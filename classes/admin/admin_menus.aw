@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.53 2004/02/27 11:20:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.54 2004/03/01 12:12:33 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -31,101 +31,19 @@ class admin_menus extends aw_template
 			}
 		}
 
+		$atc_inst = get_instance("admin/add_tree_conf");
+		if (!$atc_id)
+		{
+			$atc_id = $atc_inst->get_current_conf();
+		}
+
+		$this->is_atc = false;
 		if ($atc_id)
 		{
-			$atc_inst = get_instance("admin/add_tree_conf");
-			$atc_root = $atc_inst->get_root_for_user($atc_id);
-			if ($atc_root)
-			{
-				$mn = $this->get_objects_below(array(
-					'parent' => $atc_root,
-					'class' => CL_PSEUDO,
-					'full' => true,
-					'ignore_lang' => true,
-					'ret' => ARR_NAME
-				)) + array($atc_root => $atc_root);
-
-				$objs = array();
-				$mns = join(",",array_keys($mn));
-				if ($mns != "")
-				{
-					$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_OBJECT_TYPE." AND status = 2 AND parent IN (".$mns.") ORDER BY jrk");
-					while ($row = $this->db_next())
-					{
-						$objs[$row["parent"]][] = $row;
-					}
-				}
-
-				$cnt = 0;
-				$counts = array($atc_root => 0);
-				foreach($objs as $prnt => $arr)
-				{
-					$cnt++;
-					if (!isset($counts[$prnt]))
-					{
-						$counts[$prnt] = $cnt;
-						$this->add_menu[((int)$counts[$arr[$prnt]["parent"]])][$cnt] = array(
-							"caption" => $mn[$prnt],
-							"link" => ""
-						);
-					}
-					if (is_array($arr))
-					{
-						foreach($arr as $row)
-						{
-							$meta = $this->get_object_metadata(array("metadata" => $row["metadata"]));
-							if ($meta["type"] == "__all_objs")
-							{
-								$cldata = array();
-								foreach($this->cfg["classes"] as $clid => $_cldata)
-								{
-									if ($_cldata["name"] != "")
-									{
-										$cldata[$_cldata["name"][0]][$_cldata["file"]] = $_cldata["name"];
-									}
-								}
-
-								ksort($cldata);
-								foreach($cldata as $letter => $clns)
-								{
-									$cnt++;
-									$this->add_menu[((int)$counts[$prnt])][$cnt] = array(
-										"caption" => $letter,
-										"link" => ""
-									);
-									$cp = $cnt;
-									asort($clns);
-									foreach($clns as $cl_file => $cl_name)
-									{
-										$addlink = $this->mk_my_orb("new", array("parent" => $id, "period" => $period), $cl_file, true, true);
-
-										$cnt++;
-										$this->add_menu[((int)$cp)][$cnt] = array(
-											"caption" => $cl_name,
-											"link" => $addlink
-										);
-									}
-								}
-							}
-							else
-							{
-								$use_cfgform = "";
-								if (!empty($meta["use_cfgform"]))
-								{
-									$use_cfgform = $meta["use_cfgform"];
-								};
-								$addlink = $this->mk_my_orb("new", array("parent" => $id, "period" => $period,"cfgform" => $use_cfgform), $this->cfg["classes"][$meta["type"]]["file"], true, true);
-								$cnt++;
-								$this->add_menu[((int)$counts[$row["parent"]])][$cnt] = array(
-									"caption" => $row["name"],
-									"link" => $addlink
-								);
-							}
-						}
-					}
-				}
-				return;
-			}
+			$atc_o = obj($atc_id);
+			$this->visible = $atc_o->meta("visible");
+			$this->usable = $atc_o->meta("usable");
+			$this->is_atc = true;
 		}
 		return ($this->req_get_default_add_menu(0, $id, $period, 0));
 	}
@@ -133,11 +51,13 @@ class admin_menus extends aw_template
 	function get_az_def_menu($pt, $parent, $period, $fld_id)
 	{
 		$cldata = array();
+		$n2id = array();
 		foreach($this->cfg["classes"] as $clid => $_cldata)
 		{
 			if (!empty($_cldata["name"]) && $_cldata["can_add"])
 			{
 				$cldata[$_cldata["name"][0]][$_cldata["file"]] = $_cldata["name"];
+				$n2id[$_cldata["file"]] = $clid;
 			}
 		}
 
@@ -151,12 +71,23 @@ class admin_menus extends aw_template
 			asort($clns);
 			foreach($clns as $cl_file => $cl_name)
 			{
-				$addlink = $this->mk_my_orb("new", array("parent" => $parent, "period" => $period), $cl_file, true, true);
-				$this->add_menu["letter_" . $letter]["letter_" . $letter . $cl_file] = array(
-					"caption" => $cl_name,
-					"link" => $addlink,
-					"list" => "list",
-				);
+				if (!$this->is_atc || ($this->visible["obj"][$n2id[$cl_file]]))
+				{
+					if (!$this->is_atc || $this->usable[$n2id[$cl_file]])
+					{
+						$addlink = $this->mk_my_orb("new", array("parent" => $parent, "period" => $period), $cl_file, true, true);
+					}
+					else
+					{
+						$addlink = "";
+					}
+
+					$this->add_menu["letter_" . $letter]["letter_" . $letter . $cl_file] = array(
+						"caption" => $cl_name,
+						"link" => $addlink,
+						"list" => "list",
+					);
+				}
 			}
 		}
 	}
@@ -175,12 +106,22 @@ class admin_menus extends aw_template
 					$parens = explode(",", $cldata["parents"]);
 					if (in_array($prnt, $parens))
 					{
-						$addlink = $this->mk_my_orb("new", array("parent" => $parent, "period" => $period), $cldata["file"], true, true);
-						$tcnt++;
-						$this->add_menu[0][$tcnt] = array(
-							"caption" => $cldata["name"],
-							"link" => $addlink,
-						);
+						if (!$this->is_atc || ($this->visible["obj"][$clid]))
+						{
+							if (!$this->is_atc || $this->usable[$clid])
+							{
+								$addlink = $this->mk_my_orb("new", array("parent" => $parent, "period" => $period), $cldata["file"], true, true);
+							}
+							else
+							{
+								$addlink = "";
+							}
+							$tcnt++;
+							$this->add_menu[0][$tcnt] = array(
+								"caption" => $cldata["name"],
+								"link" => $addlink,
+							);
+						}
 					}
 				}
 			}
@@ -202,11 +143,21 @@ class admin_menus extends aw_template
 					$parens = explode(",", $cldata["parents"]);
 					if (in_array($prnt, $parens))
 					{
-						$addlink = $this->mk_my_orb("new", array("parent" => $parent, "period" => $period), $cldata["file"], true, true);
-						$this->add_menu[$fld_id]["class_" . $clid] = array(
-							"caption" => $cldata["name"],
-							"link" => $addlink,
-						);
+						if (!$this->is_atc || ($this->visible["obj"][$clid]))
+						{
+							if (!$this->is_atc || $this->usable[$clid])
+							{
+								$addlink = $this->mk_my_orb("new", array("parent" => $parent, "period" => $period), $cldata["file"], true, true);
+							}
+							else
+							{
+								$addlink = "";
+							}
+							$this->add_menu[$fld_id]["class_" . $clid] = array(
+								"caption" => $cldata["name"],
+								"link" => $addlink,
+							);
+						}
 					}
 				}
 			}
@@ -220,6 +171,11 @@ class admin_menus extends aw_template
 			{
 				if ($fdata["parent"] == $prnt)
 				{
+					if ($this->is_atc && !$this->visible["fld"][$fid])
+					{
+						continue;
+					}
+
 					$_fid = "fld_" . $fid;
 					$_fprnt = ($fdata["parent"] == 0) ? 0 : "fld_" . $prnt;
 					$this->add_menu[$_fprnt][$_fid] = array(
@@ -227,6 +183,7 @@ class admin_menus extends aw_template
 						"link" => "",
 					);
 					$this->req_get_default_add_menu($fid, $parent, $period, $_fid);
+
 					if (isset($fdata["all_objs"]))
 					{
 						$this->get_az_def_menu($fid, $parent, $period, $_fid);
@@ -1206,7 +1163,14 @@ class admin_menus extends aw_template
 				}
 				else
 				{
-					$tpl = "MENU_ITEM";
+					if ($el_data["link"] != "")
+					{
+						$tpl = "MENU_ITEM";
+					}	
+					else
+					{
+						$tpl = "MENU_ITEM_SHOW";
+					}
 				};
 			
 				$this->vars(array(

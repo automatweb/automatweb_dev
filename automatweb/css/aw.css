@@ -1135,6 +1135,16 @@ div.menu div.menuItemSep {
   margin: 4px 2px;
 }
 
+div.menu .menuItemTextSep {
+  border:transparent 1px;
+  color: #333333;
+  cursor: default;
+  display: block;
+  padding: 3px 1em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
 .toolbarbutton {
         /*float: left;*/
         margin-left: 5px;

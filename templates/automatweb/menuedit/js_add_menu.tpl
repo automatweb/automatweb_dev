@@ -4,6 +4,10 @@
 <a class="menuItem" href="{VAR:url}">{VAR:caption}</a>
 <!-- END SUB: MENU_ITEM -->
 
+<!-- SUB: MENU_ITEM_SHOW -->
+<span class="menuItemTextSep">{VAR:caption}</span>
+<!-- END SUB: MENU_ITEM_SHOW -->
+
 <!-- SUB: MENU_ITEM_SUB -->
 <a class="menuItem" href=""
 	onclick="return false;"

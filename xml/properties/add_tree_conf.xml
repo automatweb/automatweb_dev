@@ -19,6 +19,16 @@
             <method>serialize</method>
             <caption>Grupid</caption>
       </property>
+      <property>
+            <name>sel</name>
+            <type>table</type>
+            <store>no</store>
+            <group>general</group>
+            <no_caption>1</no_caption>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
       <groupinfo>
             <grps>
                   <caption>Puu root objektid</caption>

@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.141 2004/02/25 16:13:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.142 2004/03/01 12:12:33 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -803,6 +803,13 @@ class aliasmgr extends aw_template
 	// !puts all alias classes into $this->typearr
 	function make_alias_typearr()
 	{
+		$adc = get_instance("admin/add_tree_conf");
+		$filt = false;
+		if (($adc_id = $adc->get_current_conf()))
+		{
+			$filt = $adc->get_alias_filter($adc_id);
+		}
+
 		$this->typearr = array();
 
 		$classes = $this->cfg["classes"];
@@ -810,13 +817,24 @@ class aliasmgr extends aw_template
 		{
 			if (isset($cldat["alias"]))
 			{
-				$this->typearr[] = $clid;
+				if (!is_array($filt) || $filt[$clid] == $clid)
+				{
+					$this->typearr[] = $clid;
+				}
 			}
 		}
 	}
 
 	function make_alias_classarr($clid_list = false)
 	{
+		// check if there is an add tree conf for the current user
+		$adc = get_instance("admin/add_tree_conf");
+		$filt = false;
+		if (($adc_id = $adc->get_current_conf()))
+		{
+			$filt = $adc->get_alias_filter($adc_id);
+		}
+
 		$this->classarr = array();
 
 		$classes = $this->cfg["classes"];
@@ -828,12 +846,18 @@ class aliasmgr extends aw_template
 				{
 					if (in_array($clid,$clid_list))
 					{
-						$this->classarr[$clid] = $cldat["name"];
+						if (!is_array($filt) || $filt[$clid] == $clid)
+						{
+							$this->classarr[$clid] = $cldat["name"];
+						}
 					}
 				}
 				else
 				{
-					$this->classarr[$clid] = $cldat["name"];
+					if (!is_array($filt) || $filt[$clid] == $clid)
+					{
+						$this->classarr[$clid] = $cldat["name"];
+					}
 				};
 
 			}
@@ -846,14 +870,26 @@ class aliasmgr extends aw_template
 		{
 			return NULL;
 		}
+
+		// check if there is an add tree conf for the current user
+		$adc = get_instance("admin/add_tree_conf");
+		$filt = false;
+		if (($adc_id = $adc->get_current_conf()))
+		{
+			$filt = $adc->get_alias_filter($adc_id);
+		}
+
 		$classes = $this->cfg["classes"];
 		$arr = array();
 		foreach($rel_arr as $val)
 		{
 			if (isset($classes[$val]))// && isset($classes[$val]["alias"]))
 			{
-				$fil = ($classes[$val]["alias_class"] != "") ? $classes[$val]["alias_class"] : $classes[$val]["file"];
-				$arr[$val] = $classes[$val]['name'];
+				if (!is_array($filt) || $filt[$clid] == $clid)
+				{
+					$fil = ($classes[$val]["alias_class"] != "") ? $classes[$val]["alias_class"] : $classes[$val]["file"];
+					$arr[$val] = $classes[$val]['name'];
+				}
 			}
 		}
 		return $arr;
@@ -956,6 +992,13 @@ class aliasmgr extends aw_template
 			$objtype = NULL;
 		}
 
+		$adc = get_instance("admin/add_tree_conf");
+		$filt = false;
+		if (($adc_id = $adc->get_current_conf()))
+		{
+			$filt = $adc->get_alias_filter($adc_id);
+		}
+
 		$choices = array();
 		$choices2 = array();
 		$classes = $this->cfg["classes"];
@@ -964,13 +1007,16 @@ class aliasmgr extends aw_template
 		{
 			if (isset($cldat["alias"]))
 			{
-				//indent the names
-				if (empty($cldat["disable_alias"]))
+				if (!is_array($filt) || $filt[$clid] == $clid)
 				{
-					$choices[$clid] = $cldat["name"];
-				}
+					//indent the names
+					if (empty($cldat["disable_alias"]))
+					{
+						$choices[$clid] = $cldat["name"];
+					}
 
-				$choices2[$clid] = $cldat["name"];
+					$choices2[$clid] = $cldat["name"];
+				}
 			}
 		}
 		asort($choices);

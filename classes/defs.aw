@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.124 2004/02/23 18:36:37 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.125 2004/03/01 12:12:33 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -11,11 +11,11 @@ if (!defined("DEFS"))
 	define("SERIALIZE_PHP_NOINDEX",4);
 	define("SERIALIZE_XMLRPC", 5);
 
-        function create_email_links($str)
-        {
-                $str = preg_replace("/([-.a-zA-Z0-9_]*)@([-.a-zA-Z0-9_]*)/","<a href='mailto:\\1@\\2'>\\1@\\2</a>", $str);
+	function create_email_links($str)
+	{
+		$str = preg_replace("/([-.a-zA-Z0-9_]*)@([-.a-zA-Z0-9_]*)/","<a href='mailto:\\1@\\2'>\\1@\\2</a>", $str);
 		return preg_replace("/((\W|^))((http(s?):\/\/)|(www\.))(\S+)/im", "$2<a href=\"http$5://$6$7\" target=\"_blank\">$4$6$7</a>", $str); 
-        }
+	}
 
 	function post_message($msg, $params)
 	{
@@ -345,10 +345,14 @@ if (!defined("DEFS"))
 	// y < z
 	function between($a,$y,$z, $onTrue = true, $onFalse = false)
 	{
-		if (($a >= $y) && ($a <= $z))
+		if (($a >= $y) && ($a <= $z))			
+		{
 			return $onTrue;
+		}
 		else
+		{
 			return $onFalse;
+		}
 	}
 
 	////

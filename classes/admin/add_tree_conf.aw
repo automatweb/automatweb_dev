@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.2 2003/11/08 09:24:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.3 2004/03/01 12:12:33 kristo Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -16,6 +16,8 @@
 
 	@groupinfo grps caption="Puu root objektid"
 
+	@property sel type=table store=no group=general no_caption=1
+
 */
 
 class add_tree_conf extends class_base
@@ -25,6 +27,149 @@ class add_tree_conf extends class_base
 		$this->init(array(
 			"clid" => CL_ADD_TREE_CONF,
 		));
+	}
+
+	function get_property($arr)
+	{
+		$prop =& $arr["prop"];
+		switch($prop["name"])
+		{
+			case "sel":
+				$this->_do_sel_tbl($prop, $arr["obj_inst"]->meta("visible"), $arr["obj_inst"]->meta("usable"), $arr["obj_inst"]->meta("alias_add"));
+				break;
+		}
+
+		return PROP_OK;
+	}
+
+	function set_property($arr)
+	{
+		$prop =& $arr["prop"];
+		switch($prop["name"])
+		{
+			case "sel":
+				$arr["obj_inst"]->set_meta("visible", is_array($arr["request"]["visible"]) ? $arr["request"]["visible"] : array());
+				$arr["obj_inst"]->set_meta("usable", is_array($arr["request"]["usable"]) ? $arr["request"]["usable"] : array());
+				$arr["obj_inst"]->set_meta("alias_add", is_array($arr["request"]["alias_add"]) ? $arr["request"]["alias_add"] : array());
+				break;
+		}
+
+		return PROP_OK;
+	}
+
+	function _do_sel_tbl(&$arr, $visible, $usable, $alias_add)
+	{
+		$t =& $arr["vcl_inst"];
+
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "Nimi"
+		));
+
+		$t->define_field(array(
+			"name" => "visible",
+			"caption" => "N&auml;htav",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "usable",
+			"caption" => "Kasutatav",
+			"align" => "center"
+		));
+
+
+		$t->define_field(array(
+			"name" => "alias_add",
+			"caption" => "Aliasena lisatav",
+			"align" => "center"
+		));
+
+		if (!is_array($visible) || !is_array($usable))
+		{
+			echo "initfakken <br>";
+			$visible = array();
+			$usable = array();
+			$alias_add = array();
+			foreach($this->cfg["classfolders"] as $id => $d)
+			{
+				$visible["fld"][$id] = 1;
+			}
+			foreach($this->cfg["classes"] as $id => $d)
+			{
+				$visible["obj"][$id] = 1;
+				$usable[$id] = 1;
+				if ($d["alias"] != "")
+				{
+					$alias_add[$id] = 1;
+				}
+			}
+		}
+
+		$t->set_sortable(false);
+
+		$this->level = -1;
+		$this->_req_do_table($t, 0, $visible, $usable, $alias_add);
+	}
+
+	function _req_do_table(&$t, $parent, $visible, $usable, $alias_add)
+	{
+		$this->level++;
+		foreach($this->cfg["classfolders"] as $id => $cfd)
+		{
+			if ($cfd["parent"] == $parent)
+			{
+				$t->define_data(array(
+					"name" => str_repeat("&nbsp;", $this->level * 10)."<b>".$cfd["name"]."</b>",
+					"visible" => html::checkbox(array(
+						"name" => "visible[fld][$id]",
+						"value" => 1,
+						"checked" => $visible["fld"][$id] == 1
+					)),
+					
+				));
+
+				foreach($this->cfg["classes"] as $cl_id => $cld)
+				{
+					if ($cld["parents"] == "" || !$cld["can_add"])
+					{
+						continue;
+					}
+
+					$pss = $this->make_keys(explode(",", $cld["parents"]));
+					if ($pss[$id])
+					{
+						$ala = "";
+						if ($cld["alias"] != "")
+						{
+							$ala = html::checkbox(array(
+								"name" => "alias_add[$cl_id]",
+								"value" => 1,
+								"checked" => $alias_add[$cl_id] == 1
+							));
+						}
+
+						$t->define_data(array(
+							"name" => str_repeat("&nbsp;", ($this->level+1) * 10).$cld["name"],
+							"visible" => html::checkbox(array(
+								"name" => "visible[obj][$cl_id]",
+								"value" => 1,
+								"checked" => $visible["obj"][$cl_id] == 1
+							)),
+							"usable" => html::checkbox(array(
+								"name" => "usable[$cl_id]",
+								"value" => 1,
+								"checked" => $usable[$cl_id] == 1
+							)),
+							"alias_add" => $ala,
+						));
+					}
+				}
+
+				$this->_req_do_table($t, $id, $visible, $usable, $alias_add);
+			}
+		}
+		$this->level--;
 	}
 
 	function callback_get_groups($args = array())
@@ -64,7 +209,6 @@ class add_tree_conf extends class_base
 	// !gets the root menu for the current user from the conf object with id $id
 	function get_root_for_user($id)
 	{
-		//$ob = $this->get_object($id);
 		$ob = new object($id);
 		$gidlist = aw_global_get("gidlist");
 
@@ -98,6 +242,52 @@ class add_tree_conf extends class_base
 			}
 		}
 		return $root_id;
+	}
+
+	/** returns the active add_tree_conf for the current user, false if none
+
+
+	**/
+	function get_current_conf()
+	{
+		$ret = false;
+
+		// go over groups and for each check if it has the conf
+		$cur_max = 0;
+		foreach(aw_global_get("gidlist_oid") as $g_oid)
+		{
+			$o = obj($g_oid);
+			$c = $o->connections_from(array(
+				"type" => 5 /* RELTYPE_ADD_TREE from core/users/group */
+			));
+			if (count($c) > 0 && $o->prop("priority") > $cur_max)
+			{
+				$cur_max = $o->prop("priority");
+				$fc = reset($c);
+				$ret = $fc->prop("to");
+			}
+		}
+
+		return $ret;
+	}
+
+	/** returns the list of alias-addable classes for tree conf $id
+	**/
+	function get_alias_filter($id)
+	{
+		$o = obj($id);
+		$r = $o->meta("alias_add");
+		$ret = array();
+
+		foreach($r as $clid => $one)
+		{
+			if ($one == 1)
+			{
+				$ret[$clid] = $clid;
+			}
+		}
+
+		return $ret;
 	}
 }
 ?>

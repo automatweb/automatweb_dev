@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.107 2004/02/27 11:20:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.108 2004/03/01 12:12:33 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1086,7 +1086,10 @@ class users extends users_user
 			{
 				$gidlist[(int)$gid] = (int)$gd["gid"];
 				$gidlist_pri[(int)$gid] = (int)$gd["priority"];
-				$gidlist_oid[(int)$gd["oid"]] = (int)$gd["oid"];
+				if ($gd["oid"])
+				{
+					$gidlist_oid[(int)$gd["oid"]] = (int)$gd["oid"];
+				}
 			}
 
 			if (count($gidlist) < 1)

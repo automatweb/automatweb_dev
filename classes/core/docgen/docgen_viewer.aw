@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.1 2004/02/27 11:16:27 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.2 2004/03/01 12:12:34 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -117,134 +117,6 @@ text-decoration: none;
 			$fl .= $this->parse("LONG_FUNCTION");
 		}
 
-		$ex = "";
-
-		if ($data["extends"] != "")
-		{
-			$dat = $data;
-			$orb = get_instance("orb");
-			$that = get_instance("core/docgen/docgen_analyzer");
-
-			// now, do extended classes. we do that by parsing all the extends classes
-			do {
-				$level++;
-
-				if ($dat["extends"] == "db_connector")
-				{
-					$_extends = "db";
-				}
-				else
-				{
-					$_extends = $dat["extends"];
-				}
-
-				// get the file the class is in.
-				// for that we have to load it's orb defs to get the folder below the classes folder
-				$orb_defs = $orb->load_xml_orb_def($_extends);
-				$ex_fname = $this->cfg["basedir"]."/classes/".$orb_defs[$dat["extends"]]["___folder"]."/".$_extends.".".$this->cfg["ext"];
-
-				$this->vars(array(
-					"spacer" => str_repeat("&nbsp;", $level * 3),
-					"inh_link" => $this->mk_my_orb("class_info", array("file" => "/".$_extends.".".$this->cfg["ext"])),
-					"inh_name" => $dat["extends"]
-				));
-				$ex .= $this->parse("EXTENDER");
-
-				$_dat = $that->analyze_file($ex_fname, true);
-				$dat = $_dat["classes"][$dat["extends"]];
-			} while ($dat["extends"] != "");
-		}
-
-		// do dependencies
-		if (is_array($data["dependencies"]))
-		{
-			// build nice dep array
-			$dep = array();
-			$has_var = false;
-			foreach($data["dependencies"] as $d_dat)
-			{
-				if ($d_dat["is_var"])
-				{
-					$has_var = true;
-				}
-				else
-				{
-					$dep[$d_dat["dep"]]["lines"][] = $d_dat["line"];
-				}
-			}
-
-			$d_str = "";
-			$d_str_var = "";
-			if ($has_var)
-			{
-				$d_str_var = $this->parse("VAR_DEP");
-			}
-
-			foreach($dep as $d_class => $d_ar)
-			{
-				$this->vars(array(
-					"name" => $d_class,
-					"lines" => join(",", $d_ar["lines"]),
-					"link" => $this->mk_my_orb("class_info" , array("file" => "/".$d_class.".".$this->cfg["ext"]))
-				));
-				$d_str .= $this->parse("DEP");
-			}
-		}
-
-		// do properties
-		$clid = $this->_find_clid_for_name($data["name"]);
-		$p_tbl = "";
-		if ($clid)
-		{
-			$cln = $data["name"];
-			if ($cln == "document" || $cln == "document_brother")
-			{
-				$cln = "doc";
-			}
-			$cfgu = get_instance("cfg/cfgutils");
-			$props = $cfgu->load_properties(array(
-				"file" => $cln,
-				"clid" => $clid
-			));
-
-			foreach($props as $prop)
-			{
-				$this->vars(array(
-					"name" => $prop["name"],
-					"type" => $prop["type"],
-					"comment" => $prop["caption"]
-				));
-				$p_tbl .= $this->parse("PROP");
-			}
-
-			$ri = $cfgu->get_relinfo();
-			$i_ri = array();
-			foreach($ri as $ri_v => $ri_d)
-			{
-				if (substr($ri_v, 0, strlen("RELTYPE")) == "RELTYPE")
-				{
-					$i_ri[$ri_d["value"]]["name"] = $ri_v;
-				}
-
-				if (!isset($i_ri[$ri_d["value"]]))
-				{
-					$i_ri[$ri_d["value"]] = $ri_d;
-				}
-			}
-
-			$s_ri = "";
-			foreach($i_ri as $ri_vl => $ri_d)
-			{
-				$this->vars(array(
-					"name" => $ri_d["name"],
-					"clids" => $this->_get_clid_names($ri_d["clid"]),
-					"comment" => $ri_d["caption"]
-				));
-
-				$s_ri .= $this->parse("RELTYPE");
-			}
-		}
-
 		$this->vars(array(
 			"name" => $data["name"],
 			"extends" => $data["extends"],
@@ -252,12 +124,24 @@ text-decoration: none;
 			"start_line" => $data["start_line"],
 			"FUNCTION" => $f,
 			"LONG_FUNCTION" => $fl,
-			"EXTENDER" => $ex,
-			"DEP" => $d_str,
-			"VAR_DEP" => $d_str_var,
-			"PROP" => $p_tbl,
-			"RELTYPE" => $s_ri
 		));
+
+		if ($data["extends"] != "")
+		{
+			$this->_display_extends($data);
+		}
+
+		if (is_array($data["dependencies"]))
+		{
+			$this->_display_dependencies($data["dependencies"]);
+		}
+
+		// do properties
+		$clid = $this->_find_clid_for_name($data["name"]);
+		if ($clid)
+		{
+			$this->_display_properties($clid, $data);
+		}
 
 		return $this->parse();
 	}
@@ -331,6 +215,10 @@ text-decoration: none;
 
 	function _find_clid_for_name($name)
 	{
+		if ($name == "doc")
+		{
+			return CL_DOCUMENT;
+		}
 		foreach($this->cfg["classes"] as $clid => $cld)
 		{
 			if (basename($cld["file"]) == basename($name))
@@ -384,6 +272,157 @@ text-decoration: none;
 		$str .= "?>";
 
 		return highlight_string($str,true);
+	}
+
+	function _display_dependencies($dependencies)
+	{
+		// build nice dep array
+		$dep = array();
+		$has_var = false;
+		foreach($dependencies as $d_dat)
+		{
+			if ($d_dat["is_var"])
+			{
+				$has_var = true;
+			}
+			else
+			{
+				$dep[$d_dat["dep"]]["lines"][] = $d_dat["line"];
+			}
+		}
+
+		$d_str = "";
+		$d_str_var = "";
+		if ($has_var)
+		{
+			$d_str_var = $this->parse("VAR_DEP");
+		}
+
+		foreach($dep as $d_class => $d_ar)
+		{
+			$this->vars(array(
+				"name" => $d_class,
+				"lines" => join(",", $d_ar["lines"]),
+				"link" => $this->mk_my_orb("class_info" , array("file" => "/".$d_class.".".$this->cfg["ext"]))
+			));
+			$d_str .= $this->parse("DEP");
+		}
+
+		$this->vars(array(
+			"DEP" => $d_str,
+			"VAR_DEP" => $d_str_var
+		));
+	}
+
+	function _display_properties($clid, $data)
+	{
+		$cln = $data["name"];
+		if ($cln == "document" || $cln == "document_brother")
+		{
+			$cln = "doc";
+		}
+		$cfgu = get_instance("cfg/cfgutils");
+		$props = $cfgu->load_properties(array(
+			"file" => $cln,
+			"clid" => $clid
+		));
+
+		$p2t = array();
+		foreach($props as $prop)
+		{
+			$this->vars(array(
+				"name" => $prop["name"],
+				"type" => $prop["type"],
+				"comment" => $prop["caption"]
+			));
+			$p_tbl .= $this->parse("PROP");
+
+			$p2t[$prop["table"]][] = $prop["name"];
+		}
+
+		$ri = $cfgu->get_relinfo();
+		$i_ri = array();
+		foreach($ri as $ri_v => $ri_d)
+		{
+			if (substr($ri_v, 0, strlen("RELTYPE")) == "RELTYPE")
+			{
+				$i_ri[$ri_d["value"]]["name"] = $ri_v;
+			}
+
+			if (!isset($i_ri[$ri_d["value"]]))
+			{
+				$i_ri[$ri_d["value"]] = $ri_d;
+			}
+		}
+
+		$s_ri = "";
+		foreach($i_ri as $ri_vl => $ri_d)
+		{
+			$this->vars(array(
+				"name" => $ri_d["name"],
+				"clids" => $this->_get_clid_names($ri_d["clid"]),
+				"comment" => $ri_d["caption"]
+			));
+
+			$s_ri .= $this->parse("RELTYPE");
+		}
+
+		$t_str = "";
+		$awt = new aw_array($cfgu->tableinfo);
+		foreach($awt->get() as $tb => $tbd)
+		{
+			$this->vars(array(
+				"name" => $tb,
+				"index" => $tbd["index"],
+				"properties" => join(", ", $p2t[$tb])
+			));
+			$t_str .= $this->parse("TABLE");
+		}
+
+		$this->vars(array(
+			"PROP" => $p_tbl,
+			"RELTYPE" => $s_ri,
+			"TABLE" => $t_str
+		));
+	}
+
+	function _display_extends($dat)
+	{
+		$orb = get_instance("orb");
+		$that = get_instance("core/docgen/docgen_analyzer");
+
+		// now, do extended classes. we do that by parsing all the extends classes
+		do {
+			$level++;
+
+			if ($dat["extends"] == "db_connector")
+			{
+				$_extends = "db";
+			}
+			else
+			{
+				$_extends = $dat["extends"];
+			}
+
+			// get the file the class is in.
+			// for that we have to load it's orb defs to get the folder below the classes folder
+			$orb_defs = $orb->load_xml_orb_def($_extends);
+			$ex_fname = $this->cfg["basedir"]."/classes/".$orb_defs[$dat["extends"]]["___folder"]."/".$_extends.".".$this->cfg["ext"];
+
+			$this->vars(array(
+				"spacer" => str_repeat("&nbsp;", $level * 3),
+				"inh_link" => $this->mk_my_orb("class_info", array("file" => "/".$_extends.".".$this->cfg["ext"])),
+				"inh_name" => $dat["extends"]
+			));
+			$ex .= $this->parse("EXTENDER");
+
+			$_dat = $that->analyze_file($ex_fname, true);
+			$dat = $_dat["classes"][$dat["extends"]];
+		} while ($dat["extends"] != "");
+
+		$this->vars(array(
+			"EXTENDER" => $ex,
+		));
 	}
 }
 ?>

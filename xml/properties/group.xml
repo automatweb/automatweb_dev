@@ -224,6 +224,11 @@
                   <clid>CL_MENU</clid>
                   <caption>rootmen&amp;uuml;&amp;uuml;</caption>
             </ADMIN_ROOT>
+            <ADD_TREE>
+                  <value>5</value>
+                  <clid>CL_ADD_TREE_CONF</clid>
+                  <caption>lisamise puu</caption>
+            </ADD_TREE>
       </reltypes>
 </properties>
 

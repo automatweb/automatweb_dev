@@ -93,6 +93,18 @@ text-decoration: none;
 
 	<td class="text" valign="top">
 		<b>Database tables</b><br>
+		<table border="0" cellpadding="1" cellspacing="0" width="100%">
+			<td class="text"><i>Name</i></td>
+			<td class="text"><i>Index</i></td>
+			<td class="text"><i>Properties</i></td>
+		<!-- SUB: TABLE -->
+		<tr>
+			<td class="text">{VAR:name}</td>
+			<td class="text">{VAR:index}</td>
+			<td class="text">{VAR:properties}</td>
+		</tr>
+		<!-- END SUB: TABLE -->
+		</table>
 	</td>
 
 
@@ -101,6 +113,9 @@ text-decoration: none;
 
 	<td class="text" valign="top">
 		<b>Defines:</b><br>
+
+		<br>
+		<B>Templates:</b><br>
 	</td>
 
 
