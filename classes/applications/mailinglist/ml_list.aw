@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.20 2005/02/04 10:56:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.21 2005/02/07 14:21:27 ahti Exp $
 // ml_list.aw - Mailing list
 /*
 @default table=objects
@@ -245,6 +245,13 @@ class ml_list extends class_base
 	function post_message($args)
 	{
 		extract($args);
+		if($to_post)
+		{
+			return $this->submit_post_message(array(
+				"list_id" => $mto,
+				"id" => $targets,
+			));
+		}
 		$this->mk_path(0, "<a href='".aw_global_get("route_back")."'>Tagasi</a>&nbsp;/&nbsp;Saada teade");
 
 		$this->read_template("post_message.tpl");
@@ -399,16 +406,23 @@ class ml_list extends class_base
 			"request" => $request,
 			"cfgform_id" => $cfgform,
 		));
-
-		if (sizeof($errors) > 0)
+		$fld = $list_obj->prop("def_user_folder");
+		$members = $this->get_all_members($fld);
+		if(in_array($args["mail"], $members) || empty($args["mail"]))
 		{
+			$allow = false;
+			$erx["XXX"]["msg"] = t("Sellise aadressiga inimene on juba listiga liitunud");
+		}
+		if (sizeof($errors) > 0 or (!$allow && $args["op"] == 1))
+		{
+			$errors = $errors + $erx;
 			$errmsg = "";
 			foreach($errors as $errprop)
 			{
 				$errmsg .= $errprop["msg"] . "<br>";
 			}
 
-			aw_session_set("no_cache",1);
+			aw_session_set("no_cache", 1);
 		
 			// fsck me plenty
 			$request["mail"] = $_POST["mail"];
@@ -416,19 +430,12 @@ class ml_list extends class_base
 			aw_session_set("cb_errmsg", $errmsg);
 			return aw_global_get("HTTP_REFERER");
 		};
-		$fld = $list_obj->prop("def_user_folder");
-		$members = $this->get_all_members($fld);
-		if(in_array($args["mail"], $members) || empty($args["mail"]))
-		{
-			$allow = false;
-		}
 		
 		$udef_fields["textboxes"] = $args["udef_txbox"];
 		$udef_fields["textareas"] = $args["udef_txtarea"];
 		$udef_fields["checkboxes"] = $args["udef_checkbox"];
 		$udef_fields["classificators"] = $args["udef_classificator"];
 		$udef_fields["date1"] = $args["udef_date1"];
-		
 		if ($allow)
 		{
 			if ($args["op"] == 1)
@@ -443,13 +450,13 @@ class ml_list extends class_base
 					"udef_fields" => $udef_fields,
 				));
 			}
-			if ($args["op"] == 2)
-			{
-				$retval = $ml_member->unsubscribe_member_from_list(array(
-					"email" => $args["email"],
-					"list_id" => $list_obj->id(),
-				));
-			}
+		}
+		if ($args["op"] == 2)
+		{
+			$retval = $ml_member->unsubscribe_member_from_list(array(
+				"email" => $args["email"],
+				"list_id" => $list_obj->id(),
+			));
 		}
 
 		$relobj = new object($rel_id);
@@ -1873,6 +1880,7 @@ class ml_list extends class_base
 			// XXX: work out a way to save the message and not send it immediately
 			$writer->send_message(array(
 				"id" => $message_id,
+				"to_post" => $arr["to_post"],
 			));
 		}
 		else
@@ -1922,9 +1930,22 @@ class ml_list extends class_base
 		));
 		if($arr["submit_post_message"] == 1)
 		{
+			$sched = get_instance("scheduler");
+			$sched->add(array(
+				"event" => $this->mk_my_orb("process_queue", array(), "ml_queue", false, true),
+				"time" => time() + 120,	// every 2 minutes
+			));
+			$time = time();
 			$this->submit_post_message(array(
 				"list_id" => $arr["mto"],
 				"id" => $arr["id"],
+				"start_at" => array(
+					"day" => date("d", $time),
+					"month" => date("m", $time),
+					"year" => date("Y", $time),
+					"hour" => date("H", $time),
+					"minute" => date("i", $time),
+				),
 			));
 		}
 	}

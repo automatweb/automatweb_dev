@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.3 2004/12/30 15:56:28 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.4 2005/02/07 14:21:27 ahti Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -296,12 +296,10 @@ class ml_member extends class_base
 		$section = aw_global_get("section");
 
 		$user_folder = $list_obj->prop("def_user_folder");
-
 		if (empty($user_folder))
 		{
 			return $this->cfg["baseurl"] . "/" . $section;
 		};
-
 		$check = $this->check_member(array(
 			"email" => $args["email"],
 			"folder" => $user_folder,
