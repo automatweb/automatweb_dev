@@ -442,7 +442,7 @@ class form_db_base extends aw_template
 				$idx_col = "id";
 			}
 		}
-		$sql = "SELECT $sql_data FROM $sql_join WHERE $idx_tbl.$idx_col = $entry_id";
+		$sql = "SELECT $sql_data FROM $sql_join WHERE $idx_tbl.$idx_col = '$entry_id'";
 		if ($GLOBALS["fg_re_dbg"] == 1)	echo "read_entry sql = $sql <br>";
 
 		$this->db_query($sql);
@@ -971,7 +971,8 @@ class form_db_base extends aw_template
 					else
 					if ($el->arr["type"] == "date")
 					{
-						if ($this->entry[$el->get_id()] > 1)
+						$_ts = $el->get_val();
+						if ($_ts > 1)
 						{
 							if ($query != "")
 							{
@@ -979,16 +980,16 @@ class form_db_base extends aw_template
 							}
 							if ($el->arr["subtype"] == "from")
 							{
-								$query.= $pre." (".$elname." >= ".$this->entry[$el->get_id()].")";
+								$query.= $pre." (".$elname." >= ".$_ts.")";
 							}
 							else
 							if ($el->arr["subtype"] == "to")
 							{
-								$query.= $pre." (".$elname." <= ".$this->entry[$el->get_id()].")";
+								$query.= $pre." (".$elname." <= ".$_ts.")";
 							}
 							else
 							{
-								$query.= $pre." (".$elname." = ".$this->entry[$el->get_id()].")";
+								$query.= $pre." (".$elname." = ".$_ts.")";
 							}
 						}
 					}

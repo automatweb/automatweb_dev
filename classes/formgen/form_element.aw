@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.8 2002/11/13 17:52:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.9 2002/11/14 09:16:13 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -2655,6 +2655,12 @@ class form_element extends aw_template
 	// !returns the elements value in the currently loaded entry in a form that can be presented to the user (ev_xxx)
 	function get_value($numeric = false)
 	{
+		if ($this->arr["value_controller"] && (!$this->form->arr["sql_writer_writer"])) 
+		{
+			$ret = $this->form->controller_instance->eval_controller($this->arr["value_controller"], $this->entry, &$this->form, $this);
+			return $ret;
+		}
+		
 		switch($this->arr["type"])
 		{
 			case "textarea":
