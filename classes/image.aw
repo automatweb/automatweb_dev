@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.108 2004/09/09 11:14:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.109 2004/10/04 14:17:50 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -296,7 +296,7 @@ class image extends class_base
 				}
 				else if (!$this->cfg["no_default_template"])
 				{
-					if ($idata["comment"] == "" && $vars["align"] != "")
+					if ($vars["align"] != "")
 					{
 						$replacement = "<table border=0 cellpadding=5 cellspacing=0 $vars[align]><tr><td>";
 					}
@@ -317,7 +317,7 @@ class image extends class_base
 					{
 						$replacement .= "<BR>".$idata["comment"];
 					};
-					if ($idata["comment"] == "" && $vars["align"] != "")
+					if ($vars["align"] != "")
 					{
 						$replacement .= "</td></tr></table>";
 					}
