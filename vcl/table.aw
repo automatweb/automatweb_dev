@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.26 2002/07/23 13:04:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.27 2002/07/24 20:26:58 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -199,6 +199,7 @@ class aw_table
 		// grouping - whenever a value of one of these elements changes an extra row gets inserted into the table
 		$this->rgroupby = $params["rgroupby"];
 		$this->vgroupby = $params["vgroupby"];
+		$this->vgroupdat = $params["vgroupdat"];
 
 		// ok, all those if sentences are getting on my nerves - we will make sure that all sorting options
 		// after this point are always arrays
@@ -254,12 +255,24 @@ class aw_table
 
 		if (is_array($this->vgroupby))
 		{
-			foreach($this->vgroupby as $_rgcol => $rgel)
+			// $_vgcol and $vgel are the same
+			foreach($this->vgroupby as $_vgcol => $vgel)
 			{
-				$v1 = $a[$rgel];
-				$v2 = $b[$rgel];
-				$this->u_sorder = $this->sorder[$_rgcol];
-				$this->sort_flag = $this->nfields[$_rgcol] ? SORT_NUMERIC : SORT_REGULAR;
+				// if there is a sorting element for this vertical group, then actually use it's value for sorting
+				if ($this->vgroupdat[$vgel]["sort_el"])
+				{
+					$v1 = $a[$this->vgroupdat[$vgel]["sort_el"]];
+					$v2 = $b[$this->vgroupdat[$vgel]["sort_el"]];
+					$this->sort_flag = $this->nfields[$this->vgroupdat[$vgel]["sort_el"]] ? SORT_NUMERIC : SORT_REGULAR;
+				}
+				else
+				{
+					$v1 = $a[$vgel];
+					$v2 = $b[$vgel];
+					$this->sort_flag = $this->nfields[$vgel] ? SORT_NUMERIC : SORT_REGULAR;
+				}
+				// the sort numeric is specified for the actual sorting element, but the order for the column
+				$this->u_sorder = $this->sorder[$vgel];
 				if ($v1 != $v2)
 				{
 					$skip = true;
@@ -343,6 +356,7 @@ class aw_table
 		extract($arr);
 		$PHP_SELF = aw_global_get("PHP_SELF");
 		$REQUEST_URI = aw_global_get("REQUEST_URI");
+		$this->titlebar_under_groups = $arr["titlebar_under_groups"];
 		$tbl = "";
 
 		// moodustame välimise raami alguse
@@ -365,132 +379,89 @@ class aw_table
 
 		if ($this->headerstring)
 		{
-			// lauri muudetud
 			$colspan = sizeof($this->rowdefs) + sizeof($this->actions)-(int)$this->headerextrasize;
 			$tbl .= $this->opentag(array("name" => "tr"));
 			$tbl .= $this->opentag(array("name" => "td","colspan" => $colspan,"classid" => $this->titlestyle));
-			$tbl .= "<strong>" . $this->headerstring . ": ";
-			$tbl .= $this->headerlinks;
-			$tbl .= "</strong>";
+			$tbl .= "<strong>" . $this->headerstring . ": ". $this->headerlinks . "</strong>";
 			$tbl .= $this->closetag(array("name" => "td"));
-			// lauri muudetud
 			$tbl .= $this->headerextra;
 			$tbl .= $this->closetag(array("name" => "tr"));
 		}
 		
-		$tbl .= $this->opentag(array("name" => "tr"));
-
-		// moodustame headeri
-		reset($this->rowdefs);
-		while(list($k,$v) = each($this->rowdefs)) 
+		// if we show title under grouping elements, then we must not show it on the first line!
+		if (!$this->titlebar_under_groups)
 		{
-			$ta = array("name" => "td");
-	
-			// määrame ära headeri stiili
-			if ($v["sortable"]) 
+			// make header!
+			$tbl .= $this->opentag(array("name" => "tr"));
+			foreach($this->rowdefs as $k => $v)
 			{
-				// kui on sorteeritud selle välja järgi
-				if ($this->sortby[$v["name"]])
+				$tbl.=$this->opentag(array(
+					"name" => "td",
+					"classid"=> ($v["sortable"] ? ($this->sortby[$v["name"]] ? $this->header_sorted : $this->header_sortable) : $this->header_normal),
+					"align" => ($v["talign"] ? $v["talign"] : ""),
+					"valign" => ($v["tvalign"] ? $v["tvalign"] : ""),
+					"bgcolor" => ($this->tbgcolor ? $this->tbgcolor : ""),
+					"nowrap" => ($v["nowrap"] ? 1 : ""),
+					"width" => ($v["width"] ? $v["width"] : ""),
+				));
+
+				// if the column is sortable, turn it into a link
+				if ($v["sortable"]) 
 				{
-					// peab tegema workaroundi, sest class on reserved word,
-					// samas on seda vaja kasutada tabeli cellile stiili andmiseks
-					$ta["classid"] = $this->header_sorted;
+					// by default (the column is not sorted) don't show any arrows
+					$sufix = "";
+					// by default, if a column is not sorted and you click on it, it should be sorted asc
+					$so = "asc";
+
+					// kui on sorteeritud selle välja järgi
+					if ($this->sortby[$v["name"]])
+					{
+						$sufix = $this->sorder[$v["name"]] == "desc" ? $this->up_arr : $this->dn_arr;
+						$so = $this->sorder[$v["name"]] == "desc" ? "asc" : "desc";
+					}
+
+					$url = $REQUEST_URI;
+					$url = preg_replace("/sortby=[^&$]*/","",$url);
+					$url = preg_replace("/sort_order=[^&$]*/","",$url);
+					$url = preg_replace("/&{2,}/","&",$url);
+					$url = str_replace("?&", "?",$url);
+					$sep = (strpos($url,"?") === false) ?	"?" : "&";
+					$url .= $sep."sortby=".$v["name"]."&sort_order=".$so;
+
+					$tbl .= "<b><a href='$url'>$v[caption] $sufix</a></b>";
 				} 
 				else 
 				{
-					$ta["classid"] = $this->header_sortable;
+					$tbl .= $v["caption"];
 				};
-			} 
-			else 
-			{
-				// ei ole sorteeritav
-				$ta["classid"] = $this->header_normal;
+				$tbl .= $this->closetag(array("name" => "td"));
 			};
 
-			if ($v["talign"]) 
+			// kui actionid on defineeritud, siis joonistame nende jaoks vajaliku headeri
+			if (is_array($this->actions) && (sizeof($this->actions) > 0)) 
 			{
-				$ta["align"] = $v["talign"];
+				$tbl .= $this->opentag(array(
+					"name" => "td",
+					"align" => "center",
+					"classid" => $this->header_normal,
+					"colspan" => sizeof($this->actions)
+				));
+				$tbl .= "Tegevused";
+				$tbl .= $this->closetag(array("name" => "td"));
 			};
 
-			if ($v["tvalign"]) 
-			{
-				$ta["valign"] = $v["tvalign"];
-			};
+			// header kinni
+			$tbl .= $this->closetag(array("name" => "tr"));
+		}
 
-			if ($this->tbgcolor) 
-			{
-				$ta["bgcolor"] = $this->tbgcolor;
-			};
+		$this->lgrpvals = array();
 
-			if ($v["nowrap"])
-			{
-				$ta["nowrap"] = "";
-			}
-
-			if ($v["width"])
-			{
-				$ta["width"] = $v["width"];
-			};
-				
-			$tbl .= $this->opentag($ta);
-
-			// kui on sorteeritav, siis kuvame lingina
-			if ($v["sortable"]) 
-			{
-				// vaikimis näitame allanoolt:
-				$sufix = $this->dn_arr;
-				// by default, if a column is not sorted and you click on it, it should be sorted asc
-				$so = "asc";
-
-				// kui on sorteeritud selle välja järgi
-				if ($this->sortby[$v["name"]])
-				{
-					$sufix = $this->sorder[$v["name"]] == "desc" ? $this->up_arr : $this->dn_arr;
-					$so = $this->sorder[$v["name"]] == "desc" ? "asc" : "desc";
-				}
-
-				$url = $REQUEST_URI;
-				$url = preg_replace("/sortby=[^&$]*/","",$url);
-				$url = preg_replace("/sort_order=[^&$]*/","",$url);
-				$url = preg_replace("/&{2,}/","&",$url);
-				$url = str_replace("?&", "?",$url);
-				$sep = (strpos($url,"?") === false) ?	"?" : "&";
-				$url .= $sep."sortby=".$v["name"]."&sort_order=".$so;
-
-				$tbl .= "<b><a href='$url'>$v[caption] $sufix</a></b>";
-			} 
-			else 
-			{
-				$tbl .= $v["caption"];
-			};
-			$tbl .= $this->closetag(array("name" => "td"));
-		};
-
-		// kui actionid on defineeritud, siis joonistame nende jaoks vajaliku headeri
-		if (is_array($this->actions) && (sizeof($this->actions) > 0)) 
-		{
-			$tbl .= $this->opentag(array(
-				"name" => "td",
-				"align" => "center",
-				"classid" => $this->header_normal,
-				"colspan" => sizeof($this->actions)
-			));
-			$tbl .= "Tegevused";
-			$tbl .= $this->closetag(array("name" => "td"));
-		};
-
-		// header kinni
-		$tbl .= $this->closetag(array("name" => "tr"));
-
-		$lgrpval = array();
 		// koostame tabeli sisu
 		if (is_array($this->data)) 
 		{
-			reset($this->data);
-
 			// tsükkel üle data
 			$counter = 0; // kasutame ridadele erineva värvi andmiseks
-			while(list($k,$v) = each($this->data)) 
+			foreach($this->data as $k => $v)
 			{
 				$counter++;
 
@@ -498,44 +469,10 @@ class aw_table
 				$tbl .= $this->opentag(array("name" => "tr"));
 				
 				// grpupeerimine
-				if (is_array($rgroupby))
-				{
-					foreach($rgroupby as $rgel)
-					{
-						$_a = preg_replace("/<a (.*)>(.*)<\/a>/U","\\2",$v[$rgel]);
-						if ($lgrpvals[$rgel] != $_a)
-						{
-							// kui on uus v22rtus grupeerimistulbal, siis paneme rea vahele
-							$tbl.=$this->opentag(array(
-								"name" => "td",
-								"colspan" => count($this->rowdefs),
-								"classid" => $this->group_style
-							));
-							$tbl.=$_a;
-							$lgrpvals[$rgel] = $_a;
-							// if we should display some other elements after the group element
-							// they will be passed in the $rgroupdat array
-							if (is_array($rgroupdat[$rgel]))
-							{
-								$tbl.=$rgroupby_sep[$rgel]["pre"];
-								foreach($rgroupdat[$rgel] as $rgdat)
-								{
-									$tbl.=$v[$rgdat["el"]].$rgdat["sep"];
-								}
-								$tbl.=$rgroupby_sep[$rgel]["after"];
-							}
-							$tbl.=$this->closetag(array(
-								"name" => "td"
-							));
-							$tbl .= $this->closetag(array("name" => "tr"));
-							$tbl .= $this->opentag(array("name" => "tr"));
-						}
-					}
-				}
-
+				$tbl .= $this->do_col_rgrouping($rgroupby, $rgroupdat, $rgroupby_sep, $v);
+				
 				// tsükkel üle rowdefsi, et andmed oleksid oiges järjekorras
-				reset($this->rowdefs);
-				while(list($k1,$v1) = each($this->rowdefs)) 
+				foreach($this->rowdefs as $k1 => $v1)
 				{
 					$rowspan = 1;
 					$style = false;
@@ -545,7 +482,7 @@ class aw_table
 						{
 							// if this column is a part of vertical grouping, check if it's value has changed
 							// if it has, then set the new rowspan
-							// if not, then skip over this row
+							// if not, then skip over this column
 
 							// build the value from all higher grouping els and this one as well
 							$_value = "";
@@ -586,54 +523,17 @@ class aw_table
 					}
 						
 					// moodustame celli
-					$cell_attribs = array(
+					$tbl .= $this->opentag(array(
 						"name"    => "td",
-						"classid" => $style,
+						"classid" => ($v["style"] ? $v["style"] : $style),
 						"width" => $v1["width"],
-						"bgcolor" => $bgcolor,
-						"rowspan" => $rowspan
-					);
-
-					if ($this->actionrows)
-					{
-						$cell_attribs["rowspan"]=$this->actionrows;
-					};
-					
-					// eri värvi cellide jaoks muutus
-					if ($v1["chgbgcolor"] && $v[$v1["chgbgcolor"]])
-					{
-						$cell_attribs["style"]="background:".$v[$v1["chgbgcolor"]];
-					};
-
-					
-					if ($v1["align"]) 
-					{
-						$cell_attribs["align"] = $v1["align"];
-					};
-
-					if ($v1["valign"]) 
-					{
-						$cell_attribs["valign"] = $v1["valign"];
-					};
-
-					if ($v1["nowrap"]) 
-					{
-						$cell_attribs["nowrap"] = "";
-					};
-
-	
-					if ($v["bgcolor"]) 
-					{
-						$cell_attribs["bgcolor"] = $v["bgcolor"];
-					};
-
-					// this one overrides the definition given in the table header
-					if ($v["style"]) 
-					{
-						$cell_attribs["classid"] = $v["style"];
-					};
-
-					$tbl .= $this->opentag($cell_attribs);
+						"rowspan" => ($this->actionrows ? $this->actionrows : $rowspan),
+						"style" => (($v1["chgbgcolor"] && $v[$v1["chgbgcolor"]]) ? ("background:".$v[$v1["chgbgcolor"]]) : ""),
+						"align" => ($v1["align"] ? $v1["align"] : ""),
+						"valign" => ($v1["valign"] ? $v1["valign"] : ""),
+						"nowrap" => ($v1["nowrap"] ? 1 : ""),
+						"bgcolor" => ($v["bgcolor"] ? $v["bgcolor"] : $bgcolor),
+					));
 
 					if ($v1["name"] == "rec") 
 					{
@@ -669,8 +569,7 @@ class aw_table
 						// chunk split adds one too many separators, so remove that
 						$val = substr($val,strlen($v1["thousands_sep"]));
 					}
-					$val = str_replace("[__jrk_replace__]",$counter,$val);	
-					$tbl .= $val;
+					$tbl .= str_replace("[__jrk_replace__]",$counter,$val);
 					$tbl .= $this->closetag(array("name" => "td"));
 				};
 
@@ -684,24 +583,20 @@ class aw_table
 					{
 						$tbl.= $this->opentag(array("name"=>"tr"));
 					};
-					// joonistame actionid
-					reset($this->actions);
 					$style = (($counter % 2) == 0) ? $this->style1 : $this->style2; 
-					while(list($ak,$av) = each($this->actions)) 
+					// joonistame actionid
+					foreach($this->actions as $ak => $av) 
 					{
 						// joonista ainult need actionid, mis siia ritta kuuluvad
 						if ($this->actionrows ? ($arow == $av["row"] || ($arow==1 && !$av["row"]) ):1)
 						{
-							$tdtag=array(
+							$tbl .= $this->opentag(array(
 								"name"=>"td",
 								"classid" => ($av["style"]) ? $av["style"] : $style,
-								"align" => "center"
-							);
-
-							$av["cspan"] ? $tdtag["colspan"] = $av["cspan"] : "";
-							$av["rspan"] ? $tdtag["rowspan"] = $av["rspan"] : "";
-
-							$tbl .= $this->opentag($tdtag);
+								"align" => "center",
+								"colspan" => ($av["cspan"] ? $av["cspan"] : ""),
+								"rowspan" => ($av["rspan"] ? $av["rspan"] : ""),
+							));
 
 							$tbl.=$av["remote"]?
 								"<a href='javascript:remote(0,".$av["remote"].",\"$PHP_SELF?".$av["link"]."&id=".$v[$av["field"]].'");\'>'.$av["caption"]."</a>":
@@ -818,7 +713,7 @@ class aw_table
 		};
 
 		// eraldame nime ja atribuudid
-		while(list($k,$v) = each($data)) 
+		foreach($data as $k => $v) 
 		{
 			if ($k == "name") 
 			{
@@ -839,16 +734,18 @@ class aw_table
 		$attr_list = "";
 		if (is_array($attribs)) 
 		{
-			reset($attribs);
-			while(list($k,$v) = each($attribs)) 
+			foreach($attribs as $k => $v) 
 			{
-				if ($k == "nowrap")
+				if ($v)
 				{
-					$attr_list.= " $k ";
-				}
-				else
-				{
-					$attr_list .= " $k=\"$v\"";
+					if ($k == "nowrap")
+					{
+						$attr_list.= " $k ";
+					}
+					else
+					{
+						$attr_list .= " $k=\"$v\"";
+					}
 				}
 			};
 			// see on workaround, sest "class" on reserved ja seda
@@ -1040,6 +937,96 @@ class aw_table
 				$this->sorder[$_eln] = $tmp == "" ? "asc" : $tmp;
 			}
 		}
+		if (is_array($this->vgroupdat))
+		{
+			foreach($this->vgroupdat as $_eln => $dat)
+			{
+				if ($dat["sort_el"])
+				{
+					$this->sorder[$_eln] = $dat["sort_order"];
+				}
+			}
+		}
+	}
+
+	function draw_titlebar_under_rgrp()
+	{
+		$tbl = $this->opentag(array("name" => "tr"));
+		foreach($this->rowdefs as $k => $v)
+		{
+			// the headers between groups are never clickable - less confusing that way
+			$tbl .= $this->opentag(array(
+				"name" => "td",
+				"classid" => $this->header_normal, 
+				"align" => ($v["talign"] ? $v["talign"] : ""),
+				"valign" => ($v["tvalign"] ? $v["tvalign"] : ""),
+				"bgcolor" => ($this->tbgcolor ? $this->tbgcolor : ""),
+				"width" => ($v["width"] ? $v["width"] : "")
+			));
+			$tbl .= $v["caption"];
+			$tbl .= $this->closetag(array("name" => "td"));
+		}
+
+		// kui actionid on defineeritud, siis joonistame nende jaoks vajaliku headeri
+		if (is_array($this->actions) && (sizeof($this->actions) > 0)) 
+		{
+			$tbl .= $this->opentag(array(
+				"name" => "td",
+				"align" => "center",
+				"classid" => $this->header_normal,
+				"colspan" => sizeof($this->actions)
+			));
+			$tbl .= "Tegevused";
+			$tbl .= $this->closetag(array("name" => "td"));
+		};
+
+		$tbl .= $this->closetag(array("name" => "tr"));
+		return $tbl;
+	}
+
+	function do_col_rgrouping($rgroupby, $rgroupdat, $rgroupby_sep, $v)
+	{
+		$tbl = "";
+		if (is_array($rgroupby))
+		{
+			foreach($rgroupby as $rgel)
+			{
+				$_a = preg_replace("/<a (.*)>(.*)<\/a>/U","\\2",$v[$rgel]);
+				if ($this->lgrpvals[$rgel] != $_a)
+				{
+					// kui on uus v22rtus grupeerimistulbal, siis paneme rea vahele
+					$tbl.=$this->opentag(array(
+						"name" => "td",
+						"colspan" => count($this->rowdefs),
+						"classid" => $this->group_style
+					));
+					$tbl.=$_a;
+					$this->lgrpvals[$rgel] = $_a;
+					// if we should display some other elements after the group element
+					// they will be passed in the $rgroupdat array
+					if (is_array($rgroupdat[$rgel]))
+					{
+						$tbl.=$rgroupby_sep[$rgel]["pre"];
+						foreach($rgroupdat[$rgel] as $rgdat)
+						{
+							$tbl.=$v[$rgdat["el"]].$rgdat["sep"];
+						}
+						$tbl.=$rgroupby_sep[$rgel]["after"];
+					}
+					$tbl.=$this->closetag(array("name" => "td"));
+					$tbl .= $this->closetag(array("name" => "tr"));
+
+					// draw the damn titlebar under the grouping element if so instructed
+					if ($this->titlebar_under_groups)
+					{
+						$tbl.=$this->draw_titlebar_under_rgrp();
+					}
+
+					$tbl .= $this->opentag(array("name" => "tr"));
+				}
+			}
+		}
+		return $tbl;
 	}
 };
 ?>
