@@ -7,7 +7,8 @@
             <field>meta</field>
             <method>serialize</method>
             <type>chooser</type>
-            <caption>Vali template</caption>
+            <orient>vertical</orient>
+            <caption>Välimus</caption>
       </property>
       <property>
             <name>default_view</name>
@@ -17,6 +18,66 @@
             <method>serialize</method>
             <type>select</type>
             <caption>Vaade</caption>
+      </property>
+      <property>
+            <name>show_current_events</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Aktiivse päeva sisu näitamine</caption>
+      </property>
+      <property>
+            <name>minical_day_with_events</name>
+            <table>objects</table>
+            <group>style</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
+            <caption>Sündmustega päev</caption>
+      </property>
+      <property>
+            <name>minical_day_without_events</name>
+            <table>objects</table>
+            <group>style</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
+            <caption>Ilma sündmusteta päev</caption>
+      </property>
+      <property>
+            <name>minical_day_today</name>
+            <table>objects</table>
+            <group>style</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
+            <caption>Tänane päev</caption>
+      </property>
+      <property>
+            <name>minical_day_active</name>
+            <table>objects</table>
+            <group>style</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
+            <caption>Aktiivne päev</caption>
+      </property>
+      <property>
+            <name>minical_day_deactive</name>
+            <table>objects</table>
+            <group>style</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
+            <caption>Deaktiivne päev</caption>
       </property>
       <property>
             <name>show_events</name>
@@ -34,6 +95,9 @@
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
+            <style>
+                  <caption>Stiilid</caption>
+            </style>
             <show_events>
                   <caption>Sündmused</caption>
                   <submit>no</submit>
@@ -42,9 +106,22 @@
       <reltypes>
             <EVENT_SOURCE>
                   <value>1</value>
-                  <clid>CL_PLANNER</clid>
+                  <clid>
+                        <num_0>CL_PLANNER</num_0>
+                        <num_1>CL_DOCUMENT_ARCHIVE</num_1>
+                  </clid>
                   <caption>Võta sündmusi</caption>
             </EVENT_SOURCE>
+            <OUTPUT>
+                  <value>2</value>
+                  <clid>CL_RELATION</clid>
+                  <caption>väljund</caption>
+            </OUTPUT>
+            <STYLE>
+                  <value>3</value>
+                  <clid>CL_CSS</clid>
+                  <caption>Stiil</caption>
+            </STYLE>
       </reltypes>
 </properties>
 
