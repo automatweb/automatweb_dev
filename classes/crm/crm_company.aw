@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.30 2004/06/22 09:52:08 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.31 2004/06/22 12:07:50 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -52,21 +52,29 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 @property firmajuht type=chooser orient=vertical table=kliendibaas_firma  editonly=1
 @caption Kontaktisik
 
-@default group=humanres
+@default group=oldcontacts
+
+@property old_human_resources type=table store=no no_caption=1 group=oldcontacts
+@caption Nimekiri
+
+@property old_addresslist type=text store=no no_caption=1 group=oldcontacts 
+@caption Vana aadresslist
 
 @default group=contacts2
 
 @layout hbox1 type=hbox group=contacts2
+
+@property contact_toolbar type=toolbar no_caption=1 store=no group=contacts2
+@caption "The Green Button"
+
 @property unit_listing_tree type=treeview parent=hbox1 no_caption=1
+@caption Puu
 
 @property human_resources type=table store=no parent=hbox1 no_caption=1
 @caption Inimesed
 
 @property addresslist type=text store=no parent=hbox1 no_caption=1
 @caption Aadress
-
-@property contact_toolbar type=toolbar no_caption=1 store=no group=contacts
-@caption "The Green Button"
 
 @default group=cedit
 
@@ -147,11 +155,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 @property buu type=table store=no group=my_customers
 @caption Buu
 
-@groupinfo contacts caption="Kontaktid" 
+@groupinfo contacts caption="Kontaktid"
+@groupinfo oldcontacts caption="Nimekiri" parent=contacts submit=no
 @groupinfo contacts2 caption="Kontaktid" parent=contacts submit=no
 @groupinfo cedit caption="Kontaktide muutmine" parent=contacts
-groupinfo green_btn caption="Lisa" parent=contacts no_caption=1
-groupinfo humanres caption="Inimesed" submit=no
 @groupinfo overview caption="Tegevused" 
 @groupinfo all_actions caption="Kõik" parent=overview submit=no
 @groupinfo calls caption="Kõned" parent=overview submit=no
@@ -276,6 +283,7 @@ class crm_company extends class_base
 	var $unit=0;
 	var $active_node = 0;
 	var $group_not_shown = true;
+	var $data = null;
 
 	function crm_company()
 	{
@@ -416,7 +424,7 @@ class crm_company extends class_base
 			}
 			case "unit_listing_tree":
 			{
-				$tree_inst = &$arr['prop']['vcl_inst'];	
+				$tree_inst = &$arr['prop']['vcl_inst'];
 				//toplevel tree item, unit=>parent won't fall into if((int)$arr['request']['unit']), so its okay
 				if($arr['request']['unit']=='parent' || !$arr['request']['unit'])
 				{
@@ -518,7 +526,9 @@ class crm_company extends class_base
 			case "org_tasks":
 				$this->do_org_actions(&$arr);
 				break;
-
+			case 'old_human_resources':
+				$this->do_human_resources($arr,true);
+				break;
 			case "human_resources":
 				$this->do_human_resources($arr);
 				break;
@@ -649,7 +659,7 @@ class crm_company extends class_base
 		
 	}
 	
-	function do_human_resources($arr)
+	function do_human_resources($arr,$old_iface=false)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
@@ -674,30 +684,35 @@ class crm_company extends class_base
                         'caption' => 'Ametinimetus',
                         'sortable' => '1',
                 ));
-		/*
-		$t->define_field(array(
+		/*$t->define_field(array(
                         'name' => 'lastaction',
                         'caption' => 'Viimane tegevus',
                         'sortable' => '1',
-                ));
-		*/
-		$t->define_field(array(
-			'name' => 'new_call',
-			'align' => 'center',
-		));
-		$t->define_field(array(
-			'name' => 'new_meeting',
-			'align' => 'center',
-		));
-		$t->define_field(array(
-			'name' => 'new_task',
-			'align' => 'center',
-		));
-
-		$t->define_chooser(array(
-			'name'=>'check',
-			'field'=>'id',
-		));
+                ));*/
+					 
+		if($old_iface)
+		{		
+			$t->define_field(array(
+				'name' => 'new_call',
+				'align' => 'center',
+			));
+			$t->define_field(array(
+				'name' => 'new_meeting',
+				'align' => 'center',
+			));
+			$t->define_field(array(
+				'name' => 'new_task',
+				'align' => 'center',
+			));
+		}
+		
+		if(!$old_iface)
+		{
+			$t->define_chooser(array(
+				'name'=>'check',
+				'field'=>'id',
+			));
+		}
 
 		$conns = $arr["obj_inst"]->connections_from(array(
 			"type" => RELTYPE_WORKERS,
@@ -706,7 +721,7 @@ class crm_company extends class_base
 		//if listing from a specific unit, then the reltype is different
 		if((int)$arr['request']['unit'])
 		{
-			$obj = new Object((int)$arr['request']['unit']);
+			$obj = new object((int)$arr['request']['unit']);
 			$conns = $obj->connections_from(array(
 				'type' => RELTYPE_MEMBER,
 			));
@@ -768,27 +783,44 @@ class crm_company extends class_base
 					"caption" => $pdat["email"],
 				)),
 			);
-
-			if ($cal_id)
+			if($old_iface)
 			{
-				$tdata["new_task"] = html::href(array(
-					"caption" => "Uus toimetus",
-					"url" => $pdat["add_task_url"],
-				));
-				$tdata["new_call"] = html::href(array(
-					"caption" => "Uus kõne",
-					"url" => $pdat["add_call_url"],
-				));
-				$tdata["new_meeting"] = html::href(array(
-					"caption" => "Uus kohtumine",
-					"url" => $pdat["add_meeting_url"],
-				));
-			};
-
+				if ($cal_id)
+				{
+					$tdata["new_task"] = html::href(array(
+						"caption" => "Uus toimetus",
+						"url" => $pdat["add_task_url"],
+					));
+					$tdata["new_call"] = html::href(array(
+						"caption" => "Uus kõne",
+						"url" => $pdat["add_call_url"],
+					));
+					$tdata["new_meeting"] = html::href(array(
+						"caption" => "Uus kohtumine",
+						"url" => $pdat["add_meeting_url"],
+					));
+				};
+			}
 			$t->define_data($tdata);
 		};
 
 	}
+
+	/*function get_all_workers_for_company($obj)
+	{	
+		$conns = $arr["obj_inst"]->connections_from(array(
+			"type" => RELTYPE_WORKERS,
+		));
+
+		//if listing from a specific unit, then the reltype is different
+		if((int)$arr['request']['unit'])
+		{
+			$obj = new object((int)$arr['request']['unit']);
+			$conns = $obj->connections_from(array(
+				'type' => RELTYPE_MEMBER,
+			));
+		}
+	}*/
 
 	function callb_human_name($arr)
 	{
@@ -1029,7 +1061,22 @@ class crm_company extends class_base
 		$arr['clid'] = CL_TASK;
 		$this->submit_new_action_to_person(&$arr);
 	}
-	
+
+	/**
+		@attrib name=search_for_contacts
+	**/
+	function search_for_contacts($arr)
+	{
+		//arr($arr);
+		return $this->mk_my_orb(
+					'change',array(
+						'id' => $arr['id'],
+						'group' => $arr['group'],
+						'customer_search' => true,
+						),
+					'crm_company');
+	}
+
 	/**
 		@attrib name=submit_new_call
 		@param id required type=int acl=view
@@ -1365,7 +1412,7 @@ class crm_company extends class_base
 			if (is_oid($o->prop("ettevotlusvorm")))
 			{
 				$tmp = new object($o->prop("ettevotlusvorm"));
-				$vorm = $tmp->name();
+				$vorm = $tmp->prop('shortname');
 			};
 
 			if (is_oid($o->prop("pohitegevus")))
@@ -1581,6 +1628,13 @@ class crm_company extends class_base
 			'img' => 'class_244.gif',
 			'tooltip' => 'Uus toimetus',
 			'action' => 'submit_new_task'
+		));
+
+		$tb->add_button(array(
+			'name' => 'Search',
+			'img' => 'search.gif',
+			'tooltip' => 'Otsi',
+			'action' => 'search_for_contacts'
 		));
 	}
 
