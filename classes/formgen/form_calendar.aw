@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.17 2003/02/07 16:21:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.18 2003/02/07 16:54:09 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 classload("formgen/form_base");
 class form_calendar extends form_base
@@ -416,7 +416,7 @@ class form_calendar extends form_base
 		// tema broneeritud ruumide summaga arvestama
 		$q = "SELECT SUM(items) AS sum FROM calendar2event
 			LEFT JOIN objects ON (calendar2event.entry_id = objects.oid)
-			WHERE objects.status = 2 AND cal_id = '$cal_id' AND form_id = '$id'
+			WHERE cal_id = '$cal_id' AND form_id = '$id'
 				AND relation = '$entry_id' 
 				AND end >= '$start' AND start <= '$end'";
 		/*
