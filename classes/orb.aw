@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.31 2003/01/30 12:31:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.32 2003/02/05 10:52:46 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 class orb extends aw_template 
@@ -681,8 +681,13 @@ class new_orb extends orb
 
 		// do the method calling thing
 		$orb_defs = $this->try_load_class($request["class"]);
-
+	
 		$params = $this->check_method_params($orb_defs, $request["params"], $request["class"], $request["action"]);
+
+		if (!isset($orb_defs[$request["class"]][$request["action"]]))
+		{
+			$this->raise_error(ERR_ORB_MNOTFOUND,sprintf("No action with name %s defined in class %s! Malformed XML?",$request["action"],$request["class"]),true,$this->silent);
+		}
 
 		$ret = $this->do_local_call($orb_defs[$request["class"]][$request["action"]]["function"], $request["class"], $params,$orb_defs[$request["class"]]["___folder"]);
 
