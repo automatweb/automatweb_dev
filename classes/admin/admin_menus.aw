@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.26 2003/09/24 12:49:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.27 2003/09/30 09:12:32 kristo Exp $
 class admin_menus extends aw_template
 {
 	// this will be set to document id if only one document is shown, a document which can be edited
@@ -1355,10 +1355,10 @@ class admin_menus extends aw_template
 			$tmp[] = html::href(array(
 				"url" => $url,
 				"target" => $target,
-				"caption" => "<font size=\"1\" color=\"#FFFFFF\">".($lid == aw_global_get("lang_id") ? "<b>".$ln."</b>" : $ln)."</font>"
+				"caption" => ($lid == aw_global_get("lang_id") ? "<b>".$ln."</b>" : $ln)
 			));
 		}
-		$toolbar->add_end_cdata("<font size=\"1\" color=\"#FFFFFF\">[".join("|", $tmp)."]</font>");
+		$toolbar->add_end_cdata("<span class=\"mlang\">[".join("|", $tmp)."]</span>&nbsp;&nbsp;&nbsp;&nbsp;");
 
 
 		return $toolbar;
