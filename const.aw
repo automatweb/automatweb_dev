@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.45 2001/10/09 22:18:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.46 2001/10/29 09:22:18 kristo Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -228,7 +228,7 @@ else
 		{
 			$admin_lang_lc = "et";
 		}
-		include_once("$basedir/lang/" . $admin_lang_lc . "/$file.$ext");
+		@include_once("$basedir/lang/" . $admin_lang_lc . "/$file.$ext");
 	}
 
 	// loads localization constants from the site's $site_basedir
@@ -413,6 +413,8 @@ define("CL_SEARCH_FILTER",78);
 
 define("CL_TEMPLATE",79); // metaobjekt templatefaili jaoks, used to keep track of changes
 				// and archives
+define("CL_HTML_POPUP",80); // html popup
+define("CL_LINK_COLLECTION",81); // lingikogu (dokualiase jaoks)
 
 // can_add määrab ära kas, seda klassi näidatakse Lisa listboxis
 
@@ -474,6 +476,7 @@ $class_defs = array(	CL_PSEUDO => array("name" => LC_CONST_MENU,"file" => "menue
 			CL_ML_RULE => array("name" => "Meililisti ruul","file" => "ml_rule","can_add" => 1),
 			CL_SHOP_TABLE => array("name" => "Kaupade tabel", "file" => "shop_table", "can_add" => 1),
 			CL_SEARCH_FILTER => array("name" => "Otsimise filter", "file" => "search_filter", "can_add" => 1),
+			CL_HTML_POPUP => array("name" => "HTML popup", "file" => "html_popup", "can_add" => 1),
 );
 // kliendid. 
 // hierarhia esimene element on root
@@ -571,6 +574,8 @@ define("PRG_SYSCONF",50); // konfiguratsioonieditor
 define("PRG_CONFIG_REDIRECT",51);	// sisselogimist vajavate veateadete konfimine
 define("PRG_TPLEDIT",52); // templateeditor
 define("PRG_DOCMGR",53); // document manager
+define("PRG_HTML_POPUP",54); // html popip
+define("PRG_CONFIG_SITES",55);// saitide tegemine
 
 // MN_* konstandid on defineeritud $basedir/lang/$lc/common.aw sees
 // $lc = keelekood, vaikimisi "ee"
@@ -614,19 +619,20 @@ PRG_BANNERS						=> array("name" => MN_BANNERS,					"url" => "orb.aw?class=banne
 PRG_SEARCH_OBJS				=> array("name" => MN_SEARCH_OBJS,			"url" => "orb.aw?class=objects&action=search"),
 PRG_SITE_BANNER_ADMIN	=> array("name" => MN_SITE_BANNER_ADMIN,"url" => "orb.aw?class=banner_buyer&action=sel_buyer_redirect&fun=buyer_banners&r_class=banner"),
 PRG_SITE_BANNER_STATS	=> array("name" => MN_SITE_BANNER_STATS,"url" => "orb.aw?class=banner_buyer&action=sel_buyer_redirect&fun=buyer_banner_stats&r_class=banner_buyer"),
-PRG_BANNER_USERS			=> array("name" => MN_BANNER_USERS,"url" => "orb.aw?class=banner&action=show_users"),
-PRG_BANNER_PROFILES		=> array("name" => MN_BANNER_PROFILES,"url" => "orb.aw?class=banner&action=show_profiles"),
-PRG_EKOMAR						=> array("name" => MN_EKOMAR,            "url" => "orb.$ext?class=ekomar&action=list_files"),
+PRG_BANNER_USERS			=> array("name" => MN_BANNER_USERS,			"url" => "orb.aw?class=banner&action=show_users"),
+PRG_BANNER_PROFILES		=> array("name" => MN_BANNER_PROFILES,	"url" => "orb.aw?class=banner&action=show_profiles"),
+PRG_EKOMAR						=> array("name" => MN_EKOMAR,           "url" => "orb.$ext?class=ekomar&action=list_files"),
 PRG_KEYWORD						=> array("name" => MN_KEYWORD,					"url" => "orb.aw?class=keywords&action=list"),
 PRG_CONF_JOIN_MAIL		=> array("name" => MN_JOIN_MAIL,				"url" => "orb.aw?class=config&action=join_mail"),
-PRG_CSS_EDITOR		=> array("name" => "Kasutaja CSS editor",				"url" => "orb.aw?class=css&action=list"),
-PRG_CSS_SYS_EDITOR		=> array("name" => "Süsteemi CSS editor",				"url" => "orb.aw?class=css&action=syslist"),
-PRG_ML_MANAGER		=> array("name" => "Meililistid",				"url" => "orb.aw?class=ml_queue&action=queue&manager=1"),
-PRG_SYSCONF				=> array("name" => "Automatweb config", "url" => "orb.aw?class=sysconf&action=edit"),
-PRG_CONFIG_ERRORS	=> array("name" => "Config/Veateated",			"url" => "orb.aw?class=config&action=errors"),
-PRG_CONFIG_REDIRECT => array("name" => "Config/suunamine", "url" => "orb.aw?class=config&action=grp_redirect"),
-PRG_TPLEDIT => array("name" => "TemplateEditor", "url" => "orb.aw?class=tpledit&action=browse"),
-PRG_DOCMGR => array("name" => "Document manager", "url" => "orb.aw?class=docmgr&action=search"),
+PRG_CSS_EDITOR				=> array("name" => "Kasutaja CSS editor","url" => "orb.aw?class=css&action=list"),
+PRG_CSS_SYS_EDITOR		=> array("name" => "Süsteemi CSS editor","url" => "orb.aw?class=css&action=syslist"),
+PRG_ML_MANAGER				=> array("name" => "Meililistid",				"url" => "orb.aw?class=ml_queue&action=queue&manager=1"),
+PRG_SYSCONF						=> array("name" => "Automatweb config", "url" => "orb.aw?class=sysconf&action=edit"),
+PRG_CONFIG_ERRORS			=> array("name" => "Config/Veateated",	"url" => "orb.aw?class=config&action=errors"),
+PRG_CONFIG_REDIRECT		=> array("name" => "Config/suunamine",	"url" => "orb.aw?class=config&action=grp_redirect"),
+PRG_TPLEDIT						=> array("name" => "TemplateEditor",		"url" => "orb.aw?class=tpledit&action=browse"),
+PRG_DOCMGR						=> array("name" => "Document manager",	"url" => "orb.aw?class=docmgr&action=search"),
+PRG_CONFIG_SITES			=> array("name" => "Config/saidid",			"url" => "orb.aw?class=config&action=sites"),
 );
 
 // formide tyybid
@@ -644,4 +650,9 @@ PRG_DOCMGR => array("name" => "Document manager", "url" => "orb.aw?class=docmgr&
 	define("LINKC_LINKSPERLINE",3);
 
 
+// here we configure the necessary stuff for adding sites
+$AW_SITES_basefolder = "/www";
+$AW_SITES_vhost_folder = "/etc/apache/vhosts";
+$AW_SITES_server_ip = "194.204.30.123";
+$AW_SITES_admin_dir = "/www/automatweb_dev/automatweb";
 ?>
