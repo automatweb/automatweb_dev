@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.210 2003/07/16 15:26:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.211 2003/07/17 15:50:32 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -2563,9 +2563,8 @@ class core extends acl_base
 		{
 			$arr["class"] = get_class($this);
 		}
-		
-		classload("orb");
-		$ob = new new_orb;
+	
+		$ob = get_instance("orb");
 		return $ob->do_method_call($arr);
 	}
 
