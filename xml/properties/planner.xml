@@ -229,18 +229,9 @@
             <caption>Kinnita ajad</caption>
       </property>
       <property>
-            <name>search</name>
-            <table>objects</table>
-            <group>views</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <store>no</store>
-            <type>hidden</type>
-      </property>
-      <property>
             <name>event_search_name</name>
             <table>objects</table>
-            <group>views</group>
+            <group>search</group>
             <field>meta</field>
             <method>serialize</method>
             <store>no</store>
@@ -250,7 +241,7 @@
       <property>
             <name>event_search_content</name>
             <table>objects</table>
-            <group>views</group>
+            <group>search</group>
             <field>meta</field>
             <method>serialize</method>
             <store>no</store>
@@ -260,7 +251,7 @@
       <property>
             <name>event_search_comment</name>
             <table>objects</table>
-            <group>views</group>
+            <group>search</group>
             <field>meta</field>
             <method>serialize</method>
             <store>no</store>
@@ -270,7 +261,7 @@
       <property>
             <name>event_search_type</name>
             <table>objects</table>
-            <group>views</group>
+            <group>search</group>
             <field>meta</field>
             <method>serialize</method>
             <store>no</store>
@@ -283,7 +274,7 @@
       <property>
             <name>event_search_add</name>
             <table>objects</table>
-            <group>views</group>
+            <group>search</group>
             <field>meta</field>
             <method>serialize</method>
             <store>no</store>
@@ -295,7 +286,7 @@
       <property>
             <name>event_search_button</name>
             <table>objects</table>
-            <group>views</group>
+            <group>search</group>
             <field>meta</field>
             <method>serialize</method>
             <store>no</store>
@@ -305,7 +296,7 @@
       <property>
             <name>event_search_results_table</name>
             <table>objects</table>
-            <group>views</group>
+            <group>search</group>
             <field>meta</field>
             <method>serialize</method>
             <store>no</store>
@@ -358,6 +349,10 @@
             <add_event>
                   <caption>Muuda s&amp;uuml;ndmust</caption>
             </add_event>
+            <search>
+                  <caption>Otsing</caption>
+                  <submit_method>get</submit_method>
+            </search>
       </groupinfo>
       <reltypes>
             <EVENT_SOURCE>
