@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/datasource.aw,v 2.4 2002/07/23 21:13:01 duke Exp $
 // type of the data, I'm storing it in the subclass field of the objects table
 // so that I can retrieve all sources with the same type with one query
 define("DS_XML",1);
