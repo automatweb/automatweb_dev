@@ -331,16 +331,21 @@ class group extends class_base
 		{
 			// FIXME: classbase will automatically give the connection as a parameter, but 
 			// currently we do this ourselves
+
+			/*
 			if ($arr["obj_inst"]->meta("conn_id"))
 			{
 				$c = new connection($arr["obj_inst"]->meta("conn_id"));
 			}
 			else
 			{
+			*/
 				$c = new connection();
 				list(, $c_d) = each($c->find(array("relobj_id" => $arr["obj_inst"]->id())));
 				$c = new connection($c_d["id"]);
+			/*
 			}
+			*/
 
 			// now set the real acl from the connection
 			$grp = $c->to();
@@ -862,16 +867,20 @@ class group extends class_base
 			// handle relation objects
 			// FIXME: classbase will automatically give the connection as a parameter, but 
 			// currently we do this ourselves
+			/*
 			if ($arr["obj_inst"]->meta("conn_id"))
 			{
 				$c = new connection($arr["obj_inst"]->meta("conn_id"));
 			}
 			else
 			{
+			*/
 				$c = new connection();
 				list(, $c_d) = each($c->find(array("relobj_id" => $arr["obj_inst"]->id())));
 				$c = new connection($c_d["id"]);
+			/*
 			}
+			*/
 
 			// now get the real acl from the connection
 			$grp = $c->to();
