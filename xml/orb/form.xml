@@ -316,6 +316,27 @@
 			</function>
 		</action>
 
+		<action name="convtables">
+			<function name="convtables">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="conventries">
+			<function name="conventries">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="convchains">
+			<function name="convchains">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="convtype">
 			<function name="convtype">
 				<arguments>
@@ -333,6 +354,21 @@
 
 		<action name="save_folders">
 			<function name="save_folders">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="translate">
+			<function name="translate">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_translate">
+			<function name="submit_translate">
 				<arguments>
 				</arguments>
 			</function>
