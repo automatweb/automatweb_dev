@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.198 2004/01/14 15:21:22 kristo Exp $
+// $Id: class_base.aw,v 2.199 2004/01/19 11:46:30 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -533,6 +533,7 @@ class class_base extends aw_template
 				));
 			};
 		};
+
 		// rrrr, temporary hack
 		if (isset($this->id_only))
 		{
@@ -1852,7 +1853,8 @@ class class_base extends aw_template
 
 				if (($val["type"] == "relmanager") && !is_object($val["vcl_inst"]))
 				{
-					$val["vcl_inst"] = get_instance("vcl/relmanager");
+					classload("vcl/relmanager");
+					$val["vcl_inst"] = new relmanager();
 				};
 				
 				if (($val["type"] == "table") && !is_object($val["vcl_inst"]))
@@ -2010,8 +2012,6 @@ class class_base extends aw_template
 			};
 		}
 
-
-	
 		// if name_prefix given, prefixes all element names with the value 
 		// e.g. if name_prefix => "emb" and there is a property named comment,
 		// then the result will be name => emb[comment], this simplifies 
