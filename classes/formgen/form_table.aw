@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.49 2003/10/06 14:32:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.50 2004/01/06 11:56:39 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -2075,10 +2075,10 @@ class form_table extends form_base
 				{
 					$this->vars(array(
 						"el_name" => $els[$el],
-						"el_ord" => $this->table["defs"][$col]["el_ord"][$el],
+						"el_ord" => str_replace("\"", "&quot;", $this->table["defs"][$col]["el_ord"][$el]),
 						"el_id" => $el,
-						"el_sep" => $this->table["defs"][$col]["el_sep"][$el],
-						"el_sep_pre" => $this->table["defs"][$col]["el_sep_pre"][$el],
+						"el_sep" => str_replace("\"", "&quot;", $this->table["defs"][$col]["el_sep"][$el]),
+						"el_sep_pre" => str_replace("\"", "&quot;", $this->table["defs"][$col]["el_sep_pre"][$el]),
 						"el_show" => checked($this->table["defs"][$col]["el_show"][$el]),
 						"el_search" => checked($this->table["defs"][$col]["el_search"][$el])
 					));
@@ -2109,7 +2109,7 @@ class form_table extends form_base
 			$this->vars(array(
 				"HAS_FTABLE_ALIASES" => ($has_ftable_aliases ? $this->parse("HAS_FTABLE_ALIASES") : ""),
 				"col_not_active" => checked($this->table["defs"][$col]["not_active"]),
-				"col_el_sep" => $this->table["defs"][$col]["col_el_sep"]
+				"col_el_sep" => str_replace("\"", "&quot;", $this->table["defs"][$col]["col_el_sep"])
 			));
 			$coldata[$col][10] = $this->parse("SEL_SETTINGS");
 
