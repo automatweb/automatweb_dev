@@ -1,8 +1,5 @@
 <?php
-
-if (!defined(MSGBOARD_LOADED))
-{
-define(MSGBOARD_LOADED,1);
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.2 2001/05/25 22:49:56 duke Exp $
 
 define(PER_PAGE,10);
 define(PER_FLAT_PAGE,20);
@@ -141,7 +138,7 @@ class msgboard extends aw_template
 		$this->tpl_reset();
 		$this->read_template("add.tpl");
 		$this->vars(array("parent" => $parent, "section" => $section,"ext" => $GLOBALS["ext"],"subj" => $subj, "comment" => $comment,"page" => $page));
-		$this->situ_tais();
+		$this->flush_cache();
 		return $this->parse();
 	}
 
@@ -217,7 +214,7 @@ class msgboard extends aw_template
 				mail($mail[email], FORUM_MAIL_SUBJECT, $msg, "From: ".FORUM_MAIL_FROM."\n\n");
 			}
 		}
-		$this->situ_tais();
+		$this->flush_cache();
 		return $id;
 	}
 
@@ -817,5 +814,4 @@ class msgboard extends aw_template
 		return preg_replace("/&lt;ftp(.*)&gt;/","<a href='ftp\\1'>ftp\\1</a>",$ret);
 	}
 };
-}
 ?>
