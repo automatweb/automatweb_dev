@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.12 2004/03/15 08:44:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.13 2004/03/25 09:41:01 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -183,7 +183,10 @@ class poll extends class_base
 				"click_answer" => str_replace("&", "&amp;", $au),
 				"clicks" => $v["clicks"],
 			));
-			$as.=$this->parse("ANSWER");
+			if ($v["answer"] != "")
+			{
+				$as.=$this->parse("ANSWER");
+			}
 		}
 		if ($def)
 		{
