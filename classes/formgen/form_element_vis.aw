@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element_vis.aw,v 2.1 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element_vis.aw,v 1.1 2002/10/29 10:25:32 kristo Exp $
 
 class form_element_vis
 {
