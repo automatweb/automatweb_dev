@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.5 2004/05/06 12:19:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.6 2004/05/13 12:00:30 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -1152,7 +1152,8 @@ class shop_warehouse extends class_base
 				"modified" => $m->modified(),
 				"view" => html::href(array(
 					"url" => $this->mk_my_orb("change", array(
-						"id" => $o->id()
+						"id" => $o->id(),
+						"group" => "items"
 					), CL_SHOP_ORDER),
 					"caption" => "Vaata"
 				)),
@@ -1531,7 +1532,18 @@ class shop_warehouse extends class_base
 			$ret[] = $o;
 		}
 
-		return $ret;
+		// now, let the classes add sub-items to the list
+		$tmp = array();
+		foreach($ret as $o)
+		{
+			$inst = $o->instance();
+			foreach($inst->get_contained_products($o) as $co)
+			{
+				$tmp[] = $co;
+			}
+		}
+
+		return $tmp;
 	}
 
 	function get_order_folder($w)

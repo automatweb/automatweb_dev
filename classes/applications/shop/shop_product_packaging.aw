@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.1 2004/05/06 12:19:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.2 2004/05/13 12:00:30 kristo Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -7,6 +7,65 @@
 
 @default table=objects
 @default group=general
+
+@tableinfo aw_shop_packaging index=id master_table=objects master_index=brother_of
+@default table=aw_shop_packaging
+
+@property price type=textbox size=5 field=aw_price
+@caption Hind
+
+@groupinfo data caption="Andmed"
+@default group=data
+
+@property user1 type=textbox field=user1 group=data
+@caption User-defined 1
+
+@property user2 type=textbox field=user2 group=data
+@caption User-defined 2
+
+@property user3 type=textbox field=user3 group=data
+@caption User-defined 3
+
+@property user4 type=textbox field=user4 group=data
+@caption User-defined 4
+
+@property user5 type=textbox field=user5 group=data
+@caption User-defined 5
+
+@property userta1 type=textarea field=userta1 group=data
+@caption User-defined ta 1
+
+@property userta2 type=textarea field=userta2 group=data
+@caption User-defined ta 2
+
+@property userta3 type=textarea field=userta3 group=data
+@caption User-defined ta 3
+
+@property userta4 type=textarea field=userta4 group=data
+@caption User-defined ta 4
+
+@property userta5 type=textarea field=userta5 group=data
+@caption User-defined ta 5
+
+
+@property uservar1 type=classificator field=uservar1 group=data
+@caption User-defined var 1
+
+@property uservar2 type=classificator field=uservar2 group=data
+@caption User-defined var 2
+
+@property uservar3 type=classificator field=uservar3 group=data
+@caption User-defined var 3
+
+@property uservar4 type=classificator field=uservar4 group=data
+@caption User-defined var 4
+
+@property uservar5 type=classificator field=uservar5 group=data
+@caption User-defined var 5
+
+
+@reltype IMAGE value=1 clid=CL_IMAGE
+@caption pilt 
 
 */
 
@@ -55,6 +114,134 @@ class shop_product_packaging extends class_base
 			"name" => $ob->prop("name"),
 		));
 		return $this->parse();
+	}
+
+	/** returns the html for the product
+
+		@comment
+
+			uses the $layout object to draw the product packaging $prod
+			from the layout reads the template and inserts correct vars
+			optionally you can give the $quantity parameter
+			$oc_obj must be the order center object via what the product is drawn
+			
+	**/
+	function do_draw_product($arr)
+	{
+		extract($arr);
+
+		$pr_i = get_instance(CL_SHOP_PRODUCT);
+
+		$pi = $prod;
+		$prod = reset($pi->connections_to(array(
+			"from.class_id" => CL_SHOP_PRODUCT,
+		)));
+		$prod = $prod->from();
+
+		$l_inst = $layout->instance();
+		$l_inst->read_template($layout->prop("template"));
+		$ivs = array(
+			"packaging_name" => $pi->name(),
+			"packaging_price" => $this->get_price($pi),
+			"packaging_id" => $pi->id(),
+			"packaging_quantity" => (int)($arr["quantity"]),
+			"packaging_view_link" => obj_link($pi->id().":".$oc_obj->id()),
+			"name" => $prod->name(),
+			"price" => $this->get_price($prod),
+			"id" => $prod->id(),
+			"quantity" => (int)($arr["quantity"]),
+			"view_link" => obj_link($prod->id().":".$oc_obj->id())
+		);
+		$l_inst->vars($ivs);
+		$pr_i->_int_proc_ivs($ivs, $l_inst);
+
+		// insert images
+		$i = get_instance("image");
+		$cnt = 1;
+		$imgc = $prod->connections_from(array("type" => "RELTYPE_IMAGE"));
+		usort($imgc, create_function('$a,$b', 'return ($a->prop("to.jrk") == $b->prop("to.jrk") ? 0 : ($a->prop("to.jrk") > $b->prop("to.jrk") ? 1 : -1));'));
+		foreach($imgc as $c)
+		{
+			$u = $i->get_url_by_id($c->prop("to"));
+			$l_inst->vars(array(
+				"image".$cnt => image::make_img_tag($u, $c->prop("to.name")),
+				"image".$cnt."_url" => $u
+			));
+			$cnt++;
+		}
+		$imgc = $pi->connections_from(array("type" => "RELTYPE_IMAGE"));
+		usort($imgc, create_function('$a,$b', 'return ($a->prop("to.jrk") == $b->prop("to.jrk") ? 0 : ($a->prop("to.jrk") > $b->prop("to.jrk") ? 1 : -1));'));
+		foreach($imgc as $c)
+		{
+			$u = $i->get_url_by_id($c->prop("to"));
+			$l_inst->vars(array(
+				"packaging_image".$cnt => image::make_img_tag($u, $c->prop("to.name")),
+				"packaging_image".$cnt."_url" => $u
+			));
+			$cnt++;
+		}
+		
+		for($i = 1; $i < 21; $i++)
+		{
+			$tmp = $prod->prop("uservar".$i);
+			if ($tmp)
+			{
+				$tmp = obj($tmp);
+				$tmp = $tmp->name();
+			}
+			else
+			{
+				$tmp = "";
+			}
+			$tmp2 = $pi->prop("uservar".$i);
+			if ($tmp2)
+			{
+				$tmp2 = obj($tmp2);
+				$tmp2 = $tmp2->name();
+			}
+			else
+			{
+				$tmp2 = "";
+			}
+			$ivar = array(
+				"user".$i => $prod->prop("user".$i),
+				"userta".$i => nl2br($prod->prop("userta".$i)),
+				"uservar".$i => $tmp,
+				"packaging_user".$i => $pi->prop("user".$i),
+				"packaging_userta".$i => nl2br($pi->prop("userta".$i)),
+				"packaging_uservar".$i => $tmp2
+			);
+			$l_inst->vars($ivar);
+			$pr_i->_int_proc_ivs($ivar, $l_inst);
+		}
+
+		return $l_inst->parse();
+	}
+
+	function get_price($o)
+	{
+		return number_format($o->prop("price"),2);
+	}
+
+	function request_execute($obj)
+	{
+		list($prod_id, $oc_id) = explode(":", aw_global_get("section"));
+		$prod = obj($prod_id);
+
+		// get layout from soc.
+		$soc_o = obj($oc_id);
+		$soc_i = $soc_o->instance();
+
+		$layout = $soc_i->get_long_layout_for_prod(array(
+			"soc" => $soc_o,
+			"prod" => $prod
+		));
+
+		return $this->do_draw_product(array(
+			"layout" => $layout,
+			"prod" => $prod,
+			"oc_obj" => $soc_o
+		));
 	}
 }
 ?>
