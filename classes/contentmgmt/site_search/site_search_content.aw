@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.27 2004/12/01 10:58:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.28 2004/12/02 09:22:41 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -424,7 +424,7 @@ class site_search_content extends class_base
 			FROM 
 				static_content 
 			WHERE 
-				".$this->_get_sstring($str, $opts["str"], $content)." AND 
+				".$this->_get_sstring($str, $opts["str"], "content")." AND 
 				section IN (".$ams->to_sql().") AND
 				lang_id = '".aw_global_get("lang_id")."'
 		";
