@@ -676,6 +676,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->meta_filter = array();
 		$this->alias_joins = array();
 
+		$this->joins = array();
+
 		$where = $this->req_make_sql($params);
 
 		if (!$this->stat)
@@ -706,7 +708,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		{
 			$js[] = " LEFT JOIN aliases $aj[name] ON $aj[on] ";
 		}
-		$joins = join("", $js);
+
+
+		$joins = join("", $js).join(" ", $this->joins);
 
 		$ret = array();
 		if ($where != "")
@@ -762,6 +766,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	function req_make_sql($params, $logic = "AND")
 	{
 		$sql = array();
+		$p_tmp = $params;
 		foreach($params as $key => $val)
 		{
 			if ($val === NULL)
@@ -793,6 +798,17 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 			$tbl = "objects";
 			$fld = $key;
+
+			// check for dots in key. if there are any, then we gots some join thingie
+			if (strpos($key, ".") !== false)
+			{
+				list($tbl, $fld) = $this->_do_proc_complex_param(array(
+					"key" => &$key, 
+					"val" => $val, 
+					"params" => $p_tmp
+				));
+			}
+			else
 			if (isset($this->properties[$key]) && $this->properties[$key]["store"] != "no")
 			{
 				$tbl = $this->properties[$key]["table"];
@@ -810,10 +826,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						"msg" => "filter cannot contain properties ($key) that are in serialized fields other than metadata!"
 					));
 				}
+				$this->used_tables[$tbl] = $tbl;
 			}
 
 			$tf = $tbl.".".$fld;
-			$this->used_tables[$tbl] = $tbl;
+
 
 			if ($this->properties[$key]["store"] == "connect")
 			{
@@ -982,9 +999,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		foreach($clids as $clid)
 		{
-			if (!isset($GLOBALS["properties"][$clid]) || !isset($GLOBALS["tableinfo"][$clid]))
+			if (!isset($GLOBALS["properties"][$clid]) || !isset($GLOBALS["tableinfo"][$clid]) || !isset($GLOBALS["relinfo"][$clid]))
 			{
-				list($GLOBALS["properties"][$clid], $GLOBALS["tableinfo"][$clid]) = $GLOBALS["object_loader"]->load_properties(array(
+				list($GLOBALS["properties"][$clid], $GLOBALS["tableinfo"][$clid], $GLOBALS["relinfo"][$clid]) = $GLOBALS["object_loader"]->load_properties(array(
 					"file" => ($clid == CL_DOCUMENT ? "doc" : $classes[$clid]["file"]),
 					"clid" => $clid
 				));
@@ -1053,6 +1070,185 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->db_query("INSERT INTO hits(oid,hits,cachehits) VALUES($oid, 0, 0 )");
 
 		return $oid;
+	}
+
+	// $key, $val 
+	function _do_proc_complex_param($arr)
+	{
+		extract($arr);
+		
+		$filt = explode(".", $key);
+		$clid = constant($filt[0]);
+		
+		if (!is_class_id($clid))
+		{
+			if (!is_array($params["class_id"]))
+			{
+				error::throw_if(!is_class_id($params["class_id"]), array(
+					"id" => ERR_OBJ_NO_CLID,
+					"msg" => "ds_mysql::do_proc_complex_param($key, $val): if a complex join parameter is given without a class id as the first element, the class_id parameter must be set!"
+				));
+				$clid = $params["class_id"];
+			}
+			else
+			{
+				$clid = reset($params["class_id"]);
+			}
+		}
+
+		$this->foo = array(); 
+		$this->_req_do_pcp($filt, 1, $clid, $arr);
+
+		$this->joins = array();
+
+		// join all other tables from the starting class except the objects table
+		$tmp = $GLOBALS["tableinfo"][$clid];
+		unset($tmp["objects"]);
+		foreach($tmp as $tbl => $tbldat)
+		{
+			$this->joins[] = " LEFT JOIN $tbl ".$tbl."_".$clid." ON ".$tbl."_".$clid.".".$tbldat["index"]." = ".$tbldat["master_table"].".".$tbldat["master_index"]." ";
+		}
+
+		// now make joins and for the final prop, query
+		foreach($this->join_data as $pos => $join)
+		{
+			if ($join["via"] == "rel")
+			{
+				// from prev to alias from alias to obj
+				$prev_t = $join["table"]."_".$join["from_class"];
+				$prev_clid = $join["from_class"];
+
+				$str  = " LEFT JOIN aliases aliases_".$join["from_class"]." ON aliases_".$join["from_class"].".source = ";
+				$str .= " objects_".$join["from_class"].".oid ";
+				$this->joins[] = $str;
+
+				$str  = " LEFT JOIN objects objects_".$join["to_class"]." ON objects_".$join["to_class"].".target = ";
+				$str .= " objects_".$join["to_class"].".oid ";
+				$this->joins[] = $str;
+			}
+			else	// via prop
+			{
+				if (!$join["to_class"])
+				{
+					$prev_t = $join["table"]."_".$prev_clid;
+					$ret = array(
+						$prev_t,
+						$GLOBALS["properties"][$join["from_class"]][$join["prop"]]["field"],
+					);
+					continue;
+				}
+
+				// if the next stop is a property
+				// then join all the tables in that class
+				// first the objects table
+
+				$prev_t = $join["table"]."_".$join["from_class"];
+				$prev_clid = $join["from_class"];
+				$this->joins[] = " LEFT JOIN objects objects_".$join["from_class"]." ON objects_".$join["from_class"].".oid = $prev_t.".$join["field"]." ";
+			}
+		}
+
+		$arr["key"] = $filt[count($filt)-1];
+
+		return $ret;
+	}
+
+	function _req_do_pcp($filt, $pos, $cur_clid, $arr)
+	{
+		$pp = $filt[$pos];
+
+		// if the next param is RELTYPE_* then via relation
+		// else, if it is property for cur class - via property
+		// else - throw up
+
+		if (substr($pp, 0, 8) == "RELTYPE_")
+		{
+			$reltype_id = $GLOBALS["relinfo"][$cur_clid][$pp]["value"];
+			error::throw_if(!$reltype_id, array(
+				"id" => ERR_OBJ_NO_RELATION,
+				"msg" => "ds_mysql::_req_do_pcp(): no relation from class $cur_clid named $pp"
+			));
+
+			// calc new class id
+			$new_clid = $GLOBALS["relinfo"][$cur_clid][$pp]["clid"][0];
+
+			$this->join_data[] = array(
+				"via" => "rel",
+				"reltype" => $reltype_id,
+				"from_class" => $cur_clid,
+				"to_class" => $new_clid
+			);
+		}
+		else
+		{
+			if (!isset($GLOBALS["properties"][$cur_clid]))
+			{
+				$classes = aw_ini_get("classes");
+				list($GLOBALS["properties"][$cur_clid], $GLOBALS["tableinfo"][$cur_clid], $GLOBALS["relinfo"][$cur_clid]) = $GLOBALS["object_loader"]->load_properties(array(
+					"file" => ($cur_clid == CL_DOCUMENT ? "doc" : basename($classes[$cur_clid]["file"])),
+					"clid" => $cur_clid
+				));
+			}
+
+			error::throw_if(!is_array($GLOBALS["properties"][$cur_clid][$pp]), array(
+				"id" => ERR_OBJ_NO_PROP,
+				"msg" => "ds_mysql::_req_do_pcp(): no property $pp in class $cur_clid "
+			));
+
+			$cur_prop = $GLOBALS["properties"][$cur_clid][$pp];
+
+			$table = $cur_prop["table"];
+			$field = $cur_prop["field"];
+
+			// if it is the last one, then it can be anything
+			if ($pos < (count($filt) - 1))
+			{
+				error::throw_if($cur_prop["type"] != "relpicker", array(
+					"id" => ERR_OBJ_NO_RP,
+					"msg" => "ds_mysql::_req_do_pcp(): currently join properties can only be of type relpicker - can't figure out the class id of the object-to-join otherwise"
+				));
+	
+				error::throw_if($cur_prop["method"] == "serialize", array(
+					"id" => ERR_OBJ_NO_META,
+					"msg" => "ds_mysql::_req_do_pcp(): can not join classes on serialized fields (property $pp in class $cur_clid)"
+				));
+
+				switch ($cur_prop["type"])
+				{
+					case "relpicker":
+						$relt_s = $cur_prop["reltype"];
+						$relt = $GLOBALS["relinfo"][$cur_clid][$relt_s]["value"];
+				
+						error::throw_if(!$relt, array(
+							"id" => ERR_OBJ_NO_REL,
+							"msg" => "ds_mysql::_req_do_pcp(): no reltype $relt_s in class $cur_clid , got reltype from relpicker property $cur_prop[name]"
+						));
+	
+						$new_clid = $GLOBALS["relinfo"][$cur_clid][$relt_s]["clid"][0];
+						break;
+	
+					default:
+						error::throw(array(
+							"id" => ERR_OBJ_W_TP,
+							"msg" => "ds_mysql::_req_do_pcp(): incorrect prop type! ($cur_prop[type])"
+						));
+				}
+			}
+
+			$this->join_data[] = array(
+				"via" => "prop",
+				"prop" => $pp,
+				"from_class" => $cur_clid,
+				"to_class" => $new_clid,
+				"table" => $table,
+				"field" => $field
+			);
+		}
+
+		if ($pos < (count($filt)-1))
+		{
+			$this->_req_do_pcp($filt, $pos+1, $new_clid, $arr);
+		}
 	}
 }
 
