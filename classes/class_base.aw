@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.220 2004/02/25 16:12:10 kristo Exp $
+// $Id: class_base.aw,v 2.221 2004/02/26 14:30:04 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -81,6 +81,7 @@ class class_base extends aw_template
 	function class_base($args = array())
 	{
 		$this->init("");
+
 	}
 
 	function init($arg = array())
@@ -93,6 +94,11 @@ class class_base extends aw_template
 		};
 		$this->ds_name = "ds_local_sql";
 		$this->default_group = "general";
+		$this->features = array();
+
+		$this->vcl_register = array(
+			"classificator" => "classificator",
+		);
 		parent::init($arg);
 	}
 
@@ -124,7 +130,7 @@ class class_base extends aw_template
 
 	/** Generate a form for adding or changing an object 
 		
-		@attrib name=new params=name all_args="1" default="0"
+		@attrib name=new params=name all_args="1" 
 		
 		@param parent optional type=int acl="add"
 		@param period optional
@@ -148,7 +154,7 @@ class class_base extends aw_template
 
 	/**  
 		
-		@attrib name=change params=name all_args="1" default="0"
+		@attrib name=change params=name all_args="1"
 		
 		@param id optional type=int acl="edit"
 		@param group optional
@@ -199,10 +205,6 @@ class class_base extends aw_template
 			elseif (($args["action"] == "change") || ($args["action"] == "view"))
 			{
 				$this->load_storage_object($args);
-				// I'm breaking this CL_RELATION thingie for now. I have to. Or don't I?
-				// I absolutely freaking _HATE_ this magic with $this->values, it shucks
-				// so much.
-
 				if ($this->obj_inst->class_id() == CL_RELATION)
 				{
 					// this is a relation!
@@ -211,109 +213,108 @@ class class_base extends aw_template
 					$meta = $this->obj_inst->meta("values");
 					$this->values = $meta[$def];
 					$this->values["name"] = $this->obj_inst->name();
-					//$use_form = "rel";
 				};
 
 			};
 		}
 		else
 		{
-			$this->classinfo["no_yah"] = 1;
+			// because if I don't have a object id, I'm going to have a hard time drawing a yah line
+			$this->set_classinfo(array("name" => "no_yah", "value" => 1));
 		};
+
+		// now i need to do something with that translation thingie
 
 		// yees, this means that other forms besides add and edit cannot use custom config forms
 		// at least not yet.
 		if (empty($use_form))
 		{
-			// hmm, and maybe .. just maybe this is something else that a class would want to override . or?
+			// a class should be able to override it
 			$cfgform_id = $this->get_cfgform_for_object(array(
-				"meta" => $this->obj_inst->meta(),
+				"obj_inst" => $this->obj_inst,
 				"args" => $args,
 			));
+		};
 
-			$this->validate_cfgform($cfgform_id);
+		$cfgform_id = $args["cfgform"];
+		if (empty($cfgform_id) && is_object($this->obj_inst))
+		{
+			$cfgform_id = $this->obj_inst->meta("cfgform_id");
+		};
+		
+		$filter = array(
+			"clid" => $this->clid,
+			"clfile" => $this->clfile,
+			"group" => $args["group"],
+			"cfgform_id" => $cfgform_id,
+			"cb_part" => $args["cb_part"],
+		);
 
-			if ($this->classinfo["fixed_toolbar"])
-			{
-				$this->layout_mode = "fixed_toolbar";
-			}
+		if (!empty($args["form"]))
+		{
+			$filter["form"] = $args["form"];
+		};
+
+		if ($this->is_rel)
+		{
+			$filter["rel"] = 1;
 		};
 
 		// XXX: temporary -- duke
 		if ($args["fxt"])
 		{
 			$this->layout_mode = "fixed_toolbar";
-			$this->classinfo["hide_tabs"] = 1;
+			$filter["layout_mode"] == "fixed_toolbar";
 		}
 
-
-		$realprops = $this->get_active_properties(array(
-				"clfile" => $this->clfile,
-				"group" => isset($args["group"]) ? $args["group"] : "",
-				"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
-				"rel" => $this->is_rel,
-				"form" => isset($args["form"]) ? $args["form"] : "",
-				// only load the toolbar if we are shoing the container .. hm, perhaps
-				// there is a better way to accomplish that?
-				// gah, I'm really not that proud of this shit
-				"type" => ($this->layout_mode == "fixed_toolbar" && empty($args["cb_part"])) ? "toolbar" : "",
-		));
-
-
-		if (!empty($args["form"]) && isset($this->forminfo[$args["form"]]["onload"]))
+		// Now I need to deal with relation elements
+		$properties = $this->get_property_group($filter);
+		
+		if ($this->classinfo(array("name" => "trans")) == 1 && $this->id)
 		{
-			$onload_method = $this->forminfo[$args["form"]]["onload"];
+			$o_t = get_instance("translate/object_translation");
+			$t_list = $o_t->translation_list($this->id, true);
+			if (in_array($this->id, $t_list))
+			{
+				$this->is_translated = 1;
+				$tmp = $properties;
+				foreach($tmp as $pkey => $pval)
+				{
+					if ($pval["trans"] != 1 && $pval["name"] != "is_translated")
+					{
+						unset($properties[$pkey]);
+					};
+				};
+			}
+			else
+			{
+				unset($properties["is_translated"]);
+			};
+		}
+			
+		// XXX: temporary -- duke
+		if ($args["fxt"])
+		{
+			$this->set_classinfo(array("name" => "hide_tabs","value" => 1));
+		}
+
+		if (!empty($args["form"]))
+		{
+			$onload_method = $this->forminfo(array(
+				"form" => $args["form"],
+				"attr" => "onload",
+			));
+
 			if (method_exists($this->inst,$onload_method))
 			{
 				$this->inst->$onload_method($args);
 			}
-			else
-			{
-				//print "this class does not have a $onload_method method<br>";
-				//die();
-			};
 		};
-		
-		if ($args["fxt"])
-		{
-			$this->classinfo["hide_tabs"] = 1;
-			$this->classinfo["hide_tabs_L2"] = 1;
-		}
-
-
+	
 		$this->request = $args;
-
-		// XXX: what the fuck does this cycle do anyway?
-		foreach($this->groupinfo as $key => $val)
-		{
-			// ignore groups with no properties
-			if (empty($this->props_by_group[$key]))
-			{
-				continue;
-
-			}
-
-			//"hide_tabs_L2" kas seda kasutatakse kuskil??
-			if (isset($val["parent"]) && isset($this->classinfo["hide_tabs_L2"]))
-			{
-				continue;
-			}
-			// ignore subgroups that are not children of the currently active group
-			elseif (isset($val["parent"]) && $val["parent"] != $this->activegroup)
-			{
-				continue;
-			}
-			elseif (empty($val["parent"]) && isset($this->classinfo["hide_tabs"]))
-			{
-				continue;
-			}
-		}
-
 
 		if (!empty($this->id))
 		{
-			$this->load_obj_data(array("id" => $this->id));
-
 			// it is absolutely essential that pre_edit is called
 			// only for existing objects
 			if (method_exists($this->inst,"callback_pre_edit"))
@@ -328,8 +329,9 @@ class class_base extends aw_template
 		};
 		
 		$gdata = isset($this->subgroup) ? $this->groupinfo[$this->subgroup] : $this->groupinfo[$this->activegroup];
+		$lm = $this->classinfo(array("name" => "fixed_toolbar"));
 
-
+		// turn of submit button, if the toolbar is being shown
 		if (!empty($lm))
 		{
 			$gdata["submit"] = "no";
@@ -337,31 +339,30 @@ class class_base extends aw_template
 
 		// and, if we are in that other layout mode, then we should probably remap all
 		// the links in the toolbar .. augh, how the hell do I do that?
-		if ($this->layout_mode == "fixed_toolbar" && empty($args["cb_part"]))
+		if (!empty($lm) && empty($args["cb_part"]))
 		{
-			$lm = "fixed_toolbar";
-			$new_uri = $this->cfg["baseurl"] . $_SERVER["REQUEST_URI"] . "&" . "cb_part=1";
-			$cli = get_instance("cfg/" . $this->output_client,array("layout_mode" => $lm));
+			$new_uri = aw_url_change_var(array("cb_part" => 1));
+			$cli = get_instance("cfg/" . $this->output_client,array("layout_mode" => "fixed_toolbar"));
 
-			$realprops["iframe_container"] = array(
+			$properties["iframe_container"] = array(
 				"type" => "iframe",
 				"src" => $new_uri,
-				"value" => "haha",
+				"value" => " ",
 			);
+
+			$this->layout_mode = "fixed_toolbar";
+
 			// show only the elements and not the frame (because it contains some design
 			// elements and "<form>" tag that I really do not need
-			$this->classinfo["raw_output"] = 1;
+
+			// this really could use some generic solution!
+			$this->raw_output = 1;
 
 		}
 		else
 		{
-			// here be some magic to determine the correct output client
-			// this means we could create a TTY client for AW :)
-			// actually I'm thinking of native clients and XML-RPC
-			// output client is probably the first that should be
-			// implemented.
 			$cli = get_instance("cfg/" . $this->output_client);
-			if ($this->layout_mode == "fixed_toolbar")
+			if (!empty($lm))
 			{
 				if ($this->use_mode == "new")
 				{
@@ -373,52 +374,51 @@ class class_base extends aw_template
 		if ($args["cb_part"] == 1)
 		{
 			// tabs and YAH are in the upper frame, so we don't show them below
-			$this->classinfo["hide_tabs"] = 1;
-			$this->classinfo["no_yah"] = 1;
+			$this->set_classinfo(array("name" => "hide_tabs","value" => 1));
+			$this->set_classinfo(array("name" => "no_yah","value" => 1));
 		};
-
-
-		if (!empty($gdata["grpstyle"]))
-		{
-			$cli->set_group_style($gdata["grpstyle"]);
-		};
+		
 
 		// parse the properties - resolve generated properties and
 		// do any callbacks
 
-		$this->inst->classinfo = $this->classinfo;
+		// and the only user of that is the crm_company class. Would be _really_ nice
+		// to beg rid of all that shit
 		$this->inst->relinfo = $this->relinfo;
 
 		$resprops = $this->parse_properties(array(
-			"properties" => &$realprops,
+			"properties" => &$properties,
 		));
 
+		// what exactly is going on with that subgroup stuff?
 		if (isset($resprops["subgroup"]))
 		{
 			$this->subgroup = $resprops["subgroup"]["value"];
 		};
 
-
-
-		// so now I have a list of properties along with their values,
-
-		// and, if we are in that other layout mode, then we should probably remap all
-		// the links in the toolbar .. augh, how the hell do I do that?
 		if ($has_errors)
 		{
 			// give the output client a chance to display a message stating
 			// that there were errors in entered data. Individual error 
 			// messages will be next to their respective properties, this
-			// is just the 
+			// is just the caption
 			$cli->show_error();
 		}
 
+		// so now I have a list of properties along with their values,
+
+		// and, if we are in that other layout mode, then we should probably remap all
+		// the links in the toolbar .. augh, how the hell do I do that?
 		foreach($resprops as $val)
 		{
 			$cli->add_property($val);
 		};
 
 		$orb_class = $this->cfg["classes"][$this->clid]["file"];
+		if (empty($orb_class))
+		{
+			$orb_class = $this->clfile;
+		};
 
 		if ($orb_class == "document")
 		{
@@ -428,18 +428,17 @@ class class_base extends aw_template
 		$argblock = array(
 			"id" => $this->id,
 			// this should refer to the active group
-			"group" => isset($args["group"]) ? $args["group"] : $this->activegroup,
+			"group" => isset($this->request["group"]) ? $this->request["group"] : $this->activegroup,
 			"orb_class" => $orb_class,
 			"parent" => $this->parent,
 			"section" => $_REQUEST["section"],
-			"period" => isset($args["period"]) ? $args["period"] : "",
-			"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
+			"period" => isset($this->request["period"]) ? $this->request["period"] : "",
 			"alias_to" => isset($this->request["alias_to"]) ? $this->request["alias_to"] : "",
 			"reltype" => $this->reltype,
 			"cfgform" => isset($this->cfgform_id) && is_numeric($this->cfgform_id) ? $this->cfgform_id : "",
 			"return_url" => !empty($this->request["return_url"]) ? urlencode($this->request["return_url"]) : "",
 			"subgroup" => $this->subgroup,
-		) + (isset($args["extraids"]) && is_array($args["extraids"]) ? array("extraids" => $args["extraids"]) : array());
+		) + (isset($this->request["extraids"]) && is_array($this->request["extraids"]) ? array("extraids" => $this->request["extraids"]) : array());
 
 		if (method_exists($this->inst,"callback_mod_reforb"))
 		{
@@ -448,15 +447,24 @@ class class_base extends aw_template
 
 		$submit_action = "submit";
 
-		if (isset($this->forminfo[$use_form]["onsubmit"]))
+		$form_submit_action = $this->forminfo(array(
+			"form" => $use_form,
+			"attr" => "onsubmit",
+		));
+
+		if (!empty($form_submit_action))
 		{
-			$submit_action = $this->forminfo[$use_form]["onsubmit"];
-			$argblock["orb_class"] = $this->clfile;
+			$submit_action = $form_submit_action;
 		}
 
-		$method = "POST";
 		// forminfo can override form post method
-		if (isset($this->forminfo[$use_form]["method"]))
+		$form_submit_method = $this->forminfo(array(
+			"form" => $use_form,
+			"attr" => "method",
+		));
+			
+		$method = "POST";
+		if (!empty($form_submit_method))
 		{
 			$method = "GET";
 		};
@@ -464,6 +472,7 @@ class class_base extends aw_template
 		$cli->finish_output(array(
 			"method" => $method,
 			"action" => $submit_action,
+			// hm, dat is weird!
 			"submit" => isset($gdata["submit"]) ? $gdata["submit"] : "",
 			"data" => $argblock,
 		));
@@ -472,21 +481,20 @@ class class_base extends aw_template
 		if (empty($content))
 		{
 			$content = $cli->get_result(array(
-				"raw_output" => $this->classinfo["raw_output"],
+				"raw_output" => $this->raw_output,
 			));
 		};
 		
 		$rv =  $this->gen_output(array(
 			"parent" => $this->parent,
 			"content" => isset($content) ? $content : "",
-			"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
 		));
 		return $rv;
 	}
 
 	/** Saves the data that comes from the form generated by change 
 		
-		@attrib name=submit params=name default="0"
+		@attrib name=submit params=name 
 		
 		
 		@returns
@@ -508,7 +516,7 @@ class class_base extends aw_template
 		extract($args);
 
 
-		$form_data = $args;
+		$request = $args;
 
 		// I need to know the id of the configuration form, so that I
 		// can load it. Reason being, the properties can be grouped
@@ -517,23 +525,13 @@ class class_base extends aw_template
 		$this->is_rel = false;
 		if (!empty($id))
 		{
+			// aha .. so .. if we are editing an relation object, then set $this->is_rel to true
 			$_tmp = $this->get_object($id);
 			if ($_tmp["class_id"] == CL_RELATION)
 			{
 				$this->is_rel = true;
 			};
-			$cgid = 0;
-			if (isset($_tmp["meta"]["cfgform_id"]))
-			{
-				$cgid = $_tmp["meta"]["cfgform_id"];
-			};
-		}
-		else
-		{
-			$cgid = isset($args["cfgform"]) ? $args["cfgform"] : 0;
 		};
-
-		$this->validate_cfgform($cgid);
 
 		$args["rawdata"] = $args;
 		$save_ok = $this->process_data($args);
@@ -543,14 +541,13 @@ class class_base extends aw_template
 			"id" => $this->id,
 			"group" => $group,
 			"period" => aw_global_get("period"),
-			"alias_to" => $form_data["alias_to"],
-			"return_url" => $form_data["return_url"],
-			"cb_view" => $form_data["cb_view"],
+			"alias_to" => $request["alias_to"],
+			"return_url" => $request["return_url"],
 		) + ( (isset($extraids) && is_array($extraids)) ? $extraids : array());
 
 		if (!$save_ok)
 		{
-			$args["parent"] = $form_data["parent"];
+			$args["parent"] = $request["parent"];
 			if ($this->new)
 			{
 				$action = "new";
@@ -569,20 +566,24 @@ class class_base extends aw_template
 	
 		if ($save_ok)
 		{
+			// logging should be defined by the form info
 			$this->log_obj_change();
+			// as well as this
 			if (method_exists($this->inst,"callback_mod_retval"))
 			{
 				$this->inst->callback_mod_retval(array(
 					"action" => &$action,
 					"args" => &$args,
-					"form_data" => &$form_data,
-					"request" => &$form_data,
+					"form_data" => &$request,
+					"request" => &$request,
 					"orb_class" => &$orb_class,
 					"clid" => $this->clid,
 					"new" => $this->new,
 				));
 			};
 		};
+
+		// and I need a workaround for this id_only thingie!!!
 
 		// rrrr, temporary hack
 		if (isset($this->id_only))
@@ -592,13 +593,13 @@ class class_base extends aw_template
 		else
 		{
 			//$use_orb = true;
-			if (!empty($form_data["section"]))
+			if (!empty($request["section"]))
 			{
-				$args["section"] = $form_data["section"];
+				$args["section"] = $request["section"];
 				$args["_alias"] = get_class($this);
 				$use_orb = false;
 			};
-			if ($form_data["XUL"])
+			if ($request["XUL"])
 			{
 				$args["XUL"] = 1;
 			};
@@ -616,7 +617,7 @@ class class_base extends aw_template
 		$syslog_type = ST_CONFIG;
 		if (isset($this->classinfo['syslog_type']))
 		{
-			$syslog_type = constant($this->classinfo['syslog_type']['text']);
+			$syslog_type = constant($this->classinfo['syslog_type']);
 		}
 
 		// XXX: if I want to save data that does not belong to 
@@ -624,118 +625,70 @@ class class_base extends aw_template
 		$this->_log($syslog_type, isset($this->new) ? SA_ADD : SA_CHANGE, $name, $this->id);
 	}
 
-	function validate_cfgform($id = false)
-	{
-		// try to load the bastard
-		$this->cfgform_id = 0;
-		$this->cfgform = array();
-		if ($id && is_numeric($id))
-		{
-			$_tmp = $this->get_object(array(
-				"oid" => $id,
-				"class" => CL_CFGFORM,
-				"subclass" => $this->clid,
-			));
-
-
-			if ($_tmp && $_tmp["status"] != 0)
-			{
-				$this->cfgform_id = $_tmp["oid"];
-				$this->cfgform = $_tmp;
-
-				if ($_tmp["meta"]["classinfo_fixed_toolbar"] == 1)
-				{
-					$this->classinfo["fixed_toolbar"] = 1;
-				};
-				
-				if ($_tmp["meta"]["classinfo_allow_rte"] == 1)
-				{
-					$this->classinfo["allow_rte"] = 1;
-				};
-				
-				if ($_tmp["meta"]["classinfo_disable_relationmgr"] == 1)
-				{
-					$this->classinfo["disable_relationmgr"] = 1;
-				};
-
-			};
-
-		};
-
-		if (sizeof($this->cfgform) == 0 && $this->clid == CL_DOCUMENT)
-		{
-			// I should be able to override this from the doc class somehow
-			if (aw_ini_get("document.default_cfgform") != 0)
-			{
-				$_xid = aw_ini_get("document.default_cfgform");
-				$_tmp = $this->get_object(array(
-					"oid" => $_xid,
-					"class" => CL_CFGFORM,
-					"subclass" => $this->clid,
-				));
-
-				if ($_tmp)
-				{
-					$this->cfgform_id = $_tmp["oid"];
-					$this->cfgform = $_tmp;
-					if ($_tmp["meta"]["classinfo_fixed_toolbar"] == 1)
-					{
-						$this->classinfo["fixed_toolbar"] = 1;
-					};
-					
-					if ($_tmp["meta"]["classinfo_allow_rte"] == 1)
-					{
-						$this->classinfo["allow_rte"] = 1;
-					};
-					
-					if ($_tmp["meta"]["classinfo_disable_relationmgr"] == 1)
-					{
-						$this->classinfo["disable_relationmgr"] = 1;
-					};
-				};
-			}
-			else
-			{
-				$cfgu = get_instance("cfg/cfgutils");
-				$def = $this->get_file(array("file" => (aw_ini_get("basedir") . "/xml/documents/def_cfgform.xml")));
-				list($proplist,$grplist) = $cfgu->parse_cfgform(array("xml_definition" => $def));
-				$this->classinfo = $cfgu->get_classinfo();
-				$this->cfg_proplist = $proplist;
-				$this->cfg_groups = $grplist;
-				$this->cfgform["meta"]["cfg_groups"] = $grplist;
-				$this->cfgform["meta"]["cfg_proplist"] = $proplist;
-				// heh
-				$this->cfgform_id = "notempty";
-			};
-		};
-		if ($this->clid == CL_DOCUMENT)
-		{
-			$this->classinfo["fixed_toolbar"] = 1;
-		};
-	}
-
 	function get_cfgform_for_object($args = array())
 	{
 		// or, if configuration form should be loaded from somewhere
 		// else, this is the place to do it
+
+		$action = $args["change"];
+
 		$retval = "";
-		if (($args["args"]["action"] == "new") && !empty($args["args"]["cfgform"]))
-		{
-			$retval = $args["args"]["cfgform"];
-		};
+		$cgid = false;
 
-
-		if (($args["args"]["action"] == "change") && !empty($args["meta"]["cfgform_id"]))
-		{
-			$retval = $args["meta"]["cfgform_id"];
-		};
-
-		// XXX: check whether that id really is an cfgform id
+		// 1. if there is a cfgform specified in the url, then we will use that
 		if (!empty($args["args"]["cfgform"]))
 		{
-			$retval = $args["args"]["cfgform"];
+			// I need additional check, whether that config form really exists!
+			$cgid = $args["args"]["cfgform"];
+			// I need to check whether that config form is really
+			// a config form with correct subclass
+			if ($this->object_exists($cgid))
+			{
+				return $cgid;
+			};	
 		};
-		return $retval;
+
+		// 2. failing that, if there is a config form specified in the object metainfo,
+		//  we will use it
+		if (($action == "change") && $args["obj_inst"]->meta("cfgform_id") != "")
+		{
+			$cgid = $args["obj_inst"]->meta("cfgform_id");
+			if ($this->object_exists($cgid))
+			{
+				return $cgid;
+			};
+		};
+		
+		// 3. failing that too, we will check whether this class has a default cfgform
+		// and if so, use it
+		if ($this->clid == CL_DOCUMENT)
+		{
+			// I should be able to override this from the doc class somehow
+			$def_cfgform = aw_ini_get("document.default_cfgform");
+			if (!empty($def_cfgform) && $this->object_exists($def_cfgform))
+			{
+				return $cgid;
+			}
+			
+			$cfgu = get_instance("cfg/cfgutils");
+			$def = $this->get_file(array("file" => (aw_ini_get("basedir") . "/xml/documents/def_cfgform.xml")));
+			list($proplist,$grplist) = $cfgu->parse_cfgform(array("xml_definition" => $def));
+			$this->classinfo = $cfgu->get_classinfo();
+		};
+
+		// okey, I need a helper class. Something that I can create, something can load
+		// properties into and then query them. cfgform is taken, what name will I use?
+
+		
+
+		// right now .. only document class has the default config form .. or the default
+		// file. Ungh.
+
+		// 4. failing that, we will check whether this class has a default cfgform _file_
+		// and if so, use it
+
+		// 5. if all above fails, simply load the default properties. that means do nothing
+		return false; 
 	}
 	
 	////
@@ -747,7 +700,6 @@ class class_base extends aw_template
 		// can use class_base
 		
 		// create an instance of the class servicing the object ($this->inst)
-		// create an instance of the datasource ($this->ds)
 		// set $this->clid and $this->clfile
 		$cfgu = get_instance("cfg/cfgutils");
 		$orb_class = $this->cfg["classes"][$this->clid]["file"];
@@ -773,8 +725,6 @@ class class_base extends aw_template
 			die(sprintf("this class (%s) does not have any defined properties ",$orb_class));
 		};
 
-		// some day I might want to be able to edit remote objects
-		// and this is how I will do it (unless I get a better idea)
 		$this->ds = get_instance("datasource/" . $this->ds_name);
 
 		$clid = $this->clid;
@@ -790,11 +740,9 @@ class class_base extends aw_template
 			$clfile = "doc";
 		};
 
+		// classes with no CLID use class_base too
 		if (empty($clfile) && !$has_properties)
 		{
-
-		//if (empty($clfile))
-		//{
 			die("coult not identify object " . $this->clfile);
 		};
 
@@ -820,69 +768,8 @@ class class_base extends aw_template
 		{
 			$this->inst = get_instance($this->clfile);
 		};
+		
 	}
-
-	function load_obj_data($args = array())
-	{	
-		// load the object data, if there is anything to load at all
-		// but if no tables are defined, then it seems we don't load anything at all
-		if (!is_array($this->tables))
-		{
-			return false;
-		};
-
-		foreach($this->tables as $key => $val)
-		{
-			// that we already got
-			if (($key != "objects") && isset($this->realfields[$key]) && (sizeof($this->realfields[$key]) > 0) )
-			{
-				// this is a bit awkard, since it assumes that the data from objects
-				// table is already loaded .. but it should be anyway
-				if ($val["master_table"] == "objects")
-				{
-					if (isset($this->coredata[$val["master_index"]]))
-					{
-						$id_arg = $this->coredata[$val["master_index"]];
-					}
-					else
-					{
-						$id_arg = $args["id"];
-					};
-				};
-
-				$tmp = $this->load_object(array(
-					"table" => $key,
-					"idfield" => $val["index"],
-					"id" => $id_arg,
-					"fields" => $this->realfields[$key],
-				));
-				$this->data[$key] = $tmp;
-				$this->objdata = $tmp;
-			}
-			else
-			{
-				// load the core data (cause the parent might have a configuration
-				// form set) and then I need to know the id of the parent, before
-				// I can fetch all the properties
-				$fields = $this->fields[$key];
-				// for objects, we always load the parent field as well
-				$fields["parent"] = "direct";
-				$fields["brother_of"] = "direct";
-				$fields["metadata"] = "serialize";
-				$tmp = $this->load_object(array(
-					"id" => $args["id"],
-					"table" => "objects",
-					"idfield" => "oid",
-					"fields" => $fields,
-				));
-				$tmp["oid"] = $args["id"];
-				$this->data[$key] = $tmp;
-				$this->parent = $tmp["parent"];
-				$this->coredata = $tmp;
-			};
-		};
-
-	}	
 
 	function gen_output($args = array())
 	{
@@ -918,7 +805,6 @@ class class_base extends aw_template
 			$title = $this->inst->callback_gen_path(array(
 				"id" => $this->id,
 				"parent" => $args["parent"],
-				"object" => $this->coredata,
 			));
 		};
 
@@ -940,8 +826,10 @@ class class_base extends aw_template
 			)) . " / " . $title;
 		};
 
+		$no_yah = $this->classinfo(array("name" => "no_yah"));
+
 		// but that doesn't really belong to classinfo
-		if (empty($this->classinfo["no_yah"]))
+		if (empty($no_yah))
 		{
 			$this->mk_path($parent,$title,aw_global_get("period"));
 		};
@@ -955,6 +843,8 @@ class class_base extends aw_template
 		$activegroup = isset($this->activegroup) ? $this->activegroup : $this->group;
 		$activegroup = isset($this->action) ? $this->action : $activegroup;
 
+		$activegroup = $this->use_group;
+
 		$orb_action = isset($args["orb_action"]) ? $args["orb_action"] : "";
 
 		if (empty($orb_action))
@@ -965,94 +855,84 @@ class class_base extends aw_template
 		$link_args = new aw_array(array(
 			"id" => isset($this->id) ? $this->id : false,
 			"group" => "",
-			"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
 			"return_url" => $return_url,
 		));
 
+		// so .. what .. do I add tabs as well now?
 		$tab_callback = (method_exists($this->inst,"callback_mod_tab")) ? true : false;
 
-
-		foreach($this->groupinfo as $key => $val)
+		$hide_tabs = $this->classinfo["hide_tabs"];
+		if (!$hide_tabs)
 		{
-			if (empty($this->props_by_group[$key]))
+			$groupinfo = $this->get_visible_groups();
+			foreach($groupinfo as $key => $val)
 			{
-				// ignore groups with no properties
-				continue;
-
-			}
-			// we only want subgroups that are children of the currently active group
-			if (isset($val["parent"]) && isset($this->classinfo["hide_tabs_L2"])) //"hide_tabs_L2" kas seda kasutatakse kuskil??
-			{
-				continue;
-			}
-			elseif (isset($val["parent"]) && $val["parent"] != $this->activegroup)
-			{
-				continue;
-			}
-			elseif (empty($val["parent"]) && isset($this->classinfo["hide_tabs"]))
-			{
-				continue;
-			}
-
-			if ($this->id)
-			{
-				$link_args->set_at("group",$key);
-				if (aw_global_get("section"))
+				if ($this->id)
 				{
-					$link_args->set_at("section",aw_global_get("section"));
-				};
-				if ($_REQUEST["cb_part"])
+					$link_args->set_at("group",$key);
+					if (aw_global_get("section"))
+					{
+						$link_args->set_at("section",aw_global_get("section"));
+					};
+					if ($_REQUEST["cb_part"])
+					{
+						$link_args->set_at("cb_part",$_REQUEST["cb_part"]);
+					};
+					if ($this->embedded)
+					{
+						$link_args->set_at("_alias",get_class($this));
+					};
+					$link = $this->mk_my_orb($orb_action,$link_args->get(),get_class($this->orb_class));
+				}
+				else
 				{
-					$link_args->set_at("cb_part",$_REQUEST["cb_part"]);
+					$link = !empty($val["active"]) ? "#" : "";
 				};
-				if ($this->embedded)
+				
+				if (is_object($this->tr))
 				{
-					$link_args->set_at("_alias",get_class($this));
+					$commtrans = $this->tr->get_by_id("group",$key,"caption");
+					if (!empty($commtrans))
+					{
+						$val["caption"] = $commtrans;
+					};
 				};
-				$link = $this->mk_my_orb($orb_action,$link_args->get(),get_class($this->orb_class));
-			}
-			else
-			{
-				$link = ($activegroup == $key) ? "#" : "";
-			};
-			
-			if (is_object($this->tr))
-			{
-				$commtrans = $this->tr->get_by_id("group",$key,"caption");
-				if (!empty($commtrans))
+
+				$tabinfo = array(
+					"link" => &$link,
+					"caption" => &$val["caption"],
+					"id" => $key,
+					"obj_inst" => &$this->obj_inst,
+					"request" => $this->request,
+					"activegroup" => $activegroup,
+				);
+
+				$res = true;
+				if ($tab_callback)
 				{
-					$val["caption"] = $commtrans;
+					// mod_tab can block the display of a tab
+					$res = $this->inst->callback_mod_tab($tabinfo);
+				};
+
+				if ($this->action == "search_aliases" || $this->action == "list_aliases")
+				{
+					unset($val["active"]);
+				};
+
+				if ($res !== false)
+				{
+					// so, how do I figure out
+					$this->tp->add_tab(array(
+						"id" => $tabinfo["id"],
+						"level" => empty($val["parent"]) ? 1 : 2,
+						"parent" => $val["parent"],
+						"link" => $tabinfo["link"],
+						"caption" => $tabinfo["caption"],
+						"active" => !empty($val["active"]) || ($key == $this->subgroup),
+					));
 				};
 			};
 
-			$tabinfo = array(
-				"link" => &$link,
-				"caption" => &$val["caption"],
-				"id" => $key,
-				"obj_inst" => &$this->obj_inst,
-				"tp" => &$this->tp,
-				"request" => $this->request,
-				"view" => &$val["view"],
-				"activegroup" => $activegroup,
-			);
-
-			$res = true;
-			if ($tab_callback)
-			{
-				$res = $this->inst->callback_mod_tab($tabinfo);
-			};
-
-			if ($res !== false)
-			{
-				$this->tp->add_tab(array(
-					'id' => $tabinfo['id'],
-					"level" => empty($val["parent"]) ? 1 : 2,
-					'parent' => $val['parent'],
-					"link" => $tabinfo["link"],
-					"caption" => $tabinfo["caption"],
-					"active" => ($key == $activegroup) || ($key == $this->subgroup),
-				));
-			};
 		};
 
 		if (1 == $this->classinfo["disable_relationmgr"])
@@ -1069,18 +949,21 @@ class class_base extends aw_template
 		// .. which .. makes the group into a relation manager. eh? Or perhaps I should
 		// just go with the iframe layout thingie. This frees us from the unneccessary
 		// wrappers inside the class_base.
-		if (empty($this->request["cb_part"]) && isset($this->classinfo["relationmgr"]) && $this->classinfo["relationmgr"] && empty($this->request["cb_view"]))
+		if (empty($this->request["cb_part"]) && $this->classinfo(array("name" => "relationmgr")))
 		{
 			$link = "";
 			if (isset($this->id))
 			{
-				$link = $this->mk_my_orb("list_aliases",array("id" => $this->id,"return_url" => $return_url),get_class($this->orb_class));
+				$link = $this->mk_my_orb("list_aliases",array(
+					"id" => $this->id,
+					"return_url" => $return_url),
+				get_class($this->orb_class));
 			};
 
 			$this->tp->add_tab(array(
-				'id' => 'list_aliases',
+				"id" => "list_aliases",
 				"link" => $link,
-				"caption" => 'Seostehaldur',
+				"caption" => "Seostehaldur",
 				"active" => isset($this->action) && (($this->action == "list_aliases") || ($this->action == "search_aliases")),
 				"disabled" => empty($this->id),
 			));
@@ -1090,7 +973,7 @@ class class_base extends aw_template
 
 		$vars["content"] = $args["content"];
 
-		if (isset($this->classinfo["raw_output"]))
+		if (isset($this->raw_output))
 		{
 			return $args["content"];
 		}
@@ -1101,42 +984,9 @@ class class_base extends aw_template
 	}
 
 	////
-	// !Loads the core data
-	function load_coredata($args = array())
-	{
-		$this->coredata = $this->ds->ds_get_object(array(
-			"id" => $args["id"],
-			"class_id" => $this->clid,
-			"table" => "objects",
-			"idfield" => "oid",
-			"fields" => array("oid" => "oid","parent" => "parent","name" => "name"),
-		));
-
-		$this->id = $this->coredata["oid"];
-		$this->parent = $this->coredata["parent"];
-	}
-
-	// Loads an object. Any object
-	function load_object($args = array())
-	{
-		if (empty($args["table"]))
-		{
-			return false;
-		};
-
-		$tmp = $this->ds->ds_get_object(array(
-			"id" => $args["id"],
-			"table" => $args["table"],
-			"idfield" => $args["idfield"],
-			"fields" => $args["fields"],
-		));
-
-		return $tmp;
-	}
-
-	////
 	// !Returns a list of properties for generating an output
 	// or saving data. 
+	// DEPRECATED!!
 	function get_active_properties($args = array())
 	{
 
@@ -1144,7 +994,6 @@ class class_base extends aw_template
 
 		$this->get_all_properties(array(
 			"classonly" => isset($args["classonly"]) ? $args["classonly"] : "",
-			"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
 			"content" => isset($args["content"]) ? $args["content"] : "",
 			"rel" => isset($args["rel"]) ? $args["rel"] : "",
 			"type" => isset($args["type"]) ? $args["type"] : "",
@@ -1187,7 +1036,8 @@ class class_base extends aw_template
 			reset($this->groupinfo);
 			list($use_group,) = each($this->groupinfo);
 		};
-	
+
+		// this does something with second level groups
 		if (isset($this->grp_children[$use_group]))
 		{
 			list(,$use_group) = each($this->grp_children[$use_group]);
@@ -1207,27 +1057,12 @@ class class_base extends aw_template
 		// now I know the group
 		$property_list = array();
 		
-		$this->cb_views = array();
-
-		$retval = $tables = $fields = $realfields = array();
-		if (!empty($this->id))
-		{
-			$tables["objects"] = array("index" => "oid");
-		};
-		
-		if (isset($this->role) && ($this->role == "obj_edit"))
-		{
-			$tables["objects"] = array("index" => "oid");
-		};
+		$retval = array();
 
 		foreach($this->all_props as $key => $val)
 		{
-			if (isset($val["view"]) && empty($this->cb_views[$val["view"]]))
-			{
-				$this->cb_views[$val["view"]] = 1;
-			};
-
 			// multiple groups for properties are supported too
+			// no_group needs to return all properties
 			if ($no_group === false)
 			{
 				$_tgr = new aw_array($val["group"]);
@@ -1250,6 +1085,7 @@ class class_base extends aw_template
 					}
 					elseif ($args["load_defaults"] && !empty($tmp["default"]))
 					{
+						// what exactly does this thing do?
 						$tmp["group"] = $this->activegroup;
 						$property_list[$key] = $tmp;
 					}
@@ -1260,42 +1096,6 @@ class class_base extends aw_template
 				$property_list[$key] = $val;
 			};
 
-			if (isset($val["table"]) && empty($tables[$val["table"]]))
-			{
-				if (isset($this->tableinfo[$val["table"]]))
-				{
-					$tables[$val["table"]] = $this->tableinfo[$val["table"]];
-				}
-				else
-				{
-					$tables[$val["table"]] = "";
-				};
-			};
-
-			$fval = $val["method"];
-			$_field = $val["field"];
-
-			if ($val["table"] == "objects" && $_field == "meta")
-			{
-				$_field = "metadata";
-			};
-
-
-			if (isset($val["table"]))
-			{
-				if ($_field)
-				{
-					if (($val["type"] != "callback") && ($val["store"] != "no") )
-					{
-						$fields[$val["table"]][$_field] = $fval;
-					};
-				};
-
-				if (($val["type"] != "callback") && ($val["store"] != "no"))
-				{
-					$realfields[$val["table"]][$_field] = $fval;
-				};
-			};
 		};
 
 		// I need to replace this with a better check if I want to be able
@@ -1307,8 +1107,6 @@ class class_base extends aw_template
 
 			// give it the default value to silence warnings
 			$property["store"] = isset($property["store"]) ? $property["store"] : "";
-			$property["field"] = isset($property["field"]) ? $property["field"] : "";
-			$property["method"] = isset($property["method"]) ? $property["method"] : "direct";
 			// it escapes me why a property would not have a type. but some do not. -- duke
 			$property["type"] = isset($property["type"]) ? $property["type"] : "";
 
@@ -1342,24 +1140,15 @@ class class_base extends aw_template
 			};
 		};
 
-		$this->tables = $tables;
-		$this->fields = $fields;
-		$this->realfields = isset($realfields) ? $realfields : NULL;
-
-		$idx = $this->default_group;
-
-		
-		
-
 		return $retval;
 	}
 
 	////
 	// !Load all properties for the current class
+	// DEPRECATED!!!!
 	function get_all_properties($args = array())
 	{
 		$filter = $args["rel"] ? array("rel" => 1) : "";
-		$cb_view = $args["cb_view"];
 
 		if (isset($this->cfgform["meta"]["cfg_proplist"]))
 		{
@@ -1369,21 +1158,6 @@ class class_base extends aw_template
 
 		}
 
-		// XXX: suckage starts
-		if (isset($grplist["general"]))
-		{
-			$grplist["general"]["icon"] = "edit";
-		};
-		if (isset($grplist["settings"]))
-		{
-			$grplist["settings"]["icon"] = "settings";
-		};
-		if (isset($grplist["relationmgr"]))
-		{
-			$grplist["relationmgr"]["icon"] = "connectionmanager";
-		};
-		// XXX: suckage ends
-		
 		$cfgu = get_instance("cfg/cfgutils");
 
 		// content comes from the config form
@@ -1408,19 +1182,13 @@ class class_base extends aw_template
 			{
 				$filter["form"] = $args["form"];
 			};
-			/*
-			if ($this->clid == CL_MESSAGE)
-			{
-				$filter["form"] = "showmsg";
-			};
-			*/
+
 			$_all_props = $cfgu->load_properties(array(
 				"file" => empty($this->clid) ? $this->clfile : "",
 				"clid" => $this->clid,
 				"filter" => $filter,
 			));
 		};
-
 
 		if (!is_array($this->classinfo))
 		{
@@ -1432,22 +1200,14 @@ class class_base extends aw_template
 		$this->relinfo = $cfgu->get_relinfo();
 		$this->forminfo = $cfgu->get_forminfo();
 
+		// this comes from the forum thingie
 		if (is_array($this->classconfig))
 		{
 			$this->classinfo = array_merge($this->classinfo,$this->classconfig);
 		};
 		
-		if ($this->classinfo["trans"]["text"] == 1 && $this->id)
-		{
-			$o_t = get_instance("translate/object_translation");
-			$t_list = $o_t->translation_list($this->id, true);
-			if (in_array($this->id, $t_list))
-			{
-				$this->is_translated = 1;
-			}
-		}
 
-		$this->cb_views = $group_el_cnt = $this->all_props = array();
+		$group_el_cnt = $this->all_props = array();
 
 		// use the group list defined in the config form, if we are indeed using a config form
 		if (!is_array($grplist))
@@ -1456,6 +1216,8 @@ class class_base extends aw_template
 		};
 
 		$this->grp_children = array();
+
+		// I need a hook somewhere to add those dynamic properties
 		
 		foreach($grplist as $key => $val)
 		{
@@ -1471,6 +1233,8 @@ class class_base extends aw_template
 				$this->default_group = $key;
 			};
 		};				
+
+		//var_dump($this->cfgform_id);
 
 		$tmp = empty($this->cfgform_id) ? $_all_props : $proplist;
 		foreach($tmp as $k => $val)
@@ -1515,6 +1279,10 @@ class class_base extends aw_template
 					unset($val["richtext"]);
 				};
 
+				$allow_rte = $this->classinfo(array(
+					"name" => "allow_rte",
+				));
+
 				if ($this->classinfo["allow_rte"] != 1)
 				{
 					unset($val["richtext"]);
@@ -1532,25 +1300,8 @@ class class_base extends aw_template
 				continue;
 			}
 
-			if (empty($val["view"]))
-			{
-				$val["view"] = "";
-			};
-
-			if ($val["view"])
-			{
-				$this->cb_views[$val["view"]] = 1;
-			};
-
-			// list only the properties in the requested view
-			if ($val["view"] != $args["cb_view"])
-			{
-				continue;
-			};
-	
 			$argblock = array(
 				"id" => isset($this->id) ? $this->id : "",
-				//"obj" => &$this->coredata,
 			);
 
 			// generated elements count as one for this purpose
@@ -1591,6 +1342,7 @@ class class_base extends aw_template
 			}
 		}
 
+
 		$grpinfo = array();
 
 		if (is_array($grplist))
@@ -1627,23 +1379,6 @@ class class_base extends aw_template
 		$this->tableinfo = $cfgu->get_opt("tableinfo");
 
 		$this->inst->all_props = $this->all_props;
-
-		// this we use to keep track of which groups to show and which to hide
-		$this->props_by_group = $group_el_cnt;
-
-		/*
-		foreach($this->all_props as $key => $val)
-		{
-			if (empty($this->props_by_group[$val["group"]]))
-			{
-				$this->props_by_group[$val["group"]] = 1;
-			}
-			else
-			{
-				$this->props_by_group[$val["group"]]++;
-			};
-		}
-		*/
 
 		return $this->all_props;
 	}
@@ -1838,6 +1573,8 @@ class class_base extends aw_template
 			return false;
 		};
 
+		// only relation object uses this. But hey, if the relation object
+		// thingie is now done differently then I do not need this, yees?
 		if (isset($args["target_obj"]))
 		{
 			$this->target_obj = $args["target_obj"];
@@ -1854,9 +1591,7 @@ class class_base extends aw_template
 		$resprops = array();
 
 		$argblock = array(
-			//"obj" => &$this->coredata,
 			"request" => isset($this->request) ? $this->request : "",
-			"data" => &$this->data,
 			"obj_inst" => &$this->obj_inst,
 			"groupinfo" => &$this->groupinfo,
 			"new" => $this->new,
@@ -1873,8 +1608,6 @@ class class_base extends aw_template
 		$this->cfgu = get_instance("cfg/cfgutils");
 
 		$remap_children = false;
-
-		// hm, perhaps I should create a list of classes to be initialized then?
 
 		// First we resolve all callback properties, so that get_property calls will
 		// be valid for those as well
@@ -1944,21 +1677,8 @@ class class_base extends aw_template
 				$clx_name = "crm/" . $val["sclass"];
 				$clx_inst = get_instance($clx_name);
 
-				/*
-				print "<pre>";
-				print_r($this->request);
-				print "</pre>";
-				*/
-
 				$clx_inst->orb_class = $clx_name;
 				$clx_inst->init_class_base();
-
-				/*
-				$_all_props = $clx_inst->get_active_properties(array(
-					"file" => $val["sclass"],
-					"form" => $val["sform"],
-				));
-				*/
 
 				// this needs to change the form method, urk, urk
 				$clx_inst->request = $this->request[$val["name"]];
@@ -1974,17 +1694,6 @@ class class_base extends aw_template
 					$resprops[$rkey] = $rprop;
 				};
 
-
-				/*
-				foreach($_all_props as $rkey => $rval)
-				{
-					// noo ei lähe see värk nii, no ei lähe!
-					//$argblock["prop"] = $rval;
-					//$clx_inst->get_property(&$argblock);
-					//$resprops[$rkey] = $argblock["prop"];
-					$resprops[$rkey] = $rval;
-				};
-				*/
 			}
 			else
 			{
@@ -1998,8 +1707,8 @@ class class_base extends aw_template
 				
 
 		}
-
-		if (1 != $this->classinfo["allow_rte"])
+		
+		if (1 != $this->classinfo(array("name" => "allow_rte")))
 		{
 			$has_rte = false;
 		}
@@ -2007,6 +1716,7 @@ class class_base extends aw_template
 		{
 			$has_rte = true;
 		};
+
 
 		$properties = $resprops;
 
@@ -2038,33 +1748,47 @@ class class_base extends aw_template
 				continue;
 			};
 
-			if ("submit" != $this->orb_action)
+			// right now this only supports classificator
+			// eventually all VCL component will have to implement their
+			// own init_vcl_property method
+			if ($this->vcl_register[$val["type"]])
 			{
-				if (($val["type"] == "toolbar") && !is_object($val["toolbar"]))
+				$reginst = $this->vcl_register[$val["type"]];
+				$ot = get_instance($reginst);
+				if (is_callable(array($ot,"init_vcl_property")))
 				{
-					classload("toolbar");
-					$val["toolbar"] = new toolbar();
-				};
-
-				if (($val["type"] == "relmanager") && !is_object($val["vcl_inst"]))
-				{
-					classload("vcl/relmanager");
-					$val["vcl_inst"] = new relmanager();
-				};
-
-				if (($val["type"] == "table") && !is_object($val["vcl_inst"]))
-				{
-					load_vcl("table");
-					$val["vcl_inst"] = new aw_table(array(
-						"layout" => "generic",
+					$ot->init_vcl_property(array(
+						"property" => &$val,
+						"clid" => $this->clid,
 					));
 				};
-				
-				if (($val["type"] == "calendar") && !is_object($val["vcl_inst"]))
-				{
-					classload("vcl/calendar");
-					$val["vcl_inst"] = new vcalendar();
-				};
+			};
+			if (($val["type"] == "toolbar") && !is_object($val["toolbar"]))
+			{
+				classload("toolbar");
+				$val["toolbar"] = new toolbar();
+				$val["toolbar"]->set_opt("button_target","contentarea");
+			};
+
+
+			if (($val["type"] == "relmanager") && !is_object($val["vcl_inst"]))
+			{
+				classload("vcl/relmanager");
+				$val["vcl_inst"] = new relmanager();
+			};
+
+			if (($val["type"] == "table") && !is_object($val["vcl_inst"]))
+			{
+				classload("vcl/table");
+				$val["vcl_inst"] = new aw_table(array(
+					"layout" => "generic",
+				));
+			};
+			
+			if (($val["type"] == "calendar") && !is_object($val["vcl_inst"]))
+			{
+				classload("vcl/calendar");
+				$val["vcl_inst"] = new vcalendar();
 			};
 
 			if (!empty($val["parent"]))
@@ -2103,20 +1827,22 @@ class class_base extends aw_template
 				$val["vcl_inst"]->init_rel_manager($argblock);
 			};
 			
-			
 			if ( isset($val["editonly"]) && empty($this->id))
 			{
+				// this should be form depenent
 				continue;
 			}
 			else
 			if ($val["type"] == "aliasmgr" && empty($this->id))
 			{
-				continue;
 				// do not show alias manager if  no id
+				// and this too
+				continue;
 			}
 			else
 			if ( isset($val["newonly"]) && !empty($this->id))
 			{
+				// and this as well
 				continue;
 			};
 
@@ -2125,7 +1851,6 @@ class class_base extends aw_template
 			{
 				$status = $this->inst->get_property($argblock);
 			};
-
 
 			if ($status === PROP_IGNORE)
 			{
@@ -2149,6 +1874,7 @@ class class_base extends aw_template
 				{
 					if ($this->layout_mode == "fixed_toolbar")
 					{
+						$this->groupinfo = $this->groupinfo();
 						foreach($this->groupinfo as $grp_id => $grp_data)
 						{
 							// disable all other buttons besides the general when
@@ -2167,17 +1893,19 @@ class class_base extends aw_template
 							
 						}
 					};
-					
 
-					if ($has_rte)
+					// if we are using rte, then add RTE buttons to the toolbar
+					if (1 == $this->has_feature("has_rte"))
 					{
 						$rte = get_instance("vcl/rte");
 						$rte->get_rte_toolbar(array(
 							"toolbar" => &$val["toolbar"],
+							"target" => $this->layout_mode == "fixed_toolbar" ? "contentarea" : "",
 						));
 					};
 				};
 
+				// this deals with subitems .. what a sucky approach
 				if (is_array($val["items"]) && sizeof($val["items"]) > 0)
 				{
 					$tmp = array();
@@ -2191,27 +1919,14 @@ class class_base extends aw_template
 
 				$this->convert_element(&$val);
 
+				// hm, how the fuck can the name be empty anyway?
 				if (empty($name))
 				{
 					$name = $key;
 				};
-				if (!empty($val["field"]) && ($name != $val["field"]) && ($val["method"] == "direct"))
-				{
-					$_field = $val["field"];
-				}
-				else
-				{
-					$_field = $name;
-				};
-				$resprops[$_field] = $val;
+				$resprops[$name] = $val;
 			};
 		}
-
-		/*
-		print "<pre>";
-		print_r($resprops);
-		print "</pre>";
-		*/
 
 		// if name_prefix given, prefixes all element names with the value 
 		// e.g. if name_prefix => "emb" and there is a property named comment,
@@ -2266,7 +1981,7 @@ class class_base extends aw_template
 
 	/** Displays alias manager inside the configuration manager interface 
 		
-		@attrib name=list_aliases params=name all_args="1" default="0"
+		@attrib name=list_aliases params=name all_args="1" 
 		
 		
 		@returns
@@ -2283,20 +1998,24 @@ class class_base extends aw_template
 		$this->init_class_base();
 
 		$this->action = $action;
-		$this->load_coredata(array(
-			"id" => $args["id"],
-		));
 		$this->obj_inst = new object($args["id"]);
 		$this->request = $args;
 
 		$this->id = $args["id"];
-		$obj = $this->get_object($this->id);
 
 		$almgr = get_instance("aliasmgr",array("use_class" => get_class($this->orb_class)));
+		
+		$cfgform_id = $args["args"]["cfgform"];
+		if (empty($cfgform_id) && is_object($this->obj_inst))
+		{
+			$cfgform_id = $this->obj_inst->meta("cfgform_id");
+		};
 
-		$realprops = $this->get_active_properties(array(
-				"clfile" => $this->clfile,
-				"group" => $group,
+		$defaults = $this->get_property_group(array(
+			"clid" => $this->clid,
+			"clfile" => $this->clfile,
+			"group" => $args["group"],
+			"cfgform_id" => $cfgform_id,
 		));
 
 		$reltypes = $this->get_rel_types();
@@ -2330,7 +2049,7 @@ class class_base extends aw_template
 		$gen = $almgr->list_aliases(array(
 			"id" => $id,
 			"reltypes" => $reltypes,
-			'rel_type_classes' => $rel_type_classes,//$this->get_rel_type_classes(),
+			"rel_type_classes" => $rel_type_classes,
 			"return_url" => !empty($return_url) ? $return_url : $this->mk_my_orb("list_aliases",array("id" => $id),get_class($this->orb_class)),
 		));
 
@@ -2349,7 +2068,7 @@ class class_base extends aw_template
 	// !Displays alias manager search form inside the configuration manager interface
 	/**  
 		
-		@attrib name=search_aliases params=name all_args="1" default="0"
+		@attrib name=search_aliases params=name all_args="1" 
 		
 		
 		@returns
@@ -2364,21 +2083,25 @@ class class_base extends aw_template
 		$this->init_class_base();
 
 		$this->action = $action;
-		$this->load_coredata(array(
-			"id" => $args["id"],
-		));
 		$this->obj_inst = new object($args["id"]);
+		$this->id = $args["id"];
 		$this->request = $args;
 
-		$obj = $this->get_object($args["id"]);
-
 		$almgr = get_instance("aliasmgr",array("use_class" => get_class($this->orb_class)));
-
-		$realprops = $this->get_active_properties(array(
-				"clfile" => $this->clfile,
-				"group" => $group,
-		));
 		
+		$cfgform_id = $args["args"]["cfgform"];
+		if (empty($cfgform_id) && is_object($this->obj_inst))
+		{
+			$cfgform_id = $this->obj_inst->meta("cfgform_id");
+		};
+
+		$defaults = $this->get_property_group(array(
+			"clid" => $this->clid,
+			"clfile" => $this->clfile,
+			"group" => $args["group"],
+			"cfgform_id" => $cfgform_id,
+		));
+
 		$reltypes = $this->get_rel_types();
 
 		$clid_list = array();
@@ -2426,7 +2149,7 @@ class class_base extends aw_template
 
 	/** Handles the "saving" of relation list 
 		
-		@attrib name=submit_list params=name all_args="1" default="0"
+		@attrib name=submit_list params=name all_args="1" 
 		
 		
 		@returns
@@ -2449,7 +2172,7 @@ class class_base extends aw_template
 
 	/** Handles creating of new relations between the object and 
 		
-		@attrib name=addalias params=name all_args="1" default="0"
+		@attrib name=addalias params=name all_args="1" 
 		
 		
 		@returns
@@ -2473,7 +2196,7 @@ class class_base extends aw_template
 
 	/** _serialize replacement for class_base based objects 
 		
-		@attrib name=ng_serialize params=name default="0"
+		@attrib name=ng_serialize params=name 
 		
 		@param oid required type=int
 		
@@ -2494,8 +2217,6 @@ class class_base extends aw_template
 		));
 
 		$this->obj_inst = new object($this->id);
-		$this->load_obj_data(array("id" => $this->id));
-
 		$result = array();
 
 		foreach($realprops as $key => $val)
@@ -2593,6 +2314,8 @@ class class_base extends aw_template
 		// only create the object, if one of the tables used by the object
 		// is the objects table
 
+		// this object creation thingie should also only be defined in the forminfo
+
 		if (empty($id))
 		{
 			$period = aw_global_get("period");
@@ -2609,8 +2332,6 @@ class class_base extends aw_template
 				$lg = get_instance("languages");
 				$o->set_lang($lg->get_langid($rawdata["lang_id"]));
 			}
-			//$o->save();
-			//$id = $o->id();
 
 			$new = true;
 			$this->id = $id;
@@ -2629,48 +2350,27 @@ class class_base extends aw_template
 		}
 
 		$this->new = $new;
-		
+
 		// the question is .. should I call set_property for those too?
 		// and how do I load the stuff with defaults?
-		$realprops = $this->get_active_properties(array(
-				"clfile" => $this->clfile,
-				"all" => empty($group) ? true : false,
-				"group" => $group,
-				"cb_view" => $cb_view,
-				"rel" => $this->is_rel,
-				"load_defaults" => $new ? true : false,
-		));
 
-		if (!$new && isset($this->tables["objects"]))
-		{
-			$fields = $this->fields["objects"];
-			// for objects, we always load the parent field as well
-			$fields["parent"] = "direct";
-			$fields["metadata"] = "serialize";
-			$tmp = $this->load_object(array(
-				"id" => $this->id,
-				"table" => "objects",
-				"idfield" => "oid",
-				"fields" => $fields,
-			));
+		$filter = array();
+		$filter["clfile"] = $this->clfile;
+		$filter["clid"] = $this->clid;
+		$filter["group"] = $group;
+		$filter["rel"] = $this->is_rel;
+		$filter["ignore_layout"] = 1;
 
-			$tmp["oid"] = $this->id;
-
-			$this->coredata = $tmp;
-		};
+		$properties = $this->get_property_group($filter);
 
 		if (!$new)
 		{
-			$this->load_object(array("id" => $this->id));
-			$this->load_obj_data(array("id" => $this->id));
 			$this->obj_inst = new object($this->id);
 		}
 		else
 		{
 			$this->obj_inst = $o;
 		};
-
-		//$metadata = array();
 
 		$pvalues = array();
 
@@ -2679,7 +2379,7 @@ class class_base extends aw_template
 		$tmp = array();
 
 		// first, gather all the values.
-		foreach($realprops as $key => $property)
+		foreach($properties as $key => $property)
 		{
 			//do not call set_property for edit_only properties when a new
 			// object is created.
@@ -2707,7 +2407,6 @@ class class_base extends aw_template
 
 			$name = $property["name"];
 			$type = $property["type"];
-			$field = !empty($property["field"]) ? $property["field"] : $property["name"];
 				
 			$xval = isset($rawdata[$name]) ? $rawdata[$name] : "";
 
@@ -2729,9 +2428,9 @@ class class_base extends aw_template
 				$xval = (int)$xval;
 			};
 
-			if ($method == "bitmask" && empty($pvalues[$field]))
+			if ($method == "bitmask" && empty($pvalues[$name]))
 			{
-				$pvalues[$field] = $this->obj_inst->prop($field);
+				$pvalues[$name] = $this->obj_inst->prop($name);
 			};
 
 			$property["value"] = $xval;
@@ -2745,21 +2444,14 @@ class class_base extends aw_template
 
 		$realprops = $tmp;
 
-	
 		// now do the real job.
 		foreach($realprops as $key => $property)
 		{
 			$name = $property["name"];
 			$type = $property["type"];
-			$method = $property["method"];
-			$table = $property["table"];
-
-
-			$field = !empty($property["field"]) ? $property["field"] : $property["name"];
 
                         $argblock = array(
                                 "prop" => &$property,
-                                //"obj" => &$this->coredata,
                                 "form_data" => &$rawdata,
 				"request" => &$rawdata,
                                 "new" => $new,
@@ -2904,17 +2596,17 @@ class class_base extends aw_template
 				$property["value"] = $this->make_keys($rawdata[$name]);
 			};
 
-			if ($method == "bitmask")
+			if ($property["method"] == "bitmask")
 			{
 				// shift to the left, shift to the right
 				// pop, push, pop, push
-				if ( ($pvalues[$field] & $property["ch_value"]) && !($rawdata[$name] & $property["ch_value"]))
+				if ( ($pvalues[$name] & $property["ch_value"]) && !($rawdata[$name] & $property["ch_value"]))
 				{
-					$pvalues[$field] -= $property["ch_value"]; 
+					$pvalues[$name] -= $property["ch_value"]; 
 				}       
-				elseif (!($pvalues[$field] & $property["ch_value"]) && ($rawdata[$name] & $property["ch_value"]))
+				elseif (!($pvalues[$name] & $property["ch_value"]) && ($rawdata[$name] & $property["ch_value"]))
 				{
-					$pvalues[$field] += $property["ch_value"];
+					$pvalues[$name] += $property["ch_value"];
 				};     
 			};
 
@@ -2948,27 +2640,14 @@ class class_base extends aw_template
 					$values[$name] = $property["value"];
 				};
 			}
-			elseif ($table == "objects")
+			else
 			{
-				if ($method == "bitmask")
+				if ($property["method"] == "bitmask")
 				{
 					$val = ($property["ch_value"] == $property["value"]) ? $property["ch_value"] : 0;
 					$this->obj_inst->set_prop($name,$val);
 				} 
 				else
-				// mis check see on? ahah.. sellepärast vist kadusid menüüpildid ka ära, jees?
-				// if I understand the problem the right way, if I set a property to an array
-				// value, it will not be saved. jees?
-				//if (isset($rawdata[$name]))
-				{
-					// mida perset ma sellega siin peale hakkan?
-					//arr($property);
-					$this->obj_inst->set_prop($name,$property["value"]);
-				};
-			}
-			else
-			{
-				if (isset($property["value"]) && !empty($table))
 				{
 					$this->obj_inst->set_prop($name,$property["value"]);
 				};
@@ -2997,7 +2676,6 @@ class class_base extends aw_template
 
 		// gee, I wonder how many pre_save handlers do I have to fix to get this thing working
 		// properly
-		$this->coredata["id"] = $this->id;
 		
 		if (method_exists($this->inst,"callback_pre_save"))
 		{
@@ -3007,7 +2685,6 @@ class class_base extends aw_template
 				"form_data" => &$args,
 				"request" => &$args,
 				"obj_inst" => &$this->obj_inst,
-				"object" => array_merge($this->coredata,$this->objdata),
 			));
 		}
 
@@ -3068,23 +2745,6 @@ class class_base extends aw_template
 		return true;
 	}
 
-	function _get_connection_for_relobj($obj)
-	{
-		if ($obj->meta("conn_id"))
-		{
-			$rv = new connection($obj->meta("conn_id"));
-		}
-		else
-		{
-			$c = new connection();
-			list(, $c_d) = each($c->find(array(
-				"relobj_id" => $obj->id(),
-			)));
-			$rv = new connection($c_d["id"]);
-		}
-		return $rv;
-	}
-		
 	//////////////////////////////////////////////////////////////////////
 	// 
 	// init functions for classes that do not use automatic form generator
@@ -3169,7 +2829,7 @@ class class_base extends aw_template
 
 	/**  
 		
-		@attrib name=view params=name default="0"
+		@attrib name=view params=name 
 		
 		@param id required type=int
 		@param group optional
@@ -3198,10 +2858,8 @@ class class_base extends aw_template
 		$realprops = $this->get_active_properties(array(
 				"clfile" => $this->clfile,
 				"group" => $args["group"],
-				"cb_view" => $args["cb_view"],
 		));
 
-		$this->load_obj_data(array("id" => $this->id));
 		// parse the properties - resolve generated properties and
 		// do any callbacks
 		$resprops = $this->parse_properties(array(
@@ -3264,6 +2922,367 @@ class class_base extends aw_template
 		return $retval;
 	}
 
+	// needs either clid or clfile
+	function get_property_group($arr)
+	{
+		// load defaults (from the generated properties XML file) first
 
+		$filter = array();
+		if (!empty($arr["form"]))
+		{
+			$filter["form"] = $arr["form"];
+		};
+		if (!empty($arr["rel"]))
+		{
+			$filter["rel"] = 1;
+		};
+
+		// XXX: add some checks
+		$all_properties = $this->load_defaults(array(
+			"clid" => $arr["clid"],
+			"clfile" => $arr["clfile"],
+			"filter" => $filter,
+		));
+
+		// I could use a different approach here ... for example, if I'm saving then
+		// only the properties that should be saved should be returned. or not?
+
+		$this->features["has_rte"] = false;
+
+		$cfg_props = $all_properties;
+
+		$tmp = array();
+
+		if (is_oid($arr["cfgform_id"]) && $this->object_exists($arr["cfgform_id"]))
+		{
+			$cfg_props = $this->load_from_storage(array(
+				"id" => $arr["cfgform_id"],
+			));
+
+
+			// if there is a bug in config form which caused the groupdata
+			// to be empty, then this is the place where we should fix it.	
+		}
+		else
+		{
+			// no config form? alright, load the default one then!
+			if ($arr["clid"] == CL_DOCUMENT )
+			{
+				list($cfg_props,$grplist) = $this->load_from_file();
+				if (empty($this->groupinfo) || !empty($grplist))
+				{
+					$this->groupinfo = $grplist;
+				};
+			};
+		};
+
+		// I need group and caption from each one
+
+		$first_subgrp = array();
+
+		foreach($this->groupinfo as $gkey => $ginfo)
+		{
+			if (!empty($ginfo["parent"]) && empty($first_subgrp[$ginfo["parent"]]))
+			{
+				$first_subgrp[$ginfo["parent"]] = $gkey;
+			};
+		}
+
+		/// XXX: group remapping is NOT done!
+
+		// that is all nice and perty .. but. I also need to take into account the
+		// fact that .. how the hell do I put properties into those dynamic groups?
+
+		// the very default group comes from arr
+		if (isset($this->groupinfo[$arr["group"]]))
+		{
+			$use_group = $arr["group"];
+		}
+		else
+		{
+			// use first group as default
+			reset($this->groupinfo);
+			list($use_group,) = each($this->groupinfo);
+
+			// maybe some other group is set a default? scan them;
+			// latter default overwrites former, otherwise it would
+			// not be possible for a class to override the default group
+			foreach($this->groupinfo as $gkey => $ginfo)
+			{
+				if (isset($ginfo["default"]))
+				{
+					$use_group = $gkey;
+				};
+			};
+		};
+
+		$this->use_group = $use_group;
+
+		// if a group with subgroups is requested, then we need to return the contents
+		// of first subgroup
+		if (isset($first_subgrp[$use_group]))
+		{
+			$this->parent_group = $use_group;
+			$use_group = $first_subgrp[$use_group];
+		};
+
+		$this->prop_by_group = array();
+
+		// I need to create a remap map for groups .. but that is only a comfortability 
+		// feature. I don't really _need_ to do this.
+		// Leave out properties that are not listed in the class property declaration
+		$tmp = array();
+		foreach($cfg_props as $key => $val)
+		{
+			// ignore properties that are not defined in the defaults
+			if (!$all_properties[$key])
+			{
+				continue;
+			};
+
+			$propdata = array_merge($all_properties[$key],$val);
+			
+			// deal with properties belonging to multiple groups
+			$propgroups = is_array($val["group"]) ? $val["group"] : array($val["group"]);
+			$this->prop_by_group = array_merge($this->prop_by_group,array_flip($propgroups));
+			// tyri, kuidas ma siis nyyd arvestan siin järgmise taseme asju ah?
+
+			// skip anything that is not in the active group
+			if (!in_array($use_group,$propgroups))
+			{
+				continue;
+			};
+			
+			if (1 == $propdata["richtext"] && 0 == $this->classinfo["allow_rte"])
+			{
+				unset($propdata["richtext"]);
+			};
+
+			if ($propdata["richtext"] == 1)
+			{
+				$this->features["has_rte"] = true;
+			};
+
+			// return only toolbar, if this is a config form with fixed toolbar
+			if (empty($arr["ignore_layout"]) && 1 == $this->classinfo["fixed_toolbar"] && empty($arr["cb_part"]))
+			{
+				if ($propdata["type"] != "toolbar")
+				{
+					continue;
+				};
+			};
+
+			// shouldn't I do some kind of overriding?
+			$tmp[$key] = $propdata;
+
+		};
+
+		$this->use_group = $use_group;
+
+		// Very good. Now how do I deal with groups that contain subgroups?
+
+		// okey, now that I have the group, I need to filter the properties
+		// to return only the stuff that is the group that was requested
+		//print "use_group = $use_group<br>";
+
+		// if a group has properties and subgroups, then the properties need
+		// to be remapped to the first child group. 
+
+		// and I need to deal with multiple groups
+		
+		// and then I should leave out the groups with no properties
+
+		return $tmp;
+
+
+
+	}
+
+	////
+	// !Returns a list of properties having the requested type
+	function get_properties_by_type($arr)
+	{
+		// load defaults first
+		$all_properties = $this->load_defaults(array(
+			"clid" => $arr["clid"],
+			"clfile" => $arr["clfile"],
+		));
+
+		$rv = array();
+
+		foreach($all_properties as $key => $val)
+		{
+
+			if ($val["type"] == $arr["type"])
+			{
+				$rv[$key] = $val;
+			};
+		};
+
+		return $rv;
+
+	}
+
+	// and then I'll also need a method to load properties by their names
+	// relmanager and releditor need it
+
+	////
+	// !id - config form id	
+	function load_from_storage($arr)
+	{
+		extract($arr);
+		$this->classinfo = array();
+		$cfg_flags = array(
+			"classinfo_fixed_toolbar" => "fixed_toolbar",
+			"classinfo_allow_rte" => "allow_rte",
+			"classinfo" => "disable_relationmgr",
+		);
+		$rv = false;
+		if ($this->object_exists($id))
+		{
+			$cfgform_obj = new object($id);
+
+			$prps = $cfgform_obj->meta("cfg_proplist");
+			$rv = $prps;
+			$grps = $cfgform_obj->meta("cfg_groups");
+
+			foreach($cfg_flags as $key => $val)
+			{
+				$this->classinfo[$val] = $cfgform_obj->prop($key);
+			};
+
+			// sometimes the grplist is empty in config form.
+			// I don't know why, but it is, and in this case
+			// I'll load the groups from the file
+			$sbc = $cfgform_obj->prop("subclass");
+
+			// config form overloads original properties
+			if ($sbc == CL_DOCUMENT)
+			{
+				list($prplist,$grplist) = $this->load_from_file();
+				if (empty($grps))
+				{
+					$grps = $grplist;
+				};
+			};
+			$this->groupinfo = $grps;
+			// if the class has a default config file, then load 
+			// that as well
+		};
+		return $rv;
+	}
+
+	// right now only the document class supports this
+	function load_from_file()
+	{
+		$cfgu = get_instance("cfg/cfgutils");
+		$def = $this->get_file(array("file" => (aw_ini_get("basedir") . "/xml/documents/def_cfgform.xml")));
+		$rv = $cfgu->parse_cfgform(array("xml_definition" => $def));
+		if (!is_array($this->classinfo))
+		{
+			$this->classinfo = array();
+		};
+		$this->classinfo = array_merge($cfgu->normalize_text_nodes($cfgu->get_classinfo()),$this->classinfo);
+		return $rv;
+	}
+
+	// Defaults always get loaded, even if only for validation purposes
+	function load_defaults($arr)
+	{
+		$cfgu = get_instance("cfg/cfgutils");
+
+		$defaults = $cfgu->load_properties(array(
+			"file" => empty($arr["clid"]) ? $arr["clfile"] : "",
+			"clid" => $arr["clid"],
+			"filter" => $arr["filter"],
+		));
+	
+		$this->groupinfo = $cfgu->get_groupinfo();
+		$this->forminfo = $cfgu->get_forminfo();
+		if (!is_array($this->classinfo))
+		{
+			$this->classinfo = array();
+		};
+		$this->classinfo = array_merge($this->classinfo,$cfgu->normalize_text_nodes($cfgu->get_classinfo()));
+
+		$this->relinfo = $cfgu->get_relinfo();
+
+		return $defaults;
+
+	}
+
+	////
+	// !Can be used to query classinfo
+	function classinfo($arr)
+	{
+		return $this->classinfo[$arr["name"]];
+	}
+
+	// name - name
+	// value - value
+	function set_classinfo($arr)
+	{
+		$this->classinfo[$arr["name"]] = $arr["value"];
+	}
+
+	function groupinfo($arr = array())
+	{
+		return $this->groupinfo;
+	}
+
+	function set_groupinfo($name,$val)
+	{
+		$this->groupinfo[$name] = $val;
+	}
+
+	////
+	// !Returns a list of currently visible groups, should be called after property retrieving
+	function get_visible_groups()
+	{
+		$rv = array();
+		foreach($this->groupinfo as $gkey => $gval)
+		{
+			// remove groups with no properties. CL_RELATION is one of the big 
+			// users of this
+			if (!isset($this->prop_by_group[$gkey]))
+			{
+				if (!empty($gval["parent"]))
+				{
+					continue;
+				};
+			};
+
+			// skip all second level groups that are not children of the currently used group
+			// alltho some output clients might actually want all groups and all properties
+			if (!empty($gval["parent"]) && $gval["parent"] != $this->parent_group)
+			{
+				continue;
+			};
+			if ($gkey == $this->use_group)
+			{
+				$gval["active"] = 1;
+			};
+
+			if ($gkey == $this->parent_group)
+			{
+				$gval["active"] = 1;
+			};
+			$rv[$gkey] = $gval;
+		};
+		return $rv;
+	}
+
+	////
+	// form - name of the form
+	// attr - name of the attribute
+	function forminfo($arr = array())
+	{
+		return $this->forminfo[$arr["form"]][$arr["attr"]];
+	}
+
+	function has_feature($name)
+	{
+		return $this->features[$name];
+	}
 };
 ?>
