@@ -37,21 +37,6 @@ padding-right: 6px;
 .chformsubheader a {color: #FFFFFF; text-decoration:underline;}
 .chformsubheader a:hover {color: #000000; text-decoration:underline;}
 
-.chformsubtitle {
-font-family: verdana, sans-serif;
-font-size: 11px;
-font-weight: normal;
-color: #000000;
-height: 24px;
-background-color: #478EB6;
-padding-left: 20px;
-}
-.chformsubtitle a {color: #FFFFFF; text-decoration:underline;}
-.chformsubtitle a:hover {color: #000000; text-decoration:underline;}
-
-
-
-
 .mlang {
 	font-family: Verdana,Arial,Helvetica,sans-serif;
 	font-size: 11px;
@@ -94,27 +79,6 @@ text-decoration: none;
 background: #ebebeb;
 }
 
-.mboardtab {
-font-family: Verdana, Arial, Helvetica, sans-serif;
-color: #FFFFFF;
-font-size: 9px;
-font-weight: bold;
-text-decoration: none;
-background: #113789;
-}
-.mboardtab a {color: #FFFFFF; text-decoration: none;}
-.mboardtab a:hover {color: #EFF4F5; text-decoration: underline;}
-
-
-.mboardtexttopic {
-font-family: Verdana, Arial, Helvetica, sans-serif;
-color: #000000;
-font-size: 0.7em;
-text-decoration: none;
-}
-.mboardtexttopic a {color: #113789; text-decoration: none;}
-.mboardtexttopic a:hover {color: #113789; text-decoration: underline;}
-
 
 .mboardtextsmall {
 font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -133,17 +97,6 @@ text-decoration: none;
 }
 .mboard a {color: #113789; text-decoration: none;}
 .mboard a:hover {color: #113789; text-decoration: underline;}
-
-
-.sitehead {
-	font-family: Verdana,Arial,Helvetica,sans-serif;
-	font-size: 10px;
-	font-weight: bold;
-	text-decoration: none;
-	height: 17px;
-	color: #FFFFFF;
-	background: #8AABBE;
-}
 
 
 .tableborder {
@@ -185,15 +138,6 @@ background: #DBE8EE;
 
 .tabsel a {color: #000000; text-decoration: none;}
 .tabsel a:hover {color: #0000FF; text-decoration: none;}
-
-.tabselback {
-	font-family: Arial,Helvetica,sans-serif;
-	font-size: 11px;
-	text-decoration: none;
-	color: #000000;
-	background: #8AABBE;
-	background-image: URL('/automatweb/images/blue/tabsel_taust.gif');
-}
 
 .tab2 {
 	font-family: Arial,Helvetica,sans-serif;
@@ -263,33 +207,10 @@ background: #DBE8EE;
 	height: 17px;
 }
 
-.celltitlenormal {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 10px;
-	color: #000000;
-	text-decoration: none;
-	height: 17px;
-}
-
 .celltext {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 11px;
 	color: #000000;
-	text-decoration: none;
-}
-
-.celltextbold {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	font-weight: bold;
-	color: #000000;
-	text-decoration: none;
-}
-
-.cellcomment {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 10px;
-	color: #6D7477;
 	text-decoration: none;
 }
 
@@ -324,16 +245,6 @@ text-decoration: none;
 background: #FFFFFF;
 height: 22px
 border-style: solid;
-border-color: #D9D9D9;
-border-width: 1px;
-}
-
-.formtext21 {
-font-family: Verdana, Arial, Helvetica, sans-serif;
-color: #000000;
-font-size: 11px;
-text-decoration: none;
-background: #FFFFFF;
 border-color: #D9D9D9;
 border-width: 1px;
 }
@@ -415,43 +326,7 @@ border-width: 1px;
 		background: #f5f5f5;
 }
 
-.fcaption3 {
-        font-family: Verdana,Arial,Helvetica,sans-serif;
-        font-size: 8pt;
-        color: black;
-        text-decoration: none;
-        background: #FFFFFF;
-}
-.fcaption4 {
-        font-family: Verdana,Arial,Helvetica,sans-serif;
-        font-size: 8pt;
-        color: black;
-        text-decoration: none;
-        background: #CCCCCC;
-}
 
-.fselected2 {
-        font-family: Verdana,Arial,Helvetica,sans-serif;
-        font-size: 8pt;
-        color: black;
-        text-decoration: none;
-        background: #CCCCCC;
-}
-
-.fselected3 {
-        font-family: Verdana,Arial,Helvetica,sans-serif;
-        font-size: 8pt;
-        color: black;
-        text-decoration: none;
-        background: #DDDDDD;
-}
-
-.fform2 {
-        font-family: Verdana,Arial,Helvetica,sans-serif;
-        font-size: 8pt;
-        color: black;
-        background: #EEEEEE;
-}
 .ftitle2 {
         font-family: Verdana,Arial,Helvetica,sans-serif;
         font-weight: bold;
@@ -460,15 +335,6 @@ border-width: 1px;
         text-decoration: none;
         background: #E5E8F7;
 }
-.ftitle3 {
-        font-family: Verdana,Arial,Helvetica,sans-serif;
-        font-weight: bold;
-        font-size: 9pt;
-        color: black;
-        text-decoration: none;
-        background: #C5C8F7;
-}
-
 
 .title {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -478,13 +344,6 @@ border-width: 1px;
 	background: #eeeeee;
 }
 
-.title_hele {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 0.6em;
-	font-weight: bold;
-	text-decoration: none;
-	background: #f2f2f2;
-}
 
 .titlesel {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -504,13 +363,6 @@ border-width: 1px;
 	font-size: 0.6em;
 	background: #FFCCCC;
 };
-.fcaptionclean {
-        font-family: Verdana,Arial,Helvetica,sans-serif;
-        font-size: 10pt;
-        color: black;
-        text-decoration: none;
-}
-
 .fform { 
         font-family: Verdana,Arial,Helvetica,sans-serif;
         font-size: 8pt;
@@ -540,21 +392,6 @@ border-width: 1px;
 	background: #EEEEEE;
 	text-decoration: none;
 }
-.header2 {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 10px;
-	color: #000000;
-	background: #EEEEEE;
-	text-decoration: none;
-}
-
-.header3 {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	color: #000000;
-	background: #CCCCCC;
-	text-decoration: none;
-}
 
 .cut {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -582,41 +419,6 @@ border-width: 1px;
 .fgtitle {
 BACKGROUND: #eeeeee; COLOR: black; FONT-FAMILY: Verdana,Arial,Helvetica,sans-serif; FONT-SIZE: 0.6em; TEXT-DECORATION: none
 }
-.fgtitle_new {
-BACKGROUND: #1c629d; COLOR: black; FONT-FAMILY: Verdana,Arial,Helvetica,sans-serif; FONT-SIZE: 0.6em; TEXT-DECORATION: none
-}
-
-.fgtitlenew {
-BACKGROUND: #1c629d; COLOR: black; FONT-FAMILY: Verdana,Arial,Helvetica,sans-serif; FONT-SIZE: 0.6em; TEXT-DECORATION: none
-}
-
-.fgtitle_text {
-BACKGROUND: #1c629d; COLOR: #e0e7f0; FONT-FAMILY: Verdana,Arial,Helvetica,sans-serif; TEXT-DECORATION: none
-}
-
-.fgtitle_button { 
-color: #e0e7f0;
-background-color: #1c629d; 
-font-family: Verdana, Arial, Helvetica, sans-serif;
-font-size: 7pt;
-font-weight: bold;
-}
-
-.fgtitlebutton { 
-color: #e0e7f0;
-background-color: #1c629d; 
-font-family: Verdana, Arial, Helvetica, sans-serif;
-font-size: 7pt;
-font-weight: bold;
-}
-
-.fgtitle_link {
- COLOR: #e0e7f0; 
-}
-.fgtitle_link:hover {
- COLOR: #FFFFFF; 
-}
-
 .fgtext {
 
 BACKGROUND: #FFFFFF; COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT-SIZE: 11px; FONT-WEIGHT: normal; TEXT-DECORATION: none
@@ -706,11 +508,6 @@ COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT-SIZE: 11px; FONT-WEI
 BACKGROUND: #f5f5f5; COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT-SIZE: 11px; FONT-WEIGHT: normal; TEXT-DECORATION: none
 }
 
-.fgtext_bold {
-
-BACKGROUND: #FFFFFF; COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT-SIZE: 11px; FONT-WEIGHT: bold; TEXT-DECORATION: none
-}
-
 .fgtext2 {
 
 BACKGROUND: #eeeeee; COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT-SIZE: 0.6em; TEXT-DECORATION: none
@@ -730,15 +527,6 @@ BACKGROUND: #eeeeee; COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT
 .small_button {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 7pt;
-}
-
-.pealkiri1 {
-        font-family: Verdana, Arial, Helvetica, sans-serif;
-        font-size: 14px;
-        font-weight: bold;
-        color: #000000;
-        text-decoration: none;
-        background: #CCCCCC;
 }
 
 .tekstikast
@@ -789,46 +577,6 @@ font-weight: bold;
 text-decoration: none;
 }
 
-.messengermenulevel3 {
-font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
-color: #000000;
-font-size: 0.6em;
-text-decoration: none;
-}
-
-.messengermenulevel3act {
-font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
-color: #000000;
-font-size: 0.6em;
-font-weight: bold;
-text-decoration: none;
-}
-
-.messengermenulevel3act a {color: #000000;}
-.messengermenulevel3act a:hover {color: #000033;}
-
-.messengermenusub2title {
-font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
-color: #000033;
-font-size: 0.6em;
-font-weight: bold;
-text-decoration: none;
-}
-
-.messengermenusub2 {
-font-family: Arial, Helvetica, sans-serif;
-color: #000000;
-font-size: 0.8em;
-text-decoration: none;
-}
-
-.messengermenusub2selected {
-font-family: Arial, Helvetica, sans-serif;
-color: #000000;
-font-size: 1.8em;
-text-decoration: none;
-font-weight: bold;
-}
 
 .messengermenusub a {color: #929FB3;}
 .messengermenusub a:hover {color: #39537C;}
@@ -847,63 +595,12 @@ font-weight: bold;
 BACKGROUND: #EEEEEE; COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT-SIZE: 11px; FONT-WEIGHT: normal; TEXT-DECORATION: none
 }
 
-.menuedittitle {
-BACKGROUND: #1c629d; COLOR: black; FONT-FAMILY: Verdana,Arial,Helvetica,sans-serif; FONT-SIZE: 10px; TEXT-DECORATION: none
-}
-
-.menueditvali {
-BACKGROUND: #ccccccc; COLOR: black; FONT-FAMILY: Verdana,Arial,Helvetica,sans-serif; FONT-SIZE: 10px; TEXT-DECORATION: none
-}
 
 
-.menuedittitle_button { 
-color: #e0e7f0;
-background-color: #1c629d;
-font-family: Verdana, Arial, Helvetica, sans-serif;
-font-size: 10px;
-font-weight: bold;
-}
 
 
-.menueditbutton {
-font-family: Verdana, Arial, Helvetica, sans-serif;
-color: #000000;
-font-size: 10px;
-font-weight: bold;
-text-decoration: none;
-background-color: #FFFFFF;
-}
-.menueditbutton a {color: #000000; text-decoration: none;}
-.menueditbutton a:hover {color: #002884; text-decoration: none;}
 
-
-.menueditbuttontrans {
-font-family: Verdana, Arial, Helvetica, sans-serif;
-color: #000000;
-font-size: 10px;
-font-weight: bold;
-text-decoration: none;
-}
-.menueditbuttontrans a {color: #FFFFFF; text-decoration: none;}
-.menueditbuttontrans a:hover {color: #002884; text-decoration: none;}
-
-
-.menueditsaoledsiin {
-font-family: Verdana, Arial, Helvetica, sans-serif;
-color: #000000;
-font-size: 10px;
-font-weight: bold;
-text-decoration: none;
-background-color: #cccccc;
-}
-.menueditsaoledsiin a {color: #000000; text-decoration: none;}
-.menueditsaoledsiin a:hover {color: #002884; text-decoration: underline;}
-.peaLingid {  font-weight: bold; color: #0000f0; text-decoration: none}
-.peaLingidText { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 0.6em; font-weight: bold; color: #000000; text-decoration: none }
 .alamLingid {  font-family: Verdana, Arial, Helvetica, sans-serif; color: #0000f0; text-decoration: none}
-.alamLingidText { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 0.6em; color: #666666; text-decoration: none }
-.alamText { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 0.6em; color: #000000; text-decoration: none }
-.alamTextWhite { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 0.6em; color: #FFFFFF; text-decoration: none }
 .muh { position: relative; visibility: visible; }
 .mainmenu {
         position: absolute;
@@ -926,58 +623,6 @@ background-color: #cccccc;
 .menyy1 {position: absolute; left: 7px; top: 28px; text-decoration: none; visibility: hidden;}
 .menyy2 {position: absolute; left: 58px; top: 28px; text-decoration: none; visibility: hidden;}
 
-.ftitlenormal {
-	font-family: Arial,Helvetica,sans-serif;
-	font-weight: bold;
-	font-size: 9pt;
-	color: black;
-	background: #E5E8F7;
-}
-
-.ftitlesortable {
-	font-family: Arial,Helvetica,sans-serif;
-	font-weight: bold;
-	font-size: 9pt;
-	color: black;
-	background: #E5E8F7;
-}
-
-.ftitlesorted {
-	font-family: Arial,Helvetica,sans-serif;
-	font-weight: bold;
-	font-size: 9pt;
-	color: black;
-	background: #FF966f;
-}
-
-.fcontentline1 {
-	font-family: Arial,Helvetica,sans-serif;
-	font-size: 9pt;
-	color: black;
-	background: #F2F2F2;
-}
-
-.fcontentline1sorted {
-	font-family: Arial,Helvetica,sans-serif;
-	font-size: 9pt;
-	color: black;
-	background: #FFE280;
-}
-
-
-.fcontentline2 {
-	font-family: Arial,Helvetica,sans-serif;
-	font-size: 9pt;
-	color: black;
-	background: #FFFFFF;
-}
-
-.fcontentline2sorted {
-	font-family: Arial,Helvetica,sans-serif;
-	font-size: 9pt;
-	color: black;
-	background: #ffc240 
-}
 .textsmall {
 font-family: verdana, sans-serif;
 font-size: 10px;
@@ -987,13 +632,6 @@ color: #B58D47;
 .textsmall a:hover {color: #000000; text-decoration:none;}
 
 
-.awmenuediticonsjoon1 {
-background-color: #E9EBEC;
-}
-
-.awmenuediticonsjoon2 {
-background-color: #9D8254;
-}
 
 .awmenuedittableborder {
 background-color: #E2E2DB;
@@ -1507,16 +1145,6 @@ color:#000000;
 
 
 
-.aw04contentcell2 {
-border-top: 1px solid #FFFFFF;
-border-bottom: 1px solid #E6E6E6;
-border-left: 0px solid #FFFFFF;
-border-right: 0px solid #DADADA;
-background-color: #FAFAFA;
-font-family: Arial, sans-serif;
-font-size: 11px;
-color:#000000;
-}
 
 .aw04contentcell2head {
 border-top: 1px solid #FFFFFF;
@@ -1531,25 +1159,6 @@ color:#000000;
 }
 
 
-.aw04formtext {
-border: 1px solid #bdbdbd;
-background-color: #FFFFFF;
-padding: 4px;
-height: 24px;
-font-family: Verdana, Arial, sans-serif;
-font-size: 12px;
-color:#000000;
-}
-
-.aw04formtextarea {
-border: 1px solid #bdbdbd;
-background-color: #FFFFFF;
-padding: 4px;
-font-family: Verdana, Arial, sans-serif;
-font-size: 12px;
-color:#000000;
-}
-
 .aw04formbutton {
 border-top: 1px solid #FFFFFF;
 border-bottom: 1px solid #000000;
@@ -1562,20 +1171,6 @@ font-size: 11px;
 font-weight: bold;
 color:#FFFFFF;
 }
-
-.aw04formtext2 {
-font-family: Arial, sans-serif;
-font-size: 11px;
-color:#000000;
-border: 1px solid #bdbdbd;
-background-color: #FFFFFF;
-padding:2px;
-margin: 0px;
-}
-
-
-
-
 
 .reallysmall { 
 	font-family: Arial,Helvetica,sans-serif;
