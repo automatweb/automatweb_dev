@@ -1,6 +1,20 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.62 2005/04/05 08:50:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.63 2005/04/05 10:56:46 kristo Exp $
 // promo.aw - promokastid.
+
+/* content documents for promo boxes are handled thusly:
+
+- when a document is saved, promo boxes are scanned to see if any of them should display the just-saved document
+  if so, then the document is added to the list in meta[content_documents], else it is removed
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE,CL_DOCUMENT, on_save_document)
+
+
+- when a promo box is saved, the list of documents for it's display is regenerated
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE,CL_PROMO, on_save_promo)
+
+*/
 
 /*
 	@classinfo trans=1
@@ -670,9 +684,14 @@ class promo extends class_base
 	{
 		$inst =& $arr["inst"];
 
-		$doc = get_instance(CL_DOCUMENT);
-		# reset period, or we don't see contents of promo boxes under periodic menus:
-		$doc->set_period(0);
+		if (aw_ini_get("document.use_new_parser"))
+		{
+			$doc = get_instance("doc_display");
+		}
+		else
+		{
+			$doc = get_instance(CL_DOCUMENT);
+		}
 
 		if (aw_ini_get("menuedit.promo_lead_only"))
 		{
@@ -834,10 +853,22 @@ class promo extends class_base
 					obj_set_opt("no_cache", 1);
 				}
 
-				$docid = $inst->get_default_document(array(
-					"obj" => $o,
-					"all_langs" => true
-				));
+				if ($o->meta("version") == 2 && $this->cfg["version"] == 2)
+				{
+					$docid = array_values(safe_array($o->meta("content_documents")));
+
+					// prefetch docs in list so we get them in one query
+					$ol = new object_list(array("oid" => $docid));
+					$ol->arr();
+				}
+				else
+				{
+					// get_default_document prefetches docs by itself so no need to do list here
+					$docid = $inst->get_default_document(array(
+						"obj" => $o,
+						"all_langs" => true
+					));
+				}
 
 
 				if ($o->prop("trans_all_langs"))
@@ -851,7 +882,6 @@ class promo extends class_base
 				{
 					$docid = array($docid);
 				}
-
 
 				$d_cnt = 0;
 				$d_total = count($docid);
@@ -1039,6 +1069,158 @@ class promo extends class_base
 			"PREV_LINK" => $s_prev,
 			"NEXT_LINK" => $s_next
 		));
+	}
+
+	function on_save_document($arr)
+	{
+		$o = obj($arr["oid"]);
+		
+		// figure out if this document is to be shown in any promo in the system
+		// to do that
+		// make a list of all promo boxes
+		$ol = new object_list(array(
+			"class_id" => CL_PROMO,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+
+		$path = $o->path();
+
+		foreach($ol->arr() as $box)
+		{
+			$add_to_list = false;
+
+			// for each box, check the folders where it gets documents and if this document's parent is one of them, 
+			$fld = $this->_get_folders_for_box($box);
+			$is_in_promo = false;
+			foreach($fld as $f => $subs)
+			{
+				if ($f == $o->parent() || ($subs && $this->_is_in_path($path, $f)))
+				{
+					$is_in_promo = true;
+					break;
+				}
+			}
+
+			if ($is_in_promo)
+			{
+				// check if it has ndocs > 0
+				if ($box->prop("ndocs"))
+				{
+					// if so, check the sorting order and compare the current document to the current list
+					// if it belongs in the list, add it to the list
+					// how do we do that? 
+					// well, make an list of the documents in the current list
+					// add the new document to it
+					// and give the id's and sort by and length to an object_list and let the database sort it all out
+					$ids = safe_array($box->meta("content_documents"));
+					$ids[$o->id()] = $o->id();
+	
+					$ol = new object_list(array(
+						"oid" => $ids,
+						"limit" => $box->prop("ndocs"),
+						"sort_by" => $this->_get_ordby($box),
+						"status" => ($box->prop("show_inact") ? array(STAT_ACTIVE, STAT_NOTACTIVE) : STAT_ACTIVE)
+					));
+
+					// now we know the whole list, so just set that
+					$box->set_meta("content_documents", $this->make_keys($ol->ids()));
+					$box->save();
+					continue;
+				}
+				else
+				{
+					$add_to_list = true;
+				}
+			}
+
+			if ($o->status() == STAT_NOTACTIVE && !$box->prop("show_inact"))
+			{
+				$add_to_list = false;
+			}
+
+			if ($add_to_list)
+			{
+				$mt = safe_array($box->meta("content_documents"));
+				$mt[$o->id()] = $o->id();
+
+				if ($box->prop("sort_by") != "")
+				{
+					// need to reorder list
+					$ol = new object_list(array(
+						"oid" => $mt,
+						"sort_by" => $this->_get_ordby($box),
+						"status" => ($box->prop("show_inact") ? array(STAT_ACTIVE, STAT_NOTACTIVE) : STAT_ACTIVE)
+					));
+					$mt = $this->make_keys($ol->ids());
+				}
+
+				$box->set_meta("content_documents", $mt);
+				$box->save();
+			}
+		}
+	}
+
+	function _get_folders_for_box($box)
+	{
+		$ret = array();
+		$subs = safe_array($box->meta("src_submenus"));
+		foreach($box->connections_from(array("type" => "RELTYPE_DOC_SOURCE")) as $c)
+		{
+			$ret[$c->prop("to")] = $subs[$c->prop("to")] == $c->prop("to");
+		}
+
+		if (!count($ret))
+		{
+			return array($box->id() => $box->id());
+		}
+
+		return $ret;
+	}
+
+	function _is_in_path($path, $f)
+	{
+		foreach($path as $o)
+		{
+			if ($o->id() == $f)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	function _get_ordby($box)
+	{
+		$ordby = "";
+		if ($box->meta("sort_by") != "")
+		{
+			$ordby = $box->meta("sort_by");
+			if ($box->meta("sort_ord") != "")
+			{
+				$ordby .= " ".$box->meta("sort_ord");
+			}
+			if ($box->meta("sort_by") == "documents.modified")
+			{
+				$ordby .= ", objects.created DESC";
+			};
+		}
+		return $ordby;
+	}
+
+	function on_save_promo($arr)
+	{
+		$o = obj($arr["oid"]);
+
+		// get list of docs for promo
+		$si = get_instance("contentmgmt/site_show");
+		
+		$o->set_meta("content_documents", $this->make_keys($si->get_default_document(array(
+			"obj" => $o
+		))));
+
+		$o->set_meta("version", 2);
+		$o->save();
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.322 2005/04/05 08:52:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.323 2005/04/05 10:56:45 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -261,6 +261,12 @@ class document extends aw_template
 	//       lead/full is based on leadonly parameter
 	function gen_preview($params)
 	{
+		if ($this->cfg["use_new_parser"])
+		{
+			$d = get_instance("doc_display");
+			return $d->gen_preview($params);
+		}
+
 		extract($params);
 		global $print;
 		$this->print = $print;
