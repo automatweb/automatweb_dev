@@ -541,12 +541,14 @@ class aw_site extends class_base
 		// right. now we must somehow assume the identity of the new site. 
 		// quiestion is, how the hell do we do that?
 		// ok, what the hell, right now just update objects.site_id to have the new id after doing stuff
-		// createdby uids will still be incorrect, but fuck that
+		// createdby uids will still be incorrect, but we can update that later as well
 
 		// execute object script under the new datasource
 		$old_ds = $GLOBALS["object_loader"]->switch_db_connection($dbi->dc[$dbi->default_cid]);
 		// turn off acl checks, they'd fail
 		$GLOBALS["cfg"]["acl"]["no_check"] = 1;
+		// turn off storage cache, it concerns the other site and would be wrong
+		obj_set_opt("no_cache", 1);
 
 		$clss = aw_ini_get("install.init_classes");
 		foreach($clss as $class)
@@ -578,7 +580,7 @@ class aw_site extends class_base
 			"file" => $script,
 			"vars" => array(
 				"parent" => $_root_o,
-				"url" => $site["url"],
+				"url" => $site["name"],
 				"default_user" => $site["site_obj"]["default_user"],
 				"default_user_pwd" => md5($site["site_obj"]["default_user_pwd"]),
 			)
@@ -923,10 +925,14 @@ class aw_site extends class_base
 	{
 		$ob = obj($id);	
 		$site_url = str_replace("http://","",$ob->meta('site_url'));
-		$site_url = str_replace("/","",$ob->meta('site_url'));
+		$site_url = str_replace("/","",$site_url);
+
+		$site_name = str_replace("http://","",$ob->name());
+		$site_name = str_replace("/","",$site_name);
 
 		$site = array();
 		$site['url'] = $site_url;
+		$site['name'] = $site_name;
 		$site['docroot'] = aw_ini_get('install.docroot').$site_url;
 		$site['logroot'] = aw_ini_get('install.logroot').$site_url;
 		$site['vhost_file'] = aw_ini_get('install.vhost_folder').$site_url;
@@ -1239,18 +1245,34 @@ class aw_site extends class_base
 			}
 		}
 
-		$_pa = $this->do_orb_method_call(array(
-			"class" => "objects",
-			"action" => "aw_ini_get_mult",
-			"method" => "xmlrpc",
-			"server" => $site["url"],
-			"params" => array(
-				"vals" => array(
-					"promo.areas",
-				)
-			),
-			"no_errors" => true
-		));
+
+		reset($site['site_obj']['select_tpl_sites']);
+		list(, $sn) = each($site['site_obj']['select_tpl_sites']);
+		$sn = str_replace("http://","",$sn);
+	
+		if ($sn == "")
+		{
+			// try the imcss site
+			$sn = $site['site_obj']['select_imgcss_sites'];
+			$sn = str_replace("http://","",$sn);
+		}
+
+		if ($sn != "")
+		{
+			$_pa = $this->do_orb_method_call(array(
+				"class" => "objects",
+				"action" => "aw_ini_get_mult",
+				"method" => "xmlrpc",
+				"server" => $sn,
+				"params" => array(
+					"vals" => array(
+						"promo.areas",
+					)
+				),
+				"no_errors" => true
+			));
+		}
+
 		$pa = $_pa["promo.areas"];
 		if (is_array($pa) && count($pa) > 0)
 		{
@@ -1298,10 +1320,12 @@ class aw_site extends class_base
 			}
 		}
 
-		$ini_opts["promo.areas"] = $templates;		
 
 		foreach($templates as $id => $dat)
 		{
+			$ini_opts["promo.areas[$id][def]"] = $dat["def"];		
+			$ini_opts["promo.areas[$id][name]"] = $dat["name"];
+
 			$astr = $dat["name"];
 
 			$o = obj();

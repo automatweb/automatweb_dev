@@ -47,10 +47,8 @@
 				$loginm = obj { class_id=CL_MENU, parent=${mn_conf}, name="Login men&uuml;&uuml;", type=MN_CLIENT, status=STAT_ACTIVE }
 					obj { class_id=CL_CONFIG_LOGIN_MENUS, status=STAT_ACTIVE, parent=${loginm}, name="Login men&uuml;&uuml;" }
 
-		# adminni proged. - keeled, prog_acl, config
+		# adminni proged. - config only. could be none soon
 		$admin_root = obj { class_id=CL_MENU, parent=${klient}, jrk="1", name="AutomatWeb" type=MN_ADMIN1, status=STAT_ACTIVE }
-			obj { class_id=CL_MENU, parent=${admin_root}, name="Keeled" type=MN_ADMIN1, admin_feature=PRG_LANG, status=STAT_ACTIVE }
-			obj { class_id=CL_MENU, parent=${admin_root}, name="Programmide ACL" type=MN_ADMIN1, admin_feature=PRG_ACCESSMGR, status=STAT_ACTIVE }
 			obj { class_id=CL_MENU, parent=${admin_root}, name="Config" type=MN_ADMIN1, admin_feature=PRG_CONFIG, status=STAT_ACTIVE }
 
 ini { site_rootmenu=${site_root} }
