@@ -4,6 +4,7 @@
 		<action name="admin_list">
 			<function name="admin_list">
 				<arguments>
+					<optional name="sortby"/>
 				</arguments>
 			</function>
 		</action>
@@ -33,7 +34,7 @@
 			</function>
 		</action>
 
-		<action name="list" default="1" nologin="1">
+		<action name="list" default="1" nologin="1" public="1">
 			<function name="site_list">
 				<arguments>
 				</arguments>
