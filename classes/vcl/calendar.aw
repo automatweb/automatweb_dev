@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.40 2004/12/16 14:41:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.41 2004/12/16 15:59:31 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -181,6 +181,23 @@ class vcalendar extends aw_template
 			echo "id = ".$arr["data"]["id"]." name = ".$arr["data"]["name"]." start = ".date("d.m.Y H:i", $arr["data"]["start1"])." <br>";
 		}
 
+		if (!empty($arr["item_start"]))
+		{
+			$arr["timestamp"] = $arr["item_start"];
+			if (empty($arr["item_end"]))
+			{
+				$arr["item_end"] = $arr["item_start"];
+			};
+			if ($arr["item_start"] > $arr["item_end"])
+			{
+				// hehe, textbook problem .. swap variables
+				$tmp = $arr["item_end"];
+				$arr["item_end"] = $item["start"];
+				$arr["item_start"] = $tmp;
+
+			};
+		};
+
 		// convert timestamp to day, since calendar is usually day based
 		$use_date = date("Ymd",$arr["timestamp"]);
 		$this->el_count++;
@@ -202,6 +219,18 @@ class vcalendar extends aw_template
 				$this->items[$use_date][] = &$this->evt_list[$this->el_count];
 			};
 		};
+
+		if (isset($arr["item_end"]))
+		{
+			$arr["item_start"]+= 86400;
+			$arr["item_end"]+= 85399;
+			//$arr["item_start"] += 86400;
+			for ($i = $arr["item_start"]; $i <= $arr["item_end"]; $i = $i + 86400)
+			{
+				$use_date = date("Ymd",$i);
+				$this->items[$use_date][] = &$this->evt_list[$this->el_count];
+			};
+		};
 		// this is used for relational view
 		//if ($data["timestamp"] < $this->range["timestamp"])
 		if ($data["timestamp"] < time())
@@ -213,11 +242,18 @@ class vcalendar extends aw_template
 			$this->future[] = &$this->items[$use_date][sizeof($this->items[$use_date])-1];
 		};
 
+		
+
 	}
 
 	function add_overview_item($arr)
 	{
 		$use_date = date("Ymd",$arr["timestamp"]);
+		if ($GLOBALS["SITT"])
+		{
+			var_dump(error_reporting(0));
+
+		};
 		$this->overview_items[$use_date] = true;
 		if (!empty($arr["url"]))
 		{
@@ -250,6 +286,8 @@ class vcalendar extends aw_template
 		};
 		
 		$this->event_counter = 0;
+
+
 
 		if (!empty($arr["text"]))
 		{
@@ -293,6 +331,7 @@ class vcalendar extends aw_template
 					$caption = date("j. ",$this->range["timestamp"]) . locale::get_lc_month(date("m",$this->range["timestamp"])) . date(" Y",$this->range["timestamp"]);
 			};
 		};
+
 		
 		classload("date_calc");
 		$m = date("m",$this->range["timestamp"]);
@@ -321,6 +360,7 @@ class vcalendar extends aw_template
 				$awt->stop("get-overview");
 			};
 
+
 			if (is_array($overview_items))
 			{
 				foreach($overview_items as $tm => $tmp)
@@ -341,6 +381,7 @@ class vcalendar extends aw_template
 				};
 			};
 
+
 			// I need to figure out how many months should be shown.
 			// actually, it should be set from the configure item
 
@@ -356,7 +397,7 @@ class vcalendar extends aw_template
 				$ri = 0;
 				$re = 0;
 			};
-			
+
 			$awt->start("draw-s-month");
 			for ($i = $ri; $i <= $re; $i++)
 			{
@@ -389,6 +430,7 @@ class vcalendar extends aw_template
 			));
 			$ts .= $this->parse(($type == $this->range["viewtype"]) ? "SEL_PAGE" : "PAGE");
 		};
+
 
 		$tasks = array();
 		if (isset($this->tasklist_func))
@@ -457,7 +499,8 @@ class vcalendar extends aw_template
 
 		$awt->stop("gen-calendar-html");
 
-		return $this->parse();
+		$rv = $this->parse();
+		return $rv;
 	}
 
 	////
