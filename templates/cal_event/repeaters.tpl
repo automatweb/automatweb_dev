@@ -1,41 +1,72 @@
 <script language="JavaScript">
 function ed_rep()
 {
-	active = 0;
-	for (i = 1; i <= document.replist.check.length; i++)
+	if (!document.replist.check)
 	{
-		if (document.replist.check[i-1].checked)
-		{
-			active = document.replist.check[i-1].value;
-		};
-	};
-	if (active == 0)
-	{
-		alert('Vali tsükkel, mida muuta soovid');
+		alert('Nimekiri on tühi, pole midagi muuta');
 	}
 	else
 	{
-		window.location = "{VAR:ed_link}&cycle=" + active;
+		if (!document.replist.check.length)
+		{
+			active = document.replist.check.value;
+		}
+		else
+		{
+			active = 0;
+			for (i = 1; i <= document.replist.check.length; i++)
+			{
+				if (document.replist.check[i-1].checked)
+				{
+					active = document.replist.check[i-1].value;
+				};
+			};
+		};
+		if (active == 0)
+		{
+			alert('Vali tsükkel, mida kustutada soovid');
+		}
+		else
+		{
+			window.location = "{VAR:ed_link}&cycle=" + active;
+		};
 	};
 };
 
 function del_rep()
 {
-	active = 0;
-	for (i = 1; i <= document.replist.check.length; i++)
+	if (!document.replist.check)
 	{
-		if (document.replist.check[i-1].checked)
-		{
-			active = document.replist.check[i-1].value;
-		};
-	};
-	if (active == 0)
-	{
-		alert('Vali tsükkel, mida kustutada soovid');
+		alert('Nimekiri on tühi, pole midagi kustutata');
 	}
 	else
 	{
-		window.location = "{VAR:del_link}&cycle=" + active;
+		if (!document.replist.check.length)
+		{
+			active = document.replist.check.value;
+		}
+		else
+		{
+			active = 0;
+			for (i = 1; i <= document.replist.check.length; i++)
+			{
+				if (document.replist.check[i-1].checked)
+				{
+					active = document.replist.check[i-1].value;
+				};
+			};
+		};
+		if (active == 0)
+		{
+			alert('Vali tsükkel, mida kustutata soovid');
+		}
+		else
+		{
+			if (confirm('Soovid sa seda tsüklit tõesti kustutada?'))
+			{
+				window.location = "{VAR:del_link}&cycle=" + active;
+			};
+		};
 	};
 };
 </script>
