@@ -105,6 +105,7 @@
             <rows>25</rows>
             <store>no</store>
             <caption>Massiline liitmine</caption>
+            <comment>Iga aadress eraldi real, nimi ja aadress komaga eraldatud</comment>
       </property>
       <property>
             <name>confirm_unsubscribe</name>
@@ -146,6 +147,26 @@
             <rows>25</rows>
             <store>no</store>
             <caption>Massiline kustutamine</caption>
+      </property>
+      <property>
+            <name>export_type</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>export_members</group>
+            <type>chooser</type>
+            <orient>vertical</orient>
+            <store>no</store>
+            <caption>Formaat</caption>
+      </property>
+      <property>
+            <name>exp_sbt</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>export_members</group>
+            <type>submit</type>
+            <caption>Ekspordi</caption>
       </property>
       <property>
             <name>list_status_tb</name>
@@ -285,6 +306,10 @@
                   <caption>Lahkumine</caption>
                   <parent>membership</parent>
             </unsubscribing>
+            <export_members>
+                  <caption>Eksport</caption>
+                  <parent>membership</parent>
+            </export_members>
             <raports>
                   <caption>Kirjad</caption>
             </raports>

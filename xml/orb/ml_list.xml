@@ -31,6 +31,7 @@
 				<arguments>
 					<required name="id" type="int"/>
 					<optional name="filename" />
+					<optional name="export_type" type="int"/>
 				</arguments>
 			</function>
 		</action>
