@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.4 2004/06/11 08:40:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.5 2004/06/17 13:54:46 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -266,6 +266,26 @@ class otv_ds_obj extends class_base
 		return $ret;
 	}
 
+	function get_fields($ob)
+	{
+		$ret = array();
+
+		$ot = get_instance("admin/object_type");
+
+		$clids = array();
+		$cttt = $ob->connections_from(array("type" => "RELTYPE_SHOW_TYPE"));
+		foreach($cttt as $c)
+		{
+			$ps = $ot->get_properties($c->to());
+			foreach($ps as $pn => $pd)
+			{
+				$ret[$pn] = $pd["caption"];
+			}
+		}
+		
+		return $ret;
+	}
+
 	function get_objects($ob)
 	{
 		$ret = array();
@@ -346,6 +366,7 @@ class otv_ds_obj extends class_base
 		$ol->sort_by_cb(array(&$this, "_obj_list_sorter"));
 
 		$classlist = aw_ini_get("classes");
+		$fields = $this->get_fields($ob);
 
 		$ret = array();
 		classload("icons", "image");
@@ -409,6 +430,11 @@ class otv_ds_obj extends class_base
 					"caption" => "Muuda"
 				)),
 			);
+
+			foreach($fields as $ff_n => $ff_c)
+			{
+				$ret[$t->id()][$ff_n] = $t->prop($ff_n);
+			}
 		}
 		return $ret;
 	}

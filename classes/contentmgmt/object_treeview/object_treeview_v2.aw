@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.7 2004/06/11 08:40:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.8 2004/06/17 13:54:46 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2 
 /*
 
@@ -587,7 +587,7 @@ class object_treeview_v2 extends class_base
 			$ds_i = $dso->instance();
 			if (method_exists($ds_i, "get_fields"))
 			{
-				foreach($ds_i->get_fields() as $fn => $fs)
+				foreach($ds_i->get_fields($dso) as $fn => $fs)
 				{
 					$cold[$fn] = $fs;
 				}

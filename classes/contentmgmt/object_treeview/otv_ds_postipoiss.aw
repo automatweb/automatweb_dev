@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.12 2004/06/16 10:06:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.13 2004/06/17 13:54:46 kristo Exp $
 // otv_ds_postipoiss.aw - Objektinimekirja Postipoisi datasource 
 /*
 
@@ -66,12 +66,12 @@ class otv_ds_postipoiss extends class_base
 		"sep2" => "",
 		"pool1" => "Lepingu pool",
 		"kellelt" => "Kellelt",
-		"sep3" => "",
 		"kellelt_isik" => "",
+		"sep3" => "",
 		"pool2" => "Lepingu pool",
-		"Kellele" => "Kellele",
-		"sep4" => "",
+		"kellele" => "Kellele",
 		"kellele_isik" => "",
+		"sep4" => "",
 		"pealkiri" => "Pealkiri",
 		"sisu" => "Sisu",
 		"lisad" => "Lisad",
