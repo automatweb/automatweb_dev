@@ -246,6 +246,7 @@
 		<action name="get_mail">
 			<function name="get_mail">
 				<arguments>
+					<optional name="account"/>
 				</arguments>
 			</function>
 		</action>
