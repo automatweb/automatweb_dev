@@ -52,6 +52,10 @@
 	<td class="fform"><input type='radio' name='entry_type' value='session' {VAR:et_session}></td>
 	<td class="fform">Formi viimane sisestus sessioonist</td>
 </tr>
+<tr>
+	<td class="fform"><input type='radio' name='entry_type' value='writer_entry' {VAR:et_writer_entry}></td>
+	<td class="fform">SQL kirjutaja k&auml;esolev sisestus</td>
+</tr>
 
 <!-- END SUB: EL_SEL -->
 

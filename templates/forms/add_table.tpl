@@ -69,6 +69,9 @@
 <tr>
 <td class="fform">{VAR:LC_FORMS_ADD_BUTTON}:</td><td class="fform">{VAR:LC_FORMS_TEXT}: <input type='text' name='user_button_text' value='{VAR:user_button_text}'> Jrk: <input type='text' class='small_button' size=3 value='{VAR:but_jrk}'> {VAR:LC_FORMS_UP} <input type='checkbox' name='user_button_top' value='1' {VAR:user_button_top}>{VAR:LC_FORMS_DOWN} <input type='checkbox' name='user_button_bottom' value='1' {VAR:user_button_bottom}>  &nbsp;{VAR:LC_FORMS_ADDRESS}:<input type='text' name='user_button_url' value='{VAR:user_button_url}'> </td>
 </tr>
+<tr>
+<td class="fform">Vali checkboxi default:</td><td class="fform"><input type='checkbox' name='sel_def' value='1' {VAR:sel_def}></td>
+</tr>
 <!-- SUB: CHANGE -->
 <tr>
 <td class="fform" colspan=2>{VAR:LC_FORMS_CHOOSE_WHICH_COUMN_ELEMENT}:</td>

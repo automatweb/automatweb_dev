@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.99 2002/06/15 16:43:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.100 2002/06/18 08:49:00 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -429,6 +429,11 @@ class form extends form_base
 		$this->arr["after_submit_link"] = $after_submit_link;
 		$this->arr["has_aliasmgr"] = $has_aliasmgr;
 		$this->arr["has_controllers"] = $has_controllers;
+		$this->arr["sql_writer"] = $sql_writer;
+		$this->arr["sql_writer_form"] = $sql_writer_form;
+		$this->arr["show_form_with_results"] = $show_form_with_results;
+		$this->arr["sql_writer_writer"] = $sql_writer_writer;
+		$this->arr["sql_writer_writer_form"] = $sql_writer_writer_form;
 
 		if ($ev_entry_form)
 		{
@@ -804,6 +809,11 @@ class form extends form_base
 			"tables" => $this->picker($this->arr["table"],$this->get_list_tables()),
 			"tablestyles" => $this->picker($this->arr["tablestyle"], $t->get_select(0,ST_TABLE)),
 			"search_doc" => $this->mk_orb("search_doc", array(),"links"),
+			"sql_writer" => checked($this->arr["sql_writer"]),
+			"sql_writer_writer" => checked($this->arr["sql_writer_writer"]),
+			"sql_writer_writer_forms" => $this->picker($this->arr["sql_writer_writer_form"], $this->get_flist(array("type" => FTYPE_ENTRY, "addfolders" => true, "search" => true))),
+			"forms" => $this->picker($this->arr["sql_writer_form"], $this->get_flist(array("type" => FTYPE_ENTRY, "addfolders" => true, "search" => true))),
+			"show_form_with_results" => checked($this->arr["show_form_with_results"]),
 			//"cal_controllers" => $this->picker($this->arr["cal_controller"],$forms),
 			//"event_entry_forms" => $this->picker($this->arr["event_entry_form"],$forms),
 			//"event_check_form" => checked($this->arr["event_check_form"]),
@@ -1124,6 +1134,7 @@ class form extends form_base
 	// parent (id) - mille alla entry salvestada
 	// no_load_form - if true, the form is not loaded
 	// no_process_entry - no entry is read from user entered data, the loaded entry is just saved
+	// no_load_entry - if set, the entry that is already loaded is used to save data - use this to change data before saving
 	function process_entry($arr)
 	{
 		extract($arr);
@@ -1157,7 +1168,7 @@ class form extends form_base
 		}
 
 		// if entry_id is set, load the entry so we can use the previous data as well
-		if ($entry_id)
+		if ($entry_id && !$no_load_entry)
 		{
 			$this->load_entry($entry_id);
 		}
@@ -1534,19 +1545,12 @@ class form extends form_base
 			$this->load($id);
 		}
 
+
 		// if this is a search form, then search, instead of showing the entered data
-		if ($this->type == FTYPE_SEARCH)
+		if ($this->type == FTYPE_SEARCH || $this->type == FTYPE_FILTER_SEARCH)
 		{
-			$r = $this->do_search($entry_id, $op_id, $search_el, $search_val);
-			return $r;
+			return $this->show_s_res($arr);
 		}
-
-		if ($this->type == FTYPE_FILTER_SEARCH)
-		{
-			$parse = $this->do_filter_search($entry_id, $op_id, $arr);
-			return $parse;
-		}
-
 
 		if (!$no_load_op)
 		{
@@ -2165,6 +2169,7 @@ class form extends form_base
 	//	$id - search form id - if not specified, assumes the form is loaded
 	//	$entry_id - search form entry id - if not specified, assumes loaded 
 	//	$section - the active section
+	//  $no_form_tags - the <form> </form> tags will be omitted
 	function new_do_search($arr)
 	{
 		extract($arr);
@@ -2351,7 +2356,7 @@ class form extends form_base
 		// now if we are showing table, finish the table 
 		if ($this->arr["show_table"])
 		{
-			$result = $form_table->finalize_table();
+			$result = $form_table->finalize_table(array("no_form_tags" => $no_form_tags));
 		}
 
 		return $result;
@@ -2750,7 +2755,7 @@ class form extends form_base
 		return $ret;
 	}
 
-	function do_search($entry_id, $output_id,$search_el,$search_val)
+	function do_search($entry_id, $output_id,$search_el,$search_val, $no_tags)
 	{
 		global $section,$use_table, $restrict_search_el, $restrict_search_val;
 
@@ -2761,7 +2766,8 @@ class form extends form_base
 				"restrict_search_el" => $restrict_search_el, 
 				"restrict_search_val" => $restrict_search_val,
 				"use_table" => $use_table,
-				"section" => $section
+				"section" => $section,
+				"no_form_tags" => $no_tags
 			));
 		}
 
@@ -3177,7 +3183,7 @@ class form extends form_base
 			"forms" => $this->picker(0,$this->get_list(FTYPE_ENTRY,true)),
 			"types" => $this->picker(-1,$this->ftypes),
 			"config_files" => is_array($files) ? $this->picker("planner.xml",$files) : "",
-			"el_default_folders" => $this->picker(-1,$mlist),
+			"el_default_folders" => $this->picker($parent,$mlist),
 			"reforb"	=> $this->mk_reforb("submit_add",array("parent" => $parent, "alias_doc" => $alias_doc))
 		));
 		return $this->parse();
@@ -5156,5 +5162,140 @@ class form extends form_base
 		return $this->mk_my_orb("calendar",array("id" => $id));
 
 	}
+
+	function show_s_res($arr)
+	{
+		extract($arr);
+
+		$no_tags = false;
+
+		if ($this->arr["sql_writer"] && $this->arr["sql_writer_form"])
+		{
+			$tf = get_instance("form");
+			$search_res = "<br>".$tf->gen_preview(array(
+				"id" => $this->arr["sql_writer_form"],
+				"tpl" => "show_noform.tpl"
+			));
+			$no_tags = true;
+		}
+
+		if ($this->type == FTYPE_SEARCH)
+		{
+			$search_res = $this->do_search($entry_id, $op_id, $search_el, $search_val, $no_tags).$search_res;
+			if ($no_tags)
+			{
+				$search_res = "<form action='reforb.".$this->cfg["ext"]."' method='POST' name='tb_".$this->arr["table"]."'>".$search_res;
+			}
+		}
+		else
+		if ($this->type == FTYPE_FILTER_SEARCH)
+		{
+			$search_res = $this->do_filter_search($entry_id, $op_id, $arr);
+		}
+
+		if ($no_tags)
+		{
+			$search_res.= $this->mk_reforb("submit_writer", array(
+				"id" => $arr["id"],
+				"entry_id" => $arr["entry_id"]
+			));
+			$search_res.="</form>";
+		}
+
+		if ($this->arr["show_form_with_results"])
+		{
+			$search_res = $this->gen_preview(array(
+				"id" => $id,
+				"entry_id" => $entry_id,
+			)).$search_res;
+		}
+
+		return $search_res;
+	}
+
+	////
+	// !handles sql writer form submits
+	function submit_writer($arr)
+	{
+		extract($arr);
+		$seids = array();
+		if (is_array($sel))
+		{
+			foreach($sel as $seid => $one)
+			{
+				if ($one == 1)
+				{
+					$seids[$seid] = $seid;
+				}
+			}
+		}
+
+		$this->load($id);
+//		echo "load $id <br>";
+
+		global $HTTP_POST_VARS;
+//		echo "post vars = <pre>", var_dump($HTTP_POST_VARS),"</pre> <br>";
+		// process the writer form entry
+		$wrf = get_instance("form");
+		$wrf->process_entry(array(
+			"id" => $this->arr["sql_writer_form"],
+		));
+//		echo "proc entry for ", $this->arr["sql_writer_form"]," <br>";
+		$writer_entry_id = $wrf->entry_id;
+
+		// load the form whose entries we will change
+		$ef = get_instance("form");
+		$ef->load($wrf->arr["sql_writer_writer_form"]);
+//		echo "load to write form ",$wrf->arr["sql_writer_writer_form"]," <br>";
+
+		$wrf = get_instance("form");
+		$wrf->load($this->arr["sql_writer_form"]);
+		$wrf->load_entry($writer_entry_id);
+
+//		echo "wrf->entry = <pre>", var_dump($wrf->entry),"</pre> <br>";
+		// now we must load all selected entries
+		// and for each
+		// calculate the value in the writer form based on the entered elements value and let controllers process it
+		// and then save the entry
+		foreach($seids as $seid)
+		{
+//			echo "entry $seid <br>";
+			aw_global_set("current_writer_entry", $seid);
+			$changeset = array();
+
+/*			$wrf->entry = array();
+			$wrf->load_entry($writer_entry_id);*/
+			$wrf_els = $wrf->get_all_els();
+			foreach($wrf_els as $el)
+			{
+				if (($wrt_to_el = $el->get_writer_element()))
+				{
+					$wrt_el_val = $el->get_val(array(),true);
+
+					$changeset[$wrt_to_el] = $wrt_el_val;
+				}
+			}
+
+			$ef->load_entry($seid);
+			foreach($changeset as $ch_el => $ch_el_val)
+			{
+				$chelinst =& $ef->get_element_by_id($ch_el);
+//				echo "changing element $ch_el value to $ch_el_val , prev value = ", $chelinst->get_val()," <br>";
+				$ef->set_element_value($ch_el, $ch_el_val);
+				$ef->entry[$ch_el] = $ch_el_val;
+			}
+			$ef->process_entry(array(
+				"id" => $wrf->arr["sql_writer_writer_form"],
+				"entry_id" => $seid, 
+				"no_load_form" => true,
+				"no_load_entry" => true,
+				"no_process_entry" => true
+			));
+		}
+
+		// and finally, call the search func so the search results will be shown again
+		return $this->mk_my_orb("show_entry", array("id" => $id, "entry_id" => $entry_id, "op_id" => 1));
+	}
+
 };	// class ends
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.29 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.30 2002/06/18 08:49:00 kristo Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -8,7 +8,7 @@ class form_table extends form_base
 		$this->sub_merge = 1;
 		lc_load("definition");
 		$this->lc_load("form","lc_form");
-		$this->fakels = array("change", "view", "special", "delete", "created", "modified", "uid", "active", "chpos","order");
+		$this->fakels = array("change", "view", "special", "delete", "created", "modified", "uid", "active", "chpos","order", "select");
 		$this->lang_id = aw_global_get("lang_id");
 	}
 
@@ -170,6 +170,7 @@ class form_table extends form_base
 			$this->table["new_win_fixedsize"] = $new_win_fixedsize;
 			$this->table["print_button"] = $print_button;
 			$this->table["texts"] = $texts;
+			$this->table["sel_def"] = $sel_def;
 			$this->save_table(array("id" => $id, "num_cols" => $num_cols));
 		}
 		else
@@ -227,6 +228,7 @@ class form_table extends form_base
 		$els["active"] = "Active";
 		$els["chpos"] = "Move";
 		$els["order"] = "Order";
+		$els["select"] = "Select";
 
 		classload("languages");
 		$lang = new languages;
@@ -382,6 +384,7 @@ class form_table extends form_base
 			"user_button_text" => $this->table["user_button_text"],
 			"user_button_url" => $this->table["user_button_url"],
 			"aliasmgr_link" => $this->mk_my_orb("aliasmgr",array("id" => $id)),
+			"sel_def" => checked($this->table["sel_def"]),
 		));
 		return $this->parse();
 	}
@@ -518,6 +521,7 @@ class form_table extends form_base
 			$dat["ev_uid"] = $dat["modifiedby"];
 			$dat["ev_modified"] = $this->time2date($dat["modified"], 2);
 			$dat["ev_view"] = "<a href='".$show_link."'>".$this->table["texts"]["view"][$this->lang_id]."</a>";		
+			$dat["ev_select"] = "<input type='checkbox' name='sel[".$dat["entry_id"]."]' ".checked($this->table["sel_def"])." VALUE='1'>";
 
 			$after_show = $this->mk_my_orb("show_entry", 
 				array(
@@ -557,7 +561,7 @@ class form_table extends form_base
 					)
 				),
 				"form"
-			)."'>Kustuta</a>";
+			)."'>".$this->table["texts"]["delete"][$this->lang_id]."</a>";
 
 			if ($this->table["view_col"] && $this->table["view_col"] != "view")
 			{
@@ -913,8 +917,12 @@ class form_table extends form_base
 		return $ret;
 	}
 
-	function finalize_table()
+	////
+	// !finalizes table and generates html
+	// $no_form_tags - if true, no <form> </form> tags are put on table
+	function finalize_table($arr = array())
 	{
+		extract($arr);
 		$_sby = $GLOBALS["sortby"];
 		$_so = $GLOBALS["sort_order"];
 		if ($_sby == "")
@@ -929,7 +937,15 @@ class form_table extends form_base
 		}
 		$this->t->sort_by(array("field" => $_sby,"sorder" => $_so,"group_by" => $_grpby,"sort_numeric" => $_sn));
 		$tbl = $this->get_css();
-		$tbl.="<form action='reforb.".$this->cfg["ext"]."' method='POST'>\n";
+
+		$tbl.=$this->get_js();
+
+		if (!$no_form_tags)
+		{
+			$tbl.="<form action='reforb.".$this->cfg["ext"]."' method='POST' name='tb_".$this->table_id."'>\n";
+		}
+
+
 		if ($this->table["submit_top"])
 		{
 			$tbl.="<input type='submit' value='".$this->table["submit_text"]."'>";
@@ -958,9 +974,12 @@ class form_table extends form_base
 		{
 			$tbl.="&nbsp;<input type='submit' value='".$this->table["user_button_text"]."' onClick=\"window.location='".$this->table["user_button_url"]."';return false;\">";
 		}
-		$tbl.= $this->mk_reforb("submit_table", array("return" => $this->binhex($this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id)))));
 
-		$tbl.="</form>";
+		if (!$no_form_tags)
+		{
+			$tbl.= $this->mk_reforb("submit_table", array("return" => $this->binhex($this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id)))));
+			$tbl.="</form>";
+		}
 		return $tbl;
 	}
 
@@ -1042,6 +1061,11 @@ class form_table extends form_base
 			else
 			{
 				$title = $cc["title"];
+			}
+
+			if ($eln == "select")
+			{
+				$title = "&lt;a href='javascript:void(0)' onClick='tb_selall()'&gt;".$title."&lt;/a&gt;";
 			}
 			$xml.="<field name=\"ev_".$eln."\" caption=\"".$title."\" talign=\"center\" align=\"center\" ";
 			if ($cc["sortable"])
@@ -1202,6 +1226,27 @@ class form_table extends form_base
 			return "<a href='".$url."'>".$elval."</a>";
 		}
 		return $elval;
+	}
+
+	function get_js()
+	{
+		return "<script language='javascript'>
+			var chk_status = ".($this->table["sel_def"] == 1 ? "false" : "true").";
+
+				function tb_selall()
+				{
+					len = document.tb_".$this->table_id.".elements.length;
+					for (i=0; i < len; i++)
+					{
+						if (document.tb_".$this->table_id.".elements[i].name.indexOf('sel') != -1)
+						{
+							document.tb_".$this->table_id.".elements[i].checked=chk_status;
+						}
+					}
+					chk_status = !chk_status;
+					return false;
+				}
+		</script>";
 	}
 }
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.50 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.51 2002/06/18 08:49:00 kristo Exp $
 // form_entry_element.aw - 
 classload("currency");
 load_vcl("date_edit");
@@ -20,7 +20,10 @@ class form_entry_element extends form_element
 
 	function gen_admin_html()
 	{
+		// XXX: is there a way to load localizations only once and not for each element?
+		// probably. who knows? - terryf
 		$this->lc_load("form","lc_form");
+
 		$this->read_template("admin_element.tpl");
 
 		// here we create the listboxes for selecting tables
@@ -55,6 +58,17 @@ class form_entry_element extends form_element
 			}
 		}
 
+		if ($this->form->arr["sql_writer_writer"])
+		{
+			$this->do_search_script(false, array($this->form->arr["sql_writer_writer_form"] => $this->form->arr["sql_writer_writer_form"]));
+			$formcache = aw_global_get("formcache");
+			$this->vars(array(
+				"forms" => $this->picker($this->form->arr["sql_writer_writer_form"], $formcache),
+				"linked_el" => $this->arr["sql_writer_el"]
+			));
+			$this->vars(array("SEARCH_LB" => $this->parse("SEARCH_LB")));
+		}
+
 		$this->do_core_admin();
 
 		return $this->parse();
@@ -64,7 +78,18 @@ class form_entry_element extends form_element
 	// !this function takes the changed properties of this element from the form and joins them together in the array of element properties 
 	function save(&$arr)
 	{
-		return $this->do_core_save(&$arr);
+		$ret =  $this->do_core_save(&$arr);
+
+		$base = "element_".$this->id;
+		
+		if ($this->form->arr["sql_writer_writer"])
+		{
+			extract($arr);
+			$var=$base."_element";
+			$this->arr["sql_writer_el"] = $$var;
+		}
+
+		return $ret;
 	}
 
 

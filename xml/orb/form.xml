@@ -6,6 +6,8 @@
 				<arguments>
 					<required name="parent"/>
 					<optional name="alias_doc"/>
+					<optional name="return_url"/>
+					<optional name="alias_to"/>
 				</arguments>
 			</function>
 		</action>
@@ -21,6 +23,8 @@
 			<function name="gen_grid">
 				<arguments>
 					<required name="id"/>
+					<optional name="return_url"/>
+					<optional name="alias_to"/>
 				</arguments>
 			</function>
 		</action>
@@ -448,6 +452,13 @@
 
 		<action name="submit_calendar">
 			<function name="submit_calendar"/>
+		</action>
+
+		<action name="submit_writer">
+			<function name="submit_writer">
+				<required name="id"/>
+				<optional name="entry_id"/>
+			</function>
 		</action>
 	</class>
 </orb>

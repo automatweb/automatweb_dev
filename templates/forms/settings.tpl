@@ -40,13 +40,12 @@ function setLink(li,title)
 <td class="fform" colspan=2>{VAR:LC_FORMS_ALLOW_HTML}: &nbsp;<input type='checkbox' name='allow_html' value=1 {VAR:allow_html}></td>
 </tr>
 <tr>
-<td class="fform" colspan=2>Form kasutab kontrollereid: &nbsp;<input type='checkbox' name='has_controllers' value=1 {VAR:has_controllers}></td>
+<td class="fform" colspan=2>Vorm kasutab kontrollereid: &nbsp;<input type='checkbox' name='has_controllers' value=1 {VAR:has_controllers}></td>
+</tr>
+<tr>
+<td class="fform" colspan=2>Eventite sisestusvorm: &nbsp;<input type='checkbox' name='ev_entry_form' value=1 {VAR:ev_entry_form}></td>
 </tr>
 <!--
-<tr>
-<td class="fform" colspan=2>On tellimisvorm: &nbsp;<input type='checkbox' name='is_order_form' value=1 {VAR:is_order_form}></td>
-</tr>
--->
 <tr>
 <td class="fform" colspan=2 style="background: #eeeeee">Vormi kaudu tehtud pärja sisestusted omavad kalendrit: &nbsp;<input type='checkbox' name='has_calendar' value=1 {VAR:has_calendar}><br>
 Kalendri kontrollervorm: &nbsp;<select name="cal_controller">{VAR:cal_controllers}</select><br>
@@ -66,6 +65,7 @@ Kalendris näidatakse eventeid kasutades tabelit:
 &nbsp;<select name="event_display_table">{VAR:event_display_tables}</select><br>
 </td>
 </tr>
+-->
 <tr>
 <td class="fform" colspan=2>{VAR:LC_FORMS_CONTROL_FORM_STATUS}?: &nbsp;<input type='checkbox' name='check_status' value=1 {VAR:check_status}>
 <br>
@@ -88,6 +88,14 @@ Kalendris näidatakse eventeid kasutades tabelit:
 <td class="fform"><input type='radio' NAME='after_submit' VALUE='4' {VAR:as_4}>{VAR:LC_FORMS_SHOW_ENTRIES}:</td>
 <td class="fform"><select name="after_submit_op">{VAR:ops}</select></td>
 </tr>
+<tr>
+<td class="fform">SQL-kirjutaja? </td>
+<td class="fform"><input type='checkbox' NAME='sql_writer_writer' value='1' {VAR:sql_writer_writer}></td>
+</tr>
+<tr>
+<td class="fform">Vali form kuhu kirjutatakse:</td>
+<td class="fform"><select class="small_button" name='sql_writer_writer_form'>{VAR:sql_writer_writer_forms}</select></td>
+</tr>
 <!-- END SUB: NOSEARCH -->
 
 <!-- SUB: SEARCH -->
@@ -97,6 +105,17 @@ Kalendris näidatakse eventeid kasutades tabelit:
 <tr>
 <td class="fform">{VAR:LC_FORMS_CHOOSE_TABLE}:</td>
 <td class="fform"><select name='table'>{VAR:tables}</select></td>
+</tr>
+<tr>
+<td class="fform">SQL-kirjutaja? </td>
+<td class="fform"><input type='checkbox' NAME='sql_writer' value='1' {VAR:sql_writer}></td>
+</tr>
+<tr>
+<td class="fform">Vali kirjutamise form:</td>
+<td class="fform"><select class="small_button" name='sql_writer_form'>{VAR:forms}</select></td>
+</tr>
+<tr>
+<td class="fform" colspan=2>Koos tulemustega n&auml;idatakse ka otsingut? <input type='checkbox' NAME='show_form_with_results' value='1' {VAR:show_form_with_results}></td>
 </tr>
 <!-- END SUB: SEARCH -->
 <tr>

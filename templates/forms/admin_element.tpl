@@ -148,6 +148,16 @@ function toggle_file_link_newwin()
 </tr>
 <!-- END SUB: SEARCH_RELATION -->
 
+<!-- SUB: CONFIG_KEY -->
+<tr>
+	<!-- here we have to display all the config keys that match the current type -->
+	<td class="fgtext">Konfiguratsioonivõti:</td>
+	<td class="fgtext">&nbsp;<select class='small_button' name='{VAR:cell_id}_config_keyi'></select></td>
+	<td class="fgtext">&nbsp;</td>
+	<td class="fgtext">&nbsp;</td>
+</tr>
+<!-- END SUB: CONFIG_KEY -->
+
 <!-- SUB: LISTBOX_SORT -->
 <tr>
 <td class="fgtext">{VAR:LC_FORMS_SORTING}:</td>

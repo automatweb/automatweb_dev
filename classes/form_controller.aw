@@ -340,6 +340,7 @@ class form_controller extends form_base
 					"et_user_data" => checked($et_type == "user_data"),
 					"et_user_entry" => checked($et_type == "user_entry"),
 					"et_same_chain" => checked($et_type == "same_chain"),
+					"et_writer_entry" => checked($et_type == "writer_entry"),
 					"et_session" => checked($et_type == "session")
 				));
 
@@ -403,10 +404,10 @@ class form_controller extends form_base
 		$cache_key = $fid."::".$elid."::".$et_type."::".$et_entry_id;
 		if ($fid && $elid && $et_type)
 		{
-			if (($val = aw_cache_get("controller::var_value_cache", $cache_key)))
+/*			if (($val = aw_cache_get("controller::var_value_cache", $cache_key)))
 			{
 				return $val;
-			}
+			}*/
 
 			$form =& $this->cache_get_form_instance($fid);
 
@@ -454,6 +455,12 @@ class form_controller extends form_base
 				$entry_id = $GLOBALS["session_filled_forms"][$fid];
 //				echo "entry id for form $fid = $entry_id <br>";
 			}
+			else
+			if ($et_type == "writer_entry")
+			{
+				$entry_id = aw_global_get("current_writer_entry");
+//				echo "got eid $entry_id <br>";
+			}
 
 			if ($entry_id)
 			{
@@ -466,7 +473,7 @@ class form_controller extends form_base
 				if (is_object($el))
 				{
 					$val = $el->get_controller_value();
-	//				echo "val = $val entry = $el->entry , elid = $elid <br>";
+//					echo "val = $val entry = $el->entry , elid = $elid <br>";
 					aw_cache_set("controller::var_value_cache", $cache_key,$val);
 					return $val;
 				}

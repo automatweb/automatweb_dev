@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.49 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.50 2002/06/18 08:49:00 kristo Exp $
 // form_element.aw - vormi element.
 classload("image");
 
@@ -8,6 +8,7 @@ class form_element extends aw_template
 	function form_element()
 	{
 		// FIXME: need stringid lokaliseerida
+
 		$this->all_subtypes=array(
 			"textbox" => array(
 				"" => "",
@@ -145,26 +146,26 @@ class form_element extends aw_template
 				"front_checked"						=> checked($this->arr["front"] == 1),
 				"cell_order"							=> $this->arr["ord"],
 				"type"										=> $this->arr["type"],
-				"sep_enter_checked"				=> ($this->arr["sep_type"] == 1 ? " CHECKED " : "" ),
-				"sep_space_checked"				=> ($this->arr["sep_type"] != 1 ? " CHECKED " : "" ),
+				"sep_enter_checked"				=> checked($this->arr["sep_type"] == 1),
+				"sep_space_checked"				=> checked($this->arr["sep_type"] != 1),
 				"cell_sep_pixels"					=> $this->arr["sep_pixels"],
 				"element_id"							=> $this->id,
-				"text_pos_up"							=> ($this->arr["text_pos"] == "up" ? "CHECKED" : ""),
-				"text_pos_down"						=> ($this->arr["text_pos"] == "down" ? "CHECKED" : ""),
-				"text_pos_left"						=> ($this->arr["text_pos"] == "left" ? "CHECKED" : ""),
-				"text_pos_right"					=> ($this->arr["text_pos"] == "right" ? "CHECKED" : ""),
+				"text_pos_up"							=> checked($this->arr["text_pos"] == "up"),
+				"text_pos_down"						=> checked($this->arr["text_pos"] == "down"),
+				"text_pos_left"						=> checked($this->arr["text_pos"] == "left"),
+				"text_pos_right"					=> checked($this->arr["text_pos"] == "right"),
 				"length"									=> $this->arr["length"],
 				"srow_grp"								=> $this->arr["srow_grp"],
 				"changepos"								=> $this->mk_orb("change_el_pos",array("id" => $this->fid, "col" => $this->col, "row" => $this->row, "el_id" => $this->id), "form"),
-				"ignore_text" => checked($this->arr["ignore_text"]),
-				"act_from" => $de->gen_edit_form("element_".$this->id."_act_from",$this->arr["act_from"],2001,2005,true),
-				"act_to" => $de->gen_edit_form("element_".$this->id."_act_to",$this->arr["act_to"],2001,2005,true),
-				"has_act" => checked($this->arr["has_act"] == 1),
-				"entry_controllers" => $this->multiple_option_list($this->arr["entry_controllers"], $this->form->get_list_controllers()),
-				"show_controllers" => $this->multiple_option_list($this->arr["show_controllers"], $this->form->get_list_controllers()),
-				"default_controller" => $this->picker($this->arr["default_controller"], $this->form->get_list_controllers(true)),
-				"value_controller" => $this->picker($this->arr["value_controller"], $this->form->get_list_controllers(true)),
-				"disabled" => checked($this->arr["disabled"]),
+				"ignore_text" 						=> checked($this->arr["ignore_text"]),
+				"act_from" 								=> $de->gen_edit_form("element_".$this->id."_act_from",$this->arr["act_from"],2001,2005,true),
+				"act_to" 									=> $de->gen_edit_form("element_".$this->id."_act_to",$this->arr["act_to"],2001,2005,true),
+				"has_act"								 	=> checked($this->arr["has_act"] == 1),
+				"entry_controllers" 			=> $this->multiple_option_list($this->arr["entry_controllers"], $this->form->get_list_controllers()),
+				"show_controllers" 				=> $this->multiple_option_list($this->arr["show_controllers"], $this->form->get_list_controllers()),
+				"default_controller" 			=> $this->picker($this->arr["default_controller"], $this->form->get_list_controllers(true)),
+				"value_controller" 				=> $this->picker($this->arr["value_controller"], $this->form->get_list_controllers(true)),
+				"disabled" 								=> checked($this->arr["disabled"]),
 			));
 
 			// now do element metadata
@@ -1552,6 +1553,7 @@ class form_element extends aw_template
 		};
 
 		$disabled = ($this->arr["disabled"] == 1 ? " disabled " : "");
+
 		if ($disabled)
 		{
 			$html.="<input type='hidden' name='".$prefix.$elid."' value='".$this->get_val($elvalues)."'>";
@@ -1560,6 +1562,8 @@ class form_element extends aw_template
 		switch($this->arr["type"])
 		{
 			case "textarea":
+				// FIXME: should check what type of browser we are using instead of just trying
+				// to shove the IE richtext editor down the users throat
 				if ($this->arr["wysiwyg"] == 1)
 				{
 					$html.="<input type=\"hidden\" name=\"_el_".$prefix.$elid."\" value=\"".htmlspecialchars($this->get_val($elvalues))."\">";
@@ -1670,7 +1674,7 @@ class form_element extends aw_template
 						}
 					}
 				}
-				$html.=$lb_opts."</select>";
+				$html.=$lb_opts."</select>\n";
 				break;
 
 			case "multiple":
@@ -1679,7 +1683,7 @@ class form_element extends aw_template
 				{
 					$html.=" size=\"".$this->arr["mb_size"]."\"";
 				}
-				$html.=">";
+				$html.=">\n";
 
 				if ($this->entry_id)
 				{
@@ -1732,12 +1736,12 @@ class form_element extends aw_template
 						$html.="<option ".selected($sel == true)." VALUE='$b'>".$larr[$b];
 					}
 				}
-				$html.="</select>";
+				$html.="</select>\n";
 				break;
 
 			case "checkbox":
 				$sel = ($this->entry_id ? checked($this->entry == 1) : checked($this->arr["default"] == 1));
-				$html .= "<input $disabled $stat_check type='checkbox' NAME='".$prefix.$elid."' VALUE='1' $sel>";
+				$html .= "<input $disabled $stat_check type='checkbox' NAME='".$prefix.$elid."' VALUE='1' $sel>\n";
 				break;
 
 			case "textbox":
@@ -1747,13 +1751,13 @@ class form_element extends aw_template
 				{
 					$tb_type = "password";
 				}
-				$html .= "<input $disabled $stat_check type='$tb_type' NAME='".$prefix.$elid."' $l VALUE=\"".(htmlentities($this->get_val($elvalues)))."\">";
+				$html .= "<input $disabled $stat_check type='$tb_type' NAME='".$prefix.$elid."' $l VALUE=\"".(htmlentities($this->get_val($elvalues)))."\">\n";
 				break;
 
 
 			case "price":
 				$l = $this->arr["length"] ? "SIZE='".$this->arr["length"]."'" : "";
-				$html .= "<input $disabled $stat_check type='text' NAME='".$prefix.$elid."' $l VALUE=\"".(htmlentities($this->get_val($elvalues)))."\">";
+				$html .= "<input $disabled $stat_check type='text' NAME='".$prefix.$elid."' $l VALUE=\"".(htmlentities($this->get_val($elvalues)))."\">\n";
 				break;
 
 			case "alias":
@@ -1797,14 +1801,16 @@ class form_element extends aw_template
 
 			case "timeslice":
 				$values = aw_unserialize($this->get_val($elvalues));
-				$html = sprintf("<input type='text' name='%s_count' size='3' maxlength='3' value='%d'>",$prefix.$elid,$values["count"]);
-				$html .= sprintf("<select name='%s_type'>%s</select",$prefix.$elid,$this->picker($values["type"],$this->timeslice_types));
+				$html = sprintf("<input type='text' name='%s_count' size='3' maxlength='3' value='%d'>\n",$prefix.$elid,$values["count"]);
+				$html .= sprintf("<select name='%s_type'>%s</select>\n",$prefix.$elid,$this->picker($values["type"],$this->timeslice_types));
 				break;
 
 			case "button":
 			case "submit":
 			case "reset":
 				$csscl = ($this->arr["button_css_class"] != "" ? "class=\"".$this->arr["button_css_class"]."\"" : "");
+				// useful if we we are generating a preview of a form and don't want to let the user
+				// to submit the form
 				if (!$no_submit)
 				{
 					if ($lang_id == $this->form->lang_id)
@@ -1842,35 +1848,35 @@ class form_element extends aw_template
 						{
 							$bname = "name=\"confirm\"";
 						}
-						$html .= "<input $csscl $disabled $bname type='$btype' $bsrc VALUE='".$butt."' onClick=\"return check_submit();\">";
+						$html .= "<input $csscl $disabled $bname type='$btype' $bsrc VALUE='".$butt."' onClick=\"return check_submit();\">\n";
 					}
 					else
 					if ($this->arr["subtype"] == "reset" || $this->arr["type"] == "reset")
 					{
 						if ($btype == "image")
 						{
-							$html .= "<input $csscl $disabled type='image' $bsrc onClick=\"form_reset(); return false;\">";
+							$html .= "<input $csscl $disabled type='image' $bsrc onClick=\"form_reset(); return false;\">\n";
 						}
 						else
 						{
-							$html .= "<input $csscl $disabled type='reset' VALUE='".$butt."'>";
+							$html .= "<input $csscl $disabled type='reset' VALUE='".$butt."'>\n";
 						};
 					}
 					else
 					if ($this->arr["subtype"] == "url")
 					{
-						$html .= "<input $csscl $disabled type='$btype' $bsrc VALUE='".$butt."' onClick=\"window.location='".$this->arr["button_url"]."';return false;\">";
+						$html .= "<input $csscl $disabled type='$btype' $bsrc VALUE='".$butt."' onClick=\"window.location='".$this->arr["button_url"]."';return false;\">\n";
 					}
 					else
 					if ($this->arr["subtype"] == "order")
 					{
 						$loc = $this->mk_my_orb("show", array("id" => $this->arr["order_form"], "load_entry_data" => $this->form->entry_id,"section" => $GLOBALS["section"]),"form");
-						$html .= "<input $csscl $disabled type='$btype' $bsrc VALUE='".$butt."' onClick=\"window.location='".$loc."';return false;\">";
+						$html .= "<input $csscl $disabled type='$btype' $bsrc VALUE='".$butt."' onClick=\"window.location='".$loc."';return false;\">\n";
 					}
 					else
 					if ($this->arr["subtype"] == "close")
 					{
-						$html .= "<input $csscl $disabled type='$btype' $bsrc VALUE='".$butt."' onClick=\"window.close();return false;\">";
+						$html .= "<input $csscl $disabled type='$btype' $bsrc VALUE='".$butt."' onClick=\"window.close();return false;\">\n";
 					}
 				}
 				break;
@@ -1880,7 +1886,7 @@ class form_element extends aw_template
 				{
 					$html.=$this->get_value();
 				}
-				$html .= "<input type='file' $disabled $stat_check NAME='".$prefix.$elid."' value=''>";
+				$html .= "<input type='file' $disabled $stat_check NAME='".$prefix.$elid."' value=''>\n";
 				break;
 
 			// yuck
@@ -1894,6 +1900,11 @@ class form_element extends aw_template
 				break;
 
 			case "date":
+				global $DK;
+				if ($DK)
+				{
+					print "creating date<bR>";
+				};
 				$de = new date_edit(time());
 				$bits = array();
 				$has_some = false;
@@ -1930,6 +1941,14 @@ class form_element extends aw_template
 
 				uasort($bits,array($this,"_date_ord_cmp"));
 
+
+				global $DK;
+				if ($DK)
+				{
+					print "<pre>";
+					print_r($bits);
+					print "</pre>";
+				};
 				if ($has_some)
 				{
 					$de->configure($bits);
@@ -2000,14 +2019,15 @@ class form_element extends aw_template
 
 	////
 	// tagastab mingi elemendi väärtuse
-	function get_val($elvalues = array())
+	function get_val($elvalues = array(), $do_val_ctrl = false)
 	{
 		$lang_id = aw_global_get("lang_id");
 
 		// if value controiller is set, always use that
-		if ($this->arr["value_controller"]) 
+		if ($this->arr["value_controller"] && (!$this->form->arr["sql_writer_writer"] || $do_val_ctrl)) 
 		{
-			$val = $this->form->controller_instance->eval_controller($this->arr["value_controller"], "", &$this->form, $this);
+//			echo "entry = $this->entry <br>";
+			$val = $this->form->controller_instance->eval_controller($this->arr["value_controller"], $this->entry, &$this->form, $this);
 //			echo "el $this->id has value controller val = $val <br>";
 		}
 		else
@@ -2101,6 +2121,9 @@ class form_element extends aw_template
 				$d_id = $this->arr["def_date_rel_el"];
 			}
 			$v = $this->form->post_vars[$prefix.$d_id];
+
+			list($d,$m,$y) = explode("-",date("d-m-y"));
+
 			$var = mktime($v["hour"],$v["minute"],0,$v["month"],$v["day"],$v["year"]);
 
 			$var = $prefix.$d_id;
@@ -2114,19 +2137,26 @@ class form_element extends aw_template
 			{
 				$v["day"] = 1;
 			}
+			
 			if ($v["year"] > 0)
 			{
 				$tm = mktime($v["hour"],$v["minute"],0,$v["month"],$v["day"],$v["year"]);
 			}
 			else
 			{
-				$tm = -1;
+				$tm = mktime($v["hour"],$v["minute"],0,1,1,2000);
+				//$tm = -1;
 			}
 
 			if ($this->arr["def_date_type"] == "rel")
 			{
 				$var+=($this->arr["def_date_num"] * $this->arr["def_date_add"]);
 			}
+			else
+			{
+				// I don't get it
+				$var = $tm;
+			};
 		}
 		else
 		if ($this->arr["type"] == "timeslice")
@@ -2146,14 +2176,48 @@ class form_element extends aw_template
 		}
 
 		// if value controiller is set, always use that
-		if ($this->arr["value_controller"]) 
+		if ($this->arr["value_controller"] && !$this->form->arr["sql_writer_writer"]) 
 		{
-			$var = $this->form->controller_instance->eval_controller($this->arr["value_controller"], "", &$this->form, $this);
+			$var = $this->form->controller_instance->eval_controller($this->arr["value_controller"], $var, &$this->form, $this);
 		}
 
 		$entry[$this->id] = $var;
 		$this->entry = $var;
 		$this->entry_id = $id;
+
+		if ($this->arr["config_key"] && ($this->form->type == FTYPE_CONFIG))
+		{
+			if ($this->arr["type"] == "date")
+			{
+				$cval = $tm;
+			}
+			// extract the bloody id from the listbox
+			elseif ($this->arr["type"] == "listbox")
+			{
+				$parts = explode("_lbopt_",$var);
+				$cval = $parts[1];
+			}
+			else
+			{
+				$cval = $var;
+			};
+
+			$pos = strpos($this->arr["config_key"],"[");
+			if (strpos($this->arr["config_key"],"[") !== false)
+			{
+				$ck = $this->arr["config_key"];
+				$estr = "\$this->form->config_keys" . $ck . "=$cval;";
+				if ($cval)
+				{
+					eval($estr);
+				};
+			}
+			else
+			{
+				$this->form->config_keys[$this->arr["config_key"]] = $cval;
+			};
+
+		}
 
 			$var = $this->form->post_vars[$prefix.$this->id];
 //		echo "id = ",$this->id," entry = ", $var ,"<br>";
@@ -2464,7 +2528,7 @@ class form_element extends aw_template
 		}
 	}
 
-	function do_search_script($rel = false)
+	function do_search_script($rel = false, $tarr = false)
 	{
 		if (!aw_global_get("search_script"))
 		{
@@ -2476,9 +2540,12 @@ class form_element extends aw_template
 		{
 			// make javascript arrays for form elements
 			$formcache = array(0 => "");
-			$tarr = array();
-			$tarr = $this->form->get_search_targets();
-			$tarr += $this->form->get_relation_targets();
+			if ($tarr === false)
+			{
+				$tarr = array();
+				$tarr = $this->form->get_search_targets();
+				$tarr += $this->form->get_relation_targets();
+			}
 
 			$tarstr = join(",",$this->map2("%s",$tarr));
 			if ($tarstr != "")
@@ -2690,6 +2757,11 @@ class form_element extends aw_template
 			}
 		}
 		return $html;
+	}
+
+	function get_writer_element()
+	{
+		return $this->arr["sql_writer_el"];
 	}
 }
 ?>
