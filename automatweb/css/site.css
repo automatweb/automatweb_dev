@@ -13,6 +13,46 @@
 .yah a:visited {color: #FFFFFF; text-decoration: none;}
 .yah a:active {color: #000000; text-decoration: none;}
 
+.mboardtab {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+color: #FFFFFF;
+font-size: 9px;
+font-weight: bold;
+text-decoration: none;
+background: #113789;
+}
+.mboardtab a {color: #FFFFFF; text-decoration: none;}
+.mboardtab a:hover {color: #EFF4F5; text-decoration: underline;}
+
+
+.mboardtexttopic {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+color: #000000;
+font-size: 0.7em;
+text-decoration: none;
+}
+.mboardtexttopic a {color: #113789; text-decoration: none;}
+.mboardtexttopic a:hover {color: #113789; text-decoration: underline;}
+
+
+.mboardtextsmall {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+color: #676767;
+font-size: 9px;
+text-decoration: none;
+}
+.mboardtextsmall a {color: #113789; text-decoration: none;}
+.mboardtextsmall a:hover {color: #113789; text-decoration: underline;}
+
+.mboard {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+color: #000000;
+font-size: 9px;
+text-decoration: none;
+}
+.mboard a {color: #113789; text-decoration: none;}
+.mboard a:hover {color: #113789; text-decoration: underline;}
+
 
 .sitehead {
 	font-family: Verdana,Arial,Helvetica,sans-serif;
@@ -472,6 +512,8 @@ font-weight: bold;
  COLOR: #FFFFFF; 
 }
 
+
+
 .fgtext {
 
 BACKGROUND: #FFFFFF; COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT-SIZE: 11px; FONT-WEIGHT: normal; TEXT-DECORATION: none
@@ -629,49 +671,6 @@ font-weight: bold;
 
 BACKGROUND: #EEEEEE; COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT-SIZE: 11px; FONT-WEIGHT: normal; TEXT-DECORATION: none
 }
-
-.mboardtab {
-font-family: Verdana, Arial, Helvetica, sans-serif;
-color: #FFFFFF;
-font-size: 9px;
-font-weight: bold;
-text-decoration: none;
-}
-.mboardtab a {color: #ffffff; text-decoration: none;}
-.mboardtab a:hover {color: #FFFFFF; text-decoration: none;}
-
-
-.mboardtexttopic {
-font-family: Verdana, Arial, Helvetica, sans-serif;
-color: #000000;
-font-size: 0.7em;
-text-decoration: none;
-}
-.mboardtexttopic a {color: #022580; text-decoration: none;}
-.mboardtexttopic a:hover {color: #000000; text-decoration: none;}
-
-
-.mboardtextsmall {
-font-family: Verdana, Arial, Helvetica, sans-serif;
-color: #676767;
-font-size: 9px;
-text-decoration: none;
-}
-.mboardtextsmall a {color: #022580; text-decoration: none;}
-.mboardtextsmall a:hover {color: #000000; text-decoration: none;}
-
-.mboard {
-font-family: Verdana, Arial, Helvetica, sans-serif;
-color: #000000;
-font-size: 9px;
-text-decoration: none;
-}
-.mboard a {color: #022580; text-decoration: none;}
-.mboard a:hover {color: #000000; text-decoration: none;}
-
-
-
-
 
 .menuedittitle {
 BACKGROUND: #1c629d; COLOR: black; FONT-FAMILY: Verdana,Arial,Helvetica,sans-serif; FONT-SIZE: 10px; TEXT-DECORATION: none
