@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_calendar.aw,v 2.10 2002/08/23 22:38:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_calendar.aw,v 2.11 2002/09/05 08:16:49 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 class form_calendar extends form_base
 {
@@ -583,10 +583,20 @@ class form_calendar extends form_base
 		extract($args);
 		$_start = get_ts_from_arr($args["start"]);
 		list($_d,$_m,$_y) = explode("-",date("d-m-Y",$_start));
-		$_end = mktime(23,59,59,$_m,$_d,$_y);
+		if ($end > 0)
+		{
+			$_end = $end;
+		}
+		else
+		{
+			$_end = mktime(23,59,59,$_m,$_d,$_y);
+		};
+
 		$q = "SELECT SUM(max_items) AS max FROM calendar2timedef
 			 WHERE oid = '$contr' AND relation IN ($rel2)
 				AND start <= '$_end' AND end >= '$_start'";
+
+		//print $q;
 		$this->db_query($q);
 		$row2 = $this->db_next();
 		$max = (int)$row2["max"];
@@ -650,28 +660,132 @@ class form_calendar extends form_base
 
 	}
 
-	function get_other_entries($args = array())
+	function check_calendar($args = array())
 	{
 		extract($args);
-		if ($this->cached_others["id"] == $id)
-		{
-			return $this->cached_others["data"];
-		};
-		$q = "SELECT form_id FROM form_entries WHERE id = '$id'";
+		$q = "SELECT * FROM calendar2forms
+				LEFT JOIN objects ON (calendar2forms.cal_id = objects.oid)
+				WHERE form_id = '$id'";
 		$this->db_query($q);
-		$row = $this->db_next();
-		$others = array();
-		$q = "SELECT id FROM form_entries WHERE form_id = '$row[form_id]'";
+		$has_vacancies = true;
+		$has_cal_errors = false;
+		$fch = get_instance("form_chain");
+		while($row = $this->db_next())
+		{
+			// get the vacancy controller for the chain.
+			$fch->load_chain($row["cal_id"]);
+			$cal_controller = (int)$fch->chain["cal_controller"];
+
+			$__rel = $args["post_vars"][$row["el_relation"]];
+			preg_match("/lbopt_(\d+?)$/",$__rel,$m);
+			$_rel = (int)$m[1];
+
+			if ($row["count"] > 0)
+			{
+				$_req_items = $row["count"];
+			}
+			else
+			{
+				$_req_items = (int)$args["post_vars"][$row["el_cnt"]];
+				if ($_req_items == 0)
+				{
+					$_req_items = 1;
+				};
+			};
+
+			// now I need to figure out the selected value of the relation
+			// element
+			$this->save_handle();
+			$q = "SELECT * FROM form_relations WHERE el_to = $row[el_relation]";
+			$this->db_query($q);
+			$frel = $this->db_next();
+			if (!$frel)
+			{
+				$this->raise_error(ERR_FG_CAL_NORELEL, "No relation found in relation table for calendar relation element $row[el_relation] (check that the relation element in the calendar is set correctly)", true);
+			}
+			$q = sprintf("SELECT id,ev_%s AS name FROM form_%d_entries WHERE id = '%d'",
+					$frel["el_from"],$frel["form_from"],$_rel);
+			$this->db_query($q);
+			$rowx = $this->db_next();
+			$this->restore_handle();
+			$vac = $this->get_vac_by_contr(array(
+					"start" => $args["post_vars"][$row["el_start"]],
+					"contr" => $cal_controller,
+					"cal_id" => $row["cal_id"],
+					"entry_id" => $args["entry_id"],
+					"req_items" => $_req_items,
+					"rel" => $_rel,
+					"rel2" => $rowx["id"],
+					"id" => $id,
+			));
+
+			if ($vac < 0)
+			{
+				$has_errors = true;
+				$has_cal_errors = true;
+				$this->controller_errors[$row["el_cnt"]][] = "Calendar '$row[name]/$rowx[name]' does not have this many vacancies in the requested period.";
+			};
+
+		}; # while
+		return $has_errors;
+	} # check_calendar
+
+	function get_controller_errors()
+	{
+		return $this->controller_errors;
+	}
+
+	function make_event_relations($args = array())
+	{
+		extract($args);
+
+		$this->del_event_relations($eid);
+		// cycle over all the forms that this event entry form
+		// has been assigned to and write new relations for those
+		$q = "SELECT * FROM calendar2forms WHERE form_id = '$id'";
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
-			$others[$row["id"]] = $row["id"];
-
-		}
-		$this->cached_others["id"] = $id;
-		$this->cached_others["data"] = $others;
-		return $others;
+			if ($row["count"] > 0)
+			{
+				$_cnt = $row["count"];
+			}
+			else
+			{
+				$_cnt = (int)$args["post_vars"][$row["el_cnt"]];
+				// default to 1. Is this correct?
+				if ($_cnt == 0)
+				{
+					$_cnt = 1;
+				};
+			};
+			$_start = (int)get_ts_from_arr($args["post_vars"][$row["el_start"]]);
+			if ($row["end"] > 0)
+			{
+				$_end = $_start + $row["end"];
+			}
+			else
+			{
+				$_end = (int)get_ts_from_arr($args["post_vars"][$row["el_end"]]);
+			};
+			// XXXX:
+			$__rel = $args["post_vars"][$row["el_relation"]];
+			preg_match("/lbopt_(\d+?)$/",$__rel,$m);
+			$_rel = (int)$m[1];
+			// :XXXXX
+			list($_d,$_m,$_y) = explode("-",date("d-m-Y",$_start));
+			$q = "INSERT INTO calendar2event (cal_id,entry_id,start,end,items,relation,form_id)
+				VALUES ('$row[cal_id]','$eid','$_start','$_end','$_cnt','$_rel','$id')";
+			$this->db_query($q);
+		};
 	}
-		
+
+	function del_event_relations($eid)
+	{
+		// reap the old relations, we are creating new ones anyway
+		$q = "DELETE FROM calendar2event WHERE entry_id = '$eid'";
+		$this->db_query($q);
+	}
+
 };
 ?>

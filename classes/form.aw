@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.139 2002/09/04 17:52:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.140 2002/09/05 08:16:48 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1115,76 +1115,24 @@ class form extends form_base
 		{
 			// check vacations and if found, update calendar->form relations
 			// set error messages otherwise
+			$fcal = get_instance("form_calendar");
+			$errors = $fcal->check_calendar(array(
+				"id" => $id,
+				"post_vars" => $this->post_vars,
+				"entry_id" => $entry_id,
+			));
 
-			// we have to check each calendar separately
-			$q = "SELECT * FROM calendar2forms 
-					LEFT JOIN objects ON (calendar2forms.cal_id = objects.oid)
-					WHERE form_id = '$id'";
-			$this->db_query($q);
-			$has_vacancies = true;
-			$has_cal_errors = false;
-			$fch = get_instance("form_chain");
-
-			while($row = $this->db_next())
+			if ($errors)
 			{
-				// get the vacancy controller for the chain.
-				$fch->load_chain($row["cal_id"]);
-				$cal_controller = (int)$fch->chain["cal_controller"];
-
-				$fcal = get_instance("form_calendar");
-
-				$__rel = $this->post_vars[$row["el_relation"]];
-				preg_match("/lbopt_(\d+?)$/",$__rel,$m);
-				$_rel = (int)$m[1];
-
-				if ($row["count"] > 0)
+				if (!is_array($this->controller_errors))
 				{
-					$_req_items = $row["count"];
-				}
-				else
-				{
-					$_req_items = (int)$this->post_vars[$row["el_cnt"]];
-					if ($_req_items == 0)
-					{
-						$_req_items = 1;
-					};
+					$this->controller_errors = array();
 				};
-					
-				// now I need to figure out the selected value of the relation
-				// element
-				$this->save_handle();
-				$q = "SELECT * FROM form_relations WHERE el_to = $row[el_relation]";
-				$this->db_query($q);
-				$frel = $this->db_next();
-				if (!$frel)
-				{
-					$this->raise_error(ERR_FG_CAL_NORELEL, "No relation found in relation table for calendar relation element $row[el_relation] (check that the relation element in the calendar is set correctly)", true);
-				}
-				$q = sprintf("SELECT id,ev_%s AS name FROM form_%d_entries WHERE id = '%d'",
-						$frel["el_from"],$frel["form_from"],$_rel);
-				$this->db_query($q);
-				$rowx = $this->db_next();
-				$this->restore_handle();
-
-				$vac = $fcal->get_vac_by_contr(array(
-					"start" => $this->post_vars[$row["el_start"]],
-					"contr" => $cal_controller,
-					"cal_id" => $row["cal_id"],
-					"entry_id" => $entry_id,
-					"req_items" => $_req_items,
-					"rel" => $_rel,
-					"rel2" => $rowx["id"],
-					"id" => $id,
-				));
-				
-				if ($vac < 0)
-				{
-					$has_errors = true;
-					$has_cal_errors = true;
-					$this->controller_errors[$row["el_cnt"]][] = "Calendar '$row[name]/$rowx[name]' does not have this many vacancies in the requested period.";
-				};
-
+				$this->controller_errors = $this->controller_errors + $fcal->get_controller_errors();
 			};
+
+			$has_errors = $errors;
+			$has_cal_errors = $errors;
 
 		}
 
@@ -1319,46 +1267,12 @@ class form extends form_base
 		// actions. If we got here, all checks have been passed.
 		if (!$no_process_entry && ($this->subtype & FSUBTYPE_EV_ENTRY))
 		{
-			// reap the old relations, we are creating new ones anyway
-			$q = "DELETE FROM calendar2event WHERE entry_id = '$eid'";
-			$this->db_query($q);
+			$fcal->make_event_relations(array(
+				"id" => $id,
+				"post_vars" => $this->post_vars,
+				"eid" => $entry_id,
+			));
 
-			// cycle over all the forms that this event entry form
-			// has been assigned to and write new relations for those
-			$q = "SELECT * FROM calendar2forms WHERE form_id = '$id'";
-			$this->db_query($q);
-			while($row = $this->db_next())
-			{
-				if ($row["count"] > 0)
-				{
-					$_cnt = $row["count"];
-				}
-				else
-				{
-					$_cnt = (int)$this->post_vars[$row["el_cnt"]];
-					// default to 1. Is this correct?
-					if ($_cnt == 0)
-					{
-						$_cnt = 1;
-					};
-				};
-				$_start = (int)get_ts_from_arr($this->post_vars[$row["el_start"]]);
-				if ($row["end"] > 0)
-				{
-					$_end = $_start + $row["end"];
-				}
-				else
-				{
-					$_end = (int)get_ts_from_arr($this->post_vars[$row["el_end"]]);
-				};
-				$__rel = $this->post_vars[$row["el_relation"]];
-				preg_match("/lbopt_(\d+?)$/",$__rel,$m);
-				$_rel = (int)$m[1];
-				list($_d,$_m,$_y) = explode("-",date("d-m-Y",$_start));
-				$q = "INSERT INTO calendar2event (cal_id,entry_id,start,end,items,relation,form_id)
-					VALUES ('$row[cal_id]','$eid','$_start','$_end','$_cnt','$_rel','$id')";
-				$this->db_query($q);
-			};
 		}
 		elseif ($this->subtype & FSUBTYPE_CAL_CONF)
 		{
