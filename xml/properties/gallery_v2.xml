@@ -164,6 +164,7 @@
             <field>meta</field>
             <method>serialize</method>
             <group>import</group>
+            <default>1</default>
             <table>objects</table>
             <caption>Impordi kataloogist</caption>
       </property>

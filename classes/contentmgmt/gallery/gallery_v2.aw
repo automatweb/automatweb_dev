@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.10 2003/04/09 12:15:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.11 2003/04/09 13:03:52 kristo Exp $
 
 /*
 
@@ -56,7 +56,7 @@
 @property ftp_folder type=textbox field=meta method=serialize group=import
 @caption FTP Serveri kataloog
 
-@property import_local type=checkbox ch_value=1 field=meta method=serialize group=import
+@property import_local type=checkbox ch_value=1 field=meta method=serialize group=import default=1
 @caption Impordi kataloogist
 
 @property local_folder type=textbox field=meta method=serialize group=import
@@ -141,6 +141,10 @@ class gallery_v2 extends class_base
 		else
 		if ($prop['name'] == "do_import")
 		{
+			if (!$arr['obj']['meta']['import_local'] && !$arr['obj']['meta']['import_ftp'])
+			{
+				return PROP_IGNORE;
+			}
 			$prop['value'] = "Impordi";
 		}
 		else
