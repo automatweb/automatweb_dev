@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.19 2004/11/09 18:11:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.20 2004/11/10 14:51:16 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -369,7 +369,7 @@ class site_search_content extends class_base
 				"lead" => $row["lead"]
 			);
 		}
-		
+			
 		if($arr["obj"]->prop("do_keyword_search"))
 		{
 			$keyresults = $this->search_keywords($str, $menus, $arr["obj"]);
@@ -381,7 +381,7 @@ class site_search_content extends class_base
 			{
 				$ret = $keyresults;
 			}
-				
+		//arr($keyresults);		
 				
 		}
 		return $ret;
@@ -415,7 +415,7 @@ class site_search_content extends class_base
 			"class_id" => CL_KEYWORD,
 			"name" => "%$str%",
 		));
-		
+			
 		//If keyword not found, no point to process it futher
 		if($keyword_list->count() == 0)
 		{
@@ -429,7 +429,10 @@ class site_search_content extends class_base
 			"to" => $keyword_list->ids(),
 			"from.class_id" => $classes,
 		));
-		
+		if(!$keyword_aliased_conns)
+		{
+			return;
+		}	
 		foreach($keyword_aliased_conns as $conn)
 		{
 			$ids_list[] = $conn["from"];
