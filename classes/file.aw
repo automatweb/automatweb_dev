@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.3 2001/05/30 01:05:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.4 2001/05/30 01:53:53 duke Exp $
 // file.aw - Failide haldus
 global $orb_defs;
 $orb_defs["file"] = "xml";
@@ -27,14 +27,14 @@ class file extends aw_template
 		$retval = "";
 		if ($store == "fs")
 		{
-			$fname = $this->_put_fs($args);
+			$fname = basename($this->_put_fs($args));
 			$oid = $this->new_object(array(
 				"parent" => $parent,
 				"name" => $filename,
 				"class_id" => CL_FILE,
 				"comment" => $comment,
 			));
-			$q = "INSERT INTO files (id,type,file) VALUES('$pid','$type','$fname')";
+			$q = "INSERT INTO files (id,type,file) VALUES('$oid','$type','$fname')";
 			$this->db_query($q);
 		};
 		return $retval;
