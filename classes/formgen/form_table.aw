@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.62 2004/06/26 17:19:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.63 2004/08/02 12:42:04 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -3211,7 +3211,7 @@ class form_table extends form_base
 				$c = reset($tmp->connections_from(array(
 					"to" => $aid
 				)));
-				if ($c->prop("to.class_id") == CL_FORM_OUTPUT)
+				if ($c && $c->prop("to.class_id") == CL_FORM_OUTPUT)
 				{
 					// if it is a form output alias then show the output with the data the user clicked on last
 					$tbl .= $this->do_parse_ftbl_alias($c->prop("to"));
