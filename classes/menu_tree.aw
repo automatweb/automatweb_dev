@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.19 2004/03/25 11:37:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.20 2004/03/29 09:11:52 kristo Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -198,7 +198,8 @@ class menu_tree extends class_base
 					"lang_id" => aw_global_get("lang_id"),
 					"type" => MN_CLIENT
 				)
-			))
+			)),
+			"sort_by" => "objects.jrk"
 		));
 		$_parents = array();
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
