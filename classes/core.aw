@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.192 2003/05/14 13:55:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.193 2003/05/15 17:06:05 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -672,8 +672,8 @@ class core extends db_connector
 
 	// positioned arguments suck, add_alias is the Right Way to do this,
 	// but I will leave this in place just in case someone still
-	// needs it.	
-	function add_alias($source,$target,$extra = "") 
+	// needs it.
+	function add_alias($source,$target,$extra = "")
 	{
 		$this->addalias(array(
 			"id" => $source,
@@ -783,7 +783,14 @@ class core extends db_connector
 		{
 			// note that the index inside the idx array is always one less than the 
 			// number in the alias. (e.g. oid of #f1# is stored at the position 0, etc)
-			$aliases[$row["idx"]-1] = $row;
+			if (sizeof($type) == 1)
+			{
+				$aliases[$row["idx"]-1] = $row;
+			}
+			else
+			{
+				$aliases[] = $row;
+			};
 		};
 		
 		return $aliases;
