@@ -624,9 +624,9 @@ class group extends class_base
 
 	function callback_pre_save($arr)
 	{
-		if (isset($arr["form_data"]["name"]))
+		if (isset($arr["request"]["name"]))
 		{
-			$arr["coredata"]["name"] = $arr["form_data"]["name"];
+			$arr["obj_inst"]->set_name($arr["request"]["name"]);
 		}
 	}
 
@@ -644,7 +644,7 @@ class group extends class_base
 		$id = $parm['id'];
 		if ($id == 'dyn_search')
 		{
-			$od = $this->users->fetchgroup($this->users->get_gid_for_oid($parm['coredata']['oid']));
+			$od = $this->users->fetchgroup($this->users->get_gid_for_oid($parm['obj_inst']->id()));
 			if ($od["type"] != GRP_DYNAMIC)
 			{
 				return false;
