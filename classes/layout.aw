@@ -120,17 +120,9 @@ class layout extends class_base
 
 		$tmp = $ge->show($grid, $alias["target"], &$tpls);
 
-		if ($ob->prop("header") != "")
-		{
-			$tmp = nl2br($ob->prop("header")).$tmp;
-		}
-		if ($ob->prop("footer") != "")
-		{
-			$tmp .= nl2br($ob->prop("footer"));
-		}
 		$d = get_instance("document");
 		$d->create_relative_links($tmp);
-		if (strpos($tmp, "<a") !== false)
+		if (strpos($tmp, "<a") !== false || strpos($tmp, "< a") !== false || strpos($tmp, "<A") !== false)
 		{
 			return $tmp;
 		}
