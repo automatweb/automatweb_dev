@@ -22,7 +22,7 @@
 			</function>
 		</action>
 
-		<action name="submit_login_menus">
+		<action name="submit_login_menus" all_args="1">
 			<function name="submit_login_menus">
 				<arguments>
 				</arguments>
