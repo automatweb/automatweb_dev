@@ -1,6 +1,12 @@
 <form action='reforb.{VAR:ext}' method=post name=ffrm>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <tr>
+<td class="fform" colspan=2>Vali kataloogid, mille alamkatalooge valida saab:</td>
+</tr>
+<tr>
+<td colspan=2 class="fform"><select name='main_folders[]' multiple size="20" class='small_button'>{VAR:main_folders}</select></td>
+</tr>
+<tr>
 <td class="fform" colspan=2>{VAR:LC_FORMS_CHOOSE_CATALOGUE_WHERE_SAVES_FORM_INFO}:</td>
 </tr>
 <tr>
