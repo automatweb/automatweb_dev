@@ -217,17 +217,18 @@ background: #F8F9D5;
 
 </td>
 <td width="1" class="caltablebordertume"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""></td>
-<td valign="top" width="225">
+<td valign="top" width="241">
 
-<table width="225" border="0" cellpadding="0" cellspacing="0">	
+<!-- SUB: navigator -->
+<table width="241" border="0" cellpadding="0" cellspacing="0">	
 
 
 <tr>
-<td width="112" valign="top" class="caldaysback">
+<td width="120" valign="top" class="caldaysback">
 {VAR:navi1}
 </td>
 <td width="1" class="caltableborderhele"><IMG SRC="images/blue/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""></td>
-<td width="112" valign="top" class="caldaysback">
+<td width="120" valign="top" class="caldaysback">
 
 <!-- begin järgmise kuu kalender -->
 {VAR:navi2}
@@ -236,12 +237,13 @@ background: #F8F9D5;
 
 </td></tr>
 </table>
+<!-- END SUB: navigator -->
 
 
 
 
 <!-- other information-->
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<table width="241" border="0" cellpadding="0" cellspacing="0">
 <tr><td class="caltablebordertume" colspan="3"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""></td></tr>
 <tr class="calmonthback">
 <td width="25" align="center"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/cal_notes.gif" WIDTH="15" HEIGHT="15" BORDER=0 ALT=""></td>
@@ -265,5 +267,4 @@ background: #F8F9D5;
 <span class="header1">{VAR:menudef}</a>
 <br>
 <font color="red"><b>{VAR:status_msg}</b></font>
-{VAR:navigator}
 </span>
