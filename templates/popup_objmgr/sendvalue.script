@@ -1,4 +1,5 @@
-<SCRIPT language=JavaScript>
+<?php die(__FILE__);?>
+<SCRIPT language="JavaScript">
 
 function SendValues()
 {

@@ -12,6 +12,9 @@
 	@default group=manager
 	@groupinfo manager caption=ettevõtted
 
+	@property test1 type=text
+	@caption submit valimid
+
 	@property manageri type=text callback=firma_manager
 
 	@property page type=textbox size=3
@@ -56,12 +59,15 @@
 	@default group=settings
 	@groupinfo settings caption=seaded
 
-	@property valim type=popup_objmgr clid=CL_SELECTION method=serialize field=meta table=objects
+//	@property valim type=popup_objmgr clid=CL_SELECTION method=serialize field=meta table=objects
 //	@property valim type=relpicker reltype=VALIM
-	@caption vali aktiivne valim
+//	@caption vali aktiivne valim
+
+	@property valimid type=popup_objmgr clid=CL_SELECTION multiple=1 method=serialize field=meta table=objects
+	@caption valimid
 
 	@property limit_per_page type=textbox size=8
-	@caption mitu veergu näita
+	@caption mitu rida näita
 
 	@property show_columns type=select multiple=1
 	@caption ettevõtete tabelis näita neid veerge
@@ -104,6 +110,15 @@
 	@caption näita ainult tegevusalasid, kus alal on ka ettevõtteid
 
 ////////////////////////////////////////////////////////////
+	@default group=tests
+	@groupinfo tests caption=tests
+
+	@property test2 type=text
+
+	@property test3 type=text
+
+////////////////////////////////////////////////////////////
+
 
 	@default group=objects_manager
 	@groupinfo objects_manager caption=objektide_lisamine
@@ -134,43 +149,6 @@ class kliendibaas extends class_base
 {
 	var $show_columns;
 
-	function owerview($args)
-	{
-	
-		$arr=array(
-			CL_LINN => 'linn',
-			CL_RIIK => 'riik',
-			CL_MAAKOND => 'maakond',
-			CL_TEGEVUSALA => 'tegevusala',
-			CL_TOODE => 'toode',
-			CL_FIRMA => 'firma',
-			CL_ETTEVOTLUSVORM => 'ettevõtlusvorm',
-//			'' => '',
-//			'' => '',
-		);
-
-		$nodes = array();
-		$nodes[] = array(
-			"value" => 'TEST',
-		);
-		return $nodes;
-	}
-
-/*
-		$arr=array(
-			'linn' => 'linn',
-			'riik' => 'riik',
-			'maakond' => 'maakond',
-			'tegevusala' => 'tegevusala',
-			'toode' => 'toode',
-			'firma' => 'firma',
-			'ettevotlusvorm' => 'ettevõtlusvorm',
-//			'' => '',
-//			'' => '',
-		);
-
-
-*/
 
 	function objects_manager($args)
 	{
@@ -238,6 +216,27 @@ class kliendibaas extends class_base
 		//print_r($args);die();
 		switch($data["name"])
 		{
+			case 'test1':
+			
+				foreach($meta['valimid'] as $key)
+				{
+					$sel_obj=$this->get_object($key);
+					//$sel_obj['name']
+					$str.=html::button(array('name' => "valim[$key]", 'value' => "v: ".$sel_obj['name']));
+				}
+
+				$data['value'] = $str;
+
+			break;
+
+			case 'test2':
+				$data['value'] = '';
+			break;
+
+			case 'test3':
+				$data['value'] = '';
+			break;
+
 			case 'test':
 				$retval=PROP_IGNORE;
 			break;
@@ -462,7 +461,7 @@ class kliendibaas extends class_base
 
 		$search=html::textbox(array('name' => 'teg_search[kood]','value' => $meta['search'][$key],'size' => 20)).' '.
 		html::textbox(array('name' => 'teg_search[tegevusala]','value' => $meta['search'][$key],'size' => 20)).' '.
-		html::button(array('value' => 'otsi','onclick'=>'document.changeform.teg_do_search.value=1;document.changeform.submit()'));
+		html::button(array('value' => 'otsi','onclick' => 'document.changeform.teg_do_search.value=1;document.changeform.submit()'));
 
 
 		if ($meta['teg_do_search'])
@@ -1066,28 +1065,33 @@ class kliendibaas extends class_base
 	}
 
 
-function selall()
-{
-return <<<SCR
-<script language="javascript">
-var chk_status = true;
+	function owerview($args)
+	{
+		$arr=array(
+			CL_LINN => 'linn',
+			CL_RIIK => 'riik',
+			CL_MAAKOND => 'maakond',
+			CL_TEGEVUSALA => 'tegevusala',
+			CL_TOODE => 'toode',
+			CL_FIRMA => 'firma',
+			CL_ETTEVOTLUSVORM => 'ettevõtlusvorm',
+//			'' => '',
+//			'' => '',
+		);
 
-function selall(element)
-{
-        len = document.changeform.elements.length;
-        for (i=0; i < len; i++)
-        {
-                if (document.changeform.elements[i].name.indexOf(element) != -1)
-                {
-                        document.changeform.elements[i].checked=chk_status;
-                        window.status = ""+i+" / "+len;
-                }
-        }
-        chk_status = !chk_status;
-}
-</script>
-SCR;
-}
+		$nodes = array();
+		$nodes[] = array(
+			"value" => 'TEST',
+		);
+		return $nodes;
+	}
+
+
+
+	function selall()
+	{
+		return implode('',file($this->cfg['tpldir'].'/kliendibaas/selall.script'));
+	}
 
 /*
 
@@ -1142,6 +1146,22 @@ $this->db_query($q);
 		print_r($arr);
 		die();
 */
+
+/*		$arr=array(
+			'linn' => 'linn',
+			'riik' => 'riik',
+			'maakond' => 'maakond',
+			'tegevusala' => 'tegevusala',
+			'toode' => 'toode',
+			'firma' => 'firma',
+			'ettevotlusvorm' => 'ettevõtlusvorm',
+//			'' => '',
+//			'' => '',
+		);
+
+
+*/
+
 
 }
 ?>

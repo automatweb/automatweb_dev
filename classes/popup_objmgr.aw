@@ -147,7 +147,6 @@ arr($args,1);
 
 	}
 
-
 	function search_callback_get_fields(&$fields,$args)
 	{
 		$fields = array();

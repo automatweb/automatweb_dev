@@ -65,7 +65,7 @@ function selall()
 	{
 		if (document.searchform.elements[i].name.indexOf('sel') != -1)
 		{
-			document.searchform.elements[i].checked=chk_status;
+			document.searchform.elements[i].checked = chk_status;
 			window.status = ""+i+" / "+len;
 		}
 	}
@@ -77,12 +77,13 @@ function search_selall()
 	selall();
 }
 
+
 function SendValues()
 {
 	len = document.searchform.elements.length;
 	for (i=0; i < len; i++)
 	{
-		if (document.searchform.elements[i].name.indexOf('sel') != -1)
+		if (document.searchform.elements[i].name == 'sel') //indexOf('sel') != -1)
 		{
 			if (document.searchform.elements[i].checked == true)
 			{
