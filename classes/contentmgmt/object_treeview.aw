@@ -644,6 +644,7 @@ class object_treeview extends class_base
 			"root_name" => "",
 			"root_url" => "",
 			"root_icon" => "",
+			"tree_id" => "objtr" . $ob->id(),
 			"type" => TREE_DHTML, //$ob->meta('tree_type'),
 			"persist_state" => 1
 		));
