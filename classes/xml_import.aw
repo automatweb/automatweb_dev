@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.21 2003/11/07 18:54:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.22 2003/11/13 15:49:40 duke Exp $
 /*
         @default table=objects
         @default group=general
@@ -443,6 +443,7 @@ class xml_import extends class_base
 					"ysid" => $ysid,
 					"jrk" => $attr["jrk"],
 					"struktuur_id" => $attr["struktuur"],
+					"markus" => $markus,
 				);
 					
 			}
@@ -608,6 +609,7 @@ class xml_import extends class_base
 		$retval = str_replace(chr(0xC3). chr(0x84),"Ä",$retval);
 		$retval = str_replace(chr(0xC3). chr(0x9C),"Ü",$retval);
 		$retval = str_replace(chr(0xC5). chr(0xA0),"&#0352;",$retval);
+		$retval = str_replace(chr(0xC3). chr(0xA9),"&#0233;",$retval);
 		$retval = str_replace(chr(0xC5). chr(0xA1),"&#0353;",$retval);
 		$retval = str_replace(chr(0xC5). chr(0xBD),"&#381;",$retval);
 		$retval = str_replace(chr(0xC5). chr(0xBE),"&#382;",$retval);
