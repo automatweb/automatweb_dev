@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.43 2003/04/14 16:03:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.44 2003/04/21 08:02:31 duke Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 class orb extends aw_template 
@@ -217,7 +217,6 @@ class orb extends aw_template
 			};
 			$params = array_merge($params,$defined);
 		}
-
 		if (isset($user))
 		{
 			$params["user"] = 1;
@@ -241,6 +240,7 @@ class orb extends aw_template
 			$content = $t->$fname($params);
 		}
 		$this->data = $content;
+
 		// kui klass teeb enda sisse $info nimelise array, ja kirjutab sinna mingit teksti, siis
 		// see votab nad sealt välja ja caller saab get_info funktsiooni kaudu kätte kogu vajaliku info.
 		// no ntx aw sees on vaja kuidagi saada string aw index.tpl-i sisse pealkirjaks

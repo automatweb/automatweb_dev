@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.43 2003/04/15 13:27:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.44 2003/04/21 08:02:31 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -752,7 +752,7 @@ class menu extends class_base
 		if ($args["id"])
 		{
 			$obj = $this->get_object($args["id"]);
-			$link = $this->mk_my_orb("right_frame",array("parent" => $args["id"]),"menuedit");
+			$link = $this->mk_my_orb("right_frame",array("parent" => $args["id"]),"admin_menus");
 			$title = html::href(array(
 				"url" => $link,
 				"caption" => $obj["name"],

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/syslog.aw,v 1.1 2002/12/23 14:04:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/syslog.aw,v 1.2 2003/04/21 08:02:31 duke Exp $
 // syslog.aw - syslog management
 // syslogi vaatamine ja analüüs
 class db_syslog extends aw_template
@@ -420,18 +420,6 @@ class syslog extends db_syslog
 		return $this->mk_my_orb("block",array(),"syslog",false,true);
 	}
 
-	function request_startup()
-	{
-		$referer = aw_global_get("HTTP_REFERER");
-		if (preg_match("/^(http:\/\/.+)\//i",$referer,$mt))
-		{
-			if ($mt[1] != aw_ini_get("baseurl"))
-			{
-				$this->_log(ST_REFERER, SA_ADD, $referer);
-				aw_session_set("referer",$mt[1]);
-			};
-		};
-	}
 
 	function convert_syslog()
 	{

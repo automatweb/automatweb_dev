@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.178 2003/04/14 16:02:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.179 2003/04/21 08:02:31 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -491,9 +491,9 @@ class core extends db_connector
 		};
 		$q = sprintf("INSERT DELAYED INTO syslog (%s) VALUES (%s)",join(",",$fields),join(",",map("'%s'",$values)));
 		if (!$this->db_query($q,false))
-                {
-                        die("cannot write to syslog: " . $this->db_last_error["error_string"]);
-                };
+		{
+			die("cannot write to syslog: " . $this->db_last_error["error_string"]);
+		};
 	}
 		
 	//// 
@@ -2029,7 +2029,7 @@ class core extends db_connector
 			if ($use)
 			{
 				$name = ($row["name"]) ? $row["name"] : "(nimetu)";
-				$path="<a href='".$this->mk_my_orb("right_frame", array("parent" => $row["oid"],"period" => $period),"menuedit")."'>".$name."</a> / ".$path;
+				$path="<a href='".$this->mk_my_orb("right_frame", array("parent" => $row["oid"],"period" => $period),"admin_menus")."'>".$name."</a> / ".$path;
 			}
 		}
 
