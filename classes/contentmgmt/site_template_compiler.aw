@@ -1187,6 +1187,7 @@ class site_template_compiler extends aw_template
 
 				$res .= $this->_gi()."\$vars[\"sel_menu_".$area."_L".$level."_id\"] = \$tmp;\n";
 				$res .= $this->_gi()."\$tmp_o = obj(\$tmp);\n";
+				$res .= $this->_gi()."\$vars[\"sel_menu_".$area."_L".$level."_text\"] = \$tmp_o->name();\n";
 				$res .= $this->_gi()."\$vars[\"sel_menu_".$area."_L".$level."_colour\"] = \$tmp_o->prop(\"color\");\n";
 				$res .= $this->_gi()."\$tmp_im = \$tmp_o->meta(\"menu_images\");\n";
 				// insert image urls
@@ -1291,7 +1292,7 @@ class site_template_compiler extends aw_template
 
 		if ($arr["level"] == 1)
 		{
-			$ret .= $this->_gi()."if (\$this->can(\"view\", ".$arr["a_parent_p_fn"]."))\n";
+			$ret .= $this->_gi()."if (\$this->can(\"view\", ".$arr["a_parent_p_fn"].") && \$this->object_exists(".$arr["a_parent_p_fn"]."))\n";
 			$ret .= $this->_gi()."{\n";
 			$this->brace_level++;
 			$ret .= $this->_gi()."\$parent_obj = new object(".$arr["a_parent_p_fn"].");\n";
