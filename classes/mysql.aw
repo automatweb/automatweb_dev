@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.6 2001/07/26 16:49:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.7 2001/07/29 02:44:44 duke Exp $
 // mysql.aw - MySQL draiver
 include("$classdir/root.$ext");
 class db_connector extends root 
@@ -315,6 +315,52 @@ class db_connector extends root
 		}
 		$ret.=join(",",$fs);
 		return $ret.")";
+	}
+
+	////
+	// !Reads and returns the structure of the database
+	function db_get_struct()
+	{
+		$this->db_query("SHOW TABLES");
+		$tables = array();
+		while($row = $this->db_next())
+		{
+			// form entry tables are ignored
+			if (not(preg_match("/form_(\d+?)_entries/",$row[0])))
+			{
+				$name = $row[0];
+				$this->save_handle();
+				$this->db_query("DESCRIBE $name");
+				while($row = $this->db_next())
+				{
+					$flags = array();
+					list($type,$extra) = explode(" ",$row["Type"]);
+					if ($extra)
+					{
+						$flags[] = $extra;
+					};
+
+					if (not($row["Null"] == "YES"))
+					{
+						$flags[] = "NOT NULL";
+					};
+			
+					if ($row["Extra"])
+					{
+						$flags[] = $row["Extra"];
+					};
+
+					$tables[$name][$row["Field"]] = array(
+							"type" => $type,
+							"flags" => $flags,
+							"key" => $row["Key"],
+					);
+					
+				};
+				$this->restore_handle();
+			};
+		};
+		return $tables;
 	}
 };
 ?>
