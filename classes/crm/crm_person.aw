@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.42 2004/07/05 08:46:56 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.43 2004/07/05 08:48:37 rtoomas Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -282,7 +282,7 @@ class crm_person extends class_base
 				//if the person is associated with a section then show the professions
 				//from the section and if not then show all the professions in the system
 				$conns = $arr['obj_inst']->connections_to(array(
-					'type'=>21 //@todo have to change to textual, crm_person.SECTION
+					'type'=> RELTYPE_SECTION
 				));
 				if(sizeof($conns))
 				{
@@ -664,8 +664,7 @@ class crm_person extends class_base
 		};
 	
 		$conns = $o->connections_from(array(
-							'type' => 21 //crm_person.reltype_section=21
-											 //crm_section.reltype_worker=2
+							'type' => RELTYPE_SECTION
 					));
 		foreach($conns as $conn)
 		{	
