@@ -495,8 +495,8 @@
             <relationmgr>yes</relationmgr>
             <objtable>menu</objtable>
             <objtable_index>id</objtable_index>
-            <corefields>name,comment,alias,status,jrk</corefields>
             <syslog_type>ST_MENU</syslog_type>
+            <trans_id>TR_MENU</trans_id>
       </classinfo>
       <groupinfo>
             <general>

@@ -90,6 +90,7 @@
       </property>
       <classinfo>
             <trans>1</trans>
+            <trans_id>TR_FILE</trans_id>
       </classinfo>
       <groupinfo>
             <general>

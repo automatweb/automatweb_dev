@@ -137,6 +137,7 @@
             <corefields>name,comment,status</corefields>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_PROMO</syslog_type>
+            <trans_id>TR_PROMO</trans_id>
       </classinfo>
       <groupinfo>
             <general>

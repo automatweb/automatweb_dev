@@ -1,0 +1,157 @@
+<?xml version='1.0'?>
+<trtemplate>
+<string>
+      <id>b17cca80eb3cd2df1418a42b20d02e20</id>
+      <file>promo</file>
+      <ctx>textbox</ctx>
+      <caption>Nimi</caption>
+      <comment>Objekti nimi</comment>
+</string>
+<string>
+      <id>c4ce8cac6867f6df2bf9cacee074baf5</id>
+      <file>promo</file>
+      <ctx>textbox</ctx>
+      <caption>Kommentaar</caption>
+      <comment>Vabas vormis tekst objekti kohta</comment>
+</string>
+<string>
+      <id>4600a0435dab46913b6e2834ec43331c</id>
+      <file>promo</file>
+      <ctx>status</ctx>
+      <caption>Aktiivne</caption>
+      <comment>Kas objekt on aktiivne </comment>
+</string>
+<string>
+      <id>7a92677093086668eb36f640ada4fae9</id>
+      <file>promo</file>
+      <ctx>checkbox</ctx>
+      <caption>Vajab tõlget</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>0476844d348e31c49b3fa0abdc59b047</id>
+      <file>promo</file>
+      <ctx>checkbox</ctx>
+      <caption>Tõlge kinnitatud</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>60df23e1d525ba92485d1c1239e035fb</id>
+      <file>promo</file>
+      <ctx>textbox</ctx>
+      <caption>Pealkiri</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>6aebae82684279ac219ab38114b64ffb</id>
+      <file>promo</file>
+      <ctx>select</ctx>
+      <caption>Template näitamiseks</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>8a2b6e7bf61cec79b558d165d620ac36</id>
+      <file>promo</file>
+      <ctx>select</ctx>
+      <caption>Kasti tüüp</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>509ac22f40bbabce18804a70f4f45a94</id>
+      <file>promo</file>
+      <ctx>textbox</ctx>
+      <caption>Link</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>81de07a7c5cc22ec6c51b8fbffdf0d3f</id>
+      <file>promo</file>
+      <ctx>textbox</ctx>
+      <caption>Lingi kirjeldus</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>3edc10494f01544585a65fb9d0219a65</id>
+      <file>promo</file>
+      <ctx>checkbox</ctx>
+      <caption>Ilma pealkirjata</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>78ef4220682f6e852080ce13c0968263</id>
+      <file>promo</file>
+      <ctx>select</ctx>
+      <caption>Grupid, kellele kasti näidata</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>eaa1997575b6e577d9c446f840970594</id>
+      <file>promo</file>
+      <ctx>checkbox</ctx>
+      <caption>Kasuta dokumendi asukoha templatet</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>d9a0a475b59d660776dec56101da7068</id>
+      <file>promo</file>
+      <ctx>checkbox</ctx>
+      <caption>Näita igal pool</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>286e27f20f0218fc31eafec17469995b</id>
+      <file>promo</file>
+      <ctx>text</ctx>
+      <caption>Vali menüüd, mille all kasti näidata</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>909287e70f60b0c4ebe3ff821bac1df0</id>
+      <file>promo</file>
+      <ctx>text</ctx>
+      <caption>Vali menüüd, mille alt viimaseid dokumente võetakse</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>8f13fda700384fd927ccca094857bd00</id>
+      <file>promo</file>
+      <ctx>textbox</ctx>
+      <caption>Mitu viimast dokumenti</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>f388891169378aed3de58df26df238a5</id>
+      <file>promo</file>
+      <ctx>select</ctx>
+      <caption>Dokumente j&amp;auml;rjestatakse</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>16c4bc619945ce0ca64bb1c3b76a453e</id>
+      <file>promo</file>
+      <ctx>select</ctx>
+      <caption></caption>
+      <comment></comment>
+</string>
+<string>
+      <id>049acc302aa9767d5ef704ffd50cb077</id>
+      <file>promo</file>
+      <ctx>tab</ctx>
+      <caption>Üldine</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>8264513f782cbb1161300501fc598ad9</id>
+      <file>promo</file>
+      <ctx>tab</ctx>
+      <caption>Kaustad</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>502f5c8959d5b8f96265503adee47a6f</id>
+      <file>promo</file>
+      <ctx>tab</ctx>
+      <caption>Näitamine</caption>
+      <comment></comment>
+</string>
+</trtemplate>

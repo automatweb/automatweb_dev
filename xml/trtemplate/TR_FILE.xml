@@ -1,0 +1,108 @@
+<?xml version='1.0'?>
+<trtemplate>
+<string>
+      <id>11ce3ef980cfc04b30323799efee26f8</id>
+      <file>file</file>
+      <ctx>textbox</ctx>
+      <caption>Nimi</caption>
+      <comment>Objekti nimi</comment>
+</string>
+<string>
+      <id>9184a44c46cd4ce695b688c2fdaa6cb4</id>
+      <file>file</file>
+      <ctx>status</ctx>
+      <caption>Aktiivne</caption>
+      <comment>Kas objekt on aktiivne </comment>
+</string>
+<string>
+      <id>10db2dd19c93d6b61d37de08067205fc</id>
+      <file>file</file>
+      <ctx>checkbox</ctx>
+      <caption>Vajab tõlget</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>763a978520503e4d810da85871902d58</id>
+      <file>file</file>
+      <ctx>checkbox</ctx>
+      <caption>Tõlge kinnitatud</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>18267106ef80136eedb2ff3cfcbf4097</id>
+      <file>file</file>
+      <ctx>text</ctx>
+      <caption>Faili nimi</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>c412a48dd7fdbbab9e2533e536b791e1</id>
+      <file>file</file>
+      <ctx>fileupload</ctx>
+      <caption>Vali fail</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>e16eb7cf21aeb431981354cb79ba51ab</id>
+      <file>file</file>
+      <ctx>textbox</ctx>
+      <caption>Faili allkiri</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>3d55400ad5856e2fbf7e7dedce817273</id>
+      <file>file</file>
+      <ctx>checkbox</ctx>
+      <caption>Näita kohe</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>68f7a88c484cf554f9f740319593b04a</id>
+      <file>file</file>
+      <ctx>checkbox</ctx>
+      <caption>Uues aknas</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>6220b4e3e07cdd95f18788056a2be820</id>
+      <file>file</file>
+      <ctx>checkbox</ctx>
+      <caption>Näita saidi raamis</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>d28cf4d7b640850329ecb09a20d597d9</id>
+      <file>file</file>
+      <ctx>text</ctx>
+      <caption>Näita faili</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>c111466228c953570efb2f30568f5362</id>
+      <file>file</file>
+      <ctx>date_select</ctx>
+      <caption>Jõustumise kuupäev</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>47ae5fce92f3643d643510271ad7fb80</id>
+      <file>file</file>
+      <ctx>date_select</ctx>
+      <caption>Avaldamise kuupäev</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>5ff86c446df33de3708af7a26e42e917</id>
+      <file>file</file>
+      <ctx>tab</ctx>
+      <caption>Üldine</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>1fc1cbd1f95561840ab7a633d2f05960</id>
+      <file>file</file>
+      <ctx>tab</ctx>
+      <caption>Ajad</caption>
+      <comment></comment>
+</string>
+</trtemplate>

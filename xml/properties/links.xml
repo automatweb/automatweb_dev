@@ -172,6 +172,7 @@
       <classinfo>
             <objtable>extlinks</objtable>
             <objtable_index>id</objtable_index>
+            <trans_id>TR_EXTLINK</trans_id>
       </classinfo>
       <groupinfo>
             <general>
