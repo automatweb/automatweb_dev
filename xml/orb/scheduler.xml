@@ -2,7 +2,7 @@
 <orb>
 	<class name="scheduler">
 		<action name="new">
-			<function name="change">
+			<function name="add_sched">
 				<arguments>
 					<required name="parent" type="int"/>
 				</arguments>
@@ -10,7 +10,7 @@
 		</action>
 
 		<action name="change">
-			<function name="change">
+			<function name="change_sched">
 				<arguments>
 					<required name="id" type="int"/>
 				</arguments>
@@ -20,6 +20,21 @@
 		<action name="submit">
 			<function name="submit">
 				<arguments/>
+			</function>
+		</action>
+
+		<action name="search_objs" all_args="1">
+			<function name="search_objs">
+				<arguments/>
+			</function>
+		</action>
+
+		<action name="set_time">
+			<function name="set_time">
+				<arguments>
+					<required name="id" type="int"/>
+					<optional name="cycle"/>
+				</arguments>
 			</function>
 		</action>
 
@@ -41,6 +56,8 @@
 		<action name="show">
 			<function name="show">
 				<arguments>
+					<optional name="sortby"/>
+					<optional name="sort_order"/>
 				</arguments>
 			</function>
 		</action>
