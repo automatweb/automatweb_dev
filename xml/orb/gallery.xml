@@ -51,6 +51,15 @@
 			</function>
 		</action>
 
+		<action name="del_page">
+			<function name="del_page">
+				<arguments>
+					<required name="id"/>
+					<optional name="page"/>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="add_row">
 			<function name="add_rows">
 				<arguments>
