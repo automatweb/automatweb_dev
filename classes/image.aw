@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.85 2004/03/22 11:54:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.86 2004/03/25 09:39:26 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -314,21 +314,27 @@ class image extends class_base
 	{
 		$o = obj($oid);
 		$c = reset($o->connections_from(array("idx" => $idx, "to.class_id" => CL_IMAGE)));
-		return $this->get_image_by_id($c->prop("to"));
-		/*$q = "SELECT images.*,objects.* FROM objects
-			LEFT JOIN images ON objects.oid = images.id
-			WHERE parent = '$oid' AND idx = '$idx' AND objects.status = 2 AND objects.class_id = 6
-			ORDER BY created DESC";
-		$this->db_query($q);
-		$row = $this->db_next();
-		$row["url"] = $this->get_url($row["file"]);
-		$row["meta"] = aw_unserialize($row["metadata"]);
-		if ($row["meta"]["file2"] != "")
+		if (is_object($c))
 		{
-			$row["big_url"] = $this->get_url($row["meta"]["file2"]);
+			return $this->get_image_by_id($c->prop("to"));
 		}
+		else
+		{
+			$q = "SELECT images.*,objects.* FROM objects
+				LEFT JOIN images ON objects.oid = images.id
+				WHERE parent = '$oid' AND idx = '$idx' AND objects.status = 2 AND objects.class_id = 6
+				ORDER BY created DESC";
+			$this->db_query($q);
+			$row = $this->db_next();
+			$row["url"] = $this->get_url($row["file"]);
+			$row["meta"] = aw_unserialize($row["metadata"]);
+			if ($row["meta"]["file2"] != "")
+			{
+				$row["big_url"] = $this->get_url($row["meta"]["file2"]);
+			}
 
-		return $row;*/
+			return $row;
+		}
 	}
 
 	function is_flash($file)
