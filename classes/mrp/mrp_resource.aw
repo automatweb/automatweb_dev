@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.22 2005/03/15 14:08:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.23 2005/03/18 13:37:57 ahti Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -236,7 +236,7 @@ class mrp_resource extends class_base
 			$resources_folder = $workspace->prop ("resources_folder");
 			$this_object->connect (array (
 				"to" => $workspace,
-				"reltype" => RELTYPE_MRP_OWNER,
+				"reltype" => "RELTYPE_MRP_OWNER",
 			));
 			$this_object->set_parent ($resources_folder);
 			$this_object->save ();
