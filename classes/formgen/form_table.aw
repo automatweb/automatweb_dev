@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.17 2002/12/03 12:46:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.18 2002/12/03 15:19:10 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -229,8 +229,20 @@ class form_table extends form_base
 		{
 			// here also make the view and other links
 			$change_link = $this->get_link("change", $form_id,$section,$op_id,$chain_id,$chain_entry_id, $dat["entry_id"]);
-			$this->table["change_cols"]["change"] = "change";
-			$dat["ev_change"] = $this->table["texts"]["change"][$this->lang_id];
+
+			$has_change_col = false;
+			for ($i = 0; $i < $this->table["cols"]; $i++)
+			{
+				if (in_array("change",$this->table["defs"][$i]["els"]))
+				{
+					$has_change_col = true;
+				}
+			}
+			if ($has_change_col)
+			{
+				$this->table["change_cols"]["change"] = "change";
+				$dat["ev_change"] = $this->table["texts"]["change"][$this->lang_id];
+			}
 			foreach($this->table["change_cols"] as $chel)
 			{
 				$cl = $this->get_col_for_el($chel);
