@@ -216,7 +216,7 @@ class _int_object
 
 		$ret = array();
 		$cs = $GLOBALS["object_loader"]->ds->find_connections($filter);
-		foreach($cs as $c_d)
+		foreach($cs as $c_id => $c_d)
 		{
 			if ($this->can("view", $c_d["from"]) && 
 				$this->can("view", $c_d["to"]) && 
@@ -224,7 +224,7 @@ class _int_object
 				$GLOBALS["object_loader"]->object_exists($c_d["to"])
 			)
 			{
-				$ret[] =& new connection($c_d);
+				$ret[$c_id] =& new connection($c_d);
 			}
 		}
 
@@ -345,7 +345,7 @@ class _int_object
 		$pt = $this->path();
 		$i = 0;
 		$cnt = count($pt);
-        if (isset($param["max_len"]))
+        	if (isset($param["max_len"]))
 		{
 			$i = $cnt - $param["max_len"];
 		}

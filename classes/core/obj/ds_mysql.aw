@@ -562,7 +562,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$ret = array();
 		while ($row = $this->db_next())
 		{
-			$ret[] = $row;
+			$ret[$row["id"]] = $row;
 		}
 
 		return $ret;
