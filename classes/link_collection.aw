@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/link_collection.aw,v 2.5 2001/12/04 15:08:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/link_collection.aw,v 2.6 2002/01/02 18:21:56 duke Exp $
 // link_collection.aw - Lingikogude haldus
 global $orb_defs;
 lc_load("linkcollection");
@@ -84,6 +84,7 @@ class link_collection extends aw_template {
 				};
 			};
 		};
+
 		$branch_list = $mnl->gen_rec_list(array(
 			"start_from" => $collection,
 			"add_start_from" => true,
@@ -182,6 +183,10 @@ class link_collection extends aw_template {
 			$parent = $l["last"];
 		};
 
+		if (not($parent))
+		{
+			return "";
+		};
 		$target = $l["target"];
 		
 		$pobj = $this->get_object($parent);
@@ -241,11 +246,15 @@ class link_collection extends aw_template {
 		$on_this_line = 0;
 		$c = "";
 		$_tmp = "";
+		classload("extlinks");
+		$ec = new extlinks();
 		while($row = $this->db_next())
 		{
 		
+			list($url,$target,$caption) = $ec->draw_link($row["oid"]);
 			$this->vars(array(
-				"url" => sprintf("%s/indexx.%s?id=%d",$baseurl,$ext,$row["oid"]),
+				"url" => $url,
+				"target" => $target,
 				"name" => $row["name"],
 				"text" => $row["comment"],
 			));
