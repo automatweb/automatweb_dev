@@ -1,16 +1,4 @@
-<script src="/automatweb/js/popup_menu.js" type="text/javascript">
-</script>
-<style type="text/css">
-<!--
-.boxA {
-  border: 1px solid transparent;
-  cursor:hand;
-  width:70px;
-  height:70px;
-  float:left;
-}
--->
-</style>
+<script src="/automatweb/js/popup_menu.js" type="text/javascript"></script>
 
 <script language="javascript">
 <!--
@@ -140,7 +128,7 @@ function go_acl(id)
 
 
 <!-- begin ICONS table -->
-<form action='reforb.{VAR:ext}' method="post" name="foo">
+<form action='reforb.{VAR:ext}' method="post" name="foo" style="display: inline;">
 {VAR:toolbar}
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
