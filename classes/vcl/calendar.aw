@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.44 2005/01/17 16:43:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.45 2005/01/18 09:10:53 ahti Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -777,6 +777,10 @@ class vcalendar extends aw_template
 		// alright, aga see saast siis ju eeldab et mul on 
 		#for ($t = 0; $t < 7; $t++)
 		#{
+		if($this->adm_day)
+		{
+			$dcheck = $this->parse("DCHECK");
+		}
 
 		for ($i = $this->range["start"]; $i <= $this->range["end"]; $i = $i + 86400)
 		{
@@ -813,6 +817,7 @@ class vcalendar extends aw_template
 
 
 			$this->vars(array(
+				"DCHECK" => $dcheck,
 				"EVENT" => $events_for_day,
 				"daynum" => date("j",$reals),
 				"dayname" => date("F d, Y",$reals),

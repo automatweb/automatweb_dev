@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.35 2005/01/18 07:47:55 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.36 2005/01/18 09:10:53 ahti Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -1451,7 +1451,7 @@ class planner extends class_base
 			// edit the calendar
 
 			
-			if($this->can("edit", $arr["obj_inst"]->id()) && $arr["obj_inst"]->prop("default_view") == 1)
+			if($this->can("edit", $arr["obj_inst"]->id()) && ($arr["obj_inst"]->prop("default_view") == 1 || $arr["obj_inst"]->prop("default_view") == 3))
 			{
 				$toolbar->add_button(array(
 					"name" => "delete",
@@ -1580,7 +1580,7 @@ class planner extends class_base
 			"full_weeks" => $full_weeks,
 		));
 		
-		if($this->can("edit", $arr["obj_inst"]->id()) && $arr["obj_inst"]->prop("default_view") == 1)
+		if($this->can("edit", $arr["obj_inst"]->id()) && ($arr["obj_inst"]->prop("default_view") == 1 || $arr["obj_inst"]->prop("default_view") == 3))
 		{
 			$arr["prop"]["vcl_inst"]->adm_day = 1;
 		}
@@ -2452,39 +2452,31 @@ class planner extends class_base
 	**/
 	function save_participant_search_results($arr)
 	{
-		$ss = safe_array($arr["sel_search"]);
-		if (count($ss))
+		foreach($ss as $part)
 		{
-			foreach($ss as $part)
+			if (is_oid($part) && $this->can("view", $part))
 			{
-				if ($this->can("view", $part))
+				// connect the person to the event.. it seems that's it?
+				$o = obj($part);
+				if (!$o->is_connected_to(array("to" => $part)))
 				{
-					// connect the person to the event.. it seems that's it?
-					$o = obj($part);
-					if (!$o->is_connected_to(array("to" => $part)))
-					{
-						$o->connect(array(
-							"to" => $arr["event_id"],
-							"reltype" => 8 // CRM_PERSON.RELTYPE_PERSON_MEETING
-						));
-					}
-				}				
+					$o->connect(array(
+						"to" => $arr["event_id"],
+						"reltype" => 8 // CRM_PERSON.RELTYPE_PERSON_MEETING
+					));
+				}
 			}
 		}
-		return $this->mk_my_orb(
-			'change',
-			array(
-				'id' => $arr['id'],
-				'group' => $arr['group'],
-				'search_contact_firstname' => urlencode($arr["emb"]['search_contact_firstname']),
-				'search_contact_lastname' => urlencode($arr["emb"]['search_contact_lastname']),
-				'search_contact_code' => urlencode($arr["emb"]['search_contact_code']),
-				'search_contact_company' => urlencode($arr["emb"]['search_contact_company']),
-				"event_id" => $arr["event_id"],
-				"cb_group" => $arr["emb"]["cb_group"]
-			),
-			$arr['class']
-		);
+		return $this->mk_my_orb("change", array(
+			'id' => $arr['id'],
+			'group' => $arr['group'],
+			'search_contact_firstname' => urlencode($arr["emb"]['search_contact_firstname']),
+			'search_contact_lastname' => urlencode($arr["emb"]['search_contact_lastname']),
+			'search_contact_code' => urlencode($arr["emb"]['search_contact_code']),
+			'search_contact_company' => urlencode($arr["emb"]['search_contact_company']),
+			"event_id" => $arr["event_id"],
+			"cb_group" => $arr["emb"]["cb_group"]
+		), $arr["class"]);
 	}
 	
 	/**
@@ -2506,7 +2498,7 @@ class planner extends class_base
 				}
 			}
 		}
-		return $this->mk_my_orb("change",array("id" => $arr["id"],"group" => $arr["subgroup"],"date" => $arr["date"]));
+		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"], "date" => $arr["date"]));
 	}
 };
 ?>
