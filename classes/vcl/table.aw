@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.17 2004/06/02 10:50:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.18 2004/06/09 10:16:23 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -985,10 +985,10 @@ class aw_table extends aw_template
 		return $tbl;
 	}
 
-	function _format_csv_field($d)
+	function _format_csv_field($d, $sep = ";")
 	{
 		$new=strtr($d,array('"'=>'""'));
-		if (!(strpos($d,';')===false) || $new != $d)
+		if (!(strpos($d,$sep)===false) || $new != $d)
 		{
 			$new='"'.$new.'"';
 		};
@@ -996,7 +996,7 @@ class aw_table extends aw_template
 	}
 
 	// tagastab csv andmed, kustuda välja draw asemel
-	function get_csv_file()
+	function get_csv_file($sep = ";")
 	{
 		$d=array();
 		reset($this->rowdefs);
@@ -1004,7 +1004,7 @@ class aw_table extends aw_template
 		if (is_array($this->rowdefs))
 		while(list($k,$v) = each($this->rowdefs)) 
 		{
-				$tbl .= ($tbl?";":"").$this->_format_csv_field($v["caption"]);
+				$tbl .= ($tbl?$sep:"").$this->_format_csv_field($v["caption"]);
 		};
 		$d[]=$tbl;
 
@@ -1048,7 +1048,7 @@ class aw_table extends aw_template
 						$val = "";
 					};
 
-					$tbl .= ($tbl?";":"").$this->_format_csv_field($val);
+					$tbl .= ($tbl?$sep:"").$this->_format_csv_field($val,$sep);
 				};
 				$d[]=$tbl;
 			};
