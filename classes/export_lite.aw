@@ -80,7 +80,7 @@ class export_lite extends aw_template
 		// ut fix
 		if (aw_ini_get("site_id") == 900)
 		{
-			$this->db_query("UPDATE static_content SET lang_id = 1 WHERE site_id = 900 AND section=250");
+			$this->db_query("UPDATE static_content SET lang_id = 1 WHERE site_id = 900 AND section IN(250,235,234,236)");
 		}
 		echo "<br />all done. <br /><br />\n\n";
 		die();
@@ -295,24 +295,31 @@ class export_lite extends aw_template
 		//$h_id = md5($url).",".$lang_id;
 		$h_id = $this->hashes[$url];
 
-		if ($modified < 1)
+		if (preg_match("/<!-- MODIFIED:(.*) -->/U", $o_fc, $mt))
 		{
-			preg_match("/<!-- MODIFIED:(.*) -->/U", $o_fc, $mt);
-			$modified = trim($mt[1]);
+			$nmodified = trim($mt[1]);
 			//echo "preg match for time  = $modified <br>";
-			if (!is_number($modified) && $modified != "")
+			if (!is_number($nmodified) && $nmodified != "")
 			{
-				list($d,$m,$y) = explode("/", $modified);
-
-				$modified = mktime(0,0,0,$m, $d, $y);
+				list($d,$m,$y) = explode("/", $nmodified);
+	
+				$nmodified = mktime(0,0,0,$m, $d, $y);
 			}
-			if ($modified < 1)
+			if ($nmodified > 1)
 			{
-				$modified = time();
+				$modified = $nmodified;
 			}
 		}
 		
-	
+		if (!$modified)
+		{
+			$modified = time();
+		}
+		
+		if (strpos($url, "use_table") !== false)
+		{
+			$modified = time();
+		}
 		// now, we also gots to ask the content without menus, cause we don't need to 
 		// search no stinkin menus.
 		$sep = "?";
@@ -367,6 +374,14 @@ class export_lite extends aw_template
 			$cur_sec = $paramd["section"];
 		}
 
+		if (aw_ini_get("site_id") == 900)
+		{
+			if ($cur_sec == 250 || $cur_sec == 235 || $cur_sec == 234 || $cur_sec == 236)
+			{
+				$lang_id = 1;
+			}
+		}
+		
 		$t_id = $this->db_fetch_field("SELECT id FROM static_content WHERE id = '$h_id'","id");
 
 		if ($t_id == $h_id)
