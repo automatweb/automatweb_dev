@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.2 2001/05/19 23:32:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.3 2001/05/22 10:52:03 kristo Exp $
 // klass piltide manageerimiseks
 global $orb_defs;
 $orb_defs["images"] = array("new"						=> array("function"	=> "add",		"params"	=> array("parent")),
@@ -20,17 +20,17 @@ class images extends aw_template
 
 	function add($arr)
 	{
-		$this->di->mk_path($arr[parent], "Lisa pilt");
+		$this->di->mk_path($arr["parent"], "Lisa pilt");
 		$this->di->read_template("nupload.tpl");
-		$this->di->vars(array("reforb" => $this->mk_reforb("submit", array("parent" => $arr[parent]))));
+		$this->di->vars(array("reforb" => $this->mk_reforb("submit", array("parent" => $arr["parent"]))));
 		return $this->di->parse();
 	}
 
 	function submit($arr)
 	{	
 		global $pilt, $pilt_type,$comment;
-		$ar = $this->di->_upload(array("filename" => $pilt, "file_type" => $pilt_type, "oid" => $arr[parent], "descript" => $comment,"link" => $arr["link"], "newwindow" => $arr["newwindow"]));
-		return $this->mk_my_orb("change", array("id" => $arr[parent]),"document");
+		$ar = $this->di->_upload(array("filename" => $pilt, "file_type" => $pilt_type, "oid" => $arr["parent"], "descript" => $comment,"link" => $arr["link"], "newwindow" => $arr["newwindow"]));
+		return $this->mk_my_orb("change", array("id" => $arr["parent"]),"document");
 	}
 
 	function change($arr)
@@ -53,7 +53,7 @@ class images extends aw_template
 		global $pilt, $pilt_type,$comment;
 		$ar = $this->di->_replace(array("filename" => $pilt, "file_type" => $pilt_type, "oid" => $arr["parent"], "comment" => $comment,"poid" => $arr["id"],"idx" => $arr["idx"],"link" => $arr["link"], "newwindow" => $arr["newwindow"]));
 	
-		return $this->mk_my_orb("change", array("id" => $arr[parent]),"document");
+		return $this->mk_my_orb("change", array("id" => $arr["parent"]),"document");
 	}
 
 	function delete($arr)
@@ -72,15 +72,19 @@ class images extends aw_template
 	}
 }
 
-class db_images extends aw_template {
+class db_images extends aw_template 
+{
 	var $imgdir;
 	var $imgurl;
 	var $itypes;
-	function db_images() {
+
+	function db_images() 
+	{
 		global $basedir;
-		global $baseurl;
-		$this->imgdir = $basedir . "/img";
-		$this->imgurl = $baseurl . "/img";
+		global $baseurl,$site_basedir;
+		$this->imgdir = $site_basedir . "/img";	// we put images here,but some older images are 
+		$this->imgdir2 = $basedir . "/img";			// in here so if we can't find them from the prev one, we look here too
+		$this->imgurl = $baseurl . "/img";			
 		// lubatud failitüüpide nimekiri
 		$this->itypes = array("jpg" => "image/jpeg",
 		                      "gif"  => "image/gif",
@@ -94,7 +98,8 @@ class db_images extends aw_template {
 	// pildid on kõik objektide tabelis registeeritud, 
 	// käime siis kõik objekti lapsed läbi ja võtame
 	// pildid  ning joinime neile külge data piltide tabelist
-	function list_by_object($oid,$period = 0,$sortby = "",$sortorder = "") {
+	function list_by_object($oid,$period = 0,$sortby = "",$sortorder = "") 
+	{
 		if ($period > 0) 
 		{
 			$sufix = "AND objects.period = '$period'";
@@ -117,13 +122,14 @@ class db_images extends aw_template {
 
 	// automatweb/images.aw kasutab seda muudetava pildi kohta
 	// info saamiseks
-	function get_img_by_id($id) {
+	function get_img_by_id($id) 
+	{
 		$q = "SELECT objects.*,images.* FROM images
 			LEFT JOIN objects ON (objects.oid = images.id)
 			WHERE images.id = '$id'";
 		$this->db_query($q);
 		$row = $this->db_fetch_row();
-		$row["url"] = $this->get_url($row[file]);
+		$row["url"] = $this->get_url($row["file"]);
 		return $row;
 	}
 
@@ -140,54 +146,64 @@ class db_images extends aw_template {
 	}
 
 	// kontrollib katalooma olemazolu ja kirjutatavust
-	function check_dir($dir) {
+	function check_dir($dir) 
+	{
 		$d = $this->imgdir . "/$dir";
 		return file_exists($d) && is_writeable($d) && is_dir($d);
 	}
 
 	// tekitab katalooma
-	function create_dir($dir) {
+	function create_dir($dir) 
+	{
 		$d = $this->imgdir . "/$dir";
 		mkdir($d,0777);
 	}
 
-	function get_url($url) {
+	function get_url($url) 
+	{
+		global $ext;
 		$first = substr($url,0,1);
-		#$url = $this->imgurl . "/$first/$url";
-		$url = $GLOBALS["baseurl"]."/img.aw?file="  . "$url";
+		$url = $GLOBALS["baseurl"]."/img.$ext?file="."$url";
 		return $url;
 	}
 
 	// kontrollib, kas pakutava pildi mimetüüp on lubatud tüüpide nimekirjas	
-	function is_valid_image($type) {
+	function is_valid_image($type) 
+	{
 		$valid = 0;
-		while(list(,$v) = each($this->itypes)) {
-			if ($type == $v) {
+		while(list(,$v) = each($this->itypes)) 
+		{
+			if ($type == $v) 
+			{
 				$valid = 1;
 			};
 		};
 		return $valid;
 	}
 
-	function get_extension($type) {
+	function get_extension($type) 
+	{
 		reset($this->itypes);
-		while(list($k,$v) = each($this->itypes)) {
-			if ($type == $v) {
+		while(list($k,$v) = each($this->itypes)) 
+		{
+			if ($type == $v) 
+			{
 				$retval = $k;
 			};
 		};
 		return $retval;
 	}
 	
-	function replace($filename,$file_type,$oid,$idx,$descript,$poid, $ignore_type = false, $file_oname = "") {
-		$params[filename] = $filename;
-		$params[file_type] = $file_type;
-		$params[oid] = $oid;
-		$params[idx] = $idx;
-		$params[descript] = $descript;
-		$params[poid] = $poid;
-		$params[ignore_type] = $ignore_type;
-		$params[file_oname] = $file_oname;
+	function replace($filename,$file_type,$oid,$idx,$descript,$poid, $ignore_type = false, $file_oname = "") 
+	{
+		$params["filename"] = $filename;
+		$params["file_type"] = $file_type;
+		$params["oid"] = $oid;
+		$params["idx"] = $idx;
+		$params["descript"] = $descript;
+		$params["poid"] = $poid;
+		$params["ignore_type"] = $ignore_type;
+		$params["file_oname"] = $file_oname;
 		return $this->replace($params);
 	}
 	
@@ -203,14 +219,18 @@ class db_images extends aw_template {
 			{
 				$idx = 0;
 			};
-//			$old = $this->get_img_by_oid($oid,$idx);
 			$old = $this->get_img_by_id($poid);
 			// mõtleme välja katalooma, kus vana pilti hoiti
-			$start = substr($old[file],0,1);
+			$start = substr($old["file"],0,1);
 			// kui vana pilt ikka existeerib, siis märgime tolle kustutatuks
-			if (file_exists($this->imgdir . "/$start/$old[file]")) 
+			if (file_exists($this->imgdir."/$start/$old[file]"))  
 			{
-				$this->delete_object($old[id]);
+				$this->delete_object($old["id"]);
+			}
+			else
+			if (file_exists($this->imgdir2."/$start/$old[file]"))  
+			{
+				$this->delete_object($old["id"]);
 			};
 			$fname = $this->gen_uniq_id();
 			$start = substr($fname,0,1);
@@ -220,7 +240,7 @@ class db_images extends aw_template {
 				$this->create_dir($start);
 			};
 			// leiame faili nime, millesse kirjutada
-			$target = $this->imgdir . "/$start/$fname.$ext";
+			$target = $this->imgdir."/$start/$fname.$ext";
 			// kopeerime faili
 			if (copy($filename,$target)) 
 			{
@@ -237,7 +257,7 @@ class db_images extends aw_template {
 				{
 					$this->period = $period;
 				};
-				$p_oid = $this->register_object($oid,$pname,6,"$comment");
+				$p_oid = $this->new_object(array("parent" => $oid,"name" => $pname,"class_id" => 6,"comment" => $comment));
 				global $link;
 				$this->db_query("INSERT INTO images(id,file,idx,link,newwindow) VALUES($p_oid, '$fname.$ext' , '$idx','$link','$newwindow')");
 				$this->_log("image","Muutis pilti $p_oid");
@@ -258,15 +278,16 @@ class db_images extends aw_template {
 	}
 
 		
-	function upload($filename,$file_type,$oid,$descript, $ignore_type = false, $file_oname = "", $period = 0) {
+	function upload($filename,$file_type,$oid,$descript, $ignore_type = false, $file_oname = "", $period = 0) 
+	{
 		// kontrollime failitüüpi
-		$params[filename] = $filename;
-		$params[file_type] = $file_type;
-		$params[oid] = $oid;
-		$params[descript] = $descript;
-		$params[ignore_type] = $ignore_type;
-		$params[file_oname] = $file_oname;
-		$params[period] = $period;
+		$params["filename"] = $filename;
+		$params["file_type"] = $file_type;
+		$params["oid"] = $oid;
+		$params["descript"] = $descript;
+		$params["ignore_type"] = $ignore_type;
+		$params["file_oname"] = $file_oname;
+		$params["period"] = $period;
 		return $this->_upload($params);
 	}
 	
@@ -294,8 +315,11 @@ class db_images extends aw_template {
 		// tirime kohale info objektide indeksite kohta
 		$olast = $this->get_last($oid);
 		// arvutame uue pildi jaox indexi
-		$idx = $olast[image]; 
-		if (!$idx) { $idx = 0; };
+		$idx = $olast["image"]; 
+		if (!$idx) 
+		{ 
+			$idx = 0; 
+		};
 		$idx++;
 		// genereerime unikaalse nime faili jaoks
 		$fname = $this->gen_uniq_id();
@@ -330,11 +354,13 @@ class db_images extends aw_template {
 				$this->period = $period;
 			};
 			$pp = $this->get_object($oid);
-			$pid = $this->new_object(array(	"parent" => $oid,
-							"name" => $pname,
-							"class_id" => 6,
-							"comment" => "$descript",
-							"period" => ($set_period == 1 ? $pp[period] : $period)));
+			$pid = $this->new_object(array(
+				"parent" => $oid,
+				"name" => $pname,
+				"class_id" => 6,
+				"comment" => "$descript",
+				"period" => ($set_period == 1 ? $pp[period] : $period)
+			));
 			// ja paigutame info piltide tabelisse
 			$this->db_query("INSERT INTO images (id,file,idx,link,newwindow) VALUES('$pid','$fname.$ext','$idx','$link','$newwindow')");
 			// paneme paika viimase pildi indexi
@@ -358,44 +384,43 @@ class db_images extends aw_template {
 
 	function prepare_proc_text($parent)
 	{
-		$this->pacl = new acl($parent);
-		$this->pacl->query_parent();
-
 		$this->proc_parent = $parent;
 		$this->proc=array();
-		$this->db_query("SELECT objects.*, images.*,".$this->pacl->sql()."
+		$this->db_query("SELECT objects.*, images.*
 										 FROM objects 
 										 LEFT JOIN images ON objects.oid=images.id 
-										 LEFT JOIN acl ON acl.oid = objects.oid
-										 WHERE objects.parent=$parent AND objects.status = 2 AND objects.class_id=6
-										 GROUP BY objects.oid");
+										 WHERE objects.parent=$parent AND objects.status = 2 AND objects.class_id=6");
 		while ($row = $this->db_next())
+		{
 			$this->proc[] = $row;
+		}
 	}
 
 	function proc_text($text, $parent)
 	{
 		if (strchr($text, "#p")== "")	// if the text contains no aliases don't bother to check
+		{
 			return $text;
+		}
 
 		if ($this->proc_parent != $parent)
+		{
 			$this->prepare_proc_text($parent);
-
-		$iacl = new acl;
+		}
 
 		reset($this->proc);
 		while (list(, $v) = each($this->proc))
 		{
-			$u = $this->get_url($v[file]);
-			if ($v[link] != '')
+			$u = $this->get_url($v["file"]);
+			if ($v["link"] != '')
 			{
-				$text = str_replace("#p".$v[idx]."v#", "<table align=left><tr><td align=center><a href='".$v[link]."'><img src='$u' border=0></a><br>".$v[comment]."</td></tr></table>", $text);
-				$text = str_replace("#p".$v[idx]."p#", "<table align=right><tr><td align=center><a href='".$v[link]."'><img src='$u' border=0></a><br>".$row[comment]."</td></tr></table>", $text);
+				$text = str_replace("#p".$v["idx"]."v#", "<table align=left><tr><td align=center><a href='".$v["link"]."'><img src='$u' border=0></a><br>".$v["comment"]."</td></tr></table>", $text);
+				$text = str_replace("#p".$v["idx"]."p#", "<table align=right><tr><td align=center><a href='".$v["link"]."'><img src='$u' border=0></a><br>".$row["comment"]."</td></tr></table>", $text);
 			}
 			else
 			{
-				$text = str_replace("#p".$v[idx]."v#", "<table align=left><tr><td align=center><img src='$u'><br>".$v[comment]."</td></tr></table>", $text);
-				$text = str_replace("#p".$v[idx]."p#", "<table align=right><tr><td align=center><img src='$u'><br>".$row[comment]."</td></tr></table>", $text);
+				$text = str_replace("#p".$v["idx"]."v#", "<table align=left><tr><td align=center><img src='$u'><br>".$v["comment"]."</td></tr></table>", $text);
+				$text = str_replace("#p".$v["idx"]."p#", "<table align=right><tr><td align=center><img src='$u'><br>".$row["comment"]."</td></tr></table>", $text);
 			}
 		}
 		return $text;
@@ -403,29 +428,22 @@ class db_images extends aw_template {
 
 	function gen_list($parent)
 	{
-		$pacl = new acl($parent);
-		$pacl->query_parent();
-
-		$tacl = new acl;
 		$this->read_template("list.tpl");
 		$this->vars(array("LINE" => ""));
-		$this->db_query("SELECT status,images.* , objects.comment as comment, ".$tacl->sql()."
+		$this->db_query("SELECT status,images.* , objects.comment as comment
 			FROM objects
 			LEFT JOIN images ON (objects.oid = images.id)
-			LEFT JOIN acl ON acl.oid = objects.oid
 			WHERE objects.parent = '$parent' AND class_id = '6' AND objects.status=2
-			GROUP BY objects.oid
 			ORDER BY idx");
 		while($row = $this->db_next())
 		{
-			$this->vars(array("image_number"	=> $row[idx],
-												"image_url"			=> $this->get_url($row[file]),
-												"image_comment" => $row[comment],
-												"image_id"			=> $row[id],
-												"image_link"		=> $row[link],
+			$this->vars(array("image_number"	=> $row["idx"],
+												"image_url"			=> $this->get_url($row["file"]),
+												"image_comment" => $row["comment"],
+												"image_id"			=> $row["id"],
+												"image_link"		=> $row["link"],
 												"parent"				=> $parent));
 
-			$cd = ""; $cc = "";
 			$cc = $this->parse("CAN_CHANGE");
 			$cd = $this->parse("CAN_DELETE");
 
@@ -451,10 +469,10 @@ class db_images extends aw_template {
 		$pic = $this->get_img_by_id($id);
 		$this->vars(array("parent"  => $parent,
 						 				  "poid"    => $id,
-											"comment" => $pic[comment],
-											"idx"     => $pic[idx],
-											"link"    => $pic[link],
-											"url"     => $pic[url]));
+											"comment" => $pic["comment"],
+											"idx"     => $pic["idx"],
+											"link"    => $pic["link"],
+											"url"     => $pic["url"]));
 		return $this->parse();
 	}
 };
