@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.39 2003/02/27 09:50:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.40 2003/03/17 18:48:52 duke Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 class orb extends aw_template 
@@ -79,23 +79,23 @@ class orb extends aw_template
 		foreach($cl2load as $clname)
 		{
 			// not yet found
-			if (not($found))
+			if (!$found)
 			{
 				// only load if definitions for this class are
 				// not yet loaded (master class)
-				if (not($_orb_defs[$clname]))
+				if (empty($_orb_defs[$clname]))
 				{
 					$_orb_defs = $this->try_load_class($clname);
 				};
+				$fun = isset($_orb_defs[$clname][$action]) ? $_orb_defs[$clname][$action] : false;
 
-				$fun = $_orb_defs[$clname][$action];
 				// XXX: fallback to change for objects which do not have view action
 				if ( ($action == "view") && (!is_array($fun)) )
 				{
 					$action = "change";
 					$fun = $_orb_defs[$clname][$action];
 				};
-				$fun = $_orb_defs[$clname][$action];
+
 
 				if (is_array($fun))
 				{
@@ -111,13 +111,14 @@ class orb extends aw_template
 		};
 
 		// still not found?
-		if (not($found))
+		if (!$found)
 		{
 			$this->raise_error(ERR_ORB_CAUNDEF,sprintf(E_ORB_CLASS_ACTION_UNDEF,$action,$class),true,$silent);
 		};
 
 		// check acl
 		$this->do_orb_acl_checks($orb_defs[$class][$action], $vars);
+
 
 		if (isset($vars["reforb"]) && $vars["reforb"] == 1)
 		{
@@ -185,7 +186,7 @@ class orb extends aw_template
 				{
 					$this->raise_error(ERR_ORB_CPARM,sprintf(E_ORB_CLASS_PARM,$key,$action,$class),true,$silent);
 				};
-				
+
 				$this->validate_value(array(
 					"type" => $orb_defs[$class][$action]["types"][$key],
 					"name" => $key,
@@ -469,7 +470,7 @@ class orb extends aw_template
 		// try and figure out the folder for this class 
 		$folder = "";
 
-		if ($ret[$class]["___folder"])
+		if (isset($ret[$class]["___folder"]))
 		{
 			$folder = $ret[$class]["___folder"]."/";
 		}
