@@ -38,6 +38,16 @@
 </td>
 </tr>
 <tr>
+	<td colspan=2 class="fcaption">Vali men&uuml;d, mille alt viimaseid dokumente n&auml;idatakse:</td>
+</tr>
+<tr>
+	<td colspan=2 class="fcaption"><select size="20" name="last_menus[]" multiple class="small_button">{VAR:last_menus}</select></td>
+</tr>
+<tr>
+	<td class="fcaption">Mitu viimast dokumenti:</td>
+	<td class="fcaption"><input type="text" size="2" class="small_button" name="num_last" value='{VAR:num_last}'></td>
+</tr>
+<tr>
 <td class="fcaption" colspan=2><input type='submit' VALUE='{VAR:LC_PROMO_SHOW}' CLASS="small_button"></td>
 </tr>
 </table>

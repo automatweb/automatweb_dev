@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.16 2001/11/08 11:55:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.17 2001/11/20 13:40:23 cvs Exp $
 classload("images");
 lc_load("gallery");
 global $orb_defs;
@@ -419,10 +419,17 @@ class gallery extends aw_template
 					));
 					if ($cell["tnurl"] != "")
 					{
-						$c.=$this->parse("IMAGE");
+						if ($cell["bigurl"] != "" || !$this->is_template("NOLINK_IMAGE")) 
+						{
+							$c.=$this->parse("IMAGE");
+						}
+						else
+						{
+							$c.=$this->parse("NOLINK_IMAGE");
+						}
 					}
 				}
-				$this->vars(array("IMAGE" => $c));
+				$this->vars(array("IMAGE" => $c,"NOLINK_IMAGE" => ""));
 				$l.=$this->parse("LINE");
 			}
 		}

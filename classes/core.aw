@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.67 2001/11/20 13:19:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.68 2001/11/20 13:40:23 cvs Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -250,7 +250,8 @@ class core extends db_connector
 	function dmsg($msg)
 	{
 		global $HTTP_SESSION_VARS;
-		if (($HTTP_SESSION_VARS["debugging"]) || ($GLOBALS["DEBUG"] == 1))
+		global $DEBUG;
+		if ($HTTP_SESSION_VARS["debugging"] || $DEBUG)
 		{
 			if (is_array($msg))
 			{
@@ -361,6 +362,10 @@ class core extends db_connector
 			case "9":
 				// 04.01.00
 				$dateformat = "H:i:s d-m-Y";
+				break;
+			case "10":
+				// 12:33
+				$dateformat = "H:i";
 				break;
 			default:
 				// 12:22 04-01

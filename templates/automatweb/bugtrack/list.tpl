@@ -29,4 +29,5 @@ function DoFilter(what)
 </script>
 {VAR:table}
 {VAR:reforb}
+
 </form>

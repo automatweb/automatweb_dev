@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.60 2001/11/20 11:35:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.61 2001/11/20 13:40:23 cvs Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -105,7 +105,9 @@ class document extends aw_template
 			"Jrk Esileht vasak" => "frontpage_left_jrk",
 			"Jrk Esileht keskel" => "frontpage_center_jrk",
 			"Jrk Esileht keskel all" => "frontpage_center_bottom_jrk",
-			"Jrk Esileht parem" => "frontpage_right_jrk");
+			"Jrk Esileht parem" => "frontpage_right_jrk",
+			"no_last" => "no_last"
+		);
 
 		// nini. siia paneme nyt kirja v2ljad, mis dokumendi metadata juures kirjas on
 		$this->metafields = array("show_print","show_last_changed");
@@ -653,13 +655,23 @@ class document extends aw_template
 			$doc["content"] = str_replace($matches[0],"<a name='" . $matches[3] . "'> </a>",$doc["content"]);
 		};
 
+		// viimati muudetud dokude listi rida
+		if (preg_match("/#viimati_muudetud num=\"(.*)\"#/",$doc["content"], $matches))
+		{
+			$doc["content"] = str_replace("#viimati_muudetud num=\"".$matches[1]."\"#",$this->get_last_doc_list($matches[1]),$doc["content"]);
+		}
+
 		// tekitame keywordide lingid
 		// this should be toggled with a preference in site config
 		if (defined("KEYWORD_RELATIONS"))
 		{
-			$q = "SELECT keywords.keyword AS keyword,keyword_id FROM keywordrelations LEFT JOIN keywords ON (keywordrelations.keyword_id = keywords.oid) WHERE keywordrelations.id = '$docid'";
-			$this->db_query($q);
-			while ($row = $this->db_next())
+			$keywords[$row["keyword"]] = sprintf(" <a href='%s' title='%s' target='_blank'>%s<sup><b>*</b></sup></a> ",$this->mk_my_orb("lookup",array("id" => $row["keyword_id"]),"document"),"LINK",$row["keyword"]);
+		}
+		
+		if (is_array($keywords))
+		{
+			// performs the actual search and replace
+			foreach ($keywords as $k_key => $k_val)
 			{
 				$keywords[$row["keyword"]] = sprintf(" <a href='%s' title='%s' target='_blank'>%s<sup><b>*</b></sup></a> ",$this->mk_my_orb("lookup",array("id" => $row["keyword_id"]),"document"),"LINK",$row["keyword"]);
 			}
@@ -910,6 +922,7 @@ class document extends aw_template
 			"EDIT" 		=> ($this->prog_acl("view",PRG_MENUEDIT)) ? $this->parse("EDIT") : "",
 			"SHOW_MODIFIED" => ($doc["show_modified"]) ? $this->parse("SHOW_MODIFIED") : "",
 			"COPYRIGHT"	=> ($doc["copyright"]) ? $this->parse("COPYRIGHT") : "",
+			"logged" => ($GLOBALS["uid"] != "" ? $this->parse("logged") : "")
 			));
 		
 		// keeleseosed
@@ -1136,7 +1149,7 @@ class document extends aw_template
 		// nende sisu, mida vormis kasutati
 		while(list($fcap,$fname) = each($this->knownfields)) 
 		{
-			if (isset($data[$fname]) || $fname=="esilehel" || $fname=="esileht_yleval" || $fname=="esilehel_uudis" || $fname=="is_forum" || $fname=="lead_comments" || $fname=="showlead" || $fname=="yleval_paremal" || $fname == "show_title" || $fname=="copyright" || $fname == "show_modified" || $fname == "title_clickable" || $fname == "newwindow" || $fname == "no_right_pane" || $fname == "no_left_pane" || $fname == "no_search" || $fname == "frontpage_left" || $fname == "frontpage_center" || $fname == "frontpage_center_bottom" || $fname == "frontpage_right")  
+			if (isset($data[$fname]) || $fname=="esilehel" || $fname=="esileht_yleval" || $fname=="esilehel_uudis" || $fname=="is_forum" || $fname=="lead_comments" || $fname=="showlead" || $fname=="yleval_paremal" || $fname == "show_title" || $fname=="copyright" || $fname == "show_modified" || $fname == "title_clickable" || $fname == "newwindow" || $fname == "no_right_pane" || $fname == "no_left_pane" || $fname == "no_search" || $fname == "frontpage_left" || $fname == "frontpage_center" || $fname == "frontpage_center_bottom" || $fname == "frontpage_right" || $fname == "no_last")  
 			{
 				$q_parts[] = "$fname = '$data[$fname]'";
 				// paneme väljade nimed ka kirja, et formeerida logi
@@ -1688,6 +1701,7 @@ class document extends aw_template
 											"frontpage_center_jrk" => $document["frontpage_center_jrk"],
 											"frontpage_center_bottom_jrk" => $document["frontpage_center_bottom_jrk"],
 											"frontpage_right_jrk" => $document["frontpage_right_jrk"],
+											"no_last" => checked($document["no_last"]),
 											));
 
 
@@ -3237,6 +3251,23 @@ class document extends aw_template
 		};
 		$tt->sort_by(array("field" => $sortby));
 		return $tt->draw();
+	}
+
+	function get_last_doc_list($num)
+	{
+		$tp = "";
+		$this->db_query("SELECT objects.oid as oid ,name,objects.modified as modified FROM objects LEFT JOIN documents ON documents.docid = objects.brother_of WHERE (class_id = ".CL_DOCUMENT." OR class_id = ".CL_PERIODIC_SECTION.") AND status = 2 ORDER BY objects.modified DESC LIMIT $num");
+		while ($row = $this->db_next())
+		{
+			$this->vars(array(
+				"title" => $row["name"],
+				"docid" => $row["oid"],
+				"modified" => $this->time2date($row["modified"],2)
+			));
+			$tp.=$this->parse("lchanged");
+		}
+		$this->vars(array("lchanged" => ""));
+		return $tp;
 	}
 };
 ?>

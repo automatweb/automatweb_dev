@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.27 2001/11/20 13:19:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.28 2001/11/20 13:40:23 cvs Exp $
 classload("users_user","config","form");
 
 load_vcl("table");
@@ -626,10 +626,13 @@ class users extends users_user
 
 	////
 	// !generates form for changing the password inside the site
-	function user_change_pwd()
+	function user_change_pwd($section = 0)
 	{
 		global $uid;
 		$this->read_template("changeuserpwd.tpl");
+		$this->vars(array(
+			"section" => $section
+		));
 		return $this->parse();
 	}
 
@@ -777,37 +780,37 @@ class users extends users_user
 		$row = $this->db_next();
 		if ($row)
 		{
-			$add_state[error] = "<b><font color='red'>Selline kasutaja juba on, vali uus kasutajanimi.</font></b>";
+			$add_state[error] = LC_USERADD_ERROR_EXISTS;;
 			return false;
 		}
 
 		if (!is_valid("uid",$a_uid))
 		{
-			$add_state[error] = "<b><font color='red'>Kasutajanimes tohib kasutada ainult t&auml;hti, numbreid ja allkriipsu.</font></b>";
+			$add_state[error] = LC_USERADD_ERROR_SYMBOL;
 			return false;
 		}
 
 		if ($pass != $pass2)
 		{
-			$add_state[error] = "<b><font color='red'>Paroolid ei kattu!</font></b>";
+			$add_state[error] = LC_USERADD_ERROR_PWD;
 			return false;
 		}
 
 		if (!is_valid("password", $pass))
 		{
-			$add_state[error] = "<b><font color='red'>Paroolis tohib kasutada ainult t&auml;hti, numbreid ja allkriipsu</font></b>";
+			$add_state[error] = LC_USERADD_ERROR_PWD_SYMBOL;
 		return false;
 		}
 
 		if (strlen($a_uid) < 3)
 		{
-			$add_state[error] = "<b><font color='red'>Kasutajanimi peab olema v&auml;hemalt 3 t&auml;he pikkune.</font></b>";
+			$add_state[error] = LC_USERADD_ERROR_SHORT;
 			return false;
 		}
 
 		if (strlen($pass) < 3)
 		{
-			$add_state[error] = "<b><font color='red'>Parool peab olema v&auml;hemalt 3 t&auml;he pikkune.</font></b>";
+			$add_state[error] = LC_USERADD_ERROR_PWD_SHORT;
 			return false;
 		}
 		$add_state[error] = "";

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.12 2001/11/20 13:05:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.13 2001/11/20 13:40:23 cvs Exp $
 // mailinglist saadetavate mailide klass
 lc_load("mailinglist");
 	class email extends aw_template
@@ -352,22 +352,12 @@ lc_load("mailinglist");
 				if (!$this->is_email($user[mail]))
 					continue;
 
-/*				if ($user["mail"] == "stevie.kerr@beat106.com")
-				{
-					$send = true;
-				}
-
-				if (!$send)
-				{
-					continue;
-				}*/
-
 				if ($mail[mail_from_name] != "")
 					$from = $mail[mail_from_name]." <".$mail[mail_from].">";
 				else
 					$from = $mail[mail_from];
 					
-				$f = popen("/usr/sbin/sendmail -f '$from' ".$user[mail], "w");
+/*				$f = popen("/usr/libexec/sendmail/sendmail -f '$from' ".$user[mail], "w");
 				fwrite($f, "From: $from\n");
 				fwrite($f, "To: ".$user[name]." <".$user[mail].">\n");
 				fwrite($f, "Return-Path: $from\n");
@@ -380,7 +370,27 @@ lc_load("mailinglist");
 				$c = str_replace("\r","",$c);
 //				$c = str_replace("\n\n","\n\n\n",$c);
 				fwrite($f, "\n".$c."\n");
-				pclose($f);
+				pclose($f);*/
+				// now use smtp class to send the email
+
+				$msg = "Return-path: $from\n";
+				$msg.= "Date: ".gmdate("D, j M Y H:i:s T",time())."\n";
+				$msg.= "From: $from\n";
+				$msg.= "Return-Path: $from\n";
+				$msg.= "Subject: ".$mail["subj"]."\n";
+				$msg.= "To: ".$user["name"]." <".$user["mail"].">\n";
+				$msg.= "Sender: $from\n";
+				$msg.= "X-Mailer: Autom@tMail\n\n";
+				$msg.= $content;
+				$c = $this->mk_mail($user_id, $mail[contents], $user[name], $user[mail],$id);
+				$c = $this->mk_stamps($c);
+				$c = str_replace("\r","",$c);
+				$msg.= "\n".$c."\n";
+
+				classload("smtp");
+				$t = new smtp;
+				$t->send_message($GLOBALS["smtp_server"], $from, $user["mail"], $msg);
+
 				echo LC_EMAIL_SENT_EMAIL3, $user[name], "(" ,  $user[mail], ") 'le<br>";
 				flush();
 			}

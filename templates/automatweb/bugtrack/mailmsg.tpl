@@ -7,4 +7,5 @@ Tegevuseks märkis:
 {VAR:text_result}
 --------------------------------------------
 Vea kirjeldus oli:
+
 {VAR:text}

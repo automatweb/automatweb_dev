@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.7 2001/11/14 19:09:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.8 2001/11/20 13:40:23 cvs Exp $
 // Generic calendar class
 
 // php arvab by default, et pühapäev on 0.
@@ -24,7 +24,8 @@ class calendar extends aw_template
 		global $lc_calendar;
 		if (is_array($lc_calendar))
 		{
-			$this->vars($lc_calendar);}
+			$this->vars($lc_calendar);
+		};
 	}
 
 	function draw_month($args = array())
@@ -102,6 +103,10 @@ class calendar extends aw_template
 					"contents" => "&nbsp;",
 				));
 			};
+<<<<<<< calendar.aw
+			$_day = sprintf("%02d",$day);
+			$_mask = ($args["marked"][$_day]) ? "<b>%s</b>" : "%s";
+=======
 				if ($marked[$day])
 				{
 					$markup = "<b>%s</b>";
@@ -110,8 +115,13 @@ class calendar extends aw_template
 				{
 					$markup = "%s";
 				};
+>>>>>>> 2.7
 			$this->vars(array(
+<<<<<<< calendar.aw
+				"nday" => sprintf($_mask,$day),
+=======
 				"nday" => sprintf($markup,$day),
+>>>>>>> 2.7
 				"daylink" => $this->mk_link($baselink + array("day" => sprintf("%02d",$day))),
 				"day" => sprintf($markup,$day),
 			));
@@ -137,7 +147,10 @@ class calendar extends aw_template
 		list($prevmon,$prevyear) = explode("|",date("m|Y",mktime(0,0,0,$mon-1,1,$year)));	
 		list($nextmon,$nextyear) = explode("|",date("m|Y",mktime(0,0,0,$mon+1,1,$year)));	
 
-		$mname = get_lc_month($mon);
+		$mnames = array("boo","january","february","march","april","may","june","jule",
+			"august","september","october","november","december");
+		#$mname = get_lc_month($mon);
+		$mname = $mnames[$mon];
 
 		$this->vars(array(
 			"caption" => $mname . date(" Y",mktime(0,0,0,$mon,1,$year)),
@@ -151,7 +164,8 @@ class calendar extends aw_template
 			"nextyear" => $nextyear,
 			"mon"	=> $mon,
 			"year"	=> $year,
-			"add" => $add));
+			"add" => $add,
+		));
 		$retval = $this->parse();
 		return $retval;
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.23 2001/11/20 13:19:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.24 2001/11/20 13:40:23 cvs Exp $
 define(PER_PAGE,10);
 define(PER_FLAT_PAGE,20);
 define(TOPICS_PER_PAGE,7);
@@ -81,6 +81,8 @@ class msgboard extends aw_template
 		if ($msgboard_type == "flat")	// the wussy version
 			return $this->show_flat($id, $page,$forum_id);
 
+
+		$this->quote(&$id);
 		// so, if show_flat and show_treaded are separate functions, then I assume
 		// this rest of this function deals with nested comments. But shouldn't
 		// we make this a separate function as well? And really, this whole class
@@ -289,7 +291,7 @@ class msgboard extends aw_template
 			// eh?
 			$ip = "---".substr($ip,$pp);
 
-			
+			//we don't want user to claim that his name is </html><plaintext>, do we?
 			$from = strip_tags($from);
 			$subj = strip_tags($subj);
 			$email = strip_tags($email);
@@ -501,6 +503,7 @@ class msgboard extends aw_template
 		$tables = array("objects");
 		$c = "";
 		$count = 0;
+		$has_c = true;
 		// board_id on topic
 		if ($s_comments)
 		{
@@ -510,7 +513,12 @@ class msgboard extends aw_template
 		else
 		{
 			// need to figure out the id-s of all topics.
-			$q = "SELECT * FROM objects WHERE parent = '$forum_id' AND status = 2 AND name LIKE '%$subject%' AND comment LIKE '%$comment%' AND class_id = " . CL_MSGBOARD_TOPIC . " AND site_id = " . $GLOBALS["SITE_ID"];
+			$has_c = $this->get_object_metadata(array(
+				"oid" => $forum_id,
+				"key" => "comments"				
+			));
+
+			$q = "SELECT * FROM objects WHERE parent = '$forum_id' AND status = 2 AND name LIKE '%$subject%' AND createdby LIKE '%$name%' AND comment LIKE '%$comment%' AND class_id = " . CL_MSGBOARD_TOPIC . " AND site_id = " . $GLOBALS["SITE_ID"];
 			$this->db_query($q);
 			while($row = $this->db_next())
 			{
@@ -528,6 +536,11 @@ class msgboard extends aw_template
 			"topic" => $c,
 			"count" => $count,
 		));
+
+		if ($has_c)
+		{
+			$this->vars(array("READ_COMMENTS" => $this->parse("READ_COMMENTS")));
+		}
 		return $this->parse();
 
 	}

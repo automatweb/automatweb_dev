@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/nagu.aw,v 2.2 2001/07/26 16:49:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/nagu.aw,v 2.3 2001/11/20 13:40:23 cvs Exp $
 
 classload("periods","images", "msgboard","config");
 lc_load("nagu");
@@ -7,6 +7,12 @@ class nagu extends aw_template
 {
 	// need kuuluvad keelekonstantide alla ja on mdx seal ka defineeritud
 	var $kuud = array(1 => "Jaanuar", 2 => "Veebruar", 3 => "M&auml;rts", 4 => "Aprill", 5 => "Mai", 6 => "Juuni",7 => "Juuli", 8 => "August", 9 => "September", 10 => "Oktoober", 11 => "November", 12 => "Detsember");
+
+	// kategooriad
+	var $categories = array(
+		"1" => "ClubKid of the year 2001",
+		"2" => "Queen of the year 2001",
+	);
 
 	function nagu()
 	{
@@ -19,15 +25,111 @@ class nagu extends aw_template
 			$this->vars($lc_nagu);}
 	}
 
+	function gen_vote_form($args = array())
+	{
+		extract($args);
+		if ($category != 1)
+		{
+			$category = 2;
+		};
+		classload("config");
+		$config = new db_config();
+		$conf = unserialize($config->get_simple_config("vote_texts"));
+		$this->read_template("voting.tpl");
+		$q = "SELECT * FROM objects WHERE class_id = " . CL_NAGU;
+		$this->db_query($q);
+		$c = "";
+		while($row = $this->db_next())
+		{
+			$unser = unserialize($row["comment"]);
+			if ($unser["category"] == $category)
+			{
+				$this->vars(array(
+					"name" => $row["name"],
+					"imgurl" => $unser["imgurl"],
+					"url" => $unser["url"],
+					"oid" => $row["oid"],
+					"votes" => sprintf("%d",$unser["votes"]),
+
+				));
+				if (not($GLOBALS["clubvote" . $category]))
+				{
+					$this->vars(array(
+						"vote" => $this->parse("vote"),
+					));
+				}
+				else
+				{
+					$this->vars(array(
+						"NUMVOTES" => $this->parse("NUMVOTES")
+					));
+				};
+				$c .= $this->parse("element");
+			};
+
+		}
+		$this->vars(array(
+			"title" => $this->categories[$category],
+			"intro" => ($category == 1) ? $conf["kid"] : $conf["queen"],
+			"vurl" => ($category == 1) ? "/?type=voting&category=2" : "/?type=voting&category=1",
+			"vtitle" => ($category == 1) ? "Vote for Queen of the year 2001" : "Vote for ClubKid of the year 2001",
+			"element" => $c,
+			"category" => $category,
+		));
+
+		if (not($GLOBALS["clubvote" . $category]))
+		{
+			$this->vars(array(
+				"votebutton" => $this->parse("votebutton"),
+			));
+		};
+
+		return $this->parse();
+	}
+
+	function edit_texts()
+	{
+		classload("config");
+		$config = new db_config();
+		$conf = unserialize($config->get_simple_config("vote_texts"));
+		$this->read_template("texts.tpl");
+		$this->vars(array(
+			"queen" => $conf["queen"],
+			"kid" => $conf["kid"],
+		));
+		return $this->parse();
+	}
+
+	function submit_texts($args = array())
+	{
+		extract($args);
+		$ar = array(
+			"queen" => $queen,
+			"kid" => $kid,
+		);
+		$ser = serialize($ar);
+		classload("config");
+		$config = new config();
+		$config->set_simple_config("vote_texts",$ser);
+		// submitib sisestatud tekstid
+	}
+
 	function list_n2od($oid)
 	{
 		$this->read_template("n2gu_list.tpl");
 
-		$t = new db_periods($oid);
-		$t->clist();
-		while ($row = $t->db_next())
+		$q = "SELECT * FROM objects WHERE class_id = " . CL_NAGU;
+		$this->db_query($q);
+		while ($row = $this->db_next())
 		{
-			$this->vars(array("name" => $row[description],"id" => $row[id]));
+			$unser = unserialize($row["comment"]);
+			$this->vars(array(
+				"name" => $row["name"],
+				"oid" => $row[oid],
+				"votes" => sprintf("%d",$unser["votes"]),
+				"category" => $this->categories[$unser["category"]],
+
+			));
 			$l.=$this->parse("LINE");
 		}
 		$this->vars(array("LINE" => $l));
@@ -64,111 +166,87 @@ class nagu extends aw_template
 		return $this->parse();
 	}
 
-	function change($id,$fid)
+	function change($id)
 	{
 		$this->read_template("change.tpl");
 
-		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_NAGU." AND name='$id'");
-		if (!$nagu = $this->db_next())
-			$this->new_object(array("name" => $id, "class_id" => CL_NAGU));
-
+		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_NAGU." AND oid='$id'");
+		$nagu = $this->db_next();
 		$nagu = unserialize($nagu[comment]);
 
 		$t = new db_config;
-		$con = unserialize($t->get_simple_config("nagu_ooc"));
-		$tmp = $con[content];
-		uasort($tmp,__con_sort);
-		reset($tmp);
-		while (list($k,$v) = each($tmp))
-			$ar[$k] = $v[name];
-
-		$c = $nagu[content][$fid];
-		$this->vars(array("fid" => $fid, 
-											"eesnimi" => $c[eesnimi],
-											"kesknimi" => $c[kesknimi],
-											"perenimi" => $c[perenimi], 
-											"imgurl" => $c[imgurl],
-											"man" => ($c[sugu] == "m" ? "CHECKED" : ""),
-											"woman" => ($c[sugu] == "n" ? "CHECKED" : ""),
-											"byear" => $c[byear], 
-											"bmonth" => $this->option_list($c[bmonth],$this->kuud), 
-											"bday" => $this->option_list($c[bday],$this->mk_paevad()),
-											"occ" => $this->multiple_option_list($c[occ],$ar),
-											"id" => $id,
-											"estonian" => $c[estonian] == 1 ? "CHECKED" : ""));
+		$this->vars(array(
+				"name" => $nagu["name"],
+				"url" => $nagu["url"],
+				"categories" => $this->picker($nagu["category"],$this->categories),
+				"imgurl" => $nagu[imgurl],
+				"id" => $id,
+		));
 		return $this->parse();
 	}
+
+	function submit_vote($vote,$category)
+	{
+		$vote = (int)$vote;
+	        $this->db_query("SELECT * FROM objects WHERE class_id = ".CL_NAGU." AND oid='$vote'");
+                $nagu = $this->db_next();
+                $nagu = unserialize($nagu[comment]);
+		$nagu["votes"] = $nagu["votes"] + 1;
+		$ns = serialize($nagu);
+		$this->db_query("update objects set comment = '$ns' WHERE oid = $vote");
+		$id = $this->gen_uniq_id();
+		setcookie("clubvote" . $category,$id,strtotime("+1 month"));
+	}
+		
 
 	function submit($arr)
 	{
 		$this->quote(&$arr);
 		extract($arr);
 
-		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_NAGU." AND name='$id'");
+		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_NAGU." AND oid='$id'");
 		$nagu = $this->db_next();
-		$nagu_oid = $nagu[oid];
-		$nagu = unserialize($nagu[comment]);
-
-		$text = str_replace("\\","",$text);
-		$text2 = str_replace("\\","",$text2);
-		$text3 = str_replace("\\","",$text3);
-		$text = str_replace("'","\"",$text);
-		$text2 = str_replace("'","\"",$text2);
-		$text3 = str_replace("'","\"",$text3);
-
-		if ($type == "textonly")
+		if ($nagu)
 		{
-			$nagu[text] = $text;
-			$nagu[text2] = $text2;
-			$nagu[text3] = $text3;
+			$id = $nagu[oid];
+			$nagu = unserialize($nagu[comment]);
 		}
 		else
 		{
-			if ($fid == -1)
-				$fid = ++$nagu[num];
+			$id = $this->new_object(array(
+				"class_id" => CL_NAGU,
+				"name" => $name,
+			));
+			$nagu = array();
+		};
 
-			$nagu[content][$fid][eesnimi] = $forname;
-			$nagu[content][$fid][kesknimi] = $midname;
-			$nagu[content][$fid][perenimi] = $surname;
-			$nagu[content][$fid][sugu] = $gender;
-			$nagu[content][$fid][byear] = $byear % 2050;
-			$nagu[content][$fid][bmonth] = $bmonth;
-			$nagu[content][$fid][bday] = $bday;
-			$nagu[content][$fid][estonian] = $estonian;
+		$nagu["name"] = $name;
+		$nagu["url"] = $url;
+		$nagu["category"] = $category;
 
-			if (is_array($occ))
+		global $img,$img_type;
+		if ($img != "none")
+		{
+			if ($nagu["imgurl"] != "")
 			{
-				reset($occ);
-				$a = array();
-				while (list(,$v) = each($occ))
-					$a[$v]=$v;
+				// change
+				$t = new db_images;
+				$ar = $t->_replace(array("filename" => $img, "file_type" => $img_type,"poid" => $nagu["imgid"]));
 			}
-			$nagu[content][$fid][occ] = $a;
-
-			global $img,$img_type;
-			if ($img != "none")
+			else
 			{
-				if ($nagu[content][$fid][imgurl] != "")
-				{
-					// change
-					$t = new db_images;
-					$ar = $t->_replace(array("filename" => $img, "file_type" => $img_type,"poid" => $nagu[content][$fid][imgid]));
-				}
-				else
-				{
-					// add
-					$t = new db_images;
-					$ar = $t->_upload(array("filename" => $img, "file_type" => $img_type,"oid" => $id));
-				}
-				$pid = $ar[id];
-				$img = $t->get_img_by_id($pid);
-				$nagu[content][$fid][imgid] = $img[id];
-				$nagu[content][$fid][imgurl] = $img[url];
+				// add
+				$t = new db_images;
+				$ar = $t->_upload(array("filename" => $img, "file_type" => $img_type,"oid" => $id));
 			}
+			$pid = $ar["id"];
+			$img = $t->get_img_by_id($pid);
+			$nagu["imgid"] = $img["id"];
+			$nagu["imgurl"] = $img["url"];
 		}
 
 		$ns = serialize($nagu);
-		$this->db_query("update objects set comment = '$ns' WHERE oid = $nagu_oid");
+		$this->db_query("update objects set name = '$name',comment = '$ns' WHERE oid = $id");
 		return $fid;
 	}
 
@@ -258,7 +336,7 @@ class nagu extends aw_template
 		return $this->parse();
 	}
 
-	function submit_vote($arr)
+	function _submit_vote($arr)
 	{
 		$this->quote(&$arr);
 		extract($arr);
@@ -337,8 +415,12 @@ class nagu extends aw_template
 		$con = unserialize($t->get_simple_config("nagu_ooc"));
 
 		$this->read_template("change.tpl");
-		$this->vars(array("id" => $id, 
-											"eesnimi" => "","kesknimi" => "","perenimi" => "", "man" =>"", "woman" => "", "byear" => "", "bday" => $this->option_list(0,$this->mk_paevad()), "occ" => $this->multiple_option_list(array(),$con[arr]), "imgurl" => "", "fid" => -1,"bmonth" => $this->option_list(0,$this->kuud),"estonian" => ""));
+		$this->vars(array(
+			"id" => $id, 
+			"name" => $name,
+			"categories" => $this->picker(0,$this->categories),
+			"imgurl" => "",
+		));
 		return $this->parse();
 	}
 

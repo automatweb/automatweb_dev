@@ -49,7 +49,7 @@ function ch_image()
 		return true;
 	}
 
-	window.location="orb.{VAR:ext}?class=image&action=change&id="+sel_image;
+	window.location="orb.{VAR:ext}?class=images&action=change&id="+sel_image;
 	return true;
 }
 
@@ -62,7 +62,7 @@ function del_image()
 		return true;
 	}
 
-	window.location="orb.{VAR:ext}?class=image&action=delete&docid={VAR:id}&id="+sel_image;
+	window.location="orb.{VAR:ext}?class=images&action=delete&docid={VAR:id}&id="+sel_image;
 	return true;
 }
 
@@ -236,6 +236,7 @@ function del_gallery()
 	| Näita leadi: <input type='checkbox' name='showlead' value=1 {VAR:showlead}> |
 	Esilehel: <input type='checkbox' NAME='esilehel' VALUE=1 {VAR:esilehel}> <select name="jrk1">{VAR:jrk1}</select>|
 	All paremal: <input type='checkbox' NAME='esilehel_uudis' VALUE=1 {VAR:esilehel_uudis}> <select name="jrk2">{VAR:jrk2}</select>|
+	T&uuml;hista stiilid:	<input type='checkbox' name="clear_styles" value=1>
 		</td>
 	</tr>
 </table>
@@ -494,7 +495,7 @@ function format(what,opt)
 		<td>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title" colspan=7><a href="{VAR:add_nimg}">Lisa uus</a> | <a href="javascript:ch_image()">Muuda</a> | <a href="javascript:del_image();">Kustuta</a></td>
+					<td class="title" colspan=7><a href="{VAR:add_img}">Lisa uus</a> | <a href="javascript:ch_image()">Muuda</a> | <a href="javascript:del_image();">Kustuta</a></td>
 				</tr>
 				<tr>
 					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&pic_sortby=name&pic_order={VAR:pic_order}'>Nimi {VAR:pic_name_img}</a></td>
@@ -506,7 +507,7 @@ function format(what,opt)
 				</tr>
 				<!-- SUB: IMG_LINE -->
 				<tr>
-					<td align="center" class="fcaption5_hele_taust"><a href='{VAR:ch_nimg}'>{VAR:name}</a></td>
+					<td align="center" class="fcaption5_hele_taust"><a href='{VAR:ch_img}'>{VAR:name}</a></td>
 					<td align="center" class="fcaption5_hele_taust">{VAR:comment}</td>
 					<td align="center" class="fcaption5_hele_taust"><input class='tekstikast_n'  onBlur='this.value="{VAR:alias}";' onClick='this.select()' type='text' value='{VAR:alias}' size=5 class='small_button'></td>
 					<td align="center" class="fcaption5_hele_taust">{VAR:modifiedby}</td>
@@ -532,7 +533,7 @@ function format(what,opt)
 		<td>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title" colspan=7><a href="{VAR:add_nimg}">Lisa uus</a></td>
+					<td class="title" colspan=7><a href="{VAR:add_img}">Lisa uus</a></td>
 				</tr>
 			</table>
 		</tr>

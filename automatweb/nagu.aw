@@ -20,13 +20,13 @@ switch($type)
 		break;
 
 	case "change":
-		$content = $t->list_tyybid($id);
-		$site_title = "<a href='nagu.$ext'>N&auml;dala n&auml;od</a> / Muuda";
+		$content = $t->change($id);
+		$site_title = "<a href='nagu.$ext'>H‰‰letus</a> / Muuda";
 		break;
 
 	case "add":
 		$content = $t->add($id);
-		$site_title = "<a href='nagu.$ext'>N&auml;dala n&auml;od</a> / <a href='nagu.$ext?type=change&id=$id'>Muuda</a> / Lisa";
+		$site_title = "<a href='nagu.$ext'>Valimised</a> / Lisa";
 		break;
 
 	case "change_tyyp":
@@ -54,9 +54,19 @@ switch($type)
 		$site_title = "<a href='nagu.$ext'>N&auml;dala n&auml;od</a> / Muuda";
 		break;
 
+	case "edit_texts":
+		$content = $t->edit_texts();
+		$site_title = "<a href='nagu.$ext'>N&auml;dala n&auml;od</a> / Muuda tekste";
+		break;
+
+	case "submit_texts":
+		$t->submit_texts($HTTP_POST_VARS);
+		header("Location: nagu.$ext");
+		exit;
+
 	default:
 		$content = $t->list_n2od($per_oid);
-		$site_title = "N&auml;dala n&auml;od";
+		$site_title = "Valimised";
 		break;
 }
 

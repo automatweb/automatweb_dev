@@ -15,7 +15,6 @@
 <td class="fgtitle"><strong>{VAR:LC_PLANNER_LASTS}</strong></td>
 <td class="fgtitle"><select class="lefttab" name="dhour">{VAR:dhour}</select> t:<select class="lefttab" name="dmin">{VAR:dmin}</select>m
 &nbsp;&nbsp;
-<input type="checkbox" name="repeater" value="1" {VAR:repcheck}>
 </td>
 </tr>
 </table>

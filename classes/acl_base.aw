@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.11 2001/11/07 17:18:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.12 2001/11/20 13:40:23 cvs Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -164,7 +164,7 @@ class acl_base extends core
 			$max_acl["acl_rel_id"] = "666";
 			$cnt = 0;
 			// here we must traverse the tree from $oid to 1, gather all the acls and return the one with the highest priority
-	//		echo "entering can, access = $access, oid = $oid<Br>";
+		//	echo "entering can, access = $access, oid = $oid<Br>";
 			while ($oid > 0)
 			{
 				// echo "oid = $oid<br>";
@@ -276,6 +276,11 @@ class acl_base extends core
 		$this->save_handle();
 
 		global $gidlist;
+
+		if (!is_array($gidlist) || count($gidlist) < 1)
+		{
+			return;
+		}
 
 		$js = "";
 		if (is_array($joins))

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.8 2001/11/07 17:39:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.9 2001/11/20 13:40:23 cvs Exp $
 // syslog.aw - syslog management
 // syslogi vaatamine ja analüüs
 lc_load("syslog");
@@ -151,6 +151,7 @@ class db_syslog extends aw_template
 			$ss
 			ORDER BY syslog.tm DESC
 			$lim";
+
 		$arr = unserialize($this->get_cval("blockedip"));
 		$blocked_ips = (is_array($arr)) ? array_flip($arr) : array();
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.47 2001/11/20 13:19:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.48 2001/11/20 13:40:23 cvs Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -472,7 +472,7 @@ class planner extends calendar {
 							$this->vars(array(
 									"color" => $e["color"],
 									"time" => date("H:i",$e["start"]) . "-" . date("H:i",$e["end"]),
-									 "title" => $e["title"],
+									 "title" => ($e["title"]) ? $e["title"] : "(nimetu)",
 									 "id" => $e["id"],
 							));
 							$c1 .= $this->parse("line.event");
@@ -530,7 +530,7 @@ class planner extends calendar {
 								$this->vars(array(
 										"color" => $e["color"],
 										"time" => date("H:i",$e["start"]) . "-" . date("H:i",$e["end"]),
-										"title" => $e["title"],
+									 	"title" => ($e["title"]) ? $e["title"] : "(nimetu)",
 										"id" => $e["id"],
 								));
 								$c2 .= $this->parse("line.subline.element");
@@ -594,7 +594,7 @@ class planner extends calendar {
 							"color" => $e["color"],
 							"time" => date("H:i",$e["start"]) . "-" . date("H:i",$e["end"]),
 							"id" => $e["id"],
-							"title" => $e["title"],
+							"title" => ($e["title"]) ? $e["title"] : "(nimetu)",
 							"contents" => nl2br($e["description"]),
 				 	));
 					$c .= $this->parse("line");
@@ -668,7 +668,7 @@ class planner extends calendar {
 								"color" => $e["color"],
 								"time" => date("H:i",$e["start"]) . "-" . date("H:i",$e["end"]),
 								"id" => $e["id"],
-								"title" => $e["title"],
+								"title" => ($e["title"]) ? $e["title"] : "(nimetu)",
 								"contents" => nl2br($e["description"]),
 				 		));
 						$c .= $this->parse("line");

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.38 2001/11/17 18:14:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.39 2001/11/20 13:40:23 cvs Exp $
 // form_element.aw - vormi element.
 lc_load("form");
 
@@ -283,7 +283,7 @@ class form_element extends aw_template
 				$ob = new db_objects;
 				$this->vars(array(
 					"button_text" => $this->arr["button_text"],
-					"subtypes" => $this->picker($this->arr["subtype"], array("" => "","submit" => "Submit", "reset" => "Reset","delete" => "Kustuta","url" => "URL","preview" => "Eelvaade","confirm" => "Kinnita","order" => "Tellimine")),
+					"subtypes" => $this->picker($this->arr["subtype"], array("" => "","submit" => "Submit", "reset" => "Reset","delete" => "Kustuta","url" => "URL","preview" => "Eelvaade","confirm" => "Kinnita","order" => "Tellimine","close" => "Sulge aken")),
 					"button_url" => $this->arr["button_url"],
 					"chain_forward" => checked($this->arr["chain_forward"]==1),
 					"chain_backward" => checked($this->arr["chain_backward"]==1),
@@ -1179,17 +1179,7 @@ class form_element extends aw_template
 					$html.=" size=\"".$this->arr["lb_size"]."\"";
 				}
 				$html.=">";
-				if (is_array($elvalues[$this->arr["name"]]))
-				{
-					$val = $this->get_val($elvalues);
-					$cnt = sizeof($val);
-					$this->arr["listbox_items"] = $val;
-					$ext = true;
-				}
-				else
-				{
-					$cnt = $this->arr["listbox_count"];
-				};
+				$cnt = $this->arr["listbox_count"];
 
 				if ($lang_id != $this->form->lang_id)
 				{
@@ -1201,16 +1191,29 @@ class form_element extends aw_template
 				}
 
 				$lb_opts = "";
-				for ($b=0; $b < $cnt; $b++)
-				{	
-					if ($this->entry_id)
+
+				if ($this->entry_id)
+				{
+					$_lbsel = $this->entry;
+				}
+				else
+				{
+					if (isset($elvalues[$this->get_el_name()]))
 					{
-						$lbsel = ($this->entry == "element_".$this->id."_lbopt_".$b ? " SELECTED " : "");
+						list($__1,$__2,$__3,$__def) = explode("_",$elvalues[$this->get_el_name()]);
+						$_lbsel = "element_".$this->id."_lbopt_".$__def;
 					}
 					else
 					{
-						$lbsel = ($this->arr["listbox_default"] == $b ? " SELECTED " : "");
+						$_lbsel = "element_".$this->id."_lbopt_".$this->arr["listbox_default"];
 					}
+				}
+				
+				for ($b=0; $b < $cnt; $b++)
+				{	
+					$_v = "element_".$this->id."_lbopt_".$b;
+
+					$lbsel = ($_lbsel == $_v ? " SELECTED " : "");
 		
 					if (is_array($larr))
 					{
@@ -1337,6 +1340,11 @@ class form_element extends aw_template
 					{
 						$loc = $this->mk_my_orb("show", array("id" => $this->arr["order_form"], "load_entry_data" => $this->form->entry_id,"section" => $GLOBALS["section"]),"form");
 						$html = "<input type='submit' VALUE='".$butt."' onClick=\"window.location='".$loc."';return false;\">";
+					}
+					else
+					if ($this->arr["subtype"] == "close")
+					{
+						$html = "<input type='submit' VALUE='".$butt."' onClick=\"window.close();return false;\">";
 					}
 				}
 				break;

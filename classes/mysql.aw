@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.9 2001/11/20 13:19:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.10 2001/11/20 13:40:23 cvs Exp $
 // mysql.aw - MySQL draiver
 include("$classdir/root.$ext");
 class db_connector extends root 
@@ -52,7 +52,7 @@ class db_connector extends root
 			// lühendame päringu. Ntx failide lisamisel voib paring olla yle mega pikk
 			// ja selle ekraanile pritsimine ei anna mitte midagi.
 
-			if (strlen($qtext) > 5000)
+			if (strlen($qtext) > 500000)
 			{
 				$qtext = substr($qtext,0,5000) . "....(truncated)";
 			};

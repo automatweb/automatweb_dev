@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.18 2001/11/20 13:05:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.19 2001/11/20 13:40:23 cvs Exp $
 lc_load("mailinglist");
 class mlist extends aw_template
 {
@@ -11,6 +11,7 @@ class mlist extends aw_template
 		$this->db_init();
 		$this->id = $id;
 		$this->db_query("SELECT * FROM objects WHERE oid = $id");
+		$row = $this->db_next();
 
 		$this->name = $row["name"];
 		$this->l_vars = unserialize($row["last"]);

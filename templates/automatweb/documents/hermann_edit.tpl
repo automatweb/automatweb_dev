@@ -49,7 +49,7 @@ function ch_image()
 		return true;
 	}
 
-	window.location="orb.{VAR:ext}?class=image&action=change&id="+sel_image;
+	window.location="orb.{VAR:ext}?class=images&action=change&id="+sel_image;
 	return true;
 }
 
@@ -62,7 +62,7 @@ function del_image()
 		return true;
 	}
 
-	window.location="orb.{VAR:ext}?class=image&action=delete&docid={VAR:id}&id="+sel_image;
+	window.location="orb.{VAR:ext}?class=images&action=delete&docid={VAR:id}&id="+sel_image;
 	return true;
 }
 
@@ -212,15 +212,8 @@ function del_gallery()
 <table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC">
 <tr>
 <td class="hele_hall_taust" colspan="2">
-<input type="submit" class='doc_button' value="Salvesta"> <input class='doc_button' type="submit" value="Eelvaade" onClick="window.location.href='{VAR:preview}';return false;"> <input type="submit" class='doc_button' value="Sektsioonid" onClick="window.location.href='{VAR:menurl}';return false;"> <input type="submit" class='doc_button' value="Webile" onClick="window.open('{VAR:baseurl}/index.{VAR:ext}?section={VAR:id}');return false;"> 
-</td>
+<input type="submit" class='doc_button' value="Salvesta"> <input class='doc_button' type="submit" value="Eelvaade" onClick="window.location.href='{VAR:preview}';return false;"> <input type="submit" class='doc_button' value="Sektsioonid" onClick="window.location.href='{VAR:menurl}';return false;"> <input type="submit" class='doc_button' value="Webile" onClick="window.open('{VAR:baseurl}/index.{VAR:ext}?section={VAR:id}');return false;"> </td>
 </tr>
-<!-- SUB: DOC_BROS -->
-<tr>
-<td class="hele_hall_taust">{VAR:lang_name}</td>
-<td class="hele_hall_taust"><a href='{VAR:chbrourl}'>{VAR:bro_name}</a></td>
-</tr>
-<!-- END SUB: DOC_BROS -->
 <tr>
 <td class="hele_hall_taust" COLSPAN=2>
 <table border=0 cellpadding=0 cellspacing=0>
@@ -232,10 +225,11 @@ function del_gallery()
 		<td class="fcaption2_nt" bgcolor="#CCCCCC"><img src='{VAR:baseurl}/images/transa.gif' width=1 height=10 border=0></td>
 		<td class="fcaption2_nt">&nbsp;			
 			Aktiivne:	<input type='checkbox' name='status' value='2' {VAR:cstatus}>
-			Foorum:	<input type='checkbox' name='is_forum' value='1' {VAR:is_forum}>
-	| Näita leadi: <input type='checkbox' name='showlead' value=1 {VAR:showlead}> |
-	Esilehel: <input type='checkbox' NAME='esilehel' VALUE=1 {VAR:esilehel}> <select name="jrk1">{VAR:jrk1}</select>|
-	All paremal: <input type='checkbox' NAME='esilehel_uudis' VALUE=1 {VAR:esilehel_uudis}> <select name="jrk2">{VAR:jrk2}</select>|
+	| Näita leadi: <input type='checkbox' name='showlead' value=1 {VAR:showlead}>
+	| Näita pealkirja: <input type='checkbox' name='show_title' value=1 {VAR:show_title}>
+	| 'Prindi' nupp: <input type='checkbox' name='show_print' value=1 {VAR:show_print}>
+	| Muutmise kuupaev dokumendi sees: <input type='checkbox' name='show_last_changed' value=1 {VAR:show_last_changed}>
+	| &Auml;ra arvesta muutmist: <input type='checkbox' name='no_last' value=1 {VAR:no_last}>
 		</td>
 	</tr>
 </table>
@@ -249,16 +243,12 @@ function doSubmit()
 }
 </script>
 <tr>
+<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Kuup&auml;ev:&nbsp;</b></td>
+<td class="hele_hall_taust"><input class='tekstikast' type="text" name="tm" size="30" value="{VAR:tm}"></td>
+</tr>
+<tr>
 <td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Pealkiri&nbsp;</b></td>
 <td class="hele_hall_taust"><input class='tekstikast' type="text" name="title" size="80" value="{VAR:title}"></td>
-</tr>
-<tr>
-<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Autor:&nbsp;</b></td>
-<td class="hele_hall_taust"><input class='tekstikast' type="text" name="author" size="80" value="{VAR:author}"></td>
-</tr>
-<tr>
-<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Fotod:&nbsp;</b></td>
-<td class="hele_hall_taust"><input class='tekstikast' type="text" name="photos" size="80" value="{VAR:photos}"></td>
 </tr>
 <tr>
 <td class="hele_hall_taust" valign="top"><b>&nbsp;Lead&nbsp;</b></td>
@@ -276,12 +266,8 @@ function doSubmit()
 <!-- END SUB: NOT_IE -->
 <!-- SUB: IE -->
 <tr>
-<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Autor:&nbsp;</b></td>
-<td class="hele_hall_taust"><input class='tekstikast' type="text" name="author" size="80" value="{VAR:author}"></td>
-</tr>
-<tr>
-<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Fotod:&nbsp;</b></td>
-<td class="hele_hall_taust"><input class='tekstikast' type="text" name="photos" size="80" value="{VAR:photos}"></td>
+<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Kuup&auml;ev:&nbsp;</b></td>
+<td class="hele_hall_taust"><input class='tekstikast' type="text" name="tm" size="30" value="{VAR:tm}"></td>
 </tr>
 <tr>
 <td class="hele_hall_taust" valign="top"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Pealkiri&nbsp;</b></td>
@@ -321,6 +307,7 @@ function doSubmit()
 <select onchange="format('fontname',this[this.selectedIndex].value);this.selectedIndex=0" STYLE="font:8pt verdana,arial,sans-serif;background:#FFFFFF">
 										<option selected>Font...
 										<option value="Geneva,Arial,Sans-Serif">Arial
+										<option value="Trebuchet MS,Arial">Trebuchet MS
 										<option value="Verdana,Geneva,Arial,Helvetica,Sans-Serif">Verdana
 										<option value="Times New Roman,Times,Serif">Time
 										<option value="Courier, Monospace">Courier
@@ -329,6 +316,7 @@ function doSubmit()
 <select onchange="format('forecolor',this[this.selectedIndex].style.color);this.selectedIndex=0" STYLE="font:8pt verdana,arial,sans-serif;background:#FFFFFF">
 										<option selected>V&auml;rv...
 										<option style="color:black">must</option>
+										<option style="color:#FF9900">domina</option>
 										<option style="color:darkslategray">tumehall</option>
 										<option style="color:red">punane</option>
 										<option style="color:maroon">tumelilla</option>
@@ -364,16 +352,19 @@ function doSubmit()
 <input type='hidden' name='nobreaks' value='1'>
 <script for=window event=onload>
 	cont_edit.document.designMode='On';
-	cont_edit.document.write("<body style='font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 12px;background-color: #FFFFFF; border: #CCCCCC solid; border-width: 1px 1px 1px 1px; margin-left: 0px;padding-left: 3px;	padding-top: 0px;	padding-right: 3px; padding-bottom: 0px;'>");
+	cont_edit.document.write("<html><head><META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset={VAR:charset}\"></head><body style='font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 13px;background-color: #FFFFFF; border: #CCCCCC solid; border-width: 1px 1px 1px 1px; margin-left: 0px;padding-left: 3px;	padding-top: 0px;	padding-right: 3px; padding-bottom: 0px;'>");
 	cont_edit.document.write(doc.content.value);
+	cont_edit.document.write("</body></html>");
 
 	lead_edit.document.designMode='On';
-	lead_edit.document.write("<body style='font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 12px;background-color: #FFFFFF; border: #CCCCCC solid; border-width: 1px 1px 1px 1px; margin-left: 0px;padding-left: 3px;	padding-top: 0px;	padding-right: 3px; padding-bottom: 0px;'>");
+	lead_edit.document.write("<html><head><META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset={VAR:charset}\"></head><body style='font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 13px;background-color: #FFFFFF; border: #CCCCCC solid; border-width: 1px 1px 1px 1px; margin-left: 0px;padding-left: 3px;	padding-top: 0px;	padding-right: 3px; padding-bottom: 0px;'>");
 	lead_edit.document.write(doc.lead.value);
+	lead_edit.document.write("</body></html>");
 
 	title_edit.document.designMode='On';
-	title_edit.document.write("<body style='font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 12px;background-color: #FFFFFF; border: #CCCCCC solid; border-width: 1px 1px 1px 1px; margin-left: 0px;padding-left: 3px;	padding-top: 0px;	padding-right: 3px; padding-bottom: 0px;'>");
+	title_edit.document.write("<html><head><META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset={VAR:charset}\"></head><body style='font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 13px;background-color: #FFFFFF; border: #CCCCCC solid; border-width: 1px 1px 1px 1px; margin-left: 0px;padding-left: 3px;	padding-top: 0px;	padding-right: 3px; padding-bottom: 0px;'>");
 	title_edit.document.write(doc.title.value);
+	title_edit.document.write("</body></html>");
 </script>
 </td>
 </tr>
@@ -413,6 +404,10 @@ function format(what,opt)
 
 </script>
 <!-- END SUB: IE -->
+<tr>
+<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Võtmesõnad&nbsp;</b></td>
+<td class="hele_hall_taust"><input class='tekstikast' type="text" name="keywords" size="80" value="{VAR:keywords}"></td>
+</tr>
 <tr>
 <td class="hele_hall_taust" colspan=2><b>&nbsp;Objektid&nbsp;</b> <a href='pickobject.{VAR:ext}?docid={VAR:id}'>Lisa uus &gt;&gt;&gt;</a><br>
 <table border=0 cellpadding=0 cellspacing=0 width=100%>
@@ -494,7 +489,7 @@ function format(what,opt)
 		<td>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title" colspan=7><a href="{VAR:add_nimg}">Lisa uus</a> | <a href="javascript:ch_image()">Muuda</a> | <a href="javascript:del_image();">Kustuta</a></td>
+					<td class="title" colspan=7><a href="{VAR:add_img}">Lisa uus</a> | <a href="javascript:ch_image()">Muuda</a> | <a href="javascript:del_image();">Kustuta</a></td>
 				</tr>
 				<tr>
 					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&pic_sortby=name&pic_order={VAR:pic_order}'>Nimi {VAR:pic_name_img}</a></td>
@@ -506,7 +501,7 @@ function format(what,opt)
 				</tr>
 				<!-- SUB: IMG_LINE -->
 				<tr>
-					<td align="center" class="fcaption5_hele_taust"><a href='{VAR:ch_nimg}'>{VAR:name}</a></td>
+					<td align="center" class="fcaption5_hele_taust"><a href='{VAR:ch_img}'>{VAR:name}</a></td>
 					<td align="center" class="fcaption5_hele_taust">{VAR:comment}</td>
 					<td align="center" class="fcaption5_hele_taust"><input class='tekstikast_n'  onBlur='this.value="{VAR:alias}";' onClick='this.select()' type='text' value='{VAR:alias}' size=5 class='small_button'></td>
 					<td align="center" class="fcaption5_hele_taust">{VAR:modifiedby}</td>
@@ -532,7 +527,7 @@ function format(what,opt)
 		<td>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title" colspan=7><a href="{VAR:add_nimg}">Lisa uus</a></td>
+					<td class="title" colspan=7><a href="{VAR:add_img}">Lisa uus</a></td>
 				</tr>
 			</table>
 		</tr>

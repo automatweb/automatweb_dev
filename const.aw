@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.49 2001/11/20 13:25:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.50 2001/11/20 13:40:22 cvs Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -664,6 +664,8 @@ $AW_SITES_basefolder = "/www";
 $AW_SITES_vhost_folder = "/etc/apache/vhosts";
 $AW_SITES_server_ip = "194.204.30.123";
 $AW_SITES_admin_dir = "/www/automatweb_dev/automatweb";
+
+$smtp_server = "www.kirjastus.ee";
 
 // objektide subclassid - objects.subclass sees juusimiseks
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.44 2001/11/14 07:14:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.45 2001/11/20 13:40:23 cvs Exp $
 // form_entry_element.aw - 
 session_register("clipboard");
 classload("currency");
@@ -271,18 +271,23 @@ lc_load("definition");
 
 			if ($this->arr["type"] == "button")
 			{
+				if ($lang_id == $this->form->lang_id)
+				{
+					$butt = $this->arr["button_text"];
+				}
+				else
+				{
+					$butt = $this->arr["lang_button_text"][$lang_id];
+				}
 				if ($this->arr["subtype"] == "order")
 				{
-					if ($lang_id == $this->form->lang_id)
-					{
-						$butt = $this->arr["button_text"];
-					}
-					else
-					{
-						$butt = $this->arr["lang_button_text"][$lang_id];
-					}
 					$loc = $this->mk_my_orb("show", array("id" => $this->arr["order_form"], "load_entry_data" => $this->form->entry_id,"section" => $GLOBALS["section"]),"form");
 					$html = "<input type='submit' VALUE='".$butt."' onClick=\"window.location='".$loc."';return false;\">";
+				}
+				else
+				if ($this->arr["subtype"] == "close")
+				{
+					$html = "<input type='submit' VALUE='".$butt."' onClick=\"window.close();return false;\">";
 				}
 			}
 

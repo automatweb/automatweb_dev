@@ -99,7 +99,7 @@ $lc_menuedit["LC_MENUEDIT_PROPERTIES"] = "Määrangud";
 $lc_menuedit["LC_MENUEDIT_SURE_DELETE_MENU"] = "Oled kindel, et soovid seda menüüd kustutada";
 $lc_menuedit["LC_MENUEDIT_PERIOD"] = "Periood";
 $lc_menuedit["LC_LOGIN_NAME"] = "Kasutajanimi";
+$lc_menuedit["LC_LOGIN_PASS"] = "Parool";
+$lc_menuedit["LC_LOGIN_CAPTION"] = "Logi sisse";
 $lc_menuedit["LC_MENUEDIT_CHOOSE_KEYWORDS"] = "M&auml;rks&otilde;nad";
-
-
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.19 2001/11/20 13:19:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.20 2001/11/20 13:40:23 cvs Exp $
 // klass piltide manageerimiseks
 global $orb_defs;
 $orb_defs["images"] = array("new"						=> array("function"	=> "add",		"params"	=> array("parent")),
@@ -31,6 +31,7 @@ class images extends aw_template
 		if ($idata)
 		{
 			$vars = array(
+					"docid" => $oid,
 					"imgref" => $idata["url"],
 					"imgcaption" => $idata["comment"],
 					"align" => $align[$matches[4]],
@@ -439,7 +440,7 @@ class db_images extends aw_template
 			// paneme paika viimase pildi indexi
 			$this->set_last($oid,"image",$idx);
 			$this->_log("image",SPRINTF(LC_IMAGES_ADDED_PICT,$pid));
-			return array("id" => $pid, "idx" => $idx);
+			return array("id" => $pid, "idx" => $idx, "name" => $file_oname);
 		} 
 		else 
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.10 2001/11/20 13:19:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.11 2001/11/20 13:40:23 cvs Exp $
 lc_load("promo");
 global $orb_defs;
 $orb_defs["promo"] = "xml";
@@ -51,6 +51,7 @@ class promo extends aw_template
 			"left_sel" => "CHECKED",
 			"tpl_edit" => $this->option_list(0,$edit_templates),
 			"tpl_lead" => $this->option_list(0, $short_templates),
+			"last_menus" => $this->multiple_option_list(array(),$menu),
 			"reforb" => $this->mk_reforb("submit", array("parent" => $parent)),
 		));
 		return $this->parse();
@@ -61,15 +62,7 @@ class promo extends aw_template
 		$this->quote(&$arr);
 		extract($arr);
 
-		if (is_array($section))
-		{
-			reset($section);
-			$a = array();
-			while (list(,$v) = each($section))
-			{
-				$a[$v]=$v;
-			}
-		}
+		$a = $this->make_keys($section);
 
 		$sets = array(
 			"section" => $a,
@@ -83,7 +76,7 @@ class promo extends aw_template
 		{
 			$com = $all_menus ? "all_menus" : serialize($sets);
 			$this->upd_object(array("oid" => $id, "name" => $title,"last" => $type,"comment" => $com));
-			$this->db_query("UPDATE menu SET tpl_lead = '$tpl_lead', tpl_edit = '$tpl_edit' , link = '$link' WHERE id = $id");
+			$this->db_query("UPDATE menu SET tpl_lead = '$tpl_lead', tpl_edit = '$tpl_edit' , link = '$link',ndocs = '$num_last',sss = '".serialize($this->make_keys($last_menus))."' WHERE id = $id");
 			$this->set_object_metadata(array("oid" => $id, "key" => "no_title", "value" => $no_title));
 			$this->_log("promo", sprintf(LC_PROMO_CHANGED_PROMO_BOX,$title));
 		}
@@ -96,10 +89,11 @@ class promo extends aw_template
 				"comment" => serialize($sets),
 				"last" => 1,
 			));
-			$this->db_query("INSERT INTO menu (id,link,type,is_l3,tpl_lead,tpl_edit) VALUES($id,'$link',".MN_PROMO_BOX.",0,'$tpl_lead','$tpl_edit')");
+			$this->db_query("INSERT INTO menu (id,link,type,is_l3,tpl_lead,tpl_edit,ndocs,sss) VALUES($id,'$link',".MN_PROMO_BOX.",0,'$tpl_lead','$tpl_edit','$num_last','".serialize($this->make_keys($last_menus))."')");
 			$this->set_object_metadata(array("oid" => $id, "key" => "no_title", "value" => $no_title));
 			$this->_log("promo", sprintf(LC_PROMO_ADD_TO_PROMO_BOX,$title));
 		}
+
 		return $this->mk_orb("change", array("id" => $id));
 	}
 
@@ -144,7 +138,10 @@ class promo extends aw_template
 		$menu = $ob->get_list();
 		$menu[0] = "";
 		$menu[$GLOBALS["frontpage"]] = LC_PROMO_FRONTPAGE;
+
 		$this->vars(array(
+			"last_menus" => $this->multiple_option_list(unserialize($rw["sss"]), $menu),
+			"num_last" => $rw["ndocs"],
 			"title" => $row["name"], 
 			"section"	=> $ob->multiple_option_list($sets["section"],$menu),
 			"all_menus"	=> checked($row["comment"] == "all_menus"),

@@ -8,10 +8,6 @@
 				<caption>Muuda</caption>
 				<link>?class=planner&amp;action=editevent&amp;id={VAR:id}</link>
 			</edit>
-			<repeaters>
-				<caption>Kordused</caption>
-				<link>?class=planner&amp;action=repeaters&amp;id={VAR:id}</link>
-			</repeaters>
 		</sublinks>
 	</add>
 	<today>

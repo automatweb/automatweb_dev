@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.79 2001/11/15 13:10:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.80 2001/11/20 13:40:23 cvs Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -885,7 +885,7 @@ class form extends form_base
 				$lf_els = $lf_fm->get_all_els();
 				foreach($lf_els as $lf_el)
 				{
-					$elvalues[$lf_el->get_el_name()] = $lf_el->get_val();
+					$elvalues[$lf_el->get_el_name()] = $lf_fm->entry[$lf_el->get_id()];
 				}
 			}
 
@@ -1470,7 +1470,7 @@ class form extends form_base
 		global $type;
 		if ($type == "popup")
 		{
-			$retval .= "<input type='button' onClick='javascript:window.close()' value='Sulge'>";
+			$retval .= "<form><input type='button' onClick='javascript:window.close()' value='Sulge'></form>";
 		};
 		return $retval;
 	}
@@ -2478,7 +2478,7 @@ class form extends form_base
 					$joss = join(" ",$joins);
 					$chenrties = array();
 					$q = "SELECT form_chain_entries.id as chain_entry_id,uid as modifiedby, tm as created, tm as modified  $jss FROM form_chain_entries $joss WHERE form_chain_entries.id in ($eids)";
-//					echo "q = $q <br>";
+					dbg("q = $q <br>");
 					$this->db_query($q);
 					$cnt = 0;
 					$used_ids = array();
@@ -3531,6 +3531,8 @@ class form extends form_base
 			{
 				$this->save_handle();
 				
+				echo "q = ALTER TABLE form_".$row["oid"]."_entries ADD ev_".$erow["el_id"]." text <Br>";
+				flush();
 				$this->db_query("ALTER TABLE form_".$row["oid"]."_entries ADD ev_".$erow["el_id"]." text");
 				
 				$this->restore_handle();

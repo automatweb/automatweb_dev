@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.8 2001/10/16 04:15:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.9 2001/11/20 13:40:23 cvs Exp $
 // root.aw - the root class
 // this contains all the supplementary functions
 
@@ -85,6 +85,22 @@ class root
 		};
 		$urs = join("&",$this->map2("%s=%s",$ura));
 		return $PHP_SELF."?".$urs;
+	}
+
+	////
+	// !this takes an array and goes through it and makes another array that has as keyws the values of the given array and also
+	// tha velues of the given array
+	function make_keys($arr)
+	{
+		$ret = array();
+		if (is_array($arr))
+		{
+			foreach($arr as $v)
+			{
+				$ret[$v] = $v;
+			}
+		}
+		return $ret;
 	}
 };
 ?>

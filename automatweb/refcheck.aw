@@ -616,10 +616,7 @@ switch($action)
 		classload("nagu");
 		$t = new nagu();
 		$fid = $t->submit($HTTP_POST_VARS);
-		if ($type == "textonly")
-			header("Location: nagu.$ext?type=texts&id=$id");
-		else
-			header("Location: nagu.$ext?type=change_tyyp&id=$id&fid=$fid");
+		header("Location: nagu.$ext");
 		break;
 
 	case "submit_nagu_ooc":
