@@ -210,6 +210,7 @@
             <type>calendar</type>
             <group>views</group>
             <no_caption>1</no_caption>
+            <viewtype>week</viewtype>
             <store>no</store>
             <table>objects</table>
             <field>meta</field>
