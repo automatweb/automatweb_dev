@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.28 2004/01/13 16:24:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.29 2004/01/22 16:37:50 duke Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -1193,6 +1193,236 @@ class converters extends aw_template
 		}
 
 		die("all done!");
+	}
+	
+	/**  
+		
+		@attrib name=convert_crm_relations2 nologin="1"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	function convert_crm_relations2($arr)
+	{
+		// see annab mulle kõik aadressiobjektid, millel on seos URL objektiga
+		set_time_limit(0);
+		$q = "select aliases.id,aliases.source as oldsource,aliases2.source as newsource,aliases.target as newtarget from aliases,objects,aliases as aliases2,objects as objects2  where aliases.source = objects.oid and aliases2.target = objects.oid and aliases2.source = objects2.oid and objects2.class_id = 129 and aliases.type = 21 and aliases.reltype = 6 and aliases2.reltype = 3 and objects.class_id = 146 and objects.status != 0";
+		$this->db_query($q);
+		while($row = $this->db_next())
+		{
+			$this->save_handle();
+			// read old relation, fix it.
+			$id = $row["id"];
+			$newsource = $row["newsource"];
+			$q = "UPDATE aliases SET source = '$newsource', reltype = 16 WHERE id = '$id'";
+			print $q;
+			print "<br>";
+			$this->db_query($q);
+
+			$this->restore_handle();
+		};
+		print "all done<br>";
+		//  I need to get aliases that are linked to those object and sources from them.
+
+
+	}
+
+	
+	
+	/**  
+		
+		@attrib name=convert_crm_relations nologin="1"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	function convert_crm_relations($arr)
+	{
+		set_time_limit(0);
+		$q = "SELECT objects.oid,objects.name,aliases.reltype,aliases.target AS target FROM aliases,objects WHERE aliases.source = objects.oid AND aliases.type = 219;";
+		$this->db_query($q);
+		$oids = $targets = array();
+		while($row = $this->db_next())
+		{
+			//print "<pre>";
+			$oids[] = $row["oid"];
+			$targets[$row["oid"]] = $row["target"]; 
+			//print_r($row);
+			//print "</pre>";
+		};
+
+		//$oids = array(90281,92468);
+
+		$q = "SELECT oid,name,class_id,aliases.target AS target FROM aliases,objects WHERE aliases.source = objects.oid AND aliases.target IN (" . join(",",$oids) . ")";
+		$this->db_query($q);
+
+		// now I have to all those ID-s. some are 145, which means isik, others are 129
+		// which are companies
+		while($row = $this->db_next())
+		{
+			$this->save_handle();
+			// now I need to create the new links
+			if ($row["oid"] != 90281 && $row["oid"] != 92648)
+			{
+				//continue;
+			};
+			print "<pre>";
+			print_r($row);
+			print "</pre>";
+			flush();
+			$tg_phone = new object($targets[$row["target"]]);
+			//$src_obj = new object($row["oid"]);
+			if ($row["class_id"] == 145)
+			{
+				print "Lingin isiku telefoniga " . $targets[$row["target"]] . "/" . $tg_phone->name() . "<br>";
+				/*	
+				$src_obj->connect(array(
+					"to" => $tg_phone->id(),
+					"reltype" => 13,
+				));
+				*/
+				// seose tüüp - 13
+			};
+			if ($row["class_id"] == 129)
+			{
+				print "Lingin organisatsiooni telefoniga " . $targets[$row["target"]] . "/" . $tg_phone->name() . "<br>";
+				print $tg_phone->name();
+				/*
+				$src_obj->connect(array(
+					"to" => $tg_phone->id(),
+					"reltype" => 17,
+				));
+				*/
+				// seose tüüp - 17
+			};
+			flush();
+			$this->restore_handle();
+		};
+
+	}
+
+	/**
+
+	@attrib name=convert_person_org_relations
+
+	**/
+	function convert_person_org_relations($arr)
+	{
+		// list all connections from organizations to persons
+		set_time_limit(0);
+		$q = "SELECT aliases.source,aliases.target FROM aliases,objects WHERE type = 145 AND reltype = 8 AND aliases.source = objects.oid AND objects.class_id = 129 AND objects.status != 0";
+		$this->db_query($q);
+		$res = array();
+		while($row = $this->db_next())
+		{
+			$this->save_handle();
+			$q = "SELECT * FROM aliases WHERE target = '$row[source]' AND source = '$row[target]'";
+			$this->db_query($q);
+			$row2 = $this->db_next();
+			if ($row2)
+			{
+				//print "org is connected $row[source],$row[target]<bR>";
+			}
+			else
+			{
+				/*
+				$per_obj = new object($row["target"]);
+				$per_obj->connect(array(
+					"to" => $row["source"],
+					"reltype" => 6,
+				));
+				*/
+				print "person needs to be connected $row[target],$row[source]<br>";
+			};
+			flush();
+			$this->restore_handle();
+		};
+
+		print "persons done<br>";
+		
+		$q = "SELECT aliases.source,aliases.target FROM aliases,objects WHERE type = 129 AND reltype = 6 AND aliases.source = objects.oid AND objects.class_id = 145 AND objects.status != 0";
+		$this->db_query($q);
+		$res = array();
+		while($row = $this->db_next())
+		{
+			// there can be more than one .. fucking shit.
+			// fucking fuckety fuckety fucking fuckety shit
+			//$res[$row["source"]][$row["target"]] = $row["target"];
+			$this->save_handle();
+			$q = "SELECT * FROM aliases WHERE target = '$row[source]' AND source = '$row[target]'";
+			$this->db_query($q);
+			$row2 = $this->db_next();
+			if ($row2)
+			{
+				print "org is connected $row[source],$row[target]<bR>";
+			}
+			else
+			{
+				/*
+				$per_obj = new object($row["target"]);
+				$per_obj->connect(array(
+					"to" => $row["source"],
+					"reltype" => 8,
+				));
+				*/
+				print "person needs to be connected $row[target],$row[source]<br>";
+			};
+			flush();
+			$this->restore_handle();
+		};
+
+		print "orgs done<br>";
+	}
+
+	/**  
+		
+		@attrib name=convert_docs_from_menu nologin="1"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	function convert_docs_from_menu($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_MENU,
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+		echo "converting docs from menu relations <br>\n";
+		flush();
+		for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		{
+			echo "object ".$o->id()." name = ".$o->name()." <br>\n";
+			flush();
+			
+			$sss = new aw_array($o->meta("sss"));
+			foreach($sss->get() as $mnid)
+			{
+				// 9 - RELTYPE_DOCS_FROM_MENU
+				if (!$o->is_connected_to(array("to" => $mnid, "type" => 9 )))
+				{
+					$o->connect(array(
+						"to" => $mnid,
+						"reltype" => 9
+					));
+					echo "connect to $mnid <br>\n";
+					flush();
+				}
+			}
+		}
+		die("all done! ");
 	}
 };
 ?>
