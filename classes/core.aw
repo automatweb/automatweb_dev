@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.204 2003/06/17 11:56:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.205 2003/06/26 14:12:47 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -881,6 +881,7 @@ class core extends db_connector
 	//   alias - the id of the object to attach as an alias
 	//   relobj_id - reference to the relation object
 	//   reltype - type of the relation
+	//   no_cache - if true, cache is not updated
 	function addalias($arr)
 	{
 		//arr($arr);
