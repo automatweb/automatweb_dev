@@ -183,7 +183,13 @@ function search_selall()
 </form>
 <form method="GET" name="searchform" action="reforb.{VAR:ext}">
 {VAR:form}
-
+<table cellspacing=0 cellpadding=2>
+<tr>
+	<td class='chformleftcol' width='160' nowrap></td>
+	<td class='chformrightcol'>
+	<input type='submit' value='otsi' onclick="javascript:document.searchform.submit()" />
+	</td>
+</tr></table>
 {VAR:reforb}
 {VAR:table}
 </form>
