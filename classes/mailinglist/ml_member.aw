@@ -91,12 +91,32 @@ class ml_member extends aw_template
 			{
 				if (is_object($el = $finst->get_element_by_id($elid)))
 				{
-					$name[] = $el->get_value();
+					$name[$elid] = $el->get_value();
 					break;
 				}
 			}
 		}
-		$namestr = join(" ", $name);
+
+		// now sort the damn things
+		$ordar = $mlc_inst->get_name_els_order($ob["meta"]["conf_obj"]);
+		$postar = $mlc_inst->get_name_els_seps($ob["meta"]["conf_obj"]);
+
+		asort($ordar);
+		$tt = array();
+		foreach($ordar as $elid => $ord)
+		{
+			$tt[] = $name[$elid];
+			if ($postar[$elid] != "")
+			{
+				$tt[] = $postar[$elid];
+			}
+			else
+			{
+				$tt[] = " ";
+			}
+		}
+
+		$namestr = join("", $tt);
 
 		$this->upd_object(array(
 			"oid" => $id, 
