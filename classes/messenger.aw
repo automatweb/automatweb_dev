@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.15 2001/05/23 06:39:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.16 2001/05/23 06:54:53 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -583,7 +583,14 @@ class messenger extends menuedit_light
 		if ($args["reply"])
 		{
 			$msg = $this->driver->msg_get(array("id" => $reply));
-			$msg["mtargets"] = $msg["createdby"];
+			if ($msg["type"] == 2)
+			{
+				$msg["etargets"] = $msg["mfrom"];
+			}
+			else
+			{
+				$msg["mtargets"] = $msg["createdby"];
+			};
 			$msg["subject"] = "Re: " . $msg["subject"];
 			$qchar = $this->conf["quotechar"];
 			$msg["message"] = str_replace("\n","\n$qchar",$msg["message"]);
@@ -662,8 +669,24 @@ class messenger extends menuedit_light
 		global $attach;
 		global $attach_name;
 		global $attach_type;
+		global $udata;
 		$this->quote($args);
 		extract($args);
+
+		$etargets = explode(",",$etargets);
+
+		if ($etargets[0])
+		{
+			foreach($etargets as $aadress)
+			{
+				$from = $udata["email"];
+				$message = stripslashes($message);
+				mail($aadress,$subject,$message,"From: $from");
+			};
+			return $this->mk_site_orb(array(
+				"action" => "folder",
+				));
+		}
 
 		// koigepealt siis serializeme lisatud failid äsjakirjutatud kirjale külge
 		foreach($attach as $idx => $tmpname)
@@ -833,7 +856,7 @@ class messenger extends menuedit_light
 		$status_msg = $results;
 		session_register("status_msg");
 		return $this->mk_site_orb(array(
-			"action" => "folders",
+			"action" => "folder",
 		));
 	}
 
