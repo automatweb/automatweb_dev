@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.13 2002/09/19 15:12:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.14 2002/09/20 14:36:03 kristo Exp $
 // lists.aw - listide haldus
 class lists extends aw_template
 {
@@ -101,6 +101,30 @@ class lists extends aw_template
 				}
 			}
 
+			// create #password# variable
+			if (!in_array("password",$existing_variables))
+			{
+				// we gots to create a new variable
+				$pwd_var_id = $this->new_object(array("parent" => aw_ini_get("mailinglist.default_var_cat"),"name" => "password", "class_id" => CL_MAILINGLIST_VARIABLE,"status" => 2));
+				$existing_variables[$pwd_var_id] = "password";
+			}
+			else
+			{
+				$pwd_var_id = array_search("password", $existing_variables);
+			}
+
+			// create #kasutajanimi# variable
+			if (!in_array("kasutajanimi",$existing_variables))
+			{
+				// we gots to create a new variable
+				$uid_var_id = $this->new_object(array("parent" => aw_ini_get("mailinglist.default_var_cat"),"name" => "kasutajanimi", "class_id" => CL_MAILINGLIST_VARIABLE,"status" => 2));
+				$existing_variables[$uid_var_id] = "kasutajanimi";
+			}
+			else
+			{
+				$uid_var_id = array_search("kasutajanimi", $existing_variables);
+			}
+
 //			echo "id = $id newvars = <pre>", var_dump($newvars),"</pre> <br>";
 			// add variables to the list
 			classload("mlist");
@@ -131,6 +155,8 @@ class lists extends aw_template
 						$varvals[$vid] = $eval;
 					}
 				}
+				$varvals[$pwd_var_id] = $udata["password"];
+				$varvals[$uid_var_id] = $uid;
 				$li->db_add_user(array(
 					"name" => $uid, 
 					"email" => $udata["email"]

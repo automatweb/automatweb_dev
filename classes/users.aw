@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.46 2002/09/19 15:10:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.47 2002/09/20 14:36:04 kristo Exp $
 // users.aw - User Management
 classload("users_user","config","form","objects","file");
 
@@ -1759,7 +1759,7 @@ class users extends users_user
 
 			global $status_msg;
 			$host = aw_global_get("HTTP_HOST");
-			$churl = $this->mk_my_orb("pwhash",array("uid" => $uid,"key" => $hash));
+			$churl = $this->mk_my_orb("pwhash",array("uid" => $uid,"key" => $hash),"users",0,1);
 			$msg = "Keegi (ilmselt teie) soovis vahetada oma parooli saidis $host. Parooli vahetamiseks klikkige \n$churl\n\nKui te aga ei soovinud parooli vahetada, siis võite seda kirja ignoreerida\n";
 			mail($row["email"],"Paroolivahetus saidil ".aw_global_get("HTTP_HOST"),$msg,"From: AutomatWeb <automatweb@automatweb.com>");
 			$status_msg = "Link saadeti aadressile <b>$row[email]</b>. Vaata oma postkasti";
