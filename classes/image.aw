@@ -26,19 +26,15 @@
 @property newwindow type=checkbox ch_value=1 table=images field=newwindow
 @caption Uues aknas
 
-@tableinfo images index=id master_table=objects master_index=oid
-
-
-
 */
 class image extends class_base
 {
 	function image()
 	{
 		$this->init(array(
-						  "tpldir" => "automatweb/images",
-						  "clid" => CL_IMAGE
-						  ));
+			"tpldir" => "automatweb/images",
+			"clid" => CL_IMAGE
+		));
 	}
 
 	function get_image_by_id($id)
@@ -50,9 +46,12 @@ class image extends class_base
 				WHERE images.id = '$id'";
 			$this->db_query($q);
 			$row = $this->db_fetch_row();
-			$row["url"] = $this->get_url($row["file"]);
-			$row["meta"] = aw_unserialize($row["metadata"]);
-			aw_cache_set("get_image_by_id", $id, $row);
+			if ($row)
+			{
+				$row["url"] = $this->get_url($row["file"]);
+				$row["meta"] = aw_unserialize($row["metadata"]);
+				aw_cache_set("get_image_by_id", $id, $row);
+			}
 		}
 		return $row;
 	}
@@ -128,6 +127,7 @@ class image extends class_base
 				}
 				else if (isset($tpls["image_linked"]))
 				{
+					echo "yeah <br>";
 					$replacement = localparse($tpls["image_linked"],$vars);
 				}
 				else
@@ -391,36 +391,53 @@ class image extends class_base
 		}
 	}
 
-   	function get_property($arr)
-	  {
+	function get_property($arr)
+	{
 		$prop = &$arr['prop'];
 		if ($prop['name'] == 'file_show' && $arr['obj']['oid'])
-		  {
+		{
 			$imd = $this->get_image_by_id($arr['obj']['oid']);
-			if ($imd)
-			  {
+			if ($imd['file'] != '')
+			{
 				$prop['value'] = html::img(array('url' => $imd['url']));
-			  }
-		  }
+			}
+			else
+			{
+				return PROP_IGNORE;
+			}
+		}
+		else
+		if ($prop['name'] == 'ffile' && !$arr['obj']['oid'])
+		{
+			return PROP_IGNORE;
+		}
 		return PROP_OK;
-	  }
+	}
 
 	function set_property($arr)
-	  {
+	{
 		$prop = &$arr['prop'];
 		if ($prop['name'] == 'ffile' && $arr['obj']['oid'])
-		  {
+		{
 			global $ffile,$ffile_type;
 			$_fi = get_instance("file");
 			if (is_uploaded_file($ffile))
 			{
 				$fl = $_fi->_put_fs(array("type" => $ffile_type, "content" => $this->get_file(array("file" => $ffile))));
-				$q = "UPDATE images SET file = '$fl' WHERE id = '".$arr['obj']['oid']."'";
-				$this->db_query($q);
+				if ($this->db_fetch_field("SELECT id FROM images WHERE id = '".$arr['obj']['oid']."'", "id"))
+				{
+					$q = "UPDATE images SET file = '$fl' WHERE id = '".$arr['obj']['oid']."'";
+					$this->db_query($q);
+				}
+				else
+				{
+					$q = "INSERT INTO images (id, file) VALUES('".$arr['obj']['oid']."','$fl')";
+					$this->db_query($q);
+				}
 			}
 			return PROP_IGNORE;
-		  }
+		}
 		return PROP_OK;
-	  }
+	}
 }
 ?>

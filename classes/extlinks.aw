@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.26 2002/12/20 11:39:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.27 2002/12/30 14:28:41 kristo Exp $
 // extlinks.aw - Väliste linkide haldamise klass
 
 
@@ -77,7 +77,7 @@ class extlinks extends class_base
 			$linksrc = $this->mk_my_orb("show", array("id" => $link["id"]),"links",false,true);
 		};
 
-		if ($link["link_image_check_active"] && ($link["active_until"] <= time()) )
+		if ($link["link_image_check_active"] && ($link["link_image_active_until"] >= time()) )
 		{
 			$awf = get_instance("file");
 			$q = "SELECT * FROM objects LEFT JOIN files ON objects.oid = files.id WHERE parent = '$target' AND class_id = " . CL_FILE;
