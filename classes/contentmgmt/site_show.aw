@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.90 2004/10/18 13:48:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.91 2004/10/27 08:49:28 kristo Exp $
 
 /*
 
@@ -1583,7 +1583,8 @@ class site_show extends class_base
 					}
 					$inst->on_get_subtemplate_content(array(
 						"inst" => &$this,
-						"content_for" => $ask_content
+						"content_for" => $ask_content,
+						"request" => $_REQUEST
 					));
 					exit_function("mainc-$fl");
 				}
@@ -1697,6 +1698,8 @@ class site_show extends class_base
 			"date2" => $this->time2date(time(), 8),
 			"date_timestamp" => time(),
 			"date3" => date("d").". ".get_lc_month(date("n")).". ".date("Y"),
+			"date4" => get_lc_weekday(date("w")).", ".get_lc_date(time(),LC_DATE_FORMAT_LONG_FULLYEAR),
+			"date4_uc" => ucwords(get_lc_weekday(date("w"))).", ".get_lc_date(time(),LC_DATE_FORMAT_LONG_FULLYEAR),
 			"IS_FRONTPAGE" => ($section == $frontpage ? $this->parse("IS_FRONTPAGE") : ""),
 			"IS_FRONTPAGE2" => ($section == $frontpage ? $this->parse("IS_FRONTPAGE2") : ""),
 			"IS_NOT_FRONTPAGE" => ($section != $frontpage ? $this->parse("IS_NOT_FRONTPAGE") : ""),
