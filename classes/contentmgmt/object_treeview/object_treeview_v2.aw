@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.57 2005/02/21 13:35:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.58 2005/02/22 09:06:52 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -221,6 +221,10 @@ class object_treeview_v2 extends class_base
 				break;
 
 			case "url_field":
+				if (is_oid($arr["obj_inst"]->prop("inherit_view_props_from")))
+				{
+					return PROP_IGNORE;
+				}
 				$prop['options'] = $col_list;
 				break;
 
@@ -323,6 +327,7 @@ class object_treeview_v2 extends class_base
 			case "per_page":
 			case "show_hidden_cols":
 			case "alphabet_in_lower_case":
+			case "folders_table_column_count":
 				if (is_oid($arr["obj_inst"]->prop("inherit_view_props_from")))
 				{
 					return PROP_IGNORE;
@@ -1127,7 +1132,7 @@ class object_treeview_v2 extends class_base
 				classload("vcl/table");
 
 				$table = new vcl_table();
-				$cols_count = $ob->prop("folders_table_column_count");
+				$cols_count = $ih_ob->prop("folders_table_column_count");
 				if (empty($cols_count))
 				{
 					$cols_count = 2;
