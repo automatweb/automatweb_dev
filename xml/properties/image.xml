@@ -10,9 +10,27 @@
       <property>
             <name>file_show</name>
             <type>text</type>
+            <store>no</store>
             <group>general</group>
             <field>file_show</field>
-            <caption></caption>
+            <caption>Eelvaade </caption>
+      </property>
+      <property>
+            <name>file2</name>
+            <type>fileupload</type>
+            <group>img2</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Suur pilt</caption>
+      </property>
+      <property>
+            <name>file_show2</name>
+            <type>text</type>
+            <group>img2</group>
+            <store>no</store>
+            <field>file_show2</field>
+            <caption>Eelvaade</caption>
       </property>
       <property>
             <name>comment</name>
@@ -48,6 +66,14 @@
             <group>general</group>
             <caption>Uues aknas</caption>
       </property>
+      <classinfo>
+            <syslog_type>ST_IMAGE</syslog_type>
+      </classinfo>
+      <groupinfo>
+            <img2>
+                  <caption>Suur_pilt</caption>
+            </img2>
+      </groupinfo>
       <tableinfo>
             <images>
                   <index>id</index>
