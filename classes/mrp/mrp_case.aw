@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.52 2005/03/30 18:02:58 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.53 2005/03/31 06:45:39 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -1727,7 +1727,9 @@ class mrp_case extends class_base
 			MRP_STATUS_DONE,
 		);
 		$jobs_done = (int) $job_list->filter (array (
+			"class_id" => CL_MRP_JOB,
 			"state" => $applicable_states,
+			"project" => $project->id()
 		));
 
 		if ($jobs_done != $jobs)
