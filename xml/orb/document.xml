@@ -16,6 +16,14 @@
 				</arguments>
 			</function>
 		</action>
+		<action name="lookup">
+			<function name="lookup">
+				<arguments>
+					<required name="id"/>
+					<optional name="sortby"/>
+				</arguments>
+			</function>
+		</action>
 		<action name="submit_add">
 			<function name="submit_add">
 				<arguments>
