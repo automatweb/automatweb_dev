@@ -1,7 +1,23 @@
 <?php
-$vars = array_merge($HTTP_POST_VARS,$HTTP_GET_VARS,$AW_GET_VARS);
+//$vars = array_merge($HTTP_POST_VARS,$HTTP_GET_VARS,$AW_GET_VARS,$_GET,$_POST);
+// _GET, _POST and friends were implemented in php 4.1.0
+// right now, heaven is on 4.0.6, so I have to implement an workaround 
+if (!is_array($_GET))
+{
+	$_GET = $HTTP_GET_VARS;
+};
 
-if ($fastcall == 1)
+if (!is_array($_POST))
+{
+	$_POST = $HTTP_POST_VARS;
+};
+
+$vars = array_merge($_GET,$_POST,$AW_GET_VARS);
+
+$class = $vars["class"];
+$action = $vars["action"];
+
+if ($vars["fastcall"] == 1)
 {
 	// loadime klassi
 	classload("fastcall_base");
@@ -18,7 +34,7 @@ classload("orb");
 $orb = new orb(array(
 	"class" => $class,
 	"action" => $action,
-	"reforb" => $reforb,
+	"reforb" => $vars["reforb"],
 	"user"	=> 1,
 	"vars" => $vars,
 	"silent" => false,
@@ -28,7 +44,7 @@ $content = $orb->get_data();
 // et kui orb_data on link, siis teeme ümbersuunamise
 // see ei ole muidugi parem lahendus. In fact, see pole üleüldse
 // mingi lahendus
-if (substr($content,0,5) == "http:" || $reforb == 1)
+if (substr($content,0,5) == "http:" || $vars["reforb"] == 1)
 {
 	header("Location: $content");
 	print "\n\n";
