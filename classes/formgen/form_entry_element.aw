@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.6 2003/01/14 16:08:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.7 2003/07/01 19:31:13 kristo Exp $
 // form_entry_element.aw - 
 load_vcl("date_edit");
 lc_load("definition");
@@ -108,6 +108,11 @@ class form_entry_element extends form_element
 
 	function gen_show_html()
 	{
+		if ($this->arr["hidden"])
+		{
+			return "";
+		}
+
 		$lang_id = aw_global_get("lang_id");
 		$html = "";
 
