@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.90 2001/08/31 01:06:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.91 2001/08/31 09:30:07 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 lc_load("messenger");
@@ -865,6 +865,7 @@ class messenger extends menuedit_light
 			$msg["message"] = "\n$qchar" . $msg["message"];
 		};
 
+
 		// Loeme sisse ka objekti (teate) metainfo
 		$metadata = $this->get_object_metadata(array(
 							"oid" => $msg_id,
@@ -1182,6 +1183,10 @@ class messenger extends menuedit_light
 
 		classload("aw_mail");
 		$this->awm = new aw_mail();
+
+		#$message = str_replace("\r","",$message);
+		#$message = str_replace("\n","\r\n",$message);
+		$message = str_replace("\r\n", "\n", $message);
 
 		//$message = str_replace("\n","\r\n",$message);
 		// kui meil on tarvis saata ka valiseid faile, siis teeme seda siin
