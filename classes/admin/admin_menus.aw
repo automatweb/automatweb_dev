@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.43 2004/01/05 17:36:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.44 2004/01/08 12:24:40 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -1201,8 +1201,8 @@ class admin_menus extends aw_template
 		$this->t->set_numeric_field("hidden_jrk");
 
 		$this->t->sort_by(array(
-			"field" => array("is_menu", $sortby),
-			"sorder" => array("is_menu" => "desc", $sortby => $sort_order)
+			"field" => array("is_menu", $sortby, "name"),
+			"sorder" => array("is_menu" => "desc", $sortby => $sort_order, "name" => "asc")
 		));
 
 		$this->read_template("right_frame.tpl");
