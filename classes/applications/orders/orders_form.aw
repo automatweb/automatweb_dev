@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.2 2004/11/10 16:38:49 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.3 2004/11/11 15:53:02 sven Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -86,6 +86,23 @@ class orders_form extends class_base
 		return $retval;
 	}*/
 	
+	
+
+	/**
+		@attrib name=delete_from_order nologin=1
+		@param id required type=int acl=delete
+	**/
+	function delete_from_order($arr)
+	{
+		if($this->can("delete", $arr["id"]) && $this->can("view", $arr["id"]))
+		{
+			$obj = &obj($arr["id"]);
+			$obj->delete();
+			$obj->save();
+			$obj = &obj($arr["id"]);
+		}
+	}
+	
 	function do_shop_cart($arr)
 	{	
 		aw_global_set("no_cache", 1);
@@ -137,7 +154,6 @@ class orders_form extends class_base
 			"cfgform" => $cfgform,
 		));
 		
-		aw_global_set("no_cache", 0);
 		return $retval;
 	}
 	
@@ -455,7 +471,14 @@ class orders_form extends class_base
 		{
 			$this->vars(array(
 				"name" => $item->name(),
-				"editurl" => aw_url_change_var(array("editid" => $item->id(), "group" => "")),
+				"editurl" => aw_url_change_var(array(
+					"editid" => $item->id(), "group" => "")),
+				"delete_href" => html::href(array(
+					"url" => $this->mk_my_orb("delete_from_order",array(
+						"id" => $item->id(),
+					), CL_ORDERS_FORM),
+					"caption" => "Kustuta",
+				)),
 				"product_code" => $item->prop("product_code"),
 				"product_color" => $item->prop("product_color"),
 				"product_size" => $item->prop("product_size"),
