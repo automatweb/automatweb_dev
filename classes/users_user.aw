@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.31 2002/07/11 18:25:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.32 2002/08/02 13:24:39 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -1167,6 +1167,7 @@ class users_user extends aw_template
 
 	// - yeah. good point. - terryf
 	// - can we store users groups inside her session? -- duke
+	// - well. what if somebody else changes them, then they will not change for the user before logging in again - terryf
 	function get_gids_by_uid($uid)
 	{
 		$q = "SELECT groupmembers.gid AS gid, groups.* FROM groupmembers
