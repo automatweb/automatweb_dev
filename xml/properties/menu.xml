@@ -179,10 +179,10 @@
             <type>select</type>
             <multiple>1</multiple>
             <size>15</size>
+            <table>objects</table>
+            <field>meta</field>
             <method>serialize</method>
             <group>relations</group>
-            <table>menu</table>
-            <field>sss</field>
             <caption>Menüüd, mille alt viimased dokumendid võetakse</caption>
       </property>
       <property>
