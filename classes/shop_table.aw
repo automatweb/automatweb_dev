@@ -350,6 +350,7 @@ class shop_table extends shop_base
 							{
 								if ($by_item_id)
 								{
+//									echo "by iid period = ",$this->time2date($row["period"],5)," total = ", $avail[$row["period"]]["total"],"<br>";
 									$i_total = $avail[$row["period"]]["total"];
 									$i_used = $avail[$row["period"]]["used"];
 								}
