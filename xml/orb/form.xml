@@ -278,13 +278,13 @@
 		<action name="metainfo">
 			<function name="metainfo">
 				<arguments>
-					<required named="id"/>
+					<required name="id"/>
 				</arguments>
 			</function>
 		</action>
 		
 		<action name="submit_metainfo">
-			<function name="metainfo">
+			<function name="submit_metainfo">
 				<arguments>
 				</arguments>
 			</function>

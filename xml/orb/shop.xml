@@ -88,7 +88,7 @@
 			<function name="order_item">
 				<arguments>
 					<required name="item_id"/>
-					<required name="shop"/>
+					<optional name="shop"/>
 					<optional name="section"/>
 				</arguments>
 			</function>

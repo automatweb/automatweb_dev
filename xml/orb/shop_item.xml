@@ -30,7 +30,14 @@
 				</arguments>
 			</function>
 		</action>
-	
+
+		<action name="submit_bros">
+			<function name="submit_bros">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
 		
