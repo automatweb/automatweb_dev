@@ -33,6 +33,10 @@ class export extends aw_template
 		);
 		$this->hash2url[2][$this->cfg["baseurl"]."/index.aw?section=20&set_lang_id=2"] = "english";
 		$this->hash2url[2][$this->cfg["baseurl"]."/index.aw?set_lang_id=2"] = "english";
+		$this->hash2url[2]["http://editwww.ut.ee/index.aw?section=20&set_lang_id=2"] = "english";
+		$this->hash2url[2]["http://editwww.ut.ee/index.aw?set_lang_id=2"] = "english";
+		$this->hash2url[2]["http://editwww3.ut.ee/index.aw?section=20&set_lang_id=2"] = "english";
+		$this->hash2url[2]["http://editwww3.ut.ee/index.aw?set_lang_id=2"] = "english";
 	}
 
 	function orb_export($arr)
@@ -209,7 +213,7 @@ class export extends aw_template
 		set_time_limit(0);
 		ignore_user_abort(true);
 
-		echo "exporting site to folder $this->folder ... <br><br>\n\n";
+		echo "<font face='Arial'> Toimub staatiliste lehtede genereerimine, palun oodake!<br>\n";
 		flush();
 
 		if ($rule_id)
@@ -229,13 +233,18 @@ class export extends aw_template
 			$this->fetch_and_save_page($this->cfg["baseurl"]."/?set_lang_id=".aw_global_get("lang_id"),aw_global_get("lang_id"));
 		}
 
-		// now fetch the empty template page.
-		$this->fetch_and_save_page(
-			$this->cfg["baseurl"]."/?section=66666666&set_lang_id=".aw_global_get("lang_id"),
-			aw_global_get("lang_id"),
-			true,
-			"page_template.html"
-		);
+		// now fetch the empty template page for all languages
+		$lang = get_instance("languages");
+		$ll = $lang->get_list(array("all_data" => true));
+		foreach($ll as $lid => $ldat)
+		{
+			$this->fetch_and_save_page(
+				$this->cfg["baseurl"]."/?section=66666666&set_lang_id=".$lid,
+				$lid,
+				true,
+				"page_template_".$ldat["acceptlang"].".html"
+			);
+		}
 
 		// copy needed files
 		if (is_array($this->cfg["copy_files"]))
@@ -296,7 +305,7 @@ class export extends aw_template
 			foreach($files as $fn => $fd)
 			{
 				$this->removed_files[] = $fn;
-				unlink($this->folder."/".$fn);
+				@unlink($this->folder."/".$fn);
 				// ignore folders!
 				$this->db_query("DELETE FROM export_filelist WHERE filename LIKE '%fn%'");
 				$this->db_query("DELETE FROM export_content WHERE filename LIKE '%$fn%'");
@@ -358,7 +367,7 @@ class export extends aw_template
 					"content" => $this->get_file(array("file" => aw_ini_get("server.tmpdir")."/aw_zip_temp.zip"))
 				));
 			}
-			unlink(aw_ini_get("server.tmpdir")."/aw_zip_temp.zip");
+			@unlink(aw_ini_get("server.tmpdir")."/aw_zip_temp.zip");
 			echo "uploaded zip file to AW<br>\n";
 			flush();
 		}
@@ -387,7 +396,7 @@ class export extends aw_template
 					"msg" => "Found stop flag as ".$_stfn.", shutting down."
 				);
 				$this->write_log();
-				unlink($_stfn);
+				@unlink($_stfn);
 				die();
 			}
 		}
@@ -1248,6 +1257,10 @@ class export extends aw_template
 		$this->fta_used = array();
 		$this->hash2url[2][$this->cfg["baseurl"]."/index.aw?section=20&set_lang_id=2"] = "english";
 		$this->hash2url[2][$this->cfg["baseurl"]."/index.aw?set_lang_id=2"] = "english";
+		$this->hash2url[2]["http://editwww.ut.ee/index.aw?section=20&set_lang_id=2"] = "english";
+		$this->hash2url[2]["http://editwww.ut.ee/index.aw?set_lang_id=2"] = "english";
+		$this->hash2url[2]["http://editwww3.ut.ee/index.aw?section=20&set_lang_id=2"] = "english";
+		$this->hash2url[2]["http://editwww3.ut.ee/index.aw?set_lang_id=2"] = "english";
 	}
 	
 	////
@@ -1837,7 +1850,7 @@ class export extends aw_template
 					{
 						echo "delete file $fn<br>\n";
 						flush();
-						unlink($fn);
+						@unlink($fn);
 					}
 				}
 			}  
