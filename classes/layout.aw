@@ -120,6 +120,7 @@ class layout extends class_base
 		$grid['table_style'] = $ob->meta('table_style');
 
 		$tmp = $ge->show($grid, $alias["target"], &$tpls);
+		$tmp = str_replace("\n", "<br/>", $tmp);
 
 		$al = get_instance("aliasmgr");
 		if ($ob->prop("header") != "")
@@ -160,7 +161,7 @@ class layout extends class_base
 		{
 			return $tmp;
 		}
-		return str_replace("\r\n","<br />",create_email_links($tmp));
+		return create_email_links($tmp);
 	}
 
 	////
