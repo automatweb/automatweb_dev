@@ -1,0 +1,19 @@
+<h2>releditor</h2>
+
+To edit a single connection (usually the first of that type)
+#php#
+@property oneimage type=releditor rel_id=first reltype=RELTYPE_IMAGE props=name,file
+@caption Pilt
+#/php#
+
+NB! You can override rel_id from your get_property method, with a id of an other
+existing connection
+
+To edit multiple connections (a kind of mini relation mgr)
+#php#
+@property imagemanager type=releditor mode=manager reltype=RELTYPE_IMAGE props=name,file
+@caption Pilt
+#/php#
+
+<b>props</b> - list of properties you want to embed from the /other/ class
+
