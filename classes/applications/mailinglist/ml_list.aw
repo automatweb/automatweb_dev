@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.14 2005/01/25 15:12:06 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.15 2005/01/26 09:02:51 ahti Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -195,14 +195,26 @@ class ml_list extends class_base
 	function on_mconnect_to($arr)
 	{
 		$con = &$arr["connection"];
-		if($con->prop("from.class_id") == CL_ML_LIST && $con->prop("reltype") == 6)
+		if($con->prop("from.class_id") == CL_ML_LIST)
 		{
-			$obj = $con->from();
-			$fld = $obj->prop("msg_folder");
-			if(empty($fld))
+			if($con->prop("reltype") == 6)
 			{
-				$obj->set_prop("msg_folder", $con->prop("to"));
-				$obj->save();
+				$obj = $con->from();
+				$fld = $obj->prop("msg_folder");
+				if(empty($fld))
+				{
+					$obj->set_prop("msg_folder", $con->prop("to"));
+					$obj->save();
+				}
+			}
+			elseif($con->prop("reltype") == 1)
+			{
+				$to = $con->to();
+				$nlg = $this->get_cval("non_logged_in_users_group");
+				$g_oid = users::get_oid_for_gid($nlg);
+				$group = obj($g_oid);
+				$to->acl_set($group, array("can_view" => 1, "can_add" => 1));
+				$to->save();
 			}
 		}
 	}
@@ -219,7 +231,7 @@ class ml_list extends class_base
 	function post_message($args)
 	{
 		extract($args);
-		$this->mk_path(0,"<a href='".aw_global_get("route_back")."'>Tagasi</a>&nbsp;/&nbsp;Saada teade");
+		$this->mk_path(0, "<a href='".aw_global_get("route_back")."'>Tagasi</a>&nbsp;/&nbsp;Saada teade");
 
 		$this->read_template("post_message.tpl");
 
@@ -240,13 +252,13 @@ class ml_list extends class_base
 
 		$this->vars(array(
 			"title" => $target,
-			"date_edit" => $date_edit->gen_edit_form("start_at",time()-13)
+			"date_edit" => $date_edit->gen_edit_form("start_at", time() - 13),
 		));
 		$listrida .= $this->parse("listrida");
 		
 		$this->vars(array(
 			"listrida" => $listrida,
-			"reforb" => $this->mk_reforb("submit_post_message",array(
+			"reforb" => $this->mk_reforb("submit_post_message", array(
 				"id" => $id,
 				"list_id" => $listinfo->id(),
 			)),
@@ -296,7 +308,7 @@ class ml_list extends class_base
 		$q = "UPDATE ml_queue SET status = 0 WHERE qid = '$qid'";
 		$this->db_query($q);
 		
-		$this->_log(ST_MAILINGLIST, SA_SEND,"saatis meili $id listi ".$v["name"].":$gname", $lid);
+		$this->_log(ST_MAILINGLIST, SA_SEND, "saatis meili $id listi ".$v["name"].":$gname", $lid);
 		return aw_global_get("route_back");
 	}
 
@@ -331,20 +343,20 @@ class ml_list extends class_base
 				// check the list of selected folders against the actual connections to folders
 				// and ignore ones that are not connected - e.g. don't take candy from strangers
 				$conns = $list_obj->connections_from(array(
-					"type" => RELTYPE_MEMBER_PARENT,
+					"type" => "RELTYPE_MEMBER_PARENT",
 				));
 				foreach($conns as $conn)
 				{
 					if (!empty($args["subscr_folder"][$conn->prop("to")]))
 					{
 						$use_folders[] = $conn->prop("to");
-					};
-				};
-			};
+					}
+				}
+			}
 			if (sizeof($use_folders) > 0)
 			{
 				$allow = true;
-			};
+			}
 		}
 		else
 		{
@@ -365,8 +377,8 @@ class ml_list extends class_base
 			foreach($args["udef_txbox"] as $key => $val)
 			{
 				$request["udef_txbox" . $key] = $val;
-			};
-		};
+			}
+		}
 
 		$cfgform = $list_obj->prop("member_config");
 		$errors = $ml_member->validate_data(array(
@@ -380,14 +392,14 @@ class ml_list extends class_base
 			foreach($errors as $errprop)
 			{
 				$errmsg .= $errprop["msg"] . "<br>";
-			};
+			}
 
 			aw_session_set("no_cache",1);
 		
 			// fsck me plenty
 			$request["mail"] = $_POST["mail"];
-			aw_session_set("cb_reqdata",$request);
-			aw_session_set("cb_errmsg",$errmsg);
+			aw_session_set("cb_reqdata", $request);
+			aw_session_set("cb_errmsg", $errmsg);
 			return aw_global_get("HTTP_REFERER");
 		};
 		$fld = $list_obj->prop("def_user_folder");
@@ -415,16 +427,16 @@ class ml_list extends class_base
 					"confirm_subscribe" => $list_obj->prop("confirm_subscribe"),
 					"confirm_message" => $list_obj->prop("confirm_subscribe_msg"),
 					"udef_fields" => $udef_fields,
-				));	
-			};
+				));
+			}
 			if ($args["op"] == 2)
 			{
 				$retval = $ml_member->unsubscribe_member_from_list(array(
 					"email" => $args["email"],
 					"list_id" => $list_obj->id(),
-				));	
-			};
-		};
+				));
+			}
+		}
 
 		$relobj = new object($rel_id);
 
@@ -473,20 +485,20 @@ class ml_list extends class_base
 		$message = preg_replace("#\#ala\#(.*?)\#/ala\##si", '<div class="doc-titleSub">\1</div>', $message);
 		$message = str_replace("#subject#", $msg_obj->name(), $message);
 		$message = str_replace("#traceid#", "?t=".md5(uniqid(rand(), true)), $message);
-		if (is_oid($msg_obj->meta("template_selector")))
+		$tpl_sel = $msg_obj->meta("template_selector");
+		if (is_oid($tpl_sel) && $this->can("view", $tpl_sel))
 		{
-			$tpl_obj = new object($msg_obj->meta("template_selector"));
+			$tpl_obj = new object($tpl_sel);
 			$tpl_content = $tpl_obj->prop("content");
 			$tpl_content = str_replace("#title#", $c_title, $tpl_content);
 			$tpl_content = str_replace("#content#", $message, $tpl_content);
-			$tpl_content = str_replace("#container#", $c_content, $tpl_content);
-			
-			print $tpl_content;
+			$tpl_content = str_replace("#container#", $c_content, $tpl_content);	
+			echo $tpl_content;
 		}
 		else
 		{
-			print $message;
-		};
+			echo $message;
+		}
 	}
 
 	function get_property($arr)
@@ -552,11 +564,12 @@ class ml_list extends class_base
 					"tooltip" => "Salvesta",
 					"action" => "submit",
 				));
-				if (is_oid($arr["request"]["msg_id"]))
+				$msg = $arr["request"]["msg_id"];
+				if (is_oid($msg) && $this->can("view", $msg))
 				{
 					$link = $this->mk_my_orb("msg_preview",array(
 						"id" => $arr["obj_inst"]->id(),
-						"msg_id" => $arr["request"]["msg_id"],
+						"msg_id" => $msg,
 					), $this->clid, false, true);
 
 					$tb->add_button(array(
@@ -610,8 +623,8 @@ class ml_list extends class_base
 					else
 					{
 						$prop["value"] = $this->time2date($row["last_sent"],2);
-					};
-				};
+					}
+				}
 				break;
 
 			case "member_list_tb":
@@ -637,7 +650,7 @@ class ml_list extends class_base
 			case "show_mail_message":
 				$prop["value"] = $this->gen_ml_message_view($arr);
 				break;
-		};
+		}
 		return $retval;
 	}
 	
@@ -725,7 +738,7 @@ class ml_list extends class_base
 				$this->do_export = true;
 				$this->export_type = $arr["request"]["export_type"];
 				break;
-		};
+		}
 		return $retval;
 	}
 
@@ -737,11 +750,11 @@ class ml_list extends class_base
 			$arr["args"]["filename"] = "members.txt";
 			$arr["args"]["export_type"] = $this->export_type;
 			$arr["args"]["export_date"] = strtotime($arr["request"]["export_from_date"]["year"]. "-". $arr["request"]["export_from_date"]["month"]."-".$arr["request"]["export_from_date"]["day"]);
-		};
+		}
 		if (isset($this->edit_msg))
 		{
 			$arr["args"]["msg_id"] = $this->edit_msg;
-		};
+		}
 	}
 	
 	function get_all_members($id)
@@ -764,7 +777,7 @@ class ml_list extends class_base
 	// list_id(id) - which list?
 	function mass_subscribe($arr)
 	{
-		$lines = explode("\n",$arr["text"]);
+		$lines = explode("\n", $arr["text"]);
 		$list_obj = new object($arr["list_id"]);
 		$fld = $list_obj->prop("def_user_folder");
 		if(!is_oid($fld) || !$this->can("add", $fld))
@@ -790,20 +803,20 @@ class ml_list extends class_base
 				if (strlen($line) == 0)
 				{
 					continue;
-				};
-			       if (strpos($line,",") !== false)
-			       {
-				      list($name,$addr) = explode(",",$line);
-			       }
-			       elseif (strpos($line,";") !== false)
-			       {
-				      list($name,$addr) = explode(";",$line);
-			       }
-			       else
-			       {
-				      $name = "";
-				      $addr = $line;
-				};
+				}
+				if (strpos($line,",") !== false)
+				{
+					list($name,$addr) = explode(",", $line);
+				}
+				elseif (strpos($line,";") !== false)
+				{
+					list($name,$addr) = explode(";",$line);
+				}
+				else
+				{
+					$name = "";
+					$addr = $line;
+				}
 				$name = trim($name);
 				$addr = trim($addr);
 
@@ -830,8 +843,8 @@ class ml_list extends class_base
 					print "Vale aadress - nimi: $name, aadress: $addr<br />";
 					flush();
 				}
-			};
-		};
+			}
+		}
 		print "Importisin $cnt aadressi<br>";
 		return true;
 	}
@@ -840,7 +853,7 @@ class ml_list extends class_base
 	// !Mass unsubscribe of addresses
 	function mass_unsubscribe($arr)
 	{
-		$lines = explode("\n",$arr["text"]);
+		$lines = explode("\n", $arr["text"]);
 		$list_obj = new object($arr["list_id"]);
 		$fld = $list_obj->prop("def_user_folder");
 		$fld_obj = new object($fld);
@@ -860,7 +873,7 @@ class ml_list extends class_base
 				if (strlen($line) == 0)
 				{
 					continue;
-				};
+				}
 				// no, this is different, no explode. I need to extract an email address from the
 				// line
 				preg_match("/(\S*@\S*)/",$line,$m);
@@ -880,7 +893,7 @@ class ml_list extends class_base
 					else
 					{
 						print "Ei leidnud $addr<br />";
-					};
+					}
 					flush();
 					usleep(500000);
 				}
@@ -888,9 +901,9 @@ class ml_list extends class_base
 				{
 					print "IGN - a:$addr<br />";
 					flush();
-				};
-			};
-		};
+				}
+			}
+		}
 		print "Kustutasin $cnt aadressi<br>";
 		return true;
 	}
@@ -966,9 +979,9 @@ class ml_list extends class_base
 		$toolbar = &$arr["prop"]["toolbar"];
 		$toolbar->add_button(array(
 			"name" => "delete",
-			"tooltip" => "Kustuta",
+			"tooltip" => t("Kustuta"),
 			"action" => "delete_members",
-			"confirm" => "Kustutada need liikmed?",
+			"confirm" => t("Kustutada need liikmed?"),
 			"img" => "delete.gif",
 		));
 	}
@@ -996,7 +1009,7 @@ class ml_list extends class_base
 			$config_data = $config_obj->meta("cfg_proplist");
 			uasort($config_data, array($this,"__sort_props_by_ord"));
 		}
-				
+		
 		foreach($members as $key => $val)
 		{
 			list($mailto,$memberdata) = $ml_member_inst->get_member_information(array(
@@ -1005,19 +1018,19 @@ class ml_list extends class_base
 			));
 			
 			$member = &obj($memberdata["id"]);
-			if($member->created() > $arr["export_date"] or ($arr["export_date"] == -1))
+			if($member->created() > $arr["export_date"] || ($arr["export_date"] == -1))
 			{
-			switch($arr["export_type"])
-			{
-				case ML_EXPORT_ADDR:
-					$ser .= $mailto;
-					break;
-
-				case ML_EXPORT_NAMEADDR:
-					$ser .= $memberdata["name"] . " <" . $mailto . ">";
-					break;
-				
-				case ML_EXPORT_ALL:
+				switch($arr["export_type"])
+				{
+					case ML_EXPORT_ADDR:
+						$ser .= $mailto;
+						break;
+	
+					case ML_EXPORT_NAMEADDR:
+						$ser .= $memberdata["name"] . " <" . $mailto . ">";
+						break;
+					
+					case ML_EXPORT_ALL:
 						$ser .= $memberdata["name"] . ";" . $mailto . ";";
 						foreach ($config_data as $key2 => $value)
 						{
@@ -1029,20 +1042,19 @@ class ml_list extends class_base
 								}
 								else
 								{
-									$ser .= $member->prop($key2);		
+									$ser .= $member->prop($key2);
 								}
-								$ser .=";";
+								$ser .= ";";
 							}
 						}
-					
-					break;
-				default:
-					$ser .= $memberdata["name"] . "," . $mailto;
-					break;
-			};
-			$ser .= "\n";
+						break;
+					default:
+						$ser .= $memberdata["name"] . "," . $mailto;
+						break;
+				}
+				$ser .= "\n";
 			}
-		};
+		}
 		header("Content-Type: text/plain");
 		header("Content-length: " . strlen($ser));
 		header("Content-Disposition: filename=members.txt");
@@ -1076,7 +1088,7 @@ class ml_list extends class_base
 						"name" => $item["name"],
 						"caption" => $item["caption"],
 						"sortable" => 1,
-					));	
+					));
 				}
 				
 				if(strpos($key, "def_date"))
@@ -1120,7 +1132,7 @@ class ml_list extends class_base
 		$ml_member_inst = get_instance(CL_ML_MEMBER);
 
 		if (is_array($ml_list_members))
-		{	
+		{
 			foreach($ml_list_members as $key => $val)
 			{
 				list($mailto,$memberdata) = $ml_member_inst->get_member_information(array(
@@ -1145,7 +1157,7 @@ class ml_list extends class_base
 				);
 				$member_obj = &obj($memberdata["id"]);
 				for($i = 0; $i < 10; $i++)
-				{	
+				{
 					$tabledata["udef_txbox$i"] = $member_obj->prop("udef_txbox$i");
 					if($member_obj->prop("udef_date$i"))
 					{
@@ -1154,9 +1166,8 @@ class ml_list extends class_base
 				}
 				$t->define_data($tabledata);
 		
-			}	
-		}		
-
+			}
+		}
 		$t->sort_by();
 	}
 
@@ -1166,7 +1177,7 @@ class ml_list extends class_base
 		{
 			return (int)($el1["tmp_ord"] - $el2["tmp_ord"]);
 			//return 0;
-		};
+		}
 		return (int)($el1["ord"] - $el2["ord"]);
 	}
 	
@@ -1183,16 +1194,20 @@ class ml_list extends class_base
 		$toolbar->add_button(array(
 			"name" => "new",
 			"tooltip" => "Uus kiri",
-			"url" => $this->mk_my_orb("change",array("id" => $arr["obj_inst"]->id(),"group" => "write_mail")),
+			"url" => $this->mk_my_orb("change", array(
+					"id" => $arr["obj_inst"]->id(),
+					"group" => "write_mail",
+				),
+			),
 			"img" => "new.gif",
 		));
 
 		$toolbar->add_button(array(
 			"name" => "delete",
 			"tooltip" => "Kustuta",
-			"url" => "javascript:document.changeform.action.value='delete_queue_items';document.changeform.submit();",		
+			"url" => "javascript:document.changeform.action.value='delete_queue_items';document.changeform.submit();",
 			"img" => "delete.gif",
-		));		
+		));
 	}
 
 	function gen_list_status_table($arr)
@@ -1229,7 +1244,7 @@ class ml_list extends class_base
 			//$row["mid"] = $mail_obj->name();
 			if (!$row["patch_size"])
 			{
-				$row["patch_size"] = "kõik";
+				$row["patch_size"] = t("kõik");
 			};
 			$row["delay"]/=60;
 			
@@ -1242,8 +1257,8 @@ class ml_list extends class_base
 				)),
 				"caption" => $status_str,
 			));
-			$row["protsent"] = $this->queue_ready_indicator($row["position"],$row["total"]);
-			$row["perf"] = sprintf("%.2f",$row["total"] / ($row["last_sent"] - $row["start_at"]) * 60);
+			$row["protsent"] = $this->queue_ready_indicator($row["position"], $row["total"]);
+			$row["perf"] = sprintf("%.2f", $row["total"] / ($row["last_sent"] - $row["start_at"]) * 60);
 			$t->define_data($row);
 		};
 		$t->sort_by();
@@ -1376,8 +1391,8 @@ class ml_list extends class_base
 						"oid" => $row["oid"],
 						"parent" => $row["parent"],
 					);
-				};
-			};
+				}
+			}
 		}
 		elseif ($source_obj->class_id() == CL_GROUP)
 		{
@@ -1423,8 +1438,8 @@ class ml_list extends class_base
 		enter_function("ml_list::parse_alias");
 		$cb_errmsg = aw_global_get("cb_errmsg");
 		$cb_reqdata = aw_global_get("cb_reqdata");
-		aw_session_del("cb_errmsg","");
-		aw_session_del("cb_reqdata","");
+		aw_session_del("cb_errmsg", "");
+		aw_session_del("cb_reqdata", "");
 		$tobj = new object($args["alias"]["target"]);
 		$sub_form_type = $tobj->prop("sub_form_type");
 		if (!empty($args["alias"]["relobj_id"]))
@@ -1434,7 +1449,7 @@ class ml_list extends class_base
 			if (!empty($meta["CL_ML_LIST"]["sub_form_type"]))
 			{
 				$sub_form_type = $meta["CL_ML_LIST"]["sub_form_type"];
-			};
+			}
 		}
 		$tpl = ($sub_form_type == 0) ? "subscribe.tpl" : "unsubscribe.tpl";
 		$this->read_template($tpl);
@@ -1442,7 +1457,7 @@ class ml_list extends class_base
 		if ($this->is_template("FOLDER") && $tobj->prop("multiple_folders") == 1)
 		{
 			$folders = $tobj->connections_from(array(
-				"type" => RELTYPE_MEMBER_PARENT,
+				"type" => "RELTYPE_MEMBER_PARENT",
 			));
 			$c = "";
 			foreach($folders as $folder_conn)
@@ -1511,18 +1526,18 @@ class ml_list extends class_base
 		else
 		{
 			$p = (int)((int)$osa * 100 / (int)$kogu);
-		};
+		}
 		$not_p = 100 - $p;
 		//echo("qri($osa,$kogu)=$p");//dbg
 		// tekst pane sinna, kus on rohkem ruumi.
 		if ($p > $not_p)
 		{
-			$p1t="<span Style='font-size:10px;font-face:verdana;'><font color='white'>".$p."%</font></span>";
+			$p1t = "<span Style='font-size:10px;font-face:verdana;'><font color='white'>".$p."%</font></span>";
 		}
 		else
 		{
-			$p2t="<span Style='font-size:10px;font-face:verdana;'><font color='black'>".$p."%</font></span>";
-		};
+			$p2t = "<span Style='font-size:10px;font-face:verdana;'><font color='black'>".$p."%</font></span>";
+		}
 		// kommentaar on selleks, et sorteerimine töötaks (hopefully)
 		return "<!-- $p --><table bgcolor='#CCCCCC' Style='height:12;width:100%'><tr><td width=\"$p%\" bgcolor=\"blue\">$p1t</td><td width=\"$not_p%\">$p2t</td></tr></table>";
 	}
@@ -1537,7 +1552,7 @@ class ml_list extends class_base
 		$_mid = $arr["request"]["mail_id"];
 		$qid = $arr["request"]["qid"];
 		$id = $arr["obj_inst"]->id();
-		if(strtolower(aw_ini_get('db.driver'))=='mssql')
+		if(strtolower(aw_ini_get("db.driver")) == "mssql")
 		{
 			$lim1 = " TOP 50 ";
 			$lim2 = "";
@@ -1555,8 +1570,16 @@ class ml_list extends class_base
 		while ($row = $this->db_next())
 		{
 			$tgt = htmlspecialchars($row["target"]);
-			$row["member"] = "<a href='".$this->mk_my_orb("change", array("id" => $id, "group" => "show_mail", "mail_id" => $arr["request"]["mail_id"], "s_mail_id" => $row["id"]))."'>".$tgt."</a>";
-			$row["clicked"] = ($row["vars"] == 1 ? "jah" : "ei");
+			$row["member"] = html::href(array(
+				"url" => $this->mk_my_orb("change", array(
+					"id" => $id, 
+					"group" => "show_mail", 
+					"mail_id" => $arr["request"]["mail_id"], 
+					"s_mail_id" => $row["id"],
+				)),
+				"caption" => $tgt,
+			));
+			$row["clicked"] = ($row["vars"] == 1 ? t("jah") : t("ei"));
 			$t->define_data($row);
 		}
 	}
@@ -1596,7 +1619,7 @@ class ml_list extends class_base
 			$refresh_rate = 30;
 			header("Refresh: $refresh_rate; url=$url");
 			$str = ", värskendan iga ${refresh_rate} sekundi järel";
-		};
+		}
 		return "Liikmeid: $member_count, saadetud: $served_count $str";
 	}
 
@@ -1606,20 +1629,20 @@ class ml_list extends class_base
 		if ($arr["id"] == "mail_report" && empty($arr["request"]["mail_id"]))
 		{
 			return false;
-		};
+		}
 		if ($arr["id"] == "show_mail" && empty($arr["request"]["s_mail_id"]))
 		{
 			return false;
-		};
+		}
 		if ($arr["id"] == "mail_report")
 		{
 			$arr["link"] .= "&mail_id=" . $arr["request"]["mail_id"];
-		};
+		}
 		if ($arr["id"] == "write_mail" && $arr["request"]["group"] != "write_mail")
 		{
 			return false;
-		};
-	}		
+		}
+	}
 
 	function gen_ml_message_view($arr)
 	{
@@ -1627,7 +1650,7 @@ class ml_list extends class_base
 		if (!is_array($this->msg_view_data))
 		{
 			$this->msg_view_data = $this->db_fetch_row("SELECT * FROM ml_sent_mails WHERE id = '$mail_id'");
-		};
+		}
 
 		$rv = "";
 
@@ -1643,9 +1666,8 @@ class ml_list extends class_base
 
 			case "show_mail_message":
 				$rv = nl2br($this->msg_view_data["message"]);
-
 				break;
-		};
+		}
 		return $rv;
 	}
 
@@ -1707,11 +1729,11 @@ class ml_list extends class_base
 
 		// would be nice to have some other and better method to do this
 		
-		
+		$prps = array("mfrom", "name", "html_mail", "message", "msg_contener_title", "msg_contener_content", "mfrom_name"); 
 		
 		foreach($all_props as $id => $prop)
 		{
-			if ($id == "mfrom" || $id == "name" || $id == "html_mail" || $id == "message" || $id == "msg_contener_title" || $id == "msg_contener_content" || $id == "mfrom_name")
+			if (in_array($id, $prps))
 			{
 				if ($id == "mfrom")
 				{
@@ -1740,8 +1762,8 @@ class ml_list extends class_base
 					);
 				}
 				$filtered_props[$id] = $prop;
-			};
-		};
+			}
+		}
 
 		$filtered_props["id"] = array(
 			"name" => "id",
@@ -1809,10 +1831,9 @@ class ml_list extends class_base
 			if ($tpl_obj->prop("is_html") == 1)
 			{
 				$msg_obj->set_prop("html_mail", 1024);
-			};
-			
+			}	
 			$msg_obj->save();
-		};
+		}
 
 		if ($msg_data["send_away"] == 1)
 		{
@@ -1850,7 +1871,7 @@ class ml_list extends class_base
 
 	function send_message($arr)
 	{
-		$mailinglist_obj = obj($arr['mto']);
+		$mailinglist_obj = obj($arr["mto"]);
 		// mail messages folder:
 		$folder = $mailinglist_obj->prop("msg_folder");
 
@@ -1864,13 +1885,13 @@ class ml_list extends class_base
 			"request" => array(
 				"emb" => $arr,
 			),
-			"obj_inst" => obj($arr['mto']),
+			"obj_inst" => obj($arr["mto"]),
 		));
-		if($arr['submit_post_message'] == 1)
+		if($arr["submit_post_message"] == 1)
 		{
 			$this->submit_post_message(array(
-				"list_id" => $arr['mto'],
-				"id" => $arr['id'],
+				"list_id" => $arr["mto"],
+				"id" => $arr["id"],
 			));
 		}
 	}
@@ -1887,12 +1908,15 @@ class ml_list extends class_base
 	{
 		foreach(safe_array($arr["sel"]) as $member_id)
 		{
-			$member_obj = new object($member_id);
-			if($member_obj->class_id() == CL_MESSAGE)
+			if(is_oid($member_id) && $this->can("delete", $member_id))
 			{
-				$member_obj->delete();
+				$member_obj = new object($member_id);
+				if($member_obj->class_id() == CL_MESSAGE)
+				{
+					$member_obj->delete();
+				}
 			}
-		};
+		}
 		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"]));
 	}
 		
@@ -1905,15 +1929,15 @@ class ml_list extends class_base
 	**/
 	function delete_members($arr)
 	{
-		if (is_array($arr["sel"]))
+		foreach(safe_array($arr["sel"]) as $member_id)
 		{
-			foreach($arr["sel"] as $member_id)
+			if(is_oid($member_id) && $this->can("delete", $member_id))
 			{
 				$member_obj = new object($member_id);
 				$member_obj->delete();
-			};
-		};
-		return $this->mk_my_orb("change",array("id" => $arr["id"],"group" => "membership"));
+			}
+		}
+		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => "membership"));
 	}
-};
+}
 ?>
