@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.21 2005/01/24 14:54:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.22 2005/02/14 15:12:50 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -691,13 +691,19 @@ class register_search extends class_base
 		if ($GLOBALS["sortby"] != "")
 		{
 			$sp = $f_props[$GLOBALS["sortby"]];
-			$filter["sort_by"] = $sp["table"].".".$sp["field"]." ".$GLOBALS["sort_order"];
+			if ($sp)
+			{
+				$filter["sort_by"] = $sp["table"].".".$sp["field"]." ".$GLOBALS["sort_order"];
+			}
 		}
 		else
 		if ($tdata["__defaultsort"] != "")
 		{
 			$sp = $f_props[$tdata["__defaultsort"]];
-			$filter["sort_by"] = $sp["table"].".".$sp["field"]." DESC ";
+			if ($sp)
+			{
+				$filter["sort_by"] = $sp["table"].".".$sp["field"]." DESC ";
+			}
 		}
 		else
 		{
