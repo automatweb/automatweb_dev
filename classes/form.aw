@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.136 2002/09/04 08:14:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.137 2002/09/04 11:53:21 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1137,10 +1137,17 @@ class form extends form_base
 				preg_match("/lbopt_(\d+?)$/",$__rel,$m);
 				$_rel = (int)$m[1];
 
-				$_req_items = (int)$this->post_vars[$row["el_cnt"]];
-				if ($_req_items == 0)
+				if ($row["count"] > 0)
 				{
-					$_req_items = 1;
+					$_req_items = $row["count"];
+				}
+				else
+				{
+					$_req_items = (int)$this->post_vars[$row["el_cnt"]];
+					if ($_req_items == 0)
+					{
+						$_req_items = 1;
+					};
 				};
 					
 				// now I need to figure out the selected value of the relation
@@ -1322,14 +1329,28 @@ class form extends form_base
 			$this->db_query($q);
 			while($row = $this->db_next())
 			{
-				$_cnt = (int)$this->post_vars[$row["el_cnt"]];
-				// default to 1. Is this correct?
-				if ($_cnt == 0)
+				if ($row["count"] > 0)
 				{
-					$_cnt = 1;
+					$_cnt = $row["count"];
+				}
+				else
+				{
+					$_cnt = (int)$this->post_vars[$row["el_cnt"]];
+					// default to 1. Is this correct?
+					if ($_cnt == 0)
+					{
+						$_cnt = 1;
+					};
 				};
 				$_start = (int)get_ts_from_arr($this->post_vars[$row["el_start"]]);
-				$_end = (int)get_ts_from_arr($this->post_vars[$row["el_end"]]);
+				if ($row["end"] > 0)
+				{
+					$_end = $_start + $row["end"];
+				}
+				else
+				{
+					$_end = (int)get_ts_from_arr($this->post_vars[$row["el_end"]]);
+				};
 				$__rel = $this->post_vars[$row["el_relation"]];
 				preg_match("/lbopt_(\d+?)$/",$__rel,$m);
 				$_rel = (int)$m[1];
@@ -5516,6 +5537,31 @@ class form extends form_base
 		$ft = get_instance("form_table");
 		$tables = $tables + $ft->get_form_tables_for_form($form_id);
 
+		if ($item["end"] > 0)
+		{
+			// Do we deal with days?
+			if ($item["end"] >= 86400)
+			{
+				$end_mp = 86400;
+			}
+			// hours perhaps?
+			elseif ($item["end"] >= 3600)
+			{
+				$end_mp = 3600;
+			}
+			// probably minutes then
+			else
+			{
+				$end_mp = 60;
+			};
+			$end = (int)($item["end"] / $end_mp);
+		}
+		else
+		{
+			$end_mp = 60;
+			$end = 0;
+		};
+
 		$this->vars(array(
 			"target_objects" => $this->picker($item["cal_id"],$target_objects),
 			"objects_disabled" => disabled(sizeof($target_objects) == 1),
@@ -5529,6 +5575,13 @@ class form extends form_base
 			"relation_disabled" => disabled(sizeof($els_relation) == 1),
 			"ev_tables" => $this->picker($item["ev_table"],$tables),
 			"tables_disabled" => disabled(sizeof($tables) == 1),
+			"cnt_type_el" => checked($item["count"] == 0),
+			"cnt_type_cnt" => checked($item["count"] > 0),
+			"end_type_el" => checked($item["end"] == 0),
+			"end_type_shift" => checked($item["end"] > 0),
+			"end_mp" => $this->picker($end_mp,array(60 => "minut(it)",3600 => "tund(i)",86400 => "päev(a)")),
+			"end" => $end,
+			"count" => (int)$item["count"],
 			"reforb" => $this->mk_reforb("submit_cal_rel",array("form_id" => $form_id,"id" => $id)),
 		));
 		return $this->do_menu_return();				
@@ -5537,6 +5590,8 @@ class form extends form_base
 	function submit_cal_rel($args = array())
 	{
 		extract($args);
+		$count = ($cnt_type == 2) ? $count : 0;
+		$end = ($end_type == 2) ? (int)$end * (int)$end_mp : 0;
 		if ($id)
 		{
 			$q = "UPDATE calendar2forms SET
@@ -5545,14 +5600,17 @@ class form extends form_base
 				el_cnt = '$el_cnt',
 				ev_table = '$ev_table',
 				el_relation = '$el_relation',
-				el_end = '$el_end'
+				el_end = '$el_end',
+				count = '$count',
+				end = '$end'
 				WHERE id = '$id'";
 		}
 		else
 		{
-			$q = "INSERT INTO calendar2forms (cal_id,form_id,el_start,el_cnt,ev_table,el_relation,el_end)
-				VALUES ('$cal_id','$form_id','$el_start','$el_cnt','$ev_table','$el_relation','$el_end')";
+			$q = "INSERT INTO calendar2forms (cal_id,form_id,el_start,el_cnt,ev_table,el_relation,el_end, count, end)
+				VALUES ('$cal_id','$form_id','$el_start','$el_cnt','$ev_table','$el_relation','$el_end','$count','$end')";
 		};
+		//print $q;
 		$this->db_query($q);
 		return $this->mk_my_orb("calendar",array("id" => $form_id));
 	}
