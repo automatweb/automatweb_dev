@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.18 2004/06/15 11:45:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.19 2004/07/20 13:06:41 rtoomas Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -129,6 +129,7 @@ class vcalendar extends aw_template
 		$data = $arr["data"];
 		$data["timestamp"] = $arr["timestamp"];
 		$data["_id"] = $this->el_count;
+		$data['comment'] = $arr['data']['comment'];
 
 		$this->evt_list[$this->el_count] = $data;
 		$this->items[$use_date][] = &$this->evt_list[$this->el_count];
@@ -564,7 +565,6 @@ class vcalendar extends aw_template
 		
 		// do the past
 		$past = $future = "";
-
 		if (is_array($this->past))
 		{
 			uasort($this->past,array($this,"__desc_sort"));
@@ -815,11 +815,15 @@ class vcalendar extends aw_template
 			"link" => !empty($evt["link"]) ? $evt["link"] : "javascript:void(0)",
 			"modifiedby" => $evt["modifiedby"],
 			"iconurl" => !empty($evt["icon"]) ? $evt["icon"] : "/automatweb/images/trans.gif",
-			"comment" => $evt["comment"],
 			"COMMENT" => "",
 		));
+
 		if (!empty($evt["comment"]))
 		{
+			$this->evt_tpl->vars(array(
+					'comment_content' => $evt['comment'],
+			));
+
 			$this->evt_tpl->vars(array(
 				"COMMENT" => $this->evt_tpl->parse("COMMENT"),
 			));
