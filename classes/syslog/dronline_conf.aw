@@ -35,6 +35,9 @@
 @property numlines type=textbox size=4
 @caption Mitu rida
 
+@property sites type=select multiple=1 size=4
+@caption Saidid
+
 @property use_filter type=checkbox ch_value=1
 @caption Kas kasutada Tegevuste filtrit
 
@@ -160,6 +163,24 @@ class dronline_conf extends class_base
 		if (($prop['name'] == 'name' || $prop['name'] == 'comment' || $prop['name'] == 'alias' || $prop['name'] == 'status' || $prop['name'] == 'jrk') && $this->embedded == true)
 		{
 			return PROP_IGNORE;
+		}
+		else
+		if ($prop['name'] == 'sites')
+		{
+			if (!aw_ini_get("syslog.has_site_id"))
+			{
+				return PROP_IGNORE;
+			}
+			$opts = array('' => 'K&otilde;ik saidid');
+			$this->db_query("SELECT distinct(site_id) as site_id FROM syslog");
+			while ($row = $this->db_next())
+			{
+				if ($row['site_id'])
+				{
+					$opts[$row['site_id']] = $row['site_id'];
+				}
+			}
+			$prop['options'] = $opts;
 		}
 
 		return PROP_OK;

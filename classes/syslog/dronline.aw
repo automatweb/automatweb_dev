@@ -363,6 +363,19 @@ class dronline extends class_base
 			'caption' => 'Tegevus',
 			'sortable' => 1,
 		));
+		if (aw_ini_get("syslog.has_site_id"))
+		{
+			$t->define_field(array(
+				'name' => 'site_id',
+				'caption' => 'Saidi ID',
+				'sortable' => 1,
+			));
+		}
+		$t->define_field(array(
+			'name' => 'oid',
+			'caption' => 'OID',
+			'sortable' => 1,
+		));
 		$t->define_field(array(
 			'name' => 'action',
 			'caption' => 'Mida',

@@ -86,7 +86,7 @@
             <name>sites</name>
             <type>select</type>
             <multiple>1</multiple>
-            <size>5</size>
+            <size>4</size>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
