@@ -88,6 +88,15 @@
             <caption>J&amp;auml;rgmine automaatne import</caption>
       </property>
       <property>
+            <name>last_import_log</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Viimase impordi logi</caption>
+      </property>
+      <property>
             <name>props</name>
             <table>objects</table>
             <group>props</group>
@@ -145,6 +154,27 @@
             <type>password</type>
             <caption>Parool</caption>
       </property>
+      <property>
+            <name>auto_del</name>
+            <table>objects</table>
+            <group>del</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Kustuta andmeallikas puuduvad objektid</caption>
+      </property>
+      <property>
+            <name>del_max</name>
+            <table>objects</table>
+            <group>del</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <datatype>int</datatype>
+            <size>5</size>
+            <caption>Maksimaalne objektide arv mida kustutada</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_OBJECT_IMPORT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -164,6 +194,9 @@
             <sched>
                   <caption>Automaatne import</caption>
             </sched>
+            <del>
+                  <caption>Kustutamine</caption>
+            </del>
       </groupinfo>
       <reltypes>
             <OBJECT_TYPE>

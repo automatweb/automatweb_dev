@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.18 2004/11/07 11:47:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.19 2004/11/23 10:40:47 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -37,6 +37,9 @@
 @property auto_import_status type=text
 @caption J&auml;rgmine automaatne import
 
+@property last_import_log type=text field=meta method=serialize
+@caption Viimase impordi logi
+
 @groupinfo props caption="Omadused"
 @property props type=table store=no no_caption=1 group=props
 
@@ -58,6 +61,14 @@
 @property aimp_pwd type=password
 @caption Parool
 
+@groupinfo del caption="Kustutamine"
+@default group=del
+
+@property auto_del type=checkbox ch_value=1
+@caption Kustuta andmeallikas puuduvad objektid
+
+@property del_max type=textbox datatype=int size=5
+@caption Maksimaalne objektide arv mida kustutada
 
 @reltype OBJECT_TYPE value=1 clid=CL_OBJECT_TYPE
 @caption imporditav klass
@@ -99,6 +110,10 @@ class object_import extends class_base
 				{
 					$retval = PROP_IGNORE;
 				}
+				break;
+		
+			case "last_import_log":
+				$prop["value"] = join("<br>", $prop["value"]);
 				break;
 
 			case "auto_import_status":
@@ -510,6 +525,7 @@ class object_import extends class_base
 			if ($o->meta("import_status") == 1 && $o->meta("import_last_time") < (time() - 30))
 			{
 				echo "restart import for ".$o->id()." <br>";
+				$this->_add_log($o, "Importi alustati uuesti realt ".$o->meta("import_row_count"));
 				$this->do_exec_import($o, $o->meta("import_row_count"));
 			}
 			echo "for o ".$o->id()." status = ".$o->meta("import_status")." last time = ".date("d.m.Y H:i", $o->meta("import_last_time"))." <br>";
@@ -574,48 +590,13 @@ class object_import extends class_base
 				echo "creating uniqueness filter <br>\n";
 				flush();
 
-				$existing_objects = array();
-
-
-				$fetch = array("objects.oid as id");
-				$where = array("objects.status > 0", "objects.lang_id = '".aw_global_get("lang_id")."'", "objects.site_id = ".aw_ini_get("site_id"));
-				$tbls = array();
-
-				foreach($o->prop("unique_id") as $unique_id)
-				{
-					$prop = $properties[$unique_id];
-					if ($prop["store"] == "no")
-					{
-						continue;
-					}
-
-					if (!isset($tbls[$prop["table"]]))
-					{
-						$tbls[$prop["table"]] = "LEFT JOIN {$prop[table]} ON {$prop[table]}.{$tableinfo[$prop[table]][index]} = {$tableinfo[$prop[table]][master_table]}.{$tableinfo[$prop[table]][master_index]}";
-					}
-
-					$tf = $prop["table"].".".$prop["field"];
-					$fetch[] = $tf." as ".$unique_id;
-				}
-
-				$uns = $o->prop("unique_id");
-
-				$sql = "SELECT ".join(",", $fetch)." FROM objects ".join(" ", $tbls)." WHERE ".join(" AND ", $where);
-				$this->db_query($sql);
-				while ($row = $this->db_next())
-				{
-					$key = "";
-					foreach($uns as $un)
-					{
-						$key .= $un.":".$row[$un];
-					}
-					$existing_objects[$key] = $row["id"];
-				}
+				$existing_objects = $this->_get_uniq_existing($o, $properties, $tableinfo);
 
 				echo "created uniqueness filter for ".count($existing_objects)." objects. <br>\n";
 				flush();
 			}
 
+			$row_count = count($data_rows);
 			foreach($data_rows as $line)
 			{
 				$line_n++;
@@ -636,34 +617,7 @@ class object_import extends class_base
 				{
 					$key = "";
 
-					foreach($o->prop("unique_id") as $unique_id)
-					{
-						// get column for uniq id
-						$u_col = $p2c[$unique_id];
-						$val = $line[$u_col];
-
-						// if this col has a user-defined value, use that. 
-						if (!empty($userval[$unique_id]))
-						{
-							$val = $userval[$unique_id];
-						}
-
-						// check for classificators
-						if ($properties[$unique_id]["type"] == "classificator")
-						{
-							$tmp = $this->_resolve_classificator(array(
-								"name" => $unique_id,
-								"clid" => $class_id,
-								"object_type" => $o->prop("object_type")
-							), $line[$u_col]);
-							if (is_oid($tmp))
-							{
-								$val = $tmp;
-							}
-						}
-						$key .= $unique_id.":".$val;
-					}
-
+					$key = $this->_get_un_key_for_obj($o, $p2c, $line, $userval, $properties, $class_id);
 				
 					$t_oid = $existing_objects[$key];
 
@@ -783,7 +737,15 @@ class object_import extends class_base
 					$o->set_meta("import_row_count", $line_n);
 					$o->save();
 				}
+
+				if (($line_n % ($row_count / 10)) == 1)
+				{
+					$this->_add_log($o, "Imporditud $line_n objekti");
+				}
 			}
+
+			$this->_add_log($o, $this->_delete_objects($o, $properties, $tableinfo, $data_rows, $p2c, $userval, $class_id));
+			
 			$this->do_mark_finish_import($o);
 			echo "Valmis! <br>\n";
 			echo "<script language=javascript>setTimeout(\"window.location='".$this->mk_my_orb("change", array("id" => $o->id()))."'\", 5000);</script>";
@@ -795,13 +757,13 @@ class object_import extends class_base
 	{
 		$o->set_meta("import_status", 1);
 		$o->set_meta("import_started_at", time());
-		$o->save();
+		$this->_start_log($o);
 	}
 
 	function do_mark_finish_import($o)
 	{
 		$o->set_meta("import_status", 0);
-		$o->save();
+		$this->_add_log($o, "Import edukalt l&otilde;ppenud");
 	}
 
 	function callback_pre_edit($arr)
@@ -862,6 +824,158 @@ class object_import extends class_base
 			}
 		}
 		return NULL;
+	}
+
+	function _get_uniq_existing($o, $properties, $tableinfo)
+	{
+		$existing_objects = array();
+
+		$fetch = array("objects.oid as id");
+		$where = array("objects.status > 0", "objects.lang_id = '".aw_global_get("lang_id")."'", "objects.site_id = ".aw_ini_get("site_id"));
+		$tbls = array();
+
+		foreach($o->prop("unique_id") as $unique_id)
+		{
+			$prop = $properties[$unique_id];
+			if ($prop["store"] == "no")
+			{
+				continue;
+			}
+
+			if (!isset($tbls[$prop["table"]]))
+			{
+				$tbls[$prop["table"]] = "LEFT JOIN {$prop[table]} ON {$prop[table]}.{$tableinfo[$prop[table]][index]} = {$tableinfo[$prop[table]][master_table]}.{$tableinfo[$prop[table]][master_index]}";
+			}
+
+			$tf = $prop["table"].".".$prop["field"];
+			$fetch[] = $tf." as ".$unique_id;
+		}
+
+		$uns = $o->prop("unique_id");
+
+		$sql = "SELECT ".join(",", $fetch)." FROM objects ".join(" ", $tbls)." WHERE ".join(" AND ", $where);
+		$this->db_query($sql);
+		while ($row = $this->db_next())
+		{
+			$key = "";
+			foreach($uns as $un)
+			{
+				$key .= $un.":".$row[$un];
+			}
+			$existing_objects[$key] = $row["id"];
+		}
+
+		return $existing_objects;
+	}
+
+	function _delete_objects($o, $properties, $tableinfo, $lines, $p2c, $userval, $class_id)
+	{
+		// check if the object says we should delete
+		if (!$o->prop("auto_del"))
+		{
+			return;
+		}
+
+		echo "create uniq filter for delete <br>\n";
+		flush();
+
+		// get uniqueness filter
+		$uniq = $this->_get_uniq_existing($o, $properties, $tableinfo);
+
+		echo "got filter <Br>\n";
+		flush();
+
+		// compare filter to lines read from ds	
+		// make list of objects that are in uniq filter but not in ds
+		foreach($lines as $line)
+		{
+			$key = $this->_get_un_key_for_obj($o, $p2c, $line, $userval, $properties, $class_id);
+			unset($uniq[$key]);
+		}
+	
+		echo "unset keys <br>\n";
+		flush();
+
+		if (count($uniq))
+		{
+			$parents = array();
+			foreach($o->connections_from(array("type" => "RELTYPE_FOLDER")) as $c)
+			{
+				$parents[$c->prop("to")] = $c->prop("to");
+			}
+			$ol = new object_list(array(
+				"oid" => $this->make_keys(array_values($uniq)),
+				"parent" => $parents
+			));
+			$uniq = $ol->ids();
+		}
+
+		// check if the number is less than max allowed
+		if (count($uniq) > $o->prop("del_max"))
+		{
+			echo "ERROR: number of objects to delete is ".count($uniq)." greater than the max allowed: ".$o->prop("del_max")." <br>\n";
+			return "VIGA: leitud kustutamisele minevate objektide hulk ".count($uniq)." on suurem kui maksimaalne: ".$o->prop("del_max");
+		}
+
+		// kill the bastards
+		foreach($uniq as $oid)
+		{
+			echo "delete object $oid <br>\n";
+			flush();
+			$o = obj($oid);
+			$o->delete();
+		}
+
+		echo "delete done. <br>\n";
+		flush();
+		return "Edukalt kustutatud ".count($uniq)." objekti!";
+	}
+
+	function _get_un_key_for_obj($o, $p2c, $line, $userval, $properties, $class_id)
+	{
+		foreach($o->prop("unique_id") as $unique_id)
+		{
+			// get column for uniq id
+			$u_col = $p2c[$unique_id];
+			$val = $line[$u_col];
+
+			// if this col has a user-defined value, use that. 
+			if (!empty($userval[$unique_id]))
+			{
+				$val = $userval[$unique_id];
+			}
+
+			// check for classificators
+			if ($properties[$unique_id]["type"] == "classificator")
+			{
+				$tmp = $this->_resolve_classificator(array(
+					"name" => $unique_id,
+					"clid" => $class_id,
+					"object_type" => $o->prop("object_type")
+				), $line[$u_col]);
+				if (is_oid($tmp))
+				{
+					$val = $tmp;
+				}
+			}
+			$key .= $unique_id.":".$val;
+		}
+
+		return $key;
+	}
+
+	function _start_log($o)
+	{
+		$o->set_meta("last_import_log", array(date("d.m.Y / H:i").": Importi alustati "));
+		$o->save();
+	}
+
+	function _add_log($o, $msg)
+	{
+		$cur = safe_array($o->meta("last_import_log"));
+		$cur[] = date("d.m.Y / H:i").": ".$msg;
+		$o->set_meta("last_import_log", $cur);
+		$o->save();
 	}
 }
 ?>
