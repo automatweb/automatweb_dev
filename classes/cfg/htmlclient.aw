@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.33 2003/09/09 12:05:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.34 2003/09/17 11:11:55 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -30,15 +30,56 @@ class htmlclient extends aw_template
 	{
 		// if value is array, then try to interpret
 		// it as a list of elements.
+		$wrapchildren = false;
 
 		// but actually, settings parets should take place in class_base itself
 		if (isset($args["items"]) && is_array($args["items"]))
 		{
 			$res = "";
+			// if wrapchildren is set, then we attempt to place the properties
+			// next to each other using a HTML table. Other output clients
+			// can probably just ignore it, since it really is only used
+			// to lay out blocks of HTML
+			if (isset($args["wrapchildren"]))
+			{
+				$wrapchildren = true;
+				$cnt = count($args["items"]);
+			};
+
+			$i = 1;
 			foreach($args["items"] as $el)
 			{
+				if ($wrapchildren)
+				{
+					if ($i == 1)
+					{
+						$res .= $this->draw_element(array(
+							"type" => "text",
+							"value" => "<table border='0' width='100%'><tr><td valign='top' width='200'><small>",
+						));
+					};
+				};
 	 			$this->mod_property(&$el);
 				$res .= $this->draw_element($el);
+				if ($wrapchildren)
+				{
+					if ($i == $cnt)
+					{
+						$res .= $this->draw_element(array(
+							"type" => "text",
+							"value" => "</td></tr></table>",
+						));
+					}
+					else
+					{
+						$res .= $this->draw_element(array(
+							"type" => "text",
+							"value" => "</td><td valign='top'>",
+						));
+					};
+				};
+
+				$i++;
 			};
 			$args["value"] = $res;
 			$args["type"] = "text";
