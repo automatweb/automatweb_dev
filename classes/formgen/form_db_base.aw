@@ -106,7 +106,7 @@ class form_db_base extends aw_template
 		$entry_id = 0;
 		if ($this->arr["save_table"] == 1)
 		{
-			// here we must figure out if we need to create any objects for the tables 
+			// here we must figure out if we need to create any objects for the tables
 			if ($this->arr["save_tables_obj_tbl"] != "")
 			{
 				// if we get here, we must create an object in the object table and also add a row in the corresponding table
@@ -117,7 +117,7 @@ class form_db_base extends aw_template
 				// if we got here then no object has to be created - but we do have to come up with
 				// a new unique id that identifies the entry
 				// of course this will create a problem if we save data to several tables, cause then just one id won't be enough
-				// instead we need one for every table. 
+				// instead we need one for every table.
 				// so, now we gotta figure out where the hell do we save them so we can find them later
 				// well. but. maybe we don't need several id's after all, cause all the forms have to be related anyway
 				// so that we could save data to them and be able to pick it apart later.
@@ -131,7 +131,7 @@ class form_db_base extends aw_template
 				// work..
 				$tbl = $this->arr["save_table_start_from"];
 				$index_col = $this->arr["save_tables"][$tbl];
-				$entry_id = $this->db_fetch_field("SELECT MAX(".$index_col.") as id FROM $tbl","id")+1;	
+				$entry_id = $this->db_fetch_field("SELECT MAX(".$index_col.") as id FROM $tbl","id")+1;
 				// yeah, yeah, I know, race condition, bla-bla, yadda yada. just fuck off, will ya.
 				$q = "INSERT INTO $tbl($index_col) VALUES('$entry_id')";
 				$this->db_query($q);
@@ -156,13 +156,14 @@ class form_db_base extends aw_template
 		$this->save_handle();
 		if (!($this->arr["save_table"] == 1 && $this->arr["save_tables_obj_tbl"] == ""))
 		{
+			$this->quote(&$arr['name']);
 			$this->upd_object($arr);
 		}
 		$this->restore_handle();
 	}
 
 	////
-	// !this maps the data entered through the form to the necessary form (ev_555 => documents.title for instance) 
+	// !this maps the data entered through the form to the necessary form (ev_555 => documents.title for instance)
 	// and writes it to the correct tables in the database or if we ever do session saving of form entries then there too
 	// $entry_id = the entry's id that is to be created - this sould be the id returned from form_db_base::create_entry_object
 	// $entry_data = array of element_id => element_data pairs
@@ -188,8 +189,8 @@ class form_db_base extends aw_template
 			// add new entry - just so that we can determine the form id from the entry's id when we need to
 			$this->db_query("INSERT INTO form_entries(id,form_id,cal_id) VALUES($entry_id, $this->id,$cal_id)");
 
-			// create sql 
-			$ids = "id"; 
+			// create sql
+			$ids = "id";
 			$vals = "$entry_id";
 			if ($chain_entry_id)
 			{
@@ -227,7 +228,7 @@ class form_db_base extends aw_template
 	}
 
 	////
-	// !takes the data entered by the user and writes it to the database table $tbl and then recursively follows relations 
+	// !takes the data entered by the user and writes it to the database table $tbl and then recursively follows relations
 	// so that all the data gets written to the necessary tables
 	// parameters: 
 	// $tbl - the table to write the data in
@@ -1092,6 +1093,8 @@ class form_db_base extends aw_template
 							foreach($pics as $pic)
 							{
 //								echo "pic = $pic <br>";
+								$is_null = false;
+								$is_not_null = false;
 								if ($pic == "AND")
 								{
 									$qstr .= " AND ";
@@ -1100,6 +1103,18 @@ class form_db_base extends aw_template
 								if ($pic == "OR")
 								{
 									$qstr .= " OR ";
+								}
+								else
+								if ($pic == "IS_NULL")
+								{
+									$is_null = true;
+									$qstr .= ' ';
+								}
+								else
+								if ($pic == "IS_NOT_NULL")
+								{
+									$is_not_null = true;
+									$qstr .= ' ';
 								}
 								else
 								if ($pic == "NOT")
@@ -1141,6 +1156,16 @@ class form_db_base extends aw_template
 											$qstr .= " $elname2 $sep '$pic' ";
 										}
 									}
+								}
+
+								if ($is_null)
+								{
+									$qstr .= " $elname2 IS NULL ";
+								}
+								else
+								if ($is_not_null)
+								{
+									$qstr .= " $elname2 IS NOT NULL ";
 								}
 							}
 //							echo "got qstr $qstr <br>";
