@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.84 2004/10/08 01:32:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.1 2004/10/24 18:02:02 kristo Exp $
 
 lc_load("definition");
 
@@ -601,6 +601,7 @@ class acl_base extends db_connector
 
 	function auth_error()
 	{
+		echo dbg::dump(debug_backtrace());
 		header ("HTTP/1.1 404 Not Found");
 		echo "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">";
 		echo "<html><head>";
