@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.47 2001/08/13 14:33:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.48 2001/08/13 14:58:20 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -1859,7 +1859,6 @@ class menuedit extends aw_template
 		// ma arvan, et tegelikult seda ei peaks last-is hoidma
 		$lastar = unserialize($pobj["last"]);
 		$default_doc = $lastar[$GLOBALS["lang_id"]];
-
 		$period = $GLOBALS["period"];
 
 		if ($popup == 1)
@@ -2019,7 +2018,7 @@ class menuedit extends aw_template
 				"icon"				=> $this->get_icon_url($row["class_id"],$row["name"]),
 				"type"				=> $GLOBALS["class_defs"][$row["class_id"]]["name"],
 				"change"			=> $change,
-				"checked"			=> $default_doc == $row["oid"] ? "CHECKED" : "",
+				"checked"			=> checked($default_doc == $row["oid"]),
 				"link"				=> $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$row["oid"]));
 			if (!$def_found)
 			{
@@ -2075,7 +2074,7 @@ class menuedit extends aw_template
 		{	
 			$this->vars(array(
 				"default" => $this->option_list($default_doc,$this->mk_docsel($parent)),
-				"checked" => checked($def_found)
+				"checked" => checked(!$def_found)
 			));
 		}
 
