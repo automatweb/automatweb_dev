@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.119 2003/06/06 14:46:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.120 2003/06/10 16:25:59 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -502,7 +502,6 @@ class planner extends class_base
 			$all_props = $t->get_active_properties(array(
 				"group" => $emb_group,
 			));
-			
 
 			if ($this->event_id)
 			{
@@ -1046,6 +1045,10 @@ class planner extends class_base
 
 		if ($this->conf["navigator_visible"])
 		{
+			if (empty($this->day_orb_link))
+			{
+				$this->day_orb_link = $this->mk_my_orb("view",array("id" => $id,"type" => "day","ctrl" => $ctrl,"section" => aw_global_get("section")));
+			};
 			$navi1 = $_cal->draw_calendar(array(
 				"tm" => $di["start"],
 				"caption" => get_lc_month((int)$m) . " $y",
