@@ -9,6 +9,7 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Teemade kataloog</caption>
+            <comment>Sellest kataloogist võetakse foorumi teemasid</comment>
       </property>
       <property>
             <name>address_folder</name>
@@ -19,6 +20,27 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Listiliikmete kataloog</caption>
+            <comment>
+            <![CDATA[Sellesse kataloogi paigutatakse "listi liikmete" objektid]]>
+            </comment>
+      </property>
+      <property>
+            <name>topics_on_page</name>
+            <type>select</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Teemasid lehel</caption>
+      </property>
+      <property>
+            <name>comments_on_page</name>
+            <type>select</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Postitusi lehel</caption>
       </property>
       <property>
             <name>container</name>
