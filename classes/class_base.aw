@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.113 2003/06/03 14:53:07 duke Exp $
+// $Id: class_base.aw,v 2.114 2003/06/03 15:59:04 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -177,7 +177,7 @@ class class_base extends aw_template
 			// this should refer to the active group
 			"group" => isset($args["group"]) ? $args["group"] : "",
 			"orb_class" => $orb_class,
-			"parent" => $this->$parent,
+			"parent" => $this->parent,
 			"period" => isset($args["period"]) ? $args["period"] : "",
 			"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
 			"alias_to" => isset($this->request["alias_to"]) ? $this->request["alias_to"] : "",
@@ -1706,6 +1706,7 @@ class class_base extends aw_template
 			"obj" => &$this->coredata,
 			"objdata" => &$this->objdata,
 			"request" => isset($this->request) ? $this->request : "",
+			"data" => &$this->data,
 		);
 
 		$this->cfgu = get_instance("cfg/cfgutils");
