@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.3 2004/10/29 18:52:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.4 2004/11/05 14:13:55 kristo Exp $
 
 lc_load("definition");
 
@@ -567,7 +567,8 @@ class acl_base extends db_connector
 			foreach($gl as $g_oid)
 			{	
 				$o = obj($g_oid);
-				if ($o->prop("type") == 1)
+				
+				if ($o->prop("type") == 1 || $o->prop("type") == 3)
 				{
 					continue;
 				}
