@@ -60,6 +60,13 @@
 			</function>
 		</action>
 
+		<action name="convchainentries">
+			<function name="convchainentries">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
 		
