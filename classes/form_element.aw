@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.27 2001/10/14 04:56:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.28 2001/10/14 06:36:10 cvs Exp $
 // form_element.aw - vormi element.
 lc_load("form");
 global $orb_defs;
@@ -129,15 +129,26 @@ class form_element extends aw_template
 					$lb.=$this->parse("LISTBOX_ITEMS");
 				}	
 				$this->vars(array("HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE")));
+				$relation_lb = "";
+				$relation_uniq = "";
 				if ($this->arr["subtype"] == "relation")
 				{
 					$this->do_search_script(true);
 					$this->vars(array(
 						"rel_forms" => $this->picker($this->arr["rel_form"], $this->form->get_relation_targets()),
-						"rel_el" => $this->arr["rel_element"]
+						"rel_el" => $this->arr["rel_element"],
+						"unique"	=> checked($this->arr["rel_unique"] == 1)
 					));
-					$this->vars(array("RELATION_LB" => $this->parse("RELATION_LB")));
+					$relation_lb = $this->parse("RELATION_LB");
+					if ($this->form->type == FTYPE_SEARCH)
+					{
+						$relation_uniq = $this->parse("SEARCH_RELATION");
+					}
 				}
+				$this->vars(array(
+					"RELATION_LB" => $relation_lb,
+					"SEARCH_RELATION" => $relation_uniq
+				));
 			}
 
 			$mu = "";
@@ -440,6 +451,9 @@ class form_element extends aw_template
 			// save relation elements
 			if ($this->arr["subtype"] == "relation")
 			{
+				$var = $base."_unique";
+				$this->arr["rel_unique"] = $$var;
+
 				// if we get here a relation has already been created, at least we can hope so :p
 				$rel_changed = false;
 				$var = $base."_rel_form";
@@ -1021,7 +1035,12 @@ class form_element extends aw_template
 				if ($this->arr["subtype"] == "relation" && $this->arr["rel_element"] && $this->arr["rel_form"])
 				{
 					$this->save_handle();
-					$this->db_query("SELECT form_".$this->arr["rel_form"]."_entries.ev_".$this->arr["rel_element"]." as ev_".$this->arr["rel_element"]." FROM form_".$this->arr["rel_form"]."_entries LEFT JOIN objects ON objects.oid = form_".$this->arr["rel_form"]."_entries.id  WHERE objects.status != 0");
+					$rel_el = "form_".$this->arr["rel_form"]."_entries.ev_".$this->arr["rel_element"];
+					if ($this->arr["rel_unique"] == 1)
+					{
+						$rel_el = "distinct(".$rel_el.")";
+					}
+					$this->db_query("SELECT $rel_el as ev_".$this->arr["rel_element"]." FROM form_".$this->arr["rel_form"]."_entries LEFT JOIN objects ON objects.oid = form_".$this->arr["rel_form"]."_entries.id  WHERE objects.status != 0");
 					$cnt=0; 
 					while($row = $this->db_next())
 					{
