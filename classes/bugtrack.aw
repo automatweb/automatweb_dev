@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/bugtrack.aw,v 2.2 2001/05/19 23:25:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/bugtrack.aw,v 2.3 2001/05/23 18:21:59 cvs Exp $
 // generic bugtracki klass
 global $orb_defs;
 $orb_defs["bugtrack"] = array(
@@ -22,7 +22,8 @@ class bugtrack extends aw_template {
 	function bugtrack() {
 	////
 	//! bugide faili nimi
-	$this->filename="/www/automatweb/public/bugs/";
+	global $basedir;
+	$this->filename=$basedir."/bugs/";
 	////
 	//! saitide array
 	$sites=array(

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.16 2001/05/23 13:11:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.17 2001/05/23 18:21:59 cvs Exp $
 // keywords.aw - dokumentide võtmesõnad
 global $orb_defs;
 $orb_defs["keywords"] = "xml";
@@ -321,6 +321,8 @@ class keywords extends aw_template {
 			$begar[$beg] = strlen($beg);
 		}
 
+		global $strip_keyword_grps;
+
 		$q = "SELECT list_id,keyword FROM keywords ORDER BY keyword";
 		$this->db_query($q);
 		$resarray = array();
@@ -338,6 +340,11 @@ class keywords extends aw_template {
 
 			if ($match)
 			{
+				if ($strip_keyword_grps)
+				{
+					$row["keyword"] = preg_replace("/(.*\/)/","",$row["keyword"]);
+				}
+
 				if ($args["type"] == ARR_KEYWORD)
 				{
 					$resarray[$row["keyword"]] = $row["keyword"];

@@ -85,7 +85,7 @@ switch ($type)
 
 	case "folders":
 		echo $m->gen_folders($period);
-		// peatame koik taimerid ja kysime nende kohta info
+/*		// peatame koik taimerid ja kysime nende kohta info
 		$alltimers = $awt->summaries();
 
 		// siia paigutame koikide taimerite v‰‰rtused
@@ -97,7 +97,7 @@ switch ($type)
 			$label = ($tlabels[$k]) ? $tlabels[$k] : $k;
 			$timers_arr[] = "$label = $v" . "s";
 		};
-		die("<br><br><br><font size=1>".join(" | ",$timers_arr)."</font>");
+		die("<br><br><br><font size=1>".join(" | ",$timers_arr)."</font>");*/
 		break;
 
 	case "menus":
