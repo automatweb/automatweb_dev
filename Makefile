@@ -24,7 +24,7 @@ properties:
 	@echo "Generating property definitions"
 	@if test -e scripts/php; \
 		then \
-		./scripts/php -n -d register_argc_argv=1 -f ./scripts/prop/collect.aw \
+		./scripts/php -n -d memory_limit=200M -d max_execution_time=200 -d register_argc_argv=1 -f ./scripts/prop/collect.aw \
 	else \
 		echo "Cmdline php not found, cannot collect properties"; \
 	fi
@@ -42,7 +42,7 @@ orb:
 	@echo "Generating orb definitions"
 	@if test -e scripts/php; \
 		then \
-		./scripts/php -n -d register_argc_argv=1 -q -f ./scripts/mk_orb.aw \
+		./scripts/php -n -d memory_limit=200M -d max_execution_time=200 -d register_argc_argv=1 -q -f ./scripts/mk_orb.aw \
 	else \
 		echo "Cmdline php not found, cannot create orb definitions"; \
 	fi
