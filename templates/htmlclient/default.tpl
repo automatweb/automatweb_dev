@@ -85,6 +85,7 @@
 <script type="text/javascript">
 function submit_changeform(action)
 {
+	changed = 0;
 	{VAR:submit_handler}
 	if (typeof action == "string" && action.length>0)
 	{
@@ -105,3 +106,43 @@ body {
         overflow:hidden;
 }
 <!-- END SUB: iframe_body_style -->
+
+<!-- SUB: CHECK_LEAVE_PAGE -->
+<script language="javascript">
+
+changed = 0;
+function set_changed()
+{
+	changed = 1;
+}
+
+function generic_loader()
+{
+	// set onchange event handlers for all form elements
+	var els = document.changeform.elements;
+	var cnt = els.length;
+	for(var i = 0; i < cnt; i++)
+	{
+		if (els[i].attachEvent)
+		{
+			els[i].attachEvent('onChange',set_changed);
+		}
+		else
+		{
+			els[i].setAttribute("onChange","set_changed();");
+		}
+	}
+}
+
+function generic_unloader()
+{
+	if (changed)
+	{
+		if (confirm("Andmed on salvestamata, kas soovite andmed enne lahkumist salvestada?"))
+		{
+			document.changeform.submit();
+		}
+	}
+}
+</script>
+<!-- END SUB: CHECK_LEAVE_PAGE -->

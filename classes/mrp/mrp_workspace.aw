@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.66 2005/03/29 20:31:59 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.67 2005/03/30 09:50:10 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
-@classinfo syslog_type=ST_MRP_WORKSPACE relationmgr=yes no_status=1
+@classinfo syslog_type=ST_MRP_WORKSPACE relationmgr=yes no_status=1 confirm_save_data=1
 
 @groupinfo grp_customers caption="Kliendid" submit=no
 @groupinfo grp_projects caption="Projektid"

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.102 2005/03/29 13:33:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.103 2005/03/30 09:50:09 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -1011,6 +1011,13 @@ class htmlclient extends aw_template
 			$this->vars(array(
 				"SHOW_CHANGEFORM" => $this->parse("SHOW_CHANGEFORM"),
 				"SHOW_CHANGEFORM2" => $this->parse("SHOW_CHANGEFORM2"),
+			));
+		}
+
+		if ($arr["confirm_save_data"] == 1)
+		{
+			$this->vars(array(
+				"CHECK_LEAVE_PAGE" => $this->parse("CHECK_LEAVE_PAGE")
 			));
 		}
 

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.32 2005/03/29 20:31:59 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.33 2005/03/30 09:50:10 kristo Exp $
 // mrp_resource.aw - Ressurss
 /*
 
-@classinfo syslog_type=ST_MRP_RESOURCE relationmgr=yes no_status=1
+@classinfo syslog_type=ST_MRP_RESOURCE relationmgr=yes no_status=1 confirm_save_data=1
 
 @groupinfo grp_resource_schedule caption="Kalender"
 @groupinfo grp_resource_joblist caption="Tööleht" submit=no

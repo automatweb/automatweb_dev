@@ -1,11 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.38 2005/03/29 20:31:59 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.39 2005/03/30 09:50:10 kristo Exp $
 // mrp_job.aw - Tegevus
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 
-@classinfo syslog_type=ST_MRP_JOB relationmgr=yes no_status=1
+@classinfo syslog_type=ST_MRP_JOB relationmgr=yes no_status=1 confirm_save_data=1
 
 @tableinfo mrp_job index=oid master_table=objects master_index=oid
 

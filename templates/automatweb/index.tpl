@@ -49,10 +49,23 @@ function check_generic_loader()
 	}
 };
 
+function generic_unloader()
+{
+	// don't do anything. screw you.
+}
+
+function check_generic_unloader()
+{
+	if (generic_unloader)
+	{
+		generic_unloader();
+	}
+};
+
 // -->
 </script>
 </head>
-<body link="#0000ff" vlink="#0000ff" onLoad="create_objects(); check_generic_loader();">
+<body link="#0000ff" vlink="#0000ff" onBeforeUnLoad="check_generic_unloader();" onLoad="create_objects(); check_generic_loader();">
 
 	<!-- SUB: LANG_STRING -->
 <table border="0" cellpadding="0" cellspacing="0" width="100%">

@@ -1118,6 +1118,7 @@
             <syslog_type>ST_MRP_WORKSPACE</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
+            <confirm_save_data>1</confirm_save_data>
       </classinfo>
       <groupinfo>
             <grp_customers>

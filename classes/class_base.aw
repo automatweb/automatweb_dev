@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.373 2005/03/29 11:28:41 kristo Exp $
+// $Id: class_base.aw,v 2.374 2005/03/30 09:50:09 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1324,12 +1324,12 @@ class class_base extends aw_template
 				"disabled" => empty($this->id),
 			));
 		};
-
 		//if (empty($args["content"]))
 		//{
 			$content = $this->cli->get_result(array(
 				"raw_output" => $this->raw_output,
 				"content" => $args["content"],
+				"confirm_save_data" => $this->classinfo["confirm_save_data"]
 			));
 		//}
 		//else
