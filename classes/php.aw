@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.12 2002/09/26 16:09:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.13 2002/10/09 09:48:24 kristo Exp $
 // php.aw - PHP serializer
 class php_serializer 
 {
@@ -30,10 +30,6 @@ class php_serializer
 			if (is_array($v))
 			{
 				$v = $this->req_serialize($v,$to_file);
-				if ($v == "array()\n")
-				{
-					continue;
-				}
 			}
 			else
 			{
@@ -48,10 +44,7 @@ class php_serializer
 				$v = str_replace("\n","\\\n",$v);
 				$v = str_replace("\r","\\\r",$v);
 				$v = str_replace("\$","\\\\\$",$v);
-				if ($v)
-				{
-					$v = "\"$v\"";
-				}
+				$v = "\"$v\"";
 			}
 			if (!$this->for_include)
 			{
@@ -59,17 +52,11 @@ class php_serializer
 			}
 			if ($this->no_index)
 			{
-				if ($v)
-				{
-					$td[] = $v."\n";
-				}
+				$td[] = $v."\n";
 			}
 			else
 			{
-				if ($v)
-				{
-					$td[] = "'$k'"."=>".$v;
-				}
+				$td[] = "'$k'"."=>".$v;
 			};
 		}
 		return $str.join(",\n",$td).")\n";
