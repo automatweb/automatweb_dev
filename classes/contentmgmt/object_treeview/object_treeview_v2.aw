@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.53 2005/01/27 12:26:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.54 2005/01/27 14:51:24 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -71,6 +71,9 @@
 
 @property alphabet_in_lower_case type=checkbox ch_value=1 
 @caption T&auml;hestiku kuvamisel kasutada v&auml;iket&auml;hti 
+
+@property sproc_params type=textbox
+@caption Andmeallika parameetrid
 
 @groupinfo styles caption="Stiilid"
 @default group=styles
@@ -151,10 +154,15 @@ class object_treeview_v2 extends class_base
 			$ih_ob = $ob;
 		}
 
-		$col_list = $this->_get_col_list(array(
-			"o" => $ih_ob,
-			"hidden_cols" => ($ih_ob->prop("show_hidden_cols") == 1) ? true : false,
-		));
+		static $col_list;
+
+		if (!$col_list)
+		{
+			$col_list = $this->_get_col_list(array(
+				"o" => $ih_ob,
+				"hidden_cols" => ($ih_ob->prop("show_hidden_cols") == 1) ? true : false,
+			));
+		}
 
 		$col_list = array_merge(array("" => ""), $col_list);
 
@@ -395,7 +403,9 @@ class object_treeview_v2 extends class_base
 		// get all objects to show
 		// if is checked, that objects won't be shown by default, then don't show them, unless
 		// there are set some url params (tv_sel, char)
-		$params = array();
+		$params = array(
+			"sproc_params" => $ob->prop("sproc_params")
+		);
 		if (($ih_ob->prop("hide_content_table_by_default") == 1) && empty($_GET['tv_sel']) && empty($_GET['char']))
 		{
 			$ol = array();
@@ -411,8 +421,6 @@ class object_treeview_v2 extends class_base
 			// queried from datasource, no matter how much of it passes the filtering
 			if ($d_inst->has_feature("filter"))
 			{
-			
-			
 				$params = array(
 					"filters" => array(
 						"saved_filters" => new aw_array($ob->meta("saved_filters")),
@@ -420,6 +428,7 @@ class object_treeview_v2 extends class_base
 						"filter_by_char_field" => $ih_ob->prop("filter_by_char_field"),
 						"char" =>  ($_GET['char'] == "all") ? $_GET['char'] : $_GET['char']{0}, 	
 					),
+					"sproc_params" => $ob->prop("sproc_params")
 				);
 				$ol = $d_inst->get_objects($d_o, $fld, $_GET['tv_sel'], $params);
 			}
@@ -518,8 +527,12 @@ class object_treeview_v2 extends class_base
 		{
 			$tmp = new aw_array($ih_ob->meta("itemsorts"));
 		}
+
 		$this->__is = $tmp->get();
-		usort($ol, array(&$this, "__is_sorter"));
+		if (count($this->__is))
+		{
+			usort($ol, array(&$this, "__is_sorter"));
+		}
 
 		// now do pages
 		if ($ih_ob->prop("per_page"))
@@ -1280,7 +1293,8 @@ class object_treeview_v2 extends class_base
 			$ds_i = $dso->instance();
 			if (method_exists($ds_i, "get_fields"))
 			{
-				foreach($ds_i->get_fields($dso) as $fn => $fs)
+				$fds = $ds_i->get_fields($dso);
+				foreach($fds as $fn => $fs)
 				{
 					$cold[$fn] = $fs;
 				}
@@ -1790,7 +1804,6 @@ class object_treeview_v2 extends class_base
 // "otv_obj" => otv object
 	function filter_data($arr)
 	{
-
 		$ol = $arr['ol'];
 		$ob = $arr['otv_obj'];
 		$ih_ob = $arr['otv_obj_ih'];
@@ -1854,6 +1867,7 @@ class object_treeview_v2 extends class_base
 
 		}
 
+		return $ol;
 	}
 
 	function callback_mod_tab($arr)
