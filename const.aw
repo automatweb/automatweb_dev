@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.4 2001/05/21 21:41:42 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.5 2001/05/21 22:11:50 cvs Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -173,7 +173,7 @@ else
 	{
 		global $site_basedir;
 		global $ext,$LC;
-		include_once("$site_basedir/lang/" . $LC . "/$file.$ext");
+		@include_once("$site_basedir/lang/" . $LC . "/$file.$ext");
 	}
 
 	function classload($args)
