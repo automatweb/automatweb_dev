@@ -1,0 +1,4 @@
+<?xml version='1.0'?>
+<interface>
+	<class id="xml_import" action="invoke"/>
+</interface>
