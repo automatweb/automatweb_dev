@@ -1,12 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/workflow/swot/Attic/swot_type.aw,v 1.3 2003/12/07 15:27:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/workflow/swot/Attic/swot_type.aw,v 1.4 2004/10/05 09:14:27 kristo Exp $
 
 class swot_type extends class_base
 {
 	function get_property(&$arr)
 	{
 		$prop =& $arr["prop"];
-		if ($prop["name"] == "clf")
+		if ($prop["name"] == "clf" && !$arr["new"])
 		{
 			$cf = get_instance("classificator");
 			$prop['options'] = $cf->get_clfs(array(
