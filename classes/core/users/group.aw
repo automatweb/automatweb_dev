@@ -58,7 +58,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_GROUP, on_remove_alias
 @caption Otsinguvorm
 
 @property admin_rootmenu2 type=callback callback=get_admin_rootmenus field=meta method=serialize table=objects
-@caption Admin rootmen&uuml;&uuml;
+@caption Administreerimisliidese juurkaust
 
 @property grp_frontpage type=callback callback=get_grp_frontpage field=meta method=serialize table=objects
 @caption Esileht
@@ -198,9 +198,9 @@ class group extends class_base
 			case "import_desc":
 				$prop['value'] = "
 					Kasutajate importimise faili formaat on j&auml;rgmine:<br />
-					uid,password,nimi,email,aktiivne alates, aktiivne kuni <br />
+					kasutajanimi,parool,nimi,e-post,aktiivne alates,aktiivne kuni <br />
 					v&auml;ljad on eraldatud komadega, iga kasutaja on eraldi real <br />
-					kuup&auml;evade formaadi t&auml;pne kirjeldus on <a href=\"http://www.gnu.org/manual/tar-1.12/html_chapter/tar_7.html\">siin</a> <br />
+					kuup&auml;evade formaadi t&auml;pne kirjeldus on <a href=\"http://www.gnu.org/software/tar/manual/html_chapter/tar_7.html\">siin</a> <br />
 					n&auml;ide: <br />
 					kix,parool,Kristo Iila, kristo@struktuur.ee, 2003-09-17, 2005-09-17 <br />
 					<br />
@@ -651,7 +651,7 @@ class group extends class_base
 				"table" => "objects",
 				"field" => "meta",
 				"method" => "serialize",
-				"caption" => "Admin rootmen&uuml;&uuml; ($lname)",
+				"caption" => "Administreerimisliidese juurkaust ($lname)",
 				"value" => $meta["admin_rootmenu2"][$lid],
 				"reltype" => "RELTYPE_ADMIN_ROOT"
 			);

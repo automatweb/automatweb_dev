@@ -86,7 +86,7 @@
             <callback>get_admin_rootmenus</callback>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Admin rootmen&amp;uuml;&amp;uuml;</caption>
+            <caption>Administreerimisliidese juurkaust</caption>
       </property>
       <property>
             <name>grp_frontpage</name>
