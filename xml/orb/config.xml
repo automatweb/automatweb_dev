@@ -30,6 +30,20 @@
 			</function>
 		</action>
 
+		<action name="errors">
+			<function name="errors">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_errors">
+			<function name="submit_errors">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
 		
