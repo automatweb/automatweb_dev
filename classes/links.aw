@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.57 2004/06/09 06:28:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.58 2004/09/04 17:45:56 kristo Exp $
 
 /*
 
@@ -261,6 +261,10 @@ class links extends class_base
 				{
 					$prop["value"] = "/".$arr["obj_inst"]->prop("docid");
 				}
+				break;
+
+			case "link_image_active_until":
+				$prop["year_from"] = 1930;
 				break;
 		}
 		return $retval;
