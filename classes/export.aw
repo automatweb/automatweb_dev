@@ -373,6 +373,38 @@ class export extends aw_template
 			flush();
 		}
 
+		echo "kontrollin vigaseid lehti.. <Br>";
+		$this->db_query("SELECT id,filename,orig_url,lang_id FROM export_content
+			WHERE LENGTH(content) < 300 AND orig_url IS NOT NULL AND orig_url != ''
+		");
+		while($row = $this->db_next())
+		{
+			echo "uuendan .. url = $row[orig_url]  <br>";
+			$this->save_handle();
+
+			$cnt = 0;
+			$complete = false;
+			while($cnt < 3 && !$complete)
+			{
+				$this->fetch_and_save_page($row['orig_url'], $row['lang_id'], true, $row['filename']);
+				// check length
+				$len = $this->db_fetch_field("SELECT LENGTH(content) AS len FROM export_content WHERE id = $row[id]", "len");
+				$complete = $len > 300;
+				$cnt++;
+			}
+
+			if (!$complete)
+			{
+				$msg = "Lehen&uuml;&uuml;lje uuendamine eba&otilde;nnestus!!! url = $row[orig_url]";
+				echo "<br><br><B><font color=red>$msg</font></b><br><br>";
+				$this->err_log[] = array(
+					"tm" => time(),
+					"url" => $row['orig_url'],
+					"msg" => $msg
+				);
+			}
+			$this->restore_handle();
+		}
 		echo "creating log entry ...<br>\n";
 		flush();
 		$this->write_log();
@@ -635,13 +667,16 @@ class export extends aw_template
 			preg_match("/<!-- PAGE_TITLE (.*) \/PAGE_TITLE -->/U", $fc, $mt_t);
 			$title = $mt_t[1];
 			$this->quote(&$title);
+			$this->quote(&$url);
 			if (($id = $this->db_fetch_field("SELECT id FROM export_content WHERE filename = '$fn'","id")))
 			{
-				$this->db_query("UPDATE export_content SET lang_id = '$lang_id', content = '$fc',modified = '$mt[1]', section = '$cur_sec',title = '$title' WHERE id = '$id'");
+				$q = "UPDATE export_content SET lang_id = '$lang_id', content = '$fc',modified = '$mt[1]', section = '$cur_sec',title = '$title',orig_url='$url' WHERE id = '$id'";
+				$this->db_query($q);
 			}
 			else
 			{
-				$this->db_query("INSERT INTO export_content(filename, content, modified, section, lang_id,title) VALUES('$fn', '$fc','$mt[1]','$cur_sec','$lang_id','$title')");
+				$q = "INSERT INTO export_content(filename, content, modified, section, lang_id,title,orig_url) VALUES('$fn', '$fc','$mt[1]','$cur_sec','$lang_id','$title','$url')";
+				$this->db_query($q);
 			}
 		}
 
