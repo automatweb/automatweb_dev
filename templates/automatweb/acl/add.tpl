@@ -17,6 +17,10 @@
 	<td class="fform"><select multiple name='groups[]' >{VAR:groups}</select></td>
 </tr>
 <tr>
+	<td class="fform">Prioriteet:</td>
+	<td class="fform"><input type="text" name="priority" value="{VAR:priority}"></td>
+</tr>
+<tr>
 	<td class="fform" align="center"><input type="submit" value="Salvesta"></td>
 	<td class="fform" align="center"><input type="submit" name='save_acl' value="Uuenda acl"></td>
 </tr>

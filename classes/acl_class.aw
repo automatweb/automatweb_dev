@@ -67,6 +67,7 @@ class acl_class extends aw_template
 				"role" => $role,
 				"chain" => $chain,
 				"groups" => $groups,
+				"priority" => $priority
 			)
 		));
 
@@ -125,13 +126,19 @@ class acl_class extends aw_template
 			$o_grps = $this->get_acl_groups_for_obj($oid);
 			foreach($meta["groups"] as $grp)
 			{
-				if (!isset($o_grps[$grp]))
+				// ok, before we do this, we must check if another acl object, that
+				// has a higher priority, includes this folder<->group relation
+				// and if one is found, then we must not set the acl.
+				if (!$this->higher_priority_acl_exists($meta["priority"], $oid, $grp))
 				{
-					$this->add_acl_group_to_obj($grp,$oid);
-					$gads[$grp][$oid] = $grp;
-				}
+					if (!isset($o_grps[$grp]))
+					{
+						$this->add_acl_group_to_obj($grp,$oid);
+						$gads[$grp][$oid] = $grp;
+					}
 
-				$this->save_acl_masked($oid,$grp,$aclarr,$mask);
+					$this->save_acl_masked($oid,$grp,$aclarr,$mask);
+				}
 			}
 		}
 
@@ -171,6 +178,7 @@ class acl_class extends aw_template
 			"roles" => $this->picker($meta["role"],$roles),
 			"chains" => $this->picker($meta["chain"],$chains),
 			"groups" => $this->multiple_option_list($meta["groups"],$groups),
+			"priority" => $meta["priority"],
 			"reforb" => $this->mk_reforb("submit", array("id" => $id))
 		));
 		return $this->parse();
@@ -195,6 +203,63 @@ class acl_class extends aw_template
 			}
 		}
 		return $ret;
+	}
+
+	function higher_priority_acl_exists($cur_acl, $cur_priority, $oid, $grp)
+	{
+		if (!isset($this->acl_object_cache))
+		{
+			$this->acl_object_cache = array();
+			$ol = $this->list_objects(array(
+				"class" => CL_ACL,
+				"return" => ARR_ALL
+			));
+			foreach($ol as $obj)
+			{
+				if ($obj['oid'] != $cur_acl)
+				{
+					$obj['meta'] = $this->get_object_metadata(array(
+						'metadata' => $obj['metadata']
+					));
+					$this->acl_object_cache[$obj['oid']] = new acl_class;
+					$this->acl_object_cache[$obj['oid']]->acl_obj = $obj;
+				}
+			}
+		}
+
+		foreach($this->acl_object_cache as $oid => $obj)
+		{
+			if ($obj->relation_exists($oid, $grp) && $obj->get_priority() > $cur_acl)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	function get_priority()
+	{
+		return $this->acl_obj['meta']['priority'];
+	}
+
+	function relation_exists($oid, $grp)
+	{
+		$meta = $this->acl_obj['meta'];
+
+		$oc = get_instance("object_chain");
+		$objs = new aw_array($oc->get_objects_in_chain($meta["chain"]));
+
+		foreach($objs->get() as $_oid)
+		{
+			foreach($meta["groups"] as $_grp)
+			{
+				if ($oid == $_oid && $grp == $_grp)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }
 ?>
