@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.30 2002/09/04 07:31:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.31 2002/09/19 14:52:02 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -121,6 +121,7 @@ class aw_table
 	//   element is and that is used when determining if a column is sorted
 	//   but when doing the actual sorting, the value is used and that contains an ordinary element, not a column name
 	//   right now this only applies to form tables 
+	//   - so, when setting an array, always have the key and value be the same, unless you really know what you are doing
 	function set_default_sortby($sortby)
 	{
 		$this->default_order = $sortby;
@@ -485,7 +486,7 @@ class aw_table
 				}
 
 				// rida algab
-				$tbl .= $this->opentag(array("name" => "tr"));
+				$tbl .= $this->opentag(array("name" => "tr", "class" => ((($counter % 2) == 0) ? $this->tr_style2 : $this->tr_style1)));
 				
 				// grpupeerimine
 				$tbl .= $this->do_col_rgrouping($rgroupby, $rgroupdat, $rgroupby_sep, $v);
@@ -871,6 +872,15 @@ class aw_table
 			case "content_style2_selected":
 				$this->selected2 = $attrs["value"];
 				$this->selbgcolor2 = $attrs["bgcolor"];
+				break;
+
+			// stiilid contenti kuvamiseks <tr> jaoks
+			case "content_tr_style1":
+				$this->tr_style1 = $attrs["value"];
+				break;
+
+			case "content_tr_style2":
+				$this->tr_style2 = $attrs["value"];
 				break;
 
 			// actionid
