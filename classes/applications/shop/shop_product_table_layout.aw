@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.8 2004/12/27 12:31:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.9 2005/01/18 11:53:36 kristo Exp $
 // shop_product_table_layout.aw - Lao toodete tabeli kujundus 
 /*
 
@@ -202,6 +202,13 @@ class shop_product_table_layout extends class_base
 			"HAS_ITEMS" => $hi,
 			"sel_menu_text" => $so->name()
 		));
+
+		if ($this->cnt)
+		{
+			$this->vars(array(
+				"HAS_PRODS" => $this->parse("HAS_PRODS")
+			));
+		}
 		$this->draw_pageselector();
 		return $this->parse();
 	}
