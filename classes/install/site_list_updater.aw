@@ -128,7 +128,8 @@ class site_list_updater extends aw_template
 			"params" => array(
 				"site_id" => aw_ini_get("site_id"),
 				"data" => base64_encode($data)
-			)
+			),
+			"no_errors" => 1
 		));
 		if ($res)
 		{

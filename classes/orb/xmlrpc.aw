@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/orb/Attic/xmlrpc.aw,v 1.17 2004/08/30 09:28:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/orb/Attic/xmlrpc.aw,v 1.18 2004/11/24 07:42:18 kristo Exp $
 class xmlrpc extends aw_template
 {
 	var $allowed = array("I4","BOOLEAN","STRING", "DOUBLE","DATETIME.ISO8601","BASE64", "STRUCT", "ARRAY");
@@ -187,7 +187,7 @@ class xmlrpc extends aw_template
 		{
 			$server = substr($server,7);
 		};
-		$fp = fsockopen($server,$port,&$this->errno, &$this->errstr);
+		$fp = fsockopen($server,$port,&$this->errno, &$this->errstr, 5);
 		$op = "POST $handler HTTP/1.0\r\n";
 		$op .= "User-Agent: AutomatWeb\r\n";
 		$op .= "Host: $server\r\n";
