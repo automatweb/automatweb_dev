@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline_conf.aw,v 1.13 2004/03/01 14:06:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline_conf.aw,v 1.14 2004/03/05 13:24:36 kristo Exp $
 /*
 
 @default table=objects
@@ -33,6 +33,9 @@
 
 @property sites type=select multiple=1 size=4
 @caption Saidid
+
+@property languages type=select multiple=1 size=4
+@caption Keeled
 
 @property use_filter type=checkbox ch_value=1
 @caption Kas kasutada Tegevuste filtrit
@@ -127,6 +130,17 @@ class dronline_conf extends class_base
 				}
 			}
 			$prop['options'] = $opts;
+		}
+		else
+		if ($prop['name'] == 'languages')
+		{
+			if (!aw_ini_get("syslog.has_lang_id"))
+			{
+				return PROP_IGNORE;
+			}
+			$opts = array('' => 'K&otilde;ik keeled');
+			$la = get_instance("languages");
+			$prop['options'] = $la->get_list();
 		}
 
 		return PROP_OK;

@@ -85,6 +85,17 @@
             <caption>Saidid</caption>
       </property>
       <property>
+            <name>languages</name>
+            <type>select</type>
+            <multiple>1</multiple>
+            <size>4</size>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Keeled</caption>
+      </property>
+      <property>
             <name>use_filter</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>

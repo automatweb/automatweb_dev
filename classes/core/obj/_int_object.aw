@@ -718,7 +718,9 @@ class _int_object
 
 	function get_original()
 	{
-		if ($this->is_brother())
+		if ($this->is_brother() && 
+			$GLOBALS["object_loader"]->ds->can("view", $this->obj["brother_of"]) && 
+			$GLOBALS["object_loader"]->ds->object_exists($this->obj["brother_of"]))
 		{
 			return new object($this->obj["brother_of"]);
 		}

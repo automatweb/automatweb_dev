@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.250 2004/02/25 16:11:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.251 2004/03/05 13:24:34 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -461,6 +461,12 @@ class core extends acl_base
 			{
 				$fields[] = "site_id";
 				$values[] = $this->cfg["site_id"];
+			};
+
+			if (aw_ini_get("syslog.has_lang_id") == 1)
+			{
+				$fields[] = "lang_id";
+				$values[] = aw_global_get("lang_id");
 			};
 			$q = sprintf("INSERT DELAYED INTO syslog (%s) VALUES (%s)",join(",",$fields),join(",",map("'%s'",$values)));
 			if (!$this->db_query($q,false))
