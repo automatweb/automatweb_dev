@@ -4,9 +4,9 @@
             <name>conf_obj</name>
             <type>objpicker</type>
             <clid>CL_ML_LIST_CONF</clid>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <table>objects</table>
             <group>general</group>
             <caption>Vali konfiguratsioon</caption>
       </property>
@@ -15,17 +15,34 @@
             <type>text</type>
             <store>no</store>
             <editonly>1</editonly>
-            <group>fillout</group>
+            <group>general</group>
             <caption>Muuda</caption>
+      </property>
+      <property>
+            <name>name</name>
+            <type>textbox</type>
+            <table>ml_users</table>
+            <group>general</group>
+            <field>name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>mail</name>
+            <type>textbox</type>
+            <table>ml_users</table>
+            <group>general</group>
+            <field>mail</field>
+            <caption>E-post</caption>
       </property>
       <classinfo>
             <syslog_type>ST_MAILINGLIST_MEMBER</syslog_type>
       </classinfo>
-      <groupinfo>
-            <fillout>
-                  <caption>Täida_vorm</caption>
-                  <submit>no</submit>
-            </fillout>
-      </groupinfo>
+      <tableinfo>
+            <ml_users>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </ml_users>
+      </tableinfo>
 </properties>
 

@@ -1,6 +1,17 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>def_user_folder</name>
+            <type>popup_objmgr</type>
+            <clid>CL_PSEUDO</clid>
+            <editonly>1</editonly>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Vali kataloog, kuhu pannakse uued liikmed </caption>
+      </property>
+      <property>
             <name>user_form_conf</name>
             <type>objpicker</type>
             <clid>CL_ML_LIST_CONF</clid>
@@ -9,17 +20,6 @@
             <method>serialize</method>
             <group>general</group>
             <caption>Vali konfiguratsioon</caption>
-      </property>
-      <property>
-            <name>vars</name>
-            <type>callback</type>
-            <callback>callback_gen_list_variables</callback>
-            <editonly>1</editonly>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>general</group>
-            <caption>Muutujad</caption>
       </property>
       <property>
             <name>user_folders</name>
@@ -34,14 +34,15 @@
             <caption>Vali kataloogid, kust võetakse listi liikmed</caption>
       </property>
       <property>
-            <name>def_user_folder</name>
-            <type>select</type>
+            <name>vars</name>
+            <type>callback</type>
+            <callback>callback_gen_list_variables</callback>
             <editonly>1</editonly>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
-            <caption>Vali kataloog, kuhu pannakse automaatselt lisatud liikmed </caption>
+            <caption>Muutujad</caption>
       </property>
       <property>
             <name>automatic_form</name>
@@ -53,8 +54,21 @@
             <group>general</group>
             <caption>Vali vorm, mille sisestustest tehakse automaatselt liikmed</caption>
       </property>
+      <property>
+            <name>member_list</name>
+            <type>text</type>
+            <store>no</store>
+            <group>members</group>
+            <caption>Liikmed</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_MAILINGLIST</syslog_type>
       </classinfo>
+      <groupinfo>
+            <members>
+                  <caption>Liikmed</caption>
+                  <submit>no</submit>
+            </members>
+      </groupinfo>
 </properties>
 
