@@ -1,0 +1,44 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Tue,  5 Apr 2005 17:01:41 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: :42
+msgid "Lisa"
+msgstr ""
+
+#: :73 :395
+msgid "Muuda konfiobjekti"
+msgstr ""
+
+#: :78 :400
+msgid "Salvesta"
+msgstr ""
+
+#: :84
+msgid "Vali objektid"
+msgstr ""
+
+#: :356
+msgid "Rakenda"
+msgstr ""
+
+#: :361
+msgid "Vali konfiguratsiooniobjektid"
+msgstr ""
+
+#: :407
+msgid "Otsi"
+msgstr ""
+
+#: :414
+msgid "Muuda"
+msgstr ""
+

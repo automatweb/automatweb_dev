@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 14:07:08 +0300\n"
+"POT-Creation-Date: Tue,  5 Apr 2005 17:01:37 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,16 +9,39 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# :49 :59 :98
+msgid " "
+msgstr ""
 
-#: classes/vcl/releditor.aw:346
+# :50
+msgid "Viga %s definitsioonis (omadused defineerimata!)"
+msgstr ""
+
+# :60
+msgid "Viga %s definitsioonis (seose tüüp defineerimata!)"
+msgstr ""
+
+# :99
+msgid "Seda seost ei saa redigeerida!"
+msgstr ""
+
 msgid "Uus"
 msgstr ""
 
-#: classes/vcl/releditor.aw:353
 msgid "Kustutada valitud objektid?"
 msgstr ""
 
-#: classes/vcl/releditor.aw:361
 msgid "Klooni valitud objektid"
 msgstr ""
 
+# :418 :528
+msgid "Muuda"
+msgstr ""
+
+# :492 :517
+msgid "ID"
+msgstr ""
+
+# :522
+msgid "Nimi"
+msgstr ""

@@ -1,0 +1,20 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Tue,  5 Apr 2005 17:01:46 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: :666
+msgid "ACL error saidil %s: CAN_%s denied for oid %s"
+msgstr ""
+
+#: :970
+msgid "Couldn't open file '%s' for writing"
+msgstr ""
+

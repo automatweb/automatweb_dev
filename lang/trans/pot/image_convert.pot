@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 10:52:51 +0300\n"
+"POT-Creation-Date: Tue,  5 Apr 2005 17:01:41 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -10,31 +10,31 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/core/converters/image_convert.aw:20
+#: :102 :111 :121 :133 :142 :159 :168 :179 :190 :203 :212
 msgid "image_covert: could not detect any supported imagehandlers!"
 msgstr ""
 
-#: classes/core/converters/image_convert.aw:222
+#: :265
 msgid "image_convert::gd_driver::load_from_string(): could not detect image format!"
 msgstr ""
 
-#: classes/core/converters/image_convert.aw:253
+#: :296
 msgid "image_convert::gd_driver::load_from_file(): could not detect image format!"
 msgstr ""
 
-#: classes/core/converters/image_convert.aw:294 classes/core/converters/image_convert.aw:447
+#: :337 :490
 msgid "image_convert::get(%s): unknown image type!"
 msgstr ""
 
-#: classes/core/converters/image_convert.aw:324
+#: :367
 msgid "image_convert::save(%s,%s): unknown image type!"
 msgstr ""
 
-#: classes/core/converters/image_convert.aw:395
+#: :438
 msgid "image_convert::load_from_file(%s): no such file!"
 msgstr ""
 
-#: classes/core/converters/image_convert.aw:479
+#: :522
 msgid "image_convert::save(%s, %s): unknown image type!"
 msgstr ""
 

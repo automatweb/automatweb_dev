@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon,  4 Apr 2005 14:20:28 +0300\n"
+"POT-Creation-Date: Tue,  5 Apr 2005 17:01:39 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -67,18 +67,6 @@ msgstr ""
 
 # classes/crm/crm_offer.aw:prop_start1_help
 msgid "Omaduse Algus (start1) help"
-msgstr ""
-
-# classes/crm/crm_offer.aw:prop_end
-msgid "Omaduse L&otilde;pp (end) caption"
-msgstr ""
-
-# classes/crm/crm_offer.aw:prop_end_comment
-msgid "Omaduse L&otilde;pp (end) kommentaar"
-msgstr ""
-
-# classes/crm/crm_offer.aw:prop_end_help
-msgid "Omaduse L&otilde;pp (end) help"
 msgstr ""
 
 # classes/crm/crm_offer.aw:prop_preformer
@@ -175,6 +163,18 @@ msgstr ""
 
 # classes/crm/crm_offer.aw:prop_is_done_help
 msgid "Omaduse Tehtud (is_done) help"
+msgstr ""
+
+# classes/crm/crm_offer.aw:prop_end
+msgid "Omaduse L&otilde;pp (end) caption"
+msgstr ""
+
+# classes/crm/crm_offer.aw:prop_end_comment
+msgid "Omaduse L&otilde;pp (end) kommentaar"
+msgstr ""
+
+# classes/crm/crm_offer.aw:prop_end_help
+msgid "Omaduse L&otilde;pp (end) help"
 msgstr ""
 
 # classes/crm/crm_offer.aw:prop_content_toolbar
@@ -345,128 +345,99 @@ msgstr ""
 msgid "Seose Pakkumiste haldus (RELTYPE_OFFER_MGR) tekst"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:168
 msgid "Koostamisel"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:169
 msgid "Saadetud"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:170
 msgid "Esitletud"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:171
 msgid "Tagasilükatud"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:172
 msgid "Positiivelt lõppenud"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:336
 msgid "Salvesta valitud paketid pakkumisse"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:408 classes/crm/crm_offer.aw:717
 msgid "Pakett"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:414 classes/crm/crm_offer.aw:587
-#: classes/crm/crm_offer.aw:724
 msgid "Hind"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:423 classes/crm/crm_offer.aw:594
-#: classes/crm/crm_offer.aw:733
 msgid "X"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:448
 msgid "Otsing"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:454
 msgid "Nimetus"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:460
 msgid "Otsi"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:471
 msgid "Otsingutulemused"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:496
 msgid "Kustuta valitud paketid"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:498
 msgid "Soovid kustutada valitud paketid?"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:504
 msgid "Otsi pakette"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:513
 msgid "Liida paketid pakkumisse"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:582
 msgid "Toode"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:668
 msgid "Algstaatus"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:674
 msgid "Lõppstaatus"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:680
 msgid "Muutuse aeg"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:686
 msgid "Muutja"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:762
 msgid "Kokku"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:789
 msgid "Lisa"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:798
 msgid "Lisa %s"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:807
 msgid "Kustuta valitud osad"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:808
 msgid "Oled kindel et soovid valitud osad kustutada?"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:833
 msgid "Nimi"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:839
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:845
 msgid "Muuda"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:907
 msgid "Lisa pakkumisse"
+msgstr ""
+
+# :917
+msgid "no warhoos"
 msgstr ""

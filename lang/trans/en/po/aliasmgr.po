@@ -1,0 +1,88 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Tue,  5 Apr 2005 17:01:45 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: :136 :171 :487
+msgid ""
+msgstr ""
+
+#: :145
+msgid "Klass"
+msgstr ""
+
+#: :495
+msgid "Nimi"
+msgstr ""
+
+#: :501
+msgid "Keel"
+msgstr ""
+
+#: :508
+msgid "Muu info"
+msgstr ""
+
+#: :514
+msgid "Alias"
+msgstr ""
+
+#: :522
+msgid "Link"
+msgstr ""
+
+#: :531
+msgid "Cache"
+msgstr ""
+
+#: :540
+msgid "Muutja"
+msgstr ""
+
+#: :548
+msgid "Muudetud"
+msgstr ""
+
+#: :559
+msgid "Tüüp"
+msgstr ""
+
+#: :567
+msgid "Seose tüüp"
+msgstr ""
+
+#: :1132
+msgid "Lisa uus objekt"
+msgstr ""
+
+#: :1142 :1151
+msgid "Otsi"
+msgstr ""
+
+#: :1168
+msgid "Tõlgi"
+msgstr ""
+
+#: :1179
+msgid "Reload"
+msgstr ""
+
+#: :1190
+msgid "Loo seos(ed)"
+msgstr ""
+
+#: :1200
+msgid "Salvesta"
+msgstr ""
+
+#: :1207
+msgid "Kustuta valitud seos(ed)"
+msgstr ""
+

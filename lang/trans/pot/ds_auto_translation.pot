@@ -1,0 +1,28 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Tue,  5 Apr 2005 17:01:40 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: :100
+msgid "ds_auto_translation::get_objdata(%s): found more than one translation relation to object %s!"
+msgstr ""
+
+#: :221
+msgid "ds_auto_translation::get_objdata(%s): found more than one translation relation from object %s pointing to an object with lang id %s!"
+msgstr ""
+
+#: :295
+msgid "ds_auto_translation::read_properties(): no original object id for object %s in get_objdata cache!"
+msgstr ""
+
+#: :327
+msgid "ds_auto_translation::read_properties(): no info about object %s in get_objdata cache!"
+msgstr ""
+

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.16 2005/04/05 13:52:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.17 2005/04/05 14:06:27 kristo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -146,19 +146,20 @@ class pot_scanner extends core
 		{
 			echo "scanned file $file_from \n";
 
-			if (file_exists($to_file))
+			if (file_exists($file_to))
 			{
 				$tmpf = tempnam(aw_ini_get("server.tmpdir"), "awtrans");
-				$this->_write_file($tmpf, $strings, date("r", filemtime($to_file)));
+				$this->_write_file($tmpf, $strings, date("r", filemtime($file_to)), $file_from);
 			
-				if (md5($this->get_file(array("file" => $tmpf))) != md5($this->get_file(array("file" => $to_file))))
+				if (md5($this->get_file(array("file" => $tmpf))) != md5($this->get_file(array("file" => $file_to))))
 				{
-					$this->_write_file($to_file, $strings, date("r"));
+					$this->_write_file($file_to, $strings, date("r"), $file_from);
 				}
+				@unlink($tmpf);
 			}
 			else
 			{
-				$this->_write_file($to_file, $strings, date("r"));
+				$this->_write_file($file_to, $strings, date("r"), $file_from);
 			}
 
 			// now, for all languages, check of the .po file exists and if not, copy the new .pot over to that
@@ -433,7 +434,7 @@ class pot_scanner extends core
 		return $langs;
 	}
 
-	function _write_file($to_file, $strings, $date)
+	function _write_file($to_file, $strings, $date, $file_from)
 	{
 		$fp = fopen($to_file, "w");
 		// add special POT header

@@ -1,0 +1,40 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Tue,  5 Apr 2005 17:01:44 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: :52
+msgid "Kalendrid, millest otsida"
+msgstr ""
+
+#: :64
+msgid "Otsitava aja pikkus (hh:mm)"
+msgstr ""
+
+#: :175
+msgid "Kalender"
+msgstr ""
+
+#: :180
+msgid "Alates"
+msgstr ""
+
+#: :185
+msgid "Kuni"
+msgstr ""
+
+#: :190
+msgid "XX"
+msgstr ""
+
+#: :214
+msgid "Leitud ajad"
+msgstr ""
+

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon,  4 Apr 2005 14:20:48 +0300\n"
+"POT-Creation-Date: Tue,  5 Apr 2005 17:01:49 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -43,6 +43,18 @@ msgstr ""
 
 # classes/mrp/mrp_resource.aw:prop_status_help
 msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+# :prop_concurrent_threads
+msgid "Omaduse  (concurrent_threads) caption"
+msgstr ""
+
+# :prop_concurrent_threads_comment
+msgid "Omaduse  (concurrent_threads) kommentaar"
+msgstr ""
+
+# :prop_concurrent_threads_help
+msgid "Omaduse  (concurrent_threads) help"
 msgstr ""
 
 # classes/mrp/mrp_resource.aw:prop_state
@@ -129,16 +141,16 @@ msgstr ""
 msgid "Omaduse Tüüp (type) help"
 msgstr ""
 
-# classes/mrp/mrp_resource.aw:prop_concurrent_threads
-msgid "Omaduse Samaaegseid töid enim (concurrent_threads) caption"
+# :prop_thread_info
+msgid "Omaduse Samaaegseid töid enim (thread_info) caption"
 msgstr ""
 
-# classes/mrp/mrp_resource.aw:prop_concurrent_threads_comment
-msgid "Omaduse Samaaegseid töid enim (concurrent_threads) kommentaar"
+# :prop_thread_info_comment
+msgid "Omaduse Samaaegseid töid enim (thread_info) kommentaar"
 msgstr ""
 
-# classes/mrp/mrp_resource.aw:prop_concurrent_threads_help
-msgid "Omaduse Samaaegseid töid enim (concurrent_threads) help"
+# :prop_thread_info_help
+msgid "Omaduse Samaaegseid töid enim (thread_info) help"
 msgstr ""
 
 # classes/mrp/mrp_resource.aw:prop_default_pre_buffer
@@ -271,6 +283,10 @@ msgstr ""
 msgid "Grupi Kinnised ajad (grp_resource_unavailable_una) pealkiri"
 msgstr ""
 
+# :group_
+msgid "Grupi  () pealkiri"
+msgstr ""
+
 # classes/mrp/mrp_resource.aw:rel_RELTYPE_MRP_SCHEDULE
 msgid "Seose Ressursi kalender (RELTYPE_MRP_SCHEDULE) tekst"
 msgstr ""
@@ -287,98 +303,74 @@ msgstr ""
 msgid "Seose T&ouml;&ouml;aja kordus (RELTYPE_RECUR_WRK) tekst"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:141
 msgid "Vaba"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:142
 msgid "Kasutusel"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:143
 msgid "Suletud"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:147
 msgid "Uus"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:148
 msgid "Planeeritud"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:149
 msgid "Töös"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:150
 msgid "Katkestatud"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:151
 msgid "Valmis"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:152
 msgid "Lukustatud"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:153
 msgid "Paus"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:154
 msgid "Kustutatud"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:155
 msgid "Plaanist väljas"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:156
 msgid "Arhiveeritud"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:186
 msgid "Uut ressurssi saab luua vaid ressursihalduskeskkonnast. "
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:196
 msgid "Ressurss ei kuulu ühessegi ressursihaldussüsteemi. "
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:228
 msgid "/Ressursid"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:241
 msgid "Ressursi kasutust planeeritakse"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:242
 msgid "Ressursi kasutust ei planeerita"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:243
 msgid "Ressurss on allhange"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:407
 msgid "Klient"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:413
 msgid "Projekt-Töö nr."
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:419
 msgid "Alustamisaeg"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:425
 msgid "Staatus"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:430 classes/mrp/mrp_resource.aw:485
 msgid "Ava"
 msgstr ""

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 10:52:28 +0300\n"
+"POT-Creation-Date: Tue,  5 Apr 2005 17:01:37 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -10,71 +10,79 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/vcl/relationmgr.aw:57 classes/vcl/relationmgr.aw:59 classes/vcl/relationmgr.aw:63
+#: :57 :59 :63
 msgid "Objekti tüüp"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:234
+#: :234
 msgid "Lisa uus objekt"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:241 classes/vcl/relationmgr.aw:250
+#: :241 :250
 msgid "Otsi"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:261
+#: :261
 msgid "Tõlgi"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:272
+#: :272
 msgid "Uuenda"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:294
+#: :283
+msgid "Loo seos(ed)"
+msgstr ""
+
+#: :294
 msgid "Salvesta"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:301
+#: :301
 msgid "Kustuta seos(ed)"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:343
+#: :335
+msgid ""
+msgstr ""
+
+#: :343
 msgid "Nimi"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:349
+#: :349
 msgid "Keel"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:356
+#: :356
 msgid "Muu info"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:362
+#: :362
 msgid "Alias"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:370
+#: :370
 msgid "Link"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:379
+#: :379
 msgid "Cache"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:388
+#: :388
 msgid "Muutja"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:396
+#: :396
 msgid "Muudetud"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:407
+#: :407
 msgid "Tüüp"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:415
+#: :415
 msgid "Seose tüüp"
 msgstr ""
 
