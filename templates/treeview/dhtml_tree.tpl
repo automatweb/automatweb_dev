@@ -10,12 +10,6 @@ function toggle_children(objref) {
         icon = document.getElementById("icon-"+elemID);
 	iconfld = document.getElementById("iconfld-"+elemID);
 
-	// cookied cookiedeks, ma pean kusagile kirja panema kıik noded, mis mul parajasti lahti on
-	// node avamisel l‰heks see ka kirja, node sulgemisel vıetaks ta maha sealt
-	// samal ajal tuleks panna ka node avamine/sulgemine kirja
-	//  ... lehe laadimisel tuleks see array algv‰‰rtustada .. ja noh, ‰hh puhh
-	// god damn, this is going to suck
-
         if (thisDisp == 'none')
         {
 		if (get_branch_func != "" && data_loaded == "false")
@@ -59,9 +53,6 @@ function toggle_children(objref) {
         }
         return false;
 }
-
-// so now I know now how to set and get cookies .. no I need a way to split a cookie
-// into individual values .. and how if I may ask you am I going to do that?
 
 function onload_handler(arg)
 {
