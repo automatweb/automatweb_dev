@@ -213,6 +213,13 @@ function init_config($arr)
 	// and should save us a little memory. -- duke
 	if (!isset($GLOBALS["fastcall"]))
 	{
+		// I don't know how the fuck it happens, but somethis these things are not arrays
+		// check it and bail out if so. Not a solution, but still kind of better than
+		// pages of error messages
+		if (!is_array($GLOBALS["cfg"]["__default"]["classes"]))
+		{
+			return false;
+		};
 		// and here do the defs for classes
 		foreach($GLOBALS["cfg"]["__default"]["classes"] as $clid => $cld)
 		{
