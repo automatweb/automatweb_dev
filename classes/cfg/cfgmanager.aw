@@ -1,6 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgmanager.aw,v 1.1 2002/10/29 13:29:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgmanager.aw,v 1.2 2002/11/01 18:03:24 duke Exp $
 // cfgmanager.aw - Object configuration manager
+// deals with drawing add and change forms and submitting data
 class cfgmanager extends aw_template
 {
 	function cfgmanager($args = array())
@@ -8,65 +9,220 @@ class cfgmanager extends aw_template
 		$this->init("cfgmanager");
 	}
 
-	function add($args = array())
-	{
-		extract($args);
-		$cfgform = get_instance("cfgform");
-		$reforb = $this->mk_reforb("submit",array("parent" => $parent));
-		$this->create_toolbar();
-		$xf = $cfgform->change_properties(array(
-			"clid" => &$this,
-			"parent" => $parent,
-			"reforb" => $reforb,
-                ));
-		return $this->toolbar->get_toolbar() . $xf;
-	}
-
+	////
+	// !Displays a form for editing an object
+	// id(int) - id of the object
+	// don't need anything else really
 	function change($args = array())
 	{
 		extract($args);
-		$this->obj = $this->get_object($id);
-		$this->create_toolbar();
-		$cfgform = get_instance("cfgform");
-		$reforb = $this->mk_reforb("submit",array("id" => $id));
-		$xf = $cfgform->change_properties(array(
-			"clid" => &$this,
-			"obj" => $this->obj,
-			"reforb" => $reforb,
-                ));
-		return $this->toolbar->get_toolbar() . $xf;
+		// retrieve the object
+		$this->coredata = $this->get_object($id);
+
+		// get an instance of the class that handles this object type
+		$cp = $this->get_class_picker(array("field" => "file"));
+		$clfile = $cp[$this->coredata["class_id"]];
+		classload($clfile);
+		$inst = new $clfile();
+
+		$tp = get_instance("tabpanel");
+		
+		$this->mk_path($this->coredata["parent"],"Muuda objekti");
+
+		$callback = false;
+		if (method_exists($inst,"get_property"))
+		{
+			$callback = true;
+		};
+
+		$cfg = get_instance("config");
+		$cs = aw_unserialize($cfg->get_simple_config("class_cfgforms"));
+
+		$filter = (int)$cs[$this->coredata["class_id"]];
+
+		$cfgu = get_instance("cfg/cfgutils");
+		
+		$coreprops = $cfgu->load_properties(array("file" => "core"));
+		$objprops = $cfgu->load_properties(array("file" => $clfile));
+
+		if ($filter)
+		{
+			$saved = $objprops;
+			$objprops = array();
+			$fdata = $this->get_object($filter);
+			$def = $this->cfg["classes"][$this->coredata["class_id"]]["def"];
+			$fdat = $fdata["meta"]["properties"][$def];
+			foreach($saved as $key => $val)
+			{
+				if ($fdat[$val["name"]["text"]])
+				{
+					$objprops[] = $val;
+				};
+			};
+		};
+
+
+		$realprops = array_merge($coreprops,$objprops);
+
+		// now we have all the properties - draw the form
+		// XXX: arrrr, get rid of that.
+		// replace it with generic check whether there are any groups
+		if ($clfile == "menuedit")
+		{
+			$toolbar = get_instance("toolbar");
+			$this->group_magic(&$realprops,$group);
+			$grpnames = $this->groupnames;
+			$this->objdata = $this->get_menu($id);
+			$active = ($group) ? $group : "general";
+			foreach($grpnames as $key => $val)
+			{
+				$link = $this->mk_my_orb("change",array("id" => $id,"group" => $key));
+				$tp->add_tab(array(
+					"link" => $link,
+					"caption" => $key,
+					"active" => ($key == $active),
+				));
+			};
+		}
+
+		// here be some magic to determine the correct output client
+		// this means we could create a TTY client for AW :)
+		// actually I'm thinking of native clients and XML-RPC
+		// output client is probably the first that should be
+		// implemented.
+		$cli = get_instance("cfg/htmlclient");
+		$cli->start_output();
+		
+
+		foreach($realprops as $key => $val)
+		{
+			$val = $this->normalize_text_nodes($val);
+			$this->get_value(&$val);
+
+			if ($callback)
+			{
+				$inst->get_property(array(
+						"prop" => &$val,
+						"obj" => &$this->coredata,
+						"objdata" => &$this->objdata,
+				));
+			};
+
+			$cli->add_property($val);
+		};
+
+		$cli->finish_output(array(
+					"action" => "submit",
+					"data" => array("id" => $id,"group" => $group),
+		));
+
+		return $tp->get_tabpanel(array(
+			"content" => $cli->get_result(),
+		));
+
 	}
 
+	////
+	// !Submits the configuration data
 	function submit($args = array())
 	{
 		$this->quote($args);
 		extract($args);
-		if ($id)
+		// retrieve the object
+		$this->coredata = $this->get_object($id);
+
+		// figure out the name of the class file
+		$cp = $this->get_class_picker(array("field" => "file"));
+		$clfile = $cp[$this->coredata["class_id"]];
+
+		$cfgu = get_instance("cfg/cfgutils");
+		$coreprops = $cfgu->load_properties(array("file" => "core"));
+		$objprops = $cfgu->load_properties(array("file" => $clfile));
+		$realprops = array_merge($coreprops,$objprops);
+			
+		if ($clfile == "menuedit")
 		{
-			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $name,
-				"comment" => $comment,
-				"metadata" => array(
-					"priobj" => $priobj,
-					"cfgform" => $cfgform,
-				),
-			));
-		}
-		else
-		{
-			$id = $this->new_object(array(
-				"parent" => $parent,
-				"name" => $name,
-				"comment" => $comment,
-				"class_id" => CL_CFGMANAGER,
-				"metadata" => array(
-					"priobj" => $priobj,
-				),
-			));
+			$toolbar = get_instance("toolbar");
+			$this->group_magic(&$realprops,$group);
 		};
-		// XXX: log the action
-		return $this->mk_my_orb("change",array("id" => $id));
+
+		// now we need to figure out the save strategy
+		// cycle over the properties and sort out all the stuff 
+		// that has values in the form
+		$objdata = array();
+		$coredata = array();
+		$metadata = array();
+		foreach($realprops as $property)
+		{
+			$name = $property["name"]["text"];
+			$table = $property["table"]["text"];
+			$field = $property["field"]["text"];
+			$method = $property["method"]["text"];
+			$handler = $property["handler"]["text"];
+			if ($handler == "callback")
+			{
+				// how on earth to I get the values
+				// back from the callback routine?
+				print "calling back<br>";
+			}
+			else
+			if ($method == "serialize")
+			{
+				$metadata[$name] = $args[$name];
+			}
+			elseif ($args[$name] && ($table == "objects"))
+			{
+				$coredata[$name] = $args[$name];
+			}
+			elseif ($table == "menu")
+			{
+				$objdata[$name] = $args[$name];
+			};
+		};
+
+		if (sizeof($metadata) > 0)
+		{
+			$coredata["metadata"] = $metadata;
+		};
+		$coredata["oid"] = $id;
+		$this->upd_object($coredata);
+		if ($clfile == "menuedit" && (sizeof($objdata) > 0))
+		{
+			foreach($objdata as $key => $val)
+			{
+				$qpart[] = " $key = '$val' ";
+			};
+			$qparts = join(",",$qpart);
+			$q = "UPDATE menu SET $qparts WHERE id = '$id'";
+			$this->db_query($q);
+		};
+		return $this->mk_my_orb("change",array("id" => $id,"group" => $group));
+	}
+
+	function group_magic($props,$group = "")
+	{
+		$by_group = array();
+		foreach($props as $val)
+		{
+			$grpname = $val["group"]["text"];
+			if ($grpname)
+			{
+				$by_group[$grpname][] = $val;
+			};
+		}
+		$groupnames = array_flip(array_keys($by_group));
+		$this->groupnames = $groupnames;
+		if (!$group)
+		{
+			$group = "general";
+		};
+
+		if (!$by_group[$group])
+		{
+			$group = "general";
+		};
+		$filtered = $by_group[$group];
+		$props = $filtered;
 	}
 
 	function create_toolbar($args = array())
@@ -100,62 +256,8 @@ class cfgmanager extends aw_template
 	// $obj contains the object - from which the values for fields can be aquired
 	// $fields - contains a list of fields that should be returned.
 
-	// But does $fields based filtering make things more complicated?
-	// I also need to take "private" property into account - in cases where
-	// it does exist.
-
-	// the problem is also that I don't really want to put filtering into
-	// each get_properties - that's would mean way too much duplicated code
-
-	// but I also don't want to execute code which I do not need.
-	// for example - in this method I might not want to show the "priobj"
-	// dropdown - and then there should not be a need to execute the list_objects function
-
-	// then - what about a function called add_property - which would take care
-	// of filtering for me?
-
 	function get_properties($obj = array(),$fields = array())
 	{
-		/*
-		// but I don't want to do that either!
-		$this->set_property_filter($fields);
-
-		but this doesn't solve any of my problems, because the contents
-		of options are calculated before add_property is called
-
-		then what about an completey different function get_property -
-		which would only return one property at a time - then we can
-		do whatever we want with those.
-		$this->add_property("priobj",array(
-				"type" => "select",
-				"options" => "blabla",
-		));
-
-		// this could also be used, if some of the properties
-		// are to be defined in a XML file
-
-		// those add_property function should then be done
-		// somewhere inside the class
-
-		// and somehow I will have to figure out how to
-		// execute the stuff only once.
-
-		// I really start to like the idea of reading the stuff
-		// out of the ORB definition, cause that would give us
-		// a lot of additional functionality in the future.
-
-		// returning properties should not be too deeply nested
-		// nor overly complicated. I want to be able to return
-		// the stuff in a simple array if it needs to be.
-		// cause providing a function for each god damn property
-		// is just bad karma!
-
-		// I don't want to assign all the possible properties in the
-		// class constructor either, because I might want to access
-		// stuff from that class that does not need any of those properties
-		// and then loading those would mean unneccessary work
-
-		*/
 
 		$props = array();
 		// generate the picker for choosing priority objects
@@ -175,7 +277,7 @@ class cfgmanager extends aw_template
 
 	// but then - isn't there a better way for storing properties?
 	// key - name of the property
-	function get_property($args = array())
+	function __get_property($args = array())
 	{
 		$key = $args["key"];
 		$prp = false;
@@ -294,5 +396,118 @@ class cfgmanager extends aw_template
 		}
 		return $max_obj;
 	}
+
+	////
+	// !Generates a change form for an object
+	// clid(string) - name of the class
+	// oid(int) - reference to object which should be used to fill the form
+	// reforb(string) - reforb
+	function gen_change_form($args = array())
+	{
+		extract($args);
+	}
+
+	////
+	// !Figures out the value for property
+	function get_value(&$property)
+	{
+		$field = ($property["field"]) ? $property["field"] : $property["name"];
+		if ($property["table"] == "objects")
+		{
+			if ($field == "meta")
+			{
+				$property["value"] = $this->coredata["meta"][$property["name"]];
+			}
+			else
+			{
+				$property["value"] = $this->coredata[$property["name"]];
+			};
+		}
+		else
+		{
+			if ($property["method"] == "serialize")
+			{
+				$property["value"] = aw_unserialize($this->objdata[$field]);
+			}
+			else
+			{
+				$property["value"] = $this->objdata[$property["name"]];
+			};
+		};
+	}
+
+	function normalize_text_nodes($val)
+	{
+		$arr = new aw_array($val);
+		$res = array();
+		foreach($arr->get() as $key => $val)
+		{
+			$res[$key] = $val["text"];
+		};
+		return $res;
+	}
+	
+	function __add($args = array())
+	{
+		extract($args);
+		$cfgform = get_instance("cfg/cfgform");
+		$reforb = $this->mk_reforb("submit",array("parent" => $parent));
+		$this->create_toolbar();
+		$xf = $cfgform->change_properties(array(
+			"clid" => &$this,
+			"parent" => $parent,
+			"reforb" => $reforb,
+                ));
+		return $this->toolbar->get_toolbar() . $xf;
+	}
+
+	function __change($args = array())
+	{
+		extract($args);
+		$this->obj = $this->get_object($id);
+		$this->create_toolbar();
+		$cfgform = get_instance("cfg/cfgform");
+		$reforb = $this->mk_reforb("submit",array("id" => $id));
+		$xf = $cfgform->change_properties(array(
+			"clid" => &$this,
+			"obj" => $this->obj,
+			"reforb" => $reforb,
+                ));
+		return $this->toolbar->get_toolbar() . $xf;
+	}
+
+	function __submit($args = array())
+	{
+		$this->quote($args);
+		extract($args);
+		if ($id)
+		{
+			$this->upd_object(array(
+				"oid" => $id,
+				"name" => $name,
+				"comment" => $comment,
+				"metadata" => array(
+					"priobj" => $priobj,
+					"cfgform" => $cfgform,
+				),
+			));
+		}
+		else
+		{
+			$id = $this->new_object(array(
+				"parent" => $parent,
+				"name" => $name,
+				"comment" => $comment,
+				"class_id" => CL_CFGMANAGER,
+				"metadata" => array(
+					"priobj" => $priobj,
+				),
+			));
+		};
+		// XXX: log the action
+		return $this->mk_my_orb("change",array("id" => $id));
+	}
+
+
 };
 ?>
