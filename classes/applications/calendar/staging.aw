@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.8 2005/03/22 17:04:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.9 2005/03/30 11:36:48 ahti Exp $
 // staging.aw - Lavastus 
 /*
 
@@ -99,7 +99,7 @@ class staging extends class_base
 		
 		$start1 = $o->prop("start1");
 		$conns = $o->connections_from(array(
-			"type" => "RELTYPE_COPY",
+			"type" => 2, //"RELTYPE_COPY",
 		));
 
 		/*
