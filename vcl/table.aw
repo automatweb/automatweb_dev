@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.43 2003/02/10 14:10:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.44 2003/03/05 16:48:04 duke Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -23,9 +23,9 @@ class aw_table
 		$this->dn_arr = sprintf("<img src='%s' border='0' />",$this->imgurl . "/down.gif");
 
 		// prefix - kasutame sessioonimuutujate registreerimisel
-		$this->prefix = $data["prefix"];
+		$this->prefix = isset($data["prefix"]) ? $data["prefix"] : "";
 		// table cell background color
-		$this->tbgcolor = $data["tbgcolor"];
+		$this->tbgcolor = isset($data["tbgcolor"]) ? $data["tbgcolor"] : "";
 
 		$this->header_attribs = array();
 
@@ -364,14 +364,17 @@ class aw_table
 
 	function draw($arr = array()) 
 	{
-		// v?ljastab tabeli
+		// väljastab tabeli
 		if (!is_array($this->rowdefs)) 
 		{
 			print "Don't know what to do";
 			return;
 		};
 
-		$this->do_rgroup_counts($arr['rgroupby']);
+		if (isset($arr["rgroupby"]) && is_array($arr["rgroupby"]))
+		{
+			$this->do_rgroup_counts($arr["rgroupby"]);
+		};
 
 		extract($arr);
 		$PHP_SELF = aw_global_get("PHP_SELF");
@@ -379,7 +382,7 @@ class aw_table
 		$this->titlebar_under_groups = $arr["titlebar_under_groups"];
 		$tbl = "";
 
-		// moodustame v?limise raami alguse
+		// moodustame välimise raami alguse
 		if (is_array($this->frameattribs))
 		{
 			$tmp = $this->frameattribs;
@@ -416,10 +419,10 @@ class aw_table
 			foreach($this->rowdefs as $k => $v)
 			{
 				$style = false;
-				$style = ($v["sortable"] ? ($this->sortby[$v["name"]] ? $this->col_styles[$v["name"]]["header_sorted"] : $this->col_styles[$v["name"]]["header_sortable"]) : $this->col_styles[$v["name"]]["header_normal"]);
+				$style = (isset($v["sortable"]) ? ($this->sortby[$v["name"]] ? $this->col_styles[$v["name"]]["header_sorted"] : $this->col_styles[$v["name"]]["header_sortable"]) : $this->col_styles[$v["name"]]["header_normal"]);
 				if (!$style)
 				{
-					$style = ($v["sortable"] ? ($this->sortby[$v["name"]] ? $this->header_sorted : $this->header_sortable) : $this->header_normal);
+					$style = (isset($v["sortable"]) ? ($this->sortby[$v["name"]] ? $this->header_sorted : $this->header_sortable) : $this->header_normal);
 				}
 				$tbl.=$this->opentag(array(
 					"name" => "td",
@@ -432,7 +435,7 @@ class aw_table
 				));
 
 				// if the column is sortable, turn it into a link
-				if ($v["sortable"]) 
+				if (isset($v["sortable"])) 
 				{
 					// by default (the column is not sorted) don't show any arrows
 					$sufix = "";
@@ -787,7 +790,7 @@ class aw_table
 
 		// moodustame atribuutidest stringi
 		$attr_list = "";
-		if (is_array($attribs)) 
+		if (isset($attribs) && is_array($attribs)) 
 		{
 			foreach($attribs as $k => $v) 
 			{
@@ -840,12 +843,16 @@ class aw_table
 	// xml funktsioonid
 	function _xml_start_element($parser,$name,$attrs) 
 	{
+		if (!isset($attrs["value"]))
+		{
+			$attrs["value"] = "";
+		};
 		switch($name) 
 		{
-			// vaikimisi m??ratud sorteerimisj?rjekord
+			// vaikimisi määratud sorteerimisjärjekord
 			case "default_order":
 				$this->default_order = $attrs["value"];
-				$this->default_odir = $attrs["order"];
+				$this->default_odir = isset($attrs["order"]) ? $attrs["order"] : "";
 				break;
 
 			// tabeli atribuudid
@@ -853,19 +860,19 @@ class aw_table
 				$this->tableattribs = $attrs;
 				break;
 			
-			// v?limise tabeli atribuudid
+			// välimise tabeli atribuudid
 			case "frameattribs":
 				$this->frameattribs = $attrs;
 				break;
 
 			case "framebgcolor":
-				$this->framebgcolor = $attrs["bgcolor"];
+				$this->framebgcolor = isset($attrs["bgcolor"]) ? $attrs["bgcolor"] : "";
 				break;
 
 			case "titlebar":
-				$this->titlestyle = $attrs["style"];
+				$this->titlestyle = isset($attrs["style"]) ? $attrs["style"] : "";
 				// lauri muudetud
-				$this->headerlinkclassid = $attrs["linkclass"];
+				$this->headerlinkclassid = isset($attrs["linkclass"]) ? $attrs["linkclass"] : "";
 				break;
 
 			// tavalise (mittesorteeritava) headeri stiil
@@ -882,7 +889,7 @@ class aw_table
 				$this->group_style = $attrs["value"];
 				break;
 
-			// stiil, mida kasutada parajasti sorteeritud v?lja headeri n?itamiseks
+			// stiil, mida kasutada parajasti sorteeritud välja headeri näitamiseks
 			case "header_sorted":
 				$this->header_sorted = $attrs["value"];
 				break;
@@ -890,23 +897,23 @@ class aw_table
 			// stiilid contenti kuvamiseks
 			case "content_style1":
 				$this->style1 = $attrs["value"];
-				$this->bgcolor1 = $attrs["bgcolor"];
+				$this->bgcolor1 = isset($attrs["bgcolor"]) ? $attrs["bgcolor"] : "";
 				break;
 
 			case "content_style2":
 				$this->style2 = $attrs["value"];
-				$this->bgcolor2 = $attrs["bgcolor"];
+				$this->bgcolor2 = isset($attrs["bgcolor"]) ? $attrs["bgcolor"] : "";
 				break;
 
 			// stiilid millega kuvatakse sorteeritud v?lja sisu
 			case "content_style1_selected":
 				$this->selected1 = $attrs["value"];
-				$this->selbgcolor1 = $attrs["bgcolor"];
+				$this->selbgcolor1 = isset($attrs["bgcolor"]) ? $attrs["bgcolor"] : "";
 				break;
 
 			case "content_style2_selected":
 				$this->selected2 = $attrs["value"];
-				$this->selbgcolor2 = $attrs["bgcolor"];
+				$this->selbgcolor2 = isset($attrs["bgcolor"]) ? $attrs["bgcolor"] : "";
 				break;
 
 			// stiilid contenti kuvamiseks <tr> jaoks
@@ -927,7 +934,7 @@ class aw_table
 				$this->actionrows = $attrs["value"];
 				break;
 
-			// v?ljad
+			// väljad
 			case "field":
 				$temp = array();
 				while(list($k,$v) = each($attrs)) 
@@ -983,7 +990,7 @@ class aw_table
 	function define_field($args = array())
 	{
 		$this->rowdefs[] = $args;
-		if ($args["numeric"])
+		if (isset($args["numeric"]))
 		{
 			$this->nfields[$args["name"]] = 1;
 		};
@@ -1175,11 +1182,6 @@ class aw_table
 	// !this calculates how many elements are there in each rgroup and puts them in $this->rgroupcounts
 	function do_rgroup_counts($rgroupby)
 	{
-		if (!is_array($rgroupby))
-		{
-			return;
-		}
-
 		$this->rgroupcounts = array();
 		foreach($this->data as $row)
 		{
