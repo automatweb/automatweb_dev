@@ -348,7 +348,7 @@ class ml_list extends aw_template
 		$url=$this->mk_my_orb("post_message",array("id" => $id, "targets" => $targets),"",1);
 		$sched = get_instance("scheduler");
 		$sched->add(array(
-			"event" => $this->mk_my_orb("process_queue", array("rand" => gen_uniq_id()), "ml_queue", false, true),
+			"event" => $this->mk_my_orb("process_queue", array(), "ml_queue", false, true),
 			"time" => time()+120,	// every 2 minutes
 		));
 		return $url;
@@ -462,7 +462,7 @@ class ml_list extends aw_template
 			"listrida" => $listrida,
 			"reforb" => $this->mk_reforb("submit_post_message",array(
 				"id" => $id,
-				"lists" => serialize($lists),
+				"lists" => htmlentities(serialize($lists)),
 				))
 		));
 
@@ -477,8 +477,9 @@ class ml_list extends aw_template
 		
 		
 		$id=(int)$id;
-		//echo(stripslashes($lists));//dbg
-		$lists=unserialize(stripslashes($lists));
+		//		echo($lists);//dbg
+		$lists=unserialize($lists);
+		//		dbg::dump($lists);
 		//echo("<pre>");//dbg
 		//print_r($lists);//dbg
 		// siin tekib nüüd see küsimus, et kas valitud list tähendab kogu listi või siis ainult neid liikmeid,
