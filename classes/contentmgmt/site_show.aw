@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.62 2004/06/09 08:03:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.63 2004/06/09 13:02:09 kristo Exp $
 
 /*
 
@@ -585,6 +585,12 @@ class site_show extends class_base
 			{
 				$ordby = "objects.jrk";
 			}
+			global $XX6;
+			if ($XX6)
+			{
+				var_dump($ordby);
+				arr($filter);
+			};
 
 			$no_fp_document = aw_ini_get("menuedit.no_fp_document");
 
@@ -838,6 +844,14 @@ class site_show extends class_base
 
 		if ($this->sel_section_obj->prop("no_menus") == 1 || $GLOBALS["print"] || 1 == $arr["content_only"])
 		{
+			if (aw_ini_get("menuedit.print_template"))
+			{
+				$this->read_template(aw_ini_get("menuedit.print_template"));
+				$this->vars(array(
+					"doc_content" => $docc,
+				));
+				return $this->parse();
+			}
 			return $docc;
 		}
 
