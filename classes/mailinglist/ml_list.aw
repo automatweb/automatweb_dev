@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.34 2003/12/16 15:35:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.35 2003/12/16 15:52:17 duke Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -795,7 +795,7 @@ class ml_list extends class_base
 			FROM ml_sent_mails
 			LEFT JOIN objects AS m_objects ON m_objects.oid = ml_sent_mails.member
 			LEFT JOIN objects AS l_objects ON l_objects.oid = ml_sent_mails.lid
-			WHERE lid = '$id' AND mail = '$_mid'";
+			WHERE lid = '$id' AND mail = '$_mid' ORDER BY ml_sent_mails.tm DESC limit 50";
 		$this->db_query($q);
 		while ($row = $this->db_next())
 		{
