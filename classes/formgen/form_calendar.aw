@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.21 2003/02/07 19:42:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.22 2003/02/08 01:41:12 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 classload("formgen/form_base");
 class form_calendar extends form_base
@@ -399,7 +399,7 @@ class form_calendar extends form_base
 			$r_entry_id = $entry_id;
 		};
 		
-		$q = "SELECT MIN(max_items) AS max FROM calendar2timedef
+		$q = "SELECT SUM(max_items) AS max FROM calendar2timedef
 			 WHERE oid = '$contr' 
 				AND relation IN ($r_entry_id) AND start <= '$end' AND end >= '$start'";
 
