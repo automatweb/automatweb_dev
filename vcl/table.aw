@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.14 2001/11/08 22:48:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.15 2001/12/05 22:00:09 duke Exp $
 global $PHP_SELF;
 $js_table = "
 function xnavi_alfa(char_to_look_for) {
@@ -87,6 +87,14 @@ class aw_table
 		$this->last = sizeof($this->data);
 	}
 
+	////
+	// !Returns the amount of rows in the table (memory)
+	function rows()
+	{
+		return sizeof($this->data);
+
+	}
+
 	function merge_data($row)
 	{
 		$this->data[$this->last-1]  = array_merge($this->data[$this->last-1],$row);
@@ -155,6 +163,11 @@ class aw_table
 
 	function sort_by($params) 
 	{
+		// do nothing if we have no data
+		if ($this->rows() == 0)
+		{
+			return;
+		};
 		// määrame ära sorteeritava välja
 		// paramteetrid: 
 		//		field
@@ -646,7 +659,7 @@ class aw_table
 		{
 			$new='"'.$new.'"';
 		};
-		return $new;
+		return strip_tags($new);
 	}
 
 	// tagastab csv andmed, kustuda välja draw asemel
