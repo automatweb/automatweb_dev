@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.180 2003/05/15 14:46:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.181 2003/05/15 14:53:54 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -447,6 +447,37 @@ class document extends aw_template
 			$this->read_any_template($tpl);
 		};
 
+		// now I need to gather information about the different templates
+		$awdoc = get_instance("doc");
+		$plugins = $awdoc->parse_long_template(array(
+			"inst" => $this,
+		));
+
+		$plg_arg = array();
+		foreach($plugins as $plg_name)
+		{
+			$plg_arg[$plg_name] = array(
+				"value" => $doc["meta"]["plugins"][$plg_name],
+				"tpl" => $this->templates["plugin.$plg_name"],
+			);
+		}
+		
+		$plg_ldr = get_instance("plugins/plugin_loader");
+		$plugindata = $plg_ldr->load_by_category(array(
+			"category" => get_class($this),
+			"plugins" => $plugins,
+			"method" => "show",
+			"args" => $plg_arg,
+		));
+
+		$pvars = array();
+		foreach($plugindata as $key => $val)
+		{
+			$pvars["plugin.${key}"] = $val;
+		};
+
+		$this->vars($pvars);
+
 		if (( ($meta["show_print"]) && (not($print)) && $leadonly != 1) && !$is_printing)
 		{
 			if ($this->cfg["print_cap"] != "")
@@ -844,13 +875,6 @@ class document extends aw_template
 			};
 		};
 
-
-		/*
-		$t = get_instance("msgboard");
-		$nc = $t->get_num_comments($doc["docid"]);
-		$nc = $nc < 1 ? "0" : $nc;
-		$doc["content"] = str_replace("#kommentaaride arv#",$nc,$doc["content"]);
-		*/
 
 		// <mail to="bla@ee">lahe tyyp</mail>
  		$doc["content"] = preg_replace("/<mail to=\"(.*)\">(.*)<\/mail>/","<a class='mailto_link' href='mailto:\\1'>\\2</a>",$doc["content"]);
@@ -1436,6 +1460,16 @@ class document extends aw_template
 			$oq_parts["modified"] = $modified;
 		};
 
+		$metadata = array();
+		// nih, updateme objekti metadata ka 2ra.
+		foreach($this->metafields as $m_name => $m_key)
+		{
+			$metadata[$m_key] = $data[$m_key];
+		}
+
+		$metadata["plugins"] = $data["plugins"];
+		$oq_parts["metadata"] = $metadata;
+
 		$this->upd_object($oq_parts);
 
 		// uuendame vennastatud dokude nimed ka
@@ -1444,12 +1478,6 @@ class document extends aw_template
 			$this->db_query("UPDATE objects SET name='".$data["name"]."' WHERE brother_of = '".$old["brother_of"]."'");
 		}
 
-		// nih, updateme objekti metadata ka 2ra.
-		foreach($this->metafields as $m_name => $m_key)
-		{
-			$this->set_object_metadata(array("oid" => $id, "key" => $m_key, "value" => $data[$m_key]));
-		}
-		
 		if ($this->cfg["use_dcache"] && $data["dcache"])
 		{
 			$preview = $this->gen_preview(array("docid" => $id));
@@ -1771,17 +1799,10 @@ class document extends aw_template
 	function change($arr)
 	{
 		$baseurl = $this->cfg["baseurl"];
-		// hmpf, imho voiks see veidi globaalsem kontroll olla, kui
-		// ainult siin, selles yhes funktsioonid
-		if (!$this->prog_acl("view",PRG_DOCEDIT))
-		{
-			header("Location: $baseurl");
-			exit;
-		}
-
 		extract($arr);
 
 		$oob = $this->get_object($id);
+
 		if ($oob["class_id"] == CL_BROTHER_DOCUMENT)
 		{
 			$id = $oob["brother_of"];
@@ -1798,6 +1819,20 @@ class document extends aw_template
 		// jargnev funktsioon kaib rekursiivselt mooda menyysid, kuni leitakse
 		// menyy, mille juures on m??ratud edimistemplate
 		$_tpl = $this->get_edit_template($oob["parent"]);
+
+		$awdoc = get_instance("doc");
+		$plugins = $awdoc->parse_long_template(array(
+			"parent" => $oob["parent"],
+			"template_dir" => $this->template_dir,
+		));
+
+		$plg_ldr = get_instance("plugins/plugin_loader");
+		$plugindata = $plg_ldr->load_by_category(array(
+			"category" => get_class($this),
+			"plugins" => $plugins,
+			"method" => "get_static_property",
+			"args" => $oob["meta"]["plugins"],
+		));
 
 		// try to read the template from the site, but if it does noit exist, try the admin folder
 		if ($this->read_site_template($_tpl, true) === false)
@@ -1817,19 +1852,10 @@ class document extends aw_template
 			$document = $this->fetch($id);
 			$addcap = "";
 		};
-		$this->mk_path($document["parent"],"<a href='/automatweb/orb.".$this->cfg["ext"]."?class=document&action=change&id=$id'>" . LC_DOCUMENT_CHANGE_DOC . $addcap . "</a>",$document["period"]);
-		
-		// kui class_id on 1, siis jarelikult me muudame
-		// mingi sektsiooni defaulte
-		if ($document["class_id"] == 1) 
-		{
-			$mcap = LC_DOCUMENT_SEKTS_DEF;
-		} 
-		else 
-		{
-			$mcap = LC_DOCUMENT_DOC;
-		};
 
+		$url = $this->mk_my_orb("change",array("id" => $id,"period" => $document["period"]));
+		$this->mk_path($document["parent"],"<a href='$url'>" . LC_DOCUMENT_CHANGE_DOC . $addcap . "</a>");
+		
 		// keelte valimise asjad
 		if ($this->is_template("DOC_BROS"))
 		{
@@ -1877,7 +1903,6 @@ class document extends aw_template
 			"0" => "0", 
 			"1" => "1", "2" => "2", "3" => "3",  "4" => "4", "5"  => "5",
 								 "6" => "6", "7" => "7", "8" => "8",  "9" => "9", "10" => "10");
-		$addfile = $this->mk_my_orb("new",array("id" => $id, "parent" => $document["parent"]),"file");
 		$previewlink = "";
 
 		$return_url = $this->mk_my_orb("change", array("id" => $id));
@@ -1963,8 +1988,7 @@ class document extends aw_template
 											));
 
 
-		// detect browser and if it's compatible, use WYSIWYG editor
-		if (!(strpos(aw_global_get("HTTP_USER_AGENT"),"MSIE") === false))
+		if ($is_ie)
 		{
 			// IE
 			$brows = $this->parse("IE");
@@ -1974,7 +1998,19 @@ class document extends aw_template
 			// other
 			$brows = $this->parse("NOT_IE");
 		}
-		$this->vars(array("IE" => $brows, "NOT_IE" => ""));
+		$plugcontent = "";
+		foreach($plugindata as $plugdata)
+		{
+			$this->vars(array(
+				"plugin_content" => $plugdata,
+			));
+			$plugcontent .= $this->parse("PLUGIN");
+		}
+		$this->vars(array(
+			"IE" => $brows,
+			"NOT_IE" => "",
+			"PLUGIN" => $plugcontent,
+		));
 		return $this->parse();
 	}
 
