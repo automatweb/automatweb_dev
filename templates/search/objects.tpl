@@ -10,5 +10,9 @@
 	</td>
 </tr>
 <!-- END SUB: field -->
+<!-- SUB: hidden -->
+	{VAR:element}
+<!-- END SUB: hidden -->
+
 
 </table>

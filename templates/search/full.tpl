@@ -149,6 +149,16 @@ function search_selall()
 	</td>
 </tr>
 <!-- END SUB: field -->
+<!-- SUB: hidden -->
+<tr>
+	<td class='chformleftcol' width='160' nowrap>
+	hidden
+	</td>
+	<td class='chformrightcol'>
+	{VAR:element}
+	</td>
+</tr>
+<!-- END SUB: hidden -->
 </table>
 </td></tr>
 <tr><td></td>
