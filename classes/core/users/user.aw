@@ -62,12 +62,6 @@
 @property act_to store=no type=date_select
 @caption Aktiivne kuni
 
-@property user_calendar type=relpicker reltype=USER_CALENDAR table=objects field=meta method=serialize
-@caption Kasutaja kalender
-
-@property kliendibaas type=relpicker reltype=RELTYPE_KLIENDIBAAS table=objects field=meta method=serialize
-@caption Kasutaja hallatav kliendibaas
-
 @default group=chpwd
 
 @property passwd field=password type=password store=no
@@ -126,8 +120,6 @@
 */
 
 define("RELTYPE_GRP", 1);
-define('USER_CALENDAR', 2);
-define('RELTYPE_KLIENDIBAAS', 3);
 
 class user extends class_base
 {
@@ -144,8 +136,6 @@ class user extends class_base
 	{
 		return array(
 			RELTYPE_GRP => "Grupp",
-			USER_CALENDAR => 'Kasutaja kalender',
-			RELTYPE_KLIENDIBAAS => 'Kasutaja kliendibaas',
 		);
 	}
 
@@ -155,12 +145,6 @@ class user extends class_base
 		{
 			case RELTYPE_GRP:
 				return array(CL_GROUP);
-			break;
-			case USER_CALENDAR:
-				return array(CL_PLANNER);
-			break;
-			case RELTYPE_KLIENDIBAAS:
-				return array(CL_KLIENDIBAAS);
 			break;
 		}
 	}
@@ -216,6 +200,18 @@ class user extends class_base
 				$prop['value'] = $this->users->get_user_config(array(
 					"uid" => $arr["objdata"]["uid"],
 					"key" => "act_to",
+				));
+				break;
+			case "kliendibaas":
+				$prop['value'] = $this->users->get_user_config(array(
+					"uid" => $arr["objdata"]["uid"],
+					"key" => "kliendibaas",
+				));
+				break;
+			case "user_calendar":
+				$prop['value'] = $this->users->get_user_config(array(
+					"uid" => $arr["objdata"]["uid"],
+					"key" => "user_calendar",
 				));
 				break;
 
@@ -279,28 +275,6 @@ class user extends class_base
 		load_vcl("date_edit");
 		switch($prop['name'])
 		{
-			case 'user_calendar':
-				
-				$this->users->set_user_config(array(
-					"uid" => $arr["objdata"]["uid"],
-					"key" => "user_calendar",
-					"value" => $prop['value'],
-				));
-				session_register('user_calendar');
-				aw_global_set('user_calendar', $prop['value']);
-			
-			break;
-			case 'kliendibaas':
-				
-				$this->users->set_user_config(array(
-					"uid" => $arr["objdata"]["uid"],
-					"key" => "kliendibaas",
-					"value" => $prop['value'],
-				));
-				session_register('kliendibaas');
-				aw_global_set('kliendibaas', $prop['value']);
-			
-			break;
 			case "name":
 				$this->users->set_user_config(array(
 					"uid" => $arr["objdata"]["uid"],
