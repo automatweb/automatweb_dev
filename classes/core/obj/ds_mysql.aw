@@ -1289,6 +1289,25 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 			else	// via prop
 			{
+				if (!$join["to_class"] && $this->join_data[$pos-1]["via"] == "rel")
+				{
+					$prev = $this->join_data[$pos-1];
+
+					// join from rel to prop
+					$prev_t = "aliases_".$prev["from_class"];
+					$new_t = $GLOBALS["tableinfo"][$join["from_class"]];
+
+					$tbl = reset(array_keys($new_t));
+					$field = $new_t[$tbl]["index"];
+
+					$this->joins[] = " LEFT JOIN ".$tbl." ON ".$tbl.".".$field." = ".$prev_t.".target ";
+					$ret = array(
+						$tbl,
+						$join["field"],
+					);
+					break;
+				}
+				else
 				if (!$join["to_class"])
 				{
 					$prev_t = $join["table"]."_".$prev_clid;
@@ -1324,6 +1343,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		if (substr($pp, 0, 8) == "RELTYPE_")
 		{
+			$this->_do_add_class_id($cur_clid);
 			$reltype_id = $GLOBALS["relinfo"][$cur_clid][$pp]["value"];
 			error::throw_if(!$reltype_id, array(
 				"id" => ERR_OBJ_NO_RELATION,
@@ -1397,7 +1417,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 			}
 
-			$this->join_data[] = array(
+			$jd = array(
 				"via" => "prop",
 				"prop" => $pp,
 				"from_class" => $cur_clid,
@@ -1405,6 +1425,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				"table" => $table,
 				"field" => $field
 			);
+			$this->join_data[] = $jd;
 		}
 
 		if ($pos < (count($filt)-1))
