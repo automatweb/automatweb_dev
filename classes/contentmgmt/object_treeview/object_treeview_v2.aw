@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.56 2005/02/03 12:00:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.57 2005/02/21 13:35:35 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -114,11 +114,36 @@
 @property is_inheritable type=checkbox ch_value=1 field=meta method=serialize group=inherit
 @caption Kasutatav p&auml;rimiseks
 
+@groupinfo search caption="Otsingu seaded"
+
+@groupinfo search_form caption="Koosta vorm" parent=search
+@default group=search_form
+
+	@property search_fields type=table store=no no_caption=1
+	@caption Otsingu v&auml;ljad
+
+@groupinfo search_table caption="Koosta tulemuste tabel" parent=search
+@default group=search_table
+
+	@property search_tbl_fields type=table store=no no_caption=1
+	@caption Tabeli v&auml;ljad
+
+@groupinfo search_show caption="Otsi" parent=search submit_method=get
+@default group=search_show
+
+	@property search_show type=callback callback=search_gen_els
+	@caption Tabeli v&auml;ljad
+
+	@property search_res type=table store=no no_caption=1
+
 @reltype DATASOURCE value=1 clid=CL_OTV_DS_OBJ,CL_OTV_DS_POSTIPOISS,CL_OTV_DS_ROADINFO,CL_DB_TABLE_CONTENTS
 @caption andmed
 
 @reltype CSS value=2 clid=CL_CSS
 @caption css stiil
+
+@reltype CTR value=3 clid=CL_FORM_CONTROLLER
+@caption kontroller
 
 */
 
@@ -303,6 +328,18 @@ class object_treeview_v2 extends class_base
 					return PROP_IGNORE;
 				}
 				break;
+
+			case "search_fields":
+				$this->_search_fields($arr);
+				break;
+
+			case "search_tbl_fields":
+				$this->_search_tbl_fields($arr);
+				break;
+
+			case "search_res":
+				$this->_search_res($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -352,6 +389,14 @@ class object_treeview_v2 extends class_base
 
 			case "group_table":
 				$arr['obj_inst']->set_meta("saved_groups", $arr['request']['group_field']);
+				break;
+
+			case "search_fields":
+				$arr["obj_inst"]->set_meta("search_fields", $arr["request"]["dat"]);
+				break;
+
+			case "search_tbl_fields":
+				$arr["obj_inst"]->set_meta("search_tbl_fields", $arr["request"]["dat"]);
 				break;
 		}
 		return $retval;
@@ -579,6 +624,11 @@ class object_treeview_v2 extends class_base
 			{
 				$ih_ob->set_prop("show_add", false);
 			}
+
+			if (!$d_inst->check_acl("delete", $d_o, $last_o["id"]))
+			{
+				$ih_ob->set_meta("no_delete", true);
+			}
 		}
 		else
 		if ($_GET["tv_sel"])
@@ -586,6 +636,10 @@ class object_treeview_v2 extends class_base
 			if (!$d_inst->check_acl("add", $d_o, $_GET["tv_sel"]))
 			{
 				$ih_ob->set_prop("show_add", false);
+			}
+			if (!$d_inst->check_acl("delete", $d_o, $_GET["tv_sel"]))
+			{
+				$ih_ob->set_meta("no_delete", true);
 			}
 		}
 
@@ -1182,7 +1236,7 @@ class object_treeview_v2 extends class_base
 		}
 
 		$cols = $ob->meta("sel_columns");
-		if ($cols["select"])
+		if ($cols["select"] && !$ob->meta("no_delete") && $this->cnt)
 		{
 			$tb->add_button(array(
 				"name" => "del",
@@ -1956,6 +2010,277 @@ class object_treeview_v2 extends class_base
 			}
 		}
 		return true;
+	}
+
+	function _init_search_fields_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "property",
+			"caption" => "Omadus",
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "in_form",
+			"caption" => "N&auml;ita vormis",
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "text",
+			"caption" => "Tekst",
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "ord",
+			"caption" => "J&auml;rjekord",
+			"align" => "center",
+		));
+	}
+
+	function _search_fields($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_search_fields_t($t);
+
+		$dat = $arr["obj_inst"]->meta("search_fields");
+
+		$cl = $this->_get_col_list(array(
+			"o" => $arr["obj_inst"],
+			"hidden_cols" => true
+		));
+		foreach($cl as $pn => $pc)
+		{
+			$pc2 = $pc." ( ".$pn." ) ";
+			$t->define_data(array(
+				"property" => $pc2,
+				"in_form" => html::checkbox(array(
+					"name" => "dat[$pn][in_form]",
+					"value" => 1,
+					"checked" => $dat[$pn]["in_form"] == 1
+				)),
+				"text" => html::textbox(array(
+					"name" => "dat[$pn][text]",
+					"value" => (isset($dat[$pn]["text"]) ? $dat[$pn]["text"] : $pc)
+				)),
+				"ord" => html::textbox(array(
+					"name" => "dat[$pn][ord]",
+					"value" => $dat[$pn]["ord"],
+					"size" => 5
+				))
+			));
+		}
+	}
+
+	function _init_search_tbl_fields_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "jrk",
+			"caption" => "J&auml;rjekord",
+			"sortable" => 1,
+			"align" => "center",
+			"numeric" => 1
+		));
+		$t->define_field(array(
+			"name" => "el",
+			"caption" => "Element",
+			"sortable" => 1,
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "visible",
+			"caption" => "Tabelis",
+			"sortable" => 1,
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "sortable",
+			"caption" => "Sorditav",
+			"sortable" => 1,
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "view_col",
+			"caption" => "Vaata tulp",
+			"sortable" => 1,
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "u_name",
+			"caption" => "Tulba pealkiri",
+			"sortable" => 1,
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "ctr",
+			"caption" => "Kontroller",
+			"sortable" => 1,
+			"align" => "center"
+		));
+	}
+
+	function _search_tbl_fields($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_search_tbl_fields_t($t);
+
+		$dat = $arr["obj_inst"]->meta("search_tbl_fields");
+
+		$ctr_ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CTR")));
+		$ctrs = $ctr_ol->names();
+		$ctrs[0] = "--Vali--";
+
+		$cl = $this->_get_col_list(array(
+			"o" => $arr["obj_inst"],
+			"hidden_cols" => true
+		));
+		foreach($cl as $pn => $pc)
+		{
+			$pc2 = $pc." ( ".$pn." ) ";
+
+			$ctr = html::select(array(
+				"name" => "dat[$pn][ctr]",
+				"value" => $dat[$pn]["ctr"],
+				"options" => $ctrs
+			));	
+
+			$t->define_data(array(
+				"jrk" => html::textbox(array(
+					"name" => "dat[$pn][ord]",
+					"value" => $dat[$pn]["ord"],
+					"size" => 5
+				)),
+				"el" => $pc2,
+				"visible" => html::checkbox(array(
+					"name" => "dat[$pn][visible]",
+					"value" => 1,
+					"checked" => $dat[$pn]["visible"] == 1
+				)),
+				"sortable" => html::checkbox(array(
+					"name" => "dat[$pn][sortable]",
+					"value" => 1,
+					"checked" => $dat[$pn]["sortable"] == 1
+				)),
+				"view_col" => html::checkbox(array(
+					"name" => "dat[$pn][view_col]",
+					"value" => 1,
+					"checked" => $dat[$pn]["view_col"] == 1
+				)),
+				"u_name" => html::textbox(array(
+					"name" => "dat[$pn][text]",
+					"value" => isset($dat[$pn]["text"]) ? $dat[$pn]["text"] : $pc,
+				)),
+				"ctr" => ($dat[$pn]["visible"] ? $ctr : "")
+			));
+		}
+	}
+
+	function search_gen_els($arr)
+	{
+		$ret = array();
+		
+		$form_inf = safe_array($arr["obj_inst"]->meta("search_fields"));
+
+		foreach($form_inf as $eln => $eld)
+		{
+			if (!$eld["in_form"])
+			{
+				continue;
+			}
+
+			$nm = "s[$eln]";
+			$ret[$nm] = array(
+				"name" => $nm,
+				"type" => "textbox",
+				"caption" => $eld["text"],
+				"value" => $arr["request"]["s"][$eln]
+			);
+		}
+
+		$ret["s_submit"] = array(
+			"name" => "s_submit",
+			"type" => "submit",
+			"value" => "Otsi",
+			"caption" => "Otsi"
+		);
+		return $ret;
+	}
+
+	function _search_res($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->init_search_res_t($t, $arr["obj_inst"]);
+		
+		$res = $this->get_search_results($arr["obj_inst"], $arr["request"]);
+		foreach($res as $row)
+		{
+			$t->define_data($row);
+		}
+	}
+
+	function init_search_res_t(&$t, $o)
+	{
+		$tbl = safe_array($o->meta("search_tbl_fields"));
+
+		foreach($tbl as $pn => $pd)
+		{
+			if (!$pd["visible"])
+			{
+				continue;
+			}
+
+			$def = array(
+				"name" => $pn,
+				"caption" => $pd["text"]
+			);
+
+			if ($pd["sortable"])
+			{
+				$def["sortable"] = true;
+			}
+
+			// if controller, eval it
+			$show = true;
+			if (is_oid($pd["ctr"]) && $this->can("view", $pd["ctr"]))
+			{
+				$fc = get_instance(CL_FORM_CONTROLLER);
+				$show = $fc->eval_controller($pd["ctr"], $def);
+			}
+
+			if ($show)
+			{
+				$t->define_field($def);
+			}
+		}
+	}
+
+	function get_search_results($o, $req)
+	{
+		$d_o = obj($o->prop("ds"));
+		$d_inst = $d_o->instance();
+
+		$flt = array();
+		foreach(safe_array($req["s"]) as $f => $v)
+		{
+			$flt[] = array(
+				"field" => $f,
+				"value" => $v
+			);
+		}
+
+		if (count($flt) == 0)
+		{
+			return array();
+		}
+
+		$params = array(
+			"filters" => array(
+				"saved_filters" => new aw_array($flt),
+			),
+			"sproc_params" => $o->prop("sproc_params")
+		);
+		return $d_inst->get_objects($d_o, NULL, NULL, $params);
 	}
 }
 ?>

@@ -298,6 +298,48 @@
             <ch_value>1</ch_value>
             <caption>Kasutatav p&amp;auml;rimiseks</caption>
       </property>
+      <property>
+            <name>search_fields</name>
+            <table>objects</table>
+            <group>search_form</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Otsingu v&amp;auml;ljad</caption>
+      </property>
+      <property>
+            <name>search_tbl_fields</name>
+            <table>objects</table>
+            <group>search_table</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Tabeli v&amp;auml;ljad</caption>
+      </property>
+      <property>
+            <name>search_show</name>
+            <table>objects</table>
+            <group>search_show</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>callback</type>
+            <callback>search_gen_els</callback>
+            <caption>Tabeli v&amp;auml;ljad</caption>
+      </property>
+      <property>
+            <name>search_res</name>
+            <table>objects</table>
+            <group>search_show</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
       <classinfo>
             <syslog_type>ST_OBJECT_TREEVIEW_V2</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -317,6 +359,22 @@
             <inherit>
                   <caption>P&amp;auml;rimine</caption>
             </inherit>
+            <search>
+                  <caption>Otsingu seaded</caption>
+            </search>
+            <search_form>
+                  <caption>Koosta vorm</caption>
+                  <parent>search</parent>
+            </search_form>
+            <search_table>
+                  <caption>Koosta tulemuste tabel</caption>
+                  <parent>search</parent>
+            </search_table>
+            <search_show>
+                  <caption>Otsi</caption>
+                  <parent>search</parent>
+                  <submit_method>get</submit_method>
+            </search_show>
       </groupinfo>
       <reltypes>
             <DATASOURCE>
@@ -334,6 +392,11 @@
                   <clid>CL_CSS</clid>
                   <caption>css stiil</caption>
             </CSS>
+            <CTR>
+                  <value>3</value>
+                  <clid>CL_FORM_CONTROLLER</clid>
+                  <caption>kontroller</caption>
+            </CTR>
       </reltypes>
 </properties>
 
