@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.54 2004/12/09 11:28:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.55 2004/12/09 13:14:35 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -1126,6 +1126,21 @@ class forum_v2 extends class_base
 		//return $rv . $this->parse();
 
 		$retval = array();
+
+		
+		if (false === strpos(aw_global_get("REQUEST_URI"),"class="))
+		{
+			$embedded = true;		
+		}
+
+		if ($embedded)
+		{
+			$retval["_alias"] = array(
+				"type" => "hidden",
+				"name" => "_alias",
+				"value" => 1,
+			);
+		};
 			
 		$retval["contents"] = array(
 			"type" => "text",
@@ -1394,6 +1409,7 @@ class forum_v2 extends class_base
 			"hide_tabs" => 1,
 			"relationmgr" => false,
 		);
+		$this->inst->embedded = true;
 		$this->embedded = true;
 
 		global $XX5;
