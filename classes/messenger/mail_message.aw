@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.11 2003/11/04 19:28:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.12 2003/11/04 19:46:08 duke Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -73,6 +73,7 @@ class mail_message extends class_base
 	function callback_load_object($arr)
 	{
 		$msgr = get_instance("messenger/messenger_v2");
+		$msgr->set_opt("use_mailbox",$arr["request"]["mailbox"]);
                 $msgr->_connect_server(array(
                         "msgr_id" => $arr["request"]["msgrid"],
                 ));
