@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.4 2003/12/01 14:26:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.5 2003/12/05 12:44:38 duke Exp $
 /*
 @classinfo relationmgr=yes
 @tableinfo kliendibaas_firma index=oid master_table=objects master_index=oid
@@ -15,7 +15,7 @@
 @property comment type=textarea cols=65 rows=3 table=objects
 @caption Kommentaar
 
-@property reg_nr type=textbox size=10 maxlenght=20 table=kliendibaas_firma
+@property reg_nr type=textbox size=10 maxlength=20 table=kliendibaas_firma
 @caption Registri number
 
 @property pohitegevus type=relpicker reltype=RELTYPE_TEGEVUSALAD table=kliendibaas_firma
@@ -39,8 +39,7 @@
 @property logo type=textbox size=40 method=serialize field=meta table=objects
 @caption Organisatsiooni logo(url)
 
-//@property firmajuht type=relpicker reltype=RELTYPE_WORKERS table=kliendibaas_firma
-@property firmajuht type=text table=kliendibaas_firma store=
+@property firmajuht type=chooser orient=vertical table=kliendibaas_firma 
 @caption Organisatsiooni juht
 
 @default group=overview
@@ -48,10 +47,6 @@
 
 @property progress type=text callback=callback_org_actions store=no no_caption=1
 @caption org_actions
-
-//@default group=look
-//@groupinfo look caption=Vaata
-//@property look type=text callback=look_firma table=objects method=serialize field=meta
 
 @reltype ETTEVOTLUSVORM value=1 clid=CL_CRM_CORPFORM
 @caption Õiguslik vorm
@@ -71,10 +66,10 @@
 @reltype WORKERS value=8 clid=CL_CRM_PERSON
 @caption Töötajad
 
-@reltype PAKKUMINE value=9 clid=CL_CRM_OFFER
+@reltype OFFER value=9 clid=CL_CRM_OFFER,CL_CRM_PERSON
 @caption Pakkumine
 
-@reltype TEHING value=10 clid=CL_CRM_DEAL
+@reltype DEAL value=10 clid=CL_CRM_DEAL
 @caption Tehing
 
 @reltype KOHTUMINE value=11 clid=CL_CRM_MEETING
@@ -115,82 +110,38 @@ class crm_company extends class_base
 		));
 	}
 	
-	function look_firma()
+	function get_property($arr)
 	{
-
-		$nodes = array();
-		$nodes['firma'] = array(
-			"value" => 'Firma andmed tulevad siia',
-		);
-		return $nodes;
-
-	}
-
-	function get_property($args)
-	{
-		$data = &$args['prop'];
+		$data = &$arr['prop'];
 		$retval = PROP_OK;
 		switch($data['name'])
 		{
-			case 'firmajuht':
-				$i = 1;
-				$arr = $this->get_aliases(array(
-					'oid' => $args['obj_inst']->id(),
-					'reltype' => RELTYPE_WORKERS,
-					'type' => CL_CRM_PERSON,
+			case "firmajuht":
+				$conns = $arr["obj_inst"]->connections_from(array(
+					"type" => RELTYPE_WORKERS,
 				));
-//arr($arr);
-				$str = '
-				<table style="font-size:12px;">';
-				$arr[]=array('name' => ' - vali - ','oid' => '0',);
-				foreach($arr as $key => $val)
-				{
-					$col = ($val[OID] == $data['value']) ? 'red': 'blue';
-					$str.="<tr><td>
-					<a id=\"".$data['name']."_".$i."\" href=\"\" style=\"color:".$col."\" 
-					onclick=\"list_preset('".$data['name']."','".$val[OID]."');this.style.color='red';return false;\">".
-					$val['name']."</a></td><td>";
-					if ($val[OID])
-					{
-					$str.="<a href=\"".$this->mk_my_orb('change',array(
-						'id' => $val[OID],
-						'return_url' => urlencode(aw_global_get('REQUEST_URI')),
-						),'isik'
-						)."\">muuda</a>";
-					}
-					$str.="</td></tr>";
-					$i++;
-				}
 
-				$str.='</table><input type="hidden" name="'.$data['name'].'" id="'.$data['name'].'" value="'.$data['value'].'">';
-				
-				$data['value'] = $str;
+				foreach($conns as $conn)
+				{
+					$data["options"][$conn->prop("to")] = $conn->prop("to.name");
+
+				};
+				break;
 			
-			break;
-			
-			case 'navtoolbar':
-				$this->firma_toolbar($args);
-			break;
+			case "navtoolbar":
+				$this->firma_toolbar($arr);
+				break;
 			
 		};
 		return $retval;
 	}
 	
-	function set_property($args = array())
+	function set_property($arr)
 	{
-		$data = &$args["prop"];
+		$data = &$arr["prop"];
 		$retval = PROP_OK;
-		$form = &$args["form_data"];
-		$obj = &$args["obj"];
-		
 		switch($data["name"])
 		{
-			case 'firmajuht':
-				if ($args['obj'][OID])
-				{
-					$this->db_query('update kliendibaas_firma set firmajuht="'.$form['firmajuht'].'" where oid='.$args['obj'][OID]);
-				}
-			break;
 		};
 		return $retval;
 	}	
@@ -319,15 +270,15 @@ class crm_company extends class_base
 		if (!empty($cal_id))
 		{
 			$user_calendar = new object($cal_id);
-			$parents[RELTYPE_CALL] = $parents[RELTYPE_PAKKUMINE] = $parents[RELTYPE_KOHTUMINE] = $parents[RELTYPE_TEHING] = $user_calendar->prop('event_folder');
+			$parents[RELTYPE_CALL] = $parents[RELTYPE_OFFER] = $parents[RELTYPE_KOHTUMINE] = $parents[RELTYPE_DEAL] = $user_calendar->prop('event_folder');
 		}
 
 
 		$alist = array(
-			array('caption' => 'Töötaja','clid' => CL_CRM_PERSON, 'reltype' => RELTYPE_WORKERS),
-			array('caption' => 'Tegevusala','clid' => CL_CRM_SECTOR, 'reltype' => RELTYPE_TEGEVUSALAD),
-			array('caption' => 'Aadress','clid' => CL_CRM_ADDRESS, 'reltype' => RELTYPE_ADDRESS),
-			array('caption' => 'Õiguslik vorm','clid' => CL_CRM_CORPFORM, 'reltype' => RELTYPE_ETTEVOTLUSVORM),
+			array('clid' => CL_CRM_PERSON, 'reltype' => RELTYPE_WORKERS),
+			array('clid' => CL_CRM_SECTOR, 'reltype' => RELTYPE_TEGEVUSALAD),
+			array('clid' => CL_CRM_ADDRESS, 'reltype' => RELTYPE_ADDRESS),
+			array('clid' => CL_CRM_CORPFORM, 'reltype' => RELTYPE_ETTEVOTLUSVORM),
 		);
 		
 		$toolbar->add_menu_button(array(
@@ -382,46 +333,67 @@ class crm_company extends class_base
 			};
 		};
 
+		// aha, I need to figure out which objects can be added to that relation type
+
+		// basically, I need to create a list of relation types that are of any
+		// interest to me and then get a list of all classes for those
+
+		$action = array("OFFER","DEAL","KOHTUMINE","CALL");
+
+		/*
 		$action = array(
-			array("reltype" => RELTYPE_PAKKUMINE,"clid" => CL_CRM_OFFER),
-			array("reltype" => RELTYPE_TEHING,"clid" => CL_CRM_DEAL),
+			array("reltype" => RELTYPE_OFFER,"clid" => CL_CRM_OFFER),
+			array("reltype" => RELTYPE_DEAL,"clid" => CL_CRM_DEAL),
 			array("reltype" => RELTYPE_KOHTUMINE,"clid" => CL_CRM_MEETING),
 			array("reltype" => RELTYPE_CALL,"clid" => CL_CRM_CALL),
 		);
+		*/
 
-		$menudata = '';
 		if (is_array($action))
 		{
 			foreach($action as $key => $val)
 			{
-				$classinf = $this->cfg["classes"][$val["clid"]];
-				if (!$parents[$val['reltype']])
+				$clids = $this->relinfo[$val["clid"]];
+				if (!is_array($clids))
 				{
-					$toolbar->add_menu_item(array(
-						'parent' => "firma_sub",
-						'title' => 'Kalender või kalendri sündmuste kataloog määramata',
-						'text' => 'Lisa '.$classinf["name"],
-					));
-				}
-				else
+					$clids = array($clids);
+				};
+				$reltype = $this->relinfo[$val]["value"];
+				if (sizeof($clids) > 0 && !empty($clids[0]))
 				{
-					$toolbar->add_menu_item(array(
-						"parent" => "firma_sub",
-						'link' => $this->mk_my_orb('new',array(
-							'alias_to_org' => $args['obj_inst']->id(),
-							'reltype_org' => $val['reltype'],
-							'class' => 'planner',
-							'id' => $cal_id,
-							'group' => 'add_event',
-							'clid' => $val["clid"],
-							'action' => 'change',
-							'title' => urlencode($classinf["name"].': '.$args['obj_inst']->name()),
-							'parent' => $parents[$val['reltype']],
-							'return_url' => urlencode(aw_global_get('REQUEST_URI')),
-						)),
-						'text' => 'Lisa '.$classinf["name"],
-					));
-				}
+					foreach($clids as $clid)
+					{
+						$classinf = $this->cfg["classes"][constant($clid)];
+						if (!$parents[$reltype])
+						{
+							$toolbar->add_menu_item(array(
+								'parent' => "firma_sub",
+								'title' => 'Kalender või kalendri sündmuste kataloog määramata',
+								'text' => 'Lisa '.$classinf["name"],
+								"disabled" => true,
+							));
+						}
+						else
+						{
+							$toolbar->add_menu_item(array(
+								"parent" => "firma_sub",
+								'link' => $this->mk_my_orb('new',array(
+									'alias_to_org' => $args['obj_inst']->id(),
+									'reltype_org' => $reltype,
+									'class' => 'planner',
+									'id' => $cal_id,
+									'group' => 'add_event',
+									'clid' => constant($clid),
+									'action' => 'change',
+									'title' => urlencode($classinf["name"].': '.$args['obj_inst']->name()),
+									'parent' => $parents[$reltype],
+									'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+								)),
+								'text' => 'Lisa '.$classinf["name"],
+							));
+						}
+					};
+				};
 			};
 		};
 			
