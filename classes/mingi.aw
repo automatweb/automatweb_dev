@@ -3,6 +3,7 @@
 
 
 
+
 class mingi extends aw_template
 {
 	function mingi()
