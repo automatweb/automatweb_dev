@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.43 2003/01/29 15:28:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.44 2003/01/30 12:32:50 kristo Exp $
 // table.aw - tabelite haldus
 class table extends aw_template
 {
@@ -2291,8 +2291,7 @@ class table extends aw_template
 		}
 		$txt = str_replace("  ", "&nbsp;&nbsp;", $txt);
 
-		// a miks seda iga celli juures eraldi peab tegema?
-		$txt = create_links($txt);
+		$txt = preg_replace("/([-.a-zA-Z0-9_]*)@([-.a-zA-Z0-9_]*)/","<a href='mailto:\\1@\\2'>\\1@\\2</a>", $txt);
 		if ($txt == "")
 		{
 			$txt = "<img src='".$this->cfg["baseurl"]."/img/trans.gif'>";
