@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/groupware/Attic/task.aw,v 1.7 2004/03/23 16:18:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/groupware/Attic/task.aw,v 1.8 2004/04/28 14:10:17 duke Exp $
 // task.aw - TODO item
 /*
 
@@ -52,6 +52,7 @@ class task extends class_base
 	function task()
 	{
 		$this->init(array(
+			"tpldir" => "groupware/task",
 			"clid" => CL_TASK
 		));
 	}
@@ -95,6 +96,17 @@ class task extends class_base
 				break;
 		};
 		return $retval;
+	}
+	
+	function request_execute($obj)
+	{
+		$this->read_template("show.tpl");
+		$this->vars(array(
+			"name" => $obj->name(),
+			"time" => date("d-M-y H:i",$obj->prop("start1")),
+			"content" => nl2br($obj->prop("content")),
+		));
+		return $this->parse();
 	}
 }
 ?>
