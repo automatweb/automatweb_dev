@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.73 2003/10/21 18:59:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.74 2003/10/21 21:30:52 duke Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -52,10 +52,10 @@
 	@tableinfo images index=id master_table=objects master_index=oid	
 
 
-	@property new_w type=textbox group=resize field=meta method=serialize size=6
+	@property new_w type=textbox group=resize field=meta method=serialize size=6 store=no
 	@caption Uus laius
 
-	@property new_h type=textbox group=resize field=meta method=serialize size=6
+	@property new_h type=textbox group=resize field=meta method=serialize size=6 store=no
 	@caption Uus k&otilde;rgus
 
 	@property do_resize type=submit field=meta method=serialize group=resize value=Muuda store=no
@@ -587,6 +587,7 @@ class image extends class_base
 
 			case "cur_width":
 			case "cur_height":
+				// damn, I really don't like that approach
 				$fl = $arr["obj_inst"]->prop("file");
 				if (!empty($fl))
 				{
@@ -621,6 +622,17 @@ class image extends class_base
 						"content" => $this->get_file(array("file" => $file)),
 					));
 					$prop["value"] = $fl;
+				}
+				// XXX: this is not the correct way to detect this
+				elseif (!empty($arr["form_data"]["file_type"]))
+				{
+					$_fi = get_instance("file");
+					$fl = $_fi->_put_fs(array(
+						"type" => $arr["form_data"]["file_type"],
+						"content" => $prop["value"],
+					));
+					$prop["value"] = $fl;
+					
 				}
 				else
 				{
