@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.3 2003/09/12 11:44:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.4 2003/09/17 12:47:01 duke Exp $
 // imap.aw - IMAP login 
 /*
 
@@ -110,14 +110,23 @@ class imap extends class_base
 			$user = $obj->prop("user");
 			$password = $obj->prop("password");
 
-			$this->servspec = sprintf("{%s:%d/ssl/novalidate-cert}",$server,$port);
+			if ($obj->prop("use_ssl") == 1)
+			{
+				$mask = "{%s:%d/ssl/novalidate-cert}";
+			}
+			else
+			{
+				$mask = "{%s:%d}";
+			};
+
+			$this->servspec = sprintf($mask,$server,$port);
 			$this->mboxspec = $this->servspec . $this->use_mailbox;
 			$this->mbox = @imap_open($this->mboxspec, $user, $password);
 			$this->connected = true;
 		}
 	}
 
-	function list_folders()
+	function list_folders($arr = array())
 	{
 		$list = imap_getmailboxes($this->mbox,$this->servspec,"*");
                 $res = array();
@@ -125,8 +134,12 @@ class imap extends class_base
                 {
                         foreach($list as $item)
                         {
-                                $realname = substr($item->name,strlen($this->servspec));
-                                $res[$realname] = $realname;
+                                $key = $realname = substr($item->name,strlen($this->servspec));
+				$status = imap_status($this->mbox,$item->name,SA_ALL);
+                                $res[$key] = array(
+					"name" => ($status->unseen > 0) ? "<b>$realname</b>" : $realname,
+					"count" => ($status->unseen > 0) ? sprintf("<b>(%d)</b>",$status->unseen) : "",
+				);
                         };
                 };
 		return $res;
@@ -142,8 +155,18 @@ class imap extends class_base
 		$this->count = $count;
 		$sorted_array=imap_sort($this->mbox,SORTDATE,1,SE_UID);
 
-		$req_msgs = array_slice($sorted_array,$from-1,($to-$from)+1);
-	
+		// imap_ functions that deal with message uid-s accept
+		// ranges in form of start:end, where asterisk (*) can be used in place
+		// of the end specifier, in which case it marks all the message
+		// from the requested start uid to the end
+
+		// we do not pass * directly to the driver, instead we do our own math
+		// .. it will be behind the end of req_msgs, but we really don't
+		// have to care, because that's PHP
+		$endpoint = is_numeric($to) ? ($to - $from) + 1 : sizeof($sorted_array); 
+
+		$req_msgs = array_slice($sorted_array,$from-1,$endpoint);
+
 		// now I have the message ID-s exactly how I want them
 		// .. in correct order as values in the res array
 		$seq = join(",",$req_msgs);
@@ -185,8 +208,28 @@ class imap extends class_base
 		}
 	}
 
+	function move_messages($arr)
+	{
+		$rv = "";
+		$ids = join(",",$arr["id"]);
+		$to = $arr["to"];
+		if (!imap_mail_move($this->mbox,join(",",$arr["id"]),$arr["to"],CP_UID))
+		{
+			$err = imap_last_error();
+			var_dump($err);
+			$rv .= " &nbsp; &nbsp; <font color='red'>$err</font><br>";
+		}
+		else
+		{
+			// expunge any moves messages
+			imap_expunge($this->mbox);
+		};
+		return $rv;
+	}
+
 	////
 	// !Fetches a single message from the currently connected mailbox
+
 	function fetch_message($arr)
 	{
 		$msgid = $arr["msgid"];
@@ -365,6 +408,17 @@ class imap extends class_base
 		header("Content-type: ".$mime_type);
                 header("Content-Disposition: filename=$att_name");
 		die($decbody);
+	}
+
+	function store_message($arr)
+	{
+		imap_append($this->mbox,$this->servspec . $this->outbox,
+			"From: $arr[from]\r\n"
+			."To: $arr[to]\r\n"
+			."Subject: $arr[subject]\r\n"
+			."\r\n"
+			.$arr[message] . "r\n"
+		);
 	}
 
 };
