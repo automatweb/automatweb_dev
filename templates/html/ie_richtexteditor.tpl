@@ -12,7 +12,7 @@
 
 		for (var i=0;i<buttons.length;i++) 
 		{
-			s+="<span style='position:relative;height:26;width: " + buttons[i] + "'><span style='position:absolute;margin:0px;padding:0;height:26;top:0;left:0;width:" + (buttons[i]) + ";clip:rect(0 "+buttons[i]+" 25 "+0+");overflow:hidden'><img border='0' src='images/toolbar.gif' style='position:absolute;top:0;left:-" + left + "' width=290 height=50";
+			s+="<span style='position:relative;height:26;width: " + buttons[i] + "'><span style='position:absolute;margin:0px;padding:0;height:26;top:0;left:0;width:" + (buttons[i]) + ";clip:rect(0 "+buttons[i]+" 25 "+0+");overflow:hidden'><img border='0' src='{VAR:baseurl}/automatweb/images/toolbar.gif' style='position:absolute;top:0;left:-" + left + "' width=290 height=50";
 			if (buttons[i]!=4) 
 			{
 				s+=" onmouseover='this.style.top=-25' onmouseout='this.style.top=0' onclick=\"";
