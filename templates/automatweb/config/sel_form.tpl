@@ -9,6 +9,7 @@
 <td class="title">Grupp</td>
 <td class="title">J&auml;rjekord men&uuml;&uuml;s</td>
 <td class="title">Nimi men&uuml;&uuml;s</td>
+<td class="title">V&auml;ljundi stiil</td>
 </tr>
 
 <!-- SUB: LINE -->
@@ -31,6 +32,11 @@
 <!-- SUB: NAME -->
 <input type='text' size=20 name='fn[{VAR:form_id}]' value="{VAR:name}">
 <!-- END SUB: NAME -->
+</td>
+<td class="plain">&nbsp;
+<!-- SUB: OPS -->
+<select name='fp[{VAR:form_id}]'>{VAR:jops}</select>
+<!-- END SUB: OPS -->
 </td>
 </tr>
 <!-- END SUB: LINE -->
