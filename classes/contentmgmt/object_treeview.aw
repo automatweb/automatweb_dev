@@ -845,7 +845,7 @@ class object_treeview extends class_base
 
 				$this->vars(array(
 					"url" => $ot->get_add_url(array("id" => $c_o, "parent" => $parent, "section" => $parent)),
-					"caption" => $classes[$c_o->prop("type")]["name"]
+					"caption" => $c_o->prop("name")
 				));
 				$menu .= $this->parse("MENU_ITEM");
 			}
