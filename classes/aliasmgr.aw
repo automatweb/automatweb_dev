@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.122 2003/10/31 12:47:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.123 2003/11/13 11:23:36 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -274,7 +274,7 @@ class aliasmgr extends aw_template
 		$q = "SELECT $modifier, objects.class_id AS class_id, objects.name AS name
 			FROM aliases
 			LEFT JOIN objects ON (aliases.target = objects.oid)
-			WHERE source = '$oid' ORDER BY aliases.id";
+			WHERE source = '$oid' AND objects.status != 0 ORDER BY aliases.id";
 		$this->db_query($q);
 		$retval = array();
 		while($row = $this->db_next())
@@ -690,7 +690,7 @@ class aliasmgr extends aw_template
 			$reltype_id = $alias["reltype"];
 
 			$alias["icon"] = html::img(array(
-				"url" => icons::get_icon_url($aclid,""),
+				"url" => icons::get_icon_url($aclid,$alias["name"]),
 			));
 
 			// it has a meaning only for embedded aliases
