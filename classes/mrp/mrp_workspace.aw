@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.82 2005/04/06 09:24:33 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.83 2005/04/06 11:08:40 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -576,7 +576,7 @@ class mrp_workspace extends class_base
 								"id" => $tmp->id(),
 								"return_url" => get_ru()
 							)),
-							"caption" => t("") . "<span style='font-size:20px'>" . $tmp->name() . "</span>"//!!!
+							"caption" => "<span style='font-size:20px'>" . $tmp->name() . "</span>"//!!!
 						));
 						break;
 
