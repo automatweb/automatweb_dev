@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.44 2003/05/14 15:44:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.45 2003/05/27 17:02:30 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -3657,6 +3657,7 @@ class form_element extends aw_template
 				$this->arr["listbox_items"][$e_id] = $e_val;
 			}
 			$this->arr["listbox_count"] = $cnt;
+			$this->arr["listbox_lang_items"][aw_global_get("lang_id")] = $this->arr["listbox_items"];
 		}
 		return $rel;
 	}
