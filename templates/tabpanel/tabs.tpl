@@ -27,6 +27,16 @@ background-color: #478EB6;
 .awtabsel a {color: #FFFFFF; text-decoration:none;}
 .awtabsel a:hover {color: #000000; text-decoration:none;}
 
+.awtabseltext {
+font-family: verdana, sans-serif;
+font-size: 11px;
+font-weight: bold;
+color: #FFFFFF;
+background-color: #478EB6;
+}
+.awtabseltext a {color: #FFFFFF; text-decoration:none;}
+.awtabseltext a:hover {color: #000000; text-decoration:none;}
+
 .awtablecellbackdark {
 font-family: verdana, sans-serif;
 font-size: 10px;
