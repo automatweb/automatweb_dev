@@ -167,14 +167,14 @@ class class_visualizer extends aw_template
 				$cli->add_property($propdata);
 			};
 		};
-                // I need to invoke htmlclient directly
-
-                foreach($tmp as $ta)
-                {
-                        $cli->add_property($ta);
-                };
-
-                $cli->finish_output(array(
+		/* so what's the use of this thing anyway? -- ahz
+		// I need to invoke htmlclient directly
+		foreach($tmp as $ta)
+		{
+			$cli->add_property($ta);
+		};
+		*/
+		$cli->finish_output(array(
 			"action" => "submit",
 			"data" => array(
 				"id" => $o->id(),
@@ -182,8 +182,7 @@ class class_visualizer extends aw_template
 				"class" => get_class($this),
 			),
 		));
-	
-                $cont = $cli->get_result();
+		$cont = $cli->get_result();
 
 		return $cont;
 
