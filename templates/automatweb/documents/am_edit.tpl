@@ -21,7 +21,7 @@
 	| 'Prindi' nupp: <input type='checkbox' name='show_print' value=1 {VAR:show_print}>
 	| Muutmise kuupaev dokumendi sees: <input type='checkbox' name='show_last_changed' value=1 {VAR:show_last_changed}>
 	| T&uuml;hista stiilid:	<input type='checkbox' name="clear_styles" value=1>
-	| Lingi võtmesõnad      <input type='checkbox' name="link_keywords" value=1>
+	| Lingi võtmesõnad      <input type='checkbox' name="link_keywords" value=1 checked>
 	| Kommenteeritav? <input type='checkbox' name="is_forum" value=1 {VAR:is_forum}>
 		</td>
 	</tr>

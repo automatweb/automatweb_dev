@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.132 2002/07/17 00:05:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.133 2002/07/17 01:35:50 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -874,6 +874,24 @@ class menuedit extends aw_template
 		if ($obj["class_id"] == CL_BROTHER)
 		{
 			$obj = $this->get_object($obj["brother_of"]);
+		}
+
+		// if any keywords for the menu are set, we must show all the documents that match those keywords under the menu
+		if ($obj["meta"]["has_kwd_rels"])
+		{
+			$docid = array();
+
+			$q = "
+				SELECT distinct(keywordrelations.id) as id FROM keyword2menu
+				LEFT JOIN keywordrelations ON keywordrelations.keyword_id = keyword2menu.keyword_id
+				LEFT JOIN objects ON keywordrelations.id = objects.oid
+				WHERE keyword2menu.menu_id = '$obj[oid]' AND objects.status = 2";
+			$this->db_query($q);
+			while ($row = $this->db_next())
+			{
+				$docid[] = $row["id"];
+			}
+			return $docid;
 		}
 
 		$docid = $obj["last"];
@@ -5738,11 +5756,24 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			{
 				$this->db_query("INSERT INTO keyword2menu (menu_id,keyword_id) VALUES('$id','$koid')");
 			}
+			$this->set_object_metadata(array(
+				"oid" => $id,
+				"key" => "has_kwd_rels",
+				"value" => 1
+			));
+		}
+		else
+		{
+			$this->set_object_metadata(array(
+				"oid" => $id,
+				"key" => "has_kwd_rels",
+				"value" => 0
+			));
 		}
 
-		classload("keywords");
+/*		classload("keywords");
 		$kwd = new keywords;
-		$kwd->update_menu_keyword_bros(array("menu_ids" => array($id)));
+		$kwd->update_menu_keyword_bros(array("menu_ids" => array($id)));*/
 	}
 
 	function do_center_menu($oid)
