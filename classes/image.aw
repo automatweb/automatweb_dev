@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.47 2003/04/15 15:52:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.48 2003/04/22 16:06:02 duke Exp $
 // image.aw - image management
 /*
 	@default group=general
@@ -28,7 +28,7 @@
 	@property newwindow type=checkbox ch_value=1 table=images field=newwindow
 	@caption Uues aknas
 
-	@groupinfo img2 caption=Suur_pilt
+	@groupinfo img2 caption="Suur pilt"
 	@groupinfo resize caption="Muuda suurust"
 	@classinfo syslog_type=ST_IMAGE
 		
@@ -81,8 +81,16 @@ class image extends class_base
 
 	function get_url($url) 
 	{
-		$url = $this->mk_my_orb("show", array("fastcall" => 1,"file" => basename($url)),"image",false,true,"/");
-		return str_replace("automatweb/", "", $url);
+		if ($url)
+		{
+			$url = $this->mk_my_orb("show", array("fastcall" => 1,"file" => basename($url)),"image",false,true,"/");
+			$retval = str_replace("automatweb/", "", $url);
+		}
+		else
+		{
+			$retval = "";
+		};
+		return $retval;
 	}
 
 	function parse_alias_list($arr)
@@ -121,11 +129,15 @@ class image extends class_base
 			$idata = $this->get_image_by_id($f["target"]);
 		}	
 
+
 		$replacement = "";
 		$align= array("k" => "align=\"center\"", "p" => "align=\"right\"" , "v" => "align=\"left\"" ,"" => "");
 		if ($idata)
 		{
 			$alt = $idata["meta"]["alt"];
+			{
+				$size = getimagesize($idata["meta"]["file2"]);
+			};
 			$vars = array(
 				"imgref" => $idata["url"],
 				"imgcaption" => $idata["comment"],
@@ -134,7 +146,9 @@ class image extends class_base
 				"target" => ($idata["newwindow"] ? "target=\"_blank\"" : ""),
 				"img_name" => $idata["name"],
 				"alt" => $alt,
-				"bigurl" => $idata["big_url"]
+				"bigurl" => $idata["big_url"],
+				"big_width" => isset($size[0]) ? $size[0] : "",
+				"big_height" => isset($size[1]) ? $size[1] : "",
 			);
  
 			if ($this->is_flash($idata["file"]))
@@ -144,6 +158,12 @@ class image extends class_base
 			else
 			if ($idata["link"] != "")
 			{
+		//		echo "has link! <br>";
+				if ($idata["big_url"] != "" && isset($tpls["image_big_linked"]))
+				{
+					$replacement = localparse($tpls["image_big_linked"],$vars);
+				}
+				else
 				if (isset($tpls["image_inplace_linked"]))
 				{
 					$replacement = localparse($tpls["image_inplace_linked"],$vars);
@@ -193,14 +213,21 @@ class image extends class_base
 				}
 				else if (!$this->cfg["no_default_template"])
 				{
-					if ($idata["comment"] != "")
+					$replacement = "<table border=0 cellpadding=0 cellspacing=0 $vars[align]><tr><td>";
+					if (!empty($idata["big_url"]))
 					{
-						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td><img src='%s' alt='$alt' title='$alt'><br>%s</td></tr></table>",$vars['align'],$idata["url"],$idata["comment"]);
-					}
-					else
+						$replacement .= "<a href=\"javascript:window.open('$idata[big_url]','popup','width=400,height=400');\">";
+					};
+					$replacement .= "<img src='$idata[url]' alt='$alt' title='$alt'>";
+					if (!empty($idata["big_url"]))
 					{
-						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td><img src='%s' alt='$alt' title='$alt'></td></tr></table>",$vars['align'],$idata["url"]);
+						$replacement .= "</a>";
 					}
+					if (!empty($idata["comment"]))
+					{
+						$replacement .= $idata["comment"];
+					};
+					$replacement .= "</td></tr></table>";
 				};
 			}	
 		};
@@ -466,6 +493,10 @@ class image extends class_base
 					if ($url != '')
 					{
 						$prop['value'] = html::img(array('url' => $url));
+					}
+					else
+					{
+						$retval = PROP_IGNORE;
 					};
 				}
 				else
