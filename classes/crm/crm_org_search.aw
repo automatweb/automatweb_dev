@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.9 2004/08/18 11:45:07 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.10 2004/10/14 13:36:41 kristo Exp $
 // crm_org_search.aw - kliendibaasi otsing 
 /*
 
@@ -172,7 +172,7 @@ class crm_org_search extends class_base
 			// of crm_companies that have one of the results as a ceo
 			$ceo_filter = array(
 				"class_id" => CL_CRM_PERSON,
-				"limit" => 100,
+				"limit" => 1000,
 				"name" => "%" . $req["ceo"] . "%",
 			);
 			if(sizeof($xfilter['firmajuht']))
@@ -213,7 +213,7 @@ class crm_org_search extends class_base
 		{
 			$city_list = new object_list(array(
 									'class_id'=>CL_CRM_CITY,
-									'limit' => 100,
+									'limit' => 1000,
 									'name' => $xfilter['linn'],
 							));
 			if(sizeof($city_list->ids()))
@@ -231,7 +231,7 @@ class crm_org_search extends class_base
 		{
 			$county_list = new object_list(array(
 										'class_id' => CL_CRM_COUNTY,
-										'limit' => 100,
+										'limit' => 1000,
 										'name' => $xfilter['maakond']
 								));
 			if(sizeof($county_list->ids()))
@@ -259,7 +259,7 @@ class crm_org_search extends class_base
 			}
 			
 			$addr_filter["class_id"] = CL_CRM_ADDRESS;
-			$addr_filter["limit"] = 100;
+			$addr_filter["limit"] = 1000;
 			
 			$addr_list = new object_list($addr_filter);
 			if (sizeof($addr_list->ids()) > 0)
@@ -270,7 +270,7 @@ class crm_org_search extends class_base
 					$xfilter['contact'] = &$filter['contact'];
 				}
 			}
-			else if(sizeof($addr_xfilter))
+			else
 			{
 				$no_results=true;
 			}
