@@ -197,7 +197,14 @@ class poll extends aw_template
 			}
 		}
 
-		$this->vars(array("ANSWER" => $as,"question" => $poll[name], "date" => $this->time2date($poll[modified],2),"addcomment" => $t->add(0,$id,0),"num_comments" => $t->get_num_comments($id), "poll_id" => $id, "QUESTION" => $p));
+		$this->vars(array(
+			"ANSWER" => $as,
+			"question" => $poll[name],
+		 	"date" => $this->time2date($poll[modified],2),
+			"addcomment" => $t->add(0,$id,0),"num_comments" => $t->get_num_comments($id), 
+			"poll_id" => $id, 
+			"total" => $total,
+			"QUESTION" => $p));
 
 		return $this->parse();
 	}
