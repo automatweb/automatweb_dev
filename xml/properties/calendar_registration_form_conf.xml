@@ -49,6 +49,24 @@
             <caption>Kuva dokumendis s&amp;uuml;ndmuse sisu</caption>
       </property>
       <property>
+            <name>link_caption</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Lingi nimi</caption>
+      </property>
+      <property>
+            <name>redir_afto</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Kuhu suunata peale t&amp;auml;itmist</caption>
+      </property>
+      <property>
             <name>mail_to_addr</name>
             <table>objects</table>
             <group>emails</group>

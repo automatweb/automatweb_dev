@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.48 2004/12/01 14:14:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.49 2004/12/08 10:41:02 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -1017,7 +1017,7 @@ class cfgform extends class_base
 		$tmp = $class_i->load_from_storage(array(
 			"id" => $cf->id()
 		));
-
+		
 		$dat = array();
 		foreach($tmp as $pn => $pd)
 		{
@@ -1127,8 +1127,11 @@ class cfgform extends class_base
 				$tmp[$pn] = $els[$pn];
 				$tmp[$pn]["group"] = $pd["group"];
 				$tmp[$pn]["caption"] = $pd["caption"];
+				$tmp[$pn]["ord"] = $pd["ord"];
 			}
 			$els = $tmp;
+
+			uasort($els, create_function('$a, $b','if ($a["ord"] == $b["ord"]) { return 0;} else {return $a["ord"] > $b["ord"] ? 1 : -1;}'));
 		}
 		$tmp = array();
 		foreach($els as $pn => $pd)
