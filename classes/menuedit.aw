@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.309 2004/01/06 12:02:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.310 2004/01/08 08:02:11 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -526,23 +526,7 @@ class menuedit extends aw_template
 			{
 				if ($show_errors)
 				{
-					$this->_log(ST_MENUEDIT, SA_ACL_ERROR,sprintf(LC_MENUEDIT_TRIED_ACCESS,$section), $section);
-					// neat :), kui objekti ei leita, siis saadame 404 koodi
-					$r404 = $this->cfg["404redir"];
-					if (is_array($r404))
-					{
-						$r404 = $r404[aw_global_get("lang_id")];
-					}
-					if ($r404 && "/".$GLOBALS["section"] != $r404)
-					{
-						header("Location: " . $r404);
-					}
-					else
-					{
-						header ("HTTP/1.1 404 Not Found");
-						printf(E_ME_NOT_FOUND);
-					};
-					exit;
+					$this->_do_error_redir($section);
 				}
 				else
 				{
@@ -557,10 +541,25 @@ class menuedit extends aw_template
 		else 
 		{
 			// mingi kontroll, et kui sektsioon ei eksisteeri, siis n�tame esilehte
-			if (!(($section > 0) && ($this->object_exists($section)))) 
+			if (!(($section > 0) && ($this->object_exists($section) && $this->can("view", $section)))) 
 			{
 				$this->_log(ST_MENUEDIT, SA_NOTEXIST,sprintf(LC_MENUEDIT_TRIED_ACCESS2,$section), $section);
 				$section = $frontpage;
+			}
+			else
+			{
+				$o = obj($section);
+				if ($o->site_id() != aw_ini_get("site_id"))
+				{
+					if ($show_errors)
+					{
+						$this->_do_error_redir($section);
+					}
+					else
+					{
+						$section = $frontpage;
+					}
+				}
 			}
 		};
 
@@ -788,6 +787,27 @@ class menuedit extends aw_template
 		};
 		// and now in the $path array
 		return $path;
+	}
+
+	function _do_error_redir($section)
+	{
+		$this->_log(ST_MENUEDIT, SA_ACL_ERROR,sprintf(LC_MENUEDIT_TRIED_ACCESS,$section), $section);
+		// neat :), kui objekti ei leita, siis saadame 404 koodi
+		$r404 = $this->cfg["404redir"];
+		if (is_array($r404))
+		{
+			$r404 = $r404[aw_global_get("lang_id")];
+		}
+		if ($r404 && "/".$GLOBALS["section"] != $r404)
+		{
+			header("Location: " . $r404);
+		}
+		else
+		{
+			header ("HTTP/1.1 404 Not Found");
+			printf(E_ME_NOT_FOUND);
+		};
+		exit;
 	}
 }
 ?>
