@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.14 2002/11/26 12:32:35 duke Exp $
+// $Id: class_base.aw,v 2.15 2002/11/26 17:41:40 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -69,7 +69,7 @@ class class_base extends aliasmgr
 	{
 		$this->init("");
 		$this->output_client = "htmlclient";
-		$this->ds_name = ($ds_name) ? $ds_name : "ds_local_sql";
+		$this->ds_name = "ds_local_sql";
 	}
 
 	////
@@ -281,7 +281,7 @@ class class_base extends aliasmgr
 				// do nothing
 			}
 			else
-			if ($val["editonly"] && !$this->id)
+			if ($val["editonly"])
 			{
 				// skip editonly elements for new objects
 			}
@@ -336,7 +336,6 @@ class class_base extends aliasmgr
 						"orb_class" => $orb_class,
 						"parent" => $parent,
 						"period" => $period,
-						"ds_name" => $this->ds_name,
 					),
 		));
 
@@ -359,11 +358,6 @@ class class_base extends aliasmgr
 		$this->quote($args);
 
 		// check whether this current class is based on class_base
-		if ($args["ds_name"])
-		{
-			$this->ds_name = $args["ds_name"];
-		};
-
 		$this->init_class_base();
 
 		// right now, this callback is not used.
@@ -669,11 +663,14 @@ class class_base extends aliasmgr
 				$link = "#";
 			};
 
-			$this->tp->add_tab(array(
-				"link" => $link,
-				"caption" => $key,
-				"active" => ($key == $this->group),
-			));
+			if (!$this->classinfo["hide_tabs"])
+			{
+				$this->tp->add_tab(array(
+					"link" => $link,
+					"caption" => $key,
+					"active" => ($key == $this->group),
+				));
+			};
 		};
 		
 		if ($this->id && $this->classinfo["relationmgr"])
