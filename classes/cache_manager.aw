@@ -74,7 +74,7 @@ class cache_manager extends class_base
 			$this->db_query("SELECT * FROM aliases WHERE id IN (".$alist->to_sql().")");
 			while ($row = $this->db_next())
 			{
-				$cache_inst->file_invalidate('alias_cache::source::'.$row['source'].'::target::'.$row['target']);
+				$cache_inst->file_invalidate_regex('alias_cache::source::'.$row['source'].'::target::'.$row['target'].'.*');
 			}
 		}
 	}
