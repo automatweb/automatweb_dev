@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.6 2004/01/28 16:59:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.7 2004/01/28 20:58:20 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -282,7 +282,7 @@ class vcalendar extends aw_template
 		$this->read_template("month_view.tpl");
 		$rv = "";
 
-		for ($i = 1; $i <= 7; $i++)
+		for ($i = 1; $i <= 5; $i++)
 		{
 			$dn = get_lc_weekday($i);
 			$this->vars(array(
@@ -304,12 +304,23 @@ class vcalendar extends aw_template
 		$realstart = ($this->range["start"] - ($this->range["start_wd"] - 1) * 86400);
 		$realend = ($this->range["end"] + (7 - $this->range["end_wd"]) * 86400);
 
+		$now = date("Ymd");
+
 		for ($j = $realstart; $j <= $realend; $j = $j + (7*86400))
 		{
 			for ($i = $j; $i <= $j + (7*86400)-1; $i = $i + 86400)
 			{
 				$dstamp = date("Ymd",$i);
 				$events_for_day = "";
+				$wn = date("w",$i);
+				if ($wn == 0)
+				{
+					$wn = 7;
+				};
+				if ($wn > 5)
+				{
+					continue;
+				};
 				if (is_array($this->items[$dstamp]))
 				{
 					$events = $this->items[$dstamp];
@@ -325,7 +336,8 @@ class vcalendar extends aw_template
 					"dayname" => date("F d, Y",$i),
 					"daylink" => aw_url_change_var(array("viewtype" => "day","date" => date("d-m-Y",$i))),
 				));
-				$rv .= $this->parse("DAY");
+				$tpl = date("Ymd",$i) == $now ? "TODAY" : "DAY";
+				$rv .= $this->parse($tpl);
 			};
 			$this->vars(array(
 				"DAY" => $rv,
@@ -343,6 +355,7 @@ class vcalendar extends aw_template
 	function draw_week()
 	{
 		$this->read_template("week_view.tpl");
+		$now = date("Ymd");
 		for ($i = $this->range["start"]; $i <= $this->range["end"]; $i = $i + 86400)
 		{
 			$dstamp = date("Ymd",$i);
@@ -369,7 +382,8 @@ class vcalendar extends aw_template
 				"lc_month" => get_est_month(date("m",$i)),
 				"daylink" => aw_url_change_var(array("viewtype" => "day","date" => date("d-m-Y",$i))),
 			));
-			$rv .= $this->parse("DAY");
+			$tpl = date("Ymd",$i) == $now ? "TODAY" : "DAY";
+			$rv .= $this->parse($tpl);
 		};
 		$this->vars(array(
 			"DAY" => $rv,
