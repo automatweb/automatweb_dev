@@ -1193,6 +1193,8 @@ class _int_object
 			"class_id" => "class_id",
 			"lang_id" => "lang_id",
 			"period" => "period",
+			"created" => "created",
+			"modified" => "modified",
 			"periodic" => "periodic",
 		);
 		foreach($GLOBALS["properties"][$this->obj["class_id"]] as $prop)
