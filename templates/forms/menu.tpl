@@ -95,6 +95,8 @@ function toggle1(layer1,layer2) {
 
 <!-- SUB: CAN_ALL -->
 <a class="alamlingid" href='{VAR:all_elements}'>{VAR:LC_FORMS_ALL_ELEMENTS}</a>
+
+<a class="alamlingid" href='{VAR:all_elements2}'>Elementide administreerimine</a>
 <!-- END SUB: CAN_ALL -->
 
 <a class="alamlingid" href='{VAR:import_entries}'>{VAR:LC_FORMS_IMPORT_DATA}</a>

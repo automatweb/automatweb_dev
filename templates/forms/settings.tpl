@@ -83,9 +83,13 @@ function setLink(li,title)
 <td class="celltext">&nbsp;</td>
 </tr>
 <tr class="aste01">
-<td class="celltext"><input type='radio' NAME='after_submit' VALUE='3' {VAR:as_3}>{VAR:LC_FORMS_GOT_TO_ADDRESS}:</td>
-<td class="celltext"><input class="formtext" type='text' NAME='after_submit_link' value='{VAR:after_submit_link}' size="30"> <a href="javascript:remote('no',500,400,'{VAR:search_doc}')">{VAR:LC_FORMS_INTRA_LINK}</a></td>
+<td colspan="2" class="celltext"><input type='radio' NAME='after_submit' VALUE='3' {VAR:as_3}>{VAR:LC_FORMS_GOT_TO_ADDRESS}:</td>
 </tr>
+<!-- SUB: ASL_LANG -->
+<tr class="aste01">
+<td colspan="2" class="celltext">({VAR:lang_name}): <input class="formtext" type='text' NAME='after_submit_link[{VAR:lang_id}]' value='{VAR:after_submit_link}' size="30"> <a href="javascript:remote('no',500,400,'{VAR:search_doc}')">{VAR:LC_FORMS_INTRA_LINK}</a></td>
+</tr>
+<!-- END SUB: ASL_LANG -->
 <tr class="aste01">
 <td class="celltext"><input type='radio' NAME='after_submit' VALUE='4' {VAR:as_4}>{VAR:LC_FORMS_SHOW_ENTRIES}:</td>
 <td class="celltext"><select name="after_submit_op">{VAR:ops}</select></td>
@@ -142,9 +146,27 @@ function setLink(li,title)
 <td class="celltext">T&ouml;lgitav?:</td>
 <td class="celltext"><input type="checkbox" name="is_translatable" value="1" {VAR:is_translatable}></td>
 </tr>
+<!-- SUB: IS_TRANSLATABLE -->
+
+<tr class="aste01">
+<td class="celltext">T&otilde;lkides {VAR:lang_name} keelde minnakse sektsiooni:</td>
+<td class="celltext"><input type="text" name="trans_sect[{VAR:lang_id}]" value="{VAR:trans_sect}" class="formtext" size="10"></td>
+</tr>
+
+<!-- END SUB: IS_TRANSLATABLE -->
+
+<tr class="aste01">
+<td class="celltext">&Auml;ra n&auml;ita t&otilde;lkimise linki:</td>
+<td class="celltext"><input type="checkbox" name="dont_show_trans" value="1" {VAR:dont_show_trans} ></td>
+</tr>
+
 <tr class="aste01">
 <td class="celltext">&Auml;ra j&auml;ta meelde poolikut sisestust:</td>
 <td class="celltext"><input type="checkbox" name="no_use_eid_once" value="1" {VAR:no_use_eid_once}></td>
+</tr>
+<tr class="aste01">
+<td class="celltext">Javascriptiga m&auml;&auml;ratav default element:</td>
+<td class="celltext"><select name="js_default_element" class="formselect2">{VAR:js_default_element}</select></td>
 </tr>
 <tr class="aste01">
 <td></td>

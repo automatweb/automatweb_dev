@@ -108,6 +108,7 @@
 </table></td></tr></table>
 Vali stiil: <select name='selstyle' >{VAR:styles}</select><br>
 {VAR:LC_FORMS_CHOOSE_CALALOGUE_WHERE_MOVE_ELEMENT}:<select name='setfolder' class='small_button'>{VAR:folders}</select><br>
+Vali elementidele m&auml;&auml;ratav css stiil:<select name='setcss' class='small_button'>{VAR:css_styles}</select><br>
 <input class='small_sub' type='submit' NAME='save' VALUE='{VAR:LC_FORMS_SAVE}!'>
 &nbsp;&nbsp;<input type='submit' name='diliit' value='Kustuta' class='small_button'>
 {VAR:reforb}

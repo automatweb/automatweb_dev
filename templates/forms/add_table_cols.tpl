@@ -114,16 +114,25 @@
 													<td class="celltext">Pre.</td>
 													<td class="celltext">Post.</td>
 													<td class="celltext">N&auml;ita</td>
+													<!-- SUB: IS_EDITABLE -->
+													<td class="celltext">Muudetav</td>
+													<!-- END SUB: IS_EDITABLE -->
+													<td class="celltext">Tulba nimeks</td>
 												</tr>
 												<!-- SUB: SEL_EL -->
 												<tr>
 													<td class="celltext" colspan="4">{VAR:el_name}</td>
 												</tr>
 												<tr>
-													<td class="celltext"><input class="formtext" type="text" name="cols[{VAR:col_id}][el_ord][{VAR:el_id}]" value="{VAR:el_ord}" size="2"></td>
-													<td class="celltext"><input class="formtext" type="text" name="cols[{VAR:col_id}][el_sep_pre][{VAR:el_id}]" value="{VAR:el_sep_pre}" size="2"></td>
-													<td class="celltext"><input class="formtext" type="text" name="cols[{VAR:col_id}][el_sep][{VAR:el_id}]" value="{VAR:el_sep}" size="2"></td>
+													<td class="celltext"><input class="formtext" type="text" name="cols[{VAR:col_id}][el_ord][{VAR:el_id}]" value='{VAR:el_ord}' size="2"></td>
+													<td class="celltext"><input class="formtext" type="text" name="cols[{VAR:col_id}][el_sep_pre][{VAR:el_id}]" value='{VAR:el_sep_pre}' size="2"></td>
+													<td class="celltext"><input class="formtext" type="text" name="cols[{VAR:col_id}][el_sep][{VAR:el_id}]" value='{VAR:el_sep}' size="2"></td>
 													<td class="celltext"><input class="formcheck" type="checkbox" name="cols[{VAR:col_id}][el_show][{VAR:el_id}]" value="1" {VAR:el_show}></td>
+													<!-- SUB: IS_EDITABLE2 -->
+													<td class="celltext"><input class="formcheck" type="checkbox" name="cols[{VAR:col_id}][el_edit][{VAR:el_id}]" value="1" {VAR:el_edit}></td>
+													<!-- END SUB: IS_EDITABLE2 -->
+
+													<td class="celltext"><input class="formcheck" type="checkbox" name="cols[{VAR:col_id}][el_set_colname][{VAR:el_id}]" value="1" {VAR:el_set_colname}></td>
 												</tr>
 												<!-- END SUB: SEL_EL -->
 											</table>
@@ -140,6 +149,7 @@
 
 											<!-- SUB: SEL_SETINGS2 -->
 											<input type="checkbox" name="cols[{VAR:col_id}][sortable]" value="1" {VAR:col_sortable}> Sorditav <br>
+											<input type="checkbox" name="cols[{VAR:col_id}][is_edit]" value="1" {VAR:is_edit}> Muudetav <br>
 											<input type="checkbox" name="cols[{VAR:col_id}][is_email]" value="1" {VAR:col_email}> E-mail <br>
 											<input type="checkbox" name="cols[{VAR:col_id}][clicksearch]" value="1" {VAR:col_clicksearch}> Klikkides tehakse otsing <br>
 											<input type="checkbox" name="cols[{VAR:col_id}][link]" value="1" {VAR:col_link}> Link <br>

@@ -125,6 +125,19 @@
 </tr>
 <!-- END SUB: LROW7 -->
 
+<tr class="aste01">
+<td colspan=10 class="celltext">Url nuppude aadressid:</td>
+</tr>
+<!-- SUB: LROW9 -->
+<tr class="aste01">
+<td class="celltext">{VAR:name}</td>
+<!-- SUB: LCOL9 -->
+<td class="celltext"><input type='text' name='bu[{VAR:row}][{VAR:col}][{VAR:elid}][{VAR:lang_id}]' value="{VAR:text}" class='formtext'></td>
+<!-- END SUB: LCOL9 -->
+</tr>
+<!-- END SUB: LROW9 -->
+
+
 <!-- do not use L*8, it's already in use
    .. and what the fsck is it with that naming scheme anyway? -->
 <tr class="aste01">

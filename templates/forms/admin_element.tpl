@@ -230,8 +230,8 @@ function toggle_file_link_newwin()
 <tr>
 <td class="fgtext">Listboksi valik submitib formi:</td>
 <td class="fgtext"><input class="small_button" type='checkbox' NAME='{VAR:cell_id}_submit_on_select' value='1' {VAR:submit_on_select}></td>
-<td class="fgtext">&nbsp;</td>
-<td class="fgtext">&nbsp;</td>
+<td class="fgtext">onChange:</td>
+<td class="fgtext"><input class="small_button" type="text" name="{VAR:cell_id}_onChange" value="{VAR:onChange}"></td>
 </tr>
 <tr>
 <td class="fgtext">{VAR:LC_FORMS_SORTING}:</td>
@@ -488,11 +488,20 @@ function toggle_file_link_newwin()
 <td class="fgtext">{VAR:LC_FORMS_NOT_GO_BACK_IN_CHAIN}:</td>
 <td class="fgtext"><input type="checkbox" name="{VAR:cell_id}_chain_backward" value="1" {VAR:chain_backward}></td>
 </tr>
+
+<tr>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext">Mine p&auml;rja l&otilde;ppu:</td>
+<td class="fgtext"><input type="checkbox" name="{VAR:cell_id}_chain_finish" value="1" {VAR:chain_finish}></td>
+</tr>
+
+
 <tr>
 <td class="fgtext">CSS class</td>
 <td class="fgtext"><input class='small_button' type='text' name='{VAR:cell_id}_button_css_class' value='{VAR:button_css_class}'></td>
-<td class="fgtext">&nbsp;</td>
-<td class="fgtext">&nbsp;</td>
+<td class="fgtext">Nupp viib j&auml;rgmisele p&auml;rja formile</td>
+<td class="fgtext"><input type="checkbox" value="1" name="{VAR:cell_id}_button_js_next_form_in_chain" {VAR:button_js_next_form_in_chain}></td>
 </tr>
 <!-- END SUB: BUTTON_ITEMS -->
 
@@ -515,8 +524,8 @@ function toggle_file_link_newwin()
 <tr>
 <td class="fgtext">N&auml;ita tekstina:</td>
 <td class="fgtext"><input class='small_button' type='checkbox' NAME='{VAR:cell_id}_show_as_text' VALUE='1' {VAR:show_as_text}></td>
-<td class="fgtext">&nbsp;</td>
-<td class="fgtext">&nbsp;</td>
+<td class="fgtext">Ilma peidetud elemendita?</td>
+<td class="fgtext"><input class='small_button' type='checkbox' value='1' name='{VAR:cell_id}_no_hidden_el' {VAR:no_hidden_el}></td>
 </tr>
 <!-- END SUB: SHOW_AS_TEXT -->
 
@@ -663,8 +672,8 @@ function toggle_file_link_newwin()
 <tr>
 <td class="fgtext">{VAR:LC_FORMS_HEH_ACT_DATE}: </td>
 <td class="fgtext"><input type='checkbox' name='{VAR:cell_id}_has_act' value='1' {VAR:has_act}></td>
-<td class="fgtext">&nbsp;</td>
-<td class="fgtext">&nbsp;</td>
+<td class="fgtext">Tabindex:</td>
+<td class="fgtext"><input type="text" size="5" name="{VAR:cell_id}_el_tabindex" value="{VAR:el_tabindex}" class="small_button"></td>
 </tr>
 
 <!-- SUB: IS_NUMBER -->
@@ -741,6 +750,15 @@ function toggle_file_link_newwin()
 </tr>
 <!-- END SUB: SEARCH_PROPS -->
 
+<!-- SUB: IS_TEXTBOX_ITEMS -->
+<tr>
+<td class="fgtext">Kas elemendil on javascripti default v&auml;&auml;rtus?</td>
+<td class="fgtext"><input type="checkbox" value="1" name="{VAR:cell_id}_js_flopper" {VAR:js_flopper}></td>
+<td class="fgtext">Js Default v&auml;&auml;rtuse tekst:</td>
+<td class="fgtext"><input class="small_button" type="text" name="{VAR:cell_id}_js_flopper_value" value="{VAR:js_flopper_value}"></td>
+</tr>
+<!-- END SUB: IS_TEXTBOX_ITEMS -->
+
 <!-- SUB: IS_TRANSLATABLE -->
 <tr>
 <td class="fgtext">Kas element on t&otilde;lgitav?</td>
@@ -783,8 +801,8 @@ function toggle_file_link_newwin()
 <tr>
 	<td class="fgtext">Nimi</td>
 	<td class="fgtext">V&auml;&auml;rtus</td>
-	<td class="fgtext">&nbsp;</td>
-	<td class="fgtext">&nbsp;</td>
+	<td class="fgtext">Elemendi CSS Stiil:</td>
+	<td class="fgtext">&nbsp;<select name="{VAR:cell_id}_el_css_style">{VAR:el_css_style}</select></td>
 </tr>
 <!-- SUB: METADATA -->
 <tr>

@@ -63,6 +63,12 @@
 	<td class="fform" colspan="2">&Auml;ra asenda kontrolleris muutujaid: <input type='checkbox' name='no_var_replace' value='1' {VAR:no_var_replace}></td>
 </tr>
 <tr>
+	<td class="fform" colspan="2">Kontrolleri veateade js popupis: <input type='checkbox' name='error_js_pop' value='1' {VAR:error_js_pop}></td>
+</tr>
+<tr>
+	<td class="fform" colspan="2">Kontrolleri veateade ikooni alt tekstina: <input type='checkbox' name='error_icon' value='1' {VAR:error_icon}></td>
+</tr>
+<tr>
 <td class="fform" colspan=2><input class='small_button' type='submit' VALUE='Salvesta'></td>
 </tr>
 </table>
