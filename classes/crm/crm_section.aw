@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.11 2004/07/05 13:21:50 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.12 2004/09/15 07:24:22 sven Exp $
 // crm_section.aw - Üksus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disconnect_org_from_section)
@@ -50,7 +50,7 @@ class crm_section extends class_base
 		};
 		return $ol;
 	}
-
+	
 	function make_menu_link($o)
 	{
 		// right, now I need to implement the proper code
@@ -185,6 +185,33 @@ class crm_section extends class_base
 			}
 		}
 		return $rtrn;
+	}
+	
+	function get_section_workers($section_id, $recrusive = false)
+	{
+		static $retval;
+		$section = &obj($section_id);
+		if(!$retval)
+		{
+			$retval = new object_list($section->connections_from(array(
+				"type" => "RELTYPE_WORKERS"
+			)));
+		}
+		else
+		{
+			$retval->add(new object_list($section->connections_from(array(
+				"type" => "RELTYPE_WORKERS",
+			))));
+		}
+		
+		if($recrusive)
+		{
+			foreach ($section->connections_from(array("type" => "RELTYPE_SECTION")) as $subsection)
+			{
+				$this->get_section_workers($subsection->prop("to"), true);
+			}
+		}
+		return $retval;
 	}
 	
 	function get_section_job_ids_recursive($unit_id)
