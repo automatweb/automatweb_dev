@@ -452,7 +452,8 @@ class form_controller extends form_base
 			else
 			if ($et_type == "session")
 			{
-				$entry_id = $GLOBALS["session_filled_forms"][$fid];
+				$sff = aw_global_get("session_filled_forms");
+				$entry_id = $sff[$fid];
 //				echo "entry id for form $fid = $entry_id <br>";
 			}
 			else
