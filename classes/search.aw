@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.81 2004/10/28 15:08:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.82 2004/11/01 20:20:34 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -683,7 +683,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			// we need to make the object change links point to the remote server if specified. so fake it. 
 			if ($args["s"]["server"])
 			{
-				$lo = get_instance("remote_login");
+				$lo = get_instance(CL_AW_LOGIN);
 				$serv = $lo->get_server($args["s"]["server"]);
 				$old_bu = $this->cfg["baseurl"];
 				$this->cfg["baseurl"] = "http://".$serv;
@@ -711,7 +711,10 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 					$row["location"] = $serv;
 				};
 
-				$row["lang"] = $row_o->lang();
+				if (is_object($row_o))
+				{
+					$row["lang"] = $row_o->lang();
+				}
 
 				$this->rescounter++;
 				$type = $clss[$row["class_id"]]["name"];
@@ -1856,7 +1859,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		// we need to make the object change links point to the remote server if specified. so fake it. 
 		if ($args["s"]["server"])
 		{
-			$lo = get_instance("remote_login");
+			$lo = get_instance(CL_AW_LOGIN);
 			$serv = $lo->get_server($args["s"]["server"]);
 			$old_bu = $this->cfg["baseurl"];
 			$this->cfg["baseurl"] = "http://".$serv;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.69 2004/10/29 18:52:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.70 2004/11/01 20:20:34 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -764,7 +764,7 @@ class orb extends aw_template
 		extract($arr);
 		if ($login_obj)
 		{
-			$login = get_instance("remote_login");
+			$login = get_instance("protocols/file/http");
 			list($server, $cookie) = $login->login_from_obj($login_obj);
 			$this->rpc_session_cookies[$server] = $cookie;
 		}
@@ -775,7 +775,7 @@ class orb extends aw_template
 				$this->raise_error(ERR_ORB_RPC_NO_SERVER, "No server defined for ORB RPC call!", true, false);
 			}
 
-			$login = get_instance("remote_login");
+			$login = get_instance("protocols/file/http");
 			$this->rpc_session_cookies[$server] = $login->handshake(array(
 				"silent" => true,
 				"host" => $server

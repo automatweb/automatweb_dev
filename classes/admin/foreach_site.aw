@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/foreach_site.aw,v 1.5 2004/09/22 08:44:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/foreach_site.aw,v 1.6 2004/11/01 20:20:36 kristo Exp $
 // foreach_site.aw - foreach site 
 
 class foreach_site extends class_base
@@ -108,7 +108,7 @@ class foreach_site extends class_base
 			preg_match("/^http:\/\/(.*)\//U",$url, $mt);
 			$_url = $mt[1];
 
-			$awt = get_instance("aw_test");
+			$awt = get_instance("protocols/file/http");
 			$awt->handshake(array("host" => $_url));
 
 			echo "do send req $url ",substr($url,strlen("http://")+strlen($_url))," <br />";
