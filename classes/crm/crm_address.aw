@@ -1,5 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.2 2003/11/20 21:21:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.3 2004/01/06 18:21:10 duke Exp $
+// crm_address.aw - It's not really a physical address but a collection of data required to 
+// contact a person.
 /*
 	@classinfo relationmgr=yes
 	@tableinfo kliendibaas_address index=oid master_table=objects master_index=oid
@@ -11,6 +13,10 @@
 	@caption Nimi
 	
 	@default table=kliendibaas_address
+	
+	@property email type=textbox store=no
+	@caption Meiliaadress
+
 	
 	@property aadress type=textbox size=50 maxlength=100
 	@caption Tänav/Küla
@@ -39,17 +45,18 @@
 	@property piipar type=textbox size=20 maxlength=20
 	@caption Piipar
 	
-	@property e_mail type=relpicker reltype=RELTYPE_EMAIL
-	@caption E-mail
 
 	@property kodulehekylg type=relpicker reltype=RELTYPE_WWW
 	@caption Kodulehekülg
 			
 	@property comment type=textarea cols=65 rows=3 table=objects field=comment
 	@caption Kommentaar
+	
+	@property primary_mail type=relpicker reltype=RELTYPE_EMAIL table=kliendibaas_address field=e_mail group=settings
+	@caption Primaarne meiliaadress 
 
 	@classinfo no_status=1
-	
+	@groupinfo settings caption=Seadistused
 */
 
 /*
@@ -88,7 +95,7 @@ CREATE TABLE `kliendibaas_address` (
 @reltype BELONGTO value=4 clid=CL_CRM_PERSON,CL_CRM_COMPANY
 @caption Seosobjekt
 
-@reltype EMAIL value=5 clid=CL_EXTLINK
+@reltype EMAIL value=5 clid=CL_ML_MEMBER
 @caption E-mail
 
 @reltype WWW value=6 clid=CL_EXTLINK
@@ -109,8 +116,27 @@ class crm_address extends class_base
 	function crm_address()
 	{
 		$this->init(array(
-			'clid' => CL_CRM_ADDRESS,
+			"clid" => CL_CRM_ADDRESS,
 		));
+	}
+
+	function get_property($arr)
+	{
+		$data = &$arr["prop"];
+		$retval = PROP_OK;
+
+		switch($data["name"])
+		{
+			case "email":
+				$pm = $arr["obj_inst"]->prop("primary_mail");
+				if ($pm)
+				{
+					$obj = new object($pm);
+					$data["value"] = $obj->prop("mail");
+				}
+				break;
+		};
+		return $retval;
 	}
 
 	function set_property($arr)
@@ -121,7 +147,7 @@ class crm_address extends class_base
 
 		switch($data["name"])
 		{
-			case 'riik':
+			case 'name':
 				// generate a name for the object
 				$name = array();	
 				if (!empty($form["aadress"]))
@@ -157,9 +183,48 @@ class crm_address extends class_base
 				}
 
 				$arr["obj_inst"]->set_name(join(", ",$name));
+				$retval = PROP_IGNORE;
+				break;
+
+			case "email":
+				$this->create_email_obj($arr);
 				break;
 		};
 		return $retval;
 	}	
+
+	function create_email_obj($arr)
+	{
+		// first I need to check whether the address has connection an e-mail address object
+		$primary_mail = $arr["obj_inst"]->prop("primary_mail");
+		if (is_oid($primary_mail))
+		{
+			// update the e-mail address in that object
+			$pc = new object($primary_mail);
+			$val = $arr["prop"]["value"];
+			$pc->set_name($val);
+			$pc->set_prop("mail",$val);
+			$pc->save();
+		}
+		else
+		{
+			// create a new one and connect it to the current object
+			$pc = new object();
+			$pc->set_class_id(CL_ML_MEMBER);
+			$pc->set_parent($arr["obj_inst"]->parent());
+			$pc->set_name($arr["prop"]["value"]);
+			$pc->set_prop("mail",$arr["prop"]["value"]);
+			$pc->save();
+
+			$arr["obj_inst"]->connect(array(
+				"to" => $pc->id(),
+				"reltype"=> RELTYPE_EMAIL,
+			));
+
+			$arr["obj_inst"]->set_prop("primary_mail",$pc->id());
+		};
+
+	}
+
 };
 ?>
