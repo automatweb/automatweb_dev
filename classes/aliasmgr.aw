@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.152 2004/09/09 11:15:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.153 2004/09/20 13:15:46 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -1058,6 +1058,7 @@ class aliasmgr extends aw_template
 		$this->rel_type_classes[RELTYPE_ACL] = array(
 			CL_GROUP => $tmp[CL_GROUP]["name"]
 		);
+
 
 		foreach($this->reltypes as $k => $v)
 		{
