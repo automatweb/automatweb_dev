@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.25 2001/12/11 06:50:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.26 2001/12/11 07:03:07 cvs Exp $
 global $orb_defs;
 $orb_defs["forum"] = "xml";
 lc_load("msgboard");
@@ -458,7 +458,7 @@ class forum extends aw_template
 			$this->read_template("messages.tpl");
 			$content = $this->display_comment($row);
 		}
-		return $this->parse() . $this->add_comment(array("parent" => $parent,"section" => $section));
+		return $content . $this->add_comment(array("parent" => $parent,"section" => $section));
 	}
 
 	////
