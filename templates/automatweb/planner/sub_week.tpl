@@ -18,8 +18,10 @@
 		<a href="?class=planner&action=change&id={VAR:did}&date={VAR:date}">Näita päeva</a>
 		<br>
 		<!-- SUB: event -->
+		<font color="{VAR:color}">
 		<i>{VAR:time}</i><br>
-		<b><a href="?class=planner&action=editevent&id={VAR:id}&date={VAR:date}">{VAR:title}</a></b>
+		</font>
+		<b><a href="?class=planner&action=editevent&id={VAR:id}&date={VAR:date}"><font color="{VAR:color}">{VAR:title}</font></a></b>
 		<p>
 		<!-- END SUB: event -->
 		</small>

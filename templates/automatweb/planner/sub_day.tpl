@@ -13,8 +13,8 @@
 	<tr>
 	<td class="fform" width="20" align="center" valign="top"><input type="checkbox" name="chk[{VAR:id}]" value="1"></td>
 	<td class="fform" width="100" valign="top">{VAR:time}</td>
-	<td class="fform" width="200" valign="top"><a href="?class=planner&action=editevent&id={VAR:id}">{VAR:title}</a></td>
-	<td class="fform" width="*">{VAR:contents}</td>
+	<td class="fform" width="200" valign="top"><a href="?class=planner&action=editevent&id={VAR:id}"><font color="{VAR:color}">{VAR:title}</font></a></td>
+	<td class="fform" width="*"><font color="{VAR:color}">{VAR:contents}</font></td>
 	</tr>
 	<!-- END SUB: line -->	
 	<tr>
