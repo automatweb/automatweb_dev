@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.73 2004/10/05 07:21:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.74 2004/10/07 14:39:32 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -2943,7 +2943,7 @@ class form_element extends aw_template
 		{
 			if ($this->arr["subtype"] == "url" && $this->arr["bt_redir_after_submit"])
 			{
-				if ($this->form->post_vars["bt_url_".$this->id] != "")
+				if ($this->form->post_vars["bt_url_".$this->id] != "" || $this->form->post_vars["bt_url_".$this->id."_x"] != "")
 				{
 					$buu = $this->arr["button_url"];
 					if (isset($this->arr["lang_button_url"][aw_global_get("lang_id")]))
@@ -3520,7 +3520,7 @@ class form_element extends aw_template
 					$this->vars(array(
 						"el_num" => $el_num++,
 						"el_id" => $row["el_id"],
-						"el_text" => str_replace("\n","",$row["el_name"]),
+						"el_text" => htmlspecialchars(str_replace("\n","",$row["el_name"])),
 						"form_id" => $row["form_id"]
 					));
 					$eds.=$this->parse("ELDEFS");
