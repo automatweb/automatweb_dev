@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.13 2001/08/12 23:21:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.14 2001/08/17 17:49:25 duke Exp $
 // aw_template.aw - Templatemootor
 class tpl
 {
@@ -55,16 +55,13 @@ class aw_template extends acl_base
 		$this->t_tree = array();
 		$this->_init_vars();
 		$this->sub_merge = 0;
-		global $basedir;
-		$this->basedir = $basedir;
 	}
 
 	function _init_vars()
 	{
-		extract($GLOBALS);
-		global $status_msg;
-		// edaspidi kui on vaja basedir-i kasutada, siis ei pea seda globaalsest skoobist importima
+		global $basedir,$baseurl,$status_msg,$PHP_SELF,$ext;
 		$this->basedir = $basedir;
+		// edaspidi kui on vaja basedir-i kasutada, siis ei pea seda globaalsest skoobist importima
 		$this->vars(array(
 			"self" => $PHP_SELF,
 			"ext"  => $ext,
@@ -345,12 +342,8 @@ class aw_template extends acl_base
 	// muutujad yle
   function vars($params)
 	{
-		reset($params);
-		while(list($k,$v) = each($params))
-		{
-			$this->vars[$k] = $v;
-		};
-  }
+		$this->vars = array_merge($this->vars,$params);
+	 }
 
 	////
   // !Impordib muutujad, kui muutuja oli juba varem defineeritud, siis liidetakse
@@ -462,4 +455,5 @@ class aw_template extends acl_base
     };
   }
 };
+
 ?>
