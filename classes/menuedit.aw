@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.92 2002/02/07 08:43:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.93 2002/02/08 09:40:44 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -4040,15 +4040,16 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			{
 				if ($imgar[$_i]["url"] != "")
 				{
+					$imgurl = preg_replace("/^http:\/\/.*\//","/",$imgar[$_i]["url"]);
 					$this->vars(array(
-						"menu_image_".$_i => "<img src='".$imgar[$_i]["url"]."'>",
-						"menu_image_".$_i."_url" => $imgar[$_i]["url"]
+						"menu_image_".$_i => "<img src='".$imgurl."'>",
+						"menu_image_".$_i."_url" => $imgurl
 					));
 					if (in_array($row["oid"], $path))
 					{
 						$this->vars(array(
-							"sel_menu_".$name."_L".$this->level."_image_".$_i."_url" => $imgar[$_i]["url"],
-							"sel_menu_".$name."_L".$this->level."_image_".$_i => "<img src='".$imgar[$_i]["url"]."'>",
+							"sel_menu_".$name."_L".$this->level."_image_".$_i."_url" => $imgurl,
+							"sel_menu_".$name."_L".$this->level."_image_".$_i => "<img src='".$imgurl."'>",
 						));
 					}
 					$has_image = true;
