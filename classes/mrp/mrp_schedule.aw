@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.28 2005/03/28 08:11:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.29 2005/03/28 12:09:07 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -543,16 +543,6 @@ class mrp_schedule extends class_base
 // /* dbg */ echo "<hr>";
 
 		$this->save ();
-
-		### free lock and set scheduling not needed
-//		$workspace->set_prop("scheduling_lock", 0);
-
-		if (!$workspace->prop("scheduling_lock"))
-		{
-//			$workspace->set_prop("rescheduling_needed", 0);
-		}
-
-		$workspace->save();
 
 /* timing */ timing ("save schedule data", "end");
 /* timing */ timing (null, "show");
@@ -1344,7 +1334,7 @@ function timing ($name, $action = "time")
 	@param mrp_start required type=int
 	@param mrp_length required type=int
 **/
-/*	function get_unavailable_periods ($arr)
+	function get_unavailable_periods_for_range ($arr)
 	{
 		$resource_id = $arr["mrp_resource"];
 		$resource = obj ($resource_id);
@@ -1386,7 +1376,7 @@ function timing ($name, $action = "time")
 		}
 
 		return true;
-	}*/
+	}
 }
 
 ?>
