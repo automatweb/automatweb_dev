@@ -1390,48 +1390,110 @@ class site_template_compiler extends aw_template
 				continue;
 			}
 
-			$res .= $this->_gi()."if (\$this->_helper_get_levels_in_path_for_area(".$adat["parent"].") > 0)\n";
-			$res .= "{\n";
 			$this->brace_level++;
 
-			$res .= $this->_gi()."\$vars = array();\n";
+			$ares = "";
 
 			foreach($adat["levels"] as $level => $ldat)
 			{
-				$res .= $this->_gi()."\$tmp = \$this->_helper_find_parent(".$adat["parent"].", ".($level+1).");\n";
-				$res .= $this->_gi()."if (\$tmp)\n";
-				$res .= $this->_gi()."{\n";
+				$has_vars = false;
+				$vres = "";
+
 				$this->brace_level++;
 
-				$res .= $this->_gi()."\$vars[\"sel_menu_".$area."_L".$level."_id\"] = \$tmp;\n";
-				$res .= $this->_gi()."\$tmp_o = obj(\$tmp);\n";
-				$res .= $this->_gi()."\$vars[\"sel_menu_".$area."_L".$level."_text\"] = \$tmp_o->name();\n";
-				$res .= $this->_gi()."\$vars[\"sel_menu_".$area."_L".$level."_colour\"] = \$tmp_o->prop(\"color\");\n";
-				$res .= $this->_gi()."\$tmp_im = \$tmp_o->meta(\"menu_images\");\n";
+				$varname = "sel_menu_".$area."_L".$level."_id";
+				if ($this->template_has_var_full($varname))
+				{
+					$vres .= $this->_gi()."\$vars[\"$varname\"] = \$tmp;\n";
+					$has_vars = true;
+				}
+
+				$vres .= $this->_gi()."\$tmp_o = obj(\$tmp);\n";
+	
+				$varname = "sel_menu_".$area."_L".$level."_text";
+				if ($this->template_has_var_full($varname))
+				{
+					$vres .= $this->_gi()."\$vars[\"$varname\"] = \$tmp_o->name();\n";
+					$has_vars = true;
+				}
+		
+				$varname = "sel_menu_".$area."_L".$level."_colour";
+				if ($this->template_has_var_full($varname))
+				{
+					$vres .= $this->_gi()."\$vars[\"$varname\"] = \$tmp_o->prop(\"color\");\n";
+					$has_vars = true;
+				}
+
+				$imres = "";
 				// insert image urls
 				$ni = aw_ini_get("menuedit.num_menu_images");
 				for($i = 0; $i < $ni; $i++)
 				{
-					$res .= $this->_gi()."if (\$tmp_im[$i][\"image_id\"])\n";
-					$res .= $this->_gi()."{\n";
-					$this->brace_level++;
+					$varname1 = "sel_menu_".$area."_L".$level."_image_".$i."_url";
+					$varname2 = "sel_menu_".$area."_L".$level."_image_".$i;
 
-					$res .= $this->_gi()."\$tmp_im[$i][\"url\"] = \$this->image->get_url_by_id(\$tmp_im[$i][\"image_id\"]);\n";
+					$has_v1 = $this->template_has_var_full($varname1);
+					$has_v2 = $this->template_has_var_full($varname2);
 	
-					$this->brace_level--;
-					$res .= $this->_gi()."}\n";
-					$res .= $this->_gi()."\$vars[\"sel_menu_".$area."_L".$level."_image_".$i."_url\"] = image::check_url(\$tmp_im[".$i."][\"url\"]);\n";
-					$res .= $this->_gi()."\$vars[\"sel_menu_".$area."_L".$level."_image_".$i."\"] = image::make_img_tag(image::check_url(\$tmp_im[".$i."][\"url\"]));\n";
+					if ($has_v1 != false || $has_v2 != false)
+					{
+						$imres .= $this->_gi()."if (\$tmp_im[$i][\"image_id\"])\n";
+						$imres .= $this->_gi()."{\n";
+						$this->brace_level++;
+	
+						$imres .= $this->_gi()."\$tmp_im[$i][\"url\"] = \$this->image->get_url_by_id(\$tmp_im[$i][\"image_id\"]);\n";
+	
+						$this->brace_level--;
+						$imres .= $this->_gi()."}\n";
+						if ($has_v1)
+						{
+							$imres .= $this->_gi()."\$vars[\"$varname1\"] = image::check_url(\$tmp_im[".$i."][\"url\"]);\n";
+							$has_vars = true;
+						}
+						if ($has_v2)
+						{
+							$imres .= $this->_gi()."\$vars[\"$varname2\"] = image::make_img_tag(image::check_url(\$tmp_im[".$i."][\"url\"]));\n";
+							$has_vars = true;
+						}
+					}
+				
+					if ($imres != "")
+					{
+						$vres .= $this->_gi()."\$tmp_im = \$tmp_o->meta(\"menu_images\");\n".$imres;
+					}
 				}
-				$this->brace_level--;
-				$res .= $this->_gi()."}\n";
 
+				if ($has_vars)
+				{
+					$this->brace_level--;
+					$ares .= $this->_gi()."\$tmp = \$this->_helper_find_parent(".$adat["parent"].", ".($level+1).");\n";
+					$ares .= $this->_gi()."if (\$tmp)\n";
+					$ares .= $this->_gi()."{\n";
+					$ares .= $vres;
+					$ares .= $this->_gi()."}\n";
+				}
+				else
+				{
+					$this->brace_level--;
+				}
 			}
 
-			$res .= $this->_gi()."\$this->vars(\$vars);\n";
-
-			$this->brace_level--;
-			$res .= $this->_gi()."}\n";
+			if ($ares != "")
+			{
+				$this->brace_level--;
+				$res .= $this->_gi()."if (\$this->_helper_get_levels_in_path_for_area(".$adat["parent"].") > 0)\n";
+				$res .= "{\n";
+				$this->brace_level++;
+				$res .= $this->_gi()."\$vars = array();\n";
+				$res .= $ares;
+				$res .= $this->_gi()."\$this->vars(\$vars);\n";
+				$this->brace_level--;
+				$res .= $this->_gi()."}\n";
+			}
+			else
+			{
+				$this->brace_level--;
+			}
 		}
 
 		return $res;
