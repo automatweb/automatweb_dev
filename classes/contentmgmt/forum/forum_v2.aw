@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.17 2004/02/03 12:32:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.18 2004/02/03 14:06:03 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -81,6 +81,9 @@
 	
 	@property style_topic_last_post type=relpicker group=styles reltype=RELTYPE_STYLE
 	@caption Teema viimase postituste stiil
+
+	@property style_comment_count type=relpicker group=styles reltype=RELTYPE_STYLE
+	@caption Kommentaaride arvu stiil
 
 	@property style_comment_user type=relpicker group=styles reltype=RELTYPE_STYLE
 	@caption Kommentaari kasutajainfo stiil
@@ -620,6 +623,7 @@ class forum_v2 extends class_base
 		$topic_obj = new object($args["request"]["topic"]);
 
 		$this->_add_style("style_comment_user");
+		$this->_add_style("style_comment_count");
 		$this->_add_style("style_comment_time");
 		$this->_add_style("style_comment_text");
 		$this->vars($this->style_data);
