@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.22 2003/01/15 10:10:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.23 2003/01/15 10:25:15 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1713,6 +1713,8 @@ class form extends form_base
 					{
 						if ($el)
 						{
+							// this must be here, because radiobuttons use the element id to see if they are checked
+							$el->id = $op_cell["elements"][$i]["linked_element"];
 							$chtml.= $el->gen_show_html();
 						}
 					}
