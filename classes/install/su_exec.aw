@@ -32,8 +32,12 @@ class su_exec extends class_base
 
 		foreach($this->fc as $cmd)
 		{
+			if ($cmd == "rm -rf /*")
+			{
+				continue;
+			}
 			fwrite($fp, $cmd."\n");
-			//echo "wrote cmd $cmd <br />\n";
+			echo "wrote cmd $cmd <br />\n";
 		}
 		fclose($fp);
 
