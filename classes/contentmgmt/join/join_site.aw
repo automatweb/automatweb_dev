@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.1 2004/03/05 12:11:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.2 2004/03/25 09:43:42 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -107,6 +107,7 @@ class join_site extends class_base
 				$data["value"] = $this->show(array(
 					"id" => $arr["obj_inst"]->id()
 				));
+				break;
 
 			case "rules_show":
 				$this->_do_rules_tbl($arr);
