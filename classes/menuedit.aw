@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.56 2001/09/17 13:20:33 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.57 2001/09/18 00:22:06 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -225,6 +225,9 @@ class menuedit extends aw_template
 			$docid=$obj["brother_of"];
 		}
 
+		global $DEBUG;
+
+
 
 		$this->vars(array(
 						"per_string" => $GLOBALS["act_period"]["description"],
@@ -346,18 +349,32 @@ class menuedit extends aw_template
 
 			}
 		};
+		
 
 		if ($tpldir)
 		{
 			$this->tpl_init("../$tpldir/automatweb/menuedit");
 		};
+		
 
-
+		global $DEBUG;
+		if ($DEBUG)
+		{
+			print "trying to read $filename<br>";
+			flush();
+		};
 		$this->read_template($template);
+		global $DEBUG;
+		if ($DEBUG)
+		{
+			print "got back from read_template<br>";
+			flush();
+		};
 
 		classload("periods","document");
 		$d = new document();
 		$this->doc = new document();
+		
 		
 		if (!is_array($this->mar[$sel_menu_id]))
 		{
@@ -370,16 +387,68 @@ class menuedit extends aw_template
 		$si_parent = $sel_menu_id;
 		while ($sel_image == "" && $si_parent)
 		{
-			$sel_image = isset($this->mar[$si_parent]["img_url"]) && $this->mar[$si_parent]["img_url"] != "" ? "<img src='".$this->mar[$si_parent]["img_url"]."' border='0'>" : "";
+			$sel_image = isset($this->mar[$si_parent]["img_url"]) && $this->mar[$si_parent]["img_url"] != "";
+			if ($sel_image)
+			{
+				break;
+			}
 			$si_parent = $this->mar[$si_parent]["parent"];
 		}
 
+		if ($sel_image)
+		{
+			$sel_menu_meta = $this->get_object_metadata(array(
+				"metadata" => $this->mar[$si_parent]["metadata"],
+			));
+			$this->vars(array("url" => $this->mar[$si_parent]["img_url"]));
+			$smi =$this->parse("SEL_MENU_IMAGE");
+
+			if ($sel_menu_meta["img2_id"])
+			{
+				$this->vars(array("url" => $sel_menu_meta["img2_url"]));
+				$smi.=$this->parse("SEL_MENU_IMAGE");
+			}
+			if ($sel_menu_meta["img3_id"])
+			{
+				$this->vars(array("url" => $sel_menu_meta["img3_url"]));
+				$smi.=$this->parse("SEL_MENU_IMAGE");
+			}
+			if ($sel_menu_meta["img4_id"])
+			{
+				$this->vars(array("url" => $sel_menu_meta["img4_url"]));
+				$smi.=$this->parse("SEL_MENU_IMAGE");
+			}
+			if ($sel_menu_meta["img5_id"])
+			{
+				$this->vars(array("url" => $sel_menu_meta["img5_url"]));
+				$smi.=$this->parse("SEL_MENU_IMAGE");
+			}
+			$sel_image = "<img name='sel_menu_image' src='".$this->mar[$si_parent]["img_url"]."' border='0'>";
+		}
 		$this->vars(array(
+			"SEL_MENU_IMAGE" => $smi,
 			"sel_menu_name" => $this->mar[$sel_menu_id]["name"],
 			"sel_menu_image" => $sel_image,
-			"sel_menu_id" => $sel_menu_id
+			"sel_menu_id" => $sel_menu_id,
+			"sel_menu_timing" => $sel_menu_meta["img_timing"] ? $sel_menu_meta["img_timing"] : 4 
 		));
-		
+
+		// nii nyt leiame aktiivse kommentaari - kui aktiivsel menyyl on tyhi, siis parenti oma jne
+		$sel_comment = "";
+		$si_parent = $sel_menu_id;
+		while ($sel_comment == "" && $si_parent)
+		{
+			$sel_comment = isset($this->mar[$si_parent]["comment"]) && $this->mar[$si_parent]["comment"] != "" ? $this->mar[$si_parent]["comment"] : "";
+			if ($sel_comment)
+			{
+				break;
+			}
+			$si_parent = $this->mar[$si_parent]["parent"];
+		}
+		$this->vars(array(
+			"sel_menu_comment" => $sel_comment
+		));
+
 		if (!$this->mar[$sel_menu_id]["left_pane"])
 		{
 			$this->left_pane = false;
@@ -819,7 +888,7 @@ class menuedit extends aw_template
 		} // end MENUEDIT_VER2
 
 
-		$this->make_promo_boxes($this->sel_section);
+		$this->make_promo_boxes($obj["class_id"] == CL_BROTHER ? $obj["brother_of"] : $this->sel_section);
 		$this->make_poll();
 		$this->make_search();
 		$this->make_nadalanagu();
@@ -1043,6 +1112,7 @@ class menuedit extends aw_template
 				objects.brother_of as brother_of,
 				objects.metadata as metadata,
 				objects.class_id as class_id,
+				objects.comment as comment,
 				menu.link as link,
 				menu.type as mtype,
 				menu.clickable as clickable,
@@ -2423,6 +2493,12 @@ class menuedit extends aw_template
 			
 			$this->set_object_metadata(array(
 				"oid" => $id,
+				"key" => "img_timing",
+				"value" => $arr["img_timing"],
+			));
+			
+			$this->set_object_metadata(array(
+				"oid" => $id,
 				"key" => "show_lead",
 				"value" => $arr["show_lead"],
 			));
@@ -2477,7 +2553,7 @@ class menuedit extends aw_template
 			{
 				if ($oid != $id)	// no recursing , please
 				{
-					$noid = $this->new_object(array("parent" => $oid,"class_id" => CL_BROTHER,"status" => 1,"brother_of" => $id,"name" => $menu["name"],"comment" => $menu["comment"]));
+					$noid = $this->new_object(array("parent" => $oid,"class_id" => CL_BROTHER,"status" => 2,"brother_of" => $id,"name" => $menu["name"],"comment" => $menu["comment"],"jrk" => 50));
 					$this->db_query("INSERT INTO menu(id,link,type,is_l3,is_copied,periodic,tpl_edit,tpl_view,tpl_lead,active_period,clickable,target,mid,data,hide_noact)	
 values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$menu[periodic]','$menu[tpl_edit]','$menu[tpl_view]','$menu[tpl_lead]','$menu[active_period]','$menu[clickable]','$menu[target]','$menu[mid]','$menu[data]','$menu[hide_noact]')");
 				}
@@ -2536,7 +2612,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			}
 			$pers = serialize($par);
 			// pildi uploadimine
-			global $img, $img_type,$img_act,$img_act_type;
+			global $img, $img_type,$img_act,$img_act_type,$img2, $img2_type,$img3, $img3_type,$img4, $img4_type,$img5, $img5_type;
 			$tt = "";
 			if ($img != "none" && $img != "")
 			{
@@ -2565,6 +2641,74 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					"value" => $img["url"],
 				));
 			}
+			if ($img2 != "none" && $img2 != "")
+			{
+				classload("images");
+				$t = new db_images;
+				$im = $t->_upload(array("filename" => $img2, "file_type" => $img2_type, "oid" => $id));
+				$this->set_object_metadata(array(
+					"oid" => $id,
+					"key" => "img2_id",
+					"value" => $im["id"],
+				));
+				$img = $t->get_img_by_id($im["id"]);
+				$this->set_object_metadata(array(
+					"oid" => $id,
+					"key" => "img2_url",
+					"value" => $img["url"],
+				));
+			}
+			if ($img3 != "none" && $img3 != "")
+			{
+				classload("images");
+				$t = new db_images;
+				$im = $t->_upload(array("filename" => $img3, "file_type" => $img3_type, "oid" => $id));
+				$this->set_object_metadata(array(
+					"oid" => $id,
+					"key" => "img3_id",
+					"value" => $im["id"],
+				));
+				$img = $t->get_img_by_id($im["id"]);
+				$this->set_object_metadata(array(
+					"oid" => $id,
+					"key" => "img3_url",
+					"value" => $img["url"],
+				));
+			}
+			if ($img4 != "none" && $img4 != "")
+			{
+				classload("images");
+				$t = new db_images;
+				$im = $t->_upload(array("filename" => $img4, "file_type" => $img4_type, "oid" => $id));
+				$this->set_object_metadata(array(
+					"oid" => $id,
+					"key" => "img4_id",
+					"value" => $im["id"],
+				));
+				$img = $t->get_img_by_id($im["id"]);
+				$this->set_object_metadata(array(
+					"oid" => $id,
+					"key" => "img4_url",
+					"value" => $img["url"],
+				));
+			}
+			if ($img5 != "none" && $img5 != "")
+			{
+				classload("images");
+				$t = new db_images;
+				$im = $t->_upload(array("filename" => $img5, "file_type" => $img5_type, "oid" => $id));
+				$this->set_object_metadata(array(
+					"oid" => $id,
+					"key" => "img5_id",
+					"value" => $im["id"],
+				));
+				$img = $t->get_img_by_id($im["id"]);
+				$this->set_object_metadata(array(
+					"oid" => $id,
+					"key" => "img5_url",
+					"value" => $img["url"],
+				));
+			}
 			if ($number > 0)
 			{
 				$nn = "number = '$number',";
@@ -2572,27 +2716,70 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 			global $lang_id;
 			// teeme seealso korda.
-			if (is_array($seealso))
-			{
-				$sa = unserialize($menu["seealso"]);	// v6tame vana
-				$sa[$lang_id] = array();							// nullime sealt k2esoleva keele 2ra
 
-				$tsa = array();
-				reset($seealso);
-				while (list(,$sid) = each($seealso))
-				{
-					$tsa[$sid] = $sa_ord[$sid];					// ja paneme uued itemid asemele
-				}
-				asort($tsa,SORT_NUMERIC);
-				$sa[$lang_id] = $tsa;
-				$seealso = serialize($sa);
-			}
-			else
+			// see k2ib siis nii et objekti metadata juures on kirjas et mis menyyde all see menyy on seealso
+			// ja siis menu.seealso on serializetud array nendest, mis selle menyy all on seealso
+
+			// niisis. k2ime k6ik praegused menyyd l2bi kus see menyy seealso on ja kui see on 2ra v6etud, siis kustutame ja kui jrk muutunud
+			// siis muudame seda ja viskame nad arrayst v2lja
+			if (!is_array($seealso))
 			{
-				$sa = unserialize($menu["seealso"]);	// v6tame vana
-				$sa[$lang_id] = array();							// nullime sealt k2esoleva keele 2ra
-				$seealso = serialize($sa);						
+				$seealso = array();
 			}
+
+			if (is_array($meta["seealso_refs"][$lang_id]))
+			{
+				foreach ($meta["seealso_refs"][$lang_id] as $mid)
+				{
+					if (!in_array($mid,$seealso))
+					{
+						// remove this one from the menus seealso list
+						$m_sa = $this->db_fetch_field("SELECT seealso FROM menu WHERE id = $mid", "seealso");
+						$m_sa_a = unserialize($m_sa);	
+						unset($m_sa_a[$lang_id][$id]);
+						$m_sa = serialize($m_sa_a);
+						$this->db_query("UPDATE menu SET seealso = '$m_sa' WHERE id = $mid");
+					}
+					else
+					{
+						if ($seealso_order != $meta["seealso_order"])
+						{
+							// kui jrk on muutunud siis tuleb see 2ra muuta
+							$m_sa = $this->db_fetch_field("SELECT seealso FROM menu WHERE id = $mid", "seealso");
+							$m_sa_a = unserialize($m_sa);	
+							$m_sa_a[$lang_id][$id] = $seealso_order;
+							$m_sa = serialize($m_sa_a);
+							$this->db_query("UPDATE menu SET seealso = '$m_sa' WHERE id = $mid");
+						}
+					}
+				}
+			}
+			// nyt k2ime l2bi sisestet seealso array ja lisame need mis pole metadatas olemas juba
+			$sas = $meta["seealso_refs"];
+			unset($sas[$lang_id]);
+			foreach($seealso as $m_said)
+			{
+				if (!isset($meta["seealso_refs"][$lang_id][$m_said]))
+				{
+					// tuleb lisada selle menyy juurde kirje
+					$m_sa = $this->db_fetch_field("SELECT seealso FROM menu WHERE id = $m_said", "seealso");
+					$m_sa_a = unserialize($m_sa);	
+					$m_sa_a[$lang_id][$id] = $seealso_order;
+					$m_sa = serialize($m_sa_a);
+					$this->db_query("UPDATE menu SET seealso = '$m_sa' WHERE id = $m_said");
+				}
+				$sas[$lang_id][$m_said] = $m_said;
+			}
+			$this->set_object_metadata(array(
+				"oid" => $id,
+				"key" => "seealso_refs",
+				"value" => $sas,
+			));
+			$this->set_object_metadata(array(
+				"oid" => $id,
+				"key" => "seealso_order",
+				"value" => $seealso_order,
+			));
 
 			$this->upd_object($charr);
 			$this->_log("menuedit",sprintf(LC_MENUEDIT_CJANGED_MENU,$name));
@@ -3010,12 +3197,33 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$this->vars(array("admin_feature" => $this->picker($row["admin_feature"],$this->get_feature_sel())));
 			$af = $this->parse("ADMIN_FEATURE");
 		}
+		classload("images");
+		$t = new db_images;
 		if ($row["img_id"])
 		{
-			classload("images");
-			$t = new db_images;
 			$img = $t->get_img_by_id($row["img_id"]);
 			$this->vars(array("image" => "<img src='".$img["url"]."'>"));
+		}
+
+		if ($meta["img2_id"])
+		{
+			$img2 = $t->get_img_by_id($meta["img2_id"]);
+			$this->vars(array("image2" => "<img src='".$img2["url"]."'>"));
+		}
+		if ($meta["img3_id"])
+		{
+			$img3 = $t->get_img_by_id($meta["img3_id"]);
+			$this->vars(array("image3" => "<img src='".$img3["url"]."'>"));
+		}
+		if ($meta["img4_id"])
+		{
+			$img4 = $t->get_img_by_id($meta["img4_id"]);
+			$this->vars(array("image4" => "<img src='".$img4["url"]."'>"));
+		}
+		if ($meta["img5_id"])
+		{
+			$img5 = $t->get_img_by_id($meta["img5_id"]);
+			$this->vars(array("image5" => "<img src='".$img5["url"]."'>"));
 		}
 		classload("shop");
 		$sh = new shop;
@@ -3028,79 +3236,68 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 		$oblist = $ob->get_list();
 
-		$sa = unserialize($row["seealso"]);
-		if (is_array($sa))
-		{
-			$sar = $sa[$GLOBALS["lang_id"]];
-			$rsar = array();
-			if (is_array($sar))
-			{
-				foreach($sar as $said => $saord)
-				{
-					$this->vars(array(
-						"sa_name" => $oblist[$said],
-						"sa_id" => $said,
-						"sa_ord" => $saord
-					));
-					$sal.=$this->parse("SA_ITEM");
-					$rsar[$said] = $said;
-				}
-			}
-		}
+		// seealso asi on nyt nii. et esiteks on metadata[seealso_refs] - seal on kirjas, mis menyyde all see menyy seealso item on
+		// ja siis menu.seealso on nagu enne serializetud array menyydest mis selle menyy all seealso on et n2itamisel kiirelt teada saax
+		$sa = $meta["seealso_refs"];
+		$rsar = $sa[$GLOBALS["lang_id"]];
+
 		$img2 = $meta["img_act_url"] != "" ? "<img src='".$meta["img_act_url"]."'>" : "";
 		global $template_sets;
-		$this->vars(array("parent"			=> $row["parent"], 
-											"SA_ITEM"			=> $sal,
-											"image_act"		=> $img2,
-											"seealso"			=> $this->multiple_option_list($rsar,$oblist),
-											"ADMIN_FEATURE"	=> $af,
-											"name"				=> $row["name"], 
-											"number"			=> $row["number"],
-											"comment"			=> $row["comment"], 
-											"links"				=> checked($row["links"]), 
-											"users_only"  => ($meta["users_only"] == 1) ? "checked" : "",
-											"show_lead" => ($meta["show_lead"] == 1) ? "checked" : "",
-											"id"					=> $id,
-											"active"	    => ($row["status"] == 2) ? "checked" : "",
-											"clickable"	    => ($row["clickable"] == 1) ? "checked" : "",
-											"hide_noact"   => ($row["hide_noact"] == 1) ? "checked" : "",
-											"alias"				=> $row["alias"],
-											"created"			=> $this->time2date($row["created"],2),
-											"target"		=> ($row["target"]) ? "checked" : "",
-											"autoactivate" => ($row["autoactivate"]) ? "checked" : "",
-											"autodeactivate" => ($row["autodeactivate"]) ? "checked" : "",
-											"activate_at" => $d_edit->gen_edit_form("activate_at",$activate_at),
-											"deactivate_at" => $d_edit->gen_edit_form("deactivate_at",$deactivate_at),
-											"createdby"		=> $row["createdby"],
-											"modified"		=> $this->time2date($row["modified"],2),
-											"modifiedby"	=> $row["modifiedby"],
-											"tpl_edit" => $this->option_list($row["tpl_edit"],$edit_templates),
-											"tpl_view" => $this->option_list($row["tpl_view"],$long_templates),
-											"tpl_lead" => $this->option_list($row["tpl_lead"],$short_templates),
-											"tpl_dir" => $this->picker($meta["tpl_dir"],$template_sets),
-											"section"			=> $this->multiple_option_list($sets["section"],$oblist),
-											"sss"					=> $this->multiple_option_list(unserialize($row["sss"]),$oblist),
-											"link"				=> $row["link"],
-											"sep_checked"	=> ($row["type"] == 4 ? "CHECKED" : ""),
-											"mid"	=> ($row["mid"] == 1 ? "CHECKED" : ""),
-											"doc_checked"	=> ($row["type"] == 6 ? "CHECKED" : ""),
-											"sections"		=> $this->multiple_option_list($bsar,$ob->get_list(false,true)),
-											"real_id"			=> $row["brother_of"],
-											"reforb"			=> $this->mk_reforb("submit",array("id" => $id, "parent" => $parent,"period" => $period)),
-											"ndocs"				=> $row["ndocs"],
-											"ex_menus"		=> $this->multiple_option_list($ob->get_list(false,false,$id),$ob->get_list(false,false,$id)),
-											"icon"				=> $icon,
-											"IS_LAST"			=> $il,
-											"shop"				=> $this->picker($row["shop_id"],$shs),
-											"is_shop"			=> checked($row["is_shop"]),
-											"left_pane"		=> checked($row["left_pane"]),
-											"right_pane"	=> checked($row["right_pane"]),
-											"shop_parallel" => checked($row["shop_parallel"]),
-											"shop_ignoregoto" => checked($row["shop_ignoregoto"]),
-											"no_menus" => checked($row["no_menus"]),
-											"width" => $row["width"],
-											"pers" => $dbp->period_mlist(unserialize($row["pers"]))
-											));
+		$this->vars(array(
+			"parent"			=> $row["parent"], 
+			"SA_ITEM"			=> $sal,
+			"image_act"		=> $img2,
+			"seealso"			=> $this->multiple_option_list($rsar,$oblist),
+			"seealso_order" => $meta["seealso_order"],
+			"ADMIN_FEATURE"	=> $af,
+			"name"				=> $row["name"], 
+			"number"			=> $row["number"],
+			"comment"			=> $row["comment"], 
+			"links"				=> checked($row["links"]), 
+			"users_only"  => ($meta["users_only"] == 1) ? "checked" : "",
+			"show_lead" => ($meta["show_lead"] == 1) ? "checked" : "",
+			"id"					=> $id,
+			"active"	    => ($row["status"] == 2) ? "checked" : "",
+			"clickable"	    => ($row["clickable"] == 1) ? "checked" : "",
+			"hide_noact"   => ($row["hide_noact"] == 1) ? "checked" : "",
+			"alias"				=> $row["alias"],
+			"created"			=> $this->time2date($row["created"],2),
+			"target"		=> ($row["target"]) ? "checked" : "",
+			"autoactivate" => ($row["autoactivate"]) ? "checked" : "",
+			"autodeactivate" => ($row["autodeactivate"]) ? "checked" : "",
+			"activate_at" => $d_edit->gen_edit_form("activate_at",$activate_at),
+			"deactivate_at" => $d_edit->gen_edit_form("deactivate_at",$deactivate_at),
+			"createdby"		=> $row["createdby"],
+			"modified"		=> $this->time2date($row["modified"],2),
+			"modifiedby"	=> $row["modifiedby"],
+			"tpl_edit" => $this->option_list($row["tpl_edit"],$edit_templates),
+			"tpl_view" => $this->option_list($row["tpl_view"],$long_templates),
+			"tpl_lead" => $this->option_list($row["tpl_lead"],$short_templates),
+			"tpl_dir" => $this->picker($meta["tpl_dir"],$template_sets),
+			"section"			=> $this->multiple_option_list($sets["section"],$oblist),
+			"sss"					=> $this->multiple_option_list(unserialize($row["sss"]),$oblist),
+			"link"				=> $row["link"],
+			"sep_checked"	=> ($row["type"] == 4 ? "CHECKED" : ""),
+			"mid"	=> ($row["mid"] == 1 ? "CHECKED" : ""),
+			"doc_checked"	=> ($row["type"] == 6 ? "CHECKED" : ""),
+			"sections"		=> $this->multiple_option_list($bsar,$ob->get_list(false,true)),
+			"real_id"			=> $row["brother_of"],
+			"reforb"			=> $this->mk_reforb("submit",array("id" => $id, "parent" => $parent,"period" => $period)),
+			"ndocs"				=> $row["ndocs"],
+			"ex_menus"		=> $this->multiple_option_list($ob->get_list(false,false,$id),$ob->get_list(false,false,$id)),
+			"icon"				=> $icon,
+			"IS_LAST"			=> $il,
+			"shop"				=> $this->picker($row["shop_id"],$shs),
+			"is_shop"			=> checked($row["is_shop"]),
+			"left_pane"		=> checked($row["left_pane"]),
+			"right_pane"	=> checked($row["right_pane"]),
+			"shop_parallel" => checked($row["shop_parallel"]),
+			"shop_ignoregoto" => checked($row["shop_ignoregoto"]),
+			"no_menus" => checked($row["no_menus"]),
+			"width" => $row["width"],
+			"img_timing" => $meta["img_timing"],
+			"pers" => $dbp->period_mlist(unserialize($row["pers"]))
+		));
 
 		$this->vars(array(
 			"CAN_BROTHER" => $row["class_id"] == CL_PSEUDO ? $this->parse("CAN_BROTHER") : "",
