@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.52 2003/11/11 16:40:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.53 2003/11/11 16:59:04 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -99,7 +99,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 @property cite type=textarea cols=60 rows=10
 @caption Tsitaat
 
-@property tm type=textbox size=20 newonly=1
+@property tm type=textbox size=20 
 @caption Kuupäev
 
 @property show_print type=checkbox ch_value=1 table=objects field=meta method=serialize default=1
@@ -194,7 +194,10 @@ class doc extends class_base
 				break;
 
 			case "tm":
-				$data["value"] = date("d.m.Y");
+				if ($arr["new"])
+				{
+					$data["value"] = date("d.m.Y");
+				};
 				break;
 
 			case "sections":
