@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.84 2003/03/31 10:12:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.85 2003/04/14 16:00:51 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -373,6 +373,7 @@ class aliasmgr extends aw_template
 		load_vcl("table");
 		$this->t = new aw_table(array(
 			"prefix" => "images",
+			"layout" => "generic"
 		));
 		$this->t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
 		$this->t->define_field(array(
