@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry.aw,v 2.7 2001/07/19 14:24:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry.aw,v 2.8 2001/07/19 21:17:19 duke Exp $
 
 global $orb_defs;
-
+lc_load("automatweb");
 $orb_defs["form_entry"] = "xml";
 
 // basically this is an interface class :)
@@ -17,6 +17,10 @@ class form_entry extends aw_template
 		$this->db_init();
 		$this->tpl_init("forms");
 		lc_load("definition");
+		global $lc_automatweb;
+		if (is_array($lc_automatweb))
+		{
+			$this->vars($lc_automatweb);}
 	}
 
 	function change($arr)
@@ -82,13 +86,17 @@ class form_entry extends aw_template
 		};
 		// acl-iga voib kamm tekkida.
 		$new_id = $this->new_object($old);
-		
+	
 		$oldentry = $this->get_record("form_entries","id",$eid);
 
 		$t = time();
 
+
+		$contents = $oldentry["contents"];
+		$this->quote($contents);
+
 		$q = "INSERT INTO form_entries (id,form_id,contents,tm)
-			VALUES ('$oldentry[id]','$oldentry[form_id],$oldentry[contents],$t)";
+			VALUES ('$new_id','$oldentry[form_id]','$contents',$t)";
 
 		$this->db_query($q);
 
@@ -98,12 +106,24 @@ class form_entry extends aw_template
 
 		$old_f_entry["id"] = $new_id;
 
-		$keys = array_keys($old_f_entry);
-		$values = array_values($old_f_entry);
+		$keys = array(); $values = array();
+		foreach($old_f_entry as $key1 => $value1)
+		{
+			// numbrilisi key-sid ei kopeeri
+			// rec pannakse db_next-s sisse. kas seda üldse kusagil kasutatakse ka?
+			if ( (!is_number($key1)) && ($key1 != "rec") )
+			{
+				$keys[] = $key1;
+				$this->quote($value1);
+				$values[] = "'$value1'";
+			};
+		};
 
-		$q = sprintf("INSERT INTO $ftable (%s) VALUES (%s)",join(",",$keys),join(",",map('%s',$values)));
-
+		$q = sprintf("INSERT INTO $ftable (%s) VALUES (%s)",join(",",$keys),join(",",$values));
+		
 		$this->db_query($q);
+		
+		return $new_id;
 
 	}
 }
