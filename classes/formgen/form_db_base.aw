@@ -409,6 +409,10 @@ class form_db_base extends aw_template
 			$this->db_query($q);
 			$this->_log(ST_FORM_ENTRY, SA_DELETE,"form $this->name sisestus $entry_id (tabelist ".$this->arr["save_table_start_from"].")");
 		}
+
+		// also run all controller actions
+		$fact = get_instance("formgen/form_actions");
+		$fact->do_on_delete_actions(&$this, $entry_id);
 	}
 
 	////
