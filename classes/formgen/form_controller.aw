@@ -251,11 +251,21 @@ class form_controller extends form_base
 		// load controllers
 		$eq = preg_replace("/{load:(\d*)}/e","\$this->_load_ctrl_eq(\\1)",$eq);
 
+		// now do element metadata as well
+		if (is_object($el_ref))
+		{
+			foreach($el_ref->get_metadata() as $mtk => $mtv)
+			{
+				$eq = str_replace("[el.".$mtk."]",$mtv,$eq);
+			}
+		}
+
 		if ($co['meta']['no_var_replace'] == 1)
 		{
 			return $eq;
 		}
 
+		enter_function("form_controller::replace_vars::".$co["oid"]);
 		if (is_array($co["meta"]["vars"]))
 		{
 			foreach($co["meta"]["vars"] as $var => $vd)
@@ -298,19 +308,10 @@ class form_controller extends form_base
 
 		$eq = str_replace("[el]","\"".$el_value."\"",$eq);
 
-		// now do element metadata as well
-		if (is_object($el_ref))
-		{
-			foreach($el_ref->get_metadata() as $mtk => $mtv)
-			{
-				$eq = str_replace("[el.".$mtk."]",$mtv,$eq);
-			}
-		}
-
-	
 		// and finally init all non-initialized vars to zero to avoid parse errors
 		$eq = preg_replace("/(\[[-a-zA-Z0-9 _:\(\)]*\])/","0",$eq);
 
+		exit_function("form_controller::replace_vars::".$co["oid"]);
 		return $eq;
 	}
 
@@ -520,7 +521,7 @@ class form_controller extends form_base
 				$chent = aw_global_get("current_chain_entry");
 				if ($chent)
 				{
-					$chd = $this->get_chain_entry($chent);
+					$chd = $this->get_chain_entry($chent, true);
 					$entry_id = $chd[$fid];
 					if (!$entry_id)
 					{
@@ -549,7 +550,7 @@ class form_controller extends form_base
 				$chent = aw_global_get("current_chain_entry");
 				if ($chent)
 				{
-					$chd = $this->get_chain_entry($chent);
+					$chd = $this->get_chain_entry($chent, true);
 					$entry_id = $chd[$o_fid];
 //					echo "got entry id in THIS chain as $entry_id <br>";
 					// now read the related form's entry id, then get the chain entry id from that
@@ -564,7 +565,7 @@ class form_controller extends form_base
 					}
 //					echo "got rel_ch_eid as $rel_ch_eid <br>";
 					
-					$chd = $this->get_chain_entry($rel_ch_eid);
+					$chd = $this->get_chain_entry($rel_ch_eid, true);
 //					echo "got chd as ".dbg::dump($chd)." <br>";
 					$entry_id = $chd[$fid];
 //					echo "got entry_id as $entry_id <br>";
@@ -605,6 +606,7 @@ class form_controller extends form_base
 			if ($et_type == "element_sum")
 			{
 				$cursums = aw_global_get("fg_element_sums");
+				exit_function("form_controller::get_var_value");
 				return $cursums[$elid];
 			}
 
@@ -613,24 +615,31 @@ class form_controller extends form_base
 				if ($form->entry_id != $entry_id)
 				{
 //					echo "loading entry for form $form->id , entry = $entry_id <br>";
+					enter_function("form_controller::get_var_value::le::form::".$form->id."::eid::".$entry_id);
 					$form->load_entry($entry_id, true);
+					exit_function("form_controller::get_var_value::le::form::".$form->id."::eid::".$entry_id);
 				}
 				// and now read the damn value
 				$el =& $form->get_element_by_id($elid);
 				if (is_object($el))
 				{
+					enter_function("form_controller::get_var_value::gcv");
 					$val = $el->get_controller_value();
+					exit_function("form_controller::get_var_value::gcv");
 //					echo "val = $val entry = $el->entry , elid = $elid <br>";
+					exit_function("form_controller::get_var_value");
 					return $val;
 				}
 				else
 				{
 					$val = $form->entry[$elid];
 //					echo "returning pure val for element $elid <br>";
+					exit_function("form_controller::get_var_value");
 					return $val;
 				}
 			}
 		}
+		exit_function("form_controller::get_var_value");
 	}
 
 	function del_var($arr)
