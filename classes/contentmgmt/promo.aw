@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.36 2004/05/27 08:48:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.37 2004/06/02 10:36:17 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -29,6 +29,9 @@
 	
 	@property is_dyn type=checkbox ch_value=1 table=objects field=meta method=serialize
 	@caption Sisu ei cacheta
+	
+	@property trans_all_langs type=checkbox ch_value=1 table=objects field=meta method=serialize
+	@caption Sisu n&auml;idatakse k&otilde;ikides keeltes
 	
 	@property promo_tpl type=select table=objects field=meta method=serialize
 	@caption Template (dokumendi sees)
@@ -181,6 +184,13 @@ class promo extends class_base
 
 			case "section":
 				$this->get_menus($arr);
+				break;
+
+			case "trans_all_langs":
+				if (!aw_ini_get("config.object_translation"))
+				{
+					return PROP_IGNORE;
+				}
 				break;
 		}
 		return $retval;
@@ -431,9 +441,20 @@ class promo extends class_base
 		}
 
 		$ss = get_instance("contentmgmt/site_show");
+		if ($ob->prop("trans_all_langs"))
+		{
+			obj_set_opt("no_auto_translation", 1);
+			obj_set_opt("no_cache", 1);
+		}
 		$def = new aw_array($ss->get_default_document(array(
 			"obj" => obj($alias["target"])
 		)));
+		if ($ob->prop("trans_all_langs"))
+		{
+			obj_set_opt("no_auto_translation", 0);
+			obj_set_opt("no_cache", 0);
+		}
+
 		if ($ob->prop("sort_by"))
 		{
 			$_ob = $ob->prop("sort_by")." ".$ob->prop("sort_ord");
@@ -448,6 +469,7 @@ class promo extends class_base
 				"class_id" => array(CL_DOCUMENT, CL_PERIODIC_SECTION, CL_BROTHER_DOCUMENT),
 				"oid" => $def->get(),
 				"sort_by" => $_ob,
+				"lang_id" => array()
 			));
 			
 			
@@ -679,9 +701,20 @@ class promo extends class_base
 				$pr_c = "";
 				global $awt;
 				$awt->start("def-doc");
+				if ($o->prop("trans_all_langs"))
+				{
+					obj_set_opt("no_auto_translation", 1);
+					obj_set_opt("no_cache", 1);
+				}
 				$docid = $inst->get_default_document(array(
-					"obj" => $o
+					"obj" => $o,
+					"all_langs" => true
 				));
+				if ($o->prop("trans_all_langs"))
+				{
+					obj_set_opt("no_auto_translation", 0);
+					obj_set_opt("no_cache", 0);
+				}
 				$awt->stop("def-doc");
 
 				if (!is_array($docid))
