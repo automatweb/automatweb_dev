@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.56 2002/11/08 15:00:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.57 2002/11/11 13:12:53 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -32,9 +32,14 @@ class aliasmgr extends aw_template
 		$id = $args["docid"];
 		$obj = $this->get_object($id);
 
+		// I want to keep this search inside my own interface
+		$search_action = ($search_action) ? $search_action : "search";
+		$search_class = ($search_class) ? $search_class : "aliasmgr";
+
 		$this->vars(array(
-			"reforb" => $this->mk_reforb("search",array("no_reforb" => 1, "search" => 1, "docid" => $docid)),
-			"saveurl" => $this->mk_my_orb("addalias",array("id" => $args["docid"])),
+			// NB! It is possible to override class from the url
+			"reforb" => $this->mk_reforb($search_action,array("no_reforb" => 1, "search" => 1, "docid" => $docid),$search_class),
+			"saveurl" => $this->mk_my_orb("addalias",array("id" => $args["docid"],"_cl" => $_cl,"_ac" => $_ac)),
 			"toolbar" => $this->mk_toolbar(),
 			"form" => $form,
 			"table" => $search->get_results(),
@@ -67,6 +72,15 @@ class aliasmgr extends aw_template
 	function submit_list($args = array())
 	{
 		extract($args);
+		if ($subaction == "delete")
+		{
+			$to_delete = new aw_array($check);
+			foreach($to_delete->get() as $alias_id)
+			{
+                                $this->delete_alias($id,$alias_id);
+				unset($link[$alias_id]);
+			};
+		};
 		$this->set_object_metadata(array(
 			"oid" => $id,
 			"key" => "aliaslinks",
@@ -374,6 +388,8 @@ class aliasmgr extends aw_template
 		// creates $this->aliasarr
 		$this->make_alias_classarr();
 
+		$this->search_url = $search_url;
+
 		// this will be an array of class => name pairs for all object types that can be embedded
 		$aliases = array();
 		$types = array();
@@ -394,7 +410,12 @@ class aliasmgr extends aw_template
 			}
 		}
 
-		$return_url = urlencode($this->mk_my_orb("list_aliases", array("id" => $id)));
+		if (!$return_url)
+		{
+			$return_url = $this->mk_my_orb("list_aliases", array("id" => $id));
+		};
+
+		$return_url = urlencode($return_url);
 
 		// fetch a list of all the aliases for this object
 		$alist = $this->get_aliases(array(
@@ -415,7 +436,7 @@ class aliasmgr extends aw_template
 			$alias["alias"] = sprintf("<input type='text' size='5' value='%s' onClick='this.select()' onBlur='this.value=\"%s\"'>",$astr,$astr);
 			$alias["link"] = sprintf("<input type='checkbox' name='link[%d]' value='1' %s>",$alias["target"],checked($obj["meta"]["aliaslinks"][$alias["target"]]));
 			$alias["title"] = $classes[$aclid]["name"];
-			$alias["check"] = sprintf("<input type='checkbox' name='check' value='%d'>",$alias["target"]);
+			$alias["check"] = sprintf("<input type='checkbox' name='check[%d]' value='%d'>",$alias["target"],$alias["target"]);
 			$alias["name"] = sprintf("<a href='%s'>%s</a>",$ch,($alias["name"] == "" ? "(no name)" : $alias["name"]));
 
 			$this->t->define_data($alias);
@@ -429,28 +450,12 @@ class aliasmgr extends aw_template
 			"parent" => $obj["parent"],
 			"return_url" => $return_url,
 			"aliases" => $this->picker("",$aliases),
-			"reforb" => $this->mk_reforb("submit_list",array("id" => $id)),
+			"reforb" => $this->mk_reforb("submit_list",array("id" => $id,"subaction" => "none")),
 			"chlinks" => join("\n",map2("chlinks[%s] = \"%s\";",$chlinks)),
 			"toolbar" => $this->mk_toolbar(),
 		));
 
 		return $this->parse();
-	}
-
-	////
-	// !deletes aliases (separated by ;'s) 
-	// params:
-	//   id - list of aliases
-	//   oid - the object where to delete aliases from
-	function del_alias($arr)
-	{
-		extract($arr);
-		$ids = explode(";",$id);
-		foreach($ids as $real_id)
-		{
-			$this->delete_alias($oid,$real_id);
-		};
-		header("Location: ".$this->mk_my_orb("list_aliases", array("id" => $oid),"aliasmgr"));
 	}
 
 	////
@@ -479,10 +484,12 @@ class aliasmgr extends aw_template
 			}
 			else
 			{
-				$this->add_alias($id,$alias);
+				$this->add_alias($id,$onealias);
 			}
 		};
-		header("Location: ".$this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"));
+		$redir_class = ($_cl) ? $_cl : "aliasmgr";
+		$redir_action = ($_ac) ? $_ac : "list_aliases";
+		header("Location: ".$this->mk_my_orb($redir_action,array("id" => $id),$redir_class));
 	}
 
 	////
@@ -590,10 +597,11 @@ class aliasmgr extends aw_template
 		}
 		else
 		{
+			$url = ($this->search_url) ? $this->search_url : $this->mk_my_orb("search",array("docid" => $this->id),"aliasmgr");
 			$toolbar->add_button(array(
 				"name" => "search",
 				"tooltip" => "Otsi",
-				"url" => $this->mk_my_orb("search",array("docid" => $this->id),"aliasmgr"),
+				"url" => $url,
 				"imgover" => "search_over.gif",
 				"img" => "search.gif",
 			));
