@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.35 2002/06/10 15:50:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.36 2002/07/12 07:08:15 kristo Exp $
 // users.aw - User Management
 classload("users_user","config","form","objects","file");
 
@@ -999,7 +999,7 @@ class users extends users_user
 			{
 				$this->read_template("sel_join_grp.tpl");
 				$this->vars(array(
-					"reforb" => $this->mk_reforb("add_user", array("level" => 1)),
+					"reforb" => $this->mk_reforb("add_user", array("level" => 1,"no_reforb" => true)),
 					"join_grps" => $this->picker(0,$jgrps)
 				));
 				return $this->parse();
@@ -1032,10 +1032,20 @@ class users extends users_user
 
 			if ($jfrm)
 			{
-				// show them one after another to the user
+/*				// show them one after another to the user
 				$orb = $this->mk_orb("show", array("id" => $jfrm, "extraids[redirect_after]" => urlencode($this->mk_orb("add_user", array("level" => 1, "join_grp" => $join_grp), "users"))),"form");
 				header("Location: $orb");
-				return $orb;
+				return $orb;*/
+				// new approach here - user can pick an entry for the form as well now. 
+				$this->read_template("show_form.tpl");
+			
+				$f = get_instance("form");
+				$this->vars(array(
+					"form" => $f->gen_preview(array("id" => $jfrm, "tpl" => "show_noform.tpl")),
+					"entries" => $this->picker('',$f->get_entries(array("id" => $jfrm, "addempty" => true))),
+					"reforb" => $this->mk_reforb("submit_ua_form", array("id" => $jfrm, "join_grp" => $join_grp, "no_reforb" => 1))
+				));
+				return $this->parse();
 			}
 			else
 			{
@@ -2181,6 +2191,68 @@ class users extends users_user
 		{
 			aw_global_set("gidlist", $this->get_gids_by_uid($uid));
 			$this->touch($uid);
+		}
+	}
+
+	function submit_ua_form($arr)
+	{
+		extract($arr);
+		global $session_filled_forms;
+
+		// mark the previous form entry
+		if ($id)
+		{
+			// form submitted
+			if ($entry_type == "existing")
+			{
+				$session_filled_forms[$id] = $ex_entry;
+			}
+			else
+			{
+				// this also marks the session_filled_forms array
+				$f = get_instance("form");
+				$f->process_entry(array("id" => $id, "values" => $GLOBALS["HTTP_GET_VARS"]));
+			}
+		}
+
+		// find all the forms in the selected join group 
+		$this->db_query("SELECT id  FROM forms LEFT JOIN objects ON objects.oid = forms.id WHERE objects.status != 0 and forms.grp='$join_grp' AND forms.subtype = ".FSUBTYPE_JOIN);
+		$jfrm = 0;
+		while ($row = $this->db_next())
+		{
+			if (!$session_filled_forms[$row["id"]])
+			{
+				$jfrm = $row["id"];
+				break;
+			}
+		}
+
+		if ($jfrm)
+		{
+			// new approach here - user can pick an entry for the form as well now. 
+			$this->read_template("show_form.tpl");
+		
+			$f = get_instance("form");
+			$f_ref = $this->mk_reforb("process_entry", array("id" => $id,"no_reforb" => true));
+
+			$this->vars(array(
+				"form" => $f->gen_preview(array("id" => $jfrm, "tpl" => "show_noform.tpl","reforb" => $f_ref)),
+				"entries" => $this->picker('',$f->get_entries(array("id" => $jfrm, "addempty" => true))),
+				"reforb" => $this->mk_reforb("submit_ua_form", array("id" => $jfrm, "join_grp" => $join_grp,"no_reforb" => 1))
+			));
+			return $this->parse();
+		}
+		else
+		{
+			// and when we're dont with all of them, let the user select username/password
+			$this->read_template("add.tpl");
+			$this->vars(array(
+				"error" => $add_state["error"], 
+				"uid" => $add_state["uid"],
+				"email" => $add_state["email"],
+				"reforb"	=> $this->mk_reforb("submit_user", array("join_grp" => $join_grp))
+			));
+			return $this->parse();
 		}
 	}
 }
