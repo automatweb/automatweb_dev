@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.63 2001/11/22 16:41:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.64 2001/11/22 16:54:14 duke Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -409,6 +409,19 @@ class document extends aw_template
 			if (!(($pp = strpos($doc["content"],"#poolita#")) === false))
 			{
 				$doc["content"] = substr($doc["content"],0,$pp)."<br><B>Edasi loe ajakirjast!</b></font>";
+			}
+		}
+
+		// vaatame kas vaja poolitada - kui urlis on show_all siis n2itame tervet, muidu n2itame kuni #edasi# linkini
+		if ($GLOBALS["show_all"])
+		{
+			$doc["content"] = str_replace("#edasi#", "",$doc["content"]);
+		}
+		else
+		{
+			if (!(($pp = strpos($doc["content"],"#edasi#")) === false))
+			{
+				$doc["content"] = substr($doc["content"],0,$pp)."<br><B><a href='".$GLOBALS["baseurl"]."/index.aw/section=$docid/show_all=1'>Loe edasi</a></b></font>";
 			}
 		}
 
@@ -1825,8 +1838,15 @@ class document extends aw_template
 
 		$images = $this->get_aliases_for($id,CL_IMAGE,$s_pic_sortby, $s_pic_order,array("images" => "images.id = objects.oid"));
 
-//		$img = new db_images;
-//		$img->list_by_object($id,0,$s_pic_sortby,$s_pic_order);
+		if (count($images) < 1)
+		{
+			$img = new db_images;
+			$img->list_by_object($id,0,$s_pic_sortby,$s_pic_order);
+			while ($row = $img->db_next())
+			{
+				$images[] = $row;
+			}
+		}
 		$imglist = array();
 		$images_count = 0;
 		$return_url = $this->mk_my_orb("change", array("id" => $id));
