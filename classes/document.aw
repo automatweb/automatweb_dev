@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.97 2002/06/17 10:34:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.98 2002/06/18 23:51:30 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 classload("msgboard","aw_style","form_base","file");
@@ -87,14 +87,19 @@ class document extends aw_template
 		);
 
 		// nini. siia paneme nyt kirja v2ljad, mis dokumendi metadata juures kirjas on
-		$this->metafields = array("show_print","show_last_changed");
+		$this->metafields = array("show_print","show_last_changed","referer","refopt");
+
+		// for referer checks
+		$this->refopts = array("Ignoreeri","Näita","Ära näita");
 
 		// siin on kirjas need väljad, mida arhiveeritakse
 		$this->archive_fields = array("title","lead","content");
+
 		lc_site_load("document",$this);
-		if (isset($GLOBALS["lc_doc"]) && is_array($GLOBALS["lc_doc"]))
+
+		if (isset($GLOBALS["lc_document"]) && is_array($GLOBALS["lc_document"]))
 		{
-			$this->vars($GLOBALS["lc_doc"]);
+			$this->vars($GLOBALS["lc_document"]);
 		}
 	}
 
@@ -340,6 +345,32 @@ class document extends aw_template
 		{
 			$meta = $this->get_object_metadata(array("oid" => $doc["brother_of"]));
 		};
+
+		// kas on vaja rakendada refereridel põhinevat kontrolli?
+		if ($meta["refopt"] > 0)
+		{
+			$referer = aw_global_get("referer");
+			$docref = explode(",",$meta["referer"]);
+			$match = in_array($referer,$docref);
+
+			$this->referer = $meta["referer"];
+			$this->refopt = $meta["refopt"];
+
+			// kui referer matchib ja on kästud mitte näidata, siis
+			// dropime välja
+			if ($match && ($meta["refopt"] == 2))
+			{
+				return false;
+			};
+
+			// kui referer ei matchi ja on kästud näidata, siis
+			// dropime ka välja
+			if (not($match) && ($meta["refopt"] == 1))
+			{
+				return false;
+			}
+
+		}
 
 		$si = __get_site_instance();
 		//hook for site specific document parsing
@@ -1029,7 +1060,6 @@ class document extends aw_template
 		{
 			// teeme arhiivi, kui seda pole
 			// kallis vaataja, ma tean, et sulle meeldib jargnev rida kohe sitta moodi
-
 			if (not($arc->exists(array("oid" => $data["id"]))))
 			{
 				$arc->add(array("oid" => $data["id"]));
@@ -1736,6 +1766,8 @@ class document extends aw_template
 											"frontpage_center_bottom_jrk" => $document["frontpage_center_bottom_jrk"],
 											"frontpage_right_jrk" => $document["frontpage_right_jrk"],
 											"no_last" => checked($document["no_last"]),
+											"referer" => $meta["referer"],
+											"refopts" => $this->picker($meta["refopt"],$this->refopts),
 											));
 
 
@@ -1831,12 +1863,15 @@ class document extends aw_template
 		$contents = $arc->get(array("oid" => $args["docid"]));
 		$obj = $this->get_object($args["docid"]);
 		$this->mk_path($obj["parent"],"Arhiiv"); 
-		$meta = $arc->serializer->php_unserialize($obj["meta"]);
+		//$meta = $arc->serializer->php_unserialize($obj["meta"]);
+		$meta = $obj["meta"];
 
 		$current = $this->fetch($args["docid"]);
 
+		$ctitle = strip_tags($current["title"]);
+
 		$t->define_data(array(
-			"name" => sprintf("<a href='%s'><b>%s</b></a>",$this->mk_orb("change",array("id" => $args["docid"])),$current["title"]),
+			"name" => sprintf("<a href='%s'><b>%s</b></a>",$this->mk_orb("change",array("id" => $args["docid"])),$ctitle),
 			"uid" => '<b>' . $current["modifiedby"] . '</b>',
 			"date" => '<b>' . $this->time2date($current["modified"],9) . '</b>',
 			"check" => sprintf("<b><input type='radio' name='default' value='active' checked></b>"),
@@ -1847,6 +1882,7 @@ class document extends aw_template
 			foreach($contents as $key => $val)
 			{
 				$name = ($meta["archive"][$key]["name"]) ? $meta["archive"][$key]["name"] : "(nimetu)";
+				$name = strip_tags($name);
 				$link = sprintf("<a href='%s'>%s</a>",$this->mk_orb("change",array("id" => $args["docid"],"version" => $key)),$name);
 				$t->define_data(array(
 					"name" => $link,

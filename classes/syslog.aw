@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.13 2002/06/10 15:50:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.14 2002/06/18 23:51:30 duke Exp $
 // syslog.aw - syslog management
 // syslogi vaatamine ja analüüs
 class db_syslog extends aw_template
@@ -400,6 +400,19 @@ class syslog extends db_syslog
 		$q = "UPDATE config SET content = '$old_s' WHERE ckey = 'blockedip'";
 		$this->db_query($q);
 		return $this->mk_my_orb("block",array(),"syslog",false,true);
+	}
+
+	function request_startup()
+	{
+		$referer = aw_global_get("HTTP_REFERER");
+		if (preg_match("/^(http:\/\/.+)\//i",$referer,$mt))
+		{
+			if ($mt[1] != aw_ini_get("baseurl"))
+			{
+				$this->_log("referer",$referer);
+				aw_session_set("referer",$mt[1]);
+			};
+		};
 	}
 }
 ?>

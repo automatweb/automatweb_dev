@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.7 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.8 2002/06/18 23:51:30 duke Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
@@ -31,6 +31,10 @@ class cache extends core
 			{
 				$fname.="-".$v;
 			}
+			if (is_array($this->metaref) && (in_array($this->referer,$this->metaref)) )
+			{
+				$fname .= "-" . substr($this->referer,7);
+			}
 			$this->put_file(array("file" => $fname, "content" => $content));
 			if ($clear_flag)
 			{
@@ -47,6 +51,16 @@ class cache extends core
 	// $arr - array objekti kuju identivatest parameetritest (periood ntx), millest moodustatakse cache faili nimi.
 	function get($oid,$arr)
 	{
+		global $DBG;
+		if ($DBG)
+		{
+			print "getting from cache<br>";
+			print "<pre>";
+			print_r($this->metaref);
+			print_r($this->referer);
+			print "</pre>";
+		}
+
 		if (aw_ini_get("cache.use_page_cache") && !aw_global_get("uid"))
 		{
 			$fname = $this->cfg["page_cache"] . "/$oid";
@@ -54,6 +68,17 @@ class cache extends core
 			while (list(,$v) = each($arr))
 			{
 				$fname.="-".$v;
+			}
+
+			if (is_array($this->metaref) && (in_array($this->referer,$this->metaref)) )
+			{
+				$fname .= "-" . substr($this->referer,7);
+			}
+
+			global $DBG;
+			if ($DBG)
+			{
+				var_dump(in_array($this->referer,$this->metaref));
 			}
 
 			if ($this->cache_dirty($oid))

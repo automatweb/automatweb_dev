@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.120 2002/06/13 23:02:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.121 2002/06/18 23:51:30 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -136,6 +136,9 @@ class menuedit extends aw_template
 		// kontrollib sektsiooni ID-d, tagastab oige numbri kui tegemist oli
 		// aliasega, voi lopetab töö, kui miskit oli valesti
 		$section = $this->check_section($params["section"]);
+
+		$obj = $this->get_object($section);
+		$meta = $obj["meta"];
 		$params["section"] = $section;
 
 		global $format;
@@ -186,6 +189,8 @@ class menuedit extends aw_template
 			$use_cache = false;
 		};
 
+		$this->cache->set_opt("metaref",$meta["metaref"]);
+		$this->cache->set_opt("referer",aw_global_get("referer"));
 		if (!($res = $this->cache->get($section,$cp)) || $params["format"] || $not_cached)
 		{
 			// seda objekti pold caches
@@ -645,6 +650,12 @@ class menuedit extends aw_template
 
 		$popups = $this->build_popups();
 
+		$this->set_object_metadata(array(
+			"oid" => $section,
+			"key" => "metaref",
+			"value" => $this->metaref,
+		));
+
 		$retval = $this->parse();
 		return $this->parse() . $popups;
 	}
@@ -820,6 +831,7 @@ class menuedit extends aw_template
 
 		$docid = $obj["last"];
 		$ar = unserialize($docid);
+
 		if (is_array($ar))	// kuna on vaja mitme keele jaox default dokke seivida, siis uues versioonis pannaxe siia array
 												// aga backward compatibility jaox tshekime, et 2kki see on integer ikkagi
 		{
@@ -883,13 +895,6 @@ class menuedit extends aw_template
 				$ordby = "objects.jrk";
 			}
 			$q = "SELECT objects.oid as oid,objects.class_id AS class_id, objects.brother_of AS brother_of, documents.esilehel as esilehel FROM objects LEFT JOIN documents ON documents.docid = objects.brother_of WHERE (($pstr AND status = 2 AND class_id = 7 AND objects.lang_id=".aw_global_get("lang_id").") OR (class_id = ".CL_BROTHER_DOCUMENT." AND status = 2 AND $pstr)) $lsas ORDER BY $ordby $lm";
-			global $DBG;
-			if ($DBG)
-			{
-				print "<pre>";
-				print $q;
-				print "</pre>";
-			};
 			$this->db_query($q);
 			while ($row = $this->db_next())
 			{
@@ -1101,6 +1106,7 @@ class menuedit extends aw_template
 		{
 			if ($this->can("view",$row["oid"]))
 			{
+				$row["name"] = str_replace("\"","&quot;", $row["name"]);
 				$arr[$row["parent"]][] = $row;
 				$mpr[] = $row["parent"];
 			}
@@ -4527,6 +4533,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$this->blocks = array();
 
 		$template = $this->get_long_template($section);
+
+		$metaref = array();
 		
 		if (is_array($docid)) 
 		{
@@ -4550,6 +4558,12 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					"keywords" => 1,
 					"no_strip_lead" => aw_global_get("document.no_strip_lead")
 				));
+
+				if ($d->referer)
+				{
+					$metaref[] = $d->referer;
+				}
+
 				$dk++;
 			} // while
 		} 
@@ -4579,35 +4593,49 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					"keywords" => 1,
 					"boldlead" => aw_ini_get("document.boldlead")
 				));
+
+				if ($d->referer)
+				{
+					$metaref[] = $d->referer;
+				};
+
 				if ($d->no_left_pane)
 				{
 					$this->left_pane = false;
 				}
+
 				if ($d->no_right_pane)
 				{
 					$this->right_pane = false;
 				}
+
 				$this->vars(array(
 					"docid" => $docid,
 					"section" => $section,
 				));
+				
 				$PRINTANDSEND = $this->parse("PRINTANDSEND");
+
 				$this->vars(array(
 					"section" => $section,
 					"docid" => $docid,
 					"PRINTANDSEND" => $PRINTANDSEND
 				));
+
 				$this->active_doc = $docid;
+
 				if ($d->title != "")
 				{
 					$this->site_title = " / ".$d->title;
 				}
+				
 				if (is_array($d->blocks))
 				{
 					$this->blocks = $this->blocks + $d->blocks;
 				};
 			}
 		}
+		$this->metaref = $metaref;
 		return $ct;
 	}
 
@@ -5009,7 +5037,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		if ($this->is_template("SEARCH_SEL"))
 		{
 			global $section;
-			$id = $section;
+			$id = (int)$section;
 			if (!$id)
 			{
 				$id=$this->cfg["frontpage"];
