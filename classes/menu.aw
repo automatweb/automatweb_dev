@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.98 2004/07/08 12:35:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.99 2004/07/09 12:21:16 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -839,6 +839,7 @@ class menu extends class_base
 				$ob->set_meta("sort_fields",$save_fields);
 				$ob->set_meta("sort_order",$save_orders);
 				$ob->set_meta("sort_by",join(",",$str));
+				$ob->set_meta("sort_ord","");
 				break;
 
 			case "pmethod_properties":
