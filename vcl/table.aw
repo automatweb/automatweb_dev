@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.52 2003/03/19 14:11:16 axel Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.53 2003/03/19 14:24:30 axel Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -669,18 +669,13 @@ class aw_table
 					};
 
 					//võeh, ühesõnaga laseme $val läbi functsiooni, mis on defineeritud väljakutsuva klassi sees
-					//sealt peaks ka olema tehtud $t->caller = $this; vmt
 					//ja $t->define_field(array(
 					//	...
-					//	'callback' => 'function_name',
+					//	"callback" => array(&$this, "method")
 					//   ));
-					// võibolla saab seda ka veidi ressursi sõbralikumalt teha
-					if (isset($v1["callback"]) && isset($this->caller))
+					if (isset($v1["callback"]))
 					{
-						if (method_exists($this->caller,$v1["callback"]))
-						{
-							$val = call_user_func (array($this->caller,$v1["callback"]), $val);
-						}
+						$val = call_user_func ($v1["callback"], $val);
 					}
 
 					if (isset($v1["thousands_sep"]))
