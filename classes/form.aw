@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.46 2001/07/28 03:27:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.47 2001/07/28 13:46:44 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -247,6 +247,13 @@ class form extends form_base
 		$style = new style;
 		$stylesel = $style->get_select(0,ST_CELL,true);
 
+		for ($c =0; $c < $this->arr["cols"]; $c++)
+		{
+			$this->vars(array("col1" => $c+1));
+			$hh.=$this->parse("HE");
+		}
+		$this->vars(array("HE" => $hh));
+
 		$this->vars(array("form_id" => $this->id));
 		for ($i=0; $i < $this->arr["rows"]; $i++)
 		{
@@ -280,7 +287,8 @@ class form extends form_base
 					"ELEMENT"				=> $el, 
 					"style_name" => $stylesel[$this->arr["contents"][$arr["r_row"]][$arr["r_col"]]->get_style()],
 					"col"						=> $arr["r_col"], 
-					"row"						=> $arr["r_row"]
+					"row"						=> $arr["r_row"],
+					"row1" => $arr["r_row"]+1
 				));	
 
 				$this->vars(array("SOME_ELEMENTS" => $this->parse("SOME_ELEMENTS")));
