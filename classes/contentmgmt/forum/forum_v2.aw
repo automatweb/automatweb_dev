@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.13 2004/01/09 09:08:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.14 2004/01/13 14:16:12 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -134,7 +134,7 @@ class forum_v2 extends class_base
 
 		};	
 		return $retval;
-	}
+	} 
 
 	function set_property($arr)
 	{
@@ -152,6 +152,10 @@ class forum_v2 extends class_base
 
 			case "topic_selector":
 				$this->update_topic_selector($arr);
+				break;
+
+			case "container":
+				$this->update_container($arr);
 				break;
 		}
 		return $retval;
@@ -757,6 +761,15 @@ class forum_v2 extends class_base
 			"properties" => $all_props,
 			"name_prefix" => "emb",
 		));
+	}
+
+	function update_container($arr)
+	{
+		print "updating container<bR>";
+		print "<pre>";
+		print_R($arr);
+		print "</pre>";
+
 	}
 
 	function create_forum_topic($args)
