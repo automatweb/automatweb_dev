@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.75 2005/03/16 12:10:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.76 2005/03/18 12:01:19 ahti Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -984,7 +984,7 @@ class crm_person extends class_base
 
 			$arr["obj_inst"]->connect(array(
 				"to" => $pc->id(),
-				"reltype"=> RELTYPE_ADDRESS,
+				"reltype"=> "RELTYPE_ADDRESS",
 			));
 
 			$arr["obj_inst"]->set_prop("personal_contact",$pc->id());
@@ -1221,7 +1221,7 @@ class crm_person extends class_base
 		if ($this->template_has_var("imgurl"))
 		{
 			$conns = $to->connections_from(array(
-				"type" => RELTYPE_PICTURE,
+				"type" => "RELTYPE_PICTURE",
 			));
 			$imgurl = "";
 			$img_inst = get_instance(CL_IMAGE);
@@ -1434,7 +1434,7 @@ class crm_person extends class_base
 		{
 			$target_obj->connect(array(
 			  "to" => $conn->prop("from"),
-			  "reltype" => RELTYPE_WORK
+			  "reltype" => "RELTYPE_WORK",
 			));
 		};
 	}
@@ -1627,7 +1627,7 @@ class crm_person extends class_base
 			"field" => "from",
 		));
 		
-		foreach ($arr["obj_inst"]->connections_from(array("type" => RELTYPE_PREVIOUS_JOB)) as $conn)
+		foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PREVIOUS_JOB")) as $conn)
 		{
 			$prevjob = $conn->to();
 			$table->define_data(array(
@@ -1667,7 +1667,7 @@ class crm_person extends class_base
 	{	
 		if(is_array($arr["request"]["speaking"]))
 		{
-			foreach ($arr["obj_inst"]->connections_from(array("type" => RELTYPE_LANGUAGE_SKILL)) as $conn)
+			foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_LANGUAGE_SKILL")) as $conn)
 			{
 				$conn->delete();
 			}
@@ -1693,7 +1693,7 @@ class crm_person extends class_base
 			
 				$arr["obj_inst"]->connect(array(
 					"to" => $obj->id(),
-					"reltype" => RELTYPE_LANGUAGE_SKILL,
+					"reltype" => "RELTYPE_LANGUAGE_SKILL",
 				));	
 			}
 		}
@@ -1808,7 +1808,7 @@ class crm_person extends class_base
 		));
 		
 		
-		foreach ($arr["obj_inst"]->connections_from(array("type" => RELTYPE_BASIC_EDUCATION)) as $b_edu_conn)
+		foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_BASIC_EDUCATION")) as $b_edu_conn)
 		{
 			$b_edu = $b_edu_conn->to();
 
@@ -1829,7 +1829,7 @@ class crm_person extends class_base
 			));
 		}
 		
-		foreach ($arr["obj_inst"]->connections_from(array("type" => RELTYPE_SECONDARY_EDUCATION)) as $s_edu_conn)
+		foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SECONDARY_EDUCATION")) as $s_edu_conn)
 		{
 			$s_edu = $s_edu_conn->to();
 			$table->define_data(array(
@@ -1849,7 +1849,7 @@ class crm_person extends class_base
 			));
 		}
 		
-		foreach ($arr["obj_inst"]->connections_from(array("type" => RELTYPE_HIGHER_EDUCATION)) as $h_edu_conn)
+		foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_HIGHER_EDUCATION")) as $h_edu_conn)
 		{
 			$h_edu = $h_edu_conn->to();
 			$table->define_data(array(
@@ -1870,7 +1870,7 @@ class crm_person extends class_base
 			));
 		}
 		
-		foreach ($arr["obj_inst"]->connections_from(array("type" => RELTYPE_VOCATIONAL_EDUCATION)) as $v_edu_conn)
+		foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_VOCATIONAL_EDUCATION")) as $v_edu_conn)
 		{
 			$v_edu = $v_edu_conn->to();
 			$table->define_data(array(
@@ -1939,7 +1939,7 @@ class crm_person extends class_base
 		));
 
 			
-		foreach ($arr["obj_inst"]->connections_from(array("type" => RELTYPE_LANGUAGE_SKILL)) as $conn)
+		foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_LANGUAGE_SKILL")) as $conn)
 		{
 			$obj = $conn->to();
 			$lang_obj[$obj->prop("language")] = $obj; 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.26 2005/01/28 14:14:13 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.27 2005/03/18 12:01:19 ahti Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -277,7 +277,7 @@ class crm_offer extends class_base
 		{
 			$obj->connect(array(
 				"to" => $pack,
-				"reltype" => $group == "products_show" ? RELTYPE_PRODUCT:RELTYPE_PACKAGE,
+				"reltype" => $group == "products_show" ? "RELTYPE_PRODUCT" : "RELTYPE_PACKAGE",
 			));
 		}
 		
@@ -458,7 +458,7 @@ class crm_offer extends class_base
 				{
 					$arr["obj_inst"]->connect(array(
 						"to" => $data["value"],
-						"reltype" => RELTYPE_SALESMAN,
+						"reltype" => "RELTYPE_SALESMAN",
 					));
 				}
 			break;
@@ -468,7 +468,7 @@ class crm_offer extends class_base
 				{
 					$arr["obj_inst"]->connect(array(
 						"to" => $data["value"],
-						"reltype" => RELTYPE_ORDERER,
+						"reltype" => "RELTYPE_ORDERER",
 					));
 				}
 			break;
@@ -478,7 +478,7 @@ class crm_offer extends class_base
 				{
 					$arr["obj_inst"]->connect(array(
 						"to" => $data["value"],
-						"reltype" => RELTYPE_PREFORMER,
+						"reltype" => "RELTYPE_PREFORMER",
 					));
 				}
 			break;

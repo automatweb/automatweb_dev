@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.20 2005/02/17 12:13:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.21 2005/03/18 12:01:19 ahti Exp $
 // crm_section.aw - Üksus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disconnect_org_from_section)
@@ -166,7 +166,7 @@ class crm_section extends class_base
 	function get_all_org_proffessions($org_id, $recrusive=false)
 	{
 		$obj = &obj($org_id);
-		foreach ($obj->connections_from(array("type" => RELTYPE_PROFESSIONS)) as $prof_conn)
+		foreach ($obj->connections_from(array("type" => "RELTYPE_PROFESSIONS")) as $prof_conn)
 		{
 			$rtrn[$prof_conn->prop('to')] = $prof_conn->prop('to.name');
 		}
@@ -266,9 +266,9 @@ class crm_section extends class_base
 		
 		$section_obj = &obj($unit_id);
 		
-		foreach ($section_obj->connections_from(array("type" => RELTYPE_JOB_OFFER)) as $joboffer)
+		foreach ($section_obj->connections_from(array("type" => "RELTYPE_JOB_OFFER")) as $joboffer)
 		{
-			$jobs_ids[$joboffer->prop("to")] = $section_obj->name();		
+			$jobs_ids[$joboffer->prop("to")] = $section_obj->name();
 		}
 	
 		//If section has any subsections...get jobs from there too
@@ -285,7 +285,7 @@ class crm_section extends class_base
 	function get_section_job_ids($unit_id)
 	{
 		$section_obj = &obj($unit_id);
-		foreach ($section_obj->connections_from(array("type" => RELTYPE_JOB_OFFER)) as $joboffer)
+		foreach ($section_obj->connections_from(array("type" => "RELTYPE_JOB_OFFER")) as $joboffer)
 		{
 			$jobs_ids[] = $joboffer->prop("to");						
 		}
