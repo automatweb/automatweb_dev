@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/folder_list.aw,v 1.3 2004/05/03 12:07:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/folder_list.aw,v 1.4 2004/05/06 11:19:59 kristo Exp $
 // folder_list.aw - Kaustade nimekiri 
 /*
 
@@ -12,10 +12,13 @@
 @caption Juurkataloog
 
 @property template type=select field=meta method=serialize
-@caption Template
+@caption Kujundusmall
 
 @property sort_by type=select field=meta method=serialize
 @caption Mille j&auml;rgi sortida
+
+@property show_comment type=checkbox ch_value=1 field=meta method=serialize
+@caption N&auml;ita kommentaari
 
 @reltype FOLDER clid=CL_MENU value=1
 @caption juurkataloog
@@ -93,7 +96,7 @@ class folder_list extends class_base
 			$sby = $ob->prop("sort_by");
 		}
 
-		$this->read_template($tpl);
+		$this->read_site_template($tpl);
 
 		$ol = new object_list(array(
 			"parent" => $ob->prop("rootmenu"),
@@ -109,9 +112,22 @@ class folder_list extends class_base
 			$this->vars(array(
 				"name" => $o->name(),
 				"link" => $ssh->make_menu_link($o),
-				"selected" => selected($o->id() == aw_global_get("section"))
+				"selected" => selected($o->id() == aw_global_get("section")),
+				"comment" => nl2br($o->comment())
 			));
 
+			if ($ob->prop("show_comment"))
+			{
+				$this->vars(array(
+					"SHOW_COMMENT" => $this->parse("SHOW_COMMENT")
+				));
+			}
+			else
+			{
+				$this->vars(array(
+					"SHOW_COMMENT" => ""
+				));
+			}
 			$fls .= $this->parse("FOLDER");
 		}
 
