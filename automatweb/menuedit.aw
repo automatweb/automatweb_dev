@@ -67,21 +67,6 @@ $m = new menuedit($period,$pdata["description"]);
 
 switch ($type)
 {
-	case "new":
-		switch($class_id)
-		{
-			case CL_PSEUDO:
-				$site_title = $m->gen_header($parent)." - Lisa sektsioon";
-				$content = $m->gen_add_html($parent);
-				break;
-		}
-		break;
-
-	case "add_promo":
-		$content = $m->add_promo($parent);
-		$site_title = $m->gen_header($parent)." / Lisa promo kast";
-		break;
-
 	case "popup":
 		echo $m->gen_folders($period,1);
 if ($acl_server_socket)
@@ -146,27 +131,6 @@ die();
 		header("Location: $PHP_SELF?parent=$parent&menu=menu");
 		break;
 
-	case "add_menu":
-		$site_title = $m->gen_header($parent)." - Lisa sektsioon";
-		$content = $m->gen_add_html($parent);
-		break;
-
-	case "add_menu_l3":
-		$site_title = $m->gen_header($parent)." - Lisa 3nda taseme men&uuml;&uuml;";
-		$content = $m->gen_add_l3_html($parent);
-		break;
-
-	case "add_menu_admin":
-		$site_title = $m->gen_header($parent)." - Lisa men&uuml;&uuml;";
-		$content = $m->gen_add_admin_html($parent);
-		break;
-
-	case "change_menu":
-		// sektsiooni metainfo muutmine
-		$site_title = $m->gen_header($parent)." - Muuda men&uuml;&uuml;d";
-		$content = $m->gen_change_html($id);
-		break;
-
 	case "delete_menu":
 		$m->delete($id);
 		header("Location: $PHP_SELF?parent=1&menu=menu");
@@ -182,14 +146,6 @@ die();
 		$title = "<a href='$PHP_SELF?menu=menu'>Men&uuml;&uuml;editor</a> / Pr&uuml;gikoll";
 		break;
 
-	default:
-		$site_title = $m->gen_header($parent);
-		$m->rootmenu = $rootmenu;
-		if ($menu == "menu") {
-			$content = $m->gen_admin_html($parent);
-		} else {
-			$content = $m->gen_admin_html($parent,"documents.tpl");
-		};
 }
 
 include("admin_footer.$ext");
