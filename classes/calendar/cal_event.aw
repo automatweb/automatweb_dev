@@ -1,6 +1,6 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_event.aw,v 1.9 2004/06/26 09:15:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_event.aw,v 1.10 2004/12/01 11:48:28 kristo Exp $
 
 /*
 	@default table=objects
@@ -38,16 +38,16 @@ class cal_event extends class_base
 	}
 
 	function callback_get_rel_types()
-        {
-                return array("1" => "korduste kontroller");
-        }
+	{
+		return array("1" => t("korduste kontroller"));
+	}
 
 	function get_property($args = array())
 	{
 		$data = &$args["prop"];
 		$request = &$args["request"];
-                $retval = PROP_OK;
-                switch($data["name"])
+		$retval = PROP_OK;
+		switch($data["name"])
 		{
 			case "start":
 				if ($request["date"])
@@ -84,12 +84,12 @@ class cal_event extends class_base
 		$xm = new xmlmenu();
 		$xm->vars($vars);
 		$xm->load_from_files(array(
-					"xml" => $this->cfg["basedir"] . "/xml/planner/event_menu.xml",
-					"tpl" => $this->template_dir . "/menus.tpl",
-				));
+			"xml" => $this->cfg["basedir"] . "/xml/planner/event_menu.xml",
+			"tpl" => $this->template_dir . "/menus.tpl",
+		));
 		return $xm->create(array(
-				"activelist" => $activelist,
-			));
+			"activelist" => $activelist,
+		));
 	}
 
 	////
@@ -115,10 +115,10 @@ class cal_event extends class_base
 		};
 
 		$colors = array(
-			"#000000" => "must",
-			"#990000" => "punane",
-			"#009900" => "roheline",
-			"#000099" => "sinine",
+			"#000000" => t("must"),
+			"#990000" => t("punane"),
+			"#009900" => t("roheline"),
+			"#000099" => t("sinine"),
 		);
 
 		$calendars = array();
@@ -140,7 +140,7 @@ class cal_event extends class_base
 		{
 			$obj = obj($args["oid"]);
 		};
-		$types = array("linki objektile","objekti ennast");
+		$types = array(t("linki objektile"),t("objekti ennast"));
 		$this->vars(array(
 			"start" => $start_ed,
 			"shour" => $this->picker($shour,$h_list),
@@ -163,7 +163,7 @@ class cal_event extends class_base
 	{
 		extract($args);
 		$this->read_template("edit.tpl");
-		$this->mk_path($parent,"Lisa kalendrisündmus");
+		$this->mk_path($parent,t("Lisa kalendrisündmus"));
 		if ($time)
 		{
 			list($hr,$mn) = explode(":",$time);
@@ -308,7 +308,7 @@ class cal_event extends class_base
 		$row["meta"] = $meta;
 		$this->_fill_event_form($row);
 		$cal_link = sprintf("<a href='%s'><img border='0' src='%s'>Kalender</a>",$this->vars["calendar_url"],$this->vars["icon_url"]);
-		$this->mk_path($object->parent(),"$cal_link | Muuda kalendrisündmust");
+		$this->mk_path($object->parent(),sprintf(t("%s | Muuda kalendrisündmust"), $cal_link));
 
 		if ($par_obj->class_id() == CL_CALENDAR)
 		{
@@ -369,7 +369,7 @@ class cal_event extends class_base
 			"vars" => array("id" => $id),
 		));
 
-		$this->mk_path($par_obj->parent(),"Muuda eventit");
+		$this->mk_path($par_obj->parent(),t("Muuda eventit"));
 
 		// what's that?
 		$caldata = $obj_meta["calconfig"];
@@ -1003,8 +1003,8 @@ class cal_event extends class_base
 		};
 		$this->mk_path(0,"<a href='$back_link'>Tagasi</a> | <b>Otsi objekti</b>");
 		$amgr->make_alias_typearr();
-    if ($s_name != "" || $s_comment != "" || $s_type > 0)
-    {
+		if ($s_name != "" || $s_comment != "" || $s_type > 0)
+		{
 			$se = array();
 			if ($s_name != "")
 			{

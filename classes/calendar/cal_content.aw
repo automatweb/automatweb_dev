@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_content.aw,v 1.5 2004/02/17 20:55:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_content.aw,v 1.6 2004/12/01 11:48:28 kristo Exp $
 /*
 
 	@classinfo syslog_type=ST_CAL_CONTENT
@@ -32,9 +32,9 @@ class cal_content extends class_base
 	function get_property($args = array())
 	{
 		$data = &$args["prop"];
-                $retval = PROP_OK;
-                switch($data["name"])
-                {
+		$retval = PROP_OK;
+		switch($data["name"])
+		{
 			case "show_class":
 				$orb = get_instance("orb");
 				$data["options"] = $orb->get_classes_by_interface(array("interface" => "content"));
@@ -42,13 +42,11 @@ class cal_content extends class_base
 
 			case "preview":
 				$data["value"] = html::href(array(
-					"caption" => "Eelvaade",
+					"caption" => t("Eelvaade"),
 					"url" => $this->mk_my_orb("view",array("id" => $args["obj_inst"]->id())),
 					"target" => "_blank",
 				));
 				break;
-
-
 		};
 		return $retval;
 	}
@@ -68,7 +66,7 @@ class cal_content extends class_base
 	function view($args = array())
 	{
 		$obj = new object($args["id"]);
-		$this->mk_path($obj->parent(),"/ Vaata");
+		$this->mk_path($obj->parent(),t("/ Vaata"));
 		$meta = $obj->meta();
 		if (isset($meta["show_class"]))
 		{
@@ -86,7 +84,7 @@ class cal_content extends class_base
 		}
 		else
 		{
-			$retval = "Klass on valimata, midagi pole näidata";
+			$retval = t("Klass on valimata, midagi pole näidata");
 		};
 		return $retval;
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.13 2004/10/28 09:46:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.14 2004/12/01 11:48:28 kristo Exp $
 // Shared functionality for event classes
 class event_property_lib extends aw_template
 {
@@ -206,22 +206,22 @@ class event_property_lib extends aw_template
 		$table = new vcl_table();
 		
 		$table->define_field(array(
-							'name' => 'name',
-							'caption' => 'Nimi',
-							'sortable' => '1',
-							'callback' => array(&$this,'callb_human_name'),
-							'callb_pass_row' => true,
+			'name' => 'name',
+			'caption' => t('Nimi'),
+			'sortable' => '1',
+			'callback' => array(&$this,'callb_human_name'),
+			'callb_pass_row' => true,
 		));
 		$table->define_field(array(
-							'name' => 'phone',
-							'caption' => 'Telefon',
-							'sortable' => '1',
+			'name' => 'phone',
+			'caption' => t('Telefon'),
+			'sortable' => '1',
 		));
 
 		$table->define_field(array(
-							'name' => 'email',
-							'caption' => 'E-post',
-							'sortable' => '1',
+			'name' => 'email',
+			'caption' => t('E-post'),
+			'sortable' => '1',
 		));
 
 		$noshow = array('status', 'phone','firstname','lastname','name','email');
@@ -279,16 +279,16 @@ class event_property_lib extends aw_template
 		}
 
 		$table->define_field(array(
-							'name' => 'rank',
-							'caption' => 'Ametinimetus',
-							'sortable' => '1',
+			'name' => 'rank',
+			'caption' => t('Ametinimetus'),
+			'sortable' => '1',
 		));
 		if ($arr["request"]["get_csv_file"] != 1)
 		{
 			$table->define_chooser(array(
-							'name' => 'check',
-							'field' => 'id',
-							'caption' => 'X',
+				'name' => 'check',
+				'field' => 'id',
+				'caption' => 'X',
 			));
 		}
 

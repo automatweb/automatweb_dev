@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.14 2004/11/26 14:12:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.15 2004/12/01 11:48:28 kristo Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -90,11 +90,11 @@ class calendar_view extends class_base
 		{
 			case "use_template":
 				$data["options"] = array(
-					"intranet1.tpl" => "Kuuvaade & nädala sündmused",
-					"month" => "Kuukalender",
-					"futureevents" => "Algavad sündmused",
-					"weekview" => "Nädala vaade",
-					"last_events" => "Järgmised sündmused",
+					"intranet1.tpl" => t("Kuuvaade & nädala sündmused"),
+					"month" => t("Kuukalender"),
+					"futureevents" => t("Algavad sündmused"),
+					"weekview" => t("Nädala vaade"),
+					"last_events" => t("Järgmised sündmused"),
 				);
 				break;
 
@@ -105,10 +105,10 @@ class calendar_view extends class_base
 			case "default_view":
 				$data["options"] = array(
 					"" => "",
-					"day" => "päev",
-					"week" => "nädal",
-					"month" => "kuu",
-					"last" => "Järgmised",
+					"day" => t("päev"),
+					"week" => t("nädal"),
+					"month" => t("kuu"),
+					"last" => t("Järgmised"),
 				);
 				break;
 
@@ -131,7 +131,7 @@ class calendar_view extends class_base
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
-                {
+		{
 
 		}
 		return $retval;
