@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.3 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.4 2002/06/13 23:06:16 kristo Exp $
 // right now this class manages only the functios related to adding menu aliases
 // to documents and tables. But I think that all functions dealing with a single
 // menu should be moved here.
@@ -98,7 +98,7 @@ class menu extends aw_template
 			return "";
     }
 		$target = $f;
-		return sprintf("<a href='/?section=%d'>%s</a>",$target["oid"],$target["name"]);
+		return sprintf("<a href='".$this->cfg["baseurl"]."/%d'>%s</a>",$target["oid"],$target["name"]);
 	}
 };
 ?>
