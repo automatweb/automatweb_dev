@@ -17,8 +17,8 @@
 </actions>
 
 <data>
-<field name="name" caption="Aeg" align="left" talign="center" sortable="1"/>
-<field name="event" caption="Event" talign="center" align="center" sortable="1"/>
+<field name="time" caption="Aeg" align="left" talign="center" numeric="1" sortable="1" type="time" format="d-M-y / H:i"/>
+<field name="event" caption="Event" talign="center" sortable="1"/>
 </data>
 
 </tabledef>
