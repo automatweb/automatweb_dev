@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.68 2003/06/19 16:42:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.69 2003/06/25 13:50:06 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -976,6 +976,7 @@ class form extends form_base
 		}
 		else
 		{
+			$this->elvalues = array();
 			enter_function("form::load_chain_data");
 			$tb_els = array();
 			if ($load_entry_data)
@@ -995,6 +996,7 @@ class form extends form_base
 				foreach($lf_els as $lf_el)
 				{
 					$elvalues[$lf_el->get_el_name()] = $lf_fm->entry[$lf_el->get_id()];
+					$this->elvalues[$lf_el->get_id()] = $lf_fm->entry[$lf_el->get_id()];
 					if ($lf_el->get_type() == "textbox")
 					{
 						$tb_els[$lf_el->get_el_name()] = true;
@@ -1022,10 +1024,11 @@ class form extends form_base
 					foreach($lf_els as $lf_el)
 					{
 						$elvalues[$lf_el->get_el_name()] = $lf_fm->entry[$lf_el->get_id()];
-					if ($lf_el->get_type() == "textbox")
-					{
-						$tb_els[$lf_el->get_el_name()] = true;
-					}
+						$this->elvalues[$lf_el->get_id()] = $lf_fm->entry[$lf_el->get_id()];
+						if ($lf_el->get_type() == "textbox")
+						{
+							$tb_els[$lf_el->get_el_name()] = true;
+						}
 					}
 					exit_function("form::load_chain_data::iter");
 				}
