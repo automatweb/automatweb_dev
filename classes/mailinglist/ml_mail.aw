@@ -8,7 +8,6 @@ class ml_mail extends aw_template
 		lc_load("definition");
 
 		$this->dbconf=get_instance("config");
-		$this->formid=$this->dbconf->get_simple_config("ml_form");
 		$this->searchformid=$this->dbconf->get_simple_config("ml_search_form");
 		$this->mgr = get_instance("messenger", array("fast"));
 
@@ -48,6 +47,12 @@ class ml_mail extends aw_template
 			mfrom = '$mfrom',
 			mtargets1 = '$mtargets1'	WHERE id = '$id'";
 		$this->db_query($q);
+
+		$this->set_object_metadata(array(
+			"oid" => $id,
+			"key" => "conf",
+			"value" => $conf
+		));
 		$this->_log("mlist","lisas meili $id");
 		return $this->mk_my_orb("change",array("id" => $id));
 	}
@@ -56,22 +61,28 @@ class ml_mail extends aw_template
 	function orb_change($ar)
 	{
 		extract($ar);
-
-		classload("msg_sql");
-		$d=new msg_sql_driver();
-
-		$msg=$d->msg_get(array("id" => $id));
-
 		$this->mk_path($msg["parent"],"Muuda meili");
-
 		$this->read_template("ml_mail_change.tpl");
 
-		$fb=get_instance("formgen/form_base");
-		
-		$els=$fb->get_elements_for_forms(array($this->formid));
-		$elstring=join("&nbsp;",map("#%s#",$els));
+		$d = get_instance("msg_sql");
+		$msg = $d->msg_get(array("id" => $id));
+		$ret = array();
+		$fb = get_instance("formgen/form_base");
+
+		$ufc_inst = get_instance("mailinglist/ml_list_conf");
+		$ar = new aw_array($ufc_inst->get_forms_by_id($msg["meta"]["conf"]));
+		foreach($ar->get() as $fid)
+		{
+			$ml = $fb->get_form_elements(array("id" => $fid, "key" => "id", "all_data" => false));
+			foreach($ml as $k => $v)
+			{
+				$ret[$k] = $v;
+			}
+		}
+		$elstring=join("&nbsp;",map("#%s#",$ret));
 
 		$this->vars(array(
+			"conf" => $this->picker($msg["meta"]["conf"], $this->list_objects(array("class" => CL_ML_LIST_CONF))),
 			"l_saada" => $this->mk_my_orb("send",array("id" => $id)),
 			"l_queue" => $this->mk_my_orb("queue",array("fid" => $id,"show" => "mail","back" => "mail")),
 			"message" => $msg["message"],
@@ -89,28 +100,25 @@ class ml_mail extends aw_template
 	{
 		extract($arr);
 
-		$start_at=mktime($start_at["hour"],$start_at["minute"],0,$start_at["month"],$start_at["day"],$start_at["year"]);
-		$delay=$delay * 60;
+		$ob = $this->get_object($id);
+
+		$start_at = get_ts_from_arr($start_at);
+		$delay = $delay * 60;
+
 		if (is_array($lists))
 		{
+			$list_inst = get_instance("mailinglist/ml_list");
 			foreach($lists as $l)
 			{
 				$l=(int)$l;
-				$count=$this->db_fetch_field("SELECT COUNT(*) AS count FROM ml_list2member,objects WHERE lid = '$l' AND ml_list2member.mid=objects.oid AND objects.status != '0'","count");
+				$count = $list_inst->get_member_count($l);
 
 				$this->db_query("INSERT INTO ml_queue (lid,mid,status,start_at,last_sent,patch_size,delay,position,total)
 					VALUES ('$l','$id','0','$start_at','0','$patch_size','$delay','0','$count')");
-				$lname=$this->db_fetch_field("SELECT name FROM objects WHERE oid = '$l'","name");
-				$this->_log("mlist","saatis meili $id listi $lname");
+				$this->_log("mlist","saatis meili $id listi $ob[name]");
 			};
 
 		};
-
-		if (isset($back))
-		{
-			return $back;
-		};
-
 		return $this->mk_my_orb("send",array("id" => $id));
 	}
 
@@ -130,7 +138,7 @@ class ml_mail extends aw_template
 			"classid" => "small_button",
 		));
 
-		$ob=$this->get_object($id);
+		$ob = $this->get_object($id);
 		$this->mk_path($ob["parent"],"Saada meil");
 
 		$this->read_template("ml_mail_send.tpl");
@@ -143,23 +151,15 @@ class ml_mail extends aw_template
 			$ubar=$this->parse("UBAR");
 		};
 
-		$alllists=array();
-		$this->db_query("SELECT name,oid FROM objects WHERE class_id ='".CL_ML_LIST."' AND status != '0'");
-		while ($r = $this->db_next())
-		{
-			$alllists[$r["oid"]]=$r["name"];
-		};
-
-		
 		$this->vars(array(
-			"listsel" => $this->multiple_option_list(array(),$alllists),
+			"listsel" => $this->multiple_option_list(array(),$this->list_objects(array("class" => CL_ML_LIST))),
 			"date_edit" => $date_edit->gen_edit_form("start_at",time()+2*60),
 			"reforb" => $this->mk_reforb("submit_send",array(
 				"id" => $id,
 				"back" => $back,
-				)),
+			)),
 			"UBAR" => $ubar,
-			));
+		));
 		return $this->parse();
 	}
 
@@ -189,7 +189,7 @@ class ml_mail extends aw_template
 	{
 		extract($arr);
 
-		$this->read_template("queue.tpl");
+//		$this->read_template("queue.tpl");
 		$baseurl = $this->cfg["baseurl"];
 
 		load_vcl("table");
@@ -283,7 +283,7 @@ class ml_mail extends aw_template
 			"QUEUE" => $queue,
 			"MGR" => $manager
 		));
-		return $this->parse();
+		return $queue;
 	}
 
 	// tekitab tabelist sikuse väikse progress bari
@@ -326,7 +326,6 @@ class ml_mail extends aw_template
 				{
 					if (!$awm)
 					{
-						classload("aw_mail");
 						echo("aw mail loaded<br>");//dbg
 						$awm=1;
 					};
@@ -358,8 +357,6 @@ class ml_mail extends aw_template
 			{
 				if (!$awm)
 				{
-					classload("aw_mail");
-					echo("aw mail loaded<br>");//dbg
 					$awm=1;
 				};
 				$this->save_handle();
@@ -386,7 +383,7 @@ class ml_mail extends aw_template
 		$limit=" LIMIT $first,$num";
 		// võta meil
 
-		$d=new msg_sql_driver();
+		$d=get_instance("msg_sql");
 
 		$msg=$d->msg_get(array("id" => $mid));// mid on message id
 
@@ -400,7 +397,7 @@ class ml_mail extends aw_template
 		$vars=unserialize($last["vars"]);
 		
 		//tee awm objekt
-		$awm=new aw_mail();
+		$awm=get_instance("aw_mail");
 		// võta listi liikmed
 		$q="SELECT mid FROM ml_list2member WHERE lid = '$lid' ORDER BY mid $limit";
 		echo("q=$q<br>");//dbg

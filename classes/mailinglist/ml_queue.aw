@@ -384,10 +384,7 @@ class ml_queue extends aw_template
 				{
 					if (!$awm)
 					{
-						classload("aw_mail");
 						decho("aw mail loaded<br>");//dbg
-						classload("msg_sql");
-						classload("users");
 						$awm=1;
 					};
 					decho("saadan  meili<br>");flush();//dbg
@@ -433,10 +430,7 @@ class ml_queue extends aw_template
 				// a siin on juba peaaegu kindel, et läheb saatmisex
 				if (!$awm)
 				{
-					classload("aw_mail");
 					decho("aw mail loaded<br>");//dbg
-					classload("msg_sql");
-					classload("users");
 					$awm=1;
 				};
 				$this->save_handle();
@@ -571,7 +565,7 @@ class ml_queue extends aw_template
 		// võta meil
 		if (!isset($this->d))
 		{
-			$this->d=new msg_sql_driver();
+			$this->d=get_instance("msg_sql");
 		};
 		$msg=$this->d->msg_get(array("id" => $mid));
 
@@ -682,7 +676,7 @@ class ml_queue extends aw_template
 		//tee awm objekt
 		if (!isset($this->awm))
 		{
-			$this->awm=new aw_mail();
+			$this->awm=get_instance("aw_mail");
 		};
 
 		$this->awm->clean();
@@ -729,8 +723,7 @@ class ml_queue extends aw_template
 		// tsekka ruule
 		if (!isset($this->mlrule))
 		{
-			classload("ml_rule");
-			$this->mlrule=new ml_rule();
+			$this->mlrule=get_instance("mailinglist/ml_rule");
 		};
 
 		$this->mlrule->check_mailsent(array("mid" => $mid, "subject" => $subject, "vars" => ",".join(",",$used_vars).","),array($member));

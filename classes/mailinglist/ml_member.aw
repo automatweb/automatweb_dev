@@ -2,34 +2,25 @@
 
 class ml_member extends aw_template
 {
-	////
-	//! 
 	function ml_member()
 	{
-		$this->init("automatweb/mlist");
+		$this->init("mailinglist/ml_member");
 		lc_load("definition");
-
-		$this->dbconf=get_instance("config");
-		$this->formid=$this->dbconf->get_simple_config("ml_form");
 	}
-
 
 	////
 	//! Näitab uue liikme lisamist
 	function orb_new($arr)
 	{
-		is_array($arr)? extract($arr) : $parent=$arr;
-
+		extract($arr);
 		$this->mk_path($parent,"Lisa meililisti liige");
-		$f=get_instance("formgen/form");
-		$fparse=$f->gen_preview(array(
-			"id" => $this->formid,
-			"reforb" => $this->mk_reforb("submit_new",array(
-				"parent" => $parent,
-				"id" => $this->formid))
-			));
+		$this->read_template("add.tpl");
 		
-		return $fparse;
+		$this->vars(array(
+			"conf" => $this->picker(0, $this->list_objects(array("class" => CL_ML_LIST_CONF))),
+			"reforb" => $this->mk_reforb("submit_new", array("parent" => $parent))
+		));
+		return $this->parse();
 	}
 
 	////
@@ -38,16 +29,14 @@ class ml_member extends aw_template
 	{
 		extract($arr);
 
-		$arr["parent"]=$parent;
-		$arr["redirect_after"]="boo";
-		$f=get_instance("formgen/form");
-		$f->process_entry($arr);
-		// siit läheb veidi ümber nurga et saaks obj tüübiks CL_ML_MEMBER
-		$entry_id=$f->entry_id;
-		$this->db_query("UPDATE objects set class_id=".CL_ML_MEMBER." where oid='$entry_id'");
-
-		$this->_log("mlist","lisas liikme $f->entry_name");
-		return $this->mk_my_orb("change",array("id" => $entry_id, "parent" => $parent));
+		$id = $this->new_object(array(
+			"parent" => $parent,
+			"class_id" => CL_ML_MEMBER,
+			"metadata" => array(
+				"conf_obj" => $conf
+			)
+		));
+		return $this->mk_my_orb("change",array("id" => $id));
 	}
 
 	////
@@ -56,15 +45,57 @@ class ml_member extends aw_template
 	{
 		$this->quote(&$arr);
 		extract($arr);
-		$arr["redirect_after"]="boo";
-		$f=get_instance("formgen/form");
-		$f->process_entry($arr);
+	
+		$ob = $this->get_object($id);
 
-		$rule=get_instance("ml_rule");
-		$rule->check_entry(array($entry_id));
+		$f = get_instance("formgen/form");
+		$f->process_entry(array(
+			"id" => $fid,
+			"entry_id" => $ob["meta"]["form_entries"][$fid]
+		));
+		$ob["meta"]["form_entries"][$fid] = $f->entry_id;
 
-		$this->_log("mlist","muutis liiget $f->entry_name");
-		return $this->mk_my_orb("change",array("id" => $entry_id,"parent" => $parent, "lid" => $lid));
+		// now put together the name of the object and update it
+		$mlc_inst = get_instance("mailinglist/ml_list_conf");
+
+		// oh crap. we have to load all the entries here, because the elements may be in any form
+		$finst_ar = array();
+		$ar = new aw_array($mlc_inst->get_forms_by_id($ob["meta"]["conf_obj"]));
+		foreach($ar->get() as $_fid)
+		{
+			$finst_ar[$_fid] = new form;
+			$finst_ar[$_fid]->load($_fid);
+			if ($ob["meta"]["form_entries"][$_fid])
+			{
+				$finst_ar[$_fid]->load_entry($ob["meta"]["form_entries"][$_fid]);
+			}
+		}
+
+		$name = array();
+		foreach($mlc_inst->get_name_els_by_id($ob["meta"]["conf_obj"]) as $elid)
+		{
+			foreach($finst_ar as $_fid => $finst)
+			{
+				if (is_object($el = $finst->get_element_by_id($elid)))
+				{
+					$name[] = $el->get_value();
+					break;
+				}
+			}
+		}
+		$namestr = join(" ", $name);
+
+		$this->upd_object(array(
+			"oid" => $id, 
+			"name" => $namestr, 
+			"metadata" => $ob["meta"]
+		));
+
+		$rule=get_instance("mailinglist/ml_rule");
+		$rule->check_entry(array($ob["meta"]["form_entries"][$fid]));
+
+		$this->_log("mlist","muutis liiget $namestr");
+		return $this->mk_my_orb("change",array("id" => $id,"fid" => $fid));
 	}
 
 	////
@@ -74,7 +105,7 @@ class ml_member extends aw_template
 	{
 		$this->quote(&$arr);
 		extract($arr);
-		$ml=get_instance("ml_list");
+		$ml=get_instance("mailinglist/ml_list");
 		
 		$mname = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $id","name");
 
@@ -126,48 +157,33 @@ class ml_member extends aw_template
 	//! Näitab liikme muutmist
 	function orb_change($ar)
 	{
-		is_array($ar) ? extract($ar) : $id=$ar;
-		
-		// kui tuldi listi juurest siis näita teed listi folderini
+		extract($ar);
 		$o=$this->get_object($id);
-		$ml=get_instance("ml_list");
-		if ($lid)
-		{
-			$this->mk_path($o["parent"],$ml->_get_lf_path($lid)."Muuda meililisti liiget");
-		} 
-		else
-		{
-			$this->mk_path($o["parent"],"Muuda meililisti liiget");				
-		};
+		$this->mk_path($o["parent"],"Muuda meililisti liiget");				
 
-		$f=get_instance("formgen/form");
-		$fparse=$f->gen_preview(array(
-			"id" => $this->formid,
-			"entry_id" => $id,
+		$mlc_inst = get_instance("mailinglist/ml_list_conf");
+		$fl = $mlc_inst->get_forms_by_id($o["meta"]["conf_obj"]);
+
+		// if fid is set, use that, if not, take the forst from the conf
+		if (!$fid)
+		{
+			list($fid, ) = each($fl);
+		}
+		$f = get_instance("formgen/form");
+		$fparse = $f->gen_preview(array(
+			"id" => $fid,
+			"entry_id" => $o["meta"]["form_entries"][$fid],
 			"reforb" => $this->mk_reforb("submit_change",array(
-				"parent" => $parent,
-				"id" => $this->formid,
-				"lid" => $lid))
-			));
+				"id" => $id,
+				"fid" => $fid
+			))
+		));
 
 		$this->read_template("member_change.tpl");
-
-		
-		$sellists=$ml->get_lists_of_member(array("mid" => $id));
-//			echo("<pre>");print_r($sellists);echo("</pre>");//dbg
-
-		$alllists=$ml->get_all_lists();
-
-
-
 		$this->vars(array(
 			"editform" => $fparse,
-			"listsel" => $this->multiple_option_list($sellists,$alllists),
+			"selecter" => $this->make_form_selecter($fl, $id, $fid),
 			"l_sent" => $this->mk_my_orb("sent",array("id" => $id,"lid" => $lid)),
-			"reforb" => $this->mk_reforb("submit_change_lists",array(
-				"parent" => $parent,
-				"id" => $id,
-				"lid" => $lid))
 		));
 
 		return $this->parse();
@@ -179,7 +195,7 @@ class ml_member extends aw_template
 	{
 		extract($arr);
 		$o=$this->get_object($id);
-		$ml=get_instance("ml_list");
+		$ml=get_instance("mailinglist/ml_list");
 		$link="<a href=\"".$this->mk_my_orb("change",array("id" => $id,"lid" => $lid))."\">Muuda meililisti liiget</a> / Saadetud meilid";
 
 		if ($lid)
@@ -256,7 +272,7 @@ class ml_member extends aw_template
 
 		$this->db_query("DELETE FROM form_".$this->formid."_entries where id='$id'");
 		
-		$ml = get_instance("ml_list");
+		$ml = get_instance("mailinglist/ml_list");
 		$ml->remove_member_from_list(array("lid" => $id));
 
 		if (!$ar["_inner_call"])		
@@ -267,6 +283,48 @@ class ml_member extends aw_template
 		};
 	}
 
+	////
+	// !draws the bar where you can select the form to fill
+	// parameters:
+	//    flist - list of form id's to show
+	//		id of the member object
+	//		fid - the selected form
+	function make_form_selecter($flist, $id, $fid)
+	{
+		$str = "";
+		$liststr = join(",", $flist);
+		if ($liststr != "")
+		{
+			$dat = array();
 
+			$this->db_query("SELECT name, oid FROM objects WHERE oid IN ($liststr)");
+			while ($row = $this->db_next())
+			{
+				$dat[$row["oid"]] = $row["name"];
+			}
+
+			foreach($flist as $_fid)
+			{
+				$this->vars(array(
+					"fname" => $dat[$_fid],
+					"fid" => $_fid,
+					"link" => $this->mk_my_orb("change", array("id" => $id, "fid" => $_fid))
+				));
+				if ($fid == $_fid)
+				{
+					$str .= $this->parse("ITEM_SEL");
+				}
+				else
+				{
+					$str .= $this->parse("ITEM");
+				}
+			}
+		}
+		$this->vars(array(
+			"ITEM_SEL" => "",
+			"ITEM" => ""
+		));
+		return $str;
+	}
 };
 ?>

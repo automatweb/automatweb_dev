@@ -8,7 +8,6 @@ class ml_list extends aw_template
 		lc_load("definition");
 
 		$this->dbconf=get_instance("config");
-		$this->formid=$this->dbconf->get_simple_config("ml_form");
 		$this->searchformid=$this->dbconf->get_simple_config("ml_search_form");
 	}
 
@@ -23,12 +22,12 @@ class ml_list extends aw_template
 			"name" => "", 
 			"comment" => "",
 			"vars" => $this->multiple_option_list(array(),$this->get_all_varnames()),
+			"ufc" => $this->picker(0, $this->list_objects(array("class" => CL_ML_LIST_CONF, "addempty" => true))),
 			"reforb" => $this->mk_reforb("submit_omadused",array("parent" => $parent,"id" => 0))
-			));
+		));
 		return $this->parse();
 	}
 
-		
 	////
 	//! Listi omaduste vaatamise submit
 	function orb_submit_omadused($arr)
@@ -36,83 +35,66 @@ class ml_list extends aw_template
 		extract($arr);
 		if ($id)
 		{
-			if (!$subop)
-			{
-				$arr=array(
-					"name" => $name,
-					"comment" => $comment,
-					"oid" => $id
-					);
+			$ob = $this->load_list($id);
 
-				if ($this->can("change_variables",$id))
+			if ($user_form_conf != $ob["meta"]["user_form_conf"])
+			{
+				// if form has changed, delete all pseudo vars
+				$arr = new aw_array($ob["meta"]["vars"]);
+				foreach ($arr->get() as $k => $v)
 				{
-					$ol=$this->get_last($id);
-					if (!is_array($vars))
-					{
-						$vars=array();
-					};
-					$vars=array_flip($vars);
-
-					$ol["vars"]=unserialize($ol["vars"]);
-/*						echo("<pre>olvars=");print_r($ol["vars"]);echo("</pre>");//dbg
-					echo("<pre>vars=");print_r($vars);echo("</pre>");//dbg*/
-					// leia ära võetud muutujad
-					foreach ($ol["vars"] as $k => $v)
-					{
-						if (!isset($vars[$k]))
-						{
-							$this->del_pseudo_var($id,$k);
-						};
-					};
-					// leia lisatud muutujad
-					foreach ($vars as $k => $v)
-					{
-						if (!isset($ol["vars"][$k]))
-						{
-							$this->add_pseudo_var($id,$k);
-						};
-					};
-
-					$ol["vars"]=serialize($vars);
-					$arr["last"]=serialize($ol);;
+					$this->del_pseudo_var($id,$k);
 				};
-				
-				$this->upd_object($arr);
-			} 
-			else
-			if ($subop=="delete")
+			}
+
+			if ($this->can("change_variables",$id))
 			{
-				//if ($this->can("",$id))
-				$this->del_list_group($id,$lgroup);
-			} 
-			else
-			if ($subop=="rename")
-			{
-				//if ($this->can("",$id))
-				$this->ren_list_group($id,$lgroup,$gname);
-			} 
-			else 
-			if ($subop=="new")
-			{
-				$this->add_list_group($id,$gname);
+				$vars = $this->make_keys($vars);
+				// leia ära võetud muutujad
+				$arr = new aw_array($ob["meta"]["vars"]);
+				foreach ($arr->get() as $k => $v)
+				{
+					if (!isset($vars[$k]))
+					{
+						$this->del_pseudo_var($id,$k);
+					};
+				};
+				// leia lisatud muutujad
+				foreach ($vars as $k => $v)
+				{
+					if (!isset($ob["meta"]["vars"][$k]))
+					{
+						$this->add_pseudo_var($id,$k);
+					};
+				};
 			};
+				
+			$this->upd_object(array(
+				"name" => $name,
+				"comment" => $comment,
+				"oid" => $id,
+				"metadata" => array(
+					"vars" => $vars,
+					"user_form_conf" => $user_form_conf,
+					"user_folders" => $this->make_keys($user_folders)
+				)
+			));
 			$this->_log("mlist","muutis meililisti $name");
 		}
 		else
 		{
-			$id = $this->new_object(
-				array(
-					"class_id" => CL_ML_LIST,
-					"name" => $name,
-					"comment" => $comment,
-					"parent" => $parent,
-					"last" => serialize(array("vars"=>serialize(array_flip(is_array($vars) ? $vars : array() ))
-					))
-				));
-		
+			$id = $this->new_object(array(
+				"class_id" => CL_ML_LIST,
+				"name" => $name,
+				"comment" => $comment,
+				"parent" => $parent,
+				"metadata" => array(
+					"user_form_conf" => $user_form_conf
+				)
+			));
 			$this->_log("mlist","lisas meililisti $name");
 		}
-		return $this->mk_my_orb("omadused",array("id"=>$id));
+		return $this->mk_my_orb("omadused",array("id" => $id));
 	}
 
 	////
@@ -123,60 +105,38 @@ class ml_list extends aw_template
 		{
 			$name="Meililist";
 		};
-		return "<a href=\"".$this->mk_orb("change",array("id"=>$id))."\">$name</a>&nbsp;/&nbsp;";
+		return "<a href=\"".$this->mk_my_orb("change",array("id"=>$id))."\">$name</a>&nbsp;/&nbsp;";
 	}
 
 	////
 	//! Listi omaduste vaatamine
 	function orb_omadused($ar)
 	{
-		$ext = $this->cfg["ext"];
-		is_array($ar) ? extract($ar) : $id=$ar;
-
+		extract($ar);
 		$this->read_template("list_omadused.tpl");
+		$row = $this->load_list($id);
+		$this->mk_path($row["parent"],"Muuda");
 
-		$row = $this->get_object($id);
-
-		$this->mk_path($row["parent"],$this->_get_lf_path($id,$row["name"])."Omadused");
-
-		$last=unserialize($row["last"]);
-		$vars=unserialize($last["vars"]);
-
-		$back = aw_global_get("back"); // from session
-		$back=$this->mk_my_orb("omadused",array("id" => $id));
-		aw_session_set("back", $back);
-
-		$varacl=$this->can("change_variable_acl",$id);
 		$allvars=$this->get_all_varnames();
 		foreach ($allvars as $k => $name)
 		{
 			$this->vars(array(
 				"name" => $name,
-				"checked" => isset($vars[$k]) ? "checked" : "",
-				"acl" => (isset($vars[$k]) && $varacl )? "ACL" : "",
+				"checked" => checked($row["meta"]["vars"][$k]),
+				"acl" => (isset($row["meta"]["vars"][$k]))? "ACL" : "",
 				"vid" => $k,
-				"l_acl" => (isset($vars[$k]) && $varacl ) ? ("editacl.$ext?oid=".$this->get_pseudo_var($id,$k)."&file=ml_var.xml") : "",
+				"l_acl" => (isset($row["meta"]["vars"][$k])) ? ("editacl.".$this->cfg["ext"]."?oid=".$this->get_pseudo_var($id,$k)."&file=ml_var.xml") : "",
 			));
 			$varparse.=$this->parse("variable");
-		};
-		$groups=$this->get_list_groups($id);
-		unset($groups[0]);
-		foreach($groups as $k => $v)
-		{
-			$this->vars(array(
-				"name" => $v,
-				"lgroup" => $k,
-				));
-			$g.=$this->parse("group");
 		};
 
 		$this->vars(array(
 			"name" => $row["name"],
-			"id" => $id,
 			"comment" => $row["comment"],
-			"group" => $g,
 			"variable" => $varparse,
-			"reforb" => $this->mk_reforb("submit_omadused",array("id" => $id ,"subop"=> "0","lgroup"=>"0"))
+			"ufc" => $this->picker($row["meta"]["user_form_conf"], $this->list_objects(array("class" => CL_ML_LIST_CONF, "addempty" => true))),
+			"user_folders" => $this->mpicker($row["meta"]["user_folders"], $this->get_all_user_folders()),
+			"reforb" => $this->mk_reforb("submit_omadused",array("id" => $id)),
 		));
 
 		return $this->parse();
@@ -207,7 +167,9 @@ class ml_list extends aw_template
 		$ext = $this->cfg["ext"]; 
 		$this->read_template("lf_folder.tpl");
 		$id=(int)$id;
-		$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = '$id'","name");
+		$ob = $this->get_object($id);
+		$name = $ob["name"];
+		$this->mk_path($ob["parent"], "Muuda listi");
 
 		load_vcl("table");
 		$t = new aw_table(array(
@@ -666,8 +628,7 @@ class ml_list extends aw_template
 		{
 			if (!isset($this->mlrule))
 			{
-				classload("ml_rule");
-				$this->mlrule=new ml_rule();
+				$this->mlrule=get_instance("mailinglist/ml_rule");
 			};
 			$this->mlrule->check_inlist("$lid:".(int)$grp,array($mid));
 		};
@@ -882,9 +843,18 @@ class ml_list extends aw_template
 	//! Tagastab kõik formi elemendid id => name 
 	function get_all_varnames()
 	{
-		$fb=get_instance("formgen/form_base");
-		
-		return $fb->get_elements_for_forms(array($this->formid));
+		$ret = array();
+		$fb = get_instance("formgen/form_base");
+		$ar = new aw_array($this->formid);
+		foreach($ar->get() as $fid)
+		{
+			$ml = $fb->get_form_elements(array("id" => $fid, "key" => "id", "all_data" => false));
+			foreach($ml as $k => $v)
+			{
+				$ret[$k] = $v;
+			}
+		}
+		return $ret;
 	}
 
 	// --------------------------------------------------------------------
@@ -1083,6 +1053,42 @@ class ml_list extends aw_template
 		$this->db_query("UPDATE ml_avoidmids SET usagec='$total' WHERE aid='$aid'");
 
 		return aw_global_get("route_back");
+	}
+
+	function load_list($id)
+	{
+		$this->list_ob = $this->get_object($id);
+		$ufc_inst = get_instance("mailinglist/ml_list_conf");
+		$this->formid = $ufc_inst->get_forms_by_id($this->list_ob["meta"]["user_form_conf"]);
+		return $this->list_ob;
+	}
+
+	function get_all_user_folders()
+	{
+		$ufc_inst = get_instance("mailinglist/ml_list_conf");
+		return $ufc_inst->get_folders_by_id($this->list_ob["meta"]["user_form_conf"]);
+	}
+
+	function get_members($id)
+	{
+		$ret = array();
+
+		$ob = $this->load_list($id);
+		$ar = new aw_array($this->list_ob["meta"]["user_folders"]);
+		foreach($ar as $prnt)
+		{
+			$ret+=$this->get_objects_below(array(
+				"parent" => $prnt,
+				"class" => CL_ML_MEMBER,
+				"full" => true
+			));
+		}
+		return $ret;
+	}	
+
+	function get_member_count($id)
+	{
+		return count($this->get_members($id));
 	}
 };
 ?>
