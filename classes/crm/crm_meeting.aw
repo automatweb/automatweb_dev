@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.5 2004/01/13 15:34:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.6 2004/02/06 14:11:13 duke Exp $
 // kohtumine.aw - Kohtumine 
 /*
 
@@ -7,6 +7,9 @@
 
 @default table=objects
 @default group=general
+
+@property is_done type=checkbox table=objects field=flags method=bitmask ch_value=8 // OBJ_IS_DONE
+@caption Tehtud
 
 @property start1 type=datetime_select field=start table=planner 
 @caption Algab 
