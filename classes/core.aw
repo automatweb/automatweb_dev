@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.92 2002/06/25 15:30:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.93 2002/06/28 19:11:35 duke Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -528,9 +528,10 @@ class core extends db_connector
 	// !Margib koik saidi objektid dirtyks
 	function flush_cache()
 	{
-		$q = "UPDATE objects SET cachedirty = 1 WHERE objects.site_id = ".aw_ini_get("site_id")." or objects.site_id IS NULL";
+		$q = "UPDATE objects SET cachedirty = 1";
 		$this->db_query($q);
-		aw_cache_flush("cahe_dirty_cache");
+		$q = "UPDATE objects SET cachedata = ''";
+		$this->db_query($q);
 	}
 		
 	////
@@ -616,29 +617,37 @@ class core extends db_connector
 
 	////
 	// !returns true if object $oid 's cahe dirty flag is set
-	function cache_dirty($oid)
+	function cache_dirty($oid, $fname = "")
 	{
-		if (aw_cache_get("cahe_dirty_cache",$oid))
+		$q = "SELECT cachedirty,cachedata FROM objects WHERE oid = '$oid'";
+		$this->db_query($q);
+		$row = $this->db_next();
+
+		if ($fname == "")
 		{
-			return aw_cache_get("cahe_dirty_cache",$oid);
+			return ($row["cachedirty"] == 1) ? true : false;
 		}
 		else
 		{
-			$q = "SELECT cachedirty FROM objects WHERE oid = '$oid'";
-			$this->db_query($q);
-			$row = $this->db_next();
-			aw_cache_set("cahe_dirty_cache",$oid,$row["cachedirty"]);
-			return ($row["cachedirty"] == 1) ? true : false;
+			$dat = aw_unserialize($row["cachedata"]);
+			return !$dat[$fname];
 		}
 	}
 
 	////
 	// !sets objects $oid's cache dirty flag to false
-	function clear_cache($oid)
+	function clear_cache($oid, $fname = "")
 	{
-		$q = "UPDATE objects SET cachedirty = 0 WHERE oid = '$oid'";
+		$ob = $this->get_object($oid);
+		$dat = aw_unserialize($ob["cachedata"]);
+		if ($fname != "")
+		{
+			$dat[$fname] = 1;
+		}
+		$ds = aw_serialize($dat);
+		$this->quote($ds);
+		$q = "UPDATE objects SET cachedirty = 0 , cachedata = '$ds' WHERE oid = '$oid'";
 		$this->db_query($q);
-		aw_cache_set("cahe_dirty_cache",$oid,0);
 	}
 
 	////
@@ -729,7 +738,7 @@ class core extends db_connector
 		$ss = "";
 		if ($type != -1)
 		{
-			$ss = " AND aliases.type = $type ";
+			$ss = " AND aliases.type = '$type' ";
 		}
 		if ($sortby == "")
 		{
@@ -1787,12 +1796,12 @@ class core extends db_connector
 			$cl_name = get_class($this);
 		}
 
-		$urs = join("\n",$this->map2("<input type='hidden' name='%s' value='%s'>\n",$arr));
+		$urs = join("\n",$this->map2("<input type='hidden' name='%s' value='%s' />\n",$arr));
 		if (!isset($arr["no_reforb"]) || $arr["no_reforb"] != true)
 		{
-			$url = "\n<input type='hidden' name='reforb' value='1'>\n";
+			$url = "\n<input type='hidden' name='reforb' value='1' />\n";
 		}
-		$url .= "<input type='hidden' name='class' value='$cl_name'>\n<input type='hidden' name='action' value='$fun'>".$urs;
+		$url .= "<input type='hidden' name='class' value='$cl_name' />\n<input type='hidden' name='action' value='$fun' />\n".$urs;
 		return $url;
 	}
 
