@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.110 2004/10/29 21:11:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.111 2004/11/03 12:14:13 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -1966,7 +1966,7 @@ class form extends form_base
 				aw_session_set("form_".$this->id."_entry_".$entry_id."_data", $this->entry);
 				aw_session_set("form_".$this->id."_entry_".$entry_id."_errors", $this->controller_errors);
 				aw_session_set("form_".$this->id."_entry_".$entry_id."_is_error", true);
-				aw_session_set("form_redir_after_submit_".$this->id,NULL);
+				aw_session_del("form_redir_after_submit_".$this->id);
 
 				// also, we need to invalidate the cache for the section if no user is logged in.
 				// why? well, because oterwise it would be cached and the user would not see the error message
@@ -2117,6 +2117,7 @@ class form extends form_base
 
 		if (!empty($this->go_to_after_submit))
 		{
+			aw_session_del("form_redir_after_submit_".$this->id);
 			return $this->go_to_after_submit;
 		}
 
