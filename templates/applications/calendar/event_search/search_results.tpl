@@ -19,14 +19,20 @@
   </td>
 </table>
 
-<table border="0" cellpadding="4" width="100%">
+<table border="0" cellpadding="4" width="100%" cellspacing="0">
 <tbody>
 <!-- SUB: COLHEADER -->
 <th class="cal_tulp">
 	{VAR:colcaption}
 </th>
 <!-- END SUB: COLHEADER -->
+	<!-- SUB: BLOCK -->
+	<tr>
+	<td class="cal_tulp" colspan="{VAR:col_count}" style="background-color:#0366a1;font-size:14px;color:#ffffff">
+	{VAR:block_caption}
+	</td>
 	</tr>
+	<!-- END SUB: BLOCK -->
 	<!-- SUB: EVENT -->
 	<tr class="cal_rida{VAR:num}">
 	<!-- SUB: CELL -->
@@ -35,7 +41,7 @@
 	</tr>
 	<!-- SUB: FULLTEXT -->
 	<tr><td colspan="{VAR:col_count}" class="cal_rida{VAR:num}">
-		{VAR:fulltext_name}: {VAR:fulltext}
+		<!-- {AR:fulltext_name}: -->{VAR:fulltext}
 	</td></tr>
 	<!-- END SUB: FULLTEXT -->
 <!-- END SUB: EVENT -->

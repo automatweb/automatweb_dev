@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.52 2005/04/04 12:13:11 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.53 2005/04/04 13:53:01 ahti Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -76,11 +76,6 @@
 @caption Stiil
 
 */
-
-// seostatakse seadete vorm
-// seostatakse projektid kust alt otsida
-// lastakse vormi sisu natuke konffida - see siis ilmelt toimub tabelis .. vms ..
-// hoooly fuck
 
 class event_search extends class_base
 {
@@ -350,16 +345,8 @@ class event_search extends class_base
 				break;
 		}
 		return $retval;
-	}	
+	}
 
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	////
-	// !this will be called if the object is put in a document by an alias and the document is being shown
-	// parameters
-	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
 	function parse_alias($arr)
 	{
 		$args = $_GET;
@@ -517,7 +504,6 @@ class event_search extends class_base
 					"cols" => 15,
 				));
 			}
-			//arr($oldvals[$sname]["fields"]);
 			$nums = count($oldvals[$sname]["fields"]);
 			foreach(safe_array($oldvals[$sname]["fields"]) as $k => $v)
 			{
@@ -539,74 +525,12 @@ class event_search extends class_base
 		$t->set_sortable(false);
 	}
 	
-	/*
-	function get_search_results($arr)
-	{
-		// 1. pane kokku object list
-		$ob = new object($arr["id"]);
-		$formconfig = $ob->meta("formconfig");
-		$ft_fields = $ob->prop("ftsearch_fields");
-		$all_projects1 = new object_list(array(
-			"parent" => array($formconfig["project1"]["rootnode"]),
-			"class_id" => array(CL_PROJECT, CL_PLANNER),
-		));
-		$all_projects2 = new object_list(array(
-			"parent" => array($formconfig["project2"]["rootnode"]),
-			"class_id" => array(CL_PROJECT, CL_PLANNER),
-		));
-		$par1 = $all_projects1->ids();
-		$par2 = $all_projects2->ids();
-
-		$search = array();
-		$search["parent"] = array_merge($par1,$par2);
-			
-	       $ft_fields = $ob->meta("ftsearch_fields");
-	       $or_parts = array("name" => "%" . $arr["str"] . "%");
-	       foreach($ft_fields as $ft_field)
-	       {
-		       $or_parts[$ft_field] = "%" . $arr["str"] . "%";
-
-	       };
-	       $search[] = new object_list_filter(array(
-		       "logic" => "OR",
-		       "conditions" => $or_parts,
-	       ));
-		$search["sort_by"] = "planner.start";
-		$search["class_id"] = array(CL_CRM_MEETING, CL_CALENDAR_EVENT);
-		$start_tm = strtotime("today 0:00");
-		$end_tm = strtotime("+30 days", $start_tm);
-		$search["CL_CALENDAR_EVENT.start1"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $start_tm, $end_tm);
-		$ol = new object_list($search);
-		$ret = array();
-		$baseurl = aw_ini_get("baseurl");
-		foreach($ol->arr() as $o)
-		{
-			$orig = $o->get_original();
-			$oid = $orig->id();
-			$ret[$oid] = array(
-				"url" => $baseurl . "/" . $oid,
-				"title" => $orig->name(),
-				"modified" => $orig->prop("start1"),
-			);
-		};
-
-		return $ret;
-
-
-		// 2. tagasta tulemused
-
-	}
-	*/
-
-	////
-	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
 	/**
 		@attrib name=search nologin="1" all_args="1"
 	**/
 	function show($arr)
 	{
-		// vormigenekas
-		// projektivalikute asemel kuvatakse 
+		enter_function("event_search::show");
 		$ob = new object($arr["id"]);
 		$htmlc = get_instance("cfg/htmlclient", array("template" => "webform.tpl"));
 		$htmlc->start_output();
@@ -993,10 +917,6 @@ class event_search extends class_base
 			$edata = array();
 			$ecount = array();
 			
-			
-			// it would be a nice habbit to always commment my own code,
-			// but then again, these magical bugs have miraculous ability to come into
-			// makes tasklist, so why bother :) ok ok, i really should...
 			if (sizeof($search["parent"]) != 0 || $search["oid"])
 			{
 				if($search["oid"])
@@ -1025,37 +945,7 @@ class event_search extends class_base
 							"oid" => $ids,
 							"class_id" => array(CL_CRM_MEETING, CL_CALENDAR_EVENT),
 							"CL_CRM_MEETING.start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, ($end_tm + 3600*24)),
-							//"CL_CRM_MEETING.end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm),
 							"CL_CALENDAR_EVENT.start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, ($end_tm + 3600*24)),
-							//"CL_CALENDAR_EVENT.end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm),
-							/*
-							"CL_CRM_MEETING.end" => new object_list_filter(array(
-								"logic" => "OR",
-								"conditions" => array(
-									new object_list_filter(array(
-										"logic" => "AND",
-										"conditions" => array("CL_CRM_MEETING.end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm)),
-									)),
-									new object_list_filter(array(
-										"logic" => "AND",
-										"conditions" => array("CL_CRM_MEETING.end" => -1),
-									)),
-								),
-							)),
-							"CL_CALENDAR_EVENT.end" => new object_list_filter(array(
-								"logic" => "OR",
-								"conditions" => array(
-									new object_list_filter(array(
-										"logic" => "AND",
-										"conditions" => array("CL_CALENDAR_EVENT.end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm)),
-									)),
-									new object_list_filter(array(
-										"logic" => "AND",
-										"conditions" => array("CL_CALENDAR_EVENT.end" => -1),
-									)),
-								),
-							)),
-							*/
 							"sort_by" => "planner.start",
 							"lang_id" => array(),
 							"site_id" => array(),
@@ -1071,35 +961,9 @@ class event_search extends class_base
 				{
 					$orig_id = $res->id();
 					$origs[] = $orig_id;
-					/*
-					$pr = new object($res->parent());
-					$mo = new object($pr->parent());
-					$parent1 = $parent2 = "";
-					if (in_array($pr->id(), $par1))
-					{
-						$parent1 = $pr->name();
-						if ($edata[$orig_id])
-						{
-							$edata[$orig_id]["parent1"] = $parent1;
-						};
-					}
-					if (in_array($pr->id(), $par2))
-					{
-						$parent2 = $pr->name();
-						if ($edata[$orig_id])
-						{
-							$edata[$orig_id]["parent2"] = $parent2;
-						};
-					};
-					*/
-						
 					$edata[$orig_id] = array(
 						"event_id" => $res->id(),
 						"event" => $res->name(),
-						//"parent1" => $parent1,
-						//"parent2" => $parent2,
-						//"place" => $pr->name(),
-						//"parent" => $mo->name(),
 						"project_selector" => "n/a",
 						"date" => date("d-m-Y", $res->prop("start1")),
 					);
@@ -1152,203 +1016,237 @@ class event_search extends class_base
 			$dats = array();
 			foreach($blist as $b_o)
 			{
-				if (!is_oid($b_o->parent()) || !$this->can("view", $b_o->parent()))
+				$par = $b_o->parent();
+				if (!is_oid($par) || !$this->can("view", $par))
 				{
 					continue;
 				}
 				$orig = $b_o->brother_of();
 				if ($edata[$orig])
 				{
-					if(!in_array($b_o->parent(), $par2) && !in_array($b_o->parent(), $par1))
+					if(!in_array($par, $par2) && !in_array($par, $par1))
 					{
 						continue;
 					}
-					$p2 = new object($b_o->parent());
+					$p2 = new object($par);
 					$nm = $p2->name();
 					if ($p2->class_id() == CL_MENU)
 					{
 						continue;
-						/*
-						if(!$cal = reset($p2->connections_to(array(
-							"from.class_id" => CL_PLANNER,
-							"type" => 6, //EVENT_FOLDER
-						))))
-						{
-							
-						}
-						$nm = $cal->prop("from.name");
-						*/
 					}
-					$dats[$orig][] = $nm;
+					$dats[$orig][$par] = $nm;
 				}
 			}
 			foreach($dats as $key => $val)
 			{
 				$val = safe_array($val);
-				sort($val);
-				$edata[$key]["project_selector"] = implode(", ", $val);
+				$valz = $val;
+				sort($valz);
+				$edata[$key]["projs"] = array_keys($val);
+				$edata[$key]["project_selector"] = implode(", ", $valz);
+			}
+			if(count($prj_ch1) > 1)
+			{
+				$groups = array();
+				$grps = array();
+				foreach($prj_ch1 as $gid => $parr)
+				{
+					$obj = obj(key($parr));
+					$parq = obj($obj->parent());
+					$grps[$gid] = $parq->name();
+					$groups[$gid] = array();
+				}
+				foreach($edata as $ekey => $eval)
+				{
+					foreach($prj_ch1 as $ckey => $cval)
+					{
+						$xval = array_keys($cval);
+						foreach($eval["projs"] as $dkey)
+						{
+							foreach($xval as $xv)
+							{
+								if($dkey == $xv)
+								{
+									$groups[$ckey][$ekey] = $eval + array("ord" => $xv);
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+			else
+			{
+				$groups = array($edata);
 			}
 			exit_function("event_search::search_speed");
 			$res = "";
 			$aliasmrg = get_instance("aliasmgr");
-			foreach($edata as $ekey => $eval)
+			foreach($groups as $gkey => $edata)
 			{
-				$id = $eval["event_id"];
-				$obj = obj($id);
-				$cdat = "";
-				foreach($tabledef as $sname => $propdef)
+				if(count($groups) > 1)
 				{
-					if($sname == "content")
+					$this->vars(array(
+						"block_caption" => $grps[$gkey],
+					));
+					$res .= $this->parse("BLOCK");
+					if(aw_global_get("uid") == "struktuur")
 					{
-						continue;
+						uasort($edata, array($this, "__sort_props_by_proj"));
 					}
-					if($search["oid"] && !$propdef["fullview"])
+				}
+				foreach($edata as $ekey => $eval)
+				{
+					$id = $eval["event_id"];
+					$obj = obj($id);
+					$cdat = "";
+					foreach($tabledef as $sname => $propdef)
 					{
-						continue;
-					}
-					if($search["oid"] && (empty($eval[$sname]) || $eval[$sname] == -1))
-					{
-						continue;
-					}
-					elseif(!$propdef["active"] && !$search["oid"])
-					{
-						continue;
-					}
-					$names = array_merge($sname, safe_array($tabledef[$sname]["fields"]));
-					$names = $this->make_keys($names);
-					$val = array();
-					$skip = false;
-					foreach($names as $nms)
-					{
-						if(empty($nms))
+						if($sname == "content")
 						{
 							continue;
 						}
-						$v = create_links($eval[$nms]);
-						if ($nms == "start1" || $nms == "end")
+						if($search["oid"] && !$propdef["fullview"])
 						{
-							if($skip)
+							continue;
+						}
+						if($search["oid"] && (empty($eval[$sname]) || $eval[$sname] == -1))
+						{
+							continue;
+						}
+						elseif(!$propdef["active"] && !$search["oid"])
+						{
+							continue;
+						}
+						$names = array_merge($sname, safe_array($tabledef[$sname]["fields"]));
+						$names = $this->make_keys($names);
+						$val = array();
+						$skip = false;
+						foreach($names as $nms)
+						{
+							if(empty($nms))
 							{
 								continue;
 							}
-							$value = $tabledef[$nms]["props"];
-							if(!empty($value))
+							$v = create_links($eval[$nms]);
+							if ($nms == "start1" || $nms == "end")
 							{
-								/*
-								preg_replace("/#(.*)#/imsUe", $a, $mt);
-								foreach($mt[0] as $m)
+								if($skip)
 								{
+									continue;
 								}
-								*/
-								//preg_match_all("/<(.*)>/", $a, $mt);
-								//arr($mt);
-								//while(strpos("<", 
-								//$a = eregi_replace("#<*>#i", '#\1#', );
-								//$a = str_replace("<br />", "##", $tabledef[$nms]["props"]);
-								//$a = str_replace("<br>", "##", $a);
-								//$v= str_replace("##", "<br />", $v);
-								if(strpos($value, "#php#") !== false)
+								$value = $tabledef[$nms]["props"];
+								if(!empty($value))
 								{
-									$value = str_replace("#php#", "", $value);
-									$value = str_replace("#/php#", "", $value);
-									// eval is evil and inherited from the satan himself,
-									// so i decided to use it here -- ahz
-									eval($value);
+									if(strpos($value, "#php#") !== false)
+									{
+										$value = str_replace("#php#", "", $value);
+										$value = str_replace("#/php#", "", $value);
+										// eval is evil and inherited from the satan himself,
+										// so i decided to use it here -- ahz
+										eval($value);
+									}
+									else
+									{
+										$v = date($value, $v);
+									}
 								}
 								else
 								{
-									$v = date($value, $v);
+									$v = date("d-m-Y", $v);
 								}
 							}
-							else
+							if($nms == "name")
 							{
-								$v = date("d-m-Y", $v);
+								if($obj->prop("udeftb1") != "")
+								{
+									$v = html::popup(array(
+										"url" => $obj->prop("udeftb1"),
+										"caption" => $v,
+										"target" => "_blank",
+										"toolbar" => 1,
+										"directories" => 1,
+										"status" => 1,
+										"location" => 1,
+										"resizable" => 1,
+										"scrollbars" => 1,
+										"menubar" => 1,
+									));
+								}
 							}
-						}
-						if($nms == "name")
-						{
-							if($obj->prop("udeftb1") != "")
+							if($tabledef[$nms]["clickable"] == 1 && !$search["oid"])
 							{
-								 $v = html::popup(array(
-									"url" => $obj->prop("udeftb1"),
+								$v = html::href(array(
+									"url" => aw_ini_get("baseurl").aw_url_change_var(array("evt_id" => $id)),
 									"caption" => $v,
-									"target" => "_blank",
-									"toolbar" => 1,
-									"directories" => 1,
-									"status" => 1,
-									"location" => 1,
-									"resizable" => 1,
-									"scrollbars" => 1,
-									"menubar" => 1,
 								));
 							}
+							if($tabledef[$nms]["brs"] == 1)
+							{
+								$v = nl2br($v);
+							}
+							if(strpos($v, "#") !== false)
+							{
+								$aliasmrg->parse_oo_aliases($ekey, $v);
+							}
+							$val[] = $tabledef[$sname]["sepb"].$v.$tabledef[$sname]["sepa"];
 						}
-						if($tabledef[$nms]["clickable"] == 1 && !$search["oid"])
-						{
-							$v = html::href(array(
-								"url" => aw_ini_get("baseurl").aw_url_change_var(array("evt_id" => $id)),
-								"caption" => $v,
-							));
-						}
-						if($tabledef[$nms]["brs"] == 1)
-						{
-							$v = nl2br($v);
-						}
-						$aliasmrg->parse_oo_aliases($ekey, $v);
-						$val[] = $tabledef[$sname]["sepb"].$v.$tabledef[$sname]["sepa"];
+						$val = implode(" ".$tabledef[$sname]["sep"]." ", $val);
+						$this->vars(array(
+							"cell" => $val,
+							"colcaption" => $propdef["caption"],
+						));
+						$cdat .= $this->parse("CELL");
+						$this->vars(array("CELL" => $cdat));
 					}
-					$val = implode(" ".$tabledef[$sname]["sep"]." ", $val);
-					$this->vars(array(
-						"cell" => $val,
-						"colcaption" => $propdef["caption"],
-					));
-					$cdat .= $this->parse("CELL");
-					$this->vars(array("CELL" => $cdat));
-				}
-				$nmx = "content";
-				$use = false;
-				if($search["oid"] && $tabledef["content"]["fullview"])
-				{
-					$use = true;
-				}
-				elseif($tabledef["content"]["active"] && !($search["oid"]))
-				{
-					$use = true;
-				}
-				$content = "";
-				if($use)
-				{
-					if(!empty($eval["content"]))
+					$nmx = "content";
+					$use = false;
+					if($search["oid"] && $tabledef["content"]["fullview"])
 					{
-						$content = nl2br($eval["content"]);
+						$use = true;
 					}
-					elseif(!empty($eval["utextarea1"]))
+					elseif($tabledef["content"]["active"] && !($search["oid"]))
 					{
-						$content = nl2br($eval["utextarea1"]);
+						$use = true;
 					}
-					$aliasmrg->parse_oo_aliases($ekey, $content);
-				}
-				$i++;
-				$this->vars(array(
-					"num" => $i % 2 ? 1 : 2,
-				));
-				if($use && !empty($content))
-				{
+					$content = "";
+					if($use)
+					{
+						if(!empty($eval["content"]))
+						{
+							$content = nl2br($eval["content"]);
+						}
+						elseif(!empty($eval["utextarea1"]))
+						{
+							$content = nl2br($eval["utextarea1"]);
+						}
+						if(strpos($content, "#") !== false)
+						{
+							$aliasmrg->parse_oo_aliases($ekey, $content);
+						}
+					}
+					$i++;
 					$this->vars(array(
-						"fulltext_name" => $tabledef[$nmx]["caption"],
-						"fulltext" => $content,
+						"num" => $i % 2 ? 1 : 2,
 					));
-					$fulltext = $this->parse("FULLTEXT");
+					if($use && !empty($content))
+					{
+						$this->vars(array(
+							"fulltext_name" => $tabledef[$nmx]["caption"],
+							"fulltext" => $content,
+						));
+						$fulltext = $this->parse("FULLTEXT");
+					}
+					else
+					{
+						$fulltext = "";
+					}
+					$this->vars(array(
+						"FULLTEXT" => $fulltext,
+					));
+					$res .= $this->parse("EVENT");
 				}
-				else
-				{
-					$fulltext = "";
-				}
-				$this->vars(array(
-					"FULLTEXT" => $fulltext,
-				));
-				$res .= $this->parse("EVENT");
-			};
+			}
 			
 			//Navigation bar
 			$arr = $arr + array("section" => aw_global_get("section"));
@@ -1396,7 +1294,7 @@ class event_search extends class_base
 			$day_of_week = date("w", $t_day);
 			$offset = $day_of_week - 1 < 0 ? 6 : $day_of_week - 1;
 			$weeks = ceil(($cur_days + $offset) / 7);
-			for($i=1; $i <= $weeks; $i++)
+			for($i = 1; $i <= $weeks; $i++)
 			{
 				if($offset)
 				{
@@ -1449,7 +1347,6 @@ class event_search extends class_base
 			$this->vars(array(
 				"begin_month_name" => locale::get_lc_month($arr["start_date"]["month"]),
 				"begin_year" => $arr["start_date"]["year"],
-				//"next_month_url" => str_replace("class", "alias", $this->mk_my_orb("search", $next_month_args, "event_search")),
 				"prev_month_url" => str_replace("event_search", "", $this->mk_my_orb("search", $prev_month_args)),
 				"next_month_url" => str_replace("event_search", "", $this->mk_my_orb("search", $next_month_args)),
 				"next_weeks" => $res_weeks,
@@ -1469,30 +1366,29 @@ class event_search extends class_base
 
 		$htmlc->finish_output(array(
 			"data" => array(
-				"class" => "",//get_class($this),
+				"class" => "",
 				"section" => aw_global_get("section"),
 				"action" => "search",
 				"id" => $ob->id(),
 				"alias" => "event_search",
 			),
 			"method" => "get",
-			"form_handler" => aw_ini_get("baseurl") . "/" . aw_global_get("section"),
+			"form_handler" => aw_ini_get("baseurl")."/".aw_global_get("section"),
 		));
 
 		$html = $htmlc->get_result(array(
 			"form_only" => 1
 		));
+		exit_function("event_search::show");
 		return $search["oid"] ? $result : $html;
-
-		// kuupva numbrid on lihtsalt selectid
 	}
 
 	function _get_project_choices($parent)
 	{
-		if (!is_oid($parent) || !$this->can("view", $parent))
+		if(!is_oid($parent) || !$this->can("view", $parent))
 		{
 			return array();
-		};
+		}
 		$ol = new object_list(array(
 			"parent" => $parent,
 			"class_id" => array(CL_PROJECT, CL_PLANNER),
@@ -1502,9 +1398,21 @@ class event_search extends class_base
 
 	}
 
-	function __sort_props_by_ord($el1,$el2)
+	function __sort_props_by_ord($el1, $el2)
 	{
 		return (int)($el1["ord"] - $el2["ord"]);
+	}
+	
+	function __sort_props_by_proj($el1, $el2)
+	{
+		if((int)($el1["ord"] - $el2["ord"]) == 0)
+		{
+			return (int)($el1["start1"] - $el2["start1"]);
+		}
+		else
+		{
+			return (int)($el1["ord"] - $el2["ord"]);
+		}
 	}
 }
 ?>
