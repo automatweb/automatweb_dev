@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.238 2003/12/09 15:16:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.239 2004/01/05 16:11:52 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1810,8 +1810,11 @@ class core extends acl_base
 
 	function mk_my_orb($fun,$arr=array(),$cl_name="",$force_admin = false,$use_orb = false,$sep = "&")
 	{
-		global $awt;
-		$awt->start("mk_my_orb");
+		// resolve to name
+		if (is_numeric($cl_name))
+		{
+			$cl_name = $this->cfg["classes"][$cl_name]["file"];
+		};
 		$cl_name = ("" == $cl_name) ? get_class($this) : basename($cl_name);
 
 		$this->orb_values = array();
@@ -1879,7 +1882,6 @@ class core extends acl_base
 		{
 			$res .= $name."=".$value.$sep;
 		};
-		$awt->stop("mk_my_orb");
 		return substr($res,0,-1);
 	}
 
@@ -1941,7 +1943,10 @@ class core extends acl_base
 				// it will not include them.. damned if I know why
 				// so, before putting this back, check that
 				// - terryf
-				//if (($value !== "" && $value != NULL) || true == $this->use_empty)
+
+				// 0 will get included now, "" will not. reforb sets use_empty so
+				// that gets everything
+				if ((isset($value) && ($value !== "")) || $this->use_empty)	
 				//{
 					$this->orb_values[empty($prefix) ? $name : $prefix."[".$name."]"] = $value;
 				//};
@@ -2299,7 +2304,7 @@ class core extends acl_base
 	{
 		$this->tt[$o->id()] = $o->path_str();
 	}
-
+	
 	////
 	// !teeb objektide nimekirja ja tagastab selle arrays, sobiv picker() funxioonile ette andmisex
 	// ignore_langmenus = kui sait on mitme keelne ja on const.aw sees on $lang_menus = true kribatud
@@ -2319,12 +2324,23 @@ class core extends acl_base
 			$rootobj = $admin_rootmenu;
 		}
 
+		global $awt;
+
 		$ot = new object_tree(array(
 			"class_id" => CL_MENU,
 			"parent" => $rootobj,
-			"status" => ($onlyact ? STAT_ACTIVE : array(STAT_NOTACTIVE, STAT_ACTIVE)),
-			"sort_by" => "objects.parent"
+			"status" => array(STAT_NOTACTIVE, STAT_ACTIVE),
+			"sort_by" => "objects.parent",
+			"lang_id" => array(),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"lang_id" => aw_global_get("lang_id"),
+					"type" => MN_CLIENT
+				)
+			))
 		));
+
 
 		$this->tt = array();
 		if ($empty)
