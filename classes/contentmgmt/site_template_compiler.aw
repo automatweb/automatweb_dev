@@ -1479,6 +1479,13 @@ class site_template_compiler extends aw_template
 					$has_vars = true;
 				}
 		
+				$varname = "sel_menu_".$area."_L".$level."_comment";
+				if ($this->template_has_var_full($varname))
+				{
+					$vres .= $this->_gi()."\$vars[\"$varname\"] = \$tmp_o->comment();\n";
+					$has_vars = true;
+				}
+		
 				$varname = "sel_menu_".$area."_L".$level."_colour";
 				if ($this->template_has_var_full($varname))
 				{
