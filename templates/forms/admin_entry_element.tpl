@@ -19,7 +19,12 @@
 <!-- SUB: CAN_DELETE -->
     <option VALUE='delete'>Kustuta see element
 <!-- END SUB: CAN_DELETE -->
-    </select></td>
+    </select>
+<!-- SUB: HAS_SUBTYPE -->
+&nbsp;Alamt&uuml;&uuml;p:&nbsp;
+<select name='{VAR:cell_id}_subtype' class="small_button">{VAR:subtypes}</select>
+<!-- END SUB: HAS_SUBTYPE -->
+		</td>
 	<td class="fgtext">Nimi:</td>
 	<td class="fgtext"><input type='text' class="small_button" NAME='{VAR:cell_id}_name' VALUE='{VAR:cell_name}'></td>
 </tr>
@@ -99,12 +104,6 @@
 <td class="fgtext">Pikkus:</td>
 <td class="fgtext"><input type='text' CLASS="small_button" SIZE=3 NAME='{VAR:cell_id}_length' VALUE='{VAR:length}'></td>
 </tr>
-<tr>
-<td class="fgtext">Peab olema t&auml;idetud:</td>
-<td class="fgtext"><input type='checkbox' CLASS="small_button" NAME='{VAR:cell_id}_must_fill' VALUE='1' {VAR:must_fill_checked}></td>
-<td class="fgtext">Veateade:</td>
-<td class="fgtext"><input type='text' CLASS="small_button" NAME='{VAR:cell_id}_must_error' VALUE='{VAR:must_error}'></td>
-</tr>
 <!-- END SUB: DEFAULT_TEXT -->
 
 <!-- SUB: BUTTON_ITEMS -->
@@ -148,8 +147,8 @@
 <td class="fgtext" >
 	<input type=text class="small_button" size=45 NAME='{VAR:cell_id}_info' value='{VAR:cell_info}'>
 </td>
-<Td class="fgtext">&nbsp;</td>
-<Td class="fgtext">&nbsp;</td>
+<Td class="fgtext">Selectrow grupp:</td>
+<Td class="fgtext"><input type='text' name='{VAR:cell_id}_srow_grp' size=15 class='small_button' value='{VAR:srow_grp}'></td>
 </tr>
 <tr>
 <td valign=top class="fgtext">Teksti asukoht:</td>
@@ -165,4 +164,12 @@
 <td class="fgtext"><img src='/images/transa.gif' height=1 width=85><br>J&auml;rjekord:</td>
 <td class="fgtext"><input class="small_button" type='text' size=2 NAME='{VAR:cell_id}_order' VALUE='{VAR:cell_order}'></td>
 </tr>
+<!-- SUB: HAS_SIMPLE_CONTROLLER -->
+<tr>
+<td class="fgtext">Peab olema t&auml;idetud:</td>
+<td class="fgtext"><input type='checkbox' CLASS="small_button" NAME='{VAR:cell_id}_must_fill' VALUE='1' {VAR:must_fill_checked}></td>
+<td class="fgtext">Veateade:</td>
+<td class="fgtext"><input type='text' CLASS="small_button" NAME='{VAR:cell_id}_must_error' VALUE='{VAR:must_error}'></td>
+</tr>
+<!-- END SUB: HAS_SIMPLE_CONTROLLER -->
 </table>
