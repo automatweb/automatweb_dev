@@ -228,6 +228,11 @@ class object_list extends _int_obj_container_base
 	{
 		$this->list = array();
 	}
+
+	function _int_sort_list($prop, $order)
+	{
+		// TODO: int_sort_list
+	}
 }
 
 ?>

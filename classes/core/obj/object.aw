@@ -88,7 +88,7 @@ class object
 		return $GLOBALS["objects"][$this->oid]->disconnect($param);
 	}
 
-	function connections_from()
+	function connections_from($param = NULL)
 	{
 		return $GLOBALS["objects"][$this->oid]->connections_from($param);
 	}
@@ -101,6 +101,11 @@ class object
 	function path($param = NULL)
 	{
 		return $GLOBALS["objects"][$this->oid]->path($param);
+	}
+
+	function path_str($param = NULL)
+	{
+		return $GLOBALS["objects"][$this->oid]->path_str($param);
 	}
 
 	function can($param)
@@ -334,4 +339,14 @@ function &obj($param = NULL)
 	return new object($param);
 }
 
+function dump_obj_table($pre)
+{
+	echo "---------------------------------------- object table dump: <br>$pre <br>\n";
+	foreach($GLOBALS["objects"] as $oid => $obj)
+	{
+		echo "oid in list $oid , data: {oid => ".$obj->id().", name = ".$obj->name()." } <br>\n";
+	}
+	echo "++++++++++<br>\n";
+	flush();
+}
 ?>

@@ -146,9 +146,49 @@ class _int_object
 		}
 	}
 
-	function connections_from()
+	function connections_from($param = NULL)
 	{
-		// TODO: connections_from
+		if (!$this->obj["oid"])
+		{
+			error::throw(array(
+				"id" => ERR_NO_OBJ,
+				"msg" => "object::connections_from(): no current object loaded!"
+			));
+		}
+
+		$filter = array(
+			"from" => $this->obj["oid"]
+		);
+
+		if ($param != NULL)
+		{
+			if (!is_array($param))
+			{
+				error::throw(array(
+					"id" => ERR_PARAM,
+					"msg" => "object::connections_from(): if argument is present, then argument must be array of filter parameters!"
+				));
+			}
+			if (isset($param["type"]))
+			{
+				$filter["type"] = $param["type"];
+			}
+			if (isset($param["class"]))
+			{
+				$filter["class"] = $param["class"];
+			}
+		}
+
+		$ret = array();
+		$cs = $this->ds->find_connections($filter);
+		foreach($cs as $c_d)
+		{
+			if ($this->can("view", $c_d["source"]) && $this->can("view", $c_d["target"]))
+			{
+				$ret[] =& new connection($c_d);
+			}
+		}
+		return $ret;
 	}
 
 	function connections_to($param = NULL)
@@ -173,6 +213,35 @@ class _int_object
 		}
 
 		return $this->_int_path();
+	}
+
+	function path_str($param = NULL)
+	{
+		if (!param != NULL)
+		{
+			if (!is_array($param))
+			{
+				error::throw(array(
+					"id" => ERR_PARAM,
+					"msg" => "object::path_str(): parameter must be an array if present!"
+				));
+			}
+		}
+
+		$pt = $this->path();
+		$i = 0;
+		$cnt = count($pt);
+        if (isset($param["max_len"]))
+		{
+			$i = $cnt - $param["max_len"];
+		}
+
+		$ret = array();
+		for(; $i < $cnt; $i++)
+		{
+			$ret[] = $pt[$i]->name();
+		}
+		return join(" / ", $ret);
 	}
 
 	function can($param)
@@ -846,7 +915,7 @@ class _int_object
 			$ret[] = $t;
 			$parent = $t->parent();
 		}
-		return $ret;
+		return array_reverse($ret);
 	}
 
 	function _int_can($param)
@@ -862,7 +931,7 @@ class _int_object
 			// acl
 			if ($this->obj["oid"])
 			{
-				if ($this->ds->can("change", $this->obj["oid"]))
+				if ($this->ds->can("edit", $this->obj["oid"]))
 				{
 					return true;	
 				}

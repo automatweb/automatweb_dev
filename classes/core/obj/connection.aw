@@ -16,23 +16,38 @@ class connection
 	{
 		if ($id !== NULL)
 		{
-			if (!is_numeric($id))
+			if (!(is_numeric($id) || is_array($id)))
 			{
 				error::throw(array(
 					"id" => ERR_CONNECTION,
-					"msg" => "connection::constructior($id): parameter must be numeric!"
+					"msg" => "connection::constructior($id): parameter must be numeric or array!"
 				));
 			}
 
-			$this->_int_load($id);
+			$this->load($id);
 		}
 
 		$this->ds = new _int_obj_ds_local_sql;
 	}
 
-	function load($id)
+	function load($param)
 	{
-		$this->_int_load($id);
+		if (is_array($param))
+		{
+			$this->conn = $param;
+		}
+		else
+		if (!is_numeric($param))
+		{
+			error::throw(array(
+				"id" => ERR_CONNECTION,
+				"msg" => "connection::load(): parameter must be either array (connection data) or integer (connection id)!"
+			));
+		}
+		else
+		{
+			$this->_int_load($param);
+		}
 	}
 
 	function find($from, $to)
@@ -87,6 +102,18 @@ class connection
 	function id()
 	{
 		return $this->conn["id"];
+	}
+
+	function to()
+	{
+		if (!$this->conn["id"])
+		{
+			error::throw(array(
+				"id" => ERR_CONNECTION,
+				"msg" => "connection::to(): no current connection!"
+			));
+		}
+		return obj($this->conn["target"]);
 	}
 
 	////////////////////////////

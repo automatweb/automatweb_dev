@@ -5,10 +5,8 @@ class _int_obj_ds_local_sql extends acl_base
 	function _int_obj_ds_local_sql()
 	{
 		$this->init();
-		if (!isset($this->cfg) || !is_array($this->cfg))
-		{
-			aw_config_init_class(&$this);
-		}
+		// grmbl
+		$this->cfg["acl"] = $GLOBALS["cfg"]["acl"];
 	}
 
 	// returns oid for alias
@@ -44,7 +42,7 @@ class _int_obj_ds_local_sql extends acl_base
 	function get_objdata($oid)
 	{
 		$ret = $this->db_fetch_row("SELECT * FROM objects WHERE oid = $oid");
-		$ret["meta"] = unserialize($ret["metadata"]);
+		$ret["meta"] = aw_unserialize($ret["metadata"]);
 		unset($ret["metadata"]);
 		return $ret;
 	}
@@ -372,6 +370,45 @@ class _int_obj_ds_local_sql extends acl_base
 		return $this->db_fetch_field("SELECT id FROM aliases WHERE source = '$from' AND target = '$to'", "id");
 	}
 
+	// arr - { [from] , [to] }
+	function find_connections($arr)
+	{
+		$sql = "
+			SELECT 
+				* 
+			FROM 
+				aliases a
+				LEFT JOIN objects o_s ON o_s.oid = a.source
+				LEFT JOIN objects o_t ON o_t.oid = a.target
+			WHERE 
+				o_s.status != 0 AND
+				o_t.status != 0
+		";
+		if ($arr["from"])
+		{
+			$sql .= " AND source = '".$arr["from"]."' ";
+		}
+		if ($arr["to"])
+		{
+			$sql .= " AND target = '".$arr["to"]."' ";
+		}
+		if ($arr["type"])
+		{
+			$sql .= " AND reltype = '".$arr["type"]."' ";
+		}
+		if ($arr["class"])
+		{
+			$sql .= " AND type = '".$arr["class"]."' ";
+		}
+		$this->db_query($sql);
+		$ret = array();
+		while ($row = $this->db_next())
+		{
+			$ret[] = $row;
+		}
+		return $ret;
+	}
+
 	// params:
 	//	array of filter parameters 
 	// if class id is present, properties can also be filtered, otherwise only object table fields
@@ -388,11 +425,17 @@ class _int_obj_ds_local_sql extends acl_base
 
 		$stat = false;
 		$where = array();
+		$sby = "";
 		foreach($params as $key => $val)
 		{
 			if ($key == "status")
 			{
 				$stat = true;
+			}
+			if ($key == "sort_by")
+			{
+				$sby = " ORDER BY $val ";
+				continue;
 			}
 
 			$tbl = "objects";
@@ -410,8 +453,12 @@ class _int_obj_ds_local_sql extends acl_base
 				}
 			}
 
-			if (is_array($val))
+			if (is_array($val) || (is_object($val) && get_class($val) == "aw_array"))
 			{
+				if (is_object($val))
+				{
+					$val = $val->get();
+				}
 				$str = array();
 				foreach($val as $v)
 				{
@@ -469,7 +516,7 @@ class _int_obj_ds_local_sql extends acl_base
 
 		if ($where != "")
 		{
-			$q = "SELECT oid FROM objects $joins WHERE $where ";
+			$q = "SELECT oid FROM objects $joins WHERE $where $sby";
 			//echo "q = $q <br>";
 			$this->db_query($q);
 			while ($row = $this->db_next())
