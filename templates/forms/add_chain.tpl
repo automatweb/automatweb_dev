@@ -30,10 +30,10 @@
 </tr>
 <!-- END SUB: FORM -->
 <tr>
-<td class="fform" colspan=20><input type="checkbox" name="after_show_entry" value="1" {VAR:after_show_entry}> P&auml;rast viimase formi t&auml;itmist n&auml;idatakse v&auml;ljundit <select class="small_button" name="after_show_op">{VAR:ops}</select></td>
+<td class="fform" colspan=20><input type="checkbox" name="after_show_entry" value="1" {VAR:after_show_entry}> {VAR:LC_FORMS_AFTER_FILLING_LAST_FORM_SHOW_OUTPUT} <select class="small_button" name="after_show_op">{VAR:ops}</select></td>
 </tr>
 <tr>
-<td class="fform" colspan=20><input type="checkbox" name="during_show_entry" value="1" {VAR:during_show_entry}> P&auml;rja t&auml;itmise ajal n&auml;idatakse v&auml;ljundit <input type="radio" name="op_pos" value="up" {VAR:op_up}> &uuml;leval <input type="radio" name="op_pos" value="down" {VAR:op_down}> all <input type="radio" name="op_pos" value="right" {VAR:op_right}> paremal <input type="radio" name="op_pos" value="left" {VAR:op_left}> vasakul <select class="small_button" name="during_show_op">{VAR:d_ops}</select></td>
+<td class="fform" colspan=20><input type="checkbox" name="during_show_entry" value="1" {VAR:during_show_entry}> {VAR:LC_FORMS_FILLING_FORM_SHOW_OUTPUT}<input type="radio" name="op_pos" value="up" {VAR:op_up}> {VAR:LC_FORMS_UP} <input type="radio" name="op_pos" value="down" {VAR:op_down}> {VAR:LC_FORMS_DOWN}<input type="radio" name="op_pos" value="right" {VAR:op_right}> {VAR:LC_FORMS_IN_RIGHT} <input type="radio" name="op_pos" value="left" {VAR:op_left}> {VAR:LC_FORMS_IN_LEFT} <select class="small_button" name="during_show_op">{VAR:d_ops}</select></td>
 </tr>
 <tr>
 <td class="fcaption" colspan=30><input class='small_button' type='submit' VALUE='{VAR:LC_FORMS_SAVE}'></td>

@@ -82,9 +82,9 @@ function toggle_file_link_newwin()
 
 <!-- SUB: TABLE_LB -->
 <tr>
-	<td class="fgtext">Tabel:</td>
+	<td class="fgtext">{VAR:LC_FORMS_TABLE}:</td>
 	<td class="fgtext"><select class='small_button' NAME='{VAR:cell_id}_table' onChange="ch(document.f1.{VAR:cell_id}_tbl_col, this)">{VAR:tables}</select></td>
-	<td class="fgtext">Tulp tabelis:</td>
+	<td class="fgtext">{VAR:LC_FORMS_COLUMN_IN_TABLE}:</td>
 	<td class="fgtext"><select class='small_button' NAME='{VAR:cell_id}_tbl_col'><option value=''></select>
 	<script language="javascript">
 		ch(document.f1.{VAR:cell_id}_tbl_col, document.f1.{VAR:cell_id}_table);
@@ -96,12 +96,12 @@ function toggle_file_link_newwin()
 
 <!-- SUB: FILTER_PART_LB -->
 <tr>
-<td class="fgtext">Elemendiga seotud filtri osa:</td>
+<td class="fgtext">{VAR:LC_FORMS_EL_REAL_FILTR_PART}:</td>
 <td class="fgtext" colspan="3"><select class="small_button" name='{VAR:cell_id}_part'>{VAR:parts}</select></td>
 </tr>
 <!-- END SUB: FILTER_PART_LB -->
 <tr>
-	<td class="fgtext">T&uuml;&uuml;p:</td>
+	<td class="fgtext">{VAR:LC_FORM_TYPE}:</td>
 	<td class="fgtext"><select class="small_button" NAME='{VAR:cell_id}_type'>
     <option  VALUE=''>{VAR:LC_FORMS_ORDINARY_TEXT}
     <option  VALUE=''>---------
@@ -121,7 +121,7 @@ function toggle_file_link_newwin()
 <!-- END SUB: CAN_DELETE -->
     </select>
 <!-- SUB: HAS_SUBTYPE -->
-&nbsp;Alamt&uuml;&uuml;p:&nbsp;
+&nbsp;{VAR:LC_FORMS_SUBTYPE}:&nbsp;
 <select name='{VAR:cell_id}_subtype' class="small_button">{VAR:subtypes}</select>
 <!-- END SUB: HAS_SUBTYPE -->
 		</td>
@@ -136,9 +136,9 @@ function toggle_file_link_newwin()
 </tr>
 <!-- SUB: RELATION_LB -->
 <tr>
-	<td class="fgtext">Seose form:</td>
+	<td class="fgtext">{VAR:LC_FORMS_REAL_FORM}Seose form:</td>
 	<td class="fgtext"><select class='small_button' NAME='{VAR:cell_id}_rel_form' onChange="ch(document.f1.{VAR:cell_id}_rel_element, this)">{VAR:rel_forms}</select></td>
-	<td class="fgtext">Seose element:</td>
+	<td class="fgtext">{VAR:LC_FORMS_REAL_EL}Seose element:</td>
 	<td class="fgtext"><select class='small_button' NAME='{VAR:cell_id}_rel_element'><option value=''></select>
 	<script language="javascript">
 		ch(document.f1.{VAR:cell_id}_rel_element, document.f1.{VAR:cell_id}_rel_form);
@@ -150,7 +150,7 @@ function toggle_file_link_newwin()
 
 <!-- SUB: SEARCH_RELATION -->
 <tr>
-	<td class="fgtext">Ainult unikaalsed:</td>
+	<td class="fgtext">{VAR:LC_FORMS_ONLY_UNIC}:</td>
 	<td class="fgtext">&nbsp;<input type='checkbox' class='small_button' value='1' name='{VAR:cell_id}_unique' {VAR:unique}></td>
 	<td class="fgtext">&nbsp;</td>
 	<td class="fgtext">&nbsp;</td>
@@ -206,32 +206,32 @@ function toggle_file_link_newwin()
 <td valign=top class="fgtext" colspan="2">
 <table border=0 cellpadding=0 cellspacing=0>
 <tr>
-<td class="fgtext">&nbsp;Aasta:</td>
+<td class="fgtext">&nbsp;{VAR:LC_FORMS_YEAR}:</td>
 <td class="fgtext"><input type='checkbox' name='{VAR:cell_id}_has_year' value='1' {VAR:has_year}></td>
 <td class="fgtext">&nbsp;<input type='text' name='{VAR:cell_id}_year_ord' value='{VAR:year_ord}' size="2" class="small_button"></td>
 </tr>
 <tr>
-<td class="fgtext">&nbsp;Kuu:</td>
+<td class="fgtext">&nbsp;{VAR:LC_FORMS_MONTH}:</td>
 <td class="fgtext"><input type='checkbox' name='{VAR:cell_id}_has_month' value='1' {VAR:has_month}></td>
 <td class="fgtext">&nbsp;<input type='text' name='{VAR:cell_id}_month_ord' value='{VAR:month_ord}' size="2" class="small_button"></td>
 </tr>
 <tr>
-<td class="fgtext">&nbsp;P&auml;ev:</td>
+<td class="fgtext">&nbsp;{VAR:LC_FORMS_DAY}:</td>
 <td class="fgtext"><input type='checkbox' name='{VAR:cell_id}_has_day' value='1' {VAR:has_day}></td>
 <td class="fgtext">&nbsp;<input type='text' name='{VAR:cell_id}_day_ord' value='{VAR:day_ord}' size="2" class="small_button"></td>
 </tr>
 <tr>
-<td class="fgtext">&nbsp;Tund:</td>
+<td class="fgtext">&nbsp;{VAR:LC_FORMS_HOUR}:</td>
 <td class="fgtext"><input type='checkbox' name='{VAR:cell_id}_has_hr' value='1' {VAR:has_hr}></td>
 <td class="fgtext">&nbsp;<input type='text' name='{VAR:cell_id}_hr_ord' value='{VAR:hr_ord}' size="2" class="small_button"></td>
 </tr>
 <tr>
-<td class="fgtext">&nbsp;Minut:</td>
+<td class="fgtext">&nbsp;{VAR:LC_FORMS_MINUT}:</td>
 <td class="fgtext"><input type='checkbox' name='{VAR:cell_id}_has_minute' value='1' {VAR:has_minute}></td>
 <td class="fgtext">&nbsp;<input type='text' name='{VAR:cell_id}_minute_ord' value='{VAR:minute_ord}' size="2" class="small_button"></td>
 </tr>
 <tr>
-<td class="fgtext">&nbsp;Sekund:</td>
+<td class="fgtext">&nbsp;{VAR:LC_FORMS_SECUND}:</td>
 <td class="fgtext"><input type='checkbox' name='{VAR:cell_id}_has_second' value='1' {VAR:has_second}></td>
 <td class="fgtext">&nbsp;<input type='text' name='{VAR:cell_id}_second_ord' value='{VAR:second_ord}' size="2" class="small_button"></td>
 </tr>
@@ -239,16 +239,16 @@ function toggle_file_link_newwin()
 </td>
 </tr>
 <tr>
-<td class="fgtext">Kuup&auml;eva formaat n&auml;itamisel:</td>
+<td class="fgtext">{VAR:LC_FORMS_DATE_FOMAT_SHOW}:</td>
 <td class="fgtext"><input type='text' name='{VAR:cell_id}_date_format' VALUE='{VAR:date_format}' class='small_button'></td>
 <td class="fgtext" colspan="2">&nbsp;
 </td>
 </tr>
-<td class="fgtext">Default kuup&auml;ev:</td>
+<td class="fgtext">{VAR:LC_FORMS_DEFAULT_DATE}Default kuup&auml;ev:</td>
 <td class="fgtext" align="right">
-&nbsp;<input type="radio" name="{VAR:cell_id}_def_date_type" VALUE="rel" {VAR:date_rel_checked}> Kuup&auml;ev elemendist 
+&nbsp;<input type="radio" name="{VAR:cell_id}_def_date_type" VALUE="rel" {VAR:date_rel_checked}> {VAR:C_FORMS_DATE_IN_ELEMENT} 
 <select name='{VAR:cell_id}_def_date_rel' class='small_button'>{VAR:date_rel_els}</select>&nbsp;&nbsp;&nbsp;&nbsp;
-<input type="radio" name="{VAR:cell_id}_def_date_type" VALUE="now" {VAR:date_now_checked}> Kellaaeg </td>
+<input type="radio" name="{VAR:cell_id}_def_date_type" VALUE="now" {VAR:date_now_checked}> {VAR:LC_FORMS_TIME} </td>
 <td class="fgtext" colspan=2>pluss&nbsp;<input type="text" class="small_button" size="5" name="{VAR:cell_id}_def_date_num" value="{VAR:def_date_num}">&nbsp;<select name='{VAR:cell_id}_def_date_add_type' class="small_button">{VAR:add_types}</select>&nbsp;</td>
 </tr>
 <!-- END SUB: DATE_ITEMS -->
@@ -256,8 +256,8 @@ function toggle_file_link_newwin()
 <!-- SUB: FILE_ITEMS -->
 <tr>
 <td class="fgtext">{VAR:LC_FORMS_DISPLAYING}:</td>
-<td class="fgtext"><input CLASS="small_button" type='radio' NAME='{VAR:cell_id}_filetype' VALUE='1' {VAR:ftype_image_selected}> {VAR:LC_FORMS_AS_A_PICTURE} <input CLASS="small_button" type='radio' NAME='{VAR:cell_id}_filetype' VALUE='2' {VAR:ftype_file_selected}> {VAR:LC_FORMS_LINKED_AS_FILE} failina
-<input type='checkbox' name='{VAR:cell_id}_file_newwin' value=1 {VAR:file_new_win}> Link uues aknas
+<td class="fgtext"><input CLASS="small_button" type='radio' NAME='{VAR:cell_id}_filetype' VALUE='1' {VAR:ftype_image_selected}> {VAR:LC_FORMS_AS_A_PICTURE} <input CLASS="small_button" type='radio' NAME='{VAR:cell_id}_filetype' VALUE='2' {VAR:ftype_file_selected}> {VAR:LC_FORMS_LINKED_AS_FILE}
+<input type='checkbox' name='{VAR:cell_id}_file_newwin' value=1 {VAR:file_new_win}> {VAR:LC_FORMS_LINK_IN_NEW_WIN}
 <input type="button" onClick="toggle_file_link_newwin()">
 </td>
 <td class="fgtext">{VAR:LC_FORMS_LINK_TEXT}:</td>
@@ -286,7 +286,7 @@ function toggle_file_link_newwin()
 <tr>
 <td class="fgtext">{VAR:LC_FORMS_GROUP}:</td>
 <td class="fgtext"><input class="small_button" type='text' SIZE=1 NAME='{VAR:cell_id}_group' VALUE='{VAR:cell_group}'></td>
-<td class="fgtext">Algselt valitud:</td>
+<td class="fgtext">{VAR:LC_FORMS_ORIGINALLY_SELECTED}:</td>
 <td class="fgtext"><input type='checkbox' NAME='{VAR:default_name}' VALUE='1' {VAR:default_checked}></td>
 </tr>
 <tr>
@@ -317,11 +317,11 @@ function toggle_file_link_newwin()
 
 <!-- SUB: BUTTON_CONFIRM_TYPE -->
 <tr>
-<td class="fgtext">Folder kuhu liigutada:</td>
+<td class="fgtext">{VAR:LC_FORMS_FOLDER_TO_MOVE}:</td>
 <td colspan="3" class="fgtext"><select name='{VAR:cell_id}_confirm_moveto' class='small_button'>{VAR:folders}</select></td>
 </tr>
 <tr>
-<td class="fgtext">Url kuhu suunata:</td>
+<td class="fgtext">{VAR:LC_FORMS_URL_TO_MOVE}:</td>
 <td colspan="3" class="fgtext"><input type='text' name='{VAR:cell_id}_confirm_redirect' class='small_button' value='{VAR:redirect}'></td>
 </tr>
 <!-- END SUB: BUTTON_CONFIRM_TYPE -->
@@ -339,13 +339,13 @@ function toggle_file_link_newwin()
 <tr>
 <td class="fgtext">{VAR:LC_FORMS_TEXT_ON_BUTTON}:</td>
 <td class="fgtext"><input type='text' CLASS="small_button" NAME='{VAR:cell_id}_btext' VALUE='{VAR:button_text}'></td>
-<td class="fgtext">Kas p&auml;rjas ei minda edasi:</td>
+<td class="fgtext">{VAR:LC_FORMS_NOT_GO_FORW_IN_CHAIN}:</td>
 <td class="fgtext"><input type="checkbox" name="{VAR:cell_id}_chain_forward" value="1" {VAR:chain_forward}></td>
 </tr>
 <tr>
 <td class="fgtext">&nbsp;</td>
 <td class="fgtext">&nbsp;</td>
-<td class="fgtext">Kas p&auml;rjas minnakse tagasi:</td>
+<td class="fgtext">{VAR:LC_FORMS_NOT_GO_BACK_IN_CHAIN}:</td>
 <td class="fgtext"><input type="checkbox" name="{VAR:cell_id}_chain_backward" value="1" {VAR:chain_backward}></td>
 </tr>
 <!-- END SUB: BUTTON_ITEMS -->
@@ -394,7 +394,7 @@ function toggle_file_link_newwin()
 <!-- END SUB: EL_NOHLINK -->
 
 <!-- SUB: EL_HLINK -->
-<td class="fgtext">Vali v&auml;ljund:</td>
+<td class="fgtext">{VAR:LC_FORMS_CHOOSE_OUTPUT}:</td>
 <td class="fgtext"><select name='{VAR:cell_id}_link_op' class='small_button'>{VAR:ops}</select></td>
 <td class="fgtext">&nbsp;</td>
 <td class="fgtext">&nbsp;</td>
@@ -423,10 +423,16 @@ function toggle_file_link_newwin()
 <td class="fgtext"><input class="small_button" type='text' size=2 NAME='{VAR:cell_id}_order' VALUE='{VAR:cell_order}'></td>
 </tr>
 <tr>
-<td class="fgtext">Aktiivne alates:</td>
+<td class="fgtext">{VAR:LC_FORMS_ACTIVE_SINCE}:</td>
 <td class="fgtext">{VAR:act_from}</td>
-<td class="fgtext">Aktiivne kuni:</td>
+<td class="fgtext">{VAR:LC_FORMS_ACTIVE_TILL}:</td>
 <td class="fgtext">{VAR:act_to}</td>
+</tr>
+<tr>
+<td class="fgtext">{VAR:LC_FORMS_HEH_ACT_DATE}: </td>
+<td class="fgtext"><input type='checkbox' name='{VAR:cell_id}_has_act' value='1' {VAR:has_act}></td>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;</td>
 </tr>
 <!-- SUB: HAS_SIMPLE_CONTROLLER -->
 <tr>

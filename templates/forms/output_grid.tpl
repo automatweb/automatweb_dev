@@ -3,7 +3,7 @@
 <!-- SUB: PREVIEW -->
 <a href='{VAR:preview}'>{VAR:LC_FORMS_PREVIEW}</a> | 
 <!-- END SUB: PREVIEW -->
-<a href='{VAR:translate}'>T&otilde;lgi</a>
+<a href='{VAR:translate}'>{VAR:LC_FORMS_TRANSALTE}</a>
 
 <table border=0>
 <tr>
@@ -51,8 +51,8 @@
 <td class="fgen_text" colspan=2><a href='{VAR:ch_cell}'>{VAR:LC_FORMS_CHANGE}</a> | <a href='{VAR:addel}'>{VAR:LC_FORMS_ADD_ELEMENT}</a></td>
 </tr>
 <tr>
-<td class=fgen_text>Nimi</td>
-<td class=fgen_text>Tekst</td>
+<td class=fgen_text>{VAR:LC_FORM_NAME}</td>
+<td class=fgen_text>{VAR:LC_FORMS_TEXT}</td>
 </tr>
 <!-- SUB: ELEMENT -->
 <tr>

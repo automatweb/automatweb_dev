@@ -12,7 +12,7 @@
 <tr>
 <td class="fcaption">{VAR:LC_FORM_TYPE}:</td><td class="fform"><select  NAME=type><option VALUE='entry'>{VAR:LC_FORM_INPUT}
 <option VALUE='search'>{VAR:LC_FORM_SEARCH}
-<option VALUE='filter_search'>Filtri otsinguform
+<option VALUE='filter_search'>{VAR:LC_FORMS_FILTER_SEARCHFORM}
 <option VALUE='rating'>{VAR:LC_FORM_RESEARCH}
 </select>
 </td>

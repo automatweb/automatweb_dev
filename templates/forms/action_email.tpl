@@ -1,15 +1,15 @@
-<form action='reforb.{VAR:ext}' method=post>
+ <form action='reforb.{VAR:ext}' method=post>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <tr>
 <td class="fcaption">{VAR:LC_FORMS_EMAIL}:</td>
 <td class="fform"><input type='text' NAME='email' VALUE='{VAR:email}'></td>
 </tr>
 <tr>
-<td class="fcaption">V&auml;ljundi stiil:</td>
+<td class="fcaption">{VAR:LC_FORMS_OUTPUT_STYLE}:</td>
 <td class="fform"><select name='op_id'>{VAR:ops}</select></td>
 </tr>
 <tr>
-<td class="fcaption">Mis men&uuml;&uuml; alla link n2itab:</td>
+<td class="fcaption">{VAR:LC_FORMS_WH_MENU_LINK_IS}:</td>
 <td class="fform"><select class='small_button' name='l_section'>{VAR:sec}</select></td>
 </tr>
 <tr>

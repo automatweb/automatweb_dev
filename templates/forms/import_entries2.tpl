@@ -26,7 +26,7 @@
 </td>
 </tr>
 <tr>
-<td class="fform" colspan=2><input class='small_button' type='submit' VALUE='Impordi'></td>
+<td class="fform" colspan=2><input class='small_button' type='submit' VALUE='Import'></td>
 </tr>
 </table>
 {VAR:reforb}

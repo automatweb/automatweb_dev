@@ -34,21 +34,21 @@
 <td class="fform">{VAR:LC_FORMS_SORTED_CELL_SYLE_2}:</td><td class="fform"><select name='content_sorted_style2'>{VAR:content_sorted_style2}</select></td>
 </tr>
 <tr>
-<td class="fform">Linkide stiil:</td><td class="fform"><select name='link_style'>{VAR:link_style}</select></td>
+<td class="fform">{VAR:LC_FORMS_LINK_STYLE}:</td><td class="fform"><select name='link_style'>{VAR:link_style}</select></td>
 </tr>
 <tr>
-<td class="fform"><b>Prindi</b> nupp</td><td class="fform"><input type="checkbox" name="print_button" value="1" {VAR:print_button}></td>
+<td class="fform">{VAR:LC_FORMS_PRINT_BUTTON}</td><td class="fform"><input type="checkbox" name="print_button" value="1" {VAR:print_button}></td>
 </tr>
 <tr>
-<td class="fform">Vaata link <i>popup</i>-s:</td>
+<td class="fform">{VAR:LC_FORMS_WHACH_LINK_POP}:</td>
 <td class="fform">
 	<input type="checkbox" name="view_new_win" value="1" {VAR:view_new_win}>
 </td>
 </tr>
 <tr>
-<td class="fform"><i>Popup</i> akna mõõtmed:</td><td class="fform"><input type="text" name="new_win_x" value="{VAR:new_win_x}" size="3">x<input type="text" name="new_win_y" value="{VAR:new_win_y}" size="3">
-	Kerimisribad: <input type="checkbox" name="new_win_scroll" {VAR:new_win_scroll} value="1">
-	Fikseeritud suurus: <input type="checkbox" name="new_win_fixedsize" {VAR:new_win_fixedsize} value="1">
+<td class="fform">{VAR:LC_FORMS_POPUP_WIN_PARA}:</td><td class="fform"><input type="text" name="new_win_x" value="{VAR:new_win_x}" size="3">x<input type="text" name="new_win_y" value="{VAR:new_win_y}" size="3">
+	{VAR:LC_FORMS_SCROLLBAR}: <input type="checkbox" name="new_win_scroll" {VAR:new_win_scroll} value="1">
+	{VAR:LC_FORMS_FIX_SIZE}: <input type="checkbox" name="new_win_fixedsize" {VAR:new_win_fixedsize} value="1">
 </td>
 </tr>
 <tr>
@@ -72,7 +72,7 @@
 <td class="fform" colspan=2>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <tr>
-	<td class="fform" colspan=10>Tulp {VAR:column}:</td>
+	<td class="fform" colspan=10>{VAR:LC_FORMS_COLUMN} {VAR:column}:</td>
 </tr>
 <tr>
 	<!-- SUB: LANG_H -->
@@ -85,23 +85,23 @@
 	<!-- END SUB: LANG -->
 </tr>
 <tr>
-	<td class="fform">Vali elemendid:</td>
+	<td class="fform">{VAR:LC_FORMS_CHOOSE_ELEMENTS}:</td>
 	<td class="fform" colspan=10><select class="small_button" size=7 name='columns[{VAR:column}][]' multiple>{VAR:elements}</select></td>
 </tr>
 <tr>
-	<td class="fform">Sorditav:&nbsp;<input type="checkbox" name="sortable[{VAR:column}]" value="1" {VAR:sortable}></td>
-	<td class="fform" colspan=10>&nbsp;&nbsp;<a href='{VAR:add_col}'>Lisa tulp</a>&nbsp;&nbsp;<a href='{VAR:del_col}'>Kustuta tulp</a> <input type='checkbox' name='todelete[{VAR:column}]' value='1'></td>
+	<td class="fform">{VAR:LC_FORMS_SORTABLE}Sorditav:&nbsp;<input type="checkbox" name="sortable[{VAR:column}]" value="1" {VAR:sortable}></td>
+	<td class="fform" colspan=10>&nbsp;&nbsp;<a href='{VAR:add_col}'>{VAR:LC_FORMS_ADD_COLU}</a>&nbsp;&nbsp;<a href='{VAR:del_col}'>{VAR:LC_FORMS_DEL_COLU}</a> <input type='checkbox' name='todelete[{VAR:column}]' value='1'></td>
 </tr>
 </table>
 </td>
 </tr>
 <!-- END SUB: COL -->
 <tr>
-	<td class="fform">Vali vaatamise element:</td>
+	<td class="fform">{VAR:LC_FORMS_CHOOSE_LOOK_EL}:</td>
 	<td class="fform"><select name="viewcol">{VAR:v_elements}</select></td>
 </tr>
 <tr>
-	<td class="fform">Vali muutmise element:</td>
+	<td class="fform">{VAR:LC_FORMS_CHOOSE_CHANGE_EL}:</td>
 	<td class="fform"><select name="changecol">{VAR:c_elements}</select></td>
 </tr>
 <!-- END SUB: CHANGE -->

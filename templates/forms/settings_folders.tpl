@@ -7,7 +7,7 @@
 <td colspan=2 class="fform"><select name='ff_folder' class='small_button'>{VAR:ff_folder}</select></td>
 </tr>
 <tr>
-<td class="fform" colspan=2>Kataloog kuhu lisatakse t&uuml;&uuml;pelementide baasil tehtud elemendid:</td>
+<td class="fform" colspan=2>{VAR:LC_FORMS_CHOOSE_CATALOGUE_WHERE_ADD_TYPELEMENT}:</td>
 </tr>
 <tr>
 <td colspan=2 class="fform"><select name='newel_parent' class='small_button'>{VAR:ne_folder}</select></td>
@@ -37,7 +37,7 @@
 <td colspan=2 class="fform"><select class='small_button' NAME='el_move_menus[]' size=20 multiple>{VAR:el_move_menus}</select></td>
 </tr>
 <tr>
-<td class="fform" colspan=2>Vali seoseelementide formid:</td>
+<td class="fform" colspan=2>{VAR:LC_FORMS_CHOOSE_TIEELEMENTFORMS}:</td>
 </tr>
 <tr>
 <td colspan=2 class="fform"><select class='small_button' NAME='relation_forms[]' size=10 multiple>{VAR:relation_forms}</select></td>

@@ -26,7 +26,7 @@
 
 <!-- SUB: CHANGE -->
 <tr>
-<td class="fcaption" colspan=2><a href='{VAR:admin}'>Administreeri{VAR:LC_FORMS_ADMIN}</a></td>
+<td class="fcaption" colspan=2><a href='{VAR:admin}'>{VAR:LC_FORMS_ADMIN}</a></td>
 </tr>
 <!-- END SUB: CHANGE -->
 <tr>

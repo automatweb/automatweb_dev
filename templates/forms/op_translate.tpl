@@ -9,7 +9,7 @@
 <!-- END SUB: LANGH -->
 </tr>
 <tr>
-<td colspan=10 class="fform">Elementide tekstid:</td>
+<td colspan=10 class="fform">{VAR:LC_FORMS_ELEMENTS_TEXTS}:</td>
 </tr>
 <!-- SUB: LROW -->
 <tr>
@@ -19,7 +19,7 @@
 </tr>
 <!-- END SUB: LROW -->
 <tr>
-<td colspan=10 class="fform">Listboxide sisu:</td>
+<td colspan=10 class="fform">{VAR:LC_FORMS_LISTBOXES_CONTENT}:</td>
 </tr>
 <!-- SUB: LROW1 -->
 <tr>
@@ -29,7 +29,7 @@
 </tr>
 <!-- END SUB: LROW1 -->
 <tr>
-<td colspan=10 class="fform">Multiple listboxide sisu:</td>
+<td colspan=10 class="fform">{VAR:LC_FORMS_MLISTBX_CONTENT}:</td>
 </tr>
 <!-- SUB: LROW2 -->
 <tr>
@@ -39,7 +39,7 @@
 </tr>
 <!-- END SUB: LROW2 -->
 <tr>
-<td colspan=10 class="fform">Subskriptide sisu:</td>
+<td colspan=10 class="fform">{VAR:LC_FORMS_SUBSCRIPTS_CONTENT}:</td>
 </tr>
 <!-- SUB: LROW3 -->
 <tr>
@@ -49,7 +49,7 @@
 </tr>
 <!-- END SUB: LROW3 -->
 <tr>
-<td colspan=10 class="fform">Default tekstide sisu:</td>
+<td colspan=10 class="fform">{VAR:LC_FORMS_DEFAULT_TEXTS_CONTENT}:</td>
 </tr>
 <!-- SUB: LROW4 -->
 <tr>
@@ -59,7 +59,7 @@
 </tr>
 <!-- END SUB: LROW4 -->
 <tr>
-<td colspan=10 class="fform">Veateadete sisu:</td>
+<td colspan=10 class="fform">{VAR:LC_FORMS_ERRORS_CONTENT}:</td>
 </tr>
 <!-- SUB: LROW5 -->
 <tr>
@@ -69,7 +69,7 @@
 </tr>
 <!-- END SUB: LROW5 -->
 <tr>
-<td colspan=10 class="fform">Nuppude tekstid:</td>
+<td colspan=10 class="fform">{VAR:LC_FORMS_BUTTONTS_TEXTS}:</td>
 </tr>
 <!-- SUB: LROW6 -->
 <tr>

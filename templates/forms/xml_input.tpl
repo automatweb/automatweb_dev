@@ -1,16 +1,16 @@
 <form action='reforb.{VAR:ext}' METHOD=post>
 <!-- SUB: admin -->
-<a href="{VAR:adminurl}">Administreeri</a>
+<a href="{VAR:adminurl}">{VAR:LC_FORMS_ADMIN}</a>
 <!-- END SUB: admin -->
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <tr>
 <td class="fcaption">Alias:</td><td class="fform"><input type='text' NAME='name' VALUE='{VAR:name}'></td>
 </tr>
 <tr>
-<td class="fcaption">Kommentaar:</td><td class="fform"><textarea cols=50 rows=5 NAME=comment>{VAR:comment}</textarea></td>
+<td class="fcaption">{VAR:LC_FORM_COMM}:</td><td class="fform"><textarea cols=50 rows=5 NAME=comment>{VAR:comment}</textarea></td>
 </tr>
 <tr>
-<td colspan="2" class="fform"><strong>Vormid</strong></td>
+<td colspan="2" class="fform"><strong>{VAR:LC_FORMS_SMALLDS_FORMS}</strong></td>
 </tr>
 <!-- SUB: line -->
 <tr>
@@ -19,7 +19,7 @@
 </tr>
 <!-- END SUB: line -->
 <tr>
-<td colspan="2" class="fform"><strong>Vormipärjad</strong></td>
+<td colspan="2" class="fform"><strong>{VAR:LC_FORMS_FORMCHAINS}</strong></td>
 </tr>
 <!-- SUB: line2 -->
 <tr>
@@ -28,7 +28,7 @@
 </tr>
 <!-- END SUB: line2 -->
 <tr>
-<td colspan=2 class="fcaption"><input class='small_button' type='submit' VALUE='Salvesta'></td>
+<td colspan=2 class="fcaption"><input class='small_button' type='submit' VALUE='{VAR:LC_FORMS_SAVE}'></td>
 </tr>
 </table>
 {VAR:reforb}

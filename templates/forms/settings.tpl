@@ -15,7 +15,7 @@ function varvivalik()
 <form action='reforb.{VAR:ext}' method=post name=ffrm>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <tr>
-<td class="fform">Tabeli stiil:</td>
+<td class="fform">{VAR:LC_FORMS_TABLE_STYLE}:</td>
 <td class="fform"><select name='tablestyle' class='small_button'>{VAR:tablestyles}</select></td>
 </tr>
 <tr>
@@ -27,12 +27,12 @@ function varvivalik()
 <td class="fform" colspan=2>{VAR:LC_FORMS_FORM_TRIED_FILL_USER_DATA}: &nbsp;<input type='checkbox' name='try_fill' value=1 {VAR:try_fill}></td>
 </tr>
 <tr>
-<td class="fform" colspan=2>Luba väljundites HTMLi näitamist: &nbsp;<input type='checkbox' name='allow_html' value=1 {VAR:allow_html}></td>
+<td class="fform" colspan=2>{VAR:LC_FORMS_ALLOW_HTML}: &nbsp;<input type='checkbox' name='allow_html' value=1 {VAR:allow_html}></td>
 </tr>
 <tr>
-<td class="fform" colspan=2>Kontrollida vormi staatust lehelt lahkumisel?: &nbsp;<input type='checkbox' name='check_status' value=1 {VAR:check_status}>
+<td class="fform" colspan=2>{VAR:LC_FORMS_CONTROL_FORM_STATUS}?: &nbsp;<input type='checkbox' name='check_status' value=1 {VAR:check_status}>
 <br>
-Tekst, mida kasutajale kuvada: <input type="text" name="check_status_text" value="{VAR:check_status_text}" size="40">
+{VAR:LC_FORMS_TEXT_DISPLAY_USER}: <input type="text" name="check_status_text" value="{VAR:check_status_text}" size="40">
 </td>
 </tr>
 <!-- SUB: NOSEARCH -->
@@ -48,7 +48,7 @@ Tekst, mida kasutajale kuvada: <input type="text" name="check_status_text" value
 <td class="fform"><input type='text' NAME='after_submit_link' value='{VAR:after_submit_link}'></td>
 </tr>
 <tr>
-<td class="fform"><input type='radio' NAME='after_submit' VALUE='4' {VAR:as_4}>N&auml;ita sisestust:</td>
+<td class="fform"><input type='radio' NAME='after_submit' VALUE='4' {VAR:as_4}>{VAR:LC_FORMS_SHOW_ENTRIES}:</td>
 <td class="fform"><select name="after_submit_op">{VAR:ops}</select></td>
 </tr>
 <!-- END SUB: NOSEARCH -->
