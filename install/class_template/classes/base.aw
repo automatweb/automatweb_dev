@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/install/class_template/classes/base.aw,v 1.14 2003/08/13 13:39:11 axel Exp $
+// $Header: /home/cvs/automatweb_dev/install/class_template/classes/base.aw,v 1.15 2003/10/05 21:37:24 duke Exp $
 // __classname.aw - __name 
 /*
 
@@ -15,8 +15,7 @@ class __classname extends class_base
 	function __classname()
 	{
 		// change this to the folder under the templates folder, where this classes templates will be, 
-		// if they exist at all. the default folder does not actually exist, 
-		// it just points to where it should be, if it existed
+		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
 			"tpldir" => "__tplfolder",
 			"clid" => __classdef
@@ -27,9 +26,9 @@ class __classname extends class_base
 	// class_base classes usually need those, uncomment them if you want to use them
 
 	/*
-	function get_property($args)
+	function get_property($arr)
 	{
-		$data = &$args["prop"];
+		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
@@ -40,9 +39,9 @@ class __classname extends class_base
 	*/
 
 	/*
-	function set_property($args = array())
+	function set_property($arr = array())
 	{
-		$data = &$args["prop"];
+		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
                 {
@@ -60,25 +59,20 @@ class __classname extends class_base
 	// !this will be called if the object is put in a document by an alias and the document is being shown
 	// parameters
 	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
-	function parse_alias($args)
+	function parse_alias($arr)
 	{
-		extract($args);
-		return $this->show(array("id" => $alias["target"]));
+		return $this->show(array("id" => $arr["alias"]["target"]));
 	}
 
 	////
 	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
 	function show($arr)
 	{
-		extract($arr);
-		$ob = new object($id);
-
+		$ob = new object($arr["id"]);
 		$this->read_template("show.tpl");
-
 		$this->vars(array(
 			"name" => $ob->prop("name"),
 		));
-
 		return $this->parse();
 	}
 }
