@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.30 2004/06/09 08:12:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.31 2004/07/05 10:16:41 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -498,6 +498,53 @@ class sys extends aw_template
 		}
 	}
 
+	/**
 
+		@attrib name=check_indexes nologin="1"
+
+	**/
+	function do_check_indexes($arr)
+	{
+		$indexes = array(
+			"objects" => array(
+				"oid","class_id","status","site_id","lang_id"
+			),
+			"aliases" => array(
+				"source","target", "reltype"
+			),
+			"acl" => array(
+				"gid", "oid"
+			)
+		);
+
+		echo "checking indexes.. <br>\n";
+		flush();
+
+		foreach($indexes as $tbl => $td)
+		{
+			echo ".. table $tbl <br>\n";
+			flush();
+			$has_idx = array();
+			$this->db_list_indexes($tbl);
+			while($idd = $this->db_next_index())
+			{
+				$has_idx[$idd["col_name"]] = $idd;
+			}
+
+			foreach($td as $field)
+			{
+				if (!isset($has_idx[$field]))
+				{
+					echo "missing index for table $tbl field $field, create stmt:<br>";
+					$this->db_add_index($tbl, array(
+						"name" => $field,
+						"col" => $field
+					));
+				}
+			}
+		}
+
+		die("all done! ");
+	}
 };
 ?>
