@@ -228,6 +228,7 @@ function clearstyles()
 		old = el.contentWindow.document.body.innerHTML;
 		// nuke span tags
 		old2 = old.replace(/<span.+?>|<\/span>|<font.+?>|<\/font>/gi,"");
+		old2 = old2.replace(/<p.+?>/gi,"<p>");
 		//alert('clearing styles from ' + sel_el);
 		// put innerHTML back
 		el.contentWindow.document.body.innerHTML = old2;
