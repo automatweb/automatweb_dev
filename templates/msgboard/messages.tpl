@@ -1,13 +1,13 @@
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td class="ftitle2">Sorteeri <a href="/automatweb/comments.{VAR:ext}?section={VAR:section}&type=nested"><b>VASTUSTE</b></a> või <a href="/automatweb/comments.{VAR:ext}?section={VAR:section}&type=flat"><b>AJA</b></a> järgi või <a href="/automatweb/comments.{VAR:ext}?section={VAR:section}&action=search"><b>OTSI</b></a></span><br></td>
+    <td class="ftitle2">Sorteeri <a href="{VAR:baseurl}/automatweb/comments.{VAR:ext}?section={VAR:section}&type=nested"><b>VASTUSTE</b></a> või <a href="{VAR:baseurl}/automatweb/comments.{VAR:ext}?section={VAR:section}&type=flat"><b>AJA</b></a> järgi või <a href="{VAR:baseurl}/automatweb/comments.{VAR:ext}?section={VAR:section}&action=search"><b>OTSI</b></a></span><br></td>
 	</tr>
 	<tr>
 		<td align="center" >&nbsp;<font color="#000000"><br>
 			<!-- SUB: PAGES -->
 			Lehed: 
 			<!-- SUB: PAGE -->
-			<span class="menyyLeft"><a href="/automatweb/comments.{VAR:ext}?section={VAR:section}&page={VAR:pagenum}"><b>{VAR:ltext}</b></a></span><font color="#000000"> | </font>
+			<span class="menyyLeft"><a href="{VAR:baseurl}/automatweb/comments.{VAR:ext}?section={VAR:section}&page={VAR:pagenum}"><b>{VAR:ltext}</b></a></span><font color="#000000"> | </font>
 			<!-- END SUB: PAGE -->
 
 			<!-- SUB: SEL_PAGE -->
@@ -39,9 +39,9 @@
     <td class="text">{VAR:comment}</td>
 	</tr>
   <tr>
-    <td valign="bottom" height="18" class="textSmall">: <a href="/automatweb/comments.{VAR:ext}?action=add&parent={VAR:id}&section={VAR:section}&page={VAR:page}"><b>Vasta</b></a>
+    <td valign="bottom" height="18" class="textSmall">: <a href="{VAR:baseurl}/automatweb/comments.{VAR:ext}?action=add&parent={VAR:id}&section={VAR:section}&page={VAR:page}"><b>Vasta</b></a>
 		<!-- SUB: KUSTUTA -->
-			&nbsp;&nbsp;: <a href='/automatweb/comments.{VAR:ext}?action=delete&parent={VAR:id}&section={VAR:section}&page={VAR:page}'>Kustuta</a>
+			&nbsp;&nbsp;: <a href='{VAR:baseurl}/automatweb/comments.{VAR:ext}?action=delete&parent={VAR:id}&section={VAR:section}&page={VAR:page}'>Kustuta</a>
 		<!-- END SUB: KUSTUTA -->
 		</td>
   </tr>

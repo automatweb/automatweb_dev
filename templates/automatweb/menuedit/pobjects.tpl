@@ -1,8 +1,8 @@
 <html>
 <head>
-<link rel="stylesheet" href="/automatweb/css/site.css">
-<link rel="stylesheet" href="/automatweb/css/fg_menu.css">
-<link rel="stylesheet" href="/automatweb/css/bench.css">
+<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/site.css">
+<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/fg_menu.css">
+<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/bench.css">
 <script language="javascript">
 	function doSubmit(act)
 	{

@@ -35,7 +35,7 @@ function check_submit()
 
 <!-- END SUB: IMAGE -->
 
-<td bgcolor='#e5e5e5'><a href='/automatweb/images.{VAR:ext}?type=list&parent={VAR:entry_id}'><font face='tahoma, arial, geneva, helvetica' size="1">Muuda pilte</font></a></td>
+<td bgcolor='#e5e5e5'><a href='{VAR:baseurl}/automatweb/images.{VAR:ext}?type=list&parent={VAR:entry_id}'><font face='tahoma, arial, geneva, helvetica' size="1">Muuda pilte</font></a></td>
 </tr>
 </table>
 

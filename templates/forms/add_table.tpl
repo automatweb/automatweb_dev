@@ -50,6 +50,7 @@
 <!-- END SUB: TITLE -->
 <td class="fform">Muutmine</td>
 <td class="fform">Vaatamine</td>
+<td class="fform">Special</td>
 <td class="fform">Tulba pealkiri</td>
 <td class="fform">Sorditav?</td>
 </tr>
@@ -64,6 +65,7 @@
 
 <td align="center" class="fform"><input type='radio' name='columns[{VAR:column}]' value='change' {VAR:change_checked}></td>
 <td align="center" class="fform"><input type='radio' name='columns[{VAR:column}]' value='view' {VAR:view_checked}></td>
+<td align="center" class="fform"><input type='radio' name='columns[{VAR:column}]' value='special' {VAR:special_checked}></td>
 <td class="fform"><input type='text' class='small_button' name='names[{VAR:column}]' VALUE='{VAR:c_name}'></td>
 <td class="fform" align="center"><input type='checkbox' name='sortable[{VAR:column}]' VALUE='1' {VAR:sortable}></td>
 </tr>

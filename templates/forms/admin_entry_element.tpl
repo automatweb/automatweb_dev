@@ -126,9 +126,21 @@
 <!-- SUB: PRICE_ITEMS -->
 <tr>
 <td class="fgtext">Default hind:</td>
-<td class="fgtext"><input class='small_button' type='text' NAME='{VAR:cell_id}_price' VALUE='{VAR:price}'></td>
+<td class="fgtext"><input class='small_button' size=7 type='text' NAME='{VAR:cell_id}_price' VALUE='{VAR:price}'></td>
 <td class="fgtext">Pikkus:</td>
 <td class="fgtext"><input type='text' CLASS="small_button" SIZE=3 NAME='{VAR:cell_id}_length' VALUE='{VAR:length}'></td>
+</tr>
+<tr>
+<td class="fgtext">Mis valuutas hind sisestatakse:</td>
+<td class="fgtext"><select CLASS="small_button" NAME='{VAR:cell_id}_price_cur'>{VAR:price_cur}</select></td>
+<td class="fgtext">Mis valuutas hinda veel n&auml;idata:</td>
+<td class="fgtext"><select multiple CLASS="small_button" NAME='{VAR:cell_id}_price_show[]'>{VAR:price_show}</select></td>
+</tr>
+<tr>
+<td class="fgtext">Hindade eraldaja:</td>
+<td class="fgtext"><input type='text' class='small_button' name='{VAR:cell_id}_price_sep' value='{VAR:price_sep}'></td>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;</td>
 </tr>
 <!-- END SUB: PRICE_ITEMS -->
 <tr>

@@ -2,7 +2,7 @@
 	<body>
 		Muudame tabelit {VAR:table_name}.<br>
 
-		<form action='/automatweb/refcheck.{VAR:ext}' method=post ENCTYPE="multipart/form-data">
+		<form action='{VAR:baseurl}/automatweb/refcheck.{VAR:ext}' method=post ENCTYPE="multipart/form-data">
 
 			<table>
 				<tr>

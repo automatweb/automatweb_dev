@@ -1,8 +1,8 @@
 <html>
 <head>
 <title>Vali kordused</title>
-<link rel="stylesheet" href="/automatweb/css/site.css">
-<link rel="stylesheet" href="/automatweb/css/fg_menu.css">
+<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/site.css">
+<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/fg_menu.css">
 <script language="JavaScript">
 function recall()
 {

@@ -1,7 +1,7 @@
 
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td class="textSmall"><img src="/img/trans.gif" width="5" height="1" border="0" alt=""><b>Otsi kommentaare</b></td>
+    <td class="textSmall"><img src="{VAR:baseurl}/img/trans.gif" width="5" height="1" border="0" alt=""><b>Otsi kommentaare</b></td>
     <td>&nbsp;</td>
   </tr>
 </table>
@@ -10,7 +10,7 @@
 <img src="/img/trans.gif" width="1" height="10" border="0" alt=""><br>
 
 <table align="center" border="0" cellspacing="4" cellpadding="0">
-	<form method="get" action="/automatweb/comments.{VAR:ext}">
+	<form method="get" action="{VAR:baseurl}/automatweb/comments.{VAR:ext}">
 	<tr>
 		<td align="right" class="textSmall">Nimi:&nbsp;<input type='checkbox' value=1 name='s_from'></td>
 		<td><input type="text" name="from" size="25"></td>

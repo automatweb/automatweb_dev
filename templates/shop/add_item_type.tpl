@@ -138,6 +138,9 @@ function idxforvalue(el,val)
 	<td class="fcaption2" colspan=2><select name='eq'>{VAR:eqs}</select></td>
 </tr>
 <tr>
+	<td class="fcaption2" colspan=2>Kas sellele kaubale tehakse voucher?&nbsp;<input type='checkbox' name='has_voucher' value=1 {VAR:has_voucher}></td>
+</tr>
+<tr>
 	<td class="fform" align="center" colspan="2"><input type="submit" value="Edasi">
 	</td>
 </tr>

@@ -1,7 +1,7 @@
 <html>
 <head>
 <title>Autom@tweb development site</title>
-<link rel="stylesheet" href="/automatweb/css/site.css">
+<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/site.css">
 <script language="Javascript">
 <!--
 function remote(toolbar,width,height,file) {

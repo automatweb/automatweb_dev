@@ -1,6 +1,6 @@
 <!-- SUB: FG_MENU -->
 <!-- see on formgeni ylemine menyy-->
-<script language="Javascript" src="/automatweb/js/cbobjects.js"></script>
+<script language="Javascript" src="{VAR:baseurl}/automatweb/js/cbobjects.js"></script>
 <script language="Javascript">
 function init() {
     create_objects();

@@ -5,7 +5,7 @@
 	<td class="fform"><input type="text" name="name" value="{VAR:name}"></td>
 </tr>
 <tr>
-	<td class="fcaption">Kurss:</td>
+	<td class="fcaption">Kurss saksa marga suhtes:</td>
 	<td class="fform"><input type="text" size="10" name="ratio" value='{VAR:ratio}'></td>
 </tr>
 <tr>

@@ -27,9 +27,9 @@ function paste()
 // -->
 </script>
 
-<link rel="stylesheet" href="/automatweb/css/site.css">
-<link rel="stylesheet" href="/automatweb/css/fg_menu.css">
-<link rel="stylesheet" href="/automatweb/css/bench.css">
+<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/site.css">
+<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/fg_menu.css">
+<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/bench.css">
 <form action='reforb.{VAR:ext}' METHOD=POST NAME='foo'>
 <table border="0" cellspacing="0" cellpadding="0" width=100%>
 <tr>

@@ -10,6 +10,7 @@
 <td class="title">J&auml;rjekord men&uuml;&uuml;s</td>
 <td class="title">Nimi men&uuml;&uuml;s</td>
 <td class="title">V&auml;ljundi stiil</td>
+<td class="title">Teine v&auml;ljundi stiil</td>
 </tr>
 
 <!-- SUB: LINE -->
@@ -37,6 +38,11 @@
 <!-- SUB: OPS -->
 <select name='fp[{VAR:form_id}]'>{VAR:jops}</select>
 <!-- END SUB: OPS -->
+</td>
+<td class="plain">&nbsp;
+<!-- SUB: OPS2 -->
+<select name='fp2[{VAR:form_id}]'>{VAR:jops2}</select>
+<!-- END SUB: OPS2 -->
 </td>
 </tr>
 <!-- END SUB: LINE -->

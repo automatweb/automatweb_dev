@@ -21,7 +21,7 @@ OpenWindow = window.open(url);
 </table>
 
 
-<form action="/automatweb/reforb.{VAR:ext}" method="POST">
+<form action="{VAR:baseurl}/automatweb/reforb.{VAR:ext}" method="POST">
 <table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC">
 <!-- SUB: LANGUAGE -->
 	<tr>

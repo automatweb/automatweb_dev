@@ -10,7 +10,7 @@
   <tr>
     <td class="textSmall">
 
-: <a href='/automatweb/comments.{VAR:ext}?section={VAR:section}&action=search'><b>Otsi uuesti</b></a> &nbsp; : <a href='/automatweb/comments.{VAR:ext}?section={VAR:section}'><b>Loe kommentaare</b></a>
+: <a href='{VAR:baseurl}/automatweb/comments.{VAR:ext}?section={VAR:section}&action=search'><b>Otsi uuesti</b></a> &nbsp; : <a href='{VAR:baseurl}/automatweb/comments.{VAR:ext}?section={VAR:section}'><b>Loe kommentaare</b></a>
 
     </td>
     <td align="right">
@@ -41,7 +41,7 @@
 		<td bgcolor="#EFEFEF" class="vaikeVerdana">Teema:&nbsp;&nbsp;<b>{VAR:subj}</b></td>
 	</tr>
 	<tr>
-		<td bgcolor="#ffffff" class="vaikeVerdana"><img src="/img/nool_pun.gif" width="9" height="7" border="0" alt=""><a href='/automatweb/comments.{VAR:ext}?section={VAR:s_section}&from=search&cid={VAR:comment_id}#c{VAR:comment_id}' class='linkSin'>Loe</a></td>
+		<td bgcolor="#ffffff" class="vaikeVerdana"><img src="/img/nool_pun.gif" width="9" height="7" border="0" alt=""><a href='{VAR:baseurl}/automatweb/comments.{VAR:ext}?section={VAR:s_section}&from=search&cid={VAR:comment_id}#c{VAR:comment_id}' class='linkSin'>Loe</a></td>
 	</tr>
 	<tr>
 		<td><img src="/img/trans.gif" width="1" height="5" border="0" alt=""><br></td>

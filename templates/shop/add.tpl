@@ -43,10 +43,14 @@ function mk_ops()
 		{
 			eval("far = ops_"+sel_form);
 			populate_list(q.owner_form_op, far);
+			populate_list(q.owner_form_op_voucher, far);
+			populate_list(q.owner_form_op_issued, far);
 		}
 		else
 		{
 			clearList(q.owner_form_op);
+			clearList(q.owner_form_op_voucher);
+			clearList(q.owner_form_op_issued);
 		}
 	}
 }
@@ -113,6 +117,18 @@ function idxforvalue(el,val)
 <tr>
 	<td class="fcaption2" colspan=2><select name='owner_form_op'></select></td>
 </tr>
+<tr>
+	<td class="fcaption2" colspan=2>Poeomaniku rekvisiitide formi v&auml;ljund voucheril:</td>
+</tr>
+<tr>
+	<td class="fcaption2" colspan=2><select name='owner_form_op_voucher'></select></td>
+</tr>
+<tr>
+	<td class="fcaption2" colspan=2>Poeomaniku rekvisiitide formi v&auml;ljund "Issued by":</td>
+</tr>
+<tr>
+	<td class="fcaption2" colspan=2><select name='owner_form_op_issued'></select></td>
+</tr>
 <!-- SUB: CH_OWN -->
 <tr>
 	<td class="fcaption2" colspan=2><a href='{VAR:ch_own}'>Muuda poeomaniku rekvisiite</a></td>
@@ -122,6 +138,9 @@ function idxforvalue(el,val)
 <!-- SUB: CHANGE -->
 <tr>
 	<td class="fcaption2" colspan=2><a href='{VAR:orders}'>Tellimused</a></td>
+</tr>
+<tr>
+	<td class="fcaption2" colspan=2><a href='{VAR:tables}'>Arve tabelid</a></td>
 </tr>
 <!-- END SUB: CHANGE -->
 <tr>
@@ -138,6 +157,8 @@ mk_ops();
 <!-- SUB: CHANGE2 -->
 
 q.owner_form_op.selectedIndex = idxforvalue(q.owner_form_op,'{VAR:o_op_id}');
+q.owner_form_op_voucher.selectedIndex = idxforvalue(q.owner_form_op_voucher,'{VAR:o_op_id_voucher}');
+q.owner_form_op_issued.selectedIndex = idxforvalue(q.owner_form_op_issued,'{VAR:o_op_id_issued}');
 
 <!-- END SUB: CHANGE2 -->
 
