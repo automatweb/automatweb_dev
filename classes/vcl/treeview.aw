@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.37 2005/01/10 12:53:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.38 2005/01/16 12:26:25 voldemar Exp $
 // treeview.aw - tree generator
 /*
 
@@ -37,6 +37,7 @@ define("TREE_HTML", 1);
 define("TREE_JS", 2);
 define("TREE_DHTML", 3);
 define("TREE_DHTML_WITH_CHECKBOXES", 4);
+define("TREE_DHTML_WITH_BUTTONS", 5);
 
 // does this tree type support loading branches on-demand?
 define("LOAD_ON_DEMAND",1);
@@ -261,11 +262,11 @@ class treeview extends class_base
 	//   has_root - whether to draw to the root node. trees that load branches on demand don't
 	//		need to draw the rootnode for branches.
 	//   tree_id  - set to an unique id, if you want the tree to persist it's state
-	//	type - TREE_HTML|TREE_JS|TREE_DHTML|TREE_DHTML_WITH_CHECKBOXES , defaults to TREE_JS
+	//	type - TREE_HTML|TREE_JS|TREE_DHTML|TREE_DHTML_WITH_CHECKBOXES|TREE_DHTML_WITH_BUTTONS , defaults to TREE_JS
 	//	persist_state - tries to remember tree state in kuuki
-	// separator - string separator to use for separating checked node id-s, applies when type is TREE_DHTML_WITH_CHECKBOXES. defaults to ","
+	// separator - string separator to use for separating checked node id-s, applies when type is TREE_DHTML_WITH_CHECKBOXES or TREE_DHTML_WITH_BUTTONS. defaults to ","
 	// checked_nodes - tree node id-s that are checked initially, applies when type is TREE_DHTML_WITH_CHECKBOXES
-	// checkbox_data_var - name for variable that will contain posted data of what was checked/unchecked. applicable only when tree type is TREE_DHTML_WITH_CHECKBOXES. defaults to tree_id
+	// checkbox_data_var - name for variable that will contain posted data of what was checked/unchecked. applicable only when tree type is TREE_DHTML_WITH_CHECKBOXES or TREE_DHTML_WITH_BUTTONS. defaults to tree_id
 	function start_tree($arr)
 	{
 		$this->items = array();
@@ -275,12 +276,12 @@ class treeview extends class_base
 		$this->tree_id = empty($arr["tree_id"]) ? false : $arr["tree_id"];
 		$this->get_branch_func = empty($arr["get_branch_func"]) ? false : $arr["get_branch_func"];
 
-		if (($this->tree_type == TREE_DHTML or $this->tree_type == TREE_DHTML_WITH_CHECKBOXES) && !empty($this->get_branch_func))
+		if (($this->tree_type == TREE_DHTML or $this->tree_type == TREE_DHTML_WITH_CHECKBOXES or $this->tree_type == TREE_DHTML_WITH_BUTTONS) && !empty($this->get_branch_func))
 		{
 			$this->features[LOAD_ON_DEMAND] = 1;
 		}
 
-		if (($this->tree_type == TREE_DHTML or $this->tree_type == TREE_DHTML_WITH_CHECKBOXES) && !empty($this->tree_id) && $arr["persist_state"])
+		if (($this->tree_type == TREE_DHTML or $this->tree_type == TREE_DHTML_WITH_CHECKBOXES or $this->tree_type == TREE_DHTML_WITH_BUTTONS) && !empty($this->tree_id) && $arr["persist_state"])
 		{
 			$this->features[PERSIST_STATE] = 1;
 		}
@@ -289,6 +290,12 @@ class treeview extends class_base
 		{
 			$this->separator = empty($arr["separator"]) ? "," : $arr["separator"];
 			$this->checked_nodes = $arr["checked_nodes"];
+			$this->checkbox_data_var = empty ($arr["checkbox_data_var"]) ? $arr["tree_id"] : $arr["checkbox_data_var"];
+		}
+
+		if ($this->tree_type == TREE_DHTML_WITH_BUTTONS)
+		{
+			$this->separator = empty($arr["separator"]) ? "," : $arr["separator"];
 			$this->checkbox_data_var = empty ($arr["checkbox_data_var"]) ? $arr["tree_id"] : $arr["checkbox_data_var"];
 		}
 	}
@@ -374,7 +381,12 @@ class treeview extends class_base
 
 		if ($this->tree_type == TREE_DHTML_WITH_CHECKBOXES)
 		{
-			return $this->dhtml_checkboxes_finalize_tree();
+			return $this->dhtml_checkboxes_finalize_tree ();
+		}
+
+		if ($this->tree_type == TREE_DHTML_WITH_BUTTONS)
+		{
+			return $this->dhtml_buttons_finalize_tree ();
 		}
 
 		$this->read_template("ftiens.tpl");
@@ -568,6 +580,70 @@ class treeview extends class_base
 
 		// so, how do I figure out the path to the root node .. and if I do, then that's the
 		// same thing I'll have to give as an argument when using the on-demand feature
+
+		$this->vars(array(
+			"TREE_NODE" => $rv,
+			"HAS_ROOT" => $root,
+			"persist_state" => $this->has_feature(PERSIST_STATE),
+			'only_one_level_opened' => $this->only_one_level_opened,
+		));
+
+		return $this->parse();
+	}
+
+	function dhtml_buttons_finalize_tree ()
+	{
+		$level = 0;
+		$this->rv = "";
+		$this->set_parse_method("eval");
+		$this->read_template("dhtml_buttons_tree.tpl");
+
+		$this->r_path = array();
+		// now figure out the paths to selected nodes
+
+		// ja nagu sellest veel küllalt poleks .. I can have multiple opened nodes. yees!
+		if ($this->has_feature(PERSIST_STATE))
+		{
+			$opened_nodes = explode("^",$_COOKIE[$this->tree_id]);
+			$r_path = array();
+
+			foreach($opened_nodes as $open_node)
+			{
+				$rp = $this->_get_r_path($open_node);
+				$r_path = array_merge($r_path,$rp);
+			}
+
+			$this->r_path = array_unique($r_path);
+		}
+
+		$t = get_instance("languages");
+		$this->vars (array(
+			"target" => $this->tree_dat["url_target"],
+			"open_nodes" => is_array($opened_nodes) ? join(",",map("'%s'",$opened_nodes)) : "",
+			"tree_id" => $this->tree_id,
+			"charset" => $t->get_charset(),
+			"separator" => $this->separator,
+			"checkbox_data_var" => $this->checkbox_data_var,
+		));
+
+		$rv = $this->draw_dhtml_tree_with_buttons ($this->rootnode);
+
+		$root = "";
+		if ($this->has_root)
+		{
+			$this->vars(array(
+				"rootname" => $this->tree_dat["root_name"],
+				"rooturl" => $this->tree_dat["root_url"],
+				"icon_root" => ($this->tree_dat["root_icon"] != "" ) ? $this->tree_dat["root_icon"] : "/automatweb/images/aw_ikoon.gif",
+			));
+			if ($this->get_branch_func)
+			{
+				$this->vars(array(
+					"get_branch_func" => $this->get_branch_func,
+				));
+			};
+			$root .= $this->parse("HAS_ROOT");
+		};
 
 		$this->vars(array(
 			"TREE_NODE" => $rv,
@@ -794,6 +870,101 @@ class treeview extends class_base
 
 	}
 
+	function draw_dhtml_tree_with_buttons ($parent)
+	{
+		$data = $this->items[$parent];
+
+		if (!is_array($data))
+		{
+			return "";
+		};
+
+		$this->level++;
+		$result = "";
+
+		foreach($data as $item)
+		{
+			$subres = $this->draw_dhtml_tree_with_buttons ($item["id"]);
+
+			if (isset($item["iconurl"]))
+			{
+				$iconurl = $item["iconurl"];
+			}
+			elseif (in_array($item["id"],$this->r_path))
+			{
+				$iconurl = $this->cfg["baseurl"] . "/automatweb/images/open_folder.gif";
+			}
+			else
+			{
+				$iconurl = $this->cfg["baseurl"] . "/automatweb/images/closed_folder.gif";
+			};
+
+			$name = $item["name"];
+			if ($item["id"] == $this->selected_item)
+			{
+				$name = "<strong>$name</strong>";
+			}
+
+			$checkbox_status = "undefined";
+
+			if ($item["checkbox"] == "button")
+			{
+				$checkbox_status = "button";
+			}
+
+			$this->vars(array(
+				"name" => $name,
+				"id" => $item["id"],
+				"iconurl" => $iconurl,
+				"url" => $item["url"],
+				// spacer is only used for purely aesthetic reasons - to make
+				// source of the page look better
+				"spacer" => str_repeat ("    ", $this->level),
+				'menu_level' => $this->level,
+				"checkbox_status" => $checkbox_status,
+			));
+
+
+			if (empty($subres))
+			{
+				// fill them with emptyness
+				$this->vars(array(
+					"SUB_NODES" => "",
+				));
+
+				if ($checkbox_status == "button")
+				{
+					$tpl = "SINGLE_NODE_BUTTON";
+				}
+				else
+				{
+					$tpl = "SINGLE_NODE";
+				}
+			}
+			else
+			{
+				$this->vars(array(
+					"SINGLE_NODE" => $subres,
+					"display" => in_array($item["id"],$this->r_path) ? "block" : "none",
+					"data_loaded" => in_array($item["id"],$this->r_path) ? "true" : "false",
+					"node_image" => in_array($item["id"],$this->r_path) ? $this->cfg["baseurl"] . "/automatweb/images/minusnode.gif" : $this->cfg["baseurl"] . "/automatweb/images/plusnode.gif",
+					'menu_level' => $this->level,
+				));
+				$tmp = $this->parse("SUB_NODES");
+				$this->vars(array(
+					"SUB_NODES" => $tmp,
+				));
+
+				$tpl = "TREE_NODE";
+			}
+
+			$result .= $this->parse($tpl);
+		}
+
+		$this->level--;
+		return $result;
+	}
+
 	function draw_html_tree($parent, &$ml)
 	{
 		$this->level++;
@@ -931,7 +1102,7 @@ class treeview extends class_base
 	//		aw_url_change_var($var, $item->id()) - the $var variable will
 	//		contain the active tree item
 	//	node_actions - array:  clid=>"action_name". This is for specifying different actions for different classes
-	// checkbox_class_filter - array of class id-s, objects of these classes will have checkboxed tree nodes. applicable only when tree type is TREE_DHTML_WITH_CHECKBOXES
+	// checkbox_class_filter - array of class id-s, objects of these classes will have checkboxed/buttoned tree nodes. Applicable only when tree type is TREE_DHTML_WITH_CHECKBOXES or TREE_DHTML_WITH_BUTTONS.
 	function tree_from_objects($arr)
 	{
 		extract($arr);
@@ -997,6 +1168,10 @@ class treeview extends class_base
 				{
 					$checkbox_status = 0;
 				}
+			}
+			elseif ( ($this->tree_type == TREE_DHTML_WITH_BUTTONS) and is_array ($arr["checkbox_class_filter"]) and in_array ($o->class_id(), $arr["checkbox_class_filter"]) )
+			{
+				$checkbox_status = "button";
 			}
 			else
 			{
