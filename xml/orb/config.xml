@@ -120,6 +120,13 @@
 			</function>
 		</action>
 
+		<action name="class_cfgforms">
+			<function name="class_cfgforms">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="export_class_icons">
 			<function name="export_class_icons">
 				<arguments>
