@@ -64,6 +64,11 @@
 											Vali tellimise url:<Br>
 											<input type="text" class="formtext" name="cols[{VAR:col_id}][order_form]" value="{VAR:order_form}">
 											<!-- END SUB: SEL_ORDER_FORM -->
+									
+											<!-- SUB: IS_TYPE_TEXT -->
+											Tekst:<Br>
+											<input type="text" class="formtext" name="cols[{VAR:col_id}][is_type_text]" value="{VAR:is_type_text}">
+											<!-- END SUB: IS_TYPE_TEXT -->
 
 											<!-- SUB: SEL_ALIAS -->
 											Vali alias:<Br>
@@ -102,6 +107,7 @@
 											<!-- SUB: SEL_SETTINGS -->
 											Tulba m‰‰rangud:<br>
 											Tulp mitteaktiivne: <input type="checkbox" name="cols[{VAR:col_id}][not_active]" value="1" {VAR:col_not_active}><Br>
+											Elementide eraldaja: <input type="text" name="cols[{VAR:col_id}][col_el_sep]" value="{VAR:col_el_sep}" size="3" class="formtext"><Br>
 											<table border="0">
 												<tr>
 													<td class="celltext">Jrk.</td>
@@ -114,9 +120,9 @@
 													<td class="celltext" colspan="4">{VAR:el_name}</td>
 												</tr>
 												<tr>
-													<td class="celltext"><input class="formtext" type="text" name="cols[{VAR:col_id}][el_ord][{VAR:el_id}]" value="{VAR:el_ord}" size="2"></td>
-													<td class="celltext"><input class="formtext" type="text" name="cols[{VAR:col_id}][el_sep_pre][{VAR:el_id}]" value="{VAR:el_sep_pre}" size="2"></td>
-													<td class="celltext"><input class="formtext" type="text" name="cols[{VAR:col_id}][el_sep][{VAR:el_id}]" value="{VAR:el_sep}" size="2"></td>
+													<td class="celltext"><input class="formtext" type="text" name="cols[{VAR:col_id}][el_ord][{VAR:el_id}]" value='{VAR:el_ord}' size="2"></td>
+													<td class="celltext"><input class="formtext" type="text" name="cols[{VAR:col_id}][el_sep_pre][{VAR:el_id}]" value='{VAR:el_sep_pre}' size="2"></td>
+													<td class="celltext"><input class="formtext" type="text" name="cols[{VAR:col_id}][el_sep][{VAR:el_id}]" value='{VAR:el_sep}' size="2"></td>
 													<td class="celltext"><input class="formcheck" type="checkbox" name="cols[{VAR:col_id}][el_show][{VAR:el_id}]" value="1" {VAR:el_show}></td>
 												</tr>
 												<!-- END SUB: SEL_EL -->
@@ -125,7 +131,9 @@
 											Otsing elementi<Br>
 											<select name="cols[{VAR:col_id}][search_el]" class="formselect"><option value=''>{VAR:search_el}</select> <Br>
 											Otsingu v&auml;&auml;rtus elemendist:<Br>
-											<select name="cols[{VAR:col_id}][search_map]" class="formselect"><option value=''>{VAR:search_map}</select>
+											<select name="cols[{VAR:col_id}][search_map]" class="formselect"><option value=''>{VAR:search_map}</select><br>
+											Kas jagada otsing s&otilde;nadeks: <input type='checkbox' name='cols[{VAR:col_id}][split_col_search]' value='1' {VAR:split_col_search}><br>
+											S&otilde;nade eraldaja: <input type='text' name='cols[{VAR:col_id}][split_col_search_splitter]' value='{VAR:split_col_search_splitter}' class='formtext' size="2">
 											<!-- END SUB: HAS_FTABLE_ALIASES -->
 
 											<!-- END SUB: SEL_SETTINGS -->
@@ -138,6 +146,8 @@
 											<input type="checkbox" name="cols[{VAR:col_id}][no_show_empty]" value="1" {VAR:no_show_empty}> &Auml;ra n&auml;ita t&uuml;hjalt <br>
 											Vali tulba kontrollerid:<br>
 											<select name="cols[{VAR:col_id}][controllers][]" multiple class="formselect">{VAR:controllers}</select><Br>
+
+											<input type="checkbox" name="cols[{VAR:col_id}][link_new_window]" value="1" {VAR:col_link_new_window}> Uues aknas <br><br>
 
 											<input type="checkbox" name="cols[{VAR:col_id}][link_popup]" value="1" {VAR:col_link_popup}> Popup aken <br>
 											Erineva stiiliga: <input class="formcheck" type="checkbox" name="cols[{VAR:col_id}][has_col_style]" value="1" {VAR:has_col_style}><Br>
@@ -188,6 +198,11 @@
 
 											<input type="textbox" class="formtext" size="3" name="cols[{VAR:col_id}][thousands_sep]" value="{VAR:thousands_sep}"> Tuhandete eraldaja<Br>
 											<!-- END SUB: SEL_IMAGE -->
+
+											<!-- SUB: SEL_DATEFORMAT -->
+											Kuup&auml;eva formaat: <br>
+											<input type="text" class="formtext" name="cols[{VAR:col_id}][dateformat]" value="{VAR:dateformat}"> <br>
+											<!-- END SUB: SEL_DATEFORMAT -->
 										</table>
 
 										<table border="0" cellpadding="0" cellspacing="0" width="100%">
