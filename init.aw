@@ -431,6 +431,9 @@ function aw_startup()
 // !called just before the very end
 function aw_shutdown()
 {
+	$apd = get_instance("layout/active_page_data");
+	echo $apd->on_shutdown_get_styles();
+
 	global $awt;
 	if (is_object($awt))
 	{
