@@ -821,7 +821,7 @@ class _int_object
 				}
 				else
 				{
-					$this->obj[$this->properties[$key]["field"]] = $this->obj["properties"][$field];
+					$this->obj[$this->properties[$key]["field"]] = $this->obj["properties"][$key];
 				}
 			}
 		}
