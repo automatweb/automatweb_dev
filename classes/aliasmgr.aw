@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.107 2003/07/07 14:58:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.108 2003/07/08 10:56:26 axel Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -1251,7 +1251,8 @@ HTM;
 			$this->make_alias_classarr();
 			$parts["class_id"] = sprintf("class_id IN (%s)",join(",",array_keys($this->classarr)));
 		};
-		$parts["brother_id"] = "brother_of = oid ";
+		//$parts["brother_id"] = "brother_of = oid ";
+		$parts["brother_id"] = "(brother_of = 0 OR brother_of = oid)";
 	}
 
 	////
