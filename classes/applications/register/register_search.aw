@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.13 2004/12/03 09:13:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.14 2004/12/03 09:19:30 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -742,7 +742,7 @@ class register_search extends class_base
 				}
 				else
 				{
-					$data[$v["name"]] = $o->prop($v["name"]);
+					$data[$v["name"]] = $o->prop_str($v["name"]);
 					if ($tdata["__view_col"] == $v["name"])
 					{
 						$data[$v["name"]] = html::href(array(
