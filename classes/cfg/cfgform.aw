@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.3 2002/11/12 16:23:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.4 2002/11/12 21:47:33 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -22,8 +22,7 @@ class cfgform extends aw_template
 	function cfgform($args = array())
 	{
 		$this->init(array(
-			"tpldir" => "cfgform",
-			"clid" => CL_CFGFORM,
+			'clid' => CL_CFGFORM,
 		));
 	}
 
@@ -93,27 +92,6 @@ class cfgform extends aw_template
 		return $this->tb;
 	}
 	
-	// !That was all nice and good .. but I also need means to do the save queries
-	// for me instead of leaving that up to the caller.
-	function submit_properties($args = array())
-	{
-		extract($args);
-		if (!is_object($clid))
-		{
-			// get lost!
-			return false;
-		};
-		// I need to fetch all the properties once again as I do in 
-		// form drawing code and also filter them in the same way
-		// so that I don't overwrite stuff which does not exist in the form
-
-
-		// And I need to figure out the best save strategy
-		// in cases I need to store data into multiple fields
-
-
-	}
-
 	////
 	// !This will cycle over the results of get_properties, doing
 	// callbacks in the progress, if needed
