@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.41 2002/02/18 13:43:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.42 2002/03/13 14:18:58 duke Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 global $orb_defs;
@@ -704,8 +704,12 @@ class forum extends aw_template
 			));
 		};
 
+		$this->vars(array(
+			"forum_link" => $this->mk_my_orb("topics",array("id" => $board_obj["parent"])),
+		));
 		$retval = $this->parse();
 		$retval .= $this->add_comment(array("board" => $board,"parent" => $parent,"section" => $section,"act" => "show"));
+
 		return $retval;
 
 	}
@@ -834,6 +838,7 @@ class forum extends aw_template
 		};
 		$this->vars(array(
 			"TOPIC" => $this->parse("TOPIC"),
+			"forum_link" => $this->mk_my_orb("topics",array("id" => $board_obj["parent"])),
 		));
 		if ($cid)
 		{
