@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.26 2004/04/15 06:59:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.27 2004/05/06 12:37:15 duke Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -59,6 +59,15 @@ class ml_member extends class_base
 		$q = "SELECT oid FROM objects LEFT JOIN ml_users ON (objects.oid = ml_users.id) WHERE mail = '$email' AND parent = '$folder' AND status != 0";
 		$this->db_query($q);
 		return $this->db_next();
+	}
+
+	function get_member_by_id($id)
+	{
+		$id = (int)$id;
+		$q = "SELECT ml_users.name,ml_users.mail FROM objects LEFT JOIN ml_users ON (objects.oid = ml_users.id) WHERE ml_users.id = '$id'";
+		$this->db_query($q);
+		$row = $this->db_next();
+		return $row["name"] . " " . $row["mail"];
 	}
 
 	////
