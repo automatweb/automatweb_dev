@@ -3,48 +3,48 @@
       <property>
             <name>topicsonpage</name>
             <type>select</type>
-            <field>meta</field>
-            <method>serialize</method>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Teemasid lehel</caption>
       </property>
       <property>
             <name>comments</name>
             <type>checkbox</type>
-            <field>meta</field>
-            <method>serialize</method>
             <ch_value>1</ch_value>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Kommenteeritav</caption>
       </property>
       <property>
             <name>onpage</name>
             <type>select</type>
-            <field>meta</field>
-            <method>serialize</method>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Kommentaare lehel</caption>
       </property>
       <property>
             <name>rated</name>
             <type>checkbox</type>
-            <field>meta</field>
-            <method>serialize</method>
             <ch_value>1</ch_value>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Hinnatav</caption>
       </property>
       <property>
             <name>template</name>
             <type>select</type>
-            <field>meta</field>
-            <method>serialize</method>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Template</caption>
       </property>
       <property>
@@ -54,30 +54,40 @@
             <editonly>1</editonly>
             <table>objects</table>
             <group>general</group>
-            <field>preview</field>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Eelvaade</caption>
       </property>
       <property>
             <name>rates</name>
             <callback>callback_get_rates</callback>
-            <field>meta</field>
-            <method>serialize</method>
             <group>rates</group>
             <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Hinded</caption>
+      </property>
+      <property>
+            <name>addresslist</name>
+            <type>text</type>
+            <store>no</store>
+            <group>rates</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>E-posti aadressid</caption>
       </property>
       <property>
             <name>language</name>
             <callback>callback_get_languages</callback>
             <group>languages</group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
             <caption>Keel</caption>
       </property>
       <classinfo>
             <corefields>name,comment,status</corefields>
-            <toolbar>yes</toolbar>
       </classinfo>
       <groupinfo>
             <rates>
