@@ -644,7 +644,7 @@ class _int_object
 			return NULL;
 		}
 
-		return ($this->obj["oid"] == $this->obj["brother_of"]);
+		return ($this->obj["oid"] != $this->obj["brother_of"]);
 	}
 
 	function get_original()
