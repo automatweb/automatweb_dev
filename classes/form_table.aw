@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.26 2002/02/15 15:10:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.27 2002/02/27 05:39:26 duke Exp $
 global $orb_defs;
 $orb_defs["form_table"] = "xml";
 lc_load("form");
@@ -112,6 +112,7 @@ class form_table extends form_base
 						
 						$this->table["defs"][$r_c]["lang_title"] = $names[$r_c];
 						$this->table["defs"][$r_c]["sortable"] = $sortable[$r_c];
+						$this->table["defs"][$r_c]["is_email"] = $is_email[$r_c];
 						$this->table["defs"][$r_c]["doelsearch"] = $doelsearch[$r_c];
 						$r_c++;
 					}
@@ -230,6 +231,7 @@ class form_table extends form_base
 			$this->vars(array(
 				"column" => $col,
 				"sortable" => checked($this->table["defs"][$col]["sortable"]),
+				"is_email" => checked($this->table["defs"][$col]["is_email"]),
 				"elements" => $this->multiple_option_list($this->table["defs"][$col]["el"],$els),
 				"link_elements" => $this->picker($this->table["defs"][$col]["link_el"],$els),
 				"add_col" => $this->mk_my_orb("add_col", array("id" => $id,"after" => $col)),
@@ -477,6 +479,11 @@ class form_table extends form_base
 				{
 					$dat["ev_col_".$col] = "<a href='".$dat["ev_".$this->table["defs"][$col]["link_el"]]."'>".$dat["ev_col_".$col]."</a>";
 				}
+				else
+				if ($this->table["defs"][$col]["is_email"])
+				{
+					$dat["ev_col_".$col] = "<a href='mailto:".$dat["ev_col_".$col]."'>".$dat["ev_col_".$col]."</a>";
+				}
 			}
 			else
 			{
@@ -485,6 +492,17 @@ class form_table extends form_base
 					foreach($cc["el"] as $_elid => $elid)
 					{
 						$dat["ev_".$elid] = "<a href='".$dat["ev_".$this->table["defs"][$col]["link_el"]]."'>".$dat["ev_".$elid]."</a>";
+					}
+				}
+				else
+				if ($this->table["defs"][$col]["is_email"])
+				{
+					if (is_array($cc["el"]))
+					{
+						foreach($cc["el"] as $_elid => $elid)
+						{
+							$dat["ev_".$elid] = "<a href='mailto:".$dat["ev_".$elid]."'>".$dat["ev_".$elid]."</a>";
+						}
 					}
 				}
 			}
