@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.237 2003/12/05 12:59:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.238 2003/12/09 15:16:31 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -258,15 +258,6 @@ class core extends acl_base
 
 		$obj = $this->get_object($oid);
 		// give the class the option to hook into object deleteion
-		$cl = $this->cfg["classes"][$obj["class_id"]]["file"];
-		if ($cl)
-		{
-			$inst = get_instance($cl);
-			if (method_exists($inst, "on_delete_hook"))
-			{
-				$inst->on_delete_hook($oid);
-			}
-		}
 		$this->_log(ST_CORE, SA_DELETE, "$obj[name], id = $oid, class_id = ".$this->cfg['classes'][$obj['class_id']]['name'], $oid);
 
 		$where = " oid = '$oid'";
@@ -683,19 +674,6 @@ class core extends acl_base
 	{
 		$q = "DELETE FROM aliases WHERE source = '$source' AND target = '$target'";
 		$this->db_query($q);
-
-		// we must let the class that the alias was deleted from
-		// handle the deletion
-		$ob = $this->get_object($source);
-		$cls = aw_ini_get("classes");
-		$i = get_instance($cls[$ob["class_id"]]["file"]);
-		if (method_exists($i,"on_delete_alias") && !$no_callback)
-		{
-			$i->on_delete_alias(array(
-				"id" => $source,
-				"alias" => $target
-			));
-		}
 	}
 
 	////
@@ -2544,6 +2522,11 @@ class core extends acl_base
 	{
 		$obj = $this->get_object($args['id']);
 		return $obj['name'];
+	}
+	
+	function object_exists($oid)
+	{
+		return $GLOBALS["object_loader"]->ds->object_exists($oid);
 	}
 };
 ?>
