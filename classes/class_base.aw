@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.74 2003/02/17 14:41:18 duke Exp $
+// $Id: class_base.aw,v 2.75 2003/02/18 08:57:20 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -241,7 +241,7 @@ class class_base extends aliasmgr
 			$orb_class = "doc";
 		};
 
-		$gdata = $this->groupinfo->get_at($group);
+		$gdata = $this->groupinfo->get_at($this->activegroup);
 
 		$argblock = array(
 			"id" => $id,
