@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.35 2004/03/25 09:40:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.36 2004/04/06 15:16:10 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -1621,10 +1621,13 @@ class converters extends aw_template
 			$g_obj = obj($us->get_oid_for_gid($row["gid"]));
 
 			$goid = $g_obj->id();
-			$obj->connect(array(
-				"to" => $goid,
-				"reltype" => RELTYPE_ACL
-			));
+			if (is_oid($goid))
+			{
+				$obj->connect(array(
+					"to" => $goid,
+					"reltype" => RELTYPE_ACL
+				));
+			}
 			// we don't need to do more, because the acl is read from the acl table!
 		}
 		die("all done!");
