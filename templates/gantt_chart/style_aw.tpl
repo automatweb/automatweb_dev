@@ -72,6 +72,11 @@ a.VclGanttChartBarLink:hover span
 	width: {VAR:chart_width};
 }
 
+.VclGanttChartCell
+{
+	border-color: #CCC;
+}
+
 .VclGanttChartColumn
 {
 	border: none;

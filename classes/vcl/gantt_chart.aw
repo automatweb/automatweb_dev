@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.7 2005/03/11 09:12:28 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.8 2005/03/15 11:04:23 voldemar Exp $
 // gantt_chart.aw - Gantti diagramm
 /*
 
@@ -126,7 +126,7 @@ class gantt_chart extends class_base
 	// timestamp start - bar starting place on timeline. Required.
 	// int length - bar length in seconds. Required.
 	// string title - title for the bar.
-	// bool hilight - bar will be hilighted if set to true.
+	// string type - bar type ("hilighted" | "normal" | "inprogress" | "done"). default is "normal".
 	// string uri - uri for bar hyperlink. Applies if bar_anchors property is set to true for chart.
 	// string target - uri target for bar hyperlink. Applies if bar_anchors property is set to true for chart.
 	function add_bar ($arr)
@@ -135,7 +135,7 @@ class gantt_chart extends class_base
 		$start = (int) $arr["start"];
 		$length = (int) $arr["length"];
 		$title = empty ($arr["title"]) ? "" : $arr["title"];
-		$hilight = (bool) (empty ($arr["hilight"]) ? false : $arr["hilight"]);
+		$type = (string) $arr["type"];
 		$uri = empty ($arr["uri"]) ? "#" : $arr["uri"];
 		$uri_target = empty ($arr["target"]) ? "_self" : $arr["target"];
 
@@ -143,7 +143,7 @@ class gantt_chart extends class_base
 			"start" => $start,
 			"length" => $length,
 			"title" => $title,
-			"hilight" => $hilight,
+			"type" => $type,
 			"bar_uri" => $uri,
 			"bar_uri_target" => $uri_target,
 			"row" => $row
@@ -160,53 +160,7 @@ class gantt_chart extends class_base
 		);
 		$style = $this->parse ();
 
-		### create navigation
-		// $navigation = "";
-
-		// if ($this->navigation)
-		// {
-			// $start = (int) ($arr["request"]["gantt_chart_start"] ? $arr["request"]["gantt_chart_start"] : time ());
-			// $columns = (int) ($arr["request"]["gantt_chart_length"] ? $arr["request"]["gantt_chart_length"] : 7);
-			// $start = ($columns == 7) ? $this->get_week_start ($start) : $start;
-			// $period_length = $columns * 86400;
-			// $length_nav = array ();
-			// $start_nav = array ();
-
-			// for ($days = 1; $days < 8; $days++)
-			// {
-				// if ($columns == $days)
-				// {
-					// $length_nav[] = $days;
-				// }
-				// else
-				// {
-					// $length_nav[] = html::href (array (
-						// "caption" => $days,
-						// "url" => aw_url_change_var ("gantt_chart_length", $days),
-					// ));
-				// }
-			// }
-
-			// $start_nav[] = html::href (array (
-				// "caption" => "Täna",
-				// "url" => aw_url_change_var ("gantt_chart_start", $this->get_week_start (time ())),
-			// ));
-
-			// $this->read_template ("navigation_" . $this->style . ".tpl");
-			// $this->vars = array (
-				// "rewind_uri" => aw_url_change_var ("gantt_chart_start", ($start - $hop_length * $period_length)),
-				// "prev_uri" => aw_url_change_var ("gantt_chart_start", ($start - $period_length)),
-				// "current_uri" => ,
-				// "next_uri" => aw_url_change_var ("gantt_chart_start", ($start + $period_length + 1)),
-				// "ffwd_uri" => aw_url_change_var ("gantt_chart_start", ($start + $hop_length * $period_length)),
-				// "hop_length" => ,
-				// "chart_id" => $this->chart_id,
-			// );
-			// $navigation = $this->parse ();
-		// }
-
 		### compose chart table
-		$row_switch = 0;
 		$bar_switch = 0;
 		$rows = "";
 		$this->scale_quotient = (($this->end - $this->start) / $this->chart_width);
@@ -265,10 +219,29 @@ class gantt_chart extends class_base
 						if (isset ($bar["force_type"]))
 						{
 							$bar_type = $bar["force_type"];
+							unset ($bar["force_type"]);
 						}
 						else
 						{
-							$bar_type = $bar["hilight"] ? "hilighted" : $bar_switch;
+							switch ($bar["type"])
+							{
+								case "hilighted":
+									$bar_type = "hilighted";
+									break;
+
+								case "inprogress":
+									$bar_type = "inprogress";
+									break;
+
+								case "done":
+									$bar_type = "done_" . $bar_switch;
+									break;
+
+								case "normal":
+								default:
+									$bar_type = "normal_" . $bar_switch;
+									break;
+							}
 						}
 
 						### trim bars starting/ending before chart start
@@ -306,12 +279,12 @@ class gantt_chart extends class_base
 								"length" => $length,
 								"baseurl" => $this->cfg["baseurl"],
 							));
-							$cell_contents .= trim ($this->parse ("MAIN.data_row" . $row_switch . ".data_cell_" . $cell_type . ".cell_contents.bar_empty"));
+							$cell_contents .= trim ($this->parse ("MAIN.data_row.data_cell_" . $cell_type . ".cell_contents.bar_empty"));
 							$pointer += $bar["start"];
 							$content_length += $length;
 						}
 
-	// /* dbg */ if (strstr ($bar["title"], "job: 6978")){ arr ($bar); echo "[".date ("j/m/Y H.i", $bar["start"]) . "] - [".date ("j/m/Y H.i", $bar["start"] + $bar["length"]) . "]"; echo htmlentities ($row_contents);}
+// /* dbg */ if (strstr ($bar["title"], "job: 6978")){ arr ($bar); echo "[".date ("j/m/Y H.i", $bar["start"]) . "] - [".date ("j/m/Y H.i", $bar["start"] + $bar["length"]) . "]"; echo htmlentities ($row_contents);}
 
 						### parse bar
 						$length = ceil ($bar["length"] / $this->scale_quotient);
@@ -322,7 +295,7 @@ class gantt_chart extends class_base
 							"bar_uri_target" => $bar["bar_uri_target"],
 							"baseurl" => $this->cfg["baseurl"],
 						));
-						$bar_rendered = trim ($this->parse ("MAIN.data_row" . $row_switch . ".data_cell_" . $cell_type . ".cell_contents.bar_" . $bar_type));
+						$bar_rendered = trim ($this->parse ("MAIN.data_row.data_cell_" . $cell_type . ".cell_contents.bar_" . $bar_type));
 						$cell_contents .= $bar_rendered;
 
 						### ...
@@ -339,7 +312,7 @@ class gantt_chart extends class_base
 							"length" => $length,
 							"baseurl" => $this->cfg["baseurl"],
 						));
-						$cell_contents .= trim ($this->parse ("MAIN.data_row" . $row_switch . ".data_cell_" . $cell_type . ".cell_contents.bar_empty"));
+						$cell_contents .= trim ($this->parse ("MAIN.data_row.data_cell_" . $cell_type . ".cell_contents.bar_empty"));
 						$pointer = $cell_end;
 					}
 
@@ -347,7 +320,7 @@ class gantt_chart extends class_base
 					$this->vars (array (
 						"cell_contents" => $cell_contents,
 					));
-					$row_contents .= trim ($this->parse ("MAIN.data_row" . $row_switch . ".data_cell_" . $cell_type));
+					$row_contents .= trim ($this->parse ("MAIN.data_row.data_cell_" . $cell_type));
 
 					### ...
 					$cell_end += $this->cell_length;
@@ -365,9 +338,7 @@ class gantt_chart extends class_base
 				"row_uri_target" => $row["target"],
 				"data_cell_" . $cell_type => $row_contents,
 			));
-			$rows .= trim ($this->parse ("data_row" . $row_switch));
-
-			$row_switch = $row_switch ? 0 : 1;
+			$rows .= trim ($this->parse ("data_row"));
 		}
 
 		### parse header
@@ -422,7 +393,7 @@ class gantt_chart extends class_base
 			"columns" => count ($this->columns) * $this->subdivisions,
 			"subdivision_row" => $timespans,
 			"column_head" => $header_row,
-			"data_row0" => $rows,
+			"data_row" => $rows,
 		));
 		$table = $this->parse ();
 
