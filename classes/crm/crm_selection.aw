@@ -184,6 +184,10 @@ class crm_selection extends class_base
 		{
 			foreach ($objects as $object)
 			{
+				if (!$this->object_exists($object["object"]) || !$this->can("view", $object["object"]))
+				{
+					continue;
+				};
 				$item = new object($object["object"]);
 				$t->define_data(array(
 					"id" => $item->id(),
