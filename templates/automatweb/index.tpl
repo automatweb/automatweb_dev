@@ -1,5 +1,3 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-            "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset={VAR:charset}">
@@ -51,7 +49,7 @@ function check_generic_loader()
 // -->
 </script>
 </head>
-<body link="#0000ff" vlink="#0000ff" onmousedown="activate_window();" onLoad="update_window_title();create_objects(); check_generic_loader();">
+<body link="#0000ff" vlink="#0000ff" onLoad="create_objects(); check_generic_loader();">
 
 <!-- SUB: YAH -->
 <div class="aw04yah">{VAR:site_title}</div>

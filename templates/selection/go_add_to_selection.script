@@ -2,7 +2,7 @@
 function go_manage_selection(oid,backto,action,paren)
 	{
 		document.changeform.reforb.value = '1';
-		document.changeform.elements['class'].value = 'selection';
+		document.changeform.elements['class'].value = 'crm_selection';
 		document.changeform.elements['action'].value = action;
 
 		if ((action == 'add_to_selection') && (oid == '0'))

@@ -1,8 +1,7 @@
-
 <!-- SUB: start -->
-<div class="aw04toolbar">
+<!--<div class="aw04toolbar">-->
 
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<table class="aw04toolbar" width="100%" border="0" cellpadding="0" cellspacing="0">
 	<tr>
 	<td>
 
@@ -15,7 +14,7 @@
 <!-- END SUB: button -->
 
 <!-- SUB: menu_button -->
-	<td class="aw04toolbarbutton" valign="center" onMouseOver="this.className='aw04toolbarbuttonhover'" onMouseOut="this.className='aw04toolbarbutton'" onMouseDown="this.className='aw04toolbarbuttondown'" onMouseUp="this.className='aw04toolbarbuttonhover'" title="{VAR:tooltip}" alt="{VAR:tooltip}"><a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:imgbase}/{VAR:img}" border="0"><img src="{VAR:imgbase}/downarr.png" border="0"></a></td>
+	<td nowrap class="aw04toolbarbutton" valign="center" onMouseOver="this.className='aw04toolbarbuttonhover'" onMouseOut="this.className='aw04toolbarbutton'" onMouseDown="this.className='aw04toolbarbuttondown'" onMouseUp="this.className='aw04toolbarbuttonhover'" title="{VAR:tooltip}" alt="{VAR:tooltip}"><a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:imgbase}/{VAR:img}" border="0"><img src="{VAR:imgbase}/downarr.png" border="0"></a></td>
 <!-- END SUB: menu_button -->
 
 <!-- SUB: text_button -->
@@ -35,6 +34,7 @@
 	</tr>
 	</table>
 </td>
+<!--</div>-->
 <!-- END SUB: end -->
 
 <!-- SUB: right_side -->
@@ -52,6 +52,5 @@
 <!-- SUB: real_end -->
 	</tr>
 	</table>
-</div>
 <!-- END SUB: real_end -->
 

@@ -84,11 +84,7 @@ function navigate_to()
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 	<tr>
-		<td class="aw04kalender02">
-			<a href="{VAR:prevlink}"><img SRC="{VAR:baseurl}/automatweb/images/blue/cal_nool_left.gif" WIDTH="19" HEIGHT="8" BORDER=0 ALT="&lt;&lt;"></a> {VAR:caption}  <a href="{VAR:nextlink}"><img SRC="{VAR:baseurl}/automatweb/images/blue/cal_nool_right.gif" WIDTH="19" HEIGHT="8" BORDER=0 ALT="&gt;&gt;"></a>
-		</td>
-	<td valign="bottom">
-
+		<td class="aw04kalender001" colspan="3" align="right" valign="bottom">
 	<table border="0" cellpadding="0" cellspacing="0">
 		<tr>
 	
@@ -109,6 +105,15 @@ function navigate_to()
 			<!-- END SUB: SEL_PAGE -->
 			</tr>
 			</table>
+
+		</td>
+	</tr>
+	<tr>
+		<td class="aw04kalender02">
+			<a href="{VAR:prevlink}"><img SRC="{VAR:baseurl}/automatweb/images/blue/cal_nool_left.gif" WIDTH="19" HEIGHT="8" BORDER=0 ALT="&lt;&lt;"></a> {VAR:caption}  <a href="{VAR:nextlink}"><img SRC="{VAR:baseurl}/automatweb/images/blue/cal_nool_right.gif" WIDTH="19" HEIGHT="8" BORDER=0 ALT="&gt;&gt;"></a>
+		</td>
+	<td valign="bottom">
+
 
 	</td>
 	<form id='naviform' style='display: inline'>

@@ -12,14 +12,14 @@
 
 <!-- SUB: PROP_ERR_MSG -->
 <tr>
-	<td class="aw04contentcellleft" width='160'></td>
+	<td class="aw04contentcellleft" width='80'></td>
 	<td class='aw04contentcellright'><span style='color: red'>{VAR:err_msg}</span>	</td>
 </tr>	
 <!-- END SUB: PROP_ERR_MSG -->
 
 <!-- SUB: LINE -->
 <tr>
-        <td class='aw04contentcellleft' width='160' nowrap>
+        <td class='aw04contentcellleft' width='80' nowrap>
 		{VAR:caption}
 		</td>
         <td class='aw04contentcellright'>
@@ -30,7 +30,7 @@
 
 <!-- SUB: HEADER -->
 <tr>
-	<td class='aw04contentcellsubheader' width='160'>
+	<td class='aw04contentcellsubheader' width='80'>
 	&nbsp;
 	</td>
 	<td class='aw04contentcellsubheader'>
@@ -57,7 +57,7 @@
 
 <!-- SUB: SUBMIT -->
 <tr>
-	<td class='aw04contentcellleft' align='center' width='160'>&nbsp;</td>
+	<td class='aw04contentcellleft' align='center' width='80'>&nbsp;</td>
 	<td class='aw04contentcellright'>
 		<input type='submit' value='Salvesta' class='aw04formbutton' onClick='submit_changeform(); return false;'>
 	</td>
