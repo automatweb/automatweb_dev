@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.55 2002/01/18 00:40:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.56 2002/01/22 16:26:32 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -484,7 +484,7 @@ class planner extends calendar {
 			$meta = aw_unserialize($e["metadata"]);	
 			if ($meta["showtype"] == 0)
 			{
-				$link = sprintf("onClick='javascript:window.open(\"%s\",\"w%s\",\"toolbar=0,location=0,menubar=0,scrollbars=1,width=400,height=500\")'","orb.aw?class=planner&action=display_object&id=$obj[oid]",$obj["oid"]);
+				$link = sprintf("onClick='javascript:window.open(\"%s\",\"w%s\",\"toolbar=0,location=0,menubar=0,scrollbars=1,width=400,height=500\")'","orb.aw?class=objects&action=show&id=$obj[oid]",$obj["oid"]);
 				$repl = "<a href='#' $link>$obj[name]</a>";
 			}
 			else
@@ -779,44 +779,13 @@ class planner extends calendar {
 	{
 		extract($args);
 		$replacement = "";
-		// tra, ma panen ennast põlema kohe
-		switch($args["class_id"])
+		if (not($this->ob))
 		{
-			case CL_EXTLINK:
-				classload("extlinks");
-				$t = new extlinks();
-				list($url,$target,$caption) = $t->draw_link($args["oid"]);
-				$replacement = sprintf("<a href='%s' %s>%s</a>",$url,$target,$caption);
-				break;
-
-			case CL_IMAGE:
-				classload("image");
-				$t = new image();
-				$idata = $t->get_image_by_id($args["oid"]);
-				$replacement = sprintf("<img src='%s'><br>%s",$idata["url"],$idata["comment"]);
-				break;
-			case CL_TABLE:
-				classload("table");
-				$t = new table();
-				$replacement = $t->show(array("id" => $args["oid"],"align" => $align));
-				break;
-
-			case CL_FORM_ENTRY:
-				classload("form");
-				$t = new form();
-				$frm = $t->get_form_for_entry($args["oid"]);
-				$ops = $t->get_op_list($frm);
-				list($x,$y) = each($ops);
-				list($id,$name) = each($y);
-
-				$replacement = $t->show(array(
-					"id" => $frm,
-					"entry_id" => $args["oid"],
-					"op_id" => $id,
-				));
-				break;
+			classload("objects");
+			$this->ob = new objects();
 		}
 
+		$replacement = $this->ob->show(array("id" => $args["oid"]));
 		return $replacement;
 
 	}
