@@ -1,21 +1,22 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>mailtoolbar</name>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <table>messages</table>
+            <group>general</group>
+            <field>mailtoolbar</field>
+            <caption>Toolbar</caption>
+      </property>
+      <property>
             <name>uidl</name>
             <type>hidden</type>
             <table>messages</table>
             <group>general</group>
             <field>uidl</field>
             <caption>UIDL</caption>
-      </property>
-      <property>
-            <name>mfrom</name>
-            <type>textbox</type>
-            <size>80</size>
-            <table>messages</table>
-            <group>general</group>
-            <field>mfrom</field>
-            <caption>Kellelt</caption>
       </property>
       <property>
             <name>mto</name>
@@ -27,13 +28,22 @@
             <caption>Kellele</caption>
       </property>
       <property>
+            <name>mfrom</name>
+            <type>textbox</type>
+            <size>80</size>
+            <table>messages</table>
+            <group>general</group>
+            <field>mfrom</field>
+            <caption>Kellelt</caption>
+      </property>
+      <property>
             <name>name</name>
             <type>textbox</type>
             <size>80</size>
             <table>objects</table>
             <group>general</group>
             <field>name</field>
-            <caption>Teema</caption>
+            <caption>Subjekt</caption>
       </property>
       <property>
             <name>message</name>
@@ -46,45 +56,32 @@
             <caption>Sisu</caption>
       </property>
       <property>
-            <name>buttonbar</name>
-            <type>text</type>
-            <store>no</store>
+            <name>msgrid</name>
+            <type>hidden</type>
             <table>messages</table>
             <group>general</group>
-            <field>buttonbar</field>
-            <caption>Tegevused</caption>
+            <field>msgrid</field>
+            <caption>Msgrid</caption>
       </property>
       <property>
-            <name>send</name>
-            <type>submit</type>
-            <store>no</store>
-            <parent>buttonbar</parent>
+            <name>msgid</name>
+            <type>hidden</type>
             <table>messages</table>
             <group>general</group>
-            <field>send</field>
-            <caption>Saada</caption>
+            <field>msgid</field>
+            <caption>Msgid</caption>
       </property>
       <property>
-            <name>savedraft</name>
-            <type>submit</type>
-            <store>no</store>
-            <parent>buttonbar</parent>
+            <name>mailbox</name>
+            <type>hidden</type>
             <table>messages</table>
             <group>general</group>
-            <field>savedraft</field>
-            <caption>Salvesta</caption>
-      </property>
-      <property>
-            <name>aliasmgr</name>
-            <type>aliasmgr</type>
-            <store>no</store>
-            <table>messages</table>
-            <group>general</group>
-            <field>aliasmgr</field>
-            <caption>Aliased</caption>
+            <field>mailbox</field>
+            <caption>Mailbox</caption>
       </property>
       <groupinfo>
             <general>
+                  <caption>Kala</caption>
                   <submit>no</submit>
             </general>
       </groupinfo>

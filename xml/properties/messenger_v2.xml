@@ -41,10 +41,7 @@
             <name>mail_toolbar</name>
             <type>toolbar</type>
             <no_caption>1</no_caption>
-            <group>
-                  <num_0>main_view</num_0>
-                  <num_1>msg_view</num_1>
-            </group>
+            <group>main_view</group>
             <store>no</store>
             <table>objects</table>
             <field>meta</field>
@@ -54,10 +51,7 @@
       <property>
             <name>msg_cont</name>
             <type>text</type>
-            <group>
-                  <num_0>main_view</num_0>
-                  <num_1>msg_view</num_1>
-            </group>
+            <group>main_view</group>
             <no_caption>1</no_caption>
             <wrapchildren>1</wrapchildren>
             <table>objects</table>
@@ -69,10 +63,7 @@
             <name>treeview</name>
             <type>text</type>
             <parent>msg_cont</parent>
-            <group>
-                  <num_0>main_view</num_0>
-                  <num_1>msg_view</num_1>
-            </group>
+            <group>main_view</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -89,29 +80,6 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Kirjad</caption>
-      </property>
-      <property>
-            <name>message_view</name>
-            <type>text</type>
-            <store>no</store>
-            <parent>msg_cont</parent>
-            <group>msg_view</group>
-            <no_caption>1</no_caption>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Kirja sisu</caption>
-      </property>
-      <property>
-            <name>write_mail</name>
-            <type>callback</type>
-            <callback>callback_write_mail</callback>
-            <no_caption>1</no_caption>
-            <group>write_mail</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Uus kiri</caption>
       </property>
       <property>
             <name>msg_outbox</name>
@@ -153,29 +121,6 @@
             <caption>Testi filtreid</caption>
       </property>
       <property>
-            <name>message_toolbar</name>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <group>msg_view</group>
-            <store>no</store>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <view>real</view>
-            <caption>Kirjade toolbar</caption>
-      </property>
-      <property>
-            <name>foldername</name>
-            <type>textbox</type>
-            <store>no</store>
-            <group>folderadm</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <view>real</view>
-            <caption>Folderi nimi</caption>
-      </property>
-      <property>
             <name>parentfolder</name>
             <type>hidden</type>
             <store>no</store>
@@ -195,18 +140,6 @@
                   <caption>Kirjad</caption>
                   <submit>no</submit>
             </main_view>
-            <msg_view>
-                  <caption>Kiri</caption>
-                  <submit>no</submit>
-            </msg_view>
-            <write_mail>
-                  <caption>Uus kiri</caption>
-                  <submit>no</submit>
-            </write_mail>
-            <folderadm>
-                  <caption>Kataloogi admin</caption>
-                  <view>real</view>
-            </folderadm>
       </groupinfo>
       <views>
             <real>1</real>
