@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.21 2003/02/05 03:59:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.22 2003/05/29 15:36:55 duke Exp $
 // Generic calendar class
 
 // php arvab by default, et pühapäev on 0.
@@ -376,188 +376,6 @@ class calendar extends aw_template
 		return get_date_range($args);
 	}
 
-	//// Generates a month calendar
-	// date (datestamp)(optional) - dd-mm-yyyy
-	function gen_month($args = array())
-	{
-		extract($args);
-
-		// things I want to configure:
-		// * which day starts the week (monday or sunday)?
-		// * do we show the days for next and previous months
- 		//	if there are empty cells at the start or at the end
-		//	of the calendar weeks
-
-		// defaults
-		global $d;
-		$date = $d;
-
-		$s = get_instance("css");
-		$obj = $this->get_object($target);
-
-		// sue me
-		$header_style = $this->get_object($obj["meta"]["header_style"]);
-		$weekday_style = $this->get_object($obj["meta"]["weekday_style"]);
-		$weekend_style = $this->get_object($obj["meta"]["weekend_style"]);
-		$day_style = $this->get_object($obj["meta"]["day_style"]);
-		$act_day_style = $this->get_object($obj["meta"]["act_day_style"]);
-		$cel_day_style = $this->get_object($obj["meta"]["cel_day_style"]);
-
-		$css = "<style>\n";
-		$css .= $s->_gen_css_style("style" . $header_style["oid"],$header_style["meta"]["css"]);
-		$css .= $s->_gen_css_style("style" . $weekday_style["oid"],$weekday_style["meta"]["css"]);
-		$css .= $s->_gen_css_style("style" . $weekday_style["oid"],$weekend_style["meta"]["css"]);
-		$css .= $s->_gen_css_style("style" . $day_style["oid"],$day_style["meta"]["css"]);
-		$css .= $s->_gen_css_style("style" . $act_day_style["oid"],$act_day_style["meta"]["css"]);
-		$css .= $s->_gen_css_style("style" . $cel_day_style["oid"],$cel_day_style["meta"]["css"]);
-		$css .= "</style>";
-
-		if (isset($date))
-		{
-			list($dd,$mm,$yy) = explode("-",$date);
-		};
-
-		$month = (isset($mm)) ? $mm : date("n",time()); 
-		$year = (isset($yy)) ? $yy : date("Y",time()); 
-		// if not set, default to current day
-		$day = (isset($dd))? $dd : date("j", time());
-		
-		$ts = mktime(0,0,0,$month,$day,$year);
-
-		$numdays = date("t",$ts);
-
-		$start = mktime(0,0,0,$month,1,$year);
-		$end = mktime(0,0,0,$month,$numdays,$year);
-
-		$start_wday = $this->convert_wday(date("w",$start));
-		$end_wday = $this->convert_wday(date("w",$end));
-
-		//$start_day = 1 - ((2 * $start_wday) + 1);
-		$start_day = 1 - $start_wday;
-		$end_day = $numdays + (6 - $end_wday);
-
-		$tpl = (isset($tpl)) ? $tpl : "small_month.tpl";
-		$this->read_template($tpl);
-
-		$_wdays = array('P','E','T','K','N','R','L'); 
-
-		$vector = $this->get_wday_vector();
-
-
-		foreach($vector as $val)
-		{
-			$wdays[] = $_wdays[$val];
-		};
-
-		// generate the calendar
-		$header = "";
-		$line = "";
-		$i = 0;
-		foreach($wdays as $value)
-		{
-			$i++;
-			if ($i >= 6)
-			{
-				$style = $weekend_style["oid"];
-			}
-			else
-			{
-				$style = $weekday_style["oid"];
-			};
-
-			$this->vars(array(
-				"weekday_style" => "style" . $style,
-				"header_content" => $value,
-			));
-
-			$header .= $this->parse("header_cell");
-		}
-
-		$content = "";
-
-
-		$i = 0;
-		for ($zz = $start_day; $zz <= $end_day; $zz++)
-		{
-			$empty = false;
-			if (($zz < 1) || ($zz > $numdays))
-			{
-				$cell = "&nbsp;";
-				$empty = true;
-				$style = $day_style["oid"];
-			}
-			elseif ($zz == (int)$day)
-			{
-				$cell = $zz;
-				$style = $act_day_style["oid"];
-			}
-			else
-			{
-				$cell = $zz;
-				$style = $day_style["oid"];
-			}
-
-			if (!$empty)
-			{
-				$date = "$zz-$month-$year";
-				$cell = sprintf("<a href='%s/section=%s/docid=%d/cal=%d/d=%s'>%s</a>",aw_ini_get("baseurl"),aw_global_get("section"),$args["target_document"],$args["target"],$date,$cell);
-			};
-
-			if (($i >= 5) && ($zz != (int)$day))
-			{
-				$style = $cel_day_style["oid"];
-			}
-
-			$this->vars(array(
-				"content" => $cell,
-				"day_style" => "style" . $style,
-			));
-
-			$line .= $this->parse("cell");
-			
-			if ($i >= 6)
-			{
-				$this->vars(array(
-					"cell" => $line,
-				));
-				$content .= $this->parse("line");
-				$line = "";
-				$i=0;
-			}
-			else
-			{
-				$i++;
-			};
-
-		};
-
-		if ($i < 7)
-		{
-			$this->vars(array(
-					"cell" => $line,
-			));
-			$content .= $this->parse("line");
-		};
-
-		$ts = mktime(0,0,0,$month,$day,$year);
-		$prev_ts = strtotime("-1 month",$ts);
-		$next_ts = strtotime("+1 month",$ts);
-
-		$prev_date = date("d-m-Y",$prev_ts);
-		$next_date = date("d-m-Y",$next_ts);
-
-		$this->vars(array(
-			"month_name" => get_lc_month($month),
-			"header_cell" => $header,
-			"header_style" => "style" . $header_style["oid"],
-			"line" => $content,
-			"prev" => sprintf("%s/section=%s/docid=%d/cal=%d/d=%s",aw_ini_get("baseurl"),aw_global_get("section"),$args["target_document"],$args["target"],$prev_date),
-			"next" => sprintf("%s/section=%s/docid=%d/cal=%d/d=%s",aw_ini_get("baseurl"),aw_global_get("section"),$args["target_document"],$args["target"],$next_date),
-		));
-
-		return $css. $this->parse();
-	}   
-
 	function get_wday_vector()
 	{
 		if (1)
@@ -588,77 +406,118 @@ class calendar extends aw_template
 		return $retval;
 	}
 
-	function get_properties()
+	// next and hopefully last calendar drawing function
+	// width - cells on a line
+	// start - timestamp of the start day
+	// end - timestamp of the end day
+	// tpl - what template to use
+	function draw_calendar($arr = array())
 	{
-		$css = get_instance("css");
-		$styles = $css->get_select();
+		static $used = 0;
+		$used++;
+		$tpl = !empty($arr["tpl"]) ? $arr["tpl"] : "mini.tpl";
+		classload("date_calc");
+		if (!empty($arr["start"]) && !empty($arr["end"]))
+		{
+			$start = $arr["start"];
+			$end = $arr["end"];
 
-		$fields = array();
-		$fields["day_start"] = array(
-			"type" => "time_select",
-			"caption" => "Päev algab",
-			"value" => $args["day_start"],
-			"store" => "meta",
-		);
-		
-		$fields["day_end"] = array(
-			"type" => "time_select",
-			"caption" => "Päev lõpeb",
-			"value" => $args["day_end"],
-			"store" => "meta",
-		);
+		}
+		else
+		{
+			$di = get_date_range(array(
+				"time" => !empty($arr["tm"]) ? $arr["tm"] : time(),
+				"type" => $arr["type"],
+			));
+			$start = $di["start"];
+			$end = $di["end"];
+		}
 
-		$fields["header_style"] = array(
-			"type" => "select",
-			"options" => $styles,
-			"caption" => "Pealkirja stiil",
-			"value" => $args["header_style"],
-			"store" => "meta",
-                );
+		if ( ($arr["type"] == "month") || ($arr["type"] == "week") )
+		{
+			define("MONDAY_STARTS_WEEK",1);
+			if (MONDAY_STARTS_WEEK)
+			{
+				$start_wd = date("w",$start);
+				if ($start_wd == 0)
+				{
+					$start_wd = 7;
+				};
+				$end_wd = date("w",$end);
+				if ($end_wd == 0)
+				{
+					$end_wd = 7;
+				};
+				$real_start = ($start - ($start_wd - 1) * 86400);
+				$real_end = ($end + (7 - $end_wd) * 86400);
+			}	
+			else
+			{
+				$real_start = ($start - (date("w",$start)) * 86400);
+				$real_end = ($end + (6 - date("w",$end)) * 86400);
+			};
 
-		$fields["weekday_style"] = array(
-			"type" => "select",
-			"options" => $styles,
-			"caption" => "Nädalapäevade stiil",
-			"value" => $args["weekday_style"],
-			"store" => "meta",
-                );
+		}
 
-		$fields["weekend_style"] = array(
-			"type" => "select",
-			"options" => $styles,
-			"caption" => "Nädalapäevade stiil (weekend)",
-			"value" => $args["weekend_style"],
-			"store" => "meta",
-                );
+		$rwidth = 0;
+		$width = !empty($arr["width"]) ? $arr["width"] : 1;
 
-		$fields["day_style"] = array(
-			"type" => "select",
-			"options" => $styles,
-			"caption" => "Päevade stiil",
-			"value" => $args["day_style"],
-			"store" => "meta",
-                );
+		if ($real_end < $real_start)
+		{
+			return false;
+		};
 
-		$fields["act_day_style"] = array(
-			"type" => "select",
-			"options" => $styles,
-			"caption" => "Aktiivse päeva stiil",
-			"value" => $args["act_day_style"],
-			"store" => "meta",
-                );
+		$this->read_template($tpl);
+		$content = $line = "";
+		for ($i = $real_start; $i <= $real_end; $i = $i + DAY)
+		{
+			$dx = date("dmY",$i);
+			$dxx = date("d-m-Y",$i);
+			
+			$this->vars(array(
+				"content" => date("d",$i),
+				"url" => $arr["day_orb_link"] . "&date=${dxx}",
+			));
 
-		$fields["cel_day_style"] = array(
-			"type" => "select",
-			"options" => $styles,
-			"caption" => "Puhkepäevade stiil",
-			"value" => $args["cel_day_style"],
-			"store" => "meta",
-                );
 
-		return $fields;
+			if ($i == $arr["now"])
+			{
+				$stpl = "current_cell";
+			}
+			elseif ( ($i < $start) || ($i > $end) )
+			{
+				$stpl = "deactive_cell";
+			}
+			elseif ( isset($arr["marked"][$dx]) && is_array($arr["marked"][$dx]) )
+			{
+				$stpl = "active_cell";
+			}
+			else
+			{
+				$stpl = "cell";
+			}
+
+			$line .= $this->parse($stpl);
+			$rwidth++;
+			if ($rwidth >= $width)
+			{
+				$rwidth = 0;
+				$this->vars(array(
+					"cell" => $line,
+				));
+				$content .= $this->parse("line");
+				$line = "";
+			};
+		};
+		$this->vars(array(
+			"line" => $content,
+			"caption" => $arr["caption"],
+			"calstyles" => ($used == 1) ? $this->parse("calstyles") : "",
+		));
+
+		return $this->parse();
+
+
 	}
-
-	
 };
 ?>
