@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.12 2003/10/30 16:58:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.13 2003/10/30 18:09:28 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -194,15 +194,6 @@ class messenger_v2 extends class_base
 				break;
 
                         break;
-
-
-			case "foldername":
-				// intercept it, create the folder .. and then do what?
-				print "creating a new folder<br>";
-				print "<pre>";
-				print_r($arr);
-				print "</pre>";
-				break;
 
 		}
 		return $retval;
@@ -474,12 +465,6 @@ class messenger_v2 extends class_base
 				
 		}
 
-		$this->read_template("foldertree.tpl");
-		$this->vars(array(
-			"new_folder_url" => $this->mk_my_orb("change",array("id" => $arr["obj_inst"]->id(),"group" => "folderadm","cb_view" => "real")),
-		));
-		$res .= $this->parse();
-
 		$res .= $tree->finalize_tree();
 
 		$rv .= $res;
@@ -498,7 +483,10 @@ class messenger_v2 extends class_base
 		$toolbar = &$arr["prop"]["toolbar"];
 
 		// this is wrong, I have to create the the empty message body first and then allow 
-		// editing it
+		// editing it. For this to work, I need to figure out the location of the drafts folder ..
+		// mind you .. that folder can also be on the server
+
+		// aga kuda kurat ma seda popupi kaudu teen, see peaks mingi redirect olema siis
 		$toolbar->add_button(array(
 			"name" => "newmessage",
 			"tooltip" => "Uus kiri",
