@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.16 2003/04/16 14:11:32 duke Exp $
+// $Id: cfgutils.aw,v 1.17 2003/04/23 16:07:25 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -373,7 +373,98 @@ class cfgutils extends aw_template
 		return $res;
 	}
 
+	////
+	// !Generates contents for type=relpicker clid=CL_XXX
+	function el_relpicker_clid($args = array())
+	{
+		// retrieve the list of all aliases first time this is invoked
+		$val = &$args["val"];
+		if (empty($this->alist))
+		{
+			$almgr = get_instance("aliasmgr");
+			if (!empty($args["id"]))
+			{
+				$this->alist = $almgr->get_oo_aliases(array(
+					"oid" => $args["id"],
+				));
+			}
+			else
+			{
+				$this->alist = array();
+			};
+		};
 
-	
+		if (defined($val["clid"]) && isset($this->alist[constant($val["clid"])]))
+		{
+			$objlist = new aw_array($this->alist[constant($val["clid"])]);
+		}
+		else
+		{
+			$objlist = new aw_array();
+		};
+
+		$options = array("0" => "--vali--");
+		// generate option list
+		foreach($objlist->get() as $okey => $oval)
+		{
+			$options[$oval["target"]] = $oval["name"];
+		}
+
+		$val["type"] = "select";
+		$val["options"] = $options;
+	}
+
+	function el_relpicker_reltype($args = array())
+	{
+		$val = &$args["val"];
+		if (isset($args["meta"]["alias_reltype"]))
+		{
+			$reltypes = $args["meta"]["alias_reltype"];
+		}
+		else
+		{
+			$reltypes = array();
+		};
+		// retrieve the list of all aliases first time this is invoked
+		if (empty($this->alist))
+		{
+			$almgr = get_instance("aliasmgr");
+			if (!empty($args["id"]))
+			{
+				$this->alist = $almgr->get_oo_aliases(array(
+					"oid" => $args["id"],
+					"ret_type" => GET_ALIASES_FLAT,
+				));
+			}
+			else
+			{
+				$this->alist = array();
+			};
+		};
+
+		$objlist = new aw_array($this->alist);
+
+		$options = array("0" => "--vali--");
+		// generate option list
+		if (constant($val["reltype"]))
+		{
+			$reltype = constant($val["reltype"]);
+		}
+		else
+		{
+			$reltype = $val["reltype"];
+		};
+
+		foreach($objlist->get() as $okey => $oval)
+		{
+			if ($oval["reltype"] == $reltype)
+			{
+				$options[$oval["target"]] = $oval["name"];
+			};
+		}
+
+		$val["type"] = "select";
+		$val["options"] = $options;
+	}
 };
 ?>
