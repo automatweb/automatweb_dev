@@ -34,7 +34,7 @@
 	<!-- END SUB: CELL -->
 	</tr>
 	<!-- SUB: FULLTEXT -->
-	<tr><td colspan="4" class="cal_rida{VAR:num}">
+	<tr><td colspan="{VAR:col_count}" class="cal_rida{VAR:num}">
 		{VAR:fulltext_name}: {VAR:fulltext}
 	</td></tr>
 	<!-- END SUB: FULLTEXT -->

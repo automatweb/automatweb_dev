@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.19 2005/01/19 12:40:34 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.20 2005/01/19 12:49:42 ahti Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -791,6 +791,7 @@ class event_search extends class_base
 				// first I have to sort the bloody thing in correct order
 				//$this->sub_merge = 1;
 				$cdat = "";
+				$col_count = 0;
 				foreach($tabledef as $key => $propdef)
 				{
 					if($key == "content")
@@ -803,8 +804,12 @@ class event_search extends class_base
 							"colcaption" => $propdef["caption"],
 						));
 						$cdat .= $this->parse("COLHEADER");
+						$col_count++;
 					};
-					$this->vars(array("COLHEADER" => $cdat));
+					$this->vars(array(
+						"COLHEADER" => $cdat,
+						"col_count" => $col_count,
+					));
 				};
 				// vï¿½ siis .. nï¿½data ainult eventeid, mis on mï¿½ema valitud parenti all?
 				//arr($ol);
