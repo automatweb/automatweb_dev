@@ -1578,7 +1578,7 @@ class site_content extends menuedit
 			if ($pclass)
 			{
 				list($_cl,$_act) = explode("/",$pclass);
-				$orb = get_instance("orb");
+				$orb = get_instance("core/orb/orb");
 				$meth = $orb->get_public_method(array(
 					"id" => $_cl,
 					"action" => $_act,

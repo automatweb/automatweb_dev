@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.122 2005/03/15 10:41:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.123 2005/03/20 15:39:18 kristo Exp $
 
 /*
 
@@ -1998,7 +1998,7 @@ class site_show extends class_base
 			if ($pclass)
 			{
 				list($_cl,$_act) = explode("/",$pclass);
-				$orb = get_instance("orb");
+				$orb = get_instance("core/orb/orb");
 				if ($_cl == "periods")
 				{
 					$_cl = "period";

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_content.aw,v 1.6 2004/12/01 11:48:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_content.aw,v 1.7 2005/03/20 15:39:17 kristo Exp $
 /*
 
 	@classinfo syslog_type=ST_CAL_CONTENT
@@ -36,7 +36,7 @@ class cal_content extends class_base
 		switch($data["name"])
 		{
 			case "show_class":
-				$orb = get_instance("orb");
+				$orb = get_instance("core/orb/orb");
 				$data["options"] = $orb->get_classes_by_interface(array("interface" => "content"));
 				break;
 

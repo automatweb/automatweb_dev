@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.21 2005/03/20 14:51:54 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.22 2005/03/20 15:39:18 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -568,7 +568,7 @@ class docgen_viewer extends class_base
 
 	function _display_extends($dat)
 	{
-		$orb = get_instance("orb");
+		$orb = get_instance("core/orb/orb");
 		$that = get_instance("core/docgen/docgen_analyzer");
 
 		// now, do extended classes. we do that by parsing all the extends classes

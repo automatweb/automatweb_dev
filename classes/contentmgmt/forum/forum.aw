@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.1 2005/03/17 19:08:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.2 2005/03/20 15:39:18 kristo Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -1869,7 +1869,7 @@ topic");
 		{
 			if ($vars["alias"])
 			{
-				$orb = get_instance("orb",array(
+				$orb = get_instance("core/orb/orb",array(
 					"class" => $vars["alias"],
 					"action"=> $vars["action"],
 					"vars" => array_merge($vars,array("section" => aw_global_get("section"))),
