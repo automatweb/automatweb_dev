@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.14 2002/09/20 14:36:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.15 2002/09/23 11:15:07 kristo Exp $
 // lists.aw - listide haldus
 class lists extends aw_template
 {
@@ -71,7 +71,7 @@ class lists extends aw_template
 			foreach($grpmembers as $uid)
 			{
 				$udata[$uid] = $us->get_user(array("uid" => $uid));
-				$joingrps[$udata["join_grp"]] = $udata["join_grp"];
+				$joingrps[$udata[$uid]["join_grp"]] = $udata[$uid]["join_grp"];
 			}
 
 			// load all join forms
@@ -125,7 +125,6 @@ class lists extends aw_template
 				$uid_var_id = array_search("kasutajanimi", $existing_variables);
 			}
 
-//			echo "id = $id newvars = <pre>", var_dump($newvars),"</pre> <br>";
 			// add variables to the list
 			classload("mlist");
 			$this->upd_object(array(
@@ -142,7 +141,7 @@ class lists extends aw_template
 			}
 
 			// create list members from all group members
-			foreach($udata as $uid => $udata)
+			foreach($udata as $uid => $_udata)
 			{
 				// create variable values from the users' join data
 				$elvals = $us->get_user_info($uid,true);
@@ -155,11 +154,11 @@ class lists extends aw_template
 						$varvals[$vid] = $eval;
 					}
 				}
-				$varvals[$pwd_var_id] = $udata["password"];
+				$varvals[$pwd_var_id] = $_udata["password"];
 				$varvals[$uid_var_id] = $uid;
 				$li->db_add_user(array(
 					"name" => $uid, 
-					"email" => $udata["email"]
+					"email" => $_udata["email"]
 				),$varvals);
 			}
 		}
