@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.28 2003/01/20 14:25:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.29 2003/04/23 13:58:57 kristo Exp $
 // extlinks.aw - Väliste linkide haldamise klass
 
 
@@ -46,11 +46,18 @@ class extlinks extends class_base
 		);
 		if (isset($tpls["link"]))
 		{
-			$replacement = localparse($tpls["link"],$vars);
+			$replacement = trim(localparse($tpls["link"],$vars));
 		}
 		else
 		{
-			$replacement = sprintf("<a href='%s' %s>%s</a>",$url,$target,$caption);
+			if ($img)
+			{
+				$replacement = sprintf("<a href='%s' %s><img src='%s' alt='%s' border='0'></a>",$url,$target,$this->img,$caption);
+			}
+			else
+			{
+				$replacement = sprintf("<a href='%s' %s>%s</a>",$url,$target,$caption);
+			}
 		};
 		$this->img = "";
 		return $replacement;
