@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.46 2003/04/09 16:58:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.47 2003/04/09 17:26:47 duke Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -96,7 +96,7 @@ class file extends class_base
 				break;
 			case "view":
 				$data["value"] = html::href(array(
-					"url" => $this->mk_my_orb("preview",array("id" => $args["obj"]["oid"],"name" => $args["obj"]["name"])),
+					"url" => $this->mk_my_orb("preview",array("id" => $args["obj"]["oid"],"name" => urlencode($args["obj"]["name"]))),
 					"caption" => "Näita",
 					"target" => "_blank",
 				));
@@ -506,6 +506,7 @@ class file extends class_base
 		}
 		header("Content-type: ".$fc["type"]);
 		header("Content-Disposition: filename=$fc[name]");
+		header("Content-Length: ".strlen($fc["content"]));
 		header("Pragma: no-cache");
 		die($fc["content"]);
 	}
@@ -562,7 +563,7 @@ class file extends class_base
 			if (substr($url,0,6) == "/files")
 			{
 				$fileid = (int)(substr($url,13));
-				$filename = substr($url,strrpos($url,"/"));
+				$filename = urlencode(substr($url,strrpos($url,"/")));
 				$url = "/orb.".aw_ini_get("ext")."/class=file/action=show/id=".$fileid."/".$filename;
 			}
 			else
