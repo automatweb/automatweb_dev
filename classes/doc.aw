@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.98 2005/02/01 08:07:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.99 2005/03/01 07:53:41 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -504,6 +504,13 @@ class doc extends class_base
 				$data["value"] = $_end;
 				break;
 
+			case "content":
+				if ($args["request"]["content"]["cb_breaks"] == 0)
+				{
+					$args["obj_inst"]->set_prop("nobreaks",0);
+				};
+				break;
+
 		};
 		return $retval;
 	}
@@ -943,6 +950,64 @@ class doc extends class_base
 			"time" => time()-60,
 			"auth_as_local_user" => true
 		));
+	}
+
+	/**
+		@attrib name=convert_br
+
+	**/
+	function convert_br($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_DOCUMENT,
+			"site_id" => array(),
+			"lang_id" => array(),
+			//"oid" => 2479,
+
+		));
+
+		//arr($ol);
+
+		foreach($ol->arr() as $o)
+		{
+			print "n = " . $o->name() . "<br>";
+			print "nobr = ";
+			$cbdat = $o->meta("cb_nobreaks");
+			$save = false;
+			if (empty($cbdat["content"]))
+			{
+				$o->set_prop("content",str_replace("\n","<br>\n",$o->prop("content")));
+				$cbdat["content"] = 1;
+				$save = true;
+			};
+			if (empty($cbdat["lead"]))
+			{
+				$o->set_prop("lead",str_replace("\n","<br>\n",$o->prop("lead")));
+				$cbdat["lead"] = 1;
+				$save = true;
+			};
+			if (empty($cbdat["moreinfo"]))
+			{
+				$o->set_prop("moreinfo",str_replace("\n","<br>\n",$o->prop("moreinfo")));
+				$cbdat["moreinfo"] = 1;
+				$save = true;
+			};
+			if ($save)
+			{
+				$o->set_meta("cb_nobreaks",$cbdat);
+				print "saving";
+				$o->save();
+			}
+			else
+			{
+				print "not saving";
+			};
+			//arr($o->meta());
+			print "done";
+			print "<hr>";
+			flush();
+		};
+
 	}
 };
 ?>
