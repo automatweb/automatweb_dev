@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.157 2003/02/17 09:16:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.158 2003/02/19 17:51:53 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -401,6 +401,7 @@ class document extends aw_template
 		//hook for site specific document parsing
 		$doc["tpl"] = $tpl;
 		$doc["leadonly"] = $leadonly;
+		$doc["tpldir"] = $this->template_dir;
 		if ($si)
 		{
 			$si->parse_document(&$doc);
@@ -3543,7 +3544,7 @@ class document extends aw_template
 			{
 				$_to = $to;
 			}
-			mail($_to,str_replace("\n","",str_replace("\r","",$this->parse("title"))),$this->parse("mail"),"From: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
+			mail($_to,str_replace("\n","",str_replace("\r","",$this->parse("title"))),$this->parse("mail"),"Content-Type: text/plain; charset=\"ISO-8859-1\"\nFrom: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
 		}
 
 		$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $section ","name");
