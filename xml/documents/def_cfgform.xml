@@ -5,7 +5,7 @@
 		<group>general</group>
 	</property>
 	<property>
-            <name>active</name>
+            <name>status</name>
             <group>general</group>
             <caption>Aktiivne</caption>
 	</property>
