@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.190 2003/12/14 15:24:43 duke Exp $
+// $Id: class_base.aw,v 2.191 2003/12/15 14:06:12 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2745,6 +2745,7 @@ class class_base extends aw_template
 		extract($args);
 
 		$this->id = $id;
+		$this->obj_inst = new object($id);
 
 		// get a list of active properties for this object
 		// I need an easy way to turn off individual properties
