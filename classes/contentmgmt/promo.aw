@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.50 2004/10/22 14:59:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.51 2004/10/29 14:43:51 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -38,6 +38,9 @@
 	
 	@property promo_tpl type=select table=objects field=meta method=serialize
 	@caption Template (dokumendi sees)
+
+	@property show_inact type=checkbox ch_value=1 table=objects field=meta method=serialize
+	@caption N&auml;ita mitteaktiivseid dokumente tekstina
 	
 	@default table=objects
 	@default field=meta
@@ -526,6 +529,7 @@ class promo extends class_base
 			$_parms = $parms;
 			$_parms["docid"] = $val;
 			$_parms["not_last_in_list"] = ($_curdoc < $_numdocs);
+			$_parms["no_link_if_not_act"] = 1;
 			$content .= $doc->gen_preview($_parms);
 			$_curdoc ++;
 		}

@@ -102,6 +102,16 @@
             <caption>Template (dokumendi sees)</caption>
       </property>
       <property>
+            <name>show_inact</name>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>N&amp;auml;ita mitteaktiivseid dokumente tekstina</caption>
+      </property>
+      <property>
             <name>no_title</name>
             <group>show</group>
             <table>objects</table>

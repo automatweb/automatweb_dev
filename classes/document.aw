@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.290 2004/10/29 09:41:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.291 2004/10/29 14:43:51 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -293,6 +293,11 @@ class document extends aw_template
 		else
 		{
 			$doc_o = obj($doc["docid"]);
+		}
+
+		if ($params["no_link_if_not_act"] && $doc_o->status() == STAT_NOTACTIVE)
+		{
+			$doc["title_clickable"] = 0;
 		}
 
 		// if oid is in the arguments check whether that object is attached to
