@@ -8,14 +8,17 @@ class search_conf extends aw_template
 {
 	function search_conf()
 	{
+		enter_function("search_conf::search_conf",array());
 		$this->init("search_conf");
 		lc_load("definition");
 		$this->lc_load("search_conf","lc_search_conf");
 		lc_site_load("search",&$this);
+		exit_function("search_conf::search_conf");
 	}
 
 	function gen_admin($level)
 	{
+		enter_function("search_conf::gen_admin",array());
 		$lang_id = aw_global_get("lang_id");
 		$SITE_ID = $this->cfg["site_id"];
 
@@ -27,6 +30,7 @@ class search_conf extends aw_template
 		{
 			$this->read_template("conf1.tpl");
 			$this->vars(array("section"		=> $ob->multiple_option_list($conf[$SITE_ID][$lang_id]["sections"],$ob->get_list())));
+		exit_function("search_conf::gen_admin");
 			return $this->parse();
 		}
 		else
@@ -41,12 +45,15 @@ class search_conf extends aw_template
 				$s.= $this->parse("RUBR");
 			}
 			$this->vars(array("RUBR" => $s));
+		exit_function("search_conf::gen_admin");
 			return $this->parse();
 		}
+		exit_function("search_conf::gen_admin");
 	}
 
 	function submit($arr)
 	{
+		enter_function("search_conf::submit",array());
 		$lang_id = aw_global_get("lang_id");
 		$SITE_ID = $this->cfg["site_id"];
 
@@ -69,6 +76,7 @@ class search_conf extends aw_template
 		{
 			$conf[$SITE_ID][$lang_id]["sections"] = $a;
 			$c->set_simple_config("search_conf",serialize($conf));
+		exit_function("search_conf::submit");
 			return 1;
 		}
 		else
@@ -95,12 +103,15 @@ class search_conf extends aw_template
 				}
 			}
 			$c->set_simple_config("search_conf",serialize($conf));
+		exit_function("search_conf::submit");
 			return 1;
 		}
+		exit_function("search_conf::submit");
 	}
 
 	function get_search_list(&$default)
 	{
+		enter_function("search_conf::get_search_list",array());
 		$grps = $this->get_groups();
 		$ret = array();
 		foreach($grps as $grpid => $gdata)
@@ -118,6 +129,7 @@ class search_conf extends aw_template
 			}
 		}
 		$default = $def;
+		exit_function("search_conf::get_search_list");
 		return $ret;
 	}
 
@@ -125,6 +137,7 @@ class search_conf extends aw_template
 	// !shows the search form
 	function search($arr)
 	{
+		enter_function("search_conf::search",array());
 		extract($arr);
 		$this->read_template("search.tpl");
 
@@ -171,7 +184,7 @@ class search_conf extends aw_template
 			"c_type2" => selected($c_type == 2),
 			"c_type3" => selected($c_type == 3),
 			"keywords" => $this->multiple_option_list($keys,$k->get_all_keywords(array("type" => ARR_KEYWORD))),
-			"reforb"	=> $this->mk_reforb("search", array("reforb" => 0,"search" => 1))
+			"reforb"	=> $this->mk_reforb("search", array("reforb" => 0,"search" => 1,"section" => aw_global_get("section")))
 		));
 
 		if ($search && ($sstring_title != "" || $sstring != ""))
@@ -409,11 +422,13 @@ class search_conf extends aw_template
 			// logime ka et tyyp otsis ja palju leidis.
 			$this->do_log($search_list,$s_parent,$t_type,$sstring_title,$sstring,$t2c_log,$sel_keys,$keys,$c2k_log,$cnt);
 		}
+		exit_function("search_conf::search");
 		return $this->parse();
 	}
 
 	function do_log($search_list,$s_parent,$t_type,$sstring_title,$sstring,$t2c_log,$sel_keys,$keys,$c2k_log,$cnt)
 	{
+		enter_function("search_conf::do_log",array());
 		$this->db_query("INSERT INTO searches(str,s_parent,numresults,ip,tm) VALUES('$sstring','$s_parent','$cnt','".aw_global_get("REMOTE_ADDR")."','".time()."')");
 
 		$sel_parent = $search_list[$s_parent];
@@ -483,10 +498,12 @@ class search_conf extends aw_template
 			$l.=join(",",$this->map("%s",$keys));
 		}
 		$this->_log("search",sprintf(LC_SEARCH_CONF_LOOK_ANSWER,$sel_parent,$l,$cnt));
+		exit_function("search_conf::do_log");
 	}
 
 	function do_sorting($pa)
 	{
+		enter_function("search_conf::do_sorting",array());
 		$sortby = $pa["sortby"];
 		if ($sortby == "")
 		{
@@ -533,11 +550,13 @@ class search_conf extends aw_template
 			"SORT_CONTENT" => $sort_c,
 			"SORT_CONTENT_SEL" => "",
 		));
+		exit_function("search_conf::do_sorting");
 		return $ap;
 	}
 
 	function do_pageselector($cnt,$arr)
 	{
+		enter_function("search_conf::do_pageselector",array());
 		$page = $arr["page"];
 		$num_pages = $cnt / PER_PAGE;
 		$pa = $arr;
@@ -583,11 +602,13 @@ class search_conf extends aw_template
 			"PAGE" => $pg, 
 			"SEL_PAGE" => ""
 		));
+		exit_function("search_conf::do_pageselector");
 		return $this->parse("PAGESELECTOR");
 	}
 
 	function get_parent_arr($parent)
 	{
+		enter_function("search_conf::get_parent_arr",array());
 		if ($this->cfg["lang_menus"] == 1)
 		{
 			$ss = " AND objects.lang_id = ".aw_global_get("lang_id");
@@ -617,13 +638,16 @@ class search_conf extends aw_template
 				$this->rec_list($mn);
 			}
 		};
+		exit_function("search_conf::get_parent_arr");
 		return (is_array($this->marr)) ? $this->marr : array(0);
 	}
 
 	function rec_list($parent)
 	{
+		enter_function("search_conf::rec_list",array());
 		if (!is_array($this->menucache[$parent]))
 		{
+		exit_function("search_conf::rec_list");
 			return;
 		}
 
@@ -639,11 +663,13 @@ class search_conf extends aw_template
 				$this->rec_list($v["oid"]);
 			}
 		}
+		exit_function("search_conf::rec_list");
 	}
 
 	// updates documents timestamp from document::tm and objects::modified to documents::modified
 	function upd_dox()
 	{
+		enter_function("search_conf::upd_dox",array());
 		$this->db_query("SELECT objects.oid as oid,objects.modified as modified,documents.tm as tm,documents.title as title FROM objects LEFT JOIN documents ON documents.docid = objects.oid WHERE objects.class_id = 7");
 		while ($row = $this->db_next())
 		{
@@ -665,10 +691,12 @@ class search_conf extends aw_template
 			flush();
 			$this->restore_handle();
 		}
+		exit_function("search_conf::upd_dox");
 	}
 
 	function change($arr)
 	{
+		enter_function("search_conf::change",array());
 		$this->read_template("change.tpl");
 
 		$grps = $this->get_groups();
@@ -693,11 +721,13 @@ class search_conf extends aw_template
 			"LINE" => $l,
 			"s_log" => $this->mk_my_orb("search_log", array())
 		));
+		exit_function("search_conf::change");
 		return $this->parse();
 	}
 
 	function change_grp($arr)
 	{
+		enter_function("search_conf::change_grp",array());
 		extract($arr);
 		$grps = $this->get_groups();
 		$this->read_template("change_grp.tpl");
@@ -716,11 +746,13 @@ class search_conf extends aw_template
 			"users_only" => checked($grps[$id]["users_only"] == 1),
 			"reforb" => $this->mk_reforb("submit_change_grp", array("id" => $id))
 		));
+		exit_function("search_conf::change_grp");
 		return $this->parse();
 	}
 
 	function submit_change_grp($arr)
 	{
+		enter_function("search_conf::submit_change_grp",array());
 		extract($arr);
 
 		$grps = $this->get_groups();
@@ -740,20 +772,25 @@ class search_conf extends aw_template
 		
 		$this->save_grps($grps);
 
+		exit_function("search_conf::submit_change_grp");
 		return $this->mk_my_orb("change_grp", array("id" => $id));
 	}
 
 	function _grp_sort($a,$b)
 	{
+		enter_function("search_conf::_grp_sort",array());
 		if ($a["ord"] == $b["ord"])
 		{
+		exit_function("search_conf::_grp_sort");
 			return 0;
 		}
+		exit_function("search_conf::_grp_sort");
 		return $a["ord"] < $b["ord"] ? -1 : 1;
 	}
 
 	function save_grps($grps)
 	{
+		enter_function("search_conf::save_grps",array());
 		// here we must first sort the $grps array based on user entered order
 		uasort($grps,array($this,"_grp_sort"));
 		classload("cache");
@@ -770,10 +807,12 @@ class search_conf extends aw_template
 		classload("config");
 		$c = new config;
 		$c->set_simple_config("search_grps", $dat);
+		exit_function("search_conf::save_grps");
 	}
 
 	function get_groups($no_strip = false)
 	{
+		enter_function("search_conf::get_groups",array());
 		classload("cache");
 		$cache = new cache();
 		$cs = $cache->file_get("search_groups::".$this->cfg["site_id"]);
@@ -802,31 +841,39 @@ class search_conf extends aw_template
 		}
 		if (!is_array($r))
 		{
+		exit_function("search_conf::get_groups");
 			return array();
 		}
 		else
 		{
+		exit_function("search_conf::get_groups");
 			return $r;
 		}
+		exit_function("search_conf::get_groups");
 	}
 
 	function delete_grp($arr)
 	{
+		enter_function("search_conf::delete_grp",array());
 		extract($arr);
 		$grps = $this->get_groups();
 		unset($grps[$id]);
 		$this->save_grps($grps);
 		header("Location: ".$this->mk_my_orb("change", array()));
+		exit_function("search_conf::delete_grp");
 	}
 
 	function get_menus_for_grp($gp)
 	{
+		enter_function("search_conf::get_menus_for_grp",array());
 		$grps = $this->get_groups();
+		exit_function("search_conf::get_menus_for_grp");
 		return $grps[$gp]["menus"];
 	}
 
 	function search_log($arr)
 	{
+		enter_function("search_conf::search_log",array());
 		extract($arr);
 		$this->read_template("search_log.tpl");
 
@@ -850,6 +897,7 @@ class search_conf extends aw_template
 			"LINE" => $l,
 			"s_log" => $this->mk_my_orb("search_log", array())
 		));
+		exit_function("search_conf::search_log");
 		return $this->parse();
 	}
 }
