@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.54 2004/10/08 09:49:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.55 2004/11/18 22:59:30 duke Exp $
 
 /*
 
@@ -358,7 +358,7 @@ class gallery_v2 extends class_base
 
 			if ($meta["import_ftp"] == 1)
 			{
-				$ftp = get_instance("core/ftp");
+				$ftp = get_instance(CL_FTP_LOGIN,array("verbose" => true));
 				if (!$ftp->is_available())
 				{
 					return;
