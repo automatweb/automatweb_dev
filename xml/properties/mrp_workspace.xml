@@ -253,7 +253,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
+            <group>grp_settings_def</group>
             <type>relpicker</type>
             <reltype>RELTYPE_MRP_OWNER</reltype>
             <clid>CL_CRM_COMPANY</clid>
@@ -264,7 +264,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
+            <group>grp_settings_def</group>
             <type>relpicker</type>
             <reltype>RELTYPE_MRP_FOLDER</reltype>
             <clid>CL_MENU</clid>
@@ -275,7 +275,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
+            <group>grp_settings_def</group>
             <type>relpicker</type>
             <reltype>RELTYPE_MRP_FOLDER</reltype>
             <clid>CL_MENU</clid>
@@ -286,7 +286,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
+            <group>grp_settings_def</group>
             <type>relpicker</type>
             <reltype>RELTYPE_MRP_FOLDER</reltype>
             <clid>CL_MENU</clid>
@@ -297,7 +297,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
+            <group>grp_settings_def</group>
             <type>relpicker</type>
             <reltype>RELTYPE_MRP_FOLDER</reltype>
             <clid>CL_MENU</clid>
@@ -308,7 +308,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
+            <group>grp_settings_def</group>
             <type>relpicker</type>
             <reltype>RELTYPE_MRP_WORKSPACE_CFGMGR</reltype>
             <clid>CL_CFGMANAGER</clid>
@@ -319,7 +319,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
+            <group>grp_settings_def</group>
             <type>text</type>
             <store>no</store>
             <subtitle>1</subtitle>
@@ -330,7 +330,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
+            <group>grp_settings_def</group>
             <type>textbox</type>
             <default>0.5</default>
             <caption>Üle tähtaja olevate projektide tähtsuse tõus tähtaja ületamise suurenemise suunas</caption>
@@ -340,7 +340,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
+            <group>grp_settings_def</group>
             <type>textbox</type>
             <default>10</default>
             <caption>Just tähtaja ületanud projekti tähtsus</caption>
@@ -350,7 +350,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
+            <group>grp_settings_def</group>
             <type>textbox</type>
             <default>0.05</default>
             <caption>Projekti tähtsuse langus tähtaja kaugenemise suunas</caption>
@@ -360,7 +360,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
+            <group>grp_settings_def</group>
             <type>textbox</type>
             <default>0.1</default>
             <caption>Planeerimise hetkega võrdse tähtajaga projekti tähtsus</caption>
@@ -370,7 +370,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
+            <group>grp_settings_def</group>
             <type>textbox</type>
             <default>0.8</default>
             <caption>Kliendi ja projektiprioriteedi suhtelise väärtuse tõus vrd. tähtajaga</caption>
@@ -380,7 +380,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
+            <group>grp_settings_def</group>
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -390,7 +390,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
+            <group>grp_settings_def</group>
             <type>textbox</type>
             <default>2</default>
             <caption>Ajaplaani ulatus (a)</caption>
@@ -400,7 +400,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
+            <group>grp_settings_def</group>
             <type>textbox</type>
             <default>300</default>
             <caption>Ajaplaani alguse vahe planeerimise alguse hetkega (s)</caption>
@@ -410,7 +410,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
+            <group>grp_settings_def</group>
             <type>textarea</type>
             <caption>Otsingutabeli ajaskaala definitsioon (Jaotuste algused, komaga eraldatud. Esimene peaks alati 0 olema.)</caption>
       </property>
@@ -419,9 +419,19 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings</group>
+            <group>grp_settings_def</group>
             <type>select</type>
             <caption>Skaala ajaühik</caption>
+      </property>
+      <property>
+            <name>sales_pri_tbl</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings_salesman</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
       </property>
       <property>
             <name>printer_jobs</name>
@@ -752,6 +762,14 @@
             <grp_settings>
                   <caption>Seaded</caption>
             </grp_settings>
+            <grp_settings_def>
+                  <caption>Seaded</caption>
+                  <parent>grp_settings</parent>
+            </grp_settings_def>
+            <grp_settings_salesman>
+                  <caption>M&amp;uuml;&amp;uuml;gimehe seaded</caption>
+                  <parent>grp_settings</parent>
+            </grp_settings_salesman>
             <grp_printer>
                   <caption>Tr&amp;uuml;kkali vaade</caption>
                   <submit>no</submit>

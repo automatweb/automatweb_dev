@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.15 2005/02/07 15:32:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.16 2005/02/09 07:19:43 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -298,6 +298,10 @@ class mrp_case extends class_base
 
 			case "log":
 				$this->_do_log($arr);
+				break;
+
+			case "sales_priority":
+				$prop["options"] = $this->_get_sales_priority($arr["obj_inst"]);
 				break;
 		}
 
@@ -1237,6 +1241,15 @@ class mrp_case extends class_base
 		$parts = (count ($parts2) == 1) ? $parts1 : $parts2;
 		$value = (float) ((isset ($parts[0]) ? ((int) $parts[0]) : 0) . "." . (isset ($parts[1]) ? ((int) $parts[1]) : 0));
 		return $value;
+	}
+
+	function _get_sales_priority($o)
+	{
+		$ws = $o->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+		if ($ws)
+		{
+			return safe_array($ws->meta("sales_pri"));
+		}
 	}
 }
 

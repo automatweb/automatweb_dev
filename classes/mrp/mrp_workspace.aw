@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.19 2005/02/09 07:18:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.20 2005/02/09 07:19:43 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -13,6 +13,8 @@
 	@groupinfo grp_users_tree caption="Kasutajate puu" parent=grp_users submit=no
 	@groupinfo grp_users_mgr caption="Kasutajate rollid" parent=grp_users submit=no
 @groupinfo grp_settings caption="Seaded"
+	@groupinfo grp_settings_def caption="Seaded" parent=grp_settings
+	@groupinfo grp_settings_salesman caption="M&uuml;&uuml;gimehe seaded" parent=grp_settings
 @groupinfo grp_printer caption="Tr&uuml;kkali vaade" submit=no
 
 
@@ -69,7 +71,7 @@
 	@property user_mgr type=table store=no no_caption=1 parent=vsplitbox
 
 
-@default group=grp_settings
+@default group=grp_settings_def
 	@property owner type=relpicker reltype=RELTYPE_MRP_OWNER clid=CL_CRM_COMPANY
 	@caption Organisatsioon
 
@@ -119,6 +121,9 @@
 	@property parameter_timescale_unit type=select
 	@caption Skaala ajaühik
 
+@default group=grp_settings_salesman
+	@property sales_pri_tbl type=table no_caption=1
+	
 
 @default group=grp_printer
 	@property printer_jobs type=table no_caption=1
@@ -331,7 +336,7 @@ class mrp_workspace extends class_base
 						$j = get_instance(CL_MRP_JOB);
 						$prop["value"] = $j->states[$job->prop($rpn)];
 						break;
-
+				
 					default:
 						$prop["value"] = $job->prop($rpn);
 						break;
@@ -454,6 +459,10 @@ class mrp_workspace extends class_base
 				}
 				$this->_printer_jobs($arr);
 				break;
+
+			case "sales_pri_tbl":
+				$this->_do_sales_pri_tbl($arr);
+				break;
 		}
 		return $retval;
 	}
@@ -468,6 +477,10 @@ class mrp_workspace extends class_base
 			case "projects_list":
 			case "resources_list":
 				$this->save_custom_form_data ($arr);
+				break;
+
+			case "sales_pri_tbl":
+				$this->_save_sales_pri_tbl($arr);
 				break;
 		}
 
@@ -2318,6 +2331,63 @@ class mrp_workspace extends class_base
 		return urldecode($arr["return_url"]);
 	}
 
+	function _init_sales_pri_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "pri",
+			"align" => "center",
+			"caption" => "Prioriteet"
+		));
+
+		$t->define_field(array(
+			"name" => "name",
+			"align" => "center",
+			"caption" => "Tekst"
+		));
+	}
+
+	function _do_sales_pri_tbl($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_sales_pri_t($t);
+
+		$inf = safe_array($arr["obj_inst"]->meta("sales_pri"));
+		$inf[""] = "";
+		//arsort($inf);
+
+		$num = 0;
+		foreach($inf as $pri => $nm)
+		{
+			$num++;
+
+			$t->define_data(array(
+				"pri" => html::textbox(array(
+					"name" => "pris[$num]",
+					"size" => 5,
+					"value" => $pri
+				)),
+				"name" => html::textbox(array(
+					"name" => "names[$num]",
+					"value" => $nm
+				)),
+			));
+		}
+
+		$t->set_sortable(false);
+	}
+
+	function _save_sales_pri_tbl($arr)
+	{
+		$dat = array();
+		foreach(safe_array($arr["request"]["pris"]) as $idx => $pri)
+		{
+			if ($pri && $arr["request"]["names"][$idx] != "")
+			{
+				$dat[$pri] = $arr["request"]["names"][$idx];
+			}
+		}
+		$arr["obj_inst"]->set_meta("sales_pri", $dat);
+	}
 }
 
 ?>
