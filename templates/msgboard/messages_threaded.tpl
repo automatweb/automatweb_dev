@@ -8,7 +8,6 @@ function box2(caption,url)
 	}
 }
 </script>
-<form method="POST" name="commform" action="reforb.{VAR:ext}">
 
 
 
@@ -44,6 +43,11 @@ Autor: <b>{VAR:from}</b>  ({VAR:created})<br>
 {VAR:text}<br>
 </td>
 </tr>
+<tr>
+<td>
+{VAR:rated}
+</td>
+</tr>
 
 
 <!--<tr><td bgcolor="#ECECEC" class="text"><img
@@ -54,6 +58,7 @@ src="/img/new/nool_hall.gif">&nbsp;&nbsp;<a href="#comments">Loe selle teema arv
 							
 <!-- END SUB: TOPIC -->
 </table>
+<form method="POST" name="commform" action="reforb.{VAR:ext}">
 
 
 

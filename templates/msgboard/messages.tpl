@@ -8,7 +8,6 @@ function box2(caption,url)
 	}
 }
 </script>
-<form method="POST" name="commform" action="reforb.{VAR:ext}">
 
 			<!--1-->
             <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#e2e2e2">
@@ -46,6 +45,12 @@ kustutada?','{VAR:del_topic}')"><font size="1">Kustuta</font></a>
 
 </td>
 </tr>
+<tr>
+<td>
+{VAR:rated}
+</td>
+</tr>
+<form method="POST" name="commform" action="reforb.{VAR:ext}">
 
 <!--<tr> 
 <td bgcolor="#ECECEC" class="textsmall"><img
