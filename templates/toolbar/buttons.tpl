@@ -5,7 +5,6 @@
 	<td height="32" background="{VAR:baseurl}/automatweb/images/awmenueditor_iconbar_back.gif" align="{VAR:align}">
 	<table border="0" cellpadding="0" cellspacing="0">
 	<tr>
-
 <!-- END SUB: start -->
 
 <!-- SUB: button -->
