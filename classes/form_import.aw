@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_import.aw,v 2.5 2001/07/16 06:01:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_import.aw,v 2.6 2001/07/25 03:09:28 duke Exp $
 global $orb_defs;
 $orb_defs["form_import"] = "xml";
-
+lc_load("form");
 class form_import extends form_base
 {
 	function form_import()
@@ -10,6 +10,10 @@ class form_import extends form_base
 		$this->form_base();
 		$this->sub_merge = 1;
 		lc_load("definition");
+		global $lc_form;
+		if (is_array($lc_form))
+		{
+			$this->vars($lc_form);}
 	}
 
 	////
