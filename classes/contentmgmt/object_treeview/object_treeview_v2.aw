@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.16 2004/10/25 08:55:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.17 2004/10/25 11:31:31 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2 
 /*
 
@@ -194,31 +194,34 @@ class object_treeview_v2 extends class_base
 		// do some filtering in $ol
 		$filters = $ob->meta("saved_filters");
 
-		$ol_result = array();
-		foreach($ol as $ol_item)
+		if (is_array($filters) && count($filters) > 0)
 		{
-			foreach(safe_array($filters) as $filter)
+			$ol_result = array();
+			foreach($ol as $ol_item)
 			{
-				if($filter['is_strict'] == 1)
+				foreach(safe_array($filters) as $filter)
 				{
-					if($ol_item[$filter['field']] == $filter['value'])
+					if($filter['is_strict'] == 1)
 					{
-						array_push($ol_result, $ol_item);
-						break;
+						if($ol_item[$filter['field']] == $filter['value'])
+						{
+							array_push($ol_result, $ol_item);
+							break;
+						}
 					}
-				}
-				else
-				{
-					if(strpos(strtolower($ol_item[$filter['field']]), strtolower($filter['value'])) !== false)
+					else
 					{
-						array_push($ol_result, $ol_item);
-						break;
+						if(strpos(strtolower($ol_item[$filter['field']]), strtolower($filter['value'])) !== false)
+						{
+							array_push($ol_result, $ol_item);
+							break;
+						}
 					}
 				}
 			}
-		}
 
-		$ol = $ol_result;
+			$ol = $ol_result;
+		}
 
 		$this->cnt = 0;
 		$c = "";
