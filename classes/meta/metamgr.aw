@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.3 2004/03/29 14:58:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.4 2004/04/14 16:44:06 duke Exp $
 // metamgr.aw - Muutujate haldus 
 
 // see on siis mingi faking muutujate haldus. Mingi puu. Ja mingid asjad. Ja see kõik pole
@@ -30,7 +30,7 @@
 @property meta type=hidden store=no 
 @caption Metainfo
 
-@groupinfo manager caption="Muutujad" submit=no
+@groupinfo manager caption="Muutujad" 
 
 
 */
@@ -460,6 +460,16 @@ class metamgr extends class_base
 				$no->set_parent($parent);
 				$no->set_comment($data[2]);
 				$no->set_name($data[0] . " (" . $data[1] . ")");
+				$no->save();
+			}
+			if (sizeof($data) == 2)
+			{
+				$no = new object;
+				$no->set_class_id(CL_META);
+				$no->set_status(STAT_ACTIVE);
+				$no->set_parent($parent);
+				$no->set_comment($data[1]);
+				$no->set_name($data[0]);
 				$no->save();
 			};
 		};
