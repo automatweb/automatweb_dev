@@ -1483,15 +1483,25 @@ class user extends class_base
 		}
 		else
 		{
-			$o_str = $this->db_fetch_field("select name from objects where oid = '$ca[oid]'", "name");
+			$o_str = $this->db_fetch_field("select name from objects where oid = '$ca[oid]'", "name")." (oid = $ca[oid])";
 		}
-		$ro = obj($oid);
-		$g_o = obj($this->users->get_oid_for_gid($ca["gid"]));
 
-		return "Info objekti ".html::href(array(
+		if ($this->can("view", $oid))
+		{
+			$ro = obj($oid);
+			$ro_str = html::href(array(
 				"url" => $this->mk_my_orb("change", array("id" => $ro->id()), $ro->class_id()),
 				"caption" => $ro->path_str()
-			))." &otilde;iguste kohta: <br><br> &Otilde;igusi m&auml;&auml;rab &otilde;igus-seos objekti ".$o_str." ja grupi ".html::href(array(
+			));
+		}
+		else
+		{
+			$ro_str = $this->db_fetch_field("select name from objects where oid = '$oid'", "name")." (oid = $oid)";
+		}
+
+		$g_o = obj($this->users->get_oid_for_gid($ca["gid"]));
+
+		return "Info objekti ".$ro_str." &otilde;iguste kohta: <br><br> &Otilde;igusi m&auml;&auml;rab &otilde;igus-seos objekti ".$o_str." ja grupi ".html::href(array(
 			"url" => $this->mk_my_orb("change", array("id" => $g_o->id()), $g_o->class_id()),
 			"caption" => $g_o->path_str()
 		))." vahel.<br><br>Sellele seosele m&auml;&auml;ratud &otilde;igused on j&auml;rgnevad:<br>".$this->_aclw_acl_string($ca["acl"]);
