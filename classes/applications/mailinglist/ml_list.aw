@@ -1,192 +1,192 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.17 2005/02/01 12:37:36 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.18 2005/02/01 13:04:36 ahti Exp $
 // ml_list.aw - Mailing list
 /*
-	@default table=objects
-	@default field=meta
-	@default method=serialize
-	
-	HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
-	
-	------------------------------------------------------------------------
+@default table=objects
+@default field=meta
+@default method=serialize
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
+
+------------------------------------------------------------------------
 @default group=general
-	
-	@property def_user_folder type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 rel=1
-	@caption Listi liikmete allikas
 
-	@property multiple_folders type=checkbox ch_value=1
-	@caption Lase liitumisel kausta valida
-	
-	@property msg_folder type=relpicker reltype=RELTYPE_MSG_FOLDER
-	@caption Kirjade asukoht
+@property def_user_folder type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 rel=1
+@caption Listi liikmete allikas
 
-	@property sub_form_type type=select rel=1
-	@caption Vormi tüüp
+@property multiple_folders type=checkbox ch_value=1
+@caption Lase liitumisel kausta valida
 
-	@property redir_obj type=relpicker reltype=RELTYPE_REDIR_OBJECT rel=1
-	@caption Dokument millele suunata
-	
-	@property member_config type=relpicker reltype=RELTYPE_MEMBER_CONFIG rel=1
-	@caption Listi liikmete seadetevorm
-	------------------------------------------------------------------------
+@property msg_folder type=relpicker reltype=RELTYPE_MSG_FOLDER
+@caption Kirjade asukoht
+
+@property sub_form_type type=select rel=1
+@caption Vormi tüüp
+
+@property redir_obj type=relpicker reltype=RELTYPE_REDIR_OBJECT rel=1
+@caption Dokument millele suunata
+
+@property member_config type=relpicker reltype=RELTYPE_MEMBER_CONFIG rel=1
+@caption Listi liikmete seadetevorm
+------------------------------------------------------------------------
 @default group=member_list
-		
-	@property member_list_tb type=toolbar store=no no_caption=1
-	@caption Listi staatuse toolbar
 
-	@property member_list type=table store=no no_caption=1
-	@caption Liikmed
+@property member_list_tb type=toolbar store=no no_caption=1
+@caption Listi staatuse toolbar
 
-	------------------------------------------------------------------------
+@property member_list type=table store=no no_caption=1
+@caption Liikmed
+
+------------------------------------------------------------------------
 @default group=subscribing
 
-	@property confirm_subscribe type=checkbox ch_value=1 
-	@caption Liitumiseks on vaja kinnitust
+@property confirm_subscribe type=checkbox ch_value=1 
+@caption Liitumiseks on vaja kinnitust
 
-	@property confirm_subscribe_msg type=relpicker reltype=RELTYPE_ADM_MESSAGE
-	@caption Liitumise kinnituseks saadetav kiri
+@property confirm_subscribe_msg type=relpicker reltype=RELTYPE_ADM_MESSAGE
+@caption Liitumise kinnituseks saadetav kiri
 
-	@property import_textfile type=fileupload store=no
-	@caption Impordi liikmed tekstifailist
+@property import_textfile type=fileupload store=no
+@caption Impordi liikmed tekstifailist
 
-	@property mass_subscribe type=textarea rows=25 store=no
-	@caption Massiline liitmine
-	@comment Iga aadress eraldi real, nimi ja aadress komaga eraldatud
+@property mass_subscribe type=textarea rows=25 store=no
+@caption Massiline liitmine
+@comment Iga aadress eraldi real, nimi ja aadress komaga eraldatud
 
-	------------------------------------------------------------------------
+------------------------------------------------------------------------
 @default group=unsubscribing
-	
-	@property confirm_unsubscribe type=checkbox ch_value=1 
-	@caption Lahkumiseks on vaja kinnitust
-	
-	@property confirm_unsubscribe_msg type=relpicker reltype=RELTYPE_ADM_MESSAGE 
-	@caption Lahkumise kinnituseks saadetav kiri
-	
-	@property delete_textfile type=fileupload store=no
-	@caption Kustuta tekstifailis olevad aadressid
-	
-	@property mass_unsubscribe type=textarea rows=25 store=no 
-	@caption Massiline kustutamine
-	
-	------------------------------------------------------------------------
-@default group=export_members
-	@property export_type type=chooser orient=vertical store=no
-	@caption Formaat
-	
-	@property export_from_date type=date_select store=no default=-1
-	@caption Alates kuupäevast
-	
-	@property exp_sbt type=submit
-	@caption Ekspordi
 
-	------------------------------------------------------------------------
+@property confirm_unsubscribe type=checkbox ch_value=1 
+@caption Lahkumiseks on vaja kinnitust
+
+@property confirm_unsubscribe_msg type=relpicker reltype=RELTYPE_ADM_MESSAGE 
+@caption Lahkumise kinnituseks saadetav kiri
+
+@property delete_textfile type=fileupload store=no
+@caption Kustuta tekstifailis olevad aadressid
+
+@property mass_unsubscribe type=textarea rows=25 store=no 
+@caption Massiline kustutamine
+
+------------------------------------------------------------------------
+@default group=export_members
+@property export_type type=chooser orient=vertical store=no
+@caption Formaat
+
+@property export_from_date type=date_select store=no default=-1
+@caption Alates kuupäevast
+
+@property exp_sbt type=submit
+@caption Ekspordi
+
+------------------------------------------------------------------------
 @default group=list_status
 
-	@property list_status_tb type=toolbar store=no no_caption=1
-	@caption Listi staatuse toolbar
+@property list_status_tb type=toolbar store=no no_caption=1
+@caption Listi staatuse toolbar
 
-	@property list_status_table type=table store=no no_caption=1
-	@caption Listi staatus
-	
-	------------------------------------------------------------------------
+@property list_status_table type=table store=no no_caption=1
+@caption Listi staatus
+
+------------------------------------------------------------------------
 @default group=unsent
 
-	@property unsent_tb type=toolbar store=no no_caption=1
-	@caption Listi staatuse toolbar
+@property unsent_tb type=toolbar store=no no_caption=1
+@caption Listi staatuse toolbar
 
-	@property unsent_table type=table store=no no_caption=1
-	@caption Listi staatus
-	
-	------------------------------------------------------------------------
+@property unsent_table type=table store=no no_caption=1
+@caption Listi staatus
+
+------------------------------------------------------------------------
 @default group=write_mail
 
-	@property mail_toolbar type=toolbar no_caption=1
-	@caption Maili toolbar
+@property mail_toolbar type=toolbar no_caption=1
+@caption Maili toolbar
 
-	@property write_mail type=callback callback=callback_gen_write_mail store=no no_caption=1
-	@caption Maili kirjutamine
+@property write_mail type=callback callback=callback_gen_write_mail store=no no_caption=1
+@caption Maili kirjutamine
 
-	------------------------------------------------------------------------
+------------------------------------------------------------------------
 @default group=mail_report
 
-	@property mail_subject type=text store=no 
-	@caption Teema
+@property mail_subject type=text store=no 
+@caption Teema
 
-	@property mail_percentage type=text store=no 
-	@caption Saadetud
+@property mail_percentage type=text store=no 
+@caption Saadetud
 
-	@property mail_start_date type=text store=no 
-	@caption Saatmise algus
+@property mail_start_date type=text store=no 
+@caption Saatmise algus
 
-	@property mail_last_batch type=text store=no 
-	@caption Viimane kiri saadeti
-	
-	@property list_source type=text store=no
-	@caption Listi liikmete allikas
-	
-	@property mail_report table type=table store=no no_caption=1
-	@caption Meili raport
-	
-	------------------------------------------------------------------------
+@property mail_last_batch type=text store=no 
+@caption Viimane kiri saadeti
+
+@property list_source type=text store=no
+@caption Listi liikmete allikas
+
+@property mail_report table type=table store=no no_caption=1
+@caption Meili raport
+
+------------------------------------------------------------------------
 @default group=show_mail
-	@property show_mail_subject type=text store=no
-	@caption Teema
+@property show_mail_subject type=text store=no
+@caption Teema
 
-	@property show_mail_from type=text store=no
-	@caption Kellelt
+@property show_mail_from type=text store=no
+@caption Kellelt
 
-	@property show_mail_message type=text store=no no_caption=1
-	@caption Sisu
+@property show_mail_message type=text store=no no_caption=1
+@caption Sisu
 
-	------------------------------------------------------------------------
+------------------------------------------------------------------------
 @default group=export_to_file
 
-	@property expf_path type=textbox 
-	@caption Kataloog serveris
+@property expf_path type=textbox 
+@caption Kataloog serveris
 
-	@property expf_num_per_day type=textbox size=5
-	@caption Mitu korda p&auml;evas eksport teha
+@property expf_num_per_day type=textbox size=5
+@caption Mitu korda p&auml;evas eksport teha
 
-	@property expf_next_time type=text store=no
-	@caption Millal j&auml;rgmine eksport toimub
+@property expf_next_time type=text store=no
+@caption Millal j&auml;rgmine eksport toimub
 
-	------------------------------------------------------------------------
-	@groupinfo membership caption=Liikmed 
-		@groupinfo member_list caption=Nimekiri submit=no parent=membership
-		@groupinfo subscribing caption=Liitumine parent=membership
-		@groupinfo unsubscribing caption=Lahkumine parent=membership
-		@groupinfo export_members caption=Eksport parent=membership
-		@groupinfo export_to_file caption="Eksport faili" parent=membership
+------------------------------------------------------------------------
+@groupinfo membership caption=Liikmed 
+@groupinfo member_list caption=Nimekiri submit=no parent=membership
+@groupinfo subscribing caption=Liitumine parent=membership
+@groupinfo unsubscribing caption=Lahkumine parent=membership
+@groupinfo export_members caption=Eksport parent=membership
+@groupinfo export_to_file caption="Eksport faili" parent=membership
 
-	@groupinfo raports caption=Kirjad
-		@groupinfo list_status caption="Saadetud kirjad" parent=raports submit=no
-		@groupinfo unsent caption="Saatmata kirjad" parent=raports submit=no
-		@groupinfo write_mail caption="Saada kiri" parent=raports 
-		@groupinfo mail_report caption="Kirja raport" parent=raports submit=no
-		@groupinfo show_mail caption="Listi kiri" parent=raports submit=no
+@groupinfo raports caption=Kirjad
+@groupinfo list_status caption="Saadetud kirjad" parent=raports submit=no
+@groupinfo unsent caption="Saatmata kirjad" parent=raports submit=no
+@groupinfo write_mail caption="Saada kiri" parent=raports 
+@groupinfo mail_report caption="Kirja raport" parent=raports submit=no
+@groupinfo show_mail caption="Listi kiri" parent=raports submit=no
 
-	------------------------------------------------------------------------
-	@classinfo syslog_type=ST_MAILINGLIST
-	@classinfo relationmgr=yes
-	@classinfo no_status=1
+------------------------------------------------------------------------
+@classinfo syslog_type=ST_MAILINGLIST
+@classinfo relationmgr=yes
+@classinfo no_status=1
 
-	@reltype MEMBER_PARENT value=1 clid=CL_MENU,CL_GROUP,CL_USER
-	@caption Listi liikmete allikas
+@reltype MEMBER_PARENT value=1 clid=CL_MENU,CL_GROUP,CL_USER
+@caption Listi liikmete allikas
 
-	@reltype REDIR_OBJECT value=2 clid=CL_DOCUMENT
-	@caption ümbersuunamine
+@reltype REDIR_OBJECT value=2 clid=CL_DOCUMENT
+@caption ümbersuunamine
 
-	@reltype ADM_MESSAGE value=3 clid=CL_MESSAGE
-	@caption administratiivne teade 
+@reltype ADM_MESSAGE value=3 clid=CL_MESSAGE
+@caption administratiivne teade 
 
-	@reltype TEMPLATE value=4 clid=CL_MESSAGE_TEMPLATE
-	@caption kirja template
-	
-	@reltype MEMBER_CONFIG value=5 clid=CL_CFGFORM
-	@caption Listi liikme seadetevorm
+@reltype TEMPLATE value=4 clid=CL_MESSAGE_TEMPLATE
+@caption kirja template
 
-	@reltype MSG_FOLDER value=6 clid=CL_MENU
-	@caption Kirjade kaust
+@reltype MEMBER_CONFIG value=5 clid=CL_CFGFORM
+@caption Listi liikme seadetevorm
+
+@reltype MSG_FOLDER value=6 clid=CL_MENU
+@caption Kirjade kaust
 
 */
 
