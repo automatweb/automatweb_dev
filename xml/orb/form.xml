@@ -485,6 +485,13 @@
 			</function>
 		</action>
 
+		<action name="submit_sr">
+			<function name="submit_sr">
+				<required name="id"/>
+				<optional name="entry_id"/>
+			</function>
+		</action>
+
 		<action name="joins">
 			<function name="joins">
 				<required name="id" acl="edit;view"/>

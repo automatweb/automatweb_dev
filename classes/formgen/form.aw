@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.66 2003/06/19 09:56:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.67 2003/06/19 16:08:08 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -2060,7 +2060,8 @@ class form extends form_base
 			"chain_search" => checked($this->arr["search_type"] == "chain"),
 			"forms" => $this->multiple_option_list($this->arr["search_forms"],$this->get_flist(array("type" => FTYPE_ENTRY))),
 			"nchains" => $this->picker($this->arr["search_chain"],$this->get_chains(true)),
-			"show_csv_link" => checked($this->arr["search_show_csv_link"])
+			"show_csv_link" => checked($this->arr["search_show_csv_link"]),
+			"show_s_res_as_forms" => checked($this->arr["show_s_res_as_forms"])
 		));
 
 		$cs = $cs2= "";
@@ -2166,6 +2167,7 @@ class form extends form_base
 		$this->arr["search_chain_op"] = $chain_op;
 		$this->arr["search_chain_repeater"] = $chain_repeater;
 		$this->arr["search_show_csv_link"] = $show_csv_link;
+		$this->arr["show_s_res_as_forms"] = $show_s_res_as_forms;
 
 		if ($this->arr["search_type"] == "chain")
 		{
@@ -2521,7 +2523,7 @@ class form extends form_base
 //		echo "sql = $sql <br>";
 		$result = "";
 		$this->db_query($sql,false);
-		if ($this->arr["show_table"])
+		if ($this->arr["show_table"] && !$this->arr["show_s_res_as_forms"])
 		{
 			$form_table->set_num_rows($this->num_rows());
 		}
@@ -2532,6 +2534,23 @@ class form extends form_base
 			print_r($row);
 			print "</pre>";
 			*/
+
+			if ($this->arr["show_s_res_as_forms"])
+			{
+				$show_form->reset();
+				$show_form->_init_vars();
+				$show_form->load_entry($row["entry_id"]);
+				$result.=$show_form->gen_preview(array(
+					"id" => $show_form->id,
+					"entry_id" => $row["entry_id"], 
+					"no_load_entry" => true, 
+					"tpl" => "show_noform.tpl",
+					"prefix" => "sr_".$row["entry_id"]."_"
+				));
+				$this->s_res_as_forms_eids[] = $row["entry_id"];
+				$this->s_res_as_forms_fid = $show_form->id;
+			}
+			else
 			if ($this->arr["show_table"])
 			{
 				if (isset($row["chain_entry_id"]) && $row["chain_entry_id"])
@@ -2591,7 +2610,7 @@ class form extends form_base
 
 		
 		// now if we are showing table, finish the table 
-		if ($this->arr["show_table"])
+		if ($this->arr["show_table"] && !$this->arr["show_s_res_as_forms"])
 		{
 			$result = $form_table->finalize_table(array("no_form_tags" => $no_form_tags));
 			if ($this->arr["search_show_csv_link"] == 1)
@@ -5697,7 +5716,18 @@ class form extends form_base
 
 		if ($this->type == FTYPE_SEARCH)
 		{
+			if ($this->arr["show_s_res_as_forms"])
+			{
+				$no_tags = true;
+				$this->s_res_as_forms_eids = array();
+				$this->s_res_as_forms_fid = 0;
+			}
 			$search_res = $this->do_search($entry_id, $op_id, $search_el, $search_val, $no_tags).$search_res;
+			if ($this->arr["show_s_res_as_forms"])
+			{
+				$search_res = "<form action='reforb.".$this->cfg["ext"]."' method='POST' name='sr_".$this->id."'>".$search_res;
+			}
+			else
 			if ($no_tags)
 			{
 				$search_res = "<form action='reforb.".$this->cfg["ext"]."' method='POST' name='tb_".$this->arr["table"]."'>".$search_res;
@@ -5714,6 +5744,18 @@ class form extends form_base
 			}
 		}
 
+		if ($this->arr["show_s_res_as_forms"])
+		{
+			$search_res.= $this->mk_reforb("submit_sr", array(
+				"id" => $arr["id"],
+				"entry_id" => $arr["entry_id"],
+				"return_url" => aw_global_get("REQUEST_URI"),
+				"sr_fid" => $this->s_res_as_forms_fid,
+				"sr_eids" => $this->s_res_as_forms_eids
+			));
+			$search_res.="</form>";
+		}
+		else
 		if ($no_tags)
 		{
 			$search_res.= $this->mk_reforb("submit_writer", array(
@@ -6170,6 +6212,24 @@ class form extends form_base
 				$this->arr["contents"][$row][$col]->upd_value();
 			}
 		}
+	}
+
+	function submit_sr($arr)
+	{
+		extract($arr);
+
+		$ar = new aw_array($sr_eids);
+		foreach($ar->get() as $eid)
+		{
+			$prefix = "sr_".$eid."_";
+			$f = get_instance("formgen/form");
+			$f->process_entry(array(
+				"id" => $sr_fid,
+				"entry_id" => $eid,
+				"prefix" => $prefix,
+			));
+		}
+		return $arr["return_url"];
 	}
 };	// class ends
 ?>

@@ -40,6 +40,7 @@ function ssrch()
 <form action='reforb.{VAR:ext}' method="POST" name='selsrch'>
 {VAR:LC_FORMS_USE_NEW_SEARCH}: <input type="checkbox" name="use_new_search" value="1" {VAR:use_new_search}><br>
 Kas tulemustes on link csv failile: <input type="checkbox" name="show_csv_link" value="1" {VAR:show_csv_link}><br>
+N&auml;ita otsingutulemusi sisestusvormidena: <input type='checkbox' value='1' name='show_s_res_as_forms' {VAR:show_s_res_as_forms}>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 	<tr>
 		<td class="plain" width="1"><input type='radio' name='search_from' value='forms' {VAR:forms_search} onClick="ssrch();return true;"></td>
@@ -85,6 +86,7 @@ Kas tulemustes on link csv failile: <input type="checkbox" name="show_csv_link" 
 		<td colspan="4" class="plain"><input class='small_button' type='submit' value='{VAR:LC_FORMS_SAVE}'></td>
 	</tr>
 </table>
+
 {VAR:reforb}
 </form>
 
