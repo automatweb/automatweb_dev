@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.15 2001/06/20 03:21:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.16 2001/06/20 06:39:07 duke Exp $
 // defs.aw - common functions (C) StruktuurMeedia 2000,2001
 
 ////
@@ -529,7 +529,7 @@ function get_ip()
 ////
 // !Kas argument on e-maili aadress?
 // FIXME: should be rewritten. There are easier ways to do this with preg_match function
-function is_email ($address = "") 
+function is_email ($Address = "") 
 {
 	if(empty($Address)) 
 	{
