@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.43 2005/01/26 23:15:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.44 2005/01/28 14:11:29 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -1587,17 +1587,35 @@ class planner extends class_base
 			{
 				continue;
 			}
-			$arr["prop"]["vcl_inst"]->add_item(array(
-				"timestamp" => $event["start"],
-				"data" => array(
-					"id" => $event["id"],
-					"name" => $event["name"],
-					"icon" => $event["event_icon_url"],
-					"link" => $event["link"],
-					"comment" => $event["comment"],
-				),
-				"recurrence" => $this->recur_info[$event["id"]],
-			));
+			if ($_GET["XX6"])
+			{
+				$arr["prop"]["vcl_inst"]->add_item(array(
+					"item_start" => $event["start"],
+					"item_end" => $event["end"],
+					"data" => array(
+						"id" => $event["id"],
+						"name" => $event["name"],
+						"icon" => $event["event_icon_url"],
+						"link" => $event["link"],
+						"comment" => $event["comment"],
+					),
+					"recurrence" => $this->recur_info[$event["id"]],
+				));
+			}
+			else
+			{
+				$arr["prop"]["vcl_inst"]->add_item(array(
+					"timestamp" => $event["start"],
+					"data" => array(
+						"id" => $event["id"],
+						"name" => $event["name"],
+						"icon" => $event["event_icon_url"],
+						"link" => $event["link"],
+						"comment" => $event["comment"],
+					),
+					"recurrence" => $this->recur_info[$event["id"]],
+				));
+			};
 		};
 
 		// set it, so the callback functions can use it
