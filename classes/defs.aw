@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.5 2001/05/29 12:25:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.6 2001/06/05 11:00:55 duke Exp $
 if (DEFS_LOADED == 1)
 {
 }
@@ -473,25 +473,25 @@ function map2($format,$array,$type = 0)
 			if ($type == 0)
 			{
 				$v1 = $key;
-					$v2 = $val;
-				}
-				else
-				{
-					$v1 = $val;
-					$v2 = $key;
-				};
-				if ((strlen($v1) > 0) && (strlen($v2) > 0) )
-				{
-					$retval[] = sprintf($format,$v1,$v2);
-				};
-                        };
-                }
-		else
-		{
-                        $retval[] = sprintf($format,$val);
-                };
-                return $retval;
-        }
+				$v2 = $val;
+			}
+			else
+			{
+				$v1 = $val;
+				$v2 = $key;
+			};
+			if ((strlen($v1) > 0) && (strlen($v2) > 0) )
+			{
+				$retval[] = sprintf($format,$v1,$v2);
+			};
+		};
+	}
+	else
+	{
+		$retval[] = sprintf($format,$val);
+	};
+	return $retval;
+}
 
 function jerk_alert($contents) {
 	$to = "log@struktuur.ee";
