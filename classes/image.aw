@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.97 2004/06/08 09:52:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.98 2004/06/15 12:06:36 duke Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -282,7 +282,7 @@ class image extends class_base
 				{
 					if ($idata["comment"] == "" && $vars["align"] != "")
 					{
-						$replacement = "<table border=0 cellpadding=0 cellspacing=0 $vars[align]><tr><td>";
+						$replacement = "<table border=0 cellpadding=5 cellspacing=0 $vars[align]><tr><td>";
 					}
 					else
 					{
@@ -371,19 +371,25 @@ class image extends class_base
 		{
 			if (!$img_id)
 			{
-				$id = $this->new_object(array(
-					"parent" => $parent,
-					"class_id" => CL_IMAGE,
-					"status" => 2,
-					"name" => $HTTP_POST_FILES[$name]["name"],
-				));
+				$img_obj = new object();
+				$img_obj->set_parent($parent);
+				$img_obj->set_class_id(CL_IMAGE);
+				$img_obj->set_status(STAT_ACTIVE);
+				$img_obj->set_name($HTTP_POST_FILES[$name]["name"]);
+				$img_obj->save();
+				$img_id = $img_obj->id();
 			}
 
 			if (is_uploaded_file($HTTP_POST_FILES[$name]['tmp_name']))
 			{
 				$sz = getimagesize($HTTP_POST_FILES[$name]['tmp_name']);
 
-				$fl = $_fi->_put_fs(array("type" => $HTTP_POST_FILES[$name]['type'], "content" => $this->get_file(array("file" => $HTTP_POST_FILES[$name]['tmp_name']))));
+				$fl = $_fi->_put_fs(array(
+					"type" => $HTTP_POST_FILES[$name]['type'],
+					"content" => $this->get_file(array(
+						"file" => $HTTP_POST_FILES[$name]['tmp_name'],
+					)),
+				));
 
 				if (!$img_id)
 				{
@@ -403,7 +409,11 @@ class image extends class_base
 				$id = $this->get_image_by_id($img_id);
 				// we need to return the image size as well
 				$sz = @getimagesize($id['file']);
- 				return array("id" => $img_id,"url" => $id["url"], "sz" => $sz);
+ 				return array(
+					"id" => $img_id,
+					"url" => $id["url"],
+					"sz" => $sz,
+				);
 			}
 			else
 			{
@@ -767,12 +777,13 @@ class image extends class_base
 
 		if (!$id)
 		{
-			$oid = $this->new_object(array(
-				"parent" => $parent,
-				"class_id" => CL_IMAGE,
-				"status" => 2,
-				"name" => $orig_name,
-			));
+			$img_obj = new object();
+			$img_obj->set_parent($parent);
+			$img_obj->set_class_id(CL_IMAGE);
+			$img_obj->set_status(STAT_ACTIVE);
+			$img_obj->set_name($orig_name);
+			$img_obj->save();
+			$oid = $img_obj->id();
 		}
 		else
 		{
