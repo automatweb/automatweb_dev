@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.151 2003/09/29 14:20:30 kristo Exp $
+// $Id: class_base.aw,v 2.152 2003/10/02 09:56:45 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -273,7 +273,8 @@ class class_base extends aw_template
 
 		$this->is_translated = 0;
 
-		$this->quote($args);
+		// object framework does it's own quoting
+		//$this->quote($args);
 		extract($args);
 
 		$form_data = $args;
@@ -321,7 +322,6 @@ class class_base extends aw_template
 		$action = "change";
 		$orb_class = get_class($this->orb_class);
 
-		//$this->sync_object();
 		if (method_exists($this->inst,"callback_mod_retval"))
 		{
 			$this->inst->callback_mod_retval(array(
@@ -817,46 +817,6 @@ class class_base extends aw_template
 		));
 
 		return $tmp;
-	}
-
-	////
-	// !Saves the object
-	function save_object($args = array())
-	{
-		$id = $this->id;
-		if (!is_array($this->tableinfo))
-		{
-			return;
-		};
-
-		foreach($this->tableinfo as $table => $data)
-		{
-			$id_arg = $id;
-			if ($data["master_table"] == "objects")
-			{
-				if (isset($this->coredata[$data["master_index"]]))
-				{
-					$id_arg = $this->coredata[$data["master_index"]];
-				};
-			};
-			$idfield = $data["index"];
-			// NB! no record is created in the "other" table before we
-			// actually have something to write there besides the id itself
-			if (isset($table) && isset($idfield) && isset($args["data"][$table]))
-			{
-				// ds_save_object creates the record in the other table,
-				// if it does not exist yet.
-				$this->ds->ds_save_object(array(
-					"table" => $table,
-					"idfield" => $idfield,
-					"replace" => true,
-					"id" => $id_arg),$args["data"][$table]
-				);
-			};	
-		};	
-
-		// well now .. how do I propagate the changes to the original object .. if this
-		// thing is a translation?
 	}
 
 	////
@@ -1973,6 +1933,7 @@ class class_base extends aw_template
 
 		// only create the object, if one of the tables used by the object
 		// is the objects table
+
 		if (empty($id))
 		{
 			$period = aw_global_get("period");
@@ -2303,10 +2264,8 @@ class class_base extends aw_template
                 {
 			$this->obj_inst->set_meta("cfgform_id",$this->cfgform_id);
                         //$this->coredata["metadata"]["cfgform_id"] = $this->cfgform_id;
-                };
 
-		//$this->ds->ds_save_object(array("id" => $this->id,"clid" => $this->clid),$this->coredata);
-		//$this->save_object(array("data" => $this->objdata));
+                };
 
 		$this->obj_inst->save();
 
