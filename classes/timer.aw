@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/timer.aw,v 2.8 2003/04/23 14:01:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/timer.aw,v 2.9 2003/09/25 13:03:27 duke Exp $
 // klass taimerite jaoks
 class aw_timer 
 {
@@ -129,9 +129,15 @@ class aw_timer
 		reset($this->timers);
 		$retval = array();
 		$fstr = "%0." . $this->precision . "f";
+
+		$total = $this->timers["__global"]["elapsed"];
 		while(list($timer,$val) = each($this->timers)) 
 		{
 			$retval[$timer] = sprintf($fstr,$val["elapsed"]);
+			if (!empty($total))
+			{
+				$retval[$timer] .= sprintf(" (%0.2f%%)",$val["elapsed"] * 100 / $total);
+			};
 		};
 		// sort timers by time desc
 		arsort($retval);
