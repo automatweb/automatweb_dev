@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.52 2004/07/09 10:23:27 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.53 2004/07/09 10:28:58 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -2221,7 +2221,7 @@ class crm_company extends class_base
 	*/
 	function callback_on_load($arr)
 	{
-		$this->crm_customer_init();
+		$this->crm_company_init();
 		//for post stuff
 		if(array_key_exists('request',$arr))
 		{
