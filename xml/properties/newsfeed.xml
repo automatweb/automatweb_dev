@@ -1,0 +1,44 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>alias</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>alias</field>
+            <caption>Alias</caption>
+            <comment>Selle abil saab fiidile otse ligi</comment>
+      </property>
+      <property>
+            <name>feedtype</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <orient>vertical</orient>
+            <caption>Tüüp</caption>
+      </property>
+      <property>
+            <name>count</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>2</size>
+            <caption>Mitu viimast</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_NEWSFEED</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <reltypes>
+            <FEED_SOURCE>
+                  <value>1</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Materjalide kaust</caption>
+            </FEED_SOURCE>
+      </reltypes>
+</properties>
+
