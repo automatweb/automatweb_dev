@@ -1,6 +1,13 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>rescheduling_needed</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
+      </property>
+      <property>
             <name>configuration</name>
             <table>objects</table>
             <field>meta</field>

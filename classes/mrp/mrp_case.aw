@@ -1,12 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.43 2005/03/26 12:04:33 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.44 2005/03/29 10:01:12 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_MRP_CASE, on_save_case)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_CASE, on_delete_case)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_CASE, on_new_case)
-EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 
 @classinfo syslog_type=ST_MRP_CASE relationmgr=yes no_status=1
 
@@ -408,8 +407,8 @@ class mrp_case extends class_base
 		}
 
 		### post rescheduling msg
-		$msg_queue = msg_get_queue((int) $workspace->id());
-		msg_send ($msg_queue, MSG_MRP_RESCHEDULING_NEEDED, true, false, false);
+		$workspace->set_prop("rescheduling_needed", 1);
+		$workspace->save();
 
 		switch($prop["name"])
 		{
@@ -1545,11 +1544,13 @@ class mrp_case extends class_base
 
 		if (in_array ($project->prop ("state"), $applicable_states))
 		{
+			### post rescheduling msg
 			$workspace = $project->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
 
 			if ($workspace)
 			{
-				post_message (MSG_MRP_RESCHEDULING_NEEDED, array ("mrp_workspace" => $workspace->id ()));
+				$workspace->set_prop("rescheduling_needed", 1);
+				$workspace->save();
 			}
 		}
 	}
@@ -1888,11 +1889,13 @@ class mrp_case extends class_base
 			$project->set_prop("state", MRP_STATUS_PLANNED);
 			$project->save();
 
+			### post rescheduling msg
 			$workspace = $project->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
 
 			if ($workspace)
 			{
-				post_message (MSG_MRP_RESCHEDULING_NEEDED, array ("mrp_workspace" => $workspace->id ()));
+				$workspace->set_prop("rescheduling_needed", 1);
+				$workspace->save();
 			}
 
 			### log event

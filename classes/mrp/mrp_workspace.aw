@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.60 2005/03/26 12:04:33 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.61 2005/03/29 10:01:12 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -29,6 +29,10 @@
 @default table=objects
 @default field=meta
 @default method=serialize
+
+
+	@property rescheduling_needed type=hidden
+
 
 @default group=general
 	@property configuration type=relpicker reltype=RELTYPE_MRP_CONFIGURATION
@@ -363,6 +367,8 @@ class mrp_workspace extends class_base
 
 	function get_property($arr)
 	{
+// /* dbg */ if (aw_global_get('uid') !== "voldemar"){ exit ("hooldus pooleli. ~10min p2rast valmis."); }
+
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		$this_object =& $arr["obj_inst"];
@@ -446,7 +452,7 @@ class mrp_workspace extends class_base
 								"id" => $tmp->id(),
 								"return_url" => get_ru()
 							)),
-							"caption" => t("") . "<span style='font-size:20px'>".$tmp->name()."</span>"//!!!
+							"caption" => t("") . "<span style='font-size:20px'>" . $tmp->name() . "</span>"//!!!
 						));
 						break;
 
@@ -805,26 +811,6 @@ class mrp_workspace extends class_base
 	{
 		$this_object =& $arr["obj_inst"];
 
-		// ### "command" tree
-		// $url_resources_show_all = $this->mk_my_orb("change", array(
-			// "id" => $this_object->id (),
-			// "group" => "grp_projects",
-			// "mrp_resources_show" => "all",
-		// ), "mrp_workspace");
-
-		// $tree = get_instance("vcl/treeview");
-		// $tree->start_tree(array(
-			// "type" => TREE_DHTML,
-			// "tree_id" => "commandtree",
-			// "persist_state" => 1,
-		// ));
-		// $tree->add_item (0, array(
-			// "name" => "Kõik ressursid",
-			// "id" => 1,
-			// "url" => $url_resources_show_all,
-		// ));
-		// $arr["prop"]["value"] = $tree->finalize_tree ();
-
 		### resource tree
 		$resources_folder = $this_object->prop ("resources_folder");
 		$resource_tree = new object_tree(array(
@@ -832,6 +818,46 @@ class mrp_workspace extends class_base
 			"class_id" => array(CL_MENU, CL_MRP_RESOURCE),
 			"sort_by" => "objects.jrk",
 		));
+
+
+/* dbg */ //finish all jobs in progress and set_all_resources_available
+// if ($_GET["mrp_set_all_resources_available"])
+// {
+	// $list = new object_list (array (
+		// "class_id" => CL_MRP_JOB,
+		// "state" => MRP_STATUS_INPROGRESS,
+	// ));
+
+	// $jj = $list->arr();
+	// $j = get_instance(CL_MRP_JOB);
+
+	// foreach ($jj as $job_id => $job)
+	// {
+		// echo "job id: " . $job->id() ."<br>";
+		// $arr = array("id"=>$job_id);
+		// $ud = parse_url($j->done($arr));
+		// $pars = array();
+		// parse_str($ud["query"], $pars);
+		// $this->dequote($pars["errors"]);
+		// $errs = unserialize($pars["errors"]);
+		// echo "done: [" . implode(",", $errs) . "]<br><br>";
+	// }
+
+	// $list = $resource_tree->to_list();
+	// $list->filter (array (
+		// "class_id" => CL_MRP_RESOURCE,
+	// ));
+	// $list = $list->arr();
+
+	// foreach ($list as $res_id => $r)
+	// {
+		// echo "res id: " . $res_id ."<br>";
+		// $r->set_prop("state", MRP_STATUS_RESOURCE_AVAILABLE);
+		// $r->save();
+		// echo "state set to: [" . MRP_STATUS_RESOURCE_AVAILABLE . "]<br><br>";
+	// }
+// }
+/* dbg */
 
 		classload("vcl/treeview");
 		$tree = treeview::tree_from_objects(array(

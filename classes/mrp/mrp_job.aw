@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.33 2005/03/26 12:04:33 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.34 2005/03/29 10:01:12 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -63,12 +63,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 	@property state type=text
 	@caption Staatus
 
-	// @property real_start type=text
-	// @caption Töösse läinud
-
-	// @property real_length type=text
-	// @caption Tööks kulunud aeg (h)
-
 
 
 
@@ -97,8 +91,6 @@ CREATE TABLE `mrp_job` (
   `project` int(11) unsigned default NULL,
   `minstart` int(10) unsigned default NULL,
   `starttime` int(10) unsigned default NULL,
-  // `real_start` int(10) unsigned default NULL,
-  // `real_length` int(10) unsigned default NULL,
   `prerequisites` char(255) default NULL,
   `state` tinyint(2) unsigned default '1',
   `pre_buffer` int(10) unsigned default NULL,
@@ -137,6 +129,8 @@ define ("MSG_MRP_RESCHEDULING_NEEDED", 1);
 
 class mrp_job extends class_base
 {
+	var $mrp_error = false;
+
 	function mrp_job ()
 	{
 		$this->states = array(
@@ -158,36 +152,52 @@ class mrp_job extends class_base
 		));
 	}
 
+	function callback_pre_edit($arr)
+	{
+		if ($arr["request"]["action"] === "new")
+		{
+			$this->mrp_error .= t("Uut tööd saab luua vaid ressursihalduskeskkonnas. ");
+		}
+		else
+		{
+			$this_object =& $arr["obj_inst"];
+			$project_id = $this_object->prop ("project");
+			$resource_id = $this_object->prop ("resource");
+
+			if ( is_oid($project_id) and is_oid($resource_id) and !$arr["new"] and !is_object($this->project) )
+			{
+				$this->project = obj ($project_id);
+				$this->resource = obj ($resource_id);
+			}
+			else
+			{
+				$this->mrp_error .= t("Tööl puudub ressurss, projekt või ressursihalduskeskkond. ");
+			}
+		}
+	}
+
 	function get_property ($arr)
 	{
+		if ($this->mrp_error)
+		{
+			$prop["error"] = $this->mrp_error;
+			return PROP_FATAL_ERROR;
+		}
+
+		$this_object =& $arr["obj_inst"];
 		$prop =& $arr["prop"];
 		$retval = PROP_OK;
-		$this_object =& $arr["obj_inst"];
 
 		switch($prop["name"])
 		{
 			case "name":
-				$project_id = $this_object->prop ("project");
-				$resource_id = $this_object->prop ("resource");
-
-				if (is_oid ($project_id) and is_oid ($resource_id))
-				{
-					$project = obj ($project_id);
-					$resource = obj ($resource_id);
-					$project_name = $project->name () ? $project->name () : "...";
-					$resource_name = $resource->name () ? $resource->name () : "...";
-				}
-				else
-				{
-					$project_name = $resource_name = "...";
-				}
-
+				$project_name = $this->project->name () ? $this->project->name () : "...";
+				$resource_name = $this->resource->name () ? $this->resource->name () : "...";
 				$prop["value"] = $project_name . " - " . $resource_name;
 				break;
 
 			case "resource":
-				$resource = is_oid ($prop["value"]) ? obj ($prop["value"]) : false;
-				$prop["value"] = $resource ? $resource->name () : t("Ressurss määramata");
+				$prop["value"] = $this->resource->name ();
 				break;
 
 			case "length":
@@ -198,18 +208,10 @@ class mrp_job extends class_base
 				break;
 
 			case "advised_starttime":
-				if ($resource->property("type") != MRP_RESOURCE_SUBCONTRACTOR)
+				if ($this->resource->prop("type") != MRP_RESOURCE_SUBCONTRACTOR)
 				{
 					return PROP_IGNORE;
 				}
-				break;
-
-			case "real_start":
-				$prop["value"] = $prop["value"] ? date (MRP_DATE_FORMAT, $prop["value"]) : t("Plaanis");
-				break;
-
-			case "real_length":
-				$prop["value"] = $prop["value"] ? round (($prop["value"] / 3600), 2) : t("L&otilde;petamata");
 				break;
 
 			case "state":
@@ -226,8 +228,10 @@ class mrp_job extends class_base
 
 	function set_property ($arr = array())
 	{
+		$this_object =& $arr["obj_inst"];
 		$prop =& $arr["prop"];
 		$retval = PROP_OK;
+		$resource = obj($this_object->prop ("resource"));
 
 		switch($prop["name"])
 		{
@@ -246,58 +250,6 @@ class mrp_job extends class_base
 
 		}
 		return $retval;
-	}
-
-	function &get_current_workspace ($arr)
-	{
-		if ($arr["new"])
-		{
-			$workspace = obj ($arr["request"]["mrp_workspace"]);
-		}
-		else
-		{
-			$this_object =& $arr["obj_inst"];
-			$connections = $this_object->connections_from(array ("type" => "RELTYPE_MRP_PROJECT", "class_id" => CL_MRP_CASE));
-
-			foreach ($connections as $connection)
-			{
-				$project = $connection->to();
-				$project_connections = $project->connections_from(array ("type" => "RELTYPE_MRP_OWNER", "class_id" => CL_MRP_WORKSPACE));
-
-				foreach ($project_connections as $project_connection)
-				{
-					$workspace = $project_connection->to();
-					break;
-				}
-
-				break;
-			}
-		}
-
-		return $workspace;
-	}
-
-	function &get_project ($arr)
-	{
-		if (is_oid ($arr["id"]))
-		{
-			$this_object = obj ($arr["id"]);
-		}
-
-		if (is_object ($arr["obj_inst"]))
-		{
-			$this_object =& $arr["obj_inst"];
-		}
-
-		$connections = $this_object->connections_from(array ("type" => "RELTYPE_MRP_PROJECT", "class_id" => CL_MRP_CASE));
-
-		foreach ($connections as $connection)
-		{
-			$project = $connection->to();
-			break;
-		}
-
-		return $project;
 	}
 
 	function create_job_toolbar ($arr = array())
@@ -512,7 +464,6 @@ class mrp_job extends class_base
 
 			### start job
 			$this_object->set_prop ("state", MRP_STATUS_INPROGRESS);
-			$this_object->set_prop ("real_start", time());
 
 			### log
 			$ws = get_instance(CL_MRP_WORKSPACE);
@@ -571,12 +522,11 @@ class mrp_job extends class_base
 		{
 			### finish job
 			$this_object->set_prop ("state", MRP_STATUS_DONE);
-			$this_object->set_prop ("real_length", (time() - $this_object->prop("real_start")));
 			$this_object->save ();
 
 			### set resource as free
-			$resource = get_instance(CL_MRP_RESOURCE);
-			$resource_freed = $resource->stop_job(array("resource" => $this_object->prop("resource")));
+			$mrp_resource = get_instance(CL_MRP_RESOURCE);
+			$resource_freed = $mrp_resource->stop_job(array("resource" => $this_object->prop("resource")));
 
 			if (!$resource_freed)
 			{
@@ -609,7 +559,7 @@ class mrp_job extends class_base
 			if ($done_jobs === $all_jobs)
 			{
 				### finish project
-				$mrp_case = get_instance(CL_MRP_RESOURCE);
+				$mrp_case = get_instance(CL_MRP_CASE);
 				$project_finish = $mrp_case->finish(array("id" => $project->id ()));
 
 				$project_errors = parse_url($project_finish);
@@ -682,8 +632,8 @@ class mrp_job extends class_base
 			$this_object->save ();
 
 			### set resource as free
-			$resource = get_instance(CL_MRP_RESOURCE);
-			$resource_freed = $resource->stop_job(array("resource" => $this_object->prop("resource")));
+			$mrp_resource = get_instance(CL_MRP_RESOURCE);
+			$resource_freed = $mrp_resource->stop_job(array("resource" => $this_object->prop("resource")));
 
 			if (!$resource_freed)
 			{

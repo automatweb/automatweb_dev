@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.29 2005/03/28 12:09:07 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.30 2005/03/29 10:01:12 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -241,12 +241,15 @@ class mrp_schedule extends class_base
 		sem_acquire($sem_id);
 
 		### start scheduling only if input data has been altered
-		$msg_queue = msg_get_queue($workspace_id);
-		$rescheduling_needed = msg_receive($msg_queue, MSG_MRP_RESCHEDULING_NEEDED, $msgtype, 4, $message, false, MSG_IPC_NOWAIT, $msg_error);
-
-		if ($rescheduling_needed === ENOMSG)
+		if ($workspace->prop("rescheduling_needed"))
 		{
-	  		### Release&remove semaphore and queue
+			### set scheduling not needed, and start scheduling
+			$workspace->set_prop("rescheduling_needed", 0);
+			$workspace->save();
+		}
+		else
+		{
+	  		### Release&remove semaphore. stop, no rescheduling needed
 			if (!sem_release($sem_id))
 			{
 				echo "Viga: planeerimisluku avamine ebaõnnestus! Järgnevad planeerimised ei toimu enne vea kõrvaldamist.";
@@ -254,10 +257,6 @@ class mrp_schedule extends class_base
 
 			sem_remove($sem_id);
 			return;
-		}
-		else
-		{
-			msg_remove_queue($msg_queue);
 		}
 
 /* timing */ timing ("initialize", "start");
