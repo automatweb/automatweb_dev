@@ -1,0 +1,112 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>day_start</name>
+            <type>time_select</type>
+            <group>config</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Päev algab</caption>
+      </property>
+      <property>
+            <name>day_end</name>
+            <type>time_select</type>
+            <group>config</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Päev lõpeb</caption>
+      </property>
+      <property>
+            <name>object</name>
+            <type>relpicker</type>
+            <clid>CL_DOCUMENT</clid>
+            <group>config</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kontrollitav objekt</caption>
+      </property>
+      <property>
+            <name>searches</name>
+            <type>select</type>
+            <group>config</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Objektiga seotud otsingud</caption>
+      </property>
+      <property>
+            <name>header_style</name>
+            <type>relpicker</type>
+            <clid>CL_CSS</clid>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>styles</group>
+            <caption>Päise stiil</caption>
+      </property>
+      <property>
+            <name>weekday_style</name>
+            <type>relpicker</type>
+            <clid>CL_CSS</clid>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>styles</group>
+            <caption>Nädalapäevade stiil</caption>
+      </property>
+      <property>
+            <name>weekend_style</name>
+            <type>relpicker</type>
+            <clid>CL_CSS</clid>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>styles</group>
+            <caption>Nädalapäevade stiil (weekend)</caption>
+      </property>
+      <property>
+            <name>day_style</name>
+            <type>relpicker</type>
+            <clid>CL_CSS</clid>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>styles</group>
+            <caption>Päevade stiil</caption>
+      </property>
+      <property>
+            <name>act_day_style</name>
+            <type>relpicker</type>
+            <clid>CL_CSS</clid>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>styles</group>
+            <caption>Päevade stiil</caption>
+      </property>
+      <property>
+            <name>cel_day_style</name>
+            <type>relpicker</type>
+            <clid>CL_CSS</clid>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>styles</group>
+            <caption>Päevade stiil</caption>
+      </property>
+      <classinfo>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <groupinfo>
+            <config>
+                  <caption>Seaded</caption>
+            </config>
+            <styles>
+                  <caption>Stiilid</caption>
+            </styles>
+      </groupinfo>
+</properties>
+
