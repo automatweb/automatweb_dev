@@ -1,5 +1,5 @@
 <?php
-// $Id: tabpanel.aw,v 1.11 2004/05/06 12:32:02 duke Exp $
+// $Id: tabpanel.aw,v 1.12 2004/07/13 12:04:24 duke Exp $
 // tabpanel.aw - class for creating tabbed dialogs
 class tabpanel extends aw_template
 {
@@ -85,7 +85,7 @@ class tabpanel extends aw_template
 
 		//$this->tabs[$level] .= $this->parse($subtpl . "_L" . $level);
 		$this->tabs[$tab_prefix . $level] .= $this->parse($use_subtpl);
-		
+
 		// so, I need a way to specify other tab groups.
 	}
 
@@ -111,14 +111,6 @@ class tabpanel extends aw_template
 
 	}
 
-	function set_style($style_name)
-	{
-		if ($style_name == "with_logo")
-		{
-			$this->read_template("tabs_with_logo.tpl");
-		};
-	}
-	
 	function configure($arr)
 	{
 		if (isset($arr["logo_image"]))
@@ -135,6 +127,15 @@ class tabpanel extends aw_template
 			));
 		};
 	}
+
+	function set_style($style_name)
+	{
+		if ($style_name == "with_logo")
+		{
+			$this->read_template("tabs_with_logo.tpl");
+		};
+	}
+	
 
 	////
 	// !Generates and returns the tabpanel
