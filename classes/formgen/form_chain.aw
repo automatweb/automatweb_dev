@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.7 2003/02/10 14:06:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.8 2003/03/28 10:19:01 kristo Exp $
 // form_chain.aw - form chains
 
 classload("formgen/form_base");
@@ -417,6 +417,10 @@ class form_chain extends form_base
 
 		if ($this->chain["during_show_entry"] && $entry_id && $this->chain["during_show_op"])
 		{
+			if (!is_array($ear))
+			{
+				$ear = $this->get_chain_entry($entry_id);
+			}
 			// siin on j2relikult $ear array olemas k6ikidest formi sisestustest ja tuleb n2idata v2ljundit valitud kohas
 			$show_form_id = 0;
 			$this->db_query("SELECT * FROM output2form WHERE op_id = ".$this->chain["during_show_op"]);
