@@ -271,6 +271,7 @@
             <multiple>1</multiple>
             <size>15</size>
             <group>relations</group>
+            <method>serialize</method>
             <table>menu</table>
             <field>seealso</field>
             <caption>
