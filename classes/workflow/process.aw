@@ -121,9 +121,11 @@ class process extends workflow_common
 
 		// phase 1, kuvame objekti juurfunktsiooni.
 		// ja sinna juurde lingi "defineeri järgmine tegevus"
-		$root_action = new object($args["obj"]["meta"]["root_action"]);
-
-		if ("" == $root_action)
+		if ($args["obj"]["meta"]["root_action"])
+		{
+			$root_action = new object($args["obj"]["meta"]["root_action"]);
+		}
+		else
 		{
 			$data["error"] = "Juurtegevus on valimata";
 			return PROP_ERROR;
@@ -261,8 +263,7 @@ class process extends workflow_common
 				$writeout[$el] = $this->make_keys($values);
 			};
 		};
-		$metadata = &$args["metadata"];
-		$metadata["action_info"] = $writeout;
+		$args["obj_inst"]->set_meta("action_info",$writeout);
 	}
 
 }
