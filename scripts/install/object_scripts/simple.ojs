@@ -40,7 +40,7 @@ $root = obj{ class_id=CL_MENU, parent=${parent}, name="Klient", type=MN_CLIENT, 
 			$mn_conf = obj { class_id=CL_MENU, parent=${aw_obj}, name="Konfiguratsioon", type=MN_CLIENT, status=STAT_ACTIVE }
 
 				$doktpl = obj { class_id=CL_MENU, parent=${mn_conf}, name="Dokumendi templated", type=MN_CLIENT, status=STAT_ACTIVE }
-					obj { class_id=CL_CONFIG_AW_DOCUMENT_TEMPLATE, parent=${aw_obj}, name="Tavaline pikk dokument", type=0, filename="plain.tpl", status=STAT_ACTIVE }
+					obj { class_id=CL_CONFIG_AW_DOCUMENT_TEMPLATE, parent=${aw_obj}, name="Tavaline pikk dokument", type=2, filename="plain.tpl", status=STAT_ACTIVE }
 					obj { class_id=CL_CONFIG_AW_DOCUMENT_TEMPLATE, parent=${aw_obj}, name="Tavaline lead", type=1, filename="lead.tpl", status=STAT_ACTIVE }
 
 				obj { class_id=CL_CONFIG_LOGIN_MENUS, status=STAT_ACTIVE, parent=${mn_conf}, name="Login men&uuml;&uuml;d" }
