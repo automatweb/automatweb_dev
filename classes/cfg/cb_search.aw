@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.21 2004/12/21 11:32:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.22 2005/03/16 10:58:56 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -542,7 +542,7 @@ class cb_search extends class_base
 					$vparms = array("id" => $o->id());
 					if ($arr["obj_inst"]->prop("view_cf"))
 					{
-						$vparms["cfgform"] = $arr["obj_inst"]->prop("view_cf");
+						$vparms["cfgform"] = $arr["obj_inst"]->prop_str("view_cf");
 					}
 					$row["view_link"] = html::href(array(
 						"url" => $this->mk_my_orb("view", $vparms, $o->class_id()),
