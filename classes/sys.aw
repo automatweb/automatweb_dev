@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.19 2003/07/07 15:01:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.20 2003/07/18 12:29:47 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -428,9 +428,6 @@ class sys extends aw_template
 			"syslog",
 			"style",
 			"stat",
-			"shop_stat",
-			"shop_item",
-			"shop_eq"
 		);
 		$messages = "";
 		foreach($modules as $module)

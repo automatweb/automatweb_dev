@@ -767,7 +767,7 @@ class export extends aw_template
 
 		// do link processing as aw would upon request startup
 		$ud = parse_url($link);
-		if (!preg_match("/(shop.aw|banner.aw|graphs.aw|css|poll|files|ipexplorer|icon.aw|gallery.aw|login|stats|vcl|misc|index|images|feedback|forms|indexx|showimg|sorry|monitor|vv|automatweb|img|reforb|orb)/",$link))
+		if (!preg_match("/(banner.aw|graphs.aw|css|poll|files|ipexplorer|icon.aw|gallery.aw|login|stats|vcl|misc|index|images|feedback|forms|indexx|showimg|sorry|monitor|vv|automatweb|img|reforb|orb)/",$link))
 		{
 			// treat the damn thing as an alias
 			// aliases will not contain ? and & so do this:
