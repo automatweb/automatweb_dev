@@ -142,7 +142,7 @@ class contacts extends aw_template {
 		$xm = new xmlmenu();
 		$retval = $xm->build_menu(array(
 				"vars"  => $vars,
-				"xml"   => $basedir . "/xml/messenger/menucode.xml",
+				"xml"   => $basedir . "/xml/contacts/menucode.xml",
 				"tpl"   => $this->template_dir . "/menus.tpl",
 				"activelist" => $activelist,
 		));
@@ -154,9 +154,10 @@ class contacts extends aw_template {
 	function list_contacts($args = array())
 	{
 		extract($args);
+		$folder = ($folder) ? "folder=$folder" : "";
 		$menu = $this->gen_msg_menu(array(
-				"activelist" => array("contacts","list"),
-				"vars" => array("folder" => ($folder) ? "folder=$folder" : ""),
+				"activelist" => array("list"),
+				"vars" => array("folder" => $folder),
 				));
 		
 		$this->read_template("contacts.tpl");
@@ -279,7 +280,7 @@ class contacts extends aw_template {
 	{
 		extract($args);
 		$menu = $this->gen_msg_menu(array(
-				"activelist" => ($args["id"]) ? array("contacts") : array("contacts","newcontact"),
+				"activelist" => ($args["id"]) ? array("contacts") : array("add"),
 			));
 		classload("form");
 		$f = new form(CONTACT_FORM);
@@ -330,7 +331,7 @@ class contacts extends aw_template {
 	{
 		extract($args);
 		$menu = $this->gen_msg_menu(array(
-				"activelist" => ($args["id"]) ? array("contacts") : array("contacts","newgroup"),
+				"activelist" => ($args["id"]) ? array("contacts") : array("addgroup"),
 			));
 		$this->read_template("contact_group.tpl");
 		$name = "";
@@ -386,7 +387,7 @@ class contacts extends aw_template {
 	{
 		extract($args);
 		$menu = $this->gen_msg_menu(array(
-				"activelist" => array("contacts","search"),
+				"activelist" => array("search"),
 			));
 		$this->read_template("search_contact.tpl");
 		classload("form");
