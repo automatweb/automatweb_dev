@@ -909,14 +909,22 @@ class site_show extends class_base
 		$l = "";
 		foreach($ldat as $lc => $ld)
 		{
-			if (!$lang2trans[$lc])
+			if ($lc == aw_global_get("LC"))
 			{
 				continue;
 			}
 
+			$name = $ld["name"];
+			$url = $this->cfg["baseurl"] . "/" . $lang2trans[$lc];
+
+			if (!$lang2trans[$lc])
+			{
+				$url = $this->mk_my_orb("show_trans", array("set_lang_id" => $ld["id"], "section" => $obj->id()), "object_translation");
+			}
+		
 			$this->vars(array(
-				"name" => $ld["name"],
-				"lang_url" => $this->cfg["baseurl"] . "/" . $lang2trans[$lc],
+				"name" => $name,
+				"lang_url" => $url,
 			));
 
 			if ($lc == $lang_id)
@@ -956,6 +964,19 @@ class site_show extends class_base
 
 		$pos = array_search($a_parent, $this->path);
 		return $this->path[$pos+$level];
+	}
+
+	function _helper_is_in_path($oid)
+	{
+		foreach($this->path as $o)
+		{
+			if ($o->id() == $oid)
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	////
@@ -1232,7 +1253,175 @@ class site_show extends class_base
 		$retval = (strlen($popups) > 0) ? "<script language='Javascript'>$popups</script>" : "";
 		return $retval;
 	}
-	
+
+	////
+	// !Creates a link for the menu
+	function make_menu_link($o)
+	{
+		$this->skip = false;
+		if ($o->prop("mtype") == MN_PMETHOD)
+		{
+			// I should retrieve orb definitions for the requested class
+			// to figure out which arguments it needs and then provide
+			// those
+			$pclass = $o->meta("pclass");
+			if ($pclass)
+			{
+				list($_cl,$_act) = explode("/",$pclass);
+				$orb = get_instance("orb");
+				$meth = $orb->get_public_method(array(
+					"id" => $_cl,
+					"action" => $_act,
+				));
+				$values = array();
+				$err = false;
+				$mv = new aw_array($meth["values"]);
+				$mr = new aw_array($meth["required"]);
+				foreach($mr->get() as $key => $val)
+				{
+					if (in_array($key,array_keys($mv->get())))
+					{
+						$values[$key] = $meth["values"][$key];
+					}
+					else
+					{
+						$err = true;
+					};
+				};
+
+				$mo = new aw_array($meth["optional"]);
+				foreach($mo->get() as $key => $val)
+				{
+					if (in_array($key,array_keys($mv->get())))
+					{
+						$values[$key] = $meth["values"][$key];
+					}
+				};
+				if (not($err))
+				{
+					$_sec = aw_global_get("section");
+					if ($_sec)
+					{
+						$values["section"] = $_sec;
+					};
+					$link = $this->mk_my_orb($_act,$values,$_cl,$o->meta("pm_url_admin"),!$o->meta("pm_url_menus"));
+				}
+				else
+				{
+					$this->skip = true;
+				};
+			}
+			else
+			{
+				$link = "";
+			};
+		}
+		else if ($o->prop("link") != "")
+		{
+			$link = $o->prop("link");
+		}
+		else
+		{
+			$link = $this->cfg["baseurl"] ."/";
+			if (aw_ini_get("menuedit.long_section_url"))
+			{
+				if ($o->alias() != "")
+				{
+					$link .= $o->alias();
+				}
+				else
+				{
+					$link .= "index.".$this->cfg["ext"]."?section=".$o->id().$this->add_url;
+				}
+			}
+			else
+			{
+				if ($o->alias() != "")
+				{
+					if (aw_ini_get("menuedit.long_menu_aliases"))
+					{
+						$tmp = array();
+						if (!is_array($this->menu_aliases))
+						{
+							$this->menu_aliases = array();
+						};
+						foreach($this->menu_aliases as $_al)
+						{
+							if ($_al != "n/a")
+							{
+								$tmp[] = $_al;
+							}
+						}
+						$link .= join("/",$tmp);
+						if (sizeof($tmp) > 0)
+						{
+							$link .= "/";
+						};
+					}
+					$link .= $o->alias();
+				}
+				else
+				{
+					$oid = ($o->class_id() == 39) ? $o->brother_of() : $o->id();
+					$link .= $oid;
+				};
+			};
+		}
+
+
+		// this here bullshit is so that the static ut site will work
+		// basically, rewrite_links is set if we are doing searching or some other non-static action
+		// it is set in site_header.aw
+		// and we need to make all links go to the static site
+		// and this is where the magic happens
+		// also in document::do_search and search_conf::search
+		if (aw_global_get("rewrite_links"))
+		{
+			$exp = get_instance("export");
+			if (!$exp->is_external($link))
+			{
+				$_link = $link;
+				if (strpos($link, $this->cfg["baseurl"]) === false)
+				{
+					$link = $this->cfg["baseurl"].$link;
+				}
+				$exp->fn_type = aw_ini_get("search.rewrite_url_type");
+				$link = $exp->rewrite_link($link);
+				if (strpos($link, "class=search_conf") === false || strpos($link, "action=search") === false)
+				{
+					$link = $exp->add_session_stuff($link, aw_global_get("lang_id"));
+					$_tl = $link;
+					$link = $this->cfg["baseurl"]."/".$exp->get_hash_for_url(str_replace($this->cfg["baseurl"],"",$link),aw_global_get("lang_id"));
+//					echo "made hash for link $_tl = $link <br />";
+				}
+				else
+				{
+					$link = str_replace($this->cfg["baseurl"],aw_ini_get("search.baseurl"),$link);
+				};
+				
+				if ($link != $this->cfg["baseurl"]."/index.".$this->cfg["ext"] && 
+						$link != $this->cfg["baseurl"]."/" &&
+						$link != $this->cfg["baseurl"])
+				{
+					$exp->fn_type = aw_ini_get("search.rewrite_url_type");
+					$link = $exp->rewrite_link($link);
+					if (strpos($link, "class=search_conf") === false || strpos($link, "action=search") === false)
+					{
+						$link = $exp->add_session_stuff($link, aw_global_get("lang_id"));
+						$_tl = $link;
+						$link = $this->cfg["baseurl"]."/".$exp->get_hash_for_url(str_replace($this->cfg["baseurl"],"",$link),aw_global_get("lang_id"));
+	//					echo "made hash for link $_tl = $link <br />";
+					}
+					else
+					{
+						$link = str_replace($this->cfg["baseurl"],aw_ini_get("search.baseurl"),$link);
+					}
+				}
+			}
+		}
+		return $link;
+	}
+
 	function do_show_template($arr)
 	{
 		if (isset($arr["tpldir"]) && $arr["tpldir"] != "")

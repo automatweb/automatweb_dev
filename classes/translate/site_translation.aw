@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/site_translation.aw,v 1.3 2003/09/17 15:11:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/site_translation.aw,v 1.4 2003/09/22 09:33:22 kristo Exp $
 // site_translation.aw - Saidi tõlge 
 /*
 
@@ -14,11 +14,17 @@
 @property tr_toolbar group=tr_day,tr_week,tr_month,tr_all type=toolbar  store=no no_caption=1
 @caption TB
 
+@property inp_toolbar group=ipr_day,ipr_week,ipr_month,ipr_all type=toolbar  store=no no_caption=1
+@caption TB
+
 @property baselang type=text group=general store=no
 @caption Baaskeel
 
 @property targetlang type=text group=general store=no
 @caption Sihtkeel
+
+@property targetlang_all type=checkbox ch_value=1 group=general field=meta method=serialize
+@caption Kas kasutada k&otilde;iki keeli sihtkeelteks
 
 @property translated group=tr_day,tr_week,tr_month,tr_all type=text store=no no_caption=1
 @caption Tõlgitud
@@ -27,13 +33,24 @@
 @property untranslated group=utr_day,utr_week,utr_month,utr_all type=text store=no no_caption=1
 @caption Tõlkimata
 
+@property in_progress group=ipr_day,ipr_week,ipr_month,ipr_all type=text store=no no_caption=1
+@caption T&ouml;&ouml;s
+
 
 @groupinfo translated caption=Tõlgitud submit=no
 @groupinfo untranslated caption=Tõlkimata submit=no
+@groupinfo in_progress caption="T&ouml;&ouml;s" submit=no
+
 @groupinfo utr_day caption="Viimane päev" parent=untranslated submit=no
 @groupinfo utr_week caption="Viimane nädal" parent=untranslated submit=no
 @groupinfo utr_month caption="Viimane kuu" parent=untranslated submit=no
 @groupinfo utr_all caption="Kõik" parent=untranslated submit=no
+
+@groupinfo ipr_day caption="Viimane päev" parent=in_progress submit=no
+@groupinfo ipr_week caption="Viimane nädal" parent=in_progress submit=no
+@groupinfo ipr_month caption="Viimane kuu" parent=in_progress submit=no
+@groupinfo ipr_all caption="Kõik" parent=in_progress submit=no
+
 @groupinfo tr_day caption="Viimane päev" parent=translated submit=no
 @groupinfo tr_week caption="Viimane nädal" parent=translated submit=no
 @groupinfo tr_month caption="Viimane kuu" parent=translated submit=no
@@ -81,13 +98,21 @@ class site_translation extends class_base
 				$data["value"] = $this->table_of_untranslated_stuff($args);
 				break;
 
+			case "in_progress":
+				$data["value"] = $this->table_of_in_progress_stuff($args);
+				break;
+
 			case "utr_toolbar":
 				$this->gen_utr_toolbar($args);
-                                break;
+				break;
 
 			case "tr_toolbar":
 				$this->gen_tr_toolbar($args);
-                                break;
+				break;
+	
+			case "inp_toolbar":
+				$this->gen_inp_toolbar($args);
+				break;
 	
 
 		};
@@ -206,10 +231,19 @@ class site_translation extends class_base
 			"align" => "center",
 		));	
 
+		$obj = obj($args["obj"]["oid"]);
 		$l = get_instance("languages");
-		$langs = $l->get_list(array(
-			"all_data" => true
-		));
+
+		if ($obj->meta("targetlang_all"))
+		{
+			$langs = $l->get_list(array(
+				"all_data" => true
+			));
+		}
+		else
+		{
+			$langs = array($l->fetch($l->get_langid_for_code($this->target_lang_code)));
+		}
 		foreach($thingies->arr() as $item)
 		{
 			$lch = array();
@@ -360,6 +394,124 @@ class site_translation extends class_base
 		return $t->draw();
 	}
 
+	function table_of_in_progress_stuff($args)
+	{
+		switch($args["request"]["group"])
+		{
+			case "tr_month":
+				$start = mktime(0,0,0,date("m"),date("d")-30,date("Y"));
+				break;
+
+			case "tr_week":
+				$start = mktime(0,0,0,date("m"),date("d")-7,date("Y"));
+				break;
+
+			case "tr_all":
+				$start = false;
+				break;
+
+			default:
+				$start = mktime(0,0,0,date("m"),date("d"),date("Y"));
+				break;
+		};
+
+		$filter = array(
+			"flags" => array(
+				"mask" => OBJ_IS_TRANSLATED|OBJ_NEEDS_TRANSLATION, 
+				"flags" => OBJ_NEEDS_TRANSLATION
+			),
+			"class_id" => in_array($args["request"]["clid"],$this->clid) ? $args["request"]["clid"] : $this->clid,
+			"lang_id" => $this->base_lang_id,
+		);
+		if ($start)
+		{
+			$filter["modified"] = ">=$start";
+		}
+		$thingies = new object_list($filter);
+
+		load_vcl("table");
+		$t = new aw_table(array(
+			"layout" => "generic",
+		));
+
+		$t->define_field(array(
+			"name" => "id",
+			"caption" => "ID",
+			"sortable" => 1,
+		));
+		
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "Nimi",
+			"sortable" => 1,
+		));
+		
+		$t->define_field(array(
+			"name" => "class_id",
+			"caption" => "Klass",
+			"sortable" => 1,
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "base_lang",
+			"caption" => "Baaskeel",
+			"sortable" => 1,
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "action",
+			"caption" => "Vaata t&otilde;lkeid",
+			"sortable" => 0,
+			"align" => "center",
+		));
+
+		$l = get_instance("languages");
+		$langs = $l->get_list(array(
+			"all_data" => true,
+			"key" => "acceptlang"
+		));
+		$langs_id = $l->get_list(array(
+			"all_data" => true,
+			"key" => "id"
+		));
+
+		foreach($thingies->arr() as $item)
+		{
+			$co = $item->connections_from(array(
+				"type" => RELTYPE_TRANSLATION
+			));
+			$lch = array();
+			foreach($co as $conn)
+			{
+				if ($conn->prop("to.lang_id") != $langs[$item->lang()]["id"])
+				{
+					$lch[] = html::href(array(
+						"url" => $this->mk_my_orb("create",array("id" => $item->id(),"dstlang" => $langs_id[$conn->prop("to.lang_id")]["acceptlang"]),"object_translation"),
+						"caption" => $langs_id[$conn->prop("to.lang_id")]["name"],
+						"target" => "_blank"
+					));
+				}
+			}
+
+			$clfile = $this->cfg["classes"][$item->class_id()]["file"];
+			$t->define_data(array(
+				"id" => $item->id(),
+				"name" => html::href(array(
+					"url" => $this->mk_my_orb("change", array("id" => $item->id()), $clfile),
+					"caption" => $item->name(),
+					"target" => "_blank"
+				)),
+				"class_id" => $item->class_id(),
+				"base_lang" => $this->base_lang_code,
+				"action" => join(" | ", $lch),
+			));
+		};
+
+		return $t->draw();
+	}
+
 	function gen_utr_toolbar($arr)
 	{
 		$id = $arr["obj"]["oid"];
@@ -378,7 +530,34 @@ class site_translation extends class_base
 			$toolbar->add_button(array(
 				"name" => "save",
 				"tooltip" => "Salvesta",
-				"url" => "javascript:document.location.href=document.location.href+'&clid='+document.getElementById('clid').value;",
+				"url" => "#",
+				"onClick" => "document.location.href=document.location.href+'&clid='+document.getElementById('clid').value;",
+				"imgover" => "save_over.gif",
+				"img" => "save.gif",
+			));
+		};
+	}
+
+	function gen_inp_toolbar($arr)
+	{
+		$id = $arr["obj"]["oid"];
+		if ($id)
+		{
+			// which links do I need on the toolbar?
+			// 1- lisa grupp
+			$toolbar = &$arr["prop"]["toolbar"];
+
+			$toolbar->add_cdata(html::select(array(
+				"name" => "clid",
+				"options" => $this->_prep_clid_list(),
+				"selected" => (int)$arr["request"]["clid"],
+			)));
+
+			$toolbar->add_button(array(
+				"name" => "save",
+				"tooltip" => "Salvesta",
+				"url" => "#",
+				"onClick" => "document.location.href=document.location.href+'&clid='+document.getElementById('clid').value;",
 				"imgover" => "save_over.gif",
 				"img" => "save.gif",
 			));
@@ -403,7 +582,8 @@ class site_translation extends class_base
 			$toolbar->add_button(array(
 				"name" => "save",
 				"tooltip" => "Salvesta",
-				"url" => "javascript:document.location.href=document.location.href+'&clid='+document.getElementById('clid').value;",
+				"url" => "#",
+				"onClick" => "document.location.href=document.location.href+'&clid='+document.getElementById('clid').value;",
 				"imgover" => "save_over.gif",
 				"img" => "save.gif",
 			));

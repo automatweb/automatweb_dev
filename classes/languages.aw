@@ -21,7 +21,9 @@ class languages extends aw_template
 		}
 		if ($no_cache)
 		{
-			return $this->db_fetch_row("SELECT * FROM languages WHERE id = '$id'");
+			$ret =  $this->db_fetch_row("SELECT * FROM languages WHERE id = '$id'");
+			$ret["meta"] = aw_unserialize($ret["meta"]);
+			return $ret;
 		}
 		else
 		{
@@ -243,6 +245,7 @@ class languages extends aw_template
 				$this->db_query("SELECT * FROM languages WHERE status != 0");
 				while ($row = $this->db_next())
 				{
+					$row["meta"] = aw_unserialize($row["meta"]);
 					if ($row["site_id"] == "" || in_array($this->cfg["site_id"], explode(",", $row["site_id"])))
 					{
 						aw_cache_set("languages", $row["id"],$row);

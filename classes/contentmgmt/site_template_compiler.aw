@@ -9,10 +9,15 @@ define("OP_LOOP_LIST_BEGIN", 5);		// params { a_parent, level, in_parent_tpl}
 
 // list filter creation
 define("OP_LIST_BEGIN", 6);		// params { a_parent, level }
-define("OP_LIST_FILTER", 7);	// params { key, value }
+define("OP_LIST_FILTER", 7);	// params { prop, value }
 define("OP_LIST_END", 8);		// params {}
 
 define("OP_LOOP_LIST_END", 9);	// params { tpl (not-fully qualified name)}
+
+define("OP_IF_BEGIN", 10);		// params {}
+define("OP_IF_COND", 11); 		// params {prop, value}
+define("OP_IF_END", 12);		// params {}
+define("OP_IF_ELSE", 13);		// params {}
 
 class site_template_compiler extends aw_template
 {
@@ -28,7 +33,11 @@ class site_template_compiler extends aw_template
 			6 => "OP_LIST_BEGIN",
 			7 => "OP_LIST_FILTER",
 			8 => "OP_LIST_END",
-			9 => "OP_LOOP_LIST_END"
+			9 => "OP_LOOP_LIST_END",
+			10 => "OP_IF_BEGIN",
+			11 => "OP_IF_COND", 
+			12 => "OP_IF_END",
+			13 => "OP_IF_ELSE",
 		);
 	}
 
@@ -67,6 +76,10 @@ class site_template_compiler extends aw_template
 
 			$this->menu_areas[$area]["levels"][$level]["templates"][] = $parts;
 			$this->menu_areas[$area]["parent"] = array_search($area, aw_ini_get("menuedit.menu_defs"));
+			foreach($parts as $part)
+			{
+				$this->menu_areas[$area]["levels"][$level]["all_opts"][$part] = $part;
+			}
 			// figure out if the template was inside another menu template
 			// 	to do that, we get the parent template and check if it has the same menu area and level -1
 			$is_in_parent = false;
@@ -138,45 +151,76 @@ class site_template_compiler extends aw_template
 
 		// now figure out the code for displaying
 		// menu items
-				
 
 		// go over all different subtemplate
 		// combos for this level
 		// for each make the appropriate list
 		// and then display it
-		foreach($ldat["templates"] as $tdat)
-		{
-			$this->ops[] = array(
-				"op" => OP_LIST_BEGIN,
-				"params" => array(
-					"a_parent" => $adat["parent"],
-					"level" => $level,
-					"in_parent_tpl" => $ldat["inside_parent_menu_tpl"]
-				)
-			);
+		// 
+		// that was all nice and dany, except for the littel detail that it *didn't fucking work*
+		// problem was - if you had a _sel template, then the selected menu has to use that
+		// and it might be in the middle somewhere, and then the different-list-for-each-option-combo broke down
+		// so now we do the one-list-per-area-level and then if's to match the correct template to the current obj
+		$this->ops[] = array(
+			"op" => OP_LIST_BEGIN,
+			"params" => array(
+				"a_parent" => $adat["parent"],
+				"level" => $level,
+				"in_parent_tpl" => $ldat["inside_parent_menu_tpl"]
+			)
+		);
 
-			foreach($tdat as $tpl_opt)
+		$this->ops[] = array(
+			"op" => OP_LIST_END,
+			"params" => array()
+		);
+
+		$this->ops[] = array(
+			"op" => OP_LOOP_LIST_BEGIN,
+			"params" => array()
+		);
+
+		$tt = $ldat["templates"];		
+		usort($tt, create_function('$a, $b','$ca = count($a); $cb = count($b); if ($ca == $cb) { return 0; }else if ($ca > $cb) { return -1; }else{return 1;}'));
+		// right, now we gots to figure out the template
+		// we do that by trying to match the current object to any template on this area on this level
+		foreach($tt as $idx => $tdat)
+		{
+			if ($idx > 0)
 			{
-				$params = $this->get_list_filter_from_tpl_opt($tpl_opt);
-				if ($params)
-				{
-					$this->ops[] = array(
-						"op" => OP_LIST_FILTER,
-						"params" => $params
-					);
-				}
+				$this->ops[] = array(
+					"op" => OP_IF_ELSE,
+					"params" => array()
+				);
 			}
 
 			$cur_tpl = join("_",$tdat);
 			$cur_tpl_fqn = $this->v2_name_map[$cur_tpl];
 
 			$this->ops[] = array(
-				"op" => OP_LIST_END,
+				"op" => OP_IF_BEGIN,
 				"params" => array()
 			);
 
+			foreach($tdat as $tpl_opt)
+			{
+				$params = $this->get_if_filter_from_tpl_opt($tpl_opt, $ldat["all_opts"]);
+				if ($params)
+				{
+					$this->ops[] = array(
+						"op" => OP_IF_COND,
+						"params" => $params
+					);
+				}
+			}
+
 			$this->ops[] = array(
-				"op" => OP_LOOP_LIST_BEGIN,
+				"op" => OP_IF_END,
+				"params" => array()
+			);
+			
+			$this->ops[] = array(
+				"op" => OP_START_BLK,
 				"params" => array()
 			);
 
@@ -201,12 +245,17 @@ class site_template_compiler extends aw_template
 			);
 
 			$this->ops[] = array(
-				"op" => OP_LOOP_LIST_END,
-				"params" => array(
-					"tpl" => $cur_tpl
-				)
+				"op" => OP_END_BLK,
+				"params" => array()
 			);
 		}
+
+		$this->ops[] = array(
+			"op" => OP_LOOP_LIST_END,
+			"params" => array(
+				"tpl" => $cur_tpl
+			)
+		);
 
 		if ($end_block)
 		{
@@ -217,7 +266,7 @@ class site_template_compiler extends aw_template
 		}
 	}	
 
-	function get_list_filter_from_tpl_opt($opt)
+	function get_list_filter_from_tpl_opt($opt, $all_opts)
 	{
 		switch($opt)
 		{
@@ -231,8 +280,62 @@ class site_template_compiler extends aw_template
 			case "SEL":
 				return array(
 					"key" => "oid",
-					"value" => "active_page_data::get_active_section()"
+					"value" => "aw_global_get(\"section\")"
 				);
+				break;
+
+			case "SEP":
+				return array(
+					"key" => "clickable",
+					"value" => "0"
+				);
+				break;
+
+			default:
+				$ret = array();
+
+				// check if we have SEP for this level, then normal menus must only show
+				// non-sep
+				if ($all_opts["SEP"] == "SEP")
+				{
+					$ret = array(
+						"key" => "clickable",
+						"value" => "1"
+					);
+				}
+				return $ret;
+				break;
+		}
+
+		return false;
+	}
+
+	function get_if_filter_from_tpl_opt($opt, $all_opts)
+	{
+		switch($opt)
+		{
+			case "BEGIN":
+				return array(
+					"prop" => "loop_counter",
+					"value" => 1
+				);
+				break;
+
+			case "SEL":
+				return array(
+					"prop" => "oid",
+					"value" => "is_in_path"
+				);
+				break;
+
+			case "SEP":
+				return array(
+					"prop" => "clickable",
+					"value" => "0"
+				);
+				break;
+
+			default:
 				break;
 		}
 
@@ -267,7 +370,7 @@ class site_template_compiler extends aw_template
 			{
 				error::throw(array(
 					"id" => ERR_TPL_COMPILER, 
-					"msg" => "show_site::generate_code(): could not find generator for op $op_name ($gen)"
+					"msg" => "show_site::generate_code(): could not find generator for op $op_name ($gen) op = ".$op["op"]
 				));
 			}
 
@@ -334,7 +437,7 @@ class site_template_compiler extends aw_template
 		$ret  = $this->_gi()."\$this->vars(array(\n";
 		$this->brace_level++;
 		$ret .= $this->_gi()."\"text\" => ".$o_name."->name(),\n";
-		$ret .= $this->_gi()."\"link\" => \$this->cfg[\"baseurl\"].\"/\".".$o_name."->id(),\n";
+		$ret .= $this->_gi()."\"link\" => \$this->make_menu_link($o_name),\n";
 		$ret .= $this->_gi()."\"target\" => (".$o_name."->prop(\"target\") ? \"target=\\\"_blank\\\"\" : \"\"),\n";
 		$this->brace_level--;
 		$ret .= $this->_gi()."));\n";
@@ -427,6 +530,57 @@ class site_template_compiler extends aw_template
 		$this->brace_level--;
 		$ret  = $this->_gi()."}\n";
 		$ret .= $this->_gi()."\$this->vars(array(\"".$arr["tpl"]."\" => ".$content_name."));\n";
+		return $ret;
+	}
+
+	function _g_op_if_begin($arr)
+	{
+		$ret = $this->_gi()."if (";
+		return $ret;
+	}
+
+	function _g_op_if_cond($arr)
+	{
+		if ($arr["prop"] == "loop_counter")
+		{
+			$ret = "(\$i == ".$arr["value"].") && ";
+		}
+		else
+		if ($arr["prop"] == "oid")
+		{
+			end($this->list_name_stack);
+			$dat = current($this->list_name_stack);
+			$o_name = $dat["o_name"];
+
+			if ($arr["value"] == "is_in_path")
+			{
+				$ret = "(\$this->_helper_is_in_path(".$o_name."->id())) && ";
+			}
+			else
+			{
+				$ret = "(".$o_name."->id() == ".$arr["value"].") && ";
+			}
+		}
+		else
+		{
+			end($this->list_name_stack);
+			$dat = current($this->list_name_stack);
+			$o_name = $dat["o_name"];
+
+			$ret = "(".$o_name."->prop(\"".$arr["prop"]."\") == \"".$arr["value"]."\") && ";
+		}
+		return $ret;
+	}
+
+	function _g_op_if_end($arr)
+	{
+		$ret = " true )\n";
+		return $ret;
+	}
+
+	function _g_op_if_else($arr)
+	{
+		$ret = $this->_gi()."else\n";
 		return $ret;
 	}
 }

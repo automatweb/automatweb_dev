@@ -30,7 +30,9 @@ class site_cache extends aw_template
 		$arr["compiled_filename"] = $compiled_filename;
 
 		$inst = get_instance("contentmgmt/site_show");
-		return $inst->show($arr);
+		$content = $inst->show($arr);
+		$this->set_cached_content($arr, $content);
+		return $content;
 	}
 
 	////
@@ -57,6 +59,29 @@ class site_cache extends aw_template
 		
 		$cache = get_instance("cache");
 		return $cache->get(aw_global_get("section"), $cp);
+	}
+
+	function set_cached_content($arr, $content)
+	{
+		if (aw_global_get("uid") != "")
+		{
+			return false;
+		}
+
+		// don't cache pages with generated content, they usually change for each request
+		if ($arr["text"] != "")
+		{
+			if ($arr["force_cache"] != true)
+			{
+				return false;
+			}
+		}
+
+		// check cache
+		$cp = $this->get_cache_params($arr);
+		
+		$cache = get_instance("cache");
+		$cache->set(aw_global_get("section"), $cp, $content);
 	}
 
 	////

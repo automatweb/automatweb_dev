@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.3 2003/09/17 15:11:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.4 2003/09/22 09:33:22 kristo Exp $
 // object_translation.aw - Objekti tõlge 
 
 // create method accepts the following arguments:
@@ -107,6 +107,78 @@ class object_translation extends aw_template
 			"reltype" => RELTYPE_TRANSLATION
 		));
 		return $this->mk_my_orb("change",array("id" => $clone_id),$fl);
+	}
+
+	function translation_list($oid)
+	{
+		$obj = obj($oid);
+
+		// see if the object has translations
+		$conn = $obj->connections_from(array(
+			"type" => RELTYPE_TRANSLATION
+		));
+		if (count($conn) < 1)
+		{
+			// if it has none, then try to figure out if it is a translated object
+			$conn = $obj->connections_to(array(
+				"type" => RELTYPE_TRANSLATION
+			));
+			if (count($conn) > 0)
+			{
+				// if it has connections pointing to it, then it is, so get the translations from the original
+				// we need to do this, because the previous query must ever only return 0 or 1 connections
+				$obj = obj($conn[0]->prop("from"));
+				$conn = $obj->connections_from(array(
+					"type" => RELTYPE_TRANSLATION
+				));
+			}
+		}
+
+		$l = get_instance("languages");
+
+		$ret = array(
+			$l->get_langid_for_code($obj->lang()) => $obj->id()
+		);
+		foreach($conn as $c)
+		{
+			$ret[$c->prop("to.lang_id")] = $c->prop("to");
+		}
+		return $ret;
+	}
+
+	////
+	// !shows a message that the object has not been translated yet
+	function show_trans($arr)
+	{
+		extract($arr);
+		$this->read_template("show_trans.tpl");
+
+		$l = get_instance("languages");
+		$ld = $l->fetch($set_lang_id);
+		
+		$this->vars(array(
+			"trans_msg" => nl2br($ld["meta"]["trans_msg"])
+		));
+
+		$llist = $l->get_list();
+
+		$lt = "";
+
+		$tr = $this->translation_list($section);
+		foreach($tr as $lid => $oid)
+		{
+			$this->vars(array(
+				"url" => aw_ini_get("baseurl")."/".$oid,
+				"name" => $llist[$lid]
+			));
+			$lt .= $this->parse("LANGUAGE");
+		}
+
+		$this->vars(array(
+			"LANGUAGE" => $lt
+		));
+
+		return $this->parse();
 	}
 };
 ?>

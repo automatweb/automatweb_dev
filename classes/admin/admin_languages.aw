@@ -27,6 +27,7 @@ class admin_languages extends languages
 		$this->db_query("SELECT * FROM languages WHERE status != 0");
 		while ($row = $this->db_next())
 		{
+			$row["meta"] = aw_unserialize($row["meta"]);
 			$this->vars(array(
 				"id" => $row["id"], 
 				"name" => $row["name"], 
@@ -39,7 +40,7 @@ class admin_languages extends languages
 				"modifiedby" => $row["modifiedby"],
 				"change" => $this->mk_my_orb("change", array("id" => $row["id"])),
 				"delete" => $this->mk_my_orb("delete", array("id" => $row["id"])),
-				"sites" => $row["site_id"]
+				"sites" => $row["site_id"],
 			));
 			$l.=$this->parse("LINE");
 		}
@@ -96,7 +97,8 @@ class admin_languages extends languages
 			"lang_codes" => $this->picker($l["acceptlang"],$lang_codes),
 			"acceptlang" => $l["acceptlang"],
 			"reforb" => $this->mk_reforb("submit_add",array("id" => $id)),
-			"sites" => $this->mpicker($this->make_keys(explode(",", $l["site_id"])), $this->_get_sl())
+			"sites" => $this->mpicker($this->make_keys(explode(",", $l["site_id"])), $this->_get_sl()),
+			"trans_msg" => $l["meta"]["trans_msg"]
 		));
 		return $this->parse();
 	}
@@ -108,14 +110,18 @@ class admin_languages extends languages
 		$new = false;
 		$si = join(",", is_array($site_id) ? $site_id : array());
 		$acceptlang = $arr["lang_code"];
+
+		$meta = aw_serialize($meta);
+		$this->quote(&$meta);
+
 		if ($id)
 		{
-			$this->db_query("UPDATE languages SET site_id = '$si' , name = '$name' , charset = '$charset' , acceptlang='$acceptlang', modified = ".time().", modifiedby = '".aw_global_get("uid")."' WHERE id = $id");
+			$this->db_query("UPDATE languages SET site_id = '$si' , name = '$name' , charset = '$charset' , acceptlang='$acceptlang', modified = ".time().", modifiedby = '".aw_global_get("uid")."',meta = '$meta' WHERE id = $id");
 		}
 		else
 		{
 			$id = $this->db_fetch_field("select max(id) as id from languages","id")+1;
-			$this->db_query("INSERT INTO languages(id, name, charset, status, acceptlang, modified, modifiedby, site_id) values($id,'$name','$charset',1,'$acceptlang','".time()."','".aw_global_get("uid")."','$si')");
+			$this->db_query("INSERT INTO languages(id, name, charset, status, acceptlang, modified, modifiedby, site_id,meta) values($id,'$name','$charset',1,'$acceptlang','".time()."','".aw_global_get("uid")."','$si','$meta')");
 			$new = true;
 		}
 

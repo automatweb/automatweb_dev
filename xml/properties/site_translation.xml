@@ -31,6 +31,21 @@
             <caption>TB</caption>
       </property>
       <property>
+            <name>inp_toolbar</name>
+            <group>
+                  <num_0>ipr_day</num_0>
+                  <num_1>ipr_week</num_1>
+                  <num_2>ipr_month</num_2>
+                  <num_3>ipr_all</num_3>
+            </group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <table>objects</table>
+            <field>inp_toolbar</field>
+            <caption>TB</caption>
+      </property>
+      <property>
             <name>baselang</name>
             <type>text</type>
             <group>general</group>
@@ -47,6 +62,16 @@
             <table>objects</table>
             <field>targetlang</field>
             <caption>Sihtkeel</caption>
+      </property>
+      <property>
+            <name>targetlang_all</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <caption>Kas kasutada k&amp;otilde;iki keeli sihtkeelteks</caption>
       </property>
       <property>
             <name>translated</name>
@@ -78,6 +103,21 @@
             <field>untranslated</field>
             <caption>Tõlkimata</caption>
       </property>
+      <property>
+            <name>in_progress</name>
+            <group>
+                  <num_0>ipr_day</num_0>
+                  <num_1>ipr_week</num_1>
+                  <num_2>ipr_month</num_2>
+                  <num_3>ipr_all</num_3>
+            </group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <table>objects</table>
+            <field>in_progress</field>
+            <caption>T&amp;ouml;&amp;ouml;s</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SITE_TRANSLATION</syslog_type>
             <relatiomgr>yes</relatiomgr>
@@ -92,6 +132,10 @@
                   <caption>Tõlkimata</caption>
                   <submit>no</submit>
             </untranslated>
+            <in_progress>
+                  <caption>T&amp;ouml;&amp;ouml;s</caption>
+                  <submit>no</submit>
+            </in_progress>
             <utr_day>
                   <caption>Viimane päev</caption>
                   <parent>untranslated</parent>
@@ -112,6 +156,26 @@
                   <parent>untranslated</parent>
                   <submit>no</submit>
             </utr_all>
+            <ipr_day>
+                  <caption>Viimane päev</caption>
+                  <parent>in_progress</parent>
+                  <submit>no</submit>
+            </ipr_day>
+            <ipr_week>
+                  <caption>Viimane nädal</caption>
+                  <parent>in_progress</parent>
+                  <submit>no</submit>
+            </ipr_week>
+            <ipr_month>
+                  <caption>Viimane kuu</caption>
+                  <parent>in_progress</parent>
+                  <submit>no</submit>
+            </ipr_month>
+            <ipr_all>
+                  <caption>Kõik</caption>
+                  <parent>in_progress</parent>
+                  <submit>no</submit>
+            </ipr_all>
             <tr_day>
                   <caption>Viimane päev</caption>
                   <parent>translated</parent>

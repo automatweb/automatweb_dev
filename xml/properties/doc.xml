@@ -295,25 +295,6 @@
             <caption>Kuupäev</caption>
       </property>
       <property>
-            <name>referer</name>
-            <type>textbox</type>
-            <size>50</size>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>general</group>
-            <caption>Ref</caption>
-      </property>
-      <property>
-            <name>refopt</name>
-            <type>select</type>
-            <table>objects</table>
-            <store>no</store>
-            <group>general</group>
-            <field>refopt</field>
-            <caption>Ref tüüp</caption>
-      </property>
-      <property>
             <name>show_print</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>

@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.143 2003/09/19 11:17:47 duke Exp $
+// $Id: class_base.aw,v 2.144 2003/09/22 09:33:22 kristo Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -1587,7 +1587,7 @@ class class_base extends aw_template
 			};
 
 			// if it is a translated object, then don't show properties that can't be translated
-			if ($this->is_translated && $val["trans"] != 1)
+			if ($this->is_translated && $val["trans"] != 1 && $val["name"] != "needs_translation" && $val["name"] != "is_translated")
 			{
 				$status = PROP_IGNORE;
 			}

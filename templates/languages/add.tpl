@@ -47,6 +47,12 @@
 <td class="celltext">Saidid:</td><td class="celltext"><select multiple name="site_id[]" class="formselect">{VAR:sites}</select></td>
 </tr>
 <tr>
+<td class="celltext">Saidid:</td><td class="celltext"><select multiple name="site_id[]" class="formselect">{VAR:sites}</select></td>
+</tr>
+<tr>
+<td class="celltext">Teade mis antakse kui objekti pole vastavasse keelde t&otilde;lgitud:</td><td class="celltext"><textarea name='meta[trans_msg]' rows=5 cols=30>{VAR:trans_msg}</textarea></td>
+</tr>
+<tr>
 <td class="celltext" colspan=2>
 
 
