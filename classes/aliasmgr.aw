@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.29 2002/03/20 14:02:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.30 2002/03/22 18:07:15 duke Exp $
 
 class aliasmgr extends aw_template 
 {
@@ -235,6 +235,17 @@ class aliasmgr extends aw_template
 				"generator" => "_calendar_aliases",
 				"addlink" => $this->mk_my_orb("new_alias",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"planner"),
 				"chlink" => $this->mk_my_orb("change",array(),"planner"),
+				"field" => "id"
+		);
+		
+		$this->defs["menu_tree"] = array(
+				"alias" => "e",
+				"title" => "Menüüpuu",
+				"class" => "menu_tree",
+				"class_id" => CL_MENU_TREE,
+				"generator" => "_menu_tree_aliases",
+				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"menu_tree"),
+				"chlink" => $this->mk_my_orb("change",array("return_url" => $return_url),"menu_tree"),
 				"field" => "id"
 		);
 
@@ -742,6 +753,25 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		};
 	}
 	
+	function _menu_tree_aliases($args = array())
+	{
+		$aliases = $this->get_aliases_for($this->id,CL_MENU_TREE,$_sby, $s_link_order);
+		reset($aliases);
+		while (list(,$v) = each($aliases))
+		{	
+			$url = $this->mk_my_orb("change", array("id" => $v["id"],"return_url" => urlencode($this->return_url)),"menu_tree");
+			$mchain = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
+			$v["url"] = $url;
+			$this->t->define_data(array(
+				"name"                => $mchain,
+				"modified"            => $this->time2date($v["modified"],2),
+				"modifiedby"          => $v["modifiedby"],
+				"description"             => $v["comment"],
+			));
+			$this->_common_parts($v);
+		};
+	}
+	
 	function _form_aliases($args = array())
 	{
 		$forms = $this->get_aliases_for($this->id,CL_FORM,$s_form_sortby, $s_form_order);
@@ -1022,8 +1052,7 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		$oid = sprintf("%d",$oid);
 		$this->id = $oid;
 		$this->_init_aliases();
-		$q = "SELECT aliases.*, objects.class_id AS class_id,
-			objects.name AS name
+		$q = "SELECT aliases.*, objects.class_id AS class_id
 			FROM aliases
 			LEFT JOIN objects ON (aliases.target = objects.oid)
 			WHERE source = '$oid' ORDER BY aliases.id";
@@ -1052,7 +1081,6 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		else
 		{
 //			print "from db ";
-			$aliases = $meta["aliases"];
 			$aliases = $this->get_oo_aliases(array("oid" => $oid));
 			// write the aliases into metainfo for faster access later on
 			if (is_array($aliases))
@@ -1067,8 +1095,6 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		};
 
 		$this->aliases = $aliases;
-		
-
 
 		$by_alias = array();
 		$this->id = $oid;
