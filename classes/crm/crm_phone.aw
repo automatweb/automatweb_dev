@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.2 2003/11/20 21:21:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.3 2005/01/14 14:42:19 duke Exp $
 // phone.aw - Telefon 
 /*
 
@@ -13,6 +13,9 @@
 
 @property comment type=textbox
 @caption Kommentaar
+
+@property type type=chooser orient=vertical field=meta method=serialize 
+@caption Numbri tüüp
 
 @classinfo no_status=1
 */
@@ -29,6 +32,27 @@ class crm_phone extends class_base
 		$this->init(array(
 			"clid" => CL_CRM_PHONE
 		));
+	}
+
+	function get_property($arr)
+	{
+		$retval = PROP_OK;
+		$prop = &$arr["prop"];
+		switch($prop["name"])
+		{
+			case "type":
+				$prop["options"] = array(
+					"work" => t("tööl"),
+					"home" => t("kodus"),
+					"short" => t("lühinumber"),
+					"mobile" => t("mobiil"),
+					"fax" => t("faks"),
+					"skype" => t("skype"),
+				);
+				break;
+		};
+		return $retval;
+
 	}
 	
 };
