@@ -1,12 +1,86 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey.aw,v 1.1 2004/05/21 11:06:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey.aw,v 1.2 2004/05/24 11:13:14 duke Exp $
 // survey.aw - Ankeet 
 /*
 
 @classinfo syslog_type=ST_SURVEY relationmgr=yes
+@tableinfo survey index=aw_id master_table=objects master_index=brother_of
 
 @default table=objects
-@default group=general
+@default group=survey
+@default table=survey
+
+@property utext1 type=textbox 
+@caption Utext1
+
+@property utext2 type=textbox
+@caption Utext2
+
+@property utext3 type=textbox
+@caption Utext3
+
+@property utext4 type=textarea
+@caption Utext4
+
+@property uchoice1 type=classificator
+@caption Uchoice1
+
+@property uchoice2 type=classificator
+@caption Uchoice2
+
+@property uchoice3 type=classificator orient=vertical
+@caption Uchoice3
+
+@property uchoice4 type=classificator orient=vertical
+@caption Uchoice4
+
+@property uchoice5 type=classificator orient=vertical
+@caption Uchoice5
+
+@property uchoice6 type=classificator orient=vertical
+@caption Uchoice6
+
+@property uchoice7 type=classificator orient=vertical
+@caption Uchoice7
+
+@property uchoice8 type=classificator orient=vertical
+@caption Uchoice8
+
+@property uchoice9 type=classificator orient=vertical
+@caption Uchoice9
+
+@property uchoice10 type=classificator orient=vertical
+@caption Uchoice10
+
+@property uchoice11 type=classificator orient=vertical
+@caption Uchoice11
+
+@property uchoice12 type=classificator orient=vertical
+@caption Uchoice12
+
+@property ubigtext1 type=textarea
+@caption Ubigtext1
+
+@property ubigtext2 type=textarea
+@caption Ubigtext2
+
+@property ubigtext3 type=textarea
+@caption Ubigtext3
+
+@property ubigtext4 type=textarea
+@caption Ubigtext4
+
+@property ucheckgroup1 type=classificator orient=vertical method=serialize
+@caption Ucheckgroup1
+
+@property utext5 type=textbox
+@caption Utext5
+
+@reltype OWNER value=1 clid=CL_USER
+@caption Omanik
+
+@groupinfo survey caption="Küsimused"
+
 
 */
 
@@ -50,6 +124,34 @@ class survey extends class_base
 		return $retval;
 	}	
 	*/
+	
+	function callback_pre_save($arr)
+	{
+		// create a name for the object
+		// XXX: make it configurable which fields make up the object name
+		$newname = $arr["request"]["utext1"] . " " . $arr["request"]["utext2"];
+		$arr["obj_inst"]->set_name($newname);
+	}
+
+	function callback_mod_retval($arr)
+	{
+		$arr["args"]["goto"] = aw_ini_get("baseurl") . "/" . $arr["args"]["redirect_to"];
+	}
+
+	function callback_post_save($arr)
+	{
+		$users = get_instance("users");
+		$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
+		// connect to the user, if this was a new survey
+		if ($arr["new"])
+		{
+			$arr["obj_inst"]->connect(array(
+				"to" => $user,
+				"reltype" => RELTYPE_OWNER,
+			));
+		};
+
+	}
 
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed
