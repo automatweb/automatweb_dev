@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.33 2002/07/17 07:49:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.34 2002/07/17 08:44:43 kristo Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -536,12 +536,21 @@ class form_table extends form_base
 			),
 			"form");
 
+			$show_link_popup = $this->mk_my_orb("show_entry",array(
+				"id" => $form_id,
+				"entry_id" => $dat["entry_id"], 
+				"op_id" => $op_id,				
+				"section" => $section
+			),
+			"form", false,true);
+
+
 			// FIXME: kõigepealt peaks kontrollima, kas tabelis üldse ev_change välja ongi, vastasel
 			// korral on see acl kontroll mõttetu ajakulu -- duke
 /*			if ($this->can("edit",$dat["entry_id"])  || $this->cfg["site_id"] == 11)
 			{
-				$dat["ev_change"] = "<a href='".$change_link."'>".$this->table["texts"]["change"][$this->lang_id]."</a>";
 			}*/
+			$dat["ev_change"] = "<a href='".$change_link."'>".$this->table["texts"]["change"][$this->lang_id]."</a>";
 			$dat["ev_created"] = $this->time2date($dat["created"], 2);
 			$dat["ev_uid"] = $dat["modifiedby"];
 			$dat["ev_modified"] = $this->time2date($dat["modified"], 2);
@@ -588,16 +597,28 @@ class form_table extends form_base
 				"form"
 			)."'>".$this->table["texts"]["delete"][$this->lang_id]."</a>";
 
-			if ($this->table["view_col"] && $this->table["view_col"] != "view")
+			if (is_array($this->table["view_cols"]))
 			{
-				$_caption = $dat["ev_".$this->table["view_col"]];
-
-				if ($this->table["view_new_win"])
+				foreach($this->table["view_cols"] as $v_el)
 				{
-					$_link = sprintf("javascript:ft_popup('%s&type=popup','popup',%d,%d,%d,%d)",$show_link,$this->table["new_win_scroll"],!$this->table["new_win_fixedsize"],$this->table["new_win_x"],$this->table["new_win_y"]);
-				};
+					$cl = $this->get_col_for_el($v_el);
+					$_caption = $dat["ev_".$v_el];
 
-				$dat["ev_".$this->table["view_col"]] = sprintf("<a href=\"%s\" %s>%s</a>",$show_link,$_targetwin,$_caption);
+					$popdat = $this->table["defs"][$cl];
+					if ($popdat["link_popup"])
+					{
+						$show_link = sprintf(
+							"javascript:ft_popup('%s&type=popup','popup',%d,%d,%d,%d)",
+							$show_link_popup,
+							$popdat["link_popup_scrollbars"],
+							!$popdat["link_popup_fixed"],
+							$popdat["link_popup_width"],
+							$popdat["link_popup_height"]
+						);
+					};
+
+					$dat["ev_".$v_el] = sprintf("<a href=\"%s\" %s>%s</a>",$show_link,$_targetwin,$_caption);
+				}
 			}
 
 			if ($this->table["change_col"] && $this->table["change_col"] != "change" && ($this->can("edit",$dat["entry_id"]) || $this->cfg["site_id"] == 11))
