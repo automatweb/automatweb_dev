@@ -22,9 +22,9 @@ class icons extends aw_template
 		$n = 0;
 		while ($row = $this->db_next())
 		{
-			if ($n >= $start && $n <= $end)
+			if (($n >= $start && $n <= $end) || $page == "all")
 			{
-				$this->vars(array("page" => $page,"id" => $row[id], "name" => $row[name], "comment" => $row[comment],"programm" => $row[programm],"url" => 	$this->get_url($row)));
+				$this->vars(array("page" => $page,"id" => $row["id"], "name" => $row["name"], "comment" => $row["comment"],"programm" => $row["programm"],"url" => 	$this->get_url($row)));
 				$this->parse("LINE");
 			}
 			$n++;
@@ -36,7 +36,7 @@ class icons extends aw_template
 		for ($i=0; $i < $pages; $i++)
 		{
 			$this->vars(array("from" => $i*PER_PAGE, "to" => min($total,($i+1)*PER_PAGE), "num" => $i));
-			if ($i == $page)
+			if ($i == $page && $page != "all")
 			{
 				$p.=$this->parse("SEL_PAGE");
 			}
@@ -45,7 +45,17 @@ class icons extends aw_template
 				$p.=$this->parse("PAGE");
 			}
 		}
-		$this->vars(array("PAGE" => $p, "SEL_PAGE" => ""));
+		$all = $this->parse("ALL");
+		if ($page == "all")
+		{
+			$all = $this->parse("ALL_SEL");
+		}
+		$this->vars(array(
+			"PAGE" => $p, 
+			"SEL_PAGE" => "",
+			"ALL" => $all,
+			"ALL_SEL" => ""
+		));
 		return $this->parse();
 	}
 

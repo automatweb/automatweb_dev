@@ -28,6 +28,12 @@ document.boo.action.value='del_icons';document.boo.submit();
 <!-- SUB: SEL_PAGE -->
 {VAR:from} - {VAR:to} |
 <!-- END SUB: SEL_PAGE -->
+<!-- SUB: ALL -->
+<a href='config.{VAR:ext}?type=icon_db&page=all'>K&otilde;ik</a>
+<!-- END SUB: ALL -->
+<!-- SUB: ALL_SEL -->
+K&otilde;ik
+<!-- END SUB: ALL_SEL -->
 </b></td>
 </tr>
 <tr>
