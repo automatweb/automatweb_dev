@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.140 2004/06/11 08:45:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.141 2004/06/25 11:41:52 rtoomas Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -431,10 +431,18 @@ if (!defined("DEFS"))
 
 	function arr($arr,$die=false)
 	{
-		echo '<pre>';
+		$tmp = '';
+		ob_start();
 		print_r($arr);
+		$tmp = ob_get_contents();
+		ob_end_clean();
+		echo '<pre>';
+		echo htmlspecialchars($tmp);
 		echo '</pre>';
-		if ($die) die('<hr />');
+		if ($die)
+		{
+			die('<hr />');
+		}
 		return $arr;
 	}
 
