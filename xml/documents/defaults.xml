@@ -147,6 +147,12 @@
 ]]>
 </tag>
 
+<tag id='ala'>
+<![CDATA[
+<span class="darkgray">\1</span>
+]]>
+</tag>
+
 <tag id='ala1'>
 <![CDATA[
 <span class="text1">\1</span>
@@ -176,5 +182,6 @@
 <span class="heading3">\1</span>
 ]]>
 </tag>
+
 
 </doctags>
