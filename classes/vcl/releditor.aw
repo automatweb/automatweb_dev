@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.19 2004/05/31 12:03:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.20 2004/06/17 14:33:35 duke Exp $
 /*
 	Displays a form for editing an connection
 */
@@ -133,7 +133,7 @@ class releditor extends aw_template
 		{
 			$all_props = $t->get_property_group($filter);
 		};
-
+		
 		$act_props = array();
 
 		if ($visual == "manager")
@@ -245,7 +245,7 @@ class releditor extends aw_template
 		{
 			$obj_inst = new object();
 		};
-	
+
 		// so that the object can access the source object
 		aw_global_set("from_obj",$arr["obj_inst"]->id());
 
