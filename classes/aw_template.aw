@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.19 2002/01/11 19:47:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.20 2002/01/17 10:45:30 kristo Exp $
 // aw_template.aw - Templatemootor
 class tpl
 {
@@ -155,8 +155,8 @@ class aw_template extends acl_base
 		// loeme faili sisse
 		$filename = $this->template_dir . "/$filename";
 		$this->template_filename = $filename;
-
 		$source = $this->get_file(array("file" => $filename));
+		$this->names = array();
 		
 		if (!$source)
 		{
@@ -222,7 +222,7 @@ class aw_template extends acl_base
         // jep, loome uue objekti selle nimega
         $tpl = new tpl($m[1]);
 
-				$this->names[] = $m[1];
+				$this->names[$m[1]] = $m[1];
 
         // votame constructist aktiivse template
 				$last = array_pop($construct);
@@ -247,9 +247,9 @@ class aw_template extends acl_base
         array_push($construct,$last1);
         // ja laadime selle objekti constructi sisse
         array_push($construct,$tpl);
-        // kas see rida lopetab subtemplate?
       }
 			else
+      // kas see rida lopetab subtemplate?
 			if (preg_match("/<!-- END SUB: (.*) -->/",$line,$m))
 			{
 				$level--;
@@ -303,8 +303,19 @@ class aw_template extends acl_base
 	// !Saab kysida, kas sellise nimega template on registreeritud
 	function is_template($name)
 	{
+		global $awt;
+		if (is_object($awt))
+		{
+			$awt->start("aw_template::is_template");
+			$awt->count("aw_template:is_template");
+		};
+		$retval = $this->names[$name];
 		// wrapper backwards compatibility jaoks
-    $retval = $this->get_tpl_by_name($name,array("0"=> $this->construct));
+    //$retval = $this->get_tpl_by_name($name,array("0"=> $this->construct));
+    		if (is_object($awt))
+		{
+			$awt->stop("aw_template::is_template");
+		};
 		return $retval;
   }
 
@@ -413,6 +424,12 @@ class aw_template extends acl_base
 	// !This is where all the magic takes place
 	function parse($object = "MAIN") 
 	{
+		global $awt;
+		if (is_object($awt))
+		{
+			$awt->start("aw_template::parse");
+			$awt->count("aw_template::parse");
+		}
 		// siia voib anda ette nii objekti nime, kui ka
 		// viite objektile. Esimesel juhul leiab ta ise
 		// objekti viite ja töötab selle kalllal edasi
@@ -445,6 +462,10 @@ class aw_template extends acl_base
 		{
 			#$this->vars[$object->name] = $src;
 		};
+		if (is_object($awt))
+		{
+			$awt->stop("aw_template::parse");
+		}
 		return $src;
   }
 
