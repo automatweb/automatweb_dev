@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.10 2003/06/06 13:38:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.11 2003/06/06 13:40:03 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -658,7 +658,6 @@ class converters extends aw_template
 				"name" => "deleted",
 				"col" => "deleted"
 			));
-			die();
 		}
 		die();
 	}
