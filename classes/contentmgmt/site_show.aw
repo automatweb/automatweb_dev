@@ -1427,7 +1427,7 @@ class site_show extends class_base
 
 		// site_title_rev - shows two levels in reverse order
 		$pcnt = count($this->title_yah_arr);
-		$site_title_rev = strip_tags($this->title_yah_arr[$pcnt-1])." / ".strip_tags($this->title_yah_arr[$pcnt-2])." / ";
+		$site_title_rev = ($pcnt > 0 ? strip_tags($this->title_yah_arr[$pcnt-1])." / " : "").($pcnt > 1 ? strip_tags($this->title_yah_arr[$pcnt-2])." / " : "");
 
 		$this->vars(array(
 			"ss" => gen_uniq_id(),		// bannerite jaox
