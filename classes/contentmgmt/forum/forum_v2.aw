@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.50 2004/11/24 17:02:05 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.51 2004/11/30 16:00:02 kristo Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -1290,6 +1290,7 @@ class forum_v2 extends class_base
 			"hide_tabs" => 1,
 			"relationmgr" => false,
 		);
+		$this->embedded = true;
 
 		// nii. see paneb selle paika. Ja nüt, mk_my_orb peaks suutma detectida kas 
 		// relobj_id on püsti ja kui on, siis tegema kõik lingid selle baasil.
@@ -1435,14 +1436,19 @@ class forum_v2 extends class_base
 		unset($emb["id"]);
 		$emb["parent"] = $arr["topic"];
 		$emb["status"] = STAT_ACTIVE;
-        $this->comm_id = $t->submit($emb);
+                $this->comm_id = $t->submit($emb);
+		unset($arr["class"]);
+		$arr["alias"] = get_class($this);
+
+		$topic->mail_subscribers(array(
+			"id" => $arr["topic"],
+			"message" => $arr["commtext"],
+			"forum_id" => $arr["id"],
+		));
 		
-        $topic->mail_subscribers(array(
-        	"id" => $arr["topic"],
-        	"message" => $arr["commtext"],
-        	"forum_id" => $arr["id"],
-        ));
-		return $this->finish_action($arr);
+		$rv = $this->finish_action($arr);
+		$rv = aw_url_change_var("class","",$rv);
+		return $rv;
 	}
 
 	/**
@@ -1470,25 +1476,25 @@ class forum_v2 extends class_base
 		return $this->prog_acl("view",PRG_MENUEDIT);
 	}
 
-	/**  
-		
-		@attrib name=change params=name all_args="1" nologin="1"
-		
-		@param id optional type=int acl="edit"
-		@param group optional
-		@param period optional
-		@param alias_to optional
-		@param return_url optional
-		
-		@returns
-		
-		
-		@comment
+	/**
 
-	**/
-	function change($arr)
-	{
-		return parent::change($arr);
-	}
+                @attrib name=change params=name all_args="1" nologin="1"
+
+                @param id optional type=int acl="view"
+                @param group optional
+                @param period optional
+                @param alias_to optional
+                @param return_url optional
+
+                @returns
+
+
+                @comment
+
+        **/
+        function change($arr)
+        {
+                return parent::change($arr);
+        }
 };
 ?>
