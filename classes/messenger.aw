@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.41 2001/05/31 23:54:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.42 2001/06/01 04:32:52 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -635,6 +635,22 @@ class messenger extends menuedit_light
 		$this->db_query($q);
 		return $oid;
 	}
+
+	////
+	// !Teeb kasutaja drafts folderisse uue tyhja teate, ning suunab siis ymber
+	// edimisvormi
+	function create_draft($args = array())
+	{
+		$oid = $this->new_object(array(
+					"parent" => $this->conf["msg_draft"],
+					"class_id" => CL_MESSAGE,false)); // hetkel ACL-i teate jaoks ei looda
+		$q = "INSERT INTO messages (id,draft) VALUES ('$oid',1)";
+		$this->db_query($q);
+		return $this->mk_site_orb(array(
+						"action" => "edit",
+						"id" => $oid,
+					));
+	}
 		
 	////
 	// !Kuvab uue teate sisestamise/muutmise vormi
@@ -645,76 +661,103 @@ class messenger extends menuedit_light
 				"activelist" => array("write"),
 				));
 	
+		$qchar = $this->msgconf["msg_quotechar"];
+		$quote = false;
+
 		if ($args["reply"])
 		{
-			$msg = $this->driver->msg_get(array("id" => $reply));
+			$msg_id = $reply;
+			$sprefix = "Re: ";
+			$quote = true;
+			
 			if ($msg["type"] == 2)
 			{
-				$msg["etargets"] = $msg["mfrom"];
-				$msg["etargets"] = str_replace("\"","",$msg["etargets"]);
+				$msg["mtargets1"] = $msg["mfrom"];
 			}
 			else
 			{
-				$msg["mtargets"] = $msg["createdby"];
+				$msg["mtargets1"] = $msg["createdby"];
 			};
-			$msg["subject"] = "Re: " . $this->MIME_decode($msg["subject"]);
-			$qchar = $this->conf["quotechar"];
-			$msg["message"] = $this->MIME_decode($msg["message"]);
-			$msg["message"] = str_replace("\n","\n$qchar",$msg["message"]);
-			$msg["message"] = "\n$qchar" . $msg["message"];
-			$msg_id = $reply;
 		}
 		elseif ($args["forward"])
 		{
-			$msg = $this->driver->msg_get(array("id" => $forward));
-			$msg["subject"] = "Fwd: " . $this->MIME_decode($msg["subject"]);
-			$qchar = $this->conf["quotechar"];
-			$msg["message"] = $this->MIME_decode($msg["message"]);
+			$msg_id = $forward;
+			$sprefix = "Fwd: ";
+			$quote = true;
+		}
+		else
+		{
+			$msg_id = $args["id"];
+			$sprefix = "";
+		};
+
+		$msg = $this->driver->msg_get(array("id" => $msg_id));
+		$msg["subject"] = $sprefix . $this->MIME_decode($msg["subject"]);
+		$msg["message"] = $this->MIME_decode($msg["message"]);
+
+		if ($quote)
+		{
 			$msg["message"] = str_replace("\n","\n$qchar",$msg["message"]);
 			$msg["message"] = "\n$qchar" . $msg["message"];
-			$msg_id = $forward;
-		} elseif (!isset($args["id"]))
-		// kui id-d kaasa ei antud, siis j‰reldame, et tegemist on p‰ris uue kirja kirjutamisega
+		};
+
+		// Loeme sisse ka objekti (teate) metainfo
+		$metadata = $this->get_object_metadata(array(
+							"oid" => $msg_id,
+							"key" => "msg",
+						));
+
+		if (is_array($metadata))
 		{
-			// loome uue teate kasutaja drafts folderisse
-			// this can be potentionally very, very bad
-			$msg_id = $this->_create_empty(array("parent" => $this->conf["msg_draft"]));
-			$msg = array();
+			$defsig = $metadata["signature"];
+			$defident = $metadata["identity"];
+		}
+		else
+		{
+			$defsig = $this->conf["defsig"];
+			$defident = 0;
 		};
 
 		// loome nimekirja signatuuridest
-		$siglist = "";
+		$siglist = array();
+		$siglist["none"] = "(puudub)";
 		if (is_array($this->msgconf["msg_signatures"]))
 		{	
 			// ilge v‰gistamine k‰ib
-			$siglist = array();
 			foreach($this->msgconf["msg_signatures"] as $sigkey => $sigdata)
 			{
 				$siglist[$sigkey] = $sigdata["name"];
 			};
-			$siglist = $this->picker($this->conf["defsig"],$siglist);
+			$siglist = $this->picker($defsig,$siglist);
 		};
 
-		$idlist = "";
+		$idlist = array();
+		$idlist["default"] = "Default (liitumisvormist)";
+
 		if (is_array($this->msgconf["msg_identities"]))
 		{
-			$idlist = array();
 			foreach($this->msgconf["msg_identities"] as $idkey => $idata)
 			{
 				$idlist[$idkey] = $idata["name"] . " " . $idata["surname"];
 			};
-			$idlist = $this->picker(666,$idlist);
+			$idlist = $this->picker($defident,$idlist);
+			print $idlist;
 		};
 
-		$attach = "";	
+
 		$this->read_template("write.tpl");
+
+		// siin tekitame nii mitu file input valja, kui konfis m‰‰ratud oli
+		$attach = "";	
 		for ($i = 1; $i <= $this->msgconf["msg_cnt_att"]; $i++)
 		{
 			$this->vars(array("anum" => $i));
 			$attach .= $this->parse("attach");
 		};
-	
+
+		// topime kogutud info template sisse
 		$this->vars($msg);
+
 		if ($this->msgconf["msg_confirm_send"])
 		{
 			$send = $this->parse("confirmsend");
@@ -723,6 +766,7 @@ class messenger extends menuedit_light
 		{
 			$send = $this->parse("send");
 		};
+
 		$this->vars(array(
 			"msg_id" => $msg_id,
 			"send" => $send,
@@ -731,33 +775,98 @@ class messenger extends menuedit_light
 			"prilist" => $this->picker($this->msgconf["msg_default_pri"],array("0","1","2","3","4","5","6","7","8","9")),
 			"attach" => $attach,
 			"menu" => $menu,
-			"reforb" => $this->mk_reforb("post",array()),
+			"reforb" => $this->mk_reforb("handle",array()),
 		));
 
 		return $this->parse();
 	}
 
 	////
-	// !Saadab teate
-	// id - /opt/ teate id, mida postitatakse, kui see on olemas, siis veotakse teade drafts folderist
-	// Siia joutakse nii reply, kui write seest. Reply puhul create_message t‰idab vormiv‰ljad dataga ainult,
-	// enne kui siia satub. Seega, selle funktsiooni seisukohast pole vahet
+	// !Handleb teadet, s.t. kas postitab, voi hoopis salvestab selle
+	// id - /opt/ teate id, 
+	// argumendid:
+	// msg_id(int) - teade mida saadetakse
+	// message(string) - teate sisu
+	// subject(string) - subject
+	// mtargets1(string) - kasutajad kellele teade saata
+	// identity(int) - identiteedi ID, mida kasutada saatmiseks
+	// signature(int) - signatuuri ID, mida kasutada saatmisel
+	// pri(int) - prioriteet
 
-	function send_message($args = array())
+	// ja nuh. attachid ka. aga need antakse edasi globaalsete muutujate kaudu :(
+	function handle_message($args = array())
 	{
-		global $status_msg;
 		// Shucks. Aga teist voimalust ei ole nende k‰ttesaamiseks
-		global $attach;
-		global $attach_name;
-		global $attach_type;
+		global $status_msg;
 		global $udata;
+		
 		$this->quote($args);
 		extract($args);
 
-		#$etargets = explode(",",$etargets);
 
-		$external = false;
+		// First we need to fetch and store the attached files. If any.
+		$this->receive_attaches(array(
+					"msg_id" => $msg_id,
+				));
+
+		// now, we figure out how many attached objects that message has
+		$num_att = $this->count_objects(array(
+					"class" => CL_FILE,
+					"parent" => $msg_id,
+				));
 		
+		// and finally we will save the message
+		$args["num_att"] = $num_att;
+		$this->save_message($args);
+
+		if ($save)
+		{
+			// bounce back to edit form
+			return $this->mk_site_orb(array(
+							"action" => "edit",
+							"id" => $msg_id,
+						));
+		};
+
+		// Kuna me siia joudsime, siis jarelikult on meil vaja meil laiali saata
+		// koigepealt splitime mtargetsi komade pealt ‰ra ja eemaldame whitespace
+		$targets = explode(",",$mtargets1);
+
+		foreach($targets as $key => $val)
+		{
+			$targets[$key] = trim($targets[$key]);
+		};
+
+		if (strlen($targets[0]) == 0)
+		{
+			$status_msg = "Yhtegi korrektset aadressi ei leitud. Kontrollige ¸le";
+			session_register("status_msg");
+			// bounce back to edit form
+			return $this->mk_site_orb(array(
+							"action" => "edit",
+							"id" => $msg_id,
+						));
+		};
+
+		// now we should be ok, let's separate internal and external addresses
+		$externals = $internals = array();
+
+		foreach($targets as $key => $val)
+		{
+			if (strpos($val,"@"))
+			{
+				$externals[] = $val;
+			}
+			else
+			{
+				$internals[] = $val;
+			};
+		};
+
+		print "sending mail....<br>";
+
+		exit;
+
 		// signatuur loppu
 		$message = $args["message"];
 		$message .= "\n--\n" . $this->msgconf["msg_signatures"][$args["signature"]]["signature"];
@@ -786,23 +895,8 @@ class messenger extends menuedit_light
 					"body" => $message,
 				));
 		};
-			
 
-		// koigepealt siis serializeme lisatud failid ‰sjakirjutatud kirjale k¸lge
-		foreach($attach as $idx => $tmpname)
-		{
-			// opera paneb siia tyhja stringi, mitte none
-			if (($tmpname != "none") && ($tmpname))
-			{
-				 // fail sisse
-				$fc = $this->get_file(array(
-					"file" => $tmpname,
-				));
-				$row = array();
-				$row["type"] = $attach_type[$idx];
-                                $row["class_id"] = CL_FILE;
-                                $row["name"] = basename($attach_name[$idx]);
-                                $row["content"] = $fc;
+				
 				if ($external)
 				{
 					$awm->fattach(array(
@@ -820,8 +914,8 @@ class messenger extends menuedit_light
 							VALUES('$msg_id','$ser')";
 					$this->db_query($q);
 				};
-			}
-		};
+			
+
 		
 		if ($external)
 		{
@@ -974,6 +1068,87 @@ class messenger extends menuedit_light
 		session_register("status_msg");
 		return $this->mk_site_orb(array(
 			"action" => "folder",
+		));
+	}
+	
+	////
+	// !Receives the attached files and put them away for further use
+	// This handles only new files, e.g. <input type="file"-s
+	// argumendid:
+	// msg_id(int) - the message we are storing the newly created objects under
+	// returns:
+	// the number of files actually "attached"
+	function receive_attaches($args = array())
+	{
+		// we have to use global variables here, since there simply is
+		// no other way to do it.
+		global $attach;
+		global $attach_name;
+		global $attach_type;
+		
+		classload("file");
+		$awf = new file();
+		$count = 0;
+	
+		foreach($attach as $idx => $tmpname)
+		{
+			// opera paneb siia tyhja stringi, mitte none
+			if (($tmpname != "none") && ($tmpname))
+			{
+				$count++;
+				 // fail sisse
+				$fc = $this->get_file(array(
+					"file" => $tmpname,
+				));
+
+				// now we have the file and must store the attached
+				// files. And we will store in the filesystem. Where else?
+				// Where else?
+
+				// And... shouldn't we check the return code or something?
+				$awf->put(array(
+						"store" => "fs",
+						"parent" => $args["msg_id"],
+						"filename" => basename($attach_name[$idx]),
+						"type" => $attach_type[$idx],
+						"content" => $fc,
+				));
+			}
+		};
+
+		return $count;
+	}
+
+	////
+	// !Saves the message
+	// msg_id(int) - teade mida saadetakse
+	// message(string) - teate sisu
+	// subject(string) - subject
+	// mtargets1(string) - kasutajad kellele teade saata
+	// identity(int) - identiteedi ID, mida kasutada saatmiseks
+	// signature(int) - signatuuri ID, mida kasutada saatmisel
+	// pri(int) - prioriteet
+	function save_message($args = array())
+	{
+		extract($args);
+		$q = "UPDATE messages
+			SET 
+				message = '$message',
+				subject = '$subject',
+				mtargets1 = '$mtargets1',
+				pri = '$pri'
+			WHERE id = '$msg_id'";
+		$this->db_query($q);
+
+		$msg_meta = array(
+				"identity" => $identity,
+				"signature" => $signature,
+		);
+
+		$this->set_object_metadata(array(
+				"oid" => $msg_id,
+				"key" => "msg",
+				"value" => $msg_meta,
 		));
 	}
 
