@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.26 2003/03/28 18:26:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.27 2003/03/31 10:08:41 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -30,6 +30,7 @@ class htmlclient extends aw_template
 		$this->res .= "<input type='hidden' NAME='MAX_FILE_SIZE' VALUE='500000'>\n";
 		$this->res .= "\n<table border='0' width='100%' cellspacing='1' cellpadding='1' bgcolor='#FFFFFF'>\n";
 		$this->orb_vars = array();
+		$this->submit_done = false;
 	}
 
 	function add_property($args = array())
@@ -53,6 +54,11 @@ class htmlclient extends aw_template
 		};
 
 		$type = isset($args["type"]) ? $args["type"] : "";
+
+		if ($type == "submit")
+		{
+			$this->submit_done = true;
+		};
 
 		// hidden elements end up in the orb_vars
 		if ($type == "hidden")
@@ -228,6 +234,11 @@ class htmlclient extends aw_template
 	function finish_output($args = array())
 	{
 		extract($args);
+		if ($this->submit_done)
+		{
+		
+		}
+		else
 		if (empty($submit) || $submit !== "no")
 		{
 			$this->res .= "<tr>\n\t<td class='chformleftcol' align='center'>&nbsp;</td>\n";
