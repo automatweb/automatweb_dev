@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.124 2005/03/14 17:27:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.125 2005/03/18 11:38:11 ahti Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -543,7 +543,7 @@ class menu extends class_base
 				));
 
 				$see_also_conns = $arr["obj_inst"]->connections_from(array(
-					"type" => RELTYPE_SEEALSO,
+					"type" => "RELTYPE_SEEALSO",
 				));
 
 				foreach($see_also_conns as $conn)
@@ -586,7 +586,7 @@ class menu extends class_base
 				$deny = $ob->meta("ip_deny");
 
 				$conn = $ob->connections_from(array(
-					"type" => RELTYPE_IP
+					"type" => "RELTYPE_IP",
 				));
 				foreach($conn as $c)
 				{
@@ -641,7 +641,7 @@ class menu extends class_base
 		$imdata = $arr["obj_inst"]->meta("menu_images");
 
 		$imgrels = array(0 => t("Vali pilt.."));
-		foreach($arr["obj_inst"]->connections_from(array("type" => RELTYPE_IMAGE)) as $conn)
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_IMAGE")) as $conn)
 		{
 			$imgrels[$conn->prop("to")] = $conn->prop("to.name");
 		}
@@ -1179,7 +1179,7 @@ class menu extends class_base
 	{
 		$obj =& obj($args["id"]);
 		$co = $obj->connections_from(array(
-			"type" => RELTYPE_IP,
+			"type" => "RELTYPE_IP",
 		));
 
 		$_allow = $obj->meta("ip_allow");
@@ -1292,7 +1292,7 @@ class menu extends class_base
 		));
 
 		$conns = $obj->connections_from(array(
-			"type" => RELTYPE_DOCS_FROM_MENU
+			"type" => "RELTYPE_DOCS_FROM_MENU",
 		));
 
 		foreach($conns as $c)
