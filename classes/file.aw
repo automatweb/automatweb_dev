@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.98 2005/01/16 17:11:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.99 2005/01/18 13:19:14 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -209,6 +209,15 @@ class file extends class_base
 				};
 				if (is_uploaded_file($file))
 				{
+					if ($this->cfg["upload_virus_scan"])
+					{
+						if (($vir = $this->_do_virus_scan($file)))
+						{
+							$data["error"] = "Uploaditud failis on viirus $vir!";
+							return PROP_FATAL_ERROR;
+						}
+					}
+
 					// fail sisse
 					$fc = $this->get_file(array(
 						"file" => $file,
@@ -913,6 +922,13 @@ class file extends class_base
 	function update_object($ef, $id, $data)
 	{
 		return;
+	}
+
+	function _do_virus_scan($file)
+	{
+		$scanner = get_instance("core/virus_scanner");
+		$ret = $scanner->scan_file($file);
+		return $ret;
 	}
 };
 ?>
