@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.46 2004/01/16 13:21:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.47 2004/01/16 13:51:06 duke Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -313,6 +313,8 @@ class admin_menus extends aw_template
 		if ($this->can("delete", $id))
 		{
 			$delurl = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $id, "parent" => $obj->parent(),"sel[$id]" => "1","period" => $period), "admin_menus",true,true);
+
+			$delurl = "javascript:if(confirm('Are you sure you want to delete this?')){window.location='$delurl';};";
 
 			$this->vars(array(
 				"link" => $delurl,
@@ -1392,7 +1394,7 @@ class admin_menus extends aw_template
 		$toolbar->add_button(array(
 			"name" => "delete",
 			"tooltip" => "Delete",
-			"url" => "javascript:submit('delete')",
+			"url" => "javascript:if(confirm('Are you sure you want to delete this?')){submit('delete')};",
 			"imgover" => "delete_over.gif",
 			"img" => "delete.gif",
 		));
