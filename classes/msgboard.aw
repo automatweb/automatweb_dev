@@ -1,12 +1,8 @@
 <?php
-
-if (!defined(MSGBOARD_LOADED))
-{
-define(MSGBOARD_LOADED,1);
-
-define(PER_PAGE,1000);
-define(PER_FLAT_PAGE,2000);
-define(TOPICS_PER_PAGE,15);
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.18 2001/08/30 21:24:10 duke Exp $
+define(PER_PAGE,10);
+define(PER_FLAT_PAGE,20);
+define(TOPICS_PER_PAGE,7);
 
 class msgboard extends aw_template
 {
@@ -17,57 +13,61 @@ class msgboard extends aw_template
 	}
 
 	function submit_votes($args = array())
-  {
+	{
 		if ($GLOBALS["uid"] == "fubar")
-    {
+		{
 			$this->raise_error("sa pole sisse logitud ja ei saa h\xe4\xe4letada",true);
-    };
-    classload("users");
-    $u = new users();
-    extract($args);
-    global $HTTP_SESSION_VARS;
-    global $commentvotes;
-    $oldvotes = array();
-    $oldvotes = $HTTP_SESSION_VARS["commentvotes"];
-    if (is_array($vote))
-    {
+		};
+		
+		classload("users");
+		$u = new users();
+		extract($args);
+		global $HTTP_SESSION_VARS;
+		global $commentvotes;
+		$oldvotes = array();
+		$oldvotes = $HTTP_SESSION_VARS["commentvotes"];
+		if (is_array($vote))
+		{
 			foreach($vote as $key => $val)
-      {
+			{
 				$topicvotes = $this->get_object_metadata(array(
-					"oid" => $key,
-          "key" => "votes",
-        ));
-
-        $oldvotes[$key] = $val;
+							"oid" => $key,
+							"key" => "votes",
+				));
+	
+				$oldvotes[$key] = $val;
 
 				$topicvotes["votes"] = $topicvotes["votes"] + 1;
-        $topicvotes["total"] = $topicvotes["total"] + $val;
+				$topicvotes["total"] = $topicvotes["total"] + $val;
 
-        $this->set_object_metadata(array(
-					"oid" => $key,
-          "key" => "votes",
-          "value" => $topicvotes,
-        ));
-      };
-    };
-    $commentvotes = $oldvotes;
-    session_register("commentvotes");
-    global $baseurl;
-
-	global $HTTP_REFERER;
-    header("Location: $HTTP_REFERER");
+				$this->set_object_metadata(array(
+							"oid" => $key,
+							"key" => "votes",
+							"value" => $topicvotes,
+				));
+			};
+		};
+		$commentvotes = $oldvotes;
+		session_register("commentvotes");
+		global $baseurl;
+		// this sucks, really
+		header("Location: $baseurl/comments.aw?action=topics");
 		exit;
-    return;
-  }	
+		return;
+	}	
 
-	function show($id,$page,$forum_id)
+	function show($id,$page,$forum_id = 0)
 	{
 		global $msgboard_type,$aw_mb_last;
-		if ($msgboard_type == "threaded" && $forum_id)	// the lotsa-pageviews version
+		//if ($msgboard_type == "threaded" && $forum_id)	// the lotsa-pageviews version
+		// forum_id on defineerimata, kui klikkida artikli juures "Kommentaare" linki,
+		// hetkel on Eesti Naises aga tehtud ainult threaded template
+		if ($msgboard_type == "threaded")	// the lotsa-pageviews version
 			return $this->show_threaded($id, $page,$forum_id);
 
-		$aw_mb_last = unserialize($aw_mb_last);
+		$aw_mb_last = unserialize(stripslashes($aw_mb_last));
 		$aw_mb_last[$id] = time();
+		// miks mitte sessiooni kasutada?
 		setcookie("aw_mb_last",serialize($aw_mb_last),time()+24*3600*1000,"/");
 
 		if ($msgboard_type == "flat")	// the wussy version
@@ -76,13 +76,14 @@ class msgboard extends aw_template
 
 		$this->quote(&$id);
 
-		$this->db_query("SELECT * FROM comments WHERE board_id = '$id'");
+		$this->db_query("SELECT * FROM comments WHERE board_id = '$id' ORDER BY time");
 		while ($row = $this->db_next())
 		{
-			$this->comments[$row[parent]][] = $row;
+			$this->comments[$row["parent"]][] = $row;
 		}
 
 		$this->read_template("messages.tpl");
+		
 		$this->vars(array("forum_id" => $forum_id));
 	
 		if ($this->is_template("TOPIC"))
@@ -90,7 +91,13 @@ class msgboard extends aw_template
 			$this->db_query("SELECT * FROM objects where class_id = ".CL_MSGBOARD_TOPIC." AND oid = '$id'");
 			if (($row = $this->db_next()))
 			{
-				$this->vars(array("topic" => $row[name], "created" => $this->time2date($row[created], 2),"text" => str_replace("\n","<Br>",$row[comment]),"from" => $row[last],"topic_id" => $id));
+				$this->vars(array(
+					"topic" => $row["name"], 
+					"created" => $this->time2date($row["created"], 2),
+					"text" => str_replace("\n","<Br>",$row["comment"]),
+					"from" => $row["last"],
+					"topic_id" => $id
+				));
 				$top = $this->parse("TOPIC");
 			}
 			$this->vars(array("TOPIC" => $top));
@@ -153,20 +160,32 @@ class msgboard extends aw_template
 			if ($show)
 			{
 				$this->dequote(&$v);
-				$this->vars(array("id" => $v[id],"from" => $v[name], "email" => $v[email], "comment" => nl2br($v[comment]), "level" => $this->level*20,"subj" => $v[subj],"time" => $this->time2date($v[time],2),"KUSTUTA" => ""));
+				$this->vars(array(
+					"id" => $v["id"],
+					"from" => $v["name"], 
+					"email" => $v["email"], 
+					"comment" => nl2br($v["comment"]), 
+					"level" => $this->level*20,
+					"subj" => $v["subj"],
+					"time" => $this->time2date($v["time"],2),
+					"KUSTUTA" => ""
+				));
 
+				// FIXME: ACLi peab siin kasutama
 				if ($uid != "")
 					$this->vars(array("KUSTUTA" => $this->parse("KUSTUTA")));
 
 				$str.=$this->parse("message");
 
-				$this->req_msgs($v[id], &$str);
+				$this->req_msgs($v["id"], &$str);
 			}
 		}
 
 		$this->level--;
 	}
 
+	////
+	// !Kuvab kommentaari lisamise vormi
 	function add($parent,$section,$page,$forum_id = 0,$msg="",$email="",$subj="",$comment="")
 	{
 		$parent = (int)$parent;
@@ -180,8 +199,10 @@ class msgboard extends aw_template
 
 			if ($subj == "")
 			{
-				$subj = strpos($row[subj],"Re:")===false ? "Re: ".$row[subj] : $row[subj];
+				// pane ennast põlema
+				$subj = strpos($row["subj"],"Re:")===false ? "Re: ".$row["subj"] : $row["subj"];
 			}
+
 			if ($comment == "")
 			{
 				$comment = join("\r\n",$this->map("> %s",explode("\r\n",wordwrap($row[comment],33,"\r\n",1))));
@@ -238,7 +259,8 @@ class msgboard extends aw_template
 			$comment = preg_replace("/<ftp(.*)>/","&lt;ftp\\1&gt;",$comment);
 			$comment = strip_tags($comment, "<b>,<u>,<i>,<ul>,<ol>,<li>");
 
-			// figure out the senders ip
+			// figure out the senders ip.
+			// FIXME: comments.aw?HTTP_X_FORWARDED_FOR=h4x0r3d
 			$ip = $GLOBALS["HTTP_X_FORWARDED_FOR"];
 			if ($ip == "")
 			{
@@ -246,6 +268,7 @@ class msgboard extends aw_template
 			}
 			$ip = gethostbyaddr($ip);
 			$pp = strpos($ip,".");
+			// eh?
 			$ip = "---".substr($ip,$pp);
 
 			$this->db_query("INSERT INTO comments(parent, board_id,name, email,comment,subj,time,site_id,sendmail,ip) values($parent,'$section','$from','$email','$comment','$subj',".time().",".$GLOBALS["SITE_ID"].",'$sendmail','$ip')");
@@ -259,11 +282,11 @@ class msgboard extends aw_template
 			{
 				$this->db_query("SELECT * FROM comments WHERE id = $p");
 				$row = $this->db_next();
-				if ($row[sendmail] == 1)
+				if ($row["sendmail"] == 1)
 				{
-					$mails[$row[email]] = $row;
+					$mails[$row["email"]] = $row;
 				}
-				$p = $row[parent];
+				$p = $row["parent"];
 			}
 
 			global $baseurl, $ext,$section;
@@ -274,7 +297,7 @@ class msgboard extends aw_template
 				$msg = str_replace("&gt;",">",$msg);
 				$msg = str_replace("&lt;","<",$msg);
 				$msg = str_replace("\n","\n\r", $msg);
-				mail($mail[email], FORUM_MAIL_SUBJECT, $msg, "From: ".FORUM_MAIL_FROM."\n\n");
+				mail($mail["email"], FORUM_MAIL_SUBJECT, $msg, "From: ".FORUM_MAIL_FROM."\n\n");
 			}
 		}
 		else
@@ -315,7 +338,12 @@ class msgboard extends aw_template
 			$this->db_query("SELECT * FROM objects where class_id = ".CL_MSGBOARD_TOPIC." AND oid = '$id'");
 			if (($row = $this->db_next()))
 			{
-				$this->vars(array("topic" => $row[name], "created" => $this->time2date($row[created], 2),"text" => str_replace("\n","<Br>",$row[comment]),"from" => $row[last]));
+				$this->vars(array(
+					"topic" => $row["name"],
+					"created" => $this->time2date($row["created"], 2),
+					"text" => str_replace("\n","<br>",$row["comment"]),
+					"from" => $row["last"],
+				));
 				$top = $this->parse("TOPIC");
 			}
 			$this->vars(array("TOPIC" => $top));
@@ -347,8 +375,18 @@ class msgboard extends aw_template
 
 			if ($show)
 			{
-				$this->vars(array("id" => $row[id],"from" => $row[name], "email" => $row[email], "comment" => nl2br($row[comment]), "level" => 0,"subj" => $row[subj],"time" => $this->time2date($row[time],2),"KUSTUTA" => ""));
+				$this->vars(array(
+					"id" => $row["id"],
+					"from" => $row["name"], 
+					"email" => $row["email"], 
+					"comment" => nl2br($row["comment"]), 
+					"level" => 0,
+					"subj" => $row["subj"],
+					"time" => $this->time2date($row["time"],2),
+					"KUSTUTA" => "",
+				));
 
+				// FIXME: kontrolli ACLi
 				if ($uid != "")
 					$this->vars(array("KUSTUTA" => $this->parse("KUSTUTA")));
 
@@ -439,7 +477,14 @@ class msgboard extends aw_template
 
 			if ($show)
 			{
-				$this->vars(array("email" => $row[email], "from" => $row[name], "time" => $this->time2date($row[time], 2),"subj" => $row[subj],"comment_id" => $row[id],"s_section" => $row[board_id]));
+				$this->vars(array(
+					"email" => $row["email"],
+					"from" => $row["name"], 
+					"time" => $this->time2date($row["time"], 2),
+					"subj" => $row["subj"],
+					"comment_id" => $row["id"],
+					"s_section" => $row["board_id"],
+				));
 				$c.=$this->parse("message");
 			}
 			$cnt++;
@@ -480,7 +525,7 @@ class msgboard extends aw_template
 			$this->db_query("SELECT * FROM comments WHERE board_id = '$section' ORDER BY time");
 			while ($row = $this->db_next())
 			{
-				if ($row[id] == $cid)
+				if ($row["id"] == $cid)
 					break;
 				$cnt++;
 			}
@@ -498,7 +543,7 @@ class msgboard extends aw_template
 			$this->db_query("SELECT * FROM comments WHERE board_id = '$section' AND parent = 0");
 			while ($row = $this->db_next())
 			{
-				if ($row[id] == $parent)
+				if ($row["id"] == $parent)
 					break;
 				$cnt++;
 			}
@@ -529,7 +574,7 @@ class msgboard extends aw_template
 		$this->db_query("SELECT COUNT(id) as cnt ,board_id, MAX(time) as mtime FROM comments GROUP BY board_id");
 		while ($row = $this->db_next())
 		{
-			$numcomments[$row[board_id]] = array("cnt" => $row[cnt], "mtime" => $row[mtime]);
+			$numcomments[$row["board_id"]] = array("cnt" => $row["cnt"], "mtime" => $row["mtime"]);
 		}
 
 		global $aw_mb_last;
@@ -568,7 +613,7 @@ class msgboard extends aw_template
 			{
 				$nc = $numcomments[$row[oid]]["cnt"];
 				$lc = $numcomments[$row[oid]]["mtime"];
-						// FIXME: We already have the data from the previous query
+				// FIXME: We already have the data from the previous query
 				$this->save_handle();
 
 				$votedata = $this->get_object_metadata(array(
@@ -588,7 +633,8 @@ class msgboard extends aw_template
 					"rate" => sprintf("%0.2f",$votedata["total"] / $votecount),
 					"lastmessage" => $this->time2date($lc,2)
 				));
-				$dt = $GLOBALS["uid"] != "" && $can_delete ? $this->parse("DELETE") : "";
+				 // priviligeerimata kasutajad ei nae kustuta linki. praegu kasutan menuediti oigusi selleks 
+				$dt = $this->prog_acl("view",PRG_MENUEDIT) ? $this->parse("DELETE") : "";
 
 				$this->save_handle();
 				if ($aw_mb_last[$row[oid]] < 1)
@@ -620,7 +666,8 @@ class msgboard extends aw_template
 		$this->read_template("list_topics_detail.tpl");
 
 		global $aw_mb_last;
-		$this->aw_mb_last = unserialize($aw_mb_last);
+		// lauri muudetud --> stripslashes()
+		$this->aw_mb_last = unserialize(stripslashes($aw_mb_last));
 
 		$count = $this->db_fetch_field("SELECT count(*) as cnt FROM objects WHERE class_id = ".CL_MSGBOARD_TOPIC." AND status = 2 ","cnt");
 		if ($count > TOPICS_PER_PAGE)
@@ -853,7 +900,8 @@ class msgboard extends aw_template
 	function markallread($forum_id)
 	{
 		global $aw_mb_last;
-		$aw_mb_last = unserialize($aw_mb_last);
+		// lauri muudetud --> stripslashes()
+		$aw_mb_last = unserialize(stripslashes($aw_mb_last));
 
 		$this->db_query("SELECT objects.* FROM objects WHERE class_id = ".CL_MSGBOARD_TOPIC." AND status = 2  AND parent = $forum_id ORDER BY objects.created DESC");
 		while ($row = $this->db_next())
@@ -891,7 +939,10 @@ class msgboard extends aw_template
 
 		$this->db_query("SELECT * FROM objects WHERE oid = '$id'");
 		$row = $this->db_next();
-
+		if ($row["class_id"] != CL_MSGBOARD_TOPIC)
+		{
+			$row["last"] = "";
+		}
 		global $baseurl;
 		$image = "<img src='".$baseurl."/images/foorumimgs/miinus.gif' width='9' height='100%'>";
 		if (!is_array($msgcache[$id]))
@@ -958,7 +1009,6 @@ class msgboard extends aw_template
 		return preg_replace("/&lt;ftp(.*)&gt;/","<a href='ftp\\1'>ftp\\1</a>",$ret);
 	}
 
-		// lauri muudetud -->
 	function get_count_all($topic)
 	{
 		$this->db_query("SELECT COUNT(board_id) AS cnt,board_id FROM comments WHERE board_id LIKE '$topic' GROUP BY board_id");
@@ -997,7 +1047,5 @@ class msgboard extends aw_template
 
 		return $arr;
 	}
-	// <-- lauri muudetud
 };
-}
 ?>
