@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.55 2003/05/08 14:03:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.56 2003/05/08 15:47:00 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1267,43 +1267,6 @@ class form extends form_base
 		$controllers_ok = true;
 		$controller_warnings_ok = true;
 
-		// if this form uses a calendar and is an event entry form, figure out
-		// whether the calendar it is trying to write to, have enough vacancies
-		if ($this->subtype & FSUBTYPE_EV_ENTRY)
-		{
-			// check vacations and if found, update calendar->form relations
-			// set error messages otherwise
-			$fcal = get_instance("formgen/form_calendar");
-			$els = $this->get_form_elements(array(
-				"use_loaded" => true,
-				"key" => "id",
-			));
-
-			$errors = $fcal->check_calendar(array(
-				"id" => $id,
-				"post_vars" => $this->post_vars,//$this->entry,
-				"entry_id" => $entry_id,
-				"chain_entry_id" => $chain_entry_id,
-				"els" => $els,
-			));
-
-			// if any of the vacancy checks failed,
-			// merge the error messages into controller_errors
-			/*
-			if ($errors)
-			{
-			*/
-				if (!is_array($this->controller_errors))
-				{
-					$this->controller_errors = array();
-				};
-				$this->controller_errors = $this->controller_errors + $fcal->get_controller_errors();
-			//};
-
-			$has_errors = $errors;
-			$controller_warnings_ok = $fcal->fatal;
-			$has_cal_errors = $errors;
-		}
 
 		if (!$no_process_entry)
 		{
@@ -1359,10 +1322,36 @@ class form extends form_base
 			// moved calendar checks after value controller checks, so that calendar can use value
 			// controller generated values. 
 
-
-
 			$this->has_controller_warnings = !$controller_warnings_ok;
 			$this->has_controller_errors = !$controllers_ok;
+
+			// check calendar only if other controllers had no errors
+			if (!$this->has_controller_errors && ($this->subtype & FSUBTYPE_EV_ENTRY))
+			{
+				// if this form uses a calendar and is an event entry form, figure out
+				// whether the calendar it is trying to write to, have enough vacancies
+				// check vacations and if found, update calendar->form relations
+				// set error messages otherwise
+				$fcal = get_instance("formgen/form_calendar");
+				$els = $this->get_form_elements(array(
+					"use_loaded" => true,
+					"key" => "id",
+				));
+
+				$errors = $fcal->check_calendar(array(
+					"id" => $id,
+					"post_vars" => $this->post_vars,//$this->entry,
+					"entry_id" => $entry_id,
+					"chain_entry_id" => $chain_entry_id,
+					"els" => $els,
+				));
+
+				$this->controller_errors = $this->controller_errors + $fcal->get_controller_errors();
+
+				$has_errors = $errors;
+				$controller_warnings_ok = $fcal->fatal;
+				$has_cal_errors = $errors;
+			};
 //			echo "ctrlok = $controllers_ok warnok = $controller_warnings_ok <br>";
 			if ( (!$controllers_ok) || ($has_errors) || (!$controller_warnings_ok))
 			{
@@ -1401,6 +1390,9 @@ class form extends form_base
 		{
 			// we override the lang_id here, because entries that have been entered over
 			// XML-RPC do not know what their language_id might be, so specify one.
+
+			// well .. since form_rpc is gone, the above comment and any code related to
+			// it is now useless
 			$this->entry_id = $this->create_entry_object(array(
 				"parent" => $this->entry_parent,
 				"class_id" => CL_FORM_ENTRY,
