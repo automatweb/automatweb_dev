@@ -1,5 +1,5 @@
 <?php
-// $Id: menu_alias.aw,v 2.3 2003/05/08 10:27:00 kristo Exp $
+// $Id: menu_alias.aw,v 2.4 2003/05/09 15:43:37 kristo Exp $
 // menu_alias.aw - Deals with menu aliases
 class menu_alias extends aw_template
 {
@@ -101,7 +101,14 @@ class menu_alias extends aw_template
 			return "";
 		}
 		$target = $f;
-		$ret = sprintf("<a class=\"sisutekst\" href='".$this->cfg["baseurl"]."/%d'>%s</a>",$target["oid"],$target["name"]);
+		if (aw_global_get("section") == $target["oid"])
+		{
+			$ret = sprintf("<a class=\"sisutekst-sel\" href='".$this->cfg["baseurl"]."/%d'>%s</a>",$target["oid"],$target["name"]);
+		}
+		else
+		{
+			$ret = sprintf("<a class=\"sisutekst\" href='".$this->cfg["baseurl"]."/%d'>%s</a>",$target["oid"],$target["name"]);
+		}
 		return $ret;
 	}
 };
