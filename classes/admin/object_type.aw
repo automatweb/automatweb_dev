@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.10 2004/07/01 16:10:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.11 2004/08/26 09:43:05 duke Exp $
 // object_type.aw - objekti klass (lisamise puu jaoks)
 /*
 	@default table=objects
@@ -217,10 +217,10 @@ class object_type extends class_base
 		$tmp = aw_ini_get("classes");
 		foreach($tmp as $clid => $cldat)
 		{
-			if ($cldat["can_add"] == 1)
-			{
+			//if ($cldat["can_add"] == 1)
+			//{
 				$ret[$clid] = $cldat["name"];
-			}
+			//}
 		}
 		asort($ret);
 		$ret = array("__all_objs" => "K&otilde;ik") + $ret;
