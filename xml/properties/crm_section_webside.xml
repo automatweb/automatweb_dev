@@ -1,0 +1,44 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>section_picker</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SECTION</reltype>
+            <caption>Üksus</caption>
+      </property>
+      <property>
+            <name>show_sub_sections</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Võta alamüksustest</caption>
+      </property>
+      <property>
+            <name>view</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <caption>Näitamine</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_CRM_SECTION_WEBSIDE</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <reltypes>
+            <SECTION>
+                  <value>1</value>
+                  <clid>CL_CRM_SECTION</clid>
+                  <caption>&amp;uuml;ksus</caption>
+            </SECTION>
+      </reltypes>
+</properties>
+
