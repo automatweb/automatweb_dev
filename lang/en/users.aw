@@ -23,4 +23,16 @@ $lc_users["LC_JF_PASSWORD2"] = "Password 2x:";
 $lc_users["LC_JF_PASSWORD2"] = "Password 2x:";
 $lc_users["LC_JF_NEXT"] = "Next";
 
+$lc_users["LC_LOGS"] = "Logs";
+$lc_users["LC_ONLINE"] = "Online";
+$lc_users["LC_LAST_LOGIN"] = "Last login";
+$lc_users["LC_ACTIONS"] = "Actions";
+
+$lc_users["LC_PAGE"] = "Page";
+
+$lc_users["LC_CHANGE"] = "Change";
+$lc_users["LC_PROPERTIES"] = "Properties";
+$lc_users["LC_CHANGE_PWD"] = "Change password";
+$lc_users["LC_DELETE"] = "Delete";
+
 ?>

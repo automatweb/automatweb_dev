@@ -23,4 +23,16 @@ $lc_users["LC_JF_PASSWORD2"] = "Password 2x:";
 $lc_users["LC_JF_PASSWORD2"] = "Password 2x:";
 $lc_users["LC_JF_NEXT"] = "Next";
 
+$lc_users["LC_LOGS"] = "Logimisi";
+$lc_users["LC_ONLINE"] = "Sisse logitud";
+$lc_users["LC_LAST_LOGIN"] = "Viimati";
+$lc_users["LC_ACTIONS"] = "Tegevused";
+
+$lc_users["LC_PAGE"] = "Lehek&uuml;lg";
+
+$lc_users["LC_CHANGE"] = "Muuda";
+$lc_users["LC_PROPERTIES"] = "M&auml;&auml;rangud";
+$lc_users["LC_CHANGE_PWD"] = "Muuda parooli";
+$lc_users["LC_DELETE"] = "Kustuta";
+
 ?>

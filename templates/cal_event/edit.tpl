@@ -1,9 +1,14 @@
-{VAR:menubar}
 <form method="POST" action="reforb.{VAR:ext}" name="event">
 <table border="0" cellspacing="1" cellpadding="1" bgcolor="#ffffff">
 <tr>
-<td colspan="2" class="header1" align="center">
-{VAR:caption}
+<td class="header1" align="center">
+&lt;Muuda&gt;
+</td>
+<td class="header1" align="center">
+<!-- SUB: repeaters -->
+<a href="{VAR:rep_link}">Kordused</a>
+<!-- END SUB: repeaters -->
+&nbsp;
 </td>
 </tr>
 <tr>
@@ -12,11 +17,17 @@
 <tr>
 <td class="fgtitle"><strong>Kuupäev</strong></td>
 <td class="fgtitle">{VAR:start}</td>
+<td colspan="2" class="fgtitle">&nbsp;</td>
 </tr>
 <tr>
-<td class="fgtitle"><strong>{VAR:LC_PLANNER_STARTS}</strong></td>
+<td class="fgtitle"><strong>Kalender</strong></td>
+<td class="fgtitle"><select name="folder">{VAR:calendars}</select></td>
+<td colspan="2" class="fgtitle"><a href="{VAR:calendar_url}"><img border="0" src="{VAR:icon_url}">Näita kalendrit</a></td>
+</tr>
+<tr>
+<td class="fgtitle"><strong>Algab</strong></td>
 <td class="fgtitle"><select class="lefttab" name="shour">{VAR:shour}</select> t:<select class="lefttab" name="smin">{VAR:smin}</select>m</td>
-<td class="fgtitle"><strong>{VAR:LC_PLANNER_LASTS}</strong></td>
+<td class="fgtitle"><strong>Kestab</strong></td>
 <td class="fgtitle"><select class="lefttab" name="dhour">{VAR:dhour}</select> t:<select class="lefttab" name="dmin">{VAR:dmin}</select>m
 &nbsp;&nbsp;
 </td>
@@ -25,66 +36,53 @@
 </td>
 </tr>
 <tr>
-<td class="fgtitle"><strong>{VAR:LC_PLANNER_TITLE}</strong></td>
+<td class="fgtitle"><strong>Korduv sündmus</strong></td>
+<td class="fgtitle"><input type="checkbox" name="repcheck" value="1" {VAR:repcheck}></td>
+</tr>
+<tr>
+<td class="fgtitle"><strong>Nimi</strong></td>
 <td class="fgtitle"><input type="text" name="title" size="30" maxlength="60" value="{VAR:title}"></td>
 </tr>
 <tr>
-<td class="fgtitle"><strong>{VAR:LC_PLANNER_PLACE}</strong></td>
+<td class="fgtitle"><strong>Koht</strong></td>
 <td class="fgtitle"><input type="text" name="place" size="30" maxlength="60" value="{VAR:place}"></td>
 </tr>
 <tr>
-<td class="fgtitle"><strong>{VAR:LC_PLANNER_COLOR}</strong></td>
+<td class="fgtitle"><strong>Lisa objekt</strong></td>
+<td class="fgtitle"><img src="{VAR:obj_icon}">&nbsp;<big>{VAR:object}</big>
+&nbsp;
+<input type="submit" name="object" value="Muuda..."></td>
+</tr>
+<tr>
+<td class="fgtitle"><strong>Kalendris näidatakse</strong></td>
+<td class="fgtitle">
+<select name="showtype">
+{VAR:showtype}
+</select>
+&nbsp;
+</tr>
+<tr>
+<td class="fgtitle"><strong>Värv</strong></td>
 <td class="fgtitle"><select name="color">{VAR:color}</select></td>
 </tr>
 <!--
 <tr>
-<td class="fgtitle"><strong>Osalejad (kasutajad)</strong></td>
-<td class="fgtitle"><input type="text" name="users" size="30" value="{VAR:users}"></td>
-</tr>
-<tr>
-<td class="fgtitle"><strong>Osalejad (grupid)</strong></td>
-<td class="fgtitle"><input type="text" name="groups" size="30" value="{VAR:groups}"></td>
-</tr>
-<tr>
-<td class="fgtitle"><strong>Tuleta meelde</strong></td>
-<td class="fgtitle"><input type="text" name="reminder" size="2" maxlength="2" value="{VAR:reminder}"> minutit enne algust</td>
-</tr>
--->
-<tr>
 <td class="fgtitle"><strong>{VAR:LC_PLANNER_PRIVATE}</strong></td>
 <td class="fgtitle"><input type="checkbox" name="private" {VAR:private} value="1"></td>
 </tr>
+-->
 <tr>
 <td class="fgtitle" colspan="2">
-<strong>{VAR:LC_PLANNER_CONTENT}</strong><br>
+<strong>Sisu</strong><br>
 <textarea name="description" cols="60" rows="10" wrap="soft">{VAR:description}</textarea>
 </td>
 </tr>
 <tr>
 <td class="fgtitle" align="center" colspan="2">
-<input type="submit" value="{VAR:LC_PLANNER_SAVE}">
+<input type="submit" value="Salvesta">
 <!-- SUB: delete -->
 <input type="submit" name="delete" value="{VAR:LC_PLANNER_DELETE}" onClick="if (confirm('Oled kindel?')) {document.event.submit()}">
 <!-- END SUB: delete -->
-
-<input type="hidden" name="dayskip" value="{VAR:dayskip}">
-<input type="hidden" name="daypwhen" value="{VAR:daypwhen}">
-
-<input type="hidden" name="weekskip" value="{VAR:weekskip}">
-<input type="hidden" name="weekpwhen" value="{VAR:weekpwhen}">
-
-<input type="hidden" name="monskip" value="{VAR:monskip}">
-<input type="hidden" name="monpwhen" value="{VAR:monpwhen}">
-<input type="hidden" name="monpwhen2" value="{VAR:monpwhen2}">
-
-<input type="hidden" name="yearskip" value="{VAR:yearskip}">
-<input type="hidden" name="yearpwhen" value="{VAR:yearpwhen}">
-
-<input type="hidden" name="rep_type" value="{VAR:rep_type}">
-<input type="hidden" name="rep_dur" value="{VAR:rep_dur}">
-<input type="hidden" name="rep_forever" value="{VAR:rep_forever}">
-<input type="hidden" name="rep_until" value="{VAR:rep_until}">
-
 {VAR:reforb}
 </td>
 </tr>

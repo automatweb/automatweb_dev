@@ -54,7 +54,7 @@ NB! palun hetkel &uuml;lemist formi kasutada, siit edasi ei pretendeeri veel t&o
 <script language="javascript">
 function ssrch()
 {
-	if (document.selsrch.search_from[0].checked)
+/*	if (document.selsrch.search_from[0].checked)
 	{
 		document.selsrch.elements[1].disabled=false;
 		if (document.selsrch.form_op)
@@ -79,7 +79,7 @@ function ssrch()
 		{
 			document.selsrch.chain_op.disabled=false;
 		}
-	}
+	}*/
 }
 </script>
 
@@ -129,5 +129,5 @@ function ssrch()
 </form>
 
 <script language="javascript">
-ssrch();
+//ssrch();
 </script>

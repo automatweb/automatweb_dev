@@ -51,7 +51,7 @@ href="javascript:this.document.polladd.submit();">{VAR:LC_POLL_SAVE}</a>
 <tr>
 <td class="celltext" valign="top" align="right">{VAR:LC_POLL_COMMENTARY}:</td><td class="celltext"><textarea NAME='comment' cols=40 rows=5 class="formtext">{VAR:comment}</textarea></td>
 </tr>
-
+<!-- SUB: EDIT -->
 <tr>
 <td colspan="2">
 <table border='0' cellspacing='1' cellpadding='3' width='100%'>
@@ -81,6 +81,7 @@ href="javascript:this.document.polladd.submit();">{VAR:LC_POLL_SAVE}</a>
 </table>
 </td>
 </tr>
+<!-- END SUB: EDIT -->
 
 </table>
 {VAR:reforb}
