@@ -1,0 +1,24 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="rate_moderation" folder="applications/commune" extends="class_base">
+		<action name="mod_images">
+			<function name="mod_images">
+				<arguments>
+					<required name="id" type="int" acl="view" />
+					<optional name="group" />
+					<optional name="com" />
+					<optional name="mod" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="show_image">
+			<function name="show_image">
+				<arguments>
+					<required name="img_id" type="int" acl="view" />
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>
