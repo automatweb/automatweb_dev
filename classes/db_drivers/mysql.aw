@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.6 2002/12/03 13:29:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.7 2002/12/03 14:49:52 axel Exp $
 // mysql.aw - MySQL draiver
 class mysql 
 {
@@ -176,20 +176,19 @@ class mysql
 		return $row[$field];
 	}
 
-	//// ! fetch all rows from db_query result
-	// loeb kogu select tulemuse arraysse
-	// query - if not set tries to fetch from previous db_query !!
+	//// 
+	// ! fetch all rows from db_query result
+	// qtext - if not set tries to fetch from previous db_query !!
 	function db_fetch_array($qtext='') 
 	{
 		if ($qtext)
 		{
 			$this->db_query($qtext);
 		}
-		while ($row[]=$this->db_next())
+		while ($arr[]=$this->db_next())
 		{}
-		return $row;
+		return $arr;
 	}
-
 
 
 
@@ -271,6 +270,7 @@ class mysql
 		}
 		return $retval;
 	}
+
 
 	////
 	// !returns the properties of table $name or false if it doesn't exist
@@ -457,6 +457,12 @@ class mysql
 		};
 		return $tables;
 	}
+
+	function db_show_create_table($name)
+	{
+		return $this->db_fetch_field('SHOW CREATE TABLE '.$name, 'Create Table');
+	}
+
 
 	function db_list_databases()
 	{
