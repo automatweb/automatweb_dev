@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.157 2004/01/22 17:32:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.158 2004/01/27 17:15:41 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -334,6 +334,7 @@ class planner extends class_base
 		$_end = $di["end"];
 
 
+
 		// generate a list of folders from which to take events
 		$cal_conns = $obj->connections_from(array(
 			"type" => RELTYPE_EVENT_SOURCE,
@@ -389,6 +390,7 @@ class planner extends class_base
 
 		$this->db_query($q);
 		$events = array();
+		$reflist = array();
 		// now, if a project has been requested from the URL, I need to do additional filtering for each object
 
 		// we sure pass around a LOT of data
@@ -445,11 +447,12 @@ class planner extends class_base
 			{
 				$row["event_icon_url"] = icons::get_icon_url($row["class_id"]);
 				$events[$gx][$row["brother_of"]] = $row;
+				$reflist[] = &$events[$gx][$row["brother_of"]];
 			};
 		};
 		$this->day_orb_link = $this->mk_my_orb("change",array("id" => $id,"group" => "show_day"));
 		$this->week_orb_link = $this->mk_my_orb("change",array("id" => $id,"group" => "show_week"));
-		return $events;
+		return isset($args["flatlist"]) ? $reflist : $events;
 	}
 
 	////
