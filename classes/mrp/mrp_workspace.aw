@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.21 2005/02/11 07:50:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.22 2005/02/11 08:04:27 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -2524,7 +2524,10 @@ class mrp_workspace extends class_base
 
 	function callback_on_load($arr)
 	{
-		$this->cfgmanager = 17639;
+		if ($this->can("view", 17639))
+		{
+			$this->cfgmanager = 17639;
+		}
 	}
 }
 
