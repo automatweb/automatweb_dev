@@ -42,6 +42,6 @@
 
 <!-- SUB: real_end -->
 </tr>
-<!--<tr><td colspan="2" class="awmenuediticonsjoon2"><div style="width:1px;height:1px" /></td></tr>-->
+
 </table>
 <!-- END SUB: real_end -->
