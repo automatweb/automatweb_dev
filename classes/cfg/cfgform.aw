@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.39 2004/10/29 16:02:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.40 2004/11/12 11:21:18 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -59,13 +59,16 @@
 	@caption Subaction (sys)
 	
 	@property gen_controllers type=callback callback=gen_controller_props group=controllers
+	@caption Kontrollerid
 
-	
-	
+	@property sysdefault type=table group=system no_caption=1
+	@caption Süsteemi seaded
+
 	@groupinfo groupdata caption=Grupid 
 	@groupinfo layout caption=Layout submit=no
 	@groupinfo avail caption="Kõik omadused" submit=no
 	@groupinfo controllers caption="Kontrollerid"
+	@groupinfo system caption="Seaded"
 
 	@classinfo relationmgr=yes
 
@@ -102,6 +105,10 @@ class cfgform extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+
+			case "sysdefault":
+				$this->do_sysdefaults($arr);
+				break;
 
 			case "xml_definition":
 				// I don't want to show the contents of the file here
@@ -165,6 +172,75 @@ class cfgform extends class_base
 		$this->_init_cfgform_data($arr["obj_inst"]);
 	}
 
+	function do_sysdefaults($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "act",
+			"caption" => "Süsteemi default",
+			"align" => "center",
+			"width" => 85,
+		));
+
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "Nimi",
+		));
+
+		$t->define_field(array(
+			"name" => "group",
+			"caption" => "Grupp",
+		));
+
+		$o = $arr["obj_inst"];
+		$ol = new object_list(array(
+			"class_id" => $this->clid,
+			"subclass" => $o->subclass(),
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+
+		$active = 0;
+		foreach ($ol->arr() as $item)
+		{
+			$flg = $item->flag(OBJ_FLAG_IS_SELECTED);
+			if ($flg)
+			{
+				$active = $item->id();
+			};
+		};
+
+		$ol = new object_list(array(
+			"class_id" => $this->clid,
+			"subclass" => $o->subclass(),
+		));
+
+		$t->set_sortable(false);
+
+		$t->define_data(array(
+			"act" => html::radiobutton(array(
+				"name" => "sysdefault",
+				"value" => 0,
+				"checked" => 0 == $active,
+			)),
+			"name" => "Ära kasuta vormi",
+		));
+
+		foreach($ol->arr() as $o)
+		{
+			$t->define_data(array(
+				"act" => html::radiobutton(array(
+					"name" => "sysdefault",
+					"value" => $o->id(),
+					"checked" => $o->id() == $active,
+				)),
+				"name" => $o->name(),
+			));
+		};
+			
+	}
+	
+
 	function _init_cfgform_data($obj)
 	{
 		$this->_init_properties($obj->prop("subclass"));
@@ -199,13 +275,38 @@ class cfgform extends class_base
 	function set_property($arr)
 	{
 		$data = &$arr["prop"];
+		$o = $arr["obj_inst"];
 		$retval = PROP_OK;
 
 		switch($data["name"])
 		{
 			case "gen_controllers":
 				$arr["obj_inst"]->set_meta("controllers", $arr["request"]["controllers"]);		
-			break;
+				break;
+
+			case "sysdefault":
+				$ol = new object_list(array(
+                                        "class_id" => $this->clid,
+                                        "subclass" => $o->subclass(),
+                                        "lang_id" => array(),
+                                ));
+
+                                foreach ($ol->arr() as $item)
+                                {
+                                        if ($item->flag(OBJ_FLAG_IS_SELECTED) && $item->id() != $data["value"])
+                                        {
+                                                $item->set_flag(OBJ_FLAG_IS_SELECTED, false);
+                                                $item->save();
+                                        }
+                                        else
+                                        if ($item->id() == $data["value"] && !$item->flag(OBJ_FLAG_IS_SELECTED))
+                                        {
+                                                $item->set_flag(OBJ_FLAG_IS_SELECTED, true);
+                                                $item->save();
+                                        };
+                                };
+				break;
+
 			case "cfg_proplist":
 			
 			case "cfg_groups":
