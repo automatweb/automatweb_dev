@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/job_offer.aw,v 1.1 2004/03/16 14:07:00 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/job_offer.aw,v 1.2 2004/03/16 23:35:06 sven Exp $
 // job_offer.aw - job_offer 
 /*
 
@@ -9,36 +9,35 @@
 @default group=general
 @default field=meta
 
-@property name type=textbox field=name
+@tableinfo personnel_management_job index=oid master_table=objects master_index=oid
+
+@property name type=textbox table=objects field=name group=info_about_job
 @caption Ametikoht
 
 @property navtoolbar type=toolbar no_caption=1 store=no group=kandideerinud
 
-@property toosisu type=textarea method=serialize field=meta table=objects
-@caption Töö sisu
+@property toosisu type=textarea field=about_job table=personnel_management_job  group=info_about_job
+@caption Töö kirjeldus
 
-@property asukoht type=relpicker reltype=RELTYPE_LINN method=serialize automatic=1 editonly=1
-@caption Linn
-
-@property noudmised type=textarea method=serialize
+@property noudmised type=textarea field=requirements table=personnel_management_job  group=info_about_job
 @caption N&otilde;udmised kandidaadile
 
-@property tegevusvaldkond type=classificator field=meta method=serialize multiple=1 editonly=1
+@property asukoht type=relpicker reltype=RELTYPE_LINN automatic=1 editonly=1 method=serialize field=meta table=objects  group=info_about_job
+@caption Asukoht
+
+@property deadline type=date_select field=deadline table=personnel_management_job  group=info_about_job
+@caption Konkursi tähtaeg
+
+@property tegevusvaldkond type=classificator field=meta method=serialize multiple=1 editonly=1 table=objects  group=info_about_job
 @caption Tegevusvaldkond
 
-@property email type=relmanager reltype=RELTYPE_EMAIL props=mail method=serialize
+@property email type=relmanager reltype=RELTYPE_EMAIL props=mail  group=info_about_job field=meta method=serialize
 @caption Meiliaadressid
 
-@property phone type=relmanager reltype=RELTYPE_PHONE props=name method=serialize
+@property phone type=relmanager reltype=RELTYPE_PHONE props=name  group=info_about_job field=meta method=serialize
 @caption Telefoninumbrid
 
-
-@property fail type=fileupload
-@caption Tööpakkumine failina
-
-@property deadline type=date_select method=serialize
-@caption T&auml;htaeg
-
+property cv_file_rel type=releditor reltype=RELTYPE_CVFILE props=file group=info_about_job_file
 
 @property candits type=table group=kandideerinud
 @caption Kandideerijad
@@ -57,12 +56,25 @@
 @caption Kandidaat
 
 @reltype TEGEVUSVALDKOND value=6 clid=CL_META
-@caption Tegevusvaldkond 
+@caption Tegevusvaldkond
 
-@property kandideerin type=callback callback=my_candidature_get store=no
+@reltype CVFILE value=7 clid=CL_FILE
+@caption CV failina
+
+@property kandideerin type=callback callback=my_candidature_get field=meta method=serialize
 @caption Vali cv kandideerimiseks
 
+
+groupinfo info_about_job_main caption="Tööpakkumine" 
+
+@groupinfo info_about_job caption="Tööpakkumine"
+
+@groupinfo info_about_job_file caption="Tööpakkumine failina" parent=info_about_job_main
+
+@group minu_kandidatuur caption="Kandideerin"
 @groupinfo kandideerinud caption="Kandideerijad"
+
+
 
 */
 
@@ -204,7 +216,6 @@ class job_offer extends class_base
 						"type" => "select",
 						"name" => "el1",
 						"caption" => "Kandideerin",
-						"value" => 1,
 						"ch_value" =>  1,
 					);		
 					
@@ -234,16 +245,19 @@ class job_offer extends class_base
 			$valdkond->delete();	
 		}
 	
-		foreach ($arr["form_data"]["tegevusvaldkond"] as $valdkond)
+		if(is_array($arr["prop"]["value"]))
 		{
-			if($valdkond)
+			foreach ($arr["prop"]["value"] as $valdkond)
 			{
-				$new_sector_conn = new connection();
-				$new_sector_conn->change(array(
-					"from" => $arr["obj_inst"]->id(),
-					"to" => $valdkond,
-					"reltype" => RELTYPE_TEGEVUSVALDKOND,
-				));
+				if($valdkond)
+				{
+					$new_sector_conn = new connection();
+					$new_sector_conn->change(array(
+						"from" => $arr["obj_inst"]->id(),
+						"to" => $valdkond,
+						"reltype" => RELTYPE_TEGEVUSVALDKOND,
+					));
+				}
 			}
 		}
 	}
@@ -252,10 +266,12 @@ class job_offer extends class_base
 	{
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
+		
+
+		
 		switch($data["name"])
         {
 			case "kandideerin" :
-			
 				//Kontrollime kas kasutjal on ehk juba mõni CV selle tööpakkumisega seostatud
 				$user_id = users::get_oid_for_uid(aw_global_get("uid"));
 				$user_obj = & obj($user_id);
@@ -290,12 +306,13 @@ class job_offer extends class_base
 					$conn_this->delete();
 				}
 				
-				if($arr["form_data"]["el1"])
+				if($arr["prop"]["value"])
 				{
 					$newconn = new connection();
-					$newconn->change(array("from" => $arr["obj_inst"]->id(), "to" => $arr["form_data"]["el1"], "reltype" => RELTYPE_CV));
+					$newconn->change(array("from" => $arr["obj_inst"]->id(), "to" => $arr["prop"]["value"], "reltype" => RELTYPE_CV));
 				}
 				
+				print_r($arr["prop"]);
 			break;
 			case "tegevusvaldkond":
 				$this->sectors_create_rels($arr);

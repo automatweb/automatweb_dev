@@ -3,9 +3,9 @@
       <property>
             <name>name</name>
             <type>textbox</type>
-            <field>name</field>
             <table>objects</table>
-            <group>general</group>
+            <field>name</field>
+            <group>info_about_job</group>
             <caption>Ametikoht</caption>
       </property>
       <property>
@@ -20,32 +20,38 @@
       <property>
             <name>toosisu</name>
             <type>textarea</type>
-            <method>serialize</method>
-            <field>meta</field>
-            <table>objects</table>
-            <group>general</group>
-            <caption>Töö sisu</caption>
+            <field>about_job</field>
+            <table>personnel_management_job</table>
+            <group>info_about_job</group>
+            <caption>Töö kirjeldus</caption>
+      </property>
+      <property>
+            <name>noudmised</name>
+            <type>textarea</type>
+            <field>requirements</field>
+            <table>personnel_management_job</table>
+            <group>info_about_job</group>
+            <caption>N&amp;otilde;udmised kandidaadile</caption>
       </property>
       <property>
             <name>asukoht</name>
             <type>relpicker</type>
             <reltype>RELTYPE_LINN</reltype>
-            <method>serialize</method>
             <automatic>1</automatic>
             <editonly>1</editonly>
-            <table>objects</table>
-            <group>general</group>
+            <method>serialize</method>
             <field>meta</field>
-            <caption>Linn</caption>
+            <table>objects</table>
+            <group>info_about_job</group>
+            <caption>Asukoht</caption>
       </property>
       <property>
-            <name>noudmised</name>
-            <type>textarea</type>
-            <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <caption>N&amp;otilde;udmised kandidaadile</caption>
+            <name>deadline</name>
+            <type>date_select</type>
+            <field>deadline</field>
+            <table>personnel_management_job</table>
+            <group>info_about_job</group>
+            <caption>Konkursi tähtaeg</caption>
       </property>
       <property>
             <name>tegevusvaldkond</name>
@@ -55,7 +61,7 @@
             <multiple>1</multiple>
             <editonly>1</editonly>
             <table>objects</table>
-            <group>general</group>
+            <group>info_about_job</group>
             <caption>Tegevusvaldkond</caption>
       </property>
       <property>
@@ -63,10 +69,10 @@
             <type>relmanager</type>
             <reltype>RELTYPE_EMAIL</reltype>
             <props>mail</props>
+            <group>info_about_job</group>
+            <field>meta</field>
             <method>serialize</method>
             <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
             <caption>Meiliaadressid</caption>
       </property>
       <property>
@@ -74,28 +80,11 @@
             <type>relmanager</type>
             <reltype>RELTYPE_PHONE</reltype>
             <props>name</props>
+            <group>info_about_job</group>
+            <field>meta</field>
             <method>serialize</method>
             <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
             <caption>Telefoninumbrid</caption>
-      </property>
-      <property>
-            <name>fail</name>
-            <type>fileupload</type>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <caption>Tööpakkumine failina</caption>
-      </property>
-      <property>
-            <name>deadline</name>
-            <type>date_select</type>
-            <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <caption>T&amp;auml;htaeg</caption>
       </property>
       <property>
             <name>candits</name>
@@ -110,10 +99,10 @@
             <name>kandideerin</name>
             <type>callback</type>
             <callback>my_candidature_get</callback>
-            <store>no</store>
+            <field>meta</field>
+            <method>serialize</method>
             <table>objects</table>
             <group>general</group>
-            <field>meta</field>
             <caption>Vali cv kandideerimiseks</caption>
       </property>
       <classinfo>
@@ -121,10 +110,24 @@
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
+            <info_about_job>
+                  <caption>Tööpakkumine</caption>
+            </info_about_job>
+            <info_about_job_file>
+                  <caption>Tööpakkumine failina</caption>
+                  <parent>info_about_job_main</parent>
+            </info_about_job_file>
             <kandideerinud>
                   <caption>Kandideerijad</caption>
             </kandideerinud>
       </groupinfo>
+      <tableinfo>
+            <personnel_management_job>
+                  <index>oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </personnel_management_job>
+      </tableinfo>
       <reltypes>
             <EMAIL>
                   <value>2</value>
@@ -149,8 +152,13 @@
             <TEGEVUSVALDKOND>
                   <value>6</value>
                   <clid>CL_META</clid>
-                  <caption>Tegevusvaldkond </caption>
+                  <caption>Tegevusvaldkond</caption>
             </TEGEVUSVALDKOND>
+            <CVFILE>
+                  <value>7</value>
+                  <clid>CL_FILE</clid>
+                  <caption>CV failina</caption>
+            </CVFILE>
       </reltypes>
 </properties>
 
