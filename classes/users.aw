@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.21 2001/08/16 10:54:46 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.22 2001/08/21 21:31:58 duke Exp $
 classload("users_user","config","form");
 
 load_vcl("table");
@@ -735,8 +735,13 @@ class users extends users_user
 	function can_add($arr)
 	{
 		global $add_state;
+		$reserved = array("system");
 
 		extract($arr);
+		if (in_array($a_uid,$reserved))
+		{
+			return false;
+		};
 		$q = "SELECT * FROM users WHERE uid = '$a_uid'";
 		$this->db_query($q);
 		$row = $this->db_next();
