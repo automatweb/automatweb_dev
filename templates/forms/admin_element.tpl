@@ -194,6 +194,16 @@ function toggle_file_link_newwin()
 </tr>
 <!-- END SUB: CONFIG_KEY -->
 
+<!-- SUB: LB_MUL_DS -->
+<tr>
+	<td class="fgtext">Andmed formist:</td>
+	<td class="fgtext"><select name="{VAR:cell_id}_lb_data_from_form">{VAR:lb_data_from_form}</select></td>
+<td class="fgtext">Andmete element:</td>
+<td class="fgtext"><select name="{VAR:cell_id}_lb_data_from_el">{VAR:lb_data_from_el}</select></td>
+</tr>
+<!-- END SUB: LB_MUL_DS -->
+
+
 <!-- SUB: LISTBOX_SORT -->
 <tr>
 <td class="fgtext">{VAR:LC_FORMS_SORTING}:</td>
