@@ -1,39 +1,63 @@
+<script type="text/javascript">
+var chk_status = 1;
+
+function selall(element)
+{
+        element = element + '[';
+        len = document.changeform.elements.length;
+        for (i=0; i < len; i++)
+        {
+                if (document.changeform.elements[i].name.indexOf(element) != -1)
+                {
+                        document.changeform.elements[i].checked = chk_status;
+                        //window.status = "" + i + " / " + len;
+                }
+        }
+        chk_status = chk_status ? 0 : 1;
+}
+</script>
 <!-- SUB: group -->
 <fieldset style="border: 1px solid #AAA; -moz-border-radius: 0.5em;">
 <legend>{VAR:grp_caption}</legend>
 	<table style="border-collapse: collapse; font-size: 11px; border-color: #CCC;" cellpadding="3px">
+	<tr>
+		<td width="50" bgcolor="{VAR:bgcolor}">Jrk</td>
+		<td width="100" bgcolor="{VAR:bgcolor}">Pealkiri</td>
+		<td width="150" bgcolor="{VAR:bgcolor}">Pealkirja asukoht</td>
+		<td width="100" bgcolor="{VAR:bgcolor}">Tüüp</td>
+		<td width="30" align="center" bgcolor="{VAR:bgcolor}"><a href="javascript:selall('mark')">Vali</a></td>
+	</tr>
 	<!-- SUB: property -->
 	<tr>
 		<td width="50" bgcolor="{VAR:bgcolor}"><input type="text" name="prop_ord[{VAR:prp_key}]" value="{VAR:prp_order}" size="2" style="border: 1px solid #EEE; padding: 2px; background-color: #FCFCEC;"></td>
-		<td width="100" bgcolor="{VAR:bgcolor}">{VAR:prp_key}</td>
 		<td width="150" bgcolor="{VAR:bgcolor}"><input type="text" name="prpnames[{VAR:prp_key}]" value="{VAR:prp_caption}" style="border: 1px solid #EEE; padding: 2px; background-color: #FCFCEC;"></td>
+		<td width="100" bgcolor="{VAR:bgcolor}">{VAR:capt_ord}</td>
 		<td width="100" bgcolor="{VAR:bgcolor}">{VAR:prp_type}</td>
 		<td width="30" align="center" bgcolor="{VAR:bgcolor}"><input type="checkbox" name="mark[{VAR:prp_key}]" value="1" style="border: 3px solid blue;"></td>
 	</tr>
+	<!-- SUB: clf1 -->
 	<tr>
-		<td width="50" bgcolor="{VAR:bgcolor}">Pealkirja asukoht:</td>
-		<td width="100" bgcolor="{VAR:bgcolor}">{VAR:capt_ord}</td>
-		<td width="150" bgcolor="{VAR:bgcolor}">
-		<!-- SUB: clf1 -->
+		<td bgcolor="{VAR:bgcolor}"'>
 		Välja tüüp:
-		<!-- END SUB: clf1 -->
 		</td>
-		<td width="100" bgcolor="{VAR:bgcolor}">
+		<td bgcolor="{VAR:bgcolor}">
 		{VAR:clf_type}
 		</td>
-		<td width="30" align="center" bgcolor="{VAR:bgcolor}">
-		<!--<input type="checkbox" name="mark[{VAR:prp_key}]" value="1" style="border: 3px solid blue;">-->
+		<td bgcolor="{VAR:bgcolor}" colspan="3">
+		Uued variandid:
+		<input type="text" name="prp_metas[{VAR:prp_key}]" style="border: 1px solid #EEE; padding: 2px; background-color: #FCFCEC; width:200px">
 		</td>
 	</tr>
-	<!-- SUB: clf3 -->
 	<tr>
-		<td width="50" bgcolor="{VAR:bgcolor}">Variandid</td>
-		<td width="100" bgcolor="{VAR:bgcolor}" colspan="4">
-		<input type="text" name="prp_metas[{VAR:prp_key}]" value="{VAR:prp_metas}" style="border: 1px solid #EEE; padding: 2px; background-color: #FCFCEC; width:350px">
-		<input type="button" name="meta_submit[{VAR:prp_key}]" value="Muuda käsitsi" onclick="window.open('{VAR:metamgr_link}', '', 'toolbar=yes,directories=yes,status=yes,location=yes,resizable=,scrollbars=,menubar=yes,height=400,width=600');">
+		<td width="50" bgcolor="{VAR:bgcolor}" colspan="4">
+		Variandid:
+		{VAR:predefs}
+		</td>
+		<td bgcolor="{VAR:bgcolor}" align="right">
+		<input type="button" name="meta_submit[{VAR:prp_key}]" value="Muuda" onclick="window.open('{VAR:metamgr_link}', '', 'toolbar=yes,directories=yes,status=yes,location=yes,resizable=,scrollbars=,menubar=yes,height=400,width=600');">
 		</td>
 	</tr>
-	<!-- END SUB: clf3 -->
+	<!-- END SUB: clf1 -->
 	<!-- END SUB: property -->
 	</table>
 	</fieldset>
