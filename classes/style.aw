@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.14 2002/10/16 13:50:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.15 2002/11/15 18:08:03 kristo Exp $
 
 define("ST_TABLE",0);
 define("ST_CELL",1);
@@ -607,6 +607,11 @@ class style extends aw_template
 		if (isset($st["width"]) && $st["width"] != "")
 		{
 			$fstyles[] = "width: ".$st["width"].";";
+		}
+
+		if (isset($st["nowrap"]) && $st["nowrap"] == 1)
+		{
+			$fstyles[] = "white-space: nowrap;";
 		}
 
 		return  join("\n",$fstyles);
