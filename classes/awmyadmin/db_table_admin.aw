@@ -110,74 +110,12 @@ class db_table_admin extends class_base
 			))
 		);
 
-		load_vcl('table');
-		$t = new aw_table(array('prefix' => 'db_table_admin'));
-		$t->parse_xml_def($this->cfg['basedir'] . '/xml/generic_table.xml');
-		$t->define_field(array('name' => 'name','caption' => 'Nimi','sortable' => 1));
-		$t->define_field(array('name' => 'type','caption' => 'T&uuml;&uuml;p','sortable' => 1));
-		$t->define_field(array('name' => 'flags','caption' => 'Attribuudid','sortable' => 1));
-		$t->define_field(array('name' => 'null','caption' => 'NULL','sortable' => 1));
-		$t->define_field(array('name' => 'default','caption' => 'Default','sortable' => 1));
-		$t->define_field(array('name' => 'change','caption' => 'Muuda'));
-		$t->define_field(array('name' => 'sel','caption' => 'Vali'));
-
-		$db = get_instance('awmyadmin/db_login');
-		$db->login_as($ob['meta']['db_base']);
-		$tbl = $db->db_get_table($ob['meta']['db_table']);
-		foreach($tbl['fields'] as $fid => $fdat)
-		{
-			$fdat['type'] .= '('.$fdat['length'].')';
-			$fdat['change'] = html::href(array(
-				'url' => $this->mk_my_orb('admin_col', array('id' => $id, 'field' => $fdat['name'])),
-				'caption' => 'Muuda'
-			));
-			$fdat['sel'] = html::checkbox(array(
-					'name' => 'sel[]',
-				'value' => $fdat['name']
-			));
-
-			$t->define_data($fdat);
-		}
-		$t->set_default_sortby('name');
-		$t->sort_by();
-
-		$tb = get_instance('toolbar');
-		$tb->add_button(array(
-			'name' => 'new',
-			'tooltip' => 'Lisa',
-			'url' => $this->mk_my_orb('admin_col', array('id' => $id)),
-			'imgover' => 'new_over.gif',
-			'img' => 'new.gif'
+		return $this->do_table_admin(array(
+			'db_base' => $ob['meta']['db_base'],
+			'db_table' => $ob['meta']['db_table'],
+			'that' => &$this,
+			'id' => $id
 		));
-		$tb->add_button(array(
-			'name' => 'delete',
-			'tooltip' => 'Kustuta',
-			'url' => 'javascript:del()',
-			'imgover' => 'delete_over.gif',
-			'img' => 'delete.gif'
-		));
-
-		$tbp = get_instance('vcl/tabpanel');
-		$tbp->add_tab(array(
-			'active' => true,
-			'caption' => 'Tulbad',
-			'link' => $this->REQUEST_URI
-		));
-		$tbp->add_tab(array(
-			'active' => false,
-			'caption' => 'Indeksid',
-			'link' => $this->mk_my_orb('admin_indexes', array('id' => $id))
-		));
-		$this->vars(array(
-			'table' => $t->draw(),
-			'reforb' => $this->mk_reforb('submit_admin', array('id' => $id, 'is_del' => '0')),
-			'toolbar' => $tb->get_toolbar(),
-		));
-		$this->vars(array(
-			'tabs' => $tbp->get_tabpanel(array('content' => $this->parse('TBC'))),
-			'TBC' => ''
-		));
-		return $this->parse();
 	}
 
 	function admin_col($arr)
@@ -450,6 +388,84 @@ class db_table_admin extends class_base
 		$index = $name;
 
 		return $this->mk_my_orb("admin_index", array("id" => $id, "index" => $index));
+	}
+
+	function do_table_admin($arr)
+	{
+		extract($arr);
+		if ($tpl)
+		{
+			$this->read_template($tpl);
+		}
+
+		load_vcl('table');
+		$t = new aw_table(array('prefix' => 'db_table_admin'));
+		$t->parse_xml_def($this->cfg['basedir'] . '/xml/generic_table.xml');
+		$t->define_field(array('name' => 'name','caption' => 'Nimi','sortable' => 1));
+		$t->define_field(array('name' => 'type','caption' => 'T&uuml;&uuml;p','sortable' => 1));
+		$t->define_field(array('name' => 'flags','caption' => 'Attribuudid','sortable' => 1));
+		$t->define_field(array('name' => 'null','caption' => 'NULL','sortable' => 1));
+		$t->define_field(array('name' => 'default','caption' => 'Default','sortable' => 1));
+		$t->define_field(array('name' => 'change','caption' => 'Muuda'));
+		$t->define_field(array('name' => 'sel','caption' => 'Vali'));
+
+		$db = get_instance('awmyadmin/db_login');
+		$db->login_as($db_base);
+		$tbl = $db->db_get_table($db_table);
+		foreach($tbl['fields'] as $fid => $fdat)
+		{
+			$fdat['type'] .= '('.$fdat['length'].')';
+			$fdat['change'] = html::href(array(
+				'url' => $that->mk_my_orb('admin_col', array('id' => $id, 'field' => $fdat['name'])),
+				'caption' => 'Muuda'
+			));
+			$fdat['sel'] = html::checkbox(array(
+					'name' => 'sel[]',
+				'value' => $fdat['name']
+			));
+
+			$t->define_data($fdat);
+		}
+		$t->set_default_sortby('name');
+		$t->sort_by();
+
+		$tb = get_instance('toolbar');
+		$tb->add_button(array(
+			'name' => 'new',
+			'tooltip' => 'Lisa',
+			'url' => $that->mk_my_orb('admin_col', array('id' => $id)),
+			'imgover' => 'new_over.gif',
+			'img' => 'new.gif'
+		));
+		$tb->add_button(array(
+			'name' => 'delete',
+			'tooltip' => 'Kustuta',
+			'url' => 'javascript:del()',
+			'imgover' => 'delete_over.gif',
+			'img' => 'delete.gif'
+		));
+
+		$tbp = get_instance('vcl/tabpanel');
+		$tbp->add_tab(array(
+			'active' => true,
+			'caption' => 'Tulbad',
+			'link' => $this->REQUEST_URI
+		));
+		$tbp->add_tab(array(
+			'active' => false,
+			'caption' => 'Indeksid',
+			'link' => $that->mk_my_orb('admin_indexes', array('id' => $id))
+		));
+		$this->vars(array(
+			'table' => $t->draw(),
+			'reforb' => $that->mk_reforb('submit_admin', array('id' => $id, 'is_del' => '0')),
+			'toolbar' => $tb->get_toolbar(),
+		));
+		$this->vars(array(
+			'tabs' => $tbp->get_tabpanel(array('content' => $this->parse('TBC'))),
+			'TBC' => ''
+		));
+		return $this->parse();
 	}
 }
 ?>

@@ -1,55 +1,58 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>name</name>
-            <type>textbox</type>
-            <field>name</field>
-            <group>general</group>
-            <table>objects</table>
-            <caption>Nimi</caption>
-      </property>
-      <property>
             <name>status</name>
             <type>status</type>
             <group>general</group>
             <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Staatus</caption>
       </property>
       <property>
             <name>server_host</name>
             <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Server</caption>
       </property>
       <property>
             <name>server_admin_user</name>
             <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Admin kasutaja</caption>
       </property>
       <property>
             <name>server_admin_pass</name>
             <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Admin parool</caption>
       </property>
       <property>
             <name>server_driver</name>
             <type>select</type>
-            <field>meta</field>
-            <method>serialize</method>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Andmebaasi driver</caption>
+      </property>
+      <property>
+            <name>test_lb</name>
+            <type>select</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Testi listbox</caption>
       </property>
 </properties>
 

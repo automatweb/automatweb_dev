@@ -294,31 +294,417 @@ class db_server_explorer extends class_base
 
 		$tbp = get_instance('vcl/tabpanel');
 
+		$arr['type'] = 'admin';
 		$tbp->add_tab(array(
-			'active' => ($type == 'admin' ? true : false),
+			'active' => (in_array($type,array('admin_col','admin')) ? true : false),
 			'caption' => 'Administreeri',
-			'link' => $this->mk_my_orb('show_table', array('id' => $id, 'type' => 'admin'))
+			'link' => $this->mk_my_orb('show_table', $arr)
 		));
 
+		$arr['type'] = 'admin_indexes';
 		$tbp->add_tab(array(
-			'active' => ($type == 'admin_indexes' ? true : false),
+			'active' => (in_array($type,array('admin_indexes','admin_index')) ? true : false),
 			'caption' => 'Administreeri indekseid',
-			'link' => $this->mk_my_orb('show_table', array('id' => $id, 'type' => 'admin_indexes'))
+			'link' => $this->mk_my_orb('show_table', $arr)
 		));
 
+		$arr['type'] = 'content';
 		$tbp->add_tab(array(
 			'active' => ($type == 'content' ? true : false),
 			'caption' => 'Sisu',
-			'link' => $this->mk_my_orb('show_table', array('id' => $id, 'type' => 'content'))
+			'link' => $this->mk_my_orb('show_table', $arr)
 		));
 
+		$arr['type'] = 'query';
 		$tbp->add_tab(array(
 			'active' => ($type == 'query' ? true : false),
 			'caption' => 'P&auml;ring',
-			'link' => $this->mk_my_orb('show_table', array('id' => $id, 'type' => 'query'))
+			'link' => $this->mk_my_orb('show_table', $arr)
+		));
+		unset($arr['type']);
+
+		$content = '';
+		switch($type)
+		{
+			case 'admin':
+				$content = $this->_sht_do_admin($arr);
+				break;
+
+			case 'admin_col':
+				$content = $this->_sht_do_admin_col($arr);
+				break;
+
+			case 'admin_indexes':
+				$content = $this->_sht_do_admin_indexes($arr);
+				break;
+
+			case 'admin_index':
+				$content = $this->_sht_do_admin_index($arr);
+				break;
+
+			case 'content':
+				$content = $this->_sht_do_content($arr);
+				break;
+
+			case 'query':
+				$content = $this->_sht_do_query($arr);
+				break;
+		}
+
+		return $tbp->get_tabpanel(array('content' => $content));
+	}
+
+	function _sht_do_admin($arr)
+	{
+		extract($arr);
+		$this->read_template('admin.tpl');
+
+		load_vcl('table');
+		$t = new aw_table(array('prefix' => 'db_table_admin'));
+		$t->parse_xml_def($this->cfg['basedir'] . '/xml/generic_table.xml');
+		$t->define_field(array('name' => 'name','caption' => 'Nimi','sortable' => 1));
+		$t->define_field(array('name' => 'type','caption' => 'T&uuml;&uuml;p','sortable' => 1));
+		$t->define_field(array('name' => 'flags','caption' => 'Attribuudid','sortable' => 1));
+		$t->define_field(array('name' => 'null','caption' => 'NULL','sortable' => 1));
+		$t->define_field(array('name' => 'default','caption' => 'Default','sortable' => 1));
+		$t->define_field(array('name' => 'change','caption' => 'Muuda'));
+		$t->define_field(array('name' => 'sel','caption' => 'Vali'));
+
+		$db = get_instance('awmyadmin/db_login');
+		$db->login_as($db_id);
+		$tbl = $db->db_get_table($table);
+		foreach($tbl['fields'] as $fid => $fdat)
+		{
+			$fdat['type'] .= '('.$fdat['length'].')';
+			$tarr = $arr;
+			$tarr['field'] = $fdat['name'];
+			$fdat['change'] = html::href(array(
+				'url' => $this->mk_my_orb('admin_col', $tarr),
+				'caption' => 'Muuda'
+			));
+			$fdat['sel'] = html::checkbox(array(
+					'name' => 'sel[]',
+				'value' => $fdat['name']
+			));
+
+			$t->define_data($fdat);
+		}
+		$t->set_default_sortby('name');
+		$t->sort_by();
+
+		$tb = get_instance('toolbar');
+		$tb->add_button(array(
+			'name' => 'new',
+			'tooltip' => 'Lisa',
+			'url' => $this->mk_my_orb('admin_col', $arr),
+			'imgover' => 'new_over.gif',
+			'img' => 'new.gif'
+		));
+		$tb->add_button(array(
+			'name' => 'delete',
+			'tooltip' => 'Kustuta',
+			'url' => 'javascript:del()',
+			'imgover' => 'delete_over.gif',
+			'img' => 'delete.gif'
 		));
 
-		return $tbp->get_tabpanel(array('content' => 'hello'));
+		$arr['is_del'] = '0';
+		$this->vars(array(
+			'table' => $t->draw(),
+			'reforb' => $this->mk_reforb('submit_admin', $arr),
+			'toolbar' => $tb->get_toolbar(),
+		));
+		return $this->parse();
+	}
+
+	function _sht_do_content($arr)
+	{
+		$dtc = get_instance('awmyadmin/db_sql_query');
+		$nr = 0;
+		return $dtc->show_query_results($arr['db_id'],'SELECT * FROM '.$arr['table'],$nr);
+	}
+
+	function _sht_do_query($arr)
+	{
+		$this->read_template('query.tpl');
+		$tarr = $arr;
+		$tarr['no_reforb'] = 1;
+		unset($tarr['sql']);
+
+		$dtc = get_instance('awmyadmin/db_sql_query');
+		$nr = 0;
+		if ($arr['sql'] != '')
+		{
+			$res = $dtc->show_query_results($arr['db_id'],$arr['sql'],$nr);
+		}
+
+		$tb = get_instance('toolbar');
+		$tb->add_button(array(
+			'name' => 'save',
+			'tooltip' => 'Salvesta',
+			'url' => 'javascript:document.add.submit()',
+			'imgover' => 'save_over.gif',
+			'img' => 'save.gif'
+		));
+
+		$this->vars(array(
+			'sql' => $arr['sql'],
+			'reforb' => $this->mk_reforb('show_table', $tarr),
+			'results' => $res,
+			'toolbar' => $tb->get_toolbar()
+		));
+
+		return $this->parse();
+	}
+
+	function _sht_do_admin_col($arr)
+	{
+		extract($arr);
+		$this->read_template('admin_col.tpl');
+
+		$db = get_instance('awmyadmin/db_login');
+		$db->login_as($db_id);
+
+		$tbl = $db->db_get_table($table);
+
+		$tb = get_instance('toolbar');
+		$tb->add_button(array(
+			'name' => 'save',
+			'tooltip' => 'Salvesta',
+			'url' => 'javascript:document.add.submit()',
+			'imgover' => 'save_over.gif',
+			'img' => 'save.gif'
+		));
+		unset($arr['type']);
+		$arr['field'] = $field;
+		$this->vars(array(
+			'name' => $field,
+			'type' => $this->picker(strtoupper($tbl['fields'][$field]['type']),$db->db_list_field_types()),
+			'length' => $tbl['fields'][$field]['length'],
+			'null' => checked($tbl['fields'][$field]['null']),
+			'default' => $tbl['fields'][$field]['default'],
+			'extra' => $this->picker(strtoupper($tbl['fields'][$field]['flags']), $db->db_list_flags()),
+			'toolbar' => $tb->get_toolbar(),
+			'reforb' => $this->mk_reforb('submit_admin_col', $arr)
+		));
+		return $this->parse();
+	}
+
+	function submit_admin_col($arr)
+	{
+		extract($arr);
+		$db = get_instance('awmyadmin/db_login');
+		$db->login_as($db_id);
+		if ($field == '')
+		{
+			// add
+			$db->db_add_col($table, array(
+				'name' => $name,
+				'type' => $type,
+				'length' => $length,
+				'null' => ($null ? 'NULL' : 'NOT NULL'),
+				'default' => $default,
+				'extra' => $extra
+			));
+			$field = $name;
+		}
+		else
+		{
+			// change
+			$db->db_change_col($table, $field, array(
+				'name' => $name,
+				'type' => $type,
+				'length' => $length,
+				'null' => ($null ? 'NULL' : 'NOT NULL'),
+				'default' => $default,
+				'extra' => $extra
+			));
+		}
+		return $this->mk_my_orb('admin_col', array(
+			'field' => $field,
+			'id' => $id,
+			'table' => $table,
+			'db_id' => $db_id,
+			'server_id' => $server_id,
+			'sql' => $sql
+		));
+	}
+
+	function submit_admin($arr)
+	{
+		extract($arr);
+
+		$db = get_instance('awmyadmin/db_login');
+		$db->login_as($db_id);
+
+		if ($is_del)
+		{
+			$sel = new aw_array($sel);
+			foreach($sel->get() as $secol)
+			{
+				$db->db_drop_col($table,$secol);
+			}
+		}
+		return $this->mk_my_orb('show_table', array(
+			'id' => $id,
+			'table' => $table,
+			'db_id' => $db_id,
+			'server_id' => $server_id,
+			'sql' => $sql
+		));
+	}
+
+	function _sht_do_admin_indexes($arr)
+	{
+		extract($arr);
+		$this->read_template('admin_indexes.tpl');
+
+		load_vcl('table');
+		$t = new aw_table(array('prefix' => 'db_table_admin'));
+		$t->parse_xml_def($this->cfg['basedir'] . '/xml/generic_table.xml');
+		$t->define_field(array('name' => 'index_name','caption' => 'Nimi','sortable' => 1));
+		$t->define_field(array('name' => 'col_name','caption' => 'Tulba nimi','sortable' => 1));
+		$t->define_field(array('name' => 'unique','caption' => 'Unikaalne','sortable' => 1));
+		$t->define_field(array('name' => 'change','caption' => 'Muuda'));
+		$t->define_field(array('name' => 'sel','caption' => 'Vali'));
+
+		$db = get_instance('awmyadmin/db_login');
+		$db->login_as($db_id);
+		$db->db_list_indexes($table);
+		while ($idx = $db->db_next_index())
+		{
+			$tar = $arr;
+			$tar['index'] = $idx['index_name'];
+			$idx['change'] = html::href(array(
+				'url' => $this->mk_my_orb('admin_index', $tar),
+				'caption' => 'Muuda'
+			));
+			$idx['sel'] = html::checkbox(array(
+				'name' => 'sel[]',
+				'value' => $idx['index_name']
+			));
+
+			$t->define_data($idx);
+		}
+		$t->set_default_sortby('index_name');
+		$t->sort_by();
+
+		$tb = get_instance('toolbar');
+		$tb->add_button(array(
+			'name' => 'new',
+			'tooltip' => 'Lisa',
+			'url' => $this->mk_my_orb('admin_index', $arr),
+			'imgover' => 'new_over.gif',
+			'img' => 'new.gif'
+		));
+		$tb->add_button(array(
+			'name' => 'delete',
+			'tooltip' => 'Kustuta',
+			'url' => 'javascript:del()',
+			'imgover' => 'delete_over.gif',
+			'img' => 'delete.gif'
+		));
+
+		$arr['is_del'] = '0';
+		$this->vars(array(
+			'table' => $t->draw(),
+			'toolbar' => $tb->get_toolbar(),
+			'reforb' => $this->mk_reforb('submit_admin_indexes', $arr)
+		));
+		return $this->parse();
+	}
+
+	function _sht_do_admin_index($arr)
+	{
+		extract($arr);
+		$this->read_template('admin_index.tpl');
+
+		$db = get_instance('awmyadmin/db_login');
+		$db->login_as($db_id);
+
+		$db->db_list_indexes($table);
+		while($idx = $db->db_next_index())
+		{
+			if ($idx['index_name'] == $index)
+			{
+				break;
+			}
+		}
+
+		$tbl = $db->db_get_table($table);
+		$fields = $this->make_keys(array_keys($tbl['fields']));
+
+		$tb = get_instance('toolbar');
+		$tb->add_button(array(
+			'name' => 'save',
+			'tooltip' => 'Salvesta',
+			'url' => 'javascript:document.add.submit()',
+			'imgover' => 'save_over.gif',
+			'img' => 'save.gif'
+		));
+		$arr['index'] = $index;
+		$this->vars(array(
+			'name' => $idx['index_name'],
+			'fields' => $this->picker($idx['col_name'], $fields),
+			'toolbar' => $tb->get_toolbar(),
+			'reforb' => $this->mk_reforb('submit_admin_index', $arr)
+		));
+		return $this->parse();
+	}
+
+	function submit_admin_indexes($arr)
+	{
+		extract($arr);
+	
+		$db = get_instance('awmyadmin/db_login');
+		$db->login_as($db_id);
+
+		if ($is_del)
+		{
+			$ar = new aw_array($sel);
+			foreach($ar->get() as $idxname)
+			{
+				$db->db_drop_index($table, $idxname);
+			}
+		}
+		return $this->mk_my_orb('admin_indexes', array(
+			'id' => $id,
+			'table' => $table,
+			'db_id' => $db_id,
+			'server_id' => $server_id,
+			'sql' => $sql
+		));
+	}
+
+	function submit_admin_index($arr)
+	{
+		extract($arr);
+
+		$ob = $this->get_object($id);
+		$db = get_instance('awmyadmin/db_login');
+		$db->login_as($db_id);
+
+		if ($index != "")
+		{
+			// change = drop && add
+			$db->db_drop_index($table, $index);
+		}
+
+		// add
+		$db->db_add_index($table, array(
+			'name' => $name,
+			'col' => $field
+		));
+		$index = $name;
+
+		return $this->mk_my_orb("admin_index", array(
+			'id' => $id,
+			'table' => $table,
+			'db_id' => $db_id,
+			'server_id' => $server_id,
+			'sql' => $sql,
+			'index' => $index
+		));
 	}
 }
 ?>

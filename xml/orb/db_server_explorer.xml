@@ -68,6 +68,76 @@
 					<required name="db_id" type="int"/>
 					<required name="server_id" type="int"/>
 					<optional name="type" default="admin"/>
+					<optional name="sql"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_admin">
+			<function name="submit_admin">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="admin_col">
+			<function name="show_table">
+				<arguments>
+					<required name="id" type="int"/>
+					<required name="table"/>
+					<required name="db_id" type="int"/>
+					<required name="server_id" type="int"/>
+					<optional name="type" default="admin_col"/>
+					<optional name="sql"/>
+					<optional name="field"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_admin_col">
+			<function name="submit_admin_col">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="admin_indexes">
+			<function name="show_table">
+				<arguments>
+					<required name="id" type="int"/>
+					<required name="table"/>
+					<required name="db_id" type="int"/>
+					<required name="server_id" type="int"/>
+					<optional name="type" default="admin_indexes"/>
+					<optional name="sql"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_admin_indexes">
+			<function name="submit_admin_indexes">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="admin_index">
+			<function name="show_table">
+				<arguments>
+					<required name="id" type="int"/>
+					<required name="table"/>
+					<required name="db_id" type="int"/>
+					<required name="server_id" type="int"/>
+					<optional name="type" default="admin_index"/>
+					<optional name="sql"/>
+					<optional name="index"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_admin_index">
+			<function name="submit_admin_index">
+				<arguments>
 				</arguments>
 			</function>
 		</action>

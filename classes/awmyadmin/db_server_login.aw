@@ -4,24 +4,26 @@
 
 	@default table=objects
 	@default group=general
-
-	@property name type=textbox field=name group=general 
-	@caption Nimi
+	@default field=meta
+	@default method=serialize
 
 	@property status type=status group=general 
 	@caption Staatus
 
-	@property server_host type=textbox field=meta method=serialize
+	@property server_host type=textbox 
 	@caption Server
 
-	@property server_admin_user type=textbox field=meta method=serialize
+	@property server_admin_user type=textbox 
 	@caption Admin kasutaja
 
-	@property server_admin_pass type=textbox field=meta method=serialize
+	@property server_admin_pass type=textbox 
 	@caption Admin parool
 
-	@property server_driver type=select field=meta method=serialize
+	@property server_driver type=select 
 	@caption Andmebaasi driver
+
+	@property test_lb type=select 
+	@caption Testi listbox
 
 */
 
@@ -75,6 +77,11 @@ class db_server_login extends class_base
 		if ($args['prop']['name'] == 'server_driver')
 		{
 			$args['prop']['options'] = $this->list_db_drivers();
+		}
+		else
+		if ($args['prop']['name'] == 'test_lb')
+		{
+			$args['prop']['options'] = array('a' => 'yx', 'b' => 'kax');
 		}
 		return PROP_OK;
 	}
