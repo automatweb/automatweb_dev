@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.39 2004/12/15 15:31:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.40 2004/12/16 14:41:35 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -286,9 +286,10 @@ class vcalendar extends aw_template
 					$caption = "";
 					break;
 
+	
 		
 				default:
-					$content = $this->draw_day();
+					$content = $this->draw_day($arr);
 					$caption = date("j. ",$this->range["timestamp"]) . locale::get_lc_month(date("m",$this->range["timestamp"])) . date(" Y",$this->range["timestamp"]);
 			};
 		};
@@ -753,9 +754,13 @@ class vcalendar extends aw_template
 		return $this->parse();
 	}
 	
-	function draw_day()
+	function draw_day($arr = array())
 	{
-		$this->read_template("day_view.tpl");
+		$ct_template = !empty($arr["container_template"]) ? $arr["container_template"] : "day_view.tpl";
+		$this->vars(array(
+			"EVENT" => "",
+		));
+		$this->read_template($ct_template);
 		$dstamp = date("Ymd",$this->range["start"]);
 		$events_for_day = "";
 		if (is_array($this->items[$dstamp]))
@@ -775,7 +780,8 @@ class vcalendar extends aw_template
 			"daynum" => date("j",$this->range["start"]),
 			"dayname" => date("F d, Y",$this->range["start"]),
 			"long_day_name" => locale::get_lc_weekday($this->range["wd"]),
-			"date" => locale::get_lc_date($this->range["start"],5),
+                       	"date" => locale::get_lc_date($this->range["start"],5),
+			"caption" => $arr["caption"],
 			"lc_weekday" => locale::get_lc_weekday(date("w",$this->range["start"])),
 		));
 		return $this->parse();
@@ -851,6 +857,7 @@ class vcalendar extends aw_template
 	{
 		//$this->read_template("mini2.tpl");
 		$rv = "";
+
 
 		// the idea here is that drawing of month always starts from
 		// the first day of the week in which the month starts and ends
