@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.16 2002/12/03 12:52:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.17 2002/12/08 14:28:16 duke Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -96,6 +96,7 @@ class form_element extends aw_template
 
 	function form_element()
 	{
+		$this->init("");
 		$this->lc_load("form_element","lc_form_element");
 	
 		// we need that for wysiwyg "textareas"
