@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.24 2003/03/18 13:44:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.25 2003/03/28 17:28:44 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -52,7 +52,10 @@ class htmlclient extends aw_template
 			$this->mod_property(&$args);
 		};
 
-		if ($args["type"] == "hidden")
+		$type = isset($args["type"]) ? $args["type"] : "";
+
+		// hidden elements end up in the orb_vars
+		if ($type == "hidden")
 		{
 			$this->orb_vars[$args["name"]] = $args["value"];
 		}
@@ -62,11 +65,11 @@ class htmlclient extends aw_template
 			$this->put_content($args);
 		}
 		else
-		if ($args["type"])
+		if ($type)
 		{
 			$this->put_line($args);
 		}
-		elseif ($args["caption"])
+		elseif (isset($args["caption"]))
 		{
 			$this->put_header($args);
 		}
@@ -83,24 +86,28 @@ class htmlclient extends aw_template
 
 		// of course this should be here, where the hell else do you
 		// want it to be?
+		if (empty($args["type"]))
+		{
+			return false;
+		};
 		$val = "";
 		if ($args["type"] == "status")
 		{
-			if (!$args["value"])
+			if (empty($args["value"]))
 			{
 				// default to deactive
-				$args["value"] = 1;
+				$args["value"] = STAT_NOTACTIVE;
 			};
 			$val .= html::radiobutton(array(
 						"name" => $args["name"],
-						"value" => 2,
-						"checked" => ($args["value"] == 2),
+						"value" => STAT_ACTIVE,
+						"checked" => ($args["value"] == STAT_ACTIVE),
 						"caption" => "Aktiivne",
 			));
 			$val .= html::radiobutton(array(
 						"name" => $args["name"],
-						"value" => 1,
-						"checked" => ($args["value"] == 1),
+						"value" => STAT_NOTACTIVE,
+						"checked" => ($args["value"] == STAT_NOTACTIVE),
 						"caption" => "Deaktiivne",
 			));
 			
@@ -109,11 +116,13 @@ class htmlclient extends aw_template
 		
 		if ($args["type"] == "s_status")
 		{
-			if (!$args["value"])
+			if (empty($args["value"]))
 			{
 				// default to deactive
-				$args["value"] = 1;
+				$args["value"] = STAT_NOTACTIVE;
 			};
+			// hm, do we need STAT_ANY? or should I just fix the search
+			// do not use dumb value like 3 -- duke
 			$val .= html::radiobutton(array(
 						"name" => $args["name"],
 						"value" => 3,
@@ -122,14 +131,14 @@ class htmlclient extends aw_template
 			));
 			$val .= html::radiobutton(array(
 						"name" => $args["name"],
-						"value" => 2,
-						"checked" => ($args["value"] == 2),
+						"value" => STAT_ACTIVE,
+						"checked" => ($args["value"] == STAT_ACTIVE),
 						"caption" => "Aktiivne",
 			));
 			$val .= html::radiobutton(array(
 						"name" => $args["name"],
-						"value" => 1,
-						"checked" => ($args["value"] == 1),
+						"value" => STAT_NOTACTIVE,
+						"checked" => ($args["value"] == STAT_NOTACTIVE),
 						"caption" => "Deaktiivne",
 			));
 			
@@ -219,7 +228,7 @@ class htmlclient extends aw_template
 	function finish_output($args = array())
 	{
 		extract($args);
-		if ($submit !== "no")
+		if (empty($submit) || $submit !== "no")
 		{
 			$this->res .= "<tr>\n\t<td class='chformleftcol' align='center'>&nbsp;</td>\n";
 			$this->res .= "\t<td class='chformrightcol'>";
