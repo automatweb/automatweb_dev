@@ -474,9 +474,13 @@ class user extends class_base
 		$groups = $this->users->getgroupsforuser($uid);
 	
 		$t =& $this->_start_gm_table();		
-
 		foreach($gl as $gid => $gd)
 		{
+			if (is_oid($gd["oid"]) && $this->can("view", $gd["oid"]))
+			{
+				$tmp = obj($gd["oid"]);
+				$gd["name"] = $tmp->name();
+			}
 			if ($gd["type"] == GRP_DYNAMIC)
 			{
 				$gd["type"] = "D&uuml;naamiline";
