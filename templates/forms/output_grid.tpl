@@ -1,17 +1,23 @@
-<form action=reforb.{VAR:ext} method=post>
+<form action="reforb.{VAR:ext}" method="post">
 <input class='small_sub' type='submit' NAME='save' VALUE='{VAR:LC_FORMS_SAVE}!'>&nbsp;&nbsp;&nbsp;
+<a href='{VAR:change}'>{VAR:LC_FORMS_OUTPUT_SETTINGS}</a> | 
 <!-- SUB: PREVIEW -->
 <a href='{VAR:preview}'>{VAR:LC_FORMS_PREVIEW}</a> | 
 <!-- END SUB: PREVIEW -->
-<a href='{VAR:translate}'>{VAR:LC_FORMS_TRANSALTE}</a>
+
+<!-- SUB: ALIASMGR -->
+<a href='{VAR:aliasmgr}'>{VAR:LC_FORMS_ALIASMGR}</a> | 
+<!-- END SUB: ALIASMGR -->
+
+<a href='{VAR:translate}'>{VAR:LC_FORMS_TRANSLATE}</a>
 
 <table border=0>
 <tr>
-<td bgcolor=#d0d0d0>
-<table border=0 bgcolor=#f0f0f0>
+<td bgcolor="#d0d0d0">
+<table border=0 bgcolor="#f0f0f0">
 <tr>
 <!-- SUB: DC -->
-<td bgcolor=#ffffff align=left valign=bottom>
+<td bgcolor="#ffffff" align=left valign=bottom>
 <table width=100% border=0>
 <tr>
 <!-- SUB: FIRST_C -->
