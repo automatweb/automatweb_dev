@@ -41,6 +41,21 @@
 				</arguments>
 			</function>
 		</action>
+		
+		<action name="archive">
+			<function name="show_archive">
+				<arguments>
+					<optional name="oid"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_archive">
+			<function name="submit_archive">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 
 	</class>
 </orb>
