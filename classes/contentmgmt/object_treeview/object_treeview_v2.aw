@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.67 2005/03/23 11:45:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.68 2005/03/24 10:04:06 ahti Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -1226,7 +1226,7 @@ class object_treeview_v2 extends class_base
 			));
 
 
-			$ot = get_instance("admin/object_type");
+			$ot = get_instance(CL_OBJECT_TYPE);
 			foreach($types as $c_o)
 			{
 				$tb->add_menu_item(array(

@@ -1110,7 +1110,7 @@ class grid_editor extends class_base
 	{
 		$this->_init_table($data);
 
-		$stc = get_instance("style");
+		$stc = get_instance(CL_STYLE);
 		$this->_init_show_styles();
 
 		if ($this->arr["table_style"])
@@ -1166,7 +1166,7 @@ class grid_editor extends class_base
 		}
 		$table.=$rs."</table>";
 
-		$d = get_instance("document");
+		$d = get_instance(CL_DOCUMENT);
 		$d->create_relative_links($table);
 
 		$al = get_instance("aliasmgr");
@@ -1319,7 +1319,7 @@ class grid_editor extends class_base
 			$this->parse("LINE");
 		}
 
-		$st = get_instance("style");
+		$st = get_instance(CL_STYLE);
 		if ($this->arr["table_style"])
 		{
 			$tbst = "class=\"".$st->get_style_name($this->arr["table_style"])."\"";
@@ -1458,7 +1458,7 @@ class grid_editor extends class_base
 
 	function _init_show_styles()
 	{
-		$this->style_inst = get_instance("style");
+		$this->style_inst = get_instance(CL_STYLE);
 		$this->frow_style = 0;
 		$this->fcol_style = 0; 
 		$this->num_fcols = 0; 

@@ -925,7 +925,7 @@ class form_controller extends form_base
 						if ($ar_n[$fid][$elid] != 1)
 						{
 							// this was removed, load the form and remove controller
-							$f = get_instance("formgen/form");
+							$f = get_instance(CL_FORM);
 							$f->load($fid);
 							$f->remove_controller_from_element(array(
 								"controller" => $id,

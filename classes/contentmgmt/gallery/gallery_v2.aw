@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.56 2005/03/23 11:45:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.57 2005/03/24 10:04:06 ahti Exp $
 
 /*
 
@@ -187,7 +187,7 @@ class gallery_v2 extends class_base
 
 	function _get_conf_for_folder($pt)
 	{
-		$i = get_instance("image");
+		$i = get_instance(CL_IMAGE);
 		return $i->_get_conf_for_folder($pt);
 	}
 
@@ -216,7 +216,7 @@ class gallery_v2 extends class_base
 		if (!$page_data && ($def_layout = $this->_get_default_layout($obj)))
 		{
 			// this the first time this page is edited, so get the default layout for it
-			$l = get_instance("layout");
+			$l = get_instance(CL_LAYOUT);
 			$page_data = $l->get_layout($def_layout);
 		}
 		
@@ -279,7 +279,7 @@ class gallery_v2 extends class_base
 			if (!$page_data && ($def_layout = $this->_get_default_layout($arr["obj_inst"])))
 			{
 				// this the first time this page is edited, so get the default layout for it
-				$l = get_instance("layout");
+				$l = get_instance(CL_LAYOUT);
 				$page_data = $l->get_layout($def_layout);
 			}
 
@@ -393,10 +393,10 @@ class gallery_v2 extends class_base
 				sort($files);
 			}
 
-			$img = get_instance("image");
+			$img = get_instance(CL_IMAGE);
 			$img_folder = $this->_get_image_folder($ob);
 
-			$conf = get_instance("contentmgmt/gallery/gallery_conf");
+			$conf = get_instance(CL_GALLERY_CONF);
 			$conf_id = $this->_get_conf_for_folder($ob->parent());
 			$conf_o = obj($conf_id);
 
@@ -445,7 +445,7 @@ class gallery_v2 extends class_base
 
 				$fc = $_t->get(IMAGE_JPEG);
 				
-				$img_inst = get_instance("image");
+				$img_inst = get_instance(CL_IMAGE);
 				$idata = $img_inst->add_image(array(
 					"str" => $fc, 
 					"orig_name" => $file,
@@ -539,7 +539,7 @@ class gallery_v2 extends class_base
 
 	function _add_page(&$meta, $ob)
 	{
-		$l = get_instance("layout");
+		$l = get_instance(CL_LAYOUT);
 		$page_data = $l->get_layout($this->_get_default_layout($ob));
 
 		$ob->set_meta("num_pages", $meta['num_pages']+1);
@@ -561,7 +561,7 @@ class gallery_v2 extends class_base
 			if (!$meta['page_data'][$_page]['layout'])
 			{
 				// insert default layout
-				$l = get_instance("layout");
+				$l = get_instance(CL_LAYOUT);
 				$meta['page_data'][$_page]['layout'] = $l->get_layout($this->_get_default_layout($ob));
 			}
 
@@ -645,7 +645,7 @@ class gallery_v2 extends class_base
 
 		if (trim($_FILES[$img_n]["type"]) == "application/pdf" || ($old["img"]["is_file"] == 1 && $_FILES[$img_n]["tmp_file"] == ""))
 		{
-			$f = get_instance("file");
+			$f = get_instance(CL_FILE);
 			$this->_page_content[$row][$col]["img"] = $f->add_upload_image(
 				$img_n, 
 				$imgfolder,
@@ -656,7 +656,7 @@ class gallery_v2 extends class_base
 		else
 		if ($_FILES[$img_n]["tmp_name"] != "")
 		{
-			$f = get_instance("image");
+			$f = get_instance(CL_IMAGE);
 			$this->_page_content[$row][$col]["img"] = $f->add_upload_image(
 				$img_n, 
 				$imgfolder,
@@ -667,7 +667,7 @@ class gallery_v2 extends class_base
 
 		$img_n = "g_".$page."_".$row."_".$col."_tn";
 
-		$f = get_instance("image");
+		$f = get_instance(CL_IMAGE);
 		$this->_page_content[$row][$col]["tn"] = $f->add_upload_image(
 			$img_n, 
 			$imgfolder,
@@ -703,7 +703,7 @@ class gallery_v2 extends class_base
 			$parent = $obj["parent"];
 		}
 		// get it from conf
-		$cf = get_instance("contentmgmt/gallery/gallery_conf");
+		$cf = get_instance(CL_GALLERY_CONF);
 		return $cf->get_image_folder($this->_get_conf_for_folder($parent));
 	}
 
@@ -827,7 +827,7 @@ class gallery_v2 extends class_base
 			unset($robj);
 		};
 		
-		$this->rating = get_instance("contentmgmt/rate/rate");
+		$this->rating = get_instance(CL_RATE);
 
 		if ($robj)
 		{
@@ -1001,7 +1001,7 @@ class gallery_v2 extends class_base
 
 		if ($pd["img"]["is_file"])
 		{
-			$fi = get_instance("file");
+			$fi = get_instance(CL_FILE);
 			$link = $fi->get_url($pd["img"]["id"],"sisu.pdf");
 		}
 		else
@@ -1026,7 +1026,7 @@ class gallery_v2 extends class_base
 
 		if ($pd["img"]["is_file"])
 		{
-			$fi = get_instance("file");
+			$fi = get_instance(CL_FILE);
 			$link = $fi->get_url($pd["img"]["id"],"sisu.pdf");
 		}
 		else
@@ -1094,7 +1094,7 @@ class gallery_v2 extends class_base
 	{
 		$ret = array();
 
-		$cf = get_instance("contentmgmt/gallery/gallery_conf");
+		$cf = get_instance(CL_GALLERY_CONF);
 		$ros = new aw_array($cf->get_rate_objects($this->_get_conf_for_folder($obj->parent())));
 
 		$this->db_query("SELECT oid,name FROM objects WHERE oid IN(".$ros->to_sql().")");
@@ -1172,7 +1172,7 @@ class gallery_v2 extends class_base
 		$rsi = "";
 		if (count($this->_get_rate_objs($ob)) > 0)
 		{
-			$sc = get_instance("contentmgmt/rate/rate_scale");
+			$sc = get_instance(CL_RATE_SCALE);
 			$scale = $sc->get_scale_for_obj(($pd['img']['id'] ? $pd['img']['id'] : $pd['tn']['id']));
 			foreach($scale as $sci_val => $sci_name)
 			{
@@ -1192,7 +1192,7 @@ class gallery_v2 extends class_base
 
 		$email_link = $this->mk_my_orb("send", array("id" => $id, "page" => $page, "row" => $row, "col" => $col), "", false, true);
 
-		$r = get_instance("contentmgmt/rate/rate");
+		$r = get_instance(CL_RATE);
 		$this->vars(array(
 			"avg_rating" => $r->get_rating_for_object($pd['img']['id'] ? $pd['img']['id'] : $pd['tn']['id'], RATING_AVERAGE),
 			"print_link" => "javascript:window.print()",
@@ -1439,7 +1439,7 @@ class gallery_v2 extends class_base
 			return $img;
 		}
 
-		$iinst = get_instance("image");
+		$iinst = get_instance(CL_IMAGE);
 		$_img = $iinst->get_image_by_id($conf_o->meta($p."logo_img"));
 
 		$l_img = get_instance("core/converters/image_convert");
@@ -1643,7 +1643,7 @@ class gallery_v2 extends class_base
 		{
 			$parent = $obj->parent();
 		}
-		$conf = get_instance("contentmgmt/gallery/gallery_conf");
+		$conf = get_instance(CL_GALLERY_CONF);
 		return $conf->get_default_layout($this->_get_conf_for_folder($parent));
 	}
 
@@ -1735,7 +1735,7 @@ class gallery_v2 extends class_base
 		};
 		$glv = obj($tgt);
 
-		$this->img = get_instance("image");
+		$this->img = get_instance(CL_IMAGE);
 		$c_oid = $glv->id();
 		$retval = "";
 		if (empty($c_oid))

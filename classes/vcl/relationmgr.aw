@@ -125,7 +125,7 @@ class relationmgr extends aw_template
 	{
 		$pr = array();
 		$this->reltype = $arr["request"]["s"]["reltype"] ? $arr["request"]["s"]["reltype"] : $arr["request"]["reltype"];
-		$search = get_instance("search");
+		$search = get_instance(CL_SEARCH);
 		$arr = array_merge($arr, $arr["request"]);
 		$arr["clid"] = get_instance("aliasmgr");
 		$this->search = &$search;

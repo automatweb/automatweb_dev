@@ -390,7 +390,7 @@ class export extends aw_template
 			// check if the file already exists
 			$oid = $this->db_fetch_field("SELECT oid FROM objects WHERE parent = $aw_zip_folder AND status != 0 AND lang_id = ".aw_global_get("lang_id")." AND class_id = ".CL_FILE." AND name = '$aw_zip_fname'", "oid");
 
-			$f = get_instance("file");
+			$f = get_instance(CL_FILE);
 
 			if ($oid)
 			{
@@ -2145,7 +2145,7 @@ class export extends aw_template
 		$urls = explode("\n", $urls);
 		foreach($urls as $url)
 		{
-			$exp = get_instance("export/export");
+			$exp = get_instance(CL_EXPORT_RULE);
 			$exp->init_settings();
 			$url = trim($url);
 			if ($url != "")

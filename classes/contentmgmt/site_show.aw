@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.124 2005/03/23 11:45:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.125 2005/03/24 10:06:29 ahti Exp $
 
 /*
 
@@ -34,8 +34,8 @@ class site_show extends class_base
 	{
 		$this->init("automatweb/menuedit");
 		$this->cache = get_instance("cache");
-		$this->image = get_instance("image");
-		$this->doc = get_instance("document");
+		$this->image = get_instance(CL_IMAGE);
+		$this->doc = get_instance(CL_DOCUMENT);
 	}
 
 	////
@@ -374,7 +374,7 @@ class site_show extends class_base
 
 	function do_show_layout($lid)
 	{
-		$li = get_instance("layout");
+		$li = get_instance(CL_LAYOUT);
 		return $li->show(array(
 			"id" => $lid
 		));
@@ -589,7 +589,7 @@ class site_show extends class_base
 
 			if ($obj->meta("all_pers"))
 			{
-				$period_instance = get_instance("period");
+				$period_instance = get_instance(CL_PERIOD);
 				$periods = $this->make_keys(array_keys($period_instance->period_list(false)));
 			}
 			else
@@ -745,7 +745,7 @@ class site_show extends class_base
 		else
 		{
 			$activeperiod = aw_global_get("act_per_id");
-			$d = get_instance("document");
+			$d = get_instance(CL_DOCUMENT);
 			$d->set_period($activeperiod);
 			$d->list_docs($this->section_obj->id(), $activeperiod,2);
 	
@@ -771,7 +771,7 @@ class site_show extends class_base
 	{
 		global $awt;
 		$awt->start("int-show-doc");
-		$d = get_instance("document");
+		$d = get_instance(CL_DOCUMENT);
 		$d->set_opt("parent", $this->sel_section);
 		$ct = "";
 
@@ -1149,7 +1149,7 @@ class site_show extends class_base
 			if ($ref->prop("show_object_tree"))
 			{
 				$show_obj_tree = true;
-				$ot_inst = get_instance("contentmgmt/object_treeview");
+				$ot_inst = get_instance(CL_OBJECT_TREEVIEW);
 				$ot_id = $ref->prop("show_object_tree");
 			}
 
@@ -1695,7 +1695,7 @@ class site_show extends class_base
 				if ($has_tpl)
 				{
 					$awt->start("after-mainc-promo");
-					$inst = get_instance("contentmgmt/promo");
+					$inst = get_instance(CL_PROMO);
 					$inst->on_get_subtemplate_content(array(
 						"inst" => &$this,
 					));
@@ -2163,7 +2163,7 @@ class site_show extends class_base
 		// also in document::do_search and search_conf::search
 		if (aw_global_get("rewrite_links"))
 		{
-			$exp = get_instance("export/export");
+			$exp = get_instance(CL_EXPORT_RULE);
 			if (!$exp->is_external($link))
 			{
 				$_link = $link;

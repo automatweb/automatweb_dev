@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/pank/transaction.aw,v 1.4 2004/10/08 01:32:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/pank/transaction.aw,v 1.5 2005/03/24 10:04:07 ahti Exp $
 // transaction.aw - Ülekanne 
 /*
 
@@ -371,7 +371,7 @@ class transaction extends class_base
 		{
 			$to_parent = new object($arr['to']->parent());
 		
-			$pank = get_instance('pank/pank');
+			$pank = get_instance(CL_PANK);
 			$tax_to_account = $pank->get_tax_account_for_obj(&$to_parent);
 			
 			$conns = $to_parent->connections_from(array(

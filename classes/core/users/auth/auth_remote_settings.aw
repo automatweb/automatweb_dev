@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_remote_settings.aw,v 1.4 2005/03/23 10:31:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_remote_settings.aw,v 1.5 2005/03/24 10:02:24 ahti Exp $
 // auth_remote_settings.aw - Automaatne sissep&auml;&auml;s 
 /*
 
@@ -146,7 +146,7 @@ class auth_remote_settings extends class_base
 		
 		$dat = $arr["obj_inst"]->meta("dat");
 
-		$sl = get_instance("install/site_list");
+		$sl = get_instance(CL_INSTALL_SITE_LIST);
 		$list = $sl->get_local_list();
 		foreach($list as $id => $row)
 		{
@@ -186,7 +186,7 @@ class auth_remote_settings extends class_base
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_sel_users_t($t);
-		$sl = get_instance("install/site_list");
+		$sl = get_instance(CL_INSTALL_SITE_LIST);
 
 		$site2user = $arr["obj_inst"]->meta("site2user");
 
@@ -263,7 +263,7 @@ class auth_remote_settings extends class_base
 	**/
 	function autologin($arr)
 	{
-		$sl = get_instance("install/site_list");
+		$sl = get_instance(CL_INSTALL_SITE_LIST);
 		$srv = $sl->get_url_for_site($arr["remote_site"]);
 
 		// check remote hash

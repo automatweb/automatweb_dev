@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.22 2004/12/07 13:47:26 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.23 2005/03/24 10:04:06 ahti Exp $
 /*
 
 @classinfo syslog_type=ST_RATE relationmgr=yes
@@ -327,7 +327,7 @@ class rate extends class_base
 				break;
 		}
 
-		$this->img = get_instance("image");
+		$this->img = get_instance(CL_IMAGE);
 
 		$cnt = 1;
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.59 2005/03/23 11:45:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.60 2005/03/24 10:06:29 ahti Exp $
 // promo.aw - promokastid.
 
 /*
@@ -501,7 +501,7 @@ class promo extends class_base
 		}
 
 		$content = "";
-		$doc = get_instance("document");
+		$doc = get_instance(CL_DOCUMENT);
 
 		$parms = array(
 			"leadonly" => 1,
@@ -556,7 +556,7 @@ class promo extends class_base
 		$image_id = $ob->prop("image");
 		if ($image_id)
 		{
-			$i = get_instance("image");
+			$i = get_instance(CL_IMAGE);
 			$image_url = $i->get_url_by_id($image_id);
 			$image = $i->make_img_tag($image_url);
 		}
@@ -621,7 +621,7 @@ class promo extends class_base
 	{
 		$inst =& $arr["inst"];
 
-		$doc = get_instance("document");
+		$doc = get_instance(CL_DOCUMENT);
 		# reset period, or we don't see contents of promo boxes under periodic menus:
 		$doc->set_period(0);
 
@@ -829,7 +829,7 @@ class promo extends class_base
 				$image_url = "";
 				if ($o->prop("image"))
 				{
-					$i = get_instance("image");
+					$i = get_instance(CL_IMAGE);
 					$image_url = $i->get_url_by_id($o->prop("image"));
 					$image = $i->make_img_tag($image_url);
 				}

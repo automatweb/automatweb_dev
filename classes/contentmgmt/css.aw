@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/css.aw,v 1.7 2005/03/18 15:37:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/css.aw,v 1.8 2005/03/24 10:06:29 ahti Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 /*
 
@@ -470,7 +470,7 @@ class css extends class_base
 
 			case "pre":
 				$this->read_template("preview.tpl");
-				$st = get_instance("style");
+				$st = get_instance(CL_STYLE);
 				$this->vars(array(
 					"clname" => $st->get_style_name($arr["obj_inst"]->id())
 				));

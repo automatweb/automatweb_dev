@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.28 2005/03/23 11:45:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.29 2005/03/24 10:04:06 ahti Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -332,7 +332,7 @@ class otv_ds_obj extends class_base
 	{
 		$ret = array();
 
-		$ot = get_instance("admin/object_type");
+		$ot = get_instance(CL_OBJECT_TYPE);
 
 		$clids = array();
 		$cttt = $ob->connections_from(array("type" => "RELTYPE_SHOW_TYPE"));
@@ -362,7 +362,7 @@ class otv_ds_obj extends class_base
 	{
 		$ret = array();
 
-		$ot = get_instance("admin/object_type");
+		$ot = get_instance(CL_OBJECT_TYPE);
 
 		$clids = array();
 		$cttt = $ob->connections_from(array("type" => "RELTYPE_SHOW_TYPE"));
@@ -565,7 +565,7 @@ class otv_ds_obj extends class_base
 			else
 			if ($t->class_id() == CL_FILE)
 			{
-				$fi = get_instance("file");
+				$fi = get_instance(CL_FILE);
 				$url = $fi->get_url($t->id(),$t->name());
 
 				if ($fd["newwindow"])

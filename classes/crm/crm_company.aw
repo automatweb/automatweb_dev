@@ -1813,7 +1813,7 @@ class crm_company extends class_base
 			$section = '';
 			foreach($pdat['sections_arr'] as $key=>$value)
 			{
-				$crm_section = get_instance('crm/crm_section');
+				$crm_section = get_instance(CL_CRM_SECTION);
 				$sections_professions[$key] = $crm_section->get_professions($key);
 				$tmp_arr = array_intersect(array_keys($pdat['ranks_arr']),array_keys($pdat['ranks_arr']));
 				$tmp_arr2 = array();
@@ -2486,7 +2486,7 @@ class crm_company extends class_base
 			};
 		};
 		
-		$ui = get_instance("core/users/user");
+		$ui = get_instance(CL_USER);
 		$my_org_id = $ui->get_current_company();
 		$toolbar->add_menu_item(array(
 			"parent" => "calendar_sub",
@@ -3816,7 +3816,7 @@ class crm_company extends class_base
 		$ol = new object_list($search_params);
 
 		$pl = get_instance(CL_PLANNER);
-		$person = get_instance("crm/crm_person");
+		$person = get_instance(CL_CRM_PERSON);
 		$cal_id = $pl->get_calendar_for_user(array('uid'=>aw_global_get('uid')));
 
 		for($o=$ol->begin();!$ol->end();$o=$ol->next())
@@ -3877,9 +3877,11 @@ class crm_company extends class_base
 		);
 	}
 
+	
 	/**
 		@attrib name=save_search_results
 	**/
+	/*
 	function save_search_results($arr)
 	{
 		foreach($arr['check'] as $key=>$value)
@@ -3921,6 +3923,7 @@ class crm_company extends class_base
 			$arr['class']
 		);
 	}
+	*/
 
 	//goes through all the relations and builds a set of id into $data
 	function get_customers_for_company($obj, $data, $category=false)
@@ -4320,7 +4323,7 @@ class crm_company extends class_base
 		}
 		else
 		{
-			$person_class = get_instance('crm/crm_person');
+			$person_class = get_instance(CL_CRM_PERSON);
 			$work_contact = $person_class->get_work_contacts(array(
 				'obj_inst' => &$person,
 			));
@@ -4749,7 +4752,7 @@ class crm_company extends class_base
 	{
 		if ($arr["cfgform"])
 		{
-			$cfg = get_instance("cfg/cfgform"); 
+			$cfg = get_instance(CL_CFGFORM); 
 			$props = $cfg->get_props_from_cfgform(array("id" => $arr["cfgform"]));
 		}
 		else

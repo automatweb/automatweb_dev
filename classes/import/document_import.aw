@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/document_import.aw,v 1.5 2005/03/23 10:31:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/document_import.aw,v 1.6 2005/03/24 10:04:06 ahti Exp $
 // document_import.aw - Dokumentide import 
 /*
 
@@ -219,7 +219,7 @@ class document_import extends class_base
 
 	function _save_imported_data($docs, $obj)
 	{
-		$per = get_instance("period");
+		$per = get_instance(CL_PERIOD);
 		if ($obj->prop("d_period"))
 		{
 			$perid = $per->get_id_for_oid($obj->prop("d_period"));

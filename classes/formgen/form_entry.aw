@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry.aw,v 1.8 2004/06/28 19:50:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry.aw,v 1.9 2005/03/24 10:01:38 ahti Exp $
 
 // basically this is an interface class :)
 // it provides a form_entry manipulating interface to menueditor via orb. 
@@ -43,7 +43,7 @@ class form_entry extends aw_template
 		$o = obj($id);
 		$this->mk_path($o->parent(), LC_FORM_ENTRY_CHANGE_ENTRY);
 
-		$f = get_instance("formgen/form");
+		$f = get_instance(CL_FORM);
 		return $f->gen_preview(array("id" => $fid, "entry_id" => $id));
 	}
 
@@ -165,7 +165,7 @@ class form_entry extends aw_template
 	function on_delete_hook($eid)
 	{
 		// mark the deleted column in the form table
-		$f = get_instance("formgen/form");
+		$f = get_instance(CL_FORM);
 		$fid = $f->get_form_for_entry($eid);
 		if ($fid)
 		{

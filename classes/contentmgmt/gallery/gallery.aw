@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery.aw,v 1.7 2004/06/28 19:50:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery.aw,v 1.8 2005/03/24 10:04:06 ahti Exp $
 
 class gallery extends aw_template
 {
@@ -383,7 +383,7 @@ class gallery extends aw_template
 		{
 			for ($col = 0; $col < $this->arr[$page]["cols"]; $col++)
 			{
-				$t = get_instance("image");
+				$t = get_instance(CL_IMAGE);
 				$ar = $t->add_upload_image("tn_".$row."_".$col, $this->id, $this->arr[$page]["content"][$row][$col]["tn_id"]);
 				if (isset($ar["sz"]))
 				{

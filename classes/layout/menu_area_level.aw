@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/layout/Attic/menu_area_level.aw,v 1.9 2005/02/09 16:28:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/layout/Attic/menu_area_level.aw,v 1.10 2005/03/24 10:04:07 ahti Exp $
 /*
 
 @classinfo syslog_type=ST_MENU_AREA_LEVEL relationmgr=yes
@@ -89,7 +89,7 @@ class menu_area_level extends class_base
 		$sg = get_instance("layout/active_page_data");
 		$path = $sg->get_active_path();
 
-		$ma = get_instance("layout/menu_area");
+		$ma = get_instance(CL_MENU_AREA);
 		$rootmenu = $ma->get_root_menu($this->ob->meta("menu_area"));
 
 		if ($this->ob->meta('has_sub_menus'))
@@ -102,7 +102,7 @@ class menu_area_level extends class_base
 
 		if ($this->ob->meta('pre_image'))
 		{
-			$im = get_instance("image");
+			$im = get_instance(CL_IMAGE);
 			$imd = $im->get_image_by_id($this->ob->meta('pre_image'));
 			$imstr = image::make_img_tag(image::check_url($imd["url"]));
 		}
@@ -147,7 +147,7 @@ class menu_area_level extends class_base
 				if ($this->ob->meta('has_sub_menus') && $next_level_id)
 				{
 					// find next level menus and draw them
-					$nl = get_instance("layout/menu_area_level");
+					$nl = get_instance(CL_MENU_AREA_LEVEL);
 					$names[] = $nl->show(array(
 						"id" => $next_level_id,
 						"force_show" => true,

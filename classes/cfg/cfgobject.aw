@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/cfgobject.aw,v 1.11 2004/06/25 20:19:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/cfgobject.aw,v 1.12 2005/03/24 10:06:29 ahti Exp $
 // cfgobject.aw - configuration objects
 // adds, changes and in general handles configuration objects
 
@@ -114,7 +114,6 @@ class cfgobject extends aw_template
 		$c = "";
 		if ($cfgformid)
 		{
-			$html = get_instance("html");
 			$cp = get_class_picker(array("index" => "file"));
 			$cfgform = obj($cfgformid);
 			$cfgproperties = new aw_array($cfgform->meta("properties"));
@@ -143,7 +142,7 @@ class cfgobject extends aw_template
 					$checked = $tmp[$clid][$pkey];
 					if ($type == "checkbox")
 					{
-						$el = $html->checkbox(array(
+						$el = html::checkbox(array(
 							"name"  => $name, 
 							"value" => 1,
 							"checked" => $checked,
@@ -151,7 +150,7 @@ class cfgobject extends aw_template
 					}
 					elseif ($type == "select")
 					{
-						$el = $html->select(array(
+						$el = html::select(array(
 							"name" => $name,
 							"selected" => $tmp[$clid][$pkey],
 							"options" => $props[$pkey]["options"],
@@ -160,7 +159,7 @@ class cfgobject extends aw_template
 					}
 					elseif ($type == "time_select")
 					{
-						$el = $html->time_select(array(
+						$el = html::time_select(array(
 							"name" => $name,
 							"value" => $tmp[$clid][$pkey],
 						));
@@ -168,7 +167,7 @@ class cfgobject extends aw_template
 					}
 					else
 					{
-						$el = $html->text(array(
+						$el = html::text(array(
 							"name"  => $name,
 							"size" => $props[$pkey]["size"],
 							"value" => $tmp[$clid][$pkey],
@@ -388,7 +387,7 @@ class cfgobject extends aw_template
 		extract($args);
 		$obj = obj($id);
 
-		$search = get_instance("search");
+		$search = get_instance(CL_SEARCH);
 		$args["clid"] = CL_CFGOBJECT;
 		$form = $search->show($args);
 

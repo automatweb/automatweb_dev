@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.23 2005/03/14 17:27:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.24 2005/03/24 10:02:24 ahti Exp $
 // crm_call.aw - phone call
 /*
 
@@ -122,7 +122,7 @@ class crm_call extends class_base
 		switch($data['name'])
 		{
 			case 'info_on_object':
-				$crm_person = get_instance('crm/crm_person');
+				$crm_person = get_instance(CL_CRM_PERSON);
 				if(is_object($arr['obj_inst']) && is_oid($arr['obj_inst']->id()))
 				{
 					$conns = $arr['obj_inst']->connections_to(array(
@@ -252,7 +252,7 @@ class crm_call extends class_base
 		{
 			//
 			$arr['obj_inst']->save();
-			$user = get_instance('core/users/user');
+			$user = get_instance(CL_USER);
 			$person = new object($user->get_current_person());
 			$person->connect(array(
 				'reltype' => 'RELTYPE_PERSON_CALL',

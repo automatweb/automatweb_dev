@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.20 2005/03/02 13:11:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.21 2005/03/24 10:06:29 ahti Exp $
 
 class site_cache extends aw_template
 {
@@ -180,7 +180,7 @@ class site_cache extends aw_template
 		};
 		if (strpos($res,"[document_statistics") !== false)
 		{
-			$ds = get_instance('contentmgmt/document_statistics');
+			$ds = get_instance(CL_DOCUMENT_STATISTICS);
 			$res = preg_replace("/\[document_statistics(\d+)\]/e", "\$ds->show(array('id' => \\1))", $res);
 		};
 

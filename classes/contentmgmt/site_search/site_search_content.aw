@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.44 2005/03/22 16:20:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.45 2005/03/24 10:04:06 ahti Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -1300,7 +1300,7 @@ class site_search_content extends class_base
 			static $sl;
 			if (!is_object($sl))
 			{
-				$sl = get_instance("install/site_list");
+				$sl = get_instance(CL_INSTALL_SITE_LIST);
 			}
 			return $sl->get_url_for_site($row["site_id"])."/".$row["docid"];
 		}

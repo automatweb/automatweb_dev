@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/pank/pank.aw,v 1.7 2005/03/18 13:43:30 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/pank/pank.aw,v 1.8 2005/03/24 10:04:07 ahti Exp $
 // crm_pank.aw - Pank 
 /*
 @classinfo syslog_type=ST_PANK relationmgr=yes
@@ -611,7 +611,7 @@ class pank extends class_base
 		));
 		obj_set_opt('no_cache',0);
 	
-		$trans = get_instance('pank/transaction');
+		$trans = get_instance(CL_TRANSACTION);
 
 		$accounts = $ol->arr();
 		

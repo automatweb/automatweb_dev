@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/pank/account.aw,v 1.5 2004/10/08 01:32:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/pank/account.aw,v 1.6 2005/03/24 10:04:07 ahti Exp $
 // account.aw - Konto 
 /*
 @tableinfo pank_account index=oid master_table=objects master_index=oid
@@ -237,7 +237,7 @@ class account extends class_base
 
 		$transactions = $ol->arr();
 
-		$trans = get_instance('pank/transaction');
+		$trans = get_instance(CL_TRANSACTION);
 		
 		foreach($transactions as $transaction)
 		{
@@ -313,7 +313,7 @@ class account extends class_base
 		{
 			$account = new object($account);
 		}
-		$pank = get_instance('pank/pank');
+		$pank = get_instance(CL_PANK);
 		if($account->prop('account_type')==TAX_ACCOUNT)
 		{
 			return $pank->get_account_for_obj($account->parent());

@@ -132,7 +132,7 @@ class group extends class_base
 				break;
 
 			case "data":
-				$f = get_instance("formgen/form");
+				$f = get_instance(CL_FORM);
 				$prop['value'] = $f->gen_preview(array(
 					"id" => $arr["obj_inst"]->prop("search_form"),
 					"entry_id" => $prop['value'], 
@@ -214,7 +214,7 @@ class group extends class_base
 			$gid = $this->users->get_gid_for_oid($arr["request"]["group_id"]);
 			$pg = $this->users->fetchgroup($gid);
 		
-			$f = get_instance("formgen/form");
+			$f = get_instance(CL_FORM);
 			$f->process_entry(array(
 				"id" => $pg["search_form"], 
 				"entry_id" => $arr["entry_id"]
@@ -235,7 +235,7 @@ class group extends class_base
 				return PROP_OK;
 			}
 
-			$us = get_instance("core/users/user");
+			$us = get_instance(CL_USERS);
 			echo t("Impordin kasutajaid ... <br />");
 			$first = true;
 			$f = fopen($imp,"r");

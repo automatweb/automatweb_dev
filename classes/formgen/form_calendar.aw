@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.31 2004/06/09 21:01:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.32 2005/03/24 10:01:38 ahti Exp $
 // form_calendar.aw - manages formgen controlled calendars
 classload("formgen/form_base");
 class form_calendar extends form_base
@@ -679,7 +679,7 @@ class form_calendar extends form_base
 		$row = $this->db_next();
 		if ($row["class_id"] == CL_FORM_CHAIN)
 		{
-			$fch = get_instance("formgen/form_chain");
+			$fch = get_instance(CL_FORM_CHAIN);
 			$fch->load_chain($row["cal_id"]);
 			$cal_controller = (int)$fch->chain["cal_controller"];
 		}
@@ -803,7 +803,7 @@ class form_calendar extends form_base
 		$has_vacancies = true;
 		$has_errors = false;
 		$this->fatal = true;
-		$fch = get_instance("formgen/form_chain");
+		$fch = get_instance(CL_FORM_CHAIN);
 		/*
 		print "<pre>";
 		print_r($args["post_vars"]);
@@ -1316,7 +1316,7 @@ class form_calendar extends form_base
 			};
 		};
 
-		$ft = get_instance("formgen/form_table");
+		$ft = get_instance(CL_FORM_TABLE);
 		$tables = $tables + $ft->get_form_tables_for_form($form_id);
 
 		if ($item["end"] > 0)

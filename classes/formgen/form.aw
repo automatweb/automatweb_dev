@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.115 2005/03/20 16:46:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.116 2005/03/24 10:01:38 ahti Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -50,9 +50,9 @@ class form extends form_base
 
 		if (!$this->controller_instance)
 		{
-			$this->controller_instance = get_instance("formgen/form_controller");
+			$this->controller_instance = get_instance(CL_FORM_CONTROLLER);
 		}
-		$this->style_instance = get_instance("style");
+		$this->style_instance = get_instance(CL_STYLE);
 	}
 
 	////
@@ -487,7 +487,7 @@ class form extends form_base
 		extract($arr);
 		$this->if_init($id, "all_elements.tpl", LC_FORM_ALL_ELEMENTS);
 
-		$style = get_instance("style");
+		$style = get_instance(CL_STYLE);
 		$stylesel = $style->get_select(0,ST_CELL,true);
 		$css = get_instance(CL_CSS);
 		$tmp = $css->get_select();
@@ -1148,7 +1148,7 @@ class form extends form_base
 		extract($arr);
 		$this->if_init($id,"settings.tpl", LC_FORM_CHANGE_SETTINGS);
 
-		$t = get_instance("style");
+		$t = get_instance(CL_STYLE);
 		$menulist = $this->get_menu_list();
 		$ops = $this->get_op_list($id);
 
@@ -1488,7 +1488,7 @@ class form extends form_base
 				{
 					$lf_fid = $this->get_form_for_entry($load_entry_data);
 				}
-				$lf_fm = get_instance("formgen/form");
+				$lf_fm = get_instance(CL_FORM);
 				$lf_fm->load($lf_fid);
 				$lf_fm->load_entry($load_entry_data);
 				$lf_els = $lf_fm->get_all_els();
@@ -1636,7 +1636,7 @@ class form extends form_base
 		$tblstring = "";
 		if ($this->arr["tablestyle"])
 		{
-			$st = get_instance("style");
+			$st = get_instance(CL_STYLE);
 			$tblstring = $st->get_table_string($this->arr["tablestyle"]);
 		}
 
@@ -2321,7 +2321,7 @@ class form extends form_base
 			$this->read_template("show_user.tpl");
 		}
 	
-		$t_style = get_instance("style");
+		$t_style = get_instance(CL_STYLE);
 		// kui on tabeli stiil m22ratud v2ljundile, siis kasutame seda, kui pole, siis vaatame kas sellele formile on 
 		// m22ratud default stiil ja kui on, siis kasutame seda
 		$fcol_style = 0;
@@ -2983,7 +2983,7 @@ class form extends form_base
 
 		$this->req_check_stf_relations_map[$fid] = $fid;
 
-		$f = get_instance("formgen/form");
+		$f = get_instance(CL_FORM);
 		$f->load($fid);
 
 		$rels = $f->get_element_by_type("listbox","relation",true);
@@ -3050,8 +3050,8 @@ class form extends form_base
 			}
 		}
 
-		$show_form = get_instance("formgen/form");	// if showing results as outputs, this will be used
-		$form_table = get_instance("formgen/form_table"); // if showing results as a form_table, this will be used
+		$show_form = get_instance(CL_FORM);	// if showing results as outputs, this will be used
+		$form_table = get_instance(CL_FORM_TABLE); // if showing results as a form_table, this will be used
 
 		$used_els = array();
 		$group_els = array();
@@ -3109,7 +3109,7 @@ class form extends form_base
 
 		if ($this->arr["search_chain"])
 		{
-			$fc = get_instance("formgen/form_chain");
+			$fc = get_instance(CL_FORM_CHAIN);
 			$chain = $fc->load_chain($this->arr["search_chain"]);
 			// check whether the chain and the form both use a calendar
 			$has_calendar = $chain["flags"] & OBJ_HAS_CALENDAR;
@@ -3808,7 +3808,7 @@ class form extends form_base
 				$this->raise_error(ERR_FG_NOTABLE,"No table selected for showing data!",true);
 			}
 
-			$ft = get_instance("formgen/form_table");
+			$ft = get_instance(CL_FORM_TABLE);
 			// This stuff is here for the numeric element type. -->
 			/*
 			$els = array();
@@ -4086,7 +4086,7 @@ class form extends form_base
 			if ($this->form_search_only)
 			{
 				$fid = $this->search_form;
-				$t = get_instance("formgen/form");
+				$t = get_instance(CL_FORM);
 				reset($matches);
 				while (list(,$eid) = each($matches))
 				{
@@ -4097,7 +4097,7 @@ class form extends form_base
 			else
 			{
 				$fid = $this->search_form;
-				$t = get_instance("formgen/form");
+				$t = get_instance(CL_FORM);
 				// need on chain entry id'd
 				$mtstr = join(",",$matches);
 				if ($mtstr != "")
@@ -4290,7 +4290,7 @@ class form extends form_base
 	// !Clones "this" form from another
 	function _clone_from($base,$id)
 	{
-		$bf = get_instance("formgen/form");
+		$bf = get_instance(CL_FORM);
 		$bf->load($base);
 
 		$this->arr = $bf->arr;
@@ -5169,7 +5169,7 @@ class form extends form_base
 			{
 			$this->save_handle();
 
-			$form = get_instance("formgen/form");
+			$form = get_instance(CL_FORM);
 			$form->load($frow["oid"]);
 
 			echo "form ",$frow["oid"],"<br />\n";
@@ -5962,7 +5962,7 @@ class form extends form_base
 		{
 			echo "form $row[oid] \n<br />";
 			flush();
-			$f = get_instance("formgen/form");
+			$f = get_instance(CL_FORM);
 			$f->load($row["oid"]);
 			$f->save();
 		}
@@ -5972,7 +5972,7 @@ class form extends form_base
 		{
 			echo "form_op $row[oid] \n<br />";
 			flush();
-			$f = get_instance("formgen/form_output");
+			$f = get_instance(CL_FORM_OUTPUT);
 			$f->load_output($row["oid"]);
 			$f->save_output($row["oid"]);
 		}
@@ -6668,7 +6668,7 @@ class form extends form_base
 
 		if ($this->subtype & FSUBTYPE_EV_ENTRY)
 		{
-			$ft = get_instance("formgen/form_table");
+			$ft = get_instance(CL_FORM_TABLE);
 			$tables = $ft->get_form_tables_for_form($id);
 
 			$q = "SELECT *,objects.name AS name FROM calendar2forms
@@ -6936,7 +6936,7 @@ class form extends form_base
 
 		if ($this->arr["sql_writer"] && $this->arr["sql_writer_form"])
 		{
-			$tf = get_instance("formgen/form");
+			$tf = get_instance(CL_FORM);
 			$search_res .= "<br />".$tf->gen_preview(array(
 				"id" => $this->arr["sql_writer_form"],
 				"tpl" => "show_noform.tpl",
@@ -7010,7 +7010,7 @@ class form extends form_base
 		global $HTTP_POST_VARS;
 //		echo "post vars = <pre>", var_dump($HTTP_POST_VARS),"</pre> <br />";
 		// process the writer form entry
-		$wrf = get_instance("formgen/form");
+		$wrf = get_instance(CL_FORM);
 		$wrf->process_entry(array(
 			"id" => $this->arr["sql_writer_form"],
 		));
@@ -7020,11 +7020,11 @@ class form extends form_base
 		// load the form whose entries we will change
 //		echo "load to write form ",$wrf->arr["sql_writer_writer_form"]," <br />";
 
-		$wrf = get_instance("formgen/form");
+		$wrf = get_instance(CL_FORM);
 		$wrf->load($this->arr["sql_writer_form"]);
 		$wrf->load_entry($writer_entry_id);
 
-		$wrf->ef = get_instance("formgen/form");
+		$wrf->ef = get_instance(CL_FORM);
 		$wrf->ef->load($wrf->arr["sql_writer_writer_form"]);
 
 		// now we must load all selected entries
@@ -7502,7 +7502,7 @@ class form extends form_base
 		$this->db_query("SELECT oid FROM objects WHERE class_id = ".CL_FORM." AND status != 0");
 		while ($row = $this->db_next())
 		{
-			$f = get_instance("formgen/form");
+			$f = get_instance(CL_FORM);
 			$f->load($row["oid"]);
 			if ($f->arr["is_translatable"])
 			{
@@ -7543,7 +7543,7 @@ class form extends form_base
 		foreach($ar->get() as $eid)
 		{
 			$prefix = "sr_".$eid."_";
-			$f = get_instance("formgen/form");
+			$f = get_instance(CL_FORM);
 			$f->process_entry(array(
 				"id" => $sr_fid,
 				"entry_id" => $eid,

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.83 2005/03/20 16:48:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.84 2005/03/24 10:01:38 ahti Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -1276,7 +1276,7 @@ class form_element extends aw_template
 			$var=$base."_js_flopper_value";
 			$this->arr["js_flopper_value"] = $$var;
 
-			$img = get_instance("image");
+			$img = get_instance(CL_IMAGE);
 			$var=$base."_up_button_img";
 			$this->arr["up_button_img"] = $img->add_upload_image($var, $this->id, $this->arr["up_button_img"]["id"]);
 			$var=$base."_down_button_img";
@@ -1431,7 +1431,7 @@ class form_element extends aw_template
 			$this->arr["button_js_next_form_in_chain"] = $$var;
 
 			$var = $base."_button_img";
-			$im = get_instance("image");
+			$im = get_instance(CL_IMAGE);
 			$_tmp = $im->add_upload_image($var,$this->id);
 			if ($_tmp)
 			{
@@ -1837,7 +1837,7 @@ class form_element extends aw_template
 		$this->db_query("SELECT * FROM element2form WHERE el_id = ".$id);
 		while ($drow = $this->db_next())
 		{
-			$fup = get_instance("formgen/form");
+			$fup = get_instance(CL_FORM);
 			$fup->load($drow["form_id"]);
 			for ($row = 0;$row < $fup->arr["rows"]; $row++)
 			{
@@ -1870,7 +1870,7 @@ class form_element extends aw_template
 		$this->db_query("SELECT * FROM element2form WHERE el_id = ".$this->id);
 		while ($drow = $this->db_next())
 		{
-			$fup = get_instance("formgen/form");
+			$fup = get_instance(CL_FORM);
 			$fup->load($drow["form_id"]);
 			for ($row = 0;$row < $fup->arr["rows"]; $row++)
 			{
@@ -2541,7 +2541,7 @@ class form_element extends aw_template
 						$butt = $this->arr["lang_button_text"][$lang_id];
 					}
 
-					get_instance("image");
+					get_instance(CL_IMAGE);
 
 					if ($this->arr["button_img"]["use"] == 1)
 					{
@@ -2925,7 +2925,7 @@ class form_element extends aw_template
 		{
 			// gotcha, siis handletakse piltide uploadi
 			$var = $prefix.$this->id;
-			$img = get_instance("file");
+			$img = get_instance(CL_FILE);
 			$var = $img->add_upload_image($var,$this->form->entry_parent,$this->entry["id"]);
 		}
 		else
@@ -3263,7 +3263,7 @@ class form_element extends aw_template
 				if ($GLOBALS["del_image"] == $this->id && $this->form->entry_id)
 				{
 					unset($GLOBALS["del_image"]);
-					$fi = get_instance("formgen/form");
+					$fi = get_instance(CL_FORM);
 					$fi->load($this->form->id);
 					$fi->load_entry($this->form->entry_id);
 					$fi->set_element_value($this->id, false, false);

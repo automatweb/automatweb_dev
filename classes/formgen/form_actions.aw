@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.39 2005/03/20 16:46:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.40 2005/03/24 10:01:38 ahti Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -244,7 +244,7 @@ class form_actions extends form_base
 		{
 			$meta = aw_unserialize($row["metadata"]);
 
-			$f = get_instance("formgen/form");
+			$f = get_instance(CL_FORM);
 			$f->load($id);
 			$bts = $f->get_all_elements(array(
 				"typematch" => "button"
@@ -459,7 +459,7 @@ class form_actions extends form_base
 		$this->read_template("action_join_list.tpl");
 		$data = unserialize($row["data"]);
 
-		$finst = get_instance("formgen/form");
+		$finst = get_instance(CL_FORM);
 		$finst->load($id);
 
 		// make checkboxes
@@ -477,7 +477,7 @@ class form_actions extends form_base
 			$txt[$el->get_id()] = $el->get_el_name() == "" ? $el->get_text() == "" ? $el->get_type() : $el->get_text() : $el->get_el_name();
 		}
 
-		$li = get_instance("lists");
+		$li = get_instance(CL_MAILINGLIST);
 		$this->vars(array(
 			"checkbox"	=> $this->option_list($data["checkbox"],$chk),
 			"list"			=> $this->option_list($data["list"],$li->get_op_list()),
@@ -565,7 +565,7 @@ class form_actions extends form_base
 			$ca = new aw_array($meta["controllers"]);
 			foreach($ca->get() as $ctr)
 			{
-				$fc = get_instance("formgen/form_controller");
+				$fc = get_instance(CL_FORM_CONTROLLER);
 				if (!$fc->eval_controller($ctr, $form->entry, $form))
 				{
 					$show = false;
@@ -669,7 +669,7 @@ class form_actions extends form_base
 			return;
 		};
 
-		$f = get_instance("formgen/form");
+		$f = get_instance(CL_FORM);
 
 		if ($data["output"] > 0)
 		{
@@ -798,7 +798,7 @@ class form_actions extends form_base
 				}
 			}
 		}
-		$f = get_instance("formgen/form");
+		$f = get_instance(CL_FORM);
 		if ($data['op_id'] && ($data['link_caption'] != '' || $data["send_html_mail"]))
 		{
 			$msg_html = $f->show(array(
@@ -1051,7 +1051,7 @@ class form_actions extends form_base
 
 	function do_after_submit_controller_action(&$form, $data, $entry_id)
 	{
-		$cinst = get_instance("formgen/form_controller");
+		$cinst = get_instance(CL_FORM_CONTROLLER);
 		$cinst->eval_controller($data["controller"],$entry_id,$form,false);
 	}
 

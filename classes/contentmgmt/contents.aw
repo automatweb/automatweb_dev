@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/contents.aw,v 1.3 2004/06/28 19:53:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/contents.aw,v 1.4 2005/03/24 10:06:29 ahti Exp $
 // contents.aw - Saidi sisukord
 /*
 
@@ -26,8 +26,8 @@ class contents extends class_base
 		));
 
 		$this->mned = get_instance("contentmgmt/site_show");
-		$this->doc = get_instance("document");
-		$this->per = get_instance("period");
+		$this->doc = get_instance(CL_DOCUMENT);
+		$this->per = get_instance(CL_PERIOD);
 	}
 
 	/**  
@@ -147,7 +147,7 @@ class contents extends class_base
 
 		if (!empty($act_per["data"]["image"]))
 		{
-			$img = get_instance("image");
+			$img = get_instance(CL_IMAGE);
 			$dat = $img->get_image_by_id($act_per["data"]["image"]);
 			$imgurl = $dat["url"];
 		}

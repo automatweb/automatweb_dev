@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.45 2005/03/23 11:45:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.46 2005/03/24 10:06:29 ahti Exp $
 
 /*
 
@@ -195,7 +195,7 @@ class object_treeview extends class_base
 			else
 			if ($od->class_id() == CL_FILE)
 			{
-				$fi = get_instance("file");
+				$fi = get_instance(CL_FILE);
 				$fd = $fi->get_file_by_id($oid);
 				$url = $fi->get_url($oid,$fd["name"]);
 				if ($fd["newwindow"])
@@ -218,7 +218,7 @@ class object_treeview extends class_base
 			else
 			if ($od->class_id() == CL_SERVER_FOLDER)
 			{
-				$sf = get_instance("contentmgmt/server_folder");
+				$sf = get_instance(CL_SERVER_FOLDER);
 				$fl = $sf->get_contents($od);
 				$section = aw_global_get("section");
 
@@ -397,7 +397,7 @@ class object_treeview extends class_base
 				list($_oid, $_fn) = explode(":", $oid);
 				if (is_oid($_oid) && $_fn != "")
 				{
-					$sf = get_instance("contentmgmt/server_folder");
+					$sf = get_instance(CL_SERVER_FOLDER);
 					$sf->del_file($oid);
 				}
 				else
@@ -883,7 +883,7 @@ class object_treeview extends class_base
 		}
 		else
 		{
-			$ot = get_instance("admin/object_type");
+			$ot = get_instance(CL_OBJECT_TYPE);
 			foreach($types_c as $c)
 			{
 				$c_o = $c->to();

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.76 2005/03/20 16:46:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.77 2005/03/24 10:01:38 ahti Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -33,9 +33,9 @@ class form_table extends form_base
 		$this->lang_id = aw_global_get("lang_id");
 		$this->buttons = array("save" => "Salvesta", "add" => "Lisa", "delete" => "Kustuta", "move" => "Liiguta");
 		$this->ru = aw_global_get("REQUEST_URI");
-		$this->image = get_instance("image");
+		$this->image = get_instance(CL_IMAGE);
 		$this->uid = aw_global_get("uid");
-		$this->controller_instance = get_instance("formgen/form_controller");
+		$this->controller_instance = get_instance(CL_FORM_CONTROLLER);
 	}
 
 	////
@@ -963,7 +963,7 @@ class form_table extends form_base
 					}
 				}
 			}
-			$form = get_instance("formgen/form");
+			$form = get_instance(CL_FORM);
 			// here we must find the value for the element($this->table["show_second_table_search_val_el"]) that was on the row
 			// we clicked on
 			// we do that like this - we add the entry_id and form_id of the row to the search url
@@ -1089,7 +1089,7 @@ class form_table extends form_base
 
 		if ($this->table["table_style"])
 		{
-			$s = get_instance("style");
+			$s = get_instance(CL_STYLE);
 			$xml.=$s->get_table_string($this->table["table_style"]);
 		}
 		
@@ -1191,7 +1191,7 @@ class form_table extends form_base
 				}
 				if (is_array($cc["styles"]))
 				{
-					$st = get_instance("style");
+					$st = get_instance(CL_STYLE);
 					foreach($cc["styles"] as $k => $v)
 					{
 						if ($v)
@@ -1237,7 +1237,7 @@ class form_table extends form_base
 		{
 			$this->load_table($id);
 		}
-		$this->s = get_instance("style");
+		$this->s = get_instance(CL_STYLE);
 		$op = "<style type=\"text/css\">\n";
 
 		if ($this->table["header_normal"])
@@ -1633,7 +1633,7 @@ class form_table extends form_base
 		}
 		usort($this->table["rgrps"], create_function('$a,$b','if ($a["ord"] > $b["ord"]) return 1; if ($a["ord"] < $b["ord"]) return -1; return 0;'));
 
-		$im = get_instance("image");
+		$im = get_instance(CL_IMAGE);
 		if (is_array($this->table["buttons"]))
 		{
 			foreach($this->table["buttons"] as $bt_id => $bt_dat)
@@ -1969,7 +1969,7 @@ class form_table extends form_base
 			"reforb" => $this->mk_reforb("new_submit_cols", array("id" => $id))
 		));
 
-		$style_inst = get_instance("style");
+		$style_inst = get_instance(CL_STYLE);
 
 		for ($col = 0; $col < $this->table["cols"]; $col++)
 		{
@@ -2335,7 +2335,7 @@ class form_table extends form_base
 		$this->mk_path($this->table_parent, "Muuda formi tabelit");
 		$this->do_menu();
 
-		$s = get_instance("style");
+		$s = get_instance(CL_STYLE);
 		$css = $s->get_select(0,ST_CELL, true);
 
 		$this->vars(array(
@@ -3065,7 +3065,7 @@ class form_table extends form_base
 		{
 			$this->raise_error(ERR_FG_TBL_NOSEARCHTBL, "Can't show output alias in form table, no matching form or entry set - outputs can only be shown if doing a search from a previous table", true, false, 0, ($GLOBALS["tbl_sk"] != "" ? true : false));
 		}
-		$finst = get_instance("formgen/form");
+		$finst = get_instance(CL_FORM);
 		return $finst->show(array(
 			"id" => $GLOBALS["match_form"],
 			"entry_id" => $GLOBALS["match_entry"],
@@ -3279,7 +3279,7 @@ class form_table extends form_base
 
 		if ($has_edit)
 		{
-			$f = get_instance("formgen/form");
+			$f = get_instance(CL_FORM);
 			$awa = new aw_array($shown_entries);
 			foreach($awa->get() as $form_id => $ents)
 			{
@@ -3432,7 +3432,7 @@ class form_table extends form_base
 		$form_id = $defs["el_forms"][$elid];
 		if (!is_object($this->edit_el_forms[$form_id]))
 		{
-			$this->edit_el_forms[$form_id] = get_instance("formgen/form");
+			$this->edit_el_forms[$form_id] = get_instance(CL_FORM);
 			$this->edit_el_forms[$form_id]->load($form_id);
 		}
 
@@ -3449,7 +3449,7 @@ class form_table extends form_base
 
 	function rewrite_table_style_classes()
 	{
-		$st = get_instance("style");
+		$st = get_instance(CL_STYLE);
 		$css = array();
 
 		if ($this->table["header_normal"])

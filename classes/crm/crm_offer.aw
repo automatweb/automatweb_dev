@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.28 2005/03/23 11:45:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.29 2005/03/24 10:02:24 ahti Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -120,7 +120,7 @@ class crm_offer extends class_base
 		$this->init(array(
 			"clid" => CL_CRM_OFFER
 		));
-		$this->u_i = get_instance("core/users/user");
+		$this->u_i = get_instance(CL_USER);
 		$this->statuses =  array(
 			t("Koostamisel"), 
 			t("Saadetud"), 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.1 2005/03/20 15:38:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.2 2005/03/24 10:02:23 ahti Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -508,7 +508,7 @@ class orb extends aw_template
 		extract($args);
 		if ((!aw_global_get("uid")) && (!isset($this->orb_defs[$class][$action]["nologin"])))
 		{
-			$auth = get_instance("core/users/auth/auth_config");
+			$auth = get_instance(CL_AUTH_CONFIG);
 			print $auth->show_login();
 			// dat sucks
 			exit;
@@ -982,7 +982,7 @@ class orb extends aw_template
 		};
 		if ($id == "doc")
 		{
-			$cl = get_instance("document");
+			$cl = get_instance(CL_DOCUMENT);
 			if ($cl->get_opt("cnt_documents") == 1)
 			{
 				$meth["values"]["id"] = $cl->get_opt("shown_document");
@@ -1025,7 +1025,7 @@ class orb extends aw_template
 
 	function check_class_access($class)
 	{
-		$atc = get_instance("admin/add_tree_conf");
+		$atc = get_instance(CL_ADD_TREE_CONF);
 		$conf = $atc->get_current_conf();
 		if (!$conf)
 		{

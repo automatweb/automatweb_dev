@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_alias.aw,v 1.8 2004/06/28 19:50:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_alias.aw,v 1.9 2005/03/24 10:01:38 ahti Exp $
 
 classload("formgen/form");
 class form_alias extends form_base
@@ -58,7 +58,7 @@ class form_alias extends form_base
 		if ($form_submit)
 		{
 			global $HTTP_GET_VARS;
-			$f = get_instance("formgen/form");
+			$f = get_instance(CL_FORM);
 			$f->process_entry(array(
 				"id" => $sf,
 				"entry_id" => $entry_id,
@@ -70,7 +70,7 @@ class form_alias extends form_base
 
 		if ($sf)
 		{
-			$f = get_instance("formgen/form");
+			$f = get_instance(CL_FORM);
 			$form = $f->gen_preview(array(
 				"id" => $sf,
 				"reforb" => $this->mk_reforb("new_entry_alias",array("no_reforb" => true,"parent" => $parent, "return_url" => $return_url,"sf" => $sf,"entry_id" => $entry_id,"form_submit" => true,"alias_to" => $alias_to,"id" => $id),"form_alias"),
@@ -192,7 +192,7 @@ class form_alias extends form_base
 		extract($args);
 		$alias_data = unserialize($alias["data"]);
 
-		$fo = get_instance("formgen/form");
+		$fo = get_instance(CL_FORM);
 
 		aw_global_set("fg_cur_processing_alias_data", array(
 			"id" => $alias_data["form_id"],

@@ -234,7 +234,7 @@ class form_stat_table extends form_base
 		$this->col_data = array();
 
 		// get the data so we can determine how many columns the table will have
-		$f = get_instance("formgen/form");
+		$f = get_instance(CL_FORM);
 		for ($col=0; $col < $this->s_table["meta"]["num_cols"]; $col++)
 		{
 			$this->col_data[$col] = $f->get_entries_for_element(array(

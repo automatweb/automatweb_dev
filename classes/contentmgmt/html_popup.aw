@@ -1,6 +1,6 @@
 <?php
 // html_popup.aw - a class to deal with javascript popups
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/html_popup.aw,v 1.7 2005/03/23 11:45:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/html_popup.aw,v 1.8 2005/03/24 10:06:29 ahti Exp $
 
 /*
 	@classinfo relationmgr=yes syslog_type=ST_HTML_POPUP
@@ -187,7 +187,7 @@ class html_popup extends class_base
 			$show_obj = new object($o->prop("show_obj"));
 			if (CL_DOCUMENT == $show_obj->class_id())
 			{
-				$t = get_instance("document");
+				$t = get_instance(CL_DOCUMENT);
 				$content = $t->gen_preview(array(
 					"docid" => $show_obj->id(),
 					"tpl_auto" => 1,

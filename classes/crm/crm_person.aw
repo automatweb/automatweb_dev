@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.77 2005/03/18 13:33:59 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.78 2005/03/24 10:02:24 ahti Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -1071,7 +1071,7 @@ class crm_person extends class_base
 
 		if ($row['picture'])
 		{
-			$img = get_instance('image');
+			$img = get_instance(CL_IMAGE);
 
 			$im = $img->get_image_by_id($row['picture']);
 //			$row['PILT'] = $img->view(array('id' => $row['picture'], 'height' => '65'));
@@ -2005,7 +2005,7 @@ class crm_person extends class_base
 	**/
 	function edit_my_person_obj($arr)
 	{
-		$u_i = get_instance("core/users/user");
+		$u_i = get_instance(CL_USER);
 		return $this->mk_my_orb("change", array(
 			"id" => $u_i->get_current_person()), CL_CRM_PERSON);
 	}

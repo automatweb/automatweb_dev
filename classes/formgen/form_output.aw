@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.18 2005/03/20 16:46:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.19 2005/03/24 10:01:38 ahti Exp $
 classload("formgen/form_base");
 class form_output extends form_base 
 {
@@ -11,9 +11,9 @@ class form_output extends form_base
 
 		if (!$this->controller_instance)
 		{
-			$this->controller_instance = get_instance("formgen/form_controller");
+			$this->controller_instance = get_instance(CL_FORM_CONTROLLER);
 		}
-		$this->style_instance = get_instance("style");
+		$this->style_instance = get_instance(CL_STYLE);
 	}
 
 	/** Kuvab vormi, kust saab valida väljundi tüüpide vahel 
@@ -299,7 +299,7 @@ class form_output extends form_base
 		$this->read_template("add_output.tpl");
 		$this->mk_path($parent,LC_FORM_OUTPUT_ADD_OUT_STYLE);
 
-		$st = get_instance("style");
+		$st = get_instance(CL_STYLE);
 
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("add_html_step2", array("parent" => $parent,"reforb" => 0)),
@@ -329,7 +329,7 @@ class form_output extends form_base
 		$this->read_template("add_output.tpl");
 		$this->mk_path($parent,LC_FORM_OUTPUT_ADD_OUT_STYLE);
 
-		$st = get_instance("style");
+		$st = get_instance(CL_STYLE);
 
 		$els = array();
 
@@ -351,7 +351,7 @@ class form_output extends form_base
 				$a2.=$this->parse("ADD_2_LINE");
 				$bof[$bf] = $bf;
 
-				$f = get_instance("formgen/form");
+				$f = get_instance(CL_FORM);
 				$f->load($bf);
 				$els+=$f->get_all_elements();
 			}
@@ -418,7 +418,7 @@ class form_output extends form_base
 				// if the user selected a form to base this op on, make it look like the form.
 				$ord = (is_array($ord)) ? $ord : array();
 				asort($ord);
-				$f = get_instance("formgen/form");
+				$f = get_instance(CL_FORM);
 				$this->output= array();
 				foreach($ord as $bfid => $or)
 				{
@@ -504,7 +504,7 @@ class form_output extends form_base
 		$this->read_template("add_output.tpl");
 		$this->mk_path($this->parent, LC_FORM_OUTPUT_CHANGE_OUT_STYLE);
 
-		$st = get_instance("style");
+		$st = get_instance(CL_STYLE);
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
 			"name" => $this->name,
@@ -561,7 +561,7 @@ class form_output extends form_base
 		// $this->debug_map_print();
 
 		// put all styles in this form in an array so they will be faster to use
-		$style = get_instance("style");
+		$style = get_instance(CL_STYLE);
 		$style_select = $style->get_select(0,ST_CELL, true);
 		$this->vars(array(
 			"styles" => $this->picker(0,$style_select)
@@ -1781,7 +1781,7 @@ class form_output extends form_base
 	{
 		extract($args);
 
-		$fo = get_instance("formgen/form");
+		$fo = get_instance(CL_FORM);
 		$replacement = $fo->show(array(
 			"op_id" => $alias["target"],
 		));

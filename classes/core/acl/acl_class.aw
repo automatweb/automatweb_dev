@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/acl/Attic/acl_class.aw,v 1.1 2004/09/04 19:00:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/acl/Attic/acl_class.aw,v 1.2 2005/03/24 10:02:23 ahti Exp $
 /* 
 
 @classinfo syslog_type=ST_ACL relationmgr=yes
@@ -55,10 +55,10 @@ class acl_class extends class_base
 
 		$meta = $o->meta();
 
-		$oc = get_instance("object_chain");
+		$oc = get_instance(CL_OBJECT_CHAIN);
 		$objs = new aw_array($oc->get_objects_in_chain($o->prop("chain")));
 
-		$ro = get_instance("role");
+		$ro = get_instance(CL_ROLE);
 		$mask = $ro->get_acl_mask($o->prop("role"));
 		$aclarr = $ro->get_acl_values($o->prop("role"));
 
@@ -152,7 +152,7 @@ class acl_class extends class_base
 
 	function relation_exists($oid, $grp)
 	{
-		$oc = get_instance("object_chain");
+		$oc = get_instance(CL_OBJECT_CHAIN);
 		$objs = new aw_array($oc->get_objects_in_chain($this->acl_obj->prop("chain")));
 
 		foreach($objs->get() as $_oid)

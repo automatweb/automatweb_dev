@@ -846,7 +846,7 @@ class user extends class_base
 		{
 			if ($p_i->class_id() == CL_GROUP)
 			{
-				$g = get_instance("core/users/group");
+				$g = get_instance(CL_GROUP);
 				$g->add_user_to_group($u, $p_i);
 				return 0;
 			}
@@ -860,7 +860,7 @@ class user extends class_base
 		$gid = $this->users->get_gid_by_uid($uid);
 
 		// show roles table by group
-		$gr = get_instance("core/users/group");
+		$gr = get_instance(CL_GROUP);
 		return $gr->_get_roles($gid);
 	}
 
@@ -871,7 +871,7 @@ class user extends class_base
 		// now, get all the folders that have access set for these groups
 		$dat = $this->acl_get_acls_for_groups(array("grps" => array_keys($grps)));
 
-		$g = get_instance("core/users/group");
+		$g = get_instance(CL_GROUP);
 	
 		$t =& $g->_init_obj_table(array(
 			"exclude" => array("grp_name")
@@ -1264,7 +1264,7 @@ class user extends class_base
 			// set join form entry
 			$u = $arr["connection"]->from();
 			$jfe = safe_array(aw_unserialize($u->prop("join_form_entry")));
-			$f = get_instance("formmgen/form");
+			$f = get_instance(CL_FORM);
 			$eid = $arr["connection"]->prop("to");
 			$fid = $f->get_form_for_entry($eid);
 

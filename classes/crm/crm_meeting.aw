@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.27 2005/03/07 13:42:44 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.28 2005/03/24 10:02:24 ahti Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -294,7 +294,7 @@ class crm_meeting extends class_base
 		{
 			//
 			$arr['obj_inst']->save();
-			$user = get_instance('core/users/user');
+			$user = get_instance(CL_USER);
 			$person = new object($user->get_current_person());
 			$person->connect(array(
 				'reltype' => 'RELTYPE_PERSON_MEETING',

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/flash.aw,v 1.2 2005/03/08 13:26:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/flash.aw,v 1.3 2005/03/24 10:06:29 ahti Exp $
 // flash.aw - Deals with flash applets
 /*
 
@@ -80,7 +80,7 @@ class flash extends class_base
 					$this->real_width = $imgdata[0];
 					$this->real_height = $imgdata[1];
 					// stick the file in the filesystem
-					$awf = get_instance("file");
+					$awf = get_instance(CL_FILE);
 					$fs = $awf->_put_fs(array(
 						"type" => $fdata["type"],
 						"content" => $fc,

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/author.aw,v 1.2 2004/05/07 11:20:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/author.aw,v 1.3 2005/03/24 10:06:29 ahti Exp $
 // author.aw - Autori artiklid 
 /*
 
@@ -97,7 +97,7 @@ class author extends class_base
 
 		if (aw_ini_get("search_conf.only_active_periods"))
 		{
-			$pei = get_instance("period");
+			$pei = get_instance(CL_PERIOD);
 			$plist = $pei->period_list(0,false,1);
 			$perstr = " AND objects.period IN (".join(",", array_keys($plist)).")";
 		}
@@ -236,7 +236,7 @@ class author extends class_base
 			$comm_counts[$row["board_id"]] = $row["cnt"];
 		};
 
-		$perinst = get_instance("period");
+		$perinst = get_instance(CL_PERIOD);
 
 		foreach($ids as $docid)
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/folder_list.aw,v 1.13 2005/03/15 10:41:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/folder_list.aw,v 1.14 2005/03/24 10:06:29 ahti Exp $
 // folder_list.aw - Kaustade nimekiri 
 /*
 
@@ -126,7 +126,7 @@ class folder_list extends class_base
 		));
 
 		$ssh = get_instance("contentmgmt/site_show");
-		$d = get_instance("document");
+		$d = get_instance(CL_DOCUMENT);
 
 		$fls = "";
 		for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())

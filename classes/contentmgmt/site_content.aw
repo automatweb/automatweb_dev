@@ -7,7 +7,7 @@ class site_content extends menuedit
 		$this->init(array(
 			"tpldir" => "automatweb/menuedit",
 		));
-		$this->image = get_instance("image");
+		$this->image = get_instance(CL_IMAGE);
 	}
 
 	////
@@ -176,8 +176,8 @@ class site_content extends menuedit
 		
 		$this->read_template($template);
 
-		$imc = get_instance("image");
-		$pers = get_instance("period");
+		$imc = get_instance(CL_IMAGE);
+		$pers = get_instance(CL_PERIOD);
 		$_t = aw_global_get("act_period");
 		$imdata = $imc->get_image_by_id($_t["data"]["image"]);
 		$this->vars(array(
@@ -192,7 +192,7 @@ class site_content extends menuedit
 
 		if ($this->is_template("PERIOD_SWITCH"))
 		{
-			$per_inst = get_instance("period");
+			$per_inst = get_instance(CL_PERIOD);
 			$plist = array_reverse($per_inst->period_list(0,false, 1), true);
 			$next = false;
 			$prev_per_id = 0;
@@ -238,8 +238,8 @@ class site_content extends menuedit
 		}
 		
 		
-		$d = get_instance("document");
-		$this->doc = get_instance("document");
+		$d = get_instance(CL_DOCUMENT);
+		$this->doc = get_instance(CL_DOCUMENT);
 		
 		$sel_menu_id = $this->sel_section;
 		
@@ -676,7 +676,7 @@ class site_content extends menuedit
 				// now we replace the list of menus with list of periods
 				// oh, god, I hate myself
 				$this->mpr[$parent] = array();
-				$per = get_instance("period");
+				$per = get_instance(CL_PERIOD);
 				$perlist = new aw_array($per->list_periods(0));
 				$counter = 0;
 				foreach($perlist->get() as $key => $val)
@@ -1687,7 +1687,7 @@ class site_content extends menuedit
 		// also in document::do_search and search_conf::search
 		if (aw_global_get("rewrite_links"))
 		{
-			$exp = get_instance("export/export");
+			$exp = get_instance(CL_EXPORT_RULE);
 			if (!$exp->is_external($link))
 			{
 				$_link = $link;
@@ -1736,7 +1736,7 @@ class site_content extends menuedit
 	// !See jupp siin teeb promokasti
 	function make_promo_boxes($section)
 	{
-		$doc = get_instance("document");
+		$doc = get_instance(CL_DOCUMENT);
 
 		# reset period, or we don't see contents of promo boxes under periodic menus:
 		$doc->set_period(0);
@@ -1962,7 +1962,7 @@ class site_content extends menuedit
 
 	function make_poll()
 	{
-		$t = get_instance("contentmgmt/poll");
+		$t = get_instance(CL_POLL);
 		$this->vars(array("POLL" => $t->gen_user_html()));
 	}
 
@@ -2221,7 +2221,7 @@ class site_content extends menuedit
 
 	function show_periodic_documents($section,$obj)
 	{
-		$d = get_instance("document");
+		$d = get_instance(CL_DOCUMENT);
 		$cont = "";
 		// if $section is a periodic document then emulate the current period for it and show the document right away
 		$d->set_opt("parent",$section);
@@ -2296,7 +2296,7 @@ class site_content extends menuedit
 
 	function show_documents($section,$docid,$template = "")
 	{
-		$d = get_instance("document");
+		$d = get_instance(CL_DOCUMENT);
 		// Vaatame, kas selle sektsiooni jaoks on "default" dokument
 		if ($docid < 1) 
 		{
@@ -2637,7 +2637,7 @@ class site_content extends menuedit
 
 	function do_show_layout($lid)
 	{
-		$li = get_instance("layout");
+		$li = get_instance(CL_LAYOUT);
 		return $li->show(array(
 			"id" => $lid
 		));
@@ -2899,7 +2899,7 @@ class site_content extends menuedit
 
 			if ($me->meta("all_pers"))
 			{
-				$period_instance = get_instance("period");
+				$period_instance = get_instance(CL_PERIOD);
 				$periods = $this->make_keys(array_keys($period_instance->period_list(false)));
 			}
 			else

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.3 2005/03/21 09:42:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.4 2005/03/24 10:06:29 ahti Exp $
 
 /*
 
@@ -238,7 +238,7 @@ class links extends class_base
 				if ($img->count() > 0)
 				{
 					$o =& $img->begin();
-					$f = get_instance("file");
+					$f = get_instance(CL_FILE);
 					if ($f->can_be_embedded($o))
 					{
 						$prop['value'] = html::img(array(
@@ -289,7 +289,7 @@ class links extends class_base
 					$old_file = $o->id();
 				}
 
-				$f = get_instance("file");
+				$f = get_instance(CL_FILE);
 				$f->add_upload_image("link_image", $arr['obj_inst']->id(), $old_file);
 				$retval = PROP_IGNORE;
 				break;
@@ -363,7 +363,7 @@ class links extends class_base
 				"class_id" => CL_FILE
 			));
 
-			$awf = get_instance("file");
+			$awf = get_instance(CL_FILE);
 			if ($img->count() > 0 && $awf->can_be_embedded($o =& $img->begin()))
 			{
 				$img = $awf->get_url($o->id(),"");

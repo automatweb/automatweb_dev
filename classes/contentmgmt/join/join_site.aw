@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.16 2005/03/22 16:20:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.17 2005/03/24 10:04:06 ahti Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -841,7 +841,7 @@ class join_site extends class_base
 				$join_done = true;
 
 				// add the user
-				$cu = get_instance("core/users/user");
+				$cu = get_instance(CL_USER);
 				$u_oid = $cu->add_user(array(
 					"uid" => $n_uid,
 					"email" => $n_email,
@@ -1023,8 +1023,8 @@ class join_site extends class_base
 		aw_disable_acl();
 		$user = obj($u_oid);
 
-		$ri = get_instance("contentmgmt/join/join_site_rule");
-		$gi = get_instance("core/users/group");
+		$ri = get_instance(CL_JOIN_SITE_RULE);
+		$gi = get_instance(CL_GROUP);
 
 		foreach($rules as $rule_oid)
 		{

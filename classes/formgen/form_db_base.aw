@@ -619,12 +619,12 @@ class form_db_base extends aw_template
 	{
 		if (!$fid)
 		{
-			return get_instance("formgen/form");
+			return get_instance(CL_FORM);
 		}
 
 		if (!is_object(($finst =& aw_cache_get("cache_get_form_instance", $fid))))
 		{
-			$finst = get_instance("formgen/form");
+			$finst = get_instance(CL_FORM);
 			$finst->load($fid);
 			aw_cache_set("cache_get_form_instance", $fid, &$finst);
 		}

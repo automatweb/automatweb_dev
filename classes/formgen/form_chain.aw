@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.28 2005/03/20 16:46:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.29 2005/03/24 10:01:38 ahti Exp $
 // form_chain.aw - form chains
 
 classload("formgen/form_base");
@@ -404,7 +404,7 @@ class form_chain extends form_base
 			$entry_id = $this->db_fetch_field("SELECT id FROM form_chain_entries WHERE chain_id = $id AND uid = '".aw_global_get("uid")."'","id");
 		}
 
-		$fc = get_instance("formgen/form_controller");
+		$fc = get_instance(CL_FORM_CONTROLLER);
 		$toshow = array();
 		$all = array();
 		foreach($this->chain["forms"] as $fid)
@@ -543,7 +543,7 @@ class form_chain extends form_base
 			$led = $GLOBALS["load_entry_data"];
 			$lcd = $GLOBALS["load_chain_data"];
 		}
-		$f = get_instance("formgen/form");
+		$f = get_instance(CL_FORM);
 		$f->set_current_chain_entry($entry_id);
 		aw_global_set("current_chain_entry", $entry_id);
 		aw_global_set("current_chain",$id);
@@ -598,7 +598,7 @@ class form_chain extends form_base
 			}
 			if ($show_form_id)
 			{
-				$f = get_instance("formgen/form");
+				$f = get_instance(CL_FORM);
 				$entry = $f->show(array("id" => $show_form_id, "entry_id" => $ear[$show_form_id],"op_id" => $this->chain["during_show_op"]));
 				switch ($this->chain["op_pos"])
 				{
@@ -737,7 +737,7 @@ class form_chain extends form_base
 			//print "updating time definition<br />";
 		};
 		
-		$f = get_instance("formgen/form");
+		$f = get_instance(CL_FORM);
 		$f->process_entry(array(
 				"id" => $form_id,
 				"chain_entry_id" => $chain_entry_id,
@@ -973,7 +973,7 @@ class form_chain extends form_base
 		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_FORM_CHAIN." AND status != 0");
 		while ($row = $this->db_next())
 		{
-			$f = get_instance("formgen/form_chain");
+			$f = get_instance(CL_FORM_CHAIN);
 			$f->load_chain($row["oid"]);
 
 			echo "chain $row[oid] <br />";
@@ -1014,7 +1014,7 @@ class form_chain extends form_base
 	function show_table_for_chain_entry($arr)
 	{
 		extract($arr);
-		$ft = get_instance("formgen/form_table");
+		$ft = get_instance(CL_FORM_TABLE);
 		// now get all entries of the form for the chain entry
 		$entdat = $ft->get_entries(array(
 			"id" => $form_id,

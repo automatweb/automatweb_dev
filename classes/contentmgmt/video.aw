@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/video.aw,v 1.2 2004/12/27 12:39:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/video.aw,v 1.3 2005/03/24 10:06:29 ahti Exp $
 // video.aw - Video 
 /*
 
@@ -87,7 +87,7 @@ class video extends class_base
 		$ob = new object($arr["id"]);
 		$this->read_template("show.tpl");
 
-		$im = get_instance("image");
+		$im = get_instance(CL_IMAGE);
 
 		$image = "";
 		$imc = reset($ob->connections_from(array("type" => "RELTYPE_IMAGE")));
