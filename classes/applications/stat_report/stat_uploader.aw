@@ -80,10 +80,10 @@ class stat_uploader extends class_base
 	}
 
 	/**
-		@attrib name=final nologin="1"
+		@attrib name=upload_final nologin="1"
 	
 	**/
-	function final()
+	function upload_final()
 	{
 		return $this->obj->prop("final");
 	}
@@ -202,7 +202,7 @@ class stat_uploader extends class_base
 				"contact" => $email,
 				"comment" => $comment,
 			));
-			return $this->mk_my_orb("final",array());
+			return $this->mk_my_orb("upload_final",array());
 		}
 		else
 		{
