@@ -17,7 +17,7 @@
             <newonly>1</newonly>
             <method>serialize</method>
             <field>meta</field>
-            <caption>Vormi tüüp</caption>
+            <caption>Vormi t&amp;uump;&amp;uump;p</caption>
       </property>
       <property>
             <name>form_type_value</name>
@@ -26,7 +26,7 @@
             <type>text</type>
             <editonly>1</editonly>
             <field>form_type_value</field>
-            <caption>Vormi tüüp</caption>
+            <caption>Vormi t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
             <name>def_name</name>
@@ -55,7 +55,7 @@
             <size>3</size>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Millised sisestatud väärtused pannakse nimeks</caption>
+            <caption>Millised sisestatud v&amp;auml;&amp;auml;rtused pannakse nimeks</caption>
       </property>
       <property>
             <name>redirect</name>
@@ -64,7 +64,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kuhu suunata peale täitmist</caption>
+            <caption>Kuhu suunata peale t&amp;auml;tmist</caption>
       </property>
       <property>
             <name>navtoolbar</name>
@@ -274,7 +274,7 @@
                   <submit>no</submit>
             </show_entries>
             <entries>
-                  <caption>Näita sisestusi</caption>
+                  <caption>Nï¿½ta sisestusi</caption>
                   <submit>no</submit>
                   <parent>show_entries</parent>
             </entries>
@@ -293,7 +293,7 @@
                   <parent>controllers</parent>
             </set_controllers>
             <get_controllers>
-                  <caption>Näitamine</caption>
+                  <caption>Nï¿½tamine</caption>
                   <parent>controllers</parent>
             </get_controllers>
       </groupinfo>
@@ -326,7 +326,7 @@
             <OBJECT_TYPE>
                   <value>6</value>
                   <clid>CL_OBJECT_TYPE</clid>
-                  <caption>Objekti tüüp</caption>
+                  <caption>Objekti t&amp;uuml;&amp;uuml;p</caption>
             </OBJECT_TYPE>
             <REGISTER>
                   <value>7</value>
@@ -356,12 +356,12 @@
             <CAL_REG_FORM>
                   <value>12</value>
                   <clid>CL_CALENDAR_REGISTRATION_FORM</clid>
-                  <caption>Sündmuse vorm</caption>
+                  <caption>S&amp;uuml;ndmuse vorm</caption>
             </CAL_REG_FORM>
             <CAL_REG_FORM_CONF>
                   <value>13</value>
                   <clid>CL_CALENDAR_REGISTRATION_FORM_CONF</clid>
-                  <caption>Sündmuse vormi konf</caption>
+                  <caption>S&amp;uuml;ndmuse vormi konf</caption>
             </CAL_REG_FORM_CONF>
       </reltypes>
 </properties>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.2 2004/12/09 11:51:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.3 2005/01/05 18:38:46 voldemar Exp $
 // gantt_chart.aw - Gantti diagramm
 /*
 
@@ -37,8 +37,8 @@ class gantt_chart extends class_base
 	// Arguments:
 	// string chart_id - ...
 	// timestamp start - chart start time. defaults to start of week back from current time.
-	// int cells - number of divisions in chart (e.g. 7 days for a chart depicting one week). default is 7.
-	// int cell_size - length of one division in seconds. default is 86400.
+	// int columns - number of divisions in chart (e.g. 7 days for a chart depicting one week). default is 7.
+	// int column_length - length of one division in seconds. default is 86400.
 	// int chart_width - chart width in pixels. default is 1000.
 	// string row_dfn - title for row-titles column. default is "Ressurss".
 	// string style - style to use (default| ... ).
@@ -48,18 +48,18 @@ class gantt_chart extends class_base
 	function configure_chart ($arr)
 	{
 		$this->start = (int) (empty ($arr["start"]) ? (time () - 302400) : $arr["start"]);
-		$this->end = (int) (empty ($arr["end"]) ? (time () + 302400) : $arr["end"]);
-		$this->cell_size = (int) (empty ($arr["cell_size"]) ? 86400 : $arr["cell_size"]);
-		$this->cells = (int) (empty ($arr["cells"]) ? 7 : $arr["cells"]);
+		$this->column_length = (int) (empty ($arr["column_length"]) ? 86400 : $arr["column_length"]);
+		$this->columns = (empty ($arr["columns"]) ? range (1, 7) :  range (1, (int) $arr["columns"]));
 		$this->chart_width = (int) (empty ($arr["chart_width"]) ? 1000 : $arr["chart_width"]);
-		$this->chart_id = empty ($arr["chart_id"]) ? "gantt_chart" : $arr["chart_id"];
+		$this->chart_id = empty ($arr["chart_id"]) ? "0" : $arr["chart_id"];
 		$this->style = empty ($arr["style"]) ? "default" : $arr["style"];
 		$this->row_dfn = empty ($arr["row_dfn"]) ? "Ressurss" : $arr["row_dfn"];
 		$this->time_stops = empty ($arr["time_stops"]) ? 8 : $arr["time_stops"];
+		$this->end = (int) ($this->start + count ($this->columns) * $this->column_length);
 		// $this->row_anchors = $arr["row_anchors"] ? "anchors" : "noanchors";
 		// $this->bar_anchors = $arr["bar_anchors"] ? "anchors" : "noanchors";
 
-		$this->scale_quotient = ($this->cells * $this->cell_size) / $this->chart_width;
+		$this->scale_quotient = (count ($this->columns) * $this->column_length) / $this->chart_width;
 	}
 
 	// Adds one row.
@@ -83,8 +83,24 @@ class gantt_chart extends class_base
 		);
 	}
 
+	// Defines column. Columns can be defined only after calling configure_chart.
+	// Arguments:
+	// int col - column number from left, 0 is row definitions column.
+	// string title - title for the column.
+	// string uri - uri for column title.
+	// string target - uri target for column title.
 	function define_column ($arr)
 	{
+		$col = $arr["col"];
+		$title = $arr["title"];
+		$uri = $arr["uri"];
+		$target = empty ($arr["target"]) ? "_self" : $arr["target"];
+
+		$this->columns[($col - 1)] = array (
+			"title" => $title,
+			"uri" => $uri,
+			"target" => $target,
+		);
 	}
 
 	// Adds one bar/data object to specified row.
@@ -106,7 +122,7 @@ class gantt_chart extends class_base
 		$uri = empty ($arr["uri"]) ? "#" : $arr["uri"];
 		$uri_target = empty ($arr["target"]) ? "_self" : $arr["target"];
 
-		$this->data[] = array (
+		$this->data[$row][$start] = array (
 			"start" => $start,
 			"length" => $length,
 			"title" => $title,
@@ -119,50 +135,68 @@ class gantt_chart extends class_base
 
 	function draw_chart ()
 	{
-		$this->sort_data();
-
-		$this->read_template ($this->style . "_style.tpl");
+		### parse style
+		$this->read_template ("style_" . $this->style . ".tpl");
 		$this->vars = array (
+			"chart_id" => $this->chart_id,
 			"chart_width" => $this->chart_width,
 		);
 		$style = $this->parse ();
 
-		$this->read_template ("gantt.tpl");
-
+		### compose chart table
 		$row_switch = 0;
 		$bar_switch = 0;
 		$rows = "";
-
-		// go over all bars and check if any are out of chart
-		foreach($this->data as $row)
-		{
-			foreach(safe_array($row) as $bar)
-			{
-				if (($bar["start"] + $bar["length"]) > $this->end)
-				{
-					$this->end = $bar["start"] + $bar["length"];
-				}
-			}
-		}
-		$this->scale_quotient = (($this->end-$this->start) / $this->chart_width);
+		$this->scale_quotient = (($this->end - $this->start) / $this->chart_width);
+		$this->read_template ("chart_" . $this->style . ".tpl");
+		$this->sort_data ();
 
 		foreach ($this->rows as $row)
 		{
-			$length = 0;
 			$row_contents = "";
-			$cell_end = $this->start + $this->cell_size;
+			$cell_end = $this->start + $this->column_length;
 			$pointer = $this->start ;
-			$previous_bar_end = 0;
-			$cells = $this->cells;
+			$columns = count ($this->columns);
 
-			while ($cells)
+			while ($columns)
 			{
 				$cell_contents = "";
+				$content_length = 0;
 
 				while ($pointer < $cell_end)
 				{
-					$bar = array_shift ($this->data[$row["name"]]);
-					$bar_type = $bar["hilight"] ? "hilighted" : ($row_switch . ($bar_switch));
+					if (!is_array ($this->data[$row["name"]]))
+					{
+						break;
+					}
+					else
+					{
+						$bar = array_shift ($this->data[$row["name"]]);
+
+						if ($bar["start"] >= $cell_end)
+						{
+							### no bars in cell, fill with emptiness & go to next column
+							array_unshift ($this->data[$row["name"]], $bar);
+							$pointer = $cell_end;
+							$content_length = $cell_end;
+							$this->vars (array (
+								"length" => ceil ($this->column_length / $this->scale_quotient),
+								"baseurl" => $this->cfg["baseurl"],
+							));
+							$cell_contents = trim ($this->parse ("MAIN.data_row" . $row_switch . ".data_cell.cell_contents.bar_empty"));
+							break;
+						}
+					}
+
+					### set bar type
+					if (isset ($bar["force_type"]))
+					{
+						$bar_type = $bar["force_type"];
+					}
+					else
+					{
+						$bar_type = $bar["hilight"] ? "hilighted" : $bar_switch;
+					}
 
 					### trim bars starting before chart start
 					if ($bar["start"] < $this->start)
@@ -179,47 +213,53 @@ class gantt_chart extends class_base
 					}
 
 					### split bars longer than free space in one cell
-					if (($pointer + $bar["length"]) >= $cell_end)
+					if ( (($bar["start"] + $bar["length"]) >= $cell_end) and ($bar["start"] < $cell_end) )
 					{
-						$bar_length = $cell_end - $bar["start"];
-						$bar["length"] = $bar["start"] + $bar["length"] - $cell_end;
-						$bar["start"] = $cell_end;
-						array_unshift ($this->data[$row["name"]], $bar);
-					}
-					else
-					{
-						$bar_length = $bar["length"];
+						$split_bar = $bar;
+						$split_bar["length"] = $bar["length"] - ($cell_end - $bar["start"]);
+						$split_bar["start"] = $cell_end;
+						$split_bar["force_type"] = $bar_type;
+						array_unshift ($this->data[$row["name"]], $split_bar);
+						$bar["length"] = $cell_end - $bar["start"];
 					}
 
 					### insert preceeding whitespace
-					if ($bar["start"] > $pointer)
+					if ( ($bar["start"] > $pointer) and ($bar["start"] < $cell_end) )
 					{
+						$length = ceil (($bar["start"] - $pointer) / $this->scale_quotient);
 						$this->vars (array (
-							"length" => ceil (($bar["start"] - $pointer) / $this->scale_quotient),
+							"length" => $length,
+							"baseurl" => $this->cfg["baseurl"],
 						));
 						$cell_contents .= trim ($this->parse ("MAIN.data_row" . $row_switch . ".data_cell.cell_contents.bar_empty"));
+						$content_length += ($bar["start"] - $pointer);
 					}
 
 					### parse bar
+					$length = ceil ($bar["length"] / $this->scale_quotient);
 					$this->vars (array (
-						"length" => ceil ($bar_length / $this->scale_quotient),
-						"title" => $bar["title"]." (".date("d.m.Y / H:i", $bar["start"])." - ".date("d.m.Y / H:i", $bar["start"] + $bar["length"])." )",
+						"length" => $length,
+						"title" => $bar["title"],
 						"bar_uri" => $bar["bar_uri"],
 						"bar_uri_target" => $bar["bar_uri_target"],
 						"baseurl" => $this->cfg["baseurl"],
 					));
-					$cell_contents .= trim ($this->parse ("MAIN.data_row" . $row_switch . ".data_cell.cell_contents.bar_" . $bar_type));
+					$bar_rendered = trim ($this->parse ("MAIN.data_row" . $row_switch . ".data_cell.cell_contents.bar_" . $bar_type));
+					$cell_contents .= $bar_rendered;
+
 					### ...
 					$pointer = $bar["start"] + $bar["length"];
+					$content_length += $bar["length"];
 					$bar_switch = $bar_switch ? 0 : 1;
 				}
 
 				### fill remaining empty space
-				if ($pointer < $cell_end)
+				if ($content_length < $cell_end)
 				{
-					//echo "eempty len = ".ceil (($cell_end - $pointer) / $this->scale_quotient)." end = $cell_end , pointer = $pointer scale = ".$this->scale_quotient." <br>";
+					$length = ceil (($cell_end - $pointer) / $this->scale_quotient);
 					$this->vars (array (
-						"length" => ceil (($cell_end - $pointer) / $this->scale_quotient),
+						"length" => $length,
+						"baseurl" => $this->cfg["baseurl"],
 					));
 					$cell_contents .= trim ($this->parse ("MAIN.data_row" . $row_switch . ".data_cell.cell_contents.bar_empty"));
 					$pointer = $cell_end;
@@ -232,8 +272,8 @@ class gantt_chart extends class_base
 				$row_contents .= trim ($this->parse ("MAIN.data_row" . $row_switch . ".data_cell"));
 
 				### ...
-				$cells--;
-				$cell_end += $this->cell_size;
+				$columns--;
+				$cell_end += $this->column_length;
 			}
 
 			### parse row
@@ -249,26 +289,46 @@ class gantt_chart extends class_base
 		}
 
 		### parse header
-		$cells = $this->cells;
 		$header_row = "";
 
-		while ($cells)
+		foreach ($this->columns as $nr => $definition)
 		{
-			$this->vars (array (
-				"col_dfn" => $this->cells - $cells, ///!!! teha veerunimed/pealkijrad? v6tab palju ruumi?!
-			));
-			$header_row .= $this->parse ("header");
-			$cells--;
+			if (is_array ($definition))
+			{
+				if ($definition["uri"])
+				{
+					$this->vars (array (
+						"title" => ($definition["title"] ? $definition["title"] : ($nr + 1)),
+						"uri" => $definition["uri"],
+						"target" => $definition["target"],
+					));
+					$header_row .= $this->parse ("column_head_link");
+				}
+				else
+				{
+					$this->vars (array (
+						"title" => $definition["title"],
+					));
+					$header_row .= $this->parse ("column_head");
+				}
+			}
+			else
+			{
+				$this->vars (array (
+					"title" => $nr + 1,
+				));
+				$header_row .= $this->parse ("column_head");
+			}
 		}
 
 		$this->_get_timespans();
 
 		### parse table
 		$this->vars (array (
+			"chart_id" => $this->chart_id,
 			"row_dfn" => $this->row_dfn,
-			"header" => $header_row,
+			"column_head" => $header_row,
 			"data_row0" => $rows,
-			"data_row1" => ""
 		));
 		$table = $this->parse ();
 
@@ -334,7 +394,15 @@ class gantt_chart extends class_base
 		));
 	}
 
-	function sort_data()
+	function sort_data ()
+	{
+		foreach ($this->data as $row => $data)
+		{
+			ksort ($this->data[$row], SORT_NUMERIC);
+		}
+	}
+
+	function sort_data_old()
 	{
 		usort($this->data, create_function('$a,$b','if ($a["start"] == $b["start"]) { return 0; } return ($a["start"] > $b["start"] ? 1 : -1);'));
 		$tmpr = $this->rows;

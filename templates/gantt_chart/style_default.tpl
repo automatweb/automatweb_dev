@@ -5,7 +5,7 @@
 	font-size: 10px;
 	background-color: white;
 	border: 3px double #DDDDDD;
-	width: {VAR:chart_width};
+/*	width: {VAR:chart_width};*/
 }
 
 .VclGanttChartLink
@@ -26,6 +26,7 @@
 	font-weight: bold;
 	border-top: 1px solid #DDDDDD;
 	border-right: 1px solid #DDDDDD;
+	white-space: nowrap;
 }
 
 .VclGanttChartColDfn
@@ -47,6 +48,7 @@
 	border-left: 1px solid #DDDDDD;
 	border-top: 1px solid #DDDDDD;
 	padding: 0px;
+	white-space: nowrap;
 }
 
 .VclGanttChartDataImg

@@ -42,7 +42,7 @@
             <wrapchildren>1</wrapchildren>
       </property>
       <property>
-            <name>customer_list_toolbar</name>
+            <name>customers_toolbar</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -53,7 +53,7 @@
             <parent>box</parent>
       </property>
       <property>
-            <name>customer_list_tree</name>
+            <name>customers_list_tree</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -64,7 +64,7 @@
             <parent>vsplitbox</parent>
       </property>
       <property>
-            <name>customer_list</name>
+            <name>customers_list</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -75,7 +75,7 @@
             <parent>vsplitbox</parent>
       </property>
       <property>
-            <name>project_list_toolbar</name>
+            <name>projects_toolbar</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -86,7 +86,7 @@
             <parent>box</parent>
       </property>
       <property>
-            <name>project_list_tree</name>
+            <name>projects_tree</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -97,7 +97,7 @@
             <parent>vsplitbox</parent>
       </property>
       <property>
-            <name>project_list</name>
+            <name>projects_list</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -150,6 +150,26 @@
             <caption>Planeeri</caption>
       </property>
       <property>
+            <name>chart_navigation</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_schedule</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>master_schedule_chart</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_schedule</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
             <name>user_list_toolbar</name>
             <table>objects</table>
             <field>meta</field>
@@ -181,6 +201,17 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <parent>vsplitbox</parent>
+      </property>
+      <property>
+            <name>owner</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MRP_OWNER</reltype>
+            <clid>CL_CRM_COMPANY</clid>
+            <caption>Organisatsioon</caption>
       </property>
       <property>
             <name>resources_folder</name>
@@ -237,6 +268,67 @@
             <clid>CL_CFGMANAGER</clid>
             <caption>Keskkonna seadetehaldur</caption>
       </property>
+      <property>
+            <name>title_sceduler_parameters</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings</group>
+            <type>text</type>
+            <store>no</store>
+            <subtitle>1</subtitle>
+            <caption>Planeerija parameetrid</caption>
+      </property>
+      <property>
+            <name>parameter_due_date_overdue_slope</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings</group>
+            <type>textbox</type>
+            <default>0.5</default>
+            <caption>Üle tähtaja olevate projektide tähtsuse tõus tähtaja ületamise suurenemise suunas</caption>
+      </property>
+      <property>
+            <name>parameter_due_date_overdue_intercept</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings</group>
+            <type>textbox</type>
+            <default>10</default>
+            <caption>Just tähtaja ületanud projekti tähtsus</caption>
+      </property>
+      <property>
+            <name>parameter_due_date_decay</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings</group>
+            <type>textbox</type>
+            <default>0.05</default>
+            <caption>Projekti tähtsuse langus tähtaja kaugenemise suunas</caption>
+      </property>
+      <property>
+            <name>parameter_due_date_intercept</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings</group>
+            <type>textbox</type>
+            <default>0.1</default>
+            <caption>Planeerimise hetkega võrdse tähtajaga projekti tähtsus</caption>
+      </property>
+      <property>
+            <name>parameter_priority_slope</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings</group>
+            <type>textbox</type>
+            <default>0.8</default>
+            <caption>Kliendi ja projektiprioriteedi suhtelise väärtuse tõus vrd. tähtajaga</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_MRP_WORKSPACE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -277,6 +369,11 @@
                   <value>2</value>
                   <caption>Keskkonna seaded</caption>
             </MRP_WORKSPACE_CFGMGR>
+            <MRP_OWNER>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <value>4</value>
+                  <caption>Keskkonna omanik (Organisatsioon)</caption>
+            </MRP_OWNER>
       </reltypes>
 </properties>
 

@@ -1,12 +1,20 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>name</name>
+            <group>general</group>
+            <type>textbox</type>
+            <table>objects</table>
+            <field>name</field>
+            <caption>Projekti nr.</caption>
+      </property>
+      <property>
             <name>starttime</name>
             <group>general</group>
             <table>mrp_case</table>
             <type>datetime_select</type>
             <field>starttime</field>
-            <caption>Alustamisaeg</caption>
+            <caption>Alustamisaeg (materjalide saabumine)</caption>
       </property>
       <property>
             <name>due_date</name>
@@ -39,6 +47,17 @@
             <type>text</type>
             <field>state</field>
             <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>planned_date</name>
+            <group>general</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <editonly>1</editonly>
+            <caption>Planeeritud valmimisaeg</caption>
       </property>
       <property>
             <name>available_resources</name>

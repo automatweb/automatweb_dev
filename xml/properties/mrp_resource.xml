@@ -33,6 +33,16 @@
             <caption>Tööleht</caption>
       </property>
       <property>
+            <name>operator</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_resource_settings</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MRP_OPERATOR</reltype>
+            <caption>Ressursi kasutaja</caption>
+      </property>
+      <property>
             <name>unavailable_recur</name>
             <table>objects</table>
             <field>meta</field>
@@ -87,8 +97,8 @@
       <reltypes>
             <MRP_OPERATOR>
                   <value>1</value>
-                  <clid>CL_USER</clid>
-                  <caption>Ressursi operaator</caption>
+                  <clid>CL_MRP_RESOURCE_OPERATOR</clid>
+                  <caption>Ressursi kasutaja</caption>
             </MRP_OPERATOR>
             <MRP_SCHEDULE>
                   <value>2</value>
@@ -103,7 +113,7 @@
             <RECUR>
                   <value>4</value>
                   <clid>CL_RECURRENCE</clid>
-                  <caption>kordus</caption>
+                  <caption>Kordus</caption>
             </RECUR>
       </reltypes>
 </properties>
