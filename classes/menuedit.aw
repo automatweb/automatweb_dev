@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.97 2002/02/25 16:26:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.98 2002/02/26 19:03:40 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -3401,7 +3401,15 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			return $p->change(array("id" => $id));
 		}
 
-		$this->read_template("nchange.tpl");
+
+		if (strpos(aw_global_get("HTTP_USER_AGENT"),"MSIE") === false)
+		{
+			$this->read_template("nchange_plain.tpl");
+		}
+		else
+		{
+			$this->read_template("nchange.tpl");
+		};
 	
 		// kysime infot adminnitemplatede kohta
 		$q = "SELECT * FROM template WHERE type = 0 ORDER BY id";
