@@ -1,5 +1,5 @@
 <?php
-// $Id: frameset.aw,v 1.5 2002/12/19 17:59:55 duke Exp $
+// $Id: frameset.aw,v 1.6 2003/01/14 19:08:34 duke Exp $
 // frameset.aw - frameset generator
 /*
 	@default table=objects
@@ -10,7 +10,7 @@
 	@property template type=select 
 	@caption Frameseti template
 
-	@property framedata type=generated editonly=1 generator=callback_get_sources 
+	@property framedata type=text editonly=1 callback=callback_get_sources 
 	@caption Raamide sisu
 */
 /*
