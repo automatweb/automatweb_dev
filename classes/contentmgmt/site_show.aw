@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.94 2004/10/30 16:08:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.95 2004/11/03 12:15:02 kristo Exp $
 
 /*
 
@@ -1530,12 +1530,15 @@ class site_show extends class_base
 		{
 			foreach($menu_defaults as $_mar => $_mid)
 			{
-				$tmp = obj($_mid);
-				$this->path = $tmp->path();
-				$this->path_ids = array();
-				foreach($this->path as $p_obj)
+				if ($this->can("view", $_mid))
 				{
-					$this->path_ids[] = $p_obj->id();
+					$tmp = obj($_mid);
+					$this->path = $tmp->path();
+					$this->path_ids = array();
+					foreach($this->path as $p_obj)
+					{
+						$this->path_ids[] = $p_obj->id();
+					}
 				}
 			}
 		}
