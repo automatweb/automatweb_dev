@@ -1,15 +1,15 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.3 2001/05/18 21:37:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.4 2001/05/18 22:08:13 duke Exp $
 class mlist extends aw_template
 {
-	function mlist($id)
+	function mlist($id = 0)
 	{
 		$this->tpl_init("mailinglist");
 		$this->db_init();
 		$this->id = $id;
 		$this->db_query("SELECT * FROM objects WHERE oid = $id");
-		if (!($row = $this->db_next()))
-			$this->raise_error("mlist->mlist($id): no such list!",true);
+		//if (!($row = $this->db_next()))
+		//	$this->raise_error("mlist->mlist($id): no such list!",true);
 
 		$this->name = $row["name"];
 		$this->l_vars = unserialize($row["last"]);
@@ -183,7 +183,34 @@ class mlist extends aw_template
 			}
 		};
 	}
-			
+
+	////
+	// !Eemaldab kasutaja koigist listidest
+	// argumendid:
+	// uid (string) - uid
+	function remove_user_from_lists($args = array())
+	{
+		extract($args);
+		$q = "DELETE FROM ml_users WHERE uid = '$uid'";
+		$this->db_query($q);
+	}
+
+	////
+	// !Teeb koigi listide nimekirja, kuhu kasutaja kuulub
+	// argumendid:
+	// uid (string) - uid
+	function get_user_lists($args = array())
+	{
+		extract($args);
+		$q = "SELECT * FROM ml_users WHERE uid = '$uid'";
+		$this->db_query($q);
+		$res = array();
+		while($row = $this->db_next())
+		{
+			$res[] = $row["list_id"];
+		};
+		return $res;
+	}
 				
 	function change_user($uid)
 	{
