@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.25 2005/01/26 12:09:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.26 2005/01/28 11:25:49 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql 
 {
@@ -169,7 +169,8 @@ class mysql
 			$this->rec_count++;
 			if ($deq)
 			{
-				$this->dequote($res);
+				//const.aw sets magic quotes off always so we should be safe here.
+				//$this->dequote($res);
 			}
 			//$res['rec'] = $this->rec_count;
 		};
