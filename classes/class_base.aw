@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.298 2004/08/31 07:56:15 kristo Exp $
+// $Id: class_base.aw,v 2.299 2004/09/02 13:30:30 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -325,7 +325,7 @@ class class_base extends aw_template
 		// Now I need to deal with relation elements
 
 		// it's the bloody run order .. FUCK
-		$properties = $this->get_property_group2($filter);
+		$properties = $this->get_property_group($filter);
 
 		if ($this->classinfo(array("name" => "trans")) == 1 && $this->id)
 		{
@@ -1761,7 +1761,7 @@ class class_base extends aw_template
 		// current time for datetime_select properties for new objects
 		// XXX: for now this->use_form is empty for add/change forms, this
 		// will probably change in the future
-		if (empty($this->id) && empty($this->use_form) && ($property["type"] == "datetime_select" || $property["type"] == "date_select"))
+		if (empty($this->id) && empty($this->use_form) && ($property["type"] == "datetime_select" || $property["type"] == "date_select") && !$property["no_default"])
 		{
 			$property["value"] = time();
 		}
@@ -3521,11 +3521,6 @@ class class_base extends aw_template
 			"subclass" => $this->clid
 		));
 		return $ol->names();
-	}
-
-	function get_property_group2($arr)
-	{
-		return $this->get_property_group($arr);
 	}
 
 	// needs either clid or clfile
