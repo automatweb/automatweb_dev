@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.35 2004/10/08 01:32:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.36 2004/10/08 15:21:50 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -637,6 +637,25 @@ class sys extends aw_template
 		$t->set_default_sorder("desc");
 		$t->sort_by();
 		return $t->draw();
+	}
+
+	/**
+
+		@attrib name=perf
+
+	**/
+	function perf()
+	{
+		$data = array();
+		$this->db_query("show status");
+		while ($row = $this->db_next())
+		{
+			$data[$row["Variable_name"]] = $row["Value"];
+		}
+
+		echo "key cache hit rate: ".number_format((100 - (($data["Key_reads"]  / $data["Key_read_requests"]) * 100)),2)."%<br>";
+		echo "open tables: ".$data["Open_tables"]." vs opened tables: ".$data["Opened_tables"]." <br>";
+		die();
 	}
 
 	/** tests database by adding all possible types of objects
