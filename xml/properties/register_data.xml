@@ -401,7 +401,7 @@
             <name>userch1</name>
             <group>data</group>
             <table>aw_register_data</table>
-            <type>textbox</type>
+            <type>checkbox</type>
             <field>aw_userch1</field>
             <ch_value>1</ch_value>
             <datatype>int</datatype>
@@ -411,7 +411,7 @@
             <name>userch2</name>
             <group>data</group>
             <table>aw_register_data</table>
-            <type>textbox</type>
+            <type>checkbox</type>
             <field>aw_userch2</field>
             <ch_value>1</ch_value>
             <datatype>int</datatype>
@@ -421,7 +421,7 @@
             <name>userch3</name>
             <group>data</group>
             <table>aw_register_data</table>
-            <type>text</type>
+            <type>checkbox</type>
             <field>aw_userch3</field>
             <ch_value>1</ch_value>
             <datatype>int</datatype>
@@ -431,7 +431,7 @@
             <name>userch4</name>
             <group>data</group>
             <table>aw_register_data</table>
-            <type>textbox</type>
+            <type>checkbox</type>
             <field>aw_userch4</field>
             <ch_value>1</ch_value>
             <datatype>int</datatype>
@@ -441,7 +441,7 @@
             <name>userch5</name>
             <group>data</group>
             <table>aw_register_data</table>
-            <type>textbox</type>
+            <type>checkbox</type>
             <field>aw_userch5</field>
             <ch_value>1</ch_value>
             <datatype>int</datatype>
@@ -498,8 +498,767 @@
             <caption>Subtitle5</caption>
       </property>
       <property>
-            <name>uservar11</name>
+            <name>udefhidden1</name>
             <group>data</group>
+            <table>aw_register_data</table>
+            <type>hidden</type>
+            <field>udefhidden1</field>
+      </property>
+      <property>
+            <name>udefhidden2</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>hidden</type>
+            <field>udefhidden2</field>
+      </property>
+      <property>
+            <name>udefhidden3</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>hidden</type>
+            <field>udefhidden3</field>
+      </property>
+      <property>
+            <name>usertext1</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>text</type>
+            <store>no</store>
+            <field>usertext1</field>
+            <caption>Usertext1</caption>
+      </property>
+      <property>
+            <name>usertext2</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>text</type>
+            <store>no</store>
+            <field>usertext2</field>
+            <caption>Usertext2</caption>
+      </property>
+      <property>
+            <name>usertext3</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>text</type>
+            <store>no</store>
+            <field>usertext3</field>
+            <caption>Usertext3</caption>
+      </property>
+      <property>
+            <name>usertext4</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>text</type>
+            <store>no</store>
+            <field>usertext4</field>
+            <caption>Usertext4</caption>
+      </property>
+      <property>
+            <name>usertext5</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>text</type>
+            <store>no</store>
+            <field>usertext5</field>
+            <caption>Usertext5</caption>
+      </property>
+      <property>
+            <name>usertext6</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>text</type>
+            <store>no</store>
+            <field>usertext6</field>
+            <caption>Usertext6</caption>
+      </property>
+      <property>
+            <name>usertext7</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>text</type>
+            <store>no</store>
+            <field>usertext7</field>
+            <caption>Usertext7</caption>
+      </property>
+      <property>
+            <name>usertext8</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>text</type>
+            <store>no</store>
+            <field>usertext8</field>
+            <caption>Usertext8</caption>
+      </property>
+      <property>
+            <name>usertext9</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>text</type>
+            <store>no</store>
+            <field>usertext9</field>
+            <caption>Usertext9</caption>
+      </property>
+      <property>
+            <name>usertext10</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>text</type>
+            <store>no</store>
+            <field>usertext10</field>
+            <caption>Usertext10</caption>
+      </property>
+      <property>
+            <name>usersubmit1</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>submit</type>
+            <store>no</store>
+            <field>usersubmit1</field>
+            <caption>User-defined submit 1</caption>
+      </property>
+      <property>
+            <name>userreset1</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>reset</type>
+            <store>no</store>
+            <field>userreset1</field>
+            <caption>User-defined reset 1</caption>
+      </property>
+      <property>
+            <name>user21</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 21</caption>
+      </property>
+      <property>
+            <name>user22</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 22</caption>
+      </property>
+      <property>
+            <name>user23</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 23</caption>
+      </property>
+      <property>
+            <name>user24</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 24</caption>
+      </property>
+      <property>
+            <name>user25</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 25</caption>
+      </property>
+      <property>
+            <name>user26</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 26</caption>
+      </property>
+      <property>
+            <name>user27</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 27</caption>
+      </property>
+      <property>
+            <name>user28</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 28</caption>
+      </property>
+      <property>
+            <name>user29</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 29</caption>
+      </property>
+      <property>
+            <name>user30</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 30</caption>
+      </property>
+      <property>
+            <name>user31</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 31</caption>
+      </property>
+      <property>
+            <name>user32</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 32</caption>
+      </property>
+      <property>
+            <name>user33</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 33</caption>
+      </property>
+      <property>
+            <name>user34</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 34</caption>
+      </property>
+      <property>
+            <name>user35</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 35</caption>
+      </property>
+      <property>
+            <name>user36</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 36</caption>
+      </property>
+      <property>
+            <name>user37</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 37</caption>
+      </property>
+      <property>
+            <name>user38</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 28</caption>
+      </property>
+      <property>
+            <name>user39</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 39</caption>
+      </property>
+      <property>
+            <name>user40</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 40</caption>
+      </property>
+      <property>
+            <name>user41</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 41</caption>
+      </property>
+      <property>
+            <name>user42</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 42</caption>
+      </property>
+      <property>
+            <name>user43</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 43</caption>
+      </property>
+      <property>
+            <name>user44</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 44</caption>
+      </property>
+      <property>
+            <name>user45</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 45</caption>
+      </property>
+      <property>
+            <name>user46</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 46</caption>
+      </property>
+      <property>
+            <name>user47</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 47</caption>
+      </property>
+      <property>
+            <name>user48</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 48</caption>
+      </property>
+      <property>
+            <name>user49</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 49</caption>
+      </property>
+      <property>
+            <name>user50</name>
+            <group>textboxes</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>User-defined 50</caption>
+      </property>
+      <property>
+            <name>userta11</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 11</caption>
+      </property>
+      <property>
+            <name>userta12</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 12</caption>
+      </property>
+      <property>
+            <name>userta13</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 13</caption>
+      </property>
+      <property>
+            <name>userta14</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 14</caption>
+      </property>
+      <property>
+            <name>userta15</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 15</caption>
+      </property>
+      <property>
+            <name>userta16</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 16</caption>
+      </property>
+      <property>
+            <name>userta17</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 17</caption>
+      </property>
+      <property>
+            <name>userta18</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 18</caption>
+      </property>
+      <property>
+            <name>userta19</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 19</caption>
+      </property>
+      <property>
+            <name>userta20</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 20</caption>
+      </property>
+      <property>
+            <name>userta21</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 21</caption>
+      </property>
+      <property>
+            <name>userta22</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 22</caption>
+      </property>
+      <property>
+            <name>userta23</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 23</caption>
+      </property>
+      <property>
+            <name>userta24</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 24</caption>
+      </property>
+      <property>
+            <name>userta25</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 25</caption>
+      </property>
+      <property>
+            <name>userta26</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 26</caption>
+      </property>
+      <property>
+            <name>userta27</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 27</caption>
+      </property>
+      <property>
+            <name>userta28</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 28</caption>
+      </property>
+      <property>
+            <name>userta29</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 29</caption>
+      </property>
+      <property>
+            <name>userta30</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 30</caption>
+      </property>
+      <property>
+            <name>userta31</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 31</caption>
+      </property>
+      <property>
+            <name>userta32</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 32</caption>
+      </property>
+      <property>
+            <name>userta33</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 33</caption>
+      </property>
+      <property>
+            <name>userta34</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 34</caption>
+      </property>
+      <property>
+            <name>userta35</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 35</caption>
+      </property>
+      <property>
+            <name>userta36</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 36</caption>
+      </property>
+      <property>
+            <name>userta37</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 37</caption>
+      </property>
+      <property>
+            <name>userta38</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 38</caption>
+      </property>
+      <property>
+            <name>userta39</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 39</caption>
+      </property>
+      <property>
+            <name>userta40</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 40</caption>
+      </property>
+      <property>
+            <name>userta41</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 41</caption>
+      </property>
+      <property>
+            <name>userta42</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 42</caption>
+      </property>
+      <property>
+            <name>userta43</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 43</caption>
+      </property>
+      <property>
+            <name>userta44</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 44</caption>
+      </property>
+      <property>
+            <name>userta45</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 45</caption>
+      </property>
+      <property>
+            <name>userta46</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 46</caption>
+      </property>
+      <property>
+            <name>userta47</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 47</caption>
+      </property>
+      <property>
+            <name>userta48</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 48</caption>
+      </property>
+      <property>
+            <name>userta49</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 49</caption>
+      </property>
+      <property>
+            <name>userta50</name>
+            <group>textareas</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textarea</type>
+            <caption>User-defined ta 50</caption>
+      </property>
+      <property>
+            <name>uservar11</name>
+            <group>classificators</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
@@ -510,7 +1269,7 @@
       </property>
       <property>
             <name>uservar12</name>
-            <group>data</group>
+            <group>classificators</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
@@ -521,7 +1280,7 @@
       </property>
       <property>
             <name>uservar13</name>
-            <group>data</group>
+            <group>classificators</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
@@ -532,7 +1291,7 @@
       </property>
       <property>
             <name>uservar14</name>
-            <group>data</group>
+            <group>classificators</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
@@ -543,7 +1302,7 @@
       </property>
       <property>
             <name>uservar15</name>
-            <group>data</group>
+            <group>classificators</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
@@ -554,7 +1313,7 @@
       </property>
       <property>
             <name>uservar16</name>
-            <group>data</group>
+            <group>classificators</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
@@ -565,7 +1324,7 @@
       </property>
       <property>
             <name>uservar17</name>
-            <group>data</group>
+            <group>classificators</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
@@ -576,7 +1335,7 @@
       </property>
       <property>
             <name>uservar18</name>
-            <group>data</group>
+            <group>classificators</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
@@ -587,7 +1346,7 @@
       </property>
       <property>
             <name>uservar19</name>
-            <group>data</group>
+            <group>classificators</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
@@ -598,7 +1357,7 @@
       </property>
       <property>
             <name>uservar20</name>
-            <group>data</group>
+            <group>classificators</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
@@ -608,132 +1367,657 @@
             <caption>User-defined var 20</caption>
       </property>
       <property>
-            <name>udefhidden1</name>
-            <group>general</group>
+            <name>uservar21</name>
+            <group>classificators</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
-            <type>hidden</type>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER21</reltype>
+            <store>connect</store>
+            <caption>User-defined var 21</caption>
       </property>
       <property>
-            <name>udefhidden2</name>
-            <group>general</group>
+            <name>uservar22</name>
+            <group>classificators</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
-            <type>hidden</type>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER22</reltype>
+            <store>connect</store>
+            <caption>User-defined var 22</caption>
       </property>
       <property>
-            <name>udefhidden3</name>
-            <group>general</group>
+            <name>uservar23</name>
+            <group>classificators</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
-            <type>hidden</type>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER23</reltype>
+            <store>connect</store>
+            <caption>User-defined var 23</caption>
       </property>
       <property>
-            <name>usertext1</name>
-            <group>data</group>
+            <name>uservar24</name>
+            <group>classificators</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
-            <type>text</type>
-            <store>no</store>
-            <caption>Usertext1</caption>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER24</reltype>
+            <store>connect</store>
+            <caption>User-defined var 24</caption>
       </property>
       <property>
-            <name>usertext2</name>
-            <group>data</group>
+            <name>uservar25</name>
+            <group>classificators</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
-            <type>text</type>
-            <store>no</store>
-            <caption>Usertext2</caption>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER25</reltype>
+            <store>connect</store>
+            <caption>User-defined var 25</caption>
       </property>
       <property>
-            <name>usertext3</name>
-            <group>data</group>
+            <name>uservar26</name>
+            <group>classificators</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
-            <type>text</type>
-            <store>no</store>
-            <caption>Usertext3</caption>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER26</reltype>
+            <store>connect</store>
+            <caption>User-defined var 26</caption>
       </property>
       <property>
-            <name>usertext4</name>
-            <group>data</group>
+            <name>uservar27</name>
+            <group>classificators</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
-            <type>text</type>
-            <store>no</store>
-            <caption>Usertext4</caption>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER27</reltype>
+            <store>connect</store>
+            <caption>User-defined var 27</caption>
       </property>
       <property>
-            <name>usertext5</name>
-            <group>data</group>
+            <name>uservar28</name>
+            <group>classificators</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
-            <type>text</type>
-            <store>no</store>
-            <caption>Usertext5</caption>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER28</reltype>
+            <store>connect</store>
+            <caption>User-defined var 28</caption>
       </property>
       <property>
-            <name>usertext6</name>
-            <group>data</group>
+            <name>uservar29</name>
+            <group>classificators</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
-            <type>text</type>
-            <store>no</store>
-            <caption>Usertext6</caption>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER29</reltype>
+            <store>connect</store>
+            <caption>User-defined var 29</caption>
       </property>
       <property>
-            <name>usertext7</name>
-            <group>data</group>
+            <name>uservar30</name>
+            <group>classificators</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
-            <type>text</type>
-            <store>no</store>
-            <caption>Usertext7</caption>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER30</reltype>
+            <store>connect</store>
+            <caption>User-defined var 30</caption>
       </property>
       <property>
-            <name>usertext8</name>
-            <group>data</group>
+            <name>uservar31</name>
+            <group>classificators</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
-            <type>text</type>
-            <store>no</store>
-            <caption>Usertext8</caption>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER31</reltype>
+            <store>connect</store>
+            <caption>User-defined var 31</caption>
       </property>
       <property>
-            <name>usertext9</name>
-            <group>data</group>
+            <name>uservar32</name>
+            <group>classificators</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
-            <type>text</type>
-            <store>no</store>
-            <caption>Usertext9</caption>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER32</reltype>
+            <store>connect</store>
+            <caption>User-defined var 32</caption>
       </property>
       <property>
-            <name>usertext10</name>
-            <group>data</group>
+            <name>uservar33</name>
+            <group>classificators</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
-            <type>text</type>
-            <store>no</store>
-            <caption>Usertext10</caption>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER33</reltype>
+            <store>connect</store>
+            <caption>User-defined var 33</caption>
+      </property>
+      <property>
+            <name>uservar34</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER34</reltype>
+            <store>connect</store>
+            <caption>User-defined var 34</caption>
+      </property>
+      <property>
+            <name>uservar35</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER35</reltype>
+            <store>connect</store>
+            <caption>User-defined var 35</caption>
+      </property>
+      <property>
+            <name>uservar36</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER36</reltype>
+            <store>connect</store>
+            <caption>User-defined var 36</caption>
+      </property>
+      <property>
+            <name>uservar37</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER37</reltype>
+            <store>connect</store>
+            <caption>User-defined var 37</caption>
+      </property>
+      <property>
+            <name>uservar38</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER38</reltype>
+            <store>connect</store>
+            <caption>User-defined var 38</caption>
+      </property>
+      <property>
+            <name>uservar39</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER39</reltype>
+            <store>connect</store>
+            <caption>User-defined var 39</caption>
+      </property>
+      <property>
+            <name>uservar40</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER40</reltype>
+            <store>connect</store>
+            <caption>User-defined var 40</caption>
+      </property>
+      <property>
+            <name>uservar41</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER41</reltype>
+            <store>connect</store>
+            <caption>User-defined var 41</caption>
+      </property>
+      <property>
+            <name>uservar42</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER42</reltype>
+            <store>connect</store>
+            <caption>User-defined var 42</caption>
+      </property>
+      <property>
+            <name>uservar43</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER43</reltype>
+            <store>connect</store>
+            <caption>User-defined var 43</caption>
+      </property>
+      <property>
+            <name>uservar44</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER44</reltype>
+            <store>connect</store>
+            <caption>User-defined var 44</caption>
+      </property>
+      <property>
+            <name>uservar45</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER45</reltype>
+            <store>connect</store>
+            <caption>User-defined var 45</caption>
+      </property>
+      <property>
+            <name>uservar46</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER46</reltype>
+            <store>connect</store>
+            <caption>User-defined var 46</caption>
+      </property>
+      <property>
+            <name>uservar47</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER47</reltype>
+            <store>connect</store>
+            <caption>User-defined var 47</caption>
+      </property>
+      <property>
+            <name>uservar48</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER48</reltype>
+            <store>connect</store>
+            <caption>User-defined var 48</caption>
+      </property>
+      <property>
+            <name>uservar49</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER49</reltype>
+            <store>connect</store>
+            <caption>User-defined var 49</caption>
+      </property>
+      <property>
+            <name>uservar50</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER50</reltype>
+            <store>connect</store>
+            <caption>User-defined var 50</caption>
+      </property>
+      <property>
+            <name>uservar51</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER51</reltype>
+            <store>connect</store>
+            <caption>User-defined var 51</caption>
+      </property>
+      <property>
+            <name>uservar52</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER52</reltype>
+            <store>connect</store>
+            <caption>User-defined var 52</caption>
+      </property>
+      <property>
+            <name>uservar53</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER53</reltype>
+            <store>connect</store>
+            <caption>User-defined var 53</caption>
+      </property>
+      <property>
+            <name>uservar54</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER54</reltype>
+            <store>connect</store>
+            <caption>User-defined var 54</caption>
+      </property>
+      <property>
+            <name>uservar55</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER55</reltype>
+            <store>connect</store>
+            <caption>User-defined var 55</caption>
+      </property>
+      <property>
+            <name>uservar56</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER57</reltype>
+            <store>connect</store>
+            <caption>User-defined var 56</caption>
+      </property>
+      <property>
+            <name>uservar58</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER58</reltype>
+            <store>connect</store>
+            <caption>User-defined var 58</caption>
+      </property>
+      <property>
+            <name>uservar59</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER59</reltype>
+            <store>connect</store>
+            <caption>User-defined var 59</caption>
+      </property>
+      <property>
+            <name>uservar60</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER60</reltype>
+            <store>connect</store>
+            <caption>User-defined var 60</caption>
+      </property>
+      <property>
+            <name>uservar61</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER61</reltype>
+            <store>connect</store>
+            <caption>User-defined var 61</caption>
+      </property>
+      <property>
+            <name>uservar62</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER62</reltype>
+            <store>connect</store>
+            <caption>User-defined var 62</caption>
+      </property>
+      <property>
+            <name>uservar63</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER63</reltype>
+            <store>connect</store>
+            <caption>User-defined var 63</caption>
+      </property>
+      <property>
+            <name>uservar64</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER64</reltype>
+            <store>connect</store>
+            <caption>User-defined var 64</caption>
+      </property>
+      <property>
+            <name>uservar65</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER65</reltype>
+            <store>connect</store>
+            <caption>User-defined var 65</caption>
+      </property>
+      <property>
+            <name>uservar66</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER66</reltype>
+            <store>connect</store>
+            <caption>User-defined var 66</caption>
+      </property>
+      <property>
+            <name>uservar67</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER67</reltype>
+            <store>connect</store>
+            <caption>User-defined var 67</caption>
+      </property>
+      <property>
+            <name>uservar68</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER68</reltype>
+            <store>connect</store>
+            <caption>User-defined var 68</caption>
+      </property>
+      <property>
+            <name>uservar69</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER69</reltype>
+            <store>connect</store>
+            <caption>User-defined var 69</caption>
+      </property>
+      <property>
+            <name>uservar70</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER70</reltype>
+            <store>connect</store>
+            <caption>User-defined var 70</caption>
+      </property>
+      <property>
+            <name>uservar71</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER71</reltype>
+            <store>connect</store>
+            <caption>User-defined var 71</caption>
+      </property>
+      <property>
+            <name>uservar72</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER72</reltype>
+            <store>connect</store>
+            <caption>User-defined var 72</caption>
+      </property>
+      <property>
+            <name>uservar73</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER73</reltype>
+            <store>connect</store>
+            <caption>User-defined var 73</caption>
+      </property>
+      <property>
+            <name>uservar74</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER74</reltype>
+            <store>connect</store>
+            <caption>User-defined var 74</caption>
+      </property>
+      <property>
+            <name>uservar75</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER75</reltype>
+            <store>connect</store>
+            <caption>User-defined var 75</caption>
+      </property>
+      <property>
+            <name>uservar76</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER76</reltype>
+            <store>connect</store>
+            <caption>User-defined var 76</caption>
+      </property>
+      <property>
+            <name>uservar77</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER77</reltype>
+            <store>connect</store>
+            <caption>User-defined var 77</caption>
+      </property>
+      <property>
+            <name>uservar78</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER78</reltype>
+            <store>connect</store>
+            <caption>User-defined var 78</caption>
+      </property>
+      <property>
+            <name>uservar79</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER79</reltype>
+            <store>connect</store>
+            <caption>User-defined var 79</caption>
+      </property>
+      <property>
+            <name>uservar80</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER80</reltype>
+            <store>connect</store>
+            <caption>User-defined var 80</caption>
       </property>
       <property>
             <name>usertext11</name>
-            <group>data</group>
+            <group>texts</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
@@ -743,7 +2027,7 @@
       </property>
       <property>
             <name>usertext12</name>
-            <group>data</group>
+            <group>texts</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
@@ -753,7 +2037,7 @@
       </property>
       <property>
             <name>usertext13</name>
-            <group>data</group>
+            <group>texts</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
@@ -763,7 +2047,7 @@
       </property>
       <property>
             <name>usertext14</name>
-            <group>data</group>
+            <group>texts</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
@@ -773,7 +2057,7 @@
       </property>
       <property>
             <name>usertext15</name>
-            <group>data</group>
+            <group>texts</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
@@ -783,7 +2067,7 @@
       </property>
       <property>
             <name>usertext16</name>
-            <group>data</group>
+            <group>texts</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
@@ -793,7 +2077,7 @@
       </property>
       <property>
             <name>usertext17</name>
-            <group>data</group>
+            <group>texts</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
@@ -803,7 +2087,7 @@
       </property>
       <property>
             <name>usertext18</name>
-            <group>data</group>
+            <group>texts</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
@@ -813,7 +2097,7 @@
       </property>
       <property>
             <name>usertext19</name>
-            <group>data</group>
+            <group>texts</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
@@ -823,7 +2107,7 @@
       </property>
       <property>
             <name>usertext20</name>
-            <group>data</group>
+            <group>texts</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
@@ -833,7 +2117,7 @@
       </property>
       <property>
             <name>usertext21</name>
-            <group>data</group>
+            <group>texts</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
@@ -843,7 +2127,7 @@
       </property>
       <property>
             <name>usertext22</name>
-            <group>data</group>
+            <group>texts</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
@@ -853,7 +2137,7 @@
       </property>
       <property>
             <name>usertext23</name>
-            <group>data</group>
+            <group>texts</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
@@ -863,7 +2147,7 @@
       </property>
       <property>
             <name>usertext24</name>
-            <group>data</group>
+            <group>texts</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
@@ -873,7 +2157,7 @@
       </property>
       <property>
             <name>usertext25</name>
-            <group>data</group>
+            <group>texts</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
@@ -882,24 +2166,244 @@
             <caption>Usertext25</caption>
       </property>
       <property>
-            <name>usersubmit1</name>
-            <group>data</group>
+            <name>usertext26</name>
+            <group>texts</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
-            <type>submit</type>
+            <type>text</type>
             <store>no</store>
-            <caption>User-defined submit 1</caption>
+            <caption>Usertext26</caption>
       </property>
       <property>
-            <name>userreset1</name>
-            <group>data</group>
+            <name>usertext27</name>
+            <group>texts</group>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
-            <type>reset</type>
+            <type>text</type>
             <store>no</store>
-            <caption>User-defined reset 1</caption>
+            <caption>Usertext27</caption>
+      </property>
+      <property>
+            <name>usertext28</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>text</type>
+            <store>no</store>
+            <caption>Usertext28</caption>
+      </property>
+      <property>
+            <name>usertext29</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>text</type>
+            <store>no</store>
+            <caption>Usertext29</caption>
+      </property>
+      <property>
+            <name>usertext30</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>text</type>
+            <store>no</store>
+            <caption>Usertext30</caption>
+      </property>
+      <property>
+            <name>usertext31</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>text</type>
+            <store>no</store>
+            <caption>Usertext31</caption>
+      </property>
+      <property>
+            <name>usertext32</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>text</type>
+            <store>no</store>
+            <caption>Usertext32</caption>
+      </property>
+      <property>
+            <name>usertext33</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>text</type>
+            <store>no</store>
+            <caption>Usertext33</caption>
+      </property>
+      <property>
+            <name>usertext34</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>text</type>
+            <store>no</store>
+            <caption>Usertext34</caption>
+      </property>
+      <property>
+            <name>usertext35</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>text</type>
+            <store>no</store>
+            <caption>Usertext35</caption>
+      </property>
+      <property>
+            <name>usertext36</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>text</type>
+            <store>no</store>
+            <caption>Usertext36</caption>
+      </property>
+      <property>
+            <name>usertext37</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>text</type>
+            <store>no</store>
+            <caption>Usertext38</caption>
+      </property>
+      <property>
+            <name>usertext39</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>text</type>
+            <store>no</store>
+            <caption>Usertext39</caption>
+      </property>
+      <property>
+            <name>usertext40</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>text</type>
+            <store>no</store>
+            <caption>Usertext40</caption>
+      </property>
+      <property>
+            <name>usertext41</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>text</type>
+            <store>no</store>
+            <caption>Usertext41</caption>
+      </property>
+      <property>
+            <name>usertext42</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>text</type>
+            <store>no</store>
+            <caption>Usertext42</caption>
+      </property>
+      <property>
+            <name>usertext43</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>text</type>
+            <store>no</store>
+            <caption>Usertext43</caption>
+      </property>
+      <property>
+            <name>usertext44</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>text</type>
+            <store>no</store>
+            <caption>Usertext44</caption>
+      </property>
+      <property>
+            <name>usertext45</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>text</type>
+            <store>no</store>
+            <caption>Usertext45</caption>
+      </property>
+      <property>
+            <name>usertext46</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>text</type>
+            <store>no</store>
+            <caption>Usertext46</caption>
+      </property>
+      <property>
+            <name>usertext47</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>text</type>
+            <store>no</store>
+            <caption>Usertext47</caption>
+      </property>
+      <property>
+            <name>usertext48</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>text</type>
+            <store>no</store>
+            <caption>Usertext48</caption>
+      </property>
+      <property>
+            <name>usertext49</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>text</type>
+            <store>no</store>
+            <caption>Usertext49</caption>
+      </property>
+      <property>
+            <name>usertext50</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>text</type>
+            <store>no</store>
+            <caption>Usertext50</caption>
       </property>
       <classinfo>
             <syslog_type>ST_REGISTER_DATA</syslog_type>
@@ -910,6 +2414,18 @@
             <data>
                   <caption>Andmed</caption>
             </data>
+            <textboxes>
+                  <caption>Textbox</caption>
+            </textboxes>
+            <textareas>
+                  <caption>Textarea</caption>
+            </textareas>
+            <classificators>
+                  <caption>Classificator</caption>
+            </classificators>
+            <texts>
+                  <caption>Text</caption>
+            </texts>
       </groupinfo>
       <tableinfo>
             <aw_register_data>
@@ -965,7 +2481,7 @@
                   <caption>kasutajadefineeritud muutuja 9</caption>
             </VARUSER9>
             <VARUSER10>
-                  <value>10</value>
+                  <value>100</value>
                   <clid>CL_META</clid>
                   <caption>kasutajadefineeritud muutuja 10</caption>
             </VARUSER10>
@@ -1019,6 +2535,306 @@
                   <clid>CL_META</clid>
                   <caption>kasutajadefineeritud muutuja 20</caption>
             </VARUSER20>
+            <VARUSER21>
+                  <value>21</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 21</caption>
+            </VARUSER21>
+            <VARUSER22>
+                  <value>22</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 22</caption>
+            </VARUSER22>
+            <VARUSER23>
+                  <value>23</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 23</caption>
+            </VARUSER23>
+            <VARUSER24>
+                  <value>24</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 24</caption>
+            </VARUSER24>
+            <VARUSER25>
+                  <value>25</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 25</caption>
+            </VARUSER25>
+            <VARUSER26>
+                  <value>26</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 26</caption>
+            </VARUSER26>
+            <VARUSER27>
+                  <value>27</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 27</caption>
+            </VARUSER27>
+            <VARUSER28>
+                  <value>28</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 28</caption>
+            </VARUSER28>
+            <VARUSER29>
+                  <value>29</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 29</caption>
+            </VARUSER29>
+            <VARUSER30>
+                  <value>30</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 30</caption>
+            </VARUSER30>
+            <VARUSER31>
+                  <value>31</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 31</caption>
+            </VARUSER31>
+            <VARUSER32>
+                  <value>32</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 32</caption>
+            </VARUSER32>
+            <VARUSER33>
+                  <value>33</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 33</caption>
+            </VARUSER33>
+            <VARUSER34>
+                  <value>34</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 34</caption>
+            </VARUSER34>
+            <VARUSER35>
+                  <value>35</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 35</caption>
+            </VARUSER35>
+            <VARUSER36>
+                  <value>36</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 36</caption>
+            </VARUSER36>
+            <VARUSER37>
+                  <value>37</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 37</caption>
+            </VARUSER37>
+            <VARUSER38>
+                  <value>38</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 38</caption>
+            </VARUSER38>
+            <VARUSER39>
+                  <value>39</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 39</caption>
+            </VARUSER39>
+            <VARUSER40>
+                  <value>40</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 40</caption>
+            </VARUSER40>
+            <VARUSER41>
+                  <value>41</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 41</caption>
+            </VARUSER41>
+            <VARUSER42>
+                  <value>42</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 42</caption>
+            </VARUSER42>
+            <VARUSER43>
+                  <value>43</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 43</caption>
+            </VARUSER43>
+            <VARUSER44>
+                  <value>44</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 44</caption>
+            </VARUSER44>
+            <VARUSER45>
+                  <value>45</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 45</caption>
+            </VARUSER45>
+            <VARUSER46>
+                  <value>46</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 46</caption>
+            </VARUSER46>
+            <VARUSER47>
+                  <value>47</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 47</caption>
+            </VARUSER47>
+            <VARUSER48>
+                  <value>48</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 48</caption>
+            </VARUSER48>
+            <VARUSER49>
+                  <value>49</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 49</caption>
+            </VARUSER49>
+            <VARUSER50>
+                  <value>50</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 50</caption>
+            </VARUSER50>
+            <VARUSER51>
+                  <value>51</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 51</caption>
+            </VARUSER51>
+            <VARUSER52>
+                  <value>52</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 52</caption>
+            </VARUSER52>
+            <VARUSER53>
+                  <value>53</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 53</caption>
+            </VARUSER53>
+            <VARUSER54>
+                  <value>54</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 54</caption>
+            </VARUSER54>
+            <VARUSER55>
+                  <value>55</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 55</caption>
+            </VARUSER55>
+            <VARUSER56>
+                  <value>56</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 56</caption>
+            </VARUSER56>
+            <VARUSER57>
+                  <value>57</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 57</caption>
+            </VARUSER57>
+            <VARUSER58>
+                  <value>58</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 58</caption>
+            </VARUSER58>
+            <VARUSER59>
+                  <value>59</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 59</caption>
+            </VARUSER59>
+            <VARUSER60>
+                  <value>60</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 60</caption>
+            </VARUSER60>
+            <VARUSER61>
+                  <value>61</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 61</caption>
+            </VARUSER61>
+            <VARUSER62>
+                  <value>62</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 62</caption>
+            </VARUSER62>
+            <VARUSER63>
+                  <value>63</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 63</caption>
+            </VARUSER63>
+            <VARUSER64>
+                  <value>64</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 64</caption>
+            </VARUSER64>
+            <VARUSER65>
+                  <value>65</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 65</caption>
+            </VARUSER65>
+            <VARUSER66>
+                  <value>66</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 66</caption>
+            </VARUSER66>
+            <VARUSER67>
+                  <value>67</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 67</caption>
+            </VARUSER67>
+            <VARUSER68>
+                  <value>68</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 68</caption>
+            </VARUSER68>
+            <VARUSER69>
+                  <value>69</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 69</caption>
+            </VARUSER69>
+            <VARUSER70>
+                  <value>70</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 70</caption>
+            </VARUSER70>
+            <VARUSER71>
+                  <value>71</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 71</caption>
+            </VARUSER71>
+            <VARUSER72>
+                  <value>72</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 72</caption>
+            </VARUSER72>
+            <VARUSER73>
+                  <value>73</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 73</caption>
+            </VARUSER73>
+            <VARUSER74>
+                  <value>74</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 74</caption>
+            </VARUSER74>
+            <VARUSER75>
+                  <value>75</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 75</caption>
+            </VARUSER75>
+            <VARUSER76>
+                  <value>76</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 76</caption>
+            </VARUSER76>
+            <VARUSER77>
+                  <value>77</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 77</caption>
+            </VARUSER77>
+            <VARUSER78>
+                  <value>78</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 78</caption>
+            </VARUSER78>
+            <VARUSER79>
+                  <value>79</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 79</caption>
+            </VARUSER79>
+            <VARUSER80>
+                  <value>80</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 80</caption>
+            </VARUSER80>
             <REGISTER>
                   <value>10</value>
                   <clid>CL_REGISTER</clid>
