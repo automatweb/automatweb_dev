@@ -12,6 +12,14 @@
 			<function name="browser">
 				<arguments>
 					<optional name="type"/>
+					<optional name="parent"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_hd">
+			<function name="submit_hd">
+				<arguments>
 				</arguments>
 			</function>
 		</action>
