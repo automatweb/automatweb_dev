@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.101 2002/06/26 11:24:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.102 2002/06/28 14:33:57 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -434,10 +434,16 @@ class form extends form_base
 		$this->arr["show_form_with_results"] = $show_form_with_results;
 		$this->arr["sql_writer_writer"] = $sql_writer_writer;
 		$this->arr["sql_writer_writer_form"] = $sql_writer_writer_form;
+		$this->arr["event_display_table"] = $event_display_table;
 
 		if ($ev_entry_form)
 		{
 			$this->subtype = FSUBTYPE_EV_ENTRY;
+		}
+		
+		if ($email_form_action)
+		{
+			$this->subtype = FSUBTYPE_EMAIL_ACTION;
 		}
 		/*
 		$this->arr["has_calendar"] = $has_calendar;
@@ -445,7 +451,6 @@ class form extends form_base
 		$this->arr["event_entry_form"] = $event_entry_form;
 		$this->arr["event_check_form"] = $event_check_form;
 		$this->arr["event_check_against_form"] = $event_check_against_form;
-		$this->arr["event_display_table"] = $event_display_table;
 		$this->arr["is_order_form"] = $is_order_form;
 		*/
 
@@ -756,40 +761,14 @@ class form extends form_base
 		extract($arr);
 		$this->init($id,"settings.tpl", LC_FORM_CHANGE_SETTINGS);
 
-		print "<pre>";
-		print_r($this->meta);
-		print "</pre>";
-
 		classload("style");
 		$t = new style;
 		$o = new db_objects;
 		$menulist = $o->get_list();
 		$ops = $this->get_op_list($id);
-		
-		// FIXME: calendar settings should probably be on their own tab
-	
-		// list of forms for calendar controller
-		/*
-		$this->get_objects_by_class(array("class" => CL_FORM));
-		$forms = array();
-		while($row = $this->db_next())
-		{
-			$forms[$row["oid"]] = $row["name"];
-		};
-		*/
 
-		// if entries of this form are to be checked against a calendar
-		// fetch a list of elements in that form so that we can give the
-		// user the possibility to choose the element to which the calendar
-		// belongs
-
-		/*
-		if ($this->arr["event_check_form"])
-		{
-			$ft = get_instance("form_table");
-			$tables = array("0" => "Vali üks") + $ft->get_tables_for_form($id);
-		}
-		*/
+		$ft = get_instance("form_table");
+		$tables = array("0" => "Vali üks") + $ft->get_tables_for_form($id);
 
 		$this->vars(array(
 			"allow_html"	=> checked($this->arr["allow_html"]),
@@ -805,9 +784,8 @@ class form extends form_base
 			"check_status"	=> checked($this->arr["check_status"]),
 			"has_aliasmgr"	=> checked($this->arr["has_aliasmgr"]),
 			"has_controllers"	=> checked($this->arr["has_controllers"]),
-			//"has_calendar"	=> checked($this->arr["has_calendar"]),
 			"ev_entry_form" => checked($this->subtype == FSUBTYPE_EV_ENTRY),
-			//"is_order_form"	=> checked($this->arr["is_order_form"]),
+			"email_form_action" => checked($this->subtype == FSUBTYPE_EMAIL_ACTION),
 			"check_status_text" => $this->arr["check_status_text"],
 			"show_table_checked" => checked($this->arr["show_table"]),
 			"tables" => $this->picker($this->arr["table"],$this->get_list_tables()),
@@ -818,11 +796,7 @@ class form extends form_base
 			"sql_writer_writer_forms" => $this->picker($this->arr["sql_writer_writer_form"], $this->get_flist(array("type" => FTYPE_ENTRY, "addfolders" => true, "search" => true))),
 			"forms" => $this->picker($this->arr["sql_writer_form"], $this->get_flist(array("type" => FTYPE_ENTRY, "addfolders" => true, "search" => true))),
 			"show_form_with_results" => checked($this->arr["show_form_with_results"]),
-			//"cal_controllers" => $this->picker($this->arr["cal_controller"],$forms),
-			//"event_entry_forms" => $this->picker($this->arr["event_entry_form"],$forms),
-			//"event_check_form" => checked($this->arr["event_check_form"]),
-			//"event_check_against_forms" => $this->picker($this->arr["event_check_against_form"],$forms),
-			//"event_display_tables" => $this->picker($this->arr["event_display_table"],$tables),
+			"event_display_tables" => $this->picker($this->arr["event_display_table"],$tables),
 		));
 
 		$ns = "";
@@ -1082,6 +1056,7 @@ class form extends form_base
 			"reforb"						=> $reforb,
 			"checks"						=> $chk_js,
 			"stat_check_sub" => (aw_global_get("fg_check_status")) ? $check : "",
+			"ch_link" => $this->mk_my_orb("change",array("id" => $id),"form",1,1),
 		));
 
 		classload("style");
@@ -1103,6 +1078,13 @@ class form extends form_base
 			"form_vspace"				=> (isset($s["vspace"]) && $s["vspace"] != "" ? " VSPACE='".$s["vspace"]."'" : ""),
 			"form_hspace"				=> (isset($s["hspace"]) && $s["hspace"] != "" ? " HSPACE='".$s["hspace"]."'" : ""),
 		));
+
+		if ($this->can("edit",$id))
+		{
+			$this->vars(array(
+				"EDIT" => $this->parse("EDIT"),
+			));
+		}
 
 		$st = $this->parse();				
 
@@ -1264,6 +1246,7 @@ class form extends form_base
 				"start" => $_range_start,
 				"end" => $_range_end,
 				"count" => $_count,
+				"eform" => $this->id,
 			));
 
 
@@ -1396,7 +1379,7 @@ class form extends form_base
 		}
 
 		$this->do_actions($this->entry_id);
-		
+
 		// update_fcal_timedef is set to chain_id in form_chain->submit_form by altering
 		// time period definitions for a form calendar.
 
@@ -1426,6 +1409,7 @@ class form extends form_base
 			$fc->upd_event(array(
 				"entry_id" => $this->entry_id,
 				"cal_id" => $cal_id,
+				"eform" => $this->id,
 				"start" => $_range_start,
 				"end" => $_range_end,
 				"items" => $_count,
@@ -2202,6 +2186,7 @@ class form extends form_base
 		{
 //			echo "loading entry $entry_id <br>";
 			$this->load_entry($entry_id);
+//			echo "this->entry = <pre>", var_dump($this->entry),"</pre> <br>";
 		}
 
 		if ($restrict_search_el)
@@ -2335,6 +2320,7 @@ class form extends form_base
 					dbg("id = " . $fc->chain["cal_form"] . "<br>");
 					$has_vacancies = $fcal->check_vacancies(array(
 						"cal_id" => $cid,
+						"eform" => $this->id,
 						"id" => $fc->chain["cal_form"],
 						"eid" => $row["chain_entry_id"],
 						"start" => $start,
