@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml.aw,v 2.7 2001/10/02 10:16:58 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml.aw,v 2.8 2001/11/28 10:07:25 duke Exp $
 // xml.aw - generic class for handling data in xml format.
 // at the moment (Apr 25, 2001) it can serialize PHP arrays to XML and vice versa
 // now, I'm working on adding XML-RPC format support for this.
@@ -197,8 +197,17 @@ class xml {
 			//$awt->start("xml::unserialize::datacycles");
 			$tag = $v1["tag"];
 			//$awt->start("xml::unserialize::prefix_replace");
-			
-			$tag = preg_replace("/^" . $this->num_prefix . "/","",$tag);
+		
+			// hm. mulle tundub, et seda voiks teha str_replacega, mis annaks ilmselt pisikese kiirusevoidu ka.
+			$pref_idx = strpos($tag,$this->num_prefix);
+			if (not($pref_idx === false))
+			{
+				$realkey = substr($tag,strlen($this->num_prefix));
+				if ($realkey == sprintf("%d",$realkey))
+				{
+					$tag = $realkey;
+				};
+			};
 
 			//if (strpos($tag,$this->num_prefix) == 0)
 			//{
