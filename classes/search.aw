@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.48 2003/10/06 14:32:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.49 2003/10/22 13:24:32 duke Exp $
 // search.aw - Search Manager
 
 /*
@@ -1352,8 +1352,10 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		elseif($subaction == "copy" || ($subaction == "cut" && $s["server"]))
 		{
 			$copied_objects = array();
+			$rels = array();
 			if (is_array($sel))
 			{
+				// ok, so how do I add objects to here?
 				foreach($sel as $oid => $one)
 				{
 //					aw_global_set("xmlrpc_dbg",1);
@@ -1361,12 +1363,24 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 					if ($r !== false)
 					{
+						if (is_array($r["connections"]))
+						{
+							$rels = $rels + $r["connections"];
+						};
 						$copied_objects[$oid] = $r;
 						$ra = aw_unserialize($r);
 //					echo "r = $r <br />ra = <pre>", var_dump($ra),"</pre> <br />";
 					}
 				}
 			}
+			foreach($rels as $rel_id)
+			{
+				$r = $this->_search_mk_call("objects","serialize",array("oid" => $rel_id["to"]), $args);
+				if ($r !== false)
+				{
+					$copied_objects[$rel_id["to"]] = $r;
+				};
+			};
 			aw_session_set("copied_objects", $copied_objects);
 		}
 		elseif($subaction == "delete")
