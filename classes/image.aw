@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.61 2003/06/25 14:21:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.62 2003/06/26 14:13:13 kristo Exp $
 // image.aw - image management
 /*
 	@default group=general
@@ -97,7 +97,7 @@ class image extends class_base
 		{
 			$url = $this->mk_my_orb("show", array("fastcall" => 1,"file" => basename($url)),"image",false,true,"/");
 			$retval = str_replace("automatweb/", "", $url);
-			$retval .= "/aw_img.jpg";
+			//$retval .= "/aw_img.jpg";
 		}
 		else
 		{
