@@ -1,10 +1,13 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.31 2003/02/01 13:36:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.32 2003/02/01 21:44:30 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
 	// stuff that goes into the objects table
 	@default table=objects
+	
+	@property target type=checkbox group=general ch_value=1 search=1 table=menu
+	@caption Uues aknas
 
 	@property users_only type=checkbox field=meta method=serialize group=advanced ch_value=1
 	@caption Ainult sisselogitud kasutajatele
@@ -88,25 +91,16 @@
 	
 	@property admin_feature type=select group=general table=menu field=admin_feature
 	@caption Vali programm
-	
-	@property pclass type=select table=objects field=meta method=serialize group=general
-	@caption Vali meetod
-	
-	@property pm_url_admin type=checkbox table=objects field=meta method=serialize group=general ch_value=1
-	@caption Meetod viitab adminni
 
-	@property pm_url_menus type=checkbox table=objects field=meta method=serialize group=general ch_value=1
-	@caption Meetodi väljundi kuvamisel menüüde näitamine
-
+	@property pmethod_properties type=callback callback=callback_get_pmethod_options group=general store=no
+	@caption Avaliku meetodi seaded
+	
 	@property clickable type=checkbox group=advanced ch_value=1
 	@caption Klikitav
 	
 	@property no_menus type=checkbox group=advanced ch_value=1
 	@caption Ilma menüüdeta
 	
-	@property target type=checkbox group=general ch_value=1 search=1
-	@caption Uues aknas
-
 	@property mid type=checkbox group=advanced ch_value=1
 	@caption Paremal
 	
@@ -164,6 +158,7 @@
 	@classinfo objtable=menu
 	@classinfo objtable_index=id
 	@classinfo corefields=name,comment,alias,status,jrk
+	@classinfo syslog_type=ST_MENU
 
 	@groupinfo general caption=Üldine default=1
 	@groupinfo advanced caption=Spetsiaal
@@ -171,10 +166,11 @@
 	@groupinfo relations caption=Seosed
 	@groupinfo presentation caption=Presentatsioon
 	@groupinfo show caption=Näitamine
-	@groupinfo import_export caption=Import/Eksport submit=no
+	@groupinfo import_export caption=Eksport submit=no
 
 	@tableinfo menu index=id master_table=objects master_index=oid
 */
+
 class menu extends class_base
 {
 	function menu($args = array())
@@ -284,26 +280,6 @@ class menu extends class_base
 				};
 				break;	
 
-			case "pclass":
-				// only show the public method selector, if the menu has the correct type
-				if ($args["objdata"]["type"] == MN_PMETHOD)
-				{
-					$data["options"] = $this->get_pmethod_sel();
-				}
-				else
-				{
-					$retval = PROP_IGNORE;
-				};
-				break;
-
-			case "pm_url_admin":
-			case "pm_url_menus":
-				if ($args["objdata"]["type"] != MN_PMETHOD)
-				{
-					$retval = PROP_IGNORE;
-				}
-				break;
-
 		};
 		return $retval;
 	}
@@ -372,6 +348,7 @@ class menu extends class_base
 	function callback_get_export_options($args = array())
 	{
 		$submenus = $this->get_menu_list(false,false,$args["obj"]["oid"]);
+		$nodes = array();
 		$tmp = array(
 			"type" => "select",
 			"multiple" => 1,
@@ -406,6 +383,43 @@ class menu extends class_base
 		return $nodes;
 	}
 
+	function callback_get_pmethod_options($args = array())
+	{
+		if ($args["objdata"]["type"] != MN_PMETHOD)
+		{
+			return PROP_IGNORE;
+		};
+
+		$nodes = array();
+
+		$nodes[] = array(
+			"type" => "select",
+			"name" => "pclass",
+			"caption" => "Vali meetod",
+			"options" => array(),
+			"selected" => $args["obj"]["meta"]["pclass"],
+			"options" => $this->get_pmethod_sel(),
+		);
+		
+		$nodes[] = array(
+			"type" => "checkbox",
+			"name" => "pm_url_admin",
+			"value" => 1,
+			"caption" => "Meetod viitab adminni",
+			"ch_value" => $args["obj"]["meta"]["pm_url_admin"],
+		);
+		
+		$nodes[] = array(
+			"type" => "checkbox",
+			"name" => "pm_url_menus",
+			"value" => 1,
+			"caption" => "Meetodi väljundi kuvamisel näidatakse menüüsid",
+			"ch_value" => $args["obj"]["meta"]["pm_url_menus"],
+		);
+		
+		return $nodes;
+	}
+			
 	function set_property($args = array())
 	{	
 		$data = &$args["prop"];
@@ -448,6 +462,7 @@ class menu extends class_base
 					"menu" => array_merge($args["obj"],$args["objdata"]),
 					"sections" => $args["form_data"]["sections"],
 				));
+				break;
 
 			case "type":
 				$form_data = &$args["form_data"];
@@ -457,10 +472,12 @@ class menu extends class_base
 				};
 				if ($form_data["type"] != MN_PMETHOD)
 				{
-					$form_data["pclass"] = "";
-					$form_data["pm_url_admin"] = "";
-					$form_data["pm_url_menus"] = "";
+					$metadata = &$args["metadata"];
+					$metadata["pclass"] = "";
+					$metadata["pm_url_admin"] = "";
+					$metadata["pm_url_menus"] = "";
 				};
+				break;
 
 			case "menu_images":
 				$form_data = &$args["form_data"];
@@ -475,6 +492,16 @@ class menu extends class_base
 					));
 					$this->menu_images_done = 1;
 				};
+				break;
+
+			case "pmethod_properties":
+				$form_data = &$args["form_data"];
+				$metadata = &$args["metadata"];
+				$metadata["pclass"] = $form_data["pclass"];
+				$metadata["pm_url_menus"] = $form_data["pm_url_menus"];
+				$metadata["pm_url_admin"] = $form_data["pm_url_admin"];
+				break;
+				
 		};
                 return $retval;
 	}
