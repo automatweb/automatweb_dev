@@ -1,0 +1,19 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="personalikeskkond" folder="personalihaldus" extends="class_base">
+		<action name="delete_rels" >
+			<function name="delete_rels">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="save_changes" >
+			<function name="save_changes">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>
