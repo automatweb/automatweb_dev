@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.11 2004/03/11 09:07:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.12 2004/03/15 08:44:26 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -660,7 +660,10 @@ class poll extends class_base
 		$table->parse_xml_def("poll/list");
 
 		$active = $this->get_active_poll();
-		$active = $active->id();
+		if (is_object($active))
+		{
+			$active = $active->id();
+		}
 
 		$pl = new object_list(array(
 			"class_id" => CL_POLL
