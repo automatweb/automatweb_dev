@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/lang/ee/Attic/common.aw,v 2.1 2001/05/18 18:14:27 duke Exp $
 // kuude nimed
 define(LC_M1,"jaanuar");
 define(LC_M2,"veebruar");
@@ -77,5 +78,6 @@ define(MN_BANNERS,"Bannerid");
 define(MN_SEARCH_OBJS,"Objektide otsing");
 define(MN_SITE_BANNER_ADMIN,"Kasutaja bannerite admin");
 define(MN_SITE_BANNER_STATS,"Kasutaja bannerite statistika");
+define(MN_KEYWORD,"Võtmesõnad");
 
 ?>
