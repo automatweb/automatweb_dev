@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.3 2004/06/07 13:16:40 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.4 2004/06/17 13:28:07 kristo Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -41,7 +41,7 @@ property manager type=text no_caption=1 store=no wrapchildren=1 group=employers
 
 -----------------TAB DEFINTIONS--------------------
 @groupinfo my_profile caption="Minu profiil" tabgroup=navi
-@groupinfo org_profile caption="Tööpakkuja profiil" 
+@groupinfo org_profile caption="Tööpakkuja profiil"
 @groupinfo employee caption="Tööotsijad" submit=no
 @groupinfo employers caption="Tööpakkumised" submit=no
 @groupinfo managers caption="Halduri profiil"
@@ -177,12 +177,12 @@ class personnel_management extends class_base
 		}
 	}
 
-	
+
 	function callback_on_load($arr)
 	{
 		$this->cfgmanager = $this->cfg["configform_manager"];
 	}
-	
+
 	/**
 		@attrib name=delete_rels
 	**/
@@ -191,11 +191,11 @@ class personnel_management extends class_base
 		foreach ($arr["sel"] as $conn)
 		{
 			$conn=new connection($conn);
-			$conn->delete();	
+			$conn->delete();
 		}
 		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"]), CL_PERSONNEL_MANAGEMENT);
 	}
-	
+
 	/**
 		@attrib name=set_default_cv
 	**/
@@ -205,8 +205,16 @@ class personnel_management extends class_base
 		$this->my_profile["person_obj"]->save();
 		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"]), $arr["class"]);
 	}
-	
 
+	/**
+		@attrib name=view_letter all_args="1"
+	**/
+	
+	function view_letter($arr)
+	{
+		$rel_obj = &obj($arr["id"]);
+		echo $rel_obj->meta("kaaskiri");	
+	}
 	
 	function get_property($arr)
 	{
@@ -348,14 +356,25 @@ class personnel_management extends class_base
 	
 	function do_personlist_table($arr)
 	{
+
+		$gidlist = aw_global_get("gidlist_oid");
+		if(array_search(aw_ini_get("personnel_management.unloged_users") , $gidlist))
+		{
+			$name_caption = "Kood";
+		}
+		else
+		{
+			$name_caption = "Nimi";
+		}
+
 		$table = &$arr["prop"]["vcl_inst"];
-		
+
 		$table->define_field(array(
 				"name" => "nimi",
-				"caption" => "Nimi",
+				"caption" => $name_caption,
 				"sortable" => 1,
 		));
-				
+
 		$table->define_field(array(
 				"name" => "modified",
 				"caption" => "Muudetud",
@@ -367,7 +386,7 @@ class personnel_management extends class_base
 				"caption" => "Sündinud",
 				"sortable" => 1,
 		));
-		
+
 	
 		$manager = current($this->my_profile["manager_list"]);
 		if (!is_object($manager))
@@ -447,18 +466,29 @@ class personnel_management extends class_base
 				{
 					$count = true;
 				}
-				
+
 				if($count)
 				{
 					if($data["person"]->prop("birthday"))
 					{
 						$synd = get_lc_date($data["person"]->prop("birthday"));
 					}
-			
+
+					$gidlist = aw_global_get("gidlist_oid");
+
+					if(array_search($this->cfg["unloged_users"] , $gidlist))
+					{
+						$personname = $data["person"]->id();
+					}
+					else
+					{
+						$personname = $data["person"]->name();
+					}
+
 					$table->define_data(array(
 						"nimi" => html::href(array(
-							"url" => "javascript:aw_popup_scroll(\"".$this->mk_my_orb("change", array("id" => $data["cv_obj"]->id()), CL_PERSONNEL_MANAGEMENT_CV, true, true). "\",\"cv\",800,600)",
-							"caption" => $data["person"]->name(),
+							"url" => "javascript:aw_popup_scroll(\"".$this->mk_my_orb("change", array("id" => $data["cv_obj"]->id()), CL_PERSONNEL_MANAGEMENT_CV, false, true). "\",\"cv\",800,600)",
+							"caption" => $personname,
 						)),
 						"modified" => get_lc_date($data["cv_obj"]->modified()),
 						"synd" => $synd,
@@ -552,52 +582,52 @@ class personnel_management extends class_base
 			));
 		}
 	}
-	
+
 	function do_joblist($arr)
 	{
 		$table = &$arr["prop"]["vcl_inst"];
-		
+
 		$table->define_field(array(
 			"name" => "amet",
 			"caption" => "Ametinimetus",
 			"sortable" => 1,
 		));
-			
+
 		$table->define_field(array(
 			"name" => "pakkuja",
 			"caption" => "Tööpakkuja",
 			"sortable" => 1,
 		));
-				
+
 		$table->define_field(array(
 			"name" => "asukoht",
 			"caption" => "Asukoht",
 			"sortable" => 1,
-			
+
 		));
 
 		$table->define_field(array(
 			"name" => "deadline",
 			"caption" => "Tähtaeg",
 			"sortable" => 1,
-				
+
 		));
-		
+
 		$manager = current($this->my_profile["manager_list"]);
 		if  (!is_object($manager))
 		{
 			return 0;
 		}
-		
+
 		$toopakkujad_ids = array();
 		$toopakkujad = array();
-		
+
 		foreach($manager->connections_from(array("type" => RELTYPE_TOOPAKKUJA)) as $toopakkuja)
 		{
 			array_push($toopakkujad_ids, $toopakkuja->prop("to"));
 			$toopakkujad[$toopakkuja->prop("to")]["name"]=$toopakkuja->prop("to.name");
 		}
-		
+
 		$jobs_conn = new connection();
 		$jobs_list = $jobs_conn->find(array(
 			"from" => $toopakkujad_ids,
@@ -605,25 +635,25 @@ class personnel_management extends class_base
 			"to.status" => STAT_ACTIVE,
 			//"deadline" => new obj_predicate_compare(OBJ_COMP_LESS, time()),
 		));
-		
+
 		foreach ($jobs_list as $job)
 		{
-			$job_data[$job["to"]]["company"] = $job["from.name"]; 
-			$job_ids[] = $job["to"];	
+			$job_data[$job["to"]]["company"] = $job["from.name"];
+			$job_ids[] = $job["to"];
 		}
-		
+
 		if($_GET["sector_id"])
 		{
 			$job_sector_conns = new connection();
-			
+
 			$job_sector_list = $job_sector_conns->find(array(
 				"from" => $job_ids,
 				"to" => $_GET["sector_id"],
 			));
-			
+
 			$job_sector_list;
 			$job_ids = "";
-			
+
 			//Mingi anomaalia aga foreach ei taha selle masiiviga töödata.
 			while($job_sector_list)
 			{
@@ -631,31 +661,31 @@ class personnel_management extends class_base
 				$job_ids[] = $temp["from"];
 			}
 		}
-		
+
 		$job_ob_list = new object_list(array(
         	"status" => STAT_ACTIVE,
         	"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
         	"oid" => $job_ids,
         	"deadline" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
         ));
-        
+
         $city_conns = new connection();
-        
+
         $city_conns = $city_conns->find(array(
         	"from" => $job_ob_list->ids(),
         	"type" => 4,
         ));
-        
+
         foreach($city_conns as $city_conn)
         {
         	$city_data[$city_conn["from"]] = $city_conn["to.name"];
         }
-        
-   
-		
+
+
+
         foreach ($job_ob_list->arr() as $job)
 		{
-		
+
 			if($job->prop("deadline"))
 			{
         		$deadline = get_lc_date($job->prop("deadline"));
@@ -664,23 +694,23 @@ class personnel_management extends class_base
         	{
         		$deadline = "Määramata";
         	}
-        	
+
 			$table->define_data(array(
 				"amet" => html::href(array(
 							"caption" => $job->prop("name"),
-							"url" => "javascript:aw_popup_scroll(\"".$this->mk_my_orb("change", array("id" => $job->id()) , CL_PERSONNEL_MANAGEMENT_JOB_OFFER, true, true). "\",\"cv\",800,600)",
+							"url" => "javascript:aw_popup_scroll(\"".$this->mk_my_orb("change", array("id" => $job->id()) , CL_PERSONNEL_MANAGEMENT_JOB_OFFER, false, true). "\",\"cv\",800,600)",
 				)),
-				
+
 				"pakkuja" => $job_data[$job->id()]["company"],
 				"asukoht" => $city_data[$job->id()],
 				"deadline" => $deadline,
 				"created" => $job->created(),
 			));
 		}
-		
+
 		$table->set_default_sortby("created");
 		$table->set_default_sorder("desc");
-		$table->sort_by(); 
+		$table->sort_by();
 	}
 	
 	function count_sector_cvs(&$arr, $sector_id)
@@ -978,6 +1008,12 @@ class personnel_management extends class_base
 		));	
 		
 		$table->define_field(array(
+			"name" => "kaaskiri",
+			"caption" => "Kaaskiri",
+			"sortable" => 1,
+		));
+		
+		$table->define_field(array(
 			"name" => "hinne",
 			"caption" => "Hinne",
 			"sortable" => 1,
@@ -998,16 +1034,28 @@ class personnel_management extends class_base
 			$job = $job->to();
 			foreach ($job->connections_from(array("type" => 5)) as $cv)
 			{
-				$cv_rel_created = $cv->prop("created");
-				
 				$cv_connid = $cv->id();
 							
 				$cvcreated = $cv->prop("created");
 				
 				$rel_obj = obj($cv->prop("relobj_id"));
-					
+				
+				$cv_rel_created = $rel_obj->created();
+				
 				$cv = $cv->to();
-
+				
+				if($rel_obj->meta("kaaskiri"))
+				{
+					$kaaskiri_url = html::href(array(
+						"caption" => "kaaskiri",
+						"url" => "javascript:aw_popup_scroll(\"".$this->mk_my_orb("view_letter", array("id" => $rel_obj->id()), CL_PERSONNEL_MANAGEMENT, false, true). "\",\"letter\",500,200)",
+					));
+				}
+				else
+				{
+					$kaaskiri_url = "Puudub";
+				}
+				
 				foreach ($cv->connections_to(array("from.class_id" => CL_CRM_PERSON)) as $person)
 				{
 					$table->define_data(array(
@@ -1023,6 +1071,7 @@ class personnel_management extends class_base
 						"from" => $cv_connid,
 						"to" => $cv_connid,
 						"hinne" => $rel_obj->meta("hinne"),
+						"kaaskiri" => $kaaskiri_url,
 					));
 				}
 			}
@@ -1030,7 +1079,7 @@ class personnel_management extends class_base
 		
 		$table->set_default_sortby("hinne");
 		$table->set_default_sorder("desc");
-		$table->sort_by(); 
+		$table->sort_by();
 	}
 
 	function my_profile_candits_table($arr)
@@ -1065,7 +1114,7 @@ class personnel_management extends class_base
 		{
 			$cvconnn_id = $cv->id();
 			$cv = $cv->to();
-			
+
 			foreach ($cv->connections_to(array("from.class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER)) as $job)
 			{		
 				$job = &obj($job->prop("from"));
@@ -1135,7 +1184,7 @@ class personnel_management extends class_base
 			"confirm" => "Kas soovid valitud objektid kustutada?",
 		));
 	}
-	
+
 	function do_org_profile_jobtable($arr)
 	{
 		$table =& $arr["prop"]["vcl_inst"];
@@ -1171,7 +1220,7 @@ class personnel_management extends class_base
 			"field" => "from",
 			"align" => "center",
 		));
-		
+
 		foreach ($this->my_profile["org_obj"]->connections_from(array("type" => RELTYPE_JOBS)) as $job)
 		{
 			$job_conn_id = $job->id();
@@ -1276,7 +1325,7 @@ class personnel_management extends class_base
 							//Temporay solution
 							$my_profile = $this->get_my_profile();
 							$haldur = &obj(aw_ini_get("personnel_management.default_manager"));
-				
+
 							$haldur->connect(array(
 								"to" => $my_profile["person_obj"]->id(),
 								"reltype" => 21
@@ -1311,7 +1360,7 @@ class personnel_management extends class_base
 				$this->my_profile["org_obj"]->set_meta("max_active_cv_def", $prop["value"]);
 				$this->my_profile["org_obj"]->save();
 			break;
-			
+
 			case "max_active_job":
 				$this->my_profile["org_obj"]->set_meta("max_active_job", $prop["value"]);
 				$this->my_profile["org_obj"]->save();

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.3 2004/06/07 13:19:17 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.4 2004/06/17 13:28:07 kristo Exp $
 // personnel_management_job_offer.aw - Tööpakkumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_PERSONNEL_MANAGEMENT_JOB_OFFER, on_job_save)
@@ -40,8 +40,15 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_PERSONNEL_MANAGEMENT_JOB_OFFER, o
 @property candits type=table group=kandideerinud no_caption=1
 @caption Kandideerijad
 
+
+----------------MINU KANDIDATUUR---------------------
 @property kandideerin type=chooser field=meta method=serialize store=no group=minu_kandidatuur edit_links=1
 @caption Vali cv kandideerimiseks
+
+@property kaaskiri type=textarea store=no
+@caption Kaaskiri
+------------------------------------------------------
+
 
 @property statistika type=table no_caption=1 group=statistika
 
@@ -111,39 +118,41 @@ caption Telefon
 class personnel_management_job_offer extends class_base
 {
 	var $my_profile;
-	
+
 	function personnel_management_job_offer()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
+		// change this to the folder under the templates folder, where this classes templates will be,
 		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
 			"tpldir" => "applications/personnel_management/personnel_management_job_offer",
 			"clid" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER
 		));
-		
+
 		if (!aw_global_get("no_db_connection"))
 		{
 			$personalikeskkond = get_instance("applications/personnel_management/personnel_management");
 			$this->my_profile = $personalikeskkond->my_profile;
 		}
 	}
-	
+
 	function callback_on_load($arr)
 	{
-		$this->cfgmanager = aw_ini_get("personnel_management.configform_manager");	
+		$this->cfgmanager = aw_ini_get("personnel_management.configform_manager");
 	}
-	
+
+
+
 	function on_job_save($arr)
 	{
 		$job_obj = &obj($arr["oid"]);
-		
+
 		if($this->my_profile["group"] == "employer")
 		{
 			$this->my_profile["org_obj"]->connect(array(
 				"to" => $job_obj->id(),
 				"reltype" => 19,
 			));
-			
+
 			$job_obj->set_parent($this->my_profile["org_obj"]->parent());
 			$job_obj->save();
 		}
@@ -160,6 +169,15 @@ class personnel_management_job_offer extends class_base
 		}
 		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"]), $arr["class"]);
 	}
+
+	/**
+		@attrib name=change nologin="1" all_args="1"
+	**/
+	function change($params)
+	{
+		return parent::change($params);
+	}
+
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
@@ -184,7 +202,7 @@ class personnel_management_job_offer extends class_base
 					"img" => "delete.gif",
 					"tooltip" => "Kustuta fail",
 					"action" => "delete_cv_file",
-				));	
+				));
 			break;
 			case "cv_file_rel":
 				if($jobfile = current($arr["obj_inst"]->connections_from(array("type" => RELTYPE_JOBFILE))))
@@ -214,19 +232,24 @@ class personnel_management_job_offer extends class_base
 				{
 					$mycvs[$cv->prop("to")] = $cv->prop("to.name"); 
 				}
-				
+
 				foreach ($mycvs as $mycv_id => $value)
 				{
 					if($arr["obj_inst"]->connections_from(array("to" => $mycv_id)))
 					{
-						$prop["selected"] = $mycv_id;		
+						$prop["value"] = $mycv_id;
 					}
 				}
+
 				$prop["options"] = $mycvs;
 			break;
 			
 			case "candits":
 				$this->do_candits_table($arr);
+			break;
+			
+			case "kaaskiri":
+				
 			break;
 			
 			case "navtoolbar":
@@ -269,7 +292,13 @@ class personnel_management_job_offer extends class_base
 			"caption" => "Kuupäev",
 			"sortable" => 1,
 		));
-						
+
+		$table->define_field(array(
+			"name" => "kaaskiri",
+			"caption" => "Kaaskiri",
+			"sortable" => 1,
+		));
+			
 		$table->define_field(array(
 			"name" => "hinne",
 			"caption" => "Hinne",
@@ -294,7 +323,7 @@ class personnel_management_job_offer extends class_base
 				
 			$rel_obj = obj($cv->prop("relobj_id"));
 
-			$cv = obj($cv->prop("to"));
+			$cv = &obj($cv->prop("to"));
 			$conn = new connection();
 				
 			$conn = $conn->find(array(
@@ -304,7 +333,19 @@ class personnel_management_job_offer extends class_base
 				
 			$conn = array_shift($conn);
 			$person =& obj($conn["from"]);
-						
+			
+			if($rel_obj->meta("kaaskiri"))
+			{
+				$kaaskiri_url = html::href(array(
+					"caption" => "kaaskiri",
+					"url" => $this->mk_my_orb(array("view_letter", array("id" => $rel_obj->id()), CL_PERSONNEL_MANAGEMENT_JOB_OFFER)),
+				));
+			}
+			else
+			{
+				$kaaskiri_url = "Puudub";
+			}
+			
 			$table->define_data(array(							
 				"nimi" => html::href(array(
 								"caption" => $person->prop("firstname")." ".$person->prop("lastname"),
@@ -314,6 +355,7 @@ class personnel_management_job_offer extends class_base
 				"from" => $connection_id,
 				"to" => $connection_id,
 				"hinne" => $rel_obj->meta("hinne"),
+				"kaaskiri" => $kaaskiri_url,
 			));
 		}
 	}
@@ -339,7 +381,7 @@ class personnel_management_job_offer extends class_base
 		$tb = &$arr["prop"]["toolbar"];
 	
 		$tb->add_button(array(
-			"name" => "delete",
+			"name" => "GEN PDF",
 			"img" => "pdf_upload.gif",
 			"tooltip" => "Genereeri pdf",
 			"url" => $this->mk_my_orb("gen_job_pdf", array("id" => $arr["obj_inst"]->id(), "oid" => $arr["obj_inst"]->id()), CL_PERSONNEL_MANAGEMENT_JOB_OFFER),
@@ -379,7 +421,6 @@ class personnel_management_job_offer extends class_base
 		}
 	}
 
-	//Tuleb uuesti teha
 	function apply_for_job(&$arr)
 	{
 		//Kustutame seosed kasutaja cv de ja tööpakkumiste vahle... juhul kui tööotsija on pakkumisele ka enne kandideerinud
@@ -396,6 +437,10 @@ class personnel_management_job_offer extends class_base
 			$newconn = new connection();
 			$newconn->change(array("from" => $arr["obj_inst"]->id(), "to" => $arr["prop"]["value"], "reltype" => RELTYPE_KANDIDAAT));
 		}
+		//Salvestame kaaskirja seoseobjekti juurde
+		$kaaskiri_obj = &obj($newconn->prop("relobj_id"));
+		$kaaskiri_obj->set_meta("kaaskiri", $arr["request"]["kaaskiri"]);
+		$kaaskiri_obj->save();
 	}
 	
 	function parse_alias($arr)
@@ -594,7 +639,7 @@ class personnel_management_job_offer extends class_base
 	}
 	
 	/**
-		@attrib name=gen_job_pdf
+		@attrib name=gen_job_pdf nologin="1"
 		@param oid required type=int
 	**/
 	function gen_job_pdf($arr)

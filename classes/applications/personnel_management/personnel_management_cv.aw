@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/Attic/personnel_management_cv.aw,v 1.3 2004/06/07 13:17:54 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/Attic/personnel_management_cv.aw,v 1.4 2004/06/17 13:28:07 kristo Exp $
 // personnel_management_cv.aw - CV 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_PERSONNEL_MANAGEMENT_CV, on_cv_save)
@@ -152,11 +152,18 @@ class personnel_management_cv extends class_base
 		
 	}
 
+	/**
+	@attrib name=change nologin="1" all_args="1"
+	**/
+	function change($params)
+	{
+		return parent::change($params);
+	}
 
 	//When new cv is saved, this function is called by message. Creates relation betweeb current logged user and cv.
 	function on_new_cv($arr)
 	{
-		$cv_obj = &obj($arr["oid"]);	
+		$cv_obj = &obj($arr["oid"]);
 		if($this->my_profile["group"] == "employee")
 		{
 			$this->my_profile["person_obj"]->connect(array(
@@ -376,7 +383,7 @@ class personnel_management_cv extends class_base
 	}
 
 	/**
-		@attrib name=gen_job_pdf
+		@attrib name=gen_job_pdf nologin="1"
 		@param id required type=int
 	**/
 	function gen_job_pdf($arr)
@@ -969,12 +976,13 @@ class personnel_management_cv extends class_base
 		$ob = new object($arr["id"]);
 		$person_obj = current($ob->connections_to(/*array("from.class_id" => CL_CRM_PERSON)*/));
 		$person_obj = &obj($person_obj->prop("from"));
-		
+
 		$email_obj = &obj($person_obj->prop("email"));
 		$phone_obj = &obj($person_obj->prop("phone"));
-		
+
+
 		$this->read_template("show.tpl");
-		 
+
 		if($person_obj->prop("gender") == 1)
 		{
 			$gender ="Mees";
@@ -987,7 +995,7 @@ class personnel_management_cv extends class_base
 		foreach ($ob->connections_from(array("type" => RELTYPE_KOGEMUS)) as $kogemus)
 		{
 			$kogemus = $kogemus->to();
-			
+
 			$this->vars(array(
 				"company" => $kogemus->prop("asutus"),
 				"period" => get_lc_date($kogemus->prop("algus"))." - ".get_lc_date($kogemus->prop("kuni")),
@@ -1120,13 +1128,24 @@ class personnel_management_cv extends class_base
 			$ed .= $this->parse("ED");
 		}
 
+		$gidlist = aw_global_get("gidlist_oid");
+
+		if(array_search(aw_ini_get("personnel_management.unloged_users") , $gidlist))
+		{
+			$personname = $person_obj->id();
+		}
+		else
+		{
+			$personname = $person_obj->name();
+		}
+
 		$this->vars(array(
 			"COMP_SKILL" => $ck,
 			"LANG_SKILL" => $lsk,
 			"DRIVE_SKILL" => join(",", $dsk),
 			"ED" => $ed,
 			"recommenders" => nl2br($ob->prop("soovitajad")),
-			"name" => $person_obj->name(),
+			"name" => $personname,
 			"modified" => get_lc_date($ob->modified()),
 			"birthday" => date("d.m.Y", $person_obj->prop("birthday")),
 			"social_status" => $person_obj->prop("social_status"),
@@ -1141,7 +1160,7 @@ class personnel_management_cv extends class_base
 			"addional_info" => $ob->prop("job_addinfo"),
 			"gender" => $gender,
 		));
-		
+
 		return $this->parse();
 	}
 	
@@ -1166,7 +1185,7 @@ class personnel_management_cv extends class_base
 	function do_view_tb(&$arr)
 	{
 		$tb = &$arr["prop"]["toolbar"];
-	
+
 		$tb->add_button(array(
 			"name" => "delete",
 			"img" => "pdf_upload.gif",

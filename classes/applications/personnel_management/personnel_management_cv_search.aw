@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_cv_search.aw,v 1.2 2004/05/23 11:46:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_cv_search.aw,v 1.3 2004/06/17 13:28:07 kristo Exp $
 // personnel_management_cv_search.aw - CV Otsing 
 /*
 
@@ -24,7 +24,7 @@
 @caption T&ouml;&ouml; liik
 
 @property s_cv_asukoht type=objpicker multiple=1 clid=CL_CRM_CITY orient=vertical
-@caption Töötamise piirkond
+@caption Ttamise piirkond
 
 @property s_cv_koormus type=classificator multiple=1 orient=vertical mode=checkboxes
 @caption T&ouml;&ouml; koormus
