@@ -3,9 +3,8 @@
       <property>
             <name>type</name>
             <type>select</type>
+            <field>subclass</field>
             <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <group>general</group>
             <caption>Objektitüüp</caption>
       </property>
@@ -14,20 +13,55 @@
             <type>relpicker</type>
             <reltype>RELTYPE_OBJECT_CFGFORM</reltype>
             <table>objects</table>
+            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
             <caption>Kasuta seadete vormi</caption>
+      </property>
+      <property>
+            <name>configuration</name>
+            <type>callback</type>
+            <callback>gen_config</callback>
+            <store>no</store>
+            <group>settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Klassi konfiguratsioon</caption>
+      </property>
+      <property>
+            <name>default_object</name>
+            <type>chooser</type>
+            <store>no</store>
+            <group>defobj</group>
+            <orient>vertical</orient>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vaikimisi objekt</caption>
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
       </classinfo>
+      <groupinfo>
+            <settings>
+                  <caption>Klassi konfiguratsioon</caption>
+            </settings>
+            <defobj>
+                  <caption>Aktiivne objekt</caption>
+            </defobj>
+      </groupinfo>
       <reltypes>
             <OBJECT_CFGFORM>
                   <value>1</value>
                   <clid>CL_CFGFORM</clid>
                   <caption>Seadete vorm</caption>
             </OBJECT_CFGFORM>
+            <META_ELEMENTS>
+                  <value>2</value>
+                  <clid>CL_META</clid>
+                  <caption>Muutuja</caption>
+            </META_ELEMENTS>
       </reltypes>
 </properties>
 
