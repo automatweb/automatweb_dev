@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.120 2005/03/08 13:25:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.121 2005/03/10 12:49:11 ahti Exp $
 
 /*
 
@@ -568,7 +568,7 @@ class site_show extends class_base
 			{
 				$gm_subs = $obj->meta("section_include_submenus");
 				$gm_c = $obj->connections_from(array(
-					"type" => 9 // RELTYPE_DOCS_FROM_MENU
+					"type" => "RELTYPE_DOCS_FROM_MENU",
 				));
 				foreach($gm_c as $gm)
 				{

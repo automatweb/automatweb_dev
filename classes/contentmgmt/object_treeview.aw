@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.42 2005/03/01 14:42:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.43 2005/03/10 12:49:11 ahti Exp $
 
 /*
 
@@ -168,7 +168,7 @@ class object_treeview extends class_base
 		// and their cfgforms
 		// and make a nice little lut from them.
 		$class2cfgform = array();
-		foreach($ob->connections_from(array("type" => RELTYPE_ADD_TYPE)) as $c)
+		foreach($ob->connections_from(array("type" => "RELTYPE_ADD_TYPE")) as $c)
 		{
 			$addtype = $c->to();
 			if ($addtype->prop("use_cfgform"))
@@ -438,7 +438,7 @@ class object_treeview extends class_base
 		{
 			// if parent can't be found. then get the objects from all the root folders
 			$con = $ob->connections_from(array(
-				"type" => RELTYPE_FOLDER
+				"type" => "RELTYPE_FOLDER"
 			));
 
 			$ignoreself = $ob->meta("ignoreself");
@@ -566,9 +566,9 @@ class object_treeview extends class_base
 		{
 			return;
 		}
-																		
+		
 		$adm_c = $ob->connections_from(array(
-			"type" => RELTYPE_ALL_ACSS_GRP
+			"type" => "RELTYPE_ALL_ACSS_GRP"
 		));
 		foreach($adm_c as $adm_conn)
 		{
@@ -583,7 +583,7 @@ class object_treeview extends class_base
 		$access_by_parent = array();
 
 		$conns = $ob->connections_from(array(
-			"type" => RELTYPE_FOLDER
+			"type" => "RELTYPE_FOLDER"
 		));
 		foreach($conns as $conn)
 		{
@@ -618,7 +618,7 @@ class object_treeview extends class_base
 				{
 					$c_id_o = obj($c_id);
 					$c_id_gr = $c_id_o->connections_from(array(
-						"type" => RELTYPE_ACL_GROUP
+						"type" => "RELTYPE_ACL_GROUP"
 					));
 					foreach($c_id_gr as $c_id_gr_c)
 					{
@@ -817,7 +817,7 @@ class object_treeview extends class_base
 
 
 		$conns = $args["obj_inst"]->connections_from(array(
-			"type" => RELTYPE_FOLDER
+			"type" => "RELTYPE_FOLDER"
 		));
 
 		foreach($conns as $conn)
@@ -859,7 +859,7 @@ class object_treeview extends class_base
 	function _get_add_toolbar($ob)
 	{
 		$types_c = $ob->connections_from(array(
-			"type" => RELTYPE_ADD_TYPE
+			"type" => "RELTYPE_ADD_TYPE"
 		));
 
 		$menu = "";

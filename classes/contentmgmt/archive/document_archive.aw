@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/archive/document_archive.aw,v 1.2 2004/06/17 14:38:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/archive/document_archive.aw,v 1.3 2005/03/10 12:49:12 ahti Exp $
 // document_archive.aw - Dokumendiarhiiv 
 /*
 
@@ -54,7 +54,7 @@ class document_archive extends class_base
 	{
 		$o = new object($arr["id"]);
 		$conns = $o->connections_from(array(
-			"type" => RELTYPE_SOURCE,
+			"type" => "RELTYPE_SOURCE",
 		));
 		$parents = array();
 		foreach($conns as $conn)
@@ -107,7 +107,7 @@ class document_archive extends class_base
 	{
 		$o = new object($arr["id"]);
 		$conns = $o->connections_from(array(
-			"type" => RELTYPE_SOURCE,
+			"type" => "RELTYPE_SOURCE",
 		));
 		$parents = array();
 		foreach($conns as $conn)
@@ -145,7 +145,7 @@ class document_archive extends class_base
 	{
 		// list 
 		$conns = $arr["obj_inst"]->connections_from(array(
-			"type" => RELTYPE_SOURCE,
+			"type" => "RELTYPE_SOURCE",
 		));
 		$parents = array();
 		foreach($conns as $conn)
@@ -207,7 +207,7 @@ class document_archive extends class_base
 		// now I need a list of documents on that day
 		$o = new object($arr["alias"]["to"]);
 		$conns = $o->connections_from(array(
-			"type" => RELTYPE_SOURCE,
+			"type" => "RELTYPE_SOURCE",
 		));
 		$parents = array();
 		foreach($conns as $conn)

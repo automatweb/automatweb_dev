@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.16 2004/10/29 19:06:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.17 2005/03/10 12:49:11 ahti Exp $
 // document_statistics.aw - Dokumentide vaatamise statistika 
 /*
 
@@ -180,7 +180,7 @@ class document_statistics extends class_base
 
 		$subs = $arr["obj_inst"]->meta("subs");
 
-		foreach($arr["obj_inst"]->connections_from(array("type" => RELTYPE_SHOW_FOLDER)) as $c)
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SHOW_FOLDER")) as $c)
 		{
 			$o = $c->to();
 			$t->define_data(array(
@@ -207,7 +207,7 @@ class document_statistics extends class_base
 		$t =&$arr["prop"]["vcl_inst"];
 		$this->_init_periods_table($t);
 
-		foreach($arr["obj_inst"]->connections_from(array("type" => RELTYPE_SHOW_PERIOD)) as $c)
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SHOW_PERIOD")) as $c)
 		{
 			$o = $c->to();
 			$t->define_data(array(
@@ -450,7 +450,7 @@ class document_statistics extends class_base
 		$menus = array();
 
 		$subs = $o->meta("subs");
-		foreach($o->connections_from(array("type" => 1 /* RELTYPE_SHOW_FOLDER */)) as $c)
+		foreach($o->connections_from(array("type" => "RELTYPE_SHOW_FOLDER")) as $c)
 		{	
 			$menus[$c->prop("to")] = $c->prop("to");
 
@@ -484,7 +484,7 @@ class document_statistics extends class_base
 			case "rel": /* connected poeriods */
 			default:
 				$pc = array();
-				foreach($o->connections_from(array("type" => 2 /* RELTYPE_SHOW_PERIOD */)) as $c)
+				foreach($o->connections_from(array("type" => "RELTYPE_SHOW_PERIOD")) as $c)
 				{
 					$pc[] = $c->prop("to");
 				}

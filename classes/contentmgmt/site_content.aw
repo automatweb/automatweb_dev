@@ -2682,7 +2682,7 @@ class site_content extends menuedit
 	{
 		// see if the object has translations
 		$conn = $obj->connections_from(array(
-			"type" => RELTYPE_TRANSLATION
+			"type" => "RELTYPE_TRANSLATION"
 		));
 		if (count($conn) < 1)
 		{
@@ -2698,7 +2698,7 @@ class site_content extends menuedit
 				list(,$f_conn) = each($conn);
 				$obj = obj($f_conn->prop("from"));
 				$conn = $obj->connections_from(array(
-					"type" => RELTYPE_TRANSLATION
+					"type" => "RELTYPE_TRANSLATION"
 				));
 			}
 		}
@@ -2880,7 +2880,7 @@ class site_content extends menuedit
 			{
 				$gm_subs = $me->meta("section_include_submenus");
 				$gm_c = $me->connections_from(array(
-					"type" => RELTYPE_DOCS_FROM_MENU
+					"type" => "RELTYPE_DOCS_FROM_MENU"
 				));
 				foreach($gm_c as $gm)
 				{

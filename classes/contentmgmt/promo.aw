@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.57 2005/03/08 13:24:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.58 2005/03/10 12:49:11 ahti Exp $
 // promo.aw - promokastid.
 
 /*
@@ -260,7 +260,7 @@ class promo extends class_base
 		));
 
 		$conns = $obj->connections_from(array(
-			"type" => RELTYPE_ASSIGNED_MENU
+			"type" => "RELTYPE_ASSIGNED_MENU"
 		));
 
 		foreach($conns as $c)
@@ -318,7 +318,7 @@ class promo extends class_base
 		$obj = $arr["obj_inst"];
 
 		$conns = $obj->connections_from(array(
-			"type" => RELTYPE_DOC_SOURCE
+			"type" => "RELTYPE_DOC_SOURCE"
 		));
 
 		$as_name = $obj->meta("as_name");

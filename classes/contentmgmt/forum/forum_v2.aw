@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.68 2005/02/09 15:56:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.69 2005/03/10 12:49:12 ahti Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_connect_menu)
@@ -323,7 +323,7 @@ class forum_v2 extends class_base
 
 			$o->connect(array(
 				"to" => $topic_folder,
-				"reltype" => RELTYPE_TOPIC_FOLDER,
+				"reltype" => "RELTYPE_TOPIC_FOLDER",
 			));
 
 			$o->set_prop("topic_folder",$topic_folder);
@@ -524,7 +524,7 @@ class forum_v2 extends class_base
 		$this->group = $args["request"]["group"];
 
 		$conns = $args["obj_inst"]->connections_from(array(
-			"type" => RELTYPE_TOPIC_FOLDER,
+			"type" => "RELTYPE_TOPIC_FOLDER",
 		));
 
 		$c = "";

@@ -1,6 +1,6 @@
 <?php
 // html_popup.aw - a class to deal with javascript popups
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/html_popup.aw,v 1.3 2005/03/02 13:11:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/html_popup.aw,v 1.4 2005/03/10 12:49:11 ahti Exp $
 
 /*
 	@classinfo relationmgr=yes syslog_type=ST_HTML_POPUP
@@ -98,7 +98,7 @@ class html_popup extends class_base
 		{
 			$obj = $args["obj_inst"];
 			$conns = $obj->connections_from(array(
-				"type" => RELTYPE_FOLDER
+				"type" => "RELTYPE_FOLDER"
 			));
 			foreach($conns as $c)
 			{
@@ -133,7 +133,7 @@ class html_popup extends class_base
 		$obj =& obj($args["id"]);
 
 		$oldaliases = $obj->connections_from(array(
-			"type" => RELTYPE_FOLDER
+			"type" => "RELTYPE_FOLDER"
 		));
 	
 		$section = array();
