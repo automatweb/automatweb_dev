@@ -72,7 +72,7 @@
 			<function name="show">
 				<arguments>
 					<required name="poll_id" type="int"/>
-					<optional name="answer_id"/>
+					<optional name="answer_id" type="int"/>
 				</arguments>
 			</function>
 		</action>
