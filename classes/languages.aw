@@ -64,9 +64,9 @@ class languages extends aw_template
 	function get_list($arr = array())
 	{
 		extract($arr);
-		$dat = $this->listall($ignore_status);
+		$dat = $this->listall(isset($ignore_status) ? $ignore_status : false);
 
-		if ($addempty)
+		if (isset($addempty))
 		{
 			$ret = array("0" => "");
 		}
@@ -76,7 +76,7 @@ class languages extends aw_template
 		}
 		foreach($dat as $ldat)
 		{
-			if ($all_data)
+			if (isset($all_data))
 			{
 				$ret[$ldat["id"]] = $ldat;
 			}
