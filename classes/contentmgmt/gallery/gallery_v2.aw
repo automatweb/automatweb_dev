@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.22 2003/05/15 15:05:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.23 2003/07/01 12:14:03 kristo Exp $
 
 /*
 
@@ -997,6 +997,7 @@ class gallery_v2 extends class_base
 			"name" => $ob['name'],
 			"prev_image_url" => $this->mk_my_orb("show_image", array("id" => $id, "page" => $p_page, "row" => $p_row , "col" => $p_col)),
 			"next_image_url" => $this->mk_my_orb("show_image", array("id" => $id, "page" => $n_page, "row" => $n_row , "col" => $n_col)),
+			"imgcaption" => $pd['caption']
 		));
 
 		if ($n_page <= $ob['meta']['num_pages'])
