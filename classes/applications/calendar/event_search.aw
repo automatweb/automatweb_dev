@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.33 2005/01/27 10:29:56 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.34 2005/01/27 10:39:12 ahti Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -958,8 +958,8 @@ class event_search extends class_base
 						$v = $eval[$nms];
 						if ($nms == "start1" || $nms == "end")
 						{
-							$a = $tabledef[$nms]["props"];
-							if(!empty($a))
+							$value = $tabledef[$nms]["props"];
+							if(!empty($value))
 							{
 								/*
 								preg_replace("/#(.*)#/imsUe", $a, $mt);
@@ -973,8 +973,14 @@ class event_search extends class_base
 								//$a = eregi_replace("#<*>#i", '#\1#', );
 								//$a = str_replace("<br />", "##", $tabledef[$nms]["props"]);
 								//$a = str_replace("<br>", "##", $a);
-								$v = date($a, $v);
 								//$v= str_replace("##", "<br />", $v);
+								if(strpos($value, "#php#") !== false)
+								{
+									$value = str_replace("#php#", "", $value);
+									$value = str_replace("#/php#", "", $value);
+									eval($value);
+								}
+								$v = date($value, $v);
 							}
 							else
 							{
