@@ -3,20 +3,20 @@
       <property>
             <name>ffamily</name>
             <type>select</type>
+            <group>general </group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
-            <table>objects</table>
             <caption>Font</caption>
       </property>
       <property>
             <name>italic</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <group>general </group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
-            <table>objects</table>
             <caption>
             <![CDATA[<i>Italic</i>]]>
             </caption>
@@ -25,10 +25,10 @@
             <name>bold</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <group>general </group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
-            <table>objects</table>
             <caption>
             <![CDATA[<b>Bold</b>]]>
             </caption>
@@ -37,10 +37,10 @@
             <name>underline</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <group>general </group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
-            <table>objects</table>
             <caption>
             <![CDATA[<u>Underline</u>]]>
             </caption>
@@ -48,172 +48,172 @@
       <property>
             <name>size</name>
             <type>textbox</type>
+            <size>5</size>
+            <group>general </group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
-            <size>5</size>
-            <table>objects</table>
             <caption>Suurus</caption>
       </property>
       <property>
             <name>units</name>
             <type>select</type>
+            <group>general </group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
-            <table>objects</table>
             <caption>Suuruse &amp;uuml;hikud</caption>
       </property>
       <property>
             <name>fgcolor</name>
             <type>colorpicker</type>
+            <group>general </group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
-            <table>objects</table>
             <caption>Teksti v&amp;auml;rv</caption>
       </property>
       <property>
             <name>bgcolor</name>
             <type>colorpicker</type>
+            <group>general </group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
-            <table>objects</table>
             <caption>Tausta v&amp;auml;rv</caption>
       </property>
       <property>
             <name>lineheight</name>
             <type>textbox</type>
+            <size>5</size>
+            <group>general </group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
-            <size>5</size>
-            <table>objects</table>
             <caption>Joone k&amp;otilde;rgus</caption>
       </property>
       <property>
             <name>lhunits</name>
             <type>select</type>
+            <group>general </group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
-            <table>objects</table>
             <caption>Joone k&amp;otilde;rguse &amp;uuml;hikud</caption>
       </property>
       <property>
             <name>border</name>
             <type>textbox</type>
+            <size>5</size>
+            <group>general </group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
-            <size>5</size>
-            <table>objects</table>
             <caption>Border width</caption>
       </property>
       <property>
             <name>bordercolor</name>
             <type>colorpicker</type>
+            <group>general </group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
-            <table>objects</table>
             <caption>Border color</caption>
       </property>
       <property>
             <name>align</name>
             <type>select</type>
+            <group>general </group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
-            <table>objects</table>
             <caption>Align</caption>
       </property>
       <property>
             <name>valign</name>
             <type>select</type>
+            <group>general </group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
-            <table>objects</table>
             <caption>Valign</caption>
       </property>
       <property>
             <name>width</name>
             <type>textbox</type>
+            <size>5</size>
+            <group>general </group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
-            <size>5</size>
-            <table>objects</table>
             <caption>Laius</caption>
       </property>
       <property>
             <name>w_units</name>
             <type>select</type>
+            <group>general </group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
-            <table>objects</table>
             <caption>Laiuse &amp;uuml;hikud</caption>
       </property>
       <property>
             <name>height</name>
             <type>textbox</type>
+            <size>5</size>
+            <group>general </group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
-            <size>5</size>
-            <table>objects</table>
             <caption>K&amp;otilde;rgus </caption>
       </property>
       <property>
             <name>h_units</name>
             <type>select</type>
+            <group>general </group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
-            <table>objects</table>
             <caption>K&amp;otilde;rguse &amp;uuml;hikud</caption>
       </property>
       <property>
             <name>a_style</name>
             <type>relpicker</type>
+            <reltype>RELTYPE_CSS</reltype>
+            <group>general </group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
-            <reltype>RELTYPE_CSS</reltype>
-            <table>objects</table>
             <caption>Lingi stiil</caption>
       </property>
       <property>
             <name>a_hover_style</name>
             <type>relpicker</type>
+            <reltype>RELTYPE_CSS</reltype>
+            <group>general </group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
-            <reltype>RELTYPE_CSS</reltype>
-            <table>objects</table>
             <caption>Lingi stiil (hover)</caption>
       </property>
       <property>
             <name>a_visited_style</name>
             <type>relpicker</type>
+            <reltype>RELTYPE_CSS</reltype>
+            <group>general </group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
-            <reltype>RELTYPE_CSS</reltype>
-            <table>objects</table>
             <caption>Lingi stiil (visited)</caption>
       </property>
       <property>
             <name>a_active_style</name>
             <type>relpicker</type>
+            <reltype>RELTYPE_CSS</reltype>
+            <group>general </group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
-            <reltype>RELTYPE_CSS</reltype>
-            <table>objects</table>
             <caption>Lingi stiil (active)</caption>
       </property>
       <property>
@@ -221,29 +221,27 @@
             <type>textarea</type>
             <width>30</width>
             <height>5</height>
+            <group>general </group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
-            <table>objects</table>
             <caption>Kasutaja css</caption>
       </property>
       <property>
             <name>pre</name>
             <type>text</type>
-            <field>meta</field>
-            <method>serialize</method>
             <group>preview</group>
             <no_caption>1</no_caption>
             <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Eelvaade</caption>
       </property>
       <classinfo>
             <syslog_type>ST_CSS</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
-            <general>
-                  <caption>Üldine</caption>
-            </general>
             <preview>
                   <caption>Eelvaade</caption>
             </preview>
