@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.144 2003/11/27 12:35:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.145 2003/12/02 17:09:08 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -59,7 +59,7 @@
 	@property user_calendar type=checkbox group=special rel=1 table=objects field=meta method=serialize
 	@caption Kasutaja default kalender
 
-	@property event_direction type=callback callback=cb_get_event_direction group=advanced rel=1
+	@property event_direction type=chooser group=advanced rel=1
 	@caption Suund
 
 	@property range_start type=date_select group=time_settings rel=1
@@ -77,7 +77,7 @@
 	@property event_folder type=relpicker reltype=RELTYPE_EVENT_FOLDER
 	@caption Sündmuste kataloog
 
-	@property workdays callback=callback_get_workday_choices group=advanced
+	@property workdays type=chooser multiple=1 group=advanced
 	@caption Näidatavad päevad
 
 	@default store=no
@@ -220,33 +220,6 @@ class planner extends class_base
 				$data["options"] = array(1 => 1, 2 => 2, 3 => 3 );
 				break;
 
-			case "event_folder":
-				$alist = $this->get_aliases_for($args["obj"]["oid"],-1,"","","",RELTYPE_EVENT_FOLDER);
-				// this used to be a menu list, and the following code should
-				// create a relation for the menu
-				if ( (sizeof($alist) == 0) && !empty($data["value"]))
-				{
-					$this->addalias(array(
-						"id" => $args["obj"]["oid"],
-						"alias" => $data["value"],
-						"reltype" => RELTYPE_EVENT_FOLDER,
-					));
-				}
-				break;
-
-			case "event_cfgform":
-				$alist = $this->get_aliases_for($args["obj"]["oid"],-1,"","","",RELTYPE_EVENT_ENTRY);
-
-				if ( (sizeof($alist) == 0) && !empty($data["value"]))
-				{
-					$this->addalias(array(
-						"id" => $args["obj"]["oid"],
-						"alias" => $data["value"],
-						"reltype" => RELTYPE_EVENT_ENTRY,
-					));
-				}
-				break;
-
 			case "content_generator":
 				$orb = get_instance("orb");
 				$tmp = array("0" => "näita kalendri sisu") + $orb->get_classes_by_interface(array("interface" => "content"));
@@ -255,6 +228,22 @@ class planner extends class_base
 
 			case "navtoolbar":
 				$this->gen_navtoolbar($args);
+				break;
+
+			case "workdays":
+				$daynames = explode("|",LC_WEEKDAY);
+				for ($i = 1; $i <= 7; $i++)
+				{
+					$data["options"][$i] = $daynames[$i];
+				};
+				break;
+
+			case "event_direction":
+				$data["options"] = array(
+					"1" => "tagasi",
+					"0" => "praegu",
+					"2" => "edasi",
+				);
 				break;
 
 			case "use_template":
@@ -314,25 +303,6 @@ class planner extends class_base
 				break;
 
 		}
-		return $retval;
-	}
-
-	function callback_get_workday_choices($args = array())
-	{
-		$tmp = $args["prop"];
-		$daynames = explode("|",LC_WEEKDAY);
-		$wd = isset($args["obj"]["meta"]["workdays"]) ? $args["obj"]["meta"]["workdays"] : array();
-		for($i = 1; $i <= 7; $i++)
-		{
-			$tmp["items"][] = array(
-				"type" => "checkbox",
-				"name" => "workdays[$i]",
-				"label" => $daynames[$i],
-				"ch_value" => 1,
-				"value" => isset($wd[$i]) ? $wd[$i] : 0,
-			);
-		};
-		$retval = array("workdays" => $tmp);
 		return $retval;
 	}
 
@@ -2821,38 +2791,6 @@ class planner extends class_base
 		return $summary;
 	}
 
-	function cb_get_event_direction($args = array())
-	{
-		$items = array();
-		$items[] = array(
-			"type" => "radiobutton",
-			"caption" => "Tagasi",
-			"name" => $args["prop"]["name"],
-			"rb_value" => 1,
-			"value" => $args["prop"]["value"],
-		);
-		$items[] = array(
-			"type" => "radiobutton",
-			"caption" => "Praegu &nbsp;",
-			"rb_value" => 0,
-			"name" => $args["prop"]["name"],
-			"value" => $args["prop"]["value"],
-		);
-		$items[] = array(
-			"type" => "radiobutton",
-			"caption" => "Edasi &nbsp;",
-			"rb_value" => 2,
-			"name" => $args["prop"]["name"],
-			"value" => $args["prop"]["value"],
-		);
-		$retval = array(
-			"type" => "text",
-			"caption" => $args["prop"]["caption"],
-			"items" => $items,
-		);
-		return array($retval);
-	}
-
 	function callback_on_addalias($args = array())
 	{
 		// now, $args[alias] is a reference to the thingie we are interested in
@@ -2890,14 +2828,17 @@ class planner extends class_base
                 {
 			$toolbar = &$arr["prop"]["toolbar"];
 			// would be nice to have a vcl component for doing drop-down menus
-			$this->read_template("js_popup_menu.tpl");
-			$menudata = "";
 			$conns = $arr["obj_inst"]->connections_from(array(
 				"type" => RELTYPE_EVENT_ENTRY,
 			));
+			$toolbar->add_menu_button(array(
+                                "name" => "create_event",
+                                "tooltip" => "Uus",
+                        ));
 			foreach($conns as $conn)
 			{
-				$this->vars(array(
+				$toolbar->add_menu_item(array(
+					"parent" => "create_event",
 					"link" => $this->mk_my_orb("change",array(
 						"id" => $id,
 						"group" => "add_event",
@@ -2905,15 +2846,14 @@ class planner extends class_base
 					)),
 					"text" => $conn->prop("to.name"),
 				));
-
-				$menudata .= $this->parse("MENU_ITEM");
 			};
 
 			// now I need to figure out which other classes are valid for that relation type
 			$clidlist = $this->event_entry_classes;
 			foreach($clidlist as $clid)
 			{
-				$this->vars(array(
+				$toolbar->add_menu_item(array(
+					"parent" => "create_event",
 					"link" => $this->mk_my_orb("change",array(
 						"id" => $id,
 						"group" => "add_event",
@@ -2921,26 +2861,7 @@ class planner extends class_base
 					)),
 					"text" => $this->cfg["classes"][$clid]["name"],
 				));
-				$menudata .= $this->parse("MENU_ITEM");
 			};
-
-			$this->vars(array(
-				"MENU_ITEM" => $menudata,
-				"id" => "create_event",
-			));
-
-			$menu = $this->parse();
-
-                	$toolbar->add_cdata($menu);
-	
-			$toolbar->add_button(array(
-                                "name" => "add",
-                                "tooltip" => "Uus",
-				"url" => "",
-				"onClick" => "return buttonClick(event, 'create_event');",
-                                "img" => "new.gif",
-                                "class" => "menuButton",
-                        ));
 
 			$dt = date("d-m-Y",time());
 
