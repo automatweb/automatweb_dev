@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.15 2005/01/26 09:02:51 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.16 2005/01/26 10:39:09 ahti Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -1197,8 +1197,7 @@ class ml_list extends class_base
 			"url" => $this->mk_my_orb("change", array(
 					"id" => $arr["obj_inst"]->id(),
 					"group" => "write_mail",
-				),
-			),
+				)),
 			"img" => "new.gif",
 		));
 
