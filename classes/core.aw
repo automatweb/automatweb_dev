@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.59 2001/10/02 10:05:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.60 2001/10/03 13:08:10 cvs Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -164,7 +164,7 @@ class core extends db_connector
 		$php_ser = new php_serializer();
 		if ($args["oid"])
 		{
-			$q = "SELECT metadata FROM objects WHERE oid = $oid";
+			$q = "SELECT meta FROM objects WHERE oid = $oid";
 			$this->db_query($q);
 			$row = $this->db_next();
 			$meta = $row["meta"];
@@ -188,7 +188,7 @@ class core extends db_connector
 		$php_ser = new php_serializer();
 		$ser = $php_ser->php_serialize($old);
 		$this->quote($ser);
-		$q = "UPDATE objects SET metadata = '$ser' WHERE oid = $oid";
+		$q = "UPDATE objects SET meta = '$ser' WHERE oid = $oid";
 		$this->db_query($q);
 	}
 
@@ -1126,7 +1126,21 @@ class core extends db_connector
 
 		$astr = ($active) ? " AND status = 2 " : "";
 
-		$cstr = ($lang_id) ? " AND lang_id = $lang_id " : "";
+		if ($lang_id)
+		{
+			if ($class == CL_PSEUDO)
+			{
+				$cstr = " AND (lang_id = $lang_id OR menu.type = ".MN_CLIENT.") ";
+			}
+			else
+			{
+				$cstr = " AND lang_id = $lang_id ";
+			}
+		}
+		else
+		{
+			$cstr = "";
+		}
 
 		$ostr = ($orderby) ? " ORDER BY $orderby " : "";
 		
