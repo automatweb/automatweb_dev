@@ -117,7 +117,7 @@ class grid_editor extends class_base
 
 		$this->read_template("grid.tpl");
 
-		$this->debug_map_print();
+		//$this->debug_map_print();
 
 		$this->_get_edit_toolbar();
 
