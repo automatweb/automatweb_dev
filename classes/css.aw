@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.27 2003/07/04 14:24:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.28 2003/07/10 12:58:30 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 /*
 
@@ -170,6 +170,10 @@ class css extends class_base
 			switch($key)
 			{
 				case "ffamily":
+					if (is_numeric($val))
+					{
+						$val = $this->font_families[$val];
+					}
 					$mask = "font-family: %s;\n";
 					break;
 
@@ -236,6 +240,8 @@ class css extends class_base
 				$retval .= sprintf("\t" . $mask,$val);
 			};
 		}
+
+		$retval .= $data["user_css"];
 
 		$retval .= "}\n";
 
