@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.5 2004/08/26 14:35:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.6 2004/08/30 14:42:01 duke Exp $
 // calendar_event.aw - Kalendri sündmus 
 /*
 
@@ -92,7 +92,20 @@
 @property utextvar10 type=classificator
 @caption 
 
+@property uimage1 type=releditor reltype=RELTYPE_PICTURE rel_id=first use_form=emb
+@caption
+
+@property seealso type=relpicker reltype=RELTYPE_SEEALSO
+@caption
+
+
 @tableinfo planner index=id master_table=objects master_index=brother_of
+
+@reltype PICTURE value=1 clid=CL_IMAGE
+@caption Pilt
+
+@reltype SEEALSO value=2 clid=CL_DOCUMENT
+@caption Vaata lisaks
 
 */
 
@@ -148,6 +161,11 @@ class calendar_event extends class_base
 		return $this->show(array("id" => $arr["alias"]["target"]));
 	}
 
+	function request_execute($o)
+	{
+		return $this->show(array("id" => $o->id()));
+	}
+
 	////
 	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
 	function show($arr)
@@ -157,6 +175,7 @@ class calendar_event extends class_base
 		$this->vars(array(
 			"name" => $ob->prop("name"),
 		));
+		$this->vars($ob->properties());
 		return $this->parse();
 	}
 }
