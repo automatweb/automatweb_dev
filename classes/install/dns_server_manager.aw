@@ -27,6 +27,7 @@ class dns_server_manager extends class_base
 		$dom = dns::get_domain_name_for_url($domain);
 
 		// find the zone file for the domain
+
 		$zone_file = $this->cfg['zone_file_root']."/".$dom;
 		$tmp_zone_file = tempnam(aw_ini_get("server.tmpdir"),"aw_dnsmgr_zone_tmp");
 
@@ -47,10 +48,10 @@ class dns_server_manager extends class_base
 
 		// use su_exec to copy it to the right place	
 		// use su exec to execute "rndc reload"
-/*		$su->open_file();
+		$su->open_file();
 		$su->add_cmd("copy $tmp_zone_file $zone_file");
 		$su->add_cmd("rndc reload");
-		$su->exec();*/
+		$su->exec();
 
 		return true;
 	}
@@ -82,16 +83,14 @@ class dns_server_manager extends class_base
 				$end++;
 			}
 			$line = substr($fc, $pos, ($end - $pos));
-			echo "line = $line <br>";
 			// now, replace the ip aaddress
-			$line = preg_replace("/$domain\.(\s)A(\s)(.*)/", "$domain\.\\1A\\2$ip", $line);
-			echo "processed line = $line <br>";
+			$line = preg_replace("/$domain.(\s)A(\s)(.*)/", "$domain.\tA\t$ip", $line);
 			$fc = substr($fc, 0, $pos).$line.substr($fc,$end);
 		}
 		else
 		{
 			// it does not, add it to the end
-			$fc.= "\n $domain.\tA\t$ip\n";
+			$fc.= "\n$domain.\tA\t$ip\n";
 		}
 	
 		// update timestamp
@@ -115,10 +114,10 @@ class dns_server_manager extends class_base
 			{
 				$snum = (int)(substr($dstr,8));
 			}
-			$lines[$lineno] = "\t\t\t".date("Ymd").($snum+1);
+			$np1 = strlen($snum+1) == 1 ? "0".($snum+1) : $snum+1;
+			$lines[$lineno] = "\t\t\t".date("Ymd").$np1;
 		}
 		$fc = join("\n", $lines);
-		echo "fc after convert eq <pre>", $fc,"</pre> <br>";
 
 		$this->put_file(array(
 			"file" => $file,

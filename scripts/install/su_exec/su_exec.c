@@ -189,7 +189,7 @@ int main(int argc, char **argv)
 
 	for (i = 0; i < cf.num_cmds; i++)
 	{
-		printf("exec command %s \n", cf.cmds[i].real_cmd);
+//		printf("exec command %s \n", cf.cmds[i].real_cmd);
 		system(cf.cmds[i].real_cmd);
 	}
 	free_cmds(&cf);

@@ -21,7 +21,6 @@ class su_exec extends class_base
 	function exec()
 	{
 		$fn = tempnam(aw_ini_get("server.tmpdir"), "aw_su_exec");
-		echo "su_exec cmd fn = $fn <br>\n";
 		chmod($fn, 0666);
 		$fp = fopen($fn, "w");
 		fwrite($fp, count($this->fc)."\n");
@@ -40,7 +39,7 @@ class su_exec extends class_base
 		$cmdline = $this->cfg['basedir']."/scripts/install/su_exec/su_exec $fn";
 		$res = `$cmdline`;
 	
-//		unlink($fn);
+		unlink($fn);
 
 		return $res;
 	}
