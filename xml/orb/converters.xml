@@ -50,7 +50,7 @@
 			</function>
 		</action>
 
-		<action name="convert_fg_tables_deleted">
+		<action name="convert_fg_tables_deleted" nologin="1">
 			<function name="convert_fg_tables_deleted">
 				<arguments>
 				</arguments>		
