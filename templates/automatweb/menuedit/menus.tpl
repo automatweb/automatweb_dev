@@ -19,6 +19,12 @@ function cut()
 	foo.submit();
 }
 
+function del()
+{
+	foo.action.value="mdelete";
+	foo.submit();
+}
+
 function paste()
 {
 	foo.action.value="paste";
@@ -52,9 +58,10 @@ function paste()
 <!-- SUB: PASTE -->
  | <a href='javascript:paste()' class="fgtitle_link">Paste</a>
 <!-- END SUB: PASTE -->
+ | <a href='javascript:del()' class="fgtitle_link">Kustuta</a>
 </b>
 </td>
-<td height="15" colspan="11" class="fgtitle_new" valign=center background="images/uus_sinine.gif" align=right><a href='orb.aw?action=list&class=bugtrack&filt=all' class='fgtitle_link'>BugTrack</a></td>
+<td height="15" colspan="11" class="fgtitle_new" valign=center background="images/uus_sinine.gif" align=right>[<a target="list" href='languages.{VAR:ext}'><b><font size=2 color="#FF8080">{VAR:lang_name}</font></b></a>]&nbsp;&nbsp; <a href='orb.aw?action=list&class=bugtrack&filt=all' class='fgtitle_link'>BugTrack</a></td>
 <td height="15" class="fgtitle_new" valign=center background="images/uus_sinine.gif" align=right><a href='http://www.automatweb.com' target="_new"><img border=0 src='images/jessss1.gif'></a>
 </td>
 </tr>
@@ -87,7 +94,7 @@ fgtext
 
 <!-- SUB: LINE -->
 <tr>
-<td height="15" class="{VAR:is_cut}" align=center>&nbsp;&nbsp;<a href='menuedit_right.{VAR:ext}?parent={VAR:menu_id}&period={VAR:period}' target='list'><img border=0 src='images/ftv2folderclosed.gif'></a>&nbsp;</td>
+<td height="15" class="{VAR:is_cut}" align=center>&nbsp;&nbsp;<a href='menuedit_right.{VAR:ext}?parent={VAR:menu_id}&period={VAR:period}' target='list'><img border=0 src='{VAR:imgref}'></a>&nbsp;</td>
 <td height="15" class="{VAR:is_cut}">&nbsp;<a href='menuedit_right.{VAR:ext}?parent={VAR:r_menu_id}&period={VAR:period}' target='list'>{VAR:name}</a>&nbsp;</td>
 <td class="{VAR:is_cut}" align=center>&nbsp;
 <!-- SUB: NFIRST -->

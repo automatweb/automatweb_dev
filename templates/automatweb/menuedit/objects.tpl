@@ -171,7 +171,7 @@ function cl()
 | <a href='#' onClick='window.location.reload()' class="fgtitle_link">{VAR:LC_MENUEDIT_REFRESH}</a></b>
 </b>
 </td>
-<td align=right class="fgtitle_new"><a href='orb.aw?action=list&class=bugtrack&filt=all' class='fgtitle_link'>BugTrack</a>&nbsp;</td>
+<td align=right class="fgtitle_new">[<a target="list" href='languages.{VAR:ext}'><b><font size=2 color="#FF8080">{VAR:lang_name}</font></b></a>]&nbsp;&nbsp; <a href='orb.aw?action=list&class=bugtrack&filt=all' class='fgtitle_link'>BugTrack</a>&nbsp;</td>
 </tr>
 </table>
 </td>
