@@ -57,8 +57,8 @@
       <property>
             <name>j_time</name>
             <type>date_select</type>
+            <group>dates</group>
             <table>objects</table>
-            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <caption>Jõustumise kuupäev</caption>
@@ -66,16 +66,12 @@
       <property>
             <name>act_date</name>
             <type>date_select</type>
+            <group>dates</group>
             <table>objects</table>
-            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <caption>Avaldamise kuupäev</caption>
       </property>
-      <classinfo>
-            <objtable>files</objtable>
-            <objtable_index>id</objtable_index>
-      </classinfo>
       <groupinfo>
             <general>
                   <caption>Üldine</caption>
