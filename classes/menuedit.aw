@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.302 2003/10/06 14:32:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.303 2003/11/13 11:19:58 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -371,7 +371,14 @@ class menuedit extends aw_template
 
 	function check_section($section, $show_errors = true)
 	{
+		// check frontpage - if it is array, pick the correct one from the language
 		$frontpage = $this->cfg["frontpage"];
+		if (is_array($frontpage))
+		{
+			$frontpage = $frontpage[aw_global_get("lang_id")];
+			$GLOBALS["cfg"]["__default"]["frontpage"] = $frontpage;
+			$this->cfg["frontpage"] = $frontpage;
+		}
 
 		// kui sektsiooni viimane m�k on "-", paneme selle objekti sees psti
 		// raw flagi
