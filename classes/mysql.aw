@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.11 2002/01/31 00:18:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.12 2002/01/31 01:10:17 duke Exp $
 // mysql.aw - MySQL draiver
 include("$classdir/root.$ext");
 class db_connector extends root 
@@ -26,6 +26,8 @@ class db_connector extends root
 		if (!$this->dbh) 
 		{
 			echo "Can't connect to database";
+			print "<br>";
+			print mysql_error();
 			exit;
 		};
 		@mysql_select_db($base,$this->dbh);
@@ -67,7 +69,9 @@ class db_connector extends root
 
 			echo $qtext . "\n";
 			echo "<br>\n";
-			echo mysql_error();
+			echo mysql_errno($this->dbh);
+			print ":";
+			echo mysql_error($this->dbh);
 		} 
 		else 
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.10 2002/01/31 00:14:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.11 2002/01/31 01:10:17 duke Exp $
 // syslog.aw - syslog management
 // syslogi vaatamine ja analüüs
 lc_load("syslog");
@@ -203,7 +203,7 @@ class db_syslog extends aw_template
 				$t->define_data(array(	"when" => $row[tm],
 							"uid"   => ($row[uid]) ? "<b>$row[uid]</b>" : $row["tafkap"],
 							"action"	=> $action,
-							"ip"		=> $addr,
+							"ip"		=> "<a href=\"javascript:ipexplorer('".$addr."')\">".$addr."</a>",
 							"parts"	=> $parts,
 							"uid_c"	=> "&nbsp;".$mat[1]."&nbsp;",
 							"email_c"	=> "&nbsp;".$mat[2]."&nbsp;"));

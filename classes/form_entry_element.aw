@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.47 2002/01/07 10:47:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.48 2002/01/31 01:10:17 duke Exp $
 // form_entry_element.aw - 
 session_register("clipboard");
 classload("currency");
@@ -229,7 +229,14 @@ lc_load("definition");
 					}
 					else
 					{
-						$html.=date($this->arr["date_format"],$this->entry);
+						if ($this->entry < 100)
+						{
+							$html = "";
+						}
+						else
+						{
+							$html.=date($this->arr["date_format"],$this->entry);
+						}
 					}
 				}
 			}

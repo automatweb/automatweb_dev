@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.94 2001/11/20 13:19:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.95 2002/01/31 01:10:17 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 lc_load("messenger");
@@ -176,9 +176,18 @@ class messenger extends menuedit_light
 		$logo = $this->parse();
 		load_vcl("xmlmenu");
 		$xm = new xmlmenu();
+		// yeah. so you can customize the menu for different sites but others also work.
+		if (file_exists($this->template_dir . "/menucode.xml"))
+		{
+			$xml = $this->template_dir . "/menucode.xml";
+		}
+		else
+		{
+			$xml = $basedir . "/xml/messenger/menucode.xml";
+		}
 		$retval = $xm->build_menu(array(
 				"vars"	=> $vars,
-				"xml"	=> $basedir . "/xml/messenger/menucode.xml",
+				"xml"	=> $xml,
 				"tpl"	=> $this->template_dir . "/menus.tpl",
 				"activelist" => $activelist,
 			));

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/rdf.aw,v 2.4 2001/12/04 17:09:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/rdf.aw,v 2.5 2002/01/31 01:10:17 duke Exp $
 // miski simpel klass rss-i väljastamiseks
 
 define(ITEM_TPL,"
@@ -9,7 +9,7 @@ define(ITEM_TPL,"
 <dc:description>%s</dc:description>
 <dc:creator>%s</dc:creator>
 <dc:publisher>%s</dc:publisher>
-<dc:date> </dc:date>
+<dc:date>%s</dc:date>
 <dc:language>ee</dc:language>
 </item>
 ");
@@ -27,6 +27,14 @@ class rdf {
 		$this->description = $this->_convert($description);
 		$this->about = $about;
 		lc_load("definition");
+	}
+
+	////
+	// !Generates a RSS feed from one or more documents
+	function gen_feed($args = array())
+	{
+
+
 	}
 
 	////
@@ -52,8 +60,9 @@ class rdf {
 			$title = $this->_convert($title);
 			$description = $this->_convert($description);
 			$publisher = $this->_convert($publisher);
+			$date = date("Y-m-d",$args["modified"]) . "T" . date("H:i",$args["modified"]) . "+02:00";
 			$this->li .= sprintf("<rdf:li resource=\"%s\"/>\n",$link);
-			$this->items .= sprintf(ITEM_TPL,$link,$title,$link,$description,$creator,PUBLISHER); 
+			$this->items .= sprintf(ITEM_TPL,$link,$title,$link,$description,$creator,PUBLISHER,$date); 
 		}
 	}
 

@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.7 2002/01/17 10:36:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.8 2002/01/31 01:10:17 duke Exp $
 session_register("poll_clicked");
 global $class_defs;
 $class_defs["poll"] = "xml";
@@ -178,24 +178,32 @@ class poll extends aw_template
 				"name" => $name,
 				"comment" => $comment,
 			));
-			
-			if (is_array($answer))
+
+			$this->set_object_metadata(array(
+				"oid" => $id,
+				"key" => "answers",
+				"value" => $answer,
+			));
+
+			if (is_array($answer[1]))
 			{
-				foreach($answer as $aid => $la)
+				foreach($answer[1] as $aid => $la)
 				{
-					if ($aid == 0)
+					if ($aid == 0 && (strlen($la) > 0))
 					{
 						$this->db_query("INSERT INTO poll_answers(answer,poll_id) values('$la','$id')");
 					}
 					else
 					{
-						if ($la == "")
+						if (strlen($la) == 0)
 						{
-							$this->db_query("DELETE FROM poll_answers WHERE id = '$aid'");
+							$q = "DELETE FROM poll_answers WHERE id = '$aid'";
+							$this->db_query($q);
 						}
 						else
 						{
-							$this->db_query("UPDATE poll_answers SET answer = '$la' WHERE id = '$aid'");
+							$q = "UPDATE poll_answers SET answer = '$la' WHERE id = '$aid'"; 
+							$this->db_query($q);
 						}
 					}
 				}
@@ -225,10 +233,17 @@ class poll extends aw_template
 	function get_answers($id)
 	{
 		$ret = array();
+		$poll_obj = $this->get_obj_meta($id);
+		global $lang_id;
+		$meta_answers = $poll_obj["meta"]["answers"];
 		$this->db_query("SELECT * FROM poll_answers WHERE poll_id = $id ORDER BY id");
 		while ($row = $this->db_next())
 		{
 			//$row["answer"] = aw_unserialize($row["answer"]);
+			if (strlen($meta_answers[$lang_id][$row["id"]]) > 0)
+			{
+				$row["answer"] = $meta_answers[$lang_id][$row["id"]];
+			};
 			$ret[$row["id"]] = $row;
 		}
 		return $ret;
@@ -258,17 +273,14 @@ class poll extends aw_template
 			$this->mk_path($parent,"<a href='" . $this->mk_my_orb("list",array()) . "'>Pollid</a>");
 		};
 
-		$poll = $this->get_object($id);
-		
+		$poll = $this->get_obj_meta($id);
+		$meta_answers = $poll["meta"]["answers"];
+
 		//$questions = aw_unserialize($poll["questions"]);
 
 		classload("languages");
 		$l = new languages;
 		$langs = $l->listall();
-		print "<pre>";
-		print_r($langs);
-		print "</pre>";
-		//foreach($langs as $lang)
 		//{
 		//	$this->vars(array(
 		//		"lang_name" => $lang["name"],
@@ -290,21 +302,33 @@ class poll extends aw_template
 		// "Ford! There's an infinite number of monkeys outside who
 		// want to talk to us about this line of PHP code they've worked out."	
 		array_walk($answers,create_function('$val,$key,$sum','$sum = $sum + $val["clicks"];'),&$sum);
-		reset($answers);
-		while (list($aid,$v) = each($answers))
+				
+		foreach($langs as $key => $val)
 		{
-			//foreach($langs as $lang)
-			//{
+			reset($answers);
+			$tmp = "";
+			$this->vars(array(
+				"lang_id" => $val["id"],
+			));
+			while (list($aid,$v) = each($answers))
+			{
 				$percent = ($sum == 0) ? 0 : $v["clicks"]*100/$sum;
 				$this->vars(array(
-					"lang_name" => $lang["name"],
-					"lang_id" => $lang["id"],
 					"answer_id" => $aid, 
-					"answer" => $v["answer"],
+					"answer" => ($meta_answers[$val["id"]][$v["id"]]) ? $meta_answers[$val["id"]][$v["id"]] : $v["answer"],
 					"clicks" => $v["clicks"],
 					"percent" => sprintf("%0.02f",$percent),
 				));
-				$al.=$this->parse("QUESTION");
+				$tmp .= $this->parse("QUESTION");
+			};
+			$this->vars(array(
+				"name" => $poll["name"],
+				"comment" => $poll["comment"],
+				"lang" => $val["name"],
+				"lang_id" => $val["id"],
+				"QUESTION" => $tmp,
+			));
+			$al .= $this->parse("POLL");
 			//}
 			$this->vars(array("A_LANG" => $al));
 			//$this->parse("ANSWER");
@@ -312,11 +336,9 @@ class poll extends aw_template
 
 		$this->vars(array(
 			"id" => $id,
-			"name" => $poll["name"],
 			"sum" => $sum,
-			"comment" => $poll["comment"],
 			"EDIT" => $this->parse("EDIT"),
-			"QUESTION" => $al,
+			"POLL" => $al,
 			"reforb" => $this->mk_reforb("submit",array("id" => $id)),
 		));
 		return $this->parse();
@@ -405,8 +427,8 @@ class poll extends aw_template
 
 		$this->vars(array("total_answers" => $total));
 
-		classload("msgboard");
-		$t = new msgboard;
+		classload("forum");
+		$t = new forum;
 
 		// pollide arhiiv
 		$this->db_query("SELECT objects.* FROM objects WHERE class_id = ".CL_POLL." AND status != 0 AND parent = ".$GLOBALS["SITE_ID"]);
@@ -423,7 +445,7 @@ class poll extends aw_template
 		$qs = aw_unserialize($poll["questions"]);
 
 
-		$this->vars(array("ANSWER" => $as,"question" => $qs[$lang_id], "date" => $this->time2date($poll[modified],2),"addcomment" => $t->add(0,$id,0),"num_comments" => $t->get_num_comments($id), "poll_id" => $id, "QUESTION" => $p));
+		$this->vars(array("ANSWER" => $as,"question" => $qs[$lang_id], "date" => $this->time2date($poll[modified],2),"addcomment" => $t->add_comment(array("board" => $id)), "num_comments" => $t->get_num_comments($id), "poll_id" => $id, "QUESTION" => $p));
 
 		return $this->parse();
 	}

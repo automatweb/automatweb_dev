@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.86 2002/01/30 00:02:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.87 2002/01/31 01:10:17 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -2433,6 +2433,11 @@ class form extends form_base
 							$row["ev_uid"] = $row["modifiedby"];
 							$row["ev_modified"] = $this->time2date($row["modified"], 2);
 							$row["ev_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $form_id,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$form_id],"section" => $section))."'>Vaata</a>";		
+							if ($ft->table["view_new_win"])
+							{
+								$_link = sprintf("javascript:ft_popup('%s&type=popup','popup',%d,%d,%d,%d)",$this->mk_my_orb("show_entry", array("id" => $form_id,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$form_id],"section" => $section)),$ft->table["new_win_scroll"],!$ft->table["new_win_fixedsize"],$ft->table["new_win_x"],$ft->table["new_win_y"]);
+								$row["ev_view"] = sprintf("<a href=\"%s\">Vaata</a>",$_link);
+							}
 
 							if ($this->can("delete",$row["entry_id"])  || $GLOBALS["SITE_ID"] == 11)
 							{
@@ -2460,7 +2465,7 @@ class form extends form_base
 								if ($ft->table["view_new_win"])
 								{
 									$_link = sprintf("javascript:ft_popup('%s&type=popup','popup',%d,%d,%d,%d)",$_link,$ft->table["new_win_scroll"],!$ft->table["new_win_fixedsize"],$ft->table["new_win_x"],$ft->table["new_win_y"]);
-								};
+								}
 
 								$row["ev_".$ft->table["view_col"]] = sprintf("<a href=\"%s\" %s>%s</a>",$_link,$_targetwin,$_caption);
 							}

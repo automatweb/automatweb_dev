@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.10 2002/01/31 00:28:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.11 2002/01/31 01:10:17 duke Exp $
 // Generic calendar class
 
 // php arvab by default, et pühapäev on 0.
@@ -104,7 +104,7 @@ class calendar extends aw_template
 					"contents" => "&nbsp;",
 				));
 			};
-				if ($marked[$day])
+				if ($marked[sprintf("%02d",$day)])
 				{
 					$markup = "<b>%s</b>";
 				}
@@ -141,11 +141,22 @@ class calendar extends aw_template
 
 		$mnames = array("boo","january","february","march","april","may","june","jule",
 			"august","september","october","november","december");
-		#$mname = get_lc_month($mon);
-		$mname = $mnames[$mon];
+		$mname = get_lc_month($mon);
+		#$mname = $mnames[$mon];
+
+		$cap = $mname . date(" Y",mktime(0,0,0,$mon,1,$year));
+
+		if ($args["titlelink"])
+		{
+			$caption = sprintf("<a href='%s'>%s</a>",$args["titlelink"],$cap);
+		}
+		else
+		{
+			$caption = $cap;
+		};
 
 		$this->vars(array(
-			"caption" => $mname . date(" Y",mktime(0,0,0,$mon,1,$year)),
+			"caption" => $caption,
 			"prev" => $this->mk_link($misc + array("year" => $prevyear,"mon" => $prevmon)),
 			"next" => $this->mk_link($misc + array("year" => $nextyear,"mon" => $nextmon)),
 			"week" => $month,

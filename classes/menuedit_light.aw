@@ -15,7 +15,7 @@ class menuedit_light extends aw_template {
 	{
 		extract($args);
 		// vaatame ainult seda tüüpi objekte
-		$this->class_id = ($args["class_id"]) ? $args["class_id"] : 1;
+		$this->class_id = ($args["class_id"]) ? $args["class_id"] : CL_PSEUDO;
 		$this->type = $args["type"];
 		//
 		$this->field = ($args["field"]) ? $args["field"] : "oid";
@@ -30,8 +30,9 @@ class menuedit_light extends aw_template {
 		// moodustame 2mootmelise array koigist objektidest
 		// parent -> child1,(child2,...childn)
 		$this->object_list = array(); // siia satuvad koik need objektid
+		// koigepealt genereerime menyyde nimekirja
 		$this->_gen_rec_list(array("$start_from"));
-		if (sizeof($this->object_list) == 0)
+		if ( (sizeof($this->object_list) == 0) && not($this->add_start_from) )
 		{
 			$retval = false;
 		}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/graph.aw,v 2.6 2002/01/29 23:51:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/graph.aw,v 2.7 2002/01/31 01:10:17 duke Exp $
 // graph.aw - graafikute haldamine
 		global $orb_defs;
 		$orb_defs["graph"] = array(
@@ -30,7 +30,7 @@ lc_load("graph");
 	class graph extends aw_template
 	{
 		//mis tyypi pilte me siin 6ieti loome
-		var $outputimagetype="png";
+		var $outputimagetype="gif";
 
 		function graph()
 		{

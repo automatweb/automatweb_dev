@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.24 2002/01/30 01:14:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.25 2002/01/31 01:10:17 duke Exp $
 // table.aw - tabelite haldus
 global $orb_defs;
 
@@ -108,6 +108,7 @@ $orb_defs["table"] ="xml";
 		$this->filter=$this->get_object_metadata(array("metadata"=>$row["metadata"],"key"=>"filter"));*/
 
 		$this->meta = aw_unserialize($row["metadata"]);
+		$this->obj_data = $row;
 
 		$this->arr = unserialize($row["contents"]);
 
@@ -164,6 +165,7 @@ $orb_defs["table"] ="xml";
 		$this->vars(array(
 			"menu" => $menu,
 			"aliases" => checked($this->meta["aliases"]),
+			"last_changed" => checked($this->meta["last_changed"]),
 			"reforb" => $this->mk_reforb("submit_config",array("id" => $id)),
 			"table_name" => $this->table_name,
 			"table_header" => $this->arr["table_header"],
@@ -186,6 +188,7 @@ $orb_defs["table"] ="xml";
 			"oid" => $id,
 			"data" => array(
 				"aliases" => $aliases,
+				"last_changed" => $last_changed,
 			),
 		));
 
@@ -284,12 +287,13 @@ $orb_defs["table"] ="xml";
 				$cell = $this->arr["contents"][$map["row"]][$map["col"]];
 				$scell = $this->arr["styles"][$map["row"]][$map["col"]];
 				
-				$this->vars(array("text"	=> $cell["text"],
-													"col"		=> $map["col"],
-													"row"		=> $map["row"],
-													"num_cols"	=> $scell["cols"],
-													"num_rows"	=> $scell["rows"]));
-				if ($scell["rows"] > 1)
+				$this->vars(array("text"	=> htmlentities($cell["text"]),
+													"text2" => $cell["text"],
+													"col"		=> $map[col],
+													"row"		=> $map[row],
+													"num_cols"	=> $scell[cols],
+													"num_rows"	=> $scell[rows]));
+				if ($scell[rows] > 1)
 				{
 					$ba = $this->parse("AREA");
 				}
@@ -1412,6 +1416,10 @@ $orb_defs["table"] ="xml";
 			$table.=$rs."</table>";
 
 			$footer = $this->proc_text($this->arr["table_footer"]);
+			if ($this->meta["last_changed"])
+			{
+				$footer .= "<br><small><i>Muudetud: <span align='right'>" . $this->time2date($this->obj_data["modified"],4) . "</span></i></small>";
+			};
 			if ($footer != "")
 			{
 				if ($this->arr["table_style"])

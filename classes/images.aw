@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.21 2001/11/29 22:07:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.22 2002/01/31 01:10:17 duke Exp $
 // klass piltide manageerimiseks
 global $orb_defs;
 $orb_defs["images"] = array("new"						=> array("function"	=> "add",		"params"	=> array("parent")),
@@ -123,6 +123,7 @@ class images extends aw_template
 	{
 		extract($arr);
 		$this->di->delete_object($id);
+		$this->di->delete_alias($docid,$id);
 		if ($parent)
 		{
 			header("Location: menuedit.".$GLOBALS["ext"]."?parent=$parent&type=objects");
@@ -210,6 +211,27 @@ class db_images extends aw_template
 		$this->db_query($q);
 		$row = $this->db_next();
 		$row["url"] = $this->get_url($row["file"]);
+		return $row;
+	}
+
+	function get_img_by_oid2($oid,$idx) 
+	{
+		$idx--;
+		$q = "SELECT images.* FROM aliases LEFT JOIN images ON aliases.target = images.id
+			WHERE aliases.source = '$oid' AND aliases.idx = '$idx' AND aliases.type = 6";
+		$this->db_query($q);
+		$row = $this->db_next();
+//		echo "row = <pre>", var_dump($row),"</pre> file = ",$row["file"]," pos = $pos <br>";
+		$pos = strrpos($row["file"],"/");
+		if ($pos > 0)
+		{
+			$pos++;
+		}
+		if (!$row)
+		{
+			return false;
+		}
+		$row["url"] = $this->get_url(substr($row["file"],$pos));
 		return $row;
 	}
 

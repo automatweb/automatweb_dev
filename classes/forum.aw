@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.39 2002/01/29 23:51:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.40 2002/01/31 01:10:17 duke Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 global $orb_defs;
@@ -632,13 +632,16 @@ class forum extends aw_template
 			$id = $forum_obj["oid"];
 		};
 
+
+		$comment = stripslashes($board_obj["comment"]);
+		$comment = str_replace("'","",$comment);
 		$this->vars(array(
 			"topic" => $board_obj["name"],
 			"from" => ($board_obj["last"]) ? $board_obj["last"] : $board_obj["createdby"],
 			"created" => $this->time2date($board_obj["created"],2),
 			"rated" => $rated,
 			"rate" => sprintf("%0.2f",$board_obj["rate"]),
-			"text" => nl2br(create_links($board_obj["comment"])),
+			"text" => nl2br(create_links($comment)),
 			"reforb" => $this->mk_reforb("submit_messages",array("board" => $board,"section" => $this->section,"act" => "show")),
 		));
 
@@ -1106,18 +1109,31 @@ class forum extends aw_template
 		return $this->parse();
 	}
 
+	function get_num_comments($board)
+	{
+		$cnt = $this->db_fetch_field("SELECT count(*) AS cnt 
+		FROM comments WHERE board_id = '$board'","cnt");
+		return $cnt;
+	}
+
 	////
 	// !Submits comment to a topic
 	function submit_comment($args = array())
 	{
 		$this->quote($args);
 		extract($args);
+		if (!$name)
+		{
+			$name = $from;
+		};
+
 		$forum_obj = $this->get_object($board);
 		$mx = $this->get_object_metadata(array(
 			"oid" => $forum_obj["parent"],
 			"key" => "notifylist",
 		));
-		if ( (strlen($name) > 3) && (strlen($comment) > 5) )
+
+		if ( (strlen($name) > 3) && (strlen($comment) > 1) )
 		{
 			if (is_array($mx))
 			{
@@ -1536,13 +1552,15 @@ class forum extends aw_template
 	function _draw_topic($args = array())
 	{
 		$this->topic_count++;
+
+		$alias = ($this->embedded) ? "forum" : "";
 		
 		$this->use_orb_for_links = 1;
 		#if ($this->use_orb_for_links)
 		#{
-			$topic_link = $this->mk_my_orb("show",array("board" => $args["oid"],"section" => $this->section,"_alias" => "forum"));
-			$threaded_topic_link = $this->mk_my_orb("show_threaded",array("board" => $args["oid"],"section" => $this->section,"_alias" => "forum"));
-			$threaded_topic_link2 = $this->mk_my_orb("show_threaded",array("board" => $args["oid"],"section" => $this->section,"_alias" => "forum","no_comments" => 1));
+			$topic_link = $this->mk_my_orb("show",array("board" => $args["oid"],"section" => $this->section,"_alias" => $alias));
+			$threaded_topic_link = $this->mk_my_orb("show_threaded",array("board" => $args["oid"],"section" => $this->section,"_alias" => $alias));
+			$threaded_topic_link2 = $this->mk_my_orb("show_threaded",array("board" => $args["oid"],"section" => $this->section,"_alias" => $alias,"no_comments" => 1));
 		#}
 		#else
 		#{

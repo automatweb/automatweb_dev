@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.75 2002/01/31 00:26:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.76 2002/01/31 01:10:17 duke Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -924,6 +924,10 @@ class core extends db_connector
 
 		// tuleb siis teha tsykkel yle koigi registreeritud regulaaravaldiste
 		// esimese tsükliga kutsume parserite reset funktioonud välja. If any.
+		if (!is_array($this->parsers->reglist))
+		{
+			return;
+		}
 		foreach($this->parsers->reglist as $pkey => $parser)
 		{
 			if (sizeof($parser["parserchain"] > 0))

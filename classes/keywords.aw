@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.36 2001/12/03 15:11:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.37 2002/01/31 01:10:17 duke Exp $
 // keywords.aw - dokumentide võtmesõnad
 global $orb_defs;
 $orb_defs["keywords"] = "xml";
@@ -188,7 +188,7 @@ class keywords extends aw_template
 		$doc = $this->get_object($id);
 		$q = "SELECT keywords.list_id AS list_id,keywords.keyword AS keyword  FROM keywords2objects
 			LEFT JOIN keywords ON (keywords2objects.keyword_id = keywords.id)
-			WHERE oid = $id";
+			WHERE keywords.oid = $id";
 		$this->db_query($q);
 		$lx = array();
 		$kwa = array();

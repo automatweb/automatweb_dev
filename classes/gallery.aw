@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.22 2002/01/29 23:55:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.23 2002/01/31 01:10:17 duke Exp $
 classload("images");
 lc_load("gallery");
 global $orb_defs;
@@ -431,8 +431,8 @@ class gallery extends aw_template
 				"img_url" => preg_replace("/^http:\/\/.*\//","/",$this->arr[0]["content"][0][0]["tnurl"])
 			));
 			return $this->parse();
-                }
-                else
+		}
+    else
 		if (isset($GLOBALS["col"]) && isset($GLOBALS["row"]) && !isset($GLOBALS["class"]))
 		{
 			global $col, $row;
@@ -461,7 +461,7 @@ class gallery extends aw_template
 					for ($col = 0; $col < $this->arr[$page]["cols"]; $col++)
 					{
 						$cell = $this->arr[$page]["content"][$row][$col];
-						if ($cell["bigurl"] != "")
+						if ($cell["tnurl"] != "")
 						{
 							$cell["col"] = $col;
 							$cell["row"] = $row;
@@ -513,7 +513,7 @@ class gallery extends aw_template
 				"ysize" => $ysize
 			));
 
-			if ($tnurl != "")
+			if ($bigurl != "")
 			{
 				$this->vars(array("HAS_LARGE" => $this->parse("HAS_LARGE")));
 			}
