@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_center.aw,v 1.1 2004/05/12 13:29:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_center.aw,v 1.2 2004/05/17 14:18:54 kristo Exp $
 // prisma_center.aw -  
 /*
 
@@ -483,7 +483,8 @@ class prisma_center extends class_base
 
 		// get all resources 
 		$resource_list = new object_list(array(
-			"class_id" => CL_WORKFLOW_RESOURCE
+			"class_id" => CL_WORKFLOW_RESOURCE,
+			"sort_by" => "objects.jrk"
 		));
 
 
@@ -502,7 +503,8 @@ class prisma_center extends class_base
 
 		$res = "";
 		$resource_list = new object_list(array(
-			"class_id" => CL_WORKFLOW_RESOURCE
+			"class_id" => CL_WORKFLOW_RESOURCE,
+			"sort_by" => "objects.jrk"
 		));
 		for($o = $resource_list->begin(); !$resource_list->end(); $o = $resource_list->next())
 		{

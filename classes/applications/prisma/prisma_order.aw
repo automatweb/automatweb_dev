@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_order.aw,v 1.1 2004/05/12 13:29:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_order.aw,v 1.2 2004/05/17 14:18:54 kristo Exp $
 // prisma_order.aw - Printali Tr&uuml;kis 
 /*
 
@@ -421,6 +421,7 @@ class prisma_order extends class_base
 				$ev->set_prop("start1", $ts);
 				$ev->set_prop("end", $ts + ($length[$resid] * 3600));
 				$ev->set_meta("task_priority", $arr["obj_inst"]->prop("priority"));
+				$ev->set_meta("job_id", $arr["obj_inst"]->id());
 				$ev->save();
 			}
 			else
@@ -433,6 +434,7 @@ class prisma_order extends class_base
 				$ev->set_prop("start1", $ts);
 				$ev->set_prop("end", $ts + ($length[$resid] * 3600));
 				$ev->set_meta("task_priority", $arr["obj_inst"]->prop("priority"));
+				$ev->set_meta("job_id", $arr["obj_inst"]->id());
 				$ev->save();
 
 				$reso->connect(array(
@@ -446,10 +448,14 @@ class prisma_order extends class_base
 			// ach! if there are events during the one added with lower priority (if higer priority we fucked up earlier) 
 			// then we must move all of them to a later date. 
 			//echo "to add event to calendar, do move events lower, new event = ".date("d.m.Y H:i",$ts)." - ".date("d.m.Y H:i",$ts + ($length[$resid] * 3600))." <br>";
-			$this->do_move_events_lower($ts, $ts + ($length[$resid] * 3600), $arr["obj_inst"], $resid,$event_ids[$resid]);
 		}
 
 		$arr["obj_inst"]->set_meta("event_ids", $event_ids);
+
+		foreach($event_ids as $resid => $evid)
+		{
+			$this->do_move_events_lower($arr["obj_inst"], $resid,$event_ids[$resid]);
+		}
 	}
 
 	function do_save_resources($arr)
@@ -854,7 +860,7 @@ class prisma_order extends class_base
 		return $ts;
 	}
 
-	function do_move_events_lower($ts_s,$ts_e, $o, $resid, $cur_event_id = false)
+	function do_move_events_lower($o, $resid, $cur_event_id = false)
 	{
 		classload("date_calc");
 		// get all events for that timespan
@@ -882,10 +888,20 @@ class prisma_order extends class_base
 			{
 				$overlap_len = $overlap->prop("end") - $overlap->prop("start1");
 
+				// find the job and resource for the overlap event. 
+				$job_id = $overlap->meta("job_id");
+				$job_o = obj($job_id);
+				$j_events = $job_o->meta("event_ids");
+				$j_length = $job_o->meta("length");
+				$j_order = $job_o->meta("order");
+				$j_lut = $this->get_lut_by_pri($j_order, $j_length);
+				$overlap_resid = array_search($overlap->id(), $j_events);
+
+
 				//		find first avail time
 				$this->cur_priority = $overlap->meta("task_priority");
 				$this->times_by_resource = array();
-				$ts = $this->req_get_time_for_resource($resid, $length, $order, $lut, array($overlap->id() => $overlap->id()));
+				$ts = $this->req_get_time_for_resource($overlap_resid, $j_length, $j_order, $j_lut, array($overlap->id() => $overlap->id()));
 				//echo "got new ts as ".date("d.m.Y H:i", $ts)." len = $overlap_len <br>";
 				$overlap->set_prop("start1", $ts);
 				$overlap->set_prop("end", $ts + $overlap_len);
@@ -893,6 +909,25 @@ class prisma_order extends class_base
 
 				//		move = true
 				$moves = true;
+
+				// also, calc the timestamps for all the other events for the job that the first event was in and move them forward.
+				foreach($j_events as $j_resid => $j_evid)
+				{
+					if ($j_evid == $overlap->id())
+					{
+						continue;
+					}
+
+					$ts = $this->req_get_time_for_resource($j_resid, $j_length, $j_order, $j_lut, array($j_evid => $j_evid));
+					$j_evo = obj($j_evid);
+					if ($ts > $j_evo->prop("start1"))
+					{
+						$j_len = $j_evo->prop("end") - $j_evo->prop("start1");
+						$j_evo->set_prop("start1", $ts);
+						$j_evo->set_prop("end", $ts + $j_len);
+						$j_evo->save();
+					}
+				}
 			}
 			// end while
 		}
