@@ -1,10 +1,11 @@
 <?
-// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/personalikeskkond.aw,v 1.5 2004/04/07 10:01:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/personalikeskkond.aw,v 1.6 2004/04/07 10:18:24 sven Exp $
 // personalikeskkond.aw - Personalikeskkond 
 /*
- 	
-@classinfo syslog_type=ST_PERSONALIKESKKOND relationmgr=yes no_status=1
 
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_PERSONALIKESKKOND, on_connect_manager_to_keskkond)
+
+@classinfo syslog_type=ST_PERSONALIKESKKOND relationmgr=yes no_status=1
 @default table=objects
 
 //////////////////////////RELATIONS\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ 
@@ -15,6 +16,9 @@
 @reltype HALDUR value=3 clid=CL_CRM_COMPANY
 @caption Haldur
 
+@reltype CONFIGFORM value=4 clid=CL_CFGMANAGER 
+@caption Seadete vorm
+
 @reltype VALDKONNAD value=20 clid=CL_META
 @caption Tegevusvaldkonnad
 //////////////////////////TOOLBARS\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ 
@@ -24,6 +28,7 @@
 @property navtoolbar_manager type=toolbar no_caption=1 store=no group=haldurid
 
 ///////////////////////////SETTINGS_TAB\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ 
+
 @property orgs type=relpicker group=setings table=objects method=serialize field=meta reltype=RELTYPE_KAUST
 @caption Organisatsioonide kaust
 
@@ -47,9 +52,7 @@
 @caption Tööotsijad:
 @property persontable type=table group=tootsijad_nimekiri no_caption=1
 
-
 @property companytable type=table group=toopakkujad_nimekiri no_caption=1
-
 @property cvtable type=table group=cv_nimekiri no_caption=1
 
 
@@ -71,16 +74,46 @@
 
 
 /////////////////////////MINU PROFIIL TÖÖOTSIJA\\\\\\\\\\\\\\\\\\\\\\\
-@property my_personal_toolbar type=toolbar group=mycvs,my_candits,my_personal_info no_caption=1
+@property my_personal_toolbar type=toolbar group=mycvs no_caption=1
+@property my_personal_toolbar_mycandits type=toolbar group=my_candits no_caption=1
+
 @property mycvs type=table group=mycvs no_caption=1
 @property my_candits type=table group=my_candits no_caption=1
 @property my_personal_info type=table group=mycvs no_caption=1
+________________________________________________________________
+@property my_personal_info_username type=text group=my_personal_info store=no
+@caption Kasutajanimi
+
+@property my_personal_info_firstname type=textbox group=my_personal_info store=no
+@caption Eesnimi
+
+@property my_personal_info_lastname type=textbox group=my_personal_info store=no
+@caption Perekonnanimi
+
+@property gender type=chooser group=my_personal_info store=no
+@caption Sugu
+
+@property my_personal_info_id type=textbox group=my_personal_info store=no
+@caption Isikukood
+
+@property my_default_cv type=select group=mycvs
+@caption Minu cv vaikimisi
+
+@property my_personal_info_password type=textbox group=my_personal_info store=no
+@caption Parool
+
+@property my_personal_info_password_again type=textbox group=my_personal_info store=no
+@caption Parool uuesti
 
 /////////////////////////MINU PROFIIL TÖÖPAKKUJA\\\\\\\\\\\\\\\\\\\\\\\
-
+@property org_toolbar type=toolbar group=org_jobs,org_jobs_candits,org_info no_caption=1
 @property org_jobs type=table group=org_jobs no_caption=1
 @property org_candits type=table group=org_jobs_candits no_caption=1
 @property org_info type=table group=org_info no_caption=1
+@property org_bookmarks type=table group=org_bookmarks no_caption=1
+________________________________________________________________________
+
+
 ///////////////////////////TAB PROPS\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ 
 
 @groupinfo my_profile caption="Minu profiil"
@@ -90,15 +123,13 @@
 @groupinfo haldurid caption="Haldurid"
 
 
-@groupinfo toopakkujad_nimekiri caption="Tööpakkujate nimekiri" parent=toopakkujad
-@groupinfo toopakkujad_tood caption="Tööpakkumised" parent=toopakkujad
-@groupinfo toopakkujad_statistika caption="Statistika" parent=toopakkujad
-@groupinfo toopakkumised_cats parent=toopakkujad caption="Tööpakkumised - Valdkonnad" submit=no
+@groupinfo toopakkujad_nimekiri caption="Tööpakkujate nimekiri" submit=no parent=toopakkujad
+@groupinfo toopakkujad_tood caption="Tööpakkumised" submit=no parent=toopakkujad
+@groupinfo toopakkumised_cats parent=toopakkujad submit=no caption="Tööpakkumised - Valdkonnad"
 
-@groupinfo tootsijad_nimekiri caption="T&ouml;&ouml;otsijate nimekiri" parent=tootsijad
-@groupinfo cv_nimekiri caption="CV nimekiri" parent=tootsijad
-@groupinfo tootsijad_satistika caption="Statistika" parent=tootsijad
-@groupinfo tootsijad_valdkonnad caption="Tööotsijad - Valdkonnad" parent=tootsijad submit=no
+@groupinfo tootsijad_nimekiri caption="T&ouml;&ouml;otsijate nimekiri" submit=no parent=tootsijad
+@groupinfo tootsijad_valdkonnad caption="Tööotsijad - Valdkonnad" submit=no parent=tootsijad
+@groupinfo cv_nimekiri caption="CV nimekiri" submit=no parent=tootsijad
 
 
 @groupinfo mycvs caption="Minu CV-d" parent=my_profile submit=no
@@ -108,22 +139,36 @@
 
 @groupinfo org_jobs caption="Tööpakkumised" parent=org_profile submit=no
 @groupinfo org_jobs_candits caption="Kandideerijad" parent=org_profile submit=no
+@groupinfo org_bookmarks caption="Huvitavad kandidaadid" parent=org_profile submit=no
+
+@groupinfo org_jobs_candits caption="Kandideerijad" parent=org_profile submit=no
 @groupinfo org_info caption="Organisatsiooni andmed" parent=org_profile
 
-@groupinfo setings caption="Seaded"
-*/
 
+@group all_setings caption="Kaustade seaded"
+@groupinfo setings caption="Seaded" parent=all_setings
+
+*/
 class personalikeskkond extends class_base
 {
+	var $my_profile;
+
 	function personalikeskkond()
 	{
+
 		$this->init(array(
 			'clid' => CL_PERSONALIKESKKOND,
-		));
+		));		
+		$this->my_profile = $this->get_my_profile();
+
 	}
 	
-	//////
-	// class_base classes usually need those, uncomment them if you want to use them	
+	function callback_on_load($arr)
+	{
+		$this->cfgmanager = aw_ini_get("emp_cfgmanager");
+	}
+	
+	
 	function get_property($arr)
 	{
 		$data = &$arr["prop"];
@@ -131,6 +176,51 @@ class personalikeskkond extends class_base
 		
 		switch($data["name"])
 		{
+			
+			case "my_personal_info_username":
+				$data["value"] = aw_global_get("uid");
+			break;
+				
+			case "my_personal_info_firstname":
+				$data["value"] = $this->my_profile->prop("firstname");
+			break;
+			
+			case "my_personal_info_lastname":
+				$data["value"] = $this->my_profile->prop("lastname");
+			break;
+			
+			case "my_personal_info_id":
+				$data["value"] = $this->my_profile->prop("personal_id");
+			break;
+			
+			case "my_personal_info_gender":
+				$data["value"] = $this->my_profile->prop("gender");
+			break;
+			
+			case "my_personal_toolbar":
+				$this->do_my_personal_toolbar($arr);
+			break;
+			
+			case "my_personal_toolbar_mycandits":
+				$this->do_my_personal_toolbar_mycandits($arr);
+			break;
+			
+			case "my_candits":
+				$this->do_mycantis_table($arr);
+			break;
+			
+			case "org_toolbar":
+				$this->do_org_toolbar($arr);
+			break;
+			
+			case "org_candits":
+				$this->do_org_candits_table($arr);
+			break;
+			
+			case "org_bookmarks":
+				$this->do_org_bookmakrs_table($arr);
+			break;
+			
 			case "manager_table":
 				$this->do_manager_table($arr);
 			break;
@@ -150,11 +240,7 @@ class personalikeskkond extends class_base
 			case "navtoolbar_manager":	
 				$this->do_manager_toolbar($arr);	
 			break;
-			
-			case "my_personal_toolbar":
-				$this->do_my_personal_toolbar($arr);
-			break;
-			
+
 			case "navtoolbar_job_offer":
 				$this->do_navtoolbar_joboffer($arr);	
 			break;
@@ -178,16 +264,27 @@ class personalikeskkond extends class_base
 			case "mycvs":
 				$this->do_mycvs_table($arr);
 			break;
-			
-			case "my_candits":
-				$this->do_mycantis_table($arr);
-			break;
-			
+	
 			case "org_jobs":
 				$this->do_org_jobs_table($arr);
 			break;
 			
-			case "jobtable":
+			case "gender":
+				 $data["options"] = array(
+					"M" => "Mees",
+					"N" => "Naine"
+					);
+            break;
+			
+            case "my_default_cv":
+            	$mycvs = $this->get_cvs_of_person($this->my_profile);
+            	foreach ($mycvs as $mycv)
+				{
+					$data["options"][$mycv->id()] = $mycv->name();	
+				}
+            break;
+			
+            case "jobtable":
 
 				$table=&$arr["prop"]["vcl_inst"];
 				$this->do_joblist_table_cols($table);
@@ -205,15 +302,19 @@ class personalikeskkond extends class_base
 							$connection_id = $toopakkumine->id();
 							$toopakkumine = obj($toopakkumine->prop("to"));
 							
-							if($toopakkumine->prop("status") == 2 && $toopakkumine->prop("deadline") > time())
+							if($toopakkumine->prop("status") == STAT_NOTACTIVE)
 							{
-							
-								$linn=$toopakkumine->prop("asukoht");
-							
-								$linn=&obj($linn);
-								if(!is_object($linn))
+								$linn = $toopakkumine->prop("asukoht");
+								
+								//Kas linn on määratud?
+								if($linn)
 								{
-									$linn = new object();
+									$linn = &obj($linn);
+									$linn = $linn->name();
+								}
+								else
+								{
+									unset($linn);
 								}
 							
 								$table->define_data(array(
@@ -225,7 +326,7 @@ class personalikeskkond extends class_base
 												"caption" => $toopakkumine->prop("name"),
 												"url" => $this->mk_my_orb("change", array("id" => $toopakkumine->id()), "job_offer"),
 											)),
-									"asukoht" => $linn->name(),
+									"asukoht" => $linn,
 									"deadline" => get_lc_date($toopakkumine->prop("deadline")),
 									"from" => $connection_id
 								));
@@ -257,7 +358,7 @@ class personalikeskkond extends class_base
 					"caption" => "Lisa t&ouml;&ouml;pakkumine",
 					"width" => "100",
 				));
-				
+
 				foreach ($arr["obj_inst"]->connections_from(array("type" => RELTYPE_HALDUR)) as $haldur)
 				{
 					$haldur = obj($haldur->prop("to"));
@@ -294,31 +395,6 @@ class personalikeskkond extends class_base
 		return $retval;
 	}
 	
-	
-	
-	function callback_mod_tab(&$arr)
-	{
-		switch ($arr["id"])
-		{
-			case "my_profile":
-				if($this->get_my_profile())
-				{
-					return true;
-				}
-				return false;
-				
-			break;
-			
-			case "org_profile":
-				if($this->get_my_org_profile())
-				{
-					return true;
-				}
-				return false;
-			break;
-		}
-	}
-	
 	/**
 		@attrib name=delete_rels
 	**/
@@ -329,13 +405,12 @@ class personalikeskkond extends class_base
 			$conn=new connection($conn);
 			$conn->delete();	
 		}
-		//On mõni parem viis tagasi minekuks?
-		echo " <SCRIPT LANGUAGE=\"JavaScript\">history.go(-1)</SCRIPT>";
+		
+		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"]), "personalikeskkond");
 	}
 	
 	/**
 		@attrib name=save_changes
-		This functions deletes relations
 	**/
 	function save_changes($arr)
 	{
@@ -354,11 +429,150 @@ class personalikeskkond extends class_base
 			$cv->set_status(STAT_ACTIVE);
 			$cv->save();
 		}
-		
-		//On mõni parem viis tagasi minekuks?
-		echo " <SCRIPT LANGUAGE=\"JavaScript\">history.go(-1)</SCRIPT>";
+		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"]), "personalikeskkond");
 	}
 	
+	/**
+		@attrib name=refresh_jobs
+		Show only candidates for selected job
+	**/
+	function refresh_jobs($arr)
+	{
+		return $this->mk_my_orb("change", array(
+			"id" => $arr["id"],
+			"group" => $arr["group"],
+			"jobid" => $arr["org_jobs"], 
+		), $arr["class"]);
+	}
+	
+	function get_cvs_of_person(&$person)
+	{
+		$cv_conns = $person->connections_from(array("type" => 19)); 
+		foreach ($cv_conns as $cv_conn)
+		{
+			$return_cvs[] = $cv_conn->to();
+		}
+		return $return_cvs;
+	}
+	
+	function on_connect_manager_to_keskkond($arr)
+	{
+		$conn = &$arr["connection"];
+		if($conn->prop("to.class_id") == CL_CRM_COMPANY && $conn->prop("reltype") == RELTYPE_HALDUR)
+		{
+			$manager = $conn->to();
+			
+			$manager->connect(array(
+				"to" => $conn->prop("from"),
+				"reltype" => RELTYPE_PERSONAL_MRG,
+			));
+		}
+	}
+	
+	function do_org_bookmakrs_table(&$arr)
+	{
+		$table = &$arr["prop"]["vcl_inst"];
+		
+		$table->define_field(array(
+			"name" => "name",
+			"caption" => "Nimi",
+			"sortable" => 1,
+		));
+		
+		$table->define_field(array(
+			"name" => "synd",
+			"caption" => "Sündinud",
+			"sortable" => 1,
+		));
+		
+		$table->define_field(array(
+			"name" => "jobs",
+			"caption" => "Kandideerib järgmistele ametikohtadele: ",
+			"sortable" => 1,
+		));
+		
+		$table->define_chooser(array(
+			"name" => "sel",
+			"field" => "from",
+			"align" => "center",
+		));
+		
+		$my_org = $this->get_my_org_profile();
+		
+		foreach ($my_org->connections_from(array("type" => RELTYPE_KANDIDAAT)) as $bookmark)
+		{
+			$person_obj = $bookmark->to();
+			
+			$table->define_data(array(
+				"name" => html::href(array(
+					"caption" => $bookmark->prop("to.name"),
+					"url" => $this->mk_my_orb("change", array("id" => $bookmark->prop("to")), "crm_person"),
+				)),
+				"synd" => $person_obj->prop("birthday"),
+				//"jobs" => "",
+				"form" => $bookmark->id(),
+			));
+		}
+	}
+	
+	function do_org_candits_table(&$arr)
+	{
+		if($org_profile = $this->get_my_org_profile())
+		{
+			$table = &$arr["prop"]["vcl_inst"];
+		
+			$table->define_field(array(
+				"name" => "name",
+				"caption" => "Nimi",
+				"sortable" => 1,
+			));
+		
+			$table->define_field(array(
+				"name" => "job",
+				"caption" => "Tööpakkumine",
+				"sortable" => 1,
+			));
+		
+			$table->define_field(array(
+				"name" => "deadline",
+				"caption" => "Kuupäev",
+				"sortable" => 1,
+			));	
+			
+			$table->define_chooser(array(
+				"name" => "sel",
+				"field" => "from",
+				"align" => "center",
+			));
+			foreach ($org_profile->connections_from(array("type" => RELTYPE_JOBS, "to" => $arr["request"]["jobid"])) as $job)
+			{
+				$job = $job->to();
+				foreach ($job->connections_from(array("type" => 5)) as $cv)
+				{
+					$cv_rel_created = $cv->prop("created");
+					$cv_connid = $cv->id();					
+					$cvcreated = $cv->prop("created");
+					$cv = $cv->to();
+					
+					foreach ($cv->connections_from(array("type" => RELTYPE_CV_OWNER)) as $person)
+					{
+						$table->define_data(array(
+							"name"  => html::href(array(
+									"caption" => $person->prop("to.name"),
+									"url" => $this->mk_my_orb("change", array("id" => $cv->id()) ,"cv"),
+							)),
+							"job" 	=> html::href(array(
+									"caption" => $job->name(),
+									"url" => $this->mk_my_orb("change", array("id" => $job->id()) ,"job_offer"),
+							)),
+							"deadline" => get_lc_date($cv_rel_created),
+							"from" => $cv_connid,
+						));
+					}
+				}
+			}
+		}
+	}
 	
 	function do_joblist_table($arr)
 	{
@@ -407,7 +621,7 @@ class personalikeskkond extends class_base
 										"caption" => $toopakkuja->name(),
 										"url" => $this->mk_my_orb("change", array("id" => $toopakkuja->id()) ,"crm_company")
 										)),
-									"asukoht" => $city->name(),
+									"asukoht" => @$city->name(),
 									"deadline" => get_lc_date($job->prop("deadline")),
 									"from" => $job_connection_id,
 								));
@@ -418,28 +632,7 @@ class personalikeskkond extends class_base
 			}		
 		}
 	}
-	function job_tree_gen(&$obj, &$tree)
-	{
-		if($obj->prop("parent")==471)
-		{
-			$parent = 0;
-		}
-		else
-		{
-			$parent = $obj->prop("parent");
-		} 
-			$tree->add_item($parent,array(
-				"name" =>	$obj->name(),
-        	    "id" =>		$obj->id(),
-        	    "url" =>	$this->mk_my_orb("change", array( 
-    	                    				"sector_id" => $obj->id(), 
-	                        				"group" => "toopakkumised_cats", 
-	                        				"id"=> $arr["obj_inst"]->id()
-							))
-			));
-		
-	}
-	
+
 	function do_joblist_table_cols(&$table)
 	{		
 		$table->define_field(array(
@@ -475,6 +668,7 @@ class personalikeskkond extends class_base
 			"align" => "center",
 		));
 	}
+	
 	
 	function do_personlist_table_cols(&$table)
 	{
@@ -583,9 +777,12 @@ class personalikeskkond extends class_base
     		"class_id" => CL_META,
     		"parent" => $arr["obj_inst"]->prop("tegevusvaldkonnad"),
 		));
-				
+		
+			
 		$tegevusalad = $tegevusalad->to_list();
-				
+
+		
+		
 		foreach ($tegevusalad->arr() as $tegevusala)
 		{		
 			if($tegevusala->prop("parent")==$arr["obj_inst"]->prop("tegevusvaldkonnad"))
@@ -596,6 +793,7 @@ class personalikeskkond extends class_base
 			{
 				$parent = $tegevusala->prop("parent");
 			} 
+
 			
 			$tree->add_item($parent, array(
 				"name" =>	$tegevusala->name(),
@@ -607,7 +805,7 @@ class personalikeskkond extends class_base
 								))
 			));
 		}
-				
+
 		$arr["prop"]["value"] = $tree->finalize_tree();
 	}
 	
@@ -644,18 +842,33 @@ class personalikeskkond extends class_base
 		));
 	}
 	
+	
+	function do_my_personal_toolbar_mycandits(&$arr)
+	{
+		$tb = &$arr["prop"]["toolbar"];
+		
+		$tb->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => "Kustuta valitud seosed",
+			"action" => "delete_rels",
+			"confirm" => "Kas soovid valitud objektid kustutada?",
+		));
+	}
+	
 	function do_my_personal_toolbar(&$arr)
 	{
-		
 		$my_person_obj = $this->get_my_profile();
-		
+				
 		$tb = &$arr["prop"]["toolbar"];
+		
 		$tb->add_menu_button(array(
     		"name" => "new",
     		"img" => "new.gif",
     		"tooltip" => "New object",
 		));
 		
+	
 		$tb->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
@@ -666,11 +879,12 @@ class personalikeskkond extends class_base
 		
 		
 		$tb->add_button(array(
-			"name" => "Save",
-			"img" => "save.gif",
-			"tooltip" => "Salvesta",
-			"action" => "save_changes",
+				"name" => "Save",
+				"img" => "save.gif",
+				"tooltip" => "Salvesta",
+				"action" => "save_changes",
 		));
+		
 		
 		$tb->add_menu_item(array(
     		"parent" => "new",
@@ -703,7 +917,7 @@ class personalikeskkond extends class_base
 			"tooltip" => "Kustuta valitud seosed",
 			"action" => "delete_rels",
 		));	
-						
+				
 		$connections = $arr["obj_inst"]->connections_from(array("type" => RELTYPE_HALDUR));
 				
 		if(count($connections)>1)
@@ -736,16 +950,112 @@ class personalikeskkond extends class_base
 		{
 			$conn=array_pop($connections);
 			$tb->add_menu_item(array(
-						"parent" => "new",
-						"text" => "Tööpakkuja",
-						"title" => "Tööpakkuja",
-						"url" => $this->mk_my_orb("new", array(
-										"parent" => $arr["obj_inst"]->prop("orgs"),
-										"return_url" => urlencode(aw_global_get('REQUEST_URI')),
-										"alias_to" => $conn->prop("to"),
-										"reltype" => 20,
-							) ,"crm_person"),			
+					"parent" => "new",
+					"text" => "Tööpakkuja",
+					"title" => "Tööpakkuja",
+					"url" => $this->mk_my_orb("new", array(
+									"parent" => $arr["obj_inst"]->prop("orgs"),
+									"return_url" => urlencode(aw_global_get('REQUEST_URI')),
+									"alias_to" => $conn->prop("to"),
+									"reltype" => 20,
+						) ,"crm_person"),			
 			));
+		}
+	}
+	
+	function do_org_toolbar(&$arr)
+	{
+
+		if($myorg_profile = &$this->get_my_org_profile()) 
+		{
+			$tb = &$arr["prop"]["toolbar"];
+			if($arr["request"]["group"] == "org_jobs" or $arr["request"]["group"] == "org_profile")
+			{
+			
+				$tb->add_menu_button(array(
+	    			"name" => "new",
+	    			"img" => "new.gif",
+	    			"tooltip" => "Uus",
+				));
+			
+				$tb->add_menu_item(array(
+					"parent" => "new",
+					"text" => "Tööpakkumine",
+					"title" => "Tööpakkumine",
+					"url" => $this->mk_my_orb("new", array(
+						"parent" => $arr["obj_inst"]->prop("orgs"),
+						"return_url" => urlencode(aw_global_get('REQUEST_URI')),
+						"alias_to" => $myorg_profile->id(),	
+						"reltype" => RELTYPE_JOBS,
+					
+						), "job_offer")
+				));
+			}		
+			
+			$tb->add_button(array(
+				"name" => "delete",
+				"img" => "delete.gif",
+				"tooltip" => "Kustuta valitud seosed",
+				"action" => "delete_rels",
+			));	
+			
+			if($arr["request"]["group"] == "org_jobs_candits")
+			{
+				$jobs_options[] = "--Kõik tööpakkumised--";
+				$org_obj = $this->get_my_org_profile();
+			
+				foreach ($org_obj->connections_from(array("type" => RELTYPE_JOBS)) as $joboffer)
+				{
+					$jobs_options[$joboffer->prop("to")] = $joboffer->prop("to.name");	
+				}
+			
+				$orgjobs_sel = html::select(array(
+					"name" => "org_jobs",
+					"options" => $jobs_options,
+					"selected" => $arr["request"]["jobid"],
+				));
+				
+				$tb->add_button(array(
+					"name" => "bookmark",
+					"tooltip" => "Vali huvitavad kandidaadid",
+					"action" => "bookmark_persons",
+				));	
+			
+				$tb->add_cdata($orgjobs_sel, "right");	
+			
+				$tb->add_button(array(
+					"name" => "refesh",
+					"img" => "refresh.gif",
+					"tooltip" => "Uuenda",
+					"action" => "refresh_jobs",
+					"side" => "right",
+				));				
+			}
+		}
+	}
+	
+	/**
+		@attrib name=bookmark_persons
+	**/
+	function bookmark_persons($arr)
+	{
+		foreach ($arr["sel"] as $cv)
+		{
+			$cvconnection = new connection($cv);
+			$cv = $cvconnection->to();
+			$person_conn = array_pop($cv->connections_from(array("type" => RELTYPE_CV_OWNER)));
+			$persons[] = $person_conn->to();
+		}
+		
+		$persons = array_unique($persons);
+		$my_org_profile = $this->get_my_org_profile();
+		
+		foreach($persons as $person)
+		{
+			$my_org_profile->connect(array(
+				"to" => $person->id(),
+				"reltype" => RELTYPE_KANDIDAAT,
+			));	
 		}
 	}
 	
@@ -810,32 +1120,7 @@ class personalikeskkond extends class_base
 				"img" => "delete.gif",
 				"tooltip" => "Kustuta valitud seosed",
 				"action" => "delete_rels",
-		));
-		
-	
-		
-		$haldurid_options[] = "--Kõik haldurid--";
-		foreach ($arr["obj_inst"]->connections_from(array("type" => RELTYPE_HALDUR)) as $haldur_conn)
-		{
-			$haldurid_options[$haldur_conn->prop("to")] = $haldur_conn->prop("to.name");
-		}
-		
-		$haldurid = html::select(array(
-			"name" => "managers",
-			"options" => $haldurid_options
-		));
-
-		$tb->add_separator(); 
-		$tb->add_cdata($haldurid, "right");
-		
-		$tb->add_button(array(
-				"name" => "refesh",
-				"img" => "refresh.gif",
-				"tooltip" => "Uuenda",
-				"action" => "manager_change",
-				"side" => "right",
 		));	
-	
 	}
 	
 	function do_sector_table_cvs(&$arr)
@@ -951,7 +1236,7 @@ class personalikeskkond extends class_base
 	
 	function do_mycantis_table(&$arr)
 	{
-		if($person_obj = &$this->get_my_profile())
+		if($person_obj = &$this->my_profile)
 		{
 			$table=&$arr["prop"]["vcl_inst"];
 						
@@ -959,12 +1244,14 @@ class personalikeskkond extends class_base
 				"name" => "ametikoht",
 				"caption" => "Ametikoht",
 				"sortable" => 1,
+				"width" => "45%",
 			));
 			
 			$table->define_field(array(
 				"name" => "org",
 				"caption" => "Organisatsioon",
 				"sortable" => 1,
+				"width" => "40%",				
 			));	
 			
 			$table->define_field(array(
@@ -980,6 +1267,7 @@ class personalikeskkond extends class_base
 				"name" => "sel",
 				"field" => "from",
 				"align" => "center",
+				"width" => "5%",
 			));
 			
 			foreach ($person_obj->connections_from(array("type" => RELTYPE_CV)) as $cv)
@@ -1010,10 +1298,9 @@ class personalikeskkond extends class_base
 	}
 	
 	
-	
 	function do_mycvs_table(&$arr)
 	{
-		if($person_obj = &$this->get_my_profile())
+		if($person_obj = &$this->my_profile)
 		{
 			$table =& $arr["prop"]["vcl_inst"];
 			
@@ -1039,6 +1326,8 @@ class personalikeskkond extends class_base
 				"width" => "10%",
 				"align" => "center"
 			));	
+
+			
 			$table->define_chooser(array(
 				"name" => "sel",
 				"field" => "from",
@@ -1047,6 +1336,7 @@ class personalikeskkond extends class_base
 			
 			foreach ($person_obj->connections_from(array("type" => RELTYPE_CV)) as $cv)
 			{
+				$cv_connid = $cv->id();
 				$cv = $cv->to();
 				
 				$cv_id = $cv->id();
@@ -1065,13 +1355,14 @@ class personalikeskkond extends class_base
 						"url" => $this->mk_my_orb("change", array("id" => $cv->id()), "cv"),
 						"caption" => $cv->name(),
 					)),
-					"lisatud" => get_lc_date($cv->created()),
+					"lisatud"  => get_lc_date($cv->created()),
 					"muudetud" => get_lc_date($cv->modified()),
 					"aktiivne" => html::checkbox(array(
 									"name" => "act[$cv_id]",
 									"value" => $cv->status(),
 									"checked" => $checked,
-								))
+								)),
+					"from"		=> $cv_connid,
 				));
 				
 			}
@@ -1089,7 +1380,7 @@ class personalikeskkond extends class_base
 				"name" => "ametikoht",
 				"caption" => "Ametikoht",
 				"sortable" => 1,
-				"width" => "80%"
+				"width" => "70%"
 			));
 				
 			$table->define_field(array(
@@ -1108,6 +1399,13 @@ class personalikeskkond extends class_base
 				"align" => "center"
 			));
 			
+			$table->define_field(array(
+				"name" => "status",
+				"caption" => "Staatus",
+				"sortable" => 1,
+				"with" => "10%",
+			));
+			
 			$table->define_chooser(array(
 				"name" => "sel",
 				"field" => "from",
@@ -1116,8 +1414,8 @@ class personalikeskkond extends class_base
 			
 			foreach ($myorg_obj->connections_from(array("type" => RELTYPE_JOBS)) as $job_offer)
 			{
-				$job_offer = $job_offer->to();
 				
+				$job_offer = $job_offer->to();
 				$candits_count = count(($job_offer->connections_from(array("type" => 5))));
 				
 				$table->define_data(array(
@@ -1126,7 +1424,11 @@ class personalikeskkond extends class_base
 								"caption" => $job_offer->name(),
 								)),
 					"deadline" => get_lc_date($job_offer->prop("deadline")),
-					"kandidaate" => $candits_count,
+					"kandidaate" => html::href(array(
+									"caption" => $candits_count,
+									"url" => $this->mk_my_orb("change", array("id" => $job_offer->id(), "group" => "kandideerinud"), "job_offer"),
+								)),
+					"status" => "Aktiivne",
 				));
 			}	
 		}
@@ -1179,24 +1481,65 @@ class personalikeskkond extends class_base
 		}
 	}
 	
-	/*
+	function get_my_mrg_profile()
+	{
+		//List of groups where user belongs
+		$gidlist = users::getgroupsforuser(aw_global_get("uid"));
+		
+		//Konverdime grupi_id-d objekti id-deks.
+		foreach ($gidlist as $key=>$value)
+		{
+			$gidlist[$key] = users::get_oid_for_gid($key); 
+		}
+		
+		if(array_search(aw_ini_get("emp_manager.group") , $gidlist))
+		{
+			$user_id = users::get_oid_for_uid(aw_global_get("uid"));
+			$user_obj = & obj($user_id);
+			$person_obj = array_pop(( $user_obj->connections_from(array("type" => RELTYPE_PERSON))));
+			$person_obj = $person_obj->to();
+			if(is_object($person_obj))
+			{
+				$org_obj = array_pop($person_obj->connections_from(array("type" => RELTYPE_WORK)));
+				return $org_obj->to();
+			}
+		}
+			
+	}
+	
 	function set_property($arr = array())
 	{
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
+		
 		switch($data["name"])
-                {
-
+        {	
+			case "my_personal_info_firstname":
+				$this->my_profile->set_prop("firstname", $data["value"]);
+			break;
+			
+			case "my_personal_info_lastname":
+				$this->my_profile->set_prop("lastname", $data["value"]);
+			break;
+			
+			case "my_personal_info_id":
+				$this->my_profile->set_prop("personal_id", $data["value"]);
+			break;
+			
+			case "my_personal_info_gender":
+				$this->my_profile->set_prop("gender", $data["value"]);
+				$this->my_profile->save();
+			break;
 		}
 		return $retval;
 	}	
-	*/
-
+	
 	function parse_alias($arr)
 	{
 		return $this->change(array(
 			"id" => $arr["alias"]["target"]
 		));
 	}
+	
 }
 ?>
