@@ -22,5 +22,12 @@
 			</function>
 		</action>
 
+		<action name="fix_image_codes" >
+			<function name="fix_image_codes">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
