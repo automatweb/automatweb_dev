@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.12 2005/04/02 00:47:54 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.13 2005/04/02 19:05:44 voldemar Exp $
 // gantt_chart.aw - Gantti diagramm
 /*
 
@@ -251,6 +251,7 @@ class gantt_chart extends class_base
 								### trim bar ending after chart start
 								$bar["length"] = ($bar["start"] + $bar["length"]) - $this->start;
 								$bar["start"] = $this->start;
+								$bar_type = "continue";
 							}
 							else
 							{
