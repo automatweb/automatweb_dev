@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.368 2005/03/11 14:05:18 ahti Exp $
+// $Id: class_base.aw,v 2.369 2005/03/17 15:12:40 ahti Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -118,7 +118,7 @@ class class_base extends aw_template
 			"calendar_selector" => "applications/calendar/vcl/calendar_selector",
 			"participant_selector" => "applications/calendar/vcl/participant_selector",
 			"date_chooser" => "vcl/date_chooser",
-			//"relationmgr" => "vcl/relationmgr",
+			"relationmgr" => "vcl/relationmgr",
 		);
 
 		// XXX: this is temporary
@@ -2897,7 +2897,6 @@ class class_base extends aw_template
 	// this was not ment to be used from outside the class
 	function validate_data($arr)
 	{
-		//arr($arr);
 		if (empty($arr["props"]))
 		{
 			if (is_oid($arr["cfgform_id"]) && $this->can("view", $arr["cfgform_id"]))
@@ -3059,7 +3058,7 @@ class class_base extends aw_template
 			}
 		}
 
-		$this->new = $new;
+		$args["new"] = $this->new = $new;
 		
 
 		// the question is .. should I call set_property for those too?
