@@ -5,9 +5,7 @@
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
-            <type>relpicker</type>
-            <automatic>1</automatic>
-            <reltype>RELTYPE_ORDERER</reltype>
+            <type>select</type>
             <method>serialize</method>
             <caption>Tellija</caption>
       </property>
@@ -16,9 +14,15 @@
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
-            <type>relpicker</type>
-            <automatic>1</automatic>
-            <reltype>RELTYPE_PREFORMER</reltype>
+            <type>hidden</type>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>preformer_cap</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <type>text</type>
             <method>serialize</method>
             <caption>Täitja</caption>
       </property>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.68 2004/08/24 14:32:03 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.69 2004/08/24 15:48:46 sven Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -3951,7 +3951,6 @@ class crm_company extends class_base
 		@param reltype required
 		@param return_url optional
 	**/
-	
 	function create_new_person($arr)
 	{
 		/*

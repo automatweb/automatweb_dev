@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.8 2004/08/24 14:32:17 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.9 2004/08/24 15:48:59 sven Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -9,11 +9,17 @@
 @default group=general
 @default field=meta
 
-@property orderer type=relpicker automatic=1 reltype=RELTYPE_ORDERER field=meta method=serialize
+@property orderer type=select field=meta method=serialize
 @caption Tellija
 
-@property preformer type=relpicker automatic=1 reltype=RELTYPE_PREFORMER field=meta method=serialize
+property orderer type=relpicker automatic=1 reltype=RELTYPE_ORDERER field=meta method=serialize
+caption Tellija
+
+@property preformer type=hidden field=meta method=serialize
+
+@property preformer_cap type=text field=meta method=serialize
 @caption Täitja
+
 
 @property salesman type=select field=meta method=serialize
 @caption Pakkumise koostaja
@@ -113,6 +119,30 @@ class crm_offer extends class_base
 		switch($prop["name"])
 		{
 			case "orderer":
+				$org_inst = get_instance(CL_CRM_COMPANY);
+				if($arr["obj_inst"]->prop("preformer"))
+				{
+					$ord_company_id = $arr["obj_inst"]->prop("preformer"); 
+				}
+				elseif ($_GET["alias_to_org"])
+				{
+					$ord_company_id =  $_GET["alias_to"];
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
+				$org_obj = &obj($ord_company_id);
+				$data = array();
+				$org_inst->get_customers_for_company($org_obj, &$data);
+				
+				foreach ($data as $key)
+				{
+					$obj = &obj($key);
+					$options[$key] = $obj->name();
+				}
+				
+				$prop["options"] = $options;
 				if(!$prop["value"])
 				{	
 					$prop["value"] = $_GET["alias_to_org"];
@@ -132,7 +162,13 @@ class crm_offer extends class_base
 				$org = &obj($org_id);
 				$prop["value"] = $org->id();
 			break;
-						
+			
+			case "preformer_cap":
+				$org_id = $this->u_i->get_current_company();
+				$org = &obj($org_id);
+				$prop["value"] = $org->name();
+			break;
+					
 			case "salesman":
 				$my_company = $this->u_i->get_current_company();
 				$org = &obj($my_company);
@@ -143,13 +179,13 @@ class crm_offer extends class_base
 					$options[$worker->prop("to")] = $worker->prop("to.name");
 				}
 				$prop["options"] = $options;
-				/*
+				
 				if(!$prop["value"])
 				{
 					$person_id = $this->u_i->get_current_person();
 					$person_obj = &obj($person_id);
 					$prop["value"] = $person_obj->id();
-				}*/
+				}
 			break;
 			
 			case "package_table":
@@ -399,25 +435,56 @@ class crm_offer extends class_base
 				break;
 				
 			case "salesman":
-				if($arr["new"] == 1)
+				if(!$arr["new"] == 1)
 				{
-					return ;
-				}
-				
-				foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SALESMAN")) as $conn)
-				{ 
-					$arr["obj_inst"]->disconnect(array(
-						"from" => $conn->prop("to"),
-						"reltype" => RELTYPE_SALESMAN,
-					));
+			
+					foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SALESMAN")) as $conn)
+					{ 
+						$arr["obj_inst"]->disconnect(array(
+							"from" => $conn->prop("to"),
+							"reltype" => RELTYPE_SALESMAN,
+						));
+					}
 				}
 				$arr["obj_inst"]->connect(array(
 					"to" => $data["value"],
 					"reltype" => RELTYPE_SALESMAN,
 				));
-				
 			break;
-		
+			
+			case "orderer":
+				if(!$arr["new"] == 1)
+				{
+					foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_ORDERER")) as $conn)
+					{ 
+						$arr["obj_inst"]->disconnect(array(
+							"from" => $conn->prop("to"),
+							"reltype" => RELTYPE_ORDERER,
+						));
+					}
+				}
+				$arr["obj_inst"]->connect(array(
+					"to" => $data["value"],
+					"reltype" => RELTYPE_ORDERER,
+				));
+			break;
+			
+			case "preformer":
+				if(!$arr["new"] == 1)
+				{
+					foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PREFORMER")) as $conn)
+					{ 
+						$arr["obj_inst"]->disconnect(array(
+							"from" => $conn->prop("to"),
+							"reltype" => RELTYPE_PREFORMER,
+						));
+					}
+				}
+				$arr["obj_inst"]->connect(array(
+					"to" => $data["value"],
+					"reltype" => RELTYPE_PREFORMER,
+				));
+			break;
 		};
 		return $retval;
 	}
