@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.134 2002/07/17 02:06:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.135 2002/07/17 04:02:25 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -199,7 +199,7 @@ class menuedit extends aw_template
 
 		$use_cache = true;
 
-		if ($params["print"] || $params["text"])
+		if ($params["print"] || ($params["text"] && !$params["force_cache"]))
 		{
 			$not_cached = true;
 			$use_cache = false;
@@ -4714,6 +4714,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 						"keywords" => 1,
 						"doc"	=> $row));
 					$d->restore_handle();
+					$d->_init_vars();
 				}; // while
 			} // if
 			// on 1 doku
@@ -4775,6 +4776,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			reset($docid);
 			while (list(,$did) = each($docid)) 
 			{
+				$d->_init_vars();
 				$ct.=$d->gen_preview(array(
 					"docid" => $did,
 					"tpl" => ($dk & 1 ? $template : $template2),
@@ -5301,6 +5303,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$this->vars(array(
 				"search_sel" => $this->option_list($def,$sl),
 				"section" => $id,
+				"str" => $GLOBALS["HTTP_GET_VARS"]["str"]
 			));
 			$this->vars(array("SEARCH_SEL" => $this->parse("SEARCH_SEL")));
 		}
