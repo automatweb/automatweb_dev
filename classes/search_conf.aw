@@ -542,7 +542,7 @@ class search_conf extends aw_template
 				{
 					$fld = aw_ini_get("search_conf.show_in_results");
 				}
-				$co .= strip_tags($row[$fld]);
+				$co = strip_tags($row[$fld]);
 				$co = preg_replace("/#(.*)#/","",substr($co,0,strpos($co,"\n")));
 				$co = ($row["author"] != "" ? "Autor: ".$row["author"]."<br>" : "").$co;
 
