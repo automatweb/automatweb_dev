@@ -1,6 +1,6 @@
 <?php
 // date_calc.aw - Kuupäevaaritmeetika
-// $Header: /home/cvs/automatweb_dev/classes/Attic/date_calc.aw,v 2.1 2002/01/15 17:46:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/date_calc.aw,v 2.2 2002/01/31 00:25:01 kristo Exp $
 
 ////
 // !get_date_range
@@ -92,5 +92,14 @@ function convert_wday($daycode)
 {
 	return ($daycode == 0) ? 7 : $daycode;
 }
+	
+////
+// Takes 2 timestamps and calculates the difference between them in days
+//	args: time1, time2
+function get_day_diff($time1,$time2)
+{
+	$diff = $time2 - $time1;
+	$days = (int)($diff / 86400);
+	return $days;
+}
 ?>
-
