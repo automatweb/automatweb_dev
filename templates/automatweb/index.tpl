@@ -1,7 +1,7 @@
 <html>
 <head>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset={VAR:charset}"> 
-<title>{VAR:site_title} / Autom@tweb</title>
+<title>{VAR:title} / Autom@tweb</title>
 <link rel="stylesheet" href="/automatweb/css/site.css">
 <link rel="stylesheet" href="/automatweb/css/fg_menu.css">
 <script language="Javascript" src="/automatweb/js/aw.js"></script>
@@ -24,6 +24,7 @@ window.location=url
 <script language="Javascript" src="js/cbobjects.js">
 </script>
 </head>
+<!-- kas see create_objects on vajalik? -->
 <body bgcolor='#ffffff' link='#0000ff' vlink='#0000ff' onLoad="create_objects()">
 <center>
 <table border=0 width="100%" cellspacing=1 cellpadding=0 bgcolor="#FFFFFF">
