@@ -1,4 +1,5 @@
 <?php 
+// $Header: /home/cvs/automatweb_dev/automatweb/Attic/sorry.aw,v 2.1 2001/05/31 18:19:16 duke Exp $
 header ("HTTP/1.1 404 Not Found");
 ?>
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
