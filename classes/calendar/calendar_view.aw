@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.18 2004/12/16 16:00:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.19 2004/12/16 19:48:19 kristo Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -163,11 +163,13 @@ class calendar_view extends class_base
 
 	}
 
-	function get_overview($arr)
+	function _get_output_doc($obj)
 	{
-		$out_conns = $this->obj_inst->connections_from(array(
-			"type" => RELTYPE_OUTPUT,
+		$out_conns = $obj->connections_from(array(
+			"type" => "RELTYPE_OUTPUT",
 		));
+
+		$target_doc = false;
 
 		if (sizeof($out_conns) > 0)
 		{
@@ -187,7 +189,14 @@ class calendar_view extends class_base
 			};
 		};
 
+		return $target_doc;
 
+	}
+
+	function get_overview($arr)
+	{
+
+		$target_doc = $this->target_doc;
 		// now for each of those bloody things I need to figure out the date range as well
 		$conns = $this->obj_inst->connections_from(array(
 			"type" => RELTYPE_EVENT_SOURCE,
@@ -196,10 +205,12 @@ class calendar_view extends class_base
 		$overview = array();
 
 		$item = array();
+		/*
 		if (!empty($target_doc))
 		{
 			$item["url"] = aw_ini_get("baseurl") . "/" . $target_doc;
 		};
+		*/
 
 
 		foreach ($conns as $conn)
@@ -384,7 +395,9 @@ class calendar_view extends class_base
 		{
 			$this->obj_inst = new object($arr["alias"]["target"]);
 		};
-
+		
+		$this->target_doc = $this->_get_output_doc($this->obj_inst);
+		
 		classload("vcl/calendar");
 
 		// figure out correct tpldir
@@ -448,6 +461,11 @@ class calendar_view extends class_base
 		if ($arr["full_weeks"])
 		{
 			$args["full_weeks"] = $arr["full_weeks"];
+		};
+
+		if (is_oid($this->target_doc))
+		{
+			$args["target_section"] = $this->target_doc;
 		};
 
 
