@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.41 2004/04/13 12:19:44 duke Exp $
+// $Id: cfgutils.aw,v 1.42 2004/04/13 15:24:35 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -550,48 +550,5 @@ class cfgutils extends aw_template
 		return $res;
 	}
 
-	////
-	// !Generates contents for relpicker
-	function el_relpicker_reltype($arr)
-	{
-		$val = &$arr["val"];
-
-		$options = array("0" => "--vali--");
-		// generate option list
-		if (defined($val["reltype"]) && constant($val["reltype"]))
-		{
-			$reltype = constant($val["reltype"]);
-		}
-		else
-		{
-			$reltype = $val["reltype"];
-		};
-
-		// if automatic is set, then create a list of all properties of that type
-		if (isset($val["automatic"]))
-		{
-			$olist = new object_list(array(
-				"class_id" => $arr["relinfo"]["clid"],
-			));
-			$val["type"] = "select";
-			$val["options"] = $options + $olist->names();
-		}
-		else
-		if ($arr["id"])
-		{
-			$o = obj($arr["id"]);
-			$conn = $o->connections_from(array(
-				"type" => $reltype
-			));
-	
-			foreach($conn as $c)
-			{
-				$options[$c->prop("to")] = $c->prop("to.name");
-			}
-
-			$val["type"] = "select";
-			$val["options"] = $options;
-		}
-	}
 };
 ?>
