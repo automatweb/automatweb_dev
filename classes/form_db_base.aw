@@ -912,7 +912,7 @@ class form_db_base extends aw_template
 							// group checkboxes so that there are AND's between groups and OR's inside groups
 							// checkbox values must always match exactly - there seems to be no point in
 							// checking for partial matches
-							$ch_q[$el->get_ch_grp()][] = " ".$elname." = '".$value."' ";
+							$ch_q[$el->get_ch_grp()][] = " ".$elname." = '1' ";
 						}
 					}
 					else
