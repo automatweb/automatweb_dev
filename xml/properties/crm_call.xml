@@ -91,8 +91,7 @@
             <group>calendars</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>callback</type>
-            <callback>cb_calendar_selector</callback>
+            <type>calendar_selector</type>
             <store>no</store>
             <caption>Kalendrid</caption>
       </property>
@@ -102,8 +101,7 @@
             <group>projects</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>callback</type>
-            <callback>cb_project_selector</callback>
+            <type>project_selector</type>
             <store>no</store>
             <caption>Projektid</caption>
       </property>
