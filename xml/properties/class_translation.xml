@@ -32,7 +32,8 @@
       </property>
       <property>
             <name>preview</name>
-            <type>text</type>
+            <type>callback</type>
+            <callback>callback_get_preview_links</callback>
             <editonly>1</editonly>
             <store>no</store>
             <group>workbench</group>
@@ -53,6 +54,7 @@
       </property>
       <classinfo>
             <syslog_type>ST_TRANSLATION</syslog_type>
+            <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
             <workbench>
