@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.23 2005/02/11 08:36:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.24 2005/02/11 08:37:06 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -567,6 +567,7 @@ class mrp_workspace extends class_base
 
 			if ($project_id)
 			{
+				$this_object = obj($arr["args"]["id"]);
 				$list = new object_list (array (
 					"class_id" => CL_MRP_JOB,
 					"state" => new obj_predicate_not (MRP_STATUS_DELETED),
@@ -574,10 +575,13 @@ class mrp_workspace extends class_base
 					"exec_order" => 1,
 					"project" => $project_id,
 				));
-				$first_job = $list->begin ();
-				$project_start = $first_job->prop ("starttime");
-				$project_start = mktime (0, 0, 0, date ("m", $project_start), date ("d", $project_start), date("Y", $project_start));
-				$arr["args"]["mrp_chart_start"] = $project_start;
+				if ($list->count())
+				{
+					$first_job = $list->begin ();
+					$project_start = $first_job->prop ("starttime");
+					$project_start = mktime (0, 0, 0, date ("m", $project_start), date ("d", $project_start), date("Y", $project_start));
+					$arr["args"]["mrp_chart_start"] = $project_start;
+				}
 			}
 			else
 			{
