@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.24 2003/11/18 15:35:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.25 2003/12/03 12:31:16 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -21,6 +21,15 @@
 
 	@property preview type=text store=no editonly=1
 	@caption Definitsioon
+
+	@property classinfo_fixed_toolbar type=checkbox ch_value=1 field=meta method=serialize
+	@caption Fix. toolbar
+
+	@property classinfo_allow_rte type=checkbox ch_value=1 field=meta method=serialize
+	@caption Luba RTE kasutamist
+
+	@property classinfo_disable_relationmgr type=checkbox ch_value=1 field=meta method=serialize
+	@caption Ära kasuta seostehaldurit
 
 	@property edit_groups type=callback callback=callback_edit_groups group=groupdata
 	@caption Muuda gruppe
