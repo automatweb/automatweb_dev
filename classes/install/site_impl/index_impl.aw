@@ -1,9 +1,10 @@
 <?php
-
+/*
 if (empty($class) && !empty($alias))
 {
 	$class = $alias;
 }
+*/
 
 if ($class  || $reforb)
 {
