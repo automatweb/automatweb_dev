@@ -1009,7 +1009,15 @@ class _int_object
 					$rels = new object_list($this->connections_from(array(
 						"type" => $pd["reltype"]
 					)));
-					$val = join(",", $rels->names());
+					$_tmp = $rels->names();
+					if (count($_tmp))
+					{
+						$val = join(",", $_tmp);
+					}
+					else
+					{
+						$val = "";
+					}
 					break;
 				}
 
