@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.17 2003/01/09 13:27:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.18 2003/01/10 15:50:55 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -5906,6 +5906,7 @@ class form extends form_base
 			}
 		}
 
+		$this->search_form = $this->arr["start_search_relations_from"];
 		return $ret;
 	}
 
