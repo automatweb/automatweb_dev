@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.293 2004/11/02 09:59:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.294 2004/11/02 12:22:39 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -535,7 +535,7 @@ class document extends aw_template
 
 		if (false !== strpos($doc["content"],"#php#"))
 		{
-		       $doc["content"] = preg_replace("/(#php#)(.+?)(#\/php#)/esm","highlight_string(stripslashes('<'.'?'.'\$2'.'?'.'>'),true)",$doc["content"]);
+		       $doc["content"] = preg_replace("/(#php#)(.+?)(#\/php#)/esm","highlight_string(stripslashes('<'.'?php'.'\$2'.'?'.'>'),true)",$doc["content"]);
 		};
 
 		$awt->stop("phase4");
@@ -578,6 +578,10 @@ class document extends aw_template
 					$def = "<br /><B>Edasi loe ajakirjast!</b></font>";
 				};
 				$doc["content"] = substr($doc["content"],0,$pp).$def;
+			}
+			else
+			{
+				$doc["content"]  = str_replace("#poolita#","",$doc["content"]);
 			};
 		};
 
