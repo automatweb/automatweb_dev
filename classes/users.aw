@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.121 2004/06/21 11:26:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.122 2004/07/03 11:09:39 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1395,14 +1395,15 @@ class users extends users_user
 			flush();
 
 			// create default user
-			$us = get_insstance("core/users/user");
-			$us->add_user(array(
+			$us = get_instance("core/users/user");
+			$user_o = $us->add_user(array(
 				"uid" => $site["site_obj"]["default_user"],
 				"password" => $site["site_obj"]["default_user_pwd"],
 				"all_users_grp" => $aug,
 				"use_md5_passwords" => true,
 				"obj_parent" => $ini_opts["users.root_folder"]
 			));
+			$this->last_user_oid = $user_o->id();
 			echo "Adding users... <br>\n";
 			flush();
 
