@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.65 2003/02/03 14:50:22 duke Exp $
+// $Id: class_base.aw,v 2.66 2003/02/03 15:43:08 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -1264,6 +1264,11 @@ class class_base extends aliasmgr
 	function get_value(&$property)
 	{
 		$field = trim(($property["field"]) ? $property["field"] : $property["name"]);
+		if (!$this->id && $property["default"])
+		{
+			$property["value"] = $property["default"];
+		}
+		else
 		if (is_array($this->values))
 		{
 			$property["value"] = $this->values[$property["name"]];
