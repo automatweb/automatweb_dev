@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.47 2005/03/18 11:58:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.48 2005/03/18 12:12:41 ahti Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -238,7 +238,7 @@ class planner extends class_base
 		$user = new object($users->get_oid_for_uid($uid));
 
 		$conns = $user->connections_to(array(
-			"type" => 8, //RELTYPE_CALENDAR_OWNERSHIP
+			"type" => "RELTYPE_CALENDAR_OWNERSHIP",
 		));
 		if (sizeof($conns) == 0)
 		{
@@ -263,13 +263,12 @@ class planner extends class_base
 	function my_calendar($arr)
 	{
 		$this->init_class_base();
-		$users = get_instance("users");
-		$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
+		$user = new object(aw_global_get("uid_oid"));
 		// now I need to figure out the calendar that is connected to the user object
 		// XXX: why the fuck is it so hard to gain access to defined relation types from here?
 		$x = $user->connections_to();
 		$conns = $user->connections_to(array(
-			"type" => 8, //RELTYPE_CALENDAR_OWNERSHIP
+			"type" => "RELTYPE_CALENDAR_OWNERSHIP",
 		));
 		if (sizeof($conns) == 0)
 		{
@@ -466,7 +465,6 @@ class planner extends class_base
 			$_start = $arr["start"];
 			$_end = $arr["end"];
 		};
-
 		// also include events from any projects that are connected to this calender
 		// if the user wants so
 
@@ -479,7 +477,7 @@ class planner extends class_base
 			$prj = get_instance(CL_PROJECT);
 			// this is wrong, I need to figure out the users this calendar belongs to
 			$owners = $obj->connections_from(array(
-				"type" => RELTYPE_CALENDAR_OWNERSHIP,
+				"type" => "RELTYPE_CALENDAR_OWNERSHIP",
 			));
 
 			// ignore projects, if there are no users connected to this calendar
@@ -1335,7 +1333,7 @@ class planner extends class_base
 			$toolbar = &$arr["prop"]["vcl_inst"];
 			// would be nice to have a vcl component for doing drop-down menus
 			$conns = $arr["obj_inst"]->connections_from(array(
-				"type" => RELTYPE_EVENT_ENTRY,
+				"type" => "RELTYPE_EVENT_ENTRY",
 			));
 			$toolbar->add_menu_button(array(
 				"name" => "create_event",
@@ -1428,7 +1426,7 @@ class planner extends class_base
 				$prj_opts = array("" => t("--filtreeri projekti järgi--"));
 			
 				$owners = $arr["obj_inst"]->connections_from(array(
-					"type" => RELTYPE_CALENDAR_OWNERSHIP,
+					"type" => "RELTYPE_CALENDAR_OWNERSHIP",
 				));
 
 				// ignore projects, if there are no users connected to this calendar
@@ -2450,7 +2448,7 @@ class planner extends class_base
 				{
 					$o->connect(array(
 						"to" => $arr["event_id"],
-						"reltype" => 8 // CRM_PERSON.RELTYPE_PERSON_MEETING
+						"reltype" => "RELTYPE_PERSON_MEETING",
 					));
 				}
 			}
