@@ -164,6 +164,7 @@ class site_content extends menuedit
 		{
 			$si->init_gen_site_html(array(
 				"tpldir" => &$tpldir,
+				"template" => &$template,
 			));
 		};
 
@@ -841,6 +842,12 @@ class site_content extends menuedit
 			if ($row["oid"] == $this->section)
 			{
 				$this->subitems[$name . "_L" . $this->level]  = sizeof($this->mpr[$row["oid"]]);
+			}
+
+			// don't show no-export menus in export
+			if ($row["meta"]["no_export"] == 1 && $_SERVER["HTTP_USER_AGENT"] == "AW-EXPORT")
+			{
+				continue;
 			}
 
 			// make submenus_from_menu work
@@ -1821,6 +1828,10 @@ class site_content extends menuedit
 			// now, how do I figure out whether the promo box is actually in my path?
 			if ($show_promo)
 			{
+				if ($GLOBALS["PROMO_DBG"] == 1)
+				{
+					echo "display promo ".$row["oid"]." <br>";
+				}
 				// visible. so show it
 				$this->save_handle();
 				// get list of documents in this promo box
@@ -1831,6 +1842,10 @@ class site_content extends menuedit
 					reset($docid);
 					while (list(,$d) = each($docid))
 					{
+						if ($GLOBALS["PROMO_DBG"] == 1)
+						{
+							echo "display doc in promo ".$d." <br>";
+						}
 						if ($row["filename"])
 						{
 							$cont = $doc->gen_preview(array(
@@ -1896,6 +1911,7 @@ class site_content extends menuedit
 				else
 				{
 					$this->vars(array("SHOW_TITLE" => ""));
+					$this->vars(array($use_tpl . ".SHOW_TITLE" => ""));
 				}
 				$ap = "";
 				if ($row["link"] != "")
@@ -2118,7 +2134,7 @@ class site_content extends menuedit
 				if ($smi == "")
 				{
 					$sel_image = "<img name='sel_menu_image' src='".image::check_url($dat["url"])."' border='0'>";
-					$sel_image_url = $dat["url"];
+					$sel_image_url = image::check_url($dat["url"]);
 				}
 				$this->vars(array(
 					"url" => image::check_url($dat["url"])
@@ -2127,7 +2143,7 @@ class site_content extends menuedit
 				if ($dat["url"] != "")
 				{
 					$this->vars(array(
-						"sel_menu_image_".$nr => "<img name='sel_menu_image_".$nr."' src='".$dat["url"]."' border='0'>"
+						"sel_menu_image_".$nr => "<img name='sel_menu_image_".$nr."' src='".image::check_url($dat["url"])."' border='0'>"
 					));
 				}
 			}

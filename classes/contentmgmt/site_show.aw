@@ -58,6 +58,9 @@ class site_show extends class_base
 		$this->left_pane = (isset($arr["no_left_pane"]) && $arr["no_left_pane"] == true) ? false : true;
 		$this->right_pane = (isset($arr["no_right_pane"]) && $arr["no_right_pane"] == true) ? false : true;
 
+		//print "aa";
+		//flush();
+
 
 		$this->section_obj = obj(aw_global_get("section"));
 
@@ -71,13 +74,23 @@ class site_show extends class_base
 		classload("layout/active_page_data");
 		active_page_data::get_text_content(isset($arr["text"]) ? $arr["text"] : "");
 
+		//print "cc";
+		//flush();
+
 		// save path
+		//var_dump($this->section_obj);
+		//flush();
 		$this->path = $this->section_obj->path();
 		$this->path_ids = array();
+		//print "dd";
+		//flush();
 		foreach($this->path as $p_obj)
 		{
 			$this->path_ids[] = $p_obj->id();
 		}
+
+		//print "bb";
+		//flush();
 
 		// figure out the menu that is active
 		$this->sel_section = $this->_get_sel_section(aw_global_get("section"));
@@ -242,6 +255,7 @@ class site_show extends class_base
 		{
 			$si->init_gen_site_html(array(
 				"tpldir" => &$arr["tpldir"],
+				"template" => &$arr["template"],
 			));
 		}
 
@@ -412,7 +426,7 @@ class site_show extends class_base
 		}
 	}
 
-	function get_default_document($arr)
+	function get_default_document($arr = array())
 	{
 		if (isset($arr["docid"]) && $arr["docid"])
 		{
@@ -473,9 +487,22 @@ class site_show extends class_base
 			if ($obj->class_id() == CL_PROMO)
 			{
 				$lm = $obj->meta("last_menus");
+				$lm_sub = $obj->meta("src_submenus");
 				if (is_array($lm) && ($lm[0] !== 0))
 				{
 					$sections = $lm;
+					foreach($sections as $_sm)
+					{
+						if ($lm_sub[$_sm])
+						{
+							// include submenus in document sources
+							$_sm_list = $this->get_menu_list(false, false, $_sm);
+							foreach($_sm_list as $_sm_i => $ttt)
+							{
+								$sections[$_sm_i] = $_sm_i;
+							}
+						}
+					}
 				}
 				else
 				{
@@ -717,7 +744,7 @@ class site_show extends class_base
 		// Vaatame, kas selle sektsiooni jaoks on "default" dokument
 		if (!isset($arr["docid"]) || $arr["docid"] < 1) 
 		{
-			$docid = $this->get_default_document($section);
+			$docid = $this->get_default_document();
 		}
 
 		return $this->_int_show_documents($docid);
@@ -848,7 +875,13 @@ class site_show extends class_base
 		$this->title_yah = "";
 		$alias_path = array();
 
-		for ($i=1; $i < $cnt; $i++)	
+		// this is used to make sure path starts at rootmenu+1 levels, to not show
+		// "left menu" or similar in path
+		$show = false;
+
+		$prev = false;
+
+		for ($i=0; $i < $cnt; $i++)	
 		{
 			if (!aw_ini_get("menuedit.long_menu_aliases"))
 			{
@@ -892,11 +925,17 @@ class site_show extends class_base
 				"ysection" => $ref->id()
 			));
 
-			if ($ref->prop("clickable") == 1)
+			if ($ref->prop("clickable") == 1 && $show)
 			{
 				$ya .= $this->parse("YAH_LINK");
 				$this->title_yah.=" / ".$ref->name();
 			}
+
+			if ($prev && $prev->id() == $this->cfg["rootmenu"])
+			{
+				$show = true;
+			}
+			$prev = $ref;
 		}
 
 		// form table yah links get made here. 
@@ -967,7 +1006,7 @@ class site_show extends class_base
 			}
 			else
 			{
-				if ($this->is_template("SEL_LANG_BEGIN") && $l == "")
+				if ($this->is_template("LANG_BEGIN") && $l == "")
 				{
 					$l.=$this->parse("LANG_BEGIN");
 				}
@@ -1381,6 +1420,13 @@ class site_show extends class_base
 				"logged" => $this->parse("logged")
 			));
 		}
+
+		if ($this->is_parent_tpl("RIGHT_PANE", "logged") && aw_global_get("uid") != "")
+		{
+			$this->vars(array(
+				"logged" => $this->parse("logged")
+			));
+		}
 	}
 
 	// builds HTML popups
@@ -1450,6 +1496,7 @@ class site_show extends class_base
 						$values[$key] = $meth["values"][$key];
 					}
 				};
+
 				if (not($err))
 				{
 					$_sec = aw_global_get("section");
