@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.86 2004/12/02 16:41:46 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.87 2004/12/03 14:00:44 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -19,6 +19,10 @@ class htmlclient extends aw_template
 		$this->tpl_vars = $arr["tpl_vars"] ? $arr["tpl_vars"] : array();
 		$this->styles = $arr["styles"] ? $arr["styles"] : array();
 		$this->tabs = ($arr["tabs"] === false) ? false : true;
+		if (!empty($arr["embedded"]))
+		{
+			$this->embedded = true;
+		};
 		if (!empty($arr["layout_mode"]))
 		{
 			$this->set_layout_mode($arr["layout_mode"]);
@@ -128,17 +132,22 @@ class htmlclient extends aw_template
 			$this->vars($this->tpl_vars);
 		}
 		$script = aw_global_get("SCRIPT_NAME");
-		//$handler = empty($script) ? "index" : "orb";
+		// siia vaja kirjutada see embedded case
+		$handler = empty($script) ? "index" : "orb";
+		if ($this->embedded)
+		{
+			$handler = "index";
+		};
 		if($this->tplmode == "groups")
 		{
 			$this->sub_tpl->vars(array(
-				"handler" => empty($script) ? "index" : "orb",
+				"handler" => $handler,
 			));
 		}
 		else
 		{
 			$this->vars(array(
-				"handler" => empty($script) ? "index" : "orb",
+				"handler" => $handler,
 			));
 		}
 		$this->orb_vars = array();
