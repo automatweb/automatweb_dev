@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.22 2002/12/02 11:18:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.23 2002/12/03 11:24:42 kristo Exp $
 // mailinglist saadetavate mailide klass
 class email extends aw_template
 {
@@ -455,7 +455,7 @@ class email extends aw_template
 		reset($users);
 		while (list($user_id, $user) = each($users))
 		{
-			if (!$this->is_email($user["mail"]))
+			if (!is_email($user["mail"]))
 			{
 				continue;
 			}
@@ -520,18 +520,6 @@ class email extends aw_template
 		fwrite($f, "Subject: ".$subj."\n\n");
 		fwrite($f, "\n".$text."\n");
 		pclose($f);
-	}
-
-	function is_email($ml)
-	{
-		if (preg_match("/.*@.*/",$ml))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
 	}
 
 	function orb_print($arr)
