@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.73 2004/06/26 10:03:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.74 2004/07/01 13:12:04 kristo Exp $
 
 class admin_menus extends aw_template
 {
@@ -396,7 +396,7 @@ class admin_menus extends aw_template
 			$o->set_class_id($db["class_id"]);
 			$o->set_status($db["status"]);
 			$o->set_comment($db["comment"]);
-			$o->set_jrk($db["jrk"]);
+			$o->set_ord($db["jrk"]);
 			$o->set_alias($db["alias"]);
 			$o->set_periodic($db["periodic"]);
 
