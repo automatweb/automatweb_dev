@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.30 2004/06/14 12:05:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.31 2004/06/18 08:58:01 rtoomas Exp $
 // treeview.aw - tree generator
 /*
 
@@ -295,7 +295,7 @@ class treeview extends class_base
 	//      id - id of the item
 	//      name - the name of the item
 	//      url - the link for the item
-	//      icon - the url of the icon
+	//      iconurl - the url of the icon
 	//      target - the target frame of the link
 	function add_item($parent, $item)
 	{
