@@ -83,6 +83,11 @@
                   <master_table>objects</master_table>
                   <master_index>oid</master_index>
             </kliendibaas_riik>
+            <kliendibaas_tegevusala>
+                  <index>oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </kliendibaas_tegevusala>
             <kliendibaas_toode>
                   <index>oid</index>
                   <master_table>objects</master_table>
