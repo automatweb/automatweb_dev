@@ -1,72 +1,76 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.46 2004/01/13 16:24:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.47 2004/02/10 10:32:26 duke Exp $
 
 /*
 
-@groupinfo general caption=&Uuml;ldine
 @groupinfo Javascript caption=Javascript
 @groupinfo Pilt caption=Pilt
 
-@tableinfo extlinks index=id
-
-@classinfo objtable=extlinks
-@classinfo objtable_index=id
 @tableinfo extlinks index=id master_table=objects master_index=oid
 
 @default group=general
 
-@property comment type=textarea cols=30 rows=5 table=objects field=comment group=general
+@property comment type=textarea cols=30 rows=5 table=objects 
 @caption Kommentaar lingikogusse
 
-@property url table=extlinks type=textbox field=url group=general
+@default table=extlinks
+
+@property url type=textbox 
 @caption URL
 
-@property hits table=extlinks type=text field=hits group=general
+@property hits type=text 
 @caption Klikke
 
-@property url_int_text type=text group=general store=no
+@property url_int_text type=text store=no
 @caption Saidi sisene link
 
-@property alt type=textbox table=objects field=meta method=serialize group=general search=1
+@property alt type=textbox table=objects field=meta method=serialize search=1
 @caption Alt tekst
 
-@property newwindow type=checkbox ch_value=1 table=extlinks field=newwindow group=general search=1
+@property newwindow type=checkbox ch_value=1 search=1
 @caption Uues aknas
 
-@property doclinkcollection type=checkbox ch_value=1 table=extlinks field=doclinkcollection group=general
+@property doclinkcollection type=checkbox ch_value=1  
 @caption Dokumendi lingikogusse
 
-@property use_javascript type=checkbox ch_value=1 table=objects field=meta method=serialize group=Javascript search=1
+@default group=Javascript
+@default table=objects
+@default field=meta
+@default method=serialize
+
+@property use_javascript type=checkbox ch_value=1 search=1
 @caption Kasuta javascripti
 
-@property newwinwidth type=textbox ch_value=1 table=objects field=meta method=serialize group=Javascript
+@property newwinwidth type=textbox ch_value=1  
 @caption Uue akna laius
 
-@property newwinheight type=textbox ch_value=1 table=objects field=meta method=serialize group=Javascript
+@property newwinheight type=textbox ch_value=1 
 @caption Uue akna k&otilde;rgus
 
-@property newwintoolbar type=checkbox ch_value=1 table=objects field=meta method=serialize group=Javascript
+@property newwintoolbar type=checkbox ch_value=1  
 @caption Toolbar
 
-@property newwinlocation type=checkbox ch_value=1 table=objects field=meta method=serialize group=Javascript
+@property newwinlocation type=checkbox ch_value=1  
 @caption Address bar
 
-@property newwinmenu type=checkbox ch_value=1 table=objects field=meta method=serialize group=Javascript
+@property newwinmenu type=checkbox ch_value=1  
 @caption Men&uuml;&uuml;d
 
-@property newwinscroll type=checkbox ch_value=1 table=objects field=meta method=serialize group=Javascript
+@property newwinscroll type=checkbox ch_value=1  
 @caption Skrollbarid
 
-@property link_image type=fileupload group=Pilt store=no
+@default group=Pilt
+
+@property link_image type=fileupload store=no
 @caption Pilt
 
-@property link_image_show type=text group=Pilt store=no
+@property link_image_show type=text store=no editonly=1
 @caption 
 
-@property link_image_check_active type=checkbox ch_value=1 field=meta table=objects method=serialize group=Pilt
+@property link_image_check_active type=checkbox ch_value=1 
 @caption Pilt aktiivne
 
-@property link_image_active_until type=date_select field=meta table=objects method=serialize group=Pilt
+@property link_image_active_until type=date_select 
 @caption Pilt aktiivne kuni
 
 @classinfo no_status=1
@@ -87,7 +91,7 @@ class links extends class_base
 
 	/**  
 		
-		@attrib name=search_doc params=name default="0"
+		@attrib name=search_doc params=name 
 		
 		@param s_name optional
 		@param s_content optional
@@ -193,7 +197,7 @@ class links extends class_base
 
 	/**  
 		
-		@attrib name=show params=name nologin="1" default="0"
+		@attrib name=show params=name nologin="1" 
 		
 		@param id required type=int
 		
@@ -216,63 +220,63 @@ class links extends class_base
 	function get_property(&$arr)
 	{
 		$prop = &$arr["prop"];
-		if ($prop["name"] == "link_image_show" && $arr["obj"]["oid"])
+		$retval = PROP_OK;
+		switch($prop["name"])
 		{
-			$img = new object_list(array(
-				"parent" => $arr["obj"]["oid"],
-				"class_id" => CL_FILE
-			));
-			if ($img->count() > 0)
-			{
-				$o =& $img->begin();
-				$f = get_instance("file");
-				if ($f->can_be_embedded($o))
+			case "link_image_show":
+				$img = new object_list(array(
+					"parent" => $arr["obj_inst"]->id(),
+					"class_id" => CL_FILE
+				));
+				if ($img->count() > 0)
 				{
-					$prop['value'] = html::img(array(
-						'url' => file::get_url($o->id(),$o->name())
-					));
+					$o =& $img->begin();
+					$f = get_instance("file");
+					if ($f->can_be_embedded($o))
+					{
+						$prop['value'] = html::img(array(
+							'url' => file::get_url($o->id(),$o->name())
+						));
+					}
 				}
-			}
+				break;
+
+			case "url_int_text":
+				$this->read_template("intlink.tpl");
+				$this->vars(array(
+					'search_doc' => $this->mk_my_orb('search_doc')
+				));
+				$prop['value'] = $this->parse();
+				break;
 		}
-		else
-		if ($prop["name"] == "url_int_text")
-		{
-			$this->read_template("intlink.tpl");
-			$this->vars(array(
-				'search_doc' => $this->mk_my_orb('search_doc')
-			));
-			$prop['value'] = $this->parse();
-		}
-		else
-		if ($prop["name"] == "name")
-		{
-			$this->dequote(&$prop["value"]);
-		}
-		return PROP_OK;
+		return $retval;
 	}
 
 	function set_property(&$arr)
 	{
 		$prop = $arr["prop"];
-		if ($prop["name"] == "link_image")
+		$retval = PROP_OK;
+		switch($prop["name"])
 		{
-			$old_file = 0;
+			case "link_image":
+				$old_file = 0;
 
-			$img = new object_list(array(
-				"parent" => $arr["obj"]["oid"],
-				"class_id" => CL_FILE
-			));
-			if ($img->count() > 0)
-			{
-				$o =& $img->begin();
-				$old_file = $o->id();
-			}
+				$img = new object_list(array(
+					"parent" => $arr["obj_inst"]->id(),
+					"class_id" => CL_FILE
+				));
+				if ($img->count() > 0)
+				{
+					$o =& $img->begin();
+					$old_file = $o->id();
+				}
 
-			$f = get_instance("file");
-			$f->add_upload_image("link_image", $arr['obj']['oid'], $old_file);
-			return PROP_IGNORE;
-		}
-		return PROP_OK;
+				$f = get_instance("file");
+				$f->add_upload_image("link_image", $arr['obj_inst']->id(), $old_file);
+				$retval = PROP_IGNORE;
+				break;
+		};
+		return $retval;
 	}
 	
 	////
