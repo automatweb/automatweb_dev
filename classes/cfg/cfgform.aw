@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.37 2004/10/08 16:04:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.38 2004/10/28 09:45:32 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -809,6 +809,136 @@ class cfgform extends class_base
 		}
 
 		return $dat;
+	}
+
+	/** draws a config form from the given object type object
+
+		@attrib api=1
+
+		@comment
+			$ot - object type object's id 
+			$reforb - reforb for the config form
+			$errors - array returned from validate_data
+			$values - array of property name => property value pairs
+
+	**/
+	function draw_cfgform_from_ot($arr)
+	{
+		// get all props
+		$els = $this->get_props_from_ot($arr);
+
+		$errs = new aw_array($arr["errors"]);
+		$errs = $errs->get();
+
+		$ret = array();
+		foreach($els as $pn => $pd)
+		{
+			if (isset($errs[$pn]))
+			{
+				$ret[$pn."_err"] = array(
+					"name" => $pn."_err",
+					"type" => "text",
+					"store" => "no",
+					"value" => "<font color=red>".$errs[$pn]["msg"]."</font>",
+					"no_caption" => 1
+				);
+			}
+			$ret[$pn] = $pd;
+		}
+		$els = $ret;
+
+		$rd = get_instance(CL_REGISTER_DATA);
+		$els = $rd->parse_properties(array(
+			"properties" => $els,
+			"name_prefix" => ""
+		));
+
+		$htmlc = get_instance("cfg/htmlclient");
+		$htmlc->start_output();
+		foreach($els as $pn => $pd)
+		{
+			$htmlc->add_property($pd);
+		}
+		$htmlc->finish_output();
+
+		$html = $htmlc->get_result(array(
+			"raw_output" => 1
+		));
+
+		$this->read_template("show_form.tpl");
+		$this->vars(Array(
+			"form" => $html,
+			"reforb" => $arr["reforb"]
+		));
+		return $this->parse();
+	}
+
+	/** returns array of properties given object type object
+
+		@attrib api=1
+
+		@comment
+			$ot - object type object's id 
+			$values - array of property name => property value pairs
+			$for_show - if true, classificator values are resolved
+		
+	**/
+	function get_props_from_ot($arr)
+	{
+		$ot = obj($arr["ot"]);
+		$class_id = $ot->prop("type");
+
+		$cfgx = get_instance("cfg/cfgutils");
+		$els = $cfgx->load_properties(array(
+			"clid" => $class_id,
+		));
+
+		if ($ot->prop("use_cfgform"))
+		{
+			$cff = obj($ot->prop("use_cfgform"));
+			$tmp = array();
+			foreach(safe_array($cff->meta("cfg_proplist")) as $pn => $pd)
+			{
+				$tmp[$pn] = $els[$pn];
+				$tmp[$pn]["group"] = $pd["group"];
+				$tmp[$pn]["caption"] = $pd["caption"];
+			}
+			$els = $tmp;
+		}
+
+		$tmp = array();
+		foreach($els as $pn => $pd)
+		{
+			if ($pn == "is_translated" || $pn == "needs_translation")
+			{
+				continue;
+			}
+
+			if (isset($arr["values"]) && isset($arr["values"][$pn]))
+			{
+				$pd["value"] = $arr["values"][$pn];
+			}
+
+			if ($pd["type"] == "classificator")
+			{
+				$pd["object_type_id"] = $arr["ot"];
+				if ($arr["for_show"] && is_oid($pd["value"]) && $this->can("view", $pd["value"]))
+				{
+					$tmpo = obj($pd["value"]);
+					$pd["value"] = $tmpo->name();
+				}
+			}
+
+			if ($pd["type"] == "textarea" && $arr["for_show"])
+			{
+				$pd["value"] = nl2br($pd["value"]);
+			}
+
+			$tmp[$pn] = $pd;
+		}
+		$els = $tmp;
+
+		return $els;
 	}
 };
 ?>
