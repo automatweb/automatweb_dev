@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section_webside.aw,v 1.6 2004/10/04 10:06:39 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section_webside.aw,v 1.7 2004/10/29 16:13:29 sven Exp $
 // crm_section_webside.aw - ÃÃœksus weebis 
 /*
 
@@ -10,7 +10,10 @@
 @default field=meta
 @default method=serialize
 
-@property section_picker type=relpicker reltype=RELTYPE_SECTION method=serialize field=meta table=objects
+property section_picker type=relpicker reltype=RELTYPE_SECTION method=serialize field=meta table=objects
+caption Üksus
+
+@property section_picker type=select field=meta method=serialize
 @caption Üksus
 
 @property show_sub_sections type=checkbox ch_value=1
@@ -49,10 +52,12 @@
 @groupinfo order caption="Järjekord" 
 @groupinfo view caption="Näitamine"
 
-
-
 @reltype SECTION value=1 clid=CL_CRM_SECTION
 @caption &uuml;ksus
+
+@reltype ORG value=2 clid=CL_CRM_COMPANY
+@caption Organisatsioon
+
 */
 
 class crm_section_webside extends class_base
@@ -80,6 +85,24 @@ class crm_section_webside extends class_base
 		{
 			case "persons_order_table":
 				$this->do_persons_order_table($arr);
+			break;
+			
+			case "section_picker":
+				$org = $arr["obj_inst"]->get_first_obj_by_reltype('RELTYPE_ORG');
+				if($org && aw_global_get("uid") == "sven")
+				{
+					$org_inst = get_instance(CL_CRM_COMPANY);
+					$sections = $org_inst->get_all_org_sections($org);
+					
+					$ol =& new object_list(array(
+						"oid" => $sections,
+					));
+					
+					foreach($ol->arr() as $tmp)
+					{
+						$prop["options"][$tmp->id()] = $tmp->prop("name"); 
+					}
+				}
 			break;
 			
 			case "view":
@@ -131,12 +154,13 @@ class crm_section_webside extends class_base
 		
 		$section = get_instance(CL_CRM_SECTION);
 		$workers = $section->get_section_workers($arr["obj_inst"]->id(), true);
-
+		$orderinfo = $arr["obj_inst"]->meta("order");
+		
 		foreach ($workers->arr() as $worker)
 		{
 			$table->define_data(array(
 				"name" => html::get_change_url($worker->id(), array() , $worker->name()),
-				"ord" => $worker->ord(),
+				"ord" => $orderinfo[$worker->id()],
 				"person_id" => $worker->id(),
 			));	
 		}
@@ -239,11 +263,15 @@ class crm_section_webside extends class_base
 		
 		if($ob->prop("show_email"))
 		{
-			$email = &obj($person->prop("email"));
-			$this->vars(array(
-				"email" => $email->prop("mail"),
-			));
+			if($this->can("view", $person->prop("email")))
+			{ 
+				$email = &obj($person->prop("email"));
+				$this->vars(array(
+					"email" => $email->prop("mail"),
+				));
+			}
 			$retval.= $this->parse("SHOW_EMAIL");
+			
 		}
 		$retval .= $this->parse("footer");
 
@@ -271,11 +299,8 @@ class crm_section_webside extends class_base
 		
 		if(is_array($arr["request"]["ord"]))
 		{
-			foreach ($workers->arr() as $worker)
-			{
-				$worker->set_ord($arr["request"]["ord"][$worker->id()]);
-				$worker->save();
-			}
+			$arr["obj_inst"]->set_meta("order" ,$arr["request"]["ord"]);
+			$arr["obj_inst"]->save();
 		}
 	}
 	
@@ -291,7 +316,15 @@ class crm_section_webside extends class_base
 	{
 		return $this->show(array("id" => $arr["alias"]["target"]));
 	}
-
+	
+	/*function sort_workers($workers)
+	{
+		$low_val = 10000000;
+		foreach ($workers as $worker)
+		{
+			
+		}
+	}*/
 	////
 	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
 	function show($arr)
@@ -301,24 +334,28 @@ class crm_section_webside extends class_base
 		
 		if($ob->prop("show_sub_sections"))
 		{
-			$workers = $section->get_section_workers($ob->id(), true);
+			$workers = $section->get_section_workers($ob->prop("section_picker"), true);
 		}
 		else
 		{
-			$workers = $section->get_section_workers($ob->id(), false);
+			$workers = $section->get_section_workers($ob->prop("section_picker"), false);
 		}
+ 		
 		
-		$workers->sort_by(array(
-        	"prop" => "ord",
-        	"order" => "asc"
-    	));
-    	
 		$cols = $ob->prop("cols");
 		$workers_count = $workers->count();
 		$workers = array_values($workers->arr());
 		$rows = ceil($workers_count/$cols);
 		
+		$orderdata = $ob->meta("order");
+		foreach ($workers as $worker)
+		{
+			$workers2[$orderdata[$worker->id()]] = $worker;		
+			ksort($workers2);
+		}
+		$workers = array_values($workers2);	
 		
+			
 		if($ob->prop("cols") == 1)
 		{
 			$this->read_template("frame_one_col.tpl");
@@ -330,6 +367,7 @@ class crm_section_webside extends class_base
 		//This is amazing... i wrote this and I dont understand how it works, but it does
 		for($i=0; $i<$workers_count; $i++)
 		{
+			
 			$this->vars(array(
 				"person" => $this->parse_person($workers[$i], $ob), 
 			));
@@ -345,7 +383,6 @@ class crm_section_webside extends class_base
 				}
 			}
 		}
-		
 		$this->vars(array(
 			"personinfo" => join($persondata),
 		));

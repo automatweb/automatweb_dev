@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.73 2004/10/14 13:35:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.74 2004/10/29 16:14:08 sven Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -13,7 +13,7 @@
 	@caption Listi liikmete allikas
 
 	@property multiple_folders type=checkbox ch_value=1
-	@caption Lase liitumisel folderit valida
+	@caption Lase liitumisel kausta valida
 
 	@property sub_form_type type=select rel=1
 	@caption Vormi tüüp
@@ -105,7 +105,7 @@
 	@caption Saatmise algus
 
 	@property mail_last_batch type=text store=no 
-	@caption Viimane batch saadeti
+	@caption Viimane kiri saadeti
 
 	@property mail_report table type=table store=no no_caption=1
 	@caption Meili raport
@@ -139,7 +139,7 @@
 	@classinfo relationmgr=yes
 	@classinfo no_status=1
 
-	@reltype MEMBER_PARENT value=1 clid=CL_MENU,CL_USER,CL_GROUP
+	@reltype MEMBER_PARENT value=1 clid=CL_MENU,CL_GROUP
 	@caption Listi liikmete allikas
 
 	@reltype REDIR_OBJECT value=2 clid=CL_DOCUMENT
@@ -397,7 +397,8 @@ class ml_list extends class_base
 		{
 			$retval = $this->cfg["baseurl"] . "/" . $mx["redir_obj"];
 		}
-		elseif  ($list_obj->prop("redir_obj")!= "")
+		else
+		if  (is_oid($list_obj->prop("redir_obj")))
 		{
 			$ro = obj($list_obj->prop("redir_obj"));
 			$retval = $this->cfg["baseurl"] . "/" . $ro->id();
@@ -420,11 +421,18 @@ class ml_list extends class_base
 		$message = nl2br($msg_obj->prop("message"));
 		$al = get_instance("aliasmgr");
 		$al->parse_oo_aliases($msg_obj->id(),&$message);
+		
+		$c_tile = $msg_obj->prop("msg_contener_title");
+		$c_content = $msg_obj->prop("msg_contener_content");
+		
 		if (is_oid($msg_obj->meta("template_selector")))
 		{
 			$tpl_obj = new object($msg_obj->meta("template_selector"));
 			$tpl_content = $tpl_obj->prop("content");
-			$tpl_content = str_replace("#content#",$message,$tpl_content);
+			$tpl_content = str_replace("#title#", $c_tile, $tpl_content);
+			$tpl_content = str_replace("#content#", $message,$tpl_content);
+			$tpl_content = str_replace("#container#", $c_content, $tpl_content);
+			
 			print $tpl_content;
 		}
 		else
@@ -1039,50 +1047,117 @@ class ml_list extends class_base
 		return $url;
 	}
 
+	function get_members_ol($id)
+	{
+		$obj = &obj($id);
+		if($this->can("view", $obj->prop("def_user_folder")))
+		{
+			$list_source_obj = &obj($obj->prop("def_user_folder"));
+		}
+		
+		if($list_source_obj->class_id() == CL_MENU)
+		{
+			$member_list = new object_list(array(
+				"parent" => $obj->prop("def_user_folder"),
+				"class_id" => CL_ML_MEMBER,
+				"lang_id" => array(),
+				"site_id" => array(),
+			));
+		}
+		elseif ($list_source_obj->class_id() == CL_GROUP)
+		{
+			$users_list = new object_list(($list_source_obj->connections_from(array(
+				"type" => "RELTYPE_MEMBER",
+			))));
+			
+			$member_list = new object_list();
+			
+			foreach ($users_list->arr() as $user)
+			{
+				unset($tmp);
+				if($tmp = $user->get_first_obj_by_reltype("RELTYPE_EMAIL"))
+				{
+					$member_list->add($tmp);
+				}
+			}
+		}
+		return $member_list;
+	}
+	
 	function get_members($id,$from = 0, $to = 0)
 	{
+		$this->get_members_ol($id);
 		$ret = array();
 		$list_obj = new object($id);
 
-
-		$q = sprintf("SELECT oid,parent FROM objects WHERE parent = %d AND class_id = %d AND status != 0 ORDER BY objects.created DESC",$list_obj->prop("def_user_folder"),CL_ML_MEMBER);
-
-		// why oh why is it so bloody slow with 1600 objects :(
-		/*
-		$member_list = new object_list(array(
-			"parent" => $list_obj->prop("def_user_folder"),
-			"class_id" => CL_ML_MEMBER,
-			"lang_id" => array(),
-			"site_id" => array(),
-		));
-		*/
-
-		$cnt = 0;
-
-		//$this->member_count = sizeof($member_list->ids());
-		$this->db_query($q);
-
-		while($row = $this->db_next())
-		//for($o = $member_list->begin(); !$member_list->end(); $o = $member_list->next())
+		if($this->can("view", $list_obj->prop("def_user_folder")))
 		{
-			$cnt++;
-			if (0 == $to || (0 != $from && 0 != $to && between($cnt,$from,$to)))
+			$list_source_obj = &obj($list_obj->prop("def_user_folder"));
+		}
+		
+		if(!$list_source_obj)
+		{
+			return array();
+		}
+		
+		if($list_source_obj->class_id() == CL_MENU)
+		{
+			$q = sprintf("SELECT oid,parent FROM objects WHERE parent = %d AND class_id = %d AND status != 0 ORDER BY objects.created DESC",$list_obj->prop("def_user_folder"),CL_ML_MEMBER);
+
+			// why oh why is it so bloody slow with 1600 objects :(
+			/*
+			$member_list = new object_list(array(
+				"parent" => $list_obj->prop("def_user_folder"),
+				"class_id" => CL_ML_MEMBER,
+				"lang_id" => array(),
+				"site_id" => array(),
+			));
+			*/
+
+			$cnt = 0;
+
+			//$this->member_count = sizeof($member_list->ids());
+			$this->db_query($q);
+
+			while($row = $this->db_next())
+			//for($o = $member_list->begin(); !$member_list->end(); $o = $member_list->next())
 			{
+				$cnt++;
+				if (0 == $to || (0 != $from && 0 != $to && between($cnt,$from,$to)))
+				{
 				/*
 				$ret[$o->id()] = array(
 					"oid" => $o->id(),
 					"parent" => $o->parent(),
 				);
 				*/
-				$ret[$row["oid"]] = array(
-					"oid" => $row["oid"],
-					"parent" => $row["parent"],
-				);
+					$ret[$row["oid"]] = array(
+						"oid" => $row["oid"],
+						"parent" => $row["parent"],
+					);
+				};
 			};
-		};
-
+		}
+		elseif ($list_source_obj->class_id() == CL_GROUP)
+		{
+			$members = $list_source_obj->connections_from(array(
+				"type" => "RELTYPE_MEMBER",
+			));
+			foreach ($members as $member)
+			{
+				$member = $member->to();
+				$email = $member->get_first_obj_by_reltype("RELTYPE_EMAIL");
+				if(!$email)
+				{
+					continue;
+				}
+				$ret[] = array(
+					"oid" => $email->id(),
+					"parent" => $email->parent(),
+				);	
+			}
+		}
 		$this->member_count = $cnt;
-
 		return $ret;
 	}	
 
@@ -1366,9 +1441,12 @@ class ml_list extends class_base
 		// of releditor. So why can't I use _that_ to write a new mail. Eh?
 
 		// would be nice to have some other and better method to do this
+		
+		
+		
 		foreach($all_props as $id => $prop)
 		{
-			if ($id == "mfrom" || $id == "name" || $id == "html_mail" || $id == "message")
+			if ($id == "mfrom" || $id == "name" || $id == "html_mail" || $id == "message" || $id == "msg_contener_title" || $id == "msg_contener_content")
 			{
 				if ($id == "mfrom")
 				{
@@ -1377,7 +1455,6 @@ class ml_list extends class_base
 				$filtered_props[$id] = $prop;
 			};
 		};
-
 
 		$filtered_props["id"] = array(
 			"name" => "id",
@@ -1395,7 +1472,8 @@ class ml_list extends class_base
 				"properties" => $filtered_props,
 				"name_prefix" => "emb",
 		));
-
+		
+	
 		return $xprops;
 	}
 
@@ -1409,6 +1487,10 @@ class ml_list extends class_base
 
 		if ($msg_data["send_away"] == 1 && is_oid($msg_data["template_selector"]))
 		{
+			$msg_obj = &obj($msg_data["id"]);
+			$c_tile = $msg_obj->prop("msg_contener_title");
+			$c_content = $msg_obj->prop("msg_contener_content");
+			
 			// use that template then!
 			// 1. load it
 			$o = new object($msg_data["template_selector"]);
@@ -1420,7 +1502,11 @@ class ml_list extends class_base
 			{
 				$message = nl2br($message);
 			};
+			
+			$message = str_replace("#title#", $c_tile, $message);
+			$message = str_replace("#container#", $c_content, $message);
 			$template = str_replace("#content#",$message,$template);
+			
 			$msg_data["message"] = $template;
 		};
 

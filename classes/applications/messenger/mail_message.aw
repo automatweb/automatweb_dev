@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.1 2004/06/25 19:28:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.2 2004/10/29 16:14:58 sven Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -71,6 +71,12 @@
 
 	@property msg_content type=text store=no form=showmsg no_caption=1
 	@caption Kirja sisu
+	
+	@property msg_contener_title type=textbox field=meta method=serialize table=objects
+	@caption Konteineri pealkiri
+	
+	@property msg_contener_content type=textarea field=meta method=serialize table=objects
+	@caption Konteineri sisu
 
 	@property msg_attachments type=text store=no form=showmsg no_caption=1
 	@caption Manused
@@ -291,8 +297,8 @@ class mail_message extends class_base
 		{
 			case "view_toolbar":
 				$this->view_toolbar(&$data);
-				break;
-	
+			break;
+			
 			case "msg_headers":
 				$this->read_template("headers.tpl");
 				$rv = "";
@@ -505,6 +511,18 @@ class mail_message extends class_base
 		));
 
 	}
+
+	// listile peale valik - "kasuta seda malli"
+	// kui ole valikut, siis dropdownis mallid .....
+
+	// kirja objektile user defined välju - by default väljas
+
+	// uus seos - listi liikmete allikaks saaks panna gruppi ja ka kasutajale meili saatmine
+
+	// listi juurde statistika tab, et oleks näha kes on kirju lugenud
+
+	// alias mis kuvab parooli muutmise lehe
+
 
 	function view_toolbar($arr)
 	{
