@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.51 2004/04/15 10:29:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.52 2004/04/19 14:22:19 kristo Exp $
 
 /*
 
@@ -150,11 +150,11 @@ class links extends class_base
 			{
 				if (aw_ini_get("menuedit.long_section_url"))
 				{
-					$url = $this->cfg["baseurl"]."/".$this->cfg["index_file"].".".$this->cfg["ext"]."/section=".$o->id();
+					$url = "/".$this->cfg["index_file"].".".$this->cfg["ext"]."/section=".$o->id();
 				}
 				else
 				{
-					$url = $this->cfg["baseurl"]."/".$o->id();
+					$url = "/".$o->id();
 				}
 				$name = strip_tags($o->name());
 				$name = str_replace("'","",$name);
@@ -307,11 +307,11 @@ class links extends class_base
 		{
 			if ($this->img)
 			{
-				$replacement = sprintf("<a href='%s' %s title='%s'><img src='%s' alt='%s' border='0'></a>",$url,$target,$this->cur_link->prop("alt"),$this->img,$this->cur_link->prop("alt"));
+				$replacement = sprintf("<a href='%s' %s alt='%s' title='%s'><img src='%s' alt='%s' border='0'></a>",$url,$target,$this->cur_link->prop("alt"),$this->cur_link->prop("alt"),$this->img,$this->cur_link->prop("alt"));
 			}
 			else
 			{
-				$replacement = sprintf("<a href='%s' %s title='%s'>%s</a>",$url,$target,$this->cur_link->prop("alt"),$caption);
+				$replacement = sprintf("<a href='%s' %s alt='%s' title='%s'>%s</a>",$url,$target,$this->cur_link->prop("alt"),$this->cur_link->prop("alt"),$caption);
 			}
 		};
 		$this->img = "";
