@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.9 2004/07/08 12:32:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.10 2004/08/02 12:38:21 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -280,7 +280,7 @@ class register_search extends class_base
 		foreach($props as $pn => $pd)
 		{
 			$defs = "";
-			if ($tdata[$pn]["sortable"])
+			if (true || $tdata[$pn]["sortable"])
 			{
 				$defs = html::radiobutton(array(
 					"name" => "tdata[__defaultsort]",
