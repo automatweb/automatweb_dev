@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.27 2002/02/13 00:11:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.28 2002/02/28 15:24:24 duke Exp $
 
 global $orb_defs;
 $orb_defs["aliasmgr"] = "xml";
@@ -988,7 +988,7 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		$alias = sprintf("#%s%d#",$this->defs[$this->def_id]["alias"],$this->acounter);
 		$this->counter++;
 		$this->chlinks[$this->counter] = $args["url"];
-		$this->dellinks[$this->counter] = $id;
+		$this->dellinks[$id] = $id;
 		$this->t->merge_data(array(
 			"title" => $this->defs[$this->def_id]["title"],
 			"check" => sprintf("<input type='checkbox' name='check' value='%d'>",$id),
