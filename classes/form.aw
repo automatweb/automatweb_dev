@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.58 2001/09/04 16:31:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.59 2001/09/04 16:36:14 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -2062,7 +2062,7 @@ class form extends form_base
 						$jss=",".$jss;
 					}
 					$chenrties = array();
-					$q = "SELECT objects.modifiedby as modifiedby,objects.modified as modified,form_".$form_id."_entries.id as entry_id $jss FROM form_".$form_id."_entries LEFT JOIN objects ON objects.oid = form_".$form_id."_entries.id WHERE form_".$form_id."_entries.id in ($eids) AND objects.status != 0";
+					$q = "SELECT objects.modifiedby as modifiedby,objects.modified as modified,objects.created as created,form_".$form_id."_entries.id as entry_id $jss FROM form_".$form_id."_entries LEFT JOIN objects ON objects.oid = form_".$form_id."_entries.id WHERE form_".$form_id."_entries.id in ($eids) AND objects.status != 0";
 	//				echo "q = $q <br>";
 					$this->db_query($q);
 					$cnt = 0;
