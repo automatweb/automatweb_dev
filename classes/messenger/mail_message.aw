@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.6 2003/09/17 12:45:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.7 2003/10/30 16:59:21 duke Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -8,14 +8,17 @@
 
 	@default table=messages
 
-	@property uidl type=textbox 
-	@caption UIDL
+	@property mailtoolbar type=toolbar store=no no_caption=1
+	@caption Toolbar
 
-	@property mfrom type=textbox size=80
-	@caption Kellelt
+	@property uidl type=hidden
+	@caption UIDL
 	
 	@property mto type=textbox size=80
 	@caption Kellele
+
+	@property mfrom type=textbox size=80
+	@caption Kellelt
 	
 	@property name type=textbox size=80 table=objects
 	@caption Subjekt
@@ -23,12 +26,24 @@
 	@property message type=textarea cols=80 rows=40 
 	@caption Sisu
 	
-	@property send type=submit value=Saada store=no 
-	@caption Saada
+	property send type=submit value=Saada store=no 
+	caption Saada
 
-	@property aliasmgr type=aliasmgr store=no
-	@caption Aliased
+	property aliasmgr type=aliasmgr store=no
+	caption Aliased
 
+	@property msgrid type=hidden 
+	@caption Msgrid
+
+	@property msgid type=hidden
+	@caption Msgid
+
+	@property mailbox type=hidden
+	@caption Mailbox
+
+	classinfo relationmgr=yes
+
+	@groupinfo general caption="Kala" submit=no
 	@tableinfo messages index=id master_table=objects master_index=oid
 
 */
@@ -38,15 +53,123 @@ class mail_message extends class_base
 	{
 		$this->init(array(
 			"clid" => CL_MESSAGE,
+			"tpldir" => "messenger_v2",
 		));
 	}
 
-	// I need a simple way to write the contents of one fields into another ..
-	// e.g. sync them somehow
+	// so I have a bunch of fields .. like .. lessay a toolbar .. from, to, reply-to, content .. attachments
+	// I need to show different things based on whether I'm viewing a message, composing a new one
+	// or doing something else fancy .. so how am I going to do that?
 
-	function get_property($args)
+
+	// things get a bit complicated by the fact that I need to be able to load an external 
+	// message .. straight from the IMAP server
+
+	// so, how do I go between the change thingie? .. cause change wants to load an internal
+	// object and I do not have an internal object for external messages .. and yet I need
+	// to be able to load and edit them .. geezas, what a mind job
+
+	function callback_load_object($arr)
 	{
-		$data = &$args["prop"];
+		$msgr = get_instance("messenger/messenger_v2");
+                $msgr->_connect_server(array(
+                        "msgr_id" => $arr["request"]["msgrid"],
+                ));
+		$msgrobj = new object($arr["request"]["msgrid"]);
+		
+		$this->act = $arr["request"]["subgroup"];
+
+                $msgdata = $msgr->drv_inst->fetch_message(array(
+                                "msgid" => $arr["request"]["msgid"],
+                ));
+		
+
+		// kui ma nüüd vastan, siis ....
+		if ($this->act == "reply")
+		{
+			$msgdata["to"] = $msgdata["from"];
+			$msgdata["from"] = $msgrobj->prop("fromname");
+			$msgdata["subject"] = "Re: " . $msgdata["subject"];
+			$msgdata["content"] = "\n\n\n" . str_replace("\n","\n> ",$msgdata["content"]);
+		}
+		elseif ($this->act == "reply2")
+		{
+			$msgdata["to"] = $msgdata["from"];
+			$msgdata["from"] = $msgrobj->prop("fromname");
+			$msgdata["subject"] = "Re: " . $msgdata["subject"];
+			$msgdata["content"] = "";
+			$this->act = "reply";
+		}
+		elseif ($this->act == "forward")
+		{
+			$hdr = "----Forwarded message-----\n";
+			$hdr .= "From: $msgdata[from]\n";
+			$hdr .= "To: $msgdata[to]\n";
+			$hdr .= "Subject: $msgdata[subject]\n";
+			$hdr .= "Date: $msgdata[date]\n\n";
+			$msgdata["to"] = "";
+			$msgdata["from"] = $msgrobj->prop("fromname");
+			$msgdata["subject"] = "Fwd: " . $msgdata["subject"];
+			$msgdata["content"] = "\n\n\n" . $hdr . str_replace("\n","\n> ",$msgdata["content"]);
+		};
+		
+		$this->msgdata = $msgdata;
+
+		// uue kirja jaoks tuleks uus subaction teha siis on my wild guess
+		if ($arr["request"]["subgroup"] == "show")
+		{
+			$this->state = "show";
+		};
+
+		//arr($msgdata);
+		//$arr["values"] = $msgdata;
+		//arr($msgdata);
+	}
+
+	function callback_save_object($arr)
+	{
+		if ($arr["request"]["subgroup"] == "send")
+		{
+			// send the bloody message already
+			$part1["type"]= "TEXT";
+                        $part1["subtype"]="PLAIN";
+                        $part1["charset"] = "ISO-8859-4";
+                        $part1["contents.data"] = $arr["request"]["message"];
+
+			$body = array();
+			$partnum = 1;
+			$body[$partnum] = $part1;
+			
+			$envelope = array();
+                        $envelope["from"] = $arr["request"]["mfrom"];
+                        $envelope["subject"] = $arr["request"]["name"];
+                        $envelope["date"] = date('r');
+
+                        $msg = imap_mail_compose($envelope,$body);
+
+                        mail($arr["request"]["mto"],$arr["request"]["name"],"",$msg);
+
+			print "saadetud<p>";
+			print "<a href='javascript:window.close();'>sulge aken</a>";
+			exit;
+
+		}
+		else
+		{
+			// redirect back
+			return $this->mk_my_orb("change",array(
+				"msgrid" => $arr["request"]["msgrid"],
+				"msgid" => $arr["request"]["msgid"],
+				"mailbox" => $arr["request"]["mailbox"],
+				"subgroup" => $arr["request"]["subgroup"],
+			));	
+		};
+	}
+
+
+	function get_property($arr)
+	{
+		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
@@ -55,24 +178,65 @@ class mail_message extends class_base
 				$retval = PROP_IGNORE;
 				break;
 
-			case "send":
-				/*
-				$delurl = $this->mk_my_orb("deliver",array("id" => $args["obj"]["oid"]));
-				$data["value"] = html::href(array(
-					"url" => "javascript:remote(0,300,400,\"$delurl\")",
-					"caption" => "Saada",
-				));
-				*/
+			case "mfrom":
+				$data["value"] = htmlspecialchars($this->msgdata["from"]);
+				if (empty($data["value"]))
+				{
+					$msgrobj = new object($arr["request"]["msgrid"]);
+					$data["value"] = $msgrobj->prop("fromname");
+				};	
+				if ($this->state == "show")
+				{
+					$data["type"] = "text";
+				};
+				break;
+		
+			case "mto":
+				$data["value"] = htmlspecialchars($this->msgdata["to"]);
+				if ($this->state == "show")
+				{
+					$data["type"] = "text";
+				};
+				break;
+	
+			case "name":
+				$data["value"] = htmlspecialchars($this->msgdata["subject"]);
+				if ($this->state == "show")
+				{
+					$data["type"] = "text";
+				};
+				break;
+
+			case "message":
+				$data["value"] = htmlspecialchars($this->msgdata["content"]);
+				if ($this->state == "show")
+				{
+					$data["value"] = nl2br($data["value"]);
+					$data["type"] = "text";
+				};
+				break;
+
+			case "mailtoolbar":
+				// aga vaat sellega on nyyd niuke asi, et ta ei peaks salvestama ega
+				// midagi tegema .. ta peaks lihtsalt redirectima tagasi muutmisele. ..
+				$this->gen_mail_toolbar(&$data);
+				break;
+
+
+			case "msgrid":
+			case "msgid":
+			case "mailbox":
+				$data["value"] = $arr["request"][$data["name"]];
 				break;
 
 		}
 		return $retval;
 	}
 
-	function set_property($args)
+	function set_property($arr)
 	{
 		$retval = PROP_OK;
-		$data = &$args["prop"];
+		$data = &$arr["prop"];
 		switch($data["name"])
 		{
 			case "status":
@@ -80,7 +244,7 @@ class mail_message extends class_base
 				break;
 	
 			case "send":
-				if ($args["form_data"]["send"])
+				if ($arr["form_data"]["send"])
 				{
 					$this->deliver_message = true;
 				};
@@ -134,6 +298,45 @@ class mail_message extends class_base
 		$awm->gen_mail();
 
 	}
+				
+			
+	function gen_mail_toolbar($arr)
+	{
+		// urk .. what a mind job
+		$tb = &$arr["toolbar"];
+		if ($this->act != "reply" && $this->act != "forward" && $this->act != "")
+		{
+			$tb->add_button(array(
+				"name" => "reply",
+				"url" => "javascript:document.changeform.subgroup.value='reply';document.changeform.submit();",
+				"tooltip" => "Vasta/kvoodi",
+			));
+			
+			$tb->add_button(array(
+				"name" => "reply2",
+				"url" => "javascript:document.changeform.subgroup.value='reply2';document.changeform.submit();",
+				"tooltip" => "Vasta/tühjalt",
+			));
+		};
+
+		if ($this->act != "reply" && $this->act != "forward" && $this->act != "")
+		{
+			$tb->add_button(array(
+				"name" => "forward",
+				"url" => "javascript:document.changeform.subgroup.value='forward';document.changeform.submit();",
+				"tooltip" => "Forward",
+			));
+		};
+
+		if ($this->act != "show")
+		{
+			$tb->add_button(array(
+				"name" => "send",
+				"url" => "javascript:document.changeform.subgroup.value='send';document.changeform.submit();",
+				"tooltip" => "Saada",
+			));
+		};
+	}
 
 	function deliver($args)
 	{
@@ -153,10 +356,77 @@ class mail_message extends class_base
 		));
 
 		$awm->gen_mail();
+		print "<script>window.close();</script>";
 		print "Selle akna võib peale kirja saatmist sulgeda<br />";
 		print "-------<br />";
 		print "saadetud<br />";
 		die();
+	}
+
+	function viewmsg($arr)
+	{
+
+
+
+	}
+
+	function viewmsg2($arr)
+	{
+		$msgid = $arr["msgid"];
+
+		$msgr = get_instance("messenger/messenger_v2");
+                $msgr->_connect_server(array(
+                        "msgr_id" => $arr["msgrid"],
+                ));
+
+
+                $msgdata = $msgr->drv_inst->fetch_message(array(
+                                "msgid" => $msgid,
+                ));
+
+                $cont = htmlspecialchars($msgdata["content"]);
+                $cont = nl2br(create_links($cont));
+
+		$this->read_template("plain.tpl");
+                $this->sub_merge = 1;
+
+		// now I have to reformat this as a class_base form .. uh.oh.
+                $this->vars(array(
+                        "from" => htmlspecialchars(parse_obj_name($msgdata["from"])),
+                        "reply_to" => htmlspecialchars(parse_obj_name($msgdata["reply_to"])),
+                        "to" => htmlspecialchars(parse_obj_name($msgdata["to"])),
+                        "subject" => htmlspecialchars(parse_obj_name($msgdata["subject"])),
+                        "date" => $msgdata["date"],
+                        "content" => $cont,
+                ));
+
+		if (is_array($msgdata["attachments"]))
+		{
+			$this->vars(array(
+				"target_opts" => $this->picker(-1,$this->localfolders),
+			));
+
+			foreach($msgdata["attachments"] as $num => $data)
+			{
+                                $this->vars(array(
+                                        "part_name" => $data,
+                                        "get_part_url" => $this->mk_my_orb("get_part",array(
+                                                "id" => $arr["msgrid"],
+                                                "msgid" => $msgid,
+                                                "mailbox" => $this->use_mailbox,
+                                                "part" => $num,
+                                        )),
+                                        "att_reforb" => $this->mk_reforb("store_part",array(
+                                                "id" => $arr["msgrid"],
+                                                "msgid" => $msgid,
+                                                "mailbox" => $this->use_mailbox,
+                                                "part" => $num,
+                                        )),
+                                ));
+                                $this->parse("attachment");
+                        };
+                };
+                return $this->parse();
 	}
 
 	function show($arr)
