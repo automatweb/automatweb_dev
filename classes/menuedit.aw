@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.287 2003/04/23 07:15:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.289 2003/04/23 17:01:09 kristo Exp $
 // menuedit.aw - menuedit. heh.
 // meeza thinks we should split this class. One part should handle showing stuff
 // and the other the admin side -- duke
@@ -193,6 +193,9 @@ class menuedit extends aw_template
 		$template = isset($template) && $template != "" ? $template : "main.tpl";
 		$docid = isset($docid) ? $docid : 0;
 
+		// until we can have class-static variables, this actually SETS current text content
+		classload("layout/active_page_data");
+		active_page_data::get_text_content($text);
 
 		// impordime taimeriklassi
 
@@ -229,7 +232,7 @@ class menuedit extends aw_template
 			$section=$obj["parent"];
 			$docid=$obj["brother_of"];
 		}
-		
+
 		classload("image");
 		$pers = get_instance("periods");
 		$_t = aw_global_get("act_period");
@@ -296,8 +299,6 @@ class menuedit extends aw_template
 			$this->sel_section = $section;
 		}
 
-		$sel_menu_id = $this->sel_section;
-
 		$this->vars(array(
 			"sel_menu_id" => $sel_menu_id,
 			"se_lang_id" => aw_global_get("lang_id")
@@ -352,11 +353,12 @@ class menuedit extends aw_template
 			$seobj = $this->get_object($sel_menu_id);
 			$sel_menu_id = $seobj["parent"];
 		}
+
+		$sel_menu_id = $this->sel_section;
 		
 		// here we must find the menu image, if it is not specified for this menu,
 		//then use the parent's and so on.
 		$this->do_menu_images($sel_menu_id);
-
 
 		// nii nyt leiame aktiivse kommentaari - kui aktiivsel menyyl on tyhi, siis parenti oma jne
 		$this->dequote($this->properties["comment"]);
@@ -438,26 +440,6 @@ class menuedit extends aw_template
 				"docid" => $event["oid"],
 				"doc_content" => $res,
 			));
-		}
-		else
-		// if the menu has any relations to planner objects, then we show
-		// that planner under this menu. 
-		// I will fix this later.. --duke
-
-		// see siin genereerib n䤡la vaate, aga damn I really do hate this
-		if ($obj["class_id"] == CL_PSEUDO && is_array($meta["aliases_by_class"]) && sizeof($meta["aliases_by_class"][CL_PLANNER]) > 0)
-		{
-			$pl = get_instance("planner");
-			$target = $meta["aliases_by_class"][CL_PLANNER][1]["target"];
-			global $type;
-			global $date;
-			$_tmp = $pl->view(array(
-				"id" => $target,
-				"week_tpl" => "week.tpl",
-				"date" => $date,
-				"type" => ($type == "day") ? "day" : "",
-			));
-			$this->vars(array("doc_content" => $_tmp));
 		}
 		else
 		if ($text == "")
@@ -1002,7 +984,15 @@ class menuedit extends aw_template
 				$sections = $me_row["meta"]["sss"];
 			};
 
-			$periods = $me_row["meta"]["pers"];
+			if ($me_row["meta"]["all_pers"])
+			{
+				$period_instance = get_instance("periods");
+				$periods = $this->make_keys(array_keys($period_instance->period_list(false)));
+			}
+			else
+			{
+				$periods = $me_row["meta"]["pers"];
+			}
 
 			if (is_array($sections) && ($sections[0] !== 0))
 			{
@@ -2148,10 +2138,21 @@ class menuedit extends aw_template
 				}
 				else
 				{
-					$link .= $row["oid"];
+					$oid = ($row["class_id"] == 39) ? $row["brother_of"] : $row["oid"];
+					// I'm sorry -- duke
+					$date = aw_global_get("date");
+					if ($date)
+					{
+						$link .= "section=" . $oid . "/date=" . $date;
+					}
+					else
+					{
+						$link .= $oid;
+					};
 				};
 			};
 		}
+
 
 		// this here bullshit is so that the static ut site will work
 		// basically, rewrite_links is set if we are doing searching or some other non-static action
