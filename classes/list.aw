@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.15 2001/09/14 13:29:08 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.16 2001/09/25 09:57:55 cvs Exp $
 lc_load("mailinglist");
 class mlist extends aw_template
 {
@@ -129,14 +129,16 @@ class mlist extends aw_template
 	function db_add_user($data, $vars = "")
 	{
 		extract($data);
-		if (strlen($email < 4))
+		if (strlen($email) < 4)
 		{
 			return false;
 		};
 
 		$this->db_query("SELECT * FROM ml_users LEFT JOIN objects ON objects.oid = ml_users.id WHERE parent=$this->id AND status != 0 AND mail='$email'");
 		if (($row = $this->db_next()))
+		{
 			return $row["id"];	// if such user exists, do not add another
+		}
 
 		$user_id = $this->new_object(array("parent" => $this->id, "name" => $name, "class_id" => CL_MAILINGLIST_MEMBER,"status" => 2));
 		$this->db_query("INSERT INTO ml_users(id,mail) VALUES($user_id, '$email')");
