@@ -1119,7 +1119,14 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$prev_clid = $join["from_class"];
 
 				$str  = " LEFT JOIN aliases aliases_".$join["from_class"]." ON aliases_".$join["from_class"].".source = ";
-				$str .= " objects_".$join["from_class"].".oid ";
+				if ($join["from_class"] == $clid)
+				{
+					$str .= " objects.oid ";
+				}
+				else
+				{
+					$str .= " objects_".$join["from_class"].".oid ";
+				}
 				$this->joins[] = $str;
 
 				$str  = " LEFT JOIN objects objects_".$join["to_class"]." ON objects_".$join["to_class"].".target = ";
