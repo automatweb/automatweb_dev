@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="datasource" folder="applications/ut/xml_import" extends="class_base">
+	<class name="datasource" folder="applications/clients/ut/xml_import" extends="class_base">
 		<action name="fetch">
 			<function name="fetch">
 				<arguments>
