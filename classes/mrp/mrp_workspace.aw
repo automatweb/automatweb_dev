@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.38 2005/03/11 09:09:38 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.39 2005/03/13 20:21:13 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -331,7 +331,7 @@ class mrp_workspace extends class_base
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		$this_object = $arr["obj_inst"];
+		$this_object =& $arr["obj_inst"];
 
 		if (substr($prop["name"], 0, 3) == "pjp")
 		{
@@ -440,7 +440,7 @@ class mrp_workspace extends class_base
 				$this->create_projects_tree ($arr);
 				break;
 			case "projects_list":
-				if ($arr["request"]["mrp_projects_show"] == "subcontractjobs")
+				if ($arr["request"]["mrp_projects_show"] == "subcontracts")
 				{
 					$this->create_jobs_list ($arr);
 				}
@@ -924,7 +924,7 @@ class mrp_workspace extends class_base
 	function create_projects_toolbar ($arr = array())
 	{
 		$toolbar =& $arr["prop"]["toolbar"];
-		$this_object = $arr["obj_inst"];
+		$this_object =& $arr["obj_inst"];
 		$add_project_url = $this->mk_my_orb("new", array(
 			"return_url" => urlencode(aw_global_get('REQUEST_URI')),
 			"mrp_workspace" => $this_object->id (),
@@ -954,55 +954,46 @@ class mrp_workspace extends class_base
 			"id" => $this_object->id (),
 			"group" => "grp_projects",
 			"mrp_projects_show" => "all",
-			"mrp_tree_active_item" => 1,
 		), "mrp_workspace");
 		$url_projects_planned = $this->mk_my_orb("change", array(
 			"id" => $this_object->id (),
 			"group" => "grp_projects",
 			"mrp_projects_show" => "planned",
-			"mrp_tree_active_item" => 7,
 		), "mrp_workspace");
 		$url_projects_in_work = $this->mk_my_orb("change", array(
 			"id" => $this_object->id (),
 			"group" => "grp_projects",
 			"mrp_projects_show" => "inwork",
-			"mrp_tree_active_item" => 2,
 		), "mrp_workspace");
 		$url_projects_overdue = $this->mk_my_orb("change", array(
 			"id" => $this_object->id (),
 			"group" => "grp_projects",
 			"mrp_projects_show" => "overdue",
-			"mrp_tree_active_item" => 4,
 		), "mrp_workspace");
 		$url_projects_planned_overdue = $this->mk_my_orb("change", array(
 			"id" => $this_object->id (),
 			"group" => "grp_projects",
 			"mrp_projects_show" => "planned_overdue",
-			"mrp_tree_active_item" => 3,
 		), "mrp_workspace");
 		$url_projects_new = $this->mk_my_orb("change", array(
 			"id" => $this_object->id (),
 			"group" => "grp_projects",
 			"mrp_projects_show" => "new",
-			"mrp_tree_active_item" => 5,
 		), "mrp_workspace");
 		$url_projects_done = $this->mk_my_orb("change", array(
 			"id" => $this_object->id (),
 			"group" => "grp_projects",
 			"mrp_projects_show" => "done",
-			"mrp_tree_active_item" => 6,
 		), "mrp_workspace");
 		$url_projects_aborted = $this->mk_my_orb("change", array(
 			"id" => $this_object->id (),
 			"group" => "grp_projects",
 			"mrp_projects_show" => "aborted",
-			"mrp_tree_active_item" => 8,
 		), "mrp_workspace");
 		$url_subcontract_jobs = $this->mk_my_orb("change", array(
 			"id" => $this_object->id (),
 			"group" => "grp_projects",
-			"mrp_projects_show" => "subcontractjobs",
-			"mrp_tree_active_item" => 9,
+			"mrp_projects_show" => "subcontracts",
 		), "mrp_workspace");
 
 ///!!! appdeitida need count listid table listide j2rgi
@@ -1068,59 +1059,59 @@ class mrp_workspace extends class_base
 
 		$tree->add_item (0, array (
 			"name" => "Kõik plaanisolevad" . "(" . $count_projects_planned . ")",
-			"id" => 7,
+			"id" => "planned",
 			"url" => $url_projects_planned,
 		));
 
 		$tree->add_item (0, array (
 			"name" => "Hetkel töösolevad" . "(" . $count_projects_in_work . ")",
-			"id" => 2,
+			"id" => "inwork",
 			"url" => $url_projects_in_work,
 		));
 
 		$tree->add_item (0, array (
 			"name" => "Planeeritud üle tähtaja" . "(" . $count_projects_planned_overdue . ")",
-			"id" => 3,
+			"id" => "planned_overdue",
 			"url" => $url_projects_planned_overdue,
 		));
 
 		$tree->add_item (0, array (
 			"name" => "Üle tähtaja" . "(" . $count_projects_overdue . ")",
-			"id" => 4,
+			"id" => "overdue",
 			"url" => $url_projects_overdue,
 		));
 
 		$tree->add_item (0, array (
 			"name" => "Uued" . "(" . $count_projects_new . ")",
-			"id" => 5,
+			"id" => "new",
 			"url" => $url_projects_new,
 		));
 
 		$tree->add_item (0, array (
 			"name" => "Valmis" . "(" . $count_projects_done . ")",
-			"id" => 6,
+			"id" => "done",
 			"url" => $url_projects_done,
 		));
 
 		$tree->add_item (0, array (
 			"name" => "Katkestatud" . "(" . $count_projects_aborted . ")",
-			"id" => 8,
+			"id" => "aborted",
 			"url" => $url_projects_aborted,
 		));
 
 		$tree->add_item (0, array (
 			"name" => "Kõik projektid",
-			"id" => 1,
+			"id" => "all",
 			"url" => $url_projects_all,
 		));
 
 		$tree->add_item (0, array (
 			"name" => "Allhanket&ouml;&ouml;d",
-			"id" => 9,
+			"id" => "subcontracts",
 			"url" => $url_subcontract_jobs,
 		));
 
-		$active_node = is_integer ($arr["request"]["mrp_tree_active_item"]) ? $arr["request"]["mrp_tree_active_item"] : 7;
+		$active_node = empty ($arr["request"]["mrp_projects_show"]) ? "planned" : $arr["request"]["mrp_projects_show"];
 		$tree->set_selected_item ($active_node);
 		$arr["prop"]["value"] = $tree->finalize_tree ();
 	}
@@ -1487,12 +1478,20 @@ class mrp_workspace extends class_base
 
 		foreach ($jobs as $job_id => $job)
 		{
-			$project = obj ($job->prop ("project"));
-			$resource = obj ($job->prop ("resource"));
+			$project_id = $job->prop ("project");
+			$resource_id = $job->prop ("resource");
+
+			if (!is_oid ($project_id) or !is_oid ($resource_id))
+			{
+				continue;
+			}
+
+			$project = obj ($project_id);
+			$resource = obj ($resource_id);
 			$change_url = $this->mk_my_orb("change", array(
 				"id" => $job_id,
 				"return_url" => urlencode (aw_global_get ('REQUEST_URI')),
-			), "mrp_case");
+			), "mrp_job");
 
 			### get project customer
 			$customer = $project->get_first_obj_by_reltype("RELTYPE_MRP_CUSTOMER");
@@ -1526,7 +1525,7 @@ class mrp_workspace extends class_base
 
 	function create_schedule_chart ($arr)
 	{
-		$this_object = $arr["obj_inst"];
+		$this_object =& $arr["obj_inst"];
 		$chart = get_instance ("vcl/gantt_chart");
 		$columns = (int) ($arr["request"]["mrp_chart_length"] ? $arr["request"]["mrp_chart_length"] : 7);
 		$range_start = (int) ($arr["request"]["mrp_chart_start"] ? $arr["request"]["mrp_chart_start"] : $this->get_week_start ());

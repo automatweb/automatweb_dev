@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.16 2005/03/11 09:09:38 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.17 2005/03/13 20:21:13 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -432,6 +432,11 @@ class mrp_resource extends class_base
 
 	function get_recurrent_unavailable_periods ($resource, $start, $end)
 	{
+/* dbg */ if ($resource->id () == 6670  ) {
+/* dbg */ $this->mrpdbg=1;
+/* dbg */ }
+
+		### unavailable recurrences
 		$recurrent_unavailable_periods = array ();
 
 		if ($resource->prop ("unavailable_weekends"))
@@ -445,7 +450,6 @@ class mrp_resource extends class_base
 			);
 		}
 
-		### unavailable recurrences
 		foreach ($resource->connections_from (array ("type" => "RELTYPE_RECUR")) as $connection)
 		{
 			$recurrence = $connection->to ();
@@ -487,7 +491,10 @@ class mrp_resource extends class_base
 			);
 		}
 
+
 		### add workhours (available recurrences)
+		$recurrent_available_periods = array ();
+
 		foreach ($resource->connections_from (array ("type" => "RELTYPE_RECUR_WRK")) as $connection)
 		{
 			$recurrence = $connection->to ();
@@ -498,7 +505,7 @@ class mrp_resource extends class_base
 			$recurrence_time = $recurrence_time_hours * 3600 + $recurrence_time_minutes * 60;
 			$recurrence_length = round ($recurrence->prop ("length") * 3600);
 
-			$recurrent_available_periods[$start] = array (
+			$recurrent_available_periods[] = array (
 				"length" => $recurrence_length,
 				"start" => $recurrence->prop ("start"),
 				"time" => $recurrence_time,
@@ -506,6 +513,10 @@ class mrp_resource extends class_base
 				"interval" => $interval,
 			);
 		}
+
+// /* dbg */ if ($this->mrpdbg){
+// /* dbg */ arr ($recurrent_unavailable_periods);
+// /* dbg */ }
 
 		### transmute recurrently available periods to unavailables
 		### throw away erroneous definitions
@@ -518,16 +529,7 @@ class mrp_resource extends class_base
 		}
 
 		### sort available recurrences by their starting time
-		ksort ($recurrent_available_periods);
-
-		### make available recurrences array keys numeric
-		$i = 0;
-
-		foreach ($recurrent_available_periods as $key => $available_period)
-		{
-			$recurrent_available_periods[$i++] = $available_period;
-			unset ($recurrent_available_periods[$key]);
-		}
+		usort ($recurrent_available_periods, array ($this, "sort_recurrences_by_start"));
 
 		### find combinations of available periods
 		$combinations = array (); //combination,start,end
@@ -668,12 +670,56 @@ class mrp_resource extends class_base
 		return $recurrent_unavailable_periods;
 	}
 
-	function get_week_start ($time) //!!! not dst safe
+	function get_week_start ($time) //!!! not really dst safe
 	{
 		$date = getdate ($time);
 		$wday = $date["wday"] ? ($date["wday"] - 1) : 6;
 		$week_start = $time - ($wday * 86400 + $date["hours"] * 3600 + $date["minutes"] * 60 + $date["seconds"]);
+		$nodst_hour = (int) date ("H", $week_start);
+
+		switch ($nodst_day_hour)
+		{
+			case 1:
+				$week_start = $week_start - 3600;
+				break;
+
+			case 23:
+				$week_start = $week_start + 3600;
+				break;
+
+			case 2:
+				$week_start = $week_start - 2*3600;
+				break;
+
+			case 22:
+				$week_start = $week_start + 2*3600;
+				break;
+
+			case 0:
+			default:
+				$week_start = $week_start;
+				break;
+		}
+
 		return $week_start;
+	}
+
+	function sort_recurrences_by_start ($recurrence1, $recurrence2)
+	{
+		if ($recurrence1["start"] > $recurrence2["start"])
+		{
+			$result = 1;
+		}
+		elseif ($recurrence1["start"] < $recurrence2["start"])
+		{
+			$result = -1;
+		}
+		else
+		{
+			$result = 0;
+		}
+
+		return $result;
 	}
 }
 

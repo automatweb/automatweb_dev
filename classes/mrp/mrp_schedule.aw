@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.15 2005/03/11 09:09:38 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.16 2005/03/13 20:21:13 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -40,7 +40,7 @@ class mrp_schedule extends class_base
 	# time() at the moment of starting scheduling (int)
 	var $scheduling_time;
 
-	# how many seconds from time() to start schedule, should be at least scheduler's maximum execution time (int)
+	# how many seconds from time() to start including unscheduled/not done/not started jobs in scheduling (int)
 	var $min_planning_jobstart = 300;
 
 	# how many seconds from time() to start schedule, should be at least scheduler's maximum execution time (int)
@@ -65,12 +65,6 @@ class mrp_schedule extends class_base
 	var $schedulable_resources = array ();
 	var $workspace_id;
 	var $jobs_table = "mrp_job";
-	var $non_schedulable_states = array (
-		MRP_STATUS_INPROGRESS,
-		MRP_STATUS_DONE,
-		MRP_STATUS_DELETED,
-		MRP_STATUS_NEW,
-	);
 
 	# array (res_id => array (), ...)
 	var $resource_data = array ();
@@ -101,6 +95,12 @@ class mrp_schedule extends class_base
 
 	var $timings = array ();
 
+	# resource unavailable times for range of time, output of get_unavailable_periods function (start => end)
+	var $unavailable_times = array ();
+
+	# indicates whether initialization has been done for get_unavailable_periods
+	var $initialized = false;
+
 	var $state_names = array (
 		MRP_STATUS_NEW => "Uus",
 		MRP_STATUS_PLANNED => "Töösse planeeritud",
@@ -119,6 +119,56 @@ class mrp_schedule extends class_base
 		));
 	}
 
+/**
+    @attrib name=get_unavailable_periods
+	@param mrp_resource required type=int
+	@param mrp_start required type=int
+	@param mrp_length required type=int
+**/
+	function get_unavailable_periods ($arr)
+	{
+		$resource_id = $arr["mrp_resource"];
+		$resource = obj ($resource_id);
+		$workspace = $resource->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+		$pointer = 0;
+
+		if (!$workspace)
+		{
+			return false;
+		}
+
+		if (!$this->initialized)
+		{
+			$this->schedule_start = $arr["mrp_start"];
+			$this->schedule_length = $arr["mrp_length"];
+
+			$resources_folder = $workspace->prop ("resources_folder");
+			$resource_tree = new object_tree (array (
+				"parent" => $resources_folder,
+				"class_id" => array (CL_MRP_RESOURCE,CL_MENU),
+			));
+			$resource_list = $resource_tree->to_list ();
+			$resource_list->filter (array (
+				"class_id" => CL_MRP_RESOURCE,
+				"type" => new obj_predicate_not (MRP_RESOURCE_NOT_SCHEDULABLE),
+			), true);
+			$resources = $resource_list->ids ();
+			$this->init_resource_data ($resources);
+			$this->initialized = true;
+		}
+
+		while ($pointer <= ($this->schedule_start + $this->schedule_length))
+		{
+			list ($unavailable_start, $unavailable_length) = $this->get_closest_unavailable_period ($resource_id, $pointer);
+			$pointer = $unavailable_start + $unavailable_length + 1;
+			$unavailable_start = $this->schedule_start + $unavailable_start;
+			$unavailable_end = $unavailable_start + $unavailable_length;
+			$this->unavailable_times[$unavailable_start] = $unavailable_end;
+		}
+
+		return true;
+	}
+
 	function initialize ($arr)
 	{
 		if (is_oid ($arr["mrp_workspace"]))
@@ -132,6 +182,7 @@ class mrp_schedule extends class_base
 		}
 
 		$this->scheduling_time = time ();
+		$this->min_planning_jobstart = $this->scheduling_time + $this->min_planning_jobstart;
 
 		### get parameters
 		$schedule_length = $workspace->prop ("parameter_schedule_length");
@@ -139,7 +190,7 @@ class mrp_schedule extends class_base
 		$this->schedule_length = (int) $this->schedule_length * 31536000;
 
 		$schedule_start = $workspace->prop ("parameter_schedule_start");
-		$this->schedule_start = (int) is_numeric ($schedule_start) ? (time () + $schedule_start) : (time () + $this->schedule_start);
+		$this->schedule_start = (int) is_numeric ($schedule_start) ? ($this->scheduling_time + $schedule_start) : ($this->scheduling_time + $this->schedule_start);
 		$this->scheduling_day_end = mktime (23, 59, 59, date ("m", $this->scheduling_time), date ("d", $this->scheduling_time), date("Y", $this->scheduling_time));
 
 		### get combined_priority parameters
@@ -182,15 +233,20 @@ class mrp_schedule extends class_base
 		$this->range_scale = $range_scale;
 
 		### get schedulable resources
+		$applicable_types = array (
+			MRP_RESOURCE_SCHEDULABLE,
+			MRP_RESOURCE_SUBCONTRACTOR,
+		);
+
 		$resources_folder = $workspace->prop ("resources_folder");
 		$resource_tree = new object_tree (array (
 			"parent" => $resources_folder,
 			"class_id" => array (CL_MRP_RESOURCE,CL_MENU),
+			"type" => $applicable_types,
 		));
 		$resource_list = $resource_tree->to_list ();
 		$resource_list->filter (array (
 			"class_id" => CL_MRP_RESOURCE,
-			"type" => new obj_predicate_not (MRP_RESOURCE_NOT_SCHEDULABLE),
 		), true);
 
 		for ($resource = $resource_list->begin (); !$resource_list->end (); $resource = $resource_list->next ())
@@ -367,12 +423,14 @@ class mrp_schedule extends class_base
 			foreach ($project["jobs"] as $key => $job)
 			{
 
+
 /* timing */ timing ("one job total", "start");
 /* timing */ timing ("reserve time & modify earliest start", "start");
-// /* dbg */ if ($job["oid"] == 7408 ) {
-/* dbg */ if ($job["resource"] == 6670  ) {
+/* dbg */ if ($job["oid"] == 8035   ) {
+// /* dbg */ if ($job["resource"] == 6670  ) {
 /* dbg */ $this->mrpdbg=1;
 /* dbg */ }
+
 
 				$job_length = $job["pre_buffer"] + $job["length"];
 //!!! misasi on prebuffer?
@@ -389,12 +447,28 @@ class mrp_schedule extends class_base
 					$minstart = $starttime_index[$job["oid"]];
 				}
 
-// /* dbg */ if ($this->mrpdbg) {
+				$applicable_states = array (
+					MRP_STATUS_PLANNED,
+					MRP_STATUS_NEW,
+					MRP_STATUS_OVERDUE,
+				);
+
+
+/* dbg */ if ($this->mrpdbg) {
 // /* dbg */ echo "presched: minstart-". date (MRP_DATE_FORMAT,$minstart )." | length - ". $job_length/3600 ."h <br>";
+// /* dbg */ arr ($job);
+// /* dbg */ echo "minplan jobstart: " . $this->min_planning_jobstart . "<br>";
+// /* dbg */ echo "sched start: " . $this->schedule_start . "<br>";
+/* dbg */ }
+
+
+				if ( in_array ($job["resource"], $this->schedulable_resources) and in_array ($job["state"], $applicable_states) and (($job["starttime"] >= $this->min_planning_jobstart) or ($job["starttime"] < $this->schedule_start) or !$job["starttime"]) )
+				{
+
+// /* dbg */ if ($this->mrpdbg) {
+// /* dbg */ echo "sched: minstart-". date (MRP_DATE_FORMAT,$minstart )." | length - ". $job_length/3600 ."h <br>";
 // /* dbg */ }
 
-				if (in_array ($job["resource"], $this->schedulable_resources) and (($job["starttime"] >= $this->min_planning_jobstart) or !$job["starttime"]) and !in_array ($job["state"], $this->non_schedulable_states))
-				{
 					### schedule job next in line
 					list ($scheduled_start, $scheduled_length) = $this->reserve_time ($job["resource"], $minstart, $job_length);
 					$this->job_schedule[$job["oid"]] = array ($scheduled_start, $scheduled_length);
@@ -459,6 +533,10 @@ class mrp_schedule extends class_base
 	function save ()
 	{
 		$log = get_instance(CL_MRP_WORKSPACE);
+		$applicable_states = array (
+			MRP_STATUS_NEW,
+			MRP_STATUS_OVERDUE,
+		);
 
 		if (is_array ($this->project_schedule) and is_array ($this->job_schedule))
 		{
@@ -467,6 +545,8 @@ class mrp_schedule extends class_base
 				if (is_oid($project_id))
 				{
 					$project = obj ($project_id);
+					$state = $project->prop("state");
+
 					if ($date != $project->prop("planned_date"))
 					{
 						$log->mrp_log(
@@ -479,17 +559,18 @@ class mrp_schedule extends class_base
 					}
 					$project->set_prop ("planned_date", $date);
 
-					if (MRP_STATUS_PLANNED != $project->prop("state"))
+					if (in_array ($state, $applicable_states))
 					{
+						$project->set_prop ("state", MRP_STATUS_PLANNED);
 						$log->mrp_log(
 							$project->id(),
 							0,
 							"Projekti staatus muutus ".
-								$this->state_names[$project->prop("state")]." => ".
+								$this->state_names[$state]." => ".
 								$this->state_names[MRP_STATUS_PLANNED]
 						);
 					}
-					$project->set_prop ("state", MRP_STATUS_PLANNED);
+
 					aw_disable_acl();
 					$project->save ();
 					aw_restore_acl();
@@ -670,12 +751,12 @@ class mrp_schedule extends class_base
 					$reserved_time = (($start1 + $length1) >= $start) ? ($start1 + $length1) : $start;
 					list ($unavailable_start, $unavailable_length) = $this->get_closest_unavailable_period ($resource_id, $reserved_time);
 
-/* dbg */ if ($this->mrpdbg){
+// /* dbg */ if ($this->mrpdbg){
 // /* dbg */ echo $resource_id."-s1:". date (MRP_DATE_FORMAT, $this->schedule_start + $start1)."-L1:".$length1."-d:".$d."-s:". date (MRP_DATE_FORMAT, $this->schedule_start + $start) ."-s2:". date (MRP_DATE_FORMAT, $this->schedule_start + $start2) ."<br><br>";
 // /* dbg */ echo "reservedtime: " . date (MRP_DATE_FORMAT, $this->schedule_start + $reserved_time) . "<br>";
 // /* dbg */ echo "1st unavail: " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)."<br>";
-/* dbg */ $dbg_time = $reserved_time;
-/* dbg */ }
+// /* dbg */ $dbg_time = $reserved_time;
+// /* dbg */ }
 // /* dbg */ echo date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)."<br>";
 
 					### check if reserved time goes beyond an unavailable time
@@ -690,10 +771,10 @@ class mrp_schedule extends class_base
 								$reserved_time = ($unavailable_start + $unavailable_length);
 								list ($unavailable_start, $unavailable_length) = $this->get_closest_unavailable_period ($resource_id, $reserved_time);
 
-/* dbg */ if ($this->mrpdbg){
+// /* dbg */ if ($this->mrpdbg){
 // /* dbg */ echo "2nd unavail: " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)."<br>";
-/* dbg */ $dbg_time = $reserved_time;
-/* dbg */ }
+// /* dbg */ $dbg_time = $reserved_time;
+// /* dbg */ }
 							}
 							else
 							{
@@ -971,12 +1052,12 @@ class mrp_schedule extends class_base
 			$recurrence_end = $recurrence_start + $recurrence["length"];
 
 
-/* dbg */ if ($this->mrpdbg){
+// /* dbg */ if ($this->mrpdbg){
 // /* dbg */ echo " rectime:". ($recurrence["time"] / 3600) . " h<br>";
 // /* dbg */ echo " recdaystart: nodst - ". date (MRP_DATE_FORMAT, $nodst_day_start) . " | dst - ". date (MRP_DATE_FORMAT, $dst_day_start) . "<br>";
 // /* dbg */ echo " recperiod:". date (MRP_DATE_FORMAT, $recurrence_start) ."-". date (MRP_DATE_FORMAT, $recurrence_end) . "<br>";
 // /* dbg */ echo "closestper rec: ". date (MRP_DATE_FORMAT, $recurrence_start). "-" .date (MRP_DATE_FORMAT, ($recurrence_end)) . " | resp to: " .date (MRP_DATE_FORMAT, ($time)) . "<br>";
-/* dbg */ }
+// /* dbg */ }
 
 			if ($recurrence_start > $time)
 			{

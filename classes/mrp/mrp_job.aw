@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.15 2005/03/11 09:09:38 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.16 2005/03/13 20:21:13 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -13,6 +13,9 @@ EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 
 @default group=general
 @default table=objects
+	@property name type=text store=no
+	@caption Nimi
+
 	@property comment type=textarea
 	@caption Kommentaar
 
@@ -149,10 +152,29 @@ class mrp_job extends class_base
 	{
 		$prop =& $arr["prop"];
 		$retval = PROP_OK;
-		$this_object = $arr["obj_inst"];
+		$this_object =& $arr["obj_inst"];
 
 		switch($prop["name"])
 		{
+			case "name":
+				$project_id = $this_object->prop ("project");
+				$resource_id = $this_object->prop ("resource");
+
+				if (is_oid ($project_id) and is_oid ($resource_id))
+				{
+					$project = obj ($project_id);
+					$resource = obj ($resource_id);
+					$project_name = $project->name () ? $project->name () : "...";
+					$resource_name = $resource->name () ? $resource->name () : "...";
+				}
+				else
+				{
+					$project_name = $resource_name = "...";
+				}
+
+				$prop["value"] = $project_name . " - " . $resource_name;
+				break;
+
 			case "resource":
 				$resource = is_oid ($prop["value"]) ? obj ($prop["value"]) : false;
 				$prop["value"] = $resource ? $resource->name () : "Ressurss määramata";
@@ -204,7 +226,7 @@ class mrp_job extends class_base
 		}
 		else
 		{
-			$this_object = $arr["obj_inst"];
+			$this_object =& $arr["obj_inst"];
 			$connections = $this_object->connections_from(array ("type" => RELTYPE_MRP_PROJECT, "class_id" => CL_MRP_CASE));
 
 			foreach ($connections as $connection)
@@ -251,7 +273,7 @@ class mrp_job extends class_base
 	function create_job_toolbar ($arr = array())
 	{
 		$toolbar =& $arr["prop"]["toolbar"];
-		$this_object = $arr["obj_inst"];
+		$this_object =& $arr["obj_inst"];
 
 		if ($this_object->prop ("state") != MRP_STATUS_INPROGRESS)
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.29 2005/03/11 09:09:38 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.30 2005/03/13 20:21:13 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -174,7 +174,7 @@ default group=grp_case_material
 	@property resource_tree type=text store=no no_caption=1 parent=manager
 	@property workflow_table type=table store=no no_caption=1 parent=manager
 
-	@property set_plannable type=checkbox
+	@property set_plannable type=checkbox store=no ch_value=1
 	@caption Planeeri projekti
 
 
@@ -258,6 +258,7 @@ class mrp_case extends class_base
 	{
 		$prop =& $arr["prop"];
 		$retval = PROP_OK;
+		$this_object =& $arr["obj_inst"];
 
 		if ($arr["new"])
 		{
@@ -333,7 +334,27 @@ class mrp_case extends class_base
 				break;
 
 			case "set_plannable":
-				$prop["value"] = (empty ($prop["value"])) ? 0 : 1;
+				$state = $this_object->prop ("state");
+				$applicable_states = array (
+					MRP_STATUS_DELETED,
+					MRP_STATUS_DONE,
+				);
+
+				if (in_array ($state, $applicable_states))
+				{
+					$prop["value"] = 0;
+					$prop["disabled"] = true;
+				}
+				else
+				{
+					$applicable_states = array (
+						MRP_STATUS_PLANNED,
+						MRP_STATUS_INPROGRESS,
+						MRP_STATUS_LOCKED,
+						MRP_STATUS_OVERDUE,
+					);
+					$prop["value"] = (in_array ($state, $applicable_states)) ? 1 : 0;
+				}
 				break;
 
 			case "chart_navigation":
@@ -354,7 +375,7 @@ class mrp_case extends class_base
 
 	function set_property($arr = array())
 	{
-		$this_object = $arr["obj_inst"];
+		$this_object =& $arr["obj_inst"];
 		$prop =& $arr["prop"];
 		$retval = PROP_OK;
 
@@ -384,37 +405,37 @@ class mrp_case extends class_base
 				break;
 
 			case "set_plannable":
+				$state = $this_object->prop ("state");
+
 				if ($prop["value"] == 1)
 				{
-					$prop["value"] = $this_object->prop ("state");
-					$this_object->set_prop ("state", MRP_STATUS_PLANNED);
+					$applicable_states = array (
+						MRP_STATUS_ABORTED,
+						MRP_STATUS_NEW,
+						MRP_STATUS_INPROGRESS,
+						MRP_STATUS_LOCKED,
+						MRP_STATUS_OVERDUE,
+						MRP_STATUS_ONHOLD,
+					);
+
+					if (in_array ($state, $applicable_states))
+					{
+						$this_object->set_prop ("state", MRP_STATUS_PLANNED);
+					}
 				}
 				else
 				{
-					$prev_state = $this_object->prop ("set_plannable");
+					$applicable_states = array (
+						MRP_STATUS_INPROGRESS,
+						MRP_STATUS_LOCKED,
+						MRP_STATUS_OVERDUE,
+						MRP_STATUS_PLANNED,
+					);
 
-					switch ($prev_state)
+					if (in_array ($state, $applicable_states))
 					{
-						case MRP_STATUS_PLANNED:
-						case MRP_STATUS_NEW:
-						case MRP_STATUS_ABORTED:
-							$state = MRP_STATUS_ONHOLD;
-							break;
-
-						case MRP_STATUS_DONE:
-							$state = MRP_STATUS_DONE;
-							break;
-
-						case MRP_STATUS_DELETED:
-							$state = MRP_STATUS_DELETED;
-							break;
-
-						default:
-							$state = MRP_STATUS_ONHOLD;
-							break;
+						$this_object->set_prop ("state", MRP_STATUS_ONHOLD);
 					}
-
-					$this_object->set_prop ("state", $state);
 				}
 				break;
 		}
@@ -451,7 +472,7 @@ class mrp_case extends class_base
 
 	function callback_post_save ($arr)
 	{
-		$this_object = $arr["obj_inst"];
+		$this_object =& $arr["obj_inst"];
 
 		if ( ($arr["new"]) and (is_oid ($arr["request"]["mrp_workspace"])) )
 		{
@@ -746,7 +767,7 @@ class mrp_case extends class_base
 
 	function create_workflow_table ($arr)
 	{
-		$this_object = $arr["obj_inst"];
+		$this_object =& $arr["obj_inst"];
 
 		### init. table
 		$table =& $arr["prop"]["vcl_inst"];
@@ -861,7 +882,7 @@ class mrp_case extends class_base
 			$prerequisites = implode (",", $prerequisites_translated);
 
 			### get & process field values
-			$resource_name = $resource->name () ? $resource->name () : "-";
+			$resource_name = $resource->name () ? $resource->name () : "...";
 			$starttime = $job->prop ("starttime");
 			$planned_start = $starttime ? date (MRP_DATE_FORMAT, $starttime) : "Planeerimata";
 
@@ -926,7 +947,7 @@ class mrp_case extends class_base
 
 	function save_workflow_data ($arr)
 	{
-		$this_object = $arr["obj_inst"];
+		$this_object =& $arr["obj_inst"];
 		$orders = array ();
 		$errors = false;
 		$connections = $this_object->connections_from(array ("type" => RELTYPE_MRP_PROJECT_JOB, "class_id" => CL_MRP_JOB));
@@ -1255,6 +1276,7 @@ class mrp_case extends class_base
 		$job->set_prop ("pre_buffer", $pre_buffer);
 		$job->set_prop ("post_buffer", $post_buffer);
 		$job->set_prop ("resource", $resource_id);
+		$job->set_name ($this_object->name () . "-" . $resource->name ());
 		$job->save ();
 
 		if ($resource)
@@ -1289,7 +1311,8 @@ class mrp_case extends class_base
 			$ol = new object_list(array(
 				"oid" => array_keys($sel),
 			));
-			for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+
+			for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 			{
 				if ($this->can("delete", $o->id()))
 				{
@@ -1297,6 +1320,9 @@ class mrp_case extends class_base
 					$o->delete ();
 				}
 			}
+
+			$arr["oid"] = $arr["id"];
+			$this->order_jobs ($arr);
 		}
 
 		$return_url = $this->mk_my_orb("change", array(
@@ -1388,7 +1414,7 @@ class mrp_case extends class_base
 		$t->sort_by();
 	}
 
-	function on_new_case($arr)
+	function on_new_case ($arr)
 	{
 		$case_id = $arr["oid"];
 		$this->db_query("
@@ -1406,6 +1432,18 @@ class mrp_case extends class_base
 	function on_delete_case ($arr)
 	{
 		$project = obj ($arr["oid"]);
+		$project->set_prop ("state", MRP_STATUS_DELETED);
+		$project->save ();
+
+		### delete project's jobs
+		$connections = $project->connections_from (array ("type" => RELTYPE_MRP_PROJECT_JOB));
+
+		foreach ($connections as $connection)
+		{
+			$job = $connection->to ();
+			$job->delete ();
+		}
+
 		$applicable_states = array (
 			MRP_STATUS_PLANNED,
 			MRP_STATUS_INPROGRESS,
@@ -1415,25 +1453,12 @@ class mrp_case extends class_base
 
 		if (in_array ($project->prop ("state"), $applicable_states))
 		{
-			$workspace = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+			$workspace = $project->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
 
 			if ($workspace)
 			{
 				post_message (MSG_MRP_RESCHEDULING_NEEDED, array ("mrp_workspace" => $workspace->id ()));
 			}
-		}
-
-		$project->set_prop ("state", MRP_STATUS_DELETED);
-		$project->save ();
-
-		### delete project's jobs
-		$connections = $project->connections_from (array ("type" => RELTYPE_MRP_PROJECT_JOB, "class_id" => CL_MRP_JOB));
-
-		foreach ($connections as $connection)
-		{
-			$job = $connection->to ();
-			$connection->delete ();
-			$job->delete ();
 		}
 	}
 

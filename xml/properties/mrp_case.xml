@@ -437,6 +437,8 @@
             <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
+            <store>no</store>
+            <ch_value>1</ch_value>
             <caption>Planeeri projekti</caption>
       </property>
       <property>

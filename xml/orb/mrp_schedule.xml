@@ -1,6 +1,16 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="mrp_schedule" folder="mrp" extends="class_base">
+		<action name="get_unavailable_periods">
+			<function name="get_unavailable_periods">
+				<arguments>
+					<required name="mrp_resource" type="int" />
+					<required name="mrp_start" type="int" />
+					<required name="mrp_length" type="int" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="create">
 			<function name="create">
 				<arguments>
