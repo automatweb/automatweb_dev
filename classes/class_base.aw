@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.232 2004/03/04 11:14:19 duke Exp $
+// $Id: class_base.aw,v 2.233 2004/03/08 20:21:18 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -269,7 +269,7 @@ class class_base extends aw_template
 		}
 
 		// Now I need to deal with relation elements
-		$properties = $this->get_property_group($filter);
+		$properties = $this->get_property_group2($filter);
 
 		if ($this->classinfo(array("name" => "trans")) == 1 && $this->id)
 		{
@@ -339,12 +339,22 @@ class class_base extends aw_template
 			$gdata["submit"] = "no";
 		};
 
+		if ($args["no_rte"] == 1)
+		{
+                        $this->no_rte = 1;
+                };
+
 		// and, if we are in that other layout mode, then we should probably remap all
 		// the links in the toolbar .. augh, how the hell do I do that?
 		if (!empty($lm) && empty($args["cb_part"]))
 		{
 			$new_uri = aw_url_change_var(array("cb_part" => 1));
 			$cli = get_instance("cfg/" . $this->output_client,array("layout_mode" => "fixed_toolbar"));
+			if ($args["no_rte"] == 1)
+                        {
+                                $new_uri .= "&no_rte=1";
+                        };
+
 
 			$properties["iframe_container"] = array(
 				"type" => "iframe",
@@ -441,6 +451,11 @@ class class_base extends aw_template
 			"return_url" => !empty($this->request["return_url"]) ? urlencode($this->request["return_url"]) : "",
 			"subgroup" => $this->subgroup,
 		) + (isset($this->request["extraids"]) && is_array($this->request["extraids"]) ? array("extraids" => $this->request["extraids"]) : array());
+
+		if ($args["no_rte"])
+                {
+                        $argblock["no_rte"] = 1;
+                };
 
 		if (method_exists($this->inst,"callback_mod_reforb"))
 		{
@@ -547,6 +562,12 @@ class class_base extends aw_template
 			"alias_to" => $request["alias_to"],
 			"return_url" => $request["return_url"],
 		) + ( (isset($extraids) && is_array($extraids)) ? $extraids : array());
+
+		if ($form_data["no_rte"] == 1)
+		{
+                        $args["no_rte"] = 1;
+                };
+
 
 		if (!$save_ok)
 		{
@@ -1706,6 +1727,12 @@ class class_base extends aw_template
 		};
 
 
+		if ($this->no_rte)
+                {
+                        $has_rte = false;
+                };
+
+
 		$properties = $resprops;
 
 		$resprops = array();
@@ -1727,6 +1754,12 @@ class class_base extends aw_template
 			{
 				continue;
 			};
+
+                        if ($val["type"] == "textarea" && $has_rte == false)
+                        {
+                                unset($val["richtext"]);
+                        };
+
 				
 			if (isset($val["emb"]) && $val["emb"] == 1)
 			{
@@ -1886,7 +1919,8 @@ class class_base extends aw_template
 					};
 
 					// if we are using rte, then add RTE buttons to the toolbar
-					if (1 == $this->has_feature("has_rte"))
+					//if (1 == $this->has_feature("has_rte"))
+					if ($has_rte)
 					{
 						$rte = get_instance("vcl/rte");
 						$rte->get_rte_toolbar(array(
@@ -2921,6 +2955,11 @@ class class_base extends aw_template
 			$retval[$row["oid"]] = $row["name"];
 		};	
 		return $retval;
+	}
+
+	function get_property_group2($arr)
+	{
+		return $this->get_property_group($arr);
 	}
 
 	// needs either clid or clfile
