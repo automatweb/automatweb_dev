@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.100 2002/08/08 17:19:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.101 2002/08/08 17:35:19 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 lc_load("definition");
@@ -1485,13 +1485,18 @@ class messenger extends menuedit_light
 							"#kuupaev#" => $this->time2date(time(),2),
 				));
 				$this->awm->gen_mail();
+				print "Saadan aadressile $member[email]<br>";
 				//print ".";
 				flush();
 			}
-			/*print "<br>";
+			print "<br>";
 			print sizeof($alist) . " kirja saadetud<br>";
 			print "<a href='$baseurl/?class=messenger'>tagasi messengeri</a>";
-			exit;*///mis se on siis ?? lauri
+			exit;
+			//mis se on siis ?? lauri
+			// feedback kirjade saatmise kohta. Mõnikord tahetakse miskisse paarisaja
+			// liikmega listi kirja saata ja siis on hea, kui saatja näeb, et midagi
+			// toimub - selle asemel, et liivakella põrnitseda. -- duke
 		}
 		else
 		{
