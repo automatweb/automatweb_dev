@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/server_folder.aw,v 1.1 2004/02/19 15:59:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/server_folder.aw,v 1.2 2004/03/09 15:34:27 kristo Exp $
 // server_folder.aw - Serveri Kataloog 
 /*
 
@@ -148,11 +148,14 @@ class server_folder extends class_base
 			"msg" => "server_folder::change_file($fid): the fid parameter does not contain a valid object id!"
 		));
 		$o = obj($oid);
-		$fqfn = $o->prop("folder")."/".urldecode(basename($fname));
+		$old_fqfn = $o->prop("folder")."/".urldecode(basename($fname));
+		$new_fqfn = $o->prop("folder")."/".urldecode(basename($_FILES["chf_file"]["name"]));
 
 		if (is_uploaded_file($_FILES["chf_file"]["tmp_name"]))
 		{
-			move_uploaded_file($_FILES["chf_file"]["tmp_name"], $fqfn);
+			move_uploaded_file($_FILES["chf_file"]["tmp_name"], $new_fqfn);
+			@unlink($old_fqfn);
+			$fid = $oid.":".basename($_FILES["chf_file"]["name"]);
 		}
 
 		return $this->mk_my_orb("change_file", array("fid" => $fid, "section" => $section));
