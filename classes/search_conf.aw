@@ -236,12 +236,12 @@ class search_conf extends aw_template
 			{
 				if ($t_type == 1)	//	m6ni s6na
 				{
-					$q_cons2.="(".join(" OR ",$this->map("(title LIKE '%%%s%%')",explode(" ",$sstring_title))).")";
+					$q_cons2.="(".join(" OR ",map("(title LIKE '%%%s%%')",explode(" ",$sstring_title))).")";
 				}
 				else
 				if ($t_type == 2)	//	k6ik s6nad
 				{
-					$q_cons2.="(".join(" AND ",$this->map("(title LIKE '%%%s%%')",explode(" ",$sstring_title))).")";
+					$q_cons2.="(".join(" AND ",map("(title LIKE '%%%s%%')",explode(" ",$sstring_title))).")";
 				}
 				else
 				if ($t_type == 3)	//	fraas
@@ -267,18 +267,18 @@ class search_conf extends aw_template
 				if ($c_type == 1)	//	m6ni s6na
 				{
 					// dokude tabelist otsing
-					$q_cons2.="(".join(" OR ",$this->map("(content LIKE '%%%s%%' OR lead LIKE '%%%s%%')",explode(" ",$sstring))).")";
+					$q_cons2.="(".join(" OR ",map("(content LIKE '%%%s%%' OR lead LIKE '%%%s%%')",explode(" ",$sstring))).")";
 					// failide tabelist otsing
-					$q_fcons2="(".join(" OR ",$this->map("(content LIKE '%%%s%%')",explode(" ",$sstring))).")";
+					$q_fcons2="(".join(" OR ",map("(content LIKE '%%%s%%')",explode(" ",$sstring))).")";
 					// tabelite tabelist otsing
-					$q_tcons2="(".join(" OR ",$this->map("(contents LIKE '%%%s%%')",explode(" ",$sstring))).")";
+					$q_tcons2="(".join(" OR ",map("(contents LIKE '%%%s%%')",explode(" ",$sstring))).")";
 				}
 				else
 				if ($c_type == 2)	//	k6ik s6nad
 				{
-					$q_cons2.="(".join(" AND ",$this->map("(content LIKE '%%%s%%' OR lead LIKE '%%%s%%')",explode(" ",$sstring))).")";
-					$q_fcons2="(".join(" AND ",$this->map("(content LIKE '%%%s%%')",explode(" ",$sstring))).")";
-					$q_tcons2="(".join(" AND ",$this->map("(contents LIKE '%%%s%%')",explode(" ",$sstring))).")";
+					$q_cons2.="(".join(" AND ",map("(content LIKE '%%%s%%' OR lead LIKE '%%%s%%')",explode(" ",$sstring))).")";
+					$q_fcons2="(".join(" AND ",map("(content LIKE '%%%s%%')",explode(" ",$sstring))).")";
+					$q_tcons2="(".join(" AND ",map("(contents LIKE '%%%s%%')",explode(" ",$sstring))).")";
 				}
 				else
 				if ($c_type == 3)	//	fraas
@@ -303,7 +303,7 @@ class search_conf extends aw_template
 
 			if ($sel_keys)
 			{
-				$q_cons2.="(".join(" OR ",$this->map("documents.keywords LIKE '%%%s%%'",$keys)).")";
+				$q_cons2.="(".join(" OR ",map("documents.keywords LIKE '%%%s%%'",$keys)).")";
 			}
 
 			// search from files and tables here. ugh. ugly. yeah. I know.
@@ -542,7 +542,7 @@ class search_conf extends aw_template
 		if ($sel_keys)
 		{
 			$l.=LC_SEARCH_CONF_WITH_KEYWORD;
-			$l.=join(",",$this->map("%s",$keys));
+			$l.=join(",",map("%s",$keys));
 		}
 		$this->_log("search",sprintf(LC_SEARCH_CONF_LOOK_ANSWER,$sel_parent,$l,$cnt));
 	}
@@ -933,7 +933,7 @@ class search_conf extends aw_template
 
 		if ($t_type == 2)	//	k6ik s6nad
 		{
-			$q_cons.=" (".join(" AND ",$this->map("(content LIKE '%%%s%%')",explode(" ",$str))).")";
+			$q_cons.=" (".join(" AND ",map("(content LIKE '%%%s%%')",explode(" ",$str))).")";
 		}
 		else
 		if ($t_type == 3)	//	fraas
@@ -942,7 +942,7 @@ class search_conf extends aw_template
 		}
 		else
 		{
-			$q_cons.=" (".join(" OR ",$this->map("(content LIKE '%%%s%%')",explode(" ",$str))).")";
+			$q_cons.=" (".join(" OR ",map("(content LIKE '%%%s%%')",explode(" ",$str))).")";
 		}
 
 		$q_cons .= " AND lang_id = '".aw_global_get("lang_id")."'";

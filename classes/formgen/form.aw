@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.8 2002/12/02 11:18:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.9 2002/12/03 12:39:41 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -472,7 +472,7 @@ class form extends form_base
 			}
 		}
 
-		if (join(",",$this->map("%s",$old_namels)) != join(",",$this->map("%s",$this->arr["name_els"])))
+		if (join(",",map("%s",$old_namels)) != join(",",map("%s",$this->arr["name_els"])))
 		{
 			// now go through all entries and rename them
 			$this->db_query("SELECT oid FROM objects LEFT JOIN form_entries ON form_entries.id = objects.oid WHERE class_id = ".CL_FORM_ENTRY." AND form_entries.form_id = ".$this->id." AND status != 0");

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.9 2002/11/07 10:52:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.10 2002/12/03 12:39:39 kristo Exp $
 // object_chain.aw - Objektipärjad
 
 class object_chain extends aw_template
@@ -184,7 +184,7 @@ class object_chain extends aw_template
 			}
 			
 			$s_names = explode("&&", $s_name);
-			$sst = join(" OR ", $this->map("name LIKE '%%%s%%'", $s_names));
+			$sst = join(" OR ", map("name LIKE '%%%s%%'", $s_names));
 			if ($sst != "")
 			{
 				$sst = "(".$sst.") AND";
@@ -202,7 +202,7 @@ class object_chain extends aw_template
 		}
 
 		$qar = array();
-		$str = join(",",$this->map("%s",$toar));
+		$str = join(",",map("%s",$toar));
 		if ($str != "")
 		{
 			$q = "SELECT oid,name,parent,class_id FROM objects WHERE oid IN($str)";

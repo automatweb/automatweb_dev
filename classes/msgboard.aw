@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.28 2002/12/02 12:19:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.29 2002/12/03 12:39:39 kristo Exp $
 define(PER_PAGE,10);
 define(PER_FLAT_PAGE,20);
 define(TOPICS_PER_PAGE,7);
@@ -235,7 +235,7 @@ class msgboard extends aw_template
 
 			if ($comment == "")
 			{
-				$comment = join("\r\n",$this->map("> %s",explode("\r\n",wordwrap($row["comment"],33,"\r\n",1))));
+				$comment = join("\r\n",map("> %s",explode("\r\n",wordwrap($row["comment"],33,"\r\n",1))));
 			}
 		}
 
@@ -866,7 +866,7 @@ class msgboard extends aw_template
 			}
 		}
 
-		$topicss = join(",",$this->map("'%s'",$topics));
+		$topicss = join(",",map("'%s'",$topics));
 		if ($topicss != "")
 		{
 			// teeme kommentaaridest suure array, mida kasutame puu n2itamisel
@@ -1187,7 +1187,7 @@ class msgboard extends aw_template
 		setcookie("aw_mb_last",serialize($this->aw_mb_last),time()+24*3600*1000);
 
 		$subj = strpos($subj,"Re:")===false ? "Re: ".$subj : $subj;
-		$comment = join("\r\n",$this->map("> %s",explode("\r\n",wordwrap($comment,33,"\r\n",1))));
+		$comment = join("\r\n",map("> %s",explode("\r\n",wordwrap($comment,33,"\r\n",1))));
 
 		
 		$l = (isset($votes[$row["oid"]])) ? $this->parse("ALREADY_VOTED") : $this->parse("VOTE_FOR_TOPIC");

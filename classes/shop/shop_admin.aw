@@ -453,7 +453,7 @@ class shop_admin extends shop_base
 			else
 			if (is_array($arts))
 			{
-				$items = $this->get_item_picker(array("type" => ALL_PROPS, "constraint" => " AND id IN (".join(",",$this->map("%d",$a_items)).")"));
+				$items = $this->get_item_picker(array("type" => ALL_PROPS, "constraint" => " AND id IN (".join(",",map("%d",$a_items)).")"));
 				$by_type = false;
 			}
 			
@@ -563,7 +563,7 @@ class shop_admin extends shop_base
 			else
 			if (is_array($arts))
 			{
-				$items = $this->get_item_picker(array("type" => ALL_PROPS, "constraint" => " AND id IN (".join(",",$this->map("%d",$a_items)).")"));
+				$items = $this->get_item_picker(array("type" => ALL_PROPS, "constraint" => " AND id IN (".join(",",map("%d",$a_items)).")"));
 			}
 			else
 			if ($all_art_types)
@@ -573,7 +573,7 @@ class shop_admin extends shop_base
 			else
 			if (is_array($art_types))
 			{
-				$items = $this->get_item_picker(array("type" => ALL_PROPS, "constraint" => " AND type_id IN (".join(",",$this->map("%d",$a_types)).")"));
+				$items = $this->get_item_picker(array("type" => ALL_PROPS, "constraint" => " AND type_id IN (".join(",",map("%d",$a_types)).")"));
 			}
 
 			// k6igepealt leiame tellimuste id'd mille kohta n2idata tuleb ja siis alles teeme seda

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.131 2002/12/02 12:19:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.132 2002/12/03 12:39:39 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -2748,14 +2748,14 @@ class document extends aw_template
 			// search all words
 			$wds = explode(" ",$str);
 			$docmatcha = array();
-			$docmatcha[] = join(" AND ",$this->map("documents.title LIKE '%%%s%%'",$wds));
-			$docmatcha[] = join(" AND ",$this->map("documents.content LIKE '%%%s%%'",$wds));
-			$docmatcha[] = join(" AND ",$this->map("documents.author LIKE '%%%s%%'",$wds));
+			$docmatcha[] = join(" AND ",map("documents.title LIKE '%%%s%%'",$wds));
+			$docmatcha[] = join(" AND ",map("documents.content LIKE '%%%s%%'",$wds));
+			$docmatcha[] = join(" AND ",map("documents.author LIKE '%%%s%%'",$wds));
 			if ($this->cfg["use_dcache"])
 			{
-				$docmatcha[] = join(" AND ",$this->map("documents.dcache LIKE '%%%s%%'",$wds));
+				$docmatcha[] = join(" AND ",map("documents.dcache LIKE '%%%s%%'",$wds));
 			};
-			$docmatch = join(" OR ", $this->map("(%s)",$docmatcha));
+			$docmatch = join(" OR ", map("(%s)",$docmatcha));
 		}
 		$q = "SELECT documents.*,objects.parent as parent, objects.modified as modified, objects.parent as parent 
 										 FROM documents 

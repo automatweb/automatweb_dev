@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.42 2002/11/24 14:26:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.43 2002/12/03 12:39:40 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -366,7 +366,7 @@ class users_user extends aw_template
 		extract($args);
 		if (is_array($type))
 		{
-			$w_type = join(" OR ",$this->map("type = '%d'",$type));
+			$w_type = join(" OR ",map("type = '%d'",$type));
 		}
 		else
 		{

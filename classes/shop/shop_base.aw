@@ -335,7 +335,7 @@ class shop_base extends aw_template
 
 		if (is_array($item_ids))
 		{
-			$cons = " AND oid IN (".join(",",$this->map("%d",$item_ids)).")";
+			$cons = " AND oid IN (".join(",",map("%d",$item_ids)).")";
 			$items = $this->listall_items(ALL_PROPS,$cons);
 		}
 		else

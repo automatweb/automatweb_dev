@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.65 2002/12/03 11:18:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.66 2002/12/03 12:39:39 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -141,15 +141,49 @@ if (!defined("DEFS"))
 	}
 
 	////
+	// !kontrollime, kas parameeter on kuupäev (kujul pp-kk-aaaa)
+	function is_date($param)
+	{
+		$valid = preg_match("/^(\d{1,2}?)-(\d{1,2}?)-(\d{4}?)$/",$param,$parts);
+		// päevade arv < 0 ?
+		if ($parts[1] < 0)
+		{
+			$valid = false;
+		}
+		// päevi rohkem, kui selles kuus?
+		else
+		if ($parts[1] > date("t",mktime(0,0,0,$parts[2],1,$parts[3])) )
+		{
+			$valid = false;
+		}
+		else
+		if ( ($parts[2] < 1) || ($parts[2] > 12) )
+		{
+			$valid = false;
+		} 
+		return $valid;
+	};
+
+	////
+	// !Kas argument on e-maili aadress?
+	// Courtesy of martin@linuxator.com ;)
+	function is_email ($address = "") 
+	{
+		return preg_match('/([a-z0-9]((\.|_)?[a-z0-9]+)+@([a-z0-9]+(\.|-)?)+[a-z0-9]\.[a-z]{2,})/i',$address);
+	}
+
+	function is_admin()
+	{
+		return (stristr(aw_global_get("REQUEST_URI"),"/automatweb")!=false);
+	}
+
+	////
 	// !Genereerib md5 hashi kas parameetrist voi suvalisest arvust.
 	function gen_uniq_id($param = "")
 	{
-		// genereerib md5 checksumi kas siis parameetrist voi 
-		// juhuslikust arvust
 		// md5sum on alati 32 märki pikk
 		$src = (strlen($param) > 0) ? $param : uniqid(rand());
-		$result = md5($src);
-		return $result;
+		return md5($src);
 	};
 
 	////
@@ -173,55 +207,6 @@ if (!defined("DEFS"))
 	function disabled($arg)
 	{
 		return ($arg) ? "DISABLED" : "";
-	}
-
-	////
-	// !kontrollime, kas parameeter on kuupäev (kujul pp-kk-aaaa)
-	function is_date($param)
-	{
-		$valid = preg_match("/^(\d{1,2}?)-(\d{1,2}?)-(\d{4}?)$/",$param,$parts);
-		// päevade arv < 0 ?
-		if ($parts[1] < 0)
-		{
-			$valid = false;
-		}
-		// päevi rohkem, kui selles kuus?
-		elseif ($parts[1] > date("t",mktime(0,0,0,$parts[2],1,$parts[3])) )
-		{
-			$valid = false;
-		}
-		elseif ( ($parts[2] < 1) || ($parts[2] > 12) )
-		{
-			$valid = false;
-		} 
-		//elseif ( ($parts[3] < 2000) || ($parts[3] > 2001) )
-		//{
-		//	$valid = false;
-		//};
-		return $valid;
-	};
-
-	////
-	// !Genereerib XML headeri
-	function gen_xml_header($version = "1.0") 
-	{
-			return "<" . "?xml version='$version'?" . ">\n";
-	};
-
-	////
-	// !Genereerib XML tagi
-	function gen_xml_tag($name,$data) 
-	{
-		if (is_array($data)) 
-		{
-			$params = join(" ",map2(" %s='%s'",$data));
-		}
-		else 
-		{
-			$params = "";
-		};
-		$retval = sprintf("<%s%s/>\n",$name,$params);
-		return $retval;
 	}
 
 	// järgmine funktsioon on inspireeritud perlist ;)
@@ -327,19 +312,6 @@ if (!defined("DEFS"))
 			$ip = aw_global_get("REMOTE_ADDR");
 		}
 		return $ip;
-	}
-
-	////
-	// !Kas argument on e-maili aadress?
-	// Courtesy of martin@linuxator.com ;)
-	function is_email ($address = "") 
-	{
-		return preg_match('/([a-z0-9]((\.|_)?[a-z0-9]+)+@([a-z0-9]+(\.|-)?)+[a-z0-9]\.[a-z]{2,})/i',$address);
-	}
-
-	function is_admin()
-	{
-		return (stristr(aw_global_get("REQUEST_URI"),"/automatweb")!=false);
 	}
 
 	// debuukimisel on see funktsioon abiks

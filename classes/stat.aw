@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/stat.aw,v 2.10 2002/11/07 10:52:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/stat.aw,v 2.11 2002/12/03 12:39:40 kristo Exp $
 // stat.aw - generating statictis from the syslog
 // klass, mille abil saab genereerida statistikat syslog tabelist
 class db_stat extends aw_template
@@ -153,7 +153,7 @@ class db_stat extends aw_template
 		$this->types = array();
 		if (is_array($syslog_types))
 		{
-			$this->selector = "WHERE syslog.type IN (".join(",",$this->map("'%s'",$syslog_types)).")";
+			$this->selector = "WHERE syslog.type IN (".join(",",map("'%s'",$syslog_types)).")";
 			reset($syslog_types);
 			while(list(,$v) = each($syslog_types))
 			{
@@ -478,7 +478,7 @@ class db_stat extends aw_template
 	{
 		// blokitud ipd tshekime ka v2lja
 		$blocked_ips = unserialize($this->get_cval("blockedip"));
-		$bips = join(",",$this->map("'%s'",$blocked_ips));
+		$bips = join(",",map("'%s'",$blocked_ips));
 		if ($bips != "")
 		{
 			$bip = " AND ( ip NOT IN ($bips) ) ";

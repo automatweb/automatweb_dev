@@ -271,7 +271,7 @@ class form_db_base extends aw_template
 		else
 		{
 			// here we must insert a new row in the correct table
-			$q = "INSERT INTO $tbl (".join(",",$colnames).") VALUES(".join(",",$this->map("'%s'",$elvalues)).")";
+			$q = "INSERT INTO $tbl (".join(",",$colnames).") VALUES(".join(",",map("'%s'",$elvalues)).")";
 		}
 		$this->db_query($q);
 

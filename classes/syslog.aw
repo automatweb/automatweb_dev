@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.20 2002/12/03 11:19:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.21 2002/12/03 12:39:40 kristo Exp $
 // syslog.aw - syslog management
 // syslogi vaatamine ja analüüs
 class db_syslog extends aw_template
@@ -71,7 +71,7 @@ class db_syslog extends aw_template
 		{
 			if (count($syslog_types) > 1)	// dummy on alati olemas, j2relikult kui midagi tshekitud veel on, siis on 2
 			{
-				$ss = "WHERE syslog.type IN (".join(",",$this->map("'%s'",$syslog_types)).")";
+				$ss = "WHERE syslog.type IN (".join(",",map("'%s'",$syslog_types)).")";
 				reset($syslog_types);
 				while(list(,$v) = each($syslog_types))
 				{

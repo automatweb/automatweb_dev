@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.17 2002/11/12 10:47:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.18 2002/12/03 12:39:39 kristo Exp $
 // root.aw - the root class
 // this contains all the supplementary functions
 
@@ -106,17 +106,6 @@ class root
 		$tmp = $this->stacks[$stack];
 		$this->stacks[$stack] = array();
 		return $tmp;
-	}
-
-
-
-	////
-	// !Right now this is only a wrapper for the function with
-	// the same name in defs.aw. This should probably be removed
-	// at a later time
-	function map($format,$array)
-	{
-		return map($format,$array);
 	}
 
 	////

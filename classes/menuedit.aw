@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.180 2002/12/03 11:18:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.181 2002/12/03 12:39:39 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -5253,7 +5253,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		{
 			array_unique($ar);
 			$this->save_handle();
-			$this->db_query("SELECT parent FROM objects WHERE oid IN(".join(",",$this->map("%s", $ar)).")");
+			$this->db_query("SELECT parent FROM objects WHERE oid IN(".join(",",map("%s", $ar)).")");
 			$str = "";
 //			foreach($ar as $oid)
 			while ($row = $this->db_next())
