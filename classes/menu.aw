@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.112 2004/11/15 17:44:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.113 2004/11/17 09:55:55 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -917,12 +917,16 @@ class menu extends class_base
 			case "alias":
 				if ($data["value"] != "")
 				{
-					$ol = new object_list(array(
+					$filt = array(
 						"parent" => $arr["obj_inst"]->parent(),
 						"class_id" => CL_MENU,
 						"alias" => $data["value"],
-						"oid" => new obj_predicate_not($arr["obj_inst"]->id())
-					));
+					);
+					if (is_oid($arr["obj_inst"]->id()))
+					{
+						$filt["oid"] = new obj_predicate_not($arr["obj_inst"]->id());
+					}
+					$ol = new object_list($filt);
 					if (count($ol->ids()))
 					{
 						$data["error"] = "Selline alias on juba olemas!";
