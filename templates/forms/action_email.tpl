@@ -5,6 +5,24 @@
 <td class="fform"><input type='text' NAME='email' VALUE='{VAR:email}'></td>
 </tr>
 <tr>
+<td class="fcaption">Kirja subjekt:</td>
+<td class="fform">
+<table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
+<tr>
+<!-- SUB: T_LANG -->
+<td class="fform">{VAR:lang_name}</td>
+<!-- END SUB: T_LANG -->
+</tr>
+<tr>
+<!-- SUB: LANG -->
+<td class="fform"><input class='small_button' type='text' NAME='subj[{VAR:lang_id}]' VALUE='{VAR:subj}'></td>
+<!-- END SUB: LANG -->
+</tr>
+</table>
+
+</td>
+</tr>
+<tr>
 <td class="fcaption">{VAR:LC_FORMS_OUTPUT_STYLE}:</td>
 <td class="fform"><select name='op_id'>{VAR:ops}</select></td>
 </tr>
