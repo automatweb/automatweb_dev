@@ -1,5 +1,5 @@
 <?php
-
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.7 2005/03/31 05:54:46 duke Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -142,6 +142,19 @@ class pot_scanner extends core
 		{
 			echo "scanned file $file_from \n";
 			$fp = fopen($file_to, "w");
+			// add special POT header
+			fwrite($fp, "msgid \"\"\n");
+			fwrite($fp, "msgstr \"\"\n");
+			fwrite($fp, "\"Project-Id-Version: Automatweb 2.0\\n\"\n");
+			fwrite($fp, "\"POT-Creation-Date: " . date("r") . "\\n\"\n");
+			fwrite($fp, "\"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\\n\"\n");
+			fwrite($fp, "\"Last-Translator: FULL NAME <EMAIL@ADDRESS>\\n\"\n");
+			fwrite($fp, "\"MIME-Version: 1.0\\n\"\n");
+			fwrite($fp, "\"Content-Type: text/plain; charset=ISO-8859-1\\n\"\n");
+			fwrite($fp, "\"Content-Transfer-Encoding: 8bit\\n\"\n");
+			fwrite($fp, "\"Generated-By: AutomatWeb POT Scanner\\n\"\n");
+			fwrite($fp, "\n\n");
+
 			foreach($strings as $string)
 			{
 				fwrite($fp, "#: ".str_replace(aw_ini_get("basedir")."/","", $file_from).":".$string["line"]."\n");
