@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.13 2001/05/31 21:26:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.14 2001/06/05 16:22:42 duke Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -54,6 +54,30 @@ $orb_defs["form"] = "xml";
 				$this->flist = array();
 				$this->id = $arg;
 			};
+		}
+
+		////
+		// !Alias parser
+		function parse_alias($args = array())
+		{
+			extract($args);
+			if (!is_array($this->formaliases))
+			{
+				$this->formaliases = $this->get_aliases(array(
+									"oid" => $oid,
+									"type" => array(CL_FORM,CL_FORM_ENTRY),
+								));
+			};
+			$f = $this->formaliases[$matches[3] - 1];
+			if ($f["class_id"] == CL_FORM_ENTRY) {
+				$al_type = unserialize($f["data"]);
+				$this->use_form($al_type["form_id"]);
+				$replacement = $this->show(array("id" => $al_type["form_id"], "entry_id" => $f["target"], "op_id" => $al_type["output"]));
+			} else {
+				$this->use_form($f["target"]);
+				$replacement = $this->gen_preview(array("id" => $f["target"], "form_action" => "/reforb.".$GLOBALS["ext"]));
+			};
+			return $replacement;
 		}
 			
 
