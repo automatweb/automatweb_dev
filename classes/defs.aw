@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.110 2003/11/05 13:44:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.111 2003/11/08 05:55:24 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -547,6 +547,8 @@ if (!defined("DEFS"))
 		}
 
 
+
+
 		// SESSION vars - these cannot be modified by the user except through aw, so they are relatively trustworthy
 		if (is_array($GLOBALS["HTTP_SESSION_VARS"]))
 		{
@@ -563,11 +565,18 @@ if (!defined("DEFS"))
 		{
 			aw_global_set($var,$GLOBALS["HTTP_SERVER_VARS"][$var]);
 		}
+		
 
 		if (isset($GLOBALS["HTTP_COOKIE_VARS"]["lang_id"]))
 		{
 			aw_global_set("lang_id", $GLOBALS["HTTP_COOKIE_VARS"]["lang_id"]);
 		}
+
+		if (isset($_REQUEST))
+		{
+			aw_global_set("request",$_REQUEST);
+		};
+
 		$GLOBALS["__aw_globals_inited"] = true;
 	}
 
