@@ -1,10 +1,13 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.98 2004/06/15 12:06:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.99 2004/06/17 13:47:40 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
 	@default group=general
 	@default table=objects
+
+	@property ord table=objects field=jrk type=text size=5
+	@caption J&auml;rjekord
 
 	@property file type=fileupload table=images form=+emb
 	@caption Pilt
@@ -797,14 +800,7 @@ class image extends class_base
 			"content" => $str
 		));
 
-		if (!$id)
-		{
-			$this->db_query("INSERT INTO images(id,file) VALUES($oid,'$fl')");
-		}
-		else
-		{
-			$this->db_query("UPDATE images SET file = '$fl' WHERE id = '$oid'");
-		}
+		$this->db_query("UPDATE images SET file = '$fl' WHERE id = '$oid'");
 		$sz = getimagesize($fl);
 		return array("id" => $oid,"url" => $this->get_url($fl), "sz" => $sz);
 	}

@@ -1,6 +1,15 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>ord</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>textbox</type>
+            <size>3</size>
+            <field>jrk</field>
+            <caption>J&amp;auml;rjekord</caption>
+      </property>
+      <property>
             <name>file</name>
             <group>general</group>
             <table>images</table>
@@ -128,15 +137,6 @@
             <method>serialize</method>
             <value>Muuda</value>
             <store>no</store>
-      </property>
-      <property>
-            <name>ord</name>
-            <group>general</group>
-            <table>objects</table>
-            <type>textbox</type>
-            <size>3</size>
-            <field>jrk</field>
-            <caption>J&amp;auml;rjekord</caption>
       </property>
       <property>
             <name>resize_warn</name>
