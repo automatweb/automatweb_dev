@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.56 2001/06/07 19:17:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.57 2001/06/08 03:52:50 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -15,6 +15,9 @@ define('MSG_EXTERNAL',2);
 // teadete staatused
 define('MSG_STATUS_UNREAD',0);
 define('MSG_STATUS_READ',1);
+
+// kontaktide vormid
+define('CONTACT_FORM',2007);
 
 // siit algab messengeri põhiklass
 class messenger extends menuedit_light 
@@ -206,10 +209,11 @@ class messenger extends menuedit_light
 		$menudef = $this->get_file(array(
 					"file" => $basedir . "/xml/messenger/menucode.xml",
 				));
-		if (is_array($vars))
+		if (!is_array($vars))
 		{
-			$menudef = $this->localparse($menudef,$args["vars"]);
+			$vars = array("folder" => "");
 		};
+		$menudef = $this->localparse($menudef,$args["vars"]);
 		classload("xml");
 		$xml = new xml();
 		$this->menudefs = $xml->xml_unserialize(array(
@@ -296,8 +300,8 @@ class messenger extends menuedit_light
 			$glist .= $this->parse("gline");
 		};
 		classload("form");
-		$f = new form(2007);
-		$f->load(2007);
+		$f = new form(CONTACT_FORM);
+		$f->load(CONTACT_FORM);
 		$ids = $f->get_ids_by_name(array("names" => array("name","surname","email","phone")));
 		$f->get_entries(array("parent" => $folder));
 		$c = "";
@@ -331,10 +335,11 @@ class messenger extends menuedit_light
 				"activelist" => ($args["id"]) ? array("contacts") : array("contacts","newcontact"),
 			));
 		classload("form");
-		$f = new form(2007);
-		global $ext;
+		$f = new form(CONTACT_FORM);
+		global $ext,$udata;
+		$folder = ($folder) ? $folder : $udata["home_folder"];
 		$form = $f->gen_preview(array(
-						"id" => 2007,
+						"id" => CONTACT_FORM,
 						"entry_id" => ($args["id"]) ? $args["id"] : "",
 						"reforb" => $this->mk_reforb("submit_contact",array("folder" => $folder)),
 						"form_action" => "/index.$ext",
@@ -353,9 +358,9 @@ class messenger extends menuedit_light
 	{
 		extract($args);
 		classload("form");
-		$f = new form(2007);
+		$f = new form(CONTACT_FORM);
 		// save the form entry, and now .. should we show it?
-		$args["id"] = 2007;
+		$args["id"] = CONTACT_FORM;
 		$args["parent"] = $folder;
 		$f->process_entry($args);
 		global $status_msg;
@@ -426,6 +431,181 @@ class messenger extends menuedit_light
 					"action" => "edit_contact_group",
 					"id" => $id,
 		));
+	}
+
+	////
+	// !Kuvab kontakti otsimise vormi
+	function search_contact($args = array())
+	{
+		extract($args);
+		$menu = $this->gen_msg_menu(array(
+				"activelist" => array("contacts","search"),
+			));
+		$this->read_template("search_contact.tpl");
+		classload("form");
+		$f = new form(2024);
+		global $ext;
+		$form = $f->gen_preview(array(
+						"id" => 2024,
+						"reforb" => $this->mk_reforb("submit_search_contact",array()),
+						"form_action" => "/index.$ext",
+					));
+		$this->vars(array(
+				"menu" => $menu,
+				"form" => $form,
+		));
+		return $this->parse();
+	}
+
+	////
+	// !Performs the actual search
+	function submit_search_contact($args = array())
+	{
+		$menu = $this->gen_msg_menu(array(
+				"activelist" => array("contacts","search"),
+			));
+		$this->read_template("search_contact_res.tpl");
+		// FIXME:
+		classload("form");
+		$f = new form(2024);
+		// vaja kuvada otsitulemused. kuidas?
+		$this->vars(array(
+				"menu" => $menu,
+				"form" => "Tulemused",
+		));
+		return $this->parse();
+	}
+
+	function _get_groups_by_level($parent)
+	{
+		$groups = array();
+		$this->get_objects_by_class(array(
+					"parent" => $parent,
+					"class" => CL_CONTACT_GROUP
+		));
+
+		while($row = $this->db_next())
+		{
+			$groups[$row["oid"]] = array("name" => $row["name"],"parent" => $row["parent"]);
+		};
+		return $groups;
+	}
+
+	function _indent_array($arr,$level)
+	{
+		while(list($key,$val) = each($arr[$level]))
+		{
+			$this->flatlist[$key] = str_repeat("&nbsp;",$this->indentlevel*3) . $val;
+			if (is_array($arr[$key]))
+			{
+				$this->indentlevel++;
+				$this->_indent_array($arr,$key);
+				$this->identlevel--;
+			};
+		};
+	}
+
+	function pick_contacts($args = array())
+	{
+		$this->read_template("pick_contacts.tpl");
+
+		// siia paneme koikide gruppide flat listi
+		$grps = array();
+
+		// ja siia parenti jargi grupeerituna
+		$grps_by_parent = array();
+		
+		// Koostame nimekirja koigist selle kasutaja kontaktigruppidest
+		global $udata;
+		$fldr = $udata["home_folder"];
+
+		do
+		{
+			// kysime koik sellel levelil asuvad objektid
+			$groups = $this->_get_groups_by_level($fldr);
+
+			// sorteerime nad parentite jargi ära
+			// ja paigutame ka flat massiivi
+			foreach($groups as $key => $val)
+			{
+				$grps_by_parent[$val["parent"]][$key] = $val["name"];
+				$grps[$key] = $val["name"];
+			};
+		
+			// koostame parentite nimekirja jargmise tsykli jaoks
+			$fldr = array_keys($groups);
+	
+		// kordame nii kaua, kuni yhtegi objekti enam ei leitud
+		} while(sizeof($groups) > 0);
+		
+		// nyyd on dropdowni jaoks vaja koostada idenditud nimekiri koigist objektidest
+		$this->flatlist = array($udata["home_folder"] => "sorteerimata");
+		$this->indentlevel = 0;
+		$this->_indent_array($grps_by_parent,$udata["home_folder"]);
+		
+		// koostame nimekirja koigist selle formi entritest
+		classload("form");
+		$f = new form(CONTACT_FORM);
+		$f->load(CONTACT_FORM);
+		$ids = $f->get_ids_by_name(array("names" => array("name","surname","email","phone")));
+		
+		// see on selleks, et get_entries arvestaks ka neid kontakte, mis kodukataloogi
+		// on salvestatud
+		$grps[$udata["home_folder"]] = 1;
+	
+		$f->get_entries(array("parent" => array_keys($grps)));
+
+		// siia salvestame koik entryd parentite kaupa grupeerituna
+		$entries_by_parent = array();
+
+		while($row = $f->db_next())
+		{
+			$name = sprintf("%s %s <%s>",$row[$ids["name"]],$row[$ids["surname"]],$row[$ids["email"]]);
+			$entries[$row["oid"]] = $name;
+			$entries_by_parent[$row["parent"]][] = $name;
+		};
+		
+		$cnt = 1;
+		$g = "";
+		$gl = "";
+	
+		foreach($grps as $oid => $name)
+		{
+			$this->vars(array(
+					"oid" => $oid,
+				));
+			if (is_array($entries_by_parent[$oid]))
+			{
+				foreach($entries_by_parent[$oid] as $key => $gname)
+				{
+					$this->vars(array(
+							"id" => $key,
+							"name" => $gname,
+						));
+					$gl .= $this->parse("gline");
+				};
+			};
+			$this->vars(array("gline" => $gl));
+			$gl = "";
+			$g .= $this->parse("group");
+		};
+		/*
+		while($row = $this->db_next())
+		{
+			$groups[$row["oid"]] = $row["name"];
+			$this->vars(array(
+					"oid" => $row["oid"],
+					"name" => $row["name"],
+			 	));
+			$g .= $this->parse("group");
+		};
+		*/
+		$this->vars(array(
+				"groups" => $this->picker(-1,$this->flatlist),
+				"group" => $g,
+				"hf" => $udata["home_folder"],
+			));
+		print $this->parse();
 	}
 
 	////
