@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.26 2002/02/13 00:06:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.27 2002/02/13 00:11:32 duke Exp $
 
 global $orb_defs;
 $orb_defs["aliasmgr"] = "xml";
@@ -1010,7 +1010,8 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		$this->_init_aliases();
 		// we get all aliases for that object. alltho we really should only
 		// get the ones which we actually need. But how?
-		$q = "SELECT aliases.*, objects.class_id AS class_id
+		$q = "SELECT aliases.*, objects.class_id AS class_id,
+			objects.name AS name
 			FROM aliases
 			LEFT JOIN objects ON (aliases.target = objects.oid)
 			WHERE source = '$oid' ORDER BY aliases.id";
