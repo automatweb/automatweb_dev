@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.9 2002/10/20 18:59:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.10 2002/10/30 11:02:47 kristo Exp $
 // search.aw - Search Manager
 class search extends aw_template
 {
@@ -243,6 +243,27 @@ class search extends aw_template
 						};
 						break;
 
+					case "lang_id":
+						if ($val)
+						{
+							$parts["lang_id"] = " lang_id = '$val' ";
+						};
+						break;
+
+					case "period":
+						if ($val)
+						{
+							$parts["period"] = " period = '$val' ";
+						};
+						break;
+
+					case "site_id":
+						if ($val)
+						{
+							$parts["site_id"] = " site_id = '$val' ";
+						};
+						break;
+
 					default:
 				};
 					
@@ -271,9 +292,9 @@ class search extends aw_template
 				{
 					$where = join(" AND ",$parts);
 					$q = "SELECT * FROM objects WHERE $where";
+//					echo "s_q = $q <br>";
 					$_tmp = array();
 					$_tmp = $this->_search_mk_call("objects", "db_query", array("sql" => $q), $args);
-//					echo "db_rows = <pre>", var_dump($_tmp),"</pre> <br>";
 					if (is_array($_tmp))
 					{
 						$this->db_rows = $_tmp;
@@ -644,6 +665,43 @@ class search extends aw_template
 			);
 		};
 		
+		if (!$fields["lang_id"])
+		{
+			$lg = get_instance("languages");
+			$fields["lang_id"] = array(
+				"type" => "select",
+				"caption" => "Keel",
+				"options" => $lg->get_list(array("addempty" => true)),
+				"selected" => $args["s"]["lang_id"],
+			);
+		};
+		
+		if (!$fields["period"])
+		{
+			$lg = get_instance("periods");
+			$fields["period"] = array(
+				"type" => "select",
+				"caption" => "Periood",
+				"options" => $lg->period_list(aw_global_get("act_per_id"), true),
+				"selected" => $args["s"]["period"],
+			);
+		};
+
+		if (!$fields["site_id"])
+		{
+			$dat = $this->_search_mk_call("objects","db_query", array("sql" => "SELECT distinct(site_id) as site_id FROM objects"), $args);
+			$sites = array("0" => "");
+			foreach($dat as $row)
+			{
+				$sites[$row["site_id"]] = $row["site_id"];
+			}
+			$fields["site_id"] = array(
+				"type" => "select",
+				"caption" => "Saidi ID",
+				"options" => $sites,
+				"selected" => $args["s"]["site_id"],
+			);
+		};
 	}
 
 	// generates contents for the class picker drop-down menu
