@@ -328,7 +328,20 @@ class _int_object
 			));
 		}
 
-		return $this->_int_path();
+		if ($param !== NULL && !is_array($param))
+		{
+			error::throw(array(
+				"id" => ERR_PARAM,
+				"msg" => "object::path($param): if parameter is specified, it must be an array!"
+			));
+		}
+
+		if (is_array($param) && isset($param["to"]))
+		{
+			$param["to"] = $GLOBALS["object_loader"]->param_to_oid($param["to"]);
+		}
+
+		return $this->_int_path($param);
 	}
 
 	function path_str($param = NULL)
@@ -1185,6 +1198,7 @@ class _int_object
 		$ret = array();
 		$parent = $this->id();
 		$cnt = 0;
+		$add = true;
 		while ($parent && $parent != $GLOBALS["cfg"]["__default"]["rootmenu"])
 		{
 			if ($GLOBALS["object_loader"]->ds->can("view", $parent) && $GLOBALS["object_loader"]->ds->object_exists($parent))
@@ -1192,6 +1206,12 @@ class _int_object
 				$t = obj($parent);
 				$ret[] = $t;
 				$parent = $t->parent();
+
+				if (is_oid($param["to"]) && $t->id() == $param["to"])
+				{
+					$add = false;
+					break;
+				}
 			}
 			else
 			{
@@ -1211,9 +1231,13 @@ class _int_object
 				));
 			}
 		}
-		if ($GLOBALS["object_loader"]->ds->can("view", $GLOBALS["cfg"]["__default"]["rootmenu"]))
+
+		if ($add)
 		{
-			$ret[] = obj($GLOBALS["cfg"]["__default"]["rootmenu"]);
+			if ($GLOBALS["object_loader"]->ds->can("view", $GLOBALS["cfg"]["__default"]["rootmenu"]))
+			{
+				$ret[] = obj($GLOBALS["cfg"]["__default"]["rootmenu"]);
+			}
 		}
 		return array_reverse($ret);
 	}
