@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.15 2003/07/18 12:29:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.16 2003/07/28 16:42:19 duke Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -265,8 +265,15 @@ class menu_tree extends class_base
 			};
 			if ($v["alias"])
 			{
-				$id = join("/",$this->alias_stack);
-				$id .= ($id == "" ? "" : "/") . $v["alias"];
+				if (aw_ini_get("menuedit.recursive.aliases") == 0)
+				{
+					$id = $v["alias"];
+				}
+				else
+				{
+					$id = join("/",$this->alias_stack);
+					$id .= ($id == "" ? "" : "/") . $v["alias"];
+				};
 				$id = $this->cfg["baseurl"]."/".$id;
 			}
 			else
