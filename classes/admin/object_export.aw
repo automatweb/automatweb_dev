@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.2 2004/06/09 12:57:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.3 2004/11/30 14:41:40 ahti Exp $
 // object_export.aw - Objektide eksport 
 /*
 
@@ -197,7 +197,7 @@ class object_export extends class_base
 				$cp = $class_i->load_from_storage(array(
 					"id" => $cff->id()
 				));
-				foreach($cp as $pn => $pd)
+				foreach(safe_array($cp) as $pn => $pd)
 				{
 					$tmp[$pn] = $ret[$pn];
 					$tmp[$pn]["caption"] = $pd["caption"];
