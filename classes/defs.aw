@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.115 2003/12/09 15:56:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.116 2003/12/17 15:34:18 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -104,15 +104,23 @@ if (!defined("DEFS"))
 
 	////
 	// !adds or changes a variable in the current url
-	function aw_url_change_var($name, $value)
+	function aw_url_change_var($arg1, $arg2 = false)
 	{
-		$url = aw_global_get("REQUEST_URI");
-		// remove old
-		$url = preg_replace("/$name=[^&]*/","", $url);
-		if (!empty($value))
+		$arg_list = func_get_args();
+		if (sizeof($arg_list) == 2)
 		{
-			$url .= (strpos($url,"?") === false ? "?" : "&" ).$name."=".$value;
-			$url = preg_replace("/&{2,}/","&",$url);
+			$arg_list[0] = array($arg1 => $arg2);
+		}
+		$url = aw_global_get("REQUEST_URI");
+		foreach($arg_list[0] as $arg1 => $arg2)
+		{
+			// remove old
+			$url = preg_replace("/$arg1=[^&]*/","", $url);
+			if (!empty($arg2))
+			{
+				$url .= (strpos($url,"?") === false ? "?" : "&" ).$arg1."=".$arg2;
+				$url = preg_replace("/&{2,}/","&",$url);
+			};
 		};
 		return $url;
 	}
