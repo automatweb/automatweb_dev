@@ -526,13 +526,6 @@ class form_db_base extends aw_template
 	// !returns an instance of form $fid - caches the instances as well
 	function &cache_get_form_instance($fid)
 	{
-/*		if (!is_object($this->form_instance_cache[$fid]))
-		{
-			$this->form_instance_cache[$fid] = new form;
-			$this->form_instance_cache[$fid]->load($fid);
-		}
-
-		return $this->form_instance_cache[$fid];*/
 		if (!is_object(($finst =& aw_cache_get("cache_get_form_instance", $fid))))
 		{
 			$finst = new form;
@@ -749,7 +742,7 @@ class form_db_base extends aw_template
 				// include only the necessary elements - if used_els is not an array, then all elements, 
 				// otherwise the elements from the used_els that are from the current iteration's table
 				$elar = $form["els"];
-				if (is_array($used_els))
+				if (is_array($used_els) && count($used_els) > 0)
 				{
 					$elar = array();
 					if (is_array($used_els[$fid]))
@@ -815,7 +808,7 @@ class form_db_base extends aw_template
 					}
 
 					$elar = $form["els"];
-					if (is_array($used_els))
+					if (is_array($used_els) && count($used_els) > 0)
 					{
 						$elar = array();
 						if (is_array($used_els[$fid]))
