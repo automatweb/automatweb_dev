@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.121 2003/10/24 13:13:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.122 2003/10/31 12:47:09 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -32,7 +32,6 @@ class aliasmgr extends aw_template
 //		$this->reltype = isset($args['objtype']) ? $args['objtype']: NULL;
 
 		$GLOBALS['site_title'] = "Seostehaldur";
-		$this->read_template("search.tpl");
 		$search = get_instance("search");
 
 		$reltypes[0] = "alias";
@@ -62,6 +61,7 @@ class aliasmgr extends aw_template
 				$clids .= 'clids['.$clid.'] = "'.basename($cldat["file"]).'";'."\n";
 			}
 		}
+		
 
 		$args["clid"] = &$this;
 		$form = $search->show($args);
@@ -76,10 +76,18 @@ class aliasmgr extends aw_template
 		{
 			$this->ref = $ref;
 		};
+		
+		
 
 		$return_url = $this->mk_my_orb("list_aliases", array("id" => $id),$this->use_class);
 		$return_url = urlencode($return_url);
 		//$return_url = urlencode(aw_global_get('REQUEST_URI'));
+		
+		$tb = $this->mk_toolbar($args['s']['class_id'], $args['objtype']);
+		$this->read_template("search.tpl");
+		$this->vars(array(
+			"create_relation_url" => $this->mk_my_orb("search_aliases",array("id" => $this->id),$this->use_class),
+		));
 		
 
 		$this->vars(array(
@@ -96,7 +104,7 @@ class aliasmgr extends aw_template
 				"return_url" => $return_url,
 			),$this->use_class),
 			"saveurl" => $this->mk_my_orb("addalias",array("id" => $id,"reltype" => $reltype),$this->use_class),
-			"toolbar" => $this->mk_toolbar($args['s']['class_id'], $args['objtype']),
+			"toolbar" => $tb,
 			"form" => $form,
 			"table" => $search->get_results(),
 		));
@@ -308,9 +316,23 @@ class aliasmgr extends aw_template
 
 		foreach($this->cfg["classes"] as $clid => $cldat)
 		{
-			if (isset($cldat["alias"]))
+			if (isset($cldat["alias"]) || isset($cldat["old_alias"]))
 			{
 				$li = explode(",", $cldat["alias"]);
+				foreach($li as $lv)
+				{
+					if (isset($cldat["alias_class"]))
+					{
+						$by_alias[$lv]["file"] = $cldat["alias_class"];
+					}
+					else
+					{
+						$by_alias[$lv]["file"] = $cldat["file"];
+					}
+					$by_alias[$lv]["class_id"] = $clid;
+				}
+
+				$li = explode(",", $cldat["old_alias"]);
 				foreach($li as $lv)
 				{
 					if (isset($cldat["alias_class"]))
@@ -573,7 +595,6 @@ class aliasmgr extends aw_template
 		extract($args);
 		$GLOBALS['site_title'] = "Seostehaldur";
 		classload('icons');
-		$this->read_template("lists_new.tpl");
 
 		$obj = $this->get_object($id);
 		$this->id = $id;
@@ -583,6 +604,7 @@ class aliasmgr extends aw_template
 		$reltypes[0] = "alias";
 		$reltypes = new aw_array($reltypes);
 		$this->reltypes = $reltypes->get();
+		
 
 		// init vcl table to $this->t and define columns
 		$this->_init_la_tbl();
@@ -629,6 +651,9 @@ class aliasmgr extends aw_template
 			$return_url = $this->mk_my_orb("list_aliases", array("id" => $id));
 			//$return_url = aw_global_get('REQUEST_URI');
 		};
+		
+		$toolbar = $this->mk_toolbar($args['s']['class_id']);
+		$this->read_template("lists_new.tpl");
 
 		$return_url = urlencode($return_url);
 
@@ -730,7 +755,6 @@ class aliasmgr extends aw_template
 
 		$this->t->set_default_sortby("title");
 		$this->t->sort_by();
-		$toolbar = $this->mk_toolbar($args['s']['class_id']);
 
 		if (isset($this->reforb))
 		{
@@ -986,7 +1010,8 @@ class aliasmgr extends aw_template
 	// !Search and list share the same toolbar
 	function mk_toolbar($objtype = '', $selectedot = '')
 	{
-		$toolbar = get_instance("toolbar",array("imgbase" => "/automatweb/images/icons"));
+		//$toolbar = get_instance("toolbar",array("imgbase" => "/automatweb/images/icons"));
+		$toolbar = get_instance("toolbar");
 
 		if (is_array($objtype) && (count($objtype) == 1))
 		{
@@ -1023,7 +1048,9 @@ class aliasmgr extends aw_template
 		asort($choices);
 		asort($choices2);
 
-		$boxesscript = $this->get_file(array('file' => $this->cfg['tpldir'].'/aliasmgr/selectboxes.tpl'));
+		$this->read_template("selectboxes.tpl");
+		// wuh, this is bad and stuff
+		//$boxesscript = $this->get_file(array('file' => $this->cfg['tpldir'].'/aliasmgr/selectboxes.tpl'));
 
 		$hist = aw_global_get('aliasmgr_obj_history');
 
@@ -1092,10 +1119,12 @@ class aliasmgr extends aw_template
 		$rels1 .= 'listB.addOptions("_"'.',"Objekti tüüp","capt_new_object"'.");\n";
 		$defaults1 .= 'listB.setDefaultOption("_","capt_new_object");'."\n";
 
-		$boxesscript = localparse($boxesscript, array('script' => $this->cfg['baseurl'].'/automatweb/js/selectboxes.js','rels1' => $rels1, 'defaults1' =>  $defaults1));
-		
-		//$boxesscript .= $this->get_file(array('file'=> $this->cfg['tpldir'].'/aliasmgr/selectbox_selector.tpl'));
-		$boxesscript .= '<script type="text/javascript" src="'.$this->cfg['baseurl'].'/automatweb/js/selectbox_selector.js'.'"></script>';
+		$this->vars(array(
+			"rels1" => $rels1,
+			"defaults1" => $defaults1,
+		));
+
+		$boxesscript = $this->parse();
 
 		$toolbar->add_cdata($boxesscript);
 
@@ -1120,7 +1149,6 @@ HTM;
 			"name" => "new",
 			"tooltip" => "Lisa uus objekt",
 			"url" => "javascript:create_new_object()",
-			"imgover" => "new_over.gif",
 			"img" => "new.gif",
 		));
 
@@ -1131,7 +1159,6 @@ HTM;
 				"name" => "search",
 				"tooltip" => "Otsi",
 				"url" => "javascript:if (document.foo.reltype.value!='_') {document.searchform.submit();} else alert('Vali seosetüüp!')",
-				"imgover" => "search_over.gif",
 				"img" => "search.gif",
 			));
 		}
@@ -1141,7 +1168,6 @@ HTM;
 				"name" => "search",
 				"tooltip" => "Otsi",
 				"url" => "javascript:search_for_object()",
-				"imgover" => "search_over.gif",
 				"img" => "search.gif",
 			));
 		};
@@ -1160,7 +1186,6 @@ HTM;
 				"tooltip" => "Tõlgi",
 				"url" => $this->mk_my_orb("create",array("id" => $this->id,"return_url" => $return_url),"object_translation"),
 				"target" => "_blank",
-				"imgover" => "edit_over.gif",
 				"img" => "edit.gif",
 			));
 			
@@ -1171,7 +1196,6 @@ HTM;
 			"name" => "refresh",
 			"tooltip" => "Reload",
 			"url" => "javascript:window.location.reload()",
-			"imgover" => "refresh_over.gif",
 			"img" => "refresh.gif",
 		));
 
@@ -1183,7 +1207,6 @@ HTM;
 					"name" => "save",
 					"tooltip" => "Loo seos(ed)",
 					"url" => "javascript:aw_save()",
-					"imgover" => "save_over.gif",
 					"img" => "save.gif",
 				));
 			};
@@ -1194,7 +1217,6 @@ HTM;
 				"name" => "save",
 				"tooltip" => "Salvesta",
 				"url" => "javascript:saveform()",
-				"imgover" => "save_over.gif",
 				"img" => "save.gif",
 			));
 
@@ -1202,7 +1224,6 @@ HTM;
 				"name" => "delete",
 				"tooltip" => "Kustuta valitud seos(ed)",
 				"url" => "javascript:awdelete()",
-				"imgover" => "delete_over.gif",
 				"img" => "delete.gif",
 			));
 		};
