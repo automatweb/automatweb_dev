@@ -20,6 +20,12 @@
 <td class="plain"><textarea name='pwd_mail' cols=70 rows=20 wrap=hard>{VAR:pwd_mail}</textarea></td>
 </tr>
 <tr bgcolor="#C9EFEF">
+<td class="plain">Mis aadressile saadetakse liitujatele saadetud e-mailid:</td>
+</tr>
+<tr bgcolor="#C9EFEF">
+<td class="plain"><input size=30 type='text' name='join_send_also' value='{VAR:join_send_also}'></td>
+</tr>
+<tr bgcolor="#C9EFEF">
 <td class="plain"><input type='submit' value='Salvesta'></td>
 </tr>
 {VAR:reforb}
