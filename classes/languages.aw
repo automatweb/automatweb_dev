@@ -106,6 +106,11 @@ class languages extends aw_template
 	function set_active($id)
 	{
 		$id = (int)$id;
+		$status = $this->db_fetch_field("SELECT status FROM languages WHERE id = $id","status");
+		if ($status != 2)
+		{
+			return false;
+		}
 		$this->db_query("UPDATE users SET lang_id = $id WHERE uid = '".$GLOBALS["uid"]."'");
 		global $lang_id;
 		$lang_id = $id;
@@ -122,7 +127,9 @@ class languages extends aw_template
 		$langs = array();
 		$this->db_query("SELECT * FROM languages WHERE status = 2");
 		while ($row = $this->db_next())
+		{
 			$langs[$row["acceptlang"]] = $row["id"];
+		}
 
 		$larr = explode(",",$HTTP_ACCEPT_LANGUAGE);
 		reset($larr);
@@ -130,7 +137,9 @@ class languages extends aw_template
 		{
 			$la = substr($v,0,strcspn($v,"-; "));
 			if ($langs[$la])
+			{
 				return $langs[$la];
+			}
 		}
 		return 1;
 	}
