@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.9 2004/05/06 12:35:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.10 2004/06/07 14:11:42 duke Exp $
 // crm_db.aw - CRM database
 /*
 	@classinfo relationmgr=yes
@@ -167,7 +167,7 @@ class crm_db extends class_base
 		}
 
 		// so, loeme sisse kõik selle objekti seosed ja jaotame nad tüübi järgi ära, jees
-		if (!is_array($this->got_aliases))
+		if (!$args["new"] && !is_array($this->got_aliases))
 		{
 			$conns = $args["obj_inst"]->connections_from();
 			foreach($conns as $conn)
