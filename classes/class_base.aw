@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.212 2004/02/13 16:36:52 duke Exp $
+// $Id: class_base.aw,v 2.213 2004/02/16 13:25:40 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1721,13 +1721,21 @@ class class_base extends aw_template
 		if (($val["type"] == "objpicker") && isset($val["clid"]) && defined($val["clid"]))
 		{
 			$val["type"] = "select";
-			$val["options"] = $this->list_objects(array(
-				"class" => constant($val["clid"]),
-				"subclass" => isset($val["subclass"]) ? constant($val["subclass"]) : "",
-				"addempty" => true,
-				"truncate_names" => 1,
-				//"add_folders" => true,
-			));
+			$filter = array(
+				"class_id" => constant($val["clid"]),
+			);
+
+			if (isset($val["subclass"]))
+			{
+				$filter["subclass"] = constant($val["subclass"]);
+			};
+
+			$ol = new object_list($filter);
+
+			$names = $ol->names();
+			asort($names);
+
+			$val["options"] = array("" => "") + $names;
 		};
 
 		if (empty($val["value"]) && ($val["type"] == "aliasmgr") && isset($this->id))
@@ -1839,6 +1847,14 @@ class class_base extends aw_template
 			"groupinfo" => &$this->groupinfo,
 			"new" => $this->new,
 		);
+
+		/*
+		if ($this->is_rel)
+		{
+			$conn = $this->_get_connection_for_relobj($this->obj_inst);
+			var_dump($conn);
+		};
+		*/
 
 		$this->cfgu = get_instance("cfg/cfgutils");
 
@@ -2948,6 +2964,23 @@ class class_base extends aw_template
 		}
 		
 		return true;
+	}
+
+	function _get_connection_for_relobj($obj)
+	{
+		if ($obj->meta("conn_id"))
+		{
+			$rv = new connection($obj->meta("conn_id"));
+		}
+		else
+		{
+			$c = new connection();
+			list(, $c_d) = each($c->find(array(
+				"relobj_id" => $obj->id(),
+			)));
+			$rv = new connection($c_d["id"]);
+		}
+		return $rv;
 	}
 		
 	//////////////////////////////////////////////////////////////////////
