@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.110 2004/03/08 08:43:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.111 2004/03/09 10:53:33 duke Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -659,6 +659,11 @@ class users extends users_user
 
 	////
 	// !shows the form where the user can enter his/her password and then sends a pre-defined email to the user
+	/** this actually sends the reminder-email 
+		
+		@attrib name=pwd_remind params=name nologin="1" 
+
+	**/
 	function pwd_remind($arr)
 	{
 		extract($arr);
