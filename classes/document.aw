@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.50 2001/10/02 10:05:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.51 2001/10/14 13:40:30 cvs Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -2502,8 +2502,10 @@ class document extends aw_template
 	
 		$row = $ar["row"];
 
+		$row["oid"] = 0;
 		$row["parent"] = $parent;
 		$row["lang_id"] = $GLOBALS["lang_id"];
+		$this->quote(&$row);
 		$id = $this->new_object($row);
 
 		reset($this->knownfields);
@@ -2537,7 +2539,9 @@ class document extends aw_template
 	function do_search($parent,$str,$sec,$sortby,$from)
 	{
 		if ($sortby == "")
+		{
 			$sortby = "percent";
+		}
 
 		$this->tpl_init("automatweb/documents");
 		// kas ei peaks checkkima ka teiste argumentide oigsust?
@@ -2567,8 +2571,13 @@ class document extends aw_template
 			$ss = "";
 		};
 
+		classload("search_conf");
+		$sc = new search_conf;
+		$search_groups = $sc->get_groups();
+		$search_group = $search_groups[$parent];
+
 		$this->menucache = array();
-		$this->db_query("SELECT objects.oid as oid, objects.parent as parent,objects.last as last,objects.status as status,objects.metadata as metadata
+		$this->db_query("SELECT objects.oid as oid, objects.parent as parent,objects.last as last,objects.status as status,objects.metadata as metadata,objects.name as name
 										 FROM objects LEFT JOIN menu ON menu.id = objects.oid
 										 WHERE objects.class_id = 1 AND objects.status = 2 $ss");
 		$parent_list = array();
@@ -2576,7 +2585,7 @@ class document extends aw_template
 		{
 			// peame tshekkima et kui tyyp pole sisse loginud et siis ei otsitaks users only menyyde alt
 			$can = true;
-			if ($GLOBALS["uid"] == "")
+			if ($GLOBALS["uid"] == "" && $search_group["no_usersonly"] == 1)
 			{
 				$meta = $this->get_object_metadata(array("metadata" => $row["metadata"]));
 				if ($meta["users_only"] == 1)
@@ -2586,12 +2595,11 @@ class document extends aw_template
 			}
 			if ($can)
 			{
-				$this->menucache[$row[parent]][] = $row;
+				$this->menucache[$row["parent"]][] = $row;
+				$this->mmc[$row["oid"]] = $row;
 			}
 		}
 		// find the parent menus based on the search menu group id
-		classload("search_conf");
-		$sc = new search_conf;
 		$parens = $sc->get_menus_for_grp($parent);
 		$this->darr = array();
 		$this->marr = array();
@@ -2599,11 +2607,12 @@ class document extends aw_template
 		{
 			foreach($parens as $_parent)
 			{
-				if ($this->can("view",$_parent))
+				dbg("parent = $_parent ,name = ".$this->mmc[$_parent]["name"]."<br>");
+				if ($this->can("view",$_parent) && is_array($this->mmc[$_parent]))
 				{
 					$this->marr[] = $_parent;
 					// list of default documents
-					$this->rec_list($_parent);
+					$this->rec_list($_parent,$this->mmc[$_parent]["name"]);
 				};
 			}
 		};
@@ -2678,18 +2687,12 @@ class document extends aw_template
 		$max_count = 0;
 		$docarr = array();
 
-//Mingi imelik echo oli.  
-/*
-		echo "ot: SELECT documents.*,objects.parent as parent, objects.modified as modified 
-										 FROM documents 
-										 LEFT JOIN objects ON objects.oid = documents.docid
-										 WHERE (documents.title LIKE '%".$str."%' OR documents.content LIKE '%".$str."%' $fasstr $mtalsstr) AND objects.status = 2 $ml";
-*/
 		$plist = join(",",$parent_list);
 		$q = "SELECT documents.*,objects.parent as parent, objects.modified as modified 
 										 FROM documents 
 										 LEFT JOIN objects ON objects.oid = documents.docid
 										 WHERE (documents.title LIKE '%".$str."%' OR documents.content LIKE '%".$str."%' $fasstr $mtalsstr) AND objects.status = 2 AND objects.lang_id = ".$GLOBALS["lang_id"]." AND (documents.no_search is null OR documents.no_search = 0) $ml";
+		dbg("search_q = $q <br>");
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
@@ -2788,7 +2791,8 @@ class document extends aw_template
 		$this->vars(array("PAGESELECTOR" => $ps));
 		return $this->parse();
 	}
-	function rec_list($parent)
+
+	function rec_list($parent,$pref = "")
 	{
 		if (!is_array($this->menucache[$parent]))
 		{
@@ -2805,7 +2809,8 @@ class document extends aw_template
 				{
 					$this->darr[] = $v["last"];
 				}
-				$this->rec_list($v["oid"]);
+				dbg("name: ".$pref."/".$v["name"]." id = ".$v["oid"]." <br>");
+				$this->rec_list($v["oid"],$pref."/".$v["name"]);
 			}
 		}
 	}
