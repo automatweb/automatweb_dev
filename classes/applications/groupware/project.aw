@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.3 2004/06/15 13:37:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.4 2004/07/21 14:35:57 duke Exp $
 // project.aw - Projekt 
 /*
 
@@ -12,6 +12,11 @@
 @caption Sündmused
 
 @groupinfo event_list caption="Sündmused" submit=no
+@groupinfo files caption="Failid"
+
+@default group=files
+@property file_editor type=releditor reltype=RELTYPE_PRJ_FILE mode=manager props=filename,file,comment
+@caption Failid
 
 @reltype SUBPROJECT clid=CL_PROJECT value=1
 @caption alamprojekt
@@ -21,6 +26,9 @@
 
 @reltype PRJ_EVENT value=3 clid=CL_TASK,CL_CRM_CALL,CL_CRM_OFFER,CL_CRM_DEAL,CL_CRM_MEETING
 @caption Sündmus
+
+@reltype PRJ_FILE value=4 clid=CL_FILE
+@caption Fail
 
 */
 
