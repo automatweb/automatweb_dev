@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.178 2003/12/02 16:28:07 duke Exp $
+// $Id: class_base.aw,v 2.179 2003/12/02 16:43:39 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -274,7 +274,8 @@ class class_base extends aw_template
 			{
 				if ($this->use_mode == "new")
 				{
-					$cli->set_form_target();
+					// nii, kuidas kuradi moodi ma nüüd selle vormi targeti teada saan?
+					$cli->set_form_target("_parent");
 				};
 				// tabs and YAH are in the upper frame, so we don't show them below
 				$this->classinfo["hide_tabs"] = 1;
