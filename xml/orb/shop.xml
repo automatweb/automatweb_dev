@@ -54,6 +54,7 @@
 				<arguments>
 					<required name="shop_id"/>
 					<required name="section"/>
+					<optional name="num"/>
 				</arguments>
 			</function>
 		</action>
@@ -61,6 +62,18 @@
 		<action name="submit_order">
 			<function name="submit_order">
 				<arguments>
+					<optional name="shop_id"/>
+					<optional name="section"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="pre_submit_order">
+			<function name="pre_submit_order">
+				<arguments>
+					<optional name="shop_id"/>
+					<optional name="section"/>
+					<optional name="num"/>
 				</arguments>
 			</function>
 		</action>
@@ -144,6 +157,21 @@
 				<arguments>
 					<required name="section"/>
 					<optional name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="ch_owner_data">
+			<function name="ch_owner_data">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_owner_data">
+			<function name="submit_owner_data">
+				<arguments>
 				</arguments>
 			</function>
 		</action>
