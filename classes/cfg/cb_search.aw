@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.5 2004/06/14 14:30:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.6 2004/06/17 13:56:44 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -446,6 +446,7 @@ class cb_search extends class_base
 						"url" => $this->mk_my_orb("change", array("id" => $o->id()), $o->class_id()),
 						"caption" => $this->in_results["change_link"]["caption"]
 					));
+					$row["oid"] = $o->id();
 					$t->define_data($row);
 				};
 			};
@@ -768,6 +769,50 @@ class cb_search extends class_base
 			"table" => $table
 		));
 		return $this->parse();
+	}
+
+	function get_callback_properties($ob)
+	{
+		$request = array("s" => $GLOBALS["s"]);
+		if ($GLOBALS["search_butt"])
+		{
+			$request["search_butt"] = $GLOBALS["search_butt"];
+		}
+		if ($GLOBALS["ft_page"])
+		{
+			$request["ft_page"] = $GLOBALS["ft_page"];
+		}
+
+		list($props, $clid, $relinfo) = $this->get_props_from_obj($ob);
+		
+		return $this->callback_gen_search(array(
+			"obj_inst" => $ob,
+			"request" => $request
+		));
+	}
+
+	/** populates the current search result's table
+
+		@param ob required
+		@param t required
+		@param request optional
+
+		@comment
+
+			ob - search storage object
+			t - reference to vcl table instance to populate
+			request - current GET/POST request content
+	**/
+	function get_search_result_table($arr)
+	{
+		$t =& $arr["t"];
+		$this->mk_result_table(array(
+			"prop" => array(
+				"vcl_inst" => &$t
+			),
+			"obj_inst" => &$arr["ob"],
+			"request" => $arr["request"],
+		));
 	}
 }
 ?>
