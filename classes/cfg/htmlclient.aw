@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.58 2004/04/13 15:36:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.59 2004/04/20 11:27:55 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -26,11 +26,17 @@ class htmlclient extends aw_template
 		$this->group_style = "";
 		$this->layoutinfo = array();
 		$this->start_output();
+		$this->tp = get_instance("vcl/tabpanel");
 	}
 
 	function set_layout($arr)
 	{
 		$this->layoutinfo = $arr;
+	}
+
+	function set_form_layout($l)
+	{
+		$this->form_layout = $l;
 	}
 
 	function set_form_target($target = "_top")
@@ -42,6 +48,11 @@ class htmlclient extends aw_template
 				"form_target" => "target='" . $this->form_target . "' ",
 			));
 		};
+	}
+
+	function add_content_element($location,$content)
+	{
+		$this->additional_content[$location] = $content;
 	}
 
 	function set_layout_mode($mode)
@@ -56,11 +67,20 @@ class htmlclient extends aw_template
 		$this->tmp->read_template($styl . ".tpl");
 	}
 
+	// I need to remap all properties, no?
+
+	// so, how do I add a header and a footer?
+
+	// do I make the tabpanel a separate element? and then make it possible to add elements outside
+	// the current panel?
+
 	////
 	// !Starts the output 
 	function start_output($args = array())
 	{
 		$this->set_parse_method("eval");
+
+	
 		$tpl = "default.tpl";
 		if (!empty($this->use_template))
 		{
@@ -404,7 +424,7 @@ class htmlclient extends aw_template
 	
 	////
 	// !Finished the output
-	function finish_output($arr)
+	function finish_output($arr = array())
 	{
 		extract($arr);
 		$sbt = "";
@@ -546,7 +566,7 @@ class htmlclient extends aw_template
 
 	}
 
-	function get_result($arr)	
+	function get_result($arr = array())	
 	{
 		if ($this->layout_mode == "fixed_toolbar")
 		{
@@ -555,16 +575,33 @@ class htmlclient extends aw_template
 			$apd = get_instance("layout/active_page_data");
 			$apd->add_serialized_css_style($this->parse("iframe_body_style"));
 		};
+
 		if ($arr["raw_output"])
 		{
 			$rv = $this->vars["content"];
-			return $rv;
 		}
 		else
 		{
 			$rv = $this->parse();
-			return $rv;
+			$rv = $this->tp->get_tabpanel(array(
+				"content" => $rv,
+			));
 		};
+
+		if ($this->form_layout == "boxed")
+		{
+			$this->read_template("boxed.tpl");
+			$this->vars(array(
+				"top_content" => $this->additional_content["top"],
+				"left_content" => $this->additional_content["left"],
+				"right_content" => $this->additional_content["right"],
+				"bottom_content" => $this->additional_content["bottom"],
+				"content" => $rv,
+			));
+			return $this->parse();
+		};
+
+		return $rv;
 	}
 
 	function draw_element($args = array())
@@ -703,6 +740,11 @@ class htmlclient extends aw_template
 				break;
 		};
 		return $retval;
+	}
+
+	function add_tab($arr)
+	{
+		return $this->tp->add_tab($arr);
 	}
 };
 ?>
