@@ -10,6 +10,15 @@
             <caption>Initsialiseeri objekt</caption>
       </property>
       <property>
+            <name>def_name</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <method>serialize</method>
+            <field>meta</field>
+            <caption>Saatja nimi</caption>
+      </property>
+      <property>
             <name>def_mail</name>
             <table>objects</table>
             <group>general</group>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.11 2004/12/06 14:08:37 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.12 2004/12/09 17:06:05 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -10,6 +10,9 @@
 
 @property on_init type=hidden newonly=1
 @caption Initsialiseeri objekt
+
+@property def_name type=textbox method=serialize field=meta
+@caption Saatja nimi
 
 @property def_mail type=textbox method=serialize field=meta
 @caption Saatja e-mail
@@ -425,17 +428,17 @@ class webform extends class_base
 					array(
 						"name" => "*elemendinimi* peab olema täidetud",
 						"formula" => 'if($prop["value"] == ""){$retval = PROP_ERROR;}',
-						"errmsg" => "Väli %caption peab olema täidetud",
+						"errmsg" => "%caption peab olema täidetud",
 					),
 					array(
 						"name" => "*elemendinimi* peab olema valitud",
-						"formula" => 'if(!checked($prop["value"])){$retval = PROP_ERROR;}',
-						"errmsg" => "Väli %caption peab olema valitud",
+						"formula" => 'if(empty($prop["value"])){$retval = PROP_ERROR;}',
+						"errmsg" => "%caption peab olema valitud",
 					),
 					array(
 						"name" => "Kontrolli e-maili õigsust",
 						"formula" => 'if(!is_email($prop["value"])){$retval = PROP_ERROR;}',
-						"errmsg" => "Välja %caption sisestatud e-mailiaadress pole korrektne",
+						"errmsg" => "%caption sisestatud e-mailiaadress pole korrektne",
 					),
 					array(
 						"name" => "Kuva sisestaja IP ja host aadress",
@@ -1090,8 +1093,7 @@ class webform extends class_base
 		$els = $cfgform_i->get_props_from_ot($arr);
 		$cfgform = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_CFGFORM");
 		$sel_styles = safe_array($arr["obj_inst"]->meta("styles"));
-		$errs = new aw_array($arr["errors"]);
-		$errs = $errs->get();
+		$errs = safe_array($arr["errors"]);
 		$all_props = safe_array($cfgform->meta("cfg_proplist"));
 		$ret = array();
 		foreach($els as $pn => $pd)
@@ -1134,13 +1136,23 @@ class webform extends class_base
 			// some goddamn thing messes up the element captions, reorder them
 			//$els[$key]["caption"] = $all_props[$key]["caption"];
 			$els[$key]["capt_ord"] = $all_props[$key]["wf_capt_ord"];
+			
+			// treat all text properties as an ordinary text property
+			if($all_props[$key]["type"] == "text" && empty($all_props[$key]["wf_capt_ord"]))
+			{
+				$els[$key]["subtitle"] = 1;
+			}
+			else
+			{
+				unset($els[$key]["subtitle"]);
+			}
 			if(is_array($sel_styles[$key]))
 			{
 				if(!empty($sel_styles[$key]["caption"]))
 				{
 					$els[$key]["style"]["caption"] = $sel_styles[$key]["caption"];
 				}
-				if(!empty($sel_styles[$key]["caption"]))
+				if(!empty($sel_styles[$key]["prop"]))
 				{
 					$els[$key]["style"]["prop"] = $sel_styles[$key]["prop"];
 				}
@@ -1296,6 +1308,7 @@ class webform extends class_base
 			{
 				$email = $eml->to();
 				$awm->create_message(array(
+					"fromn" => $obj_inst->prop("def_name"),
 					"froma" => $obj_inst->prop("def_mail"),
 					"subject" => $obj_inst->name(),
 					"to" => $email->prop("mail"),
