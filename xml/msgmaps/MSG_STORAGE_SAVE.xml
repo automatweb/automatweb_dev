@@ -1,9 +1,9 @@
 <?xml version='1.0'?>
 <xml>
 <num_0>
-      <class>doc</class>
-      <func>on_save_document</func>
-      <param>CL_DOCUMENT</param>
+      <class>core/users/group</class>
+      <func>on_save_grp</func>
+      <param>CL_GROUP</param>
 </num_0>
 <num_1>
       <class>applications/personnel_management/personnel_management_cv</class>
@@ -16,8 +16,8 @@
       <param>CL_PERSONNEL_MANAGEMENT_JOB_OFFER</param>
 </num_2>
 <num_3>
-      <class>core/users/group</class>
-      <func>on_save_grp</func>
-      <param>CL_GROUP</param>
+      <class>doc</class>
+      <func>on_save_document</func>
+      <param>CL_DOCUMENT</param>
 </num_3>
 </xml>
