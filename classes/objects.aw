@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.63 2005/01/21 12:37:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.64 2005/01/27 21:21:29 duke Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 class db_objects extends aw_template 
 {
@@ -180,13 +180,13 @@ class objects extends db_objects
 	/**
 		@attrib name=storage_query params=name all_args="1"
 		@param name optional
-		@param class_id optional
+		@param class_id optional type=int
 		@param comment optional
 		@param site_id optional
-		@param createdby optional
+		@param createdby optional 
 		@param modifiedby optional
-
-
+		@param status optional type=int
+		@param lang_id optional type=int
 	**/
 	function storage_query($arr)
 	{
@@ -205,6 +205,8 @@ class objects extends db_objects
 				"modified" => $o->modified(),
 				"createdby" => $c_o->name(),
 				"modifiedby" => $m_o->name(),
+				"lang_id" => $o->lang(),
+				"path_str" => htmlspecialchars($o->path_str()),
 			);
 		};
 		return $rv;
