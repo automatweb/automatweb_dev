@@ -19,7 +19,6 @@
 	@property source_table type=select
 	@caption source table
 
-
 	@property use_object type=checkbox ch_value=on
 	@caption kasuta objektitabelit
 
@@ -32,13 +31,13 @@
 	@property my_parent type=select
 	@caption uued objektid salvesta kataloogi:
 
-
 	@property use_sisu type=checkbox ch_value=on
 	@caption kasuta sisutabelit
 
 	@property sisu_table type=select
 	@caption sisutabel
 
+///////////////////////////////////////////////////////////////
 
 	@default group=genereeri
 
@@ -51,12 +50,28 @@
 	@property gen_broken type=text
 	@caption JÄTKA KATKENUD IMPORTI
 
+
+
+///////////////////////////////////////////////////////////////
 	@default group=obgennn
-
 	@property ob_conf type=text
-	@caption testdfgh
-	@property multiple type=text
 
+//	@property multiple type=text
+
+	@property dejoin type=textbox
+	@property multiple type=textbox
+	@property add type=textbox
+
+	@property dejoin_table type=textbox
+	@property dejoin_field type=textbox
+	@property remember type=textbox
+
+	@property object type=textbox
+	@property meta type=textbox
+	@property sisu type=textbox
+	@property unique type=textbox
+
+///////////////////////////////////////////////////////////////
 
 	@default group=log
 	@property log_display type=checkbox ch_value=on
@@ -72,12 +87,6 @@
 
 */
 
-/*
-	@property meta
-	@property dejoin
-	@property multiple
-	@property add
-*/
 
 class ob_gen extends class_base
 {
@@ -91,22 +100,16 @@ class ob_gen extends class_base
 
 	function set_property($args = array())
 	{
-		$data = &$args["prop"];
-//			print_r($args);die();
+		$data = &$args['prop'];
+		$form = &$args['form_data'];
 		$retval = PROP_OK;
-		switch($data["name"])
+		switch($data['name'])
 		{
-/*			case 'meta':
-			print_r($args);
-				$args['prop']['value']=serialize($args['prop']['value']);
-			break;*/
-			case 'multiple':
-				die();
-				$args['prop']['value']=serialize($args['prop']['value']);
-			break;
+
 		};
 		return $retval;
 	}
+
 
 
 	function get_property($args)
@@ -122,7 +125,7 @@ class ob_gen extends class_base
 		$id=$args['obj']['oid'];
 		$meta=$args['obj']['meta'];
 
-		switch($data["name"])
+		switch($data['name'])
 		{
 /*			case '':
 				$retval = PROP_IGNORE;
@@ -136,6 +139,48 @@ class ob_gen extends class_base
 				$data['selected'] = $args['obj']['meta']['sisu_table'];
 			break;
 
+			case 'dejoin_table':
+				return PROP_IGNORE;
+			break;
+			case 'dejoin_field':
+				return PROP_IGNORE;
+			break;
+			case 'remember':
+				return PROP_IGNORE;
+			break;
+
+
+			case 'alias':
+				return PROP_IGNORE;
+			break;
+
+			case 'status':
+//				return PROP_IGNORE;
+			break;
+
+			case 'unique':
+				return PROP_IGNORE;
+			break;
+			case 'object':
+				return PROP_IGNORE;
+			break;
+			case 'meta':
+				return PROP_IGNORE;
+			break;
+
+			case 'sisu':
+				return PROP_IGNORE;
+			break;
+			case 'dejoin':
+				return PROP_IGNORE;
+			break;
+			case 'multiple':
+				return PROP_IGNORE;
+			break;
+			case 'add':
+				return PROP_IGNORE;
+			break;
+
 			case 'my_status':
 				if (!$args['obj']['meta']['use_object'])
 				{
@@ -147,7 +192,7 @@ class ob_gen extends class_base
 				{
 					return PROP_IGNORE;
 				}
-				$par = get_instance("objects");
+				$par = get_instance('objects');
 				$parents = $par->get_list(false,true,50477);//$parents = $par->get_list(false,true);
 				$data['options'] = $parents;
 				$data['selected'] = $args['obj']['meta']['my_parent'];
@@ -160,10 +205,13 @@ class ob_gen extends class_base
 					return PROP_IGNORE;
 				}
 
-				$list_classes[]=" - ";
-				foreach ($this->cfg["classes"] as $key => $val)
+				$list_classes[]=' - ';
+				foreach ($this->cfg['classes'] as $key => $val)
 				{
-					$list_classes[$key]=$val["def"];
+					if ($val['name'])
+					{
+						$list_classes[$key]=$val['name'];
+					}
 				}
 				asort($list_classes);
 
@@ -175,7 +223,7 @@ class ob_gen extends class_base
 				$data['options'] = $list_tables;
 			break;
 			case 'limit':
-				$chunks=array("1" => 1,"10" => 10,"100" => 100);
+				$chunks=array('1' => 1,'10' => 10,'100' => 100);
 				$data['selected'] = $args['obj']['meta']['limit'];
 				$data['options'] = $chunks;
 			break;
@@ -203,7 +251,7 @@ class ob_gen extends class_base
 				));
 			break;
 			case 'gen_broken':
-				$source_pointer=$this->db_fetch_field("select max(id)as maks from ".$meta['source_table'],"maks");
+				$source_pointer=$this->db_fetch_field('select max(id)as maks from '.$meta['source_table'],'maks');
 				$log_pointer=$this->db_fetch_field('select max(source_id)as maks from ob_gen_log where generator_oid="'.$id.'"','maks');
 				if($source_pointer > $log_pointer)
 				{
@@ -223,73 +271,9 @@ class ob_gen extends class_base
 	}
 
 
-	// !this gets called when the user clicks on ob_conf
-	// parameters:
-	//    id - the id of the object to change
-	//    return_url - optional, if set, "back" link should point to it
 	function callback_get_ob_conf($ob)
 	{
-
-
-		$id=$ob['oid'];
-
-$object_tpl=<<<TPL
-		<table border=1><tr><td>
-		<select name='object[{VAR:field_name}][{VAR:nr}]'  class="formselect">
-		{VAR:object_f}
-		</select>
-		<input {VAR:dejoin_object} type="checkbox" name="dejoin[object][{VAR:field_name}][{VAR:nr}]" title="leia id teisest tabelist">
-		{VAR:dejoin_object_conf}
-		<input {VAR:multiple} type="checkbox" name="multiple[object][{VAR:field_name}][{VAR:nr}]" title="multiple values">
-		<input {VAR:add} type="checkbox" name="add[object][{VAR:field_name}][{VAR:nr}]" title="extra rida">
-		{VAR:d_conf}
-		</td></tr></table>
-TPL;
-
-$meta_tpl=<<<TPL
-		<table border=1><tr><td>
-		<input value="{VAR:meta_f}" type="text" name="meta[{VAR:field_name}][{VAR:nr}]" size=8 class="formtext">
-		<input {VAR:dejoin_meta} type="checkbox" name="dejoin[meta][{VAR:field_name}][{VAR:nr}]" title="leia id teisest tabelist">
-		{VAR:dejoin_meta_conf}
-		<input {VAR:multiple} type="checkbox" name="multiple[meta][{VAR:field_name}][{VAR:nr}]" title="multiple values">
-		<input {VAR:add} type="checkbox" name="add[meta][{VAR:field_name}][{VAR:nr}]" title="extra rida"><br />
-		{VAR:d_conf}
-		</td></tr></table>
-TPL;
-
-$sisu_tpl=<<<TPL
-		<table border=1><tr><td>
-		<select name="sisu[{VAR:field_name}][{VAR:nr}]"  class="formselect">
-		{VAR:sisu_f}
-		</select>
-		<input {VAR:dejoin_sisu} type="checkbox" name="dejoin[sisu][{VAR:field_name}][{VAR:nr}]" title="leia id teisest tabelist">
-		{VAR:dejoin_sisu_conf}
-		<input {VAR:multiple} type="checkbox" name="multiple[sisu][{VAR:field_name}][{VAR:nr}]" title="multiple values">
-		<input {VAR:add} type="checkbox" name="add[sisu][{VAR:field_name}][{VAR:nr}]" title="extra rida"><br />
-		{VAR:d_conf}
-		</td></tr></table>
-TPL;
-
-$dejoin_tpl=<<<TPL
-<br>
-<select name="dejoin_table[{VAR:what}][{VAR:field_name}][{VAR:nr}]" class="formselect" title="sellest tabelist">
-	{VAR:dejoin_tables}
-</select>
-<select name="dejoin_field[{VAR:what}][{VAR:field_name}][{VAR:nr}]" class="formselect" title="see veerg">
-	{VAR:dejoin_fields}
-</select><br />
-TPL;
-
-$remember_tpl=<<<TPL
-<input {VAR:remember} type="checkbox" name="remember[{VAR:what}][{VAR:field_name}][{VAR:nr}]">
-<small>remember join result</small>
-TPL;
-
-$unique_tpl=<<<TPL
-	<input {VAR:unique} type="checkbox" name="unique[{VAR:field_name}]">
-TPL;
-
-
+	$id=$ob['oid'];
 		if ($ob['meta']['sisu_table'])
 		{
 			$list_sisu_fields=$this->db_get_fieldnames($ob['meta']['sisu_table'],1);
@@ -302,7 +286,7 @@ TPL;
 
 		$object_fields = $this->db_get_fieldnames('objects',1);
 		$fnames = $this->db_get_fieldnames($ob['meta']['source_table']);
-		$whats=array("object","sisu","meta");
+		$whats=array('object','sisu','meta');
 
 		foreach($fnames as $field)
 		{
@@ -310,11 +294,11 @@ TPL;
 			foreach($whats as $what)
 			{
 
-$ob['meta']['add'][$what][$field][]='';
+				$ob['meta']['add'][$what][$field][]='';
 
-foreach ($ob['meta']['add'][$what][$field] as $nr => $xxx)
-{
-				$dejoin_conf[$what]="";
+			foreach ($ob['meta']['add'][$what][$field] as $nr => $xxx)
+			{
+				$dejoin_conf[$what]='';
 				if ($ob['meta']['dejoin'][$what][$field][$nr])
 				{
 					if (!$dejoin_fields[$ob['meta']['dejoin_table'][$what][$field][$nr]] && $ob['meta']['dejoin_table'][$what][$field][$nr])
@@ -323,81 +307,77 @@ foreach ($ob['meta']['add'][$what][$field] as $nr => $xxx)
 					}
 					else
 					{
-						$dejoin_fields[$ob['meta']['dejoin_table'][$what][$field][$nr]]=array(0=>" - ");
+						$dejoin_fields[$ob['meta']['dejoin_table'][$what][$field][$nr]]=array(0=>' - ');
 					}
-					$vars=array(
-				"field_name" => $field,
-						'nr' => $nr,
-						"what" => $what,
-						"dejoin_tables" => $this->picker($ob['meta']['dejoin_table'][$what][$field][$nr],$list_tables),
-						"dejoin_fields" => $this->picker($ob['meta']['dejoin_field'][$what][$field][$nr],$dejoin_fields[$ob['meta']['dejoin_table'][$what][$field][$nr]]),
-						"remember" =>checked($ob['meta']['remember'][$what][$field][$nr]),
-					);
-					$dejoin_conf[$what] = localparse($dejoin_tpl,$vars);
+					$dejoin_conf[$what] =
+'<br />'.
+html::select(array('name'=>'dejoin_table['.$what.']['.$field.']['.$nr.']','selected'=>$ob['meta']['dejoin_table'][$what][$field][$nr],'options'=>$list_tables)).
+html::select(array('name'=>'dejoin_field['.$what.']['.$field.']['.$nr.']','selected'=>$ob['meta']['dejoin_field'][$what][$field][$nr],'options'=>$dejoin_fields[$ob['meta']['dejoin_table'][$what][$field][$nr]])).
+html::checkbox(array('name'=>'remember['.$what.']['.$field.']['.$nr.']','checked'=>$ob['meta']['remember'][$what][$field][$nr])).
+'<small>remember join result</small><br />';
 					$oncemore=1;
 				}
 
+				$aargh[$what].='<table border=1><tr><td>';
 
-				$vars=array(
-				"field_name" => $field,
-					'nr' => $nr,
-					"dejoin_".$what => checked($ob['meta']['dejoin'][$what][$field][$nr]),
-					"object_f" => $this->picker($ob['meta']['object'][$field][$nr],$object_fields),
-					"meta_f" => $ob['meta']['meta'][$field][$nr],
-					"sisu_f" => $this->picker($ob['meta']['sisu'][$field][$nr],$list_sisu_fields),
-					"add"=>checked($ob['meta']['add'][$what][$field][$nr]),
-					'd_conf' =>$dejoin_conf[$what],
-				);
-				$tpl=$what.'_tpl';
-				$aargh[$what] .=  localparse($$tpl, $vars);
-}
+				switch($what)
+				{
+					case 'sisu':
+						$aargh[$what].= html::select(array(
+							'name'=>'sisu['.$field.']['.$nr.']',
+							'options' => $list_sisu_fields,
+							'selected' => $ob['meta']['sisu'][$field][$nr],
+						));
+					break;
+					case 'meta':
+						$aargh[$what].= html::textbox(array(
+							'name'=>'meta['.$field.']['.$nr.']',
+							'value'=>$ob['meta']['meta'][$field][$nr],
+							'size'=>9
+						));
+					break;
+					case 'object':
+						$aargh[$what].= html::select(array(
+							'name'=>'object['.$field.']['.$nr.']',
+							'options' => $object_fields,
+							'selected' => $ob['meta']['object'][$field][$nr]
+						));
+					break;
+				}
+				$aargh[$what].= html::checkbox(array(
+						'name'=>'dejoin['.$what.']['.$field.']['.$nr.']',
+						'checked'=>$ob['meta']['dejoin'][$what][$field][$nr]
+					)).'leia id teisest tabelist'.
+					html::checkbox(array(
+						'name'=>'add['.$what.']['.$field.']['.$nr.']',
+						'checked'=>$ob['meta']['add'][$what][$field][$nr]
+					)).'extra rida'.
+				$dejoin_conf[$what].
+				'</td></tr></table>';
 			}
-			$vars=array(
-				"field_name" => $field,
+			
+			}
+/*			$vars=array(
+				'field_name' => $field,
 				'nr' => $nr,
-				"dejoini" => $dejoin,
-				"unique" => checked($ob['meta']['unique'][$field]),
-			);
+				'dejoini' => $dejoin,
+				'unique' => checked($ob['meta']['unique'][$field]),
+			);*/
+
 			$data[]=array(
-				"source" => $field,
-				"unique" => localparse($unique_tpl, $vars),
-//				"dejoin" => $this->parse("dejoin"),
+				'source' => $field,
+				'unique' => html::checkbox(array('name' => 'unique['.field.']', 'value' =>$ob['meta']['unique'][$field])),
+
+//				'dejoin' => $this->parse('dejoin'),
 			)+ $aargh;
 		}
 
 
-		return $this->ob_conf_table($data);
+		return ''.$this->ob_conf_table($data);
 
 	}
 
 
-/*
-	function submit($arr)
-	{
-					"oid" => $id,
-					"name" => $name,
-					"comment" => $comment,
-					"metadata" =>array(
-						"my_status" => $my_status,
-						"limit" => $limit,
-						"sisu_table" => $sisu_table,
-						"my_parent" => $my_parent,
-						"source_table" => $source_table,
-						"my_class_id" => $my_class_id,
-						"use_object" => $use_object,
-						"use_sisu" => $use_sisu,
-						"log" => $log,
-						"object" => $object,
-						"meta" => $meta,
-						"sisu" => $sisu,
-						"unique" => $unique,
-						"dejoin" => $dejoin,
-						"add" => $add,
-						"dejoin_table" => $dejoin_table,
-						"dejoin_field" => $dejoin_field,
-						"remember" => $remember,
-
-*/
 	function clear_log($arr)
 	{
 		extract($oid);
@@ -433,7 +413,7 @@ foreach ($ob['meta']['add'][$what][$field] as $nr => $xxx)
 	{
 //		print "<pre>";
 //		print_r($arr);
-/*
+
 		extract($arr);
 
 		if (is_array($object))
@@ -582,8 +562,10 @@ break;
 		return $this->db_fetch_field($q, 'oid');
 	}
 
-// vat siin hakataksegi neid objekte kokku panema....
 
+
+
+// vat siin hakataksegi neid objekte kokku panema....
 	function generate_objects($arr)
 	{
 		extract($arr);
@@ -665,9 +647,7 @@ break;
 					foreach($whats as $what)
 					{
 
-foreach(count($ob['meta']['add'][$what][$field]) as $nr => $xxx)
-//$nr=0;
-//for ($j=0;$j<(count($ob['meta']['add'][$what][$field])+1);$j++)
+foreach($ob['meta']['add'][$what][$field] as $nr => $xxx)
 {
 						if ($ob['meta'][$what][$field][$nr]){
 							if ($ob['meta']['dejoin'][$what][$field][$nr] && $ob['meta']['dejoin_table'][$what][$field][$nr] && $ob['meta']['dejoin_field'][$what][$field][$nr] && $val)
@@ -721,10 +701,7 @@ $get_oids.=$get_oid.';';
 								$$what+=array($ob['meta'][$what][$field][$nr] => $val);
 							}
 						}
-
-//$nr++;
 }
-
 
 					}
 				}
@@ -759,15 +736,11 @@ $get_oids.=$get_oid.';';
 				$count2++;
 			}
 
-			$alg+=$lopp; //alg=row[id]
-//		break;
+			$alg+=$lopp;
 		} while ($count2 || $skipped);
 		$this->flush_cache();
 		die("\n\n total objects generated: ".$this->newcount."</pre>");
 	}
-
-
-
 
 	function db_get_fieldnames($table,$addempty="",$get_all="")
 	{
@@ -797,51 +770,14 @@ $get_oids.=$get_oid.';';
 
 	function picker_list_db_tables()
 	{
-		$this->db_list_tables();
-		$list_tables[]=" - ";
-		while ($tb = $this->db_next_table())
+		$tables[]=" - ";
+		$all_db_tables=$this->db_query('show tables');
+		while ($row = $this->db_next())
 		{
-			$list_tables[$tb]=$tb;
+			$tables[$row['Tables_in_samaw']] = $row['Tables_in_samaw'];
 		}
-		return $list_tables;
+		return $tables;
 	}
-
-
-	////
-	// !this should create a string representation of the object
-	// parameters
-	//    oid - object's id
-	function _serialize($arr)
-	{
-		extract($arr);
-		$ob = $this->get_object($oid);
-		if (is_array($ob))
-		{
-			return aw_serialize($ob, SERIALIZE_NATIVE);
-		}
-		return false;
-	}
-
-	////
-	// !this should create an object from a string created by the _serialize() function
-	// parameters
-	//    str - the string
-	//    parent - the folder where the new object should be created
-	function _unserialize($arr)
-	{
-		extract($arr);
-		$row = aw_unserialize($str);
-		$row["parent"] = $parent;
-		unset($row["brother_of"]);
-		$this->quote(&$row);
-		$id = $this->new_object($row);
-		if ($id)
-		{
-			return true;
-		}
-		return false;
-	}
-
 
 
 	function ob_conf_table($data)
@@ -868,8 +804,6 @@ $get_oids.=$get_oid.';';
 				"name" => "object",
 				"caption" => "välja nimi objektitabelis",
 				"valign" => "top",
-				"nowrap" => "1",
-//				"width" => "10",
 			));
 		}
 
@@ -878,9 +812,6 @@ $get_oids.=$get_oid.';';
 				"name" => "meta",
 				"caption" => "veeru nimi objektitabeli metas",
 				"valign" => "top",
-				"nowrap" => "1",
-//				"sortable" => 1,
-//				"width" => "10",
 			));
 		}
 
@@ -889,8 +820,6 @@ $get_oids.=$get_oid.';';
 				"name" => "sisu",
 				"caption" => "veeru nimi sisutabelis",
 				"valign" => "top",
-				"nowrap" => "1",
-//				"width" => "10",
 			));
 		}
 
@@ -899,21 +828,8 @@ $get_oids.=$get_oid.';';
 				"name" => "unique",
 				"caption" => "unikaalne",
 				"valign" => "top",
-				"nowrap" => "1",
-//				"width" => "10",
 			));
 		}
-/*
-		$t->define_field(array(
-			"name" => "lyhend",
-			"caption" => "lühend",
-			"talign" => "center",
-			"align" => "center",
-			"nowrap" => "1",
-			"width" => "30",
-			"sortable" => 1,
-		));
-*/
 
 		$arr = new aw_array($data);
 
@@ -923,8 +839,7 @@ $get_oids.=$get_oid.';';
 				$row
 			);
 		}
-//		$t->sort_by();
-		return $t->draw();
+		return '<table border=1>'.$t->draw().'</table>';
 	}
 }
 
