@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.13 2004/04/12 14:43:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.14 2004/04/19 13:12:21 duke Exp $
 /*
 	Displays a form for editing an connection
 */
@@ -274,7 +274,7 @@ class releditor extends aw_template
 	function init_rel_table($arr)
 	{
 		classload("vcl/table");
-		$awt = new aw_table(array(
+		$awt = new vcl_table(array(
 			"layout" => "generic",
 		));
 
