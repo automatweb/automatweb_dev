@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.70 2004/03/22 16:54:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.71 2004/03/24 16:16:08 kristo Exp $
 
 lc_load("definition");
 
@@ -202,7 +202,6 @@ class acl_base extends db_connector
 		$max_acl["acl_rel_id"] = "666";
 		$cnt = 0;
 		// here we must traverse the tree from $oid to 1, gather all the acls and return the one with the highest priority
-		//	echo "entering can, access = $access, oid = $oid<br />";
 		while ($oid > 0)
 		{
 			$_t = aw_cache_get("aclcache",$oid);
@@ -210,6 +209,12 @@ class acl_base extends db_connector
 			{
 				$tacl = $_t;
 				$parent = $_t["parent"];
+				if (!isset($tacl["oid"]))
+				{
+					// if we are on any level and we get back no object, return no access
+					// cause then we asked about an object that does not exist or an object that is below a deleted object!
+					return array();
+				}
 			}
 			else
 			{
@@ -219,7 +224,8 @@ class acl_base extends db_connector
 				{
 					// if we are on any level and we get back no object, return no access
 					// cause then we asked about an object that does not exist or an object that is below a deleted object!
-					aw_cache_set("aclcache",$oid,$tacl);
+					// set the oid's acl cache as not-bloody-anything
+					aw_cache_set("aclcache",$oid,array());
 					return array();
 				}
 
