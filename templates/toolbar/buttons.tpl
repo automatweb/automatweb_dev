@@ -33,7 +33,7 @@
 <!-- END SUB: text_button -->
 
 <!-- SUB: separator -->
-	<td class="aw04buttonsep" nowrap><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/trans.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+	<td class="aw04buttonsep" nowrap><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/trans.gif" width="1" height="1" border="0" alt="------"></td>
 <!-- END SUB: separator -->
 
 <!-- SUB: cdata -->
