@@ -10,6 +10,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_USER, on_add_alias)
 
 EMIT_MESSAGE(MSG_USER_CREATE);
 
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
+
 */
 
 /*
@@ -1768,6 +1770,32 @@ class user extends class_base
 			return true;
 		}
 		return false;
+	}
+
+	function on_save_addr($arr)
+	{
+		obj_set_opt("no_cache", 1);
+		$ml_m = obj($arr["oid"]);
+		$c = reset($ml_m->connections_to(array("from.class_id" => CL_USER, "type" => 6)));
+		obj_set_opt("no_cache", 0);
+
+		$user = $c->from();
+
+		$rn = $this->users->get_user_config(array(
+			"uid" => $user->prop("uid"),
+			"key" => "real_name",
+		));
+
+		if ($user->prop("email") != $ml_m->prop("mail") || $rn != $ml_m->prop("name"))
+		{
+			$user->set_prop("email", $ml_m->prop("mail"));
+			$user->save();
+			$this->users->set_user_config(array(
+				"uid" => $user->prop("uid"),
+				"key" => "real_name",
+				"value" => $ml_m->prop("name")
+			));
+		}
 	}
 }
 ?>
