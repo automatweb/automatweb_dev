@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.16 2003/10/17 13:11:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.17 2003/10/28 12:08:24 duke Exp $
 // promo.aw - promokastid.
 
 /*
@@ -181,7 +181,7 @@ class promo extends class_base
 		$obj = $arr["obj_inst"];
 		$section_include_submenus = $obj->meta("section_include_submenus");
 
-		$t = &$arr["prop"]["obj_inst"];
+		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			"name" => "id",
 			"caption" => "ID",
@@ -227,7 +227,7 @@ class promo extends class_base
 
 	function get_doc_sources($arr)
 	{
-		$t = &$arr["prop"]["obj_inst"];
+		$t = &$arr["prop"]["vcl_inst"];
 
 		$t->define_field(array(
 			"name" => "id",
@@ -385,21 +385,10 @@ class promo extends class_base
 
 		$this->read_template("default.tpl");
 
-		$me = get_instance("contentmgmt/site_content");
-		if (is_array($ob->meta('last_menus')))
-		{
-			$def = array();
-			foreach($ob->meta('last_menus') as $menu)
-			{
-				$_t = new aw_array($me->get_default_document($menu,true));
-				$def += $_t->get();
-			}
-			$def = new aw_array($def);
-		}
-		else
-		{
-			$def = new aw_array($me->get_default_document($alias["target"],true));
-		}
+		$ss = get_instance("contentmgmt/site_show");
+		$def = new aw_array($ss->get_default_document(array(
+			"obj" => obj($alias["target"])
+		)));
 
 		$_ob = aw_ini_get("menuedit.document_list_order_by");
 		if (($_ob != "") && (sizeof($def->get()) > 0))
@@ -433,7 +422,9 @@ class promo extends class_base
 		if (!$ob->meta('use_fld_tpl'))
 		{
 			$mgr = get_instance("templatemgr");
-			$parms["tpl"] = $mgr->get_template_file_by_id($ob->prop("tpl_lead"));
+			$parms["tpl"] = $mgr->get_template_file_by_id(array(
+				"id" => $ob->prop("tpl_lead")
+			));
 		}
 		else
 		{
@@ -458,6 +449,7 @@ class promo extends class_base
 			"title" => $ob->meta("caption"),
 			"content" => $content,
 			"align" => $align[$args["matches"][4]],
+			"link" => $ob->prop("link")
 		));
 
 		if (!$ob->meta('no_title'))
