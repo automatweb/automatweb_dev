@@ -35,6 +35,51 @@
             <caption>Mitu peab korraga tellima</caption>
       </property>
       <property>
+            <name>userch1</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>userch1</field>
+            <caption>User-defined checkbox 1</caption>
+      </property>
+      <property>
+            <name>userch2</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>userch2</field>
+            <caption>User-defined checkbox 2</caption>
+      </property>
+      <property>
+            <name>userch3</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>userch3</field>
+            <caption>User-defined checkbox 3</caption>
+      </property>
+      <property>
+            <name>userch4</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>userch4</field>
+            <caption>User-defined checkbox 4</caption>
+      </property>
+      <property>
+            <name>userch5</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>userch5</field>
+            <caption>User-defined checkbox 5</caption>
+      </property>
+      <property>
             <name>user1</name>
             <table>aw_shop_products</table>
             <group>data</group>
@@ -437,6 +482,9 @@
                   <num_4>file2</num_4>
                   <num_5>new_w</num_5>
                   <num_6>new_h</num_6>
+                  <num_7>new_w_big</num_7>
+                  <num_8>new_h_big</num_8>
+                  <num_9>comment</num_9>
             </props>
             <table_fields>
                   <num_0>name</num_0>
