@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.38 2003/05/21 11:25:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.39 2003/06/26 14:13:39 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -339,6 +339,11 @@ class poll extends aw_template
 		{
 			// try the old way
 			$apid = $this->db_fetch_field("SELECT oid FROM objects WHERE class_id = ".CL_POLL." AND status = 2 AND parent =".aw_ini_get("site_id"),"oid");
+			if (!$apid)
+			{
+				// try the oldest way
+				$apid = $this->db_fetch_field("SELECT oid FROM objects WHERE class_id = ".CL_POLL." AND status = 2 ","oid");
+			}
 		}
 		return $this->get_object($apid);
 	}
