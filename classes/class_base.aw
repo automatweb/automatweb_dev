@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.104 2003/05/16 12:09:35 duke Exp $
+// $Id: class_base.aw,v 2.105 2003/05/16 13:12:11 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -1165,6 +1165,16 @@ class class_base extends aw_template
 		$this->cb_views = array();
 
 		$property_list = array();
+		$retval = $tables = $fields = $realfields = array();
+		if (!empty($this->id))
+		{
+			$tables["objects"] = array("index" => "oid");
+		};
+		
+		if (isset($this->role) && ($this->role == "obj_edit"))
+		{
+			$tables["objects"] = array("index" => "oid");
+		};
 
 		foreach($this->all_props as $key => $val)
 		{
@@ -1192,22 +1202,49 @@ class class_base extends aw_template
 					$property_list[$key] = $val;
 				};
 			};
-		};
+			
+			if (isset($val["table"]) && empty($tables[$val["table"]]))
+			{
+				if (isset($this->tableinfo[$val["table"]]))
+				{
+					$tables[$val["table"]] = $this->tableinfo[$val["table"]];
+				}
+				else
+				{
+					$tables[$val["table"]] = "";
+				};
+			};
 
-		$retval = $tables = $fields = $realfields = array();
+
+			$fval = $val["method"];
+			$_field = $val["field"];
+
+			if ($_field == "meta")
+			{
+				$_field = "metadata";
+			};
+
+
+			if (isset($val["table"]))
+			{
+				if ($_field)
+				{
+					if (($val["type"] != "callback") && ($val["store"] != "no") )
+					{
+						$fields[$val["table"]][$_field] = $fval;
+					};
+				};
+
+				if (($val["type"] != "callback") && ($val["store"] != "no"))
+				{
+					$realfields[$val["table"]][$_field] = $fval;
+				};
+			};
+		};
 
 		// I need to replace this with a better check if I want to be able
 		// to use config forms in other situations besides editing objects
 
-		if (!empty($this->id))
-		{
-			$tables["objects"] = array("index" => "oid");
-		};
-		
-		if (isset($this->role) && ($this->role == "obj_edit"))
-		{
-			$tables["objects"] = array("index" => "oid");
-		};
 		
 		foreach($property_list as $key => $val)
 		{
@@ -1238,46 +1275,6 @@ class class_base extends aw_template
 			{
 				$retval[$key] = $property;
 			};
-
-			// figure out information about the table
-			if (isset($property["table"]) && empty($tables[$property["table"]]))
-			{
-				if (isset($this->tableinfo[$property["table"]]))
-				{
-					$tables[$property["table"]] = $this->tableinfo[$property["table"]];
-				}
-				else
-				{
-					$tables[$property["table"]] = "";
-				};
-			};
-
-			$fval = $property["method"];
-			$_field = $property["field"];
-
-			if ($_field == "meta")
-			{
-				$_field = "metadata";
-			};
-
-
-			if (isset($property["table"]))
-			{
-				if ($_field)
-				{
-					if (($property["type"] != "callback") && ($property["store"] != "no") )
-					{
-						$fields[$property["table"]][$_field] = $fval;
-					};
-				};
-
-				//if (($property["type"] != "text") && ($property["type"] != "callback") && ($property["store"] != "no"))
-				if (($property["type"] != "callback") && ($property["store"] != "no"))
-				{
-					$realfields[$property["table"]][$_field] = $fval;
-				};
-			};
-
 		};
 
 
