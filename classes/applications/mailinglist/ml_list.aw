@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.10 2005/01/06 09:43:08 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.11 2005/01/06 12:47:48 ahti Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -393,7 +393,7 @@ class ml_list extends class_base
 		};
 		$fld = $list_obj->prop("def_user_folder");
 		$members = $this->get_all_members($fld);
-		if(in_array($args["mail"], $members))
+		if(in_array($args["mail"], $members) || empty($args["mail"]))
 		{
 			$allow = false;
 		}
