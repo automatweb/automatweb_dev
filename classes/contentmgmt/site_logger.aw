@@ -26,8 +26,12 @@ class site_logger extends core
 		{
 			$sec_id = aw_ini_get("frontpage");
 		}
-		$sec_o = obj($sec_id);
-		$path_str = $sec_o->path_str();
+
+		if ($this->can("view", $sec_id))
+		{
+			$sec_o = obj($sec_id);
+			$path_str = $sec_o->path_str();
+		}
 
 		// now also, if we are in some fg incremental search, 
 		// log the "address" of that as well.
