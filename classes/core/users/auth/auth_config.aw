@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.8 2004/11/29 13:02:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.9 2004/11/29 13:55:01 kristo Exp $
 // auth_config.aw - Autentimise Seaded 
 /*
 
@@ -295,12 +295,18 @@ class auth_config extends class_base
 			return false;
 		}
 
+		$pass = $cred["password"];
+
+		if ($confo->prop("no_save_pwd"))
+		{
+			$pass = "-";
+		}
 		aw_disable_acl();
 		// create local user
 		$us = get_instance(CL_USER);
 		$new_user = $us->add_user(array(
 			"uid" => $cred["uid"],
-			"password" => $cred["password"]
+			"password" => $pass
 		));
 
 		$this->_upd_udata($new_user, $cred, $confo);

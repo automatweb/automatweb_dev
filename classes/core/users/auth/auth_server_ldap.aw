@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_ldap.aw,v 1.10 2004/11/29 13:02:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_ldap.aw,v 1.11 2004/11/29 13:55:01 kristo Exp $
 // auth_server_ldap.aw - Autentimisserver LDAP 
 /*
 
@@ -39,6 +39,9 @@
 
 @property break_chain type=checkbox ch_value=1
 @caption Gruppi mitekuuluvus katkestab ahela
+
+@property no_save_pwd type=checkbox ch_value=1
+@caption &Auml;ra salvesta AW'sse kasutaja parooli
 
 @reltype GROUP value=2 clid=CL_GROUP
 @caption grupp
@@ -271,7 +274,9 @@ class auth_server_ldap extends class_base
 		{
 			$u = $ol->begin();
 			$g = get_instance(CL_GROUP);
+			aw_disable_acl();
 			$g->remove_user_from_group($u, obj($grp));
+			aw_restore_acl();
 		}
 	}
 }
