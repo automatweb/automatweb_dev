@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.184 2003/12/08 10:28:04 duke Exp $
+// $Id: class_base.aw,v 2.185 2003/12/09 12:34:06 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2215,9 +2215,10 @@ class class_base extends aw_template
 					"reltype" => ($rawdata["reltype"] ? $rawdata["reltype"] : $reltype),
 				));
 			};
-			
+
 			$new = true;
 			$this->id = $id;
+			
 		};
 
 		if ($this->classinfo["trans"]["text"] == 1)
@@ -2475,6 +2476,7 @@ class class_base extends aw_template
 		if (method_exists($this->inst,"callback_pre_save"))
 		{
 			$this->inst->callback_pre_save(array(
+				"new" => $new,
 				"id" => $this->id,
 				"form_data" => &$args,
 				"request" => &$args,
