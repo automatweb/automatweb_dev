@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.32 2003/05/26 13:51:04 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.33 2003/05/26 15:51:07 axel Exp $
 // search.aw - Search Manager
 
 /*
@@ -451,8 +451,9 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 						break;
 
 					case "class_id":
-						if (is_array($val))
+						if (is_array($val) || (!is_numeric($val) && ($val = explode(',', ltrim($val,',')))))
 						{
+							//arr($val);
 							$tmp = array();
 							$val = $this->make_keys($val);
 
@@ -485,6 +486,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 							$parts["class_id"] = " class_id = '$val' ";
 							$partcount++;
 						};
+
+
 					break;
 
 					case "status":
@@ -671,6 +674,56 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			{
 				$fieldref = $fields[$key];
 				$fieldref['name'] = 's['.$key.']';
+				
+						$scr = <<<SCR
+							<script language= "javascript">
+							function GetOptions(from, tu,tyype)
+							{
+								if (tyype=='select')
+								{
+								len = tu.options.length;
+								for (i=0; i < len; i++)
+								{
+									tu.options[0] = null
+								}
+								var j = 0;
+								len = from.options.length;
+								for (var i=0; i < len; i++)
+								{
+									if ((from.options[i].value != 'capt_new_object') && (from.options[i].value != '0'))
+									{
+										if (tyype == 'select')
+										{
+											tu.options[j] = new Option(from.options[i].text, from.options[i].value, false, false);
+											j = j + 1;
+										}
+										else
+										{
+											tu.value = tu.value + ',' + from.options[i].value;
+										}
+									}
+
+								}
+								}
+								else
+								{
+
+								len = tu.value = '';
+								len = from.options.length;
+								for (var i=0; i < len; i++)
+								{
+									if ((from.options[i].value != 'capt_new_object') && (from.options[i].value != '0'))
+									{
+										tu.value = tu.value + ',' + from.options[i].value;
+									}
+
+								}
+								}
+
+
+							}
+SCR;
+
 				switch($fieldref["type"])
 				{
 					case "select":
@@ -704,51 +757,29 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 						$items = $this->mpicker($sel,$fieldref["options"]);
 						$size = ($fieldref["size"]) ? $fieldref["size"] : 5;
 
-
-						$scr = <<<SCR
-							<script language= "javascript">
-							function GetOptions(from, tu)
-							{
-								len = tu.options.length;
-								for (i=0; i < len; i++)
-								{
-									tu.options[0] = null
-								}
-								var j = 0;
-								len = from.options.length;
-								for (var i=0; i < len; i++)
-								{
-									if ((from.options[i].value != 'capt_new_object') && (from.options[i].value != '0'))
-									{
-										tu.options[j] = new Option(from.options[i].text, from.options[i].value, false, false)
-										j = j + 1;
-									}
-								}
-							}
-							GetOptions(document.forms[0].elements['aselect'],document.forms['searchform'].elements['s[class_id][]']);
-							</script>
-SCR;
 						//$mselectbox = sprintf("<select multiple size='$size' name='s[%s][]' onChange='%s'>%s</select>",$key,$fieldref["onChange"],$items);
 
-						$mselectbox = '<select multiple size="'.$size.'" name="s[class_id][]" ></select>'.$scr;
+						$mselectbox = '<select multiple size="'.$size.'" name="s[class_id][]" style="width:170px"></select>'.$scr."
+if (document.forms['searchform'].elements['s[class_id][]'])
+{
+	GetOptions(document.forms[0].elements['aselect'],document.forms['searchform'].elements['s[class_id][]'], 'select');
+}
+</script>
+";
 
 						if (isset($fieldref["filter"]))
 						{
-							$element = '<table border="0"><tr><td>'.
-							$mselectbox.
-							'</td><td><small>'.
-							implode('<br />',array(
-								'vali milles sisaldub',
-								html::textbox(array('name'=>'pattern1', 'size' => '9')).
-								html::button(array('name'=>'selectmatching1', 'value'=>'vali', 'onclick' => "selectMatchingOptions(document.forms[1].elements['s[class_id][]'],document.forms[1].pattern1.value.toLowerCase())")),
-								'vali ainult sisalduvad',
-								html::textbox(array('name'=>'pattern2', 'size' => '9')).
-								html::button(array('name'=>'selectmatching2', 'value'=>'vali', 'onclick' => "selectOnlyMatchingOptions(document.forms[1].elements['s[class_id][]'],document.forms[1].pattern2.value.toLowerCase())")),
-								'ära vali mis sisaldavad',
-								html::textbox(array('name'=>'pattern3', 'size' => '9')).
-								html::button(array('name'=>'selectmatching3', 'value'=>'vali', 'onclick' => "unSelectMatchingOptions(document.forms[1].elements['s[class_id][]'],document.forms[1].pattern3.value.toLowerCase())")),
-							)).
-							'</td></tr></table>';
+							$element = html::textbox(array('name'=>'pattern1', 'size' => '14')).
+								html::button(array('name'=>'selectmatching1', 'value'=>'vali', 'onclick' => "selectMatchingOptions(document.forms[1].elements['s[class_id][]'],document.forms[1].pattern1.value.toLowerCase())")).
+								'<br />'.
+								$mselectbox;
+//								'vali ainult sisalduvad',
+//								html::textbox(array('name'=>'pattern2', 'size' => '9')).
+//								html::button(array('name'=>'selectmatching2', 'value'=>'vali', 'onclick' => "selectOnlyMatchingOptions(document.forms[1].elements['s[class_id][]'],document.forms[1].pattern2.value.toLowerCase())")),
+//								'ära vali mis sisaldavad',
+//								html::textbox(array('name'=>'pattern3', 'size' => '9')).
+//								html::button(array('name'=>'selectmatching3', 'value'=>'vali', 'onclick' => "unSelectMatchingOptions(document.forms[1].elements['s[class_id][]'],document.forms[1].pattern3.value.toLowerCase())")),
+
 						}
 						else
 						{
@@ -756,6 +787,20 @@ SCR;
 						}
 						$caption = $fieldref["caption"];
 						break;
+
+					case "class_id_hidden":
+
+						$element = html::hidden($fieldref).$scr.
+"
+if (document.forms['searchform'].elements['s[class_id]'])
+{
+GetOptions(document.forms[0].elements['aselect'],document.forms['searchform'].elements['s[class_id]'], 'textbox');
+}
+"
+.'</script>';
+
+
+					break;
 
 					case "multiple":
 						if (is_array($fieldref["selected"]))
@@ -790,9 +835,9 @@ SCR;
 						$element = $fieldref['value'];
 						$caption = $fieldref["caption"];
 						break;
+
 					case 'hidden':
-						$element = html::hidden($fieldref).$fieldref['value'];
-						$caption = $fieldref["caption"];
+						$element = html::hidden($fieldref);//.$fieldref['value'];
 						break;
 
 
@@ -802,12 +847,22 @@ SCR;
 						break;
 				};
 
-				$this->vars(array(
-						"caption" => $caption,
-						"element" => $element,
-				));
+				if (($fieldref['type'] == 'class_id_hidden') || ($fieldref['type'] == 'hidden') )
+				{
+					$this->vars(array(
+							"element" => $element,
+					));
+					$c .= $this->parse("hidden");
+				}
+				else
+				{
+					$this->vars(array(
+							"caption" => $caption,
+							"element" => $element,
+					));
 
-				$c .= $this->parse("field");
+					$c .= $this->parse("field");
+				}
 			};
 		};
 

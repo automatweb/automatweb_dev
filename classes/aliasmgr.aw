@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.95 2003/05/26 13:51:04 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.96 2003/05/26 15:51:06 axel Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -141,7 +141,10 @@ class aliasmgr extends aw_template
 					'url' => $request.'&complex=1',
 				)),
 			);
-			$fields["class_id"] = 'n/a';
+			$fields["class_id"] = array(
+				"type" => "class_id_hidden",
+			);
+
 		}
 	}
 
@@ -818,10 +821,10 @@ class aliasmgr extends aw_template
 			}
 		}
 	}
-	
+
 	function make_alias_classarr2($rel_arr)
 	{
-		if (!is_array($rel_arr))
+		if (!is_array($rel_arr) || ($rel_arr == array()))
 			return NULL;
 		$classes = $this->cfg["classes"];
 		$arr = array();
@@ -927,7 +930,7 @@ class aliasmgr extends aw_template
 		$toolbar = get_instance("toolbar",array("imgbase" => "/automatweb/images/icons"));
 
 		$choices = array();
-		$choices2 = array();		
+		$choices2 = array();
 		//$spacer = "&nbsp;&nbsp;&nbsp;";
 		$spacer = "";
 
