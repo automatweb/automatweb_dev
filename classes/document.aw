@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.113 2002/07/24 20:48:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.114 2002/08/02 13:36:32 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 classload("msgboard","aw_style","form_base","file");
@@ -91,9 +91,9 @@ class document extends aw_template
 		$this->metafields = array("show_print","show_last_changed","show_real_pos","referer","refopt","dcache");
 
 		// for referer checks
-		$this->refopts = array("Ignoreeri","Näita","Ära näita");
+		$this->refopts = array("Ignoreeri","N?ita","?ra n?ita");
 
-		// siin on kirjas need väljad, mida arhiveeritakse
+		// siin on kirjas need v?ljad, mida arhiveeritakse
 		$this->archive_fields = array("title","lead","content");
 
 		lc_site_load("document",$this);
@@ -111,8 +111,8 @@ class document extends aw_template
 		$this->period = $period;	
 	}
 
-	// listib kõik dokumendid
-	// iseenesest kahtlane funktsioon, imho ei lähe seda vaja
+	// listib k?ik dokumendid
+	// iseenesest kahtlane funktsioon, imho ei l?he seda vaja
 	function listall()
 	{
 		$q = "SELECT *, objects.parent as parent FROM documents
@@ -122,7 +122,7 @@ class document extends aw_template
 	}
 
 	////
-	// !Listib dokud mingi menüü all
+	// !Listib dokud mingi men?? all
 	function list_docs($parent,$period = -1,$status = -1,$visible = -1)
 	{
 		if ($period == -1)
@@ -174,7 +174,7 @@ class document extends aw_template
 			$rstr = "objects.period = $period";
 		};
 	
-		// kui staatus on defineerimata, siis näitame ainult aktiivseid dokumente
+		// kui staatus on defineerimata, siis n?itame ainult aktiivseid dokumente
 		$v.= " AND objects.status = " . (($status == -1) ? 2 : $status);
 
 		if ($row["ndocs"] > 0)
@@ -295,8 +295,8 @@ class document extends aw_template
 	}
 
 	////
-	// !genereerib objekti nö valmiskujul
-	// sellest saab wrapper järgnevale funktsioonile
+	// !genereerib objekti n? valmiskujul
+	// sellest saab wrapper j?rgnevale funktsioonile
 	// params: docid, text, tpl, tpls, leadonly, strip_img, secID, boldlead, tplsf, notitleimg, showlead, no_stip_lead, doc
 	// tpls - selle votmega antakse ette template source, mille sisse kood paigutada
 	// doc - kui tehakse p2ring dokude tabelisse, siis v6ib ju sealt saadud inffi kohe siia kaasa panna ka
@@ -322,7 +322,7 @@ class document extends aw_template
 		}
 
 		
-		// küsime dokumendi kohta infot
+		// k?sime dokumendi kohta infot
 		// muide docid on kindlasti numbriline, aliaseid kasutatakse ainult
 		// menueditis.
 
@@ -371,7 +371,7 @@ class document extends aw_template
 			$meta = $this->get_object_metadata(array("oid" => $doc["brother_of"]));
 		};
 
-		// kas on vaja rakendada refereridel põhinevat kontrolli?
+		// kas on vaja rakendada refereridel p?hinevat kontrolli?
 		if ($meta["refopt"] > 0)
 		{
 			$referer = aw_global_get("referer");
@@ -381,15 +381,15 @@ class document extends aw_template
 			$this->referer = $meta["referer"];
 			$this->refopt = $meta["refopt"];
 
-			// kui referer matchib ja on kästud mitte näidata, siis
-			// dropime välja
+			// kui referer matchib ja on k?stud mitte n?idata, siis
+			// dropime v?lja
 			if ($match && ($meta["refopt"] == 2))
 			{
 				return false;
 			};
 
-			// kui referer ei matchi ja on kästud näidata, siis
-			// dropime ka välja
+			// kui referer ei matchi ja on k?stud n?idata, siis
+			// dropime ka v?lja
 			if (not($match) && ($meta["refopt"] == 1))
 			{
 				return false;
@@ -575,13 +575,13 @@ class document extends aw_template
 		}
 
 		// laeme vajalikud klassid
-		// kui vaja on näidata ainult dokumendi leadi, siis see tehakse siin
+		// kui vaja on n?idata ainult dokumendi leadi, siis see tehakse siin
  		if ($leadonly > -1) 
 		{
-			// stripime pildid välja. 
+			// stripime pildid v?lja. 
 			if ($strip_img) 
 			{
-				// ja stripime leadist *koik* objektitagid välja.
+				// ja stripime leadist *koik* objektitagid v?lja.
 				$this->vars(array("imurl" => "/images/trans.gif"));
 				$doc["lead"] = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$doc["lead"]);
 			};
@@ -1050,6 +1050,12 @@ class document extends aw_template
  
 
 		$retval = $this->parse();
+
+		if (aw_global_get("print") && $this->cfg["remove_links_from_print"])
+		{
+			$retval = preg_replace("/<a(.*)>/U", "", $retval);
+			$retval = str_replace("</a>", "", $retval);
+		}
 		return $retval;
 	}
 
@@ -1080,12 +1086,12 @@ class document extends aw_template
 		return $retval;
 	}
 	
-	// kysib "sarnaseid" dokusid mingi välja kaudu
+	// kysib "sarnaseid" dokusid mingi v?lja kaudu
 	// XXX
 	function get_relations_by_field($params) 
 	{
-		$field = $params["field"]; // millisest väljast otsida
-		$keywords = split(",",$params["keywords"]); // mida sellest väljast otsida,
+		$field = $params["field"]; // millisest v?ljast otsida
+		$keywords = split(",",$params["keywords"]); // mida sellest v?ljast otsida,
 																		// comma separated listi
 		$section = $params["section"]; // millisest sektsioonist otsida
 		// kui me midagi ei otsi, siis pole siin midagi teha ka enam. GET OUT!
@@ -1095,7 +1101,7 @@ class document extends aw_template
 		} 
 		else 
 		{
-			// moodustame päringu dokude (v6i menyyde) saamiseks, mis vastavad meile
+			// moodustame p?ringu dokude (v6i menyyde) saamiseks, mis vastavad meile
 			// vajalikule tingimusele
 			$retval = array();
 			while(list($k,$v) = each($keywords)) 
@@ -1132,7 +1138,7 @@ class document extends aw_template
 	function save($data) 
 	{
 		// id (docid) on ainuke parameeter, mis *peab* olema kaasa antud
-		// ja siis veel vähemalt yx teine parameeter mida muuta
+		// ja siis veel v?hemalt yx teine parameeter mida muuta
 
 		// fetchime vana dokumendi, et seda arhiivi salvestada
 		$old = $this->fetch($data["id"]);
@@ -1253,7 +1259,7 @@ class document extends aw_template
 			if (isset($data[$fname]) || $fname=="esilehel" || $fname=="esileht_yleval" || $fname=="esilehel_uudis" || $fname=="is_forum" || $fname=="lead_comments" || $fname=="showlead" || $fname=="yleval_paremal" || $fname == "show_title" || $fname=="copyright" || $fname == "show_modified" || $fname == "title_clickable" || $fname == "newwindow" || $fname == "no_right_pane" || $fname == "no_left_pane" || $fname == "no_search" || $fname == "frontpage_left" || $fname == "frontpage_center" || $fname == "frontpage_center_bottom" || $fname == "frontpage_right" || $fname == "no_last")  
 			{
 				$q_parts[] = "$fname = '$data[$fname]'";
-				// paneme väljade nimed ka kirja, et formeerida logi
+				// paneme v?ljade nimed ka kirja, et formeerida logi
 				// jaoks natuke informatiivsem teade
 				$changed_fields[] = $fcap;
 			};
@@ -1299,13 +1305,13 @@ class document extends aw_template
 		$q = "UPDATE documents SET " . join(",\n",$q_parts) . " WHERE docid = '".$old["brother_of"]."'"; 
 		$this->db_query($q);
 		
-		// siia moodustame objektitabeli päringu osad
+		// siia moodustame objektitabeli p?ringu osad
 		$oq_parts = array();
 
 		$obj_known_fields = array("name","visible","status","parent");
 
-		// seda on järgneva päringu koostamiseks vaja, sest objektitabelis pole "title"
-		// välja. On "name"
+		// seda on j?rgneva p?ringu koostamiseks vaja, sest objektitabelis pole "title"
+		// v?lja. On "name"
 		if ($data["title"]) 
 		{
 			$data["name"] = $data["title"];
@@ -1401,7 +1407,7 @@ class document extends aw_template
 
 		if ($SITE_ID == 5)
 		{
-			$text = "$from_name ($from) soovitab teil vaadata Pere ja Kodu saidile ".$baseurl.",\ntäpsemalt linki ".$baseurl."/index.$ext?section=$section\n\n$from_name kommentaar lingile: $comment\n";
+			$text = "$from_name ($from) soovitab teil vaadata Pere ja Kodu saidile ".$baseurl.",\nt?psemalt linki ".$baseurl."/index.$ext?section=$section\n\n$from_name kommentaar lingile: $comment\n";
 
 			if ($copy != "")
 				$bcc = "\nCc: $copy ";
@@ -1411,7 +1417,7 @@ class document extends aw_template
 		else
 		if ($SITE_ID == 17)
 		{
-			$text = "$from_name ($from) soovitab teil vaadata Ida-Viru investeerimisportaali ".$baseurl.",\ntäpsemalt linki ".$baseurl."/index.$ext?section=$section \n\n$from_name kommentaar lingile: $comment\n";
+			$text = "$from_name ($from) soovitab teil vaadata Ida-Viru investeerimisportaali ".$baseurl.",\nt?psemalt linki ".$baseurl."/index.$ext?section=$section \n\n$from_name kommentaar lingile: $comment\n";
 
 			if ($copy != "")
 				$bcc = "\nCc: $copy ";
@@ -1421,7 +1427,7 @@ class document extends aw_template
 		else
 		if ($SITE_ID == 71)
 		{
-			$text = "$from_name ($from) soovitab teil vaadata saiti ".$baseurl.",\ntäpsemalt linki ".$baseurl."/index.$ext?section=$section \n\n$from_name kommentaar lingile: $comment\n";
+			$text = "$from_name ($from) soovitab teil vaadata saiti ".$baseurl.",\nt?psemalt linki ".$baseurl."/index.$ext?section=$section \n\n$from_name kommentaar lingile: $comment\n";
 
 			if ($copy != "")
 				$bcc = "\nCc: $copy ";
@@ -1430,7 +1436,7 @@ class document extends aw_template
 		}
 		else
 		{
-			$text = "$from_name ($from) soovitab teil vaadata Nädala saidile www.nadal.ee,\ntäpsemalt linki http://www.nadal.ee/index.$ext?section=$section\n\n$from_name kommentaar lingile: $comment\n";
+			$text = "$from_name ($from) soovitab teil vaadata N?dala saidile www.nadal.ee,\nt?psemalt linki http://www.nadal.ee/index.$ext?section=$section\n\n$from_name kommentaar lingile: $comment\n";
 
 			if ($copy != "")
 			{
@@ -1708,7 +1714,7 @@ class document extends aw_template
 		}
 
 		// jargnev funktsioon kaib rekursiivselt mooda menyysid, kuni leitakse
-		// menyy, mille juures on määratud edimistemplate
+		// menyy, mille juures on m??ratud edimistemplate
 		$_tpl = $this->get_edit_template($oob["parent"]);
 		if (is_number($_tpl))
 		{
@@ -1946,7 +1952,7 @@ class document extends aw_template
 		
 		$t->define_field(array(
 			"name" => "date",
-			"caption" => "Kuupäev",
+			"caption" => "Kuup?ev",
 			"talign" => "center",
 			"nowrap" => 1,
 			"sortable" => 1,
@@ -2656,6 +2662,7 @@ class document extends aw_template
 			$sortby = "percent";
 		}
 
+		$str = trim($str);
 		$this->tpl_init("automatweb/documents");
 		// kas ei peaks checkkima ka teiste argumentide oigsust?
 		$ostr = $str;
@@ -2942,7 +2949,13 @@ class document extends aw_template
 		$per_page = 10;
 
 		$mned = get_instance("menuedit");
-		
+
+		if (aw_ini_get("search.rewrite_urls"))
+		{
+			$exp = get_instance("export");
+			$exp->init_settings();
+		}
+
 		$num = 0;
 		reset($docarr);
 		while (list(,$v) = each($docarr))
@@ -2958,41 +2971,18 @@ class document extends aw_template
 					$sstr = substr(($v["matches"]*100) / $max_count,0,4);
 				}
 
-
 				$sec = $v["section"];
 				if ($mc->subs[$v["parent"]] == 1)
 				{
-//.					echo "vparent = $v[parent] <br>";
-					// we need to push all parent menus aliases to menuedit::menu_aliases for make_menu_link to work
-					$mrow = $mc->get_cached_menu($v["parent"]);
-					$mpr = $mrow["parent"];
-					$mned->menu_aliases = array();
-
-//					echo "mpr = $mpr sec = $sec mrow = <pre>", var_dump($mrow),"</pre> root= ",$this->cfg["rootmenu"],"<br>";
-					while ($mpr > 0 && $mpr != $this->cfg["rootmenu"])
-					{
-						$mrow = $mc->get_cached_menu($mpr);
-						if ($mrow["alias"] != "")
-						{
-							array_push($mned->menu_aliases,$mrow["alias"]);
-						}
-						$mpr = $mrow["parent"];
-//						echo "mpr = $mpr <br>";
-					}
-					$mr = $mc->get_cached_menu($v["parent"]);
-					if (!is_array($mr))
-					{
-						$mr = array();
-					}
-					$sec = $mned->make_menu_link($mr);
+					// if it is the only document under the menu, make link to the menu instead
+					$sec = $v["parent"];
 				}
 
 				if (aw_ini_get("search.rewrite_urls"))
 				{
-					$exp = get_instance("export");
-					$exp->fn_type = aw_ini_get("search.rewrite_url_type");
-					$sec = $exp->rewrite_link($sec);
+					$sec = $exp->rewrite_link(document::get_link($sec));
 					$sec = aw_ini_get("baseurl")."/".$exp->get_hash_for_url($sec,aw_global_get("lang_id"));
+					$sec = str_replace("_","/",$sec);
 				}
 
 				$this->vars(array("title"			=> strip_tags($v["title"]),
