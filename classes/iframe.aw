@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/iframe.aw,v 2.8 2004/03/09 14:48:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/iframe.aw,v 2.9 2004/05/06 12:27:31 kristo Exp $
 // iframe.aw - iframes
 
 /*
@@ -148,6 +148,12 @@ class iframe extends class_base
 
 		return $this->parse();
 	}
-	
+
+	function request_execute($o)
+	{
+		die("<html><body topmargin=0 leftmargin=0 margintop=0 marginleft=0>".$this->parse_alias(array(
+			"alias" => array("target" => $o->id())
+		))."</body></html>");
+	}	
 }
 ?>
