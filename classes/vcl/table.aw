@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.18 2004/06/09 10:16:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.19 2004/06/11 12:55:42 duke Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -64,6 +64,14 @@ class aw_table extends aw_template
 	function set_sortable($arg)
 	{
 		$this->sortable = $arg;
+	}
+
+	/** some users need to put simple plain text above the
+	    table, give them a setter for this
+	**/
+	function set_header($arr)
+	{
+		$this->table_header = $arr;
 	}
 
 	////
