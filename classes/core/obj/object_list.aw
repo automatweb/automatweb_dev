@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.16 2003/12/08 17:11:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.17 2004/01/13 16:13:40 duke Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -22,6 +22,15 @@ class object_list extends _int_obj_container_base
 				"id" => ERR_PARAM,
 				"msg" => "objct_list::filter(): parameter must be an array!"
 			));
+		}
+
+		if (is_array($param["oid"]) && sizeof($param["oid"]) == 0)
+		{
+			error::throw(array(
+				"id" => ERR_PARAM,
+				"msg" => "objct_list::filter(): oid parameter cannot be an empty array!"
+			));
+
 		}
 
 		// we should check the individual arguments as well .. if "oid" is an object
