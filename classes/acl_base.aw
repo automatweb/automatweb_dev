@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.23 2002/10/16 13:56:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.24 2002/10/20 16:48:18 kristo Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -232,9 +232,12 @@ class acl_base extends core
 		}
 		enter_function("acl_base::can", array());
 
-		$max_acl = $this->can_aw($access,$oid);
-		$access="can_".$access;
+		if (!($max_acl = aw_cache_get("__aw_acl_cache", $oid)))
+		{
+			$max_acl = $this->can_aw($access,$oid);
+		}
 
+		$access="can_".$access;
 		exit_function("acl_base::can");
 		return $max_acl[$access];
 	}
