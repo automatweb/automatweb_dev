@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.5 2001/07/03 04:24:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.6 2001/07/03 05:07:18 duke Exp $
 global $PHP_SELF;
 $js_table = "
 function xnavi_alfa(char_to_look_for) {
@@ -400,13 +400,16 @@ class aw_table
 					// määrame ära staili
 					if ($this->sortby == $v1[name]) {
 						$style = (($counter % 2) == 0) ? $this->selected1 : $this->selected2;
+						$bgcolor = ($counter % 2) ? $this->selbgcolor1 : $this->selbgcolor2;
 					} else {
 						$style = (($counter % 2) == 0) ? $this->style1 : $this->style2; 
+						$bgcolor = ($counter % 2) ? $this->bgcolor1 : $this->bgcolor2;
 					};
 						
 					// moodustame celli
 					$cell_attribs = array("name"    => "td",
-							      "classid" => $style);
+							      "classid" => $style,
+							      "bgcolor" => $bgcolor);
 					if ($v1["align"]) {
 						$cell_attribs["align"] = $v1["align"];
 					};
@@ -419,6 +422,7 @@ class aw_table
 						$cell_attribs["nowrap"] = "";
 					};
 
+	
 					if ($v["bgcolor"]) {
 						$cell_attribs["bgcolor"] = $v["bgcolor"];
 					};
@@ -444,7 +448,7 @@ class aw_table
 						};
 					};
 
-					if ($v1[type] == "time") {
+					if ($v1["type"] == "time") {
 						$val = date($v1["format"],$val);
 					};
 
@@ -608,19 +612,23 @@ class aw_table
 			// stiilid contenti kuvamiseks
 			case "content_style1":
 				$this->style1 = $attrs["value"];
+				$this->bgcolor1 = $attrs["bgcolor"];
 				break;
 
 			case "content_style2":
 				$this->style2 = $attrs["value"];
+				$this->bgcolor2 = $attrs["bgcolor"];
 				break;
 
 			// stiilid millega kuvatakse sorteeritud välja sisu
 			case "content_style1_selected":
 				$this->selected1 = $attrs["value"];
+				$this->selbgcolor1 = $attrs["bgcolor"];
 				break;
 
 			case "content_style2_selected":
 				$this->selected2 = $attrs["value"];
+				$this->selbgcolor2 = $attrs["bgcolor"];
 				break;
 
 			// stiil, millega joonistatakse tähestik
