@@ -1,8 +1,20 @@
-<form action='refcheck.{VAR:ext}' method=post>
+<script language="javascript">
+var sel_el;
+function setLink(li,title)
+{
+	sel_el.value=li;
+}
+</script>
+
+<form action='refcheck.{VAR:ext}' method=post name="b88">
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <tr bgcolor="#C9EFEF">
 <td class="plain">Aadress, kuhu suunatakse p&auml;rast sisse logimist:</td>
-<td class="plain"><input type='text' name='after_login' value='{VAR:after_login}'></td>
+<td class="plain"><input type='text' name='after_login' value='{VAR:after_login}'><a href="#" onclick="sel_el=document.b88.after_login;remote('no',500,400,'{VAR:search_doc}')">Saidi sisene link</a></td>
+</tr>
+<tr bgcolor="#C9EFEF">
+<td class="plain">Sisse-logimist vajava veateate asukoht:</td>
+<td class="plain"><input type='text' name='orb_err_mustlogin' value='{VAR:orb_err_mustlogin}'><a href="#" onClick="sel_el=document.b88.orb_err_mustlogin;remote('no',500,400,'{VAR:search_doc}')">Saidi sisene link</a></td>
 </tr>
 <tr bgcolor="#C9EFEF">
 <td class="plain" colspan=2><input type='submit' value='Salvesta'></td>
