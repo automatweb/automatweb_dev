@@ -1004,7 +1004,14 @@ class form_db_base extends aw_template
 							$query.=" AND ";
 						}
 						// and like radiobuttons and checkboxes, listbox items should be exact matches
-						$query.=" (".$elname2." = '".$value."')";
+						if ($el->arr["lb_search_like"])
+						{
+							$query.=" (".$elname2." LIKE '%".$value."%')";
+						}
+						else
+						{
+							$query.=" (".$elname2." = '".$value."')";
+						}
 					}
 					else
 					if ($el->arr["type"] == "date")
@@ -1391,11 +1398,12 @@ class form_db_base extends aw_template
 		// it is assumed, that the root element for the tree is $f_from
 		// and the tree contains all the relations for the forms in it. 
 		// well - I see no way of avoiding this exhaustive search, and it really does not take that long
-		$this->_clear_stack("join_path");
+		//$this->_clear_stack("join_path");
+		$this->join_path = array();
 		$this->rgjp_beenthere = array();
 		if ($this->req_get_join_path($f_from, $f_to))
 		{
-			return $this->_clear_stack("join_path");
+			return $this->join_path;
 		}
 		// FIXME: this error message needs to be able to point it out to the user where the link broke
 		// or at least give some hint towards the breakage
@@ -1409,14 +1417,14 @@ class form_db_base extends aw_template
 			return;
 		}
 		$this->rgjp_beenthere[$f_root] = $f_root;
-		$this->_push($f_root,"join_path");
+		array_push($this->join_path,$f_root);
 		if (is_array($this->form_rel_tree[$f_root]))
 		{
 			foreach($this->form_rel_tree[$f_root] as $r_fid => $r_data)
 			{
 				if ($r_fid == $f_to)	// we found the end, get out of here
 				{
-					$this->_push($f_to,"join_path");
+					array_push($this->join_path,$f_to);
 					return true;
 				}
 
@@ -1426,7 +1434,7 @@ class form_db_base extends aw_template
 				}
 			}
 		}
-		$this->_pop("join_path");
+		array_pop($this->join_path);
 		return false;
 	}
 
