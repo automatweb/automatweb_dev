@@ -30,6 +30,16 @@
             <caption>Aktiivse päeva sisu näitamine</caption>
       </property>
       <property>
+            <name>show_days_with_events</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Näita ainult sündmustega päevi</caption>
+      </property>
+      <property>
             <name>minical_day_with_events</name>
             <table>objects</table>
             <group>style</group>
@@ -78,6 +88,26 @@
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
             <caption>Deaktiivne päev</caption>
+      </property>
+      <property>
+            <name>minical_title</name>
+            <table>objects</table>
+            <group>style</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
+            <caption>Pealkiri</caption>
+      </property>
+      <property>
+            <name>minical_background</name>
+            <table>objects</table>
+            <group>style</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
+            <caption>Taust</caption>
       </property>
       <property>
             <name>show_events</name>
