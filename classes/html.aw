@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.37 2003/06/04 14:19:54 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.38 2003/07/02 14:53:52 duke Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -359,7 +359,8 @@ class html extends aw_template
 		extract($args);
 		$target = isset($target) ? " target='$target' " : "";
 		$onClick = isset($onClick) ? " onClick='$onClick' " : "";
-		return "<a href='$url' $target $onClick>$caption</a>";
+		$title = isset($title) ? " alt='$title' title='$title' " : "";
+		return "<a href='$url' $target $title $onClick>$caption</a>";
 	}
 
 	function richtext($args = array())
