@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.278 2004/06/25 21:40:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.279 2004/06/26 08:19:57 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -180,18 +180,18 @@ class core extends acl_base
 	// !sets objects $oid's cache dirty flag to false
 	function clear_cache($oid, $fname = "")
 	{
-		$ob = $this->get_object($oid);
-		$dat = aw_unserialize($ob["cachedata"]);
+		$ccd = $this->db_fetch_field("SELECT cachedata FROM objects WHERE oid = '$oid'","cachedata");
+		$dat = aw_unserialize($ccd);
 		if ($fname != "")
 		{
 			$dat[$fname] = 1;
 		}
 		$ds = aw_serialize($dat);
 		$this->quote($ds);
-			if ($GLOBALS["INTENSE_CACHE"] == 1)
-			{
-				echo "clear_cache oid = $oid fname = $fname , dat = ".dbg::dump($dat)." <br>";
-			}
+		if ($GLOBALS["INTENSE_CACHE"] == 1)
+		{
+			echo "clear_cache oid = $oid fname = $fname , dat = ".dbg::dump($dat)." <br>";
+		}
 		$q = "UPDATE objects SET cachedirty = 0 , cachedata = '$ds' WHERE oid = '$oid'";
 		$this->db_query($q);
 	}
@@ -224,11 +224,11 @@ class core extends acl_base
 	function change_alias($arr) 
 	{
 		extract($arr);
-		$target_data = $this->get_object($target);
+		$target_data = obj($target);
 
 		$source = $this->db_fetch_field("SELECT source FROM aliases WHERE id = '$id'", "source");
 
-		$q = "UPDATE aliases SET target = '$target' , type = '$target_data[class_id]' , data = '$extra' 
+		$q = "UPDATE aliases SET target = '$target' , type = '".$target_data->class_id()."' , data = '$extra' 
 					WHERE id = '$id'";
 
 		$this->db_query($q);
@@ -289,9 +289,9 @@ class core extends acl_base
 
 		$extra = ($arr["extra"]) ? $arr["extra"] : "";
 
-		$target_data = $this->get_object($alias);
+		$target_data = obj($alias);
 
-		$idx = $this->db_fetch_field("SELECT MAX(idx) as idx FROM aliases WHERE source = '$id' AND type =  '$target_data[class_id]'","idx");
+		$idx = $this->db_fetch_field("SELECT MAX(idx) as idx FROM aliases WHERE source = '$id' AND type =  '".$target_data->class_id()."'","idx");
 		if ($idx === "")
 		{
 			$idx = 1;
@@ -304,9 +304,9 @@ class core extends acl_base
 		$relobj_id = (int)$arr["relobj_id"];
 		$reltype = (int)$arr["reltype"];
 		$q = "INSERT INTO aliases (source,target,type,data,idx,relobj_id,reltype)
-			VALUES('$id','$alias','$target_data[class_id]','$extra','$idx','$relobj_id','$reltype')";
+			VALUES('$id','$alias','".$target_data->class_id()."','$extra','$idx','$relobj_id','$reltype')";
 
-		$cl = $target_data['class_id'];
+		$cl = $target_data->class_id();
 
 		// aliasmgr object type history
 		if (isset($add_obj_type_history))
