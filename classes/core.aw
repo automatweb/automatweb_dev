@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.40 2001/07/18 16:22:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.41 2001/07/25 01:05:42 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -980,6 +980,25 @@ class core extends db_connector
 	}
 
 	////
+	// !Tagastab objekti ja tema lahtiparsitud metainfo
+	function get_obj_meta($oid)
+	{
+		global $objcache;
+		$object = $this->get_object($oid);
+		if (is_array($object))
+		{
+			$meta = $this->get_object_metadata(array(
+							"oid" => $oid,
+							"metadata" => $object["metadata"],
+			));
+
+			$object["meta"] = $meta;
+		};
+		return $object;
+	}
+			
+
+	////
 	// !tagastab objekti nime ja class_id jargi
 	function get_object_by_name($args = array())
 	{
@@ -1504,6 +1523,7 @@ class core extends db_connector
 
 		classload($v["file"]);
 		$t = new $v["file"];
+
 
 		return $t->_unserialize(array("str" => $s["str"], "parent" => $parent, "period" => $period));
 	}
