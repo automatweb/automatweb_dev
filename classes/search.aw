@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.27 2003/04/24 07:47:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.28 2003/05/02 13:29:34 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -298,6 +298,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			"alias" => "",
 			"redir_target" => "",
 			"oid" => "",
+			"site_id" => aw_ini_get('site_id')
 		);
 
 		$_obj = $args["obj"];
@@ -948,7 +949,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				"type" => "select",
 				"caption" => "Saidi ID",
 				"options" => $sites,
-				"selected" => $args["s"]["site_id"],
+				"selected" => ($args["s"]["site_id"] ? $args["s"]["site_id"] : aw_ini_get("site_id")),
 			);
 		};
 	}
