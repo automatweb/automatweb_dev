@@ -21,6 +21,7 @@
 </actions>
 
 <data>
+<field name="icon" caption="" align="center" talign="center" sortable="0" chgbgcolor="cutcopied" width="22" />
 <field name="name" caption="Nimi" align="left" talign="center" sortable="1" chgbgcolor="cutcopied"/>
 <field name="jrk" caption="Jrk" align="center" width="10" talign="center" sortable="0" chgbgcolor="cutcopied" numeric="yea"/>
 <field name="status" caption="Aktiivne" width="10" talign="center" align="center" chgbgcolor="cutcopied"/>
