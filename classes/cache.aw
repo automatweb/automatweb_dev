@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.14 2003/01/20 16:02:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.15 2003/01/20 18:43:08 duke Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
@@ -202,6 +202,8 @@ class cache extends core
 		$source_mtime = @filemtime($fqfn);
 		$cache_mtime = @filemtime($cachefile);
 
+		//$source_mtime = $cache_mtime + 100;
+
 		if ($source_mtime > $cache_mtime)
 		{
 			//print "need to reparse<br>";
@@ -214,6 +216,12 @@ class cache extends core
 				$contents = $this->get_file(array("file" => $fqfn));
 				// 3) pass them to unserializer
 				$result = $clobj->$clmeth(array("content" => $contents));
+			};
+			$clobj = &$args["loader"][0];
+			$clmeth = $loader[1];
+			if (is_object($clobj) && method_exists($clobj,$clmeth))
+			{
+				$clobj->$clmeth(array("data" => $result));
 			};
 			$ser_res = aw_serialize($result,SERIALIZE_PHP);
 			$this->put_file(array(
