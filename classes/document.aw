@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.205 2003/08/18 14:23:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.206 2003/08/26 09:34:00 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -295,7 +295,6 @@ class document extends aw_template
 			};
 		}
 
-
 		if ($doc["meta"])
 		{
 			$meta = $doc["meta"];
@@ -436,6 +435,12 @@ class document extends aw_template
 		};
 
 		$this->vars(array("imurl" => "/images/trans.gif"));
+		// import charset for print 
+		$_langs = get_instance("languages");
+		$_ld = $_langs->fetch(aw_global_get("lang_id"),true);
+		$this->vars(array(
+			"charset" => $_ld["charset"]
+		));
 
 		// load localization settings and put them in the template
 		lc_site_load("document",$this);
@@ -910,7 +915,12 @@ class document extends aw_template
 			setlocale(LC_CTYPE, $old_loc);
 		}
 		classload("image");
-	
+
+		if (!$doc["tm"])
+		{
+			$doc["tm"] = $doc["modified"];
+		}
+			
 		$this->vars(array(
 			"page_title" => ($pagetitle != "" ? $pagetitle : strip_tags($title)),
 			"title"	=> $title,
@@ -944,7 +954,8 @@ class document extends aw_template
 			"doc_count" => $this->doc_count++,
 			"title_target" => $doc["newwindow"] ? "target=\"_blank\"" : "",
 			"title_link"  => ($doc["link_text"] != "" ? $doc["link_text"] : (isset($GLOBALS["doc_file"]) ? $GLOBALS["doc_file"] :  "index.".$ext."/")."section=".$docid),
-			"site_title" => strip_tags($doc["title"])
+			"site_title" => strip_tags($doc["title"]),
+			"link" => ""
 		));
 
 		if (is_object($si) && method_exists($si,"get_document_vars"))
@@ -1788,6 +1799,7 @@ class document extends aw_template
 		));
 
 
+
 		$t = get_instance("languages");
 
 		$meta = $this->get_object_metadata(array("oid" => $id));
@@ -1886,6 +1898,7 @@ class document extends aw_template
 			"NOT_IE" => "",
 			"PLUGIN" => $plugcontent,
 		));
+
 		return $this->parse();
 	}
 
@@ -3272,12 +3285,17 @@ class document extends aw_template
 	{
 		$lsu = aw_ini_get("menuedit.long_section_url");
 
+		$_lim = aw_ini_get("document.max_author_docs");
+		if ($_lim)
+		{
+			$lim = "LIMIT ".$_lim;
+		}
 		$this->db_query("
 			SELECT docid,title 
 			FROM documents 
 				LEFT JOIN objects ON objects.oid = documents.docid 
 			WHERE author = '$author' AND objects.status = 2
-			ORDER BY objects.created DESC
+			ORDER BY objects.created DESC $lim
 		");
 		while ($row = $this->db_next())
 		{
