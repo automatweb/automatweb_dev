@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.19 2001/08/08 06:06:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.20 2001/08/08 07:31:08 cvs Exp $
 
 global $orb_defs;
 $orb_defs["config"] = "xml";
@@ -50,6 +50,7 @@ class db_config extends aw_template
 		$this->read_template("config.tpl");
 	
 		$al = $this->get_simple_config("after_login");
+		$doc = $this->get_simple_config("orb_err_mustlogin");
 		$if = $this->get_simple_config("user_info_form");
 		$op = $this->get_simple_config("user_info_op");
 
@@ -61,7 +62,8 @@ class db_config extends aw_template
 			"after_login" => $al,
 			"forms" => $this->picker($if,$fb->get_list(FTYPE_ENTRY,true)),
 			"ops" => $this->picker($op,$ops[$if]),
-			"search_doc" => $this->mk_orb("search_doc", array(),"links")
+			"search_doc" => $this->mk_orb("search_doc", array(),"links"),
+			"mustlogin" => $doc
 		));
 		return $this->parse();
 	}
@@ -923,6 +925,7 @@ class db_config extends aw_template
 		$this->set_simple_config("after_login",$after_login);
 		$this->set_simple_config("user_info_form",$user_info_form);
 		$this->set_simple_config("user_info_op",$user_info_op);
+		$this->set_simple_config("orb_err_mustlogin",$mustlogin);
 	}
 };
 
