@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.62 2004/04/19 09:37:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.63 2004/04/30 08:48:30 kristo Exp $
 
 class admin_menus extends aw_template
 {
@@ -472,6 +472,7 @@ class admin_menus extends aw_template
 				}
 			}
 		}
+
 		aw_session_set("copied_objects", $copied_objects);
 
 		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
