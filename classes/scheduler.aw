@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.11 2003/02/21 12:56:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.12 2003/04/24 14:31:45 kristo Exp $
 // scheduler.aw - Scheduler
 
 class scheduler extends aw_template
@@ -133,6 +133,11 @@ class scheduler extends aw_template
 	function open_session()
 	{
 		$this->session_fp = fopen($this->cfg["sched_file"], "a+");
+		if (!$this->session_fp)
+		{
+			printf("cannot open %s for writing, please check permission",$this->cfg["sched_file"]);
+			die();
+		};
 		flock($this->session_fp,LOCK_EX);
 
 		fseek($this->session_fp,0,SEEK_SET);
@@ -169,7 +174,7 @@ class scheduler extends aw_template
 		set_time_limit(0);
 		
 		// ok, here check if events are already being processed
-		if (file_exists($this->cfg["lock_file"]) && (filectime($this->cfg["lock_file"]) > (time()-180)))
+		if (file_exists($this->cfg["lock_file"]) && (filectime($this->cfg["lock_file"]) > (time()-36000)))
 		{
 			// they are so just bail out
 			echo "bailing for lock file ",$this->cfg["lock_file"],"<br>\n";
