@@ -1,40 +1,8 @@
 <!--tabelraam-->
-<table width="100%" cellspacing="0" cellpadding="1">
+<table width="100%" cellspacing="0" cellpadding="0" border="0">
+<form method="GET" name="foo">
 <tr><td class="tableborder">
-
-	<!--tabelshadow-->
-	<table width="100%" cellspacing="0" cellpadding="0">
-	<tr><td width="1" class="tableshadow"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""></td><td class="tableshadow"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""><br>
-		<!--tabelsisu-->
-		<table width="100%" cellspacing="0" cellpadding="0">
-		<tr><td><td class="tableinside" height="29">
-
-
-
-
-<table border="0" cellpadding="0" cellspacing="0">
-	<form method="GET" name="foo">
-	<!-- SUB: aliaslist -->
-			<select name="aselect" class="formselect">
-				<option>--Vali alias--</option>
-				{VAR:aliases}
-			</select>
-	<!-- END SUB: aliaslist -->
 {VAR:toolbar}
-</td>
-</tr>
-</table>
-
-
-		</td>
-		</tr>
-		</table>
-
-
-	</td>
-	</tr>
-	</table>
-
 </td>
 </tr>
 </table>
