@@ -499,6 +499,20 @@ function toggle_file_link_newwin()
 </tr>
 <!-- END SUB: ALIASES -->
 
+<!-- SUB: TIMESLICE -->
+<tr>
+	<td class="fgtext" valign="top">
+		Ajaühiku pikkus
+	</td>
+	<td class="fgtext" colspan="3">
+		<select class="small_button" name="{VAR:cell_id}_slicelength">
+		<option value="0">--- Vali üks ---</option>
+		{VAR:slicelengthlist}
+		</select>
+	</td>
+</tr>
+<!-- END SUB: TIMESLICE -->
+
 
 <!-- SUB: EL_HLINK -->
 <td class="fgtext">{VAR:LC_FORMS_CHOOSE_OUTPUT}:</td>
