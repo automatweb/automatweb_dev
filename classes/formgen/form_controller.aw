@@ -42,6 +42,7 @@ class form_controller extends form_base
 	function submit($arr)
 	{
 		extract($arr);
+		$this->dequote(&$eq);
 		if ($id)
 		{
 			// update
