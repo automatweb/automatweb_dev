@@ -198,6 +198,11 @@
 
 											<input type="textbox" class="formtext" size="3" name="cols[{VAR:col_id}][thousands_sep]" value="{VAR:thousands_sep}"> Tuhandete eraldaja<Br>
 											<!-- END SUB: SEL_IMAGE -->
+
+											<!-- SUB: SEL_DATEFORMAT -->
+											Kuup&auml;eva formaat: <br>
+											<input type="text" class="formtext" name="cols[{VAR:col_id}][dateformat]" value="{VAR:dateformat}"> <br>
+											<!-- END SUB: SEL_DATEFORMAT -->
 										</table>
 
 										<table border="0" cellpadding="0" cellspacing="0" width="100%">

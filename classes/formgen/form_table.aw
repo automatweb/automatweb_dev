@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.44 2003/07/01 10:49:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.45 2003/07/07 13:51:44 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -1197,7 +1197,12 @@ class form_table extends form_base
 				list(,$elid) = each($cc['els']);
 				if ($cc['el_main_types'][$elid] == 'date' && count($cc['els']) == 1)
 				{
-					$numericattr = ' type="time" format="d.m.y / H:i" numeric="yes"';
+					$fmt = "d.m.y / H:i";
+					if ($cc["dateformat"] != "")
+					{
+						$fmt = $cc["dateformat"];
+					}
+					$numericattr = ' type="time" format="'.$fmt.'" numeric="yes"';
 				}
 				else
 				if ($cc['el_types'][$elid] == 'int')
@@ -2139,10 +2144,28 @@ class form_table extends form_base
 				"img_type_imgtx" => checked($this->table["defs"][$col]["image_type"] == "imgtx"),
 			));
 			$coldata[$col][13] = $this->parse("SEL_IMAGE");
+
+			$has_dates = false;
+			$awa = new aw_array($this->table["defs"][$col]["els"]);
+			
+			foreach($awa->get() as $_elid)
+			{
+				if ($this->table["defs"][$col]["el_main_types"][$_elid] == "date")
+				{
+					$has_dates = true;
+				}
+			}
+			if ($has_dates)
+			{
+				$this->vars(array(
+					"dateformat" => $this->table["defs"][$col]["dateformat"]
+				));
+				$coldata[$col][14] = $this->parse("SEL_DATEFORMAT");
+			}
 		}
 
 		$l = "";
-		for ($idx = 1; $idx < 14; $idx++)
+		for ($idx = 1; $idx < 15; $idx++)
 		{
 			$td = "";
 			for ($col = 0; $col < $this->table["cols"]; $col++)
@@ -2169,6 +2192,7 @@ class form_table extends form_base
 			"SEL_ORDER_FORM" => "",
 			"SEL_FORMEL" => "",
 			"SEL_BASKET" => "",
+			"SEL_DATEFORMAT" => ""
 		));
 		return $this->parse();
 	}
