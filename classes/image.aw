@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.80 2004/01/13 16:24:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.81 2004/01/28 15:32:23 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -275,8 +275,14 @@ class image extends class_base
 				}
 				else if (!$this->cfg["no_default_template"])
 				{
-					//$replacement = "<table border=0 cellpadding=0 cellspacing=0 $vars[align]><tr><td>";
-					$replacement = "";
+					if ($idata["comment"] == "")
+					{
+						$replacement = "<table border=0 cellpadding=0 cellspacing=0 $vars[align]><tr><td>";
+					}
+					else
+					{
+						$replacement = "";
+					}
 					if (!empty($idata["big_url"]))
 					{
 						$replacement .= "<a href=\"javascript:void(0)\" onClick=\"$bi_link\">";
@@ -290,7 +296,10 @@ class image extends class_base
 					{
 						$replacement .= "<BR>".$idata["comment"];
 					};
-					//$replacement .= "</td></tr></table>";
+					if ($idata["comment"] == "")
+					{
+						$replacement .= "</td></tr></table>";
+					}
 				};
 			}	
 		}
