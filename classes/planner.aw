@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.162 2004/01/30 13:33:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.163 2004/02/02 17:01:54 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -17,7 +17,6 @@ EMIT_MESSAGE(MSG_EVENT_ADD);
 	@default method=serialize
 	@default group=general2
 	@classinfo relationmgr=yes
-	//@classinfo toolbar_type=menubar
 
 	@property default_view type=select rel=1
 	@caption Aeg
@@ -49,9 +48,6 @@ EMIT_MESSAGE(MSG_EVENT_ADD);
 	@property items_on_line type=textbox size=4 group=special rel=1
 	@caption Max. cell'e reas
 
-	@property use_menubar type=checkbox group=special rel=1 table=objects field=meta method=serialize ch_value=1
-	@caption Kasuta menubari
-	
 	@property user_calendar type=checkbox group=special rel=1 table=objects field=meta method=serialize
 	@caption Kasutaja default kalender
 
@@ -87,15 +83,6 @@ EMIT_MESSAGE(MSG_EVENT_ADD);
 	@property calendar_contents type=calendar group=views no_caption=1 viewtype=week
 	@caption Kalendri sisu
 
-	property show_day callback=callback_show_day group=show_day 
-	caption Päev
-	
-	property show_week callback=callback_show_week group=show_week
-	caption Nädal
-	
-	property show_month callback=callback_show_month group=show_month
-	caption Kuu
-	
 	@property add_event callback=callback_get_add_event group=add_event 
 	@caption Lisa sündmus
 
@@ -524,78 +511,6 @@ class planner extends class_base
 		$this->day_orb_link = $this->mk_my_orb("change",array("id" => $id,"group" => "views","viewtype" => "day"));
 		$this->week_orb_link = $this->mk_my_orb("change",array("id" => $id,"group" => "views","viewtype" => "week"));
 		return isset($args["flatlist"]) ? $reflist : $rv;
-	}
-
-	////
-	// !Day view
-	// Basically, how they should work, is that I want to define a datasource
-	// for events (and also provide different callbacks for setting up the configuration)
-	// and then let those functions display thos events based on the datasource configuration
-	function callback_show_day($args = array())
-	{
-		$nodes = array();
-		$events = $this->_init_event_source(array(
-			"id" => $args["request"]["id"],
-			"type" => "day",
-			"date" => $args["request"]["date"],
-		));
-		$nodes[] = array(
-			"no_caption" => 1,
-			"value" => $this->view(array(
-				"type" => "day",
-				"id" => $args["request"]["id"],
-				"date" => $args["request"]["date"],
-				"no_tabs" => 1,
-				"events" => $events,
-			)),
-		);
-		return $nodes;
-	}
-
-	////
-	// !Week view	
-	function callback_show_week($args = array())
-	{
-		$nodes = array();
-		$events = $this->_init_event_source(array(
-			"id" => $args["request"]["id"],
-			"type" => "week",
-			"date" => $args["request"]["date"],
-		));
-		$nodes[] = array(
-			"no_caption" => 1,
-			"value" => $this->view(array(
-				"type" => "week",
-				"id" => $args["request"]["id"],
-				"date" => $args["request"]["date"],
-				"no_tabs" => 1,
-				"events" => $events,
-			)),
-		);
-		return $nodes;
-	} 
-
-	////
-	// !Month view	
-	function callback_show_month($args = array())
-	{
-		$nodes = array();
-		$events = $this->_init_event_source(array(
-			"id" => $args["request"]["id"],
-			"type" => "month",
-			"date" => $args["request"]["date"],
-		));
-		$nodes[] = array(
-			"no_caption" => 1,
-			"value" => $this->view(array(
-				"type" => "month",
-				"id" => $args["request"]["id"],
-				"date" => $args["request"]["date"],
-				"no_tabs" => 1,
-				"events" => $events,
-			)),
-		);
-		return $nodes;
 	}
 
 	function do_group_headers($arr)
@@ -1190,42 +1105,75 @@ class planner extends class_base
 
 	////
 	// !Parsib kalendrialiast
-	function parse_alias($args = array())
+	function parse_alias($arr)
 	{
-		extract($args);
-		// XXX: comment this
-		if (!is_array($this->calaliases) || ($oid != $this->cal_oid) )
-		{
-			$this->calaliases = $this->get_aliases(array(
-				"oid" => $oid,
-				"type" => CL_PLANNER,
-			));
-			$this->cal_oid = $oid;
-		};
+		//extract($args);
+		extract($arr);
+
+
+		$cal_id = $alias["to"];
 
 		// if there is a relation object, then load it and apply the settings 
 		// it has.
 		if ($alias["relobj_id"])
 		{
-			$relobj = $this->get_object(array(
-				"oid" => $alias["relobj_id"],
-				"clid" => CL_RELATION,
-			));
+			$relobj = new object($alias["relobj_id"]);
 
-			$overrides = $relobj["meta"]["values"]["CL_PLANNER"];
+			$overrides1 = $relobj->meta("values");
+			$overrides = $overrides1["CL_PLANNER"];
+
 			if (is_array($overrides))
 			{
 				$this->overrides = $overrides;
 			};
-			if (!empty($relobj["name"]))
+
+			if ($relobj->name() != "")
 			{
-				$this->caption = $relobj["name"];
+				$this->caption = $relobj->name();
 			};
 
 			$this->relobj_id = $alias["relobj_id"];
 		}
 
-		$replacement = $this->view(array("id" => $alias["target"]));
+		// nii, aga kuidas kuradi moodi ma selle kalendri komponendi nüüd tööle saan? :(
+		classload("vcl/calendar");
+		$vcal = new vcalendar();
+		$vcal->configure(array(
+			"overview_func" => array(&$this,"get_overview"),
+			"overview_range" => 1,
+		));
+
+		
+		$range = $vcal->get_range(array(
+			"viewtype" => "day",
+		));
+		
+		$this->calendar_inst = new object($alias["to"]);
+		
+		// that is all nice and well. But I also need a separate function for 
+		// overview
+		$events = $this->_init_event_source(array(
+			"id" => $cal_id,
+			"type" => $range["viewtype"],
+			"flatlist" => 1,
+			"date" => date("d-m-Y",$range["timestamp"]),
+		));
+
+		foreach($events as $event)
+		{
+			$vcal->add_item(array(
+				"timestamp" => $event["start"],
+				"data" => array(
+					"name" => $event["name"],
+					"icon" => $event["event_icon_url"],
+					"link" => $event["link"],
+				),
+			));
+		};
+
+		return $vcal->get_html();
+			
+		//$replacement = $this->view(array("id" => $alias["to"]));
 		return $replacement;
 	}
 
@@ -1347,31 +1295,6 @@ class planner extends class_base
 			"range_start" => $this->conf["range_start"],
 		));
 
-		/// XXX: check whether that object has OBJ_HAS_CALENDAR flag
-		if ($object["class_id"] == CL_FORM_CHAIN)
-		{
-			$fch = get_instance("formgen/form_chain");
-			$fch->load_chain($object["oid"]);
-
-			$vac_cont = (int)$fch->chain["cal_controller"];
-
-			$q = "SELECT ev_table FROM calendar2forms WHERE cal_id = '$object[oid]'";
-			$this->db_query($q);
-			$row = $this->db_next();
-			$ev_table = $row["ev_table"];
-
-
-		}
-		elseif ($object["class_id"] == CL_FORM)
-		{
-			$vac_cont = $object["oid"];
-			$q = "SELECT ev_table FROM calendar2forms WHERE cal_id = '$object[oid]'";
-			$this->db_query($q);
-			$row = $this->db_next();
-			$ev_table = $row["ev_table"];
-
-		}
-		else
 		if ($args["events"] || $this->events_done)
 		{
 			$events = $args["events"];
@@ -1400,30 +1323,6 @@ class planner extends class_base
 				));
 			};
 
-		};
-
-		if ($ev_table)
-		{
-			// retrieve all entries that belong to this calendar.
-			$fc = get_instance("formgen/form_calendar");
-			$events = $fc->get_events(array(
-				"eid" => $object["oid"],
-				"start" => $di["start"],
-				"end" => $di["end"],
-				"eform" => $vac_cont,
-				"ctrl" => $ctrl,
-			));
-
-			$this->raw_events = $fc->raw_events;
-			$this->raw_headers = $fc->raw_headers;
-			$this->cached_chain_ids = array();
-			$this->ft = get_instance("formgen/form_table");
-			$this->table_id = $ev_table;
-			// event_display_table can be empty
-			if ($this->table_id)
-			{
-				$this->ft->load_table($this->table_id);
-			};
 		};
 		
 		$ddiff1 = $this->get_day_diff($di["start"],$di["end"]);
@@ -2196,159 +2095,124 @@ class planner extends class_base
 	// it needs an argument which shows how to draw a single event. or day. or whatever
 	function _disp_day($args = array())
 	{
-		if ($this->table_id)
+		// drop out if this day has no events
+		if (not(is_array($this->events[$args["dx"]])))
 		{
-			$c = $this->raw_headers[$args["dx"]];
-			if (not(is_array($this->raw_events[$args["dx"]])))
-			{
-				return $c;
-			}
+			$this->vars(array(
+				"event_content" => "",
+			));
+			return false;
+		};
 
-			$this->ft->start_table($this->table_id);
-			foreach($this->raw_events[$args["dx"]] as $row)
-			{
-				$__ch = $this->ft->get_chains_for_form($row["form_id"]);
-				list($_ch,) = each($__ch);
+		$events = $this->events[$args["dx"]];
 
-				$mx = $this->get_object((int)$row[form_id]);
+		// moo. miks neid eventeid varem ära ei sorteerita?
+		// sort the events by start date
+		uasort($events,array($this,"__asc_sort"));
+		$c = "";
 
-				$cx = $this->get_object((int)$_ch);
+		$section = aw_global_get("section");
+		$d = get_instance("document");
+		$cntr = 0;
 
-				//if ($mx["meta"]["calendar_chain"])
-				if ($cx["flags"] & OBJ_HAS_CALENDAR)
-				{
-					$cctrl = $row["chain_id"];
-				}
-				else
-				{
-					$cctrl = $this->ctrl;
-				};
-				$this->ft->row_data($row,$row["form_id"],$section,0,$_ch,$cctrl);
-			}
-			$c .= $this->ft->finalize_table();
-
-		}
-		else
+		foreach($events as $key => $e)
 		{
-			// drop out if this day has no events
-			if (not(is_array($this->events[$args["dx"]])))
+			$cntr++;
+			$pv = "";
+			$objlink = "";
+			$this->day_event_count++;
+			$tgt = $this->_get_cal_target($e["meta"]["calendar_relation"]);
+			if (empty($tgt))
 			{
-				$this->vars(array(
-					"event_content" => "",
+				$daylink = $this->mk_my_orb("view",array(
+					"section" => $section,
+					"id" => $this->id,
+					"type" => "day",
+					"date" => date("d-m-Y",$e["start"]),
 				));
-				return false;
+			}
+			else
+			{
+				$daylink = "/" . $tgt;
 			};
 
-			$events = $this->events[$args["dx"]];
-
-			// moo. miks neid eventeid varem ära ei sorteerita?
-			// sort the events by start date
-			uasort($events,array($this,"__asc_sort"));
-			$c = "";
-
-			$section = aw_global_get("section");
-			$d = get_instance("document");
-			$cntr = 0;
-
-			foreach($events as $key => $e)
+			if (!$this->is_template("CELL") && (($e["class_id"] == CL_DOCUMENT) || ($e["class_id"] == CL_BROTHER_DOCUMENT)))
 			{
-				$cntr++;
-				$pv = "";
-				$objlink = "";
-				$this->day_event_count++;
-				$tgt = $this->_get_cal_target($e["meta"]["calendar_relation"]);
-				if (empty($tgt))
+				$daylink = "";
+
+				// figure out prev and next events
+				if ($tgt)
 				{
-					$daylink = $this->mk_my_orb("view",array(
-						"section" => $section,
-						"id" => $this->id,
-						"type" => "day",
-						"date" => date("d-m-Y",$e["start"]),
-					));
-				}
-				else
-				{
-					$daylink = "/" . $tgt;
+					$daylink = "/section=" . $tgt . "/date=" . date("d-m-Y",$e["start"]);
 				};
-
-				if (!$this->is_template("CELL") && (($e["class_id"] == CL_DOCUMENT) || ($e["class_id"] == CL_BROTHER_DOCUMENT)))
+				$section = $e["id"];
+				if ($this->type == CAL_SHOW_DAY)
 				{
-					$daylink = "";
-
-					// figure out prev and next events
-					if ($tgt)
+					if (substr(aw_global_get("REQUEST_URI"),0,11) != "/automatweb")
 					{
-						$daylink = "/section=" . $tgt . "/date=" . date("d-m-Y",$e["start"]);
+						$this->no_wrapper = true;
+						$e["docid"] = $e["id"];
+						$e["showlead"] = 1;
+						$pv = $d->gen_preview(array(
+							  "tpl" => "doc_event.tpl",
+							  "docid" => $e["id"],
+							  "doc" => $e,
+							  "vars" => array(
+								"edate" => date("d-m-Y",$e["start"]),
+								"prevref" => $this->prevref,
+								"nextref" => $this->nextref,
+							),
+						));
 					};
-					$section = $e["id"];
-					if ($this->type == CAL_SHOW_DAY)
-					{
-						if (substr(aw_global_get("REQUEST_URI"),0,11) != "/automatweb")
-						{
-							$this->no_wrapper = true;
-							$e["docid"] = $e["id"];
-							$e["showlead"] = 1;
-							$pv = $d->gen_preview(array(
-								  "tpl" => "doc_event.tpl",
-								  "docid" => $e["id"],
-								  "doc" => $e,
-								  "vars" => array(
-									"edate" => date("d-m-Y",$e["start"]),
-									"prevref" => $this->prevref,
-									"nextref" => $this->nextref,
-								),
-							));
-						};
 
-					};
 				};
+			};
 
+			$this->vars(array(
+				"event_content" => $pv,
+				"lead" => $e["lead"],
+				"moreinfo" => $e["moreinfo"],
+				"title" => $e["title"],
+				"id" => $e["id"],
+				"content" => $e["content"],
+				"icon" => $e["icon"],
+				"daylink" => $daylink,
+				"imgurl" => isset($e["imgurl"]) ? $e["imgurl"] : "/img/trans.gif",
+			));
+			if ($daylink && !empty($e["content"]))
+			{
 				$this->vars(array(
-					"event_content" => $pv,
-					"lead" => $e["lead"],
-					"moreinfo" => $e["moreinfo"],
-					"title" => $e["title"],
-					"id" => $e["id"],
-					"content" => $e["content"],
-					"icon" => $e["icon"],
-					"daylink" => $daylink,
-					"imgurl" => isset($e["imgurl"]) ? $e["imgurl"] : "/img/trans.gif",
+					"xlink" => $this->parse("xlink"),
+					"no_xlink" => "",
 				));
-				if ($daylink && !empty($e["content"]))
-				{
-					$this->vars(array(
-						"xlink" => $this->parse("xlink"),
-						"no_xlink" => "",
-					));
-				}
-				else
-				{
-					$this->vars(array(
-						"no_xlink" => $this->parse("no_xlink"),
-						"xlink" => "",
-					));
-				};
+			}
+			else
+			{
+				$this->vars(array(
+					"no_xlink" => $this->parse("no_xlink"),
+					"xlink" => "",
+				));
+			};
 
-				if (isset($e["realcontent"]))
+			if (isset($e["realcontent"]))
+			{
+				$c .= $e["realcontent"];
+			}
+			else
+			{
+				if ($this->type == CAL_SHOW_DAY)
 				{
-					$c .= $e["realcontent"];
+					$e["color"] = ($cntr % 2) ? "#FFF" : "#F6F6F6";
+				};
+				if ($this->is_template("event"))
+				{
+					$e["time_start"] = date("H:i",$e["start"]);
+					$this->vars($e);
+					$c .= $this->parse("event");
 				}
 				else
 				{
-					if ($this->type == CAL_SHOW_DAY)
-					{
-						$e["color"] = ($cntr % 2) ? "#FFF" : "#F6F6F6";
-					};
-					if ($this->is_template("event"))
-					{
-						$e["time_start"] = date("H:i",$e["start"]);
-						$this->vars($e);
-						$c .= $this->parse("event");
-					}
-					else
-					{
-						$c .= $this->ev->draw($e);
-					};
+					$c .= $this->ev->draw($e);
 				};
 			};
 		};
@@ -2924,7 +2788,9 @@ class planner extends class_base
 				"img" => "icon_cal_today.gif",
 				"class" => "menuButton",
 			));
-			
+
+			// XXX: check acl and only show that button, if the user actually _can_
+			// edit the calendar
 			$toolbar->add_button(array(
 				"name" => "delete",
 				"tooltip" => "Kustuta märgitud sündmused",
