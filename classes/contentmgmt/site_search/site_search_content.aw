@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.2 2003/10/06 14:32:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.3 2003/10/14 10:21:23 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -176,6 +176,7 @@ class site_search_content extends class_base
 		extract($arr);
 		$ob = new object($id);
 		$this->read_template("search.tpl");
+		lc_site_load("search_conf", $this);
 
 		$gr = $this->get_groups($ob);
 		if (!isset($group) || !$group)
