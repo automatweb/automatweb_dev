@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.109 2002/07/23 12:59:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.110 2002/07/24 20:48:22 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -47,6 +47,7 @@ class form extends form_base
 		{
 			$this->controller_instance = get_instance("form_controller");
 		}
+		$this->style_instance = get_instance("style");
 	}
 
 	////
@@ -332,7 +333,11 @@ class form extends form_base
 					if ($addel)
 					{
 						// we must add an element of the specified type to this cell
-						$this->arr["contents"][$row][$col]->do_add_element(array("parent" => $this->arr["newel_parent"], "name" => "uus_element_".(++$newelcnt), "based_on" => $addel));
+						$this->arr["contents"][$row][$col]->do_add_element(array(
+							"parent" => $this->arr["newel_parent"], 
+							"name" => "uus_element_".(++$newelcnt), 
+							"based_on" => $addel
+						));
 					}
 				}
 			}
@@ -474,7 +479,7 @@ class form extends form_base
 		{
 			for ($a=0; $a < $this->arr["cols"]; $a++)
 			{
-				$this->arr["contents"][$i][$a]->save_short(&$this);
+				$this->arr["contents"][$i][$a]->save_short($arr);
 			}
 		}
 
@@ -501,7 +506,12 @@ class form extends form_base
 					{
 						$el_parent = $this->db_fetch_field("SELECT parent FROM objects WHERE oid = ".$el->get_id(),"parent");
 
-						$newelid = $this->arr["contents"][$el->get_row()][$el->get_col()]->do_add_element(array("name" => $el->get_el_name(), "parent" => $this->arr["tear_folder"], "based_on" => $elid,"props" => $el->get_props()));
+						$newelid = $this->arr["contents"][$el->get_row()][$el->get_col()]->do_add_element(array(
+							"name" => $el->get_el_name(), 
+							"parent" => $this->arr["tear_folder"], 
+							"based_on" => $elid,
+							"props" => $el->get_props()
+						));
 
 						// save element props also
 						$prp = aw_serialize($this->arr["elements"][$el->get_row()][$el->get_col()][$newelid],SERIALIZE_XML);
@@ -691,43 +701,6 @@ class form extends form_base
 	}
 
 	////
-	// !returns array id => name of all elements in the loaded form
-	// what if I want to know the types of the elements as well?
-	// if type argument is set, then the values of the returned array are 
-	// also arrays, consiting of two elements,
-	// 1) type of the element
-	// 2) the actual name
-	function get_all_elements($args = array())
-	{
-		$ret = array();
-		for ($row = 0; $row < $this->arr["rows"]; $row++)
-		{
-			for ($col = 0; $col < $this->arr["cols"]; $col++)
-			{
-				$elar = $this->arr["contents"][$row][$col]->get_elements();
-				reset($elar);
-				while (list(,$el) = each($elar))
-				{
-					if ($args["type"])
-					{
-						$block = array(
-							"name" => $el["name"],
-							"type" => $el["type"],
-						);
-						$ret[$el["id"]] = $block;
-					}
-					else
-					{
-						$ret[$el["id"]] = $el["name"];
-					};
-				}
-			}
-		}
-		return $ret;
-	}
-
-
-	////
 	// !Generates the form used in modifying the table settings
 	// TODO: move to separate class
 	function gen_settings($arr)
@@ -758,7 +731,7 @@ class form extends form_base
 			"email_form_action" => checked($this->subtype == FSUBTYPE_EMAIL_ACTION),
 			"check_status_text" => $this->arr["check_status_text"],
 			"show_table_checked" => checked($this->arr["show_table"]),
-			"tables" => $this->picker($this->arr["table"],$this->get_list_tables()),
+			"tables" => $this->picker($this->arr["table"],$this->list_objects(array("class" => CL_FORM_TABLE))),
 			"tablestyles" => $this->picker($this->arr["tablestyle"], $t->get_select(0,ST_TABLE)),
 			"search_doc" => $this->mk_orb("search_doc", array(),"links"),
 			"sql_writer" => checked($this->arr["sql_writer"]),
@@ -1295,7 +1268,8 @@ class form extends form_base
 			$this->_log("form","Muutis formi $this->name sisestust $this->entry_id");
 		}
 
-		$this->do_actions($this->entry_id);
+		$fact = get_instance("form_actions");
+		$fact->do_actions(&$this, $this->entry_id);
 
 		// update_fcal_timedef is set to chain_id in form_chain->submit_form by altering
 		// time period definitions for a form calendar.
@@ -3253,7 +3227,11 @@ class form extends form_base
 							// replicate this element into this form!!
 							$el_parent = $this->db_fetch_field("SELECT parent FROM objects WHERE oid = $elid", "parent");
 
-							$newel = $bf->arr["contents"][$row][$col]->do_add_element(array("parent" => $el_parent, "name" => $elval["name"], "based_on" => $elid));
+							$newel = $bf->arr["contents"][$row][$col]->do_add_element(array(
+								"parent" => $el_parent, 
+								"name" => $elval["name"], 
+								"based_on" => $elid
+							));
 
 							$elval["id"] = $newel;
 							$elval["ver2"] = true;
@@ -3293,8 +3271,7 @@ class form extends form_base
 	{
 		extract($arr);
 		$this->load($id);
-		$ret = $this->arr["contents"][$row][$col]->add_element();
-		return $ret;
+		return $this->arr["contents"][$row][$col]->add_element();
 	}
 
 	////
@@ -3304,7 +3281,7 @@ class form extends form_base
 		extract($args);
 		$this->load($id);
 		$this->arr["contents"][$row][$col]->submit_element($args);
-		return $this->mk_orb("admin_cell", array("id" => $id, "row" => $row, "col" => $col));
+		return $this->mk_my_orb("admin_cell", array("id" => $id, "row" => $row, "col" => $col));
 	}
 
 	////
@@ -3314,30 +3291,9 @@ class form extends form_base
 		$this->dequote(&$arr);
 		extract($arr);
 		$this->load($id);
-		$this->arr["contents"][$row][$col]->submit_cell($arr,&$this);
+		$this->arr["contents"][$row][$col]->submit_cell($arr);
 		$this->save();
-		return $this->mk_orb("admin_cell", array("id" => $this->id, "row" => $row, "col" => $col));
-	}
-
-	////
-	// !generates the form for selecting cell style
-	function sel_cell_style($arr)
-	{
-		extract($arr);
-		$this->load($id);
-		return $this->arr["contents"][$row][$col]->pickstyle();
-	}
-
-	////
-	// !saves the cell style
-	function save_cell_style($arr)
-	{
-		$this->dequote(&$arr);
-		extract($arr);
-		$this->load($id);
-		$this->arr["contents"][$row][$col]->set_style($style);
-		$this->save();
-		return $this->mk_orb("sel_cell_style", array("id" => $this->id, "row" => $row, "col" => $col));
+		return $this->mk_my_orb("admin_cell", array("id" => $this->id, "row" => $row, "col" => $col));
 	}
 
 	////
@@ -3446,6 +3402,8 @@ class form extends form_base
 
 	////
 	// !finds the first element with type $type (and subtype $subtype) in the loaded form and returns a reference to it
+	// if no such element is found, returns false
+	// if all_els is true, returns all matching elements in an array. if none match, returns empty array
 	function get_element_by_type($type,$subtype = "",$all_els = false)
 	{
 		$ret = array();
@@ -3512,7 +3470,11 @@ class form extends form_base
 				for ($i=0; $i < $el_count; $i++)
 				{
 					$name = $oldel["name"]."_".$cnt;
-					$this->arr["contents"][$row][$col]->do_add_element(array("name" => $name, "parent" => $oldel_ob["parent"], "based_on" => $el_id));
+					$this->arr["contents"][$row][$col]->do_add_element(array(
+						"name" => $name, 
+						"parent" => $oldel_ob["parent"], 
+						"based_on" => $el_id
+					));
 					$cnt++;
 				}
 			}
@@ -3566,8 +3528,6 @@ class form extends form_base
 		// then we go through alla the elements in the form
 		$this->load($oid);
 
-		$fc = get_instance("form_cell");
-
 		for ($row = 0; $row < $this->arr["rows"]; $row++)
 		{
 			for ($col = 0; $col < $this->arr["cols"]; $col++)
@@ -3577,8 +3537,8 @@ class form extends form_base
 					reset($this->arr["elements"][$row][$col]);
 					while (list($k,$v) = each($this->arr["elements"][$row][$col]))
 					{
-						// and for each alter the form_xxx_entries table and the form element to include this form. cool.
-						$fc->_do_add_element($this->id,$k);
+						// and for each alter the correct db tables
+						$this->add_element_cols($this->id,$k);
 					}
 				}
 			}
@@ -3655,12 +3615,13 @@ class form extends form_base
 
 	////
 	// !returns the value of element with id $id
-	function get_element_value($id)
+	// $numeric - if true, the element will try to return a number instead of a string (checkbox value vs 1/0)
+	function get_element_value($id, $numeric = false)
 	{
 		$el = $this->get_element_by_id($id);
 		if ($el)
 		{
-			$ev =  $el->get_value();
+			$ev =  $el->get_value($numeric);
 			return $ev;
 		}
 		return "";
@@ -3668,14 +3629,22 @@ class form extends form_base
 
 	////
 	// !sets the element $id's value in the loaded entry to $val
-	function set_element_value($id,$val)
+	// $user_val - if set $val is assumed to be user value and the element is set with a different function
+	function set_element_value($id,$val,$user_val = false)
 	{
 		$this->entry[$id] = $val;
 		for ($row=0; $row < $this->arr["rows"]; $row++)
 		{
 			for ($col=0; $col < $this->arr["cols"]; $col++)
 			{
-				$this->arr["contents"][$row][$col] -> set_entry(&$this->entry, $this->entry_id);
+				if ($user_val)
+				{
+					$this->arr["contents"][$row][$col] -> set_element_entry($id,$val);
+				}
+				else
+				{
+					$this->arr["contents"][$row][$col] -> set_entry(&$this->entry, $this->entry_id);
+				}
 			};
 		};
 	}
