@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.6 2002/10/10 11:10:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.7 2002/10/14 07:40:51 kristo Exp $
 // this is the class that allows us to connect to multiple datasources at once
 // it replaces the mysql class which was used up to now, but still routes all
 // db functions to it so that everything stays working and it also provides
@@ -54,16 +54,10 @@ class db_connector extends root
 		extract($args);
 		// FIXME: validate arguments
 
-
-
-		switch($driver)
+		$dc = get_instance("db_drivers/".$driver);
+		if (!is_object($dc))
 		{
-			case "mysql":
-				$dc = get_instance($driver);
-				break;
-
-			default:
-				die("this driver is not supported");
+			die("this driver is not supported");
 		};
 
 		// FIXME: check for return value
@@ -232,7 +226,7 @@ class db_connector extends root
 		{
 			$keyvalue =  join(",",$keyvalue);
 		};
-		
+
 		$fields = join(",",map2(" %s = '%s' ",$values));
 
 		$q = sprintf("UPDATE %s SET %s WHERE %s IN (%s)",$table,$fields,$keyname,$keyvalue);
@@ -241,6 +235,17 @@ class db_connector extends root
 		$this->db_query($q);
 
 	}
+
+        ////
+        // !fetchib kirje suvalisest tabelist
+        function get_record($table,$field,$selector)
+        {
+                $q = "SELECT * FROM $table WHERE $field = '$selector'";
+                $this->db_query($q);
+                return $this->db_fetch_row();
+        }
+
+
 		
 
 };
