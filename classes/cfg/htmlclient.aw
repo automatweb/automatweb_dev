@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.63 2004/05/03 11:37:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.64 2004/05/04 12:58:26 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -617,15 +617,27 @@ class htmlclient extends aw_template
 			else
 			{
 
-				$tabs = $this->tp->get_tabpanel(array(
+				$tabs = $tp->get_tabpanel(array(
 					"content" => $rv,
-					//"panels_only" => true,
+					"panels_only" => true,
 				));
 				if (is_array($tabs))
 				{
 					foreach($tabs as $key => $item)
 					{
-						$this->additional_content[$key] .= join("",$item);
+						if (empty($key))
+						{
+							$loc = "top";
+						}
+						elseif ($key == "navi")
+						{
+							$loc = "left";
+						}
+						else
+						{
+							$loc = $key;
+						};
+						$this->additional_content[$loc] .= join("",$item);
 					};
 				}
 				else
@@ -691,7 +703,7 @@ class htmlclient extends aw_template
 						$retval .= html::radiobutton(array(
 							"caption" => $val,
 							"name" => $arr["name"],
-							"checked" => !empty($arr["value"]) && ($arr["value"] == $key),
+							"checked" => isset($arr["value"]) && ($arr["value"] == $key),
 							"value" => $key,
 						));
 					};
