@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.27 2004/05/28 14:55:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.28 2004/06/16 16:02:43 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -582,9 +582,12 @@ class forum_v2 extends class_base
 
 		};
 
+		$page_count = 0;
+
 		// draw pager
 		for ($i = 1; $i <= $num_pages; $i++)
 		{
+			$page_count++;
 			$this->vars(array(
 				"num" => $i,
 				"url" => $this->mk_my_orb("change",array(
@@ -598,6 +601,19 @@ class forum_v2 extends class_base
 			));
 			$pager .= $this->parse($selpage == $i ? "active_page" : "page");
 		};
+
+		if ($this->is_template("PAGER") && $page_count > 1)
+		{
+			$this->vars(array(
+				"active_page" => $pager,
+			));
+			$pager = $this->parse("PAGER");
+			$this->vars(array(
+				"PAGER" => $pager,
+			));
+			$pager = "";
+		};	
+	
 
 		$this->vars(array(
 			"SUBTOPIC" => $c,
