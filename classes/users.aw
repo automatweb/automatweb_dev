@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.24 2001/10/10 18:21:54 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.25 2001/11/07 17:41:17 kristo Exp $
 classload("users_user","config","form");
 
 load_vcl("table");
@@ -480,7 +480,7 @@ class users extends users_user
 		static $indent = 0;
 		$indent++;
 		static $cnt = 0;
-		if (!is_array($items))
+		if (!is_array($items[$section]))
 		{
 			$indent--;
 			return;
@@ -516,6 +516,7 @@ class users extends users_user
 		$status_msg = LC_USERS_FOLDER_ADDED;
 		session_register("status_msg");
 
+		$this->_log("user", "Lisas kodukataloogi alla kataloogi $name");
 		return $this->mk_my_orb("gen_home_dir", array("id" => $parent));
 	}
 
@@ -629,6 +630,7 @@ class users extends users_user
 		else
 			$this->save(array("uid" => $arr[id], "email" => $arr[email]));
 
+		$this->_log("user", "$arr[id] changed password");
 		return $this->mk_orb("gen_list", array());
 	}
 
@@ -639,6 +641,7 @@ class users extends users_user
 		extract($arr);
 		$this->save(array("uid" => $id, "blocked" => 1, "blockedby" => UID));
 		$this->savegroup(array("gid" => $this->get_gid_by_uid($id),"type" => 3));
+		$this->_log("user", UID." blocked user $id");
 		header("Location: ".$this->mk_orb("gen_list", array()));
 	}
 
@@ -685,6 +688,7 @@ class users extends users_user
 			$add_state = "";
 			$GLOBALS["session_filled_forms"] = array();
 
+			$this->_log("user", $add_state["uid"]." joined");
 			return $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$after_join;
 		}
 		else
@@ -716,6 +720,7 @@ class users extends users_user
 
 			$add_state = "";
 			$GLOBALS["session_filled_forms"] = array();
+			$this->_log("user", $add_state["uid"]." was added from admin interface by ".$GLOBALS["uid"]);
 			return $this->mk_orb("gen_list", array());
 		}
 		else
@@ -1074,7 +1079,7 @@ class users extends users_user
 		$mail = str_replace("#liituja_andmed#", str_replace("\n\n","\n",$this->show_join_data(array("nohtml" => true,"user" => $username))),$mail);
 
 		mail($udata["email"],$c->get_simple_config("remind_pwd_mail_subj"),$mail,"From: ".MAIL_FROM);
-
+		$this->_log("user", "user $username was reminded of his/her password");
 		return $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$after;
 	}
 
@@ -1259,6 +1264,7 @@ class users extends users_user
 		setcookie("admin_lang",$admin_lang,time()*24*3600*1000,"/");
 		setcookie("admin_lang_lc",$admin_lang_lc,time()*24*3600*1000,"/");
 
+		$this->_log("user", $GLOBALS["uid"]." changed settings ");
 		return $this->mk_my_orb("settings", array("id" => $id));
 	}
 }

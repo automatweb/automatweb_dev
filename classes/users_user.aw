@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.18 2001/09/12 19:47:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.19 2001/11/07 17:41:44 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -961,6 +961,7 @@ class users_user extends aw_template
 		$this->db_query("INSERT INTO groupmembergroups(parent,child,created,createdby)
 					VALUES($parent,$child,".time().",'".$GLOBALS["uid"]."')");
 
+		$this->_log("user",$GLOBALS["uid"]." lisas grupi $parent sisse grupi $child");
 		$uarr = $this->getgroupmembers2($child);
 		$this->add_users_to_group_rec($parent,$uarr);
 	}
@@ -970,6 +971,7 @@ class users_user extends aw_template
 		$this->db_query("DELETE FROM groupmembergroups
 					WHERE parent = $parent AND child = $child");
 
+		$this->_log("user",$GLOBALS["uid"]." kustutas grupi $parent seest grupi $child");
 		$uarr = $this->getgroupmembers2($child);
 		$this->remove_users_from_group_rec($parent,$uarr);
 	}
@@ -992,9 +994,10 @@ class users_user extends aw_template
 		return $ret;
 	}
 
+	////
+	// returns the level the group is at in the groups hierarchy
 	function get_grp_level($gid)
 	{
-		// @desc: returns the level the group is at in the groups hierarchy
 		$gar = array();
 		$this->getgroupsabove($gid,$gar);
 		return count($gar);
