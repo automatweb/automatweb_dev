@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.47 2002/09/20 14:36:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.48 2002/09/23 14:13:01 kristo Exp $
 // users.aw - User Management
 classload("users_user","config","form","objects","file");
 
@@ -1979,6 +1979,10 @@ class users extends users_user
 		foreach($gm as $uid)
 		{
 			$pwd = substr($this->gen_uniq_id(),0,8);
+			if (aw_ini_get("auth.md5_passwords"))
+			{
+				$pwd = md5($pwd);
+			}
 			$this->db_query("UPDATE users SET password = '$pwd' WHERE uid = '$uid'");
 			echo "generated password $pwd for user $uid <br>\n";
 		}
