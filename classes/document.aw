@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.80 2002/01/18 18:55:32 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.81 2002/01/29 15:41:45 duke Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -219,7 +219,7 @@ class document extends aw_template
 
 		if ($docid)
 		{
-			$q = "SELECT objects.*, documents.* FROM objects LEFT JOIN documents ON objects.brother_of = documents.docid WHERE objects.oid = $docid $sufix";
+			$q = "SELECT objects.*,documents.* FROM objects LEFT JOIN documents ON objects.brother_of = documents.docid WHERE objects.oid = $docid $sufix";
 			$this->db_query($q);
 		}
 		$data = $this->db_next();
@@ -332,7 +332,7 @@ class document extends aw_template
 			// objekti polnud, bail out
 			return false;
 		};
-		
+
 		$meta = $this->get_object_metadata(array("oid" => $doc["brother_of"]));
 		
 /*		$doc["lead"] = preg_replace("/<p>(.*)<\/p>/is","\\1",$doc["lead"]);
@@ -502,7 +502,11 @@ class document extends aw_template
 					if (preg_match("/#p(\d+?)(v|k|p|)#/i",$doc["lead"],$match)) 
 					{
 						// asendame 
-						$idata = $img->get_img_by_oid($docid,$match[1]);
+						$idata = $img->get_img_by_oid2($docid,$match[1]);
+						if (!$idata)
+						{
+							$idata = $img->get_img_by_oid($docid,$match[1]);
+						}
 						$this->vars(array(
 							"imgref" => $idata["url"]
 						));
@@ -553,6 +557,7 @@ class document extends aw_template
 		$doc["content"] = preg_replace("/<\?xml(.*)\/>/imsU","",$doc["content"]); 
 
 		$this->register_parsers();
+
 
 
 		// linkide parsimine
@@ -757,6 +762,7 @@ class document extends aw_template
 		));
 
 		$fr = "";
+		
 		if ($doc["is_forum"] && (not($print)) )
 		{
 			classload("forum");
@@ -1111,7 +1117,7 @@ class document extends aw_template
 		$modified = time();
 		if ($data["tm"] != "")
 		{
-			list($day,$mon,$year) = explode("/",$row["tm"]);
+			list($day,$mon,$year) = explode("/",$data["tm"]);
 
 			$ts = mktime(0,0,0,$mon,$day,$year);
 			if ($ts)
@@ -2438,6 +2444,8 @@ class document extends aw_template
 		$row["lang_id"] = $GLOBALS["lang_id"];
 		$this->quote(&$row);
 		$id = $this->new_object($row);
+
+		$this->upd_object(array("oid" => $id, "brother_of" => $id));
 
 		reset($this->knownfields);
 		while(list($fcap,$fname) = each($this->knownfields)) 
