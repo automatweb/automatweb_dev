@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.2 2001/05/28 14:29:16 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.3 2001/05/31 13:38:45 kristo Exp $
 
 define(DENIED,0);
 define(ALLOWED,1);
@@ -347,7 +347,7 @@ class acl_base extends core
 		{
 			return DENIED;
 		}
-		if ($SITE_ID == 666 || $SITE_ID == 667 || $SITE_ID == 8)	// aint rkool,reklaam.struktuur.ee
+		if ($GLOBALS["check_prog_acl"])
 		{
 			if (!is_array($prog_cache))
 			{
@@ -355,7 +355,6 @@ class acl_base extends core
 				$c = new db_config;
 				$prog_cache = unserialize($c->get_simple_config("accessmgr"));
 			}
-//			echo "return $right , $progid , ",$prog_cache[$progid],", uid = ",$GLOBALS["uid"],"<br>";
 			return $this->can($right,$prog_cache[$progid]);
 		}
 		else

@@ -125,10 +125,15 @@ class shop extends aw_template
 			$this->vars(array(
 				"name" => $row["name"], 
 				"id" => $row["oid"],
-				"cat_link" => $this->mk_my_orb("show", array("id" => $shop, "parent" => $row["oid"]))
+//				"cat_link" => $this->mk_my_orb("show", array("id" => $shop, "section" => $row["oid"]))
+				"cat_link" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$row["oid"]
 			));
-			$this->parse("CAT");
+			$this->shop_menus.=$this->parse("CAT");
 		}
+		$this->vars(array(
+				"SHOW_CAT" => $this->shop_menus,
+				"CAT" => ""
+		));
 
 		// make yah link
 		$p = $parent;
@@ -138,7 +143,8 @@ class shop extends aw_template
 			$this->vars(array(
 				"id" => $op["oid"],
 				"name" => $op["name"],
-				"yah_link" => $this->mk_my_orb("show", array("id" => $shop, "parent" => $op["oid"]))
+//				"yah_link" => $this->mk_my_orb("show", array("id" => $shop, "section" => $op["oid"]))
+				"yah_link" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$op["oid"]
 			));
 			$y = $this->parse("YAH").$y;
 			$p = $op["parent"];
@@ -150,7 +156,7 @@ class shop extends aw_template
 			"fp" => $s["root_menu"],
 			"s_name" => $s["name"],
 			"section" => $parent,
-			"location" => $this->mk_my_orb("show", array("id" => $shop, "parent" => $s["root_menu"]))
+			"location" => $this->mk_my_orb("show", array("id" => $shop, "section" => $s["root_menu"]))
 		));
 		return $parent;
 	}
@@ -164,15 +170,15 @@ class shop extends aw_template
 	
 		if (!$id)
 		{
-			$id = $this->find_shop_id($parent);
+			$id = $this->find_shop_id($section);
 		}
 
 		global $shopping_cart;
-		$parent = $this->do_shop_menus($id,$parent);
+		$parent = $this->do_shop_menus($id,$section);
 
 		classload("form");
 
-		$this->db_query("SELECT objects.brother_of as oid,shop_items.* FROM objects LEFT JOIN shop_items ON shop_items.id = objects.brother_of WHERE parent = $parent AND class_id = ".CL_SHOP_ITEM." AND status = 2");
+		$this->db_query("SELECT objects.brother_of as oid,shop_items.* FROM objects LEFT JOIN shop_items ON shop_items.id = objects.brother_of WHERE parent = $section AND class_id = ".CL_SHOP_ITEM." AND status = 2");
 		while ($row = $this->db_next())
 		{
 			$f = new form;
@@ -181,7 +187,7 @@ class shop extends aw_template
 				"item_id" => $row["oid"],
 				"price" => $row["price"],
 				"it_cnt"	=> $shopping_cart["items"][$row["oid"]]["cnt"],
-				"order_item" => $this->mk_my_orb("order_item", array("item_id" => $row["oid"], "shop" => $id, "section" => $parent))
+				"order_item" => $this->mk_my_orb("order_item", array("item_id" => $row["oid"], "shop" => $id, "section" => $section))
 			));
 			$tp+=(double)$shopping_cart["items"][$row["oid"]]["cnt"]*(double)$row["price"];	// selle arvutame p2rast kogusummast maha
 																																			// et saada korvi hind = baashind + selle lehe asjade hind
@@ -190,8 +196,8 @@ class shop extends aw_template
 
 		$this->vars(array(
 			"tot_price" => (double)$shopping_cart["price"]-(double)$tp,	
-			"reforb" => $this->mk_reforb("add_cart", array("shop_id" => $id, "section" => $parent)),
-			"cart" => $this->mk_site_orb(array("action" => "view_cart", "shop_id" => $id, "section" => $parent))
+			"reforb" => $this->mk_reforb("add_cart", array("shop_id" => $id, "section" => $section)),
+			"cart" => $this->mk_site_orb(array("action" => "view_cart", "shop_id" => $id, "section" => $section))
 		));
 		return $this->parse();
 	}
@@ -263,7 +269,8 @@ class shop extends aw_template
 			"section" => $section,
 			"order"	=> $this->mk_site_orb(array("action" => "order", "shop_id" => $shop_id, "section" => $section)),
 			"order_hist" => $this->mk_my_orb("order_history", array("id" => $shop_id)),
-			"to_shop" => $this->mk_my_orb("show", array("id" => $shop_id, "parent" => $section))
+			"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$section//$this->mk_my_orb("show", array("id" => $shop_id, "parent" => $section))
+			
 		));
 		if ($items)
 		{
@@ -395,7 +402,7 @@ class shop extends aw_template
 			"shop_id" => $shop_id,
 			"section" => $section,
 			"cart" => $this->mk_site_orb(array("action" => "view_cart", "shop_id" => $shop_id, "section" => $section)),
-			"to_shop" => $this->mk_my_orb("show", array("id" => $shop_id, "parent" => $section))
+			"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$section//$this->mk_my_orb("show", array("id" => $shop_id, "parent" => $section))
 		));
 		return $this->parse();
 	}
@@ -640,7 +647,7 @@ class shop extends aw_template
 		}
 		else
 		{
-			return $this->mk_my_orb("order_item", array("item_id" => $item_id, "shop" => $shop, "section" => $section));
+			return $this->mk_my_orb("view_cart", array("shop_id" => $shop, "section" => $section));
 		}
 	}
 

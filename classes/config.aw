@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.8 2001/05/28 08:07:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.9 2001/05/31 13:38:45 kristo Exp $
 class db_config extends aw_template 
 {
 	function db_config() 
@@ -125,9 +125,12 @@ class db_config extends aw_template
 		$this->read_template("config.tpl");
 	
 		$al = $this->get_simple_config("after_login");
+		$ml = $this->get_simple_config("orb_err_mustlogin");
 
 		$this->vars(array(
-			"after_login" => $al
+			"after_login" => $al,
+			"orb_err_mustlogin" => $ml,
+			"search_doc" => $this->mk_orb("search_doc", array(),"links")
 		));
 		return $this->parse();
 	}
@@ -882,6 +885,7 @@ class db_config extends aw_template
 	{
 		extract($arr);
 		$this->set_simple_config("after_login",$after_login);
+		$this->set_simple_config("orb_err_mustlogin",$orb_err_mustlogin);
 	}
 };
 ?>

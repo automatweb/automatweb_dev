@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.14 2001/05/29 16:44:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.15 2001/05/31 13:38:45 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -240,6 +240,14 @@ classload("cache","validator","defs");
 				"sel_menu_image" => ($this->mar[$sel_menu_id]["img_url"] != "" ? "<img src='".$this->mar[$sel_menu_id]["img_url"]."' border='0'>" : ""),
 				"sel_menu_id" => $sel_menu_id
 			));
+			if (!$this->mar[$sel_menu_id]["left_pane"])
+			{
+				$this->left_pane = false;
+			}
+			if (!$this->mar[$sel_menu_id]["right_pane"])
+			{
+				$this->right_pane = false;
+			}
 
 			// loome sisu
 			if ($obj["class_id"] == CL_PSEUDO && $this->is_link_collection($section) && $text == "")
@@ -632,7 +640,7 @@ classload("cache","validator","defs");
 				$this->vars($vars);
 			}
 
-			if (defined("UID"))
+			if ($GLOBALS["uid"] != "")
 			{
 				classload("users");
 				$t = new users;
@@ -825,7 +833,9 @@ classload("cache","validator","defs");
 					menu.is_shop as is_shop,
 					menu.seealso as seealso,
 					menu.shop_id as shop_id,
-					menu.width as width
+					menu.width as width,
+					menu.right_pane as right_pane,
+					menu.left_pane as left_pane
 				FROM objects 
 					LEFT JOIN menu ON menu.id = objects.oid
 					WHERE (objects.class_id = ".CL_PSEUDO." OR objects.class_id = ".CL_BROTHER.")  AND $where $aa
@@ -1394,7 +1404,7 @@ classload("cache","validator","defs");
 			{
 				if ($row["status"] != 2)
 					continue;
-				if ($row["admin_feature"] && !$this->prog_acl("view", $row["admin_feature"]) && ($GLOBALS["SITE_ID"] == 666 || $SITE_ID == 667 || $SITE_ID == 8))
+				if ($row["admin_feature"] && !$this->prog_acl("view", $row["admin_feature"]) && ($GLOBALS["check_prog_acl"]))
 					continue;
 
 				$sub = $this->rec_admin_tree(&$arr,$row[oid]);
@@ -2366,7 +2376,9 @@ classload("cache","validator","defs");
 								sss = '$sss',
 								seealso = '$seealso',
 								pers = '$pers',
-								admin_feature = '$admin_feature'
+								admin_feature = '$admin_feature',
+								left_pane = '$left_pane',
+								right_pane = '$right_pane'
 								WHERE id = '$id'";
 				$this->db_query($q);
 			} 
@@ -2378,7 +2390,7 @@ classload("cache","validator","defs");
 				}
 				// teeme uue menyy
 				$id = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_PSEUDO, "comment" => $comment,"status" => 1));
-				$this->db_query("INSERT INTO menu (id,link,type,is_l3) VALUES($id,'$link',$class_id,0)");
+				$this->db_query("INSERT INTO menu (id,link,type,is_l3,left_pane,right_pane) VALUES($id,'$link',$class_id,0,1,1)");
 				if ($class_id == MN_HOME_FOLDER_SUB)
 				{
 					// keelame teistel selle n2gemise sharetud folderis
@@ -2668,7 +2680,9 @@ classload("cache","validator","defs");
 											 menu.is_shop as is_shop,
 											 menu.shop_id as shop_id,
 											 menu.seealso as seealso,
-											 menu.width as width
+											 menu.width as width,
+											 menu.left_pane as left_pane,
+											 menu.right_pane as right_pane
 											 FROM objects 
 											 LEFT JOIN menu ON menu.id = objects.oid
 											 WHERE oid = $id");
@@ -2777,6 +2791,8 @@ classload("cache","validator","defs");
 												"IS_LAST"			=> $il,
 												"shop"				=> $this->picker($row["shop_id"],$shs),
 												"is_shop"			=> checked($row["is_shop"]),
+												"left_pane"		=> checked($row["left_pane"]),
+												"right_pane"	=> checked($row["right_pane"]),
 												"width" => $row["width"]
 												));
 
@@ -2971,7 +2987,7 @@ classload("cache","validator","defs");
 				return 0;
 			}
 			$this->vars(array($mn => ""));
-			
+
 			// go over the menus on this level
 			reset($this->mpr[$parent]);
 			while (list(,$row) = each($this->mpr[$parent]))
@@ -3471,7 +3487,6 @@ classload("cache","validator","defs");
 		}
 		else
 		{
-			$this->left_pane = false;
 			$this->right_pane = false;
 			return $sh_id;
 		}
@@ -3944,8 +3959,9 @@ classload("cache","validator","defs");
 	{
 		classload("shop");
 		$sh = new shop;
-		$shop = $sh->get($shop_id);
-		return $sh->show(array("parent" => $shop["root_menu"],"id" => $shop_id));
+		$ret = $sh->show(array("section" => $section,"id" => $shop_id));
+		$this->vars(array("shop_menus" => $sh->shop_menus));
+		return $ret;
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.3 2001/05/25 15:25:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.4 2001/05/31 13:38:45 kristo Exp $
 // tegeleb ORB requestide handlimisega
 classload("aw_template","defs");
 lc_load("automatweb");
@@ -65,7 +65,18 @@ class orb extends aw_template {
 
 		if ((!defined("UID")) && (!isset($orb_defs[$class][$action]["nologin"])))
 		{
-			$this->raise_error(E_ORB_LOGIN_REQUIRED,$fatal,$silent);
+			classload("config");
+			$c = new db_config;
+			$doc = $c->get_simple_config("orb_err_mustlogin");
+			if ($doc != "")
+			{
+				header("Location: $doc");
+				die();
+			}
+			else
+			{
+				$this->raise_error(E_ORB_LOGIN_REQUIRED,$fatal,$silent);
+			}
 		};
 
 
