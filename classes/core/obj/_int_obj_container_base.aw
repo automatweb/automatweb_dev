@@ -14,7 +14,7 @@ class _int_obj_container_base
 	{
 		$cnt = $this->foreach_o(array(
 			"func" => "delete", 
-			"save" => true
+			"save" => false
 		));
 		$this->_int_init_empty();
 		return $cnt;
