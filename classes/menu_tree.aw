@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.20 2004/03/29 09:11:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.21 2004/06/15 08:37:22 kristo Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -149,7 +149,7 @@ class menu_tree extends class_base
 		{
 			$this->res = "";
 
-			if ($this->add_start_from)
+			if ($this->add_start_from && $this->can("view", $start_from))
 			{
 				$_root = obj($start_from);
 				if ($_root->status() == STAT_ACTIVE)
