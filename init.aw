@@ -143,6 +143,7 @@ function init_config($arr)
 //	echo "timestamping took ",($ts_e - $ts_s), "seconds <br>";
 //	result: 0.00013	 - too small to measure correctly
 
+	$read_from_cache = false;
 	if ($is_cached)
 	{
 //		list($micro,$sec) = split(" ",microtime());
@@ -151,12 +152,17 @@ function init_config($arr)
 		$fc = fread($f,filesize($cache_file));
 		fclose($f);
 		$GLOBALS["cfg"] = unserialize($fc);
+		if (is_array($GLOBALS["cfg"]["__default"]["classes"]))
+		{
+			$read_from_cache = true;
+		}
 //		list($micro,$sec) = split(" ",microtime());
 //		$ts_e = $sec + $micro;
 //		echo "cache unserialize ",($ts_e - $ts_s), " seconds <br>";
 //		result: 0.005 - too small to measure correctly
 	}
-	else
+
+	if (!$read_from_cache)
 	{
 //		list($micro,$sec) = split(" ",microtime());
 //		$ts_s = $sec + $micro;
