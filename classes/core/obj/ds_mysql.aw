@@ -192,6 +192,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$tbls = array();
 		foreach($properties as $prop => $data)
 		{
+			if (empty($data["table"]))
+			{
+				continue;
+			}
+			
 			if ($data["table"] == "objects")
 			{
 				continue;
