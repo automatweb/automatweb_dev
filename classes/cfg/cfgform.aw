@@ -1,141 +1,30 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.2 2002/11/01 16:26:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.3 2002/11/12 16:23:55 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
+
+/*
+	@default table=objects
+	@default field=meta
+	@default method=serialize
+
+	@property classes type=generated generator=callback_get_class_list 
+	@caption Klassid
+
+	@property properties type=generated generator=callback_get_prop_list group=advanced
+	@caption Omadused
+
+	@property ord type=hidden group=advanced
+	@caption Jrk
+*/
 class cfgform extends aw_template
 {
 	function cfgform($args = array())
 	{
-		$this->init("cfgform");
-
-		// styles used to draw the change form
-		// these should probably come from ini file or smth.
-		$this->leftcolstyle = "chformleftcol";
-		$this->rightcolstyle = "chformrightcol";
-	}
-
-	////
-	// !Adds a new configuration form
-	function add($args = array())
-	{
-		extract($args);
-		$this->read_template("add.tpl");
-		$toolbar = get_instance("toolbar");
-		$toolbar->add_button(array(
-                        "name" => "add",
-                        "tooltip" => "Lisa",
-                        "url" => "javascript:document.clform.submit()",
-                        "imgover" => "save_over.gif",
-                        "img" => "save.gif",
-                ));
-		
-		$this->mk_path($parent,"Lisa konfivorm");
-
-		$this->vars(array(
-			"toolbar" => $toolbar->get_toolbar(),
-			"class_container" => $this->_draw_fields(),
-			"reforb" => $this->mk_reforb("submit",array("parent" => $parent)),
+		$this->init(array(
+			"tpldir" => "cfgform",
+			"clid" => CL_CFGFORM,
 		));
-
-		return $this->parse();
-	}
-
-	////
-	// !Allows to change the configuration form
-	function change($args = array())
-	{
-		extract($args);
-		$obj = $this->get_object($id);
-
-		$toolbar = get_instance("toolbar");
-		$this->read_template("add.tpl");
-		$toolbar->add_button(array(
-                        "name" => "save",
-                        "tooltip" => "Salvesta",
-                        "url" => "javascript:document.clform.submit()",
-                        "imgover" => "save_over.gif",
-                        "img" => "save.gif",
-                ));
-
-		$this->mk_path($obj["parent"],"Muuda konfivormi");
-
-		$this->vars(array(
-			"name" => $obj["name"],
-			"comment" => $obj["comment"],
-			"toolbar" => $toolbar->get_toolbar(),
-			"class_container" => $this->_draw_fields($obj["meta"]["properties"]),
-			"reforb" => $this->mk_reforb("submit",array("id" => $id)),
-		));
-		return $this->parse();
-	}
-
-	////
-	// !Submits the configuration form
-	function submit($args = array())
-	{
-		$this->quote($args);
-		extract($args);
-		if ($id)
-		{
-			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $name,
-				"comment" => $comment,
-				"metadata" => array(
-					"properties" => $properties,
-				),
-			));
-		}
-		else
-		{
-			$id = $this->new_object(array(
-				"parent" => $parent,
-				"name" => $name,
-				"comment" => $comment,
-				"class_id" => CL_CFGFORM,
-				"metadata" => array(
-					"properties" => $properties,
-				),
-			));
-		};
-		return $this->mk_my_orb("change",array("id" => $id));
-	}
-
-	////
-	// !Meeza needz to rewrite that function to use the properties definitions
-	function _draw_fields($fields = array())
-	{
-		$cx = get_instance("cfg/cfgutils");
-		$res = $cx->get_classes_with_properties();
-		$c = "";
-		foreach($res as $key => $val)
-		{
-			// for each thingsbums I also have to create a list of all properties
-			$props = $cx->load_properties(array("clid" => $key));
-			$l = "";
-			$def = $this->cfg["classes"][$key]["def"];
-			foreach($props as $property)
-			{
-				$key = $property["name"]["text"];
-				$checked = checked($fields[$def][$key]);
-				$this->vars(array(
-					"clid" => $def,
-					"pkey" => $property["name"]["text"],
-					"pname" => $property["caption"]["text"],
-					"checked" => $checked,
-				));
-					
-				$l .= $this->parse("line");
-			};
-
-			$this->vars(array(
-				"line" => $l,
-				"cname" => $val,
-			));
-				
-			$c .= $this->parse("class_container");
-		}
-		return $c;
 	}
 
 	////
@@ -388,6 +277,113 @@ class cfgform extends aw_template
 			}
 		};
 		return $result;
+	}
+
+	////
+	// !Returns a list of checkboxes for selecting classes
+	function callback_get_class_list($args = array())
+	{
+		$cx = get_instance('cfg/cfgutils');
+		$class_list = new aw_array($cx->get_classes_with_properties());
+		$cp = $this->get_class_picker(array('field' => 'def'));
+		$nodes = array();
+		$nodes[] = array('caption' => 'Klassid');
+		foreach($class_list->get() as $key => $val)
+		{
+			$ckey = $cp[$key];
+			$nodes[] = array(
+				'caption' => $val,
+				'type' => 'checkbox',
+				'name' => "classes[$ckey]",
+				'checked' => $args['prop']['value'][$ckey],
+			);
+		};
+		return $nodes;
+	}
+
+	////
+	// !Returns a list of checkboxes for selecting properties
+	function callback_get_prop_list($args = array())
+	{
+		$sel_classes = new aw_array($args['obj']['meta']['classes']);
+		$cfgu = get_instance('cfg/cfgutils');
+		$res = array();
+
+
+		// now I need to create a VCL table
+		load_vcl('table');
+		$this->t = new aw_table(array('prefix' => 'cfgform'));
+		$this->t->parse_xml_def($this->cfg['basedir'].'/xml/cool_table.xml');
+
+		$this->t->define_field(array(
+			'name' => 'caption',
+			'caption' => 'Nimi',
+			'talign' => 'center',
+			'width' => 300,
+			'nowrap' => 1,
+		));
+		
+		$this->t->define_field(array(
+			'name' => 'check',
+			'caption' => 'Vali',
+			'talign' => 'center',
+			'align' => 'center',
+			'nowrap' => 1,
+		));
+		
+		$this->t->define_field(array(
+			'name' => 'ord',
+			'caption' => 'jrk',
+			'talign' => 'center',
+			'align' => 'center',
+			'nowrap' => 1,
+		));
+		
+		
+		$this->t->define_field(array(
+			'name' => 'group',
+			'caption' => 'Grupp',
+			'talign' => 'center',
+			'nowrap' => 1,
+		));
+
+		foreach($sel_classes->get() as $key => $val)
+		{
+			$has_props = $cfgu->has_properties(array('cldef' => $key));
+			$clid = $cfgu->get_clid_by_cldef(array('cldef' => $key));
+			if ($has_props)
+			{
+				$selprops = $args['prop']['value'][$key];
+				$res[] = array(
+					'caption' => $this->cfg['classes'][$clid]['name'],
+				);
+			
+				$props = $cfgu->load_properties(array('clid' => $clid));
+				foreach($props as $property)
+				{
+					if ($property['access']['text'] != 'ro')
+					{
+						$name = $property['name']['text'];
+						$caption = $property['caption']['text'];
+						$ord = $args["obj"]["meta"]["ord"][$key][$name];
+						$this->t->define_data(array(
+							'caption' => $caption,
+							'group' => $property['group']['text'],
+							'check' => html::checkbox(array('name' => "properties[$key][$name]",'checked' => $selprops[$name])),
+							'ord' => html::textbox(array('size' => 4, 'name' => "ord[$key][$name]", 'value' => $ord)),
+						));
+					}; // if !ro
+				}; // forach $props
+
+				$res[] = array(
+					'value' => $this->t->draw(),
+				);
+				$this->t->clear_data();
+			};
+		};
+
+		return $res;
+
 	}
 
 
