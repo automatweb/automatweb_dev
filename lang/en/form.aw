@@ -4,4 +4,5 @@ define("FG_ENTRY_FORM", "Sisestus");
 define("FG_SEARCH_FORM", "Otsing");
 define("FG_RATING_FORM", "Reiting");
 
+
 ?>
