@@ -10,7 +10,7 @@
 <param name="text_color" value="#000000">
 <param name="top_color" value="#DBE8EE">
 <param name="font" value="Times New Roman">
-<param name="perioodiline" value="OFF"><!-- ON/OFF , kui on, siis puul perioodide valimise võimalus-->
+<param name="perioodiline" value="ON"><!-- ON/OFF , kui on, siis puul perioodide valimise võimalus-->
 <param name="deemon" value="ON"><!-- ON/OFF , kui off, siis puul refresh nupp-->
 <param name="server" value="{VAR:demon_server}"><!-- deemoni asukoha server -->
 <param name="port" value="{VAR:demon_port}">
