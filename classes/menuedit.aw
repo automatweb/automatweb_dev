@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.150 2002/09/03 06:04:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.151 2002/09/04 07:33:34 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -4334,6 +4334,14 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					{
 						$err = true;
 					};
+				};
+
+				foreach($meth["optional"] as $key => $val)
+				{
+					if (in_array($key,array_keys($meth["values"])))
+					{
+						$values[$key] = $meth["values"][$key];
+					}
 				};
 				if (not($err))
 				{
