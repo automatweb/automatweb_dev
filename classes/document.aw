@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.281 2004/09/15 16:29:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.282 2004/09/17 07:33:38 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -426,6 +426,10 @@ class document extends aw_template
 			$this->read_any_template($tpl);
 		};
 		
+		$l = get_instance(CL_LANGUAGE);
+		$l->do_insert_texts($this);
+
+		lc_site_load("document", &$this);
 
 		$awt->start("phase3");
 		if (( ($meta["show_print"]) && (not($print)) && $leadonly != 1) && !$is_printing)
@@ -479,7 +483,6 @@ class document extends aw_template
 		$awt->start("phase4");
 
 
-		lc_site_load("document", &$this);
 		$this->vars(array("imurl" => "/images/trans.gif"));
 		// import charset for print
 		if ($this->template_has_var("charset"))
@@ -1221,8 +1224,6 @@ class document extends aw_template
 			));
 		}
 
-		$l = get_instance(CL_LANGUAGE);
-		$l->do_insert_texts($this);
 
 
 		$this->vars(array(
