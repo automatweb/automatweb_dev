@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.49 2005/01/24 12:43:34 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.50 2005/01/24 14:06:55 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -29,13 +29,16 @@
 @property show_link_field type=select
 @caption Millises v&auml;ljas vaata linki n&auml;idata
 
+@property url_field type=select
+@caption Millises v&auml;ljas lingi url
+
 @property hide_content_table_by_default type=checkbox ch_value=1
 @caption Vaikimisi &auml;ra n&auml;ita sisu tabelit
 
 @property tree_type type=chooser default=TREE_DHTML
 @caption Puu n&auml;itamise meetod
 
-@property folders_table_column_count type=textbox 
+@property folders_table_column_count type=textbox size=5 
 @caption Mitu tulpa n&auml;idata kaustade tabelis
 
 @property per_page type=textbox size=5
@@ -148,6 +151,9 @@ class object_treeview_v2 extends class_base
 				// in any column, uh.
 				unset($col_list['']);
 				$col_list = array_merge(array("" => "", "---" => "---"), $col_list);
+				$prop['options'] = $col_list;
+				break;
+			case "url_field":
 				$prop['options'] = $col_list;
 				break;
 			case "tree_type":
@@ -1034,8 +1040,6 @@ class object_treeview_v2 extends class_base
 		extract($parms);
 		extract($arr);
 
-		$show_link = $this->_get_link($name, $url, $parms['pfk']);
-
 		$formatv = array(
 			"show" => $url,
 			"name" => $name,
@@ -1112,8 +1116,15 @@ class object_treeview_v2 extends class_base
 						// i can come out right now. The best way should be, that if no show_link_field
 						// are seelcted, THEN it won't appear in any column, but it will also break 
 						// existing objects so this is out of question. 
+
 						if ($show_link_field != "---")
 						{
+
+							$url_field = $parms['tree_obj']->prop("url_field");
+							if (!empty($url_field))
+							{
+								$url = $arr[$url_field];
+							}
 							$content = $this->_get_link($content, $url, $parms['tree_obj']);
 						}
 					}

@@ -50,6 +50,15 @@
             <caption>Millises v&amp;auml;ljas vaata linki n&amp;auml;idata</caption>
       </property>
       <property>
+            <name>url_field</name>
+            <table>objects</table>
+            <group>showing</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Millises v&amp;auml;ljas lingi url</caption>
+      </property>
+      <property>
             <name>hide_content_table_by_default</name>
             <table>objects</table>
             <group>showing</group>
@@ -76,6 +85,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
+            <size>5</size>
             <caption>Mitu tulpa n&amp;auml;idata kaustade tabelis</caption>
       </property>
       <property>
