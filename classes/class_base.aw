@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.364 2005/02/15 09:42:00 kristo Exp $
+// $Id: class_base.aw,v 2.365 2005/02/15 10:57:10 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2900,27 +2900,33 @@ class class_base extends aw_template
 	// !You give it a class id and a list of properties .. it performs a validation on all the data
 	// and returns something eatable
 
+	// this was not ment to be used from outside the class
 	function validate_data($arr)
 	{
 		//arr($arr);
 		if (empty($arr["props"]))
 		{
-			$props = $this->load_defaults(array(
-				"clid" => $this->clid,
-			));
+			if (is_oid($arr["cfgform_id"]) && $this->can("view", $arr["cfgform_id"]))
+			{
+				$cf = get_instance("cfg/cfgform");
+				$props = $cf->get_props_from_cfgform(array("id" => $arr["cfgform_id"]));
+			}
+			else
+			{
+				$props = $this->load_defaults(array(
+					"clid" => $this->clid,
+				));
+			};
 		}
 		else
 		{
 			$props = &$arr["props"];
 		};
 
-
 		if (is_oid($arr["cfgform_id"]) && $this->can("view", $arr["cfgform_id"]))
 		{
 			$controller_inst = get_instance(CL_CFGCONTROLLER);
 			$controllers = $this->get_all_controllers($arr["cfgform_id"]);
-			//$cf = get_instance("cfg/cfgform");
-			//$props = $cf->get_props_from_cfgform(array("id" => $arr["cfgform_id"]));
 		};
 		
 		$res = array();
