@@ -31,6 +31,8 @@ class languages extends aw_template
 				"selected" => checked($lang_id == $row["id"]),
 				"active" => checked($row["status"] == 2),
 				"check" => checked($admin_lang == $row["id"]),
+				"modified" => $this->time2date($row["modified"],2),
+				"modifiedby" => $row["modifiedby"],
 				"change" => $this->mk_my_orb("change", array("id" => $row["id"])),
 				"delete" => $this->mk_my_orb("delete", array("id" => $row["id"]))
 			));
@@ -133,12 +135,12 @@ class languages extends aw_template
 
 		if ($id)
 		{
-			$this->db_query("UPDATE languages SET name = '$name' , charset = '$charset' , acceptlang='$acceptlang' WHERE id = $id");
+			$this->db_query("UPDATE languages SET name = '$name' , charset = '$charset' , acceptlang='$acceptlang', modified = ".time().", modifiedby = '".aw_global_get("uid")."' WHERE id = $id");
 		}
 		else
 		{
 			$id = $this->db_fetch_field("select max(id) as id from languages","id")+1;
-			$this->db_query("INSERT INTO languages values($id,'$name','$charset',1,'$acceptlang')");
+			$this->db_query("INSERT INTO languages(id, name, charset, status, acceptlang, modified, modifiedby) values($id,'$name','$charset',1,'$acceptlang','".time()."','".aw_global_get("uid")."')");
 		}
 
 		$this->init_cache(true);
@@ -148,7 +150,7 @@ class languages extends aw_template
 
 	function set_status($id,$status)
 	{
-		$this->db_query("UPDATE languages SET status = $status WHERE id = $id");
+		$this->db_query("UPDATE languages SET status = $status, modified = '".time()."', modifiedby = '".aw_global_get("uid")."' WHERE id = $id");
 		$this->init_cache(true);
 	}
 

@@ -53,6 +53,8 @@ onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseu
 		<td align=center class="celltext" width="20%">&nbsp;{VAR:LC_LANGUAGES_NAME}&nbsp;</td>
 		<td align=center class="celltext" width="20%">&nbsp;{VAR:LC_LANGUAGES_LANGUAGE_ID}&nbsp;</td>
 		<td align=center class="celltext" width="20%">&nbsp;{VAR:LC_LANGUAGES_CHARSET}&nbsp;</td>
+		<td align=center class="celltext" width="20%">&nbsp;Muutja&nbsp;</td>
+		<td align=center class="celltext" width="20%">&nbsp;Muudetud&nbsp;</td>
 		<td align=center class="celltext" width="10%">&nbsp;{VAR:LC_LANGUAGES_CHOSEN}&nbsp;</td>
 		<td align=center class="celltext" width="10%">&nbsp;{VAR:LC_LANGUAGES_ADMIN}&nbsp;</td>
 		<td align=center class="celltext" width="10%">&nbsp;{VAR:LC_LANGUAGES_ACTIVE}?&nbsp;</td>
@@ -63,6 +65,8 @@ onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseu
 <td class="celltext" align=center>&nbsp;{VAR:name}&nbsp;</td>
 <td class="celltext" align=center>&nbsp;{VAR:acceptlang}&nbsp;</td>
 <td class="celltext" align=center>&nbsp;{VAR:charset}&nbsp;</td>
+<td class="celltext" align=center>&nbsp;{VAR:modifiedby}&nbsp;</td>
+<td class="celltext" align=center>&nbsp;{VAR:modified}&nbsp;</td>
 <td class="celltext" align="center">&nbsp;<input type="radio" name="selected" value='{VAR:id}' {VAR:selected}>&nbsp;</td>
 <td class="celltext" align="center">&nbsp;<input type='radio' name='adminlang' value='{VAR:id}' {VAR:check}>&nbsp;</td>
 <td class="celltext" align="center">&nbsp;<input type="checkbox" name="act[{VAR:id}]" value='1' {VAR:active}>&nbsp;</td>
