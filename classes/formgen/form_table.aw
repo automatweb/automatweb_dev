@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.33 2003/02/02 15:06:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.34 2003/02/02 15:23:53 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -228,7 +228,7 @@ class form_table extends form_base
 		if ($form_id != 0)
 		{
 			// here also make the view and other links
-			$change_link = $this->get_link("change", $form_id,$section,$op_id,$chain_id,$chain_entry_id, $dat["entry_id"]);
+			$change_link = $this->get_link("change", $form_id,$section,$op_id,$chain_id,$chain_entry_id, $dat["entry_id"] ? $dat["entry_id"] : $dat['id']);
 
 			$has_change_col = false;
 			for ($i = 0; $i < $this->table["cols"]; $i++)
@@ -285,8 +285,8 @@ class form_table extends form_base
 				$dat["ev_".$chel] = "<a href=\"".$change_link."\">".$dat["ev_".$chel]."</a>";
 			}
 
-			$show_link = $this->get_link("show", $form_id,$section,$op_id,$chain_id,$chain_entry_id, $dat["entry_id"]);
-			$show_link_popup = $this->get_link("show_popup", $form_id,$section,$op_id,$chain_id,$chain_entry_id, $dat["entry_id"]);
+			$show_link = $this->get_link("show", $form_id,$section,$op_id,$chain_id,$chain_entry_id, $dat["entry_id"] ? $dat["entry_id"] : $dat['id']);
+			$show_link_popup = $this->get_link("show_popup", $form_id,$section,$op_id,$chain_id,$chain_entry_id, $dat["entry_id"] ? $dat["entry_id"] : $dat['id']);
 			if ($this->get_col_for_el("view"))
 			{
 				// only do this, when necessary and perhaps avoid the next loop
@@ -335,7 +335,7 @@ class form_table extends form_base
 				}
 			}
 
-			$del_link = $this->get_link("delete", $form_id,$section,$op_id,$chain_id,$chain_entry_id, $dat["entry_id"]);
+			$del_link = $this->get_link("delete", $form_id,$section,$op_id,$chain_id,$chain_entry_id, $dat["entry_id"] ? $dat["entry_id"] : $dat['id']);
 			$del_cl = $this->get_col_for_el("delete");
 			$deltxt = $this->table["texts"]["delete"][$this->lang_id];
 			if ($del_cl)
