@@ -1,14 +1,17 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.5 2001/07/26 16:49:57 duke Exp $
-/*
-	AW Foundation Classes
-	(C) StruktuurMeedia 2000,2001
-*/
+// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.6 2001/07/27 23:24:16 duke Exp $
+// root.aw - the root class
+// actually I'm not sure this class is needed at all
+// this contains all the supplementary functions
+
+classload("defs");
+
 class root
 {
 	// siin asuvad mıned sagedamini kasutataivamad funktsioonid
 	var $errorlevel;
-	var $stacks = array("root" => array("subcount" => 0)); // siia me salvestame erinevad stackid
+	// siia me salvestame erinevad stackid
+	var $stacks = array("root" => array("subcount" => 0));
 	function root()
 	{
 		$this->errorlevel = 0;
@@ -23,162 +26,54 @@ class root
 	//	siis, kasutatakse meelevaldselt v‰lja mıeldud nime
 	//			'root'
 
-	// vbla pole neid funktsioone yldse vaja enam? aw_template ei kasuta neid
-	// enam.
+	////
+	// !Pushes a variable onto the stock
 	function _push($item,$stack = "root")
 	{
-		if (!isset($this->stacks[$stack]))
+		if ( not(is_array($this->stacks[$stack])) )
 		{
-			$this->stacks[$stack]["subcount"] = 0;
-		}
-		$subcount = $this->stacks[$stack]["subcount"];
-		$subcount++;
-		$this->stacks[$stack]["subcount"] = $subcount;
-		// don't you just love those 3 dimensional arrays? ;)
-		$this->stacks[$stack]["items"][$subcount] = $item;
+			$this->stacks[$stack] = array();
+		};
+
+		array_push($this->stacks[$stack],$item);
 	}
 
+	////
+	// !Pops a variable from the stack
 	function _pop($stack = "root")
 	{
-		$subcount = $this->stacks[$stack]["subcount"];
-		$ret = $this->stacks[$stack]["items"][$subcount];
-                unset($this->stacks[$stack]["items"][$subcount]);
-		$subcount--;
-		$this->stacks[$stack]["subcount"] = $subcount;
-                return $ret;
+		return array_pop($this->stacks[$stack]);
 	}
 
-	function _last($stack = "root")
-	{
-		$subcount = $this->stacks[$stack]["subcount"];
-		$ret = $this->stacks[$stack]["items"][$subcount];			
-		return $ret;
-	}
-
-	function _get_all($stack = "root")
-	{
-		return $this->stacks[$stack]["items"];
-  }
-
-
-	function _reset($stack = "root")
-	{
-		unset($this->stacks[$stack]["items"]);
-		unset($this->stacks[$stack]["subcount"]);
-	}
-	//-----------------------------------------------------
-	// ja siit nad lıpevad
-
-	// j‰rgmine funktsioon on inspireeritud perlist ;)
-	// kasutusn‰ide:
-	//       print $object->map("--- %s ---\n",array("1","2","3"));
-	// tulemus:
-	//      --- 1 ---
-	//      --- 2 ---
-	//      --- 3 ---
-	// Ma ei n‰e ¸htegi pohjust miks see funktsioon siin peaks olema.
-	// defs.aw-sse sobib ta palju paremini
-		
+	////
+	// !Right now this is only a wrapper for the function with
+	// the same name in defs.aw. This should probably be removed
+	// at a later time
 	function map($format,$array)
 	{
-		$retval = array();
-		if (is_array($array))
-		{
-			while(list(,$val) = each($array))
-			{
-				$retval[]= sprintf($format,$val,$val);
-			};
-		}
-		else
-		{
-			$retval[]= sprintf($format,$val,$val);
-		};
-		return $retval;
+		return map($format,$array);
 	}
-	// sama, mis eelmine, ainult et moodustuvad paarid
-  // array iga elemendi indeksist ja v‰‰rtusest
-  // format peab siis sisaldama v‰hemalt kahte kohta muutujate jaoks
 
-	// kui $type != 0, siis pˆˆratakse array nˆ ringi ... key ja val vahetatakse ‰ra	
-	// TODO: viia defs.aw-sse
+	////
+	// !Right now this is only a wrapper for the function with
+	// the same name in defs.aw. This should probably be removed
+	// at a later time
 	function map2($format,$array,$type = 0)
 	{
-		$retval = array();
-		if (is_array($array))
-		{
-			while(list($key,$val) = each($array))
-			{
-				if ($type == 0)
-				{
-					$v1 = $key;
-					$v2 = $val;
-				}
-				else
-				{
-					$v1 = $val;
-					$v2 = $key;
-				};
-				if ((strlen($v1) > 0) && (strlen($v2) > 0) )
-				{
-					$retval[] = sprintf($format,$v1,$v2);
-				};
-			};
-		}
-		else
-		{
-			$retval[] = sprintf($format,$val);
-		};
-		return $retval;
+		return map2($format,$array,$type);
 	}
 
-	// TODO: viia defs.aw-sse
+	////
+	// !Right now this is only a wrapper for the function with
+	// the same name in defs.aw. This should probably be removed
+	// at a later time
 	function gen_uniq_id($param = "")
 	{
-		// genereerib md5 checksumi kas siis parameetrist voi 
-		// juhuslikust arvust
-		//  md5sum on alati 32 m‰rki pikk
-		// selle funktsiooni peaks siit v‰lja liigutama
-		if (strlen($param) > 0)
-		{
-			$result = md5($param);
-		}
-		else
-		{
-			$result = md5(uniqid(rand()));
-		};
-		return $result;
+		return gen_uniq_id($param);
 	}
 
-	function error()
-	{
-		// tagastab true, kui on tekkinud viga
-		return ($this->errorlevel > 0);
-	}
-
-	// formeerib xml andmestruktuuri identifikaator
-	// TODO: viia defs.aw-sse
-	function gen_xml_header($version = "1.0") 
-	{
-		return "<" . "?xml version='$version'?" . ">\n";
-	}
-
-
-	// formeerib xml tagi nimega $name ja parameetritega arrayst data
-	// TODO: viia defs.aw-sse
-	function gen_xml_tag($name,$data) 
-	{
-		if (is_array($data)) 
-		{
-			$params = join(" ",$this->map2(" %s='%s'",$data));
-		}
-		else 
-		{
-			$params = "";
-		};
-		$retval = sprintf("<%s%s/>\n",$name,$params);
-		return $retval;
-	}
-
+	////
+	// !Koostab URL-i parameetritest ning HTTP_GET_VARS v‰‰rtustest
 	// TODO: viia defs.aw-sse
 	function make_url($arr)
 	{
