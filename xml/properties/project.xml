@@ -1,6 +1,16 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>event_toolbar</name>
+            <table>objects</table>
+            <group>event_list</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>event_toolbar</field>
+            <caption>Sündmuste toolbar </caption>
+      </property>
+      <property>
             <name>event_list</name>
             <table>objects</table>
             <group>event_list</group>
@@ -9,6 +19,15 @@
             <store>no</store>
             <field>event_list</field>
             <caption>Sündmused</caption>
+      </property>
+      <property>
+            <name>add_event</name>
+            <table>objects</table>
+            <group>add_event</group>
+            <callback>callback_get_add_event</callback>
+            <store>no</store>
+            <field>add_event</field>
+            <caption>Lisa sündmus</caption>
       </property>
       <property>
             <name>file_editor</name>
@@ -35,6 +54,9 @@
                   <caption>Sündmused</caption>
                   <submit>no</submit>
             </event_list>
+            <add_event>
+                  <caption>Muuda sündmust</caption>
+            </add_event>
             <files>
                   <caption>Failid</caption>
             </files>
@@ -74,6 +96,11 @@
                   <clid>CL_TAX_CHAIN</clid>
                   <caption>Maksu pärg</caption>
             </TAX_CHAIN>
+            <PRJ_CFGFORM>
+                  <value>6</value>
+                  <clid>CL_CFGFORM</clid>
+                  <caption>Seadete vorm</caption>
+            </PRJ_CFGFORM>
       </reltypes>
 </properties>
 
