@@ -17,6 +17,14 @@
             <caption>Lõpeb</caption>
       </property>
       <property>
+            <name>person_ref</name>
+            <group>general</group>
+            <table>external_reference</table>
+            <type>textbox</type>
+            <field>ext_id</field>
+            <caption>Viit isikule</caption>
+      </property>
+      <property>
             <name>type</name>
             <group>general</group>
             <table>objects</table>
@@ -30,6 +38,18 @@
             <syslog_type>ST_CRM_CONTRACT_STOP</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
+      <tableinfo>
+            <planner>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </planner>
+            <external_reference>
+                  <index>aw_id</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </external_reference>
+      </tableinfo>
       <reltypes>
             <CONTRACT_STOP_TYPE>
                   <value>1</value>
