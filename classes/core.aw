@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.220 2003/09/17 14:52:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.221 2003/09/23 16:33:30 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1934,6 +1934,10 @@ class core extends acl_base
 		{
 			$arr["date"] = aw_global_get("date");
 		};
+		if (aw_global_get("trid") && empty($arr["trid"]))
+		{
+			$arr["trid"] = aw_global_get("trid");
+		};
 		foreach($arr as $k => $v)
 		{
 			if (is_array($v))
@@ -2077,6 +2081,10 @@ class core extends acl_base
 		if (aw_global_get("date") && empty($arr["date"]))
 		{
 			$arr["date"] = aw_global_get("date");
+		};
+		if (aw_global_get("trid") && empty($arr["trid"]))
+		{
+			$arr["trid"] = aw_global_get("trid");
 		};
 		$tmp = new aw_array($arr);
 		foreach($tmp->get() as $k => $v)
@@ -2417,7 +2425,7 @@ class core extends acl_base
 			$this->trid = $args["trid"];
 			if (!is_object($this->tr))
 			{
-				$this->tr = get_instance("translation");
+				$this->tr = get_instance("translate/class_translator");
 			}
 			$this->tr->load_catalog($this->trid);
 		}
