@@ -171,6 +171,17 @@
             <caption>Formaat</caption>
       </property>
       <property>
+            <name>export_from_date</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>export_members</group>
+            <type>date_select</type>
+            <store>no</store>
+            <default>-1</default>
+            <caption>Alates kuupäevast</caption>
+      </property>
+      <property>
             <name>exp_sbt</name>
             <table>objects</table>
             <field>meta</field>
