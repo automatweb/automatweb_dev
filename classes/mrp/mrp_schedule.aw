@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.8 2005/02/11 07:37:35 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.9 2005/02/11 11:22:55 voldemar Exp $
 // mrp_schedule.aw - Ajaplaan?
 /*
 
@@ -357,7 +357,31 @@ class mrp_schedule extends class_base
 /* dbg */ $this->mrpdbg=1;
 /* dbg */ }
 
-				$job_length = $job["pre_buffer"] + $job["length"] + $job["post_buffer"];
+				$job_length = $job["pre_buffer"] + $job["length"];
+//!!! misasi on prebuffer?
+//!!! kas ressursi default puhvrid pole mitte eraldi asjad vrd. t88de puhvritega?
+
+
+
+
+// job: 7458
+// res: 1341
+
+// STAHL volt: 26 h; kinni L, P; tˆˆaeg 01:00-17:00 (16h)
+// Planeeritud - 16.06 kl 930 - 17.06 kl 2130.
+
+// Peaks olemas sedasi:
+// Algus: 16/06 - 09:30 - 17:00: 7,5h (j‰‰k 18,5 h)
+            // 17/06 - 01:00 - 17:00: 16h (j‰‰k 2,5 h)
+            // 18/06 - 01:00 - 03:30: 2,5h (j‰‰k 0)
+
+// job: 7454 mis tuleb kohe p‰rast seda ja mille kestus on 2 h, kuid
+// planeeritud mitu p‰eva.
+
+
+
+
+
 
 				if ($project_start !== false)
 				{
@@ -397,7 +421,7 @@ class mrp_schedule extends class_base
 				{
 					foreach ($successor_index[$job["oid"]] as $successor_id)
 					{
-						$starttime_index[$successor_id] = max ($starttime_index[$successor_id], ($scheduled_start + $scheduled_length));
+						$starttime_index[$successor_id] = max ($starttime_index[$successor_id], ($scheduled_start + $scheduled_length + $job["post_buffer"]));
 					}
 				}
 

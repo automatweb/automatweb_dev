@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.11 2005/02/11 07:31:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.12 2005/02/11 11:22:55 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -351,7 +351,6 @@ class mrp_resource extends class_base
 
 		foreach ($dates as $date)
 		{
-			$date = str_replace(";", "", $date);
 			list ($day, $mon) = explode (".", $date);
 			settype ($day, "integer");
 			settype ($mon, "integer");
@@ -437,7 +436,7 @@ class mrp_resource extends class_base
 					$interval = round (($interval ? $interval : 1) * 86400 * 365);
 					break;
 			}
-			
+
 			$recurrence_starttime = $recurrence->prop ("time");
 			$recurrence_starttime = explode (":", $recurrence_starttime);
 			$recurrence_starttime_hours = $recurrence_starttime[0] ? (int) $recurrence_starttime[0] : 0;
@@ -448,9 +447,9 @@ class mrp_resource extends class_base
 				"length" => round ($recurrence->prop ("length") * 3600),
 				"start" => $recurrence->prop ("start"),
 				"time" => $recurrence_starttime,
-                                "end" => $recurrence->prop ("end"),
-                                "interval" => $interval,
-                        );
+				"end" => $recurrence->prop ("end"),
+				"interval" => $interval,
+			);
 		}
 
 		### add workhours, transmute to unavailable periods
@@ -494,9 +493,9 @@ class mrp_resource extends class_base
 				"length" => $length,
 				"start" => $recurrence->prop ("start"),
 				"time" => $recurrence_starttime,
-                                "end" => $recurrence->prop ("end"),
-                                "interval" => $interval,
-                        );
+				"end" => $recurrence->prop ("end"),
+				"interval" => $interval,
+			);
 		}
 
 		return $recurrent_unavailable_periods;

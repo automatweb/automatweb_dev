@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.18 2005/02/11 08:36:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.19 2005/02/11 11:22:55 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -689,7 +689,7 @@ class mrp_case extends class_base
 
 			foreach ($prerequisites as $oid)
 			{
-				if (is_oid ($oid) && $this->can("view", $oid))
+				if (is_oid ($oid) && $this->can("view", $oid)) //!!! miks see can view seal on?
 				{
 					$prerequisite_job = obj ($oid);
 					$prerequisites_translated[] = $prerequisite_job->prop ("exec_order");
@@ -1242,7 +1242,7 @@ class mrp_case extends class_base
 		$value = (float) ((isset ($parts[0]) ? ((int) $parts[0]) : 0) . "." . (isset ($parts[1]) ? ((int) $parts[1]) : 0));
 		return $value;
 	}
-
+//!!! miks see workspacest v6etakse?
 	function _get_sales_priority($o)
 	{
 		$ws = $o->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
