@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.58 2003/07/08 11:59:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.59 2003/07/17 12:26:21 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -2876,34 +2876,40 @@ class form_element extends aw_template
 				$d_id = $this->arr["def_date_rel_el"];
 			}
 			$v = $this->form->post_vars[$prefix.$d_id];
-
-			list($d,$m,$y) = explode("-",date("d-m-y"));
-
-			$var = mktime($v["hour"],$v["minute"],0,$v["month"],$v["day"],$v["year"]);
-
-			$var = $prefix.$d_id;
-			global $$var;
-			$v = $$var;
-			if (!$this->arr["has_month"])
+			if ($this->arr["hidden"])
 			{
-				$v["month"] = 1;
-			}
-			if (!$this->arr["has_day"])
-			{
-				$v["day"] = 1;
-			}
-			if (!$this->arr["has_year"])
-			{
-				$v["year"] = date("Y");
-			}
-			
-			if ($v["year"] > 0 || (!$this->arr["has_year"]))
-			{
-				$tm = mktime($v["hour"],$v["minute"],0,$v["month"],$v["day"],$v["year"]);
+				$tm = $v;
 			}
 			else
 			{
-				$tm = 0;
+				list($d,$m,$y) = explode("-",date("d-m-y"));
+
+				$var = mktime($v["hour"],$v["minute"],0,$v["month"],$v["day"],$v["year"]);
+
+				$var = $prefix.$d_id;
+				global $$var;
+				$v = $$var;
+				if (!$this->arr["has_month"])
+				{
+					$v["month"] = 1;
+				}
+				if (!$this->arr["has_day"])
+				{
+					$v["day"] = 1;
+				}
+				if (!$this->arr["has_year"])
+				{
+					$v["year"] = date("Y");
+				}
+			
+				if ($v["year"] > 0 || (!$this->arr["has_year"]))
+				{
+					$tm = mktime($v["hour"],$v["minute"],0,$v["month"],$v["day"],$v["year"]);
+				}
+				else
+				{
+					$tm = 0;
+				}
 			}
 
 			if ($this->arr["def_date_type"] == "rel")
