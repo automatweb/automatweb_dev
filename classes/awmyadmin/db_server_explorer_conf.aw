@@ -10,13 +10,13 @@
 	@property status type=status 
 	@caption Staatus
 
-	@property all_servers type=checkbox
+	@property all_servers type=checkbox ch_value=1
 	@caption K&otilde;ik serverid
 
 	@property servers type=select multiple=1 size=5
 	@caption Serverid, millest baase n&auml;idatakse
 
-	@property all_databases type=checkbox
+	@property all_databases type=checkbox ch_value=1
 	@caption K&otilde;ik andmebaasid
 
 	@property databases type=select multiple=1 size=10

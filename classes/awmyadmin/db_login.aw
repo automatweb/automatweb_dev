@@ -22,7 +22,7 @@
 	@property db_pass type=textbox 
 	@caption Parool
 
-	@property db_create_ifnexist type=checkbox 
+	@property db_create_ifnexist type=checkbox ch_value=1
 	@caption Loo kui olemas pole
 
 */
