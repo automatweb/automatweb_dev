@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.233 2003/11/12 15:30:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.234 2003/12/03 12:03:23 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -585,14 +585,6 @@ class core extends acl_base
 
 		return ($timestamp) ? date($dateformat,$timestamp) : date($dateformat);
 	}
-
-	////
-	// !Tagastab kasutaja login menüü id
-	function get_login_menu()
-	{
-		return $this->login_menu;
-	}
-
 
 	///
 	// !Margib koik saidi objektid dirtyks
@@ -1819,11 +1811,11 @@ class core extends acl_base
 					$u = $co->get_simple_config("error_redirect");
 				}
 
-				if ($u != "" && aw_global_get("uid") != "kix" && aw_global_get("uid") != "duke" && !headers_sent())
-				{
-					header("Location: $u");
-					die();
-				}
+				//if ($u != "" && aw_global_get("uid") != "kix" && aw_global_get("uid") != "duke" && !headers_sent())
+				//{
+				//	header("Location: $u");
+				//	die();
+				//}
 				flush();
 				die("<br /><b>AW_ERROR: $msg</b><br />\n\n<br />");
 			}
@@ -2065,10 +2057,16 @@ class core extends acl_base
 			}
 			else
 			{
-				if (($value !== "" && $value != NULL) || true == $this->use_empty)
-				{
+				// commented this out, because it breaks stuff - namely, urls that are created via
+				// $this->mk_orb("admin_cell", array("id" => $this->id, "col" => (int)$arr["r_col"], "row" => (int)$arr["r_row"]))
+				// where the col and row parameters will be "0"
+				// it will not include them.. damned if I know why
+				// so, before putting this back, check that
+				// - terryf
+				//if (($value !== "" && $value != NULL) || true == $this->use_empty)
+				//{
 					$this->orb_values[empty($prefix) ? $name : $prefix."[".$name."]"] = $value;
-				};
+				//};
 			}
 		};
 	}
@@ -2504,6 +2502,11 @@ class core extends acl_base
 		return $this->parse();
 	}
 	
+	function _get_menu_list_cb($o, $param)
+	{
+		$this->tt[$o->id()] = $o->path_str();
+	}
+
 	////
 	// !teeb objektide nimekirja ja tagastab selle arrays, sobiv picker() funxioonile ette andmisex
 	// ignore_langmenus = kui sait on mitme keelne ja on const.aw sees on $lang_menus = true kribatud
@@ -2515,9 +2518,34 @@ class core extends acl_base
 	// rootobj - mis objektist alustame
 	function get_menu_list($ignore_langmenus = false,$empty = false,$rootobj = -1, $onlyact = -1) 
 	{
+		enter_function("core::get_menu_list");
 		$admin_rootmenu = $this->cfg["admin_rootmenu2"];
 
-		$cf_name = "objects::get_list::ign::".((int)$ignore_langmenus)."::empty::".((int)$empty)."::rootobj::".$rootobj;
+		if ($rootobj == -1)
+		{
+			$rootobj = $admin_rootmenu;
+		}
+
+		$ot = new object_tree(array(
+			"class_id" => CL_MENU,
+			"parent" => $rootobj,
+			"status" => ($onlyact ? STAT_ACTIVE : array(STAT_NOTACTIVE, STAT_ACTIVE)),
+			"sort_by" => "objects.parent"
+		));
+
+		$this->tt = array();
+		if ($empty)
+		{
+			$tt[] = "";
+		}
+		$ot->foreach_cb(array(
+			"save" => false,
+			"func" => array(&$this, "_get_menu_list_cb"),
+			"param" => ""
+		));
+
+		exit_function("core::get_menu_list");
+		/*$cf_name = "objects::get_list::ign::".((int)$ignore_langmenus)."::empty::".((int)$empty)."::rootobj::".$rootobj;
 		$cf_name.= "::adminroot::".$admin_rootmenu."::uid::".aw_global_get("uid")."::onlyact::".$onlyact;
 
 		if (!$ignore_langmenus)
@@ -2618,9 +2646,9 @@ class core extends acl_base
 		}
 
 		$cache->file_set($cf_name,aw_serialize($tt));
-		aw_global_set($cf_name, $tt);
+		aw_global_set($cf_name, $tt);*/
 
-		return $tt;
+		return $this->tt;
 	}
 
 	function mkah(&$arr, &$ret,$parent,$prefix)
