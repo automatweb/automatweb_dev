@@ -99,8 +99,8 @@ target="_blank" href="{VAR:baseurl}/index.aw?section={VAR:id}">Eelvaade</a></td>
 
 	&nbsp;&nbsp;Lingi võtmesõnad:	<input type='checkbox' name="link_keywords" value=1>&nbsp;&nbsp;&nbsp;
 	Arhiveeri:	<input type='checkbox' name="archive" value=1>&nbsp;&nbsp;&nbsp;
-	<!--
 	Esilehel:	<input type='checkbox' name="esilehel" value=1 {VAR:esilehel}>&nbsp;&nbsp;&nbsp;
+	<!--
 	Esilehel tulbas:	<input type='checkbox' name="frontpage_left" value=1 {VAR:frontpage_left}>&nbsp;&nbsp;&nbsp;
 	-->
 		</td>
@@ -129,6 +129,10 @@ function doSubmit()
 <td class="celltext"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Autor:&nbsp;</b></td>
 <td class="celltext"><input class='tekstikast' type="text" name="author" size="80" value="{VAR:author}"></td>
 </tr>
+<tr>
+<td class="celltext"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Fotod:&nbsp;</b></td>
+<td class="celltext"><input class='tekstikast' type="text" name="photos" size="80" value="{VAR:photos}"></td>
+</tr>
 
 <tr>
 <td class="celltext" valign="top"><b>&nbsp;Lead&nbsp;</b></td>
@@ -151,6 +155,10 @@ function doSubmit()
 <tr>
 <td class="celltext" width="10%"><img src='{VAR:baseurl}/images/transa.gif' width=10 height=1><Br><B>&nbsp;Autor:&nbsp;</b></td>
 <td class="celltext" width="90%"><input class='tekstikast' type="text" name="author" size="80" value="{VAR:author}"></td>
+</tr>
+<tr>
+<td class="celltext" width="10%"><img src='{VAR:baseurl}/images/transa.gif' width=10 height=1><Br><B>&nbsp;Fotod:&nbsp;</b></td>
+<td class="celltext" width="90%"><input class='tekstikast' type="text" name="photos" size="80" value="{VAR:photos}"></td>
 </tr>
 <tr>
 <td class="celltext" valign="top"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Pealkiri&nbsp;</b></td>
