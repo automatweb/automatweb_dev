@@ -199,7 +199,7 @@ class form_controller extends form_base
 	// $entry is the current element's value
 	// form_ref - reference to the form that the current element is a part of
 	// $el_ref is a reference to the current element - it is used to import metadata values - optional
-	function eval_controller($id, $entry, &$form_ref,$el_ref = false)
+	function eval_controller($id, $entry = false, $form_ref = false,$el_ref = false)
 	{
 		if (!$id)
 		{
@@ -216,9 +216,8 @@ class form_controller extends form_base
 
 	////
 	// !this imports all the variable values to equasion $eq
-	function replace_vars($co,$eq,$add_quotes,&$form_ref, $el_ref, $el_value = "")
+	function replace_vars($co,$eq,$add_quotes,$form_ref = false, $el_ref = false, $el_value = "")
 	{
-		$this->cur_form_instance = &$form_ref;
 		if (is_array($co["meta"]["vars"]))
 		{
 			foreach($co["meta"]["vars"] as $var => $vd)
@@ -239,20 +238,23 @@ class form_controller extends form_base
 		}
 
 		// now import all current form element values as well
-		$els = $form_ref->get_all_els();
-		foreach($els as $el)
+		if (is_object($form_ref))
 		{
-			$var = $el->get_el_name();
-//			echo "var = '$var' eq = $eq <br>";
-			if (strpos($eq,"[".$var."]") !== false)
+			$els = $form_ref->get_all_els();
+			foreach($els as $el)
 			{
-				$val = $el->get_controller_value();
-				if ($add_quotes)
+				$var = $el->get_el_name();
+	//			echo "var = '$var' eq = $eq <br>";
+				if (strpos($eq,"[".$var."]") !== false)
 				{
-					$val = "\"".$val."\"";
+					$val = $el->get_controller_value();
+					if ($add_quotes)
+					{
+						$val = "\"".$val."\"";
+					}
+	//				echo "replace '$var' with '$val' <Br>";
+					$eq = str_replace("[".$var."]",$val,$eq);
 				}
-//				echo "replace '$var' with '$val' <Br>";
-				$eq = str_replace("[".$var."]",$val,$eq);
 			}
 		}
 

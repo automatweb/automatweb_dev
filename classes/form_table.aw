@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.62 2002/10/16 15:43:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.63 2002/10/16 16:03:38 kristo Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -1025,6 +1025,23 @@ class form_table extends form_base
 					continue;
 				}
 			}
+
+			// check column controllers
+			$ctrl_ok = true;
+			if (is_array($cc["controllers"]))
+			{
+				foreach($cc["controllers"] as $ctr_id)
+				{
+					$ctrl_ok &= $this->controller_instance->eval_controller($ctr_id);
+				}
+			}
+
+			if (!$ctrl_ok)
+			{
+				// don't show this column if controller not ok
+				continue;
+			}
+
 			$eln = "col_".$col;
 			
 			$numericattr = "";
@@ -1912,6 +1929,7 @@ class form_table extends form_base
 				"link_style1_styles" => $this->picker($this->table["defs"][$col]["styles"]["link_style1"], $sts),
 				"link_style2_styles" => $this->picker($this->table["defs"][$col]["styles"]["link_style2"], $sts),
 				"group_style_styles" => $this->picker($this->table["defs"][$col]["styles"]["group_style"], $sts),
+				"controllers" => $this->mpicker($this->table["defs"][$col]["controllers"], $this->list_objects(array("class" => CL_FORM_CONTROLLER, "addempty" => true)))
 			));
 			$hst = "";
 			if ($this->table["defs"][$col]["has_col_style"])
@@ -2003,6 +2021,7 @@ class form_table extends form_base
 		for ($i=0; $i < $this->table["cols"]; $i++)
 		{
 			$this->table["defs"][$i]["els"] = $this->make_keys($cols[$i]["els"]);
+			$this->table["defs"][$i]["controllers"] = $this->make_keys($cols[$i]["controllers"]);
 			foreach($this->table["defs"][$i]["els"] as $elid)
 			{
 				$this->table["defs"][$i]["el_forms"][$elid] = $els[$elid];

@@ -134,6 +134,9 @@
 											<input type="checkbox" name="cols[{VAR:col_id}][clicksearch]" value="1" {VAR:col_clicksearch}> Klikkides tehakse otsing <br>
 											<input type="checkbox" name="cols[{VAR:col_id}][link]" value="1" {VAR:col_link}> Link <br>
 											<input type="checkbox" name="cols[{VAR:col_id}][no_show_empty]" value="1" {VAR:no_show_empty}> &Auml;ra n&auml;ita t&uuml;hjalt <br>
+											Vali tulba kontrollerid:<br>
+											<select name="cols[{VAR:col_id}][controllers][]" multiple class="formselect">{VAR:controllers}</select><Br>
+
 											<input type="checkbox" name="cols[{VAR:col_id}][link_popup]" value="1" {VAR:col_link_popup}> Popup aken <br>
 											Erineva stiiliga: <input class="formcheck" type="checkbox" name="cols[{VAR:col_id}][has_col_style]" value="1" {VAR:has_col_style}><Br>
 
