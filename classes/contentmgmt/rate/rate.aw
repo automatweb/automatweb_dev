@@ -259,74 +259,72 @@ class rate extends class_base
 
 		// get list of all objects that this rating applies to
 		$oids = array();
-		if ($ob['meta']['objects_from'] == OBJECTS_FROM_CLID)
+		switch($ob["meta"]["objects_from"])
 		{
-			$where = "objects.class_id = ".$ob['meta']['objects_from_clid'];
-		}
-		else
-		if ($ob['meta']['objects_from'] == OBJECTS_FROM_FOLDER)
-		{
-			// need to get a list of all folders below that one.
-			$mn = array();
-			$pts = new aw_array($ob['meta']['objects_from_folder']);
-			foreach($pts->get() as $fld)
-			{
-				$mn += $this->get_objects_below(array(
-					'parent' => $fld,
-					'class' => CL_PSEUDO,
-					'full' => true,
-					'ignore_lang' => true,
-					'ret' => ARR_NAME
-				)) + array($fld => $fld);
-			}
-			$where = "objects.parent IN (".join(",",array_keys($mn)).")";
-		}
-		else
-		if ($ob['meta']['objects_from'] == OBJECTS_FROM_OID)
-		{
-			$c_oid = $ob['meta']['objects_from_oid'];
-			$c_obj = $this->get_object($c_oid);
-			$c_inst = get_instance($this->cfg['classes'][$c_obj['class_id']]['file']);
-			if (method_exists($c_inst, "get_contained_objects"))
-			{
-				$c_objs = $c_inst->get_contained_objects(array(
-					"oid" => $c_oid
-				));
-			}
-			else
-			{
-				$c_objs = array($c_oid => $c_oid);
-			}
-			$where = "objects.oid IN (".join(",", array_keys($c_objs)).")";
+			case OBJECTS_FROM_CLID:
+				$where = "objects.class_id = ".$ob['meta']['objects_from_clid'];
+				break;
+
+			case OBJECTS_FROM_FOLDER:
+				// need to get a list of all folders below that one.
+				$mn = array();
+				$pts = new aw_array($ob['meta']['objects_from_folder']);
+				foreach($pts->get() as $fld)
+				{
+					$mn += $this->get_objects_below(array(
+						'parent' => $fld,
+						'class' => CL_PSEUDO,
+						'full' => true,
+						'ignore_lang' => true,
+						'ret' => ARR_NAME
+					)) + array($fld => $fld);
+				}
+				$where = "objects.parent IN (".join(",",array_keys($mn)).")";
+				break;
+
+			case OBJECTS_FROM_OID:
+				$c_oid = $ob['meta']['objects_from_oid'];
+				$c_obj = $this->get_object($c_oid);
+				$c_inst = get_instance($this->cfg['classes'][$c_obj['class_id']]['file']);
+				if (method_exists($c_inst, "get_contained_objects"))
+				{
+					$c_objs = $c_inst->get_contained_objects(array(
+						"oid" => $c_oid
+					));
+				}
+				else
+				{
+					$c_objs = array($c_oid => $c_oid);
+				}
+				$where = "objects.oid IN (".join(",", array_keys($c_objs)).")";
+				break;
 		}
 
 		// query the max/avg for those. 
 		$order = "DESC";
-		if ($ob['meta']['top_type'] == ORDER_HIGHEST)
+		switch($ob["meta"]["top_type"])
 		{
-			$fun = "rating";
-		}
-		else
-		if ($ob['meta']['top_type'] == ORDER_AVERAGE)
-		{
-			$fun = "AVG(rating)";
-		}
-		else
-		if ($ob['meta']['top_type'] == ORDER_VIEWS)
-		{
-			$fun = "hits.hits";
-		}
-		else
-		if ($ob['meta']['top_type'] == ORDER_LOWEST_RATE)
-		{
-			$fun = "rating";
-			$order = "ASC";
-		}
-		else
-		if ($ob['meta']['top_type'] == ORDER_LOWEST_VIEWS)
-		{
-			$fun = "hits.hits";
-			$order = "ASC";
+			case ORDER_HIGHEST:
+				$fun = "rating";
+				break;
+
+			case ORDER_AVERAGE:
+				$fun = "AVG(rating)";
+				break;
+
+			case ORDER_VIEWS:
+				$fun = "hits.hits";
+				break;
+
+			case ORDER_LOWEST_RATE:
+				$fun = "rating";
+				$order = "ASC";
+				break;
+
+			case ORDER_LOWEST_VIEWS:
+				$fun = "hits.hits";
+				$order = "ASC";
+				break;
 		}
 
 		$this->img = get_instance("image");
