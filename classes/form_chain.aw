@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.20 2002/07/17 07:44:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.21 2002/07/17 12:28:28 kristo Exp $
 // form_chain.aw - form chains
 
 classload("form_base");
@@ -97,13 +97,16 @@ class form_chain extends form_base
 		}
 	
 		// notify form_calendar
-		$fc = get_instance("form_calendar");
-		$fc->upd_calendar(array(
-			"cal_id" => $id,
-			"form_id" => $cal_entry_form,
-			"vform_id" => $cal_controller,
-			"active" => $has_calendar,
-		));
+		if ($cal_entry_form)
+		{
+			$fc = get_instance("form_calendar");
+			$fc->upd_calendar(array(
+				"cal_id" => $id,
+				"form_id" => $cal_entry_form,
+				"vform_id" => $cal_controller,
+				"active" => $has_calendar,
+			));
+		}
 
 
 		$this->db_query("DELETE FROM form2chain WHERE chain_id = $id");
