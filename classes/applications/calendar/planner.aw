@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.2 2004/08/25 08:37:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.3 2004/08/25 13:50:06 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -8,10 +8,18 @@ EMIT_MESSAGE(MSG_EVENT_ADD);
 EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 
 	@default table=objects
+	@default group=general2
+
+	@property name type=textbox
+	@caption Nimi
+
+	@property status type=status
+	@caption Staatus
+	
 	@default field=meta
 	@default method=serialize
-	@default group=general2
 	@classinfo relationmgr=yes
+
 
 	@property default_view type=select rel=1
 	@caption Aeg
