@@ -9,11 +9,26 @@
             <caption>Nimi mitmuses</caption>
             <comment>Ametinimetus mitmuses</comment>
       </property>
+      <property>
+            <name>trans</name>
+            <table>objects</table>
+            <group>trans</group>
+            <type>callback</type>
+            <store>no</store>
+            <callback>callback_gen_trans</callback>
+            <field>trans</field>
+            <caption>Tõlkimine</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_PROFESSION</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
       </classinfo>
+      <groupinfo>
+            <trans>
+                  <caption>Tõlkimine</caption>
+            </trans>
+      </groupinfo>
       <tableinfo>
             <kliendibaas_amet>
                   <index>oid</index>
