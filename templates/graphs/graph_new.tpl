@@ -11,22 +11,22 @@
 <form method="post" action="reforb.{VAR:ext}">
 <TABLE border=0>
 <TR>
-	<TD class="fcaption">Nimi:<TD colspan=2 class="fcaption"><input type="text" name="name" value="Graafik">
+	<TD class="fcaption">{VAR:LC_GRAPH_NAME}:<TD colspan=2 class="fcaption"><input type="text" name="name" value="{VAR:LC_GRAPH_GRAPH}">
 <TR>
-	<TD class="fcaption">Kommentaar:<TD colspan=2 class="fcaption"><textarea name="comment" COLS=50 ROWS=5 wrap='soft'></textarea></tr>
+	<TD class="fcaption">{VAR:LC_GRAPH_COMM}:<TD colspan=2 class="fcaption"><textarea name="comment" COLS=50 ROWS=5 wrap='soft'></textarea></tr>
 <TR>
-	<TD colspan=3 class="fcaption">Graafiku tüüp:</TD>
+	<TD colspan=3 class="fcaption">{VAR:LC_GRAPH_TYPE}:</TD>
 </TR>
 	<TD colspan=3 class="fcaption">
 		<select name="type" value="">
-		<option value="2">Tulp</option>
-		<option value="1">Joon</option>
-		<option value="0">Pirukas</option>
+		<option value="2">{VAR:LC_GRAPH_POST}</option>
+		<option value="1">{VAR:LC_GRAPH_LINE}</option>
+		<option value="0">{VAR:LC_GRAPH_PIE}</option>
 		</select>	
 
 </TR>
 </TABLE>   
-<input type="submit" name="Submit" value="Edasi">
+<input type="submit" name="Submit" value="{VAR:LC_GRAPH_FOR}">
 </TABLE>
 {VAR:reforb}
 </form>

@@ -22,15 +22,15 @@ function varvivalik(nr)
 
 <table border="0" cellspacing="0" cellpadding="0" width=100%>
 	<tr>
-		<td height="15" colspan="4" class="fgtitle">&nbsp;<b>GRAAFIK:&nbsp;<a href={VAR:prev}>Eelvaade</a>&nbsp;|&nbsp;<a href={VAR:meta}>Meta informatsioon</a>&nbsp;
+		<td height="15" colspan="4" class="fgtitle">&nbsp;<b>{VAR:LC_GRAPH_GRAPH1}:&nbsp;<a href={VAR:prev}>{VAR:LC_GRAPH_PREW}</a>&nbsp;|&nbsp;<a href={VAR:meta}>{VAR:LC_GRAPH_META}</a>&nbsp;
 		<!-- SUB: CHANGE -->
-		|&nbsp;<a href='{VAR:userdata}'>&nbsp;Sisesta/Muuda Andmeid</a>
+		|&nbsp;<a href='{VAR:userdata}'>&nbsp;{VAR:LC_GRAPH_INCH}</a>
 		<!-- END SUB: CHANGE -->
 		
 	</b></td>
 	</tr>
 	<tr>
-		<td height="15" colspan="4" class="fgtitle">&nbsp;M‰rkus: Enne eelvaadet tuleks graafiku seaded salvestada</td>
+		<td height="15" colspan="4" class="fgtitle">&nbsp;{VAR:LC_GRAPH_NOTE1}</td>
 	</tr>
 	<tr><td>&nbsp;</tr></td>
 <tr><td>
@@ -40,81 +40,81 @@ function varvivalik(nr)
 <form method="post" action="reforb.{VAR:ext}" name=ff>
 <table border="0" cellspacing=1>
 	<tr>
-		<td class="fcaption" colspan=4 align=center>Graafiku: <b>"{VAR:name}"</b> seaded
+		<td class="fcaption" colspan=4 align=center> <b>"{VAR:name}"</b> {VAR:LC_GRAPH_CONF}
 	<tr>
 	<tr>
 		<td class="fcaption" colspan=4 align=center>&nbsp;
 	<tr>
 
-		<td class="fcaption">Graafiku pealkiri:</td>
+		<td class="fcaption">{VAR:LC_GRAPH_TITLE}:</td>
 		<td class="fcaption" colspan=3>
 		<input type="text" name="setup[title]" size=40 value="{VAR:title}">
 		</td>
 	<tr>
-		<td class="fcaption">Pealkirja v&auml;rv:</td>
-		<td class="fcaption">#<input type="text" size=6 name="setup[title_col]" value="{VAR:title_col}"><a href="#" onclick="varvivalik(1);">&nbsp;Vali&nbsp;</a>
+		<td class="fcaption">{VAR:LC_GRAPH_TITLE_COLOR}:</td>
+		<td class="fcaption">#<input type="text" size=6 name="setup[title_col]" value="{VAR:title_col}"><a href="#" onclick="varvivalik(1);">&nbsp;{VAR:LC_GRAPH_CHOOSE}&nbsp;</a>
 		</td>
-		<td class="fcaption">Tausta v&auml;rv:</td>
-		<td class="fcaption">#<input type="text" size=6 name="setup[back_col]" value="{VAR:back_col}"><a href="#" onclick="varvivalik(2);">&nbsp;Vali&nbsp;</a>
+		<td class="fcaption">{VAR:LC_GRAPH_BACK_COLOR}:</td>
+		<td class="fcaption">#<input type="text" size=6 name="setup[back_col]" value="{VAR:back_col}"><a href="#" onclick="varvivalik(2);">&nbsp;{VAR:LC_GRAPH_CHOOSE}&nbsp;</a>
 		</td>
 	</tr>
 	<tr>
-		<td class="fcaption">K&otilde;rgus: </td>
+		<td class="fcaption">{VAR:LC_GRAPH_HIGH}: </td>
 		<td class="fcaption"><input type="text" size=3 name="setup[heigth]" value="{VAR:gr_height}">
 		</td>
-		<td class="fcaption">Laius: </td>
+		<td class="fcaption">{VAR:LC_GRAPH_WIDTH}: </td>
 		<td class="fcaption"><input type="text" size=3 name="setup[width]" value="{VAR:width}">
 		</td>
 	</tr>
 	<tr>
-		<td class="fcaption"> Raami laius: </td>
+		<td class="fcaption"> {VAR:LC_FRAME_BLAA}: </td>
 		<td class="fcaption"><input type="text" size=3 name="setup[frame]" value="{VAR:frame}">
 		</td>
-		<td class="fcaption"> Sisemine laius: </td>
+		<td class="fcaption"> {VAR:LC_GRAPH_INS_BLAA}: </td>
 		<td class="fcaption"><input type="text" size=3 name="setup[inside]" value="{VAR:inside}">
 		</td>
 	</tr>
 	<tr>
-		<td class="fcaption">Y telje text: </td>
+		<td class="fcaption">Y {VAR:LC_GRAPH_AX_TEXT}: </td>
 		<td class="fcaption"><input type="text" size=20 name="setup[y_axis_text]" value="{VAR:y_axis_text}">
 		</td>
-		<td class="fcaption">Y telje teksti v&auml;rv:</td>
-		<td class="fcaption">#<input type="text" size=6 name="setup[y_axis_col]" value="{VAR:y_axis_col}"><a href="#" onclick="varvivalik(8);">&nbsp;Vali&nbsp;</a>
+		<td class="fcaption">Y {VAR:LC_GRAPH_AX_COLOR}:</td>
+		<td class="fcaption">#<input type="text" size=6 name="setup[y_axis_col]" value="{VAR:y_axis_col}"><a href="#" onclick="varvivalik(8);">&nbsp;{VAR:LC_GRAPH_CHOOSE}&nbsp;</a>
 		</td>
 	</tr>
 	<tr>
-		<td class="fcaption" colspan=2>N‰itan Y teljel max ja min v‰‰rtusi:&nbsp;</td>
+		<td class="fcaption" colspan=2>{VAR:LC_GRAPH_Y_MAXMIN}:&nbsp;</td>
 		<td class="fcaption" colspan=2><input type="checkbox" name="setup[show_y_val]" {VAR:y}>
 		</td>
 	<tr>
-		<td class="fcaption">X telje text: </td>
+		<td class="fcaption">X {VAR:LC_GRAPH_AX_TEXT}: </td>
 		<td class="fcaption"><input type="text" size=20 name="setup[x_axis_text]" value="{VAR:x_axis_text}">
 		</td>
-		<td class="fcaption">X telje teksti v&auml;rv:</td>
-		<td class="fcaption">#<input type="text" size=6 name="setup[x_axis_col]" value="{VAR:x_axis_col}"><a href="#" onclick="varvivalik(11);">&nbsp;Vali&nbsp;</a>
+		<td class="fcaption">X {VAR:LC_GRAPH_AX_COLOR}:</td>
+		<td class="fcaption">#<input type="text" size=6 name="setup[x_axis_col]" value="{VAR:x_axis_col}"><a href="#" onclick="varvivalik(11);">&nbsp;{VAR:LC_GRAPH_CHOOSE}&nbsp;</a>
 		</td>
 	</tr>
 	<tr>
-		<td class="fcaption">Y telje &uuml;hikute arv:</td>
+		<td class="fcaption">{VAR:LC_GRAPH_Y_INCH}:</td>
 		<td class="fcaption"><input type="text" size=2 name="setup[y_grid]" value="{VAR:y_grid}">
 		</td>
-		<td class="fcaption">Y telje gridi v‰‰rtuste v&auml;rv:</td>
-		<td class="fcaption">#<input type="text" size=6 name="setup[y_grid_col]" value="{VAR:y_grid_col}"><a href="#" onclick="varvivalik(13);">&nbsp;Vali&nbsp;</a>
+		<td class="fcaption">{VAR:LC_GRAPH_GRID_COLOR}:</td>
+		<td class="fcaption">#<input type="text" size=6 name="setup[y_grid_col]" value="{VAR:y_grid_col}"><a href="#" onclick="varvivalik(13);">&nbsp;{VAR:LC_GRAPH_CHOOSE}&nbsp;</a>
 		</td>
 	</tr>
 	<tr>
-		<td class="fcaption" colspan=2>N&auml;itan gridil v&auml;&auml;rtusi:</td>
+		<td class="fcaption" colspan=2>{VAR:LC_GRAPH_GRID_INCH}:</td>
 		<td class="fcaption" colspan=2><input type="checkbox" name="setup[show_grid_val]" {VAR:g}>
 		</td>
 	</tr>
 	<tr>
-		<td  class="fcaption">Andmete v‰rv:</td>
-		<td colspan=3 class="fcaption">#<input type="text" size=6 name="setup[fir_col]" value="{VAR:fir_col}"><a href="#" onclick="varvivalik(15);">&nbsp;Vali&nbsp;</a> M‰rkus: Ei kasutata kasutaja andmetega graafiku puhul</td>
+		<td  class="fcaption">{VAR:LC_GRAPH_DATA_COLOR}:</td>
+		<td colspan=3 class="fcaption">#<input type="text" size=6 name="setup[fir_col]" value="{VAR:fir_col}"><a href="#" onclick="varvivalik(15);">&nbsp;{VAR:LC_GRAPH_CHOOSE}&nbsp;</a> {VAR:LC_GRAPH_NOTE2}</td>
 	</tr>
 </table>
 <table>
 <tr>
-	<td><input type="submit" value="Salvesta"></td>
+	<td><input type="submit" value="{VAR:LC_GRAPH_SAVE}"></td>
 </table>
 {VAR:reforb}
 </form>
