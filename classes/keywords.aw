@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.18 2001/05/23 18:22:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.19 2001/05/24 11:36:47 duke Exp $
 // keywords.aw - dokumentide võtmesõnad
 global $orb_defs;
 $orb_defs["keywords"] = "xml";
@@ -436,7 +436,7 @@ class keywords extends aw_template {
 	}
 		
 
-	function show_interests_form($beg = "")
+	function show_interests_form($beg = "",$section = 0)
 	{
 		if ($beg != "")
 		{
@@ -474,12 +474,12 @@ class keywords extends aw_template {
 		$act = $mlist->get_user_lists(array(
 					"uid" => UID,
 					));
-		global $REQUEST_URI;
+		global $REQUEST_URI,$ext;
 		$this->vars(array(
 				"name" => "$eesnimi $perenimi",
 				"email" => $udata["email"],
 				"keywords" => $this->multiple_option_list($act,$kw->get_all_keywords(array("beg" => $beg))),
-				"reforb" => $this->mk_reforb("submit_interests", array("gotourl" => urlencode($REQUEST_URI)))
+				"reforb" => $this->mk_reforb("submit_interests", array("gotourl" => urlencode("/index.$ext?section=$section")))
 		));
 		return $this->parse();
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/documents.aw,v 2.12 2001/05/23 18:22:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/documents.aw,v 2.13 2001/05/24 11:36:47 duke Exp $
 classload("msgboard","aw_style");
 classload("acl","styles","form","tables","extlinks","images","gallery","file");
 class db_documents extends aw_template
@@ -978,13 +978,13 @@ class db_documents extends aw_template
 		// keywordide list. bijaatch!
 		if (!(strpos($doc["content"],"#huvid_form") === false))
 		{
-			preg_match("/#huvid_form algus=\"(.*)\"#/",$doc["content"], $maat);
+			preg_match("/#huvid_form algus=\"(.*)\" go=\"(.*)\"#/",$doc["content"], $maat);
 
 			classload("keywords");
 			$kw = new keywords;
-			$t_int_form = $kw->show_interests_form($maat[1]);
+			$t_int_form = $kw->show_interests_form($maat[1],$maat[2]);
 
-			$doc["content"] = preg_replace("/#huvid_form algus=\"(.*)\"#/",$t_int_form,$doc["content"]);
+			$doc["content"] = preg_replace("/#huvid_form algus=\"(.*)\" go=\"(.*)\"#/",$t_int_form,$doc["content"]);
 		}
 
 		$awt->stop("db_documents->gen_preview()::misc_replaces");
