@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.20 2001/08/12 23:21:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.21 2001/08/13 20:09:40 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 lc_load("form");
@@ -572,6 +572,17 @@ class form_base extends aw_template
 				"addempty" => $addempty,
 				"onlyactive" => $onlyactive,
 		));
+	}
+
+	function listall_ops()
+	{
+		$ret = array();
+		$this->db_query("SELECT oid,name FROM objects WHERE class_id = ".CL_FORM_OUTPUT." AND status != 0");
+		while ($row = $this->db_next())
+		{
+			$ret[$row["oid"]] = $row["name"];
+		}
+		return $ret;
 	}
 
 	////
