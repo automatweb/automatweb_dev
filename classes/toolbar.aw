@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/toolbar.aw,v 2.16 2003/10/07 16:26:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/toolbar.aw,v 2.17 2003/10/22 08:59:00 duke Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -29,6 +29,10 @@ class toolbar extends aw_template
 	function add_button($args = array())
 	{
 		$args["type"] = "button";
+		if (empty($args["img"]))
+		{
+			$args["type"] = "text_button";
+		};
 		$this->matrix[$args["name"]] = $args;
 	}
 
@@ -74,6 +78,7 @@ class toolbar extends aw_template
 			switch($val["type"])
 			{
 				case "button":
+				case "text_button":
 					if (isset($args["id"]))
 					{
 						$val["name"] .= $args["id"];
@@ -87,7 +92,7 @@ class toolbar extends aw_template
 						$val["onClick"] = "";
 					};
 					$this->vars($val);
-					$result .= $this->parse("button");
+					$result .= $this->parse($val["type"]);
 					break;
 				
 				case "separator":
