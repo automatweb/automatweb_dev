@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.69 2004/03/17 11:44:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.70 2004/03/22 16:54:05 kristo Exp $
 
 lc_load("definition");
 
@@ -442,7 +442,6 @@ class acl_base extends db_connector
 			$can_adm_max = 0;
 			$can_adm_oid = 0;
 
-			$str = "";
 			$gl = aw_global_get("gidlist_oid");
 			// turn off acl checks for this
 			$tmp = $GLOBALS["cfg"]["acl"]["no_check"];
@@ -454,34 +453,15 @@ class acl_base extends db_connector
 				{
 					continue;
 				}
-				$str .= "goid= $g_oid , type = ".$o->prop("type")." pri = ".$o->prop("priority")." ";
 				if ($o->prop("priority") > $can_adm_max)
 				{
 					$can_adm = $o->prop("can_admin_interface");
 					$can_adm_max = $o->prop("priority");
-					$can_adm_oid = $g_oid;
 				}
 			}
 			$GLOBALS["cfg"]["acl"]["no_check"] = $tmp;
 
-			if (aw_ini_get("site_id") == 84 || aw_ini_get("site_id") == 95)
-			{
-				return $can_adm;
-			}
-
-			// ok, if we are returning false, send an error e-mail, so that we can fix the situation
-			if (!$can_adm)
-			{
-				error::throw(array(
-					"id" => ERR_NOTICE,
-					"msg" => "acl_base::prog_acl($right, $progid): access was denied for user ".aw_global_get("uid").". please verify that the site is configured correctly ($can_adm_oid) gl = ".join(",", array_values($gl))." (str = $str)!",
-					"fatal" => false,
-					"show" => false
-				));
-			}
-
-			// FIXME: after I have checked all the relevant checkboxes for all the sites, this should return $can_adm
-			return true; //$can_adm;
+			return $can_adm;
 		};
 	}
 
