@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.319 2004/11/12 11:24:09 duke Exp $
+// $Id: class_base.aw,v 2.320 2004/11/12 11:43:34 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -925,24 +925,19 @@ class class_base extends aw_template
 			"class_id" => CL_CFGFORM,
 			"subclass" => $this->clid,
 			"lang_id" => array(),
-			"site_id" => array(),
+			"flags" => array(
+				"mask" => OBJ_FLAG_IS_SELECTED,
+				"flags" => OBJ_FLAG_IS_SELECTED
+	        	),
 		));
 
-                $active = 0;
-                foreach ($ol->arr() as $item)
-                {
-                        $flg = $item->flag(OBJ_FLAG_IS_SELECTED);
-                        if ($flg)
-                        {
-                                $active = $item->id();
-				$this->auto_cfgform = true;
-                        };
-                };
-
-		if  ($active)
+		if (sizeof($ol->ids()) > 0)
 		{
-			return $active;
+			$first = $ol->begin();
+			return $first->id();
 		};
+
+
 		// okey, I need a helper class. Something that I can create, something can load
 		// properties into and then query them. cfgform is taken, what name will I use?
 
