@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.47 2003/03/28 16:48:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.48 2003/04/14 15:55:57 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -5999,6 +5999,38 @@ class form extends form_base
 		$this->save();
 
 		return $this->mk_my_orb("joins", array("id" => $id));
+	}
+
+	function export($arr)
+	{
+		extract($arr);
+		$this->read_template("export.tpl");
+	
+		$this->id = $id;
+
+		$this->vars(array(
+			"to_db" => checked(true),
+			"reforb" => $this->mk_reforb("submit_export", array("id" => $id))
+		));
+
+		return $this->do_menu_return();
+	}
+
+	function submit_export($arr)
+	{
+		extract($arr);
+
+		$inst = false;
+		if ($to == "db")
+		{
+			$inst = get_instance("formgen/form_export_db");
+		}
+
+		if (is_object($inst))
+		{
+			return $inst->do_export($arr);
+		}
+		return $this->mk_my_orb("export", array("id" => $id));
 	}
 };	// class ends
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.12 2003/03/28 16:48:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.13 2003/04/14 15:55:57 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -330,6 +330,7 @@ class form_base extends form_db_base
 			"aliasmgr" => $this->mk_my_orb("form_aliasmgr", array("id" => $this->id),"form"),
 			"calendar" => $this->mk_my_orb("calendar",array("id" => $this->id),"form"),
 			"joins" => $this->mk_my_orb("joins",array("id" => $this->id),"form"),
+			"export" => $this->mk_my_orb("export", array("id" => $this->id),"form")
 		));
 
 		if (in_array($action, array("change","preview_form","all_elements","sel_search","sel_filter_search","form_aliasmgr")))
@@ -337,7 +338,7 @@ class form_base extends form_db_base
 			$this->parse("GRID_SEL");
 		}
 
-		if (in_array($action, array("table_settings","list_actions","metainfo","set_folders","translate","sel_tables","calendar","new_cal_rel","edit_cal_rel","joins")))
+		if (in_array($action, array("table_settings","list_actions","metainfo","set_folders","translate","sel_tables","calendar","new_cal_rel","edit_cal_rel","joins","export")))
 		{
 			$this->parse("SETTINGS_SEL");
 		}
