@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.11 2005/03/31 10:57:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.12 2005/03/31 11:12:18 duke Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -193,6 +193,13 @@ class pot_scanner extends core
 				if (!file_exists($fn))
 				{
 					copy($file_to, $fn);
+				}
+				else
+				{
+					// -U updates file in place, and real men do not need a backup
+					shell_exec("msgmerge -U --backup=off $fn $file_to");
+					//shell_exec("msgmerge -U --backup=off $fn $file_to -o $fn");
+
 				}
 			}
 		}
