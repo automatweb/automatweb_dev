@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.27 2002/02/14 17:09:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.28 2002/02/27 19:56:46 duke Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -112,7 +112,9 @@ class users_user extends aw_template
 	function login($params = array())
 	{
 		global $uid;
-		global $password;
+		$uid = $params["uid"];
+		$password = $params["password"];
+		// why are we doing this? I mean we get all the postvars directly from orb?
 		global $HTTP_POST_VARS;
 		if ($HTTP_POST_VARS["uid"] || $HTTP_POST_VARS["l_uid"])
 		{
@@ -666,6 +668,17 @@ class users_user extends aw_template
 
 					$q = "INSERT INTO groupmembers (gid,uid,created,createdby,permanent) VALUES('$v','$k','$t','$uid',$permanent)";
 					$this->db_query($q);
+					
+					//magistrali korral võtan javaga yhendust
+					if($GLOBALS["SITE_ID"]==12)
+					{
+						$acl_server_socket = fsockopen("127.0.0.1", 10000,$errno,$errstr,10);
+						//teatan, et grupile $v lisadi user $uid
+						$str="0 ".$GLOBALS["SITE_ID"]." ".$uid." ".$v."\n";
+						fputs($acl_server_socket,$str);
+						fclose($acl_server_socket);
+					}
+					
 				}
 			};
 		};
@@ -736,6 +749,17 @@ class users_user extends aw_template
 
 		$this->_log("user", "Kustutas grupi ".$this->grpcache[$gid]["name"]);
 
+		
+		//magistrali korral võtan javaga yhendust
+		if($GLOBALS["SITE_ID"]==12)
+		{
+			$acl_server_socket = fsockopen("127.0.0.1", 10000,$errno,$errstr,10);
+			//teatan, et saidilt kustutati grupp $grpcache[$gid]
+			$str="5 ".$GLOBALS["SITE_ID"]." ".$GLOBALS["uid"]." ".$grpcache[$gid]."\n";
+			fputs($acl_server_socket,$str);
+			fclose($acl_server_socket);
+		}
+		
 		if (!is_array($this->grpcache[$gid]))
 			return;
 
