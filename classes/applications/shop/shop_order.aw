@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.25 2005/02/17 13:10:54 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.26 2005/03/08 13:26:53 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -673,6 +673,12 @@ class shop_order extends class_base
 			for( $i=1; $i<21; $i++)
 			{
 				$ui = $product_info->prop("user".$i);
+
+				if ($i == 16 && aw_ini_get("site_id") == 139 && $product_info->prop("userch5"))
+				{
+					$ui = $prod->prop("user3");
+				}
+
 				$this->vars(array(
 					'user'.$i => $ui,
 					"packaging_user".$i => $prod->prop("user".$i),
