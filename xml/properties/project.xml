@@ -214,6 +214,11 @@
                   <clid>CL_CRM_COMPANY</clid>
                   <caption>teostaja</caption>
             </IMPLEMENTOR>
+            <PRJ_VIDEO>
+                  <value>11</value>
+                  <clid>CL_VIDEO</clid>
+                  <caption>Video</caption>
+            </PRJ_VIDEO>
       </reltypes>
 </properties>
 
