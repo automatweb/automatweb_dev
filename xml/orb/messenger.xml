@@ -227,6 +227,7 @@
 		<action name="edit_signature">
 			<function name="edit_signature">
 				<arguments>
+					<required name="id"/>
 				</arguments>
 			</function>
 		</action>
