@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.33 2004/02/18 10:42:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.34 2004/03/12 10:24:16 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -1569,6 +1569,51 @@ class converters extends aw_template
 		};
 	}
 
+	/** converts acl entries to relations
+
+		@attrib name=convert_acl_rels
+
+	**/
+	function convert_acl_rels($arr)
+	{
+		$GLOBALS["cfg"]["acl"]["no_check"] = 1;
+		// get list og groups that are not user groups
+		$gl = array();
+		$this->db_query("select gid FROM groups WHERE type IN (".GRP_REGULAR.",".GRP_DYNAMIC.")");
+		while ($row = $this->db_next())
+		{
+			$gl[] = $row["gid"];
+		}
+	
+		$us = get_instance("users");
+
+		$gs = join(",", $gl);
+		echo "got groups as $gs <br>";
+		$this->db_query("SELECT *,".$this->sql_unpack_string()." FROM acl WHERE gid IN ($gs)");
+		while ($row = $this->db_next())
+		{
+			$this->save_handle();
+			if (!$this->db_fetch_field("SELECT oid FROM objects WHERE oid = $row[oid] AND status != 0", "oid"))
+			{
+				$this->restore_handle();
+				continue;
+			}
+			$this->restore_handle();
+			echo "oid = $row[oid] gid = $row[gid] <br>\n";
+			flush();
+			$obj = obj($row["oid"]);
+			$g_obj = obj($us->get_oid_for_gid($row["gid"]));
+
+			$goid = $g_obj->id();
+			$obj->connect(array(
+				"to" => $goid,
+				"reltype" => RELTYPE_ACL
+			));
+			// we don't need to do more, because the acl is read from the acl table!
+		}
+		die("all done!");
+	}
+
 	/** converts languages to objects
 		@attrib name=lang_new_convert
 
@@ -1604,5 +1649,6 @@ class converters extends aw_template
 			$this->restore_handle();
 		}
 	}
+
 };
 ?>

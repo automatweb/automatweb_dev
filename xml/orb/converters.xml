@@ -150,6 +150,13 @@
 			</function>
 		</action>
 
+		<action name="convert_acl_rels" >
+			<function name="convert_acl_rels">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="lang_new_convert" >
 			<function name="lang_new_convert">
 				<arguments>
