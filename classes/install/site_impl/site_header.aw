@@ -1,7 +1,10 @@
 <?php
 if (empty($_COOKIE["nocache"]) && aw_ini_get("config.use_squid"))
 {
-        session_cache_limiter("public");
+	$ma = aw_ini_get("config.http_cache_max_age");
+        session_cache_limiter("must-revalidate, max-age=".$ma);
+	header("Cache-Control: must-revalidate, max-age=".$ma);
+	header("Expires: ".gmdate("D, d M Y H:i:s",time()+$ma)." GMT");
 };
 
 session_name("automatweb");

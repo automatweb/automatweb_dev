@@ -28,6 +28,7 @@ if (!$class)
 	$class = $vars["alias"];
 };
 
+
 $action = $vars["action"];
 
 if ($vars["fastcall"] == 1)
