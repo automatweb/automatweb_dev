@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.84 2004/09/21 07:17:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.85 2004/09/22 07:43:00 kristo Exp $
 
 /*
 
@@ -1900,6 +1900,16 @@ class site_show extends class_base
 					"obj" => (!empty($pobject) ? $pobject : false),
 					"pgroup" =>  (!empty($pgroup) ? $pgroup : false),
 				));
+	
+				// check acl
+				if ($_act == "new" && !$this->can("add", aw_global_get("section")))
+				{
+					$this->skip = true;
+				}
+				if ($_act == "change" && !$this->can("edit", aw_global_get("section")))
+				{
+					$this->skip = true;
+				}
 				$values = array();
 				$err = false;
 				$mv = new aw_array($meth["values"]);
