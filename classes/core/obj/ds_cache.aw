@@ -164,9 +164,9 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	{
 		foreach($this->funcs as $func)
 		{
-			$this->cache->file_invalidate($cfn."::$func::$oid");
+			$this->cache->file_invalidate($cfn."-$func-$oid");
 		}
-		$this->cache->file_invalidate_regex($cfn."::search::(.*)::0");
+		$this->cache->file_invalidate_regex($cfn."-search-(.*)-0");
 	}
 
 	function object_exists($oid)
