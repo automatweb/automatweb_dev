@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.73 2004/08/28 13:08:54 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.74 2004/08/31 12:24:54 sven Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -269,27 +269,27 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 ------------ END PAKKUMISED -------------------
 
 ------------ ORGANISATSIOONI OBJEKTID ---------
-layout objects_toolbar type=hbox group=org_objects
-layout objects_main type=hbox width=20%:80% group=org_objects
-layout objects_tree type=vbox parent=objects_main group=org_objects
-layout objects_table type=vbox parent=objects_main group=org_objects
+@layout objects_toolbar type=hbox group=org_objects
+@layout objects_main type=hbox width=20%:80% group=org_objects
+@layout objects_tree type=vbox parent=objects_main group=org_objects
+@layout objects_table type=vbox parent=objects_main group=org_objects
 
-property objects_listing_toolbar type=toolbar no_caption=1 parent=objects_toolbar group=org_objects
-property objects_listing_tree type=treeview no_caption=1 parent=objects_tree group=org_objects
-property objects_listing_table type=table no_caption=1 parent=objects_table group=org_objects
+@property objects_listing_toolbar type=toolbar no_caption=1 parent=objects_toolbar group=org_objects
+@property objects_listing_tree type=treeview no_caption=1 parent=objects_tree group=org_objects
+@property objects_listing_table type=table no_caption=1 parent=objects_table group=org_objects
 ---------- END ORGANISATSIOONI OBJEKTID ---------
 
 ---------- PROJEKTID ----------------------------
-layout projects_main type=hbox width=20%:80% group=org_projects
-layout projects_tree type=vbox parent=projects_main group=org_projects
-layout projects_table type=vbox parent=projects_main group=org_projects
+@layout projects_main type=hbox width=20%:80% group=org_projects
+@layout projects_tree type=vbox parent=projects_main group=org_projects
+@layout projects_table type=vbox parent=projects_main group=org_projects
 
-default group=org_projects
-default no_caption=1
+@default group=org_projects
+@default no_caption=1
 
 property projects_listing_toolbar type=toolbar no_caption=1 parent=projects_toolbar 
-property projects_listing_tree type=treeview no_caption=1 parent=projects_tree 
-property projects_listing_table type=table no_caption=1 parent=projects_table
+@property projects_listing_tree type=treeview no_caption=1 parent=projects_tree 
+@property projects_listing_table type=table no_caption=1 parent=projects_table
 
 -------------------------------------------------
 
@@ -3855,11 +3855,31 @@ class crm_company extends class_base
 		}
 		else
 		{
-			$offers = new object_list(array(
+			$params = array(
 				"preformer" => $arr["obj_inst"]->id(),
 				"offer_status" => array(0,1,2),
 				"class_id" => CL_CRM_OFFER,
-			));
+			);
+			
+			if(is_oid($arr["request"]["category"]))
+			{
+				$cat = &obj($arr["request"]["category"]);
+				$data = array();
+				$this->get_customers_for_company($cat,&$data,true);
+				foreach ($data as $org)
+				{
+					$offer_obj = $offer_inst->get_offers_for_company($org, $arr["obj_inst"]->id());
+					foreach ($offer_obj->arr() as $tmp)
+					{
+						$ids[] = $tmp->id();
+					}
+				}
+				$params["oid"] = $ids;
+				if(count($ids)>0)
+				{
+					$offers = new object_list($params);
+				}
+			}	
 		}
 		
 		if(is_object($offers))
@@ -4224,5 +4244,30 @@ class crm_company extends class_base
 		$tb = &$arr["prop"]["vcl_inst"];
 	}
 	
+	function do_projects_listing_table($arr)
+	{
+		$table = &$arr["prop"]["vcl_inst"];
+		
+		$table->define_field(array(
+			"name" => "project_name",
+			"caption" => "Projekti nimi",
+			"sortable" => 1,
+		));
+		
+		$table->define_field(array(
+			"name" => "project_participants",
+			"caption" => "Projektis osalejad",
+			"sortable" => 1,
+		));
+		
+		$table->define_field(array(
+			"name" => "project_created",
+			"caption" => "Projekt loodud",
+			"sortable" => 1,
+		));
+		
+		
+		
+	}
 }
 ?>
