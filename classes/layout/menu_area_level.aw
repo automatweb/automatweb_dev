@@ -1,10 +1,8 @@
 <?php
-
+// $Header: /home/cvs/automatweb_dev/classes/layout/Attic/menu_area_level.aw,v 1.9 2005/02/09 16:28:25 duke Exp $
 /*
 
 @classinfo syslog_type=ST_MENU_AREA_LEVEL relationmgr=yes
-
-@groupinfo general caption=Üldine
 
 @default table=objects
 @default group=general
@@ -48,10 +46,13 @@
 @property comment_sep type=textbox
 @caption Kommentaari eraldaja
 
-*/
+@reltype STYLE value=1 clid=CL_CSS
+@caption stiil
 
-define("RELTYPE_STYLE",1);
-define("RELTYPE_IMAGE",2);
+@reltype IMAGE value=2 clid=CL_IMAGE
+@caption pilt
+
+*/
 
 class menu_area_level extends class_base
 {
@@ -159,26 +160,6 @@ class menu_area_level extends class_base
 		}
 
 		return "";
-	}
-
-	function callback_get_rel_types()
-	{
-		return array(
-			RELTYPE_STYLE => "stiil",
-			RELTYPE_IMAGE => "pilt"
-		);
-	}
-
-	function callback_get_classes_for_relation($args = array())
-	{
-		if ($args["reltype"] == RELTYPE_STYLE)
-		{
-			return array(CL_CSS);
-		}
-		if ($args["reltype"] == RELTYPE_IMAGE)
-		{
-			return array(CL_IMAGE);
-		}
 	}
 
 	function get_menu_link($mdat)
