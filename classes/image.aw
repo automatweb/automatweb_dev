@@ -36,16 +36,10 @@ class image extends aw_template
 		extract($arr);
 
 		$_fi = new file;
+		global $file,$file_name,$file_type;
 		if ($id)
 		{
-			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $name,
-				"comment" => $comment,
-				"parent" => $parent
-			));
 
-			global $file,$file_name,$file_type;
 			if ($file != "" && $file != "none")
 			{
 				if (is_uploaded_file($file))
@@ -54,15 +48,22 @@ class image extends aw_template
 					$fc = fread($f,filesize($file));
 					fclose($f);
 					$fl = $_fi->_put_fs(array("type" => $file_type, "content" => $fc));
+					$name = $file_name;
 
 					$this->db_query("UPDATE images SET file = '$fl' WHERE id = $id");
 				}
 			}
+			
+			$this->upd_object(array(
+				"oid" => $id,
+				"name" => $file_name,
+				"comment" => $comment,
+				"parent" => $parent
+			));
+			
 		}
 		else
 		{
-			global $file,$file_name,$file_type;
-
 			if ($name == "")
 			{
 				$name = $file_name;
@@ -170,6 +171,7 @@ class image extends aw_template
 								"type" => CL_IMAGE,
 							));
 			$this->imagealiasoid = $oid;
+			$this->image_inplace_used = false;
 		};
 		$f = $this->imagealiases[$matches[3] - 1];
 		if (!$f["target"])
@@ -205,7 +207,14 @@ class image extends aw_template
 			else
 			if ($idata["link"] != "")
 			{
-				$replacement = $this->localparse($tpls["image_linked"],$vars);
+				if (isset($tpls["image_linked"]))
+				{
+					$replacement = $this->localparse($tpls["image_linked"],$vars);
+				}
+				else
+				{
+					 $replacement = sprintf("<a href='%s' target='_blank'><img src='%s' border='0'></a><br>%s",$idata["link"],$idata["url"],$idata["comment"]);
+				};
 			}
 			else
 			{
@@ -213,6 +222,7 @@ class image extends aw_template
 				{
 					$tpl = "image_inplace";
 					$inplace = $tpl;
+					// mix seda lauset vaja on?
 					$this->image_inplace_used = true;
 				}
 				else
