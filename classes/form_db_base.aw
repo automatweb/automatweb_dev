@@ -1545,10 +1545,10 @@ class form_db_base extends aw_template
 		if ($GLOBALS["fg_dbg"] == 2) echo "_grlc q = $q <br>";
 
 		// try to read the result from the cache
-		if (($ret = aw_cache_get("get_entries_for_element_cache", $q.((int)$ret_values).((int)$ret_ids))))
+/*		if (($ret = aw_cache_get("get_entries_for_element_cache", $q.((int)$ret_values).((int)$ret_ids))))
 		{
 			return $ret;
-		}
+		}*/
 
 		$cnt=0;
 		$result = array();

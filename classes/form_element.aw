@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.76 2002/09/30 08:05:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.77 2002/09/30 10:01:38 kristo Exp $
 // form_element.aw - vormi element.
 classload("image");
 
@@ -300,26 +300,48 @@ class form_element extends aw_template
 					$this->vars(array("LISTBOX_ITEMS_ACTIVITY" => $at));
 					$lb.=$this->parse("LISTBOX_ITEMS");
 				}	
-				$this->vars(array("HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE")));
-				$this->vars(array("ACTIVITY" => $this->parse("ACTIVITY")));
-				$relation_lb = "";
+				$this->vars(array(
+					"HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE"),
+					"ACTIVITY" => $this->parse("ACTIVITY")
+				));
+				$relation_lb = $relation_lb_show = $rel_line = "";
 				$relation_uniq = "";
 				if ($this->arr["subtype"] == "relation" && !$this->form->is_form_output)
 				{
 					$this->do_search_script(true);
+					$r_els = $this->form->get_elements_for_forms(array($this->arr["rel_form"]));
 					$this->vars(array(
 						"rel_forms" => $this->picker($this->arr["rel_form"], $this->form->get_relation_targets()),
 						"rel_el" => $this->arr["rel_element"],
-						"unique"	=> checked($this->arr["rel_unique"] == 1)
+						"unique"	=> checked($this->arr["rel_unique"] == 1),
+						"rel_show_elements" => $this->mpicker($this->arr["rel_elements_show"], $r_els)
+					));
+					$l = "";
+					if (is_array($this->arr["rel_elements_show"]))
+					{
+						foreach($this->arr["rel_elements_show"] as $r_elid)
+						{
+							$this->vars(array(
+								"rel_el_n" => $r_els[$r_elid],
+								"r_id" => $r_elid,
+								"r_el_ord" => $this->arr["rel_el_ord"][$r_elid],
+								"r_el_sep" => $this->arr["rel_el_sep"][$r_elid],
+							));
+							$l.=$this->parse("REL_LINE");
+						}
+					}
+					$this->vars(array(
+						"REL_LINE" => $l
 					));
 					$relation_lb = $this->parse("RELATION_LB");
-					$this->vars(array("RELATION_LB" => $relation_lb));
-//					if ($this->form->type == FTYPE_SEARCH)
-//					{
-						$relation_uniq = $this->parse("SEARCH_RELATION");
-						$this->vars(array("SEARCH_RELATION" => $relation_uniq));
-//					}
+					$relation_uniq = $this->parse("SEARCH_RELATION");
+					$relation_lb_show = $this->parse("RELATION_LB_SHOW");
 				}
+				$this->vars(array(
+					"RELATION_LB" => $relation_lb,
+					"RELATION_LB_SHOW" => $relation_lb_show,
+					"SEARCH_RELATION" => $relation_uniq
+				));
 			}
 
 			$mu = "";
@@ -903,6 +925,16 @@ class form_element extends aw_template
 
 				$var = $base."_chain_entries_only";
 				$this->arr["chain_entries_only"] = $$var;
+
+				$var = $base."_rel_element_show";
+				$this->arr["rel_elements_show"] = $this->make_keys($$var);
+
+				$var = $base."_rel_element_show_order";
+				$this->arr["rel_el_ord"] = $$var;
+				asort($this->arr["rel_el_ord"]);
+
+				$var = $base."_rel_element_show_sep";
+				$this->arr["rel_el_sep"] = $$var;
 
 				$rel_changed = false;
 				$var = $base."_rel_form";
@@ -2899,7 +2931,24 @@ class form_element extends aw_template
 		// too - to check whether the entry falls into allowed range in a calendar
 		$opts = $this->arr;
 		$opts["ret_ids"] = true;
-		list($cnt,$this->arr["listbox_items"]) = $this->form->get_entries_for_element($opts);
+
+		if (!is_array($this->arr["rel_el_ord"]))
+		{
+			list($cnt,$this->arr["listbox_items"]) = $this->form->get_entries_for_element($opts);
+		}
+		else
+		{
+			$this->arr["listbox_items"] = array();
+			foreach($this->arr["rel_el_ord"] as $r_elid => $r_ord)
+			{
+				$opts["rel_element"] = $r_elid;
+				list($cnt,$vals) = $this->form->get_entries_for_element($opts);
+				foreach($vals as $e_id => $e_val)
+				{
+					$this->arr["listbox_items"][$e_id] .= $this->arr["rel_el_sep"][$r_elid].$e_val;
+				}
+			}
+		}
 		$this->arr["listbox_count"] = $cnt;
 		if ($this->form->type == FTYPE_SEARCH || $this->form->type == FTYPE_FILTER_SEARCH)
 		{

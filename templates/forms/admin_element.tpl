@@ -145,6 +145,30 @@ function toggle_file_link_newwin()
 </tr>
 <!-- END SUB: RELATION_LB -->
 
+<!-- SUB: RELATION_LB_SHOW -->
+<tr>
+	<td class="fgtext">Elemendid mida n&auml;idatakse:</td>
+	<td class="fgtext"><select class="small_button" MULTIPLE name="{VAR:cell_id}_rel_element_show[]">{VAR:rel_show_elements}</select></td>
+	<td class="fgtext">&nbsp;</td>
+	<td class="fgtext">&nbsp;</td>
+</tr>
+<tr>
+	<td class="fgtext">Element</td>
+	<td class="fgtext">J&auml;rjekord</td>
+	<td class="fgtext">Eraldaja</td>
+	<td class="fgtext">&nbsp;</td>
+</tr>
+<!-- SUB: REL_LINE -->
+<tr>
+	<td class="fgtext">{VAR:rel_el_n}</td>
+	<td class="fgtext"><input type='text' name='{VAR:cell_id}_rel_element_show_order[{VAR:r_id}]' class='small_button' size='3' value='{VAR:r_el_ord}'></td>
+	<td class="fgtext"><input type='text' name='{VAR:cell_id}_rel_element_show_sep[{VAR:r_id}]' class='small_button' size='3' value='{VAR:r_el_sep}'></td>
+	<td class="fgtext">&nbsp;</td>
+</tr>
+<!-- END SUB: REL_LINE -->
+
+<!-- END SUB: RELATION_LB_SHOW -->
+
 <!-- SUB: SEARCH_RELATION -->
 <tr>
 	<td class="fgtext">{VAR:LC_FORMS_ONLY_UNIC}:</td>
