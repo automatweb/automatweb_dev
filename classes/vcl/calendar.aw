@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.31 2004/11/19 11:59:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.32 2004/11/22 14:04:46 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -409,7 +409,7 @@ class vcalendar extends aw_template
 			$mnames[$i] = locale::get_lc_month($i);
 		};
 
-		for ($i = 2002; $i <= 2005; $i++)
+		for ($i = 2003; $i <= 2010; $i++)
 		{
 			$years[$i] = $i;
 		};
