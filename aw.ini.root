@@ -66,3 +66,4 @@ include ${ini_dir}/syslog.ini
 include ${ini_dir}/formgen.ini
 include ${ini_dir}/poll.ini
 include ${ini_dir}/dns_server_manager.ini
+include ${ini_dir}/image.ini
