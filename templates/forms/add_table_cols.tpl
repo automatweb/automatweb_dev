@@ -85,6 +85,13 @@
 											<select class="formselect" name="cols[{VAR:col_id}][formel]" size="10">{VAR:formels}</select>
 											<!-- END SUB: SEL_FORMEL -->
 
+											<!-- SUB: SEL_BASKET -->
+											Vali ostukorv:<Br>
+											<select class="formselect" name="cols[{VAR:col_id}][basket]">{VAR:baskets}</select><br>
+											Vali kontroller:<Br>
+											<select class="formselect" name="cols[{VAR:col_id}][basket_controller]">{VAR:basket_controller}</select><br>
+											<!-- END SUB: SEL_BASKET -->
+
 											<!-- SUB: SEL_SETTINGS -->
 											Tulba m‰‰rangud:
 											<table border="0">
