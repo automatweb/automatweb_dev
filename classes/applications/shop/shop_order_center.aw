@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.21 2005/02/17 13:10:54 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.22 2005/03/10 14:10:08 ahti Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -1026,11 +1026,11 @@ class shop_order_center extends class_base
 		switch($type)
 		{
 			case "person":
-				return array_flip($o->meta("ps_pmap"));
+				return array_flip(safe_array($o->meta("ps_pmap")));
 				break;
 
 			case "org":
-				return array_flip($o->meta("org_pmap"));
+				return array_flip(safe_array($o->meta("org_pmap")));
 				break;
 
 			default:

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.23 2005/02/17 13:10:54 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.24 2005/03/10 14:10:08 ahti Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -2088,6 +2088,10 @@ class shop_warehouse extends class_base
 	{
 		// also update the data form data, based on the property maps from the order center
 		// first org
+		if(!is_oid($arr["oid"]) || !$this->can("view", $arr["oid"]))
+		{
+			return;
+		}
 		$o = obj($arr["oid"]);
 
 		$oc = get_instance(CL_SHOP_ORDER_CENTER);
