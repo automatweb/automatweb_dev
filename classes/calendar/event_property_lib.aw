@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.1 2004/03/08 16:43:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.2 2004/04/06 10:39:23 duke Exp $
 // Shared functionality for event classes
 class event_property_lib extends core
 {
@@ -52,9 +52,12 @@ class event_property_lib extends core
 		// 1) retreieve all connections that this event has to projects
 		// 2) remove those that were not explicitly checked in the form
 		// 3) create new connections which did not exist before
+		global $awt;
+		$awt->start("retr-project-connections");
 		$e_conns = $event_obj->connections_to(array(
 			"from.class_id" => CL_PROJECT,
 		));
+		$awt->stop("retr-project-connections");
 
 		$new_ones = array();
 		if (is_array($arr["request"]["prj"]))
@@ -63,6 +66,7 @@ class event_property_lib extends core
 		};
 
 		$prj_inst = get_instance("groupware/project");
+		$awt->start("disconnect-from-project");
 
 		foreach($e_conns as $conn)
 		{
@@ -75,6 +79,8 @@ class event_property_lib extends core
 			};
 			unset($new_ones[$conn->prop("from")]);
 		};
+		$awt->stop("disconnect-from-project");
+		$awt->start("connect-to-project");
 
 		foreach($new_ones as $new_id => $whatever)
 		{
@@ -83,6 +89,15 @@ class event_property_lib extends core
 				"event_id" => $event_obj->id(),
 			));
 		};
+
+		$awt->stop("connect-to-project");
+		if (aw_global_get("uid") == "duke")
+		{
+			print "<pre>";
+			print_r($awt->summaries());
+			print "</pre>";
+		};
+
 	}
 
 	function calendar_selector($arr)
@@ -102,8 +117,8 @@ class event_property_lib extends core
 
 		foreach($this->get_planners_with_folders() as $row)
 		{
-			if ($row["event_folder"] != $arr["obj_inst"]->parent())
-			{
+			//if ($row["event_folder"] != $arr["obj_inst"]->parent())
+			//{
 				$folderdat = $this->get_object($row["event_folder"]);
 
 				$all_props["link_calendars_" . $row["oid"]] = array(
@@ -116,8 +131,9 @@ class event_property_lib extends core
 					"ch_value" => $row["oid"],
 					"value" => isset($plrlist[$row["event_folder"]]) ? $row["oid"] : 0,
 				);
-			};
+			//};
 		};
+
 	
 		return $all_props;
 	}
@@ -169,6 +185,7 @@ class event_property_lib extends core
 			$plr_obj = new object($plid);
                 	$bro = $event_obj->create_brother($plr_obj->prop("event_folder"));
 		};
+
 	}
 
 	////
