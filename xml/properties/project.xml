@@ -1,6 +1,61 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>name</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>textbox</type>
+            <field>name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>status</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>status</type>
+            <field>status</field>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>doc</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PRJ_DOCUMENT</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Loe lähemalt</caption>
+      </property>
+      <property>
+            <name>skip_subproject_events</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Ära näita alamprojektide sündmusi</caption>
+      </property>
+      <property>
+            <name>project_navigator</name>
+            <table>objects</table>
+            <group>web_settings</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Näita projektide navigaatorit</caption>
+      </property>
+      <property>
+            <name>use_template</name>
+            <table>objects</table>
+            <group>web_settings</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Välimus</caption>
+      </property>
+      <property>
             <name>event_toolbar</name>
             <table>objects</table>
             <group>event_list</group>
@@ -45,11 +100,29 @@
             <field>file_editor</field>
             <caption>Failid</caption>
       </property>
+      <property>
+            <name>trans</name>
+            <table>objects</table>
+            <group>trans</group>
+            <type>translator</type>
+            <store>no</store>
+            <props>name</props>
+            <field>trans</field>
+            <caption>Tõlkimine</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PROJECT</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
+            <general2>
+                  <parent>general</parent>
+                  <caption>Üldine</caption>
+            </general2>
+            <web_settings>
+                  <parent>general</parent>
+                  <caption>Veebiseadistused</caption>
+            </web_settings>
             <event_list>
                   <caption>Sündmused</caption>
                   <submit>no</submit>
@@ -60,6 +133,9 @@
             <files>
                   <caption>Failid</caption>
             </files>
+            <trans>
+                  <caption>Tõlkimine</caption>
+            </trans>
       </groupinfo>
       <reltypes>
             <SUBPROJECT>
@@ -101,6 +177,11 @@
                   <clid>CL_CFGFORM</clid>
                   <caption>Seadete vorm</caption>
             </PRJ_CFGFORM>
+            <PRJ_DOCUMENT>
+                  <value>7</value>
+                  <clid>CL_DOCUMENT</clid>
+                  <caption>Kirjeldus</caption>
+            </PRJ_DOCUMENT>
       </reltypes>
 </properties>
 
