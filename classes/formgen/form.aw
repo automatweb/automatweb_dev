@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.45 2003/02/27 12:17:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.46 2003/03/28 10:23:21 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -882,6 +882,7 @@ class form extends form_base
 	//	$load_chain_data - loads the specified chain entry's data and matches the elements in this form by element names
 	function gen_preview($arr)
 	{
+		set_time_limit(0);
 		$arr["prefix"] = isset($arr["prefix"]) ? $arr["prefix"] : false;
 		$arr["elvalues"] = isset($arr["elvalues"]) ?  $arr["elvalues"] : false ;
 		$arr["no_submit"] = isset($arr["no_submit"]) ? $arr["no_submit"]  : false;
@@ -1196,6 +1197,7 @@ class form extends form_base
 	{
 		extract($arr);
 
+		set_time_limit(0);
 		// values can be passed from the caller inside the $values argument, or..
 		if (is_array($values))
 		{
@@ -1277,10 +1279,12 @@ class form extends form_base
 
 		$new = ($entry_id) ? false : true;
 
+
 		if (!$no_process_entry)
 		{
 //			echo "ctrlchk <br>";
 			$this->controller_queue = array();
+			$this->value_controller_queue = array();
 			for ($i=0; $i < $this->arr["rows"]; $i++)
 			{
 				for ($a=0; $a < $this->arr["cols"]; $a++)
@@ -1291,6 +1295,18 @@ class form extends form_base
 				}
 			}
 
+			foreach($this->value_controller_queue as $dat)
+			{
+				$cval = $this->controller_instance->eval_controller(
+					$dat["ctrl_id"],
+					$dat["val"],
+					&$this, 
+					&$this->arr["contents"][$dat["row"]][$dat["col"]]->arr[$dat["idx"]]
+				);
+				$this->arr["contents"][$dat["row"]][$dat["col"]]->arr[$dat["idx"]]->entry = $cval;
+				$this->entry[$dat["id"]] = $cval;
+			}
+		
 			$controllers_ok = true;
 			$controller_warnings_ok = true;
 			foreach($this->controller_queue as $ctrl)
@@ -1425,7 +1441,7 @@ class form extends form_base
 			));
 
 		}
-		elseif ($this->subtype & FSUBTYPE_CAL_CONF)
+		elseif (($this->subtype & FSUBTYPE_CAL_CONF))
 		{
 			$fc = get_instance("formgen/form_calendar");
 			$els = $this->get_form_elements(array(
@@ -2428,6 +2444,8 @@ class form extends form_base
 //			print $sql;
 //			print "<br>";
 			$this->db_query($sql,false);
+		//	print "SQL = $sql<br>";
+		//	flush();
 			list(,$__gr) = each($used_els);
 			if (is_array($__gr))
 			{
@@ -2448,6 +2466,7 @@ class form extends form_base
 					"end" => $end - 1,
 					"req_items" => $count,
 				));
+				//$vacs = 0;
 				if (!$groups[$row[$_key]] && ($vacs > -1))
 				{
 					$groups[$row[$_key]] = $vacs;
@@ -5295,6 +5314,11 @@ class form extends form_base
 						{
 							$valx=$el->get_value();
 						};
+
+						if ($el->get_type() == "date")
+						{
+							$valx = $el->get_value(true);
+						}
 						$sf->filter["p".(int)$el->arr["part"]]["val"]=$valx;
 						if ($GLOBALS["dbg_ft"]) {echo("blah part=".$el->arr["part"]." type= ".$sf->filter["p".(int)$el->arr["part"]]["type"]." val=".$valx);};
 					};
