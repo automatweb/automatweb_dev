@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.8 2004/05/27 08:47:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.9 2004/06/28 09:45:46 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -17,6 +17,9 @@
 @property autologin type=checkbox ch_value=1 field=meta method=serialize 
 @caption Kas kasutaja logitakse automaatselt sisse liitumisel
 
+@property send_join_mail type=checkbox ch_value=1 field=meta method=serialize 
+@caption Kas liitumisel saadetakse meil
+
 @groupinfo props caption="Vormid"
 
 @groupinfo sel_props parent=props caption="Vali elemendid"
@@ -29,6 +32,9 @@
 
 @property join_sep_pages type=checkbox field=meta method=serialize ch_value=1 group=sel_props
 @caption Eraldi lehtedel
+
+@property join_but_text type=textbox field=meta method=serialize group=sel_props
+@caption Liitumise nupu tekst
 
 @property join_properties_pages type=table store=no group=mk_pages
 @caption Liitumisel k&uuml;sitavad v&auml;ljad
@@ -60,6 +66,13 @@
 @groupinfo preview caption="Eelvaade"
 
 @property preview type=text store=no no_caption=1 group=preview
+
+@groupinfo joinmail caption="Meil"
+
+@property joinmail_legend type=text store=no group=joinmail
+@caption Meili legend
+
+@property jm_texts type=callback callback=callback_get_jm_texts group=joinmail store=no
 
 @reltype JOIN_CLASS value=1 clid=CL_OBJECT_TYPE
 @caption liitumise vorm
@@ -135,6 +148,9 @@ class join_site extends class_base
 				$data["value"] = $this->_do_add_rule($arr);
 				break;
 
+			case "joinmail_legend":
+				$data["value"] = "E-maili sisu, mis saadetakse kasutajale liitumisel (kasutajanime alias #kasutaja#, parooli alias #parool# ja parooli muutmise lingi alias #pwd_hash#).";
+				break;
 		};
 		return $retval;
 	}
@@ -163,6 +179,10 @@ class join_site extends class_base
 
 			case "rule_to_grp":
 				$this->_save_rule($arr);
+				break;
+
+			case "jm_texts":
+				$arr["obj_inst"]->set_meta("jm_texts", $arr["request"]["lm_l_tx"]);
 				break;
 		}
 		return $retval;
@@ -713,10 +733,17 @@ class join_site extends class_base
 			$add = 0;
 		}
 
+		$o = obj($arr["id"]);
+		$tx = "Join!";
+		if ($o->prop("join_but_text"))
+		{
+			$tx = $o->prop("join_but_text");
+		}
 		$this->vars(array(
 			"form" => $this->get_form_from_obj(array(
 				"id" => $arr["id"]
 			)),
+			"join_but_text" => $tx,
 			"reforb" => $this->mk_reforb("submit_join_form", array("id" => $arr["id"], "add" => $add, "section" => aw_global_get("section")))
 		));
 
@@ -826,6 +853,18 @@ class join_site extends class_base
 					$us->login(array(
 						"uid" => $n_uid,
 						"password" => $n_pass
+					));
+				}
+
+				// if needed, send join mail
+				if ($obj->prop("send_join_mail"))
+				{
+					$this->_do_send_join_mail(array(
+						"obj" => $obj,
+						"uid" => $n_uid,
+						"pass" => $n_pass,
+						"email" => $n_email,
+						"data" => $sessd
 					));
 				}
 
@@ -1350,6 +1389,88 @@ class join_site extends class_base
 	{
 		$this->__sort_ord = $ob->meta("ord");
 		uasort($tp, array(&$this, "__prop_sorter"));
+	}
+
+	function callback_get_jm_texts($arr)
+	{
+		$ret = array();
+
+		$la = get_instance("languages");
+		$ll = $la->listall();
+
+		$jmt = $arr["obj_inst"]->meta("jm_texts");
+
+		foreach($ll as $lid => $ldata)
+		{
+			$name3 = "lm_l_tx[".$lid."][from]";
+			$tmp3 = array(
+				"name" => $name3,
+				"type" => "textbox",
+				"table" => "objects",
+				"field" => "meta",
+				"method" => "serialize",
+				"caption" => "Liitumise meili from aadress (".$ldata["name"].")",
+				"value" => $jmt[$lid]["from"]
+			);
+
+			$name = "lm_l_tx[".$lid."][subj]";
+			$tmp = array(
+				"name" => $name,
+				"type" => "textbox",
+				"table" => "objects",
+				"field" => "meta",
+				"method" => "serialize",
+				"caption" => "Liitumise meili subjekt (".$ldata["name"].")",
+				"value" => $jmt[$lid]["subj"]
+			);
+
+			$name2 = "lm_l_tx[".$lid."][text]";
+			$tmp2 = array(
+				"name" => $name2,
+				"type" => "textarea",
+				"rows" => 10,
+				"cols" => 50,
+				"table" => "objects",
+				"field" => "meta",
+				"method" => "serialize",
+				"caption" => "Liitumise meil (".$ldata["name"].")",
+				"value" => $jmt[$lid]["text"]
+			);
+
+			$name4 = "lm_l_tx_".$lid."_sep";
+			$tmp4 = array(
+				"name" => $name4,
+				"type" => "text",
+				"store" => "no",
+				"no_caption" => 1,
+				"value" => "<hr>"
+			);
+
+			$ret[$name3] = $tmp3;
+			$ret[$name] = $tmp;
+			$ret[$name2] = $tmp2;
+			$ret[$name4] = $tmp4;
+		}
+
+		return $ret;
+	}
+
+	function _do_send_join_mail($arr)
+	{
+		$jms = $arr["obj"]->meta("jm_texts");
+
+		$from = $jms[aw_global_get("lang_id")]["from"];
+		$subj = $jms[aw_global_get("lang_id")]["subj"];
+		$text = $jms[aw_global_get("lang_id")]["text"];
+
+		$us = get_instance("users");
+		$cp = $us->get_change_pwd_hash_link($arr["uid"]);
+
+		$text = str_replace("#parool#", $arr["pass"], $text);
+		$text = str_replace("#kasutaja#", $arr["uid"], $text);
+		$text = str_replace("#pwd_hash#", $cp, $text);
+
+		send_mail($arr["email"],$subj,$text,"From: ".$from);
 	}
 }
 ?>

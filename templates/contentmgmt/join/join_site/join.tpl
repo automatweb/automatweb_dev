@@ -5,5 +5,5 @@
 </table>
 {VAR:reforb}
 
-<input type="submit" value="Join!">
+<input type="submit" value="{VAR:join_but_text}">
 </form>

@@ -30,6 +30,16 @@
             <caption>Kas kasutaja logitakse automaatselt sisse liitumisel</caption>
       </property>
       <property>
+            <name>send_join_mail</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kas liitumisel saadetakse meil</caption>
+      </property>
+      <property>
             <name>join_properties</name>
             <table>objects</table>
             <group>sel_props</group>
@@ -47,6 +57,15 @@
             <method>serialize</method>
             <ch_value>1</ch_value>
             <caption>Eraldi lehtedel</caption>
+      </property>
+      <property>
+            <name>join_but_text</name>
+            <table>objects</table>
+            <group>sel_props</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Liitumise nupu tekst</caption>
       </property>
       <property>
             <name>join_properties_pages</name>
@@ -121,6 +140,24 @@
             <no_caption>1</no_caption>
             <field>preview</field>
       </property>
+      <property>
+            <name>joinmail_legend</name>
+            <table>objects</table>
+            <group>joinmail</group>
+            <type>text</type>
+            <store>no</store>
+            <field>joinmail_legend</field>
+            <caption>Meili legend</caption>
+      </property>
+      <property>
+            <name>jm_texts</name>
+            <table>objects</table>
+            <group>joinmail</group>
+            <type>callback</type>
+            <callback>callback_get_jm_texts</callback>
+            <store>no</store>
+            <field>jm_texts</field>
+      </property>
       <classinfo>
             <syslog_type>ST_JOIN_SITE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -161,6 +198,9 @@
             <preview>
                   <caption>Eelvaade</caption>
             </preview>
+            <joinmail>
+                  <caption>Meil</caption>
+            </joinmail>
       </groupinfo>
       <reltypes>
             <JOIN_CLASS>
