@@ -139,7 +139,8 @@ class image extends aw_template
 	function get_url($url) 
 	{
 		global $ext;
-		$url = $this->mk_my_orb("show", array("file" => basename($url)),"image",false,true);
+//		$url = $this->mk_my_orb("show", array("file" => basename($url)),"image",false,true);
+		$url = $GLOBALS["baseurl"]."/img.".$GLOBALS["ext"]."?file=".basename($url);
 		return $url;
 	}
 
@@ -199,10 +200,18 @@ class image extends aw_template
 		$f = $this->imagealiases[$matches[3] - 1];
 		if (!$f["target"])
 		{
-			return "";
+			// now try and list images by the old way 
+			$idata = $this->get_img_by_oid($oid,$matches[3]);
+			if (!is_array($idata))
+			{
+				return "";
+			}
 		}
+		else
+		{
+			$idata = $this->get_image_by_id($f["target"]);
+		}		
 
-		$idata = $this->get_image_by_id($f["target"]);
 		$replacement = "";
 		$align= array("k" => "align=\"center\"", "p" => "align=\"right\"" , "v" => "align=\"left\"" ,"" => "");
 		if ($idata)
@@ -239,6 +248,18 @@ class image extends aw_template
 				"inplace" => $inplace,
 		);
 		return $retval;
+	}
+
+	function get_img_by_oid($oid,$idx) 
+	{
+		$q = "SELECT images.*,objects.* FROM objects
+			LEFT JOIN images ON objects.oid = images.id
+			WHERE parent = '$oid' AND idx = '$idx' AND objects.status = 2 AND objects.class_id = 6
+			ORDER BY created DESC";
+		$this->db_query($q);
+		$row = $this->db_next();
+		$row["url"] = $this->get_url($row["file"]);
+		return $row;
 	}
 }
 ?>
