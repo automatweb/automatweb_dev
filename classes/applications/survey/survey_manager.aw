@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey_manager.aw,v 1.2 2004/06/17 14:32:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey_manager.aw,v 1.3 2004/07/06 11:39:17 duke Exp $
 // survey_manager.aw - Ankeetide haldur 
 /*
 
@@ -66,96 +66,8 @@ class survey_manager extends class_base
 				$this->make_result_table($arr);
 				break;
 
-			case "sweepstake1":
-				$this->make_p_table($arr);
-				break;
-
-			case "sweepstake2":
-				return PROP_IGNORE;
-				break;
-
 		};
 		return $retval;
-	}
-	
-	function make_p_table($arr)
-	{
-		$arr["prop"]["vcl_inst"]->define_field(array(
-			"name" => "p1",
-			"caption" => "Autoportaal",
-		));
-		
-		$arr["prop"]["vcl_inst"]->define_field(array(
-			"name" => "p2",
-			"caption" => "Koodikataloog",
-		));
-
-		$p1 = array(758,1582,666,401,681,829,573);
-		$p2 = array(727,557,951,696,890,527);
-
-		shuffle($p1);
-		shuffle($p2);
-
-		for ($i = 0; $i <= 5; $i++)
-		{
-			$o1 = new object($p1[$i]);
-			$o2 = new object($p2[$i]);
-			$arr["prop"]["vcl_inst"]->define_data(array(
-				"p1" => $o1->name(),
-				"p2" => $o2->name(),
-			));
-		};
-
-		$o1 = new object($p1[6]);
-			
-		$arr["prop"]["vcl_inst"]->define_data(array(
-			"p1" => $o1->name(),
-			"p2" => " mitte kedagi :(",
-		));
-	}
-
-	function make_s_table($arr)
-	{
-		
-		$arr["prop"]["vcl_inst"]->define_field(array(
-			"name" => "id",
-			"caption" => "ID",
-		));
-		
-		$arr["prop"]["vcl_inst"]->define_field(array(
-			"name" => "name",
-			"caption" => "Nimi",
-		));
-		$arr["prop"]["vcl_inst"]->define_field(array(
-			"name" => "email",
-			"caption" => "E-post",
-		));
-		if ($arr["prop"]["name"] == "sweepstake1")
-		{
-			$start = 0;
-			$end = $this->size;
-		}
-		else
-		{
-			$start = $this->size+1;
-			$end = sizeof($this->map)-1;
-		};
-		
-		for ($i = $start; $i <= $end; $i++)
-		{
-			$ox = new object($this->map[$this->people[$i]]);
-			$arr["prop"]["vcl_inst"]->define_data(array(
-				"id" => $ox->id(),
-				"name" => $ox->name(),
-				"email" => $ox->prop("utext5"),
-			));
-
-			//$arr["vcl_inst"]->define_data(array(
-			//	"id" =>
-
-		};
-
-
 	}
 
 	function callback_pre_edit($arr)
@@ -186,6 +98,10 @@ class survey_manager extends class_base
 			"format" => "H:i d-M-y",
 			"sortable" => 1,
 		));
+		$t->define_field(array(
+			"name" => "utext5",
+			"caption" => "E-post",
+		));	
 		$t->define_field(array(
 			"name" => "utext7",
 			"caption" => "Tavatelefon",
@@ -229,6 +145,7 @@ class survey_manager extends class_base
 					"caption" => "Vaata",
 				)),
 				"utext7" => $o->prop("utext7"),
+				"utext5" => $o->prop("utext5"),
 				"utext6" => $o->prop("utext6"),
 				"utext3" => $o->prop("utext3"),
 			));
