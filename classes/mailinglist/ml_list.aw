@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.57 2004/08/10 12:33:55 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.58 2004/08/26 14:27:40 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -274,11 +274,6 @@ class ml_list extends class_base
 	{
 		$list_id = $args["id"];
 		$rel_id = $args["rel_id"];
-		$rx = $this->db_fetch_row("SELECT * FROM aliases WHERE target = '$list_id' AND relobj_id = '$rel_id'");
-		if (empty($rx))
-		{
-			die("miskit on mäda");
-		};
 
 		$list_obj = new object($list_id);
 
@@ -319,10 +314,63 @@ class ml_list extends class_base
 			$allow = true;
 		};
 
+		// nii .. ja siin on ka see koht, kus tuleb teostada kontroll ..
+		// ja suunata tagasi sinna kuhu vaja
+
+		// nini .. ml_member on meil loodud .. nüüd on vaja teada saada, kas vormis olev info valideerub.
+
+		// selleks on vaja teada kasutavat konfivormi
+		//arr($list_obj->properties());
+
+		// member_config property sisaldab seda vajalikku infot
+
+		// nii .. load form data, load member_config .. chec ..
+
+
+		// I HATE you all
+		$request = $args;
+		if (is_array($args["udef_txbox"]))
+		{
+			foreach($args["udef_txbox"] as $key => $val)
+			{
+				$request["udef_txbox" . $key] = $val;
+			};
+		};
+
+		$cfgform = $list_obj->prop("member_config");
+		$errors = $ml_member->validate_data(array(
+			"request" => $request,
+			"cfgform_id" => $cfgform,
+		));
+
+		if (sizeof($errors) > 0)
+		{
+			$errmsg = "";
+			foreach($errors as $errprop)
+			{
+				$errmsg .= $errprop["msg"] . "<br>";
+			};
+
+			$con = new connection();
+			$conns = $con->find(array(
+				"relobj_id" => $rel_id,
+			));
+			$conn = reset($conns);
+			$this->flush_cache($conn["from"]);
+
+		
+			// fsck me plenty
+			aw_session_set("cb_reqdata",$request);
+			aw_session_set("cb_errmsg",$errmsg);
+			return aw_global_get("HTTP_REFERER");
+		};
+
+
 		$udef_fields["textboxes"] = $args["udef_txtbox"];
 		$udef_fields["textareas"] = $args["udef_txtarea"];
 		$udef_fields["checkboxes"] = $args["udef_checkbox"];
 		$udef_fields["classificators"] = $args["udef_classificator"];
+
 		
 		if ($allow)
 		{
@@ -963,6 +1011,10 @@ class ml_list extends class_base
 
 	function parse_alias($args = array())
 	{
+		$cb_errmsg = aw_global_get("cb_errmsg");
+		$cb_reqdata = aw_global_get("cb_reqdata");
+		aw_session_set("cb_errmsg","");
+		aw_session_set("cb_reqdata","");
 		$tobj = new object($args["alias"]["target"]);
 		$sub_form_type = $tobj->prop("sub_form_type");
 		if (!empty($args["alias"]["relobj_id"]))
@@ -1012,10 +1064,15 @@ class ml_list extends class_base
 				)),
 			));
 		}
-		
+
+		if (is_array($cb_reqdata))
+		{
+			$this->vars($cb_reqdata);
+		};
 		
 		$this->vars(array(
 			"listname" => $tobj->name(),
+			"cb_errmsg" => $cb_errmsg,
 			"reforb" => $this->mk_reforb("subscribe",array(
 				"id" => $args["alias"]["target"],
 				"rel_id" => $relobj->id(),
