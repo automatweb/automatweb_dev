@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.82 2004/02/02 19:22:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.83 2004/02/19 22:35:06 duke Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -275,7 +275,7 @@ class image extends class_base
 				}
 				else if (!$this->cfg["no_default_template"])
 				{
-					if ($idata["comment"] == "")
+					if ($idata["comment"] == "" && $vars["align"] != "")
 					{
 						$replacement = "<table border=0 cellpadding=0 cellspacing=0 $vars[align]><tr><td>";
 					}
@@ -296,7 +296,7 @@ class image extends class_base
 					{
 						$replacement .= "<BR>".$idata["comment"];
 					};
-					if ($idata["comment"] == "")
+					if ($idata["comment"] == "" && $vars["align"] != "")
 					{
 						$replacement .= "</td></tr></table>";
 					}
@@ -633,7 +633,6 @@ class image extends class_base
 	{
 		$prop = &$arr['prop'];
 		$retval = PROP_OK;
-		$form_data = &$arr["form_data"];
 		switch ($prop["name"])
 		{
 			case "file":
@@ -648,11 +647,11 @@ class image extends class_base
 					$prop["value"] = $fl;
 				}
 				// XXX: this is not the correct way to detect this
-				elseif (!empty($arr["form_data"]["file_type"]))
+				elseif (!empty($arr["request"]["file_type"]))
 				{
 					$_fi = get_instance("file");
 					$fl = $_fi->_put_fs(array(
-						"type" => $arr["form_data"]["file_type"],
+						"type" => $arr["request"]["file_type"],
 						"content" => $prop["value"],
 					));
 					$prop["value"] = $fl;
@@ -665,7 +664,7 @@ class image extends class_base
 				break;
 
 			case "file2":
-				if ($arr["form_data"]["file2_del"] == 1)
+				if ($arr["request"]["file2_del"] == 1)
 				{
 					$prop['value'] = '';
 				}
