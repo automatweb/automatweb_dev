@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.7 2001/06/16 15:41:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.8 2001/06/20 03:21:03 duke Exp $
 classload("users_user","config","form");
 
 load_vcl("table");
@@ -380,16 +380,19 @@ class users extends users_user
 				
 				case CL_FILE:
 					$preview = $GLOBALS["baseurl"]."/files.".$GLOBALS["ext"]."/id=".$row["oid"]."/".$row["name"];
+					$iconurl = get_icon_url(CL_FILE,$row["name"]);
+					$tpl = "doc";
 					break;
 
 				default:
+					$iconurl = get_icon_url($row["class_id"],0);
 					$tpl = "doc";
 					break;
 			};
 			$this->vars(array(
 				"name" => ($row["name"]) ? $row["name"] : "(nimetu)",
 				"id" => $row["oid"],
-				"iconurl" => get_icon_url($row["class_id"],0),
+				"iconurl" => $iconurl,
 				"color" => ($cnt % 2) ? "#FFFFFF" : "#EEEEEE",
 				"f_click" => $this->mk_my_orb("gen_home_dir", array("id" => $row["oid"])),
 				"preview" => $preview,

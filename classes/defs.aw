@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.14 2001/06/20 00:29:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.15 2001/06/20 03:21:03 duke Exp $
 // defs.aw - common functions (C) StruktuurMeedia 2000,2001
 
 ////
@@ -186,7 +186,8 @@ function get_icon_url($clid,$name)
 			$d_fileicon_cache = unserialize($c->get_simple_config("file_icons"));
 			$d_fileicons_loaded = true;
 		}
-		$extt = substr($name,strpos($name,".")+1);
+		$extt = substr($name,strpos($name,"."));
+		#$extt = substr($name,strpos($name,".")+1);
 		if ($d_fileicon_cache[$extt]["url"] != "")
 		{
 			$i = $d_fileicon_cache[$extt]["url"];
