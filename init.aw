@@ -196,6 +196,9 @@ function init_config($arr)
 	{
 		define($prd["def"], $prid);
 	}
+
+	classload("defs");
+	
 }
 
 function aw_ini_set($key,$value)
@@ -350,6 +353,12 @@ function aw_startup()
 
 	$syslog = get_instance("syslog");
 	$syslog->request_startup();
+
+	classload("menuedit");
+	$m = new menuedit();
+
+	$m->request_startup();
+
 
 //	list($micro,$sec) = split(" ",microtime());
 //	$ts_e = $sec + $micro;
