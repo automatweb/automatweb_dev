@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/vcl/project_selector.aw,v 1.5 2004/10/29 15:55:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/vcl/project_selector.aw,v 1.6 2005/01/26 22:35:06 duke Exp $
 class project_selector extends core
 {
 	function project_selector()
@@ -139,9 +139,16 @@ class project_selector extends core
 		foreach($olist->arr() as $o)
 		{
 			// hm, originaali näidatakse aga listi ei panda. Ongi nii või?
+			$p_o = new object($o->parent());
+			if ($p_o->class_id() != CL_PROJECT)
+			{
+				continue;
+			};
+
 			if ($o->id() != $o->brother_of())
 			{
-				$xlist[$o->id()] = $o->parent();
+				//$xlist[$o->id()] = $o->parent();
+				$xlist[$o->parent()] = $o->id();
 			};
 		};
 
@@ -154,20 +161,19 @@ class project_selector extends core
 		if (is_array($arr["prop"]["value"]))
 		{
 			$new_ones = $arr["prop"]["value"];
-		};
-
-		unset($new_ones[$event_obj->parent()]);
+		}
 
 		$prj_inst = get_instance(CL_PROJECT);
 
-		foreach($xlist as $obj_id => $folder_id)
+		foreach($xlist as $folder_id => $obj_id)
 		{
-			if (!$new_ones[$obj_id])
+			if (!$new_ones[$folder_id])
 			{
+				//print "deleting $obj_id<br>";
 				$bo = new object($obj_id);
 				$bo->delete();
 			};
-			unset($new_ones[$obj_id]);
+			unset($new_ones[$folder_id]);
 		};
 
 		if (1 == aw_ini_get("project.tree"))
@@ -203,7 +209,6 @@ class project_selector extends core
 
 			if ($parentcount > 1)
 			{
-				// XXX: get that thing to show!
 				$arr["prop"]["error"] = "Sündmus ei saa korraga olla mitmes viimase taseme projektis!";	
 				return PROP_ERROR;
 			};
@@ -242,7 +247,7 @@ class project_selector extends core
 
 		foreach($new_ones as $new_id => $whatever)
 		{
-
+			//print "creating brother under $new_id<br>";
 			$event_obj->create_brother($new_id);
 		};
 

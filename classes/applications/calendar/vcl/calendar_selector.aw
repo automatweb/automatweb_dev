@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/vcl/calendar_selector.aw,v 1.3 2005/01/26 17:34:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/vcl/calendar_selector.aw,v 1.4 2005/01/26 22:35:23 duke Exp $
 class calendar_selector extends core
 {
 	function calendar_selector()
@@ -57,7 +57,24 @@ class calendar_selector extends core
 	{
 		$event_obj  = $arr["obj_inst"];
 
+		$parents = array();
+		
+		$planners = new object_list(array(
+			"class_id" => CL_PLANNER,
+			"status" => STAT_ACTIVE,
+			"site_id" => array(),
+		));
+
+		foreach($planners->arr() as $planner_obj)
+		{
+			if (is_oid($planner_obj->prop("event_folder")))
+			{
+				$parents[] = $planner_obj->prop("event_folder");
+			};
+		};		
+
 		$brlist = new object_list(array(
+			"parent" => $parents,
 			"brother_of" => $event_obj->id(),
 		));
 
