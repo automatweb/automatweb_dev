@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.5 2004/06/30 09:22:31 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.6 2004/07/01 14:39:44 rtoomas Exp $
 // crm_section.aw - Üksus
 /*
 
@@ -7,6 +7,9 @@
 
 @default table=objects
 @default group=general
+
+@property jrk type=textbox size=4
+@caption Järk
 
 @reltype SECTION value=1 clid=CL_CRM_SECTION
 @caption Alamüksus

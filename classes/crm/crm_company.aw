@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.42 2004/06/30 09:27:03 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.43 2004/07/01 14:39:44 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -68,11 +68,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 @property contact_toolbar type=toolbar no_caption=1 store=no parent=hbox_toolbar
 @caption "The Green Button"
 
-@layout hbox_others type=hbox group=contacts2 width=20%:80%
+@layout hbox_others type=hbox group=contacts2 width=15%:30%:55%
 
 @layout vbox_contacts_left type=vbox parent=hbox_others group=contacts2
 
-@property unit_listing_tree type=treeview no_caption=1 parent=vbox_contacts_left
+@property unit_listing_tree type=treeview no_caption=1 store=no parent=vbox_contacts_left
 @caption Puu
 
 @layout vbox_contacts_right type=vbox parent=hbox_others group=contacts2
@@ -80,12 +80,28 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 @property human_resources type=table store=no no_caption=1 parent=vbox_contacts_right
 @caption Inimesed
 
-@default group=cedit
+@property contact_search_firstname type=textbox size=30 store=no parent=vbox_contacts_right
+@caption Eesnimi
 
+@property contact_search_lastname type=textbox size=30 store=no parent=vbox_contacts_right
+@caption Perenimi
+
+@property contact_search_code type=textbox size=30 store=no parent=vbox_contacts_right
+@caption Isikukood
+
+@property contact_search type=hidden store=no no_caption=1 parent=vbox_contacts_right value=1
+@caption contact_search
+
+@property contact_search_submit type=submit store=no parent=vbox_contacts_right
+@caption Otsi
+
+@property contacts_search_results type=table store=no no_caption=1 parent=vbox_contacts_right
+@caption Otsingutulemused
+
+@default group=cedit
 
 @property contact type=relpicker reltype=RELTYPE_ADDRESS table=kliendibaas_firma
 @caption Vaikimisi aadress
-
 
 @property phone_id type=relmanager table=kliendibaas_firma reltype=RELTYPE_PHONE props=name
 @caption Telefon
@@ -158,6 +174,36 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 
 @property customer type=table store=no no_caption=1 parent=vbox_customers_right
 @caption Kliendid
+
+@property customer_search_name type=textbox size=30 store=no parent=vbox_customers_right
+@caption Nimi
+
+@property customer_search_reg type=textbox size=30 store=no parent=vbox_customers_right
+@caption Reg nr.
+
+@property customer_search_leader type=textbox size=30 store=no parent=vbox_customers_right
+@caption Firmajuht
+
+@property customer_search_ type=textbox size=30 store=no parent=vbox_customers_right
+@caption Põhitegevus
+
+@property customer_search_county type=textbox size=30 store=no parent=vbox_customers_right
+@caption Maakond
+
+@property customer_search_city type=textbox size=30 store=no parent=vbox_customers_right
+@caption Linn/Vald/Alev
+
+@property customer_search_address type=textbox size=30 store=no parent=vbox_customers_right
+@caption Tänav/Küla
+
+@property customer_search_submit type=submit size=15 store=no parent=vbox_customers_right
+@caption Otsi
+
+@property customer_search type=hidden store=no parent=vbox_customers_right value=1 no_caption=1
+@caption Otsi
+
+@property customer_search_results type=table store=no parent=vbox_customers_right no_caption=1
+@caption Otsi tulemused 
 
 ////end of box////
 
@@ -290,6 +336,11 @@ class crm_company extends class_base
 	var $active_node = 0;
 	var $group_not_shown = true;
 	var $data = null;
+	//bad name, it is in the meaning of
+	//show_contacts_search
+	var $do_search = 0;
+
+	var $show_customer_search = 0;
 	/*
 		Problem. The datamodel is as follows.
 			company -> section -> profession|section|member 
@@ -318,11 +369,16 @@ class crm_company extends class_base
 	var $crm_company_reltype_workers = 8;
 	//crm_section.reltype_workers.value = 2;
 	var $crm_section_reltype_workers = 2;
+	//categorys
+	var $crm_company_reltype_category = 30;
+	var $crm_category_reltype_category = 2;
+
 
 	//default to company relation values
 	var $reltype_section = 0;//$this->crm_company_reltype_section;
 	var $reltype_professions = 0;//$this->crm_company_reltype_professions;
 	var $reltype_workers = 0;//$this->crm_company_reltype_workers;
+	var $reltype_category = 0;
 
 	function crm_company()
 	{
@@ -330,6 +386,7 @@ class crm_company extends class_base
 		$this->reltype_section = $this->crm_company_reltype_section;
 		$this->reltype_professions = $this->crm_company_reltype_professions;
 		$this->reltype_workers = $this->crm_company_reltype_workers;
+		$this->reltype_category = $this->crm_company_reltype_category;
 		//
 		$this->init(array(
 			'clid' => CL_CRM_COMPANY,
@@ -350,18 +407,36 @@ class crm_company extends class_base
 	{
 		//all connections from the currrent object
 		//different reltypes
+		$tmp_type = $type1;
 		if($obj->prop('class_id')==CL_CRM_COMPANY)
 		{
-			$type1 = $this->crm_company_reltype_section;
+			if($type1=='RELTYPE_CATEGORY')
+			{
+				$type1 = $this->crm_company_reltype_category;
+			}
+			else
+			{
+				$type1 = $this->crm_company_reltype_section;
+			}
 		}
 		else if($obj->prop('class_id')==CL_CRM_SECTION)
 		{
-			$type1 = $this->crm_section_reltype_section;
+			if($type1=='RELTYPE_CATEGORY')
+			{
+				$type1 = $this->crm_category_reltype_category;
+			}
+			else
+			{
+				$type1 = $this->crm_section_reltype_section;
+			}
 		}
-		
+	
 		$conns = $obj->connections_from(array(
-			'type'=>$type1
+			'type'=>$type1,
+			'sort_by' => 'from.jrk',
+			'sort_dir' => 'asc',
 		));
+		$conns = $conns;
 		//parent nodes'id actually
 		$this_level_id = $node_id;
 		foreach($conns as $key=>$conn)
@@ -403,7 +478,7 @@ class crm_company extends class_base
 
 			//add another item to the tree
 			$tree->add_item($this_level_id,$tree_node_info);
-			$this->generate_tree(&$tree,&$tmp_obj,&$node_id,$type1,&$skip, &$attrib, $leafs);
+			$this->generate_tree(&$tree,&$tmp_obj,&$node_id,$tmp_type,&$skip, &$attrib, $leafs);
 		}
 		//if leafs
 		if($leafs)
@@ -480,36 +555,156 @@ class crm_company extends class_base
 			}
 			$arr['groupinfo']['my_customers']['caption'] = $name;
 		}
-		
-		if((int)$arr['request']['unit'])
-		{
-			//section relations are active now
-			$this->unit=$arr['request']['unit'];
-			$this->reltype_section = $this->crm_section_reltype_section;
-			$this->reltype_professions = $this->crm_section_reltype_professions;
-			$this->reltype_workers = $this->crm_section_reltype_workers;
-		}
-		else
-		{
-			//company relations are default
-			$this->reltype_section = $this->crm_company_reltype_section;
-			$this->reltype_professions = $this->crm_company_reltype_professions;
-			$this->reltype_workers = $this->crm_company_reltype_workers;
-		}
+	
 
 		switch($data['name'])
 		{
-			case 'my_customers':
-			{
-				//arr($arr);
+			//START OF CUSTOMER SEARCH
+			case 'customer_search_name':
+				if($this->show_customer_search)
+				{
+					$data['value'] = $arr['request']['customer_search_name'];
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
 				break;
-			}
+			case 'customer_search_reg':
+				if($this->show_customer_search)
+				{
+					$data['value'] = $arr['request']['customer_search_reg'];
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
+				break;
+			case 'customer_search_address':
+				if($this->show_customer_search)
+				{
+					$data['value'] = $arr['request']['customer_search_address'];
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
+				break;
+			case 'customer_search_leader':
+				if($this->show_customer_search)
+				{
+					$data['value'] = $arr['request']['customer_search_leader'];
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
+				break;
+			case 'customer_search_city':
+				if($this->show_customer_search)
+				{
+					$data['value'] = $arr['request']['customer_search_city'];
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
+				break;
+			case 'customer_search_county':
+				if($this->show_customer_search)
+				{
+					$data['value'] = $arr['request']['customer_search_county'];
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
+				break;
+			case 'customer_search_submit':
+				if(!$this->show_customer_search)
+				{
+					return PROP_IGNORE;	
+				}
+				break;
+			case 'customer_search_results':
+				if($this->show_customer_search)
+				{
+					$this->do_customer_search_results(&$arr);
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
+				break;
+			case 'customer_search':
+				if(!$this->show_customer_search)
+				{
+					return PROP_IGNORE;
+				}
+				break;
+			//END OF CUSTOMER SEARCH
+
+			//START OF CONTACTS SEARCH
+			case 'contacts_search_results':
+				if($this->do_search && $arr['request']['contacts_search_show_results'])
+				{
+					$this->do_contacts_search_results(&$arr);
+				}
+				else
+				{
+					return IGNORE_PROP;
+				}
+				break;
+			//show or don't show search stuff
+			case 'contact_search_firstname':
+				if(!$arr['request']['contact_search'])
+				{
+					return PROP_IGNORE;
+				}
+				else
+				{
+					$data['value'] = $arr['request']['contact_search_firstname'];
+				}
+				break;	
+			case 'contact_search_lastname':
+				if(!$arr['request']['contact_search'])
+				{
+					return PROP_IGNORE;
+				}
+				else
+				{
+					$data['value'] = $arr['request']['contact_search_lastname'];
+				}
+				break;
+			case 'contact_search_code':
+				if(!$arr['request']['contact_search'])
+				{
+					return PROP_IGNORE;
+				}
+				else
+				{
+					$data['value'] = $arr['request']['contact_search_code'];
+				}
+				break;
+			case 'contact_search_submit':
+				if(!$arr['request']['contact_search'])
+				{
+					return PROP_IGNORE;
+				}
+				break;
+			case 'contact_search':
+				if(!$arr['request']['contact_search'])
+				{
+					return PROP_IGNORE;
+				}
+				break;
+			//END OF CONTACTS SEARCH
 			case "unit_listing_tree":
 			{
 				$tree_inst = &$arr['prop']['vcl_inst'];
 				$node_id = 0;
 				$this->active_node = (int)$arr['request']['unit'];
-				$this->generate_tree(&$tree_inst,$arr['obj_inst'],&$node_id,RELTYPE_SECTION,array(),'unit',true);
+				$this->generate_tree(&$tree_inst,$arr['obj_inst'],&$node_id,'RELTYPE_SECTION',array(),'unit',true);
 				break;
 			}
 			case "customer_listing_tree":
@@ -518,7 +713,7 @@ class crm_company extends class_base
 				$node_id = 0;
 				$this->active_node = (int)$arr['request']['category'];
 				$this->generate_tree(&$tree_inst,$arr['obj_inst'],&$node_id,
-													RELTYPE_CATEGORY,array(CL_CRM_COMPANY),'category',false);
+													'RELTYPE_CATEGORY',array(CL_CRM_COMPANY),'category',false);
 				break;
 			}
 			case 'ettevotlusvorm':
@@ -550,7 +745,14 @@ class crm_company extends class_base
 				break;
 			}
 			case "customer":
-				$this->org_table(&$arr);
+				if($this->show_customer_search)
+				{
+					return PROP_IGNORE;
+				}
+				else
+				{
+					$this->org_table(&$arr);
+				}
 				break;
 
 			case "org_toolbar":
@@ -584,8 +786,15 @@ class crm_company extends class_base
 			case 'old_human_resources':
 				$this->do_human_resources($arr,true);
 				break;
+			case 'contact_search':
+				$this->do_contact_search($arr);
+				break;
 			case "human_resources":
-				$this->do_human_resources($arr);
+				//don't show it if i wan't to show the search part
+				if(!$arr['request']['contact_search'])
+				{
+					$this->do_human_resources($arr);
+				}
 				break;
 			case "tasks_call":
 				$this->do_tasks_call($arr);
@@ -603,6 +812,18 @@ class crm_company extends class_base
 			
 		};
 		return $retval;
+	}
+
+	function set_property($arr)
+	{
+		$data = &$arr['prop'];
+		if($data['name']=='contact_search_submit')
+		{
+			//arr($arr);
+			//contact_search_lastname
+			//contact_search_code
+			//contact_search_sex
+		}
 	}
 
 	function callback_pre_edit($arr)
@@ -713,7 +934,12 @@ class crm_company extends class_base
 		}
 		
 	}
-	
+
+	function do_contact_search($arr)
+	{
+		$table = &$arr['prop']['vcl_inst'];
+	}
+
 	function do_human_resources($arr,$old_iface=false)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
@@ -1140,7 +1366,7 @@ class crm_company extends class_base
 		{
 			$target_obj->connect(array(
 				"to" => $conn->prop("from"),
-				"reltype" => RELTYPE_WORKERS,
+				"reltype" => $this->crm_company_reltype_workers,
 			));
 		}
 		else if($target_obj->class_id() == CL_CRM_SECTION)
@@ -1203,12 +1429,27 @@ class crm_company extends class_base
 	**/
 	function search_for_contacts($arr)
 	{
-		//arr($arr);
 		return $this->mk_my_orb(
 					'change',array(
 						'id' => $arr['id'],
 						'group' => $arr['group'],
-						'customer_search' => true,
+						'contact_search' => true,
+						'unit' => $arr['unit']
+						),
+					'crm_company');
+	}
+	
+	/**
+		@attrib name=search_for_customers
+	**/
+	function search_for_customers($arr)
+	{
+		return $this->mk_my_orb(
+					'change',array(
+						'id' => $arr['id'],
+						'group' => $arr['group'],
+						'customer_search' => 1,
+						'unit' => $arr['unit']
 						),
 					'crm_company');
 	}
@@ -1682,9 +1923,93 @@ class crm_company extends class_base
 			
 	}
 
+	/*
+	
+	*/
+	function callback_on_load($arr)
+	{
+		//for post stuff
+		if(array_key_exists('request',$arr))
+		{
+			$this->do_search = $arr['request']['contact_search'];
+			$this->show_customer_search = $arr['request']['customer_search'];
+			//pean processima tulnud infot, tundub küll imelik koht
+			//ilmselt kui vale, keegi hakkab karjuma
+		}
+		//for get stuff
+		else
+		{
+			$this->do_search = $arr['contact_search'];
+			$this->show_customer_search = $arr['customer_search'];
+		}
+
+		//stuff
+		if((int)$arr['request']['unit'])
+		{
+			//section relations are active now
+			$this->unit=$arr['request']['unit'];
+			$this->reltype_section = $this->crm_section_reltype_section;
+			$this->reltype_professions = $this->crm_section_reltype_professions;
+			$this->reltype_workers = $this->crm_section_reltype_workers;
+		}
+		else
+		{
+			//company relations are default
+			$this->reltype_section = $this->crm_company_reltype_section;
+			$this->reltype_professions = $this->crm_company_reltype_professions;
+			$this->reltype_workers = $this->crm_company_reltype_workers;
+		}
+
+		if(is_oid($arr['request']['category']))
+		{
+			$this->reltype_category = $this->crm_category_reltype_category;
+		}
+		else
+		{
+			$this->reltype_category = $this->crm_company_reltype_category;
+		}
+	}
+
+	/*
+		kõik lingid saavad $key muutuja lisaks
+	*/
 	function callback_mod_reforb($arr)
 	{
 		$arr['unit'] = $this->unit;
+		$arr['return_url'] = aw_global_get('REQUEST_URI');
+	}
+
+	function callback_mod_retval($arr)
+	{
+		if($this->do_search)
+		{
+			$arr['args']['contact_search_firstname'] = urlencode($arr['request']['contact_search_firstname']);
+			$arr['args']['contact_search_lastname'] = urlencode($arr['request']['contact_search_lastname']);
+			$arr['args']['contact_search_code'] = urlencode($arr['request']['contact_search_code']);
+			$arr['args']['contact_search'] = $this->do_search;
+			$arr['args']['contacts_search_show_results'] = 1;
+		}
+	
+		if($this->show_customer_search)
+		{
+			$arr['args']['customer_search_name'] = urlencode($arr['request']['customer_search_name']);
+			$arr['args']['customer_search_reg'] = urlencode($arr['request']['customer_search_reg']);
+			$arr['args']['customer_search_address'] = urlencode($arr['request']['customer_search_address']);
+			$arr['args']['customer_search_leader'] = urlencode($arr['request']['customer_search_leader']);
+			$arr['args']['customer_search_city'] = urlencode($arr['request']['customer_search_city']);
+			$arr['args']['customer_search_county'] = urlencode($arr['request']['customer_search_county']);
+			$arr['args']['customer_search'] = $this->show_customer_search;
+		}
+	
+		if($arr['request']['unit'])
+		{
+			$arr['args']['unit'] = $arr['request']['unit'];
+		}
+
+		if($arr['request']['category'])
+		{
+			$arr['args']['category'] = $arr['request']['category'];
+		}
 	}
 
 	function do_contact_toolbar($tb,$arr)
@@ -1769,12 +2094,24 @@ class crm_company extends class_base
 			'action' => 'submit_new_task'
 		));
 
+		$tb->add_separator();
+
 		$tb->add_button(array(
 			'name' => 'Search',
 			'img' => 'search.gif',
 			'tooltip' => 'Otsi',
 			'action' => 'search_for_contacts'
 		));
+
+		if($arr['request']['contact_search'])
+		{
+			$tb->add_button(array(
+				'name' => 'Save',
+				'img' => 'save.gif',
+				'tooltip' => 'Salvesta',
+				'action' => 'save_search_results'
+			));
+		}
 	}
 
 	function do_customer_toolbar($tb, $arr)
@@ -1801,7 +2138,7 @@ class crm_company extends class_base
 				'link'=>$this->mk_my_orb('new',array(
 					'parent'=>$arr['obj_inst']->id(),
 					'alias_to'=>$alias_to,
-					'reltype'=>$rel_type,
+					'reltype'=>$this->reltype_category,
 					'return_url'=>urlencode(aw_global_get('REQUEST_URI'))
 				),'crm_category')
 				
@@ -1812,7 +2149,271 @@ class crm_company extends class_base
 			'img' => 'delete.gif',
 			'tooltip' => 'Kustuta valitud',
 			'action' => 'submit_delete_customer_relations',
-		));		
+		));
+
+		$tb->add_separator();
+
+		$tb->add_button(array(
+			'name' => 'Search',
+			'img' => 'search.gif',
+			'tooltip' => 'Otsi',
+			'action' => 'search_for_customers'
+		));
+		
+		if($arr['request']['customer_search'])
+		{
+			$tb->add_button(array(
+				'name' => 'Save',
+				'img' => 'save.gif',
+				'tooltip' => 'Salvesta',
+				'action' => 'save_customer_search_results'
+			));
+		}
+	}
+
+	function do_customer_search_results($arr)
+	{
+		$tf = &$arr["prop"]["vcl_inst"];
+		$tf->define_field(array(
+							"name" => "name",
+							"caption" => "Organisatsioon",
+							"sortable" => 1,
+				 ));
+
+		$tf->define_field(array(
+				"name" => "pohitegevus",
+				"caption" => "Põhitegevus",
+				"sortable" => 1,
+		));
+
+		$tf->define_field(array(
+				"name" => "corpform",
+				"caption" => "Õiguslik vorm",
+				"sortable" => 1,
+		));
+
+		$tf->define_field(array(
+				"name" => "address",
+				"caption" => "Aadress",
+				"sortable" => 1,
+		));
+
+		$tf->define_field(array(
+				"name" => "email",
+				"caption" => "E-post",
+				"sortable" => 1,
+		));
+
+		$tf->define_field(array(
+				"name" => "url",
+				"caption" => "WWW",
+				"sortable" => 1,
+		));
+		$tf->define_field(array(
+				"name" => "phone",
+				"caption" => 'Telefon',
+		));
+
+		$tf->define_field(array(
+				"name" => "ceo",
+				"caption" => "Juht",
+				"sortable" => 1,
+		));
+
+		$tf->define_chooser(array(
+					"field" => "id",
+					"name" => "check",
+		));
+
+
+		$search_params = array('class_id'=>CL_CRM_PERSON,'limit'=>100,'sort_by'=>'name');
+
+		if($arr['request']['customer_search_name'])
+		{
+			$search_params['firma_nim'] = '%'.urldecode($arr['request']['customer_search_name']).'%';
+		}
+		if($arr['request']['customer_search_reg'])
+		{
+			$search_params['reg_nr'] = '%'.urldecode($arr['request']['customer_search_reg']).'%';
+		}
+		if($arr['request']['customer_search_address'])
+		{
+			$search_params['CL_CRM_COMPANY.ADDRESS.name'] = '%'.urldecode($arr['request']['customer_search_address']).'%';
+		}
+		/*
+		if($arr['request']['customer_search_firmajuht'])
+		{
+			$search_params['CL_CRM_COMPANY.'] = '%'.urldecode($arr['request']['customer_search_firmajuht']).'%';
+		}
+		*/
+		if($arr['request']['customer_search_linn'])
+		{
+			$search_params['CL_CRM_COMPANY.ADDRESS.linn'] = '%'.urldecode($arr['request']['customer_search_linn']).'%';
+		}
+		if($arr['request']['customer_search_maakond'])
+		{
+			$search_params['CL_CRM_COMPANY.ADDRESS.maakond'] = '%'.urldecode($arr['request']['customer_search_maakond']).'%';
+		}
+		//arr($search_params);
+		/*
+		$tf->define_data(array(
+			"id" => $o->id(),
+			"name" => html::href(array(
+				"url" => $this->mk_my_orb("change",array(
+					"id" => $o->id(),
+				),$o->class_id()),
+				"caption" => $o->name(),
+			)),
+			"reg_nr" => $o->prop("reg_nr"),
+			"pohitegevus" => $tegevus,
+			"corpform" => $vorm,
+			"address" => $contact,
+			"ceo" => html::href(array(
+				"url" => $this->mk_my_orb("change",array(
+					"id" => $juht_id,
+				),CL_CRM_PERSON),
+				"caption" => $juht,
+			)),
+			"phone" => $phone,
+			"url" => html::href(array(
+				"url" => $url,
+				"caption" => $url,
+			)),
+			"email" => $mail,
+		));
+		*/
+	}
+
+	function do_contacts_search_results($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+                        'name' => 'name',
+                        'caption' => 'Nimi',
+                        'sortable' => '1',
+			'callback' => array(&$this, 'callb_human_name'),
+			'callb_pass_row' => true,
+                ));
+		$t->define_field(array(
+                        'name' => 'phone',
+                        'caption' => 'Telefon',
+                        'sortable' => '1',
+                ));
+		$t->define_field(array(
+                        'name' => 'email',
+                        'caption' => 'E-post',
+                        'sortable' => '1',
+                ));
+		$t->define_field(array(
+								'name' => 'section',
+								'caption' => 'Üksus',
+								'sortable' => '1',
+					));
+		$t->define_field(array(
+                        'name' => 'rank',
+                        'caption' => 'Ametinimetus',
+                        'sortable' => '1',
+                ));
+		$t->define_chooser(array(
+			'name'=>'check',
+			'field'=>'id',
+		));
+
+		$search_params = array('class_id'=>CL_CRM_PERSON,'limit'=>50,'sort_by'=>'name');
+
+		if($arr['request']['contact_search_firstname'])
+		{
+			//$search_params['CL_CRM_PERSON.firstname'] = $arr['request']['contact_search_firstname'];
+			$search_params['firstname'] = '%'.urldecode($arr['request']['contact_search_firstname']).'%';
+		}
+
+		if($arr['request']['contact_search_lastname'])
+		{
+			//$search_params['CL_CRM_PERSON.lastname'] = $arr['request']['contact_search_lastname'];
+			$search_params['lastname'] = '%'.urldecode($arr['request']['contact_search_lastname']).'%';
+		}
+
+		if($arr['request']['contact_search_code'])
+		{
+			//$search_params['CL_CRM_PERSON.personal_id'] = $arr['request']['contact_search_code'];
+			$search_params['personal_id'] = '%'.urldecode($arr['request']['contact_search_code']).'%';
+		}
+	
+		//let's try to get certain fields
+		$search_params['sort_by'] = 'name';
+
+		/*$ol = new object_list(array(
+					'limit' => 50,
+					'sort_by' => 'name',
+					'class_id' => CL_CRM_PERSON,
+					'CL_CRM_PERSON.RELTYPE_PHONE.name' => '%'
+				));
+		arr($ol);
+		die();*/
+
+		$ol = new object_list($search_params);
+		//$ol = new object_list(array('class_id' => CL_CRM_PERSON,'firstname'=>'toomas','lastname'=>'koobas'));
+		$pl = get_instance(CL_PLANNER);
+		$person = get_instance("crm/crm_person");
+		$cal_id = $pl->get_calendar_for_user(array('uid'=>aw_global_get('uid')));
+		for($o=$ol->begin();!$ol->end();$o=$ol->next())
+		{
+			$person_data = $person->fetch_person_by_id(array(
+									'id' => $o->id(),
+									'cal_id' => $calid
+								));
+			$t->define_data(array(
+					"name" => $o->prop('name'),
+					"id" => $o->id(),
+					"phone" => $person_data['phone'],
+					"rank" => $person_data["rank"],
+					'section' => $person_data['section'],
+					"email" => html::href(array(
+						"url" => "mailto:" . $person_data['email'],
+						"caption" => $person_data['email'],
+					)),
+				));
+		}
+	}
+	
+	/**
+		@attrib name=save_customer_search_results
+	**/
+	function save_customer_search_results($arr)
+	{
+	
+	}
+
+	/**
+		@attrib name=save_search_results
+	**/
+	function save_search_results($arr)
+	{
+		foreach($arr['check'] as $key=>$value)
+		{
+			$obj = null;
+			$reltype = 0;
+			if($arr['unit'])
+			{
+				$obj = new object($arr['unit']);
+				$reltype = 2; //crm_section.workers
+			}
+			else
+			{
+				$obj = new object($arr['id']);
+				$reltype = 8; //crm_company.workers	
+			}
+			
+			$obj->connect(array(
+					'to' => $value,
+					'reltype' => $reltype 
+					));
+		}
+		return $this->mk_my_orb('change',array(
+								'id' => $arr['id'],
+								'unit' => $arr['unit'],
+								'group' => $arr['group'],
+							),$arr['class']);
 	}
 }
 ?>
