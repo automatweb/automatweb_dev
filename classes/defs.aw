@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.143 2004/07/05 08:56:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.144 2004/07/22 13:44:35 rtoomas Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -440,19 +440,21 @@ if (!defined("DEFS"))
 		return ($arg) ? "DISABLED" : "";
 	}
 
-	function arr($arr,$die=false)
+	function arr($arr,$die=false,$see_html=false)
 	{
+		echo '<hr/>';
 		$tmp = '';
 		ob_start();
 		print_r($arr);
 		$tmp = ob_get_contents();
 		ob_end_clean();
 		echo '<pre>';
-		echo htmlspecialchars($tmp);
+		echo $see_html?htmlspecialchars($tmp):$tmp;
 		echo '</pre>';
+		echo '<hr/>';
 		if ($die)
 		{
-			die('<hr />');
+			die('');
 		}
 		return $arr;
 	}
@@ -1231,5 +1233,10 @@ if (!defined("DEFS"))
 			return count($this->arg);
 		}
 	};
+
+	function do_nothing()
+	{
+	
+	}
 };
 ?>
