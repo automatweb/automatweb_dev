@@ -102,7 +102,7 @@ class object
 		return $GLOBALS["objects"][$this->oid]->connections_from($param);
 	}
 
-	function connections_to($param)
+	function connections_to($param = NULL)
 	{
 		return $GLOBALS["objects"][$this->oid]->connections_to($param);
 	}

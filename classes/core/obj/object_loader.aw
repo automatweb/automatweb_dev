@@ -1,5 +1,13 @@
 <?php
 
+/*
+
+this message will get called whenever an object is saved as the class_id as the message type parameter
+and the object's id as the "oid" parameter
+EMIT_MESSAGE(MSG_STORAGE_SAVE)
+
+*/
+
 class _int_object_loader
 {
 	// private variables, only object system classes can use these
@@ -228,6 +236,11 @@ class _int_object_loader
 		// because you probably will not be able to acquire pointers to temp-objects.
 		// probably.
 		// well, here's to hoping it won't happen!
+
+		post_message_with_param(MSG_STORAGE_SAVE, $GLOBALS["objects"][$t_oid]->class_id(), array(
+			"oid" => $t_oid
+		));
+
 		return $t_oid;
 	}
 
@@ -248,6 +261,10 @@ class _int_object_loader
 
 		// copy the object to the new place
 		$GLOBALS["objects"][$t_oid] = $t_o;
+
+		post_message_with_param(MSG_STORAGE_SAVE, $GLOBALS["objects"][$t_oid]->class_id(), array(
+			"oid" => $t_oid
+		));
 
 		return $t_oid;
 	}
