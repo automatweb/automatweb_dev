@@ -1,0 +1,17 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>limit</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Mitu viimast</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_AUTHOR</syslog_type>
+            <no_status>1</no_status>
+      </classinfo>
+</properties>
+

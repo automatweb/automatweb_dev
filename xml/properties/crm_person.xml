@@ -55,9 +55,7 @@
             <name>gender</name>
             <table>kliendibaas_isik</table>
             <group>general</group>
-            <type>textbox</type>
-            <size>5</size>
-            <maxlength>10</maxlength>
+            <type>chooser</type>
             <field>gender</field>
             <caption>Sugu</caption>
       </property>
@@ -134,8 +132,10 @@
             <name>picture</name>
             <table>kliendibaas_isik</table>
             <group>general</group>
-            <type>relpicker</type>
+            <type>releditor</type>
             <reltype>RELTYPE_PICTURE</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
             <field>picture</field>
             <caption>Pilt/foto</caption>
       </property>
@@ -255,23 +255,13 @@
             <caption>Toimetused</caption>
       </property>
       <property>
-            <name>forms</name>
-            <table>objects</table>
-            <group>forms</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_BACKFORMS</reltype>
-            <caption>tagasiside vormid</caption>
-      </property>
-      <property>
             <name>templates</name>
             <table>objects</table>
             <group>forms</group>
+            <type>select</type>
             <field>meta</field>
             <method>serialize</method>
-            <type>select</type>
-            <caption>templiidid</caption>
+            <caption>Väljund</caption>
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
