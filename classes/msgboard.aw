@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.29 2002/12/03 12:39:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.30 2002/12/03 15:19:46 kristo Exp $
 define(PER_PAGE,10);
 define(PER_FLAT_PAGE,20);
 define(TOPICS_PER_PAGE,7);
@@ -634,7 +634,8 @@ class msgboard extends aw_template
 		$num_pages = ($cnt / PER_FLAT_PAGE);
 		for ($i=0; $i <= $num_pages; $i++)
 		{
-			$this->vars(array("url" => $this->make_url(array("page" => $i)), "ltext" => $i,"from" => $i*PER_PAGE, "to" => min($cnt,($i+1)*PER_PAGE)));
+			$url = aw_global_get("PHP_SELF")."?".join("&",$this->map2("%s=%s",$GLOBALS['HTTP_GET_VARS']+array("page" => $i)));
+			$this->vars(array("url" => $url, "ltext" => $i,"from" => $i*PER_PAGE, "to" => min($cnt,($i+1)*PER_PAGE)));
 			if ($page == $i)
 			{
 				$p.=$this->parse("SEL_PAGE");

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.19 2002/12/03 12:52:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.20 2002/12/03 15:19:46 kristo Exp $
 // root.aw - the root class
 // this contains all the supplementary functions
 
@@ -115,22 +115,6 @@ class root
 	function gen_uniq_id($param = "")
 	{
 		return gen_uniq_id($param);
-	}
-
-	////
-	// !Koostab URL-i parameetritest ning HTTP_GET_VARS väärtustest
-	// TODO: viia defs.aw-sse
-	function make_url($arr)
-	{
-		global $HTTP_GET_VARS;
-		$ura = $HTTP_GET_VARS;
-		reset($arr);
-		while (list($k,$v) = each($arr))
-		{
-			$ura[$k] = $v;
-		};
-		$urs = join("&",$this->map2("%s=%s",$ura));
-		return aw_global_get("PHP_SELF")."?".$urs;
 	}
 
 	////

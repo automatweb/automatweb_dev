@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.12 2002/12/02 12:19:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.13 2002/12/03 15:19:46 kristo Exp $
 load_vcl("table");
 
 session_register("group_folders");
@@ -193,7 +193,8 @@ class groups extends users_user
 				}
 				else
 				{
-					$image = "<a href='".$this->make_url(array($parent_name => $v["gid"], "op" => $op))."'><img src='";
+					$url = aw_global_get("PHP_SELF")."?".join("&",$this->map2("%s=%s",$GLOBALS['HTTP_GET_VARS']+array($parent_name => $v["gid"], "op" => $op)));
+					$image = "<a href='".$url."'><img src='";
 				}
 
 				$image.="/images/puu_tyhi.gif' border=0>";
@@ -207,7 +208,8 @@ class groups extends users_user
 				}
 				else
 				{
-					$image.="' border=0><a href='".$this->make_url(array($parent_name => $v["gid"], "op" => $op))."'>";
+					$url = aw_global_get("PHP_SELF")."?".join("&",$this->map2("%s=%s",$GLOBALS['HTTP_GET_VARS']+array($parent_name => $v["gid"], "op" => $op)));
+					$image.="' border=0><a href='".$url."'>";
 				}
 			}
 
@@ -241,7 +243,8 @@ class groups extends users_user
 			$name = $v["name"];
 			if (!$orb)
 			{
-				$name="<a href='".$this->make_url(array($parent_name => $v["gid"],"op" => "open"))."'>".$v["name"]."</a>";
+				$url = aw_global_get("PHP_SELF")."?".join("&",$this->map2("%s=%s",$GLOBALS['HTTP_GET_VARS']+array($parent_name => $v["gid"],"op" => "open")));
+				$name="<a href='".$url."'>".$v["name"]."</a>";
 			}
 			$this->vars(array(
 				"space_images"	=> $spim, 
