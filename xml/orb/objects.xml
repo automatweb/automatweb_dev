@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="objects" folder="" extends="db_objects">
+	<class name="objects" folder="" extends="core">
 		<action name="show" nologin="1">
 			<function name="show">
 				<arguments>
@@ -36,13 +36,6 @@
 			<function name="orb_delete_object">
 				<arguments>
 					<required name="oid" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="get_db_pwd" nologin="1">
-			<function name="orb_get_db_pwd">
-				<arguments>
 				</arguments>
 			</function>
 		</action>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.36 2005/03/03 12:55:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.37 2005/03/20 16:21:13 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_SITE relationmgr=yes no_comment=1
@@ -793,16 +793,22 @@ class aw_site extends class_base
 
 			$db_dat = $this->do_orb_method_call(array(
 				"class" => "objects",
-				"action" => "get_db_pwd",
+				"action" => "aw_ini_get_mult",
 				"method" => "xmlrpc",
 				"server" => str_replace("http://","",$site['site_obj']['select_db']),
-				"no_errors" => 1
+				"no_errors" => 1,
+				"params" => array(
+					"db.user",
+					"db.host",
+					"db.base",
+					"db.pass"
+				)
 			));
 
-			$ini_opts['db.user'] = $db_dat['user'];
-			$ini_opts['db.host'] = $db_dat['host'];
-			$ini_opts['db.base'] = $db_dat['base'];
-			$ini_opts['db.pass'] = $db_dat['pass'];
+			$ini_opts['db.user'] = $db_dat['db.user'];
+			$ini_opts['db.host'] = $db_dat['db.host'];
+			$ini_opts['db.base'] = $db_dat['db.base'];
+			$ini_opts['db.pass'] = $db_dat['db.pass'];
 			//echo "got db inf = <pre>", var_dump($db_dat),"</pre> <br />";
 		}
 		else
@@ -906,10 +912,11 @@ class aw_site extends class_base
 			// try to fetch db login data
 			$db_dat = $this->do_orb_method_call(array(
 				"class" => "objects",
-				"action" => "get_db_pwd",
+				"action" => "aw_ini_get_mult",
 				"method" => "xmlrpc",
 				"server" => str_replace("http://","",$site['site_obj']['select_db']),
-				"no_errors" => 1
+				"no_errors" => 1,
+				"params" => array("baseurl")
 			));
 			if (!is_array($db_dat))
 			{

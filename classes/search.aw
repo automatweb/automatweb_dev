@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.86 2005/03/14 17:27:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.87 2005/03/20 16:21:12 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -134,7 +134,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		//// end:valim///
 
 		switch($data["name"])
-                {
+		{
 			//// valim///
 			/* ühesõnaga see on hidden element, meil on vaja et ta metas salvestuks */
 			case 'active_selection':
@@ -147,7 +147,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				break;
 
 			case "s_location":
-				$data["options"] = array(0 => "Igalt poolt"); //$this->_get_s_parent();
+				$data["options"] = array(0 => "Igalt poolt"); 
 				break;
 
 			case "s_lang_id":
@@ -412,8 +412,6 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		// perform the actual search
 		if ($search)
 		{
-			// object_tree seems to be REALLY slow, so I'm commenting this out
-			//$obj_list = $this->_get_s_parent($args);
 			load_vcl("table");
 			$this->t = new aw_table(array("layout" => "generic"));
 
@@ -686,7 +684,6 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				$serv = $lo->get_server($args["s"]["server"]);
 				$old_bu = $this->cfg["baseurl"];
 				$this->cfg["baseurl"] = "http://".$serv;
-				#$obj_list = $this->_get_s_parent($args);
 				$is_remote = true;
 			}
 
@@ -1146,12 +1143,6 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 		if (!$fields["location"])
 		{
-/*			$fields["location"] = array(
-				"type" => "select",
-				"caption" => "Asukoht",
-				"options" => $this->_get_s_parent($args),
-				"selected" => $args["s"]["location"],
-			);*/
 			$fields["location"] = array(
 				"type" => "textbox",
 				"caption" => "Asukoht",
@@ -1641,7 +1632,6 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 	function execute_search($args = array())
 	{
-		$obj_list = $this->_get_s_parent($args);
 		extract($args);
 		if (is_array($request))
 		{
