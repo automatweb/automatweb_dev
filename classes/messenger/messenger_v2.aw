@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.26 2004/01/19 10:45:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.27 2004/02/11 17:02:19 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -265,7 +265,7 @@ class messenger_v2 extends class_base
 			"no_folders" => true,
 		));
 
-		$perpage = empty($this->perpage) ? 50 : $this->perpage;
+		$perpage = empty($this->perpage) ? 10 : $this->perpage;
 
 		$ft_page = (int)$GLOBALS["ft_page"];
 
@@ -283,21 +283,20 @@ class messenger_v2 extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->parse_xml_def("messenger/mailbox_view");
 
-
 		$t->d_row_cnt = $count;
 
 		$pageselector = "";
 
 		if ($t->d_row_cnt > $perpage)
 		{
-			$pageselector = $t->draw_lb_pageselector(array(
+			$pageselector = $t->draw_button_pageselector(array(
 				"records_per_page" => $perpage
 			));
 		};
 
 		$fldr = $this->use_mailbox;	
 
-		$t->table_header = $dump . $pageselector;
+		$t->table_header = $pageselector;
 
 		foreach($contents as $key => $message)
 		{
@@ -326,8 +325,9 @@ class messenger_v2 extends class_base
 					"url" => "javascript:aw_popup_scroll(\"" . $this->mk_my_orb("change",array(
 							"msgrid" => $arr["obj_inst"]->id(),
 							"msgid" => $key,
+							"form" => "showmsg",
+							"cb_part" => 1,
 							"mailbox" => $this->use_mailbox,
-							"subgroup" => "show",
 					),"mail_message",false,true) . "\",\"$wname\",800,600)",
 					"caption" => $this->_format(parse_obj_name($message["subject"]),$seen),
 				)),
@@ -491,7 +491,11 @@ class messenger_v2 extends class_base
 		$toolbar->add_button(array(
 			"name" => "newmessage",
 			"tooltip" => "Uus kiri",
-			"url" => "javascript:aw_popup_scroll('" . $this->mk_my_orb("new",array("parent" => $drafts,"msgrid" => $this->msgobj->id()),"mail_message",false,true) . "','msgr',800,600)",
+			// selle asemel ma pean tegema uue objekti tüüpi draft, shalla-lalla
+			"url" => "javascript:aw_popup_scroll('" . $this->mk_my_orb("create_draft",array(
+				"msgrid" => $this->msgobj->id(),
+				"cb_part" => 1,
+			),"mail_message",false,true) . "','msgr',800,600)",
 			"img" => "new.gif",
 		));
 

@@ -1,28 +1,32 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.21 2004/01/13 16:24:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.22 2004/02/11 17:02:19 duke Exp $
 // mail_message.aw - Mail message
 
 /*
+	@classinfo no_comment=1 no_status=1 
 	@default group=general
 	@default table=messages
 
-	@property mailtoolbar type=toolbar store=no no_caption=1
-	@caption Toolbar
+	@property edit_toolbar type=toolbar store=no no_caption=1
+	@caption Kirja redigeerimise toolbar
 
 	@property uidl type=hidden
 	@caption UIDL
 	
-	@property mfrom type=callback callback=callback_get_identities
+	@property mfrom type=select 
 	@caption Kellelt
 	
 	@property mto type=textbox size=80
 	@caption Kellele
 
+	@property cc type=textbox field=mtargets1 size=80
+	@caption Koopia
+
 	@property name type=textbox size=80 table=objects
 	@caption Teema
 
-	@property date type=text store=no
-	@caption Kuupäev
+	property date type=text store=no
+	caption Kuupäev
 	
 	@property html_mail type=checkbox ch_value=1 field=type method=bitmask ch_value=1024
 	@caption HTML kiri
@@ -30,8 +34,9 @@
 	@property message type=textarea cols=80 rows=40
 	@caption Sisu
 
-	@property attachments type=text store=no
+	@property attachments type=relmanager table=objects field=meta method=serialize reltype=RELTYPE_ATTACHMENT props=comment,file
 	@caption Manused
+
 	
 	property send type=submit value=Saada store=no 
 	caption Saada
@@ -39,21 +44,43 @@
 	property aliasmgr type=aliasmgr store=no
 	caption Aliased
 
-	@property msgrid type=hidden store=no
+	@property msgrid type=hidden store=no form=all
 	@caption Msgrid
 
-	@property msgid type=hidden store=no
+	@property msgid type=hidden store=no form=all
 	@caption Msgid
 
-	@property mailbox type=hidden store=no
+	@property mailbox type=hidden store=no form=all
 	@caption Mailbox
+
+	@property cb_part type=hidden store=no form=all
+	@caption Cb part
 
 	classinfo relationmgr=yes
 
 	@groupinfo general submit=no
 	@tableinfo messages index=id master_table=objects master_index=oid
+	
+	@property view_toolbar type=toolbar store=no no_caption=1 form=showmsg
+	@caption Kirja vaatamise toolbar
+
+	@property msg_headers type=text store=no form=showmsg no_caption=1
+	@caption Kirja päised
+
+	@property msg_content type=text store=no form=showmsg no_caption=1
+	@caption Kirja sisu
+
+	@property msg_attachments type=text store=no form=showmsg no_caption=1
+	@caption Manused
+
+	@forminfo showmsg onload=load_remote_message
+	@forminfo showheaders onload=load_remote_message
+
+	@reltype ATTACHMENT value=1 clid=CL_FILE
+	@caption Manus
 
 */
+
 class mail_message extends class_base
 {
 	function mail_message()
@@ -64,253 +91,189 @@ class mail_message extends class_base
 		));
 	}
 
-	// so I have a bunch of fields .. like .. lessay a toolbar .. from, to, reply-to, content .. attachments
-	// I need to show different things based on whether I'm viewing a message, composing a new one
-	// or doing something else fancy .. so how am I going to do that?
-
-
-	// things get a bit complicated by the fact that I need to be able to load an external 
-	// message .. straight from the IMAP server
-
-	// so, how do I go between the change thingie? .. cause change wants to load an internal
-	// object and I do not have an internal object for external messages .. and yet I need
-	// to be able to load and edit them .. geezas, what a mind job
-
-	function callback_load_object($arr)
+	////
+	// !Retrieves a message from specified messenger, specified folder,
+	// with specified id
+	function fetch_message($arr)
 	{
-		if (empty($arr["request"]["mailbox"]) && isset($arr["request"]["id"]))
-		{
-			$this->state = "show";
-			$msgobj = new object($arr["request"]["id"]);
-			$msgdata["to"] = $msgobj->prop("mto");
-			$msgdata["from"] = $msgobj->prop("mfrom");
-			$msgdata["subject"] = $msgobj->name();
-			$msgdata["content"] = $msgobj->prop("message");
-			$msgdata["date"] = $this->time2date($msgobj->modified());
-			$this->local = true;
-			$this->msgdata = $msgdata;
-			return false;
-		};
-		$msgr = get_instance("messenger/messenger_v2");
-		$msgr->set_opt("use_mailbox",$arr["request"]["mailbox"]);
+		$msgr = get_instance(CL_MESSENGER_V2);
+		$msgr->set_opt("use_mailbox",$arr["mailbox"]);
                 $msgr->_connect_server(array(
-                        "msgr_id" => $arr["request"]["msgrid"],
+                        "msgr_id" => $arr["msgrid"],
                 ));
-		$msgrobj = new object($arr["request"]["msgrid"]);
-		
-		$this->act = $arr["request"]["subgroup"];
+                
+		$rv = $msgr->drv_inst->fetch_message(array(
+                                "msgid" => $arr["msgid"],
+                ));
 
-		if ($this->act == "delete")
+		if ($rv && isset($arr["fullheaders"]))
 		{
-			$msgr->drv_inst->delete_msgs_from_folder(array($arr["request"]["msgid"]));
-			print "kustutatud!";
-			print "<script>window.opener.location.reload();</script>";
-			print "<a href='javascript:window.close();'>sulge aken</a>";
-			exit;
+			$rv["fullheaders"] = $msgr->drv_inst->fetch_headers(array(
+				"msgid" => $arr["msgid"],
+			));	
 		};
 
-                $msgdata = $msgr->drv_inst->fetch_message(array(
-                                "msgid" => $arr["request"]["msgid"],
-                ));
+		return $rv;
+			
+	}
 
-		//var_dump($msgdata);
-
+	function load_remote_message($arr)
+	{
+		// now I have to create a connection to a remote object
+		$msgdata = $this->fetch_message(array(
+			"mailbox" => $arr["mailbox"],
+			"msgrid" => $arr["msgrid"],
+			"msgid" => $arr["msgid"],
+			"fullheaders" => $arr["viewmode"] == "headers",
+		));
+		
 		if (empty($msgdata))
 		{
 			print "couldn't retrieve message " . $arr["request"]["msgid"] . ", perhaps it has been deleted or moved?<bR>";
 			die();
 		};
 
-		// kui ma nüüd vastan, siis ....
-		if ($this->act == "reply")
+		if ($arr["viewmode"] == "headers")
 		{
-			$msgdata["to"] = $msgdata["reply_to"];
-			$msgdata["from"] = $msgrobj->prop("fromname");
-			$msgdata["subject"] = "Re: " . $msgdata["subject"];
-			$msgdata["content"] = "\n\n\n" . str_replace("\n","\n> ",$msgdata["content"]);
-		}
-		elseif ($this->act == "reply2")
-		{
-			$msgdata["to"] = $msgdata["reply_to"];
-			$msgdata["from"] = $msgrobj->prop("fromname");
-			$msgdata["subject"] = "Re: " . $msgdata["subject"];
-			$msgdata["content"] = "";
-			$this->act = "reply";
-		}
-		elseif ($this->act == "reply3")
-		{
-			$addrs = explode(",",$msgdata["to"]);
-			$addrs = array_merge($addrs,explode(",",$msgdata["from"]));
-			$addrs = array_merge($addrs,explode(",",$msgdata["reply_to"]));
-			$uniqs = array_unique($addrs);
-			$msgdata["to"] = join(",",$uniqs);
-			$msgdata["from"] = $msgrobj->prop("fromname");
-			$msgdata["subject"] = "Re: " . $msgdata["subject"];
-			$msgdata["content"] = "\n\n\n" . str_replace("\n","\n> ",$msgdata["content"]);
-			$this->act = "reply";
-		}
-		elseif ($this->act == "forward")
-		{
-			$hdr = "----Forwarded message-----\n";
-			$hdr .= "From: $msgdata[from]\n";
-			$hdr .= "To: $msgdata[to]\n";
-			$hdr .= "Subject: $msgdata[subject]\n";
-			$hdr .= "Date: $msgdata[date]\n\n";
-			$msgdata["to"] = "";
-			$msgdata["from"] = $msgrobj->prop("fromname");
-			$msgdata["subject"] = "Fwd: " . $msgdata["subject"];
-			$msgdata["content"] = "\n\n\n" . $hdr . str_replace("\n","\n> ",$msgdata["content"]);
+			$this->rawheaders = $msgdata["fullheaders"];
 		};
-
-		aw_global_set("title_action",$msgdata["subject"]);
-		
 		$this->msgdata = $msgdata;
-
-		// uue kirja jaoks tuleks uus subaction teha siis on my wild guess
-		if ($arr["request"]["subgroup"] == "show")
-		{
-			$this->state = "show";
-		};
-
-		
 
 	}
 
-	function callback_save_object($arr)
+	// Retrieves a message object from storage and delivers it
+	function send_message($arr)
 	{
-		if ($arr["request"]["subgroup"] == "send")
+		$this->awm = get_instance("aw_mail");
+
+		$msgobj = new object($arr["id"]);
+
+		//$fxt = false;
+
+		// no! I do not need to connect to the server, unless I'm actually saving
+		// something there.
+
+		// this should only need the message id from local filesystem, it then
+		// will read in the object and do the actual delivery
+
+		// the thing is, this is not hard at all, I'm just having some kind of mental block
+		/*
+		if ($arr["request"]["msgrid"])
 		{
-			$this->awm = get_instance("aw_mail");
+			$msgr = get_instance(CL_MESSENGER_V2);
+			$msgr->set_opt("use_mailbox",$arr["request"]["mailbox"]);
+			$msgr->_connect_server(array(
+				"msgr_id" => $arr["request"]["msgrid"],
+			));
 
-			// hurrah, but I do need a way to save this message to a local
-			// folder and can you please tell me just how the fuck am I supposed
-			// to do this?
+			$msgrobj = new object($arr["request"]["msgrid"]);
+			//$outbox = $msgrobj->prop("msg_outbox");
+			$arr["request"]["parent"] = $msgrobj->prop("msg_outbox");
+			$fxt = true;
+		};	
+		*/
 
-			// aha .. we just check whether this account has any local folders
-			// set to be used as outbox
-
-			// what should I do in situations where I do not have a messenger?
-			// Like when I'm sending from a list for example
-
-			$fxt = false;
-
-			if ($arr["request"]["msgrid"])
+		$to_addr = $msgobj->prop("mto");
+		// jesus fucking christ, I hate this approach
+		// now I need to fix sending from lists as well. How tha fuck am I going to do that?
+		if (is_numeric($to_addr))
+		{
+			$target_obj = new object($to_addr);
+			if ($target_obj->prop("class_id") == CL_ML_LIST)
 			{
-				$msgr = get_instance("messenger/messenger_v2");
-				$msgr->set_opt("use_mailbox",$arr["request"]["mailbox"]);
-				$msgr->_connect_server(array(
-					"msgr_id" => $arr["request"]["msgrid"],
-				));
-
-				$identities = $msgr->_get_identity_list(array(
-					"id" => $arr["request"]["msgrid"],	
-				));
-				
-				$msgrobj = new object($arr["request"]["msgrid"]);
-				//$outbox = $msgrobj->prop("msg_outbox");
-				$arr["request"]["parent"] = $msgrobj->prop("msg_outbox");
-				$fxt = true;
-			};	
-
-			if (!empty($arr["request"]["parent"]))
-			{
-				$to_addr = $arr["request"]["mto"];
-				if (is_numeric($to_addr))
-				{
-					$target_obj = new object($to_addr);
-					if ($target_obj->prop("class_id") == CL_ML_LIST)
-					{
-                                		$lists = array(":" . $target_obj->prop("name"));
-						$to_addr = join(",",$lists);
-					};
-					$to_list = true;
-				};
-				$arr["request"]["mto"] = $to_addr;
-				// numeric? then it is identity id, otherwise just trust the value in there
-				if (is_numeric($arr["request"]["mfrom"]))
-				{
-					$arr["request"]["mfrom"] = $identities[$arr["request"]["mfrom"]];
-				};
-				$arr["request"]["rawdata"] = $arr["request"];
-				// this should create a message object in local filesystem
-				// wuhuhuhuuu
-				$this->process_data($arr["request"]);
-
-				if ($to_list)
-				{
-					$mllist=get_instance("mailinglist/ml_list");
-					// if sending from messenger, then we are inside a popup
-					// and don't want to display the rest of the list interface 
-					// form (or perhaps I do?)
-					if ($fxt)
-					{
-						$route_back = $this->mk_my_orb("change",array("id" => $target_obj->id(),"mail_id" => $this->id,"group" => "mail_report","cb_part" => 1,"fxt" => 1),"ml_list");
-					}
-					else
-					{
-						$route_back = $this->mk_my_orb("change",array("id" => $target_obj->id(),"mail_id" => $this->id,"group" => "mail_report"),"ml_list");
-					};
-					aw_session_set("route_back",$route_back);
-					// scheduleerib kirjade saatmise
-					$url=$mllist->route_post_message(array("id" => $this->id, "targets" => $lists));
-					Header("Location: $url");
-					die();
-				};
+				$lists = array(":" . $target_obj->prop("name"));
+				$to_addr = join(",",$lists);
 			};
+			$to_list = true;
+		};
 
-			$msg = $arr["request"]["message"];
-
-			if ($arr["request"]["html_mail"])
-                	{
-				$this->awm->create_message(array(
-					"froma" => $identities[$arr["request"]["mfrom"]],
-					"subject" => $arr["request"]["name"],
-					"to" => $arr["request"]["mto"],
-					//"cc" => $cc,
-					"body" => "Kahjuks sinu meililugeja ei oska näidata HTML formaadis kirju",
-				));
-                        	$this->awm->htmlbodyattach(array("data"=>nl2br($msg)));
-                	}
+		if ($to_list)
+		{
+			$mllist = get_instance("mailinglist/ml_list");
+			// if sending from messenger, then we are inside a popup
+			// and don't want to display the rest of the list interface 
+			// form (or perhaps I do?)
+			if ($fxt)
+			{
+				$route_back = $this->mk_my_orb("change",array(
+					"id" => $target_obj->id(),
+					"mail_id" => $this->id,
+					"group" => "mail_report",
+					"cb_part" => 1,
+					"fxt" => 1),
+				"ml_list");
+			}
 			else
 			{
-				$this->awm->create_message(array(
-					"froma" => $arr["request"]["mfrom"],
-					"subject" => $arr["request"]["name"],
-					"to" => $arr["request"]["mto"],
-					//"cc" => $cc,
-					"body" => $msg,
-				));
+				$route_back = $this->mk_my_orb("change",array(
+					"id" => $target_obj->id(),
+					"mail_id" => $this->id,
+					"group" => "mail_report"),
+				"ml_list");
 			};
+			aw_session_set("route_back",$route_back);
+			// scheduleerib kirjade saatmise
+			$url = $mllist->route_post_message(array(
+				"id" => $this->id,
+				"targets" => $lists,
+			));
+			Header("Location: $url");
+			die();
+		};
 
-
-			$this->awm->gen_mail();
-
-			// but I do need to save the message in the Sent items folder!
-			$msgr->drv_inst->store_message(array(
-                                "from" => $identities[$arr["request"]["mfrom"]],
-                                "to" => $arr["request"]["mto"],
-                                "subject" => $arr["request"]["name"],
-                                "message" => $this->awm->bodytext,
-                        ));
-
-                        //mail($arr["request"]["mto"],$arr["request"]["name"],"",$msg);
-
-
-			print "saadetud<p>";
-			print "<a href='javascript:window.close();'>sulge aken</a>";
-			exit;
-
+		if ($msgobj->prop("html_mail") == 1)
+		{
+			$this->awm->create_message(array(
+				"froma" => $msgobj->prop("mfrom"),
+				"subject" => $msgobj->name(),
+				"to" => $msgobj->prop("mto"),
+				"cc" => $msgobj->prop("cc"),
+				"body" => "Kahjuks sinu meililugeja ei oska näidata HTML formaadis kirju",
+			));
+			$this->awm->htmlbodyattach(array(
+				"data" => $msgobj->prop("message"),
+			));
 		}
 		else
 		{
-			// redirect back
-			return $this->mk_my_orb("change",array(
-				"msgrid" => $arr["request"]["msgrid"],
-				"msgid" => $arr["request"]["msgid"],
-				"mailbox" => $arr["request"]["mailbox"],
-				"subgroup" => $arr["request"]["subgroup"],
-			));	
+			$this->awm->create_message(array(
+				"froma" => $msgobj->prop("mfrom"),
+				"subject" => $msgobj->name(),
+				"to" => $msgobj->prop("mto"),
+				"cc" => $msgobj->prop("cc"),
+				"body" => $msgobj->prop("message"),
+			));
 		};
+
+		$conns = $msgobj->connections_from(array(
+			"type" => RELTYPE_ATTACHMENT,
+		));
+
+		$mimeregistry = get_instance("core/aw_mime_types");
+
+
+
+		foreach($conns as $conn)
+		{
+			$to_o = $conn->to();
+			// XXX: is this check correct?
+			if ($to_o->prop("file") == "")
+			{
+				continue;
+			};
+			$realtype = $mimeregistry->type_for_file($to_o->name());
+			$this->awm->fattach(array(
+				"path" => $to_o->prop("file"),
+				"contenttype"=> $mimeregistry->type_for_file($to_o->name()),
+				"name" => $to_o->name(),
+			));
+		};
+
+		$this->awm->gen_mail();
+
+		// but I do need to save the message in the Sent items folder!
+
+		// this is where I need to connect to the remote server! This! And Not Before!
 	}
 
 
@@ -320,15 +283,109 @@ class mail_message extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-			case "comment":
-			case "status":
-				$retval = PROP_IGNORE;
+			case "view_toolbar":
+				$this->view_toolbar(&$data);
+				break;
+	
+			case "msg_headers":
+				$this->read_template("headers.tpl");
+				$rv = "";
+				if (($this->rawheaders))
+				{
+					$rh = $this->rawheaders;
+					$rh = preg_replace("/\n\s/"," ",$rh);
+					$rh = htmlspecialchars($rh);
+					$lines = explode("\n",$rh);
+					foreach($lines as $line)
+					{
+						if (strlen($line) == 0)
+						{
+							continue;
+						};
+						preg_match("/^(.+?):(.*)$/",$line,$m);
+						$this->vars(array(
+							"caption" => $m[1],
+							"content" => $m[2],
+						));
+						if ($m[1] == "Subject")
+						{
+							aw_global_set("title_action",$m[2]);
+						};
+						$rv .= $this->parse("header_line");
+
+
+
+					};
+				}
+				else
+				{
+					$keys = array("from","reply_to","cc","to","subject","date");
+					foreach($this->msgdata as $key => $value)
+					{
+						if (empty($value))
+						{
+							continue;
+						};
+						if (in_array($key,$keys))
+						{
+							$rkey = ucfirst(str_replace("_","-",$key));
+							$value = htmlspecialchars($value);
+							$this->vars(array(
+								"caption" => $rkey,
+								"content" => $value,
+							));
+							if ($rkey == "Subject")
+							{
+								aw_global_set("title_action",$value);
+							};
+							$rv .= $this->parse("header_line");
+						};
+					};
+				};
+				$this->vars(array(
+					"header_line" => $rv,
+				));
+				$data["value"] = $this->parse();
+				break;
+
+			case "msg_content":
+				$data["value"] = nl2br(create_links($this->msgdata["content"]));
+				break;
+
+			case "msg_attachments":
+				if (empty($this->msgdata["attachments"]))
+				{
+					$retval = PROP_IGNORE;
+				}
+				else
+				{
+					$this->read_template("attachment.tpl");
+					foreach($this->msgdata["attachments"] as $num => $pdata)
+					{
+						$this->vars(array(
+							"part_name" => $pdata,
+							"get_part_url" => $this->mk_my_orb("get_part",array(
+								"msgrid" => $arr["request"]["msgrid"],
+								"msgid" => $arr["request"]["msgid"],
+								"mailbox" => $arr["request"]["mailbox"],
+								"part" => $num,
+							),"mail_message","false",true),
+						));
+						$rv .= $this->parse("att_line");
+					};
+					$this->vars(array(
+						"att_line" => $rv,
+					));
+					$data["value"] = $this->parse();
+				};
 				break;
 
 			case "mto":
 				// check whether the messenger object has any connections to 
 				// a list object
-				$msgr = get_instance("messenger/messenger_v2");
+
+				// XXX: this kind of lock-down is bad, ok?
+				$msgr = get_instance(CL_MESSENGER_V2);
 				$opts = array();
 				$msgrobj = new object($arr["request"]["msgrid"]);
 				$outbox = $msgrobj->prop("msg_outbox");
@@ -349,95 +406,24 @@ class mail_message extends class_base
 				}
 				else
 				{
-					$data["value"] = htmlspecialchars($this->msgdata["to"]);
-				};
-
-				if ($this->act == "reply")
-				{
 					$data["type"] == "textbox";
-					$data["value"] = $this->msgdata["to"];
+					//$data["value"] = $this->msgdata["to"];
 				};
 
-				if ($this->state == "show")
-				{
-					$data["type"] = "text";
-					$data["value"] = htmlspecialchars($this->msgdata["to"]);
-				};
 				break;
 
-			case "date":
-				if ($this->state == "show")
-				{
-					$data["value"] = $this->msgdata["date"];
-				}
-				else
-				{
-					$retval = PROP_IGNORE;
-				};
-				break;
-	
-			case "name":
-				$data["value"] = htmlspecialchars($this->msgdata["subject"]);
-				if ($this->state == "show")
-				{
-					$data["type"] = "text";
-				};
+			case "mfrom":
+				$this->gen_identities(&$arr);
 				break;
 
-			case "message":
-				$data["value"] = htmlspecialchars($this->msgdata["content"]);
-				if ($this->state == "show")
-				{
-					$data["value"] = nl2br(create_links($data["value"]));
-					$data["type"] = "text";
-				};
-				break;
-
-			case "mailtoolbar":
-				// aga vaat sellega on nyyd niuke asi, et ta ei peaks salvestama ega
-				// midagi tegema .. ta peaks lihtsalt redirectima tagasi muutmisele. ..
-				if ($this->local)
-				{
-					$retval = PROP_IGNORE;
-				};
-				$this->gen_mail_toolbar(&$data);
-				break;
-
-			case "html_mail":
-				if ($this->state == "show")
-				{
-					$retval = PROP_IGNORE;
-				};
-				break;
-
-			case "attachments":
-				if (empty($this->msgdata["attachments"]))
-				{
-					$retval = PROP_IGNORE;
-				}
-				else
-				{
-					$this->read_template("attachment.tpl");
-					foreach($this->msgdata["attachments"] as $num => $pdata)
-					{
-						$this->vars(array(
-							"part_name" => $pdata,
-							"get_part_url" => $this->mk_my_orb("get_part",array(
-								"msgrid" => $arr["request"]["msgrid"],
-								"msgid" => $arr["request"]["msgid"],
-								"mailbox" => $arr["request"]["mailbox"],
-								"part" => $num,
-							),"mail_message","false",true),
-						));
-						$rv .= $this->parse();
-					};
-					$data["value"] = $rv;
-				};
+			case "edit_toolbar":
+				$this->edit_toolbar(&$data);
 				break;
 
 			case "msgrid":
 			case "msgid":
 			case "mailbox":
+			case "cb_part":
 				$data["value"] = $arr["request"][$data["name"]];
 				break;
 
@@ -445,36 +431,17 @@ class mail_message extends class_base
 		return $retval;
 	}
 
+	/*
 	function set_property($arr)
 	{
 		$retval = PROP_OK;
 		$data = &$arr["prop"];
 		switch($data["name"])
 		{
-			case "status":
-				$data["value"] = STAT_ACTIVE;
-				break;
-	
-			case "send":
-				if ($arr["form_data"]["send"])
-				{
-					$this->deliver_message = true;
-				};
-				break;
-
-					
-			
 		};
 		return $retval;
 	}
-
-	function callback_post_save($arr)
-	{
-		if ($this->deliver_message)
-		{
-			$this->deliver(array("id" => $arr["id"]));
-		};
-	}
+	*/
 
 	// basically the same as deliver, except that this one is _not_
 	// called through ORB, and you can specify replacements here
@@ -511,67 +478,126 @@ class mail_message extends class_base
 	}
 				
 			
-	function gen_mail_toolbar($arr)
+	function edit_toolbar($arr)
 	{
-		// urk .. what a mind job
 		$tb = &$arr["toolbar"];
-		if ($this->act != "reply" && $this->act != "forward" && $this->act != "")
-		{
-			$tb->add_button(array(
-				"name" => "reply",
-				"img" => "mail_reply.gif",
-				"url" => "javascript:document.changeform.subgroup.value='reply';document.changeform.submit();",
-				"tooltip" => "Vasta/kvoodi",
-			));
-	
-			/*
-			$tb->add_button(array(
-				"name" => "reply2",
-				"url" => "javascript:document.changeform.subgroup.value='reply2';document.changeform.submit();",
-				"tooltip" => "Vasta/tühjalt",
-			));
-			*/
-			
-			$tb->add_button(array(
-				"name" => "reply3",
-				"img" => "mail_reply_all.gif",
-				"url" => "javascript:document.changeform.subgroup.value='reply3';document.changeform.submit();",
-				"tooltip" => "Vasta/kõigile",
-			));
+		// now, how do I figure out that the send button was clicked in my set_property calls?
+		// it needs to act exactly like save in every aspect, except that it has to 
+		// send the message as well
+		$tb->add_button(array(
+			"name" => "send",
+			"action" => "mail_send",
+			"img" => "mail_send.gif",
+			"tooltip" => "Saada",
+		));
 
-			$tb->add_separator();
-			
-			$tb->add_button(array(
-				"name" => "forward",
-				"url" => "javascript:document.changeform.subgroup.value='forward';document.changeform.submit();",
-				"img" => "mail_fwd.gif",
-				"tooltip" => "Forward",
-			));
+		$tb->add_button(array(
+			"name" => "save",
+			"action" => "",
+			"img" => "save.gif",
+			"tooltip" => "Salvesta",
+		));
 
-			$tb->add_separator();
-
-			$tb->add_button(array(
-				"name" => "delete",
-				"url" => "javascript:document.changeform.subgroup.value='delete';document.changeform.submit();",
-				"img" => "delete.gif",
-				"tooltip" => "Kustuta",
-			));
-
-		};
-
-		if ($this->act != "show")
-		{
-			$tb->add_button(array(
-				"name" => "send",
-				"url" => "javascript:document.changeform.subgroup.value='send';document.changeform.submit();",
-				"tooltip" => "Saada",
-			));
-		};
 	}
+
+	function view_toolbar($arr)
+	{
+		$tb = &$arr["toolbar"];
+		$tb->add_button(array(
+			"name" => "reply",
+			"action" => "mail_reply",
+			"tooltip" => "Vasta",
+			"img" => "mail_reply.gif",
+		));
+
+		$tb->add_button(array(
+			"name" => "reply3",
+			"action" => "mail_reply_all",
+			"tooltip" => "Vasta/kõigile",
+			"img" => "mail_reply_all.gif",
+		));
+
+		$tb->add_button(array(
+			"name" => "forward",
+			"action" => "mail_forward",
+			"tooltip" => "Edasta",
+			"img" => "mail_fwd.gif",
+		));
+
+		$tb->add_separator();
+		$tb->add_button(array(
+			"name" => "delete",
+			"action" => "mail_delete",
+			"confirm" => "Kustutada see kiri? (tagasi ei saa!)",
+			"tooltip" => "Kustuta",
+			"img" => "delete.gif",
+		));
+		
+
+
+		$pl = get_instance(CL_PLANNER);
+		$user_cal = $pl->get_calendar_for_user(array(
+			"uid" => aw_global_get("uid"),
+		));
+
+		if (is_oid($user_cal))
+		{
+			$tb->add_separator();
+			$tb->add_menu_button(array(
+				"name" => "calendar",
+				"img" => "icon_cal_today.gif",
+			));
+			$ev_classes = $pl->get_event_classes();
+
+			$clinf = aw_ini_get("classes");
+			foreach($ev_classes as $clid)
+			{
+				$tb->add_menu_item(array(
+					"parent" => "calendar",
+					"text" => $clinf[$clid]["name"],
+					"action" => "register_event",
+				
+					// tegelikult see action võib lihtsalt kuvada
+					// teate "lisatud" .. .. kasutaja ise
+					// vaatab oma kalendrist siis, et mis värk
+					// on. uh.huh	
+				));
+			};
+		};
+
+		// nii ja huvitav, kuidas ma need URLid siis nüüd koostan, mis
+		// mingi sündmuse kalendrisse topivad?
+
+		// põmst ju üsna lihtne, ma nimelt pean leidma kasutaja kalendri,
+		// leidma selle sündmuste kataloogi, tegema sinna objekti
+		// ja optionally suunama selle sündmuse edimise vormile
+
+		// I would prefer that functionality to be in the planner class, eh?
+
+		$tb->add_separator();
+
+		$tb->add_menu_button(array(
+			"name" => "viewmode",
+			"img" => "preview.gif",
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "viewmode",
+			"text" => "Tavaline",
+			"url" => aw_url_change_var("viewmode",""),
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "viewmode",
+			"text" => "Kõik päised",
+			"url" => aw_url_change_var("viewmode","headers"),
+		));
+	}
+
 
 	/**  
 		
-		@attrib name=deliver params=name default="0"
+		@attrib name=deliver params=name 
 		
 		@param id required type=int
 		
@@ -606,19 +632,26 @@ class mail_message extends class_base
 		die();
 	}
 
-	function callback_get_identities($arr)
+	function callback_mod_retval($arr)
 	{
-		$rv = $arr["prop"];
+		$args = &$arr["args"];
+		if ($arr["request"]["msgrid"])
+		{
+			$args["msgrid"] = $arr["request"]["msgrid"];
+		};
+		if ($arr["request"]["cb_part"])
+		{
+			$args["cb_part"] = $arr["request"]["cb_part"];
+		};
+	}
 
-		if ($this->state == "show")
+	function gen_identities($arr)
+	{
+		$rv = &$arr["prop"];
+		// grr, I hate this
+		if (isset($arr["request"]["msgrid"]))
 		{
-			$rv["value"] = htmlspecialchars($this->msgdata["from"]);
-			$rv["type"] = "text";
-		}
-		elseif (isset($arr["request"]["msgrid"]))
-		{
-			$msgr = get_instance("messenger/messenger_v2");
-			$rv["type"] = "select";
+			$msgr = get_instance(CL_MESSENGER_V2);
 			$opts = $msgr->_get_identity_list(array(
 				"id" => $arr["request"]["msgrid"],
 			));
@@ -626,17 +659,13 @@ class mail_message extends class_base
 			{
 				$rv["options"][$key] = htmlspecialchars($item);
 			};
-		}
-		else
-		{
-			$rv["type"] = "textbox";
 		};
 		return array($rv);
 	}
 	
 	/** Can be used to download message parts 
 		
-		@attrib name=get_part params=name default="0"
+		@attrib name=get_part params=name 
 		
 		@param msgrid required type=int
 		@param msgid required type=int
@@ -652,7 +681,7 @@ class mail_message extends class_base
 	function get_part($arr)
 	{
 		$msgid = $arr["msgid"];
-		$msgr = get_instance("messenger/messenger_v2");
+		$msgr = get_instance(CL_MESSENGER_V2);
 		$msgr->set_opt("use_mailbox",$arr["request"]["mailbox"]);
                 $msgr->_connect_server(array(
                         "msgr_id" => $arr["msgrid"],
@@ -662,6 +691,281 @@ class mail_message extends class_base
 			"msgid" => $msgid,
 			"part" => $arr["part"],
 		));
+	}
+	
+	/** Creates a message draft
+		
+		@attrib name=create_draft params=name 
+		
+		@param msgrid required type=int
+		@param cb_part optional type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	function create_draft($arr)
+	{
+		$msgobj = $this->_create_draft(array(
+			"msgrid" => $arr["msgrid"],
+		));
+	
+		$arr["id"] = $msgobj->id();
+		return $this->_gen_edit_url($arr);
+	}
+
+	/** Creates a calendar event from a message object 
+		
+		@attrib name=register_event
+
+	**/
+	function register_event($arr)
+	{
+		$msgdata = $this->fetch_message(array(
+			"mailbox" => $arr["mailbox"],
+			"msgrid" => $arr["msgrid"],
+			"msgid" => $arr["msgid"],
+		));
+
+		// mind huvitab subject ja content ja from
+		$hdr = "";
+		$hdr .= "From: $msgdata[from]\n";
+		$hdr .= "To: $msgdata[to]\n";
+		$hdr .= "Subject: $msgdata[subject]\n";
+		$hdr .= "Date: $msgdata[date]\n\n";
+
+		$name = $msgdata["subject"];
+		$content = $hdr . "\n\n" . $msgdata["content"];
+
+		// now, how do I create the event?
+
+		$pl = get_instance(CL_PLANNER);
+		$user_cal = $pl->get_calendar_for_user(array(
+			"uid" => aw_global_get("uid"),
+		));
+
+		if (!is_oid($user_cal))
+		{
+			die("err, ei leidnud kalendrit");
+		};
+
+		$user_cal = new object($user_cal);
+
+		$event_folder = $user_cal->prop("event_folder");
+		$clid = CL_TASK;
+
+		$o = new object;
+		$o->set_class_id($clid);
+		$o->set_parent($user_cal->prop("event_folder"));
+		$o->set_status(STAT_ACTIVE);
+		$o->set_name($name);
+		$o->set_prop("content",$content);
+		$o->set_prop("start1",time());
+		$o->save();
+
+		print "Toimetus lisatud<br>";
+
+		$arr["id"] = $arr["msgid"];
+		
+		return $this->_gen_edit_url($arr);
+
+
+	}
+	
+	/** Deletes a message 
+		
+		@attrib name=mail_delete
+
+	**/
+	function mail_delete($arr)
+	{
+		$msgr = get_instance(CL_MESSENGER_V2);
+		$msgr->set_opt("use_mailbox",$arr["mailbox"]);
+                $msgr->_connect_server(array(
+                        "msgr_id" => $arr["msgrid"],
+                ));
+		$msgr->drv_inst->delete_msgs_from_folder(array($arr["msgid"]));
+		print "kustutatud!";
+		print "<script>window.opener.location.reload();</script>";
+		print "<a href='javascript:window.close();'>sulge aken</a>";
+		exit;
+	}
+	
+	/** Sends a message stored in local folders
+		
+		@attrib name=mail_send
+
+	**/
+	function mail_send($arr)
+	{
+		$this->id_only = true;
+	
+		// mfrom is a select box containing all the different identities for
+		// this messenger, but I need the textual value for it
+		// field, I'll resolve the numeric 
+		if (is_numeric($arr["mfrom"]) && isset($arr["msgrid"]))
+		{
+			$msgr = get_instance(CL_MESSENGER_V2);
+			$identities = $msgr->_get_identity_list(array(
+				"id" => $arr["msgrid"],	
+			));
+			$arr["mfrom"] = $identities[$arr["mfrom"]];
+		};
+
+
+		// this is the place where I need to resolve the from address
+		$msgid = $this->submit($arr);
+
+		$this->send_message(array(
+			"id" => $msgid,
+		));
+
+		// I'll also have to move the message from drafts folder to the outbox
+		// if there is such a thing that is
+
+		// would be nice to set the replied flag for the original message too
+		// but I really don't know how on earth I'm going to do that
+		/*
+		$msgr->drv_inst->store_message(array(
+			"from" => $identities[$arr["request"]["mfrom"]],
+			"to" => $arr["request"]["mto"],
+			"subject" => $arr["request"]["name"],
+			"message" => $this->awm->bodytext,
+		));
+		*/
+		
+		print "saadetud<p>";
+		print "<a href='javascript:window.close();'>sulge aken</a>";
+		exit;
+
+	}
+
+	////
+	// !Creates a draft message, needs messenger id, returns the id of the empty message body
+	function _create_draft($arr)
+	{
+		$msgr_obj = new object($arr["msgrid"]);
+		$drafts_folder = $msgr_obj->prop("msg_drafts");
+		$o = new object();
+		$o->set_class_id($this->clid);
+		$o->set_parent($drafts_folder);
+		$o->set_status(STAT_ACTIVE);
+		$o->save();
+		return $o;
+	}
+
+	function _gen_edit_url($arr)
+	{
+		return $this->mk_my_orb("change",array(
+			"id" => $arr["id"],
+			"msgrid" => $arr["msgrid"],
+			"cb_part" => $arr["cb_part"],
+		));
+	}
+	
+	/** Prepares a message for replying
+		
+		@attrib name=mail_reply  
+	**/
+	function mail_reply($arr)
+	{
+		$msgdata = $this->fetch_message(array(
+			"mailbox" => $arr["mailbox"],
+			"msgrid" => $arr["msgrid"],
+			"msgid" => $arr["msgid"],
+		));
+
+		$msgobj = $this->_create_draft(array(
+			"msgrid" => $arr["msgrid"],
+		));
+
+		$msgobj->set_name("Re: " . $msgdata["subject"]);
+		$msgobj->set_prop("mto",!empty($msgdata["reply_to"]) ? $msgdata["reply_to"] : $msgdata["from"]);
+		$msgobj->set_prop("message","\n\n\n> " . str_replace("\n","\n> ",$msgdata["content"]));
+		$msgobj->save();
+
+		$arr["id"] = $msgobj->id();
+		return $this->_gen_edit_url($arr);
+	}
+	
+	/** Prepares a message for replying to all addresses
+		
+		@attrib name=mail_reply_all  
+	**/
+	function mail_reply_all($arr)
+	{
+		$msgdata = $this->fetch_message(array(
+			"mailbox" => $arr["mailbox"],
+			"msgrid" => $arr["msgrid"],
+			"msgid" => $arr["msgid"],
+		));
+
+		$msgobj = $this->_create_draft(array(
+			"msgrid" => $arr["msgrid"],
+		));
+		// Replying to all
+		//  1. from/reply_to becomes to
+		//  2. to goes to cc
+		//  3. cc goes to cc
+		$addrs1 = explode(",",$msgdata["to"]);
+		if ($msgdata["cc"])
+		{
+			$addrs1 = array_merge($addrs1,explode(",",$msgdata["cc"]));
+		};
+		// XXX: implement something to exclude any addresses in the identities 
+		// from the aadress list
+		$to = $msgdata["reply_to"] ? $msgdata["reply_to"] : $msgdata["from"];
+		$uniqs = array_unique($addrs1);
+
+		// try remove to aadress from CC
+		$rf = array_search($to,$uniqs);
+		if ($rf !== false)
+		{
+			unset($uniqs[$rf]);
+		};
+
+		$msgobj->set_prop("mto",$to);
+		$msgobj->set_prop("cc",join(",",$uniqs));
+		$msgobj->set_name("Re: " . $msgdata["subject"]);
+		$msgobj->set_prop("message","\n\n\n> " . str_replace("\n","\n> ",$msgdata["content"]));
+		$msgobj->save();
+		
+		$arr["id"] = $msgobj->id();
+		return $this->_gen_edit_url($arr);
+		
+	}
+	
+	/** Prepares a message for forwarding
+		
+		@attrib name=mail_forward
+	**/
+	function mail_forward($arr)
+	{
+		$msgdata = $this->fetch_message(array(
+			"mailbox" => $arr["mailbox"],
+			"msgrid" => $arr["msgrid"],
+			"msgid" => $arr["msgid"],
+		));
+
+		$msgobj = $this->_create_draft(array(
+			"msgrid" => $arr["msgrid"],
+		));
+		$this->_prepare_message($arr);
+
+		$hdr = "----Forwarded message-----\n";
+		$hdr .= "> From: $msgdata[from]\n";
+		$hdr .= "> To: $msgdata[to]\n";
+		$hdr .= "> Subject: $msgdata[subject]\n";
+		$hdr .= "> Date: $msgdata[date]\n\n";
+
+		$msgobj->set_name("Fwd: " . $msgdata["subject"]);
+		$msgobj->set_prop("message","\n\n\n" . $hdr . "> " . str_replace("\n","\n> ",$msgdata["content"]));
+		$msgobj->save();
+		
+		$arr["id"] = $msgobj->id();
+		return $this->_gen_edit_url($arr);
 	}
 
 	////

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_config.aw,v 1.2 2003/09/11 13:28:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_config.aw,v 1.3 2004/02/11 17:02:19 duke Exp $
 // messenger_config.aw - Messengeri config 
 /*
 
@@ -76,9 +76,6 @@ class messenger_config extends class_base
 			"clid" => CL_MESSENGER_CONFIG
 		));
 	}
-
-	//////
-	// class_base classes usually need those, uncomment them if you want to use them
 
 	function get_property($args)
 	{

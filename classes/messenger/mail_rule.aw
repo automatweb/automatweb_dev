@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_rule.aw,v 1.3 2004/01/13 14:11:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_rule.aw,v 1.4 2004/02/11 17:02:19 duke Exp $
 // mail_rule.aw - Maili ruul 
 /*
 @classinfo syslog_type=ST_MAIL_RULE relationmgr=yes
@@ -47,7 +47,11 @@ class mail_rule extends class_base
 				{
 					$msgr = $msgr_obj->instance();
 					$msgr->_connect_server(array("msgr_id" => $msgr_obj->id()));
-					$this->folders = $msgr->drv_inst->list_folders();
+					$tmp = $msgr->drv_inst->list_folders();
+					foreach($tmp as $item)
+					{
+						$this->folders[$item["name"]] = $item["name"];
+					};
 				};
 			};
 		};
