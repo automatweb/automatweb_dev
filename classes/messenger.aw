@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.45 2001/06/01 05:35:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.46 2001/06/01 05:58:39 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -619,23 +619,6 @@ class messenger extends menuedit_light
 	}
 
 	
-	//// 
-	// !Loob tühja teate
-	// Sel hetkel, kui kasutaja vajutab linki "Uus teade" tehakse koigepealt tema drafts folderisse
-	// uus objekt CL_MESSAGE (et oleksid voimalikud valikud a la Salvesta, objektide lisamine, jne...)
-	// parent - folderi id, mille alla objekt luua
-	// tegelikult see funktsionaalsus kuulub üleüldse draiveri juurde
-	// Tagastab äsja loodud objekti ID
-	function _create_empty($args = array())
-	{
-		$oid = $this->new_object(array(
-				"parent" => $args["parent"],
-				"class_id" => CL_MESSAGE),false); // hetkel ACL-i teate jaoks ei looda
-		$q = "INSERT INTO messages (id,draft) VALUES ('$oid',1)";
-		$this->db_query($q);
-		return $oid;
-	}
-
 	////
 	// !Teeb kasutaja drafts folderisse uue tyhja teate, ning suunab siis ymber
 	// edimisvormi
@@ -1604,26 +1587,6 @@ class messenger extends menuedit_light
 						"aftpage" => "accounts");
 				break;
 
-			case "identities":
-				$tpl = "identities.tpl";
-				$this->read_template($tpl);
-				$c = "";
-				$idconf = $this->msgconf["msg_identities"];
-				if (is_array($idconf))
-				{
-					foreach($idconf as $idid => $idval)
-					{
-						$this->vars(array(
-								"id" => $idid,
-								"name" => $idval["name"],
-								"surname" => $idval["surname"],
-								"email" => $idval["email"],
-						));
-						$c .= $this->parse("line");
-					};
-				};
-				$vars = array("line" => $c);
-				break;
 
 			default:
 				$tpl = "conf_general.tpl";
@@ -1717,72 +1680,6 @@ class messenger extends menuedit_light
 		
 	}
 
-	////
-	// !Kuvab uue identiteedi lisamis- voi olemasoleva muutmisvormi
-	function edit_identity($args = array())
-	{
-		$menu = $this->gen_msg_menu(array(
-				"activelist" => array("configure","identities"),
-				));
-		$this->read_template("edit_identity.tpl");
-		extract($args);
-		if (isset($id))
-		{
-			$vars = $this->msgconf["msg_identities"][$id];
-			$title = "Muuda identiteeti";
-			$this->vars($vars);
-		}
-		else
-		{
-			$title = "Uus identiteet";
-		};
-		$this->vars(array(
-				"menu" => $menu,
-				"title" => $title,
-				"reforb" => $this->mk_reforb("submit_identity",array("id" => $id)),
-			));
-		return $this->parse();
-	}
-
-	////
-	// !Submitib identiteedi lisamis- või muutmisvormist tulnud info
-	function submit_identity($args = array())
-	{
-		$idlist = $this->msgconf["msg_identities"];
-		if (!is_array($idlist))
-		{
-			$idlist = array();
-		};
-		$datablock = array(
-				"name" => $args["name"],
-				"surname" => $args["surname"],
-				"email" => $args["email"],
-			);
-		if (isset($args["id"]))
-		{
-			$idlist[$args["id"]] = $datablock;
-		}
-		else
-		{
-			$idlist[] = $datablock;
-		};
-		$this->msgconf["msg_identities"] = $idlist;
-		classload("users");
-		$users = new users();
-		$users->set_user_config(array(
-						"uid" => UID,
-						"key" => "messenger",
-						"value" => $this->msgconf,
-					));
-		global $status_msg;
-		$status_msg = (isset($args["id"])) ? "Identiteet on salvestatud" : "Identiteet on lisatud";
-		session_register("status_msg");
-		$ref = $this->mk_site_orb(array(
-				"action" => "configure",
-				"page" => "identities",
-		));
-		return $ref;
-	}
 
 	////
 	// !Kuvab olemasoleva voi uue signatuuri muutmis/lisamisvormi
@@ -1985,6 +1882,9 @@ class messenger extends menuedit_light
 		$this->read_template("pop3conf.tpl");
 		$this->vars(array(
 			"name" => $pop3conf[$id]["name"],
+			"name1" => $pop3conf[$id]["name1"],
+			"surname" => $pop3conf[$id]["surname"],
+			"address" => $pop3conf[$id]["address"],
 			"server" => $pop3conf[$id]["server"],
 			"uid" => $pop3conf[$id]["uid"],
 			"password" => $pop3conf[$id]["password"],
@@ -2002,6 +1902,9 @@ class messenger extends menuedit_light
 		$conf = $this->msgconf;
 		$pop3conf = $conf["msg_pop3servers"];
 		$confblock = array(
+					"name1" => $name1,
+					"surname" => $surname,
+					"address" => $address,
 					"name" => $name,
 					"server" => $server,
 					"uid" => $uid,
