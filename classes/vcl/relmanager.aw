@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/relmanager.aw,v 1.9 2004/05/06 12:32:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/relmanager.aw,v 1.10 2004/05/20 11:15:02 duke Exp $
 /*
 // !Displays a table of relations and adds one line with edit fields to allow adding
 // of new objects
@@ -285,6 +285,18 @@ class relmanager extends aw_template
 			"to" => $obj_id,
 			"reltype"=> $arr["prop"]["relinfo"]["value"],
 		));
+
+		// now check, how many connections we have
+		$conns = $arr["obj_inst"]->connections_from(array(
+			"type" => $arr["prop"]["relinfo"]["value"],
+		));
+
+		// set the newly created connection as the value of the element, if this was the first entry
+		if (sizeof($conns) == 1)
+		{
+			$arr["prop"]["value"] = $obj_id;
+		}
+
 	}
 
 };
