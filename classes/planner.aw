@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.105 2003/04/11 11:15:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.106 2003/04/16 10:40:58 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -918,6 +918,7 @@ class planner extends class_base
 				"type" => $type,
 			));
 
+
 			// recalculate di, it can change if we honor the 
 			// only_days_with_events setting
 			if (isset($this->start_date))
@@ -989,6 +990,7 @@ class planner extends class_base
 			
 			case "month":
 				$this->type = CAL_SHOW_MONTH;
+			
 				$content = $this->disp_month(array("events" => $events,"di" => $di,"tpl" => "disp_week.tpl"));
 				$caption = sprintf("%s",$this->time2date($di["start"],7));
 				$start = $date;
@@ -1341,11 +1343,12 @@ class planner extends class_base
 		$results = array();
 		$ia = get_instance("image");
 		$count = $this->num_rows();
+		$almgr = get_instance("aliasmgr");
 		$next_active = false;
 		if (($type == "day") && ($count == 0) && $conf["only_days_with_events"])
 		{
 			// this is where I have to find the next active event
-			$q = "SELECT name,class_id,parent,planner.*,documents.lead,documents.moreinfo,documents.content FROM objects LEFT JOIN planner ON (objects.brother_of = planner.id) LEFT JOIN documents ON (objects.brother_of = documents.docid) WHERE status != 0 AND parent IN ($calstring) AND (start >= '$start') LIMIT 1";
+			$q = "SELECT name,class_id,parent,planner.*,documents.lead,documents.moreinfo,documents.content FROM objects LEFT JOIN planner ON (objects.brother_of = planner.id) LEFT JOIN documents ON (objects.brother_of = documents.docid) WHERE objects.status != 0 AND parent IN ($calstring) AND (start >= '$start') LIMIT 1";
 			$this->db_query($q);
 			$next_active = true;
 
@@ -1390,6 +1393,8 @@ class planner extends class_base
 				));
 			};
 			$row["title"] = $row["name"];
+			$almgr->parse_oo_aliases($row["id"],$row["lead"]);
+			$almgr->parse_oo_aliases($row["id"],$row["moreinfo"]);
 			$results[$gx][] = $row;
 		}
 		return $results;
@@ -2268,15 +2273,6 @@ class planner extends class_base
 				));
 				if (($e["class_id"] == CL_DOCUMENT) || ($e["class_id"] == CL_BROTHER_DOCUMENT))
 				{
-					/*
-					$daylink = $this->mk_my_orb("view",array(
-						"section" => $e["parent"],
-						"cal" => $e["parent"],
-						"id" => $this->id,
-						"type" => "day",
-						"date" => date("d-m-Y",$e["start"]),
-					));
-					*/
 					$daylink = $this->cfg["baseurl"] . "/section=$e[parent]/cal=$e[parent]/date=" . date("d-m-Y",$e["start"]);
 					$section = $e["id"];
 					if ($this->type == CAL_SHOW_DAY)
@@ -2286,12 +2282,10 @@ class planner extends class_base
 							  "tpl" => "doc_event.tpl",
 							  "docid" => $e["id"],
 							  "vars" => array("edate" => date("d-m-Y",$e["start"])),
-
 						));
 
 					};
 				};
-
 
                                 $this->vars(array(
 					"event_content" => $pv,
@@ -2420,6 +2414,7 @@ class planner extends class_base
 		$head = "";
 		$cnt = "";
 		$d1 = date("d",$di["start"]);
+		$workdays = explode(",",$this->cfg["workdays"]);
 		for ($i = 0; $i <= 6; $i++)
 		{
 			$thisday = strtotime("+$i days",$di["start"]);
@@ -2475,6 +2470,7 @@ class planner extends class_base
 					"hcell" => strtoupper($lcw) . " " . date("d-M",$thisday),
 					"hcell_weekday" => strtoupper($lcw),
 					"hcell_weekday_en" => date("D",$thisday),
+					"day_message" => in_array($w,$workdays) ? $this->cfg["workday_message"] : $this->cfg["freeday_message"],
 					"daynum" => $d,
 					"hcell_date" =>  date("d.m.",$thisday),
 					"dayorblink" => $day_orb_link,
