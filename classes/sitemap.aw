@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/sitemap.aw,v 2.3 2001/07/28 03:27:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/sitemap.aw,v 2.4 2001/10/14 13:38:09 cvs Exp $
 // sitemap.aw - Site Map
 classload("menuedit");
 class sitemap extends aw_template 
@@ -18,12 +18,30 @@ class sitemap extends aw_template
 		$m->db_listall(" objects.status = 2 ");
 		while ($row = $m->db_next())
 		{
-			$this->mar[$row[parent]][] = $row;
+//			$can = $this->can("view",$row["oid"]);
+			$can = true;
+			if ($GLOBALS["uid"] == "" && $GLOBALS["no_show_users_only"])
+			{
+				$meta = $this->get_object_metadata(array(
+					"metadata" => $row["metadata"]
+				));
+				if ($meta["users_only"] == 1)
+				{
+					$can = false;
+				}
+			}
+
+			if ($can)
+			{
+				$this->mar[$row[parent]][] = $row;
+			}
 		}
 
 		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_DOCUMENT." AND status = 2 AND lang_id = ".$GLOBALS["lang_id"]." ORDER BY jrk");
 		while ($row = $this->db_next())
-			$this->mar[$row[parent]][] = $row;
+		{
+				$this->mar[$row[parent]][] = $row;
+		};
 
 		$parent = $GLOBALS["sitemap_rootmenu"];
 		return $this->req_map($parent);
