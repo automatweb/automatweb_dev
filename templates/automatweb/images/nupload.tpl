@@ -22,6 +22,10 @@
 	<td class="fform"><input type="checkbox" name="set_period" value=1></td>
 </tr>
 <tr>
+	<td class="fcaption">Millise men&uuml;&uuml; alla?</td>
+	<td class="fform"><select name='parent' class='small_button'>{VAR:menus}</select></td>
+</tr>
+<tr>
 	<td class="fform" colspan="2" align="center">
 	{VAR:reforb}
 	<input type="submit" value="{VAR:LC_DOCUMENT_PICT_ADD}">
