@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.58 2004/07/19 14:01:08 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.59 2004/07/20 12:37:37 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -1707,6 +1707,7 @@ class crm_company extends class_base
 						"link" => $link,
 						"modifiedby" => $item->prop("modifiedby"),
 						"icon" => $icon,
+						'comment' => $item->comment(),
 					),
 				));
 			};
