@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.5 2002/11/07 10:52:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.6 2002/11/14 17:55:30 duke Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -27,7 +27,7 @@ class html extends aw_template
 	function select($args = array())
 	{
 		extract($args);
-		if ($value)
+		if (!$selected && $value)
 		{
 			$selected = $value;
 		};
@@ -99,6 +99,10 @@ class html extends aw_template
 	{
 		extract($args);
 		$checked = checked($checked);
+		if (!$value)
+		{
+			$value = 1;
+		};
 		return "<input type='checkbox' name='$name' value='$value' $checked/>\n";
 	}
 
