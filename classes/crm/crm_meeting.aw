@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.23 2005/01/11 15:01:44 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.24 2005/01/12 12:51:46 ahti Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -297,21 +297,31 @@ class crm_meeting extends class_base
 	/**
       @attrib name=submit_delete_participants_from_calendar
       @param id required type=int acl=view
+	  @param group optional
+	  @param check required
    **/
    function submit_delete_participants_from_calendar($arr)
    {
-		if(is_array($arr['check']))
+		if(is_array($arr["check"]))
 		{
-			foreach($arr['check'] as $person_id)
+			foreach($arr["check"] as $person_id)
 			{
 				$obj = new object($person_id);
-				$ev = obj($arr["event_id"]);
-				if ($obj->is_connected_to(array("to" => $ev->brother_of())))
+				if($obj->class_id() == CL_CRM_PERSON)
 				{
-					$obj->disconnect(array('from'=>$ev->brother_of()));
+					$ev = obj($arr["event_id"]);
+					if ($obj->is_connected_to(array("to" => $ev->brother_of())))
+					{
+						$obj->disconnect(array("from" => $ev->brother_of()));
+					}
+				}
+				else
+				{
+					$obj->delete();
 				}
 			}
-		}		
+		}
+		return html::get_change_url($arr["id"], array("group" => $arr["group"]));
    }
 
 	/**

@@ -23,16 +23,16 @@
 <!-- END SUB: COLHEADER -->
 	</tr>
 	<!-- SUB: EVENT -->
-	<tr class="cal_rida{VAR:fuck}">
+	<tr class="cal_rida{VAR:num}">
 	<!-- SUB: CELL -->
 		<td>{VAR:cell}</td>
 	<!-- END SUB: CELL -->
-<!--
-	<tr><td colspan="4" class="cal_rida{VAR:fuck}">
-		MÄRKUS: {VAR:fulltext}
-	</td></tr>
--->
 	</tr>
+	<!-- SUB: FULLTEXT -->
+	<tr><td colspan="4" class="cal_rida{VAR:num}">
+		{VAR:fulltext_name}: {VAR:fulltext}
+	</td></tr>
+	<!-- END SUB: FULLTEXT -->
 <!-- END SUB: EVENT -->
 <tbody>
 </table>

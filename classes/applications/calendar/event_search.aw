@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.11 2005/01/11 13:43:15 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.12 2005/01/12 12:51:45 ahti Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -551,26 +551,25 @@ class event_search extends class_base
 		$search = array();
 		load_vcl("date_edit");
 		$dt = new date_edit();
-		
 		$start_tm = $dt->get_timestamp($arr["start_date"]);
 		$end_tm = $dt->get_timestamp($arr["end_date"]);
-		
-		$sd = $ob->prop("show_type") == 1 ? date('d') : 1;
-		$ed = $ob->prop("show_type") == 1 ? date('d') : 31;
-		if($start_tm ==-1 || !$end_tm ==-1)
+		$cur_days = cal_days_in_month(CAL_GREGORIAN, date("m"), date("Y"));
+		$sd = $ob->prop("show_type") == 1 ? date("d") : 1;
+		$ed = $ob->prop("show_type") == 1 ? date("d") : $cur_days;
+		if($start_tm == -1)
 		{
-			$start_tm = mktime(0,0,0,date('m'), $sd, date('Y'));
-			$end_tm = mktime(0,0,0,date('m'), $ed, date('Y'));
-			
-			$arr["start_date"]["month"] = date('m');
-			$arr["start_date"]["year"] = date('Y');
+			$start_tm = mktime(0, 0, 0, date("m"), $sd, date("Y"));
+			$arr["start_date"]["month"] = date("m");
+			$arr["start_date"]["year"] = date("Y");
 			$arr["start_date"]["day"] = 1;
-			
-			$arr["end_date"]["month"] = date('m');
-			$arr["end_date"]["year"] = date('Y');
-			$arr["end_date"]["day"] = 31;
 		}
-		
+		if($end_tm == -1)
+		{
+			$end_tm = mktime(0, 0, 0, date("m"), $ed, date("Y"));
+			$arr["end_date"]["month"] = date("m");
+			$arr["end_date"]["year"] = date("Y");
+			$arr["end_date"]["day"] = $cur_days;
+		}
 		if($formconfig["fulltext"]["active"])
 		{
 			$htmlc->add_property(array(
@@ -587,7 +586,7 @@ class event_search extends class_base
 				"name" => "start_date",
 				"caption" => $formconfig["start_date"]["caption"],
 				"type" => "date_select",
-				"value" => $start_tm != -1 ? $start_tm : time(),
+				"value" => $start_tm,
 			));
 		}
 		
@@ -597,7 +596,7 @@ class event_search extends class_base
 				"name" => "end_date",
 				"caption" => $formconfig["end_date"]["caption"],
 				"type" => "date_select",
-				"value" => $end_tm != -1 ? $end_tm : time() + (30 * 86400),
+				"value" => $end_tm,
 			));
 		}
 		$search_p1 = false;
@@ -741,13 +740,10 @@ class event_search extends class_base
 					$search["parent"][] = $rn2;
 				}
 			}
-			if ($start_tm != -1)
-			{
-				$search["CL_CRM_MEETING.start1"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $end_tm);
-				$search["CL_CRM_MEETING.end"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm);
-				$search["CL_CALENDAR_EVENT.start1"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $end_tm);
-				$search["CL_CALENDAR_EVENT.end"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm);
-			};
+			$search["CL_CRM_MEETING.start1"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $end_tm);
+			$search["CL_CRM_MEETING.end"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm);
+			$search["CL_CALENDAR_EVENT.start1"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $end_tm);
+			$search["CL_CALENDAR_EVENT.end"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm);
 			$ft_fields = $ob->prop("ftsearch_fields");
 			// kuidas ma nd need parentid kokku laon?
 			if ($arr["fulltext"])
@@ -839,7 +835,7 @@ class event_search extends class_base
 							"place" => $pr->name(),
 							"parent" => $mo->name(),
 							"project_selector" => "n/a",
-							"date" => date("d-m-Y",$res->prop("start1")),
+							"date" => date("d-m-Y", $res->prop("start1")),
 						);
 						$edata[$orig_id] = array_merge($edata[$orig_id],$res->properties());
 					};
@@ -864,7 +860,6 @@ class event_search extends class_base
 					continue;
 				}
 				$p2 = new object($b_o->parent());
-				//$id = $b_o->id();
 				if ($p2->parent() == $pr1)
 				{
 					$orig = $b_o->brother_of();
@@ -875,14 +870,9 @@ class event_search extends class_base
 				};
 			};
 			exit_function("event_search::search_speed");
-			//arr($edata);
 			$res = "";
 			
 			$aliasmrg = get_instance("aliasmgr");
-			//arr($result_table);
-			//arr($edata);
-			//arr($tabledef);
-			//arr($tabledef);
 			foreach($edata as $ekey => $eval)
 			{
 				$cdat = "";
@@ -906,6 +896,12 @@ class event_search extends class_base
 							$a = $tabledef[$nms]["props"];
 							if(!empty($a))
 							{
+								/*
+								preg_replace("/#(.*)#/imsUe", $a, $mt);
+								foreach($mt[0] as $m)
+								{
+								}
+								*/
 								//preg_match_all("/<(.*)>/", $a, $mt);
 								//arr($mt);
 								//while(strpos("<", 
@@ -924,40 +920,38 @@ class event_search extends class_base
 						$val[] = $v;
 					}
 					$val = implode(" ".$tabledef[$sname]["sep"]." ", $val);
-					//arr($val);
 					$this->vars(array("cell" => $val));
-					//print "exporting $sname" . $eval[$sname];
 					$cdat .= $this->parse("CELL");
 					$this->vars(array("CELL" => $cdat));
 				}
-				if(!empty($eval["content"]))
+				$nmx = "";
+				if(!empty($eval["content"]) && $tabledef["content"]["active"])
 				{
+					$nmx = "content";
 					$aliasmrg->parse_oo_aliases($ekey, $eval["content"]);
 					$content = $eval["content"];
 				}
-				elseif(!empty($eval["utextarea1"]))
+				elseif(!empty($eval["utextarea1"]) && $tabledef["content"]["active"])
 				{
 					$aliasmrg->parse_oo_aliases($ekey, $eval["utextarea1"]);
 					$content = $eval["utextarea1"];
+					$nmx = "utextarea1";
 				}
-				$this->vars(array(
-					"fulltext" => $content,
-				));
-				
 				$i++;
-				if($i%2)
+				$this->vars(array(
+					"num" => $i % 2 ? 1 : 2,
+				));
+				if($nmx != "")
 				{
 					$this->vars(array(
-						"fuck" => "1",
+						"fulltext_name" => $tabledef[$nmx]["caption"],
+						"fulltext" => $content,
 					));
-				}
-				else
-				{
 					$this->vars(array(
-						"fuck" => "2",
+						"FULLTEXT" => $this->parse("FULLTEXT"),
 					));
+					
 				}
-				
 				$res .= $this->parse("EVENT");
 			};
 			
@@ -968,7 +962,6 @@ class event_search extends class_base
 			
 			if($next_month_args["start_date"]["month"] == 12)
 			{
-		
 				$next_month_args["start_date"]["month"] = 1;
 				$next_month_args["end_date"]["month"] = 1;
 				
@@ -1000,27 +993,60 @@ class event_search extends class_base
 			$prev_month_args["start_date"]["day"] = 1;
 			$prev_month_args["end_date"]["day"] = cal_days_in_month(CAL_GREGORIAN, $prev_month_args["end_date"]["month"], $prev_month_args["end_date"]["year"]);
 			
-			for($i=1; $i <= 5; $i++)
+			$prev_days = $prev_month_args["end_date"]["day"];
+			$next_days = $next_month_args["end_date"]["day"];
+			$s_date = $arr["start_date"];
+			$cur_days = cal_days_in_month(CAL_GREGORIAN, $s_date["month"], $s_date["year"]);
+			$t_day = mktime(0, 0, 0, $s_date["month"], 1, $s_date["year"]);
+			$day_of_week = date("w", $t_day);
+			$offset = $day_of_week - 1 < 0 ? 6 : $day_of_week - 1;
+			$weeks = ceil(($cur_days + $offset) /7);
+			for($i=1; $i <= $weeks; $i++)
 			{
-				
-				$week_args = $arr;
-				$week_args["start_date"]["day"] = (7 * ($i-1)) + 1;
-				$week_args["end_date"]["day"] = (7 * ($i-1)) + 7;
-								
-				$this->vars(array(
-					"week_url" => str_replace("event_search", "", $this->mk_my_orb("search", $week_args, "event_search")),
-					"week_nr" => $i,	
-				));
-				
-				if($i == 5)
+				if($offset)
 				{
-					$res_weeks.= $this->parse("next_weeks_end");
-		
+					$start_day = $offset > 0 ? $prev_days - $offset : $t_day;
+					$start_month = $offset > 0 ? $prev_month_args["start_date"]["month"] : $s_date["month"];
+					$start_year = $offset > 0 ? $prev_month_args["start_date"]["year"] : $s_date["year"];
+					$end_day = 7 - $offset;
+					$end_year = $s_date["year"];
+					$end_month = $s_date["month"];
+					unset($offset);
+				}
+				elseif($i == $weeks)
+				{
+					$b_days = $end_day + 7;
+					$start_day = $end_day + 1;
+					$end_month = $b_days > $cur_days ? $next_month_args["start_date"]["month"] : $end_month;
+					$end_year = $b_days > $cur_days ? $next_month_args["start_date"]["year"] : $end_year;
+					$end_day = $b_days > $cur_days ? $b_days - $cur_days : $b_days;
 				}
 				else
 				{
-					$res_weeks.= $this->parse("next_weeks");
+					$start_day = $end_day + 1;
+					$end_day = $end_day + 7;
+					$start_month = $s_date["month"];
+					$start_year = $s_date["year"];
 				}
+				$week_args = array(
+					"section" => aw_global_get("section"),
+					"start_date" => array(
+						"day" => $start_day,
+						"year" => $start_year,
+						"month" => $start_month,
+					),
+					"end_date" => array(
+						"day" => $end_day,
+						"year" => $end_year,
+						"month" => $end_month,
+					),
+				);
+				
+				$this->vars(array(
+					"week_url" => str_replace("event_search", "", $this->mk_my_orb("search", $week_args, "event_search")),
+					"week_nr" => $i,
+				));
+				$res_weeks .= $this->parse(($i == $weeks ? "next_weeks_end": "next_weeks"));
 			}
 			
 			$this->vars(array(

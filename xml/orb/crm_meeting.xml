@@ -5,6 +5,8 @@
 			<function name="submit_delete_participants_from_calendar">
 				<arguments>
 					<required name="id" type="int" acl="view" />
+					<optional name="group" />
+					<required name="check" />
 				</arguments>
 			</function>
 		</action>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.17 2005/01/12 09:47:44 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.18 2005/01/12 12:51:45 ahti Exp $
 // Shared functionality for event classes
 class event_property_lib extends aw_template
 {
@@ -214,11 +214,11 @@ class event_property_lib extends aw_template
 		{
 			$f = 1;
 			$table->define_field(array(
-				'name' => 'name',
-				'caption' => t('Nimi'),
-				'sortable' => '1',
-				'callback' => array(&$this,'callb_human_name'),
-				'callb_pass_row' => true,
+				"name" => "name",
+				"caption" => t("Nimi"),
+				"sortable" => 1,
+				"callback" => array(&$this, "callb_human_name"),
+				"callb_pass_row" => true,
 			));
 			$table->define_field(array(
 				'name' => 'phone',
@@ -315,6 +315,7 @@ class event_property_lib extends aw_template
 						"caption" => "Vaata"
 					));
 					*/
+					$dat["id"] = $_tmp->id();
 					$dat["change"] = html::get_change_url($_tmp->id(), array(), "Muuda");
 					foreach($_tmp->properties() as $pn => $pv)
 					{
