@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.49 2002/01/08 01:51:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.50 2002/01/08 05:52:50 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -1201,6 +1201,8 @@ class planner extends calendar {
 		extract($args);
 
 		$par_obj = $this->get_object($id);
+		$grand_parent = $this->get_object($par_obj["parent"]);
+		$this->mk_path($grand_parent["parent"],"Muuda eventit");
 		$meta = $this->get_object_metadata(array("oid" => $id,"key" => "repeaters"));
 
 		$menubar = $this->gen_menu(array(
@@ -1254,6 +1256,7 @@ class planner extends calendar {
 				"yearpwhen" => ($meta["yearpwhen"] > 0) ? $meta["yearpwhen"] : 1,
 				"region4" => checked($meta["region4"]),
 				"yearskip" => ($meta["yearskip"] > 0) ? $meta["yearskip"] : 1,
+				"menubar" => $menubar,
 				"reforb" => $this->mk_reforb("submit_repeaters",array("id" => $id)),
 		));
 		return $this->parse();
