@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.23 2001/05/24 14:47:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.24 2001/05/24 15:47:40 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -717,7 +717,8 @@ class messenger extends menuedit_light
 				if ($external)
 				{
 					$awm->fattach(array(
-						"data" => $tmpname,
+						"path" => $tmpname,
+						"name" => basename($attach_name[$idx]),
 						"contenttype" => $attach_type[$idx],
 					));
 				}
@@ -735,6 +736,9 @@ class messenger extends menuedit_light
 		
 		if ($external)
 		{
+			$awm->gen_mail();
+			$status_msg = "Meil on saadetud";
+			session_register("status_msg");
 			return $this->mk_site_orb(array(
 				"action" => "folder",
 			));

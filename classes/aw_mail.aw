@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.0 2001/05/24 14:29:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.1 2001/05/24 15:47:40 duke Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending mail. MIME compatible
 
@@ -148,6 +148,7 @@ class aw_mail {
 	// contenttype(string) - sisu tyyp
 	// encoding(string) - encoding. DUH.
 	// disp(string) content-disposition
+	// name(string) string, mida kasutatakse faili nimena
 	function fattach($args = array())
 	{
 		extract($args);
@@ -169,7 +170,12 @@ class aw_mail {
 			return false; // fail
 		}
 
-		$contenttype .= ";\r\n\tname=".basename($path);
+		if (!$name)
+		{
+			$name = basename($path);
+		};
+
+		$contenttype .= ";\r\n\tname=".$name;
 		$data = fread($fp, filesize($path));
 		return $this->attach(array(
 				"data" => $data,
