@@ -1,6 +1,28 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/obj_table_conf.aw,v 2.7 2004/10/14 13:47:21 sven Exp $
+// obj_table_conf - Objekti tabeli conf 
+/*
 
-class obj_table_conf extends aw_template
+@classinfo relationmgr=yes no_status=1
+
+@default table=objects
+@default group=general
+@default field=meta
+@default method=serialize
+
+@property proptoolbar type=toolbar store=no no_caption=1 group=proptab
+@property proptable type=table store=no no_caption=1 group=proptab
+
+@property sep type=textbox
+@caption Eraldaja ühe tulba elementide vahel
+
+@groupinfo proptab caption=Objektitabel
+
+@reltype GROUP value=1 clid=CL_GROUP
+@caption Kasutajagrupp
+
+*/
+class obj_table_conf extends class_base
 {
 	var $data = array(
 		"oid" => array("name" => "ID", "type" => "int", "sortable" => true),
@@ -44,241 +66,220 @@ class obj_table_conf extends aw_template
 		"cachedata" => array("name" => "cachedata", "type" => "text", "sortable" => true),
 		"flags" => array("name" => "Flags", "type" => "int", "sortable" => true),
 	);
-
+	
 	function obj_table_conf()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be 
-		$this->init("obj_table_conf");
+		$this->init(array(
+			"clid" => CL_OBJ_TABLE_CONF
+		));
 	}
 
-	/** called, when adding a new object 
-		
-		@attrib name=new params=name default="0"
-		
-		@param parent required acl="add"
-		@param alias_to optional
-		@param return_url optional
-		
-		@returns
-		
-		
-		@comment
-		parameters:
-		parent - the folder under which to add the object
-		return_url - optional, if set, the "back" link should point to it
-		alias_to - optional, if set, after adding the object an alias to the object with oid alias_to should be created
+	//////
+	// class_base classes usually need those, uncomment them if you want to use them
 
-	**/
-	function add($arr)
+	
+	function get_property($arr)
 	{
-		extract($arr);
-		if ($return_url != "")
+		$prop = &$arr["prop"];
+		$retval = PROP_OK;
+		
+		switch($prop["name"])
 		{
-			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Lisa objektitabeli konf");
-		}
-		else
-		{
-			$this->mk_path($parent,"Lisa objektitabeli konf");
-		}
-		$this->read_template("change.tpl");
-
-		$this->vars(array(
-			"col_id" => 1,
-			"cols" => $this->picker(" ",$this->mk_col_picker()),
-			"ord" => 0,
-			"idx" => 0
-		));
-
-		$this->vars(array(
-			"EL" => $this->parse("EL")
-		));
-
-		$this->vars(array(
-			"COLUMN_HEADER" => $this->parse("COLUMN_HEADER"),
-			"COLUMN" => $this->parse("COLUMN"),
-			"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "alias_to" => $alias_to, "return_url" => $return_url))
-		));
-		return $this->parse();
+			case "proptable":
+				$this->gen_proptable($arr);
+			break;
+			case "proptoolbar":
+				$this->gen_proptoolbar($arr);
+			break;
+		};
+		return $retval;
 	}
-
-	/** this gets called when the user submits the object's form 
-		
-		@attrib name=submit params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-		parameters:
-		id - if set, object will be changed, if not set, new object will be created
-
-	**/
-	function submit($arr)
+	
+	function gen_proptoolbar($arr)
 	{
-		extract($arr);
-		if ($id)
+		$tb = &$arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+   			"name" => "save",
+    		"img" => "save.gif",
+    		"action" => "submit",
+    		"tooltip" => "Salvesta muudatused",
+    	));
+	}
+	
+	function get_options()
+	{
+		
+		$retval[] = "";
+		foreach ($this->data as $key => $value)
 		{
-			$o = obj($id);
-			$o->set_name($name);
+			$retval[$key] = $value["name"];
 		}
-		else
+		return $retval;
+	}
+	/*
+	function callb_ord($arr)
+	{
+		$fieldname = $arr["fieldname"];
+		
+		return html::textbox(array(
+				"name" => "col_info[$fieldname][ord]",
+				"value" => $arr['ord'],
+				"size" => 3
+		));
+	}*/
+	
+	function gen_proptable($arr)
+	{
+		$table = &$arr["prop"]["vcl_inst"];
+		
+		$table->define_field(array(
+			"name" => "name",
+			"caption" => "Pealkiri",
+			"align" => "center",	
+		));
+		
+		$table->define_field(array(
+			"name" => "jrk",
+			"caption" => "Järjekord",
+			"sortable" => 1,
+			//"callback" => array(&$this, "callb_ord"),
+			//"numeric" => 1,
+			//"callb_pass_row" => true,	
+		));
+		
+		$table->define_field(array(
+			"name" => "sortable",
+			"caption" => "Sorteeritav",	
+		));
+		
+		$table->define_field(array(
+			"name" => "property",
+			"caption" => "Omadus",	
+		));
+		
+		if($arr["obj_inst"]->meta("cols"))
 		{
-			$o = obj();
-			$o->set_parent($parent);
-			$o->set_name($name);
-			$o->set_class_id(CL_OBJ_TABLE_CONF);
-		}
-
-		$cl = array();
-		if (is_array($cols))
-		{
-			foreach($cols as $clid => $cldat)
+			$i = 0;
+			foreach ($arr["obj_inst"]->meta("cols") as $col => $item)
 			{
-				$rd = array();
-				if (is_array($cldat["col"]))
+				//$fieldname = current($item['col']);
+				unset($selects);
+				foreach ($item['col'] as $fieldname)
 				{
-					foreach($cldat["col"] as $idx => $colname)
+					if(!$fieldname)
 					{
-						if (trim($colname) != "")
+						continue;
+					}
+					$selects .= html::select(array(
+						"name" => "col_info[$i][col][]",
+						"options" => $this->get_options(),
+						"value" => $fieldname,
+					));
+				}
+				
+				$selects .= html::select(array(
+						"name" => "col_info[$i][col][]",
+						"options" => $this->get_options(),
+				));
+				
+				$table->define_data(array(
+					"name" => html::textbox(array(
+						"name"  => "col_info[$i][title]",
+						"value" => $item['title'],
+					)),
+					"jrk" => html::textbox(array(
+						"name"  => "col_info[$i][ord]",
+						"size" => 2,
+						"value" => $item['ord'],
+					)),
+					"sortable" => html::checkbox(array(
+						"name" => "col_info[$i][sortable]",
+						"checked" => $item["sortable"],
+					)),
+					"property" => $selects,
+					"ord" => $item['ord'],
+					"fieldname" => $i,
+				));
+				$i++;
+			}	
+		}
+		
+		$table->define_data(array(
+			"name" => html::textbox(array(
+				"name"  => "new_name",
+			)),
+			"jrk" => html::textbox(array(
+				"name"  => "new_jrk",
+				"size" => 2,
+			)),
+			"sortable" => html::checkbox(array(
+				"name" => "new_sortable",
+				"value" => 1,
+			)),
+			"property" => html::select(array(
+				"options" => $this->get_options(),
+				"name" => "new_prop",
+			)),
+		));
+		$table->set_sortable(false);
+	}
+	
+	function callback_pre_save($arr)
+	{
+		if($arr["request"]['new_prop'] && $arr["request"]['new_name'])
+		{
+			$arr["request"]["col_info"][] = array(
+				'title' => $arr["request"]['new_name'],
+				'ord' => $arr["request"]['new_jrk'],
+				'sortable' => $arr["request"]['new_sortable'],
+				'col' => array(1 => $arr["request"]['new_prop']),
+			);
+		}
+		if($arr["request"]["col_info"])
+		{
+			
+			//Fuck this sort... 
+			foreach ($arr["request"]["col_info"] as $key => $value)
+			{
+				if($value["title"] && is_array($value["col"]))
+				{
+					unset($cols);
+					foreach ($value["col"] as $col)
+					{
+						if($col)
 						{
-							$rd[$idx] = $colname;
+							$cols[] = $col;
 						}
 					}
-				}
-				if (count($rd) > 0)
-				{
-					$cldat["col"] = $rd;
-					$cl[$clid] = $cldat;
+					$value['col'] = $cols;
+					$sortedarr[$value['ord']] = $value;
 				}
 			}
-		}
-
-		uasort($cl, create_function('$a,$b','if ($a["ord"] > $b["ord"]) { return 1; } if ($a["ord"] < $b["ord"]) { return -1; } return 0;'));
-
-		$o->set_meta("cols", $cl);
-		$o->set_meta("sep", $sep);
-		$id = $o->save();
-
-		if ($alias_to)
-		{
-			$o = obj($alias_to);
-			$o->connect(array(
-				"to" => $id
-			));
-		}
-
-		return $this->mk_my_orb("change", array("id" => $id, "return_url" => urlencode($return_url)));
-	}
-
-	/** this gets called when the user clicks on change object 
-		
-		@attrib name=change params=name default="0"
-		
-		@param id required acl="view;edit"
-		@param return_url optional
-		
-		@returns
-		
-		
-		@comment
-		parameters:
-		id - the id of the object to change
-		return_url - optional, if set, "back" link should point to it
-
-	**/
-	function change($arr)
-	{
-		extract($arr);
-		$ob = obj($id);
-		if ($return_url != "")
-		{
-			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Muuda objektitabeli konfi");
-		}
-		else
-		{
-			$this->mk_path($ob->parent(), "Muuda objektitabeli konfi");
-		}
-		$this->read_template("change.tpl");
-
-		$cl = "";
-		$maxclid = $mxord = 0;
-		$mt = $ob->meta();
-		if (is_array($mt["cols"]))
-		{
-			foreach($mt["cols"] as $colid => $coldata)
+			
+			
+			ksort($sortedarr);
+			if(is_array($arr["request"]["col_info"]))
 			{
-				$els = "";
-				$mxidx = 0;
-				$this->vars(array(
-					"col_id" => $colid,
-					"title" => $coldata["title"],
-					"ord" => $coldata["ord"],
-					"sortable" => checked($coldata["sortable"])
-				));
-				if (is_array($coldata["col"]))
-				{
-					foreach($coldata["col"] as $idx => $el)
-					{
-						$this->vars(array(
-							"idx" => $idx,
-							"cols" => $this->picker($el, $this->mk_col_picker()),
-						));
-						$els.=$this->parse("EL");
-						$mxidx = max($idx, $mxidx);
-					}
-				}
-				$this->vars(array(
-					"idx" => $mxidx+1,
-					"cols" => $this->picker(" ",$this->mk_col_picker())
-				));
-				$els.=$this->parse("EL");
-				$this->vars(array(
-					"EL" => $els
-				));
-
-				$cl.=$this->parse("COLUMN");
-				$maxclid = max($maxclid, $colid);
-				$mxord = max($mxord, $coldata["ord"]);
+				$arr["obj_inst"]->set_meta("cols", array_values($sortedarr));
 			}
 		}
-
-		$this->vars(array(
-			"col_id" => $maxclid+1,
-			"cols" => $this->picker(" ", $this->mk_col_picker()),
-			"ord" => $mxord+1,
-			"title" => "",
-			"idx" => 1,
-		));
-		$this->vars(array(
-			"EL" => $this->parse("EL")
-		));
-		$cl.=$this->parse("COLUMN");
-
-		$this->vars(array(
-			"COLUMN" => $cl,
-			"name" => $ob->name(),
-			"sep" => $mt["sep"],
-			"reforb" => $this->mk_reforb("submit", array("id" => $id, "return_url" => urlencode($return_url)))
-		));
-
-		return $this->parse();
 	}
-
-	////
-	// !returns an array of column name => description for objects table
-	function mk_col_picker()
+	
+	function table_row($row, &$tbl_ref)
 	{
-		$ret = array(" " => " ");
-		foreach($this->data as $tblc => $tbld)
+		$dat = array();
+		foreach($this->ob->meta("cols") as $clid => $cldat)
 		{
-			$ret[$tblc] = $tbld["name"];
+			$str = array();
+			foreach($cldat["col"] as $idx => $colname)
+			{
+				$str[] =$row[$colname];
+			}
+			$dat["col_".$clid] = join($this->ob->meta("sep"), $str);
 		}
-		return $ret;
+		$tbl_ref->define_data($dat);
 	}
-
-	////
-	// !initializes vcl table $tbl_ref to be the table defined in table conf $id
+	
 	function init_table($id, &$tbl_ref)
 	{
 		$this->ob = obj($id);
@@ -309,21 +310,6 @@ class obj_table_conf extends aw_template
 				$tbl_ref->define_field($row);
 			}
 		}
-	}
-
-	function table_row($row, &$tbl_ref)
-	{
-		$dat = array();
-		foreach($this->ob->meta("cols") as $clid => $cldat)
-		{
-			$str = array();
-			foreach($cldat["col"] as $idx => $colname)
-			{
-				$str[] =$row[$colname];
-			}
-			$dat["col_".$clid] = join($this->ob->meta("sep"), $str);
-		}
-		$tbl_ref->define_data($dat);
 	}
 }
 ?>
