@@ -65,9 +65,18 @@ $content = $orb->get_data();
 // mingi lahendus
 if (substr($content,0,5) == "http:" || $vars["reforb"] == 1)
 {
-	header("Location: $content");
-	print "\n\n";
-	exit;
+	if (headers_sent())
+        {
+                print html::href(array(
+                        "url" => $content,
+                        "caption" => "Kliki siia jätkamiseks",
+                ));
+        }
+        else
+        {
+                header("Location: $content");
+                print "\n\n";
+        };
+        exit;
 };
-
 ?>

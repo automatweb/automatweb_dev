@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.13 2003/07/17 15:49:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.14 2003/11/26 15:44:40 duke Exp $
 set_time_limit(0);
 include("const.aw");
 
@@ -70,8 +70,18 @@ $content = $orb->get_data();
 // mingi lahendus
 if ((substr($content,0,5) == "http:" || (isset($vars["reforb"]) && ($vars["reforb"] == 1))) && !$vars["no_redir"])
 {
-	header("Location: $content");
-	print "\n\n";
+	if (headers_sent())
+	{
+		print html::href(array(
+			"url" => $content,
+			"caption" => "Kliki siia jätkamiseks",
+		));		
+	}
+	else
+	{
+		header("Location: $content");
+		print "\n\n";
+	};
 	exit;
 };
 
