@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.12 2005/02/11 11:22:55 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.13 2005/02/11 16:43:45 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -452,7 +452,7 @@ class mrp_resource extends class_base
 			);
 		}
 
-		### add workhours, transmute to unavailable periods
+		### add workhours (available recurrences), transmute to unavailable periods
 		foreach ($resource->connections_from (array ("type" => "RELTYPE_RECUR_WRK")) as $connection)
 		{
 			$recurrence = $connection->to ();
@@ -479,20 +479,27 @@ class mrp_resource extends class_base
 					break;
 			}
 
-			$recurrence_starttime = $recurrence->prop ("time");
-			$recurrence_starttime = explode (":", $recurrence_starttime);
-			$recurrence_starttime_hours = $recurrence_starttime[0] ? (int) $recurrence_starttime[0] : 0;
-			$recurrence_starttime_minutes = $recurrence_starttime[1] ? (int) $recurrence_starttime[1] : 0;
-			$recurrence_starttime = $recurrence_starttime_hours * 3600 + $recurrence_starttime_minutes * 60;
 
+			$recurrence_time = explode (":", $recurrence->prop ("time"));
+			$recurrence_time_hours = $recurrence_time[0] ? (int) $recurrence_time[0] : 0;
+			$recurrence_time_minutes = $recurrence_time[1] ? (int) $recurrence_time[1] : 0;
+			$recurrence_time = $recurrence_time_hours * 3600 + $recurrence_time_minutes * 60;
 			$recurrence_length = round ($recurrence->prop ("length") * 3600);
-			$start = $recurrence->prop ("start") + $recurrence_starttime + $recurrence_length;
+
+			$time = ($recurrence_time + $recurrence_length) % 86400;
 			$length = $interval - $recurrence_length;
+			$start = $recurrence->prop ("start") - (ceil ($length / 86400) * 86400);
+
+// /* dbg */ if ($resource->id () == 1341){
+// /* dbg */ echo "get res unavail: length - ".  $length . "s | prop start - ". date (MRP_DATE_FORMAT, $recurrence->prop ("start")) . "<br>";
+// /* dbg */ echo "get res unavail: avail time - ". $recurrence_time . "s | start - ". date (MRP_DATE_FORMAT, $start) . "<br>";
+// /* dbg */ echo "get res unavail: unavail time - ". $time . "s | interval - ". ($interval) . "<br>";
+// /* dbg */ }
 
 			$recurrent_unavailable_periods[] = array (
 				"length" => $length,
-				"start" => $recurrence->prop ("start"),
-				"time" => $recurrence_starttime,
+				"start" => $start,
+				"time" => $time,
 				"end" => $recurrence->prop ("end"),
 				"interval" => $interval,
 			);
@@ -501,7 +508,7 @@ class mrp_resource extends class_base
 		return $recurrent_unavailable_periods;
 	}
 
-	function get_week_start ($time)
+	function get_week_start ($time) //!!! not dst safe
 	{
 		$date = getdate ($time);
 		$wday = $date["wday"] ? ($date["wday"] - 1) : 6;

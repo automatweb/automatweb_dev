@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.25 2005/02/11 11:22:55 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.26 2005/02/11 16:43:46 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -61,7 +61,7 @@
 	@property master_schedule_chart type=text store=no no_caption=1
 
 	@property chart_project_hilight type=select store=no
-	@caption T&otilde;sta esile projekt
+	@caption Vali projekt
 
 	@property chart_project_hilight_gotostart type=checkbox store=no
 	@caption Mine valitud projekti algusesse
@@ -451,7 +451,7 @@ class mrp_workspace extends class_base
 				{
 					$options[$project->id ()] = $project->name ();
 				}
-				
+
 				$prop["options"] = $options;
 				break;
 
@@ -1426,7 +1426,11 @@ class mrp_workspace extends class_base
 		if (is_oid ($arr["request"]["mrp_hilight"]))
 		{
 			$project = obj ($arr["request"]["mrp_hilight"]);
-			$navigation .= ' &nbsp;&nbsp;Valitud projekt: <span style="color: #CC0000;">' . $project->name () . '</span>';
+			$deselect = html::href (array (
+				"caption" => "Kaota valik",
+				"url" => aw_url_change_var ("mrp_hilight", ""),
+			));
+			$navigation .= ' &nbsp;&nbsp;Valitud projekt: <span style="color: #CC0000;">' . $project->name () . '</span> (' . $deselect . ')';
 		}
 
 		return $navigation;
