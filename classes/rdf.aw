@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/rdf.aw,v 2.6 2002/06/10 15:50:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/rdf.aw,v 2.7 2002/11/07 22:58:34 kristo Exp $
 // miski simpel klass rss-i väljastamiseks
 
 define(ITEM_TPL,"
@@ -14,7 +14,7 @@ define(ITEM_TPL,"
 </item>
 ");
 
-class rdf 
+class rdf extends aw_template
 {
 	var $li;
 	var $items;
@@ -27,6 +27,7 @@ class rdf
 		$this->title = $this->_convert($title);
 		$this->description = $this->_convert($description);
 		$this->about = $about;
+		$this->init("");
 		lc_load("definition");
 	}
 
@@ -57,9 +58,9 @@ class rdf
 			$id = ($id) ? $id : $docid;
 			$description = ($description) ? $description : $lead;
 			$creator = $this->_convert($author);
-			$link = sprintf("%s/index.%s/section=%d",$baseurl,$ext,$id);
+			$link = sprintf("%s/%d",$baseurl,$id);
 			$title = $this->_convert($title);
-			$description = $this->_convert($description);
+			$description = "<a href='$link'>$title</a>" . " - " . $this->_convert($description);
 			$publisher = $this->_convert($publisher);
 			$date = date("Y-m-d",$args["modified"]) . "T" . date("H:i",$args["modified"]) . "+02:00";
 			$this->li .= sprintf("<rdf:li resource=\"%s\"/>\n",$link);
