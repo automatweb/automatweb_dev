@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.87 2004/07/21 14:31:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.88 2004/08/12 14:08:38 rtoomas Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -356,6 +356,7 @@ class file extends class_base
 			{
 				$replacement = html::img(array(
 					"url" => $icon,
+					'border' => 0,
 				)) . " <a $ss class=\"sisutekst\" href='".$url."'>$comment</a>";
 			}
 		}
