@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.11 2004/06/14 14:29:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.12 2004/06/16 10:06:36 kristo Exp $
 // otv_ds_postipoiss.aw - Objektinimekirja Postipoisi datasource 
 /*
 
@@ -543,7 +543,7 @@ class otv_ds_postipoiss extends class_base
 
 	function do_reschedule()
 	{
-		$url = str_replace("automatweb/", "", $this->mk_my_orb("do_dache_update"));
+		$url = str_replace("automatweb/", "", $this->mk_my_orb("do_cache_update"));
 
 		// automatic updates are at 06:00 AM and 06:00 PM
 		$sc = get_instance("scheduler");
