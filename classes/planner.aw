@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.94 2003/03/14 13:37:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.95 2003/03/14 14:41:28 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -2073,6 +2073,7 @@ class planner extends class_base
 
 		// ja siis pean tegema tsükli üle kõigi nende nädalate, mis minu kuu sisse
 		// jäävad, ning iga nädala jaoks callima disp_week-i
+		$header = true;
 		for ($i = $realstart; $i <= $realend; $i = $i + $week)
 		{
 			$di = array(
@@ -2080,7 +2081,13 @@ class planner extends class_base
 				"end" => $i + $week - 1,
 			);
 
-			$c .= $this->disp_week(array("di" => $di,"tpl" => "disp_week.tpl"));
+			$c .= $this->disp_week(array(
+				"di" => $di,
+				"tpl" => "disp_week.tpl",
+				"header" => $header,
+			));
+
+			$header = false;
 
 		};
 
@@ -2108,6 +2115,7 @@ class planner extends class_base
 	{ 
 		extract($args);
 		$title = CAL_WEEK;
+		$header = isset($header) ? $header : true;
 		list($d1,$m1,$y1) = split("-",date("d-m-Y",$di["start"]));
 		list($d2,$m2,$y2) = split("-",date("d-m-Y",$di["end"]));
 		$mon1 = get_lc_month($m1);
@@ -2178,7 +2186,10 @@ class planner extends class_base
 					"cell" => $c1,
 				));
 
-				$head .= $this->parse("header_cell");
+				if ($header)
+				{
+					$head .= $this->parse("header_cell");
+				};
 				$c .= $this->parse("content_cell");
 
 				$this->vars(array(
@@ -2209,7 +2220,7 @@ class planner extends class_base
 
 		$this->vars(array(
 			"content_row" => $this->parse("content_row"),
-			"header" => $this->parse("header"),
+			"header" => ($header) ? $this->parse("header") : "",
 		));
 		
 		$retval =  $this->parse();
