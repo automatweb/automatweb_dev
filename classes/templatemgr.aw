@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/templatemgr.aw,v 2.20 2004/10/13 13:40:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/templatemgr.aw,v 2.21 2005/03/18 10:23:36 kristo Exp $
 
 class templatemgr extends aw_template
 {
@@ -45,9 +45,15 @@ class templatemgr extends aw_template
 		$q = "SELECT * FROM template WHERE type = $type ORDER BY id";
 		$this->db_query($q);
 		$result = array("0" => $args["caption"]);
-		while($tpl = $this->db_fetch_row())
+		$dat = array();
+		while($tpl = $this->db_next())
 		{
-			if ($tpl["obj_id"] > 0)
+			$dat[] = $tpl;
+		}
+
+		foreach($dat as $tpl)
+		{
+			if (false && $tpl["obj_id"] > 0)
 			{
 				if (!$this->can("view", $tpl["obj_id"]))
 				{
