@@ -1,3 +1,7 @@
+body {
+        background-color: #FFFFFF;
+}
+
 .caltableborderhele {
 background: #8AAABE;
 }
@@ -1369,3 +1373,36 @@ div.menu div.menuItemSep {
   margin: 4px 2px;
 }
 
+.toolbarbutton {
+        float: left;
+        margin-left: 5;
+	height: 23px;
+        padding-left: 2px;
+        padding-right: 2px;
+	vertical-align: middle;
+        border-style: solid;
+        border-width: 1px;
+        border-color: ButtonFace;
+}
+
+.toolbarbuttonhover {
+        float: left;
+        margin-left: 5;
+        cursor: pointer;
+	height: 23px;
+        border-width: 1px;
+        border-style: solid;
+        padding-left: 2px;
+        padding-right: 2px;
+        border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
+}
+.toolbarbuttondown {
+        float: left;
+        margin-left: 5;
+        border-width: 1px;
+	height: 23px;
+        border-style: solid;
+        padding-left: 2px;
+        padding-right: 2px;
+        border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow;
+}
