@@ -30,7 +30,7 @@ class popup_search extends aw_template
 		$url = $this->mk_my_orb("do_search", array(
 			"id" => $arr["obj_inst"]->id(),
 			"pn" => $tmp["name"],
-			"clid" => $tmp["clid"]
+			"clid" => constant($tmp["clid"])
 		));
 
 		$tmp["value"] = html::select(array(
