@@ -7,22 +7,25 @@
 @default form=stat
 
 @property reg type=textbox 
-@caption Reg. kood
+@caption Äriregistrikood
 
 @property password type=password 
-@caption Parool
+@caption Tunnuskood
 
 @property report_type type=select
-@caption Aruande tüüp
+@caption Aruande nimetus
 
 @property file type=fileupload
-@caption Fail 
+@caption Aruande fail 
 
 @property name type=textbox
 @caption Aruande esitaja
 
 @property email type=textbox
 @caption Kontaktandmed
+
+@property comment type=textarea
+@caption Kommentaar
 
 @classinfo hide_tabs=1
 @forminfo stat onsubmit=submit_upload
@@ -33,15 +36,17 @@ class stat_uploader extends class_base
 	function stat_uploader()
 	{
 		$this->init("");
-		$this->password = "1234";
 		$this->filestore = "/www/aruanded.stat.ee/aruanded";
-		$this->reg = array(1234,2234,3234);
-		$this->whitelist = array(
-			".*\.xls$",
-			".*\.sxc$",
-			".*\.ddoc$",
-		);
+		// XXX: make this configurable. how?
 		$this->obj = new object(130830);
+		$whitelist = $this->obj->prop("whitelist");
+		$items = preg_split("/\s+/",$whitelist);
+		foreach($items as $item)
+		{
+			$item = trim($item);		
+			$this->whitelist[] = ".*\.$item$";
+		};
+
 		$conns = $this->obj->connections_from(array(
 			"reltype" => 1,
 		));
@@ -62,6 +67,8 @@ class stat_uploader extends class_base
 			$this->choices[$o->comment()] = $o->name();
 		};
 
+		asort($this->choices);
+
 	}
 
 	/**
@@ -71,7 +78,6 @@ class stat_uploader extends class_base
 	function final()
 	{
 		print "No kuule aitähh, faili sain kätte";
-		exit;
 	}
 
 	/** 
@@ -96,13 +102,15 @@ class stat_uploader extends class_base
 		$propvalues["reg"]["error"] = "";
 		$propvalues["name"]["error"] = "";
 		$propvalues["email"]["error"] = "";
+		$propvalues["report_type"]["error"] = "";
 		$propvalues["file"]["error"] = "";
+		$propvalues["comment"]["error"] = "";
 
-		$authfile = aw_ini_get("site_basedir") . "/auth.csv";
+		$authfile = aw_ini_get("site_basedir") . "/ettevotted.csv";
 		$authcontents = file_get_contents($authfile);
 
 		$mx = preg_match("/^$reg,(.*)$/m",$authcontents,$m);
-		$this->password = $m[1];
+		$this->password = trim($m[1]);
 
 		if (empty($reg))
 		{
@@ -171,17 +179,53 @@ class stat_uploader extends class_base
 			// now fetch the file and do something with it
 			$pi = pathinfo($filename);
 			$ext = $pi["extension"];
-			$new_name = $this->filestore . "/" . $reg . "_" . $arr["report_type"] . "#" . date("YmdHi") . "." . $ext;
+			$n_basename = $reg . "_" . $arr["report_type"] . "#" . date("YmdHi");
+			$new_name = $this->filestore . "/" . $n_basename . "." . $ext;
 			$stat = move_uploaded_file($filedat["tmp_name"],$new_name);
+			chmod($new_name,0666);
+			$this->log_upload(array(
+				"file" => $this->filestore . "/" . $n_basename . ".txt",
+				"ip" => gethostbyaddr($_SERVER["REMOTE_ADDR"]),
+				"name" => $name,
+				"reg" => $reg,
+				"report_type" => $report_type,
+				"contact" => $email,
+				"comment" => $comment,
+			));
 			return $this->mk_my_orb("final",array());
 		}
 		else
 		{
 			$propvalues["reg"]["value"] = $reg;
 			$propvalues["name"]["value"] = $name;
+			$propvalues["report_type"]["value"] = $report_type;
 			$propvalues["email"]["value"] = $email;
 			$propvalues["file"]["value"] = $file;
+			$propvalues["comment"]["value"] = $comment;
 			aw_session_set("cb_values",$propvalues);
+			
+			// log error
+			$els = array();
+			$els[] = time();
+			$els[] = gethostbyaddr($_SERVER["REMOTE_ADDR"]);
+			$els[] = $reg;
+			$els[] = $report_type;
+			$els[] = $name;
+			$els[] = $email;
+
+			foreach($propvalues as $key => $item)
+			{
+				if (!empty($item["error"]))
+				{
+					$els[] = $item["error"];
+				};
+			};
+
+			$fh = fopen($this->filestore . "/log/error.log","a");
+			fwrite($fh,join("\t",$els) . "\n");
+			fclose($fh);
+
+			// ---
 			return $this->mk_my_orb("show",array());
 		};
 	}
@@ -194,9 +238,48 @@ class stat_uploader extends class_base
 		{
 			case "report_type":
 				$prop["options"] = $this->choices;
+				if (!empty($_GET["statement"]))
+				{
+					$prop["value"] = $_GET["statement"];
+				};
 				break;
+
+			case "reg":
+				if (!empty($_GET["reg"]))
+				{
+					$prop["value"] = $_GET["reg"];
+				};
+
 		};
 		return $rv;
+	}
+
+	function log_upload($arr)
+	{
+		$this->put_file(array(
+			"file" => $arr["file"],
+			"content" => $arr["name"] . "\n" . $arr["ip"] . "\n" . $arr["contact"] . "\n" . $arr["comment"],
+		));
+		/*
+		Lisaks on kataloogis aruanded.stat.ee/public/aruanded/log tekstifail aruanded.log, mis sisaldab
+		tab-iga eraldatud kujul infot kõikide failiuploadide kohta:
+			uploadi aeg unix timestampina
+			uploadija IP aadress
+			ettevõtte registrikood
+			etteõtte esindaja nimi
+			faili uploadija kontaktandmed
+		*/
+		$els = array();
+		$els[] = time();
+		$els[] = $arr["ip"];
+		$els[] = $arr["reg"];
+		$els[] = $arr["report_type"];
+		$els[] = $arr["name"];
+		$els[] = $arr["contact"];
+
+		$fh = fopen($this->filestore . "/log/aruanded.log","a");
+		fwrite($fh,join("\t",$els) . "\n");
+		fclose($fh);
 	}
 };
 ?>
