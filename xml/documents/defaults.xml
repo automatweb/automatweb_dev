@@ -1,6 +1,18 @@
 <?xml version='1.0'?>
 <doctags>
 
+<tag id='stiiltaust'>
+<![CDATA[
+<span class="stiiltaust">\1</span>
+]]>
+</tag>
+
+<tag id='stiilkast'>
+<![CDATA[
+<div class="stiilkast">\1</div>
+]]>
+</tag>
+
 <tag id='peida'>
 <![CDATA[
 ]]>
@@ -188,6 +200,5 @@
 <span class="textsin">\1</span>
 ]]>
 </tag>
-
 
 </doctags>
