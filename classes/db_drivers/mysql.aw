@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.5 2002/12/02 11:18:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.6 2002/12/03 13:29:40 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql 
 {
@@ -65,7 +65,7 @@ class mysql
 			}
 		};
 		$this->qID = @mysql_query($qtext, $this->dbh);
-		log_query($qtext);
+		$this->log_query($qtext);
 		if (!$this->qID ) 
 		{
 			if (!$errors)
@@ -596,6 +596,22 @@ class mysql
 	function db_get_last_error()
 	{
 		return $this->db_last_error;
+	}
+
+	// logs the query, if user has a cookie named log_query
+	function log_query($msg)
+	{
+		$uid = aw_global_get("uid");
+		$logfile = "/www/log/mysql-" . $uid . ".log";
+
+		if (isset($GLOBALS["HTTP_COOKIE_VARS"]["log_query"]))
+		{
+			$fp = fopen($logfile,"a");
+			flock($fp, LOCK_EX);
+			fwrite($fp,$msg . "\n\n-----------------------------------\n\n");
+			flock($fp, LOCK_UN);
+			fclose($fp);
+		}
 	}
 };
 ?>

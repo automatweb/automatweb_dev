@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.69 2002/12/03 13:27:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.70 2002/12/03 13:29:39 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -283,23 +283,6 @@ if (!defined("DEFS"))
 		}
 		return $ip;
 	}
-
-	// logs the query, if user has a cookie named log_query
-	function log_query($msg)
-	{
-		$uid = aw_global_get("uid");
-		$logfile = "/www/log/mysql-" . $uid . ".log";
-
-		if (isset($GLOBALS["HTTP_COOKIE_VARS"]["log_query"]))
-		{
-			$fp = fopen($logfile,"a");
-			flock($fp, LOCK_EX);
-			fwrite($fp,$msg . "\n\n-----------------------------------\n\n");
-			flock($fp, LOCK_UN);
-			fclose($fp);
-		}
-	}
-
 
 	function aw_serialize($arr,$type = SERIALIZE_PHP, $flags = array())
 	{
