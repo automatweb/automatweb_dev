@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.80 2003/03/12 14:40:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.81 2003/03/13 13:34:03 axel Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -827,8 +827,8 @@ class aliasmgr extends aw_template
 
 		$choices = array();
 		$spacer = "&nbsp;&nbsp;&nbsp;";
-
-		$choices["capt_new_object"] = "Objekti tüüp";
+		
+		$ch["capt_new_object"] = "Objekti tüüp";
 
 		$classes = $this->cfg["classes"];
 		// generate a list of class => name pairs
@@ -843,7 +843,9 @@ class aliasmgr extends aw_template
 				$choices[$lib] = $spacer . $cldat["name"];
 			}
 		}
-	
+		asort($choices);
+		$choices = array_merge($ch,$choices);
+
 		$reltypes = html::select(array(
 			"options" => $this->reltypes,
 			"name" => "reltype",
