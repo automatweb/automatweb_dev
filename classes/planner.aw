@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.87 2003/03/07 16:06:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.88 2003/03/07 16:36:25 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -39,6 +39,9 @@
 
 	@property navigator_visible type=checkbox ch_value=1 default=1 group=advanced
 	@caption Näita navigaatorit
+
+	@property use_tabpanel type=checkbox ch_value=1 default=1 group=advanced
+	@caption Kalendri näitamisel kasutatakse 'tabpanel' komponenti
 
 	@property navigator_months type=select 
 	@caption Kuud navigaatoris
@@ -595,61 +598,71 @@ class planner extends class_base
 			$act = "day";
 		};
 		$this->actlink = $actlink;
-		// generate a menu bar
-		// tabpanel really should be in the htmlclient too
-                $this->tp = get_instance("vcl/tabpanel");			
-
+		
+		$use_tabpanel = false;
+		if (isset($this->conf["use_tabpanel"]))
+		{
+			$use_tabpanel = true;
+		};
+		
 		$today = date("d-m-Y");
 		
-		$this->tp->add_tab(array(
-			"link" => $this->mk_my_orb("view",array("id" => $id,"date" => $today,"ctrl" => $ctrl,"type" => "day")),
-			"caption" => "Täna",
-			"active" => ($act == $today),
-		));
-
-		if ($this->conf["tab_day_visible"] == 1)
-		{	
-			$this->tp->add_tab(array(
-				"link" => $this->mk_my_orb("view",array("id" => $id,"date" => $date,"ctrl" => $ctrl,"type" => "day")),
-				"caption" => "Päev",
-				"active" => ($act == "day"),
-			));
-		};
-
-		if ($this->conf["tab_overview_visible"] == 1)
+		if ($use_tabpanel)
 		{
-			$this->tp->add_tab(array(
-				"link" => $this->mk_my_orb("view",array("id" => $id,"date" => $date,"ctrl" => $ctrl,"type" => "overview")),
-				"caption" => "Ülevaade",
-				"active" => ($act == "overview"),
-			));
-		};
+			// generate a menu bar
+			// tabpanel really should be in the htmlclient too
+			$this->tp = get_instance("vcl/tabpanel");			
+		
+			if ($this->conf["tab_day_visible"] == 1)
+			{	
+				$this->tp->add_tab(array(
+					"link" => $this->mk_my_orb("view",array("id" => $id,"date" => $today,"ctrl" => $ctrl,"type" => "day")),
+					"caption" => "Täna",
+					"active" => ($act == $today),
+				));
 
-		if ($this->conf["tab_week_visible"] == 1)
-		{
-			$this->tp->add_tab(array(
-				"link" => $this->mk_my_orb("view",array("id" => $id,"date" => $date,"ctrl" => $ctrl,"type" => "week")),
-				"caption" => "Nädal",
-				"active" => ($act == "week"),
-			));
-		};
-	
-		if ($this->conf["tab_month_visible"] == 1)
-		{	
-			$this->tp->add_tab(array(
-				"link" => $this->mk_my_orb("view",array("id" => $id,"date" => $date,"ctrl" => $ctrl,"type" => "month")),
-				"caption" => "Kuu",
-				"active" => ($act == "month"),
-			));
-		};
+				$this->tp->add_tab(array(
+					"link" => $this->mk_my_orb("view",array("id" => $id,"date" => $date,"ctrl" => $ctrl,"type" => "day")),
+					"caption" => "Päev",
+					"active" => ($act == "day"),
+				));
+			};
 
-		if ($this->conf["tab_add_visible"] == 1)
-		{
-			$this->tp->add_tab(array(
-				"link" => $this->mk_my_orb("new",array("parent" => $parent,"date" => $date,"alias_to" => $id,"return_url" => urlencode($actlink)),"cal_event"),
-				"caption" => "Lisa sündmus",
-				"active" => 0,
-			));
+			if ($this->conf["tab_overview_visible"] == 1)
+			{
+				$this->tp->add_tab(array(
+					"link" => $this->mk_my_orb("view",array("id" => $id,"date" => $date,"ctrl" => $ctrl,"type" => "overview")),
+					"caption" => "Ülevaade",
+					"active" => ($act == "overview"),
+				));
+			};
+
+			if ($this->conf["tab_week_visible"] == 1)
+			{
+				$this->tp->add_tab(array(
+					"link" => $this->mk_my_orb("view",array("id" => $id,"date" => $date,"ctrl" => $ctrl,"type" => "week")),
+					"caption" => "Nädal",
+					"active" => ($act == "week"),
+				));
+			};
+		
+			if ($this->conf["tab_month_visible"] == 1)
+			{	
+				$this->tp->add_tab(array(
+					"link" => $this->mk_my_orb("view",array("id" => $id,"date" => $date,"ctrl" => $ctrl,"type" => "month")),
+					"caption" => "Kuu",
+					"active" => ($act == "month"),
+				));
+			};
+
+			if ($this->conf["tab_add_visible"] == 1)
+			{
+				$this->tp->add_tab(array(
+					"link" => $this->mk_my_orb("new",array("parent" => $parent,"date" => $date,"alias_to" => $id,"return_url" => urlencode($actlink)),"cal_event"),
+					"caption" => "Lisa sündmus",
+					"active" => 0,
+				));
+			};
 		};
 
 		// ctrl is a form controller object
@@ -910,16 +923,17 @@ class planner extends class_base
 			"next" => $next,
 		));
 
-		$vars["content"] = $this->parse();
-		if ($args["no_tabs"] == 1)
+		if ($use_tabpanel)
 		{
-			return $vars["content"];
+			$vars["content"] = $this->parse();
+                	$retval = $this->tp->get_tabpanel($vars);
 		}
 		else
 		{
-                	return $this->tp->get_tabpanel($vars);
+			$retval = $this->parse();
 		};
 
+		return $retval;
 	}
 
 
