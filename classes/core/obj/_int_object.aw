@@ -134,7 +134,7 @@ class _int_object
 				"from" => $this->obj["oid"],
 				"to" => $oid,
 			));
-			if (!$conn_id)
+			if (!$conn_id[0]["id"])
 			{
 				error::throw(array(
 					"id" => ERR_CONNECTION,
