@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.104 2002/02/27 20:09:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.105 2002/02/27 23:37:21 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -786,6 +786,9 @@ class menuedit extends aw_template
 				menu.link as link,
 				menu.links as links,
 				menu.type as mtype,
+				menu.tpl_view as tpl_view,
+				menu.tpl_lead as tpl_lead,
+				menu.tpl_edit as tpl_edit,
 				menu.clickable as clickable,
 				menu.target as target,
 				menu.ndocs as ndocs,
@@ -4317,7 +4320,11 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		// if $section is a periodic document then emulate the current period for it and show the document right away
 		if ($obj["class_id"] == CL_PERIODIC_SECTION)
 		{
-			$template = $this->get_long_template($section);
+			$template = $this->_get_template_filename($this->properties["tpl_view"]);
+			if (not($template))
+			{
+				$template = $this->properties["ftpl_view"];
+			};
 			$activeperiod = $obj["period"];
 			$cont = $d->gen_preview(array(
 						"docid" => $section,
@@ -4333,7 +4340,11 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$d->list_docs($section, $activeperiod,2);
 			if ($d->num_rows > 1)		// the database driver sets this
 			{
-				$template = $this->get_lead_template($section);
+				$template = $this->_get_template_filename($this->properties["tpl_lead"]);
+				if (not($template))
+				{
+					$template = $this->properties["ftpl_lead"];
+				};
 				while($row = $d->db_next()) 
 				{
 					$d->save_handle();
@@ -4351,7 +4362,11 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			else 
 			{
 				$row = $d->db_next();
-				$template = $this->get_long_template($section);
+				$template = $this->_get_template_filename($this->properties["tpl_view"]);
+				if (not($template))
+				{
+					$template = $this->properties["ftpl_view"];
+				};
 				$cont = $d->gen_preview(array(
 							"docid" => $row["docid"],
 							"boldlead" => 1,
@@ -4383,17 +4398,19 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		// mingitest artiklis esinevatest asjadest. You name it.
 		$this->blocks = array();
 
-		$tpl = $template;
-				 
-		$template = $this->get_long_template($section);
-						  
-		$tpl = ($template) ? $template : $tpl;
+		$template = $this->_get_template_filename($this->properties["tpl_view"]);
+		if (not($template))
+		{
+			$template = $this->properties["ftpl_view"];
+		};
 		
-
-		$template = $this->get_long_template($section);
 		if (is_array($docid)) 
 		{
-			$template = $this->get_lead_template($section);
+			$template = $this->_get_template_filename($this->properties["tpl_lead"]);
+			if (not($template))
+			{
+				$template = $this->properties["ftpl_lead"];
+			};
 			$template = $template == "" ? "plain.tpl" : $template;
 			$template2 = file_exists($GLOBALS["tpldir"]."/automatweb/documents/".$template."2") ? $template."2" : $template;
 			$ct = ""; 
@@ -4437,7 +4454,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					"section" => $section,
 					"no_strip_lead" => $GLOBALS["no_strip_lead"],
 					"notitleimg" => 0,
-					"tpl" => $tpl,
+					"tpl" => $template,
 					"boldlead" => $GLOBALS["boldlead"]
 				));
 				if ($d->no_left_pane)
@@ -4558,7 +4575,11 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$right_promo = "";
 		$left_promo = "";
 		$scroll_promo = "";
-		$template = $this->get_lead_template($section);
+		$template = $this->_get_template_filename($this->properties["tpl_lead"]);
+		if (not($template))
+		{
+			$template = $this->properties["ftpl_lead"];
+		};
 		if ($GLOBALS["lang_menus"])
 		{
 			$lai = "AND objects.lang_id = ".$GLOBALS["lang_id"];
@@ -5311,6 +5332,12 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"tpl_dir"  => "",
 			"users_only" => 0,
 			"comment" => "",
+			"tpl_view" => "",
+			"ftpl_view" => "",
+			"tpl_lead" => "",
+			"ftpl_lead" => "",
+			"tpl_edit" => "",
+			"ftpl_edit" => "",
 		);
 
 		while($parent)
@@ -5406,6 +5433,14 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			}
 		}
 		$this->raise_error(ERR_MNEDIT_NOACL,"No ACL error messages defined!",true);
+	}
+
+	function _get_template_filename($id)
+	{
+		$q = "SELECT filename FROM template WHERE id = '$id'";
+		$this->db_query($q);
+		$row = $this->db_next();
+		return $row["filename"];
 	}
 }
 ?>
