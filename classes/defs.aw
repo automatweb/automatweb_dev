@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.60 2002/12/02 12:50:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.61 2002/12/02 17:43:52 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -14,15 +14,11 @@ if (!defined("DEFS"))
 	classload("xml","php");
 
 	////
-	// !Replaces links inside text
+	// !places <a href tags around urls and e-mail addresses in text $src
 	function create_links($src)
 	{
-//		$src .= " ";
-		$src = preg_replace("/(\W)((http(s?):\/\/)|(www\.))(.+?)([\s|$])/im", "$1<a href=\"http$4://$5$6\" target=\"_blank\">$3$5$6</a>$7", $src);
-//		$src = preg_replace('/([a-z0-9]((\.|_)?[a-z0-9]+)+@([a-z0-9]+(\.|-)?)+[a-z0-9]\.[a-z]{2,})/i',"<a href=\"mailto:$1\">$1</a>",$src);
-		// stripime viimase tyhiku maha ka j2lle. ex ta ju asja aeglasemaks tee a seda on kaind of vaja - terryf
-//		return substr($src,0,strlen($src)-1);	
-		return $src;
+		$src = preg_replace("/((\W|^))((http(s?):\/\/)|(www\.))(\S+)/im", "$2<a href=\"http$5://$6$7\" target=\"_blank\">$4$6$7</a>", $src);
+		return preg_replace("/((\s|^)+)(\S+)@(\S+)/","\\2<a href='mailto:\\3@\\4'>\\3@\\4</a>", $src);
 	}
 
 	function strip_html($src)
