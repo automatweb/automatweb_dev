@@ -1,5 +1,11 @@
 <?php 
 
+/*
+
+EMIT_MESSAGE(MSG_STORAGE_SAVE)
+
+*/
+
 class _int_object 
 {
 	///////////////////////////////////////////
@@ -236,6 +242,17 @@ class _int_object
 			if (isset($param["from"]))
 			{
 				$filter["from"] = $param["from"];
+			}
+			foreach($param as $k => $v)
+			{
+				if (substr($k, 0, 3) == "to.")
+				{
+					$filter[$k] = $v;
+				}
+				if (substr($k, 0, 5) == "from.")
+				{
+					$filter[$k] = $v;
+				}
 			}
 		}
 
