@@ -45,7 +45,7 @@
 													<tr>
 														<td class="celltext">Pealkiri</td>
 														<td class="celltext">Jrk</td>
-														<td class="celltext">Elemendid</td>
+														<td class="celltext">Sorditav</td>
 													</tr>
 													<!-- SUB: COLUMN -->
 													<tr>
