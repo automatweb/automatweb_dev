@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.2 2001/05/30 00:42:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.3 2001/05/30 01:05:29 duke Exp $
 // file.aw - Failide haldus
 global $orb_defs;
 $orb_defs["file"] = "xml";
@@ -27,7 +27,15 @@ class file extends aw_template
 		$retval = "";
 		if ($store == "fs")
 		{
-			$retval = $this->_put_fs($args);
+			$fname = $this->_put_fs($args);
+			$oid = $this->new_object(array(
+				"parent" => $parent,
+				"name" => $filename,
+				"class_id" => CL_FILE,
+				"comment" => $comment,
+			));
+			$q = "INSERT INTO files (id,type,file) VALUES('$pid','$type','$fname')";
+			$this->db_query($q);
 		};
 		return $retval;
 
@@ -35,14 +43,21 @@ class file extends aw_template
 
 	////
 	// !Salvestab faili failisysteemi. For internal use, s.t. kutsutakse välja put-i seest
+	// returns the name of the file that the data was saved in
 	function _put_fs($args = array())
 	{
+		// find the extension for the file
+		list($major,$minor) = explode("/",$args["type"]);
+
 		// first, we need to find a path to put the file
-		global $basedir;
-		print "bs = $basedir<br>";
-		print "<pre>";
-		print_r($args);
-		print "</pre>";
+		$filename = $this->gen_uniq_id();
+		$prefix = substr($filename,0,1);
+		$file = SITE_DIR . "/files/" . $prefix . "/" . "$filename.$minor";
+		$this->put_file(array(
+					"file" => $file,
+					"content" => $args["content"],
+			));
+		return $file;
 	}
 
 	////
