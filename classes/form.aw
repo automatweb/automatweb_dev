@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.38 2001/07/18 16:22:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.39 2001/07/18 18:08:46 kristo Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -42,6 +42,9 @@ class form extends form_base
 		$this->typearr = array(FORM_ENTRY => FG_ENTRY_FORM, FORM_SEARCH => FG_SEARCH_FORM, FORM_RATING => FG_RATING_FORM);
 		$this->formaliases = "";
 		$this->entry_id = 0;
+
+		$this->active_currency = 0;
+
 		lc_load("definition");
 	}
 
@@ -2538,6 +2541,13 @@ class form extends form_base
 			}
 		}
 		return $ret;
+	}
+
+	////
+	// !if this function is called, all price elements are converted to this currency
+	function set_active_currency($cuid = 0)
+	{
+		$this->active_currency = $cuid;
 	}
 };	// class ends
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.25 2001/07/12 04:23:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.26 2001/07/18 18:08:47 kristo Exp $
 // form_entry_element.aw - 
 session_register("clipboard");
 classload("currency");
@@ -87,9 +87,20 @@ load_vcl("date_edit");
 				// currencies are cached the first time we ask for one
 				if ($this->arr["price_cur"])
 				{
-					$cur = $this->currency->get($this->arr["price_cur"]);
-					$in_dem = (double)$cur["rate"]*(double)$this->entry;
-					$html.=$cur["name"];
+					if ($this->form->active_currency)
+					{
+						// if the currency in which to show price is set, then show that currency
+						$cur = $this->currency->get($this->form->active_currency);
+						$in_dem = (double)$cur["rate"]*(double)$this->entry;
+						$html.=$cur["name"];
+					}
+					else
+					{
+						$cur = $this->currency->get($this->arr["price_cur"]);
+						$in_dem = (double)$cur["rate"]*(double)$this->entry;
+						$html.=$cur["name"];
+					}
+
 					if (is_array($this->arr["price_show"]))
 					{
 						foreach($this->arr["price_show"] as $prid)
