@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.40 2002/07/24 20:34:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.41 2002/07/29 12:36:38 duke Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -83,7 +83,7 @@ class form_table extends form_base
 
 	////
 	// !adds another row of data to the table
-	function row_data($dat,$form_id = 0,$section = 0 ,$op_id = 0,$chain_id = 0, $chain_entry_id = 0)
+	function row_data(&$dat,$form_id = 0,$section = 0 ,$op_id = 0,$chain_id = 0, $chain_entry_id = 0)
 	{
 		enter_function("form_table::row_data", array());
 		if ($form_id != 0)
