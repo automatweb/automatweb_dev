@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.83 2002/03/11 15:42:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.84 2002/03/12 23:42:01 duke Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -69,7 +69,7 @@ class core extends db_connector
 		// the object into memory.
 		if ($oid)
 		{
-			$odata = $this->get_object($oid);
+			$odata = $this->get_object($oid,$args["no_cache"]);
 			//$odata = $this->_get_object_metadata($oid);
 		}
 		else
@@ -552,15 +552,32 @@ class core extends db_connector
 
 	////
 	// !kirjutab objekti kustutatux
-	function delete_object($oid)
+	function delete_object($oid,$class_id = false)
 	{
 		global $uid;
+		$obj = $this->get_object($oid);
+		if ($obj["class_id"] == CL_FILE || $obj["class_id"] == CL_PSEUDO)
+		{
+			// remove the file size from all parent folders as well
+			classload("file");
+			$fi = new file;
+			$meta = $this->get_object_metadata(array(
+				"metadata" => $obj["metadata"]
+			));
+			$fi->add_size_to_parents($obj["parent"],-$meta["file_size"]);
+		}
 		$t = time();
+		$where = " oid = '$oid'";
+		if ($class_id)
+		{
+			$where .= " AND class_id = '$class_id'";
+		};
+
 		$q = "UPDATE objects
 			SET status = 0,
 			    modified = '$t',
 			    modifiedby = '$uid'
-			WHERE oid = '$oid'";
+			WHERE $where";
 		$this->_log("OBJECT",sprintf(LC_CORE_TO_ERASED,$oid));
 		$this->db_query($q);
 	}
@@ -689,7 +706,6 @@ class core extends db_connector
 	function add_alias($source,$target,$extra = "") 
 	{
 		$target_data = $this->get_object($target);
-
 		$idx = $this->db_fetch_field("SELECT MAX(idx) as idx FROM aliases WHERE source = '$source' AND type =  '$target_data[class_id]'","idx");
 		if ($idx === "")
 		{
@@ -699,7 +715,6 @@ class core extends db_connector
 		{
 			$idx = 1;
 		}
-
 		$q = "INSERT INTO aliases (source,target,type,data,idx)
 			VALUES('$source','$target','$target_data[class_id]','$extra','$idx')";
 
@@ -1043,11 +1058,6 @@ class core extends db_connector
 					};
 				};
 			};
-			if ($DEBUG)
-			{
-				print "complete<br>";
-				flush();
-			};
 		};
 		if (is_object($awt))
 		{
@@ -1179,7 +1189,7 @@ class core extends db_connector
 
 	////
 	// !tagastab objekti
-	function get_object($arg) 
+	function get_object($arg,$no_cache = false) 
 	{
 		if (is_array($arg))
 		{
@@ -1191,12 +1201,19 @@ class core extends db_connector
 			$oid = $arg;
 		};
 
-		if (!aw_cache_get("objcache",$oid))
+		if ($no_cache)
 		{
-			aw_cache_set("objcache",$oid,$this->get_record("objects","oid",$oid));
+			$_t = $this->get_record("objects","oid",$oid);
 		}
+		else
+		{
+			if (!aw_cache_get("objcache",$oid))
+			{
+				aw_cache_set("objcache",$oid,$this->get_record("objects","oid",$oid));
+			}
 
-		$_t = aw_cache_get("objcache",$oid);
+			$_t = aw_cache_get("objcache",$oid);
+		}
 		if (isset($class_id) && ($_t["class_id"] != $class_id) )
 		{
 			// objekt on valest klassist
