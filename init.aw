@@ -211,6 +211,17 @@ function init_config($arr)
 		{
 			define($erd["def"], $erid);
 		}
+
+		// defines for syslog
+		foreach($GLOBALS["cfg"]["syslog"]["types"] as $stid => $std)
+		{
+			define($std["def"], $stid);
+		}
+		// defines fos syslog actions
+		foreach($GLOBALS["cfg"]["syslog"]["actions"] as $said => $sad)
+		{
+			define($sad["def"], $said);
+		}
 	};
 
 	// db driver quoting settings

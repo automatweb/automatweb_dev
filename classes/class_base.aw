@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.24 2002/12/19 17:17:40 duke Exp $
+// $Id: class_base.aw,v 2.25 2002/12/20 11:39:43 kristo Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -505,11 +505,11 @@ class class_base extends aliasmgr
 
 		if ($this->new)
 		{
-			$this->_log($classname, "Lisas $classname objekti $name ($id)", $id);
+			$this->_log(ST_CONFIG, SA_ADD, "Lisas $classname objekti $name ($id)", $id);
 		}
 		else
 		{
-			$this->_log($classname, "Muutis $classname objekti $name ($id)", $id);
+			$this->_log(ST_CONFIG, SA_CHANGE, "Muutis $classname objekti $name ($id)", $id);
 		};
 
 		$args = array("id" => $id,"group" => $group,"period" => aw_global_get("period")) + (is_array($extraids) ? $extraids : array());

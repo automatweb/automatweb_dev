@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.67 2002/12/19 15:19:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.68 2002/12/20 11:39:43 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -499,7 +499,7 @@ class users extends users_user
 			}
 		}
 
-		$this->_log("user", "$arr[id] changed password");
+		$this->_log(ST_USERS, SA_CHANGE_PWD, "$arr[id] changed password");
 		if (is_admin())
 		{
 			return $this->mk_my_orb("gen_list", array());
@@ -518,7 +518,7 @@ class users extends users_user
 		extract($arr);
 		$this->save(array("uid" => $id, "blocked" => 1, "blockedby" => aw_global_get("uid")));
 		$this->savegroup(array("gid" => $this->get_gid_by_uid($id),"type" => 3));
-		$this->_log("user", aw_global_get("uid")." blocked user $id");
+		$this->_log(ST_USERS, SA_BLOCK_USER, aw_global_get("uid")." blocked user $id");
 		header("Location: ".$this->mk_orb("gen_list", array()));
 	}
 
@@ -576,7 +576,7 @@ class users extends users_user
 			$add_state = "";
 			aw_session_set("session_filled_forms",array());
 
-			$this->_log("user", $add_state["uid"]." joined");
+			$this->_log(ST_USERS, SA_ADD,  $add_state["uid"]." joined");
 			return $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$after_join;
 		}
 		else
@@ -631,7 +631,7 @@ class users extends users_user
 
 			$add_state = "";
 			aw_session_set("session_filled_forms",array());
-			$this->_log("user", $add_state["uid"]." was added from admin interface by ".aw_global_get("uid"));
+			$this->_log(ST_USERS, SA_ADD, $add_state["uid"]." was added from admin interface by ".aw_global_get("uid"));
 			return $this->mk_orb("gen_list", array());
 		}
 		else
@@ -1043,7 +1043,7 @@ class users extends users_user
 		$mail = str_replace("\r\n","\n",$mail);
 
 		mail($udata["email"],$c->get_simple_config("remind_pwd_mail_subj"),$mail,"From: ".$this->cfg["mail_from"]);
-		$this->_log("user", "user $username was reminded of his/her password");
+		$this->_log(ST_USERS, SA_REMIND_PWD, "user $username was reminded of his/her password");
 		return $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$after;
 	}
 
@@ -1245,7 +1245,7 @@ class users extends users_user
 		setcookie("admin_lang",$admin_lang,time()*24*3600*1000,"/");
 		setcookie("admin_lang_lc",$admin_lang_lc,time()*24*3600*1000,"/");
 
-		$this->_log("user", aw_global_get("uid")." changed settings ");
+		$this->_log(ST_USERS, SA_CHANGE, aw_global_get("uid")." changed settings ");
 		return $this->mk_my_orb("settings", array("id" => $id));
 	}
 
@@ -1954,7 +1954,7 @@ class users extends users_user
 		$newpass = md5($pass1);
 		$q = "UPDATE users SET password = '$newpass' WHERE uid = '$uid'";
 		$this->db_query($q);
-		$this->_log("auth","$uid vahetas parooli (hash)");
+		$this->_log(ST_USERS, SA_CHANGE_PWD,"$uid vahetas parooli (hash)");
 //		$this->read_adm_template("password_change_success.tpl");
 //		return $this->parse();
 		aw_session_set("status_msg","<b><font color=green>Parool on edukalt vahetatud</font></b>");

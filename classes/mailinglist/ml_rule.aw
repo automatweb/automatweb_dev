@@ -313,7 +313,7 @@ class ml_rule extends aw_template
 				$this->execute_rules($matches,$ruledta);
 			};
 
-			$this->_log("mlist","muutis ruuli $name");
+			$this->_log(ST_MAILINGLIST_RULE, SA_CHANGE,"muutis ruuli $name", $id);
 			return $this->mk_my_orb("change",array("id" => $id,"parent" => $parent));
 		};
 	}
@@ -349,10 +349,6 @@ class ml_rule extends aw_template
 			case "entry":
 				$w="(trig & ".T_ENTRY." >0)";
 				break;
-
-			default:
-				$this->_log("mlist","error: select_rules type on määramata");
-				return;
 		}
 
 		$q="SELECT rid FROM ml_rules WHERE $w AND dynamic='1'";
@@ -375,7 +371,7 @@ class ml_rule extends aw_template
 	{
 		if (!is_array($arr))
 		{
-			$this->_log("mlist","error: match_rules arr ei ole array");
+			$this->_log(ST_MAILINGLIST_RULE, SA_RAISE_ERROR,"error: match_rules arr ei ole array");
 			return;
 		};
 
@@ -569,7 +565,7 @@ class ml_rule extends aw_template
 	{
 		if (!is_array($arr))
 		{
-			$this->_log("mlist","error: execute_rules arr ei ole array");
+			$this->_log(ST_MAILINGLIST_RULE, SA_RAISE_ERROR,"error: execute_rules arr ei ole array");
 			return;
 		};
 
@@ -649,7 +645,7 @@ class ml_rule extends aw_template
 
 
 					default:
-						$this->_log("mlist","error: WTF?? execute_rules on mid=$mid rule rid=$rid has no action!");
+						$this->_log(ST_MAILINGLIST_RULE, SA_RAISE_ERROR, "error: WTF?? execute_rules on mid=$mid rule rid=$rid has no action!");
 						break;
 				};// of switch
 			};// of foreach($midarr as $mid)

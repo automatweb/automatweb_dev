@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.141 2002/12/19 11:44:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.142 2002/12/20 11:39:43 kristo Exp $
 // core.aw - Core functions
 define("ARR_NAME", 1);
 define("ARR_ALL",2);
@@ -223,9 +223,14 @@ class core extends db_connector
 
 	////
 	// !write to syslog. 
-	function _log($type,$action,$oid = 0)
+	// params:
+	// type - int, defined in syslog.types, log entry type (class name/pageview)
+	// action - int, defined in syslog.actions, log entry action (add obj, change obj)
+	// text - text for log entry
+	// oid - object that the action was performed on
+	function _log($type,$action,$text,$oid = 0)
 	{
-		$this->quote($action);
+		$this->quote($text);
 
 		$REMOTE_ADDR = aw_global_get("REMOTE_ADDR");
 		$ip = aw_global_get("HTTP_X_FORWARDED_FOR");
@@ -234,8 +239,8 @@ class core extends db_connector
 			$ip = $REMOTE_ADDR;
 		}
 		$t = time();
-		$fields = array("tm","uid","type","action","ip","oid","created_hour","created_day","created_week","created_month","created_year");
-		$values = array($t,aw_global_get("uid"),$type,$action,$ip,$oid,date("H",$t),date("d",$t),date("w",$t),date("m",$t),date("Y",$t));
+		$fields = array("tm","uid","type","action","ip","oid","act_id", "referer");
+		$values = array($t,aw_global_get("uid"),$type,$text,$ip,$oid,$action, aw_global_get("HTTP_REFERER"));
 		if (aw_ini_get("tafkap"))
 		{
 			$fields[] = "tafkap";
@@ -245,7 +250,7 @@ class core extends db_connector
 		if (aw_ini_get("syslog.has_site_id") == 1)
 		{
 			$fields[] = "site_id";
-      $values[] = $this->cfg["site_id"];
+			$values[] = $this->cfg["site_id"];
 		};
 		$q = sprintf("INSERT DELAYED INTO syslog (%s) VALUES (%s)",join(",",$fields),join(",",map("'%s'",$values)));
 
@@ -518,7 +523,7 @@ class core extends db_connector
 			    modified = '$t',
 			    modifiedby = '".aw_global_get("uid")."'
 			WHERE $where";
-		$this->_log("OBJECT",sprintf(LC_CORE_TO_ERASED,$oid));
+		$this->_log(ST_CORE, SA_DELETE, sprintf(LC_CORE_TO_ERASED,$oid), $oid);
 		$this->db_query($q);
 	}
 
@@ -724,7 +729,7 @@ class core extends db_connector
 		$aliasmgr = get_instance("aliasmgr");
 		$aliasmgr->cache_oo_aliases($source);
 
-		$this->_log("alias",sprintf(LC_CORE_ADD_TO_OBJECT,$source));
+		$this->_log(ST_CORE, SA_ADD_ALIAS,"Lisas objektile $source aliase $target", $source);
 	}
 
 	////
@@ -747,7 +752,7 @@ class core extends db_connector
 		$aliasmgr = get_instance("aliasmgr");
 		$_aliases = $aliasmgr->cache_oo_aliases(array("oid" => $source));
 
-		$this->_log("alias",sprintf(LC_CORE_ADD_TO_OBJECT,$source));
+		$this->_log(ST_CORE, SA_CHANGE_ALIAS, "Muutis objekti $source aliast $target", $source);
 	}
 
 	////
@@ -1470,7 +1475,7 @@ class core extends db_connector
 	// $msg - teate tekst
 	// $fatal - katkestada töö?
 	// $silent - logida viga, aga jätkata tööd
-	function raise_error($err_type,$msg, $fatal = false, $silent = false) 
+	function raise_error($err_type,$msg, $fatal = false, $silent = false, $oid = 0)
 	{
 		$this->errmsg[] = $msg;
 
@@ -1478,9 +1483,11 @@ class core extends db_connector
 		$is_rpc_call = aw_global_get("__is_rpc_call");
 		$rpc_call_type = aw_global_get("__rpc_call_type");
 
+		$this->_log(ST_CORE, SA_RAISE_ERROR, $msg, $oid);
+
 		$msg = "Suhtuge veateadetesse rahulikult!  Te ei ole korda saatnud midagi katastroofilist. Ilmselt juhib programm Teie tähelepanu mingile ebatäpsusele  andmetes või näpuveale.<Br><br>\n\n".$msg;
 
-		$this->_log("error",$msg);	
+
 		// meilime veateate listi ka
 		$subj = "Viga saidil ".$this->cfg["baseurl"];
 

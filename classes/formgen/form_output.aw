@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.4 2002/12/03 12:52:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.5 2002/12/20 11:39:43 kristo Exp $
 classload("formgen/form_base");
 class form_output extends form_base 
 {
@@ -723,7 +723,7 @@ class form_output extends form_base
 		$this->quote(&$tp);
 		$this->db_query("UPDATE form_output SET op = '$tp' WHERE id = $id");
 		$this->upd_object(array("oid" => $id));
-		$this->_log("form",sprintf(LC_FORM_OUTPUT_CHANGED_STYLE,$name));
+		$this->_log(ST_FORM_OP, SA_CHANGE,sprintf(LC_FORM_OUTPUT_CHANGED_STYLE,$name), $id);
 	}
 
 	////

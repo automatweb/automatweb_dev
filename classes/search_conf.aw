@@ -544,7 +544,7 @@ class search_conf extends aw_template
 			$l.=LC_SEARCH_CONF_WITH_KEYWORD;
 			$l.=join(",",map("%s",$keys));
 		}
-		$this->_log("search",sprintf(LC_SEARCH_CONF_LOOK_ANSWER,$sel_parent,$l,$cnt));
+		$this->_log(ST_SEARCH, SA_DO_SEARCH, sprintf(LC_SEARCH_CONF_LOOK_ANSWER,$sel_parent,$l,$cnt));
 	}
 
 	function do_sorting($pa)

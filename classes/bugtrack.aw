@@ -473,7 +473,7 @@ class bugtrack extends aw_template
 		$this->update_mail($req["id"],MAIL_ADD);
 
 		// logi 
-		$this->_log("bug","Lisas bugtrackki ".$this->bugtypes[$arr["bug_type"]]." $title");
+		$this->_log(ST_BUG, SA_ADD,"Lisas bugtrackki ".$this->bugtypes[$arr["bug_type"]]." $title");
 
 		return $this->mk_my_orb("edit",array("id"=> $req["id"]),"",false,true);
 	}
@@ -568,7 +568,7 @@ class bugtrack extends aw_template
 		$this->update_mail($id,MAIL_CHANGE);
 
 		// logi 
-		$this->_log("bug","Muutis bugi ".$bug["title"]);
+		$this->_log(ST_BUG, SA_CHANGE,"Muutis bugi ".$bug["title"]);
 		
 		return $this->mk_my_orb("edit",array("id" => $id),"",false,true);
 	}
@@ -595,7 +595,7 @@ class bugtrack extends aw_template
 
 		if ($req["error"])
 		{
-			$this->_log("error","bugtrack::replicate VIGA bugi uuendamisel");
+			$this->_log(ST_BUG, SA_RAISE_ERROR,"bugtrack::replicate VIGA bugi uuendamisel");
 			die("VIGA bugi uuendamisel ".$req["error"]);
 		};
 
@@ -612,7 +612,7 @@ class bugtrack extends aw_template
 		}
 
 		// logi 
-		$this->_log("bug","Määras bugi ".$bug["title"]." ".$developer."-le");
+		$this->_log(ST_BUG, SA_ASSIGN,"Määras bugi ".$bug["title"]." ".$developer."-le");
 
 		$GLOBALS["reforb"]=0;// ära redirecti siin midagi krt.
 		//echo "",," br";
@@ -638,7 +638,7 @@ class bugtrack extends aw_template
 			foreach($sel as $id)
 			{
 				$buk = $this->get_bug($id);
-				$this->_log("bug","Kustutas bugi ".$buk["title"]);
+				$this->_log(ST_BUG, SA_DELETE,"Kustutas bugi ".$buk["title"]);
 				
 				// kustuta kohalikust tabelist kui puuk ise pole masterist pandud
 				if ($buk["site"]!=$this->cfg["mastersite"])

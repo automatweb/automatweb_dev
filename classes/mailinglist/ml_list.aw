@@ -107,7 +107,7 @@ class ml_list extends aw_template
 				$this->update_automatic_list($id);
 			}
 
-			$this->_log("mlist","muutis meililisti $name");
+			$this->_log(ST_MAILINGLIST, SA_CHANGE,"muutis meililisti $name", $id);
 		}
 		else
 		{
@@ -120,7 +120,7 @@ class ml_list extends aw_template
 					"user_form_conf" => $user_form_conf
 				)
 			));
-			$this->_log("mlist","lisas meililisti $name");
+			$this->_log(ST_MAILINGLIST, SA_ADD,"lisas meililisti $name", $id);
 		}
 		return $this->mk_my_orb("omadused",array("id" => $id));
 	}
@@ -526,7 +526,7 @@ class ml_list extends aw_template
 				$this->db_query("INSERT INTO ml_queue (lid,mid,gid,uid,aid,status,start_at,last_sent,patch_size,delay,position,total)
 					VALUES ('$lid','$id','$gid','".aw_global_get("uid")."','$aid','0','$_start_at','0','$_patch_size','$_delay','0','$count')");
 				
-				$this->_log("mlist","saatis meili $id listi ".$v["name"].":$gname");
+				$this->_log(ST_MAILINGLIST, SA_SEND,"saatis meili $id listi ".$v["name"].":$gname", $lid);
 			};
 		};
 			

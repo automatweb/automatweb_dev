@@ -63,7 +63,7 @@ class ml_stamp extends aw_template
 				"key" => "content"
 			));
 
-			$this->_log("mlist","lisas stambi $name");
+			$this->_log(ST_MAILINGLIST_STAMP, SA_ADD,"lisas stambi $name", $id);
 		} 
 		else
 		{
@@ -73,7 +73,7 @@ class ml_stamp extends aw_template
 				"value" => $content,
 				"key" => "content"
 			));
-			$this->_log("mlist","muutis stampi $name");
+			$this->_log(ST_MAILINGLIST_STAMP, SA_CHANGE, "muutis stampi $name", $id);
 		};
 		
 		return $this->mk_my_orb("change",array("id" => $id,"parent" => $parent));

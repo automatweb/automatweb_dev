@@ -117,7 +117,7 @@ class iframe extends aw_template
 				"class_id" => CL_HTML_IFRAME,
 			));
 
-			$this->_log("iframe",sprintf(IFRAME_SYSLOG_ADD,$name),$id);
+			$this->_log(ST_IFRAME, SA_ADD, sprintf(IFRAME_SYSLOG_ADD,$name),$id);
 		}
 		else
 		{
@@ -127,7 +127,7 @@ class iframe extends aw_template
 				"comment" => $comment,
 			));
 			
-			$this->_log("iframe",sprintf(IFRAME_SYSLOG_CHANGE,$name),$id);
+			$this->_log(ST_IFRAME, SA_CHANGE,sprintf(IFRAME_SYSLOG_CHANGE,$name),$id);
 		};
 
 		if ( ($height < $this->min_height) || ($height > $this->max_height) )

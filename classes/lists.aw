@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.20 2002/12/02 11:18:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.21 2002/12/20 11:39:43 kristo Exp $
 // lists.aw - listide haldus
 class lists extends aw_template
 {
@@ -31,12 +31,12 @@ class lists extends aw_template
 		if ($id)
 		{
 			$this->upd_object(array("name" => $name, "comment" => $comment, "oid" => $id));
-			$this->_log("mlist",sprintf(LC_LISTS_CHANGE_LIST,$name));
+			$this->_log(ST_ML_LIST, SA_CHANGE,sprintf(LC_LISTS_CHANGE_LIST,$name), $id);
 		}
 		else
 		{
 			$id = $this->create_list($arr);
-			$this->_log("mlist",sprintf(LC_LISTS_ADD_LIST,$name));
+			$this->_log(ST_ML_LIST, SA_ADD,sprintf(LC_LISTS_ADD_LIST,$name), $id);
 		}
 		return $this->mk_my_orb("change",array("id" => $id));
 	}
@@ -188,7 +188,7 @@ class lists extends aw_template
 		extract($args);
 		$this->delete_object($id,CL_MAILINGLIST);
 		$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $id","name");
-		$this->_log("mlist",sprintf(LC_LISTS_ERASE_LIST,$name));
+		$this->_log(ST_ML_LIST, SA_DELETE,sprintf(LC_LISTS_ERASE_LIST,$name), $id);
 		return $this->mk_my_orb("gen_list",array("parent" => $parent));
 	}
 
@@ -422,12 +422,12 @@ class lists extends aw_template
 		if ($id)
 		{
 			$this->upd_object(array("oid" => $id, "name" => $name, "status" => 2, "comment" => $comment));
-			$this->_log("mlist",sprintf(LC_LISTS_CHANGE_CATEGORY,$name));
+			$this->_log(ST_ML_CAT, SA_CHANGE,sprintf(LC_LISTS_CHANGE_CATEGORY,$name), $id);
 		}
 		else
 		{
 			$id = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_MAILINGLIST_CATEGORY, "comment" => $comment));
-			$this->_log("mlist",sprintf(LC_LISTS_ADD_CATEGORY,$name));
+			$this->_log(ST_ML_CAT, SA_ADD,sprintf(LC_LISTS_ADD_CATEGORY,$name), $id);
 		}
 
 		return $this->mk_my_orb("change_cat",array("id" => $id));

@@ -109,7 +109,7 @@ class ml_member extends aw_template
 		$ml_inst = get_instance("mailinglist/ml_list");
 		$ml_inst->flush_member_cache();
 
-		$this->_log("mlist","muutis liiget $namestr");
+		$this->_log(ST_MAILINGLIST_MEMBER, SA_CHANGE, "muutis liiget $namestr", $id);
 		return $this->mk_my_orb("change",array("id" => $id,"fid" => $fid));
 	}
 

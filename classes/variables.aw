@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/variables.aw,v 2.4 2002/12/02 12:19:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/variables.aw,v 2.5 2002/12/20 11:39:43 kristo Exp $
 
 class variables extends aw_template
 {
@@ -31,12 +31,12 @@ class variables extends aw_template
 		if ($id)
 		{
 			$this->upd_object(array("oid" => $id, "name" => $name));
-			$this->_log("ml_var",sprintf(LC_VARS_CHANGED_VAR,$name));
+			$this->_log(ST_ML_VAR, SA_CHANGE, sprintf(LC_VARS_CHANGED_VAR,$name), $id);
 		}
 		else
 		{
 			$id = $this->new_object(array("parent" => $parent,"name" => $name, "class_id" => CL_MAILINGLIST_VARIABLE,"status" => 2));
-			$this->_log("ml_var",sprintf(LC_VARS_ADD_VAR,$name));
+			$this->_log(ST_ML_VAR,SA_ADD, sprintf(LC_VARS_ADD_VAR,$name), $id);
 		}
 
 		return $this->mk_my_orb("change", array("id" => $id));
@@ -383,12 +383,12 @@ class variables extends aw_template
 		if ($id)
 		{
 			$this->upd_object(array("oid" => $id, "name" => $name, "comment" => $value));
-			$this->_log("ml_var",sprintf(LC_VARS_CHANGED_STAMP,$name));
+			$this->_log(ST_ML_STAMP,SA_CHANGE, sprintf(LC_VARS_CHANGED_STAMP,$name), $id);
 		}
 		else
 		{
 			$id = $this->new_object(array("parent" => 1,"name" => $name, "class_id" => CL_MAILINGLIST_STAMP, "comment" => $value));
-			$this->_log("ml_var",sprintf(LC_VARS_ADD_STAMP,$name));
+			$this->_log(ST_ML_STAMP,SA_ADD, sprintf(LC_VARS_ADD_STAMP,$name), $id);
 		};
 		return $this->mk_my_orb("change_stamp",array("id" => $id));
 	}
@@ -443,7 +443,7 @@ class variables extends aw_template
 				"status" => 2,
 				"comment" => $comment,
 			));
-			$this->_log("ml_var",sprintf(LC_VARS_CHANGED_CAT,$name));
+			$this->_log(ST_ML_CAT, SA_CHANGE,sprintf(LC_VARS_CHANGED_CAT,$name), $id);
 		}
 		else
 		{
@@ -454,7 +454,7 @@ class variables extends aw_template
 				"comment" => $comment,
 			));
 			
-			$this->_log("ml_var",sprintf(LC_VARS_ADD_CAT,$name));
+			$this->_log(ST_ML_CAT, SA_ADD,sprintf(LC_VARS_ADD_CAT,$name), $id);
 		}
 		return $this->mk_my_orb("change_cat",array("id" => $id));
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.5 2002/12/19 10:40:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.6 2002/12/20 11:39:43 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -127,7 +127,7 @@ class form_actions extends form_base
 				}
 				$this->db_query("UPDATE form_actions SET data = '$data' WHERE id = $action_id");
 				$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $action_id","name");
-				$this->_log("form",sprintf(LC_FORM_ACTIONS_CHANGED_ACTION,$this->name,$name));
+				$this->_log(ST_FORM_ACTION, SA_CHANGE, sprintf(LC_FORM_ACTIONS_CHANGED_ACTION,$this->name,$name), $id);
 				return $this->mk_orb("change_action", array("id" => $id, "aid" => $action_id, "level" => 2));
 			}
 			else
@@ -148,7 +148,7 @@ class form_actions extends form_base
 				"status" => 2
 			));
 			$this->db_query("INSERT INTO form_actions(id,form_id,type) VALUES($action_id, $id, '$type')");
-			$this->_log("form",sprintf(LC_FORM_ACTIONS_ADDED_FORM_ACTIONS,$id,$name));
+			$this->_log(ST_FORM_ACTION, SA_ADD,sprintf(LC_FORM_ACTIONS_ADDED_FORM_ACTIONS,$id,$name), $id);
 			return $this->mk_orb("change_action", array("id" => $id, "aid" => $action_id, "level" => 2));
 		}
 	}

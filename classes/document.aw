@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.134 2002/12/11 12:32:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.135 2002/12/20 11:39:43 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -1220,7 +1220,7 @@ class document extends aw_template
 			));
 			
 			// logime aktsioone
-			$this->_log("document","muutis dokumenti <a href='".$this->cfg["baseurl"]."/automatweb/".$this->mk_orb("change", array("id" => $id))."'>'".$data["title"]."'</a> arhiivikoopiat");
+			$this->_log(ST_DOCUMENT, SA_CHANGE,"muutis dokumenti <a href='".$this->cfg["baseurl"]."/automatweb/".$this->mk_orb("change", array("id" => $id))."'>'".$data["title"]."'</a> arhiivikoopiat", $id);
 			// laena mulle bensiini ja tikke, vanemuine
 			return $this->mk_my_orb("change", array("id" => $data["id"],"section" => $data["section"],"version" => $data["version"]));
 		};
@@ -1397,7 +1397,7 @@ class document extends aw_template
 		$this->flush_cache();
 
 		// logime aktsioone
-		$this->_log("document","muutis dokumenti <a href='".$this->cfg["baseurl"]."/automatweb/".$this->mk_orb("change", array("id" => $id))."'>'".$data["title"]."'</a>");
+		$this->_log(ST_DOCUMENT, SA_CHANGE,"muutis dokumenti <a href='".$this->cfg["baseurl"]."/automatweb/".$this->mk_orb("change", array("id" => $id))."'>'".$data["title"]."'</a>",$id);
 
 		return $this->mk_my_orb("change", array("id" => $id,"section" => $data["section"]),"",false,true);
 	}
@@ -2086,7 +2086,7 @@ class document extends aw_template
 			};
 			$q = sprintf("UPDATE documents SET %s WHERE docid = '%d'",join(",",$values),$id);
 			$this->db_query($q);
-			$this->_log("document","aktiveeris dokumendi $id arhiiviversiooni");
+			$this->_log(ST_DOCUMENT, SA_CHANGE,"aktiveeris dokumendi $id arhiiviversiooni", $id);
 
 		};
 
@@ -2945,7 +2945,7 @@ class document extends aw_template
 		$ps = $this->parse("PAGESELECTOR");
 		$this->vars(array("PAGESELECTOR" => $ps));
 
-		$this->_log("document", "otsis stringi $str , alamjaotusest nr $parent, leiti $cnt dokumenti");
+		$this->_log(ST_SEARCH, SA_DO_SEARCH, "otsis stringi $str , alamjaotusest nr $parent, leiti $cnt dokumenti");
 		$this->db_query("INSERT INTO searches(str,s_parent,numresults,ip,tm) VALUES('$str','$parent','$cnt','".aw_global_get("REMOTE_ADDR")."','".time()."')");
 
 		$retval = $this->parse();
@@ -3429,7 +3429,7 @@ class document extends aw_template
 		mail("\"$to_name\" <".$to.">",str_replace("\n","",str_replace("\r","",$this->parse("title"))),$this->parse("mail"),"From: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
 
 		$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $section ","name");
-		$this->_log("document", "$from_name  $from saatis dokumendi <a href='".$this->cfg["baseurl"]."/?section=".$section."'>$name</a> $to_name $to  'le",$section);
+		$this->_log(ST_DOCUMENT, SA_SEND, "$from_name  $from saatis dokumendi <a href='".$this->cfg["baseurl"]."/?section=".$section."'>$name</a> $to_name $to  'le",$section);
 
 		return $this->cfg["baseurl"]."/?section=".$section;
 	}
@@ -3491,7 +3491,7 @@ class document extends aw_template
 		$feedback = get_instance("feedback");
 		$arr["title"] = $inf["title"];
 		$feedback->add_feedback($arr);
-		$this->_log("document", "$eesnimi $perenimi , email:$mail saatis feedbacki", $docid);
+		$this->_log(ST_DOCUMENT, SA_SEND, "$eesnimi $perenimi , email:$mail saatis feedbacki", $docid);
 		return $this->mk_my_orb("thanks", array("section" => $docid,"eesnimi" => $eesnimi));
 	}
 
@@ -3509,7 +3509,7 @@ class document extends aw_template
 	{
 		extract($arr);
 		$dat = $this->get_record("objects","oid",$section);
-		$this->_log("document", "Printis dokumendi $dat[name] ",$section);
+		$this->_log(ST_DOCUMENT, SA_PRINT, "Printis dokumendi $dat[name] ",$section);
 		echo($this->gen_preview(array(
 			"docid" => $section,
 			"tpl" => "print.tpl"

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.22 2002/12/11 12:46:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.23 2002/12/20 11:39:43 kristo Exp $
 // syslog.aw - syslog management
 // syslogi vaatamine ja analüüs
 class db_syslog extends aw_template
@@ -427,7 +427,7 @@ class syslog extends db_syslog
 		{
 			if ($mt[1] != aw_ini_get("baseurl"))
 			{
-				$this->_log("referer",$referer);
+				$this->_log(ST_REFERER, SA_ADD, $referer);
 				aw_session_set("referer",$mt[1]);
 			};
 		};

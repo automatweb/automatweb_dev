@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.4 2002/11/26 12:27:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.5 2002/12/20 11:39:43 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -261,7 +261,7 @@ class form_base extends form_db_base
 		aw_session_del_patt("/form_rel_tree.*/");
 
 		$this->db_query("UPDATE forms SET content = '$contents', subtype = " . $this->subtype . ", rows = ".$this->arr["rows"]." , cols = ".$this->arr["cols"].",el_tables = '$el_tblstr' WHERE id = ".$this->id);
-		$this->_log("form",sprintf(LC_FORM_BASE_CHANGED_FORM,$this->name));
+		$this->_log(ST_FORM, SA_CHANGE,sprintf(LC_FORM_BASE_CHANGED_FORM,$this->name), $this->id);
 	}
 
 	////

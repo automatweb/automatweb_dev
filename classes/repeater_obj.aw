@@ -69,7 +69,7 @@ class repeater_obj extends cal_event
 				'oid' => $id,
 				'name' => $name
 			));
-			$this->_log('repeater_obj', "Muutis repeater_obj objekti $name ($id)", $id);
+			$this->_log(ST_REPEATER, SA_CHANGE, "Muutis repeater_obj objekti $name ($id)", $id);
 		}
 		else
 		{
@@ -78,7 +78,7 @@ class repeater_obj extends cal_event
 				'name' => $name,
 				'class_id' => CL_REPEATER_OBJ
 			));
-			$this->_log('repeater_obj', "Lisas repeater_obj objekti $name ($id)", $id);
+			$this->_log(ST_REPEATER, SA_ADD, "Lisas repeater_obj objekti $name ($id)", $id);
 		}
 
 		if ($alias_to)

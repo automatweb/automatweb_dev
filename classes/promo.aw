@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.20 2002/12/19 19:06:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.21 2002/12/20 11:39:43 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -184,10 +184,10 @@ class promo extends class_base
 	function callback_pre_save($args = array())
 	{
 		$objdata = &$args["objdata"];
-                if (!$objdata["type"])
-                {
+		if (!$objdata["type"])
+		{
 			$objdata["type"] = MN_PROMO_BOX;
-                };
+		};
 	}
 
 	function convert($args = array())

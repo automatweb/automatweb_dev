@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.12 2002/12/03 13:56:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.13 2002/12/20 11:39:43 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1329,7 +1329,7 @@ class form extends form_base
 			$this->is_new_entry = true;
 			// see logimine on omal kohal ainult siis, kui täitmine toimub
 			// läbi veebi.
-			$this->_log("form","T&auml;itis formi $this->name");
+			$this->_log(ST_FORM_ENTRY, SA_ADD,"Lisas formi $this->name ($this->id) kaudu uue sisestuse $this->entry_name ($this->entry_id) ", $this->entry_id);
 			// check automatic mailinglist except 
 			$ml_list_inst = get_instance("mailinglist/ml_list");
 			$this->db_query("SELECT * FROM ml_list2automatic_form WHERE fid = '$this->id'");
@@ -1342,7 +1342,7 @@ class form extends form_base
 		{
 			// update the stored data from the gathered data
 			$this->update_entry_data($this->entry_id,$this->entry);
-			$this->_log("form","Muutis formi $this->name sisestust $this->entry_id");
+			$this->_log(ST_FORM_ENTRY, SA_CHANGE,"Muutis formi $this->name ($this->id) sisestust $this->entry_name ($this->entry_id)", $this->entry_id);
 			$this->is_new_entry = false;
 		}
 
@@ -3389,7 +3389,7 @@ class form extends form_base
 		}
 
 		// add the type of the form to the log message as well
-		$this->_log("form",$this->vars["LC_FORMS_LOG_NEW"] ." ". $this->ftypes[$type] ." ". $name);
+		$this->_log(ST_FORM, SA_ADD,$this->vars["LC_FORMS_LOG_NEW"] ." ". $this->ftypes[$type] ." ". $name, $id);
 
 		// XXX: sucky-sucky
 		if ($alias_doc)
@@ -3530,7 +3530,7 @@ class form extends form_base
 		extract($arr);
 		$this->delete_object($id);
 		$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $id","name");
-		$this->_log("form","Kustutas formi $name");
+		$this->_log(ST_FORM, SA_DELETE,"Kustutas formi $name ($id)", $id);
 		header("Location: ".$this->mk_orb("obj_list", array("parent" => $parent), "menuedit"));
 	}
 
@@ -3807,7 +3807,7 @@ class form extends form_base
 	{
 		extract($arr);
 		$this->upd_object(array("oid" => $id, "name" => $name, "comment" => $comment));
-		$this->_log("form","Muutis formi $this->name metainfot");
+		$this->_log(ST_FORM, SA_CHANGE,"Muutis formi $this->name ($id) metainfot", $id);
 		return $this->mk_orb("metainfo",  array("id" => $id));
 	}
 

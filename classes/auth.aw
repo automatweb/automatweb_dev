@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/auth.aw,v 2.2 2002/06/10 15:50:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/auth.aw,v 2.3 2002/12/20 11:39:43 kristo Exp $
 // auth.aw - authentication functions
 class auth extends aw_template 
 {
@@ -52,12 +52,12 @@ class auth extends aw_template
 
 		if ($success)
 		{
-			$this->_log("auth","$uid logis sisse");
+			$this->_log(ST_USERS, SA_LOGIN,"$uid logis sisse");
 			session_register("uid");
 		}
 		else
 		{
-			$this->_log("auth","Tundmatu kasutaja või vale parool - $uid");
+			$this->_log(ST_USERS, SA_LOGIN_FAILED,"Tundmatu kasutaja või vale parool - $uid");
 		};
 		return $this->cfg["baseurl"] . aw_global_get("request_uri_before_auth");
 	}

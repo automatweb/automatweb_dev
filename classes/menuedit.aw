@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.191 2002/12/19 19:07:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.192 2002/12/20 11:39:43 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -43,7 +43,7 @@ class menuedit extends aw_template
 		$type = $args["type"] ? $args["type"] : MN_HOME_FOLDER_SUB;
 		$q = sprintf("INSERT INTO menu (id,type) VALUES (%d,%d)",$newoid,$type);
 		$this->db_query($q);
-		$this->_log("menuedit",sprintf(LC_MENUEDIT_ADDED_HOMECAT_FOLDER,$args["name"]));
+		$this->_log(ST_MENUEDIT, SA_ADD ,sprintf(LC_MENUEDIT_ADDED_HOMECAT_FOLDER,$args["name"]), $newoid);
 
 		if (!$args['no_flush'])
 		{
@@ -963,7 +963,7 @@ class menuedit extends aw_template
 				$this->db_query("SELECT ml_users.*,objects.name as name FROM ml_users LEFT JOIN objects ON objects.oid = ml_users.id WHERE id = $artid");
 				if (($ml_user = $this->db_next()))
 				{
-					$this->_log("pageview",$ml_user["name"]." (".$ml_user["mail"].") tuli lehele $log meilist ".$ml_msg["subj"],$section);
+					$this->_log(ST_MENUEDIT, SA_PAGEVIEW ,$ml_user["name"]." (".$ml_user["mail"].") tuli lehele $log meilist ".$ml_msg["subj"],$section);
 
 					// and also remember the guy
 					// set a cookie, that expires in 3 years
@@ -977,12 +977,12 @@ class menuedit extends aw_template
 			$this->db_query("SELECT ml_users.*,objects.name as name FROM ml_users LEFT JOIN objects ON objects.oid = ml_users.id WHERE id = $mlxuid");
 			if (($ml_user = $this->db_next()))
 			{
-				$this->_log("pageview",$ml_user["name"]." (".$ml_user["mail"].") vaatas lehte $log",$section);
+				$this->_log(ST_MENUEDIT, SA_PAGEVIEW,$ml_user["name"]." (".$ml_user["mail"].") vaatas lehte $log",$section);
 			}
 		}
 		else
 		{
-			$this->_log("pageview",sprintf(LC_MENUEDIT_LOOKED_SITE,$log),$section);
+			$this->_log(ST_MENUEDIT, SA_PAGEVIEW ,sprintf(LC_MENUEDIT_LOOKED_SITE,$log),$section);
 		}
 	}
 
@@ -1156,7 +1156,7 @@ class menuedit extends aw_template
 			{
 				if ($show_errors)
 				{
-					$this->_log("menuedit",sprintf(LC_MENUEDIT_TRIED_ACCESS,$section));
+					$this->_log(ST_MENUEDIT, SA_ACL_ERROR,sprintf(LC_MENUEDIT_TRIED_ACCESS,$section), $section);
 					// neat :), kui objekti ei leita, siis saadame 404 koodi
 					header ("HTTP/1.1 404 Not Found");
 					printf(E_ME_NOT_FOUND);
@@ -1177,7 +1177,7 @@ class menuedit extends aw_template
 			// mingi kontroll, et kui sektsioon ei eksisteeri, siis näitame esilehte
 			if (!(($section > 0) && ($this->get_object($section)))) 
 			{
-				$this->_log("menuedit",sprintf(LC_MENUEDIT_TRIED_ACCESS2,$section));
+				$this->_log(ST_MENUEDIT, SA_NOTEXIST,sprintf(LC_MENUEDIT_TRIED_ACCESS2,$section), $section);
 				$section = $frontpage;
 			}
 		};
@@ -2639,7 +2639,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			));
 
 			$this->upd_object($charr);
-			$this->_log("menuedit",sprintf(LC_MENUEDIT_CJANGED_MENU,$name));
+			$this->_log(ST_MENUEDIT, SA_CHANGE,sprintf(LC_MENUEDIT_CJANGED_MENU,$name), $id);
 			$q = "UPDATE menu SET 
 							tpl_edit = '$tpl_edit',
 							tpl_lead = '$tpl_lead',
@@ -2683,7 +2683,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				// keelame teistel selle n2gemise sharetud folderis
 				$this->deny_obj_access($id);
 			}
-			$this->_log("menuedit",sprintf(LC_MENUEDIT_ADDED_SECTION,$name));
+			$this->_log(ST_MENUEDIT, SA_ADD,sprintf(LC_MENUEDIT_ADDED_SECTION,$name), $id);
 		}
 
 		$updmenus[] = $id;

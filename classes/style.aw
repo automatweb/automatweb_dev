@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.16 2002/12/02 11:18:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.17 2002/12/20 11:39:43 kristo Exp $
 
 define("ST_TABLE",0);
 define("ST_CELL",1);
@@ -209,7 +209,7 @@ class style extends aw_template
 
 		$this->db_query("UPDATE styles SET style = '$sts' WHERE id = $id");
 
-		$this->_log("style", "changed table $name");
+		$this->_log(ST_STYLE, SA_CHANGE, "changed table $name");
 		$this->upd_object(array("oid" => $id, "name" => $name, "comment" => $comment));
 		return $this->mk_orb("change",array("parent" => $parent, "id" => $id));
 	}
