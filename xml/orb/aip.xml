@@ -1,13 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="aip">
-		<action name="admin">
-			<function name="admin">
-				<arguments>
-					<required name="section"/>
-				</arguments>
-			</function>
-		</action>
+	<class name="aip" folder="aip" extends="class_base">
 	</class>
 </orb>
 		
