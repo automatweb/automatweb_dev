@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.8 2004/06/17 14:36:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.9 2004/09/24 09:29:35 duke Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -16,6 +16,9 @@
 
 @property use_template type=chooser orient=vertical
 @caption Välimus
+
+@property num_next_events type=textbox size=5 
+@caption Mitu j&auml;rgmist
 
 @property default_view type=select 
 @caption Vaade
@@ -84,11 +87,12 @@ class calendar_view extends class_base
 		switch($data["name"])
 		{
 			case "use_template":
-				//$data["options"] = $this->get_template_files();
 				$data["options"] = array(
 					"intranet1.tpl" => "Kuuvaade & nädala sündmused",
 					"month" => "Kuukalender",
 					"futureevents" => "Algavad sündmused",
+					"weekview" => "Nädala vaade",
+					"last_events" => "Järgmised sündmused",
 				);
 				break;
 
@@ -102,7 +106,15 @@ class calendar_view extends class_base
 					"day" => "päev",
 					"week" => "nädal",
 					"month" => "kuu",
+					"last" => "Järgmised",
 				);
+				break;
+
+			case "num_next_events":
+				if ($arr["obj_inst"]->prop("use_template") != "last_events")
+				{
+					return PROP_IGNORE;
+				}
 				break;
 		};
 		return $retval;
@@ -223,83 +235,148 @@ class calendar_view extends class_base
 	// !Scans events source connections and exports them to the calendar component
 	function _export_events($arr)
 	{
-		$conns = $arr["obj_inst"]->connections_from(array(
-			"type" => RELTYPE_EVENT_SOURCE,
-		));
-
+		// alright .. this function needs to accept an object id from which to ask events
 		$range = $arr["range"];
-		
-		foreach ($conns as $conn)
+		if (is_oid($arr["oid"]))
 		{
-			$to_o = $conn->to();
-			$events = array();
-			// so, how do I get events from that calendar now?
-			// no matter HOW, that function needs to accept range arguments
-			if ($to_o->class_id() == CL_PLANNER)
-			{
-				$pl = get_instance(CL_PLANNER);
-				$events = $pl->_init_event_source(array(
-					"id" => $to_o->id(),
-					"type" => $range["viewtype"],
-					"flatlist" => 1,
-					"date" => date("d-m-Y",$range["timestamp"]),
-				));
-			};
-		
-			if ($to_o->class_id() == CL_DOCUMENT_ARCHIVE)
-			{
-				$da = get_instance(CL_DOCUMENT_ARCHIVE);
-
-				$events = $da->get_events(array(
-					"id" => $to_o->id(),
-					"range" => $range,
-				));	
-
-			};
-
-			if ($to_o->class_id() == CL_PROJECT)
-			{
-				$pr = get_instance(CL_PROJECT);
-
-				$events = $pr->get_events(array(
-					"id" => $to_o->id(),
-					"range" => $range,
-				));
-			};
-
+			$obj = new object($arr["oid"]);
+			$events = $this->get_events_from_object(array(
+				"obj_inst" => $obj,
+				"range" => $range,
+				"status" => $arr["status"],
+			));
 
 			foreach($events as $event)
 			{
+				$data = $event;
+				$evt_obj = new object($event["id"]);
+				$data = $evt_obj->properties() + $data;
+				$data["icon"] = "event_icon_url";
 				$arr["cal_inst"]->add_item(array(
 					"timestamp" => $event["start"],
-					"data" => array(
-						"id" => $event["id"],
-						"name" => $event["name"],
-						"icon" => $event["event_icon_url"],
-						"link" => $event["link"],
-						"comment" => $event["comment"],
-					),
+					"data" => $data,
 				));
 			};
 
+		}
+		else
+		{
+
+			$conns = $arr["obj_inst"]->connections_from(array(
+				"type" => RELTYPE_EVENT_SOURCE,
+			));
+
+			foreach ($conns as $conn)
+			{
+				$to_o = $conn->to();
+				$events = $this->get_events_from_object(array(
+					"obj_inst" => $to_o,
+					"range" => $range,
+				));
+
+				foreach($events as $event)
+				{
+					$data = $event;
+					$evt_obj = new object($event["id"]);
+					$data = $evt_obj->properties() + $data;
+					$data["icon"] = "event_icon_url";
+					$arr["cal_inst"]->add_item(array(
+						"timestamp" => $event["start"],
+						"data" => $data,
+					));
+				};
+
+			};
 		};
+	}
+
+	function get_events_from_object($arr)
+	{
+		$events = array();
+		// so, how do I get events from that calendar now?
+		// no matter HOW, that function needs to accept range arguments
+		$o = $arr["obj_inst"];
+		$range = $arr["range"];
+		if ($o->class_id() == CL_PLANNER)
+		{
+			$pl = get_instance(CL_PLANNER);
+			$events = $pl->_init_event_source(array(
+				"id" => $o->id(),
+				"type" => $range["viewtype"],
+				"flatlist" => 1,
+				"date" => date("d-m-Y",$range["timestamp"]),
+			));
+		};
+		
+		if ($o->class_id() == CL_DOCUMENT_ARCHIVE)
+		{
+			$da = get_instance(CL_DOCUMENT_ARCHIVE);
+
+			$events = $da->get_events(array(
+				"id" => $o->id(),
+				"range" => $range,
+			));	
+
+		};
+
+		if ($o->class_id() == CL_PROJECT)
+		{
+			$pr = get_instance(CL_PROJECT);
+
+			$events = $pr->get_events(array(
+				"id" => $o->id(),
+				"range" => $range,
+				"status" => $arr["status"],
+			));
+		};
+
+		return $events;
 	}
 
 	////
 	//! 
 	function parse_alias($arr)
 	{
-		$this->obj_inst = new object($arr["alias"]["target"]);
+		if ($arr["obj_inst"])
+		{
+			$this->obj_inst = $arr["obj_inst"];
+		}
+		else
+		{
+			$this->obj_inst = new object($arr["alias"]["target"]);
+		};
 		
 		classload("vcl/calendar");
 
 		// figure out correct tpldir
 		$tpldir = "calendar/calendar_view";
-		if ($this->obj_inst->prop("use_template") == "month")
+		$use_template = isset($arr["use_template"]) ? $arr["use_template"] : $this->obj_inst->prop("use_template");
+		#print $use_template;
+		if ($use_template == "month")
 		{
 			$tpldir = "calendar/calendar_view/month";
 		};
 
+		if ($use_template ==  "weekview")
+		{
+			$tpldir = "calendar/calendar_view/week";
+		};
+
+		if ($use_template == "year")
+		{
+			$tpldir = "calendar/calendar_view/year";
+		};
+
+		if ($use_template == "day")
+		{
+			$tpldir = "calendar/calendar_view/day";
+		};
+		
+		if($use_template == "last_events")
+		{
+			$tpldir = "calendar/calendar_view/last_events";
+		}
+		
 		$vcal = new vcalendar(array(
 			"tpldir" => $tpldir,
 		));
@@ -319,6 +396,16 @@ class calendar_view extends class_base
 			$args["show_days_with_events"] = 1;
 		};
 
+		if ($arr["skip_empty"])
+		{
+			$args["skip_empty"] = $arr["skip_empty"];
+		};
+
+		if ($arr["full_weeks"])
+		{
+			$args["full_weeks"] = $arr["full_weeks"];
+		};
+
 		$vcal->configure($args);
 
 		$viewtype = $this->obj_inst->prop("default_view");
@@ -326,20 +413,39 @@ class calendar_view extends class_base
 		{
 			$viewtype = "week";
 		};
+		if ($arr["viewtype"])
+		{
+			$viewtype = $arr["viewtype"];
+		};
 
-                $range = $vcal->get_range(array(
-                        "viewtype" => $viewtype,
-                        "date" => aw_global_get("date"),
-                ));
-		
+		$range_p = array(
+			"viewtype" => $viewtype,
+			"date" => aw_global_get("date"),
+		);
+		if ($use_template == "last_events")
+		{
+			$range_p["limit_events"] = $this->obj_inst->prop("num_next_events");
+			$range_p["viewtype"] = "last_events";
+			$range_p["type"] = "last_events";
+		}
+		$range = $vcal->get_range($range_p);
+
 		// this cycle creates the "big" calendar, minicalendar is done in the 
 		// get_overview callback
 
-		$this->_export_events(array(
+		$exp_args = array(
 			"obj_inst" => &$this->obj_inst,
 			"cal_inst" => &$vcal,
 			"range" => $range,
-		));
+			"status" => $arr["status"],
+		);
+
+		if ($arr["obj_inst"])
+		{
+			$exp_args["oid"] = $arr["obj_inst"]->id();
+		};
+
+		$this->_export_events($exp_args);
 
 		classload("layout/active_page_data");
 
@@ -389,9 +495,21 @@ class calendar_view extends class_base
 			$style["minical_background"] = "st" . $this->obj_inst->prop("minical_background");
 		};
 
-		return $vcal->get_html(array(
+		$args = array(
 			"style" => $style,
-		));
+		);
+		
+		if ($this->obj_inst->prop("use_template") ==  "weekview")
+		{
+			$args["tpl"] = "week.tpl";
+		};
+
+		if ($arr["event_template"])
+		{
+			$args["event_template"] = $arr["event_template"];
+		};
+
+		return $vcal->get_html($args);
 	}
 }
 ?>
