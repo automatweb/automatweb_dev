@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.33 2002/07/11 20:08:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.34 2002/07/16 19:22:20 kristo Exp $
 
 classload("aw_template","xml","objects","languages","icons");
 class db_config extends aw_template 
@@ -94,7 +94,7 @@ class db_config extends aw_template
 
 		$gids = aw_global_get("gidlist");
 		$cur_pri = -1;
-		$cur_menu = false;
+		$cur_menu = -1;
 
 		if (!is_array($gids))
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.18 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.19 2002/07/16 19:22:20 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql 
 {
@@ -81,10 +81,10 @@ class mysql
 			// lühendame päringu. Ntx failide lisamisel voib paring olla yle mega pikk
 			// ja selle ekraanile pritsimine ei anna mitte midagi.
 
-			if (strlen($qtext) > 5000)
+/*			if (strlen($qtext) > 5000)
 			{
 				$qtext = substr($qtext,0,5000) . "....(truncated)";
-			};
+			};*/
 
 			echo $qtext . "\n";
 			echo "<br>\n";
@@ -222,7 +222,7 @@ class mysql
 
 	function num_rows()
 	{
-		return mysql_num_rows($this->qID);
+		return $this->num_rows;//($this->qID);
 	}
 
 	function db_list_tables()

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.100 2002/07/11 20:57:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.101 2002/07/16 19:22:20 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 classload("msgboard","aw_style","form_base","file");
@@ -871,6 +871,8 @@ class document extends aw_template
 			classload("forum");
 			$forum = new forum();
 			$fr = $forum->add_comment(array("board" => $docid));
+
+			$this->vars(array("FORUM_ADD_SUB" => $this->parse("FORUM_ADD_SUB")));
 		}
 
 		$langs = "";

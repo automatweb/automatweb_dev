@@ -32,6 +32,13 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="list" default="1" nologin="1">
+			<function name="site_list">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
 		

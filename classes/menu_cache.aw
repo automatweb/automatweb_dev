@@ -1,12 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.6 2002/07/12 16:56:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.7 2002/07/16 19:22:20 kristo Exp $
 // menu_cache.aw - Menüüde cache
 class menu_cache extends aw_template
 {
 	function menu_cache($args = array())
 	{
 		$this->init("");
-		$this->period = $args["period"];
+		$this->period = aw_global_get("act_per_id");
 	}
 
 	////
@@ -27,6 +27,7 @@ class menu_cache extends aw_template
 			FROM objects WHERE $where $sufix
 			GROUP BY parent";
 
+//		echo "q = $q <br>";
 		if (not($this->db_query($q,false)))
 		{
 			print "false!";
@@ -112,7 +113,7 @@ class menu_cache extends aw_template
 			$lang_id = aw_global_get("lang_id");
 		}
 		$SITE_ID = $this->cfg["site_id"];
-		$filename = "menuedit::menu_cache::lang::" . $lang_id . "::site_id::" . $SITE_ID;
+		$filename = "menuedit::menu_cache::lang::" . $lang_id . "::site_id::" . $SITE_ID."::period::".$this->period;
 		$fn = aw_ini_get("cache.page_cache")."/".$filename;
 		if ($this->loaded_cache != $filename)
 		{
@@ -135,7 +136,7 @@ class menu_cache extends aw_template
 			// avoid writing to the menu cache if the queries didn't succeed,
 			// otherwise we are stuck with whatever (void most likely) lands
 			// in the cache until the cache is invalidated
-			$subsql = " class_id = ".CL_DOCUMENT." AND objects.status = 2 AND objects.lang_id = ".$lang_id." AND objects.site_id = ".aw_ini_get("site_id");
+			$subsql = " (class_id = ".CL_DOCUMENT." OR class_id = ".CL_PERIODIC_SECTION.") AND objects.status = 2 AND objects.lang_id = ".$lang_id." AND objects.site_id = ".aw_ini_get("site_id");
 			if ( $this->_list_subs(array("where" => $subsql)) &&	$this->_list_menus(array("where" => $where,"lang_id" => $lang_id)) )
 			{
 				// make sure that we ust have to include this file and the menu cache will be read into
@@ -157,7 +158,7 @@ class menu_cache extends aw_template
 				$c_d .= "\n".$php->php_serialize($this->subs,true);
 
 				$c_d .= "\n?>";
-       	$cache->file_set("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID,$c_d);
+       	$cache->file_set("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID."::period::".$this->period,$c_d);
 			};
 		}
 	}

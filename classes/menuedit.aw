@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.130 2002/07/16 17:47:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.131 2002/07/16 19:22:20 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -4679,9 +4679,9 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$d->list_docs($section, $activeperiod,2);
 
 			// I need to  know that for the public method menus
-			$d->set_opt("cnt_documents",$d->num_rows);
+			$d->set_opt("cnt_documents",$d->num_rows());
 
-			if ($d->num_rows > 1)		// the database driver sets this
+			if ($d->num_rows() > 1)		// the database driver sets this
 			{
 				$template = $this->get_lead_template($section);
 				while($row = $d->db_next()) 
@@ -4885,7 +4885,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		return $path;
 	}
 
-	 function make_yah($path)
+	function make_yah($path)
 	{
 		// now build "you are here" links from the path
 		$ya = "";  
@@ -4936,7 +4936,9 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					"ysection" => $this->mar[$path[$i+1]]["oid"]
 				));
 
-				if ($this->mar[$path[$i+1]]["clickable"] == 1 && ($this->subs[$this->mar[$path[$i+1]]["oid"]] > 0))
+				$check_subs = ($this->subs[$this->mar[$path[$i+1]]["oid"]] > 0) || $this->cfg["yah_no_subs"];
+
+				if ($this->mar[$path[$i+1]]["clickable"] == 1 && $check_subs)
 				{
 					$ya.=$this->parse("YAH_LINK");
 					$this->title_yah.=" / ".$this->mar[$path[$i+1]]["name"];
@@ -5357,7 +5359,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$d->set_period($activeperiod);
 			$d->list_docs($section, $activeperiod,2);
 			$cont = "";
-			if ($d->num_rows > 1) 
+			if ($d->num_rows() > 1) 
 			{
 				while($row = $d->db_next()) 
 				{

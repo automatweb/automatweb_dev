@@ -1,13 +1,13 @@
 <?php
-// a$Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.9 2002/06/10 15:50:54 kristo Exp $
+// a$Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.10 2002/07/16 19:22:20 kristo Exp $
 
 class db_periods extends aw_template 
 {
-	function db_periods($oid) 
+	function db_periods() 
 	{
 		$this->init("automatweb/periods");
-		$this->oid = $oid;
 		lc_load("definition");
+		$this->oid = $this->cfg["per_oid"];
 		$this->lc_load("periods","lc_periods");	
 		$this->cf_name = "periods::cache::site_id::".$this->cfg["site_id"]."::period::";
 		$this->cf_ap_name = "active_period::cache::site_id::".$this->cfg["site_id"];
@@ -449,6 +449,28 @@ class periods extends db_periods
 			// and if after all this we have managed to figure out the active period we go and spoil it all by loading it
 			aw_global_set("act_period",$this->get($ap));
 		}
+	}
+
+	function site_list($arr)
+	{
+		$this->read_template("arhiiv.tpl");
+		$this->clist(1);
+		while($row = $this->db_next()) 
+		{
+			$this->vars(array(
+				"period" => $row["id"],
+				"description" => $row["description"]
+			));
+			if ($row["id"] == aw_global_get("act_per_id")) 
+			{
+				$content .= $this->parse("active");
+			} 
+			else 
+			{
+				$content .= $this->parse("passive");
+			};
+		};
+		return $content;
 	}
 }
 
