@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.62 2002/08/08 13:58:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.63 2002/08/09 11:08:32 kristo Exp $
 // form_element.aw - vormi element.
 classload("image");
 
@@ -639,7 +639,7 @@ class form_element extends aw_template
 				{
 					foreach($this->form->arr["save_tables"] as $tbl => $tblcolel)
 					{
-						$tar[$tbl] = $tbl;
+						$tar[$tbl] = $this->form->get_fg_tblname($tbl);
 					}
 				}
 

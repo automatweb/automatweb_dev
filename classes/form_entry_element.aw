@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.56 2002/08/08 13:58:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.57 2002/08/09 11:08:32 kristo Exp $
 // form_entry_element.aw - 
 classload("currency");
 load_vcl("date_edit");
@@ -40,7 +40,7 @@ class form_entry_element extends form_element
 					$this->vars(array(
 						"tbl_num" => $tbl_num++,
 						"table_name" => $tbl,
-						"col_name" => $fn
+						"col_name" => $this->form->get_fg_colname($fn)
 					));
 					$t_tb.=$this->parse("TBL");
 				}

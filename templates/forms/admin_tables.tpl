@@ -49,7 +49,7 @@
 		<table cellpadding="3" cellspacing="1" border="0" width="100%">
 			<tr>
 				<td class="celltext" width="50%" align="right">{VAR:LC_FORMS_TABLE}:</td>
-				<td class="celltext" width="50%">{VAR:table_name}</td>
+				<td class="celltext" width="50%">{VAR:usr_table_name}</td>
 			</tr>
 			<tr>
 				<td class="celltext" width="50%" align="right">{VAR:LC_FORMS_UNIC_COL_IN_TABLE}:</td>
