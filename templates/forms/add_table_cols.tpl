@@ -82,18 +82,26 @@
 
 											<!-- SUB: SEL_FORMEL -->
 											Vali element:<Br>
-											<select class="formselect" name="cols[{VAR:col_id}][formel]" size="10">{VAR:formels}</select>
+											<select class="formselect" multiple name="cols[{VAR:col_id}][formel][]" size="10">{VAR:formels}</select>
 											<!-- END SUB: SEL_FORMEL -->
 
 											<!-- SUB: SEL_BASKET -->
-											Vali ostukorv:<Br>
-											<select class="formselect" name="cols[{VAR:col_id}][basket]">{VAR:baskets}</select><br>
+											Vali ostukorv ({VAR:fel_name}):<Br>
+											<select class="formselect" name="cols[{VAR:col_id}][basket][{VAR:fel_id}]">{VAR:baskets}</select><br>
 											Vali kontroller:<Br>
-											<select class="formselect" name="cols[{VAR:col_id}][basket_controller]">{VAR:basket_controller}</select><br>
+											<select class="formselect" multiple name="cols[{VAR:col_id}][basket_controller][{VAR:fel_id}][]">{VAR:basket_controller}</select><br>
+											<!-- SUB: EL_IS_SUBMIT --> 
+											Korvi URL:<Br>
+											<input class="formtext" name="cols[{VAR:col_id}][basket_url][{VAR:fel_id}]" value="{VAR:basket_url}"><br>
+											Koguse element:<Br>
+											<select class="formselect" name="cols[{VAR:col_id}][basket_add_count_el][{VAR:fel_id}]">{VAR:bcount_el}</select>
+											<!-- END SUB: EL_IS_SUBMIT --> 
+
 											<!-- END SUB: SEL_BASKET -->
 
 											<!-- SUB: SEL_SETTINGS -->
-											Tulba m‰‰rangud:
+											Tulba m‰‰rangud:<br>
+											Tulp mitteaktiivne: <input type="checkbox" name="cols[{VAR:col_id}][not_active]" value="1" {VAR:col_not_active}><Br>
 											<table border="0">
 												<tr>
 													<td class="celltext">Jrk.</td>
@@ -125,6 +133,7 @@
 											<input type="checkbox" name="cols[{VAR:col_id}][is_email]" value="1" {VAR:col_email}> E-mail <br>
 											<input type="checkbox" name="cols[{VAR:col_id}][clicksearch]" value="1" {VAR:col_clicksearch}> Klikkides tehakse otsing <br>
 											<input type="checkbox" name="cols[{VAR:col_id}][link]" value="1" {VAR:col_link}> Link <br>
+											<input type="checkbox" name="cols[{VAR:col_id}][no_show_empty]" value="1" {VAR:no_show_empty}> &Auml;ra n&auml;ita t&uuml;hjalt <br>
 											<input type="checkbox" name="cols[{VAR:col_id}][link_popup]" value="1" {VAR:col_link_popup}> Popup aken <br>
 											<!-- END SUB: SEL_SETINGS2 -->
 
