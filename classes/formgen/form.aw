@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.62 2003/05/29 14:26:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.63 2003/06/03 13:54:29 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -1273,6 +1273,8 @@ class form extends form_base
 		$controllers_ok = true;
 		$controller_warnings_ok = true;
 
+
+		$this->in_process_entry = true;
 
 		if (!$no_process_entry)
 		{
