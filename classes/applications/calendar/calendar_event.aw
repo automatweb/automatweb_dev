@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.10 2004/11/17 16:48:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.11 2004/12/13 12:45:25 kristo Exp $
 // calendar_event.aw - Kalendri sündmus 
 /*
 
@@ -17,6 +17,9 @@
 
 @property project_selector type=project_selector store=no group=projects all_projects=1
 @caption Projektid
+
+@property project_selector2 type=project_selector store=no group=projects22 all_projects=1
+@caption Projektid 2
 
 @property utextbox1 type=textbox 
 @caption
