@@ -1,45 +1,51 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate_scale.aw,v 1.4 2004/02/11 20:14:04 duke Exp $
 
 /*
 
 @classinfo syslog_type=ST_RATE_SCALE relationmgr=yes
 
-@groupinfo general caption=Üldine
 @groupinfo scale caption=Skaala
 
 @default table=objects
 @default group=general
+@default field=meta
+@default method=serialize
 
-@property type_nr type=checkbox ch_value=1 field=meta method=serialize group=scale
-@caption Numbriline skaala
-
-@property nr_from type=textbox size=3 field=meta method=serialize group=scale
-@caption Alates
-
-@property nr_to type=textbox size=3 field=meta method=serialize group=scale
-@caption Kuni
-
-@property nr_step type=textbox size=3 field=meta method=serialize group=scale
-@caption Aste
-
-@property type_ud type=checkbox ch_value=2 field=meta method=serialize group=scale
-@caption Kasutaja defineeritud skaala
-
-@property ud_scale type=generated field=meta method=serialize generator=get_udscale_entries group=scale
-@caption 
-
-@property rate_clid type=select field=meta method=serialize
+@property rate_clid type=select 
 @caption Mis objektit&uuml;&uuml;bile skaala kehtib
 
-@property rate_folders type=relpicker field=meta method=serialize multiple=1 reltype=RELTYPE_FOLDER
+@property rate_folders type=relpicker multiple=1 reltype=RELTYPE_FOLDER
 @caption Mis kataloogidele skaala kehtib
+
+@default group=scale
+
+@property type_nr type=checkbox ch_value=1 
+@caption Numbriline skaala
+
+@property nr_from type=textbox size=3 
+@caption Alates
+
+@property nr_to type=textbox size=3
+@caption Kuni
+
+@property nr_step type=textbox size=3
+@caption Aste
+
+@property type_ud type=checkbox ch_value=2
+@caption Kasutaja defineeritud skaala
+
+@property ud_scale type=generated generator=get_udscale_entries 
+@caption 
+
+
+@reltype FOLDER value=1 clid=CL_MENU
+@caption Kehtiv kataloog
 
 */
 
 define("RATING_NUMERIC", 1);
 define("RATING_TEXT", 2);
-
-define("RELTYPE_FOLDER",1);
 
 class rate_scale extends class_base
 {
@@ -48,41 +54,6 @@ class rate_scale extends class_base
 		$this->init(array(
 			'clid' => CL_RATE_SCALE
 		));
-	}
-
-	////
-	// !this should create a string representation of the object
-	// parameters
-	//    oid - object's id
-	function _serialize($arr)
-	{
-		extract($arr);
-		$ob = $this->get_object($oid);
-		if (is_array($ob))
-		{
-			return aw_serialize($ob, SERIALIZE_NATIVE);
-		}
-		return false;
-	}
-
-	////
-	// !this should create an object from a string created by the _serialize() function
-	// parameters
-	//    str - the string
-	//    parent - the folder where the new object should be created
-	function _unserialize($arr)
-	{
-		extract($arr);
-		$row = aw_unserialize($str);
-		$row['parent'] = $parent;
-		unset($row['brother_of']);
-		$this->quote(&$row);
-		$id = $this->new_object($row);
-		if ($id)
-		{
-			return true;
-		}
-		return false;
 	}
 
 	function get_udscale_entries($arr)
@@ -101,14 +72,14 @@ class rate_scale extends class_base
 			case "nr_from":
 			case "nr_to":
 			case "nr_step":
-				if (!$arr["obj"]["meta"]["type_nr"])
+				if ("" == $arr["obj_inst"]->prop("type_nr"))
 				{
 					return PROP_IGNORE;
 				}
 				break;
 
 			case "ud_scale":
-				if (!$arr["obj"]["meta"]["type_ud"])
+				if ("" == $arr["obj_inst"]->prop("type_ud"))
 				{
 					return PROP_IGNORE;
 				}
@@ -122,36 +93,23 @@ class rate_scale extends class_base
 		return PROP_OK;
 	}
 
-	function callback_get_rel_types()
-	{
-		return array(
-			RELTYPE_FOLDER => "kehtiv kataloog",
-		);
-	}
-
-	function callback_get_classes_for_relation($args = array())
-	{
-		if ($args["reltype"] == RELTYPE_FOLDER)
-		{
-			return array(CL_PSEUDO);
-		}
-	}
-
 	function callback_post_save($arr)
 	{
 		extract($arr);
-		$ob = $this->get_object($id);
+		$ob = $arr["obj_inst"];
+		$id = $ob->id();
 		$this->db_query("DELETE FROM rate2menu WHERE rate_id = '$id'");
-		$d = new aw_array($ob['meta']['rate_folders']);
+		$d = new aw_array($ob->prop('rate_folders'));
+		$rate_clid = $ob->prop("rate_clid");
 		foreach($d->get() as $fld)
 		{
-			$this->db_query("INSERT INTO rate2menu(menu_id, rate_id, clid) VALUES('$fld','$id','".$ob['meta']['rate_clid']."')");
+			$this->db_query("INSERT INTO rate2menu(menu_id, rate_id, clid) VALUES('$fld','$id','".$rate_clid."')");
 		}
 
 		$this->db_query("DELETE FROM rate2clid WHERE rate_id = '$id'");
 		if ($d->count() == 0)
 		{
-			$this->db_query("INSERT INTO rate2clid(rate_id, clid) VALUES('$id','".$ob['meta']['rate_clid']."')");
+			$this->db_query("INSERT INTO rate2clid(rate_id, clid) VALUES('$id','".$rate_clid"')");
 		}
 	}
 
