@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.27 2002/07/24 20:26:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.28 2002/08/02 13:19:03 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -29,7 +29,7 @@ class aw_table
 
 		$this->header_attribs = array();
 
-		// ridade värvid (och siis stiilid) muutuvad
+		// ridade v?rvid (och siis stiilid) muutuvad
 		// siin defineerime nad
 		$this->style1 = "#AAAAAA";
 		$this->style2 = "#CCCCCC";
@@ -40,7 +40,7 @@ class aw_table
 		$this->actions = array();
 
 		// esimene kord andmeid sisestada?
-		// seda on vaja selleks, et määrata default sort order.
+		// seda on vaja selleks, et m??rata default sort order.
 		$this->first = true;
 	}
 
@@ -346,7 +346,7 @@ class aw_table
 
 	function draw($arr = array()) 
 	{
-		// väljastab tabeli
+		// v?ljastab tabeli
 		if (!is_array($this->rowdefs)) 
 		{
 			print "Don't know what to do";
@@ -359,7 +359,7 @@ class aw_table
 		$this->titlebar_under_groups = $arr["titlebar_under_groups"];
 		$tbl = "";
 
-		// moodustame välimise raami alguse
+		// moodustame v?limise raami alguse
 		if (is_array($this->frameattribs))
 		{
 			$tmp = $this->frameattribs;
@@ -413,7 +413,7 @@ class aw_table
 					// by default, if a column is not sorted and you click on it, it should be sorted asc
 					$so = "asc";
 
-					// kui on sorteeritud selle välja järgi
+					// kui on sorteeritud selle v?lja j?rgi
 					if ($this->sortby[$v["name"]])
 					{
 						$sufix = $this->sorder[$v["name"]] == "desc" ? $this->up_arr : $this->dn_arr;
@@ -459,11 +459,20 @@ class aw_table
 		// koostame tabeli sisu
 		if (is_array($this->data)) 
 		{
-			// tsükkel üle data
-			$counter = 0; // kasutame ridadele erineva värvi andmiseks
+			// ts?kkel ?le data
+			$counter = 0; // kasutame ridadele erineva v?rvi andmiseks
 			foreach($this->data as $k => $v)
 			{
 				$counter++;
+				// if this is not on the active page, don't show the damn thing
+				if ($has_pages)
+				{
+					$cur_page = (int)(($counter-1) / $records_per_page);
+					if ($cur_page != $act_page)
+					{
+						continue;
+					}
+				}
 
 				// rida algab
 				$tbl .= $this->opentag(array("name" => "tr"));
@@ -471,7 +480,7 @@ class aw_table
 				// grpupeerimine
 				$tbl .= $this->do_col_rgrouping($rgroupby, $rgroupdat, $rgroupby_sep, $v);
 				
-				// tsükkel üle rowdefsi, et andmed oleksid oiges järjekorras
+				// ts?kkel ?le rowdefsi, et andmed oleksid oiges j?rjekorras
 				foreach($this->rowdefs as $k1 => $v1)
 				{
 					$rowspan = 1;
@@ -507,7 +516,7 @@ class aw_table
 						}
 					}
 
-					// määrame ära staili
+					// m??rame ?ra staili
 					if (!$style)
 					{
 						if ($this->sortby[$v1["name"]]) 
@@ -627,7 +636,7 @@ class aw_table
 			$tbl .= $this->closetag(array("name" => "table"));
 		};
 
-		// tagastame selle käki
+		// tagastame selle k?ki
 		return $tbl;
 	}
 
@@ -641,7 +650,7 @@ class aw_table
 		return strip_tags($new);
 	}
 
-	// tagastab csv andmed, kustuda välja draw asemel
+	// tagastab csv andmed, kustuda v?lja draw asemel
 	function get_csv_file()
 	{
 		$d=array();
@@ -787,7 +796,7 @@ class aw_table
 	{
 		switch($name) 
 		{
-			// vaikimisi määratud sorteerimisjärjekord
+			// vaikimisi m??ratud sorteerimisj?rjekord
 			case "default_order":
 				$this->default_order = $attrs["value"];
 				$this->default_odir = $attrs["order"];
@@ -798,7 +807,7 @@ class aw_table
 				$this->tableattribs = $attrs;
 				break;
 			
-			// välimise tabeli atribuudid
+			// v?limise tabeli atribuudid
 			case "frameattribs":
 				$this->frameattribs = $attrs;
 				break;
@@ -827,7 +836,7 @@ class aw_table
 				$this->group_style = $attrs["value"];
 				break;
 
-			// stiil, mida kasutada parajasti sorteeritud välja headeri näitamiseks
+			// stiil, mida kasutada parajasti sorteeritud v?lja headeri n?itamiseks
 			case "header_sorted":
 				$this->header_sorted = $attrs["value"];
 				break;
@@ -843,7 +852,7 @@ class aw_table
 				$this->bgcolor2 = $attrs["bgcolor"];
 				break;
 
-			// stiilid millega kuvatakse sorteeritud välja sisu
+			// stiilid millega kuvatakse sorteeritud v?lja sisu
 			case "content_style1_selected":
 				$this->selected1 = $attrs["value"];
 				$this->selbgcolor1 = $attrs["bgcolor"];
@@ -863,7 +872,7 @@ class aw_table
 				$this->actionrows = $attrs["value"];
 				break;
 
-			// väljad
+			// v?ljad
 			case "field":
 				$temp = array();
 				while(list($k,$v) = each($attrs)) 
