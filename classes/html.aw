@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.65 2005/01/17 16:43:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.66 2005/01/25 09:06:34 ahti Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -430,8 +430,8 @@ class html extends aw_template
 	function popup($arr = array())
 	{
 		extract($arr);
-		$arr["onClick"] = 'javascript:window.open("'.$url.'", "'.$target.
-		'", "toolbar='.($toolbar ? "yes" : "no").
+		$arr["onClick"] = "javascript:window.open('$url', '".$target.
+		"', 'toolbar=".($toolbar ? "yes" : "no").
 		",directories=".($directories ? "yes" : "no").
 		",status=".($status ? "yes" : "no").
 		",location=".($location ? "yes" : "no").
@@ -440,7 +440,11 @@ class html extends aw_template
 		",menubar=".($menubar ? "yes" : "no").
 		",height=".($height ? $height : 400).
 		",width=".($width ? $width : 400).
-		'");return false;';
+		"');return false;'";
+		if($no_link)
+		{
+			return $arr["onClick"];
+		}
 		return html::href($arr);
 	}
 	////
