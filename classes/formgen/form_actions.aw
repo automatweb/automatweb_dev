@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.18 2004/02/11 11:50:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.19 2004/02/23 08:53:37 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -107,12 +107,14 @@ class form_actions extends form_base
 					case "email":
 						$data["email"] = $email;
 						$data["email_el"] = $email_el;
+						$data["from_email_el"] = $from_email_el;
 						$data["add_pdf"] = $add_pdf;
 						$data["op_id"] = $op_id;
 						$data["l_section"] = $l_section;
 						$data["no_mail_on_change"] = $no_mail_on_change;
 						$data["link_to_change"] = $link_to_change;
 						$data["link_caption"] = $link_caption;
+						$data["text_only"] = $text_only;
 						$la = get_instance("languages");
 						$ls = $la->listall();
 						foreach($ls as $ld)
@@ -345,6 +347,8 @@ class form_actions extends form_base
             "link_to_change" => checked($data["link_to_change"]),
             "link_caption" => $data["link_caption"],
 			"add_pdf" => checked($data["add_pdf"]),
+			"from_email_el" => $this->picker($data["from_email_el"], $this->get_elements_for_forms(array($id), false, true)),
+			"text_only" => checked($try["text_only"]),
 			"email_el" => $this->picker($data["email_el"], $this->get_elements_for_forms(array($id), false, true))
 		));
 
@@ -499,7 +503,7 @@ class form_actions extends form_base
 			{
 				foreach($meta["activate_on_button"] as $btid)
 				{
-					if ($GLOBALS["HTTP_POST_VARS"]["submit"][$btid] != "")
+					if ($GLOBALS["HTTP_POST_VARS"]["submit"][$btid] != "" || $GLOBALS["HTTP_POST_VARS"]["bt_url_".$btid."_x"])
 					{
 						$show = true;
 					}
@@ -708,6 +712,11 @@ class form_actions extends form_base
 			return;
 		}
 
+		if ($data["text_only"])
+		{
+			$GLOBALS["no_html"] = 1;
+		}
+
 		if (aw_global_get("uid") != "")
 		{
 			$us = get_instance("users");
@@ -743,7 +752,7 @@ class form_actions extends form_base
 
 		$f->load($form->get_id());
 		$f->load_entry($entry_id);
-		$msg = $f->show_text();
+		$msg = strip_tags($f->show_text());
 
 		if (!is_array($data))
 		{
@@ -792,7 +801,7 @@ class form_actions extends form_base
 
 			if (aw_global_get("fa_mail_priority"))
 			{
-				$awm->set_header("X-Priority: ".aw_global_get("fa_mail_priority"));
+				$awm->set_header("X-Priority",aw_global_get("fa_mail_priority"));
 			}
 
 			$fname = "attachment.pdf";
@@ -817,6 +826,14 @@ class form_actions extends form_base
 
 			$awm->gen_mail();
 
+			if ($data["text_only"])
+			{
+				$l = get_instance("languages");
+				$ct = "";/*"Content-type: text/plain; charset=".$l->get_charset()."\n";*/
+				$from = $f->get_element_value($data["from_email_el"]);
+				mail($data["email"], $subj, strip_tags($msg_html)."\n".$app."\n".$link_url, "From: $from\n$ct");
+			}
+			else
 			if ($data["email_el"] && ($_to = $f->get_element_value($data["email_el"])))
 			{
 				$awm = get_instance("aw_mail");
@@ -837,7 +854,7 @@ class form_actions extends form_base
 
 				if (aw_global_get("fa_mail_priority"))
 				{
-					$awm->set_header("X-Priority: ".aw_global_get("fa_mail_priority"));
+					$awm->set_header("X-Priority",aw_global_get("fa_mail_priority"));
 				}
 
 				$fname = "attachment.pdf";
@@ -877,7 +894,7 @@ class form_actions extends form_base
 	function do_after_submit_controller_action(&$form, $data, $entry_id)
 	{
 		$cinst = get_instance("formgen/form_controller");
-		$cinst->eval_controller($data["controller"],false,$form,false);
+		$cinst->eval_controller($data["controller"],$entry_id,$form,false);
 	}
 }
 ?>
