@@ -5,7 +5,6 @@ class site_list extends class_base
 	function site_list()
 	{
 		$this->init("automatweb/site_list");
-		$this->check_db();
 	}
 
 	/**  
@@ -245,32 +244,6 @@ class site_list extends class_base
 		$t->sort_by();
 
 		return $t->draw();
-	}
-
-	function check_db()
-	{
-		if (!aw_global_get("site_list::tables_checked"))
-		{
-			if (!$this->db_table_exists("aw_site_list"))
-			{
-				$this->db_query("CREATE TABLE aw_site_list (
-					id int primary key, 
-					name varchar(255),
-					url varchar(255), 
-					server_id int, 
-					ip varchar(255),
-					site_used int default 1,
-					code_branch varchar(255),
-					data mediumtext
-				)");
-			}
-
-			if (!$this->db_table_exists("aw_server_list"))
-			{
-				$this->db_query("CREATE TABLE aw_server_list (id int primary key, name varchar(255), ip varchar(255), comment mediumtext)");
-			}
-			aw_global_set("site_list::tables_checked", true);
-		}
 	}
 
 	/** adds or updates site 

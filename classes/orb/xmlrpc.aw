@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/orb/Attic/xmlrpc.aw,v 1.14 2004/03/08 09:52:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/orb/Attic/xmlrpc.aw,v 1.15 2004/04/11 18:25:01 kristo Exp $
 class xmlrpc extends aw_template
 {
 	var $allowed = array("I4","BOOLEAN","STRING", "DOUBLE","DATETIME.ISO8601","BASE64", "STRUCT", "ARRAY");
@@ -452,7 +452,7 @@ class xmlrpc extends aw_template
 						}
 					} while ($cont);
 					prev($this->vals);
-					return $str;
+					return str_replace("&lt;", "<", $str);
 					break;
 
 				case "DOUBLE":

@@ -224,6 +224,7 @@ function init_config($arr)
 		foreach($GLOBALS["cfg"]["__default"]["classes"] as $clid => $cld)
 		{
 			define($cld["def"], $clid);
+			$GLOBALS["cfg"]["class_lut"][basename($cld["file"])] = $clid;
 		}
 
 		// and here do the defs for programs
@@ -379,6 +380,19 @@ function get_instance($class,$args = array())
 	$instance = aw_global_get($id);
 
 	$lib = basename($class);
+
+	// check if the class is remoted. if it is, then create proxy class instance, not real class instance
+	$clid = $GLOBALS["cfg"]["class_lut"][$lib];
+	if (($rs = $GLOBALS["cfg"]["__default"]["classes"][$clid]["is_remoted"]) != "")
+	{
+		if ($rs != $GLOBALS["cfg"]["__default"]["baseurl"])
+		{
+			$proxy_file = $GLOBALS["cfg"]["__default"]["basedir"]."/classes/core/proxy_classes/".$lib.".aw";
+			$proxy_class = "__aw_proxy_".$lib;
+			include_once($proxy_file);
+			return new $proxy_class($rs);
+		}
+	}
 
 	if (not(is_object($instance)))
 	{

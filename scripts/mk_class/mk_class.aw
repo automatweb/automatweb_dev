@@ -63,9 +63,6 @@ $stdo = fopen("php://stdout", "w");
 echo "Hello! I am the AW class-o-maker 3000!\n";
 echo "You will answer these questions:\n\n";
 
-//echo "Class def (CL_FOO_BAR): ";
-//$class['def'] = trim(fgets($stdin));
-
 echo "Folder where the class file is (created under AWROOT/classes): ";
 $class['folder'] = trim(fgets($stdin));
 
@@ -88,8 +85,14 @@ $class['parents'] = trim(fgets($stdin));
 echo "Alias (if you leave this empty, then the class can't be added as an alias): ";
 $class['alias'] = trim(fgets($stdin));
 
-//echo "Syslog type (ST_FOO , goes to syslog.ini): ";
-//$class['syslog.type'] = trim(fgets($stdin));
+echo "Class is remoted? (1/0): ";
+$class['is_remoted'] = trim(fgets($stdin));
+
+if ($class['is_remoted'])
+{
+	echo "Default server to remote to (http://www.foo.ee): ";
+	$class['default_remote_server'] = trim(fgets($stdin));
+}
 
 
 ////////////////////////////////////////////////////////////////////
@@ -149,6 +152,11 @@ if ($class['parents'] != '')
 if ($class['alias'] != '')
 {
 	$new_clini .= "classes[$new_clid][alias] = ".$class['alias']."\n";
+}
+
+if ($class['is_remoted'] == 1)
+{
+	$new_clini .= "classes[$new_clid][is_remoted] = ".$class['default_remote_server']."\n";
 }
 
 $fp = fopen('config/ini/classes.ini','a');

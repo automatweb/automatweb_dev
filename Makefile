@@ -50,7 +50,16 @@ orb:
 		echo "Cmdline php not found, cannot create orb definitions"; \
 	fi
 
+remoting:
+	@echo "Generating remoting proxy classes"
+	@if test -e scripts/php; \
+		then \
+		./scripts/php -n -d register_argc_argv=1 -q -f ./scripts/mk_remoting.aw \
+	else \
+		echo "Cmdline php not found, cannot create remoting proxy classes"; \
+	fi
+
 class:
 	@scripts/php -n -q scripts/mk_class/mk_class.aw
 
-all: ini properties msg orb
+all: ini properties msg orb remoting
