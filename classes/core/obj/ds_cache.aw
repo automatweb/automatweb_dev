@@ -172,6 +172,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		$str .= "?>";
 
 		$this->cache->file_set($cfn."-$fn-$oid", $str);
+		$this->cache->flush_cache();
 	}
 
 	function _clear_cache($oid, $cfn = "objcache")
@@ -182,10 +183,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		}
 		$this->cache->file_invalidate_regex($cfn."-search-(.*)-0");
 		$this->cache->file_invalidate_regex("connection(.*)");
-		if ($GLOBALS["cfg"]["cache"]["use_page_cache"])
-		{
-			$this->cache->flush_cache();
-		}
+		$this->cache->flush_cache();
 	}
 
 	function object_exists($oid)
