@@ -1,0 +1,48 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>file</name>
+            <type>fileupload</type>
+            <field>meta</field>
+            <table>objects</table>
+            <group>general</group>
+            <method>serialize</method>
+            <caption>Vali fail</caption>
+      </property>
+      <property>
+            <name>width</name>
+            <type>textbox</type>
+            <size>4</size>
+            <field>meta</field>
+            <table>objects</table>
+            <group>general</group>
+            <method>serialize</method>
+            <caption>Laius</caption>
+      </property>
+      <property>
+            <name>height</name>
+            <type>textbox</type>
+            <size>4</size>
+            <field>meta</field>
+            <table>objects</table>
+            <group>general</group>
+            <method>serialize</method>
+            <caption>Kõrgus</caption>
+      </property>
+      <property>
+            <name>preview</name>
+            <type>text</type>
+            <store>no</store>
+            <group>general</group>
+            <caption>Eelvaade</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_FLASH</syslog_type>
+      </classinfo>
+      <groupinfo>
+            <general>
+                  <caption>Üldine</caption>
+            </general>
+      </groupinfo>
+</properties>
+
