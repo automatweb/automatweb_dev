@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.22 2004/06/11 12:26:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.23 2004/06/11 12:44:24 duke Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -767,16 +767,14 @@ class crm_company extends class_base
 		// through the crm_db class, which means that they can be different for each user
 		if (empty($crm_db_id))
 		{
-			$parents[RELTYPE_JOBS] = $parents[RELTYPE_ETTEVOTLUSVORM] = $parents[RELTYPE_WORKERS] = $parents[RELTYPE_ADDRESS] = $parents[RELTYPE_TEGEVUSALAD] = $args['obj_inst']->parent();
+			$parents[RELTYPE_JOBS] = $parents[RELTYPE_WORKERS] = $parents[RELTYPE_ADDRESS] = $args['obj_inst']->parent();
 		}
 		else
 		{
 			$crm_db = new object($crm_db_id);
 			$default_dir = $crm_db->prop("dir_default");
 			$parents[RELTYPE_ADDRESS] = $crm_db->prop("dir_address") == "" ? $default_dir : $crm_db->prop('dir_address');
-			$parents[RELTYPE_TEGEVUSALAD] = $crm_db->prop("dir_tegevusala") == "" ? $default_dir : $crm_db->prop('dir_address');
 			$parents[RELTYPE_WORKERS] = $crm_db->prop("dir_isik") == "" ? $default_dir : $crm_db->prop('dir_isik');
-			$parents[RELTYPE_ETTEVOTLUSVORM] = $crm_db->prop("dir_ettevotlusvorm") == "" ? $default_dir : $crm_db->prop('dir_ettevotlusvorm');
 		};
 
 		if (!empty($this->cal_id))
@@ -802,7 +800,7 @@ class crm_company extends class_base
 			"text" => $this->cfg["classes"][$this->clid]["name"],
 		));
 
-		$alist = array(RELTYPE_WORKERS,RELTYPE_TEGEVUSALAD,RELTYPE_ADDRESS,RELTYPE_ETTEVOTLUSVORM,RELTYPE_JOBS);
+		$alist = array(RELTYPE_WORKERS,RELTYPE_ADDRESS,RELTYPE_JOBS);
 		foreach($alist as $key => $val)
 		{
 			$clids = $this->relinfo[$val]["clid"];
