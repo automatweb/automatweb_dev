@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.1 2003/05/12 17:00:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.2 2003/05/12 19:42:00 kristo Exp $
 // period.aw - periods 
 /*
 
@@ -171,6 +171,8 @@ class period extends class_base
 
 	function clist($arc_only = -1) 
 	{
+
+								
 		$this->mk_percache();
 
 		// read all periods from db and then compare the oids to the ones in the object chain for $oid
@@ -292,7 +294,7 @@ class period extends class_base
 	{
 		$oid = $oid == -1 ? $this->oid : $oid;
 		do {
-			$q = "SELECT menu.active_period as active_period,objects.parent as parent FROM menu left join objects on objects.oid = menu.id WHERE id = "  . $oid;
+			$q = "SELECT menu.active_period as active_period,objects.parent as parent FROM menu left join objects on objects.oid = menu.id WHERE id = '"  . $oid."'";
 			$this->db_query($q);
 			$row = $this->db_fetch_row();
 			$oid = $row["parent"];

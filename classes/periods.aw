@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.28 2003/05/01 17:29:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.29 2003/05/12 19:42:00 kristo Exp $
 // this is here so that orb will work...
 class periods extends aw_template
 {
@@ -166,7 +166,7 @@ class periods extends aw_template
 	{
 		$oid = $oid == -1 ? $this->oid : $oid;
 		do {
-			$q = "SELECT menu.active_period as active_period,objects.parent as parent FROM menu left join objects on objects.oid = menu.id WHERE id = "  . $oid;
+			$q = "SELECT menu.active_period as active_period,objects.parent as parent FROM menu left join objects on objects.oid = menu.id WHERE id = '"  . $oid."'";
 			$this->db_query($q);
 			$row = $this->db_fetch_row();
 			$oid = $row["parent"];
