@@ -81,6 +81,10 @@ class connection
 
 	function find($param)
 	{
+		if ($GLOBALS["OBJ_TRACE"])
+		{
+			echo "connection::find(".join(",", map2('%s => %s', $param)).") <br>";
+		}
 		if (!is_array($param))
 		{
 			error::throw(array(
