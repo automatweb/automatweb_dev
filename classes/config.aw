@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.65 2004/11/19 11:28:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.66 2005/02/01 15:01:53 kristo Exp $
 
 class db_config extends aw_template 
 {
@@ -231,7 +231,7 @@ class config extends db_config
 		{
 			$this->vars(array(
 				"grp_id" => $row["gid"],
-				"grp_name" => $row["name"],
+				"grp_name" => $row["name"] != "" ? $row["name"] : $row["o_name"],
 				"url" => $ea[$row["gid"]]["url"],
 				"priority" => $ea[$row["gid"]]["pri"]
 			));
