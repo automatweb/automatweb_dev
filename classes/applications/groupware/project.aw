@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.4 2004/07/21 14:35:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.5 2004/07/27 12:00:44 rtoomas Exp $
 // project.aw - Projekt 
 /*
 
@@ -30,6 +30,8 @@
 @reltype PRJ_FILE value=4 clid=CL_FILE
 @caption Fail
 
+@reltype TAX_CHAIN value=5 clid=CL_TAX_CHAIN
+@caption Maksu pärg
 */
 
 class project extends class_base
