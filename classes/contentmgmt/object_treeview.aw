@@ -569,7 +569,7 @@ class object_treeview extends class_base
 				$_ot = new object_tree(array(
 					"class_id" => CL_MENU,
 					"parent" => $c_o->id(),
-					"status" => STAT_ACTIVE,
+					"status" => array(STAT_ACTIVE,STAT_NOTACTIVE),
 					"lang_id" => array()
 				));
 				$cur_ids = $_ot->ids();
