@@ -135,7 +135,10 @@ The above should be rather self-explanatory. define_data takes it's arguments in
 
 set_default_sortby and set_default_sorder are optional, you don't have to use them, but if you do then they define the initial sort order for the table.
 
-If you don't use them, then no sorting is done, rows will be shown in the same order they were defined.
+If you want the data to appear in the exactly same order you put it in the table then do
+#php#
+$t->set_sortable(false);
+#/php#
 
 Note that the fields you use in define_data do not have to be defined by define_field. If a field is not defined, then it will not be shown, but you can still use it's value if needed.
 
