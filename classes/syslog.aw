@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.17 2002/08/07 12:12:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.18 2002/09/26 16:23:38 duke Exp $
 // syslog.aw - syslog management
 // syslogi vaatamine ja analüüs
 class db_syslog extends aw_template
@@ -405,6 +405,35 @@ class syslog extends db_syslog
 			{
 				$this->_log("referer",$referer);
 				aw_session_set("referer",$mt[1]);
+			};
+		};
+	}
+
+	function convert_syslog()
+	{
+		// fills the site_id field in syslog table
+		$q = "SELECT oid FROM syslog GROUP BY (oid)";
+		$this->db_query($q);
+		while($row = $this->db_next())
+		{
+			$this->save_handle();
+			$q = "SELECT site_id FROM objects WHERE oid = '$row[oid]'";
+			$this->db_query($q);
+			$row2 = $this->db_next();
+			$site_id = (int)$site_id;
+			// just in case, avoid writing to the table while we are reading
+			// from it. 
+			$ids[$row["oid"]] = (int)$row2["site_id"];
+			$this->restore_handle();
+		};
+
+		if (is_array($ids))
+		{
+			foreach($ids as $key => $val)
+			{
+				$q = "UPDATE syslog SET site_id = '$val' WHERE oid = '$key'";
+				print $q;
+				print "<br>";
 			};
 		};
 	}
