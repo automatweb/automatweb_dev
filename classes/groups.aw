@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.16 2003/05/13 14:37:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.17 2003/06/04 19:20:17 kristo Exp $
 load_vcl("table");
 
 session_register("group_folders");
@@ -123,19 +123,15 @@ class groups extends users_user
 		$this->db_query("SELECT groups.oid,groups.gid FROM groups LEFT JOIN objects ON objects.oid = groups.oid WHERE objects.status != 0");
 		while ($row = $this->db_next())
 		{
-			$view = $this->can("view_users", $row[oid]);
-			if ($view)
+			// add all users of this group to list of users
+			$this->save_handle();
+			$ul = $this->getgroupmembers2($row[gid]);
+			reset($ul);
+			while (list(,$u_uid) = each($ul))
 			{
-				// add all users of this group to list of users
-				$this->save_handle();
-				$ul = $this->getgroupmembers2($row[gid]);
-				reset($ul);
-				while (list(,$u_uid) = each($ul))
-				{
-					$users[$u_uid] = $u_uid;
-				}
-				$this->restore_handle();
+				$users[$u_uid] = $u_uid;
 			}
+			$this->restore_handle();
 		}
 
 		$this->listgroups("parent","asc",GRP_DEFAULT);
@@ -278,7 +274,7 @@ class groups extends users_user
 				"CAN_DELETE" => $rt && $this->can("delete",$v["oid"]) ? $this->parse("CAN_DELETE") : "",
 				"CAN_ACL" => $rt && $this->can("admin",$v["oid"]) ? $this->parse("CAN_ACL") : "",
 				"CHECK"			 => $che,
-				"CAN_PRIORITY" => $rt && $this->can("order",$v["oid"]) ? $this->parse("CAN_PRIORITY") : ""
+				"CAN_PRIORITY" => $rt ? $this->parse("CAN_PRIORITY") : ""
 			));
 
 			if ($this->can("view", $v["oid"]))
@@ -599,24 +595,20 @@ class groups extends users_user
 	{
 		$gp = $this->fetchgroup($id);
 
-		// we must only show users who are in groups to which the suer has can_copy access
 		$users = array(aw_global_get("uid") => "\"".aw_global_get("uid")."\"");
 		$this->listacl("objects.status != 0 AND objects.class_id = ".CL_GROUP);
 		$this->db_query("SELECT groups.oid,groups.gid FROM groups LEFT JOIN objects ON objects.oid = groups.oid WHERE objects.status != 0");
 		while ($row = $this->db_next())
 		{
-			if ($this->can("copy", $row[oid]))
+			// add all users of this group to list of users
+			$this->save_handle();
+			$ul = $this->getgroupmembers2($row["gid"]);
+			reset($ul);
+			while (list(,$u_uid) = each($ul))
 			{
-				// add all users of this group to list of users
-				$this->save_handle();
-				$ul = $this->getgroupmembers2($row["gid"]);
-				reset($ul);
-				while (list(,$u_uid) = each($ul))
-				{
-					$users[$u_uid] = "\"".$u_uid."\"";
-				}
-				$this->restore_handle();
+				$users[$u_uid] = "\"".$u_uid."\"";
 			}
+			$this->restore_handle();
 		}
 
 		$members = array();
@@ -639,10 +631,6 @@ class groups extends users_user
 	{
 		extract($arr);
 		$gp = $this->fetchgroup($gid);
-		if (!$this->can("copy",$gp["oid"]))
-		{
-			return "";
-		}
 		$this->mk_path(0,"Muuda grupi ".$gp["name"]." liikmeid");
 		$this->read_template("user_grp_members.tpl");
 		$this->do_grp_members($gid);
@@ -657,10 +645,6 @@ class groups extends users_user
 	{
 		extract($arr);
 		$gp = $this->fetchgroup($id);
-		if (!$this->can("copy",$gp["oid"]))
-		{
-			return "";
-		}
 		$this->mk_path(0,"<a href='".$this->mk_orb("list_grps_user",array("parent" => $gp["parent"]))."'>Grupid</a> / Muuda liikmeid");
 		$this->read_template("user_grp_members.tpl");
 		$this->do_grp_members($id);
@@ -684,18 +668,15 @@ class groups extends users_user
 		$this->db_query("SELECT groups.oid,groups.gid FROM groups LEFT JOIN objects ON objects.oid = groups.oid WHERE objects.status != 0");
 		while ($row = $this->db_next())
 		{
-			if ($this->can("copy", $row["oid"]))
+			// add all users of this group to list of users
+			$this->save_handle();
+			$ul = $this->getgroupmembers2($row["gid"]);
+			reset($ul);
+			while (list(,$u_uid) = each($ul))
 			{
-				// add all users of this group to list of users
-				$this->save_handle();
-				$ul = $this->getgroupmembers2($row["gid"]);
-				reset($ul);
-				while (list(,$u_uid) = each($ul))
-				{
-					$users[$u_uid] = $u_uid;
-				}
-				$this->restore_handle();
+				$users[$u_uid] = $u_uid;
 			}
+			$this->restore_handle();
 		}
 
 		$toadd = array();
@@ -832,11 +813,13 @@ class groups extends users_user
 			{
 				$ca = $this->parse("CAN_ACL");
 			}
-			if ($this->can("order", $row["oid"]))
-			{
-				$nf = $this->parse("NFIRST");
-			}
-			$this->vars(array("CAN_CHANGE" => $cc, "CAN_DELETE" => $cd, "CAN_ACL" => $ca, "NFIRST" => $nf));
+			$nf = $this->parse("NFIRST");
+			$this->vars(array(
+				"CAN_CHANGE" => $cc, 
+				"CAN_DELETE" => $cd, 
+				"CAN_ACL" => $ca, 
+				"NFIRST" => $nf
+			));
 			$l.=$this->parse("LINE");
 		}
 		$this->vars(array(
