@@ -1,5 +1,5 @@
 <?php
-// $Id: frameset.aw,v 1.1 2002/11/04 14:49:28 duke Exp $
+// $Id: frameset.aw,v 1.2 2002/11/04 20:53:13 duke Exp $
 // frameset.aw - frameset generator
 /*
 	@default table=objects
@@ -63,27 +63,10 @@ class frameset extends aw_template
 {
 	function frameset($args = array())
 	{
-		$this->init("");
-
-	}
-
-	function add($args = array())
-	{
-		extract($args);
-		// gotta get rid of that too
-		$cfg = get_instance("cfg/cfgmanager");
-		return $cfg->change(array(
-			"class_id" => CL_FRAMESET,
-			"parent" => $parent,
+		$this->init(array(
+			"clid" => CL_FRAMESET,
 		));
-	}
 
-	function change($args = array())
-	{
-		$cfg = get_instance("cfg/cfgmanager");
-		return $cfg->change(array(
-			"id" => $args["id"],
-		));
 	}
 
 	function show($args = array())
@@ -95,7 +78,14 @@ class frameset extends aw_template
 			return "fuck off";
 		};
 		$tpl = $this->get_frame_template(array("type" => $obj["meta"]["template"]));
-		$this->sources = $obj["meta"]["sources"];
+		if ($args["sources"])
+		{
+			$this->sources = $args["sources"];
+		}
+		else
+		{
+			$this->sources = $obj["meta"]["sources"];
+		};
 		$this->draw_frameset($tpl);
 		print $this->content;
 		exit;
@@ -111,8 +101,18 @@ class frameset extends aw_template
 					"frames" => array("left","right"),
 				);
 				$retval = array(
-					"rows" => "20%,*",
+					"rows" => "18%,*",
 					"frames" => array("top",$twopanel),
+				);
+				break;
+			case "l1r2":
+				$twopanel = array(
+					"rows" => "20%,*",
+					"frames" => array("top","right"),
+				);
+				$retval = array(
+					"cols" => "20%,*",
+					"frames" => array("left",$twopanel),
 				);
 				break;
 
@@ -169,7 +169,7 @@ class frameset extends aw_template
 		switch($data["name"])
 		{
 			case "template":
-				$data["options"] = array("" => "--vali--","u1d2" => "Üleval 1, all 2");
+				$data["options"] = array("" => "--vali--","u1d2" => "Üleval 1, all 2","l1r2" => "vasakul 1, paremal 2");
 				$tpl = $this->get_frame_template(array("type" => "u1d2"));
 				$this->draw_frameset($tpl);
 				break;

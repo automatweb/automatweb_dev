@@ -1,5 +1,5 @@
 <?php
-// $Id: treeview.aw,v 1.1 2002/11/04 16:05:06 duke Exp $
+// $Id: treeview.aw,v 1.2 2002/11/04 20:53:13 duke Exp $
 // treeview.aw - tree generator
 /*
         @default table=objects
@@ -15,25 +15,9 @@ class treeview extends aw_template
 {
 	function treeview($args = array())
 	{
-		$this->init("treeview");
-	}
-
-	function add($args = array())
-	{
-		extract($args);
-		// gotta get rid of that too
-		$cfg = get_instance("cfg/cfgmanager");
-		return $cfg->change(array(
-			"class_id" => CL_TREEVIEW,
-			"parent" => $parent,
-		));
-	}
-
-	function change($args = array())
-	{
-		$cfg = get_instance("cfg/cfgmanager");
-		return $cfg->change(array(
-			"id" => $args["id"],
+		$this->init(array(
+			"tpldir" => "treeview",
+			"clid" => CL_TREEVIEW,
 		));
 	}
 
