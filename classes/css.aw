@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.6 2001/11/20 13:19:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.7 2002/01/21 11:28:37 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 // I decided to make it a separate class, because I think the style.aw 
 // class is too cluttered.
@@ -54,6 +54,7 @@ class css extends aw_template {
 				"4" => "sans-serif",
 				"5" => "monospace",
 				"6" => "cursive",
+				"7" => "Trebuchet,Tahoma,sans-serif"
 		);
 
 		$this->units = array(
@@ -540,6 +541,7 @@ class css extends aw_template {
 		};
 		foreach($data as $key => $val)
 		{
+			$ign = false;
 			switch($key)
 			{
 				case "ffamily":
@@ -565,13 +567,18 @@ class css extends aw_template {
 				case "textdecoration":
 					$mask = "text-decoration: %s;\n";
 					break;
+				
+				default:
+					$ign = true;
+					break;
 			};
 
 			if ($key == "size")
 			{
 				$retval .= "\tfont-size: $val" . $data["units"] . ";\n";
 			}
-			elseif ($key != "units")
+			else
+			if ($key != "units" && !$ign)
 			{
 				$retval .= sprintf("\t" . $mask,$val);
 			};
@@ -579,7 +586,40 @@ class css extends aw_template {
 		}
 
 		$retval .= "}\n";
+
+		if (!$this->in_gen)
+		{
+			$this->in_gen = true;
+			if ($data["a_style"])
+			{
+				$retval.=$this->_gen_css_style($name." a",$this->get_cached_style_data($data["a_style"]));
+			}
+			if ($data["a_hover_style"])
+			{
+				$retval.=$this->_gen_css_style($name." a:hover",$this->get_cached_style_data($data["a_hover_style"]));
+			}
+			if ($data["a_visited_style"])
+			{
+				$retval.=$this->_gen_css_style($name." a:visited",$this->get_cached_style_data($data["a_visited_style"]));
+			}
+			if ($data["a_active_style"])
+			{
+				$retval.=$this->_gen_css_style($name." a:active",$this->get_cached_style_data($data["a_active_style"]));
+			}
+			$this->in_gen = false;
+		}
 		return $retval;
+	}
+
+	function get_cached_style_data($id)
+	{
+		global $AW_CSS_STYLE_CACHE;
+		if (!$AW_CSS_STYLE_CACHE[$id])
+		{
+			$css_info = $this->get_obj_meta($id);
+			$AW_CSS_STYLE_CACHE[$id] = $css_info["meta"]["css"];
+		}
+		return $AW_CSS_STYLE_CACHE[$id];
 	}
 
 	////
@@ -675,6 +715,8 @@ class css extends aw_template {
 			
 		$styl = $this->_gen_css_style("demo",$css_data);
 
+		$stlist = $this->get_select(true);
+
 		$this->vars(array(
 			"styl" => $styl,
 			"name" => $obj["name"],
@@ -690,6 +732,10 @@ class css extends aw_template {
 			"link_my_styles" => $this->mk_my_orb("my_list",array("gid" => $gid)),
 			"link_groups" => $this->mk_my_orb("list",array()),
 			"reforb" => $this->mk_reforb("submit",array("oid" => $id,"gid" => $gid)),
+			"a_style" => $this->picker($css_data["a_style"], $stlist),
+			"a_hover_style" => $this->picker($css_data["a_hover_style"], $stlist),
+			"a_visited_style" => $this->picker($css_data["a_visited_style"], $stlist),
+			"a_active_style" => $this->picker($css_data["a_active_style"], $stlist),
 		));
 		return $this->parse();
 	}
@@ -712,6 +758,10 @@ class css extends aw_template {
 		$block["units"] = $args["units"];
 		$block["fgcolor"] = $args["fgcolor"];
 		$block["bgcolor"] = $args["bgcolor"];
+		$block["a_style"] = $args["a_style"];
+		$block["a_hover_style"] = $args["a_hover_style"];
+		$block["a_visited_style"] = $args["a_visited_style"];
+		$block["a_active_style"] = $args["a_active_style"];
 
 		$oid = $args["oid"];
 		$gid = $args["gid"];
@@ -754,9 +804,13 @@ class css extends aw_template {
 		return $this->mk_my_orb("my_list",array());
 	}
 	
-	function get_select()
+	function get_select($addempty = false)
 	{
 		$ret = array();
+		if ($addempty)
+		{
+			$ret[0] = "";
+		}
 		$this->db_query("SELECT oid,name FROM objects WHERE class_id = ".CL_CSS." AND status != 0");
 		while ($row = $this->db_next())
 		{

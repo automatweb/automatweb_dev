@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.21 2002/01/07 16:33:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.22 2002/01/21 11:28:37 kristo Exp $
 // table.aw - tabelite haldus
 global $orb_defs;
 
@@ -212,7 +212,9 @@ $orb_defs["table"] ="xml";
 											where aw_tables.id = $id";
 		$this->db_query($q);
 		if (!($row = $this->db_next()))
+		{
 			$this->raise_error("no such table $id (tables.class->load_table)!", true);
+		}
 		
 		/*$this->is_filter=$this->get_object_metadata(array("metadata"=>$row["metadata"],"key"=>"is_filter"));
 		$this->filter=$this->get_object_metadata(array("metadata"=>$row["metadata"],"key"=>"filter"));*/
@@ -224,13 +226,13 @@ $orb_defs["table"] ="xml";
 		if ($this->arr["cols"]  < 1 || $this->arr["rows"]  < 1)
 		{
 			$this->arr["cols"] =1;
-			$this->arr[map][0][0] = array("row" => 0, "col" => 0);
+			$this->arr["map"][0][0] = array("row" => 0, "col" => 0);
 			$this->arr["rows"] = 1;
 		}
-		$this->table_name = $row[name];
-		$this->table_comment = $row[comment];
+		$this->table_name = $row["name"];
+		$this->table_comment = $row["comment"];
 		$this->table_id = $id;
-		$this->table_parent = $row[parent];
+		$this->table_parent = $row["parent"];
 
 		// $this->table_loaded = true;
 	}
@@ -262,7 +264,15 @@ $orb_defs["table"] ="xml";
 			"activelist" => array("configure"),
 		));
 		$this->gen_yah();
-		$st = new style();
+
+		classload("style");
+		$st = new style;
+		$stylesel = $st->get_select(0,ST_CELL,true);
+		classload("css");
+		$css = new css;
+		$tmp = $css->get_select();
+		$stylesel = $stylesel + $tmp;
+
 		$this->vars(array(
 			"menu" => $menu,
 			"aliases" => checked($this->meta["aliases"]),
@@ -271,7 +281,7 @@ $orb_defs["table"] ="xml";
 			"table_header" => $this->arr["table_header"],
 			"table_footer" => $this->arr["table_footer"],
 			"tablestyle" => $this->option_list($this->arr["table_style"], $st->get_select($this->table_parent,ST_TABLE)),
-			"defaultstyle" => $this->option_list($this->arr["default_style"], $st->get_select($this->table_parent,ST_CELL)),
+			"defaultstyle" => $this->option_list($this->arr["default_style"], $stylesel),
 			"show_title"  => checked($this->arr["show_title"]),
 		));
 		return $this->parse();
@@ -296,6 +306,7 @@ $orb_defs["table"] ="xml";
 		$this->arr["show_title"] = $show_title;
 		$this->arr["table_style"] = $table_style;
 		$this->arr["default_style"] = $default_style;
+		$this->arr["style2class"][$default_style] = $this->db_fetch_field("SELECT class_id FROM objects WHERE oid = $default_style","class_id");
 
 		// touch the object
 		$this->upd_object(array(
@@ -313,14 +324,12 @@ $orb_defs["table"] ="xml";
 	{
 		extract($arr);
 
-
 		$this->load_table($id);
 		$menu = $this->gen_navbar(array(
 			"activelist" => array("change"),
 		));
 
 		$this->gen_yah();
-
 
 		$this->read_template("table_modify.tpl");
 		session_register("is_filter$id");
@@ -330,7 +339,6 @@ $orb_defs["table"] ="xml";
 		{
 			$GLOBALS["is_filter$id"]=1;
 			$GLOBALS["filter$id"]=$filter;
-		
 		};
 			
 		if ($GLOBALS["is_filter$id"])
@@ -379,22 +387,28 @@ $orb_defs["table"] ="xml";
 			for ($a=0; $a < $this->arr["cols"]; $a++)
 			{
 				if (!($spans = $this->get_spans($i, $a)))
+				{
 						continue;
+				}
 
-				$map = $this->arr[map][$i][$a];
+				$map = $this->arr["map"][$i][$a];
 
-				$cell = $this->arr["contents"][$map[row]][$map[col]];
-				$scell = $this->arr["styles"][$map[row]][$map[col]];
+				$cell = $this->arr["contents"][$map["row"]][$map["col"]];
+				$scell = $this->arr["styles"][$map["row"]][$map["col"]];
 				
 				$this->vars(array("text"	=> $cell["text"],
-													"col"		=> $map[col],
-													"row"		=> $map[row],
-													"num_cols"	=> $scell[cols],
-													"num_rows"	=> $scell[rows]));
-				if ($scell[rows] > 1)
+													"col"		=> $map["col"],
+													"row"		=> $map["row"],
+													"num_cols"	=> $scell["cols"],
+													"num_rows"	=> $scell["rows"]));
+				if ($scell["rows"] > 1)
+				{
 					$ba = $this->parse("AREA");
+				}
 				else
+				{
 					$ba = $this->parse("BOX");
+				}
 				
 				$this->vars(array("AREA" => $ba, "BOX" => ""));
 				$col.=$this->parse("COL");
@@ -404,12 +418,14 @@ $orb_defs["table"] ="xml";
 			$this->parse("LINE");
 		}
 		$st = new style;
-		$this->vars(array("reforb" => $this->mk_reforb("submit", array("id" => $id)),
-											"table_id" => $id,
-											"aliasmgr_link" => $this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"),
-											"menu" => $menu,
-											"extdata" => $extdata,
-											"addstyle"		=> $this->mk_orb("new",array("parent" => $this->table_parent),"style")));
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
+			"table_id" => $id,
+			"aliasmgr_link" => $this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"),
+			"menu" => $menu,
+			"extdata" => $extdata,
+			"addstyle" => $this->mk_orb("new",array("parent" => $this->table_parent),"style")
+		));
 
 		if ($this->meta["aliases"])
 		{
@@ -420,7 +436,7 @@ $orb_defs["table"] ="xml";
 		reset($ar);
 		while (list(,$v) = each($ar))
 		{
-			$this->vars(array("url" => $this->mk_orb("list_aliases", array("id" => $v[id],),"aliasmgr"),"title" => $v["name"]));
+			$this->vars(array("url" => $this->mk_orb("list_aliases", array("id" => $v["id"],),"aliasmgr"),"title" => $v["name"]));
 			$this->parse("ALIAS_LINK");
 		}
 		return $this->parse();
@@ -438,10 +454,9 @@ $orb_defs["table"] ="xml";
 				$this->gen_yah();
 			};
 			
-
 			$this->read_template("admin.tpl");
 	
-			for ($col = 0; $col < $this->arr[cols]; $col++)
+			for ($col = 0; $col < $this->arr["cols"]; $col++)
 			{
 				$fc = "";
 				if ($col == 0)
@@ -449,10 +464,12 @@ $orb_defs["table"] ="xml";
 					$this->vars(array("add_col" => $this->mk_orb("nadd_col", array("id" => $id, "after" => -1, "num" => 0))));
 					$fc = $this->parse("FIRST_C");
 				}
-				$this->vars(array("FIRST_C" => $fc, 
-													"col" => $col,
-													"add_col" => $this->mk_orb("nadd_col", array("id" => $id, "after" => $col,"num" => 0)),
-													"del_col"	=> $this->mk_orb("ndel_col", array("id" => $id, "col" => $col))));
+				$this->vars(array(
+					"FIRST_C" => $fc, 
+					"col" => $col,
+					"add_col" => $this->mk_orb("nadd_col", array("id" => $id, "after" => $col,"num" => 0)),
+					"del_col"	=> $this->mk_orb("ndel_col", array("id" => $id, "col" => $col))
+				));
 				$this->parse("DC");
 			}
 			for ($i=0; $i < $this->arr["rows"]; $i++)
@@ -461,22 +478,30 @@ $orb_defs["table"] ="xml";
 				for ($a=0; $a < $this->arr["cols"]; $a++)
 				{
 					if (!($spans = $this->get_spans($i, $a)))
+					{
 						continue;
+					}
 
-					$map = $this->arr[map][$i][$a];
+					$map = $this->arr["map"][$i][$a];
 
-					$cell = $this->arr["contents"][$map[row]][$map[col]];
-					$scell = $this->arr["styles"][$map[row]][$map[col]];
+					$cell = $this->arr["contents"][$map["row"]][$map["col"]];
+					$scell = $this->arr["styles"][$map["row"]][$map["col"]];
 					
-					$this->vars(array("text"	=> htmlentities(substr($cell["text"],0,10)),
-														"col"		=> $map[col],
-														"row"		=> $map[row],
-														"rows"	=> ($scell[rows] < 1 ? 1 : $scell[rows]),
-														"cols"	=> ($scell[cols] < 1 ? 15 : $scell[cols])));
-					if ($scell[rows] > 1)
+					$this->vars(array(
+						"text"	=> htmlentities(substr($cell["text"],0,10)),
+						"col"		=> $map["col"],
+						"row"		=> $map["row"],
+						"rows"	=> ($scell["rows"] < 1 ? 1 : $scell["rows"]),
+						"cols"	=> ($scell["cols"] < 1 ? 15 : $scell["cols"])
+					));
+					if ($scell["rows"] > 1)
+					{
 						$ba = $this->parse("AREA");
+					}
 					else
+					{
 						$ba = $this->parse("BOX");
+					}
 					$this->vars(array("AREA" => $ba, "BOX" => ""));
 					$col.=$this->parse("COL");
 				}
@@ -504,7 +529,7 @@ $orb_defs["table"] ="xml";
 			reset($ar);
 			while (list(,$v) = each($ar))
 			{
-				$this->vars(array("url" => $this->mk_orb("change", array("id" => $v[id],"parent" => $v[parent]),"document"),"title" => $v[name]));
+				$this->vars(array("url" => $this->mk_orb("change", array("id" => $v["id"],"parent" => $v["parent"]),"document"),"title" => $v["name"]));
 				$this->parse("ALIAS_LINK");
 			}
 			return $this->parse();
@@ -525,7 +550,7 @@ $orb_defs["table"] ="xml";
 		
 		function submit($arr)
 		{
-			$this->load_table($arr[id]);
+			$this->load_table($arr["id"]);
 
 //			$this->arr[table_style] = $arr[table_style];
 //			$this->arr[default_style] = $arr[default_style];
@@ -534,13 +559,15 @@ $orb_defs["table"] ="xml";
 //			$this->upd_object(array("oid" => $arr[id], "name" => $arr[table_name]));
 			$this->save_table($arr);
 			$this->_log("table", "changed table $arr[table_name]");
-			return $this->mk_orb("change", array("id" => $arr[id]));
+			return $this->mk_orb("change", array("id" => $arr["id"]));
 		}
 
 		function save_table($ar, $update=true)
 		{
 			if ($update)
+			{
 				$this->update_table();
+			}
 
 			$cdelete = array();
 			$rdelete = array();
@@ -560,11 +587,15 @@ $orb_defs["table"] ="xml";
 
 			reset($cdelete);
 			while (list($k,$v) = each($cdelete))
+			{
 				$this->del_col(array("col" => $v));
+			}
 
 			reset($rdelete);
 			while (list($k,$v) = each($rdelete))
+			{
 				$this->del_row(array("row" => $v));
+			}
 
 			$ar["str"]=serialize($this->arr);
 			$this->quote($ar);
@@ -609,13 +640,17 @@ $orb_defs["table"] ="xml";
 					$this->arr["cols"]++;
 
 					$nm = array();
-					for ($row =0; $row < $this->arr[rows]; $row++)
+					for ($row =0; $row < $this->arr["rows"]; $row++)
+					{
 						for ($col=0; $col <= $after; $col++)
-							$nm[$row][$col] = $this->arr[map][$row][$col];		// copy the left part of the map
+						{
+							$nm[$row][$col] = $this->arr["map"][$row][$col];		// copy the left part of the map
+						}
+					}
 
 					$change = array();
-					for ($row = 0; $row < $this->arr[rows]; $row++)
-						for ($col=$after+1; $col < ($this->arr[cols]-1); $col++)
+					for ($row = 0; $row < $this->arr["rows"]; $row++)
+						for ($col=$after+1; $col < ($this->arr["cols"]-1); $col++)
 						{
 							if ($this->arr[map][$row][$col][col] > $after)	
 							{
@@ -947,7 +982,6 @@ $orb_defs["table"] ="xml";
 				"activelist" => array("edit"),
 			));
 
-
 			if (!$GLOBALS["is_filter$id"])
 			{
 				$this->gen_yah();
@@ -1124,10 +1158,18 @@ $orb_defs["table"] ="xml";
 			}
 			$this->read_template("pickstyle.tpl");
 
-			$s = new style;
-			$sel = $s->get_select($this->table_parent,ST_CELL);
-			$this->vars(array("stylessel" => $this->option_list($this->arr["styles"][$row][$col][style], $sel),
-												"reforb"	=> $ro));
+			classload("style");
+			$st = new style;
+			$stylesel = $st->get_select(0,ST_CELL,true);
+			classload("css");
+			$css = new css;
+			$tmp = $css->get_select();
+			$stylesel = $stylesel + $tmp;
+
+			$this->vars(array(
+				"stylessel" => $this->option_list($this->arr["styles"][$row][$col]["style"], $stylesel),
+				"reforb"	=> $ro
+			));
 			return $this->parse();
 		}
 
@@ -1136,9 +1178,11 @@ $orb_defs["table"] ="xml";
 			extract($arr);
 			$this->load_table($id);
 
+			$this->arr["style2class"][$style] = $this->db_fetch_field("SELECT class_id FROM objects WHERE oid = $style","class_id");
+
 			if (isset($col) && isset($row))
 			{
-				$this->arr["styles"][$row][$col][style] = $style;
+				$this->arr["styles"][$row][$col]["style"] = $style;
 			}
 
 			if (is_array($frow))
@@ -1146,9 +1190,9 @@ $orb_defs["table"] ="xml";
 				reset($frow);
 				while (list(,$v) = each($frow))
 				{
-					for ($col=0; $col < $this->arr[cols]; $col++)
+					for ($col=0; $col < $this->arr["cols"]; $col++)
 					{
-						$this->arr["styles"][$v][$col][style] = $style;
+						$this->arr["styles"][$v][$col]["style"] = $style;
 					}
 				}
 			}
@@ -1158,9 +1202,9 @@ $orb_defs["table"] ="xml";
 				reset($fcol);
 				while (list(,$v) = each($fcol))
 				{
-					for ($row=0; $row < $this->arr[rows]; $row++)
+					for ($row=0; $row < $this->arr["rows"]; $row++)
 					{
-						$this->arr["styles"][$row][$v][style] = $style;
+						$this->arr["styles"][$row][$v]["style"] = $style;
 					}
 				}
 			}
@@ -1370,17 +1414,24 @@ $orb_defs["table"] ="xml";
 				$is_filter="1";
 			};
 
-			if ($this->arr[show_title])
+			if ($this->arr["show_title"])
+			{
 				$table = "<b><font size=\"+1\">".$this->table_name."</font></b><br>";
-
+			}
 			
-			$stc = new style; $frow_style = 0; $fcol_style = 0; $num_fcols = 0; $num_frows = 0;
+			$stc = new style; 
+			$frow_style = 0; 
+			$fcol_style = 0; 
+			$num_fcols = 0; 
+			$num_frows = 0;
 
 			$header = $this->proc_text($this->arr["table_header"]);
 			if ($header != "")
 			{
-				if ($this->arr[table_style])
+				if ($this->arr["table_style"])
+				{
 					$header_style = $stc->get_header_style($this->arr["table_style"]);
+				}
 
 				$table.= $header_style ? $stc->get_text_begin_str($header_style).$header.$stc->get_text_end_str($header_style) : $header;
 			}
@@ -1398,50 +1449,73 @@ $orb_defs["table"] ="xml";
 				$table.= "<table $al ".$stc->get_table_string($this->arr[table_style]).">";
 			}
 			else
+			{
 				$table.= "<table $al>";
+			}
 
-			for ($row=0; $row < $this->arr[rows]; $row++)
+			$used_css_styles = array();
+			for ($row=0; $row < $this->arr["rows"]; $row++)
 			{
 				$cs = "";
-				for ($col=0; $col < $this->arr[cols]; $col++)
+				for ($col=0; $col < $this->arr["cols"]; $col++)
 				{
 					if (!($spans = $this->get_spans($row, $col)))
+					{
 						continue;
+					}
 
-					$map = $this->arr[map][$row][$col];
+					$map = $this->arr["map"][$row][$col];
 
-					$cell = $this->arr[contents][$map[row]][$map[col]];
-					$scell = $this->arr[styles][$map[row]][$map[col]];
+					$cell = $this->arr["contents"][$map["row"]][$map["col"]];
+					$scell = $this->arr["styles"][$map["row"]][$map["col"]];
 
 					$st = 0;
-					if ($scell[style])
-						$st = $scell[style];
+					if ($scell["style"])
+					{
+						$st = $scell["style"];
+					}
 					else
 					{
 						// tshekime et kui on esimene rida/tulp ja stiili pole m22ratud, siis 
 						// v6tame tabeli stiilist, kui see on m22ratud default stiili esimese rea/tulba jaox
-						if ($this->arr[table_style] && $row < $num_frows)
+						if ($this->arr["table_style"] && $row < $num_frows)
 							$st = $frow_style;
 						else
-						if ($this->arr[table_style] && $col < $num_fcols)
+						if ($this->arr["table_style"] && $col < $num_fcols)
 							$st = $fcol_style;
 
 						// kui tabeli stiilis pold m22ratud stiili v6i ei old esimene rida/tulp, siis v6tame default celli stiili, kui see on
-						if ($st == 0 && $this->arr[default_style])
-							$st = $this->arr[default_style];
+						if ($st == 0 && $this->arr["default_style"])
+						{
+							$st = $this->arr["default_style"];
+						}
 						// damn this was horrible
 					}
 
 					if ($st)
-						$cs.= $stc->get_cell_begin_str($st,$spans[colspan],$spans[rowspan]);
+					{
+						if ($this->arr["style2class"][$st] == CL_CSS)
+						{
+							$cs .= "<td colspan=\"".$spans["colspan"]."\" rowspan=\"".$spans["rowspan"]."\" class=\"st_".$st."\">";
+							$used_css_styles[$st] = $st;
+						}
+						else
+						{
+							$cs.= $stc->get_cell_begin_str($st,$spans["colspan"],$spans["rowspan"]);
+						}
+					}
 					else
-						$cs .= "<td colspan=\"".$spans[colspan]."\" rowspan=\"".$spans[rowspan]."\">";
+					{
+						$cs .= "<td colspan=\"".$spans["colspan"]."\" rowspan=\"".$spans["rowspan"]."\">";
+					}
 
-					$celltxt=$is_filter?$this->filter_eval($cell["text"]):$cell["text"];
+					$celltxt = $is_filter ? $this->filter_eval($cell["text"]) : $cell["text"];
 					$cs.= $this->proc_text($celltxt);//siin evalida text lauri
 
 					if ($st)
+					{
 						$cs.= $stc->get_cell_end_str($st);
+					}
 
 					$cs.= "</td>";
 				}
@@ -1449,15 +1523,35 @@ $orb_defs["table"] ="xml";
 			}
 			$table.=$rs."</table>";
 
-			$footer = $this->proc_text($this->arr[table_footer]);
+			$footer = $this->proc_text($this->arr["table_footer"]);
 			if ($footer != "")
 			{
-				if ($this->arr[table_style])
-					$footer_style = $stc->get_footer_style($this->arr[table_style]);
+				if ($this->arr["table_style"])
+				{
+					$footer_style = $stc->get_footer_style($this->arr["table_style"]);
+				}
 
 				$table.= $footer_style ? $stc->get_text_begin_str($footer_style).$footer.$stc->get_text_end_str($footer_style) : $footer;
 			}
 			$retval = $this->replace_aliases(array("id" => $id,"content" => $table));
+
+			$css_file = "";
+			classload("css");
+			$css = new css;
+			$used = array();
+			foreach($used_css_styles as $stylid => $stylid)
+			{
+				if ($used[$stylid] != 1)
+				{
+					$used[$stylid] = 1;
+					$css_info = $this->get_obj_meta($stylid);
+					$css_file .= $css->_gen_css_style("st_".$stylid,$css_info["meta"]["css"]);
+				}
+			}
+			if ($css_file != "")
+			{
+				$retval = "<style type=\"text/css\">".$css_file."</style>\n".$retval;
+			}
 			return $retval;
 		}
 
