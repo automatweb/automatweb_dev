@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.27 2003/11/26 16:26:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.28 2003/12/03 12:32:46 duke Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
@@ -635,7 +635,7 @@ class aw_mail {
 			};
 		};
 		$this->bodytext = $email;
-		send_mail($to,$subject,$email,$headers);
+		send_mail($to,$subject,$email,$headers," -fduke@struktuur.ee");
 		
 	}
 	
