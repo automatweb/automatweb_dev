@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.8 2004/11/07 11:47:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.9 2005/01/28 14:23:34 kristo Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -192,6 +192,10 @@ class shop_packet extends class_base
 			"id" => $prod->id(),
 			"quantity" => (int)($arr["quantity"]),
 			"view_link" => obj_link($prod->id().":".$oc_obj->id())
+		));
+
+		$l_inst->vars(array(
+			"printlink" => aw_global_get("REQUEST_URI")."&print=1"
 		));
 
 		$h_s_p = "";
