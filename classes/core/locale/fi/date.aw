@@ -41,7 +41,7 @@ class date
 				$rv = date("H:i j.m.Y", $timestamp);
 				break;
 		}
-		$return $rv;
+		return $rv;
 	}
 
 	function get_lc_weekday($num, $short = false)
