@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.38 2004/10/28 09:45:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.39 2004/10/29 16:02:52 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -179,7 +179,7 @@ class cfgform extends class_base
 
 		error::throw_if(empty($class_id),(array(
                         "id" => ERR_ABSTRACT,
-                        "msg" => "this is not a valid config form"
+                        "msg" => "this is not a valid config form - class_id not specified"
                 )));
 
 		$tmp = aw_ini_get("classes");
