@@ -1,0 +1,63 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>status</name>
+            <type>status</type>
+            <field>status</field>
+            <table>objects</table>
+            <method>serialize</method>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>pealkiri</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <caption>Tootekataloogi pealkiri</caption>
+      </property>
+      <property>
+            <name>rootauto</name>
+            <type>checkbox</type>
+            <value>yes</value>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <caption>Automaatne rootmenüü nimi</caption>
+      </property>
+      <property>
+            <name>rootname</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <caption>Rootmenüü pealkiri</caption>
+      </property>
+      <property>
+            <name>newwindow</name>
+            <type>checkbox</type>
+            <value>yes</value>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <caption>Ava tooted uues aknas</caption>
+      </property>
+      <property>
+            <name>headline</name>
+            <type>checkbox</type>
+            <value>yes</value>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <caption>Näita pealkirja ja joont</caption>
+      </property>
+      <property>
+            <name>root</name>
+            <type>select</type>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <caption>Rootmenyy</caption>
+      </property>
+</properties>
+
