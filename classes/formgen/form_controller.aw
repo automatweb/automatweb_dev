@@ -211,7 +211,7 @@ class form_controller extends form_base
 
 		$eq = "\$res = ".$eq.";";
 		eval($eq);
-//		echo "evaling $eq , res = $res<br>";
+		dbg2("evaling $eq , res = $res<br>");
 		return $res;
 	}
 
