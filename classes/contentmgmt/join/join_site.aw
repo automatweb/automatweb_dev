@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.7 2004/05/21 11:10:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.8 2004/05/27 08:47:07 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -753,7 +753,7 @@ class join_site extends class_base
 
 	/** submitting a join form will get you here
 	
-		@attrib name=submit_join_form
+		@attrib name=submit_join_form nologin="1"
 
 	**/
 	function submit_join_form($arr)
