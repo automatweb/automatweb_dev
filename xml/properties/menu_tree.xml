@@ -1,0 +1,15 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>menus</name>
+            <type>select</type>
+            <multiple>1</multiple>
+            <size>15</size>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Menüüd</caption>
+      </property>
+</properties>
+
