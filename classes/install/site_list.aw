@@ -466,7 +466,7 @@ class site_list extends class_base
 	function get_site_id_by_url($arr)
 	{
 		extract($arr);
-		return $this->db_fetch_field("SELECT id FROM aw_site_list WHERE url LIKE '%$url%'","id");
+		return $this->db_fetch_field("SELECT id FROM aw_site_list WHERE url LIKE '$url'","id");
 	}
 
 	/** returns all data that we have on the site 
