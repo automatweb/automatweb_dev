@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/documents.aw,v 2.10 2001/05/22 02:41:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/documents.aw,v 2.11 2001/05/22 10:54:33 kristo Exp $
 classload("msgboard","aw_style");
 classload("acl","styles","form","tables","extlinks","images","gallery","file");
 class db_documents extends aw_template
@@ -820,7 +820,8 @@ class db_documents extends aw_template
 					if ($gid)
 					{
 						// siin tuleb siis n2idata galeriid id'ga $gid
-						$gal = new gallery($gid);
+						$gal = new gallery();
+						$gal->load($gid,$GLOBALS["page"]);
 						$replacement = $gal->show($GLOBALS["page"]);
 					};
 					break;

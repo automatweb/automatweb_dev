@@ -11,9 +11,9 @@ class gallery extends aw_template
 		$this->db_init();
 		$this->tpl_init("gallery");
 		$this->sub_merge = 1;
-		if ($id != 0)
+		if ($id)
 		{
-			$this->load($id);
+			$this->load($id,$GLOBALS["page"]);
 		}
 	}
 
@@ -47,7 +47,7 @@ class gallery extends aw_template
 			"name" => $row["name"], 
 			"comment" => $row["comment"],
 			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
-			"content" => $this->mk_orb("admin", array("id" => $id))
+			"content" => $this->mk_orb("admin", array("id" => $id, "page" => "0"))
 		));
 		$this->parse("CHANGE");
 		return $this->parse();
@@ -76,7 +76,7 @@ class gallery extends aw_template
 		return $this->mk_orb("change", array("id" => $id));
 	}
 
-	function load($id)
+	function load($id,$pg)
 	{
 		$this->db_query("SELECT objects.*, galleries.content as content FROM objects LEFT JOIN galleries ON galleries.id = objects.oid WHERE oid = $id");
 		if (!($row = $this->db_next()))
@@ -113,9 +113,12 @@ class gallery extends aw_template
 	function admin($arr)
 	{
 		extract($arr);
-		$page = max($page,0);
+		if ($page < 1)
+		{
+			$page = "0";
+		}
 		$this->read_template("grid.tpl");
-		$this->load($id);
+		$this->load($id,$page);
 		$this->mk_path($this->parent, "<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda</a> / Sisu");
 		
 		for ($pg = 0; $pg < $this->arr["pages"]; $pg++)
@@ -163,21 +166,59 @@ class gallery extends aw_template
 		$this->vars(array(
 			"LINE" => $l,
 			"page" => $page,
-			"reforb" => $this->mk_reforb("c_submit", array("id" => $id,"page" => $page))
+			"reforb" => $this->mk_reforb("c_submit", array("id" => $id,"page" => $page)),
+			"del_row" => $this->mk_orb("del_row", array("id" => $id, "page" => $page)),
+			"del_col" => $this->mk_orb("del_col", array("id" => $id, "page" => $page))
 		));
 		return $this->parse();
 	}
 
-	function add_rows($pg,$num)
+	function add_rows($arr)
 	{
-		$this->arr[$pg][rows] += $num;
+		extract($arr);
+		$this->load($id,$page);
+		$this->arr[$page]["rows"] += $rows;
 		$this->save();
+		header("Location: ".$this->mk_orb("admin", array("id" => $id, "page" => $page)));
+		die();
 	}
 
-	function add_cols($pg,$num)
+	function add_cols($arr)
 	{
-		$this->arr[$pg][cols] += $num;
+		extract($arr);
+		$this->load($id,$page);
+		$this->arr[$page]["cols"] += $cols;
 		$this->save();
+		header("Location: ".$this->mk_orb("admin", array("id" => $id, "page" => $page)));
+		die();
+	}
+
+	function del_col($arr)
+	{
+		extract($arr);
+		$this->load($id,$page);
+		$this->arr[$page]["cols"]--;
+		for ($i=0; $i < $this->arr[$page]["rows"]; $i++)
+		{
+			$this->arr[$page]["content"][$i][$this->arr[$page]["cols"]] = "";
+		}
+		$this->save();
+		header("Location: ".$this->mk_orb("admin", array("id" => $id, "page" => $page)));
+		die();
+	}
+
+	function del_row($arr)
+	{
+		extract($arr);
+		$this->load($id,$page);
+		$this->arr[$page]["rows"]--;
+		for ($i=0; $i < $this->arr[$page]["cols"]; $i++)
+		{
+			$this->arr[$page]["content"][$this->arr[$page]["rows"]][$i] = "";
+		}
+		$this->save();
+		header("Location: ".$this->mk_orb("admin", array("id" => $id, "page" => $page)));
+		die();
 	}
 
 	function save()
@@ -186,28 +227,17 @@ class gallery extends aw_template
 		$this->db_query("UPDATE galleries SET content = '$content' WHERE id = $this->id");
 	}
 
-	function del_col($pg)
+	////
+	// !saves the uploaded pictures for gallery $id, on page $page
+	function submit($arr)
 	{
-		$this->arr[$pg][cols]--;
-		for ($i=0; $i < $this->arr[$pg][rows]; $i++)
-			$this->arr[$pg][content][$i][$this->arr[$pg][cols]] = "";
-		$this->save();
-	}
+		extract($arr);
+		$this->load($id,$page);
 
-	function del_row($pg)
-	{
-		$this->arr[$pg][rows]--;
-		for ($i=0; $i < $this->arr[$pg][cols]; $i++)
-			$this->arr[$pg][content][$this->arr[$pg][rows]][$i] = "";
-		$this->save();
-	}
-
-	function submit()
-	{
 		global $page;
-		for ($row = 0; $row < $this->arr[$page][rows]; $row++)
+		for ($row = 0; $row < $this->arr[$page]["rows"]; $row++)
 		{
-			for ($col = 0; $col < $this->arr[$page][cols]; $col++)
+			for ($col = 0; $col < $this->arr[$page]["cols"]; $col++)
 			{
 				$t = new db_images;
 				$var = "tn_".$row."_".$col;
@@ -215,19 +245,19 @@ class gallery extends aw_template
 
 				if ($$var != "none")
 				{
-					if ($this->arr[$page][content][$row][$col][tn_id] != 0)
+					if ($this->arr[$page]["content"][$row][$col]["tn_id"] != 0)
 					{
-						$ar = $t->_replace(array("filename" => $$var,"file_type" => ${$var."_type"}, "poid" => $this->arr[$page][content][$row][$col][tn_id]));
-						$pid = $ar[id];
+						$ar = $t->_replace(array("filename" => $$var,"file_type" => ${$var."_type"}, "poid" => $this->arr[$page]["content"][$row][$col]["tn_id"]));
+						$pid = $ar["id"];
 					}
 					else
 					{
 						$ar = $t->_upload(array("filename" => $$var,"file_type" => ${$var."_type"}, "oid" => $this->id));
-						$pid = $ar[id];
+						$pid = $ar["id"];
 					}
 					$img = $t->get_img_by_id($pid);
-					$this->arr[$page][content][$row][$col][tn_id] = $img[id];
-					$this->arr[$page][content][$row][$col][tnurl] = $img[url];
+					$this->arr[$page]["content"][$row][$col]["tn_id"] = $img["id"];
+					$this->arr[$page]["content"][$row][$col]["tnurl"] = $img["url"];
 				}
 
 				$t = new db_images;
@@ -236,22 +266,22 @@ class gallery extends aw_template
 
 				if ($$var != "none")
 				{
-					if ($this->arr[$page][content][$row][$col][im_id] != 0)
+					if ($this->arr[$page]["content"][$row][$col]["im_id"] != 0)
 					{
-						$ar = $t->_replace(array("filename" => $$var,"file_type" => ${$var."_type"}, "poid" => $this->arr[$page][content][$row][$col][im_id]));
-						$pid = $ar[id];
+						$ar = $t->_replace(array("filename" => $$var,"file_type" => ${$var."_type"}, "poid" => $this->arr[$page]["content"][$row][$col]["im_id"]));
+						$pid = $ar["id"];
 					}
 					else
 					{
 						$ar = $t->_upload(array("filename" => $$var,"file_type" => ${$var."_type"}, "oid" => $this->id));
-						$pid = $ar[id];
+						$pid = $ar["id"];
 					}
 					$sz = getimagesize($$var);
 					$img = $t->get_img_by_id($pid);
-					$this->arr[$page][content][$row][$col][im_id] = $img[id];
-					$this->arr[$page][content][$row][$col][bigurl] = $img[url];
-					$this->arr[$page][content][$row][$col][xsize] = $sz[0];
-					$this->arr[$page][content][$row][$col][ysize] = $sz[1];
+					$this->arr[$page]["content"][$row][$col]["im_id"] = $img["id"];
+					$this->arr[$page]["content"][$row][$col]["bigurl"] = $img["url"];
+					$this->arr[$page]["content"][$row][$col]["xsize"] = $sz[0];
+					$this->arr[$page]["content"][$row][$col]["ysize"] = $sz[1];
 				}
 
 
@@ -259,30 +289,36 @@ class gallery extends aw_template
 				global $$var;
 				$v = str_replace("\\","",$$var);
 				$v = str_replace("'","\"",$v);
-				$this->arr[$page][content][$row][$col][caption] = $v;
+				$this->arr[$page]["content"][$row][$col]["caption"] = $v;
 
 				$var = "date_".$row."_".$col;
 				global $$var;
 				$v = str_replace("\\","",$$var);
 				$v = str_replace("'","\"",$v);
-				$this->arr[$page][content][$row][$col][date] = $v;
+				$this->arr[$page]["content"][$row][$col]["date"] = $v;
 
 				$var = "erase_".$row."_".$col;
 				global $$var;
 				if ($$var == 1)
 				{
-					$this->arr[$page][content][$row][$col] = array();
+					$this->arr[$page]["content"][$row][$col] = array();
 				}
 			}
 		}
 		$this->save();
+		return $this->mk_orb("admin", array("id" => $id, "page" => $page));
 	}
 
-	function add_page()
+	////
+	// !adds a page to the gallery and returns to grid
+	function add_page($arr)
 	{
-		$this->arr[pages] ++;
+		extract($arr);
+		$this->load($id,$page);
+		$this->arr["pages"] ++;
 		$this->save();
-		return $this->arr[pages]-1;
+		header("Location: ".$this->mk_orb("admin", array("id" => $id, "page" => $page)));
+		die();
 	}
 
 	function show($page)

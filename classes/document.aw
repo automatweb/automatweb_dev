@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.7 2001/05/21 16:25:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.8 2001/05/22 10:54:33 kristo Exp $
 // document.aw - Dokumentide haldus. ORB compatible. Should be used instead of documents.aw
 // defineerime orbi funktsioonid
 global $orb_defs;
@@ -1585,25 +1585,8 @@ class document extends aw_template
 		$alilist = array();
 		$jrk = array("1" => "1", "2" => "2", "3" => "3",  "4" => "4", "5"  => "5",
 								 "6" => "6", "7" => "7", "8" => "8",  "9" => "9", "10" => "10");
-/*		if ($user)
-		{
-			$addfile = $this->mk_site_orb(array(
-				"action" => "new",
-				"id" => $id,
-				"parent" => $document["parent"],
-				"class" => "file",
-			));
-			$previewlink = $this->mk_site_orb(array(
-				"action" => "preview",
-				"id" => $id,
-				"class" => "document",
-			));
-		}
-		else
-		{*/
-			$addfile = $this->mk_my_orb("new",array("id" => $id, "parent" => $document["parent"]),"file");
-			$previewlink = "";
-//		};
+		$addfile = $this->mk_my_orb("new",array("id" => $id, "parent" => $document["parent"]),"file");
+		$previewlink = "";
 
 		$this->vars(array(
 			"addtable"	=> $this->mk_my_orb("add_doc", array("id" => $id, "parent" => $document["parent"]),"table"),
@@ -1613,7 +1596,7 @@ class document extends aw_template
 			"addform"		=> $this->mk_my_orb("new", array("parent" => $document["parent"],"alias_doc" => $id),"form"),
 			"addgb"			=> $this->mk_my_orb("new", array("parent" => $document["parent"], "docid" => $id), "guestbook"),
 			"addgraph"	=> $this->mk_my_orb("new", array("parent" => $document["parent"],"alias_doc" => $id),"graph"),
-			"addgallery"	=> "galerii.".$GLOBALS["ext"]."?type=new&parent=".$document["parent"]."&alias_doc=$id"
+			"addgallery"	=> $this->mk_my_orb("new", array("parent" => $document["parent"],"alias_doc" => $id),"gallery")
 		));
 		// see sordib ja teeb aliaste nimekirja. ja see ei meeldi mulle. but what can ye do, eh?
 		$this->mk_alias_lists($id);
@@ -1972,30 +1955,30 @@ class document extends aw_template
 		while (list(,$v) = each($galleries))
 		{
 			$galc++;
-			$this->vars(array("name"								=> $v[name], 
-												"modified"						=> $this->time2date($v[modified],2), 
-												"modifiedby"					=> $v[modifiedby],
-												"alias"								=> "#y".$galc."#","comment" => $v[comment],
+			$this->vars(array("name"								=> $v["name"], 
+												"modified"						=> $this->time2date($v["modified"],2), 
+												"modifiedby"					=> $v["modifiedby"],
+												"alias"								=> "#y".$galc."#","comment" => $v["comment"],
 												"id"									=> $v[id],
-												"ch_gallery"					=> "galerii.".$GLOBALS["ext"]."?type=content&id=".$v[id],
+												"ch_gallery"					=> $this->mk_orb("admin", array("id" => $v["id"]),"gallery"),
 												"gallery_order"					=> $s_gallery_order == "ASC" ? "DESC" : "ASC",
 												"gallery_name_img"				=> $s_gallery_sortby == "name" ?				($s_gallery_order == "DESC" ? $upimg : $downimg ): "",
 												"gallery_comment_img"		=> $s_gallery_sortby == "comment" ?		($s_gallery_order == "DESC" ? $upimg : $downimg ): "",
 												"gallery_modifiedby_img"	=> $s_gallery_sortby == "modifiedby" ? ($s_gallery_order == "DESC" ? $upimg : $downimg ): "",
 												"gallery_modified_img"		=> $s_gallery_sortby == "modified" ?		($s_gallery_order == "DESC" ? $upimg : $downimg ): ""));
 			$gal.=$this->parse("GALLERY_LINE");
-			$gallist[] = sprintf("<a href='gallery".$GLOBALS["ext"]."?type=content&id=".$v[id]."'>#y%d#</a> <i>(Nimi: $v[name])</i>",$galc);
+			$gallist[] = sprintf("<a href='".$this->mk_orb("admin", array("id" => $v["id"]),"gallery")."'>#y%d#</a> <i>(Nimi: $v[name])</i>",$galc);
 		}
 		$this->vars(array("GALLERY_LINE" => $gal,"gallist" => join(",",$gallist)));
 		if ($galc > 0)
 		{
-			$hg = $this->parse("HAS_GRAPHS");
+			$hg = $this->parse("HAS_GALLERIES");
 		}
 		else
 		{
-			$hg = $this->parse("NO_GRAPHS");
+			$hg = $this->parse("NO_GALLERIES");
 		}
-		$this->vars(array("HAS_GRAPHS" => $hg, "NO_GRAPHS" => ""));
+		$this->vars(array("HAS_GALLERIES" => $hg, "NO_GALLERIES" => ""));
 
 		$gbs = $this->get_aliases_for($id,CL_GUESTBOOK,$s_gb_sortby, $s_gb_order);
 		$gbc = 0;
