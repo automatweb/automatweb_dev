@@ -1,14 +1,6 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>comment</name>
-            <type>textarea</type>
-            <table>kliendibaas_linn</table>
-            <group>general</group>
-            <field>comment</field>
-            <caption>Keeled</caption>
-      </property>
-      <property>
             <name>name</name>
             <type>textbox</type>
             <size>20</size>
@@ -30,26 +22,6 @@
             <objtable_index>oid</objtable_index>
       </classinfo>
       <tableinfo>
-            <kliendibaas_contact>
-                  <index>oid</index>
-                  <master_table>objects</master_table>
-                  <master_index>oid</master_index>
-            </kliendibaas_contact>
-            <kliendibaas_ettevotlusvorm>
-                  <index>oid</index>
-                  <master_table>objects</master_table>
-                  <master_index>oid</master_index>
-            </kliendibaas_ettevotlusvorm>
-            <kliendibaas_firma>
-                  <index>oid</index>
-                  <master_table>objects</master_table>
-                  <master_index>oid</master_index>
-            </kliendibaas_firma>
-            <kliendibaas_isik>
-                  <index>oid</index>
-                  <master_table>objects</master_table>
-                  <master_index>oid</master_index>
-            </kliendibaas_isik>
             <kliendibaas_linn>
                   <index>oid</index>
                   <master_table>objects</master_table>

@@ -1,27 +1,178 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>comment</name>
-            <type>textarea</type>
-            <field>comment</field>
+            <name>dir_firmad</name>
+            <type>select</type>
             <table>objects</table>
-            <group>general</group>
-            <caption>Kommentaar</caption>
+            <group>directorys</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>firmade kataloog(id)</caption>
       </property>
       <property>
-            <name>asi</name>
-            <type>textarea</type>
+            <name>dir_isik</name>
+            <type>select</type>
             <table>objects</table>
-            <group>general</group>
-            <field>asi</field>
-            <caption>asi</caption>
+            <group>directorys</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>isikute kataloog(id)</caption>
       </property>
-      <tableinfo>
-            <kliendibaas_firma>
-                  <index>oid</index>
-                  <master_table>objects</master_table>
-                  <master_index>oid</master_index>
-            </kliendibaas_firma>
-      </tableinfo>
+      <property>
+            <name>dir_contact</name>
+            <type>select</type>
+            <table>objects</table>
+            <group>directorys</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>aadresside kataloog(id)</caption>
+      </property>
+      <property>
+            <name>dir_linn</name>
+            <type>select</type>
+            <table>objects</table>
+            <group>directorys</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>linnade kataloog(id)</caption>
+      </property>
+      <property>
+            <name>dir_maakond</name>
+            <type>select</type>
+            <table>objects</table>
+            <group>directorys</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>maakondade kataloog(id)</caption>
+      </property>
+      <property>
+            <name>dir_riik</name>
+            <type>select</type>
+            <table>objects</table>
+            <group>directorys</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>riikide kataloog(id)</caption>
+      </property>
+      <property>
+            <name>dir_tegevusala</name>
+            <type>select</type>
+            <table>objects</table>
+            <group>directorys</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>tegevusalade kataloog(id)</caption>
+      </property>
+      <property>
+            <name>dir_toode</name>
+            <type>select</type>
+            <table>objects</table>
+            <group>directorys</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>toodete kataloog(id)</caption>
+      </property>
+      <property>
+            <name>dir_default</name>
+            <type>select</type>
+            <table>objects</table>
+            <group>directorys</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>üld kataloog kataloog</caption>
+      </property>
+      <property>
+            <name>manager</name>
+            <type>generated</type>
+            <callback>contact_manager</callback>
+            <table>objects</table>
+            <group>manager</group>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>show_columns</name>
+            <type>select</type>
+            <multiple>1</multiple>
+            <table>objects</table>
+            <group>manager</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>näita veerge</caption>
+      </property>
+      <property>
+            <name>order_by_columns</name>
+            <type>select</type>
+            <table>objects</table>
+            <group>manager</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>sorteerituna</caption>
+      </property>
+      <property>
+            <name>limit_per_page</name>
+            <type>textbox</type>
+            <size>8</size>
+            <table>objects</table>
+            <group>manager</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>mitu veergu näita</caption>
+      </property>
+      <property>
+            <name>page</name>
+            <type>textbox</type>
+            <size>3</size>
+            <table>objects</table>
+            <group>manager</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>page</caption>
+      </property>
+      <property>
+            <name>search</name>
+            <type>textbox</type>
+            <size>3</size>
+            <table>objects</table>
+            <group>manager</group>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>search_require</name>
+            <type>textbox</type>
+            <size>3</size>
+            <table>objects</table>
+            <group>manager</group>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>do_search</name>
+            <type>textbox</type>
+            <size>3</size>
+            <table>objects</table>
+            <group>manager</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>do otsing</caption>
+      </property>
+      <property>
+            <name>actions</name>
+            <type>text</type>
+            <table>objects</table>
+            <group>manager</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>actions</caption>
+      </property>
+      <groupinfo>
+            <directorys>
+                  <caption>kataloogid</caption>
+            </directorys>
+            <manager>
+                  <caption>haldus</caption>
+            </manager>
+      </groupinfo>
 </properties>
 

@@ -118,11 +118,82 @@
             <group>obgennn</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption>testdfgh</caption>
+      </property>
+      <property>
+            <name>dejoin</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <group>obgennn</group>
+            <field>meta</field>
+            <method>serialize</method>
       </property>
       <property>
             <name>multiple</name>
-            <type>text</type>
+            <type>textbox</type>
+            <table>objects</table>
+            <group>obgennn</group>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>add</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <group>obgennn</group>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>dejoin_table</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <group>obgennn</group>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>dejoin_field</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <group>obgennn</group>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>remember</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <group>obgennn</group>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>object</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <group>obgennn</group>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>meta</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <group>obgennn</group>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>sisu</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <group>obgennn</group>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>unique</name>
+            <type>textbox</type>
             <table>objects</table>
             <group>obgennn</group>
             <field>meta</field>
@@ -178,12 +249,5 @@
             <method>serialize</method>
             <caption>log_log_warnings</caption>
       </property>
-      <tableinfo>
-            <kliendibaas_firma>
-                  <index>oid</index>
-                  <master_table>objects</master_table>
-                  <master_index>oid</master_index>
-            </kliendibaas_firma>
-      </tableinfo>
 </properties>
 
