@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.22 2004/09/09 11:04:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.23 2004/10/05 07:21:38 kristo Exp $
 // form_chain.aw - form chains
 
 classload("formgen/form_base");
@@ -376,6 +376,11 @@ class form_chain extends form_base
 	function show($arr)
 	{
 		extract($arr);
+		if (!$this->can("view", $form_entry_id))
+		{
+			$form_entry_id = NULL;
+		}
+
 		$this->start_el = $start_el;
 		$this->end_el = $end_el;
 		$this->start = $start;

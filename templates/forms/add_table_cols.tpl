@@ -118,6 +118,7 @@
 													<td class="celltext">Muudetav</td>
 													<!-- END SUB: IS_EDITABLE -->
 													<td class="celltext">Tulba nimeks</td>
+													<td class="celltext">&Auml;ra n&auml;ita<br> rida kui t&uuml;hi</td>
 												</tr>
 												<!-- SUB: SEL_EL -->
 												<tr>
@@ -133,6 +134,7 @@
 													<!-- END SUB: IS_EDITABLE2 -->
 
 													<td class="celltext"><input class="formcheck" type="checkbox" name="cols[{VAR:col_id}][el_set_colname][{VAR:el_id}]" value="1" {VAR:el_set_colname}></td>
+													<td class="celltext"><input class="formcheck" type="checkbox" name="cols[{VAR:col_id}][el_no_row_if_empty][{VAR:el_id}]" value="1" {VAR:el_no_row_if_empty}></td>
 												</tr>
 												<!-- END SUB: SEL_EL -->
 											</table>

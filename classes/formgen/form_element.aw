@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.72 2004/09/09 11:04:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.73 2004/10/05 07:21:38 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -3245,6 +3245,7 @@ class form_element extends aw_template
 					$fi->load($this->form->id);
 					$fi->load_entry($this->form->entry_id);
 					$fi->set_element_value($this->id, false, false);
+					$fi->entry[$this->id] = NULL;
 					$fi->process_entry(array(
 						"id" => $this->form->id,
 						"entry_id" => $this->form->entry_id,

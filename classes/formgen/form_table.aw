@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.66 2004/09/09 11:04:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.67 2004/10/05 07:21:38 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -291,6 +291,10 @@ class form_table extends form_base
 				{
 					$cl = $this->get_col_for_el($v_el);
 					$_caption = $dat["ev_".$v_el];
+					if ($this->table["skip_one_liners_col"] == $cl && $this->table["skip_one_liners"])
+					{
+						$this->last_table_alias_url = $show_link;
+					}
 
 					$popdat = $this->table["defs"][$cl];
 					if (isset($popdat["link_popup"]) && $popdat["link_popup"])
@@ -377,6 +381,16 @@ class form_table extends form_base
 		for ($col = 0; $col < $this->table["cols"]; $col++)
 		{
 			$cc = $this->table["defs"][$col];
+
+			$awa = new aw_array($cc["el_no_row_if_empty"]);
+			foreach($awa->get() as $el_no_row_if_empty_k => $el_no_row_if_empty_v)
+			{
+				if ($dat["ev_".$el_no_row_if_empty_k] == "")
+				{
+					return;
+				}
+			}
+
 			$dat["ev_text"] = $cc["is_type_text"];
 			if (is_array($cc["els"]) && !$cc["not_active"])
 			{
@@ -690,24 +704,33 @@ class form_table extends form_base
 			$_sord = array();
 			foreach($this->table["defsort"] as $nr => $dat)
 			{
-				$cl = $this->get_col_for_el($dat["el"]);
-				if ($cl === false)
+				if ($dat["el"] == "created")
 				{
-					$cl = gen_uniq_id();
-				}
-				if ($this->table["defs"][$cl]['el_main_types'][$dat['el']] == 'date')
-				{
-					$_sby["ev_col_".$cl] = "el_".$dat["el"];
-					$this->t->set_numeric_field("ev_col_".$cl);
-					$this->t->set_numeric_field("el_".$dat["el"]);
-					$_sord["el_".$dat["el"]] = $dat["type"];
+					$this->t->set_numeric_field("created");
+					$_sby["created"] = "created";
+					$_sord["created"] = $dat["type"];
 				}
 				else
 				{
-					$_sby["ev_col_".$cl] = "ev_".$dat["el"];
-					$_sord["ev_".$dat["el"]] = $dat["type"];
+					$cl = $this->get_col_for_el($dat["el"]);
+					if ($cl === false)
+					{
+						$cl = gen_uniq_id();
+					}
+					if ($this->table["defs"][$cl]['el_main_types'][$dat['el']] == 'date')
+					{
+						$_sby["ev_col_".$cl] = "el_".$dat["el"];
+						$this->t->set_numeric_field("ev_col_".$cl);
+						$this->t->set_numeric_field("el_".$dat["el"]);
+						$_sord["el_".$dat["el"]] = $dat["type"];
+					}
+					else
+					{
+						$_sby["ev_col_".$cl] = "ev_".$dat["el"];
+						$_sord["ev_".$dat["el"]] = $dat["type"];
+					}
+					$_sord["ev_col_".$cl] = $dat["type"];
 				}
-				$_sord["ev_col_".$cl] = $dat["type"];
 			}
 			$this->t->set_default_sortby($_sby);
 			$this->t->set_default_sorder($_sord);
@@ -1977,6 +2000,7 @@ class form_table extends form_base
 						"el_show" => checked($this->table["defs"][$col]["el_show"][$el]),
 						"el_edit" => checked($this->table["defs"][$col]["el_edit"][$el]),
 						"el_set_colname" => checked($this->table["defs"][$col]["el_set_colname"][$el]),
+						"el_no_row_if_empty" => checked($this->table["defs"][$col]["el_no_row_if_empty"][$el]),
 						"el_search" => checked($this->table["defs"][$col]["el_search"][$el])
 					));
 					$ise = "";
