@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/message_template.aw,v 1.1 2004/06/25 19:28:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/message_template.aw,v 1.2 2004/11/05 13:32:38 ahti Exp $
 // message_template.aw - Kirja template 
 /*
 
@@ -11,6 +11,9 @@
 @default method=serialize
 
 @classinfo no_comment=1
+
+@property subject type=textbox
+@caption Pealkiri
 
 @property is_html type=checkbox ch_value=1
 @caption HTML

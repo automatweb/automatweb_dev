@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.2 2004/11/02 12:18:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.3 2004/11/05 13:32:37 ahti Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -1501,10 +1501,14 @@ class ml_list extends class_base
 			$msg_obj = &obj($msg_data["id"]);
 			$c_tile = $msg_obj->prop("msg_contener_title");
 			$c_content = $msg_obj->prop("msg_contener_content");
-			
 			// use that template then!
 			// 1. load it
 			$o = new object($msg_data["template_selector"]);
+			$subject = $o->prop("subject");
+			if(!empty($subject))
+			{
+				$msg_data["name"] = $subject;
+			}
 			$template = $o->prop("content");
 			$message = $msg_data["message"];
 			$al = get_instance("aliasmgr");
