@@ -1,10 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.186 2004/06/17 14:32:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.187 2004/06/22 09:21:27 rtoomas Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
 
-EMIT_MESSAGE(MSG_EVENT_ADD);	
+EMIT_MESSAGE(MSG_EVENT_ADD);
+EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 
 	@default table=objects
 	@default field=meta
@@ -104,6 +105,24 @@ lc_load("calendar");
 classload("calendar");
 class planner extends class_base
 {
+	
+	/**
+
+      @attrib name=submit_delete_participants_from_calendar
+      @param id required type=int acl=view
+
+	**/
+	function submit_delete_participants_from_calendar($arr)
+	{
+		post_message_with_param(
+			MSG_MEETING_DELETE_PARTICIPANTS,
+			CL_CRM_MEETING,
+			&$arr
+		);
+		return $arr['return_url'];
+	}
+
+
 	function planner($args = array())
 	{
 		$this->init(array(
@@ -790,6 +809,7 @@ class planner extends class_base
 		{
 			$args["event_id"] = $this->event_id;
 		};
+		$args['return_url'] = aw_global_get('REQUEST_URI');
 	}
 
 	function callback_mod_retval($arr)
@@ -886,6 +906,7 @@ class planner extends class_base
 		return $this->change(array("id" => $args["id"]));
 	}
 
+
 	////
 	// !tagastab eventid mingis ajavahemikus
 	// argumendid:
@@ -951,10 +972,10 @@ class planner extends class_base
 			$ccounter = (int)$meta["cycle_counter"];
 			for ($i = 1; $i <= $ccounter; $i++)
 			{
-				if ($meta["repeaters{$i}"]["own_time"])
+				if ($meta["repeaters".$i]["own_time"])
 				{
-					$hour = $meta["repeaters{$i}"]["reptime"]["hour"];
-					$minute = $meta["repeaters{$i}"]["reptime"]["minute"];
+					$hour = $meta["repeaters".$i]["reptime"]["hour"];
+					$minute = $meta["repeaters".$i]["reptime"]["minute"];
 					list($d,$m,$y) = explode("-",date("d-m-Y",$start));
 					# start from the next day?
 					$_start = mktime($hour,$minute,0,$m,$d,$y);
@@ -1039,7 +1060,6 @@ class planner extends class_base
 		return $res;
 	}
 
-
 	function _get_cal_target($rel_id)
 	{
 		if (!is_numeric($rel_id))
@@ -1063,7 +1083,6 @@ class planner extends class_base
 		$retval = mktime(0,0,0,$m,$d,$y);
 		return $retval;
 	}
-
 
 	////
 	// !Embed the repeater editor form inside the planner interface
