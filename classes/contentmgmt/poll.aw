@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.2 2004/01/13 16:24:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.3 2004/01/21 16:10:13 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -63,7 +63,7 @@ class poll extends class_base
 		$ret = $ans[$o->lang_id()];
 
 		$data = array();
-		$this->db_query("SELECT * FROM poll_answers WHERE poll_id = $id ORDER BY id");
+		$this->db_query("SELECT * FROM poll_answers WHERE poll_id = '$id' ORDER BY id");
 		while ($row = $this->db_next())
 		{
 			$data[$row["id"]] = $row;
@@ -76,6 +76,10 @@ class poll extends class_base
 			$ret[$aid] = $data[$aid];
 		}
 
+		if (!is_array($ret))
+		{
+			return array();
+		}
 		return $ret;
 	}
 
