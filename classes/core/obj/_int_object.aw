@@ -645,8 +645,8 @@ class _int_object
 	function set_ord($param)
 	{
 		$prev = $this->obj["jrk"];
-
-		if (!is_numeric($param))
+		
+		if (!is_numeric($param) && $param != "")
 		{
 			error::throw(array(
 				"id" => ERR_ORD,
@@ -1018,32 +1018,42 @@ class _int_object
 
 		$this->obj["properties"][$key] = $val;
 
-		// if this is an object field property, sync to object field
-		if ($GLOBALS["properties"][$this->obj["class_id"]][$key]["table"] == "objects")
+		// if this is a relpicker property, create the relation as well
+		$propi = $GLOBALS["properties"][$this->obj["class_id"]][$key];
+		if ($propi["type"] == "relpicker" && is_oid($val) && $GLOBALS["object_loader"]->ds->can("view", $val))
 		{
-			if ($GLOBALS["properties"][$this->obj["class_id"]][$key]["field"] == "meta")
+			$this->connect(array(
+				"to" => $val,
+				"reltype" => $GLOBALS["relinfo"][$this->obj["class_id"]][$propi["reltype"]]["value"]
+			));
+		}
+
+		// if this is an object field property, sync to object field
+		if ($propi["table"] == "objects")
+		{
+			if ($propi["field"] == "meta")
 			{
-				$this->obj["meta"][$GLOBALS["properties"][$this->obj["class_id"]][$key]["name"]] = $val;
+				$this->obj["meta"][$propi["name"]] = $val;
 			}
 			else
-			if ($GLOBALS["properties"][$this->obj["class_id"]][$key]["method"] == "bitmask")
+			if ($propi["method"] == "bitmask")
 			{
 				// it's flags, sync to that
 				$mask = $this->obj["flags"];
 				// zero out cur field bits
-				$mask = $mask & (~((int)$GLOBALS["properties"][$this->obj["class_id"]][$key]["ch_value"]));
+				$mask = $mask & (~((int)$propi["ch_value"]));
 				$mask = $mask | $val;
 				$this->obj["flags"] = $mask;
 			}
 			else
 			{
-				if ($GLOBALS["properties"][$this->obj["class_id"]][$key]["method"] == "serialize")
+				if ($propi["method"] == "serialize")
 				{
-					$this->obj[$GLOBALS["properties"][$this->obj["class_id"]][$key]["field"]][$GLOBALS["properties"][$this->obj["class_id"]][$key]["name"]] = $this->obj["properties"][$key];
+					$this->obj[$propi["field"]][$propi["name"]] = $this->obj["properties"][$key];
 				}
 				else
 				{
-					$this->obj[$GLOBALS["properties"][$this->obj["class_id"]][$key]["field"]] = $this->obj["properties"][$key];
+					$this->obj[$propi["field"]] = $this->obj["properties"][$key];
 				}
 			}
 		}
