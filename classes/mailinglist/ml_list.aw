@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.69 2004/09/15 13:38:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.70 2004/09/20 13:09:13 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -1041,6 +1041,7 @@ class ml_list extends class_base
 
 	function parse_alias($args = array())
 	{
+		enter_function("ml_list::parse_alias");
 		$cb_errmsg = aw_global_get("cb_errmsg");
 		$cb_reqdata = aw_global_get("cb_reqdata");
 		aw_session_del("cb_errmsg","");
@@ -1112,6 +1113,7 @@ class ml_list extends class_base
 				"section" => aw_global_get("section"),
 			)),
 		));
+		exit_function("ml_list::parse_alias");
 		return $this->parse();
 
 	}
