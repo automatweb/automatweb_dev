@@ -52,19 +52,18 @@ class keyword_db extends aw_template
 		extract($arr);
 		if ($id)
 		{
-			$this->upd_object(array(
-				"name" => $name, 
-				"oid" => $id
-			));
+			$o = obj($id);
+			$o->set_name($name);
+			$o->save();
 		}
 		else
 		{
-			$id = $this->new_object(array(
-				"name" => $name, 
-				"parent" => $parent,
-				"class_id" => CL_KEYWORD_DB,
-				"status" => 2,
-			));
+			$o = obj();
+			$o->set_name($name);
+			$o->set_parent($parent);
+			$o->set_class_id(CL_KEYWORD_DB);
+			$o->set_status(STAT_ACTIVE);
+			$id = $o->save();
 		}
 
 		$this->db_query("DELETE FROM keyword_db2keyword_menus WHERE db_id = '$id'");

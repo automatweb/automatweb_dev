@@ -72,7 +72,7 @@ class export extends aw_template
 			$pl = new planner;
 			$pl->submit_add(array("parent" => 1));
 			$cal_id = $pl->id;
-			$event_id = $pl->bron_add_event(array("parent" => $cal_id,"start" => time(), "end" => time()+1));			
+			$event_id = false; 
 
 			$c = new config;
 			$c->set_simple_config("export::cal_id",$cal_id);

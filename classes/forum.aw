@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.90 2004/06/11 10:35:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.91 2004/06/15 08:57:55 kristo Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -507,6 +507,7 @@ topic");
 	{
 		$this->quote($args);
 		extract($args);
+
 		$tid = $this->new_object(array(
 			"parent" => $id,
 			"name" => $topic,
@@ -515,12 +516,12 @@ topic");
 			"class_id" => CL_MSGBOARD_TOPIC,
 			"status" => 2,
 		));
-		
-		$this->set_object_metadata(array(
-			"oid" => $tid,
-			"key" => "author_email",
-			"value" => $email,
-		));
+
+		aw_disable_acl();
+		$o = obj($tid);
+		$o->set_meta("author_email", $email);
+		$o->save();
+		aw_restore_acl();
 
 		if ($section)
 		{
@@ -2251,12 +2252,11 @@ topic");
 			"last" => $from,
 			"comment" => $comment
 		));
-		$this->set_object_metadata(array(
-			"oid" => $board,
-			"key" => "author_email",
-			"value" => $email,
-		));
 
+		aw_disable_acl();
+		$o = obj($board);
+		$o->set_meta("author_email", $email);
+		$o->save();
 
 		$pobj = new object($forum_id);
 		if ($pobj->class_id() == CL_DOCUMENT)

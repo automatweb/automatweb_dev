@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.261 2004/06/11 09:17:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.262 2004/06/15 08:57:55 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1884,7 +1884,9 @@ class document extends aw_template
 
 		$this->id = $lid;
 
-		$this->set_object_metadata(array("oid" => $lid, "key" => "show_print", "value" => 1));
+		$o = obj($lid);
+		$o->set_meta("show_print", 1);
+		$o->save();
 
 		return $this->mk_my_orb("change", array("id" => $lid));
 	}

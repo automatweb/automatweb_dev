@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/icons.aw,v 2.30 2004/04/29 12:20:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/icons.aw,v 2.31 2004/06/15 08:57:55 kristo Exp $
 
 class icons extends aw_template
 {
@@ -188,81 +188,6 @@ class icons extends aw_template
 			"reforb" => $this->mk_reforb("submit_icon_zip")
 		));
 		return $this->parse();
-	}
-
-	/**  
-		
-		@attrib name=submit params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function submit_icon($arr)
-	{
-		extract($arr);
-		global $fail, $fail_type;
-
-		$itypes = array(
-			"image/jpeg",
-		  "image/gif",
-			"image/jpg",
-			"image/pjpeg"
-		);
-		if (!in_array($fail_type,$itypes) && $fail != "none")
-		{
-			$this->raise_error(ERR_ICONS_WTYPE,LC_ICONS_GIR_OR_JPEG,true);
-		}
-
-		if ($id)
-		{
-			if ($fail == "none")
-			{
-				$this->db_query("UPDATE icons SET name = '$name' , comment = '$comment', kelle = '$kelle', puhastatud='$puhastatud', praht = '$praht', opsys = '$opsys', p2rit = '$p2rit', m2rks6nad = '$m2rks6nad', m2rks6nad2 = '$m2rks6nad2', programm = '$programm'  WHERE id = $id");
-			}
-			else
-			{
-				$f = fopen($fail,"r");
-				$fc = fread($f,filesize($fail));
-				fclose($f);
-				$this->quote(&$fc);
-				$this->db_query("UPDATE icons SET name='$name', comment = '$comment', kelle = '$kelle', puhastatud='$puhastatud', praht = '$praht', opsys = '$opsys', p2rit = '$p2rit', m2rks6nad = '$m2rks6nad', m2rks6nad2 = '$m2rks6nad2', programm = '$programm', file = '$fc', file_type = '$fail_type' WHERE id = $id");
-			}
-			$this->upd_object(array(
-				"oid" => $id, 
-				"name" => $name, 
-				"comment" => $comment
-			));
-		}
-		else
-		{
-//			$id = $this->db_fetch_field("SELECT MAX(id) as id FROM icons","id")+1;
-			$id = $this->new_object(array(
-				"parent" => $parent, 
-				"class_id" => CL_ICON,
-				"name" => $name, 
-				"comment" => $comment
-			));
-
-			if ($fail == "none")
-			{
-				$this->db_query("INSERT INTO icons (id,name,comment,kelle,puhastatud,praht,opsys,p2rit,m2rks6nad,m2rks6nad2,programm) 
-																		 VALUES($id,'$name','$comment','$kelle','$puhastatud','$praht','$opsys','$p2rit','$m2rks6nad','$m2rks6nad2','$programm')");
-			}
-			else
-			{
-				$f = fopen($fail,"r");
-				$fc = fread($f,filesize($fail));
-				fclose($f);
-				$this->quote(&$fc);
-				$this->db_query("INSERT INTO icons (id,name,comment,kelle,puhastatud,praht,opsys,p2rit,m2rks6nad,m2rks6nad2,programm,file,file_type) 
-																		 VALUES($id,'$name','$comment','$kelle','$puhastatud','$praht','$opsys','$p2rit','$m2rks6nad','$m2rks6nad2','$programm','$fc','$fail_type')");
-			}
-		}
-		return $this->mk_my_orb("change", array("id" => $id));
 	}
 
 	/**  

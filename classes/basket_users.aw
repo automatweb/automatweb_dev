@@ -57,31 +57,20 @@ class basket_users extends basket
 		extract($arr);
 		if ($id)
 		{
-			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $name
-			));
+			$o = obj($id);
+			$o->set_name($name);
 		}
 		else
 		{
-			$id = $this->new_object(array(
-				"parent" => $parent,
-				"name" => $name,
-				"class_id" => CL_SHOP_BASKET_USER_ORDERS
-			));
+			$o = obj();
+			$o->set_parent($parent);
+			$o->set_name($name);
+			$o->set_class_id(CL_SHOP_BASKET_USER_ORDERS);
 		}
 
-		if ($alias_to)
-		{
-			$this->add_alias($alias_to, $id);
-		}
+		$o->set_meta("basket",$basket);
+		$id = $o->save();
 
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"data" => array(
-				"basket" => $basket,
-			)
-		));
 		return $this->mk_my_orb("change", array("id" => $id, "return_url" => urlencode($return_url)));
 	}
 

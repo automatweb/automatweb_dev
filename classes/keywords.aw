@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.46 2004/06/11 09:16:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.47 2004/06/15 08:57:55 kristo Exp $
 // keywords.aw - dokumentide võtmesõnad
 
 define("ARR_LISTID", 1);
@@ -79,21 +79,20 @@ class keywords extends aw_template
 		extract($args);
 		if ($add)
 		{
-			$id = $this->new_object(array(
-				"parent" => $parent,
-				"class_id" => CL_KEYWORD,
-				"status" => 2,
-				"name" => $keyword,
-			));
+			$o = obj();
+			$o->set_parent($parent);
+			$o->set_class_id(CL_KEYWORD);
+			$o->set_status(STAT_ACTIVE);
+			$o->set_name($keyword);
+			$id = $o->save();
 			$q = "INSERT INTO keywords (keyword,oid,type) VALUES ('$keyword','$id','1')";
 			$this->db_query($q);
 		}
 		else
 		{
-			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $keyword,
-			));
+			$o = obj($id);
+			$o->set_name($keyword);
+			$o->save();
 			$q = "UPDATE keywords SET 
 				keyword = '$keyword'
 				WHERE oid = '$id'";

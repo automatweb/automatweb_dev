@@ -62,37 +62,31 @@ class basket extends aw_template
 		extract($arr);
 		if ($id)
 		{
-			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $name
-			));
+			$o = obj($id);
+			$o->set_name($name);
 		}
 		else
 		{
-			$id = $this->new_object(array(
-				"parent" => $parent,
-				"name" => $name,
-				"class_id" => CL_SHOP_BASKET
-			));
+			$o = obj();
+			$o->set_parent($parent);
+			$o->set_name($name);
+			$o->set_class_id(CL_SHOP_BASKET);
 		}
+
+		$o->set_meta("ftbl",$ftbl);
+		$o->set_meta("ord_parent",$ord_parent);
+		$o->set_meta("after_order",$after_order);
+		$o->set_meta("mail_to",$mail_to);
+		$o->set_meta("order_form",$order_form);
+		$o->set_meta("order_form_op",$order_form_op);
+		$o->set_meta("order_ftbl",$order_ftbl);
+		$id = $o->save();
 
 		if ($alias_to)
 		{
 			$this->add_alias($alias_to, $id);
 		}
 
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"data" => array(
-				"ftbl" => $ftbl,
-				"ord_parent" => $ord_parent,
-				"after_order" => $after_order,
-				"mail_to" => $mail_to,
-				"order_form" => $order_form,
-				"order_form_op" => $order_form_op,
-				"order_ftbl" => $order_ftbl
-			)
-		));
 		return $this->mk_my_orb("change", array("id" => $id, "return_url" => urlencode($return_url)));
 	}
 
