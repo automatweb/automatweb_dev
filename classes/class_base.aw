@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.273 2004/06/01 07:48:27 duke Exp $
+// $Id: class_base.aw,v 2.274 2004/06/03 13:11:47 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2838,7 +2838,7 @@ class class_base extends aw_template
 				// value in the session. Is that a problem?
 			};
 
-			if ("int" == $property["datatype"] && (is_numeric($property["value"]) === false))
+			if ($status != PROP_IGNORE && "int" == $property["datatype"] && (is_numeric($property["value"]) === false))
 			{
 				$status = PROP_ERROR;
 				$property["error"] = "Siia saab sisestada ainult arvu!";
@@ -2926,11 +2926,21 @@ class class_base extends aw_template
 			};
 			*/
 
+			// XXX: create a VCL component out of this
+			// would be nice if one VCL component could handle multiple property types
 			if (($type == "date_select") || ($type == "datetime_select"))
 			{
 				if (is_array($rawdata[$name]))
 				{
-					$property["value"] = date_edit::get_timestamp($rawdata[$name]);
+					if ($property["save_format"] == "iso8601")
+					{
+						$dt = $rawdata[$name];
+						$property["value"] = sprintf("%04d-%02d-%02d",$dt["year"],$dt["month"],$dt["day"]);
+					}
+					else
+					{
+						$property["value"] = date_edit::get_timestamp($rawdata[$name]);
+					};
 				};
 			};
 
