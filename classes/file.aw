@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.39 2003/01/17 15:09:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.40 2003/01/17 16:16:46 duke Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -23,6 +23,8 @@
 
 	@property file type=fileupload 
 	@caption Vali fail
+
+	@property type type=hidden
 
 	@property comment type=textbox table=objects field=comment
 	@caption Faili allkiri
@@ -81,7 +83,7 @@ class file extends class_base
 		{
 			case "view":
 				$data["value"] = html::href(array(
-					"url" => $this->mk_my_orb("preview",array("id" => $args["obj"]["oid"])),
+					"url" => $this->mk_my_orb("preview",array("id" => $args["obj"]["oid"],"name" => $args["obj"]["name"])),
 					"caption" => "Näita",
 					"target" => "_blank",
 				));
@@ -119,6 +121,7 @@ class file extends class_base
 					));
 
 					$form_data["file"] = $fs;
+					$form_data["type"] = $file_type;
 				};
 		
 				/*	
@@ -173,6 +176,7 @@ class file extends class_base
 			else
 			{
 				header("Content-type: ".$fi["type"]);
+				header("Content-Disposition: filename=$fi[name]");
 				die($fi["content"]);
 			}
 		}
@@ -465,6 +469,7 @@ class file extends class_base
 		$fc = $this->get_file_by_id($id);
 
 		header("Content-type: ".$fc["type"]);
+		header("Content-Disposition: filename=$fc[name]");
 		header("Pragma: no-cache");
 		die($fc["content"]);
 	}
@@ -481,6 +486,7 @@ class file extends class_base
 		else
 		{
 			header("Content-type: ".$fc["type"]);
+			header("Content-Disposition: filename=$fc[name]");
 			header("Pragma: no-cache");
 			die($fc["content"]);
 		};

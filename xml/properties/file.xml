@@ -9,6 +9,13 @@
             <caption>Vali fail</caption>
       </property>
       <property>
+            <name>type</name>
+            <type>hidden</type>
+            <table>files</table>
+            <group>general</group>
+            <field>type</field>
+      </property>
+      <property>
             <name>comment</name>
             <type>textbox</type>
             <table>objects</table>
