@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.45 2002/09/12 15:27:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.46 2002/09/19 15:10:41 kristo Exp $
 // users.aw - User Management
 classload("users_user","config","form","objects","file");
 
@@ -211,7 +211,8 @@ class users extends users_user
 			"all_url" => $this->mk_my_orb("gen_list", $_arr),
 			"search" => $this->mk_my_orb("gen_list", $_arr2),
 			"list" => $this->mk_my_orb("gen_list", $_arr3),
-			"stats" => $this->mk_my_orb("user_stats")
+			"stats" => $this->mk_my_orb("user_stats"),
+			"createpwd" => $this->mk_my_orb("createpwd")
 		));
 
 		$users = $this->_gen_usr_list();
@@ -1018,11 +1019,11 @@ class users extends users_user
 	// the return value is an array(element_name => element_value). 
 	// the function caches the result for better performance
 	// the cache needs to be zeroed out when the user changes his/her data
-	function get_user_info($uid)
+	function get_user_info($uid, $ret_id = false)
 	{
 		// yeah. use the cached version if available for better performance
 		$dat = $this->get_user_config(array("uid" => $uid, "key" => "user_info_cache"));
-		if (is_array($dat))
+		if (is_array($dat) && !$ret_id)
 		{
 			return $dat;
 		}
@@ -1043,27 +1044,34 @@ class users extends users_user
 			// now elvalues is array el_id => el_value
 			// but we need it to be el_name => el_value
 			// so we do a bigass query to find all the names of the elements
-			$tmp = array();
-			foreach($elvs as $k => $v)
+			if ($ret_id)
 			{
-				if (is_number($k))
-				{
-					$tmp[$k] = $v;
-				}
+				return $elvs;
 			}
-			$elsss = join(",",$this->map2("%s",$tmp));
+			else
+			{
+				$tmp = array();
+				foreach($elvs as $k => $v)
+				{
+					if (is_number($k))
+					{
+						$tmp[$k] = $v;
+					}
+				}
+				$elsss = join(",",$this->map2("%s",$tmp));
 
-			if ($elsss != "")
-			{
-				$this->db_query("SELECT oid,name FROM objects WHERE oid IN($elsss)");
-				while ($row = $this->db_next())
+				if ($elsss != "")
 				{
-					$elvalues[$row["name"]] = $elvs[$row["oid"]];
+					$this->db_query("SELECT oid,name FROM objects WHERE oid IN($elsss)");
+					while ($row = $this->db_next())
+					{
+						$elvalues[$row["name"]] = $elvs[$row["oid"]];
+					}
 				}
+				$elvalues["E-mail"] = $udata["email"];
+				// but we could also just cache this info in the users table
+				$this->set_user_config(array("uid" => $uid, "key" => "user_info_cache", "value" => $elvalues));
 			}
-			$elvalues["E-mail"] = $udata["email"];
-			// but we could also just cache this info in the users table
-			$this->set_user_config(array("uid" => $uid, "key" => "user_info_cache", "value" => $elvalues));
 		};
 		return $elvalues;
 	}
@@ -1648,7 +1656,7 @@ class users extends users_user
 			{
 				$this->vars(array(
 					"acl_name" => $acl_name,
-					"checked" => checked($row[$acl_name] == aw_ini_get("acl.allowed")),
+					"checked" => checked($row[$acl_name] == $this->cfg["acl"]["allowed"]),
 					"acl_value" => $row[$acl_name]
 				));
 				$at .= $this->parse("ACL_CELL");
@@ -1949,6 +1957,33 @@ class users extends users_user
 			));
 			return $this->parse();
 		}
+	}
+
+	function createpwd($arr)
+	{
+		extract($arr);
+		$this->read_template("createpwd.tpl");
+		$this->mk_path(0,"Loo paroolid");
+
+		$this->vars(array(
+			"grps" => $this->picker(0,$this->get_group_picker(array("type" => array(GRP_REGULAR, GRP_DYNAMIC)))),
+			"reforb" => $this->mk_reforb("submit_createpwd")
+		));
+		return $this->parse();
+	}
+
+	function submit_createpwd($arr)
+	{
+		extract($arr);
+		$gm = $this->getgroupmembers2($grps);
+		foreach($gm as $uid)
+		{
+			$pwd = substr($this->gen_uniq_id(),0,8);
+			$this->db_query("UPDATE users SET password = '$pwd' WHERE uid = '$uid'");
+			echo "generated password $pwd for user $uid <br>\n";
+		}
+		die();
+//		return $this->mk_my_orb("gen_list");
 	}
 }
 ?>
