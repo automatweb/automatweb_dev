@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.20 2003/05/02 06:50:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.21 2003/07/01 10:21:45 kristo Exp $
 // menu_cache.aw - Menüüde cache
 class menu_cache extends aw_template
 {
@@ -163,7 +163,14 @@ class menu_cache extends aw_template
 			// avoid writing to the menu cache if the queries didn't succeed,
 			// otherwise we are stuck with whatever (void most likely) lands
 			// in the cache until the cache is invalidated
-			$subsql = " (class_id = ".CL_DOCUMENT." OR class_id = ".CL_PERIODIC_SECTION.") AND objects.status = 2 AND objects.lang_id = ".$lang_id." AND objects.site_id = ".$this->cfg["site_id"];
+			if (aw_ini_get("menuedit.only_document_subs"))
+			{
+				$subsql = " (class_id = ".CL_DOCUMENT." OR class_id = ".CL_PERIODIC_SECTION.") AND objects.status = 2 AND objects.lang_id = ".$lang_id." AND objects.site_id = ".$this->cfg["site_id"];
+			}
+			else
+			{
+				$subsql = " objects.status = 2 AND objects.lang_id = ".$lang_id." AND objects.site_id = ".$this->cfg["site_id"];
+			}
 			if ( $this->_list_subs(array("where" => $subsql)) &&	$this->_list_menus(array("where" => $where,"lang_id" => $lang_id)) )
 			{
 				// make sure that we ust have to include this file and the menu cache will be read into
