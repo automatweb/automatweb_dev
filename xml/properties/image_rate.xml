@@ -12,17 +12,6 @@
             <caption>Hinda</caption>
       </property>
       <property>
-            <name>vsbt</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <store>no</store>
-            <group>general</group>
-            <form>rate</form>
-            <type>submit</type>
-            <caption>Hinda</caption>
-      </property>
-      <property>
             <name>image</name>
             <table>objects</table>
             <field>meta</field>
@@ -31,7 +20,19 @@
             <group>general</group>
             <form>rate</form>
             <type>text</type>
+            <no_caption>1</no_caption>
             <caption>Pilt</caption>
+      </property>
+      <property>
+            <name>image_name</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <store>no</store>
+            <group>general</group>
+            <form>rate</form>
+            <type>text</type>
+            <caption>Pildi nimi</caption>
       </property>
       <property>
             <name>image_comment</name>
@@ -42,7 +43,7 @@
             <group>general</group>
             <form>rate</form>
             <type>text</type>
-            <caption>Pildi allkiri</caption>
+            <caption>Pildi kommentaar</caption>
       </property>
       <property>
             <name>current</name>

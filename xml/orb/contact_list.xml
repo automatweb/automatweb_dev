@@ -4,7 +4,17 @@
 		<action name="delete">
 			<function name="delete">
 				<arguments>
+					<required name="id" type="int" acl="view" />
+					<optional name="group" />
 					<required name="sel" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="show_list">
+			<function name="show_list">
+				<arguments>
+					<required name="id" type="int" acl="view" />
 				</arguments>
 			</function>
 		</action>

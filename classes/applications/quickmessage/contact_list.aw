@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/contact_list.aw,v 1.2 2004/10/20 09:36:04 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/contact_list.aw,v 1.3 2004/11/18 17:21:47 ahti Exp $
 // contact_list.aw - Aadressiraamat 
 /*
 
@@ -33,7 +33,7 @@
 @reltype LIST_OWNER value=1 clid=CL_USER
 @caption Aadressiraamatu omanik
 
-@reltype ADDED_USER value=2 clid=CL_USER
+@reltype ADDED_PERSON value=2 clid=CL_CRM_PERSON
 @caption Lisatud aadress
 
 @reltype LIST_PROFILE_SEARCH value=3 cl=CL_CB_SEARCH
@@ -48,15 +48,11 @@ class contact_list extends class_base
 		// change this to the folder under the templates folder, where this classes templates will be, 
 		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
-			"tpldir" => "applications/commune/contact_list",
+			"tpldir" => "applications/quickmessage/",
 			"clid" => CL_CONTACT_LIST
 		));
 	}
 
-	//////
-	// class_base classes usually need those, uncomment them if you want to use them
-
-	
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
@@ -106,6 +102,7 @@ class contact_list extends class_base
 		};
 		return $retval;
 	}
+	
 	function show_contact_list($arr)
 	{
 		/*
@@ -118,42 +115,52 @@ class contact_list extends class_base
 		$owner = &$arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_LIST_OWNER");
 		if(is_object($owner))
 		{
+			
 			// now, first we sort out the things we need -- ahz
-			$o_person = $owner->get_first_obj_by_reltype("RELTYPE_PERSON");
-			$o_profile = $o_person->get_first_obj_by_reltype("RELTYPE_PROFILE");
-			$conts = $o_profile->connections_from(array(
+			$person = $owner->get_first_obj_by_reltype("RELTYPE_PERSON");
+			$conts = $person->connections_from(array(
 				"type" => "RELTYPE_FRIEND",
-				"sort_by" => "objects.desc",
+				//"sort_by" => "",
+				//"sort_dir" => "desc",
 			));
 			foreach($conts as $cont)
 			{
-				$profile = $cont->to();
-				$person = $profile->get_first_obj_by_reltype("RELTYPE_PERSON");
-				$creator = $profile->createdby();
-				$contacts[$creator->id()] = array(
-					"name" => $creator->name(),
-					"email" => $person->prop("email"),
-					"profile" => $profile->id(),
+				$a_person = $cont->to();
+				$a_profile = $a_person->get_first_obj_by_reltype("RELTYPE_PROFILE");
+				$a_user = $a_person->createdby();
+				$contacts[$a_user->id()] = array(
+					"id" => $a_person->id(),
+					"name" => $a_user->name(),
+					"email" => $a_person->prop("email"),
+					"profile" => $a_profile->id(),
 				);
 			}
+			
 		}
-		$users = &$arr["obj_inst"]->connections_from(array(
-			"type" => "RELTYPE_ADDED_USER",
-			"sort_by" => "objects.desc",
+		$persons = &$arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_ADDED_PERSON",
 		));
 		//arr($users);
-		foreach($users as $user)
+		foreach($persons as $pers)
 		{
-			$user_o = $user->to();
-			$person = $user_o->get_first_obj_by_reltype("RELTYPE_PERSON");
-			$profile = $person->get_first_obj_by_reltype("RELTYPE_PROFILE");
-			$contacts[$user_o->id()] = array(
-				"name" => $user_o->name(),
-				"email" => $user_o->prop("email"),
-				"profile" => is_object($profile) ? $profile->id() : "",
+			$b_person = $pers->to();
+			$b_user = $b_person->createdby();
+			$b_profile = $person->get_first_obj_by_reltype("RELTYPE_PROFILE");
+			$contacts[] = array(
+				"id" => $b_user->id(),
+				"name" => $b_user->name(),
+				"email" => $b_user->prop("email"),
+				"profile" => is_object($b_profile) ? $b_profile->id() : "",
 			);
 		}
 		$t = &$arr["vcl_inst"];
+		$r_on_page = 40;
+		$t->table_header = $t->draw_text_pageselector(array(
+			"records_per_page" => $r_on_page, // rows per page
+			"d_row_cnt" => count($contacts), // total rows 
+		));
+		$ft_page = $arr["request"]["ft_page"] ? $arr["request"]["ft_page"] : 0;
+		$contacts = array_slice($contacts, ($ft_page * $r_on_page), $r_on_page);
 		$t->define_field(array(
 			"name" => "id",
 			"caption" => "ID",
@@ -174,7 +181,8 @@ class contact_list extends class_base
 			"name" => "sel",
 			"field" => "id",
 		));
-		foreach($contacts as $id => $contact)
+		//arr($contacts);
+		foreach($contacts as $contact)
 		{
 			// h4x0rD stuff -- ahz
 			if($arr["include"])
@@ -194,14 +202,14 @@ class contact_list extends class_base
 			{
 				$profile = $this->mk_my_orb("change",array(
 					"id" => $contact["profile"],
-				),"profile");
+				), CL_PROFILE);
 				$message = $this->mk_my_orb("change",array(
 					"cuser" => $contact["name"],
 					"group" => "newmessage",
-				),"quickmessage");
+				), CL_QUICKMESSAGE);
 			}
 			$t->define_data(array(
-				"id" => $id,
+				"id" => $contact["id"],
 				"name" => html::href(array(
 					"url" => $profile,
 					"caption" => $contact["name"],
@@ -217,8 +225,12 @@ class contact_list extends class_base
 			));
 		}
 	}
+	
 	/**	
 		@attrib name=delete
+		
+		@param id required type=int acl=view
+		@param group optional
 		@param sel required
 	**/
 	function delete($arr)
@@ -228,20 +240,29 @@ class contact_list extends class_base
 		{
 			foreach($arr["sel"] as $id)
 			{
-				if($obj->is_connected_to(array(
-					"to" => $id,
-					"type" => "RELTYPE_ADDED_USER",
-				)))
-				{
-					$obj->disconnect(array(
-						"from" => $id,
-						"reltype" => "RELTYPE_ADDED_USER",
-					));
-				}
+				$obj->disconnect(array(
+					"from" => $id,
+					"reltype" => "RELTYPE_ADDED_PERSON",
+					"errors" => false,
+				));
 			}
 		}
-		return $this->mk_my_orb("change",array("group" =>  $arr["group"], "id" => $arr["id"]));
+		return html::get_change_url($arr["id"], array("group" =>  $arr["group"]));
 	}
+	
+	/**	
+		@attrib name=show_list
+		
+		@param id required type=int acl=view
+	**/
+	function show_list($arr)
+	{
+		$this->read_template("show_list.tpl");
+		echo dbg::process_backtrace(debug_backtrace());
+		return $this->parse();
+	}
+	
+	
 	/*
 	function set_property($arr = array())
 	{
@@ -253,29 +274,5 @@ class contact_list extends class_base
 		return $retval;
 	}
 	*/
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	////
-	// !this will be called if the object is put in a document by an alias and the document is being shown
-	// parameters
-	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
-	function parse_alias($arr)
-	{
-		return $this->show(array("id" => $arr["alias"]["target"]));
-	}
-
-	////
-	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
-	function show($arr)
-	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		return $this->parse();
-	}
 }
 ?>

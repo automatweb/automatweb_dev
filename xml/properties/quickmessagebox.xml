@@ -94,6 +94,7 @@
       <classinfo>
             <syslog_type>ST_QUICKMESSAGEBOX</syslog_type>
             <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
       </classinfo>
       <groupinfo>
             <newmessage>
@@ -118,6 +119,11 @@
                   <clid>CL_USER</clid>
                   <caption>Omanik</caption>
             </OWNER>
+            <CONTACT_LIST>
+                  <value>5</value>
+                  <clid>CL_CONTACT_LIST</clid>
+                  <caption>Aadressiraamat</caption>
+            </CONTACT_LIST>
       </reltypes>
 </properties>
 

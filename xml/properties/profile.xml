@@ -1,40 +1,9 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>avatar_image</name>
-            <group>general</group>
-            <table>objects</table>
-            <type>relpicker</type>
-            <reltype>RELTYPE_AVATAR</reltype>
-            <method>serialize</method>
-            <field>meta</field>
-            <caption>Avatar</caption>
-      </property>
-      <property>
-            <name>default_active</name>
-            <group>general</group>
-            <table>objects</table>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <rel>1</rel>
-            <method>serialize</method>
-            <field>meta</field>
-            <caption>Vaikimisi aktiivne</caption>
-      </property>
-      <property>
-            <name>friend_groups</name>
-            <group>general</group>
-            <table>objects</table>
-            <type>classificator</type>
-            <reltype>RELTYPE_FRIEND_GROUPS</reltype>
-            <store>no</store>
-            <field>friend_groups</field>
-            <caption>Sõbragrupid</caption>
-      </property>
-      <property>
             <name>online</name>
-            <group>settings</group>
-            <table>aw_profiles</table>
+            <table>objects</table>
+            <group>general</group>
             <type>text</type>
             <store>no</store>
             <field>online</field>
@@ -42,88 +11,86 @@
       </property>
       <property>
             <name>age</name>
-            <group>settings</group>
-            <table>aw_profiles</table>
+            <table>objects</table>
+            <group>general</group>
             <type>text</type>
             <store>no</store>
             <field>age</field>
             <caption>Vanus</caption>
       </property>
       <property>
-            <name>user_field1</name>
-            <group>settings</group>
-            <table>aw_profiles</table>
-            <type>date_select</type>
-            <year_from>1918</year_from>
-            <year_to>2004</year_to>
-            <default>-1</default>
-            <field>user_field1</field>
-            <caption>Sünniaeg</caption>
-      </property>
-      <property>
-            <name>user_check1</name>
-            <group>settings</group>
-            <table>aw_profiles</table>
-            <type>checkbox</type>
-            <value>1</value>
-            <ch_value>1</ch_value>
-            <field>user_check1</field>
-            <caption>E-post varjatud</caption>
-      </property>
-      <property>
-            <name>user_check2</name>
-            <group>settings</group>
-            <table>aw_profiles</table>
-            <type>checkbox</type>
-            <value>1</value>
-            <ch_value>1</ch_value>
-            <field>user_check2</field>
-            <caption>Kinnine postkast</caption>
+            <name>avatar_image</name>
+            <table>objects</table>
+            <group>settings_general</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_AVATAR</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <method>serialize</method>
+            <field>meta</field>
+            <store>no</store>
+            <caption>Avatar</caption>
       </property>
       <property>
             <name>user_text1</name>
-            <group>settings</group>
             <table>aw_profiles</table>
+            <group>settings_general</group>
             <type>textbox</type>
+            <datatype>int</datatype>
             <field>user_text1</field>
             <caption>Telefon</caption>
       </property>
       <property>
             <name>user_text2</name>
-            <group>settings</group>
             <table>aw_profiles</table>
+            <group>settings_general</group>
             <type>textbox</type>
+            <datatype>int</datatype>
             <field>user_text2</field>
             <caption>ICQ</caption>
       </property>
       <property>
             <name>user_text3</name>
-            <group>settings</group>
             <table>aw_profiles</table>
+            <group>settings_general</group>
             <type>textbox</type>
             <field>user_text3</field>
             <caption>MSN</caption>
       </property>
       <property>
             <name>user_blob1</name>
-            <group>settings</group>
             <table>aw_profiles</table>
-            <type>textbox</type>
+            <group>settings_general</group>
+            <type>textarea</type>
+            <cols>50</cols>
+            <rows>10</rows>
             <field>user_blob1</field>
             <caption>Lisainfo</caption>
       </property>
       <property>
             <name>user_blob2</name>
-            <group>settings</group>
             <table>aw_profiles</table>
-            <type>textbox</type>
+            <group>settings_general</group>
+            <type>textarea</type>
+            <cols>50</cols>
+            <rows>10</rows>
             <field>user_blob2</field>
             <caption>Lisainfo sõpradele</caption>
       </property>
       <property>
-            <name>height</name>
-            <group>settings</group>
+            <name>user_check1</name>
             <table>aw_profiles</table>
+            <group>settings_general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <default>1</default>
+            <field>user_check1</field>
+            <caption>E-post varjatud</caption>
+      </property>
+      <property>
+            <name>height</name>
+            <table>aw_profiles</table>
+            <group>settings_outlook</group>
             <type>classificator</type>
             <reltype>RELTYPE_PRF_HEIGHT</reltype>
             <orient>vertical</orient>
@@ -132,8 +99,8 @@
       </property>
       <property>
             <name>weight</name>
-            <group>settings</group>
             <table>aw_profiles</table>
+            <group>settings_outlook</group>
             <type>classificator</type>
             <reltype>RELTYPE_PRF_WEIGHT</reltype>
             <orient>vertical</orient>
@@ -142,8 +109,8 @@
       </property>
       <property>
             <name>eyes_color</name>
-            <group>settings</group>
             <table>aw_profiles</table>
+            <group>settings_outlook</group>
             <type>classificator</type>
             <reltype>RELTYPE_PRF_EYES_COLOR</reltype>
             <orient>vertical</orient>
@@ -152,8 +119,8 @@
       </property>
       <property>
             <name>hair_color</name>
-            <group>settings</group>
             <table>aw_profiles</table>
+            <group>settings_outlook</group>
             <type>classificator</type>
             <reltype>RELTYPE_PRF_HAIR_COLOR</reltype>
             <orient>vertical</orient>
@@ -162,8 +129,8 @@
       </property>
       <property>
             <name>hair_type</name>
-            <group>settings</group>
             <table>aw_profiles</table>
+            <group>settings_outlook</group>
             <type>classificator</type>
             <reltype>RELTYPE_PRF_HAIR_TYPE</reltype>
             <orient>vertical</orient>
@@ -172,8 +139,8 @@
       </property>
       <property>
             <name>body_type</name>
-            <group>settings</group>
             <table>aw_profiles</table>
+            <group>settings_outlook</group>
             <type>classificator</type>
             <reltype>RELTYPE_PRF_BODY_TYPE</reltype>
             <orient>vertical</orient>
@@ -182,16 +149,27 @@
       </property>
       <property>
             <name>user_text5</name>
-            <group>settings</group>
             <table>aw_profiles</table>
+            <group>settings_hobbies</group>
             <type>textbox</type>
             <field>user_text5</field>
             <caption>Koduleht</caption>
       </property>
       <property>
+            <name>hobbies</name>
+            <table>objects</table>
+            <group>settings_hobbies</group>
+            <type>textarea</type>
+            <cols>50</cols>
+            <rows>15</rows>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Huvid/harrastused</caption>
+      </property>
+      <property>
             <name>sexual_orientation</name>
-            <group>settings</group>
             <table>aw_profiles</table>
+            <group>settings_habits</group>
             <type>classificator</type>
             <reltype>RELTYPE_PRF_SEX_ORIENT</reltype>
             <orient>vertical</orient>
@@ -200,8 +178,8 @@
       </property>
       <property>
             <name>alcohol</name>
-            <group>settings</group>
             <table>aw_profiles</table>
+            <group>settings_habits</group>
             <type>classificator</type>
             <reltype>RELTYPE_PRF_ALCOHOL</reltype>
             <orient>vertical</orient>
@@ -210,8 +188,8 @@
       </property>
       <property>
             <name>tobacco</name>
-            <group>settings</group>
             <table>aw_profiles</table>
+            <group>settings_habits</group>
             <type>classificator</type>
             <reltype>RELTYPE_PRF_TOBACCO</reltype>
             <orient>vertical</orient>
@@ -220,8 +198,8 @@
       </property>
       <property>
             <name>user_field2</name>
-            <group>settings</group>
             <table>aw_profiles</table>
+            <group>settings_occupation</group>
             <type>classificator</type>
             <orient>vertical</orient>
             <field>user_field2</field>
@@ -229,8 +207,8 @@
       </property>
       <property>
             <name>occupation</name>
-            <group>settings</group>
             <table>objects</table>
+            <group>settings_occupation</group>
             <type>classificator</type>
             <field>meta</field>
             <method>serialize</method>
@@ -238,26 +216,16 @@
       </property>
       <property>
             <name>user_text4</name>
-            <group>settings</group>
             <table>aw_profiles</table>
+            <group>settings_occupation</group>
             <type>textbox</type>
             <field>user_text4</field>
             <caption>Elukutse</caption>
       </property>
       <property>
-            <name>friends</name>
-            <group>friends</group>
-            <table>aw_profiles</table>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>friends</field>
-            <caption>Minu sõbrad</caption>
-      </property>
-      <property>
             <name>comments</name>
-            <group>comments</group>
             <table>aw_profiles</table>
+            <group>comments</group>
             <type>comments</type>
             <store>no</store>
             <field>comments</field>
@@ -271,9 +239,26 @@
             <settings>
                   <caption>Seaded</caption>
             </settings>
-            <friends>
-                  <caption>Sõbrad</caption>
-            </friends>
+            <settings_general>
+                  <caption>Üldandmed</caption>
+                  <parent>settings</parent>
+            </settings_general>
+            <settings_outlook>
+                  <caption>Välimus</caption>
+                  <parent>settings</parent>
+            </settings_outlook>
+            <settings_hobbies>
+                  <caption>Harrastused</caption>
+                  <parent>settings</parent>
+            </settings_hobbies>
+            <settings_habits>
+                  <caption>Harjumused</caption>
+                  <parent>settings</parent>
+            </settings_habits>
+            <settings_occupation>
+                  <caption>Kool/Töö</caption>
+                  <parent>settings</parent>
+            </settings_occupation>
             <comments>
                   <caption>Kommentaarid</caption>
             </comments>
@@ -351,26 +336,6 @@
                   <clid>CL_CFGMANAGER</clid>
                   <caption>Seadete haldur</caption>
             </CFG_MANAGER>
-            <FRIEND>
-                  <value>20</value>
-                  <clid>CL_PROFILE</clid>
-                  <caption>Sõber</caption>
-            </FRIEND>
-            <FAVOURITE>
-                  <value>21</value>
-                  <clid>CL_PROFILE</clid>
-                  <caption>Lemmik</caption>
-            </FAVOURITE>
-            <MATCH>
-                  <value>23</value>
-                  <clid>CL_PROFILE</clid>
-                  <caption>Väljavalitu</caption>
-            </MATCH>
-            <FRIEND_GROUPS>
-                  <value>24</value>
-                  <clid>CL_META</clid>
-                  <caption>Sõbragrupid</caption>
-            </FRIEND_GROUPS>
       </reltypes>
 </properties>
 

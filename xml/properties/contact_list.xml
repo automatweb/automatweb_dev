@@ -41,11 +41,11 @@
                   <clid>CL_USER</clid>
                   <caption>Aadressiraamatu omanik</caption>
             </LIST_OWNER>
-            <ADDED_USER>
+            <ADDED_PERSON>
                   <value>2</value>
-                  <clid>CL_USER</clid>
+                  <clid>CL_CRM_PERSON</clid>
                   <caption>Lisatud aadress</caption>
-            </ADDED_USER>
+            </ADDED_PERSON>
             <LIST_PROFILE_SEARCH>
                   <value>3</value>
                   <cl>CL_CB_SEARCH</cl>

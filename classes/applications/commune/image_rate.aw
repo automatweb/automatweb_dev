@@ -13,14 +13,14 @@
 @property rate type=chooser store=no
 @caption Hinda
 
-@property vsbt type=submit store=no
-@caption Hinda
-
-@property image type=text store=no
+@property image type=text store=no no_caption=1
 @caption Pilt
 
+@property image_name type=text store=no
+@caption Pildi nimi
+
 @property image_comment type=text store=no
-@caption Pildi allkiri
+@caption Pildi kommentaar
 
 @property current type=text store=no
 @caption Hinne
@@ -61,137 +61,150 @@
 
 class image_rate extends class_base
 {
+	var $no_picture;
 	function image_rate()
 	{
 		$this->init();
+		$this->no_picture = false;
 	}
-
-	function callback_on_load($arr)
-	{
-		//echo " callback_on_load:";
-	}
-
-	function callback_pre_edit($arr)
-	{
-		//echo " callback_pre_edit:";
-	}
+	
 	function init_rate($arr)
 	{
-		$uid = aw_global_get("uid");
-		if(!empty($uid))
+		//arr(aw_global_get("rated_objs"));
+		$user_id = aw_global_get("uid_oid");
+		if(!empty($user_id))
 		{
-			$user_i = get_instance(CL_USER);
-			$user = obj($user_i->get_current_user());
+			$user = obj($user_id);
 			$person = $user->get_first_obj_by_reltype("RELTYPE_PERSON");
-			$view = $person->meta("view_conditions");
-			$message = $person->meta("message_conditions");
+			//$view = $person->meta("view_conditions");
 			$browse = $person->meta("browsing_conditions");
 		}
+		//aw_session_del("rated_objs");
+		//arr($view);
 		//arr($browse);
-
-		// this is the place where aw-s functionality fails in speed, and hack comes along
-		// and a really ugly hack that is... -- ahz
-		//$q = "count(*) as total";
-		$q = "profile2image.*";
-		$q = "SELECT $q FROM profile2image LEFT JOIN objects ON (profile2image.img_id = objects.oid) WHERE objects.status > 0";
-		///$q = "select * from profile2image where img_id='924'";
-		if(!empty($browse["sexorient"]))
+		$w = "";
+		$x = array();
+		if(is_array($browse["sexorient"]))
 		{
-			$w = " and aw_profiles.sexual_orientation = '".$browse["sexorient"]."'"; 
+			$w .= " AND aw_profiles.sexual_orientation IN (".implode(", ", $browse["sexorient"]).")"; 
 		}
 		if(!empty($browse["gender"]))
 		{
-			$w = " and kliendibaas_isik.gender = '".$browse["gender"]."'";
+			$w .= " AND isik.gender = '".$browse["gender"]."'";
 		}
+		
 		if(!empty($browse["age_s"]))
 		{
-			$y = (date("Y")-$browse["age_s"])."0000";
-			$w = " and aw_profiles.user_field1 < '$y'";
+			$w .= " AND isik.birthday < '".mktime(0, 0, 0, 0, 0, (date("Y") - $browse["age_s"]))."'";
 		}
 		if(!empty($browse["age_e"]))
 		{
-			$y = (date("Y")-$browse["age_e"])."0000";
-			$w = "and aw_profiles.user_field > '$y'";
+			$w .= " AND isik.birthday > '".mktime(0, 0, 0, 0, 0, (date("Y") - $browse["age_s"]))."'";
 		}
-		$usah = get_instance("users");
-		//echo $usah->get_oid_for_uid(aw_global_get("uid"));
-		// that one hasn't ignored other and the other hasn't blocked one
-		$w = "
-			and ((aliases.source='$sorts' and aliases.target='$target') and reltype!='$rel1')
-			and ((aliases.source='$target' and aliases.target='$sorts') and reltype!='$rel2')
-		";
+		if(!empty($GLOBALS["img_id"]))
+		{
+			$w .= " AND profile2image.img_id = '".$GLOBALS["img_id"]."'";
+		}
+		$ro = aw_global_get("rated_objs");
+		if(is_array($ro))
+		{
+			$w .= " AND profile2image.img_id NOT IN (".implode(", ", array_keys($ro)).")";
+		}
 		/*
-		$q = "
-		select profile2image.* from profile2image 
-		left join objects on (profile2image.img_id=objects.oid) 
-		left join aliases on (aliases.target=profile2image.prof_id and aliases.reltype=2) 
-		left join kliendibaas_isik on (kliendibaas_isik.oid = aliases.source) 
-		left join objects as pobject on (kliendibaas_isik.oid = pobject.oid)
-		left join aliases as ualias on (pobject.createdby=ualias.source and ualias.reltype=2)
-		left join aw_profiles on (aw_profiles.id=profile2image.prof_id)
-		where 
-		objects.status > 0 and 
-		aw_profiles.sexual_orientation='' and 
-		kliendibaas_isik.gender='1' and 
-		aw_profiles.user_field1 > '1984000' and 
-		aw_profiles.user_field1 < '20030000'"; and 
-		((aliases.source='1656' and aliases.target=pobject.createdby) and aliases.reltype!='442')
-		and ((aliases.source=pobject.createdby and aliases.target='1656') and aliases.reltype!='332')";
+		if($user_group)
+		{
+			$w .= " AND prof2g = '$user_group'";
+		}
+		else
+		{
+			$w .= " AND isik.active_profile = aw_profiles.id";
+		}
 		*/
 		/*
-		$q = "SELECT profile2image.* FROM profile2image LEFT JOIN objects ON (profile2image.img_id = objects.oid) WHERE objects.status > 0";
-		*/
-		$this->db_query($q);
+		sinu kasutaja			vaadatav kasutaja
+		user				<-	ei ole blokitud
+		ei ole ignoreeritud	->	user
+		sex_orient			->	profile
+		vanus				->	profile
+		sugu				->	person
+		group				<-	active_profile
 		
+		prof2g.group = '$user_group'
+		
+		*/;
+		//arr(aw_cache_get("get_gid_for_uid", $user_id));
+		$q2 = "
+			SELECT 
+				profile2image.*, users.oid, isik.oid AS person_id 
+			FROM 
+				profile2image 
+				LEFT JOIN aw_profiles ON (profile2image.prof_id = aw_profiles.id)
+				LEFT JOIN profile2group prof2g ON (prof2g.profile = aw_profiles.id)
+				LEFT JOIN aliases prof2person ON (prof2person.source = aw_profiles.id AND prof2person.reltype = 9)
+				
+				LEFT JOIN kliendibaas_isik isik ON (prof2person.target = isik.oid)
+				LEFT JOIN aliases isik2user ON (isik2user.target = isik.oid AND isik2user.reltype = 2)
+				LEFT JOIN users ON (isik2user.source = users.oid)
+				
+				LEFT JOIN objects img_o ON (profile2image.img_id = img_o.oid)
+				LEFT JOIN objects prof_o ON (aw_profiles.id = prof_o.oid)
+				LEFT JOIN objects isik_o ON (isik.oid = isik_o.oid)
+				LEFT JOIN objects user_o ON (users.oid = user_o.oid)
+			WHERE
+				img_o.status = 2 AND
+				prof_o.status != 0 AND 
+				isik_o.status != 0 AND
+				user_o.status != 0 AND
+				user_o.oid != '$user_id'
+				$w
+		";
+		$this->db_query($q2);
+		$var = array();
 		while($value = $this->db_next())
 		{
-		//arr($value);
 			$var[] = $value;
 		}
 		//arr($var);
-		$count = 0;
+		$true = false;
+		$count = count($var);
+		shuffle($var);
+		//arr($var);
 		while(!$true)
 		{
-			$count++;
-			$true = false;
-			shuffle($var);
-			$row = $var[0];
-			//echo $row["img_id"];
-			if($this->can("view", $row["img_id"]))
+			$count--;
+			if($count < 0)
+			{
+				$this->inst->no_picture = true;
+				return;
+			}
+			$row = $var[$count];
+			$query = "SELECT count(*) AS num FROM aliases WHERE ((source = '".$person->id()."' AND target = '".$row["person_id"]."') AND reltype = '39') OR ((source = '".$row["person_id"]."' and target = '".$person->id()."') AND reltype = '38')";
+			$this->db_query($query);
+			$q = $this->db_next();
+			if($this->can("view", $row["img_id"]) && is_oid($row["img_id"]) && $q["num"] == 0)
 			{
 				$true = true;
 			}
-			// a little check against endless loop
-			if($count > 100)
-			{
-				break;
-			}
 		}
-		//	$q = "SELECT profile2image.* FROM profile2image LEFT JOIN objects ON (profile2image.img_id = //objects.oid) WHERE objects.status > 0 ORDER BY rand() LIMIT 1";
-		// see võtab praegu kõik süsteemis olevad kommuunide poolt tekitatud pildid,
-		// ta ei arvesta $commune->prop("profiles_folder")-ga
-		$this->inst->profile_data = new object($row["prof_id"]);
-
-		// figure out person data
-		if ($conn = reset($this->inst->profile_data->connections_to(array("type" => 14))))
-		{
-			$this->inst->person_data = $conn->from();
-		}
-		else
-		{  
-			//$this->inst_person_data = new object(); //mis see siin on?
-			$this->inst->person_data = new object();
-		};
-
-		$this->inst->image_data = new object($row["img_id"]);
 		$rt = get_instance(CL_RATE);
-
+		$this->inst->profile_data = obj($row["prof_id"]);
+		$this->inst->image_data = obj($row["img_id"]);
+		$this->inst->user_data = obj($row["oid"]);
+		$this->inst->person_data = obj($row["person_id"]);
 		$this->inst->current = $rt->get_rating_for_object($row["img_id"]);
 	}
 
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
+		if($this->no_picture)
+		{
+			return PROP_IGNORE;
+		}
+		$params = array(
+			"id" => $GLOBALS["id"], // commune'i id! ($arr["request"]["id"] ei anna midagi, sest form)
+			"person" => $this->person_data->id(),
+		);
 		switch($prop["name"])
 		{
 			case "name":
@@ -205,65 +218,53 @@ class image_rate extends class_base
 				));
 				break;
 			case "send_message_link":
-				$user = $this->profile_data->createdby();
-				$params = array(
-					"id" => $GLOBALS["id"], // commune'i id! ($arr["request"]["id"] ei anna midagi, sest form)
-					"cuser" => $user->name(),
+				$smparams = $params + array(
+					"cuser" => $this->user_data->name(),
 					"group" => "newmessage",
 				);
+				unset($smparams["person"]);
 				$prop["value"] = html::href(array(
-					"url" => $this->mk_my_orb("change", $params, "commune"),
+					"url" => $this->mk_my_orb("change", $smparams, "commune"),
 					"caption" => "Saada sõnum",
 				));
 				break;
 			case "add_friend_link":
-				$params = array(
-					"id" => $GLOBALS["id"], // commune'i id! ($arr["request"]["id"] ei anna midagi, sest form)
-					"profile" => $this->profile_data->id(),
+				$afparams = $params + array(
 					"commact" => "add_friend",
 					"group" => "friends",
 				);
 				$prop["value"] = html::href(array(
-					"url" => $this->mk_my_orb("commaction", $params, "commune"),
+					"url" => $this->mk_my_orb("commaction", $afparams, "commune"),
 					"caption" => "lisa sõprade hulka",
 				));
 				break;
 			case "add_ignored_link":
-				$user = $this->profile_data->createdby();
-				$params = array(
-					"id" => $GLOBALS["id"], // commune'i id! ($arr["request"]["id"] ei anna midagi, sest form)
-					"cuser" => $user->id(),
+				$aiparams = $params + array(
 					"commact" => "add_ignored",
 					"group" => "ignored_list",
 				);
 				$prop["value"] = html::href(array(
-					"url" => $this->mk_my_orb("commaction", $params, "commune"),
+					"url" => $this->mk_my_orb("commaction", $aiparams, "commune"),
 					"caption" => "Ignoreeri",
 				));
 				break;
 			case "add_blocked_link":
-				$user = $this->profile_data->createdby();
-				$params = array(
-					"id" => $GLOBALS["id"], // commune'i id! ($arr["request"]["id"] ei anna midagi, sest form)
-					"cuser" => $user->id(),
+				$abparams = $params + array(
 					"commact" => "add_blocked",
 					"group" => "blocked_list",
 				);
 				$prop["value"] = html::href(array(
-					"url" => $this->mk_my_orb("commaction", $params, "commune"),
+					"url" => $this->mk_my_orb("commaction", $abparams, "commune"),
 					"caption" => "Blokeeri",
 				));
 				break;
 			case "contact_list_link":
-				$user = $this->profile_data->createdby();
-				$params = array(
-					"id" => $GLOBALS["id"], // commune'i id! ($arr["request"]["id"] ei anna midagi, sest form)
-					"cuser" => $user->id(),
+				$clparams = $params + array(
 					"commact" => "add_contact",
 					"group" => "address_book",
 				);
 				$prop["value"] = html::href(array(
-					"url" => $this->mk_my_orb("commaction", $params, "commune"),
+					"url" => $this->mk_my_orb("commaction", $clparams, "commune"),
 					"caption" => "Lisa kontaktidesse",
 				));
 				break;
@@ -277,18 +278,18 @@ class image_rate extends class_base
 				));
 				break;
 				
+			case "image_name":
+				$prop["value"] = $this->image_data->name();
+				break;
+				
 			case "image_comment":
 				$prop["value"] = $this->image_data->comment();
 				break;
 				
 			case "rate":
-				$prop["options"] = array(
-					"1" => "1",
-					"2" => "2",
-					"3" => "3",
-					"4" => "4",
-					"5" => "5",
-				);
+				$scale = get_instance(CL_RATE_SCALE);
+				$prop["options"] = $scale->get_scale_for_obj($this->image_data->id());
+				$prop["onclick"] = "this.form.submit()";
 				break;
 
 			case "prof_id":

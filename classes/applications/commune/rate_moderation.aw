@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/rate_moderation.aw,v 1.1 2004/11/18 10:38:07 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/rate_moderation.aw,v 1.2 2004/11/18 17:21:46 ahti Exp $
 // rate_moderation.aw - Hindamise modereerimine 
 /*
 
@@ -274,7 +274,6 @@ class rate_moderation extends class_base
 						$c = obj();
 						$c->set_class_id(CL_COMMENT);
 						$c->set_parent($id);
-						$c->set_status(STAT_ACTIVE);
 						$c->save();
 						$img->connect(array(
 							"to" => $c->id(),

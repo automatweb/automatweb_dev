@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/quickmessagebox.aw,v 1.3 2004/10/19 13:26:24 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/quickmessagebox.aw,v 1.4 2004/11/18 17:21:47 ahti Exp $
 // quickmessagebox.aw - Kiirsõnumite haldus 
 /*
 
-@classinfo syslog_type=ST_QUICKMESSAGEBOX relationmgr=yes
+@classinfo syslog_type=ST_QUICKMESSAGEBOX relationmgr=yes no_status=1
 
 @default table=objects
 @default group=general
@@ -50,6 +50,9 @@
 @reltype OWNER value=4 clid=CL_USER
 @caption Omanik
 
+@reltype CONTACT_LIST value=5 clid=CL_CONTACT_LIST
+@caption Aadressiraamat
+
 */
 define("QUICKMESSAGE_INCOMING", 1);
 define("QUICKMESSAGE_OUTGOING", 2);
@@ -59,17 +62,12 @@ class quickmessagebox extends class_base
 {
 	function quickmessagebox()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
-		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
 			"tpldir" => "applications/quickmessage/quickmessagebox",
 			"clid" => CL_QUICKMESSAGEBOX
 		));
 	}
-
-	//////
-	// class_base classes usually need those, uncomment them if you want to use them
-
+	
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
@@ -140,12 +138,13 @@ class quickmessagebox extends class_base
 						"name"		=> "delete",
 						"tooltip"	=> "Kustuta valitud kirjad",
 						"img"		=> "delete.gif",
-						"url"		=> html::get_change_url($arr["request"]["id"], array(
+						"url"		=> "javascript:window.location='".html::get_change_url($arr["request"]["id"], array(
 							"group" => $arr["request"]["group"],
 							"action" => "delete_message", 
 							"mid" => $arr["request"]["mid"],
 							"sel[".$arr["request"]["mid"]."]" => $arr["request"]["mid"],
-						)),
+						))."'",
+						"confirm" => "oled sa kindel, et tahad valitud kirja kustutada?",
 					));
 				}
 				else
@@ -218,7 +217,7 @@ class quickmessagebox extends class_base
 				break;
 			*/
 			case "newmessage":
-				$this->save_new_message(array(
+				$retval = $this->save_new_message(array(
 					"obj_inst" => &$arr["obj_inst"],
 					"request" => $arr["request"],
 				));
@@ -255,32 +254,37 @@ class quickmessagebox extends class_base
 			"name" => "content",
 		));
 		$user_from = $users->get_uid_for_oid($o->prop("user_from"));
-		$user_to = $users->get_uid_for_oid($o->prop("user_to"));
+		$user_to = $o->prop("user_to");
+		$_users = array();
+		$tmp = explode(",", $user_to);
+		foreach($tmp as $value)
+		{
+			$t_users[] = $users->get_uid_for_oid($value);
+		}
+		$user_to = array();
+		foreach($t_users as $value)
+		{
+			$user_to[] = html::get_change_url($arr["request"]["id"], array(
+				"mid" => $arr["request"]["mid"],
+				"group" => "newmessage",
+				"cuser" => $value,
+			), $value);
+		}
 		$t->define_data(array(
 			"name" => "Kellelt",
-			"content" => html::href(array(
-				"caption" => $user_from,
-				"url" => html::get_change_url($arr["request"]["id"], array(
-					"mid" => $arr["request"]["mid"],
-					"group" => "newmessage",
-					"cuser" => $user_from,
-				)),
-			)),
+			"content" => html::get_change_url($arr["request"]["id"], array(
+				"mid" => $arr["request"]["mid"],
+				"group" => "newmessage",
+				"cuser" => $user_from,
+			), $user_from ? $user_from : " "),
 		));
 		$t->define_data(array(
 			"name" => "Kellele",
-			"content" => html::href(array(
-				"caption" => $user_to,
-				"url" => html::get_change_url($arr["request"]["id"], array(
-					"mid" => $arr["request"]["mid"],
-					"group" => "newmessage",
-					"cuser" => $user_to,
-				)),
-			)),
+			"content" => implode(", ", $user_to),
 		));
 		$t->define_data(array(
 			"name" => "Saadetud",
-			"content" => $this->time2date($o->created(), 2),
+			"content" => get_lc_date($o->created(), 7),
 		));
 		$t->define_data(array(
 			"name" => "Pealkiri",
@@ -290,7 +294,6 @@ class quickmessagebox extends class_base
 			"name" => "Sisu",
 			"content" => nl2br($o->prop("content")),
 		));
-		//arr($o->properties());
 	}
 	
 	function get_box_for_user($arr)
@@ -318,71 +321,92 @@ class quickmessagebox extends class_base
 			"mstatus" => $arr["mstatus"],
 		));
 		$t = &$arr["vcl_inst"];
-		$t->define_field(array(
-			"name" => "id",
-			"caption" => "ID",
+		$r_on_page = 30;
+		$pageselector = $t->draw_text_pageselector(array(
+			"records_per_page" => $r_on_page, // rows per page
+			"d_row_cnt" => count($messages), // total rows 
 		));
-		$t->define_field(array(
-			"name" => "time",
-			"caption" => "Aeg",
-			"sortby" => 1,
-		));
-		$t->define_field(array(
-			"name" => "user",
-			"caption" => "Kasutaja",
-		));
-		$t->define_field(array(
-			"name" => "subject",
-			"caption" => "Pealkiri",
-		));
+		$t->table_header = $pageselector;
+		
+		$ft_page = $arr["request"]["ft_page"] ? $arr["request"]["ft_page"] : 0;
+		$messages = array_slice($messages, ($ft_page * $r_on_page), $r_on_page);
+		$fields = array(
+			"id" => "ID",
+			"time" => "Aeg",
+			"user" => "Kasutaja",
+			"subject" => "Pealkiri",
+		);
+		foreach($fields as $key => $value)
+		{
+			$t->define_field(array(
+				"name" => $key,
+				"caption" => $value,
+			));
+		}
 		$t->define_chooser(array(
 			"name" => "sel",
 			"field" => "id",
 		));
-		$t->draw_text_pageselector(array(
-			"records_per_page" => 25,
-			"d_row_cnt" => count($messages),
-		));
-		$t->set_default_sortby("time");
-		$t->set_default_sorder("desc");
-		// "subject" => urlencode("Re: ".$message["subject"]),
-		//arr($arr);
 		foreach($messages as $message)
 		{
-			$user = obj($message["user_from"]);
+			if($this->can("view", $message["user_from"]) && is_oid($message["user_from"]))
+			{
+				$user = obj($message["user_from"]);
+				$name =  $user->name();
+			}
 			$t->define_data(array(
 				"id" => $message["brother_of"],
-				"time" => $this->time2date($message["created"], 2),
-				"user" => html::href(array(
-					"url" => html::get_change_url($arr["class_id"], array(
-						"group" => "newmessage",
-						"cuser" => $user->name(),
-					)),
-					"caption" => $user->name(),
-				)),
-				"subject" => html::href(array(
-					"url" => html::get_change_url($arr["class_id"], array(
-						"mid" => $message["brother_of"],
-						"group" => $arr["group"],
-					)),
-					"caption" => $message["subject"],
-				)),
+				"time" => get_lc_date($message["created"], 7),
+				"user" => html::get_change_url($arr["class_id"], array(
+					"group" => "newmessage",
+					"cuser" => $name,
+				), $name ? $name : " "),
+				"subject" => html::get_change_url($arr["class_id"], array(
+					"mid" => $message["brother_of"],
+					"group" => $arr["group"],
+				), $message["subject"]),
 			));
 		}
-		$t->sort_by();
-		//$t->draw();
 	}
 	
 	function callback_new_message($arr)
 	{
+		$obj_inst = $arr["obj_inst"];
 		$arr = $arr["request"];
+		$c_list = $obj_inst->get_first_conn_by_reltype("RELTYPE_CONTACT_LIST");
 		// how the hell do i connect this thing to a contact list? -- ahz
 		//arr($arr);
+		//arr($c_list);
 		$cu = get_instance("cfg/cfgutils");
-		$props = $cu->load_properties(array("file" => "quickmessage", "clid" => CL_QUICKMESSAGE));
+		$props = $cu->load_properties(array(
+			"file" => "quickmessage", 
+			"clid" => CL_QUICKMESSAGE,
+		));
 		//arr($props);
 		$needed_props = array("user_from", "user_to", "subject", "content");
-		$gotit_props = array();
+		/*
+		if(!empty($c_list))
+		{
+			$gotit_props = array(
+				"contact_list" => array(
+					"name" => "contact_list",
+					"type" => "text",
+					//"no_caption" => 1,
+					"value" => html::href(array(
+						"url" => "javascript:void(0)",
+						"onClick" => "javascript:window.open(\"".$this->mk_my_orb("show_list", array(
+							"id" => $c_list->prop("to"),
+						), CL_CONTACT_LIST, false, true)."\",\"\",\" toolbar=no,directories=no,status=no,location=no,resizable=no,scrollbars=yes,menubar=no,height=300,width=500\");return false;",
+						"caption" => "Aadressiraamat",
+					)),
+				),
+			);
+		}
+		else
+		{
+		*/
+			$gotit_props = array();
+		//}
 		foreach($props as $key => $value)
 		{
 			if(in_array($key, $needed_props))
@@ -422,6 +446,38 @@ class quickmessagebox extends class_base
 		return $o;
 	}
 	
+	function dispatch_message($arr)
+	{
+		// commune / prop / to / message
+		if(!$templates_folder = $arr["commune"]->prop("message_templates_folder"))
+		{
+			return false;
+		}
+		$messages = new object_list(array(
+			"parent" => $templates_folder,
+			"name" => $arr["prop"],
+		));
+		if(!$message = $messages->begin())
+		{
+			return false;
+		}
+		if(!$msgbox = $this->get_message_box_for_user($arr["to"]))
+		{
+			return false;
+		}
+		$o = new object();
+		$o->set_class_id(CL_QUICKMESSAGE);
+		$o->set_parent($msgbox->id());
+		$o->set_status(STAT_ACTIVE);
+		$o->set_prop("mstatus", 1);
+		$o->set_prop("subject", $message->prop("subject"));
+		$o->set_prop("content", str_replace("#content#", $arr["message"], $message->prop("content")));
+		$o->set_prop("user_to", $arr["to"]->id());
+		$o->set_name($message->prop("subject"));
+		$o->save();
+		return true;
+	}
+	
 	// get the messagebox of the user -- ahz
 	function get_message_box_for_user($user)
 	{
@@ -430,7 +486,6 @@ class quickmessagebox extends class_base
 			"type" => 4, // RELTYPE_OWNER
 			"from.class_id" => CL_QUICKMESSAGEBOX,
 		)));
-		
 		// if he doesn't have the connection, then he doesn't have the box... simple -- ahz
 		if(!is_object($message_box))
 		{
@@ -445,58 +500,149 @@ class quickmessagebox extends class_base
 	
 	function save_new_message($arr)
 	{
-		$vars = $arr["request"];
 		// yeah, the magic of messaging:
 		// 1. we get the object id's of sender and reciever
 		// 2. we check, whether the receiver is a user and he has a messagebox
 		// 3. we create the necessary objects
 		// 4. we connect the message to sender and reciever
 		// 5. done!
-		$users = get_instance("users");
-		$u_id = aw_global_get("uid_oid");
-		$t_id = $users->get_oid_for_uid($vars["user_to"]);
-
-		if(!$this->can("view", $t_id) || empty($t_id))
+		$vars = $arr["request"];
+		
+		if(!$u_id = aw_global_get("uid_oid"))
 		{
 			return PROP_FATAL_ERROR;
 		}
-		$user_to = obj($t_id);
-		// if this person doesn't have a inbox, then we will currently add it to him brute-force -- ahz
-		$mbox = $this->get_message_box_for_user($user_to);
-		//$user = obj($u_id);
+		$user = obj($u_id);
+		$person = $user->get_first_obj_by_reltype("RELTYPE_PERSON");
+		$users = get_instance("users");
+		
+		// this be spam
+		$user_to = array();
+		// if the name contains commas, then there are multiple names
+		if(strpos($vars["user_to"], ",") !== false)
+		{
+			$user_to = explode(",", $vars["user_to"]);
+			foreach($user_to as $key => $value)
+			{
+				$user_to[$key] = trim($value);
+			}
+		}
+		else
+		{
+			$user_to[] = $vars["user_to"];
+		}
+		$tmp = array();
+		foreach($user_to as $value)
+		{
+			$tmp[] = $users->get_oid_for_uid($value);
+		}
+		$user_to = $tmp;
+		if(is_array($vars["mgroup"]))
+		{
+			unset($vars["mgroup"][0]);
+			unset($vars["mgroup"][1]);
+			if(is_array($vars["mgroup"]))
+			{
+				$objs = new object_list(array("oid" => array_keys($vars["mgroup"])));
+				foreach($objs->arr() as $obj)
+				{
+					$friends = $obj->meta("friends");
+					if(is_array($friends))
+					{
+						$user_to = $user_to + $friends;
+					}
+				}
+			}
+		}
+		$q_users = array();
+		foreach($user_to as $value)
+		{
+			if(!$this->can("view", $value) || empty($value))
+			{
+				continue;
+			}
+			$r_obj = obj($value);
+			// if this person doesn't have a inbox, then we will currently add it to him brute-force -- ahz
+			if(!$mbox = $this->get_message_box_for_user($r_obj))
+			{
+				continue;
+			}
+			$q_users[$r_id] = $mbox->id();
+		}
+		$tmp = array();
+		
+		foreach($q_users as $m_id => $mbox_id)
+		{
+			$mflag = true;
+			$m_user = obj($m_id);
+			$nfm_flag = false;
+			$fm_flag = false;
+			if($m_person = $m_user->get_first_obj_by_reltype("RELTYPE_PERSON"))
+			{
+				if($m_message = $m_person->meta("message_conditions"))
+				{
+					if($m_message["nfm"][1] == 1)
+					{
+						$nfm_flag = true;
+					}
+					if($m_message["fm"][1] == 1)
+					{
+						$fm_flag = true;
+					}
+				}
+			}
+			if($fm_flag === true)
+			{
+				if(!$m_person->is_connected_to(array(
+					"to" => $person->id(),
+					"type" => "RELTYPE_FRIEND",
+				)))
+				{
+					$nfm_flag = false;
+					continue;
+				}
+			}
+			if($nfm_flag === true)
+			{
+				if($m_person->is_connected_to(array(
+					"to" => $person->id(),
+					"type" => "RELTYPE_FRIEND",
+				)) && $fm_flag === false)
+				{
+					continue;
+				}
+			}
+			$tmp[$m_id] = $mbox_id;
+		}
+		$q_users = $tmp;
+		/*
 		$asd = $arr["obj_inst"]->prop("maxsize");
 		if(strlen($vars["content"]) > $asd && !empty($asd))
 		{
-			return PROP_ERROR;
+			$vars["content"] = substr($vars["content
 		}
+		*/
+
 		$o = new object();
 		$o->set_class_id(CL_QUICKMESSAGE);
 		$o->set_parent($arr["obj_inst"]->id());
 		$o->set_status(STAT_ACTIVE);
-		// need to resolve it!
 		$o->set_prop("user_from", $u_id);
-		$o->set_prop("user_to", $t_id);
+		$o->set_prop("user_to", implode(",", array_keys($q_users)));
 		$o->set_prop("subject", $vars["subject"]);
 		$o->set_prop("content", $vars["content"]);
 		$o->set_prop("mstatus", QUICKMESSAGE_OUTGOING);
 		$o->set_name($vars["subject"]);
 		$o->save();
-		/*
-		$arr["obj_inst"]->connect(array(
-			"to" => $o->id(),
-			"reltype" => "RELTYPE_OUTGOING",
-		));
-		*/
-		$brother = obj($o->save_new());
-		$brother->set_parent($mbox->id());
-		$brother->set_prop("mstatus", QUICKMESSAGE_INCOMING);
-		$brother->save();
-		/*
-		$mbox->connect(array(
-			"to" => $brother->id(),
-			"reltype" => "RELTYPE_INCOMING",
-		));
-		*/
+		
+		foreach($q_users as $key => $value)
+		{
+			$brother = obj($o->save_new());
+			$brother->set_parent($value);
+			$brother->set_prop("user_to", $key);
+			$brother->set_prop("mstatus", QUICKMESSAGE_INCOMING);
+			$brother->save();
+		}
 	}
 	
 	/**
@@ -511,7 +657,10 @@ class quickmessagebox extends class_base
 			foreach($arr["sel"] as $sel)
 			{
 				$obj = obj($sel);
-				$obj->delete();
+				if($this->can("delete", $sel) && $obj->class_id() == CL_QUICKMESSAGE)
+				{
+					$obj->delete();
+				}
 			}
 		}
 		return html::get_change_url($arr["id"], array("group" => $arr["group"]));
@@ -535,33 +684,5 @@ class quickmessagebox extends class_base
 		}
 		return html::get_change_url($arr["id"], array("group" => "archive"));
 	}
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	////
-	// !this will be called if the object is put in a document by an alias and the document is being shown
-	// parameters
-	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
-	/*
-	function parse_alias($arr)
-	{
-		return $this->show(array("id" => $arr["alias"]["target"]));
-	}
-
-	*/
-	////
-	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
-	/*
-	function show($arr)
-	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		return $this->parse();
-	}
-	*/
 }
 ?>
