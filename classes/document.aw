@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.238 2004/02/27 16:53:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.239 2004/03/09 09:06:23 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -312,6 +312,25 @@ class document extends aw_template
 			return false;
 		};
 
+		$oid = aw_global_get("oid");
+		if ($oid)
+		{
+			$q = "SELECT * FROM aliases WHERE source = '$docid' AND target = '$oid' AND type =" . CL_FILE;
+			$this->db_query($q);
+			$row = $this->db_next();
+			if ($row)
+			{
+				$fi = get_instance("file");
+				$fl = $fi->get_file_by_id($oid);
+				$doc["content"] = $fl["content"];
+				$doc["lead"] = "";
+				$doc["title"] = "";
+				$doc["meta"]["show_print"] = 1;
+				$mk_compat = false;
+				$this->vars(array("page_title" => strip_tags($fl["comment"])));
+				$pagetitle = strip_tags($fl["comment"]);
+			};
+		}
 		
 		if ($doc["meta"])
 		{
