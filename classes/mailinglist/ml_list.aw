@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.66 2004/09/14 12:56:28 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.67 2004/09/14 12:59:08 sven Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -878,9 +878,8 @@ class ml_list extends class_base
 					$tabledata["udef_txbox$i"] = $member_obj->prop("udef_txbox$i");
 					$tabledata["udef_date$i"] = get_lc_date($member_obj->prop("udef_date$i"));
 				}
-			}
-			arr($tabledata);	
-				$t->define_data($tabledata);	
+			}	
+			$t->define_data($tabledata);	
 		}		
 	}
 
