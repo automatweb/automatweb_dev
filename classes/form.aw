@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.18 2001/06/07 19:16:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.19 2001/06/07 23:08:56 duke Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -1798,7 +1798,8 @@ $orb_defs["form"] = "xml";
 		function get_entries($args = array())
 		{
 			extract($args);
-			$pstr = ($parent) ? " WHERE objects.parent = $parent " : "";
+			// kui parent on antud, siis moodustame sellest IN klausli
+			$pstr = ($parent) ? " WHERE objects.parent IN (" . join(",",map("'%s'",$parent)) . ")" : "";
 			$table = sprintf("form_%d_entries",$this->id);
 			$q = "SELECT * FROM $table LEFT JOIN objects ON ($table.id = objects.oid) $pstr";
 			$this->db_query($q);
