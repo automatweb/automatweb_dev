@@ -1059,13 +1059,31 @@ class _int_object
 	{
 		$ret = array();
 		$parent = $this->id();
+		$cnt = 0;
 		while ($parent && $parent != $this->ini["rootmenu"])
 		{
-			if ($GLOBALS["object_loader"]->ds->can("change", $parent))
+			if ($GLOBALS["object_loader"]->ds->can("view", $parent))
 			{
 				$t = obj($parent);
 				$ret[] = $t;
 				$parent = $t->parent();
+			}
+			else
+			{
+				// we break here, because if we don't have view access to an object in the path
+				// we can't find it's parent and then we're fucked anyway. 
+				$parent = 0;
+				break;
+			}
+
+			$cnt++;
+
+			if ($cnt > 100)
+			{
+				error::throw(array(
+					"id" => ERR_HIER, 
+					"msg" => "object::path(".$this->id()."): error in object hierarchy, infinite loop!"
+				));
 			}
 		}
 		$ret[] = obj($this->ini["rootmenu"]);
