@@ -17,7 +17,8 @@ class export extends aw_template
 
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_export"),
-			"folder" => $this->get_cval("export::folder")
+			"folder" => $this->get_cval("export::folder"),
+			"zip_file" => $this->get_cval("export::zip_file")
 		));
 		return $this->parse();
 	}
@@ -29,6 +30,7 @@ class export extends aw_template
 		classload("config");
 		$c = new config;
 		$c->set_simple_config("export::folder",$folder);
+		$c->set_simple_config("export::zip_file",$zip_file);
 
 		// take the folder thing and add the date to it so we can make several copies in the same folder
 		if (!is_dir($folder))
@@ -48,25 +50,33 @@ class export extends aw_template
 		flush();
 		$this->hashes = array();
 
-		// so. here we go. make a list of menus and get the page for each menu, convert links and save it as a file. 
-		// shouldn't be hard.
-		// right. funny. 
-		global $baseurl,$ext;
-/*		$this->db_query("SELECT oid FROM objects WHERE class_id = ".CL_PSEUDO." AND status != 0 AND site_id = ".$GLOBALS["SITE_ID"]);
-		while ($row = $this->db_next())
+		// import exclusion list
+		global $site_export_exclude_urls;
+		if (is_array($site_export_exclude_urls))
 		{
-//			echo "exporting section $row[oid] as file ".$folder."/".$hashes[$row["oid"]]." <br>\n";
-			flush();
-			$url = $baseurl."/index.".$ext."?section=".$row["oid"];
-			$this->fetch_and_save_page($url);
-		}*/
+			$this->hashes = $site_export_exclude_urls;
+		}
 
-		// ok, try this for a change. 
+		global $baseurl,$ext;
+
+		// ok, start from the front page
 		$this->fetch_and_save_page($baseurl."/");
 		
 		if ($zip_file != "")
 		{
 			// $zip_file contains the path and name of the file into which we should zip the exported site
+			// first, delete the old zip
+			@unlink($zip_file);
+			global $zip_path;
+			echo "creating zip file $zip_file <br>\n";
+			flush();
+			if (!chdir($this->folder))
+			{
+				echo "can't change dir to $this->folder <br>\n";
+			}
+			$res = `$zip_path $zip_file *`;
+			echo "created zip file $zip_file<br>\n";
+			flush();
 		}
 		echo "<br>all done. <br><br>\n\n";
 		die();
