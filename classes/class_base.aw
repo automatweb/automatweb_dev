@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.90 2003/03/31 10:09:21 duke Exp $
+// $Id: class_base.aw,v 2.91 2003/04/01 16:45:00 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -178,9 +178,6 @@ class class_base extends aliasmgr
 	// any other data, then you'll need to use other field name
 	function change($args = array())
 	{
-		// create an instance of the class servicing the object ($this->inst)
-		// create an instance of the datasource ($this->ds)
-		// set $this->clid and $this->clfile (Do I need the latter at all?)
 		$this->init_class_base();
 
 		extract($args);
@@ -200,8 +197,6 @@ class class_base extends aliasmgr
 				"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
 		));
 
-
-		
 		$this->load_obj_data(array("id" => $this->id));
 
 		if (method_exists($this->inst,"callback_pre_edit"))
@@ -600,7 +595,16 @@ class class_base extends aliasmgr
 				"orb_class" => &$orb_class,
 			));
 		};
-		return $this->mk_my_orb($action,$args,$orb_class);
+		// rrrr, temporary hack
+		if (isset($this->id_only))
+		{
+			$retval = $id;
+		}
+		else
+		{
+			$retval = $this->mk_my_orb($action,$args,$orb_class);
+		};
+		return $retval;
 	}
 
 	////
@@ -741,6 +745,10 @@ class class_base extends aliasmgr
 	{
 		// only classes which have defined properties
 		// can use class_base
+		
+		// create an instance of the class servicing the object ($this->inst)
+		// create an instance of the datasource ($this->ds)
+		// set $this->clid and $this->clfile
 		$cfgu = get_instance("cfg/cfgutils");
 		$orb_class = $this->cfg["classes"][$this->clid]["file"];
 		if (empty($orb_class))
@@ -803,6 +811,7 @@ class class_base extends aliasmgr
 		{
 			return false;
 		};
+
 		foreach($this->tables as $key => $val)
 		{
 			// that we already got
@@ -837,7 +846,7 @@ class class_base extends aliasmgr
 					"idfield" => "oid",
 					"fields" => $fields,
 				));
-				$tmp["oid"] = $this->id;
+				$tmp["oid"] = $args["id"];
 				$this->data[$key] = $tmp;
 				$this->parent = $tmp["parent"];
 				$this->coredata = $tmp;
@@ -1160,7 +1169,12 @@ class class_base extends aliasmgr
 		{
 			$tables["objects"] = array("index" => "oid");
 		};
-
+		
+		if (isset($this->role) && ($this->role == "obj_edit"))
+		{
+			$tables["objects"] = array("index" => "oid");
+		};
+		
 		foreach($property_list as $key => $val)
 		{
 			$property = $this->all_props[$key];
@@ -1228,6 +1242,7 @@ class class_base extends aliasmgr
 			};
 
 		};
+
 
 
 		$this->tables = $tables;
@@ -1309,7 +1324,6 @@ class class_base extends aliasmgr
 			// with well working code.
 			if (!empty($this->cfgform_id) && empty($_all_props[$val["name"]]))
 			{
-				//print "skipping $val[name]<br>";
 				continue;
 			};
 
@@ -1317,14 +1331,20 @@ class class_base extends aliasmgr
 			if (!empty($this->cfgform_id))
 			{
 				$val = array_merge($_all_props[$k],$val);
+				// use the default caption, if the one in config form
+				// is empty. oh, and for consistency, I should do the
+				// same when I save the config form
+				if (empty($val["caption"]))
+				{
+					$val["caption"] = $_all_props[$k]["caption"];
+				};	
 			}
-
-			//print "using $val[name]<br>";
 
 			if (empty($val["view"]))
 			{
 				$val["view"] = "";
 			};
+
 			if ($val["view"])
 			{
 				$this->cb_views[$val["view"]] = 1;
@@ -1686,9 +1706,9 @@ class class_base extends aliasmgr
 			"request" => isset($this->request) ? $this->request : "",
 		);
 
-
 		foreach($properties as $key => $val)
 		{
+
 			$name = $val["name"];
 			if (is_array($val))
 			{
@@ -1730,6 +1750,10 @@ class class_base extends aliasmgr
 			if (isset($val["callback"]) && method_exists($this->inst,$val["callback"]))
 			{
 				$meth = $val["callback"];
+				// I need a way to figure out whether that callback method
+				// did actually set any groups or not?
+
+				// and just how exactly am I going to do that?
 				$vx = $this->inst->$meth($argblock);
 				if (is_array($vx))
 				{
