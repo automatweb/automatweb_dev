@@ -31,8 +31,8 @@
             <name>use_existing_database</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <group>db</group>
             <table>objects</table>
-            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <caption>Kasuta olemasolevat andmebaasi</caption>
@@ -40,8 +40,8 @@
       <property>
             <name>select_db</name>
             <type>select</type>
+            <group>db</group>
             <table>objects</table>
-            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <caption>Vali andmebaas</caption>
@@ -59,8 +59,8 @@
             <name>use_existing_templates</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <group>templates</group>
             <table>objects</table>
-            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <caption>Vali olemasolevad templated</caption>
@@ -70,8 +70,8 @@
             <type>select</type>
             <multiple>1</multiple>
             <size>10</size>
+            <group>templates</group>
             <table>objects</table>
-            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <caption>Vali saidid, mille templatesid valida saad</caption>
@@ -81,21 +81,20 @@
             <type>select</type>
             <multiple>1</multiple>
             <size>20</size>
+            <group>templates</group>
             <table>objects</table>
-            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <caption>Vali templatede kataloogid, mis uude saiti kopeerida</caption>
       </property>
       <property>
-            <name>select_layout</name>
-            <type>relpicker</type>
-            <reltype>RELATION_LAYOUT</reltype>
+            <name>select_imgcss_sites</name>
+            <type>select</type>
+            <group>templates</group>
             <table>objects</table>
-            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Vali uue saidi default layout</caption>
+            <caption>Vali sait, millelt v&amp;otilde;tta css ja pildid</caption>
       </property>
       <property>
             <name>gen_site</name>
@@ -133,6 +132,12 @@
             <general>
                   <caption>Üldine</caption>
             </general>
+            <templates>
+                  <caption>Templated</caption>
+            </templates>
+            <db>
+                  <caption>Andmebaas</caption>
+            </db>
       </groupinfo>
 </properties>
 

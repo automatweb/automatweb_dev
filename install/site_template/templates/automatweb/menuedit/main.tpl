@@ -160,25 +160,47 @@
 
 
 <!-- SUB: logged -->
-<table width="155" border="0" cellpadding="5" cellspacing="0">
+<table width="230" border="0" cellpadding="0" cellspacing="0">
+<tr><td background="{VAR:baseurl}/img/kast_hall_taust.gif" bgcolor="#F5F5F5"><IMG src="{VAR:baseurl}/img/trans.gif" WIDTH="1" HEIGHT="20" BORDER="0" ALT=""><br>
 
-	<!-- box_title -->
-	<tr><td class="boxtitle">{VAR:uid} / {VAR:date}</td></tr>
-	<!-- end_box_title -->
-
-	<!-- box_content -->
-	<tr><td class="boxcontent">
+	<table width="190" align="center" border="0" cellpadding="0" cellspacing="0" background="{VAR:baseurl}/img/trans.gif">
 	
-		<!-- SUB: MENU_LOGGED_L1_ITEM -->		
-		&gt; <a href="{VAR:link}" {VAR:target}>{VAR:text}</a><br />
-		<!-- END SUB: MENU_LOGGED_L1_ITEM -->
+	<tr><td class="boxtitle"><b>{VAR:uid}</b> ({VAR:date})</td></tr>
+
+	<tr><td><IMG src="{VAR:baseurl}/img/trans.gif" WIDTH="1" HEIGHT="10" BORDER="0" ALT=""><br>
+	
+	<table border="0" cellpadding="0" cellspacing="2">
+
+<!-- SUB: MENU_LOGGED_L1_ITEM -->
+	<tr><td colspan="2" class="boxcontent" valign="top">{VAR:text}</td></tr>
+
+
+
+	<!-- SUB: MENU_LOGGED_L2_ITEM -->
+	<tr><td class="boxcontent" valign="top"><font color="#D00000"><b>&#183;</b></font>&nbsp;</td>
+	<td class="boxcontent" valign="top"><a
+	href="{VAR:link}" {VAR:target}>{VAR:text}</a></td></tr>
+	<!-- END SUB: MENU_LOGGED_L2_ITEM -->
+
+	<!-- SUB: MENU_LOGGED_L2_ITEM_SEL -->
+	<tr><td class="boxcontent" valign="top"><font color="#D00000"><b>&#183;</b></font>&nbsp;</td>
+	<td class="boxcontent" valign="top"><b>{VAR:text}</b></td></tr>
+	<!-- END SUB: MENU_LOGGED_L2_ITEM_SEL -->
+
+	<!-- END SUB: MENU_LOGGED_L1_ITEM -->
+
+	</tr></table>
 
 
 	</td></tr>
-	<!-- end box_content -->
+	</table>
 
+</td></tr>
+<tr><td bgcolor="#F5F5F5"><IMG src="{VAR:baseurl}/img/kast_hall_bottom.gif" WIDTH="230" HEIGHT="20" BORDER="0" ALT=""></td></tr>
 </table>
-<img src="{VAR:baseurl}/img/trans.gif" width="1" height="7" border="0" alt="" /><br />
+<IMG src="{VAR:baseurl}/img/trans.gif" WIDTH="1" HEIGHT="10" BORDER="0" ALT=""><br>
+
+
 <!-- END SUB: logged -->
 
 

@@ -16,12 +16,10 @@
 			</function>
 		</action>
 
-		<action name="class_info" caption="N&auml;ita klassi infot">
+		<action name="class_info" caption="N&amp;auml;ita klassi infot">
 			<function name="class_info">
 				<arguments>
-					<required name="file" type="int" acl="view;edit"/>
-					<optional name="file_2" type="int" acl="view;edit" default="19"/>
-					<define name="file_3" value="100"/>
+					<required name="file" />
 				</arguments>
 			</function>
 		</action>

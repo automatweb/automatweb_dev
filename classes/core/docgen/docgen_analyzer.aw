@@ -3,7 +3,7 @@
 /** aw code analyzer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_analyzer.aw,v 1.7 2004/01/14 15:21:22 kristo Exp $
+	@cvs $Id: docgen_analyzer.aw,v 1.8 2004/02/03 16:31:20 kristo Exp $
 
 	@comment 
 	analyses aw code
@@ -104,13 +104,51 @@ class docgen_analyzer extends class_base
 			$f .= $this->parse("FUNCTION");
 		}
 
+		$ex = "";
+
+		if ($data["extends"] != "")
+		{
+			$dat = $data;
+			$orb = get_instance("orb");
+			$that = get_instance("core/docgen/docgen_analyzer");
+
+			// now, do extended classes. we do that by parsing all the extends classes
+			do {
+				$level++;
+
+				if ($dat["extends"] == "db_connector")
+				{
+					$_extends = "db";
+				}
+				else
+				{
+					$_extends = $dat["extends"];
+				}
+
+				// get the file the class is in.
+				// for that we have to load it's orb defs to get the folder below the classes folder
+				$orb_defs = $orb->load_xml_orb_def($_extends);
+				$ex_fname = $this->cfg["basedir"]."/classes/".$orb_defs[$dat["extends"]]["___folder"]."/".$_extends.".".$this->cfg["ext"];
+
+				$this->vars(array(
+					"spacer" => str_repeat("&nbsp;", $level * 3),
+					"inh_link" => $this->mk_my_orb("class_info", array("file" => "/".$_extends.".".$this->cfg["ext"])),
+					"inh_name" => $dat["extends"]
+				));
+				$ex .= $this->parse("EXTENDER");
+
+				$_dat = $that->analyze_file($ex_fname, true);
+				$dat = $_dat["classes"][$dat["extends"]];
+			} while ($dat["extends"] != "");
+		}
+
 		$this->vars(array(
 			"name" => $data["name"],
 			"extends" => $data["extends"],
 			"end_line" => $data["end_line"],
 			"start_line" => $data["start_line"],
-			"orb_defs" => nl2br(htmlentities($this->_get_orb_defs($data))),
-			"FUNCTION" => $f
+			"FUNCTION" => $f,
+			"EXTENDER" => $ex
 		));
 
 		return $this->parse();
@@ -120,9 +158,7 @@ class docgen_analyzer extends class_base
 
 		@attrib params=name nologin=0 is_public=0 all_args=0 caption="N&auml;ita klassi infot" default=0 name=class_info
 
-		@param file required type=int acl=view;edit 
-		@param file_2 optional type=int acl=view;edit default=19
-		@param file_3 define value=100
+		@param file required 
 
 		@returns 
 		html with class info
@@ -135,7 +171,6 @@ class docgen_analyzer extends class_base
 		extract($arr);
 
 		$data = $this->analyze_file($file);
-		//echo dbg::dump($data);
 
 		foreach($data["classes"] as $class => $c_data)
 		{
@@ -777,7 +812,7 @@ class docgen_analyzer extends class_base
 
 				if (isset($attr["caption"]) && $attr["caption"] != "")
 				{
-					$x_a[] = "caption=\"".$attr["caption"]."\"";
+					$x_a[] = "caption=\"".str_replace("&", "&amp;", $attr["caption"])."\"";
 				}
 
 				$xml .= " ".join(" ", $x_a).">\n";
@@ -825,191 +860,6 @@ class docgen_analyzer extends class_base
 		return $xml;
 	}
 	
-	function get_doc_comment_from_orb_def($class)
-	{
-		$o = get_instance("orb");
-		$dat = $o->load_xml_orb_def($class);
-		$dat = $dat[$class];
-
-		// also, copy the file to the /www/dev/terryf/awcl/classes folder with the correct subfolders
-		$from = "/www/dev/terryf/automatweb_dev/classes/".$dat["___folder"]."/".$class.".aw";
-		$to = "/www/dev/terryf/awcl/classes/".$dat["___folder"]."/".$class.".aw";
-		echo "copied $from to $to <br>\n";
-		copy($from, $to);
-		flush();
-
-		foreach($dat as $nm => $inf)
-		{
-			if ($nm == "_extends" || $nm == "___folder" || $nm == "default")
-			{
-				continue;
-
-			}
-
-			//echo "Comment for function $inf[function] = <br><br>\n";
-
-			$comm  = "\t/** short comment \n";
-			$comm .= "\t\t\n";
-
-			$x_a = array();
-			$x_a["nologin"] = $inf["nologin"];
-			$x_a["is_public"] = $inf["is_public"];
-			$x_a["all_args"] = $inf["all_args"];
-			$x_a["caption"] = $inf["caption"];
-			$x_a["default"] = (int)($nm == $dat["default"]);
-
-			$comm .= "\t\t@attrib name=".$nm." params=name ".join(" ", map2("%s=\"%s\"",$x_a))."\n\t\t\n";
-
-			// make params
-			foreach($inf["required"] as $p_n => $param)
-			{
-				$comm .= "\t\t@param $p_n required";
-				if ($inf["types"][$p_n] != "")
-				{
-					$comm .= " type=".$inf["types"][$p_n];
-				}
-
-				if ($inf["acl"][$p_n] != "")
-				{
-					$comm .= " acl=\"".$inf["acl"][$p_n]."\"";
-				}
-
-				if ($inf["defaults"][$p_n] != "")
-				{
-					$comm .= " default=\"".$inf["defaults"][$p_n]."\"";
-				}
-
-				$comm .= "\n";
-			}
-
-			foreach($inf["optional"] as $p_n => $param)
-			{
-				$comm .= "\t\t@param $p_n optional";
-				if ($inf["types"][$p_n] != "")
-				{
-					$comm .= " type=".$inf["types"][$p_n];
-				}
-
-				if ($inf["acl"][$p_n] != "")
-				{
-					$comm .= " acl=\"".$inf["types"][$p_n]."\"";
-				}
-
-				if ($inf["defaults"][$p_n] != "")
-				{
-					$comm .= " default=\"".$inf["defaults"][$p_n]."\"";
-				}
-
-				$comm .= "\n";
-			}
-
-			foreach($inf["define"] as $p_n => $val)
-			{
-				$comm .= "\t\t@param $p_n define";
-				if ($inf["types"][$p_n] != "")
-				{
-					$comm .= " type=".$inf["types"][$p_n];
-				}
-
-				if ($inf["acl"][$p_n] != "")
-				{
-					$comm .= " acl=\"".$inf["types"][$p_n]."\"";
-				}
-
-				if ($inf["defaults"][$p_n] != "")
-				{
-					$comm .= " default=\"".$inf["defaults"][$p_n]."\"";
-				}
-
-				$comm .= " value=\"$val\"\n";
-			}
-			$comm .= "\t\t\n";
-			$comm .= "\t\t@returns\n";
-			$comm .= "\t\t\n";
-			$comm .= "\t\t\n";
-			$comm .= "\t\t@comment\n";
-			$comm .= "long comment\n";
-			$comm .= "\t**/\n";
-			//echo "comm = ".nl2br(htmlentities($comm))." <br>";
-
-			// now, write the actual comment to the file
-			// first, run the file through the analyzer
-			// then extract the beginning line of the function
-			// and insert the comment before that. 
-			$this->analyze_file($to, true);
-
-			$start_line = $this->data["classes"][$class]["functions"][$inf["function"]]["start_line"]-1;
-			$newf = "";
-			$fls = file($to);
-
-			$last_oc_line = 0;
-			foreach($fls as $ln => $tline)
-			{
-				if (trim($tline) == "////")
-				{
-					$last_oc_line = $ln;
-				}
-				if ($ln == $start_line)
-				{
-					break;
-				}
-				if (substr(trim($tline), 0, 8) == "function")
-				{
-					$last_oc_line = 0;
-				}
-			}
-
-			$oc = "";
-			$shortc = "";
-			foreach($fls as $ln => $tline)
-			{
-				if ($ln == $start_line)
-				{
-					$newf .= str_replace("short comment", $shortc, str_replace("long comment", $oc, $comm));
-				}
-
-				if ($ln >= $last_oc_line && $ln < $start_line && $last_oc_line)
-				{
-					if ($ln == $last_oc_line)
-					{
-						continue;
-					}
-
-					if (substr(trim($tline), 0, 4) == "// !")
-					{
-						$shortc = trim(substr(trim($tline), 4));
-					}
-					else
-					{
-						$oc .= "\t\t".trim(substr(trim($tline), 2))."\n";
-					}
-				}
-				else
-				{
-					$newf .= $tline;
-				}
-			}
-			$this->put_file(array(
-				"file" => $to,
-				"content" => $newf
-			));
-			echo "did function $inf[function] <br>\n";
-			flush();
-		}
-	}
-
-	function make_doc_comments_from_orb_defs()
-	{
-		// get all files in the xml/orb folder and do the trick for them
-		$dc = $this->get_directory(array("dir" => aw_ini_get("basedir")."/xml/orb"));
-		foreach($dc as $file)
-		{
-			$this->get_doc_comment_from_orb_def(basename($file,".xml"));
-		}
-		//$this->get_doc_comment_from_orb_def("docgen_analyzer");
-		//die("all done<br>");
-	}
-
 	function make_orb_defs_from_doc_comments()
 	{
 		$p = get_instance("parser");

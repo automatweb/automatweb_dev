@@ -53,10 +53,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_USER, on_add_alias)
 @property email field=email type=textbox
 @caption E-mail
 
-@property created field=created type=date
+@property created field=created type=date table=objects
 @caption Created
 
-@property createdby field=createdby type=text
+@property createdby field=createdby type=text table=objects
 @caption Created by
 
 @property admin_lang store=no type=select
@@ -79,8 +79,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_USER, on_add_alias)
 @property passwd field=password type=password store=no
 @caption Password
 
-@property passwd_again store=no type=password store=no
-@caption Password veelkord
+@property password type=hidden table=users
+
 
 @property gen_pwd store=no type=text 
 @caption Genereeri parool

@@ -308,11 +308,40 @@ class _int_object_loader
 
 	function object_exists($oid)
 	{
-		return $this->ds->object_exists($oid);
+		return $this->ds->object_exists($this->param_to_oid($oid));
+	}
+
+	/** switches the object_loader's default database connection to $new_conn
+		
+		@attrib params=pos
+
+		@param new_conn required 
+
+		new conn is the new database connection to set the datasource to
+		returns the old connection 
+	**/
+	function switch_db_connection($new_conn)
+	{
+		// ok, we need to find the real connection. 
+		// iterate over the ds chain until we hit the last one. 
+		// that should be the final database ds
+		$ds =& $this->ds;
+		while (is_object($ds->contained))
+		{
+			$ds =& $ds->contained;
+		}
+
+		error::throw_if(!is_object($ds), array(
+			"id" => ERR_NO_DS,
+			"msg" => "object_loader::switch_db_connection($new_conn): could nto find root connection!"
+		));
+
+		$old = $ds->dc[$ds->default_cid];
+		$ds->dc[$ds->default_cid] = $new_conn;
+		return $old; 
 	}
 }
 
 $GLOBALS["object_loader"] = new _int_object_loader();
 $GLOBALS["objects"] = array();
-
 ?>

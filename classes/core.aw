@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.240 2004/01/28 15:34:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.241 2004/02/03 16:31:20 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1501,7 +1501,7 @@ class core extends acl_base
 		}
 
 		// also attach backtrace
-		if (function_exists("debug_backtrace"))
+		/*if (function_exists("debug_backtrace"))
 		{
 			$msg .= "<br><br> Backtrace: \n\n<Br><br>";
 			$bt = debug_backtrace();
@@ -1544,7 +1544,7 @@ class core extends acl_base
 			
 				$msg .= " <br><br>\n\n";
 			}
-		}
+		}*/
 
 		// meilime veateate listi ka
 		$subj = "Viga saidil ".$this->cfg["baseurl"];

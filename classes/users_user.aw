@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.80 2004/02/02 19:22:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.81 2004/02/03 16:31:20 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -569,7 +569,7 @@ class users_user extends aw_template
 		return $ret;
 	}
 
-	function addgroup($parent,$gname,$type=0,$data = 0,$priority = USER_GROUP_PRIORITY,$search_form = 0) 
+	function addgroup($parent,$gname,$type=0,$data = 0,$priority = USER_GROUP_PRIORITY,$search_form = 0, $obj_parent = 0) 
 	{
 		$this->quote($gname);
 		$uid = aw_global_get("uid");
@@ -580,6 +580,11 @@ class users_user extends aw_template
 		if (!$pg["oid"])
 		{
 			$pg["oid"] = aw_ini_get("groups.tree_root");
+		}
+
+		if ($obj_parent)
+		{
+			$og["oid"] = $obj_parent;
 		}
 		$oid = $this->new_object(array("name" => $gname, "class_id" => CL_GROUP, "status" => 2, "parent" => $pg["oid"]));
 
@@ -710,11 +715,6 @@ class users_user extends aw_template
 		{
 			$this->add_users_to_group($v,$users,$permanent,$check);
 		}
-		
-		if ($normalize)
-		{
-			//$this->normalize_user_objects();
-		}
 	}
 
 	function add_users_to_group($gid,$users,$permanent = 0,$check = false) 
@@ -805,6 +805,7 @@ class users_user extends aw_template
 				"name" => $uid, 
 				"class_id" => CL_USER, 
 			),false);
+			$this->last_user_oid = $user_oid;
 		}
 		
 

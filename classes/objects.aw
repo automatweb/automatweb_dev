@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.55 2004/01/15 19:06:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.57 2004/02/03 16:31:20 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 class db_objects extends aw_template 
 {
@@ -784,208 +784,16 @@ class objects extends db_objects
 		$mned = get_instance("menuedit");
 		$mned->dc = $dbi->dc;	// fake the db connection
 		
-		if (!$site['site_obj']['use_existing_database'])
-		{
-			$root_id = $mned->add_new_menu(array(
-				"name" => "root",
-				"parent" => 0,
-				"type" => MN_CLIENT,
-				"status" => 2,
-				"skip_invalidate" => true
-			));
-
-			$client_id = $mned->add_new_menu(array(
-				"name" => "klient",
-				"parent" => $root_id,
-				"type" => MN_CLIENT,
-				"status" => 2,
-				"skip_invalidate" => true
-			));
-		}
-		else
+		if ($site['site_obj']['use_existing_database'])
 		{
 			$client_id = $site['site_obj']['select_parent_folder'];
 			//echo "got client id as $client_id <br />\n";
 			flush();
 		}
 
-		$site_folder_id = $mned->add_new_menu(array(
-			"name" => $site["url"],
-			"parent" => $client_id,
-			"type" => MN_CLIENT,
-			"status" => 2,
-			"skip_invalidate" => true
-		));
-
-		$ini_opts["rootmenu"] = $site_folder_id;
-		$ini_opts["admin_rootmenu2"] = $site_folder_id;
-		$ini_opts["per_oid"] = $site_folder_id;
-
-		$awmenu_id = $mned->add_new_menu(array(
-			"name" => "Automatweb",
-			"parent" => $site_folder_id,
-			"type" => MN_CLIENT,
-			"status" => 2,
-			"skip_invalidate" => true
-		));
-		$ini_opts["amenustart"] = $awmenu_id;
-
-		// here we gots to export the program menus from the master site. 
-
-		// get list of alla program menus to export
-		$mnex = $this->get_objects_below(array(
-			'parent' => aw_ini_get("amenustart"),
-			'class' => CL_PSEUDO,
-			'full' => true,
-			'ignore_lang' => true,
-			'ret' => ARR_NAME
-		));
-
-		// temporarily put back real site id so we can fetch all the correct menus
-		$osid = aw_ini_get("site_id");
-		$GLOBALS["cfg"]["__default"]["site_id"] = aw_global_get("real_site_id");
-
-		$m_db = get_instance("menu");
-		$menus = array();/*$m_db->export_menus(array(
-			"id" => aw_ini_get("amenustart"),
-			"ex_menus" => array_keys($mnex),
-			"ret_data" => true,
-			"ex_icons" => 1
-		));*/
-
-		// reset to new site id
-		$GLOBALS["cfg"]["__default"]["site_id"] = $osid;
-
-		// and now import them to the new site
-		$i_p = $menus[0];
-
-		$am = get_instance("admin/admin_menus");
-		$am->dc = $dbi->dc;	// fake the db connection
-
-		$am->req_import_menus($i_p, &$menus, $awmenu_id);
-		//echo "imported .. <br />\n";
-		flush();
-
-		// create another menu with the site name and make menus under that
-		$s_rmn_id = $mned->add_new_menu(array(
-			"name" => $site['url'],
-			"parent" => $site_folder_id,
-			"type" => MN_CLIENT,
-			"status" => 2,
-			"skip_invalidate" => true
-		));
-
-		if ($site["select_layout"])
-		{
-			$mned->set_object_metadata(array(
-				"oid" => $s_rmn_id,
-				"key" => "show_layout",
-				"value" => $site['site_obj']["select_layout"]
-			));
-		}
-
-		$ini_opts["frontpage"] = $s_rmn_id;
-
-		
-		$upmenu_id = $mned->add_new_menu(array(
-			"name" => "Ylemine menyy",
-			"parent" => $s_rmn_id,
-			"type" => MN_CLIENT,
-			"status" => 2,
-			"skip_invalidate" => true
-		));
-		$ini_opts["menuedit.menu_defs[$upmenu_id]"] = "YLEMINE";
-
-		// create a couple submenus as well, just as an example
-		$mned->add_new_menu(array(
-			"name" => "Ylemine 1",
-			"parent" => $upmenu_id,
-			"type" => MN_CONTENT,
-			"status" => 2,
-			"skip_invalidate" => true
-		));
-		$mned->add_new_menu(array(
-			"name" => "Ylemine 2",
-			"parent" => $upmenu_id,
-			"type" => MN_CONTENT,
-			"status" => 2,
-			"skip_invalidate" => true
-		));
-
-		$leftmenu_id = $mned->add_new_menu(array(
-			"name" => "Vasak menyy",
-			"parent" => $s_rmn_id,
-			"type" => MN_CLIENT,
-			"status" => 2,
-			"skip_invalidate" => true
-		));
-		$ini_opts["menuedit.menu_defs[$leftmenu_id]"] = "VASAK";
-
-		$mned->add_new_menu(array(
-			"name" => "Vasak 1",
-			"parent" => $leftmenu_id,
-			"type" => MN_CONTENT,
-			"status" => 2,
-			"skip_invalidate" => true
-		));
-		$mned->add_new_menu(array(
-			"name" => "Vasak 2",
-			"parent" => $leftmenu_id,
-			"type" => MN_CONTENT,
-			"status" => 2,
-			"skip_invalidate" => true
-		));
-
-		$lo_p_id = $mned->add_new_menu(array(
-			"name" => "Login menyy",
-			"parent" => $s_rmn_id,
-			"type" => MN_CLIENT,
-			"status" => 2,
-			"skip_invalidate" => true
-		));
-
-		$lo_id = $mned->add_new_menu(array(
-			"name" => "Sisse loginud",
-			"parent" => $lo_p_id,
-			"type" => MN_CLIENT,
-			"status" => 2,
-			"skip_invalidate" => true
-		));
-		$ini_opts["menuedit.menu_defs[$lo_id]"] = "LOGGED";
-
-		$_tmp = $mned->add_new_menu(array(
-			"name" => "Tee t88d",
-			"parent" => $lo_id,
-			"type" => MN_CONTENT,
-			"status" => 2,
-			"link" => "/automatweb/"
-		));
-		$_tmp = $mned->add_new_menu(array(
-			"name" => "Lisa dokument",
-			"parent" => $lo_id,
-			"type" => MN_PMETHOD,
-			"status" => 2,
-			"pclass" => "document/new",
-			"pm_url_admin" => 1
-		));
-		$_tmp = $mned->add_new_menu(array(
-			"name" => "Muuda dokumenti",
-			"parent" => $lo_id,
-			"type" => MN_PMETHOD,
-			"status" => 2,
-			"pclass" => "document/change",
-			"pm_url_admin" => 1
-		));
-		$_tmp = $mned->add_new_menu(array(
-			"name" => "Logi valja",
-			"parent" => $lo_id,
-			"type" => MN_CONTENT,
-			"status" => 2,
-			"link" => "/orb.aw?class=users&action=logout"
-		));
 
 		// since no access is given (can't figure out how to do that :( ) we should grant all privileges to everyone by default
-		$dbi->db_query("INSERT INTO acl(gid,oid,acl) VALUES(1,$client_id, 9223372036854775807)");
+		//$dbi->db_query("INSERT INTO acl(gid,oid,acl) VALUES(1,$client_id, 9223372036854775807)");
 	}
 
 	/**  
@@ -1050,6 +858,22 @@ class objects extends db_objects
 	function orb_get_list($arr)
 	{
 		return parent::orb_get_list($arr);
+	}
+
+	/** serialize
+		
+		@attrib name=serialize params=name default="0" nologin="1" 
+		
+		@param oid required
+		
+		@returns
+		
+		@comment
+			serializes an object
+	**/
+	function orb_serialize($arr)
+	{
+		return parent::serialize($arr);
 	}
 }
 

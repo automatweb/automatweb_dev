@@ -73,7 +73,7 @@
             <name>created</name>
             <field>created</field>
             <type>date</type>
-            <table>users</table>
+            <table>objects</table>
             <group>general</group>
             <caption>Created</caption>
       </property>
@@ -81,7 +81,7 @@
             <name>createdby</name>
             <field>createdby</field>
             <type>text</type>
-            <table>users</table>
+            <table>objects</table>
             <group>general</group>
             <caption>Created by</caption>
       </property>
@@ -140,13 +140,11 @@
             <caption>Password</caption>
       </property>
       <property>
-            <name>passwd_again</name>
-            <store>no</store>
-            <type>password</type>
+            <name>password</name>
+            <type>hidden</type>
             <table>users</table>
             <group>chpwd</group>
-            <field>passwd_again</field>
-            <caption>Password veelkord</caption>
+            <field>password</field>
       </property>
       <property>
             <name>gen_pwd</name>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.47 2004/02/02 19:10:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.48 2004/02/03 16:31:20 kristo Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -420,22 +420,6 @@ class acl_base extends db_connector
 	function prog_acl_error($right,$prog)
 	{
 		die("Sorry, but you do not have $right access to program ".$this->cfg["programs"][$prog]["name"]."<br />");
-	}
-
-	function check_environment(&$sys, $fix = false)
-	{
-		$op_table = array(
-			"name" => "acl", 
-			"fields" => array(
-				"id" => array("name" => "id", "length" => 11, "type" => "int", "flags" => ""),
-				"gid" => array("name" => "gid", "length" => 11, "type" => "int", "flags" => ""),
-				"oid" => array("name" => "oid", "length" => 11, "type" => "int", "flags" => ""),
-				"acl" => array("name" => "acl", "length" => 20, "type" => "int", "flags" => "")
-			)
-		);
-
-		$ret= $sys->check_db_tables(array($op_table),$fix);
-		return $ret;
 	}
 
 	////

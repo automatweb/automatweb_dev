@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/accessmgr.aw,v 2.14 2004/02/02 19:22:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/accessmgr.aw,v 2.15 2004/02/03 16:31:20 kristo Exp $
 
 class accessmgr extends aw_template
 {
@@ -13,31 +13,7 @@ class accessmgr extends aw_template
 		$this->ar = aw_unserialize($this->get_cval("accessmgr"));
 		if (!is_array($this->ar))
 		{
-			$minoid = $this->db_fetch_field("SELECT MIN(oid) AS minoid FROM objects", "minoid");
-			$this->ar = array();
-			// loome k6ik vajalikud objektid
-			// k6igepealt root objekti et saax k6igile 6igusi m22rata
-			$id = $this->new_object(array(
-				"parent" => $minoid,
-				"class_id" => CL_ACCESSMGR, 
-				"status" => 0,
-				"name" => "Accessmgr",
-				"no_flush" => 1
-			));
-			$this->ar["root"] = $id;
-
-			reset($this->cfg["programs"]);
-			while (list($prid, $ar) = each($this->cfg["programs"]))
-			{
-				$id = $this->new_object(array(
-					"parent" => $this->ar["root"], 
-					"class_id" => CL_ACCESSMGR, 
-					"status" => $prid,
-					"name" => $ar["name"],
-					"no_flush" => 1
-				));
-				$this->ar[$prid] = $id;
-			}
+			$this->_do_init_accessmgr();
 			$s = aw_serialize($this->ar);
 			$this->quote(&$s);
 			$this->set_cval("accessmgr", $s);
@@ -102,6 +78,56 @@ class accessmgr extends aw_template
 			$s = aw_serialize($this->ar);
 			$this->quote(&$s);
 			$this->set_cval("accessmgr", $s);
+		}
+	}
+
+	function on_site_init(&$dbi, &$site, &$ini_opts, &$log, &$osi_vars)
+	{
+		$this->dc = $dbi->dc;
+		$this->_do_init_accessmgr();
+		$s = aw_serialize($this->ar);
+		$this->quote(&$s);
+		$dbi->db_query("INSERT INTO config(ckey,content) values('accessmgr','$s')");
+
+		// now, clear all acls for these objects and give all perms to admin grp and none for all users
+		$this->db_query("DELETE FROM acl WHERE oid IN (".join(",", array_values($this->ar)).")");
+
+		$dbi->add_acl_group_to_obj(2, $this->ar["root"]);
+		$dbi->save_acl($this->ar["root"], 2,array(
+			"can_edit" => 1,
+			"can_add" => 1,
+			"can_admin" => 1,
+			"can_delete" => 1,
+			"can_view" => 1
+		));
+	}
+
+	function _do_init_accessmgr()
+	{
+		$minoid = $this->db_fetch_field("SELECT MIN(oid) AS minoid FROM objects", "minoid");
+		$this->ar = array();
+		// loome k6ik vajalikud objektid
+		// k6igepealt root objekti et saax k6igile 6igusi m22rata
+		$id = $this->new_object(array(
+			"parent" => $minoid,
+			"class_id" => CL_ACCESSMGR, 
+			"status" => 0,
+			"name" => "Accessmgr",
+			"no_flush" => 1
+		));
+		$this->ar["root"] = $id;
+
+		reset($this->cfg["programs"]);
+		while (list($prid, $ar) = each($this->cfg["programs"]))
+		{
+			$id = $this->new_object(array(
+				"parent" => $this->ar["root"], 
+				"class_id" => CL_ACCESSMGR, 
+				"status" => $prid,
+				"name" => $ar["name"],
+				"no_flush" => 1
+			));
+			$this->ar[$prid] = $id;
 		}
 	}
 }

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.3 2004/01/13 16:24:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.4 2004/02/03 16:31:20 kristo Exp $
 // config_login_menus.aw - Login men&uuml;&uuml;d 
 /*
 
@@ -212,6 +212,36 @@ class config_login_menus extends class_base
 		}
 		$o = $ol->begin();
 		return $this->mk_my_orb("change", array("id" => $o->id()));
+	}
+
+	function on_site_init(&$dbi, &$site, &$ini_opts, &$log, $vars)
+	{
+		// we are using the new db as the default, so we can create objects
+		$oid = $dbi->db_fetch_field("SELECT oid FROM objects WHERE class_id = ".CL_CONFIG_LOGIN_MENUS, "oid");
+		$o = obj($oid);
+		$o->set_flag(OBJ_FLAG_IS_SELECTED, true);
+
+		// and manually set login menu conf as correct
+		$data = array();
+		// 2 is the gid for admins. 3 for regular users
+		for ($lid = 1; $lid < 5; $lid++)
+		{
+			$data[$lid][2]["menu"] = $vars["logged_admins"];
+			$data[$lid][2]["pri"] = 1000;
+	
+			$data[$lid][3]["menu"] = $vars["logged_users"];
+			$data[$lid][3]["pri"] = 100;
+
+			if ($lid == 1)
+			{
+				$o->set_meta("lm", $data[$lid]);
+			}
+		}
+		$o->save();
+
+		$str = aw_serialize($data);
+		$this->quote(&$str);
+		$dbi->db_query("INSERT INTO config(ckey,content) values('login_menus_".$ini_opts["site_id"]."','$str')");
 	}
 }
 ?>

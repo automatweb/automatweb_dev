@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.21 2003/09/17 14:53:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.22 2004/02/03 16:31:20 kristo Exp $
 // this is the class that allows us to connect to multiple datasources at once
 // it replaces the mysql class which was used up to now, but still routes all
 // db functions to it so that everything stays working and it also provides
@@ -49,7 +49,6 @@ class db_connector
 	// !init default database connection
 	function init($args = array())
 	{
-		#parent::init($args);
 		// dammit, I hate it when I don't know whether the args are string or array
 		if ((is_array($args) && isset($args["no_db"])) || (aw_global_get("no_db_connection")))
 		{
@@ -60,8 +59,6 @@ class db_connector
 		// if no connection id is set, pretend that this is the primary data source
 		$id = "db::".$this->default_cid;
 		$dc = aw_global_get($id);
-
-		
 		if ($dc)
 		{
 			$this->dc[$this->default_cid] = $dc;
@@ -228,52 +225,6 @@ class db_connector
 	function restore_handle()
 	{
 		return $this->dc[$this->default_cid]->restore_handle();
-	}
-
-	////
-	// ! Creates an UPDATE sql clause
-	// key(array) name => value (oid => 666)
-	// values(array) name => value pairs of fields that need to be updated
-	// table(string) - name of the table to update
-	// can be updated to support multiple keys
-	// Example:
-	// $this->db_update_record(array
-	//	"table" => "documents",
-	//	"key" => array("docid"  => array(36,35,95)),
-	//	"values" => array("show_lead" =>  1,"show_title" => 1),
-	//  ));
-
-	//  creates and executes the following query:
-	// UPDATE documents SET show_lead = 1, show_title = 1 WHERE docid IN (36,35,95)
-
-	function db_update_record($args = array())
-	{
-		extract($args);
-		if (!is_array($key) || !is_array($values))
-		{
-			return false;
-		};
-
-		list($keyname,$keyvalue) = each($key);
-
-		if (is_array($keyvalue))
-		{
-			$keyvalue =  join(",",$keyvalue);
-		};
-
-		$fields = join(",",map2(" %s = '%s' ",$values, 0, true));
-
-		if ($fields)
-		{
-			$old = $this->get_record($table,$keyname,$keyvalue,array($keyname));
-			if (empty($old))
-			{
-				$q = "INSERT INTO $table ($keyname) VALUES ($keyvalue)";
-				$this->db_query($q);
-			};
-			$q = sprintf("UPDATE %s SET %s WHERE %s IN (%s)",$table,$fields,$keyname,$keyvalue);
-			$this->db_query($q);
-		};
 	}
 
 	////

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.103 2004/02/02 19:22:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.104 2004/02/03 16:31:20 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -2473,14 +2473,25 @@ class users extends users_user
 		else
 		{
 			// create default group
-			/*$this->dc = $dbi->dc;
+			$this->dc = $dbi->dc;
 
 			$aug = $this->addgroup(
 				0,
 				"K&otilde;ik kasutajad", 
 				GRP_REGULAR,
 				0,
-				1000
+				1000,
+				0,
+				$ini_opts["groups.tree_root"]
+			);
+			$admg = $this->addgroup(
+				0,
+				"Administraatorid", 
+				GRP_REGULAR,
+				0,
+				10000,
+				0,
+				$ini_opts["groups.tree_root"]
 			);
 			$ini_opts["groups.all_users_grp"] = $aug;
 
@@ -2490,10 +2501,39 @@ class users extends users_user
 				"password" => $site["site_obj"]["default_user_pwd"],
 				"all_users_grp" => $aug,
 				"use_md5_passwords" => true,
-				"obj_parent" => $uparent
-			));*/
+				"obj_parent" => $ini_opts["users.rootmenu"]
+			));
+
+			// add user to admin group
+			$this->add_users_to_group_rec(
+				$admg,
+				array($site["site_obj"]["default_user"]),
+				true,
+				true,
+				false
+			);
+
+			$this->_install_create_g_u_o_rel($this->last_user_oid, $this->get_oid_for_gid($admg));
+			$this->_install_create_g_u_o_rel($this->last_user_oid, $this->get_oid_for_gid($aug));
 		}
 		$ini_opts["auth.md5_passwords"] = 1;
+	}
+
+	function _install_create_g_u_o_rel($u_oid, $g_oid)
+	{
+		// create objects
+		$u_o = obj($u_oid);
+		$u_o->create_brother($g_oid);
+		/*$u_o->connect(array(
+			"to" => $g_oid,
+			"reltype" => 1 // RELTYPE_GRP from user
+		));
+
+		$g_o = obj($g_oid);
+		$g_o->connect(array(
+			"to" => $u_o->id(),
+			"reltype" => 2 // RELTYPE_MEMBER from group
+		));*/
 	}
 
 	/**  
