@@ -1,118 +1,54 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list_report.aw,v 1.3 2003/04/07 13:17:40 duke Exp $
+// ml_list_report - listi raport
 
-class ml_list_report extends aw_template
+/*
+	@default table=objects
+	@default field=meta
+	@default method=serialize
+	@default group=general
+
+	@property lists type=objpicker clid=CL_ML_LIST multiple=1
+	@caption Listid
+
+	@property result_table type=text store=no no_caption=1
+	@caption Tabel
+
+*/
+
+class ml_list_report extends class_base
 {
 	function ml_list_report()
 	{
-		$this->init("mailinglist/ml_list_report");
+		$this->init(array(
+			"clid" => CL_ML_LIST_REPORT,
+			"tpldir" => "mailinglist/ml_list_report",
+		));
 	}
 
-	////
-	// !called, when adding a new object 
-	// parameters:
-	//    parent - the folder under which to add the object
-	//    return_url - optional, if set, the "back" link should point to it
-	//    alias_to - optional, if set, after adding the object an alias to the object with oid alias_to should be created
-	function add($arr)
+	function get_property($args = array())
 	{
-		extract($arr);
-		if ($return_url != "")
+		$data = &$args["prop"];
+		$retval = PROP_OK;
+		switch($data["name"])
 		{
-			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Lisa ml_list_report");
-		}
-		else
-		{
-			$this->mk_path($parent,"Lisa ml_list_report");
-		}
-		$this->read_template("change.tpl");
-
-		$tb = get_instance("toolbar");
-		$tb->add_button(array(
-			"name" => "save",
-			"tooltip" => "Salvesta",
-			"url" => "javascript:document.add.submit()",
-			"imgover" => "save_over.gif",
-			"img" => "save.gif"
-		));
-
-		$this->vars(array(
-			"toolbar" => $tb->get_toolbar(),
-			"lists" => $this->mpicker(array(), $this->list_objects(array("class" => CL_ML_LIST))),
-			"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "alias_to" => $alias_to, "return_url" => $return_url))
-		));
-		return $this->parse();
+                        case "result_table":
+				$data["value"] = $this->gen_result_table($args);
+				break;
+		};
+		return $retval;
 	}
 
-	////
-	// !this gets called when the user submits the object's form
-	// parameters:
-	//    id - if set, object will be changed, if not set, new object will be created
-	function submit($arr)
+	function gen_result_table($args = array())
 	{
-		extract($arr);
-		if ($id)
-		{
-			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $name
-			));
-		}
-		else
-		{
-			$id = $this->new_object(array(
-				"parent" => $parent,
-				"name" => $name,
-				"class_id" => CL_ML_LIST_REPORT
-			));
-		}
-
-		if ($alias_to)
-		{
-			$this->add_alias($alias_to, $id);
-		}
-
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"data" => array(
-				"lists" => $this->make_keys($lists)
-			)
-		));
-		return $this->mk_my_orb("change", array("id" => $id, "return_url" => urlencode($return_url)));
-	}
-
-	////
-	// !this gets called when the user clicks on change object 
-	// parameters:
-	//    id - the id of the object to change
-	//    return_url - optional, if set, "back" link should point to it
-	function change($arr)
-	{
-		extract($arr);
-		$ob = $this->get_object($id);
-		if ($return_url != "")
-		{
-			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Muuda ml_list_report");
-		}
-		else
-		{
-			$this->mk_path($ob["parent"], "Muuda ml_list_report");
-		}
-		$this->read_template("change.tpl");
-	
-		$tb = get_instance("toolbar");
-		$tb->add_button(array(
-			"name" => "save",
-			"tooltip" => "Salvesta",
-			"url" => "javascript:document.add.submit()",
-			"imgover" => "save_over.gif",
-			"img" => "save.gif"
-		));
-
 		load_vcl("table");
 		$t = new aw_table(array(
 			"prefix" => "ml_list_report",
 		));
-		if (!$mail_id)
+
+		$id = $args["obj"]["oid"];
+		
+		if (empty($args["request"][$mail_id]))
 		{
 			$t->parse_xml_def($this->cfg["basedir"] . "/xml/mlist/report_mails.xml");
 			$q = "
@@ -120,7 +56,7 @@ class ml_list_report extends aw_template
 				FROM ml_sent_mails 
 				LEFT JOIN objects AS m_objects ON m_objects.oid = ml_sent_mails.member 
 				LEFT JOIN objects AS l_objects ON l_objects.oid = ml_sent_mails.lid
-				WHERE lid IN (".join(",", $ob["meta"]["lists"]).")
+				WHERE lid IN (".join(",", $args["obj"]["meta"]["lists"]).")
 				GROUP BY mail
 			";
 			$this->db_query($q);
@@ -143,7 +79,7 @@ class ml_list_report extends aw_template
 				FROM ml_sent_mails 
 				LEFT JOIN objects AS m_objects ON m_objects.oid = ml_sent_mails.member 
 				LEFT JOIN objects AS l_objects ON l_objects.oid = ml_sent_mails.lid
-				WHERE lid IN (".join(",", $ob["meta"]["lists"]).") AND mail = '$mail_id'
+				WHERE lid IN (".join(",", $args["obj"]["meta"]["lists"]).") AND mail = '$args[request][$mail_id]'
 			";
 			$this->db_query($q);
 			while ($row = $this->db_next())
@@ -155,15 +91,7 @@ class ml_list_report extends aw_template
 			$rt = $t->draw();
 		}
 
-		$this->vars(array(
-			"res_tbl" => $rt,
-			"toolbar" => $tb->get_toolbar(),
-			"lists" => $this->mpicker($ob["meta"]["lists"], $this->list_objects(array("class" => CL_ML_LIST))),
-			"name" => $ob["name"],
-			"reforb" => $this->mk_reforb("submit", array("id" => $id, "return_url" => urlencode($return_url)))
-		));
-
-		return $this->parse();
+		return $rt;
 	}
 
 	////

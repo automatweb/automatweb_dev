@@ -1,0 +1,23 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>lists</name>
+            <type>objpicker</type>
+            <clid>CL_ML_LIST</clid>
+            <multiple>1</multiple>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Listid</caption>
+      </property>
+      <property>
+            <name>result_table</name>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <group>general</group>
+            <caption>Tabel</caption>
+      </property>
+</properties>
+
