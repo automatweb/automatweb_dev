@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.8 2002/11/22 17:24:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.9 2002/11/26 12:36:43 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -17,7 +17,8 @@ class htmlclient extends aw_template
 		$this->style2 = "chformrightcol";
 		$this->style_subheader = "chformsubheader";
 		$this->style_content = "chformrightcol";
-		$this->html = get_instance("html");
+
+		$this->start_output();
 	}
 
 
@@ -40,7 +41,7 @@ class htmlclient extends aw_template
 			foreach($args["items"] as $el)
 			{
 				$this->mod_property(&$el);
-				$res .= $this->html->draw($el);
+				$res .= $this->draw_element($el);
 			};
 			$args["value"] = $res;
 			$args["type"] = "text";
@@ -84,13 +85,13 @@ class htmlclient extends aw_template
 				// default to deactive
 				$args["value"] = 1;
 			};
-			$val .= $this->html->radiobutton(array(
+			$val .= html::radiobutton(array(
 						"name" => $args["name"],
 						"value" => 2,
 						"checked" => ($args["value"] == 2),
 						"caption" => "Aktiivne",
 			));
-			$val .= $this->html->radiobutton(array(
+			$val .= html::radiobutton(array(
 						"name" => $args["name"],
 						"value" => 1,
 						"checked" => ($args["value"] == 1),
@@ -107,7 +108,7 @@ class htmlclient extends aw_template
 
 		if ($args["type"] == "colorpicker")
 		{
-			$val .= $this->html->textbox(array(
+			$val .= html::textbox(array(
 					"name" => $args["name"],
 					"size" => 7,
 					"maxlength" => 7,
@@ -132,7 +133,7 @@ class htmlclient extends aw_template
 
 			$tx = "<a href=\"javascript:colorpicker('$args[name]')\">Vali</a>";
 	
-			$val .= $this->html->text(array("value" => $script . $tx));
+			$val .= html::text(array("value" => $script . $tx));
 			$args["value"] = $val;
 		};
 	}
@@ -145,7 +146,7 @@ class htmlclient extends aw_template
 		$this->res .= "</td>\n";
 
 		$this->res.= "\t<td class='" . $this->style2 . "'>";
-		$this->res .= $this->html->draw($args);
+		$this->res .= $this->draw_element($args);
 		$this->res .= "</td>\n";
 		$this->res .= "</tr>\n";
 	}
@@ -189,6 +190,72 @@ class htmlclient extends aw_template
 	function get_result()	
 	{
 		return $this->res;
+	}
+
+	function draw_element($args = array())
+	{
+		$tmp = new aw_array($args);
+		$arr = $tmp->get();
+
+		// Check the types and call their counterparts
+		// from the HTML class. If you want to support
+		// a new object type, this is where you will have
+		// to register it.
+		switch($args["type"])
+		{
+			case "select":
+				$retval = html::select($arr);
+				break;
+
+			case "textbox":
+				$retval = html::textbox($arr);
+				break;
+
+			case "textarea":
+				$retval = html::textarea($arr);
+				break;
+
+			case "password":
+				$retval = html::password($arr);
+				break;
+
+			case "hidden":
+				$retval = html::hidden($arr);
+				break;
+
+			case "fileupload":
+				$retval = html::fileupload($arr);
+				break;
+
+			case "checkbox":
+				$retval = html::checkbox($arr);
+				break;
+
+			case "radiobutton":
+				$retval = html::radiobutton($arr);
+				break;
+
+			case "submit":
+				$retval = html::submit($arr);
+				break;
+
+			case "time_select":
+				$retval = html::time_select($arr);
+				break;
+
+			case "img":
+				$retval = html::img($arr);
+				break;
+
+			case "href":
+				$retval = html::href($arr);
+				break;
+
+			default:
+				$retval = html::text($arr);
+				break;
+		};
+		return $retval;
 	}
 };
 ?>
