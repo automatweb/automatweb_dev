@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/css.aw,v 1.2 2004/11/15 16:03:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/css.aw,v 1.3 2004/12/01 10:59:45 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 /*
 
@@ -329,6 +329,16 @@ class css extends class_base
 				if ($key == "border")
 				{
 					$has_border = true;
+					$retval .= "\tborder: $data[border]px solid ";
+					if (trim($data["bordercolor"]) != "")
+					{
+						if ($data["bodercolor"]{0} != "#")
+						{
+							$retval .= "#";
+						}
+						$retval .= "$data[bordercolor]";
+					}
+					$retval .= ";\n";
 				}
 			};
 		}
