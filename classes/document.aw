@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.179 2003/05/13 15:17:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.180 2003/05/15 14:46:35 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -23,13 +23,13 @@ class document extends aw_template
 		// see on selleks, kui on vaja perioodilisi dokumente naidata
 		$this->period = $period;
 		
-		$this->style_engine = get_instance("aw_style");
 		$this->lc_load("document","lc_document");
 		lc_load("definition");
 			
+		$this->style_engine = get_instance("aw_style");
 		// this takes less than 0.1 seconds btw
 		$xml_def = $this->get_file(array("file" => $this->cfg["basedir"]."/xml/documents/defaults.xml"));
-	    if ($xml_def)
+		if ($xml_def)
 		{
 			$this->style_engine->define_styles($xml_def);
 		}
@@ -79,6 +79,7 @@ class document extends aw_template
 			"Jrk Esileht parem" => "frontpage_right_jrk",
 			"no_last" => "no_last",
 			"Dok. cache" =>  "dcache",
+			"Moreinfo" => "moreinfo",
 		);
 
 		// nini. siia paneme nyt kirja v2ljad, mis dokumendi metadata juures kirjas on
@@ -997,6 +998,7 @@ class document extends aw_template
 			setlocale(LC_CTYPE, $old_loc);
 		}
 		classload("image");
+	
 		$this->vars(array(
 			"page_title" => ($pagetitle != "" ? $pagetitle : strip_tags($title)),
 			"title"	=> $title,
@@ -1323,8 +1325,8 @@ class document extends aw_template
 
 		if ($data["clear_styles"] == 1)
 		{
-			$data["content"] = strip_tags($data["content"], "<b>,<i>,<u>,<p><ul><li><ol>");
-			$data["lead"] = strip_tags($data["lead"], "<b>,<i>,<u>,<p><ul><li><ol>");
+			$data["content"] = strip_tags($data["content"], "<b>,<i>,<u>,<p>,<ul><li><ol>");
+			$data["lead"] = strip_tags($data["lead"], "<b>,<i>,<u>,<p>,<ul><li><ol>");
 		}
 
 		if ($data["status"] == 0)
@@ -1342,7 +1344,7 @@ class document extends aw_template
 		// nende sisu, mida vormis kasutati
 		while(list($fcap,$fname) = each($this->knownfields)) 
 		{
-			if (isset($data[$fname]) || $fname=="esilehel" || $fname=="esileht_yleval" || $fname=="esilehel_uudis" || $fname=="is_forum" || $fname=="lead_comments" || $fname=="showlead" || $fname=="yleval_paremal" || $fname == "show_title" || $fname=="copyright" || $fname == "show_modified" || $fname == "title_clickable" || $fname == "newwindow" || $fname == "no_right_pane" || $fname == "no_left_pane" || $fname == "no_search" || $fname == "frontpage_left" || $fname == "frontpage_center" || $fname == "frontpage_center_bottom" || $fname == "frontpage_right" || $fname == "no_last")  
+			if (isset($data[$fname]) || $fname=="esilehel" || $fname=="esileht_yleval" || $fname=="esilehel_uudis" || $fname=="is_forum" || $fname=="lead_comments" || $fname=="showlead" || $fname=="yleval_paremal" || $fname == "show_title" || $fname=="copyright" || $fname == "show_modified" || $fname == "title_clickable" || $fname == "newwindow" || $fname == "no_right_pane" || $fname == "no_left_pane" || $fname == "no_search" || $fname == "frontpage_left" || $fname == "frontpage_center" || $fname == "frontpage_center_bottom" || $fname == "frontpage_right" || $fname == "no_last" || $fname == "moreinfo")  
 			{
 				$q_parts[] = "$fname = '$data[$fname]'";
 				// paneme v?ljade nimed ka kirja, et formeerida logi
@@ -1350,7 +1352,7 @@ class document extends aw_template
 				$changed_fields[] = $fcap;
 			};
 		};
-		
+
 		// siin paneme muutmise kuup2eva ka kirja. trikk on sellest et dokul on v2li "tm", kuhu saab k2sici kirjutada muutmise kuup2eva. 
 		// vot. nyt kui seal on midagi, siis teeme sellest timestampi ja paneme selle documents::modified sisse kirja. 
 		// kui tm on aga tyhi, siis paneme documents::tm sisse praeguse kellaaja.
@@ -1957,6 +1959,7 @@ class document extends aw_template
 											"referer" => $meta["referer"],
 											"refopts" => $this->picker($meta["refopt"],$this->refopts),
 											"dcache" => checked($meta["dcache"]),
+											"moreinfo" => $document["moreinfo"],
 											));
 
 
