@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.18 2001/11/19 06:35:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.19 2001/11/19 14:35:27 cvs Exp $
 global $orb_defs;
 $orb_defs["forum"] = "xml";
 lc_load("msgboard");
@@ -750,7 +750,7 @@ class forum extends aw_template
 			"cnt" => (int)$this->comments[$args["oid"]],
 			"topic_link" => $topic_link,
 			"NEW_MSGS" => $mark,
-			"rate" => (int)$rate,
+			"rate" => (floor(($rate*10)+0.5)/10),
 			"DELETE" => ($this->prog_acl("view",PRG_MENUEDIT) ? $this->parse("DELETE") : "")
 		));
 		$even = ($this->topic_count % 2);
