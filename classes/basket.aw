@@ -323,8 +323,9 @@ class basket extends aw_template
 		));
 
 		// write order to db
-		$this->db_query("INSERT INTO basket_orders(id, of_entry, t_price, basket_id) 
-			VALUES('$order_id', '$finst->entry_id','$t_price','$id')");
+		$vurl = $this->mk_my_orb("change", array("id" => $order_id), "basket_order");
+		$this->db_query("INSERT INTO basket_orders(id, of_entry, t_price, basket_id, view_url) 
+			VALUES('$order_id', '$finst->entry_id','$t_price','$id','$vurl')");
 		foreach($basket["items"] as $iid => $icnt)
 		{
 			$this->db_query("INSERT INTO basket_order2item(order_id, item_id, cnt, it_price, form_id) 
