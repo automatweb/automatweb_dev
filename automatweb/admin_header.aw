@@ -7,10 +7,22 @@ classload("timer","aw_template","defs","users","objects","languages");
 
 // there is no need to do aw_startup() here, it will probably do bad things anyway
 
+// reset aw_cache_* function globals
+$GLOBALS["__aw_cache"] = array();
+
+classload("defs");
+_aw_global_init();
+
 $u = new users;
 $u->request_startup();
 $l = new languages;
 $l->request_startup();
+
+global $LC;
+
+@include($GLOBALS["cfg"]["__default"]["basedir"]."/lang/" . $LC . "/errors.".$GLOBALS["cfg"]["__default"]["ext"]);
+@include($GLOBALS["cfg"]["__default"]["basedir"]."/lang/" . $LC . "/common.".$GLOBALS["cfg"]["__default"]["ext"]);
+
 
 //aw_startup();
 

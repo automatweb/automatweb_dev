@@ -353,6 +353,12 @@ function aw_startup()
 //	list($micro,$sec) = split(" ",microtime());
 //	$ts_s = $sec + $micro;
 
+	// reset aw_cache_* function globals
+	$GLOBALS["__aw_cache"] = array();
+
+	classload("defs");
+	_aw_global_init();
+
 	$l = get_instance("languages");
 	$l->request_startup();
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.52 2002/10/16 13:55:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.53 2002/10/20 16:49:14 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -633,112 +633,91 @@ if (!defined("DEFS"))
 	// and yeah. we shouldn't need these before aw_startup() and we could init it in there.. - terryf
 	function &_aw_global_init()
 	{
-		global $aw_globals_instance;
-		if (!is_object($aw_globals_instance))
+		// reset aw_global_* function globals
+		$GLOBALS["__aw_globals"] = array();
+
+		// import CGI spec variables and apache variables
+
+		// but we must do this in a certain order - first the global vars, then the session vars and then the server vars
+		// why? well, then you can't override server vars from the url.
+
+		// known variables - these can be modified by the user and are not to be trusted, so we get them first 
+		$impvars = array("lang_id","tafkap","DEBUG","no_menus","section","class","action","fastcall","reforb","set_lang_id","admin_lang","admin_lang_lc","LC","period","oid","print","sortby","sort_order");
+		foreach($impvars as $k)
 		{
-			classload("dummy");
-			$aw_globals_instance = new dummy();
-			// import CGI spec variables and apache variables
+			aw_global_set($k,$GLOBALS[$k]);
+		}
 
-			// but we must do this in a certain order - first the global vars, then the session vars and then the server vars
-			// why? well, then you can't override server vars from the url.
-
-			// known variables - these can be modified by the user and are not to be trusted, so we get them first 
-			$impvars = array("lang_id","tafkap","DEBUG","no_menus","section","class","action","fastcall","reforb","set_lang_id","admin_lang","admin_lang_lc","LC","period","oid","print","sortby","sort_order");
-			foreach($impvars as $k)
+		// SESSION vars - these cannot be modified by the user except through aw, so they are relatively trustworthy
+		if (is_array($GLOBALS["HTTP_SESSION_VARS"]))
+		{
+			foreach($GLOBALS["HTTP_SESSION_VARS"] as $k => $v)
 			{
-				aw_global_set($k,$GLOBALS[$k]);
-			}
-
-			// SESSION vars - these cannot be modified by the user except through aw, so they are relatively trustworthy
-			if (is_array($GLOBALS["HTTP_SESSION_VARS"]))
-			{
-				foreach($GLOBALS["HTTP_SESSION_VARS"] as $k => $v)
-				{
-					aw_global_set($k,$v);
-				}
-			}
-			aw_global_set("uid", $GLOBALS["HTTP_SESSION_VARS"]["uid"]);
-
-			// server vars - these can be trusted pretty well, so we do these last
-			$server = array("SERVER_SOFTWARE", "SERVER_NAME", "GATEWAY_INTERFACE", "SERVER_PROTOCOL", "SERVER_PORT","REQUEST_METHOD",  "PATH_TRANSLATED","SCRIPT_NAME", "QUERY_STRING", "REMOTE_ADDR", "HTTP_ACCEPT","HTTP_ACCEPT_CHARSET", "HTTP_ACCEPT_ENCODING", "HTTP_ACCEPT_LANGUAGE", "HTTP_CONNECTION", "HTTP_HOST", "HTTP_REFERER", "HTTP_USER_AGENT","REMOTE_PORT","SCRIPT_FILENAME", "SERVER_ADMIN", "SERVER_PORT", "SERVER_SIGNATURE", "PATH_TRANSLATED", "SCRIPT_NAME", "REQUEST_URI", "PHP_SELF", "DOCUMENT_ROOT", "PATH_INFO", "SERVER_ADDR", "HTTP_X_FORWARDED_FOR");
-			foreach($server as $var)
-			{
-				aw_global_set($var,$GLOBALS["HTTP_SERVER_VARS"][$var]);
+				aw_global_set($k,$v);
 			}
 		}
-		return $aw_globals_instance;
+		aw_global_set("uid", $GLOBALS["HTTP_SESSION_VARS"]["uid"]);
+
+		// server vars - these can be trusted pretty well, so we do these last
+		$server = array("SERVER_SOFTWARE", "SERVER_NAME", "GATEWAY_INTERFACE", "SERVER_PROTOCOL", "SERVER_PORT","REQUEST_METHOD",  "PATH_TRANSLATED","SCRIPT_NAME", "QUERY_STRING", "REMOTE_ADDR", "HTTP_ACCEPT","HTTP_ACCEPT_CHARSET", "HTTP_ACCEPT_ENCODING", "HTTP_ACCEPT_LANGUAGE", "HTTP_CONNECTION", "HTTP_HOST", "HTTP_REFERER", "HTTP_USER_AGENT","REMOTE_PORT","SCRIPT_FILENAME", "SERVER_ADMIN", "SERVER_PORT", "SERVER_SIGNATURE", "PATH_TRANSLATED", "SCRIPT_NAME", "REQUEST_URI", "PHP_SELF", "DOCUMENT_ROOT", "PATH_INFO", "SERVER_ADDR", "HTTP_X_FORWARDED_FOR");
+		foreach($server as $var)
+		{
+			aw_global_set($var,$GLOBALS["HTTP_SERVER_VARS"][$var]);
+		}
+		$GLOBALS["__aw_globals_inited"] = true;
 	}
 
 	////
 	// !this function replaces php's GLOBAL - it keeps global variables in a global object instance
 	// why is this? well, because then they can't be set from the url, overriding the default values
 	// and causing potential security problems
-	function &aw_global_get($var)
+	function aw_global_get($var)
 	{
-		$inst =& _aw_global_init(); 
-		return $inst->vars[$var];
+		return $GLOBALS["__aw_globals"][$var];
 	}
 
 	function aw_global_set($var,$val)
 	{
-		$inst =& _aw_global_init(); 
-		$inst->vars[$var] = $val;
-	}
-
-	function &_aw_cache_init()
-	{
-		global $aw_caches_instance;
-		if (!is_object($aw_caches_instance))
-		{
-			classload("dummy");
-			$aw_caches_instance = new dummy();
-		}
-		return $aw_caches_instance;
+		$GLOBALS["__aw_globals"][$var] = $val;
 	}
 
 	////
 	// !this replaces global caches - if you use this function, then cache contents cannot be overriden from the url
-	function &aw_cache_get($cache,$key)
+	function aw_cache_get($cache,$key)
 	{
-		$inst =& _aw_cache_init();
-		return $inst->caches[$cache][$key];
+		return $GLOBALS["__aw_cache"][$cache][$key];
 	}
 
 	function aw_cache_set($cache,$key,$val = "")
 	{
-		$inst =& _aw_cache_init();
 		// if $key is array, we will just stick it into the cache
 		if (is_array($key))
 		{
-			$inst->caches[$cache] = $key;
+			$GLOBALS["__aw_cache"][$cache] = $key;
 		}
 		else
 		{
-			$inst->caches[$cache][$key] = $val;
+			$GLOBALS["__aw_cache"][$cache][$key] = $val;
 		};
 	}
 
 	function aw_cache_flush($cache)
 	{
-		$inst =& _aw_cache_init();
-		$inst->caches[$cache] = false;
+		$GLOBALS["__aw_cache"][$cache] = false;
 	}
 
 	////
 	// !this returns the entire cache array - this is useful for instance if you want to iterate over the cache
 	function aw_cache_get_array($cache)
 	{
-		$inst =& _aw_cache_init();
-		return $inst->caches[$cache];
+		return $GLOBALS["__aw_cache"][$cache];
 	}
 
 	////
 	// !this is for initializing the cache
 	function aw_cache_set_array($cache,$arr)
 	{
-		$inst =& _aw_cache_init();
-		$inst->caches[$cache] = $arr;
+		$GLOBALS["__aw_cache"][$cache] = $arr;
 	}
 
 	////
