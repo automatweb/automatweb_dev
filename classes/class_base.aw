@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.265 2004/05/03 11:25:17 duke Exp $
+// $Id: class_base.aw,v 2.266 2004/05/06 12:38:26 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -182,6 +182,7 @@ class class_base extends aw_template
 	function change($args = array())
 	{
 		global $awt;
+
 		$awt->start("cb-change");
 		$this->init_class_base();
 
@@ -1893,20 +1894,23 @@ class class_base extends aw_template
 				// calls on it .. and then get the results and inject those
 				// into my output stream. Uh, that's going to be hard.
 
+
 				$_all_props = $cfgu->load_properties(array(
 					"file" => basename($val["sclass"]),
 					"filter" => $filter,
 				));
 
 				// and how I get the class_instance?
-				$clx_name = "crm/" . $val["sclass"];
+				$clx_name = $val["sclass"];
+				//$clx_name = "crm/" . $val["sclass"];
 				$clx_inst = get_instance($clx_name);
 
 				$clx_inst->orb_class = $clx_name;
 				$clx_inst->init_class_base();
 
 				// this needs to change the form method, urk, urk
-				$clx_inst->request = $this->request[$val["name"]];
+				//$clx_inst->request = $this->request[$val["name"]];
+				$clx_inst->request = $_REQUEST[$val["name"]];
 
 				$xprops = $clx_inst->parse_properties(array(
 					"properties" => $_all_props,
@@ -3276,8 +3280,6 @@ class class_base extends aw_template
 				"id" => $arr["cfgform_id"],
 			));
 
-
-
 			// if there is a bug in config form which caused the groupdata
 			// to be empty, then this is the place where we should fix it.	
 		}
@@ -3337,7 +3339,7 @@ class class_base extends aw_template
 					$cfg_props = $this->load_from_storage(array(
 						"id" => $found_form,
 					));
-
+			
 					global $CFG_DEBUG;
 					if ($CFG_DEBUG)
 					{
@@ -3638,6 +3640,10 @@ class class_base extends aw_template
 				if ($orig_groups[$gkey]["submit"])
 				{
 					$gval["submit"] = $orig_groups[$gkey]["submit"];
+				};
+				if ($orig_groups[$gkey]["tabgroup"])
+				{
+					$gval["tabgroup"] = $orig_groups[$gkey]["tabgroup"];
 				};
 				$tmp[$gkey] = $gval;
 			};
