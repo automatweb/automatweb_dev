@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.35 2002/01/11 00:37:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.36 2002/01/11 00:42:48 duke Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 global $orb_defs;
@@ -986,7 +986,7 @@ class forum extends aw_template
 			FROM comments WHERE board_id = '$board'","cnt");
 		$this->mk_links(array("board" => $board));
 		
-		if (not($subj && preg_match("/Re:/i",$args["subj"])))
+		if ($subj && not(preg_match("/Re:/i",$args["subj"])))
 		{
 			$subj = "Re: " . $subj;
 		};
