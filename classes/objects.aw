@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.25 2002/01/07 16:37:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.26 2002/01/07 18:52:57 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 
 global $orb_defs;
@@ -288,7 +288,7 @@ class db_objects extends aw_template
 		};
 
 		$this->read_template("pick.tpl");
-		$this->vars(array("search" => "pickobject.".$GLOBALS["ext"]."?type=search&docid=".$docid));
+		$this->vars(array("search" => "pickobject.".$GLOBALS["ext"]."?docid=".$docid));
 		$this->listall_types($parent,$this->typearr2);
 		$lines = "";
 		$count = 0;
