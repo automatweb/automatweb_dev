@@ -42,10 +42,5 @@
       <classinfo>
             <syslog_type>ST_FLASH</syslog_type>
       </classinfo>
-      <groupinfo>
-            <general>
-                  <caption>Üldine</caption>
-            </general>
-      </groupinfo>
 </properties>
 
