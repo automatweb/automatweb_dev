@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.20 2001/11/20 13:40:23 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.21 2001/11/29 22:07:03 duke Exp $
 // klass piltide manageerimiseks
 global $orb_defs;
 $orb_defs["images"] = array("new"						=> array("function"	=> "add",		"params"	=> array("parent")),
@@ -92,8 +92,7 @@ class images extends aw_template
 			"link" => $arr["link"], 
 			"newwindow" => $arr["newwindow"]
 		));
-		# niet pilte saab siis lisada ainult dokude sisse....
-		return $this->mk_my_orb("change", array("id" => $arr["parent"]),"document");
+		return $this->mk_my_orb("list_aliases", array("id" => $arr["parent"]),"aliasmgr");
 	}
 
 	function change($arr)
