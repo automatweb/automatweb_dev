@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.41 2003/02/03 16:15:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.42 2003/02/11 17:05:13 duke Exp $
 // image.aw - image management
 /*
 	@default group=general
@@ -136,7 +136,7 @@ class image extends class_base
 				{
 					$replacement = localparse($tpls["image_linked"],$vars);
 				}
-				else
+				else if (!$this->cfg["no_default_template"])
 				{
 					if ($idata["comment"] != "")
 					{
@@ -168,7 +168,7 @@ class image extends class_base
 				{
 					$replacement = localparse($tpls[$tpl],$vars);
 				}
-				else
+				else if (!$this->cfg["no_default_template"])
 				{
 					if ($idata["comment"] != "")
 					{
