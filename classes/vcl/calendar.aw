@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.14 2004/04/06 09:51:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.15 2004/05/06 12:31:45 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -608,15 +608,13 @@ class vcalendar extends aw_template
 		$now = date("Ymd");
 
 		$active_day = aw_global_get("date");
-		list($d,$m,$y) = explode("-",aw_global_get("date"));
+		if (empty($active_day))
+		{
+			$active_day = date("d-m-Y");
+		};
+		list($d,$m,$y) = explode("-",$active_day);
 		$act_tm = mktime(0,0,0,$m,$d,$y);
 		$act_stamp = date("Ymd",$act_tm);
-		
-		$subs = array_flip($this->get_subtemplates_regex("(cell.*)"));
-
-		print "<pre>";
-		print_r($this->styles);
-		print "</pre>";
 
 		// modes
 		//  0: day with events
@@ -630,6 +628,48 @@ class vcalendar extends aw_template
 		// minical_cell_today - day_today
 		// minical_cell_deact  - deactiv (outside teh current range) - day_deactive
 
+		$style_day_with_events = "minical_cellact";
+		if (isset($this->styles["minical_day_with_events"]))
+		{
+			$style_day_with_events = $this->styles["minical_day_with_events"];
+		};
+
+		$style_day_without_events = "minical_cell";
+		if (isset($this->styles["minical_day_without_events"]))
+		{
+			$style_day_without_events = $this->styles["minical_day_without_events"];
+		};
+		
+		$style_day_active = "minical_cellselected";
+		if (isset($this->styles["minical_day_active"]))
+		{
+			$style_day_active = $this->styles["minical_day_active"];
+		};
+		
+		$style_day_deactive = "minical_cell_deact";
+		if (isset($this->styles["minical_day_deactive"]))
+		{
+			$style_day_deactive = $this->styles["minical_day_deactive"];
+		};
+		
+		$style_day_today = "minical_cell_today";
+		if (isset($this->styles["minical_day_today"]))
+		{
+			$style_day_today = $this->styles["minical_day_today"];
+		};
+
+		$style_title = "minical_table";
+		if (isset($this->styles["minical_title"]))
+		{
+			$style_title = $this->styles["minical_title"];
+		};
+		
+		$style_background = "minical_table";
+		if (isset($this->styles["minical_background"]))
+		{
+			$style_background = $this->styles["minical_background"];
+		};
+
 		$j = $realstart;
 		while($j <= $realend)
 		{
@@ -638,24 +678,24 @@ class vcalendar extends aw_template
 			{
 				$dstamp = date("Ymd",$i);
 				$has_events = $this->overview_items[$dstamp];
-				$style = $has_events ? "minical_cellact" : "minical_cell";
+				$style = $has_events ? $style_day_with_events : $style_day_without_events;
 				if (between($i,$arr["start"],$arr["end"]))
 				{
 					$mode = 0;
 					// if a day has no events and "cell_empty" sub is defined, use it.
-					if (empty($has_events) && isset($subs["cell_empty"]))
+					if (empty($has_events))
 					{
 						$mode = 1;
 					};
 
 					if ($act_stamp == $dstamp)
 					{
-						$style = "minical_cellselected";
+						$style = $style_day_active;
 					};
 
 					if ($now == $dstamp)
 					{
-						$style = "minical_cell_today";
+						$style = $style_day_today;
 					};
 				}
 				else
@@ -663,7 +703,7 @@ class vcalendar extends aw_template
 					// cells outside the current range will always be drawn with
 					// this subtemplate
 					$mode = 2;
-					$style = "minical_cell_deact";
+					$style = $style_day_deactive;
 				};
 
 				if (!empty($this->overview_urls[$dstamp]))
@@ -710,8 +750,18 @@ class vcalendar extends aw_template
 		$caption =  get_est_month(date("m",$arr["timestamp"])) . " " . date("Y",$arr["timestamp"]);
 
 		$caption_url = aw_url_change_var(array("viewtype" => "month","date" => date("d-m-Y",$arr["timestamp"])));
-		$caption = "<div class='minical_table'><a href='$caption_url'>$caption</a></a>";
-		return $caption . "<table border=0 cellspacing=0 cellpadding=0><tr><td class='aw04kalendermini'><table border=0 cellpadding=0 cellspacing=1>" . $w . "</table></td></tr></table>";
+
+		$prev_url = aw_url_change_var(array(
+			"viewtype" => "month",
+			"date" => date("d-m-Y",mktime(0,0,0,$m-1,$d,$y)),
+		));
+		
+		$next_url = aw_url_change_var(array(
+			"viewtype" => "month",
+			"date" => date("d-m-Y",mktime(0,0,0,$m+1,$d,$y)),
+		));
+		$caption = "<div class='$style_title'><a href='$prev_url'>&lt;&lt;</a> <a href='$caption_url'>$caption</a> <a href='$next_url'>&gt;&gt;</a>";
+		return $caption . "<table border=0 cellspacing=0 cellpadding=0 width='100%'><tr><td class='$style_background'><table border=0 cellpadding=0 cellspacing=1 width='100%'>" . $w . "</table></td></tr></table>";
 	}
 
 	function draw_event($evt)
