@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.244 2004/03/30 14:40:35 duke Exp $
+// $Id: class_base.aw,v 2.245 2004/03/31 13:31:09 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -3179,6 +3179,8 @@ class class_base extends aw_template
 					};
 				}
 
+				// gruppides ei muutu mitte midagi
+
 				// use it, if we found one, otherwise fall back to defaults
 				if (is_oid($found_form) && $this->can("view",$found_form))
 				{
@@ -3186,6 +3188,7 @@ class class_base extends aw_template
 						"id" => $found_form,
 					));
 				};
+
 			};
 		};
 
@@ -3253,13 +3256,16 @@ class class_base extends aw_template
 
 		};
 
-
 		$this->prop_by_group = array();
 
 		// I need to create a remap map for groups .. but that is only a comfortability 
 		// feature. I don't really _need_ to do this.
-		// Leave out properties that are not listed in the class property declaration
 		$tmp = array();
+
+		$property_groups = array();
+
+		// do it 2 cycles, first figure out which groups have properties
+		// so that I can select a new default group
 		foreach($cfg_props as $key => $val)
 		{
 			// ignore properties that are not defined in the defaults
@@ -3289,7 +3295,65 @@ class class_base extends aw_template
 			{
 				$propgroups[] = $propdata["group"];
 			};
+
+			$x_tmp = $propgroups;
+
+			foreach($x_tmp as $pkey)
+			{
+				if ($rgroupmap[$pkey])
+				{
+					$propgroups[] = $rgroupmap[$pkey];
+				};
+			};
+
 			$this->prop_by_group = array_merge($this->prop_by_group,array_flip($propgroups));
+			$property_groups[$key] = $propgroups;
+		};
+
+		// now - if the requested group is empty, then set the active group to the next
+		// possible group. I do this by scanning $this->groupinfo
+		if (	!isset($this->prop_by_group[$use_group]) &&
+			( (!empty($this->parent_group) && empty($this->prop_by_group[$this->parent_group])) || empty($this->parent_group)))
+		{
+			$found = false;
+			foreach($this->groupinfo as $_key => $_val)
+			{
+				if (!$found && isset($this->prop_by_group[$_key]))
+				{
+					$found = true;
+					$use_group = $_key;
+					if ($rgroupmap[$use_group])
+					{
+						$this->parent_group = $rgroupmap[$use_group];
+					}
+					elseif (isset($groupmap[$use_group][0]))
+					{
+						$this->parent_group = $use_group;
+						$use_group = $groupmap[$use_group][0];
+
+					};
+					$this->use_group = $use_group;
+				};
+			};
+		};
+
+
+		// I need to split this thing
+		foreach($cfg_props as $key => $val)
+		{
+			// ignore properties that are not defined in the defaults
+			if (!$all_properties[$key])
+			{
+				continue;
+			};
+
+			if ($val["display"] == "none")
+			{
+				continue;
+			};
+
+			$propdata = array_merge($all_properties[$key],$val);
+			$propgroups = $property_groups[$key];
 
 			// skip anything that is not in the active group
 			if (!in_array($use_group,$propgroups))
