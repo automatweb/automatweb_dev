@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.9 2004/09/24 09:29:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.10 2004/10/07 21:31:36 kristo Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -78,6 +78,8 @@ class calendar_view extends class_base
 			"tpldir" => "calendar/calendar_view",
 			"clid" => CL_CALENDAR_VIEW
 		));
+		
+		lc_site_load("calendar_view",&$this);
 	}
 
 	function get_property($arr)
@@ -237,6 +239,7 @@ class calendar_view extends class_base
 	{
 		// alright .. this function needs to accept an object id from which to ask events
 		$range = $arr["range"];
+		$arr["cal_inst"]->vars($this->vars);
 		if (is_oid($arr["oid"]))
 		{
 			$obj = new object($arr["oid"]);
@@ -261,7 +264,6 @@ class calendar_view extends class_base
 		}
 		else
 		{
-
 			$conns = $arr["obj_inst"]->connections_from(array(
 				"type" => RELTYPE_EVENT_SOURCE,
 			));
@@ -290,11 +292,11 @@ class calendar_view extends class_base
 		};
 	}
 
+	// common interface for getting events out of any class that can contain events
+	// probably should not even be in this class
 	function get_events_from_object($arr)
 	{
 		$events = array();
-		// so, how do I get events from that calendar now?
-		// no matter HOW, that function needs to accept range arguments
 		$o = $arr["obj_inst"];
 		$range = $arr["range"];
 		if ($o->class_id() == CL_PLANNER)
@@ -428,6 +430,8 @@ class calendar_view extends class_base
 			$range_p["viewtype"] = "last_events";
 			$range_p["type"] = "last_events";
 		}
+
+		
 		$range = $vcal->get_range($range_p);
 
 		// this cycle creates the "big" calendar, minicalendar is done in the 
@@ -439,6 +443,12 @@ class calendar_view extends class_base
 			"range" => $range,
 			"status" => $arr["status"],
 		);
+
+		if ($use_template == "last_events")
+		{
+			$exp_args["limit_events"] = $this->obj_inst->prop("num_next_events");
+		};
+
 
 		if ($arr["obj_inst"])
 		{
