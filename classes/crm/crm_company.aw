@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.66 2004/08/18 17:25:21 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.67 2004/08/23 10:27:09 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -357,6 +357,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 
 @reltype PROJECT value=33 clid=CL_PROJECT
 @caption Projekt
+
+@reltype CLIENT_MANAGER value=34 clid=CL_CRM_MANAGER
+@caption Kliendihaldur
 
 @classinfo no_status=1
 			
@@ -2240,59 +2243,71 @@ class crm_company extends class_base
 		}
 	}
 
+	function _org_table_header($tf)
+	{
+		$tf->define_field(array(
+			"name" => "name",
+			"caption" => "Organisatsioon",
+			"sortable" => 1,
+		));
+
+		$tf->define_field(array(
+			"name" => "pohitegevus",
+			"caption" => "Põhitegevus",
+			"sortable" => 1,
+		));
+
+		$tf->define_field(array(
+			"name" => "corpform",
+			"caption" => "Õiguslik vorm",
+			"sortable" => 1,
+		));
+
+		$tf->define_field(array(
+			"name" => "address",
+			"caption" => "Aadress",
+			"sortable" => 1,
+		));
+
+		$tf->define_field(array(
+			"name" => "email",
+			"caption" => "E-post",
+			"sortable" => 1,
+		));
+
+		$tf->define_field(array(
+			"name" => "url",
+			"caption" => "WWW",
+			"sortable" => 1,
+		));
+
+		$tf->define_field(array(
+			"name" => "phone",
+			"caption" => 'Telefon',
+		));
+
+		$tf->define_field(array(
+			"name" => "ceo",
+			"caption" => "Juht",
+			"sortable" => 1,
+		));
+		
+		$tf->define_field(array(
+			"name" => "rollid",
+			"caption" => "Rollid",
+			"sortable" => 0,
+		));
+
+		$tf->define_chooser(array(
+			"field" => "id",
+			"name" => "check",
+		));
+	}
+
 	function org_table(&$arr, $filter=null)
 	{
 		$tf = &$arr["prop"]["vcl_inst"];
-		$tf->define_field(array(
-                        "name" => "name",
-                        "caption" => "Organisatsioon",
-                        "sortable" => 1,
-                ));
-
-                $tf->define_field(array(
-                        "name" => "pohitegevus",
-                        "caption" => "Põhitegevus",
-                        "sortable" => 1,
-                ));
-
-                $tf->define_field(array(
-                        "name" => "corpform",
-                        "caption" => "Õiguslik vorm",
-                        "sortable" => 1,
-                ));
-
-                $tf->define_field(array(
-                        "name" => "address",
-                        "caption" => "Aadress",
-                        "sortable" => 1,
-                ));
-	
-                $tf->define_field(array(
-                        "name" => "email",
-                        "caption" => "E-post",
-                        "sortable" => 1,
-                ));
-
-                $tf->define_field(array(
-                        "name" => "url",
-                        "caption" => "WWW",
-                        "sortable" => 1,
-                ));
-                $tf->define_field(array(
-                        "name" => "phone",
-                        "caption" => 'Telefon',
-                ));
-
-                $tf->define_field(array(
-                        "name" => "ceo",
-                        "caption" => "Juht",
-                        "sortable" => 1,
-                ));
-
-		$tf->define_chooser(array(
-                        "field" => "id",
-                        "name" => "check",
-                ));
+		$this->_org_table_header(&$tf);
 
 		//will list the companys from the category
 		//if category is selected
@@ -2388,6 +2403,10 @@ class crm_company extends class_base
 					"caption" => $url,
 				)),
 				"email" => $mail,
+				'rollid' => html::href(array(
+									'url' =>aw_url_change_var(array()),
+									'caption' => 'Rollid'
+								)),
 			));
 		}
 	}
@@ -3601,6 +3620,28 @@ class crm_company extends class_base
 		$person->set_prop('work_contact',$work_contact);
 		$person->save();
 		return html::get_change_url($person->id());
+	}
+
+	function get_client_manager($arr)
+	{
+		$manager = $arr['obj_inst']->get_first_conn_by_reltype('RELTYPE_CLIENT_MANAGER');
+		if($manager)
+		{
+			return $manager;
+		}
+		else
+		{
+			$obj = new object();
+			$obj->set_class_id(CL_CRM_MANAGER);
+			$obj->set_parent($arr['obj_inst']->id());
+			$obj->save();
+			$arr['obj_inst']->connect(array(
+					'to' => $obj->id(),
+					'reltype' => 'RELTYPE_CUSTOMER',
+			));
+			
+			return $obj;
+		}
 	}
 }
 ?>
