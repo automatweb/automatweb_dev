@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.39 2001/10/16 04:29:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.40 2001/10/24 09:03:24 cvs Exp $
 // form_entry_element.aw - 
 session_register("clipboard");
 classload("currency");
@@ -97,10 +97,12 @@ lc_load("definition");
 
 			global $lang_id;
 			$html = "";
+			$this->entry .= " ";
 			if ($this->arr["type"] == "textarea")
 			{
 				$src = ($this->form->allow_html) ? $this->entry : htmlspecialchars($this->entry);
-				$src = preg_replace("/((http(s?):\/\/)|(www\.))([\w\.]+)/i", "<a href=\"http$3://$4$5\" target=\"_blank\">$2$4$5</a>", $src);
+				$src = preg_replace("/((http(s?):\/\/)|(www\.))(.+?)\s/i", "<a href=\"http$3://$4$5\" target=\"_blank\">$2$4$5</a>", $src);
+				$src = preg_replace("/(\w*?\@.*\.\w*)/i","<a href=\"mailto:$1\">$1</a>",$src);
 				$html = str_replace("\n","<br>",$src);
 			}
 					
@@ -165,6 +167,8 @@ lc_load("definition");
 			if ($this->arr["type"] == "textbox")
 			{
 				$src = ($this->form->allow_html) ? $this->entry : htmlspecialchars($this->entry);
+				$src = preg_replace("/((http(s?):\/\/)|(www\.))(.+?)\s/i", "<a href=\"http$3://$4$5\" target=\"_blank\">$2$4$5</a>", $src);
+				$src = preg_replace("/(\w*?\@.*)\s/i","<a href=\"mailto:$1\">$1</a>",$src);
 				$html = $src;
 			}
 
@@ -229,9 +233,11 @@ lc_load("definition");
 					}
 					else
 					{
-						$html.="<a target='_new' href='".$row["url"]."'>".$this->arr["flink_text"]."</a>";
+						$linktext = ($this->entry["name"]) ? $this->entry["name"] : $this->arr["flink_text"];
+						$html.="<a target='_new' href='".$row["url"]. "/" . $linktext . "'>".$linktext."</a>";
 					}
 				}
+
 			}
 
 			if ($this->arr["type"] == "link")
