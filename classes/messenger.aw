@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.80 2001/07/03 00:00:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.81 2001/07/03 01:52:23 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -101,7 +101,7 @@ class messenger extends menuedit_light
 	// !And this should be somewhere else as well
 	function pick_folder($args = array())
 	{
-		global $udata;
+		global $udata,$baseurl;
 		$this->read_template("pf.tpl");
 		extract($args);
 		$att = $this->get_object($attach);
@@ -114,7 +114,7 @@ class messenger extends menuedit_light
 		while($row = $this->db_next())
 		{
 			$this->vars(array(
-					"folder" => "<a href='?class=messenger&action=pick_folder&id=$row[oid]&type=popup&attach=$attach&msg_id=$msg_id'>$row[name]</a>",
+					"folder" => "<a href='$baseurl/?class=messenger&action=pick_folder&id=$row[oid]&type=popup&attach=$attach&msg_id=$msg_id'>$row[name]</a>",
 			));
 			$c .= $this->parse("line");
 		};
@@ -275,16 +275,17 @@ class messenger extends menuedit_light
 		// siis just siitkaudu saab seda teha
 		// hm. tegelikult peaks seda kontrolli tegema ka mujal, kus
 		// messengeri poole pöördutakse
+		global $baseurl;
 		if (!isset($this->conf["msg_outbox"]))
 		{
-			$retval = "Initsialiseerin Messengeri<br>";
+			$retval = MSG_INIT;
 			$this->init_messenger();
-			$retval .= "<a href='?class=messenger'>Kliki siia</a>";
+			$retval .= "<a href='$baseurl/?class=messenger'>" . MSG_INIT2 . "</a>";
 			return $retval;
 		};
 
 		$menu = $this->gen_msg_menu(array(
-				"title" => "Folderid",
+				"title" => MSG_TITLE_FOLDERS,
 				"activelist" => array("configure","folders2","flist"),
 				));
 
@@ -351,6 +352,7 @@ class messenger extends menuedit_light
 	{
 		extract($args);
 		$folder = $id;
+		global $baseurl;
 
 		$inbox = $this->user["msg_inbox"];
 
@@ -427,7 +429,7 @@ class messenger extends menuedit_light
 			if ($page > 1)
 			{
 				$prevpage = $page - 1;
-				$pg = "?class=messenger&action=folder&id=$folder&page=$prevpage";
+				$pg = "$baseurl/?class=messenger&action=folder&id=$folder&page=$prevpage";
 				$this->vars(array("pg" => $pg));
 				$prev = $this->parse("prev");
 			};
@@ -435,27 +437,11 @@ class messenger extends menuedit_light
 			if ($page < $pages)
 			{
 				$nextpage = $page + 1;
-				$pg = "?class=messenger&action=folder&id=$folder&page=$nextpage";
+				$pg = "$baseurl/?class=messenger&action=folder&id=$folder&page=$nextpage";
 				$this->vars(array("pg" => $pg));
 				$next = $this->parse("next");
 			};
 				
-			
-			$cp = "";
-			for ($i = 1; $i <= $pages; $i++)
-			{
-				if ($page == $i)
-				{
-					$pg = $i;
-				}
-				else
-				{
-					$pg = "<a href='?class=messenger&action=folder&id=$folder&page=$i'>$i</a>";
-				};
-				$this->vars(array("pg" => $pg));
-				$cp .= $this->parse("page");
-			};
-			
 			$c = "";
 			$cnt = 0;
 
@@ -489,11 +475,11 @@ class messenger extends menuedit_light
 					$subject = $this->MIME_decode($msg["subject"]);
 					if ($args["id"] == $this->conf["msg_draft"])
 					{
-						$msg["subject"] = "<a href='?class=messenger&action=edit&id=$msg[id]'>" . $subject . "</a>";
+						$msg["subject"] = "<a href='$baseurl/?class=messenger&action=edit&id=$msg[id]'>" . $subject . "</a>";
 					}
 					else
 					{
-						$msg["subject"] = "<a href='?class=messenger&action=show&id=$msg[id]'>" . $subject . "</a>";
+						$msg["subject"] = "<a href='$baseurl/?class=messenger&action=show&id=$msg[id]'>" . $subject . "</a>";
 					};
 					$msg["pri"] = ($msg["pri"]) ? $msg["pri"] : 0;
 					$msg["cnt"] = $cnt;
@@ -509,17 +495,25 @@ class messenger extends menuedit_light
 		$dummy2 = array("header" => " - Liiguta - ");
 		// active_folder - selle folderi ID
 		// $id - aktiivne folder
+		$pagelist = array();
+
+		for ($i = 1; $i <= $pages; $i++)
+		{
+			$pagelist[$i] = " - $i - ";
+		};
+
 		$this->vars(array(
 			"line" => $c,
 			"folders_dropdown" => $this->picker("dummy",$dummy + $folder_list),
 			"folders_dropdown2" => $this->picker("dummy",$dummy2 + $folder_list),
 			"active_folder" => $folder,
 			"message_count" => verbalize_number($cnt),
+			"pagelist" => $this->picker($page,$pagelist),
 			"folder_name" => $folder_name,
-			"page" => $cp,
 			"prev" => $prev,
 			"next" => $next,
-			"reforb" => $this->mk_reforb("mailbox_op",array("active_folder" => $args["id"])),
+			"reforb" => $this->mk_reforb("mailbox_op",array("active_folder" => $folder)),
+			"id" => $folder,
 			"menu" => $menu,
 		));
 		return $this->parse();
@@ -574,7 +568,7 @@ class messenger extends menuedit_light
 		};
 		if (!is_array($check))
 		{
-			$status_msg = "Ühtegi teadet polnud märgistatud, seega ei tehtud midagi";
+			$status_msg = MSG_MAILBOX_OP_WARNING;
 		}
 		else
 		{
@@ -591,7 +585,7 @@ class messenger extends menuedit_light
 								"id" => $rcheck,
 								"folder" => $moveto,
 								));
-					$status_msg = "$cnt teadet kustutati";
+					$status_msg = sprintf(MSG_MAILBOX_OP_DELETED,$cnt);
 					break;
 
 				case "move_to":
@@ -599,7 +593,7 @@ class messenger extends menuedit_light
 								"id" => $rcheck,
 								"folder" => $folder,
 								));
-					$status_msg = "$cnt teadet viidi teise folderisse";
+					$status_msg = sprintf(MSG_MAILBOX_OP_MOVED,$cnt);
 					break;
 
 				case "mark_as_read":
@@ -608,7 +602,7 @@ class messenger extends menuedit_light
 								"id" => $rcheck,
 								"folder" => $moveto,
 								));
-					$status_msg = "$cnt teadet märgiti loetuks";
+					$status_msg = sprintf(MSG_MAILBOX_OP_MARKREAD,$cnt);
 					break;
 
 				case "mark_as_new":
@@ -616,11 +610,11 @@ class messenger extends menuedit_light
 								"id" => $rcheck,
 								"status" => MSG_STATUS_UNREAD,
 								));
-					$status_msg = "$cnt teadet märgiti uueks";
+					$status_msg = sprintf(MSG_MAILBOX_OP_MARKNEW,$cnt);
 					break;
 
 				default:
-					$status_msg = "Tundmatu operatsioonikood - $op";
+					$status_msg = sprintf(MSG_MAILBOX_OP_UNKOWN,$op);
 			}
 		};
 		session_register("status_msg");
@@ -962,7 +956,7 @@ class messenger extends menuedit_light
 
 		if (strlen($targets[0]) == 0)
 		{
-			$status_msg = "Ühtegi korrektset aadressi ei leitud. Kontrollige üle";
+			$status_msg = MSG_ADDR_CHECK_FAILED;
 			session_register("status_msg");
 			// bounce back to edit form
 			return $this->mk_site_orb(array(
@@ -1076,7 +1070,7 @@ class messenger extends menuedit_light
 			$fromn = $this->msgconf["msg_pop3servers"][$args["identity"]]["name1"] . " " . $this->msgconf["msg_pop3servers"][$args["identity"]]["surname"];
 			if (!$froma)
 			{
-				print "E-mail address for this account has not been set. Cannot send any messages before you do that";
+				print MSG_FROM_CHECK_FAILED;
 				exit;
 			}
 		}
@@ -1131,6 +1125,7 @@ class messenger extends menuedit_light
 		};
 
 		// noja lopuks siis, saadame meili minema ka
+		global $baseurl;
 		if (is_array($alist) && sizeof($alist) > 0)
 		{
 			foreach($alist as $addr)
@@ -1142,7 +1137,7 @@ class messenger extends menuedit_light
 			}
 			print "<br>";
 			print sizeof($alist) . " kirja saadetud<br>";
-			print "<a href='?class=messenger'>tagasi messengeri</a>";
+			print "<a href='$baseurl/?class=messenger'>tagasi messengeri</a>";
 			exit;
 		}
 		else
@@ -1266,7 +1261,7 @@ class messenger extends menuedit_light
 	{
 		$a2 = ($args["refine"]) ? "refine" : "newsearch";
 		$menu = $this->gen_msg_menu(array(
-				"title" => "Otsing",
+				"title" => MSG_TITLE_SEARCH,
 				"activelist" => array("search",$a2),
 				));
 
@@ -1321,11 +1316,22 @@ class messenger extends menuedit_light
 		for ($i = 0; $i <= 4; $i++)
 		{
 			$chosen = ($checkall) ? -1 : $sconf["field"][$i];
+
+			if ( ($i == 0) && (isset($args["mfrom"])) )
+			{
+				$value = htmlspecialchars(rawurldecode($args["mfrom"]));
+				$value = stripslashes($value);
+			}
+			else
+			{
+				$value = "";
+			};
+
 			$this->vars(array(
 					"idx" => $i,
 					"num" => $i + 1,
 					"fieldlist" => $this->picker($chosen,$this->fields),
-					"value" => $sconf["search"][$i],
+					"value" => (isset($value)) ? $value : $sconf["search"][$i],
 				));
 			$sline .= $this->parse("sline");
 			if ($i < 4)
@@ -1338,6 +1344,7 @@ class messenger extends menuedit_light
 				$sline .= $this->parse("connline");
 			};
 		};
+
 		$this->vars(array(
 			"msg_search_remark" => MSG_SEARCH_REMARK,
 			"sline" => $sline,
@@ -1345,6 +1352,7 @@ class messenger extends menuedit_light
 			"menu" => $menu,
 			"reforb" => $rf,
 		));
+
 		return $this->parse();
 	}
 
@@ -1358,7 +1366,7 @@ class messenger extends menuedit_light
 	{
 		extract($args);
 		$menu = $this->gen_msg_menu(array(
-				"title" => "Otsing",
+				"title" => MSG_TITLE_SEARCH,
 				"activelist" => array("search"),
 				));
 
@@ -1385,7 +1393,7 @@ class messenger extends menuedit_light
 			if ($search[$i - 1])
 			{
 				$qs .= sprintf("(%s LIKE '%%%s%%')",$field[$i - 1], $search[$i - 1]);
-				$quser .= sprintf(" ..väljal <b>%s</b> sisaldub string '%s'",$this->fields[$field[$i - 1]],$search[$i - 1]);
+				$quser .= sprintf(" ..väljal <b>%s</b> sisaldub string '%s'",$this->fields[$field[$i - 1]],stripslashes(htmlspecialchars($search[$i - 1])));
 			};
 
 			if ($search[$i])
@@ -1728,7 +1736,7 @@ class messenger extends menuedit_light
 		// Menüü koostamine
 		$page = ($page) ? $page : "general"; // see viimane kehtib by default
 		$menu = $this->gen_msg_menu(array(
-				"title" => "Messengeri konfigureerimine",
+				"title" => MSG_TITLE_CONFIG,
 				"activelist" => array("configure",$page),
 				));
 
@@ -1916,7 +1924,7 @@ class messenger extends menuedit_light
 						"value" => $this->msgconf,
 		));
 		global $status_msg;
-		$status_msg = "Konfiguratsioonimuudatused on salvestatud";
+		$status_msg = MSG_STATUS_CONFIG_SAVED;
 		session_register("status_msg");
 		return $ret;
 		
@@ -1935,12 +1943,12 @@ class messenger extends menuedit_light
 		if (isset($id))
 		{
 			$vars = $this->msgconf["msg_signatures"][$id];
-			$title = "Muuda signatuuri";
+			$title = MSG_EDIT_SIGNATURE;
 			$this->vars($vars);
 		}
 		else
 		{
-			$title = "Uus signatuur";
+			$title = MSG_NEW_SIGNATURE;
 		};
 		$this->vars(array(
 				"menu" => $menu,
@@ -1980,7 +1988,7 @@ class messenger extends menuedit_light
 						"value" => $this->msgconf,
 					));
 		global $status_msg;
-		$status_msg = (isset($args["id"])) ? "Signatuur on salvestatud" : "Signatuur on lisatud";
+		$status_msg = (isset($args["id"])) ? MSG_STATUS_SIGNATURE_SAVED : MSG_STATUS_SIGNATURE_ADDED;
 		session_register("status_msg");
 		$ref = $this->mk_site_orb(array(
 				"action" => "configure",
@@ -2084,7 +2092,7 @@ class messenger extends menuedit_light
 			$this->db_query($q);
 		};
 		global $status_msg;
-		$status_msg = "Konfiguratsiooni muudatused on salvestatud";
+		$status_msg = MSG_STATUS_CONFIG_SAVED;
 		session_register("status_msg");
 		return $this->mk_site_orb(array(
 			"action" => "configure",
@@ -2162,7 +2170,7 @@ class messenger extends menuedit_light
 		{
 			$pop3conf[] = $confblock;
 			$id = sizeof($pop3conf) - 1;
-			$status_msg = "Konto on lisatud";
+			$status_msg = MSG_STATUS_ACCOUNT_ADDED;
 		}
 		else
 		{
@@ -2172,7 +2180,7 @@ class messenger extends menuedit_light
 				$confblock["default"] = 1;
 			};
 			$pop3conf[$id] = $confblock;
-			$status_msg = "Konto muudatused on salvestatud";
+			$status_msg = MSG_STATUS_ACCOUNT_SAVED;
 		};
 		classload("users");
 		$users = new users();
@@ -2255,7 +2263,7 @@ class messenger extends menuedit_light
 						"parent" => $parent,
 					));
 		};
-		$status_msg = "Received $msg_count messages from $acc_count accounts";
+		$status_msg = sprintf(MSG_STATUS_MAIL_RECEIVED,$msg_count,$acc_count);
 		session_register("status_msg");
 		return $this->mk_my_orb("folder",array());
 	}
@@ -2384,7 +2392,7 @@ class messenger extends menuedit_light
 	function rules($args = array())
 	{
 		$menu = $this->gen_msg_menu(array(
-				"title" => "Reeglid",
+				"title" => MSG_TITLE_RULES,
 				"activelist" => array("configure","rules","list"),
 				));
 		$fields = array("mfrom" => "Kellelt",
@@ -2449,7 +2457,7 @@ class messenger extends menuedit_light
 	function editrule($args = array())
 	{
 		$menu = $this->gen_msg_menu(array(
-				"title" => "Reeglid",
+				"title" => MSG_TITLE_RULES,
 				"activelist" => array("configure","rules","addrule"),
 				));
 
