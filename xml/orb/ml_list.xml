@@ -26,6 +26,15 @@
 			</function>
 		</action>
 
+		<action name="export_members" >
+			<function name="export_members">
+				<arguments>
+					<required name="id" type="int"/>
+					<optional name="filename" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="delete_queue_items" >
 			<function name="delete_queue_items">
 				<arguments>
