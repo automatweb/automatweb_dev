@@ -21,7 +21,7 @@ class basket extends aw_template
 		$this->read_template("add.tpl");
 
 		$ob = get_instance("objects");
-		$fo = get_instance("form");
+		$fo = get_instance("formgen/form");
 
 		$this->vars(array(
 			"ftbls" => $this->picker(0,$this->list_objects(array("class" => CL_FORM_TABLE, "addempty" => true))),
@@ -86,7 +86,7 @@ class basket extends aw_template
 		$this->read_template("add.tpl");
 
 		$oj = get_instance("objects");
-		$fo = get_instance("form");
+		$fo = get_instance("formgen/form");
 
 		$ops = $fo->get_op_list($ob["meta"]["order_form"]);
 
@@ -248,37 +248,12 @@ class basket extends aw_template
 		$tmp = aw_global_get("shop_basket");
 		$basket = $tmp[$this->current_basket_id];
 
-		/*
-		// start drawing the set table
-		if (!$ob["meta"]["ftbl"])
-		{
-			$this->raise_error(ERR_BASKET_NO_TBL_SET, "No form table set for basket $id - can't show basket!", true);
-		}
-
-		// form factory for reading in other forms
-		$ff = get_instance("form");
-
-		// start drawing the basket
-		$ft = get_instance("form_table");
-		$ft->start_table($ob["meta"]["ftbl"]);
-		foreach($basket["items"] as $iid => $icnt)
-		{
-			$fid = $basket["form_ids"][$iid];
-			$finst =& $ff->cache_get_form_instance($fid);
-			$finst->load_entry($iid);
-			$ft->form_for_entry_id = $fid;
-			$ft->row_data_from_form(array($finst));
-		}
-
-		// put this into global scope, so that we can use it in a form controller
-		aw_global_set("cur_price_elements_sum", $ft->get_price_elements_sum());
-*/
 		if (!$ob["meta"]["order_form"])
 		{
 			$this->raise_error(ERR_BASKET_NO_OF_SET,"No order form is selected for basket $id, can't continue!", true);
 		}
 
-		$ff = get_instance("form");
+		$ff = get_instance("formgen/form");
 		$this->vars(array(
 			"basket" => $this->_draw_basket_ft($ob, $basket),//$ft->finalize_table(),
 			"order_form" => $ff->gen_preview(array(
@@ -327,7 +302,7 @@ class basket extends aw_template
 		aw_global_set("cur_price_elements_sum", $t_price);
 
 		// now create the form entry under the order
-		$finst = get_instance("form");
+		$finst = get_instance("formgen/form");
 		$finst->process_entry(array(
 			"id" => $ob["meta"]["order_form"],
 			"parent" => $order_id,
@@ -344,6 +319,15 @@ class basket extends aw_template
 			"subclass" => $id					// save the basket id there so that we can query for it later
 		));
 
+		// write order to db
+		$this->db_query("INSERT INTO basket_orders(id, of_entry, t_price, basket_id) 
+			VALUES('$order_id', '$finst->entry_id','$t_price','$id')");
+		foreach($basket["items"] as $iid => $icnt)
+		{
+			$this->db_query("INSERT INTO basket_order2item(order_id, item_id, cnt, it_price, form_id) 
+				VALUES('$order_id','$iid','$icnt','".$basket["prices"][$iid]."','".$basket["form_ids"][$iid]."')");
+		}
+
 		$mls = explode(",", $ob["meta"]["mail_to"]);
 		if (is_array($mls))
 		{
@@ -351,7 +335,7 @@ class basket extends aw_template
 			$this->read_template("mail.tpl");
 			$its = "";
 
-			$ff = get_instance("form");
+			$ff = get_instance("formgen/form");
 			$ff->load($ob["meta"]["order_form"]);
 			$ff->load_entry($finst->entry_id);
 
@@ -387,7 +371,7 @@ class basket extends aw_template
 			}
 			else
 			{
-				$finst = get_instance("form");
+				$finst = get_instance("formgen/form");
 				$finst->load($ob["meta"]["order_form"]);
 				$htmlmail = $finst->show(array(
 					"id" => $ob["meta"]["order_form"],
@@ -452,17 +436,17 @@ class basket extends aw_template
 		}
 
 		// form factory for reading in other forms
-		$ff = get_instance("form");
+		$ff = get_instance("formgen/form");
 
 		// start drawing the basket
-		$ft = get_instance("form_table");
+		$ft = get_instance("formgen/form_table");
 		$ft->start_table($ob["meta"]["ftbl"]);
 		foreach($basket["items"] as $iid => $icnt)
 		{
 			$fid = $basket["form_ids"][$iid];
 //			unset($finst);
 //			$finst =& $ff->cache_get_form_instance($fid);
-			$finst = get_instance("form");
+			$finst = get_instance("formgen/form");
 			$finst->load($fid);
 			$finst->load_entry($iid);
 			$ft->form_for_entry_id = $fid;
