@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.231 2004/01/13 16:24:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.232 2004/01/28 15:33:28 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -940,8 +940,8 @@ class document extends aw_template
 		}
 
 		$_date = $doc["doc_modified"] > 1 ? $doc["doc_modified"] : $doc["modified"];
-		$date_est = date("d", $_date).". ".get_est_month(date("m", $_date))." ".date("Y", $_date);
-		$date_est_print = date("d", time()).". ".get_est_month(date("m", time()))." ".date("Y", time());
+		$date_est = date("d", $_date).". ".get_lc_month(date("m", $_date))." ".date("Y", $_date);
+		$date_est_print = date("d", time()).". ".get_lc_month(date("m", time()))." ".date("Y", time());
 
 		$r_docid = $docid;
 
@@ -953,6 +953,7 @@ class document extends aw_template
 
 		$this->vars(array(
 			"doc_modified" => $_date,
+			"doc_mod" => $doc["doc_modified"],
 			"date_est" => $date_est,
 			"print_date_est" => $date_est_print,
 			"page_title" => ($pagetitle != "" ? $pagetitle : strip_tags($title)),
@@ -2699,7 +2700,7 @@ class document extends aw_template
 		$this->vars(array(
 			"MATCH" => $r,
 			"s_parent" => $parent,
-			"sstring" => urlencode($str),
+			"sstring" => urldecode($str),
 			"sstringn" => $str, 
 			"section" => $section,
 			"matches" => $cnt,
@@ -3006,7 +3007,14 @@ class document extends aw_template
 		}
 		elseif ($alias["aliaslink"] == 1)
 		{
-			$replacement = sprintf("<a href='/?section=%d'>%s</a>",$d["target"],$d["name"]);
+			if (aw_ini_get("menuedit.long_section_url"))
+			{
+				$replacement = sprintf("<a href='%s/?section=%d'>%s</a>",$this->cfg["baseurl"],$d["target"],$d["name"]);
+			}
+			else
+			{
+				$replacement = sprintf("<a href='%s/%d'>%s</a>",$this->cfg["baseurl"],$d["target"],$d["name"]);
+			}
 		}
 		else
 		{
