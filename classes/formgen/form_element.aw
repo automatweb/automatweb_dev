@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.47 2003/05/29 14:26:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.48 2003/06/05 09:59:48 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -3079,9 +3079,10 @@ class form_element extends aw_template
 					uksort($ar,array($this,"__lb_sort"));
 				}
 				$ordar = $this->arr["listbox_order"];
+				$this->arr["listbox_items"] = array();
 				foreach( $ar as $k => $v)
 				{
-					$this->arr["listbox_items"][$k] = $v;
+					$this->arr["listbox_items"][] = $v;
 					$this->arr["listbox_order"][$k] = $ordar[$k];
 				}
 			}
