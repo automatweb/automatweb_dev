@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.44 2004/01/13 16:24:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.46 2004/06/11 09:16:10 kristo Exp $
 // keywords.aw - dokumentide võtmesõnad
 
 define("ARR_LISTID", 1);
@@ -639,6 +639,7 @@ class keywords extends aw_template
 	// oid (int) - objekti (dokumendi id) millega märksõnad siduda
 	function update_keywords($args = array())
 	{
+		return;	// FIXME: this is fucked - old lists are gone and this probably does not work anyway
 		extract($args);
 		$keywordlist = explode(",",$keywords);
 		$categories = array();
@@ -667,7 +668,7 @@ class keywords extends aw_template
 	
 		// teeme kindlaks koik votmesonad, millel polnud ID-d (uued)
 		// loome ka uue listi votmesona jaoks
-		$lists = get_instance("lists");
+		//$lists = get_instance("lists");
 
 		foreach($klist as $val)
 		{
@@ -1066,7 +1067,8 @@ class keywords extends aw_template
 			{
 				if ($to_brother[$o_did] != $o_did)
 				{
-					$this->delete_object($bdata["oid"]);
+					$tmp = obj($bdata["oid"]);
+					$tmp->delete();
 				}
 			}
 		}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.31 2003/08/01 12:48:16 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.32 2004/06/11 09:15:39 kristo Exp $
 define(PER_PAGE,10);
 define(PER_FLAT_PAGE,20);
 define(TOPICS_PER_PAGE,7);
@@ -34,10 +34,8 @@ class msgboard extends aw_template
 		{
 			foreach($vote as $key => $val)
 			{
-				$topicvotes = $this->get_object_metadata(array(
-					"oid" => $key,
-					"key" => "votes",
-				));
+				$tmp = obj($key);
+				$topicvotes = $tmp->meta("votes");
 	
 				$oldvotes[$key] = $val;
 
@@ -368,12 +366,10 @@ class msgboard extends aw_template
 		$votes = $HTTP_SESSION_VARS["commentvotes"];
 		
 		$forumdat = $this->get_object($forum_id);
-		$meta = $this->get_object_metadata(array("metadata" => $forumdat["metadata"]));
+		$meta = aw_unserialize($forumdat["metadata"]);
 
-		$votedata = $this->get_object_metadata(array(
-			"oid" => $id,
-			"key" => "votes",
-		));
+		$tmp = obj($id);
+		$votedata = $tmp->meta("votes");
 
 		$votecount = ($votedata["votes"]) ? $votedata["votes"] : 1;
 
@@ -534,10 +530,8 @@ class msgboard extends aw_template
 		else
 		{
 			// need to figure out the id-s of all topics.
-			$has_c = $this->get_object_metadata(array(
-				"oid" => $forum_id,
-				"key" => "comments"				
-			));
+			$tmp = obj($forum_id);
+			$has_c = $tmp->meta("comments");
 
 			$q = "SELECT * FROM objects WHERE parent = '$forum_id' AND status = 2 AND name LIKE '%$subject%' AND createdby LIKE '%$name%' AND comment LIKE '%$comment%' AND class_id = " . CL_MSGBOARD_TOPIC . " AND site_id = " . $this->cfg["site_id"];
 			$this->db_query($q);
@@ -780,10 +774,8 @@ class msgboard extends aw_template
 				// FIXME: We already have the data from the previous query
 				$this->save_handle();
 
-				$votedata = $this->get_object_metadata(array(
-					"oid" => $row["oid"],
-					"key" => "votes",
-				));
+				$tmp = obj($row["oid"]);
+				$votedata = $tmp->meta("votes");
 				
 				$this->restore_handle();
 				$votecount = ($votedata["votes"]) ? $votedata["votes"] : 1;
@@ -1068,7 +1060,8 @@ class msgboard extends aw_template
 		if (aw_global_get("uid") != "")
 		{
 			$id = (int)$id;
-			$this->delete_object($id);
+			$tmp = obj($id);
+			$tmp->delete();
 			$this->db_query("DELETE FROM comments WHERE board_id = '$id'");
 		}
 	}

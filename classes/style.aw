@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.30 2004/05/17 17:48:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.31 2004/06/11 09:13:06 kristo Exp $
 
 define("ST_TABLE",0);
 define("ST_CELL",1);
@@ -317,7 +317,8 @@ class style extends aw_template
 	{
 		extract($arr);
 
-		$this->delete_object($id);
+		$tmp = obj($id);
+		$tmp->delete();
 		header("Location: ".$this->mk_orb("obj_list", array("parent" => $parent),"menuedit"));
 	}
 

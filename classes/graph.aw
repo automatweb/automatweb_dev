@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/graph.aw,v 2.12 2004/01/13 16:24:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/graph.aw,v 2.13 2004/06/11 09:16:34 kristo Exp $
 // graph.aw - graafikute haldamine
 
 define("TYPE_PIE",0);
@@ -522,7 +522,8 @@ class graph extends aw_template
 	function delete_graph($ar)
 	{
 		extract($ar);
-		$this->delete_object($id);
+		$tmp = obj($id);
+		$tmp->delete();
 		header("Location:orb.".$this->cfg["ext"]."?class=menuedit&action=obj_list&parent=$parent");
 	}
 	//Näitab preview pilti, sinna sisse imetakse templatest ka graph->show() meetodiga pilt ise

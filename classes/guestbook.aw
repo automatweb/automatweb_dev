@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/guestbook.aw,v 2.8 2004/01/13 16:24:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/guestbook.aw,v 2.9 2004/06/11 09:16:23 kristo Exp $
 
 class guestbook extends aw_template
 {
@@ -74,7 +74,8 @@ class guestbook extends aw_template
 				{
 					if ($erase[$id] == 1)
 					{
-						$this->delete_object($id);
+						$tmp = obj($id);
+						$tmp->delete();
 					}
 					else
 					{

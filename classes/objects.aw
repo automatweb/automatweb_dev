@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.59 2004/02/27 11:20:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.60 2004/06/11 09:14:52 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 class db_objects extends aw_template 
 {
@@ -358,7 +358,10 @@ class objects extends db_objects
 	function orb_delete_object($arr)
 	{
 		extract($arr);
-		return $this->delete_object($oid);
+		aw_disable_acl();
+		$tmp = obj($oid);
+		$tmp->delete();
+		aw_restore_acl();
 	}
 
 	/**  

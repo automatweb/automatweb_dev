@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.74 2004/05/14 08:35:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.75 2004/06/11 09:17:46 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -633,7 +633,8 @@ class doc extends class_base
 		reset($deleted);
 		while (list($oid,) = each($deleted))
 		{
-			$this->delete_object($oidar[$oid]);
+			$tmp = obj($oidar[$oid]);
+			$tmp->delete();
 		}
 		reset($added);
 		while(list($oid,) = each($added))

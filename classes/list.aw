@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.24 2002/03/26 11:02:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.25 2004/06/11 09:15:54 kristo Exp $
 
 lc_load("mailinglist");
 class mlist extends aw_template
@@ -155,10 +155,8 @@ class mlist extends aw_template
 		}
 
 		// also send join mail
-		$join_mail = $this->get_object_metadata(array(
-			"oid" => $this->id,
-			"key" => "join_mail"
-		));
+		$tmp = obj($this->id);
+		$join_mail = $tmp->meta("join_mail");
 		if ($join_mail)
 		{
 			if (is_email($email))
@@ -371,8 +369,13 @@ class mlist extends aw_template
 			$uidarr = explode(",",$ids);
 			reset($uidarr);
 			while (list(,$v) = each($uidarr))
+			{
 				if ($rows[$v] == 1)
-					$this->delete_object($v);
+				{
+					$tmp = obj($v);
+					$tmp->delete();
+				}
+			}
 
 			$this->_log("mlist",sprintf(LC_LIST_ERASED_USER,$this->name));
 		}
@@ -436,7 +439,8 @@ class mlist extends aw_template
 		while ($row = $this->db_next())
 		{
 			$this->save_handle();
-			$this->delete_object($row["oid"]);
+			$tmp = obj($row["oid"]);
+			$tmp->delete();
 			$this->restore_handle();
 		}
 	}
@@ -522,13 +526,14 @@ class mlist extends aw_template
 
 		if ($id)
 		{
-			$this->delete_object($id);
+			aw_disable_acl();
+			$tmp = obj($id);
+			$tmp->delete();
+			aw_restore_acl();
 
 			// send remove mail
-			$remove_mail = $this->get_object_metadata(array(
-				"oid" => $this->id,
-				"key" => "leave_mail"
-			));
+			$tmp = obj($this->id);
+			$remove_mail = $tmp->meta("leave_mail");
 			if ($remove_mail)
 			{
 				if (is_email($email))
@@ -621,7 +626,10 @@ class mlist extends aw_template
 
 	function del_user($id)
 	{
-		$this->delete_object($id);
+		aw_disable_acl();
+		$tmp = obj($id);
+		$tmp->delete();
+		aw_restore_acl();
 	}
 
 	function send_mail_to($join_mail,$name,$email,$user_id,$list_id)
