@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.29 2004/06/07 09:32:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.30 2004/06/14 12:05:22 duke Exp $
 // treeview.aw - tree generator
 /*
 
@@ -64,6 +64,24 @@ class treeview extends class_base
 				$data["options"] = array("" => "--vali--","dhtml" => "DHTML (Ftiens)");
 				break;
 		};
+	}
+	
+	function init_vcl_property($arr)
+	{
+		$pr = $arr["property"];
+		$this->start_tree(array(
+                        "type" => TREE_DHTML,
+                        "tree_id" => $pr["name"], // what if there are multiple trees
+                        "persist_state" => 1,
+                ));
+		$pr["vcl_inst"] = $this;
+		return array($pr["name"] => $pr);
+	}
+
+	function get_html()
+	{
+		$rv = $this->finalize_tree();
+		return $rv;
 	}
 
 	

@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.277 2004/06/11 09:18:54 kristo Exp $
+// $Id: class_base.aw,v 2.278 2004/06/14 12:05:01 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -109,6 +109,8 @@ class class_base extends aw_template
 			"table" => "vcl/table",
 			"relpicker" => "vcl/relpicker",
 			"tabpanel" => "vcl/tabpanel",
+			"popup_search" => "vcl/popup_search",
+			"treeview" => "vcl/treeview",
 		);
 
 		// XXX: this is temporary
@@ -900,7 +902,7 @@ class class_base extends aw_template
 		$has_properties = $cfgu->has_properties(array("file" => $orb_class));
 		if (empty($has_properties))
 		{
-			die(sprintf("this class (%s) does not have any defined properties ",$orb_class));
+			die(sprintf("this class (%s/%d) does not have any defined properties ",$orb_class, $this->clid));
 		};
 
 		$clid = $this->clid;
@@ -1615,12 +1617,14 @@ class class_base extends aw_template
 			return false;
 		};
 
+
 		if ($this->view == 1)
 		{
 			if ($val["type"] == "date_select")
 			{
 				$val["value"] = get_lc_date($val["value"]);
 			};
+			$val["orig_type"] = $val["type"];
 			$val["type"] = "text";
 		};
 
@@ -1967,8 +1971,6 @@ class class_base extends aw_template
 			{
 				$has_rte = true;
 			};
-				
-
 		}
 
 		if (1 != $this->classinfo(array("name" => "allow_rte")))
@@ -2070,6 +2072,12 @@ class class_base extends aw_template
 			if (is_array($val) && $val["type"] != "callback" && $val["type"] != "submit")
 			{
 				$this->get_value(&$val);
+				// fuck me plenty
+				if ($this->view && $val["orig_type"] == "select" && is_oid($val["value"]))
+				{
+					$tmp = new object($val["value"]);
+					$val["value"] = $tmp->name();
+				};
 			};
 
 			if (is_object($this->tr))
