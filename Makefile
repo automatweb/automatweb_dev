@@ -16,4 +16,10 @@ dist:
 
 ini:
 	@echo "Generating AW ini file"
-	./scripts/ini/php -d register_argc_argv=1 -q -f ./scripts/ini/mk_ini.aw ../../aw.ini.root > aw.ini
+	@if test -e scripts/php; \
+		then \
+		./scripts/php -d register_argc_argv=1 -q -f ./scripts/ini/mk_ini.aw ../../aw.ini.root > aw.ini; \
+	else \
+		echo "Cmdline php not found, cannot compile ini file"; \
+	fi
+
