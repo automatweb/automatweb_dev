@@ -1260,7 +1260,7 @@ class grid_editor extends class_base
 		return $this->arr;
 	}
 
-	function on_styles_edit($data, $oid, $pickable_styles)
+	function on_styles_edit($data, $oid)
 	{
 		$this->_init_table($data);
 		$this->_init_show_styles();
@@ -1324,7 +1324,6 @@ class grid_editor extends class_base
 			"selstyle" => $this->mk_my_orb("sel_style", array(), "layout"),
 			"oid" => $oid,
 			"tb_style" => $tbst,
-			"sel_style" => $this->picker("", $pickable_styles)
 		));
 
 		$table = $this->parse();

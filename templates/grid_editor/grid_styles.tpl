@@ -1,5 +1,4 @@
 
-Vali stiil: <select name="sel_style">{VAR:sel_style}</select>
 <table border=1 cellspacing=1 cellpadding=2 {VAR:tb_style}>
 	<tr>
 		<!-- SUB: DC -->

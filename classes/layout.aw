@@ -28,6 +28,9 @@
 @property grid type=callback group=layout 
 @caption Tabel
 
+@property sel_style type=select store=no group=styles
+@caption Vali stiil
+
 @property grid_styles type=callback group=styles 
 @caption Vali element
 
@@ -182,14 +185,17 @@ class layout extends class_base
 				$prop['value'] = $ge->on_aliases_edit($arr['obj_inst']->meta('grid'), $arr['obj_inst']->id());
 				break;
 
+			case "sel_style":
+				$prop["options"] = $this->get_pickable_styles($arr["obj_inst"]->id());
+				break;
+
 			case "grid_styles":
 				$ge = get_instance("vcl/grid_editor");
 				$grid = $arr['obj_inst']->meta('grid');
 				$grid["table_style"] = $arr["obj_inst"]->meta("table_style");
 				$prop['value'] = $ge->on_styles_edit(
 					$grid, 
-					$arr['obj_inst']->id(), 
-					$this->get_pickable_styles($arr["obj_inst"]->id())
+					$arr['obj_inst']->id() 
 				);
 				break;
 

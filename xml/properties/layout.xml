@@ -43,6 +43,13 @@
             <caption>Tabel</caption>
       </property>
       <property>
+            <name>sel_style</name>
+            <store>no</store>
+            <type>select</type>
+            <group>styles</group>
+            <caption>Vali stiil</caption>
+      </property>
+      <property>
             <name>grid_styles</name>
             <table>objects</table>
             <field>meta</field>
