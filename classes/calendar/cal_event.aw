@@ -1,6 +1,6 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_event.aw,v 1.1 2003/01/16 16:37:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_event.aw,v 1.2 2003/01/16 17:00:07 duke Exp $
 
 /*
 	@default table=objects
@@ -158,7 +158,7 @@ class cal_event extends class_base
 
 	////
 	// !Kuvab uue eventi lisamise vormi
-	function add($args = array())
+	function _add($args = array())
 	{
 		extract($args);
 		$par_obj = $this->get_object($parent);
@@ -190,7 +190,7 @@ class cal_event extends class_base
 
 	////
 	// !Submitib uue kalendri eventi
-	function submit($args = array())
+	function _submit($args = array())
 	{
 		extract($args);
 		// sellest teeme timestampi
@@ -278,7 +278,7 @@ class cal_event extends class_base
 
 	////
 	// !Kuvab olemasoleva eventi muutmise objekti
-	function change($args = array())
+	function _change($args = array())
 	{
 		extract($args);
 		$object = $this->get_obj_meta($id);
