@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.15 2001/08/02 01:15:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.16 2001/08/02 03:04:38 duke Exp $
 
 global $orb_defs;
 $orb_defs["config"] = "xml";
@@ -71,9 +71,16 @@ class db_config extends aw_template
 			$this->raise_error("LOGIN_MENUS on defineerimata.",true);
 		};
 
+		$xmldata = $this->get_simple_config("login_menus");
+		classload("xml");
+		$xml = new xml();
+		$data = $xml->xml_unserialize(array("source" => $xmldata));
+
 		$obj = $this->get_objects_below(array("parent" => LOGIN_MENUS,"class" => CL_PSEUDO));
 
 		$menus = array();
+
+		$menus[0] = "määramata";
 
 		foreach($obj as $key => $val)
 		{
@@ -82,7 +89,7 @@ class db_config extends aw_template
 
 		classload("users_user");
 		$u = new users_user();
-		$u->listgroups(-1,-1,-1,-1,0);
+		$u->list_groups(array("type" => array(GRP_DYNAMIC,GRP_REGULAR)));
 		$c = "";
 
 		while($row = $u->db_next())
@@ -90,7 +97,8 @@ class db_config extends aw_template
 			$this->vars(array(
 				"gid" => $row["gid"],
 				"group" => $row["name"],
-				"menus" => $this->picker($row["login_menu"],$menus),
+				"priority" =>  ($data["pri"][$row["gid"]]) ? $data["pri"][$row["gid"]] : 0,
+				"menus" => $this->picker($data["menu"][$row["gid"]],$menus),
 			));
 
 			$c .= $this->parse("LINE");
@@ -109,15 +117,19 @@ class db_config extends aw_template
 	function submit_login_menus($args = array())
 	{
 		extract($args);
-		// $menu on array, key on gid, value on login menüü, mida see grupp kasutama peaks
-		if (is_array($menu))
-		{
-			foreach($menu as $key => $val)
-			{
-				$q = "UPDATE groups SET login_menu = '$val' WHERE gid = '$key'";
-				$this->db_query($q);
-			};
-		}
+		classload("xml");
+		$xml = new xml();
+		$data = array(
+			"pri" => $pri,
+			"menu" => $menu,
+		);
+
+		$xmldata = $xml->xml_serialize($data);
+
+		$this->quote($xmldata);
+
+		$this->set_simple_config("login_menus",$xmldata);
+
 		return $this->mk_my_orb("login_menus",array());
 	}
 
