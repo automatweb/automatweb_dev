@@ -21,7 +21,7 @@
 
 <td class="celltext">
 <b>
-Search objects | <a href='{VAR:pick_link}'>List of objects</a>
+Search objects 
 </b>
 </td></tr></table>
 
