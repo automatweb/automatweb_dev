@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_pp_search.aw,v 1.1 2004/08/30 10:50:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_pp_search.aw,v 1.2 2004/09/06 08:25:41 kristo Exp $
 // otv_ds_pp_search.aw - Objektinimekirja pp andmeallika otsing 
 /*
 
@@ -121,6 +121,8 @@ class otv_ds_pp_search extends class_base
 
 		$i = get_instance(CL_OTV_DS_POSTIPOISS);
 		$flds = $i->get_fields();
+
+		$flds["__fulltext"] = "T&auml;istekstiotsing";
 
 		foreach($flds as $fldid => $fldc)
 		{
@@ -340,6 +342,7 @@ class otv_ds_pp_search extends class_base
 		$this->quote(&$req);
 
 		$sf = safe_array($o->meta("sform"));
+		$sf_tmp = $sf;
 		foreach($sf as $fld => $fld_dat)		
 		{
 			if (!$fld_dat["in_form"])
@@ -347,6 +350,22 @@ class otv_ds_pp_search extends class_base
 				continue;
 			}
 
+			if ($fld == "__fulltext")
+			{
+				$npts = array();
+				$i = get_instance(CL_OTV_DS_POSTIPOISS);
+				$sf_tmp = $i->get_fields();
+				foreach($sf_tmp as $fld => $fld_dat)
+				{
+					if (!$fld_dat["in_form"] || $fld == "__fulltext")
+					{
+						continue;
+					}
+					$npts[] = " aw_".$fld." LIKE '%".$req["__fulltext"]."%' ";
+				}
+				$pts[] = " (".join(" OR ", $npts).") ";
+			}
+			else
 			if ($req[$fld] != "")
 			{
 				$pts[] = " aw_".$fld." LIKE '%".$req[$fld]."%' ";
