@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.4 2001/05/31 13:38:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.5 2001/06/04 10:24:22 duke Exp $
 // tegeleb ORB requestide handlimisega
 classload("aw_template","defs");
 lc_load("automatweb");
@@ -18,8 +18,15 @@ class orb extends aw_template {
 		// optional
 		// d) silent. veateateid ei väljastata. caller peaks kontrollima return valuet,
 		// kui see on false, siis oli viga.
+		if (defined("DEBUG"))
+		{
+			print "<pre>";
+			print_r($args);
+			print "</pre>";
+		};
 
 		extract($args);
+		$action = $vars["action"];
 
 		$fatal = true;
 
