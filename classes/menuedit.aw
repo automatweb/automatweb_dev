@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.114 2002/03/14 11:32:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.115 2002/03/14 11:59:12 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -1894,7 +1894,7 @@ class menuedit extends aw_template
 		else
 		{
 			$this->listacl("objects.class_id = ".CL_PERIODIC_SECTION." AND objects.status != 0 AND objects.parent = $parent");
-			$q  = "SELECT objects.*,documents.* FROM objects LEFT JOIN documents ON documents.docid = objects.brother_of WHERE (objects.class_id = ".CL_PERIODIC_SECTION." OR objects.class_id = ".CL_BROTHER_DOCUMENT.") AND objects.status != 0 AND objects.parent = $parent AND objects.period = $period ORDER BY $sortby $order";
+			$q  = "SELECT objects.*,documents.*,objects.oid AS oid FROM objects LEFT JOIN documents ON documents.docid = objects.brother_of WHERE (objects.class_id = ".CL_PERIODIC_SECTION." OR objects.class_id = ".CL_BROTHER_DOCUMENT.") AND objects.status != 0 AND objects.parent = $parent AND objects.period = $period ORDER BY $sortby $order";
 			$this->db_query($q);
 		}
 		$total = 0; 
@@ -1918,7 +1918,7 @@ class menuedit extends aw_template
 
 			$target = "";
 
-			$change = $this->mk_orb("change", array("id" => $row["docid"], "parent" => $row["parent"]), $inf["file"]);
+			$change = $this->mk_orb("change", array("id" => $row["oid"], "parent" => $row["parent"]), $inf["file"]);
 			if ($row["class_id"] == CL_FILE)
 			{
 				if ($filearr[$row["oid"]]["newwindow"] == 1)
