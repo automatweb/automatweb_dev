@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.52 2003/01/17 15:41:57 duke Exp $
+// $Id: class_base.aw,v 2.53 2003/01/17 18:02:49 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -222,8 +222,11 @@ class class_base extends aliasmgr
 			$orb_class = "doc";
 		};
 
+		$gdata = $this->groupinfo->get_at($group);
+		
 		$cli->finish_output(array(
 			"action" => "submit",
+			"submit" => $gdata["submit"],
 			"data" => array(
 				"id" => $id,
 				"group" => $group,
@@ -239,6 +242,7 @@ class class_base extends aliasmgr
 		{
 			$content = $cli->get_result();
 		};
+
 
 		return $this->gen_output(array(
 			"parent" => $parent,
@@ -836,12 +840,25 @@ class class_base extends aliasmgr
 
 		foreach($all_props as $key => $val)
 		{
-			$bygroup[$val["group"]][$key] = $val;
+			if (is_array($val["group"]))
+			{
+				$tmp = $val;
+				foreach($val["group"] as $_group)
+				{
+					$tmp["group"] = $_group;
+					$bygroup[$_group][$key] = $tmp;
+				}
+			}
+			else
+			{
+				$bygroup[$val["group"]][$key] = $val;
+			};
 		};
 
 		// loads all properties for this class
 		$this->classinfo = $cfgu->get_classinfo();
 		$groupinfo = new aw_array($cfgu->get_groupinfo());
+		$this->groupinfo = $groupinfo;
 		$this->tableinfo = $cfgu->get_opt("tableinfo");
 
 		if ($args["group"] && $bygroup[$args["group"]])
