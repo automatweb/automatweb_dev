@@ -51,5 +51,4 @@
 <!-- END SUB: LINE -->
 </table>
 <input type='hidden' name='docid' value='{VAR:docid}'>
-<input type='hidden' name='type' value='search'>
 </form>
