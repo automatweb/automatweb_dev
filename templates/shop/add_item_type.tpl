@@ -132,6 +132,12 @@ function idxforvalue(el,val)
 	<td class="fcaption2" colspan=2><select name='cnt_form_op'>{VAR:oplist}</select></td>
 </tr>
 <tr>
+	<td class="fcaption2" colspan=2>Vali hinna valem:</td>
+</tr>
+<tr>
+	<td class="fcaption2" colspan=2><select name='eq'>{VAR:eqs}</select></td>
+</tr>
+<tr>
 	<td class="fform" align="center" colspan="2"><input type="submit" value="Edasi">
 	</td>
 </tr>

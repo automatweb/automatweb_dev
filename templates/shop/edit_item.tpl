@@ -37,13 +37,13 @@
 					<td class="fcaption2" colspan=2>Hinna arvutamise valem: (kui see on t&uuml;hi, siis kasutatakse tavalist hinda)</td>
 				</tr>
 				<tr>
-					<td class="fcaption2" colspan=2><input type='text' name='price_eq' value='{VAR:price_eq}' size=50></td>
+					<td class="fcaption2" colspan=2>{VAR:price_eq}</td>
 				</tr>
 				<tr>
 					<td class="fcaption2" colspan=2>Kauba t&uuml;&uuml;p:</td>
 				</tr>
 				<tr>
-					<td class="fcaption2" colspan=2><select name='type'>{VAR:types}</select></td>
+					<td class="fcaption2" colspan=2>{VAR:type}</td>
 				</tr>
 			</table>
 				<input class="small_button" type='submit' value='Salvesta'>
