@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.256 2004/03/15 18:59:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.257 2004/03/16 10:23:05 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1582,40 +1582,8 @@ class core extends acl_base
 	// until it finds a menu for which it is set
 	function get_lead_template($section)
 	{
-		global $awt;
-		$awt->start("lead-template");
-		if (aw_cache_get("lead_template_cache",$section) != "")
-		{
-			$template = aw_cache_get("lead_template_cache",$section);
-		}
-		else
-		{
-			do { 
-				$section = (int)$section;
-				$this->db_query("SELECT template.filename AS filename, objects.parent AS parent,objects.metadata as metadata FROM menu LEFT JOIN template ON template.id = menu.tpl_lead LEFT JOIN objects ON objects.oid = menu.id WHERE menu.id = $section");
-				$row = $this->db_next();
-				$meta = $this->get_object_metadata(array(
-					"metadata" => $row["metadata"]
-				));
-
-				if ((int)$meta["template_type"] == TPLTYPE_TPL)
-				{
-					$template = $row["filename"];
-				}
-				else
-				{
-					$template = $meta["ftpl_lead"];
-				}
-				$section = $row["parent"];
-			} while ($template == "" && $section > 1);
-			aw_cache_set("lead_template_cache",$section,$template);
-		}
-		if ($template == "")
-		{
-			$template = "lead.tpl";
-		}
-		$awt->stop("lead-template");
-		return $template;
+		$tplmgr = get_instance("templatemgr");
+		return $tplmgr->get_lead_template($section);
 	}
 
 	////

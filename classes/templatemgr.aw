@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/templatemgr.aw,v 2.13 2004/03/15 12:35:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/templatemgr.aw,v 2.14 2004/03/16 10:23:05 duke Exp $
 
 class templatemgr extends aw_template
 {
@@ -115,7 +115,11 @@ class templatemgr extends aw_template
 		}
 		return $cnt;
 	}
-
+	
+	////
+        // !finds the full document template for menu $section
+        // if the template is not set for this menu, traverses the object tree upwards
+        // until it finds a menu for which it is set
 	function get_long_template($section)
 	{
 		$obj = new object($section);
@@ -144,6 +148,36 @@ class templatemgr extends aw_template
 		if (empty($template))
 		{
 			$template = "plain.tpl";
+		};
+		return $template;
+        }
+
+	////
+        // !finds the lead template for menu $section
+        // if the template is not set for this menu, traverses the object tree upwards
+        // until it finds a menu for which it is set	
+	function get_lead_template($section)
+	{
+		$obj = new object($section);
+		$path = $obj->path();
+		$template = "";
+		if (is_array($path))
+		{
+			$path = array_reverse($path);
+			foreach($path as $path_item)
+			{
+				if (empty($template) && is_oid($path_item->prop("tpl_lead")))
+				{
+					$tlead = $path_item->prop("tpl_lead");
+					$template = $this->get_template_file_by_id(array("id" => $tlead));
+				};
+
+			};
+		};
+
+		if (empty($template))
+		{
+			$template = "lead.tpl";
 		};
 		return $template;
         }
