@@ -1,6 +1,13 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>subclass</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>hidden</type>
+            <field>subclass</field>
+      </property>
+      <property>
             <name>ord</name>
             <group>general</group>
             <table>objects</table>
@@ -200,5 +207,12 @@
                   <master_index>oid	</master_index>
             </images>
       </tableinfo>
+      <reltypes>
+            <MOD_COMMENT>
+                  <value>1</value>
+                  <clid>CL_COMMENT</clid>
+                  <caption>Moderaatori kommentaar</caption>
+            </MOD_COMMENT>
+      </reltypes>
 </properties>
 
