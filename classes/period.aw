@@ -1,7 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.7 2003/08/27 13:47:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.8 2003/09/17 15:11:41 kristo Exp $
 // period.aw - periods 
 /*
+
+	HANDLE_MESSAGE(MSG_ON_SITE_SHOW_IMPORT_VARS, on_site_show_import_vars);
 
 	@default group=general
 	@default table=objects
@@ -436,6 +438,31 @@ class period extends class_base
 			$retval[] = $row;
 		};
 		return $retval;
+	}
+
+	////
+	// !import period variables into main.tpl
+	function on_site_show_import_vars($arr)
+	{	
+		$_t = aw_global_get("act_period");
+
+		$imc = get_instance("image");
+		$imdata = $imc->get_image_by_id($_t["data"]["image"]);
+		$arr["inst"]->vars(array(
+			"per_string" => $_t["name"],
+			"act_per_id" => $_t["id"],
+			"def_per_id" => $this->get_active_period(),
+			"per_img_url" => image::check_url($imdata["url"]),
+			"per_img_tag" => image::make_img_tag(image::check_url($imdata["url"])),
+			"per_img_link" => ($_t["data"]["image_link"] != "" ? $_t["data"]["image_link"] : aw_ini_get("baseurl"))
+		));
+
+		if ($_t["data"]["image"]["url"] != "")
+		{
+			$arr["inst"]->vars(array(
+				"HAS_PERIOD_IMAGE" => $arr["inst"]->parse("HAS_PERIOD_IMAGE")
+			));
+		}
 	}
 };
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.48 2003/08/27 13:47:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.49 2003/09/17 15:11:41 kristo Exp $
 // table.aw - tabelite haldus
 class table extends aw_template
 {
@@ -2377,6 +2377,13 @@ class table extends aw_template
 		$ret.= $sys->check_db_tables(array($op_table),$fix);
 
 		return $ret;
+	}
+
+	function request_execute($obj)
+	{
+		return $this->show(
+			"id" => $obj->id()
+		));
 	}
 }
 ?>

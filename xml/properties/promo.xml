@@ -133,6 +133,7 @@
             <group>show</group>
       </property>
       <classinfo>
+            <trans>1</trans>
             <corefields>name,comment,status</corefields>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_PROMO</syslog_type>

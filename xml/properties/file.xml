@@ -88,6 +88,9 @@
             <method>serialize</method>
             <caption>Avaldamise kuupäev</caption>
       </property>
+      <classinfo>
+            <trans>1</trans>
+      </classinfo>
       <groupinfo>
             <general>
                   <caption>Üldine</caption>

@@ -1,11 +1,14 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.67 2003/08/27 13:47:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.68 2003/09/17 15:11:41 kristo Exp $
 // image.aw - image management
 /*
+	@classinfo trans=1
 	@default group=general
 
 	@property file type=fileupload table=images
 	@caption Pilt
+
+	@property image_file type=hidden table=images field=file type=hidden
 
 	@property file_show type=text store=no
 	@caption Eelvaade 
@@ -782,6 +785,13 @@ class image extends class_base
 			"big_url" => $this->get_url($im["meta"]["file2"])
 		));
 		die($this->parse());
+	}
+
+	function request_execute($obj)
+	{
+		$this->show(array(
+			"file" => basename($obj->prop("image_file"))
+		));
 	}
 }
 ?>

@@ -9,6 +9,13 @@
             <caption>Pilt</caption>
       </property>
       <property>
+            <name>image_file</name>
+            <type>hidden</type>
+            <table>images</table>
+            <field>file</field>
+            <group>general</group>
+      </property>
+      <property>
             <name>file_show</name>
             <type>text</type>
             <store>no</store>
@@ -130,6 +137,7 @@
             <value>Muuda</value>
       </property>
       <classinfo>
+            <trans>1</trans>
             <syslog_type>ST_IMAGE</syslog_type>
       </classinfo>
       <groupinfo>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.2 2003/09/08 14:18:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.3 2003/09/17 15:11:42 kristo Exp $
 // object_translation.aw - Objekti tõlge 
 
 // create method accepts the following arguments:
@@ -67,7 +67,6 @@ class object_translation extends aw_template
 			$fl = "doc";
 		};
 
-
 		// check if the original object already has a translation relation to an object of the correct lang
 		$conns = $orig->connections_from(array(
 			"reltype" => RELTYPE_TRANSLATION,
@@ -76,10 +75,8 @@ class object_translation extends aw_template
 		if (count($conns) > 0)
 		{
 			// it already has the translation, don't create a new one, just go to changing
-			$clone = $conns[0]->to();
-			return $this->mk_my_orb("change",array("id" => $clone->id()),$fl);
+			return $this->mk_my_orb("change",array("id" => $conns[0]->prop("to")),$fl);
 		}
-		
 		// 3 - clone all the data from the original object ...
 		$orig_inst = get_instance($fl);
 
@@ -97,6 +94,10 @@ class object_translation extends aw_template
 			"parent" => $orig->parent(),
 			"raw" => $raw,
 		));
+
+		$clone = obj($clone_id);
+		$clone->set_lang($dstlang);
+		$clone->save();
 
 		// we also gots to create a relation
 		$co = new connection();

@@ -14,9 +14,6 @@ class site_show extends class_base
 {
 	var $path;				// the path to the selected section
 	var $sel_section;		// the MENU that is selected - section can point to any object below it
-	var $sel_section_real;	// the MENU that is selected - section can point to any object below it -
-							// this is the real object if translation is active - damn, it seems I can't make the translation
-							// thing COMPLETELY transparent after all :((((((((
 	var $sel_section_obj;	// the MENU OBJECT that is selected - section can point to any object below it
 	var $section_obj;		// the object instance for $section
 	var $properties;		// the properties gathered from menus in the path
@@ -25,15 +22,9 @@ class site_show extends class_base
 	var $active_doc;		// if only a single document is shownm this will contain the docid
 	var $site_title;		// the title for the site should be put in here
 
-	var $cache;				// cache class instance
-
-	var $image;				// image class instance
-
 	function site_show()
 	{
 		$this->init("automatweb/menuedit");
-		$this->cache = get_instance("cache");
-		$this->image = get_instance("image");
 	}
 
 	////
@@ -61,19 +52,13 @@ class site_show extends class_base
 		$this->left_pane = (isset($arr["no_left_pane"]) && $arr["no_left_pane"] == true) ? false : true;
 		$this->right_pane = (isset($arr["no_right_pane"]) && $arr["no_right_pane"] == true) ? false : true;
 
-		//print "aa";
-		//flush();
-
 
 		$this->section_obj = obj(aw_global_get("section"));
 
-		if ($this->section_obj->class_id())
+		$obj_inst = $this->section_obj->instance();
+		if (method_exists($obj_inst, "request_execute"))
 		{
-			$obj_inst = $this->section_obj->instance();
-			if (method_exists($obj_inst, "request_execute"))
-			{
-				$arr["text"] = $obj_inst->request_execute($this->section_obj);
-			}
+			$arr["text"] = $obj_inst->request_execute($obj);
 		}
 
 		// until we can have class-static variables, this actually SETS current text content
@@ -82,24 +67,9 @@ class site_show extends class_base
 
 		// save path
 		$this->path = $this->section_obj->path();
-		$this->path_ids = array();
-		foreach($this->path as $p_obj)
-		{
-			$this->path_ids[] = $p_obj->id();
-		}
-
 
 		// figure out the menu that is active
 		$this->sel_section = $this->_get_sel_section(aw_global_get("section"));
-		if (aw_ini_get("config.object_translation"))
-		{
-			$ot = get_instance("translate/object_translation");
-			$this->sel_section_real = $ot->get_original($this->sel_section);
-		}
-		else
-		{
-			$this->sel_section_real = $this->sel_section;
-		}
 		$this->sel_section_obj = obj($this->sel_section);
 
 		$this->site_title = $this->sel_section_obj->name();
@@ -117,8 +87,7 @@ class site_show extends class_base
 
 		$this->do_check_properties(&$arr);
 
-		$apd = get_instance("layout/active_page_data");
-		return $this->do_show_template($arr).$apd->on_shutdown_get_styles();
+		return $this->do_show_template($arr);
 	}
 
 	function show_type($arr)
@@ -143,7 +112,7 @@ class site_show extends class_base
 		$this->vars(array(
 			"sel_menu_id" => $this->sel_section,
 			"sel_menu_comment" => isset($arr["comment"]) ? $arr["comment"] : "",
-			"site_title" => strip_tags($this->site_title),
+			"site_title" => $this->site_title
 		));
 		
 		// leat each class handle it's own variable import
@@ -181,9 +150,7 @@ class site_show extends class_base
 			"comment" => "", // prop!
 			"tpl_view" => "", // prop!
 			"tpl_lead" => "",// prop!
-			"show_layout" => "",
-			"ip_allowed" => array(),
-			"ip_denied" => array()
+			"show_layout" => "" // prop!
 		);
 
 		$cnt = count($this->path);
@@ -193,31 +160,11 @@ class site_show extends class_base
 
 			foreach($this->properties as $key => $val)
 			{
-				if ($key == "ip_allowed")
+				// check whether this object has any properties that 
+				// none of the previous ones had
+				if (empty($this->properties[$key]) && $obj->class_id() == CL_MENU && $obj->prop($key))
 				{
-					$tipa = $obj->meta("ip_allow");
-					if (is_array($tipa) && count($tipa) > 0)
-					{
-						$this->properties[$key] = $tipa;
-					}
-				}
-				else
-				if ($key == "ip_denied")
-				{
-					$tipa = $obj->meta("ip_deny");
-					if (is_array($tipa) && count($tipa) > 0)
-					{
-						$this->properties[$key] = $tipa;
-					}
-				}
-				else
-				{
-					// check whether this object has any properties that 
-					// none of the previous ones had
-					if (empty($this->properties[$key]) && $obj->class_id() == CL_MENU && $obj->prop($key))
-					{
-						$this->properties[$key] = $obj->prop($key);
-					}
+					$this->properties[$key] = $obj->prop($key);
 				}
 			}
 		}
@@ -252,84 +199,12 @@ class site_show extends class_base
 		{
 			$si->init_gen_site_html(array(
 				"tpldir" => &$arr["tpldir"],
-				"template" => &$arr["template"],
 			));
 		}
 
 		if ($this->properties["comment"])
 		{
 			$arr["comment"] = $this->properties["comment"];
-		}
-
-		if (count($this->properties["ip_allowed"]) > 0 || count($this->properties["ip_denied"]))
-		{
-			$this->do_check_ip_access(array(
-				"allowed" => $this->properties["ip_allowed"],
-				"denied" => $this->properties["ip_denied"]
-			));
-		}
-	}
-
-	////
-	// !checks if the current IP has access
-	// parameters:
-	//	allowed - array of addresses allowed
-	//	denied - array of addresses denied
-	//
-	// algorithm:
-	// if count(allowed) > 0 , then deny everything else, except allowed
-	// if count(denied) > 0, then allow everyone, except denied
-	function do_check_ip_access($arr)
-	{
-		extract($arr);
-		$cur_ip = aw_global_get("REMOTE_ADDR");
-
-		$ipa = get_instance("syslog/ipaddress");
-
-		if (count($allowed) > 0)
-		{
-			$deny = true;
-			foreach($allowed as $ipid => $t)
-			{
-				$ipo = obj($ipid);
-
-				if ($ipa->match($ipo->prop("addr"), $cur_ip))
-				{
-					$deny = false;
-				}
-			}
-
-			if ($deny)
-			{
-				$this->no_access_redir($this->section_obj->id());
-			}
-			else
-			{
-				return;
-			}
-		}
-
-		if (count($denied) > 0)
-		{
-			$deny = false;
-			foreach($denied as $ipid => $t)
-			{
-				$ipo = obj($ipid);
-
-				if ($ipa->match($ipo->prop("addr"), $cur_ip))
-				{
-					$deny = true;
-				}
-			}
-
-			if ($deny)
-			{
-				$this->no_access_redir($this->section_obj->id());
-			}
-			else
-			{
-				return;
-			}
 		}
 	}
 
@@ -423,7 +298,7 @@ class site_show extends class_base
 		}
 	}
 
-	function get_default_document($arr = array())
+	function get_default_document($arr)
 	{
 		if (isset($arr["docid"]) && $arr["docid"])
 		{
@@ -470,7 +345,7 @@ class site_show extends class_base
 			$ok = $check->class_id() == CL_DOCUMENT && $check->status() == STAT_ACTIVE;
 			if ($this->cfg["lang_menus"] == 1)
 			{
-				$ok &= $check->lang() == aw_global_get("LC");
+				$ok &= $check->lang_id() == aw_global_get("LC");
 			}
 			if (!$ok)
 			{
@@ -478,33 +353,15 @@ class site_show extends class_base
 			}
 		}
 
-		set_time_limit(0);
-
-
 		// no default, show list
 		if ($docid < 1)	
 		{
 			if ($obj->class_id() == CL_PROMO)
 			{
 				$lm = $obj->meta("last_menus");
-				$lm_sub = $obj->meta("src_submenus");
 				if (is_array($lm) && ($lm[0] !== 0))
 				{
 					$sections = $lm;
-					foreach($sections as $_sm)
-					{
-						if ($lm_sub[$_sm])
-						{
-							// include submenus in document sources
-							$ot = new object_tree(array(
-								"class_id" => CL_MENU,
-								"parent" => $_sm,
-								"status" => array(STAT_NOTACTIVE, STAT_ACTIVE),
-								"sort_by" => "objects.parent"
-							));
-							$sections = $sections + $ot->ids();
-						}
-					}
 				}
 				else
 				{
@@ -513,32 +370,7 @@ class site_show extends class_base
 			}
 			else
 			{
-				$gm_subs = $obj->meta("section_include_submenus");
-				$gm_c = $obj->connections_from(array(
-					"type" => RELTYPE_DOCS_FROM_MENU
-				));
-				foreach($gm_c as $gm)
-				{
-					$gm_id = $gm->prop("to");
-					$sections[$gm_id] = $gm_id;
-					if ($gm_subs[$gm_id])
-					{
-						  $ot = new object_tree(array(
-								 "class_id" => CL_MENU,
-								 "parent" => $gm_id,
-								 "status" => array(STAT_NOTACTIVE, STAT_ACTIVE),
-								 "sort_by" => "objects.parent"
-						  ));
-						  $sections = $ot->ids();
-						  /*
-						$_sm_list = $this->get_menu_list(false, false, $gm_id);
-						foreach($_sm_list as $_sm_i => $ttt)
-						{
-							$sections[$_sm_i] = $_sm_i;
-						}
-						*/
-					}
-				}
+				$sections = $obj->meta("sss");
 			};
 
 			if ($obj->meta("all_pers"))
@@ -561,6 +393,7 @@ class site_show extends class_base
 			{
 				$filter["parent"] = $obj->id();
 			};
+
 			if ($obj->prop("ndocs") > 0)
 			{
 				$filter["limit"] = $obj->prop("ndocs"); 
@@ -595,31 +428,14 @@ class site_show extends class_base
 			$filter["class_id"] = array(CL_DOCUMENT, CL_PERIODIC_SECTION, CL_BROTHER_DOCUMENT);
 			$filter["lang_id"] = aw_global_get("lang_id");
 			$filter["sort_by"] = $ordby;
-
+			
 			$documents = new object_list($filter);
 
 			for($o = $documents->begin(); !$documents->end(); $o = $documents->next())
 			{
 				if (!($no_fp_document && $o->prop("esilehel") == 1))
 				{
-					// oh. damn. this is sneaky. what if the brother is not active - we gits to check for that and if it is, then
-					// use the brother
-					if ($o->class_id() != CL_DOCUMENT)
-					{
-						$bo = obj($o->brother_of());
-						if ($bo->status() != STAT_ACTIVE)
-						{
-							$docid[$cnt++] = $o->id();
-						}
-						else
-						{
-							$docid[$cnt++] = $o->brother_of();
-						}
-					}
-					else
-					{
-						$docid[$cnt++] = $o->id();
-					}
+					$docid[$cnt++] = ($o->class_id() == CL_DOCUMENT) ? $o->id() : $o->brother_of();
 				}
 			}
 
@@ -788,11 +604,7 @@ class site_show extends class_base
 		// Vaatame, kas selle sektsiooni jaoks on "default" dokument
 		if (!isset($arr["docid"]) || $arr["docid"] < 1) 
 		{
-			$docid = $this->get_default_document();
-		}
-		else
-		{
-			$docid = $arr["docid"];
+			$docid = $this->get_default_document($section);
 		}
 
 		return $this->_int_show_documents($docid);
@@ -831,7 +643,6 @@ class site_show extends class_base
 		$smi = "";
 		$sel_image = "";
 
-
 		$cnt = count($this->path);
 		for($i = $cnt-1; $i > -1; $i--)
 		{
@@ -847,20 +658,9 @@ class site_show extends class_base
 				break;
 			}
 
-			$img_act_url = "";
-			if ($o->meta("img_act"))
+			if ($o->meta("img_act_url") != "")
 			{
-				$img_act_url = $this->image->get_url_by_id($o->meta("img_act"));
-			}
-
-			if ($img_act_url == "" && $o->meta("img_act_url") != "")
-			{
-				$img_act_url = $o->meta("img_act_url");
-			}
-			
-			if ($img_act_url != "")
-			{
-				$sel_image_url = image::check_url($img_act_url);
+				$sel_image_url = image::check_url($o->meta("img_act_url"));
 				$sel_image = "<img name='sel_menu_image' src='".$sel_image_url."' border='0'>";
 				$this->vars(array(
 					"url" => $sel_image_url
@@ -876,11 +676,6 @@ class site_show extends class_base
 			$smi = "";
 			foreach($imgar as $nr => $dat)
 			{
-				if ($dat["image_id"])
-				{
-					$dat["url"] = $this->image->get_url_by_id($dat["image_id"]);
-				}
-
 				if ($smi == "")
 				{
 					$sel_image = "<img name='sel_menu_image' src='".image::check_url($dat["url"])."' border='0'>";
@@ -898,7 +693,7 @@ class site_show extends class_base
 				}
 			}
 		}
-		$smn = $this->sel_section_obj->name();
+		$smn = $o->name();
 		if (aw_ini_get("menuedit.strip_tags"))
 		{
 			$smn = strip_tags($smn);
@@ -913,9 +708,9 @@ class site_show extends class_base
 		$sel_menu_timing = 6;
 		if ($imgs)
 		{
-			if ($this->sel_section_obj->meta("img_timing"))
+			if ($o->meta("img_timing"))
 			{
-				$sel_menu_timing = $this->sel_section_obj->meta("img_timing");
+				$sel_menu_timing = $o->meta("img_timing");
 			}
 		}
 
@@ -932,22 +727,15 @@ class site_show extends class_base
 
 	////
 	// !build "you are here" links from the path
-	 function make_yah()
+	function make_yah()
 	{
-		$ya = "";
+		$ya = "";  
 		$cnt = count($this->path);
 
 		$this->title_yah = "";
 		$alias_path = array();
 
-		// this is used to make sure path starts at rootmenu+1 levels, to not show
-		// "left menu" or similar in path
-		$show = false;
-
-		$prev = false;
-		$show_obj_tree = false;
-
-		for ($i=0; $i < $cnt; $i++)
+		for ($i=1; $i < $cnt; $i++)	
 		{
 			if (!aw_ini_get("menuedit.long_menu_aliases"))
 			{
@@ -985,60 +773,22 @@ class site_show extends class_base
 			{
 				$link = $ref->prop("link");
 			}
-
-			if ($show_obj_tree)
-			{
-				$link = $ot_inst->get_yah_link($ot_id, $ref);
-			}
-
-			// now. if the object in the path is marked to use site tree as
-			// the displayer, then get the link from that
-			if ($ref->prop("show_object_tree"))
-			{
-				$show_obj_tree = true;
-				$ot_inst = get_instance("contentmgmt/object_treeview");
-				$ot_id = $ref->prop("show_object_tree");
-			}
-
 			$this->vars(array(
 				"link" => $link,
-				"text" => str_replace("&nbsp;"," ",strip_tags($ref->name())),
+				"text" => str_replace("&nbsp;"," ",strip_tags($ref->name())), 
 				"ysection" => $ref->id()
 			));
 
-			if ($ref->prop("clickable") == 1 && $show)
+			if ($ref->prop("clickable") == 1)
 			{
-				if ($this->is_template("YAH_LINK_BEGIN") && $ya == "")
-				{
-					$ya .= $this->parse("YAH_LINK_BEGIN");
-				}
-				else
-				if ($this->is_template("YAH_LINK_END") && $i == ($cnt-1))
-				{
-					$ya .= $this->parse("YAH_LINK_END");
-				}
-				else
-				if ($this->is_template("YAH_LINK_REVERSE"))
-				{
-					$ya = $this->parse("YAH_LINK_REVERSE").$ya;
-				}
-				else
-				{
-					$ya .= $this->parse("YAH_LINK");
-				}
+				$ya .= $this->parse("YAH_LINK");
 				$this->title_yah.=" / ".$ref->name();
 			}
-
-			if ($prev && $prev->id() == $this->cfg["rootmenu"])
-			{
-				$show = true;
-			}
-			$prev = $ref;
 		}
 
-		// form table yah links get made here.
-		// basically the session contains a vriable fg_table_sessions that has all the possible yah links for
-		// all shown tables (and yeah, I know it is gonna be friggin huge.
+		// form table yah links get made here. 
+		// basically the session contains a vriable fg_table_sessions that has all the possible yah links for 
+		// all shown tables (and yeah, I know it is gonna be friggin huge. 
 		// and no, I can't remove the old ones, cause the user might have other windows open
 		// and if I remove all the other ones from the array, he will lose the yah link in other windows
 		if ($GLOBALS["tbl_sk"] != "")
@@ -1065,10 +815,7 @@ class site_show extends class_base
 		}
 
 		$this->vars(array(
-			"YAH_LINK" => $ya,
-			"YAH_LINK_END" => "",
-			"YAH_LINK_BEGIN" => "",
-			"YAH_LINK_REVERSE" => ""
+			"YAH_LINK" => $ya
 		));
 
 		if ($ya != "")
@@ -1095,36 +842,19 @@ class site_show extends class_base
 			));
 			if ($row["id"] == $lang_id)
 			{
-				if ($this->is_template("SEL_LANG_BEGIN") && $l == "")
-				{
-					$l.=$this->parse("SEL_LANG_BEGIN");
-				}
-				else
-				{
-					$l.=$this->parse("SEL_LANG");
-				}
+				$l.=$this->parse("SEL_LANG");
 				$sel_lang = $row;
 			}
 			else
 			{
-				if ($this->is_template("LANG_BEGIN") && $l == "")
-				{
-					$l.=$this->parse("LANG_BEGIN");
-				}
-				else
-				{
-					$l.=$this->parse("LANG");
-				}
+				$l.=$this->parse("LANG");
 			}
 		}
 		$this->vars(array(
 			"LANG" => $l,
 			"SEL_LANG" => "",
-			"SEL_LANG_BEGIN" => "",
-			"LANG_BEGIN" => "",
 			"sel_charset" => $sel_lang["charset"],
-			"se_lang_id" => $lang_id,
-			"lang_code" => $sel_lang["acceptlang"]
+			"se_lang_id" => $lang_id
 		));
 	}
 
@@ -1133,14 +863,7 @@ class site_show extends class_base
 	// into which the current document has been translated to
 	function make_context_langs()
 	{
-		if ($this->active_doc)
-		{
-			$obj = obj($this->active_doc);
-		}
-		else
-		{
-			$obj = $this->section_obj;
-		}
+		$obj = $this->section_obj;
 
 		// see if the object has translations
 		$conn = $obj->connections_from(array(
@@ -1156,9 +879,7 @@ class site_show extends class_base
 			{
 				// if it has connections pointing to it, then it is, so get the translations from the original
 				// we need to do this, because the previous query must ever only return 0 or 1 connections
-				reset($conn);
-				list(,$f_conn) = each($conn);
-				$obj = obj($f_conn->prop("from"));
+				$obj = obj($conn[0]->prop("from"));
 				$conn = $obj->connections_from(array(
 					"type" => RELTYPE_TRANSLATION
 				));
@@ -1188,22 +909,14 @@ class site_show extends class_base
 		$l = "";
 		foreach($ldat as $lc => $ld)
 		{
-			if ($lc == aw_global_get("LC"))
+			if (!$lang2trans[$lc])
 			{
 				continue;
 			}
 
-			$name = $ld["name"];
-			$url = $this->cfg["baseurl"] . "/" . $lang2trans[$lc];
-
-			if (!$lang2trans[$lc])
-			{
-				$url = $this->mk_my_orb("show_trans", array("set_lang_id" => $ld["id"], "section" => $obj->id()), "object_translation");
-			}
-		
 			$this->vars(array(
-				"name" => $name,
-				"lang_url" => $url,
+				"name" => $ld["name"],
+				"lang_url" => $this->cfg["baseurl"] . "/" . $lang2trans[$lc],
 			));
 
 			if ($lc == $lang_id)
@@ -1236,22 +949,13 @@ class site_show extends class_base
 	// and we get here only if that returns true
 	function _helper_find_parent($a_parent, $level)
 	{
-		if (!$this->can("view", $a_parent))
-		{
-			$a_parent = aw_ini_get("rootmenu");
-		}
-
 		if ($level == 1)
 		{
 			return $a_parent;
 		}
-		$pos = array_search($a_parent, $this->path_ids);
-		return $this->path_ids[$pos+($level-1)];
-	}
 
-	function _helper_is_in_path($oid)
-	{
-		return array_search($oid, $this->path_ids);
+		$pos = array_search($a_parent, $this->path);
+		return $this->path[$pos+$level];
 	}
 
 	////
@@ -1259,15 +963,7 @@ class site_show extends class_base
 	// for the menu area beginning at $parent
 	function _helper_get_levels_in_path_for_area($parent)
 	{
-		// why is this here you ask? well, if the user has no access to the area rootmenu
-		// then the rootmenu will get rewritten to the group's rootmenu, therefore
-		// we need to rewrite it in the path checker functions as well
-		if (!$this->can("view", $parent))
-		{
-			$parent = aw_ini_get("rootmenu");
-		}
-
-		$pos = array_search($parent, $this->path_ids);
+		$pos = array_search($parent, $this->path);
 		if ($pos === NULL || $pos === false)
 		{
 			return 0;
@@ -1279,50 +975,9 @@ class site_show extends class_base
 		return count($this->path) - ($pos+1);
 	}
 
-	function _helper_get_login_menu_id()
-	{
-		if (!$this->current_login_menu_id)
-		{
-			if (aw_global_get("uid") == "")
-			{
-				$this->current_login_menu_id = array_search("LOGGED", aw_ini_get("menuedit.menu_defs"));
-			}
-			else
-			{
-				$cfg = get_instance("config");
-				$_id = $cfg->get_login_menus();
-				if ($_id > 0)
-				{
-					$this->current_login_menu_id = $_id;
-				}
-				else
-				{
-					$this->current_login_menu_id = array_search("LOGGED", aw_ini_get("menuedit.menu_defs"));
-				}
-			}
-		}
-		return $this->current_login_menu_id;
-	}
-
-	function _helper_get_objlastmod()
-	{
-		static $last_mod;
-		if (!$last_mod)
-		{
-			if (($last_mod = $this->cache->file_get("objlastmod")) === false)
-			{
-				$last_mod = $this->db_fetch_field("SELECT MAX(modified) as m FROM objects", "m");
-				$this->cache->file_set("objlastmod", $last_mod);
-			}
-			// also compiled menu template
-			$last_mod = max($last_mod, @filemtime($this->compiled_filename));
-		}
-		return $last_mod;
-	}
-
 	function do_draw_menus($arr)
 	{
-		if (!isset($this->compiled_filename) || $this->compiled_filename == "")
+		if (!isset($arr["compiled_filename"]) || $arr["compiled_filename"] == "")
 		{
 			error::throw(array(
 				"id" => ERR_NO_COMPILED,
@@ -1330,9 +985,7 @@ class site_show extends class_base
 			));
 		}
 	
-		enter_function("site_show::do_draw_menus");
-		include_once($this->compiled_filename);
-		exit_function("site_show::do_draw_menus");
+		include_once($arr["compiled_filename"]);
 	}
 
 	function exec_subtemplate_handlers($arr)
@@ -1554,13 +1207,6 @@ class site_show extends class_base
 				"logged" => $this->parse("logged")
 			));
 		}
-
-		if ($this->is_parent_tpl("RIGHT_PANE", "logged") && aw_global_get("uid") != "")
-		{
-			$this->vars(array(
-				"logged" => $this->parse("logged")
-			));
-		}
 	}
 
 	// builds HTML popups
@@ -1586,226 +1232,15 @@ class site_show extends class_base
 		$retval = (strlen($popups) > 0) ? "<script language='Javascript'>$popups</script>" : "";
 		return $retval;
 	}
-
-	////
-	// !Creates a link for the menu
-	function make_menu_link($o)
-	{
-		$this->skip = false;
-		if ($o->prop("type") == MN_PMETHOD)
-		{
-			// I should retrieve orb definitions for the requested class
-			// to figure out which arguments it needs and then provide
-			// those
-			$pclass = $o->meta("pclass");
-			if ($pclass)
-			{
-				list($_cl,$_act) = explode("/",$pclass);
-				$orb = get_instance("orb");
-				$meth = $orb->get_public_method(array(
-					"id" => $_cl,
-					"action" => $_act,
-				));
-				$values = array();
-				$err = false;
-				$mv = new aw_array($meth["values"]);
-				$mr = new aw_array($meth["required"]);
-				foreach($mr->get() as $key => $val)
-				{
-					if (in_array($key,array_keys($mv->get())))
-					{
-						$values[$key] = $meth["values"][$key];
-					}
-					else
-					{
-						$err = true;
-					};
-				};
-
-				$mo = new aw_array($meth["optional"]);
-				foreach($mo->get() as $key => $val)
-				{
-					if (in_array($key,array_keys($mv->get())))
-					{
-						$values[$key] = $meth["values"][$key];
-					}
-				};
-
-				if (not($err))
-				{
-					//$_sec = aw_global_get("section");
-					$_sec = $_REQUEST["section"];
-					if ($_sec)
-					{
-						$values["section"] = $_sec;
-					};
-					$link = $this->mk_my_orb($_act,$values,$_cl,$o->meta("pm_url_admin"),!$o->meta("pm_url_menus"));
-				}
-				else
-				{
-					$this->skip = true;
-				};
-			}
-			else
-			{
-				$link = "";
-			};
-		}
-		else if ($o->prop("link") != "")
-		{
-			$link = $o->prop("link");
-		}
-		else
-		{
-			$link = $this->cfg["baseurl"] ."/";
-			if (aw_ini_get("menuedit.long_section_url"))
-			{
-				if ($o->alias() != "")
-				{
-					$link .= $o->alias();
-				}
-				else
-				{
-					$link .= "index.".$this->cfg["ext"]."?section=".$o->id().$this->add_url;
-				}
-			}
-			else
-			{
-				if ($o->alias() != "")
-				{
-					if (aw_ini_get("menuedit.long_menu_aliases"))
-					{
-						$tmp = array();
-						if (!is_array($this->menu_aliases))
-						{
-							$this->menu_aliases = array();
-						};
-						foreach($this->menu_aliases as $_al)
-						{
-							if ($_al != "n/a")
-							{
-								$tmp[] = $_al;
-							}
-						}
-						$link .= join("/",$tmp);
-						if (sizeof($tmp) > 0)
-						{
-							$link .= "/";
-						};
-					}
-					$link .= $o->alias();
-				}
-				else
-				{
-					$oid = ($o->class_id() == 39) ? $o->brother_of() : $o->id();
-					$link .= $oid;
-				};
-			};
-		}
-
-
-		// this here bullshit is so that the static ut site will work
-		// basically, rewrite_links is set if we are doing searching or some other non-static action
-		// it is set in site_header.aw
-		// and we need to make all links go to the static site
-		// and this is where the magic happens
-		// also in document::do_search and search_conf::search
-		if (aw_global_get("rewrite_links"))
-		{
-			$exp = get_instance("export");
-			if (!$exp->is_external($link))
-			{
-				$_link = $link;
-				if (strpos($link, $this->cfg["baseurl"]) === false)
-				{
-					$link = $this->cfg["baseurl"].$link;
-				}
-				$exp->fn_type = aw_ini_get("search.rewrite_url_type");
-				$link = $exp->rewrite_link($link);
-				if (strpos($link, "class=search_conf") === false || strpos($link, "action=search") === false)
-				{
-					$link = $exp->add_session_stuff($link, aw_global_get("lang_id"));
-					$_tl = $link;
-					$link = $this->cfg["baseurl"]."/".$exp->get_hash_for_url(str_replace($this->cfg["baseurl"],"",$link),aw_global_get("lang_id"));
-				}
-				else
-				{
-					$link = str_replace($this->cfg["baseurl"],aw_ini_get("search.baseurl"),$link);
-				};
-				
-				if ($link != $this->cfg["baseurl"]."/index.".$this->cfg["ext"] && 
-						$link != $this->cfg["baseurl"]."/" &&
-						$link != $this->cfg["baseurl"])
-				{
-					$exp->fn_type = aw_ini_get("search.rewrite_url_type");
-					$link = $exp->rewrite_link($link);
-					if (strpos($link, "class=search_conf") === false || strpos($link, "action=search") === false)
-					{
-						$link = $exp->add_session_stuff($link, aw_global_get("lang_id"));
-						$_tl = $link;
-						$link = $this->cfg["baseurl"]."/".$exp->get_hash_for_url(str_replace($this->cfg["baseurl"],"",$link),aw_global_get("lang_id"));
-					}
-					else
-					{
-						$link = str_replace($this->cfg["baseurl"],aw_ini_get("search.baseurl"),$link);
-					}
-				}
-			}
-		}
-		return $link;
-	}
-
-	////
-	// !returns the file where the generated code for the template is, if it is in the cache
-	function get_cached_compiled_filename($arr)
-	{
-		$tpl = $arr["tpldir"]."/".$arr["template"];
-		$fn = aw_ini_get("cache.page_cache")."/compiled_menu_template-".str_replace("/","_",str_replace(".","_",$tpl))."-".aw_global_get("lang_id");
-		if (file_exists($fn) && is_readable($fn) && filectime($fn) > filectime($tpl))
-		{
-			return $fn;
-		}
-		return false;
-	}
-
-	////
-	// !compiles the template and saves the code in a cache file, returns the cache file
-	function cache_compile_template($path, $tpl)
-	{
-		$co = get_instance("contentmgmt/site_template_compiler");
-		$code = $co->compile($path, $tpl);
-
-		$tpl = $path."/".$tpl;
-		$fn = "compiled_menu_template-".str_replace("/","_",str_replace(".","_",$tpl))."-".aw_global_get("lang_id");
-
-		$ca = get_instance("cache");
-		$ca->file_set($fn, $code);
-
-		return aw_ini_get("cache.page_cache")."/".$fn;
-	}
-
+	
 	function do_show_template($arr)
 	{
-		$tpldir = "../".str_replace($this->cfg["site_basedir"]."/", "", $this->cfg["tpldir"])."/automatweb/menuedit";
-
 		if (isset($arr["tpldir"]) && $arr["tpldir"] != "")
 		{
 			$this->tpl_init(sprintf("../%s/automatweb/menuedit",$arr["tpldir"]));
-			$tpldir = "../".$arr["tpldir"]."/automatweb/menuedit";;
 		}
-
-		$arr["tpldir"] = $tpldir;
-		// right. now, do the template compiler bit
-		if (!($this->compiled_filename = $this->get_cached_compiled_filename($arr)))
-		{
-			$this->compiled_filename = $this->cache_compile_template($tpldir, $arr["template"]);
-		}
-
 
 		$this->read_template($arr["template"]);
-
-		// import language constants
-		lc_site_load("menuedit",$this);
 
 		$this->do_sub_callbacks(isset($arr["sub_callbacks"]) ? $arr["sub_callbacks"] : array());
 		
@@ -1813,6 +1248,7 @@ class site_show extends class_base
 		{
 			return $docc;
 		}
+
 		$this->import_class_vars($arr);
 
 		// here we must find the menu image, if it is not specified for this menu,
@@ -1841,47 +1277,6 @@ class site_show extends class_base
 		$this->make_final_vars();		
 
 		return $this->parse().$this->build_popups();
-	}
-
-	////
-	// !Redirect the user if he/she didn't have the right to view that section
-	function no_access_redir($section)
-	{
-		$c = get_instance("config");
-		$ec = $c->get_simple_config("errors");
-		$ra = aw_unserialize($ec);
-			
-		$gidlist = aw_global_get("gidlist");
-		if (is_array($gidlist))
-		{
-			$d_gid = 0;
-			$d_pri = 0;
-			$d_url = "";
-			foreach($gidlist as $gid)
-			{
-				if ($ra[$gid]["pri"] >= $d_pri && $ra[$gid]["url"] != "")
-				{
-					$d_gid = $gid;
-					$d_pri = $ra[$gid]["pri"];
-					$d_url = $ra[$gid]["url"];
-				}
-			}
-			
-			if ($d_url != "")
-			{
-				if ($d_url != aw_global_get("REQUEST_URI"))
-				{
-					header("Location: $d_url");
-					die();
-				}
-				else
-				{
-					$this->raise_error(ERR_ACL_ERR,"Access denied and error redirects are defined.incorrectly. Please report this to the site administrator",1);
-				};
-					
-			}
-		}
-		$this->raise_error(ERR_MNEDIT_NOACL,"No ACL error messages defined! no can_view access for object $section",true);
 	}
 }
 ?>

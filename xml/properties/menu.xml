@@ -491,6 +491,7 @@
             <group>show</group>
       </property>
       <classinfo>
+            <trans>1</trans>
             <relationmgr>yes</relationmgr>
             <objtable>menu</objtable>
             <objtable_index>id</objtable_index>

@@ -1073,12 +1073,26 @@ class _int_object
 				{
 					return true;	
 				}
+				else
+				{
+					error::throw(array(
+						"id" => ERR_ACL,
+						"msg" => "object::save(): no acess to save object!"
+					));
+				}
 			}
 			else
 			{
 				if ($GLOBALS["object_loader"]->ds->can("add", $this->obj["parent"]))
 				{
 					return true;	
+				}
+				else
+				{
+					error::throw(array(
+						"id" => ERR_ACL,
+						"msg" => "object::save(): no acess to save object!"
+					));
 				}
 			}
 		}

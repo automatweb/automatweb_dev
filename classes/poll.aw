@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.40 2003/07/01 10:20:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.41 2003/09/17 15:11:41 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -807,6 +807,13 @@ class poll extends aw_template
 		$this->t->set_default_sortby("date");
 		$this->t->sort_by();
 		return $this->t->draw();
+	}
+
+	function on_get_subtemplate_content($arr)
+	{
+		$arr["inst"]->vars(array(
+			"POLL" => $this->gen_user_html()
+		));
 	}
 }
 ?>

@@ -1,8 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.7 2003/09/08 14:18:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.8 2003/09/17 15:11:41 kristo Exp $
 // promo.aw - promokastid.
 
 /*
+	@classinfo trans=1
 	@default group=general
 	
 	@property caption type=textbox table=objects field=meta method=serialize
@@ -566,6 +567,215 @@ class promo extends class_base
 			));
 		}
 		return $this->parse();
+	}
+
+	////
+	// !this must set the content for subtemplates in main.tpl
+	// params
+	//	inst - instance to set variables to
+	//	content_for - array of templates to get content for
+	function on_get_subtemplate_content($arr)
+	{
+		$inst =& $arr["inst"];
+
+		$doc = get_instance("document");
+		# reset period, or we don't see contents of promo boxes under periodic menus:
+		$doc->set_period(0);
+
+		if (aw_ini_get("menuedit.promo_lead_only"))
+		{
+			$leadonly = 1;
+		}
+		else
+		{
+			$leadonly = -1;
+		}
+
+		$filter = array();
+		$filter["status"] = STAT_ACTIVE;
+		$filter["class_id"] = CL_PROMO;
+		$filter["sort_by"] = "objects.jrk";
+
+		if (aw_ini_get("menuedit.lang_menus"))
+		{
+			$filter["lang_id"] = aw_global_get("lang_id");
+		}
+
+		$list = new object_list($filter);
+
+		$tplmgr = get_instance("templatemgr");
+		$promos = array();
+		$gidlist = aw_global_get("gidlist");
+		for($o =& $list->begin(); !$list->end(); $o =& $list->next())
+		{
+			if (!$o->prop("tpl_lead"))
+			{
+				$tpl_filename = aw_ini_get("promo.default_tpl");
+				if (!$tpl_filename)
+				{
+					continue;
+				}
+			}
+			else
+			{
+				// find the file for the template by id. sucks. we should join the template table
+				// on the menu template I guess
+				$tpl_filename = $tplmgr->get_template_file_by_id($o->prop("tpl_lead"));
+			}
+
+			$found = false;
+
+			if (!is_array($o->meta("groups")) || count($o->meta("groups")) < 1)
+			{
+				$found = true;
+			}
+			else
+			{
+				foreach($o->meta("groups") as $gid)
+				{
+					if (isset($gidlist[$gid]) && $gidlist[$gid] == $gid)
+					{
+						$found = true;
+					}
+				}
+			}
+
+			$doc->doc_count = 0;
+
+			$show_promo = false;
+			
+			$msec = $o->meta("section");
+
+			if ($o->meta("all_menus"))
+			{
+				$show_promo = true;
+			}
+			else
+			if (isset($msec[$inst->sel_section]) && $msec[$inst->sel_section])
+			{
+				$show_promo = true;
+			}
+			else
+			if (is_array($o->meta("section_include_submenus")) && $inst->is_in_path($inst->sel_section))
+			{
+				$pa = array();
+				foreach($inst->path as $o)
+				{
+					$pa[] = $o->id();
+				}
+
+				// here we need to check, whether any of the parent menus for
+				// this menu has been assigned a promo box and has been told
+				// that it should be shown in all submenus as well
+				$intersect = array_intersect($pa,$o->meta("section_include_submenus"));
+				if (sizeof($intersect) > 0)
+				{
+					$show_promo = true;
+				}
+			}
+
+			if ($found == false)
+			{
+				$show_promo = false;
+			};
+			
+			// this line decides, whether we should show this promo box here or not.
+			// now, how do I figure out whether the promo box is actually in my path?
+			if ($show_promo)
+			{
+				// visible. so show it
+				// get list of documents in this promo box
+				$pr_c = "";
+				$docid = $inst->get_default_document(array(
+					"obj" => $o
+				));
+
+				if (!is_array($docid))
+				{
+					$docid = array($docid);
+				}
+
+				foreach($docid as $d)
+				{
+					$cont = $doc->gen_preview(array(
+						"docid" => $d,
+						"tpl" => $tpl_filename,
+						"leadonly" => $leadonly,
+						"section" => $inst->sel_section,
+						"strip_img" => false,
+						"showlead" => 1,
+						"boldlead" => 1,
+						"no_strip_lead" => 1,
+						"no_acl_checks" => aw_ini_get("menuedit.no_view_acl_checks"),
+					));
+					$pr_c .= str_replace("\r","",str_replace("\n","",$cont));
+				}
+
+				$inst->vars(array(
+					"comment" => $o->comment(),
+					"title" => $o->name(), 
+					"content" => $pr_c,
+					"url" => $o->prop("link"),
+					"link_caption" => $o->meta("link_caption")
+				));
+
+				// which promo to use? we need to know this to use
+				// the correct SHOW_TITLE subtemplate
+				$templates = array(
+					"scroll" => "SCROLL_PROMO",
+					"0" => "LEFT_PROMO",
+					"1" => "RIGHT_PROMO",
+					"2" => "UP_PROMO",
+					"3" => "DOWN_PROMO",
+				);
+	
+				$use_tpl = $templates[$meta["type"]];
+				if (!$use_tpl)
+				{
+					$use_tpl = "LEFT_PROMO";
+				};
+
+				if ($o->meta("no_title") != 1)
+				{
+					$inst->vars(array(
+						"SHOW_TITLE" => $inst->parse($use_tpl . ".SHOW_TITLE")
+					));
+				}
+				else
+				{
+					$inst->vars(array(
+						"SHOW_TITLE" => ""
+					));
+				}
+				$ap = "";
+				if ($o->prop("link") != "")
+				{
+					$ap = "_LINKED";
+				}
+				if ($this->used_promo_tpls[$use_tpl] != 1)
+				{
+					$ap.="_BEGIN";
+					$this->used_promo_tpls[$use_tpl] = 1;
+				}
+
+				if ($inst->is_template($use_tpl . $ap))
+				{
+					$promos[$use_tpl] .= $inst->parse($use_tpl . $ap);
+					$inst->vars(array($use_tpl . $ap => ""));
+				}
+				else
+				{
+					$promos[$use_tpl] .= $inst->parse($use_tpl);
+					$inst->vars(array($use_tpl => ""));
+				};
+				// nil the variables that were imported for promo boxes
+				// if we dont do that we can get unwanted copys of promo boxes
+				// in places we dont want them
+				$inst->vars(array("title" => "", "content" => "","url" => ""));
+			}
+		};
+
+		$inst->vars($promos);
 	}
 }
 ?>

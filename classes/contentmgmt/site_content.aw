@@ -784,14 +784,18 @@ class site_content extends menuedit
 			$has_lugu = "";
 			if (isset($meta["show_lead"]) && $meta["show_lead"] && (!aw_ini_get("menuedit.show_lead_in_menu_only_active") || in_array($row["oid"], $path)))
 			{
-				$activeperiod = aw_global_get("act_per_id");
-				$this->save_handle();
-				$q = "SELECT objects.oid FROM objects LEFT JOIN documents ON (objects.oid = documents.docid) WHERE parent = $row[oid] AND status = 2 AND objects.period = '$activeperiod' AND class_id IN (" . CL_PERIODIC_SECTION.",".CL_DOCUMENT.") ORDER BY objects.jrk LIMIT ".((int)(aw_ini_get("menuedit.show_lead_in_menu_count")));
-				$this->db_query($q);
-				while ($xdat = $this->db_next())
+				$xdat = new object_list(array(
+					"parent" => $row["oid"],
+					"status" => STAT_ACTIVE,
+					"period" => aw_global_get("act_per_id"),
+					"class_id" => array(CL_PERIODIC_SECTION, CL_DOCUMENT),
+					"sort_by" => "objects.jrk",
+					"limit" => (int)aw_ini_get("menuedit.show_lead_in_menu_count")
+				));
+				for($o =& $xdat->begin(); !$xdat->end(); $o =& $xdat->next())
 				{
 					$done = $this->doc->gen_preview(array(
-						"docid" => $xdat["oid"], 
+						"docid" => $o->id(), 
 						"tpl" => "nadal_film_side_lead.tpl",
 						"leadonly" => 1, 
 						"section" => $row["oid"],
@@ -802,7 +806,6 @@ class site_content extends menuedit
 					));
 					$has_lugu .= $this->parse("HAS_LUGU");
 				}
-				$this->restore_handle();
 			}
 			// HAS_LUGU var is inserted in template much later, so that it will not get overwritten
 			

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.45 2003/08/21 10:23:49 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.46 2003/09/17 15:11:41 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -1761,6 +1761,22 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			"format" => "rows",
 		));
 		return $this->db_rows;
+	}
+
+	function on_get_subtemplate_content($arr)
+	{
+		$id = $arr["inst"]->section_obj->id();
+		$t = get_instance("search_conf");
+		$def = $GLOBALS["HTTP_GET_VARS"]["parent"] ? $GLOBALS["HTTP_GET_VARS"]["parent"] : $id;
+		$sl = $t->get_search_list(&$def);
+		$arr["inst"]->vars(array(
+			"search_sel" => $this->option_list($def,$sl),
+			"section" => $id,
+			"str" => htmlentities($GLOBALS["HTTP_GET_VARS"]["str"])
+		));
+		$arr["inst"]->vars(array(
+			"SEARCH_SEL" => $arr["inst"]->parse("SEARCH_SEL")
+		));
 	}
 };
 ?>

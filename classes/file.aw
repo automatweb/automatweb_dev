@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.54 2003/09/08 14:18:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.55 2003/09/17 15:11:41 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -18,6 +18,7 @@
 //
 
 /*
+	@classinfo trans=1
 	@default table=files
 	@default group=general
 
@@ -673,6 +674,11 @@ class file extends class_base
 				return false;
 			}
 		}
+	}
+
+	function request_execute($obj)
+	{
+		return $this->show($obj->id());
 	}
 };
 ?>

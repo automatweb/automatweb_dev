@@ -1,5 +1,5 @@
 <?php
-// $Id: site_threepane.aw,v 1.7 2003/01/16 14:30:27 duke Exp $
+// $Id: site_threepane.aw,v 1.8 2003/09/17 15:11:42 kristo Exp $
 // site_threepane.aw - simpel 3 paaniga sait.
 /*
 	@default table=objects
@@ -186,6 +186,13 @@ class site_threepane extends class_base
 				),
 			),
 		);
+	}
+
+	function request_execute($obj)
+	{
+		return $this->show(array(
+			"id" => $obj->id()
+		));
 	}
 };
 ?>

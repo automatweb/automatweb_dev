@@ -33,17 +33,7 @@
       <property>
             <name>baselang</name>
             <type>text</type>
-            <group>
-                  <num_0>general</num_0>
-                  <num_1>utr_day</num_1>
-                  <num_2>utr_week</num_2>
-                  <num_3>utr_month</num_3>
-                  <num_4>tr_day</num_4>
-                  <num_5>tr_week</num_5>
-                  <num_6>tr_month</num_6>
-                  <num_7>tr_all</num_7>
-                  <num_8>utr_all</num_8>
-            </group>
+            <group>general</group>
             <store>no</store>
             <table>objects</table>
             <field>baselang</field>
@@ -52,17 +42,7 @@
       <property>
             <name>targetlang</name>
             <type>text</type>
-            <group>
-                  <num_0>general</num_0>
-                  <num_1>utr_day</num_1>
-                  <num_2>utr_week</num_2>
-                  <num_3>utr_month</num_3>
-                  <num_4>tr_day</num_4>
-                  <num_5>tr_week</num_5>
-                  <num_6>tr_month</num_6>
-                  <num_7>tr_all</num_7>
-                  <num_8>utr_all</num_8>
-            </group>
+            <group>general</group>
             <store>no</store>
             <table>objects</table>
             <field>targetlang</field>

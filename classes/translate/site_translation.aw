@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/site_translation.aw,v 1.2 2003/09/08 14:18:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/site_translation.aw,v 1.3 2003/09/17 15:11:42 kristo Exp $
 // site_translation.aw - Saidi tõlge 
 /*
 
@@ -14,10 +14,10 @@
 @property tr_toolbar group=tr_day,tr_week,tr_month,tr_all type=toolbar  store=no no_caption=1
 @caption TB
 
-@property baselang type=text group=general,utr_day,utr_week,utr_month,tr_day,tr_week,tr_month,tr_all,utr_all store=no
+@property baselang type=text group=general store=no
 @caption Baaskeel
 
-@property targetlang type=text group=general,utr_day,utr_week,utr_month,tr_day,tr_week,tr_month,tr_all,utr_all store=no
+@property targetlang type=text group=general store=no
 @caption Sihtkeel
 
 @property translated group=tr_day,tr_week,tr_month,tr_all type=text store=no no_caption=1
@@ -182,7 +182,7 @@ class site_translation extends class_base
 		
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => "Originaal objekti nimi",
 			"sortable" => 1,
 		));
 		
@@ -194,13 +194,37 @@ class site_translation extends class_base
 		));
 
 		$t->define_field(array(
+			"name" => "base_lang",
+			"caption" => "Baaskeel",
+			"sortable" => 1,
+			"align" => "center",
+		));
+
+		$t->define_field(array(
 			"name" => "action",
-			"caption" => "Tegevus",
+			"caption" => "T&otilde;lgi",
 			"align" => "center",
 		));	
 
+		$l = get_instance("languages");
+		$langs = $l->get_list(array(
+			"all_data" => true
+		));
 		foreach($thingies->arr() as $item)
 		{
+			$lch = array();
+			foreach($langs as $lid => $lg)
+			{
+				if ($item->lang() != $lg["acceptlang"])
+				{
+					$lch[] = html::href(array(
+						"url" => $this->mk_my_orb("create",array("id" => $item->id(),"dstlang" => $lg["acceptlang"]),"object_translation"),
+						"caption" => $lg["name"],
+						"target" => "_blank"
+					));
+				}
+			}
+
 			$clfile = $this->cfg["classes"][$item->class_id()]["file"];
 			$t->define_data(array(
 				"id" => $item->id(),
@@ -210,11 +234,8 @@ class site_translation extends class_base
 					"target" => "_blank"
 				)),
 				"class_id" => $clist[$item->class_id()]["name"],
-				"action" => html::href(array(
-					"url" => $this->mk_my_orb("create",array("id" => $item->id(),"dstlang" => $this->target_lang_code),"object_translation"),
-					"caption" => "Tõlgi",
-					"target" => "_blank"
-				)),
+				"action" => join(" | ", $lch),
+				"base_lang" => $this->base_lang_code
 			));
 		};
 
@@ -280,13 +301,59 @@ class site_translation extends class_base
 			"align" => "center",
 		));
 
+		$t->define_field(array(
+			"name" => "base_lang",
+			"caption" => "Baaskeel",
+			"sortable" => 1,
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "action",
+			"caption" => "Vaata t&otilde;lkeid",
+			"sortable" => 0,
+			"align" => "center",
+		));
+
+		$l = get_instance("languages");
+		$langs = $l->get_list(array(
+			"all_data" => true,
+			"key" => "acceptlang"
+		));
+		$langs_id = $l->get_list(array(
+			"all_data" => true,
+			"key" => "id"
+		));
+
 		foreach($thingies->arr() as $item)
 		{
+			$co = $item->connections_from(array(
+				"type" => RELTYPE_TRANSLATION
+			));
+			$lch = array();
+			foreach($co as $conn)
+			{
+				if ($conn->prop("to.lang_id") != $langs[$item->lang()]["id"])
+				{
+					$lch[] = html::href(array(
+						"url" => $this->mk_my_orb("create",array("id" => $item->id(),"dstlang" => $langs_id[$conn->prop("to.lang_id")]["acceptlang"]),"object_translation"),
+						"caption" => $langs_id[$conn->prop("to.lang_id")]["name"],
+						"target" => "_blank"
+					));
+				}
+			}
+
 			$clfile = $this->cfg["classes"][$item->class_id()]["file"];
 			$t->define_data(array(
 				"id" => $item->id(),
-				"name" => $item->name(),
+				"name" => html::href(array(
+					"url" => $this->mk_my_orb("change", array("id" => $item->id()), $clfile),
+					"caption" => $item->name(),
+					"target" => "_blank"
+				)),
 				"class_id" => $item->class_id(),
+				"base_lang" => $this->base_lang_code,
+				"action" => join(" | ", $lch),
 			));
 		};
 
