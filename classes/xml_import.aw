@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.5 2002/07/23 21:13:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.6 2002/07/24 16:12:58 duke Exp $
 class xml_import extends aw_template
 {
 
@@ -11,6 +11,8 @@ class xml_import extends aw_template
 			"import_struktuurid" => "import_struktuurid",
 			"import_tootajad" => "import_tootajad",
 			"import_oppekava" => "import_oppekava",
+			"import_oppeasted" => "import_oppeasted",
+			"import_oppevormid" => "import_oppevormid",
 		);
 	}
 
@@ -185,11 +187,17 @@ class xml_import extends aw_template
 				$oppekava = $attr["oppekava"];
 				$oppeaste = $attr["oppeaste"];
 				$oppevorm = $attr["oppevorm"];
+				$oppekava = $this->convert_unicode($oppekava);
+				$oppeaste = $this->convert_unicode($oppeaste);
+				$oppevorm = $this->convert_unicode($oppevorm);
+				$nimi = $enimi . " " . $pnimi;
 				$aasta = $attr["aasta"];
 
 				$this->quote($nimi);
-				$q = "INSERT INTO ut_tudengid (id,enimi,pnimi,struktuur,oppekava,oppeaste,oppevorm,aasta)
-					VALUES('$id','$enimi','$pnimi','$struktuur','$oppekava','$oppeaste','$oppevorm','$aasta')";
+				$this->quote($enimi);
+				$this->quote($pnimi);
+				$q = "INSERT INTO ut_tudengid (id,enimi,pnimi,struktuur,oppekava,oppeaste,oppevorm,aasta,nimi)
+					VALUES('$id','$enimi','$pnimi','$struktuur','$oppekava','$oppeaste','$oppevorm','$aasta','$nimi')";
 				print $q;
 				print "<br>";
 				$this->db_query($q);
@@ -264,6 +272,7 @@ class xml_import extends aw_template
 					$veeb = $attr["veeb"];
 					$telefon = $attr["telefon"];
 					$faks = $attr["faks"];
+					$jrk = $attr["jrk"];
 
 					/*
 					print "<pre>";
@@ -273,18 +282,27 @@ class xml_import extends aw_template
 					$real_ylem_name = $ylem_list[sizeof($ylem_list) - 1];
 					$real_ylem_id = $ylem_ilist[sizeof($ylem_list) - 1];
 
-					if (preg_match("/vastutusala/",$nimetus))
+					/*if (preg_match("/vastutusala/",$nimetus))
 					{
 						$real_ylem_id = -1;
 					};
-					
-					if (preg_match("/teaduskond/",$nimetus))
+					*/
+				
+					if (not($real_ylem_id))
 					{
-						$real_ylem_id = 0;
+						if (preg_match("/teaduskond/",$nimetus))
+						{
+							$real_ylem_id = 0;
+						}
+						else
+						{
+							$real_ylem_id = -1;
+						};
 					};
+						
 
-					$q = "INSERT INTO ut_struktuurid (id,kood,nimetus,aadress,email,veeb,telefon,faks,osakond,ylem_id,ylemyksus)
-							VALUES('$id','$kood','$nimetus','$aadress','$email','$veeb','$telefon','$faks','$osakond','$real_ylem_id','$real_ylem_name')";
+					$q = "INSERT INTO ut_struktuurid (id,kood,nimetus,aadress,email,veeb,telefon,faks,osakond,ylem_id,ylemyksus,jrk)
+							VALUES('$id','$kood','$nimetus','$aadress','$email','$veeb','$telefon','$faks','$osakond','$real_ylem_id','$real_ylem_name','$jrk')";
 					print $q;
 					$this->db_query($q);
 					print "<br>";
@@ -392,6 +410,70 @@ class xml_import extends aw_template
 				$this->quote($nimetus);
 				$q = "INSERT INTO ut_oppekavad (id,kood,nimetus)
 					VALUES('$id','$kood','$nimetus')";
+				print $q;
+				print "<br>";
+				$this->db_query($q);
+			};
+
+
+
+		}
+	}
+	
+	function import_oppeasted($args = array())
+	{
+		$contents = $args["source"];
+		$parser = xml_parser_create();
+		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
+		// xml data arraysse
+		xml_parse_into_struct($parser,$contents,&$values,&$tags);
+		// R.I.P. parser
+		xml_parser_free($parser);
+		$q = "DELETE FROM ut_oppeasted";
+		$this->db_query($q);
+		foreach($values as $key => $val)
+		{
+			if ( ($val["tag"] == "oppeaste")  && ($val["type"] == "complete") )
+			{
+				$attr = $val["attributes"];		
+				$nimetus = $this->convert_unicode($attr["nimetus"]);
+				$id = $attr["id"];
+				$jrk = $attr["jrk"];
+				$this->quote($nimetus);
+				$q = "INSERT INTO ut_oppeasted (id,nimetus,jrk)
+					VALUES('$id','$nimetus','$jrk')";
+				print $q;
+				print "<br>";
+				$this->db_query($q);
+			};
+
+
+
+		}
+	}
+	
+	function import_oppevormid($args = array())
+	{
+		$contents = $args["source"];
+		$parser = xml_parser_create();
+		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
+		// xml data arraysse
+		xml_parse_into_struct($parser,$contents,&$values,&$tags);
+		// R.I.P. parser
+		xml_parser_free($parser);
+		$q = "DELETE FROM ut_oppevormid";
+		$this->db_query($q);
+		foreach($values as $key => $val)
+		{
+			if ( ($val["tag"] == "oppevorm")  && ($val["type"] == "complete") )
+			{
+				$attr = $val["attributes"];		
+				$nimetus = $this->convert_unicode($attr["nimetus"]);
+				$id = $attr["id"];
+				$jrk = $attr["jrk"];
+				$this->quote($nimetus);
+				$q = "INSERT INTO ut_oppevormid (id,nimetus,jrk)
+					VALUES('$id','$nimetus','$jrk')";
 				print $q;
 				print "<br>";
 				$this->db_query($q);
