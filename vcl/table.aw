@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.44 2003/03/05 16:48:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.45 2003/03/06 17:06:08 duke Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -9,7 +9,7 @@ class aw_table
 	// !contructor - paramaters:
 	// prefix - a symbolic name for the table so we could tell it apart from the others
 	// tbgcolor - default cell background color
-	function aw_table($data)
+	function aw_table($data = array())
 	{
 		if (file_exists(aw_ini_get("site_basedir")."/public/img/up.gif"))
 		{
@@ -42,6 +42,7 @@ class aw_table
 		// esimene kord andmeid sisestada?
 		// seda on vaja selleks, et m??rata default sort order.
 		$this->first = true;
+		$this->set_layout(isset($data["layout"]) ? $data["layout"] : "generic");
 	}
 
 	////
@@ -1015,11 +1016,29 @@ class aw_table
 		};
 	}
 
+	function set_layout($def)
+	{
+		$realdef = "generic";
+		if ($def == "cool")
+		{
+			$realdef = "cool";
+		};
+		$this->parse_xml_def($realdef . "_table");
+	}
+
 	function parse_xml_def($file) 
 	{
-		$xml_data = $this->get_file_contents($file);
+		if (substr($file,0,1) != "/")
+		{
+			$path = aw_ini_get("basedir") . "/xml/" . $file . ".xml";
+		}
+		else
+		{ 
+			$path = $file;
+		};
+		$xml_data = $this->get_file_contents($path);
 		return $this->parse_xml_def_string($xml_data);
-  }
+	}
 
 	////
 	// !this makes sure that all sort properties (sortby, sort_order) are 
