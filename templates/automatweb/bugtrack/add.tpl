@@ -1,4 +1,4 @@
-<form method="POST" action="reforb.aw">
+<form method="POST" action="reforb.{VAR:ext}">
 <table border="0" cellspacing="1" cellpadding="2" bgcolor="#CCCCCC">
 <tr>
 	<td class="fcaption2">Kes</td>
@@ -14,31 +14,20 @@
 </tr>
 <tr>
 	<td class="fcaption2">Prioriteet</td>
-	<td class="fform"><select name="pri">
-		<option value="1">1 - madalaim
-		<option>2
-		<option>3
-		<option>4
-		<option>5
-		<option>6
-		<option>7
-		<option>8
-		<option value="9">9 - kõrgeim
-            </select></td>
+	<td class="fform"><select name="pri">{VAR:prilist}</select></td>
 </tr>
 <tr>
 	<td class="fcaption2">Kellele</td>
-	<td class="fform"><select name="developer">{VAR:userlist}</select></td>
+	<td class="fform"><select name="developer">{VAR:developerlist}</select></td>
 </tr>
 <tr>
 	<td class="fcaption2">Tõsidus</td>
-	<td class="fform"><select name="severity">{VAR:sevlist}</select></td>
+	<td class="fform"><select name="severity">{VAR:severitylist}</select></td>
 </tr>
 <tr>
 	<td class="fcaption2" valign="top">Tekst</td>
 	<td class="fform">
-		<textarea name="text" cols="60" rows="10" wrap="soft">
-		</textarea>
+		<textarea name="text" cols="60" rows="10" wrap="soft"></textarea>
 	</td>
 </tr>
 <tr>
@@ -51,7 +40,7 @@
 	</td>
 </tr>
 <tr>
-	<td class="fcaption2" colspan=2>Kas soovite teadet, kui bugi on parandatud? (saadetakse aadressile {VAR:user_mail}) <input type='checkbox' NAME='sendmail2' value=1 CHECKED></td>
+	<td class="fcaption2" colspan=2>Kas soovite teadet, kui bugi on parandatud? (saadetakse aadressile {VAR:sendmail2_mail}) <input type='checkbox' NAME='sendmail2' value=1 CHECKED></td>
 </tr>
 <tr>
 	<td class="fform" align="center" colspan="2">

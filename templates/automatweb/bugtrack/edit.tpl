@@ -1,4 +1,4 @@
-<form method="POST" action="reforb.aw">
+<form method="POST" action="reforb.{VAR:ext}">
 <table border="0" cellspacing="1" cellpadding="2" bgcolor="#CCCCCC">
 <tr>
 	<td class="fcaption2">Kes</td>
@@ -24,41 +24,41 @@
 	<td class="fcaption2">Staatus</td>
 	<td class="fform">
 		<select name="status">
-			{VAR:statlist}
+			{VAR:statuslist}
 		</select>
 	</td>
-</tr>
-<tr>
-	<td class="fcaption2">Tõsidus</td>
-	<td class="fform"><select name="severity">{VAR:sevlist}</select></td>
-</tr>
-<tr>
-	<td class="fcaption2">Järeldus</td>
-	<td class="fform"><select name="resolution">{VAR:reslist}</select></td>
 </tr>
 <tr>
 	<td class="fcaption2">Kellele</td>
 	<td class="fform">
 		<select name="developer">
-			{VAR:userlist}
+			{VAR:developerlist}
 		</select></td>
+</tr>
+<tr>
+	<td class="fcaption2">Tõsidus</td>
+	<td class="fform"><select name="severity">{VAR:severitylist}</select></td>
 </tr>
 <tr>
 	<td class="fcaption2">Valmis ajaks</td>
 	<td class="fform">{VAR:time_fixed}</td>
 </tr>
 <tr>
-	<td class="fcaption2" colspan=2>Kas soovite teadet emailiga, kui bugi on parandatud? Saadetakse aadressile "{VAR:user_mail}" 
-	<input type='checkbox' NAME='sendmail2' value=1 {VAR:checked}> </td>
+	<td class="fcaption2" colspan=2>Kas soovite teadet emailiga, kui bugi on parandatud? Saadetakse aadressile "{VAR:sendmail2_mail}" 
+	<input type='checkbox' NAME='sendmail2' value=1 {VAR:sendmail2}> </td>
 </tr>
 <tr>
 	<td class="fcaption2" colspan=2>Lisa aadress(e) kuhu tahad teate saada (eralda komaga): 
-	<INPUT TYPE="text" NAME="add_mail" Value="{VAR:add_mail}" SIZE=40></td>
+	<INPUT TYPE="text" NAME="mails" Value="{VAR:mails}" SIZE=40></td>
 </tr>
 <tr>
 	<td class="fcaption2" valign="top">Tekst</td>
 	<td class="fcaption2">{VAR:text}
 	</td>
+</tr>
+<tr>
+	<td class="fcaption2">Järeldus</td>
+	<td class="fform"><select name="resol">{VAR:resollist}</select></td>
 </tr>
 <tr>
 	<td class="fcaption2" valign="top">Parandaja märkus:</td>
@@ -78,5 +78,3 @@
 </tr>
 </table>
 </form>
-
-{VAR:blaah}
