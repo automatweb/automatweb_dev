@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.64 2001/06/19 00:57:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.65 2001/06/20 04:13:10 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -288,6 +288,7 @@ class messenger extends menuedit_light
 		$args["id"] = CONTACT_FORM;
 		$args["parent"] = $args[0];
 		$f->process_entry($args);
+		exit;
 		// I realize that this a little ugly
 		print "<script language='javascript'>window.close()</script>";
 		exit;
@@ -1141,16 +1142,23 @@ class messenger extends menuedit_light
 	// edimisvormi
 	function create_draft($args = array())
 	{
-		$oid = $this->new_object(array(
-					"parent" => $this->conf["msg_draft"],
-					"class_id" => CL_MESSAGE,false)); // hetkel ACL-i teate jaoks ei looda
-		$q = "INSERT INTO messages (id,draft) VALUES ('$oid',1)";
-		$this->db_query($q);
+		$oid = $this->init_message();
 		return $this->mk_site_orb(array(
 						"action" => "edit",
 						"id" => $oid,
 					));
 	}
+
+	function init_message($args = array())
+	{
+		$oid = $this->new_object(array(
+					"parent" => $this->conf["msg_draft"],
+					"class_id" => CL_MESSAGE,false));
+		$q = "INSERT INTO messages (id,draft) VALUES ('$oid',1)";
+		$this->db_query($q);
+		return $oid;
+	}
+					
 		
 	////
 	// !Kuvab uue teate sisestamise/muutmise vormi
@@ -1524,8 +1532,8 @@ class messenger extends menuedit_light
 		// ja lopuks liigutame ta draftist ära outboxi
 		$outbox = $this->conf["msg_outbox"];
 
-		$q = "UPDATE objects SET parent = '$outbox' WHERE oid = '$msg_id'";
-		$this->db_query($q);
+		//$q = "UPDATE objects SET parent = '$outbox' WHERE oid = '$msg_id'";
+		//$this->db_query($q);
 	}
 	
 	////
@@ -1627,7 +1635,21 @@ class messenger extends menuedit_light
 			$c .= $this->parse("line");
 		};
 		$rf =  $this->mk_reforb("do_search",array());
+		$sline = "";
+		for ($i = 0; $i <= 4; $i++)
+		{
+			$this->vars(array(
+					"idx" => $i,
+					"num" => $i + 1,
+				));
+			$sline .= $this->parse("sline");
+			if ($i < 4)
+			{
+				$sline .= $this->parse("connline");
+			};
+		};
 		$this->vars(array(
+			"sline" => $sline,
 			"line" => $c,
 			"menu" => $menu,
 			"reforb" => $rf,
@@ -1641,6 +1663,9 @@ class messenger extends menuedit_light
 		$menu = $this->gen_msg_menu(array(
 				"activelist" => array("search"),
 				));
+		print "<pre>";
+		print_r($args);
+		print "</pre>";
 		$folder_list = $this->_folder_list();
 		if (!is_array($folders))
 		{
@@ -2527,6 +2552,7 @@ class messenger extends menuedit_light
 				$tm = strtotime($body["headers"]["Date"]);
 				$header = join("\n",map2("%s: %s",$body["headers"]));
 				$this->quote($subject);
+				$this->quote($cc);
 				$this->quote($from);
 				$this->quote($to);
 				$this->quote($uidl);

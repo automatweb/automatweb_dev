@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.29 2001/06/20 02:58:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.30 2001/06/20 04:13:10 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -155,6 +155,46 @@ class planner extends calendar {
 			$date = date("d-m-Y");
 		};
 		return $this->change($args);
+	}
+
+	function export_event($args = array())
+	{
+		extract($args);
+		$q = "SELECT * FROM planner WHERE id = '$id'";
+		$this->db_query($q);
+		$row = $this->db_next();
+		classload("xml");
+		$xml = new xml(array("ctag" => "event"));
+		$block = array(
+			"start" => $row["start"],
+			"end" => $row["end"],
+			"title" => $row["title"],
+			"description" => $row["description"],
+			"color" => $row["color"],
+			"place" => $row["place"],
+		);
+		$data = $xml->xml_serialize(array("data" => $block));
+		
+		classload("messenger","file");
+		$msng = new messenger();
+		$msg_id = $msng->init_message();
+		$awf = new file();
+		$awf->put(array(
+				"store" => "fs",
+				"filename" => "event.xml",
+				"type" => "text/xml",
+				"content" => $data,
+				"parent" => $msg_id,
+			));
+			
+		// step 1, create a new empty message object
+		// step 2, create a file from this event
+		// step 3, bounce the user into the editor
+		return $this->mk_site_orb(array(
+				"class" => "messenger",
+				"action" => "edit",
+				"id" => $msg_id,
+			));
 	}
 	
 	////
