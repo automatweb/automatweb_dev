@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.160 2003/02/25 13:50:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.161 2003/02/27 14:57:45 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1500,7 +1500,7 @@ class core extends db_connector
 	// $silent - logida viga, aga jätkata tööd
 	function raise_error($err_type,$msg, $fatal = false, $silent = false, $oid = 0)
 	{
-		if (aw_global_get("__from_raise_error") > 0)
+		if (aw_global_get("__from_raise_error") > 0 || aw_global_get("__in_aw_error_redirect"))
 		{
 			return false;
 		}
@@ -1615,6 +1615,7 @@ class core extends db_connector
 			{
 				$co = get_instance("config");
 				$u = $co->get_simple_config("error_redirect");
+				aw_session_set("__in_aw_error_redirect", 1);
 				if ($u != "" && aw_global_get("uid") != "kix")
 				{
 					header("Location: $u");
