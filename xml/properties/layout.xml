@@ -86,6 +86,35 @@
             <caption>Eelvaade</caption>
       </property>
       <property>
+            <name>import_file</name>
+            <type>fileupload</type>
+            <group>import</group>
+            <method>serialize</method>
+            <table>objects</table>
+            <field>meta</field>
+            <caption>Uploadi .csv fail</caption>
+      </property>
+      <property>
+            <name>import_remove_empty</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <group>import</group>
+            <method>serialize</method>
+            <table>objects</table>
+            <field>meta</field>
+            <caption>Kas eemaldame tühjad read lõpust</caption>
+      </property>
+      <property>
+            <name>import_sep</name>
+            <type>textbox</type>
+            <size>1</size>
+            <group>import</group>
+            <method>serialize</method>
+            <table>objects</table>
+            <field>meta</field>
+            <caption>Mis märgiga on tulbad eraldatud?</caption>
+      </property>
+      <property>
             <name>show_in_folders</name>
             <type>relpicker</type>
             <reltype>RELTYPE_SHOW_FOLDER</reltype>
@@ -116,6 +145,9 @@
             <aliases>
                   <caption>Aliased</caption>
             </aliases>
+            <import>
+                  <caption>Import</caption>
+            </import>
             <preview>
                   <caption>Eelvaade</caption>
             </preview>

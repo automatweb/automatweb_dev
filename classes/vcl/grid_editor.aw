@@ -406,7 +406,7 @@ class grid_editor extends class_base
 			{
 				for ($col = $this->arr["cols"]-1; $col > $after; $col--)
 				{
-					$this->arr["contents"][$row][$col] = $this->arr["contents"][$row][$col-1];
+					$this->arr["aliases"][$row][$col] = $this->arr["aliases"][$row][$col-1];
 				}
 			}
 			
@@ -414,7 +414,7 @@ class grid_editor extends class_base
 			{
 				for ($row = 0; $row < $this->arr["rows"]; $row++)
 				{
-					$this->arr["contents"][$row][$after+1] = "";
+					$this->arr["aliases"][$row][$after+1] = "";
 				}
 			}
 
@@ -550,7 +550,7 @@ class grid_editor extends class_base
 			{
 				for ($row = $this->arr["rows"]-1; $row > $after; $row--)
 				{
-					$this->arr["contents"][$row][$col] = $this->arr["contents"][$row-1][$col];
+					$this->arr["aliases"][$row][$col] = $this->arr["aliases"][$row-1][$col];
 					$this->arr["styles"][$row][$col] = $this->arr["styles"][$row-1][$col];
 				}
 			}
@@ -559,7 +559,7 @@ class grid_editor extends class_base
 			{
 				for ($col = 0; $col < $this->arr["cols"]; $col++)
 				{
-					$this->arr["contents"][$after+1][$col] = "";
+					$this->arr["aliases"][$after+1][$col] = "";
 					$this->arr["styles"][$after+1][$col] = "";
 				}
 			}
@@ -629,7 +629,7 @@ class grid_editor extends class_base
 		{
 			for ($c = $col+1; $c < $this->arr["cols"]; $c++)
 			{
-				$this->arr["contents"][$row][$c-1] = $this->arr["contents"][$row][$c];
+				$this->arr["aliases"][$row][$c-1] = $this->arr["aliases"][$row][$c];
 				$this->arr["styles"][$row][$c-1] = $this->arr["styles"][$row][$c];
 			}
 		}
@@ -687,7 +687,7 @@ class grid_editor extends class_base
 		{
 			for ($r = $row+1; $r < $this->arr["rows"]; $r++)
 			{
-				$this->arr["contents"][$r-1][$col] = $this->arr["contents"][$r][$col];
+				$this->arr["aliases"][$r-1][$col] = $this->arr["aliases"][$r][$col];
 				$this->arr["styles"][$r-1][$col] = $this->arr["styles"][$r][$col];
 			}
 		}
@@ -1074,7 +1074,7 @@ class grid_editor extends class_base
 
 				$map = $this->arr["map"][$row][$col];
 
-				$cell = $this->arr["contents"][$map["row"]][$map["col"]];
+				$cell = $this->arr["aliases"][$map["row"]][$map["col"]];
 				$scell = $this->arr["styles"][$map["row"]][$map["col"]];
 
 				$st = $this->_get_cell_style_id($row, $col, $scell);
@@ -1833,6 +1833,206 @@ class grid_editor extends class_base
 			echo "</tr>";
 		}
 		echo "</table>";
+	}
+
+	////
+	// !imports from csv file
+	// parameters:
+	//	file - file that contains csv data
+	//	sep - separatro betwwen entries
+	//	remove_empty - if true, remove empty lines from end
+	function do_import($arr)
+	{
+		extract($arr);
+
+		// siin ei saa file() funktsiooni kasutada, kuna kui reavahetus on jutum2rkide vahel celli sees, siis ei t2henda see rea l6ppu.
+		// damnit.
+		$file = $this->mk_file($file,$sep);
+		
+		$num_rows = count($file);
+
+		reset($file);
+		list(,$line) = each($file);
+		$num_cols = count(explode($sep,$line));
+
+
+		$this->arr["cols"] = 1;
+		$this->arr["map"] = array();
+		$this->arr["map"][0][0] = array("row" => 0, "col" => 0);
+		$this->arr["aliases"] = array();
+		$this->arr["rows"] = 1;
+
+		// nini. kuna importimisel clearitaxe kogu tabla 2ra niikuinii, siis v6ime lihtsalt uue mapi teha ju
+		$this->arr["cols"] = $num_cols;
+		$this->arr["rows"] = $num_rows;
+		for ($row = 0; $row < $num_rows; $row++)
+		{
+			for ($col = 0; $col < $num_cols; $col++)
+			{
+				$this->arr["map"][$row][$col] = array("row" => $row, "col" => $col);
+			}
+		}
+
+		reset($file);
+		for ($row = 0; $row < $this->arr["rows"]; $row++)
+		{
+			list(,$line) = each($file);
+			$line = chop($line).$sep;
+
+			// ok, so far so good. 
+			// a siin hakkab keemia pihta
+			// nimelt, kui celli sees on ; m2rk, siis pannaxe sisule " ymber. ja celli sees olevad " m2rgid dubleeritaxe
+			$rowarr = array();
+			
+			$pos = 0;
+			$len = strlen($line);
+			while ($pos < $len)
+			{
+				$quoted = false;
+				if ($line[$pos] == "\"")
+				{
+					$quoted = true;
+					$pos++;
+				}
+
+				$cell_content = "";
+				$in_cell = true;
+				while ($in_cell && $pos < $len)
+				{
+					if ($quoted && ($line[$pos] == "\"" && $line[$pos+1] != "\""))	
+					{
+						// leidsime celli l6pu
+						$in_cell = false;
+						$pos+=2;
+					}
+					else
+					if ($line[$pos] == "\"" && $line[$pos+1] == "\"")
+					{
+						// leidsime dubleeritud jutum2rgi
+						$cell_content.="\"";
+						$pos+=2;
+					}
+					else
+					if (!$quoted && $line[$pos] == $sep)
+					{
+						// leidsime celli mis pole jutum2rkide vahel, l6pu
+						$in_cell= false;
+						$pos++;
+					}
+					else
+					{
+						$cell_content.=$line[$pos];
+						$pos++;
+					}
+				}
+				$rowarr[] = $cell_content;
+			}
+			reset($rowarr);
+			for ($col = 0; $col < $this->arr["cols"]; $col++)
+			{
+				list(,$ct) = each($rowarr);
+				$ct = str_replace("'", "\"",$ct);
+				$this->arr["aliases"][$row][$col] = $ct;
+			}
+		}
+	
+		if ($arr["trim"])
+		{
+			for ($row = 0; $row < $this->arr["rows"]; $row++)
+			{
+				$filled = false;
+				for ($col = 0; $col < $this->arr["cols"]; $col++)
+				{
+					if ($this->arr["aliases"][$row][$col] != "")
+					{
+						$filled = true;
+					}
+				}
+				if ($filled)
+				{
+					$last = $row;
+				}
+			}
+			$this->arr["rows"] = $last+1;
+
+			for ($col = 0; $col < $this->arr["cols"]; $col++)
+			{
+				$filled = false;
+				for ($row = 0; $row < $this->arr["rows"]; $row++)
+				{
+					if ($this->arr["aliases"][$row][$col] != "")
+					{
+						$filled = true;
+					}
+				}
+				if ($filled)
+				{
+					$last = $col;
+				}
+			}
+			$this->arr["cols"] = $last+1;
+		}
+		return $this->arr;
+	}
+
+	function mk_file($file,$separator)
+	{
+		$f = fopen($file,"r");
+		$filestr = fread($f,filesize($file));
+		fclose($f);
+
+		$len = strlen($filestr);
+		$linearr = array();
+		$in_cell = false;
+		for ($pos=0; $pos < $len; $pos++)
+		{
+			if ($filestr[$pos] == "\"")	
+			{
+				if ($in_cell == false)
+				{
+					// pole celli sees ja jutum2rk. j2relikult algab quoted cell
+					$in_cell = true;
+					$line.=$filestr[$pos];
+				}
+				else
+				if ($in_cell == true && ($filestr[$pos+1] == $separator || $filestr[$pos+1] == "\n" || $filestr[$pos+1] == "\r"))
+				{
+					// celli sees ja jutum2rk ja j2rgmine on kas semikas v6i reavahetus, j2relikult cell l6peb
+					$in_cell = false;
+					$line.=$filestr[$pos];
+				}
+				else
+				{
+					// dubleeritud jutum2rk
+					$line.=$filestr[$pos];
+				}
+			}
+			else
+			if ($filestr[$pos] == $separator && $in_cell == false)
+			{
+				// semikas t2histab celli l6ppu aint siis, kui ta pole jutum2rkide vahel
+				$in_cell = false;
+				$line.=$filestr[$pos];
+			}
+			else
+			if (($filestr[$pos] == "\n" || $filestr[$pos] == "\r") && $in_cell == false)
+			{
+				// kui on reavahetus ja me pole quotetud celli sees, siis algab j2rgmine rida
+
+				// clearime j2rgneva l2bu ka 2ra
+				if ($filestr[$pos+1] == "\n" || $filestr[$pos+1] == "\r")
+				{
+					$pos++;
+				}
+				$linearr[] = $line;
+				$line = "";
+			}
+			else
+			{
+				$line.=$filestr[$pos];
+			}
+		}
+		return $linearr;
 	}
 }
 ?>

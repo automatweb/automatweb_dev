@@ -9,6 +9,7 @@
 @groupinfo layout caption=Tabel
 @groupinfo styles caption=Stiilid
 @groupinfo aliases caption=Aliased
+@groupinfo import caption=Import
 @groupinfo preview caption=Eelvaade
 
 @default table=objects
@@ -40,6 +41,15 @@
 
 @property grid_preview type=callback group=preview method=serialize
 @caption Eelvaade
+
+@property import_file type=fileupload group=import method=serialize
+@caption Uploadi .csv fail
+
+@property import_remove_empty type=checkbox ch_value=1 group=import method=serialize
+@caption Kas eemaldame tühjad read lõpust
+
+@property import_sep type=textbox size=1 group=import method=serialize
+@caption Mis märgiga on tulbad eraldatud?
 
 @property show_in_folders type=relpicker reltype=RELTYPE_SHOW_FOLDER multiple=1 rel=1 method=serialize
 @caption Millistes kataloogides n&auml;idatakse
@@ -204,7 +214,27 @@ class layout extends class_base
 			$ge->set_num_rows($arr["form_data"]["rows"]);
 			$arr['metadata']['grid'] = $ge->_get_table();
 		}
+		else
+		if ($prop["name"] == "import_file")
+		{
+			global $import_file;
+			if (is_uploaded_file($import_file))
+			{
+				$ge = get_instance("vcl/grid_editor");
+				$arr["metadata"]["grid"] = $ge->do_import(array(
+					"sep" => $arr["form_data"]["import_sep"],
+					"remove_empty" => $arr["form_data"]["import_remove_empty"],
+					"file" => $import_file
+				));
+			}
+		}
 		return PROP_OK;
+	}
+
+	function _do_import($arr)
+	{
+		extract($arr);
+
 	}
 
 	function sel_style($arr)
