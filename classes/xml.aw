@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml.aw,v 2.12 2002/10/24 15:35:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml.aw,v 2.13 2003/03/06 19:12:36 duke Exp $
 // xml.aw - xml serializer
 // at the moment (Apr 25, 2001) it can serialize PHP arrays to XML and vice versa
 class xml 
@@ -189,6 +189,7 @@ class xml
 
 		$datablock = "";
 		$ckeys = array();
+		$path = "";
 
 		foreach($keys as $k1 => $v1)
 		{
