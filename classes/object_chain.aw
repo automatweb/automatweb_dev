@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.7 2002/09/09 12:27:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.8 2002/09/25 22:43:33 duke Exp $
 // object_chain.aw - Objektipärjad
 
 classload("objects");
@@ -256,7 +256,7 @@ class object_chain extends aw_template
 	{
 		extract($arr);
 		$this->expl_chain(array("id" => $alias,"parent" => $id));
-		header("Location: ".$this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"));
+		//header("Location: ".$this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"));
 	}
 }
 ?>
