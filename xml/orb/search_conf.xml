@@ -77,6 +77,13 @@
 			</function>
 		</action>
 
+		<action name="submit_conf">
+			<function name="submit_conf">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
 		

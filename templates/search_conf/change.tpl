@@ -32,6 +32,12 @@ onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('log','','{VAR:baseur
 name="log" alt="Log" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/log.gif" width="25" height="25"></a></td>
 
 
+<td><IMG
+SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a href="javascript:document.b88.submit()"
+onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseurl}/automatweb/images/blue/awicons/save_over.gif',1)"><img
+name="log" alt="Log" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/save.gif" width="25" height="25"></a></td>
+
+
 
 </tr>
 </table>
@@ -68,6 +74,7 @@ name="log" alt="Log" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicon
 <td align="center" class="celltext">&nbsp;{VAR:LC_SEARCH_CONF_NAME}&nbsp;</td>
 <td align="center" class="celltext">&nbsp;Jrk&nbsp;</td>
 <td align="center" class="celltext" colspan=2>&nbsp;{VAR:LC_SEARCH_CONF_ACTION}&nbsp;</td>
+<td align="center" class="celltext">Aktiivne</td>
 </tr>
 
 <!-- SUB: LINE -->
@@ -76,8 +83,13 @@ name="log" alt="Log" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicon
 <td class="celltext" width="5%">&nbsp;{VAR:ord}&nbsp;</td>
 <td class="celltext" width="5%" align="center"><a href='{VAR:change}'><img src="{VAR:baseurl}/automatweb/images/blue/obj_edit.gif" alt="{VAR:LC_SEARCH_CONF_CHANGE}" border="0"></a></td>
 <td class="celltext" width="5%" align="center"><a href='{VAR:delete}'><img src="{VAR:baseurl}/automatweb/images/blue/obj_delete.gif" border="0" alt="{VAR:LC_SEARCH_CONF_DELETE}"></a></td>
+<td class="celltext" width="5%" align="center"><input type="radio" name="act_search" value="{VAR:grpid}" {VAR:checked}></td>
 </tr>
 <!-- END SUB: LINE -->
+<tr class="aste07">
+	<td class="celltext" colspan="4">&nbsp;</td>
+	<td class="celltext" width="5%" align="center"><input type="radio" name="act_search" value="" {VAR:no_act_search}></td>
+</tr>
 </table>
 </td>
 </tr>

@@ -741,6 +741,8 @@ class search_conf extends aw_template
 	{
 		$this->read_template("change.tpl");
 
+		$act_grp = $this->get_cval("search::default_group");
+
 		$grps = $this->get_groups();
 		foreach($grps as $grpid => $grpdata)
 		{
@@ -749,21 +751,30 @@ class search_conf extends aw_template
 				"name" => $grpdata["name"],
 				"ord" => $grpdata["ord"],
 				"change" => $this->mk_my_orb("change_grp", array("id" => $grpid)),
-				"delete" => $this->mk_my_orb("delete_grp", array("id" => $grpid))
+				"delete" => $this->mk_my_orb("delete_grp", array("id" => $grpid)),
+				"checked" => checked($act_grp == $grpid)
 			));
 			$l.=$this->parse("LINE");
 		}
 
-//		end($grps);
-//		list($id,$dat) = each($grps);
 		$id = @max(array_keys($grps))+1;
 
 		$this->vars(array(
 			"add" => $this->mk_my_orb("change_grp", array("id" => $id)),
 			"LINE" => $l,
-			"s_log" => $this->mk_my_orb("search_log", array())
+			"s_log" => $this->mk_my_orb("search_log", array()),
+			"no_act_search" => checked(!$act_grp),
+			"reforb" => $this->mk_reforb("submit_conf")
 		));
 		return $this->parse();
+	}
+
+	function submit_conf($arr)
+	{
+		extract($arr);
+		
+		$this->set_cval("search::default_group", $act_search);
+		return $this->mk_my_orb("change");
 	}
 
 	function change_grp($arr)
