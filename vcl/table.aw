@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.11 2001/10/02 10:06:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.12 2001/10/09 23:38:46 duke Exp $
 global $PHP_SELF;
 $js_table = "
 function xnavi_alfa(char_to_look_for) {
@@ -122,6 +122,11 @@ class aw_table
 			$params[] = "$k=$v"; 
 		};
 		$this->header_att_string = join("&",$params);
+	}
+
+	function add_query_string($string)
+	{
+		$this->header_att_string .= "&" . $string;
 	}
 
 
