@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.16 2003/11/04 14:00:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.17 2003/11/08 06:40:45 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -60,7 +60,6 @@ caption Peavaade
 @groupinfo main_view caption="Kirjad" submit=no
 
 */
-// I'd really really like to get rid of the bloody iframe
 define("RELTYPE_MAIL_IDENTITY",1); // things that appear on the From lines etc...
 define("RELTYPE_MAIL_SOURCE",2); // imap, pop3 is deprecated 
 define("RELTYPE_MAIL_CONFIG",3); // which config to use
@@ -300,7 +299,6 @@ class messenger_v2 extends class_base
 			// this should be unique enough
 			$wname = "msgr" . $key;
 
-				
 			$t->define_data(array(
 				"mark" => html::checkbox(array(
 					"name" => "mark[" . $key . "]",
@@ -313,7 +311,7 @@ class messenger_v2 extends class_base
 							"msgid" => $key,
 							"mailbox" => $this->use_mailbox,
 							"subgroup" => "show",
-					),"mail_message") . "\",\"$wname\",800,600)",
+					),"mail_message",false,true) . "\",\"$wname\",800,600)",
 					"caption" => $this->_format(parse_obj_name($message["subject"]),$seen),
 				)),
 				"date" => $message["tstamp"],
@@ -981,20 +979,6 @@ class messenger_v2 extends class_base
 		return $rv;
 	}
 
-	////
-	// !Can be used to download message parts
-	function get_part($arr)
-	{
-		$msgid = $arr["msgid"];
-		$this->_connect_server(array(
-			"msgr_id" => $arr["id"],
-		));
-
-		$this->drv_inst->fetch_part(array(
-			"msgid" => $msgid,
-			"part" => $arr["part"],
-		));
-	}
 
 	function store_part($arr)
 	{

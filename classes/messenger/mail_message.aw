@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.12 2003/11/04 19:46:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.13 2003/11/08 06:40:45 duke Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -80,6 +80,15 @@ class mail_message extends class_base
 		$msgrobj = new object($arr["request"]["msgrid"]);
 		
 		$this->act = $arr["request"]["subgroup"];
+
+		if ($this->act == "delete")
+		{
+			$msgr->drv_inst->delete_msgs_from_folder(array($arr["request"]["msgid"]));
+			print "kustutatud!";
+			print "<script>window.opener.location.reload();</script>";
+			print "<a href='javascript:window.close();'>sulge aken</a>";
+			exit;
+		};
 
                 $msgdata = $msgr->drv_inst->fetch_message(array(
                                 "msgid" => $arr["request"]["msgid"],
@@ -239,17 +248,11 @@ class mail_message extends class_base
 						$this->vars(array(
 							"part_name" => $pdata,
 							"get_part_url" => $this->mk_my_orb("get_part",array(
-								"id" => $arr["msgrid"],
-								"msgid" => $msgid,
-								"mailbox" => $this->use_mailbox,
+								"msgrid" => $arr["request"]["msgrid"],
+								"msgid" => $arr["request"]["msgid"],
+								"mailbox" => $arr["request"]["mailbox"],
 								"part" => $num,
-							)),
-							"att_reforb" => $this->mk_reforb("store_part",array(
-								"id" => $arr["msgrid"],
-								"msgid" => $msgid,
-								"mailbox" => $this->use_mailbox,
-								"part" => $num,
-							)),
+							),"mail_message","false",true),
 						));
 						$rv .= $this->parse();
 					};
@@ -356,6 +359,13 @@ class mail_message extends class_base
 				"url" => "javascript:document.changeform.subgroup.value='reply3';document.changeform.submit();",
 				"tooltip" => "Vasta/kõigile",
 			));
+
+			$tb->add_button(array(
+				"name" => "delete",
+				"url" => "javascript:document.changeform.subgroup.value='delete';document.changeform.submit();",
+				"img" => "delete.gif",
+				"tooltip" => "Kustuta",
+			));
 		};
 
 		if ($this->act != "reply" && $this->act != "forward" && $this->act != "")
@@ -424,6 +434,23 @@ class mail_message extends class_base
 			};
 		};	
 		return array($rv);
+	}
+	
+	////
+	// !Can be used to download message parts
+	function get_part($arr)
+	{
+		$msgid = $arr["msgid"];
+		$msgr = get_instance("messenger/messenger_v2");
+		$msgr->set_opt("use_mailbox",$arr["request"]["mailbox"]);
+                $msgr->_connect_server(array(
+                        "msgr_id" => $arr["msgrid"],
+                ));
+
+		$msgr->drv_inst->fetch_part(array(
+			"msgid" => $msgid,
+			"part" => $arr["part"],
+		));
 	}
 
 	////
