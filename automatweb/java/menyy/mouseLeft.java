@@ -2,7 +2,8 @@ import java.awt.*;
 import java.awt.event.*; 
 import java.applet.*; 
 import java.net.*; 
-import java.io.*; 
+import java.io.*;
+import java.util.*;
  
 
 class menu extends Menu 
@@ -77,8 +78,17 @@ class hiireKuular implements MouseListener
 	public void mouseReleased(MouseEvent e) {} 
 	public void mouseEntered(MouseEvent e) 
 	{ 
-		boss.icon=boss.icon2; 
-		boss.repaint(); 
+		if (boss.ikoon)
+		{
+			boss.icon=boss.icon2; 
+			boss.repaint(); 
+		}
+
+		if (boss.popup.getItemCount()==0)
+		{
+			boss.popup.plugIn();
+		}
+
 		if(boss.getParameter("onClick").compareTo("1")!=0)
 		{
 			jump(e);
@@ -86,8 +96,11 @@ class hiireKuular implements MouseListener
 	} 
 	public void mouseExited(MouseEvent e) 
 	{ 
-		boss.icon=boss.icon1; 
-		boss.repaint(); 
+		if (boss.ikoon)
+		{
+			boss.icon=boss.icon1; 
+			boss.repaint();
+		}
 	} 
 	public void mouseClicked(MouseEvent e) 
 	{ 
@@ -105,68 +118,39 @@ class hiireKuular implements MouseListener
 	}
 } 
  
- 
- 
-public class mouseLeft extends Applet 
-{ 
-	Image icon; 
-	Image icon1;//niisama refresh 
-	Image icon2;//mouse over refresh 
-	PopupMenu popup;
-	boolean ikoon=true;
- 
-	public void destroy()
+
+
+class menyy extends PopupMenu
+{
+	Applet boss;
+
+	menyy(Applet bos)
 	{
-		popup.removeAll();
-		removeAll();
+		boss=bos;
 	}
 
-	
-	public void init() 
-	{ 
-		URL urll; 
-		popup=new PopupMenu(); 
-
-		Color back=getColor(getParameter("back_color")); 
-		if(back==null) 
-		{ 
-			back=Color.white; 
-		} 
-		setBackground(back); 
-		setCursor(new Cursor(Cursor.HAND_CURSOR)); 
- 
-		try 
-		{                                                                                              
-			urll=new URL(getParameter("icon"));     			 
-			icon=this.getImage(urll);   
-			//icon=getImage(getCodeBase(),"print.gif"); 
-			icon1=icon;                                                                			 
-			urll=new URL(getParameter("mouse_over_icon"));   
-			icon2=this.getImage(urll);     
-			//icon2=getImage(getCodeBase(),"printRol.gif"); 
-		}                                                                                              			                                                                                         			 
-		catch(Exception e)                                                                            			 
-		{                                                                                              			 
-			System.out.println("Ei saanud ikooni kätte "+e);
-			ikoon=false;
-		}  
-		 
-		String aadress=""; 
-		byte[] array=new byte[1]; 
-		byte[] array2; 
+	public void plugIn()
+	{
+		String eraldaja="\n";
+		String menyy=boss.getParameter("fetchcontent");
 		int i=1;
- 
 		try 
-		{   
+		{ 
+		if ((menyy.compareTo("1")==0)||(menyy==null))
+		{
+			String aadress=""; 
+			byte[] array=new byte[1]; 
+			byte[] array2; 
+					  
 			//pärimise aadressi ehitamine
-			aadress="http://"+getParameter("url")+"/orb.aw?class=menuedit&action=get_popup_data";
+			aadress="http://"+boss.getParameter("url")+"/orb.aw?class=menuedit&action=get_popup_data";
 
 			String parameeter;
 			try
 			{
 				while(true)
 				{
-					parameeter=getParameter("urlparam"+i);
+					parameeter=boss.getParameter("urlparam"+i);
 					if (parameeter==null)
 					{
 						break;
@@ -202,7 +186,14 @@ public class mouseLeft extends Applet
  
 				sisse.close(); 
  
-				String menyy=new String(array); 
+				menyy=new String(array);
+		}
+		else
+		{
+			menyy=boss.getParameter("content");
+			eraldaja="#";
+			//System.out.println("menyy="+menyy);
+		}
 //System.out.println("menyy="+menyy); 
 /*=================== PARSIN ============================ 
 //(id|parent|nimi|url|frame)
@@ -225,16 +216,15 @@ public class mouseLeft extends Applet
 			int tab,id,parent; 
 			menu[] jada=new menu[0];
 			menu[] jada2;
-			menu seff=new menu("temp",-1,-1,this);//kirjutatakse kohe yle
+			menu seff=new menu("temp",-1,-1,boss);//kirjutatakse kohe yle
 
-			tab=menyy.indexOf("\n");
-		
+			//tab=menyy.indexOf("\n");
+			tab=menyy.indexOf(eraldaja);
 			while(tab!=-1) 
 			{ 
 				if(tab<menyy.indexOf("|"))
 				{//kui reavahetus enne eraldajaid
-					System.out.println("Separaator");
-					popup.addSeparator(); 
+					this.addSeparator(); 
 					menyy=menyy.substring(tab+1);
 				}
 				else
@@ -255,7 +245,8 @@ public class mouseLeft extends Applet
 	 
 					viit=menyy.substring(0,tab); 
 					menyy=menyy.substring(tab+1); 
-					tab=menyy.indexOf("\n"); 
+					//tab=menyy.indexOf("\n"); 
+					tab=menyy.indexOf(eraldaja);
 
 					frame=menyy.substring(0,tab);	
 					menyy=menyy.substring(tab+1); 
@@ -264,12 +255,12 @@ public class mouseLeft extends Applet
 					{
 						if(viit.compareTo("")!=0)
 						{
-							popup.add(new menuItem(nimi,viit,this,id,parent,frame));
+							this.add(new menuItem(nimi,viit,boss,id,parent,frame));
 						}
 						else
 						{
-							menu uus=new menu(nimi,id,parent,this);
-							popup.add(uus);
+							menu uus=new menu(nimi,id,parent,boss);
+							this.add(uus);
 							jada2=jada;
 							jada=new menu[jada2.length+1];
 
@@ -285,12 +276,12 @@ public class mouseLeft extends Applet
 					{
 						if((viit.compareTo("")!=0)&&(seff.id==parent))
 						{
-							seff.add(new menuItem(nimi,viit,this,id,parent,frame));
+							seff.add(new menuItem(nimi,viit,boss,id,parent,frame));
 						}
 						else
 						if(seff.id==parent)
 						{
-							menu uus=new menu(nimi,id,parent,this);
+							menu uus=new menu(nimi,id,parent,boss);
 							seff.add(uus);
 							jada2=jada;
 							jada=new menu[jada2.length+1];
@@ -315,12 +306,12 @@ public class mouseLeft extends Applet
 
 							if((viit.compareTo("")!=0)&&(seff.id==parent))
 							{
-								seff.add(new menuItem(nimi,viit,this,id,parent,frame));
+								seff.add(new menuItem(nimi,viit,boss,id,parent,frame));
 							}
 							else
 							if(seff.id==parent)
 							{
-								menu uus=new menu(nimi,id,parent,this);
+								menu uus=new menu(nimi,id,parent,boss);
 								seff.add(uus);
 								jada2=jada;
 								jada=new menu[jada2.length+1];
@@ -336,7 +327,8 @@ public class mouseLeft extends Applet
 					}//else parent==0
 				}//else separator
 				
-				tab=menyy.indexOf("\n");
+				//tab=menyy.indexOf("\n");
+				tab=menyy.indexOf(eraldaja);
 
 				if(tab==-1) 
 				{ 
@@ -344,16 +336,109 @@ public class mouseLeft extends Applet
 				} 
 			}
 
-			
-			this.add(popup); 
-			this.addMouseListener(new hiireKuular(this));  
+			menyy=null;
 			 
 		}                                                                                              			                                                                                         			 
 		catch(Exception e)                                                                            			 
 		{                                                                                              			 
-			System.out.println("Ei saanud menüüd kätte "+e); 
-			System.out.println("URL: "+aadress); 
+			//System.out.println("Ei saanud menüüd kätte "+e); 
+			//System.out.println("URL: "+aadress); 
 		}  
+	}
+} 
+ 
+
+
+class master extends Thread
+{
+	Applet boss;
+	
+	master(Applet bos)
+	{
+		boss=bos;
+	}
+
+	
+	public void run()
+	{
+		Enumeration jada=boss.getAppletContext().getApplets();
+
+		while (jada.hasMoreElements())
+		{
+			try
+			{
+				if (((mouseLeft)jada.nextElement()).popup.getItemCount()==0)
+				{
+					((mouseLeft)jada.nextElement()).popup.plugIn();
+				}		
+			}
+			catch(Exception e)
+			{
+			}
+		}
+
+	}
+}
+
+
+
+public class mouseLeft extends Applet 
+{ 
+	Image icon; 
+	Image icon1;//niisama refresh 
+	Image icon2;//mouse over refresh 
+	menyy popup;
+	boolean ikoon=true;
+ 
+	public void destroy()
+	{
+		popup.removeAll();
+		removeAll();
+	}
+
+	
+	public void init() 
+	{ 
+		URL urll; 
+		popup=new menyy(this); 
+
+		Color back=getColor(getParameter("back_color")); 
+		if(back==null) 
+		{ 
+			back=Color.white; 
+		} 
+		setBackground(back); 
+		setCursor(new Cursor(Cursor.HAND_CURSOR)); 
+ 
+		try 
+		{                                                                                              
+			urll=new URL(getParameter("icon"));     			 
+			icon=this.getImage(urll);   
+			//icon=getImage(getCodeBase(),"print.gif"); 
+			icon1=icon;                                                                			 
+			urll=new URL(getParameter("mouse_over_icon"));   
+			icon2=this.getImage(urll);     
+			//icon2=getImage(getCodeBase(),"printRol.gif"); 
+		}                                                                                              			                                                                                         			 
+		catch(Exception e)                                                                            			 
+		{                                                                                              			 
+			System.out.println("Ei saanud ikooni kätte "+e);
+			ikoon=false;
+		}  
+		
+		this.add(popup); 
+		this.addMouseListener(new hiireKuular(this));
+		
+		if (getParameter("now").compareTo("1")==0)
+		{
+			popup.plugIn();
+		}
+		if (getParameter("boss").compareTo("1")==0)
+		{
+			Thread master=new master(this);
+			master.start();
+			
+		}
 	} 
  
 
