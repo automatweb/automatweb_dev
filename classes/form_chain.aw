@@ -51,6 +51,9 @@ class form_chain extends form_base
 
 		$ct["fillonce"] = $fillonce;
 
+		$ct["after_show_entry"] = $after_show_entry;
+		$ct["after_show_op"] = $after_show_op;
+
 		$this->chain = $ct;
 		uksort($ct["forms"],array($this,"__ch_sort"));
 		
@@ -157,6 +160,8 @@ class form_chain extends form_base
 			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
 			"import" => $this->mk_my_orb("import_chain_entries", array("id" => $id),"form_import"),
 			"entries" => $this->mk_my_orb("show_chain_entries", array("id" => $id)),
+			"ops" => $this->picker($this->chain["after_show_op"], $this->listall_ops()),
+			"after_show_entry" => checked($this->chain["after_show_entry"] == 1),
 			"LANG_H" => $lh
 		));
 		return $this->parse();
@@ -304,6 +309,7 @@ class form_chain extends form_base
 		$this->add_entry_to_chain($chain_entry_id,$f->entry_id,$form_id);
 
 		$this->load_chain($id);
+		$tfid = $form_id;
 		if ($this->chain["gotonext"][$form_id])
 		{
 			$prev = 0;
@@ -315,6 +321,15 @@ class form_chain extends form_base
 					break;
 				}
 				$prev = $fid;
+			}
+		}
+
+		if ($tfid == $form_id)
+		{
+			// check that if we are after the last form then if the user has selected that we should show the entry then do so
+			if ($this->chain["after_show_entry"] == 1 && $this->chain["after_show_op"] > 0  && $this->chain["gotonext"][$form_id] == 1)
+			{
+				return $this->mk_my_orb("show_entry", array("id" => $form_id,"entry_id" => $f->entry_id,"op_id" => $this->chain["after_show_op"],"section" => $section),"form");
 			}
 		}
 
