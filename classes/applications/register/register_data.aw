@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.4 2004/10/08 01:32:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.5 2004/10/22 07:25:20 kristo Exp $
 // register_data.aw - Registri andmed 
 /*
 
@@ -276,6 +276,16 @@ class register_data extends class_base
 			"name" => $ob->prop("name"),
 		));
 		return $this->parse();
+	}
+
+	/**
+
+		@attrib name=view nologin=1 all_args=1
+
+	**/
+	function view($arr)
+	{
+		return parent::view($arr);
 	}
 }
 ?>
