@@ -1260,7 +1260,7 @@ class grid_editor extends class_base
 		return $this->arr;
 	}
 
-	function on_styles_edit($data, $oid)
+	function on_styles_edit($data, $oid, $pickable_styles)
 	{
 		$this->_init_table($data);
 		$this->_init_show_styles();
@@ -1288,7 +1288,7 @@ class grid_editor extends class_base
 				$cell = $this->arr["styles"][$map["row"]][$map["col"]];
 				$scell = $this->arr["styles"][$map["row"]][$map["col"]];
 				
-				$st = $this->_get_cell_style_id($row, $col, $scell);
+				$st = $this->_get_cell_style_id($i, $a, $scell);
 				if ($st)
 				{
 					$td_style = "colspan=\"".$spans["colspan"]."\" rowspan=\"".$spans["rowspan"]."\" class=\"st".$st."\"";
@@ -1314,9 +1314,17 @@ class grid_editor extends class_base
 			$this->parse("LINE");
 		}
 
+		$st = get_instance("style");
+		if ($this->arr["table_style"])
+		{
+			$tbst = "class=\"".$st->get_style_name($this->arr["table_style"])."\"";
+			active_page_data::add_site_css_style($this->arr["table_style"]);
+		}
 		$this->vars(array(
 			"selstyle" => $this->mk_my_orb("sel_style", array(), "layout"),
-			"oid" => $oid
+			"oid" => $oid,
+			"tb_style" => $tbst,
+			"sel_style" => $this->picker("", $pickable_styles)
 		));
 
 		$table = $this->parse();

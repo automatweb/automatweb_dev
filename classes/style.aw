@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.38 2004/11/05 13:22:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.39 2004/11/15 15:53:04 kristo Exp $
 
 define("ST_TABLE",0);
 define("ST_CELL",1);
@@ -29,7 +29,7 @@ class style extends aw_template
 		{
 			$pt = "AND parent = $parent";
 		}
-		$this->db_query("SELECT objects.*,styles.* FROM objects LEFT JOIN styles ON styles.id = objects.oid WHERE status != 0 AND class_id = ".CL_STYLE." $pt ".$ss);
+		$this->db_query("SELECT objects.*,styles.* FROM objects LEFT JOIN styles ON styles.id = objects.oid WHERE status != 0 AND class_id = ".CL_STYLE." $pt ".$ss." ORDER BY objects.jrk,objects.name");
 	}
 
 	function get($id)
@@ -63,7 +63,8 @@ class style extends aw_template
 			$ol = new object_list(array(
 				"class_id" => CL_CSS,
 				"site_id" => array(),
-				"lang_id" => array()
+				"lang_id" => array(),
+				"sort_by" => "objects.jrk,objects.name"
 			));
 			for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 			{
@@ -849,6 +850,7 @@ class style extends aw_template
 		$ol = new object_list(array(
 			"class_id" => CL_CSS,
 			"lang_id" => array(),
+			"sort_by" => "objects.jrk,objects.name"
 		));
 		foreach($ol->names() as $id => $nm)
 		{

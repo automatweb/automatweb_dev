@@ -184,7 +184,13 @@ class layout extends class_base
 
 			case "grid_styles":
 				$ge = get_instance("vcl/grid_editor");
-				$prop['value'] = $ge->on_styles_edit($arr['obj_inst']->meta('grid'), $arr['obj_inst']->id());
+				$grid = $arr['obj_inst']->meta('grid');
+				$grid["table_style"] = $arr["obj_inst"]->meta("table_style");
+				$prop['value'] = $ge->on_styles_edit(
+					$grid, 
+					$arr['obj_inst']->id(), 
+					$this->get_pickable_styles($arr["obj_inst"]->id())
+				);
 				break;
 
 			case "grid_preview":
@@ -250,8 +256,7 @@ class layout extends class_base
 				break;
 
 			case "grid_styles":
-				$ge = get_instance("vcl/grid_editor");
-				$arr["obj_inst"]->set_meta("grid",$ge->on_styles_edit_submit($arr['obj_inst']->meta('grid'), $arr['request']));
+				$this->submit_styles($arr["obj_inst"], $arr["request"]);
 				break;
 
 			case "rows":
@@ -312,124 +317,38 @@ class layout extends class_base
 
 	}
 
-	/**  
-		
-		@attrib name=sel_style params=name all_args="1" default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function sel_style($arr)
+	function submit_styles($obj, $request)
 	{
-		extract($arr);
-		$this->read_template("pickstyle.tpl");
-		$ob = obj($oid);
-
-		// make style pick list
-		// folders:
-		$styles = array();
-		$folders = new aw_array($ob->meta('cell_style_folders'));
-
-		$ol = new object_list(array(
-			"parent" => $folders,
-			"class_id" => CL_CSS,
-			"lang_id" => array(),
-			"site_id" => array()
-		));
-		$styles = $ol->names(array(
-			"add_folders" => true
-		));
-
-		$this->vars(array(
-			"stylessel" => $this->option_list("", $styles),
-			"reforb"	=> $this->mk_reforb("submit_styles", array(
-				"cols" => $cols,
-				"rows" => $rows,
-				"cells" => $cells,
-				"oid" => $oid
-			))
-		));
-		return $this->parse();
-	}
-
-	/**  
-		
-		@attrib name=submit_styles params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function submit_styles($arr)
-	{
-		extract($arr);
-		
-		$obj = obj($oid);
 		$ge = get_instance("vcl/grid_editor");
 		$ge->_init_table($obj->meta('grid'));
 
 		// now we need to figure out where to apply the style
-		if ($rows != "")
+		foreach($request as $r_k => $r_v)
 		{
-			$rowarr = explode("dr_", $rows);
-			foreach($rowarr as $row)
+			if ($r_v == "")
 			{
-				if ($row !== "")
+				continue;
+			}
+
+			if (substr($r_k, 0, 3) == "dr_")
+			{
+				$ge->set_row_style(substr($r_k, 3), $request["sel_style"]);
+			}
+			if (substr($r_k, 0, 3) == "dc_")
+			{
+				$ge->set_col_style(substr($r_k, 3), $request["sel_style"]);
+			}
+
+			if (substr($r_k, 0, 8) == "sel_row=")
+			{
+				if (preg_match("/sel_row=(\d+);col=(\d+)/imsU", $r_k, $mt))
 				{
-					// set style for the row
-					$ge->set_row_style($row, $style);
+					$ge->set_cell_style($mt[1], $mt[2], $request["sel_style"]);
 				}
 			}
 		}
 
-		if ($cols != "")
-		{
-			$colarr = explode("dc_", $cols);
-			foreach($colarr as $col)
-			{
-				if ($col !== "")
-				{
-					// set style for the col
-					$ge->set_col_style($col, $style);
-				}
-			}
-		}
-
-		if ($cells != "")
-		{
-			$celarr = explode("sel_", $cells);
-			foreach($celarr as $cell)
-			{
-				if ($cell !== "")
-				{
-					list($rd, $cd) = explode(";", $cell);
-					list(, $row) = explode("=", $rd);
-					list(, $col) = explode("=", $cd);
-
-					// set style for the cell
-					$ge->set_cell_style($row, $col, $style);
-				}
-			}
-		}
-
-		// now save object
-		$o = obj($oid);
-		$o->set_meta("grid", $ge->_get_table());
-		$o->save();
-
-		return $this->mk_my_orb("sel_style", array(
-			"cols" => $cols,
-			"rows" => $rows,
-			"cells" => $cells,
-			"oid" => $oid
-		));
+		$obj->set_meta("grid", $ge->_get_table());
 	}
 
 	////
@@ -486,6 +405,26 @@ class layout extends class_base
 			);
 		}
 		return $ret;
+	}
+
+	function get_pickable_styles($oid)
+	{
+		$ob = obj($oid);
+
+		// make style pick list
+		// folders:
+		$folders = new aw_array($ob->meta('cell_style_folders'));
+
+		$ol = new object_list(array(
+			"parent" => $folders,
+			"class_id" => CL_CSS,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"sort_by" => "objects.jrk,objects.name"
+		));
+		return array("" => "") + $ol->names(array(
+			"add_folders" => true
+		));
 	}
 }
 ?>
