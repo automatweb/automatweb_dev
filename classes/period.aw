@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.13 2004/01/09 11:22:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.14 2004/01/09 11:28:29 duke Exp $
 // period.aw - periods 
 /*
 
@@ -16,6 +16,12 @@
 
 	@property status type=status
 	@caption Arhiivis
+
+	@property per_id type=text table=periods field=id
+	@caption Perioodi id.
+
+	@property per_oid type=hidden table=periods field=oid
+	@caption Oid
 
 	@default field=meta
 	@default method=serialize
@@ -102,6 +108,11 @@ class period extends class_base
 			case "activity":
 				$this->mk_activity_table($arr);
 				break;
+
+			case "per_oid":
+				$data["value"] = aw_ini_get("per_oid");
+				break;
+				
 
 		};
 		return $retval;
