@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.297 2004/10/13 11:49:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.298 2004/10/18 13:41:35 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -222,55 +222,6 @@ class core extends acl_base
 	}
 
 	////
-	// !lisab objektile aliase
-	// source on see objekt, mille juurde lingitakse
-	// target on see, mida lingitakse
-	// aliaste tabelisse paigutame ka klassi id, nii
-	// peaks hiljem olema voimalik natuke kiirust gainida
-
-	// positioned arguments suck, add_alias is the Right Way to do this,
-	// but I will leave this in place just in case someone still
-	// needs it.
-	function add_alias($source,$target,$extra = "")
-	{
-		return $this->addalias(array(
-			"id" => $source,
-			"alias" => $target,
-			"extra" => $extra,
-		));
-	}
-
-	////
-	// !$arr must contain 
-	// id = alias id
-	// target = alias target
-	// and may contain 
-	// extra = data to write to alias table
-	function change_alias($arr) 
-	{
-		extract($arr);
-		$target_data = $this->get_object($target);
-
-		$source = $this->db_fetch_field("SELECT source FROM aliases WHERE id = '$id'", "source");
-
-		$q = "UPDATE aliases SET target = '$target' , type = '$target_data[class_id]' , data = '$extra' 
-					WHERE id = '$id'";
-
-		$this->db_query($q);
-
-		$this->_log(ST_CORE, SA_CHANGE_ALIAS, "Muutis objekti $source aliast $target", $source);
-	}
-
-	////
-	// !deletes alias $target from object $source
-	function delete_alias($source,$target, $no_cache = false, $no_callback = false)
-	{
-		$q = "DELETE FROM aliases WHERE source = '$source' AND target = '$target'";
-		$this->db_query($q);
-	}
-
-
-	////
 	// !returns array of aliases pointing to object $oid
 	function get_aliases_of($args = array()) 
 	{
@@ -311,84 +262,6 @@ class core extends acl_base
 	function delete_aliases_of($oid)
 	{
 		$this->db_query("DELETE FROM aliases WHERE source = $oid");
-	}
-
-	////
-	// !the base version of per-class alias adding
-	// a class can override this, to implement adding aliases differently
-	// for instance - when adding an alias to form_entry it lets you pick the output
-	// with which the entry is shown. 
-	// but basically what this function needs to do, is to call core::add_alias($id,$alias)
-	// and finally redirect the user to $this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr")
-	// parameters:
-	//   id - the id of the object where the alias will be attached
-	//   alias - the id of the object to attach as an alias
-	//   relobj_id - reference to the relation object
-	//   reltype - type of the relation
-	//   no_cache - if true, cache is not updated
-	//   add_obj_type_history - if set, save object type in session for use in aliasmgr obj type listbox
-	function addalias($arr)
-	{
-		//arr($arr);
-		extract($arr);
-
-		$extra = ($arr["extra"]) ? $arr["extra"] : "";
-
-		$target_data = $this->get_object($alias);
-
-		$idx = $this->db_fetch_field("SELECT MAX(idx) as idx FROM aliases WHERE source = '$id' AND type =  '$target_data[class_id]'","idx");
-		if ($idx === "")
-		{
-			$idx = 1;
-		}
-		else
-		{
-			$idx++;
-		}
-
-		$relobj_id = (int)$arr["relobj_id"];
-		$reltype = (int)$arr["reltype"];
-		$q = "INSERT INTO aliases (source,target,type,data,idx,relobj_id,reltype)
-			VALUES('$id','$alias','$target_data[class_id]','$extra','$idx','$relobj_id','$reltype')";
-
-		$cl = $target_data['class_id'];
-
-		// aliasmgr object type history
-		if (isset($add_obj_type_history))
-		{		
-			if (is_array($hist = aw_global_get('aliasmgr_obj_history')))
-			{
-				$hist[time()] = $cl;
-				array_unique($hist);
-				krsort($hist);
-				while(count($hist) > 10)
-				{
-					array_pop($hist);
-				}
-			}
-			else
-			{
-				$hist = array(time() => $cl);
-			}
-
-			aw_session_set('aliasmgr_obj_history',$hist);
-
-			$usr = get_instance('users_user');
-
-			$usr->set_user_config(array(
-				'uid' => aw_global_get('uid'),
-				'key' => 'aliasmgr_obj_history',
-				'value' => $hist
-			));
-		}
-
-		$this->db_query($q);
-
-		$ret = $this->db_last_insert_id();
-
-		$this->_log(ST_CORE, SA_ADD_ALIAS,"Lisas objektile $id aliase $alias", $id);
-
-		return $ret;
 	}
 
 	////
