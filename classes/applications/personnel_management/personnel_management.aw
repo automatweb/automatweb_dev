@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.4 2004/06/17 13:28:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.5 2005/03/18 12:20:16 ahti Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -396,7 +396,7 @@ class personnel_management extends class_base
 
 		$user_inst = get_instance("core/users/user");
 		
-		foreach ($manager->connections_from(array("type" => RELTYPE_TOOTSIJA)) as $tootu)
+		foreach ($manager->connections_from(array("type" => "RELTYPE_TOOTSIJA")) as $tootu)
 		{
 			$tootu_ids[] = $tootu->prop("to");
 		}
@@ -622,7 +622,7 @@ class personnel_management extends class_base
 		$toopakkujad_ids = array();
 		$toopakkujad = array();
 
-		foreach($manager->connections_from(array("type" => RELTYPE_TOOPAKKUJA)) as $toopakkuja)
+		foreach($manager->connections_from(array("type" => "RELTYPE_TOOPAKKUJA")) as $toopakkuja)
 		{
 			array_push($toopakkujad_ids, $toopakkuja->prop("to"));
 			$toopakkujad[$toopakkuja->prop("to")]["name"]=$toopakkuja->prop("to.name");
@@ -721,7 +721,7 @@ class personnel_management extends class_base
 			return 0;
 		}
 		
-		foreach($manager->connections_from(array("type" => RELTYPE_TOOTSIJA)) as $person)
+		foreach($manager->connections_from(array("type" => "RELTYPE_TOOTSIJA")) as $person)
 		{
 			$person_ids[] = $person->prop("to");
 		}
@@ -946,7 +946,7 @@ class personnel_management extends class_base
 			"align" => "center",
 		));
 		
-		foreach ($this->my_profile["person_obj"]->connections_from(array("type" => RELTYPE_CV)) as $mycv)
+		foreach ($this->my_profile["person_obj"]->connections_from(array("type" => "RELTYPE_CV")) as $mycv)
 		{
 			$mycvconn_id = $mycv->id();
 			$mycv = $mycv->to();
@@ -1029,7 +1029,7 @@ class personnel_management extends class_base
 			"align" => "center",
 		));
 		
-		foreach ($this->my_profile["org_obj"]->connections_from(array("type" => RELTYPE_JOBS)) as $job)
+		foreach ($this->my_profile["org_obj"]->connections_from(array("type" => "RELTYPE_JOBS")) as $job)
 		{
 			$job = $job->to();
 			foreach ($job->connections_from(array("type" => 5)) as $cv)
@@ -1110,7 +1110,7 @@ class personnel_management extends class_base
 			"align" => "center",
 		));
 
-		foreach ($this->my_profile["person_obj"]->connections_from(array("type" => RELTYPE_CV)) as $cv)
+		foreach ($this->my_profile["person_obj"]->connections_from(array("type" => "RELTYPE_CV")) as $cv)
 		{
 			$cvconnn_id = $cv->id();
 			$cv = $cv->to();
@@ -1221,7 +1221,7 @@ class personnel_management extends class_base
 			"align" => "center",
 		));
 
-		foreach ($this->my_profile["org_obj"]->connections_from(array("type" => RELTYPE_JOBS)) as $job)
+		foreach ($this->my_profile["org_obj"]->connections_from(array("type" => "RELTYPE_JOBS")) as $job)
 		{
 			$job_conn_id = $job->id();
 			$job = $job->to();
@@ -1559,7 +1559,7 @@ class personnel_management extends class_base
 	function callback_get_locations($arr)
 	{
 		$conns = $arr["obj_inst"]->connections_from(array(
-			"type" => RELTYPE_CONTENT,
+			"type" => "RELTYPE_CONTENT",
 		));
 
 		$old = $arr["obj_inst"]->meta("locations");
@@ -1593,7 +1593,7 @@ class personnel_management extends class_base
 	{
 		$obj_inst = $arr["obj_inst"];
 		$els = $obj_inst->connections_from(array(
-			"type" => RELTYPE_CONTENT,
+			"type" => "RELTYPE_CONTENT",
 		));
 		$locations = $obj_inst->meta("locations");
 		$rv = array();

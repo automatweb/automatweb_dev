@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.7 2005/03/02 13:11:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.8 2005/03/18 12:19:32 ahti Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -264,7 +264,7 @@ class mail_message extends class_base
 		};
 
 		$conns = $msgobj->connections_from(array(
-			"type" => RELTYPE_ATTACHMENT,
+			"type" => "RELTYPE_ATTACHMENT",
 		));
 
 		$mimeregistry = get_instance("core/aw_mime_types");

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.5 2005/01/21 13:11:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.6 2005/03/18 12:19:32 ahti Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -268,7 +268,7 @@ class messenger_v2 extends class_base
 				return false;
 			};
 			$this->msgobj = new object($arr["msgr_id"]);
-			$conns = $this->msgobj->connections_from(array("type" => RELTYPE_MAIL_SOURCE));
+			$conns = $this->msgobj->connections_from(array("type" => "RELTYPE_MAIL_SOURCE"));
 
 
 			// right now it only deals with a single server.
@@ -485,7 +485,7 @@ class messenger_v2 extends class_base
 
 		$local_fld = $i;
 		$this->localfolders = array();
-		$conns = $this->msgobj->connections_from(array("type" => RELTYPE_FOLDER));
+		$conns = $this->msgobj->connections_from(array("type" => "RELTYPE_FOLDER"));
 		foreach($conns as $folder_item)
 		{
 			$i++;
@@ -716,7 +716,7 @@ class messenger_v2 extends class_base
 	function preprocess_filters()
 	{
 		$conns = $this->msgobj->connections_from(array(
-			"type" => RELTYPE_RULE,
+			"type" => "RELTYPE_RULE",
 		));
 
 		if (sizeof($conns) == 0)
@@ -958,7 +958,7 @@ class messenger_v2 extends class_base
 		$msgrobj = new object($arr["id"]);
 		$rv = array($msgrobj->prop("fromname"));
 		$conns = $msgrobj->connections_from(array(
-			"type" => RELTYPE_MAIL_IDENTITY,
+			"type" => "RELTYPE_MAIL_IDENTITY",
 		));
 		foreach($conns as $conn)
 		{
@@ -973,7 +973,7 @@ class messenger_v2 extends class_base
 		$msgrobj = new object($arr["id"]);
 		$rv = array();
 		$conns = $msgrobj->connections_from(array(
-			"type" => RELTYPE_ADDRESS,
+			"type" => "RELTYPE_ADDRESS",
 		));
 		foreach($conns as $conn)
 		{
