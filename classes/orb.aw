@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.70 2004/11/01 20:20:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.71 2004/11/05 13:19:55 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -902,7 +902,7 @@ class orb extends aw_template
 		$orbclass = get_instance("orb");
 		$orb_defs = $orbclass->load_xml_orb_def($id);
 		$methods = array();
-		foreach($orb_defs[$id] as $key => $val)
+		foreach(safe_array($orb_defs[$id]) as $key => $val)
 		{
 			if (is_array($val) && isset($val[$flag]))
 			{
