@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.31 2004/12/10 10:07:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.32 2004/12/10 11:13:52 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -817,18 +817,14 @@ class object_treeview_v2 extends class_base
 		if (($line % 2) == 1)
 		{
 			$ret = $ob->prop("odd_bgcolor");
-			if ($ret == "")
-			{
-				$ret = "#EFF7F7";
-			}
 		}
 		else
 		{
 			$ret = $ob->prop("even_bgcolor");
-			if ($ret == "")
-			{
-				$ret = "#FFFFFF";
-			}
+		}
+		if ($ret != "" && $ret{0} != "#")
+		{
+			$ret = "#".$ret;
 		}
 		return $ret;
 	}
@@ -1048,7 +1044,7 @@ class object_treeview_v2 extends class_base
 // get row background color
 
 		$this->vars(array(
-			"bgcolor" => "#".$this->_get_bgcolor($tree_obj, $this->cnt),
+			"bgcolor" => $this->_get_bgcolor($tree_obj, $this->cnt),
 		));
 
 		return $this->parse("FILE");
