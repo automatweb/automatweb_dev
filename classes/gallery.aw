@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.11 2001/09/07 09:45:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.12 2001/09/14 19:10:23 kristo Exp $
 classload("images");
 lc_load("gallery");
 global $orb_defs;
@@ -443,9 +443,13 @@ class gallery extends aw_template
 		}
 		$this->vars(array("LINE" => $l,"PAGE" => $p,"sel_page" => $page,"PREVIOUS" => $pr, "NEXT" => $nx));
 
-		if ($this->arr[pages] > 0)
+		if ($this->arr[pages] > 1)
 		{
 			$this->vars(array("PAGES" => $this->parse("PAGES")));
+		}
+		else
+		{
+			$this->vars(array("PAGES" => ""));
 		}
 		return $this->parse();
 	}
