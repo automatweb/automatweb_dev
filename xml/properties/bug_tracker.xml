@@ -1,8 +1,53 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>bug_tb</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>toolbar</type>
+            <parent>bugl</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>bug_tb</field>
+      </property>
+      <property>
+            <name>bug_tree</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>treeview</type>
+            <parent>bugl_lower</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>bug_tree</field>
+      </property>
+      <property>
+            <name>bug_list</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>table</type>
+            <parent>bugl_lower</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>bug_list</field>
+      </property>
       <classinfo>
             <syslog_type>ST_BUG_TRACKER</syslog_type>
             <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
       </classinfo>
+      <layout>
+            <bugl>
+                  <type>vbox</type>
+            </bugl>
+            <bugl_tb>
+                  <type>hbox</type>
+                  <parent>bugl</parent>
+            </bugl_tb>
+            <bugl_lower>
+                  <type>hbox</type>
+                  <parent>bugl</parent>
+            </bugl_lower>
+      </layout>
 </properties>
 
