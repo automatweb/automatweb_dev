@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.34 2004/03/12 10:24:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.35 2004/03/25 09:40:18 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -924,6 +924,22 @@ class converters extends aw_template
 				}
 				$this->restore_handle();
 			};
+			$this->restore_handle();
+		}
+	}
+
+	/** creates indexes for aliases
+		@attrib name=convert_alias_idx
+	**/
+	function convert_alias_idx()
+	{
+		$this->db_query("SELECT * FROM aliases WHERE idx = 0");
+		while ($row = $this->db_next())
+		{
+			$lut[$row["source"]][$row["type"]] ++;
+			$this->save_handle();
+			$this->db_query("UPDATE aliases SET idx = ".$lut[$row["source"]][$row["type"]]." WHERE id = ".$row["id"]);
+			echo "updated alias from dooc $row[source] to idx ".$lut[$row["source"]][$row["type"]]." <BR>";
 			$this->restore_handle();
 		}
 	}
