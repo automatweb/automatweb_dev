@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.27 2002/02/27 05:39:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.28 2002/04/08 06:15:51 duke Exp $
 global $orb_defs;
 $orb_defs["form_table"] = "xml";
 lc_load("form");
@@ -418,7 +418,7 @@ class form_table extends form_base
 			$dat["ev_delete"] = "<a href='".$this->mk_my_orb(
 				"delete_entry", 
 				array(
-					"id" => $fid,
+					"id" => $form_id,
 					"entry_id" => $dat["entry_id"], 
 					"after" => $this->binhex(
 						$this->mk_my_orb(
