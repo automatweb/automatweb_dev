@@ -1322,9 +1322,15 @@ class _int_object
 		{
 			$file = "doc";
 		}
-		list($GLOBALS["properties"][$this->obj["class_id"]], $GLOBALS["tableinfo"][$this->obj["class_id"]], $GLOBALS["relinfo"][$this->obj["class_id"]]) = $GLOBALS["object_loader"]->load_properties(array(
-			"file" => $file,
-			"clid" => $this->obj["class_id"]
+		list(
+				$GLOBALS["properties"][$this->obj["class_id"]], 
+				$GLOBALS["tableinfo"][$this->obj["class_id"]], 
+				$GLOBALS["relinfo"][$this->obj["class_id"]],
+				$GLOBALS["classinfo"][$this->obj["class_id"]],
+			) = 
+			$GLOBALS["object_loader"]->load_properties(array(
+				"file" => $file,
+				"clid" => $this->obj["class_id"]
 		));
 
 		// also make list of properties that belong to object, so we can keep them 
@@ -1655,6 +1661,10 @@ class _int_object
 
 		foreach($todelete as $oid)
 		{			
+			if (!$GLOBALS["object_loader"]->ds->can("delete", $oid))
+			{
+				continue;
+			}
 			post_message_with_param(
 				MSG_STORAGE_DELETE,
 				$this->obj["class_id"],
@@ -1662,7 +1672,15 @@ class _int_object
 					"oid" => $oid
 				)
 			);
+
+			$tmpo = obj($oid);
+			// get object's class info
+			$clid = $tmpo->class_id();
+			$type = @constant($GLOBALS["classinfo"][$clid]["syslog_type"]["text"]);
+			$nm = $tmpo->name();
+
 			$GLOBALS["object_loader"]->ds->delete_object($oid);
+			$GLOBALS["object_loader"]->cache->_log($type, SA_DELETE, $nm, $oid, false);
 		}
 
 		// must clear acl cache for all objects below it

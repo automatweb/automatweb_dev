@@ -349,7 +349,7 @@ class _int_object_loader extends core
 		// so doing the caching here is just wasting memory now. 
 		// - terryf
 		$props = $this->cfgu->load_properties($arr);
-		$rv = array($props, $this->cfgu->tableinfo, $this->cfgu->relinfo);
+		$rv = array($props, $this->cfgu->tableinfo, $this->cfgu->relinfo, $this->cfgu->classinfo);
 		return $rv;
 	}
 
@@ -507,7 +507,12 @@ class _int_object_loader extends core
 
 	function _log($new, $oid, $name)
 	{
-		$this->cache->_log(100000, ($new ? SA_ADD : SA_CHANGE), $name, $oid, false);
+		$tmpo = obj($oid);
+		// get object's class info
+		$clid = $tmpo->class_id();
+		$type = @constant($GLOBALS["classinfo"][$clid]["syslog_type"]["text"]);
+
+		$this->cache->_log($type, ($new ? SA_ADD : SA_CHANGE), $name, $oid, false);
 	}
 }
 
