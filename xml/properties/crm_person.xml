@@ -144,7 +144,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_WORK</reltype>
             <table>kliendibaas_isik</table>
-            <group>general</group>
+            <group>contact</group>
             <field>work_contact</field>
             <caption>Organisatsioon</caption>
       </property>
@@ -154,7 +154,7 @@
             <reltype>RELTYPE_RANK</reltype>
             <table>kliendibaas_isik</table>
             <automatic>1</automatic>
-            <group>general</group>
+            <group>contact</group>
             <field>rank</field>
             <caption>Ametinimetus</caption>
       </property>
