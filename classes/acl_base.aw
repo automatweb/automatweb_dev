@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.63 2004/03/12 12:50:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.64 2004/03/16 09:46:00 kristo Exp $
 
 lc_load("definition");
 
@@ -188,8 +188,6 @@ class acl_base extends db_connector
 
 	function can_aw($access,$oid)
 	{
-		$o_oid = $oid;
-
 		$access="can_".$access;
 
 		$this->save_handle();
@@ -235,10 +233,6 @@ class acl_base extends db_connector
 				}
 			}
 
-			// now check if we found an acl with a higher priority, than the current one
-			// this could be optimized a bit by finding out the highest priority among the groups, the user belongs to
-			// and only looping until we find that, but that will not happen too often, since user groups always have the highest priority
-			// and access is almost always granted by normal groups, not user groups so it isn't worth it
 			if ($tacl["priority"] > $max_priority)
 			{
 				$max_priority = $tacl["priority"];
@@ -265,6 +259,7 @@ class acl_base extends db_connector
 		{
 			return true;
 		}
+
 		if (!($max_acl = aw_cache_get("__aw_acl_cache", $oid)))
 		{
 			// try for file cache
@@ -280,7 +275,6 @@ class acl_base extends db_connector
 			else
 			{
 				$max_acl = $this->can_aw($access,$oid);
-
 				if ($GLOBALS["cfg"]["cache"]["page_cache"] != "")
 				{
 					$str = "<?php\n";
