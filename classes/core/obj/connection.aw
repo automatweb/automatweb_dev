@@ -121,6 +121,19 @@ class connection
 		}
 		return obj($this->conn["to"]);
 	}
+	
+	function from()
+	{
+		if (!$this->conn["id"])
+		{
+			error::throw(array(
+				"id" => ERR_CONNECTION,
+				"msg" => "connection::to(): no current connection!"
+			));
+		}
+		return obj($this->conn["from"]);
+	}
+
 
 	////////////////////////////
 	// private functions
