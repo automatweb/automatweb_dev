@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.14 2002/08/16 11:41:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.15 2002/08/29 03:17:00 kristo Exp $
 // form_actions.aw - creates and executes form actions
 
 class form_actions extends form_base
@@ -521,7 +521,7 @@ class form_actions extends form_base
 			// don't try to send to invalid addresses
 			if (is_email($addr))
 			{
-				echo "sending to $addr <br>";
+//				echo "sending to $addr <br>";
 				$this->awm->set_header("Subject",$data["subject"]);
 				$this->awm->set_header("From",$data["from"]);
 				$this->awm->set_header("To",$addr);
