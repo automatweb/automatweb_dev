@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.6 2004/02/11 09:42:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.7 2004/02/16 15:38:27 duke Exp $
 /*
 
 @classinfo syslog_type=ST_GALLERY_CONF relationmgr=yes
@@ -21,7 +21,7 @@
 @property images_folder type=relpicker reltype=RELTYPE_IMAGES_FOLDER
 @caption Piltide asukoht
 
-@property def_layout type=relpicker reltype=RELATION_LAYOUT
+@property def_layout type=relpicker reltype=RELTYPE_LAYOUT
 @caption Default layout:
 
 @default group=imgsize
