@@ -28,6 +28,7 @@
 				<arguments>
 					<optional name="id"/>
 					<required name="attach"/>
+					<required name="msg_id"/>
 				</arguments>
 			</function>
 		</action>
