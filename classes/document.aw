@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.32 2001/07/04 23:01:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.33 2001/07/09 21:37:19 duke Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -48,6 +48,7 @@ class document extends aw_template
 		$this->period = $period;
 		
 		$this->style_engine = new aw_style;
+		lc_load("definition");
 		global $lc_document;
 		if (is_array($lc_document))
 		{
@@ -65,38 +66,38 @@ class document extends aw_template
 		// mida voidakse muuta
 		// key on kasutusel selleks, et formeerida logi jaoks moistlik string
 		$this->knownfields = array(
-				"Pealkiri"		=> "title",
-		 		"Alapealkiri" 		=> "subtitle",
-				"Autor"       		=> "author",
-				"Fotod"       		=> "photos",
-				"Votmesonad"  		=> "keywords",
-				"Nimed"       		=> "names",
-				"Lead"        		=> "lead",
-				"Näita leadi" 		=> "showlead",
-				"Sisu"        		=> "content",
-				"Esilehel"     		=> "esilehel",
-				"jrk1"			=> "jrk1",
-				"jrk2"			=> "jrk2",
-				"jrk3"			=> "jrk3",
-				"Esileht yleval"	=> "esileht_yleval",
-				"Esilehel uudis"	=> "esilehel_uudis",
-				"Pealkiri klikitav"	=> "title_clickable",
-				"Tsitaat"		=> "cite",
-				"Kanal"			=> "channel",
-				"Kellaaeg"		=> "tm",
-				"Foorum"		=> "is_forum",
-				"Lingi tekst"		=> "link_text",
-				"Lead comment"		=> "lead_comments",
-				"Uues aknas"		=> "newwindow",
-				"Paremal"		=> "yleval_paremal",
-				"Pealkiri n2htav"	=> "show_title",
-				"Copyright"		=> "copyright",
-				"Pikk pealkiri"		=> "long_title",
-				"nobreaks"		=> "nobreaks",
-				"No left pane"		=> "no_left_pane",
-				"No right pane"		=> "no_right_pane",
-				"No search"		=> "no_search",
-				"N@ita muudetud" =>	"show_modified");
+				LC_DOCUMENT_TITLE		=> "title",
+		 		LC_DOCUMENT_SUBTITLE 		=> "subtitle",
+				LC_DOCUMENT_AUTHOR       		=> "author",
+				LC_DOCUMENT_PHOTO       		=> "photos",
+				LC_DOCUMENT_KEYWORD  		=> "keywords",
+				LC_DOCUMENT_NAMES       		=> "names",
+				LC_DOCUMENT_LEAD        		=> "lead",
+				LC_DOCUMENT_SHOW_LEAD 		=> "showlead",
+				LC_DOCUMENT_THEME       		=> "content",
+				LC_DOCUMENT_FRONTPAGE     		=> "esilehel",
+				LC_DOCUMENT_NR1		=> "jrk1",
+				LC_DOCUMENT_NR2			=> "jrk2",
+				LC_DOCUMENT_NR3			=> "jrk3",
+				LC_DOCUMENT_FRONT_UP	=> "esileht_yleval",
+				LC_DOCUMENT_FRONT_NEWS	=> "esilehel_uudis",
+				LC_DOCUMENT_TITLE_CLIK	=> "title_clickable",
+				LC_DOCUMENT_TSITAAT		=> "cite",
+				LC_DOCUMENT_CANAL			=> "channel",
+				LC_DOCUMENT_TIME		=> "tm",
+				LC_DOCUMENT_FORUM		=> "is_forum",
+				LC_DOCUMENT_LINK_TEXT		=> "link_text",
+				LC_DOCUMENT_LEAD_COM		=> "lead_comments",
+				LC_DOCUMENT_NEW_WIN		=> "newwindow",
+				LC_DOCUMENT_RIGHT		=> "yleval_paremal",
+				LC_DOCUMENT_TITLE_SHOW	=> "show_title",
+				LC_DOCUMENT_COPYRIGHT		=> "copyright",
+				LC_DOCUMENT_LONG_TITLE		=> "long_title",
+				LC_DOCUMENT_NOBREAKS		=> "nobreaks",
+				LC_DOCUMENT_NO_LEFT_PANE		=> "no_left_pane",
+				LC_DOCUMENT_NO_RIGHT_PANE		=> "no_right_pane",
+				LC_DOCUMENT_NO_SEARCH		=> "no_search",
+				LC_DOCUMENT_SHOW_CHANGED =>	"show_modified");
 	}
 
 	function set_period($period)
