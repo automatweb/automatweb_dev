@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.57 2001/06/08 03:52:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.58 2001/06/08 18:53:53 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -1274,9 +1274,20 @@ class messenger extends menuedit_light
 
 		$targets = explode(",",$mtargets1);
 
+		$cc = $to = array();
+
 		foreach($targets as $key => $val)
 		{
 			$targets[$key] = trim($targets[$key]);
+		};
+
+		$cctargets = explode(",",$mtargets2);
+		foreach($cctargets as $key => $val)
+		{
+			if (strpos($val,"@"))
+			{
+				$cc[] = $val;
+			};
 		};
 
 		if (strlen($targets[0]) == 0)
@@ -1298,6 +1309,7 @@ class messenger extends menuedit_light
 			if (strpos($val,"@"))
 			{
 				$externals[] = $val;
+				$to[] = $val;
 			}
 			else
 			{
@@ -1341,7 +1353,8 @@ class messenger extends menuedit_light
 					"froma" => $froma,
 					"fromn" => $fromn,
 					"subject" => $subject,
-					"to" => join(",",$externals),
+					"to" => join(",",$to),
+					"cc" => join(",",$cc),
 					"body" => $message,
 				));
 
@@ -1466,6 +1479,7 @@ class messenger extends menuedit_light
 				message = '$message',
 				subject = '$subject',
 				mtargets1 = '$mtargets1',
+				mtargets2 = '$mtargets2',
 				pri = '$pri'
 			WHERE id = '$msg_id'";
 		$this->db_query($q);
@@ -1601,12 +1615,14 @@ class messenger extends menuedit_light
 			case MSG_EXTERNAL:
 				// replace < and > in the fields with correspondening HTML entitites
 				$from = $msg["mfrom"];
+				$cc = $msg["mtargets2"];
 				$from = $this->MIME_decode($from);
 				$subject = $this->MIME_decode($msg["subject"]);
 				$vars = array(
 					"mfrom" => htmlspecialchars($from),
 					"mtargets1" => htmlspecialchars($msg["mto"]),
 					"subject" => htmlspecialchars($subject),
+					"mtargets2" => htmlspecialchars($cc),
 				);
 				break;
 
@@ -1630,6 +1646,7 @@ class messenger extends menuedit_light
 		};
 
 		$this->vars($vars);	
+		$cc = ($cc) ? $this->parse("cc") : "";
 
 		$message = $msg["message"];
 		$message = ereg_replace("((ftp://)|(http://))(([[:alnum:]]|[[:punct:]])*)", "<a href=\"\\0\" target='_new'>\\0</a>",$message);
@@ -1646,6 +1663,7 @@ class messenger extends menuedit_light
 			"id" => $msg["id"],
 			"msg_id" => $args["id"],
 			"msgid" => $args["id"],
+			"cc" => $cc,
 			"show" => $s,
 			"status" => $msg["status"],
 			"message" => $message,
@@ -2320,6 +2338,7 @@ class messenger extends menuedit_light
 				// siin checkime ruule:
 				$subject = $this->MIME_decode($body["headers"]["Subject"]);
 				$from = $this->MIME_decode($body["headers"]["From"]);
+				$cc = $this->MIME_decode($body["headers"]["Cc"]);
 				$mfrom = $from;
 				$content = $this->MIME_decode($body["body"]);
 				$processing = true;
@@ -2376,8 +2395,9 @@ class messenger extends menuedit_light
 				$this->quote($header);
 				
 				// tyypi 2 on välised kirjad. as simpel as that.
-				$q = "INSERT INTO messages (id,pri,mfrom,mto,folder,subject,tm,type,uidl,message,headers,num_att)
-					VALUES('$oid','0','$from','$to','$parent','$subject','$tm','2','$uidl','$content','$header','$res')";
+				$q = "INSERT INTO messages (id,pri,mfrom,mto,mtargets2,folder,subject,tm,type,uidl,message,headers,num_att)
+					VALUES('$oid','0','$from','$to','$cc','$parent','$subject','$tm','2','$uidl','$content','$header','$res')";
+
 				$this->db_query($q);
 
 
