@@ -936,7 +936,7 @@ class form_db_base extends aw_template
 						$ec=explode(",",$el->entry);
 						foreach($ec as $v)
 						{
-							$qpts[] = " ".$elname." like '%".$el->arr["multiple_items"][$v]."%' ";
+							$qpts[] = " ".$elname2." like '%".$el->arr["multiple_items"][$v]."%' ";
 						}
 
 						$query.= join("OR",$qpts).")";
