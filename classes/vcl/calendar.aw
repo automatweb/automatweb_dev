@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.7 2004/01/28 20:58:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.8 2004/02/02 17:00:56 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -33,6 +33,11 @@ class vcalendar extends aw_template
 		{
 			$this->overview_func = $arr["overview_func"];
 		};
+
+		if ($arr["overview_range"])
+		{
+			$this->overview_range = $arr["overview_range"];
+		};
 	}
 
 	////
@@ -53,6 +58,11 @@ class vcalendar extends aw_template
 		{
 			$range_args["date"] = $arr["date"];
 		};
+
+		if (empty($this->overview_range))
+		{
+			$this->overview_range = 3;
+		};
 		// this should also return overview range. no?
 		// depending on amount of months we have in the overview.
 		// yees. For starters, let's assume that we have 3 of them
@@ -64,10 +74,21 @@ class vcalendar extends aw_template
 		$m = date("m",$range["timestamp"]);
 		$y = date("Y",$range["timestamp"]);
 		$range["viewtype"] = $viewtype;
-		// start of the previous month
-		$range["overview_start"] = mktime(0,0,0,$m-1,1,$y);
-		// end of the next month
-		$range["overview_end"] = mktime(23,59,59,$m+2,0,$y);
+
+		if ($this->overview_range == 3)
+		{
+			// start of the previous month
+			$range["overview_start"] = mktime(0,0,0,$m-1,1,$y);
+			// end of the next month
+			$range["overview_end"] = mktime(23,59,59,$m+2,0,$y);
+		}
+		elseif ($this->overview_range == 1)
+		{
+			// start of the this month
+			$range["overview_start"] = mktime(0,0,0,$m,1,$y);
+			// end of the this month
+			$range["overview_end"] = mktime(23,59,59,$m+1,0,$y);
+		};
 		if ($viewtype == "relative")
 		{
 			$range["past"] = $this->past_limit;
@@ -150,19 +171,13 @@ class vcalendar extends aw_template
 		if ($this->overview_func)
 		{
 
-			// XX: i need a better way to calculate the range
-			$xs1 = get_date_range(array(
-				"date" => "1-" . $m-1 . "-$y",
-				"type" => "month",
-			));
-			
-			$xs2 = get_date_range(array(
-				"date" => "1-" . $m+1 . "-$y",
-				"type" => "month",
-			));
+			$ostart = $this->range["overview_start"];
+			$oend = $this->range["overview_end"];
 
+			/*
 			$ostart = $xs1["start"];
 			$oend = $xs2["end"];
+			*/
 			
 			$inst = $this->overview_func[0];
 			$meth = $this->overview_func[1];
@@ -187,7 +202,18 @@ class vcalendar extends aw_template
 
 			// I also need to figure out which days to show, so that
 			// holidays will get be excluded
-			for ($i = -1; $i <= 1; $i++)
+			if ($this->overview_range == 3)
+			{
+				$ri =  -1;
+				$re = 1;
+			}
+			else
+			{
+				$ri = 0;
+				$re = 0;
+			};
+				
+			for ($i = $ri; $i <= $re; $i++)
 			{
 				$range = get_date_range(array(
 					"date" => sprintf("%d-%d-%d",1,$m+$i,$y),
