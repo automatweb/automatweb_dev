@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.11 2002/11/19 17:41:24 duke Exp $
+// $Id: class_base.aw,v 2.12 2002/11/21 17:25:42 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -69,12 +69,19 @@ class class_base extends aliasmgr
 	{
 		$this->init("");
 		$this->output_client = "htmlclient";
+		$this->ds_name = ($ds_name) ? $ds_name : "ds_local_sql";
 	}
 
 	////
 	// !Generate a form for adding or changing an object
 	function change($args = array())
 	{
+		// XXX: this needs some SERIOUS cleanup
+		if ($args["ds_name"])
+		{
+			$this->ds_name = $args["ds_name"];
+		};
+
 		$this->check_class();
 
 		extract($args);
@@ -89,6 +96,8 @@ class class_base extends aliasmgr
 				"group" => $group,
 		));
 
+		// if the object is divided between 2 tables, then this
+		// loads data from the second table
 		$this->load_object();
 
 		// here be some magic to determine the correct output client
@@ -122,7 +131,6 @@ class class_base extends aliasmgr
                 {
                         if (is_array($val))
                         {
-                                $val = $this->normalize_text_nodes($val);
                                 $this->get_value(&$val);
                         };
 
@@ -207,6 +215,7 @@ class class_base extends aliasmgr
 						"orb_class" => $orb_class,
 						"parent" => $parent,
 						"period" => $period,
+						"ds_name" => $this->ds_name,
 					),
 		));
 
@@ -215,7 +224,10 @@ class class_base extends aliasmgr
 			$content = $cli->get_result();
 		};
 
-		return $this->gen_output(array("content" => $content));
+		return $this->gen_output(array(
+			"parent" => $parent,
+			"content" => $content,
+		));
 
 	}
 
@@ -224,15 +236,26 @@ class class_base extends aliasmgr
 	function submit($args = array())
 	{
 		$this->quote($args);
+
+		// check whether this current class is based on class_base
+		if ($args["ds_name"])
+		{
+			$this->ds_name = $args["ds_name"];
+		};
+
 		$this->check_class();
 
+		// if this is a new object, then _init_object tries to load
+		// the parent object as a menu. If that fails, the code
+		// will never return here.
 		$this->_init_object(array(
 			"id" => $args["id"],
 			"parent" => $args["parent"],
 		));
-	
+
 		if (method_exists($this->inst,"callback_pre_save"))
 		{
+			// nb! the handler gets quoted data
 			$this->inst->callback_pre_save(array(
 				"id" => $this->id,
 				"form_data" => &$args,
@@ -244,14 +267,13 @@ class class_base extends aliasmgr
 		if (!$id)
 		{
 			// create the object, if it wasn't already there
-			$status = (isset($status)) ? $status : 1;
-			$id = $this->new_object(array(
-				"parent" => $parent,
-				"name" => $name,
-				"comment" => $comment,
-				"class_id" => $this->clid,
-				"alias" => $alias,
-				"status" => $status,
+			$id = $this->ds->ds_new_object(array(),array(
+					"parent" => $parent,
+					"name" => $name,
+					"comment" => $comment,
+					"class_id" => $this->clid,
+					"alias" => $alias,
+					"status" => isset($status) ? $status : 1,
 			));
 
 			$this->new = true;
@@ -259,7 +281,10 @@ class class_base extends aliasmgr
 		};
 
 		// and read it back again
-		$this->coredata = $this->get_object($id);
+		$this->coredata = $this->ds->ds_get_object(array(
+			"id" => $this->id,
+			"class_id" => $this->clid,
+		));
 
 		$realprops = $this->get_active_properties(array(
 			"clfile" => $this->clfile,
@@ -290,7 +315,6 @@ class class_base extends aliasmgr
                 {
                         if (is_array($property))
                         {
-                                $property = $this->normalize_text_nodes($property);
 				// this return the old/saved value of the property
                                 $this->get_value(&$property);
 				// new data is in $args
@@ -373,39 +397,39 @@ class class_base extends aliasmgr
 			}
 			elseif ($table == "objects")
 			{
-				if (isset($args["name"]))
+				if (isset($savedata[$name]))
 				{
 					$coredata[$name] = $savedata[$name];
 				};
 			}
 			else
 			{
-				if (isset($args["name"]))
+				if (isset($savedata[$name]))
 				{
 					$objdata[$name] = $savedata[$name];
 				};
 			};
 		};
 
+
 		if (sizeof($metadata) > 0)
 		{
 			$coredata["metadata"] = $metadata;
 		};
-		$coredata["oid"] = $id;
 
-		$this->upd_object($coredata);
+		$coredata["id"] = $id;
+		$this->ds->ds_save_object(array("id" => $id,"clid" => $this->clid),$coredata);
 		$this->save_object(array("data" => $objdata));
 
-		$classname = get_class($this->orb_class);
-
-
-		$name = $this->coredata["name"];
-		
 		if (method_exists($this->inst,"callback_post_save"))
 		{
 			$this->inst->callback_post_save(array("id" => $this->id));
 		}
+
 		// logging
+		$classname = get_class($this->orb_class);
+		$name = $this->coredata["name"];
+
 		if ($this->new)
 		{
 			$this->_log($classname, "Lisas $classname objekti $name ($id)", $id);
@@ -415,7 +439,16 @@ class class_base extends aliasmgr
 			$this->_log($classname, "Muutis $classname objekti $name ($id)", $id);
 		};
 
-                return $this->mk_my_orb("change",array("id" => $id,"group" => $group),get_class($this->orb_class));
+
+		if ($this->ds_name == "ds_local_file")
+		{
+			$ds_name = $this->ds_name;
+		}
+		else
+		{
+			$ds_name = "";
+		};
+                return $this->mk_my_orb("change",array("id" => $id,"group" => $group,"ds_name" => $ds_name),get_class($this->orb_class));
 	}
 
 	////
@@ -429,6 +462,7 @@ class class_base extends aliasmgr
 		{
 			die("this class does not have any defined properties ");
 		};
+		$this->ds = get_instance("datasource/" . $this->ds_name);
 	}
 
 	////
@@ -440,77 +474,45 @@ class class_base extends aliasmgr
 
 		if ($args["id"])
 		{
-                        // retrieve the object
-			// NB! get_object dies if the object does not have the 
-			// correct type
-			if (!$this->can("edit", $args["id"]))
-			{
-				$this->acl_error("edit", $args["id"]);
-			}
-			
-                        $this->coredata = $this->get_object(array(
-				"oid" => $args["id"],
+			$this->coredata = $this->ds->ds_get_object(array(
+				"id" => $args["id"],
 				"class_id" => $this->clid,
 			));
 
 			$this->id = $this->coredata["oid"];
+			$this->parent = $this->coredata["parent"];
                         $this->clfile = $cp[$this->coredata["class_id"]];
-			// temporary - until we switch menu editing over to new interface
-			if ($this->coredata["class_id"] == 1)
-			{
-				$this->clfile = "menu";
-			};
-			if ($this->coredata["class_id"] == 7)
-			{
-				$this->clfile = "doc";
-			};
 			
 		}
 		else
 		{
-			if (!$this->can("add", $args["parent"]))
+			if (!$this->ds->ds_can_add($args))
 			{
-				$this->acl_error("add", $args["parent"]);
-			}
-			// object should only be saved under menus
-			// NB! get_object dies if the object does not have the 
-			// correct type
-			$parobj = $this->get_object(array(
-				"oid" => $args["parent"],
-				"class_id" => CL_PSEUDO,
-			));
+				die($this->ds->get_error_text());
+			};
 
-			$this->parent = $parobj["oid"];
+			$this->parent = $args["parent"];
 			$this->clfile = $cp[$this->clid];
-			// temporary - until we switch menu editing over to new interface
-			if ($this->clid == 1)
-			{
-				$this->clfile = "menu";
-			};
-			if ($this->clid == 7)
-			{
-				$this->clfile = "doc";
-			};
 
 		}
+
+		// temporary - until we are sure that will will not go back to
+		// the old interface
+		if ($this->clid == 1)
+		{
+			$this->clfile = "menu";
+		};
+
+		// temporary - until we switch document editing back to new interface
+		if ($this->clid == 7)
+		{
+			$this->clfile = "doc";
+		};
 
 		if (!$this->clfile)
 		{
 			die("coult not identify object " . $this->clfile);
 		};
-
-		// if there is a configuration form set for the current 
-		// class, load it and filter our display according to that
-		$cfg = get_instance("config");
-		$classconf = aw_unserialize($cfg->get_simple_config("class_cfgforms"));
-
-		$use_form = $classconf[$this->clid];
-		$cfgform = $this->get_object($use_form);
-
-//                $def = $this->cfg["classes"][$this->clid]["def"];
-//                $this->visible_properties = $cfgform["meta"]["properties"][$def];
-//                $this->el_ord = $cfgform["meta"]['ord'][$def];
-
 		
 		// get an instance of the class that handles this object type
 		$this->inst = get_instance($this->clfile);
@@ -522,13 +524,13 @@ class class_base extends aliasmgr
 		$classname = get_class($this->orb_class);
 		if ($this->id)
 		{
-			$title = "Muuda $classname objekti";
+			$title = "Muuda $classname objekti " . $this->coredata["name"];
 			$parent = $this->coredata["parent"];
 		}
 		else
 		{
 			$title = "Lisa $classname objekt";
-			$parent = $this->parent;
+			$parent = $args["parent"];
 		};
 
 		$this->mk_path($parent,$title);
@@ -537,6 +539,9 @@ class class_base extends aliasmgr
 		
 		// tabpanel really should be in the htmlclient too
 		$this->tp = get_instance("vcl/tabpanel");
+
+		// I need a way to let the client (the class using class_base to
+		// display the editing form) to add it's own tabs.
 
 		foreach($grpnames->get() as $key => $val)
 		{
@@ -575,41 +580,43 @@ class class_base extends aliasmgr
 
 	function load_object($args = array())
 	{
-		$objtable = $this->classinfo["objtable"]["text"];
-		$objtable_index = $this->classinfo["objtable_index"]["text"];
+		$table = $this->classinfo["objtable"]["text"];
+		$idfield = $this->classinfo["objtable_index"]["text"];
 		$id = $this->id;
-		if ($id && $objtable && $objtable_index)
+		if ($id && $table && $idfield)
 		{
-			$q = "SELECT * FROM $objtable WHERE $objtable_index = '$id'";
-			$this->objdata = $this->db_fetch_row($q);
+			$this->objdata = $this->ds->ds_get_object(array(
+				"id" => $id,
+				"table" => $table,
+				"idfield" => $idfield,
+			));
 		};
 	}
 
+	////
+	// !Saves the object
 	function save_object($args = array())
 	{
-		$objtable = $this->classinfo["objtable"]["text"];
-		$objtable_index = $this->classinfo["objtable_index"]["text"];
+		$table = $this->classinfo["objtable"]["text"];
+		$idfield = $this->classinfo["objtable_index"]["text"];
 		$id = $this->id;
-		// create the new record
-		if ($this->new && $objtable && $objtable_index)
+		if ($table && $idfield)
 		{
-			$q = sprintf("INSERT INTO %s (%s) VALUES (%d)",$objtable,$objtable_index,$id);
-			$this->db_query($q);
-		};
-		$data = new aw_array($args["data"]);
-		$parts = array();
-		foreach($data->get() as $key => $val)
-		{
-			$parts[] = " $key = '$val' ";
-		};
-		if ((sizeof($parts) > 0) && $id && $objtable && $objtable_index)
-		{
-			$q = sprintf("UPDATE %s SET %s WHERE %s = %d",
-				$objtable,
-				join(",",$parts),
-				$objtable_index,
-				$id);
-			$this->db_query($q);
+			// create the new record
+			if ($this->new)
+			{
+				$this->ds->ds_new_object(array(
+					"table" => $table,
+					"idfield" => $idfield,
+					"id" => $id,
+				));
+			};
+		
+			$this->ds->ds_save_object(array(
+				"table" => $table,
+				"idfield" => $idfield,
+				"id" => $id),$args["data"]
+			);
 		};
 	}
 	
@@ -618,57 +625,67 @@ class class_base extends aliasmgr
 		// load all properties
 		$cfgu = get_instance("cfg/cfgutils");
 		$cfile = basename($args["clfile"]);
+
 		// XXX: temporary
 		if ($cfile == "document")
 		{
 			$cfile = "doc";
 		};
+
+		// this finds out whether we have to load a config form
+		// and if so, do it and set $this->active_properties
+		// and $this->property_order - which we will then use
+		// for generating the list of active properties
+		$this->get_active_cfgform();
+
+		// loads all properties for this class
 		$all_props = $cfgu->load_properties(array("file" => $cfile));
+
 		$this->classinfo = $cfgu->get_classinfo();
-
-		$corefields = array_flip(explode(",",$this->classinfo["corefields"]["text"]));
-
-		// by default only the name is shown
-		if ( sizeof($corefields) == 0 )
-		{
-			$corefields = array("name" => 0);
-		};
+		$corefields = $this->get_visible_corefields();
 
 		// I need names of all group and the contents of active group
-		$by_group = array();
+		// group means the contents of a tab
 		$activegroup = ($args["group"]) ? $args["group"] : "general";
+		
 		$elements = array();
 		$this->groupnames = array();
 		$default_ord = 0;
+
+		// now, cycle over all the properties and do all necessary filtering
 		foreach($all_props as $val)
 		{
 			$use = true;
-			$corefield = $val["corefield"]["text"];
+			$name = $val["name"];
 
-			if ($val["access"]["text"] == "ro")
+			// skip all Read-Only properties - but those will probably go away anyway
+			if ($val["access"] == "ro")
 			{
 				$use = false;
 			};
 
-			$name = $val["name"]["text"];
 
-			if (is_array($this->visible_properties) && (!$this->visible_properties[$name]))
+			// skip if the active cfgform hides it
+			if (is_array($this->active_properties) && (!$this->active_properties[$name]))
 			{
 				$use = false;
 			};
 
-			if ($corefield && !isset($corefields[$name]))
+			// skip if property is a core fields. Core fields are common to all objects
+			// and they are stored in the objects table
+			if ($val["corefield"] && !isset($corefields[$name]))
 			{
 				$use = false;
 			};
 
 			if ($use)
 			{
-				$grpname = ($val["group"]["text"]) ? $val["group"]["text"] : "general";
 				// stuff with no group name goes into general. 
+				$grpname = ($val["group"]) ? $val["group"] : "general";
+
 				if ($grpname == $activegroup)
 				{
-					$elkey = (int)$this->el_ord[$name];
+					$elkey = (int)$this->property_order[$name];
 					if (!$elkey)
 					{
 						$elkey = $default_ord;
@@ -676,41 +693,40 @@ class class_base extends aliasmgr
 					$elkey .= $name;
 					$elements[$elkey] = $val;
 				};
+
 				$this->groupnames[$grpname] = $grpname;
 				$default_ord++;
 			};
 		}
-	
+
+		// reorder the elements
 		ksort($elements,SORT_NUMERIC);
+
 		return $elements;
 	}
 	
-	function normalize_text_nodes($val)
-	{
-		if (is_array($val))
-		{
-			$res = array();
-			foreach($val as $key => $val)
-			{
-				$res[$key] = $val["text"];
-			};
-		}
-		else
-		{
-			$res = $val;
-		};
-		return $res;
-	}
-
 	function convert_element(&$val)
 	{
 		if (($val["type"] == "objpicker") && $val["clid"])
 		{
 			$val["type"] = "select";
-                        $val["options"] = $this->list_objects(array(
-					"class" => constant($val["clid"]),
-					"addempty" => true,
+			$val["options"] = $this->list_objects(array(
+				"class" => constant($val["clid"]),
+				"subclass" => ($val["subclass"]) ? constant($val["subclass"]) : "",
+				"addempty" => true,
 			));
+		};
+
+		if (($val["type"] == "cfgform_picker") && $val["clid"])
+		{
+			// now I need to figure out the list of files for thiss
+			// class type
+			$class_id = constant($val["clid"]);
+			$cf = get_instance("cfg/cfgform");
+			$val["options"] = $cf->get_cfgforms_by_class(array(
+				"clid" => $val["clid"],
+			));
+			$val["type"] = "select";
 		};
 
 		if (($val["type"] == "relpicker") && ($val["clid"]))
@@ -774,6 +790,105 @@ class class_base extends aliasmgr
 		};
 	}
 
+	////
+	// !Figures out which corefields should be shown
+	function get_visible_corefields()
+	{
+		// figure out which core fields are to be shown
+		if ($this->classinfo["corefields"]["text"])
+		{
+			$corefields = array_flip(explode(",",$this->classinfo["corefields"]["text"]));
+		}
+		else
+		{
+			$corefields = array("name" => 0);
+		};
+		
+		// by default only the name is shown
+		if ( sizeof($corefields) == 0 )
+		{
+			$corefields = array("name" => 0);
+		};
+
+		return $corefields;
+	}
+
+	////
+	// !Figures out the correct configuration form that should be used
+	// for displaying the object editing form
+
+	// right now this only works for documents and the "doc" class
+	function get_active_cfgform($args = array())
+	{
+		if ($this->clid == 7)
+		{
+			// first, check the parent menu
+			if ($this->parent)
+			{
+				$parobj = $this->get_object($this->parent);
+				$this->parse_cfgform(array("id" => $parobj["meta"]["tpl_edit_cfgform"]));
+			};
+
+		};
+
+//                 if there is a configuration form set for the current 
+//                 class, load it and filter our display according to that
+
+//                $cfg = get_instance("config");
+//                $classconf = aw_unserialize($cfg->get_simple_config("class_cfgforms"));
+//
+//                $use_form = $classconf[$this->clid];
+//                $cfgform = $this->get_object($use_form);
+
+//                $def = $this->cfg["classes"][$this->clid]["def"];
+//                $this->visible_properties = $cfgform["meta"]["properties"][$def];
+//                $this->el_ord = $cfgform["meta"]['ord'][$def];
+	}
+
+	////
+	// !Loads and parses a configuration form
+	// id(int) - id of the config form
+	function parse_cfgform($args = array())
+	{
+		$id = $args["id"];
+		if ($id)
+		{
+			$cf = get_instance("cfg/cfgform");
+			$forms = $cf->get_cfgforms_by_class(array(
+				"clid" => $this->cfg["classes"][$this->clid]["def"],
+			));
+			
+//                        $cfgform = $this->get_object($id);
+			if ($forms[$id])
+			{
+				// load the file
+				$cfgform = $cf->get_cfgform_from_file(array(
+					"clid" => $this->cfg["classes"][$this->clid]["def"],
+					"id" => $id,
+				));
+
+			};
+
+			// XXX: false means that no filtering should be done
+			// but I think that this should really be decided by the ini file
+			// maybe it's better if we are "locked down" by default
+			$this->active_properties = false;
+
+			if (is_array($cfgform["properties"]))
+			{
+				$this->active_properties = $cfgform["properties"];
+			};
+
+			$this->property_order = false;
+
+			if (is_array($cfgform["ord"]))
+			{
+				$this->property_order = $cfgform["ord"];
+			};
+		};
+
+	}
+
 	// wrappers for alias manager
 
 	////
@@ -782,6 +897,7 @@ class class_base extends aliasmgr
 	function list_aliases($args = array())
 	{
 		extract($args);
+		$this->check_class();
 		$this->_init_object(array("id" => $id));
 
 		$this->action = $action;
@@ -805,6 +921,7 @@ class class_base extends aliasmgr
 	function search_aliases($args = array())
 	{
 		extract($args);
+		$this->check_class();
 		$this->_init_object(array("id" => $id));
 
 		$this->action = $action;
