@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.200 2003/07/10 12:43:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.201 2003/07/28 15:57:05 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -113,11 +113,16 @@ class document extends aw_template
 			$pstr = "objects.parent = '$parent'";
 		};
 
+		// _if_ we are showing documents from multiple periods, then we should not use
+		// the period field in the document "fetch" function
+		$this->ignore_periods = false;
+
 		if (is_array($periods))
 		{
 			$rstr = join(",",$periods);
 			if ($rstr != "")
 			{
+				$this->ignore_periods = true;
 				$rstr = "objects.period IN ($rstr)";
 			}
 			else
@@ -173,7 +178,7 @@ class document extends aw_template
 		//	return false;
 		}
 
-		if ($this->period > 0) 
+		if ($this->period > 0 && !$this->ignore_periods) 
 		{
 			$sufix = " && objects.period = " . $this->period;
 		} 
@@ -2722,6 +2727,13 @@ class document extends aw_template
 			$num++;
 		}
 
+		if ($num == 0 && $this->is_template("NO_RESULTS"))
+		{
+			if ($cnt == 0)
+			{
+				return $this->parse("NO_RESULTS");
+			}
+		}
 		$this->vars(array(
 			"MATCH" => $r,
 			"s_parent" => $parent,
@@ -3452,7 +3464,19 @@ class document extends aw_template
 			$hu = " AND orig_url != ''";
 		}
 
-		$this->db_query("SELECT * FROM export_content WHERE content LIKE '%$str%'  AND filename != 'page_template.html' AND lang_id = '".aw_global_get("lang_id")."' $hu GROUP BY title");
+		$this->db_query("
+			SELECT * 
+			FROM 
+				export_content 
+				LEFT JOIN objects ON objects.oid = export_content.section
+			WHERE 
+				content LIKE '%$str%'  AND 
+				filename != 'page_template.html' AND 
+				export_content.lang_id = '".aw_global_get("lang_id")."' AND
+				objects.site_id = '".aw_ini_get("site_id")."' $hu 
+			GROUP BY 
+				title
+		");
 		while ($row = $this->db_next())
 		{
 			$show = false;
@@ -3469,8 +3493,12 @@ class document extends aw_template
 				$c = substr_count(strtoupper($row["content"]),strtoupper($str)) + substr_count(strtoupper($row["title"]),strtoupper($str))*5;
 				$max_count = max($c,$max_count);
 
-				$nm = preg_match_all("/\<!-- PAGE_TITLE (.*) \/PAGE_TITLE -->/U", $row["content"], $mt, PREG_SET_ORDER);
-				$title = strip_tags($mt[$nm-1][1]);
+				$title = $row["title"];
+				if ($title == "")
+				{
+					$nm = preg_match_all("/\<!-- PAGE_TITLE (.*) \/PAGE_TITLE -->/U", $row["content"], $mt, PREG_SET_ORDER);
+					$title = strip_tags($mt[$nm-1][1]);
+				}
 
 				$docarr[] = array(
 					"matches" => $c,
