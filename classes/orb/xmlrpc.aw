@@ -128,7 +128,9 @@ class xmlrpc extends aw_template
 //			echo "in fault: expect fault close got $tmp[tag] $tmp[type] <br>";
 			list(,$tmp) = each($this->vals);	// value close
 //			echo "in fault: expect methodresponse close got $tmp[tag] $tmp[type] <br>";
-			$this->raise_error(ERR_XMLRPC_FAULT, "Got remote error!<br><br> code: $faultcode<br> string: $faultstring", true, false);
+			$errs = aw_ini_get("errors");
+			$faultcodestr = $errs[$faultcode][def];
+			$this->raise_error(ERR_XMLRPC_FAULT, "Got remote error!<br><br> code: $faultcodestr ($faultcode)<br> string: $faultstring", true, false);
 		}
 		else
 		{
