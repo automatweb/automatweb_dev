@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.12 2001/06/25 11:27:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.13 2001/07/03 00:00:47 duke Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
@@ -502,7 +502,8 @@ class aw_mail {
 		$subject = $this->headers["Subject"];
 		unset($this->headers["To"]);
 		unset($this->headers["Subject"]);
-		#$this->set_header("Message-Id",$this->gen_message_id());
+		$this->set_header("Message-Id",$this->gen_message_id());
+		$this->set_header("Sender",$this->headers["From"]);
 		foreach($this->headers as $name => $value)
 		{
 			if ($value)
@@ -513,6 +514,7 @@ class aw_mail {
 		mail($to,$subject,$email,$headers);
 		
 	}
+	
 
 };
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.79 2001/07/02 04:51:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.80 2001/07/03 00:00:46 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -155,6 +155,9 @@ class messenger extends menuedit_light
 	{
 		extract($args);
 		global $basedir;
+		$this->read_template("logo.tpl");
+		$this->vars(array("title" => $title));
+		$logo = $this->parse();
 		load_vcl("xmlmenu");
 		$xm = new xmlmenu();
 		$retval = $xm->build_menu(array(
@@ -163,7 +166,7 @@ class messenger extends menuedit_light
 				"tpl"	=> $this->template_dir . "/menus.tpl",
 				"activelist" => $activelist,
 			));
-		return $retval;
+		return $logo . $retval;
 	}
 	
 	////
@@ -281,6 +284,7 @@ class messenger extends menuedit_light
 		};
 
 		$menu = $this->gen_msg_menu(array(
+				"title" => "Folderid",
 				"activelist" => array("configure","folders2","flist"),
 				));
 
@@ -362,11 +366,7 @@ class messenger extends menuedit_light
 			};
 			$folder = $id;
 		};
-		$menu = $this->gen_msg_menu(array(
-						"activelist" => $mactive,
-					));
 
-		$this->read_template("mailbox.tpl");
 		$fld_info = $this->get_object($folder);
 		$folder_name = $fld_info["name"];
 
@@ -374,6 +374,13 @@ class messenger extends menuedit_light
 		{
 			$folder_name = "Inbox ($folder_name)";
 		};
+		
+		$menu = $this->gen_msg_menu(array(
+						"title" => $folder_name,
+						"activelist" => $mactive,
+					));
+		
+		$this->read_template("mailbox.tpl");
 
 		$folder_list = $this->_folder_list();
 
@@ -401,7 +408,7 @@ class messenger extends menuedit_light
 		
 		if (is_array($msglist))
 		{
-			$pages = (int)(sizeof($msglist) / $onpage);
+			$pages = (int)(sizeof($msglist) / $onpage) + 1;
 			if ($pages <= 0)
 			{
 				$pages = 1;
@@ -658,6 +665,7 @@ class messenger extends menuedit_light
 				"id" => $reply,
 				"newid" => $newid,
 				"reply" => true,
+				"reply_all" => $all,
 				"qchar" => $this->msgconf["msg_quotechar"],
 			));
 		return $this->mk_site_orb(array(
@@ -847,6 +855,7 @@ class messenger extends menuedit_light
 			"menu" => $menu,
 			"msg_box_width" => ($this->msgconf["msg_box_width"]) ? $this->msgconf["msg_box_width"] : 60,
 			"msg_box_height" => ($this->msgconf["msg_box_height"]) ? $this->msgconf["msg_box_height"] : 20,
+			"msg_field_width" => ($this->msgconf["msg_field_width"]) ? $this->msgconf["msg_field_width"] : 50,
 			"reforb" => $this->mk_reforb("handle",array()),
 		));
 
@@ -1257,6 +1266,7 @@ class messenger extends menuedit_light
 	{
 		$a2 = ($args["refine"]) ? "refine" : "newsearch";
 		$menu = $this->gen_msg_menu(array(
+				"title" => "Otsing",
 				"activelist" => array("search",$a2),
 				));
 
@@ -1348,6 +1358,7 @@ class messenger extends menuedit_light
 	{
 		extract($args);
 		$menu = $this->gen_msg_menu(array(
+				"title" => "Otsing",
 				"activelist" => array("search"),
 				));
 
@@ -1434,7 +1445,9 @@ class messenger extends menuedit_light
 	// !Kuvab teate
 	function show_message($args = array())
 	{
-		$menu = $this->gen_msg_menu(array());
+		$menu = $this->gen_msg_menu(array(
+				"title" => "read",
+		));
 		extract($args);
 	
 		// hm. kas seda GLOBALS["udata"] seest ei saaks?
@@ -1715,6 +1728,7 @@ class messenger extends menuedit_light
 		// Menüü koostamine
 		$page = ($page) ? $page : "general"; // see viimane kehtib by default
 		$menu = $this->gen_msg_menu(array(
+				"title" => "Messengeri konfigureerimine",
 				"activelist" => array("configure",$page),
 				));
 
@@ -1813,6 +1827,7 @@ class messenger extends menuedit_light
 						"msg_font_size" => $this->picker($conf["msg_font_size"],array("1" => "1","2" => "2", "3" => "3","+2" => "+2", "+3" => "+3")),
 						"msg_box_width" => ($conf["msg_box_width"]) ? $conf["msg_box_width"] : 60,
 						"msg_box_height" => ($conf["msg_box_height"]) ? $conf["msg_box_height"] : 20,
+						"msg_field_width" => ($conf["msg_field_width"]) ? $conf["msg_field_width"] : 50,
 						"aftpage" => "general",
 						);
 				break;
@@ -2285,6 +2300,7 @@ class messenger extends menuedit_light
 				$content = $this->MIME_decode($body["body"]);
 				$processing = true;
 				$deliver_to = $parent;
+				$priority = 0;
 				if (is_array($rules))
 				{
 					foreach($rules as $rkey => $rval)
@@ -2292,6 +2308,10 @@ class messenger extends menuedit_light
 						$field = $rval["field"];
 						if (!(strpos($$field,$rval["rule"]) === false) && $processing )
 						{
+							if ($rval["set_priority"])
+							{
+								$priority = $rval["set_priority_to"];
+							}
 							$deliver_to = $rval["folder"];
 							$processing = false;
 						};
@@ -2347,7 +2367,7 @@ class messenger extends menuedit_light
 				
 				// tyypi 2 on välised kirjad. as simpel as that.
 				$q = "INSERT INTO messages (id,pri,mfrom,mto,mtargets2,folder,subject,tm,type,uidl,message,headers,num_att)
-					VALUES('$oid','0','$from','$to','$cc','$parent','$subject','$tm','2','$uidl','$content','$header','$res')";
+					VALUES('$oid',$priority,'$from','$to','$cc','$parent','$subject','$tm','2','$uidl','$content','$header','$res')";
 
 				$this->db_query($q);
 
@@ -2364,6 +2384,7 @@ class messenger extends menuedit_light
 	function rules($args = array())
 	{
 		$menu = $this->gen_msg_menu(array(
+				"title" => "Reeglid",
 				"activelist" => array("configure","rules","list"),
 				));
 		$fields = array("mfrom" => "Kellelt",
@@ -2425,22 +2446,28 @@ class messenger extends menuedit_light
 
 	////
 	// !Kuvab ruuli lisamis/muutmisvormi
-	function addrule($args = array())
+	function editrule($args = array())
 	{
 		$menu = $this->gen_msg_menu(array(
+				"title" => "Reeglid",
 				"activelist" => array("configure","rules","addrule"),
 				));
+
 		$fields = array("mfrom" => "Kellelt",
 				"message" => "Sisu",
 				"to" => "Kellele",
 				"subject" => "Teema",
 		);
+
 		$folders = $this->_folder_list();
+
 		extract($args);
+
 		$user = $this->get_user(array(
 			"uid" => UID,
 		));
-		$this->read_template("newrule.tpl");
+
+		$this->read_template("editrule.tpl");
 		$delivery = "fldr";
 		classload("users");
 		$users = new users();
@@ -2448,6 +2475,7 @@ class messenger extends menuedit_light
 						"uid" => UID,
 						"key" => "rules",
 		));
+
 		if (isset($id))
 		{
 			$title = "Muuda reeglit";
@@ -2471,18 +2499,22 @@ class messenger extends menuedit_light
 			$field_index = 0;
 			$folder_index = $user["msg_inbox"];
 		};
+
 		$this->vars(array(
 			"field_list" => $this->picker($field_index,$fields),
 			"folder_list" => $this->picker($folder_index,$folders),
 			"folder_checked" => checked($delivery == "fldr"),
 			"addr_checked" => checked($delivery == "mail"),
 			"rule" => $row["rule"],
+			"set_pri_checked" => checked($row["set_priority"]),
+			"pri_list" => $this->picker($row["set_priority_to"],array("0","1","2","3","4","5","6","7","8","9")),
 			"addr" => $row["addr"],
 			"title" => $title,
 			"btn_cap" => $btn_cap,
 			"menu" => $menu,
 			"reforb" => $this->mk_reforb("submitrule",array("id" => $id)),
 		));
+
 		return $this->parse();
 	}
 
@@ -2499,31 +2531,32 @@ class messenger extends menuedit_light
 						"uid" => UID,
 						"key" => "rules",
 		));
+			
+		$keyblock = array(
+				"field" => $field,
+				"rule" => $rule,
+				"set_priority" => $set_priority,
+				"set_priority_to" => (isset($set_priority)) ? $set_priority_to : "",
+				"folder" => $folder,
+		);
+
 		if (isset($id))
 		{
-			$keyblock = array(
-					"field" => $field,
-					"rule" => $rule,
-					"folder" => $folder,
-			);
 			$oldrules[$id] = $keyblock;
 			$status_msg = "Reegel salvestatud";
 		}
 		else
 		{
-			$keyblock = array(
-					"field" => $field,
-					"rule" => $rule,
-					"folder" => $folder,
-			);
 			$oldrules[] = $keyblock;
 			$status_msg = "Reegel lisatud";
 		};
+
 		$users->set_user_config(array(
 						"uid" => UID,
 						"key" => "rules",
 						"value" => $oldrules,
 		));
+
 		session_register("status_msg");
 		return $this->mk_site_orb(array(
 			"action" => "rules",
@@ -2535,6 +2568,7 @@ class messenger extends menuedit_light
 	function new_folder($args = array())
 	{
 		$menu = $this->gen_msg_menu(array(
+				"title" => "Uus folder",
 				"activelist" => array("configure","folders2","newfolder"),
 				));
 		$this->read_template("addfolder.tpl");
