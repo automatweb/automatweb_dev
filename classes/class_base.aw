@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.210 2004/02/11 21:33:37 duke Exp $
+// $Id: class_base.aw,v 2.211 2004/02/12 12:56:07 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -459,6 +459,7 @@ class class_base extends aw_template
 		};
 
 		$cli->finish_output(array(
+			"method" => isset($this->forminfo[$use_form]["method"]) ? "GET" : "",
 			"action" => $submit_action,
 			"submit" => isset($gdata["submit"]) ? $gdata["submit"] : "",
 			"data" => $argblock,
@@ -1421,7 +1422,7 @@ class class_base extends aw_template
 		$this->classinfo = $this->classinfo + $clif->get();
 		$this->relinfo = $cfgu->get_relinfo();
 		$this->forminfo = $cfgu->get_forminfo();
-		#arr($this->forminfo);
+
 		if (is_array($this->classconfig))
 		{
 			$this->classinfo = array_merge($this->classinfo,$this->classconfig);
@@ -1725,7 +1726,7 @@ class class_base extends aw_template
 				"subclass" => isset($val["subclass"]) ? constant($val["subclass"]) : "",
 				"addempty" => true,
 				"truncate_names" => 1,
-				"add_folders" => true,
+				//"add_folders" => true,
 			));
 		};
 
