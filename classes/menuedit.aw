@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.313 2004/02/11 11:57:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.314 2004/03/08 17:51:48 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -483,16 +483,18 @@ class menuedit extends aw_template
 							}
 						};
 
-						if ( ($prnt != 0) && ($obj->parent() != $prnt) )
-						{
-							$obj = false;
-						}
-						else
 						if ($obj)
 						{
-							if (is_object($obj))
+							if ( ($prnt != 0) && ($obj->parent() != $prnt) )
 							{
-								$prnt = $obj->id();
+								$obj = false;
+							}
+							else
+							{
+								if (is_object($obj))
+								{
+									$prnt = $obj->id();
+								}
 							}
 						}
 					}
