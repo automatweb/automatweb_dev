@@ -45,6 +45,15 @@
             <caption>Koopia</caption>
       </property>
       <property>
+            <name>bcc</name>
+            <group>general</group>
+            <table>messages</table>
+            <type>textbox</type>
+            <field>mtargets2</field>
+            <size>80</size>
+            <caption>Pimekoopia</caption>
+      </property>
+      <property>
             <name>name</name>
             <group>general</group>
             <table>objects</table>
