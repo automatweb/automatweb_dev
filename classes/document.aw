@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.265 2004/06/19 19:15:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.266 2004/06/19 20:07:02 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1752,149 +1752,9 @@ class document extends aw_template
 	**/
 	function add($arr)
 	{
-		extract($arr);
-		$per_oid= $this->cfg["per_oid"];
-		global $period;
-
-		$ret = $this->submit_add(array(
-			"section" => $section,
-			"period" => $period,
-			"parent" => $parent,
-			"user" => $user
-		));
-		header("Location: ".$ret);
-		die();
+		return $this->mk_my_orb("new", $arr, "doc");
 	}
 
-	/**  
-		
-		@attrib name=submit_add params=name default="0"
-		
-		@param parent required acl="add"
-		@param period required
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function submit_add($arr)
-	{
-		extract($arr);
-		if ($docfolder)
-		{
-			$parent = $docfolder;
-		}
-		if ($period) 
-		{
-			$data["class_id"] = CL_PERIODIC_SECTION;
-			$data["period"] = $period;
-		} 
-		else 
-		{
-			$data["class_id"] = CL_DOCUMENT;
-		};
-		$data["name"] = $name;
-		$data["parent"] = $parent;
-		$data["status"] = 1;
-		$o_data = $this->get_object($parent);
-		$this->period = $data["period"];
-		$lid = $this->new_object($data);
-		$this->upd_object(array("oid" => $lid, "brother_of" => $lid));	// dokument on enda vend ka
-		// me peame selle dokumendi ka menyys registreerima
-		if ($period) 
-		{
-			$q = "INSERT INTO menu (id,type,periodic) VALUES ('$lid','99','1')";
-		} 
-		else 
-		{
-			$q = "INSERT INTO menu (id,type) VALUES ('$lid','99')";
-		};
-		$def = $this->fetch($parent);
-		$idef = aw_ini_get("document.defaults");
-		if (is_array($idef))
-		{
-			$defaults = $idef + $def;
-		}
-		else
-		{
-			$defaults = $def;
-		}
-		$this->quote(&$defaults);
-		$flist = array();
-		$vlist = array();
-		while(list($k,$v) = each($this->knownfields)) 
-		{
-			if ($v != "dcache")
-			{
-				$flist[] = $v;
-			};
-			switch($v)
-			{
-				case "title":
-					$defaults[$v] = ($name) ? $name : "";
-					$vlist[] = "'" . $defaults[$v] . "'";
-					break;
-				case "copyright":
-					$vlist[] = "''";
-					break;
-				case "show_title":
-					$vlist[] = "'1'";
-					break;
-				case "show_modified":
-					$vlist[] = "'1'";
-					break;
-				case "title_clickable":
-					$vlist[] = "'1'";
-					break;
-				case "showlead":
-					$vlist[] = "'1'";
-					break;
-				case "tm":
-					$vlist[] = "'".date("d.m.Y")."'";
-					break;
-				case "no_right_pane":
-					if ($this->cfg["site_id"] == 9)
-					{
-						$vlist[] = "'1'";
-					}
-					else
-					{
-						$vlist[] = "'" . $defaults[$v] . "'";
-					}
-					break;
-				case "dcache":	
-					break;
-				default:
-					$vlist[] = "'" . $defaults[$v] . "'";
-			};
-		};
-
-		$flist[] = "lang_id";
-		$vlist[] = "'".aw_global_get("lang_id")."'";
-
-		if (is_array($flist) && (sizeof($flist) > 0)) 
-		{
-			$part1 = "," . join(",",$flist);
-			$part2 = "," . join(",",$vlist);
-		} 
-		else 
-		{
-			$part1 = "";
-			$part2 = "";
-		};
-		$q = "INSERT INTO documents (docid $part1) VALUES ('$lid' $part2)";
-		$this->db_query($q);
-
-		$this->id = $lid;
-
-		$o = obj($lid);
-		$o->set_meta("show_print", 1);
-		$o->save();
-
-		return $this->mk_my_orb("change", array("id" => $lid));
-	}
 
 	/** Displays the document edit form 
 		
