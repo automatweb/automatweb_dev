@@ -46,68 +46,11 @@
             <field>jrk</field>
             <caption>Jrk</caption>
       </property>
-      <property>
-            <name>created</name>
-            <type>date</type>
-            <access>ro</access>
-            <table>objects</table>
-            <corefield>yes</corefield>
-            <field>created</field>
-            <caption>Loomise kuupäev</caption>
-      </property>
-      <property>
-            <name>createdby</name>
-            <type>uid</type>
-            <access>ro</access>
-            <table>objects</table>
-            <corefield>yes</corefield>
-            <field>createdby</field>
-            <caption>Looja</caption>
-      </property>
-      <property>
-            <name>modified</name>
-            <type>date</type>
-            <access>ro</access>
-            <table>objects</table>
-            <corefield>yes</corefield>
-            <field>modified</field>
-            <caption>Muutmise kuupäev</caption>
-      </property>
-      <property>
-            <name>modifiedby</name>
-            <type>uid</type>
-            <access>ro</access>
-            <table>objects</table>
-            <corefield>yes</corefield>
-            <field>modifiedby</field>
-            <caption>Muutja</caption>
-      </property>
-      <property>
-            <name>oid</name>
-            <type>int</type>
-            <access>ro</access>
-            <table>objects</table>
-            <corefield>yes</corefield>
-            <field>oid</field>
-            <caption>Objekti id</caption>
-      </property>
-      <property>
-            <name>parent</name>
-            <type>int</type>
-            <access>ro</access>
-            <table>objects</table>
-            <corefield>yes</corefield>
-            <field>parent</field>
-            <caption>Parenti id</caption>
-      </property>
-      <property>
-            <name>class_id</name>
-            <type>class_id</type>
-            <access>ro</access>
-            <table>objects</table>
-            <corefield>yes</corefield>
-            <field>class_id</field>
-            <caption>Klassi id</caption>
-      </property>
+      <groupinfo>
+            <general>
+                  <caption>Üldine</caption>
+                  <default>1</default>
+            </general>
+      </groupinfo>
 </properties>
 
