@@ -1,5 +1,68 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.25 2002/12/11 12:46:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.26 2002/12/17 17:41:07 kristo Exp $
+
+/*
+
+@classinfo objtable=extlinks
+@classinfo objtable_index=id
+
+@default group=general
+
+@property status type=status table=objects
+@caption Staatus
+
+@property comment type=textarea cols=30 rows=5 table=objects field=comment
+@caption Kommentaar lingikogusse
+
+@property url table=extlinks type=textbox field=url
+@caption URL
+
+@property url_int_text type=text
+@caption Saidi sisene link
+
+@property alt type=textbox table=objects field=meta method=serialize
+@caption Alt tekst
+
+@property newwindow type=checkbox value=1 table=extlinks field=newwindow
+@caption Uues aknas
+
+@property doclinkcollection type=checkbox value=1 table=extlinks field=doclinkcollection
+@caption Dokumendi lingikogusse
+
+@property use_javascript type=checkbox value=1 table=objects field=meta method=serialize group=Javascript
+@caption Kasuta javascripti
+
+@property newwinwidth type=textbox value=1 table=objects field=meta method=serialize group=Javascript
+@caption Uue akna laius
+
+@property newwinheight type=textbox value=1 table=objects field=meta method=serialize group=Javascript
+@caption Uue akna k&otilde;rgus
+
+@property newwintoolbar type=checkbox value=1 table=objects field=meta method=serialize group=Javascript
+@caption Toolbar
+
+@property newwinlocation type=checkbox value=1 table=objects field=meta method=serialize group=Javascript
+@caption Address bar
+
+@property newwinmenu type=checkbox value=1 table=objects field=meta method=serialize group=Javascript
+@caption Men&uuml;&uuml;d
+
+@property newwinscroll type=checkbox value=1 table=objects field=meta method=serialize group=Javascript
+@caption Skrollbarid
+
+@property link_image type=fileupload group=Pilt
+@caption Pilt
+
+@property link_image_show type=text group=Pilt
+@caption 
+
+@property link_image_check_active type=checkbox value=1 field=meta table=objects method=serialize group=Pilt
+@caption Pilt aktiivne
+
+@property link_image_active_until type=date_select field=meta table=objects method=serialize group=Pilt
+@caption Pilt aktiivne kuni
+
+*/
 
 classload("extlinks");
 class links extends extlinks
@@ -8,274 +71,6 @@ class links extends extlinks
 	{
 		$this->extlinks();
 		$this->init("automatweb/extlinks");
-	}
-
-	////
-	// !Kuvab uue lingi lisamise vormi
-	function add($arr)
-	{
-		extract($arr);
-		$t = get_instance("menuedit");
-		if ($return_url)
-		{
-			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / ".LC_LINKS_ADD);
-		}
-		else
-		{
-			$this->mk_path($parent, LC_LINKS_ADD);
-		}
-		$this->read_template("nadd.tpl");
-		$ob = get_instance("objects");
-		load_vcl("date_edit");
-		$de = new date_edit("active_until");
-		$de->configure(array(
-			"day" => "",
-			"month" => "",
-			"year" => "",
-			"hour" => "",
-			"minute" => ""
-		));
-		$this->vars(array(
-			"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "alias_to" => $alias_to, "return_url" => $return_url)),
-			"parent" => $this->picker($parent,$ob->get_list()),
-			"search_doc" => $this->mk_orb("search_doc", array()),
-			"extlink" => "checked",
-			"link_image_active_until" => $de->gen_edit_form("active_until",0),
-		));
-		return $this->parse();
-	}
-
-	////
-	// !Kuvab lingi muutmise vormi
-	function change($arr)
-	{
-		extract($arr);
-
-		$link = $this->get_link($id);
-		$t = get_instance("menuedit");
-
-		if ($return_url)
-		{
-			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / ".LC_LINKS_CHANGE);
-		}
-		else
-		{
-			$this->mk_path($link["parent"], LC_LINKS_CHANGE);
-		}
-
-		// check whether this link has an image attached
-		$q = "SELECT * FROM objects LEFT JOIN files ON objects.oid = files.id WHERE parent = '$id' AND class_id = " . CL_FILE;
-		$this->db_query($q);
-		$row = $this->db_next();
-		$awf = get_instance("file");
-		
-		$this->read_template("nadd.tpl");
-
-		if ($row && $awf->can_be_embedded(&$row))
-		{
-			$url = $awf->get_url($row["oid"],"");
-			$this->vars(array("link_image" => "<img src='$url'>"));
-		}
-		
-		load_vcl("date_edit");
-		$de = new date_edit("active_until");
-		$de->configure(array(
-			"day" => "",
-			"month" => "",
-			"year" => "",
-			"hour" => "",
-			"minute" => ""
-		));
-
-		$active_until = ($link["link_image_check_active"]) ? $link["link_image_active_until"] : time() + (3 * 86400);
-
-		$ob = get_instance("objects");
-		$this->vars(array(
-			"reforb"	=> $this->mk_reforb("submit", array("docid" => $docid,"id" => $id,"xparent" => $parent,"return_url" => $return_url)),
-			"name"		=> $link["name"],
-			"url"			=> $link["url"],
-			"search_doc" => $this->mk_orb("search_doc", array()),
-			"desc"		=> $link["descript"],
-			"newwinwidth" => ($link["newwinwidth"]) ? $link["newwinwidth"] : 640,
-			"newwinheight" => ($link["newwinheight"]) ? $link["newwinheight"] : 480,
-			"newwintoolbar" => checked($link["newwintoolbar"]),
-			"newwinlocation" => checked($link["newwinlocation"]),
-			"newwinmenu" => checked($link["newwinmenu"]),
-			"newwinscroll" => checked($link["newwinscroll"]),
-			"use_javascript" => checked($link["use_javascript"]),
-			"comment"	=> $link["comment"],
-			"parent"	=> $this->picker($link["parent"], $ob->get_list()),
-			"extlink"	=> checked($link["type"] != "int"),
-			"intlink"	=> checked($link["type"] == "int"),
-			"doclinkcollection"	=> checked($link["doclinkcollection"]),
-			"newwindow" => checked($link["newwindow"]),
-			"link_image_active_until" => $de->gen_edit_form("active_until",$active_until),
-			"link_image_check_active" => checked($link["link_image_check_active"]),
-			"alt" => $link["alt"],
-		));
-		return $this->parse();
-	}
-
-	////
-	// !Submitib add voi change actioni tulemuse
-	function submit($arr)
-	{
-		extract($arr);
-			
-		if (!$id)
-		{
-			$newlinkid = $this->new_object(array(
-				"parent" => $parent,
-				"name" => $name,
-				"class_id" => CL_EXTLINK,
-				"comment" => $comment,
-				"metadata" => array(
-					"alt" => $alt,
-				),
-			));
-
-			$this->add_link(array(
-				"id"  => $newlinkid,	
-				"oid" => $parent, 
-				"name" => $name,
-				"url" => $url,
-				"desc"  => $desc,
-				"newwindow" => $newwindow,
-				"type" => $type, 
-				"docid" => $a_docid,
-				"doclinkcollection" => $doclinkcollection,
-			));
-
-			$linkid = $newlinkid;
-
-			if ($alias_to)
-			{
-				$this->add_alias($alias_to,$newlinkid);
-			}
-
-			$id = $newlinkid;
-		}
-		else
-		{
-			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $name,
-				"parent" => $parent,
-				"comment" => $comment,
-				"metadata" => array(
-					"alt" => $alt,
-				),
-			));
-
-			$linkid = $id;
-
-			$this->save_link(array(
-				"lid" => $id, 
-				"name" => $name, 
-				"url" => $url, 
-				"desc" => $desc, 
-				"newwindow" => $newwindow,
-				"type" => $type,
-				"docid" => $a_docid,
-				"doclinkcollection" => $doclinkcollection,
-			));
-		}
-		// tegelikult voiks metainfo salvetamise upd_object sisse panema muidugi
-		load_vcl("date_edit");
-		$de = new date_edit("foo");
-		$meta = array(
-			"use_javascript" => $use_javascript,
-			"newwinwidth" => $newwinwidth,
-			"newwinheight" => $newwinheight,
-			"newwintoolbar" => $newwintoolbar,
-			"newwinlocation" => $newwinlocation,
-			"newwinmenu" => $newwinmenu,
-			"newwinscroll" => $newwinscroll,
-			"link_image_active_until" => $de->get_timestamp($active_until),
-			"link_image_check_active" => $link_image_check_active,
-			"alt" => $alt,
-		);
-
-		$this->obj_set_meta(array("oid" => $linkid,"meta" => $meta));
-		
-		$_fi = get_instance("file");
-		// figure out whether that link already has an image attached
-		$q = "SELECT * FROM objects WHERE parent = '$id' AND class_id = " . CL_FILE;
-		$this->db_query($q);
-		$row = $this->db_next();
-		if ($row)
-		{
-			$img_id = $row["oid"];
-		}
-		else
-		{	
-			$img_id = "";
-		};
-		
-		global $link_image,$link_image_name,$link_image_type;
-		if ($link_image != "" && $link_image != "none")
-		{
-			if (is_uploaded_file($link_image))
-			{
-				$fl = $_fi->_put_fs(array("type" => $link_image_type, "content" => $this->get_file(array("file" => $link_image))));	
-				// I'm only interested in the filename, not the path
-				$fl = basename($fl);
-
-				$fn = $link_image_name;
-
-				if ($img_id)
-				{
-					$this->db_query("UPDATE files SET file = '$fl',type = '$link_image_type' WHERE id = $img_id");
-				}
-				else
-				{
-					$img_id = $this->new_object(array(
-						"parent" => $id,
-						"name" => "link image",
-						"class_id" => CL_FILE,
-						"status" => 2,
-					));
-
-					$this->db_query("INSERT INTO files (id,file,type) VALUES ('$img_id','$fl','$link_image_type')");
-				};
-			}
-		};
-
-		// arendaks miskit plugin arhitektuuri siin.
-		// ntx, klass providib vahendid linkide lisamiseks, muutmiseks ja submiti
-		// handlemiseks, aga redirectid tehaks siiski sellest klassist, mis vajab
-		// neid teenuseid. Ntx dokumendiklassi sees.
-
-		#$par_obj = $this->get_object($xparent);
-		return $this->mk_my_orb("change",array("id" => $id, "return_url" => urlencode($return_url)));
-		/*
-		if ($docid)
-		{
-			return $this->mk_my_orb("list_aliases", array("id" => $docid), "aliasmgr");
-		}
-		else
-		{
-			return $this->mk_orb("obj_list", array("parent" => $parent),"menuedit");
-		}
-		*/
-	}
-
-	////
-	// !Kustutab lingi objekti
-	function delete($arr)
-	{
-		extract($arr);
-		$p_obj = $this->get_object($parent);
-		$this->delete_object($id);
-		$this->delete_alias($parent,$id);
-		if ($p_obj["class_id"] != CL_PSEUDO)
-		{
-			return $this->mk_my_orb("change",array("id" => $parent),"document");
-		}
-		else
-		{
-			header("Location: ".$this->mk_orb("obj_list", array("parent" => $parent),"menuedit"));
-		};
 	}
 
 	function search_doc($arr)
@@ -362,10 +157,7 @@ class links extends extlinks
 				extlinks.name as e_name,
 				extlinks.hits as e_hits,
 				extlinks.oid as e_oid,
-				extlinks.descript as e_descript,
 				extlinks.newwindow as e_newwindow,
-				extlinks.type as e_type, 
-				extlinks.docid as e_docid, 
 				extlinks.doclinkcollection as e_doclinkcollection,
 				objects.* 
 			FROM extlinks 
@@ -383,7 +175,7 @@ class links extends extlinks
 		$row["parent"] = $parent;
 		$this->quote(&$row);
 		$id = $this->new_object($row);
-		$this->db_query("INSERT INTO extlinks(id,url,name,hits,oid,descript,newwindow,type,docid,doclinkcollection) VALUES($id,'".$row["e_url"]."','".$row["e_name"]."','".$row["e_hits"]."','".$row["e_oid"]."','".$row["e_descript"]."','".$row["e_newwindow"]."','".$row["e_type"]."','".$row["e_docid"]."','".$row["e_doclinkcollection"]."')");
+		$this->db_query("INSERT INTO extlinks(id,url,name,hits,oid,newwindow,doclinkcollection) VALUES($id,'".$row["e_url"]."','".$row["e_name"]."','".$row["e_hits"]."','".$row["e_oid"]."','".$row["e_newwindow"]."','".$row["e_doclinkcollection"]."')");
 		return true;
 	}
 
@@ -403,69 +195,47 @@ class links extends extlinks
 		};
 	}
 	
-	function get_properties($args = array())
+	function get_property(&$arr)
 	{
-		$fields = array();
-		$fields["newwindow"] = array(
-			"type" => "checkbox",
-			"caption" => "Uues aknas",
-			"value" => $args["newwindow"],
-			"store" => "table",
-			"table" => "extlinks",
-			"idfield" => "id",
-		);
+	  $prop = &$arr["prop"];
+	  if ($prop["name"] == "link_image_show" && $arr["obj"]["oid"])
+	  {
+		$foid = $this->db_fetch_field("SELECT oid FROM objects WHERE parent = ".$arr["obj"]["oid"]." AND class_id =".CL_FILE." AND status != 0","oid");
+		if ($foid)
+		{
+		  $f = get_instance("file");
+		  $fdat = $f->get_file_by_id($foid);
+		  if ($f->can_be_embedded($fdat))
+			{
+			  $prop['value'] = html::img(array(
+				 'url' => file::get_url($fdat['oid'],$fdat['name'])
+			  ));
+			}
+		}
+	  }
+	  else
+		if ($prop["name"] == "url_int_text")
+		  {
+			$this->read_template("intlink.tpl");
+			$this->vars(array(
+							  'search_doc' => $this->mk_my_orb('search_doc')
+							  ));
+			$prop['value'] = $this->parse();
+		  }
+	  return PROP_OK;
+	}  
 
-		$fields["use_javascript"] = array(
-			"type" => "checkbox",
-			"caption" => "Kasutada lingi loomisel javascripti",
-			"value" => $args["use_javascript"],
-			"store" => "meta",
-		);
-		
-		$fields["newwinwidth"] = array(
-			"type" => "text",
-			"caption" => "Uue akna laius",
-			"value" => $args["newwinwidth"],
-			"store" => "meta",
-			"size" => 3,
-		);
-		
-		$fields["newwinheight"] = array(
-			"type" => "text",
-			"caption" => "Uue akna kõrgus",
-			"value" => $args["newwinwidth"],
-			"store" => "meta",
-			"size" => 3,
-		);
-		
-		$fields["newwintoolbar"] = array(
-			"type" => "checkbox",
-			"caption" => "Toolbar",
-			"value" => $args["newwintoolbar"],
-			"store" => "meta",
-		);
-		$fields["newwinlocation"] = array(
-			"type" => "checkbox",
-			"caption" => "Aadressiriba",
-			"value" => $args["newwinlocation"],
-			"store" => "meta",
-		);
-
-		$fields["newwinmenu"] = array(
-			"type" => "checkbox",
-			"caption" => "Menüü",
-			"value" => $args["newwinmenu"],
-			"store" => "meta",
-		);
-		
-		$fields["newwinscroll"] = array(
-			"type" => "checkbox",
-			"caption" => "Kerimisribad",
-			"value" => $args["newwinscroll"],
-			"store" => "meta",
-		);
-
-		return $fields;
+	function set_property(&$arr)
+	{
+		$prop = $arr["prop"];
+		if ($prop["name"] == "link_image")
+		{
+		  $f = get_instance("file");
+		  $foid = $this->db_fetch_field("SELECT oid FROM objects WHERE parent = ".$arr["obj"]["oid"]." AND class_id =".CL_FILE." AND status != 0","oid");
+		  $nfoid = $f->add_upload_image("link_image", $arr['obj']['oid'], $foid);
+		  return PROP_IGNORE;
+		}
+		return PROP_OK;
 	}
 }
 ?>

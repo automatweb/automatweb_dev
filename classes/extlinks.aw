@@ -1,13 +1,16 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.24 2002/12/16 16:15:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.25 2002/12/17 17:41:07 kristo Exp $
 // extlinks.aw - Väliste linkide haldamise klass
 
 
-class extlinks extends aw_template 
+class extlinks extends class_base
 {
 	function extlinks($args = array())
 	{
-		$this->init("");
+		$this->init(array(
+		    "tpldir" => "",
+		    "clid" => CL_EXTLINK
+		));
 		lc_load("definition");
 	
 		$this->lc_load("extlinks","lc_extlinks");
@@ -18,12 +21,8 @@ class extlinks extends aw_template
 	function add_link($args) 
 	{
 	  extract($args);
-		if ($type == "")
-		{
-			$type = "ext";
-		}
-		$q = "INSERT INTO extlinks (id,oid,url,name,hits,newwindow,descript,type,docid,doclinkcollection) 
-						VALUES('$id','$oid','$url','$name','$hits','$newwindow','$desc','$type','$docid','$doclinkcollection')";
+		$q = "INSERT INTO extlinks (id,oid,url,name,hits,newwindow,doclinkcollection) 
+						VALUES('$id','$oid','$url','$name','$hits','$newwindow','$doclinkcollection')";
 		$this->db_query($q);
 		$this->_log("link",sprintf(LC_EXTLINKS_ADD_LINK,$name));
 	}
@@ -45,7 +44,6 @@ class extlinks extends aw_template
 			"target" => $target,
 			"img" => $this->img,
 		);
-
 		if (isset($tpls["link"]))
 		{
 			$replacement = localparse($tpls["link"],$vars);
@@ -78,7 +76,6 @@ class extlinks extends aw_template
 		{
 			$linksrc = $this->mk_my_orb("show", array("id" => $link["id"]),"links",false,true);
 		};
-
 
 		if ($link["link_image_check_active"] && ($link["active_until"] <= time()) )
 		{
@@ -132,11 +129,8 @@ class extlinks extends aw_template
 		$q = "UPDATE extlinks 
 			SET name = '$name',
 			    url = '$url',
-			    descript = '$desc',
 					newwindow = '$newwindow',
-					type = '$type',
 					doclinkcollection = '$doclinkcollection',
-					docid = '$docid'
 			WHERE id = '$lid'";
 		$this->db_query($q);
 		$this->upd_object(array("oid" => $lid,"name" => $name));
@@ -151,11 +145,8 @@ class extlinks extends aw_template
 			return;
 		};
 		$q = "SELECT extlinks.*,objects.* FROM extlinks LEFT JOIN objects ON objects.oid = extlinks.id WHERE id = '$id'";
-		$this->db_query($q);
-		$row = $this->db_fetch_row();
-		$meta = aw_unserialize($row["meta"]);
-		$row = array_merge($row,$meta);
-		
+		$row = $this->db_fetch_row($q);
+		$row = array_merge($row,aw_unserialize($row['metadata']));
 		if ($row["type"] == "int")
 		{
 			$row["url"] = $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".$row["docid"];
