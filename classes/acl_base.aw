@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.33 2003/02/27 09:57:51 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.34 2003/03/13 12:13:43 kristo Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -45,11 +45,13 @@ class acl_base extends core
 	{
 		$this->db_query("insert into acl(gid,oid) values($gid,$oid)");
 		$this->save_acl($oid,$gid,$this->cfg["acl"]["default"]);		// set default acl to the new relation
+		aw_session_set("__acl_cache", array());
 	}
 
 	function remove_acl_group_from_obj($gid,$oid)
 	{
 		$this->db_query("DELETE FROM acl WHERE gid = $gid AND oid = $oid");
+		aw_session_set("__acl_cache", array());
 	}
 
 	function save_acl($oid,$gid,$aclarr)
@@ -70,6 +72,7 @@ class acl_base extends core
 			$qstr[] = " ( $a << $bitpos ) ";
 		}
 		$this->db_query("UPDATE acl SET acl = (".join(" | ",$qstr).") WHERE oid = $oid AND gid = $gid");
+		aw_session_set("__acl_cache", array());
 	}
 
 	////
@@ -101,6 +104,7 @@ class acl_base extends core
 			$qstr[] = " ( $a << $bitpos ) ";
 		}
 		$this->db_query("UPDATE acl SET acl = (".join(" | ",$qstr).") WHERE oid = $oid AND gid = $gid");
+		aw_session_set("__acl_cache", array());
 	}
 
 	function get_acl_for_oid_gid($oid,$gid)
@@ -169,6 +173,7 @@ class acl_base extends core
 				$max_row["priority"] = $max_pri;
 			}
 		}
+		unset($max_row['metadata']);	// no need to save this in the cache, it just uses up unnecessary space.
 		return $max_row;
 	}
 
@@ -253,9 +258,10 @@ class acl_base extends core
 			return true;
 		}
 
-		if (!($max_acl = aw_cache_get("__aw_acl_cache", $oid)))
+		if (!($max_acl = aw_session_cache_get("__aw_acl_cache", $oid)))
 		{
 			$max_acl = $this->can_aw($access,$oid);
+			aw_session_cache_set("__aw_acl_cache", $oid, $max_acl);
 		}
 
 		$access="can_".$access;
