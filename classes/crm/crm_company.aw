@@ -1,5 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.84 2004/09/12 22:03:28 sven Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -3846,21 +3845,21 @@ class crm_company extends class_base
 		
 		$table->define_field(array(
 			"name" => "offer_name",
-			"caption" => "Pakkumise nimi",
+			"caption" => "Nimi",
 			"sortable" => "1",
 			"align" => "center",
 		));
 		
 		$table->define_field(array(
 			"name" => "salesman",
-			"caption" => "Pakkumise koostaja",
+			"caption" => "Koostaja",
 			"sortable" => "1",
 			"align" => "center",
 		));
 		
 		$table->define_field(array(
 			"name" => "offer_made",
-			"caption" => "Pakkumine tehtud",
+			"caption" => "Lisatud",
 			"sortable" => "1",
 			"type" => "time",
 			"numeric" => 1,
@@ -3870,14 +3869,14 @@ class crm_company extends class_base
 		
 		$table->define_field(array(
 			"name" => "offer_sum",
-			"caption" => "Pakkumise summa",
+			"caption" => "Summa",
 			"sortable" => "1",
 			"align" => "center",
 		));
 		
 		$table->define_field(array(
 			"name" => "offer_status",
-			"caption" => "Pakkumise staatus",
+			"caption" => "Staatus",
 			"sortable" => "1",
 			"align" => "center",
 		));
