@@ -382,12 +382,12 @@ class form_db_base extends aw_template
 //			echo "sql join = $sql_join , <br><br><br> $sql_data = $sql_data <br>";
 			if ($this->arr["save_table"])
 			{
-				$idx_tbl = $this->arr["save_table_start_from"];
-				$idx_col = $this->arr["save_tables"][$idx_tbl];
+				$idx_tbl = form_db_base::mk_tblname($this->arr["save_table_start_from"], $this->id);
+				$idx_col = $this->arr["save_tables"][$this->arr["save_table_start_from"]];
 			}
 			else
 			{
-				$idx_tbl = "form_".$this->id."_entries";
+				$idx_tbl = form_db_base::mk_tblname("form_".$this->id."_entries", $this->id);
 				$idx_col = "id";
 			}
 		}
@@ -444,7 +444,7 @@ class form_db_base extends aw_template
 //		echo "got sql join = $sql_join <br>";
 
 		// now get fetch data part
-		$sql_data = $this->get_sql_fetch_for_search($this->_joins,$this->arr["start_search_relations_from"],$used_els, $group_collect_els);
+		$sql_data = $this->get_sql_fetch_for_search($this->_joins,$this->arr["start_search_relations_from"],$used_els, $group_collect_els, $group_els);
 	//		echo "got sql data = $sql_data <br>";
 
 		// this adds deleted object checking if the form entries have objects attached
@@ -511,7 +511,6 @@ class form_db_base extends aw_template
 	// $this->_joins array 
 	function get_sql_joins_for_search($used_els, $start_relations_from)
 	{
-
 		// recurse through the selected search form relations. boo-ya!
 		$this->build_form_relation_tree($start_relations_from);
 
@@ -558,11 +557,11 @@ class form_db_base extends aw_template
 
 		if ($srfi["save_table"])
 		{
-			$tn = $srfi["save_table_start_from"];
+			$tn = form_db_base::mk_tblname($srfi["save_table_start_from"], $start_relations_from);
 		}
 		else
 		{
-			$tn = "form_".$start_relations_from."_entries";
+			$tn = form_db_base::mk_tblname("form_".$start_relations_from."_entries",$start_relations_from);
 		}
 		// add the start table to the join map
 		$this->_joins[] = array(
@@ -597,6 +596,7 @@ class form_db_base extends aw_template
 		// always start from the form marked as the one to start the searches from
 
 		// get a list of all forms used in the query
+//		echo "used_els = <pre>", var_dump($used_els),"</pre> <br>";
 		$forms_queried = $this->get_forms_used_in_where();
 		foreach($used_els as $fid => $els)
 		{
@@ -617,19 +617,19 @@ class form_db_base extends aw_template
 		// ok, so we can assume that we have all the necessary relations in $this->_joins, so convert that into sql
 		$sql = "";
 		$first = true;
-		$this->join_sql_used = array();
+		$this->join_sql_used = array($tn => $tn);
 		foreach($this->_joins as $jdata)
 		{
 			if ($first)
 			{
-				$sql = $jdata["from_tbl"];
+				$sql = $this->get_rtbl_from_tbl($jdata["from_tbl"])." AS ".$jdata["from_tbl"];
 				$prev = $jdata;
 			}
 			else
 			{
 				if (!isset($this->join_sql_used[$jdata["to_tbl"]]))
 				{
-					$sql.=" LEFT JOIN ".$jdata["to_tbl"]." ON ".$jdata["from_tbl"].".".$jdata["from_el"]." = ".$jdata["to_tbl"].".".$jdata["to_el"];
+					$sql.=" LEFT JOIN ".$this->get_rtbl_from_tbl($jdata["to_tbl"])." AS ".$jdata["to_tbl"]." ON ".$jdata["from_tbl"].".".$jdata["from_el"]." = ".$jdata["to_tbl"].".".$jdata["to_el"];
 					$this->join_sql_used[$jdata["to_tbl"]] = $jdata["to_tbl"];
 				}
 			}
@@ -646,7 +646,7 @@ class form_db_base extends aw_template
 	////
 	// !this creates the fetch data part of the query 
 	// it just loops over all the used elements, finds their database tables and gives them correct names
-	function get_sql_fetch_for_search($joins, $start_relations_from, $used_els, $gp_coll_els = array())
+	function get_sql_fetch_for_search($joins, $start_relations_from, $used_els, $gp_coll_els = array(), $group_els = false)
 	{
 		$sql = "";
 		$usedtbls = array();
@@ -665,8 +665,9 @@ class form_db_base extends aw_template
 					$_tf =& $this->cache_get_form_eldat($fid);
 					$_tftbls = $_tf["save_tables"];
 				
+					$_rtbl = form_db_base::get_rtbl_from_tbl($tbl);
 					// make sure we get the id column as entry_id
-					$sql=$tbl.".".$_tftbls["table_indexes"][$tbl]." AS entry_id "; 
+					$sql=$tbl.".".$_tftbls["table_indexes"][$_rtbl]." AS entry_id "; 
 					if ($this->arr["search_chain"])
 					{
 						// if we are doing a chain search, then also get the chain id
@@ -689,7 +690,7 @@ class form_db_base extends aw_template
 				}
 				foreach($elar as $el => $eltbls)
 				{
-					$s_t = $eltbls["table"];
+					$s_t = form_db_base::mk_tblname($eltbls["table"], $fid);
 					if ($s_t == $tbl && $tbl != "")
 					{
 						// if this element gets written to the current table, include it in the sql
@@ -732,7 +733,7 @@ class form_db_base extends aw_template
 						$_tf =& $this->cache_get_form_eldat($fid);
 						$_tftbls = $_tf["save_tables"];
 
-						$sql=$tbl.".".$_tftbls["table_indexes"][$tbl]." AS entry_id "; 
+						$sql=$tbl.".".$_tftbls["table_indexes"][form_db_base::get_rtbl_from_tbl($tbl)]." AS entry_id "; 
 						if ($this->arr["search_chain"])
 						{
 							// if we are doing a chain search, then also get the chain id
@@ -754,7 +755,7 @@ class form_db_base extends aw_template
 					}
 					foreach($elar as $el => $eldat)
 					{
-						$s_t = $eldat["table"];
+						$s_t = form_db_base::mk_tblname($eldat["table"], $fid);
 						if ($s_t == $tbl && $tbl != "")
 						{
 							// if this element gets written to the current table, include it in the sql
@@ -794,6 +795,10 @@ class form_db_base extends aw_template
 			$sql.=", objects.modified as modified, objects.created as created, objects.modifiedby as modifiedby ";
 		}
 
+		if (is_array($group_els) && count($group_els) > 0)
+		{
+			$sql.=", count(*) as ev_cnt ";
+		}
 //		echo "sql = $sql <br>";
 		return $sql;
 	}
@@ -818,7 +823,7 @@ class form_db_base extends aw_template
 			{
 				$relf =& $this->cache_get_form_eldat($el->arr["linked_form"]);
 				$linked_el = $relf["els"][$el->arr["linked_element"]];
-				$elname = $linked_el["table"].".".$linked_el["col2"];
+				$elname = form_db_base::mk_tblcol($linked_el["table"],$linked_el["col2"],$el->arr["linked_form"]);
 
 				// include only elements into which the user has entered a value
 				if (($value = trim($el->get_value())) != "")	
@@ -873,7 +878,7 @@ class form_db_base extends aw_template
 					else
 					if ($el->arr["type"] == "listbox")
 					{
-						$elname2 = $linked_el["table"].".".$linked_el["col"];
+						$elname2 = form_db_base::mk_tblcol($linked_el["table"],$linked_el["col"],$el->arr["linked_form"]);
 						if ($query != "")
 						{
 							$query.=" AND ";
@@ -1358,23 +1363,23 @@ class form_db_base extends aw_template
 
 			if ($this->form_rel_tree[$fid][$n_fid]["el_from"] == "chain_id")
 			{
-				$from_tbl = "form_".$fid."_entries";
+				$from_tbl = form_db_base::mk_tblname("form_".$fid."_entries",$fid);
 				$from_el = "chain_id";
 			}
 			else
 			{
-				$from_tbl = $f_el["table"];
+				$from_tbl = form_db_base::mk_tblname($f_el["table"],$fid);
 				$from_el = $f_el["col"];
 			}
 
 			if ($this->form_rel_tree[$fid][$n_fid]["el_to"] == "chain_id")
 			{
-				$to_tbl = "form_".$n_fid."_entries";
+				$to_tbl = form_db_base::mk_tblname("form_".$n_fid."_entries", $n_fid);
 				$to_el = "chain_id";
 			}
 			else
 			{
-				$to_tbl = $t_el["table"];
+				$to_tbl = form_db_base::mk_tblname($t_el["table"],$n_fid);
 				$to_el = $t_el["col"];
 			}
 
@@ -1389,20 +1394,20 @@ class form_db_base extends aw_template
 
 			if ($f_el)
 			{
-				$this->table2form_map[$f_el["table"]] = $fid;
+				$this->table2form_map[form_db_base::mk_tblname($f_el["table"],$fid)] = $fid;
 			}
 			else
 			{
-				$this->table2form_map["form_".$fid."_entries"] = $fid;
+				$this->table2form_map[form_db_base::mk_tblname("form_".$fid."_entries",$fid)] = $fid;
 			}
 
 			if ($t_el)
 			{
-				$this->table2form_map[$t_el["table"]] = $n_fid;
+				$this->table2form_map[form_db_base::mk_tblname($t_el["table"],$n_fid)] = $n_fid;
 			}
 			else
 			{
-				$this->table2form_map["form_".$n_fid."_entries"] = $n_fid;
+				$this->table2form_map[form_db_base::mk_tblname("form_".$n_fid."_entries",$n_fid)] = $n_fid;
 			}
 		}
 	}
@@ -1441,7 +1446,7 @@ class form_db_base extends aw_template
 				$finst = $this->cache_get_form_eldat($fid);
 //				echo "fid = $fid <br>";
 //				echo "looking for el $elid els = <pre>",var_dump($finst["els"]),"</pre> <br>";
-				$gpb[] = $finst["els"][$elid]["table"].".".$finst["els"][$elid]["col"];
+				$gpb[] = form_db_base::mk_tblcol($finst["els"][$elid]["table"],$finst["els"][$elid]["col"],$fid);
 			}
 		}
 
@@ -1483,6 +1488,36 @@ class form_db_base extends aw_template
 			$query = " WHERE ".$query;
 		}
 		return $query;
+	}
+
+	////
+	// !makes the table name for table $tbl, in form $frm
+	// static
+	function mk_tblname($tbl,$frm)
+	{
+		return $tbl."_".$frm;
+	}
+
+	////
+	// !makes the table and col name for table $tbl, col $col , in form $frm
+	// static
+	function mk_tblcol($tbl,$col,$frm)
+	{
+		if ($tbl != "" && $frm != "" && $col != "")
+		{
+			return $tbl."_".$frm.".".$col;
+		}
+		return "";
+	}
+
+	function get_rtbl_from_tbl($tbl)
+	{
+		$_p = strrpos($tbl,"_");
+		if ($_p === false)
+		{
+			return $tbl;
+		}
+		return substr($tbl,0,$_p);
 	}
 }
 ?>
