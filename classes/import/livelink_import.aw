@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.6 2003/04/28 16:20:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.7 2003/05/14 12:11:21 kristo Exp $
 // livelink_import.aw - Import livelingist
 
 /*
@@ -209,6 +209,7 @@ class livelink_import extends class_base
 		if ($name == "llnode" && isset($attribs["objtype"]) && ($attribs["objtype"] == 0))
 		{
 			$name = $attribs["name"];
+			$realname = preg_replace("/^\d+?\.\s/","",$name);
 			$description = isset($attribs["description"]) ? $attribs["description"] : "";
 			$id = $attribs["id"];
 			$parent = $attribs["parentid"];
@@ -228,8 +229,8 @@ class livelink_import extends class_base
 				$this->quote($name);
 				$this->quote($description);
 				print "creating $name\n";
-				$q = "INSERT INTO livelink_folders  (id,name,description,parent,modified,rootnode)
-					VALUES ('$id','$name','$description','$parent','$modified','$rootnode')";
+				$q = "INSERT INTO livelink_folders  (id,name,realname,description,parent,modified,rootnode)
+					VALUES ('$id','$name','$realname','$description','$parent','$modified','$rootnode')";
 				print $q;
 				print "\n";
 				$this->need2update[] = $id;
@@ -252,6 +253,7 @@ class livelink_import extends class_base
 
 				$q = "UPDATE livelink_folders SET
 					name = '$name',description = '$description',parent = '$parent',
+					realname = '$realname',
 					modified = '$modified',	
 					rootnode = '$rootnode'
 					WHERE id = '$id'";
