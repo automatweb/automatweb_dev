@@ -501,6 +501,7 @@ class _int_object
 			));
 		}
 
+
 		$this->_int_set_of_value("parent", $parent);
 		$this->_int_do_implicit_save();
 		return $prev;
