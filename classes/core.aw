@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.263 2004/05/19 15:57:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.264 2004/05/21 11:12:09 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1822,6 +1822,10 @@ class core extends acl_base
 	// !creates a list of menus above $parent and appends $text and assigns it to the correct variable
 	function mk_path($oid,$text = "",$period = 0)
 	{
+		if (!$this->can("view", $oid))
+		{
+			return;
+		}
 		if (is_oid($oid))
 		{
 			$path = "";
