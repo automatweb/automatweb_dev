@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.48 2002/08/12 14:38:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.49 2002/08/24 12:31:17 duke Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -41,6 +41,19 @@ class form_table extends form_base
 		{
 			$ret[$row["form_id"]] = $row["form_id"];
 		}
+		return $ret;
+	}
+
+	////
+	//  !returns an array of tables that belong to this form
+	function get_form_tables_for_form($id)
+	{
+		$ret = array();
+		$this->db_query("SELECT * FROM form_table2form LEFT JOIN objects ON (form_table2form.table_id = objects.oid) WHERE form_id = '$id'");
+                while ($row = $this->db_next())
+                {
+                        $ret[$row["table_id"]] = $row["name"];
+                }
 		return $ret;
 	}
 
