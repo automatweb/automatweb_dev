@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.21 2001/07/04 23:01:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.22 2001/07/04 23:05:49 kristo Exp $
 // form_entry_element.aw - 
 session_register("clipboard");
 classload("currency");
@@ -730,6 +730,7 @@ load_vcl("date_edit");
 			else
 			if ($this->arr["type"] == 'file')
 			{
+				// gotcha, siis handletakse piltide uploadi
 				$var = $prefix.$this->id;
 				global $$var;
 
@@ -739,14 +740,21 @@ load_vcl("date_edit");
 					global $$ft;
 					$fn = $var."_name";
 					global $$fn;
+					print $$fn;
 
 					$im = new db_images;
 					if ($this->arr["fshow"] == 1)
 					{
 						if (is_array($entry[$this->id]))	// this holds array("id" => $image_id, "idx" => $image_idx);
+						{
+							print "replacing<br>";
 							$entry[$this->id] = $im->replace($$var,$$ft,$id,$entry[$this->id]["idx"],"",$entry[$this->id]["id"],true,$$fn);
+						}
 						else
+						{
+							print "updating<br>";
 							$entry[$this->id] = $im->upload($$var, $$ft, $id, "",true,$$fn);
+						};
 					}
 					else
 					{
