@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.41 2004/11/12 11:44:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.42 2004/11/17 16:50:53 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -15,6 +15,9 @@
 
 	@default field=meta
 	@default method=serialize
+
+	@property use_output type=relpicker reltype=RELTYPE_OUTPUT
+	@caption Väljundvorm
 
 	@property xml_definition type=fileupload editonly=1
 	@caption Uploadi vormi fail
@@ -80,6 +83,9 @@
 
 	@reltype CONTROLLER value=3 clid=CL_CFGCONTROLLER
 	@caption Kontroller
+
+	@reltype OUTPUT value=4 clid=CL_CFGFORM
+	@caption Väljund
 
 	// so, how da fuck do I implement the grid layout thingie?
 	// add_item (item, row, col)
