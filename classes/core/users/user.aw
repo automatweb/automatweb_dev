@@ -831,9 +831,9 @@ class user extends class_base
 
 	function callback_mod_retval($arr)
 	{
-		if ($arr["form_data"]["edit_acl"])
+		if ($arr["request"]["edit_acl"])
 		{
-			$arr["args"]["edit_acl"] = $arr["form_data"]["edit_acl"];
+			$arr["args"]["edit_acl"] = $arr["request"]["edit_acl"];
 		}
 	}
 
