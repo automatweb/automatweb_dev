@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.257 2004/05/19 10:07:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.258 2004/05/21 11:11:54 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -269,7 +269,6 @@ class document extends aw_template
 		!isset($leadonly) ? $leadonly = -1 : "";
 		!isset($strip_img) ? $strip_img = 0 : "";
 		!isset($notitleimg) ? $notitleimg = 0 : "";
-
 
 		$baseurl = $this->cfg["baseurl"];
 		$ext = $this->cfg["ext"];
@@ -3558,7 +3557,8 @@ class document extends aw_template
 		echo $this->gen_preview(array(
 			"docid" => $section,
 			"tpl" => "print.tpl",
-			"is_printing" => true
+			"is_printing" => true,
+			"no_strip_lead" => 1
 		));
 		aw_shutdown();
 		if ($GLOBALS["format"] == "pdf")
