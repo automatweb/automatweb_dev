@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.217 2004/02/17 17:15:38 duke Exp $
+// $Id: class_base.aw,v 2.218 2004/02/18 12:45:44 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -340,7 +340,7 @@ class class_base extends aw_template
 		if ($this->layout_mode == "fixed_toolbar" && empty($args["cb_part"]))
 		{
 			$lm = "fixed_toolbar";
-			$new_uri = $_SERVER["REQUEST_URI"] . "&" . "cb_part=1";
+			$new_uri = $this->cfg["baseurl"] . $_SERVER["REQUEST_URI"] . "&" . "cb_part=1";
 			$cli = get_instance("cfg/" . $this->output_client,array("layout_mode" => $lm));
 
 			$realprops["iframe_container"] = array(
@@ -707,6 +707,10 @@ class class_base extends aw_template
 				// heh
 				$this->cfgform_id = "notempty";
 			};
+		};
+		if ($this->clid == CL_DOCUMENT)
+		{
+			$this->classinfo["fixed_toolbar"] = 1;
 		};
 	}
 
@@ -1818,7 +1822,7 @@ class class_base extends aw_template
 		{
 			$property["value"] = $this->obj_inst->prop($property["name"]);
 		}
-		
+
 		if ($property["method"] == "bitmask")
 		{
 			$property["value"] = $property["value"] & $property["ch_value"];
@@ -2522,6 +2526,7 @@ class class_base extends aw_template
 				};
 			};
 		}
+
 
 		// also add relations
 		$obj = new object($this->id);
