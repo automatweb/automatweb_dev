@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.62 2004/08/03 11:43:03 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.63 2004/08/16 09:29:19 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -641,6 +641,24 @@ class crm_company extends class_base
 
 		switch($data['name'])
 		{
+			//hägish, panen nime kõrval html lingi ka
+			case 'contact':
+				if(sizeof($data['options'])>1)
+				{
+					$url = $this->mk_my_orb('change',array(
+								'id' => max(array_keys($data['options'])),
+					),CL_CRM_ADDRESS);
+				}
+				else
+				{
+					$url = $this->mk_my_orb('new',array(
+								'alias_to' => $arr['obj_inst']->id(),
+								'parent' => $arr['obj_inst']->id(),
+								'reltype' => 3, //crm_company.reltype_address
+					),CL_CRM_ADDRESS);
+				}
+				$data['caption'] .= '<br><a href="'.$url.'">Muuda</a>';
+			break;
 			//START OF CUSTOMER SEARCH
 			case 'customer_search_name':
 				if($this->show_customer_search)
