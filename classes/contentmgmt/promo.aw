@@ -1,9 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.23 2002/12/24 14:22:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.1 2003/07/17 13:17:44 kristo Exp $
 // promo.aw - promokastid.
 
 /*
-	@classinfo trans=1
 	@default group=general
 	
 	@property caption type=textbox table=objects field=meta method=serialize
@@ -14,9 +13,6 @@
 	
 	@property type type=select table=objects field=meta method=serialize
 	@caption Kasti tüüp
-
-	@property tpl_edit type=select table=menu group=show
-	@caption Template dokumentide muutmiseks
 
 	@property link type=textbox table=menu
 	@caption Link
@@ -39,10 +35,10 @@
 	@property all_menus type=checkbox ch_value=1 value=1 group=menus method=serialize
 	@caption Näita igal pool
 
-	@property section type=table group=menus method=serialize store=no
+	@property section type=text callback=callback_get_menus group=menus method=serialize
 	@caption Vali menüüd, mille all kasti näidata
 	
-	@property last_menus type=table group=menus method=serialize store=no
+	@property last_menus type=text callback=callback_get_doc_sources group=menus method=serialize
 	@caption Vali menüüd, mille alt viimaseid dokumente võetakse
 
 	@property ndocs type=textbox size=4 group=menus table=menu field=ndocs 
@@ -53,11 +49,13 @@
 
 	@property sort_ord type=select table=objects field=meta method=serialize group=show
 
+	@classinfo corefields=name,comment,status
 	@classinfo relationmgr=yes
 	@classinfo syslog_type=ST_PROMO
 
 	@tableinfo menu index=id master_table=objects master_index=oid
 
+	@groupinfo general caption=Üldine
 	@groupinfo menus caption=Kaustad
 	@groupinfo show caption=Näitamine
 			
@@ -80,7 +78,7 @@ class promo extends class_base
 	{
 		if ($args["reltype"] == RELTYPE_ASSIGNED_MENU || $args["reltype"] == RELTYPE_DOC_SOURCE)
 		{
-			return array(CL_MENU);
+			return array(CL_PSEUDO);
 		}
 	}
 
@@ -92,25 +90,32 @@ class promo extends class_base
 		);
 	}
 
-	function get_property($arr = array())
+	function get_property($args = array())
 	{
-		$data = &$arr["prop"];
+		$data = &$args["prop"];
 		$retval = PROP_OK; 
 		switch($data["name"])
 		{
-			case "tpl_edit":
-				$tplmgr = get_instance("templatemgr");
-				$data["options"] = $tplmgr->get_template_list(array("type" => 0, "menu" => $args["obj"]["oid"]));
-				break;
-
 			case "tpl_lead":
 				// kysime infot lyhikeste templatede kohta
-				$tplmgr = get_instance("templatemgr");
-				$data["options"] = $tplmgr->get_template_list(array(
-					"type" => 1,
-					"def" => aw_ini_get("promo.default_tpl"),
-					"caption" => "Vali template"
-				));
+				$q = "SELECT * FROM template WHERE type = 1 ORDER BY id";
+				$this->db_query($q);
+				$short_templates = array("0" => "Vali template");
+				$def_name = "";
+				while($tpl = $this->db_fetch_row()) 
+				{
+					if ($tpl["filename"] == aw_ini_get("promo.default_tpl"))
+					{
+						$def_name = $tpl["id"];
+						$tpl["name"] .= " (V) ";
+					}
+					$short_templates[$tpl["id"]] = $tpl["name"];
+				};
+				if ($def_name != "" && !$data["value"])
+				{
+					$data["value"] = $def_name;
+				}
+				$data["options"] = $short_templates;
 				break;
 	
 			case "type":
@@ -146,169 +151,189 @@ class promo extends class_base
 					'ASC' => "V&auml;iksem (vanem) enne",
 				);
 				break;
-	
-			case "last_menus":
-				$this->get_doc_sources($arr);
-				break;
-
-			case "section":
-				$this->get_menus($arr);
-				break;
 		}
 		return $retval;
 	}
 
-	function set_property($arr)
+	function set_property($args = array())
 	{
-		$data = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($data["name"])
+		$data = &$args["prop"];
+		$meta = &$args["metadata"];
+                $retval = PROP_OK;
+		if ($data["name"] == "section")
 		{
-			case "section":
-				$arr["obj_inst"]->set_meta("section_include_submenus",$arr["form_data"]["include_submenus"]);
-				break;
-
-			case "ndocs":
-				$arr["obj_inst"]->set_meta("as_name",$arr["form_data"]["as_name"]);
-				$arr["obj_inst"]->set_meta("src_submenus",$this->make_keys($arr["form_data"]["src_submenus"]));
-				break;
+			$meta["section_include_submenus"] = $args["form_data"]["include_submenus"];
 		};
+
+		if ($data["name"] == "ndocs")
+		{
+			$args["metadata"]["as_name"] = $args["form_data"]["as_name"];
+		}
 		return $retval;
 
 	}
 
-	function get_menus($arr)
+	function callback_get_menus($args = array())
 	{
-		$obj = $arr["obj_inst"];
-		$section_include_submenus = $obj->meta("section_include_submenus");
-
-		$t = &$arr["prop"]["vcl_inst"];
-		$t->define_field(array(
-			"name" => "id",
-			"caption" => "ID",
-			"talign" => "center",
-			"align" => "center",
-			"nowrap" => "1",
-			"width" => "30",
-		));
-		$t->define_field(array(
-			"name" => "name",
-			"caption" => "Nimi",
-			"talign" => "center",
-		));
-		$t->define_field(array(
-			"name" => "check",
-			"caption" => "k.a. alammenüüd",
-			"talign" => "center",
+		$prop = $args["prop"];
+		$nodes = array();
+		$section_include_submenus = $args["obj"]["meta"]["section_include_submenus"];
+		// now I have to go through the process of setting up a generic table once again
+		load_vcl("table");
+                $this->t = new aw_table(array(
+                        "prefix" => "promo_menus",
+                ));
+                $this->t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
+                $this->t->define_field(array(
+                        "name" => "oid",
+                        "caption" => "ID",
+                        "talign" => "center",
+                        "align" => "center",
+                        "nowrap" => "1",
+                        "width" => "30",
+                ));
+                $this->t->define_field(array(
+                        "name" => "name",
+                        "caption" => "Nimi",
+                        "talign" => "center",
+                ));
+                $this->t->define_field(array(
+                        "name" => "check",
+                        "caption" => "k.a. alammenüüd",
+                        "talign" => "center",
 			"width" => 80,
 			"align" => "center",
-		));
+                ));
 
-		$conns = $obj->connections_from(array(
-			"type" => RELTYPE_ASSIGNED_MENU
-		));
 
-		foreach($conns as $c)
+		$q = sprintf("SELECT oid,name,status FROM aliases LEFT JOIN objects on (aliases.target = objects.oid) LEFT JOIN menu on (aliases.target = menu.id) WHERE source = '%d'",$args["obj"]["oid"]);
+
+		$this->db_query($q);
+		while($row = $this->db_next())
 		{
-			$c_o = $c->to();
-
-			$t->define_data(array(
-				"id" => $c_o->id(),
-				"name" => $c_o->path_str(array(
-					"max_len" => 3
-				)),
+			// it shouldn't be too bad, cause get_object is cached.
+			// still, it sucks.
+			$this->save_handle();
+			$chain = array_reverse($this->get_obj_chain(array(
+				"oid" => $row["oid"],
+			)), true);
+			$path = join("/",array_slice($chain,-3));
+			$this->restore_handle();
+			$this->t->define_data(array(
+				"oid" => $row["oid"],
+				"name" => $path,
 				"check" => html::checkbox(array(
-					"name" => "include_submenus[".$c_o->id()."]",
-					"value" => $c_o->id(),
-					"checked" => $section_include_submenus[$c_o->id()],
+					"name" => "include_submenus[$row[oid]]",
+					"value" => $row["oid"],
+					"checked" => $section_include_submenus[$row["oid"]],
 				)),
 			));
-		}
+		};
+		
+		$nodes[$prop["name"]] = array(
+			"type" => "text",
+			"caption" => $prop["caption"],
+			"value" => $this->t->draw(),
+		);
+		return $nodes;
 	}
 
-	function get_doc_sources($arr)
+	function callback_get_doc_sources($args = array())
 	{
-		$t = &$arr["prop"]["vcl_inst"];
+		$prop = $args["prop"];
+		$nodes = array();
+		// now I have to go through the process of setting up a generic table once again
+		load_vcl("table");
+                $this->t = new aw_table(array(
+                        "prefix" => "promo_menus",
+                ));
+                $this->t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
+                $this->t->define_field(array(
+                        "name" => "oid",
+                        "caption" => "ID",
+                        "talign" => "center",
+                        "align" => "center",
+                        "nowrap" => "1",
+                        "width" => "30",
+                ));
+                $this->t->define_field(array(
+                        "name" => "name",
+                        "caption" => "Nimi",
+                        "talign" => "center",
+                        //"nowrap" => "1",
+                        "sortable" => 1,
+                ));
+                $this->t->define_field(array(
+                        "name" => "as_name",
+                        "caption" => "Pane pealkirjaks",
+                        "talign" => "center",
+                        "align" => "center",
+                ));
 
-		$t->define_field(array(
-			"name" => "id",
-			"caption" => "ID",
-			"talign" => "center",
-			"align" => "center",
-			"nowrap" => "1",
-			"width" => "30",
-		));
-
-		$t->define_field(array(
-			"name" => "name",
-			"caption" => "Nimi",
-			"talign" => "center",
-			"sortable" => 1,
-		));
-
-		$t->define_field(array(
-			"name" => "as_name",
-			"caption" => "Pane pealkirjaks",
-			"talign" => "center",
-			"align" => "center",
-		));
-
-		$t->define_field(array(
-			"name" => "src_submenus",
-			"caption" => "k.a. alammen&uuml;&uuml;d",
-			"talign" => "center",
-			"align" => "center",
-		));
-
-		$obj = $arr["obj_inst"];
-
-		$conns = $obj->connections_from(array(
-			"type" => RELTYPE_DOC_SOURCE
-		));
-
-		$as_name = $obj->meta("as_name");
-		$ssm = $obj->meta("src_submenus");
-
-		foreach($conns as $c)
+		$alias_reltype = $args["obj"]["meta"]["alias_reltype"];
+		// and from this array, I need to get the list of objects that
+		// have the reltype RELTYPE_DOC_SOURCE
+		if (is_array($alias_reltype))
 		{
-			$c_o = $c->to();
-			$t->define_data(array(
-				"id" => $c_o->id(),
-				"name" => $c_o->path_str(array(
-					"max_len" => 3
-				)),
+			$menu_ids = array_filter($alias_reltype,create_function('$val','if ($val==RELTYPE_DOC_SOURCE) return true;'));
+		};
+
+		if (sizeof($menu_ids) > 0)
+		{
+
+			// now get those objects and put them into table
+			$q = sprintf("SELECT oid,name,status FROM objects
+					LEFT JOIN menu ON (objects.oid = menu.id) WHERE oid IN (%s)",join(",",array_keys($menu_ids)));
+
+			$this->db_query($q);
+			while($row = $this->db_next())
+			{
+				// it shouldn't be too bad, cause get_object is cached.
+				// still, it sucks.
+				$this->save_handle();
+				$chain = array_reverse($this->get_obj_chain(array(
+					"oid" => $row["oid"],
+				)),true);
+				$this->restore_handle();
+				$path = join("/",array_slice($chain,-3));
+				$this->t->define_data(array(
+					"oid" => $row["oid"],
+					"name" => $path,
+					"as_name" => html::radiobutton(array(
+						"name" => "as_name",
+						"value" => $row["oid"],
+						"checked" => ($args["obj"]["meta"]["as_name"] == $row["oid"])
+					))
+				));
+			};
+			$this->t->define_data(array(
+				"oid" => 0,
+				"name" => "",
 				"as_name" => html::radiobutton(array(
 					"name" => "as_name",
-					"value" => $c_o->id(),
-						"checked" => ($as_name == $c_o->id())
-				)),
-				"src_submenus" => html::checkbox(array(
-					"name" => "src_submenus[]",
-					"value" => $c_o->id(),
-					"checked" => ($ssm[$c_o->id()] == $c_o->id())
+					"value" => 0,
+					"checked" => (!$args["obj"]["meta"]["as_name"])
 				))
 			));
-		}
-		$t->define_data(array(
-			"id" => 0,
-			"name" => "",
-			"as_name" => html::radiobutton(array(
-				"name" => "as_name",
-				"value" => 0,
-				"checked" => (!$as_name)
-			))
-		));
+		};
+		
+		$nodes[$prop["name"]] = array(
+			"type" => "text",
+			"caption" => $prop["caption"],
+			"value" => $this->t->draw(),
+		);
+
+		return $nodes;
 	}
 
 	function callback_pre_edit($args = array())
 	{
-		$id = $args["obj_inst"]->id();
-		$obj = $args["obj_inst"];
-
+		$id = $args["object"]["oid"];
+		$menu = $this->get_menu($id);
 		// first check, whether the promo box was in the very old format (contained serialized data
 		// in the comment field
-		$check1 = aw_unserialize($obj->prop("comment"));
-		$check2 = aw_unserialize($obj->meta("sss"));
+		$check1 = aw_unserialize($menu["comment"]);
+		$check2 = aw_unserialize($menu["sss"]);
 		if (is_array($check1) || is_array($check2))
 		{
 			$convert_url = $this->mk_my_orb("promo_convert",array(),"converters");
@@ -318,32 +343,104 @@ class promo extends class_base
 		
 		// now, check, whether we have to convert the current contents of comment and sss to relation objects
 		// we use a flag in object metainfo for that
-		// converters->convert_promo_relations()
 
+		// and still, it would be nice if we could convert all the promo boxes at once.
+		// then I wouldn't have to check for this shit each fucking time, for each
+		// fucking promo box. But maybe it's not as bad as I imagine it
+		if ($args["object"]["meta"]["uses_relationmgr"])
+		{
+			return true;
+		};
+		
+		$id = $args["object"]["oid"];
+		$oldaliases = $this->get_aliases_for($id,CL_PSEUDO);
+		$flatlist = array();
+		$alias_reltype = $args["object"]["meta"]["alias_reltype"];
+		foreach($oldaliases as $alias)
+		{
+			$flatlist[$alias["target"]] = $alias_reltype[$alias["target"]];
+		};
+
+		// basically, I have to get a list of menus in $args["object"]["meta"]["section"]
+		// and create a relation of type RELTYPE_ASSIGNED_MENU for each of those
+
+		$sections = $args["object"]["meta"]["section"];
+		if ( is_array($sections) && (sizeof($sections) > 0) )
+		{
+			foreach($sections as $key => $val)
+			{
+				if (!$flatlist[$val])
+				{
+					$alias_reltype[$val] = RELTYPE_ASSIGNED_MENU;
+					$this->add_alias($id,$val,CL_PSEUDO);
+				};
+			};
+		}
+
+		// then I have to get a list of menus in $args["object"]["meta"]["last_menus"] and
+		// create a relation of type RELTYPE_DOC_SOURCE for each of those.
+
+		// I also want to keep the old representation around, so that old code keeps working
+		$last_menus = $args["object"]["meta"]["last_menus"];
+		if ( is_array($last_menus) && (sizeof($last_menus) > 0) )
+		{
+			foreach($last_menus as $key => $val)
+			{
+				if (!$flatlist[$val])
+				{
+					$alias_reltype[$val] = RELTYPE_DOC_SOURCE;
+					$this->add_alias($id,$val,CL_PSEUDO);
+				};
+			};
+		}
+
+		// update reltype information, that is only if there is anything to update
+		if (sizeof($alias_reltype) > 0)
+		{
+			$this->upd_object(array(
+				"oid" => $args["object"]["oid"],
+				"metadata" => array(
+					"alias_reltype" => $alias_reltype,
+					"uses_relationmgr" => 1,
+				),
+			));
+		};
+	}
+
+	function callback_pre_save($args = array())
+	{
+		$objdata = &$args["objdata"];
+		if (!$objdata["type"])
+		{
+			$objdata["type"] = MN_PROMO_BOX;
+		};
 	}
 
 	function callback_on_submit_relation_list($args = array())
 	{
 		// this is where we put data back into object metainfo, for backwards compatibility
-		$obj =& obj($args["id"]);
-
-		$oldaliases = $obj->connections_from(array(
-			"class" => CL_MENU
-		));
+		$id = $args["id"];
+		$obj = $this->get_object($id);
+		
+		$oldaliases = $this->get_aliases_for($id,CL_PSEUDO);
 		
 		$section = array();
 		$last_menus = array();
 
+		$alias_reltype = $obj["meta"]["alias_reltype"];
+		$new_alias_reltype = array();
 		foreach($oldaliases as $alias)
 		{
-			if ($alias->prop("reltype") == RELTYPE_ASSIGNED_MENU)
+			if ($alias_reltype[$alias["target"]] == RELTYPE_ASSIGNED_MENU)
 			{
-				$section[$alias->prop("to")] = $alias->prop("to");
+				$section[$alias["target"]] = $alias["target"];
+				$new_alias_reltype[$alias["target"]] = RELTYPE_ASSIGNED_MENU;
 			};
 			
-			if ($alias->prop("reltype") == RELTYPE_DOC_SOURCE)
+			if ($alias_reltype[$alias["target"]] == RELTYPE_DOC_SOURCE)
 			{
-				$last_menus[$alias->prop("to")] = $alias->prop("to");
+				$last_menus[$alias["target"]] = $alias["target"];
+				$new_alias_reltype[$alias["target"]] = RELTYPE_DOC_SOURCE;
 			};
 		};
 
@@ -354,16 +451,20 @@ class promo extends class_base
 			$last_menus = "";
 		};
 
-		$obj->set_meta("section",$section);
-		$obj->set_meta("last_menus",$last_menus);
-
-		$obj->save();
+		$this->upd_object(array(
+			"oid" => $id,
+			"metadata" => array(
+				"section" => $section,
+				"last_menus" => $last_menus,
+				"alias_reltype" => $new_alias_reltype,
+			),
+		));
 	}
 
 	function callback_on_addalias($args = array())
 	{
 		$obj_list = explode(",",$args["alias"]);
-		$obj =&obj($args["id"]);
+		$obj = $this->get_object($args["id"]);
 
 		if ($args["reltype"] == RELTYPE_ASSIGNED_MENU)
 		{
@@ -375,46 +476,60 @@ class promo extends class_base
 			$var = "last_menus";
 		};
 
-		$data = $obj->meta($var);
+		$data = $obj["meta"][$var];
 
 		foreach($obj_list as $val)
 		{
 			$data[$val] = $val;
 		};
 
-		$obj->set_meta($var,$data);
-		$obj->save();
+		$this->upd_object(array(
+			"oid" => $args["id"],
+			"metadata" => array(
+				$var => $data,
+			),
+		));
 	}
 
 
 	function parse_alias($args = array())
 	{
 		$alias = $args["alias"];
-		$ob =& obj($alias["target"]);
+		$ob = $this->get_object($alias["target"]);
 
 		$this->read_template("default.tpl");
 
-		$ss = get_instance("contentmgmt/site_show");
-		$def = new aw_array($ss->get_default_document(array(
-			"obj" => obj($alias["target"])
-		)));
-		if ($ob->prop("sort_by"))
+		$me = get_instance("contentmgmt/site_content");
+		if (is_array($ob['meta']['last_menus']))
 		{
-			$_ob = $ob->prop("sort_by")." ".$ob->prop("sort_ord");
+			$def = array();
+			foreach($ob['meta']['last_menus'] as $menu)
+			{
+				$_t = new aw_array($me->get_default_document($menu,true));
+				$def += $_t->get();
+			}
+			$def = new aw_array($def);
 		}
-		if (($_ob != "") && (sizeof($def->get()) > 0))
+		else
 		{
-			$ol = new object_list(array(
-				"class_id" => array(CL_DOCUMENT, CL_PERIODIC_SECTION, CL_BROTHER_DOCUMENT),
-				"oid" => $def->get(),
-				"sort_by" => $_ob,
-			));
-			
-			
-			$def = new aw_array($ol->ids());
+			$def = new aw_array($me->get_default_document($alias["target"],true));
 		}
 
-		$ndocs = $ob->prop("ndocs");
+		$_ob = aw_ini_get("menuedit.document_list_order_by");
+		if ($_ob != "")
+		{
+			$_ids = $def->to_sql();
+			$_q = "SELECT objects.oid as oid FROM objects  LEFT JOIN documents ON documents.docid=objects.oid WHERE objects.oid IN ($_ids) ORDER BY $_ob";
+			$this->db_query($_q);
+			$def = array();
+			while ($row = $this->db_next())
+			{
+				$def[] = $row["oid"];
+			}
+			$def = new aw_array($def);
+		}
+
+		$ndocs = $this->db_fetch_field("SELECT ndocs FROM menu WHERE id = '$alias[target]'", "ndocs");
 		if ($ndocs)
 		{
 			$def = new aw_array(array_slice($def->get(), 0, $ndocs));
@@ -423,25 +538,26 @@ class promo extends class_base
 		$content = "";
 		$doc = get_instance("document");
 
+		$mn = $this->get_menu($alias["target"]);
+
+		$q = "SELECT filename FROM template WHERE id = '$mn[tpl_lead]'";
+		$row = $this->db_fetch_row($q);
+
 		$parms = array(
 			"leadonly" => 1,
 			"showlead" => 1,
-			"boldlead" => $thid->cfg["boldlead"],
+			"boldlead" => 1,
 			"no_strip_lead" => 1,
 		);
-
-		if (!$ob->meta('use_fld_tpl'))
+		if (!$ob['meta']['use_fld_tpl'])
 		{
-			$mgr = get_instance("templatemgr");
-			$parms["tpl"] = $mgr->get_template_file_by_id(array(
-				"id" => $ob->prop("tpl_lead")
-			));
+			$parms["tpl"] = $row["filename"];
 		}
 		else
 		{
 			$parms["tpl_auto"] = 1;
 		}
-
+	
 		foreach($def->get() as $key => $val)
 		{
 			$_parms = $parms;
@@ -449,257 +565,23 @@ class promo extends class_base
 			$content .= $doc->gen_preview($_parms);
 		}
 
-		if ($ob->meta('as_name') && $ob->meta("caption") == "")
+		if ($ob['meta']['as_name'] && $ob['meta']["caption"] == "")
 		{
-			if ($this->object_exists($ob->meta("as_name")))
-			{
-				$as_n_o = obj($ob->meta("as_name"));
-				$ob->set_meta('caption',$as_n_o->name());
-			}
+			$ob["meta"]['caption'] = $this->db_fetch_field("SELECT name FROM objects WHERE oid = '".$ob['meta']['as_name']."'","name");
 		}
 
-		$align= array("k" => "align=\"center\"", "p" => "align=\"right\"" , "v" => "align=\"left\"" ,"" => "");
 		$this->vars(array(
-			"title" => $ob->meta("caption"),
+			"title" => $ob['meta']["caption"],
 			"content" => $content,
-			"align" => $align[$args["matches"][4]],
-			"link" => $ob->prop("link")
 		));
 
-		if (!$ob->meta('no_title'))
+		if (!$ob['meta']['no_title'])
 		{
 			$this->vars(array(
 				"SHOW_TITLE" => $this->parse("SHOW_TITLE")
 			));
 		}
-		else
-		{
-			$this->vars(array(
-				"SHOW_TITLE" => ""
-			));
-		}
 		return $this->parse();
-	}
-
-	////
-	// !this must set the content for subtemplates in main.tpl
-	// params
-	//	inst - instance to set variables to
-	//	content_for - array of templates to get content for
-	function on_get_subtemplate_content($arr)
-	{
-		$inst =& $arr["inst"];
-
-		$doc = get_instance("document");
-		# reset period, or we don't see contents of promo boxes under periodic menus:
-		$doc->set_period(0);
-
-		if (aw_ini_get("menuedit.promo_lead_only"))
-		{
-			$leadonly = 1;
-		}
-		else
-		{
-			$leadonly = -1;
-		}
-
-		$filter = array();
-		$filter["status"] = STAT_ACTIVE;
-		$filter["class_id"] = CL_PROMO;
-		$filter["sort_by"] = "objects.jrk";
-
-		if (aw_ini_get("menuedit.lang_menus"))
-		{
-			$filter["lang_id"] = aw_global_get("lang_id");
-		}
-
-		$list = new object_list($filter);
-
-		$tplmgr = get_instance("templatemgr");
-		$promos = array();
-		$gidlist = aw_global_get("gidlist");
-		for($o =& $list->begin(); !$list->end(); $o =& $list->next())
-		{
-			if (!$o->prop("tpl_lead"))
-			{
-				$tpl_filename = aw_ini_get("promo.default_tpl");
-				if (!$tpl_filename)
-				{
-					continue;
-				}
-			}
-			else
-			{
-				// find the file for the template by id. sucks. we should join the template table
-				// on the menu template I guess
-				$tpl_filename = $tplmgr->get_template_file_by_id(array("id" => $o->prop("tpl_lead")));
-			}
-
-			$found = false;
-
-			if (!is_array($o->meta("groups")) || count($o->meta("groups")) < 1)
-			{
-				$found = true;
-			}
-			else
-			{
-				foreach($o->meta("groups") as $gid)
-				{
-					if (isset($gidlist[$gid]) && $gidlist[$gid] == $gid)
-					{
-						$found = true;
-					}
-				}
-			}
-
-			$doc->doc_count = 0;
-
-			$show_promo = false;
-			
-			$msec = $o->meta("section");
-
-			if ($o->meta("all_menus"))
-			{
-				$show_promo = true;
-			}
-			else
-			if (isset($msec[$inst->sel_section_real]) && $msec[$inst->sel_section_real])
-			{
-				$show_promo = true;
-			}
-			else
-			if (is_array($o->meta("section_include_submenus")))
-			{
-				$pa = array(aw_ini_get("frontpage"), aw_ini_get("rootmenu"));
-				foreach($inst->path as $p_o)
-				{
-					$pa[] = $p_o->id();
-				}
-
-				// here we need to check, whether any of the parent menus for
-				// this menu has been assigned a promo box and has been told
-				// that it should be shown in all submenus as well
-				$sis = new aw_array($o->meta("section_include_submenus"));
-				$intersect = array_intersect($pa,$sis->get());
-				if (sizeof($intersect) > 0)
-				{
-					$show_promo = true;
-				}
-			}
-
-			if ($found == false)
-			{
-				$show_promo = false;
-			};
-			
-			// this line decides, whether we should show this promo box here or not.
-			// now, how do I figure out whether the promo box is actually in my path?
-			if ($show_promo)
-			{
-				// visible. so show it
-				// get list of documents in this promo box
-				$pr_c = "";
-				$docid = $inst->get_default_document(array(
-					"obj" => $o
-				));
-
-				if (!is_array($docid))
-				{
-					$docid = array($docid);
-				}
-
-				$d_cnt = 0;
-				foreach($docid as $d)
-				{
-					if (($d_cnt % 2)  == 1)
-					{
-						if (file_exists(aw_ini_get("tpldir")."/automatweb/documents/".$tpl_filename."2"))
-						{
-							$tpl_filename .= "2";
-						}
-					}
-					$cont = $doc->gen_preview(array(
-						"docid" => $d,
-						"tpl" => $tpl_filename,
-						"leadonly" => $leadonly,
-						"section" => $inst->sel_section,
-						"strip_img" => false,
-						"showlead" => 1,
-						"boldlead" => $this->cfg["boldlead"],
-						"no_strip_lead" => 1,
-						"no_acl_checks" => aw_ini_get("menuedit.no_view_acl_checks"),
-						"vars" => array("doc_ord_num" => $d_cnt+1),
-					));
-					$pr_c .= str_replace("\r","",str_replace("\n","",$cont));
-					$d_cnt++;
-				}
-
-				$inst->vars(array(
-					"comment" => $o->comment(),
-					"title" => $o->name(), 
-					"content" => $pr_c,
-					"url" => $o->prop("link"),
-					"link_caption" => $o->meta("link_caption"),
-					"promo_doc_count" => (int)$d_cnt,
-				));
-
-				// which promo to use? we need to know this to use
-				// the correct SHOW_TITLE subtemplate
-				$templates = array(
-					"scroll" => "SCROLL_PROMO",
-					"0" => "LEFT_PROMO",
-					"1" => "RIGHT_PROMO",
-					"2" => "UP_PROMO",
-					"3" => "DOWN_PROMO",
-				);
-	
-				$use_tpl = $templates[$o->meta("type")];
-				if (!$use_tpl)
-				{
-					$use_tpl = "LEFT_PROMO";
-				};
-
-				if ($o->meta("no_title") != 1)
-				{
-					$inst->vars(array(
-						"SHOW_TITLE" => $inst->parse($use_tpl . ".SHOW_TITLE")
-					));
-				}
-				else
-				{
-					$inst->vars(array(
-						"SHOW_TITLE" => ""
-					));
-				}
-				$ap = "";
-				if ($o->prop("link") != "")
-				{
-					$ap = "_LINKED";
-				}
-				if ($this->used_promo_tpls[$use_tpl] != 1)
-				{
-					$ap.="_BEGIN";
-					$this->used_promo_tpls[$use_tpl] = 1;
-				}
-
-				if ($inst->is_template($use_tpl . $ap))
-				{
-					$promos[$use_tpl] .= $inst->parse($use_tpl . $ap);
-					$inst->vars(array($use_tpl . $ap => ""));
-				}
-				else
-				{
-					$promos[$use_tpl] .= $inst->parse($use_tpl);
-					$inst->vars(array($use_tpl => ""));
-				};
-				// nil the variables that were imported for promo boxes
-				// if we dont do that we can get unwanted copys of promo boxes
-				// in places we dont want them
-				$inst->vars(array("title" => "", "content" => "","url" => ""));
-			}
-		};
-
-		$inst->vars($promos);
 	}
 }
 ?>
