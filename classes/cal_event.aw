@@ -1,6 +1,6 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.13 2002/02/14 22:34:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.14 2002/02/15 10:56:45 duke Exp $
 global $class_defs;
 $class_defs["cal_event"] = "xml";
 
@@ -633,7 +633,6 @@ class cal_event extends aw_template {
 		// cycle over all (remaining) days in that month
 		for ($this->d = $sd; $this->d <= $dm; $this->d++)
 		{
-
 			if ($this->wd == 8)
 			{
 				// week rollover
@@ -679,7 +678,8 @@ class cal_event extends aw_template {
 				//$ts = mktime(0,0,0,$month,$this->start_day + $this->daynum,$year);
 				//$ts = mktime(23,59,59,1,$this->gdaynum + 1,2001);
 				//print "<b>MATCH:</b> " . date("l, d-m-Y",$ts) . "<br>";;
-				$ts = mktime(23,59,59,$this->start_month,$this->start_day + $this->daynum,$year);
+				//$ts = mktime(23,59,59,$this->start_month,$this->start_day + $this->daynum,$year);
+				$ts = mktime(23,59,59,$this->start_month,$this->start_day + $this->daynum,$this->start_year);
 
 				// try to avoid duplicate repeaters
 				if (not(in_array($this->gdaynum + 1,$this->reps)))
@@ -725,6 +725,7 @@ class cal_event extends aw_template {
 		$this->start_day = $sx_d;
 		
 		$this->start_month = $sx_m;
+		$this->start_year = $start_year;
 
 
 		// that's a semaphore, which is used to decide whether we should drop out
@@ -803,7 +804,6 @@ class cal_event extends aw_template {
 			if ( ($y - 1) != $last_year)
 			{
 				$this->from_scratch = true;
-				//print "fresh start $y (y)!<br>";
 			};
 			$last_year = $y;
 
@@ -824,13 +824,13 @@ class cal_event extends aw_template {
 				};
 				$last_mon = $m;
 		
-				//print "<i>Processing:</i> $m/$y<br>";
 				if ( ($y == $start_year) && ($m < $sx_m) )
 				{
 					// it's too early, do nothing
 				}
 				else
 				{
+					//print "<i>Processing:</i> $m/$y<br>";
 					$this->_process_month(array("month" => $m,"year" => $y));
 					if ($this->finished)
 					{
