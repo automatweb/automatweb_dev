@@ -1,14 +1,14 @@
 <!-- SUB: start -->
-<table border="0" cellpadding="0" cellspacing="0" bgcolor="#EEEEEE" height="32" width="100%">
+<table border="0" cellpadding="0" cellspacing="0" bgcolor="#EEEEEE" height="30" width="100%">
 	<tr>
 	<td>
 	
-	<table border="0" cellpadding="0" cellspacing="0" bgcolor="#EEEEEE">
+	<table border="0" cellpadding="0" cellspacing="0" bgcolor="#EEEEEE" height="30" style="border-collapse: collapse;">
 	<tr>
 <!-- END SUB: start -->
 
 <!-- SUB: button -->
-	<td><span class="toolbarbutton" onMouseOver="this.className='toolbarbuttonhover'" onMouseOut="this.className='toolbarbutton'" onMouseDown="this.className='toolbarbuttondown'" onMouseUp="this.className='toolbarbuttonhover'"><a alt="{VAR:tooltip}" href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:imgbase}/{VAR:img}" title="{VAR:tooltip}" alt="{VAR:tooltip}" border="0"></a></span></td>
+	<td class="toolbarbutton" onMouseOver="this.className='toolbarbuttonhover'" onMouseOut="this.className='toolbarbutton'" onMouseDown="this.className='toolbarbuttondown'" onMouseUp="this.className='toolbarbuttonhover'" title="{VAR:tooltip}" alt="{VAR:tooltip}"><a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:imgbase}/{VAR:img}" border="0"></a></td>
 
 <!-- END SUB: button -->
 
@@ -18,7 +18,8 @@
 <!-- END SUB: text_button -->
 
 <!-- SUB: separator -->
-	<td style="margin-left: 2px; border-right: 1px dotted #999; width: 2px; height: 25px;">&nbsp;</td>
+	<td style="width: 2px;">
+	<td style="background-color: #FFF; border-left: 1px solid #CCC; width: 2px;"></td>
 <!-- END SUB: separator -->
 
 <!-- SUB: cdata -->
@@ -28,21 +29,21 @@
 
 <!-- SUB: end -->
 	</tr>
-	        </table>
-		        </td>
+	</table>
+	</td>
 <!-- END SUB: end -->
 
-<!-- SUB: end_sep -->
+<!-- SUB: right_side -->
 <td align="right">
-	<table border="0" cellspacing="0" cellpadding="0">
+	<table border="0" cellspacing="0" cellpadding="0" height="30" style="border-collapse: collapse;">
 	<tr>
 	<td align="right" valign="center">
-			{VAR:data}
+			{VAR:right_side_content}
 	</td>
 	</tr>
 	</table>
 </td>
-<!-- END SUB: end_sep -->
+<!-- END SUB: right_side -->
 
 <!-- SUB: real_end -->
 </tr>
