@@ -86,8 +86,8 @@
 	<td class="fform" colspan=10><select class="small_button" size=7 name='columns[{VAR:column}][]' multiple>{VAR:elements}</select></td>
 </tr>
 <tr>
-	<td class="fform">Sorditav:</td>
-	<td class="fform" colspan=10><input type="checkbox" name="sortable[{VAR:column}]" value="1" {VAR:sortable}>&nbsp;&nbsp;<a href='{VAR:add_col}'>Lisa tulp</a>&nbsp;&nbsp;<a href='{VAR:del_col}'>Kustuta tulp</a></td>
+	<td class="fform">Sorditav:&nbsp;<input type="checkbox" name="sortable[{VAR:column}]" value="1" {VAR:sortable}></td>
+	<td class="fform" colspan=10>&nbsp;&nbsp;<a href='{VAR:add_col}'>Lisa tulp</a>&nbsp;&nbsp;<a href='{VAR:del_col}'>Kustuta tulp</a> <input type='checkbox' name='todelete[{VAR:column}]' value='1'></td>
 </tr>
 </table>
 </td>

@@ -155,6 +155,14 @@ function setsel(el,val)
 <td valign=top class="fgtext">&nbsp;</td>
 <td class="fgtext">&nbsp;</td>
 </tr>
+<tr>
+<td class="fgtext">Default kuup&auml;ev:</td>
+<td class="fgtext" align="right">
+&nbsp;<input type="radio" name="{VAR:cell_id}_def_date_type" VALUE="rel" {VAR:date_rel_checked}> Kuup&auml;ev elemendist 
+<select name='{VAR:cell_id}_def_date_rel' class='small_button'>{VAR:date_rel_els}</select>&nbsp;&nbsp;&nbsp;&nbsp;
+<input type="radio" name="{VAR:cell_id}_def_date_type" VALUE="now" {VAR:date_now_checked}> Kellaaeg </td>
+<td class="fgtext" colspan=2>pluss&nbsp;<input type="text" class="small_button" size="5" name="{VAR:cell_id}_def_date_num" value="{VAR:def_date_num}">&nbsp;<select name='{VAR:cell_id}_def_date_add_type' class="small_button">{VAR:add_types}</select>&nbsp;</td>
+</tr>
 <!-- END SUB: DATE_ITEMS -->
 
 <!-- SUB: FILE_ITEMS -->
@@ -277,6 +285,8 @@ function setsel(el,val)
 <!-- SUB: EL_NOHLINK -->
 <td valign=top class="fgtext">{VAR:LC_FORMS_TEXT}:</td>
 <td valign=top class="fgtext"><input class="small_button" type='text' NAME='{VAR:cell_id}_text' VALUE="{VAR:cell_text}">&nbsp;{VAR:LC_FORMS_DISTANCE_FROM_ELEMENT}:&nbsp;<input class="small_button" type='text' NAME='{VAR:cell_id}_dist' size=3 VALUE='{VAR:cell_dist}'>&nbsp;pix</td>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;</td>
 <!-- END SUB: EL_NOHLINK -->
 
 <!-- SUB: EL_HLINK -->
