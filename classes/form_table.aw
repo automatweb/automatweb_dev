@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.41 2002/07/29 12:36:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.42 2002/07/31 10:03:21 kristo Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -73,9 +73,12 @@ class form_table extends form_base
 		{
 			// and finally, add the current search to the path
 			$num = count($fg_table_sessions[$tbl_sk]);
-			if ($fg_table_sessions[$tbl_sk][$num-1] != aw_global_get("REQUEST_URI"))
+			$req = aw_global_get("REQUEST_URI");
+			$req = str_replace("&print=1", "", $req);
+			$req = str_replace("?print=1", "", $req);
+			if ($fg_table_sessions[$tbl_sk][$num-1] != $req)
 			{
-				$fg_table_sessions[$tbl_sk][] = aw_global_get("REQUEST_URI");
+				$fg_table_sessions[$tbl_sk][] = $req;
 			}
 		}
 		aw_session_set("fg_table_sessions", $fg_table_sessions);
@@ -147,14 +150,16 @@ class form_table extends form_base
 					{
 						if ($cc["el_show"][$elid] == 1)
 						{
-							if ($elid == "order")
-							{
-								$str .= $this->get_order_url($col,$dat["ev_".$elid],$dat);
-							}
-							else
-							{
-								$str .= $dat["ev_".$elid];
-							}
+							$str .= $dat["ev_".$elid];
+							$str .= $this->table["defs"][$col]["el_sep"][$elid];
+						}
+					}
+					else
+					{
+						// order element will never have a value in the data
+						if ($elid == "order" && $cc["el_show"][$elid] == 1)
+						{
+							$str .= $this->get_order_url($col,$dat);
 							$str .= $this->table["defs"][$col]["el_sep"][$elid];
 						}
 					}
@@ -608,7 +613,7 @@ class form_table extends form_base
 		return $op;
 	}
 
-	function get_order_url($col,$elval,$dat)
+	function get_order_url($col,$dat)
 	{
 		if (strpos($this->table["defs"][$col]["order_form"],"?") === false)
 		{
@@ -1136,12 +1141,20 @@ class form_table extends form_base
 			));
 			$coldata[$col][2] = $this->parse("SEL_ELS");
 
+			if ($this->table["defs"][$col]["els"]["order"] == "order")
+			{
+				$this->vars(array(
+					"order_form" => $this->table["defs"][$col]["order_form"]
+				));
+				$coldata[$col][3] = $this->parse("SEL_ORDER_FORM");
+			}
+
 			if ($this->table["has_aliasmgr"])
 			{
 				$this->vars(array(
 					"aliases" => $this->mpicker($this->table["defs"][$col]["alias"], $this->get_aliases_for_table())
 				));
-				$coldata[$col][3] = $this->parse("SEL_ALIAS");
+				$coldata[$col][4] = $this->parse("SEL_ALIAS");
 			}
 
 			if ($this->table["has_groupacl"])
@@ -1150,7 +1163,7 @@ class form_table extends form_base
 				$this->vars(array(
 					"grps" => $this->mpicker($this->table["defs"][$col]["grps"], $us->get_group_picker(array("type" => array(GRP_REGULAR,GRP_DYNAMIC))))
 				));
-				$coldata[$col][4] = $this->parse("SEL_GRPS");
+				$coldata[$col][5] = $this->parse("SEL_GRPS");
 			}
 
 			if ($this->table["defs"][$col]["link"] == 1)
@@ -1158,7 +1171,7 @@ class form_table extends form_base
 				$this->vars(array(
 					"link" => $this->picker($this->table["defs"][$col]["link_el"], $els)
 				));
-				$coldata[$col][5] = $this->parse("SEL_LINK");
+				$coldata[$col][6] = $this->parse("SEL_LINK");
 			}
 
 			
@@ -1201,7 +1214,7 @@ class form_table extends form_base
 			$this->vars(array(
 				"HAS_FTABLE_ALIASES" => ($has_ftable_aliases ? $this->parse("HAS_FTABLE_ALIASES") : "")
 			));
-			$coldata[$col][6] = $this->parse("SEL_SETTINGS");
+			$coldata[$col][7] = $this->parse("SEL_SETTINGS");
 
 			$this->vars(array(
 				"col_sortable" => checked($this->table["defs"][$col]["sortable"]),
@@ -1210,7 +1223,7 @@ class form_table extends form_base
 				"col_link" => checked($this->table["defs"][$col]["link"]),
 				"col_link_popup" => checked($this->table["defs"][$col]["link_popup"])
 			));
-			$coldata[$col][7] = $this->parse("SEL_SETINGS2");
+			$coldata[$col][8] = $this->parse("SEL_SETINGS2");
 
 			$this->vars(array(
 				"popup_width" => $this->table["defs"][$col]["link_popup_width"],
@@ -1220,18 +1233,18 @@ class form_table extends form_base
 				"toolbar" => checked($this->table["defs"][$col]["link_popup_toolbar"]),
 				"addressbar" => checked($this->table["defs"][$col]["link_popup_addressbar"]),
 			));
-			$coldata[$col][8] = $this->parse("SEL_POPUP");
+			$coldata[$col][9] = $this->parse("SEL_POPUP");
 
 			$this->vars(array(
 				"img_type_img" => checked($this->table["defs"][$col]["image_type"] == "img"),
 				"img_type_tximg" => checked($this->table["defs"][$col]["image_type"] == "tximg"),
 				"img_type_imgtx" => checked($this->table["defs"][$col]["image_type"] == "imgtx"),
 			));
-			$coldata[$col][9] = $this->parse("SEL_IMAGE");
+			$coldata[$col][10] = $this->parse("SEL_IMAGE");
 		}
 
 		$l = "";
-		for ($idx = 1; $idx < 10; $idx++)
+		for ($idx = 1; $idx < 11; $idx++)
 		{
 			$td = "";
 			for ($col =0 ; $col < $this->table["cols"]; $col++)
@@ -1255,6 +1268,7 @@ class form_table extends form_base
 			"SEL_SETINGS2" => "",
 			"SEL_POPUP" => "",
 			"SEL_IMAGE" => "",
+			"SEL_ORDER_FORM" => "",
 		));
 		return $this->parse();
 	}

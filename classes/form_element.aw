@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.60 2002/07/24 20:44:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.61 2002/07/31 10:03:21 kristo Exp $
 // form_element.aw - vormi element.
 classload("image");
 
@@ -2925,9 +2925,16 @@ class form_element extends aw_template
 
 	////
 	// !sets the element's value to $val 
-	// $val is human-readable - it tries to find the best match with the real values
-	function set_value($val)
+	// if $user_val == true, then $val is human-readable - it tries to find the best match with the real values
+	// else $val is assumed to be fg internal value
+	function set_value($val, $user_val = true)
 	{
+		if (!$user_val)
+		{
+			$this->entry = $val;
+			return;
+		}
+
 		switch($this->arr["type"])
 		{
 			case "checkbox":

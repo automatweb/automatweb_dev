@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.113 2002/07/25 23:55:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.114 2002/07/31 10:03:21 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -890,6 +890,14 @@ class form extends form_base
 				foreach($lf_els as $lf_el)
 				{
 					$elvalues[$lf_el->get_el_name()] = $lf_fm->entry[$lf_el->get_id()];
+					$els = $this->get_element_by_name($lf_el->get_el_name(), RET_ALL);
+					if (is_array($els))
+					{
+						foreach($els as $el)
+						{
+							$this->set_element_value($el->get_id(), $lf_fm->entry[$lf_el->get_id()], false);
+						}
+					}
 				}
 			}
 			if ($load_chain_data)
@@ -903,6 +911,14 @@ class form extends form_base
 					foreach($lf_els as $lf_el)
 					{
 						$elvalues[$lf_el->get_el_name()] = $lf_fm->entry[$lf_el->get_id()];
+						$els = $this->get_element_by_name($lf_el->get_el_name(), RET_ALL);
+						if (is_array($els))
+						{
+							foreach($els as $el)
+							{
+								$this->set_element_value($el->get_id(), $lf_fm->entry[$lf_el->get_id()], false);
+							}
+						}
 					}
 				}
 			}
@@ -3383,6 +3399,7 @@ class form extends form_base
 		{
 			for ($col = 0; $col < $this->arr["cols"]; $col++)
 			{
+				$elar = array();
 				$this->arr["contents"][$row][$col]->get_els(&$elar);
 				reset($elar);
 				while (list(,$el) = each($elar))
