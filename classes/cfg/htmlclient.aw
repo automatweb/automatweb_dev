@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.96 2005/02/23 09:56:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.97 2005/02/23 11:32:27 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -939,16 +939,16 @@ class htmlclient extends aw_template
 			foreach($this->rtes as $rte)
 			{
 				$txt .= "tmpdat = document.getElementById('${rte}_edit').contentWindow.document.body.innerHTML;\n";
-				$txt .= "tmpdat = tmpdat.replace(/\\n/gi,' ');";
-				$txt .= "tmpdat = tmpdat.replace(/\\r/gi,'');";
+				#$txt .= "tmpdat = tmpdat.replace(/\\n/gi,' ');";
+				#$txt .= "tmpdat = tmpdat.replace(/\\r/gi,'');";
 
-				$txt .= "tmpdat = tmpdat.replace(br_remove,\"\\r\\n\");\n";
-				$txt .= "tmpdat = tmpdat.replace(br_remove2,\"\\r\\n\");\n";
+				#$txt .= "tmpdat = tmpdat.replace(br_remove,\"\\r\\n\");\n";
+				#$txt .= "tmpdat = tmpdat.replace(br_remove2,\"\\r\\n\");\n";
 
 
-				//$txt .= "document.changeform.elements['${rte}'].value=document.getElementById('${rte}_edit').contentWindow.document.body.innerHTML;\n";
-				$txt .= "document.changeform.elements['${rte}'].value=tmpdat.replace(remove_exp," . '"href=\"");' . "\n";
-				$data["cb_nobreaks[${rte}]"] = 0;
+				$txt .= "document.changeform.elements['${rte}'].value=document.getElementById('${rte}_edit').contentWindow.document.body.innerHTML;\n";
+				#$txt .= "document.changeform.elements['${rte}'].value=tmpdat.replace(remove_exp," . '"href=\"");' . "\n";
+				$data["cb_nobreaks[${rte}]"] = 1;
 			};
 
 			$submit_handler = $txt;
