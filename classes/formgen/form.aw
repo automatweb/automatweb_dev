@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.23 2003/01/15 10:25:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.24 2003/01/17 09:30:50 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1246,6 +1246,10 @@ class form extends form_base
 			$controller_warnings_ok = true;
 			foreach($this->controller_queue as $ctrl)
 			{
+				if (!$ctrl["val"])
+				{
+					$ctrl["val"] = $this->get_element_value($ctrl["el_id"],true);
+				}
 				$res = $this->controller_instance->do_check($ctrl["ctrlid"], $ctrl["val"], &$this, $this->get_element_by_id($ctrl["el_id"]));
 //				echo "ctrlid = $ctrl[ctrlid] val - $ctrl[val] <br>";
 				if ($res !== true)
@@ -3823,7 +3827,7 @@ class form extends form_base
 
 	////
 	// !returns the value of the entered element. form entry must be loaded before calling this.
-	function get_element_value_by_name($name)
+	function get_element_value_by_name($name, $numeric = false)
 	{
 		$el = $this->get_element_by_name($name);
 		if (!$el)
@@ -3831,7 +3835,7 @@ class form extends form_base
 			return false;
 		}
 
-		$va = $el->get_value();
+		$va = $el->get_value($numeric);
 		return $va;
 	}
 
