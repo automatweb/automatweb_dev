@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.130 2003/07/04 13:40:29 duke Exp $
+// $Id: class_base.aw,v 2.131 2003/07/08 09:28:45 axel Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -98,6 +98,7 @@ class class_base extends aw_template
 		{
 			$this->id = $args["id"];
 			$obj = $this->get_object($this->id);
+			$this->toolbar_type = ((isset($obj['meta']['use_menubar']) && ($obj['meta']['use_menubar'] == '1')) ? 'menubar' : 'tabs');
 			$this->parent = "";
 
 
@@ -573,8 +574,17 @@ class class_base extends aw_template
 		};
 
 		$this->mk_path($parent,$title,aw_global_get("period"));
-		
-		$this->tp = get_instance("vcl/tabpanel");
+
+		if (($this->toolbar_type == 'menubar') || (isset($this->classinfo['toolbar_type']) && ($this->classinfo['toolbar_type']['text'] == 'menubar')))
+		{
+			$this->toolbar_type = 'menubar';
+			$this->tp = get_instance("vcl/menubar");
+		}
+		else
+		{
+			$this->tp = get_instance("vcl/tabpanel");
+		}
+
 
 		// I need a way to let the client (the class using class_base to
 		// display the editing form) to add it's own tabs.
@@ -601,13 +611,16 @@ class class_base extends aw_template
 		foreach($this->groupinfo as $key => $val)
 		{
 			// we only want subgroups that are children of the currently active group
-			if (isset($val["parent"]) && isset($this->classinfo["hide_tabs_L2"]))
+			if (isset($val["parent"]) && isset($this->classinfo["hide_tabs_L2"])) //"hide_tabs_L2" kas seda kasutatakse kuskil??
 			{
 				continue;
 			}
 			elseif (isset($val["parent"]) && $val["parent"] != $this->activegroup)
 			{
-				continue;
+				if ($this->toolbar_type != 'menubar')
+				{
+					continue;
+				}
 			}
 			elseif (empty($val["parent"]) && isset($this->classinfo["hide_tabs"]))
 			{
@@ -641,7 +654,7 @@ class class_base extends aw_template
 				"request" => $this->request,
 			);
 
-			$res = true;	
+			$res = true;
 			if ($tab_callback)
 			{
 				$res = $this->inst->callback_mod_tab($tabinfo);
@@ -650,17 +663,18 @@ class class_base extends aw_template
 			if ($res !== false)
 			{
 				$this->tp->add_tab(array(
+					'id' => $tabinfo['id'],
 					"level" => empty($val["parent"]) ? 1 : 2,
+					'parent' => $val['parent'],
 					"link" => $tabinfo["link"],
 					"caption" => $tabinfo["caption"],
 					"active" => ($key == $activegroup) || ($key == $this->subgroup),
 				));
 			};
 		};
-		
 
 		// XX: I need a better way to handle relationmgr, it should probably be a special
-		// property type instead of being hardcoded. 
+		// property type instead of being hardcoded.
 
 		// well, there is a "relationmgr" property type and if used the property is drawn
 		// in an iframe. But what I really need is an argument to the group definition,
@@ -674,7 +688,9 @@ class class_base extends aw_template
 			{
 				$link = $this->mk_my_orb("list_aliases",array("id" => $this->id,"return_url" => $return_url),get_class($this->orb_class));
 			};
+
 			$this->tp->add_tab(array(
+				'id' => 'list_aliases',
 				"link" => $link,
 				"caption" => "Seostehaldur",
 				"active" => isset($this->action) && (($this->action == "list_aliases") || ($this->action == "search_aliases")),
@@ -692,7 +708,7 @@ class class_base extends aw_template
 		};
 
 		$vars["content"] = $args["content"];
-
+		
 		return $this->tp->get_tabpanel($vars);
 	}
 
@@ -891,7 +907,7 @@ class class_base extends aw_template
 			{
 				$property_list[$key] = $val;
 			};
-			
+
 			if (isset($val["table"]) && empty($tables[$val["table"]]))
 			{
 				if (isset($this->tableinfo[$val["table"]]))
@@ -1570,7 +1586,7 @@ class class_base extends aw_template
 				));
 			}
 		}
-//arr($rel_type_classes);
+		
 		$gen = $almgr->list_aliases(array(
 			"id" => $id,
 			"reltypes" => $reltypes,
@@ -2186,7 +2202,7 @@ class class_base extends aw_template
 		{
 			$this->id = $this->values["id"];
 		};
-
+//arr($resprops);
 		$resprops = $this->parse_properties(array(
 			"properties" => &$realprops,
 		));
