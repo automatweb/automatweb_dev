@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.24 2002/11/07 10:52:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.25 2002/11/11 14:03:56 duke Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 class orb extends aw_template 
@@ -55,6 +55,11 @@ class orb extends aw_template
 		$action = ($action) ? $action : $orb_defs[$class]["default"];
 
 		$this->check_login(array("class" => $class,"action" => $action));
+
+		// if the action is found in one of the classes defined by
+		// the extends attribute, it should know which class was really
+		// requested.
+		$this->orb_class = $class;
 
 		// action defineeritud?
 		if (!isset($action))
@@ -121,6 +126,8 @@ class orb extends aw_template
 			{
 				// loome õige objekti
 				$t = new $class;
+
+				$t->set_opt("orb_class",$this->orb_class);
 
 				// reforbi funktsioon peab tagastama aadressi, kuhu edasi minna
 				$url = $t->$fname($vars);
@@ -199,6 +206,7 @@ class orb extends aw_template
 		{
 			$t = new $class;
 			// ja kutsume funktsiooni v2lja
+			$t->set_opt("orb_class",$this->orb_class);
 			$fname = $fun["function"];
 			if (!method_exists($t,$fname))
 			{
