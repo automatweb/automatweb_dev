@@ -52,8 +52,8 @@
 </tr>
 <!-- SUB: ELEMENT -->
 <tr>
-<td align=right class=fgen_text>{VAR:LC_FORMS_ELEMENT}:</td>
-<td>{VAR:el_name}</td>
+<td align=right class=fgen_text><input class='tekstikast_n' size=15 type='text' NAME='names[{VAR:row}][{VAR:col}][{VAR:el_cnt}]' VALUE='{VAR:el_name}'></td>
+<td><input class='tekstikast_n' size=15 type='text' NAME='texts[{VAR:row}][{VAR:col}][{VAR:el_cnt}]' VALUE='{VAR:el_text}'>&nbsp;<input type='checkbox' name='elsel[{VAR:row}][{VAR:col}][{VAR:el_cnt}]' value=1></td>
 </tr>
 <!-- END SUB: ELEMENT -->
 <tr>
@@ -96,8 +96,10 @@
 </tr>
 <!-- END SUB: LINE -->
 </table></td></tr></table>
-<select name='selstyle' >{VAR:styles}</select><br>
+Vali stiil: <select name='selstyle' >{VAR:styles}</select><br>
+{VAR:LC_FORMS_CHOOSE_CALALOGUE_WHERE_MOVE_ELEMENT}:<select name='setfolder' class='small_button'>{VAR:folders}</select><br>
 <input class='small_sub' type='submit' NAME='save' VALUE='{VAR:LC_FORMS_SAVE}!'>
+&nbsp;&nbsp;<input type='submit' name='diliit' value='Kustuta' class='small_button'>
 {VAR:reforb}
 </form>
 <form action='reforb.{VAR:ext}' method=POST>

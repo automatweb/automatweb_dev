@@ -9,8 +9,7 @@
 <tr>
 <td height="15" colspan="15" class="fgtitle">&nbsp;<b>{VAR:LC_FORMS_BIG_ELEMENTS}:
 <a href="javascript:document.f1.submit()">{VAR:LC_FORMS_SAVE}</a>
-&nbsp;|&nbsp;<a href='forms.{VAR:ext}?type=change_form_cell&f_id={VAR:form_id}&col={VAR:form_col}&row={VAR:form_row}'>{VAR:LC_FORMS_SETTINGS}</a>
-&nbsp;|&nbsp;<a href='{VAR:cell_style}'>{VAR:LC_FORMS_STYLES}</a>
+&nbsp;|&nbsp;
 <!-- SUB: CAN_ACTION -->
 &nbsp;|&nbsp;<a href='forms.{VAR:ext}?type=cell_actions&f_id={VAR:form_id}&col={VAR:form_col}&row={VAR:form_row}'>{VAR:LC_FORMS_SMALL_ACTIONS}</a>
 <!-- END SUB: CAN_ACTION -->

@@ -40,6 +40,7 @@
 {VAR:LC_FORMS_CHOOSE_STYLE}:<select name='setstyle' class='small_button'>{VAR:styles}</select><br>
 {VAR:LC_FORMS_CHOOSE_CALALOGUE_WHERE_MOVE_ELEMENT}:<select name='setfolder' class='small_button'>{VAR:folders}</select><br>
 {VAR:LC_FORMS_CHOOSE_ELEMENT_TYPE_WHAT_ADD}:<select name='addel' class='small_button'>{VAR:types}</select><br>
-<input type='submit' value='{VAR:LC_FORMS_SAVE}' class='small_button'>
+<input type='submit' value='{VAR:LC_FORMS_SAVE}' class='small_button'>&nbsp;&nbsp;
+<input type='submit' name='diliit' value='Kustuta' class='small_button'>
 {VAR:reforb}
 </form>

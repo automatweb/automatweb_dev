@@ -7,7 +7,7 @@
 <td colspan=2 class="fform"><select name='ff_folder' class='small_button'>{VAR:ff_folder}</select></td>
 </tr>
 <tr>
-<td class="fform" colspan=2>Kataloog kuhu lisatakse t&uuml;&uuml;elemendid:</td>
+<td class="fform" colspan=2>Kataloog kuhu lisatakse t&uuml;&uuml;pelementide baasil tehtud elemendid:</td>
 </tr>
 <tr>
 <td colspan=2 class="fform"><select name='newel_parent' class='small_button'>{VAR:ne_folder}</select></td>
@@ -29,6 +29,12 @@
 </tr>
 <tr>
 <td colspan=2 class="fform"><select class='small_button' NAME='el_menus2[]' size=20 multiple>{VAR:el_menus2}</select></td>
+</tr>
+<tr>
+<td class="fform" colspan=2>{VAR:LC_FORMS_CHOOSE_MOVE_FOLDERS}:</td>
+</tr>
+<tr>
+<td colspan=2 class="fform"><select class='small_button' NAME='el_move_menus[]' size=20 multiple>{VAR:el_move_menus}</select></td>
 </tr>
 <tr>
 <td class="fform" colspan=2><input class='small_button' type='submit' NAME='save_form_settings' VALUE='{VAR:LC_FORMS_SAVE} form'></td>

@@ -87,8 +87,8 @@ function setsel(el,val)
 	<td class="fgtext"><input type='text' class="small_button" NAME='{VAR:cell_id}_name' VALUE='{VAR:cell_name}'></td>
 </tr>
 <tr>
-	<td class="fgtext">&nbsp;</td>
-	<td class="fgtext">&nbsp;</td>
+	<td class="fgtext">{VAR:LC_FORMS_IGNORE_TEXT}:</td>
+	<td class="fgtext"><input type='checkbox' name='{VAR:cell_id}_ignore_text' {VAR:ignore_text}></td>
 	<td class="fgtext">{VAR:LC_FORMS_TYPE_NAME}:</td>
 	<td class="fgtext"><input type='text' class="small_button" NAME='{VAR:cell_id}_type_name' VALUE='{VAR:cell_type_name}'></td>
 </tr>
@@ -226,6 +226,7 @@ function setsel(el,val)
 <td class="fgtext"><input type='text' name='{VAR:cell_id}_ch_value' value='{VAR:ch_value}' class='small_button'></td>
 </tr>
 <!-- END SUB: CHECKBOX_ITEMS -->
+
 <!-- SUB: PRICE_ITEMS -->
 <tr>
 <td class="fgtext">{VAR:LC_FORMS_DEFAULT_PRICE}:</td>
@@ -253,6 +254,8 @@ function setsel(el,val)
 <!-- END SUB: EL_NOHLINK -->
 
 <!-- SUB: EL_HLINK -->
+<td class="fgtext">Vali v&auml;ljund:</td>
+<td class="fgtext"><select name='{VAR:cell_id}_link_op' class='small_button'>{VAR:ops}</select></td>
 <td class="fgtext">&nbsp;</td>
 <td class="fgtext">&nbsp;</td>
 <!-- END SUB: EL_HLINK -->

@@ -21,6 +21,9 @@
 </table>
 </td>
 <!-- END SUB: DC -->
+<td>
+<input class='small_sub' type='submit' NAME='save' VALUE='{VAR:LC_FORMS_SAVE}!'>
+</td>
 </tr>
 <!-- SUB: LINE -->
 <tr>
@@ -109,7 +112,12 @@
 </td>
 </tr>
 </table>
-<input class='small_sub' type='submit' NAME='save' VALUE='{VAR:LC_FORMS_SAVE}!'>
+<table width="100%">
+<tr>
+<td><input class='small_sub' type='submit' NAME='save' VALUE='{VAR:LC_FORMS_SAVE}!'></td>
+<td align="right"><input class='small_sub' type='submit' NAME='save' VALUE='{VAR:LC_FORMS_SAVE}!'></td>
+</tr>
+</table>
 {VAR:reforb}
 </form>
 
