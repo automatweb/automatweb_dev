@@ -1,12 +1,14 @@
 <?php
-// $Revision: 2.8 $
-// docmgr.aw - Document manager
+// $Revision: 2.9 $
+// docmgr.aw - Document manager. Obsolete. Really. Dead.
+// will go away soon
 // our first goal is it to make a decent interface to searching
 // from documents and their archives.
 
 // then all the document management functions (and I mean editing,
 // and other stuff like that should be moved over here to reduce
 // the memory requirements of the main document class.
+
 
 classload("document");
 class docmgr extends document 
