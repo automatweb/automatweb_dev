@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.20 2004/04/26 09:32:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.21 2004/06/10 13:24:19 duke Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -110,11 +110,12 @@ caption Õiguslik vorm
 
 @property jobsnotact type=table no_caption=1 group=jobs
 
-@property org_toolbar type=toolbar group=customers store=no no_caption=1
-@caption Org. toolbar
+// disabled until the functionality is coded
+//@property org_toolbar type=toolbar group=customers store=no no_caption=1
+//@caption Org. toolbar
 
-@property customer type=table group=customers store=no no_caption=1
-@caption Kliendid
+//@property customer type=table group=customers store=no no_caption=1
+//@caption Kliendid
 
 @groupinfo contacts caption="Kontaktid" 
 @groupinfo contacts2 caption="Kontaktid" parent=contacts submit=no
@@ -465,9 +466,7 @@ class crm_company extends class_base
 		// reltype_org oleks vastava seose id
 
 		$pl = get_instance(CL_PLANNER);
-		$cal_id = $pl->get_calendar_for_user(array(
-			"uid" => aw_global_get("uid"),
-		));
+		$cal_id = $pl->get_calendar_for_user();
 
 		// XXX: I should check whether $this->cal_id exists and only include those entries
 		// when it does.
@@ -482,28 +481,35 @@ class crm_company extends class_base
 				"id" => $conn->prop("to"),
 				"cal_id" => $cal_id,
 			));
-			$t->define_data(array(
+
+			$tdata = array(
 				"name" => $conn->prop("to.name"),
 				"id" => $conn->prop("to"),
 				"phone" => $pdat["phone"],
-				"email" => html::href(array(
+				"rank" => $pdat["rank"],
+			);
+
+			if ($cal_id)
+			{
+				$tdata["email"] = html::href(array(
 					"url" => "mailto:" . $pdat["email"],
 					"caption" => $pdat["email"],
-				)),
-				"rank" => $pdat["rank"],
-				"new_task" => html::href(array(
+				));
+				$tdata["new_task"] = html::href(array(
 					"caption" => "Uus toimetus",
 					"url" => $pdat["add_task_url"],
-				)),
-				"new_call" => html::href(array(
+				));
+				$tdata["new_call"] = html::href(array(
 					"caption" => "Uus kõne",
 					"url" => $pdat["add_call_url"],
-				)),
-				"new_meeting" => html::href(array(
+				));
+				$tdata["new_meeting"] = html::href(array(
 					"caption" => "Uus kohtumine",
 					"url" => $pdat["add_meeting_url"],
-				)),
-			));
+				));
+			};
+
+			$t->define_data($tdata);
 		};
 
 	}
