@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.87 2002/03/22 17:26:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.88 2002/03/27 01:19:18 duke Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -252,18 +252,21 @@ class core extends db_connector
 		$t = time();
 		$this->quote($action);
 		$this->quote($time);
+		$fields = array("tm","uid","type","action","ip","oid","created_hour","created_day","created_week","created_month","created_year");
+		$values = array($t,$uid,$type,$action,$ip,$oid,date("H",$t),date("d",$t),date("w",$t),date("m",$t),date("Y",$t));
 		if (aw_ini_get("TAFKAP"))
 		{
-			$q = "INSERT DELAYED INTO syslog (tm,uid,type,action,ip,oid,tafkap,created_hour,created_day,created_week,created_month,created_year)
-				VALUES('$t','$uid','$type','$action','$ip','$oid','".aw_global_get("tafkap")."','".date("H",$t)."','".date("d",$t)."','".date("w",$t)."','".date("m",$t)."','".date("Y",$t)."')";
-		}
-		else
-		{
-			$q = "INSERT DELAYED INTO syslog (syslog.tm,uid,type,action,ip,oid)
-				VALUES('$t','$uid','$type','$action','$ip','$oid')";
-			//$q = "INSERT DELAYED INTO syslog (syslog.tm,uid,type,action,ip,oid,created_hour,created_day,created_week,created_month,created_year)
-			//	VALUES('$t','$uid','$type','$action','$ip','$oid','".date("H",$t)."','".date("d",$t)."','".date("w",$t)."','".date("m",$t)."','".date("Y",$t)."')";
+			$fields[] = "tafkap";
+			$values[] = $tafkap;
 		};
+
+		if (aw_ini_get("SYSLOG_HAS_SITE_ID"))
+		{
+			$fields[] = "site_id";
+                        $values[] = aw_ini_get("SITE_ID");
+		};
+		$q = sprintf("INSERT DELAYED INTO syslog (%s) VALUES (%s)",join(",",$fields),join(",",map("'%s'",$values)));
+
 		$this->db_query($q);
 	}
 		
