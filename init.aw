@@ -196,9 +196,6 @@ function init_config($arr)
 	{
 		define($prd["def"], $prid);
 	}
-
-	classload("defs");
-	
 }
 
 function aw_ini_set($key,$value)
