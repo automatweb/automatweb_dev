@@ -1,5 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.300 2004/10/18 13:56:50 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -120,8 +119,8 @@ class core extends acl_base
 				MSSQL have used the aw.ini directive logging_disabled.
 				Im sure a more permanent fix will surface one day.
 			*/
-
 			$q = sprintf("INSERT INTO syslog (%s) VALUES (%s)",join(",",$fields),join(",",map("'%s'",$values)));
+
 			if (!$this->db_query($q,false))
 			{
 				die("cannot write to syslog: " . $this->db_last_error["error_string"]);
@@ -219,6 +218,176 @@ class core extends acl_base
 		//XXX the following query was commented out on eau, have to watch out for this one
 
 		$this->db_query($q);
+	}
+
+	////
+	// !lisab objektile aliase
+	// source on see objekt, mille juurde lingitakse
+	// target on see, mida lingitakse
+	// aliaste tabelisse paigutame ka klassi id, nii
+	// peaks hiljem olema voimalik natuke kiirust gainida
+
+	// positioned arguments suck, add_alias is the Right Way to do this,
+	// but I will leave this in place just in case someone still
+	// needs it.
+	function add_alias($source,$target,$extra = "")
+	{
+		return $this->addalias(array(
+			"id" => $source,
+			"alias" => $target,
+			"extra" => $extra,
+		));
+	}
+
+	////
+	// !$arr must contain 
+	// id = alias id
+	// target = alias target
+	// and may contain 
+	// extra = data to write to alias table
+	function change_alias($arr) 
+	{
+		extract($arr);
+		$target_data = $this->get_object($target);
+
+		$source = $this->db_fetch_field("SELECT source FROM aliases WHERE id = '$id'", "source");
+
+		$q = "UPDATE aliases SET target = '$target' , type = '$target_data[class_id]' , data = '$extra' 
+					WHERE id = '$id'";
+
+		$this->db_query($q);
+
+		$this->_log(ST_CORE, SA_CHANGE_ALIAS, "Muutis objekti $source aliast $target", $source);
+	}
+
+	////
+	// !deletes alias $target from object $source
+	function delete_alias($source,$target, $no_cache = false, $no_callback = false)
+	{
+		$q = "DELETE FROM aliases WHERE source = '$source' AND target = '$target'";
+		$this->db_query($q);
+	}
+
+
+	////
+	// !returns array of aliases pointing to object $oid
+	function get_aliases_of($args = array()) 
+	{
+		extract($args);
+		if (!$oid)
+		{
+			return;
+		}
+		$rl = "";
+		if (!empty($reltype))
+		{
+			$rl = " AND reltype = $reltype ";
+		};
+		if (!empty($lang_id))
+		{
+			$ll = " AND lang_id = $lang_id ";
+		};
+		$q = "SELECT *,objects.name as name,objects.parent as parent FROM aliases
+			LEFT JOIN objects ON
+			(aliases.source = objects.oid)
+			WHERE target = '$oid' $rl $ll ORDER BY id";
+		$this->db_query($q);
+		$aliases = array();
+		while($row = $this->db_next())
+		{
+			$aliases[$row["source"]]=array(
+				"type" => $row["type"],
+				"name" => $row["name"], 
+				"data" => $row["data"],
+				"id" => $row["source"],
+				"parent" => $row["parent"]);
+		};
+		return $aliases;
+	}
+
+	////
+	// !Deletes all aliases for $oid
+	function delete_aliases_of($oid)
+	{
+		$this->db_query("DELETE FROM aliases WHERE source = $oid");
+	}
+
+	////
+	// !the base version of per-class alias adding
+	// a class can override this, to implement adding aliases differently
+	// for instance - when adding an alias to form_entry it lets you pick the output
+	// with which the entry is shown. 
+	// but basically what this function needs to do, is to call core::add_alias($id,$alias)
+	// and finally redirect the user to $this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr")
+	// parameters:
+	//   id - the id of the object where the alias will be attached
+	//   alias - the id of the object to attach as an alias
+	//   relobj_id - reference to the relation object
+	//   reltype - type of the relation
+	//   no_cache - if true, cache is not updated
+	//   add_obj_type_history - if set, save object type in session for use in aliasmgr obj type listbox
+	function addalias($arr)
+	{
+		//arr($arr);
+		extract($arr);
+
+		$extra = ($arr["extra"]) ? $arr["extra"] : "";
+
+		$target_data = $this->get_object($alias);
+
+		$idx = $this->db_fetch_field("SELECT MAX(idx) as idx FROM aliases WHERE source = '$id' AND type =  '$target_data[class_id]'","idx");
+		if ($idx === "")
+		{
+			$idx = 1;
+		}
+		else
+		{
+			$idx++;
+		}
+
+		$relobj_id = (int)$arr["relobj_id"];
+		$reltype = (int)$arr["reltype"];
+		$q = "INSERT INTO aliases (source,target,type,data,idx,relobj_id,reltype)
+			VALUES('$id','$alias','$target_data[class_id]','$extra','$idx','$relobj_id','$reltype')";
+
+		$cl = $target_data['class_id'];
+
+		// aliasmgr object type history
+		if (isset($add_obj_type_history))
+		{		
+			if (is_array($hist = aw_global_get('aliasmgr_obj_history')))
+			{
+				$hist[time()] = $cl;
+				array_unique($hist);
+				krsort($hist);
+				while(count($hist) > 10)
+				{
+					array_pop($hist);
+				}
+			}
+			else
+			{
+				$hist = array(time() => $cl);
+			}
+
+			aw_session_set('aliasmgr_obj_history',$hist);
+
+			$usr = get_instance('users_user');
+
+			$usr->set_user_config(array(
+				'uid' => aw_global_get('uid'),
+				'key' => 'aliasmgr_obj_history',
+				'value' => $hist
+			));
+		}
+
+		$this->db_query($q);
+
+		$ret = $this->db_last_insert_id();
+
+		$this->_log(ST_CORE, SA_ADD_ALIAS,"Lisas objektile $id aliase $alias", $id);
+
+		return $ret;
 	}
 
 	////
@@ -627,6 +796,26 @@ class core extends acl_base
 			}
 		};
 		aw_global_set("__from_raise_error",0);
+	}
+
+	////
+	// !finds the lead template for menu $section
+	// if the template is not set for this menu, traverses the object tree upwards
+	// until it finds a menu for which it is set
+	function get_lead_template($section)
+	{
+		$tplmgr = get_instance("templatemgr");
+		return $tplmgr->get_lead_template($section);
+	}
+
+	////
+	// !finds the full document template for menu $section
+	// if the template is not set for this menu, traverses the object tree upwards 
+	// until it finds a menu for which it is set
+	function get_long_template($section)
+	{
+		$tplmgr = get_instance("templatemgr");
+		return $tplmgr->get_long_template($section);
 	}
 
 	////
@@ -1273,6 +1462,34 @@ class core extends acl_base
 	{
 		$obj = obj($args['id']);
 		return $obj->name();
+	}
+	
+	////
+	// !generates a simple one-level menu from the given data structure - the active item is determined by orb action
+	function do_menu($items)
+	{
+		global $action;
+		$im = "";
+		foreach($items as $iid => $idata)
+		{
+			$this->vars(array(
+				"url"	=> $idata["url"],
+				"text" => $idata["name"]
+			));
+			if ($action == $iid)
+			{
+				$im.=$this->parse("SEL_ITEM");
+			}
+			else
+			{
+				$im.=$this->parse("ITEM");
+			}
+		}
+		$this->vars(array(
+			"ITEM" => $im,
+			"SEL_ITEM" => ""
+		));
+		return $this->parse();
 	}
 };
 ?>
