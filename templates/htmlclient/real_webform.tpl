@@ -94,10 +94,10 @@
 <!-- END SUB: SUBMIT -->
 
 <!-- SUB: SUBMIT_RIGHT -->
-<tr class="{VAR:webform_content}">
-	<td>
+<tr>
+	<td class="{VAR:webform_content}">
 	</td>
-	<td>
+	<td class="{VAR:webform_content}">
 		<input type="submit" name="{VAR:name}" value="{VAR:sbt_caption}">
 	</td>
 </tr>
