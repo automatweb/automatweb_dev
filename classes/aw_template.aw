@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.23 2002/06/10 15:50:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.24 2002/06/26 11:14:20 kristo Exp $
 // aw_template.aw - Templatemootor
 
 classload("acl_base");
@@ -232,6 +232,8 @@ class aw_template extends acl_base
 		// "e" regexpi lõpus tähendab seda, et teist parameetrit käsitletakse php koodina,
 		// mis eval-ist läbi lastakse. 
 		$src = preg_replace("/{VAR:(.+?)}/e","\$this->vars[\"\\1\"]",$src);
+
+		$src = preg_replace("/{INI:(.+?)}/e","aw_ini_get(\"\\1\")",$src);
 
 		// võtame selle maha ka
 		global $status_msg;
