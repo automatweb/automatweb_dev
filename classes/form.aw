@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.130 2002/08/23 22:38:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.131 2002/08/24 12:42:31 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -5226,14 +5226,9 @@ class form extends form_base
 		extract($args);
 		$this->if_init($id,"calendar.tpl", "Kalendrisätungid");
 	
-		// -----------------------
 		$_els = $this->get_all_elements(array("type" => 1));
 
-		$els_start = array("0" => " -- Vali -- ");
-		$els_end   = array("0" => " -- Vali -- ");
-		$els_count = array("0" => " -- Vali -- ");
-		$els_period = array("0" => " -- Vali --");
-		$els_release = array("0" => " -- Vali --");
+		$els_start = $els_end = $els_count = $els_period = $els_release = array("0" => " -- Vali --");
 
 		foreach($_els as $key => $val)
 		{
@@ -5264,41 +5259,6 @@ class form extends form_base
 
 		};
 
-
-		$start_disabled = $end_disabled = $count_disabled = $period_disabled = $release_disabled = false;
-		
-		if (sizeof($els_start) == 1)
-		{
-			$els_start = array("0" => "n/a");
-			$start_disabled = true;
-		};
-		
-		if (sizeof($els_end) == 1)
-		{
-			$els_start = array("0" => "n/a");
-			$end_disabled = true;
-		};
-		
-		if (sizeof($els_count) == 1)
-		{
-			$els_count = array("0" => "n/a");
-			$count_disabled = true;
-		};
-		
-		if (sizeof($els_period) == 1)
-		{
-			$els_period = array("0" => "n/a");
-			$period_disabled = true;
-		};
-		
-		if (sizeof($els_release) == 1)
-		{
-			$els_release = array("0" => "n/a");
-			$release_disabled = true;
-		};
-
-
-
 		$this->get_objects_by_class(array("class" => CL_FORM));
 		$forms = $chains = array();
 		while($row = $this->db_next())
@@ -5319,23 +5279,12 @@ class form extends form_base
 		if ($this->subtype == FSUBTYPE_EV_ENTRY)
 		{
 			$ft = get_instance("form_table");
-
-			// once upon a time there was a function called get_tables_for_form in the
-			// form_table class. Alas, now it's gone and there is a function with the
-			// same name in form_db_base .. which does a completely different thing.
-			// Well, anyway. the function that returns a list of tables for a form
-			// should be elsewhere. Feel free to move the following code out of here.
-			$tables = array("0" => "Vali üks");
-			$this->db_query("SELECT * FROM form_table2form LEFT JOIN objects ON (form_table2form.table_id = objects.oid) WHERE form_id = $id");
-			while ($row = $this->db_next())
-			{
-				$tables[$row["table_id"]] = $row["name"];
-			}
-			// ------------------------
+			$tables = $ft->get_form_tables_for_form($form_id);
 
 			$q = "SELECT *,objects.name AS name FROM calendar2forms
 				LEFT JOIN objects ON (calendar2forms.cal_id = objects.oid)
 				WHERE form_id = '$id'";
+
 			$this->db_query($q);
 			while($row = $this->db_next())
 			{
@@ -5354,20 +5303,21 @@ class form extends form_base
 			};
 		}
 
+		$roles = array(
+			"0" => "Tavaline",
+			FSUBTYPE_EV_ENTRY => "Eventite sisestamine",
+			FSUBTYPE_CAL_CONF => "Ajavahemike defineerimine",
+		);
+		
 		$this->vars(array(
-			"role_general" => checked($this->subtype == 0),
-			"role_entry" => checked($this->subtype == FSUBTYPE_EV_ENTRY),
-			"role_define" => checked($this->subtype == FSUBTYPE_CAL_CONF),
-			"role_general_val" => 0,
-			"role_entry_val" => FSUBTYPE_EV_ENTRY,
-			"role_define_val" => FSUBTYPE_CAL_CONF,
+			"roles" => $this->picker($this->subtype,$roles),
 			"event_display_tables" => $this->picker($this->arr["event_display_table"],$tables),
 			"event_start_els" => $this->picker($this->arr["event_start_el"],$date_els),
-			"start_disabled" => disabled($start_disabled),
-			"end_disabled" => disabled($end_disabled),
-			"count_disabled" => disabled($count_disabled),
-			"period_disabled" => disabled($period_disabled),
-			"release_disabled" => disabled($release_disabled),
+			"start_disabled" => disabled(sizeof($els_start) == 1),
+			"end_disabled" => disabled(sizeof($els_end) == 1),
+			"count_disabled" => disabled(sizeof($els_count) == 1),
+			"period_disabled" => disabled(sizeof($els_period) == 1),
+			"release_disabled" => disabled(sizeof($els_release) == 1),
 			"els_start" => $this->picker($this->arr["el_event_start"],$els_start),
 			"els_end" => $this->picker($this->arr["el_event_end"],$els_end),
 			"els_count" => $this->picker($this->arr["el_event_count"],$els_count),
@@ -5375,7 +5325,6 @@ class form extends form_base
 			"els_release" => $this->picker($this->arr["el_event_release"],$els_release),
 			"newlink" => $this->mk_my_orb("new_cal_rel",array("form_id" => $this->id)),
 			"LINE" => $lines,
-			//---------------
 			"reforb"	=> $this->mk_reforb("submit_calendar", array("id" => $this->id))
 		));
 		$res = "";
@@ -5439,19 +5388,13 @@ class form extends form_base
 			"flags" => OBJ_HAS_CALENDAR,
 		));
 
-		$target_objects = array("0" => " -- Vali üks --");
-
+		$els_start = $els_count = $els_relation = $els_end = $tables = $target_objects = array("0" => " -- Vali --");
 		while($row = $this->db_next())
 		{
 			$target_objects[$row["oid"]] = ($row["name"]) ? $row["name"] : "(nimetu)";
 		};
 		
 		$_els = $this->get_all_elements(array("type" => 1));
-
-		$els_start = array("0" => " -- Vali -- ");
-		$els_count = array("0" => " -- Vali -- ");
-		$els_relation = array("0" => " -- Vali --");
-		$els_end = array("0" => " -- Vali --");
 
 		foreach($_els as $key => $val)
 		{
@@ -5465,7 +5408,6 @@ class form extends form_base
 				$els_end[$key] = $val["name"];
 			};
 			
-			
 			if ( ($val["type"] == "textbox") && ($val["subtype"] == "count") )
 			{
 				$els_count[$key] = $val["name"];
@@ -5478,27 +5420,21 @@ class form extends form_base
 		};
 		
 		$ft = get_instance("form_table");
-
-		// once upon a time there was a function called get_tables_for_form in the
-		// form_table class. Alas, now it's gone and there is a function with the
-		// same name in form_db_base .. which does a completely different thing.
-		// Well, anyway. the function that returns a list of tables for a form
-		// should be elsewhere. Feel free to move the following code out of here.
-		$tables = array("0" => "Vali üks");
-		$this->db_query("SELECT * FROM form_table2form LEFT JOIN objects ON (form_table2form.table_id = objects.oid) WHERE form_id = $form_id");
-                while ($row = $this->db_next())
-                {
-                        $tables[$row["table_id"]] = $row["name"];
-                }
-		// ------------------------
+		$tables = $tables + $ft->get_form_tables_for_form($form_id);
 
 		$this->vars(array(
 			"target_objects" => $this->picker($item["cal_id"],$target_objects),
+			"objects_disabled" => disabled(sizeof($target_objects) == 1),
 			"start_els" => $this->picker($item["el_start"],$els_start),
+			"start_disabled" => disabled(sizeof($els_start) == 1),
 			"cnt_els" => $this->picker($item["el_cnt"],$els_count),
+			"count_disabled" => disabled(sizeof($els_count) == 1),
 			"end_els" => $this->picker($item["el_end"],$els_end),
+			"end_disabled" => disabled(sizeof($els_end) == 1),
 			"relation_els" => $this->picker($item["el_relation"],$els_relation),
+			"relation_disabled" => disabled(sizeof($els_relation) == 1),
 			"ev_tables" => $this->picker($item["ev_table"],$tables),
+			"tables_disabled" => disabled(sizeof($tables) == 1),
 			"reforb" => $this->mk_reforb("submit_cal_rel",array("form_id" => $form_id,"id" => $id)),
 		));
 		return $this->do_menu_return();				
