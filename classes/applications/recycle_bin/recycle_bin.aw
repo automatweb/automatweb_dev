@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.8 2005/01/07 12:10:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.9 2005/01/18 11:22:59 kristo Exp $
 // recycle_bin.aw - Prügikast 
 /*
 @default table=objects
@@ -66,6 +66,7 @@ class recycle_bin extends class_base
 			"caption" => "ID",
 			"sortable" => 1,
 			"width" => 50,
+			"numeric" => 1
 		));
 		
 		$table->define_field(array(
@@ -111,14 +112,21 @@ class recycle_bin extends class_base
 
 		$cnt = $this->db_fetch_field("SELECT count(*) as cnt FROM objects WHERE status=0 ", "cnt");
 		
-		if ($arr["request"]["sortby"] != "")
+		if ($arr["request"]["sortby"] == "")
 		{
-			$ob = " ORDER BY ".$arr["request"]["sortby"]." ".$arr["request"]["sort_order"];
+			$arr["request"]["sortby"] = "modified";
 		}
+
+		if ($arr["request"]["sort_order"] == "")
+		{
+			$arr["request"]["sort_order"] = "desc";
+		}
+
+		$ob = " ORDER BY ".$arr["request"]["sortby"]." ".$arr["request"]["sort_order"];
 
 		$lim = "LIMIT ".($arr["request"]["ft_page"] * 100).",".(100);
 
-		$query = "SELECT * FROM objects WHERE status=0 $ob ".$lim;
+		$query = "SELECT * FROM objects WHERE status=0 AND site_id = ".aw_ini_get("site_id")." $ob ".$lim;
 		$this->db_query($query);
 		$rows = array();
 		while ($row = $this->db_next())
