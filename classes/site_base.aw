@@ -56,6 +56,13 @@ class site_base extends aw_template
 	}
 
 	////
+	// !this gets called when showing documents - if it returns false, the document is not shown
+	function can_show_document(&$doc)
+	{
+		return true;
+	}
+
+	////
 	// !stub for parse_search_result_document, allows to perform site specific
 	// operations on search results (replacing aliases for example). I needed that
 	// for hightechestonia.com

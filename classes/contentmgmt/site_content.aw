@@ -205,6 +205,8 @@ class site_content extends menuedit
 			$this->right_pane = false;
 		}
 
+		$this->do_sub_callbacks($sub_callbacks);
+
 		if ($obj["class_id"] == CL_PSEUDO && (($sh_id = $this->is_shop($section)) > 0) && $text == "")
 		{
 			// tshekime et kas 2kki on selle menyy all pood. kui on, siis joonistame selle.
@@ -228,49 +230,6 @@ class site_content extends menuedit
 			$this->vars(array("doc_content" => $docc));
 		} 
 		else 
-		if (aw_global_get("cal"))
-		{
-			$cal_id = aw_global_get("cal");
-			// first check, whether the argument really can be an event source
-			$q = "SELECT count(*) AS cnt FROM aliases WHERE target = '$cal_id'";
-			$this->db_query($q);
-			$xrow = $this->db_next();
-			if (!$xrow)
-			{
-				die("no such calendar");
-			};
-			// leiame aktiivse eventi ka
-			list($_d,$_m,$_y) = explode("-",aw_global_get("date"));
-			$tm = mktime(0,0,0,$_m,$_d,$_y)-1;
-			$q = sprintf("SELECT objects.oid,name,parent,start FROM objects LEFT JOIN planner ON (objects.oid = planner.id) WHERE parent = $cal_id AND planner.start >= $tm AND class_id IN (%d,%d) ORDER BY start LIMIT 1",CL_DOCUMENT,CL_BROTHER_DOCUMENT);
-			$this->db_query($q);
-			$event = $this->db_next();
-			if (!$event)
-			{
-				die("no events in this calendar");
-			};
-			$d = get_instance("document");
-			if ($text)
-			{
-				// I'm sorry, I can't think of anything else right now to pass this
-				// to the site class
-				aw_global_set("doc_text",$text);
-			};
-			$res = $d->gen_preview(array(
-				"tpl" => "doc_event.tpl",
-				"docid" => $event["oid"],
-				"vars" => array("edate" => date("d-m-Y",$event["start"])),
-			));
-
-			$this->active_doc = $event["oid"];
-
-			$this->vars(array(
-				// to get the "edit document" link working
-				"docid" => $event["oid"],
-				"doc_content" => $res,
-			));
-		}
-		else
 		if ($text == "")
 		{
 			// sektsioon pole perioodiline
@@ -395,6 +354,7 @@ class site_content extends menuedit
 				};
 			}
 		}
+
 		
 		$this->make_promo_boxes($obj["class_id"] == CL_BROTHER ? $obj["brother_of"] : $this->sel_section);
 
@@ -408,8 +368,6 @@ class site_content extends menuedit
 		
 		$this->make_banners();
 	
-		$this->do_sub_callbacks($sub_callbacks);
-
 		$this->vars(array(
 			"ss" => gen_uniq_id(),		// bannerite jaox
 			"ss2" => gen_uniq_id(),
@@ -1570,6 +1528,10 @@ class site_content extends menuedit
 				{
 					$oid = ($row["class_id"] == 39) ? $row["brother_of"] : $row["oid"];
 					// I'm sorry -- duke
+					// how the fuck do I rewrite those URLs correctly
+					// whatever .. the fact is that I can't simply stick date to the
+					// end of that shait.
+					/*
 					$date = aw_global_get("date");
 					if ($date)
 					{
@@ -1577,8 +1539,9 @@ class site_content extends menuedit
 					}
 					else
 					{
+					*/
 						$link .= $oid;
-					};
+					//};
 				};
 			};
 		}
