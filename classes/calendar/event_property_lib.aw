@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.2 2004/04/06 10:39:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.3 2004/05/20 08:14:21 duke Exp $
 // Shared functionality for event classes
 class event_property_lib extends core
 {
@@ -65,7 +65,7 @@ class event_property_lib extends core
 			$new_ones = $arr["request"]["prj"];
 		};
 
-		$prj_inst = get_instance("groupware/project");
+		$prj_inst = get_instance(CL_PROJECT);
 		$awt->start("disconnect-from-project");
 
 		foreach($e_conns as $conn)
