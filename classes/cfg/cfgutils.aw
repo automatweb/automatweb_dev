@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.22 2003/08/01 13:27:47 axel Exp $
+// $Id: cfgutils.aw,v 1.23 2003/09/02 12:59:04 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -499,7 +499,7 @@ class cfgutils extends aw_template
 
 		$options = array("0" => "--vali--");
 		// generate option list
-		if (constant($val["reltype"]))
+		if (defined($val["reltype"]) && constant($val["reltype"]))
 		{
 			$reltype = constant($val["reltype"]);
 		}

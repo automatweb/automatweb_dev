@@ -163,7 +163,7 @@ class property_group extends aw_template
 			"parent" => $parent,
 			"name" => $name,
 			"comment" => $comment,
-			"class_id" => CL_PSEUDO,
+			"class_id" => CL_MENU,
 			"status" => 2,
 			"no_flush" => 1,
 		));
@@ -183,7 +183,7 @@ class property_group extends aw_template
 			$group_id = $this->new_object(array(
 				"parent" => $grandparent,
 				"name" => $group,
-				"class_id" => CL_PSEUDO,
+				"class_id" => CL_MENU,
 				"status" => 2,
 				"no_flush" => 1,
 			));

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.18 2003/07/28 13:53:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.19 2003/09/02 12:59:03 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -70,7 +70,7 @@ class cfgform extends class_base
 		switch($args["reltype"])
 		{
                         case RELTYPE_PROP_GROUP:
-                                $retval = array(CL_PSEUDO);
+                                $retval = array(CL_MENU);
                                 break;
 		}
 		return $retval;
