@@ -2,7 +2,7 @@
 
 t2<br>
 <table border="1">
-<!-- SUB: obj_templ -->
+<!-- SUB: object -->
 <tr>
 <td>
 {VAR:name}
@@ -13,9 +13,9 @@ t2<br>
 </td><td>
 {VAR:class_id}
 </td><td>
-
+{VAR:class_file}
 </td><td>
-
+{VAR:test}
 </td><td>
 
 </td><td>
@@ -26,5 +26,5 @@ t2<br>
 
 </td>
 </tr>
-<!-- END SUB: obj_templ -->
+<!-- END SUB: object -->
 </table>

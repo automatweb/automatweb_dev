@@ -775,8 +775,7 @@ html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'chec
 		}
 		else
 		{
-			classload("linklist");
-			$files=linklist::get_templates($ob["meta"]["source_path"]."/");// selle linklistis oleva meetodi peaks oopis coressse panema
+			$files = $this->get_directory(array('dir' => $ob["meta"]["source_path"]));
 		}
 
 		if (!$files)

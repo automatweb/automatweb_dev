@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.54 2003/04/04 06:30:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.55 2003/04/07 10:18:59 axel Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -678,7 +678,7 @@ class aw_table
 					//   ));
 					if (isset($v1["callback"]))
 					{
-						$val = call_user_func ($v1["callback"], $val);
+						$val = call_user_func ($v1["callback"], isset($v1['callb_pass_row']) ? $v : $val);
 					}
 
 					if (isset($v1["thousands_sep"]))

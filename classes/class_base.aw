@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.91 2003/04/01 16:45:00 duke Exp $
+// $Id: class_base.aw,v 2.92 2003/04/07 10:18:54 axel Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -195,6 +195,7 @@ class class_base extends aliasmgr
 				"clfile" => $this->clfile,
 				"group" => isset($args["group"]) ? $args["group"] : "",
 				"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
+
 		));
 
 		$this->load_obj_data(array("id" => $this->id));
@@ -1247,7 +1248,7 @@ class class_base extends aliasmgr
 
 		$this->tables = $tables;
 		$this->fields = $fields;
-		$this->realfields = $realfields;
+		$this->realfields = isset($realfields) ? $realfields : NULL;
 
 		if (isset($layout) && is_array($layout[$this->activegroup]["items"]))
 		{
@@ -1468,7 +1469,7 @@ class class_base extends aliasmgr
 			}
 
 			$val['popup_objmgr'] = $this->mk_my_orb('search',array(
-				'check_name' => $val['check_name'],
+				'check_name' => isset($val['check_name']) ? $val['check_name'] : NULL,
 				'multiple' => $val['multiple'],
 //				'check_name' => $val['check_name']
 				//'parent' => 50477,

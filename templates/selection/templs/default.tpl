@@ -2,7 +2,7 @@
 
 default template<br>
 <table border="1">
-<!-- SUB: obj_templ -->
+<!-- SUB: object -->
 <tr>
 <td>
 {VAR:name}
@@ -26,5 +26,5 @@ default template<br>
 
 </td>
 </tr>
-<!-- END SUB: obj_templ -->
+<!-- END SUB: object -->
 </table>

@@ -31,6 +31,16 @@
             <caption>perekonnanimi</caption>
       </property>
       <property>
+            <name>title</name>
+            <type>textbox</type>
+            <size>5</size>
+            <maxlength>10</maxlength>
+            <table>kliendibaas_isik</table>
+            <group>general</group>
+            <field>title</field>
+            <caption>tiitel</caption>
+      </property>
+      <property>
             <name>gender</name>
             <type>textbox</type>
             <size>5</size>
@@ -49,16 +59,6 @@
             <group>general</group>
             <field>personal_id</field>
             <caption>isikukood</caption>
-      </property>
-      <property>
-            <name>title</name>
-            <type>textbox</type>
-            <size>5</size>
-            <maxlength>10</maxlength>
-            <table>kliendibaas_isik</table>
-            <group>general</group>
-            <field>title</field>
-            <caption>tiitel</caption>
       </property>
       <property>
             <name>nickname</name>
@@ -167,6 +167,34 @@
             <field>personal_contact</field>
             <caption>kodused kontakt andmed</caption>
       </property>
+      <property>
+            <name>forms</name>
+            <type>relpicker</type>
+            <reltype>BACKFORMS</reltype>
+            <table>objects</table>
+            <group>forms</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>tagasiside vormid</caption>
+      </property>
+      <property>
+            <name>templates</name>
+            <type>select</type>
+            <table>objects</table>
+            <group>forms</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>templiidid</caption>
+      </property>
+      <property>
+            <name>dokus</name>
+            <type>text</type>
+            <callback>show_isik</callback>
+            <table>objects</table>
+            <group>show</group>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
       </classinfo>
@@ -174,6 +202,13 @@
             <general>
                   <caption>&amp;Uuml;ldine</caption>
             </general>
+            <forms>
+                  <caption>väljundid</caption>
+            </forms>
+            <show>
+                  <caption>Visiitkaart</caption>
+                  <submit>no</submit>
+            </show>
       </groupinfo>
       <tableinfo>
             <kliendibaas_isik>

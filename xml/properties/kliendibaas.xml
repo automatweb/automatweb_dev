@@ -1,13 +1,13 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>test1</name>
+            <name>selection_manage_buttons</name>
             <type>text</type>
+            <callback>selection_manage_bar</callback>
             <table>objects</table>
             <group>manager</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption>submit valimid</caption>
       </property>
       <property>
             <name>manageri</name>
@@ -111,7 +111,7 @@
             <method>serialize</method>
       </property>
       <property>
-            <name>sel</name>
+            <name>sele</name>
             <type>checkbox</type>
             <ch_value>on</ch_value>
             <table>objects</table>
@@ -307,22 +307,6 @@
             <caption>näita ainult tegevusalasid, kus alal on ka ettevõtteid</caption>
       </property>
       <property>
-            <name>test2</name>
-            <type>text</type>
-            <table>objects</table>
-            <group>tests</group>
-            <field>meta</field>
-            <method>serialize</method>
-      </property>
-      <property>
-            <name>test3</name>
-            <type>text</type>
-            <table>objects</table>
-            <group>tests</group>
-            <field>meta</field>
-            <method>serialize</method>
-      </property>
-      <property>
             <name>objects_manager</name>
             <type>text</type>
             <callback>objects_manager</callback>
@@ -332,11 +316,34 @@
             <method>serialize</method>
       </property>
       <property>
-            <name>overview</name>
+            <name>active_selection_objects</name>
             <type>text</type>
-            <callback>owerview</callback>
+            <callback>callback_obj_list</callback>
             <table>objects</table>
-            <group>overview</group>
+            <group>selectione</group>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>selections</name>
+            <type>popup_objmgr</type>
+            <clid>CL_SELECTION</clid>
+            <multiple>1</multiple>
+            <method>serialize</method>
+            <field>meta</field>
+            <table>objects</table>
+            <width>600</width>
+            <group>general</group>
+            <caption>majanda valimeid</caption>
+      </property>
+      <property>
+            <name>active_selection</name>
+            <type>textbox</type>
+            <group>
+                  <num_0>manager</num_0>
+                  <num_1>selectione</num_1>
+            </group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
       </property>
@@ -345,23 +352,21 @@
       </classinfo>
       <groupinfo>
             <manager>
-                  <caption>ettevõtted</caption>
+                  <caption>Ettevõtted</caption>
             </manager>
             <tegevusalad>
-                  <caption>tegevusalad</caption>
+                  <caption>Tegevusalad</caption>
             </tegevusalad>
             <settings>
-                  <caption>seaded</caption>
+                  <caption>Seaded</caption>
             </settings>
-            <tests>
-                  <caption>tests</caption>
-            </tests>
             <objects_manager>
-                  <caption>objektide_lisamine</caption>
+                  <caption>Objektide&amp;nbsp;lisamine</caption>
             </objects_manager>
-            <overview>
-                  <caption>ülevaade</caption>
-            </overview>
+            <selectione>
+                  <caption>Valimid</caption>
+                  <submit>no</submit>
+            </selectione>
       </groupinfo>
 </properties>
 

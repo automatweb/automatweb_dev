@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.31 2003/03/28 18:28:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.32 2003/04/07 10:18:55 axel Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -107,6 +107,18 @@ class html extends aw_template
 	}
 
 	////
+	//draws nice border around html content and put cute label on it, not all browsers support this
+	//caption
+	//content
+	function fieldset($args = array())
+	{
+		extract($args);
+		$caption = isset($caption) ? '<legend>'.$caption.'</legend>' : '';
+
+		return '<fieldset>'.$caption.$content.'</fieldset>';
+	}
+
+	////
 	// !html iframe
 	// name(string)
 	// width(string)
@@ -120,9 +132,17 @@ class html extends aw_template
 		return "<iframe src='$src' name='$name' width='$width' height='$height'></iframe>\n";
 	}
 
+	//width - popup width
+	//height - popup height
+	//top, left
+	//options - array of id-s => names
+	//selected - array
+	//multiple
+
 	function popup_objmgr($args = array())
 	{
 		extract($args);
+		$str = '';
 		if (isset($multiple))
 		{
 			$mz = "multiple ";
@@ -147,25 +167,25 @@ class html extends aw_template
 			$options = $this->picker($selected,$options);
 		};
 
-		if (!$this->got_popup_objmgr)
+		if (!isset($this->got_popup_objmgr))
 		{
 			$this->got_popup_objmgr=1;
-			$this->width = $width;
-			$this->height = $height;
+			$this->width = isset($width) ? $width : '';
+			$this->height = isset($height) ? $height : '';
 
 			$str.=localparse(implode('',file($this->cfg['tpldir'].'/popup_objmgr/popup_objmgr.script')),
 				array(
-					'params' => ($top?'top='.$top.',':'').($left?'left='.$left.',':''),
+					'params' => (isset($top) ? 'top='.$top.',' : '').(isset($left) ? 'left='.$left.',' : ''),
 				)
 
 			);
 		}
-		$width=(int)($width?$width:$this->width);
-		$height=(int)($height?$height:$this->height);
+		$width = isset($width) ? $width : $this->width;
+		$height = isset($height) ? $height : $this->height;
 
 		return 	$str.="<select name='".$name."' $mz id='".$name."'>\n".$options."</select>\n".
 			"<input type='button' value=' + ' onClick=\""."current_element='".$name."';pop_select('".$popup_objmgr."',$width,$height);"."\" />
-			".$change."\n";
+			".(isset($change) ? $change : '')."\n";
 
 	}
 
@@ -195,6 +215,7 @@ class html extends aw_template
 	function hidden($args = array())
 	{
 		extract($args);
+		$value = isset($value) ? $value : '';
 		return "<input type='hidden' id='$name' name='$name' value='$value' />\n";
 	}
 
@@ -214,7 +235,8 @@ class html extends aw_template
 	function checkbox($args = array())
 	{
 		extract($args);
-		$checked = checked($checked);
+		$checked = isset($checked) ? checked($checked) : '';
+		$capt = '';
 		if (empty($value))
 		{
 			$value = 1;

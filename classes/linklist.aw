@@ -300,7 +300,8 @@ class linklist extends class_base
 			$link[]= $link[0];
 		}
 
-		$list_templates = $this->get_templates(SHOW_TPL_DIR);
+
+		$list_templates = $this->get_directory(array('dir' => SHOW_TPL_DIR));
 		load_vcl('table');
 		$t = new aw_table(array(
 			'prefix' => 'html_ruul_conf',
@@ -500,44 +501,6 @@ class linklist extends class_base
 //		$t->sort_by();
 
 		return $t->draw();
-	}
-
-
-/*
-
-		$p_tbp = get_instance('vcl/tabpanel');
-		$p_tbp->hide_one_tab = false;
-		$num_pages = ($per_page > 0 ? $num_rows / $per_page : 1);
-		for ($i = 0; $i < $num_pages; $i++)
-		{
-			$p_tbp->add_tab(array(
-				'active' => ($page == $i),
-				'caption' => ($i * $per_page).' - '.min((($i+1) * $per_page), $num_rows),
-				'link' => $this->mk_my_orb('content', array('id' => $ob['oid'], 'page' => $i))
-			));
-		}
-		return $p_tbp->get_tabpanel(array('content' => ''));
-*/
-
-	////
-	// !gets list of the files in given path (eg templates)
-	// parameters:
-	//  $path - directory where to search the files
-	//  returns key and value as 'filename.ext', because numeric key may differ after file add/delete
-	function get_templates($path,$ext='')
-	{
-		if ($dir = @opendir($path))
-		{
-			while (($file = readdir($dir)) !== false)
-			{
-				if ($file != '.' && $file != '..' && is_file("$path/$file"))
-				{
-					$list_templates[] = $file;
-				}
-			}
-			closedir($dir);
-		}
-		return $this->make_keys($list_templates);
 	}
 
 

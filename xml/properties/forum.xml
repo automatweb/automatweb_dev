@@ -1,15 +1,6 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>topicsonpage</name>
-            <type>select</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
-            <caption>Teemasid lehel</caption>
-      </property>
-      <property>
             <name>comments</name>
             <type>checkbox</type>
             <field>meta</field>
@@ -18,15 +9,6 @@
             <table>objects</table>
             <group>general</group>
             <caption>Kommenteeritav</caption>
-      </property>
-      <property>
-            <name>onpage</name>
-            <type>select</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
-            <caption>Kommentaare lehel</caption>
       </property>
       <property>
             <name>rated</name>
@@ -48,12 +30,22 @@
             <caption>Template</caption>
       </property>
       <property>
-            <name>preview</name>
-            <type>text</type>
-            <store>no</store>
-            <editonly>1</editonly>
+            <name>onpage</name>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
             <group>general</group>
-            <caption>Eelvaade</caption>
+            <caption>Kommentaare lehel</caption>
+      </property>
+      <property>
+            <name>topicsonpage</name>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Teemasid lehel</caption>
       </property>
       <property>
             <name>rates</name>

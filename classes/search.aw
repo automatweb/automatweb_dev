@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.22 2003/03/12 14:49:24 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.23 2003/04/07 10:18:55 axel Exp $
 // search.aw - Search Manager
 
 /*
@@ -48,21 +48,21 @@
 	@caption Saidi ID
 
 /////valimi nupud lisamiseks
-	@property selection_manage_buttons type=text callback=selection_manage_bar group=advanced
+	@property selection_manage_buttons type=text callback=selection_manage_bar group=advanced,search,results
 
 	@property results type=text group=search,advanced,objsearch,results callback=get_result_table
 
 	@property objsearch type=text group=objsearch callback=get_objsearch
 
-	@groupinfo search caption=Lihtne_otsing
-	@groupinfo advanced caption=Advanced_otsing
+	@groupinfo search caption=Lihtne&nbsp;otsing
+	@groupinfo advanced caption=Advanced&nbsp;otsing
 	@groupinfo objsearch caption=Objektiotsing
 	@groupinfo results caption=Tulemused submit=no
 
 //////////////valimite kraam////////////////////////////////////////////////////////////////////////////
 
 	@default group=selectione
-	@groupinfo selectione caption=valimid submit=no
+	@groupinfo selectione caption=Valimid submit=no
 
 	@property active_selection_objects type=text callback=callback_obj_list
 
@@ -70,7 +70,7 @@
 	@caption majanda valimeid
 
 	@property active_selection type=textbox group=objsearch,advanced,selectione
-	
+
 
 */
 class search extends class_base
@@ -129,6 +129,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			$this->selection_object = new selection();
 			$this->selection = $args['obj'];
 		}
+		//// end:valim///
 
 		switch($data["name"])
                 {
@@ -137,7 +138,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			case 'active_selection':
 				$retval=PROP_IGNORE;
 				break;
-
+			//// end:valim///
+			
 			case "s_class_id":
 				$data["options"] = $this->_get_s_class_id();
 				break;
@@ -1057,7 +1059,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 	function get_next()
 	{
-		if (method_exists($this->obj_ref,"search_callback_get_next"))
+		if (isset($this->obj_ref) && method_exists($this->obj_ref,"search_callback_get_next"))
 		{
 			$result = $this->search_callback(array("name" => "get_next"));
 		}
@@ -1074,7 +1076,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 	function search_callback($args = array())
 	{
 		$prefix = "search_callback_";
-		if (!is_object($this->obj_ref))
+		if (!isset($this->obj_ref) || !is_object($this->obj_ref))
 		{
 			return false;
 		};
@@ -1219,7 +1221,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			"action" => $action, 
 			"params" => $params
 		);
-		if ($args["s"]["server"])
+		if (isset($args["s"]["server"]))
 		{
 			$_parms["method"] = "xmlrpc";
 			$_parms["login_obj"] = $args["s"]["server"];
@@ -1484,7 +1486,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				"data" => &$row,
 				"args" => $args,
 			));
-			if (!$args["clid"] || ($args["clid"] == "aliasmgr"))
+			if (!isset($args["clid"]) || ($args["clid"] == "aliasmgr"))
 			{
 				$row["name"] = "<a href='" . $this->mk_my_orb("change", array("id" => $row["oid"], "parent" => $row["parent"]), $this->cfg["classes"][$row["class_id"]]["file"]) . "'>$row[name]</a>";
 			};
@@ -1497,7 +1499,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			};
 			$row["location"] = join("/",$_loc);
 
-			if (!$args["clid"])
+			if (!isset($args["clid"]))
 			{
 				$row["change"] = "<input type='checkbox' name='sel[$row[oid]]' value='$row[oid]'>";
 			};

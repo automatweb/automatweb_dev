@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.87 2003/03/26 03:48:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.88 2003/04/07 10:18:55 axel Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -373,7 +373,8 @@ if (!defined("DEFS"))
 			$retval = $p->php_unserialize($str);
 		}
 		else
-		if ($str{0} == "<")
+		//if ($str{0} == "<")
+		if ((strlen($str) > 0) && ($str{0} == "<"))
 		{
 			$ser = get_instance("orb/xmlrpc");
 			$retval = $ser->xmlrpc_unserialize($str);

@@ -3,7 +3,8 @@ var chk_status = 1;
 
 function selall(element)
 {
-        len = document.changeform.elements.length;
+	element = element + '[';
+	len = document.changeform.elements.length;
         for (i=0; i < len; i++)
         {
                 if (document.changeform.elements[i].name.indexOf(element) != -1)
@@ -12,8 +13,6 @@ function selall(element)
                         window.status = "" + i + " / " + len;
                 }
         }
-
         chk_status = chk_status ? 0 : 1;
-
 }
 </script>

@@ -147,7 +147,11 @@
             <name>selection_manage_buttons</name>
             <type>text</type>
             <callback>selection_manage_bar</callback>
-            <group>advanced</group>
+            <group>
+                  <num_0>advanced</num_0>
+                  <num_1>search</num_1>
+                  <num_2>results</num_2>
+            </group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -210,10 +214,10 @@
       </property>
       <groupinfo>
             <search>
-                  <caption>Lihtne_otsing</caption>
+                  <caption>Lihtne&amp;nbsp;otsing</caption>
             </search>
             <advanced>
-                  <caption>Advanced_otsing</caption>
+                  <caption>Advanced&amp;nbsp;otsing</caption>
             </advanced>
             <objsearch>
                   <caption>Objektiotsing</caption>
@@ -223,7 +227,7 @@
                   <submit>no</submit>
             </results>
             <selectione>
-                  <caption>valimid</caption>
+                  <caption>Valimid</caption>
                   <submit>no</submit>
             </selectione>
       </groupinfo>

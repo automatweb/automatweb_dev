@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.41 2003/03/18 16:18:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.42 2003/04/07 10:18:55 axel Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 class orb extends aw_template 
@@ -93,7 +93,7 @@ class orb extends aw_template
 				if ( ($action == "view") && (!is_array($fun)) )
 				{
 					$action = "change";
-					$fun = $_orb_defs[$clname][$action];
+					$fun = isset($_orb_defs[$clname][$action]) ? $_orb_defs[$clname][$action] : NULL;
 				};
 
 
@@ -167,7 +167,7 @@ class orb extends aw_template
 			foreach($_params as $key => $val)
 			{
 				$this->validate_value(array(
-					"type" => $orb_defs[$class][$action]["types"][$key],
+					"type" => isset($orb_defs[$class][$action]["types"][$key]) ? $orb_defs[$class][$action]["types"][$key] : NULL,
 					"name" => $key,
 					"value" => $val,
 				));
@@ -217,7 +217,7 @@ class orb extends aw_template
 			$params = array_merge($params,$defined);
 		}
 
-		if ($user)
+		if (isset($user))
 		{
 			$params["user"] = 1;
 		};
@@ -485,7 +485,7 @@ class orb extends aw_template
 		{
 			$this->raise_error(ERR_ORB_NOTFOUND,sprintf(E_ORB_CLASS_NOT_FOUND,$class),true,$this->silent);
 		}
-	
+
 		$ret = $this->load_xml_orb_def($class);
 
 		// try and figure out the folder for this class 
@@ -510,7 +510,7 @@ class orb extends aw_template
 			}
 		};
 
-		if (!$this->orb_class)
+		if (!isset($this->orb_class))
 		{
 			$this->orb_class = new $class;
 		};
@@ -522,7 +522,7 @@ class orb extends aw_template
 
 	function do_orb_acl_checks($act, $vars)
 	{
-		if (is_array($act["acl"]))
+		if (isset($act["acl"]) && is_array($act["acl"]))
 		{
 			foreach($act["acl"] as $varname => $varacl)
 			{
@@ -564,7 +564,8 @@ class new_orb extends orb
 	//              if this is set, then server will be ignored
 	function do_method_call($arr)
 	{
-		$arr["server"] = str_replace("http://","",$arr["server"]);
+		$arr['server'] = isset($arr['server']) ? str_replace('http://','',$arr['server']) : NULL;
+
 		extract($arr);
 
 		$this->fatal = true;
@@ -590,10 +591,11 @@ class new_orb extends orb
 		$this->do_orb_acl_checks($orb_defs[$class][$action], $params);
 
 		// do the call
-		if (!$method || $method == "local")
+		if (!isset($method) || (isset($method) && ($method == "local")))
 		{
 			// local call
-			$data = $this->do_local_call($orb_defs[$class][$action]["function"], $class, $params, $orb_defs[$class]["___folder"]);
+			$___folder = isset($orb_defs[$class]["___folder"]) ? $orb_defs[$class]["___folder"] : NULL;
+			$data = $this->do_local_call($orb_defs[$class][$action]["function"], $class, $params, $___folder);
 		}
 		else
 		{

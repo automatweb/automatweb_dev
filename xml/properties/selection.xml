@@ -1,6 +1,25 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>pilot</name>
+            <type>relpicker</type>
+            <reltype>PILOT</reltype>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>näitamise pilootobjekt</caption>
+      </property>
+      <property>
+            <name>use_existing_pilot</name>
+            <type>checkbox</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>näitamisel kasuta konkreetse objekti pilootobjekti kui on olemas</caption>
+      </property>
+      <property>
             <name>selections</name>
             <type>popup_objmgr</type>
             <clid>CL_SELECTION</clid>
@@ -8,7 +27,7 @@
             <method>serialize</method>
             <field>meta</field>
             <table>objects</table>
-            <width>500</width>
+            <width>600</width>
             <group>general</group>
             <caption>majanda valimeid</caption>
       </property>
@@ -50,6 +69,9 @@
             <field>meta</field>
             <method>serialize</method>
       </property>
+      <classinfo>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
       <groupinfo>
             <objects>
                   <caption>objectid</caption>

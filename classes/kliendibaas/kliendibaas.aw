@@ -10,10 +10,13 @@
 //////////////////////////////////////////////////////
 
 	@default group=manager
-	@groupinfo manager caption=ettevõtted
+	@groupinfo manager caption=Ettevõtted
 
-	@property test1 type=text
-	@caption submit valimid
+//	@property test1 type=text
+//	@caption submit valimid
+	
+/////valimi nupud lisamiseks
+	@property selection_manage_buttons type=text callback=selection_manage_bar
 
 	@property manageri type=text callback=firma_manager
 
@@ -38,12 +41,12 @@
 
 	@property select type=textbox size=3
 	@property objs type=textbox size=3
-	@property sel type=checkbox ch_value=on
+	@property sele type=checkbox ch_value=on
 
 ////////////////////////////////////////////////////////////
 
 	@default group=tegevusalad
-	@groupinfo tegevusalad caption=tegevusalad
+	@groupinfo tegevusalad caption=Tegevusalad
 
 	@property teg_page type=textbox size=3
 	@caption teg_page
@@ -55,9 +58,8 @@
 	@property teg_search type=textbox size=3
 
 ////////////////////////////////////////////////////////////
-
 	@default group=settings
-	@groupinfo settings caption=seaded
+	@groupinfo settings caption=Seaded
 
 //	@property valim type=popup_objmgr clid=CL_SELECTION method=serialize field=meta table=objects
 //	@property valim type=relpicker reltype=VALIM
@@ -110,27 +112,41 @@
 	@caption näita ainult tegevusalasid, kus alal on ka ettevõtteid
 
 ////////////////////////////////////////////////////////////
-	@default group=tests
-	@groupinfo tests caption=tests
-
-	@property test2 type=text
-
-	@property test3 type=text
-
+/	@default group=tests
+/	@groupinfo tests caption=tests
+/
+/	@property test2 type=text
+/
+/	@property test3 type=text
+/
 ////////////////////////////////////////////////////////////
 
 
 	@default group=objects_manager
-	@groupinfo objects_manager caption=objektide_lisamine
+	@groupinfo objects_manager caption=Objektide&nbsp;lisamine
 
 	@property objects_manager type=text callback=objects_manager
 
 ////////////////////////////////////////////////////////////
 
-	@default group=overview
-	@groupinfo overview caption=ülevaade
+/	@default group=overview
+/	@groupinfo overview caption=Ülevaade
+/
+/	@property overview type=text callback=owerview
 
-	@property overview type=text callback=owerview
+//////////////valimite kraam////////////////////////////////////////////////////////////////////////////
+
+	@default group=selectione
+	@groupinfo selectione caption=Valimid submit=no
+
+	@property active_selection_objects type=text callback=callback_obj_list
+
+	@property selections type=popup_objmgr clid=CL_SELECTION multiple=1 method=serialize field=meta table=objects width=600 group=general
+	@caption majanda valimeid
+
+	@property active_selection type=textbox group=manager,selectione
+
+
 
 */
 
@@ -150,9 +166,42 @@ class kliendibaas extends class_base
 	var $show_columns;
 
 
+
+//// valim///
+/* ühesõnaga valimi klassiga näitame valimeid ja manageerime neid
+põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
+*/
+	function callback_obj_list($args)
+	{
+		classload('kliendibaas/selection');
+
+		$arg2['obj']['oid'] = $args['obj']['meta']['active_selection'];
+		$arg2['obj']['parent'] = $args['obj']['parent'];
+		$arg2['obj']['meta']['active_selection'] = $args['obj']['meta']['active_selection'];
+		$arg2['obj']['meta']['selections'] = $args['obj']['meta']['selections'];
+		return $this->selection_object->obj_list($arg2);
+	}
+
+	function selection_manage_bar($args = array())
+	{
+		$nodes = array();
+		$nodes['toolbar'] = array(
+			'value' => $this->selection_object->mk_toolbar(array(
+				'arr' =>$this->selection['meta']['selections'],
+				'parent' => $this->selection['parent'],
+				'selected' => $this->selection['meta']['active_selection'],
+				'align' => 'right',
+				'show_buttons' => array('add','change'),
+			))
+		);
+		return $nodes;
+	}
+//// end:valim///
+
+
 	function objects_manager($args)
 	{
-		$arr=array(
+		$arr = array(
 			'linn' => 'linn',
 			'riik' => 'riik',
 			'maakond' => 'maakond',
@@ -169,13 +218,13 @@ class kliendibaas extends class_base
 			$k = $this->mk_my_orb('new', array('parent' => $args['obj']['parent']),$key);
 			$arr2[$k] = $value;
 		}
-		$str.= 'lisa objekt ';
-		$str.= html::select(array('name' => 'mk_new', 'options' => $arr2, 'onchange' =>
+		$str .= 'lisa objekt ';
+		$str .= html::select(array('name' => 'mk_new', 'options' => $arr2, 'onchange' =>
 			"window.open(document.changeform.mk_new.value,'new object','')"
 		));
 
 		$nodes = array();
-		$nodes[] = array(
+		$nodes['obj'] = array(
 			"value" => $str,
 		);
 		return $nodes;
@@ -214,17 +263,35 @@ class kliendibaas extends class_base
 		$meta = &$args['obj']['meta'];
 		$req = &$args['request'];
 		//print_r($args);die();
+		
+		//// valim///
+		/* loome valimi instansi kui seda juba tehtud pole */
+		if (!is_object($this->selection_object) && method_exists($this,'callback_obj_list'))
+		{
+			classload('kliendibaas/selection');
+			$this->selection_object = new selection();
+			$this->selection = $args['obj'];
+		}
+
 		switch($data["name"])
 		{
+			//// valim///
+			/* ühesõnaga see on hidden element, meil on vaja et ta metas salvestuks */
+			case 'active_selection':
+				$retval=PROP_IGNORE;
+				break;
+
 			case 'test1':
 			
+				if(is_array($meta['valimid']))
+				{
 				foreach($meta['valimid'] as $key)
 				{
 					$sel_obj=$this->get_object($key);
 					//$sel_obj['name']
 					$str.=html::button(array('name' => "valim[$key]", 'value' => "v: ".$sel_obj['name']));
 				}
-
+				}
 				$data['value'] = $str;
 
 			break;
@@ -451,7 +518,7 @@ class kliendibaas extends class_base
 
 		$t->define_field(array(
 			'name' => 'check',
-			'caption' => "<a href='javascript:selall(\"select\")'>Vali</a>",
+			'caption' => "<a href='javascript:selall(\"sel\")'>Vali</a>",
 			'width'=> 15,
 		));
 
@@ -575,8 +642,8 @@ class kliendibaas extends class_base
 
 
 		$nodes = array();
-		$nodes[] = array(
-			"value" => $this->selall().$nav.$lks.'total :'.$cnt.'.  '.$back.$t.$search,
+		$nodes['teg'] = array(
+			"value" => $nav.$lks.'total :'.$cnt.'.  '.$back.$t.$search,
 		);
 		return $nodes;
 
@@ -590,7 +657,7 @@ class kliendibaas extends class_base
 		$arr = new aw_array($data);
 		foreach($arr->get() as $row)
 		{
-			$row['check']=html::checkbox(array('name'=>'select['.$row['oid'].']'));
+			$row['check']=html::checkbox(array('name'=>'sel['.$row['oid'].']'));
 //			$row['change']=html::href(array('caption'=>'muuda','target'=>'_blank','url'=>$this->mk_my_orb('change',array('id'=>$row['oid']),'kliendibaas/tegevusala')));
 			$row['fcount']=$row['fcount']?(html::href(array('caption'=>'<b> [ '.$row['fcount'].' ] </b>',
 				'url'=>$this->mk_my_orb('change',
@@ -625,7 +692,7 @@ class kliendibaas extends class_base
 		$order_by=$meta['order_by_columns']?$meta['order_by_columns']:'objects.name';
 		$where=' where objects.status<>0 ';
 
-		$sel = $meta['sel'];
+		$sele = $meta['sele'];
 
 /*		if ($req['do_search'])
 		{
@@ -636,8 +703,8 @@ class kliendibaas extends class_base
 //		if ($meta['do_search'])
 //			$meta['search'] = $this->search_values;
 
-
-		if ($meta['valim'])
+/*
+		if (is_array($meta['valim']))
 		{
 			$sl = get_instance('kliendibaas/selection');
 			$selection = $sl->get_selection($meta['valim']);
@@ -650,6 +717,7 @@ class kliendibaas extends class_base
 			);
 			return $nodes;
 		}
+*/
 
 		$tabelid = array(
 			'vorm' => 'left join kliendibaas_ettevotlusvorm as vorm on vorm.oid=firma.ettevotlusvorm',
@@ -664,7 +732,7 @@ class kliendibaas extends class_base
 
 		load_vcl('table');
 
-		if (!$sel)
+		if (!$sele)
 		{
 			$like_st = '%';
 			$like_en = '%';
@@ -781,7 +849,7 @@ class kliendibaas extends class_base
 				break;
 			}
 
-			if (!$sel)
+			if (!$sele)
 			{
 				if ($meta['do_search'])
 				{
@@ -856,7 +924,7 @@ class kliendibaas extends class_base
 
 		$t->define_field(array(
 			'name' => 'check',
-			'caption' => "<a href='javascript:selall(\"select\")'>Vali</a>",
+			'caption' => "<a href='javascript:selall(\"sel\")'>Vali</a>",
 			'width'=> 15,
 		));
 
@@ -870,7 +938,7 @@ class kliendibaas extends class_base
 			}
 		}
 
-		if (!$sel)
+		if (!$sele)
 		{
 			$q='select count(*) as cnt from kliendibaas_firma as firma left join objects on firma.oid=objects.oid '.@implode(' ',$join).$where;
 			$cnt = $this->db_fetch_field($q,'cnt');
@@ -933,8 +1001,8 @@ class kliendibaas extends class_base
 
 
 		$nodes = array();
-		$nodes[] = array(
-			"value" => $this->selall().'total: '.$cnt.'<br />'.$nav.'lk: '.$lks.'<br />'.$t.'<br />'.$s_hist,
+		$nodes['firms'] = array(
+			"value" => 'total: '.$cnt.'<br />'.$nav.'lk: '.$lks.'<br />'.$t.'<br />'.$s_hist,
 		);
 		return $nodes;
 
@@ -987,10 +1055,11 @@ class kliendibaas extends class_base
 		$arr = new aw_array($data);
 		foreach($arr->get() as $row)
 		{
-			$row['check']=html::checkbox(array('name'=>'select['.$row['oid'].']','checked' => $selection[$row['oid']],'value' => 1));
+			$row['check']=html::checkbox(array('name'=>'sel['.$row['oid'].']','checked' => $selection[$row['oid']],'value' => $row['oid']));
 			$row['check'].=html::hidden(array('name'=>'objs['.$row['oid'].']' ,'value'=>1));
 
- 			if ($row['firma_nimetus'])
+
+			if ($row['firma_nimetus'])
 			{
 				$row['firma_nimetus']=html::href(array('caption'=>$row['firma_nimetus'],'target'=>'_blank','url'=>$this->mk_my_orb('change',array('id'=>$row['oid']),'kliendibaas/firma')));
 			}
@@ -1018,7 +1087,6 @@ class kliendibaas extends class_base
 		}
 		return $nav;
 	}
-
 
 	////
 	// ! create new contact entry
@@ -1080,17 +1148,10 @@ class kliendibaas extends class_base
 		);
 
 		$nodes = array();
-		$nodes[] = array(
+		$nodes['overv'] = array(
 			"value" => 'TEST',
 		);
 		return $nodes;
-	}
-
-
-
-	function selall()
-	{
-		return implode('',file($this->cfg['tpldir'].'/kliendibaas/selall.script'));
 	}
 
 /*
