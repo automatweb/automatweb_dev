@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.21 2004/02/13 11:42:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.22 2004/02/13 12:26:44 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -490,14 +490,29 @@ class forum_v2 extends class_base
 		$this->read_template("folder.tpl");
 
 		$obj_chain = $topic_obj->path();
+		$obj_chain = array_reverse($obj_chain);
 
 		$path = array();
+		$stop = false;
 		foreach($obj_chain as $o)
 		{
+			if ($stop)
+			{
+				continue;
+			};
 			$key = $o->id();
 			$name = $o->name();
 			//if ($key == $fld)
-			if ($key == $args["request"]["folder"])
+			//if ($key == $args["request"]["folder"])
+			global $XX3;
+			if ($XX3)
+			{
+				print "id = " . $o->id() . "<bR>";
+				print "t = " . $topic_obj->id() . "<br>";
+				print "n = ". $o->name() . "<br>";
+
+			};
+			if ($o->id() == $topic_obj->id())
 			{
 				/*
 				$name = html::href(array(
@@ -505,6 +520,7 @@ class forum_v2 extends class_base
 					"caption" => $name,
 				));
 				*/
+				$stop = true;
 				break;
 			}
 			else
@@ -700,7 +716,7 @@ class forum_v2 extends class_base
 		$path = array();
 		$o = obj($args["request"]["topic"]);
 
-		$fld = $topic_obj->parent();
+		$fld = $topic_obj->parent(); 
 
 		$show = true;
 		foreach($o->path() as $_to)
@@ -729,7 +745,8 @@ class forum_v2 extends class_base
 			}
 			else
 			{*/
-				$obj = new object($key);
+				//$obj = new object($key);
+				$obj = $_to;
 				if ($obj->class_id() == CL_MENU)
 				{
 					/*if ($obj->id() == $args["obj_inst"]->prop("topic_folder"))
@@ -743,13 +760,14 @@ class forum_v2 extends class_base
 					{*/
 						$name = html::href(array(
 							"url" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"group" => $args["request"]["group"],"folder" => $obj->id(),"section" => aw_global_get("section"),"_alias" => get_class($this))),
-							"caption" => $name,
+							"caption" => $obj->name(),
 						));
 					//};
 				};
 						
 			//};
-			$path[] = $name;
+			//$path[] = $name;
+			$path = array($name) + $path;
 		};
 
 		// path drawing ends .. sucks
@@ -1059,6 +1077,7 @@ class forum_v2 extends class_base
 			"rel_id" => $args["alias"]["relobj_id"],
 			"folder" => $_GET["folder"],
 			"topic" => $_GET["topic"],
+			"page" => $_GET["page"],
 			"c" => $_GET["c"],
 			"cb_part" => 1,
 			"fxt" => 1,
