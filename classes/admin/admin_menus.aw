@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.83 2004/10/25 12:45:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.84 2004/10/25 13:24:24 duke Exp $
 
 class admin_menus extends aw_template
 {
@@ -1265,7 +1265,7 @@ class admin_menus extends aw_template
 		extract($args);
 		$toolbar = get_instance("vcl/toolbar");
 		
-		if ($this->can("add", $parent))
+		if ($this->can("add", $parent) && is_array($this->add_menu))
 		{
 			$toolbar->add_menu_button(array(
 				"name" => "new",
