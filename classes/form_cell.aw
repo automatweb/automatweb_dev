@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.33 2002/07/24 20:47:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.34 2002/08/29 03:16:04 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle formi sees kirjas
@@ -594,13 +594,13 @@ class form_cell extends form_base
 
 	////
 	// !sets element $el 's entry to $val if the element exists in this cell
-	function set_element_entry($el,$val)
+	function set_element_entry($el,$val, $usr_val = false)
 	{
 		for ($i=0; $i < $this->cnt; $i++)
 		{
 			if ($this->arr[$i]->get_id() == $el)
 			{
-				$this->arr[$i]->set_value($val);
+				$this->arr[$i]->set_value($val, $usr_val);
 			}
 		}
 	}
