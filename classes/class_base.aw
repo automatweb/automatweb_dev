@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.126 2003/06/26 16:57:39 duke Exp $
+// $Id: class_base.aw,v 2.127 2003/07/01 15:14:42 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -71,8 +71,6 @@ class class_base extends aw_template
 	{
 		$this->init_class_base();
 
-		// check whther the user can actually add the object .. hm, but isn't this
-		// handled by the acl calls in the orb definition instead?
 		$cfgform_id = "";
 		$this->subgroup = $this->reltype = "";
 		$this->is_rel = false;
@@ -118,7 +116,6 @@ class class_base extends aw_template
 
 		$this->validate_cfgform($cfgform_id);
 
-		
 		$realprops = $this->get_active_properties(array(
 				"clfile" => $this->clfile,
 				"group" => isset($args["group"]) ? $args["group"] : "",
@@ -172,6 +169,7 @@ class class_base extends aw_template
 		};
 
 		$gdata = isset($this->subgroup) ? $this->groupinfo[$this->subgroup] : $this->groupinfo[$this->activegroup];
+
 		
 		$argblock = array(
 			"id" => $this->id,
@@ -179,6 +177,7 @@ class class_base extends aw_template
 			"group" => isset($args["group"]) ? $args["group"] : $this->activegroup,
 			"orb_class" => $orb_class,
 			"parent" => $this->parent,
+			"section" => aw_global_get("section"),
 			"period" => isset($args["period"]) ? $args["period"] : "",
 			"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
 			"alias_to" => isset($this->request["alias_to"]) ? $this->request["alias_to"] : "",
@@ -285,7 +284,14 @@ class class_base extends aw_template
 		}
 		else
 		{
-			$retval = $this->mk_my_orb($action,$args,$orb_class);
+			$use_orb = true;
+			if (!empty($form_data["section"]))
+			{
+				$args["section"] = $form_data["section"];
+				$args["_alias"] = get_class($this);
+				$use_orb = false;
+			};
+			$retval = $this->mk_my_orb($action,$args,$orb_class,false,$use_orb);
 		};
 		return $retval;
 	}
@@ -587,60 +593,78 @@ class class_base extends aw_template
 			"return_url" => $return_url,
 		));
 
-		// I'm not sure, why someone would want to do that, but it is possible to hide the tabs
-		if (empty($this->classinfo["hide_tabs"]))
+		$tab_callback = (method_exists($this->inst,"callback_mod_tab")) ? true : false;
+
+		foreach($this->groupinfo as $key => $val)
 		{
-			$tab_callback = (method_exists($this->inst,"callback_mod_tab")) ? true : false;
-
-			foreach($this->groupinfo as $key => $val)
+			// we only want subgroups that are children of the currently active group
+			if (isset($val["parent"]) && isset($this->classinfo["hide_tabs_L2"]))
 			{
-				// we only want subgroups that are children of the currently active group
-				if (isset($val["parent"]) && $val["parent"] != $this->activegroup)
-				{
-					continue;
-				};		
+				continue;
+			}
+			elseif (isset($val["parent"]) && $val["parent"] != $this->activegroup)
+			{
+				continue;
+			}
+			elseif (empty($val["parent"]) && isset($this->classinfo["hide_tabs"]))
+			{
+				continue;
+			}
 
-				if ($this->id)
+			if ($this->id)
+			{
+				$link_args->set_at("group",$key);
+				if (aw_global_get("section"))
 				{
-					$link_args->set_at("group",$key);
-					$link = $this->mk_my_orb($orb_action,$link_args->get(),get_class($this->orb_class));
-				}
-				else
-				{
-					$link = ($activegroup == $key) ? "#" : "";
+					$link_args->set_at("section",aw_global_get("section"));
 				};
-
-				$tabinfo = array(
-					"link" => &$link,
-					"caption" => &$val["caption"],
-					"id" => $key,
-					"tp" => &$this->tp,
-					"coredata" => $this->coredata,
-					"request" => $this->request,
-				);
-
-				$res = true;	
-				if ($tab_callback)
+				if ($this->embedded)
 				{
-					$res = $this->inst->callback_mod_tab($tabinfo);
+					$link_args->set_at("_alias",get_class($this));
 				};
-
-				if ($res !== false)
-				{
-					$this->tp->add_tab(array(
-						"level" => empty($val["parent"]) ? 1 : 2,
-						"link" => $tabinfo["link"],
-						"caption" => $tabinfo["caption"],
-						"active" => ($key == $activegroup) || ($key == $this->subgroup),
-					));
-				};
+				$link = $this->mk_my_orb($orb_action,$link_args->get(),get_class($this->orb_class));
+			}
+			else
+			{
+				$link = ($activegroup == $key) ? "#" : "";
 			};
-		
+
+			$tabinfo = array(
+				"link" => &$link,
+				"caption" => &$val["caption"],
+				"id" => $key,
+				"tp" => &$this->tp,
+				"coredata" => $this->coredata,
+				"request" => $this->request,
+			);
+
+			$res = true;	
+			if ($tab_callback)
+			{
+				$res = $this->inst->callback_mod_tab($tabinfo);
+			};
+
+			if ($res !== false)
+			{
+				$this->tp->add_tab(array(
+					"level" => empty($val["parent"]) ? 1 : 2,
+					"link" => $tabinfo["link"],
+					"caption" => $tabinfo["caption"],
+					"active" => ($key == $activegroup) || ($key == $this->subgroup),
+				));
+			};
 		};
+		
 
 		// XX: I need a better way to handle relationmgr, it should probably be a special
-		// property type instead of being hardcoded
-		if (isset($this->classinfo["relationmgr"]) && empty($this->request["cb_view"]) && !$this->is_rel)
+		// property type instead of being hardcoded. 
+
+		// well, there is a "relationmgr" property type and if used the property is drawn
+		// in an iframe. But what I really need is an argument to the group definition,
+		// .. which .. makes the group into a relation manager. eh? Or perhaps I should
+		// just go with the iframe layout thingie. This frees us from the unneccessary
+		// wrappers inside the class_base.
+		if (isset($this->classinfo["relationmgr"]) && $this->classinfo["relationmgr"] && empty($this->request["cb_view"]) && !$this->is_rel)
 		{
 			$link = "";
 			if (isset($this->id))
@@ -779,13 +803,13 @@ class class_base extends aw_template
 				};
 			};
 		};
+
 		
 		if (empty($this->id))
 		{
 			$use_group = "general";
 		};
 
-		
 		// and if nothing suitable was found, use the first group from the list
 		if (empty($use_group))
 		{
@@ -1119,6 +1143,10 @@ class class_base extends aw_template
 		}
 
 		$this->classinfo = $cfgu->get_classinfo();
+		if (is_array($this->classconfig))
+		{
+			$this->classinfo = array_merge($this->classinfo,$this->classconfig);
+		};
 		$grpinfo = array();
 		if (is_array($grplist))
 		{
