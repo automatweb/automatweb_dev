@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.62 2002/12/18 13:16:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.63 2003/01/22 16:53:46 duke Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 
@@ -27,7 +27,7 @@
 
 */
 
-class forum extends aw_template
+class forum extends class_base
 {
 	function forum($args = array())
 	{
