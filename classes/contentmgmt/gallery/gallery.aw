@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery.aw,v 1.2 2003/04/23 14:01:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery.aw,v 1.3 2003/10/22 14:16:33 kristo Exp $
 
 class gallery extends aw_template
 {
@@ -367,6 +367,7 @@ class gallery extends aw_template
 		if (is_array($page))
 		{
 			extract($page);	// via orb call
+			//global $page, $id;
 			$this->load($id,$page);
 		}
 
@@ -407,10 +408,14 @@ class gallery extends aw_template
 			));
 			return $this->parse();
 		}
-    else
-		if (isset($col) && isset($row))
+    	else
+		if ((isset($col) && isset($row)) && (!$this->arr["is_slideshow"] || $GLOBALS["show_big"]))
 		{
 			$this->read_template("show_pic.tpl");
+			if (is_array($page))
+			{
+				$page = (int)$page["page"];
+			}
 			$cell = $this->arr[$page]["content"][$row][$col];
 			$bigurl = image::check_url($cell["bigurl"]);
 			$this->vars(array(
@@ -477,9 +482,10 @@ class gallery extends aw_template
 
 			$gurl = $this->mk_my_orb("show",array(
 				"id" => $id,
-				"col" => $cols[$nr],
-				"row" => $rows[$nr], 
-				"page" => $pages[$nr]
+				"col" => (string)($cols[$nr]),
+				"row" => (string)($rows[$nr]), 
+				"page" => $pages[$nr],
+				"show_big" => 1
 			),"gallery",false,true,"/");
 
 			$this->vars(array(

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.227 2003/10/21 21:32:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.228 2003/10/22 14:16:33 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1621,7 +1621,8 @@ class core extends acl_base
 
 				$msg .= $fnm2." with arguments ";
 
-				$msg .= "<font size=\"-1\">(".join(",", $bt[$i]["args"]).") file = ".$bt[$i]["file"]."</font>";
+				$awa = new aw_array($bt[$i]["args"]);
+				$msg .= "<font size=\"-1\">(".join(",", $awa->get()).") file = ".$bt[$i]["file"]."</font>";
 			
 				$msg .= " <br><br>\n\n";
 			}
@@ -1816,7 +1817,7 @@ class core extends acl_base
 					$u = $co->get_simple_config("error_redirect");
 				}
 
-				if ($u != "" && aw_global_get("uid") != "kix")
+				if ($u != "" && aw_global_get("uid") != "kix" && false)
 				{
 					header("Location: $u");
 					die();
@@ -2060,7 +2061,7 @@ class core extends acl_base
 			}
 			else
 			{
-				if (!empty($value) || true == $this->use_empty)
+				if (($value !== "" && $value != NULL) || true == $this->use_empty)
 				{
 					$this->orb_values[empty($prefix) ? $name : $prefix."[".$name."]"] = $value;
 				};
