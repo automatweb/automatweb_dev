@@ -63,7 +63,11 @@
 				</arguments>		
 			</function>
 		</action>
-
+		<action name="convert_seealso_menus">
+			<function name="convert_seealso_menus">
+				<arguments/>
+			</function>
+		</action>
 		<action name="convert_copy_makes_brother" nologin="1">
 			<function name="convert_copy_makes_brother">
 				<arguments>
