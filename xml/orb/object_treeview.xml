@@ -18,6 +18,13 @@
 			</function>
 		</action>
 
+		<action name="submit_show">
+			<function name="submit_show">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
 		

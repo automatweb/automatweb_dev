@@ -591,7 +591,7 @@
             <ACL_GROUP>
                   <value>7</value>
                   <clid>CL_GROUP</clid>
-                  <caption>&amp;Otilde;iguste Grupp</caption>
+                  <caption>Kasutajagrupp</caption>
             </ACL_GROUP>
             <OBJ_TREE>
                   <value>8</value>
