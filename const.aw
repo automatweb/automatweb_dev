@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.72 2002/08/20 07:48:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.73 2002/08/29 03:07:24 kristo Exp $
 error_reporting(E_ALL ^ E_NOTICE);
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
@@ -388,6 +388,10 @@ $error_types = array(
 	ERR_F_OP_NO_SESSION_FORM => "ERR_F_OP_NO_SESSION_FORM",
 	ERR_SCHED_NOTIMEREP => "ERR_SCHED_NOTIMEREP" ,
 	ERR_FG_NOFORMRELS => "ERR_FG_NOFORMRELS",
-	ERR_FG_TBL_NOSEARCHTBL => "ERR_FG_TBL_NOSEARCHTBL"
+	ERR_FG_TBL_NOSEARCHTBL => "ERR_FG_TBL_NOSEARCHTBL",
+	ERR_FG_CAL_NORELEL => "ERR_FG_CAL_NORELEL",
+	ERR_FG_TBL_NOBASKET => "ERR_FG_TBL_NOBASKET",
+	ERR_BASKET_NO_TBL_SET => "ERR_BASKET_NO_TBL_SET",
+	ERR_BASKET_NO_OF_SET => "ERR_BASKET_NO_OF_SET",
 );
 ?>
