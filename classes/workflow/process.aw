@@ -4,8 +4,6 @@
 	@classinfo syslog_type=ST_PROCESS
 	@classinfo relationmgr=yes
 
-	@groupinfo general caption=Üldine
-
 	@default table=objects
 	@default group=general
 
@@ -79,7 +77,7 @@ class process extends workflow_common
 		$data = &$args["prop"];
 		$name = $data["name"];
 		$retval = PROP_OK;
-		if ($name == "alias" || $name == "jrk" || $name == "comment")
+		if ($name == "comment")
 		{
 			return PROP_IGNORE;
 		};
@@ -123,12 +121,9 @@ class process extends workflow_common
 
 		// phase 1, kuvame objekti juurfunktsiooni.
 		// ja sinna juurde lingi "defineeri järgmine tegevus"
-		$root_action = $this->get_object(array(
-			"oid" => $args["obj"]["meta"]["root_action"],
-			"class_id" => CL_ACTION,
-		));
+		$root_action = new object($args["obj"]["meta"]["root_action"]);
 
-		if (empty($root_action))
+		if ("" == $root_action)
 		{
 			$data["error"] = "Juurtegevus on valimata";
 			return PROP_ERROR;
@@ -137,8 +132,11 @@ class process extends workflow_common
 		$action_info = $args["obj"]["meta"]["action_info"];
 		$this->action_info = $action_info;
 
-		$alias_reltype = $args["obj"]["meta"]["alias_reltype"];
-		if (!is_array($alias_reltype))
+		$conns = $args["obj_inst"]->connections_from(array(
+			"type" => RELTYPE_ACTION,
+		));
+
+		if (sizeof($conns) == 0)
 		{
 			$data["error"] = "Objektil puuduvad 'tegevus' tüüpi seosed";
 			return PROP_ERROR;
@@ -147,11 +145,12 @@ class process extends workflow_common
 
 		// list all non-root actions
 		$actions = array();
-		foreach($alias_reltype as $key => $val)
+		foreach($conns as $conn)
+		//foreach($alias_reltype as $key => $val)
 		{
-			if ( ($key != $root_action["oid"]) && ($val == RELTYPE_ACTION) )
+			if ($conn->to() != $root_action->id())
 			{
-				$actions[] = $key;
+				$actions[] = $conn->prop("to");
 			};
 		}
 		
@@ -161,7 +160,7 @@ class process extends workflow_common
 			return PROP_ERROR;
 		};
 
-		$actiondata[$root_action["oid"]] = $root_action["name"];
+		$actiondata[$root_action->id()] = $root_action->name();
 
 		$q = sprintf("SELECT * FROM objects WHERE oid IN (%s)",join(",",$actions));
 		$this->db_query($q);
@@ -173,10 +172,10 @@ class process extends workflow_common
 
 		$this->actiondata = $actiondata;
 
-		$line .= $this->_draw_action_line(array($root_action["oid"]));
+		$line .= $this->_draw_action_line(array($root_action->id()));
 	
-		$next = $root_action["oid"];	
-		$this->root_action_id = $root_action["oid"];
+		$next = $root_action->id();	
+		$this->root_action_id = $root_action->id();
 		if (is_array($action_info))
 		{
 			foreach($action_info as $key => $val)
@@ -266,34 +265,5 @@ class process extends workflow_common
 		$metadata["action_info"] = $writeout;
 	}
 
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	////
-	// !this will be called if the object is put in a document by an alias and the document is being shown
-	// parameters
-	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
-	function parse_alias($args)
-	{
-		extract($args);
-		return $this->show(array('id' => $alias['target']));
-	}
-
-	////
-	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
-	function show($arr)
-	{
-		extract($arr);
-		$ob = $this->get_object($id);
-
-		$this->read_template('show.tpl');
-
-		$this->vars(array(
-			'name' => $ob['name']
-		));
-
-		return $this->parse();
-	}
 }
 ?>

@@ -1,7 +1,7 @@
 <?php
 /*
 
-@classinfo syslog_type=ST_WORKFLOW_CONFIG
+@classinfo syslog_type=ST_WORKFLOW_CONFIG no_status=1
 @classinfo relationmgr=yes
 
 @groupinfo general caption=Üldine
@@ -11,7 +11,7 @@
 @default field=meta
 @default method=serialize
 
-@property treeview_conf type=objpicker clid=CL_TREEVIEW editonly=1
+@property treeview_conf type=relpicker reltype=RELTYPE_TREE_CONFIG editonly=1
 @caption Puu konfiguratsioon
 
 @property actor_rootmenu type=relpicker reltype=RELTYPE_ROOTMENU group=config_actor
@@ -26,16 +26,20 @@
 @property process_rootmenu type=relpicker reltype=RELTYPE_ROOTMENU group=config_process
 @caption Protsesside juurmenüü
 
-@groupinfo config_actor caption=Tegijate_konf
-@groupinfo config_action caption=Tegevuste_konf
-@groupinfo config_entity caption=Olemite_konf
-@groupinfo config_process caption=Protsesside_konf
+@groupinfo config_actor caption="Tegijate seaded"
+@groupinfo config_action caption=Tegevuste seaded"
+@groupinfo config_entity caption="Olemite seaded"
+@groupinfo config_process caption="Protsesside seaded"
+
+@reltype ROOTMENU value=1 clid=CL_MENU
+@caption juurmenüü
+
+@reltype TREE_CONFIG value=2 clid=CL_TREEVIEW
+@caption puu seaded
 
 
 
 */
-
-define(RELTYPE_ROOTMENU,1);
 
 class workflow_config extends class_base
 {
@@ -49,68 +53,15 @@ class workflow_config extends class_base
 		));
 	}
 
-	function callback_get_rel_types()
-        {
-                return array(
-                        RELTYPE_ROOTMENU => "juurmenüü",
-                );
-        }
-	
-	function callback_get_classes_for_relation($args = array())
-	{
-		$retval = false;
-		switch($args["reltype"])
-		{
-			case RELTYPE_ROOTMENU:
-				$retval = array(CL_PSEUDO);
-				break;
-		}
-		return $retval;
-	}
-
 	function get_property($args = array())
         {
 		$data = &$args["prop"];
 		$name = $data["name"];
 		$retval = PROP_OK;
-		if ($name == "alias" || $name == "jrk")
-		{
-			return PROP_IGNORE;
-		};
 
 		switch($data["name"])
 		{
 		};
-	}
-
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	////
-	// !this will be called if the object is put in a document by an alias and the document is being shown
-	// parameters
-	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
-	function parse_alias($args)
-	{
-		extract($args);
-		return $this->show(array('id' => $alias['target']));
-	}
-
-	////
-	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
-	function show($arr)
-	{
-		extract($arr);
-		$ob = $this->get_object($id);
-
-		$this->read_template('show.tpl');
-
-		$this->vars(array(
-			'name' => $ob['name']
-		));
-
-		return $this->parse();
 	}
 }
 ?>

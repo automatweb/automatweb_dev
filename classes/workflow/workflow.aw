@@ -2,14 +2,14 @@
 /*
 
 	@classinfo syslog_type=ST_WORKFLOW
-	@classinfo relatiomgr=yes
+	@classinfo relationmgr=yes
 
 	@groupinfo general caption=Üldine
 
 	@default table=objects
 	@default group=general
 
-	@property config type=objpicker clid=CL_WORKFLOW_CONFIG field=meta method=serialize
+	@property config type=relpicker reltype=RELTYPE_WORKFLOW_CONFIG field=meta method=serialize
 	@caption Konfiguratsioon
 
 	@property preview type=text editonly=1 store=no
@@ -43,6 +43,9 @@
 	@groupinfo show_actions caption=Tegevused submit=no
 	@groupinfo show_actors caption=Tegijad submit=no
 	@groupinfo show_documentation caption=Juhendmaterjalid submit=no
+
+	@reltype WORKFLOW_CONFIG clid=CL_WORKFLOW_CONFIG value=1
+	@caption Konfiguratsioon 
 
 */
 
@@ -123,7 +126,7 @@ class workflow extends class_base
 		$this->cfg_obj = new object($cfgid);
 
 		$this->treeview_conf_id = $this->cfg_obj->prop("treeview_conf");
-		
+
 		if (empty($this->treeview_conf_id))
 		{
 			$data["error"] = "Puu konfiguratsioon on valimata!";
@@ -138,19 +141,19 @@ class workflow extends class_base
 
 	function satisfy_any($arr)
 	{
-		if (isset($args["action"]) && empty($this->actions[$args["action"]]))
+		if (isset($arr["action"]) && empty($this->actions[$arr["action"]]))
 		{
-			$this->actions[$args["action"]] = new object($args["action"]);
+			$this->actions[$arr["action"]] = $this->get_object($arr["action"]);
 		};	
 		
-		if (isset($args["actor"]) && empty($this->actors[$args["actor"]]))
+		if (isset($arr["actor"]) && empty($this->actors[$arr["actor"]]))
 		{
-			$this->actors[$args["actor"]] =  new object($args["actor"]);
+			$this->actors[$arr["actor"]] =  $this->get_object($arr["actor"]);
 		};	
 		
-		if (isset($args["process"]) && empty($this->processes[$args["process"]]))
+		if (isset($arr["process"]) && empty($this->processes[$arr["process"]]))
 		{
-			$this->processes[$args["process"]] = new object($args["process"]);
+			$this->processes[$arr["process"]] = $this->get_object($arr["process"]);
 		};	
 	}
 
@@ -238,7 +241,6 @@ class workflow extends class_base
 	
 	function callback_show_entities($args = array())
 	{
-		// transparent redirect to the "add new entity" form
 		$request = $args["request"];
 		if (isset($request["subgroup"]) && $request["subgroup"] == "add_entity")
 		{
@@ -262,7 +264,7 @@ class workflow extends class_base
 
 		$entity_rootmenu_id = $this->cfg_obj->prop("entity_rootmenu");
 
-		if (empty($entity_rootmenu))
+		if (empty($entity_rootmenu_id))
 		{
 			$data["error"] = "Olemite rootmenüü on valimata!";
 			return PROP_ERROR;
@@ -341,7 +343,7 @@ class workflow extends class_base
 				"class_id" => CL_ENTITY,
 			));
 
-			for($o = $member_list->begin(); !$member_list->end(); $o = $member_list->next())
+			for($o = $entity_list->begin(); !$entity_list->end(); $o = $entity_list->next())
 			{
 				$types[$o->id()] = $o->name();
 			};
@@ -377,11 +379,11 @@ class workflow extends class_base
 					continue;
 				};
 
-				if ($treeroot_clid["class_id"] == CL_MENU && (empty($types[$typ])))
+				if ($treeroot_clid == CL_MENU && (empty($types[$typ])))
 				{
 					continue;
 				};
-
+					
 				// now, for each object I also have to figure out which config form it uses
 				// or in this context entity type
 				$meta = aw_unserialize($row["metadata"]);
@@ -408,11 +410,13 @@ class workflow extends class_base
 
 				$this->satisfy_any($ctrail);
 
+
 				$this->t->define_data(array(
 					"name" => html::href(array(
 						"url" => $this->treeurl . "&subgroup=entity_log&oid=$row[oid]",
 						"caption" => $row["name"],
 					)),
+					//"process" => $this->processes[$entity2process[$row["oid"]]]["name"],
 					"process" => $this->processes[$entity2process[$row["oid"]]]["name"],
 					"modifiedby" => $row["modifiedby"],
 					"actor" => $this->actors[$ctrail["actor"]]["name"],
@@ -427,39 +431,28 @@ class workflow extends class_base
 		}
 
 		$this->t->sort_by(array("field" => "type"));	
+		$tb = get_instance("toolbar");
+		$tb->add_menu_button(array(
+			"name" => "add",
+			"tooltip" => "Uus",
+		));
 
-		$this->read_template("js_popup_menu.tpl");
-
-		$menudata = "";
-
+		// these are actually entity types. the "entity" class itself also deals with
+		// entity types .. entities itself are plain old documents. right now at least.
 		foreach($types as $key => $val)
 		{
-			$this->vars(array(
-				"link" => $this->mk_my_orb("view",array("id" => $args["obj"]["oid"],"group" => "show_entities","subgroup" => "add_entity","entity_id" => $key)),
+			$tb->add_menu_item(array(
+				"parent" => "add",
+				"link" => $this->mk_my_orb("view",array(
+					"id" => $args["obj"]["oid"],
+					"group" => "show_entities",
+					"subgroup" => "add_entity",
+					"entity_id" => $key,
+				)),
 				"text" => $val,
 			));
 
-			$menudata .= $this->parse("MENU_ITEM");
 		};
-
-		$this->vars(array(
-			"MENU_ITEM" => $menudata,
-			"id" => "add_entity",
-		));
-
-		$menu = $this->parse();
-		
-		$tb = get_instance("toolbar");
-		$tb->add_cdata($menu);
-
-		$tb->add_button(array(
-			"name" => "add",
-			"tooltip" => "Uus",
-			"url" => "",
-			"onClick" => "return buttonClick(event, 'add_entity');",
-			"img" => "new.gif",
-			"class" => "menuButton",
-		));
 		
 		$tb->add_button(array(
 			"name" => "save",
@@ -471,6 +464,7 @@ class workflow extends class_base
 		$this->read_template("entity_list.tpl");
 
 		classload("vcl/tabpanel");
+		// fucking hypercube thingie
 		$tp = new tabpanel(array("tpl" => "headeronly"));
 		$tp->add_tab(array(
 			"link" => "#",
@@ -518,9 +512,7 @@ class workflow extends class_base
 		$this->tree = array();
 		$this->oidlist = array();
 
-		$row = $this->get_object(array(
-			"oid" => $parent,
-		));
+		$root_item = new object($parent);
 
 		if ($this->req_treeroot == $parent)
 		{
@@ -535,35 +527,24 @@ class workflow extends class_base
 	
 		$row["link"] = $this->treeurl;
 		$this->id = 1;
-		/*
-		if (is_array($this->items))
-		{
-			foreach($this->items as $key => $val)
-			{
-				$this->tree[0][$this->id] = $val;
-				$this->id++;
-			};
-		};
-		*/
-		$this->tree[0][$this->id] = $row;
+		$this->tree = get_instance(CL_TREEVIEW);
+		$this->tree->start_tree(array(
+			"type" => TREE_DHTML,
+			"root_url" => $this->treeurl,
+			"tree_id" => "wrkflw",
+			"persist_state" => true,
+		));
+		$this->tree->add_item(0,array(
+			"name" => parse_obj_name($root_item->name()),
+			"id" => $this->id,
+			"url" => $this->treeurl,
+		));
+
 		$this->parent2id = array($parent => $this->id);
 		$this->ic = get_instance("icons");
 		$this->_rec_build_tree($parent);
-		
-		/*
-		print "<pre>";
-		print_r($this->tree);
-		print "</pre>";
-		*/
-	
-		$treeview = get_instance("vcl/treeview");
-		return $treeview->create_tree_from_array(array(
-			"parent" => 0,
-			"data" => $this->tree,
-			"shownode" => $this->treeroot,
-			"linktarget" => "_self",
-		));
 
+		return $this->tree->finalize_tree();
 	}
 	
 	function _rec_build_tree($parent)
@@ -600,7 +581,9 @@ class workflow extends class_base
 
 			$row["icon_url"] = ($row["class_id"] == CL_MENU) ? "" : $this->ic->get_icon_url($row["class_id"],"");
 
-                        $this->tree[$pid][$this->id] = $row;
+			$this->tree->add_item($pid,$row);
+
+                        //$this->tree[$pid][$this->id] = $row;
 			$this->oidlist[] = $row["oid"];
                         $this->save_handle();
                         $this->_rec_build_tree($row["oid"]);
@@ -644,21 +627,43 @@ class workflow extends class_base
 		);
 
 		$t = get_instance("doc");
-		$xprops = $xprops + $t->get_properties_by_group(array(
-			"content" => $cfgform_obj["meta"]["xml_definition"],
+		// yuk
+		$t->obj_inst = new object();
+
+		$frm = $this->get_object($cfgform_id);
+		$t->cfgform = $frm;
+		$t->cfgform_id = $frm["oid"];
+
+		$all_props = $t->get_active_properties(array(
 			"group" => "general",
-			//"values" => array("id" => $event_id) + $row,
 		));
 
+		$all_props["cfgform_id"] = array(
+			"type" => "hidden",
+			"name" => "cfgform",
+			"value" => $frm["oid"],
+		);
+		
+		unset($all_props["sbt"]);
+		unset($all_props["aliasmgr"]);
+
+		$xprops = $xprops + $t->parse_properties(array(
+			"properties" => $all_props,
+			"name_prefix" => "emb",
+		));
 
 		// now the list of properties inside that entity
-		unset($xprops["sbt"]);
-		unset($xprops["aliasmgr"]);
 
 		$xprops[] = array(
 			"type" => "hidden",
 			"name" => "entity_id",
 			"value" => $data["request"]["entity_id"],
+		);
+
+		$xprops[] = array(
+			"type" => "hidden",
+			"name" => "subgroup",
+			"value" => "add_entity",
 		);
 
 		$xprops[] = array(
@@ -812,6 +817,7 @@ class workflow extends class_base
 	
 	function callback_add_process($args = array())
 	{
+		// this is SO bad .. adding processes should go through the alias manager somehow
 		$this->read_template("process_wrapper.tpl");
 		$this->cfg_obj = new object($args["obj_inst"]->prop("config"));
 		$return_url = $this->mk_my_orb("view",array("id" => $args["obj_inst"]->id(),"group" => "show_processes","b1" => 1));
@@ -921,27 +927,39 @@ class workflow extends class_base
 		// and I also have to bind this new object to our process, so that I can
 		// properly show it, where needed.
 
-		// hm, what I use relations for all of that stuff?
+		// hm, what if I use relations for all of that stuff?
 
+		$t = get_instance("doc");
+		$emb = $args["request"]["emb"];
+		$emb["parent"] = $entity_root;
+		
+		// a hack that makes submit() return only the id of the newly created object
+		$t->id_only = true;
+		$_entity_id = $t->submit($emb);
+
+		/*
 		$objdata["parent"] = $entity_root;
 		$objdata["name"] = $cldata["title"];
 		$objdata["class_id"] = CL_DOCUMENT;
+		*/
 
-		$_entity_id = $this->new_object($objdata);
+		// I need to create a new 
+
+		//$_entity_id = $this->new_object($objdata);
 
 		// now I need to create a bunch of relations:
 		// 1 - between the object and the config form, so that I know
 		// which form should be used to edit it.
 		$this->addalias(array(
 			"id" => $_entity_id,
-			"alias" => $args["form_data"]["entity_id"],
+			"alias" => $args["request"]["entity_id"],
 			"reltype" => RELTYPE_CFGFORM,
 		));
 		
 		// 2 - between the process and the object, so that I know
 		// in which process the object currently is
 		$this->addalias(array(
-			"id" => $proc_obj["oid"],
+			"id" => $proc_obj->id(),
 			"alias" => $_entity_id,
 			"reltype" => RELTYPE_LINK,
 		));
@@ -950,9 +968,9 @@ class workflow extends class_base
 		// should list me all objects that are currently in this stage
 		// but _also_ in this process
 
-		$_entity_process = $args["form_data"]["entity_process"];
-		$_entity_action = $proc_obj["meta"]["root_action"];
-		$_entity_actor = $args["form_data"]["entity_actor"];
+		$_entity_process = $args["request"]["entity_process"];
+		$_entity_action = $proc_obj->prop("root_action");
+		$_entity_actor = $args["request"]["entity_actor"];
 		$_entity_uid = aw_global_get("uid");
 		$_entity_tm = time();
 
@@ -971,6 +989,8 @@ class workflow extends class_base
 		$ent_obj = new object($_entity_id);
 
 		$ent_obj->set_meta("current_logtrail",$current_logtrail);
+
+		$ent_obj->save();
 
 		// now let's retrieve the process object
 
@@ -1038,6 +1058,7 @@ class workflow extends class_base
 
 		$ent_obj = new object($_entity_id);
 		$ent_obj->set_meta("current_logtrail",$current_logtrail);
+		$ent_obj->save();
 
 	}
 
