@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="syslog">
+	<class name="syslog" folder="syslog">
 		<action name="show" default="1">
 			<function name="display_last_10">
 				<arguments>

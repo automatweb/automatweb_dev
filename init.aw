@@ -402,7 +402,7 @@ function aw_startup()
 	$u = get_instance("users");
 	$u->request_startup();
 
-	$syslog = get_instance("syslog");
+	$syslog = get_instance("syslog/syslog");
 	$syslog->request_startup();
 
 	$m = get_instance("menuedit");
