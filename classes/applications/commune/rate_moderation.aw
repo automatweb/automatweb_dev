@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/rate_moderation.aw,v 1.2 2004/11/18 17:21:46 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/rate_moderation.aw,v 1.3 2004/11/24 11:03:03 ahti Exp $
 // rate_moderation.aw - Hindamise modereerimine 
 /*
 
@@ -96,15 +96,14 @@ class rate_moderation extends class_base
 		
 	function show_mod_table($arr)
 	{
-		//$age = (int)$arr["obj_inst"]->prop("expiration");
 		$age = 600;
 		$group = $arr["request"]["group"];
 		if($group == "new_pictures")
 		{
 			$mask = M_OBJ_IS_SELECTED;
 			$mask2 = 0;
-			$tm = "new_time";
-			$pcs = "new_pics";
+			$tm = "nw_time";
+			$pcs = "nw_pics";
 		}
 		else
 		{
@@ -119,10 +118,8 @@ class rate_moderation extends class_base
 			"status" => STAT_NOTACTIVE,
 			"modified" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, (time() - $age)),
 		));
-		//arr($objs->ids());
 		foreach($objs->arr() as $obj)
 		{
-			//arr($obj->subclass());
 			$obj->set_subclass($mask2);
 			$obj->save();
 		}
@@ -153,18 +150,13 @@ class rate_moderation extends class_base
 			"sort_by" => "objects.created DESC",
 			"limit" => 15,
 		);
-		//aw_session_del($tm);
-		//aw_session_del($pcs);
-		//arr($ids);
-		if($time >= time() - $age && !empty($ids) && is_array($ids))
+		if($time >= (time() - $age) && !empty($ids) && is_array($ids))
 		{
 			$props["oid"] = $ids;
 		}
 		else
 		{
 			$props["subclass"] = $mask2;
-			aw_session_del($tm);
-			aw_session_del($pcs);
 		}
 		$imgs = new object_list($props);
 		$img_i = get_instance(CL_IMAGE);
@@ -173,11 +165,10 @@ class rate_moderation extends class_base
 			STAT_ACTIVE => "Aktiveeri",
 			STAT_NOTACTIVE => "Lükka tagasi",
 		);
+		aw_session_set($pcs, $this->make_keys($imgs->ids()));
+		aw_session_set($tm, time());
 		foreach($imgs->arr() as $img)
 		{
-			//arr($img->subclass());
-			aw_session_set($pcs, $this->make_keys($imgs->ids()));
-			aw_session_set($tm, time());
 			$img->set_subclass($mask);
 			$img->save();
 			$profile = reset($img->connections_to(array(
@@ -241,12 +232,13 @@ class rate_moderation extends class_base
 	**/
 	function mod_images($arr)
 	{
+		$obj_inst = obj($arr["id"]);
 		$rval = html::get_change_url($arr["id"], array("group" => $arr["group"]));
 		$age = 600;
 		if($arr["group"] == "new_pictures")
 		{
-			$tm = "new_time";
-			$pcs = "new_pics";
+			$tm = "nw_time";
+			$pcs = "nw_pics";
 		}
 		else
 		{
@@ -287,13 +279,36 @@ class rate_moderation extends class_base
 		}
 		if(is_array($arr["sel"]))
 		{
+			$disp = false;
+			$qmb = get_instance(CL_QUICKMESSAGEBOX);
+			$commune = $obj_inst->prop("commune");
+			if(is_oid($commune) && $this->can("view", $commune))
+			{
+				$disp = true;
+			}
 			foreach($arr["sel"] as $id => $stat)
 			{
 				if(is_oid($id) && $this->can("view", $id))
 				{
 					if($stat == STAT_ACTIVE)
 					{
+						$pname = "pacpt";
 						$img = obj($id);
+						$user = $img->createdby();
+						$person = $user->get_first_obj_by_reltype("RELTYPE_PERSON");
+						$props = $person->meta("message_conditions");
+						if($disp && ($props[$pname][0] == true || $props[$pname][1] == true))
+						{
+							$qmb->dispatch_message(array(
+								"from" => aw_global_get("uid_oid"),
+								"msg1" => $props[$pname][0],
+								"msg2" => $props[$pname][1],
+								"commune" => obj($commune),
+								"to" => $img->createdby(),
+								"prop" => $pname,
+								//"message" => "",
+							));
+						}
 						$img->set_status(STAT_ACTIVE);
 						$img->set_subclass(0);
 						$img->save();
@@ -304,7 +319,14 @@ class rate_moderation extends class_base
 						}
 						$ids = aw_global_get($pcs);
 						unset($ids[$id]);
-						aw_session_set($pcs, $ids);
+						if(empty($ids))
+						{
+							aw_session_del($pcs);
+						}
+						else
+						{
+							aw_session_set($pcs, $ids);
+						}
 					}
 					elseif($stat == STAT_NOTACTIVE)
 					{
@@ -313,7 +335,14 @@ class rate_moderation extends class_base
 						$img->save();
 						$ids = aw_global_get($pcs);
 						unset($ids[$id]);
-						aw_session_set($pcs, $ids);
+						if(empty($ids))
+						{
+							aw_session_del($pcs);
+						}
+						else
+						{
+							aw_session_set($pcs, $ids);
+						}
 					}
 				}
 			}
