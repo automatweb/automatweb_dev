@@ -225,7 +225,8 @@ class aip_pdf extends aw_template
 						"parent" => $pr,
 						"name" => $act["file"],
 						"class_id" => CL_FILE,
-						"jrk" => $_tt[3]
+						"jrk" => $_tt[3],
+						"status" => 2
 					));
 
 					@$this->db_query("INSERT INTO files (id,type,file)

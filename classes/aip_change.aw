@@ -57,14 +57,17 @@ class aip_change extends aw_template
 		load_vcl("date_edit");
 		$de = new date_edit("act_time");
 
-		$sch = get_instance("scheduler");
+		//$sch = get_instance("scheduler");
 
 		if ($id)
 		{
 			$ch = $this->load($id);
-			$sch->remove(array(
+			/*$sch->remove(array(
 				"event" => $this->mk_my_orb("do_change", array("id" => $id))
 			));
+			$sch->remove(array(
+				"event" => $this->mk_my_orb("do_publish", array("id" => $id))
+			));*/
 
 			$f = get_instance("file");
 
@@ -142,12 +145,17 @@ class aip_change extends aw_template
 			));
 		}
 
+		/*$sch->add(array(
+			"time" => $de->get_timestamp($act_time),
+			"event" => $this->mk_my_orb("do_publish", array("id" => $id))
+		));*/
+
 		if ($type != 3)
 		{
-			$sch->add(array(
-				"time" => $de->get_timestamp($act_time),
+		  /*$sch->add(array(
+				"time" => $de->get_timestamp($j_time),
 				"event" => $this->mk_my_orb("do_change", array("id" => $id))
-			));
+			));*/
 		}
 		return $this->mk_my_orb("change", array("id" => $id), "", false, true);
 	}
@@ -338,10 +346,10 @@ class aip_change extends aw_template
 		{
 			foreach($sel as $id)
 			{
-				$sched = get_instance("scheduler");
+			  /*$sched = get_instance("scheduler");
 				$sched->remove(array(
 					"event" => $this->mk_my_orb("do_change", array("id" => $id))
-				));
+				));*/
 				$this->delete_object($id);
 			}
 		}
@@ -357,10 +365,10 @@ class aip_change extends aw_template
 	{
 		extract($arr);
 
-		$sched = get_instance("scheduler");
+		/*$sched = get_instance("scheduler");
 		$sched->remove(array(
 			"event" => $this->mk_my_orb("do_change", array("id" => $id))
-		));
+		));*/
 		$this->delete_object($id);
 		header("Location: ".$this->mk_my_orb("list", array(), "", false, true));
 		die();
@@ -531,7 +539,8 @@ class aip_change extends aw_template
 						"parent" => $pr,
 						"name" => $act["file"],
 						"class_id" => CL_FILE,
-						"jrk" => $_tt[3]
+						"jrk" => $_tt[3],
+						"status" => 2
 					));
 
 					$this->db_query("INSERT INTO files (id,type,file)
@@ -1058,6 +1067,72 @@ class aip_change extends aw_template
 		}
 
 		return true;
+	}
+
+	////
+	// !this publishes the file - makes it the default change in it's category
+	function do_publish($arr)
+	{
+		extract($arr);
+		$ob = $this->get_object($id);
+		if ($ob['meta']['upd_type'] == 1)
+		{
+			$this->set_cval("aip_change::act_change_1", $id);
+		}
+		else
+		if ($ob['meta']['upd_type'] == 2)
+		{
+			$this->set_cval("aip_change::act_change_2", $id);
+		}
+		else
+		if ($ob['meta']['upd_type'] == 3)
+		{
+			$ar = new aw_array(aw_unserialize($this->get_cval("aip_change::act_change_3")));
+			$ar = $ar->get();
+			if (!in_array($id, $ar))
+			{
+				$ar[] = $id;
+			}
+			$str = aw_serialize($ar);
+			$this->quote(&$str);
+			$this->set_cval("aip_change::act_change_3", $str);
+		}
+	}
+
+	function check_events()
+	{
+		$ol = $this->list_objects(array(
+			"class" => CL_AIP_CHANGE,
+			"return" => ARR_ALL
+		));
+
+		$t = time();
+		foreach($ol as $oid => $od)
+		{
+			if ($od["status"] > 0)
+			{
+				echo "checking event $oid <br>\n";
+				$meta = $this->get_object_metadata(array(
+					"metadata" => $od["metadata"]
+				));
+				$publish = $meta["act_time"];
+				$activate = $meta["j_time"];
+				echo "publish = ".$this->time2date($publish, 2)." , activate = ".$this->time2date($activate, 2)." , current = ".$this->time2date($t, 2)." <br>\n";
+				if (abs($t - $publish) < 600 && $publish <= $t)
+				{
+					echo "publishing change $oid <br>\n";
+					$ai = get_instance("aip_change");
+					$ai->do_publish(array("id" => $oid));
+				}
+				if (abs($t - $activate) < 600 && $activate <= $t)
+				{
+					echo "activating change $oid <br>\n";
+					$ai = get_instance("aip_change");
+					$ai->do_change(array("id" => $oid));
+				}
+			}
+		}
+		die("finished checking\n");
 	}
 }
 ?>
