@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.3 2004/11/04 16:50:02 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.4 2004/11/05 10:33:04 sven Exp $
 // recycle_bin.aw - Prügikast 
 /*
 @default table=objects
@@ -10,12 +10,13 @@
 
 @groupinfo recycle submit=no caption="Kustutatud objektid"
 */
-
 class recycle_bin extends class_base
 {
 	function recycle_bin()
 	{
-		$this->init();
+		$this->init(array(
+			"clid" => CL_RECYCLE_BIN,
+		));
 	}
 	
 	function callback_mod_tab($arr)
@@ -47,13 +48,6 @@ class recycle_bin extends class_base
 		$table = &$arr["prop"]["vcl_inst"];
 		
 		$table->define_field(array(
-			"name" => "oid",
-			"caption" => "ID",
-			"sortable" => 1,
-			"width" => 50,
-		));
-		
-		$table->define_field(array(
 			"name" => "icon",
 			"caption" => "",
 			"width" => 15,
@@ -66,8 +60,15 @@ class recycle_bin extends class_base
 		));
 		
 		$table->define_field(array(
+			"name" => "oid",
+			"caption" => "ID",
+			"sortable" => 1,
+			"width" => 50,
+		));
+		
+		$table->define_field(array(
 			"name" => "restore",
-			"caption" => "Taasta",
+			"caption" => "Tegevus",
 		));
 		
 		$table->define_field(array(
@@ -99,6 +100,7 @@ class recycle_bin extends class_base
 		$table->define_chooser(array(
     		"name" => "mark",
     		"field" => "id",
+    		"caption" => "Vali",
 		));
 	
 		$classes = aw_ini_get("classes");
@@ -143,7 +145,7 @@ class recycle_bin extends class_base
     		"name" => "refresh",
     		"img" => "refresh.gif",
     		"tooltip" => "Uuenda",
-    		"url" => "javascript:history.go()",
+    		"url" => aw_url_change_var(array()),
     	));
 	}
 
@@ -162,12 +164,15 @@ class recycle_bin extends class_base
 	**/
 	function restore_objects($arr)
 	{
-		foreach($arr["mark"] as $oid)
+		if($arr["mark"])
 		{
-			$query = "UPDATE objects SET status=1 WHERE oid=$oid";
-			$this->db_query($query);
+			foreach($arr["mark"] as $oid)
+			{
+				$query = "UPDATE objects SET status=1 WHERE oid=$oid";
+				$this->db_query($query);
+			}
 		}
-		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"]), $arr["class"]);
+			return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"]), $arr["class"]);	
 	}
 }
 ?>
