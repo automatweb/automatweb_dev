@@ -211,17 +211,8 @@ class ml_list extends aw_template
 		$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = '$id'","name");
 
 		load_vcl("table");
-
 		$t = new aw_table(array(
 			"prefix" => "ml_list",
-			"self" => aw_global_get("PHP_SELF"),
-			"imgurl" => $this->cfg["baseurl"] . "/automatweb/images",
-		));
-
-		$t->set_header_attribs(array(
-			"class" => "ml_list",
-			"action" => "change",
-			"id" => $id
 		));
 
 		$back=$queue_back=$this->mk_my_orb("change",array("id" => $id));
@@ -290,15 +281,7 @@ class ml_list extends aw_template
 			$t->define_data($r);
 		}
 
-		if ($sortby)
-		{
-			$t->sort_by(array("field"=>$sortby));
-		} 
-		else
-		{
-			$t->sort_by(array());
-		};
-
+		$t->sort_by();
 		$this->vars(array(
 			"table" => $t->draw(),
 			"reforb" => $this->mk_reforb("something",array("lid" => $id))

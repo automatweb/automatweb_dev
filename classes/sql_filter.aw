@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/sql_filter.aw,v 2.6 2002/06/10 15:50:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/sql_filter.aw,v 2.7 2002/07/18 10:44:45 kristo Exp $
 
 class sql_filter extends aw_template 
 {
@@ -10,6 +10,7 @@ class sql_filter extends aw_template
 		$this->joinnames=array("and"=>"ja","or"=>"või");
 		$this->init("automatweb");
 	}
+
 
 
 	// filtrite stuff algab siit

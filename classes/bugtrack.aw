@@ -249,25 +249,13 @@ class bugtrack extends aw_template
 		{
 			$bugtr_filt = 0;
 		}
+
+		$this->mk_header("Bugide nimekiri");
 		
 		load_vcl("table");
-
 		$t = new aw_table(array(
 			"prefix" => "bugtrack",
-			"self" => aw_global_get("PHP_SELF"),
-			"imgurl" => $this->cfg["baseurl"] . "/automatweb/images",
 		));
-
-		$t->set_header_attribs(array(
-			"class" => "bugtrack",
-			"action" => ($search_sess != "" ? "search" : "list"),
-			"page" => $page,
-			"search_sess" => $search_sess,
-			"search" => ($search_sess != "" ? 1 : 0)
-		));
-	
-		$this->mk_header("Bugide nimekiri");
-
 		$t->parse_xml_def($this->cfg["basedir"] . "/xml/bugtrack/bugtrack.xml");
 	
 		if ($search_sess )
@@ -277,18 +265,6 @@ class bugtrack extends aw_template
 		else
 		{
 			$filta=$this->sql_filter->filter_to_sql(array("filter"=>$this->get_filter($bugtr_filt)));
-		}
-
-		$_sby = $sortby;
-		if (!$_sby)
-		{
-			$_sby = "tm";
-		}
-		global $sort_order;
-		$_so = $sort_order;
-		if (!$_so)
-		{
-			$_so = "asc";
 		}
 
 		// make pageselector
@@ -347,14 +323,7 @@ class bugtrack extends aw_template
 			$t->define_data($row);
 		};
 
-		if ($sortby)
-		{
-			$t->sort_by(array("field"=>$sortby,"sorder" => $_so));
-		} else
-		{
-			$t->sort_by(array());
-		};
-
+		$t->sort_by();
 		$this->vars(array(
 			"table" => $t->draw(),
 			"filter" =>"",
@@ -1888,32 +1857,19 @@ class bugtrack extends aw_template
 	function orb_list_errors($arr)
 	{
 		extract($arr);
-
-		$this->read_template("err_list.tpl");
-
-		$this->mk_header("Vigade nimekiri");
-
-		load_vcl("table");
-
-		$t = new aw_table(array(
-			"prefix" => "bugtrack",
-			"self" => aw_global_get("PHP_SELF"),
-			"imgurl" => $this->cfg["baseurl"] . "/automatweb/images",
-		));
-
 		if (!$groupby)
 		{
 			$groupby = "type_id";
 		}
 
-		$t->set_header_attribs(array(
-			"class" => "bugtrack",
-			"action" => "list_errors",
-			"groupby" => $groupby
+		$this->read_template("err_list.tpl");
+		$this->mk_header("Vigade nimekiri");
+
+		load_vcl("table");
+		$t = new aw_table(array(
+			"prefix" => "bugtrack",
 		));
-		
 		$t->define_header("BugTrack",$this->get_list_headerarr(0,false));
-		
 		$t->parse_xml_def($this->cfg["basedir"] . "/xml/bugtrack/errors.xml");
 
 		$this->db_query("SELECT *,count(*) as cnt FROM bugtrack_errors GROUP BY $groupby");
@@ -1925,15 +1881,7 @@ class bugtrack extends aw_template
 			$t->define_data($row);
 		}
 
-		if ($sortby)
-		{
-			$t->sort_by(array("field"=>$sortby,"sorder" => $sort_order));
-		} 
-		else
-		{
-			$t->sort_by(array());
-		};
-
+		$t->sort_by();
 		$this->vars(array(
 			"grpby_id" => checked($groupby == "id"),
 			"grpby_type_id" => checked($groupby == "type_id"),
@@ -2001,14 +1949,6 @@ class bugtrack extends aw_template
 
 		$t = new aw_table(array(
 			"prefix" => "bugtrack",
-			"self" => aw_global_get("PHP_SELF"),
-			"imgurl" => $this->cfg["baseurl"] . "/automatweb/images",
-		));
-
-		$t->set_header_attribs(array(
-			"class" => "bugtrack",
-			"action" => "show_type",
-			"type_id" => $type_id
 		));
 		$t->parse_xml_def($this->cfg["basedir"] . "/xml/bugtrack/err_type_list.xml");
 
@@ -2019,7 +1959,7 @@ class bugtrack extends aw_template
 			$t->define_data($row);
 		}
 
-		$t->sort_by(array("field" => $GLOBALS["sortby"],"sorder" => $GLOBALS["sort_order"]));
+		$t->sort_by();
 		$this->vars(array(
 			"SITE_CNT" => $l,
 			"cnt" => $cnt,
@@ -2052,14 +1992,6 @@ class bugtrack extends aw_template
 
 		$t = new aw_table(array(
 			"prefix" => "bugtrack",
-			"self" => aw_global_get("PHP_SELF"),
-			"imgurl" => $this->cfg["baseurl"] . "/automatweb/images",
-		));
-
-		$t->set_header_attribs(array(
-			"class" => "bugtrack",
-			"action" => "show_site",
-			"site" => $site
 		));
 		$t->parse_xml_def($this->cfg["basedir"] . "/xml/bugtrack/err_site_list.xml");
 
@@ -2070,7 +2002,7 @@ class bugtrack extends aw_template
 			$t->define_data($row);
 		}
 
-		$t->sort_by(array("field" => $GLOBALS["sortby"],"sorder" => $GLOBALS["sort_order"]));
+		$t->sort_by();
 		$this->vars(array(
 			"TYPE_CNT" => $l,
 			"cnt" => $cnt,

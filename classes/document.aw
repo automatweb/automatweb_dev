@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.106 2002/07/17 05:11:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.107 2002/07/18 10:44:45 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 classload("msgboard","aw_style","form_base","file");
@@ -1897,18 +1897,9 @@ class document extends aw_template
 		$arc = new archive();
 		$t = new aw_table(array(
 			"prefix" => "mailbox",
-			"imgurl"    => $this->cfg["baseurl"]."/images",
 			"tbgcolor" => "#C3D0DC",
 		));
-
 		$t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
-
-		$t->set_header_attribs(array(
-			"class" => "document",
-			"action" => "archive",
-			"docid" => $args["docid"],
-		));
-
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => "Nimi",
@@ -1950,6 +1941,8 @@ class document extends aw_template
 			"nowrap" => 1,
 		));
 
+		$t->set_default_sortby("date");
+
 		$contents = $arc->get(array("oid" => $args["docid"]));
 		$obj = $this->get_object($args["docid"]);
 		$this->mk_path($obj["parent"],"Arhiiv"); 
@@ -1984,8 +1977,8 @@ class document extends aw_template
 			}
 		};
 
-		$t->sort_by(array("field" => ($args["sortby"]) ? $args["sortby"] : "date"));
-
+		
+		$t->sort_by();
 		$this->vars(array(
 			"docid" => $docid,
 			"arc_table" => $t->draw(),
@@ -3149,16 +3142,10 @@ class document extends aw_template
 
 		$tt = new aw_table(array(
 			"prefix" => "keywords",
-			"imgurl"    => $this->cfg["baseurl"]."/img",
 			"tbgcolor" => "#C3D0DC",
 		));
 
 		$tt->parse_xml_def($this->cfg["site_basedir"]."/xml/generic_table.xml");
-		$tt->set_header_attribs(array(
-			"id" => $id,
-			"class" => "document",
-			"action" => "lookup",
-		));
 		$tt->define_field(array(
 			"name" => "name",
 			"caption" => "Pealkiri",
@@ -3216,10 +3203,7 @@ class document extends aw_template
 				"modifiedby" => $author,
 			));
 		};
-		if ($sortby != "")
-		{
-			$tt->sort_by(array("field" => $sortby));
-		}
+		$tt->sort_by();
 		return $tt->draw();
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.38 2002/07/12 18:21:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.39 2002/07/18 10:44:45 kristo Exp $
 // users.aw - User Management
 classload("users_user","config","form","objects","file");
 
@@ -124,10 +124,6 @@ class users extends users_user
 		global $lookfor, $sortby;
 		$t = new aw_table(array(
 			"prefix" => "users",
-			"sortby" => $sortby,
-			"lookfor" => $lookfor,
-			"imgurl" => $this->cfg["baseurl"]."/vcl/img", 
-			"self" => aw_global_get("PHP_SELF").($gid ? "?gid=$gid" : "")
 		));
 		$t->parse_xml_def($this->cfg["basedir"]."/xml/users/pickable.xml");
 

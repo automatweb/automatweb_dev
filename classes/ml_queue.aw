@@ -59,25 +59,13 @@ class ml_queue extends aw_template
 	function orb_queue($arr)
 	{
 		extract($arr);
-		load_vcl("table");
-
 		$this->read_template("manager.tpl");
-		
 
+		load_vcl("table");
 		$t = new aw_table(array(
 			"prefix" => "ml_queue",
-			"self" => aw_global_get("PHP_SELF"),
-			"imgurl" => $this->cfg["baseurl"] . "/automatweb/images",
 		));
 		
-		$t->set_header_attribs(array(
-			"class" => "ml_queue",
-			"action" => "queue",
-			"show" => $show,
-			"fid" => $fid,
-			"manager" => $manager
-		));
-
 		if ($show && $show != "all")
 		{
 			$fid=(int)$fid;
@@ -160,15 +148,7 @@ class ml_queue extends aw_template
 			$t->define_data($row);
 		};
 
-		if ($sortby)
-		{
-			$t->sort_by(array("field"=>$sortby));
-		} 
-		else
-		{
-			$t->sort_by(array());
-		};
-
+		$t->sort_by();
 		$queue=$t->draw();
 
 		if ($manager)

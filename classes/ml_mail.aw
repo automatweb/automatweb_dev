@@ -189,27 +189,15 @@ class ml_mail extends aw_template
 	function orb_queue($arr)
 	{
 		extract($arr);
-		load_vcl("table");
 
 		$this->read_template("queue.tpl");
-		
-
 		$baseurl = $this->cfg["baseurl"];
+
+		load_vcl("table");
 		$t = new aw_table(array(
 			"prefix" => "ml_queue",
-			"self" => aw_global_get("PHP_SELF"),
-			"imgurl" => $baseurl . "/automatweb/images",
 		));
 		
-		$t->set_header_attribs(array(
-			"class" => "ml_mail",
-			"action" => "queue",
-			"show" => $show,
-			"fid" => $fid,
-			"back" => $back,
-			"manager" => $manager
-		));
-
 		if ($show && $show != "all")
 		{
 			$fid=(int)$fid;
@@ -273,15 +261,7 @@ class ml_mail extends aw_template
 			$t->define_data($row);
 		};
 
-		if ($sortby)
-		{
-			$t->sort_by(array("field"=>$sortby));
-		} 
-		else
-		{
-			$t->sort_by(array());
-		};
-
+		$t->sort_by();
 		$queue=$t->draw();
 
 		if ($manager)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.98 2002/06/26 11:24:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.99 2002/07/18 10:44:45 kristo Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 lc_load("definition");
@@ -480,19 +480,10 @@ class messenger extends menuedit_light
 		load_vcl("table");
 		$t = new aw_table(array(
 			"prefix" => "mailbox",
-			"imgurl"    => $baseurl."/img",
 			"tbgcolor" => "#C3D0DC",
 		));
 
 		$t->parse_xml_def($this->cfg["basedir"]."/xml/messenger/table.xml");
-
-		$t->set_header_attribs(array(
-			"class" => "messenger",
-			"action" => "folder",
-			"id" => $folder,
-			"page" => $page,
-		));
-
 		$t->define_field(array(
 			"name" => "check",
 			"caption" => "<a href='#' onClick='toggle_all()'>X</a>",
@@ -638,7 +629,7 @@ class messenger extends menuedit_light
 		// $id - aktiivne folder
 		$pagelist = array();
 
-		$t->sort_by(array("field" => $args["sortby"]));
+		$t->sort_by();
 
 		for ($i = 1; $i <= $pages; $i++)
 		{
@@ -1366,12 +1357,11 @@ class messenger extends menuedit_light
 		{
 			classload("ml_list");
 			$mllist=new ml_list();
-			global $route_back;
-			session_register("route_back");
 			$route_back=$this->mk_site_orb(array(
 				"action" => "edit",
 				"id" => $msg_id,
 			));
+			aw_session_set("route_back",$route_back);
 			$url=$mllist->route_post_message(array("id" => $msg_id, "targets" => $lists));
 			Header("Location: $url");
 			die();
@@ -1409,7 +1399,9 @@ class messenger extends menuedit_light
 		// tavaline meil
 		if (($type & MSG_HTML) == 0)
 		{
-			$body=strip_tags($message);//see oli enne handle_message()s. mix seda vaja yldse on?? kes siis plaintexti tage topib
+			//see oli enne handle_message()s. mix seda vaja yldse on?? kes siis plaintexti tage topib
+			// sellepärast ongi vaja, et ei topitaks -- duke
+			$body=strip_tags($message);
 		} 
 		else
 		{
@@ -1824,21 +1816,14 @@ class messenger extends menuedit_light
 			return $this->mk_site_orb(array("action" => "search"));
 		};
 
+		$baseurl = $this->cfg["baseurl"];
+
 		load_vcl("table");
 		$t = new aw_table(array(
 			"prefix" => "mailbox_search",
-			"imgurl"    => $this->cfg["baseurl"]."/img",
 			"tbgcolor" => "#C3D0DC",
 		));
-
 		$t->parse_xml_def($this->cfg["basedir"]."/xml/messenger/table.xml");
-
-		$t->set_header_attribs(array(
-			"class" => "messenger",
-			"action" => "do_search",
-		));
-		$baseurl = $this->cfg["baseurl"];
-
 		$t->define_field(array(
 			"name" => "folder",
 			"caption" => "Folder",
@@ -1846,7 +1831,6 @@ class messenger extends menuedit_light
 			"talign" => "left",
 			"sortable" => 1,
 		));
-
 		$t->define_field(array(
 			"name" => "from",
 			"caption" => "Kellelt",
@@ -1854,8 +1838,6 @@ class messenger extends menuedit_light
 			"nowrap" => 1,
 			"sortable" => 1,
 		));
-	
-
 		$t->define_field(array(
 			"name" => "subject",
 			"caption" => "Teema",
@@ -1863,7 +1845,6 @@ class messenger extends menuedit_light
 			"talign" => "left",
 			"sortable" => 1,
 		));
-		
 		$t->define_field(array(
 			"name" => "when",
 			"caption" => "Aeg",
@@ -1905,7 +1886,7 @@ class messenger extends menuedit_light
 			$c .= $this->parse("line");
 		};
 		
-		$t->sort_by(array("field" => $args["sortby"]));
+		$t->sort_by();
 		$this->vars(array(
 			"line" => $c,
 			"quser" => $quser,

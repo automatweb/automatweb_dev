@@ -23,8 +23,6 @@ class events_user extends aw_template
 		load_vcl("table");
 		$t = new aw_table(array(
 			"prefix" => "events",
-			"imgurl" => "/img",
-			"self" => aw_global_get("PHP_SELF"),
 		));
 		if ($year)
 		{
@@ -35,12 +33,6 @@ class events_user extends aw_template
 				"mon" => $mon,
 				"day" => $day,
 				"add" => "&op=show_date",
-			));
-			$t->set_header_attribs(array(
-				"year" => $year,
-				"mon"	=> $mon,
-				"day"	=> $day,
-				"op"	=> $op
 			));
 			$this->read_template("list_date.tpl");
 			$this->vars(array("calendar" => $calendar));
@@ -59,10 +51,6 @@ class events_user extends aw_template
 				"mon" => $mon,
 				"add" => "&op=show_week",
 			));
-			$t->set_header_attribs(array(
-				"op" => $op,
-				"date" => $date,
-			));
 			$this->read_template("list_date.tpl");
 			$this->vars(array("calendar" => $calendar));
 		}
@@ -70,10 +58,6 @@ class events_user extends aw_template
 		{
 			$this->read_template("search_event.tpl");
 			$this->vars(array("lookfor" => $lookfor));
-			$t->set_header_attribs(array(
-				"lookfor" => $lookfor,
-				"op"	=> $op,
-			));
 		}
 		else
 		{
@@ -90,10 +74,6 @@ class events_user extends aw_template
 				$tpl = ($k == $type) ? "active" : "eventline";
 				$eline .= $this->parse($tpl);
 			};
-			$t->set_header_attribs(array(
-				"op"	=> $op,
-				"type_id" => $type,
-			));
 		};
 		$this->_list_events($args);
 		$count = 0;
@@ -121,7 +101,7 @@ class events_user extends aw_template
 			$caption = LC_EVENTS_USER_ALLEVENTS;
 		};
 		$t->define_header($caption);
-		$t->sort_by(array("field" => $args["sortby"])); 
+		$t->sort_by(); 
 		$table = $t->draw();	
 		$this->vars(array("table" => $table,
 			"total" => $count,

@@ -12,6 +12,7 @@ class search_filter extends aw_template
 		$this->sql_filter=new sql_filter();
 	}
 
+
 	function orb_new($arr)
 	{
 		is_array($arr)? extract($arr) : $parent=$arr;
@@ -630,11 +631,7 @@ class search_filter extends aw_template
 
 		$this->ft=new form_table();
 		$table_id=$this->data["output_id"];
-		if (!$this_page_array)
-		{
-			$this_page_array=array("class" => "search_filter", "action" => "search",   "filter_id" => $id,"id"=>$id,"op_id" => $op_id);
-		};
-		$this->ft->start_table($table_id,$this_page_array);
+		$this->ft->start_table($table_id);
 
 		$stats=array();//statistika avaldiste väärtused
 		$num_rec_found=0;

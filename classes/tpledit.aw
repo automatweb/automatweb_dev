@@ -18,15 +18,9 @@ class tpledit extends aw_template
 		$meta = $this->obj_get_meta(array("oid" => $args["oid"]));
 		$t = new aw_table(array(
 			"prefix" => "tpledit_browse",
-			"imgurl"    => $this->cfg["baseurl"]."/images",
 			"tbgcolor" => "#C3D0DC",
 		));
 		$t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
-		$t->set_header_attribs(array(
-			"class" => "tpledit",
-			"action" => "browse",
-			"parent" => $args["parent"],
-		));
 
 		$t->define_field(array(
 			"name" => "oid",
@@ -214,7 +208,7 @@ class tpledit extends aw_template
 		$title_path[] = "<a href='" . $this->mk_orb("browse",array("parent" => "root")) . "'>TemplateEditor</a>";
 
 		$title_path = $title_path + map2("<a href='orb.".$this->cfg["ext"]."?class=tpledit&action=browse&parent=%s'>%s</a>",$path);
-		$t->sort_by(array("field" => $args["sortby"]));
+		$t->sort_by();
 
 		$this->vars(array(
 			"directory" => $d,
@@ -505,16 +499,9 @@ class tpledit extends aw_template
 		$meta = $this->obj_get_meta(array("oid" => $args["oid"]));
 		$t = new aw_table(array(
 			"prefix" => "mailbox",
-			"imgurl"    => $this->cfg["baseurl"]."/img",
 			"tbgcolor" => "#C3D0DC",
 		));
 		$t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
-		$t->set_header_attribs(array(
-			"class" => "tpledit",
-			"action" => "archive",
-			"oid" => $args["oid"],
-		));
-
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => "Nimi",
@@ -588,7 +575,7 @@ class tpledit extends aw_template
 
 			};
 		};
-		$t->sort_by(array("field" => $args["sortby"]));
+		$t->sort_by();
 		$this->vars(array(
 			"table" => $t->draw(),
 			"reforb" => $this->mk_reforb("submit_archive",array("oid" => $args["oid"])),

@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.12 2002/07/16 23:43:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.13 2002/07/18 10:44:45 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -38,17 +38,10 @@ class poll extends aw_template
 		load_vcl("table");
 		$t = new aw_table(array(
 			"prefix" => "poll",
-			"imgurl"    => $this->cfg["baseurl"]."/automatweb/images",
 			"tbgcolor" => "#C3D0DC",
 		));
 			
 		$t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
-
-		$t->set_header_attribs(array(
-			"class" => "poll",
-			"action" => "list",
-    ));
-
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => $lc_poll["LC_POLL_QUESTION"],
@@ -122,7 +115,7 @@ class poll extends aw_template
 			));
 		}
 
-		$t->sort_by(array("field" => $args["sortby"]));
+		$t->sort_by();
 		$this->vars(array(
 			"table" => $t->draw(),
 			"newpoll_url" => $this->mk_my_orb("new",array()),

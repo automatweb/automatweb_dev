@@ -196,17 +196,7 @@ class ml_member extends aw_template
 		
 		$t = new aw_table(array(
 			"prefix" => "ml_member",
-			"self" => aw_global_get("PHP_SELF"),
-			"imgurl" => $this->cfg["baseurl"] . "/automatweb/images",
 		));
-		
-		$t->set_header_attribs(array(
-			"class" => "ml_member",
-			"action" => "sent",
-			"lid" => $lid,
-			"id" => $id,
-		));
-
 		$t->define_header("Saadetud meilid",array());
 		$t->parse_xml_def($this->cfg["basedir"] . "/xml/mlist/sentmails.xml");
 
@@ -222,15 +212,7 @@ class ml_member extends aw_template
 			$t->define_data($row);
 		};
 
-		if ($sortby)
-		{
-			$t->sort_by(array("field"=>$sortby));
-		} 
-		else
-		{
-			$t->sort_by(array());
-		};
-
+		$t->sort_by();
 		return $t->draw();
 	}
 

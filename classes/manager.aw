@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/manager.aw,v 2.2 2002/06/12 10:56:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/manager.aw,v 2.3 2002/07/18 10:44:45 kristo Exp $
 // that's your basic file manager with 2 frames class. On the left side is a
 // menu tree just like in /automatweb right now, on the right side we show objects
 // someday this can perhaps replace the current menuedit framework
@@ -60,18 +60,9 @@ class manager extends aw_template
 		load_vcl("table");
 		$t = new aw_table(array(
 			"prefix" => "manager_menus",
-			"imgurl"    => $baseurl."/img",
 			"tbgcolor" => "#C3D0DC",
 		));
-
 		$t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
-
-		$t->set_header_attribs(array(
-			"class" => "manager",
-			"action" => "browse",
-			"parent" => $parent,
-		));
-
 		$t->define_field(array(
 			"name" => "folder",
 			"caption" => "&nbsp;",
@@ -79,7 +70,6 @@ class manager extends aw_template
 			"align" => "center",
 			"nowrap" => "1",
 		));
-		
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => LC_MANAGER_COLS_NAME,
@@ -190,8 +180,8 @@ class manager extends aw_template
 		}
 
 		// sort by name by default
-		$sortby = ($args["sortby"]) ? $args["sortby"] : "name";
-		$t->sort_by(array("field" => $args["sortby"]));
+		$t->set_default_sortby("name");
+		$t->sort_by();
 
 		$this->vars(array(
 			"menu_table" => $t->draw(),

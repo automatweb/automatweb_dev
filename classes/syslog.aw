@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.14 2002/06/18 23:51:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.15 2002/07/18 10:44:45 kristo Exp $
 // syslog.aw - syslog management
 // syslogi vaatamine ja analüüs
 class db_syslog extends aw_template
@@ -270,13 +270,6 @@ class db_syslog extends aw_template
     load_vcl("table");
     $t = new aw_table(array(
 			"prefix" 	=> "syslog", 
-      "sortby" 	=> $syslog_params["sortby"],
-      "lookfor" => "",
-      "imgurl" 	=> $this->cfg["baseurl"]."/images",
-      "self" 		=> aw_global_get("PHP_SELF"),
-		));
-		$t->set_header_attribs(array(
-			"class" => "syslog"
 		));
     $t->parse_xml_def($this->cfg["basedir"]."/xml/syslog.xml");
                                                                                             
@@ -301,7 +294,7 @@ class db_syslog extends aw_template
 			};
 		};
 		
-		$t->sort_by(array("field" => $sortby));
+		$t->sort_by();
 	
 		if ($to && $from)
 		{

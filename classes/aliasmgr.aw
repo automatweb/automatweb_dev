@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.38 2002/07/16 23:43:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.39 2002/07/18 10:44:45 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -288,6 +288,52 @@ class aliasmgr extends aw_template
 				"field" => "id"
 		);
 
+		$this->defs['chatobj']=array(
+			'alias'			=>	'c',
+			'title'			=>	'Jutuka objekt',
+			'class'			=>	'chatobj',
+			'class_id'	=>	CL_CHATOBJ,
+			'generator'	=>	'_CHATOBJ_aliases',
+			'addlink'		=>	$this->mk_my_orb('new',array(
+				'parent'			=>	$this->id,
+				'return_url'	=>	$return_url,
+				'alias_to'		=>	$this->id),'chatobj'),
+			'chlink'		=> $this->mk_my_orb('change',array(
+				'return_url'	=> $return_url), 'chatobj'),
+			'field'			=>	'id'
+		);
+
+		$this->defs['chat_channel_conf']=array(
+			'alias'			=>	'h',
+			'title'			=>	'Jutuka kanali konf.',
+			'class'			=>	'chat_channel_conf',
+			'class_id'	=>	CL_CHAT_CHANNEL_CONF,
+			'generator'	=>	'_CHAT_CHANNEL_CONF_aliases',
+			'addlink'		=>	$this->mk_my_orb('new',array(
+				'parent'			=>	$this->id,
+				'return_url'	=>	$return_url,
+				'alias_to'		=>	$this->id),'chat_channel_conf'),
+			'chlink'		=> $this->mk_my_orb('change',array(
+				'return_url'	=> $return_url), 'chat_channel_conf'),
+			'field'			=>	'id'
+		);
+
+		$this->defs['chatserver']=array(
+			'alias'			=>	's',
+			'title'			=>	'Jutuka server',
+			'class'			=>	'chatserver',
+			'class_id'	=>	CL_CHATSERVER,
+			'generator'	=>	'_CHATSERVER_aliases',
+			'addlink'		=>	$this->mk_my_orb('new',array(
+				'parent'			=> $this->id,
+				'return_url'	=> $return_url,
+				'alias_to'		=> $this->id), 'chatserver'),
+			'chlink'		=> $this->mk_my_orb('change',array(
+				'return_url'	=> $return_url), 'chatserver'),
+			'field'			=> 'id'
+		);
+
+
 		$this->defs["chat_list"] = array(
 				"alias" => "z",
 				"title" => "Jutuka listiobjekt",
@@ -483,28 +529,18 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		$this->id = $id;
 		$this->_init_aliases();
 		$this->table = $table;
-		$this->sortby = $sortby;
-		$this->sort_order = $sort_order;
 		$this->read_template("lists.tpl");
 		$meta = $this->get_object_metadata(array(
 			"oid" => $id,
 			"key" => "aliaslinks",
 		));
 		$this->aliaslinks = $meta;
-		load_vcl("table");
 
+		load_vcl("table");
 		$this->t = new aw_table(array(
 			"prefix" => "images",
-			"imgurl"    => $this->cfg["baseurl"]."/automatweb/images",
-			"tbgcolor" => "#C3D0DC",
 		));
-
 		$this->t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
-		$this->t->set_header_attribs(array(
-			"id" => $this->id,
-			"class" => "aliasmgr",
-			"action" => "list_aliases",
-		));
 		$this->t->define_field(array(
 			"name" => "icon",
 			"caption" => "",
@@ -604,16 +640,8 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 			$this->_finalize($key);
 		};
 
-		if (not($args["sortby"]))
-		{
-			$sortby = "title";
-		}
-		else
-		{
-			$sortby = $args["sortby"];
-		};
-		$this->t->sort_by(array("field" => $sortby));
-		
+		$this->t->set_default_sortby("title");
+		$this->t->sort_by();
 		$this->vars(array(
 			"table" => $this->t->draw(),
 			"id" => $id,
@@ -848,6 +876,65 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 			));
 			$this->_common_parts($v);
 		};
+	}
+
+	function _CHATOBJ_aliases($args=array()){
+		$aliases = $this->get_aliases_for($this->id, CL_CHATOBJ, $_sby, $s_link_order);
+		reset($aliases);
+		while(list(,$v)=each($aliases)){
+			$url=$this->mk_my_orb('change',
+														array(
+															'id'					=>	$v['id'],
+															'return_url'	=>	urlencode($this->return_url)),
+														'chatobj');
+			$mchain=sprintf('<a href="%s">%s</a>',$url, $v['name']);
+			$v['url']=$url;
+			$this->t->define_data(array(
+				'name'	=>	$mchain,
+				'description'	=>	$v['comment'],
+				'id'		=>	$v['id']));
+			$this->_common_parts($v);
+		}
+	}
+	
+	function _CHAT_CHANNEL_CONF_aliases($args=array())
+	{
+		$aliases = $this->get_aliases_for($this->id, CL_CHAT_CHANNEL_CONF, $_sby, $s_link_order);
+		reset($aliases);
+		while(list(,$v)=each($aliases)){
+			$url=$this->mk_my_orb('change',
+														array(
+															'id'					=>	$v['id'],
+															'return_url'	=>	urlencode($this->return_url)),
+														'chat_channel_conf');
+			$mchain=sprintf('<a href="%s">%s</a>',$url, $v['name']);
+			$v['url']=$url;
+			$this->t->define_data(array(
+				'name'	=>	$mchain,
+				'description'	=>	$v['comment'],
+				'id'		=>	$v['id']));
+			$this->_common_parts($v);
+		}
+	}
+	
+	function _CHATSERVER_aliases($args=array())
+	{
+		$aliases = $this->get_aliases_for($this->id, CL_CHATSERVER, $_sby, $s_link_order);
+		reset($aliases);
+		while(list(,$v)=each($aliases)){
+			$url=$this->mk_my_orb('change',
+														array(
+															'id'					=>	$v['id'],
+															'return_url'	=>	urlencode($this->return_url)),
+														'chatserver');
+			$mchain=sprintf('<a href="%s">%s</a>',$url, $v['name']);
+			$v['url']=$url;
+			$this->t->define_data(array(
+				'name'	=>	$mchain,
+				'description'	=>	$v['comment'],
+				'id'		=>	$v['id']));
+			$this->_common_parts($v);
+		}
 	}
 	
 	function _form_aliases($args = array())

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.45 2002/06/10 15:50:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.46 2002/07/18 10:44:45 kristo Exp $
 // shop.aw - Shop
 
 session_register("shopping_cart");
@@ -2122,7 +2122,7 @@ class shop extends shop_base
 					$tx.=$ft->finish_table();
 				}
 				// ja alustame uut
-				$ft->start_table($type2table[$row["item_type"]],array("shop" => $shop, "order_id" => $order_id, "section" => $section,"class" =>  "shop", "action" => "view_bill"));
+				$ft->start_table($type2table[$row["item_type"]]);
 
 				$itt = $this->get_item_type($row["item_type"]);
 				// j2relikult muutus ka itemi sisestamise form, loadime
@@ -2267,7 +2267,7 @@ class shop extends shop_base
 					$tx.=$ft->finish_table();
 				}
 				// ja alustame uut
-				$ft->start_table($type2table[$row["item_type"]],array("shop" => $shop, "order_id" => $order_id, "section" => $section,"class" =>  "shop", "action" => "view_confirmation"));
+				$ft->start_table($type2table[$row["item_type"]]);
 
 				$itt = $this->get_item_type($row["item_type"]);
 				// j2relikult muutus ka itemi sisestamise form, loadime

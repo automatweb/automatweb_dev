@@ -1,5 +1,5 @@
 <?php
-// $Revision: 2.6 $
+// $Revision: 2.7 $
 // docmgr.aw - Document manager
 // our first goal is it to make a decent interface to searching
 // from documents and their archives.
@@ -59,17 +59,9 @@ class docmgr extends document
 
 		$t = new aw_table(array(
 			"prefix" => "docmgr",
-			"imgurl"    => $this->cfg["baseurl"]."/img",
 			"tbgcolor" => "#C3D0DC",
 		));
 		$t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
-		$t->set_header_attribs(array(
-			"class" => "docmgr",
-			"action" => "search",
-			"reforb" => 1,
-			"no_redir" => 1,
-		));
-		$t->add_query_string(join("&",$query_string));
 
 		$t->define_field(array(
 			"name" => "oid",
@@ -189,7 +181,7 @@ class docmgr extends document
 			};
 		}
 
-		$t->sort_by(array("field" => $args["sortby"]));
+		$t->sort_by();
 	
 		$this->vars(array(
 			"results" => $t->draw(),
