@@ -1,5 +1,5 @@
 <?php
-// $Revision: 2.3 $
+// $Revision: 2.4 $
 // docmgr.aw - Document manager
 // our first goal is it to make a decent interface to searching
 // from documents and their archives.
@@ -7,15 +7,12 @@
 // then all the document management functions (and I mean editing,
 // and other stuff like that should be moved over here to reduce
 // the memory requirements of the main document class.
-global $orb_defs;
-$orb_defs["docmgr"] = "xml";
+
 classload("document");
 class docmgr extends document 
 {
 	function docmgr($args = array())
 	{
-		#$this->db_init();
-		#$this->tpl_init("automatweb/documents");
 		// call document constructor to initialize settings
 		$this->document();
 	}
@@ -57,12 +54,15 @@ class docmgr extends document
 			};
 		};
 
+		// otsime ainult yhest saidist
+		$qstring[] = " objects.site_id = " . aw_ini_get("site_id") . " ";
+
 		$t = new aw_table(array(
 			"prefix" => "docmgr",
-			"imgurl"    => $GLOBALS["baseurl"]."/img",
+			"imgurl"    => aw_ini_get("baseurl")."/img",
 			"tbgcolor" => "#C3D0DC",
 		));
-		$t->parse_xml_def($GLOBALS["basedir"]."/xml/generic_table.xml");
+		$t->parse_xml_def(aw_ini_get("basedir")."/xml/generic_table.xml");
 		$t->set_header_attribs(array(
 			"class" => "docmgr",
 			"action" => "search",
