@@ -31,10 +31,18 @@
 <!-- SUB: SUBTOPIC -->
 <tr>
 	<td class="{VAR:style_topic_caption}"><center><img src="{VAR:baseurl}/automatweb/images/forum_arrow_sm.gif"></center></td>
-	<td class="{VAR:style_topic_caption}"><a href="{VAR:open_topic_url}">{VAR:name}</a></td>
+	<td class="{VAR:style_topic_caption}">
+	<!-- SUB: ADMIN_BLOCK -->
+	<input type="checkbox" name="sel_topic[{VAR:topic_id}]" value="1" />
+	<!-- END SUB: ADMIN_BLOCK -->
+	<a href="{VAR:open_topic_url}">{VAR:name}</a>
+	</td>
 	<td align="center" class="{VAR:style_topic_replies}">{VAR:comment_count}</td>
 	<td align="center" class="{VAR:style_topic_author}">{VAR:author}</td>
 	<td align="center" class="{VAR:style_topic_last_post}">{VAR:last_date}<br>{VAR:last_createdby}</td>
 </tr>
 <!-- END SUB: SUBTOPIC -->
 </table>
+<!-- SUB: DELETE_ACTION -->
+<input type="submit" name="delete_selected_topics" value="Kustuta valitud teemad">
+<!-- END SUB: DELETE_ACTION -->
