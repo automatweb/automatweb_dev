@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.2 2003/09/09 15:43:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.3 2003/09/11 13:13:54 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -164,19 +164,42 @@ class messenger_v2 extends class_base
 			"msgr_id" => $arr["obj"]["oid"],
 		));
 
-		$contents = $this->drv_inst->get_folder_contents();
-		
+		$perpage = 50;
+		$ft_page = (int)$GLOBALS["ft_page"];
+
+		$contents = $this->drv_inst->get_folder_contents(array(
+			"from" => $perpage * $ft_page + 1,
+			"to" => $perpage * ($ft_page + 1),
+		));
+
+		$count = $this->drv_inst->count;
+
 		$t = &$arr["prop"]["obj_inst"];
 		$t->parse_xml_def("messenger/mailbox_view");
-		
+
+
+		$t->d_row_cnt = $count;
+
+		$pageselector = "";
+
+		if ($t->d_row_cnt > $perpage)
+		{
+			$pageselector = $t->draw_lb_pageselector(array(
+				"records_per_page" => $perpage
+			));
+		};
+
+		$t->table_header = $pageselector;
+
 		foreach($contents as $key => $message)
 		{
+			$seen = $message["seen"];
 			$t->define_data(array(
 				"mark" => html::checkbox(array(
 					"name" => "mark[" . $key . "]",
 					"value" => 1,
 				)),
-				"from" => htmlspecialchars($message["from"]),
+				"from" => $this->_format(htmlspecialchars($message["from"]),$seen),
 				"subject" => html::href(array(
 					"url" => $this->mk_my_orb("change",array(
 							"id" => $arr["obj"]["oid"],
@@ -184,14 +207,21 @@ class messenger_v2 extends class_base
 							"group" => $arr["request"]["group"],
 							"mailbox" => $this->use_mailbox,
 					)),
-					"caption" => parse_obj_name($message["subject"]),
+					"caption" => $this->_format(parse_obj_name($message["subject"]),$seen),
 				)),
-				"date" => $message["date"],
-				"size" => $message["size"],
-				"seen" => $this->_conv_stat($message["seen"]),
-				"answered" => $this->_conv_stat($message["answered"]),
+				"date" => $this->_format(date("H:i d-M",strtotime($message["date"])),$seen),
+				"size" => $this->_format(sprintf("%dK",$message["size"]/1024),$seen),
+				"seen" => $this->_format($this->_conv_stat($message["seen"]),$seen),
+				"answered" => $this->_format($this->_conv_stat($message["answered"]),$seen),
 			));
 		};
+
+	}
+
+	function _format($str,$flag)
+	{
+		return ($flag) ? $str : "<strong>$str</strong>";
+
 
 	}
 
@@ -206,37 +236,68 @@ class messenger_v2 extends class_base
 			"msgr_id" => $arr["obj"]["oid"],
 		));
 
-		$rv = "<table border='0' width='100%'><tr><td valign='top'><small>";
-
+		$rv = "<table border='0' width='100%'><tr><td valign='top' width='200'><small>";
 		$this->mailboxlist = $this->drv_inst->list_folders();
-		$selected = isset($arr["request"]["mailbox"]) ? $arr["request"]["mailbox"] : "INBOX";
+
+		$boxes = array();
+		$boxes[0][1] = array("name" => "IMAP");
+		
+		// I have to enumerate those mailboxes, because the current DHTML
+		// trees uses names as unique identifiers for tree branches ..
+		// having special characters in them breaks javascript syntax
+		$enum = array();
+		$i = 1;
+
 		foreach($this->mailboxlist as $key => $val)
 		{
-			if ($val == $selected)
+			$i++;
+			$enum[$val] = $i;
+			
+			// kui mailboxi nimi ei sisalda punkti, siis on tegemist esimese taseme folderiga
+			// tegelikult .. eraldaja m‰‰ratakse ‰ra namespacega, ilmselt vıib olla see ka
+			// midagi muud kui punkt. aga praegu piisab punktist.
+			if (strpos($val,".") === false)
 			{
-				$rv .= "<strong>$val</strong>";
+				$parent = 1;
+				$boxes[1][$i] = array("name" => $val);
+				$name = $val;
 			}
 			else
 			{
-				$rv .= html::href(array(
-					"url" => $this->mk_my_orb("change",array(
-						"id" => $arr["obj"]["oid"],
-						"group" => "message_view",
-						"mailbox" => $val,
-					)),
-					"caption" => $val,
-				));
+				$parent = $enum[substr($val,0,strrpos($val,"."))];
+				$name = substr($val,strrpos($val,".")+1);
 			};
-			$rv .= "<br>";
-		};
 
+			if ($val == $this->use_mailbox)
+			{
+				$name = "<strong>$name</strong>";
+			};
+
+			$boxes[$parent][$i] = array(
+				"name" => $name,
+				"link" => $this->mk_my_orb("change",array(
+					"id" => $arr["obj"]["oid"],
+					"group" => "message_view",
+					"mailbox" => $val,
+				)),
+			);
+				
+		}
+
+		$treeview = get_instance("vcl/treeview");
+                $res =  $treeview->create_tree_from_array(array(
+                        "parent" => 1,
+                        "data" => $boxes,
+                        "shownode" => $enum[$this->use_mailbox],
+                        "linktarget" => "_self",
+                ));
+
+		$rv .= $res;
 		$rv .= "</td><td valign='top'>";
 
 		return $rv;
 	}
 
-
-	
 
 	function gen_mail_toolbar($arr)
 	{
@@ -244,32 +305,11 @@ class messenger_v2 extends class_base
 			"msgr_id" => $arr["obj"]["oid"],
 		));
 
-		//$this->mailboxlist = $this->drv_inst->list_folders();
-
 		$toolbar = &$arr["prop"]["toolbar"];
-
-		/*
-		$toolbar->add_cdata(html::select(array(
-				"name" => "mailbox",
-				"options" => $this->mailboxlist,
-				"selected" => $selected,
-		)));
-		*/
 
 		$req_uri = aw_global_get("REQUEST_URI");
 
 	
-		/*
-		$toolbar->add_button(array(
-			"name" => "refresh",
-			"tooltip" => "Lae meilbox",
-			"url" => "javascript:document.changeform.submit()",
-			"img" => "refresh.gif",
-			"imgover" => "refresh_over.gif",
-		));
-		*/
-
-
 		if (!empty($arr["request"]["msgid"]))
 		{
 			$toolbar->add_cdata(html::href(array(
@@ -297,7 +337,7 @@ class messenger_v2 extends class_base
 		));
 
 
-		$msgdata = $this->fetch_message(array(
+		$msgdata = $this->drv_inst->fetch_message(array(
 				"msgid" => $msgid,
 		));
 
@@ -307,6 +347,7 @@ class messenger_v2 extends class_base
 		$rv .= "<br><b>To: </b>" . htmlspecialchars(parse_obj_name($msgdata["to"]));
 		$rv .= "<br><b>Subject: </b>" . htmlspecialchars(parse_obj_name($msgdata["subject"]));
 		$rv .= "<br><b>Date: </b>" . $msgdata["date"];
+		$rv .= "<br><br>";
 		$rv .= nl2br(htmlspecialchars($msgdata["content"]));
 
 		return $rv;
@@ -358,7 +399,7 @@ class messenger_v2 extends class_base
 		$msgdata = array();
 		if (!empty($msgid))
 		{
-			$msgdata = $this->fetch_message(array(
+			$msgdata = $this->drv_inst->fetch_message(array(
 				"msgid" => $msgid,
 			));
 		};
@@ -383,9 +424,16 @@ class messenger_v2 extends class_base
 
 		$all_props["mfrom"]["value"] = $msgobj->prop("fromname");
 
-		$all_props["mto"]["type"] = "relpicker";
-		$all_props["mto"]["reltype"] = "RELTYPE_ADDRESS";
-		$all_props["mto"]["size"] = 1;
+		$related_lists = $msgobj->connections_from(array(
+			"type" => RELTYPE_ADDRESS,
+		));
+
+		if (sizeof($related_lists) > 0)
+		{
+			$all_props["mto"]["type"] = "relpicker";
+			$all_props["mto"]["reltype"] = "RELTYPE_ADDRESS";
+			$all_props["mto"]["size"] = 1;
+		};
 
 		if (sizeof($msgdata) > 0)
 		{
@@ -480,47 +528,6 @@ class messenger_v2 extends class_base
                 return PROP_OK;
 
 	}
-
-	////
-	// !This should move to the IMAP class, but hey .. I have enough time to do that
-	// needs 2 arguments, mailbox name and msgid .. arr,arr
-	function fetch_message($arr)
-	{
-		$msgid = $arr["msgid"];
-		$msg_no = imap_msgno($this->mbox,$arr["msgid"]);
-		$hdrinfo = imap_headerinfo($this->mbox,$msg_no);
-
-		$msgdata = array(
-			"from" => $hdrinfo->fromaddress,
-			"reply_to" => $hdrinfo->reply_toaddress,
-			"to" => $hdrinfo->toaddress,
-			"subject" => $hdrinfo->subject,
-			"date" => $hdrinfo->MailDate,
-		);
-		
-		$overview = imap_fetchstructure($this->mbox,$msgid,FT_UID);
-		$rv = "";
-
-		if (is_array($overview->parts))
-		{
-			foreach($overview->parts as $num => $meta)
-			{
-				$part = imap_fetchbody($this->mbox,$msgid,$num+1,FT_UID);
-				$rv .= "\n\n" . $part;
-			}
-		}
-		else
-		{
-			$part = imap_fetchbody($this->mbox,$msgid,1,FT_UID);
-			$rv .= "\n\n";
-			$rv .= $part;
-		}
-
-		$msgdata["content"] = $rv;
-
-		return $msgdata;
-	}
-
 
 	function callback_get_rel_types()
 	{
