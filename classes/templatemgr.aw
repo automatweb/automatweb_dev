@@ -96,5 +96,12 @@ class templatemgr extends aw_template
 		};
 		return $result;
 	}
+
+	function get_template_file_by_id($args = array())
+	{
+		$id = (int)$args["id"];
+		$row = $this->get_record("template","id",$id,array("filename"));
+		return $row["filename"];
+	}
 }
 ?>
