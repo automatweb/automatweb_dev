@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.22 2002/10/30 11:03:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.23 2002/11/01 13:01:36 kristo Exp $
 // tegeleb ORB requestide handlimisega
 classload("aw_template","defs");
 lc_load("automatweb");
@@ -329,7 +329,7 @@ class orb extends aw_template
 						};
 						if ($attribs["folder"])
 						{
-							$orb_defs[$class]["folder"] = $attribs["folder"];
+							$orb_defs[$class]["___folder"] = $attribs["folder"];
 						};
 					};
 				}
@@ -422,9 +422,9 @@ class orb extends aw_template
 		// try and figure out the folder for this class 
 		$folder = "";
 
-		if ($ret[$class]["folder"])
+		if ($ret[$class]["___folder"])
 		{
-			$folder = $ret[$class]["folder"]."/";
+			$folder = $ret[$class]["___folder"]."/";
 		}
 
 		// laeme selle klassi siis
@@ -497,7 +497,7 @@ class new_orb extends orb
 		if (!$method || $method == "local")
 		{
 			// local call
-			$data = $this->do_local_call($orb_defs[$class][$action]["function"], $class, $params);
+			$data = $this->do_local_call($orb_defs[$class][$action]["function"], $class, $params, $orb_defs[$class]["folder"]);
 		}
 		else
 		{
@@ -587,9 +587,13 @@ class new_orb extends orb
 		return $ret;
 	}
 
-	function do_local_call($func, $class, $params)
+	function do_local_call($func, $class, $params, $folder)
 	{
-		$inst = get_instance($class);
+		if ($folder != "")
+		{
+			$folder.="/";
+		}
+		$inst = get_instance($folder.$class);
 		if (is_object($inst))
 		{
 			if (method_exists($inst, $func))
@@ -663,7 +667,7 @@ class new_orb extends orb
 		$orb_defs = $this->try_load_class($request["class"]);
 		$params = $this->check_method_params($orb_defs, $request["params"], $request["class"], $request["action"]);
 
-		$ret = $this->do_local_call($orb_defs[$request["class"]][$request["action"]]["function"], $request["class"], $params);
+		$ret = $this->do_local_call($orb_defs[$request["class"]][$request["action"]]["function"], $request["class"], $params, $orb_defs[$request["class"]]["folder"]);
 
 		return $inst->encode_return_data($ret);
 	}
