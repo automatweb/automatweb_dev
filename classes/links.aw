@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.20 2002/09/25 15:03:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.21 2002/10/03 13:46:16 duke Exp $
 
 classload("extlinks");
 class links extends extlinks
@@ -112,7 +112,8 @@ class links extends extlinks
 			"extlink"	=> checked($link["type"] != "int"),
 			"intlink"	=> checked($link["type"] == "int"),
 			"doclinkcollection"	=> checked($link["doclinkcollection"]),
-			"docs"		=> $this->picker($link["docid"], $t->mk_docsel()),
+///mk_doksel tekitab probleeme?
+//			"docs"		=> $this->picker($link["docid"], $t->mk_docsel()),
 			"newwindow" => checked($link["newwindow"]),
 			"link_image_active_until" => $de->gen_edit_form("active_until",$active_until),
 			"link_image_check_active" => checked($link["link_image_check_active"]),
@@ -253,7 +254,7 @@ class links extends extlinks
 		// neid teenuseid. Ntx dokumendiklassi sees.
 
 		#$par_obj = $this->get_object($xparent);
-		return $this->mk_my_orb("change",array("id" => $id, "return_url" => $return_url));
+		return $this->mk_my_orb("change",array("id" => $id, "return_url" => urlencode($return_url)));
 		/*
 		if ($docid)
 		{
@@ -388,6 +389,7 @@ class links extends extlinks
 
 		$row = unserialize($str);
 		$row["parent"] = $parent;
+		$this->quote(&$row);
 		$id = $this->new_object($row);
 		$this->db_query("INSERT INTO extlinks(id,url,name,hits,oid,descript,newwindow,type,docid,doclinkcollection) VALUES($id,'".$row["e_url"]."','".$row["e_name"]."','".$row["e_hits"]."','".$row["e_oid"]."','".$row["e_descript"]."','".$row["e_newwindow"]."','".$row["e_type"]."','".$row["e_docid"]."','".$row["e_doclinkcollection"]."')");
 		return true;
