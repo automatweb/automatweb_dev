@@ -60,6 +60,25 @@
 	<td class="fform"><input type='radio' name='entry_type' value='element_sum' {VAR:et_element_sum}></td>
 	<td class="fform">K&otilde;ik vaadataval lehel olevate selle elemendi sisestuste summa</td>
 </tr>
+<tr>
+	<td class="fform"><input type='radio' name='entry_type' value='other_chain' {VAR:et_other_chain}></td>
+	<td class="fform">Sisestatava p&auml;rjaga seotud teise p2rja teise formi siestus</td>
+</tr>
+<!-- SUB: OTHER_ELEMENT -->
+<tr>
+	<td colspan="2" class="fform">Vali selle p&auml;rja seose form:</td>
+</tr>
+<tr>
+	<td colspan="2" class="fform"><select class='small_button' NAME='other_sel_form'>{VAR:other_forms}</select></td>
+</tr>
+<tr>
+	<td colspan="2" class="fform">Vali seoseelement:</td>
+</tr>
+<tr>
+	<td colspan="2" class="fform"><select class='small_button' NAME='other_sel_el'>{VAR:other_elements}</select></td>
+</tr>
+<!-- END SUB: OTHER_ELEMENT -->
+
 
 <!-- END SUB: EL_SEL -->
 
