@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.73 2004/05/06 12:28:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.74 2004/06/04 11:25:04 kristo Exp $
 
 lc_load("definition");
 
@@ -353,7 +353,7 @@ class acl_base extends db_connector
 					fwrite($fp, $str);
 					flock($fp, LOCK_UN);
 					fclose($fp);
-					chmod($fqfn, 0666);
+					@chmod($fqfn, 0666);
 				}
 
 				aw_cache_set("__aw_acl_cache", $oid, $max_acl);
