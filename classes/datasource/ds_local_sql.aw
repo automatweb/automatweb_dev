@@ -1,5 +1,5 @@
 <?php
-// $Id: ds_local_sql.aw,v 1.5 2003/01/02 13:30:12 duke Exp $
+// $Id: ds_local_sql.aw,v 1.6 2003/03/12 13:15:11 duke Exp $
 // ds_local_sql - interface for the local SQL database
 class ds_local_sql extends aw_template
 {
@@ -71,12 +71,13 @@ class ds_local_sql extends aw_template
 	function ds_save_object($args = array(),$data = array())
 	{
 
-		if ($args["table"] && $args["idfield"])
+		if (isset($args["table"]) && isset($args["idfield"]))
 		{
 			$this->db_update_record(array(
 				"table" => $args["table"],
 				"key" => array($args["idfield"] => $args["id"]),
 				"values" => $data,
+				"replace" => $args["replace"],
 			));
 			
 		}
