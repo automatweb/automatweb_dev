@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.91 2004/11/26 14:04:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.92 2004/12/01 17:39:21 ahti Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -34,7 +34,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 @caption Fotode autor
 
 @property keywords type=textbox size=60 trans=1
-@caption Võtmesõnad
+@caption V&otilde;tmes&otilde;nad
 
 @property names type=textbox size=60 trans=1
 @caption Nimed
@@ -55,10 +55,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 @caption Foorum
 
 @property showlead type=checkbox ch_value=1 default=1 trans=1
-@caption Näita leadi
+@caption N&auml;ita leadi
 
 @property show_modified type=checkbox ch_value=1 trans=1 default=1
-@caption Näita muutmise kuupäeva
+@caption N&auml;ita muutmise kuup&auml;eva
 
 @property doc_modified type=hidden table=documents field=modified trans=1
 @caption Dok. modified
@@ -74,13 +74,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 @caption Pealkiri klikitav
 
 @property clear_styles type=checkbox ch_value=1 store=no trans=1
-@caption Tühista stiilid
+@caption T&uuml;hista stiilid
 
 @property link_keywords type=checkbox ch_value=1 store=no trans=1
-@caption Lingi võtmesõnad
+@caption Lingi v&otilde;tmes&otilde;nad
 
 @property link_keywords2 type=checkbox ch_value=1 field=meta method=serialize table=objects default=1
-@caption Võtmesõnad lingina
+@caption V&otilde;tmes&otilde;nad lingina
 
 @property esilehel type=checkbox ch_value=1 group=settings trans=1
 @caption Esilehel
@@ -100,16 +100,16 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 
 
 @property show_title type=checkbox ch_value=1 default=1 trans=1
-@caption Näita pealkirja
+@caption N&auml;ita pealkirja
 
 @property no_search type=checkbox ch_value=1 trans=1
-@caption Jäta otsingust välja
+@caption J&auml;ta otsingust välja
 
 @property cite type=textarea cols=60 rows=10 trans=1
 @caption Tsitaat
 
 @property tm type=textbox size=20 trans=1
-@caption Kuupäev
+@caption Kuup&auml;ev
 
 @property show_print type=checkbox ch_value=1 table=objects field=meta method=serialize default=1 trans=1
 @caption 'Prindi' nupp
@@ -157,7 +157,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 @caption Kestab
 
 @property calendar_relation type=select field=meta method=serialize group=general table=objects trans=1
-@caption Põhikalender
+@caption P&otilde;hikalender
 
 @property gen_static type=checkbox store=no trans=1
 @caption Genereeri staatiline
@@ -170,10 +170,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 @property nobreaks type=hidden table=documents
 
 @property no_topic_links type=checkbox table=objects field=meta method=serialize ch_value=1
-@caption Ära tee Samal teemal linke
+@caption &Auml;ra tee Samal teemal linke
 
 @property no_last type=checkbox ch_value=1 group=settings trans=1
-@caption Ära arvesta muutmist
+@caption &Auml;ra arvesta muutmist
 
 @property show_last_changed type=checkbox ch_value=1 group=settings trans=1 table=objects field=meta method=serialize
 @caption Muutmise kuupaev dokumendi sees
