@@ -345,6 +345,21 @@
             <caption>User-defined var 10</caption>
       </property>
       <property>
+            <name>packaging</name>
+            <table>objects</table>
+            <group>packaging</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_PACKAGING</reltype>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>price</num_1>
+            </props>
+            <mode>manager</mode>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Pakendid</caption>
+      </property>
+      <property>
             <name>images</name>
             <table>objects</table>
             <group>img</group>
@@ -369,6 +384,9 @@
             <data>
                   <caption>Toote info</caption>
             </data>
+            <packaging>
+                  <caption>Pakendid</caption>
+            </packaging>
             <img>
                   <caption>Pildid</caption>
             </img>

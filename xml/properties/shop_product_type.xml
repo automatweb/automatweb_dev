@@ -10,6 +10,16 @@
             <method>serialize</method>
             <caption>Vorm, millega toodet sisestatakse</caption>
       </property>
+      <property>
+            <name>packaging_cfgform</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SP_CFGFORM</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vorm, millega toote pakendit sisestatakse</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_PRODUCT_TYPE</syslog_type>
             <relationmgr>yes</relationmgr>

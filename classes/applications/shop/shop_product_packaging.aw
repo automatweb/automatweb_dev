@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.2 2004/05/13 12:00:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.3 2004/05/13 14:47:28 kristo Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -63,6 +63,8 @@
 @property uservar5 type=classificator field=uservar5 group=data
 @caption User-defined var 5
 
+@property images type=releditor reltype=RELTYPE_IMAGE table=objects field=meta method=serialize mode=manager props=name,ord,status,file group=img
+@caption Pildid
 
 @reltype IMAGE value=1 clid=CL_IMAGE
 @caption pilt 
@@ -153,7 +155,7 @@ class shop_product_packaging extends class_base
 			"view_link" => obj_link($prod->id().":".$oc_obj->id())
 		);
 		$l_inst->vars($ivs);
-		$pr_i->_int_proc_ivs($ivs, $l_inst);
+		$proc_ivs = $ivs;
 
 		// insert images
 		$i = get_instance("image");
@@ -212,9 +214,10 @@ class shop_product_packaging extends class_base
 				"packaging_uservar".$i => $tmp2
 			);
 			$l_inst->vars($ivar);
-			$pr_i->_int_proc_ivs($ivar, $l_inst);
+			$proc_ivs += $ivar;
 		}
 
+		$pr_i->_int_proc_ivs($proc_ivs, $l_inst);
 		return $l_inst->parse();
 	}
 

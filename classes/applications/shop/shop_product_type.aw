@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_type.aw,v 1.1 2004/03/17 16:06:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_type.aw,v 1.2 2004/05/13 14:47:28 kristo Exp $
 // shop_product_type.aw - Toote t&uuml;&uuml;p 
 /*
 
@@ -10,6 +10,10 @@
 
 @property sp_cfgform type=relpicker reltype=RELTYPE_SP_CFGFORM field=meta method=serialize
 @caption Vorm, millega toodet sisestatakse
+
+@property packaging_cfgform type=relpicker reltype=RELTYPE_SP_CFGFORM field=meta method=serialize
+@caption Vorm, millega toote pakendit sisestatakse
+
 
 @reltype SP_CFGFORM value=1 clid=CL_CFGFORM
 @caption seadete vorm
