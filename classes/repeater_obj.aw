@@ -1,6 +1,6 @@
 <?php
 
-classload("cal_event");
+classload("calendar/cal_event");
 class repeater_obj extends cal_event
 {
 	function repeater_obj()

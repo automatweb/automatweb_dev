@@ -154,7 +154,7 @@ echo $q;
 			"reforb" => $this->mk_reforb("submit", array("parent"=>$parent, "id" => $id, "sid" => $sid, "return_url" => urlencode($return_url))),
 		));
 		
-		
+/*		
 		
 		
 alates:{VAR:from_date}<br />
@@ -201,7 +201,7 @@ select count from linikogu_stat where oid=666:_ {VAR:caunt_linke} <br />
 </fieldset>
 
 
-{VAR:stat_out}
+{VAR:stat_out}*/
 
 		return $this->parse();
 

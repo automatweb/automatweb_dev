@@ -4,6 +4,7 @@
 // so we derive a class from menuedit and override the function thet draws the path line.
 // yeah. maybe some others as well, l8r. 
 // oop rulez. 
+classload("menuedit");
 class shop_menuedit extends menuedit
 {
 	function shop_menuedit()
