@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.33 2004/05/12 12:39:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.34 2004/05/12 15:04:00 duke Exp $
 // promo.aw - promokastid.
 
 /*
@@ -72,11 +72,18 @@
 
 	@groupinfo menus caption=Kaustad
 	@groupinfo show caption=Näitamine
+
+	@reltype ASSIGNED_MENU value=1 clid=CL_MENU
+	@caption näita menüü juures
+
+	@reltype DOC_SOURCE value=2 clid=CL_MENU
+	@caption võta dokumente selle menüü alt
+
+	@reltype IMAGE value=3 clid=CL_IMAGE
+	@caption pilt
+	
 			
 */
-define("RELTYPE_ASSIGNED_MENU",1);
-define("RELTYPE_DOC_SOURCE",2);
-define("RELTYPE_IMAGE",3);
 class promo extends class_base
 {
 	function promo()
@@ -89,27 +96,6 @@ class promo extends class_base
 		$this->lc_load("promo","lc_promo");
 	}
 
-	function callback_get_classes_for_relation($args = array())
-	{
-		if ($args["reltype"] == RELTYPE_ASSIGNED_MENU || $args["reltype"] == RELTYPE_DOC_SOURCE)
-		{
-			return array(CL_MENU);
-		}
-		else
-		if ($args["reltype"] == RELTYPE_IMAGE)
-		{
-			return array(CL_IMAGE);
-		}
-	}
-
-	function callback_get_rel_types()
-	{
-		return array(
-			RELTYPE_ASSIGNED_MENU => "näita menüü juures",
-			RELTYPE_DOC_SOURCE => "võta dokumente selle menüü alt",
-			RELTYPE_IMAGE => "pilt",
-		);
-	}
 
 	function get_property($arr = array())
 	{
@@ -543,6 +529,24 @@ class promo extends class_base
 				"SHOW_TITLE" => ""
 			));
 		}
+
+		if (aw_global_get("uid") != "" && $this->is_template("ADD_ITEM"))
+		{
+			$conns = $ob->connections_from(array(
+				"type" => "RELTYPE_DOC_SOURCE",
+			));
+			if (sizeof($conns) > 0)
+			{
+				$first = reset($conns);
+				$this->vars(array(
+					"add_item_url" => $this->mk_my_orb("new",array("parent" => $first->prop("to")),"doc",true),
+				));
+				$this->vars(array(
+					"ADD_ITEM" => $this->parse("ADD_ITEM"),
+				));
+			};
+		}
+
 		return $this->parse();
 	}
 
