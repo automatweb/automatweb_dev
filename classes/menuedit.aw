@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.170 2002/11/07 10:52:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.171 2002/11/12 17:59:24 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 /*
@@ -195,6 +195,12 @@ class menuedit extends aw_template
 			$c = get_instance("config");
 			$c->show_favicon(array());
 		}
+
+		if (aw_global_get("no_menus") == 1)
+		{
+			return $params["text"];
+		}
+
 
 		// kontrollib sektsiooni ID-d, tagastab oige numbri kui tegemist oli
 		// aliasega, voi lopetab töö, kui miskit oli valesti
@@ -2251,6 +2257,12 @@ class menuedit extends aw_template
 			return "";
 		}
 
+		global $XYZ;
+		if ($XYZ)
+		{
+			print "rec_tree with $parent<br>";
+		};
+
 		$baseurl = $this->cfg["baseurl"];
 		$ext = $this->cfg["ext"];
 
@@ -3549,7 +3561,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					{
 						$this->vars(array(
 							"sel_menu_".$name."_L".$this->level."_image_".$_i."_url" => $imgurl,
-							"sel_menu_".$name."_L".$this->level."_image_".$_i => "<img src='".$imgurl."'>",
+							"sel_menu_".$name."_L".$this->level."_image_".$_i => "<img src='".$imgurl."' border='0'>",
 						));
 					}
 					$has_image = true;
