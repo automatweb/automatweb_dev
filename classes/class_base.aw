@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.311 2004/10/29 16:04:35 duke Exp $
+// $Id: class_base.aw,v 2.312 2004/11/01 15:26:07 ahti Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -3088,7 +3088,7 @@ class class_base extends aw_template
 				if (is_numeric($val) === false)
 				{
 					$status = PROP_ERROR;
-					$property["error"] = $property["name"] . " - siia saab sisestada ainult arvu!";
+					$property["error"] = $property["caption"] . " - siia saab sisestada ainult arvu!";
 				};
 			};
 			
