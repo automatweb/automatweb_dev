@@ -1,6 +1,6 @@
 <?php
 
-class __classname extends aw_template
+class __classname extends class_base
 {
 	////////////////////////////////////
 	// the next functions are REQUIRED for all classes that can be added from menu editor interface
@@ -13,6 +13,24 @@ class __classname extends aw_template
 	}
 
 	////
+	// !generates the toolbar for this class
+	// default toolbar includes only one button - save button
+	function mk_toolbar()
+	{
+		$tb = get_instance("toolbar");
+		
+		$tb->add_button(array(
+			"name" => "save",
+			"tooltip" => "Salvesta",
+			"url" => "javascript:document.add.submit()",
+			"imgover" => "save_over.gif",
+			"img" => "save.gif"
+		));
+
+		return $tb->get_toolbar();
+	}
+
+	////
 	// !called, when adding a new object 
 	// parameters:
 	//    parent - the folder under which to add the object
@@ -21,17 +39,11 @@ class __classname extends aw_template
 	function add($arr)
 	{
 		extract($arr);
-		if ($return_url != "")
-		{
-			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Lisa __classname");
-		}
-		else
-		{
-			$this->mk_path($parent,"Lisa __classname");
-		}
-		$this->read_template("change.tpl");
+		// checks ACL, sets the path and reads the template
+		$this->_add_init($arr, "__classname", "change.tpl");
 
 		$this->vars(array(
+			"toolbar" => $this->mk_toolbar(),
 			"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "alias_to" => $alias_to, "return_url" => $return_url))
 		));
 		return $this->parse();
@@ -50,6 +62,7 @@ class __classname extends aw_template
 				"oid" => $id,
 				"name" => $name
 			));
+			$this->_log("__classname", "Muutis __classname objekti $name ($id)", $id);
 		}
 		else
 		{
@@ -58,6 +71,7 @@ class __classname extends aw_template
 				"name" => $name,
 				"class_id" => __classdef
 			));
+			$this->_log("__classname", "Lisas __classname objekti $name ($id)", $id);
 		}
 
 		if ($alias_to)
@@ -76,19 +90,12 @@ class __classname extends aw_template
 	function change($arr)
 	{
 		extract($arr);
-		$ob = $this->get_object($id);
-		if ($return_url != "")
-		{
-			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Muuda __classname");
-		}
-		else
-		{
-			$this->mk_path($ob["parent"], "Muuda __classname");
-		}
-		$this->read_template("change.tpl");
-	
+		// checks ACL, sets path, reads template and returns the object
+		$ob = $this->_change_init($arr, "__classname", "change.tpl");
+
 		$this->vars(array(
 			"name" => $ob["name"],
+			"toolbar" => $this->mk_toolbar(),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id, "return_url" => urlencode($return_url)))
 		));
 
