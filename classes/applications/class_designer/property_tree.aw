@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_tree.aw,v 1.4 2005/03/17 13:42:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_tree.aw,v 1.5 2005/03/18 12:23:41 kristo Exp $
 // property_tree.aw - Puu komponent 
 /*
 
@@ -164,7 +164,7 @@ class property_tree extends class_base
 
 		$ic = get_instance("core/icons");
 
-		$var = "demot_".$el->id()."_";
+		$var = "demot[".$el->id()."]";
 
 		$ot = new object_tree(array(
 			"parent" => $el->id(),
