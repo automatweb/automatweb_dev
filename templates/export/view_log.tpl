@@ -25,6 +25,15 @@
 </td></tr></table>
 
 
+<span class="celltitle">Vali lehek&uuml;lg: 
+<!-- SUB: PAGE -->
+<a href='{VAR:link}'>{VAR:from} - {VAR:to}</a>
+<!-- END SUB: PAGE -->
+
+<!-- SUB: SEL_PAGE -->
+{VAR:from} - {VAR:to}
+<!-- END SUB: SEL_PAGE -->
+</span>
 <table border="0" cellspacing="0" cellpadding="0" width=100%>
 <tr>
 <td bgcolor="#FFFFFF">

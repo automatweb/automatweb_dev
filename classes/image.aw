@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.66 2003/08/26 09:29:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.67 2003/08/27 13:47:52 kristo Exp $
 // image.aw - image management
 /*
 	@default group=general
@@ -273,7 +273,7 @@ class image extends class_base
 					//$replacement .= "</td></tr></table>";
 				};
 			}	
-		};
+		}
 		$retval = array(
 				"replacement" => $replacement,
 				"inplace" => $inplace,

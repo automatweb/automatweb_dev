@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.35 2003/08/18 14:35:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.36 2003/08/27 13:47:52 kristo Exp $
 
 /*
 
@@ -187,7 +187,6 @@ class links extends class_base
 		{
 			$this->dequote(&$prop["value"]);
 		}
-
 		return PROP_OK;
 	}
 
@@ -245,6 +244,7 @@ class links extends class_base
 	function draw_link($target,$ret_all = false)
 	{
 		$link = $this->get_link($target);
+		$this->dequote(&$link);
 		$this->cur_link = $link;
 		if (not($link))
 		{

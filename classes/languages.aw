@@ -91,6 +91,7 @@ class languages extends aw_template
 			if ($row["site_id"] != 0)
 			{
 				// get site name from site server
+				/*
 				$sd = $this->do_orb_method_call(array(
 					"class" => "site_list", 
 					"action" => "get_site_data", 
@@ -100,6 +101,7 @@ class languages extends aw_template
 					"method" => "xmlrpc",
 					"server" => "register.automatweb.com"
 				));
+				*/
 				$ret[$row["site_id"]] = $sd["name"]."( ".$row["site_id"]." )";
 			}
 		}

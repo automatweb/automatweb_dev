@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.41 2003/08/01 13:27:46 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.42 2003/08/27 13:47:51 kristo Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -184,7 +184,7 @@ class acl_base extends db_connector
 	function can_aw($access,$oid)
 	{
 		$o_oid = $oid;
-		
+
 		$access="can_".$access;
 
 		$this->save_handle();
@@ -248,7 +248,7 @@ class acl_base extends db_connector
 		$this->restore_handle();
 		// and now return the highest found
 //		return 1;
-		
+
 		// nini ja nyt kui see on aw.struktuur.ee siis kysime java k2est ka
 //		echo "returning from can_aw , oid = $o_oid , result = <pre>", var_dump($max_acl),"</pre> <br />";
 		return $max_acl;
@@ -292,7 +292,7 @@ class acl_base extends db_connector
 			$js = join(' ',map2('LEFT JOIN %s ON %s',$joins));
 		}
 
-		// stuff all the objects in the cache, because the next query will not 
+		// stuff all the objects in the cache, because the next query will not
 		// get a list of objects if they don't have their acl specified
 		$q = "SELECT objects.oid as oid, objects.parent as parent FROM objects $js WHERE ($where)";
 		//echo "q = $q <br />";

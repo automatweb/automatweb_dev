@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.63 2003/08/01 12:48:16 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.64 2003/08/27 13:47:52 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -53,7 +53,7 @@
 	@caption Konfiguratsioonivorm
 	
 	@property show_lead type=checkbox field=meta method=serialize group=advanced ch_value=1
-	@caption Näita ainult leadi (kasutusel Nädalas)
+	@caption Näita ainult leadi
 	
 	@property grkeywords type=select size=10 multiple=1 field=meta method=serialize group=keywords
 	@caption AW Märksõnad

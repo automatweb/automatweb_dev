@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.18 2003/06/17 11:56:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.19 2003/08/27 13:47:52 kristo Exp $
 load_vcl("table");
 
 session_register("group_folders");
@@ -1028,7 +1028,7 @@ class groups extends users_user
 		if (!$level)
 		{
 			// make list of search forms
-			$this->db_query("SELECT objects.* FROM forms LEFT JOIN objects ON objects.oid = forms.id WHERE type = ".FTYPE_SEARCH." AND objects.status != 0 and site_id = ".$this->cfg["site_id"]);
+			$this->db_query("SELECT objects.* FROM forms LEFT JOIN objects ON objects.oid = forms.id WHERE type = ".FTYPE_SEARCH." AND objects.status != 0 "/*and site_id = ".$this->cfg["site_id"]*/);
 			$sfs = array();
 			while ($row = $this->db_next())
 			{

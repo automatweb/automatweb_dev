@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.11 2003/08/01 13:27:51 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.12 2003/08/27 13:47:52 kristo Exp $
 // livelink_import.aw - Import livelingist
 
 /*
@@ -138,6 +138,7 @@ class livelink_import extends class_base
 			));
 		};
 
+		print "<font color='green'><big>Import completed!</big></font>";
 		print "</pre>";
 	}
 
@@ -405,7 +406,6 @@ class livelink_import extends class_base
 				WHERE id = '$id'";
 				$this->db_query($q);	
 				print $q;
-				exit;
 			}
 			else
 			{

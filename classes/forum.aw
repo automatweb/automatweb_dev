@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.81 2003/08/25 09:21:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.82 2003/08/27 13:47:52 kristo Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -807,6 +807,7 @@ topic");
 			"email" => $board_obj["meta"]["author_email"],
 			"created" => $this->time2date($board_obj["created"],2),
 			"rated" => $rated,
+			"board" => $board,
 			"rate" => sprintf("%0.2f",$board_obj["rate"]),
 			"text" => nl2br(create_links($board_obj["comment"])),
 		));
@@ -1214,6 +1215,7 @@ topic");
 			$name = $from;
 		};
 
+
 		$forum_obj = $this->get_object($board);
 
 		$_mx = aw_ini_get("forum.comments_mailto");
@@ -1242,6 +1244,7 @@ topic");
 			$board = $row["board_id"];
 		};
 
+
 		if ( (strlen($name) > 2) && (strlen($comment) > 1) )
 		{
 			if (is_array($mx))
@@ -1254,6 +1257,7 @@ topic");
 						"From: $name <$email>");
 				}
 			};
+			
 			$name = strip_tags($name);
 			$email = strip_tags($email);
 			$comment = strip_tags($comment);

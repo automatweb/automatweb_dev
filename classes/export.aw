@@ -661,7 +661,6 @@ class export extends aw_template
 		// now also save file to database, but only if it's a html file
 		if (substr($name, -5) == ".html" && !$no_db)
 		{
-			$fc = strip_tags($fc);
 			$this->quote($fc);
 			preg_match("/<!-- MODIFIED:(\d*) -->/U", $fc, $mt);
 			$fn = basename($name);
@@ -672,6 +671,8 @@ class export extends aw_template
 			$url = str_replace(aw_ini_get("baseurl"), aw_ini_get("ut.static_server"), $url);
 			$this->quote(&$title);
 			$this->quote(&$url);
+
+			$fc = strip_tags($fc);
 			if (($id = $this->db_fetch_field("SELECT id FROM export_content WHERE filename = '$fn'","id")))
 			{
 				$q = "UPDATE export_content SET lang_id = '$lang_id', content = '$fc',modified = '$mt[1]', section = '$cur_sec',title = '$title',orig_url='$url' WHERE id = '$id'";

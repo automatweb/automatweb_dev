@@ -103,7 +103,7 @@ href="javascript:this.document.aa.submit();">Salvesta</a>
 	</tr>
 	<tr>
 		<td class="celltext">Align:</td>
-		<td class="celltext"><input type="radio" name="st[align]" VALUE='left' {VAR:align_left}>{VAR:LC_STYLE_LEFT} <input type="radio" name="st[align]" VALUE='center' {VAR:align_center}>{VAR:LC_STYLE_MIDDLE} <input type="radio" name="st[align]" VALUE='right' {VAR:align_right}>{VAR:LC_STYLE_RIGHT}</td>
+		<td class="celltext"><input type="radio" name="st[align]" VALUE='left' {VAR:align_left}>{VAR:LC_STYLE_LEFT} <input type="radio" name="st[align]" VALUE='center' {VAR:align_center}>{VAR:LC_STYLE_MIDDLE} <input type="radio" name="st[align]" VALUE='right' {VAR:align_right}>{VAR:LC_STYLE_RIGHT}  <input type="radio" name="st[align]" VALUE=''>Defineerimata</td>
 	</tr>
 	<tr>
 		<td class="celltext">Valign:</td>

@@ -21,6 +21,9 @@ class contents extends aw_template
 		$this->per = get_instance("period");
 
 		$this->period = aw_global_get("act_per_id");
+		
+		$this->count = 0;
+		$this->max_count = $arr["max"];
 
 		$this->count = 0;
 		$this->max_count = $arr["max"];

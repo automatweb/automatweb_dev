@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.48 2003/08/01 12:48:15 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.49 2003/08/27 13:47:51 kristo Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -12,7 +12,10 @@ class aw_template extends core
 		parent::init($args);
 		if (is_array($args))
 		{
-			$this->tpl_init(isset($args["tpldir"]) ? $args["tpldir"] : "");
+			if (method_exists($this, "tpl_init"))
+			{
+				$this->tpl_init(isset($args["tpldir"]) ? $args["tpldir"] : "");
+			}
 		}
 		else
 		{

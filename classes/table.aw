@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.47 2003/08/01 12:48:19 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.48 2003/08/27 13:47:52 kristo Exp $
 // table.aw - tabelite haldus
 class table extends aw_template
 {
@@ -2291,8 +2291,11 @@ class table extends aw_template
 		}
 		$txt = str_replace("  ", "&nbsp;&nbsp;", $txt);
 
-		$txt = preg_replace("/([-.a-zA-Z0-9_]*)@([-.a-zA-Z0-9_]*)/","<a href='mailto:\\1@\\2'>\\1@\\2</a>", $txt);
-		$txt = preg_replace("/((\W|^))((http(s?):\/\/)|(www\.))(\S+)/im", "$2<a href=\"http$5://$6$7\" target=\"_blank\">$4$6$7</a>", $txt);
+		if (strpos($txt, "href") === false)
+		{
+			$txt = preg_replace("/([-.a-zA-Z0-9_]*)@([-.a-zA-Z0-9_]*)/","<a href='mailto:\\1@\\2'>\\1@\\2</a>", $txt);
+			$txt = preg_replace("/((\W|^))((http(s?):\/\/)|(www\.))(\S+)/im", "$2<a href=\"http$5://$6$7\" target=\"_blank\">$4$6$7</a>", $txt);
+		}
 		if ($txt == "")
 		{
 			$txt = "<img src='".$this->cfg["baseurl"]."/img/trans.gif'>";

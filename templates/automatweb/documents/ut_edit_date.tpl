@@ -93,6 +93,7 @@ target="_blank" href="{VAR:baseurl}/index.aw?section={VAR:id}">Eelvaade</a></td>
 			-->
 	Näita leadi: <input type='checkbox' name='showlead' value=1 {VAR:showlead}>&nbsp;&nbsp;&nbsp;
 	Näita pealkirja: <input type='checkbox' name='show_title' value=1 {VAR:show_title}>
+	Näita kuupäeva: <input type='checkbox' name='show_modified' value=1 {VAR:show_modified}>&nbsp;&nbsp;&nbsp;
 	<!--
 	Ilma parema paanita: <input type='checkbox' name='no_right_pane' value=1 {VAR:no_right_pane}>&nbsp;&nbsp;&nbsp;
 	Pealkiri klikitav: <input type='checkbox' name="title_clickable" {VAR:title_clickable} value=1>&nbsp;&nbsp;&nbsp;
@@ -105,9 +106,9 @@ target="_blank" href="{VAR:baseurl}/index.aw?section={VAR:id}">Eelvaade</a></td>
 	Arhiveeri:	<input type='checkbox' name="archive" value=1>&nbsp;&nbsp;&nbsp;
 	'Prindi' nupp: <input type='checkbox' name='show_print' value=1 {VAR:show_print}>
 	Genereeri staatiline koopia: <input type='checkbox' name='gen_static' value=1>
-	<!--
-	Esilehel:	<input type='checkbox' name="esilehel" value=1 {VAR:esilehel}>&nbsp;&nbsp;&nbsp;
-	Esilehel tulbas:	<input type='checkbox' name="frontpage_left" value=1 {VAR:frontpage_left}>&nbsp;&nbsp;&nbsp;
+
+	Esilehe uudis:	<input type='checkbox' name="frontpage_left" value=1 {VAR:frontpage_left}>&nbsp;&nbsp;&nbsp;
+	<!--Esilehel tulbas:	<input type='checkbox' name="frontpage_left" value=1 {VAR:frontpage_left}>&nbsp;&nbsp;&nbsp;
 	-->
 		</td>
 	</tr>

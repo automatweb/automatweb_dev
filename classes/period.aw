@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.6 2003/08/18 14:20:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.7 2003/08/27 13:47:52 kristo Exp $
 // period.aw - periods 
 /*
 
@@ -252,7 +252,7 @@ class period extends class_base
 		}
 		while($row = $this->db_next())
 		{
-			$elements[$row["id"]] = $row["description"];
+			$elements[$row["id"]] = $row["name"];
 		};
 		return $elements;
 	}

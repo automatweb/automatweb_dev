@@ -78,6 +78,7 @@
 		<action name="view_log">
 			<function name="view_log">
 				<arguments>
+					<optional name="page"/>
 				</arguments>
 			</function>
 		</action>

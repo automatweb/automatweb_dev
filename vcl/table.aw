@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.60 2003/08/01 13:27:54 axel Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.61 2003/08/27 13:47:53 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -348,15 +348,45 @@ class aw_table
 		{
 			if (((int)$v1) == ((int)$v2))
 			{
+				if ($GLOBALS["vcl_sort_dbg"] == 1)
+				{
+					echo "compare integers $v1 , $v2 , ret equal <br>";
+				}
 				return 0;
 			}
 
 			if ($this->u_sorder == "asc")
 			{
+				if ($GLOBALS["vcl_sort_dbg"] == 1)
+				{
+					echo "compare integers $v1 , $v2 , ";
+					$ret = ((int)$v1) < ((int)$v2) ? -1 : 1;
+					if ($ret == -1)
+					{
+						echo " $v1 less than  $v2 <br>";
+					}
+					if ($ret == 1)
+					{
+						echo " $v1 greater than  $v2 <br>";
+					}
+				}
 				return ((int)$v1) < ((int)$v2) ? -1 : 1;
 			}
 			else
 			{
+				if ($GLOBALS["vcl_sort_dbg"] == 1)
+				{
+					echo "compare integers $v1 , $v2 , ret $v1 less than $v2 <br>";
+					$ret = ((int)$v1) > ((int)$v2) ? -1 : 1;
+					if ($ret == -1)
+					{
+						echo " $v1 greater than  $v2 <br>";
+					}
+					if ($ret == 1)
+					{
+						echo " $v1 less than  $v2 <br>";
+					}
+				}
 				return ((int)$v1) > ((int)$v2) ? -1 : 1;
 			}
 		}
@@ -365,6 +395,22 @@ class aw_table
 			$_a = strtolower(preg_replace("/<a (.*)>(.*)<\/a>/U","\\2",$v1));
 			$_b = strtolower(preg_replace("/<a (.*)>(.*)<\/a>/U","\\2",$v2));
 			$ret = strcoll($_a, $_b);
+			if ($GLOBALS["vcl_sort_dbg"] == 1)
+			{
+				echo "compare strings $_a , $_b";
+				if ($ret == -1)
+				{
+					echo " $_a greater than  $_b <br>";
+				}
+				if ($ret == 1)
+				{
+					echo " $_a less than  $_b <br>";
+				}
+				if ($ret == 0)
+				{
+					echo " $_a equal to  $_b <br>";
+				}
+			}
 			if (isset($this->u_sorder) && ($this->u_sorder == "asc"))
 			{
 				return $ret;

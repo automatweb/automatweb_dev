@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.5 2003/08/19 15:54:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.6 2003/08/27 13:47:52 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -294,7 +294,7 @@ class promo extends class_base
 
 	function callback_pre_edit($args = array())
 	{
-		$id = $args["object"]["oid"];
+		$id = $args["coredata"]["oid"];
 		$menu = $this->get_menu($id);
 		// first check, whether the promo box was in the very old format (contained serialized data
 		// in the comment field
@@ -318,10 +318,25 @@ class promo extends class_base
 			return true;
 		};
 		
-		$id = $args["object"]["oid"];
 		$oldaliases = $this->get_aliases_for($id,CL_PSEUDO);
 		$flatlist = array();
-		$alias_reltype = $args["object"]["meta"]["alias_reltype"];
+		$alias_reltype = $args["coredata"]["meta"]["alias_reltype"];
+
+
+		$q = "SELECT * FROM aliases WHERE source = '$id'";
+		$this->db_query($q);
+		while($row = $this->db_next())
+		{
+			if (($row["reltype"] == 0) && ($alias_reltype[$row["target"]]))
+			{
+				$this->save_handle();
+				$q = "UPDATE aliases SET reltype = " . $alias_reltype[$row["target"]] . " WHERE id = $row[id]";
+				$this->db_query($q);
+				$this->restore_handle();
+			};
+		}
+
+
 		foreach($oldaliases as $alias)
 		{
 			$flatlist[$alias["target"]] = $alias_reltype[$alias["target"]];
@@ -330,7 +345,7 @@ class promo extends class_base
 		// basically, I have to get a list of menus in $args["object"]["meta"]["section"]
 		// and create a relation of type RELTYPE_ASSIGNED_MENU for each of those
 
-		$sections = $args["object"]["meta"]["section"];
+		$sections = $args["coredata"]["meta"]["section"];
 		if ( is_array($sections) && (sizeof($sections) > 0) )
 		{
 			foreach($sections as $key => $val)
@@ -338,7 +353,12 @@ class promo extends class_base
 				if (!$flatlist[$val])
 				{
 					$alias_reltype[$val] = RELTYPE_ASSIGNED_MENU;
-					$this->add_alias($id,$val,CL_PSEUDO);
+					$this->addalias(array(
+						"id" => $id,
+						"alias" => $val,
+						"reltype" => RELTYPE_ASSIGNED_MENU,
+					));
+					//$this->add_alias($id,$val,CL_PSEUDO);
 				};
 			};
 		}
@@ -347,7 +367,7 @@ class promo extends class_base
 		// create a relation of type RELTYPE_DOC_SOURCE for each of those.
 
 		// I also want to keep the old representation around, so that old code keeps working
-		$last_menus = $args["object"]["meta"]["last_menus"];
+		$last_menus = $args["coredata"]["meta"]["last_menus"];
 		if ( is_array($last_menus) && (sizeof($last_menus) > 0) )
 		{
 			foreach($last_menus as $key => $val)
@@ -355,7 +375,12 @@ class promo extends class_base
 				if (!$flatlist[$val])
 				{
 					$alias_reltype[$val] = RELTYPE_DOC_SOURCE;
-					$this->add_alias($id,$val,CL_PSEUDO);
+					$this->addalias(array(
+						"id" => $id,
+						"alias" => $val,
+						"reltype" => RELTYPE_DOC_SOURCE,
+					));
+					//$this->add_alias($id,$val,CL_PSEUDO);
 				};
 			};
 		}
@@ -364,7 +389,7 @@ class promo extends class_base
 		if (sizeof($alias_reltype) > 0)
 		{
 			$this->upd_object(array(
-				"oid" => $args["object"]["oid"],
+				"oid" => $args["coredata"]["oid"],
 				"metadata" => array(
 					//"alias_reltype" => $alias_reltype,
 					"uses_relationmgr" => 1,
@@ -506,6 +531,14 @@ class promo extends class_base
 			"no_strip_lead" => 1,
 		);
 
+		global $XX3;
+		if ($XX3)
+		{
+			print "<pre>";
+			print_r($alias);
+			var_dump($ob->prop("tpl_lead"));
+			print "</pre>";
+		};
 		if (!$ob->meta('use_fld_tpl'))
 		{
 			$mgr = get_instance("templatemgr");
@@ -515,6 +548,14 @@ class promo extends class_base
 		{
 			$parms["tpl_auto"] = 1;
 		}
+
+		global $XX3;
+		if ($XX3)
+		{
+			print "<pre>";
+			print_r($parms);
+			print "</pre>";
+		};
 	
 		foreach($def->get() as $key => $val)
 		{
