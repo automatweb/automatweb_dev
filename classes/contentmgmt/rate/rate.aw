@@ -296,7 +296,8 @@ class rate extends class_base
 				{
 					$c_objs = array($c_oid => $c_oid);
 				}
-				$where = "objects.oid IN (".join(",", array_keys($c_objs)).")";
+				$_tar = new aw_array(array_keys($c_objs));
+				$where = "objects.oid IN (".$_tar->to_sql().")";
 				break;
 		}
 
