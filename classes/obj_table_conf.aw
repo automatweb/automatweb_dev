@@ -119,23 +119,15 @@ class obj_table_conf extends aw_template
 		extract($arr);
 		if ($id)
 		{
-			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $name
-			));
+			$o = obj($id);
+			$o->set_name($name);
 		}
 		else
 		{
-			$id = $this->new_object(array(
-				"parent" => $parent,
-				"name" => $name,
-				"class_id" => CL_OBJ_TABLE_CONF
-			));
-		}
-
-		if ($alias_to)
-		{
-			$this->add_alias($alias_to, $id);
+			$o = obj();
+			$o->set_parent($parent);
+			$o->set_name($name);
+			$o->set_class_id(CL_OBJ_TABLE_CONF);
 		}
 
 		$cl = array();
@@ -164,17 +156,15 @@ class obj_table_conf extends aw_template
 
 		uasort($cl, create_function('$a,$b','if ($a["ord"] > $b["ord"]) { return 1; } if ($a["ord"] < $b["ord"]) { return -1; } return 0;'));
 
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "cols",
-			"value" => $cl
-		));
+		$o->set_meta("cols", $cl);
+		$o->set_meta("sep", $sep);
+		$id = $o->save();
 
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "sep",
-			"value" => $sep
-		));
+		if ($alias_to)
+		{
+			$this->add_alias($alias_to, $id);
+		}
+
 		return $this->mk_my_orb("change", array("id" => $id, "return_url" => urlencode($return_url)));
 	}
 
@@ -269,31 +259,6 @@ class obj_table_conf extends aw_template
 		));
 
 		return $this->parse();
-	}
-
-	////
-	// !this should create a string representation of the object
-	// parameters
-	//    oid - object's id
-	function _serialize($arr)
-	{
-		extract($arr);
-		$ob = $this->get_object($oid);
-		return aw_serialize($row);
-	}
-
-	////
-	// !this should create an object from a string created by the _serialize() function
-	// parameters
-	//    str - the string
-	//    parent - the folder where the new object should be created
-	function _unserialize($arr)
-	{
-		extract($arr);
-		$row = unserialize($str);
-		$row["parent"] = $parent;
-		$id = $this->new_object($row);
-		return true;
 	}
 
 	////

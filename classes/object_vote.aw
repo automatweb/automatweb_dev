@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/object_vote.aw,v 2.6 2004/06/11 09:15:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/object_vote.aw,v 2.7 2004/06/15 08:52:08 kristo Exp $
 
 class object_vote extends aw_template
 {
@@ -78,12 +78,13 @@ class object_vote extends aw_template
 		$dbp = get_instance("period",$per_oid);
 		$rec = $dbp->get($period);
 		$name = $rec["description"];
-		$oid = $this->new_object(array(
-			"name" => $name,
-			"parent" => $per_oid,
-			"period" => $period,
-			"class_id" => CL_OBJECT_VOTE,
-		));
+
+		$o = obj();
+		$o->set_parent($per_oid);
+		$o->set_name($name);
+		$o->set_period($period);
+		$o->set_class_id(CL_OBJECT_VOTE);
+		$oid = $o->save();
 		$link = "$baseurl/automatweb/orb.".$this->cfg["ext"]."?class=object_vote&action=edit_cluster&id=$oid";
 		header("Location: $link");
 		print " ";
@@ -129,12 +130,9 @@ class object_vote extends aw_template
 			"jrk" => $jrk,
 		);
 		
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "object_vote",
-			"value" => $block,
-		));
-
+		$o = obj($id);
+		$o->set_meta("object_vote", $block);
+		$o->save();
 
 		return $this->cfg["baseurl"] . "/automatweb/orb.".$this->cfg["ext"]."?class=object_vote&action=edit_cluster&id=$id";
 	}
@@ -219,11 +217,11 @@ class object_vote extends aw_template
 		$votes = $xmeta;
 		$votes[$args["vote"]] += 1;
 		$votes["total"] += 1;
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "votes",
-			"value" => $votes,
-		));
+
+		$o = obj($id);
+		$o->set_meta("votes", $votes);
+		$o->save();
+
 		if ($args["comment"])
 		{
 			return true;

@@ -1,6 +1,6 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_event.aw,v 1.7 2004/06/08 19:00:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_event.aw,v 1.8 2004/06/15 08:49:18 kristo Exp $
 
 /*
 	@default table=objects
@@ -204,22 +204,31 @@ class cal_event extends class_base
 		{
 			$par_obj = obj($parent);
 			$parent_class = $par_obj->class_id();
-			$id = $this->new_object(array(
-				"parent" => $parent,
-				"name" => $title,
-				"class_id" => CL_CAL_EVENT,
-				"status" => 2,
-			));
 
-			$this->upd_object(array(
-				"oid" => $id,
-				"metadata" => array("repcheck" => $repcheck,"showtype" => $showtype),
-			));
+			$o = obj();
+			$o->set_parent($parent);
+			$o->set_name($title);
+			$o->set_class_id(CL_CAL_EVENT);
+			$o->set_status(STAT_ACTIVE);
+			$o->set_meta("repcheck",$repcheck);
+			$o->set_meta("showtype",$showtype);
+			$id = $o->save();
 
-			$q = "INSERT INTO planner
-				(id,start,end,title,place,description,color,folder)
-                                VALUES ('$id','$st','$et','$title','$place','$description','$color','$folder')";
+			$q = "UPDATE planner 
+				SET 
+					start = '$start',
+					end = '$et',
+					title = '$title',
+					place = '$place',
+					description = '$description',
+					color = '$color',
+					folder = '$folder'
+				WHERE 
+					id = '$id'
+			";
 			$this->db_query($q);
+			// flush cache
+			$o->save();
 		}
 		else
 		{
@@ -234,13 +243,14 @@ class cal_event extends class_base
 				$mt = array("repcheck" => $repcheck,"repeaters" => array(),"showtype" => $showtype);
 			}
 			$obj = obj($id);
+			foreach($mt as $k => $v)
+			{
+				$obj->set_meta($k, $v);
+			}
+			$obj->set_name($title);
+
 			$par_obj = obj($obj->parent());
 			$parent_class = $par_obj->class_id();
-			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $title,
-				"metadata" => $mt,
-			));
 			                         
 			$q = "UPDATE planner SET
 				start = '$st',
@@ -252,6 +262,7 @@ class cal_event extends class_base
 				description = '$description'
 				WHERE id = '$id'";
 			$this->db_query($q);
+			$obj->save();
 		}
 
 		if ($parent_class == CL_CALENDAR)
@@ -563,28 +574,21 @@ class cal_event extends class_base
 		
 		// save the current settings
 		$key = "repeaters" . $cycle;
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"overwrite" => 1,
-			"key" => $key,
-			"value" => $args,
-		));
 	
 		// now we fetch them all back again, so that we can perform our calculations
-		$obj = $this->get_obj_meta($id);
-		$obj_meta = $obj["meta"];
-		$par_obj = obj($obj["parent"]);
+		$obj = obj($id);
+		$obj->set_meta($key, $args);
+		$obj->save();
+
+		$obj_meta = $obj->meta();
+		$par_obj = obj($obj->parent());
 		$parent_class = $par_obj->class_id();
 		
 		// if that one was a new cycle, then we need update the object as well
 		if ($new)
 		{
-			$this->set_object_metadata(array(
-					"oid" => $id,
-					"key" => "cycle_counter",
-					"value" => $cycle, // 1
-			));
-
+			$obj->set_meta("cycle_counter", $cycle);
+			$obj->save();
 			$cycle_counter = $cycle;
 		}
 		else
@@ -640,12 +644,12 @@ class cal_event extends class_base
 		$sched->update_repeaters(array("id" => $id));
 
 		// FIXME: this sucks
-		if ($obj["class_id"] == CL_REPEATER_OBJ)
+		if ($obj->class_id() == CL_REPEATER_OBJ)
 		{
 			return $this->mk_my_orb("set_time",array("id" => $id),"repeater_obj");
 		}
 		else
-		if ($obj["class_id"] == CL_SCHEDULER)
+		if ($obj->class_id() == CL_SCHEDULER)
 		{
 			return $this->mk_my_orb("set_time",array("id" => $id),"scheduler");
 		}
