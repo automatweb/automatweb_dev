@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.58 2002/10/02 08:48:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.59 2002/10/08 13:41:39 kristo Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -471,18 +471,26 @@ class form_table extends form_base
 						if ($elid == "formel_price")
 						{
 							reset($cc["formel"]);
-							list(,$element_id) = each($cc["formel"]);
-							$basket_count = 0;
-							foreach($basketsonrow as $bid)
+//							list(,$element_id) = each($cc["formel"]);
+							setlocale(LC_ALL, 'et_EE');
+							foreach($cc["formel"] as $element_id)
 							{
-								// set the item price for the item in all the baskets it can get to from this table
-								$this->baskets[$bid]->set_item_price(array("item_id" => $dat["entry_id"], "price" => $dat["ev_".$element_id]));
+								$basket_count = 0;
+								foreach($basketsonrow as $bid)
+								{
+									// set the item price for the item in all the baskets it can get to from this table
+									$_pr = $dat["ev_".$element_id];
+									$this->baskets[$bid]->set_item_price(array("item_id" => $dat["entry_id"], "price" => $_pr));
 
-								// calculate the total count of the item on this table row (we can have several baskets on one row)
-								$basket_count += $this->baskets[$bid]->get_item_count(array("item_id" => $dat["entry_id"]));
+									// calculate the total count of the item on this table row (we can have several baskets on one row)
+									$basket_count += $this->baskets[$bid]->get_item_count(array("item_id" => $dat["entry_id"]));
+								}
+								$this->pricel_sum += $dat["ev_".$element_id]*$basket_count;
+								if (((double)$dat["ev_".$element_id]*(double)$basket_count) > 0)
+								{
+									$str .= (double)$dat["ev_".$element_id]*(double)$basket_count;
+								}
 							}
-							$this->pricel_sum += $dat["ev_".$element_id]*$basket_count;
-							$str .= $dat["ev_".$element_id]*$basket_count;
 						}
 					}
 				}
@@ -598,6 +606,14 @@ class form_table extends form_base
 					if (($fid = $el_ref->get_up_down_count_el_form()))
 					{
 						$ret[$fid][$el_ref->get_up_down_count_el_el()] = $el_ref->get_up_down_count_el_el();
+					}
+					else
+					{
+						$el_ref = $form->get_element_by_id($element_id);
+						if (($fid = $el_ref->get_up_down_count_el_form()))
+						{
+							$ret[$fid][$el_ref->get_up_down_count_el_el()] = $el_ref->get_up_down_count_el_el();
+						}
 					}
 				}
 			}
@@ -1011,6 +1027,14 @@ class form_table extends form_base
 				{
 					$xml.=" sortable=\"1\" ";
 				}
+				if ($cc["col_style"])
+				{
+					$xml.=" style=\"style_".$cc["col_style"]."\"";
+				}
+				if ($cc["col_header_style"])
+				{
+					$xml.=" header_style=\"style_".$cc["col_header_style"]."\"";
+				}
 				$xml.=" $numericattr />\n";
 			}
 		}
@@ -1067,6 +1091,19 @@ class form_table extends form_base
 		{
 			$op.= $s->get_css($this->table["pg_text_style"],$this->table["pg_text_style_link"]);
 		}
+
+		for ($col = 0; $col < $this->table["cols"]; $col++)
+		{
+			if ($this->table["defs"][$col]["col_style"])
+			{
+				$op.= $s->get_css($this->table["defs"][$col]["col_style"],$this->table["defs"][$col]["col_link_style"]);
+			}
+			if ($this->table["defs"][$col]["col_header_style"])
+			{
+				$op.= $s->get_css($this->table["defs"][$col]["col_header_style"],$this->table["defs"][$col]["col_header_link_style"]);
+			}
+		}
+
 		$op.="</style>\n";
 		return $op;
 	}
@@ -1163,6 +1200,7 @@ class form_table extends form_base
 					var wprops = \"toolbar=\"+toolbar+\",location=\"+locationbar+\",directories=0,status=0,\"+
 					\"menubar=0,scrollbars=\"+scrollbars+\",resizable=\"+fixed+\",width=\" + width + \",height=\" + height;
 					openwindow = window.open(url,name,wprops);
+					openwindow.focus();
 				}
 		</script>";
 	}
@@ -1643,6 +1681,8 @@ class form_table extends form_base
 			"reforb" => $this->mk_reforb("new_submit_cols", array("id" => $id))
 		));
 
+		$style_inst = get_instance("style");
+
 		for ($col = 0; $col < $this->table["cols"]; $col++)
 		{
 			$this->vars(array(
@@ -1653,8 +1693,9 @@ class form_table extends form_base
 			));
 			$coldata[$col][1] = $this->parse("COL_HEADER");
 
+			
 			$this->vars(array(
-				"els" => $this->mpicker($this->table["defs"][$col]["els"], $els)
+				"els" => $this->mpicker($this->table["defs"][$col]["els"], $els),
 			));
 			$coldata[$col][2] = $this->parse("SEL_ELS");
 
@@ -1778,7 +1819,7 @@ class form_table extends form_base
 
 			$this->vars(array(
 				"HAS_FTABLE_ALIASES" => ($has_ftable_aliases ? $this->parse("HAS_FTABLE_ALIASES") : ""),
-				"col_not_active" => checked($this->table["defs"][$col]["not_active"])
+				"col_not_active" => checked($this->table["defs"][$col]["not_active"]),
 			));
 			$coldata[$col][9] = $this->parse("SEL_SETTINGS");
 
@@ -1788,7 +1829,20 @@ class form_table extends form_base
 				"col_clicksearch" => checked($this->table["defs"][$col]["clicksearch"]),
 				"col_link" => checked($this->table["defs"][$col]["link"]),
 				"col_link_popup" => checked($this->table["defs"][$col]["link_popup"]),
-				"no_show_empty" => checked($this->table["defs"][$col]["no_show_empty"])
+				"no_show_empty" => checked($this->table["defs"][$col]["no_show_empty"]),
+				"has_col_style" => checked($this->table["defs"][$col]["has_col_style"]),
+				"styles" => $this->picker($this->table["defs"][$col]["col_style"], $style_inst->get_select(0,ST_CELL, true)),
+				"link_styles" => $this->picker($this->table["defs"][$col]["col_link_style"], $style_inst->get_select(0,ST_CELL, true)),
+				"header_styles" => $this->picker($this->table["defs"][$col]["col_header_style"], $style_inst->get_select(0,ST_CELL, true)),
+				"header_link_styles" => $this->picker($this->table["defs"][$col]["col_header_link_style"], $style_inst->get_select(0,ST_CELL, true)),
+			));
+			$hst = "";
+			if ($this->table["defs"][$col]["has_col_style"])
+			{
+				$hst = $this->parse("HAS_STYLE");
+			}
+			$this->vars(array(
+				"HAS_STYLE" => $hst
 			));
 			$coldata[$col][10] = $this->parse("SEL_SETINGS2");
 
