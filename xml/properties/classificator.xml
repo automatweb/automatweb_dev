@@ -40,5 +40,12 @@
                   <caption>Üldine</caption>
             </general>
       </groupinfo>
+      <reltypes>
+            <FOLDER>
+                  <value>1</value>
+                  <clid>CL_MENU</clid>
+                  <caption>hallatav kataloog</caption>
+            </FOLDER>
+      </reltypes>
 </properties>
 
