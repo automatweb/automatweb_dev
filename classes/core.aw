@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.236 2003/12/04 16:36:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.237 2003/12/05 12:59:41 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -288,53 +288,6 @@ class core extends acl_base
 			$this->flush_cache();
 		}
 	}
-
-	////
-	// !deletes all brothers of $oid
-	function delete_brothers_of($oid)
-	{
-		$this->db_query("SELECT oid FROM objects WHERE brother_of = '$oid' AND status != 0");
-		while ($row = $this->db_next())
-		{
-			$this->delete_object($row["oid"], false, false);
-		}
-	}
-
-	//////////////////////////////////////////////////////////////////////////////////////////////////
-	// object getting functions - by id, by alias, etc..
-	//////////////////////////////////////////////////////////////////////////////////////////////////
-
-	////
-	// !tagastab objekti info aliase kaudu
-	// if optional $parent argument is also set, we add that to the WHERE clause
-	// of the query (needed for parsing long urls like http://site/kalad/tursk
-	// where we have to make sure that "tursk" actually belongs to "kalad"
-	function _get_object_by_alias($alias,$parent = 0) 
-	{
-		// bail out, if $alias doesn't have the value, because otherwise
-		// we end up scanning _all_ objects which have no alias and are not deleted
-		// for no reason at all. I don't know why this is called with no value
-		// but it does sometimes
-		$this->quote($alias);
-		if (strlen($alias) == 0)
-		{
-			return false;
-		};
-		if ($parent)
-		{
-			$ps = " AND parent = $parent ";
-		};
-		$site_id = aw_ini_get("site_id");
-		$q = "SELECT * FROM objects WHERE alias = '$alias' AND site_id = '$site_id' AND status = 2 $ps";
-		$res = $this->db_fetch_row($q);
-		// also unserialize metadata
-		if ($res)
-		{
-			$res['meta'] = aw_unserialize($res['metadata']);
-		}
-		return $res;
-	}
-
 
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1158,16 +1111,6 @@ class core extends acl_base
      
 
 	////
-	// !imcrements the objects cached hit count by one
-	function add_cache_hit($oid) 
-	{
-		if ($oid) 
-		{
-			$this->db_query("UPDATE hits SET cachehits=cachehits+1 WHERE oid = $oid");
-		};
-	}
-
-	////
 	// !traverses the object tree from bottom to top and returns an 
 	// array of all objects in the path
 	// params:
@@ -1448,18 +1391,6 @@ class core extends acl_base
 	}
 
 	////
-	// !Eelmise analoog, kuid class_id seekord ignoreeritakse
-	function get_objects($args = array())
-	{
-		extract($args);
-		$pstr = " AND parent IN (" . join(",",map("'%s'",$parent)) . ")";
-		$cstr = " AND class_id IN (" . join(",",map("'%s'",$class_id)) . ")";
-		$this->db_query("SELECT objects.*
-					FROM objects
-					WHERE status != 0 $pstr $cstr");
-	}
-	
-	////
 	// !tagastab array oid => name matchinud objektidest
 	// parameetrid on samad, mis get_objects_by_class funxioonil
 	// lisaks:
@@ -1521,21 +1452,6 @@ class core extends acl_base
 
 		$this->restore_handle();
 		return $ret;
-	}
-
-	////
-	// !loendab mingisse kindlasse klassi kuuluvad objektid mingi parenti all
-	// argumendid
-	// class (int) - klassi id
-	// parent(id)(opt) - kui defineeritud, siis loeb ainult objekte selle parenti all
-	function count_objects($args = array())
-	{
-		extract($args);
-		$this->db_query("SELECT COUNT(*) AS cnt
-					FROM objects
-					WHERE class_id = $class AND status != 0 AND parent = '$parent'");
-		$row = $this->db_next();
-		return $row["cnt"];
 	}
 
 	//// 
@@ -1990,9 +1906,9 @@ class core extends acl_base
 	}
 
 	////
-        // !creates the necessary hidden elements to put in a form that tell the orb which function to call
-        function mk_reforb($fun,$arr = array(),$cl_name = "")
-        {
+	// !creates the necessary hidden elements to put in a form that tell the orb which function to call
+	function mk_reforb($fun,$arr = array(),$cl_name = "")
+	{
 
 		$cl_name = ("" == $cl_name) ? get_class($this) : basename($cl_name);
 
@@ -2068,24 +1984,6 @@ class core extends acl_base
 	}
 
 	////
-	// !reforbi koostamine
-	// ei, ma ei ytleks, et see deprecated on. See on lihtsalt alternatiivne lähenemine
-	// reforbi koostamisele, kusjuures ta on väga liberaalne parameetrite suhtes.
-	// eelmise analoog. Parameetrid votab arrayst
-	function mk_site_orb($args = array())
-	{
-		extract($args);
-		if (!isset($class))
-		{
-			$args["class"] = get_class($this);
-		};
-		$arguments = join("&",map2("%s=%s",$args));
-		$retval = $this->cfg["baseurl"] . "/?" . $arguments;
-		return $retval;
-	}
-
-
-	////
 	// Tekitab lingi. duh. 
 	// params(array) - key/value paarid elementidest, mida lingi tekitamisel kasutada
 	// skip_empty makes us ignore keys with no values
@@ -2141,45 +2039,6 @@ class core extends acl_base
 			aw_global_set("title_action", substr(strip_tags($text),$sps));
 		};
 		return $path;
-	}
-
-	////
-	// !Next generation mk_path. Knows how to display a different path if 
-	// the page is shown inside the alias manager
-	function gen_path($args = array())
-	{
-		extract($args);
-
-		// if alias_to is set, then we need to shown the PATH in form
-		// go back / change object
-		if ($alias_to)
-		{
-			$path = sprintf("<a href='%s'>%s</a> / ",$return_url,$return_cap);
-		}	
-		else
-		{
-			$path = "";
-			$ch = $this->get_object_chain($oid, true);
-			reset($ch);
-			$use = true;
-			while (list(,$row) = each($ch))
-			{
-				if ($row["oid"] == $this->cfg["admin_rootmenu2"])
-				{
-					$use = false;
-				}
-				if ($use)
-				{
-					$name = ($row["name"]) ? $row["name"] : "(nimetu)";
-					$path="<a href='".$this->mk_my_orb("obj_list", array("parent" => $row["oid"],"period" => $period),"menuedit")."'>".$name."</a> / ".$path;
-				}
-			}
-		};
-
-		$path .= strip_tags($caption);
-		$GLOBALS["site_title"] = $path;
-		return $path;
-
 	}
 
 	////
@@ -2458,34 +2317,6 @@ class core extends acl_base
 		}
 	}
 
-	////
-	// !generates a simple one-level menu from the given data structure - the active item is determined by orb action
-	function do_menu($items)
-	{
-		global $action;
-		$im = "";
-		foreach($items as $iid => $idata)
-		{
-			$this->vars(array(
-				"url"	=> $idata["url"],
-				"text" => $idata["name"]
-			));
-			if ($action == $iid)
-			{
-				$im.=$this->parse("SEL_ITEM");
-			}
-			else
-			{
-				$im.=$this->parse("ITEM");
-			}
-		}
-		$this->vars(array(
-			"ITEM" => $im,
-			"SEL_ITEM" => ""
-		));
-		return $this->parse();
-	}
-	
 	function _get_menu_list_cb($o, $param)
 	{
 		$this->tt[$o->id()] = $o->path_str();
@@ -2679,43 +2510,6 @@ class core extends acl_base
 		$ob = get_instance("orb");
 		return $ob->do_method_call($arr);
 	}
-
-
-        function obj_get_meta($args = array())
-        {
-                extract($args);
-                classload("php");
-                if (not($oid) && (strlen($meta) == 0))
-                {
-                        return false;
-                };
-                $php_ser = new php_serializer();
-                if ($args["oid"])
-                {
-                        $q = "SELECT meta FROM objects WHERE oid = $oid";
-                        $this->db_query($q);
-                        $row = $this->db_next();
-                        $meta = $row["meta"];
-                }
-                else
-                {
-                        $meta = $args["meta"];
-                };
-                $retval = $php_ser->php_unserialize($meta);
-                return $retval;
-        }
-
-
-        function obj_set_meta($args = array())
-        {
-                extract($args);
-                $old = $this->obj_get_meta(array("oid" => $oid));
-                $old = array_merge($old,$args["meta"]);
-                $ser = aw_serialize($old);
-                $this->quote($ser);
-                $q = "UPDATE objects SET meta = '$ser' WHERE oid = $oid";
-                $this->db_query($q);
-        }
 
 	////
 	// !this takes an array and goes through it and makes another array that has as keys the values of the given array and also
