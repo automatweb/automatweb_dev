@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/shop_item.aw,v 2.24 2001/11/20 13:19:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/shop_item.aw,v 2.25 2002/01/31 00:15:03 kristo Exp $
 lc_load("shop");
 global $orb_defs;
 $orb_defs["shop_item"] = "xml";
@@ -187,7 +187,7 @@ class shop_item extends shop_base
 			"type" => $itt["name"],
 			"price_eq" => $eq["name"],
 			"per_from" => $de->gen_edit_form("per_from", $o["per_from"],2001,2010),
-			"sel_period" => $this->mk_my_orb("repeaters", array("id" => $o["per_event_id"]),"planner"),
+			"sel_period" => $this->mk_my_orb("repeaters", array("id" => $o["per_event_id"]),"cal_event"),
 			"per_cnt" => $o["per_cnt"],
 			"per_prices" => $this->mk_my_orb("set_per_prices", array("id" => $id)),
 			"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$o["parent"],
@@ -396,14 +396,14 @@ class shop_item extends shop_base
 			{
 				// now we must delete the brother for this object that is present under menu $menu_id
 				// kas vendasid ei peaks lihtsalt maha votma, selle asemel, et neid dekatiivseks määrata?
-				$this->db_query("UPDATE objects SET status = 0 WHERE class_id = ".CL_SHOP_ITEM." AND brother_of = $id AND parent = $menu_id ");
+				$this->db_query("UPDATE objects SET status = 0 WHERE class_id = ".CL_SHOP_ITEM." AND brother_of = $id AND parent = $menu_id AND oid != $id");
 			}
 			// and now the brothers should be up to date....
 		}
 		else
 		{
 			// just delete all brothaz
-			$this->db_query("UPDATE objects SET status = 0 WHERE class_id = ".CL_SHOP_ITEM." AND brother_of = $id");
+			$this->db_query("UPDATE objects SET status = 0 WHERE class_id = ".CL_SHOP_ITEM." AND brother_of = $id AND oid != $id");
 		}
 
 		$this->db_query("UPDATE shop_items SET redir = '$redir' WHERE id = '$id'");
@@ -479,7 +479,7 @@ class shop_item extends shop_base
 
 				// also add one event to the calendar as the start of the periodics
 				// lengh 1 second, just to have something there
-				$event_id = $pl->add_event(array("parent" => $calendar_id,"start" => $per_from, "end" => $per_from+1));			
+				$event_id = $pl->bron_add_event(array("parent" => $calendar_id,"start" => $per_from, "end" => $per_from+1));			
 			}
 			else
 			if ($per_from != $o["per_from"])
@@ -488,7 +488,7 @@ class shop_item extends shop_base
 				// delete the old event and add a new one with the correct start time
 				$this->db_query("UPDATE objects SET status = 1 WHERE class_id = ".CL_CAL_EVENT." AND parent = ".$calendar_id);
 
-				$event_id = $pl->add_event(array("parent" => $calendar_id,"start" => $per_from, "end" => $per_from+1));
+				$event_id = $pl->bron_add_event(array("parent" => $calendar_id,"start" => $per_from, "end" => $per_from+1));
 			}
 		}
 
@@ -777,7 +777,7 @@ class shop_item extends shop_base
 			"type" => $itt["name"],
 			"price_eq" => $eq["name"],
 			"per_from" => $de->gen_edit_form("per_from", $o["per_from"],2001,2010),
-			"sel_period" => $this->mk_my_orb("repeaters", array("id" => $o["per_event_id"]),"planner",false,true),
+			"sel_period" => $this->mk_my_orb("repeaters", array("id" => $o["per_event_id"]),"cal_event",false,true),
 			"per_cnt" => $o["per_cnt"],
 			"cnt_form" => $this->picker($o["cnt_form"], $fl),
 			"item_eq" => $this->picker($o["price_eq"], $this->listall_eqs(true)),
