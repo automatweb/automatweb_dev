@@ -53,9 +53,7 @@
 <tr>
 <td class="fgtitle" colspan="2">
 <strong>{VAR:LC_PLANNER_CONTENT}</strong><br>
-<textarea name="description" cols="60" rows="10" wrap="soft">
-{VAR:description}
-</textarea>
+<textarea name="description" cols="60" rows="10" wrap="soft">{VAR:description}</textarea>
 </td>
 </tr>
 <tr>
