@@ -31,7 +31,6 @@ class kliendibaas extends class_base
 	function pop_select($arr)
 	{
 		extract($arr);
-		$this->read_template('kliendibaas/pop_select.tpl');
 
 		if (!$tyyp) die('no type');
 
