@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.4 2001/10/09 11:24:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.1 2002/10/29 10:16:39 kristo Exp $
 // form_entry_element.aw - 
 load_vcl("date_edit");
 lc_load("definition");
-classload("formgen/form_element");
+classload("form_element");
 class form_entry_element extends form_element
 {
 	function form_entry_element()
@@ -281,28 +281,13 @@ class form_entry_element extends form_element
 
 		if ($this->arr["type"] == "link")
 		{
-			$target = "";
-			if ($this->arr["link_newwindow"])
-			{
-				$target = 'target="_blank"';
-			}
-
 			if ($this->arr["subtype"] == "show_op")
 			{
-				$html.="<a $target href='".$this->mk_my_orb("show_entry", array("id" => $this->form->id, "entry_id" => $this->entry_id, "op_id" => $this->arr["link_op"], "section" => $GLOBALS["section"]),"form")."'>".$this->arr["link_text"]."</a>";
+				$html.="<a href='".$this->mk_my_orb("show_entry", array("id" => $this->form->id, "entry_id" => $this->entry_id, "op_id" => $this->arr["link_op"], "section" => $GLOBALS["section"]),"form")."'>".$this->arr["link_text"]."</a>";
 			}
 			else
 			{
-				// ok, bit of trickery here. if $this->entry is not an array, use it as the link address 
-				// and the text of the element as the link caption
-				if (is_array($this->entry))
-				{
-					$html.="<a $target href='".$this->entry["address"]."'>".$this->entry["text"]."</a>";
-				}
-				else
-				{
-					$html.="<a $target href='".$this->entry."'>".$this->arr["link_text"]."</a>";
-				}
+				$html.="<a href='".$this->entry["address"]."'>".$this->entry["text"]."</a>";
 			}
 		}
 
