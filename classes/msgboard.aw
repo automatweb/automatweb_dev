@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.25 2001/11/20 13:44:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.26 2002/02/18 13:47:43 kristo Exp $
 define(PER_PAGE,10);
 define(PER_FLAT_PAGE,20);
 define(TOPICS_PER_PAGE,7);
@@ -19,7 +19,7 @@ class msgboard extends aw_template
 		if ($GLOBALS["uid"] == "fubar")
 		{
 			// see, kes haaletada saab, peab olema konfigureeritav
-			$this->raise_error("sa pole sisse logitud ja ei saa h\xe4\xe4letada",true);
+			$this->raise_error(ERR_MSGB_NOLOGIN,"sa pole sisse logitud ja ei saa h\xe4\xe4letada",true);
 		};
 		
 		extract($args);
@@ -213,7 +213,7 @@ class msgboard extends aw_template
 		{
 			$this->db_query("SELECT * FROM comments WHERE id = $parent");
 			if (!($row = $this->db_next()))
-				$this->raise_error("msgboard->add($parent, $section): no comment with id $parent!", true);
+				$this->raise_error(ERR_MSGB_NOCOMM,"msgboard->add($parent, $section): no comment with id $parent!", true);
 
 			if ($subj == "")
 			{

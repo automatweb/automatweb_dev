@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.43 2002/01/31 00:15:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.44 2002/02/18 13:46:29 kristo Exp $
 // shop.aw - Shop
 lc_load("shop");
 global $orb_defs;
@@ -1274,14 +1274,16 @@ class shop extends shop_base
 					$f->set_active_currency($ucur);
 					$f->load($itt["form_id"]);
 					$f->load_entry($row["entry_id"]);
+					$_br = $row;
 					foreach($reps as $time => $evnt)
 					{
+						$row = $_br;
 						$f->reset();
 
 						$el = $f->get_element_by_type("date", "from");
 						if (!$el)
 						{
-							$this->raise_error("No from date element in item form! ", true);
+							$this->raise_error(ERR_SHOP_NDATEEL,"No from date element in item form! ", true);
 						}
 						$f->set_element_value($el->get_id(),$time);
 
