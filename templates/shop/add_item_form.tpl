@@ -42,6 +42,7 @@ function mk_ops()
 		{
 			eval("far = ops_"+sel_form);
 			populate_list(q.op_id, far);
+			populate_list(q.op_id_l, far);
 			cur_arr = sel_form;
 		}
 	}
@@ -58,10 +59,22 @@ function mk_ops()
 	<td class="fcaption2" colspan=2><select name='form_id' onChange="sel_form=this.options[this.selectedIndex].value;mk_ops();">{VAR:flist}</select></td>
 </tr>
 <tr>
-	<td class="fcaption2" colspan=2>Vali v&auml;ljundi stiil:</td>
+	<td class="fcaption2" colspan=2>Vali v&auml;ljundi stiil nimekirjas:</td>
 </tr>
 <tr>
 	<td class="fcaption2" colspan=2><select name='op_id'>{VAR:oplist}</select></td>
+</tr>
+<tr>
+	<td class="fcaption2" colspan=2>Vali v&auml;ljundi stiil pikk:</td>
+</tr>
+<tr>
+	<td class="fcaption2" colspan=2><select name='op_id_l'>{VAR:oplist}</select></td>
+</tr>
+<tr>
+	<td class="fcaption2" colspan=2>Vali kauba koguse valimise form:</td>
+</tr>
+<tr>
+	<td class="fcaption2" colspan=2><select name='cnt_form'>{VAR:flist}</select></td>
 </tr>
 <tr>
 	<td class="fform" align="center" colspan="2"><input type="submit" value="Edasi">

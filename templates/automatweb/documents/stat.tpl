@@ -212,7 +212,7 @@ function del_gallery()
 <table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC">
 <tr>
 <td class="hele_hall_taust" colspan="2">
-<input type="submit" class='doc_button' value="Salvesta"> <input class='doc_button' type="submit" value="Eelvaade" onClick="window.location.href='{VAR:preview}';return false;"> <input type="submit" class='doc_button' value="Sektsioonid" onClick="window.location.href='{VAR:menurl}';return false;"> <input type="submit" class='doc_button' value="Webile" onClick="window.open('{VAR:baseurl}/index.{VAR:ext}?section={VAR:id}');return false;"> 
+<input type="submit" class='doc_button' value="Salvesta"> <input class='doc_button' type="submit" value="Eelvaade" onClick="window.location.href='{VAR:preview}';return false;"> <input type="submit" class='doc_button' value="Sektsioonid" onClick="window.location.href='{VAR:menurl}';return false;"> <input type="submit" class='doc_button' value="Webile" onClick="window.open('{VAR:baseurl}/index.{VAR:ext}?section={VAR:id}');return false;"> <input type="button" class="doc_button" value="Teavita liste" onClick="if (confirm('Teavitada liste?')) { window.location.href='{VAR:self}?class=keywords&action=notify&id={VAR:docid}';}"> 
 </td>
 </tr>
 <tr>
@@ -239,6 +239,7 @@ function del_gallery()
 	| Näita pealkirja: <input type='checkbox' name='show_title' value=1 {VAR:show_title}>
 	| Ilma parema paanita: <input type='checkbox' name='no_right_pane' value=1 {VAR:no_right_pane}>
 	| Ilma vasaku paanita: <input type='checkbox' name='no_left_pane' value=1 {VAR:no_left_pane}>
+	| Copyright: <input type='checkbox' name='copyright' value=1 {VAR:copyright}>
 		</td>
 	</tr>
 </table>
@@ -408,6 +409,10 @@ function format(what,opt)
 
 </script>
 <!-- END SUB: IE -->
+<tr>
+<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Võtmesõnad&nbsp;</b></td>
+<td class="hele_hall_taust"><input class='tekstikast' type="text" name="keywords" size="80" value="{VAR:keywords}"></td>
+</tr>
 <tr>
 <td class="hele_hall_taust" colspan=2><b>&nbsp;Objektid&nbsp;</b> <a href='pickobject.{VAR:ext}?docid={VAR:id}'>Lisa uus &gt;&gt;&gt;</a><br>
 <table border=0 cellpadding=0 cellspacing=0 width=100%>

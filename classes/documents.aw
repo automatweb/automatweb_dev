@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/documents.aw,v 2.2 2001/05/19 23:34:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/documents.aw,v 2.3 2001/05/21 07:12:45 kristo Exp $
 classload("msgboard","aw_style");
 classload("acl","styles","form","tables","extlinks","images","gallery","file");
 class db_documents extends aw_template
@@ -33,7 +33,6 @@ class db_documents extends aw_template
 		 			"Alapealkiri"		=> "subtitle",
 					"Autor"			=> "author",
 					"Fotod"			=> "photos",
-					"Votmesonad"		=> "keywords",
 					"Nimed"			=> "names",
 					"Lead"        		=> "lead",
 					"Näita leadi"		=> "showlead",
@@ -1152,17 +1151,26 @@ class db_documents extends aw_template
 					$fif = $this->db_next();
 
 					$im = $ftypearr[$fif["type"]];
-
-					$this->vars(array(
-						"url" => $GLOBALS["baseurl"]."/files.".$GLOBALS["ext"]."/id=".$ar["target"]."/".urlencode($fif["name"]),
-						"im" => $im == "" ? "fil" : $im
-					));
+					if ($im != "" && $im != "html")
+					{
+						$this->vars(array(
+							"url" => $GLOBALS["baseurl"]."/files.".$GLOBALS["ext"]."/id=".$ar["target"]."/".urlencode($fif["name"]),
+							"im" => $im == "" ? "fil" : $im
+						));
 					
-					$fff.=$this->parse("FILE");
+						$fff.=$this->parse("FILE");
+					}
 				}
 			}
 			$this->vars(array("FILE" => $fff));
 		}
+
+		$cr = "";
+		if ($doc["copyright"])
+		{
+			$cr = $this->parse("COPYRIGHT");
+		}
+		$this->vars(array("COPYRIGHT" => $cr));
 
  		$retval = $this->parse();
 		// ??

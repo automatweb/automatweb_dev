@@ -63,13 +63,15 @@ kustutada?','list.{VAR:ext}?type=delete_cat&id={VAR:cat_id}&parent={VAR:parent}'
 
 <table border="0" cellspacing="0" cellpadding="0" width=100%>
 <tr>
+<form method="POST" name="listform">
 <td bgcolor="#CCCCCC">
 
 <table border="0" cellspacing="1" cellpadding="2" width=100%>
 <tr>
 <td height="15" colspan="15" class="fgtitle">&nbsp;<b>LISTID:&nbsp;
 <!-- SUB: ADD_LIST -->
-<a href='list.{VAR:ext}?type=add_list&parent={VAR:parent}'>Lisa</a>
+<a href='list.{VAR:ext}?type=add_list&parent={VAR:parent}'>Lisa</a> |
+<a href='#' onClick='document.listform.submit()'>Salvesta</a>
 <!-- END SUB: ADD_LIST -->
 </b></td>
 </tr>
@@ -78,6 +80,7 @@ kustutada?','list.{VAR:ext}?type=delete_cat&id={VAR:cat_id}&parent={VAR:parent}'
 <td align="center" class="title">&nbsp;Nimi&nbsp;</td>
 <td align="center" class="title">&nbsp;Kommentaar&nbsp;</td>
 <td align="center" colspan="7" class="title">Tegevus</td>
+<td align="center" class="title">&nbsp;Default&nbsp;</td>
 </tr>
 <!-- SUB: LINE -->
 <tr>
@@ -107,7 +110,12 @@ kustutada?','list.{VAR:ext}?type=delete_cat&id={VAR:cat_id}&parent={VAR:parent}'
 <a href='list.{VAR:ext}?type=import_file&id={VAR:list_id}'>Impordi aadresse</a>
 <!-- END SUB: L_IMPORT -->
 &nbsp;</td>
+<td class="fgtext2" align="center"><input type="radio" name="default" value="{VAR:list_id}" {VAR:checked}>
+</td>
 <!-- END SUB: LINE -->
 </tr>
 </table>
+<input type="hidden" name="type" value="submit_default_list">
+<input type="hidden" name="parent" value="{VAR:parent}">
+</form>
 </td></tr></table>

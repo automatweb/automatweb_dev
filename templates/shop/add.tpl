@@ -20,6 +20,12 @@
 <tr>
 	<td class="fcaption2" colspan=2><select name='order_form'>{VAR:of}</select></td>
 </tr>
+<tr>
+	<td class="fcaption2" colspan=2>Komaga eraldatud e-mailiaadressid, kellele tellimus saata:</td>
+</tr>
+<tr>
+	<td class="fcaption2" colspan=2><input type='text' name='emails' size=50 value='{VAR:emails}'></td>
+</tr>
 <!-- SUB: CHANGE -->
 <tr>
 	<td class="fcaption2" colspan=2><a href='{VAR:stat_by_turnover}'>K&auml;ibe statistika</a></td>

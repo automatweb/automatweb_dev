@@ -8,6 +8,8 @@
 					<optional name="step"/>
 					<optional name="form_id"/>
 					<optional name="op_id"/>
+					<optional name="op_id_l"/>
+					<optional name="cnt_form"/>
 					<required name="parent"/>
 				</arguments>
 			</function>

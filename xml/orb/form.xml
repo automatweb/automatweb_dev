@@ -159,7 +159,7 @@
 		</action>
 		
 		<action name="submit_grid">
-			<function name="submit_grid">
+			<function name="save_grid">
 				<arguments>
 				</arguments>
 			</function>

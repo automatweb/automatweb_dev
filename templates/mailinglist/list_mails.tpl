@@ -1,10 +1,12 @@
 <table border="0" cellspacing="0" cellpadding="0"  width=100%>
+<form method="POST" name="defform">
 <tr>
 <td bgcolor="#CCCCCC">
 
 <table border="0" cellspacing="1" cellpadding="2"  width=100%>
 <tr>
-<td height="15" colspan="15" class="fgtitle">&nbsp;<b>MEILID:&nbsp;<a href='list.{VAR:ext}?type=new_mail&parent={VAR:parent}'>Lisa</a></b></td>
+<td height="15" colspan="15" class="fgtitle">&nbsp;<b>MEILID:&nbsp;<a href='list.{VAR:ext}?type=new_mail&parent={VAR:parent}'>Lisa</a> |
+<a href='#' onClick="document.defform.submit()">Salvesta</a></b></td>
 </tr>
 <tr>
 <td align="center" class="title">&nbsp;From&nbsp;</td>
@@ -12,6 +14,7 @@
 <td align="center" class="title">&nbsp;Saadetud?&nbsp;</td>
 <td align="center" class="title">&nbsp;Millal saadetud&nbsp;</td>
 <td align="center" colspan="5" class="title">Tegevus</td>
+<td align="center" class="title">&nbsp;Default&nbsp;</td>
 </tr>
 <!-- SUB: LINE -->
 <tr>
@@ -40,10 +43,16 @@
 <!-- END SUB: M_SEND -->
 &nbsp;</td>
 <td class="fgtext2">&nbsp;<a href='list.{VAR:ext}?type=mail_preview&id={VAR:mail_id}&parent={VAR:parent}'>Eelvaade</a>&nbsp;</td>
+<td class="fgtext2" align="center">
+<input type="radio" name="default" value="{VAR:mail_id}" {VAR:checked}>
+</td>
 <!-- END SUB: LINE -->
 </tr>
 </table>
 
 </td></tr>
+<input type="hidden" name="type" value="submit_default">
+<input type="hidden" name="id" value="{VAR:id}">
+</form>
 </table>
 <br><br>

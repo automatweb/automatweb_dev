@@ -5,6 +5,16 @@ $orb_defs["shop"] = "xml";
 
 session_register("shopping_cart");
 
+// the layout of $shopping_cart is this:
+// 
+//	$shopping_cart["items"][$oid]["cnt"] - count of item $oid
+//	$shopping_cart["items"][$oid]["price"] -  price of item $oid , 
+//																						not to be trusted when calculating final payment, good enough
+//																						for showing the user the total in cart at the moment
+//	$shopping_cart["items"][$oid]["name"] - name of item $oid
+//	$shopping_cart["items"][$oid]["cnt_entry"] - form_entry id of the form filled to specify count and type of items
+//  $shopping_cart["price"] = total price of items in cart, not to be trusted, payment total should be calculated from database
+
 class shop extends aw_template
 {
 	function shop()
@@ -57,7 +67,8 @@ class shop extends aw_template
 			"root" => $this->picker($oba["root_menu"],$ob->get_list()),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
 			"of" => $this->picker($oba["order_form"],$fb->get_list(FORM_ENTRY)),
-			"stat_by_turnover" => $this->mk_orb("turnover_stat", array("id" => $id))
+			"stat_by_turnover" => $this->mk_orb("turnover_stat", array("id" => $id)),
+			"emails" => $oba["emails"]
 		));
 		$this->parse("CHANGE");
 		return $this->parse();
@@ -72,12 +83,12 @@ class shop extends aw_template
 		if ($id)
 		{
 			$this->upd_object(array("oid" => $id, "name" => $name, "comment" => $comment));
-			$this->db_query("UPDATE shop SET root_menu = $root, order_form = $order_form WHERE id = $id");
+			$this->db_query("UPDATE shop SET root_menu = $root, order_form = $order_form,emails='$emails' WHERE id = $id");
 		}
 		else
 		{
 			$id = $this->new_object(array("parent" => $parent, "class_id" => CL_SHOP, "status" => 1, "name" => $name, "comment" => $comment));
-			$this->db_query("INSERT INTO shop(id,root_menu,order_form) VALUES($id,'$root','$order_form')");
+			$this->db_query("INSERT INTO shop(id,root_menu,order_form,emails) VALUES($id,'$root','$order_form','$emails')");
 		}
 
 		return $this->mk_orb("change", array("id" => $id));
@@ -96,16 +107,10 @@ class shop extends aw_template
 		return $ret;
 	}
 
-	////
-	// !shows the shop $id on the suer side
-	function show($parent,$id,$from_shop = false)
+	function do_shop_menus($shop,$parent,$from_shop)
 	{
-		$this->read_template("show_shop.tpl");
-
-		global $shopping_cart;
-
-		$s = $this->get($id);
-		$this->vars(array("shop" => $id));
+		$s = $this->get($shop);
+		$this->vars(array("shop" => $shop));
 
 		if (!$from_shop)
 		{
@@ -124,23 +129,6 @@ class shop extends aw_template
 			$this->parse("CAT");
 		}
 
-		classload("form");
-
-		$this->db_query("SELECT objects.*,shop_items.* FROM objects LEFT JOIN shop_items ON shop_items.id = objects.oid WHERE parent = $parent AND class_id = ".CL_SHOP_ITEM." AND status = 2");
-		while ($row = $this->db_next())
-		{
-			$f = new form;
-			$this->vars(array(
-				"item" => $f->show(array("id" => $row["form_id"], "entry_id" => $row["entry_id"],"op_id" => $row["op_id"])),
-				"item_id" => $row["oid"],
-				"price" => $row["price"],
-				"it_cnt"	=> $shopping_cart["items"][$row["oid"]]["cnt"]
-			));
-			$tp+=(double)$shopping_cart["items"][$row["oid"]]["cnt"]*(double)$row["price"];	// selle arvutame p2rast kogusummast maha
-																																			// et saada korvi hind = baashind + selle lehe asjade hind
-			$this->parse("ITEM");
-		}
-
 		// make yah link
 		$p = $parent;
 		$op = $this->get_object($p);
@@ -151,11 +139,44 @@ class shop extends aw_template
 			$p = $op["parent"];
 			$op = $this->get_object($p);
 		}
+
 		$this->vars(array(
 			"YAH" => $y, 
 			"fp" => $s["root_menu"],
 			"s_name" => $s["name"],
-			"section" => $parent,
+			"section" => $parent
+		));
+		return $parent;
+	}
+
+	////
+	// !shows the shop $id on the suer side
+	function show($parent,$id,$from_shop = false)
+	{
+		$this->read_template("show_shop.tpl");
+
+		global $shopping_cart;
+		$parent = $this->do_shop_menus($id,$parent,$from_shop);
+
+		classload("form");
+
+		$this->db_query("SELECT objects.*,shop_items.* FROM objects LEFT JOIN shop_items ON shop_items.id = objects.oid WHERE parent = $parent AND class_id = ".CL_SHOP_ITEM." AND status = 2");
+		while ($row = $this->db_next())
+		{
+			$f = new form;
+			$this->vars(array(
+				"item" => $f->show(array("id" => $row["form_id"], "entry_id" => $row["entry_id"],"op_id" => $row["op_id"])),
+				"item_id" => $row["oid"],
+				"price" => $row["price"],
+				"it_cnt"	=> $shopping_cart["items"][$row["oid"]]["cnt"],
+				"order_item" => $this->mk_my_orb("order_item", array("item_id" => $row["oid"], "shop" => $id, "section" => $parent))
+			));
+			$tp+=(double)$shopping_cart["items"][$row["oid"]]["cnt"]*(double)$row["price"];	// selle arvutame p2rast kogusummast maha
+																																			// et saada korvi hind = baashind + selle lehe asjade hind
+			$this->parse("ITEM");
+		}
+
+		$this->vars(array(
 			"tot_price" => (double)$shopping_cart["price"]-(double)$tp,	
 			"reforb" => $this->mk_reforb("add_cart", array("shop_id" => $id, "section" => $parent)),
 			"cart" => $this->mk_site_orb(array("action" => "view_cart", "shop_id" => $id, "section" => $parent))
@@ -180,6 +201,10 @@ class shop extends aw_template
 		global $shopping_cart;
 		$this->read_template("show_cart.tpl");
 
+		classload("form");
+		$f = new form;
+		$images = new db_images;
+
 		$items = false;
 		if (is_array($shopping_cart["items"]))
 		{
@@ -188,11 +213,32 @@ class shop extends aw_template
 			{
 				if ($ar["cnt"] > 0)
 				{
+					// now here we must show the name of the item followed by
+					// the rows from the cnt_form for that item that have selectrow checked
+
+					// so, get the item
+					$it = $this->get_item($item_id);
+					// load it's cnt_form
+					$f->load($it["cnt_form"]);
+					// now find all the rows that are selected in the entry from the shopping cart
+					$f->load_entry($ar["cnt_entry"]);
+					$selrows = $this->get_selected_rows_in_form(&$f);
+
+					$rowhtml = "";
+					foreach($selrows as $rownum)
+					{
+						// here we must add the elements of row $rownum to the form we are assembling of the selected rows
+						// oh what a mindjob.
+						// we add prefix entry_.$entry_id._ to all elements in this entry and later when processing
+						// entry, we add the same prefix so we process the elements from the right form.
+						$this->vars(array("row" => $f->mk_row_html($rownum,$images,"entry_".$ar["cnt_entry"]."_")));
+						$rowhtml.=$this->parse("F_ROW");
+					}
+
 					$this->vars(array(
-						"item_id" => $item_id,
-						"price" => $ar["price"],
-						"count" => $ar["cnt"],
-						"name" => $ar["name"]
+						"item_link" => $this->mk_my_orb("order_item", array("item_id" => $item_id, "shop" => $shop_id, "section" => $section)),
+						"name" => $ar["name"],
+						"F_ROW" => $rowhtml
 					));
 					$this->parse("ITEM");
 					$items = true;
@@ -217,7 +263,46 @@ class shop extends aw_template
 	function submit_cart($arr)
 	{
 		extract($arr);
-		$this->upd_cart_from_arr($sh_it);
+
+		// here we must update the cnt_form entries from the entered data, 
+		// forms are separated by prefixes entry_.$entry_id._
+
+		classload("form");
+		$f = new form;
+
+		global $shopping_cart;
+		if (is_array($shopping_cart["items"]))
+		{
+			reset($shopping_cart["items"]);
+			while (list($item_id,$ar) = each($shopping_cart["items"]))
+			{
+				if ($ar["cnt"] > 0)
+				{
+					$it = $this->get_item($item_id);
+
+					// process the entry
+					$f->process_entry(array(
+						"id" => $it["cnt_form"],
+						"entry_id" => $ar["cnt_entry"],
+						"prefix" => "entry_".$ar["cnt_entry"]."_"
+					));
+
+					// also update the count in the cart
+					$selrows = $this->get_selected_rows_in_form(&$f);
+					
+					$count = 0;
+					foreach($selrows as $i)
+					{
+						$rowels = $f->get_elements_for_row($i);
+						// this row's count must be added to this item's count in the shopping cart
+						$count+=$rowels["mitu"];
+					}
+					$GLOBALS["shopping_cart"]["items"][$item_id]["cnt"] = $count;
+					$GLOBALS["shopping_cart"]["items"][$item_id]["name"] = $it["name"];
+					$GLOBALS["shopping_cart"]["items"][$item_id]["cnt_entry"] = $ar["cnt_entry"];
+				}
+			}
+		}
 		return $this->mk_site_orb(array("action" => "view_cart", "shop_id" => $shop_id, "section" => $section));
 	}
 
@@ -305,18 +390,57 @@ class shop extends aw_template
 		$ord_id = $this->db_fetch_field("SELECT MAX(id) AS id FROM orders","id")+1;
 		$this->db_query("INSERT INTO orders(id,entry_id,tm,user,ip,shop_id,day,month,wd,hr) VALUES($ord_id,$eid,".time().",'$uid','".get_ip()."','$shop_id','$day','$month','$wd','$hr')");
 
+		// now we must also send an email to somebody notifying them of the new order.
+		// the email must contain all the info about the purchase, including all the
+		// items and their counts and also the order form data.
+		$mail = "Tere!\n\nStatisikameti poest ".$sh["name"]." tellis kasutaja $uid (ip aadress: ".get_ip().") kell ".$this->time2date(time(),2)." järgmised kaubad: \n\n";
+
+		classload("form");
+		$f = new form;
+
 		global $shopping_cart;
 		if (is_array($shopping_cart["items"]))
 		{
 			reset($shopping_cart["items"]);
 			while (list($item_id,$ar) = each($shopping_cart["items"]))
 			{
-				$this->db_query("INSERT INTO order2item(order_id,item_id,count,price) VALUES($ord_id,$item_id,'".$ar["cnt"]."','".$ar["price"]."')");
-				$t_p += (double)$ar["cnt"] * (double)$ar["price"];
+				if ($ar["cnt"] > 0)
+				{
+					// so, get the item
+					$it = $this->get_item($item_id);
+					// load it's cnt_form
+					$f->load($it["cnt_form"]);
+					// now find all the rows that are selected in the entry from the shopping cart
+					$f->load_entry($ar["cnt_entry"]);
+					$selrows = $this->get_selected_rows_in_form(&$f);
+
+					$mail.="Nimi: ".$it["name"]."\n";
+					$mail.="Kogus ja tüüp: \n";
+					$rowhtml = "";
+					foreach($selrows as $rownum)
+					{
+						// here we must add the elements of row $rownum to the email we are assembling of the selected rows
+						$mail.=$f->mk_show_text_row($rownum)."\n";
+					}
+					$mail.="\n";
+					$this->db_query("INSERT INTO order2item(order_id,item_id,count,price,cnt_entry) VALUES($ord_id,$item_id,'".$ar["cnt"]."','".$ar["price"]."','".$ar["cnt_entry"]."')");
+					$t_p += (double)$ar["cnt"] * (double)$ar["price"];
+				}
 			}
 		}
 
 		$this->db_query("UPDATE orders SET t_price = '$t_p' WHERE id = $ord_id");
+		
+		$mail.="\n\nTellija sisestas enda kohta järgmised andmed:\n\n";
+		$f->load($sh["order_form"]);
+		$f->load_entry($eid);
+		$mail.=$f->show_text();
+
+		$emails = explode(",",$sh["emails"]);
+		foreach($emails as $email)
+		{
+			mail($email,"Tellimus Poest", $mail,"From: automatweb@automatweb.com\n");
+		}
 
 		// zero out the customers shopping cart as well.
 		$GLOBALS["shopping_cart"] = array();
@@ -575,6 +699,103 @@ class shop extends aw_template
 			"t_cnt" => $t_cnt
 		));
 		return $this->parse();
+	}
+
+	////
+	// !show the longer definition of item and lets the user order it
+	function order_item($arr)
+	{
+		extract($arr);
+		$this->read_template("order_item.tpl");
+		$parent = $this->do_shop_menus($shop,$parent,$from_shop);
+
+		classload("form");
+
+		$row = $this->get_item($item_id);
+
+		global $shopping_cart,$ext;
+
+		$f = new form;
+		$this->vars(array(
+			"item" => $f->show(array("id" => $row["form_id"], "entry_id" => $row["entry_id"],"op_id" => $row["op_id_l"])),
+			"item_id" => $row["oid"],
+			"price" => $row["price"],
+			"it_cnt"	=> $shopping_cart["items"][$row["oid"]]["cnt"],
+			"order_item" => $this->mk_my_orb("order_item", array("item_id" => $row["oid"], "shop" => $id, "section" => $parent)),
+			"cnt_form" => $f->gen_preview(array(
+												"id" => $row["cnt_form"],
+												"entry_id" => $shopping_cart["items"][$row["oid"]]["cnt_entry"],
+												"reforb" => $this->mk_reforb("submit_order_item", array("item_id" => $row["oid"], "shop" => $shop, "section" => $parent)),
+												"form_action" => "/index.".$ext)),
+			"cart" => $this->mk_my_orb("view_cart", array("shop_id" => $shop, "section" => $parent))
+		));
+		return $this->parse();
+	}
+
+	////
+	// !returns the shop item $id
+	function get_item($id)
+	{
+		$this->db_query("SELECT objects.*,shop_items.* FROM objects LEFT JOIN shop_items ON shop_items.id = objects.oid WHERE id = $id");
+		return $this->db_next();
+	}
+
+	////
+	// !adds the number of items in the count form to cart and also remembers the form_entry of the cnt_form so we know what type
+	// of item was ordered. damn. this is like complicated and shit 
+	function submit_order_item($arr)
+	{
+		extract($arr);
+		global $shopping_cart;
+	
+		$it = $this->get_item($item_id);
+
+		classload("form");
+		$f = new form;
+		$f->process_entry(array(
+			"id" => $it["cnt_form"], 
+			"entry_id" => $shopping_cart["items"][$item_id]["cnt_entry"]
+		));
+		$entry_id = $f->entry_id;
+
+		// now figure out the correct row(s) in the count form and mark them in the shopping cart.
+		// rows are figured out based on elements named selectrow - if it's checked on that row, then that row
+		// nost be added to the cart. 
+		// here we just calculate the amount of items based on the selected rows and numbers entered in "mitu" elements
+
+		$selrows = $this->get_selected_rows_in_form(&$f);
+
+		$count = 0;
+		foreach($selrows as $i)
+		{
+			$rowels = $f->get_elements_for_row($i);
+			// this row's count must be added to this item's count in the shopping cart
+			$count+=$rowels["mitu"];
+		}
+		$GLOBALS["shopping_cart"]["items"][$item_id]["cnt"] = $count;
+		$GLOBALS["shopping_cart"]["items"][$item_id]["name"] = $it["name"];
+		$GLOBALS["shopping_cart"]["items"][$item_id]["cnt_entry"] = $entry_id;
+
+		return $this->mk_my_orb("order_item", array("item_id" => $item_id, "shop" => $shop, "section" => $section));
+	}
+
+	////
+	// !returns an array of rows that are selected in the entry loaded in the form $f (reference to object)
+	function get_selected_rows_in_form(&$f)
+	{
+		$ret = array();
+		$nr = $f->get_num_rows();
+		for ($i=0; $i < $nr; $i++)
+		{
+			$rowels = $f->get_elements_for_row($i);
+			// now check if this row's selectrow is checked
+			if ($f->is_checked_value($rowels["selectrow"]))
+			{
+				// if it is, add it to the return
+				$ret[$i] = $i;
+			}
+		}
+		return $ret;
 	}
 }
 ?>

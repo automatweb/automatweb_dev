@@ -59,7 +59,7 @@ class shop_item extends aw_template
 			$f = new form;
 			return $f->gen_preview(array(
 				"id" => $form_id,
-				"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "fid" => $form_id,"op_id" => $op_id))
+				"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "fid" => $form_id,"op_id" => $op_id,"op_id_l" => $op_id_l,"cnt_form" => $cnt_form))
 			));
 		}
 	}
@@ -87,7 +87,7 @@ class shop_item extends aw_template
 
 			$id = $this->new_object(array("parent" => $parent, "class_id" => CL_SHOP_ITEM, "status" => 2, "name" => $f->get_element_value_by_name("nimi")));
 			$price = $f->get_element_value_by_type("price");
-			$this->db_query("INSERT INTO shop_items(id,form_id,entry_id,op_id,price) values($id,'$fid','$eid','$op_id','$price')");
+			$this->db_query("INSERT INTO shop_items(id,form_id,entry_id,op_id,price,op_id_l,cnt_form) values($id,'$fid','$eid','$op_id','$price','$op_id_l','$cnt_form')");
 		}
 		return $this->mk_orb("change", array("id" => $id));
 	}

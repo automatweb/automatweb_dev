@@ -84,6 +84,23 @@
 			</function>
 		</action>
 
+		<action name="order_item">
+			<function name="order_item">
+				<arguments>
+					<required name="item_id"/>
+					<required name="shop"/>
+					<required name="section"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_order_item">
+			<function name="submit_order_item">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
 		

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.4 2001/05/21 03:39:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.5 2001/05/21 07:12:45 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -3043,6 +3043,7 @@ classload("cache","validator","defs");
 	// !draws MENU_$name_SEEALSO_ITEM 's for the menu given in $row
 	function do_seealso_items($row,$name)
 	{
+		global $ext,$baseurl;
 		$sa = unserialize($row["seealso"]);
 		if (is_array($sa))
 		{

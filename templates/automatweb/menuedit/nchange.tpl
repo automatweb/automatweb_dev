@@ -2,7 +2,7 @@
 DIV {
 	position: absolute;
 }
-DIV.navigation { visibility; visible; left: 10px; top: 50px; font-family: Verdana; width: 680px; font-weight: bold; font-size: 9px; }
+DIV.navigation { visibility; visible; left: 10px; top: 50px; font-family: Verdana; width: 700px; font-weight: bold; font-size: 9px; }
 DIV.tab {  visibility: hidden;   left: 0px;   top: 15px;  height: 100px;   width: 400px;}
 DIV.tab1 {  visibility: visible;   left: 0px;   top: 15px;  height: 100px;   width: 400px;}
 </style>
@@ -22,7 +22,7 @@ function savemenu() {
 </script>
 
 <div id="navi" class="navigation">
-<table border="0" cellspacing="0" cellpadding="0" width=680>
+<table border="0" cellspacing="0" cellpadding="0" width=700>
 <tr>
 <td bgcolor="#CCCCCC">
 <table border="0" cellspacing="1" cellpadding="0" width=100%>
@@ -52,10 +52,10 @@ function savemenu() {
 <form action='reforb.{VAR:ext}' name="menuinfo" method=post enctype='multipart/form-data'>
 <input type='hidden' NAME='MAX_FILE_SIZE' VALUE='1000000'>
 <div id="xtab1" class="tab1">
-<table border="0" cellspacing="0" cellpadding="0" width=680>
+<table border="0" cellspacing="0" cellpadding="0" width=700>
 <tr>
 <td bgcolor="#CCCCCC">
-<table border=0 cellspacing=1 cellpadding=1 width=680>
+<table border=0 cellspacing=1 cellpadding=1 width=700>
 	<tr>
 		<td class="title">&nbsp;Objekt:&nbsp;</td>
 		<td class="fgtext_g">&nbsp;<b>ID:</b>&nbsp;{VAR:id}</td>
@@ -119,10 +119,10 @@ See on vennastatud men&uuml;&uuml;, mille vanem vend asub <a href='menuedit.{VAR
 <!-- END SUB: IS_BROTHER -->
 </div>
 <div id="xtab2" class="tab">
-<table border="0" cellspacing="0" cellpadding="0" width=680>
+<table border="0" cellspacing="0" cellpadding="0" width=700>
 <tr>
 <td bgcolor="#CCCCCC">
-<table border=0 cellspacing=1 cellpadding=1 width=680>
+<table border=0 cellspacing=1 cellpadding=1 width=700>
 	<tr>
 		<td class="title" width=10%>&nbsp;ID:&nbsp;</td>
 		<td class="fgtext_g"><b>{VAR:id}</b></td>
@@ -153,10 +153,10 @@ See on vennastatud men&uuml;&uuml;, mille vanem vend asub <a href='menuedit.{VAR
 </table>
 </div>
 <div id="xtab3" class="tab">
-<table border="0" cellspacing="0" cellpadding="0" width=680>
+<table border="0" cellspacing="0" cellpadding="0" width=700>
 <tr>
 <td bgcolor="#CCCCCC">
-<table border=0 cellspacing=1 cellpadding=1 width=680>
+<table border=0 cellspacing=1 cellpadding=1 width=700>
 	<tr>
 		<td class="title" width=10%>&nbsp;ID:&nbsp;</td>
 		<td class="fgtext_g"><b>{VAR:id}</b></td>
@@ -183,10 +183,10 @@ See on vennastatud men&uuml;&uuml;, mille vanem vend asub <a href='menuedit.{VAR
 </table>
 </div>
 <div id="xtab4" class="tab">
-<table border="0" cellspacing="0" cellpadding="0" width=680>
+<table border="0" cellspacing="0" cellpadding="0" width=700>
 <tr>
 <td bgcolor="#CCCCCC">
-<table border=0 cellspacing=1 cellpadding=1 width=680>
+<table border=0 cellspacing=1 cellpadding=1 width=700>
 	<tr>
 		<td class="title" width=10%>&nbsp;ID:&nbsp;</td>
 		<td class="fgtext_g"><b>{VAR:id}</b></td>
@@ -213,10 +213,10 @@ See on vennastatud men&uuml;&uuml;, mille vanem vend asub <a href='menuedit.{VAR
 </table>
 </div>
 <div id="xtab5" class="tab">
-<table border="0" cellspacing="0" cellpadding="0" width=680>
+<table border="0" cellspacing="0" cellpadding="0" width=700>
 <tr>
 <td bgcolor="#CCCCCC">
-<table border=0 cellspacing=1 cellpadding=1 width=680>
+<table border=0 cellspacing=1 cellpadding=1 width=700>
 	<tr>
 		<td class="title" width=10%>&nbsp;ID:&nbsp;</td>
 		<td class="fgtext_g"><b>{VAR:id}</b></td>
@@ -243,10 +243,10 @@ See on vennastatud men&uuml;&uuml;, mille vanem vend asub <a href='menuedit.{VAR
 </table>
 </div>
 <div id="xtab6" class="tab">
-<table border="0" cellspacing="0" cellpadding="0" width=680>
+<table border="0" cellspacing="0" cellpadding="0" width=700>
 <tr>
 <td bgcolor="#CCCCCC">
-<table border=0 cellspacing=1 cellpadding=1 width=680>
+<table border=0 cellspacing=1 cellpadding=1 width=700>
 	<tr>
 		<td class="title" width=10%>&nbsp;ID:&nbsp;</td>
 		<td class="fgtext_g"><b>{VAR:id}</b></td>
@@ -266,10 +266,10 @@ See on vennastatud men&uuml;&uuml;, mille vanem vend asub <a href='menuedit.{VAR
 </div>
 
 <div id="xtab7" class="tab">
-<table border="0" cellspacing="0" cellpadding="0" width=680>
+<table border="0" cellspacing="0" cellpadding="0" width=700>
 <tr>
 <td bgcolor="#CCCCCC">
-<table border=0 cellspacing=1 cellpadding=1 width=680>
+<table border=0 cellspacing=1 cellpadding=1 width=700>
 	<tr>
 		<td class="title" width=10%>&nbsp;ID:&nbsp;</td>
 		<td class="fgtext_g"><b>{VAR:id}</b></td>
@@ -293,10 +293,10 @@ See on vennastatud men&uuml;&uuml;, mille vanem vend asub <a href='menuedit.{VAR
 </div>
 
 <div id="xtab8" class="tab">
-<table border="0" cellspacing="0" cellpadding="0" width=680>
+<table border="0" cellspacing="0" cellpadding="0" width=700>
 <tr>
 <td bgcolor="#CCCCCC">
-<table border=0 cellspacing=1 cellpadding=1 width=680>
+<table border=0 cellspacing=1 cellpadding=1 width=700>
 	<tr>
 		<td class="title" width=10%>&nbsp;ID:&nbsp;</td>
 		<td class="fgtext_g"><b>{VAR:id}</b></td>
@@ -312,10 +312,10 @@ See on vennastatud men&uuml;&uuml;, mille vanem vend asub <a href='menuedit.{VAR
 </div>
 
 <div id="xtab9" class="tab">
-<table border="0" cellspacing="0" cellpadding="0" width=680>
+<table border="0" cellspacing="0" cellpadding="0" width=700>
 <tr>
 <td bgcolor="#CCCCCC">
-<table border=0 cellspacing=1 cellpadding=1 width=680>
+<table border=0 cellspacing=1 cellpadding=1 width=700>
 	<tr>
 		<td class="title" width=10%>&nbsp;ID:&nbsp;</td>
 		<td class="fgtext_g"><b>{VAR:id}</b></td>
