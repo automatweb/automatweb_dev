@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.14 2002/08/29 03:09:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.15 2002/09/09 18:19:00 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -230,11 +230,11 @@ class poll extends aw_template
 					"comment" => $comment
 				)
 			));
-			if ($alias_to)
-			{
-				$this->add_alias($alias_to,$id);
-			};
 		}
+		if ($alias_to)
+		{
+			$this->add_alias($alias_to,$id);
+		};
 		$retval = $this->mk_my_orb("change",array("id" => $id,"return_url" => $return_url,"alias_to" => $alias_to));
 		return $retval;
 
@@ -324,6 +324,7 @@ class poll extends aw_template
 			"sum" => $sum,
 			"reforb" => $this->mk_reforb("submit",array("id" => $id, "return_url" => urlencode($return_url))),
 			"translate" => $this->mk_my_orb("translate", array("id" => $id, "return_url" => urlencode($return_url))),
+			"clicks" => $this->mk_my_orb("clicks", array("id" => $id)),
 		));
 		$this->vars(array(
 			"CHANGE" => $this->parse("CHANGE")
@@ -414,7 +415,14 @@ class poll extends aw_template
 
 		if ($poa[$poll_id] != 1)
 		{
+			$REMOTE_ADDR = aw_global_get("REMOTE_ADDR");
+			$ip = aw_global_get("HTTP_X_FORWARDED_FOR");
+			if (!is_ip($ip))
+			{
+				$ip = $REMOTE_ADDR;
+			}
 			$this->db_query("UPDATE poll_answers SET clicks=clicks+1 WHERE id = $aid");
+			$this->db_query("INSERT INTO poll_clicks(uid, ip, date, poll_id, answer_id) VALUES('".aw_global_get("uid")."','$ip',".time().",'$poll_id','$aid')");
 		}
 
 		$poa[$poll_id] = 1;
@@ -615,6 +623,59 @@ class poll extends aw_template
 			)
 		));
 		return $this->mk_my_orb("translate", array("id" => $id, "return_url" => $return_url));
+	}
+
+	function clicks($arr)
+	{
+		extract($arr);
+		load_vcl("table");
+		$this->t = new aw_table(array("prefix" => "images"));
+		$this->t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
+		$this->t->define_field(array(
+			"name" => "uid",
+			"caption" => "UID",
+			"talign" => "center",
+			"align" => "center",
+			"sortable" => 1,
+    ));
+		$this->t->define_field(array(
+			"name" => "ip",
+			"caption" => "IP",
+			"talign" => "center",
+			"align" => "center",
+			"sortable" => 1,
+    ));
+		$this->t->define_field(array(
+			"name" => "date",
+			"caption" => "Kuup&auml;ev",
+			"talign" => "center",
+			"align" => "center",
+			"sortable" => 1,
+			"numeric" => 1,
+			"type" => "time",
+			"format" => "d.m.y / H:i"
+    ));
+		$this->t->define_field(array(
+			"name" => "answer",
+			"caption" => "Vastus",
+			"talign" => "center",
+			"align" => "center",
+			"sortable" => 1,
+    ));
+
+		$ansa = $this->get_answers($id);
+
+		$this->db_query("SELECT * FROM poll_clicks WHERE poll_id = '$id' AND answer_id != 0");
+		while ($row = $this->db_next())
+		{
+			$row["answer"] = $ansa[$row["answer_id"]]["answer"];
+			list($row["ip"],) = aw_gethostbyaddr($row["ip"]);
+			$this->t->define_data($row);
+		}
+
+		$this->t->set_default_sortby("date");
+		$this->t->sort_by();
+		return $this->t->draw();
 	}
 }
 ?>

@@ -43,7 +43,8 @@ href="javascript:this.document.polladd.submit();">{VAR:LC_POLL_SAVE}</a>
 		<td class="celltext">ID:</td>
 		<td colspan="3" class="celltext">{VAR:id} 
 		<!-- SUB: CHANGE -->
-			<a href='{VAR:translate}'>T&otilde;lgi</a>
+			<a href='{VAR:translate}'>T&otilde;lgi</a>&nbsp;&nbsp;&nbsp;
+			<a href='{VAR:clicks}'>Klikid</a>
 		<!-- END SUB: CHANGE -->
 		</td>
 	</tr>
