@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.6 2004/12/02 16:44:12 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.7 2004/12/03 12:52:03 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -436,11 +436,15 @@ class webform extends class_base
 						"formula" => 'if(!is_email($prop["value"]){$retval = PROP_ERROR;}',
 						"errmsg" => "Välja %caption sisestatud e-mailiaadress pole korrektne",
 					),
+					array(
+						"name" => "Kuva sisestaja IP ja host aadress",
+						"formula" => 'if(empty($prop["value"])){$request[$prop["name"]] = "Host: ".$_SERVER["REMOTE_HOST"]."<br />IP: ".$_SERVER["REMOTE_ADDR"];}',
+					),
 				);
 				$get_controllers = array(
 					array(
 						"name" => "Kuva sisestaja IP ja host aadress",
-						"formula" => "",
+						"formula" => 'if(!empty($prop["value"])){$prop["type"] = "text";}',
 					),
 				);
 				$i = 0;
@@ -460,7 +464,6 @@ class webform extends class_base
 					$i++;
 				}
 				$i = 0;
-				/*
 				foreach($get_controllers as $key => $val)
 				{
 					$controller = obj();
@@ -475,13 +478,12 @@ class webform extends class_base
 					));
 					$i++;
 				}
-				*/
 				break;
 				
 			case "view_controllers":
 				if($this->cfgform)
 				{
-					$this->cfgform->set_meta("controllers", $arr["request"]["view_controllers"]);
+					$this->cfgform->set_meta("view_controllers", $arr["request"]["view_controllers"]);
 				}
 				break;
 			
@@ -664,7 +666,7 @@ class webform extends class_base
 
 	function add_new_properties($arr)
 	{
-		$no_props = array("status", "comment", "name");
+		$no_props = array("status", "comment", "name", "register_id");
 		$target = $arr["request"]["target"];
 		// first check, whether a group with that id exists
 		$_tgt = $this->cfgform->meta("cfg_groups");
@@ -1055,10 +1057,10 @@ class webform extends class_base
 		
 		$rval = $this->draw_cfgform_from_ot(array(
 			"ot" => $object_type->id(),
-			"reforb" => $this->mk_reforb("save_form_data", array(
+			"reforb" => array(
+				"section" => $section,
 				"id" => $arr["id"],
-				"return_url" => $section,
-			)),
+			),
 			"errors" => $errors,
 			"values" => $values,
 			"obj_inst" => $obj_inst,
@@ -1129,6 +1131,10 @@ class webform extends class_base
 					$els[$key]["style"]["prop"] = $sel_styles[$key]["prop"];
 				}
 			}
+			if($val["type"] == "hidden")
+			{
+				$arr["reforb"][$key] = "";
+			}
 		}
 		classload("cfg/htmlclient");
 		$htmlc = new htmlclient(array(
@@ -1145,11 +1151,10 @@ class webform extends class_base
 		$html = $htmlc->get_result(array(
 			"raw_output" => 1,
 		));
-
 		$this->read_template("show_form.tpl");
-		$this->vars(Array(
+		$this->vars(array(
 			"form" => $html,
-			"reforb" => $arr["reforb"],
+			"reforb" => $this->mk_reforb("save_form_data", $arr["reforb"]),
 		));
 		return $this->parse();
 	}
@@ -1176,7 +1181,7 @@ class webform extends class_base
 		$prplist = safe_array($cfgform->meta("cfg_proplist"));
 		$is_valid = $this->validate_data(array(
 			"cfgform_id" => $cfgform->id(),
-			"request" => $arr,
+			"request" => &$arr,
 		));
 		if(!empty($is_valid))
 		{
