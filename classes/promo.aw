@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.30 2003/06/03 15:33:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.31 2003/06/04 10:37:20 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -70,6 +70,14 @@ class promo extends class_base
 		));
 		lc_load("definition");
 		$this->lc_load("promo","lc_promo");
+	}
+
+	function callback_get_classes_for_relation($args = array())
+	{
+		if ($args["reltype"] == RELTYPE_ASSIGNED_MENU || $args["reltype"] == RELTYPE_DOC_SOURCE)
+		{
+			return array(CL_PSEUDO);
+		}
 	}
 
 	function callback_get_rel_types()
