@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.12 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.13 2002/06/26 11:27:15 duke Exp $
 // Generic calendar class
 
 // php arvab by default, et pühapäev on 0.
@@ -126,7 +126,10 @@ class calendar extends aw_template
 			if ($wday > ROLL_OVER)
 			{
 				// nädal lõppes, lisame selle kalendrisse
-				$this->vars(array("cell" => $line));
+				$this->vars(array(
+					"cell" => $line,
+					"weekorblink" => $this->mk_my_orb("view",array("id" => $id,"type" => "week","date" => "$day-$mon-$year")),
+				));
 				$month .= $this->parse("week");
 				$line = "";
 
