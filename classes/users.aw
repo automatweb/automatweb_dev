@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.84 2003/05/13 07:44:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.85 2003/05/13 07:46:59 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -18,87 +18,6 @@ class users extends users_user
 		$this->lc_load("users","lc_users");
 	}
 
-	// users tabelis on väli config, tyypi text, kuhu saab salvestada
-	// igasugu misc informatsiooni, mida pole vaja kiiresti kätte saada,
-	// aga mis on siiski oluline. Järgnevad 2 funktsiooni tegelevad
-	// selle handlemisega.
-	////
-	// !Loeb kasutaja konfiguratsiooni sisse
-	// uid - kasutaja
-	// key - key, mille sisu teada soovitakse
-	// $data = $users->get_user_config(array(
-	//		"uid" => "duke",
-	//		"key" => "coolness_factor",));
-	function get_user_config($args = array())
-	{
-		extract($args);
-		$udata = $this->_get_user_config($uid);
-		if (!$udata)
-		{
-			return false;
-		};
-		$retval = aw_unserialize($udata["config"]);
-		// return a single key if asked
-		if ($key)
-		{
-			$retval = $retval[$key];
-			//$retval = $tmp[$key];
-		}
-		// otherwise the whole config block
-		return $retval;
-	}
-
-	function _get_user_config($uid)
-	{
-		$row = aw_cache_get("users_cache",$uid);
-		if (not(is_array($row)))
-		{
-			$q = "SELECT config FROM users WHERE uid = '$uid'";
-			$this->db_query($q);
-			$row = $this->db_next();
-		};
-		return $row;
-	}
-
-	////
-	// !Kirjutab kasutaja konfiguratsioonis mingi key yle
-	// uid - kasutaja
-	// key - võtme nimi
-	// value - key väärtus. intenger, string, array, whatever
-	// $users->set_user_config(array(
-	//		"uid" => "duke",
-	//		"key" => "coolness_factor",
-	//		"value" => "99",));
-	function set_user_config($args = array())
-	{
-		extract($args);
-		// loeme vana konfi sisse
-		$old = $this->_get_user_config($uid);
-		if (!$old)
-		{
-			return false;
-		};
-		$config = aw_unserialize($old["config"]);
-		if (is_array($data))
-		{
-			$config = array_merge($config,$data);
-		}
-		else
-		{
-			$config[$key] = $value;
-		};
-		$newconfig = aw_serialize($config);
-		if (($row = aw_cache_get("users_cache", $uid)))
-		{
-			$row["config"] = $newconfig;
-			aw_cache_set("users_cache", $uid, $row);
-		}
-		$this->quote($newconfig);
-		$q = "UPDATE users SET config = '$newconfig' WHERE uid = '$uid'";
-		$this->db_query($q);
-		return true;
-	}
-			
 	////
 	// !generates list of users. For internal use
 	// I made this a separate function, because I'm going to need this functionality in
