@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.315 2005/01/21 10:08:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.316 2005/02/03 11:43:53 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -394,6 +394,11 @@ class document extends aw_template
 		$params["vars"] = $doc["vars"];
 		$tpl = $doc["tpl"];
 		
+		if (trim($doc["lead"]) == "<br>")
+		{
+			$doc["lead"] = "";
+		}
+
 		//$meta = $doc["meta"];
 		if ($meta["show_last_changed"])
 		{
