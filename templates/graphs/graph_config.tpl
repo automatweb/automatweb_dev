@@ -54,13 +54,18 @@ SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""></td>
 <td valign="bottom">
 												<table border=0 cellpadding=0 cellspacing=0>
 													<tr>
+
+													
+														<td class="tabsel"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td>
+														<td nowrap background="{VAR:baseurl}/automatweb/images/blue/tab_taust.gif" class="tabsel" valign="bottom">{VAR:LC_GRAPH_CONFIG}</td><td class="tabsel"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td>
+														
 														
 														<td class="tab"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td>
 														<td nowrap background="{VAR:baseurl}/automatweb/images/blue/tab_taust.gif" class="tab" valign="middle"><a href="{VAR:prev}">{VAR:LC_GRAPH_PREW}</a></td><td class="tab"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td>
 
 
 														<td class="tab"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td>
-														<td nowrap background="{VAR:baseurl}/automatweb/images/blue/tab_taust.gif" class="tab" valign="middle"><a href={VAR:meta}>{VAR:LC_GRAPH_META}</a></td><td class="tab"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td>
+														<td nowrap background="{VAR:baseurl}/automatweb/images/blue/tab_taust.gif" class="tab" valign="middle"><a href="{VAR:meta}">{VAR:LC_GRAPH_META}</a></td><td class="tab"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td>
 
 
 														<!-- SUB: CHANGE -->
@@ -86,18 +91,21 @@ SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""></td>
 
 </td></tr></table>
 </td></tr></table>
-<span class="celltext"><font color="darkred">{VAR:LC_GRAPH_NOTE1}</font></span></td>
+</td>
 </tr></table>
 
 
-<table border="0" cellspacing="0" cellpadding="1" width="100%">
-<tr>
-<td bgcolor="#FFFFFF">
 
 
-<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<table width="100%" border="0" cellpadding="5" cellspacing="0">
+<tr><td class="tableborder">
+
+<table border=0 cellpadding=2 bgcolor="#FFFFFF" cellspacing=1>
+
 <tr>
-<td class="aste01">
+	<td class="aste01">
+
+<span class="celltext"><font color="red">{VAR:LC_GRAPH_NOTE1}</font></span>
 
 <table border="0" cellspacing="5" cellpadding="2">
 	<tr>
@@ -160,7 +168,7 @@ SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""></td>
 	</tr>
 	<tr>
 		<td  class="celltext" align="right">{VAR:LC_GRAPH_DATA_COLOR}:</td>
-		<td colspan=3 class="celltext">#<input type="text" size=6 name="setup[fir_col]" value="{VAR:fir_col}" class="formtext"><a href="#" onclick="varvivalik(15);">&nbsp;{VAR:LC_GRAPH_CHOOSE}&nbsp;&nbsp;&nbsp;</a> <font color="darkred">{VAR:LC_GRAPH_NOTE2}</font></td>
+		<td colspan=3 class="celltext">#<input type="text" size=6 name="setup[fir_col]" value="{VAR:fir_col}" class="formtext"><a href="#" onclick="varvivalik(15);">&nbsp;{VAR:LC_GRAPH_CHOOSE}&nbsp;&nbsp;&nbsp;</a> <font color="red">{VAR:LC_GRAPH_NOTE2}</font></td>
 	</tr>
 	<!--<tr>
 	     <td></td>
@@ -176,3 +184,12 @@ SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""></td>
 
 </td></tr></table>
 </td></tr></form></table>
+
+
+
+</td>
+</tr>
+</table>
+
+</td></tr></table>
+<br>

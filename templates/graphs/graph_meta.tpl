@@ -79,32 +79,44 @@ SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""></td>
 
 
 
+<table width="100%" border="0" cellpadding="5" cellspacing="0">
+<tr><td class="tableborder">
 
+<table border=0 cellpadding=2 bgcolor="#FFFFFF" cellspacing=1>
 
-<table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr>
-<td class="aste02">
+	<td align=center class="aste01">
+
 
 <table border="0" cellspacing="5" cellpadding="2">
 	<tr>
-	<TD class="celltext">{VAR:LC_GRAPH_NAME}:</td>
+	<TD class="celltext" align="right">{VAR:LC_GRAPH_NAME}:</td>
 	<TD class="celltext"><input type="text" name="name" value="{VAR:name}" class="formtext"></td>
 	</tr>
 <TR>
-	<TD class="celltext">{VAR:LC_GRAPH_COMM}:</td>
+	<TD class="celltext" align="right">{VAR:LC_GRAPH_COMM}:</td>
 	<TD class="celltext"><textarea name="comment" COLS=50 ROWS=5 wrap='soft' class="formtext">{VAR:comment}</textarea>
 </tr>
 <TR>
-	<TD class="celltext">{VAR:LC_GRAPH_TYPE}:</td>
+	<TD class="celltext" align="right">{VAR:LC_GRAPH_TYPE}:</td>
 	<td class="celltext">&nbsp;{VAR:type}&nbsp;</td>
 </tr>
 <TR>
-	<TD class="celltext">{VAR:LC_GRAPH_DATA}:</td>
+	<TD class="celltext" align="right">{VAR:LC_GRAPH_DATA}:</td>
 	<td class="celltext">&nbsp;{VAR:andmed}&nbsp;</td>
 </tr>
 	</TABLE>   
 <!--<input type="submit" name="Submit" value="{VAR:LC_GRAPH_SAVE}">-->
-</td></tr>
-</TABLE>
+
 {VAR:reforb}
 </form>
+
+
+
+
+</td>
+</tr>
+</table>
+
+</td></tr></table>
+<br>

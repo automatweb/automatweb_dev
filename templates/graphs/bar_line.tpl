@@ -1,3 +1,14 @@
+<table width="100%" border="0" cellpadding="5" cellspacing="0">
+<tr><td class="tableborder">
+
+<table border=0 cellpadding=2 bgcolor="#FFFFFF" cellspacing=1>
+
+<tr>
+	<td align=center class="aste01">
+
+
+
+
 <FORM METHOD=POST ACTION="reforb.aw">
 
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
@@ -44,3 +55,14 @@
 </TABLE>
 {VAR:reforb}
 </FORM>
+
+
+
+
+
+</td>
+</tr>
+</table>
+
+</td></tr></table>
+<br>
