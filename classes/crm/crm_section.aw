@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.7 2004/07/02 09:40:32 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.8 2004/07/02 14:58:58 sven Exp $
 // crm_section.aw - Üksus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disconnect_org_from_section)
@@ -23,6 +23,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 @reltype PROFESSIONS value=3 clid=CL_CRM_PROFESSION
 @caption Roll
 
+@reltype JOB_OFFER value=4 clid=CL_PERSONNEL_MANAGEMENT_JOB_OFFER
+@caption Tööpakkumine
 */
 
 class crm_section extends class_base
@@ -95,19 +97,77 @@ class crm_section extends class_base
 	/*
 		$id - object id
 	*/
-	function get_professions($id)
+	function get_professions($id, $recrusive = false)
 	{
-		$obj = new object($id);
-		$rtrn = array();
-		$conns = $obj->connections_from(array(
-					'type' => 'RELTYPE_PROFESSIONS'
-		));
-		foreach($conns as $conn)
+		static $rtrn;
+		
+		if($recrusive == false)
 		{
-			$rtrn[$conn->prop('to')] = $conn->prop('to.name');
+			$obj = new object($id);
+			$rtrn = array();
+			$conns = $obj->connections_from(array(
+				'type' => 'RELTYPE_PROFESSIONS'
+			));
+			foreach($conns as $conn)
+			{
+				$rtrn[$conn->prop('to')] = $conn->prop('to.name');
+			}
+		}
+		else
+		{	//Case recrusve
+			$obj = new object($id);
+			$conns = $obj->connections_from(array(
+				'type' => 'RELTYPE_PROFESSIONS'
+			));
+			
+			foreach($conns as $conn)
+			{
+				$rtrn[$conn->prop('to')] = $conn->prop('to.name');
+			}
+			
+			if($sub_sections = $obj->connections_from(array("type" => 1)))
+			{
+				foreach ($sub_sections as $sub_section)
+				{
+					$this->get_professions($sub_section->prop("to"), true);
+				}
+			}
 		}
 		return $rtrn;
 	}
+	
+	function get_section_job_ids_recrusive($unit_id)
+	{
+		static $jobs_ids;
+		
+		$section_obj = &obj($unit_id);
+		
+		foreach ($section_obj->connections_from(array("type" => RELTYPE_JOB_OFFER)) as $joboffer)
+		{
+			$jobs_ids[$joboffer->prop("to")] = $section_obj->name();		
+		}
+	
+		//If section has any subsections...get jobs from there too
+		if($sub_sections = $section_obj->connections_from(array("type" => 1)))
+		{
+			foreach ($sub_sections as $sub_section)
+			{
+				$this->get_section_job_ids_recrusive($sub_section->prop("to"));				
+			}
+		}
+		return $jobs_ids;
+	}
+	
+	function get_section_job_ids($unit_id)
+	{
+		$section_obj = &obj($unit_id);
+		foreach ($section_obj->connections_from(array("type" => RELTYPE_JOB_OFFER)) as $joboffer)
+		{
+			$jobs_ids[] = $joboffer->prop("to");						
+		}
+		return $jobs_ids;	
+	}
+
 
    // Invoked when a connection from organization to section is removed
    // .. this will then remove the opposite connection as well if one exists
@@ -155,5 +215,6 @@ class crm_section extends class_base
 			}
       }
 	}
+
 }
 ?>
