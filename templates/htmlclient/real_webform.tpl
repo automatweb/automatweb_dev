@@ -88,7 +88,7 @@
 <!-- SUB: SUBMIT -->
 <tr>
 	<td class="{VAR:webform_content}" colspan="2">
-		<input type="submit" name="{VAR:name}" value="{VAR:sbt_caption}">
+		<input type="submit" name="{VAR:name}" value="{VAR:sbt_caption}" onclick="submit_changeform();">
 	</td>
 </tr>
 <!-- END SUB: SUBMIT -->
@@ -98,7 +98,7 @@
 	<td class="{VAR:webform_content}">
 	</td>
 	<td class="{VAR:webform_content}">
-		<input type="submit" name="{VAR:name}" value="{VAR:sbt_caption}" class="{VAR:webform_content}">
+		<input type="submit" name="{VAR:name}" value="{VAR:sbt_caption}" class="{VAR:webform_content}" onclick="submit_changeform();">
 	</td>
 </tr>
 <!-- END SUB: SUBMIT_RIGHT -->
