@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.14 2005/02/07 13:18:36 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.15 2005/02/07 15:32:56 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -343,9 +343,31 @@ class mrp_case extends class_base
 				break;
 		}
 
-		if ($arr["obj_inst"]->prop($prop["name"]) != $prop["value"] && $prop["type"] == "textbox")
+		if ($arr["obj_inst"]->prop($prop["name"]) != $prop["value"] && in_array($prop["type"], array("textbox", "datetime_select")))
 		{
-			$this->mrp_log($arr["obj_inst"]->id(), NULL, "Projekti omaduse ".$prop["caption"]." v&auml;&auml;rtust muudeti ".$arr["obj_inst"]->prop($prop["name"])." => ".$prop["value"]);
+			if ($prop["type"] == "textbox")
+			{
+				$v1 = $arr["obj_inst"]->prop($prop["name"]);
+				$v2 = $prop["value"];
+			}
+			else
+			if ($prop["type"] == "datetime_select")
+			{
+				$v1 = date("d.m.Y H:i", $arr["obj_inst"]->prop($prop["name"]));
+				$v2 = date("d.m.Y H:i", date_edit::get_timestamp($prop["value"]));
+				if ($v1 == $v2)
+				{
+					return $retval;
+				}
+			}
+		
+			$this->mrp_log(
+				$arr["obj_inst"]->id(), 
+				NULL, 
+				"Projekti omaduse ".
+					$prop["caption"]." v&auml;&auml;rtust muudeti ".
+					$v1." => ".$v2
+			);
 		}
 
 		return $retval;

@@ -75,5 +75,26 @@
 			</function>
 		</action>
 
+		<action name="cut_resources">
+			<function name="cut_resources">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="copy_resources">
+			<function name="copy_resources">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="paste_resources">
+			<function name="paste_resources">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

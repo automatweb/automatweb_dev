@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.6 2005/02/07 13:18:36 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.7 2005/02/07 15:32:56 kristo Exp $
 // mrp_schedule.aw - Ajaplaan?
 /*
 
@@ -81,6 +81,16 @@ class mrp_schedule extends class_base
 	);
 
 	var $timings = array ();
+
+	var $state_names = array (
+		MRP_STATUS_NEW => "Uus",
+		MRP_STATUS_PLANNED => "Töösse planeeritud",
+		MRP_STATUS_INPROGRESS => "Töös",
+		MRP_STATUS_ABORTED => "Katkestatud",
+		MRP_STATUS_DONE => "Valmis",
+		MRP_STATUS_OVERDUE => "Üle tähtaja",
+	);
+
 
 	function mrp_schedule ()
 	{
@@ -430,6 +440,8 @@ class mrp_schedule extends class_base
 
 	function save ()
 	{
+		$log = get_instance(CL_MRP_WORKSPACE);
+
 		if (is_array ($this->project_schedule) and is_array ($this->job_schedule))
 		{
 			foreach ($this->project_schedule as $project_id => $date)
@@ -437,7 +449,28 @@ class mrp_schedule extends class_base
 				if (is_oid($project_id))
 				{
 					$project = obj ($project_id);
+					if ($date != $project->prop("planned_date"))
+					{
+						$log->mrp_log(
+							$project->id(), 
+							0, 
+							"Projekti planeeritud aeg muutus ".
+								date("d.m.Y H:i", $project->prop("planned_date"))." => ".
+								date("d.m.Y H:i", $date)
+						);
+					}
 					$project->set_prop ("planned_date", $date);
+
+					if (MRP_STATUS_PLANNED != $project->prop("state"))
+					{
+						$log->mrp_log(
+							$project->id(), 
+							0, 
+							"Projekti staatus muutus ".
+								$this->state_names[$project->prop("state")]." => ".
+								$this->state_names[MRP_STATUS_PLANNED]
+						);
+					}
 					$project->set_prop ("state", MRP_STATUS_PLANNED);
 					aw_disable_acl();
 					$project->save ();
@@ -450,8 +483,28 @@ class mrp_schedule extends class_base
 				if (is_oid($job_id) and $job_data[1])
 				{
 					$job = obj ($job_id);
+					if ($job->prop("starttime") != $job_data[0])
+					{
+						$log->mrp_log(
+							$job->prop("project"), 
+							$job->id(), 
+							"T&ouml;&ouml; aeg muutus ".
+								date("d.m.Y H:i", $job->prop("starttime"))." => ".
+								date("d.m.Y H:i", $job_data[0])
+						);
+					}
 					$job->set_prop ("starttime", $job_data[0]);
 					$job->set_prop ("planned_length", $job_data[1]);
+					if (MRP_STATUS_PLANNED != $job->prop("state"))
+					{
+						$log->mrp_log(
+							$job->prop("project"), 
+							$job->id(), 
+							"T&ouml;&ouml; staatus muutus ".
+								$this->state_names[$job->prop("state")]." => ".
+								$this->state_names[MRP_STATUS_PLANNED]
+						);
+					}
 					$job->set_prop ("state", MRP_STATUS_PLANNED);
 					aw_disable_acl();
 					$job->save ();

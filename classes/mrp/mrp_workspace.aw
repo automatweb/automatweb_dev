@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.16 2005/02/07 13:18:36 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.17 2005/02/07 15:32:56 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -587,6 +587,8 @@ class mrp_workspace extends class_base
 
 		$resources = $object_list->arr();
 
+		$res2p = $this->get_workers_for_resources($object_list->ids());
+
 		foreach ($resources as $resource)
 		{
 			$resource_id = $resource->id ();
@@ -594,6 +596,17 @@ class mrp_workspace extends class_base
 				"id" => $resource_id,
 				"return_url" => urlencode (aw_global_get ('REQUEST_URI')),
 			), "mrp_resource");
+
+			$operators = array();
+			
+			foreach(safe_array($res2p[$resource_id]) as $person)
+			{
+				$operators[] = html::get_change_url(
+					$person->id(), 
+					array("return_url" => urlencode(aw_global_get("REQUEST_URI"))),
+					$person->name()
+				);
+			}
 
 			$table->define_data (array (
 				"modify" => html::href (array (
@@ -607,7 +620,7 @@ class mrp_workspace extends class_base
 					"value" => $resource->ord (),
 				)),
 				"name" => $resource->name(),
-				"operator" => $resource->prop("operator"),
+				"operator" => join(",",$operators),
 				"status" => $resource->prop("status"),
 				"resource_id" => $resource_id,
 			));
@@ -663,31 +676,34 @@ class mrp_workspace extends class_base
 			"link" => $add_category_url,
 		));
 
-		// $toolbar->add_separator();
+		$toolbar->add_separator();
 
-		// $toolbar->add_button(array(
-			// "name" => "cut",
-			// "tooltip" => "L&otilde;ika",
-			// "action" => "cut_resources",
-			// "img" => "cut.gif",
-		// ));
+		$toolbar->add_button(array(
+			"name" => "cut",
+			"tooltip" => "L&otilde;ika",
+			"action" => "cut_resources",
+			"img" => "cut.gif",
+		));
 
-		// $toolbar->add_button(array(
-			// "name" => "copy",
-			// "tooltip" => "Kopeeri",
-			// "action" => "copy_resources",
-			// "img" => "copy.gif",
-		// ));
+		$toolbar->add_button(array(
+			"name" => "copy",
+			"tooltip" => "Kopeeri",
+			"action" => "copy_resources",
+			"img" => "copy.gif",
+		));
 
-		// if ($sel_count > 0)
-		// {
-			// $toolbar->add_button(array(
-				// "name" => "paste",
-				// "tooltip" => "Kleebi",
-				// "action" => "paste_resources",
-				// "img" => "paste.gif",
-			// ));
-		// };
+		if (count(safe_array($_SESSION["mrp_workspace"]["cut_resources"])) > 0 || 
+			count(safe_array($_SESSION["mrp_workspace"]["copied_resources"])) > 0)
+		{
+			$toolbar->add_button(array(
+				"name" => "paste",
+				"tooltip" => "Kleebi",
+				"action" => "paste_resources",
+				"img" => "paste.gif",
+			));
+		};
+
+		$toolbar->add_separator();
 
 		$toolbar->add_button(array(
 			"name" => "delete",
@@ -1326,13 +1342,13 @@ class mrp_workspace extends class_base
 			}
 		}
 
-		$return_url = $this->mk_my_orb("change", array(
+		/*$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
 			"return_url" => urlencode ($arr["return_url"]),
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
-		), "mrp_workspace");
-		return $return_url;
+		), "mrp_workspace");*/
+		return urldecode($arr["return_url"]);
 	}
 
 	function get_proj_overdue($this_object)
@@ -1434,6 +1450,7 @@ class mrp_workspace extends class_base
 		$arr['return_url'] = urlencode(aw_global_get('REQUEST_URI'));
 		$arr['cat'] = $_GET["cat"];
 		$arr['pj_job'] = $_GET["pj_job"];
+		$arr['mrp_tree_active_item'] = $_GET["mrp_tree_active_item"];
 	}
 
 	/** cuts the selected person objects
@@ -2253,6 +2270,61 @@ class mrp_workspace extends class_base
 		$value = (float) ((isset ($parts[0]) ? ((int) $parts[0]) : 0) . "." . (isset ($parts[1]) ? ((int) $parts[1]) : 0));
 		return $value;
 	}
+
+	/**
+
+		@attrib name=cut_resources
+
+	**/
+	function cut_resources($arr)
+	{
+		$_SESSION["mrp_workspace"]["cut_resources"] = safe_array($arr["selection"]);
+		return urldecode($arr["return_url"]);
+	}
+
+	/**
+
+		@attrib name=copy_resources
+
+	**/
+	function copy_resources($arr)
+	{
+		$_SESSION["mrp_workspace"]["copied_resources"] = safe_array($arr["selection"]);
+		return urldecode($arr["return_url"]);
+	}
+
+	/**
+
+		@attrib name=paste_resources
+
+	**/
+	function paste_resources($arr)
+	{
+		foreach(safe_array($_SESSION["mrp_workspace"]["cut_resources"]) as $resource)
+		{
+			if (is_oid($resource) && $this->can("edit", $resource))
+			{
+				$o = obj($resource);
+				$o->set_parent($arr["mrp_tree_active_item"]);
+				$o->save();
+			}
+		}
+		unset($_SESSION["mrp_workspace"]["cut_resources"]);
+
+		foreach(safe_array($_SESSION["mrp_workspace"]["copied_resources"]) as $resource)
+		{
+			if (is_oid($resource) && $this->can("view", $resource) && $this->can("add", $arr["mrp_tree_active_item"]))
+			{
+				$o = obj($resource);
+				$o->set_parent($arr["mrp_tree_active_item"]);
+				$o->save_new();
+			}
+		}
+		unset($_SESSION["mrp_workspace"]["copied_resources"]);
+
+		return urldecode($arr["return_url"]);
+	}
+
 }
 
 ?>

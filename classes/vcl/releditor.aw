@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.40 2005/01/19 21:27:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.41 2005/02/07 15:32:57 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -441,7 +441,22 @@ class releditor extends core
 					)),
 					"_active" => ($arr["request"][$this->elname] == $conn->prop("to")),
 				);
-				$export_props = $target->properties();
+				$property_list = $target->get_property_list();
+				$export_props = array();
+				foreach($property_list as $_pn => $_pd)
+				{
+					$export_props[$_pn] = $target->prop($_pn);
+					if ($_pd["type"] == "date_select")
+					{
+						$export_props[$_pn] = date("d.m.Y", $export_props[$_pn]);
+					}
+					else
+					if ($_pd["type"] == "datetime_select")
+					{
+						$export_props[$_pn] = date("d.m.Y H:i", $export_props[$_pn]);
+					}
+				}
+				//$export_props = $target->properties();
 				if ($ed_fields && ($this->form_type != $target->id()))
 				{
 					foreach($ed_fields->get() as $ed_field)
