@@ -205,9 +205,11 @@ class _int_object_loader
 			));
 		}
 
-		if (!is_object($GLOBALS["objects"][$oid]))
+		if (!is_object($GLOBALS["objects"][$oid]) || 
+			($GLOBALS["objects"][$oid]->obj_sys_flags["no_auto_translation"] != $GLOBALS["__obj_sys_opts"]["no_auto_translation"]))
 		{
 			$ref = &new _int_object($oid);
+			$ref->obj_sys_flags = $GLOBALS["__obj_sys_opts"];
 			if ($ref->id() === NULL)
 			{
 				error::throw(array(

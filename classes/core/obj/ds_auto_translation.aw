@@ -363,6 +363,73 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 
 		return $this->contained->save_properties($arr);
 	}
+
+	function find_connections($arr)
+	{
+		if ($arr["from"] && $arr["from.class_id"] && $arr["type"])
+		{
+			// beisikli if were doing connections_from
+			$cldef = $GLOBALS["cfg"]["__default"]["classes"][$arr["from.class_id"]];
+			if ($cldef["rels"][$arr["type"]]["trans_always_original"] == 1)
+			{
+				if (is_array($arr["from"]))
+				{
+					$tmp = array();
+					foreach($arr["from"] as $t_from)
+					{
+						$tmp[] = $this->_get_original_obj($t_from);
+					}
+					$arr["from"] = $tmp;
+				}
+				else
+				{
+					$arr["from"] = $this->_get_original_obj($arr["from"]);
+				}
+			}
+		}
+
+		if ($arr["to"] && $arr["from.class_id"] && $arr["type"])
+		{
+			// beisikli if were doing connections_to
+
+			$cldef = $GLOBALS["cfg"]["classes"][$arr["from.class_id"]];
+			if ($cldef["rels"][$arr["type"]]["trans_always_original"] == 1)
+			{
+				if (is_array($arr["to"]))
+				{
+					$tmp = array();
+					foreach($arr["to"] as $t_to)
+					{
+						$tmp[] = $this->_get_original_obj($t_to);
+					}
+					$arr["to"] = $tmp;
+				}
+				else
+				{
+					$arr["to"] = $this->_get_original_obj($arr["to"]);
+				}
+			}
+		}
+		return $this->contained->find_connections($arr);
+	}
+
+	function _get_original_obj($oid)
+	{
+		// if this is the original
+		$conns = $this->contained->find_connections(array(
+			"from" => $oid,
+			"type" => RELTYPE_TRANSLATION
+		));
+		if (count($conns) > 0)
+		{
+			return $oid;
+		}
+		$conn = reset($this->contained->find_connections(array(
+			"from" => $oid,
+			"type" => RELTYPE_ORIGINAL
+		)));
+		return $conn["to"];
+	}
 }
 
 ?>

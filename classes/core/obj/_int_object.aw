@@ -262,6 +262,11 @@ class _int_object
 			}
 		}
 
+		if (!$filter["from.class_id"])
+		{
+			$filter["from.class_id"] = $this->obj["class_id"];
+		}
+
 		$ret = array();
 		$cs = $GLOBALS["object_loader"]->ds->find_connections($filter);
 		foreach($cs as $c_id => $c_d)
@@ -708,9 +713,12 @@ class _int_object
 			));
 		}
 
-		aw_disable_acl();
+		if (!$GLOBALS["object_loader"]->can("view", $oid))
+		{
+			return obj();
+		}
+
 		$ret = new object($oid);
-		aw_restore_acl();
 		return $ret;
 	}
 
