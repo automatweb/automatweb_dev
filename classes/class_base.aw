@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.326 2004/11/29 03:07:45 ahti Exp $
+// $Id: class_base.aw,v 2.327 2004/11/29 03:10:20 ahti Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2915,9 +2915,9 @@ class class_base extends aw_template
 						$res[$key]["msg"][] = $errmsg;
 					};
 				}
-				if(count($res["key"]["msg"]) > 0)
+				if(count($res[$key]["msg"]) > 0)
 				{
-					$res["key"]["msg"] = implode("<br />\n", $res["key"]["msg"]);
+					$res[$key]["msg"] = implode("<br />\n", $res[$key]["msg"]);
 				}
 			}
 		};
