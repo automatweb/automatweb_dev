@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.23 2005/01/07 11:20:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.24 2005/03/14 11:10:39 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -352,9 +352,14 @@ class poll extends class_base
 		$t = get_instance("forum");
 
 		// pollide arhiiv
-		$ol = new object_list(array(
+		$filt = array(
 			"class_id" => CL_POLL
-		));
+		);
+		if (aw_ini_get("poll.archive_from_all_sites"))
+		{
+			$filt["site_id"] = array();
+		}
+		$ol = new object_list($filt);
 		foreach($ol->arr() as $o)
 		{
 			$o_id = $o->id();
