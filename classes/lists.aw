@@ -1,5 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.3 2001/05/20 18:46:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.4 2001/05/21 03:19:42 kristo Exp $
+// list.aw - listide haldus
 
 	global $orb_defs;
 	$orb_defs["lists"] = array(
@@ -220,9 +221,10 @@
 		function gen_list($parent)
 		{
 			$this->read_template("list_list.tpl");
-			
 			if ($parent < 1)
 				$parent = 1;
+
+			$p = $this->get_object($parent);
 
 			$l = $this->make_tree($parent);
 			$this->vars(array("C_LINE" => $l,"parent" => $parent));
@@ -237,19 +239,32 @@
 											 GROUP BY objects.oid");
 			while ($row = $this->db_next())
 			{
-				$this->vars(array("list_id"				=> $row[oid],
-													"list_name"			=> $row[name],
-													"list_comment"	=> $row[comment]));
+				$this->vars(array("list_id"				=> $row["oid"],
+													"list_name"			=> $row["name"],
+													"list_comment"	=> $row["comment"]));
 				$ce = $this->parse("L_CHANGE");
 				$cd = $this->parse("L_DELETE");
 				$ca = $this->parse("L_ACL");
 				$ci = $this->parse("L_IMPORT");
-
-				$this->vars(array("L_CHANGE" => $ce,"L_DELETE" => $cd,"L_ACL" => $ca,"L_IMPORT" => $ci));
+				$checked = ($p["last"] == $row["oid"]) ? "checked" : "";
+				
+				$this->vars(array(
+						"L_CHANGE" => $ce,
+						"L_DELETE" => $cd,
+						"L_ACL" => $ca,
+						"L_IMPORT" => $ci,
+						"checked" => $checked));
 				$c.=$this->parse("LINE");
 			}
-			$this->vars(array("LINE" => $c,"ADD_CAT" => $ac,"ADD_LIST" => $al));
+			$this->vars(array("LINE" => $c,"ADD_CAT" => $ac,"ADD_LIST" => $al,"parent" => $parent));
 			return $this->parse();
+		}
+
+		function submit_default_list($args = array())
+		{
+			extract($args);
+			$q = "UPDATE objects SET last = '$default' WHERE oid = '$parent'";
+			$this->db_query($q);
 		}
 
 		function add_cat($parent)
