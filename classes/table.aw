@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.53 2004/06/11 09:12:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.54 2004/06/11 10:02:16 duke Exp $
 // table.aw - tabelite haldus
 class table extends aw_template
 {
@@ -2697,8 +2697,8 @@ class table extends aw_template
 	function add_doc($arr)
 	{
 		extract($arr);
-		$doc = $this->get_object($id);
-		$this->mk_path($parent,"<a href='".$this->mk_orb("change", array("id" => $id),"document")."'>".$doc["name"].LC_TABLE_ADD_TABLE);
+		$doc = new object($id);
+		$this->mk_path($parent,"<a href='".$this->mk_orb("change", array("id" => $id),"document")."'>".$doc->name().LC_TABLE_ADD_TABLE);
 		$this->read_template("table_add.tpl");
 		$this->vars(array("reforb" => $this->mk_reforb("submit_doc", array("parent" => $parent,"id" => $id))));
 		return $this->parse();
