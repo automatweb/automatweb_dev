@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.92 2004/06/29 10:43:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.93 2004/06/30 12:34:48 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -775,7 +775,10 @@ class users_user extends aw_template
 
 		aw_disable_acl();
 		$tmp = obj($this->grpcache[$gid]["oid"]);
-		$tmp->delete();
+		if ($tmp->status() > 0)
+		{
+			$tmp->delete();
+		}
 		aw_restore_acl();
 		$this->db_query("DELETE FROM groups WHERE gid = $gid");
 		$this->db_query("DELETE FROM groupmembers WHERE gid = $gid");
