@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.13 2004/02/17 15:09:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.14 2004/02/20 10:03:05 duke Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -420,6 +420,7 @@ class crm_company extends class_base
 			"date" => $arr["request"]["date"],
 			"viewtype" => !empty($arr["request"]["viewtype"]) ? $arr["request"]["viewtype"] : $arr["prop"]["viewtype"],
 		));
+
 		$start = $range["start"];
 		$end = $range["end"];
 
@@ -433,6 +434,8 @@ class crm_company extends class_base
 		// gather a list of events to show
 		$evts = array();
 
+		// XXX: optimize the hell out of it. I have the range, I should use 
+		// it.
 		foreach($conns as $conn)
 		{
 			$evts[$conn->prop("to")] = $conn->prop("to");
@@ -445,22 +448,20 @@ class crm_company extends class_base
 		));
 
 		$this->overview = array();
+		classload("icons");
 
 		foreach($evts as $obj_id)
 		{
 			$item = new object($obj_id);
-			if ($item->prop("start1") < $overview_start)
+			// relative needs last n and next m items, those might be 
+			// outside of the current range
+			if ($range["viewtype"] != "relative" && $item->prop("start1") < $overview_start)
 			{
 				continue;
 			};
 			
-			$cldat = $classes[$item->class_id()];
-			classload("icons");
-
 			$icon = icons::get_icon_url($item);
 		
-			// I need to filter the connections based on whether they write to calendar
-			// or not.
 			$link = $planner->get_event_edit_link(array(
 				"cal_id" => $this->cal_id,
 				"event_id" => $item->id(),
@@ -483,11 +484,6 @@ class crm_company extends class_base
 			if ($item->prop("start1") > $overview_start)
 			{
 				$this->overview[$item->prop("start1")] = 1;
-				/*
-				$t->add_overview_item(array(
-					"timestamp" => $item->prop("start1"),
-				));
-				*/
 			};
 		}
 	}
