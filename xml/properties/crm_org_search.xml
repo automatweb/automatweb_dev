@@ -65,6 +65,7 @@
             <form>crm_search</form>
             <type>submit</type>
             <value>Otsi</value>
+            <store>no</store>
             <field>search_button</field>
             <caption>Otsi</caption>
       </property>

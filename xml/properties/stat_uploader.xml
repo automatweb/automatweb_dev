@@ -79,6 +79,7 @@
             <form>stat</form>
             <type>submit</type>
             <value>Saada</value>
+            <store>no</store>
             <field>submit</field>
       </property>
       <classinfo>

@@ -73,6 +73,7 @@
             <form>cv_search</form>
             <type>submit</type>
             <value>Otsi</value>
+            <store>no</store>
             <field>cv_search_button</field>
             <caption>Otsi</caption>
       </property>

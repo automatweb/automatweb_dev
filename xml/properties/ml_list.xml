@@ -188,6 +188,7 @@
             <method>serialize</method>
             <group>export_members</group>
             <type>submit</type>
+            <store>no</store>
             <caption>Ekspordi</caption>
       </property>
       <property>
