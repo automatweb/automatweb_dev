@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/link_collection.aw,v 2.3 2001/11/29 21:58:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/link_collection.aw,v 2.4 2001/12/04 14:07:02 duke Exp $
 // link_collection.aw - Lingikogude haldus
 global $orb_defs;
 lc_load("linkcollection");
@@ -18,15 +18,15 @@ class link_collection extends aw_template {
 	}
 
 	////
-	// !Is 
-	function pick_branch($args = array())
+	// !First step is to pick a link collection
+	function pick_collection($args = array())
 	{
 		extract($args);
 		$par_obj = $this->get_object($parent);
 		$this->mk_path($par_obj["parent"],"Lisa lingikogu oks");
-		$this->read_template("pick_branch.tpl");
+		$this->read_template("pick_collection.tpl");
 		// Yes, this is really scary but I need to know where all the link
-		// collections are
+		// collections are 
 		classload("menuedit");
 		$awm = new menuedit();
 
@@ -34,17 +34,55 @@ class link_collection extends aw_template {
 
 		$collections = array();
 		// and it gets "better", we access the data from the other class directly
+		$firstkey = 0;
 		foreach($awm->mar as $key => $val)
 		{
 			if ($val["links"] > 0)
 			{
 				$collections[$key] = $val["name"];
+				if ($firstkey == 0)
+				{
+					$firstkey = $key;
+				};
 			};
 		}
 		
 		$this->vars(array(
-			"branches" => $this->picker(-1,$collections),
-			"reforb" => $this->mk_reforb("submit_branch",array("parent" => $parent)),
+			"collections" => $this->picker($firstkey,$collections),
+			"reforb" => $this->mk_reforb("pick_branch",array("parent" => $parent,"no_reforb" => 1)),
+		));
+		return $this->parse();
+	}
+
+	////
+	// !And next we let the user pick a branch
+	function pick_branch($args = array())
+	{
+		extract($args);
+		$this->read_template("pick_branch.tpl");
+		classload("menuedit_light");
+		$mnl = new menuedit_light();
+		$branch_list = $mnl->gen_rec_list(array(
+			"start_from" => $collection,
+			"add_start_from" => true,
+		));
+		$c = "";
+		if (is_array($branch_list))
+		{
+			foreach($branch_list as $key => $val)
+			{
+				$this->vars(array(
+					"key" => $key,
+					"value" => $val,
+					// select the first branch by default
+					"checked" => (strlen($c) == 0) ? "checked" : "",
+				));
+				$c .= $this->parse("line");
+			};
+		};
+		$this->vars(array(
+			"line" => $c,
+			"reforb" => $this->mk_reforb("submit_branch",array("collection" => $collection,"parent" => $parent)),
 		));
 		return $this->parse();
 	}
@@ -53,8 +91,11 @@ class link_collection extends aw_template {
 	{
 		extract($args);
 		// name, comment, branch
+
 		$par_obj = $this->get_object($parent);
 
+		// CL_LINK_COLLECTION - nimi on täbar... actually it means
+		// a branch of a link collection
 		$id = $this->new_object(array(
 			"parent" => $parent,
 			"name" => $name,
@@ -81,20 +122,105 @@ class link_collection extends aw_template {
 						"type" => CL_LINK_COLLECTION,
 		));
 		$l = $this->lc_aliases[$matches[3] - 1];
+		// see imeb. kivimune.
+		global $lcb;
+		if ($lcb)
+		{
+			$l = $this->get_object($lcb);
+			$parent = $l["oid"];
+		}
+		else
+		{
+			$parent = $l["last"];
+		};
+
 		$target = $l["target"];
-		$tobj = $this->get_object($target);
-		$parent = $tobj["last"];
+		
+		$pobj = $this->get_object($parent);
+
+		$in_collection = true;
+		$yah = "";
+		$this->read_template("link_collection.tpl");
+		// we have to find the oid of the link collection, we are in
+		$chain = $this->get_object_chain($pobj["oid"]);
+		if (is_array($chain))
+		{
+			while($in_collection && (list($key,$val) = each($chain)))
+			{
+				$this->vars(array(
+					"url" => $this->mk_link(array("section" => $oid,"lcb" => $val["oid"])),
+					"name" => $val["name"],
+				));
+				// stop processing when we find the actual link collection
+				// AND use the "YAH_BEGIN" subtemplate for the FIRST element
+				// remember, path elements come in in reverse order
+				$in_collection = ($val["links"] > 0) ? false : true;
+				$yah = (($in_collection) ? $this->parse("YAH") : $this->parse("YAH_BEGIN")). $yah;
+			};
+		};
+
+		// now we create links to categories
+		global $baseurl,$ext;
+		$q = "SELECT oid,name FROM objects WHERE parent = '$parent' AND class_id = '" . CL_PSEUDO . "' AND status = 2 ORDER BY name";
+		$this->db_query($q);
+		define("SECTION_COLUMNS",2);
+		$cnt = 0;
+		$cols = array();
+		while($row = $this->db_next())
+		{
+			$cnt++;
+			$this->vars(array(
+				"name" => $row["name"],
+				"url" => $this->mk_link(array("section" => $oid,"lcb" => $row["oid"])),
+			));
+			$cols[$cnt % SECTION_COLUMNS] .= $this->parse("SECTIONS_COL");
+		};
+
+		$columns = "";
+
+		foreach($cols as $column)
+		{
+			$this->vars(array(
+				"SECTIONS_COL" => $column,
+			));
+
+			$columns .= $this->parse("SECTIONS_LINE");
+		};
 
 		$q = "SELECT * FROM objects WHERE parent = '$parent' AND class_id = '" . CL_EXTLINK . "' AND status = 2 ";
 		$this->db_query($q);
-		$html = "";
-		global $baseurl,$ext;
+		define("LINK_COLS",1);
+		$on_this_line = 0;
+		$c = "";
+		$_tmp = "";
 		while($row = $this->db_next())
 		{
-			$linksrc = sprintf("%s/indexx.%s?id=%d",$baseurl,$ext,$row["oid"]);
-			$html .= "<a href='$linksrc' target='_blank'>$row[name]</a></a> - $row[comment]<br>";
+		
+			$this->vars(array(
+				"url" => sprintf("%s/indexx.%s?id=%d",$baseurl,$ext,$row["oid"]),
+				"name" => $row["name"],
+				"text" => $row["comment"],
+			));
+
+			$_tmp .= $this->parse("LINK_COL");
+			$on_this_line++;
+			if ($on_this_line == LINK_COLS)
+			{
+				$this->vars(array(
+					"LINK_COL" => $_tmp,
+				));
+				$c .= $this->parse("LINK_LINE");
+				$_tmp = "";
+				$on_this_line = 0;
+			};
 		};
-		return $html;
+
+		$this->vars(array(
+			"SECTIONS_LINE" => $columns,
+			"YAH" => $yah,
+			"LINK_LINE" => $c,
+		));
+		return $this->parse();
 		// koigepealt siis kysime koigi extrnal linkide aliased. 
 	}
 
