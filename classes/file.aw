@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.90 2004/09/24 09:33:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.91 2004/10/05 09:23:03 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -99,11 +99,16 @@ class file extends class_base
 				classload("icons");
 
 				$fname = basename($arr["obj_inst"]->prop("file"));
+
 				if ($fname == "" && $arr["obj_inst"]->prop("file_url") == "")
 				{
 					$file = $this->cfg["site_basedir"]."/files/".$fname[0]."/".$fname;
 					$data["value"] = "fail puudub";
 					return PROP_OK;
+				}
+				else
+				{
+					$file = $this->cfg["site_basedir"]."/files/".$fname{0}."/".$fname;
 				}
 
 				if (is_file($file))
