@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.16 2002/11/26 17:51:17 kristo Exp $
+// $Id: class_base.aw,v 2.17 2002/11/26 18:41:18 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -225,14 +225,14 @@ class class_base extends aliasmgr
 
 		$active = ($group) ? $group : "general";
 		$this->group = $active;
+		
+		$this->load_object(array("id" => $id));
 
 		// I need an easy way to turn off individual properties
 		$realprops = $this->get_active_properties(array(
 				"clfile" => $this->clfile,
 				"group" => $group,
 		));
-
-		$this->load_object(array("id" => $id));
 
 		// here be some magic to determine the correct output client
 		// this means we could create a TTY client for AW :)
@@ -284,11 +284,6 @@ class class_base extends aliasmgr
 			if ($status === PROP_IGNORE)
 			{
 				// do nothing
-			}
-			else
-			if ($val["editonly"])
-			{
-				// skip editonly elements for new objects
 			}
 			else
 			if ($val["type"] == "generated" && method_exists($this->inst,$val["generator"]))
@@ -856,11 +851,20 @@ class class_base extends aliasmgr
 			// now I need to figure out the list of files for thiss
 			// class type
 			$class_id = constant($val["clid"]);
-			$cf = get_instance("cfg/cfgform");
-			$val["options"] = $cf->get_cfgforms_by_class(array(
-				"clid" => $val["clid"],
+			$val["options"] = $this->list_objects(array(
+				"class" => CL_CFGFORM,
+				"subclass" => ($class_id) ? $class_id : "",
+				"addempty" => true,
 			));
 			$val["type"] = "select";
+		};
+
+		if (($val["type"] == "aliasmgr"))
+		{
+			$link = $this->mk_my_orb("list_aliases",array("id" => $this->id),"aliasmgr");
+			$val["value"] = "<iframe width='100%' height='800' frameborder='0' src='$link'></iframe>";
+			$val["type"] = "";
+			$val["caption"] = "";
 		};
 
 		if (($val["type"] == "relpicker") && ($val["clid"]))
@@ -984,40 +988,28 @@ class class_base extends aliasmgr
 	// id(int) - id of the config form
 	function parse_cfgform($args = array())
 	{
-		$id = $args["id"];
+		$id = (int)$args["id"];
 		if ($id)
 		{
-			$cf = get_instance("cfg/cfgform");
-			$forms = $cf->get_cfgforms_by_class(array(
-				"clid" => $this->cfg["classes"][$this->clid]["def"],
-			));
-			
-//                        $cfgform = $this->get_object($id);
-			if ($forms[$id])
-			{
-				// load the file
-				$cfgform = $cf->get_cfgform_from_file(array(
-					"clid" => $this->cfg["classes"][$this->clid]["def"],
-					"id" => $id,
-				));
+                        $cfgform = $this->get_object($id);
 
-			};
+			$this->cfgform_id = $id;
 
 			// XXX: false means that no filtering should be done
 			// but I think that this should really be decided by the ini file
 			// maybe it's better if we are "locked down" by default
 			$this->active_properties = false;
 
-			if (is_array($cfgform["properties"]))
+			if (is_array($cfgform["meta"]["properties"]))
 			{
-				$this->active_properties = $cfgform["properties"];
+				$this->active_properties = $cfgform["meta"]["properties"];
 			};
 
 			$this->property_order = false;
 
-			if (is_array($cfgform["ord"]))
+			if (is_array($cfgform["meta"]["ord"]))
 			{
-				$this->property_order = $cfgform["ord"];
+				$this->property_order = $cfgform["meta"]["ord"];
 			};
 		};
 
@@ -1032,6 +1024,15 @@ class class_base extends aliasmgr
 				"toolbar" => &$toolbar,
 				"id" => $this->id,
 			));
+		};
+		if ($this->cfgform_id)
+		{
+			$ac = $this->get_object($this->cfgform_id);
+			$toolbar->add_cdata(html::href(array(
+				"url" => $this->mk_my_orb("change",array("id" => $this->cfgform_id),"cfgform"),
+				"caption" => "Aktiivne konfivorm: " . $ac["name"],
+				"target" => "_blank",
+			)));
 		};
 		$this->toolbar = $toolbar->get_toolbar();
 		$this->toolbar2 = $toolbar->get_toolbar(array("id" => "bottom"));
