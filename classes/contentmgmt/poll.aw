@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.9 2004/03/04 14:23:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.10 2004/03/09 18:24:02 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -251,7 +251,7 @@ class poll extends class_base
 
 		$this->read_template("show.tpl");
 
-		if (!$this->object_exists($id) || !$this->can("view", $id))
+		if (!$this->can("view", $id))
 		{
 			return "";
 		}

@@ -694,28 +694,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->db_query("DELETE FROM aliases WHERE source = '$oid'");
 	}
 
-	function object_exists($oid)
-	{
-		if (is_object($oid))
-		{
-			$stat = $oid->status();
-		}
-		else
-		{
-			if ($GLOBALS["objects"][$oid])
-			{
-				// this should come from cache
-				$tmp = new object($oid);
-				$stat = $tmp->status();
-			}
-			else
-			{
-				$stat = $this->db_fetch_field("SELECT status FROM objects WHERE oid = '$oid'", "status");
-			};
-		};
-		return ($stat > 0);
-	}
-
 	function req_make_sql($params, $logic = "AND")
 	{
 		$sql = array();

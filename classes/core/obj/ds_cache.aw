@@ -185,20 +185,5 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		$this->cache->file_invalidate_regex("connection(.*)");
 		$this->cache->flush_cache();
 	}
-
-	function object_exists($oid)
-	{
-		if (!$oid)
-		{
-			return false;
-		}
-		$oid = $GLOBALS["object_loader"]->param_to_oid($oid);
-
-		if (!isset($this->obje_cache[$oid]))
-		{
-			$this->obje_cache[$oid] = $this->contained->object_exists($oid);
-		}
-		return $this->obje_cache[$oid];
-	}
 }
 ?>

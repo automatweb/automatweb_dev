@@ -120,11 +120,6 @@ class _int_obj_ds_decorator
 		$this->contained->dequote($dat);
 	}
 
-	function object_exists($oid)
-	{
-		return $this->contained->object_exists($oid);
-	}
-
 	function create_brother($arr)
 	{
 		return $this->contained->create_brother($arr);

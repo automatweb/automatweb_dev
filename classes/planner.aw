@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.176 2004/03/08 16:49:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.177 2004/03/09 18:24:00 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -545,20 +545,17 @@ class planner extends class_base
 		if (!empty($args["request"]["event_id"]))
 		{
 			$event_id = $args["request"]["event_id"];
-			if (true || $GLOBALS["object_loader"]->object_exists($event_id))
+			$event_obj = new object($event_id);
+			if ($event_obj->is_brother())
 			{
-				$event_obj = new object($event_id);
-				if ($event_obj->is_brother())
-				{
-					$event_obj = $event_obj->get_original();
-				};
-				$this->event_id = $event_id;
-				$clid = $event_obj->class_id();
-				if ($clid == CL_DOCUMENT || $clid == CL_BROTHER_DOCUMENT)
-				{
-					unset($clid);
-				};
-			}
+				$event_obj = $event_obj->get_original();
+			};
+			$this->event_id = $event_id;
+			$clid = $event_obj->class_id();
+			if ($clid == CL_DOCUMENT || $clid == CL_BROTHER_DOCUMENT)
+			{
+				unset($clid);
+			};
 		}
 		else
 		{

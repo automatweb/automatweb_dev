@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.28 2004/03/01 15:10:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.29 2004/03/09 18:24:02 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -470,7 +470,7 @@ class promo extends class_base
 
 		if ($ob->meta('as_name') && $ob->meta("caption") == "")
 		{
-			if ($this->object_exists($ob->meta("as_name")))
+			if ($this->can("view",$ob->meta("as_name")))
 			{
 				$as_n_o = obj($ob->meta("as_name"));
 				$ob->set_meta('caption',$as_n_o->name());

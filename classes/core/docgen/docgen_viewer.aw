@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.2 2004/03/01 12:12:34 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.3 2004/03/09 18:24:04 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -117,15 +117,6 @@ text-decoration: none;
 			$fl .= $this->parse("LONG_FUNCTION");
 		}
 
-		$this->vars(array(
-			"name" => $data["name"],
-			"extends" => $data["extends"],
-			"end_line" => $data["end_line"],
-			"start_line" => $data["start_line"],
-			"FUNCTION" => $f,
-			"LONG_FUNCTION" => $fl,
-		));
-
 		if ($data["extends"] != "")
 		{
 			$this->_display_extends($data);
@@ -142,6 +133,15 @@ text-decoration: none;
 		{
 			$this->_display_properties($clid, $data);
 		}
+
+		$this->vars(array(
+			"name" => $data["name"],
+			"extends" => $data["extends"],
+			"end_line" => $data["end_line"],
+			"start_line" => $data["start_line"],
+			"FUNCTION" => $f,
+			"LONG_FUNCTION" => $fl,
+		));
 
 		return $this->parse();
 	}

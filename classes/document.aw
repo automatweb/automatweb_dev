@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.240 2004/03/09 15:38:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.241 2004/03/09 18:23:59 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -195,7 +195,7 @@ class document extends aw_template
 			extract($docid);
 		}
 
-		if (not($this->can("view",$docid)) || not($this->object_exists($docid)))
+		if (not($this->can("view",$docid)))
 		{
 			//	and why is this commented out?
 			$this->data = false;

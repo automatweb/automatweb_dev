@@ -808,7 +808,7 @@ class user extends class_base
 			{
 				continue;
 			}
-			if (!$this->can("edit", $row["oid"]) || !$this->object_exists($row["oid"]))
+			if (!$this->can("edit", $row["oid"]))
 			{
 				continue;
 			}

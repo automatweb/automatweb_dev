@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.85 2004/02/17 20:51:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.86 2004/03/09 18:24:00 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1033,7 +1033,7 @@ class menu extends class_base
 		}
 		$target = $f;
 
-		if (!$this->object_exists($target["oid"]))
+		if (!$this->can("view", $target["oid"]))
 		{
 			return "";
 		}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.252 2004/03/09 15:38:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.253 2004/03/09 18:23:59 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -2292,11 +2292,6 @@ class core extends acl_base
 		return $obj['name'];
 	}
 	
-	function object_exists($oid)
-	{
-		return $GLOBALS["object_loader"]->ds->object_exists($oid);
-	}
-
 	////
 	// !generates a simple one-level menu from the given data structure - the active item is determined by orb action
 	function do_menu($items)

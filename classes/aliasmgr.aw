@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.142 2004/03/01 12:12:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.143 2004/03/09 18:23:58 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -255,10 +255,6 @@ class aliasmgr extends aw_template
 			return array();
 		}
 
-		if (!$GLOBALS["object_loader"]->ds->object_exists($oid))
-		{
-			return;
-		}
 		// lets' remove this for now. If there is a problem with alias enumeration
 		// somewhere, then it should be fixed case by case basis instead of doing
 		// it blindly over and over and over and over again
@@ -914,10 +910,6 @@ class aliasmgr extends aw_template
 	function recover_idx_enumeration($id)
 	{
 		if (!$id)
-		{
-			return;
-		}
-		if (!$GLOBALS["object_loader"]->ds->object_exists($id))
 		{
 			return;
 		}

@@ -21,7 +21,7 @@ define("OP_IF_ELSE", 13);			// params {}
 
 define("OP_CHECK_SUBITEMS_SEL", 14);// params { tpl, fq_tpl }
 
-define("OP_AREA_CACHE_CHECK", 15);	// params { a_parent,level }
+define("OP_AREA_CACHE_CHECK", 15);	// params { a_parent,level,a_name }
 define("OP_AREA_CACHE_SET", 16);	// params { a_parent,level }
 
 define("OP_CHECK_NO_SUBITEMS_SEL", 17);// params { tpl, fq_tpl }
@@ -386,7 +386,8 @@ class site_template_compiler extends aw_template
 				"op" => OP_AREA_CACHE_CHECK,
 				"params" => array(
 					"a_parent" => $adat["parent"],
-					"level" => $level
+					"level" => $level,
+					"a_name" => $area
 				)
 			);
 		}
@@ -615,7 +616,8 @@ class site_template_compiler extends aw_template
 				"op" => OP_AREA_CACHE_SET,
 				"params" => array(
 					"a_parent" => $adat["parent"],
-					"level" => $level
+					"level" => $level,
+					"a_name" => $area
 				)
 			);
 		}
@@ -1220,7 +1222,7 @@ class site_template_compiler extends aw_template
 		$content_name = "\$content_".$arr["a_parent"]."_".$arr["level"];
 
 		$res = "";
-		$res .= $this->_gi()."if ((".$content_name." = \$this->cache->file_get_ts(\"site_show_menu_area_cache_tpl_".$this->tplhash."_lid_\".aw_global_get(\"lang_id\").\"_section_\".aw_global_get(\"section\").\"_".$arr["a_parent"]."_level_".$arr["level"]."_uid_\".aw_global_get(\"uid\"),\$this->_helper_get_objlastmod())) == \"\")\n";
+		$res .= $this->_gi()."if ((".$content_name." = \$this->cache->file_get_ts(\"site_show_menu_area_cache_tpl_".$this->tplhash."_lid_\".aw_global_get(\"lang_id\").\"_section_\".aw_global_get(\"section\").\"_".$arr["a_name"]."_level_".$arr["level"]."_uid_\".aw_global_get(\"uid\"),\$this->_helper_get_objlastmod())) == \"\")\n";
 		$res .= $this->_gi()."{\n";
 		$this->brace_level++;
 		return $res;
@@ -1237,7 +1239,7 @@ class site_template_compiler extends aw_template
 		$res .= $this->_gi()."if (".$cache_name.")\n";
 		$res .= $this->_gi()."{\n";
 		$this->brace_level++;
-		$res .= $this->_gi()."\$this->cache->file_set(\"site_show_menu_area_cache_tpl_".$this->tplhash."_lid_\".aw_global_get(\"lang_id\").\"_section_\".aw_global_get(\"section\").\"_".$arr["a_parent"]."_level_".$arr["level"]."_uid_\".aw_global_get(\"uid\"), ".$content_name.");\n";
+		$res .= $this->_gi()."\$this->cache->file_set(\"site_show_menu_area_cache_tpl_".$this->tplhash."_lid_\".aw_global_get(\"lang_id\").\"_section_\".aw_global_get(\"section\").\"_".$arr["a_name"]."_level_".$arr["level"]."_uid_\".aw_global_get(\"uid\"), ".$content_name.");\n";
 		$this->brace_level --;
 		$res .= $this->_gi()."}\n";
 		$this->brace_level --;
@@ -1378,7 +1380,7 @@ class site_template_compiler extends aw_template
 
 		if ($arr["level"] == 1)
 		{
-			$ret .= $this->_gi()."if (\$this->can(\"view\", ".$arr["a_parent_p_fn"].") && \$this->object_exists(".$arr["a_parent_p_fn"]."))\n";
+			$ret .= $this->_gi()."if (\$this->can(\"view\", ".$arr["a_parent_p_fn"]."))\n";
 			$ret .= $this->_gi()."{\n";
 			$this->brace_level++;
 			$ret .= $this->_gi()."\$parent_obj = new object(".$arr["a_parent_p_fn"].");\n";

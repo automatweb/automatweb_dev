@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.126 2004/03/09 10:46:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.127 2004/03/09 18:23:59 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -959,10 +959,10 @@ if (!defined("DEFS"))
 			}
 		}
 
-		function process_backtrace($bt)
+		function process_backtrace($bt, $skip = 0)
 		{
 			$msg .= "<br><br> Backtrace: \n\n<Br><br>";
-			for ($i = count($bt)-1; $i > 0; $i--)
+			for ($i = count($bt)-1; $i > $skip; $i--)
 			{
 				if ($bt[$i+1]["class"] != "")
 				{

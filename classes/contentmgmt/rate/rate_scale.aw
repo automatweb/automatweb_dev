@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate_scale.aw,v 1.6 2004/02/17 10:55:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate_scale.aw,v 1.7 2004/03/09 18:24:04 kristo Exp $
 
 /*
 
@@ -153,7 +153,7 @@ class rate_scale extends class_base
 	function _get_scale($id)
 	{
 		$ret = array();
-		if ($this->object_exists($id))
+		if ($this->can("view",$id))
 		{
 			$ob = new object($id);
 			if ($ob->prop('type_nr') == 1)

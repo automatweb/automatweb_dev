@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.67 2004/02/27 11:56:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.68 2004/03/09 18:24:01 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -677,17 +677,9 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			{
 				if (!$this->can("view",$row["oid"])) continue;
 
-				if ($this->object_exists($row["oid"]))
-				{
-					$row_o = obj($row["oid"]);				
-					$row["location"] = $row_o->path_str();
-					$row["icon"] = sprintf("<img src='%s' alt='$type' title='$type'>",icons::get_icon_url($row_o));
-				}
-				else
-				{
-					$row["location"] = $obj_list[$row["parent"]];
-					$row["icon"] = sprintf("<img src='%s' alt='$type' title='$type'>",icons::get_icon_url($row["class_id"],""));
-				}
+				$row_o = obj($row["oid"]);				
+				$row["location"] = $row_o->path_str();
+				$row["icon"] = sprintf("<img src='%s' alt='$type' title='$type'>",icons::get_icon_url($row_o));
 
 				$this->rescounter++;
 				$type = $this->cfg["classes"][$row["class_id"]]["name"];

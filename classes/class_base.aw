@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.234 2004/03/09 13:00:21 duke Exp $
+// $Id: class_base.aw,v 2.235 2004/03/09 18:23:58 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -679,7 +679,7 @@ class class_base extends aw_template
 			$cgid = $args["args"]["cfgform"];
 			// I need to check whether that config form is really
 			// a config form with correct subclass
-			if ($this->object_exists($cgid))
+			if ($this->can("view", $cgid))
 			{
 				return $cgid;
 			};	
@@ -690,7 +690,7 @@ class class_base extends aw_template
 		if (($action == "change") && $args["obj_inst"]->meta("cfgform_id") != "")
 		{
 			$cgid = $args["obj_inst"]->meta("cfgform_id");
-			if ($this->object_exists($cgid))
+			if ($this->can("view", $cgid))
 			{
 				return $cgid;
 			};
@@ -702,7 +702,7 @@ class class_base extends aw_template
 		{
 			// I should be able to override this from the doc class somehow
 			$def_cfgform = aw_ini_get("document.default_cfgform");
-			if (!empty($def_cfgform) && $this->object_exists($def_cfgform))
+			if (!empty($def_cfgform) && $this->can("view",$def_cfgform))
 			{
 				return $cgid;
 			}
@@ -3008,7 +3008,7 @@ class class_base extends aw_template
 
 		$tmp = array();
 
-		if (is_oid($arr["cfgform_id"]) && $this->object_exists($arr["cfgform_id"]))
+		if (is_oid($arr["cfgform_id"]) && $this->can("view", $arr["cfgform_id"]))
 		{
 			$cfg_props = $this->load_from_storage(array(
 				"id" => $arr["cfgform_id"],
@@ -3024,7 +3024,7 @@ class class_base extends aw_template
 			if ($arr["clid"] == CL_DOCUMENT )
 			{
 				$def_cfgform = aw_ini_get("document.default_cfgform");
-				if (is_oid($def_cfgform) && $this->object_exists($def_cfgform))
+				if (is_oid($def_cfgform) && $this->can("view",$def_cfgform))
 				{
 					$cfg_props = $this->load_from_storage(array(
 						"id" => $def_cfgform,
@@ -3223,7 +3223,7 @@ class class_base extends aw_template
 			"classinfo" => "disable_relationmgr",
 		);
 		$rv = false;
-		if ($this->object_exists($id))
+		if ($this->can("view", $id))
 		{
 			$cfgform_obj = new object($id);
 

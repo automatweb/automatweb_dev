@@ -3,7 +3,7 @@
 /** aw code analyzer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_analyzer.aw,v 1.11 2004/02/27 11:16:27 kristo Exp $
+	@cvs $Id: docgen_analyzer.aw,v 1.12 2004/03/09 18:24:04 kristo Exp $
 
 	@comment 
 	analyses aw code
@@ -63,6 +63,10 @@ class docgen_analyzer extends class_base
 					case T_STRING:
 						$this->handle_t_string($token);
 						break;
+
+					case T_VARIABLE:
+						$this->handle_variable_ref($token);
+						break;
 				}
 			}
 			else
@@ -118,12 +122,12 @@ class docgen_analyzer extends class_base
 	{
 		if (!is_array($tok))
 		{
-			die("assert failed on line ".$this->get_line()." token = ".dbg::dump($tok)." expect = complex token with type ".token_name($id));
+			die("assert failed in file ".$this->cur_file." on line ".$this->get_line()." token = ".dbg::dump($tok)." expect = complex token with type ".token_name($id).dbg::process_backtrace(debug_backtrace(),-1));
 		}
 
 		if ($tok[0] != $id)
 		{
-			die("assert failed on line ".$this->get_line()." token = {id => ".token_name($tok[0]).", str = ".$tok[1]." } expected ".token_name($id));
+			die("assert failed in file ".$this->cur_file."on line ".$this->get_line()." token = {id => ".token_name($tok[0]).", str = ".$tok[1]." } expected ".token_name($id).dbg::process_backtrace(debug_backtrace(),-1));
 		}
 		//$this->dump_context();
 	}
@@ -132,6 +136,7 @@ class docgen_analyzer extends class_base
 	{
 		echo "assert_fail on token: ";
 		$this->dump_tok($tok);
+		echo dbg::process_backtrace(debug_backtrace(), 0);
 		die();
 	}
 
@@ -267,6 +272,8 @@ class docgen_analyzer extends class_base
 		$this->current_function = $f_name;
 		$this->in_function = true;
 		$this->function_start_level = $this->brace_level;
+
+		$this->var_track_func_scope = array();
 
 		// start paren
 		$tok = $this->get();
@@ -405,6 +412,7 @@ class docgen_analyzer extends class_base
 	{
 		$this->data["classes"][$this->current_class]["functions"][$this->current_function]["end_line"] = $this->get_line();
 		$this->in_function = false;
+		$this->var_track_func_scope = array();
 		$this->current_function = "";
 	}
 
@@ -619,6 +627,7 @@ class docgen_analyzer extends class_base
 
 	function handle_t_string($tok)
 	{
+		$depd = false;
 		if ($tok[1] == "get_instance" || $tok[1] == "classload")
 		{
 			// follows:
@@ -676,22 +685,31 @@ class docgen_analyzer extends class_base
 
 			if ($this->current_class)
 			{
-				$this->data["classes"][$this->current_class]["dependencies"][] = array(
+				$depd = array(
 					"dep_via" => $tok[1],
 					"function" => $this->current_function,
 					"line" => $this->get_line(),
 					"dep" => $class,
 					"is_var" => $is_var
 				);
+				$this->data["classes"][$this->current_class]["dependencies"][] = $depd;
 			}
 		}
+		return $depd;
 	}
 
 	/** skips function call arguments, returns content
 	**/
 	function do_read_funcall()
 	{
+		// check if the first tok is (, then skip that
+		$tmp = $this->get();
+		if (!(!is_array($tmp) && $tmp == "("))
+		{
+			$this->back();
+		}
 		$cnt = 1;
+		$tcnt = 0;
 		$class = "";
 		// skip until we get to the closing )
 		do {
@@ -716,10 +734,237 @@ class docgen_analyzer extends class_base
 					$class .= $tok;
 				}
 			}
-		} while ($cnt > 0);
+			$tcnt ++;
+		} while ($cnt > 0 && $tcnt < 100000);
+		if ($tcnt > 100000)
+		{
+			$this->assert_fail();
+		}
 		$this->back();
 
 		return $class;
+	}
+
+	function handle_variable_ref($v_tok)
+	{
+		$tok = $this->get();
+		if ($tok[0] == T_OBJECT_OPERATOR)
+		{
+			// after object operator (->), variable or function name, or "variable variable"
+			$fun_name = $this->get();
+			if ($fun_name[0] == T_VARIABLE)
+			{
+				// check if we can get the real variable from var track
+				/*$vard = $this->get_track_var($fun_name[1]);
+				if ($vard)
+				{
+
+				}*/
+			}
+			else
+			{
+				$this->assert($fun_name, T_STRING);
+			}
+			$nxt = $this->get();
+			if (!is_array($nxt) && $nxt == "(")
+			{
+				if ($v_tok[1] == "\$this")
+				{
+					// funcall via $this->bla, register local call in func table
+					$calld = array(
+						"func" => $fun_name[1],
+						"line" => $this->get_line(),
+						"arguments" => $this->do_read_funcall()
+					);
+					$this->data["classes"][$this->current_class]["functions"][$this->current_function]["local_calls"][$fun_name[1]] = $calld;
+				}
+				else
+				{
+					// funcall via $foo->fun(
+					// check from the variable tracker if we know the type 
+					// and register an external ref
+					$vard = $this->get_track_var($v_tok[1]);
+					if ($vard)
+					{
+						if ($vard["class"])
+						{
+							$class = $vard["class"];
+						}
+					}
+					else
+					{
+						// unknown vartype
+						$class = "unknown external reference via variable $v_tok[1]";
+					}
+					$calld = array(
+						"func" => $fun_name[1],
+						"class" => $class,
+						"line" => $this->get_line(),
+						"arguments" => $this->do_read_funcall()
+					);
+					$this->data["classes"][$this->current_class]["functions"][$this->current_function]["external_calls"][$fun_name[1]] = $calld;
+				}
+			}
+			else
+			{
+				if (!is_array($nxt) && $nxt == "=")
+				{
+					// var assign, add to var track if we know type
+					$assign = $this->get();
+					if ($assign[0] == T_ARRAY)
+					{
+						$vt = array(
+							"type" => "array",
+							"last_assign" => $this->get_line(),
+							"last_value" => $this->read_const_array_def()
+						);
+						$this->add_track_var($fun_name[1], $vt);
+					}
+					else
+					if ($assign[0] == T_STRING)
+					{
+						if ($assign[1] == "true" || $assign[1] == "false")
+						{
+							$vt = array(
+								"type" => "bool",
+								"last_assign" => $this->get_line(),
+								"last_value" => ($assign[1] == "true" ? true : false)
+							);
+							$this->add_track_var($fun_name[1], $vt);
+						}
+						else
+						{
+							// this is probably a non-class variable call
+							$depd = $this->handle_t_string($assign);
+							if ($depd)
+							{
+								$vt = array(
+									"type" => "class",
+									"class" => $depd[$dep],
+									"last_assign" => $this->get_line(),
+									"last_value" => $depd[$dep]
+								);
+								$this->add_track_var($fun_name[1], $vt);
+							}
+							else
+							{
+								// probably a php funcall, set var track type as other
+								$vt = array(
+									"type" => "other",
+									"last_assign" => $this->get_line(),
+									"last_value" => "unknown",
+									"funcall" => $this->do_read_funcall()
+								);
+								$this->add_track_var($fun_name[1], $vt);
+							}
+						}
+					}
+					else
+					if ($assign[0] == T_CONSTANT_ENCAPSED_STRING)
+					{
+						$vt = array(
+							"type" => "string",
+							"last_assign" => $this->get_line(),
+							"last_value" => $assign[1],
+						);
+						$this->add_track_var($fun_name[1], $vt);
+					}
+					else
+					if ($assign[0] == T_VARIABLE)
+					{
+						// get type data from referenced var
+						$vard = $this->get_track_var($assign[1]);
+						if ($vard)
+						{
+							$this->add_track_var($fun_name[1], $vard);
+						}
+						else
+						{
+							// add var as unknown type
+
+							//die("ERROR!! unassigned var ref on file ".$this->cur_file." line = ".$this->get_line()." var = ".$this->dump_tok($assign));
+							$vt = array(
+								"type" => "other",
+								"last_assign" => $this->get_line(),
+								"last_value" => "unknown",
+								"var_ref" => $assign[1]
+							);
+							$this->add_track_var($fun_name[1], $vt);
+						}
+					}
+					else
+					if ($assign[0] == T_LNUMBER)
+					{
+						// variable type number
+						$vt = array(
+							"type" => "number",
+							"last_assign" => $this->get_line(),
+							"last_value" => $assign[1],
+						);
+						$this->add_track_var($fun_name[1], $vt);
+					}
+					else
+					if ($assign[0] == T_NEW)
+					{
+						$cln = $this->get();
+						$this->assert($cln, T_STRING);
+						// string is class name
+
+						$tmp = $this->get();
+						$this->back();
+						$clp = "";
+						if (!is_array($tmp) && $tmp == "(")
+						{
+							$clp = $this->do_read_funcall();
+						}
+
+						// class instance, mark as object var
+						$vt = array(
+							"type" => "class",
+							"class" => $cln[1],
+							"last_assign" => $this->get_line(),
+							"last_value" => $cln[1],
+							"class_params" => $clp
+						);
+						$this->add_track_var($fun_name[1], $vt);
+					}
+					else
+					if ($assign[0] == T_ISSET)
+					{
+						// we're sorta fucked here, cause that's the start of a complex expression probably :(
+						$tmp = $this->get();
+						$this->dump_tok($tmp, false);
+						$tmp = $this->get();
+						$this->dump_tok($tmp, false);
+						$tmp = $this->get();
+						$this->dump_tok($tmp, false);
+					}
+					else
+					{
+						$this->dump_tok($assign, false);
+					}
+				}
+			}
+		}
+	}
+
+	function get_track_var($varname)
+	{
+		// if in func, check local scope
+		if ($this->in_function)
+		{
+			return $this->var_track_func_scope[$varname];
+		}
+		return $this->var_track_glob_scope[$varname];
+	}
+
+	function add_track_var($varn, $vard)
+	{
+		if ($this->in_function)
+		{
+			$this->var_track_func_scope[$varn] = $vard;
+		}
+		$this->var_track_glob_scope[$varn] = $vard;
 	}
 }
 ?>

@@ -310,11 +310,6 @@ class _int_object_loader
 		return $rv;
 	}
 
-	function object_exists($oid)
-	{
-		return $this->ds->object_exists($this->param_to_oid($oid));
-	}
-
 	/** switches the object_loader's default database connection to $new_conn
 		
 		@attrib params=pos

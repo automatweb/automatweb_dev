@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.38 2004/02/19 22:12:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.39 2004/03/09 18:24:02 kristo Exp $
 
 /*
 
@@ -196,7 +196,7 @@ class gallery_v2 extends class_base
 			}
 		}
 		// that config object might have been deleted, check it and return false, if so
-		if (!$this->object_exists($rv))
+		if (!$this->can("view",$rv))
 		{
 			$rv = false;
 		};

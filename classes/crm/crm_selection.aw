@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_selection.aw,v 1.11 2004/02/17 13:53:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_selection.aw,v 1.12 2004/03/09 18:24:06 kristo Exp $
 /*
 @classinfo relationmgr=yes
 @default table=objects
@@ -185,7 +185,7 @@ class crm_selection extends class_base
 		{
 			foreach ($objects as $object)
 			{
-				if (!$this->object_exists($object["object"]) || !$this->can("view", $object["object"]))
+				if (!$this->can("view", $object["object"]))
 				{
 					continue;
 				};
