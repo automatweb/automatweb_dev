@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.245 2004/02/11 12:02:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.246 2004/02/12 14:49:05 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -534,6 +534,11 @@ class core extends acl_base
 	// !Margib koik saidi objektid dirtyks
 	function flush_cache()
 	{
+		if (aw_global_get("old_cache_flushed"))
+		{
+			return;
+		}
+		aw_global_set("old_cache_flushed", 1);
 		$q = "UPDATE objects SET cachedirty = 1, cachedata = ''";
 		$this->db_query($q);
 	}
