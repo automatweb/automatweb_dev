@@ -321,9 +321,8 @@ function toggle_file_link_newwin()
 <tr>
 <td class="fgtext">Kalendri lingi tüüp</td>
 <td class="fgtext"><select name="{VAR:cell_id}_clink_target">{VAR:clink_targets}</select></td>
-<td class="fgtext" colspan="2">
-&nbsp;
-</td>
+<td class="fgtext">Saidi raamis?</td>
+<td class="fgtext"><input type="checkbox" name="{VAR:cell_id}_clink_no_orb" {VAR:clink_no_orb}></td>
 </tr>
 <!-- END SUB: CALENDAR_LINK -->
 
