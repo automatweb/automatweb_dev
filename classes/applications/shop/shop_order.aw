@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.19 2004/11/03 14:52:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.20 2004/11/05 13:51:35 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -504,6 +504,7 @@ class shop_order extends class_base
 			foreach($emails as $c)
 			{
 				$eml = $c->to();
+			
 
 				$awm = get_instance("protocols/mail/aw_mail");
 				$awm->create_message(array(
@@ -619,11 +620,6 @@ class shop_order extends class_base
 			for( $i=1; $i<21; $i++)
 			{
 				$ui = $product_info->prop("user".$i);
-				if ($i == 16 && aw_ini_get("site_id") == 139 && $product_info->prop("userch5"))
-				{
-					$ui = $prod->prop("user3");
-				}
-
 				$this->vars(array(
 					'user'.$i => $ui
 				));
@@ -812,14 +808,14 @@ class shop_order extends class_base
 		}
 
 		$ll = $lln = "";
-		/*if (aw_global_get("uid") != "")
+		if (aw_global_get("uid") != "")
 		{
 			$ll = $this->parse("logged");
 		}
 		else
-		{*/
+		{
 			$lln = $this->parse("not_logged");
-		//}
+		}
 
 		$this->vars(array(
 			"logged" => $ll,

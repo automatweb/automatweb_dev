@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.7 2004/11/03 14:52:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.8 2004/11/05 13:51:40 kristo Exp $
 // otto_prod_search.aw - Otto toodete otsing 
 /*
 
@@ -24,12 +24,26 @@ class otto_prod_search extends class_base
 		//array("Eripakkumised", array(149113))
 	);
 
+	var $search_fld_lat = array(
+		array("Sievieğu mode", array(135883)),
+		array("Virieğu mode", array(135836)),
+		array("Bernu un pusaudşu mode", array(135962)),
+		array("Apavi", array(135963)),
+		array("Sporta preces", array(135964)),
+		array("Majturiba", array(135965))
+	);
+
 	function otto_prod_search()
 	{
 		$this->init(array(
 			"tpldir" => "applications/shop/otto/otto_prod_search",
 			"clid" => CL_OTTO_PROD_SEARCH
 		));
+
+		if (aw_global_get("lang_id") == 6)
+		{
+			$this->search_fld = $this->search_fld_lat;
+		}
 	}
 
 	function get_property($arr)
@@ -130,6 +144,7 @@ class otto_prod_search extends class_base
 		{
 			$jstr = "-1";
 		}
+
 		$q = "
 			SELECT 
 				o.brother_of as oid,pi.imnr as imnr
@@ -145,6 +160,7 @@ class otto_prod_search extends class_base
 				pi.imnr
 		";
 		$this->db_query($q);
+
 		$ol_cnt = new object_list();
 		while ($row = $this->db_next())
 		{
@@ -232,7 +248,7 @@ class otto_prod_search extends class_base
 
 				$viewlink = $this->mk_my_orb("show_items", array(
 					"section" => $prod->parent(),
-					"id" => 614,
+					"id" => aw_ini_get("shop.prod_fld_path_oc"),
 					"page" => $prod->prop("user18"),
 					"oview" => 2,
 					"apid" => $prod->id()
@@ -273,6 +289,9 @@ class otto_prod_search extends class_base
 				}
 				else
 				{
+					//$i--;
+					//$prod = $ol->next();
+					//continue;
 					$imnr = html::img(array(
 						"url" => aw_ini_get("baseurl")."/automatweb/images/transparent.gif",
 						"width" => 80,
@@ -287,17 +306,34 @@ class otto_prod_search extends class_base
 					));
 				}
 
+				// get by page
+				$q = "SELECT fld FROM otto_imp_t_p2p WHERE pg = '".$prod->prop("user18")."' AND lang_id = '".aw_global_get("lang_id")."'";
+				$folder = $this->db_fetch_field($q,"fld");
+				//echo "q = $q , f = $folder";
+				if (is_oid($folder) && $this->can("view", $folder))
+				{
+					$fo = obj($folder);
+					$path = $fo->path_str(array(
+						"to" => aw_ini_get("shop.prod_fld_path"),
+						"no_self" => 1,
+						"max_len" => 3
+					));
+				}
+				else
+				{
+					$path = $prod->path_str(array(
+						"to" => aw_ini_get("shop.prod_fld_path"),
+						"no_self" => 1,
+						"max_len" => 3
+					));
+				}
 				$prod_i = $prod->instance();
 				$this->vars(array(
 					"prod_link" => $viewlink,
 					"prod_name" => $prod->name(),
 					"prod_desc" => $prod->prop("userta2"),
 					"prod_price" => $prod_i->get_price($prod),
-					"path" => $prod->path_str(array(
-						"to" => 149,
-						"no_self" => 1,
-						"max_len" => 3
-					)),
+					"path" => $path,
 					"pimg" => $imnr
 				));
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.8 2004/11/03 14:52:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.9 2004/11/05 13:51:40 kristo Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -41,14 +41,6 @@
 
 @property fnames type=textarea rows=30 cols=80 group=files
 @caption Failinimed
-
-@groupinfo imgs caption="Pildid"
-
-@property imgs_csv type=textbox 
-@caption Piltide CSV faili url
-
-@property do_img_i type=checkbox ch_value=1
-@caption Teosta piltide import
 
 @groupinfo folders caption="Kataloogid"
 
@@ -260,7 +252,6 @@ class otto_import extends class_base
 
 			echo "process pcode $pcode (".($total - $cur_cnt)." to go, estimated time remaining $rem_hr hr, $rem_min min) <br>\n";
 			flush();
-
 
 			$url = "http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/OttoDe/de_DE/-/EUR/OV_ParametricSearch-Progress;sid=bwNBYJMEb6ZQKdPoiDHte7MOOf78U0shdsyx6iWD?_PipelineID=search_pipe_ovms&_QueryClass=MallSearch.V1&ls=0&Orengelet.sortPipelet.sortResultSetSize=10&SearchDetail=one&Query_Text=".$pcode;
 		
@@ -482,33 +473,6 @@ class otto_import extends class_base
 		$first = true;
 
 		$log = array();
-
-		/*$fp = fopen($o->prop("folder_url"), "r");
-		while ($row = fgetcsv($fp,1000))
-		{
-			if ($first)
-			{
-				$first = false;
-				continue;
-			}
-
-			echo "got row as ".dbg::dump($row)." <br>";
-			echo "$pg => \n";
-			$row = $this->char_replacement($row);
-			flush();
-			foreach(explode(",",$row[1]) as $pg)
-			{
-				$this->db_query("
-					INSERT INTO otto_imp_t_p2p(pg,fld, lang_id)
-					VALUES('$pg','$row[2]','".aw_global_get("lang_id")."')
-				");
-				echo ".\n";
-				echo "imported $pg => $row[2] <br>";
-				flush();
-			}
-			echo "<br>\n";
-		}
-		die();*/
 
 		foreach(explode("\n", $o->prop("fnames")) as $fname)
 		{
@@ -775,6 +739,7 @@ class otto_import extends class_base
 			$log[] = "lugesin failist $fld_url $num hinda";
 			flush();
 		}
+
 		$this->db_query("SELECT * FROM otto_imp_t_codes");
 		while ($row = $this->db_next())
 		{
@@ -915,7 +880,6 @@ class otto_import extends class_base
 			{
 				$log[] = "Tootel ".$dat->name()." (".trim($dat->prop("user16")).") on kood ".trim($row["full_code"])." , kus on rohkem kui &uuml;ks t&auml;ht!";
 			}
-
 
 			$dat->save();
 
@@ -1064,8 +1028,9 @@ class otto_import extends class_base
 		}
 
 		echo "hear hear. prods done. <br>\n";
+
 		$log[] = "importisin $items_done toodet";
-		
+
 		flush();
 		// to make packages, group by image number and for all images where cnt > 1 create a package for all those prods
 
@@ -1201,8 +1166,6 @@ class otto_import extends class_base
 
 		$this->fix_prices();
 
-		//$this->fix_package_pages(array());
-
 		// clear cache
 		$cache = get_instance("maitenance");
 		$cache->cache_clear(array("clear" => 1));
@@ -1228,27 +1191,99 @@ class otto_import extends class_base
 
 	function char_replacement($str)
 	{
-		//$needle = array('Î','Ï',chr(137));
-		//$haystack = array(chr(158),chr(158),chr(154));
+		/* l2ti t2hed
+		,
+		,chr(226)
+		,chr(238)
+		,chr(239)
+		,chr(231)
+		
 
-		$needle = array(
-			chr(235),	// zhee;
-			chr(159),	// &uuml;
-			chr(134), 	// &Uuml;
-			chr(154),	// &ouml;
-			chr(138),	// &auml;
-			chr(205),	// &Otilde;
-			chr(155), 	// &otilde;
-		);
-		$haystack = array(
-			chr(158),
-			chr(252),
-			chr(220),
-			chr(246),
+		Andmete allikaks oli:
+		Impordifail: http://terryf.struktuur.ee/str/otto/import/data/LAT.T004-11.txt
+		Tekst saidil (skrolli alla): http://otto-latvia.struktuur.ee/134393
+		kooditabel: http://www.science.co.il/Language/Character-Code.asp?s=1257
+		*/
+		if (aw_global_get("lang_id") == 6)
+		{
+			/* uus */
+			$needle = array(
+			chr(236),
+			chr(240),
+			chr(165),
+			chr(207),
+			chr(191),
+			chr(199),
+			chr(148),
+			chr(239),
+			chr(134),
+			chr(174),
+			chr(149),
+			chr(192),
 			chr(228),
-			chr(213),
-			chr(245),
-		);
+			chr(180),
+			chr(250),
+			chr(137),
+			chr(208),
+			chr(130),
+			chr(207),
+			chr(153),
+			chr(179),
+			chr(129),
+			chr(210),
+			chr(211),
+			chr(178));
+
+			$haystack = array(
+			chr(207),
+			chr(251),
+			chr(238),
+			chr(254),
+			chr(242),
+			chr(226),
+			chr(199),
+			chr(231),
+			chr(239),
+			chr(236),
+			chr(231),
+			chr(242),
+			chr(240),
+			chr(238),
+			chr(237),
+			chr(200),
+			chr(45),
+			chr(226),
+			chr(254),
+			chr(237),
+			chr(34),
+			chr(194),
+			chr(34),
+			chr(34),
+			chr(34));
+
+		}
+		else
+		{
+			$needle = array(
+				chr(235),	// zhee;
+				chr(159),	// &uuml;
+				chr(134), 	// &Uuml;
+				chr(154),	// &ouml;
+				chr(138),	// &auml;
+				chr(205),	// &Otilde;
+				chr(155), 	// &otilde;
+			);
+			$haystack = array(
+				chr(158),
+				chr(252),
+				chr(220),
+				chr(246),
+				chr(228),
+				chr(213),
+				chr(245),
+			);
+		}
+
 		if(is_array($str))
 		{
 			foreach($str as $key=>$value)
@@ -1508,63 +1543,6 @@ class otto_import extends class_base
 			$linearr[] = $line;
 		}
 		return $linearr;
-	}
-
-	/** try to fix package page numbers by checking their products
-
-		@attrib name=fix_package_pages
-
-	**/
-	function fix_package_pages($arr)
-	{
-		echo "fixing package pages! <br>\n";
-		flush();
-
-		$ol = new object_list(array(
-			"class_id" => CL_SHOP_PACKET,
-			"oid" => 180396
-		));
-		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
-		{
-			echo "packet ".$o->name()." <br>\n";
-			flush();
-			// get prods from packet
-			$pages = array();
-			foreach($o->connections_from(array("type" => "RELTYPE_PRODUCT")) as $c)
-			{
-				$prod = $c->to();
-				$pages[$prod->prop("user18")] = $prod->prop("user18");
-			}
-
-			echo "gt pages as ".dbg::dump($pages)." <br>";
-
-			if (true || count($pages) == 1)
-			{
-				$page = reset($pages);
-				//echo "cnt = 1 , user4 = ".$o->prop("user4")." page = $page <br>\n";
-				if ($o->prop("user4") != $page)
-				{
-					$o->set_prop("user4", $page);
-					$o->save();
-
-					// check image table
-					if ($o->prop("user3") != "")
-					{
-						$impg = $this->db_fetch_field("SELECT p_pg FROM otto_prod_img WHERE imnr = '".$o->prop("user3")."'", "p_pg");
-						if ($impg != $page)
-						{
-							$this->db_query("UPDATE otto_prod_img SET p_pg = '$page' WHERE imnr = '".$o->prop("user3")."'");
-							//echo "q = UPDATE otto_prod_img SET p_pg = '$page' WHERE imnr = '".$o->prop("user3")."' <br>";
-						}
-					}
-					echo "changed page to $page <br>\n";
-					flush();
-				}
-			}
-		}
-
-		echo "all done. <br>\n";
-		flush();
 	}
 
 	function is_csv($url)
