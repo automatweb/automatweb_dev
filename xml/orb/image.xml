@@ -16,14 +16,6 @@
 				</arguments>
 			</function>
 		</action>
-
-		<action name="get_image_list" is_content="1" caption="Viimati lisatud pildid">
-			<function name="get_image_list">
-				<arguments>
-					<required name="count" type="int"/>
-				</arguments>
-			</function>
-		</action>
 	</class>
 </orb>
 		
