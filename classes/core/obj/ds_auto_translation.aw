@@ -20,24 +20,59 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 			return $this->contained->get_objdata($oid, $param);
 		}
 
+		if ($GLOBALS["AUTO_TRANS_D"] == 1)
+		{
+			echo __LINE__."::enter , oid =$oid <br>";
+		}
 		$lang_id = aw_global_get("lang_id");
 		$req_od = $this->contained->get_objdata($oid, $param);
-		if ($req_od["brother_of"] != $oid && $req_od["brother_of"])
-		{
-			$oid = $req_od["brother_of"];
-			$req_od = $this->contained->get_objdata($oid, $param);
-		}
+
+		// idea - don't translate brothers, but if the requested object is a brother, read the data from the
+		// brother object and translate the parent, also set lang_id to the correct value. might work.  
 
 		// check if this object is part of the whole translation hooplaa or not. if not, just return the objdata
 		if (($req_od["flags"] & (OBJ_HAS_TRANSLATION|OBJ_IS_TRANSLATED|OBJ_NEEDS_TRANSLATION)) == 0)
 		{
+			if ($GLOBALS["AUTO_TRANS_D"] == 1)
+			{
+				echo __LINE__."::return regular od, for object is not part of translation <br>";
+			}
 			return $req_od;
+		}
+
+		$sets = array();
+
+		$conn_oid = $oid;
+		if ($req_od["brother_of"] != $oid && $req_od["brother_of"])
+		{
+			/*$tmp = $this->contained->get_objdata($req_od["brother_of"], array(
+				"no_errors" => true
+			));
+			if ($tmp !== NULL)
+			{
+				$req_od = $tmp;
+			
+				$req_od["oid"] = $oid;
+			}*/
+			$conn_oid = $req_od["brother_of"];
+			$sets["oid"] = $req_od["oid"];
+			$tmp = $this->get_objdata($req_od["parent"]);
+			$sets["parent"] = $tmp["oid"];
+			if ($GLOBALS["AUTO_TRANS_D"] == 1)
+			{
+				echo __LINE__."::is brother, read conns from $conn_oid <br>";
+			}
 		}
 
 		// check whether there are any relations of type RELTYPE_TRANSLATION pointing
 		// to this object .. 
+		if ($GLOBALS["AUTO_TRANS_D"] == 1)
+		{
+			echo __LINE__."::read conns TO $conn_oid of type RELTYPE_TRANSLATION <br>";
+		}
+
 		$conns = $this->contained->find_connections(array(
-			"to" => $oid,
+			"to" => $conn_oid,
 			"type" => RELTYPE_TRANSLATION
 		));
 		if (count($conns) > 1)
@@ -53,6 +88,10 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 			// we found that there are some connections to this object with translation reltype
 			// that means that this is a translation object. so load it and see if we hit the correct one in regards to lang_id
 			$objdata = $req_od;
+			if ($GLOBALS["AUTO_TRANS_D"] == 1)
+			{
+				echo __LINE__."::found some connections to this object of type RELTYPE_TRANSLATION, meaning that this is a translation object <br>";
+			}
 
 			// mark in cache that this is the original object for the translation
 			reset($conns);
@@ -69,6 +108,10 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 				$this->objdata[$oid]["trans_orig"] = $f_c["from"];
 
 				// but we still gots to read the original and get the untranslated props from that!
+				if ($GLOBALS["AUTO_TRANS_D"] == 1)
+				{
+					echo __LINE__."::found correct translation object oid = $f_c[from], merge and return <br>------------------------------<br>";
+				}
 				return $this->_merge_obj_dat($this->contained->get_objdata($f_c["from"], $param), $objdata);
 			}
 			// this is not the corret language object. get the original and try to find
@@ -78,6 +121,10 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 				"type" => RELTYPE_TRANSLATION,
 				"to.lang_id" => $lang_id
 			));
+			if ($GLOBALS["AUTO_TRANS_D"] == 1)
+			{
+				echo __LINE__."::incorrect language, get original and trace from that original = $f_c[from], read connections from that <br>";
+			}
 
 			if (count($conns2) > 1)
 			{
@@ -93,6 +140,10 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 
 				reset($conns2);
 				list(, $f_c2) = each($conns2);
+				if ($GLOBALS["AUTO_TRANS_D"] == 1)
+				{
+					echo __LINE__."::echo found coeect connection $f_c2[id] , from = $f_c[from] to $f_c[to], merge and return <br>-----------------------<br>";
+				}
 
 				$this->objdata[$f_c["from"]]["trans_rels"][$lang_id] = $f_c2["to"];
 
@@ -101,11 +152,17 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 				$this->objdata[$f_c2["to"]]["trans_orig"] = $f_c["from"];
 
 				// the correct object is in $f_c2["to"]
-				return $this->_merge_obj_dat($req_od, $this->contained->get_objdata($f_c2["to"], $param));
+				$tmp = $this->_merge_obj_dat($req_od, $this->contained->get_objdata($f_c2["to"], $param));
+				return $tmp;
 			}
 			else
 			{
-				return $this->_merge_obj_dat($req_od, $this->contained->get_objdata($f_c["from"], $param));
+				$tmp =  $this->_merge_obj_dat($req_od, $this->contained->get_objdata($f_c["from"], $param));
+				if ($GLOBALS["AUTO_TRANS_D"] == 1)
+				{
+					echo __LINE__."::did not find connection to required language, return merge of original ($f_c[from] ) and requested oid <br>---------------------------<br>";
+				}
+				return $tmp;
 			}
 		}
 		else
@@ -117,8 +174,12 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 
 			if ($req_od["lang_id"] != $lang_id)
 			{
+				if ($GLOBALS["AUTO_TRANS_D"] == 1)
+				{
+					echo __LINE__."::this is the original object, find correct translation from it (from = $conn_oid , type = RELTYPE_TRANSLATION , to.lang_id = $lang_id)  <br>";
+				}
 				$conns = $this->contained->find_connections(array(
-					"from" => $oid,
+					"from" => $conn_oid,
 					"type" => RELTYPE_TRANSLATION,
 					"to.lang_id" => $lang_id
 				));
@@ -142,7 +203,16 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 					$this->objdata[$dat["to"]]["trans_orig"] = $oid;
 
 					// the correct object is in $dat["to"]
-					return $this->_merge_obj_dat($req_od, $this->contained->get_objdata($dat["to"], $param));
+					$tmp =  $this->_merge_obj_dat($req_od, $this->contained->get_objdata($dat["to"], $param));
+					if ($GLOBALS["AUTO_TRANS_D"] == 1)
+					{
+						echo __LINE__."::got correct translation rel, return merge $req_od[oid] with $dat[to]<br>--------------------------------<br>";
+					}
+					foreach($sets as $k => $v)
+					{
+						$tmp[$k] = $v;
+					}
+					return $tmp;
 				}
 				else
 				{
@@ -152,6 +222,10 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 			else
 			{
 				$ret = $req_od;
+			}
+			if ($GLOBALS["AUTO_TRANS_D"] == 1)
+			{
+				echo __LINE__."::return requested oid cause did not find anything. damn. oid = $oid , retoid = $ret[oid] <br>------------------------<br>";
 			}
 			return $ret;
 		}
