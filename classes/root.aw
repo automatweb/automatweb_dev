@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.16 2002/11/12 10:11:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.17 2002/11/12 10:47:43 kristo Exp $
 // root.aw - the root class
 // this contains all the supplementary functions
 
@@ -12,6 +12,7 @@ class aw_array
 	function aw_array($arg = false)
 	{
 		$this->arg = (is_array($arg)) ? $arg : array();
+		reset($this->arg);
 	}
 
 	function &get()
@@ -24,16 +25,6 @@ class aw_array
 		return $this->arg[$key];
 	}
 
-	function next()
-	{
-		return each($this->arg);
-	}
-
-	function reset()
-	{
-		reset($this->arg);
-	}
-
 	function set($val)
 	{
 		$this->arg[] = $val;
@@ -44,9 +35,19 @@ class aw_array
 		$this->arg[$key] = $val;
 	}
 
+	function next()
+	{
+		return each($this->arg);
+	}
+
+	function reset()
+	{
+		reset($this->arg);
+	}
+
 	function to_sql()
 	{
-		$str = join(",",$this->arg);
+		$str = join(",",array_values($this->arg));
 		if ($str == "")
 		{
 			return "NULL";
