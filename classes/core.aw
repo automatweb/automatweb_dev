@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.91 2002/06/13 23:58:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.92 2002/06/25 15:30:13 kristo Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -36,6 +36,25 @@ class core extends db_connector
 	{
 		$q = sprintf("SELECT content FROM config WHERE ckey = '%s'",$ckey);
 		return $this->db_fetch_field($q,"content");
+	}
+
+	////
+	// !Setter for object
+	function set_opt($key,$val)
+	{
+		$this->$key = $val;
+		global $DBG;
+		if ($DBG)
+		{
+			print "setting $key to $val<br>";
+		}
+	}
+	
+	////
+	// !Setter for object
+	function get_opt($key)
+	{
+		return $this->$key;
 	}
 
 	// Objekti metadata handlemine. Seda hoitakse objects tabelis metadata väljas XML kujul.
@@ -1828,6 +1847,45 @@ class core extends db_connector
 
 		aw_global_set("title_action", substr(strip_tags($text),$sps));
 		return $path;
+	}
+
+	////
+	// !Next generation mk_path. Knows how to display a different path if 
+	// the page is shown inside the alias manager
+	function gen_path($args = array())
+	{
+		extract($args);
+
+		// if alias_to is set, then we need to shown the PATH in form
+		// go back / change object
+		if ($alias_to)
+		{
+			$path = sprintf("<a href='%s'>%s</a> / ",$return_url,$return_cap);
+		}	
+		else
+		{
+			$path = "";
+			$ch = $this->get_object_chain($oid);
+			reset($ch);
+			$use = true;
+			while (list(,$row) = each($ch))
+			{
+				if ($row["oid"] == aw_ini_get("admin_rootmenu2"))
+				{
+					$use = false;
+				}
+				if ($use)
+				{
+					$name = ($row["name"]) ? $row["name"] : "(nimetu)";
+					$path="<a href='".$this->mk_my_orb("obj_list", array("parent" => $row["oid"],"period" => $period),"menuedit")."'>".$name."</a> / ".$path;
+				}
+			}
+		};
+
+		$path .= strip_tags($caption);
+		$GLOBALS["site_title"] = $path;
+		return $path;
+
 	}
 
 	////
