@@ -1,6 +1,136 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.168 2002/10/22 15:56:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.169 2002/11/02 23:11:12 duke Exp $
 // menuedit.aw - menuedit. heh.
+
+/*
+	// stuff that goes into the objects table
+	@default table=objects
+
+	@property users_only type=checkbox field=meta method=serialize group=advanced
+	@caption Ainult sisselogitud kasutajatele
+
+	@property color type=colorpicker field=meta method=serialize group=advanced
+	@caption Menüü värv
+
+	@property icon type=icon field=icon group=advanced
+	@caption Ikoon
+
+	@property sort_by_name type=checkbox field=meta method=serialize group=advanced
+	@caption Sorteeri nime järgi
+
+	@property aip_filename type=textbox field=meta method=serialize group=advanced
+	@caption Failinimi
+
+	@property objtbl_conf type=select field=meta method=serialize group=advanced
+	@caption Objektitabeli konff
+
+	@property add_tree_conf type=select field=meta method=serialize group=advanced
+	@caption Objekti lisamise puu konff
+
+	@property cfgmanager type=select field=meta method=serialize group=advanced
+	@caption Konfiguratsioonihaldur
+	
+	@property show_lead type=checkbox field=meta method=serialize group=advanced
+	@caption Näita ainult leadi (kasutusel Nädalas)
+	
+	@property grkeywords type=select size=10 multiple=1 field=meta method=serialize group=keywords
+	@caption AW Märksõnad
+
+	@property keywords type=textbox field=meta method=serialize group=keywords
+	@caption META keywords
+
+	@property description type=textbox field=meta method=serialize group=keywords
+	@caption META description
+	
+	@property sections type=select multiple=1 field=meta size=20 method=serialize group=relations
+	@caption Vennastamine
+
+	@property img_timing type=textbox size=3 field=meta method=serialize group=presentation
+	@caption Viivitus piltide vahel (sek.)
+
+	@property img_act type=imgupload field=meta method=serialize group=presentation
+	@caption Aktiivse menüü pilt
+
+	@property menu_images type=array field=meta method=serialize getter=callback_get_menu_image group=presentation
+	@caption Menüü pildid
+
+	// and now stuff that goes into menu table
+	@default table=menu
+	
+	@property sss type=select multiple=1 size=15 method=serialize group=relations
+	@caption Menüüd, mille alt viimased dokumendid võetakse
+	
+	@property pers type=select multiple=1 size=15 method=serialize group=relations
+	@caption Perioodid, mille alt dokumendid võetakse
+
+	@property seealso type=select multiple=1 size=15 group=relations
+	@caption Vali menüüd, mille all see menüü on "vaata lisaks" menüü
+
+	@property seealso_order type=textbox group=relations size=3 table=objects field=meta method=serialize
+	@caption Järjekorranumber (vaata lisaks)
+
+	@property link type=textbox group=show
+	@caption Menüü link
+
+	@property type type=select group=advanced
+	@caption Menüü tüüp
+
+	@property clickable type=checkbox group=advanced
+	@caption Klikitav
+	
+	@property no_menus type=checkbox group=advanced
+	@caption Ilma menüüdeta
+
+	@property target type=checkbox group=general
+	@caption Uues aknas
+
+	@property mid type=checkbox group=advanced
+	@caption Paremal
+	
+	@property width type=textbox size=5 group=advanced
+	@caption Laius
+	
+	@property is_shop type=checkbox group=advanced
+	@caption Pood
+	
+	@property shop_parallel type=checkbox group=advanced
+	@caption Kaubad sbs (pood)
+	
+	@property shop_ignoregoto type=checkbox group=advanced
+	@caption Ignoreeri järgmist (pood)
+
+	@default group=show
+
+	@property left_pane type=checkbox 
+	@caption Vasak paan
+
+	@property right_pane type=checkbox
+	@caption Parem paan
+	
+	@property tpl_dir table=objects type=select field=meta method=serialize
+	@caption Template set 
+	
+	@property tpl_edit type=select 
+	@caption Template muutmiseks
+	
+	@property tpl_view type=select
+	@caption Template näitamiseks (pikk)
+	
+	@property tpl_lead type=select
+	@caption Template näitamiseks (lühike)
+	
+	@property hide_noact type=checkbox
+	@caption Peida ära, kui dokumente pole
+	
+	@property ndocs type=textbox size=3
+	@caption Mitu viimast dokumenti
+	
+
+
+*/
+
+// meeza thinks we should split this class. One part should handle showing stuff
+// and the other the admin side -- duke
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
 define("SHARED_FOLDER_ID",2147483647);
@@ -56,6 +186,8 @@ class menuedit extends aw_template
 	//	olevad muutujad pannaxe menyyediti template sisse
 	// $sub_callbacks - array template_name => funxiooninimi
 	//  neid kutsutakse siis v2lja kui vastav sub on template sees olemas
+	// @arg section type=int
+	// @arg print type=int
 	function gen_site_html($params)
 	{
 		// handle favicon
@@ -90,9 +222,6 @@ class menuedit extends aw_template
 		// koostame array vajalikest parameetritest, mis identifitseerivad cachetava objekti
 		$cp = array();
 
-		// page, type and lcb are in the HTTP_GET_VARS too .. so why do they get
-		// separate handling?
-
 		$cp[] = $act_per_id;
 
 		$cp[] = aw_global_get("lang_id");
@@ -102,7 +231,8 @@ class menuedit extends aw_template
 
 		foreach($HTTP_GET_VARS as $var => $val)
 		{
-			if ($var != "automatweb" && $var != "set_lang_id")	// just to make sure that each user does not get it's own copy
+			// just to make sure that each user does not get it's own copy
+			if ($var != "automatweb" && $var != "set_lang_id")
 			{
 				if (is_array($val))
 				{
@@ -138,7 +268,7 @@ class menuedit extends aw_template
 			{
 				$cache->set($section,$cp,$res);
 			};
-			echo "<!-- no cache $section <pre>",join("-",$cp),"</pre>\n-->";
+//                      echo "<!-- no cache $section <pre>",join("-",$cp),"</pre>\n-->";
 		}
 		else
 		{
@@ -188,7 +318,7 @@ class menuedit extends aw_template
 		$this->vars(array(
 			"lang_code" => aw_global_get("LC"),
 		));
-		
+
 		$obj = $this->get_object($section);
 
 		$this->check_object($obj);
@@ -210,7 +340,7 @@ class menuedit extends aw_template
 		{
 			die($this->do_rdf($section,$obj,$format,$docid));
 		}
- 
+
 		/// Vend?
 		if ($obj["class_id"] == CL_BROTHER_DOCUMENT)
 		{
@@ -245,7 +375,7 @@ class menuedit extends aw_template
 
 		// leiame, kas on tegemist perioodilise rubriigiga
 		$periodic = $this->is_periodic($section);
-
+		
 		if ($obj["class_id"] == CL_DOCUMENT || $obj["class_id"] == CL_PERIODIC_SECTION)
 		{
 			$this->sel_section = $obj["parent"];
@@ -427,8 +557,6 @@ class menuedit extends aw_template
 
 		$this->section = $section;
 		
-		// eek.
-
 		$cd = "";
 		$menu_defs_v2 = $this->cfg["menu_defs"];
 		$this->menu_defaults = $this->cfg["menu_defaults"];
@@ -438,16 +566,6 @@ class menuedit extends aw_template
 			$this->menu_defaults = $this->cfg["menu_defaults"][aw_global_get("lang_id")];
 		}
 		$frontpage = $this->cfg["frontpage"];
-
-		global $DBUG;
-		if ($DBUG)
-		{
-			print "<pre>";
-			var_dump($this->cfg["lang_defs"]);
-			var_dump($menu_defs_v2);
-			print "</pre>";
-		};
-	
 
 		if (isset($menu_defs_v2) && is_array($menu_defs_v2))
 		{
@@ -522,10 +640,10 @@ class menuedit extends aw_template
 			"ss3" => $this->gen_uniq_id(),
 			"link" => "",
 			"section"	=> $section,
-		  "uid" => aw_global_get("uid"),
-		  "date" => $this->time2date(time(), 2),
-		  "date2" => $this->time2date(time(), 8),
-		  "date3" => date("d").". ".get_lc_month(date("n")).". ".date("Y"),
+			"uid" => aw_global_get("uid"),
+			"date" => $this->time2date(time(), 2),
+			"date2" => $this->time2date(time(), 8),
+			"date3" => date("d").". ".get_lc_month(date("n")).". ".date("Y"),
 			"IS_FRONTPAGE" => ($section == $frontpage ? $this->parse("IS_FRONTPAGE") : ""),
 			"IS_FRONTPAGE2" => ($section == $frontpage ? $this->parse("IS_FRONTPAGE2") : ""),
 			"IS_NOT_FRONTPAGE" => ($section != $frontpage ? $this->parse("IS_NOT_FRONTPAGE") : ""),
@@ -538,19 +656,14 @@ class menuedit extends aw_template
 				"HAS_PERIOD_IMAGE" => $this->parse("HAS_PERIOD_IMAGE")
 			));
 		}
-		// what's that for?
-		// well, you can pass along values for variables from index.aw and places like that using $vars array 
-		// it's pretty neat actually. - terryf
+		
+		// you can pass along values for variables from index.aw and places like that using
+		// $vars array - it's pretty neat actually. - terryf
 		if (is_array($vars))
 		{
 			$this->vars($vars);
 		}
 
-	
-		// eek.
-		// whaat?
-		// damned, if I knew
-		
 		$cd = "";
 		if (aw_global_get("uid") == "")
 		{
@@ -683,6 +796,8 @@ class menuedit extends aw_template
 			"NOT_ENG" => $neng
 		));
 
+		// end of suckage
+
 
 		if ($section == $frontpage)
 		{
@@ -703,7 +818,6 @@ class menuedit extends aw_template
 
 	function is_periodic($section,$checkobj = 1) 
 	{
-		//$mn = $this->get_menu($section);
 		$mn = $this->mar[$section];
 		$periodic = $mn["periodic"];
 		// menyysektsioon ei ole perioodiline. Well, vaatame 
@@ -785,11 +899,6 @@ class menuedit extends aw_template
 				LEFT JOIN menu ON menu.id = objects.oid
 				WHERE (objects.class_id = ".CL_PSEUDO." OR objects.class_id = ".CL_BROTHER.")  AND $where $aa
 				ORDER BY objects.parent, jrk,objects.created";
-		global $XXX;
-		if ($XXX)
-		{
-			print $q;
-		}
 		$this->db_query($q);
 	}
 
@@ -1021,13 +1130,16 @@ class menuedit extends aw_template
 		$this->db_query($q);
 		$row = $this->db_next();
 
-		if ($row && $set_lang_id)
+		if ($set_lang_id)
 		{
-			aw_global_set("lang_id",$set_lang_id);
-		}
-		else
-		{
-			$realsect = $this->cfg["frontpage"];
+			if ($row)
+			{
+				aw_global_set("lang_id",$set_lang_id);
+			}
+			else
+			{
+				$realsect = $this->cfg["frontpage"];
+			};
 		};
 
 		aw_global_set("section",$realsect);
@@ -1076,7 +1188,11 @@ class menuedit extends aw_template
 			// and if so, log it as crack attempt
 
 			// and if that check is not good enough, we need something like "is_valid_section"
+
+			// yeah, well, /\W/ match is way too strict - I can't use blah.html as the alias for instance
+			// $this->quote(&$alias) will prevent doing any bad things in the sql - terryf
 			$prnt = 0;
+			$obj = true;
 			foreach($sections as $skey => $sval)
 			{
 				global $DBUG;
@@ -1084,11 +1200,6 @@ class menuedit extends aw_template
 				{
 					print "checking $sval<br>";
 				}
-				if (preg_match("/\W/",$sval))
-				{
-					$obj = false;
-				}
-				else
 				if ($obj !== false)
 				{
 					// vaatame, kas selle nimega aliast on?
@@ -1543,7 +1654,7 @@ class menuedit extends aw_template
 		$cldata = array();
 		foreach($this->cfg["classes"] as $clid => $_cldata)
 		{
-			if ($_cldata["name"] != "")
+			if ($_cldata["name"] != "" && $_cldata["can_add"])
 			{
 				$cldata[$_cldata["name"][0]][$_cldata["file"]] = $_cldata["name"];
 			}
@@ -1590,6 +1701,23 @@ class menuedit extends aw_template
 			$ret.="separator".$sep;
 		}
 
+		if (is_array($this->cfg["classes"]) && $prnt != 0)
+		{
+			foreach($this->cfg["classes"] as $clid => $cldata)
+			{
+				if ($cldata["parents"] != "" && $cldata["can_add"])
+				{
+					$parens = explode(",", $cldata["parents"]);
+					if (in_array($prnt, $parens))
+					{
+						$addlink = $this->mk_my_orb("new", array("parent" => $parent, "period" => $period), $cldata["file"], true, true);
+						$ret .= ($clid+1000)."|".((int)($prnt+4))."|".$cldata["name"]."|$addlink|list".$sep;
+					}
+				}
+			}
+//			$ret.="separator".$sep;
+		}
+
 		if (is_array($this->cfg["classfolders"]))
 		{
 			foreach($this->cfg["classfolders"] as $fid => $fdata)
@@ -1608,21 +1736,6 @@ class menuedit extends aw_template
 			}
 		}
 
-		if (is_array($this->cfg["classes"]) && $prnt != 0)
-		{
-			foreach($this->cfg["classes"] as $clid => $cldata)
-			{
-				if ($cldata["parents"] != "")
-				{
-					$parens = explode(",", $cldata["parents"]);
-					if (in_array($prnt, $parens))
-					{
-						$addlink = $this->mk_my_orb("new", array("parent" => $parent, "period" => $period), $cldata["file"], true, true);
-						$ret .= ($clid+1000)."|".((int)($prnt+4))."|".$cldata["name"]."|$addlink|list".$sep;
-					}
-				}
-			}
-		}
 		return $ret;
 	}
 
@@ -1869,7 +1982,8 @@ class menuedit extends aw_template
 
 		$this->listacl("objects.status != 0 AND objects.parent = '$parent' AND objects.class_id = ".CL_PSEUDO);
 		// listib koik menyyd ja paigutab need arraysse
-		$this->db_listall("objects.status != 0 AND objects.parent = '$parent' AND (menu.type != ".MN_FORM_ELEMENT." AND menu.type != ".MN_ADMIN1.") AND objects.lang_id = ".aw_global_get("lang_id"),true);
+		$this->db_listall("objects.status != 0 AND objects.parent = '$parent' AND (menu.type != ".MN_FORM_ELEMENT." AND menu.type != ".MN_ADMIN1.") AND objects.lang_id = ".aw_global_get("lang_id") . " OR (menu.type = 69 AND objects.parent ='$parent')",true);
+
 		while ($row = $this->db_next())
 		{
 			$this->save_handle();
@@ -1923,6 +2037,11 @@ class menuedit extends aw_template
 
 		//$this->db_listall("objects.status = 2 AND objects.parent = '$parent' AND menu.type = ".MN_ADMIN1." AND objects.lang_id = ".aw_global_get("lang_id"),true,true);
 		$this->db_listall("objects.status = 2 AND objects.parent = '$parent' AND menu.type = ".MN_ADMIN1,true,true);
+		global $XXX;
+		if ($XXX)
+		{
+			print "prnt = $parent<br>";
+		};
 		$ext = $this->cfg["ext"];
 		$blank = $this->mk_my_orb("blank");
 		while ($row = $this->db_next())
@@ -2225,6 +2344,7 @@ class menuedit extends aw_template
 			$this->pr_icons = aw_unserialize($c->get_simple_config("program_icons"));
 		}
 		$i = $this->pr_icons[$fid]["url"];
+		classload("icons");
 		return icons::check_url($i == "" ? "/automatweb/images/icon_aw.gif" : $i);
 	}
 
@@ -2657,12 +2777,12 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	{
 		extract($arr);
 		global $period;
-		$this->mk_path($id, "Muuda",$period);
 		if (!$this->can("edit",$id))
 		{
 			$this->raise_error(ERR_MNEDIT_ACL_NOCHANGE,LC_MENUEDIT_NOT_ALLOW, true);
 		}
 
+		$this->mk_path($id, "Muuda",$period);
 		$basedir = $this->cfg["basedir"];
 		$baseurl = $this->cfg["baseurl"];
 		$ext = $this->cfg["ext"];
@@ -2707,13 +2827,6 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"metadata" => $row["metadata"],
 		));
 
-		if ($row["class_id"] == CL_PROMO)
-		{
-			classload("promo");
-			$p = new promo;
-			return $p->change(array("id" => $id));
-		}
-
 		if (strpos(aw_global_get("HTTP_USER_AGENT"),"MSIE") === false)
 		{
 			$this->read_template("nchange_plain.tpl");
@@ -2723,48 +2836,12 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$this->read_template("nchange.tpl");
 		};
 
-		// kysime infot adminnitemplatede kohta
-		$q = "SELECT * FROM template WHERE type = 0 ORDER BY id";
-		$this->db_query($q);
-		$edit_templates = array("0" => "default");
-		while($tpl = $this->db_fetch_row()) 
-		{
-			$edit_templates[$tpl["id"]] = $tpl["name"];
-		};
-		// kysime infot lyhikeste templatede kohta
-		$q = "SELECT * FROM template WHERE type = 1 ORDER BY id";
-		$this->db_query($q);
-		$short_templates = array();
-		while($tpl = $this->db_fetch_row()) 
-		{
-			$short_templates[$tpl["id"]] = $tpl["name"];
-		};
-		// kysime infot pikkade templatede kohta
-		$q = "SELECT * FROM template WHERE type = 2 ORDER BY id";
-		$this->db_query($q);
-		$long_templates = array();
-		while($tpl = $this->db_fetch_row()) 
-		{
-			$long_templates[$tpl["id"]] = $tpl["name"];
-		};
+		$tplmgr = get_instance("templatemgr");
 
-		$bsar = array();
-		$this->db_query("SELECT * FROM objects WHERE brother_of = $id AND status != 0 AND class_id = ".CL_BROTHER);
-		while ($arow = $this->db_next())
-		{
-			$bsar[$arow["parent"]] = $arow["parent"];
-		}
-
-		classload("objects");
-		$ob = new db_objects;
-	  $activate_at = ($row["activate_at"]) ? $row["activate_at"] : "+24h";
+		$ob = get_instance("objects");
+		$activate_at = ($row["activate_at"]) ? $row["activate_at"] : "+24h";
 		$deactivate_at = ($row["deactivate_at"]) ? $row["deactivate_at"] : "+48h";
 		$this->dequote(&$row["name"]);
-
-		if ($row["ndocs"] > 0)
-		{
-			$il = $this->parse("IS_LAST");
-		}
 
 		// kui see on adminni menyy, siis kuvame kasutajale featuuride listi, 
 		// mille hulgast ta siis valida saab, et mis selle menyy alt avaneb. 
@@ -2774,13 +2851,12 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$af = $this->parse("ADMIN_FEATURE");
 		}
 
+		// prep a list of public methods
 		$pm = "";
 		if ($row["type"]  == MN_PMETHOD)
 		{
-			$aw_orb = get_instance("aw_orb");
-			$pclasses = array("0" => "--choose--") + $aw_orb->get_public_classes();
 			$this->vars(array(
-				"pclasses" => $this->picker($meta["pclass"],$pclasses),
+				"pclasses" => $this->picker($meta["pclass"],$this->get_pmethod_sel()),
 				"pmethods" => "",
 				"pm_url_admin" => checked($meta["pm_url_admin"]),
 				"pm_url_menus" => checked($meta["pm_url_menus"])
@@ -2789,6 +2865,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$pm = $this->parse("PMETHOD");
 		};
 
+		// prep a list of menu images
 		$num_menu_images = $this->cfg["num_menu_images"];
 		$imgar = $meta["menu_images"];
 
@@ -2797,7 +2874,9 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$image = "";
 			if ($imgar[$i]["id"])
 			{
-				$image = "<img src='".$imgar[$i]["url"]."'>";
+				$url = $imgar[$i]["url"];
+				$url = image::check_url($url);
+				$image = "<img src='".$url."'>";
 			}
 			$this->vars(array(
 				"nr" => $i,
@@ -2814,10 +2893,6 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$all_kwds = $kwds->get_keyword_picker();
 		$kwd_list = $this->get_menu_keywords($id);
 
-		classload("shop");
-		$sh = new shop;
-		$shs = $sh->get_list();
-
 		$icon = $row["icon_id"] ? "<img src=\"".$baseurl."/automatweb/icon.".$ext."?id=".$row["icon_id"]."\">" : ($row["admin_feature"] ? "<img src=\"".$this->get_feature_icon_url($row["admin_feature"])."\">" : "");
 
 		classload("periods");
@@ -2830,96 +2905,125 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$sa = $meta["seealso_refs"];
 		$rsar = $sa[aw_global_get("lang_id")];
 
-		classload("form_base");
-		$fb = new form_base;
+		$fb = get_instance("formgen/form_base");
 		$flist = $fb->get_flist(array("type" => FTYPE_ENTRY));
 
 		$img2 = $meta["img_act_url"] != "" ? "<img src='".$meta["img_act_url"]."'>" : "";
 		$template_sets = $this->cfg["template_sets"];
 		$template_sets = array_merge(array("" => "kasuta parenti valikut"),$template_sets);
 
-		$types = array(
-			"69" => LC_MENUEDIT_CLIENT,
-			"70" => LC_MENUEDIT_SECTION,
-			"71" => LC_MENUEDIT_ADMINN_MENU,
-			"72" => LC_MENUEDIT_DOCUMENT,
-			"75" => LC_MENUEDIT_CATALOG,
-			"77" => LC_MENUEDIT_PMETHOD,
-		);
-
 		$this->vars(array(
-			"types" => $this->option_list($row["type"],$types),
+			"name"				=> htmlentities($row["name"]), 
+			"comment"			=> $row["comment"], 
+			"alias"				=> $row["alias"],
+			"created"			=> $this->time2date($row["created"],2),
+			"createdby"		=> $row["createdby"],
+			"modified"		=> $this->time2date($row["modified"],2),
+			"modifiedby"	=> $row["modifiedby"],
+			"id"					=> $id,
+
+			"types" => $this->option_list($row["type"],$this->get_type_sel()),
 			"grkeywords" => $this->multiple_option_list($kwd_list, $all_kwds),
-			"parent"			=> $row["parent"], 
-			"SA_ITEM"			=> $sal,
+			"parent"			=> $row["parent"], // not used
+			"SA_ITEM"			=> $sal,	// not used
+			// aktiivse menüü pilt
 			"image_act"		=> $img2,
 			"seealso"			=> $this->multiple_option_list($rsar,$oblist),
 			"seealso_order" => $meta["seealso_order"],
+			// värv?
 			"color" => $meta["color"],
+			// filled only if the menu has the correct type
 			"ADMIN_FEATURE"	=> $af,
 			"PMETHOD" => $pm,
-			"name"				=> htmlentities($row["name"]), 
+			// number testi küsimuste jaoks?
 			"number"			=> $row["number"],
-			"comment"			=> $row["comment"], 
+			// on lingikogu? ilmselt deprecated
 			"links"				=> checked($row["links"]), 
+			// näidata ainult sisseloginud kasutajatele?
 			"users_only"  => checked($meta["users_only"] == 1),
+			// näita leadi. Ilmselt kehtib ainult dokumentidele selle menüü all
 			"show_lead" => checked($meta["show_lead"] == 1),
-			"id"					=> $id,
+			// kas menu on aktiivne
 			"active"	    => checked($row["status"] == 2),
+			// kas menu on klikitav? Kasutusel ntx separaatorite tegemisel ja ka YAHi koostamisel
 			"clickable"	    => checked($row["clickable"] == 1),
+
+			// kas peita menüü ära, kui tema all ei ole dokumente.
 			"hide_noact"   => checked($row["hide_noact"] == 1),
-			"alias"				=> $row["alias"],
-			"created"			=> $this->time2date($row["created"],2),
+
+			// avada uues aknas?
 			"target"		=> checked($row["target"]),
+			// aktiveerimine ja deaktiveerimine. Ma arvan, et see ei peaks siin olema.
 			"autoactivate" => checked($row["autoactivate"]),
 			"autodeactivate" => checked($row["autodeactivate"]),
 			"activate_at" => $d_edit->gen_edit_form("activate_at",$activate_at),
 			"deactivate_at" => $d_edit->gen_edit_form("deactivate_at",$deactivate_at),
-			"createdby"		=> $row["createdby"],
-			"modified"		=> $this->time2date($row["modified"],2),
-			"modifiedby"	=> $row["modifiedby"],
-			"tpl_edit" => $this->option_list($row["tpl_edit"],$edit_templates),
-			"tpl_view" => $this->option_list($row["tpl_view"],$long_templates),
-			"tpl_lead" => $this->option_list($row["tpl_lead"],$short_templates),
+			// templated - muutmine, pikk ja leadonly
+			"tpl_edit" => $this->picker($row["tpl_edit"],$tplmgr->get_template_list(array("type" => "0"))),
+			"tpl_lead" => $this->picker($row["tpl_lead"],$tplmgr->get_template_list(array("type" => "1"))),
+			"tpl_view" => $this->picker($row["tpl_view"],$tplmgr->get_template_list(array("type" => "2"))),
+			// mis kataloogist templatesid võtta
 			"tpl_dir" => $this->picker($meta["tpl_dir"],$template_sets),
-			"section"			=> $this->multiple_option_list($sets["section"],$oblist),
+			//"section"			=> $this->multiple_option_list($sets["section"],$oblist),
+			// mis menüü alt viimased dokumendid võetakse?
 			"sss"					=> $this->multiple_option_list(unserialize($row["sss"]),$oblist),
+			// handwritten link. Dunno, seems kind of pointless to me really. Maybe we would
+			// handle that with link object instead?
 			"link"				=> $row["link"],
-			"sep_checked"	=> checked($row["type"] == 4),
+
+			//"sep_checked"	=> checked($row["type"] == 4),
+			// keskel?
 			"mid"	=> checked($row["mid"] == 1),
-			"doc_checked"	=> checked($row["type"] == 6),
-			"sections"		=> $this->multiple_option_list($bsar,$ob->get_list(false,true)),
+			//"doc_checked"	=> checked($row["type"] == 6),
+			"sections"		=> $this->multiple_option_list($this->get_brothers($id),$ob->get_list(false,true)),
 			"real_id"			=> $row["brother_of"],
-			"reforb"			=> $this->mk_reforb("submit",array("id" => $id, "parent" => $parent,"period" => $period)),
 			"ndocs"				=> $row["ndocs"],
 			"ex_menus"		=> $this->multiple_option_list($ob->get_list(false,false,$id),$ob->get_list(false,false,$id)),
 			"icon"				=> $icon,
 			"IS_LAST"			=> $il,
-			"shop"				=> $this->picker($row["shop_id"],$shs),
 			"is_shop"			=> checked($row["is_shop"]),
 			"left_pane"		=> checked($row["left_pane"]),
 			"right_pane"	=> checked($row["right_pane"]),
 			"shop_parallel" => checked($row["shop_parallel"]),
 			"shop_ignoregoto" => checked($row["shop_ignoregoto"]),
+
+			// selle menüü juures näidatakse ainult sisu. A la "print" vaade
 			"no_menus" => checked($row["no_menus"]),
+
+			// laius?
 			"width" => $row["width"],
+
+			// vahe piltide vahel pixlites. Default on 6
 			"img_timing" => $meta["img_timing"],
+			// need peaksid genereeritud HTMLi headerisse meta tagide ssse
 			"keywords" => $meta["keywords"],
 			"description" => $meta["description"],
+
 			"pers" => $dbp->period_mlist(unserialize($row["pers"])),
+			
+			// milliseid templatesid selle menüü all olevate objektide näitamiseks kasutatakse
+			"tpltype_form" => checked((int)$meta["template_type"] == TPLTYPE_FORM),
+			"tpltype_tpl" => checked((int)$meta["template_type"] == TPLTYPE_TPL),
+		
+			// some magic for form based "templates"
 			"ftpl_edit" => $this->picker($meta["ftpl_edit"],$flist),
 			"ftpl_view" => $this->picker($meta["ftpl_view"],$this->list_objects(array("class" => CL_FORM_OUTPUT))),
 			"ftpl_lead" => $this->picker($meta["ftpl_lead"],$this->list_objects(array("class" => CL_FORM_OUTPUT))),
-			"tpltype_form" => checked((int)$meta["template_type"] == TPLTYPE_FORM),
-			"tpltype_tpl" => checked((int)$meta["template_type"] == TPLTYPE_TPL),
 			"ftpl_edit_id" => (int)$meta["ftpl_edit"],
 			"ftpl_lead_id" => (int)$meta["ftpl_lead"],
 			"ftpl_view_id" => (int)$meta["ftpl_view"],
+
+			// some random stuff
 			"aip_filename" => $meta["aip_filename"],
+			// kuidas adminnis selle menüü all objektitabelit kuvatakse
 			"objtbl_conf" => $this->picker($meta["objtbl_conf"], $this->list_objects(array("class" => CL_OBJ_TABLE_CONF, "addempty" => true))),
+			// milline on objektide lisamise puu selle menüü all
 			"add_tree_conf" => $this->picker($meta["add_tree_conf"], $this->list_objects(array("class" => CL_ADD_TREE_CONF, "addempty" => true))),
+			// missugust konfiguratsioonihaldurit kasutatakse selle menüü all olevate
+			// objektide jaoks. Ja ehk ka menüü enda jaoks?
 			"cfgmanager" => $this->picker($meta["cfgmanager"], $this->list_objects(array("class" => CL_CFGMANAGER, "addempty" => true))),
-			"sort_by_name" => checked($meta["sort_by_name"])
+			"sort_by_name" => checked($meta["sort_by_name"]),
+			"reforb"			=> $this->mk_reforb("submit",array("id" => $id, "parent" => $parent,"period" => $period)),
 		));
 
 		$op_list = $fb->get_op_list();
@@ -2969,6 +3073,29 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		}
 
 		return $ret;
+	}
+
+	////
+	// !Tagastab nimekirja avalikest meetodidest. Arvatavasti tuleb see anyway ymber kirjutada,
+	// sest kui neid meetodeid saab olema palju, siis on neid sitt selectist valida
+	function get_pmethod_sel()
+	{
+		$aw_orb = get_instance("aw_orb");
+		return array("0" => "--choose--") + $aw_orb->get_public_classes();
+	}
+
+	////
+	// !Tagastab nimekirja erinevatest menüütüüpidest
+	function get_type_sel()
+	{
+		return array(
+			"69" => LC_MENUEDIT_CLIENT,
+			"70" => LC_MENUEDIT_SECTION,
+			"71" => LC_MENUEDIT_ADMINN_MENU,
+			//"72" => LC_MENUEDIT_DOCUMENT,
+			"75" => LC_MENUEDIT_CATALOG,
+			"77" => LC_MENUEDIT_PMETHOD,
+		);
 	}
 
 	function create_homes()
@@ -5220,6 +5347,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	function get_menu_keywords($id)
 	{
 		$ret = array();
+		$id = (int)$id;
 		$this->db_query("SELECT * FROM keyword2menu WHERE menu_id = $id");
 		while ($row = $this->db_next())
 		{
@@ -5758,7 +5886,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$host = str_replace(":".$mt[1], "", $host);
 		}
 
-		if (isset($period))
+		if ($period)
 		{
 			$ps = " AND ((period = '$period') OR (periodic = 1)) ";
 		}
@@ -6237,6 +6365,189 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			}
 		}
 		return true;
+	}
+
+	function get_brothers($id)
+	{
+		$bsar = array();
+		$this->db_query("SELECT * FROM objects WHERE brother_of = $id AND status != 0 AND class_id = ".CL_BROTHER);
+		while ($arow = $this->db_next())
+		{
+			$bsar[$arow["parent"]] = $arow["parent"];
+		}
+		return $bsar;
+	}
+
+	function get_property($args)
+	{
+		$data = &$args["prop"];
+		switch($data["name"])
+		{
+			case "objtbl_conf":
+				$data["options"] = $this->list_objects(array("class" => CL_OBJ_TABLE_CONF, "addempty" => true));
+				break;
+
+			case "add_tree_conf":
+				$data["options"] = $this->list_objects(array("class" => CL_ADD_TREE_CONF, "addempty" => true));
+				break;
+
+			case "cfgmanager":
+				$data["options"] = $this->list_objects(array("class" => CL_CFGMANAGER, "addempty" => true));
+				break;
+
+			case "type":
+				$data["options"] = $this->get_type_sel();
+				break;
+
+			case "tpl_edit":
+				$tplmgr = get_instance("templatemgr");
+				$data["options"] = $tplmgr->get_template_list(array("type" => 0));
+				break;
+			
+			case "tpl_lead":
+				$tplmgr = get_instance("templatemgr");
+				$data["options"] = $tplmgr->get_template_list(array("type" => 1));
+				break;
+			
+			case "tpl_view":
+				$tplmgr = get_instance("templatemgr");
+				$data["options"] = $tplmgr->get_template_list(array("type" => 2));
+				break;
+
+			case "tpl_dir":
+				$template_sets = $this->cfg["template_sets"];
+				$data["options"] = array_merge(array("" => "kasuta parenti valikut"),$template_sets);
+				break;
+			
+			case "sections":
+				$ob = get_instance("objects");
+				$data["options"] = $ob->get_list(false,true);
+				$data["selected"] = $this->get_brothers($args["obj"]["oid"]);
+				break;
+			
+			case "sss":
+				$ob = get_instance("objects");
+				$data["options"] = $ob->get_list();
+				break;
+
+			case "pers":
+				classload("periods");
+				$dbp = new db_periods($this->cfg["per_oid"]);
+				$data["options"] = $dbp->period_list(false);
+				break;
+
+			case "grkeywords":
+				$kwds = get_instance("keywords");
+				$data["options"] = $kwds->get_keyword_picker();
+				$data["selected"] = $this->get_menu_keywords($args["obj"]["oid"]);
+				break;
+
+			case "seealso":
+				// seealso asi on nyt nii. et esiteks on metadata[seealso_refs] - seal on
+				// kirjas, mis menyyde all see menyy seealso item on
+				// ja siis menu.seealso on nagu enne serializetud array menyydest mis
+				// selle menyy all seealso on et n2itamisel kiirelt teada saax
+				$sa = $args["obj"]["meta"]["seealso_refs"];
+				$rsar = $sa[aw_global_get("lang_id")];
+				$ob = get_instance("objects");
+				$data["options"] = $ob->get_list();
+				$data["value"] = $rsar;
+				break;
+
+			case "icon":
+				$ext = $this->cfg["ext"];
+				if ($args["objdata"]["icon_id"])
+				{
+					$icon = "<img src='$baseurl" . "/automatweb/icon.$ext" . "?id=" . $args[objdata][icon_id] . "'>";
+				}
+				else
+				{
+					if ($args[objdata]["admin_feature"])
+					{
+						$icon = "<img src='" . $this->get_feature_icon_url($args["objdata"]["admin_feature"]) . "'>";
+					}
+					else
+					{
+						$icon = "(no icon set)";
+					};
+				};
+				$data["value"] = $icon;
+				break;
+
+			case "img_act":
+				$data["value"] = $args["obj"]["meta"]["img_act_url"] != "" ? "<img src='".$args[obj][meta][img_act_url]."'>" : "";
+				break;
+
+		};
+	}
+
+	////
+	// !Callback for the edit form, returns the data for 
+	// menu images (of which there can be 1..n)
+	function callback_get_menu_image($args = array())
+	{
+		classload("html");
+		classload("image");
+		$data = $args["prop"];
+		static $i = 0;
+		// each line consists of multiple elements
+		// and this is where we create them
+		if ($i < $this->cfg["num_menu_images"])
+		{
+			$tmp = array();
+			$node = array();
+			// do something
+			$node["caption"] = "Pilt #" . ($i + 1);
+			$node["items"] = array();
+
+			$val = $data["value"][$i];
+		
+			// ord textbox
+			$tmp = array(
+				"type" => "textbox",
+				"name" => "img_ord[$i]",
+				"size" => 3,
+				"value" => $val["ord"],
+			);
+			array_push($node["items"],$tmp);
+
+			// delete checkbox
+			$tmp = array(
+				"type" => "checkbox",
+				"name" => "img_del[$i]",
+			);
+			array_push($node["items"],$tmp);
+
+			// file upload
+			$tmp = array(
+				"type" => "fileupload",
+				"name" => "img" . $i,
+			);
+			array_push($node["items"],$tmp);
+
+			// image preview
+			$url = image::check_url($val["url"]);
+			$tmp = array(
+				"type" => "text",
+				"value" => ($url) ? html::img(array("url" => $url)) : "",
+			);
+			array_push($node["items"],$tmp);
+
+			$i++;
+		}
+		else
+		{
+			$node = false;
+		};
+		return $node;
+	}
+
+	function set_property($args = array())
+        {
+                $data = &$args["prop"];
+		switch($data["name"])
+                {
+                };
 	}
 }
 ?>
