@@ -7,9 +7,6 @@
 <link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/fg_menu.css">
 <link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/bench.css">
 <link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/awmenueditstyles.css">
-<!-- SUB: custom_css -->
-<link rel="stylesheet" href="{VAR:baseurl}/automatweb/orb.aw?class=css&action=get_user_css&fastcall=1&name={VAR:custom}.css">
-<!-- END SUB: custom_css -->
 <script language="Javascript" src="{VAR:baseurl}/automatweb/js/aw.js"></script>
 <script language="Javascript">
 <!--
