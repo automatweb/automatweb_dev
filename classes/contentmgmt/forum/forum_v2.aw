@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.33 2004/07/07 18:30:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.34 2004/08/10 11:23:52 rtoomas Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -1116,7 +1116,7 @@ class forum_v2 extends class_base
 		{
 			// hm, but this does not work at all with multiple parents
 			$q = sprintf("SELECT parent,created,createdby,forum_comments.uname FROM objects LEFT JOIN forum_comments ON (objects.oid = forum_comments.id) WHERE parent IN (%s) AND class_id = '%d'
-				AND status != 0 ORDER BY created DESC LIMIT 1",join(",",$args["parents"]),CL_COMMENT);
+				AND status != 0 ORDER BY created DESC",join(",",$args["parents"]),CL_COMMENT);
 			$this->db_query($q);
 			$retval = $this->db_next();
 		};
