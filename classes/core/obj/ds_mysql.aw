@@ -50,6 +50,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		$ret["meta"] = aw_unserialize($ret["metadata"]);
 		unset($ret["metadata"]);
+
+		if ($ret["brother_of"] == 0)
+		{
+			$ret["brother_of"] = $ret["oid"];
+		}
 		return $ret;
 	}
 
@@ -277,6 +282,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->quote(&$metadata);
 		$this->quote(&$objdata);
 
+		if ($objdata["brother_of"] == 0)
+		{
+			$objdata["brother_of"] = $objdata["oid"];
+		}
+
 		// first, save all object table fields.
 		$q = "UPDATE objects SET
 			parent = '".$objdata["parent"]."',
@@ -295,7 +305,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			cachedirty = '1',
 			metadata = '".$metadata."',
 			subclass = '".$objdata["subclass"]."',
-			flags = '".$objdata["flags"]."'
+			flags = '".$objdata["flags"]."',
+			brother_of = '".$objdata["brother_of"]."'
 			
 			WHERE oid = '".$objdata["oid"]."'
 		";
@@ -304,6 +315,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->db_query($q);
 
 		// now save all properties
+
 
 		// divide all properties into tables
 		$tbls = array();
@@ -648,9 +660,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			{
 				if (!empty($val->filter["non_filter_classes"]))
 				{
-					$this->_do_add_class_id($val->filter["non_filter_classes"]);
+					$this->_do_add_class_id($val->filter["non_filter_classes"], true);
 				}
-				$sql[] = "(".$this->req_make_sql($val->filter["conditions"], $val->filter["logic"]).")";
+				if (isset($val->filter["logic"]))
+				{
+					$sql[] = "(".$this->req_make_sql($val->filter["conditions"], $val->filter["logic"]).")";
+				}
 			}
 			else
 			if (is_array($val) || (is_object($val) && get_class($val) == "aw_array"))
@@ -698,7 +713,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		return join(" ".$logic." ", $sql);
 	}
 
-	function _do_add_class_id($clids)
+	function _do_add_class_id($clids, $add_table = false)
 	{
 		if (!is_array($clids))
 		{
@@ -711,9 +726,17 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				"file" => ($clid == CL_DOCUMENT ? "doc" : $classes[$clid]["file"]),
 				"clid" => $clid
 			));
+
 			$this->properties += $tmp;
 			if (is_array($tmp2))
 			{
+				if ($add_table)
+				{
+					foreach($tmp2 as $_tbl => $td)
+					{
+						$this->used_tables[$_tbl] = $_tbl;
+					}
+				}
 				$this->tableinfo += $tmp2;
 			}
 			if (isset($this->tableinfo["documents"]))

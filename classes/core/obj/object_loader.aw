@@ -161,6 +161,11 @@ class _int_object_loader
 				return $param->ids();
 			}
 		}
+		else
+		if (is_array($param))
+		{
+			return $param;
+		}
 
 		error::throw(array(
 			"id" => ERR_PARAM,
@@ -284,6 +289,11 @@ class _int_object_loader
 		}
 		$props = $this->cfgu->load_properties($arr);
 		return array($props, $this->cfgu->tableinfo);
+	}
+
+	function object_exists($oid)
+	{
+		return $this->ds->object_exists($oid);
 	}
 }
 
