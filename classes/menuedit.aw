@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.85 2002/01/24 14:05:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.86 2002/01/24 15:31:40 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -394,7 +394,6 @@ class menuedit extends aw_template
 									"metadata" => $val["metadata"],
 									"key" => "tpl_dir",
 					));
-
 					if ($tpldir)
 					{
 						// uh. suck. anyways, this whole gen_site_html should be split
@@ -3482,6 +3481,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 		$img2 = $meta["img_act_url"] != "" ? "<img src='".$meta["img_act_url"]."'>" : "";
 		global $template_sets;
+		$template_sets = array_merge(array("" => "kasuta parenti valikut"),$template_sets);
 		$this->vars(array(
 			"grkeywords" => $this->multiple_option_list($kwd_list, $all_kwds),
 			"parent"			=> $row["parent"], 
@@ -5487,7 +5487,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"sel_menu_image" => $sel_image,
 			"sel_menu_image_url" => $sel_image_url,
 			"sel_menu_id" => $sel_menu_id,
-			"sel_menu_timing" => $sel_menu_meta["img_timing"] ? $sel_menu_meta["img_timing"] : 4 
+			"sel_menu_timing" => $sel_menu_meta["img_timing"] ? $sel_menu_meta["img_timing"] : 6 
 		));
 	}
 
@@ -5591,6 +5591,26 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				}
 			}
 			$this->vars(array("CENTER_MENU" => $mmd));
+		}
+	}
+
+	function reset_template_sets()
+	{
+		$q = "SELECT id FROM menu";
+		$this->db_query($q);
+		while($row = $this->db_next())
+		{
+			$this->save_handle();
+			$oldmeta = $this->get_object_metadata(array("oid" => $row["id"]));
+			if ($oldmeta)
+			{
+				$oldmeta["tpl_dir"] = "";
+				$this->set_object_metadata(array(
+					"oid" => $row["id"],
+					"data" => $oldmeta,
+				));	
+			}
+			$this->restore_handle();
 		}
 	}
 }
