@@ -12,6 +12,6 @@
 	
 	<reminder>
 		<caption>Meeldetuletus</caption>
-		<link>?class=planner&amp;action=event_reminders&amp;id={VAR:id}</link>
+		<link>?class=planner&amp;action=event_reminder&amp;id={VAR:id}</link>
 	</reminder>
 </event_edit>
