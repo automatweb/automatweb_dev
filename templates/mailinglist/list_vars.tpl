@@ -59,7 +59,7 @@
 
 
 
-{VAR:LC_MAILINGLIST_ALWAYS_DEFINED} #nimi# , #email# ja #kuupaev# .
+{VAR:LC_MAILINGLIST_ALWAYS_DEFINED} #{VAR:LC_MAILINGLIST_SMALL_NAME}# , #email# ja #{VAR:LC_MAILINGLIST_DATE}# .
 <table border="0" cellspacing="0" cellpadding="0" width=100%>
 <tr>
 <td bgcolor="#CCCCCC">
@@ -71,7 +71,7 @@
 </td>
 </tr>
 <tr>
-<td align=center class="title">&nbsp;Number&nbsp;</td>
+<td align=center class="title">&nbsp;{VAR:LC_MAILINGLIST_NUMBER}&nbsp;</td>
 <td align=center class="title">&nbsp;{VAR:LC_MAILINGLIST_NAME}&nbsp;</td>
 <td align="center" colspan="3" class="title">&nbsp;{VAR:LC_MAILINGLIST_ACTION}&nbsp;</td>
 </tr>

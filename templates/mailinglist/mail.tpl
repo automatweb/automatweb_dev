@@ -2,7 +2,7 @@
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0 width=80%>
 <tr>
 <td class="fcaption">{VAR:LC_MAILINGLIST_SMALL_VARIABLES}:</td><td class="fform">
-#nimi#&nbsp; #email#&nbsp; #kuupaev#
+#{VAR:LC_MAILINGLIST_SMALL_NAME}#&nbsp; #email#&nbsp; #{VAR:LC_MAILINGLIST_DATE}#
 <!-- SUB: LIST -->
 &nbsp; {VAR:var_name} 
 <!-- END SUB: LIST -->

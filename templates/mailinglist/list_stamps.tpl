@@ -7,7 +7,7 @@
 <td height="15" colspan="11" class="fgtitle">&nbsp;<b>{VAR:LC_MAILINGLIST_BIG_STAMPS}:&nbsp;<a href='list.{VAR:ext}?type=add_stamp'>{VAR:LC_MAILINGLIST_ADD}</a></b></td>
 </tr>
 <tr>
-<td align=center class="title">&nbsp;Number&nbsp;</td>
+<td align=center class="title">&nbsp;{VAR:LC_MAILINGLIST_NUMBER}&nbsp;</td>
 <td align=center class="title">&nbsp;{VAR:LC_MAILINGLIST_NAME}&nbsp;</td>
 <td align="center" colspan="3" class="title">&nbsp;{VAR:LC_MAILINGLIST_ACTION}&nbsp;</td>
 </tr>

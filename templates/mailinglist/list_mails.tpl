@@ -1,5 +1,5 @@
 <table border="0" cellspacing="0" cellpadding="0"  width=100%>
-<form method="POST" name="defform">
+<form action="{VAR:self}" method="POST" name="defform">
 <tr>
 <td bgcolor="#CCCCCC">
 
