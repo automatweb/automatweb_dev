@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.34 2005/01/17 16:43:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.35 2005/01/18 07:47:55 ahti Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -1566,6 +1566,7 @@ class planner extends class_base
 		{
 			if(!$wds[$wd])
 			{
+				$full_weeks = false;
 				break;
 			}
 			else
