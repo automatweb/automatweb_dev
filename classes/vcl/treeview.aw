@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.16 2003/10/05 17:21:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.17 2003/10/22 08:49:26 duke Exp $
 // treeview.aw - tree generator
 /*
         @default table=objects
@@ -28,6 +28,8 @@ define("TREE_HTML", 1);
 define("TREE_JS", 2);
 define("TREE_DHTML",3);
 
+define("LOAD_ON_DEMAND",1);
+
 class treeview extends class_base
 {
 	function treeview($args = array())
@@ -36,6 +38,8 @@ class treeview extends class_base
 			"tpldir" => "treeview",
 			"clid" => CL_TREEVIEW,
 		));
+
+		$this->features = array();
 	}
 
 	function get_property($args)
@@ -224,6 +228,18 @@ class treeview extends class_base
 		$this->items = array();
 		$this->tree_type = empty($arr["type"]) ? TREE_JS : $arr["type"];
 		$this->tree_dat = $arr;
+		$this->has_root = empty($arr["has_root"]) ? false : $arr["has_root"];
+		$this->get_branch_func = empty($arr["get_branch_func"]) ? false : $arr["get_branch_func"];
+		if ($this->tree_type == TREE_DHTML && !empty($this->get_branch_func))
+		{
+			$this->features[LOAD_ON_DEMAND] = 1;
+		}
+
+	}
+
+	function has_feature($feature)
+	{
+		return isset($this->features[$feature]);
 	}
 
 	////
@@ -341,11 +357,26 @@ class treeview extends class_base
 		$this->vars(array("target" => $this->tree_dat["url_target"]));
 		$rv = $this->draw_dhtml_tree($this->rootnode);
 
+		$root = "";
+		if ($this->has_root)
+		{
+			$this->vars(array(
+				"rootname" => $this->tree_dat["root_name"],
+				"rooturl" => $this->tree_dat["root_url"],
+				"icon_root" => ($this->tree_dat["root_icon"] != "" ) ? $this->tree_dat["root_icon"] : "/automatweb/images/aw_ikoon.gif",
+			));
+			if ($this->get_branch_func)
+			{
+				$this->vars(array(
+					"get_branch_func" => $this->get_branch_func,
+				));
+			};
+			$root .= $this->parse("HAS_ROOT");
+		};
+
 		$this->vars(array(
 			"TREE_NODE" => $rv,
-			"rootname" => $this->tree_dat["root_name"],
-			"rooturl" => $this->tree_dat["root_url"],
-			"icon_root" => ($this->tree_dat["root_icon"] != "" ) ? $this->tree_dat["root_icon"] : "/automatweb/images/aw_ikoon.gif",
+			"HAS_ROOT" => $root,
 		));
 
 		return $this->parse();
@@ -371,7 +402,7 @@ class treeview extends class_base
 				"idx" => $item["id"],
 				"idy" => $item["id"],
 				"idz" => $item["id"],
-				"iconurl" => isset($item["iconurl"]) ? $item["iconurl"] : $this->cfg["baseurl"] . "/automatweb/images/ftv2doc.gif",
+				"iconurl" => isset($item["iconurl"]) ? $item["iconurl"] : $this->cfg["baseurl"] . "/automatweb/images/closed_folder.gif",
 				"url" => $item["url"],
 				"spacer" => str_repeat("    ",$this->level),
 			));
