@@ -1,5 +1,7 @@
 <?php
 /*
+*/
+/*
 create table kliendibaas_firma
 (
 oid int primary key unique,
@@ -20,7 +22,7 @@ class firma extends aw_template
 
 	function firma()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be 
+		// change this to the folder under the templates folder, where this classes templates will be
 		$this->init("kliendibaas");
 	}
 
@@ -51,12 +53,23 @@ class firma extends aw_template
 
 		if ($delsub)
 		{
-			$q="select korvaltegevused from kliendibaas_firma where oid='$id'";	
+			$q="select korvaltegevused from kliendibaas_firma where oid='$id'";
 			$resul=$this->db_fetch_field($q,"korvaltegevused");
 			$korva=explode(";",$resul);
 			$del=array_search($delsub,$korva);
 			$korva[$del]=NULL;
 			$q='update kliendibaas_firma set korvaltegevused="'.implode(";",$korva).'" where oid='.$id;
+			$this->db_query($q);
+		}
+
+		if ($deltoode)
+		{
+			$q="select tooted from kliendibaas_firma where oid='$id'";
+			$resul=$this->db_fetch_field($q,"tooted");
+			$tood=explode(";",$resul);
+			$del=array_search($deltoode,$tood);
+			$tood[$del]=NULL;
+			$q='update kliendibaas_firma set tooted="'.implode(";",$tood).'" where oid='.$id;
 			$this->db_query($q);
 		}
 
@@ -78,9 +91,9 @@ class firma extends aw_template
 			t1.tegevusala as s_pohitegevus,
 			concat(t6.firstname,' ', t6.lastname) as s_firmajuht,
 			t7.name as s_ettevotlusvorm
-			from kliendibaas_firma as t 
+			from kliendibaas_firma as t
 			left join kliendibaas_ettevotlusvorm as t7 on t7.oid=t.ettevotlusvorm
-			left join kliendibaas_tegevusala as t1 on t1.oid=t.pohitegevus
+			left join kliendibaas_tegevusala as t1 on t1.kood=t.pohitegevus
 			left join kliendibaas_isik as t6 on t6.oid=t.firmajuht
 			left join kliendibaas_contact as t9 on t9.oid=t.contact
 			left join kliendibaas_linn as t10 on t10.oid=t9.linn
@@ -91,10 +104,11 @@ class firma extends aw_template
 //			concat(t9.aadress,', ',t10.name,', ',t11.name) as s_contact,
 //			concat(t9.aadress,', ',t9.linn,', ',t9.riik) as s_contact,
 
-
 			$res=$this->db_query($q);
 			$res=$this->db_next();
 			extract($res, EXTR_PREFIX_ALL, "f");
+
+
 
 			$korval=explode(";",$f_korvaltegevused);
 			$f_korvaltegevused=implode(";",$korval);
@@ -103,8 +117,8 @@ class firma extends aw_template
 			foreach($korval as $key => $val)
 			{
 				if (!$val) continue;
-				
-				$q="select tegevusala from kliendibaas_tegevusala where oid='$val'";	
+
+				$q="select tegevusala from kliendibaas_tegevusala where kood='$val'";
 				$resul=$this->db_fetch_field($q,"tegevusala");
 				if ($resul)
 				{
@@ -114,7 +128,41 @@ class firma extends aw_template
 					));
 					$s_korvaltegevusedd.=$this->parse("s_korvaltegevused");
 				}
+				else
+				{
+					$s_korvaltegevusedd.='<b>tundmatu tegevusala:'.$val.' (lisa)</b><br>';
+				}
+
 			}
+
+
+			$tood=explode(";",$f_tooted);
+			$f_tooted=implode(";",$tood);
+
+			if(is_array($tood))
+			foreach($tood as $key => $val)
+			{
+				if (!$val) continue;
+
+				$q="select toode from kliendibaas_toode where kood='$val'";
+				$resul=$this->db_fetch_field($q,"toode");
+				if ($resul)
+				{
+					$this->vars(array(
+						"nimetus"=>$resul,
+						"delete"=>$this->mk_my_orb("change",array("id" => $id,"deltoode" => $val, "return_url" => urlencode($return_url))),
+					));
+					$s_tootedd.=$this->parse("s_tooted");
+				}
+				else
+				{
+					$s_tootedd.='<b>tundmatu toode:'.$val.' (lisa)</b><br>';
+				}
+			}
+
+
+
+
 			if (!$f_contact)
 			{
 				get_instance("kliendibaas/contact");
@@ -136,7 +184,7 @@ class firma extends aw_template
 			if (!$f_firmajuht)
 			{
 				get_instance("kliendibaas/isik");
-	
+
 				$f_firmajuht = isik::new_isik(array(
 					"name" => $f_firma_nimetus.' - firmajuht',
 					"parent" => $ob['parent'],
@@ -169,11 +217,11 @@ class firma extends aw_template
 
 			"contact_change"=>$contact_change,
 			"firmajuht_change"=>$firmajuht_change,
-			
+
 			"f_firmajuht"=>$f_firmajuht,
 //			"f_sourcefile"=>$f_sourcefile,
 //			"f_olek"=>$f_olek,
-
+			"s_tooted"=>$s_tootedd,
 			"s_korvaltegevused"=>$s_korvaltegevusedd,
 			"s_pohitegevus"=>$f_s_pohitegevus,
 			"s_ettevotlusvorm"=>$f_s_ettevotlusvorm,
@@ -181,6 +229,7 @@ class firma extends aw_template
 			"f_ettevotlusvorm_pop"=>$this->mk_my_orb("pop_select", array("id" => $id,"tyyp" => "ettevotlusvorm", "return_url" => urlencode($return_url))),
 //change		"f_firmajuht_pop"=>$this->mk_my_orb("pop_select", array("id" => $id,"tyyp" => "firmajuht", "return_url" => urlencode($return_url))),
 			"f_korvaltegevused_pop"=>$this->mk_my_orb("pop_select", array("id" => $id,"tyyp" => "korvaltegevused", "return_url" => urlencode($return_url))),
+			"f_tooted_pop"=>$this->mk_my_orb("pop_select", array("id" => $id,"tyyp" => "tooted", "return_url" => urlencode($return_url))),
 			"f_pohitegevus_pop"=>$this->mk_my_orb("pop_select", array("id" => $id,"tyyp" => "pohitegevus", "return_url" => urlencode($return_url))),
 
 			"abx"=>$abx,
@@ -188,9 +237,9 @@ class firma extends aw_template
 			"toolbar"=>$toolbar->get_toolbar(),
 			"id"=>$firma["id"],
 			"reforb" => $this->mk_reforb("submit", array(
-				"id" => $id, 
+				"id" => $id,
 				"return_url" => urlencode($return_url),
-				"parent" => $parent, 
+				"parent" => $parent,
 			)),
 		));
 		return $this->parse();
@@ -200,7 +249,7 @@ class firma extends aw_template
 	function parse_alias($args)
 	{
 		extract($args);
-			
+
 		return $this->show(array("id" => $alias["target"]));
 	}
 
@@ -289,7 +338,7 @@ $this->db_query($q);
 		if ($id)
 		{
 			$selected=$this->db_fetch_field("select $tyyp from kliendibaas_firma where oid=$id",$tyyp);
-			$ob = $this->get_object($id);		
+			$ob = $this->get_object($id);
 		}
 
 		switch($tyyp)
@@ -298,7 +347,7 @@ $this->db_query($q);
 				{
 					$q="select t1.oid,concat(t1.firstname,' ',t1.lastname) as name from kliendibaas_isik as t1, objects as t2 where t1.oid=t2.oid and t2.status=2";
 					$this->db_query($q);
-					while($row = $this->db_next()) 
+					while($row = $this->db_next())
 					{
 						$data[$row["oid"]] = substr($row["name"],0,30).".";
 					};
@@ -307,22 +356,33 @@ $this->db_query($q);
 			break;
 			case "korvaltegevused":
 				{
-					$q="select t1.oid,t1.tegevusala from kliendibaas_tegevusala as t1, objects as t2 where t1.oid=t2.oid and t2.status=2";
+					$q="select t1.kood,t1.tegevusala from kliendibaas_tegevusala as t1, objects as t2 where t1.oid=t2.oid and t2.status=2";
 					$this->db_query($q);
-					while($row = $this->db_next()) 
+					while($row = $this->db_next())
 					{
-						$data[$row["oid"]] = substr($row["tegevusala"],0,50);
+						$data[$row["kood"]] = substr($row["tegevusala"],0,50);
 					};
 					$add=$this->mk_my_orb("new",array("parent"=>$ob["parent"]),"kliendibaas/tegevusala");
 				}
 			break;
+			case "tooted":
+				{
+					$q="select t1.kood,t1.toode from kliendibaas_toode as t1, objects as t2 where t1.oid=t2.oid and t2.status=2";
+					$this->db_query($q);
+					while($row = $this->db_next())
+					{
+						$data[$row["kood"]] = substr($row["toode"],0,50);
+					};
+					$add=$this->mk_my_orb("new",array("parent"=>$ob["parent"]),"kliendibaas/toode");
+				}
+			break;
 			case "pohitegevus":
 				{
-					$q="select t1.oid,t1.tegevusala from kliendibaas_tegevusala as t1, objects as t2 where t1.oid=t2.oid and t2.status=2";
+					$q="select t1.kood,t1.tegevusala from kliendibaas_tegevusala as t1, objects as t2 where t1.oid=t2.oid and t2.status=2";
 					$this->db_query($q);
-					while($row = $this->db_next()) 
+					while($row = $this->db_next())
 					{
-						$data[$row["oid"]] = substr($row["tegevusala"],0,50);
+						$data[$row["kood"]] = substr($row["tegevusala"],0,50);
 					};
 					$add=$this->mk_my_orb("new",array("parent"=>$ob["parent"]),"kliendibaas/tegevusala");
 				}
@@ -332,7 +392,7 @@ $this->db_query($q);
 					$q="select t1.oid,t1.name from kliendibaas_ettevotlusvorm as t1, objects as t2 where t1.oid=t2.oid and t2.status=2";
 
 					$this->db_query($q);
-					while($row = $this->db_next()) 
+					while($row = $this->db_next())
 					{
 						$data[$row["oid"]] = $row["name"];
 					};
