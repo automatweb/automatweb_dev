@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.93 2005/01/18 10:53:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.94 2005/03/03 12:59:11 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -689,7 +689,7 @@ class admin_menus extends aw_template
 				{
 					if (!preg_match("/([0-9\.]+)(.*)/",$row,$mt))
 					{
-						$this->raise_error(ERR_MNEDIT_TXTIMP,sprintf(t("Menyyde importimisel tekkis viga real %s "),$cnt),true);
+						die(sprintf(t("Menyyde importimisel tekkis viga real %s "),$cnt));
 					}
 				}
 				// now parse the position in the structure from the numbers.
@@ -706,7 +706,7 @@ class admin_menus extends aw_template
 
 				if ($_pt != "" && !$_parent)
 				{
-					$this->raise_error(ERR_MNEDIT_TXTIMP_PARENT,sprintf(t("Menyyde importimisel ei leidnud parent menyyd real %s "),$cnt),true);
+					die(sprintf(t("Menyyde importimisel ei leidnud parent menyyd real %s "),$cnt));
 				}
 				else
 				{
