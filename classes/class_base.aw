@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.68 2003/02/11 19:18:58 duke Exp $
+// $Id: class_base.aw,v 2.69 2003/02/12 14:57:17 axel Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -8,14 +8,14 @@
 
 	@property name type=textbox group=general
 	@caption Objekti nimi
-	
+
 	@property comment type=textbox group=general
 	@caption Kommentaar
-	
-	@property alias type=textbox group=general 
+
+	@property alias type=textbox group=general
 	@caption Alias
 
-	@property status type=status group=general 
+	@property status type=status group=general
 	@caption Staatus
 
 	@property jrk type=textbox size=4 group=general
@@ -39,7 +39,7 @@ define('PROP_IGNORE',2);
 // object data (if any)
 define('PROP_ERROR',3);
 
-// something went very very wrong, 
+// something went very very wrong,
 // notify the user and DO NOT display the form/save the object
 define('PROP_FATAL_ERROR',4);
 
@@ -77,7 +77,7 @@ class class_base extends aliasmgr
 				"group" => $args["group"],
 				"cb_view" => $args["cb_view"],
 		));
-		
+
 		$this->request = $args;
 
 		// parse the properties - resolve generated properties and
@@ -86,8 +86,8 @@ class class_base extends aliasmgr
 		$resprops = $this->parse_properties(array(
 			"properties" => &$realprops,
 		));
-		
-		
+
+
 		$cli = get_instance("cfg/" . $this->output_client);
 
 		if (is_array($this->layout))
@@ -107,7 +107,7 @@ class class_base extends aliasmgr
 				{
 					$_tmp = $resprops[$key];
 				};
-				
+
 				$cli->add_property($_tmp);
 			};
 		}
@@ -205,7 +205,7 @@ class class_base extends aliasmgr
 		// so now I have a list of properties along with their values,
 		// and some information about the layout - and I want to display
 		// that stuff now
-		
+
 		// here be some magic to determine the correct output client
 		// this means we could create a TTY client for AW :)
 		// actually I'm thinking of native clients and XML-RPC
@@ -241,7 +241,7 @@ class class_base extends aliasmgr
 		};
 
 		$gdata = $this->groupinfo->get_at($group);
-		
+
 		$argblock = array(
 			"id" => $id,
 			"group" => $group,
@@ -283,12 +283,12 @@ class class_base extends aliasmgr
 	{
 		// check whether this current class is based on class_base
 		$this->init_class_base();
-		
+
 		extract($args);
 
 		$this->id = $id;
 
-		// get the list of properties in the active group	
+		// get the list of properties in the active group
 		// actually, it does a little more than dat, it also
 		// sorts the data into different variables
 		$realprops = $this->get_active_properties(array(
@@ -1260,7 +1260,7 @@ class class_base extends aliasmgr
 			foreach($tmp_grpinfo as $key => $val)
 			{
 				if (in_array($key,array_keys($group_el_cnt)))
-				{	
+				{
 					$grpinfo[$key] = $val;
 				};
 			};
@@ -1268,9 +1268,47 @@ class class_base extends aliasmgr
 		$this->groupinfo = new aw_array($grpinfo);
 		$this->tableinfo = $cfgu->get_opt("tableinfo");
 	}
-	
+
 	function convert_element(&$val)
 	{
+
+		if (($val["type"] == "popup_objmgr"))
+		{
+			if ($val['multiple'])
+			{
+				if ($val['value'])
+				{
+				$val['value']=(array)$val['value'];
+				foreach($val['value'] as $va)
+				{
+					$obj=$this->get_object($va);
+					$options_[$va]=htmlentities($obj['name']);
+				}
+				$val['selected'] = $val['value'];
+				$val['options'] = $options_;
+				}
+			}
+			else
+			{
+				$val['selected'] = $val['value'];
+				if (is_number($val['value']))
+				{
+					$obj=$this->get_object($val['value']);
+				}
+				$val['options'] = array($val['value']=>$obj['name'],0 => ' - ');
+			}
+
+			$val['popup_objmgr'] = $this->mk_my_orb('search',array(
+				'check_name' => $val['check_name'],
+				'multiple' => $val['multiple'],
+//				'check_name' => $val['check_name']
+				//'parent' => 50477,
+				"parent" => $this->parent,
+				'return_url' => 'plaa',
+				),'popup_objmgr');
+		};
+
+
 		if (($val["type"] == "objpicker") && $val["clid"])
 		{
 			$val["type"] = "select";
@@ -1332,7 +1370,7 @@ class class_base extends aliasmgr
 			$val["type"] = "select";
 			$val["options"] = $options;
 		};
-		
+
 		if (($val["type"] == "relpicker") && ($val["reltype"]))
 		{
 			$reltypes = $this->coredata["meta"]["alias_reltype"];
@@ -1381,7 +1419,7 @@ class class_base extends aliasmgr
 			$val["options"] = $options;
 		};
 	}
-	
+
 	////
 	// !Figures out the value for property
 	function get_value(&$property)
@@ -1482,11 +1520,11 @@ class class_base extends aliasmgr
 	function parse_properties($args = array())
 	{
 		$properties = &$args["properties"];
-	
+
 		// I really doubt that get_property appears out of blue
 		// while we are generating the output form
 		$callback = method_exists($this->inst,"get_property");
-		
+
 		// need to cycle over the property nodes, do replacements
 		// where needed and then cycle over the result and generate
 		// the output
@@ -1807,7 +1845,7 @@ class class_base extends aliasmgr
 		extract($args);
 
 		$this->id = $id;
-		
+
 		// get a list of active properties for this object
 		// I need an easy way to turn off individual properties
 		$realprops = $this->get_active_properties(array(
@@ -1815,7 +1853,7 @@ class class_base extends aliasmgr
 				"group" => $args["group"],
 				"cb_view" => $args["cb_view"],
 		));
-		
+
 		$this->load_obj_data(array("id" => $this->id));
 		// parse the properties - resolve generated properties and
 		// do any callbacks
@@ -1826,7 +1864,7 @@ class class_base extends aliasmgr
 		// so now I have a list of properties along with their values,
 		// and some information about the layout - and I want to display
 		// that stuff now
-		
+
 		// here be some magic to determine the correct output client
 		// this means we could create a TTY client for AW :)
 		// actually I'm thinking of native clients and XML-RPC
@@ -1889,8 +1927,8 @@ class class_base extends aliasmgr
 	// fuck, oh fuck, I hate this SO much
 	function sync_property_table($args = array())
 	{
-		
-		
+
+
 
 
 	}
@@ -1903,7 +1941,7 @@ class class_base extends aliasmgr
 
 		$q = "DELETE FROM properties WHERE oid = $id";
 		$this->db_query($q);
-		
+
 		// load the current object data
 		$this->load_obj_data(array("id" => $this->id));
 
@@ -1913,15 +1951,15 @@ class class_base extends aliasmgr
 			if ($val["search"] == 1 && ($val["method"] == "serialize"))
 			{
 				$this->get_value($val);
-				$searchfields[$val["name"]] = $val["value"];	
+				$searchfields[$val["name"]] = $val["value"];
 			};
 		};
-		
+
 		// create new records
 		$fs = new aw_array($searchfields);
 		foreach($fs->get() as $key => $val)
 		{
-			$q = "INSERT INTO properties (oid,pname,pvalue) 
+			$q = "INSERT INTO properties (oid,pname,pvalue)
 				VALUES ($id,'$key','$val')";
 			$this->db_query($q);
 		};
