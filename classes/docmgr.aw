@@ -1,5 +1,5 @@
 <?php
-// $Revision: 2.1 $
+// $Revision: 2.2 $
 // docmgr.aw - Document manager
 // our first goal is it to make a decent interface to searching
 // from documents and their archives.
@@ -10,7 +10,8 @@
 global $orb_defs;
 $orb_defs["docmgr"] = "xml";
 classload("document");
-class docmgr extends document {
+class docmgr extends document 
+{
 	function docmgr($args = array())
 	{
 		#$this->db_init();
@@ -146,40 +147,44 @@ class docmgr extends document {
 			};
 		};
 
-		$q = sprintf("SELECT documents.*,objects.modified AS modified,objects.modifiedby AS modifiedby,objects.status AS status,objects.parent AS parent,objects.meta AS meta FROM documents LEFT JOIN objects ON (documents.docid = objects.oid) WHERE (%s) OR docid IN (%s) ORDER BY oid",join(" AND ",$qstring),join(",",$in_archive));
-		$this->db_query($q);
-		while($row = $this->db_next())
+		$_ss = join(" AND ",$qstring);
+		if ($_ss != "")
 		{
-			$link = $this->mk_orb("change",array("id" => $row["docid"],"parent" => $row["parent"]),"document");
-			$titlelink = sprintf("<a href='%s'>%s</a>",$link,strip_tags($row["title"]));
-			if ($in_archive[$row["docid"]])
+			$q = sprintf("SELECT documents.*,objects.modified AS modified,objects.modifiedby AS modifiedby,objects.status AS status,objects.parent AS parent,objects.meta AS meta FROM documents LEFT JOIN objects ON (documents.docid = objects.oid) WHERE (%s) OR docid IN (%s) ORDER BY oid",$_ss,join(",",$in_archive));
+			$this->db_query($q);
+			while($row = $this->db_next())
 			{
-				$meta = $archiver->serializer->php_unserialize($row["meta"]);
-				foreach($arc[$row["docid"]] as $key => $value)
+				$link = $this->mk_orb("change",array("id" => $row["docid"],"parent" => $row["parent"]),"document");
+				$titlelink = sprintf("<a href='%s'>%s</a>",$link,strip_tags($row["title"]));
+				if ($in_archive[$row["docid"]])
+				{
+					$meta = $archiver->serializer->php_unserialize($row["meta"]);
+					foreach($arc[$row["docid"]] as $key => $value)
+					{
+						$t->define_data(array(
+							"oid" => $row["docid"],
+							"title" => $titlelink,
+							"modified" => $this->time2date($meta["archive"][$key]["timestamp"],4),
+							"modifiedby" => $meta["archive"][$key]["uid"],
+							"archive_name" => $meta["archive"][$key]["name"],
+							"status" => "Deaktiivne",
+							"archived" => "<b>jah</b>",
+						));
+					};
+				}
+				else
 				{
 					$t->define_data(array(
 						"oid" => $row["docid"],
 						"title" => $titlelink,
-						"modified" => $this->time2date($meta["archive"][$key]["timestamp"],4),
-						"modifiedby" => $meta["archive"][$key]["uid"],
-						"archive_name" => $meta["archive"][$key]["name"],
-						"status" => "Deaktiivne",
-						"archived" => "<b>jah</b>",
+						"modified" => $this->time2date($row["modified"],4),
+						"modifiedby" => $row["modifiedby"],
+						"status" => ($row["status"] == 2) ? "Aktiivne" : "Deaktiivne",
+						"archived" => "ei",
 					));
 				};
-			}
-			else
-			{
-				$t->define_data(array(
-					"oid" => $row["docid"],
-					"title" => $titlelink,
-					"modified" => $this->time2date($row["modified"],4),
-					"modifiedby" => $row["modifiedby"],
-					"status" => ($row["status"] == 2) ? "Aktiivne" : "Deaktiivne",
-					"archived" => "ei",
-				));
 			};
-		};
+		}
 
 		$t->sort_by(array("field" => $args["sortby"]));
 	
@@ -212,12 +217,13 @@ class docmgr extends document {
 
 			$c .= $this->parse("field");
 		};
+
 		$this->vars(array(
 			"field" => $c,
 			"reforb" => $this->mk_reforb("search",array("no_redir" => 1)),
 			"search_archive" => checked($args["search_archive"]),
 		));
-	};
+	}
 		
 };
 ?>
