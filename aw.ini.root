@@ -1,6 +1,7 @@
 #########################
 # global definitions
 
+
 # this no longer needs to be set, this will be figured out from the ini file location
 # the folder that aw code is in
 # basedir = /www/automatweb_dev
