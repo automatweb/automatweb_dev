@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.7 2005/01/10 12:53:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.8 2005/03/24 21:38:37 voldemar Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -123,6 +123,7 @@ class toolbar extends aw_template
 		{
 			$args["onClick"] = "if(!confirm('$args[confirm]')) { return false; };".$args["onClick"];
 		};
+
 		$this->matrix[$args["name"]] = $args;
 	}
 
@@ -199,8 +200,12 @@ class toolbar extends aw_template
 					{
 						$val["tooltip"] = "";
 					};
+
+					$disabled = $val["disabled"] ? "_disabled" : "";
+
 					$this->vars($val);
-					$tpl = $val["type"];
+					$tpl = $val["type"] . $disabled;
+
 					if ($val["ismenu"])
 					{
 						$tpl = "menu_button";
@@ -214,7 +219,7 @@ class toolbar extends aw_template
 						$right_side_content .= $this->parse($tpl);
 					};
 					break;
-				
+
 				case "separator":
 					$this->vars($val);
 					if ($side == "left")
@@ -226,7 +231,7 @@ class toolbar extends aw_template
 						$right_side_content .= $this->parse("separator");
 					};
 					break;
-				
+
 				case "cdata":
 					$this->vars($val);
 					if ($side == "left")
