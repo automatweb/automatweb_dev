@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.4 2005/02/25 12:57:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.5 2005/02/28 15:09:52 duke Exp $
 // newsfeed.aw - Newsfeed 
 /*
 
@@ -18,8 +18,14 @@
 @property feedtype type=chooser orient=vertical
 @caption Tüüp
 
+@property limittype type=chooser orient=vertical
+@caption Milliseid uudiseid näidata?
+
 @property count type=textbox size=2
 @caption Mitu viimast
+
+@property days type=textbox size=2
+@caption Mitme viimase päeva omad
 
 @reltype FEED_SOURCE value=1 clid=CL_MENU
 @caption Materjalide kaust
@@ -49,8 +55,15 @@ class newsfeed extends class_base
 		{
 			case "feedtype":
 				$prop["options"] = array(
-					"rss20" => "RSS 2.0",
-					"atom" => "Atom (implementeerimata)",
+					"rss20" => t("RSS 2.0"),
+					"atom" => t("Atom (implementeerimata)"),
+				);
+				break;
+
+			case "limittype":
+				$prop["options"] = array(
+					"last" => "Viimased X uudist",
+					"days" => "Viimase X päeva uudised",
 				);
 				break;
 
@@ -71,19 +84,6 @@ class newsfeed extends class_base
 		return $retval;
 	}	
 	*/
-
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	////
-	// !this will be called if the object is put in a document by an alias and the document is being shown
-	// parameters
-	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
-	function parse_alias($arr)
-	{
-		return $this->show(array("id" => $arr["alias"]["target"]));
-	}
 
 	////
 	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
@@ -114,6 +114,9 @@ class newsfeed extends class_base
 
 		$al = get_instance("aliasmgr");
 
+
+		$limittype = $feedobj->prop("limittype") == "days" ? "days" : "last";
+
 		if (sizeof($parents) > 0)
 		{
 			$count = $feedobj->prop("count");
@@ -121,13 +124,23 @@ class newsfeed extends class_base
 			{
 				$count = 20;
 			};
-			$ol = new object_list(array(
+			$ol_args = array(
 				"class_id" => $classes,
 				"parent" => $parents,
 				"status" => STAT_ACTIVE,
 				"sort_by" => "objects.modified DESC",
-				"limit" => $count,
-			));
+			);
+			if ($limittype == "last")
+			{
+				$ol_args["limit"] = $count;
+			};
+			if ($limittype == "days")
+			{
+				$days = $feedobj->prop("days");
+				$start = strtotime("-${days} days");
+				$ol_args["CL_DOCUMENT.doc_modified"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start);
+			};
+			$ol = new object_list($ol_args);
 			$first = 0;
 			$source = aw_ini_get("newsfeed.source");
 			$baseurl = aw_ini_get("baseurl");
