@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.43 2001/09/12 14:51:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.44 2001/09/12 15:08:34 cvs Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -160,6 +160,7 @@ class document extends aw_template
 			{
 				$pstr = "objects.parent = $parent";
 			};
+			$ordby = "objects.modified";
 		}
 		else
 		{
@@ -191,6 +192,10 @@ class document extends aw_template
 			$lm = "LIMIT ".$row["ndocs"];
 		};
 
+		if (!$ordby)
+		{
+			$ordby = "objects.jrk";
+		}
 		$q = "SELECT documents.lead AS lead,
 			documents.docid AS docid,
 			documents.title AS title,
@@ -202,7 +207,7 @@ class document extends aw_template
 			LEFT JOIN objects ON
 			(documents.docid = objects.oid)
 			WHERE $pstr && $rstr $v
-			ORDER BY objects.period DESC,objects.jrk $lm";
+			ORDER BY objects.period DESC,$ordby $lm";
 		$this->db_query($q);
 	}
 
