@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.67 2004/06/09 08:01:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.68 2004/06/11 08:52:42 kristo Exp $
 
 class admin_menus extends aw_template
 {
@@ -1563,7 +1563,8 @@ class admin_menus extends aw_template
 		$this->ser_obj = array();
 		$hash = gen_uniq_id();
 		$this->menu_hash2id[$oid] = $hash;
-		$od = $this->get_object($oid);
+		$od = obj($oid);
+		$od = $od->fetch();
 		$od["parent"] = 0;
 		$od["oid"] = $hash;
 

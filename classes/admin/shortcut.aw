@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/shortcut.aw,v 1.2 2004/01/13 16:24:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/shortcut.aw,v 1.3 2004/06/11 08:52:02 kristo Exp $
 // shortcut.aw - Shortcut 
 /*
 
@@ -40,16 +40,16 @@ class shortcut extends class_base
 	**/
 	function view($args)
 	{
-		$val = $this->get_object($args['id']);
-		$val2 = $this->get_object($val['brother_of']);
-		$cldat = $this->cfg['classes'][$val2['class_id']];
+		$val = obj($args['id']);
+		$val2 = obj($val->brother_of());
+		$cldat = $this->cfg['classes'][$val2->class_id()];
 
 		if ($cldat['alias_class'])
 		{
 			$cldat['file'] = $cldat['alias_class'];
 		}
 
-		header('Location:'.$this->mk_my_orb('view', array('id' => $val['brother_of']), $cldat['file']));
+		header('Location:'.$this->mk_my_orb('view', array('id' => $val->brother_of()), $cldat['file']));
 		die;
 	}
 	
@@ -67,52 +67,20 @@ class shortcut extends class_base
 	**/
 	function mk_shortcut($args)
 	{
-		$val = $this->get_object($args['id']);
+		$val = obj($args['id']);
 		
 		$noid = $this->new_object(array(
-			"parent" => $val['parent'],
+			"parent" => $val->parent(),
 			"class_id" => CL_SHORTCUT,
-			"status" => $val['status'],
-			"brother_of" => $val[OID],
-			"name" => $val["name"].' (kiirviide)',
-			"comment" => $val["comment"],
-			"jrk" => $val['jrk'],
+			"status" => $val->status(),
+			"brother_of" => $val->id(),
+			"name" => $val->name().' (kiirviide)',
+			"comment" => $val->comment(),
+			"jrk" => $val->jrk(),
 		));
 		header('Location:'.aw_global_get('HTTP_REFERER'));
 		die;
 		//return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
 	}	
-	
-	
-	
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	////
-	// !this will be called if the object is put in a document by an alias and the document is being shown
-	// parameters
-	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
-	function parse_alias($args)
-	{
-		extract($args);
-		return $this->show(array('id' => $alias['target']));
-	}
-
-	////
-	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
-	function show($arr)
-	{
-		extract($arr);
-		$ob = $this->get_object($id);
-
-		$this->read_template('show.tpl');
-
-		$this->vars(array(
-			'name' => $ob['name']
-		));
-
-		return $this->parse();
-	}
 }
 ?>

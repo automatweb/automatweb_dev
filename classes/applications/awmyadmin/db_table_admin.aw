@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_admin.aw,v 1.1 2004/05/21 11:08:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_admin.aw,v 1.2 2004/06/11 08:51:43 kristo Exp $
 
 /*
 
@@ -35,7 +35,7 @@ class db_table_admin extends class_base
 		{
 			case 'db_table':
 				$tbls = array(-1 => 'Lisa uus');
-				$base = get_instance('awmyadmin/db_login');
+				$base = get_instance(CL_DB_LOGIN);
 				if ($base->login_as($args['obj']['meta']['db_base']))
 				{
 					$base->db_list_tables();
@@ -107,8 +107,8 @@ class db_table_admin extends class_base
 	{
 		extract($arr);
 		$this->read_template('admin_col.tpl');
-		$ob = $this->get_object($id);
-		$this->mk_path($ob['parent'], html::href(array(
+		$ob = obj($id);
+		$this->mk_path($ob->parent(), html::href(array(
 				'url' => $this->mk_my_orb('change', array('id' => $id)),
 				'caption' => 'Muuda'
 			)).' / '.html::href(array(
@@ -120,10 +120,10 @@ class db_table_admin extends class_base
 			))
 		);
 
-		$db = get_instance('awmyadmin/db_login');
-		$db->login_as($ob['meta']['db_base']);
+		$db = get_instance(CL_DB_LOGIN);
+		$db->login_as($ob->meta('db_base'));
 
-		$tbl = $db->db_get_table($ob['meta']['db_table']);
+		$tbl = $db->db_get_table($ob->meta('db_table'));
 
 		$tb = get_instance('toolbar');
 		$tb->add_button(array(
@@ -160,16 +160,16 @@ class db_table_admin extends class_base
 	{
 		extract($arr);
 
-		$ob = $this->get_object($id);
-		$db = get_instance('awmyadmin/db_login');
-		$db->login_as($ob['meta']['db_base']);
+		$ob = obj($id);
+		$db = get_instance(CL_DB_LOGIN);
+		$db->login_as($ob->meta('db_base'));
 
 		if ($is_del)
 		{
 			$sel = new aw_array($sel);
 			foreach($sel->get() as $secol)
 			{
-				$db->db_drop_col($ob['meta']['db_table'],$secol);
+				$db->db_drop_col($ob->meta('db_table'),$secol);
 			}
 		}
 		return $this->mk_my_orb('admin', array('id' => $id));
@@ -189,13 +189,13 @@ class db_table_admin extends class_base
 	function submit_admin_col($arr)
 	{
 		extract($arr);
-		$ob = $this->get_object($id);
-		$db = get_instance('awmyadmin/db_login');
-		$db->login_as($ob['meta']['db_base']);
+		$ob = obj($id);
+		$db = get_instance(CL_DB_LOGIN);
+		$db->login_as($ob->meta('db_base'));
 		if ($field == '')
 		{
 			// add
-			$db->db_add_col($ob['meta']['db_table'], array(
+			$db->db_add_col($ob->meta('db_table'), array(
 				'name' => $name,
 				'type' => $type,
 				'length' => $length,
@@ -208,7 +208,7 @@ class db_table_admin extends class_base
 		else
 		{
 			// change
-			$db->db_change_col($ob['meta']['db_table'], $field, array(
+			$db->db_change_col($ob->meta('db_table'), $field, array(
 				'name' => $name,
 				'type' => $type,
 				'length' => $length,
@@ -236,8 +236,8 @@ class db_table_admin extends class_base
 	{
 		extract($arr);
 		$this->read_template('admin_indexes.tpl');
-		$ob = $this->get_object($id);
-		$this->mk_path($ob['parent'], html::href(array(
+		$ob = obj($id);
+		$this->mk_path($ob->parent(), html::href(array(
 				'url' => $this->mk_my_orb('change', array('id' => $id)),
 				'caption' => 'Muuda'
 			)).' / '.html::href(array(
@@ -256,9 +256,9 @@ class db_table_admin extends class_base
 		$t->define_field(array('name' => 'change','caption' => 'Muuda'));
 		$t->define_field(array('name' => 'sel','caption' => 'Vali'));
 
-		$db = get_instance('awmyadmin/db_login');
-		$db->login_as($ob['meta']['db_base']);
-		$db->db_list_indexes($ob['meta']['db_table']);
+		$db = get_instance(CL_DB_LOGIN);
+		$db->login_as($ob->meta('db_base'));
+		$db->db_list_indexes($ob->meta('db_table'));
 		while ($idx = $db->db_next_index())
 		{
 			$idx['change'] = html::href(array(
@@ -329,16 +329,16 @@ class db_table_admin extends class_base
 	{
 		extract($arr);
 	
-		$ob = $this->get_object($id);
-		$db = get_instance('awmyadmin/db_login');
-		$db->login_as($ob['meta']['db_base']);
+		$ob = obj($id);
+		$db = get_instance(CL_DB_LOGIN);
+		$db->login_as($ob->meta('db_base'));
 
 		if ($is_del)
 		{
 			$ar = new aw_array($sel);
 			foreach($ar->get() as $idxname)
 			{
-				$db->db_drop_index($ob['meta']['db_table'], $idxname);
+				$db->db_drop_index($ob->meta('db_table'), $idxname);
 			}
 		}
 		return $this->mk_my_orb('admin_indexes', array('id' => $id));
@@ -361,8 +361,8 @@ class db_table_admin extends class_base
 	{
 		extract($arr);
 		$this->read_template('admin_index.tpl');
-		$ob = $this->get_object($id);
-		$this->mk_path($ob['parent'], html::href(array(
+		$ob = obj($id);
+		$this->mk_path($ob->parent(), html::href(array(
 				'url' => $this->mk_my_orb('change', array('id' => $id)),
 				'caption' => 'Muuda'
 			)).' / '.html::href(array(
@@ -374,10 +374,10 @@ class db_table_admin extends class_base
 			))
 		);
 
-		$db = get_instance('awmyadmin/db_login');
-		$db->login_as($ob['meta']['db_base']);
+		$db = get_instance(CL_DB_LOGIN);
+		$db->login_as($ob->meta('db_base'));
 
-		$db->db_list_indexes($ob['meta']['db_table']);
+		$db->db_list_indexes($ob->meta('db_table'));
 		while($idx = $db->db_next_index())
 		{
 			if ($idx['index_name'] == $index)
@@ -386,7 +386,7 @@ class db_table_admin extends class_base
 			}
 		}
 
-		$tbl = $db->db_get_table($ob['meta']['db_table']);
+		$tbl = $db->db_get_table($ob->meta('db_table'));
 		$fields = $this->make_keys(array_keys($tbl['fields']));
 
 		$tb = get_instance('toolbar');
@@ -420,18 +420,18 @@ class db_table_admin extends class_base
 	{
 		extract($arr);
 
-		$ob = $this->get_object($id);
-		$db = get_instance('awmyadmin/db_login');
-		$db->login_as($ob['meta']['db_base']);
+		$ob = obj($id);
+		$db = get_instance(CL_DB_LOGIN);
+		$db->login_as($ob->meta('db_base'));
 
 		if ($index != "")
 		{
 			// change = drop && add
-			$db->db_drop_index($ob['meta']['db_table'], $index);
+			$db->db_drop_index($ob->meta('db_table'), $index);
 		}
 
 		// add
-		$db->db_add_index($ob['meta']['db_table'], array(
+		$db->db_add_index($ob->meta('db_table'), array(
 			'name' => $name,
 			'col' => $field
 		));
@@ -459,7 +459,7 @@ class db_table_admin extends class_base
 		$t->define_field(array('name' => 'change','caption' => 'Muuda'));
 		$t->define_field(array('name' => 'sel','caption' => 'Vali'));
 
-		$db = get_instance('awmyadmin/db_login');
+		$db = get_instance(CL_DB_LOGIN);
 		$db->login_as($db_base);
 		$tbl = $db->db_get_table($db_table);
 		foreach($tbl['fields'] as $fid => $fdat)

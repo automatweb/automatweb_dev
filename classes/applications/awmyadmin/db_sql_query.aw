@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_sql_query.aw,v 1.1 2004/05/21 11:08:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_sql_query.aw,v 1.2 2004/06/11 08:51:43 kristo Exp $
 /*
 
 	@default table=objects
@@ -43,11 +43,11 @@ class db_sql_query extends class_base
 		extract($arr);
 		$chgf = parent::change($arr);
 
-		$ob = $this->get_object($id);
+		$ob = obj($id);
 
 		// do the query and display results
 		$num_rows = 0;
-		$qres = $this->show_query_results($ob['meta']['db_base'], $ob['meta']['sql'], &$num_rows);
+		$qres = $this->show_query_results($ob->meta('db_base'), $ob->meta('sql'), &$num_rows);
 
 		$tbp = get_instance('vcl/tabpanel');
 		$tbp->hide_one_tab = false;
