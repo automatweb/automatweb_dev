@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.16 2004/10/27 10:16:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.17 2004/10/27 12:24:01 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -34,6 +34,9 @@
 @property import_status type=text
 @caption Impordi staatus
 
+@property auto_import_status type=text
+@caption J&auml;rgmine automaatne import
+
 @groupinfo props caption="Omadused"
 @property props type=table store=no no_caption=1 group=props
 
@@ -42,6 +45,18 @@
 
 @groupinfo folders caption="Kataloogid"
 @property folders type=table store=no no_caption=1 group=folders
+
+@groupinfo sched caption="Automaatne import"
+@default group=sched
+
+@property recurrence type=relpicker reltype=RELTYPE_RECURRENCE
+@caption Kordus
+
+@property aimp_uid type=textbox
+@caption Kasutajanimi
+
+@property aimp_pwd type=password
+@caption Parool
 
 
 @reltype OBJECT_TYPE value=1 clid=CL_OBJECT_TYPE
@@ -55,6 +70,9 @@
 
 @reltype EXCEPTION value=4 clid=CL_OBJECT_IMPORT_EXCEPTION
 @caption erand
+
+@reltype RECURRENCE value=5 clid=CL_RECURRENCE
+@caption kordus
 
 */
 
@@ -80,6 +98,23 @@ class object_import extends class_base
 				if (!$arr["obj_inst"]->prop("ds"))
 				{
 					$retval = PROP_IGNORE;
+				}
+				break;
+
+			case "auto_import_status":
+				$o = $arr["obj_inst"];
+				if (is_oid($o->prop("recurrence")) && $o->prop("aimp_uid") != "" && $o->prop("aimp_pwd") != "")
+				{
+					$t = get_instance(CL_RECURRENCE); 
+					$next = $t->get_next_event(array(
+						"id" => $o->prop("recurrence")
+					));
+
+					$prop["value"] = get_lc_date($next, LC_DATE_FORMAT_LONG_FULLYEAR).", kell ".date("H:i", $next).", kasutaja ".$o->prop("aimp_uid")." &otilde;igustes.";
+				}
+				else
+				{
+					return PROP_IGNORE;
 				}
 				break;
 
@@ -438,6 +473,49 @@ class object_import extends class_base
 		return $ds_i->get_fields($ds_o);
 	}
 
+	/**
+
+		@attrib name=automatic_import
+
+		@param id required 
+
+	**/
+	function automatic_import($arr)
+	{
+		$o = obj($arr["id"]);
+		$this->do_exec_import($o);
+	}
+
+
+	/**
+
+		@attrib name=do_check_import nologin="1"
+
+		@param oid optional 
+	**/
+	function do_check_import($arr = array())
+	{
+		$filt = array(
+			"class_id" => CL_OBJECT_IMPORT,
+			"site_id" => array(),
+			"lang_id" => array()
+		);
+		if ($arr["oid"])
+		{
+			$filt["oid"] = $arr["oid"];
+		}
+		$ol = new object_list($filt);
+		for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		{
+			if ($o->meta("import_status") == 1 && $o->meta("import_last_time") < (time() - 30))
+			{
+				echo "restart import for ".$o->id()." <br>";
+				$this->do_exec_import($o, $o->meta("import_row_count"));
+			}
+			echo "for o ".$o->id()." status = ".$o->meta("import_status")." last time = ".date("d.m.Y H:i", $o->meta("import_last_time"))." <br>";
+		}
+	}
+
 	function do_exec_import($o, $start_from_row = 0)
 	{
 		// for each line in the ds
@@ -726,35 +804,6 @@ class object_import extends class_base
 		$o->save();
 	}
 
-	/**
-
-		@attrib name=do_check_import nologin="1"
-
-		@param oid optional 
-	**/
-	function do_check_import($arr = array())
-	{
-		$filt = array(
-			"class_id" => CL_OBJECT_IMPORT,
-			"site_id" => array(),
-			"lang_id" => array()
-		);
-		if ($arr["oid"])
-		{
-			$filt["oid"] = $arr["oid"];
-		}
-		$ol = new object_list($filt);
-		for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
-		{
-			if ($o->meta("import_status") == 1 && $o->meta("import_last_time") < (time() - 30))
-			{
-				echo "restart import for ".$o->id()." <br>";
-				$this->do_exec_import($o, $o->meta("import_row_count"));
-			}
-			echo "for o ".$o->id()." status = ".$o->meta("import_status")." last time = ".date("d.m.Y H:i", $o->meta("import_last_time"))." <br>";
-		}
-	}
-
 	function callback_pre_edit($arr)
 	{
 		if ($arr["obj_inst"]->meta("import_status") == 1)
@@ -765,6 +814,30 @@ class object_import extends class_base
 				"time" => time() + 4 * 60,
 				"sessid" => session_id()
 			));
+		}
+	}
+
+	function callback_post_save($arr)
+	{
+		$o = $arr["obj_inst"];
+		if (is_oid($o->prop("recurrence")) && $o->prop("aimp_uid") != "" && $o->prop("aimp_pwd") != "")
+		{
+			$t = get_instance(CL_RECURRENCE); 
+			$next = $t->get_next_event(array(
+				"id" => $o->prop("recurrence")
+			));
+
+			if ($next)
+			{
+				// add to scheduler
+				$sc = get_instance("scheduler");
+				$sc->add(array(
+					"event" => $this->mk_my_orb("automatic_import", array("id" => $o->id())),
+					"time" => $next,
+					"uid" => $o->prop("aimp_uid"),
+					"password" => $o->prop("aimp_pwd")
+				));
+			}
 		}
 	}
 

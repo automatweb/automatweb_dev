@@ -1,6 +1,14 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="object_import" folder="admin" extends="class_base">
+		<action name="automatic_import" >
+			<function name="automatic_import">
+				<arguments>
+					<required name="id" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="do_check_import" nologin="1">
 			<function name="do_check_import">
 				<arguments>
