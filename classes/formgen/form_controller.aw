@@ -216,6 +216,7 @@ class form_controller extends form_base
 			return true;	// don't remove this, otherwise all controller checks will fail withut a controller
 		}
 		enter_function("form_controller::eval_controller");
+		enter_function("form_controller::eval_controller::$id");
 		$this->form_ref =& $form_ref;
 		$this->el_ref =& $el_ref;
 		$this->entry = $entry;
@@ -224,7 +225,8 @@ class form_controller extends form_base
 		if ($_COOKIE["profile_controllers"] == "1")
 		{
 				$awt->start("eval_controller::$id");
-				echo "eval_controller $id for entry $entry , el ".(is_object($el_ref) ? $el_ref->get_id() : "")." <br>";
+				$awt->count("eval_controller::$id");
+				echo "eval_controller_ref $id for entry $entry , el ".(is_object($el_ref) ? $el_ref->get_id() : "")." <br>";
 		}
 		$co = $this->load_controller($id);
 		$eq = $this->replace_vars($co,$co["meta"]["eq"],true,$form_ref, $el_ref, $entry);
@@ -240,9 +242,11 @@ class form_controller extends form_base
 		}
 		if ($_COOKIE["profile_controllers"] == "1")
 		{
-			echo "got result $res, elapsed time = ".$awt->elapsed("eval_controller::$id")." <br>";
+			echo "got result $res, elapsed time = ".$awt->elapsed("eval_controller::$id")." <br><br>";
 		}
 
+		exit_function("form_controller::eval_controller");
+		exit_function("form_controller::eval_controller::".$co[OID]);
 		return $res;
 	}
 
@@ -258,6 +262,7 @@ class form_controller extends form_base
 			return true;	// don't remove this, otherwise all controller checks will fail withut a controller
 		}
 		enter_function("form_controller::eval_controller");
+		enter_function("form_controller::eval_controller::$id");
 		$this->form_ref =& $form_ref;
 		$this->el_ref =& $el_ref;
 		$this->entry = $entry;
@@ -274,7 +279,7 @@ class form_controller extends form_base
 		$eq = "\$res = ".$eq.";\$contr_finish = true;";
 		dbg::p2("controller id $id: evaling $eq <br>");
 		@eval($eq);
-		dbg::p2("evaled $id, res: ".dbg::dump($res)." <br>");
+		dbg::p2("evaled $id, res: ".dbg::dump($res)." <br><br>");
 		if (!$contr_finish)
 		{
 			$this->dequote(&$eq);
@@ -285,6 +290,8 @@ class form_controller extends form_base
 			echo "got result $res, elapsed time = ".$awt->elapsed("eval_controller::$id")." <br>";
 		}
 
+		exit_function("form_controller::eval_controller");
+		exit_function("form_controller::eval_controller::".$co[OID]);
 		return $res;
 	}
 
