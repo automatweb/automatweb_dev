@@ -8,4 +8,8 @@
       <class>taket/taket_users_import</class>
       <func>update_user_info</func>
 </num_1>
+<num_2>
+      <class>install/site_list_updater</class>
+      <func>on_login</func>
+</num_2>
 </xml>
