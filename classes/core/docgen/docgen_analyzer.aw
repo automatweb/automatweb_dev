@@ -3,7 +3,7 @@
 /** aw code analyzer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $id$
+	@cvs $Id: docgen_analyzer.aw,v 1.4 2003/09/22 13:46:18 kristo Exp $
 
 	@comment 
 	analyses aw code
