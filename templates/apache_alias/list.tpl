@@ -80,7 +80,15 @@ name="new" alt="Lisa" title="Lisa" border="0" SRC="{VAR:baseurl}/automatweb/imag
 </td></tr></table>
 {VAR:reforb}
 </form>
-This gets written into the apache conf file
+<table border="0" cellspacing="1" cellpadding="2" width="100%">
+<tr>
+<td class="celltext">
+<strong>
+Apache konfiguratsioonifaili kirjutati järgmised read
+</strong>
 <pre>
 {VAR:conf}
 </pre>
+</td>
+</tr>
+</table>
