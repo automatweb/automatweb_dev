@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.9 2003/01/13 12:52:27 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.10 2003/01/16 16:45:03 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql 
 {
@@ -620,6 +620,16 @@ class mysql
 			flock($fp, LOCK_UN);
 			fclose($fp);
 		}
+	}
+
+	function db_table_exists($tbl)
+	{
+		$q = "DESCRIBE $tbl";
+		if (@mysql_query($q, $this->dbh))
+		{
+			return true;
+		}
+		return false;
 	}
 };
 ?>
