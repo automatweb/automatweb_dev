@@ -122,10 +122,17 @@
             <syslog_type>ST_MENU_AREA_LEVEL</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
-      <groupinfo>
-            <general>
-                  <caption>Üldine</caption>
-            </general>
-      </groupinfo>
+      <reltypes>
+            <STYLE>
+                  <value>1</value>
+                  <clid>CL_CSS</clid>
+                  <caption>stiil</caption>
+            </STYLE>
+            <IMAGE>
+                  <value>2</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>pilt</caption>
+            </IMAGE>
+      </reltypes>
 </properties>
 
