@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.5 2002/09/26 16:07:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.6 2002/10/09 09:47:38 kristo Exp $
 // remote_login.aw - AW remote login
 classload("socket");
 
@@ -124,22 +124,22 @@ class remote_login extends aw_template
 		
 		$request = "uid=$uid&password=$password&class=users&action=login";
 
-		$op = "POST http://$host/orb.".$this->cfg["ext"]." HTTP/1.1\r\n";
+		$op = "GET /orb.".$this->cfg["ext"]."?$request HTTP/1.0\r\n";
 		$op .= "Host: $host\r\n";
 		$op .= "Cookie: automatweb=$cookie\r\n";
-		$op .= "Keep-Alive: 5\r\n";
-		$op .= "Referer: http://$host/login.".$this->cfg["ext"]."\r\n";
-		$op .= "Content-type: application/x-www-form-urlencoded\r\n";
-		$op .= "Content-Length: " . strlen($request) . "\r\n\r\n";
+//		$op .= "Keep-Alive: 5\r\n";
+		$op .= "Referer: http://$host/login.".$this->cfg["ext"]."\r\n\r\n";
+//		$op .= "Content-type: application/x-www-form-urlencoded\r\n";
+//		$op .= "Content-Length: " . strlen($request) . "\r\n\r\n";
 
 		if (!$silent)
 		{
 			print "<pre>";
-			print "Logging in\n";
+			echo "Logging in op = ",htmlentities($op),"\n";
 		}
 
 		$socket->write($op);
-		$socket->write($request);
+//		$socket->write($request);
 	
 		$ipd = "";
 		while($data = $socket->read())
@@ -208,6 +208,7 @@ class remote_login extends aw_template
 			"host" => $ob["name"],
 			"uid" => $ob["meta"]["login_uid"],
 			"password" => $ob["meta"]["login_password"],
+			"silent" => true
 		));
 
 		return array($ob["name"],$this->cookie);
