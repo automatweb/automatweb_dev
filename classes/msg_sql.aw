@@ -1,7 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msg_sql.aw,v 2.4 2001/06/25 12:59:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msg_sql.aw,v 2.5 2001/06/25 16:05:05 duke Exp $
 // msg_sql.aw - sql draiver messengeri jaoks
-class msg_sql_driver extends db_connector
+class msg_sql_driver extends core
 {
 	function msg_sql_driver()
 	{
@@ -188,6 +188,66 @@ class msg_sql_driver extends db_connector
 		$this->db_query($q);
 		$row = $this->db_next();
 		return $row["cnt"];
+	}
+
+	////
+	// !teeb koopia kirjast.
+	// id(int) - vana kirja ID
+	// newid(int) - millise ID-ga uus kiri regida
+	// swapfrom(bool) - vahetada from ja to read?
+	
+	function msg_copy($args = array())
+	{
+		extract($args);
+		$old = $this->msg_get(array("id" => $args["id"]));
+		$this->quote($old);
+		extract($old);
+		if ($args["reply"])
+		{
+			$mtargets1 = $mfrom;
+			$mto = $mfrom;
+			$mfrom = "";
+			$subject = "Re: $subject";
+			$message = str_replace("\n","\n$qchar",$message);
+			$message = "\n\n$qchar" . $message;
+		};
+
+		if ($forward)
+		{
+			$headers = $this->parse_headers(array(
+						"headers" => $old["headers"],
+					));
+			$subject = "Fwd: $subject";
+			$message = "\n\nForwarded message:\n\n";
+			$message .= "Date: " . $headers["Date"] . "\n";
+			$message .= "From: " . $headers["From"] . "\n";
+			$message .= "To: " . $headers["To"] . "\n";
+			$message .= "Subject: " . $headers["Subject"] . "\n\n";
+			$message .= $old["message"];
+			//$message = str_replace("\n","\n$qchar",$message);
+			//$message = "\n\n$qchar" . $message;
+		};
+
+		$q = "INSERT INTO messages (id,pri,reply,mtargets1,subject,tm,type,message,mto)
+			VALUES('$newid','$pri',0,'$mtargets1','$subject','$tm','$type','$message','$mto')";
+		$this->db_query($q);
+	}
+
+	////
+	// !Parsib kirja headeri arrayks, kus keydeks on valjada nimed
+	// headers(string) - headerid
+	// tegelikult see funktsioon muidugi ei kuulu siia
+	function parse_headers($args = array())
+	{
+		extract($args);
+		$lines = preg_split("/\n/",$headers); 
+		$retval = array();
+		foreach($lines as $line)
+		{
+			preg_match("/^(.+?): (.*)$/",$line,$matches);
+			$retval[$matches[1]] = $matches[2];
+		}
+		return $retval;
 	}
 
 }

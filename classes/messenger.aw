@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.76 2001/06/25 12:59:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.77 2001/06/25 16:05:05 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -207,6 +207,7 @@ class messenger extends menuedit_light
 			};
 		};
 	}
+	
 
 	////
 	// !Attachib objekti mingi kirja külge
@@ -642,8 +643,56 @@ class messenger extends menuedit_light
 		$this->db_query($q);
 		return $oid;
 	}
-					
+
+	function reply_message($args = array())
+	{	
+		extract($args);
+		$newid = $this->new_object(array(
+					"parent" => $this->conf["msg_draft"],
+					"class_id" => CL_MESSAGE,false));
+		$this->driver->msg_copy(array(
+				"id" => $reply,
+				"newid" => $newid,
+				"reply" => true,
+				"qchar" => $this->msgconf["msg_quotechar"],
+			));
+		return $this->mk_site_orb(array(
+						"action" => "edit",
+						"id" => $newid,
+					));
+	}
+
+	function forward_message($args = array())
+	{
+		extract($args);
+		$newid = $this->new_object(array(
+					"parent" => $this->conf["msg_draft"],
+					"class_id" => CL_MESSAGE,false));
+		$this->driver->msg_copy(array(
+				"id" => $forward,
+				"newid" => $newid,
+				"forward" => true,
+				"qchar" => $this->msgconf["msg_quotechar"],
+			));
 		
+		// add all the attaches to the new message as well
+		classload("file");
+		$awf = new file();
+		$this->get_objects_by_class(array(
+						"class" => CL_FILE,
+						"parent" => $forward,
+					));
+		while($row = $this->db_next())
+		{
+			$awf->cp(array("id" => $row["oid"],"parent" => $newid));
+		}
+
+		return $this->mk_site_orb(array(
+					"action" => "edit",
+					"id" => $newid,
+			));
+	}
+			
 	////
 	// !Kuvab uue teate sisestamise/muutmise vormi
 	function gen_edit_form($args = array())
@@ -659,7 +708,7 @@ class messenger extends menuedit_light
 		if ($args["reply"])
 		{
 			$msg_id = $reply;
-			$msg = $this->driver->msg_get(array("id" => $msg_id));
+			$msg = $this->driver->msg_get(array("id" => $newid));
 			$sprefix = "Re: ";
 			$quote = true;
 			
@@ -822,6 +871,7 @@ class messenger extends menuedit_light
 	
 		if ($post)
 		{
+			// hm. ma ei teagi, kas ja kus seda kasutatakse?
 			$args = $this->driver->msg_get(array(
 				"id" => $id,
 			));
@@ -882,6 +932,7 @@ class messenger extends menuedit_light
 
 		$cc = $to = array();
 
+
 		foreach($targets as $key => $val)
 		{
 			$targets[$key] = trim($targets[$key]);
@@ -909,6 +960,9 @@ class messenger extends menuedit_light
 
 		// now we should be ok, let's separate internal and external addresses
 		$externals = $internals = array();
+	
+		// kysime info teate kohta.
+		$mdata = $this->get_object($msg_id);
 
 		foreach($targets as $key => $val)
 		{
@@ -986,10 +1040,13 @@ class messenger extends menuedit_light
 		};
 
 		// ja lopuks liigutame ta draftist ära outboxi
-		$outbox = $this->conf["msg_outbox"];
-
-		//$q = "UPDATE objects SET parent = '$outbox' WHERE oid = '$msg_id'";
-		//$this->db_query($q);
+		// aga seda peaks tegema ainult siis, kui ta ka toesti oli draftis.
+		if ($mdata["parent"] == $this->conf["msg_draft"])
+		{
+			$outbox = $this->conf["msg_outbox"];
+			$q = "UPDATE objects SET parent = '$outbox' WHERE oid = '$msg_id'";
+			$this->db_query($q);
+		}
 	}
 
 	function deliver($args = array())
@@ -1013,6 +1070,12 @@ class messenger extends menuedit_light
 			$froma = $udata["email"];
 			$fromn = "";
 		};
+
+		$mfrom = sprintf("%s <%s>",$fromn,$froma);
+		$this->quote($mfrom);
+		$q = "UPDATE messages SET mfrom = '$mfrom' WHERE id = '$msg_id'";
+		$this->db_query($q);
+
 		$this->awm->create_message(array(
 				"froma" => $froma,
 				"fromn" => $fromn,
