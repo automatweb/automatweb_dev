@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry.aw,v 1.2 2003/06/06 14:42:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry.aw,v 1.3 2003/06/18 13:47:17 kristo Exp $
 
 // basically this is an interface class :)
 // it provides a form_entry manipulating interface to menueditor via orb. 
@@ -146,7 +146,7 @@ class form_entry extends aw_template
 		$fid = $f->get_form_for_entry($eid);
 		if ($fid)
 		{
-			$this->db_query("UPDATE form_".$fid."_entries SET deleted = 1");
+			$this->db_query("UPDATE form_".$fid."_entries SET deleted = 1 WHERE id = '$eid'");
 		}
 	}
 }
