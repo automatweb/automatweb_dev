@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.32 2004/02/17 15:07:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.33 2004/02/18 10:42:40 duke Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -1212,9 +1212,9 @@ class converters extends aw_template
 		set_time_limit(0);
 		// 21 / 6 / 16 is URL
 		// 219 / 9 / 17 is phone (but really fax)
-		// 219 / 78 / 17 , is phone
+		// 219 / 7,8 / 17 , is phone
 		//$q = "select aliases.id,aliases.source as oldsource,aliases2.source as newsource,aliases.target as newtarget from aliases,objects,aliases as aliases2,objects as objects2  where aliases.source = objects.oid and aliases2.target = objects.oid and aliases2.source = objects2.oid and objects2.class_id = 129 and aliases.type = 21 and aliases.reltype = 6 and aliases2.reltype = 3 and objects.class_id = 146 and objects.status != 0";
-		$q = "select aliases.id,aliases.source as oldsource,aliases2.source as newsource,aliases.target as newtarget from aliases,objects,aliases as aliases2,objects as objects2  where aliases.source = objects.oid and aliases2.target = objects.oid and aliases2.source = objects2.oid and objects2.class_id = 129 and aliases.type = 219 and aliases.reltype = 7 and aliases2.reltype = 3 and objects.class_id = 146 and objects.status != 0";
+		$q = "select aliases.id,aliases.source as oldsource,aliases2.source as newsource,aliases.target as newtarget from aliases,objects,aliases as aliases2,objects as objects2  where aliases.source = objects.oid and aliases2.target = objects.oid and aliases2.source = objects2.oid and objects2.class_id = 129 and aliases.type = 21 and aliases.reltype = 5 and aliases2.reltype = 3 and objects.class_id = 146 and objects.status != 0";
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
@@ -1223,7 +1223,7 @@ class converters extends aw_template
 			$id = $row["id"];
 			$newsource = $row["newsource"];
 			//$q = "UPDATE aliases SET source = '$newsource', reltype = 16 WHERE id = '$id'";
-			$q = "UPDATE aliases SET source = '$newsource', reltype = 17 WHERE id = '$id'";
+			$q = "UPDATE aliases SET source = '$newsource', reltype = 15 WHERE id = '$id'";
 			print $q;
 			print "<br>";
 			$this->db_query($q);
@@ -1284,28 +1284,24 @@ class converters extends aw_template
 			print "</pre>";
 			flush();
 			$tg_phone = new object($targets[$row["target"]]);
-			//$src_obj = new object($row["oid"]);
+			$src_obj = new object($row["oid"]);
 			if ($row["class_id"] == 145)
 			{
 				print "Lingin isiku telefoniga " . $targets[$row["target"]] . "/" . $tg_phone->name() . "<br>";
-				/*	
 				$src_obj->connect(array(
 					"to" => $tg_phone->id(),
 					"reltype" => 13,
 				));
-				*/
 				// seose tüüp - 13
 			};
 			if ($row["class_id"] == 129)
 			{
 				print "Lingin organisatsiooni telefoniga " . $targets[$row["target"]] . "/" . $tg_phone->name() . "<br>";
 				print $tg_phone->name();
-				/*
 				$src_obj->connect(array(
 					"to" => $tg_phone->id(),
 					"reltype" => 17,
 				));
-				*/
 				// seose tüüp - 17
 			};
 			flush();
@@ -1404,14 +1400,14 @@ class converters extends aw_template
 
 		$q = "SELECT oid,target
 			FROM kliendibaas_firma,aliases
-			WHERE kliendibaas_firma.oid = aliases.source AND telefax_id = 0 AND aliases.reltype = 18";
+			WHERE kliendibaas_firma.oid = aliases.source AND email_id = 0 AND aliases.reltype = 15";
 		$this->db_query($q);
 		$qs = array();
 		while($row = $this->db_next())
 		{
 			$pid = $row["target"];
 			$oid = $row["oid"];
-			$qs[] = "UPDATE kliendibaas_firma SET telefax_id = $pid WHERE oid = $oid";
+			$qs[] = "UPDATE kliendibaas_firma SET email_id = $pid WHERE oid = $oid";
 		};
 
 		// phone_id, url_id, email_id, fax_id
@@ -1467,6 +1463,58 @@ class converters extends aw_template
 		}
 		die("all done! ");
 	}
+
+	/**
+		@attrib name=convert_crm_links
+
+		@comment some e-mail addresses were originally created as link objects whereas
+		they should have been created ml_members (the class that deals with mail
+		addresses). This converts them.
+
+	**/
+	function convert_crm_links($arr)
+	{
+		// first I need to create records in ml_users.mail table for each
+		// 
+		// extlinks.url should become ml_users.mail
+
+		// and I should also remove shit from extlinks table
+
+		// and I should change class_id
+		$q = "SELECT target,extlinks.url AS url FROM aliases,extlinks
+			WHERE aliases.target = extlinks.id AND reltype = 15 AND aliases.type = 21";
+		$this->db_query($q);
+		while($row = $this->db_next())
+		{
+			$this->save_handle();
+			$id = $row["target"];
+			$mail = $row["url"];
+			$sakk = "SELECT * FROM ml_users WHERE id = '$id'";
+			$this->db_query($sakk);
+			$rx = $this->db_next();
+			if (!$rx)
+			{
+				$q = "INSERT INTO ml_users (id,mail) VALUES ($id,'$mail')";
+				print $q;
+				$this->db_query($q);
+				print "<br>";
+			};
+			$q = "DELETE FROM extlinks WHERE id = '$id'";
+			print $q;
+			$this->db_query($q);
+			print "<bR>";
+			$q = "UPDATE objects SET class_id = 73 WHERE oid = '$id'";
+			print $q;
+			$this->db_query($q);
+			print "<br>";
+			flush();
+			$this->restore_handle();
+		};
+		print "all done<br>";
+
+
+	}
+	
 	
 	/**  
 		
