@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.32 2002/08/02 13:24:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.33 2002/08/02 13:41:33 duke Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -1168,6 +1168,8 @@ class users_user extends aw_template
 	// - yeah. good point. - terryf
 	// - can we store users groups inside her session? -- duke
 	// - well. what if somebody else changes them, then they will not change for the user before logging in again - terryf
+	// - I'm sure there are ways around _that_. Why I want this? It just seems utterly meaningless
+	//   to read the group data at every request. 99% of the time, this data does not change.
 	function get_gids_by_uid($uid)
 	{
 		$q = "SELECT groupmembers.gid AS gid, groups.* FROM groupmembers
