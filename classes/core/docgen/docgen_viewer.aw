@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.15 2004/08/17 07:55:00 rtoomas Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.16 2004/08/23 10:55:35 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -986,6 +986,7 @@ class docgen_viewer extends class_base
 			$documenter->parse_files($arr['classdir']);
 			$obj->set_meta('properties_data',serialize($documenter));
 			$obj->save();
+			$data = $documenter;
 		}
 
 
