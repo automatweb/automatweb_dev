@@ -360,6 +360,35 @@
             <no_caption>1</no_caption>
             <caption>Sisu</caption>
       </property>
+      <property>
+            <name>expf_path</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>export_to_file</group>
+            <type>textbox</type>
+            <caption>Kataloog serveris</caption>
+      </property>
+      <property>
+            <name>expf_num_per_day</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>export_to_file</group>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Mitu korda p&amp;auml;evas eksport teha</caption>
+      </property>
+      <property>
+            <name>expf_next_time</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>export_to_file</group>
+            <type>text</type>
+            <store>no</store>
+            <caption>Millal j&amp;auml;rgmine eksport toimub</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_MAILINGLIST</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -386,6 +415,10 @@
                   <caption>Eksport</caption>
                   <parent>membership</parent>
             </export_members>
+            <export_to_file>
+                  <caption>Eksport faili</caption>
+                  <parent>membership</parent>
+            </export_to_file>
             <raports>
                   <caption>Kirjad</caption>
             </raports>
