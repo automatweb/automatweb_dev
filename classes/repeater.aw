@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/repeater.aw,v 2.1 2001/06/14 12:07:22 duke Exp $
 class repeater {
 	////
 	// !Konstruktor.
@@ -26,14 +27,27 @@ class repeater {
 	
 		// ja salvestame selle vektori
 		$this->vector[] = array("$st" => "$et");
+
+		$this->virgin = 1;
 	}
 
 	function show_vector()
 	{
-		foreach($this->vector as $key => $dt)
+		if (!$this->virgin)
 		{
-			list($start,$end) = each($dt);
-			printf("%s | %s<br>",date("d-m-Y H:i",$start),date("d-m-Y H:i",$end));
+			foreach($this->vector as $key => $dt)
+			{
+				list($start,$end) = each($dt);
+				printf("%d | %s | %s<br>",$key,date("d-m-Y H:i",$start),date("d-m-Y H:i",$end));
+			};
+		};
+	}
+
+	function get_vector()
+	{
+		if (!$this->virgin)
+		{
+			return $this->vector;
 		};
 	}
 		
@@ -42,6 +56,7 @@ class repeater {
 	// ning vastavalt sellele tykeldame vektorit.
 	function handle($args = array())
 	{
+		$this->virgin = 0;
 		extract($args);
 		switch($type)
 		{
@@ -61,6 +76,8 @@ class repeater {
 					$newvec = array();
 					for ($i = $start; $i <= $end; $i = $i+$skip)
 					{
+						print "*";
+						flush();
 						if ($pwhen)
 						{
 							$mlist = explode(",",$pwhen);
@@ -90,6 +107,39 @@ class repeater {
 					$this->vector = $newvec;
 				};
 				break;
+
+			// päevad
+			case "1":
+				// well, that should be easy. since day has really only 1 field - skip
+				// kaime kogu vektori läbi.
+				$newvec = array();
+				foreach($this->vector as $numpair)
+				{
+					list($st,$et) = each($numpair);
+					// we use that format, so we can handle skips in days more correctly.
+					$start = date("Ymd",$st);
+					$end = date("Ymd",$et);
+					list($d1,$m1,$y1) = split("-",date("d-m-Y",$st));
+					list($d2,$m2,$y2) = split("-",date("d-m-Y",$et));
+					if ($skip > 0)
+					{
+						$cnt = $this->get_day_diff($st,$et);
+						for ($i = 0; $i <= $cnt; $i++)
+						{
+							$sx = mktime(0,0,0,$m1,$d1 + $i,$y1);
+							$newstart = ($st > $sx) ? $st : $sx;
+							$sy = mktime(23,59,59,$m1,$d1 + $i,$y1);
+							$newend = $sy;
+							if ($sy > $st)
+							{
+								$newvec[] = array($newstart => $newend);
+							};
+						};
+					};
+				};
+				$this->vector = $newvec;
+				break;
+						
 		};
 
 	}
@@ -101,6 +151,14 @@ class repeater {
 		$et = mktime(0,0,0,12,31,$yyyy);
 		return array($st,$et);
 	}
+
+	function get_day_diff($time1,$time2)
+        {
+                $diff = $time2 - $time1;
+                $days = (int)($diff / 86400);
+                return $days;
+        }
+
 };
 // siia peab moodustuma array koigist objektidest
 /*
