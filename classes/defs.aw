@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.25 2001/10/14 13:45:35 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.26 2001/10/16 04:15:13 kristo Exp $
 // defs.aw - common functions (C) StruktuurMeedia 2000,2001
 if (!defined("DEFS"))
 {
@@ -466,7 +466,7 @@ function map($format,$array)
 // format peab siis sisaldama vähemalt kahte kohta muutujate jaoks
 
 // kui $type != 0, siis pööratakse array nö ringi ... key ja val vahetatakse ära	
-function map2($format,$array,$type = 0)
+function map2($format,$array,$type = 0,$empty = false)
 {
 	$retval = array();
 	if (is_array($array))
@@ -483,7 +483,7 @@ function map2($format,$array,$type = 0)
 				$v1 = $val;
 				$v2 = $key;
 			};
-			if ((strlen($v1) > 0) && (strlen($v2) > 0) )
+			if ((strlen($v1) > 0) && (strlen($v2) > 0) || $empty)
 			{
 				$retval[] = sprintf($format,$v1,$v2);
 			};
