@@ -1,52 +1,123 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>maxsize</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Kirja maksimaalne suurus (märkides)</caption>
+      </property>
+      <property>
+            <name>newmessage</name>
+            <table>objects</table>
+            <group>newmessage</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>callback</type>
+            <callback>callback_new_message</callback>
+            <store>no</store>
+      </property>
+      <property>
+            <name>inbox_toolbar</name>
+            <table>objects</table>
+            <group>inbox</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>Inboxi</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
             <name>inbox</name>
             <table>objects</table>
             <group>inbox</group>
-            <store>no</store>
-            <submit>no</submit>
+            <field>meta</field>
+            <method>serialize</method>
             <type>table</type>
             <no_caption>1</no_caption>
-            <field>inbox</field>
-            <caption>this is inbox</caption>
+            <store>no</store>
+            <caption>Sissetulnud kirjad</caption>
       </property>
       <property>
-            <name>fake1</name>
+            <name>outbox_toolbar</name>
             <table>objects</table>
             <group>outbox</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
             <store>no</store>
-            <submit>no</submit>
-            <type>text</type>
-            <field>fake1</field>
-            <caption>this is outbox</caption>
+            <caption>Outboxi toolbar</caption>
       </property>
       <property>
-            <name>fake2</name>
+            <name>outbox</name>
+            <table>objects</table>
+            <group>outbox</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Välja saadetud kirjad</caption>
+      </property>
+      <property>
+            <name>archive_toolbar</name>
             <table>objects</table>
             <group>archive</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
             <store>no</store>
-            <submit>no</submit>
-            <type>text</type>
-            <field>fake2</field>
-            <caption>this is archive</caption>
+            <caption>Arhiivi toolbar</caption>
+      </property>
+      <property>
+            <name>archive</name>
+            <table>objects</table>
+            <group>archive</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Arhiiv</caption>
       </property>
       <classinfo>
             <syslog_type>ST_QUICKMESSAGEBOX</syslog_type>
             <relationmgr>yes</relationmgr>
-            <no_status>1</no_status>
-            <no_comment>1</no_comment>
       </classinfo>
       <groupinfo>
+            <newmessage>
+                  <caption>Uus teade</caption>
+            </newmessage>
             <inbox>
                   <caption>Inbox</caption>
+                  <submit>no</submit>
             </inbox>
             <outbox>
                   <caption>Outbox</caption>
+                  <submit>no</submit>
             </outbox>
             <archive>
                   <caption>Arhiiv</caption>
+                  <submit>no</submit>
             </archive>
       </groupinfo>
+      <reltypes>
+            <OWNER>
+                  <value>4</value>
+                  <clid>CL_USER</clid>
+                  <caption>Omanik</caption>
+            </OWNER>
+      </reltypes>
 </properties>
 

@@ -3,7 +3,7 @@
       <property>
             <name>user_from</name>
             <table>quickmessages</table>
-            <group>message</group>
+            <group>general</group>
             <type>text</type>
             <field>user_from</field>
             <caption>Kellelt</caption>
@@ -11,7 +11,7 @@
       <property>
             <name>user_to</name>
             <table>quickmessages</table>
-            <group>message</group>
+            <group>general</group>
             <type>textbox</type>
             <field>user_to</field>
             <caption>Kellele</caption>
@@ -19,7 +19,7 @@
       <property>
             <name>subject</name>
             <table>quickmessages</table>
-            <group>message</group>
+            <group>general</group>
             <type>textbox</type>
             <field>subject</field>
             <caption>Teema</caption>
@@ -27,41 +27,10 @@
       <property>
             <name>content</name>
             <table>quickmessages</table>
-            <group>message</group>
+            <group>general</group>
             <type>textarea</type>
             <field>content</field>
             <caption>Sisu</caption>
-      </property>
-      <property>
-            <name>inbox</name>
-            <table>quickmessages</table>
-            <group>inbox</group>
-            <store>no</store>
-            <submit>no</submit>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <field>inbox</field>
-            <caption>this is inbox</caption>
-      </property>
-      <property>
-            <name>fake1</name>
-            <table>quickmessages</table>
-            <group>outbox</group>
-            <store>no</store>
-            <submit>no</submit>
-            <type>text</type>
-            <field>fake1</field>
-            <caption>this is outbox</caption>
-      </property>
-      <property>
-            <name>fake2</name>
-            <table>quickmessages</table>
-            <group>archive</group>
-            <store>no</store>
-            <submit>no</submit>
-            <type>text</type>
-            <field>fake2</field>
-            <caption>this is archive</caption>
       </property>
       <classinfo>
             <syslog_type>ST_QUICKMESSAGE</syslog_type>
@@ -69,20 +38,6 @@
             <no_status>1</no_status>
             <no_comment>1</no_comment>
       </classinfo>
-      <groupinfo>
-            <message>
-                  <caption>Uus teade</caption>
-            </message>
-            <inbox>
-                  <caption>Inbox</caption>
-            </inbox>
-            <outbox>
-                  <caption>Outbox</caption>
-            </outbox>
-            <archive>
-                  <caption>Arhiiv</caption>
-            </archive>
-      </groupinfo>
       <tableinfo>
             <quickmessages>
                   <index>id</index>

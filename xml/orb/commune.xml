@@ -121,6 +121,30 @@
 			</function>
 		</action>
 
+		<action name="delete_contact" >
+			<function name="delete_contact">
+				<arguments>
+					<required name="sel" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="delete_message" >
+			<function name="delete_message">
+				<arguments>
+					<required name="sel" type="int" acl="delete"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="archive_message" >
+			<function name="archive_message">
+				<arguments>
+					<required name="sel" type="int" acl="view"/>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="show_profile" >
 			<function name="show_profile">
 				<arguments>

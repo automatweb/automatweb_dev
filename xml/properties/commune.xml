@@ -18,25 +18,25 @@
             <field>meta</field>
             <method>serialize</method>
             <type>callback</type>
-            <callback>callback_show_profile</callback>
+            <callback>callback_profile_view</callback>
             <no_caption>1</no_caption>
             <store>no</store>
             <caption>Vaata profiili</caption>
       </property>
       <property>
-            <name>my_profile</name>
+            <name>profile_change</name>
             <group>profile_change</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>callback</type>
-            <callback>callback_my_profile</callback>
+            <callback>callback_profile_change</callback>
             <no_caption>1</no_caption>
             <store>no</store>
             <caption>Minu profiil</caption>
       </property>
       <property>
-            <name>profile_toolbar</name>
+            <name>all_profiles_toolbar</name>
             <group>all_profiles</group>
             <table>objects</table>
             <field>meta</field>
@@ -47,7 +47,7 @@
             <caption>Profiilide haldus</caption>
       </property>
       <property>
-            <name>my_profiles</name>
+            <name>all_profiles</name>
             <group>all_profiles</group>
             <table>objects</table>
             <field>meta</field>
@@ -406,12 +406,14 @@
             <caption>Sõbragrupid</caption>
       </property>
       <property>
-            <name>fake4</name>
+            <name>search_n_add</name>
             <group>search_n_add</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
+            <type>callback</type>
+            <callback>callback_profile_search</callback>
+            <no_caption>1</no_caption>
             <store>no</store>
       </property>
       <property>
@@ -495,23 +497,15 @@
             <caption>Viimati lisatud pildid</caption>
       </property>
       <property>
-            <name>fake5</name>
-            <group>saved</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <store>no</store>
-      </property>
-      <property>
             <name>inbox</name>
             <group>inbox</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
-            <store>no</store>
+            <type>callback</type>
+            <callback>callback_inbox</callback>
             <no_caption>1</no_caption>
+            <store>no</store>
             <caption>Inbox</caption>
       </property>
       <property>
@@ -520,10 +514,22 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
-            <store>no</store>
+            <type>callback</type>
+            <callback>callback_outbox</callback>
             <no_caption>1</no_caption>
+            <store>no</store>
             <caption>Outbox</caption>
+      </property>
+      <property>
+            <name>archive</name>
+            <group>archive</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>callback</type>
+            <callback>callback_archive</callback>
+            <store>no</store>
+            <caption>Arhiiv</caption>
       </property>
       <property>
             <name>newmessage</name>
@@ -531,8 +537,8 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <type>form</type>
-            <sclass>applications/quickmessage/quickmessage</sclass>
+            <type>callback</type>
+            <callback>callback_newmessage</callback>
             <store>no</store>
             <caption>Uue teate kirjutamine</caption>
       </property>
@@ -576,42 +582,82 @@
             <method>serialize</method>
       </property>
       <property>
-            <name>fake7</name>
+            <name>my_communtities</name>
             <group>my_communities</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
             <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Minu kogukonnad</caption>
       </property>
       <property>
-            <name>fake8</name>
+            <name>categories</name>
             <group>categories</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
             <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Kategooriad</caption>
       </property>
       <property>
-            <name>fake9</name>
-            <group>statistics</group>
+            <name>community_search</name>
+            <group>community_search</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
             <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Otsing</caption>
       </property>
       <property>
-            <name>join</name>
-            <group>join</group>
+            <name>my_statistics</name>
+            <group>my_statistics</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Minu statistika</caption>
+      </property>
+      <property>
+            <name>general_statistics</name>
+            <group>general_statistics</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Üldstatistika</caption>
+      </property>
+      <property>
+            <name>join_form</name>
+            <group>join_form</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>callback</type>
-            <callback>callback_get_join</callback>
+            <callback>callback_join_form</callback>
             <store>no</store>
-            <caption>Liitumine</caption>
+            <no_caption>1</no_caption>
+            <caption>Liitu kasutajaks</caption>
+      </property>
+      <property>
+            <name>forgot_password</name>
+            <group>forgot_password</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <no_captioN>1</no_captioN>
+            <caption>Unustasid salasõna?</caption>
       </property>
       <property>
             <name>join_obj</name>
@@ -893,12 +939,12 @@
                   <parent>messages</parent>
                   <tabgroup>left</tabgroup>
             </outbox>
-            <saved>
-                  <caption>Salvestatud</caption>
+            <archive>
+                  <caption>Arhiiv</caption>
                   <submit>no</submit>
                   <parent>messages</parent>
                   <tabgroup>left</tabgroup>
-            </saved>
+            </archive>
             <newmessage>
                   <caption>Uus teade</caption>
                   <parent>messages</parent>
@@ -941,20 +987,50 @@
                   <tabgroup>left</tabgroup>
                   <submit>no</submit>
             </categories>
+            <community_search>
+                  <caption>Otsing</caption>
+                  <parent>communities</parent>
+                  <tabgroup>left</tabgroup>
+                  <submit>no</submit>
+            </community_search>
             <statistics>
                   <caption>Statistika</caption>
                   <submit>no</submit>
             </statistics>
+            <my_statistics>
+                  <caption>Minu statistika</caption>
+                  <parent>statistics</parent>
+                  <tabgroup>left</tabgroup>
+                  <submit>no</submit>
+            </my_statistics>
+            <general_statistics>
+                  <caption>Üldstatistika</caption>
+                  <parent>statistics</parent>
+                  <tabgroup>left</tabgroup>
+                  <submit>no</submit>
+            </general_statistics>
             <join>
                   <caption>Liitumine</caption>
             </join>
+            <join_form>
+                  <caption>Liitu kasutajaks</caption>
+                  <parent>join</parent>
+                  <tabgroup>left</tabgroup>
+                  <submit>no</submit>
+            </join_form>
+            <forgot_password>
+                  <caption>Unustasid salasõna?</caption>
+                  <parent>join</parent>
+                  <tabgroup>left</tabgroup>
+                  <submit>no</submit>
+            </forgot_password>
             <locations>
                   <caption>Sisuobjektid</caption>
             </locations>
       </groupinfo>
       <reltypes>
             <PROF_SEARCH>
-                  <value>77</value>
+                  <value>21</value>
                   <clid>CL_CB_SEARCH</clid>
                   <caption>profiilide otsing</caption>
             </PROF_SEARCH>

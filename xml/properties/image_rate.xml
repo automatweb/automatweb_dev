@@ -67,6 +67,61 @@
             <caption>Profiil</caption>
       </property>
       <property>
+            <name>add_friend_link</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <store>no</store>
+            <group>general</group>
+            <form>rate</form>
+            <type>text</type>
+            <caption>Lisa sõber</caption>
+      </property>
+      <property>
+            <name>add_ignored_link</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <store>no</store>
+            <group>general</group>
+            <form>rate</form>
+            <type>text</type>
+            <caption>Ignoreeri</caption>
+      </property>
+      <property>
+            <name>add_blocked_link</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <store>no</store>
+            <group>general</group>
+            <form>rate</form>
+            <type>text</type>
+            <caption>Blokeeri</caption>
+      </property>
+      <property>
+            <name>send_message_link</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <store>no</store>
+            <group>general</group>
+            <form>rate</form>
+            <type>text</type>
+            <caption>Saade teade</caption>
+      </property>
+      <property>
+            <name>contact_list_link</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <store>no</store>
+            <group>general</group>
+            <form>rate</form>
+            <type>text</type>
+            <caption>Lisa aadressiraamatusse</caption>
+      </property>
+      <property>
             <name>comments</name>
             <table>objects</table>
             <field>meta</field>

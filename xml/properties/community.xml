@@ -4,20 +4,20 @@
             <name>forum</name>
             <table>objects</table>
             <group>forum</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FORUM</reltype>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FORUM</reltype>
             <caption>Foorum</caption>
       </property>
       <property>
             <name>calendar</name>
             <table>objects</table>
             <group>calendar</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CALENDAR</reltype>
             <field>meta</field>
             <method>serialize</method>
+            <type>calendar</type>
+            <store>no</store>
             <caption>Kalender</caption>
       </property>
       <classinfo>
@@ -30,6 +30,7 @@
             </forum>
             <calendar>
                   <caption>Kalender</caption>
+                  <submit>no</submit>
             </calendar>
       </groupinfo>
       <reltypes>
