@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.60 2003/12/10 13:54:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.61 2003/12/29 10:49:41 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -90,7 +90,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 @property num_ratings type=hidden 
 
 
-@property show_title type=checkbox ch_value=1
+@property show_title type=checkbox ch_value=1 default=1
 @caption Näita pealkirja
 
 @property no_search type=checkbox ch_value=1
@@ -571,10 +571,14 @@ class doc extends class_base
 	function update_brothers($args = array())
 	{
 		extract($args);
+		if (!$id)
+		{
+			return;
+		}
 		$obj = $this->get_object($id);
 
 		$sar = array(); $oidar = array();
-		$this->db_query("SELECT * FROM objects WHERE brother_of = $id AND status != 0 AND class_id = ".CL_BROTHER_DOCUMENT);
+		$this->db_query("SELECT * FROM objects WHERE brother_of = '$id' AND status != 0 AND class_id = ".CL_BROTHER_DOCUMENT);
 		while ($row = $this->db_next())
 		{
 			$sar[$row["parent"]] = $row["parent"];
