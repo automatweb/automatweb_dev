@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.8 2001/11/20 13:19:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.9 2002/01/18 15:41:02 duke Exp $
 // sys.aw - various system related functions
 lc_load("syslog");
 global $orb_defs;
@@ -30,6 +30,49 @@ class sys extends aw_template
 		header("Content-length: " . strlen($ser));
 		header("Content-Disposition: filename=awtables.xml");
 		print $ser;
+		exit;
+	}
+
+	////
+	// Lisab piltidele aliases
+	function convimages($args = array())
+	{
+		extract($args);
+		$q = "SELECT * FROM objects WHERE class_id = " . CL_DOCUMENT . " ORDER BY oid";
+		$this->db_query($q);
+		while($row = $this->db_next())
+		{
+			$name = strip_tags($row[name]);
+			print "found document $row[oid] $name, checking images<br>";
+			$this->save_handle();
+			$q = "SELECT * FROM objects WHERE parent = $row[oid] AND class_id = " . CL_IMAGE;
+			$this->db_query($q);
+			while($row2 = $this->db_next())
+			{
+				print "&nbsp;&nbsp;&nbsp;found image $row2[name]<br>";
+				print "&nbsp;&nbsp;&nbsp;checking aliases<br>";
+				$q = "SELECT * FROM aliases WHERE source = '$row[oid]' AND target = '$row2[oid]'";
+				$this->save_handle();
+				$this->db_query($q);
+				$row3 = $this->db_next();
+				if ($row3)
+				{
+					print "<b>Found alias</b><br>";
+					print "<pre>";
+					print_r($row3);
+					print "</pre>";
+				}
+				else
+				{
+					print "<b>No such alias, creating</b><br>";
+					$q = "INSERT INTO aliases (source,target,type)
+						VALUES('$row[oid]','$row2[oid]',6)";
+					$this->db_query($q);
+				};
+				$this->restore_handle();
+			};
+			$this->restore_handle();
+		}
 		exit;
 	}
 		
