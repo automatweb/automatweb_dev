@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.65 2004/09/14 12:03:49 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.66 2004/09/14 12:56:28 sven Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -817,14 +817,6 @@ class ml_list extends class_base
 						"sortable" => 1,
 					));	
 				}
-				if($config_data["udef_checkbox$i"])
-				{
-					$t->define_field(array(
-						"name" => $config_data["udef_txbox$i"]["name"],
-						"caption" => $config_data["udef_txbox$i"]["caption"],
-						"sortable" => 1,
-					));	
-				}
 				if($config_data["udef_date$i"])
 				{
 					$t->define_field(array(
@@ -866,8 +858,8 @@ class ml_list extends class_base
 					"lid" => $arr["obj_inst"]->id(),
 					"member" => $val["oid"],
 				));
-	
-				$t->define_data(array(
+				
+				$tabledata = array(
 					"id" => $val["oid"],
 					"email" => $mailto,
 					"others" => html::href(array(
@@ -879,10 +871,17 @@ class ml_list extends class_base
 							), CL_ML_MEMBER),
 					)), 
 					"name" => $memberdata["name"],
-				));	
-
+				);
+				$member_obj = &obj($memberdata["id"]);
+				for($i = 0; $i < 10; $i++)
+				{	
+					$tabledata["udef_txbox$i"] = $member_obj->prop("udef_txbox$i");
+					$tabledata["udef_date$i"] = get_lc_date($member_obj->prop("udef_date$i"));
+				}
 			}
-		};		
+			arr($tabledata);	
+				$t->define_data($tabledata);	
+		}		
 	}
 
 
