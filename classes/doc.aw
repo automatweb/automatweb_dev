@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.69 2004/03/24 17:21:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.70 2004/03/25 00:27:12 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -520,23 +520,23 @@ class doc extends class_base
 
 	function callback_get_doc_plugins($args = array())
 	{
-		if (!is_object($args["obj_inst"]))
+		if (!is_object($args["obj_inst"]) || !is_oid($args["obj_inst"]->id()))
 		{
 			return false;
 		};
 
-                $plugins = $this->parse_long_template(array(
-                        "parent"=> $args["obj_inst"]->parent(),
-                        "template_dir" => $this->template_dir,
-                ));
+		$plugins = $this->parse_long_template(array(
+			"parent"=> $args["obj_inst"]->parent(),
+			"template_dir" => $this->template_dir,
+		));
 
-                $plg_ldr = get_instance("plugins/plugin_loader");
-                $plugindata = $plg_ldr->load_by_category(array(
-                        "category" => "document",
-                        "plugins" => $plugins,
-                        "method" => "get_property",
-                        "args" => $args["obj_inst"]->meta("plugins"),
-                ));
+		$plg_ldr = get_instance("plugins/plugin_loader");
+		$plugindata = $plg_ldr->load_by_category(array(
+			"category" => "document",
+			"plugins" => $plugins,
+			"method" => "get_property",
+			"args" => $args["obj_inst"]->meta("plugins"),
+		));
 
 		return $plugindata;
 	}
