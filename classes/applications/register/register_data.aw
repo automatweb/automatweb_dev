@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.13 2004/11/23 14:45:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.14 2004/11/30 10:16:37 ahti Exp $
 // register_data.aw - Registri andmed 
 /*
 
@@ -201,6 +201,9 @@
 
 @property usersubmit1 type=submit store=no
 @caption User-defined submit 1
+
+@property userreset1 type=reset store=no
+@caption User-defined reset 1
 
 @reltype VARUSER1 value=1 clid=CL_META
 @caption kasutajadefineeritud muutuja 1

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.2 2004/11/29 05:07:59 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.3 2004/11/30 10:16:37 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -10,6 +10,9 @@
 
 @property on_init type=hidden newonly=1
 @caption Initsialiseeri objekt
+
+@property def_mail type=textbox method=serialize field=meta
+@caption E-mailiaadress, millelt saadetakse sisestusi e-mailile
 
 @property obj_name type=select multiple=1 size=3 field=meta method=serialize
 @caption Millised sisestatud väärtused pannakse nimeks
@@ -61,7 +64,7 @@
 @property styles type=callback callback=callback_styles group=styles no_caption=1
 @caption Stiilid
 
-@property get_controller_folder type=relpicker reltype=RELTYPE_VIEWCONTROLLER_FOLDER field=meta method=serialize group=get_controllers
+@property get_controller_folder type=relpicker reltype=RELTYPE_CONTROLLER_FOLDER field=meta method=serialize group=get_controllers
 @caption Kontrollerite kaust
 
 @property view_controllers type=callback callback=callback_view_controllers group=get_controllers no_caption=1
@@ -88,7 +91,7 @@
 @reltype VIEWCONTROLLER value=4 clid=CL_CFG_VIEW_CONTROLLER
 @caption N&auml;tamise kontroller
 
-@reltype EMAIL value=5 clid=CL_EMAIL
+@reltype EMAIL value=5 clid=CL_ML_MEMBER
 @caption Meiliaadress
 
 @reltype OBJECT_TYPE value=6 clid=CL_OBJECT_TYPE
@@ -103,11 +106,8 @@
 @reltype STYLE_FOLDER value=9 clid=CL_MENU
 @caption Stiilide kaust
 
-@reltype VIEWCONTROLLER_FOLDER value=10 clid=CL_MENU
-@caption Näitamise kontrollerite kaust
-
 @reltype CONTROLLER_FOLDER value=10 clid=CL_MENU
-@caption Salvestamise kontrollerite kaust
+@caption Kontrollerite kaust
 */
 
 class webform extends class_base
@@ -120,12 +120,13 @@ class webform extends class_base
 		));
 		$this->trans_names = array(
 			"text" => "Tekst",
-			"textbox" => "Tekstikast",
+			"textbox" => "Väike tekstikast",
 			"classificator" => "Valikväli",
 			"date_select" => "Kuupäevavalik",
-			"textarea" => "Tekstiväli",
+			"textarea" => "Suur tekstikast",
 			"hidden" => "Peidetud väli",
 			"submit" => "Saada nupp",
+			"reset" => "Tühista nupp",
 		);
 	}
 	
@@ -487,69 +488,60 @@ class webform extends class_base
 						"request" => &$arr["request"],
 					));
 					$prplist = $this->cfgform_i->cfg_proplist;
-					if(is_array($arr["request"]["prp_opts"]))
+					foreach(safe_array($arr["request"]["prp_opts"]) as $key => $val)
 					{
-						foreach($arr["request"]["prp_opts"] as $key => $val)
+						if($prplist[$key])
 						{
-							if($prplist[$key])
+							foreach($val as $key2 => $val2)
 							{
-								foreach($val as $key2 => $val2)
-								{
-									$prplist[$key][$key2] = $arr["request"]["prp_opts"][$key][$key2];
-								}
+								$prplist[$key][$key2] = $arr["request"]["prp_opts"][$key][$key2];
 							}
 						}
 					}
 					if($arr["request"]["subaction"] == "delete")
 					{
 						$mark = $arr["request"]["mark"];
-						if(is_array($mark))
+						foreach(safe_array($mark) as $pkey => $val)
 						{
-							foreach($mark as $pkey => $val)
+							if(is_oid($classificator[$pkey]) && $this->can("delete", $classificator[$pkey]))
 							{
-								if(is_oid($classificator[$pkey]) && $this->can("delete", $classificator[$pkey]))
-								{
-									$meta = obj($classificator[$pkey]);
-									$meta->delete();
-								}
-								unset($classificator[$pkey]);
-								unset($clf_type[$key]);
+								$meta = obj($classificator[$pkey]);
+								$meta->delete();
 							}
+							unset($classificator[$pkey]);
+							unset($clf_type[$key]);
 						}
 					}
-					if(is_array($arr["request"]["prp_metas"]))
+					foreach(safe_array($arr["request"]["prp_metas"]) as $key => $val)
 					{
-						foreach($arr["request"]["prp_metas"] as $key => $val)
+						$prps = explode(";", $val);
+						if($prplist[$key] && !empty($prps) && is_oid($classificator[$key]) && $this->can("view", $classificator[$key]))
 						{
-							$prps = explode(";", $val);
-							if($prplist[$key] && !empty($prps) && is_oid($classificator[$key]) && $this->can("view", $classificator[$key]))
+							$e_prp_list = new object_list(array(
+								"parent" => $classificator[$key],
+								"class_id" => CL_META,
+								"status"=> STAT_ACTIVE,
+							));
+							$e_prps = $e_prp_list->names();
+							foreach($prps as $prp)
 							{
-								$e_prp_list = new object_list(array(
-									"parent" => $classificator[$key],
-									"class_id" => CL_META,
-									"status"=> STAT_ACTIVE,
-								));
-								$e_prps = $e_prp_list->names();
-								foreach($prps as $prp)
+								$prp = trim($prp);
+								if(in_array($prp, $e_prps) || empty($prp))
 								{
-									$prp = trim($prp);
-									if(in_array($prp, $e_prps))
-									{
-										continue;
-									}
-									$no = obj();
-									$no->set_class_id(CL_META);
-									$no->set_status(STAT_ACTIVE);
-									$no->set_parent($classificator[$key]);
-									$no->set_name($prp);
-									$no->save();
+									continue;
 								}
+								$no = obj();
+								$no->set_class_id(CL_META);
+								$no->set_status(STAT_ACTIVE);
+								$no->set_parent($classificator[$key]);
+								$no->set_name($prp);
+								$no->save();
 							}
 						}
-						$object_type->set_meta("clf_type", $clf_type);
-						$object_type->set_meta("classificator", $classificator);
-						$object_type->save();
 					}
+					$object_type->set_meta("clf_type", $clf_type);
+					$object_type->set_meta("classificator", $classificator);
+					$object_type->save();
 					$this->cfgform_i->cfg_proplist = $prplist;
 				}
 				break;
@@ -575,6 +567,7 @@ class webform extends class_base
 
 	function callback_props($arr)
 	{
+		$no_props = array("status", "comment", "name");
 		//arr($this->cfgform_i->all_props);
 		$this->read_template("avail_props.tpl");
 		$prp_count = array();
@@ -584,9 +577,10 @@ class webform extends class_base
 		}
 		$show_props = array();
 		$ext_count = array();
+		// these props won't go to heaven
 		foreach($this->cfgform_i->all_props as $key => $prop)
 		{
-			if(!in_array($prop["type"], $show_props) && $prop["type"] != "status")
+			if(!in_array($prop["type"], $show_props) && !in_array($prop["type"], $no_props))
 			{
 				$show_props[$prop["type"]] = $prop;
 			}
@@ -615,6 +609,7 @@ class webform extends class_base
 
 	function add_new_properties($arr)
 	{
+		$no_props = array("status", "comment", "name");
 		$target = $arr["request"]["target"];
 		// first check, whether a group with that id exists
 		$_tgt = $this->cfgform->meta("cfg_groups");
@@ -650,6 +645,10 @@ class webform extends class_base
 							if($c <= 0)
 							{
 								break;
+							}
+							if(in_array($key, $no_props))
+							{
+								continue;
 							}
 							if(!array_key_exists($key, $prplist) && $val["type"] == $pkey)
 							{
@@ -836,11 +835,6 @@ class webform extends class_base
 				"obj" => "CSS",
 			),
 		);
-		/*
-		$rel_folders = $arr["obj_inst"]->connections_from(array(
-			"type" => "RELTYPE_".$vars[$prop]["rel"]."_FOLDER",
-		));
-		*/
 		$rels = $arr["obj_inst"]->connections_from(array(
 			"type" => "RELTYPE_".$vars[$prop]["rel"],
 		));
@@ -870,7 +864,6 @@ class webform extends class_base
 	
 	function callback_styles($arr)
 	{
-		//$object_type = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE");
 		$sel_styles = safe_array($arr["obj_inst"]->meta("styles"));
 		$m_styles = safe_array($arr["obj_inst"]->meta("m_styles"));
 		$this->get_rel_props(array(
@@ -1099,6 +1092,7 @@ class webform extends class_base
 		{
 			return $rval;
 		}
+		$prplist = safe_array($cfgform->meta("cfg_proplist"));
 		$is_valid = $this->validate_data(array(
 			"cfgform_id" => $cfgform->id(),
 			"request" => $arr,
@@ -1111,29 +1105,93 @@ class webform extends class_base
 		}
 		else
 		{
+			$register = $obj_inst->get_first_obj_by_reltype("RELTYPE_REGISTER");
 			$o = obj();
-			$parent = $obj_inst->parent();
-			if($register = $obj_inst->get_first_obj_by_reltype("RELTYPE_REGISTER"))
-			{
-				$prop = $register->prop("data_rootmenu");
-				if(!empty($prop))
-				{
-					$parent = $prop;
-				}
-			}
 			$o->set_class_id(CL_REGISTER_DATA);
-			$o->set_parent($parent);
+			$o->set_parent($register->prop("data_rootmenu"));
 			$o->set_status(STAT_ACTIVE);
-			foreach($o->get_property_list() as $pn => $pd)
-			{
-				$o->set_prop($pn, $arr[$pn]);
-			}
-
-			$o->set_meta("object_type", $object_type->id());
 			$o->set_meta("cfgform_id", $cfgform->id());
+			$o->set_meta("object_type", $object_type->id());
 			$o->set_prop("register_id", $register->id());
-			$o->set_name(implode(" ", safe_array($obj_inst->prop("obj_name"))));
 			$o->save();
+			$cls = get_instance(CL_CLASSIFICATOR);
+			$relprops = $this->get_properties_by_type(array(
+				"clid" => CL_REGISTER_DATA,
+				"type" => "classificator",
+			));
+			foreach($arr as $key => $val)
+			{
+				if(!array_key_exists($key, $prplist))
+				{
+					unset($arr[$key]);
+					continue;
+				}
+				// goddamn conversion...
+				if($prplist[$key]["type"] == "date_select")
+				{
+					$val = mktime(0, 0, 0, $val["month"], $val["day"], $val["year"]);
+				}
+				if($prplist[$key]["type"] == "classificator")
+				{
+					$cls->process_vcl_property(array(
+						"obj_inst" => $o,
+						"prop" => array(
+							"name" => $key,
+							"value" => $val,
+							"reltype" => $relprops[$key]["reltype"],
+							"store" => "connect",
+						),
+						"clid" => CL_REGISTER_DATA,
+					));
+				}
+				$o->set_prop($key, $val);
+			}
+			foreach(safe_array($obj_inst->prop("obj_name")) as $key => $val)
+			{
+				$name .= " ".$args[$key];
+			}
+			$o->set_name(trim($name));
+			$o->save();
+			$emails = $obj_inst->connections_from(array(
+				"type" => "RELTYPE_EMAIL",
+			));
+			$body = "";
+			foreach($arr as $key => $val)
+			{
+				if($prplist[$key]["type"] == "date_select")
+				{
+					$val = $val["day"].".".$val["month"].".".$val["year"];
+				}
+				if($prplist[$key]["type"] == "classificator")
+				{
+					list($choices,,) = $cls->get_choices(array(
+						"clid" => CL_REGISTER_DATA,
+						"name" => $key,
+						"obj_inst" => $obj_inst,
+					));
+					$choices = $choices->names();
+					$vals = array();
+					$val = is_array($val) ? $val : array($val);
+					foreach($val as $valx)
+					{
+						$vals[] = $choices[$valx];
+					}
+					$val = implode(", ", $vals);
+				}
+				$body .= "$key: $val\n";
+			}
+			$awm = get_instance("protocols/mail/aw_mail");
+			foreach($emails as $eml)
+			{
+				$email = $eml->to();
+				$awm->create_message(array(
+					"froma" => $obj_inst->prop("def_mail"),
+					"subject" => $obj_inst->name(),
+					"to" => $email->prop("mail"),
+					"body" => $body,
+				));
+				$awm->gen_mail();
+			}
 		}
 		return $rval;
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.13 2004/11/25 11:32:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.14 2004/11/30 10:16:37 ahti Exp $
 // register.aw - Register 
 /*
 
@@ -187,14 +187,14 @@ class register extends class_base
 
 		$t->define_field(array(
 			"name" => "createdby",
-			"caption" => "Kes l&otilde;i",
+			"caption" => "Looja",
 			"sortable" => 1,
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "created",
-			"caption" => "Millal loodi",
+			"caption" => "Loodud",
 			"sortable" => 1,
 			"type" => "time",
 			"format" => "d.m.Y H:i",
@@ -203,14 +203,14 @@ class register extends class_base
 
 		$t->define_field(array(
 			"name" => "modifiedby",
-			"caption" => "Kes muutis",
+			"caption" => "Muutja",
 			"sortable" => 1,
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "modified",
-			"caption" => "Millal muudeti",
+			"caption" => "Muudetud",
 			"sortable" => 1,
 			"type" => "time",
 			"format" => "d.m.Y H:i",
@@ -233,15 +233,19 @@ class register extends class_base
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_data_tbl($t);
-
+		$t->set_sortable(false);
 		$filt = array(
 			"class_id" => CL_REGISTER_DATA,
-			"register_id" => $arr["obj_inst"]->id()
+			"register_id" => $arr["obj_inst"]->id(),
 		);
 
 		if (!$arr["request"]["sortby"])
 		{
-			$arr["request"]["sortby"] = "name";
+			$arr["request"]["sortby"] = "objects.created";
+		}
+		if (!$arr["request"]["sort_order"])
+		{
+			$arr["request"]["sort_order"] = "desc";
 		}
 
 		$filt["sort_by"] = $arr["request"]["sortby"]." ".$arr["request"]["sort_order"];
