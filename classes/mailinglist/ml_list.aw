@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.58 2004/08/26 14:27:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.59 2004/08/27 11:04:49 duke Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -351,13 +351,7 @@ class ml_list extends class_base
 				$errmsg .= $errprop["msg"] . "<br>";
 			};
 
-			$con = new connection();
-			$conns = $con->find(array(
-				"relobj_id" => $rel_id,
-			));
-			$conn = reset($conns);
-			$this->flush_cache($conn["from"]);
-
+			aw_session_set("no_cache",1);
 		
 			// fsck me plenty
 			aw_session_set("cb_reqdata",$request);
