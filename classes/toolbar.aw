@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/toolbar.aw,v 2.1 2002/09/25 22:45:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/toolbar.aw,v 2.2 2002/09/26 16:23:00 duke Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -21,7 +21,9 @@ class toolbar extends aw_template
 		$this->vars($args);
 		return $this->parse("button");
 	}
-	
+
+	////
+	// !Generates a separator
 	function gen_separator($args = array())
 	{
 		$this->vars($args);
