@@ -74,9 +74,11 @@ class site_template_compiler extends aw_template
 
 		$this->read_template($tpl);
 		$this->tplhash = md5($path.$tpl);
+
 		$this->parse_template_parts();
 		$this->compile_template_parts();
 		$code =  "<?php\n".$this->generate_code()."?>";
+
 		exit_function("site_template_compiler::compile");
 		return $code;
 	}
@@ -513,7 +515,10 @@ class site_template_compiler extends aw_template
 					$chd_tpl_dat = $ldat["child_tpls"][$cur_tpl];
 					$chd_area = $chd_tpl_dat["area"];
 					$chd_lv = $chd_tpl_dat["level"];
-					$this->compile_template_level($chd_area, $this->menu_areas[$chd_area], $chd_lv, $this->menu_areas[$chd_area]["levels"][$chd_lv]);
+					if (!($chd_area == $area && $chd_lv == $level))
+					{
+						$this->compile_template_level($chd_area, $this->menu_areas[$chd_area], $chd_lv, $this->menu_areas[$chd_area]["levels"][$chd_lv]);
+					}
 					$this->no_top_level_code_for[$chd_area][$chd_lv] = true;
 				}
 
