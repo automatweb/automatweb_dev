@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.50 2003/04/25 11:36:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.51 2003/04/25 13:42:57 kristo Exp $
 // image.aw - image management
 /*
 	@default group=general
@@ -85,6 +85,7 @@ class image extends class_base
 		{
 			$url = $this->mk_my_orb("show", array("fastcall" => 1,"file" => basename($url)),"image",false,true,"/");
 			$retval = str_replace("automatweb/", "", $url);
+			$retval .= "/aw_img.jpg";
 		}
 		else
 		{
@@ -216,7 +217,8 @@ class image extends class_base
 					$replacement = "<table border=0 cellpadding=0 cellspacing=0 $vars[align]><tr><td>";
 					if (!empty($idata["big_url"]))
 					{
-						$replacement .= "<a href=\"#\" onClick=\"javascript:window.open('$idata[big_url]','popup','width=400,height=400');\">";
+						$bi_show_link = $this->mk_my_orb("show_big", array("id" => $f["target"]));
+						$replacement .= "<a href=\"#\" onClick=\"window.open('$bi_show_link','popup','width=400,height=400');\">";
 					};
 					$replacement .= "<img src='$idata[url]' alt='$alt' title='$alt' border=\"0\">";
 					if (!empty($idata["big_url"]))
@@ -393,6 +395,7 @@ class image extends class_base
 
 					};
 					header("Content-type: $type");
+					header("Content-length: ".filesize($fname));
 					readfile($fname);
 				};
 			} 
@@ -546,11 +549,11 @@ class image extends class_base
 		else
 		if ($prop['name'] == 'file2')
 		{
-			global $file2,$file_type2;
+			global $file2,$file2_type;
 			$_fi = get_instance("file");
 			if (is_uploaded_file($file2))
 			{
-				$fl = $_fi->_put_fs(array("type" => $file_type2, "content" => $this->get_file(array("file" => $file2))));
+				$fl = $_fi->_put_fs(array("type" => $file2_type, "content" => $this->get_file(array("file" => $file2))));
 				$prop["value"] = $fl;
 			}
 			else
@@ -720,6 +723,17 @@ class image extends class_base
 			unlink($tn);
 			return $img;
 		}
+	}
+
+	function show_big($arr)
+	{
+		extract($arr);
+		$im = $this->get_image_by_id($id);
+		$this->read_any_template("show_big.tpl");
+		$this->vars(array(
+			"big_url" => $this->get_url($im["meta"]["file2"])
+		));
+		die($this->parse());
 	}
 }
 ?>
