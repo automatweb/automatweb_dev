@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.37 2005/01/04 10:39:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.38 2005/01/04 11:11:01 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -491,7 +491,8 @@ class object_treeview_v2 extends class_base
 				"tree_obj" => $ob,
 				"sel_cols" => $sel_cols,
 				"col_list" => $col_list,
-				"edit_columns" => $edit_columns
+				"edit_columns" => $edit_columns,
+				"pfk" => $ob
 			));
 			$group_name = $odata[$group_field];
 		}
@@ -972,7 +973,7 @@ class object_treeview_v2 extends class_base
 			"url" => $url,
 			"caption" => $name,
 		);
-		if ($d_o->prop("show_link_new_win"))
+		if ($parms["pfk"]->prop("show_link_new_win"))
 		{
 			$ld["target"] = "_blank";
 		}
