@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.61 2004/04/23 08:26:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.62 2004/05/03 11:23:53 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -105,6 +105,15 @@ class htmlclient extends aw_template
 	{
 		// if value is array, then try to interpret
 		// it as a list of elements.
+
+		// the (possibly bad) side effect is that the first added panel will be used
+		// as the main tab panel. OTOH, the first should always be the one that
+		// is added by class_base, so we should be covered
+		if ($args["type"] == "tabpanel" && !is_object($this->tabpanel))
+		{
+			$this->tabpanel = &$args["vcl_inst"];
+			return false;
+		};
 
 		// I need to redo this
 		$wrapchildren = false;
@@ -259,7 +268,6 @@ class htmlclient extends aw_template
 				STAT_NOTACTIVE => "Ei",
 			);
 		};
-
 
 		if (empty($args["value"]) && is_callable(array($args["vcl_inst"],"get_html")))
 		{
@@ -590,16 +598,21 @@ class htmlclient extends aw_template
 			{
 				$rv = $arr["content"];
 			};
+			$tp = $this->tp;
+			if (is_object($this->tabpanel))
+			{
+				$tp = $this->tabpanel;
+			};
 			if ($this->form_layout != "boxed")
 			{
-				$rv = $this->tp->get_tabpanel(array(
+				$rv = $tp->get_tabpanel(array(
 					"content" => $rv,
 					//"panels_only" => true,
 				));
 			}
 			else
 			{
-				$tabs = $this->tp->get_tabpanel(array());
+				$tabs = $tp->get_tabpanel(array());
 				$this->additional_content["top"] .= $tabs;
 			};
 		};
@@ -760,7 +773,14 @@ class htmlclient extends aw_template
 
 	function add_tab($arr)
 	{
-		return $this->tp->add_tab($arr);
+		if (is_object($this->tabpanel))
+		{
+			return $this->tabpanel->add_tab($arr);
+		}
+		else
+		{
+			return $this->tp->add_tab($arr);
+		};
 	}
 };
 ?>
