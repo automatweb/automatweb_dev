@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.26 2002/02/12 15:42:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.27 2002/02/14 17:09:43 duke Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -690,6 +690,12 @@ class users_user extends aw_template
 		// kodukataloom
 		$hfid = $this->new_object(array("parent" => 1, "name" => $uid, "class_id" => 1, "comment" => $uid." kodukataloog"),false);
 		$this->db_query("INSERT INTO menu (id,type) VALUES($hfid,".MN_HOME_FOLDER.")");
+
+
+		if (defined("MD5_PASSWORDS"))
+		{
+			$password = md5($password);
+		};
 
 		// teeme kasutaja
 		$this->db_query("INSERT INTO users (uid,password,created,join_form_entry,email,home_folder,join_grp,created_hour,created_day,created_week,created_month,created_year) VALUES('$uid','$password',$t,'$join_form_entry','$email',$hfid,'$join_grp','".date("H",$t)."','".date("d",$t)."','".date("w",$t)."','".date("m",$t)."','".date("Y",$t)."')");
