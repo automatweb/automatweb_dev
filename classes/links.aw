@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.34 2003/08/18 13:56:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.35 2003/08/18 14:35:02 kristo Exp $
 
 /*
 
@@ -229,20 +229,23 @@ class links extends class_base
 		{
 			if ($img)
 			{
-				$replacement = sprintf("<a href='%s' %s><img src='%s' alt='%s' border='0'></a>",$url,$target,$this->img,$caption);
+				$replacement = sprintf("<a href='%s' %s title='%s'><img src='%s' alt='%s' border='0'></a>",$url,$target,$this->cur_link["alt"],$this->img,$caption);
 			}
 			else
 			{
-				$replacement = sprintf("<a href='%s' %s>%s</a>",$url,$target,$caption);
+				$replacement = sprintf("<a href='%s' %s title='%s'>%s</a>",$url,$target,$this->cur_link["alt"],$caption);
 			}
 		};
 		$this->img = "";
 		return $replacement;
 	}
-	
-	function draw_link($target)
+
+	////
+	// !if ret_all is set, returns all the information about the link
+	function draw_link($target,$ret_all = false)
 	{
 		$link = $this->get_link($target);
+		$this->cur_link = $link;
 		if (not($link))
 		{
 			return;
@@ -294,7 +297,7 @@ class links extends class_base
 		};
 
 
-		return(array($url,$target,$link["name"]));
+		return $ret_all ? $link : (array($url,$target,$link["name"]));
 	}
 	
 	////
@@ -321,8 +324,7 @@ class links extends class_base
 		return $row;
 	}
 
-  // registreerib kliki lingile
-
+	// registreerib kliki lingile
 	// peab ehitama ka mehhanisimi spämmimise vältimiseks
 	function add_hit($id,$host,$uid) 
 	{
@@ -336,6 +338,52 @@ class links extends class_base
 		$this->db_query($q);
 		$name = $this->db_fetch_field("SELECT name FROM objects where oid = $id","name");
 		$this->_log(ST_EXTLINK, SA_CLICK, $name, $id);
+	}
+
+	////
+	// !Returns a list of links matching the given conditions. Used to implement
+	// the feature of adding links to a document
+	function get_link_list($arr)
+	{
+		$retval = "";
+		$qparts = array(
+			"parent" => $arr["parent"],
+			"class_id" => $this->clid,
+			"status" => STAT_ACTIVE,
+		);
+
+                if (!empty($arr["period"]))
+                {
+                        $qparts["period"] = $arr["period"];
+                };
+
+                $q = sprintf("SELECT oid,name,created,createdby,commtext FROM objects
+                                LEFT JOIN forum_comments ON (objects.oid = forum_comments.id)
+                                WHERE (%s) ORDER BY created",join(" AND ",map2("%s='%s'",$qparts)));
+
+                $this->db_query($q);
+
+		// don't read the template/show anything if there are no comments,
+		// perhaps this should be configurable though
+		if (sizeof($this->num_rows()) > 0)
+		{
+			$this->sub_merge = 1;
+			$this->read_template("link_list.tpl");
+			while($row = $this->db_next())
+			{
+				$this->save_handle();
+                                $ldata = $this->draw_link($row["oid"],true);
+				$this->restore_handle();
+                                $this->vars(array(
+                                        "user" => $ldata["createdby"],
+                                        "url" => $ldata["url"],
+                                        "name" => $ldata["name"],
+                                ));
+                                $this->parse("one_url");
+                        };
+			$retval = $this->parse();
+                }
+		return $retval;
 	}
 }
 ?>
