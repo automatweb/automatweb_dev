@@ -7,4 +7,6 @@
 	<class id="periods" name="Perioodid"/>
 	<class id="contents" name="Sisukaart"/>
 	<class id="messenger_v2" name="E-post"/>
+	<class id="planner" name="Kalender"/>
+	<class id="menu" name="Kaust"/>
 </interface>
