@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.13 2003/10/30 18:09:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.14 2003/10/31 13:46:07 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -1058,6 +1058,10 @@ class messenger_v2 extends class_base
 			case RELTYPE_RULE:
 				$retval = array(CL_MAIL_RULE);
 				break;
+
+			case RELTYPE_MAIL_IDENTITY:
+				$retval = array(CL_MESSENGER_IDENTITY);
+				break;
 		};
 		return $retval;
 	}
@@ -1126,24 +1130,21 @@ class messenger_v2 extends class_base
 
 		$req_grp = $arr["request"]["group"];
 
-		/*
-		if ($arr["id"] == "msg_view" && $req_grp != "main_view")
-		{
-			return false;
-		};
-		
-		if ($arr["id"] == "msg_view" && $req_grp != "msg_view")
-		{
-			return false;
-		};
-		
-		if ($arr["id"] == "write_mail" && $req_grp != "write_mail")
-		{
-			return false;
-		};
-		*/
+	}
 
-
+	function _get_identity_list($arr)
+	{
+		$msgrobj = new object($arr["id"]);
+		$rv = array($msgrobj->prop("fromname"));
+		$conns = $msgrobj->connections_from(array(
+			"type" => RELTYPE_MAIL_IDENTITY,
+		));
+		foreach($conns as $conn)
+		{
+			$obj = new object($conn->to());
+			$rv[$obj->id()] = $obj->prop("name") . " <" . $obj->prop("email") . ">";
+		};
+		return $rv;
 	}
 
 }

@@ -1,11 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.8 2003/10/30 17:59:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.9 2003/10/31 13:46:07 duke Exp $
 // mail_message.aw - Mail message
 
 /*
-	@default table=objects
 	@default group=general
-
 	@default table=messages
 
 	@property mailtoolbar type=toolbar store=no no_caption=1
@@ -14,14 +12,14 @@
 	@property uidl type=hidden
 	@caption UIDL
 	
+	@property mfrom type=callback callback=callback_get_identities
+	@caption Kellelt
+	
 	@property mto type=textbox size=80
 	@caption Kellele
 
-	@property mfrom type=textbox size=80
-	@caption Kellelt
-	
 	@property name type=textbox size=80 table=objects
-	@caption Subjekt
+	@caption Teema
 
 	@property message type=textarea cols=80 rows=40 
 	@caption Sisu
@@ -46,7 +44,7 @@
 
 	classinfo relationmgr=yes
 
-	@groupinfo general caption="Kala" submit=no
+	@groupinfo general submit=no
 	@tableinfo messages index=id master_table=objects master_index=oid
 
 */
@@ -141,7 +139,13 @@ class mail_message extends class_base
 			$body[$partnum] = $part1;
 			
 			$envelope = array();
-                        $envelope["from"] = $arr["request"]["mfrom"];
+
+			$msgr = get_instance("messenger/messenger_v2");
+			$identities = $msgr->_get_identity_list(array(
+				"id" => $arr["request"]["msgrid"],	
+			));
+
+                        $envelope["from"] = $identities[$arr["request"]["mfrom"]];
                         $envelope["subject"] = $arr["request"]["name"];
                         $envelope["date"] = date('r');
 
@@ -178,19 +182,6 @@ class mail_message extends class_base
 				$retval = PROP_IGNORE;
 				break;
 
-			case "mfrom":
-				$data["value"] = htmlspecialchars($this->msgdata["from"]);
-				if (empty($data["value"]))
-				{
-					$msgrobj = new object($arr["request"]["msgrid"]);
-					$data["value"] = $msgrobj->prop("fromname");
-				};	
-				if ($this->state == "show")
-				{
-					$data["type"] = "text";
-				};
-				break;
-		
 			case "mto":
 				$data["value"] = htmlspecialchars($this->msgdata["to"]);
 				if ($this->state == "show")
@@ -293,7 +284,6 @@ class mail_message extends class_base
 			$this->deliver(array("id" => $arr["id"]));
 		};
 	}
-		
 
 	// basically the same as deliver, except that this one is _not_
 	// called through ORB, and you can specify replacements here
@@ -391,6 +381,30 @@ class mail_message extends class_base
 		print "-------<br />";
 		print "saadetud<br />";
 		die();
+	}
+
+	function callback_get_identities($arr)
+	{
+		$rv = $arr["prop"];
+			
+		if ($this->state == "show")
+		{
+			$rv["value"] = htmlspecialchars($this->msgdata["from"]);
+			$rv["type"] = "text";
+		}
+		else
+		{
+			$msgr = get_instance("messenger/messenger_v2");
+			$rv["type"] = "select";
+			$opts = $msgr->_get_identity_list(array(
+				"id" => $arr["request"]["msgrid"],
+			));
+			foreach($opts as $key => $item)
+			{
+				$rv["options"][$key] = htmlspecialchars($item);
+			};
+		};	
+		return array($rv);
 	}
 
 	////
