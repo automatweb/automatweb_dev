@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.4 2001/10/15 05:03:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.5 2001/11/15 13:10:28 duke Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 // I decided to make it a separate class, because I think the style.aw 
 // class is too cluttered.
@@ -115,7 +115,8 @@ class css extends aw_template {
 		$this->quote($args);
 		extract($args);
 		$id = $this->new_object(array("parent" => $parent,"name" => $name,"class_id" => CL_CSS));
-		return $this->mk_orb("change",array("id" => $oid));
+		$url = $this->mk_orb("change",array("id" => $id));
+		return $url;
 	}
 
 	////

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.58 2001/11/14 19:18:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.59 2001/11/15 13:10:28 duke Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -167,7 +167,7 @@ class document extends aw_template
 			{
 				$pstr = "objects.parent = $parent";
 			};
-			$ordby = "objects.modified DESC";
+//			$ordby = "objects.modified DESC";
 		}
 		else
 		{
@@ -212,9 +212,9 @@ class document extends aw_template
 			objects.parent as parent
 			FROM documents
 			LEFT JOIN objects ON
-			(documents.docid = objects.oid)
+			(documents.docid = objects.brother_of)
 			WHERE $pstr && $rstr $v
-			ORDER BY objects.period DESC,$ordby $lm";
+			ORDER BY $ordby $lm";
 		$this->db_query($q);
 	}
 
@@ -338,7 +338,14 @@ class document extends aw_template
 			if (defined("PRINT_CAP"))
 			{
 				$pc = localparse(PRINT_CAP,array("link" => $REQUEST_URI . "&print=1"));
-				$doc["lead"] = $pc . $doc["lead"];
+				if (!($doc["showlead"] == 1 || $showlead == 1))
+				{
+					$doc["content"] = $pc . $doc["content"];
+				}
+				else
+				{
+					$doc["lead"] = $pc . $doc["lead"];
+				}
 			}
 			else
 			{
@@ -656,13 +663,13 @@ class document extends aw_template
 			{
 				$keywords[$row["keyword"]] = sprintf(" <a href='%s' title='%s' target='_blank'>%s<sup><b>*</b></sup></a> ",$this->mk_my_orb("lookup",array("id" => $row["keyword_id"]),"document"),"LINK",$row["keyword"]);
 			}
-		
+	
 			if (is_array($keywords))
 			{
 				// performs the actual search and replace
 				foreach ($keywords as $k_key => $k_val)
 				{
-					$doc["content"] = preg_replace("/\s$k_key\s/i",$k_val," " . $doc["content"] . " ");
+					$doc["content"] = preg_replace("/$k_key/i",$k_val," " . $doc["content"] . " ");
 				};
 
 			}
@@ -2591,8 +2598,27 @@ class document extends aw_template
 
 		classload("objects");
 		$ob = new db_objects;
+		$ol = $ob->get_list(true);
 
-		$this->vars(array("docid" => $id,"sections"		=> $this->multiple_option_list($sar,$ob->get_list(true)),
+		classload("config");
+		$conf = new config;
+		$df = $conf->get_simple_config("docfolders");
+		$xml = new xml;
+		$_df = $xml->xml_unserialize(array("source" => $df));
+
+		$ndf = array();
+
+		foreach($_df as $dfid => $dfname)
+		{
+			$ndf[$dfid] = $ol[$dfid];
+		}
+		
+		if (count($ndf) < 2)
+		{
+			$ndf = $ol;
+		}
+
+		$this->vars(array("docid" => $id,"sections"		=> $this->multiple_option_list($sar,$ndf),
 											"reforb"	=> $this->mk_reforb("submit_menus",array("id" => $id)),
 											"preview"	=> $this->mk_orb("preview", array("id" => $id)),
 											"menurl"	=> $this->mk_orb("sel_menus",array("id" => $id)),
@@ -2649,7 +2675,7 @@ class document extends aw_template
 		{
 			if ($oid != $id)	// no recursing , please
 			{
-				$noid = $this->new_object(array("parent" => $oid,"class_id" => CL_BROTHER_DOCUMENT,"status" => 1,"brother_of" => $id,"name" => $obj["name"],"comment" => $obj["comment"]));
+				$noid = $this->new_object(array("parent" => $oid,"class_id" => CL_BROTHER_DOCUMENT,"status" => $obj["status"],"brother_of" => $id,"name" => $obj["name"],"comment" => $obj["comment"],"period" => $obj["period"]));
 			}
 		}
 
@@ -2686,7 +2712,7 @@ class document extends aw_template
 			while ($row = $this->db_next())
 			{
 				$this->vars(array("name" => $row["name"], "id" => $row["oid"],
-													"brother" => $this->mk_orb("create_bro", array("parent" => $parent, "id" => $row["oid"], "s_name" => $s_name, "s_content" => $s_content)),
+													"brother" => $this->mk_orb("create_bro", array("parent" => $parent, "id" => $row["oid"], "s_name" => $s_name, "s_content" => $s_content,"period" => $GLOBALS["period"])),
 													"change" => $this->mk_orb("change", array("parent" => $parent, "id" => $row["oid"]))));
 				$l.=$this->parse("LINE");
 			}
@@ -2958,8 +2984,8 @@ class document extends aw_template
 			$max_count = max($c,$max_count);
 
 			// find the first paragraph of text
-			$co = strip_tags($row[content]);
-			$co = substr($co,0,strpos($co,"\n"));
+			$co = substr($row[content],0,strpos($row[content],"<BR>"));
+			$co = strip_tags($co);
 			$co = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$co);
 			$docarr[] = array("matches" => $c, "title" => $row[title],"section" => $row[docid],"content" => $co,"modified" => $this->time2date($row[modified],5),"tm" => $row[tm]);
 			

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.65 2001/11/06 07:18:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.66 2001/11/15 13:10:28 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -139,6 +139,7 @@ class core extends db_connector
 
 		$metadata[$key] = $value;
 		$newmeta = $xml->xml_serialize($metadata);
+
 		if ($args["metadata"])
 		{
 			$retval = $newmeta;

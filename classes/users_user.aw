@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.20 2001/11/15 08:29:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.21 2001/11/15 13:10:29 duke Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -140,7 +140,7 @@ class users_user extends aw_template
 		// is_valid_uid funktsioon ntx?
 		if (strlen($uid) < 2)
 		{
-			$msg = sprintf(E_USR_UID_TOO_SHORT,$uid,$password);
+			$msg = sprintf(E_USR_UID_TOO_SHORT,$uid,"");
 			$this->send_alert($msg);
 			$this->_log("auth",$msg);
 			$load_user = false;
@@ -148,7 +148,7 @@ class users_user extends aw_template
 		// eelnevad kommentaarid kaivad ka parooli kontrollimise kohta
 		elseif (strlen($password) < 2)
 		{
-			$msg = sprintf(E_USR_PASS_TOO_SHORT,$uid,$password);
+			$msg = sprintf(E_USR_PASS_TOO_SHORT,$uid,"");
 			$this->send_alert($msg);
 			$this->_log("auth",$msg);
 			$load_user = false;
@@ -176,7 +176,7 @@ class users_user extends aw_template
 			}
 			else
 			{
-				$msg = sprintf(E_USR_WRONG_PASS,$uid,$password);
+				$msg = sprintf(E_USR_WRONG_PASS,$uid,"");
 				$this->send_alert($msg);
 				$this->_log("auth",$msg);
 			};

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.12 2001/10/02 10:05:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.13 2001/11/15 13:10:29 duke Exp $
 // table.aw - tabelite haldus
 global $orb_defs;
 
@@ -321,7 +321,7 @@ $orb_defs["table"] ="xml";/* array("change"						=> array("function"	=> "gen_adm
 			for ($i=0; $i < $this->arr["cols"]; $i++)
 				for ($a=0; $a < $this->arr["rows"]; $a++)
 				{
-					$this->dequote(&$text[$a][$i]);
+					$this->dequote($text[$a][$i]);
 					$this->arr["contents"][$a][$i]["text"] = $text[$a][$i];
 				}
 
@@ -371,7 +371,7 @@ $orb_defs["table"] ="xml";/* array("change"						=> array("function"	=> "gen_adm
 				$this->del_row(array("row" => $v));
 
 			$ar["str"]=serialize($this->arr);
-			$this->quote(&$ar);
+			$this->quote($ar);
 			extract($ar);
 						
 			$this->db_query("UPDATE aw_tables SET contents = '$str' WHERE id = ".$this->table_id);

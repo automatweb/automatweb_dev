@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.78 2001/11/14 07:14:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.79 2001/11/15 13:10:28 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -972,10 +972,15 @@ class form extends form_base
 			$css_file = "";
 			classload("css");
 			$css = new css;
+			$used = array();
 			foreach($this->styles as $stylid => $stylname)
 			{
-				$css_info = $this->get_obj_meta($stylid);
-				$css_file .= $css->_gen_css_style($stylname,$css_info["meta"]["css"]);
+				if ($used[$stylid] != 1)
+				{
+					$used[$stylid] = 1;
+					$css_info = $this->get_obj_meta($stylid);
+					$css_file .= $css->_gen_css_style($stylname,$css_info["meta"]["css"]);
+				}
 			}
 		}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.33 2001/11/09 22:45:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.34 2001/11/15 13:10:28 duke Exp $
 // keywords.aw - dokumentide võtmesõnad
 global $orb_defs;
 $orb_defs["keywords"] = "xml";
@@ -89,7 +89,7 @@ class keywords extends aw_template {
 		$data = " $data ";
 		while($row = $this->db_next())
 		{
-			if (preg_match("/\s$row[keyword]\s/i",$data))
+			if (preg_match("/$row[keyword]/i",$data))
 			{
 				$this->save_handle();
 				$q = "INSERT INTO keywordrelations (id,keyword_id) VALUES ('$id','$row[oid]')";

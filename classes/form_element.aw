@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.35 2001/11/14 07:28:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.36 2001/11/15 13:10:28 duke Exp $
 // form_element.aw - vormi element.
 lc_load("form");
 
@@ -1724,7 +1724,10 @@ class form_element extends aw_template
 
 			if (is_array($ar))
 			{
-				uksort($ar,array($this,"__lb_sort"));
+				if ($this->arr["sort_by_order"] || $this->arr["sort_by_alpha"])
+				{
+					uksort($ar,array($this,"__lb_sort"));
+				}
 				$cnt=0;
 				$ordar = $this->arr["listbox_order"];
 				foreach( $ar as $k => $v)
@@ -1741,7 +1744,10 @@ class form_element extends aw_template
 	{
 		if ($this->arr["sort_by_order"])
 		{
-			if ($this->arr["listbox_order"][$a] == $this->arr["listbox_order"][$b])
+			$oa = (int)$this->arr["listbox_order"][$a];
+			$ob = (int)$this->arr["listbox_order"][$b];
+
+			if ($oa == $ob)
 			{
 				if ($this->arr["sort_by_alpha"])
 				{
@@ -1754,7 +1760,7 @@ class form_element extends aw_template
 				}
 			}
 			else
-			if ($this->arr["listbox_order"][$a] < $this->arr["listbox_order"][$b])
+			if ($oa < $ob)
 			{
 				return -1;
 			}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.67 2001/11/15 09:17:23 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.68 2001/11/15 13:10:28 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -431,10 +431,14 @@ class menuedit extends aw_template
 			$this->left_pane = false;
 		}
 
+		$this->left_pane = true;
+
 		if (!$this->mar[$sel_menu_id]["right_pane"])
 		{
 			$this->right_pane = false;
 		}
+
+		$this->right_pane = true;
 
 		// loome sisu
 		if ($obj["class_id"] == CL_PSEUDO && $this->is_link_collection($section) && $text == "")
@@ -4336,7 +4340,6 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$awt->start("menuedit::make_menu_caches");
 		$cache = new cache();
 		$ms = $cache->db_get("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID);
-		$ms = 0;
 		if (!$ms)
 		{
 			// make one big array for the whole menu

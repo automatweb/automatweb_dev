@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/events3.aw,v 2.2 2001/11/14 19:05:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/events3.aw,v 2.3 2001/11/15 13:10:28 duke Exp $
 // events.aw - the sucky sucky version of the PIKK calendar
 
 //  kalendri vaated teemade kaupa:
@@ -187,6 +187,11 @@ class events3 extends aw_template {
 			$end = mktime(23,59,59,$mon,$day,$year);
 			$limits = " AND events3.start >= $start AND events3.start <= $end";
 			$this->vars(array("date" => date("d-m-Y",$start)));
+		}
+		elseif ($op == "view")
+		{
+			global $id;
+			$limits = " AND id = '$id' ";
 		}
 		elseif ($op == "tomorrow")
 		{
