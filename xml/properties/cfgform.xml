@@ -39,34 +39,63 @@
             <caption>Definitsioon</caption>
       </property>
       <property>
-            <name>property_list</name>
-            <type>callback</type>
-            <callback>callback_gen_property_list</callback>
+            <name>navtoolbar</name>
+            <type>toolbar</type>
+            <group>layout</group>
             <store>no</store>
-            <group>prplist</group>
+            <no_caption>1</no_caption>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Omadused</caption>
+            <caption>Toolbar</caption>
       </property>
       <property>
-            <name>group_list</name>
+            <name>layout</name>
             <type>callback</type>
-            <callback>callback_gen_group_list</callback>
+            <callback>callback_gen_layout</callback>
             <store>no</store>
-            <group>grplist</group>
+            <group>layout</group>
+            <no_caption>1</no_caption>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Grupid</caption>
+            <caption>Layout</caption>
       </property>
+      <property>
+            <name>availtoolbar</name>
+            <type>toolbar</type>
+            <group>avail</group>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Av. Toolbar</caption>
+      </property>
+      <property>
+            <name>availprops</name>
+            <type>callback</type>
+            <callback>callback_gen_avail_props</callback>
+            <store>no</store>
+            <group>avail</group>
+            <no_caption>1</no_caption>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kõik omadused</caption>
+      </property>
+      <classinfo>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
       <groupinfo>
-            <prplist>
-                  <caption>Omadused</caption>
-            </prplist>
-            <grplist>
-                  <caption>Grupid</caption>
-            </grplist>
+            <layout>
+                  <caption>Layout</caption>
+                  <submit>no</submit>
+            </layout>
+            <avail>
+                  <caption>Kõik omadused</caption>
+                  <submit>no</submit>
+            </avail>
       </groupinfo>
 </properties>
 
