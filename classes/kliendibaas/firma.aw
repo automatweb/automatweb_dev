@@ -1,4 +1,4 @@
-<?php
+<?php  
 /*
 
 	@tableinfo kliendibaas_firma index=oid master_table=objects master_index=oid
@@ -77,11 +77,13 @@ class firma extends class_base
 	function set_property($args = array())
 	{
 		$data = &$args["prop"];
+		$form = &$args["form_data"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-			case 'blaa':
-
+			case 'status':
+//				die();
+//				$form['value']=1;
 			break;
 
 		};
@@ -96,40 +98,33 @@ class firma extends class_base
 		{
 			case 'popups':
 
+
+				$arr=array('firmajuht','contact','ettevotlusvorm','korvaltegevused','tooted','pohitegevus');
+
+				foreach($arr as $val)
+				{
+					$str.='if (target == "'.$val."\")\ndocument.changeform.".$val.".value = value;\nelse";
+				}
+
 $data['value']=<<<SCR
 <script language='javascript'>
 
+function pop_select(url)
+{
+	aken=window.open(url,"selector","HEIGHT=300,WIDTH=310,TOP=400,LEFT=500");
+ 	aken.focus();
+}
+
 function put_value(target,value)
 {
-	if (target == "firmajuht")
-		document.changeform.firmajuht.value = value;
-	else
-	if (target == "contact")
-		document.changeform.contact.value = value;
-	else
-	if (target == "ettevotlusvorm")
-		document.changeform.ettevotlusvorm.value = value;
-	else
-	if (target == "korvaltegevused")
-		document.changeform.korvaltegevused.value = value;
-	else
-	if (target == "tooted")
-		document.changeform.tooted.value = value;
-	else
-	if (target == "pohitegevus")
-		document.changeform.pohitegevus.value = value;
-	else
+	$str
 	{
 		alert('form element not found');
 	}
 	document.changeform.submit();
 }
 
-function pop_select(url)
-{
-	aken=window.open(url,"selector","HEIGHT=300,WIDTH=310,TOP=400,LEFT=500")
- 	aken.focus()
-}
+
 </script>
 SCR;
 			break;
