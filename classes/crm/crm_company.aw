@@ -13,7 +13,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 
 @property navtoolbar type=toolbar store=no no_caption=1 group=general_sub,all_actions,meetings,tasks,calls editonly=1
 
-@property name type=textbox size=30 maxlenght=255 table=objects
+@property name type=textbox size=30 maxlength=255 table=objects
 @caption Organisatsiooni nimi
 
 @property comment type=textarea cols=65 rows=3 table=objects

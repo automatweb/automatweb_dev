@@ -22,7 +22,7 @@
             <group>general_sub</group>
             <type>textbox</type>
             <size>30</size>
-            <maxlenght>255</maxlenght>
+            <maxlength>255</maxlength>
             <field>name</field>
             <caption>Organisatsiooni nimi</caption>
       </property>
