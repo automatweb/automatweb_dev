@@ -11,11 +11,11 @@
 
 <!-- SUB: MENU_ITEM_SUB -->
 <a class="menuItem" href=""
-	onmouseover="menuItemMouseover(event, '{VAR:sub_menu_id}');return false;">
-	<span
-	class="menuItemText">{VAR:text}</span><span
-	class="menuItemArrow"><img src="{VAR:baseurl}/automatweb/images/arr.gif" alt="" border="0" /></span></a>
+        onclick="return false;"
+	onmouseover="menuItemMouseover(event, '{VAR:sub_menu_id}');">
+	<span class="menuItemText">{VAR:text}</span><span class="menuItemArrow"><img style="border:0px" src="{VAR:baseurl}/automatweb/images/arr.gif" alt=""></span></a>
 <!-- END SUB: MENU_ITEM_SUB -->
+
 
 <!-- SUB: MENU_SEPARATOR -->
 <div class="menuItemSep"></div>
