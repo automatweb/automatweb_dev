@@ -3,7 +3,6 @@ classload(
 	"core/obj/_int_obj_container_base", 
 	"core/obj/_int_object", 
 	"core/obj/ds_base",
-	"core/obj/ds_local_sql",
 	"core/obj/connection",
 	"core/obj/object_loader", 
 	"core/obj/object_list", 
@@ -21,6 +20,16 @@ classload(
 // and access them through that only, so object data is in memory only once, but there can be several oid pointers to it. 
 // the dummy object class just forwards all calls to the global table.
 // voila - instant object cache!
+
+
+// rules for datasources: 
+// if you create a new wrapper datasource, then it must not derive from anything, be in this folder 
+// the file name must be ds_[name], the class name must be _int_obj_ds_[name] 
+// the constructor must take one parameter - the contained ds instance
+// it must implement all functions in ds_base, even if that just means passing everything to the contained ds
+// this way we minimize the number of connections and duplicate data, therefore save memory
+// if you create a new db-specific datasource (the last one in the chain), the file naming convention still applies, 
+// but it should derive from ds_base and call $this->init() from the constructor, that takes no parameters
 
 class object
 {

@@ -2,13 +2,35 @@
 
 class _int_object_loader
 {
+	// private variables, only object system classes can use these
 	var $ds; 					// data source
 	var $object_member_funcs;	// names of all object class member functions
 	var $cfgu;					// cfgutilities instance
 
 	function _int_object_loader()
 	{
-		$this->ds = new _int_obj_ds_mysql;
+		// init the datasource from the ini file setting
+		$datasources = aw_ini_get("objects.default_datasource");
+		if ($datasources == "")
+		{
+			// default to simple mysql
+			$datasources = "ds_mysql";
+		}
+
+		$dss = array_reverse(explode(",", $datasources));
+	
+		classload("core/obj/ds_".$dss[0]);
+		$clname = "_int_obj_ds_".$dss[0];
+		// the first is the db specific ds, that does not contain anything
+		$this->ds = new $clname;
+
+		for ($i = 1; $i < count($dss); $i++)
+		{
+			classload("core/obj/ds_".$dss[$i]);
+			$clname = "_int_obj_ds_".$dss[$i];
+			$this->ds = new $clname($this->ds);
+		}
+
 		$this->object_member_funcs = get_class_methods("object");
 		$this->cfgu = get_instance("cfg/cfgutils");
 	}
