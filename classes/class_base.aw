@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.34 2002/12/30 17:12:23 duke Exp $
+// $Id: class_base.aw,v 2.35 2002/12/30 19:20:22 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -1285,8 +1285,18 @@ class class_base extends aliasmgr
 				"group" => $group,
 		));
 
+		if (method_exists($this->inst,"callback_get_rel_types"))
+		{
+			$reltypes = $this->inst->callback_get_rel_types();
+		}
+		else
+		{
+			$reltypes = array();
+		};
+
 		$gen = $almgr->new_list_aliases(array(
 			"id" => $id,
+			"reltypes" => $reltypes,
 			"return_url" => $this->mk_my_orb("list_aliases",array("id" => $id),get_class($this->orb_class)),
 		));
 		return $this->gen_output(array("content" => $gen));
