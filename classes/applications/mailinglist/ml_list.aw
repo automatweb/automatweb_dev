@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.4 2004/12/15 12:07:48 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.5 2004/12/20 10:48:59 ahti Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -14,6 +14,9 @@
 
 	@property multiple_folders type=checkbox ch_value=1
 	@caption Lase liitumisel kausta valida
+	
+	@property msg_folder type=relpicker reltype=RELTYPE_MSG_FOLDER
+	@caption Kirjade asukoht
 
 	@property sub_form_type type=select rel=1
 	@caption Vormi tüüp
@@ -84,6 +87,15 @@
 	@caption Listi staatus
 	
 	------------------------------------------------------------------------
+	@default group=unsent
+
+	@property unsent_tb type=toolbar store=no no_caption=1
+	@caption Listi staatuse toolbar
+
+	@property unsent_table type=table store=no no_caption=1
+	@caption Listi staatus
+	
+	------------------------------------------------------------------------
 	@default group=write_mail
 
 	@property mail_toolbar type=toolbar no_caption=1
@@ -121,7 +133,6 @@
 	@property show_mail_message type=text store=no no_caption=1
 	@caption Sisu
 
-	
 	------------------------------------------------------------------------
 	@groupinfo membership caption=Liikmed 
 	@groupinfo member_list caption=Nimekiri submit=no parent=membership
@@ -130,6 +141,7 @@
 	@groupinfo export_members caption=Eksport parent=membership
 	@groupinfo raports caption=Kirjad
 	@groupinfo list_status caption="Saadetud kirjad" parent=raports submit=no
+	@groupinfo unsent caption="Saatmata kirjad" parent=raports submit=no
 	@groupinfo write_mail caption="Saada kiri" parent=raports 
 	@groupinfo mail_report caption="Kirja raport" parent=raports submit=no
 	@groupinfo show_mail caption="Listi kiri" parent=raports submit=no
@@ -153,7 +165,10 @@
 	
 	@reltype MEMBER_CONFIG value=5 clid=CL_CFGFORM
 	@caption Listi liikme seadetevorm
-	
+
+	@reltype MSG_FOLDER value=6 clid=CL_MENU
+	@caption Kirjade kaust
+
 */
 
 define("ML_EXPORT_CSV",1);
@@ -429,9 +444,10 @@ class ml_list extends class_base
 		
 		$message = str_replace("#username#", "Kasutajanimi", $message);
 		$message = str_replace("#name#", "Nimi Perenimi", $message);
-		$message = str_replace("#pea#", "<font size=+2>".$msg_obj->name()."</font>", $message);
-		$message = preg_replace("#\#ala\#(.*?)\#/ala\##si", '<font size=+1>\1</font>', $message);
 		
+		$message = preg_replace("#\#pea\#(.*?)\#/pea\##si", '<div class="doc-title">\1</div>', $message);
+		$message = preg_replace("#\#ala\#(.*?)\#/ala\##si", '<div class="doc-titleSub">\1</div>', $message);
+		$message = str_replace("#subject#", $msg_obj->name(), $message);
 		if (is_oid($msg_obj->meta("template_selector")))
 		{
 			$tpl_obj = new object($msg_obj->meta("template_selector"));
@@ -445,19 +461,30 @@ class ml_list extends class_base
 		else
 		{
 			print $message;
-
 		};
 	}
 
 	function get_property($arr)
 	{
-		$data = &$arr["prop"];
+		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 
-		switch($data["name"])
+		switch($prop["name"])
 		{
+			case "msg_folder":
+				if(empty($prop["value"]))
+				{
+					$obj = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MSG_FOLDER");
+					if(is_object($obj))
+					{
+						$arr["obj_inst"]->set_prop("msg_folder", $obj->id());
+						$prop["value"] = $obj->id();
+					}
+				}
+				break;
+				
 			case "sub_form_type":
-				$data["options"] = array(
+				$prop["options"] = array(
 					"0" => "liitumine",
 					"1" => "lahkumine",
 				);
@@ -470,21 +497,29 @@ class ml_list extends class_base
 			case "list_status_table":
 				$this->gen_list_status_table($arr);
 				break;
-			
+				
+			case "unsent_table":
+				$this->gen_unsent_table($arr);
+				break;
+				
+			case "unsent_tb":
+				$this->gen_unsent_tb($arr);
+				break;
+				
 			case "mail_report":
 				$this->gen_mail_report_table($arr);
 				break;
 
 			case "mail_percentage":
-				$data["value"] = $this->gen_percentage($arr);
+				$prop["value"] = $this->gen_percentage($arr);
 				break;
 
 			case "mail_subject":
-				$data["value"] = $this->gen_mail_subject($arr);
+				$prop["value"] = $this->gen_mail_subject($arr);
 				break;
 
 			case "mail_toolbar":
-				$tb = &$data["toolbar"];
+				$tb = &$prop["vcl_inst"];
 				$tb->add_button(array(
 					"name" => "save",
 					"img" => "save.gif",
@@ -519,19 +554,19 @@ class ml_list extends class_base
 				$list_id = $arr["obj_inst"]->id();
 				$mail_id = $arr["request"]["mail_id"];
 				$row = $this->db_fetch_row("SELECT * FROM ml_queue WHERE lid = ${list_id} ANd mid = ${mail_id}");
-				if ($data["name"] == "mail_start_date")
+				if ($prop["name"] == "mail_start_date")
 				{
-					$data["value"] = $this->time2date($row["start_at"],2);
+					$prop["value"] = $this->time2date($row["start_at"],2);
 				}
 				else
 				{
 					if ($row["last_sent"] == 0)
 					{
-						$data["value"] = "Midagi pole veel saadetud";
+						$prop["value"] = "Midagi pole veel saadetud";
 					}
 					else
 					{
-						$data["value"] = $this->time2date($row["last_sent"],2);
+						$prop["value"] = $this->time2date($row["last_sent"],2);
 					};
 				};
 				break;
@@ -545,19 +580,19 @@ class ml_list extends class_base
 				break;
 
 			case "export_type":
-				$data["options"] = array(
+				$prop["options"] = array(
 					ML_EXPORT_CSV => "nimi,aadress",
 					ML_EXPORT_NAMEADDR => "nimi &lt;aadress&gt;",
 					ML_EXPORT_ADDR => "aadress",
 					ML_EXPORT_ALL => "Kõik andmed",
 				);
-				$data["value"] = 1;
+				$prop["value"] = 1;
 				break;
 
 			case "show_mail_subject":
 			case "show_mail_from":
 			case "show_mail_message":
-				$data["value"] = $this->gen_ml_message_view($arr);
+				$prop["value"] = $this->gen_ml_message_view($arr);
 				break;
 		};
 		return $retval;
@@ -566,11 +601,22 @@ class ml_list extends class_base
 
 	function set_property($arr)
 	{
-		$data = &$arr["prop"];
+		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		switch($data["name"])
+		switch($prop["name"])
 		{
-			case "import_textfile":	
+			case "msg_folder":
+				if(empty($prop["value"]))
+				{
+					$obj = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MSG_FOLDER");
+					if(is_object($obj))
+					{
+						$prop["value"] = $obj->id();
+					}
+				}
+				break;
+				
+			case "import_textfile":
 				$imp = $_FILES["import_text_file"]["tmp_name"];
 				if (!is_uploaded_file($imp))
 				{
@@ -582,7 +628,7 @@ class ml_list extends class_base
 					"text" => $contents,
 				)))
 				{
-					$data["error"] = "Selle toimingu jaoks peab listiliikmete allikas olema kaust";
+					$prop["error"] = "Selle toimingu jaoks peab listiliikmete allikas olema kaust";
 					return PROP_FATAL_ERROR;
 				}
 				break;
@@ -599,7 +645,7 @@ class ml_list extends class_base
 					"text" => $contents,
 				)))
 				{
-					$data["error"] = "Selle toimingu jaoks peab listiliikmete allikas olema kaust";
+					$prop["error"] = "Selle toimingu jaoks peab listiliikmete allikas olema kaust";
 					return PROP_FATAL_ERROR;
 				}
 				break;
@@ -608,10 +654,10 @@ class ml_list extends class_base
 			case "mass_subscribe":
 				if(!$this->mass_subscribe(array(
 					"list_id" => $arr["obj_inst"]->id(),
-					"text" => $data["value"],
+					"text" => $prop["value"],
 				)))
 				{
-					$data["error"] = "Selle toimingu jaoks peab listiliikmete allikas olema kaust";
+					$prop["error"] = "Selle toimingu jaoks peab listiliikmete allikas olema kaust";
 					return PROP_FATAL_ERROR;
 				}
 				break;
@@ -619,10 +665,10 @@ class ml_list extends class_base
 			case "mass_unsubscribe":
 				if(!$this->mass_unsubscribe(array(
 					"list_id" => $arr["obj_inst"]->id(),
-					"text" => $data["value"],
+					"text" => $prop["value"],
 				)))
 				{
-					$data["error"] = "Selle toimingu jaoks peab listiliikmete allikas olema kaust";
+					$prop["error"] = "Selle toimingu jaoks peab listiliikmete allikas olema kaust";
 					return PROP_FATAL_ERROR;
 				}
 				break;
@@ -781,6 +827,71 @@ class ml_list extends class_base
 		return true;
 	}
 
+	function gen_unsent_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "id",
+			"caption" => t("ID"),
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+		));
+		$t->define_field(array(
+			"name" => "created",
+			"caption" => t("Loodud"),
+			"type" => "time",
+			"format" => "H:i d-M-y",
+			"numeric" => 1,
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "id",
+		));
+		$t->set_default_sortby("created");
+		$t->set_default_sorder("desc");
+		$q = "SELECT DISTINCT m.mail FROM ml_sent_mails m LEFT JOIN objects ON (objects.oid = m.mail) WHERE objects.status != 0";
+		$fld = $arr["obj_inst"]->prop("msg_folder");
+		$mls = array();
+		$this->db_query($q);
+		while($w = $this->db_next())
+		{
+			$mls[] = $w["mail"];
+		}
+		$mails = new object_list(array(
+			"class_id" => CL_MESSAGE,
+			"parent" => (!empty($fld) ? $fld : $arr["obj_inst"]->parent()),
+		));
+		foreach($mails->arr() as $mail)
+		{
+			if(!in_array($mail->id(), $mls))
+			{
+				$t->define_data(array(
+					"id" => $mail->id(),
+					"name" => html::get_change_url($arr["obj_inst"]->id(), array(
+						"group" => "write_mail",
+						"msg_id" => $mail->id(),
+					), ($mail->name() ? $mail->name() : "(pealkiri puudub)")),
+					"created" => $mail->created(),
+				));
+			}
+		}
+		$t->sort_by();
+	}
+	
+	function gen_unsent_tb($arr)
+	{
+		$toolbar = &$arr["prop"]["toolbar"];
+		$toolbar->add_button(array(
+			"name" => "delete",
+			"tooltip" => t("Kustuta"),
+			"action" => "delete_mails",
+			"confirm" => t("Eemaldan valitud kirjad?"),
+			"img" => "delete.gif",
+		));
+	}
+	
 	function gen_member_list_tb($arr)
 	{
 		$toolbar = &$arr["prop"]["toolbar"];
@@ -790,7 +901,7 @@ class ml_list extends class_base
 			"action" => "delete_members",
 			"confirm" => "Kustutada need liikmed?",
 			"img" => "delete.gif",
-		));		
+		));
 	}
 
 	/** Exports list members as a plain text file
@@ -909,11 +1020,14 @@ class ml_list extends class_base
 				}
 			}
 		}
-
-		$t->define_field(array(
-			"name" => "others",
-			"caption" => "Liitumisinfo",
-		));
+		$member_config = $arr["obj_inst"]->prop("member_config");
+		if(!empty($member_config))
+		{
+			$t->define_field(array(
+				"name" => "others",
+				"caption" => "Liitumisinfo",
+			));
+		}
 		$t->define_chooser(array(
 			"name" => "sel",
 			"field" => "id",
@@ -939,11 +1053,12 @@ class ml_list extends class_base
 				list($mailto,$memberdata) = $ml_member_inst->get_member_information(array(
 					"lid" => $arr["obj_inst"]->id(),
 					"member" => $val["oid"],
+					"from_user" => true,
 				));
-				
 				$tabledata = array(
 					"id" => $val["oid"],
 					"email" => $mailto,
+					"joined" => $memberdata["joined"],
 					"others" => html::href(array(
 						"caption" => "Vaata",
 						"url" => $this->mk_my_orb("change", array(
@@ -983,6 +1098,13 @@ class ml_list extends class_base
 	
 	function gen_list_status_tb($arr)
 	{
+		/*
+		$sched = get_instance("scheduler");
+		$sched->do_events(array(
+			"event" => $this->mk_my_orb("process_queue", array(), "", false, true),
+			"time" => time()-120,
+		));
+		*/
 		$toolbar = &$arr["prop"]["toolbar"];
 		$toolbar->add_button(array(
 			"name" => "new",
@@ -1008,6 +1130,8 @@ class ml_list extends class_base
 			"name" => "sel",
 			"field" => "qid",
 		));
+		$t->set_default_sortby("last_sent");
+		$t->set_default_sorder("desc");
 		$q = "SELECT ml_queue.* FROM ml_queue LEFT JOIN objects ON (ml_queue.mid = objects.oid) WHERE objects.status != 0 AND lid = " . $arr["obj_inst"]->id() . " ORDER BY start_at DESC";
 		$this->db_query($q);
 		while ($row = $this->db_next())
@@ -1022,23 +1146,26 @@ class ml_list extends class_base
 			{
 				$status_str = $mq->a_status[$row["status"]];
 			};
-				
-			$row['subject'] = html::href(array(
-					'url' => $this->mk_my_orb("change", array("group" => "mail_report", "id" => $arr["obj_inst"]->id(),"mail_id" => $row['mid'])),
-					'caption' => $mail_obj->name(),
-				));
-			
+			$row["subject"] = html::get_change_url($arr["obj_inst"]->id(), array(
+				"group" => "write_mail",
+				"msg_id" => $mail_obj->id(),
+			), $mail_obj->name());
 			//$row["mid"] = $mail_obj->name();
 			if (!$row["patch_size"])
 			{
-				$row["patch_size"]="kõik";
+				$row["patch_size"] = "kõik";
 			};
 			$row["delay"]/=60;
-			$row["status"] = $status_str;
+			
+			$row["status"] = html::href(array(
+				"url" => $this->mk_my_orb("change", array("group" => "mail_report", "id" => $arr["obj_inst"]->id(),"mail_id" => $row['mid'])),
+				"caption" => $status_str,
+			));
 			$row["protsent"] = $this->queue_ready_indicator($row["position"],$row["total"]);
 			$row["perf"] = sprintf("%.2f",$row["total"] / ($row["last_sent"] - $row["start_at"]) * 60);
 			$t->define_data($row);
 		};
+		$t->sort_by();
 	}
 	
 	/** removes queue items 
@@ -1067,11 +1194,11 @@ class ml_list extends class_base
 	function route_post_message($args = array())
 	{
 		extract($args);
-		$url=$this->mk_my_orb("post_message",array("id" => $id, "targets" => $targets),"",1);
+		$url = $this->mk_my_orb("post_message", array("id" => $id, "targets" => $targets), "", 1);
 		$sched = get_instance("scheduler");
 		$sched->add(array(
 			"event" => $this->mk_my_orb("process_queue", array(), "ml_queue", false, true),
-			"time" => time()+120,	// every 2 minutes
+			"time" => time() + 120,	// every 2 minutes
 		));
 		return $url;
 	}
@@ -1340,7 +1467,7 @@ class ml_list extends class_base
 		}
 
 		$q = "
-			SELECT $lim1 target, tm, subject, id
+			SELECT $lim1 target, tm, subject, id, vars
 			FROM ml_sent_mails
 			WHERE lid = '$id' AND mail = '$_mid' AND mail_sent = 1 ORDER BY tm DESC $lim2";
 		$this->db_query($q);
@@ -1348,6 +1475,7 @@ class ml_list extends class_base
 		{
 			$tgt = htmlspecialchars($row["target"]);
 			$row["member"] = "<a href='".$this->mk_my_orb("change", array("id" => $id, "group" => "show_mail", "mail_id" => $arr["request"]["mail_id"], "s_mail_id" => $row["id"]))."'>".$tgt."</a>";
+			$row["clicked"] = ($row["vars"] == 1 ? "jah" : "ei");
 			$t->define_data($row);
 		}
 	}
@@ -1452,13 +1580,16 @@ class ml_list extends class_base
 		{
 			$msg_obj = new object($arr["request"]["msg_id"]);
 		}
+		
 		else
 		{
 			$msg_obj = new object();
 			$msg_obj->set_class_id(CL_MESSAGE);
-			$msg_obj->set_parent($arr["obj_inst"]->parent());
-			$msg_obj->save();
+			$folder = $arr["obj_inst"]->prop("msg_folder");
+			$msg_obj->set_parent((!empty($folder) ? $folder : $arr["obj_inst"]->parent()));
+			//$msg_obj->save();
 		};
+		
 
 		$templates = $arr["obj_inst"]->connections_from(array(
 			"type" => "RELTYPE_TEMPLATE",
@@ -1486,7 +1617,7 @@ class ml_list extends class_base
 			"name" => "send_away",
 			"type" => "checkbox",
 			"ch_value" => 1,
-			"caption" => "Saada peale salvestamist ära",
+			"caption" => t("Saada peale salvestamist ära"),
 		);
 
 		// narf, can I make this work better perhaps? I really do hate callback ..
@@ -1499,12 +1630,33 @@ class ml_list extends class_base
 		
 		foreach($all_props as $id => $prop)
 		{
-			if ($id == "mfrom" || $id == "name" || $id == "html_mail" || $id == "message" || $id == "msg_contener_title" || $id == "msg_contener_content")
+			if ($id == "mfrom" || $id == "name" || $id == "html_mail" || $id == "message" || $id == "msg_contener_title" || $id == "msg_contener_content" || $id == "mfrom_name")
 			{
 				if ($id == "mfrom")
 				{
+					$prop["caption"] = "Saatja e-maili aadress";
 					$prop["type"] = "textbox";
-				};				
+				}
+				elseif($id == "mfrom_name")
+				{
+					$prop["caption"] = "Saatja nimi";
+					$prop["type"] = "textbox";
+				}
+				elseif($id == "message")
+				{
+					$filtered_props["legend"] = array(
+						"type" => "text",
+						"name" => "legend",
+						"caption" =>  t("Asenduste legend"),
+						"value" => "Meili sisus on võimalik kasutada järgnevaid asendusi:<br /><br />
+							#username# - AutomatWebi kasutajanimi<br />
+							#name# - Listi liikme nimi<br />
+							#subject# - Kirja teema<br />
+							#pea#(pealkiri)#/pea# - (pealkiri) asemele kirjutatud tekst muutub 1. taseme pealkirjaks<br />
+							#ala#(pealkiri)#/ala# - (pealkiri) asemele kirjutatud tekst muutub 2. taseme pealkirjaks<br /><br />
+							Kui soovid kirja pandavat lingi puhul teada saada, kas saaja sellele ka klikkis, lisa lingi lõppu t=1, st link kujul http://www.automatweb.com/456?t=1 või http://www.automatweb.com/?class=general&action=general&t=1",
+					);
+				}
 				$filtered_props[$id] = $prop;
 			};
 		};
@@ -1520,11 +1672,14 @@ class ml_list extends class_base
 			"type" => "aliasmgr",
 		);
 
-		$xprops = $writer->parse_properties(array(
+		if($msg_obj)
+		{
+			$xprops = $writer->parse_properties(array(
 				"obj_inst" => $msg_obj,
 				"properties" => $filtered_props,
 				"name_prefix" => "emb",
-		));
+			));
+		}
 		
 	
 		return $xprops;
@@ -1537,10 +1692,20 @@ class ml_list extends class_base
 		// for starters I'll use the one from the list object itself
 		#$msg_data["parent"] = $arr["obj_inst"]->parent();
 		$msg_data["mto"] = $arr["obj_inst"]->id();
-
-		if ($msg_data["send_away"] == 1 && is_oid($msg_data["template_selector"]))
+		if(!is_oid($msg_data["id"]) || !$this->can("view", $msg_data["id"]))
+		{
+			$msg_obj = obj();
+			$msg_obj->set_parent((!empty($folder) ? $folder : $arr["obj_inst"]->parent()));
+			$msg_obj->set_class_id(CL_MESSAGE);
+			$msg_obj->save();
+			$msg_data["id"] = $msg_obj->id();
+		}
+		else
 		{
 			$msg_obj = &obj($msg_data["id"]);
+		}
+		if ($msg_data["send_away"] == 1 && is_oid($msg_data["template_selector"]))
+		{
 			$c_tile = $msg_obj->prop("msg_contener_title");
 			$c_content = $msg_obj->prop("msg_contener_content");
 			// use that template then!
@@ -1559,7 +1724,6 @@ class ml_list extends class_base
 			{
 				$message = nl2br($message);
 			};
-			
 			$message = str_replace("#title#", $c_tile, $message);
 			$message = str_replace("#container#", $c_content, $message);
 			$template = str_replace("#content#", $message, $template);
@@ -1603,7 +1767,28 @@ class ml_list extends class_base
 
 		// 
 	}
-	
+
+	/** delete members from list
+		
+		@attrib name=delete_mails 
+		
+		@param id required type=int 
+		@param group optional
+		
+	**/
+	function delete_mails($arr)
+	{
+		foreach(safe_array($arr["sel"]) as $member_id)
+		{
+			$member_obj = new object($member_id);
+			if($member_obj->class_id() == CL_MESSAGE)
+			{
+				$member_obj->delete();
+			}
+		};
+		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"]));
+	}
+		
 	/** delete members from list
 		
 		@attrib name=delete_members 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.6 2004/12/15 12:07:48 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.7 2004/12/20 10:49:00 ahti Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -641,12 +641,16 @@ class ml_queue extends aw_template
 				"site_id" => array(),
 			));
 		}
-			
+		$this->read_template("send_mail.tpl");
 		// 3) calls preprocess_one_message for each one
-		print "preprocessing<br>";
 		set_time_limit(0);
-		for($member = $member_list->begin(); !$member_list->end(); $member = $member_list->next())
+		$ret = "";
+		foreach($member_list->arr() as $member)
 		{
+			$this->vars(array(
+				"name" => $member->prop("name"),
+				"mail" => $member->prop("mail"),
+			));
 			$this->preprocess_one_message(array(
 				"name" => $member->prop("name"),
 				"mail" => $member->prop("mail"),
@@ -656,23 +660,27 @@ class ml_queue extends aw_template
 				"msg" => $msg,
 				"qid" => $arr["qid"],
 			));
+			$ret .= $this->parse("item");
 		};
-		print "<br>done";
+		$this->vars(array(
+			"item" => $ret,
+		));
+		echo $this->parse();
 	}
 
 	function preprocess_one_message($arr)
 	{
+		$users = get_instance("users");
 		// 1) replaces variables in the message
 		// 2) store to ml_sent_mails (which has a default value of '0' in mail_sent values
 		// use all variables. 
-		print "name = " . $arr["name"];
-		print " mail = " . $arr["mail"] . "<br>";
+		//print "<tr><td>".$arr["name"]."</td><td>".$arr["mail"]."</td></tr>\n";
 		$data = array(
 			"name" => $arr["name"],
 			"mail" => $arr["mail"],
 			"member_id" => $arr["member_id"],
 			"mail_id" => $arr["mail_id"],
-			"pea" => "<font size=+2>".$arr["msg"]["subject"]."</font>",
+			"subject" => $arr["msg"]["subject"],
 		);
 		
 		$this->used_variables = array();
@@ -684,16 +692,20 @@ class ml_queue extends aw_template
 		if(is_object($user))
 		{
 			$data["username"] = $user->prop("from.name");
+			$data["name"] = $users->get_user_config(array(
+				"uid" => $user->prop("from.name"),
+				"key" => "real_name",
+			));
 		}
 		$message = $arr["msg"]["message"];
-		$message = preg_replace("#\#ala\#(.*?)\#/ala\##si", '<font size=+1>\1</font>', $message);
+		$message = preg_replace("#\#pea\#(.*?)\#/pea\##si", '<div class="doc-title">\1</div>', $message);
+		$message = preg_replace("#\#ala\#(.*?)\#/ala\##si", '<div class="doc-titleSub">\1</div>', $message);
 		$message = $this->replace_tags($message,$data);
 		$subject = $this->replace_tags($arr["msg"]["subject"],$data);
 		$mailfrom = $this->replace_tags($arr["msg"]["mfrom"],$data);
-
 		$mailfrom = trim($mailfrom);
 		$subject = trim($subject);
-
+		$mailfrom = $arr["msg"]["meta"]["mfrom_name"] . " <" . $mailfrom . ">";
 		$used_vars = array_keys($this->used_variables);
 
 		$mid = $arr["mail_id"];
