@@ -27,21 +27,6 @@ if (window != window.top)
   float:left;
 }
 
-.iconname
-{
-padding-left:2px;
-padding-right:2px;
-background-color:#1166C0;
-color:#ffffff;
-font-size:13px;
-font-weight:bold;
-spacing:2px;
-}
-
-.boxB {
-  background-color: #fffff0;
-  padding: 2px;
-}
 </style>
 
 
@@ -176,7 +161,7 @@ function go_acl(id)
 {VAR:toolbar}
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
-<tr><td class="{VAR:viewstyle}" style="border:1px">
+<tr><td class="{VAR:viewstyle}" style="border:1px solid #BBB">
 {VAR:table}
 </td></tr></table>
 {VAR:reforb}

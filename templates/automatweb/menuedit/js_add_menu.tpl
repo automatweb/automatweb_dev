@@ -8,7 +8,7 @@
 <a class="menuItem" href=""
 	onclick="return false;"
 	onmouseover="menuItemMouseover(event, '{VAR:sub_menu_id}');"
-      ><span class="menuItemText">{VAR:caption}</span><span class="menuItemArrow"><img style="border:0px" src="http://axel.struktuur.ee/tmp/arr.gif" alt=""></span></a>
+      ><span class="menuItemText">{VAR:caption}</span><span class="menuItemArrow"><img style="border:0px" src="{VAR:baseurl}/automatweb/images/arr.gif" alt=""></span></a>
 <!-- END SUB: MENU_ITEM_SUB -->
 
 <!-- SUB: MENU_SEPARATOR -->

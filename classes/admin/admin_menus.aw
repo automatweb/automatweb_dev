@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.22 2003/07/22 08:09:52 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.23 2003/07/22 08:38:27 axel Exp $
 class admin_menus extends aw_template
 {
 	// this will be set to document id if only one document is shown, a document which can be edited
@@ -1075,14 +1075,12 @@ class admin_menus extends aw_template
 			}
 
 			//axel häkkis,
-			//make big icon here
 			$row['icon_url'] = $iu;
 			$row['caption'] = $caption;
 			$row['chlink'] = $chlink;
 
-
 			$this->vars($row);
-			$the_icons .= $this->parse('ICON');//'<table border=1 style="float:left;"><tr><td>'.$row['oid'].'</td></tr></table>';
+			$the_icons .= $this->parse('ICON');
 
 			$num_records++;
 

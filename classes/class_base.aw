@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.136 2003/07/22 08:09:52 axel Exp $
+// $Id: class_base.aw,v 2.137 2003/07/22 08:38:27 axel Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -90,7 +90,6 @@ class class_base extends aw_template
 			{
 				die($this->ds->get_error_text());
 			};
-			//$this->do_something_neat = 'wehee';//axel
 
 			$this->parent = $args["parent"];
 			$this->id = "";
@@ -698,7 +697,7 @@ class class_base extends aw_template
 			$this->tp->add_tab(array(
 				'id' => 'list_aliases',
 				"link" => $link,
-				"caption" => "Seostehaldur".($this->do_something_neat ? ' oi':''),//axel
+				"caption" => 'Seostehaldur',
 				"active" => isset($this->action) && (($this->action == "list_aliases") || ($this->action == "search_aliases")),
 				"disabled" => empty($this->id),
 			));

@@ -1345,13 +1345,3 @@ div.menu div.menuItemSep {
   margin: 4px 2px;
 }
 
-.sm_icon a {
-        text-decoration: none;
-        color: #041CB2;
-width:170px;position:relative;float:left;overflow:hidden;padding: 0px 5px 0px 3px;
-}
-.sm_icon a:hover {
-        color: #041CB2;
-        text-decoration: underline;
-width:170px;position:relative;float:left;overflow:hidden;padding: 0px 5px 0px 3px;	
-}

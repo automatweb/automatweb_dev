@@ -43,12 +43,6 @@ function check_generic_loader()
 </script>
 </head>
 <body bgcolor='#FFFFFF' link='#0000ff' vlink='#0000ff' onLoad="create_objects(); check_generic_loader();" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-
-<style type="text/css">
-
-
-</style>
-
 <table border=0 width="100%" cellspacing="0" cellpadding="2">
 <tr>
 <td align="left" class="yah">&nbsp;
