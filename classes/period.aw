@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.25 2004/10/08 01:32:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.26 2004/10/29 16:05:11 duke Exp $
 // period.aw - periods 
 /*
 
@@ -14,7 +14,7 @@
 	@property comment type=textbox
 	@caption Kommentaar (teema)
 	
-	@property perimage type=releditor reltype=RELTYPE_IMAGE rel_id=first use_form=emb field=meta method=serialize
+	@property perimage type=relpicker reltype=RELTYPE_IMAGE rel_id=first use_form=emb field=meta method=serialize
 	@caption Pilt2
 
 	@property status type=status
@@ -632,12 +632,13 @@ class period extends class_base
 		{
 			$image = $o->name();
 		}
-
+		
 		$this->vars(array(
 			"name" => $o->name(),
 			"link" => $link,
 			"image" => $image
 		));
+		
 		return $this->parse();
 	}
 };
