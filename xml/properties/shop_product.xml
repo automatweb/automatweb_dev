@@ -180,7 +180,7 @@
             <name>uservar1</name>
             <table>aw_shop_products</table>
             <group>data</group>
-            <type>textarea</type>
+            <type>classificator</type>
             <field>varuser1</field>
             <caption>User-defined var 1</caption>
       </property>
@@ -188,7 +188,7 @@
             <name>uservar2</name>
             <table>aw_shop_products</table>
             <group>data</group>
-            <type>textarea</type>
+            <type>classificator</type>
             <field>varuser2</field>
             <caption>User-defined var 2</caption>
       </property>
@@ -196,7 +196,7 @@
             <name>uservar3</name>
             <table>aw_shop_products</table>
             <group>data</group>
-            <type>textarea</type>
+            <type>classificator</type>
             <field>varuser3</field>
             <caption>User-defined var 3</caption>
       </property>
@@ -204,7 +204,7 @@
             <name>uservar4</name>
             <table>aw_shop_products</table>
             <group>data</group>
-            <type>textarea</type>
+            <type>classificator</type>
             <field>varuser4</field>
             <caption>User-defined var 4</caption>
       </property>
@@ -212,7 +212,7 @@
             <name>uservar5</name>
             <table>aw_shop_products</table>
             <group>data</group>
-            <type>textarea</type>
+            <type>classificator</type>
             <field>varuser5</field>
             <caption>User-defined var 5</caption>
       </property>
@@ -220,7 +220,7 @@
             <name>uservar6</name>
             <table>aw_shop_products</table>
             <group>data</group>
-            <type>textarea</type>
+            <type>classificator</type>
             <field>varuser6</field>
             <caption>User-defined var 6</caption>
       </property>
@@ -228,7 +228,7 @@
             <name>uservar7</name>
             <table>aw_shop_products</table>
             <group>data</group>
-            <type>textarea</type>
+            <type>classificator</type>
             <field>varuser7</field>
             <caption>User-defined var 7</caption>
       </property>
@@ -236,7 +236,7 @@
             <name>uservar8</name>
             <table>aw_shop_products</table>
             <group>data</group>
-            <type>textarea</type>
+            <type>classificator</type>
             <field>varuser8</field>
             <caption>User-defined var 8</caption>
       </property>
@@ -244,7 +244,7 @@
             <name>uservar9</name>
             <table>aw_shop_products</table>
             <group>data</group>
-            <type>textarea</type>
+            <type>classificator</type>
             <field>varuser9</field>
             <caption>User-defined var 9</caption>
       </property>
@@ -252,7 +252,7 @@
             <name>uservar10</name>
             <table>aw_shop_products</table>
             <group>data</group>
-            <type>textarea</type>
+            <type>classificator</type>
             <field>varuser10</field>
             <caption>User-defined var 10</caption>
       </property>

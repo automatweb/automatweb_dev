@@ -201,6 +201,16 @@
             <caption>Viivitus piltide vahel (sek.)</caption>
       </property>
       <property>
+            <name>imgrelmanager</name>
+            <table>objects</table>
+            <type>relmanager</type>
+            <reltype>IMAGE</reltype>
+            <store>no</store>
+            <group>presentation</group>
+            <field>imgrelmanager</field>
+            <caption>Vali pilte</caption>
+      </property>
+      <property>
             <name>img_act</name>
             <table>objects</table>
             <type>relpicker</type>
@@ -260,6 +270,16 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Dokumente perioodist</caption>
+      </property>
+      <property>
+            <name>sa_manager</name>
+            <table>menu</table>
+            <type>relmanager</type>
+            <reltype>SEEALSO</reltype>
+            <group>relations</group>
+            <store>no</store>
+            <field>sa_manager</field>
+            <caption>Seosehaldur</caption>
       </property>
       <property>
             <name>seealso</name>
@@ -646,7 +666,10 @@
             </IMAGE>
             <SUBMENUS>
                   <value>16</value>
-                  <clid>CL_SHOP_ORDER_CENTER</clid>
+                  <clid>
+                        <num_0>CL_SHOP_ORDER_CENTER</num_0>
+                        <num_1>CL_CRM_SECTION</num_1>
+                  </clid>
                   <caption>alammen&amp;uuml;&amp;uuml;d objektist</caption>
             </SUBMENUS>
       </reltypes>
