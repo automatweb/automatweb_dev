@@ -180,10 +180,6 @@ class site_content extends menuedit
 
 		$sel_menu_id = $this->sel_section;
 		
-		// here we must find the menu image, if it is not specified for this menu,
-		//then use the parent's and so on.
-		$this->do_menu_images($sel_menu_id);
-
 		// nii nyt leiame aktiivse kommentaari - kui aktiivsel menyyl on tyhi, siis parenti oma jne
 		$this->dequote($this->properties["comment"]);
 		$this->vars(array(
@@ -252,6 +248,10 @@ class site_content extends menuedit
 		{
 			$this->vars(array("doc_content" => $text));
 		}
+
+		// here we must find the menu image, if it is not specified for this menu,
+		//then use the parent's and so on.
+		$this->do_menu_images($sel_menu_id);
 
 		// import language constants
 		lc_site_load("menuedit",$this);
@@ -1328,7 +1328,7 @@ class site_content extends menuedit
 					$this->vars(array(
 						"target" => $samenu["target"] ? "target=\"_blank\"" : "",
 						"link" => $link,
-						"text" => str_replace("&nbsp;","",strip_tags($samenu["name"]))
+						"text" => $samenu["name"]//str_replace("&nbsp;","",strip_tags($samenu["name"]))
 					));
 					$this->parse("MENU_".$name."_SEEALSO_ITEM");
 				}
@@ -2018,9 +2018,21 @@ class site_content extends menuedit
 				}
 			}
 		}
+		$smn = $this->mar[$sel_menu_id]["name"];
+		if (aw_ini_get("menuedit.strip_tags"))
+		{
+			$smn = strip_tags($smn);
+		}
+
+		$smn_nodoc = $smn;
+		if ($this->active_doc)
+		{
+			$smn_nodoc = "";
+		}
 		$this->vars(array(
 			"SEL_MENU_IMAGE" => $smi,
-			"sel_menu_name" => $this->mar[$sel_menu_id]["name"],
+			"sel_menu_name" => $smn,
+			"sel_menu_name_no_doc" => $smn_nodoc,
 			"sel_menu_image" => $sel_image,
 			"sel_menu_image_url" => $sel_image_url,
 			"sel_menu_o_img_url" => $sel_menu_o_img_url,
