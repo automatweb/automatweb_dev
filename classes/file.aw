@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.27 2002/07/02 12:51:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.28 2002/07/30 22:38:24 duke Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -59,10 +59,6 @@ class file extends aw_template
 				die($fi["content"]);
 			}
 		}
-		elseif ($fi["meta"]["show_framed"] == 1)
-		{
-			$replacement = $fi["content"];
-		}
 		else
 		{
 			if ($fi["newwindow"])
@@ -75,8 +71,15 @@ class file extends aw_template
 			{
 				$comment = $fi["name"];
 			}
-			
-			$url = $this->get_url($alias["target"],$fi["name"]);
+		
+			if ($fi["meta"]["show_framed"])
+			{
+				$url = "/section=$alias[source]/oid=$alias[target]";
+			}
+			else
+			{
+				$url = $this->get_url($alias["target"],$fi["name"]);
+			};
 			$replacement = "<a $ss class=\"sisutekst\" href='".$url."'>$comment</a>";
 		}
 		return $replacement;
