@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.3 2003/07/01 15:18:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.4 2003/12/03 12:35:17 duke Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -23,7 +23,7 @@
 @property commtext type=textarea 
 @caption Kommentaar
 
-@classinfo syslog_type=ST_COMMENT
+@classinfo syslog_type=ST_COMMENT no_status=1
 @tableinfo forum_comments index=id master_table=objects master_index=oid
 */
 
@@ -78,7 +78,6 @@ class forum_comment extends class_base
 
 				};
 				break;
-			case "status":
 			case "comment":
 				$retval = PROP_IGNORE;
 				break;
@@ -92,10 +91,6 @@ class forum_comment extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-			case "status":
-				$data["value"] = STAT_ACTIVE;
-				break;
-
 			case "remember":
 				if (!empty($data["value"]) && !headers_sent())
 				{
@@ -138,46 +133,6 @@ class forum_comment extends class_base
 		};
 
 		return $retval;
-	}
-
-	////////////////////////////////////
-	// object persistance functions - used when copying/pasting object
-	// if the object does not support copy/paste, don't define these functions
-	////////////////////////////////////
-
-	////
-	// !this should create a string representation of the object
-	// parameters
-	//    oid - object's id
-	function _serialize($arr)
-	{
-		extract($arr);
-		$ob = $this->get_object($oid);
-		if (is_array($ob))
-		{
-			return aw_serialize($ob, SERIALIZE_NATIVE);
-		}
-		return false;
-	}
-
-	////
-	// !this should create an object from a string created by the _serialize() function
-	// parameters
-	//    str - the string
-	//    parent - the folder where the new object should be created
-	function _unserialize($arr)
-	{
-		extract($arr);
-		$row = aw_unserialize($str);
-		$row['parent'] = $parent;
-		unset($row['brother_of']);
-		$this->quote(&$row);
-		$id = $this->new_object($row);
-		if ($id)
-		{
-			return true;
-		}
-		return false;
 	}
 
 	////////////////////////////////////

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.10 2003/11/03 17:11:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.11 2003/12/03 12:35:17 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -24,6 +24,12 @@
 
 	@property comments_on_page type=select
 	@caption Postitusi lehel
+
+	@property topic_depth type=select default=1
+	@caption Teemade sügavus
+
+	@property topic_selector type=callback callback=callback_get_topic_selector group=topic_selector
+	@caption Teemade tasemed
 
 	@property container type=text store=no group=container no_caption=1
 	@caption Konteiner
@@ -77,6 +83,7 @@
 	@caption Kommentaari teksti stiil
 
 	@groupinfo container caption=Foorum submit=no
+	@groupinfo topic_selector caption="Teemad"
 	@groupinfo contents caption=Sisu submit=no parent=container
 	@groupinfo styles caption=Stiilid
 	@groupinfo add_topic caption="Lisa teema" parent=container
@@ -116,7 +123,7 @@ class forum_v2 extends class_base
 		{
 			case RELTYPE_TOPIC_FOLDER:
 			case RELTYPE_ADDRESS_FOLDER:
-				$retval = array(CL_PSEUDO);
+				$retval = array(CL_MENU);
 				break;
 
 			case RELTYPE_STYLE:
@@ -141,6 +148,10 @@ class forum_v2 extends class_base
 				$data["options"] = array(5 => 5,10 => 10,15 => 15,20 => 20,25 => 25,30 => 30);
 				break;
 
+			case "topic_depth":
+				$data["options"] = array("1" => "1","2" => "2","3" => "3","4" => "4","5" => "5");
+				break;
+
 		};	
 		return $retval;
 	}
@@ -157,6 +168,10 @@ class forum_v2 extends class_base
 
 			case "add_comment":
 				$this->create_forum_comment($arr);
+				break;
+
+			case "topic_selector":
+				$this->update_topic_selector($arr);
 				break;
 		}
 		return $retval;
@@ -178,7 +193,6 @@ class forum_v2 extends class_base
 		{
 			$this->style_donor_obj = new object($style_donor);
 		};
-		//$this->meta = $args["obj"]["meta"];
 		$this->_add_style("style_caption");
 		
 		$args["fld"] = $fld;
@@ -197,7 +211,7 @@ class forum_v2 extends class_base
 		};
 
 		$prop = $args["prop"];
-		$prop["type"] = "text";
+		//$prop["type"] = "text";
 		$prop["value"] = $retval;
 		return array($prop);
 	}	
@@ -205,11 +219,6 @@ class forum_v2 extends class_base
 	function draw_all_folders($args = array())
 	{
 		extract($args);
-
-		$folder_list = new object_list(array(
-			"parent" => $args["fld"],
-			"class_id" => CL_MENU,
-		));
 
 		$this->read_template("forum.tpl");
 
@@ -222,77 +231,175 @@ class forum_v2 extends class_base
 		$this->_add_style("style_folder_last_post");
 		$this->vars($this->style_data);
 
-		for ($folder_obj = $folder_list->begin(); !$folder_list->end(); $folder_obj = $folder_list->next())
-		//foreach($flds as $fdata)
+		// so now I need a function that gives me all folders .. hm .... can I use object_tree
+		// for that then? no, obviously not.
+
+		// it is important to know that comments may only be at the lowest level
+
+		$depth = $args["obj_inst"]->prop("topic_depth");
+		if (empty($depth))
 		{
+			$depth = 1;
+		};
+
+		$this->depth = $depth;
+
+		$this->level = 0;
+		$this->group = $args["request"]["group"];
+		$c = $this->_draw_one_level(array(
+			"parent" => $args["fld"],
+			"id" => $args["obj_inst"]->id(),
+		));
+
+		$this->vars(array(
+			"forum_contents" => $c,
+		));
+
+		$rv = $this->parse();
+		return $rv;
+	}
+
+	function _draw_one_level($arr)
+	{
+		$this->level++;
+		if ($this->level == $this->depth)
+		{
+			$c .= $this->_draw_last_level(array(
+				"parent" => $arr["parent"],
+				"id" => $arr["id"],
+			));
+		}
+		else
+		{
+			$folder_list = new object_list(array(
+				"parent" => $arr["parent"],
+				"class_id" => CL_MENU,
+			));
+			for ($folder_obj = $folder_list->begin(); !$folder_list->end(); $folder_obj = $folder_list->next())
+			{
+				$this->vars(array(
+					"name" => $folder_obj->name(),
+					"comment" => $folder_obj->comment(),
+					"open_l1_url" => $this->mk_my_orb("change",array(
+						"id" => $arr["id"],
+						"c" => $folder_obj->id(),
+						"group" => $this->group,
+						"section" => aw_global_get("section"),
+						"_alias" => get_class($this),
+					)),
+				));
+
+				$tplname = "L" . $this->level . "_FOLDER";
+
+				$tplname = "FOLDER";
+				$this->vars(array(
+					"spacer" => str_repeat("&nbsp;",6*($this->level-1)),
+				));
+
+				$c .= $this->parse($tplname);
+
+				$c .= $this->_draw_one_level(array(
+					"parent" => $folder_obj->id(),
+					"id" => $arr["id"],
+				));
+
+				// so if I want to make this work, I need to figure out how
+				// many levels do I have to draw. I have to make this function recursive.
+				/*
+				if (empty($args["request"]["c"]) || ($args["request"]["c"] == $folder_obj->id()))
+				{
+					$c .= $this->_draw_last_level(array(
+						"parent" => $folder_obj->id(),
+						"forum_id" => $args["obj_inst"]->id(),
+					));
+				}
+				else
+				*/
+
+
+
+			}
+		};
+		$this->level--;
+		return $c;
+	}
+
+	// needs at least one argument .. the parent
+	function _draw_last_level($arr)
+	{
+		// for each first level folder, figure out all the second level
+		// folders.
+		$sub_folder_list = new object_list(array(
+			"parent" => $arr["parent"],
+			"class_id" => CL_MENU,
+		));
+
+		// for each second level folder, figure out the amount of topics
+		// and posts 
+		list($topic_counts,$topic_list) = $this->get_topic_list(array(
+			"parents" => $sub_folder_list->ids(),
+		));
+
+		// ja iga alamtopicu jaoks on mul vaja teada, mitu
+		// teemat seal on.
+		for ($sub_folder_obj = $sub_folder_list->begin(); !$sub_folder_list->end(); $sub_folder_obj = $sub_folder_list->next())
+		{
+			list(,$comment_count) = $this->get_comment_counts(array(
+				"parents" => $topic_list[$sub_folder_obj->id()],
+			));
+			
+			$last = $this->get_last_comments(array(
+				"parents" => $topic_list[$sub_folder_obj->id()],
+			));
+
+			$mdate = $last["created"];
+			$datestr = empty($date) ? "" : $this->time2date($mdate,2);
+
+			$lv = $this->level - 2;
+			if ($lv < 0)
+			{
+				$lv = 0;
+			};
+
 			$this->vars(array(
-				"name" => $folder_obj->name(),
-				"comment" => $folder_obj->comment(),
-				"open_l1_url" => $this->mk_my_orb("change",array(
-					"id" => $args["obj_inst"]->id(),
-					"c" => $folder_obj->id(),
-					"group" => $args["request"]["group"],
+				"name" => $sub_folder_obj->name(),
+				"topic_count" => (int)$topic_counts[$sub_folder_obj->id()],
+				"comment_count" => (int)$comment_count,
+				"last_createdby" => $last["createdby"],
+				"last_date" => $datestr,
+				"spacer" => str_repeat("&nbsp;",6*($lv)),
+				"open_topic_url" => $this->mk_my_orb("change",array(
+					"id" => $arr["id"],
+					"folder" => $sub_folder_obj->id(),
+					"group" => $this->group,
 					"section" => aw_global_get("section"),
 					"_alias" => get_class($this),
 				)),
 			));
+			$c .= $this->parse("LAST_LEVEL");
+		};
+		return $c;
+	}
 
-			$c .= $this->parse("L1_FOLDER");
-
-			if (empty($args["request"]["c"]) || ($args["request"]["c"] == $folder_obj->id()))
-			{
-				// for each first level folder, figure out all the second level
-				// folders.
-				$sub_folder_list = new object_list(array(
-					"parent" => $folder_obj->id(),
-					"class_id" => CL_MENU,
-				));
-
-				// for each second level folder, figure out the amount of topics
-				// and posts 
-				list($topic_counts,$topic_list) = $this->get_topic_list(array(
-					"parents" => $sub_folder_list->ids(),
-				));
-
-				// ja iga alamtopicu jaoks on mul vaja teada, mitu
-				// teemat seal on.
-				for ($sub_folder_obj = $sub_folder_list->begin(); !$sub_folder_list->end(); $sub_folder_obj = $sub_folder_list->next())
-				{
-					list(,$comment_count) = $this->get_comment_counts(array(
-						"parents" => $topic_list[$sub_folder_obj->id()],
-					));
-					
-					$last = $this->get_last_comments(array(
-						"parents" => $topic_list[$sub_folder_obj->id()],
-					));
-
-					$mdate = $last["created"];
-					$datestr = empty($date) ? "" : $this->time2date($mdate,2);
+	function get_folder_tree($arr)
+	{
+		$this->tree = array();
 
 
-					$this->vars(array(
-						"name" => $sub_folder_obj->name(),
-						"topic_count" => (int)$topic_counts[$sub_folder_obj->id()],
-						"comment_count" => (int)$comment_count,
-						"last_createdby" => $last["createdby"],
-						"last_date" => $datestr,
-						"open_topic_url" => $this->mk_my_orb("change",array(
-							"id" => $args["obj_inst"]->id(),
-							"folder" => $sub_folder_obj->id(),
-							"group" => $args["request"]["group"],
-							"section" => aw_global_get("section"),
-							"_alias" => get_class($this),
-						)),
-					));
-					$c .= $this->parse("L2_FOLDER");
-				};
-			};
-		}
+	}
 
-		$this->vars(array(
-			"L1_FOLDER" => $c,
+	////
+	// !antakse ette parent ja sügavus ja siis tehakse lotsa tööd
+	function _rec_folder_tree($arr)
+	{
+		$folder_list = new object_list(array(
+			"parent" => $arr["parent"],
+			"class_id" => CL_MENU,
 		));
-		return $this->parse();
+		for ($folder_obj = $folder_list->begin(); !$folder_list->end(); $folder_obj = $folder_list->next())
+		{
+			$this->tree[$folder_obj->parent()][$folder_obj->id()] = $folder_obj->name();
+		};
 	}
 
 	////
@@ -441,10 +548,6 @@ class forum_v2 extends class_base
 	{
 		$fld = $args["fld"];
 		$this->read_template("topic.tpl");
-		$obj_chain = $this->get_obj_chain(array(
-			"oid" => $args["request"]["topic"],
-			"stop" => $args["obj"]["meta"]["topic_folder"],
-		));
 
 		$topic_obj = new object($args["request"]["topic"]);
 
@@ -453,40 +556,6 @@ class forum_v2 extends class_base
 		$this->vars($this->style_data);
 		
 		$comments_on_page = !empty($args["obj"]["meta"]["topics_on_page"]) ? $args["obj"]["meta"]["topics_on_page"] : 5;
-		$path = array();
-		foreach($obj_chain as $key => $name)
-		{
-			if ($key == $fld)
-			{
-				$name = html::href(array(
-					"url" => $this->mk_my_orb("change",array("id" => $args["obj"]["oid"],"group" => $args["request"]["group"],"section" => aw_global_get("section"),"_alias" => get_class($this))),
-					"caption" => $name,
-				));
-			}
-			else
-			{
-				$obj = new object($key);
-				if ($obj->class_id() == CL_PSEUDO)
-				{
-					if ($obj["parent"] != $fld)
-					{
-						$name = html::href(array(
-							"url" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"group" => $args["request"]["group"],"folder" => $obj->id(),"section" => aw_global_get("section"),"_alias" => get_class($this))),
-							"caption" => $name,
-						));
-					}
-					else
-					{
-						$name = html::href(array(
-							"url" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"group" => $args["request"]["group"],"c" => $obj->id(),"section" => aw_global_get("section"),"_alias" => get_class($this))),
-							"caption" => $name,
-						));
-					};
-				};
-						
-			};
-			$path[] = $name;
-		};
 
 		$t = get_instance("contentmgmt/forum/forum_comment");
 		$comments = $t->get_comment_list(array("parent" => $args["request"]["topic"]));
@@ -537,6 +606,48 @@ class forum_v2 extends class_base
 			));
 			$pager .= $this->parse($selpage == $i ? "active_page" : "page");
 		};
+	
+		// path drawing starts
+		$path = array();
+		$obj_chain = $this->get_obj_chain(array(
+			"oid" => $args["request"]["topic"],
+			"stop" => $args["obj"]["meta"]["topic_folder"],
+		));
+		foreach($obj_chain as $key => $name)
+		{
+			if ($key == $fld)
+			{
+				$name = html::href(array(
+					"url" => $this->mk_my_orb("change",array("id" => $args["obj"]["oid"],"group" => $args["request"]["group"],"section" => aw_global_get("section"),"_alias" => get_class($this))),
+					"caption" => $name,
+				));
+			}
+			else
+			{
+				$obj = new object($key);
+				if ($obj->class_id() == CL_MENU)
+				{
+					if ($obj["parent"] != $fld)
+					{
+						$name = html::href(array(
+							"url" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"group" => $args["request"]["group"],"folder" => $obj->id(),"section" => aw_global_get("section"),"_alias" => get_class($this))),
+							"caption" => $name,
+						));
+					}
+					else
+					{
+						$name = html::href(array(
+							"url" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"group" => $args["request"]["group"],"c" => $obj->id(),"section" => aw_global_get("section"),"_alias" => get_class($this))),
+							"caption" => $name,
+						));
+					};
+				};
+						
+			};
+			$path[] = $name;
+		};
+
+		// path drawing ends .. sucks
 
 		$this->vars(array(
 			"active_page" => $pager,
@@ -738,6 +849,28 @@ class forum_v2 extends class_base
 		$this->style_data[$name] = "st" . $st_data;
 	}
 
+	function callback_get_topic_selector($arr)
+	{
+		$depth = $arr["obj_inst"]->prop("topic_depth");
+		$rv = array();
+		for ($i = 1; $i < $depth; $i++)
+		{
+			$name = "hide_folder[$i]";
+			$rv[$name] = array(
+				"type" => "checkbox",
+				"name" => $name,
+				"ch_value" => 1,
+				"caption" => "Peida #$i tase",
+			);
+		};
+		return $rv;
+	}
+
+	function update_topic_selector($arr)
+	{
+		arr($arr);
+	}
+
 	////
 	// !this will be called if the object is put in a document by an alias and the document is being shown
 	// parameters
@@ -756,6 +889,8 @@ class forum_v2 extends class_base
 			"folder" => $_GET["folder"],
 			"topic" => $_GET["topic"],
 			"c" => $_GET["c"],
+			"cb_part" => 1,
+			"fxt" => 1,
 			"group" => isset($_GET["group"]) ? $_GET["group"] : "container",
 		));
 	}
