@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.84 2002/01/24 14:02:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.85 2002/01/24 14:05:37 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -5014,10 +5014,12 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					if ($this->is_template("SCROLL_PROMO".$ap))
 					{
 						$scroll_promo .= $this->parse("SCROLL_PROMO".$ap);
+						$this->vars(array("SCROLL_PROMO".$ap => ""));
 					}
 					else
 					{
 						$scroll_promo .= $this->parse("SCROLL_PROMO");
+						$this->vars(array("SCROLL_PROMO" => ""));
 					}
 				}
 				else
@@ -5026,10 +5028,12 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					if ($this->is_template("RIGHT_PROMO".$ap))
 					{
 						$right_promo .= $this->parse("RIGHT_PROMO".$ap);
+						$this->vars(array("RIGHT_PROMO".$ap => ""));
 					}
 					else
 					{
 						$right_promo .= $this->parse("RIGHT_PROMO");
+						$this->vars(array("RIGHT_PROMO" => ""));
 					}
 				}
 				else
@@ -5038,10 +5042,12 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					if ($this->is_template("UP_PROMO".$ap))
 					{
 						$up_promo .= $this->parse("UP_PROMO".$ap);
+						$this->vars(array("UP_PROMO".$ap => ""));
 					}
 					else
 					{
 						$up_promo .= $this->parse("UP_PROMO");
+						$this->vars(array("UP_PROMO" => ""));
 					}
 				}
 				else
@@ -5050,10 +5056,12 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					if ($this->is_template("DOWN_PROMO".$ap))
 					{
 						$down_promo .= $this->parse("DOWN_PROMO".$ap);
+						$this->vars(array("DOWN_PROMO".$ap => ""));
 					}
 					else
 					{
 						$down_promo .= $this->parse("DOWN_PROMO");
+						$this->vars(array("DOWN_PROMO" => ""));
 					}
 				}
 				else
@@ -5061,10 +5069,12 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					if ($this->is_template("LEFT_PROMO".$ap))
 					{
 						$left_promo .= $this->parse("LEFT_PROMO".$ap);
+						$this->vars(array("LEFT_PROMO".$ap => ""));
 					}
 					else
 					{
 						$left_promo .= $this->parse("LEFT_PROMO");
+						$this->vars(array("LEFT_PROMO" => ""));
 					}
 				}
 				// nil the variables that were imported for promo boxes
