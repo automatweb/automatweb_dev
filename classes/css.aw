@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.32 2003/11/03 14:45:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.33 2003/12/03 12:03:47 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 /*
 
@@ -117,7 +117,12 @@ class css extends class_base
 		if (!empty($id))
 		{
 			$style_obj = new object($id);
-			return $this->_gen_css_style("st${id}",$style_obj->meta("css"));
+			$css = $style_obj->meta("css");
+			if (!is_array($css) || count($css) < 1)
+			{
+				$css = $style_obj->meta();
+			}
+			return $this->_gen_css_style("st${id}",$css);
 		};
 	}
 
