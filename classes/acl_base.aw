@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.10 2001/10/02 10:05:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.11 2001/11/07 17:18:02 kristo Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -226,6 +226,10 @@ class acl_base extends core
 			global $awt;
 			$access = "can_".$access;
 			$awt->start("acl::can_server");
+			if (!$o_oid)
+			{
+				return false;
+			}
 			global $acl_server_socket;
 			if (!$acl_server_socket)
 			{
