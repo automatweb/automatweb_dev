@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.18 2004/12/14 10:21:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.19 2004/12/30 13:50:08 dragut Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -18,6 +18,9 @@
 
 @property show_all_in_empty_search type=checkbox ch_value=1
 @caption T&uuml;hi otsing n&auml;itab k&otilde;iki
+
+@property show_only_act type=checkbox ch_value=1
+@caption N&auml;ita ainult aktiivseid objekte
 
 @property show_all_right_away type=checkbox ch_value=1
 @caption Otsingus n&auml;idatakse ilma otsimata k&otilde;iki
@@ -597,6 +600,7 @@ class register_search extends class_base
 
 		$filter = array(
 			"class_id" => CL_REGISTER_DATA,
+			"status" => $o->prop("show_only_act") ? STAT_ACTIVE : array(STAT_ACTIVE, STAT_NOTACTIVE),
 			new object_list_filter(array(
 				"logic" => "OR", 
 				"conditions" => array(
@@ -675,7 +679,6 @@ class register_search extends class_base
 		{
 			$filter["sort_by"] = "objects.name ASC ";
 		}
-		
 		if (count($filter) > 3 || $o->prop("show_all_right_away") == 1)
 		{
 			$ol_cnt = new object_list($filter);
