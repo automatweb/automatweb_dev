@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.129 2003/12/08 13:01:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.130 2003/12/10 15:44:08 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -232,6 +232,11 @@ class aliasmgr extends aw_template
 		if (!$oid)
 		{
 			return array();
+		}
+
+		if (!$GLOBALS["object_loader"]->ds->object_exists($oid))
+		{
+			return;
 		}
 		$this->recover_idx_enumeration($oid);
 
@@ -679,11 +684,20 @@ class aliasmgr extends aw_template
 			);
 		};
 
+		if (in_array($obj->class_id() , array(CL_MENU, CL_GROUP, CL_PROMO)))
+		{
+			$_a_parent = $obj->id();
+		}
+		else
+		{
+			$_a_parent = $obj->parent();
+		}
+
 		$this->vars(array(
 			'class_ids' => $clids,
 			"table" => $this->t->draw(),
 			"id" => $id,
-			"parent" => $obj->parent(),
+			"parent" => $_a_parent,
 			"reforb" => $reforb,
 			"chlinks" => join("\n",map2("chlinks[%s] = \"%s\";",$chlinks)),
 			"toolbar" => $toolbar,
@@ -804,6 +818,10 @@ class aliasmgr extends aw_template
 	function recover_idx_enumeration($id)
 	{
 		if (!$id)
+		{
+			return;
+		}
+		if (!$GLOBALS["object_loader"]->ds->object_exists($id))
 		{
 			return;
 		}
