@@ -17,7 +17,7 @@
 <!-- SUB: COL -->
 <td bgcolor=#dddddd colspan={VAR:colspan} rowspan={VAR:rowspan}>
 <!-- SUB: H_HEADER-->
-<b>{VAR:text}</b>
+<b>{VAR:text2}</b>
 <!-- END SUB: H_HEADER-->
 <!-- SUB: AREA -->
 <textarea class='small_button' name="text[{VAR:row}][{VAR:col}]" cols="{VAR:num_cols}" rows="{VAR:num_rows}">{VAR:text}</textarea>

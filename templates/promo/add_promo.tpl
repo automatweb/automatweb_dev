@@ -31,6 +31,9 @@
 <td class="fcaption">All:</td><td class="fform"><input type='radio' NAME='right' VALUE='3' {VAR:down_sel}></td>
 </tr>
 <tr>
+<td class="fcaption">Skrolliv:</td><td class="fform"><input type='radio' NAME='right' VALUE='scroll' {VAR:scroll_sel}></td>
+</tr>
+<tr>
 <td class="fcaption">{VAR:LC_PROMO_WHTOUT_TITLE}:</td><td class="fform"><input type='checkbox' NAME='no_title' VALUE='1' {VAR:no_title}></td>
 </tr>
 <tr>

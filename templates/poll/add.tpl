@@ -38,41 +38,48 @@ href="javascript:this.document.polladd.submit();">{VAR:LC_POLL_SAVE}</a>
 <table width="100%" cellspacing="0" cellpadding="5">
 <tr><td>
 
-
 <table  cellpadding=2 cellspacing=1 border=0>
 <tr>
 <td class="celltext" align="right">ID:</td><td class="celltext">{VAR:id}</td>
 </tr>
-
 <tr>
-<td class="celltext" align="right">{VAR:LC_POLL_QUESTION}:</td><td class="celltext"><input size="40" type='text' NAME='name' VALUE='{VAR:name}' class="formtext"></td>
-</tr>
-
+<!-- SUB: POLL -->
+<td>
+<table border="0">
 <tr>
-<td class="celltext" valign="top" align="right">{VAR:LC_POLL_COMMENTARY}:</td><td class="celltext"><textarea NAME='comment' cols=40 rows=5 class="formtext">{VAR:comment}</textarea></td>
+<td class="celltext">Keel:&nbsp;&nbsp;<b>{VAR:lang}</b></td>
 </tr>
-<!-- SUB: EDIT -->
+<tr>
+<td class="celltext">{VAR:LC_POLL_QUESTION}:<br><input size="40" type='text' NAME='name' VALUE='{VAR:name}' class="formtext"></td>
+</tr>
 <tr>
 <td colspan="2">
 <table border='0' cellspacing='1' cellpadding='3' width='100%'>
 <tr>
-<td class="celltext"><b>{VAR:LC_POLL_ANSWER}</b></td>
-<td class="celltext"><b>Klikke</b></td>
-<td class="celltext"><b>Protsent</b></td>
+<td class="celltext" valign="top">{VAR:LC_POLL_COMMENTARY}:<br><textarea NAME='comment' cols=40 rows=5 class="formtext">{VAR:comment}</textarea></td>
 </tr>
+
 <!-- SUB: QUESTION -->
 <tr>
-<td class="celltext">
-<input size="40" type='text' NAME='answer[{VAR:answer_id}]' VALUE='{VAR:answer}' class="formtext">
-</td>
-<td class="celltext" align="center">
-	{VAR:clicks}
-</td>
-<td class="celltext" align="center">
-	{VAR:percent}%
+<td>
+<input size="40" type='text' NAME='answer[{VAR:lang_id}][{VAR:answer_id}]' VALUE='{VAR:answer}' class="formtext">
 </td>
 </tr>
 <!-- END SUB: QUESTION -->
+</table>
+</td>
+<!-- END SUB: POLL -->
+<td>
+<table border="1">
+<tr>
+<td rowspan="3">
+&nbsp;
+</td>
+<td class="celltext">{VAR:clicks}</td>
+</tr>
+</table>
+</td>
+</tr>
 <tr>
 <td class="celltext" align="right"><b>Kokku:</b></td>
 <td class="celltext" align="center"><b>{VAR:sum}</b></td>

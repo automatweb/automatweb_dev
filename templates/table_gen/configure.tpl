@@ -7,6 +7,10 @@
 <td class="hele_hall_taust"><input type="checkbox" name="aliases" value="1" {VAR:aliases}></td>
 </tr>
 <tr>
+<td class="hele_hall_taust">Viimase muutmise kuupäev?</td>
+<td class="hele_hall_taust"><input type="checkbox" name="last_changed" value="1" {VAR:last_changed}></td>
+</tr>
+<tr>
 <td class="hele_hall_taust">{VAR:LC_TABLE_NAME}</td>
 <td class="hele_hall_taust"><input type="text" name="table_name" value="{VAR:table_name}">
 <input type='checkbox' name='show_title' VALUE=1 {VAR:show_title}>
