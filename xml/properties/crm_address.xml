@@ -34,6 +34,7 @@
             <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_LINN</reltype>
+            <automatic>1</automatic>
             <field>linn</field>
             <caption>Linn/Vald/Alev</caption>
       </property>
@@ -43,6 +44,7 @@
             <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_MAAKOND</reltype>
+            <automatic>1</automatic>
             <field>maakond</field>
             <caption>Maakond</caption>
       </property>
@@ -52,6 +54,7 @@
             <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_RIIK</reltype>
+            <automatic>1</automatic>
             <field>riik</field>
             <caption>Riik</caption>
       </property>

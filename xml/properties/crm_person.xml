@@ -84,6 +84,7 @@
             <type>date_select</type>
             <year_from>1930</year_from>
             <year_to>2010</year_to>
+            <default>-1</default>
             <field>birthday</field>
             <caption>Sünnipäev</caption>
       </property>
@@ -122,6 +123,7 @@
             <reltype>RELTYPE_PICTURE</reltype>
             <rel_id>first</rel_id>
             <use_form>emb</use_form>
+            <store>no</store>
             <field>picture</field>
             <caption>Pilt/foto</caption>
       </property>
