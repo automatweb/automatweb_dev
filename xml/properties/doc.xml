@@ -77,6 +77,27 @@
             <caption>Sisu</caption>
       </property>
       <property>
+            <name>moreinfo</name>
+            <type>textarea</type>
+            <richtext>1</richtext>
+            <cols>60</cols>
+            <rows>5</rows>
+            <table>documents</table>
+            <group>general</group>
+            <field>moreinfo</field>
+            <caption>Lisainfo</caption>
+      </property>
+      <property>
+            <name>img1</name>
+            <type>relpicker</type>
+            <clid>CL_IMAGE</clid>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Pilt</caption>
+      </property>
+      <property>
             <name>is_forum</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
@@ -242,6 +263,22 @@
             <group>calendar</group>
             <caption>Kalendrisündmus</caption>
       </property>
+      <property>
+            <name>start</name>
+            <type>date_select</type>
+            <table>planner</table>
+            <group>calendar</group>
+            <field>start</field>
+            <caption>Algab</caption>
+      </property>
+      <property>
+            <name>link_calendars</name>
+            <type>callback</type>
+            <store>no</store>
+            <callback>callback_gen_link_calendars</callback>
+            <group>calendar</group>
+            <caption>Vali kalendrid, millesse see sündmus veel salvestatakse.</caption>
+      </property>
       <classinfo>
             <toolbar>yes</toolbar>
             <corefields>status</corefields>
@@ -257,6 +294,11 @@
                   <master_table>objects</master_table>
                   <master_index>oid</master_index>
             </documents>
+            <planner>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </planner>
       </tableinfo>
 </properties>
 
