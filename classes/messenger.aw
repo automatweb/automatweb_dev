@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.61 2001/06/13 18:26:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.62 2001/06/16 10:46:08 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -230,6 +230,48 @@ class messenger extends menuedit_light
 		$this->read_template("contacts.tpl");
 		global $udata;
 		$folder = ($args["folder"]) ? $args["folder"] : $udata["home_folder"];
+		$fdata = $this->get_object($folder);
+		$path = array();
+
+		if ($fdata["class_id"] == CL_CONTACT_GROUP)
+		{
+			//print "check passed<br>";
+			$path[$fdata["oid"]] = $fdata["name"];
+		}
+		else
+		{
+			// we will just default to the user homedir
+			// this is inexpensive, since get_object caches the results
+			$path[$udata["home_folder"]] = "root";
+			$fdata = $this->get_object($udata["home_folder"]);
+		};
+		
+		// now we will have to try and find the names of all objects up until the home_folder
+		// of course only if we already aren't IN the home folder
+		$found = ($udata["home_folder"] != $fdata["oid"]);
+		$parent = $fdata["parent"];
+		while($found)
+		{
+			$obj = $this->get_object($parent);
+			if ($obj["class_id"] != CL_CONTACT_GROUP)
+			{
+				if ($udata["home_folder"] == $obj["oid"])
+				{
+					$path[$obj["oid"]] = "root";
+				};
+				$found = false;
+			}
+			else
+			{
+				$path[$obj["oid"]] = $obj["name"];
+			};
+			$parent = $obj["parent"];
+		};
+
+		$fullpath = map2("<a href='?class=messenger&action=contacts&id=%s'>%s</a>",$path);
+		$fullpath = join(" &gt; " ,array_reverse($fullpath));
+		
+		
 		$this->get_objects_by_class(array(
 					"parent" => $folder,
 					"class" => CL_CONTACT_GROUP,
@@ -266,12 +308,58 @@ class messenger extends menuedit_light
 			$cnt++;
 			$c .= $this->parse("line");
 		};
+
+		
+		$fldr = $udata["home_folder"];
+		do
+		{
+			// kysime koik sellel levelil asuvad objektid
+			$groups = $this->_get_groups_by_level($fldr);
+			
+			// sorteerime nad parentite jargi ära
+			// ja paigutame ka flat massiivi
+			foreach($groups as $key => $val)
+			{
+				$grps_by_parent[$val["parent"]][$key] = $val["name"];
+				$grps[$key] = $val["name"];
+			};
+		
+			// koostame parentite nimekirja jargmise tsykli jaoks
+			$fldr = array_keys($groups);
+	
+		// kordame nii kaua, kuni yhtegi objekti enam ei leitud
+		} while(sizeof($groups) > 0);
+	
+		// nyyd on dropdowni jaoks vaja koostada idenditud nimekiri koigist objektidest
+		$this->flatlist = array($udata["home_folder"] => "sorteerimata");
+		$this->_indent_array($grps_by_parent,$udata["home_folder"]);
 		$this->vars(array(
 				"menu" => $menu,
 				"line" => $c,
 				"gline" => $glist,
+				"grouplist" => $this->picker($folder,$this->flatlist),
+				"reforb" => $this->mk_reforb("submit_contact_list",array("folder" => $folder)),
+				"fullpath" => $fullpath,
 		));
 		return $this->parse();
+	}
+
+	function submit_contact_list($args = array())
+	{
+		extract($args);
+		if (is_array($check))
+		{
+			$inlist = join(",",array_keys($check));
+			$q = "UPDATE objects SET parent = '$group' WHERE oid IN ($inlist)";
+			$this->db_query($q);
+		};
+		global $status_msg;
+		$status_msg = "Kontaktid liigutati teise folderisse";
+		session_register("status_msg");
+		return $this->mk_site_orb(array(
+					"action" => "contacts",
+					"folder" => $folder));
+
 	}
 
 	////
@@ -441,16 +529,17 @@ class messenger extends menuedit_light
 
 	function _indent_array($arr,$level)
 	{
+		static $indent = 0;
+		$indent++;
 		while(list($key,$val) = each($arr[$level]))
 		{
-			$this->flatlist[$key] = str_repeat("&nbsp;",$this->indentlevel*3) . $val;
+			$this->flatlist[$key] = str_repeat("&nbsp;",$indent*3) . $val;
 			if (is_array($arr[$key]))
 			{
-				$this->indentlevel++;
 				$this->_indent_array($arr,$key);
-				$this->identlevel--;
 			};
 		};
+		$indent--;
 	}
 
 	function pick_contacts($args = array())
@@ -1273,7 +1362,7 @@ class messenger extends menuedit_light
 		if ($args["signature"] != "none")
 		{
 			// signatuur loppu
-			$message .= "\n--\n" . $this->msgconf["msg_signatures"][$args["signature"]]["signature"];
+			$message .= $this->msgconf["msg_signatures"][$args["signature"]]["signature"];
 		};
 
 		// kui meil on tarvis saata ka valiseid faile, siis teeme seda siin
