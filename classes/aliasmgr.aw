@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.171 2005/03/24 10:19:14 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.172 2005/03/27 08:46:01 ahti Exp $
 
 class aliasmgr extends aw_template
 {
@@ -703,7 +703,7 @@ class aliasmgr extends aw_template
 			$adat["id"] = $alias->prop("id");
 
 			$adat["name"] = html::href(array(
-				"url" => $ch,
+				"url" => $this->mk_my_orb("change", array("id" => $alias->prop("to"), "return_url" => $return_url), $edfile),
 				"caption" => parse_obj_name($alias->prop("to.name")),
 			));
 
