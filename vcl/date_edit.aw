@@ -141,7 +141,7 @@ class date_edit
 					);
 					while(list($mk,$mv) = each($mnames)) 
 					{
-						$retval .= sprintf("<option value='%s' %s>%s</option>\n",$mk,selected($mk == $month && $this->timestamp > 0),$mv);
+						$retval .= sprintf("<option value='%s' %s>%s</option>\n",$mk,selected($mk == $month && $this->timestamp != -1),$mv);
 					};
 					$retval .= "</select>\n";
 					break;
@@ -158,7 +158,7 @@ class date_edit
 					}
 					for ($i = 1; $i <= 31; $i++) 
 					{
-						$retval .= sprintf("<option value='%s' %s>%s</option>\n",$i,selected($i == $day && $this->timestamp > 0),$i);
+						$retval .= sprintf("<option value='%s' %s>%s</option>\n",$i,selected($i == $day && $this->timestamp != -1),$i);
 					};
 					$retval .= "</select>\n";
 					break;
@@ -175,7 +175,7 @@ class date_edit
 					}
 					for ($i = 0; $i <= 23; $i++) 
 					{
-						$retval .= sprintf("<option value='%s' %s>%02d</option>\n",$i,selected($i == $hour && $this->timestamp > 0),$i);
+						$retval .= sprintf("<option value='%s' %s>%02d</option>\n",$i,selected($i == $hour && $this->timestamp != -1),$i);
 					};
 					$retval .= "</select> :\n";
 					break;
@@ -193,7 +193,7 @@ class date_edit
 					$step = isset($this->minute_step) ? $this->minute_step : 1;
 					for ($i = 0; $i <= 59; $i = $i + $step) 
 					{
-						$retval .= sprintf("<option value='%s' %s>%02d</option>\n",$i,selected($i == $minute && $this->timestamp > 0),$i);
+						$retval .= sprintf("<option value='%s' %s>%02d</option>\n",$i,selected($i == $minute && $this->timestamp != -1),$i);
 					};
 					$retval .= "</select>\n";
 					break;
@@ -212,6 +212,7 @@ class date_edit
 		{
 			return -1;
 		}
-		return mktime($var["hour"], $var["minute"], $var["second"], $var["month"], $var["day"], $var["year"]);
+		$tmp =  mktime($var["hour"], $var["minute"], $var["second"], $var["month"], $var["day"], $var["year"]);
+		return $tmp;
 	}
 }; // end class
