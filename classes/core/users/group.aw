@@ -42,6 +42,9 @@
 @property search_form type=relpicker reltype=RELTYPE_SEARCHFORM
 @caption Otsinguvorm
 
+@property admin_rootmenu2 type=callback callback=get_admin_rootmenus field=meta method=serialize table=objects
+@caption Admin rootmen&uuml;&uuml;
+
 @property data type=text group=dyn_search no_caption=1
 
 @property import type=fileupload store=no group=import
@@ -646,6 +649,29 @@ class group extends class_base
 			}
 		}
 		return true;
+	}
+
+	function get_admin_rootmenus($arr)
+	{
+		$ret = array();
+		$la = get_instance("languages");
+		$ll = $la->get_list();
+
+		foreach($ll as $lid => $lname)
+		{
+			$ret["admin_rootmenu2[$lid]"] = array(
+				"name" => "admin_rootmenu2[$lid]",
+				"type" => "relpicker",
+				"group" => "settings",
+				"table" => "objects",
+				"field" => "meta",
+				"method" => "serialize",
+				"caption" => "Admin rootmen&uuml;&uuml; ($lname)",
+				"value" => $arr["obj"]["meta"]["admin_rootmenu2"][$lid],
+				"reltype" => "RELTYPE_ADMIN_ROOT"
+			);
+		}
+		return $ret;
 	}
 }
 ?>

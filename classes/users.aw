@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.94 2003/10/06 14:32:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.95 2003/10/22 07:34:29 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1935,6 +1935,32 @@ class users extends users_user
 			aw_global_set("gidlist", $gidlist);
 			aw_global_set("gidlist_pri", $gidlist_pri);
 			$this->touch($uid);
+
+			// get highest priority group
+			$hig = 0;
+			$hig_p = -1;
+			foreach($gidlist_pri as $_gid => $_pri)
+			{
+				if ($_pri > $hig_p && $_pri < 100000000)
+				{
+					$hig_p = $_pri;
+					$hig = $_gid;
+				}
+			}
+
+			if ($hig)
+			{
+				$_oid = $this->get_oid_for_gid($hig);
+				if ($_oid)
+				{
+					$o = $this->get_object($_oid);
+					if (is_array($o["meta"]["admin_rootmenu2"]) && $o["meta"]["admin_rootmenu2"][aw_global_get("lang_id")])
+					{
+						$GLOBALS["cfg"]["__default"]["admin_rootmenu2"] = $o["meta"]["admin_rootmenu2"][aw_global_get("lang_id")];
+						$GLOBALS["cfg"]["__default"]["rootmenu"] = $o["meta"]["admin_rootmenu2"][aw_global_get("lang_id")];
+					}
+				}
+			}
 		}
 		if (!is_array(aw_global_get("gidlist")))
 		{

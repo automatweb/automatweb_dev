@@ -77,6 +77,16 @@
             <caption>Otsinguvorm</caption>
       </property>
       <property>
+            <name>admin_rootmenu2</name>
+            <type>callback</type>
+            <callback>get_admin_rootmenus</callback>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Admin rootmen&amp;uuml;&amp;uuml;</caption>
+      </property>
+      <property>
             <name>data</name>
             <type>text</type>
             <group>dyn_search</group>
