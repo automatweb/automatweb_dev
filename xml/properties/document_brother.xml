@@ -70,6 +70,15 @@
             <caption>Fotode autor</caption>
       </property>
       <property>
+            <name>alias</name>
+            <type>textbox</type>
+            <size>60</size>
+            <table>objects</table>
+            <field>alias</field>
+            <group>general</group>
+            <caption>Alias</caption>
+      </property>
+      <property>
             <name>keywords</name>
             <type>textbox</type>
             <size>60</size>

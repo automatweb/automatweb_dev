@@ -28,6 +28,9 @@
 @property photos type=textbox size=60 trans=1
 @caption Fotode autor
 
+@property alias type=textbox size=60 table=objects field=alias
+@caption Alias
+
 @property keywords type=textbox size=60 trans=1
 @caption Võtmesõnad
 
