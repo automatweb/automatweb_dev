@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.71 2004/06/11 09:13:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.72 2004/06/17 14:29:27 duke Exp $
 // search.aw - Search Manager
 
 /*
@@ -672,7 +672,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				$serv = $lo->get_server($args["s"]["server"]);
 				$old_bu = $this->cfg["baseurl"];
 				$this->cfg["baseurl"] = "http://".$serv;
-				$obj_list = $this->_get_s_parent($args);
+				#$obj_list = $this->_get_s_parent($args);
 				$is_remote = true;
 			}
 
