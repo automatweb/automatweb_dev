@@ -18,3 +18,22 @@ function selall(element)
 }
 </script>
 <!-- END SUB: selallscript -->
+
+<!-- SUB: hilight_script -->
+<script type="text/javascript">
+var sel_row_style = '{VAR:sel_row_style}';
+function hilight(el,tgt)
+{
+        tgtel = document.getElementById(tgt);
+        if (el.checked)
+        {
+                tgtel.setAttribute('oldclass',tgtel.className);
+                tgtel.className = sel_row_style;
+        }
+        else
+        {
+                tgtel.className = tgtel.getAttribute('oldclass');
+        };
+}
+</script>
+<!-- END SUB: hilight_script -->
