@@ -2,99 +2,101 @@
 <properties>
       <property>
             <name>name</name>
-            <type>textbox</type>
             <group>general</group>
             <table>objects</table>
+            <type>textbox</type>
             <field>name</field>
             <caption>Nimetus (aasta,kuu)</caption>
       </property>
       <property>
             <name>comment</name>
-            <type>textbox</type>
             <group>general</group>
             <table>objects</table>
+            <type>textbox</type>
             <field>comment</field>
             <caption>Kommentaar (teema)</caption>
       </property>
       <property>
-            <name>status</name>
-            <type>status</type>
+            <name>perimage</name>
             <group>general</group>
             <table>objects</table>
+            <type>releditor</type>
+            <reltype>RELTYPE_IMAGE</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Pilt2</caption>
+      </property>
+      <property>
+            <name>status</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>status</type>
             <field>status</field>
             <caption>Arhiivis</caption>
       </property>
       <property>
             <name>syear</name>
-            <type>hidden</type>
-            <table>periods</table>
-            <field>syear</field>
             <group>general</group>
+            <table>periods</table>
+            <type>hidden</type>
+            <field>syear</field>
       </property>
       <property>
             <name>per_id</name>
-            <type>text</type>
-            <table>periods</table>
-            <field>id</field>
             <group>general</group>
+            <table>periods</table>
+            <type>text</type>
+            <field>id</field>
             <caption>Perioodi id.</caption>
       </property>
       <property>
             <name>per_oid</name>
-            <type>hidden</type>
-            <table>periods</table>
-            <field>oid</field>
             <group>general</group>
+            <table>periods</table>
+            <type>hidden</type>
+            <field>oid</field>
             <caption>Oid</caption>
       </property>
       <property>
-            <name>image</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_IMAGE</reltype>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Pilt</caption>
-      </property>
-      <property>
             <name>image_link</name>
-            <type>textbox</type>
             <group>general</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
             <caption>Pildi link</caption>
       </property>
       <property>
             <name>pyear</name>
-            <type>select</type>
             <group>general</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>select</type>
             <caption>Aasta</caption>
       </property>
       <property>
             <name>preview</name>
-            <type>text</type>
-            <store>no</store>
-            <editonly>1</editonly>
             <group>general</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <editonly>1</editonly>
             <caption>Eelvaade</caption>
       </property>
       <property>
             <name>activity</name>
-            <type>table</type>
             <group>activity</group>
-            <no_caption>1</no_caption>
-            <store>no</store>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
             <caption>Aktiivsus</caption>
       </property>
       <classinfo>
@@ -112,5 +114,12 @@
                   <master_index>oid</master_index>
             </periods>
       </tableinfo>
+      <reltypes>
+            <IMAGE>
+                  <value>1</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>Perioodi pilt</caption>
+            </IMAGE>
+      </reltypes>
 </properties>
 

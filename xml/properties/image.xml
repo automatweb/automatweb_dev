@@ -2,127 +2,132 @@
 <properties>
       <property>
             <name>file</name>
-            <type>fileupload</type>
-            <table>images</table>
             <group>general</group>
+            <table>images</table>
+            <type>fileupload</type>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
             <field>file</field>
             <caption>Pilt</caption>
       </property>
       <property>
             <name>dimensions</name>
-            <type>text</type>
             <group>
                   <num_0>general</num_0>
                   <num_1>resize</num_1>
             </group>
-            <store>no</store>
             <table>objects</table>
+            <type>text</type>
+            <store>no</store>
             <field>dimensions</field>
             <caption>Mõõtmed</caption>
       </property>
       <property>
             <name>file2</name>
-            <type>fileupload</type>
             <group>img2</group>
             <table>objects</table>
+            <type>fileupload</type>
             <field>meta</field>
             <method>serialize</method>
             <caption>Suur pilt</caption>
       </property>
       <property>
             <name>file2_del</name>
+            <group>img2</group>
+            <table>objects</table>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <group>img2</group>
             <store>no</store>
-            <table>objects</table>
             <field>file2_del</field>
             <caption>Kustuta suur pilt</caption>
       </property>
       <property>
             <name>comment</name>
+            <group>general</group>
             <table>objects</table>
             <field>comment</field>
             <type>textbox</type>
-            <group>general</group>
             <caption>Pildi allkiri</caption>
       </property>
       <property>
             <name>author</name>
+            <group>general</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <group>general</group>
             <caption>Pildi autor</caption>
       </property>
       <property>
             <name>alt</name>
-            <type>textbox</type>
+            <group>general</group>
             <table>objects</table>
+            <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
             <caption>Alt</caption>
       </property>
       <property>
             <name>link</name>
-            <type>textbox</type>
-            <table>images</table>
-            <field>link</field>
             <group>general</group>
+            <table>images</table>
+            <type>textbox</type>
+            <field>link</field>
             <caption>Link</caption>
       </property>
       <property>
             <name>newwindow</name>
+            <group>general</group>
+            <table>images</table>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <table>images</table>
             <field>newwindow</field>
-            <group>general</group>
             <caption>Uues aknas</caption>
       </property>
       <property>
             <name>no_print</name>
+            <group>general</group>
+            <table>objects</table>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
             <caption>&amp;Auml;ra n&amp;auml;ita print-vaates</caption>
       </property>
       <property>
             <name>new_w</name>
-            <type>textbox</type>
             <group>resize</group>
+            <table>objects</table>
+            <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
             <size>6</size>
             <store>no</store>
-            <table>objects</table>
             <caption>Uus laius</caption>
       </property>
       <property>
             <name>new_h</name>
-            <type>textbox</type>
             <group>resize</group>
+            <table>objects</table>
+            <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
             <size>6</size>
             <store>no</store>
-            <table>objects</table>
             <caption>Uus k&amp;otilde;rgus</caption>
       </property>
       <property>
             <name>do_resize</name>
+            <group>resize</group>
+            <table>objects</table>
             <type>submit</type>
             <field>meta</field>
             <method>serialize</method>
-            <group>resize</group>
             <value>Muuda</value>
             <store>no</store>
-            <table>objects</table>
       </property>
       <classinfo>
             <trans>1</trans>
