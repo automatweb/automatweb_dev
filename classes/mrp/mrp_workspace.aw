@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.78 2005/04/05 08:38:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.79 2005/04/05 13:05:40 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -1073,7 +1073,7 @@ class mrp_workspace extends class_base
 				),
 				"order" => $resource->ord (),
 				"operator" => join(",",$operators),
-				"status" => $resource->prop("status"),
+				"status" => $resource->prop("state"),
 				"resource_id" => $resource->id(),
 			));
 		}
@@ -1249,6 +1249,14 @@ class mrp_workspace extends class_base
 
 		$list = new object_list (array (
 			"class_id" => CL_MRP_CASE,
+			"state" => MRP_STATUS_ONHOLD,
+			"parent" => $this_object->prop ("projects_folder"),
+			// "createdby" => aw_global_get('uid'),
+		));
+		$count_projects_onhold = $list->count ();
+
+		$list = new object_list (array (
+			"class_id" => CL_MRP_CASE,
 			"state" => MRP_STATUS_ARCHIVED,
 			"parent" => $this_object->prop ("projects_folder"),
 			// "createdby" => aw_global_get('uid'),
@@ -1263,15 +1271,15 @@ class mrp_workspace extends class_base
 		$count_projects_all = $list->count();
 
 		$list = new object_list (array (
-			"class_id" => CL_MRP_CASE,
+			"class_id" => CL_MRP_JOB,
 			"state" => MRP_STATUS_ABORTED,
-			"parent" => $this_object->prop ("projects_folder"),
+			"parent" => $this_object->prop ("jobs_folder"),
 			// "createdby" => aw_global_get('uid'),
 		));
-		$count_projects_aborted = $list->count();
+		$count_jobs_aborted = $list->count ();
 
 		$list = $this->_get_subcontract_job_list($this_object);
-		$count_projects_subcontracted = $list->count();
+		$count_jobs_subcontracted = $list->count();
 
 		$tree = get_instance("vcl/treeview");
 		$tree->start_tree (array (
@@ -1317,6 +1325,12 @@ class mrp_workspace extends class_base
 		));
 
 		$tree->add_item (0, array (
+			"name" => t("Plaanist väljas") . " (" . $count_projects_onhold . ")",
+			"id" => "onhold",
+			"url" => aw_url_change_var ("mrp_tree_active_item", "onhold"),
+		));
+
+		$tree->add_item (0, array (
 			"name" => t("Valmis") . " (" . $count_projects_done . ")",
 			"id" => "done",
 			"url" => aw_url_change_var ("mrp_tree_active_item", "done"),
@@ -1335,13 +1349,13 @@ class mrp_workspace extends class_base
 		));
 
 		$tree->add_item (0, array (
-			"name" => t("Allhanket&ouml;&ouml;d") . " (" . $count_projects_subcontracted . ")",
+			"name" => t("Allhanket&ouml;&ouml;d") . " (" . $count_jobs_subcontracted . ")",
 			"id" => "subcontracts",
 			"url" => aw_url_change_var ("mrp_tree_active_item", "subcontracts"),
 		));
 
 		$tree->add_item (0, array (
-			"name" => t("Katkestatud t&ouml;&ouml;d") . " (" . $count_projects_aborted . ")",
+			"name" => t("Katkestatud t&ouml;&ouml;d") . " (" . $count_jobs_aborted . ")",
 			"id" => "aborted_jobs",
 			"url" => aw_url_change_var ("mrp_tree_active_item", "aborted_jobs"),
 		));
@@ -1387,6 +1401,7 @@ class mrp_workspace extends class_base
 			case "new":
 			case "planned":
 			case "aborted":
+			case "onhold":
 				$table->define_field (array (
 					"name" => "starttime",
 					"caption" => t("Materjalide saabumine"),
@@ -1484,33 +1499,40 @@ class mrp_workspace extends class_base
 				break;
 
 			case "planned_overdue":
-			///!!! pyyda teha object listina
-				// $list = new object_list (array (
-					// "class_id" => CL_MRP_CASE,
-					// "state" => MRP_STATUS_PLANNED,
-					// "planned_date" => new obj_predicate_compare (OBJ_COMP_GREATER, projectduedate),///!!!
-					// "parent" => $this_object->prop ("projects_folder"),
-					//// "createdby" => aw_global_get('uid'),
-				// ));
+				$applicable_states = array (
+					MRP_STATUS_INPROGRESS,
+					MRP_STATUS_PLANNED,
+				);
+				$list = new object_list (array (
+					"class_id" => CL_MRP_CASE,
+					"state" => $applicable_states,
+					"planned_date" => new obj_predicate_prop (OBJ_COMP_GREATER, "due_date"),
+					"parent" => $this_object->prop ("projects_folder"),
+					// "createdby" => aw_global_get('uid'),
+				));
 
-				$od = $this->get_proj_overdue($this_object);
-				if (count($od) == 0)
-				{
-					$list = new object_list();
-				}
-				else
-				{
-					$list = new object_list (array (
-						"oid" => $od
-					));
-				}
+				// $od = $this->get_proj_overdue($this_object);
+				// if (count($od) == 0)
+				// {
+					// $list = new object_list();
+				// }
+				// else
+				// {
+					// $list = new object_list (array (
+						// "oid" => $od
+					// ));
+				// }
 				break;
 
 			case "overdue":
+				$applicable_states = array (
+					MRP_STATUS_INPROGRESS,
+					MRP_STATUS_PLANNED,
+				);
 				$list = new object_list (array (
 					"class_id" => CL_MRP_CASE,
 					"due_date" => new obj_predicate_compare (OBJ_COMP_LESS, time()),
-					"state" => new obj_predicate_not (MRP_STATUS_DONE),
+					"state" => $applicable_states,
 					"parent" => $this_object->prop ("projects_folder"),
 					// "createdby" => aw_global_get('uid'),
 				));
@@ -1547,6 +1569,15 @@ class mrp_workspace extends class_base
 				$list = new object_list (array (
 					"class_id" => CL_MRP_CASE,
 					"state" => MRP_STATUS_ABORTED,
+					"parent" => $this_object->prop ("projects_folder"),
+					// "createdby" => aw_global_get('uid'),
+				));
+				break;
+
+			case "onhold":
+				$list = new object_list (array (
+					"class_id" => CL_MRP_CASE,
+					"state" => MRP_STATUS_ONHOLD,
 					"parent" => $this_object->prop ("projects_folder"),
 					// "createdby" => aw_global_get('uid'),
 				));
@@ -3063,8 +3094,8 @@ class mrp_workspace extends class_base
 			case "grp_printer":
 			case "grp_printer_current":
 				$states = array(
-					MRP_STATUS_NEW, MRP_STATUS_PLANNED, MRP_STATUS_INPROGRESS, 
-					MRP_STATUS_LOCKED, MRP_STATUS_PAUSED, MRP_STATUS_DELETED, 
+					MRP_STATUS_NEW, MRP_STATUS_PLANNED, MRP_STATUS_INPROGRESS,
+					MRP_STATUS_LOCKED, MRP_STATUS_PAUSED, MRP_STATUS_DELETED,
 					MRP_STATUS_ONHOLD, MRP_STATUS_ARCHIVED
 				);
 				break;

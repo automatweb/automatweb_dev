@@ -1,6 +1,13 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>concurrent_threads</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
+      </property>
+      <property>
             <name>state</name>
             <table>objects</table>
             <field>meta</field>
@@ -75,7 +82,7 @@
             <caption>Tüüp</caption>
       </property>
       <property>
-            <name>concurrent_threads</name>
+            <name>thread_info</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>

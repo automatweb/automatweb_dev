@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.40 2005/04/02 19:04:41 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.41 2005/04/05 13:05:39 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -17,10 +17,10 @@
 @default table=objects
 @default field=meta
 @default method=serialize
+	@property concurrent_threads type=hidden
 
 	@property state type=text group=general,grp_resource_maintenance
 	@caption Ressursi staatus
-
 
 @default group=general
 	@property category type=text editonly=1
@@ -48,7 +48,7 @@
 	@property type type=select
 	@caption Tüüp
 
-	@property concurrent_threads type=textbox default=1
+	@property thread_info type=textbox default=1
 	@comment Positiivne täisarv
 	@caption Samaaegseid töid enim
 
@@ -236,6 +236,10 @@ class mrp_resource extends class_base
 				$prop["value"] = $this->create_resource_calendar ($arr);
 				break;
 
+			case "thread_info":
+				$prop["value"] = count ($this_object->prop ("thread_info"));
+				break;
+
 			case "type":
 				$prop["options"] = array (
 					MRP_RESOURCE_SCHEDULABLE => t("Ressursi kasutust planeeritakse"),
@@ -308,7 +312,7 @@ class mrp_resource extends class_base
 		### post rescheduling msg where necessary
 		switch ($prop["name"])
 		{
-			case "concurrent_threads":
+			case "thread_info":
 			case "global_buffer":
 				if ($this_object->prop ($prop["name"]) != $prop["value"])
 				{
@@ -332,6 +336,38 @@ class mrp_resource extends class_base
 			case "default_post_buffer":
 			case "global_buffer":
 				$prop["value"] = round ($prop["value"] * 3600);
+				break;
+
+			case "thread_info":
+				$thread_info = $this_object->prop ("thread_info");
+				$concurrent_threads = count ($thread_info);
+
+				if (($concurrent_threads != $prop["value"])  and $prop["value"])
+				{
+					if (!$concurrent_threads)
+					{
+						$thread_info = array_fill (0, (int) $prop["value"], array (
+							"state" => MRP_STATUS_RESOURCE_AVAILABLE,
+							"job" => NULL,
+						));
+					}
+					elseif ($prop["value"] > $concurrent_threads)
+					{
+						$new_threads = (int) $prop["value"] - $concurrent_threads;
+						$thread_info = array_merge ($thread_info, array_fill ($concurrent_threads, $new_threads, array (
+							"state" => MRP_STATUS_RESOURCE_AVAILABLE,
+							"job" => NULL,
+						)));
+					}
+					elseif ($prop["value"] < $concurrent_threads)
+					{
+						$thread_info = array_slice ($thread_info, (int) $prop["value"]);
+					}
+
+					$resource->set_prop ("thread_info", $thread_info);
+					$resource->set_prop ("concurrent_threads", count ($thread_info));
+					$this->workspace->set_prop("rescheduling_needed", 1);
+				}
 				break;
 
 			case "maintenance_history":
@@ -571,8 +607,9 @@ class mrp_resource extends class_base
 	{
 		$unavailable_dates = array ();
 		$dates = explode (";", $dates);
-		$pattern = 		"/([1-9]|\d{2})\s*[\:\.\,\/]\s*([1-9]|\d{2})\s*[\:\.\,\/\|]\s*(\d{1,2})\s*([\:\.\,]\s*(\d{1,2})\s*)*\-" .
-								"\s*([1-9]|\d{2})\s*[\:\.\,\/]\s*([1-9]|\d{2})\s*[\:\.\,\/\|]\s*(\d{1,2})\s*([\:\.\,]\s*(\d{1,2}))*/S";
+		// $pattern = 		"/([1-9]|\d{2})\s*[\:\.\,\/]\s*([1-9]|\d{2})\s*[\:\.\,\/\|]\s*(\d{1,2})\s*([\:\.\,]\s*(\d{1,2})\s*)*\-" .
+								// "\s*([1-9]|\d{2})\s*[\:\.\,\/]\s*([1-9]|\d{2})\s*[\:\.\,\/\|]\s*(\d{1,2})\s*([\:\.\,]\s*(\d{1,2}))*/S";
+		$separators = " ,.:/|-\\";
 		$period_start_year = date ("Y", $period_start);
 		$period_start_mon = date ("n", $period_start);
 		$period_start_day = date ("j", $period_start);
@@ -582,10 +619,20 @@ class mrp_resource extends class_base
 
 		foreach ($dates as $date)
 		{
-			$match = preg_match (&$pattern, $date, $datedefinition);
-			list ($NULL, $start_day, $start_mon, $start_hour, $NULL, $start_min, $end_day, $end_mon, $end_hour, $NULL, $end_min) = $datedefinition;
+			// $match = preg_match (&$pattern, $date, $datedefinition);
+			// list ($NULL, $start_day, $start_mon, $start_hour, $NULL, $start_min, $end_day, $end_mon, $end_hour, $NULL, $end_min) = $datedefinition;
 
-			if ($match and (mktime ($start_hour, $start_min, 0, $start_mon, $start_day, $period_start_year) < mktime ($end_hour, $end_min, 0, $end_mon, $end_day, ($period_start_year + 1))))
+			$start_day = (int) strtok ($date, $separators);
+			$start_mon = (int) strtok ($separators);
+			$start_hour = (int) strtok ($separators);
+			$start_min = (int) strtok ($separators);
+			$end_day = (int) strtok ($separators);
+			$end_mon = (int) strtok ($separators);
+			$end_hour = (int) strtok ($separators);
+			$end_min = (int) strtok ($separators);
+
+			// if ($match and (mktime ($start_hour, $start_min, 0, $start_mon, $start_day, $period_start_year) < mktime ($end_hour, $end_min, 0, $end_mon, $end_day, ($period_start_year + 1))))
+			if ($start_day and $start_mon and $end_day and $end_mon and (mktime ($start_hour, $start_min, 0, $start_mon, $start_day, $period_start_year) < mktime ($end_hour, $end_min, 0, $end_mon, $end_day, ($period_start_year + 1))))
 			{
 				$year = $period_start_year;
 
@@ -910,10 +957,11 @@ class mrp_resource extends class_base
 /**
     @attrib name=start_job
 	@param resource required type=int
+	@param job required type=int
 **/
 	function start_job ($arr)
 	{
-		if (is_oid ($arr["resource"]))
+		if (is_oid ($arr["resource"]) and is_oid ($arr["job"]))
 		{
 			$resource = obj ($arr["resource"]);
 		}
@@ -925,9 +973,33 @@ class mrp_resource extends class_base
 		switch ($resource->prop ("state"))
 		{
 			case MRP_STATUS_RESOURCE_AVAILABLE:
-				$resource->set_prop ("state", MRP_STATUS_RESOURCE_INUSE);
+				$thread_info = $resource->prop ("thread_info");
+				$started = false;
+				$last_thread = true;
+
+				foreach ($thread_info as $key => $thread)
+				{
+					if ($thread["state"] == MRP_STATUS_RESOURCE_AVAILABLE and ($started === false))
+					{
+						$thread_info[$key]["state"] = MRP_STATUS_RESOURCE_INUSE;
+						$thread_info[$key]["job"] = $arr["job"];
+						$started = $key;
+					}
+					elseif ($thread["state"] == MRP_STATUS_RESOURCE_AVAILABLE and ($started !== false))
+					{
+						$last_thread = false;
+						break;
+					}
+				}
+
+				if ($last_thread)
+				{
+					$resource->set_prop ("state", MRP_STATUS_RESOURCE_INUSE);
+				}
+
+				$resource->set_prop ("thread_info", $thread_info);
 				$resource->save ();
-				return true;
+				return $started;
 
 			default:
 				return false;
@@ -937,10 +1009,11 @@ class mrp_resource extends class_base
 /**
     @attrib name=stop_job
 	@param resource required type=int
+	@param job required type=int
 **/
 	function stop_job ($arr)
 	{
-		if (is_oid ($arr["resource"]))
+		if (is_oid ($arr["resource"]) and is_oid ($arr["job"]))
 		{
 			$resource = obj ($arr["resource"]);
 		}
@@ -949,6 +1022,19 @@ class mrp_resource extends class_base
 			return false;
 		}
 
+		$thread_info = $resource->prop ("thread_info");
+
+		foreach ($thread_info as $key => $thread)
+		{
+			if ($thread["job"] == $arr["job"])
+			{
+				$thread_info[$key]["state"] = MRP_STATUS_RESOURCE_AVAILABLE;
+				$thread_info[$key]["job"] = NULL;
+				break;
+			}
+		}
+
+		$resource->set_prop ("thread_info", $thread_info);
 		$resource->set_prop ("state", MRP_STATUS_RESOURCE_AVAILABLE);
 		$resource->save ();
 		return true;

@@ -5,6 +5,7 @@
 			<function name="start_job">
 				<arguments>
 					<required name="resource" type="int" />
+					<required name="job" type="int" />
 				</arguments>
 			</function>
 		</action>
@@ -13,6 +14,7 @@
 			<function name="stop_job">
 				<arguments>
 					<required name="resource" type="int" />
+					<required name="job" type="int" />
 				</arguments>
 			</function>
 		</action>

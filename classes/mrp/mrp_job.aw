@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.47 2005/04/02 19:04:41 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.48 2005/04/05 13:05:40 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -509,9 +509,12 @@ class mrp_job extends class_base
 
 		### reserve resource
 		$mrp_resource = get_instance(CL_MRP_RESOURCE);
-		$resource_is_reserved = $mrp_resource->start_job(array("resource" => $this_object->prop("resource")));
+		$resource_is_reserved = $mrp_resource->start_job(array(
+			"resource" => $this_object->prop("resource"),
+			"job" => $this_object->id (),
+		));
 
-		if (!$resource_is_reserved)
+		if ($resource_is_reserved === false)
 		{
 			$errors[] = t("Ressurss kinni");
 		}
@@ -520,7 +523,10 @@ class mrp_job extends class_base
 		if ($errors)
 		{
 			### free resource and exit
-			$mrp_resource->stop_job(array("resource" => $this_object->prop("resource")));
+			$mrp_resource->stop_job(array(
+				"resource" => $this_object->prop("resource"),
+				"job" => $this_object->id (),
+			));
 			$errors = urlencode(serialize($errors));
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
@@ -542,7 +548,10 @@ class mrp_job extends class_base
 					$errors = array_merge($errors, $project_errors);
 
 					### free resource and exit
-					$mrp_resource->stop_job(array("resource" => $this_object->prop("resource")));
+					$mrp_resource->stop_job(array(
+						"resource" => $this_object->prop("resource"),
+						"job" => $this_object->id (),
+					));
 					$errors = urlencode(serialize($errors));
 					return aw_url_change_var ("errors", $errors, $return_url);
 				}
@@ -618,7 +627,10 @@ class mrp_job extends class_base
 
 			### set resource as free
 			$mrp_resource = get_instance(CL_MRP_RESOURCE);
-			$resource_freed = $mrp_resource->stop_job(array("resource" => $this_object->prop("resource")));
+			$resource_freed = $mrp_resource->stop_job(array(
+				"resource" => $this_object->prop("resource"),
+				"job" => $this_object->id (),
+			));
 
 			if (!$resource_freed)
 			{
@@ -734,7 +746,10 @@ class mrp_job extends class_base
 
 			### set resource as free
 			$mrp_resource = get_instance(CL_MRP_RESOURCE);
-			$resource_freed = $mrp_resource->stop_job(array("resource" => $this_object->prop("resource")));
+			$resource_freed = $mrp_resource->stop_job(array(
+				"resource" => $this_object->prop("resource"),
+				"job" => $this_object->id (),
+			));
 
 			if (!$resource_freed)
 			{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.57 2005/04/05 08:38:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.58 2005/04/05 13:05:40 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -1091,7 +1091,7 @@ class mrp_case extends class_base
 				{
 					$job = obj ($property[1]);
 					$property = $property[2];
-					$status = $job->prop ("job_status");
+					$status = $job->prop ("state");
 
 					if ( ($status == MRP_STATUS_INPROGRESS) or ($status == MRP_STATUS_DONE) )
 					{
