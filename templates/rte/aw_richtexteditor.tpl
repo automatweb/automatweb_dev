@@ -109,6 +109,7 @@ function apply_editor_style(doc,val,iframe)
 	//doc.write(val);
 	// val = val.replace(/\r/,"");
 	doc.write(val.replace(/\r\n/gi,"<br>\r\n"));
+	//doc.write(val.replace(/\n/gi,"<br>\n"));
 	doc.writeln("</body></html>");
 	doc.close();
 };
@@ -228,6 +229,7 @@ function clearstyles()
 		el = document.getElementById(rte_list[i] + "_edit");
 		// get old innerHTML
 		old = el.contentWindow.document.body.innerHTML;
+		//alert(old);
 		// nuke span tags
 		old2 = old.replace(/<span.+?>|<\/span>|<font.+?>|<\/font>/gi,"");
 		//old2 = old2.replace(/<p.+?>/gi,"<p>");
