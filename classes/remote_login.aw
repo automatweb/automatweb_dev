@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.2 2002/02/15 18:21:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.3 2002/02/15 18:25:26 duke Exp $
 // remote_login.aw - AW remote login
 global $orb_defs;
 $orb_defs["remote_login"] = "xml";
@@ -44,19 +44,19 @@ class remote_login extends aw_template {
 	{
 		$this->quote($args);
 		extract($args);
-		if ($parent)
+		if ($id)
+		{
+			$this->upd_object(array(
+				"oid" => $id,
+				"name" => $server,
+			));
+		}
+		else
 		{
 			$id = $this->new_object(array(
 				"parent" => $parent,
 				"name" => $server,
 				"class_id" => CL_AW_LOGIN,
-			));
-		}
-		else
-		{
-			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $server,
 			));
 		};
 
