@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.18 2003/03/12 16:43:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.19 2003/04/13 17:03:08 duke Exp $
 // this is the class that allows us to connect to multiple datasources at once
 // it replaces the mysql class which was used up to now, but still routes all
 // db functions to it so that everything stays working and it also provides
@@ -41,8 +41,8 @@
 	// should and will take care of connecting to correct sources 
 */
 
-classload("root");
-class db_connector extends root
+#classload("root");
+class db_connector
 {
 	var $dc; # this is where we hold connections
 
@@ -50,12 +50,18 @@ class db_connector extends root
 	// !init default database connection
 	function init($args = array())
 	{
-		parent::init($args);
+		#parent::init($args);
+		// dammit, I hate it when I don't know whether the args are string or array
+		if (is_array($args) && isset($args["no_db"]))
+		{
+			return;
+		};
 		$this->default_cid = "DBMAIN";
 		
 		// if no connection id is set, pretend that this is the primary data source
 		$id = "db::".$this->default_cid;
 		$dc = aw_global_get($id);
+
 		
 		if ($dc)
 		{
