@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.18 2001/05/23 07:08:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.19 2001/05/23 17:41:43 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -533,7 +533,7 @@ class messenger extends menuedit_light
 					// kui status == true, siis on teade loetud
 					$msg["id"] = $msg["oid"];
 					$msg["color"] = ($msg["status"]) ? "#FFFFFF" : "#EEEEEE";
-					$msg["from"] = "$pref<a href='?class=messenger&action=do_search&field=modifiedby&value=$msg[modifiedby]&folders=$folder'>" . $msg["modifiedby"] . "</a>$suf";
+					$msg["from"] = $msg["mfrom"];
 					$msg["subject"] = "$pref<a href='?class=messenger&action=show&id=$msg[id]'>" . $msg["subject"] . "</a>$suf";
 					$msg["pri"] = ($msg["pri"]) ? $msg["pri"] : 0;
 					$msg["cnt"] = $cnt;
