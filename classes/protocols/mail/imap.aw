@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.8 2003/10/28 13:16:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.9 2003/10/28 15:18:49 duke Exp $
 // imap.aw - IMAP login 
 /*
 
@@ -163,6 +163,7 @@ class imap extends class_base
 					//$status = imap_status($this->mbox,$item->name,SA_ALL);
 					$res[$key] = array(
 						"name" => $realname,
+						"realname" => strpos($realname,".") === false ? $realname : substr($realname, strrpos($realname, '.') + 1),
 						//"count" => ($status->unseen > 0) ? sprintf("<b>(%d)</b>",$status->unseen) : "",
 					);
 				};
@@ -222,14 +223,17 @@ class imap extends class_base
 				foreach($to_fetch as $msg_uid)
 				{
 					//print "fetching message with uid $msg_uid<br>";
-					flush();
+					//flush();
 					$overview = imap_fetch_overview($this->mbox,$msg_uid,FT_UID);
+					$addrinf = $this->_extract_address($message->from);
 					//print "fetch done, processing<br>";
-					flush();
+					//flush();
 					$message = $overview[0];
 					$rkey = $message->uid;
 					$req_msgs[$rkey] = array(
 						"from" => $message->from,
+						"froma" => $addrinf["addr"],
+						"fromn" => $addrinf["name"],
 						"subject" => $this->_parse_subj($message->subject),
 						"date" => $message->date,
 						"tstamp" => strtotime($message->date),
@@ -239,7 +243,7 @@ class imap extends class_base
 						"recent" => $message->recent,
 					);
 					//print ".";
-					flush();
+					//flush();
 				};
 			};
 
@@ -523,5 +527,25 @@ class imap extends class_base
 	{
 		return md5($dat->Nmsgs . $dat->Size . "tambovihunt2");
 	}
+
+	function _extract_address($arg)
+	{
+		if (preg_match("/(.*)<(.*)>/",$arg,$m))
+		{
+			$rv = array(
+				"name" => $m[1],
+				"addr" => $m[2],
+			);
+		}
+		else
+		{
+			$rv = array(
+				"name" => $arg,
+				"addr" => "",
+			);
+		}
+		return $rv;
+	}
+
 };
 ?>
