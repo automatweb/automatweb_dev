@@ -1,5 +1,5 @@
 <?php
-
+// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline_conf.aw,v 1.10 2003/10/30 16:08:25 duke Exp $
 /*
 
 @default table=objects
@@ -37,32 +37,30 @@
 @property use_filter type=checkbox ch_value=1
 @caption Kas kasutada Tegevuste filtrit
 
-@property filter_types type=generated generator=get_filter_types group=types
+@property filter_types type=callback callback=get_filter_types group=types
 @caption T&uuml;&uuml;bid
 
-@property filter_actions type=generated generator=get_filter_actions group=actions
+@property filter_actions type=callback callback=get_filter_actions group=actions
 @caption Tegevused
 
-@property filter_combo type=generated generator=get_filter_combo group=combo
+@property filter_combo type=callback callback=get_filter_combo group=combo
 @caption Tegevused
 
-@property ip_save_folder type=select group=ipfilter
+@property ip_save_folder type=objpicker clid=CL_MENU group=ipfilter
 @caption Kataloog, kuhu salvestatakse IP aadressid
 
-@property ip_block_folders type=select multiple=1 group=ipfilter
+@property ip_block_folders type=objpicker clid=CL_MENU multiple=1 group=ipfilter
 @caption Blokeeritavate aadresside kataloogid
 
 @property ip_block_folders_subs type=checkbox ch_value=1 group=ipfilter
 @caption Kas n&auml;idata ka alamkataloogid
 
-@property ip_allow_folders type=select multiple=1 group=ipfilter
+@property ip_allow_folders type=objpicker clid=CL_MENU multiple=1 group=ipfilter
 @caption N&auml;idatavate aadresside kataloogid
 
 @property ip_allow_folders_subs type=checkbox ch_value=1 group=ipfilter
 @caption Kas n&auml;idata ka alamkataloogid
 
-
-@groupinfo general caption=Üldine
 @groupinfo types caption=T&uuml;&uuml;bid
 @groupinfo actions caption=Tegevused
 @groupinfo combo caption=Kombineeritud
@@ -74,9 +72,6 @@ class dronline_conf extends class_base
 {
 	function dronline_conf()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
-	    // if they exist at all. the default folder does not actually exist, 
-	    // it just points to where it should be, if it existed
 		$this->init(array(
 			'tpldir' => 'syslog/dronline_conf',
 			'clid' => CL_DRONLINE_CONF
@@ -103,25 +98,7 @@ class dronline_conf extends class_base
 			$prop['value'] = time();
 		}
 		else
-		if ($prop['name'] == 'ip_save_folder')
-		{
-			$ob = get_instance('objects');
-			$prop['options'] = $ob->get_list();
-		}
-		else
-		if ($prop['name'] == 'ip_block_folders')
-		{
-			$ob = get_instance('objects');
-			$prop['options'] = $ob->get_list();
-		}
-		else
-		if ($prop['name'] == 'ip_allow_folders')
-		{
-			$ob = get_instance('objects');
-			$prop['options'] = $ob->get_list();
-		}
-		else
-		if (($prop['name'] == 'name' || $prop['name'] == 'comment' || $prop['name'] == 'alias' || $prop['name'] == 'status' || $prop['name'] == 'jrk') && $this->embedded == true)
+		if (($prop['name'] == 'name' || $prop['name'] == 'comment' || $prop['name'] == 'status') && $this->embedded == true)
 		{
 			return PROP_IGNORE;
 		}
@@ -147,9 +124,57 @@ class dronline_conf extends class_base
 		return PROP_OK;
 	}
 
-	function get_filter_types()
+	function set_property($arr)
+	{
+		$data = &$arr["prop"];
+		$retval = PROP_OK;
+		switch($data["name"])
+		{
+			case "filter_types":
+				$tps = aw_ini_get("syslog.types");
+				foreach($tps as $tpid => $tpd)
+				{
+					$rt = 'slt_'.$tpid;
+					$arr["obj_inst"]->set_meta($rt,isset($arr["request"][$rt]) ? $arr["request"][$rt] : "");
+				};
+				break;
+
+			case "filter_actions":
+				$tps = aw_ini_get("syslog.actions");
+				foreach($tps as $tpid => $tpd)
+				{
+					$rt = 'sla_'.$tpid;
+					$arr["obj_inst"]->set_meta($rt,isset($arr["request"][$rt]) ? $arr["request"][$rt] : "");
+				};
+				break;
+			
+
+			case "filter_combo":
+				$tps = aw_ini_get("syslog.types");
+				$acts = aw_ini_get("syslog.actions");
+				foreach($tps as $tpid => $tpd)
+				{
+					foreach($acts as $acid => $acd)
+					{
+						// check if this action applies for this type
+						$tlist = explode(",", $acd['types']);
+						if (in_array($tpid, $tlist))
+						{
+							$rt = 'slc_'.$tpid.'_'.$acid;
+							$arr["obj_inst"]->set_meta($rt,isset($arr["request"][$rt]) ? $arr["request"][$rt] : "");
+						};
+					};
+				};
+				break;
+		};
+		return $retval;
+	}
+
+
+	function get_filter_types($arr)
 	{
 		$acts = array();
+		$values = $arr["obj_inst"]->meta();
 		$tps = aw_ini_get("syslog.types");
 		foreach($tps as $tpid => $tpd)
 		{
@@ -160,20 +185,19 @@ class dronline_conf extends class_base
 				'caption' => $tpd['name'],
 				'type' => 'checkbox',
 				'ch_value' => 1,
-				'table' => 'objects',
-				'field' => 'meta',
-				'method' => 'serialize',
-				'group' => 'types'
+				'value' => $values[$rt],
+				'group' => $arr["prop"]["group"],
 			);
 		}
 
 		return $acts;
 	}
 
-	function get_filter_actions()
+	function get_filter_actions($arr)
 	{
 		$acts = array();
 		$tps = aw_ini_get("syslog.actions");
+		$values = $arr["obj_inst"]->meta();
 		foreach($tps as $tpid => $tpd)
 		{
 			$rt = 'sla_'.$tpid;
@@ -183,19 +207,18 @@ class dronline_conf extends class_base
 				'caption' => $tpd['name'],
 				'type' => 'checkbox',
 				'ch_value' => 1,
-				'table' => 'objects',
-				'field' => 'meta',
-				'method' => 'serialize',
-				'group' => 'actions'
+				'group' => $arr["prop"]["group"],
+				'value' => $values[$rt],
 			);
 		}
 
 		return $acts;
 	}
 
-	function get_filter_combo()
+	function get_filter_combo($arr)
 	{
 		$acts = array();
+		$values = $arr["obj_inst"]->meta();
 		$tps = aw_ini_get("syslog.types");
 		$acts = aw_ini_get("syslog.actions");
 		foreach($tps as $tpid => $tpd)
@@ -219,10 +242,8 @@ class dronline_conf extends class_base
 						'caption' => $acd['name'],
 						'type' => 'checkbox',
 						'ch_value' => 1,
-						'table' => 'objects',
-						'field' => 'meta',
-						'method' => 'serialize',
-						'group' => 'combo'
+						'value' => $values[$rt],
+						'group' => $arr["prop"]["group"],
 					);
 				}
 			}
