@@ -16,17 +16,17 @@
 
 	@property pohitegevus type=textbox size=10 maxlenght=20
 	@caption põhitegevus
-	@property pohitegevus_b type=button
+	@property pohitegevus_b type=text
 	@caption pohitegevus
 
 	@property korvaltegevused type=textbox size=10 maxlenght=20
 	@caption kõrvaltegevused
-	@property korvaltegevused_b type=button
+	@property korvaltegevused_b type=text
 	@caption korvaltegevused
 
 	@property ettevotlusvorm type=textbox size=10 maxlenght=20
 	@caption ettevõtlusvorm
-	@property ettevotlusvorm_b type=button
+	@property ettevotlusvorm_b type=text
 	@caption ettevõtlusvorm
 
 	@property firma_nimetus type=textbox size=10 maxlenght=20
@@ -34,20 +34,27 @@
 
 	@property tooted type=textbox size=10 maxlenght=20
 	@caption tooted
-	@property tooted_b type=button
+	@property tooted_b type=text
 	@caption tooted
 
 	@property kaubamargid type=textbox size=10 maxlenght=20
 	@caption kaubamärgid
 
-	@property contact type=textbox size=10 maxlenght=20
+	@property contact_change type=text
 	@caption kontakt
+
+	@property contact type=textbox
+	@caption kontakt hidden
 
 	@property tegevuse_kirjeldus type=textbox size=10 maxlenght=20
 	@caption tegevuse kirjeldus
 
-	@property firmajuht type=textbox size=10 maxlenght=20
+	@property firmajuht_change type=text
 	@caption firmajuht
+
+	@property firmajuht type=textbox
+	@caption firmajuht hidden
+
 
 	@property popups type=text
 	@caption pop
@@ -94,6 +101,12 @@ $data['value']=<<<SCR
 
 function put_value(target,value)
 {
+	if (target == "firmajuht")
+		document.changeform.firmajuht.value = value;
+	else
+	if (target == "contact")
+		document.changeform.contact.value = value;
+	else
 	if (target == "ettevotlusvorm")
 		document.changeform.ettevotlusvorm.value = value;
 	else
@@ -106,7 +119,9 @@ function put_value(target,value)
 	if (target == "pohitegevus")
 		document.changeform.pohitegevus.value = value;
 	else
-	{}
+	{
+		alert('form element not found');
+	}
 	document.changeform.submit();
 }
 
@@ -120,20 +135,40 @@ SCR;
 			break;
 
 			case 'ettevotlusvorm_b':
-				$data['value']='vali ettevotlusvorm';
-				$data['onclick']="javascript:pop_select('".$this->mk_my_orb('pop_select', array('id' => $id, 'table' => 'kliendibaas_firma','tyyp' => 'ettevotlusvorm', 'return_url' => urlencode($return_url)),'kliendibaas/kliendibaas')."')";
+				$q="select name from kliendibaas_ettevotlusvorm where oid='".$args['objdata']['ettevotlusvorm']."'";
+				$data['value']=$this->db_fetch_field($q,'name');
+				$caption=$data['value']?'muuda':'vali';
+				$onclick="javascript:pop_select('".$this->mk_my_orb('pop_select', array('id' => $id, 'table' => 'kliendibaas_firma','tyyp' => 'ettevotlusvorm', 'return_url' => urlencode($return_url)),'kliendibaas/kliendibaas')."')";
+				$data['value'].=' '.html::button(array('value'=>$caption,'onclick'=>$onclick));
 			break;
 			case 'korvaltegevused_b':
-				$data['value']='vali kõrvaltegevused';
-				$data['onclick']="javascript:pop_select('".$this->mk_my_orb('pop_select', array('id' => $id, 'table' => 'kliendibaas_firma', 'tyyp' => 'korvaltegevused', 'return_url' => urlencode($return_url)),'kliendibaas/kliendibaas')."')";
+				$q="select tegevusala as name from kliendibaas_tegevusala where oid='".$args['objdata']['korvaltegevused']."'";
+				$data['value']=$this->db_fetch_field($q,'name');
+				$caption=$data['value']?'muuda':'vali';
+				$onclick="javascript:pop_select('".$this->mk_my_orb('pop_select', array('id' => $id, 'table' => 'kliendibaas_firma', 'tyyp' => 'korvaltegevused', 'return_url' => urlencode($return_url)),'kliendibaas/kliendibaas')."')";
+				$data['value'].=' '.html::button(array('value'=>$caption,'onclick'=>$onclick));
 			break;
 			case 'tooted_b':
-				$data['value']='vali tooted';
-				$data['onclick']="javascript:pop_select('".$this->mk_my_orb('pop_select', array('id' => $id, 'table' => 'kliendibaas_firma','tyyp' => 'tooted', 'return_url' => urlencode($return_url)),'kliendibaas/kliendibaas')."')";
+				$q="select toode as name from kliendibaas_toode where oid='".$args['objdata']['tooted']."'";
+				$data['value']=$this->db_fetch_field($q,'name');
+				$caption=$data['value']?'muuda':'vali';
+				$onclick="javascript:pop_select('".$this->mk_my_orb('pop_select', array('id' => $id, 'table' => 'kliendibaas_firma','tyyp' => 'tooted', 'return_url' => urlencode($return_url)),'kliendibaas/kliendibaas')."')";
+				$data['value'].=' '.html::button(array('value'=>$caption,'onclick'=>$onclick));
 			break;
 			case 'pohitegevus_b':
-				$data['value']='vali põhitegevus';
-				$data['onclick']="javascript:pop_select('".$this->mk_my_orb('pop_select', array('id' => $id, 'table' => 'kliendibaas_firma','tyyp' => 'pohitegevus', 'return_url' => urlencode($return_url)),'kliendibaas/kliendibaas')."')";
+				$q="select tegevusala as name from kliendibaas_tegevusala where oid='".$args['objdata']['pohitegevus']."'";
+				$data['value']=$this->db_fetch_field($q,'name');
+				$caption=$data['value']?'muuda':'vali';
+				$onclick="javascript:pop_select('".$this->mk_my_orb('pop_select', array('id' => $id, 'table' => 'kliendibaas_firma','tyyp' => 'pohitegevus', 'return_url' => urlencode($return_url)),'kliendibaas/kliendibaas')."')";
+				$data['value'].=' '.html::button(array('value'=>$caption,'onclick'=>$onclick));
+			break;
+			case 'contact_change':
+				$what='contact';
+				$data['value']=$this->contact_manager($what,$args['objdata'][$what]);
+			break;
+			case 'firmajuht_change':
+				$what='firmajuht';
+				$data['value']=$this->isik_manager($what,$args['objdata'][$what]);
 			break;
 
 			case 'plaaah':
@@ -141,6 +176,85 @@ SCR;
 		};
 		return $retval;
 	}
+
+
+
+	function contact_manager($tyyp,$id)
+	{
+
+		if (!$id)
+		{
+		//create
+			$onclick="javascript:pop_select('".$this->mk_my_orb("contact_makah", array(
+				"tyyp" => $tyyp,
+				"do" => 'new',
+				'name'=> 'nimi',
+				),'kliendibaas/kliendibaas')."')";
+			$data['value'].=' '.html::button(array('onclick'=>$onclick,'value'=>'loo'));
+		}
+		else
+		{
+		//change
+			$data['value'] .=html::href(array(
+				'caption' => 'muuda',
+				'target' => '_blank',
+				'url' => $this->mk_my_orb('change',array(
+					'id'=>$id,
+				),'contact'
+				),
+			));
+
+			//delete
+			$onclick="javascript:pop_select('".$this->mk_my_orb("contact_makah", array(
+				"tyyp" => $tyyp,
+				"do" => 'delete',
+				'id' => $id,
+					),'kliendibaas/kliendibaas')."')";
+				$data['value'].=' '.html::button(array('onclick'=>$onclick,'value'=>'kustuta'));
+
+		}
+		return $data['value'];
+	}
+
+
+
+	function isik_manager($tyyp,$id)
+	{
+
+		if (!$id)
+		{
+		//create
+			$onclick="javascript:pop_select('".$this->mk_my_orb("isik_makah", array(
+				"do" => 'new',
+				'name'=> 'nimi',
+				"tyyp" => $tyyp,
+				),'kliendibaas/kliendibaas')."')";
+			$data['value'].=' '.html::button(array('onclick'=>$onclick,'value'=>'loo'));
+		}
+		else
+		{
+		//change
+			$data['value'] .=html::href(array(
+				'caption' => 'muuda',
+				'target' => '_blank',
+				'url' => $this->mk_my_orb('change',array(
+					'id'=>$id,
+				),'isik'
+				),
+			));
+
+			//delete
+			$onclick="javascript:pop_select('".$this->mk_my_orb("isik_makah", array(
+				"do" => 'delete',
+				"tyyp" => $tyyp,
+				'id' => $id,
+					),'kliendibaas/kliendibaas')."')";
+				$data['value'].=' '.html::button(array('onclick'=>$onclick,'value'=>'kustuta'));
+
+		}
+		return $data['value'];
+	}
+
 
 
 /*

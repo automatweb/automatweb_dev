@@ -8,10 +8,10 @@
 	@property comment type=textarea field=comment
 	@caption Kommentaar
 
-	@default table=kliendibaas_riik
+	@default table=kliendibaas_linn
 
 	@property name type=textbox size=20
-	@caption Nimetus (tmp)
+	@caption Nimetus
 
 	@property comment type=textarea
 	@caption Keeled
@@ -19,17 +19,17 @@
 	@property location type=textarea
 	@caption Asukoha kirjeldus
 
-	@classinfo objtable=kliendibaas_riik
+	@classinfo objtable=kliendibaas_linn
 	@classinfo objtable_index=oid
 */
 
-class riik extends class_base
+class linn extends class_base
 {
-	function riik()
+	function linn()
 	{
 //		$this->init("kliendibaas");
 		$this->init(array(
-			'clid' => CL_RIIK,
+			'clid' => CL_LINN,
 		));
 	}
 }

@@ -1,6 +1,7 @@
 <?php
-
 /*
+	@tableinfo kliendibaas_isik index=oid master_table=objects master_index=oid
+
 	@default table=objects
 	@default group=general
 
@@ -34,26 +35,33 @@
 	@property digitalID type=textarea cols=20 rows=3
 	@caption digitaalallkiri
 	@property pictureurl type=textbox size=20 maxlength=200
-	@caption foto/pildi asukoht
-	@property picture type=file
-	@caption foto
+	@caption foto/pildi url
+	@property picture type=button value=lisa
+	@caption pildiobjekt
 
 	@property work_contact_change type=text
 	@caption töökoha kontakt
 
+	@property work_contact type=textbox
+	@caption töökoha kontakt hidden
+
+
+
 	@property personal_contact_change type=text
 	@caption kodukoha kontakt
 
-	@property more type=text
-	@caption more
+	@property personal_contact type=textbox
+	@caption kodukoha kontakt hidden
+
+
+	@property popups type=text
+	@caption popup
+
+//	@property more type=text
+//	@caption more
 
 	@classinfo objtable=kliendibaas_isik
 	@classinfo objtable_index=oid
-*/
-
-/*
-    -> personal_contact int,
-    -> work_contact int,
 */
 
 class isik extends class_base
@@ -87,101 +95,89 @@ class isik extends class_base
 		$retval = true;
 		switch($data["name"])
 		{
-			case 'more':
-				$data['value'] = html::iframe(array('name' => 'contacts','src' => 'juhuu','width' => '500', 'height' => '300'));
-			break;
+//			case 'more':
+//				$data['value'] = html::iframe(array('name' => 'contacts','src' => 'juhuu','width' => '500', 'height' => '300'));
+//			break;
 			case 'personal_contact_change':
-
-				if (!$args['objdata']['home_contact'])
-				{
-					$data['value'] = html::href(array(
-						'caption' => 'uus',
-						'target' => '_blank',
-						'url' => $this->mk_my_orb("new",array(
-							'parent'=>$args['obj']['parent'], //parent tuleb kliendibaasi objektist pigem võtta
-						),'kliendibaas/contact'),
-					));
-				}
-				else
-				{
-					$data['value'] = html::href(array(
-						'caption' => 'muuda',
-						'target' => '_blank',
-						'url' => $this->mk_my_orb("change",array(
-							"id" => $args['objdata']['home_contact'],
-							'parent'=>$args['obj']['parent'],
-							"return_url" => urlencode($return_url)
-						),'kliendibaas/contact'),
-					));
-					$data['value'] .= html::href(array(
-						'caption' => 'kustuta',
-						'target' => 'contacts',
-						'url' => $this->mk_my_orb('delete',array(
-							"id" => $args['objdata']['home_contact'],
-						),'kliendibaas/contact'),
-					));
-				}
+				$what='personal_contact';
+				$data['value']=$this->contact_manager($what,$args['objdata'][$what]);
 			break;
 			case 'work_contact_change':
-				$data['value'] = html::href(array(
-					'caption' => 'muuda',
-					'target' => '_blank',
-					'url' => $this->mk_my_orb("change",array(
-						"id" => $args['objdata']['work_contact'],
-						'parent'=>$args['obj']['parent'],
-						"return_url" => urlencode($return_url),
-					),'kliendibaas/contact'),
-				));
-
+				$what='work_contact';
+				$data['value']=$this->contact_manager($what,$args['objdata'][$what]);
 			break;
 
+
+			case "popups":
+
+$data['value']=<<<SCR
+<script language='javascript'>
+
+function put_value(target,value)
+{
+	if (value=='0')
+		value='';
+	if (target == "work_contact")
+		document.changeform.work_contact.value = value;
+	else
+	if (target == "personal_contact")
+		document.changeform.personal_contact.value = value;
+	else {
+		alert("form element not found")
+	}
+
+	document.changeform.submit();
+}
+
+function pop_select(url)
+{
+	aken=window.open(url,"selector","HEIGHT=300,WIDTH=310,TOP=400,LEFT=500")
+ 	aken.focus()
+}
+</script>
+SCR;
+			break;
 		}
 		return $retval;
 	}
 
-/*
-	////
-	// ! create new isik entry
-	// isik			at least one element required
-	//	name
-	//	firstname
-	//	lastname
-	//	...
-	// name
-	// parent
-	// comment
-	// ...
-	function new_isik($arr)
+	function contact_manager($tyyp,$id)
 	{
-		extract($arr);
 
-			$isik["name"]=$isik["name"]?$isik["name"]:$isik["firstname"]." ".$isik["lastname"];
-			foreach ($isik as $key=>$val)
-			{
-				{
-					$this->quote($val);
-					$f[]=$key;
-					$v[]="'".$val."'";
-				}
-			}
-
-			$id = $this->new_object(array(
-				"name" => $isik["name"],
-				"parent" => $parent,
-				"class_id" => CL_ISIK,
-				"comment" => $comment,
-				"metadata" => array(
-				)
+		if (!$id)
+		{
+		//create
+			$onclick="javascript:pop_select('".$this->mk_my_orb("contact_makah", array(
+				"tyyp" => $tyyp,
+				"do" => 'new',
+				'name'=> 'nimi',
+				),'kliendibaas/kliendibaas')."')";
+			$data['value'].=' '.html::button(array('onclick'=>$onclick,'value'=>'loo'));
+		}
+		else
+		{
+		//change
+			$data['value'] .=html::href(array(
+				'caption' => 'muuda',
+				'target' => '_blank',
+				'url' => $this->mk_my_orb('change',array(
+					'id'=>$id,
+				),'contact'
+				),
 			));
-			$f[]='oid';
-			$v[]="'".$id."'";
 
-			$q='insert into kliendibaas_isik('.implode(",",$f).')values('.implode(",",$v).')';
+			//delete
+			$onclick="javascript:pop_select('".$this->mk_my_orb("contact_makah", array(
+				"tyyp" => $tyyp,
+				"do" => 'delete',
+				'id' => $id,
+					),'kliendibaas/kliendibaas')."')";
+				$data['value'].=' '.html::button(array('onclick'=>$onclick,'value'=>'kustuta'));
 
-		$this->db_query($q);
-		return $id;
+		}
+		return $data['value'];
 	}
-*/
+
 
 }
 ?>

@@ -36,7 +36,7 @@ class riik extends class_base
 {
 	function riik()
 	{
-		$this->init("kliendibaas");
+		//$this->init("kliendibaas");
 		$this->init(array(
 			'clid' => CL_RIIK,
 		));
