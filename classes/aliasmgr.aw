@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.59 2002/11/11 15:59:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.60 2002/11/14 17:46:30 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -560,7 +560,10 @@ class aliasmgr extends aw_template
 		{
 			if (isset($cldat["alias"]))
 			{
-				$aliases[$cldat["file"]] = $cldat["name"];
+				$fil = $cldat["alias_class"] != "" ? $cldat["alias_class"] : $cldat["file"];
+				preg_match("/(\w*)$/",$fil,$m);
+				$lib = $m[1];
+				$aliases[$lib] = $cldat["name"];
 			}
 		}
 
