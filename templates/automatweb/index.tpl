@@ -51,6 +51,9 @@ function MM_swapImage() { //v3.0
 <script language="Javascript" src="js/cbobjects.js">
 </script>
 <script language="Javascript">
+function generic_loader()
+{
+}
 function check_generic_loader()
 {
 	if (generic_loader)
