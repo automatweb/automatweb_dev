@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.61 2004/06/26 09:47:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.62 2004/06/26 17:19:29 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -1460,19 +1460,14 @@ class form_table extends form_base
 
 	function get_data_for_alias($aid)
 	{
-		$tmp = obj($this->table_id);
-		$c = reset($tmp->connections_from(array(
-			"to" => $aid
-		)));
+		$c = new connection($aid);
 
-		if (!$c)
-		{
-			return false;
-		}
-		return array(
+		$ret = array(
 			"class_id" => $c->prop("to.class_id"),
-			"target" => $c->prop("to")
+			"target" => $c->prop("to"),
+			"real_id" => $c->prop("to")
 		);
+		return $ret;
 	}
 
 	function get_js()
