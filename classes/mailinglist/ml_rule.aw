@@ -723,7 +723,7 @@ class ml_rule extends aw_template
 	function exec_dynamic_rules()
 	{
 		$rarr = array();
-		$this->db_query("SELECT * FROM rules LEFT JOIN objects ON objects.oid = rules.rid WHERE objects.status != 0 AND dynamic=1");
+		$this->db_query("SELECT * FROM ml_rules LEFT JOIN objects ON objects.oid = ml_rules.rid WHERE objects.status != 0 AND dynamic=1");
 		while ($row = $this->db_next())
 		{
 			$rarr[] = $row["rid"];
