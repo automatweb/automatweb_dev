@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.58 2004/04/08 12:41:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.59 2004/06/17 13:59:20 kristo Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -473,6 +473,12 @@ class aw_template extends core
 		return $this->get_directory(array(
 			"dir" => $this->template_dir,
 		));
+	}
+
+	function get_template_string($name)
+	{
+		$tmp = isset($this->v2_name_map[$name]) ? $this->v2_name_map[$name] : "";
+		return isset($this->v2_templates[$tmp]) ? $this->v2_templates[$tmp] : ""; 
 	}
 };
 classload("class_base","html");
