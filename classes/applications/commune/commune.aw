@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/commune.aw,v 1.4 2004/08/25 07:13:38 ahti Exp $
-// commune.aw - Kommuun << i will burn in hell for this blasphemy....
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/commune.aw,v 1.5 2004/09/02 11:16:26 ahti Exp $
+// commune.aw - Kommuun
 /*
 
 @classinfo syslog_type=ST_COMMUNE relationmgr=yes layout=boxed
@@ -305,15 +305,15 @@
 @caption Foorum
 
 
-@groupinfo my_forum_topics caption="Minu foorumid" parent=forumtab submit=no tabgroup=left
+@groupinfo my_forum_topics caption="Minu teemad" parent=forumtab submit=no tabgroup=left
 
-@property my_forum_topics type=text group=my_forum_topics no_caption=1 store=no
-@caption Minu foorumid
+@property my_forum_topics type=table group=my_forum_topics no_caption=1 store=no
+@caption Minu foorumiteemad
 
 
-@groupinfo forum_settings caption="Sätted" parent=forumtab submit=no tabgroup=left
+@groupinfo forum_settings caption="Sätted" parent=forumtab tabgroup=left
 
-@property forum_settings type=text group=forum_settings no_caption=1 store=no
+@property forum_settings type=callback callback=callback_forum_settings group=forum_settings no_caption=1 store=no
 @property Sätted
 
 ----------------------- FOORUM : END --------------------------
@@ -455,6 +455,7 @@
 @caption profiilide kataloog
 
 --------- folders : end ----------------------
+
 */
 
 class commune extends class_base
@@ -583,7 +584,7 @@ class commune extends class_base
 		}
 		if($this->common["f_group"])
 		{
-			$arr["my_profile"] = $this->common["f_group"];
+			$arr["f_group"] = $this->common["f_group"];
 		}
 		//arr($arr);
 		
@@ -619,45 +620,27 @@ class commune extends class_base
 		//arr($this->common["profile"]);
 	}
 	
+	function callback_mod_tab($args = array())
+	{
+		// this be cool -- ahz
+		/*
+		//if ($args["id"] == "add_event" && empty($this->event_id))
+		if ($args["activegroup"] != "add_event" && $args["id"] == "add_event")
+		{
+			return false;
+		};
+
+		if ($args["activegroup"] == "add_event" && $args["id"] == "add_event")
+		{
+			$link = &$args["link"];
+			$link = $this->mk_my_orb("change",$args["request"]);
+		};
+		*/
+
+	}
+	
 	function callback_pre_edit($arr)
 	{
-		//echo dbg::process_backtrace(debug_backtrace());
-		//arr($arr);
-		// sellega on mingi jama?
-		//$this->common["arr"] = $arr;
-		//unset($arr['request']['id']);
-		//$this->common["obj_inst"] = $arr["obj_inst"];
-
-		// siin toimub request analüüs ja otsustatakse mis actioneid näidata
-		// ja kelle pilti näidata ja mida paremal näidata
-
-		//a little ORB here:
-		//arr($arr);
-		//debug:
-		//$profile_id = $arr["request"]["profile"];
-		//echo 'is_oid($profile_id{'.$profile_id.'}):';
-		//var_dump( is_oid($profile_id));
-		//echo ' $this->can("view", $profile_id)):';
-		//var_dump( $this->can("view", $profile_id));
-		
-		//kord peab üks, kord teine.. lisaks ei tohi olla: acl.no_check = 1; testi ka 4 eelnevat rida..
-		/*
-		if ($profile_id = $arr["request"]["profile"] and $this->can("view", $profile_id) and is_oid($profile_id))
-		{
-			$this->common["profile"] = obj($profile_id);
-		}*/
-		/* mingi keerulisem värk sellega, tegeleb hiljem, kui vajadust
-		if($person_o = $this->get_person())
-		{
-			if($profile_id2 = $arr["request"]["my_profile"] and is_oid($profile_id2) and $temp_obj = obj($profile_id2) and $temp_obj->is_connected_to(array(
-			"type" => "RELTYPE_PERSON",
-			"from" => 1,
-			)))
-			{
-				$this->common["my_profile"] = $temp_obj;
-			}
-		}
-		*/
 		$commune_view_actions = array("profile","friends","communities","pictures");
 		//if (method_exists($this, "show_".$commact))
 		if ($commact = $arr["request"]["commact"] and in_array($commact, $commune_view_actions))
@@ -691,6 +674,9 @@ class commune extends class_base
 		{
 			case "fake10":
 				$prop["value"] = "ma veel teen sulle horoskoopi, neeger";
+				break;
+			case "my_forum_topics":
+				$this->my_forum_topics($arr);
 				break;
 			case "tabpanel":
 				if (is_oid($arr["obj_inst"]->id()))
@@ -1012,10 +998,8 @@ class commune extends class_base
 				$sel_options = array();
 				foreach($connected_profiles as $conns)
 				{
-					$to = $conns->to();
-					$sel_options[$to->id()] = $conns->prop('to.name');
+					$sel_options[$conns->prop("to")] = $conns->prop('to.name');
 				}
-
 				$tb->add_cdata(html::select(array(
 					'name' => 'profile_oid',
 					'options' => $sel_options,
@@ -1066,6 +1050,92 @@ class commune extends class_base
 		return $retval;
 	}
 	
+	function set_property($arr)
+	{
+		//arr($arr);
+		$prop = $arr["prop"];
+		$rv = PROP_OK;
+		switch($prop["name"])
+		{
+			case "message_conditions":
+				$this->update_message_conditions($arr);
+				break;
+			case "forum_settings":
+					$user = $this->get_user();
+					$user->set_meta("forum_view", $arr["request"]["days"]);
+					$user->save();
+				break;
+			case "browsing_conditions":
+				$this->update_browsing_conditions($arr);
+				break;
+			case "view_conditions":
+				$this->update_view_conditions($arr);
+				break;
+			case "profile_change":
+				$this->update_profile($arr);
+				break;
+
+			case "my_images":
+				$this->update_my_images($arr);
+				break;
+
+			case "rate_content":
+			case "rateform":
+				$this->add_rate($arr);
+				break;
+
+			case "locations":
+				$this->update_locations($arr);
+				break;
+
+			case "newmessage":
+				$this->create_message($arr);
+				break;
+
+			case "join_form":
+				$j_oid = &$arr["obj_inst"]->prop("join_obj");
+				if ($j_oid)
+				{
+					$tmp = $arr["request"];
+					$tmp["id"] = $j_oid;
+					if (aw_global_get("uid") == "")
+					{
+						$ji = get_instance("contentmgmt/join/join_site");
+						$url = $ji->submit_join_form($tmp);
+						if ($url != "")
+						{
+							header("Location: $url");
+							die();
+						}
+					}
+					else
+					{
+						$ji = get_instance("contentmgmt/join/join_site");
+						$ji->submit_update_form($tmp);
+					}
+				}
+				break;
+				
+			case "all_profiles":
+				
+				//miks ei tööta????
+				//aw_session_set("active_profile_id", $active_profile_id);
+				//debug:
+				//echo 'aw_global_get:'.aw_global_get('active_profile_id');
+				
+				//sessioone ei saa kasutada. nt see ei tööta:
+				//aw_session_set('kala', 1);
+				//echo 'aw_global_get:'.aw_global_get('kala');
+				
+				$person = $this->get_person();
+				$person->set_meta("active_profile", $arr["request"]["active_profile"]);
+				$person->save();
+
+				break;
+		};
+		return $rv;
+	}
+	
 	function show_forum($arr)
 	{
 		$forums = $arr["obj_inst"]->connections_from(array(
@@ -1093,6 +1163,7 @@ class commune extends class_base
 	
 	function callback_profile_search($arr)
 	{
+		enter_function("commune::callback_profile_search");
 		$ob = $this->common["obj_inst"]->get_first_obj_by_reltype("RELTYPE_PROF_SEARCH");
 		$search = $ob->instance();
 		$request = array("s" => $arr["request"]["s"]);
@@ -1231,7 +1302,140 @@ class commune extends class_base
 			"value" => $this->parse(),
 			"no_caption" => 1,
 		);
+		exit_function("commune::callback_profile_search");
+		return $rval;
+	}
+	
+	function my_forum_topics($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "Teema",
+		));
+		$t->define_field(array(
+			"name" => "posts",
+			"caption" => "Postitusi",
+			"type" => "int",
+		));
+		$t->define_field(array(
+			"name" => "date",
+			"caption" => "Loomisaeg",
+		));
+		$t->define_field(array(
+			"name" => "lastpost",
+			"caption" => "Viimane postitus",
+		));
 		
+		$frm = reset($arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_FORUM",
+		)));
+		$forum = $frm->to();
+		$topics = new object_list(array(
+			"parent" => $forum->prop("topic_folder"),
+			"class_id" => CL_MSGBOARD_TOPIC,
+		));
+		
+		$user = $this->get_user();
+		$days = $user->meta("forum_view");
+		$needed_topics = array();
+		
+		// we gonna nicely travel thru every single topic and their comment to find the right ones -- ahz
+		foreach($topics->arr() as $topic)
+		{
+			$tcreator = $topic->createdby();
+			$comments = new object_list(array(
+				"parent" => $topic->id(),
+				"class_id" => CL_COMMENT,
+			));
+			$comments->sort_by(array(
+				"prop" => "created", 
+				"order" => "desc",
+			));
+			// saves as a s**tload on travelling -- ahz
+			if($tcreator->name == aw_global_get("uid"))
+			{
+				if($comments->count() == 0)
+				{
+					$lastpost = $topic->created();
+				}
+				else
+				{
+					$mob = $comments->begin();
+					$lastpost = $mob->created();
+				}
+				$needed_topics[$topic->id()] = array(
+					"count" => $comments->count(),
+					"obj" => $topic,
+					"lastpost" => $lastpost,
+				);
+			}
+			else
+			{
+				if($comments->count() == 0)
+				{
+					$lastpost = $topic->created();
+				}
+				else
+				{
+					$mob = $comments->begin();
+					$lastpost = $mob->created();
+				}
+				foreach($comments->arr() as $comment)
+				{
+					$ccreator = $comment->createdby();
+					if($ccreator->name() == aw_global_get("uid"))
+					{
+						$needed_topics[$topic->id()] = array(
+							"count" => $comments->count(),
+							"obj" => $topic,
+							"lastpost" => $lastpost,
+						);
+						break;
+					}
+				}
+			}
+		}
+		
+		foreach($needed_topics as $tpc)
+		{
+			// if forum_view setting is added, the additional filter will be put upon thee -- ahz
+			if(!empty($days))
+			{
+				$view = strtotime("-$days days");
+				if($tpc["lastpost"] < $view)
+				{
+					continue;
+				}
+			}
+			$t->define_data(array(
+				"name" => $tpc["obj"]->name(),
+				"date" => $this->time2date($tpc["obj"]->created(), 2),
+				"posts" => $tpc["count"],
+				"lastpost" => $this->time2date($tpc["lastpost"], 2),
+			));
+		}
+	}
+		
+	function callback_forum_settings($arr)
+	{
+		$user = $this->get_user();
+		$view = $user->meta("forum_view");
+		$opts = array(10, 30, 60, 100, 200, 365);
+		$ropts = array(0 => "näita kõiki");
+		foreach($opts as $opt)
+		{
+			$ropts[$opt] = $opt." päeva";
+		}
+		$rval = array(
+			"days" => array(
+				"name" => "days",
+				"type" => "select",
+				"caption" => "Ära näita vanemaid teemasid, kui",
+				"options" => $ropts,
+				"selected" => $view,
+			),
+		);
 		return $rval;
 	}
 	
@@ -2255,7 +2459,7 @@ class commune extends class_base
 		$prof_cls_i = get_instance(CL_PROFILE);
 		$prof_cls_i->init_class_base();
 		$props = $prof_cls_i->get_property_group(array(
-			"group" => "settings",
+			"group" => "settings_harjumused",
 		));
 		// selle asemel et näha hullumoodi vaeva, otsides andmebaasist
 		// maksimaalset ja minimaalset vanust, teeb hoopis 1 - 100
@@ -2291,9 +2495,9 @@ class commune extends class_base
 			"obj_inst" => $profile_o,
 		));
 		$options = array(
-			"x" => "Mõlemad",
-			"M" => "Mees",
-			"N" => "Naine",
+			"0" => "Mõlemad",
+			"1" => "Mees",
+			"2" => "Naine",
 		);
 		foreach($options as $key => $value)
 		{
@@ -2418,71 +2622,6 @@ class commune extends class_base
 		$person = $this->get_person();
 		$person->set_meta("view_conditions", $profsets);
 		$person->save();
-	}
-	
-	// for debugging and maintenance
-	function do_a_thing($arr)
-	{
-		$created = array();
-		$finded = array();
-		$not_finded = array();
-		
-		$commune = obj($arr["id"]);
-		$prof_list = new object_list(array(
-			"class_id" => CL_PROFILE,
-			"parent" => $commune->prop("profiles_folder"),
-			//"parent" => &$arr["obj_inst"]->prop("profiles_folder"),
-			//"parent" => $this->common["obj_inst"]->prop("profiles_folder"), 
-			//siia tullakse ennem kui pre_edit, kui sinna üldse minnaksegi
-		));
-		for ($profile = $prof_list->begin(); !$prof_list->end(); $profile = $prof_list->next())
-		{
-			if (!$person = $profile->get_first_obj_by_reltype("RELTYPE_PERSON"))
-			{
-				//seost (profiil -> isik) ei olnud, otsin vastupidist (isik -> profiil):
-				$conns = $profile->connections_to(array(
-					"type" => 14, //RELTYPE_PROFILE, //"RELTYPE_PROFILE", 
-					//paistab et connections_from toetab stringe, connections_to ei toeta
-				));
-			
-				if ($conn_to_profile = reset($conns)) //leidsime vastupidise sose?
-				{	
-					$person = $conn_to_profile->from();
-					
-					//!!!teeme õigetpidi seose (profile -> crm_person)
-					$profile->connect(array(
-						"to" => $person->id(),
-						"reltype" => "RELTYPE_PERSON", // 9!!,
-					));
-					echo("loodud seos: ".$this->get_link_for_obj($profile)." -> crm_person(".$this->get_link_for_obj($person).") <br>\n");
-					kdeb("loodud seos: ".$this->get_link_for_obj($profile)." -> crm_person(".$this->get_link_for_obj($person).") <br>\n");
-					$created[] = $this->get_link_for_obj($profile);
-				}
-				else
-				{
-					echo("ei leitud seost (isik -> profiil(".$this->get_link_for_obj($profile).")): isik teadmata <br>\n");
-					kdeb("ei leitud seost (isik -> profiil(".$this->get_link_for_obj($profile).")): isik teadmata <br>\n");
-					$not_finded[] = $this->get_link_for_obj($profile);
-					$profile->set_parent(1625);
-					$profile->save();
-				}
-			}
-			else 
-			{
-				echo("leiti seos: (profile(".$this->get_link_for_obj($profile).") -> crm_person(".$this->get_link_for_obj($person).")) <br>\n");
-				kdeb("leiti seos: (profile(".$this->get_link_for_obj($profile).") -> crm_person(".$this->get_link_for_obj($person).")) <br>\n");
-				$finded[] = $this->get_link_for_obj($profile);
-				
-				//if($profile->get_first_conn_by_reltype("?alias")){}
-			}
-		}
-		
-		echo "<br>\n finded:<br>\n";
-		echo join("<br>\n", $finded);
-		echo "<br>\n created:<br>\n";
-		echo join("<br>\n", $created);
-		echo "<br>\n not_finded:<br>\n";
-		echo join("<br>\n", $not_finded);
 	}
 	
 	function cb_get_last_added_items_for_page($vars)
@@ -3623,87 +3762,16 @@ class commune extends class_base
 		// generated form. How?
 	}
 
-	function set_property($arr)
+	function oid_is_this_persons_profile($arr = array())
 	{
-		//arr($arr);
-		$prop = $arr["prop"];
-		$rv = PROP_OK;
-		switch($prop["name"])
+		extract($arr);
+		$person = $this->get_person();
+		if($conns = $person->connections_from(array('id' => $oid)))
 		{
-			case "message_conditions":
-				$this->update_message_conditions($arr);
-				break;
-			case "browsing_conditions":
-				$this->update_browsing_conditions($arr);
-				break;
-			case "view_conditions":
-				$this->update_view_conditions($arr);
-				break;
-			case "profile_change":
-				$this->update_profile($arr);
-				break;
-
-			case "my_images":
-				$this->update_my_images($arr);
-				break;
-
-			case "rate_content":
-			case "rateform":
-				$this->add_rate($arr);
-				break;
-
-			case "locations":
-				$this->update_locations($arr);
-				break;
-
-			case "newmessage":
-				$this->create_message($arr);
-				break;
-
-			case "join_form":
-				$j_oid = &$arr["obj_inst"]->prop("join_obj");
-				if ($j_oid)
-				{
-					$tmp = $arr["request"];
-					$tmp["id"] = $j_oid;
-					if (aw_global_get("uid") == "")
-					{
-						$ji = get_instance("contentmgmt/join/join_site");
-						$url = $ji->submit_join_form($tmp);
-						if ($url != "")
-						{
-							header("Location: $url");
-							die();
-						}
-					}
-					else
-					{
-						$ji = get_instance("contentmgmt/join/join_site");
-						$ji->submit_update_form($tmp);
-					}
-				}
-				break;
-				
-			case "all_profiles":
-				
-				//miks ei tööta????
-				//aw_session_set("active_profile_id", $active_profile_id);
-				//debug:
-				//echo 'aw_global_get:'.aw_global_get('active_profile_id');
-				
-				//sessioone ei saa kasutada. nt see ei tööta:
-				//aw_session_set('kala', 1);
-				//echo 'aw_global_get:'.aw_global_get('kala');
-				
-				$person = $this->get_person();
-				$person->set_meta("active_profile", $arr["request"]["active_profile"]);
-				$person->save();
-
-				break;
-		};
-		return $rv;
+			arr($conns);
+		}
 	}
-
+	
 	function add_rate($arr)
 	{
 		if (!empty($arr["request"]["rateform"]["img_id"]))
@@ -3948,7 +4016,7 @@ class commune extends class_base
 			//$person->set_meta("active_profile", $profile->id());
 			$person->save();
 		}
-		return $this->mk_comm_orb(array("group" => $arr["group"]), $arr["obj_inst"]->id());
+		return $this->mk_comm_orb(array("group" => $arr["group"]), $arr["id"]);
 		//return $this->mk_comm_orb(array("group" => $arr["group"]));
 	}
 	
@@ -3983,14 +4051,7 @@ class commune extends class_base
 
 	function update_profile($arr)
 	{
-		if($this->common["my_profile"])
-		{
-			$person = $this->get_person_for_profile($this->common["my_profile"]);
-		}
-		else
-		{
-			$person = $this->get_person();
-		}
+		$person = $this->get_person();
 		//arr($arr);
 		// save props for person:
 		$person_i = $person->instance();
@@ -4002,6 +4063,7 @@ class commune extends class_base
 		// save props for profile:
 		$new = false;
 		$profile_props = $arr["request"]["profdata"];
+		//arr($profile_props);
 		//arr($arr);
 		//arr($profile_props);
 		$usr = &$profile_props["user_field1"];
@@ -4013,7 +4075,7 @@ class commune extends class_base
 			}
 		}
  		$profile_props["user_field1"] = $usr["year"].$usr["month"].$usr["day"];
-		$profile_props["group"] = "settings_yldandmed";
+		$groups = array("yldandmed", "valimus", "harrastused", "harjumused", "kool_too");
 		$profile_props["return"] = "id";
 		
 		if($this->common["my_profile"])
@@ -4039,9 +4101,15 @@ class commune extends class_base
 			}
 		}
 		$profile_i = get_instance(CL_PROFILE);
-		//$profile->set_meta("occupation", $profile_props["occupation"]);
-		$profile_id = $profile_i->submit($profile_props);
-
+		//arr($profile_props);
+		$profile->set_meta("occupation", $profile_props["occupation"]);
+		
+		// there has GOT TO BE BETTER WAY then THIS :| -- ahz
+		foreach($groups as $group)
+		{
+			$profile_props["group"] = "settings_".$group;
+			$profile_id = $profile_i->submit($profile_props);
+		}
 
 		if ($new)
 		{
@@ -4057,6 +4125,8 @@ class commune extends class_base
 
 		}
 		$profile->save();
+		
+		//arr($profile->properties());
 	}
 
 	function get_content_elements($arr)
@@ -4143,27 +4213,6 @@ class commune extends class_base
 		}
 		return array();
 	}
-
-	/**
-
-		@attrib name=change nologin=1 all_args=1
-
-	**/
-	function change($arr)
-	{
-		return parent::change($arr);
-	}
-	
-	/**
-
-		@attrib name=submit nologin=1
-
-	**/
-	function submit($arr)
-	{
-		return parent::submit($arr);
-	}
-	
 	
 	function callback_inbox($arr)
 	{
@@ -4222,12 +4271,22 @@ class commune extends class_base
 		return $rval;
 	}
 	
-	// so why the should i rewrite the code here? i better take it from the messagebox class... -- ahz
+	// so why the should i rewrite the code here? i better take it from the messagebox class...
+	// and add a little flavor -- ahz
 	function callback_newmessage($arr)
 	{
 		$box = get_instance(CL_QUICKMESSAGEBOX);
 		$box->get_message_box_for_user($this->get_user());
-		return $box->callback_new_message($arr);
+		$abox = array(
+			"group" => array(
+			"name" => "group",
+			"type" => "textbox",
+			"caption" => "Grupp",
+		));
+		$bbox = $box->callback_new_message($arr);
+		$rval = $abox + $bbox;
+		
+		return $rval;
 	}
 	
 	function create_message($arr)
@@ -4266,17 +4325,10 @@ class commune extends class_base
 		//$pers = $this->get_person();
 		//echo $pers->id();
 		$retval = array();
-		//momendil ei ole seda vaja, sest ma ei kavatse suunata siia võõraste profiilide vaatamist
 		// oh, yes you do!! -- ahz
-		if ($profile = $this->common["my_profile"]) 
-		{
-			$val = $this->render_profile_view($profile);
-		}
-		elseif ($profile = $this->common["profile"]) 
-		{
-			$val = $this->render_profile_view($profile);
-		}
-		elseif ($profile = $this->get_active_profile())
+		if (($profile = $this->common["my_profile"]) 
+		|| ($profile = $this->common["profile"]) 
+		|| ($profile = $this->get_active_profile())) 
 		{
 			$val = $this->render_profile_view($profile);
 		}
@@ -4284,7 +4336,6 @@ class commune extends class_base
 			"name" => "profile_change_toolbar",
 			"type" => "toolbar",
 			"no_caption" => 1,
-			"caption" => "Toolbar",
 		);
 		$retval["el1"] = array(
 			"type" => "text",
@@ -4307,7 +4358,7 @@ class commune extends class_base
 		*/
 	    return $retval;
 	}
-
+	
 	function render_profile_view($profile)
 	{
 		$rendered_value = "";
@@ -4316,18 +4367,18 @@ class commune extends class_base
 			"arr" => $arr,
 			"profile" => $profile,
 		));
-		
 		//show person props and profile props
 		$props = $this->get_profile_props_for_view(array(
 			"arr" => $arr,
 			"profile" => $profile,
 		));
-		
+		//arr($props);
 		$rendered_value .= $this->render_property_view(array(
 			"items" => $props,
 		));
 		return $rendered_value;
 	}
+	
 	
 	function render_property_view($vars)
 	{
@@ -4549,13 +4600,28 @@ class commune extends class_base
 		//arr($result_props);
 		return $result_props;
 	}
+
+	/**
+		@attrib name=change nologin=1 all_args=1
+	**/
+	function change($arr)
+	{
+		return parent::change($arr);
+	}
 	
-	/**	
+	/**
+		@attrib name=submit nologin=1
+	**/
+	function submit($arr)
+	{
+		return parent::submit($arr);
+	}
+		
+	/**
 		@attrib name=delete_profile all_args="1"
 		@param id required type=int acl=view
 		@param group optional
 		@param return_url optional
-		
 	**/
 	function delete_profile($arr)
 	{
@@ -4815,16 +4881,6 @@ class commune extends class_base
 		}
 		return $this->mk_comm_orb(array("group" =>  $arr["group"], "id" => $arr["id"]), obj($arr["id"]));
 	}
-	
-	function oid_is_this_persons_profile($arr = array())
-	{
-		extract($arr);
-		$person = $this->get_person();
-		if($conns = $person->connections_from(array('id' => $oid)))
-		{
-			arr($conns);
-		}
-	}
 
 	/**
 		@attrib name=delete_message
@@ -4835,6 +4891,7 @@ class commune extends class_base
 		$ins = get_instance(CL_QUICKMESSAGEBOX);
 		return $ins->delete_message($arr);
 	}
+	
 	/**
 		@attrib name=archive_message
 		@param sel required type=int acl=view
@@ -4845,6 +4902,7 @@ class commune extends class_base
 		$ins = get_instance(CL_QUICKMESSAGEBOX);
 		return $ins->archive_message($arr);
 	}
+	
 	
 	/**
 

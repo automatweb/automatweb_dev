@@ -28,12 +28,6 @@
 @property name type=text store=no
 @caption Profiil
 
-//@property profile_link type=text store=no
-//@caption Profiil
-
-//@property commune_profile_link type=text store=no
-//@caption Profiil kommuunis
-
 @property add_friend_link type=text store=no
 @caption Lisa sõber
 
@@ -62,6 +56,7 @@
 @caption Pildi id
 
 @forminfo rate onload=init_rate onsubmit=test method=post
+
 */
 
 class image_rate extends class_base
@@ -80,15 +75,67 @@ class image_rate extends class_base
 	{
 		//echo " callback_pre_edit:";
 	}
-
-	function test($arr)
-	{
-		//echo "siia siis ei tulegi? :(";
-	}
 	function init_rate($arr)
 	{
-		$this->inst->kala = "tursk";
+		$user_i = get_instance(CL_USER);
+		$user = obj($user_i->get_current_user());
+		$person = $user->get_first_obj_by_reltype("RELTYPE_PERSON");
+		$view = $person->meta("view_conditions");
+		$message = $person->meta("message_conditions");
+		$browse = $person->meta("browsing_conditions");
+		//arr($browse);
+
+		// this is the place where aw-s functionality fails in speed, and hack comes along
+		// and a really ugly hack that is... -- ahz
+		$q = "count(*) as total";
+		$q = "profile2image.*";
+		$q = "SELECT $q FROM profile2image LEFT JOIN objects ON (profile2image.img_id = objects.oid) WHERE objects.status > 0";
+		if(!empty($browse["sexorient"]))
+		{
+			$w = " and aw_profiles.sexual_orientation = '".$browse["sexorient"]."'"; 
+		}
+		if(!empty($browse["gender"]))
+		{
+			$w = " and kliendibaas_isik.gender = '".$browse["gender"]."'";
+		}
+		if(!empty($browse["age_s"]))
+		{
+			$y = (date("Y")-$browse["age_s"])."0000";
+			$w = " and aw_profiles.user_field1 < '$y'";
+		}
+		if(!empty($browse["age_e"]))
+		{
+			$y = (date("Y")-$browse["age_e"])."0000";
+			$w = "and aw_profiles.user_field > '$y'";
+		}
+		$usah = get_instance("users");
+		//echo $usah->get_oid_for_uid(aw_global_get("uid"));
+		// that one hasn't ignored other and the other hasn't blocked one
+		$w = "
+			and ((aliases.source='$sorts' and aliases.target='$target') and reltype!='$rel1')
+			and ((aliases.source='$target' and aliases.target='$sorts') and reltype!='$rel2')
+		";
+		/*
+		$q = "
+		select profile2image.* from profile2image 
+		left join objects on (profile2image.img_id=objects.oid) 
+		left join aliases on (aliases.target=profile2image.prof_id and aliases.reltype=2) 
+		left join kliendibaas_isik on (kliendibaas_isik.oid = aliases.source) 
+		left join objects as pobject on (kliendibaas_isik.oid = pobject.oid)
+		left join aliases as ualias on (pobject.createdby=ualias.source and ualias.reltype=2)
+		left join aw_profiles on (aw_profiles.id=profile2image.prof_id)
+		where 
+		objects.status > 0 and 
+		aw_profiles.sexual_orientation='' and 
+		kliendibaas_isik.gender='1' and 
+		aw_profiles.user_field1 > '1984000' and 
+		aw_profiles.user_field1 < '20030000'"; and 
+		((aliases.source='1656' and aliases.target=pobject.createdby) and aliases.reltype!='442')
+		and ((aliases.source=pobject.createdby and aliases.target='1656') and aliases.reltype!='332')";
+		*/
+		/*
 		$q = "SELECT profile2image.* FROM profile2image LEFT JOIN objects ON (profile2image.img_id = objects.oid) WHERE objects.status > 0";
+		*/
 		$this->db_query($q);
 		
 		while($value = $this->db_next())
@@ -96,6 +143,7 @@ class image_rate extends class_base
 		//arr($value);
 			$var[] = $value;
 		}
+		//arr($var);
 		$count = 0;
 		while(!$true)
 		{
@@ -116,36 +164,6 @@ class image_rate extends class_base
 		//	$q = "SELECT profile2image.* FROM profile2image LEFT JOIN objects ON (profile2image.img_id = //objects.oid) WHERE objects.status > 0 ORDER BY rand() LIMIT 1";
 		// see võtab praegu kõik süsteemis olevad kommuunide poolt tekitatud pildid,
 		// ta ei arvesta $commune->prop("profiles_folder")-ga
-		/*
-		$q2 = "select count(*) as total from profile2image left join objects on (profile2image.img_id=objects.oid) where objects.status=2";
-		$q2 = $this->db_query($q2);
-		$q3 = $this->db_next();
-		echo $q3["total"]."<br>";
-		$row = $this->db_fetch_row($q);
-		$this->db_query($q);
-		$row = $this->db_next();
-		echo $q;
-		$w = mysql_query($q);
-		$row = mysql_fetch_assoc($w);
-		
-		$w = mysql_query($q,$newqhandle);
-		while($row2 = mysql_fetch_assoc($w))
-		{
-			arr($row);
-			$row=$row2;
-		}
-		mysql_close($newqhandle);
-		*/
-		// see siin on VÄGA AJUTINE workaround :|
-		//for($i=1;$i<=2;$i++)
-		//{
-			//$row = $this->db_fetch_row($q);
-		//}
-
-		// müstika: _admin_keskkonnas!!_ hakkab mõnikord üks ja sama pilt korduma - siit saabub kogu aeg üks ja sama kirje.
-		//arr($row); echo time();
-		// kas on tegemist mingi query cachemisega?
-
 		$this->inst->profile_data = new object($row["prof_id"]);
 
 		// figure out person data
@@ -180,33 +198,6 @@ class image_rate extends class_base
 					"caption" => $this->person_data->prop("firstname") . " " . $this->person_data->prop("lastname"),
 				));
 				break;
-			// all this crap get's out of here, rating should be only for rating, misc things
-			// go under profile view -- ahz
-			/*
-			case "profile_link":
-				$prop["value"] = $this->person_data->prop("firstname") . " " . $this->person_data->prop("lastname").
-					" " . html::href(array(
-					"url" => $this->mk_my_orb("change", array(
-						"profile" => $this->profile_data->id(),
-						"group" => "friend_details",
-					), "commune"),
-					"caption" => "profiil",
-				));
-				break;
-			case "commune_profile_link":
-				$prop["value"] = $this->person_data->prop("firstname") . " " . $this->person_data->prop("lastname").
-					" " . html::href(array(
-					"url" => $this->mk_my_orb("commaction", array(
-						"id" => $GLOBALS["id"],
-						"profile" => $this->profile_data->id(),
-						"commact" => "profile",
-						"group" => "friends",
-					), "commune"),
-					"caption" => "profiil",
-				));
-				break;
-			// THIS should certainly NOT be here, goes under profile view -- ahz
-			*/
 			case "send_message_link":
 				$user = $this->profile_data->createdby();
 				$params = array(
@@ -309,8 +300,7 @@ class image_rate extends class_base
 
 			case "comments":
 				//var_dump(aw_global_get("uid")); //mitte sisse logituna: bool(false)
-				$id = $this->image_data->id();
-				$prop["use_parent"] = $id;
+				$prop["use_parent"] = $this->image_data->id();
 				break;
 
 		};

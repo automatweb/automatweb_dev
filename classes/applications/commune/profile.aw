@@ -1,42 +1,37 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/profile.aw,v 1.3 2004/08/25 07:13:38 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/profile.aw,v 1.4 2004/09/02 11:16:27 ahti Exp $
 // profile.aw - Profiil 
 /*
 
 
 @classinfo syslog_type=ST_PROFILE relationmgr=yes
 
-@groupinfo settings caption=Seaded
-@groupinfo comments caption=Kommentaarid
-@groupinfo friends caption=Sõbrad
-
 @default group=general
 @default table=objects
 
+------------------------- general -----------------------------------
 
-// ------------------------------------------------------------
-// general (Üldine) tabi alla asuvad asjad
-// ------------------------------------------------------------
-@property cfgmanager type=relpicker reltype=RELTYPE_CFG_MANAGER method=serialize table=objects field=meta group=general
+@property cfgmanager type=relpicker reltype=RELTYPE_CFG_MANAGER method=serialize field=meta
 @caption Seadete haldur
 
-@property avatar_image type=relpicker reltype=RELTYPE_CFG_MANAGER method=serialize table=objects field=meta group=general
+@property avatar_image type=relpicker reltype=RELTYPE_CFG_MANAGER method=serialize field=meta
 @caption Avatar
 
 //isikul peaks olema üks profiil, mis on vaikimisi aktiivne, mida sisse logimisel esimesena näidatakse
 //lihtsam oleks, kui see oleks isiku küljes, aga praegu on ta siin, sest isikut ei tohi puutuda.
-@property default_active type=checkbox ch_value=1 rel=1 group=general method=serialize table=objects field=meta
-@caption Vaikimisi aktiivne
--------------------------------------------------------
 
-@property friend_groups type=classificator reltype=RELTYPE_FRIEND_GROUPS store=no group=general
+@property default_active type=checkbox ch_value=1 rel=1 method=serialize field=meta
+@caption Vaikimisi aktiivne
+
+@property friend_groups type=classificator reltype=RELTYPE_FRIEND_GROUPS store=no
 @caption Sõbragrupid
 
+------------------------- general : end -----------------------------------
 
-// ------------------------------------------------------------
-// setting (Seaded) tabi all asuvad asjad
-// ------------------------------------------------------------
-@default group=settings
+------------------------- settings -----------------------------------
+
+@groupinfo settings caption=Seaded
+
 @tableinfo aw_profiles index=id master_table=objects master_index=brother_of
 @default table=aw_profiles
 
@@ -67,117 +62,146 @@ explain aw_profiles;
 | user_field2        | bigint(20) unsigned | YES  |     | NULL    |       |+
 +--------------------+---------------------+------+-----+---------+-------+
 
+------------------------- üldandmed -----------------------------------
 
-@groupinfo settings_yldandmed caption="Üldandmed" parent=settings
-@groupinfo settings_valimus caption="Välimus" parent=settings
-@groupinfo settings_harrastused caption="Harrastused" parent=settings
-@groupinfo settings_harjumused caption="Harjumused" parent=settings
-@groupinfo settings_kool_too caption="Kool/Töö" parent=settings
+//@groupinfo settings_yldandmed caption="Üldandmed" parent=settings
 
-@default group=settings_yldandmed
-@property online type=text store=no
+//@property online type=text store=no group=settings_yldandmed
+@property online type=text store=no group=settings
 @caption Online
 
-@property age type=text store=no 
+//@property age type=text store=no group=settings_yldandmed
+@property age type=text store=no group=settings
 @caption Vanus
 
-@property user_field1 type=date_select year_from=1918 year_to=2004 default=-1
+//@property user_field1 type=date_select year_from=1918 year_to=2004 default=-1 group=settings_yldandmed
+@property user_field1 type=date_select year_from=1918 year_to=2004 default=-1 group=settings
 @caption Sünniaeg
 
-@property user_check1 type=checkbox value=1 ch_value=1 
+//@property user_check1 type=checkbox value=1 ch_value=1 group=settings_yldandmed
+@property user_check1 type=checkbox value=1 ch_value=1 group=settings
 @caption E-post varjatud
 
-@property user_check2 type=checkbox value=1 ch_value=1
+//@property user_check2 type=checkbox value=1 ch_value=1 group=settings_yldandmed
+@property user_check2 type=checkbox value=1 ch_value=1 group=settings
 @caption Kinnine postkast
 
-@property user_text1 type=textbox 
+//@property user_text1 type=textbox group=settings_yldandmed
+@property user_text1 type=textbox group=settings
 @caption Telefon
 
-@property user_text2 type=textbox
+//@property user_text2 type=textbox group=settings_yldandmed
+@property user_text2 type=textbox group=settings
 @caption ICQ
 
-@property user_text3 type=textbox
+//@property user_text3 type=textbox group=settings_yldandmed
+@property user_text3 type=textbox group=settings
 @caption MSN
 
-@property user_blob1 type=textbox
+//@property user_blob1 type=textbox group=settings_yldandmed
+@property user_blob1 type=textbox group=settings
 @caption Lisainfo
 
-@property user_blob2 type=textbox
+//@property user_blob2 type=textbox group=settings_yldandmed
+@property user_blob2 type=textbox group=settings
 @caption Lisainfo sõpradele
 
+------------------------- üldandmed : end -----------------------------------
 
-@default group=settings_valimus
+------------------------- välimus -----------------------------------
 
-@property height type=classificator reltype=RELTYPE_PRF_HEIGHT orient=vertical 
+//@groupinfo settings_valimus caption="Välimus" parent=settings
+
+//@property height type=classificator reltype=RELTYPE_PRF_HEIGHT orient=vertical group=settings_valimus
+@property height type=classificator reltype=RELTYPE_PRF_HEIGHT orient=vertical group=settings
 @caption Kasv
 
-@property weight type=classificator reltype=RELTYPE_PRF_WEIGHT orient=vertical 
+//@property weight type=classificator reltype=RELTYPE_PRF_WEIGHT orient=vertical group=settings_valimus
+@property weight type=classificator reltype=RELTYPE_PRF_WEIGHT orient=vertical group=settings
 @caption Kaal
 
-@property eyes_color type=classificator reltype=RELTYPE_PRF_EYES_COLOR orient=vertical 
+//@property eyes_color type=classificator reltype=RELTYPE_PRF_EYES_COLOR orient=vertical group=settings_valimus
+@property eyes_color type=classificator reltype=RELTYPE_PRF_EYES_COLOR orient=vertical group=settings
 @caption Silmade värv
 
-@property hair_color type=classificator reltype=RELTYPE_PRF_HAIR_COLOR orient=vertical 
+//@property hair_color type=classificator reltype=RELTYPE_PRF_HAIR_COLOR orient=vertical group=settings_valimus
+@property hair_color type=classificator reltype=RELTYPE_PRF_HAIR_COLOR orient=vertical group=settings
 @caption Juuksevärv
 
-@property hair_type type=classificator reltype=RELTYPE_PRF_HAIR_TYPE orient=vertical 
+//@property hair_type type=classificator reltype=RELTYPE_PRF_HAIR_TYPE orient=vertical group=settings_valimus
+@property hair_type type=classificator reltype=RELTYPE_PRF_HAIR_TYPE orient=vertical group=settings
 @caption Juuste tüüp
 
-@property body_type type=classificator reltype=RELTYPE_PRF_BODY_TYPE orient=vertical 
+//@property body_type type=classificator reltype=RELTYPE_PRF_BODY_TYPE orient=vertical group=settings_valimus
+@property body_type type=classificator reltype=RELTYPE_PRF_BODY_TYPE orient=vertical group=settings
 @caption Keha tüüp
 
+------------------------- välimus : end -----------------------------------
 
-@default group=settings_harrastused
+------------------------- harrastused -----------------------------------
 
-@property user_text5 type=textbox
+//@groupinfo settings_harrastused caption="Harrastused" parent=settings
+
+//@property user_text5 type=textbox group=settings_harrastused
+@property user_text5 type=textbox group=settings
 @caption Koduleht
 
+------------------------- harrastused : end -----------------------------------
 
-@default group=settings_harjumused
+------------------------- harjumused -----------------------------------
 
-@property sexual_orientation type=classificator reltype=RELTYPE_PRF_SEX_ORIENT orient=vertical 
+//@groupinfo settings_harjumused caption="Harjumused" parent=settings
+
+
+//@property sexual_orientation type=classificator reltype=RELTYPE_PRF_SEX_ORIENT orient=vertical group=settings_harjumused
+@property sexual_orientation type=classificator reltype=RELTYPE_PRF_SEX_ORIENT orient=vertical group=settings
 @caption Seksuaalne orientatsioon
 
-@property alcohol type=classificator reltype=RELTYPE_PRF_ALCOHOL orient=vertical  
+//@property alcohol type=classificator reltype=RELTYPE_PRF_ALCOHOL orient=vertical group=settings_harjumused 
+@property alcohol type=classificator reltype=RELTYPE_PRF_ALCOHOL orient=vertical group=settings
 @caption Alkoholi tarbimine
 
-@property tobacco type=classificator reltype=RELTYPE_PRF_TOBACCO orient=vertical 
+//@property tobacco type=classificator reltype=RELTYPE_PRF_TOBACCO orient=vertical group=settings_harjumused
+@property tobacco type=classificator reltype=RELTYPE_PRF_TOBACCO orient=vertical group=settings
 @caption Tubaka tarbimine
 
+------------------------- harjumused : end -----------------------------------
 
-@default group=settings_kool_too
+------------------------- kool_too -----------------------------------
 
-@property user_field2 type=classificator 
+//@groupinfo settings_kool_too caption="Kool/Töö" parent=settings
+
+//@property user_field2 type=classificator group=settings_kool_too
+@property user_field2 type=classificator group=settings
 @caption Haridustase
 
-@property occupation type=classificator field=meta method=serialize table=objects
+//@property occupation type=classificator table=objects field=meta method=serialize group=settings_kool_too
+@property occupation type=classificator table=objects field=meta method=serialize group=settings
 @caption Tegevusala
 
-@property user_text4 type=textbox
+//@property user_text4 type=textbox group=settings_kool_too
+@property user_text4 type=textbox group=settings
 @caption Elukutse
 
+------------------------- kool_too : end -----------------------------------
 
-// ------------------------------------------------------------
-// friends (Sõbrad) tabi all asuvad asjad
-// ------------------------------------------------------------
-//@property friends type=callback callback=callback_friends group=friends
-//@caption Sõbrad 
+------------------------- friends -----------------------------------
 
-@property friends_tbl type=table group=friends no_caption=1
+@groupinfo friends caption=Sõbrad
+
+@property friends type=table group=friends no_caption=1
 @caption Minu sõbrad
 
+------------------------- friends : end -----------------------------------
 
-// ------------------------------------------------------------
-// comments (Kommentaarid) tabi all asuvad asjad
-// ------------------------------------------------------------
+------------------------- comments -----------------------------------
+
+@groupinfo comments caption=Kommentaarid
+
 @property comments type=comments group=comments store=no
 @caption Kommentaarid
 
-
 ----------------RELTYPES----------------------------------------------
-// this I do not need
-@reltype TASK_COMMENT value=1 clid=CL_COMMENT
-@caption Kommentaar
 
 @reltype PRF_EYES_COLOR value=2 clid=CL_META
 @caption Silmade värv
@@ -216,7 +240,9 @@ explain aw_profiles;
 
 @reltype CFG_MANAGER value=15 clid=CL_CFGMANAGER
 @caption seadete haldur
+
 ----------------------
+
 @reltype FRIEND value=20 clid=CL_PROFILE
 @caption sõber
 
@@ -277,7 +303,7 @@ class profile extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "friends_tbl":
+			case "friends":
 				$this->do_friends_tbl($arr);
 				break;
 
