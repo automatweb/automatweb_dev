@@ -20,7 +20,10 @@
 
 <!-- SUB: HEADER -->
 <tr>
-	<td colspan='2' class='chformsubheader' width='160'>
+	<td class='chformsubheader' width='160'>
+	&nbsp;
+	</td>
+	<td class='chformsubheader'>
 	{VAR:caption}
 	</td>
 </tr>
@@ -28,7 +31,7 @@
 
 <!-- SUB: SUB_TITLE -->
 <tr>
-	<td colspan='2' class='chformsubtitle'>
+	<td colspan='2' class='chformsubtitle' width='160'>
 	{VAR:value}
 	</td>
 </tr>
@@ -36,7 +39,7 @@
 
 <!-- SUB: CONTENT -->
 <tr>
-	<td colspan='2' class='chformrightcol' width='160'>
+	<td colspan='2' class='chformrightcol'>
 	{VAR:value}
 	</td>
 </tr>
@@ -45,7 +48,7 @@
 
 <!-- SUB: SUBMIT -->
 <tr>
-	<td class='chformleftcol' align='center'>&nbsp;</td>
+	<td class='chformleftcol' align='center' width='160'>&nbsp;</td>
 	<td class='chformrightcol'>
 		<input type='submit' value='Salvesta' class='small_button'>
 	</td>
