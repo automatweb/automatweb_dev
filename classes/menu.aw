@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.71 2003/10/28 12:08:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.72 2003/11/07 21:30:37 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -44,7 +44,7 @@
 	@property add_tree_conf type=objpicker clid=CL_ADD_TREE_CONF field=meta method=serialize group=advanced
 	@caption Objekti lisamise puu konff
 
-	@property cfgmanager type=objpicker clid=CL_CFGFORM subclass=CL_PSEUDO field=meta method=serialize group=advanced
+	@property cfgmanager type=objpicker clid=CL_CFGFORM subclass=CL_MENU field=meta method=serialize group=advanced
 	@caption Konfiguratsioonivorm
 	
 	@property show_lead type=checkbox field=meta method=serialize group=advanced ch_value=1
@@ -110,6 +110,9 @@
 	
 	@property clickable type=checkbox group=advanced ch_value=1 default=1
 	@caption Klikitav
+	
+	@property no_export type=checkbox group=advanced ch_value=1 field=meta method=serialize table=objects
+	@caption &Auml;ra n&auml;ita ekspordis
 	
 	@property no_menus type=checkbox group=advanced ch_value=1
 	@caption Ilma menüüdeta
@@ -198,8 +201,7 @@ class menu extends class_base
 	{
 		$this->init(array(
 			"tpldir" => "automatweb/menu",
-			"clid" => CL_PSEUDO,
-			"trid" => TR_MENU,
+			"clid" => CL_MENU,
 		));
 	}
 	
@@ -408,6 +410,7 @@ class menu extends class_base
 		// each line consists of multiple elements
 		// and this is where we create them
 		$nodes = array();
+		$imdata = $args["obj_inst"]->meta("menu_images");
 		for ($i = 0; $i < $this->cfg["num_menu_images"]; $i++)
 		{
 			$node = array();
@@ -447,14 +450,16 @@ class menu extends class_base
 			array_push($node["items"],$tmp);
 
 			// image preview
-			$url = image::check_url($args["obj"]["meta"]["menu_images"][$i]["url"]);
+			$url = image::check_url($imdata[$i]["url"]);
 			if ($url)
 			{
 				$url =  html::img(array("url" => $url));
+				/*
 				$url .= " ( ".html::href(array(
-					"url" => $this->mk_my_orb("change", array("id" => $val["id"]),"image"),
+					"url" => $this->mk_my_orb("change", array("id" => $imdata[$i]["id"]),"image"),
 					"caption" => "Muuda"
 				))." ) ";
+				*/
 			}
 
 			$tmp = array(
@@ -601,6 +606,7 @@ class menu extends class_base
 					$this->menu_images_done = 1;
 				};
 				break;
+
 
 			case "pmethod_properties":
 				$form_data = &$arr["form_data"];
@@ -924,7 +930,7 @@ class menu extends class_base
 			case RELTYPE_PICTURES_MENU:
 			case RELTYPE_SHOW_SUBFOLDERS_MENU:
 			case RELTYPE_SEEALSO:
-				$retval = array(CL_PSEUDO);
+				$retval = array(CL_MENU);
 				break;
 			case RELTYPE_SHOW_AS_CALENDAR:
 				$retval = array(CL_PLANNER);
