@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.36 2003/03/28 16:48:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.37 2003/04/16 17:33:57 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -288,7 +288,8 @@ class form_element extends aw_template
 					"must_error" => $this->arr["must_error"],
 					"lb_size" => $this->arr["lb_size"],
 					"subtypes" => $this->picker($this->arr["subtype"], $this->subtypes["listbox"]),
-					"submit_on_select" => checked($this->arr["submit_on_select"])
+					"submit_on_select" => checked($this->arr["submit_on_select"]),
+					"lb_search_like" => checked($this->arr["lb_search_like"])
 				));
 				$this->vars(array("HAS_SIMPLE_CONTROLLER" => $this->parse("HAS_SIMPLE_CONTROLLER")));
 				for ($b=0; $b < ($this->arr["listbox_count"]+1); $b++)
@@ -955,6 +956,9 @@ class form_element extends aw_template
 
 			$var = $base."_submit_on_select";
 			$this->arr["submit_on_select"] = $$var;
+
+			$var = $base."_lb_search_like";
+			$this->arr["lb_search_like"] = $$var;
 
 			$var = $base."_lb_item_controllers";
 			$this->arr["lb_item_controllers"] = $this->make_keys($$var);
@@ -2041,7 +2045,7 @@ class form_element extends aw_template
 					}
 					$this->arr["listbox_count"] = $cnt;
 				}
-				else
+
 				if ($this->arr["value_controller"] && $this->form->arr["has_controllers"])
 				{
 					$this->form->controller_instance->eval_controller($this->arr["value_controller"], $this->entry, &$this->form, &$this);
@@ -2202,7 +2206,7 @@ class form_element extends aw_template
 						reset($ear);
 						while (list(,$v) = each($ear))
 						{
-							if ($v == $b)
+							if ((string)$v === (string)$b)
 							{
 								$sel = true;
 							}
@@ -2654,7 +2658,6 @@ class form_element extends aw_template
 		{
 //			echo "entry = $this->entry <br>";
 			$val = $this->form->controller_instance->eval_controller($this->arr["value_controller"], $this->entry, &$this->form, $this);
-//			echo "el $this->id has value controller val = $val <br>";
 		}
 		else
 		// kui entry on laetud, siis voetakse see sealt.
