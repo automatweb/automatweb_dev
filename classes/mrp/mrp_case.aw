@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.25 2005/02/17 12:42:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.26 2005/02/17 23:06:18 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -375,10 +375,10 @@ class mrp_case extends class_base
 					return $retval;
 				}
 			}
-		
+
 			$this->mrp_log(
-				$arr["obj_inst"]->id(), 
-				NULL, 
+				$arr["obj_inst"]->id(),
+				NULL,
 				"Projekti omaduse ".
 					$prop["caption"]." v&auml;&auml;rtust muudeti ".
 					$v1." => ".$v2
@@ -707,7 +707,7 @@ class mrp_case extends class_base
 
 			foreach ($prerequisites as $oid)
 			{
-				if (is_oid ($oid) && $this->can("view", $oid)) //!!! miks see can view seal on?
+				if (is_oid ($oid)) //!!! selle can view v6tsin 2ra, sest kui siin on viga siis edasiminekul andmete riknemine laieneb. samas ei saa korrektse systeemi puhul siin viga esineda. nimelt ei ole siinne kasutajainputiga otseselt seotud. voldemar 2/18/2005.
 				{
 					$prerequisite_job = obj ($oid);
 					$prerequisites_translated[] = $prerequisite_job->prop ("exec_order");
@@ -832,15 +832,15 @@ class mrp_case extends class_base
 
 							foreach ($prerequisites as $oid)
 							{
-								if (is_oid ($oid) && $this->can("view", $oid))
+								if (is_oid ($oid))
 								{
 									$prerequisite_job = obj ($oid);
 									$prerequisites_translated[] = $prerequisite_job->prop ("exec_order");
 								}
-								/*else
+								else
 								{
 									$errors = "Viga "; ///!!!mingi veateade teha? mida siin edasi teha?
-								}*/
+								}
 							}
 
 							$prerequisites = implode (",", $prerequisites_translated);
@@ -942,11 +942,6 @@ class mrp_case extends class_base
 	**/
 	function order_jobs ($arr = array ())
 	{
-		$prerequisite_index = array ();
-		$job_index = array ();
-		$prerequisites = array ();
-		$jobs = array ();
-
 		if (is_oid ($arr["oid"]))
 		{
 			$this_object = obj ($arr["oid"]);
@@ -958,6 +953,7 @@ class mrp_case extends class_base
 		}
 
 		$connections = $this_object->connections_from (array ("type" => RELTYPE_MRP_PROJECT_JOB, "class_id" => CL_MRP_JOB));
+		$workflow = array ();
 
 		foreach ($connections as $connection)
 		{
@@ -966,63 +962,19 @@ class mrp_case extends class_base
 			if ($job->prop ("state") != MRP_STATUS_DELETED)
 			{
 				$job_id = $job->id ();
-				$job_index[] = $job_id;
-				$job_prerequisites = explode (",", $job->prop ("prerequisites"));
-				$prerequisite_index[$job_id] = $job_prerequisites;
-
-				foreach ($job_prerequisites as $prerequisite)
-				{
-					$prerequisites[] = (int) $prerequisite;
-				}
+				$prerequisites = explode (",", $job->prop ("prerequisites"));
+				$workflow[$job_id] = $prerequisites;
 			}
 		}
 
-		$prerequisites = array_unique ($prerequisites);
-		$last_job = array_diff ($job_index, $prerequisites);
-		$last_job_id = reset ($last_job);
-
-		if (!$last_job_id)
-		{
-			veryseriouserror;///!!!
-		}
-		else
-		{
-			$jobs[] = $last_job_id;
-			$pointer = 0;
-		}
-
-		while (1)
-		{
-			if (array_key_exists ($pointer, $jobs))
-			{
-				$job_id = $jobs[$pointer];
-				$pointer++;
-			}
-			else
-			{
-				break;
-			}
-
-			$prerequisites = $prerequisite_index[$job_id];
-
-			foreach ($prerequisites as $job_id)
-			{
-				if ((!in_array ($job_id, $jobs)) and $job_id)
-				{
-					$jobs[] = $job_id;
-				}
-			}
-		}
-
-		krsort ($jobs);
-		$job_count = count ($jobs);
+		$jobs = $this->workflow2sequence ($workflow);
 
 		foreach ($jobs as $key => $job_id)
 		{
-			if (is_oid($job_id))
+			if (is_oid ($job_id))
 			{
 				$job = obj ($job_id);
-				$job->set_prop ("exec_order", ($job_count - $key));
+				$job->set_prop ("exec_order", ($key + 1));
 				$job->save ();
 			}
 			else
@@ -1030,6 +982,79 @@ class mrp_case extends class_base
 				veryseriouserror;///!!!
 			}
 		}
+	}
+
+	// converts workflow to sequence of jobs. concurrent jobs are ordered as given in Input
+	// Input: $workflow = array (job_id_1 => array (prerequisite_job_id_m, ...), ...)
+	// if job n has no prerequisites then: job_id_n => array (0)
+	// Output: ordered non-associative array of job id-s: array (0 => job_id_1, ...)
+	function workflow2sequence ($workflow_input = array ())
+	{
+		$workflow = array ();
+
+		foreach ($workflow_input as $job_id => $prerequisites)
+		{
+			if ($prerequisites[0])
+			{
+				foreach ($prerequisites as $value)
+				{
+					if ($value)
+					{
+						$workflow[$job_id][] = trim ($value);
+					}
+				}
+			}
+			else
+			{
+					$workflow[$job_id][] = 0;
+			}
+		}
+
+		$sequence = array ();
+		$current_prerequisites = array (0);
+
+		while ($current_prerequisites !== false)
+		{
+			$new_prerequisites = array ();
+
+			foreach ($current_prerequisites as $current_prerequisite)
+			{
+				foreach ($workflow as $job_id => $prerequisites)
+				{
+					foreach ($workflow[$job_id] as $key => $prerequisite)
+					{
+						if ($prerequisite == $current_prerequisite)
+						{
+							if ( (count ($prerequisites) == 1) or (count ($workflow) == 1) )
+							{
+								if (!in_array ($job_id, $sequence))
+								{
+									$sequence[] = $job_id;
+
+									if (!in_array ($job_id, $new_prerequisites))
+									{
+										$new_prerequisites[] = $job_id;
+									}
+								}
+							}
+
+							unset ($workflow[$job_id][$key]);
+						}
+					}
+				}
+			}
+
+			if (empty ($new_prerequisites))
+			{
+				$current_prerequisites = false;
+			}
+			else
+			{
+				$current_prerequisites = $new_prerequisites;
+			}
+		}
+
+		return $sequence;
 	}
 
 /**
@@ -1075,7 +1100,7 @@ class mrp_case extends class_base
 
 		if (!($jobs_folder = $workspace->prop ("jobs_folder")))
 		{
-			return false;//!!! veateade teha?
+			return false;//!!! veateade teha? siin ei tasu mingit suurt kella l88ma hakata.
 		}
 
 		$list = new object_list (array (
@@ -1150,7 +1175,7 @@ class mrp_case extends class_base
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
 		), "mrp_case"); //echo $return_url;
-		
+
 		return $return_url;
 	}
 

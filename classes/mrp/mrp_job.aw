@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.11 2005/02/17 08:00:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.12 2005/02/17 23:06:18 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -293,7 +293,7 @@ class mrp_job extends class_base
 		$project->set_prop ("state", MRP_STATUS_INPROGRESS);
 		$project->save ();
 
-		
+
 		$ws = get_instance(CL_MRP_WORKSPACE);
 		if ($log)
 		{
@@ -327,10 +327,10 @@ class mrp_job extends class_base
 
 		$ws = get_instance(CL_MRP_WORKSPACE);
 		$ws->mrp_log(
-			$this_object->prop("project"), 
-			$this_object->id(), 
+			$this_object->prop("project"),
+			$this_object->id(),
 			"T&ouml;&ouml; ".$this_object->name().
-				" staatus muudeti ".$this->states[$this_object->prop("state")], 
+				" staatus muudeti ".$this->states[$this_object->prop("state")],
 			$arr["pj_change_comment"]
 		);
 
@@ -349,12 +349,12 @@ class mrp_job extends class_base
 
 			$project->set_prop ("state", MRP_STATUS_DONE);
 			$project->save ();
-		
+
 			if ($log)
 			{
 				$ws->mrp_log(
-					$project->id(), 
-					NULL, 
+					$project->id(),
+					NULL,
 					"Projekt l&otilde;petati"
 				);
 			}
@@ -391,26 +391,45 @@ class mrp_job extends class_base
 
 	function on_delete_job ($arr)
 	{
-		$job = obj ($arr["oid"]);
+		$job_id = (int) $arr["oid"];
+		$job = obj ($job_id);
 		$job->set_prop ("state", MRP_STATUS_DELETED);
 		$job->save ();
 
-		### correct project's job order if project wasn't deleted
-		foreach ($job->connections_to () as $connection)
+		### get project for deleted job
+		$project = $job->get_first_obj_by_reltype ("RELTYPE_MRP_PROJECT");
+
+		### set successive jobs' prerequisites equal to deleted job's prerequisites
+		$prerequisites = explode (",", $job->prop ("prerequisites"));
+		$list = new object_list (array (
+			"class_id" => CL_MRP_JOB,
+			"project" => $project->id (),
+			"state" => new obj_predicate_not (MRP_STATUS_DELETED),
+		));
+
+		for ($successive_job =& $list->begin (); !$list->end (); $successive_job =& $list->next ())
 		{
-			if ($connection->prop("from.class_id") == CL_MRP_CASE)
+			$successor_prerequisites = explode (",", $successive_job->prop ("prerequisites"));
+
+			if (in_array ($job_id, $successor_prerequisites))
 			{
-				$project = $connection->from ();
-				$this->do_orb_method_call (array (
-					"action" => "order_jobs",
-					"class" => "mrp_case",
-					"params" => array (
-						"oid" => $project->id ()
-					)
-				));
-				break;
+				$successor_prerequisites = array_merge ($successor_prerequisites, $prerequisites);
+				$successor_prerequisites = array_unique ($successor_prerequisites);
+				$keys = array_keys ($successor_prerequisites, $job_id);
+				unset ($successor_prerequisites[$keys[0]]);
+				$successor_prerequisites = implode (",", $successor_prerequisites);
+				$successive_job->set_prop ("prerequisites", $successor_prerequisites);
 			}
 		}
+
+		### correct project's job order if project wasn't deleted
+		$this->do_orb_method_call (array (
+			"action" => "order_jobs",
+			"class" => "mrp_case",
+			"params" => array (
+				"oid" => $project->id ()
+			)
+		));
 	}
 }
 
