@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.101 2004/11/05 14:21:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.102 2004/11/09 10:55:21 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -114,15 +114,6 @@ class users_user extends aw_template
 	}
 
 	////
-	// !Saadab alerdi (ebaonnestunud sisselogimine, vms) aadressile config.alert_addr
-	function send_alert($msg)
-	{
-		$subject = sprintf(aw_ini_get("config.alert_subject"),aw_global_get("HTTP_HOST"));
-		$msg = "IP: ".aw_global_get("REMOTE_ADDR")."\nTeade:" . $msg;
-		send_mail(aw_ini_get("config.alert_addr"),$subject,$msg,aw_ini_get("config.alert_from"));
-	}
-
-	////
 	// !Kinky - touch user. Anyway. Seab users tabelis lastaction valja hetke timestambiks
 	// Saab kasutada selleks, et teha kindlaks kui kaua kasutaja on idle istunud
 	function touch($user) 
@@ -157,7 +148,6 @@ class users_user extends aw_template
 		if (!is_valid("password",$password))
 		{
 			$msg = "Vigane v&otilde;i vale parool";
-			$this->send_alert($msg);
 			$this->_log(ST_USERS, SA_LOGIN_FAILED, $msg);
 			$load_user = false;
 			$do_auth = false;
@@ -166,7 +156,6 @@ class users_user extends aw_template
 		if (!is_valid("uid",$uid))
 		{
 			$msg = "Vigane kasutajanimimi $uid";
-			$this->send_alert($msg);
 			$this->_log(ST_USERS, SA_LOGIN_FAILED, $msg);
 			$load_user = false;
 			$do_auth = false;
@@ -194,7 +183,6 @@ class users_user extends aw_template
 		// all checks complete, result in $success, process it
 		if (!$success)
 		{
-			$this->send_alert($msg);
 			$this->_log(ST_USERS, SA_LOGIN_FAILED, $msg);
 
 			session_unregister("uid");
