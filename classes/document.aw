@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.176 2003/05/02 13:52:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.177 2003/05/12 12:06:44 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -2747,10 +2747,10 @@ class document extends aw_template
 			$ml = " AND objects.parent IN ($ml) ";
 		}
 
-		if ($ml2 != "")
+		/*if ($ml2 != "")
 		{
 			$ml.= " AND objects.oid IN ($ml2) ";
-		}
+		}*/
 	
 		if ($sortby == "time")
 		{
