@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.132 2004/12/10 14:23:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.133 2004/12/14 13:51:34 ahti Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1018,15 +1018,18 @@ class users extends users_user
 				return $this->mk_my_orb("send_hash",array());
 			};
 
-			$churl = $this->get_change_pwd_hash_link($uid);
-
-			$email = $this->cfg["webmaster_mail"];
-			$name_wm = $this->cfg["webmaster_name"];
-
-			$msg = "Tere $row[uid]\n\nTeie isikliku parooli vahetamiseks kodulehel $host tuleb teil klikkida lingil\n\n$churl\n\nLingile klikkides avanab Teile parooli muutmise leht. \n\nProbleemide korral saatke e-mail $email.\n\nKõike paremat soovides,\n$name_wm";
-			$from = sprintf("%s <%s>",$this->cfg["webmaster_name"],$this->cfg["webmaster_mail"]);
-			send_mail($row["email"],"Paroolivahetus saidil ".aw_global_get("HTTP_HOST"),$msg,"From: $from");
-			aw_session_set("status_msg","Parooli muutmise link saadeti  aadressile <b>$row[email]</b>. Vaata oma postkasti<br />Täname!<br />");
+			$this->read_template("hash_send.tpl");
+			$this->vars(array(
+				"churl" => $this->get_change_pwd_hash_link($uid),
+				"email" => $this->cfg["webmaster_mail"],
+				"name_wm" => $this->cfg["webmaster_name"],
+				"uid" => $row["uid"],
+				"host" => $host,
+			));
+			$msg = $this->parse();
+			$from = sprintf("%s <%s>", $this->cfg["webmaster_name"], $this->cfg["webmaster_mail"]);
+			send_mail($row["email"], "Paroolivahetus saidil ".aw_global_get("HTTP_HOST"), $msg, "From: $from");
+			aw_session_set("status_msg", "Parooli muutmise link saadeti  aadressile <b>$row[email]</b>. Vaata oma postkasti<br />Täname!<br />");
 		};
 		return $this->mk_my_orb("send_hash",array("section" => $args["section"]));
 	}
