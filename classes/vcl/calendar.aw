@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.8 2004/02/02 17:00:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.9 2004/02/03 12:02:50 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -174,11 +174,6 @@ class vcalendar extends aw_template
 			$ostart = $this->range["overview_start"];
 			$oend = $this->range["overview_end"];
 
-			/*
-			$ostart = $xs1["start"];
-			$oend = $xs2["end"];
-			*/
-			
 			$inst = $this->overview_func[0];
 			$meth = $this->overview_func[1];
 			if (method_exists($inst,$meth))
@@ -279,15 +274,16 @@ class vcalendar extends aw_template
 			$mnames[$i] = get_est_month($i);
 		};
 
-		for ($i = 2002; $i <= 2004; $i++)
+		for ($i = 2002; $i <= 2005; $i++)
 		{
 			$years[$i] = $i;
 		};
+
 		$this->vars(array(
 			"PAGE" => $ts,
 			"naviurl" => aw_url_change_var("date",""),
-			"mnames" => html::picker($this->range["m"],$mnames),
-			"years" => html::picker($this->range["y"],$years),
+			"mnames" => html::picker((int)$m,$mnames),
+			"years" => html::picker($y,$years),
 			"content" => $content,
 			"caption" => $caption,
 			"prevlink" => aw_url_change_var("date",$this->range["prev"]),
@@ -567,12 +563,22 @@ class vcalendar extends aw_template
 		$this->evt_tpl->vars(array(
 			"time" => date("H:i",$evt["timestamp"]),
 			"date" => date("j-m-Y H:i",$evt["timestamp"]),
+			"datestamp" => date("d-m-Y",$evt["timestamp"]),
 			"lc_date" => date("j",$evt["timestamp"]) . ". " . $lc_month . " " . date("Y H:i",$evt["timestamp"]),
 			"name" => $evt["name"],
+			"id" => $evt["id"],
 			"link" => !empty($evt["link"]) ? $evt["link"] : "javascript:void(0)",
 			"modifiedby" => $evt["modifiedby"],
 			"iconurl" => !empty($evt["icon"]) ? $evt["icon"] : "/automatweb/images/trans.gif",
+			"comment" => $evt["comment"],
+			"COMMENT" => "",
 		));
+		if (!empty($evt["comment"]))
+		{
+			$this->evt_tpl->vars(array(
+				"COMMENT" => $this->evt_tpl->parse("COMMENT"),
+			));
+		}
 		return $this->evt_tpl->parse();
 	}
 
