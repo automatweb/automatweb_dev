@@ -280,8 +280,10 @@ class languages extends aw_template
 	{
 		extract($arr);
 		aw_global_set("admin_lang",$adminlang);
+		aw_session_set("admin_lang",$adminlang);
 		$admin_lang_lc = $this->get_langid($adminlang);
 		aw_global_set("admin_lang_lc", $admin_lang_lc);
+		aw_session_set("admin_lang_lc", $admin_lang_lc);
 
 		setcookie("admin_lang",$adminlang,time()*24*3600*1000,"/");
 		setcookie("admin_lang_lc",$admin_lang_lc,time()*24*3600*1000,"/");
@@ -383,7 +385,11 @@ class languages extends aw_template
 			$LC = "et";
 		}
 		aw_global_set("LC", $LC);
-		aw_global_set("admin_lang_lc",$LC);
+		// oh yeah, we should only overwrite admin_lang_lc if it is not set already!
+		if (aw_global_get("admin_lang_lc") == "")
+		{
+			aw_global_set("admin_lang_lc",$LC);
+		}
 		// and we should be all done. if after this, lang_id will still be not set I won't be able to write the
 		// code that fixes it anyway. 
 	}
