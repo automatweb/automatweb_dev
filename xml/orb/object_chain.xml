@@ -5,6 +5,7 @@
 			<function name="add">
 				<arguments>
 					<required name="parent" type="int"/>
+					<optional name="return_url"/>
 				</arguments>
 			</function>
 		</action>
@@ -24,6 +25,7 @@
 					<optional name="s_name" default="%"/>
 					<optional name="s_comment" default="%"/>
 					<optional name="s_type"/>
+					<optional name="return_url"/>
 				</arguments>
 			</function>
 		</action>
