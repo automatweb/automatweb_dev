@@ -272,7 +272,6 @@ class aip_change extends aw_template
 	{
 		$tb = get_instance("toolbar");
 		$_mn = get_instance("menuedit");
-		$_mn->read_template("java_popup_menu.tpl");
 
 		$host = str_replace("http://","",$_mn->cfg["baseurl"]);
 		preg_match("/.*:(.+?)/U",$host, $mt);
@@ -281,30 +280,15 @@ class aip_change extends aw_template
 			$host = str_replace(":".$mt[1], "", $host);
 		}
 
-		// make applet for adding objects
-		$_mn->vars(array(
-			"icon_over" => $_mn->cfg["baseurl"]."/automatweb/images/icons/new2_over.gif",
-			"icon" => $_mn->cfg["baseurl"]."/automatweb/images/icons/new2.gif",
-			"oid" => aip::get_root(),
-			"bgcolor" => "#D4D7DA",
-			"nr" => 2,
-			"key" => "addmenu",
-			"val" => 1,
-			"name" => "",
-			"height" => 22,
-			"width" => 23,
-			"url" => $host,
-			"content" => $this->get_add_menu(array("section" => aip::get_root()))
+		$tb->add_button(array(
+			"name" => "add",
+			"tooltop" => "Uus",
+			"url" => "#",
+			"onClick" => "return buttonClick(event, 'aw_menu_0');",
+			"img" => "new.gif",
+			"imgover" => "new_over.gif",
+			"class" => "menuButton",
 		));
-		$up = $_mn->parse("URLPARAM");
-		$_mn->vars(array(
-			"URLPARAM" => $up,
-			"FETCHCONTENT" => $_mn->parse("FETCHCONTENT")
-		));
-
-		$tb->add_cdata($_mn->parse());
-
-		
 		
 		$tb->add_button(array(
 			"name" => "save",
@@ -336,7 +320,7 @@ class aip_change extends aw_template
 			"imgover" => "delete_over.gif",
 			"img" => "delete.gif"
 		));
-		return $tb->get_toolbar();
+		return $tb->get_toolbar().get_add_menu(array("section" => aip::get_root()));
 	}
 
 	function submit_list($arr)

@@ -34,39 +34,15 @@ class aip_ctl_list extends aw_template
 
 		$tb = get_instance("toolbar");
 
-
-		$_mn = get_instance("menuedit");
-		$_mn->read_template("java_popup_menu.tpl");
-
-		$host = str_replace("http://","",$_mn->cfg["baseurl"]);
-		preg_match("/.*:(.+?)/U",$host, $mt);
-		if ($mt[1])
-		{
-			$host = str_replace(":".$mt[1], "", $host);
-		}
-
-		// make applet for adding objects
-		$_mn->vars(array(
-			"icon_over" => $_mn->cfg["baseurl"]."/automatweb/images/icons/new2_over.gif",
-			"icon" => $_mn->cfg["baseurl"]."/automatweb/images/icons/new2.gif",
-			"oid" => aip::get_root(),
-			"bgcolor" => "#D4D7DA",
-			"nr" => 2,
-			"key" => "addmenu",
-			"val" => 1,
-			"name" => "",
-			"height" => 22,
-			"width" => 23,
-			"url" => $host,
-			"content" => $this->get_add_menu(array("section" => aip::get_root()))
+		$tb->add_button(array(
+			"name" => "add",
+			"tooltop" => "Uus",
+			"url" => "#",
+			"onClick" => "return buttonClick(event, 'aw_menu_0');",
+			"img" => "new.gif",
+			"imgover" => "new_over.gif",
+			"class" => "menuButton",
 		));
-		$up = $_mn->parse("URLPARAM");
-		$_mn->vars(array(
-			"URLPARAM" => $up,
-			"FETCHCONTENT" => $_mn->parse("FETCHCONTENT")
-		));
-
-		$tb->add_cdata($_mn->parse());
 
 		$tb->add_button(array(
 			"name" => "ules",
@@ -87,7 +63,7 @@ class aip_ctl_list extends aw_template
 		$this->vars(array(
 			"LINE" => $l,
 			"upload" => $this->mk_my_orb("upload"),
-			"toolbar" => $tb->get_toolbar(),
+			"toolbar" => $tb->get_toolbar().get_add_menu(array("section" => aip::get_root())),
 			"rootmenu" => aip::get_root()
 		));
 		return $this->parse();
@@ -102,39 +78,15 @@ class aip_ctl_list extends aw_template
 
 		$tb = get_instance("toolbar");
 
-		$_mn = get_instance("menuedit");
-		$_mn->read_template("java_popup_menu.tpl");
-
-		$host = str_replace("http://","",$_mn->cfg["baseurl"]);
-		preg_match("/.*:(.+?)/U",$host, $mt);
-		if ($mt[1])
-		{
-			$host = str_replace(":".$mt[1], "", $host);
-		}
-
-		// make applet for adding objects
-		$_mn->vars(array(
-			"icon_over" => $_mn->cfg["baseurl"]."/automatweb/images/icons/new2_over.gif",
-			"icon" => $_mn->cfg["baseurl"]."/automatweb/images/icons/new2.gif",
-			"oid" => aip::get_root(),
-			"bgcolor" => "#D4D7DA",
-			"nr" => 2,
-			"key" => "addmenu",
-			"val" => 1,
-			"name" => "",
-			"height" => 22,
-			"width" => 23,
-			"url" => $host,
-			"content" => $this->get_add_menu(array("section" => aip::get_root()))
+		$tb->add_button(array(
+			"name" => "add",
+			"tooltop" => "Uus",
+			"url" => "#",
+			"onClick" => "return buttonClick(event, 'aw_menu_0');",
+			"img" => "new.gif",
+			"imgover" => "new_over.gif",
+			"class" => "menuButton",
 		));
-		$up = $_mn->parse("URLPARAM");
-		$_mn->vars(array(
-			"URLPARAM" => $up,
-			"FETCHCONTENT" => $_mn->parse("FETCHCONTENT")
-		));
-
-		$tb->add_cdata($_mn->parse());
-
 
 		$tb->add_button(array(
 			"name" => "save",
@@ -162,7 +114,7 @@ class aip_ctl_list extends aw_template
 
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_upload"),
-			"toolbar" => $tb->get_toolbar(),
+			"toolbar" => $tb->get_toolbar().get_add_menu(array("section" => aip::get_root())),
 			"rootmenu" => aip::get_root()
 		));
 		return $this->parse();
@@ -222,35 +174,6 @@ class aip_ctl_list extends aw_template
 		return $this->mk_my_orb("upload", array(), "", false, true);
 	}
 
-	function get_add_menu($arr)
-	{
-		extract($arr);
-		$ob = $this->get_object($section);
-
-		$ret = "";
-		$ret .= "1|0|Lisa PDF|".$this->mk_my_orb("new", array("is_aip" => 1, "parent" => $section,"return_url" => urlencode(aw_ini_get("baseurl")."/index.aw?aip=1&section=$section")),"file",false,true)."|_top#";
-
-		$ret .= "2|0|Lisa kaust|".aw_ini_get("baseurl")."/index.aw?action=addfolder&parent=$ob[parent]"."|_top#";
-//		$ret .= "3|0|Impordi kaustad|".aw_ini_get("baseurl")."/index.aw?section=".$section."&action=importmenus"."|_top#";
-		$ret .= "3|0|Konfigureeri|".$this->mk_my_orb("configure", array(), "aip_pdf", false, true)."|_top#";
-
-		$ret .= "4|0|Muudatused||_top#";
-		$ret .= "5|4|Lisa muudatus|".$this->mk_my_orb("new", array("parent" => 6885), "aip_change", false, true)."|_top#";
-		$ret .= "6|4|Nimekiri|".$this->mk_my_orb("list", array(), "aip_change", false, true)."|_top#";
-
-		$ret .= "7|0|Kontrollnimekiri||_top#";
-		$ret .= "8|7|Lisa kontrollnimekiri|".$this->mk_my_orb("upload", array(), "aip_ctl_list", false, true)."|_top#";
-		$ret .= "9|7|Nimekiri|".$this->mk_my_orb("log", array(), "aip_ctl_list", false, true)."|_top#";
-	
-		$ret .= "11|0|PDF Üleslaadimine||_top#";
-		$ret .= "12|11|Log|".$this->mk_my_orb("log", array(), "aip_pdf", false, true)."|_top#";
-		$ret .= "13|11|Failide raport|".$this->mk_my_orb("report", array(), "aip_pdf", false, true)."|_top#";
-		$ret .= "14|11|Uute failide toimetamine|".$this->mk_my_orb("listfiles", array(), "aip_pdf", false, true)."|_top#";
-
-
-		return $ret;
-	}
-
 	function orb_log($arr)
 	{
 		extract($arr);
@@ -270,41 +193,18 @@ class aip_ctl_list extends aw_template
 		}
 	
 
-			$tb = get_instance("toolbar");
+		$tb = get_instance("toolbar");
 
 
-		$_mn = get_instance("menuedit");
-		$_mn->read_template("java_popup_menu.tpl");
-
-		$host = str_replace("http://","",$_mn->cfg["baseurl"]);
-		preg_match("/.*:(.+?)/U",$host, $mt);
-		if ($mt[1])
-		{
-			$host = str_replace(":".$mt[1], "", $host);
-		}
-
-		// make applet for adding objects
-		$_mn->vars(array(
-			"icon_over" => $_mn->cfg["baseurl"]."/automatweb/images/icons/new2_over.gif",
-			"icon" => $_mn->cfg["baseurl"]."/automatweb/images/icons/new2.gif",
-			"oid" => aip::get_root(),
-			"bgcolor" => "#D4D7DA",
-			"nr" => 2,
-			"key" => "addmenu",
-			"val" => 1,
-			"name" => "",
-			"height" => 22,
-			"width" => 23,
-			"url" => $host,
-			"content" => $this->get_add_menu(array("section" => aip::get_root()))
+		$tb->add_button(array(
+			"name" => "add",
+			"tooltop" => "Uus",
+			"url" => "#",
+			"onClick" => "return buttonClick(event, 'aw_menu_0');",
+			"img" => "new.gif",
+			"imgover" => "new_over.gif",
+			"class" => "menuButton",
 		));
-		$up = $_mn->parse("URLPARAM");
-		$_mn->vars(array(
-			"URLPARAM" => $up,
-			"FETCHCONTENT" => $_mn->parse("FETCHCONTENT")
-		));
-
-		$tb->add_cdata($_mn->parse());
 
 		$tb->add_button(array(
 			"name" => "ules",
@@ -333,7 +233,7 @@ class aip_ctl_list extends aw_template
 		$this->vars(array(
 			"rootmenu" => aip::get_root(),
 			"LINE" => $l,
-			"toolbar" => $tb->get_toolbar()
+			"toolbar" => $tb->get_toolbar().get_add_menu(array("section" => aip::get_root()))
 		));
 		return $this->parse();
 	}
