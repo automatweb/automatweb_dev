@@ -188,7 +188,8 @@ echo "parsing and adding to config/ini/syslog.ini..\n";
 $sysini = _file_get_contents('config/ini/syslog.ini');
 preg_match_all("/syslog\.types\[(\d+)\]\[def\]/",$sysini, $sys_mt);
 $sysids = make_keys($sys_mt[1]);
-$new_sysid = max($sysids)+1;
+//$new_sysid = max($sysids)+1;
+$new_sysid = $new_clid;
 
 $first_match = false;
 $inserted = false;
