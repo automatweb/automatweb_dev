@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.5 2004/12/20 10:48:59 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.6 2004/12/23 09:20:08 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -472,7 +472,7 @@ class ml_list extends class_base
 		switch($prop["name"])
 		{
 			case "msg_folder":
-				if(empty($prop["value"]))
+				if(empty($prop["value"]) && !$arr["new"])
 				{
 					$obj = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MSG_FOLDER");
 					if(is_object($obj))
@@ -606,7 +606,7 @@ class ml_list extends class_base
 		switch($prop["name"])
 		{
 			case "msg_folder":
-				if(empty($prop["value"]))
+				if(empty($prop["value"]) && !$arr["new"])
 				{
 					$obj = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MSG_FOLDER");
 					if(is_object($obj))
