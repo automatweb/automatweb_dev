@@ -1,38 +1,40 @@
 <?php
-
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.12 2003/11/27 16:26:40 duke Exp $
 /*
 
 @classinfo syslog_type=ST_RATE relationmgr=yes
 
-@groupinfo general caption=Üldine
-
 @default table=objects
 @default group=general
+@default field=meta
+@default method=serialize
 
-@property top type=textbox size=5 field=meta method=serialize
+@property top type=textbox size=5 
 @caption Mitu topis
 
-@property top_type type=select field=meta method=serialize
+@property top_type type=select 
 @caption J&auml;rjestatakse
 
-@property objects_from type=select field=meta method=serialize
+@property objects_from type=select
 @caption Millistele objektidele kehtib
 
-@property objects_from_clid type=select field=meta method=serialize
+@property objects_from_clid type=select
 @caption Vali klass
 
-@property objects_from_folder type=relpicker field=meta method=serialize reltype=RELTYPE_FOLDER multiple=1
+@property objects_from_folder type=relpicker reltype=RELTYPE_RATE_FOLDER multiple=1
 @caption Vali kataloogid
 
-@property objects_from_oid type=relpicker field=meta method=serialize reltype=RELTYPE_OID
+@property objects_from_oid type=relpicker reltype=RELTYPE_RATE_OID
 @caption Vali objekt
+
+@reltype RATE_FOLDER value=1 clid=CL_MENU
+@caption Hinnatavate objektide kataloog
+
+@reltype RATE_OID value=2
+@caption Hinnatav objekt
 
 
 */
-
-define("RELTYPE_FOLDER",1);
-define("RELTYPE_OID",2);
-
 define("OBJECTS_FROM_CLID", 1);
 define("OBJECTS_FROM_FOLDER", 2);
 define("OBJECTS_FROM_OID", 3);
@@ -58,58 +60,7 @@ class rate extends class_base
 			'clid' => CL_RATE
 		));
 	}
-
-	////
-	// !this should create a string representation of the object
-	// parameters
-	//    oid - object's id
-	function _serialize($arr)
-	{
-		extract($arr);
-		$ob = $this->get_object($oid);
-		if (is_array($ob))
-		{
-			return aw_serialize($ob, SERIALIZE_NATIVE);
-		}
-		return false;
-	}
-
-	////
-	// !this should create an object from a string created by the _serialize() function
-	// parameters
-	//    str - the string
-	//    parent - the folder where the new object should be created
-	function _unserialize($arr)
-	{
-		extract($arr);
-		$row = aw_unserialize($str);
-		$row['parent'] = $parent;
-		unset($row['brother_of']);
-		$this->quote(&$row);
-		$id = $this->new_object($row);
-		if ($id)
-		{
-			return true;
-		}
-		return false;
-	}
 	
-	function callback_get_rel_types()
-	{
-		return array(
-			RELTYPE_FOLDER => "hinnatavate objektide kataloog",
-			RELTYPE_OID => "hinnatav objekt",
-		);
-	}
-
-	function callback_get_classes_for_relation($args = array())
-	{
-		if ($args["reltype"] == RELTYPE_FOLDER)
-		{
-			return array(CL_PSEUDO);
-		}
-	}
-
 	function get_property(&$arr)
 	{
 		$prop =& $arr["prop"];
@@ -124,7 +75,7 @@ class rate extends class_base
 				break;
 
 			case "objects_from_clid":
-				if ($arr['obj']['meta']['objects_from'] != OBJECTS_FROM_CLID)
+				if ($arr['obj_inst']->prop('objects_from') != OBJECTS_FROM_CLID)
 				{
 					return PROP_IGNORE;
 				}
@@ -132,14 +83,14 @@ class rate extends class_base
 				break;
 
 			case "objects_from_folder":
-				if ($arr['obj']['meta']['objects_from'] != OBJECTS_FROM_FOLDER)
+				if ($arr['obj_inst']->prop('objects_from') != OBJECTS_FROM_FOLDER)
 				{
 					return PROP_IGNORE;
 				}
 				break;
 
 			case "objects_from_oid":
-				if ($arr['obj']['meta']['objects_from'] != OBJECTS_FROM_OID)
+				if ($arr['obj_inst']->prop('objects_from') != OBJECTS_FROM_OID)
 				{
 					return PROP_IGNORE;
 				}
@@ -265,18 +216,13 @@ class rate extends class_base
 			case OBJECTS_FROM_FOLDER:
 				// need to get a list of all folders below that one.
 				$mn = array();
-				$pts = new aw_array($ob['meta']['objects_from_folder']);
-				foreach($pts->get() as $fld)
-				{
-					$mn += $this->get_objects_below(array(
-						'parent' => $fld,
-						'class' => CL_PSEUDO,
-						'full' => true,
-						'ignore_lang' => true,
-						'ret' => ARR_NAME
-					)) + array($fld => $fld);
-				}
-				$where = "objects.parent IN (".join(",",array_keys($mn)).")";
+				//$pts = new aw_array($ob['meta']['objects_from_folder']);
+				$_parent_list = new object_list(array(
+					"parent" => $ob["meta"]["objects_from_folder"],
+					"class_id" => CL_MENU,
+				));
+				$mn = array($fld => $fld) + $_parent_list->ids();
+				$where = "objects.parent IN (".join(",",$mn).")";
 				break;
 
 			case OBJECTS_FROM_OID:
