@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.7 2001/06/21 03:51:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.8 2001/07/03 09:23:50 duke Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -10,14 +10,14 @@
 // 2 - dynamic group
 // 3 - deleted user group
 // 4 - group added below the users default group
-define("GRP_REGULAR",0);
-define("GRP_DEFAULT",1);
-define("GRP_DYNAMIC",2);
-define("GRP_DELETED_USER",3);
-define("GRP_USERGRP",4);
+define(GRP_REGULAR,0);
+define(GRP_DEFAULT,1);
+define(GRP_DYNAMIC,2);
+define(GRP_DELETED_USER,3);
+define(GRP_USERGRP,4);
 
-define("GROUP_LEVEL_PRIORITY", 100000);
-define("USER_GROUP_PRIORITY", GROUP_LEVEL_PRIORITY*1000);	// max 1000 levels of groups
+define(GROUP_LEVEL_PRIORITY, 100000);
+define(USER_GROUP_PRIORITY, GROUP_LEVEL_PRIORITY*1000);	// max 1000 levels of groups
 
 classload("defs");
 lc_load("users");
@@ -187,11 +187,15 @@ class users_user extends aw_template {
 		      		WHERE uid = '$uid'";
 			$this->db_query($q);
 			$this->_log("auth",USR_LOGGED_IN);
+			if (defined("TAFKAP"))
+			{
+				setcookie("tafkap",$uid,strtotime("+7 years"));
+			};
 		};
 		$this->msg = $msg;
 		// caller voib kontrollida - if (!$users->login("fubar"))
 		//				login failed	
-		if ($success)
+		if ($success && $params["reforb"])
 		{
 			global $baseurl;
 			session_register("uid");
