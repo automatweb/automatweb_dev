@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_graph.aw,v 2.4 2004/02/27 13:04:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/aw_graph.aw,v 1.1 2004/10/24 18:52:38 kristo Exp $
 class aw_graph extends aw_template
 {
 	function aw_graph()
