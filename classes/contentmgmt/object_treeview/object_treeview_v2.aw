@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.50 2005/01/24 14:06:55 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.51 2005/01/25 10:18:21 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -161,12 +161,16 @@ class object_treeview_v2 extends class_base
 					TREE_DHTML => "DHTML",
 					TREE_TABLE => t("Tabel"),
 				);
-// arr($prop['value']);
-/*				if (empty($prop['value']))
+// if tree_type isn't set, TREE_DHTML will be used 
+// eh, i definitely need a better solution to handle existing objects
+// cause right i now there are at least 2 more checks to make sure, that DHTML
+// will be used when nothing is set
+
+				if (empty($prop['value']))
 				{
 					$prop['value'] = TREE_DHTML;
 				}
-*/		
+		
 				break;
 
 			case "sortbl":
@@ -300,7 +304,13 @@ class object_treeview_v2 extends class_base
 		$this->_insert_styles($ob);
 
 		// returns an array of object id's that are folders that are in the object
-		$fld = $d_inst->get_folders($d_o, $ob->prop("tree_type"));
+		$tree_type = $ob->prop("tree_type");
+		if (empty($tree_type))
+		{
+			$tree_type = TREE_DHTML;
+		}
+
+		$fld = $d_inst->get_folders($d_o, $tree_type);
 
 		// get all objects to show
 		// if is checked, that objects won't be shown by default, then don't show them, unless
@@ -885,7 +895,12 @@ class object_treeview_v2 extends class_base
 		{
 			return;
 		}
-		switch ($ob->prop("tree_type"))
+		$tree_type = $ob->prop("tree_type");
+		if (empty($tree_type))
+		{
+			$tree_type = TREE_DHTML;
+		}
+		switch ($tree_type)
 		{
 			case "TREE_TABLE":
 
@@ -903,9 +918,10 @@ class object_treeview_v2 extends class_base
 				{
 					$table->define_field(array(
 						"name" => "col_".$i,
-						"caption" => t("Osakonnad"),
+						"caption" => "",
 					));
 				}
+				$folders[$_GET['tv_sel']]['name'] = "<strong>".$folders[$_GET['tv_sel']]['name']."</strong>";
 				$tmp_fld = array_chunk($folders, $folders_count_in_col);
 				for ($i = 0; $i < $folders_count_in_col; $i++)
 				{
