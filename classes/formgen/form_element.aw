@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.66 2004/03/24 10:24:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.67 2004/03/25 09:46:36 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -287,8 +287,8 @@ class form_element extends aw_template
 					"file_show"							=> checked($this->arr["fshow"] == 1),
 					"file_alias"						=> checked($this->arr["fshow"] != 1),
 					"HAS_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_CONTROLLER") : ""),
-					"file_new_win" => checked($this->arr["file_new_win"] == 1)
-				));
+					"file_new_win" => checked($this->arr["file_new_win"] == 1),
+					"file_delete_link_text" => $this->arr["file_delete_link_text"][$this->form->lang_id]				));
 				$fi = $this->parse("FILE_ITEMS");
 			}
 
@@ -1280,6 +1280,13 @@ class form_element extends aw_template
 			$this->arr["fshow"] = $$var;
 			$var=$base."_file_new_win";
 			$this->arr["file_new_win"] = $$var;
+
+			$var=$base."_file_delete_link_text";
+			if (!is_array($this->arr["file_delete_link_text"]))
+			{
+				$this->arr["file_delete_link_text"] = array();
+			}
+			$this->arr["file_delete_link_text"][$this->form->lang_id] = $$var;
 		}
 
 		if ($this->arr["type"] == 'link')
@@ -2062,7 +2069,7 @@ class form_element extends aw_template
 			{
 				$css .= " ";
 			}
-			$css .= "tabindex=\"".$this->arr["el_tabindex"]."\"";
+			$css .= "tabindex=\"".($this->arr["el_tabindex"]+$this->form->base_tabindex)."\"";
 		}
 
 		switch($this->arr["type"])
@@ -3209,6 +3216,23 @@ class form_element extends aw_template
 				break;
 
 			case "file":
+				if ($GLOBALS["del_image"] == $this->id && $this->form->entry_id)
+				{
+					unset($GLOBALS["del_image"]);
+					$fi = get_instance("formgen/form");
+					$fi->load($this->form->id);
+					$fi->load_entry($this->form->entry_id);
+					$fi->set_element_value($this->id, false, false);
+					$fi->process_entry(array(
+						"id" => $this->form->id,
+						"entry_id" => $this->form->entry_id,
+						"no_load_form" => true,
+						"no_load_entry" => true,
+						"no_process_entry" => true
+					));	
+					$this->entry = false;
+				}
+
 				if ($this->entry["url"] != "")
 				{
 					classload("file");
@@ -3216,7 +3240,15 @@ class form_element extends aw_template
 					{
 						if ($this->arr["fshow"])
 						{
-							$html="<img src=\"".file::check_url($this->entry["url"])."\" /><br />";
+							$dlk = "";
+							if (isset($this->arr["file_delete_link_text"][aw_global_get("lang_id")]))
+							{
+								$dlk = html::href(array(
+									"url" => aw_url_change_var("del_image", $this->id),
+									"caption" => $this->arr["file_delete_link_text"][aw_global_get("lang_id")]
+								));
+							}
+							$html="<img src=\"".file::check_url($this->entry["url"])."\" />$dlk<br />";
 						}
 					}
 					else

@@ -137,6 +137,18 @@
 </tr>
 <!-- END SUB: LROW9 -->
 
+<tr class="aste01">
+<td colspan=10 class="celltext">Failide kustuta linkide tekstid:</td>
+</tr>
+<!-- SUB: LROW10 -->
+<tr class="aste01">
+<td class="celltext">{VAR:name}</td>
+<!-- SUB: LCOL10 -->
+<td class="celltext"><input type='text' name='dt[{VAR:row}][{VAR:col}][{VAR:elid}][{VAR:lang_id}]' value="{VAR:text}" class='formtext'></td>
+<!-- END SUB: LCOL10 -->
+</tr>
+<!-- END SUB: LROW10 -->
+
 
 <!-- do not use L*8, it's already in use
    .. and what the fsck is it with that naming scheme anyway? -->

@@ -383,9 +383,9 @@ function toggle_file_link_newwin()
 <td class="fgtext">&nbsp;</td>
 <td class="fgtext"><input type='radio' NAME='{VAR:cell_id}_file_show' VALUE=1 {VAR:file_show}> {VAR:LC_FORMS_DISPLAY_NOW} <input type='radio' NAME='{VAR:cell_id}_file_show' VALUE=0 {VAR:file_alias}> {VAR:LC_FORMS_MAKING_ALIAS}</td>
 <td class="fgtext">
-&nbsp;
+Kustuta lingi tekst:
 </td>
-<td class="fgtext">&nbsp;</td>
+<td class="fgtext"><input CLASS="small_button" type='text' NAME='{VAR:cell_id}_file_delete_link_text' VALUE='{VAR:file_delete_link_text}'></td>
 </tr>
 <!-- END SUB: FILE_ITEMS -->
 

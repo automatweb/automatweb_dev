@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.91 2004/03/09 15:32:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.92 2004/03/25 09:46:36 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -783,6 +783,8 @@ class form extends form_base
 
 		if ($this->type != FTYPE_SEARCH)
 		{
+			if (aw_ini_get("site_id") != 22)
+			{
 			if (join(",",map("%s",$old_namels)) != join(",",map("%s",$this->arr["name_els"])))
 			{
 				// now go through all entries and rename them
@@ -795,6 +797,7 @@ class form extends form_base
 					$this->update_entry_name($row["oid"]);
 					$this->restore_handle();
 				}
+			}
 			}
 		}
 
@@ -5740,6 +5743,38 @@ class form extends form_base
 			}
 		}
 
+		for ($row=0; $row < $this->arr["rows"]; $row++)
+		{
+			for ($col=0; $col < $this->arr["cols"]; $col++)
+			{
+				$elar = array();
+				$this->arr["contents"][$row][$col]->get_els(&$elar);
+
+				foreach($elar as $el)
+				{
+					if ($el->get_type() != "file")
+					{
+						continue;
+					}
+					$lcol10 = "";
+					foreach($langs as $lar)
+					{
+						$tx = $el->arr["file_delete_link_text"][$lar["id"]];
+						$this->vars(array(
+							"text" => str_replace("\"","&quot;",$tx),
+							"col" => $col,
+							"row" => $row,
+							"elid" => $el->get_id(),
+							"lang_id" => $lar["id"],
+						));
+						$lcol10.=$this->parse("LCOL10");
+					}
+					$this->vars(array("LCOL10" => $lcol10,"name" => $el->arr["name"]));
+					$lrow10.=$this->parse("LROW10");
+				}
+			}
+		}
+
 		$this->vars(array(
 			"LROW" => $lrow,
 			"LROW1" => $lrow1,
@@ -5751,6 +5786,7 @@ class form extends form_base
 			"LROW7" => $lrow7,
 			"LROW8" => $lrow8,
 			"LROW9" => $lrow9,
+			"LROW10" => $lrow10,
 			"reforb" => $this->mk_reforb("submit_translate", array("id" => $id))
 		));
 
@@ -5824,6 +5860,14 @@ class form extends form_base
 						foreach($langs as $lar)
 						{
 							$this->arr["elements"][$row][$col][$el->get_id()]["lang_button_url"][$lar["id"]] = $bu[$row][$col][$el->get_id()][$lar["id"]];
+						}
+					}
+					else
+					if ($el->get_type() == "file")
+					{
+						foreach($langs as $lar)
+						{
+							$this->arr["elements"][$row][$col][$el->get_id()]["file_delete_link_text"][$lar["id"]] = $dt[$row][$col][$el->get_id()][$lar["id"]];
 						}
 					}
 
