@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.15 2003/08/01 13:27:50 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.16 2003/10/06 14:32:26 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -78,6 +78,7 @@ class form_actions extends form_base
 					case "email":
 						$data["email"] = $email;
 						$data["email_el"] = $email_el;
+						$data["add_pdf"] = $add_pdf;
 						$data["op_id"] = $op_id;
 						$data["l_section"] = $l_section;
 						$data["no_mail_on_change"] = $no_mail_on_change;
@@ -144,7 +145,8 @@ class form_actions extends form_base
 					"comment" => $comment ,
 					"oid" => $action_id,
 					"metadata" => array(
-						"activate_on_button" => $this->make_keys($activate_on_button)
+						"activate_on_button" => $this->make_keys($activate_on_button),
+						"controllers" => $this->make_keys($controllers)
 					)
 				));
 				$this->db_query("UPDATE form_actions SET type = '$type' WHERE id = $action_id");
@@ -202,6 +204,7 @@ class form_actions extends form_base
 				"email_form"					=> checked($row["type"] == 'email_form'),
 				"after_submit_controller"		=> checked($row["type"] == 'after_submit_controller'),
 				"activate_on_button" => $this->mpicker($meta["activate_on_button"], $bts),
+				"controllers" => $this->mpicker($meta["controllers"], $f->get_list_controllers()),
 				"action_id"						=> $id,
 				"reforb"						=> $this->mk_reforb("submit_action", array("id" => $id, "action_id" => $aid, "level" => 1))
 			));
@@ -287,6 +290,7 @@ class form_actions extends form_base
 			"no_mail_on_change" => checked($data["no_mail_on_change"]),
             "link_to_change" => checked($data["link_to_change"]),
             "link_caption" => $data["link_caption"],
+			"add_pdf" => checked($data["add_pdf"]),
 			"email_el" => $this->picker($data["email_el"], $this->get_elements_for_forms(array($id), false, true))
 		));
 
@@ -450,6 +454,17 @@ class form_actions extends form_base
 			else
 			{
 				$show = true;
+			}
+
+			// controllers
+			$ca = new aw_array($meta["controllers"]);
+			foreach($ca->get() as $ctr)
+			{
+				$fc = get_instance("formgen/form_controller");
+				if (!$fc->eval_controller($ctr, $form->entry, $form))
+				{
+					$show = false;
+				} 
 			}
 
 			if ($show)
@@ -720,6 +735,21 @@ class form_actions extends form_base
 			));
 
 			$awm->htmlbodyattach(array("data" => $app));
+
+			if ($data["add_pdf"])
+			{
+				$co = get_instance("core/converters/html2pdf");
+				$pdf = $co->convert(array(
+					"source" => $msg_html
+				));
+				$awm->fattach(array(
+					"content" => $pdf,
+					"filename" => "attachment.pdf",
+					"contenttype" => "application/pdf",
+					"name" => "attachment.pdf"
+				));
+			}
+
 			$awm->gen_mail();
 
 			if ($data["email_el"] && ($_to = $f->get_element_value($data["email_el"])))
@@ -739,16 +769,31 @@ class form_actions extends form_base
 				));
 
 				$awm->htmlbodyattach(array("data" => $app));
+
+				if ($data["add_pdf"])
+				{
+					$co = get_instance("core/converters/html2pdf");
+					$pdf = $co->convert(array(
+						"source" => $msg_html
+					));
+					$awm->fattach(array(
+						"content" => $pdf,
+						"filename" => "attachment.pdf",
+						"contenttype" => "application/pdf",
+						"name" => "attachment.pdf"
+					));
+				}
+
 				$awm->gen_mail();
 			}
 		}
 		else
 		{
 			$app .= $link_url;
-			mail($data["email"],$subj, $msg.$app,"From: automatweb@automatweb.com\n");
+			send_mail($data["email"],$subj, $msg.$app,"From: automatweb@automatweb.com\n");
 			if ($data["email_el"] && ($_to = $f->get_element_value($data["email_el"])))
 			{
-				mail($_to,$subj, $msg.$app,"From: automatweb@automatweb.com\n");
+				send_mail($_to,$subj, $msg.$app,"From: automatweb@automatweb.com\n");
 			}
 		}
 	}

@@ -641,7 +641,12 @@ class ml_queue extends aw_template
 		//decho("data=<pre>");dprint_r($data);decho("</pre>");//dbg
 		
 		$this->used_variables=array();
-		$message=$this->replace_tags($msg["message"],$data);
+
+		$message = $msg["message"];
+		$message = str_replace("#member_id#",$member,$message);
+		$message = str_replace("#mail_id#",$mid,$message);
+
+		$message=$this->replace_tags($message,$data);
 		$subject=$this->replace_tags($msg["subject"],$data);
 		//decho("mail contans mfrom value of ".$msg["mfrom"]."<br />");//dbg
 		$mfrom=$this->replace_tags($msg["mfrom"],$data);

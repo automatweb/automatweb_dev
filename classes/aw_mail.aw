@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.25 2003/08/29 11:51:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.26 2003/10/06 14:32:24 kristo Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
@@ -471,6 +471,8 @@ class aw_mail {
 	// !Attaches a file to the message
 	// argumendid:
 	// path(string) - teekond failini
+	// content(string) - if set, path is ignored
+	// filename(string) - if content is set, this must too
 	// description(string) - kirjeldus
 	// contenttype(string) - sisu tyyp
 	// encoding(string) - encoding. DUH.
@@ -494,21 +496,28 @@ class aw_mail {
 			$encoding = BASE64;
 		};
 
-		// read the fscking file
-		$fp = fopen($path,"rb");
-		if (!$fp)
+		if ($content == "")
 		{
-			print "attach failed<br />";
-			return false; // fail
+			// read the fscking file
+			$fp = fopen($path,"rb");
+			if (!$fp)
+			{
+				print "attach failed<br />";
+				return false; // fail
+			}
+
+			if (!$name)
+			{
+				$name = basename($path);
+			};
+			$data = fread($fp, filesize($path));
+		}
+		else
+		{
+			$data = $content;
 		}
 
-		if (!$name)
-		{
-			$name = basename($path);
-		};
-
 		$contenttype .= ";" . CRLF . " name=\"".$name . "\"";
-		$data = fread($fp, filesize($path));
 		return $this->attach(array(
 				"data" => $data,
 				"description" => $description,
@@ -625,7 +634,7 @@ class aw_mail {
 				$email = str_replace($key,$val,$email);
 			};
 		};
-		mail($to,$subject,$email,$headers);
+		send_mail($to,$subject,$email,$headers);
 		
 	}
 	

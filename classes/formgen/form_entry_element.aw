@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.8 2003/08/01 13:27:51 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.9 2003/10/06 14:32:27 kristo Exp $
 // form_entry_element.aw - 
 load_vcl("date_edit");
 lc_load("definition");
@@ -129,7 +129,10 @@ class form_entry_element extends form_element
 				$allow_html = $this->form->arr["allow_html"];
 			}
 			$src = ($allow_html) ? $this->entry : htmlspecialchars($this->entry);
-			$src = create_links($src);
+			if (strpos($src, "<a h") === false)
+			{
+				$src = create_links($src);
+			}
 			$html = str_replace("\n","<br />",$src);
 		}
 				
@@ -147,10 +150,7 @@ class form_entry_element extends form_element
 				
 		if ($this->arr["type"] == "listbox")
 		{
-			if ($this->arr["subtype"] == "relation" && $this->arr["rel_element"] && $this->arr["rel_form"])
-			{
-				$this->make_relation_listbox_content();
-			}
+			$this->_init_listbox_content();
 			$sp = split("_", $this->entry, 10);
 			$sp[3] = (int)$sp[3];
 			if ($this->form->lang_id != $lang_id)
@@ -196,7 +196,10 @@ class form_entry_element extends form_element
 		if ($this->arr["type"] == "textbox")
 		{
 			$src = ($this->form->arr["allow_html"]) ? $this->entry : htmlspecialchars($this->entry);
-			$src = trim(create_links(" ".$src." " ));
+			if (strpos($src, "<a h") === false)
+			{
+				$src = trim(create_links(" ".$src." " ));
+			}
 			if ($this->arr["subtype"] == "int" && $this->arr["thousands_sep"] != "" && $src != " ")
 			{
 				// insert separator every after every 3 chars, starting from the end. 

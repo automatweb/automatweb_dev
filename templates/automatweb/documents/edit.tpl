@@ -90,12 +90,15 @@ target="_blank" href="{VAR:baseurl}/index.aw?section={VAR:id}">Eelvaade</a></td>
 			Aktiivne: <input type='checkbox' name='status' value='2' {VAR:cstatus}>&nbsp;&nbsp;&nbsp;
 			Kommenteeritav:	<input type='checkbox' name='is_forum' value='1' {VAR:is_forum}>&nbsp;&nbsp;&nbsp;
 	Näita leadi: <input type='checkbox' name='showlead' value=1 {VAR:showlead}>&nbsp;&nbsp;&nbsp;
-	Näita pealkirja: <input type='checkbox' name='show_title' value=1 {VAR:show_title}>
+	Näita pealkirja: <input type='checkbox' name='show_title' value=1 {VAR:show_title}><br>
+	N&auml;ita kuup&auml;eva:	<input type='checkbox' name="show_modified" value=1 {VAR:show_modified}>
+	&nbsp;&nbsp;Prindi nupp?	<input type='checkbox' name="show_print" value=1 {VAR:show_print}>&nbsp;&nbsp;&nbsp;
+
 	<!--
 	Ilma parema paanita: <input type='checkbox' name='no_right_pane' value=1 {VAR:no_right_pane}>&nbsp;&nbsp;&nbsp;
 	Pealkiri klikitav: <input type='checkbox' name="title_clickable" {VAR:title_clickable} value=1>&nbsp;&nbsp;&nbsp;
 	-->
-	T&uuml;hista stiilid:	<input type='checkbox' name="clear_styles" value=1><br>
+	T&uuml;hista stiilid:	<input type='checkbox' name="clear_styles" value=1>
 
 	&nbsp;&nbsp;Lingi võtmesõnad:	<input type='checkbox' name="link_keywords" value=1>&nbsp;&nbsp;&nbsp;
 	Arhiveeri:	<input type='checkbox' name="archive" value=1>&nbsp;&nbsp;&nbsp;

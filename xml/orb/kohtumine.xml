@@ -3,4 +3,3 @@
 	<class name="kohtumine" folder="kliendibaas" extends="class_base">
 	</class>
 </orb>
-		

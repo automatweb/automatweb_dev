@@ -167,11 +167,6 @@ class doc_event extends core
 			GROUP BY objects.brother_of
 			ORDER BY planner.start $order,objects.created $lmt";
 		$this->db_query($q);
-		global $XX3;
-		if ($XX3)
-		{
-			print $q;
-		};
 		$results = array();
 		$count = $this->num_rows();
 		$almgr = get_instance("aliasmgr");
@@ -249,6 +244,11 @@ class doc_event extends core
 				}
 				else
 				{
+					global $XX7;
+					if ($XX7)
+					{
+						print "no target found for $_cal_id<br>";
+					};
 					$row["ev_link"] = aw_ini_get("baseurl");
 				};
 				$this->restore_handle();

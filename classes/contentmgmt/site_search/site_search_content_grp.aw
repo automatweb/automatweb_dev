@@ -1,0 +1,220 @@
+<?php
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.2 2003/10/06 14:32:26 kristo Exp $
+// site_seaarch_content_grp.aw - Saidi sisu otsingu grupp 
+/*
+
+@classinfo syslog_type=ST_SITE_SEARCH_CONTENT_GRP relationmgr=yes
+
+@default table=objects
+@default group=general
+
+@property users_only type=checkbox ch_value=1 field=meta method=serialize
+@caption Ainult sisse logitud kasutajatele
+
+@property menus type=text store=no callback=callback_get_menus
+@caption Vali men&uuml;&uuml;d
+
+*/
+
+define("RELTYPE_MENU", 1);
+
+class site_search_content_grp extends class_base
+{
+	function site_search_content_grp()
+	{
+		// change this to the folder under the templates folder, where this classes templates will be, 
+		// if they exist at all. the default folder does not actually exist, 
+		// it just points to where it should be, if it existed
+		$this->init(array(
+			"tpldir" => "contentmgmt/site_search/site_search_content_grp",
+			"clid" => CL_SITE_SEARCH_CONTENT_GRP
+		));
+	}
+
+	function callback_get_rel_types()
+	{
+		return array(
+			RELTYPE_MENU => "men&uuml;&uuml; mille alt otsitakse",
+		);
+	}
+
+	function callback_get_classes_for_relation($args = array())
+	{
+		$retval = false;
+		switch($args["reltype"])
+		{
+			case RELTYPE_MENU:
+				$retval = array(CL_MENU);
+				break;
+		};
+		return $retval;
+	}
+
+/*	function get_property($args)
+	{
+		$data = &$args["prop"];
+		$retval = PROP_OK;
+		switch($data["name"])
+		{
+			case "menus":
+				
+				break;
+		};
+		return $retval;
+	}*/
+
+	function set_property($args = array())
+	{
+		$data = &$args["prop"];
+		$meta = &$args["metadata"];
+		$retval = PROP_OK;
+		switch($data["name"])
+		{
+			case "menus":
+				$meta["section_include_submenus"] = $args["form_data"]["include_submenus"];
+				break;
+		}
+		return $retval;
+	}	
+
+	function callback_get_menus($args = array())
+	{
+		if (!$args["obj"]["oid"])
+		{
+			return PROP_IGNORE;
+		}
+		$prop = $args["prop"];
+		$nodes = array();
+		$section_include_submenus = $args["obj"]["meta"]["section_include_submenus"];
+		// now I have to go through the process of setting up a generic table once again
+		load_vcl("table");
+		$this->t = new aw_table(array(
+			"prefix" => "sgrp_menus",
+			"layout" => "generic"
+		));
+		$this->t->define_field(array(
+			"name" => "oid",
+			"caption" => "ID",
+			"talign" => "center",
+			"align" => "center",
+			"nowrap" => "1",
+			"width" => "30",
+		));
+		$this->t->define_field(array(
+			"name" => "name",
+			"caption" => "Nimi",
+			"talign" => "center",
+		));
+		$this->t->define_field(array(
+			"name" => "check",
+			"caption" => "k.a. alammenüüd",
+			"talign" => "center",
+			"width" => 80,
+			"align" => "center",
+		));
+
+		$obj = obj($args["obj"]["oid"]);
+		$conns = $obj->connections_from(array(
+			"type" => RELTYPE_MENU
+		));
+		foreach($conns as $c)
+		{
+			$c_o = $c->to();
+
+			$this->t->define_data(array(
+				"oid" => $c_o->id(),
+				"name" => $c_o->path_str(array(
+					"max_len" => 3
+				))."/".$c_o->name(),
+				"check" => html::checkbox(array(
+					"name" => "include_submenus[".$c_o->id()."]",
+					"value" => $c_o->id(),
+					"checked" => $section_include_submenus[$c_o->id()],
+				)),
+			));
+		}
+ 
+		$nodes[$prop["name"]] = array(
+			"type" => "text",
+			"caption" => $prop["caption"],
+			"value" => $this->t->draw(),
+		);
+		return $nodes;
+	}
+
+	function callback_on_submit_relation_list($args = array())
+	{
+		// this is where we put data back into object metainfo, for backwards compatibility
+		$obj =& obj($args["id"]);
+
+		$oldaliases = $obj->connections_from(array(
+			"type" => RELTYPE_MENU
+		));
+		
+		$section = array();
+		foreach($oldaliases as $alias)
+		{
+			$section[$alias->prop("to")] = $alias->prop("to");
+		}
+
+		$obj->set_meta("section",$section);
+		$obj->save();
+	}
+
+	function callback_on_addalias($args = array())
+	{
+		$obj_list = explode(",",$args["alias"]);
+		$obj =&obj($args["id"]);
+
+		$data = $obj->meta("section");
+
+		foreach($obj_list as $val)
+		{
+			$data[$val] = $val;
+		};
+
+		$obj->set_meta("section",$data);
+		$obj->save();
+	}
+
+	////
+	// !returns all the menus that are a part of this search group
+	// params
+	//	id - group id
+	function get_menus($arr)
+	{
+		$o = obj($arr["id"]);
+
+		$se = $o->meta("section");
+		$sub = $o->meta("section_include_submenus");
+
+		$ret = array();
+
+		foreach($se as $m)
+		{
+			if ($sub[$m])
+			{
+				$ret[$m] = $m;
+				/*$tr = new object_tree(array(
+					"parent" => $m,
+					"status" => STAT_ACTIVE,
+					"class_id" => CL_MENU,
+					"lang_id" => aw_global_get("lang_id"),
+				));
+				$ids = $tr->ids();*/
+				$ids = array_keys($this->get_menu_list(false, false, $m));
+				foreach($ids as $id)
+				{
+					$ret[$id] = $id;
+				}
+			}
+			else
+			{
+				$ret[$m] = $m;
+			}
+		}
+
+		return $ret;
+	}
+}
+?>

@@ -458,12 +458,12 @@ class _int_object
 
 	function ord()
 	{
-		return $this->arr["jrk"];
+		return $this->obj["jrk"];
 	}
 
 	function set_ord($param)
 	{
-		$prev = $this->arr["jrk"];
+		$prev = $this->obj["jrk"];
 
 		if (!is_numeric($param))
 		{
@@ -507,7 +507,7 @@ class _int_object
 			return NULL;
 		}
 
-		$ui = get_intance("users");
+		$ui = get_instance("users");
 		$oid = $ui->get_oid_for_uid($uid);
 		if (!$oid)
 		{
@@ -534,7 +534,7 @@ class _int_object
 			return NULL;
 		}
 
-		$ui = get_intance("users");
+		$ui = get_instance("users");
 		$oid = $ui->get_oid_for_uid($uid);
 		if (!$oid)
 		{

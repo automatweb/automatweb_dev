@@ -2,24 +2,24 @@
 {VAR:PAGESELECTOR}
 
 <hr noshade width="100%" size="1">
-{VAR:LC_SEARCH_CONF_SEARCH_SORTING}
+Sorteeri
 <!-- SUB: SORT_MODIFIED -->
-<a href='{VAR:sort_modified}'>{VAR:LC_SEARCH_CONF_SEARCH_LAST_MOD}</a> 
+<a href='{VAR:sort_modified}'>muutmise kuup&auml;eva </a> 
 <!-- END SUB: SORT_MODIFIED -->
 
 <!-- SUB: SORT_MODIFIED_SEL -->
-{VAR:LC_SEARCH_CONF_SEARCH_LAST_MOD}
+ muutmise kuup&auml;eva 
 <!-- END SUB: SORT_MODIFIED_SEL -->
 
 <!-- SUB: SORT_TITLE -->
- | <a href='{VAR:sort_title}'>{VAR:LC_SEARCH_CONF_SORT_TITLE}</a> 
+ | <a href='{VAR:sort_title}'>pealkirja</a> 
 <!-- END SUB: SORT_TITLE -->
 
 <!-- SUB: SORT_TITLE_SEL -->
- | {VAR:LC_SEARCH_CONF_SORT_TITLE}
+ | pealkirja
 <!-- END SUB: SORT_TITLE_SEL -->
 
-{VAR:LC_SEARCH_CONF_SEARCH_BY}<br><br>
+j&auml;rgi.<br><br>
 <br>
 <!-- SUB: MATCH -->
 <table border=0 cellpadding=0 cellspacing=0 width=100%>

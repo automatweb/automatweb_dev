@@ -17,6 +17,36 @@ class document_brother extends document
 		$period = aw_global_get("period");
 		if ($s_name != "" || $s_content != "")
 		{
+			load_vcl("table");
+			$t = new aw_table(array(
+				"layout" => "generic"
+			));
+			$t->define_field(array(
+				"name" => "name",
+				"caption" => "Nimetus",
+				"sortable" => 1
+			));
+			$t->define_field(array(
+				"name" => "parent",
+				"caption" => "Asukoht",
+				"sortable" => 1
+			));
+			$t->define_field(array(
+				"name" => "createdby",
+				"caption" => "Looja",
+				"sortable" => 1
+			));
+			$t->define_field(array(
+				"name" => "modified",
+				"caption" => "Viimati muudetud",
+				"type" => "time",
+				"format" => "d.m.Y / H:i",
+				"sortable" => 1
+			));
+			$t->define_field(array(
+				"name" => "pick",
+				"caption" => "Vali see",
+			));
 			$se = array();
 			if ($s_name != "")
 			{
@@ -27,18 +57,41 @@ class document_brother extends document
 				$se[] = " content LIKE '%".$s_content."%' ";
 			}
 			/* AND (objects.site_id = $SITE_ID OR objects.site_id IS NULL) */
-			$this->db_query("SELECT documents.title as name,objects.oid FROM objects LEFT JOIN documents ON documents.docid=objects.oid WHERE objects.status != 0  AND (objects.class_id = ".CL_DOCUMENT." OR objects.class_id = ".CL_PERIODIC_SECTION." ) AND ".join("AND",$se));
+			$this->db_query("
+				SELECT 
+					documents.title as name,
+					objects.oid,
+					objects.createdby,
+					objects.modified
+				FROM 
+					objects 
+					LEFT JOIN documents ON documents.docid=objects.oid 
+				WHERE 
+					objects.status != 0  AND 
+					(
+						objects.class_id = ".CL_DOCUMENT." OR 
+						objects.class_id = ".CL_PERIODIC_SECTION." 
+					) AND 
+					".join("AND",$se));
 			while ($row = $this->db_next())
 			{
-				$this->vars(array(
-					"name" => $row["name"], 
-					"id" => $row["oid"],
-					"brother" => $this->mk_my_orb("create_bro", array("parent" => $parent, "id" => $row["oid"], "s_name" => $s_name, "s_content" => $s_content,"period" => $period)),
-					"change" => $this->mk_my_orb("change", array("parent" => $parent, "id" => $row["oid"]), "document")
+				$row["name"] = html::href(array(
+					"url" => $this->mk_my_orb("change", array("id" => $row["oid"])),
+					"caption" => $row["name"]
 				));
-				$l.=$this->parse("LINE");
+				$row["pick"] = html::href(array(
+					"url" => $this->mk_my_orb("create_bro", array("parent" => $parent, "id" => $row["oid"], "s_name" => $s_name, "s_content" => $s_content,"period" => $period)),
+					"caption" => "Vali see"
+				));
+				$o = obj($row["oid"]);
+				$row["parent"] = $o->path_str(array(
+					"max_len" => 4
+				));
+				$t->define_data($row);
 			}
-			$this->vars(array("LINE" => $l));
+			$t->set_default_sortby("name");
+			$t->sort_by();
+			$this->vars(array("LINE" => $t->draw()));
 		}
 		else
 		{

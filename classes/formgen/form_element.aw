@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.60 2003/08/01 13:27:50 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.61 2003/10/06 14:32:26 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -282,7 +282,8 @@ class form_element extends aw_template
 					"file_link_text"				=> $this->arr["flink_text"],
 					"file_show"							=> checked($this->arr["fshow"] == 1),
 					"file_alias"						=> checked($this->arr["fshow"] != 1),
-					"HAS_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_CONTROLLER") : "")
+					"HAS_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_CONTROLLER") : ""),
+					"file_new_win" => checked($this->arr["file_new_win"] == 1)
 				));
 				$fi = $this->parse("FILE_ITEMS");
 			}
@@ -1249,6 +1250,8 @@ class form_element extends aw_template
 			$this->arr["flink_text"] = $$var;
 			$var=$base."_file_show";
 			$this->arr["fshow"] = $$var;
+			$var=$base."_file_new_win";
+			$this->arr["file_new_win"] = $$var;
 		}
 
 		if ($this->arr["type"] == 'link')
@@ -3111,7 +3114,13 @@ class form_element extends aw_template
 					{
 						if ($this->arr["fshow"])
 						{
-							$html.="<a href=\"".file::check_url($this->entry["url"])."\" />".$this->arr["flink_text"]."</a><br />";
+							$target = "";
+							if ($this->arr["file_new_win"] == 1)
+							{
+								$target = "target=\"_blank\"";
+							}
+
+							$html.="<a $target href=\"".file::check_url($this->entry["url"])."\" />".$this->arr["flink_text"]."</a><br />";
 						}
 					}
 				}

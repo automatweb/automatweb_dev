@@ -52,6 +52,9 @@
 												<td colspan="2" class="celltext"><select class="formselect" NAME='settings[folders][]' size="20" multiple>{VAR:folders}</select></td>
 											</tr>
 											<tr>
+												<td colspan="2" class="celltext"><input type="checkbox" name="settings[has_ftbl_extlinks]" value="1" class="formcheck" {VAR:has_ftbl_extlinks}> Formi tabeli aliaste lingid viitavad dokumendist v&auml;lja</td>
+											</tr>
+											<tr>
 												<td colspan="2" class="celltext"><input type="checkbox" name="settings[has_yah]" value="1" class="formcheck" {VAR:has_yah}> YAH riba</td>
 											</tr>
 											<tr>
@@ -146,6 +149,7 @@
 														</tr>
 														<tr>
 															<td class="celltext">Jrk:</td>
+															<td class="celltext">Enne:</td>
 															<td class="celltext">Element:</td>
 															<td class="celltext">Vertikaalne:</td>
 															<td class="celltext">Eraldaja enne</td>
@@ -159,6 +163,7 @@
 														<!-- SUB: GRP2LINE -->
 														<tr>
 															<td class="celltext"><input type="text" class="formtext" name="rgrps[{VAR:grp_nr}][ord]" value="{VAR:gp_ord}" size="4"></td>
+															<td class="celltext"><input type="text" class="formtext" name="rgrps[{VAR:grp_nr}][real_sep_before]" value="{VAR:gp_real_sep_before}" size="4"></td>
 															<td class="celltext">N&auml;itamise:<br>
 															<SELECT CLASS="formselect" name="rgrps[{VAR:grp_nr}][el]"><option value=''>{VAR:els}</select><br>
 															Sortimise:<br>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.223 2003/10/05 17:00:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.224 2003/10/06 14:32:24 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -517,7 +517,6 @@ class core extends acl_base
 				$values[] = $this->cfg["site_id"];
 			};
 			$q = sprintf("INSERT DELAYED INTO syslog (%s) VALUES (%s)",join(",",$fields),join(",",map("'%s'",$values)));
-			return false;
 			if (!$this->db_query($q,false))
 			{
 				die("cannot write to syslog: " . $this->db_last_error["error_string"]);
@@ -1583,6 +1582,50 @@ class core extends acl_base
 
 		$msg = "Suhtuge veateadetesse rahulikult!  Te ei ole korda saatnud midagi katastroofilist. Ilmselt juhib programm Teie tähelepanu mingile ebatäpsusele  andmetes või näpuveale.<br /><br />\n\n".$msg." </b>";
 
+		// also attach backtrace
+		if (function_exists("debug_backtrace"))
+		{
+			$msg .= "<br><br> Backtrace: \n\n<Br><br>";
+			$bt = debug_backtrace();
+			for ($i = count($bt)-1; $i > 0; $i--)
+			{
+				if ($bt[$i+1]["class"] != "")
+				{
+					$fnm = "method <b>".$bt[$i+1]["class"]."::".$bt[$i+1]["function"]."</b>";
+				}
+				else
+				if ($bt[$i+1]["function"] != "")
+				{
+					$fnm = "function <b>".$bt[$i+1]["function"]."</b>";
+				}
+				else
+				{
+					$fnm = "file ".$bt[$i]["file"];
+				}
+
+				$msg .= $fnm." on line ".$bt[$i]["line"]." called <br>\n";
+
+				if ($bt[$i]["class"] != "")
+				{
+					$fnm2 = "method <b>".$bt[$i]["class"]."::".$bt[$i]["function"]."</b>";
+				}
+				else
+				if ($bt[$i]["function"] != "")
+				{
+					$fnm2 = "function <b>".$bt[$i]["function"]."</b>";
+				}
+				else
+				{
+					$fnm2 = "file ".$bt[$i]["file"];
+				}
+
+				$msg .= $fnm2." with arguments ";
+
+				$msg .= "<font size=\"-1\">(".join(",", $bt[$i]["args"]).") file = ".$bt[$i]["file"]."</font>";
+			
+				$msg .= " <br><br>\n\n";
+			}
+		}
 
 		// also attach backtrace
 		if (function_exists("debug_backtrace"))
@@ -1701,9 +1744,17 @@ class core extends acl_base
 			$send_mail = false;
 		}
 
+		if ($err_type == 30)
+		{
+			if (count($HTTP_GET_VARS) < 1 && count($HTTP_POST_VARS) < 1)
+			{
+				$send_mail = false;
+			}
+		}
+
 		if ($send_mail)
 		{		
-			mail("vead@struktuur.ee", $subj, $content,$head);
+			send_mail("vead@struktuur.ee", $subj, $content,$head);
 		}
 
 		// here we replicate the error to the site that logs all errors (usually aw.struktuur.ee)
@@ -1859,12 +1910,12 @@ class core extends acl_base
 			$right = func_get_arg(0);
 			$oid = func_get_arg(1);
 			printf(E_ACCESS_DENIED1,"CAN_".$right,$oid);
-			mail("vead@struktuur.ee", "ACL error saidil ".aw_ini_get("baseurl"), sprintf(E_ACCESS_DENIED1,"CAN_".$right,$oid));
+			send_mail("vead@struktuur.ee", "ACL error saidil ".aw_ini_get("baseurl"), sprintf(E_ACCESS_DENIED1,"CAN_".$right,$oid));
 		}
 		else
 		{
 			printf(E_ACCESS_DENIED2);
-			mail("vead@struktuur.ee", "ACL error saidil ".aw_ini_get("baseurl"), sprintf(E_ACCESS_DENIED2));
+			send_mail("vead@struktuur.ee", "ACL error saidil ".aw_ini_get("baseurl"), sprintf(E_ACCESS_DENIED2));
 		};
 		die();
 	}

@@ -826,6 +826,8 @@ class aw_site extends class_base
 		// create temp ini file, then use su_exec to copy it to the correct place
 		$tmpnam = tempnam(aw_ini_get("server.tmpdir"),"aw_install_ini");
 
+		$ini_opts["document.no_static_forms"] = 1;
+
 		$fc = join("\n", map2('%s = %s', $ini_opts));
 		$this->put_file(array(
 			'file' => $tmpnam,

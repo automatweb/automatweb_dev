@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/flash.aw,v 1.3 2003/10/03 11:39:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/flash.aw,v 1.4 2003/10/06 14:32:24 kristo Exp $
 // flash.aw - Deals with flash applets
 /*
 
@@ -62,19 +62,18 @@ class flash extends class_base
 
 	function set_property($arr)
 	{
-                $data = &$arr["prop"];
-                $form_data = &$arr["form_data"];
+		$data = &$arr["prop"];
+		$form_data = &$arr["form_data"];
 		$retval = PROP_OK;
-                if ($data["name"] == "file")
-                {
+		if ($data["name"] == "file")
+		{
 			$fdata = $_FILES["file"];
-                        if ($fdata["type"] == "application/x-shockwave-flash" &&
-				is_uploaded_file($fdata["tmp_name"]))
-                        {
-                                // SLURP!
-                                $fc = $this->get_file(array(
-                                        "file" => $fdata["tmp_name"],
-                                ));
+			if ($fdata["type"] == "application/x-shockwave-flash" && is_uploaded_file($fdata["tmp_name"]))
+			{
+				// SLURP!
+				$fc = $this->get_file(array(
+					"file" => $fdata["tmp_name"],
+				));
 
 				$imgdata = getimagesize($fdata["tmp_name"]);
 				if (is_array($imgdata) && ($fc != ""))
@@ -86,15 +85,14 @@ class flash extends class_base
 					$fs = $awf->_put_fs(array(
 						"type" => $fdata["type"],
 						"content" => $fc,
-                                        ));
+					));
 
-                                        $data["value"] = $fs;
+					$data["value"] = $fs;
 					if (!$arr["obj_inst"]->prop("name"))
 					{
 						$arr["obj_inst"]->set_prop("name",$fdata["name"]);
 					};
-                                };
-
+				};
 			}
 			else
 			{

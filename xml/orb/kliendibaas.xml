@@ -12,9 +12,40 @@
 					<optional name="teg_oid"/>
 					<optional name="letter"/>
 					<optional name="fpage"/>
+					<optional name="tpage"/>
 					<optional name="no_search"/>
+					<optional name="search_type"/>
 				</arguments>
 			</function>
 		</action>
+
+		<action name="convert_events">
+			<function name="convert_events">
+				<arguments>
+					<optional name="blaa"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="alias_to_org">
+			<function name="alias_to_org">
+				<arguments>
+					<required name="org"/>
+					<required name="event"/>
+					<required name="reltype"/>
+				</arguments>
+			</function>
+		</action>
+				
+		<action name="add_new_org">
+			<function name="add_new_org">
+				<arguments>
+					<required name="event"/>
+					<required name="reltype"/>
+				</arguments>
+			</function>
+		</action>
+		
+		
 	</class>
 </orb>

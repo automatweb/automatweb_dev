@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.49 2003/09/25 11:22:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.50 2003/10/06 14:32:24 kristo Exp $
 
 class db_config extends aw_template 
 {
@@ -78,7 +78,13 @@ class db_config extends aw_template
 
 	function _get_login_menus($args = array())
 	{
-		return aw_unserialize($this->get_simple_config("login_menus"));
+		$sid = aw_ini_get("site_id");
+		$res = $this->get_simple_config("login_menus_".$sid);
+		if (!$res)
+		{
+			$res = $this->get_simple_config("login_menus");
+		}
+		return aw_unserialize($res);
 	}
 };
 
@@ -416,7 +422,8 @@ class config extends db_config
 	{
 		extract($args);
 		$xml = get_instance("xml");
-		$old = aw_unserialize($this->get_simple_config("login_menus"));
+		//$old = aw_unserialize($this->get_simple_config("login_menus"));
+		$old = $this->_get_login_menus();
 
 		if (is_array($login_menu))
 		{
@@ -443,7 +450,7 @@ class config extends db_config
 
 		$this->quote($data);
 
-		$this->set_simple_config("login_menus",$data);
+		$this->set_simple_config("login_menus_".aw_ini_get("site_id"),$data);
 
 		return $this->mk_my_orb("login_menus",array());
 	}

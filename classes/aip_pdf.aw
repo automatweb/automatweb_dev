@@ -336,6 +336,7 @@ class aip_pdf extends aw_template
 	// !creates the list of files and checks each file's status and returns them in an array
 	function mk_file_list($folder,$parent)
 	{
+		$ret = array();
 		$fd = $this->get_file_data($parent);
 		clearstatcache();
 		if ($dir = @opendir($folder)) 

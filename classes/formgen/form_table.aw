@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.48 2003/08/27 12:25:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.49 2003/10/06 14:32:27 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -886,9 +886,11 @@ class form_table extends form_base
 					$rgroupby_sep["ev_col_".$cl]["pre"] = $dat["pre_sep"];
 					$rgroupby_sep["ev_col_".$cl]["after"] = $dat["after_sep"];
 					$rgroupby_sep["ev_col_".$cl]["mid_sep"] = $dat["mid_sep"];
+					$rgroupby_sep["ev_col_".$cl]["real_sep_before"] = $dat["real_sep_before"];
 					$rgroupby_sep["ev_".$dat["el"]]["pre"] = $dat["pre_sep"];
 					$rgroupby_sep["ev_".$dat["el"]]["after"] = $dat["after_sep"];
 					$rgroupby_sep["ev_".$dat["el"]]["mid_sep"] = $dat["mid_sep"];
+					$rgroupby_sep["ev_".$dat["el"]]["real_sep_before"] = $dat["real_sep_before"];
 				}
 			}
 		}
@@ -1133,12 +1135,16 @@ class form_table extends form_base
 		  $xml .= "<content_style1_selected value=\"style_".$this->table["content_sorted_style1"]."\"/>";
 		}
 		if ($this->table["content_sorted_style2"])
-	    {
+		{
 		  $xml .= "<content_style2_selected value=\"style_".$this->table["content_sorted_style2"]."\"/>";
-	    }
+		}
 		if ($this->table["group_style"])
-		{		
-		  $xml.= "<group_style value=\"style_".$this->table["group_style"]."\"/>\n";
+		{
+			$xml.= "<group_style value=\"style_".$this->table["group_style"]."\"/>\n";
+		}
+		if ($this->table["grp_add_els_style"])
+		{
+			$xml.= "<group_add_els_style value=\"style_".$this->table["grp_add_els_style"]."\"/>\n";
 		}
 		$xml.="<tableattribs ";
 
@@ -1274,6 +1280,10 @@ class form_table extends form_base
 		if ($this->table["group_style"])
 		{
 			$op.= $this->chk_get_css($this->table["group_style"],$this->table["link_style"]);
+		}
+		if ($this->table["group_add_els_style"])
+		{
+			$op.= $this->chk_get_css($this->table["group_add_els_style"],$this->table["link_style"]);
 		}
 		if ($this->table["header_sortable"])
 		{
@@ -1527,6 +1537,7 @@ class form_table extends form_base
 
 		$this->table["has_aliasmgr"] = $settings["has_aliasmgr"];
 		$this->table["has_yah"] = $settings["has_yah"];
+		$this->table["has_ftbl_extlinks"] = $settings["has_ftbl_extlinks"];
 		$this->table["select_default"] = $settings["select_default"];
 		$this->table["has_textels"] = $settings["has_textels"];
 		$this->table["has_groupacl"] = $settings["has_groupacl"];
@@ -1693,6 +1704,7 @@ class form_table extends form_base
 			"has_aliasmgr" => checked($this->table["has_aliasmgr"]),
 			"select_default" => checked($this->table["select_default"]),
 			"has_yah" => checked($this->table["has_yah"]),
+			"has_ftbl_extlinks" => checked($this->table["has_ftbl_extlinks"]),
 			"has_pages" => checked($this->table["has_pages"]),
 			"has_pages_text" => checked($this->table["has_pages_type"] == "text"),
 			"has_pages_lb" => checked($this->table["has_pages_type"] == "lb"),
@@ -1792,6 +1804,7 @@ class form_table extends form_base
 				$this->vars(array(
 					"grp_nr" => $nr,
 					"gp_ord" => $dat["ord"],
+					"gp_real_sep_before" => htmlspecialchars($dat["real_sep_before"]),
 					"gp_row_title" => $dat["row_title"],
 					"els" => $this->picker($dat["el"], $els),
 					"sort_els" => $this->picker($dat["sort_el"], $els),
@@ -1836,6 +1849,7 @@ class form_table extends form_base
 			"gp_vertical" => checked(false),
 			"data_els" => $this->mpicker(array(), $els),
 			"pre_sep" => "",
+			"gp_real_sep_before" => "",
 			"after_sep" => "",
 			"DATEL" => ""
 		));
@@ -2345,6 +2359,7 @@ class form_table extends form_base
 			"sum_style" => $this->picker($this->table["sum_style"],$css),
 			"text_style" => $this->picker($this->table["text_style"],$css),
 			"text_style_link" => $this->picker($this->table["text_style_link"],$css),
+			"grp_add_els_style" => $this->picker($this->table["grp_add_els_style"],$css),
 			"reforb" => $this->mk_reforb("new_submit_styles", array("id" => $id))
 		));
 
@@ -2668,7 +2683,17 @@ class form_table extends form_base
 		}
 
 		$new_sk = gen_uniq_id();
-		$url = $ru.$sep."use_table=".$alias_target;
+		if ($this->table["has_ftbl_extlinks"])
+		{
+			$url = $ru.$sep."use_table=".$alias_target;
+			$url = substr($url, strpos($url, "?")+1);
+			$cur_alias_data = $this->get_cur_processing_alias_data();
+			$url = $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".aw_global_get("section")."&class=form&action=show_entry&id=".$cur_alias_data["id"]."&entry_id=".$cur_alias_data["entry_id"]."&op_id=1&".$url;
+		}
+		else
+		{
+			$url = $ru.$sep."use_table=".$alias_target;
+		}
 		// if we are doing grouping in the table then we must include the group elements value(s) as a restrict search element
 		// as well, because it would make a whole lotta sense that way
 		if (is_array($this->table["rgrps"]) && !$this->table["no_grpels_in_restrict"])
@@ -3283,6 +3308,11 @@ class form_table extends form_base
 	function create_email_links($str)
 	{
 		return preg_replace("/([-.a-zA-Z0-9_]*)@([-.a-zA-Z0-9_]*)/","<a href='mailto:\\1@\\2'>\\1@\\2</a>", $str);
+	}
+	
+	function get_cur_processing_alias_data()
+	{
+		return aw_global_get("fg_cur_processing_alias_data");
 	}
 }
 ?>

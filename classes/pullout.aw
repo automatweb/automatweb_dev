@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/pullout.aw,v 2.10 2003/08/26 10:59:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/pullout.aw,v 2.11 2003/10/06 14:32:25 kristo Exp $
 // pullout.aw - Pullout manager
 
 /*
@@ -122,9 +122,19 @@ class pullout extends class_base
 		$do = get_instance("document");
 		if ($meta["template"] == "")
 		{
-			$meta["template"] = "plain.tpl";
+			if ($GLOBALS["print"] == 1)
+			{
+				$meta["template"] = "print.tpl";
+			}
+			else
+			{
+				$meta["template"] = "plain.tpl";
+			}
 		}
-		
+		$old_print = $GLOBALS["print"];
+		$GLOBALS["print"] = 0;
+		$_GET["print"] = 0;
+		aw_global_set("print", 0);
 		$this->read_template($meta["template"]);
 		$this->vars(array(
 			"width" => $meta["width"],
@@ -135,6 +145,9 @@ class pullout extends class_base
 			)),
 			"title" => $o["name"]
 		));
+		$GLOBALS["print"] = $old_print;
+		$_GET["print"] = $old_print;
+		aw_global_set("print", $old_print);
 		return $this->parse();
 	}
 

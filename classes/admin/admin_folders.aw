@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.14 2003/09/26 11:14:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.15 2003/10/06 14:32:25 kristo Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -154,6 +154,7 @@ class admin_folders extends aw_template
 			}
 		}
 
+		$this->_x_shown[$this->cfg["admin_rootmenu2"]] = true;
 		// objektipuu
 		//$tr = $this->rec_tree(&$arr, $this->cfg["admin_rootmenu2"],$period);
 
@@ -177,9 +178,10 @@ class admin_folders extends aw_template
 
 		$tb = get_instance("toolbar");
 		// perioodide tropp.
+		// temp workaround
+		$tb = get_instance("toolbar");
 		if ($this->cfg["per_oid"])
 		{
-			// temp workaround
 			$dbp = get_instance("period",$this->cfg["per_oid"]);
 			$act_per_id = $dbp->get_active_period();
 			$dbp->clist();
@@ -221,7 +223,7 @@ class admin_folders extends aw_template
 				"options" => $ar,
 				"selected" => isset($period) ? $period : 0,
 			)));
-		};
+		}
 		$tb->add_button(array(
 			"name" => "refresh",
 			"tooltip" => "Reload",
@@ -229,28 +231,21 @@ class admin_folders extends aw_template
 			"imgover" => "refresh_over.gif",
 			"img" => "refresh.gif",
 		));
-
 		$tb->add_button(array(
-                        "name" => "logout",
-                        "tooltip" => "Logi v&auml;lja",
-                        "url" => $this->mk_my_orb("logout", array(), "users"),
-                        "imgover" => "logout_over.gif",
-                        "img" => "logout.gif",
-                        "target" => "_top"
-                ));
-
+			"name" => "logout",
+			"tooltip" => "Logi v&auml;lja",
+			"url" => $this->mk_my_orb("logout", array(), "users"),
+			"imgover" => "logout_over.gif",
+			"img" => "logout.gif",
+			"target" => "_top"
+		));
 		$tb->add_cdata($this->mk_reforb("folders",array("no_reforb" => 1)));
 		$this->vars(array(
-			"toolbar" => $tb->get_toolbar(),
+			"toolbar" => $tb->get_toolbar(array("no_target" => true)),
 		));
 		$this->vars(array(
 			"has_toolbar" => $this->parse("has_toolbar"),
 		));
-		/*
-		print "<pre>";
-		print_r($awt->summaries());
-		print "</pre>";
-		*/
 		return $this->parse();
 	}
 
@@ -473,6 +468,12 @@ class admin_folders extends aw_template
 			return "";
 		}
 
+		if ($this->_x_rt[$parent])
+		{
+			return "";
+		}
+		$this->_x_rt[$parent] = true;
+
 		$baseurl = $this->cfg["baseurl"];
 		$ext = $this->cfg["ext"];
 
@@ -494,7 +495,7 @@ class admin_folders extends aw_template
 					$show = false;
 				}
 
-				if ($show)
+				if ($show && !$this->_x_shown[$row["oid"]])
 				{
 					if ($row["class_id"] == CL_PROMO)
 					{
@@ -509,6 +510,22 @@ class admin_folders extends aw_template
 					{
 						$url = $row["icon_id"] > 0 ? $baseurl."/automatweb/icon.".$ext."?id=".$row["icon_id"] : "";
 					}
+					$this->vars(array(
+						"name" => $row["name"],
+						"id" => $row["oid"],
+						"parent" => $row["parent"],
+						"iconurl" => $url,
+						"url" => $this->mk_my_orb("right_frame",array("parent" => $row["oid"], "period" => $period),"admin_menus"),
+					));
+					if ($sub == "")
+					{
+						$ret.=$this->parse("DOC");
+					}
+					else
+					{
+						$ret.=$this->parse("TREE").$sub;
+					}
+					$this->_x_shown[$row["oid"]] = true;
 				}
 			}
 		}

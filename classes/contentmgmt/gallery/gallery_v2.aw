@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.25 2003/08/01 13:27:47 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.26 2003/10/06 14:32:26 kristo Exp $
 
 /*
 
@@ -58,6 +58,12 @@
 
 @property local_folder type=textbox field=meta method=serialize group=import
 @caption Kataloog
+
+@property import_zip type=checkbox ch_value=1 field=meta method=serialize group=import
+@caption Impordi ZIP failist
+
+@property zip_file type=fileupload group=import store=no
+@caption Uploadi ZIP fail
 
 @property import_overwrite type=checkbox ch_value=1 field=meta method=serialize group=import
 @caption Importimisel kirjuta olemasolevad pildid &uuml;le
@@ -138,7 +144,7 @@ class gallery_v2 extends class_base
 		else
 		if ($prop['name'] == "do_import")
 		{
-			if (!$arr['obj']['meta']['import_local'] && !$arr['obj']['meta']['import_ftp'])
+			if (!$arr['obj']['meta']['import_local'] && !$arr['obj']['meta']['import_ftp'] && !$arr['obj']['meta']['import_zip'])
 			{
 				return PROP_IGNORE;
 			}
@@ -277,6 +283,23 @@ class gallery_v2 extends class_base
 			$arr['metadata']['page_data'] = array();
 			$prop['value'] = 0;
 		}
+		if ($prop["name"] == "zip_file")
+		{
+			global $zip_file;
+			if (is_uploaded_file($zip_file))
+			{
+				$tn = aw_ini_get("server.tmpdir")."/".gen_uniq_id();
+				if (move_uploaded_file($zip_file, $tn))
+				{
+					$arr["metadata"]["up_zip_file"] = $tn;
+					chmod($tn, 0666);
+				}
+				else
+				{
+					$this->raise_error("move_uploaded_file ($zip_file, $tn) failed!");
+				}	
+			}
+		}
 		return PROP_OK;
 	}
 
@@ -291,6 +314,20 @@ class gallery_v2 extends class_base
 			if ($meta['import_overwrite'] == 1)
 			{
 				$this->_clear_images(&$meta);
+			}
+
+			if ($meta["import_zip"] == 1)
+			{
+				$zf = $meta["up_zip_file"];
+				$zip = aw_ini_get("server.unzip_path");
+				$tn = aw_ini_get("server.tmpdir")."/".gen_uniq_id();
+				mkdir($tn,0777);
+								
+				$cmd = $zip." -d $tn $zf";
+				$op = shell_exec($cmd);
+				$meta["import_local"] = 1;
+				$meta["local_folder"] = $tn;
+				chmod($tn, 0777);
 			}
 
 			if ($meta["import_ftp"] == 1)
@@ -353,11 +390,11 @@ class gallery_v2 extends class_base
 					$fc = $this->get_file(array("file" => $meta['local_folder']."/".$file));
 				}
 			
-				// get image size
-				$img = $this->_imagecreatefromstring($fc, $file);
+				$img = get_instance("core/converters/image_convert");
+				$img->load_from_string($fc);
 
-				$i_width = imagesx($img);
-				$i_height = imagesy($img);
+				// get image size
+				list($i_width, $i_height) = $img->size();
 
 				$xydata = $this->_get_xydata(array(
 					"i_width" => $i_width,
@@ -369,21 +406,17 @@ class gallery_v2 extends class_base
 				// the conf object may specify a different size for images, so resize if necessary
 				if (($width && ($width != $i_width)) || ($height && ($height != $i_height)))
 				{
-					$n_img = imagecreatetruecolor($width, $height);
-					imagecopyresampled($n_img, $img, 0, 0, 0,0, $width, $height, $i_width, $i_height);
-					imagedestroy($img);
-					$img = $n_img;
+					$img->resize_simple($width, $height);
 				}
 
-				$_t = imagecreatetruecolor($width, $height);
-				imagecopy($_t, $img, 0,0,0,0, $width, $height);
+				$_t = $img->copy();
 
 				if ($conf_o["meta"]["insert_logo"] == 1)
 				{
 					$_t = $this->_do_logo($_t, $conf_o);
 				}
 
-				$fc = $this->_get_jpeg($_t);
+				$fc = $_t->get(IMAGE_JPEG);
 				
 				$img_inst = get_instance("image");
 				$idata = $img_inst->add_image(array(
@@ -393,20 +426,25 @@ class gallery_v2 extends class_base
 				));
 
 				// now we gots to make a thumbnail and add that as well.
-				$n_img = imagecreatetruecolor($tn_width, $tn_height);
+				$n_img = $img->copy();
 				
 				// now if the user specified that the thumbnail is subimage, then cut it out first
 				if ($tn_is_subimage && $tn_si_width && $tn_si_height)
 				{
-					$t_img = imagecreatetruecolor($tn_si_width, $tn_si_height);
-					imagecopy($t_img, $img, 0, 0, $tn_si_left, $tn_si_top, $tn_si_width, $tn_si_height);
-					$res = imagecopyresampled($n_img, $t_img, 0, 0, 0,0, $tn_width, $tn_height, $tn_si_width, $tn_si_height);
+					$n_img->resize(array(
+						"x" => $tn_si_left,
+						"y" => $tn_si_top,
+						"width" => $tn_si_width,
+						"height" => $tn_si_height,
+						"new_width" => $tn_width,
+						"new_height" => $tn_height
+					));
 				}
 				else
 				{
-					$res = imagecopyresampled($n_img, $img, 0, 0, 0,0, $tn_width, $tn_height, $width, $height);
+					$n_img->resize_simple($tn_height, $tn_width);
 				}
-				imagedestroy($img);
+				$img->destroy();
 				$img = $n_img;
 
 				if ($conf_o["meta"]["tn_insert_logo"] == 1)
@@ -414,7 +452,7 @@ class gallery_v2 extends class_base
 					$img = $this->_do_logo($img, $conf_o, "tn_");
 				}
 
-				$fc = $this->_get_jpeg($img);
+				$fc = $img->get(IMAGE_JPEG);
 				
 				$tn_idata = $img_inst->add_image(array(
 					"str" => $fc, 
@@ -424,13 +462,11 @@ class gallery_v2 extends class_base
 
 				// and now we need to add the image to the first empty slot
 				$r = $this->_get_next_free_pos($meta, $_pg, $_row, $_col, $ob);
-//				echo "r = ".dbg::dump($r)." <br />";
 				if ($r === false && $meta['import_add_pages'] == 1)
 				{
 					// add page to the end
 					$this->_add_page(&$meta, $ob);
 					$r = $this->_get_next_free_pos($meta, $_pg, $_row, $_col, $ob);
-//					echo "r after add page = ".dbg::dump($r)." <br />";
 				}
 
 				if ($r != false)
@@ -438,7 +474,6 @@ class gallery_v2 extends class_base
 					$_pg = $r[0];
 					$_row = $r[1];
 					$_col = $r[2];
-//					echo "free page = $_pg row = $_row , col = $_col <br />";
 					$meta['page_data'][$_pg]['content'][$_row][$_col]['img'] = $idata;
 					$meta['page_data'][$_pg]['content'][$_row][$_col]['tn'] = $tn_idata;
 					$this->db_query("INSERT INTO g_img_rel(img_id, tn_id) VALUES('".$idata["id"]."','".$tn_idata["id"]."')");
@@ -449,6 +484,28 @@ class gallery_v2 extends class_base
 					"metadata" => $meta
 				));
 			}
+			if ($meta["import_zip"] == 1)
+			{
+				@unlink($meta["up_zip_file"]);
+				$meta["import_local"] = 0;
+				$meta["local_folder"] = "";
+				@unlink($meta["up_zip_file"]);
+				if ($dir = @opendir($tn)) 
+				{
+					while (($file = readdir($dir)) !== false) 
+					{
+						if (!($file == "." || $file == ".."))
+						{
+							@unlink($tn."/".$file);
+						}
+					}  
+					closedir($dir);
+				}
+				@rmdir($tn);
+				$meta["import_local"] = 0;
+				$meta["local_folder"] = "";
+			}
+			
 			$meta["do_import"] = "";
 			$this->upd_object(array(
 				"oid" => $arr["id"],
@@ -477,7 +534,6 @@ class gallery_v2 extends class_base
 		{
 			$page = 1;
 		}		
-//		echo "gnfp p $page r $row c $col <br />";
 		for ($_page = 1; $_page <= $meta['num_pages']; $_page++)
 		{
 			if (!$meta['page_data'][$_page]['layout'])
@@ -487,36 +543,28 @@ class gallery_v2 extends class_base
 				$meta['page_data'][$_page]['layout'] = $l->get_layout($this->_get_default_layout($ob));
 			}
 
-//			echo "scanning .. page $_page , rows = ".$meta['page_data'][$_page]['layout']['rows']." <br />";
 			for ($_row = 0; $_row < $meta['page_data'][$_page]['layout']['rows']; $_row++)
 			{
-//				echo "scanning .. page $_page , row $_row ,  cols = ".$meta['page_data'][$_page]['layout']['cols']." <br />";
 				for ($_col = 0; $_col < $meta['page_data'][$_page]['layout']['cols']; $_col++)
 				{
-//					echo "scanning .. page $_page , row = $_row , col = $_col <br />";
 					
 					$col_data = $meta['page_data'][$_page]['content'][$_row][$_col];
-//					echo "col data = ".dbg::dump($col_data)." <br />";
 					if ($_page == $page && $_row >= $row)
 					{
 						if ($_row == $row)
 						{
 							if ($_col >= $col)
 							{
-//								echo "first half = row <br />";
 								if (!$col_data["img"]["id"])
 								{
-//									echo "found it! <br />";
 									return array($_page, $_row, $_col);
 								}
 							}
 						}
 						else
 						{
-//							echo "first page <br />";
 							if (!$col_data["img"]["id"])
 							{
-//								echo "found! <br />";
 								return array($_page, $_row, $_col);
 							}
 						}
@@ -524,10 +572,8 @@ class gallery_v2 extends class_base
 					else
 					if ($_page > $page)
 					{
-//						echo "other page! <br />";
 						if (!$col_data["img"]["id"])
 						{	
-//							echo "found! <br />";
 							return array($_page, $_row, $_col);
 						}
 					}
@@ -1203,21 +1249,6 @@ class gallery_v2 extends class_base
 		);
 	}
 
-	function _get_jpeg($img)
-	{
-		ob_start();
-		imagejpeg($img);
-		$fc = ob_get_contents();
-		ob_end_clean();
-		return $fc;
-	}
-
-	function _imagecreatefromstring($str, $orig_filename)
-	{
-		$imi = get_instance("image");
-		return $imi->_imagecreatefromstring($str, $orig_filename);
-	}
-
 	function _do_logo($img, $conf_o, $p = "")
 	{
 		// first, get the damn image
@@ -1229,72 +1260,51 @@ class gallery_v2 extends class_base
 		$iinst = get_instance("image");
 		$_img = $iinst->get_image_by_id($conf_o["meta"][$p."logo_img"]);
 
-		$l_img = $this->_imagecreatefromstring($this->get_file(array("file" => $_img["file"])), $_img["file"]);
+		$l_img = get_instance("core/converters/image_convert");
+		$l_img->load_from_file($_img["file"]);
 
-		// this here finds the transparent color and makes it really be transparent
-		//$trans = imagecolorclosestalpha($l_img, 0,0,0, 127);
-		$trans = imagecolorat ($l_img, 0, 0);
-		imagecolortransparent($l_img, $trans);
- 
+		list($img_x, $img_y) = $img->size();
+		list($l_img_x, $l_img_y) = $l_img->size();
+
 		// now, find where to put the damn thing
 		if ($conf_o["meta"][$p."logo_corner"] == CORNER_LEFT_TOP)
 		{
-			imagecopymerge(
-				$img, 			// dst_im
-				$l_img, 		// src_im
-				$conf_o["meta"][$p."logo_dist_x"], 	// dstx
-				$conf_o["meta"][$p."logo_dist_y"], 	// dsty 
-				0,		// srcx
-				0, 		// srcy 
-				imagesx($l_img), 	// dstw
-				imagesy($l_img), 	// dsth
-				($conf_o["meta"][$p."logo_transparency"] ? $conf_o["meta"][$p."logo_transparency"] : 99)
-			);
+			$img->merge(array(
+				"source" => $l_img,
+				"x" => $conf_o["meta"][$p."logo_dist_x"],
+				"y" => $conf_o["meta"][$p."logo_dist_y"],
+				"pct" => ($conf_o["meta"][$p."logo_transparency"] ? $conf_o["meta"][$p."logo_transparency"] : 99)
+			));
 		}
 		else
 		if ($conf_o["meta"][$p."logo_corner"] == CORNER_LEFT_BOTTOM)
 		{
-			imagecopymerge(
-				$img, 
-				$l_img, 
-				$conf_o["meta"][$p."logo_dist_x"], 
-				imagesy($img) - ($conf_o["meta"][$p."logo_dist_y"] + imagesy($l_img)), 
-				0,
-				0, 
-				imagesx($l_img), 
-				imagesy($l_img), 
-				($conf_o["meta"][$p."logo_transparency"] ? $conf_o["meta"][$p."logo_transparency"] : 100)
-			);
+			$img->merge(array(
+				"source" => $l_img,
+				"x" => $conf_o["meta"][$p."logo_dist_x"],
+				"y" => $img_y - ($conf_o["meta"][$p."logo_dist_y"] + $l_img_y),
+				"pct" => ($conf_o["meta"][$p."logo_transparency"] ? $conf_o["meta"][$p."logo_transparency"] : 99)
+			));
 		}
 		else
 		if ($conf_o["meta"][$p."logo_corner"] == CORNER_RIGHT_TOP)
 		{
-			imagecopymerge(
-				$img, 
-				$l_img, 
-				imagesx($img) - ($conf_o["meta"][$p."logo_dist_x"] + imagesx($l_img)), 
-				$conf_o["meta"][$p."logo_dist_y"], 
-				0,
-				0, 
-				imagesx($l_img), 
-				imagesy($l_img), 
-				($conf_o["meta"][$p."logo_transparency"] ? $conf_o["meta"][$p."logo_transparency"] : 100)
-			);
+			$img->merge(array(
+				"source" => $l_img,
+				"x" => $img_x - ($conf_o["meta"][$p."logo_dist_x"] + $l_img_x),
+				"y" => $conf_o["meta"][$p."logo_dist_y"],
+				"pct" => ($conf_o["meta"][$p."logo_transparency"] ? $conf_o["meta"][$p."logo_transparency"] : 99)
+			));
 		}
 		else
 		if ($conf_o["meta"][$p."logo_corner"] == CORNER_RIGHT_BOTTOM)
 		{
-			imagecopymerge(
-				$img, 
-				$l_img, 
-				imagesx($img) - ($conf_o["meta"][$p."logo_dist_x"] + imagesx($l_img)), 
-				imagesy($img) - ($conf_o["meta"][$p."logo_dist_y"] + imagesy($l_img)), 
-				0,
-				0, 
-				imagesx($l_img), 
-				imagesy($l_img), 
-				($conf_o["meta"][$p."logo_transparency"] ? $conf_o["meta"][$p."logo_transparency"] : 100)
-			);
+			$img->merge(array(
+				"source" => $l_img,
+				"x" => $img_x - ($conf_o["meta"][$p."logo_dist_x"] + $l_img_x),
+				"y" => $img_y - ($conf_o["meta"][$p."logo_dist_y"] + $l_img_y),
+				"pct" => ($conf_o["meta"][$p."logo_transparency"] ? $conf_o["meta"][$p."logo_transparency"] : 99)
+			));
 		}
 		return $img;
 	}
@@ -1370,7 +1380,7 @@ class gallery_v2 extends class_base
 		
 		$link = $this->mk_my_orb("show_image", array("id" => $id, "page" => $page, "row" => $row, "col" => $col));
 
-		mail($to, $subject, $message."\n\n".$link."\n\n");
+		send_mail($to, $subject, $message."\n\n".$link."\n\n");
 
 		return $link;
 	}

@@ -18,6 +18,14 @@
 <tr>
 <td colspan="2" class="celltext"><select name='activate_on_button[]' multiple class='formselect'>{VAR:activate_on_button}</select></td>
 </tr>
+
+<tr>
+<td colspan="2" class="celltext" align="right" valign="top">Action t&auml;idetakse ainult siis kui m&otilde;ni nendest kontrolleritest tagastab false:</td>
+</tr>
+<tr>
+<td colspan="2" class="celltext"><select name='controllers[]' multiple class='formselect'>{VAR:controllers}</select></td>
+</tr>
+
 <tr>
 <td class="celltext" colspan=2>{VAR:LC_FORMS_TYPE}:</td>
 </tr>

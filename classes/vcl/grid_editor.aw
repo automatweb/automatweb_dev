@@ -1019,9 +1019,9 @@ class grid_editor extends class_base
 					"col" => $map["col"],
 					"row" => $map["row"],
 					"ta_rows" => $spans["rowspan"],
-					"ta_cols" => $spans["colspan"]*5+(($spans["colspan"]-1)*2),
+					"ta_cols" => $spans["colspan"]*20+(($spans["colspan"]-1)*2),
 					"content" => htmlentities($this->arr['aliases'][$map['row']][$map['col']]),
-					"width" => $spans["colspan"]*50+($spans["colspan"]-1)*7,
+					"width" => $spans["colspan"]*150+($spans["colspan"]-1)*7,
 					"height" => $spans["rowspan"]*17+($spans["rowspan"]-1)*9,
 				));
 

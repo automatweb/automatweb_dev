@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/kliendibaas/Attic/pakkumine.aw,v 1.1 2003/08/29 14:30:48 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/kliendibaas/Attic/pakkumine.aw,v 1.2 2003/10/06 14:32:27 kristo Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -10,6 +10,8 @@
 @default field=meta
 @default method=serialize
 
+
+@default group=calendar
 @property start1 type=datetime_select
 // field=start table=planner group=calendar
 @caption Algab 
@@ -21,9 +23,10 @@
 @property content type=textarea cols=60 rows=30
 @caption Sisu
 
+@default group=other_calendars
 
-@property into_user_calendar type=checkbox ch_value=1
-@caption Pane kasutaja kalendrisse
+
+
 
 
 
@@ -42,168 +45,21 @@ class pakkumine extends class_base
 		));
 	}
 
-	//////
-	// class_base classes usually need those, uncomment them if you want to use them
-
 	
-	function get_property($args)
+	
+	function change($args)
 	{
-		$data = &$args["prop"];
-		$retval = PROP_OK;
-		switch($data["name"])
-		{
-			case 'into_user_calendar':
-				if ($cal_id = aw_global_get('user_calendar'))
-				{
-					
-					
-				}
-				else
-				{
-					$retval = PROP_IGNORE;
-				}
-			break;
-		};
-		return $retval;
-	}
-	
-
-	
-	function set_property($args = array())
-	{
-		$data = &$args["prop"];
-		$retval = PROP_OK;
-		switch($data["name"])
-                {
-			case 'into_user_calendar':
+		$args['strs'] = array(
+			'type' => 'PAKKUMINE',
+			'typeStr' => 'Pakkumine',
+			'typestr' => 'pakkumine',
+			'typestrs' => 'pakkumise',
+		);
 		
-				//teha kalendrisse sündmus
-				if ($cal_id = aw_global_get('user_calendar'))
-				{
-					$planner = get_instance('planner');
-					$kal = $this->get_object($cal_id);
-					$arr['obj'] = $kal;
+		$kohtumine = get_instance('kliendibaas/kohtumine');
+		$kohtumine->_change($args);
+	}
 
-					$arr['form_data']['emb'] =  $args['form_data'];
-					$arr['form_data']['emb']['title'] = 'Pakkumine: '.$args['form_data']['name'];
-					//$arr['form_data']['emb']['nimi'] = 'Pakkumine: '.$args['form_data']['name'];					
-					$arr['form_data']['class'] = 'doc';
-					$arr['form_data']['action'] = 'submit';
-					$arr['form_data']['group'] = 'general';
-//<input type='hidden' name='emb[cfgform]' value="96038" />
-					
-//arr($arr) ;
-					$planner->create_planner_event($arr);
-
-///				
-/*
-Array
-(
-    [form_data] => Array
-        (
-            [MAX_FILE_SIZE] => 5000000
-            [emb] => Array
-                (
-                    [start1] => Array
-                        (
-                            [day] => 30
-                            [month] => 8
-                            [year] => 2003
-                            [hour] => 12
-                            [minute] => 24
-                        )
-
-                    [duration] => Array
-                        (
-                            [hour] => 4
-                            [minute] => 0
-                        )
-
-                    [status] => 1
-                    [title] => nimi siin
-                    [content] => sisu on see
-                    [sbt] => Salvesta
-                    [class] => doc
-                    [action] => submit
-                    [group] => general
-                    [id] => 125492
-                )
-
-            [reforb] => 1
-            [class] => planner
-            [action] => submit
-            [id] => 125451
-            [group] => add_event
-            [parent] => 97175
-            [section] => 
-            [period] => 
-            [cb_view] => 
-            [alias_to] => 
-            [reltype] => 
-            [cfgform] => 0
-            [return_url] => 
-            [subgroup] => 
-            [event_id] => 125492
-            [rawdata] => Array
-                (
-                    [MAX_FILE_SIZE] => 5000000
-                    [emb] => Array
-                        (
-                            [start1] => Array
-                                (
-                                    [day] => 30
-                                    [month] => 8
-                                    [year] => 2003
-                                    [hour] => 12
-                                    [minute] => 24
-                                )
-
-                            [duration] => Array
-                                (
-                                    [hour] => 4
-                                    [minute] => 0
-                                )
-
-                            [status] => 1
-                            [title] => nimi siin
-                            [content] => sisu on see
-                            [sbt] => Salvesta
-                            [class] => doc
-                            [action] => submit
-                            [group] => general
-                            [id] => 125492
-                        )
-
-                    [reforb] => 1
-                    [class] => planner
-                    [action] => submit
-                    [id] => 125451
-                    [group] => add_event
-                    [parent] => 97175
-                    [section] => 
-                    [period] => 
-                    [cb_view] => 
-                    [alias_to] => 
-                    [reltype] => 
-                    [cfgform] => 0
-                    [return_url] => 
-                    [subgroup] => 
-                    [event_id] => 125492
-                    [rawdata] => Array
- *RECURSION*
-                )
-
-        )
-
-    [new] => 
-)		
-*/		
-//////////////					
-				}
-			break;
-		}
-		return $retval;
-	}	
 	
 
 	////////////////////////////////////

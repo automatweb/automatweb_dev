@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/document_import.aw,v 1.1 2003/08/26 13:56:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/document_import.aw,v 1.2 2003/10/06 14:32:27 kristo Exp $
 // document_import.aw - Dokumentide import 
 /*
 
@@ -11,7 +11,7 @@
 @property file type=fileupload store=no
 @caption XML Fail
 
-@property period type=relpicker reltype=RELTYPE_PERIOD field=meta method=serialize
+@property d_period type=relpicker reltype=RELTYPE_PERIOD field=meta method=serialize
 @caption Periood
 
 @property found type=text store=no
@@ -30,6 +30,8 @@
 
 @property end_tag type=textbox field=meta method=serialize group=settings
 @caption dokumenti l&otilde;petav tag
+
+@property content_transform type=generated generator=generate_tag_fields
 
 */
 
@@ -134,6 +136,7 @@ class document_import extends class_base
 	{
 		$parser = xml_parser_create();
 		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,1);
+//		xml_parser_set_option($parser,XML_OPTION_TARGET_ENCODING, "ISO-8859-1");
 		xml_parse_into_struct($parser,$str,&$values,&$tags);
 		if (($err = xml_get_error_code($parser)))
 		{
@@ -144,28 +147,13 @@ class document_import extends class_base
 
 		$docs = array();
 
-		$location_tags = array();
-		$_location_tags = explode(",", $obj["meta"]["location_tags"]);
-		foreach($_location_tags as $tg)
-		{
-			list($tag, $loc) = explode("=", $tg);
-			$tag = strtoupper($tag);
-			$location_tags[$tag] = $loc;
-		}
-
-		$field_tags = array();
-		$_field_tags = explode(",", $obj["meta"]["field_tags"]);
-		foreach($_field_tags as $tg)
-		{
-			list($tag, $fld) = explode("=", $tg);
-			$tag = strtoupper($tag);
-			$field_tags[$tag] = $fld;
-		}
-
+		$location_tags = $this->_explode_tags($obj["meta"]["location_tags"]);
+		$field_tags = $this->_explode_tags($obj["meta"]["field_tags"]);
 		$end_tag = strtoupper($obj["meta"]["end_tag"]);
 
 		$cur_doc = array();
 
+		$jrk = 1;
 		foreach($values as $idx => $val)
 		{
 			if (isset($location_tags[$val["tag"]]))
@@ -175,13 +163,18 @@ class document_import extends class_base
 
 			if (isset($field_tags[$val["tag"]]))
 			{
-				$cur_doc[$field_tags[$val["tag"]]] = $val["value"];
+				$vl = $obj["meta"]["pre_".$val["tag"]].$val["value"].$obj["meta"]["post_".$val["tag"]];
+				$cur_doc[$field_tags[$val["tag"]]] .= $vl;
 			}
 
 			if ($val["tag"] == trim($end_tag) && $val["type"] == "close")
 			{
-				$docs[] = $cur_doc;
-				$cur_doc = array();
+				if ($cur_doc["parent"])
+				{
+					$cur_doc["jrk"] = $jrk++;
+					$docs[] = $cur_doc;
+				}
+				$cur_doc = array("parent" => $cur_doc["parent"]);
 			}
 		}
 
@@ -215,6 +208,7 @@ class document_import extends class_base
 			$doc["parent"] = $o->path_str(array(
 				"max_len" => 3
 			));
+			$doc["content"] = str_replace("\n","<br><br>",trim($doc["lead"]))."<br>".str_replace("\n","<br><br>",trim($doc["content"]));
 			$t->define_data($doc);
 		}
 		
@@ -223,25 +217,38 @@ class document_import extends class_base
 
 	function _save_imported_data($docs, $obj)
 	{
+		$per = get_instance("period");
+		if ($obj["meta"]["d_period"])
+		{
+			$perid = $per->get_id_for_oid($obj["meta"]["d_period"]);
+		}
 		foreach($docs as $doc)
 		{
+			$doc["lead"] = str_replace("\n", "<br><br>", trim($doc["lead"]));
+			$doc["content"] = str_replace("\n", "<br><br>", trim($doc["content"]));
 			$o = obj($doc);
 			$o->set_name($doc["title"]);
-			if ($obj["meta"]["period"])
+			if ($perid)
 			{
-				$o->set_period($obj["meta"]["period"]);
+				$o->set_period($perid);
 			}
 			$o->set_class_id(CL_DOCUMENT);
 			$o->set_status(STAT_ACTIVE);
+			$o->set_ord($doc["jrk"]);
+			$o->set_site_id(aw_ini_get("site_id"));
+			$o->set_meta("cfgform_id", aw_ini_get("document_import.cfgform_id"));
+			$o->set_meta("show_print", 1);
 			$props = $o->get_property_list();
 			foreach($props as $prop)
 			{
 				if (isset($doc[$prop["name"]]))
 				{
-					$o->set_prop($prop["name"],$doc[$prop["name"]]);
+					$o->set_prop($prop["name"],nl2br(trim($doc[$prop["name"]])));
 				}
 			}
-			$o->save();
+			$id = $o->save();
+			$this->db_query("UPDATE documents SET modified = '".time()."' WHERE docid = $id");
+			$this->db_query("UPDATE objects SET site_id = ".aw_ini_get("site_id")." where oid = $id ");
 		}
 	}
 
@@ -262,5 +269,53 @@ class document_import extends class_base
 		};
 	}
 
+	function generate_tag_fields($arr)
+	{
+		$obj = obj($arr["id"]);
+		$ret = array();
+		
+		$tags = $this->_explode_tags($obj->meta("field_tags"));
+		foreach($tags as $tag => $fld)
+		{
+			$rt = 'pre_'.$tag;
+
+			$ret[$rt] = array(
+				'name' => $rt,
+				'caption' => "Tagi ".$tag." sisu ette pane ",
+				'type' => 'textbox',
+				'table' => 'objects',
+				'field' => 'meta',
+				'method' => 'serialize',
+				'group' => 'settings'
+			);
+
+			$rt = 'post_'.$tag;
+
+			$ret[$rt] = array(
+				'name' => $rt,
+				'caption' => "Tagi ".$tag." sisu taha pane ",
+				'type' => 'textbox',
+				'table' => 'objects',
+				'field' => 'meta',
+				'method' => 'serialize',
+				'group' => 'settings'
+			);
+		
+		}
+		return $ret;
+	}
+	
+	function _explode_tags($str)
+	{
+		$tags = array();
+		$_tags = explode(",", $str);
+		foreach($_tags as $tg)
+		{
+			list($tag, $fld) = explode("=", $tg);
+			$tag = strtoupper($tag);
+			$tags[$tag] = $fld;
+		}
+		return $tags;
+	}
 }
 ?>

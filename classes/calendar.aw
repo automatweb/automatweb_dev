@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.24 2003/07/03 16:13:24 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.25 2003/10/06 14:32:24 kristo Exp $
 // Generic calendar class
 
 // php arvab by default, et pühapäev on 0.
@@ -520,6 +520,7 @@ class calendar extends aw_template
 		$this->vars(array(
 			"line" => $content,
 			"caption" => $arr["caption"],
+			"caption_url" => $arr["caption_url"],
 			"calstyles" => ($used == 1) ? $this->parse("calstyles") : "",
 		));
 

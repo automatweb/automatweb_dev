@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.49 2003/09/17 15:11:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.50 2003/10/06 14:32:25 kristo Exp $
 // table.aw - tabelite haldus
 class table extends aw_template
 {
@@ -2352,10 +2352,12 @@ class table extends aw_template
 
 		$row = aw_unserialize($str);
 		$row["parent"] = $parent;
+		unset($row["brother_of"]);
 		// $row may contain metadata and the query will fail, if that metadata contains apostrophses
 		$this->quote($row);
 		$row["lang_id"] = aw_global_get("lang_id");
 		$id = $this->new_object($row);
+		$this->db_query("UPDATE objects SET brother_of = oid WHERE oid = '$id'");
 		$this->db_query("INSERT INTO aw_tables(id,contents,idx,oid) VALUES($id,'".$row["contents"]."','".$row["tbl_idx"]."','".$row["tbl_oid"]."')");
 		return true;
 	}
@@ -2381,7 +2383,7 @@ class table extends aw_template
 
 	function request_execute($obj)
 	{
-		return $this->show(
+		return $this->show(array(
 			"id" => $obj->id()
 		));
 	}

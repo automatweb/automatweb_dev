@@ -62,7 +62,7 @@
 <table class="caltable" cellpadding="0" cellspacing="0">
 <tr>
 <td colspan="7" class="calheader">
-{VAR:caption}
+<a href="{VAR:caption_url}">{VAR:caption}</a>
 </td>
 </tr>
 

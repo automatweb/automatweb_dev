@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.32 2003/06/03 15:09:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.33 2003/10/06 14:32:25 kristo Exp $
 // this is here so that orb will work...
 class periods extends aw_template
 {
@@ -92,14 +92,14 @@ class periods extends aw_template
 	// $active muutujaga saab ette anda selle, milline periood peaks olema aktiivne
 	// kui $active == 0, siis on selected see option, mis parajasti aktiivne on
 	// kui $active == 'somethingelse', siis on selectitud vastava id-ga element
-	function period_list($active, $addempty = false)
+	function period_list($active, $addempty = false, $onlyactive = -1)
 	{
 		if ($active == 0)
 		{
 			$active = $this->get_cval("activeperiod");
 		};
 		$this->active = $active;
-		$this->clist();
+		$this->clist($onlyactive);
 		if ($addempty)
 		{
 			$elements = array("0" => "");
@@ -281,6 +281,7 @@ class periods extends aw_template
 				$content .= $this->parse("passive");
 			};
 		};
+		$content .= $this->parse("append");
 		return $content;
 	}
 

@@ -367,7 +367,7 @@ function toggle_file_link_newwin()
 <tr>
 <td class="fgtext">{VAR:LC_FORMS_DISPLAYING}:</td>
 <td class="fgtext"><input CLASS="small_button" type='radio' NAME='{VAR:cell_id}_filetype' VALUE='1' {VAR:ftype_image_selected}> {VAR:LC_FORMS_AS_A_PICTURE} <input CLASS="small_button" type='radio' NAME='{VAR:cell_id}_filetype' VALUE='2' {VAR:ftype_file_selected}> {VAR:LC_FORMS_LINKED_AS_FILE}
-<input type='checkbox' name='{VAR:cell_id}_file_newwin' value=1 {VAR:file_new_win}> {VAR:LC_FORMS_LINK_IN_NEW_WIN}
+<input type='checkbox' name='{VAR:cell_id}_file_new_win' value=1 {VAR:file_new_win}> {VAR:LC_FORMS_LINK_IN_NEW_WIN}
 <input type="button" onClick="toggle_file_link_newwin()">
 </td>
 <td class="fgtext">{VAR:LC_FORMS_LINK_TEXT}:</td>

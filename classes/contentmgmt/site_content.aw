@@ -22,6 +22,13 @@ class site_content extends menuedit
 		$template = isset($template) && $template != "" ? $template : "main.tpl";
 		$docid = isset($docid) ? $docid : 0;
 
+		// right, so if we got format=pdf then do a sub-request for the same 
+		// url, except for the format part, then convert it
+		if ($GLOBALS["format"] == "pdf")
+		{
+			return $this->do_pdf($params);
+		}
+
 		// until we can have class-static variables, this actually SETS current text content
 		classload("layout/active_page_data");
 		active_page_data::get_text_content($text);
@@ -55,7 +62,7 @@ class site_content extends menuedit
 			$section=$obj2->prop("parent");
 			$docid=$obj2->prop("brother_of");
 		}
-		
+
 		// check whether access to that menu is denied by ACL and if so
 		// redirect the user 
 		if (!aw_ini_get("menuedit.no_view_acl_checks"))
@@ -134,6 +141,16 @@ class site_content extends menuedit
 
 		// duh .. this is where I need to build the menu fucking chain
 		$this->build_menu_chain($this->sel_section);
+
+		if (count($this->properties["ip_allow"]) > 0 || count($this->properties["ip_deny"]) > 0)
+		{
+			$this->do_check_ip_access(array(
+				"allowed" => $this->properties["ip_allow"],
+				"denied" => $this->properties["ip_deny"]
+			));
+		}
+
+
 		if ($this->properties["show_layout"])
 		{
 			return $this->do_show_layout($this->properties["show_layout"]);
@@ -208,7 +225,11 @@ class site_content extends menuedit
 		if ($periodic && $text == "") 
 		{
 			$docc = $this->show_periodic_documents($section,$obj);
-			if ($this->mar[$sel_menu_id]["no_menus"] == 1 || ($GLOBALS["print"]) )
+			if ($GLOBALS["real_no_menus"] == 1)
+			{
+				die($docc);
+			}
+			if ($this->mar[$sel_menu_id]["no_menus"] == 1 || ($GLOBALS["print"]) || $GLOBALS["no_menus"] == 1)
 			{
 				// this tells site index.aw not to show the index.tpl
 				// shrug, erki wants it that way
@@ -224,7 +245,11 @@ class site_content extends menuedit
 			// sektsioon pole perioodiline
 			//$docc = $this->show_documents($section,$docid,$template);
 			$docc = $this->show_documents($section,$docid,$xtemplate);
-			if ( ($this->mar[$sel_menu_id]["no_menus"] == 1) || ($GLOBALS["print"]) )
+			if ($GLOBALS["real_no_menus"] == 1)
+			{
+				die($docc);
+			}
+			if ( ($this->mar[$sel_menu_id]["no_menus"] == 1) || ($GLOBALS["print"]) || $GLOBALS["no_menus"] == 1)
 			{
 				$this->no_index_template = true;
 				return $docc;
@@ -245,6 +270,14 @@ class site_content extends menuedit
 		else
 		{
 			$this->vars(array("doc_content" => $text));
+			if ($GLOBALS["real_no_menus"] == 1)
+			{
+				die($text);
+			}
+			if ($this->mar[$sel_menu_id]["no_menus"] == 1 || ($GLOBALS["print"]) || $GLOBALS["no_menus"] == 1)
+			{
+				return $text;
+			}
 		}
 
 		// here we must find the menu image, if it is not specified for this menu,
@@ -568,8 +601,6 @@ class site_content extends menuedit
 			$this->vars(array("IS_FRONTPAGE" => $this->parse("IS_FRONTPAGE")));
 		}
 
-		$popups = $this->build_popups();
-
 		if (is_array($this->metaref) && (sizeof($this->metaref) > 0))
 		{
 			$this->set_object_metadata(array(
@@ -676,7 +707,7 @@ class site_content extends menuedit
 			if (in_array($parent,$menu_check_acl))
 			{
 				$check_acl = true;
-			};
+			}
 		}
 		
 		// make the subtemplate names for this and the next level
@@ -815,6 +846,22 @@ class site_content extends menuedit
 			{
 				continue;
 			}
+
+			// if we are showing frontpage
+			// and the menu area has only frontpage option set
+			// don't show the menu unless it has frontpage
+			// checked
+			if (aw_ini_get("frontpage") == aw_global_get("section"))
+			{
+				if ($this->is_template("MENU_".$name."_ONLY_FRONTPAGE"))
+				{
+					if ($meta["frontpage"] != 1)
+					{
+						continue;
+					}
+				}
+			}
+
 
 			if ($row["hide_noact"] || aw_ini_get("menuedit.all_menus_makdp") == true)
 			{
@@ -1408,15 +1455,22 @@ class site_content extends menuedit
 			{
 				$link = $this->mar[$path[$i+1]]["link"];
 			}
+
 			$this->vars(array(
 				"link" => $link,
 				"text" => str_replace("&nbsp;"," ",strip_tags($this->mar[$path[$i+1]]["name"])), 
 				"ysection" => $this->mar[$path[$i+1]]["oid"]
 			));
-			$check_subs = ($this->subs[$this->mar[$path[$i+1]]["oid"]] > 0) || aw_ini_get("menuedit.yah_no_subs");
 			if ($this->mar[$path[$i+1]]["clickable"] == 1 && $check_subs)
 			{
-				$ya.=$this->parse("YAH_LINK");
+				if ($i == ($cnt-1) && $this->is_template("YAH_LINK_END"))
+				{
+					$ya.=$this->parse("YAH_LINK_END");
+				}
+				else
+				{
+					$ya.=$this->parse("YAH_LINK");
+				}
 				$this->title_yah.=" / ".$this->mar[$path[$i+1]]["name"];
 			}
 		}
@@ -1443,6 +1497,8 @@ class site_content extends menuedit
 				}
 			}
 		}
+
+		$this->vars(array("YAH_LINK_END" => ""));
 		return $ya;
 	}
 			
@@ -1908,7 +1964,7 @@ class site_content extends menuedit
 		$c = get_instance("config");
 		$ec = $c->get_simple_config("errors");
 		$ra = aw_unserialize($ec);
-			
+
 		$gidlist = aw_global_get("gidlist");
 		if (is_array($gidlist))
 		{
@@ -1949,10 +2005,10 @@ class site_content extends menuedit
 		$dbc = get_instance("config");
 		$la = get_instance("languages");
 		$ld = $la->fetch(aw_global_get("lang_id"));
-		$url = $c->get_simple_config("orb_err_mustlogin_".$ld["acceptlang"]);
+		$url = $dbc->get_simple_config("orb_err_mustlogin_".$ld["acceptlang"]);
 		if (!$url)
 		{
-			$url = $c->get_simple_config("orb_err_mustlogin");
+			$url = $dbc->get_simple_config("orb_err_mustlogin");
 		}
 		aw_session_set("request_uri_before_auth",aw_global_get("REQUEST_URI"));
 		header("Location: ".$this->cfg["baseurl"]."/$url");
@@ -2117,7 +2173,8 @@ class site_content extends menuedit
 						"leadonly" => 1,
 						"section" => $section,
 						"keywords" => 1,
-						"doc"	=> $row));
+						"doc"	=> $row,
+					));
 					$d->restore_handle();
 					$d->_init_vars();
 				}; // while
@@ -2490,31 +2547,6 @@ class site_content extends menuedit
 		));
 	}
 
-
-	// builds HTML popups
-	function build_popups()
-	{
-		// that sucks. We really need to rewrite that
-		// I mean we always read information about _all_ the popups
-		$pl = new object_list(array(
-			"status" => STAT_ACTIVE,
-			"class_id" => CL_HTML_POPUP
-		));
-		for ($o = $pl->begin(); !$pl->end(); $o = $pl->next())
-		{
-			$ar = new aw_array($o->meta("menus"));
-			foreach($ar->get() as $key => $val)
-			{
-				if ($val == $this->sel_section)
-				{
-					$popups .= sprintf("window.open('%s','popup','top=0,left=0,toolbar=0,location=0,menubar=0,scrollbars=0,width=%s,height=%s');", $o->meta("url"), $o->meta("width"), $o->meta("height"));
-				}
-			}
-		}
-		$retval = (strlen($popups) > 0) ? "<script language='Javascript'>$popups</script>" : "";
-		return $retval;
-	}
-
 	function make_langs()
 	{
 		$lang_id = aw_global_get("lang_id");
@@ -2724,6 +2756,18 @@ class site_content extends menuedit
 				if (is_array($lm) && ($lm[0] !== 0))
 				{
 					$sections = $lm;
+					foreach($sections as $_sm)
+					{
+						if ($me_row["meta"]["src_submenus"][$_sm])
+						{
+							// include submenus in document sources
+							$_sm_list = $this->get_menu_list(false, false, $_sm);
+							foreach($_sm_list as $_sm_i => $ttt)
+							{
+								$sections[$_sm_i] = $_sm_i;
+							}
+						}
+					}
 				}
 				else
 				{
@@ -2801,7 +2845,14 @@ class site_content extends menuedit
 			{
 				if (!($no_fp_document && $o->prop("esilehel") == 1))
 				{
-					$docid[$cnt++] = ($o->class_id() == CL_DOCUMENT) ? $o->id() : $o->brother_of();
+					if (aw_ini_get("document.show_real_location"))
+					{
+						$docid[$cnt++] = ($o->class_id() == CL_DOCUMENT) ? $o->id() : $o->brother_of();
+					}
+					else
+					{
+						$docid[$cnt++] = $o->id();
+					}
 				}
 			}
 
@@ -2841,12 +2892,19 @@ class site_content extends menuedit
 		// we will this with properties from the first element in chain who
 		// has thoses
 		$this->properties = array(
-			"tpl_dir"  => "", // prop!
-			"users_only" => 0, // prop!
-			"comment" => "", // prop!
-			"tpl_view" => "", // prop!
-			"tpl_lead" => "",// prop!
-			"show_layout" => "" // prop!
+			"tpl_dir"  => "",
+			"users_only" => 0,
+			"comment" => "",
+			"tpl_view" => "",
+			"ftpl_view" => "",
+			"tpl_lead" => "",
+			"ftpl_lead" => "",
+			"tpl_edit" => "",
+			"ftpl_edit" => "",
+			"tpl_edit_cfgform" => "",
+			"show_layout" => "",
+			"ip_allow" => array(),
+			"ip_deny" => array()
 		);
 	
 		while($parent)
@@ -2886,10 +2944,6 @@ class site_content extends menuedit
 			$parent = $obj->prop("parent");
 			//$parent = (isset($this->menu_chain[$obj["parent"]]) && $this->menu_chain[$obj["parent"]]) ? false : $obj["parent"];
 		};
-		  //print "<!--";
-		  //print_r($this->properties);
-		  //print "-->";
-
 	}
 	
 	function check_object($obj)
@@ -2945,6 +2999,65 @@ class site_content extends menuedit
 		};
 	}
 
+	////
+	// !checks if the current IP has access
+	// parameters:
+	//	allowed - array of addresses allowed
+	//	denied - array of addresses denied
+	//
+	// algorithm:
+	// if count(allowed) > 0 , then deny everything else, except allowed
+	// if count(denied) > 0, then allow everyone, except denied
+	function do_check_ip_access($arr)
+	{
+		extract($arr);
+		$cur_ip = aw_global_get("REMOTE_ADDR");
 
+		$ipa = get_instance("syslog/ipaddress");
+
+		if (count($allowed) > 0)
+		{
+			$deny = true;
+			foreach($allowed as $ipid => $t)
+			{
+				$ipr = $this->db_fetch_field("SELECT ip FROM ipaddresses WHERE id = '$ipid'", "ip");
+				if ($ipa->match($ipr, $cur_ip))
+				{
+					$deny = false;
+				}
+			}
+
+			if ($deny)
+			{
+				$this->no_access_redir(aw_global_get("section"));
+			}
+			else
+			{
+				return;
+			}
+		}
+
+		if (count($denied) > 0)
+		{
+			$deny = false;
+			foreach($denied as $ipid => $t)
+			{
+				$ipr = $this->db_fetch_field("SELECT ip FROM ipaddresses WHERE id = '$ipid'", "ip");
+				if ($ipa->match($ipr, $cur_ip))
+				{
+					$deny = true;
+				}
+			}
+
+			if ($deny)
+			{
+				$this->no_access_redir(aw_global_get("section"));
+			}
+			else
+			{
+				return;
+			}
+		}
+	}
 };
 ?>

@@ -47,15 +47,6 @@
             <method>serialize</method>
       </property>
       <property>
-            <name>selection_manage_buttons</name>
-            <type>text</type>
-            <callback>selection_manage_bar</callback>
-            <table>objects</table>
-            <group>firmad</group>
-            <field>meta</field>
-            <method>serialize</method>
-      </property>
-      <property>
             <name>manageri</name>
             <type>text</type>
             <callback>firma_manager</callback>
@@ -65,7 +56,25 @@
             <method>serialize</method>
       </property>
       <property>
+            <name>selection_manage_buttons</name>
+            <type>text</type>
+            <callback>selection_manage_bar</callback>
+            <table>objects</table>
+            <group>firmad</group>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
             <name>make_search</name>
+            <type>textbox</type>
+            <size>1</size>
+            <table>objects</table>
+            <group>firmad</group>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>search_type</name>
             <type>textbox</type>
             <size>1</size>
             <table>objects</table>
@@ -93,16 +102,16 @@
             <method>serialize</method>
       </property>
       <property>
-            <name>order_by_columns</name>
-            <type>select</type>
+            <name>selection_manage_buttons2</name>
+            <type>text</type>
+            <callback>selection_manage_bar</callback>
             <table>objects</table>
-            <group>settings</group>
+            <group>tegevusalad</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption>sorteeri veeru j‰rgi</caption>
       </property>
       <property>
-            <name>dir_firmad</name>
+            <name>dir_firma</name>
             <type>relpicker</type>
             <reltype>FIRMA_CAT</reltype>
             <table>objects</table>
@@ -152,6 +161,16 @@
             <caption>Vaikimisi linnade kataloog</caption>
       </property>
       <property>
+            <name>dir_maakond</name>
+            <type>relpicker</type>
+            <reltype>MAAKOND_CAT</reltype>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vaikimisi maakondade kataloog</caption>
+      </property>
+      <property>
             <name>dir_tegevusala</name>
             <type>relpicker</type>
             <reltype>TEGEVUSALA_CAT</reltype>
@@ -162,6 +181,16 @@
             <caption>Vaikimisi tegevusalade kataloog</caption>
       </property>
       <property>
+            <name>dir_toode</name>
+            <type>relpicker</type>
+            <reltype>TOODE_CAT</reltype>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vaikimisi toodete kataloog</caption>
+      </property>
+      <property>
             <name>dir_default</name>
             <type>relpicker</type>
             <reltype>GENERAL_CAT</reltype>
@@ -170,6 +199,56 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Vaikimisi kataloog, kui mıni eelnevatest pole m‰‰ratud, siis kasutatakse seda</caption>
+      </property>
+      <property>
+            <name>kone_form</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FORMS</reltype>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kıne sisestusvorm</caption>
+      </property>
+      <property>
+            <name>pakkumine_form</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FORMS</reltype>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Pakkumise sisestusvorm</caption>
+      </property>
+      <property>
+            <name>tehing_form</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FORMS</reltype>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Tehingu sisestusvorm</caption>
+      </property>
+      <property>
+            <name>kohtumine_form</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FORMS</reltype>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kohtumise sisestusvorm</caption>
+      </property>
+      <property>
+            <name>default_form</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FORMS</reltype>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vaikimisi sisestusvorm</caption>
       </property>
       <property>
             <name>flimit</name>
@@ -188,6 +267,16 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>See on kasutaja default kliendibaas</caption>
+      </property>
+      <property>
+            <name>addtoolbar</name>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <table>objects</table>
+            <group>objects_manager</group>
+            <field>meta</field>
+            <method>serialize</method>
       </property>
       <property>
             <name>active_selection_objects</name>
@@ -218,11 +307,16 @@
                   <caption>Organisatsioonid</caption>
             </firmad>
             <tegevusalad>
+                  <submit>no</submit>
                   <caption>Tegevusalad</caption>
             </tegevusalad>
             <settings>
                   <caption>Seaded</caption>
             </settings>
+            <objects_manager>
+                  <caption>Objektide&amp;nbsp;lisamine</caption>
+                  <submit>no</submit>
+            </objects_manager>
             <selectione>
                   <submit>no</submit>
                   <caption>Valimid</caption>

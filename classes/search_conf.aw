@@ -1,8 +1,8 @@
 <?php
-define("PER_PAGE",10);
 
 class search_conf extends aw_template 
 {
+	var $per_page = 10;
 	function search_conf()
 	{
 		$this->init("search_conf");
@@ -189,7 +189,7 @@ class search_conf extends aw_template
 		if (!$search)
 		{
 			$date_from = mktime(0,0,0,date("m"),date("d"),date("Y")-1);
-			$date_to = time();
+			$date_to = time()+24*3600;
 			$max_results = 50;
 		}
 
@@ -219,6 +219,7 @@ class search_conf extends aw_template
 			"c_type2" => selected($c_type == 2),
 			"c_type3" => selected($c_type == 3),
 			"max_results" => $this->picker($max_results, array("10" => "10", "20" => "20", "30" => "30", "40" => "40", "50" => "50", "60" => "60", "70" => "70", "80" => "80", "90" => "90", "100" => "100")),
+			"max_results_tb" => $max_results,
 			"date_from" => $de->gen_edit_form("date_from", $date_from, 2002, date("Y")+5, true),
 			"date_to" => $de->gen_edit_form("date_to", $date_to, 2002, date("Y")+5, true),
 			"keywords" => $this->multiple_option_list($keys,$k->get_all_keywords(array("type" => ARR_KEYWORD))),
@@ -368,6 +369,8 @@ class search_conf extends aw_template
 
 			if ($date_from > 24*3600*12)
 			{
+				// also include that day's articles
+				$date_from += 24*3600-1;
 				if ($q_cons2 != "")
 				{
 					$q_cons2 .= " AND ";
@@ -377,6 +380,8 @@ class search_conf extends aw_template
 
 			if ($date_to > 24*3600*12)
 			{
+				// also include that day's articles
+				$date_to += 24*3600-1;
 				if ($q_cons2 != "")
 				{
 					$q_cons2 .= " AND ";
@@ -470,8 +475,18 @@ class search_conf extends aw_template
 				$q_cons.=" AND (".$q_cons2.")";
 			}
 
+			$perstr = "";
+			if (aw_ini_get("search_conf.only_active_periods"))
+			{
+				$pei = get_instance("periods");
+				$plist = $pei->period_list(0,false,1);
+				$perstr = ($q_cons != "" ? " AND " : "")." objects.period IN (".join(",", array_keys($plist)).")";
+			}
+						
+			$sid = " AND site_id = ".aw_ini_get("site_id")." AND objects.lang_id = ".aw_global_get("lang_id");
+
 			// make pageselector
-			$cnt = $this->db_fetch_field("SELECT count(*) as cnt FROM documents LEFT JOIN objects ON objects.oid = documents.docid WHERE $q_cons","cnt");
+			$cnt = $this->db_fetch_field("SELECT count(*) as cnt FROM documents LEFT JOIN objects ON objects.oid = documents.docid WHERE $q_cons $perstr $sid","cnt");
 			if ($max_results > 0)
 			{
 				$cnt = min($max_results, $cnt);
@@ -487,12 +502,20 @@ class search_conf extends aw_template
 			$mc = get_instance("menu_cache");
 			$mc->make_caches();
 
-			$sql = "SELECT objects.*,documents.* FROM documents LEFT JOIN objects ON objects.oid = documents.docid WHERE $q_cons $ap LIMIT ".($page*PER_PAGE).",".PER_PAGE;
+			$page = max(0, $page);
+
+			$sql = "SELECT objects.*,documents.* FROM documents LEFT JOIN objects ON objects.oid = documents.docid WHERE $q_cons $perstr $sid $ap LIMIT ".($page*$this->per_page).",".$this->per_page;
 			$this->db_query($sql);
 			while ($row = $this->db_next())
 			{
-				$co = strip_tags($row["content"]);
+				$fld = "content";
+				if (aw_ini_get("search_conf.show_in_results") != "")
+				{
+					$fld = aw_ini_get("search_conf.show_in_results");
+				}
+				$co .= strip_tags($row[$fld]);
 				$co = preg_replace("/#(.*)#/","",substr($co,0,strpos($co,"\n")));
+				$co = ($row["author"] != "" ? "Autor: ".$row["author"]."<br>" : "").$co;
 
 				$sec = $row["docid"];
 				if ($mc->subs[$row["parent"]] == 1)
@@ -684,7 +707,7 @@ class search_conf extends aw_template
 	function do_pageselector($cnt,$arr)
 	{
 		$page = $arr["page"];
-		$num_pages = floor(($cnt / PER_PAGE) + 0.5);
+		$num_pages = floor(($cnt / $this->per_page) + 0.5);
 		$pa = $arr;
 		$pg = "";
 		$prev = "";
@@ -694,8 +717,8 @@ class search_conf extends aw_template
 			$pa["page"] = $i;
 			$this->vars(array(
 				"page" => $this->mk_my_orb("search", $pa),
-				"page_from" => $i*PER_PAGE,
-				"page_to" => min(($i+1)*PER_PAGE,$cnt)
+				"page_from" => $i*$this->per_page,
+				"page_to" => min(($i+1)*$this->per_page,$cnt)
 			));
 			if ($i == $page)
 			{
@@ -718,7 +741,8 @@ class search_conf extends aw_template
 		{
 			$prev = $this->parse("PREVIOUS");
 		}
-		if ($page < ($num_pages-1))
+		
+		if (((int)$page) < ($num_pages-1))
 		{
 			$nxt = $this->parse("NEXT");
 		}
@@ -1060,7 +1084,7 @@ class search_conf extends aw_template
 
 		$public_url = $this->get_cval("export::public_symlink_name");
 
-		$q = "SELECT * FROM export_content WHERE $p_arr_str $nou $q_cons GROUP BY title ORDER BY modified LIMIT ".$page*PER_PAGE.",".PER_PAGE;
+		$q = "SELECT * FROM export_content WHERE $p_arr_str $nou $q_cons GROUP BY title ORDER BY modified LIMIT ".$page*$this->per_page.",".$this->per_page;
 		$this->db_query($q);
 		while ($row = $this->db_next())
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.28 2003/07/10 12:58:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.29 2003/10/06 14:32:24 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 /*
 
@@ -186,7 +186,10 @@ class css extends class_base
 					break;
 				
 				case "bold":
-					$mask = "font-weight: bold;\n";
+					if ($val == 1)
+					{
+						$mask = "font-weight: bold;\n";
+					}
 					break;
 				
 				case "fgcolor":

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.6 2003/09/29 13:11:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.7 2003/10/06 14:32:27 kristo Exp $
 // imap.aw - IMAP login 
 /*
 
@@ -115,6 +115,7 @@ class imap extends class_base
 			$port = $obj->prop("port");
 			$user = $obj->prop("user");
 			$password = $obj->prop("password");
+
 
 			//  cert validating could probably be made an option later on
 			$mask = (1 == $obj->prop("use_ssl")) ? "{%s:%d/ssl/novalidate-cert}" : "{%s:%d}";

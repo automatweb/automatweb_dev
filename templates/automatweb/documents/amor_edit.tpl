@@ -91,6 +91,7 @@ target="_blank" href="{VAR:baseurl}/index.aw?section={VAR:id}">Eelvaade</a></td>
 			Näita pealkirja: <input type='checkbox' name='show_title' value=1 {VAR:show_title}>&nbsp;&nbsp;&nbsp;
 			'Prindi' nupp: <input type='checkbox' name='show_print' value=1 {VAR:show_print}>&nbsp;&nbsp;&nbsp;
 			Muutmise kuupaev dokumendi sees: <input type='checkbox' name='show_last_changed' value=1 {VAR:show_last_changed}>&nbsp;&nbsp;&nbsp;
+			T&uuml;hista stiilid:	<input type='checkbox' name="clear_styles" value=1><br>
 		</td>
 	</tr>
 </table>

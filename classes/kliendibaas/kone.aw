@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/kliendibaas/Attic/kone.aw,v 1.1 2003/08/29 14:30:48 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/kliendibaas/Attic/kone.aw,v 1.2 2003/10/06 14:32:27 kristo Exp $
 // kone.aw - Kõne 
 /*
 
@@ -35,45 +35,21 @@ class kone extends class_base
 		));
 	}
 
-	//////
-	// class_base classes usually need those, uncomment them if you want to use them
-
-	
-	function get_property($args)
+	function change($args)
 	{
-		$data = &$args["prop"];
-		$retval = PROP_OK;
-		switch($data["name"])
-		{
-			case "duration":
-				$_tmp = $args["data"]["planner"]["end"] - $args["data"]["planner"]["start"];
-				$data["value"] = array(
-					"hour" => (int)($_tmp/3600),
-					"minute" => ($_tmp % 3600) / 60,
-				);
-				break;
-		};
-		return $retval;
-	}
-	
-
-	
-	function set_property($args = array())
-	{
-		$data = &$args["prop"];
-		$retval = PROP_OK;
-		switch($data["name"])
-                {
-			case "duration":
-				$_start = date_edit::get_timestamp($args["form_data"]["start1"]);
-				$_end = $_start + (3600 * $data["value"]["hour"]) + (60 * $data["value"]["minute"]);
-				$data["value"] = $_end;
-				break;
-		}
-		return $retval;
+		$args['strs'] = array(
+			'type' => 'KONE',
+			'typeStr' => 'Kõne',
+			'typestr' => 'kõne',
+			'typestrs' => 'kõne',
+		);
+		
+		$kohtumine = get_instance('kliendibaas/kohtumine');
+		$kohtumine->_change($args);
 	}	
 	
-
+	
+	
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed
 	////////////////////////////////////

@@ -101,9 +101,10 @@ class aip_html_tree extends class_base
 				$this->first_level_menu_is_last = false;
 			}
 
+			$pre = $row["meta"]["aip_menu_upload_id"];
 			$this->vars(array(
 				"link" => $this->mk_my_orb("show", array("parent" => $row['oid'])),
-				"name" => $row["name"],
+				"name" => $pre." ".$row["name"],
 				"section" => $row['oid']
 			));
 

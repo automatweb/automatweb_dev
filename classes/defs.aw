@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.104 2003/09/24 11:46:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.105 2003/10/06 14:32:24 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -18,6 +18,15 @@ if (!defined("DEFS"))
 			"msg" => $msg, 
 			"params" => $params
 		));
+	}
+
+	function send_mail($to,$subject,$msg,$headers="",$arguments="")
+	{
+		if (empty($arguments))
+		{
+			$arguments = aw_ini_get("mail.arguments");
+		};
+		mail($to,$subject,$msg,$headers,$arguments);
 	}
 	
 	////
@@ -105,7 +114,7 @@ if (!defined("DEFS"))
 		// "e" regexpi lõpus tähendab seda, et teist parameetrit käsitletakse php koodina,
 		// mis eval-ist läbi lastakse. 
 		$src = @preg_replace("/{VAR:(.+?)}/e","\$vars[\"\\1\"]",$src);
-		$src = @preg_replace("/{DATE:(.+?)\|(.+?)}/e","date(\"\\1\",\$vars[\"\\2\"])",$src);
+		$src = @preg_replace("/{DATE:(.+?)\|(.+?)}/e","(is_numeric(\$vars[\"\\1\"]) ? date(\"\\2\",\$vars[\"\\1\"]) : \$vars[\"\\1\"])",$src);
 		return @preg_replace("/{INI:(.+?)}/e","aw_ini_get(\"\\1\")",$src);
 	}
 

@@ -1,8 +1,56 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>start1</name>
+            <type>datetime_select</type>
+            <field>start</field>
+            <table>planner</table>
+            <group>calendar</group>
+            <caption>Algab </caption>
+      </property>
+      <property>
+            <name>duration</name>
+            <type>time_select</type>
+            <field>end</field>
+            <table>planner</table>
+            <group>calendar</group>
+            <caption>Kestab</caption>
+      </property>
+      <property>
+            <name>content</name>
+            <type>textarea</type>
+            <cols>60</cols>
+            <rows>30</rows>
+            <table>objects</table>
+            <group>general</group>
+            <field>content</field>
+            <caption>Sisu</caption>
+      </property>
+      <property>
+            <name>summary</name>
+            <type>textarea</type>
+            <cols>60</cols>
+            <rows>30</rows>
+            <table>objects</table>
+            <group>general</group>
+            <field>summary</field>
+            <caption>Kokkuvõte</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_KOHTUMINE</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
+      <tableinfo>
+            <documents>
+                  <index>docid</index>
+                  <master_table>objects</master_table>
+                  <master_index>brother_of</master_index>
+            </documents>
+            <planner>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>brother_of</master_index>
+            </planner>
+      </tableinfo>
 </properties>
 

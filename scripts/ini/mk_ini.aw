@@ -48,7 +48,7 @@ function parse_config($file)
 				$ifile = trim(substr($line, strlen("include")));
 				if (!file_exists($ifile) || !is_readable($ifile))
 				{
-					fwrite($GLOBALS["stderr"], "Failed to open include file on line $linenum in file $file \n");
+					fwrite($GLOBALS["stderr"], "Failed to open include file on line $linenum in file $file ($ifile) \n");
 					return false;
 				}
 				$in = parse_config($ifile);
@@ -103,7 +103,7 @@ function parse_config($file)
 							$GLOBALS["cfg"][$varclass][$arrname] = array();
 						}
 						$code = "\$GLOBALS[cfg][\$varclass][\$arrname]".$arrparams." = \"".$varvalue."\";";
-	//					echo "evaling $code <br>";
+//						echo "evaling $code <br>\n";
 						eval($code);
 					}
 					else

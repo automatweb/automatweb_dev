@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.119 2003/09/24 12:49:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.120 2003/10/06 14:32:24 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -79,6 +79,8 @@ class aliasmgr extends aw_template
 
 		$return_url = $this->mk_my_orb("list_aliases", array("id" => $id),$this->use_class);
 		$return_url = urlencode($return_url);
+		//$return_url = urlencode(aw_global_get('REQUEST_URI'));
+		
 
 		$this->vars(array(
 			'class_ids' => $clids,
@@ -625,6 +627,7 @@ class aliasmgr extends aw_template
 		if (!$return_url)
 		{
 			$return_url = $this->mk_my_orb("list_aliases", array("id" => $id));
+			//$return_url = aw_global_get('REQUEST_URI');
 		};
 
 		$return_url = urlencode($return_url);
@@ -752,7 +755,10 @@ class aliasmgr extends aw_template
 			"toolbar" => $toolbar,
 			"return_url" => $return_url,
 			"period" => $period,
-			"search_url" => $this->mk_my_orb("search_aliases",array("id" => $this->id),$this->use_class),
+			"search_url" => $this->mk_my_orb("search_aliases",array(
+				"id" => $this->id,
+				"return_url" => $return_url,//axel
+			),$this->use_class),
 		));
 
 		return $this->parse();
@@ -1086,8 +1092,11 @@ class aliasmgr extends aw_template
 		$rels1 .= 'listB.addOptions("_"'.',"Objekti tüüp","capt_new_object"'.");\n";
 		$defaults1 .= 'listB.setDefaultOption("_","capt_new_object");'."\n";
 
-		$boxesscript = localparse($boxesscript, array('rels1' => $rels1, 'defaults1' =>  $defaults1));
-		$boxesscript .= $this->get_file(array('file'=> $this->cfg['tpldir'].'/aliasmgr/selectbox_selector.tpl'));
+		$boxesscript = localparse($boxesscript, array('script' => $this->cfg['baseurl'].'/automatweb/js/selectboxes.js','rels1' => $rels1, 'defaults1' =>  $defaults1));
+		
+		//$boxesscript .= $this->get_file(array('file'=> $this->cfg['tpldir'].'/aliasmgr/selectbox_selector.tpl'));
+		$boxesscript .= '<script type="text/javascript" src="'.$this->cfg['baseurl'].'/automatweb/js/selectbox_selector.js'.'"></script>';
+
 		$toolbar->add_cdata($boxesscript);
 
 		$toolbar->add_cdata(
@@ -1140,6 +1149,8 @@ HTM;
 		$toolbar->add_separator();
 
 		$return_url = $this->mk_my_orb("list_aliases", array("id" => $this->id),$this->use_class);
+		//$return_url = aw_global_get('REQUEST_URI');
+				
 		$return_url = urlencode($return_url);
 
 		if (aw_ini_get("config.object_translation") == 1)

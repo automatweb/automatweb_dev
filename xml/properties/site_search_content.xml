@@ -1,0 +1,82 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>search_static</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Otsing staatilisse koopiasse</caption>
+      </property>
+      <property>
+            <name>search_live</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Otsing aktiivsest saidist</caption>
+      </property>
+      <property>
+            <name>default_grp</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SEARCH_GRP</reltype>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Vaikimisi otsingu grupp</caption>
+      </property>
+      <property>
+            <name>default_order</name>
+            <type>select</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Vaikimisi sorteeritakse tulemused</caption>
+      </property>
+      <property>
+            <name>per_page</name>
+            <type>textbox</type>
+            <size>5</size>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Mitu tulemust lehel</caption>
+      </property>
+      <property>
+            <name>static_gen_repeater</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_REPEATER</reltype>
+            <group>static</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vali kordus, millega tehakse staatilist koopiat otsingu jaoks</caption>
+      </property>
+      <property>
+            <name>static_gen_link</name>
+            <type>text</type>
+            <store>no</store>
+            <group>static</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Staatilise genereerimise link</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_SITE_SEARCH_CONTENT</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <groupinfo>
+            <static>
+                  <caption>Staatiline otsing</caption>
+            </static>
+      </groupinfo>
+</properties>
+

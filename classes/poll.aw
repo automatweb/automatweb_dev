@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.41 2003/09/17 15:11:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.42 2003/10/06 14:32:25 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -158,7 +158,7 @@ class poll extends aw_template
 
 		$this->db_query("SELECT * FROM objects
 				WHERE class_id = ".CL_POLL." AND
-				status != 0 AND site_id = ".$this->cfg["site_id"]);
+				status != 0 "/*AND site_id = ".$this->cfg["site_id"]*/);
 
 		while ($row = $this->db_next())
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.16 2003/07/28 16:42:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.17 2003/10/06 14:32:24 kristo Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -156,8 +156,8 @@ class menu_tree extends class_base
 			}
 			else
 			{
-                                $retval = $this->res;
-                        };
+				$retval = $this->res;
+			};
 		};
 		return $retval;
 	}
@@ -171,7 +171,7 @@ class menu_tree extends class_base
 		$nsuo = (aw_global_get("uid") == "" && aw_ini_get("menuedit.no_show_users_only"));
 
 		$plist = join(",",$parents);
-		$q = sprintf("SELECT %s,parent,name,class_id,alias,menu.link,objects.metadata as metadata FROM objects 
+		$q = sprintf("SELECT %s,parent,name,class_id,alias,menu.link,objects.metadata as metadata,menu.clickable as clickable FROM objects 
 				LEFT JOIN menu ON (objects.%s = menu.id)
 				WHERE class_id = '%d' AND parent IN (%s) AND status = 2 AND lang_id = %d AND menu.type != %s
 				ORDER BY jrk",
@@ -257,7 +257,14 @@ class menu_tree extends class_base
 			}
 			elseif ($this->layout_mode == 3)
 			{
-				$tpl = "ITEM";
+				if ($v["clickable"] != 1 && $this->is_template("ITEM_NOCLICK"))
+				{
+					$tpl = "ITEM_NOCLICK";
+				}
+				else
+				{
+					$tpl = "ITEM";
+				}
 			}
 			else
 			{
@@ -265,7 +272,7 @@ class menu_tree extends class_base
 			};
 			if ($v["alias"])
 			{
-				if (aw_ini_get("menuedit.recursive.aliases") == 0)
+				if (aw_ini_get("menuedit.recursive_aliases") == 0)
 				{
 					$id = $v["alias"];
 				}

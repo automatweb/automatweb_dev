@@ -18,19 +18,19 @@ color: #002E73; text-decoration: underline;
 
 
 <!-- SUB: MENU -->
-<span class="fgtext_bad"><a href='{VAR:link}'>{VAR:name}</a></span>
+<span class="text"><a href='{VAR:link}'>{VAR:name}</a></span>
 <!-- END SUB: MENU -->
 
 <!-- SUB: MENU_NOSUBS -->
-<span class="fgtext_bad"><a href='{VAR:link}'>{VAR:name}</a></span>
+<span class="text"><a href='{VAR:link}'>{VAR:name}</a></span>
 <!-- END SUB: MENU_NOSUBS -->
 
 <!-- SUB: MENU_SEL -->
-<span class="fgtext_bad"><a href='{VAR:link}'><b>{VAR:name}</b></a></span>
+<span class="text"><a href='{VAR:link}'><b>{VAR:name}</b></a></span>
 <!-- END SUB: MENU_SEL -->
 
 <!-- SUB: MENU_NOSUBS_SEL -->
-<span class="fgtext_bad"><a href='{VAR:link}'><b>{VAR:name}</b></a></span>
+<span class="text"><a href='{VAR:link}'><b>{VAR:name}</b></a></span>
 <!-- END SUB: MENU_NOSUBS_SEL -->
 
 
@@ -70,16 +70,16 @@ color: #002E73; text-decoration: underline;
 <!-- SUB: FTV_ITEM -->
 <tr>
 	{VAR:str}
-	<td colspan='{VAR:colspan}'>{VAR:ms}</td>
-	<td>{VAR:changed}</td>
+	<td colspan='{VAR:colspan}' class="text">{VAR:ms}</td>
+	<td class="text">{VAR:changed}</td>
 </tr>
 <!-- END SUB: FTV_ITEM -->
 
 <!-- SUB: TREE_BEGIN -->
 <table border='0' cellpadding='0' cellspacing='0'>
 <tr>
-	<td colspan="{VAR:colspan}">&nbsp;</td>
-	<td>Muudetud</td>
+	<td colspan="{VAR:colspan}" class="text">&nbsp;</td>
+	<td class="text">Muudetud</td>
 </tr>
 <!-- END SUB: TREE_BEGIN -->
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.2 2003/08/29 11:51:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.3 2003/10/06 14:32:26 kristo Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -148,7 +148,7 @@ class forum_topic extends class_base
 					"name" => $val["name"],
 					"addr" => $val["mail"],
 				);
-				mail($val["mail"],$args["subject"],$args["message"],$iidrid);
+				send_mail($val["mail"],$args["subject"],$args["message"],$iidrid);
 			}
 		};
 	}

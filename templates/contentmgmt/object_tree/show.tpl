@@ -2,18 +2,20 @@
 
 <!-- END SUB: FOLDERS -->
 
-<table border="1">
-	<tr>
-		<td colspan="2">Nimi</td>
-		<td>T&uuml;&uuml;p</td>
-		<td>Lisamise kuup&auml;ev</td>
-	</tr>
+<table border="0">
+	<span class="text">
+	<!--<tr>
+		<td colspan="2" class="text">Nimi</td>
+		<td class="text">Tüüp</td>
+		<td class="text">Lisamise kuupäev</td>
+	</tr>-->
 	<!-- SUB: FILE -->
 	<tr>
-		<td>{VAR:icon}</td>
-		<td><a href='{VAR:show}'>{VAR:name}</a></td>
-		<td>{VAR:type}</td>
-		<td>{VAR:add_date}</td>
+		<td class="text">{VAR:icon}</td>
+		<td class="text"><a href='{VAR:show}'>{VAR:name}</a></td>
+		<td class="text">{VAR:type}</td>
+		<!--<td class="text">{VAR:add_date}</td>-->
 	</tr>
 	<!-- END SUB: FILE -->
+	</span>
 </table>

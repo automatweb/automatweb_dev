@@ -13,7 +13,7 @@
 </tr>
 <tr style="font-family: Arial, Helvetica; font-size: 12px">
 <td colspan="2" align="center">
-<input type="submit" value="Vaheta parool">
+<input type="submit" value="Kinnita parool">
 {VAR:reforb}
 </td>
 </tr>

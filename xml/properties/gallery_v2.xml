@@ -170,6 +170,25 @@
             <caption>Kataloog</caption>
       </property>
       <property>
+            <name>import_zip</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>import</group>
+            <table>objects</table>
+            <caption>Impordi ZIP failist</caption>
+      </property>
+      <property>
+            <name>zip_file</name>
+            <type>fileupload</type>
+            <group>import</group>
+            <store>no</store>
+            <table>objects</table>
+            <field>zip_file</field>
+            <caption>Uploadi ZIP fail</caption>
+      </property>
+      <property>
             <name>import_overwrite</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>

@@ -11,7 +11,7 @@
 <table border="0" cellspacing="1" cellpadding="2" bgcolor="#FFFFFF">
 <tr>
 <td class="fgtitle"><strong>Kuupäev</strong></td>
-<td class="fgtitle">{VAR:start}</td>
+<td class="fgtitle" colspan="3">{VAR:start}</td>
 </tr>
 <tr>
 <td class="fgtitle"><strong>{VAR:LC_PLANNER_STARTS}</strong></td>

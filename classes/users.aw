@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.93 2003/08/01 12:48:19 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.94 2003/10/06 14:32:25 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -381,11 +381,11 @@ class users extends users_user
 			$mail = str_replace("#liituja_andmed#", str_replace("\n\n","\n",$this->show_join_data(array("nohtml" => true, "user" => $arr["id"]))),$mail);
 			$mail = str_replace("#pwd_hash#", $this->get_change_pwd_hash_link($arr["id"]), $mail);
 
-			mail($udata["email"],$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
+			send_mail($udata["email"],$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
 			$jsa = $c->get_simple_config("join_send_also");
 			if ($jsa != "")
 			{
-				mail($jsa,$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
+				send_mail($jsa,$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
 			}
 		}
 
@@ -457,11 +457,11 @@ class users extends users_user
 			$mail = str_replace("#liituja_andmed#", str_replace("\n\n","\n",$this->show_join_data(array("nohtml" => true))),$mail);
 			$mail = str_replace("#pwd_hash#", $this->get_change_pwd_hash_link($add_state["uid"]), $mail);
 
-			mail($add_state["email"],$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
+			send_mail($add_state["email"],$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
 			$jsa = $c->get_simple_config("join_send_also");
 			if ($jsa != "")
 			{
-				mail($jsa,$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
+				send_mail($jsa,$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
 			}
 			$add_state = "";
 			aw_session_set("session_filled_forms",array());
@@ -512,11 +512,11 @@ class users extends users_user
 				$mail = str_replace("#liituja_andmed#", str_replace("\n\n","\n",$this->show_join_data(array("nohtml" => true, "user" => $add_state["uid"]))),$mail);
 				$mail = str_replace("#pwd_hash#", $this->get_change_pwd_hash_link($add_state["uid"]), $mail);
 
-				mail($add_state["email"],$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
+				send_mail($add_state["email"],$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
 				$jsa = $c->get_simple_config("join_send_also");
 				if ($jsa != "")
 				{
-					mail($jsa,$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
+					send_mail($jsa,$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
 				}
 			}
 
@@ -935,13 +935,16 @@ class users extends users_user
 				{
 					foreach($jf as $joinform => $joinentry)
 					{
-						$ret.=$f->show(array(
-							"id" => $joinform,
-							"entry_id" => $joinentry, 
-							"op_id" => $ops[$joinform],
-							"no_html" => $nohtml,
-							"no_load_op" => $arr["no_load_op"]
-						));
+						if ($ops[$joinform])
+						{
+							$ret.=$f->show(array(
+								"id" => $joinform,
+								"entry_id" => $joinentry, 
+								"op_id" => $ops[$joinform],
+								"no_html" => $nohtml,
+								"no_load_op" => $arr["no_load_op"]
+							));
+						}
 					};
 				}
 			};
@@ -997,7 +1000,7 @@ class users extends users_user
 		#$mail = str_replace("\r","",$mail);
 		$mail = str_replace("\r\n","\n",$mail);
 
-		mail($udata["email"],$c->get_simple_config("remind_pwd_mail_subj"),$mail,"From: ".$this->cfg["mail_from"]);
+		send_mail($udata["email"],$c->get_simple_config("remind_pwd_mail_subj"),$mail,"From: ".$this->cfg["mail_from"]);
 		$this->_log(ST_USERS, SA_REMIND_PWD, $username);
 		return $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$after;
 	}
@@ -1743,7 +1746,7 @@ class users extends users_user
 
 			$msg = "Tere $row[uid]\n\nTeie isikliku parooli vahetamiseks kodulehel $host tuleb teil klikkida lingil\n\n$churl\n\nLingile klikkides avanab Teile parooli muutmise leht. \n\nProbleemide korral saatke e-mail $email.\n\nKõike paremat soovides,\n$name_wm";
 			$from = sprintf("%s <%s>",$this->cfg["webmaster_name"],$this->cfg["webmaster_mail"]);
-			mail($row["email"],"Paroolivahetus saidil ".aw_global_get("HTTP_HOST"),$msg,"From: $from");
+			send_mail($row["email"],"Paroolivahetus saidil ".aw_global_get("HTTP_HOST"),$msg,"From: $from");
 			aw_session_set("status_msg","Parooli muutmise link saadeti  aadressile <b>$row[email]</b>. Vaata oma postkasti<br />Täname!<br />");
 		};
 		return $this->mk_my_orb("send_hash",array());
@@ -2292,11 +2295,11 @@ class users extends users_user
 		))),$mail);
 		$mail = str_replace("#pwd_hash#", $this->get_change_pwd_hash_link($uid), $mail);
 
-		mail($udata["email"],$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
+		send_mail($udata["email"],$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
 		$jsa = $c->get_simple_config("join_send_also");
 		if ($jsa != "")
 		{
-			mail($jsa,$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
+			send_mail($jsa,$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
 		}
 	}
 

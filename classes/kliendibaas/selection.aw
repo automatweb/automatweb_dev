@@ -260,7 +260,8 @@ class selection extends class_base
 		return html::href(array(
 			'caption' => $args['name'],
 			'url' => $this->mk_my_orb('change', array(
-					'id' => $args[OID]
+					'id' => $args[OID],
+					'return_url' => urlencode(aw_global_get('REQUEST_URI')),
 				),basename($this->cfg['classes'][$args['clid']]['file'])
 			),
 		));

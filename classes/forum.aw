@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.82 2003/08/27 13:47:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.83 2003/10/06 14:32:24 kristo Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -1101,6 +1101,9 @@ topic");
 		};
 
 		$alias = ($this->embedded) ? "forum" : "";
+		$this->dequote(&$args["comment"]);
+		$this->dequote(&$args["subj"]);
+		$this->dequote(&$args["name"]);
 		$this->vars(array(
 			"SHOW_COMMENT" => "",
 			"spacer" => $args["spacer"],
@@ -1224,7 +1227,7 @@ topic");
 		{
 			foreach($mx as $val)
 			{
-				mail($val,
+				send_mail($val,
 					"Uus sissekanne teemal: $forum_obj[name]",
 					"Nimi: $name\nE-post: $email\nTeema: $subj\nKommentaar:\n$comment\n\nVastamiseks kliki siia: ".aw_ini_get("baseurl")."/?class=forum&action=show_threaded&board=$board",
 					"From: $name <$email>");
@@ -1245,13 +1248,13 @@ topic");
 		};
 
 
-		if ( (strlen($name) > 2) && (strlen($comment) > 1) )
+		if ( (strlen($name) > 0) && (strlen($comment) > 1) )
 		{
 			if (is_array($mx))
 			{
 				foreach($mx as $key => $val)
 				{
-					mail($val["name"] . "<" . $val["address"] . ">",
+					send_mail($val["name"] . "<" . $val["address"] . ">",
 						"Uus sissekanne teemal: $forum_obj[name]",
 						"Nimi: $name\nE-post: $email\nTeema: $subj\nKommentaar:\n$comment\n\nVastamiseks kliki siia: http://sylvester.struktuur.ee/?class=forum&action=show_threaded&board=$board",
 						"From: $name <$email>");
@@ -1921,7 +1924,7 @@ topic");
 		{
 			$onpage = 5;
 		};
-		$num_pages = (int)(($total / $onpage) + 1);
+		$num_pages = (int)(($total / $onpage));
 
 		// no pager, if we have less entries than will fit on one page
 		if ($total < ($onpage - 1))

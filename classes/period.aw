@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.9 2003/10/05 20:42:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.10 2003/10/06 14:32:25 kristo Exp $
 // period.aw - periods 
 /*
 
@@ -319,6 +319,11 @@ class period extends class_base
 		return $row["active_period"];
 	}
 
+	function get_id_for_oid($oid)
+	{
+		return $this->db_fetch_field("select id from periods where obj_id = '$oid'", "id");
+	}
+	
 	////
 	// !returns period $id
 	function get($id) 
@@ -339,7 +344,7 @@ class period extends class_base
 		}
 		// and finally, the db
 		dbg::p1("period::get no hit ");
-		$q = "SELECT *,objects.name,objects.metadata FROM periods LEFT JOIN objects ON (periods.obj_id = objects.oid) WHERE id = '$id'";
+		$q = "SELECT *,objects.name,objects.metadata,objects.status as o_status FROM periods LEFT JOIN objects ON (periods.obj_id = objects.oid) WHERE id = '$id'";
 		$this->db_query($q);
 		$pr = $this->db_fetch_row();
 		$pr["data"] = aw_unserialize($pr["metadata"]);
@@ -356,6 +361,15 @@ class period extends class_base
 		$period = aw_global_get("period");
 		if ($period) 
 		{
+			// only let them switch to active periods if not logged in
+			if (aw_global_get("uid") == "")
+			{
+				$pd = $this->get($period);
+				if ($pd["o_status"] != STAT_ACTIVE)
+				{
+					$period = $this->get_active_period();
+				}
+			}
 			// if it was, we should switch 
 			$act_per_id = $period;
 			aw_session_set("act_per_id", $act_per_id);
@@ -387,6 +401,15 @@ class period extends class_base
 			}
 			// if a period was previously active we just leave it like that
 		};
+		
+		if (aw_global_get("uid") == "")
+		{
+			$pd = $this->get(aw_global_get("act_per_id"));
+			if ($pd["o_status"] != STAT_ACTIVE)
+			{
+				aw_global_set("act_per_id", $this->get_active_period());
+			}
+		}
 
 		if (($ap = aw_global_get("act_per_id")))
 		{

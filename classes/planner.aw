@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.132 2003/09/12 11:54:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.133 2003/10/06 14:32:25 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -222,7 +222,7 @@ class planner extends class_base
 				$data['ch_value'] = $args['obj'][OID];
 				aw_session_set('user_calendar',$data['checked'] ? $args['obj'][OID] : '');
 			break;
-					
+
 			case "default_view":
 				$data["options"] = $this->viewtypes;
 				break;
@@ -282,27 +282,28 @@ class planner extends class_base
 
 	function set_property($args = array())
 	{
-                $data = &$args["prop"];
-                $retval = PROP_OK;
-		$form = &$args["form_data"];		
-                switch($data["name"])
-                {
+			$data = &$args["prop"];
+			$retval = PROP_OK;
+			$form = &$args["form_data"];		
+			switch($data["name"])
+			{
 			case 'user_calendar':
-				if ($form['user_calendar'])
+				$this->users = get_instance("users");
+
+				$kb = $this->users->get_user_config(array(
+					"uid" => aw_global_get("uid"),
+					"key" => "user_calendar",
+				));
+				if(($kb == $args['obj'][OID]) || ($kb == ''))
 				{
-					$this->users = get_instance("users");
-						$this->users->set_user_config(array(
+					$this->users->set_user_config(array(
 						"uid" => aw_global_get("uid"),
 						"key" => "user_calendar",
-						"value" => $args['obj'][OID],
+						"value" => $form['user_calendar'],
 					));
-					aw_session_del('user_calendar');
-					session_register('user_calendar');
-
-					//echo $GLOBALS['user_calendar'];
+					aw_session_set('user_calendar', $form['user_calendar']);
 				}
-				aw_session_set('user_calendar', $form['user_calendar']);
-	
+
 			break;	
 		
 			case "event_cfgform":
@@ -524,7 +525,7 @@ class planner extends class_base
 		$event_folder = $meta["event_folder"];
 
 		$event_id = $args["request"]["event_id"];
-		//$dtitle = $args["request"]['title'];//axel
+		$dtitle = $args["request"]['title'];//axel
 
 		$this->event_id = $event_id;
 
@@ -532,6 +533,7 @@ class planner extends class_base
 
 		if ($event_cfgform)
 		{
+			aw_session_set('org_action',aw_global_get('REQUEST_URI'));
 			$ev_data = $this->get_object($event_id);
 			if ($ev_data["meta"]["cfgform_id"])
 			{
@@ -612,7 +614,7 @@ class planner extends class_base
 			// bad, I need a way to detect the default group. 
 			// but for now this has to do.
 			$resprops["capt"] = $tmp;
-			//$xprops['title']['value'] = $xprops['title']['value'] ? $xprops['title']['value'] : $dtitle;//axel
+			$xprops['title']['value'] = $xprops['title']['value'] ? $xprops['title']['value'] : $dtitle;//axel
 			foreach($xprops as $key => $val)
 			{
 				// a põmst, kui nimes on [ sees, siis peab lahutama
@@ -703,6 +705,20 @@ class planner extends class_base
 			$this->emb_group = $emb["group"];
 		};
 		$this->event_id = $t->submit($emb);
+		
+		//I really don't like this hack //axel
+		$gl = aw_global_get('org_action');
+		preg_match('/alias_to_org=(\w*)/', $gl, $o);
+		preg_match('/reltype_org=(\w*)/', $gl, $r);
+		if (is_numeric($o[1]) && is_numeric($r[1]))
+		{
+			$this->addalias(array(
+				'id' => $o[1],
+				'alias' => $this->event_id,
+				'reltype' => $r[1],
+			));
+			aw_session_del('org_action');
+		}
 		return PROP_OK;
 	}
 
@@ -1138,7 +1154,7 @@ class planner extends class_base
 			};
 			if ($this->conf["navigator_months"] == 3)
 			{
-				$_thismon,$_thisyear) = explode("-",date("m-Y",$di["start"]));
+				list($_thismon,$_thisyear) = explode("-",date("m-Y",$di["start"]));
 				$_prevmon = mktime(0,0,0,$_thismon-1,1,$_thisyear);
 				$navi0 = $_cal->draw_calendar(array(
 					"tm" => $_prevmon,
@@ -1156,6 +1172,7 @@ class planner extends class_base
 				"now" => mktime(0,0,0,$m,$d,$y),
 				"type" => "month",
 				"day_orb_link" => $this->day_orb_link,
+				"caption_url" => $this->mk_my_orb("change",array("id" => $id,"group" => "show_month","ctrl" => $ctrl,"section" => aw_global_get("section"),"date" => "1-${_thismon}-${_thisyear}")),
 				"marked" => $events,
 			));
 			if ($this->conf["navigator_months"] >= 2)
@@ -1168,6 +1185,7 @@ class planner extends class_base
 					"width" => 7,
 					"type" => "month",
 					"day_orb_link" => $this->day_orb_link,
+					"caption_url" => $this->mk_my_orb("change",array("id" => $id,"group" => "show_month","ctrl" => $ctrl,"section" => aw_global_get("section"),"date" => date("d-m-Y",$_nextmon))),
 					"marked" => $events,
 				));
 

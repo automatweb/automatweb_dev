@@ -4,6 +4,10 @@
 		<action name="show" nologin="1" default="1" is_public="1" caption="Show">
 			<function name="show">
 				<arguments>
+					<optional name="leadonly" type="int"/>
+					<optional name="max" type="int"/>
+					<optional name="tpl"/>
+					<optional name="d_tpl"/>
 				</arguments>
 			</function>
 		</action>

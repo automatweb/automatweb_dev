@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.8 2003/09/08 14:18:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.9 2003/10/06 14:32:26 kristo Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -239,7 +239,10 @@ class object_list extends _int_obj_container_base
 		$oids = $GLOBALS["object_loader"]->ds->search($filter);
 		foreach($oids as $oid)
 		{
-			$this->list[$oid] = new object($oid);
+			if ($GLOBALS["object_loader"]->ds->can("view", $oid))
+			{
+				$this->list[$oid] = new object($oid);
+			}
 		}
 	}
 
@@ -252,6 +255,14 @@ class object_list extends _int_obj_container_base
 	function _int_sort_list($prop, $order)
 	{
 		// TODO: int_sort_list
+	}
+
+	function _int_add_to_list($oid_arr)
+	{
+		foreach($oid_arr as $oid)
+		{
+			$this->list[$oid] = new object($oid);
+		}
 	}
 }
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.12 2003/08/27 13:47:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.13 2003/10/06 14:32:27 kristo Exp $
 // livelink_import.aw - Import livelingist
 
 /*
@@ -207,7 +207,9 @@ class livelink_import extends class_base
 
 	function _xml_start_element($parser,$name,$attribs)
 	{
-		if ($name == "llnode" && isset($attribs["objtype"]) && ($attribs["objtype"] == 0))
+		// 0 on tavaline folder
+		// 136 on compound document -- duke
+		if ($name == "llnode" && isset($attribs["objtype"]) && ($attribs["objtype"] == 0 || $attribs["objtype"] == 136))
 		{
 			$name = $attribs["name"];
 			$realname = preg_replace("/^\d+?\.\s/","",$name);
@@ -233,9 +235,12 @@ class livelink_import extends class_base
 				# so it must be new
 				$this->quote($name);
 				$this->quote($description);
+				$icon = ($attribs["objtype"] == 136) ? "compound_doc.gif" : "folder.gif";
+				$iconurl = sprintf("<img src='/img/%s' alt='' title='' />",$icon);
+				$this->quote($iconurl);
 				print "creating $name\n";
-				$q = "INSERT INTO livelink_folders  (id,name,realname,description,parent,modified,rootnode)
-					VALUES ('$id','$name','$realname','$description','$parent','$modified','$rootnode')";
+				$q = "INSERT INTO livelink_folders  (id,name,realname,description,parent,modified,rootnode,icon)
+					VALUES ('$id','$name','$realname','$description','$parent','$modified','$rootnode','$iconurl')";
 				print $q;
 				print "\n";
 				//$this->need2update[] = $id;
@@ -274,7 +279,7 @@ class livelink_import extends class_base
 			};
                 }
 
-		if ($name == "llnode" && isset($attribs["objtype"]) && ($attribs["objtype"] > 0))
+		if ($name == "llnode" && isset($attribs["objtype"]) && ($attribs["objtype"] > 0 || $attribs["objtype"] != 136))
 		{
 			// only retrieve the docs, if the parent has been modified
 			// siin me koostame siis nimekirja docid-dest, mida oleks vaja uuendada

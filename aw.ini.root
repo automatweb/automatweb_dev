@@ -72,3 +72,4 @@ include ${ini_dir}/planner.ini
 include ${ini_dir}/feedback.ini
 include ${ini_dir}/promo.ini
 include ${ini_dir}/translate.ini
+include ${ini_dir}/html2pdf.ini

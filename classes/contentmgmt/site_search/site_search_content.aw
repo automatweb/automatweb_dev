@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.7 2002/12/24 15:18:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.2 2003/10/06 14:32:26 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -176,7 +176,6 @@ class site_search_content extends class_base
 		extract($arr);
 		$ob = new object($id);
 		$this->read_template("search.tpl");
-		lc_site_load("search_conf", $this);
 
 		$gr = $this->get_groups($ob);
 		if (!isset($group) || !$group)
@@ -197,27 +196,17 @@ class site_search_content extends class_base
 
 		$this->vars(array(
 			"GROUP" => $s_gr,
-			"reforb" => $this->mk_reforb("do_search", array("id" => $id, "no_reforb" => 1, "section" => aw_global_get("section"))),
+			"reforb" => $this->mk_reforb("do_search", array("id" => $id, "no_reforb" => 1)),
 			"str" => (isset($str) ? $str : ""),
 		));
 
 		return $this->parse();
 	}
 
-	/** this will get called via scheduler to generate the static content to search from 
-		
-		@attrib name=generate_static params=name nologin="1" default="0"
-		
-		@param id required
-		
-		@returns
-		
-		
-		@comment
-		parameters:
-		id - required, id of the search object
-
-	**/
+	////
+	// !this will get called via scheduler to generate the static content to search from
+	// parameters:
+	//	id - required, id of the search object
 	function generate_static($arr)
 	{
 		extract($arr);
@@ -302,7 +291,6 @@ class site_search_content extends class_base
 				d.docid as docid, 
 				d.title as title, 
 				o.modified as modified,
-				d.lead as lead,
 				d.content as content
 			 FROM 
 				documents d 
@@ -327,8 +315,7 @@ class site_search_content extends class_base
 				"url" => $this->cfg["baseurl"]."/".$row["docid"],
 				"title" => $row["title"],
 				"modified" => $row["modified"],
-				"content" => $row["content"],
-				"lead" => $row["lead"]
+				"content" => $row["content"]
 			);
 		}
 		return $ret;
@@ -341,13 +328,13 @@ class site_search_content extends class_base
 		$lut = array();
 		foreach($orig as $i)
 		{
-			$lut[strtolower(trim(strip_tags($i["title"])))] = 1;
+			$lut[$i["title"]] = 1;
 		}
 
 		$ret = $orig;
 		foreach($add as $item)
 		{
-			if (!isset($lut[strtolower(trim(strip_tags($item["title"])))]))
+			if (!isset($lut[$item["title"]]))
 			{
 				$ret[] = $item;
 			}
@@ -406,7 +393,7 @@ class site_search_content extends class_base
 		{
         	return 0;
 		}
-		return ($a["modified"] > $b["modified"]) ? -1 : 1;
+		return ($a["modified"] < $b["modified"]) ? -1 : 1;
 	}
 
 	function _sort_content($a, $b)
@@ -561,8 +548,7 @@ class site_search_content extends class_base
 			"SEL_PAGE" => ""
 		));
 		$this->vars(array(
-			"PAGESELECTOR" => $this->parse("PAGESELECTOR"),
-			"count" => $cnt
+			"PAGESELECTOR" => $this->parse("PAGESELECTOR")
 		));
 
 		$this->display_sorting_links(array(
@@ -574,7 +560,7 @@ class site_search_content extends class_base
 	function _get_content($ct)
 	{
 		return "";
-		$co = trim(strip_tags($ct));
+		$co = strip_tags($ct);
 		$co = substr($co,strpos($co,"\n"));
 		$co = trim($co);
 		$co = preg_replace("/#(.*)#/","",substr($co,0,strpos($co,"\n")));
@@ -615,8 +601,7 @@ class site_search_content extends class_base
 				"link" => $results[$i]["url"],
 				"title" => $results[$i]["title"],
 				"modified" => date("d.m.Y", $results[$i]["modified"]),
-				"content" => $this->_get_content($results[$i]["content"]),
-				"lead" => preg_replace("/#(.*)#/","",$results[$i]["lead"])
+				"content" => $this->_get_content($results[$i]["content"])
 			));
 			$res .= $this->parse("MATCH");
 		}
@@ -700,22 +685,6 @@ class site_search_content extends class_base
 		return $arr;
 	}
 
-	/**  
-		
-		@attrib name=do_search params=name nologin="1" default="0"
-		
-		@param id required
-		@param group optional
-		@param page optional
-		@param str optional
-		@param sort_by optional
-		
-		@returns
-		
-		
-		@comment
-
-	**/
 	function do_search($arr)
 	{
 		extract($this->set_defaults($arr));

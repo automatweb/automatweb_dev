@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.212 2003/09/24 12:49:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.213 2003/10/06 14:32:24 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -379,10 +379,11 @@ class document extends aw_template
 			}
 			else
 			{
-				$request_uri = aw_global_get("REQUEST_URI");
+				$request_uri = aw_ini_get("baseurl").aw_global_get("REQUEST_URI");
 				$pos = strpos($request_uri, "&");
-				if ($pos === false)
-				{ 
+				$pos2 = strpos($request_uri, "set_lang_id");
+				if ($pos === false && $pos2 === false)
+				{
 					$link = $request_uri . "?print=1";
 				}
 				else
@@ -401,7 +402,7 @@ class document extends aw_template
 		};
 
 		$this->vars(array("imurl" => "/images/trans.gif"));
-		// import charset for print 
+		// import charset for print
 		$_langs = get_instance("languages");
 		$_ld = $_langs->fetch(aw_global_get("lang_id"),true);
 		$this->vars(array(
@@ -487,17 +488,22 @@ class document extends aw_template
 		}
 		else
 		{
+			$re = LC_LOE_EDASI;
+			if ($re == "")
+			{
+				$re = "Loe edasi";
+			}
 			if (!(($pp = strpos($doc["content"],"#edasi#")) === false))
 			{
-				$doc["content"] = substr($doc["content"],0,$pp)."<br /><B><a href='".$baseurl."/index.".$ext."/section=$docid/show_all=1'>Loe edasi</a></b></font>";
+				$doc["content"] = substr($doc["content"],0,$pp)."<br /><B><a href='".$baseurl."/index.".$ext."/section=$docid/show_all=1'>$re</a></b></font>";
 			}
 
 			if (!(($pp = strpos($doc["content"],"#edasi1#")) === false))
 			{
-				$doc["content"] = substr($doc["content"],0,$pp)."<br /><B><a href='".$baseurl."/index.".$ext."/section=$docid/show_all=1'>Loe edasi</a></b></font>";
+				$doc["content"] = substr($doc["content"],0,$pp)."<br /><B><a href='".$baseurl."/index.".$ext."/section=$docid/show_all=1'>$re</a></b></font>";
 			}
 		}
-
+	
 		// laeme vajalikud klassid
 		// kui vaja on n?idata ainult dokumendi leadi, siis see tehakse siin
  		if ($leadonly > -1) 
@@ -532,7 +538,14 @@ class document extends aw_template
 				}
 				if ($no_strip_lead != 1)
 				{
-					$doc["lead"] = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$doc["lead"]);
+					// here we only strip images
+					// because kirjastus.ee dites require it - there are images in lead that get shown in
+					// document list, but when viewing the full article the images are somewhere in the article
+					// and should not be shown in the lead again
+					// but other sites will want to put for instance links in the lead
+					// so we gots to keep those.
+					$doc["lead"] = preg_replace("/#pict(\d+?)(v|k|p|)#/i","",$doc["lead"]);
+					$doc["lead"] = preg_replace("/#p(\d+?)(v|k|p|)#/i","",$doc["lead"]);
 				}
 				$txt = "";
 
@@ -886,14 +899,31 @@ class document extends aw_template
 		{
 			$doc["tm"] = $doc["modified"];
 		}
+
+		$_date = $doc["modified"] > 1 ? $doc["modified"] : $doc["created"];
+		$date_est = date("d", $_date).". ".get_lc_month(date("m", $_date))." ".date("Y", $_date);
 			
+		if (!aw_ini_get("document.show_real_location"))
+		{
+			$r_docid = $doc["real_oid"];
+		}
+		else
+		{
+			$r_docid = $docid;
+		}
+		if (!headers_sent())
+		{
+			header("X-AW-Last-Modified: ".$_date);
+			header("X-AW-Document-Title: ".($pagetitle != "" ? $pagetitle : strip_tags($title)));
+		}
 		$this->vars(array(
+			"date_est" => $date_est,
 			"page_title" => ($pagetitle != "" ? $pagetitle : strip_tags($title)),
 			"title"	=> $title,
 			"menu_image" => image::check_url($mn["img_url"]),
 			"text"  => $doc["content"],
 			"secid" => isset($secID) ? $secID : 0,
-			"docid" => $docid,
+			"docid" => $r_docid,
 			"ablock"   => isset($ab) ? $ab : 0,
 			"pblock"   => isset($pb) ? $pb : 0,
 			"moreinfo" => $doc["moreinfo"],
@@ -907,7 +937,7 @@ class document extends aw_template
 			"modified"	=> $this->time2date($doc["modified"],2),
 			"createdby" => $doc["createdby"],
 			"date2"	=> $this->time2date($doc["modified"],8),
-			"timestamp" => $doc["modified"],
+			"timestamp" => ($doc["modified"] > 1 ? $doc["modified"] : $doc["created"]),
 			"channel"		=> $doc["channel"],
 			"tm"				=> $doc["tm"],
 			"link_text"	=> $doc["link_text"],
@@ -1040,7 +1070,7 @@ class document extends aw_template
 					$prnt = "parent = " . (int)$section;
 				}
 				$q = "SELECT oid FROM objects
-							WHERE $prnt AND $field LIKE '%$v%' AND objects.status = 2 AND objects.class_id = ".CL_PSEUDO;
+							WHERE $prnt AND $field LIKE '%$v%' AND objects.status = 2 AND objects.class_id = ".CL_MENU;
 				$retval[$v] = $this->db_fetch_field($q,"oid");
 				if (!$retval[$v])
 				{
@@ -1276,7 +1306,7 @@ class document extends aw_template
 			if ($copy != "")
 				$bcc = "\nCc: $copy ";
 
-			mail("\"$to_name\" <".$to.">","Artikkel saidilt ".$baseurl,$text,"From: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
+			send_mail("\"$to_name\" <".$to.">","Artikkel saidilt ".$baseurl,$text,"From: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
 		}
 		else
 		if ($SITE_ID == 17)
@@ -1286,7 +1316,7 @@ class document extends aw_template
 			if ($copy != "")
 				$bcc = "\nCc: $copy ";
 
-			mail("\"$to_name\" <".$to.">","Artikkel saidilt ".$baseurl,$text,"From: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
+			send_mail("\"$to_name\" <".$to.">","Artikkel saidilt ".$baseurl,$text,"From: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
 		}
 		else
 		if ($SITE_ID == 71)
@@ -1296,7 +1326,7 @@ class document extends aw_template
 			if ($copy != "")
 				$bcc = "\nCc: $copy ";
 
-			mail("\"$to_name\" <".$to.">","Artikkel saidilt ".$baseurl,$text,"From: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
+			send_mail("\"$to_name\" <".$to.">","Artikkel saidilt ".$baseurl,$text,"From: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
 		}
 		else
 		{
@@ -1308,7 +1338,7 @@ class document extends aw_template
 			}
 
 
-			mail("\"$to_name\" <".$to.">",LC_DOCUMENT_ART_FROM_NADAL,$text,"From: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
+			send_mail("\"$to_name\" <".$to.">",LC_DOCUMENT_ART_FROM_NADAL,$text,"From: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
 		}
 	}
 
@@ -1500,7 +1530,7 @@ class document extends aw_template
 		// if a config form was used to create this document, redirect to the
 		// class that can actually CAN use config forms
 		if (
-			(aw_ini_get("document.no_static_forms") == 1) || 
+			(aw_ini_get("document.no_static_forms") == 1 || $oob["meta"]["cfgform_id"] == "notempty") || 
 			(isset($oob["meta"]["cfgform_id"]) && ( ($oob["meta"]["cfgform_id"] > 0)))
 		)
 		{
@@ -2010,6 +2040,10 @@ class document extends aw_template
 		{
 			$is_brother = true;
 		}
+		else
+		{
+			unset($row["brother_of"]);
+		}
 
 		$row["oid"] = 0;
 		$row["parent"] = $parent;
@@ -2089,6 +2123,7 @@ class document extends aw_template
 			$this->cfg["baseurl"] = $bs;
 			$this->vars(array("baseurl" => $bs));
 		}
+		lc_site_load("document",$this);
 
 		// genereerime listi koikidest menyydest, samasugune kood on ka
 		// mujal olemas, kas ei voiks seda kuidagi yhtlustada?
@@ -2302,11 +2337,17 @@ class document extends aw_template
 			};
 			$docmatch = join(" OR ", map("(%s)",$docmatcha));
 		}
+		$perstr = "";
+		if (aw_ini_get("search_conf.only_active_periods"))
+		{
+			$pei = get_instance("periods");
+			$plist = $pei->period_list(0,false,1);
+			$perstr = " AND  objects.period IN (".join(",", array_keys($plist)).")";
+		}
 		$q = "SELECT documents.*,objects.parent as parent, objects.modified as modified, objects.parent as parent 
 										 FROM documents 
 										 LEFT JOIN objects ON objects.oid = documents.docid
-										 WHERE ($docmatch) AND objects.status = 2 AND objects.lang_id = ".aw_global_get("lang_id")." AND objects.site_id = " . $this->cfg["site_id"] . " AND (documents.no_search is null OR documents.no_search = 0) $ml";
-		dbg::p("search_q = $q <br />");
+										 WHERE ($docmatch) AND objects.status = 2 $perstr AND objects.lang_id = ".aw_global_get("lang_id")." AND objects.site_id = " . $this->cfg["site_id"] . " AND (documents.no_search is null OR documents.no_search = 0) $ml";
 		$si = __get_site_instance();
 		$this->db_query($q);
 		while($row = $this->db_next())
@@ -2871,7 +2912,7 @@ class document extends aw_template
 			{
 				$_to = $to;
 			}
-			mail($_to,str_replace("\n","",str_replace("\r","",$this->parse("title"))),$this->parse("mail"),"Content-Type: text/plain; charset=\"ISO-8859-1\"\nFrom: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
+			send_mail($_to,str_replace("\n","",str_replace("\r","",$this->parse("title"))),$this->parse("mail"),"Content-Type: text/plain; charset=\"ISO-8859-1\"\nFrom: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
 		}
 
 		$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $section ","name");
@@ -2959,14 +3000,24 @@ class document extends aw_template
 	function do_print($arr)
 	{
 		extract($arr);
+		ob_start();
 		$dat = $this->get_record("objects","oid",$section);
 		$this->_log(ST_DOCUMENT, SA_PRINT, "$dat[name] ",$section);
-		echo($this->gen_preview(array(
+		echo $this->gen_preview(array(
 			"docid" => $section,
 			"tpl" => "print.tpl",
 			"is_printing" => true
-		)));
+		));
 		aw_shutdown();
+		if ($GLOBALS["format"] == "pdf")
+		{
+			$content = ob_get_contents();
+			ob_end_clean();
+			$conv = get_instance("core/converters/html2pdf");
+			$pdf = $conv->convert(array("source" => $content));
+			header("Content-type: application/pdf");
+			die($pdf);
+		}
 		die();
 	}
 
@@ -2979,13 +3030,21 @@ class document extends aw_template
 		{
 			$lim = "LIMIT ".$_lim;
 		}
-		$this->db_query("
+		$perstr = "";
+		if (aw_ini_get("search_conf.only_active_periods"))
+		{
+			$pei = get_instance("periods");
+			$plist = $pei->period_list(0,false,1);
+			$perstr = " and objects.period IN (".join(",", array_keys($plist)).")";
+		}
+		$sql = "
 			SELECT docid,title 
 			FROM documents 
 				LEFT JOIN objects ON objects.oid = documents.docid 
-			WHERE author = '$author' AND objects.status = 2
+			WHERE author = '$author' AND objects.status = 2 $perstr
 			ORDER BY objects.created DESC $lim
-		");
+		";
+		$this->db_query($sql);
 		while ($row = $this->db_next())
 		{
 			$this->save_handle();
@@ -3180,6 +3239,7 @@ class document extends aw_template
 			$hu = " AND orig_url != ''";
 		}
 
+		lc_site_load("document", &$this);
 		$this->db_query("
 			SELECT * 
 			FROM 

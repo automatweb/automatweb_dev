@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.67 2003/08/29 14:32:05 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.68 2003/10/06 14:32:25 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -113,7 +113,7 @@ class users_user extends aw_template
 	{
 		$subject = sprintf(aw_ini_get("config.alert_subject"),aw_global_get("HTTP_HOST"));
 		$msg = "IP: ".aw_global_get("REMOTE_ADDR")."\nTeade:" . $msg;
-		mail(aw_ini_get("config.alert_addr"),$subject,$msg,aw_ini_get("config.alert_from"));
+		send_mail(aw_ini_get("config.alert_addr"),$subject,$msg,aw_ini_get("config.alert_from"));
 	}
 
 	////
@@ -1329,7 +1329,8 @@ class users_user extends aw_template
 			WHERE 
 				m.gid = $gd[gid] AND
 				u.oid IS NOT NULL AND 
-				u.oid > 0
+				u.oid > 0 AND
+				u.blocked != 1
 		";
 		$this->db_query($sql);
 		while($row = $this->db_next())

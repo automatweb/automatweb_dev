@@ -141,4 +141,21 @@
 ]]>
 </tag>
 
+<tag id='ala'>
+<![CDATA[
+<span class="titlePri">\1</span>
+]]>
+</tag>
+
+<tag id='ala1'>
+<![CDATA[
+<span class="text1">\1</span>
+]]>
+</tag>
+
+<tag id='ala2'>
+<![CDATA[
+<span class="text2">\1</span>
+]]>
+</tag>
 </doctags>

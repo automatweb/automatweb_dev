@@ -1,13 +1,13 @@
 <?php
 /*
 @classinfo relationmgr=yes
-
+@groupinfo general caption=Üldine
 @tableinfo kliendibaas_firma index=oid master_table=objects master_index=oid
+
 @default table=objects
 @default group=general
 
-@property navtoolbar type=toolbar group=general store=no no_caption=1
-@caption 
+@property navtoolbar type=toolbar store=no no_caption=1 group=general,overview
 
 @property name type=textbox size=30 maxlenght=255 table=objects
 @caption Organisatsiooni nimi
@@ -42,6 +42,12 @@
 //@property firmajuht type=relpicker reltype=WORKERS table=kliendibaas_firma
 @property firmajuht type=text table=kliendibaas_firma store=
 @caption Organisatsiooni juht
+
+@default group=overview
+@groupinfo overview caption="Seotud tegevused"
+
+@property progress type=text callback=callback_org_actions store=no no_caption=1
+@caption org_actions
 
 //@default group=look
 //@groupinfo look caption=Vaata
@@ -115,6 +121,8 @@ class firma extends class_base
 			CHILD_ORG => 'Tütar-organisatsioonid',
 			PAKKUMINE => 'Pakkumine',
 			TEHING => 'Tehing',
+			KONE => 'Kõne',
+			KOHTUMINE => 'Kohtumine',
 		);
 	}
 	
@@ -143,6 +151,18 @@ class firma extends class_base
 			break;
 			case CHILD_ORG:
 				$retval = array(CL_FIRMA);
+			break;
+			case KOHTUMINE:
+				$retval = array(CL_KOHTUMINE);
+			break;
+			case PAKKUMINE:
+				$retval = array(CL_PAKKUMINE);
+			break;
+			case KONE:
+				$retval = array(CL_KONE);
+			break;
+			case TEHING:
+				$retval = array(CL_TEHING);
 			break;
 		};
 		return $retval;
@@ -185,7 +205,11 @@ class firma extends class_base
 					$val['name']."</a></td><td>";
 					if ($val[OID])
 					{
-					$str.="<a target=\"_blank\" href=\"".$this->mk_my_orb('change',array('id' => $val[OID]),'isik')."\">muuda</a>";
+					$str.="<a href=\"".$this->mk_my_orb('change',array(
+						'id' => $val[OID],
+						'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+						),'isik'
+						)."\">muuda</a>";
 					}
 					$str.="</td></tr>";
 					$i++;
@@ -197,15 +221,8 @@ class firma extends class_base
 			
 			break;
 			
-			/*case '':
-			
-			break;*/
-			/*case '':
-			
-			break;*/
-			
-			
 			case 'navtoolbar':
+				/*
 				if (!aw_global_get('kliendibaas') || !$args['obj'][OID])
 				{
 					$retval=PROP_IGNORE;
@@ -214,13 +231,17 @@ class firma extends class_base
 				{
 					$args['kliendibaas'] = aw_global_get('kliendibaas');
 					$this->firma_toolbar($args);
+				}*/
+		                if ($args['obj']['oid'])
+                		{
+					$args['kliendibaas'] = aw_global_get('kliendibaas');
+					$this->firma_toolbar($args);
 				}
 			break;
 			
 		};
 		return $retval;
 	}
-	
 	
 	function set_property($args = array())
 	{
@@ -241,100 +262,159 @@ class firma extends class_base
 		return $retval;
 	}	
 
+	function callback_org_actions($args)
+	{
+		$relobjects = $this->get_aliases(array(
+			'oid' => $args['obj'][OID],
+			'type' => CL_DOCUMENT,
+			//'reltype' => ,
+		));
+		
+		$t = new aw_table(array(
+			'prefix' => 'org_actions',
+		));
 
+		$t->set_default_sortby('changed');//peaks otsima docust sündmuse kellaaja
+
+		$t->parse_xml_def($this->cfg['basedir'].'/xml/generic_table.xml');
+
+		$t->define_field(array(
+			'name' => 'name',
+			'caption' => 'Nimi',
+			'sortable' => '1',
+		));
+		
+		$t->define_field(array(
+			'name' => 'type',
+			'caption' => 'Tüüp',
+			'sortable' => '1',
+		));
+		
+		$t->define_field(array(
+			'name' => 'moreinfo',
+			'caption' => 'lisainfo',
+			//'sortable' => '1',
+		));
+		
+		$t->define_field(array(
+			'name' => 'event_start',
+			'caption' => 'Sündmus algab',
+			'sortable' => '1',
+		));
+		$t->define_field(array(
+			'name' => 'event_end',
+			'caption' => 'Sündmus lõppeb',
+			'sortable' => '1',
+		));
+		$t->define_field(array(
+			'name' => 'createdby',
+			'caption' => 'Looja',
+			'sortable' => '1',
+		));
+		$t->define_field(array(
+			'name' => 'modifiedby',
+			'caption' => 'Muutja',
+			'sortable' => '1',
+		));
+
+		$reltype_caption = $this->callback_get_rel_types();
+		
+		foreach($relobjects as $val)
+		{
+		//arr($val);
+			$pl = $this->db_fetch_row('select * from planner where id='.$val[OID]);
+			$doc = $this->db_fetch_row('select * from documents where docid='.$val[OID]);		
+			
+			$classes = $this->cfg["classes"];
+			$cldat = $classes[$val['class_id']];
+			if (isset($cldat["alias"]))
+			{
+				if ($cldat["alias_class"])
+				{
+					$cldat["file"] = $cldat["alias_class"];
+				}
+			}
+			
+			
+			$t->define_data(array(
+				'name' => html::href(array('caption' => $val['name'],'url' => $this->mk_my_orb('change', array('id' => $val[OID]), $cldat["file"]))),
+				'type' => $reltype_caption[$val['reltype']],
+				'event_start' => date('Y-m-d H:i',$pl['start']),
+				'event_end' => date('Y-m-d H:i',$pl['end']),
+				'moreinfo' => $doc['moreinfo'],
+				'modifiedby' => $val['modifiedby'],
+				'createdby' => $val['createdby'],
+			));
+		}
+		$t->sort_by();
+		
+		$nodes = array();
+		$nodes['actions'] = array(
+			'value' => $t->draw(),
+		);
+		return $nodes;	
+	}
+	
+	
 	function firma_toolbar(&$args)
 	{
-                if ($args['obj']['oid'])
-                {
-			$toolbar = &$args["prop"]["toolbar"];
 
-			$this->read_template('js_popup_menu.tpl');
+		$toolbar = &$args["prop"]["toolbar"];
+		$menu_cdata = '';
+		$this->read_template('js_popup_menu.tpl');
+
+		$kliendibaas = $this->get_object($args['kliendibaas']);
+		//arr($kliendibaas);
+		if ($args['kliendibaas'])
+		{
+			$parents[ADDRESS] = $kliendibaas['meta']['dir_address'] ? $kliendibaas['meta']['dir_address'] : $kliendibaas['meta']['dir_default'];
+			$parents[TEGEVUSALAD] = $kliendibaas['meta']['dir_tegevusala'] ? $kliendibaas['meta']['dir_tegevusala'] : $kliendibaas['meta']['dir_default'];
+			$parents[WORKERS] = $kliendibaas['meta']['dir_isik'] ? $kliendibaas['meta']['dir_isik'] : $kliendibaas['meta']['dir_default'];
+			$parents[ETTEVOTLUSVORM] = $kliendibaas['meta']['dir_ettevotlusvorm'] ? $kliendibaas['meta']['dir_ettevotlusvorm'] : $kliendibaas['meta']['dir_default'];
 			
-			$kliendibaas = $this->get_object($args['kliendibaas']);
-			//arr($kliendibaas);
-$parents[ADDRESS] = $kliendibaas['meta']['dir_address'] ? $kliendibaas['meta']['dir_address'] : $kliendibaas['meta']['dir_default'];
-$parents[TEGEVUSALAD] = $kliendibaas['meta']['dir_tegevusala'] ? $kliendibaas['meta']['dir_tegevusala'] : $kliendibaas['meta']['dir_default'];
-$parents[WORKERS] = $kliendibaas['meta']['dir_isik'] ? $kliendibaas['meta']['dir_isik'] : $kliendibaas['meta']['dir_default'];
-			if ($cal_id = aw_global_get('user_calendar'))
+			$cfgform[KONE] = $kliendibaas['meta']['kone_form'] ? $kliendibaas['meta']['kone_form'] : $kliendibaas['meta']['default_form'];
+			$cfgform[PAKKUMINE] = $kliendibaas['meta']['pakkumine_form'] ? $kliendibaas['meta']['pakkumine_form'] : $kliendibaas['meta']['default_form'];
+			$cfgform[KOHTUMINE] = $kliendibaas['meta']['kohtumine_form'] ? $kliendibaas['meta']['kohtumine_form'] : $kliendibaas['meta']['default_form'];
+			$cfgform[TEHING] = $kliendibaas['meta']['tehing_form'] ? $kliendibaas['meta']['tehing_form'] : $kliendibaas['meta']['default_form'];
+		}
+		else
+		{
+			$parents[ETTEVOTLUSVORM] = $parents[WORKERS] = $parents[ADDRESS] = $parents[TEGEVUSALAD] = $args['obj']['parent'];
+		}
+
+		if ($cal_id = aw_global_get('user_calendar'))
+		{
+			$user_calendar = $this->get_object($cal_id);
+			$parents[KONE] = $parents[PAKKUMINE] = $parents[KOHTUMINE] = $parents[TEHING] = $user_calendar['meta']['event_folder'];
+		}
+
+
+		$alist = array(
+			array('caption' => 'Töötaja','class' => 'isik', 'reltype' => WORKERS),
+			array('caption' => 'Tegevusala','class' => 'tegevusala', 'reltype' => TEGEVUSALAD),
+			array('caption' => 'Aadress','class' => 'address', 'reltype' => ADDRESS),
+			array('caption' => 'Õiguslik vorm','class' => 'ettevotlusvorm', 'reltype' => ETTEVOTLUSVORM),
+			//array('caption' => 'Pakkumine','class' => 'pakkumine', 'reltype' => PAKKUMINE),
+			//array('caption' => '','class' => '', 'reltype' => ),
+		);
+		
+		
+		$menudata = '';
+		if (is_array($alist))
+		{
+			foreach($alist as $key => $val)
 			{
-				$user_calendar = $this->get_object($cal_id);
-				$parents[PAKKUMINE] = $user_calendar['meta']['event_folder'];
-				$parents[KONE] = $parents[PAKKUMINE];
-				$parents[KOHTUMINE] = $parents[PAKKUMINE];
-				$parents[TEHING] = $parents[PAKKUMINE];
-			}
-	
-	
-			$alist = array(
-				array('caption' => 'Töötaja','class' => 'isik', 'reltype' => WORKERS),
-				array('caption' => 'Tegevusala','class' => 'tegevusala', 'reltype' => TEGEVUSALAD),
-				array('caption' => 'Aadress','class' => 'address', 'reltype' => ADDRESS),
-				array('caption' => 'Pakkumine','class' => 'pakkumine', 'reltype' => PAKKUMINE),
-				//array('caption' => '','class' => '', 'reltype' => ),
-			);
-			$menudata = '';
-			if (is_array($alist))
-			{
-				foreach($alist as $key => $val)
+				if (!$parents[$val['reltype']])
 				{
-					if (!$parents[$val['reltype']])
-					{
-						$this->vars(array(
-							'alt' => 'Kalender määramata',
-							'text' => 'Lisa : '.$val['caption'],
-						));
-						$menudata .= $this->parse("MENU_ITEM_DISABLED");
-					}
-					else
-					{
-					// continue;
-						$this->vars(array(
-							'link' => $this->mk_my_orb('new',array(
-								'alias_to' => $args['obj']['oid'],
-								'reltype' => $val['reltype'],
-								'class' => $val['class'],
-								'parent' => $parents[$val['reltype']],
-								'return_url' => urlencode(aw_global_get('REQUEST_URI')),
-							)),
-							'text' => 'Lisa : '.$val['caption'],
-						));
-						$menudata .= $this->parse("MENU_ITEM");					
-					}
-
-				};
-				$this->vars(array(
-					"MENU_ITEM" => $menudata,
-					"id" => "add_relation",
-				));
-				$addbutton = $this->parse();
-                		$toolbar->add_cdata($addbutton);
-				$toolbar->add_button(array(
-					"name" => "add_item_button",
-					"tooltip" => "Uus",
-					"url" => "",
-					"onClick" => "return buttonClick(event, 'add_relation');",
-					"img" => "new.gif",
-					"imgover" => "new_over.gif",
-					"class" => "menuButton",
-				));
-				
-			};
-			
-			
-
-			$action = array(
-				//array('caption' => 'Lisa Pakkumine','class' => '', 'reltype' => PAKKUMINE, 'title' => 'Pakkumine'),
-				array('caption' => 'Lisa Tehing','class' => '', 'reltype' => TEHING,'title' => 'Tehing'),
-				array('caption' => 'Lisa Kohtumine','class' => '', 'reltype' => KOHTUMINE,'title' => 'Kohtumine'),
-				array('caption' => 'Lisa Kõne','class' => '', 'reltype' => KONE,'title' => 'Kõne'),
-			);
-
-			$menudata = '';
-			if ($cal_id && is_array($action))
-			{
-				foreach($action as $key => $val)
+					$this->vars(array(
+						'title' => 'Kalender määramata',
+						'text' => 'Lisa '.$val['caption'],
+					));
+					$menudata .= $this->parse("MENU_ITEM_DISABLED");
+				}
+				else
 				{
-					if (!$parents[$val['reltype']]) continue;
+				// continue;
 					$this->vars(array(
 						'link' => $this->mk_my_orb('new',array(
 							'alias_to' => $args['obj']['oid'],
@@ -350,40 +430,110 @@ $parents[WORKERS] = $kliendibaas['meta']['dir_isik'] ? $kliendibaas['meta']['dir
 							'parent' => $parents[$val['reltype']],
 							'return_url' => urlencode(aw_global_get('REQUEST_URI')),
 						)),
+						'text' => 'Lisa '.$val['caption'],
+					));
+					$menudata .= $this->parse("MENU_ITEM");	
+				}
+			};
+
+			$this->vars(array(
+				"MENU_ITEM" => $menudata,
+				"id" => "firma_sub",
+			));
+			$menu_cdata .= $this->parse();
+		};
+
+		$action = array(
+			array('reltype' => PAKKUMINE, 'title' => 'Pakkumine'),
+			array('reltype' => TEHING,'title' => 'Tehing'),
+			array('reltype' => KOHTUMINE, 'title' => 'Kohtumine'),
+			array('reltype' => KONE,'title' => 'Kõne'),
+		);
+
+		$menudata = '';
+		if (is_array($action))
+		{
+			foreach($action as $key => $val)
+			{
+				if (!$parents[$val['reltype']] || !$cfgform[$val['reltype']])
+				{
+					$this->vars(array(
+						'title' => 'Konfivorm, kalender või kalendri sündumste kataloog määramata',
 						'text' => 'Lisa '.$val['title'],
 					));
-
+					$menudata .= $this->parse("MENU_ITEM_DISABLED");
+				}
+				else
+				{
+					$this->vars(array(
+						'link' => $this->mk_my_orb('new',array(
+							'alias_to_org' => $args['obj']['oid'],
+							'reltype_org' => $val['reltype'],
+							'class' => 'planner',
+							'id' => $cal_id,
+							'group' => 'add_event',
+							'action' => 'change',
+							'title' => urlencode($val['title'].': '.$args['obj']['name']),
+							'parent' => $parents[$val['reltype']],
+							'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+							'cfgform_id' => $cfgform[$val['reltype']],
+						)),
+						'text' => 'Lisa '.$val['title'],
+					));
 					$menudata .= $this->parse("MENU_ITEM");
-				};
-				$this->vars(array(
-					"MENU_ITEM" => $menudata,
-					"id" => "add_event",
-				));
-				$eventbutton = $this->parse();
-                		$toolbar->add_cdata($eventbutton);
-				$toolbar->add_button(array(
-					"name" => "add_event_button",
-					"tooltip" => "Uus",
-					"url" => "",
-					"onClick" => "return buttonClick(event, 'add_event');",
-					"img" => "new.gif",
-					"imgover" => "new_over.gif",
-					"class" => "menuButton",
-				));
-	
+				}
 			};
-			
-			
-/*			
-- Eraldi toolbari nupp on, kus ma saan lisada Kõnet, Kohtumist, Pakkumist ja Tehingut. 
-Pakkumise ja Tehingu "objekt" on "toode" seosetüübiga Pakkumine või Tehing.			
-*/			
-			
-
-
+			$this->vars(array(
+				"MENU_ITEM" => $menudata,
+				"id" => "calendar_sub",
+			));
+			$menu_cdata .= $this->parse();
+		};
 			
 		
-                };
+		$menudata = '';
+		$this->vars(array(
+			'sub_menu_id' => 'calendar_sub',
+			'text' => 'Lisa kalendrisse...',
+		));
+		$menudata .= $this->parse("MENU_ITEM_SUB");	
+		$this->vars(array(
+			'sub_menu_id' => 'firma_sub',
+			'text' => 'Lisa organisatsioonile...',
+		));
+		$menudata .= $this->parse("MENU_ITEM_SUB");	
+		$this->vars(array(
+			'MENU_ITEM' => '',
+			"MENU_ITEM_SUB" => $menudata,
+			"id" => "mainmenu",
+		));
+		$menu_cdata = $this->parse().$menu_cdata;
+		
+		$toolbar->add_button(array(
+			"name" => "add_item_button",
+			"tooltip" => "Uus",
+			"url" => "",
+			"onClick" => "return buttonClick(event, 'mainmenu');",
+			"img" => "new.gif",
+			"imgover" => "new_over.gif",
+			"class" => "menuButton",
+		));
+		
+		if ($cal_id = aw_global_get('user_calendar'))
+		{
+			$toolbar->add_button(array(
+				"name" => "user_calendar",
+				"tooltip" => "Kasutaja kalender",
+				"url" => $this->mk_my_orb('change', array('id' => $cal_id,'return_url' => urlencode(aw_global_get('REQUEST_URI')),),'planner'),
+				"onClick" => "",
+				"img" => "icon_cal_today.gif",
+				"imgover" => "icon_cal_today_over.gif",
+				"class" => "menuButton",
+			));
+		}
+		
+		$toolbar->add_cdata($menu_cdata);
+
 	}
 
 

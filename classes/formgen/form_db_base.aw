@@ -230,14 +230,23 @@ class form_db_base extends aw_template
 				$ll = $l->get_list();
 				foreach($ll as $lid => $ld)
 				{
-					$sql = "INSERT INTO form_".$this->id."_entries($ids,lang_id) VALUES($vals,$lid)";
-					$this->db_query($sql);
+					$try = $this->db_fetch_field("SELECT id FROM form_".$this->id."_entries WHERE id = '$entry_id'", "id");
+					if ($try != $entry_id)
+					{
+						$sql = "INSERT INTO form_".$this->id."_entries($ids,lang_id) VALUES($vals,$lid)";
+						$this->db_query($sql);
+					}
 				}
 			}
 			else
 			{
-				$sql = "INSERT INTO form_".$this->id."_entries($ids) VALUES($vals)";
-				$this->db_query($sql);
+				// damn, I hate to do this, but I can't figure this out right now
+				$try = $this->db_fetch_field("SELECT id FROM form_".$this->id."_entries WHERE id = '$entry_id'", "id");
+				if ($try != $entry_id)
+				{
+					$sql = "INSERT INTO form_".$this->id."_entries($ids) VALUES($vals)";
+					$this->db_query($sql);
+				}
 			}
 		}
 		$this->restore_handle();

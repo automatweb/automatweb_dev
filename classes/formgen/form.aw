@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.84 2003/08/27 12:25:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.85 2003/10/06 14:32:26 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -1586,6 +1586,8 @@ class form extends form_base
 				}
 				break;
 		}
+	
+		aw_session_del("form_redir_after_submit_".$this->id);
 		return $l;
 	}
 
@@ -1882,6 +1884,14 @@ class form extends form_base
 				$retval .= "<form><input type='button' onClick='javascript:window.close()' value='".$this->output["lang_close_button_text"][aw_global_get("lang_id")]."'></form>";
 			}
 		};
+
+		if ($GLOBALS["format"] == "pdf")
+		{
+			$co = get_instance("core/converters/html2pdf");
+			$pdf = $co->convert(array("source" => $retval));
+			header("Content-type: application/pdf");
+			die($pdf);
+		}
 		return $retval;
 	}
 
@@ -5097,9 +5107,11 @@ class form extends form_base
 				$tabel.=$this->parse("TABLE");
 			}
 		}
+		$tbl = new aw_array($tables);
+		$st = new aw_array($this->arr["save_tables"]);
 		$this->vars(array(
 			"save_table" => checked($this->arr["save_table"] == 1),
-			"tables" => $this->multiple_option_list($this->make_keys(array_keys($this->arr["save_tables"])), $tables),
+			"tables" => $this->multiple_option_list($this->make_keys(array_keys($st->get())), $tbl->get()),
 			"TABLE" => $tabel,
 			"reforb" => $this->mk_reforb("submit_tables", array("id" => $id))
 		));

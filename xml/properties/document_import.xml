@@ -10,7 +10,7 @@
             <caption>XML Fail</caption>
       </property>
       <property>
-            <name>period</name>
+            <name>d_period</name>
             <type>relpicker</type>
             <reltype>RELTYPE_PERIOD</reltype>
             <field>meta</field>
@@ -64,6 +64,14 @@
             <group>settings</group>
             <table>objects</table>
             <caption>dokumenti l&amp;otilde;petav tag</caption>
+      </property>
+      <property>
+            <name>content_transform</name>
+            <type>generated</type>
+            <generator>generate_tag_fields</generator>
+            <table>objects</table>
+            <group>general</group>
+            <field>content_transform</field>
       </property>
       <classinfo>
             <syslog_type>ST_DOCUMENT_IMPORT</syslog_type>

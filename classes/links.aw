@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.41 2003/09/23 16:43:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.42 2003/10/06 14:32:24 kristo Exp $
 
 /*
 
@@ -93,6 +93,38 @@ class links extends class_base
 
 		if ($s_name != "" || $s_content != "")
 		{
+
+			load_vcl("table");
+			$t = new aw_table(array(
+				"layout" => "generic"
+			));
+			$t->define_field(array(
+				"name" => "pick",
+				"caption" => "Vali see",
+			));
+			$t->define_field(array(
+				"name" => "name",
+				"caption" => "Nimetus",
+				"sortable" => 1
+			));
+			$t->define_field(array(
+				"name" => "parent",
+				"caption" => "Asukoht",
+				"sortable" => 1
+			));
+			$t->define_field(array(
+				"name" => "createdby",
+				"caption" => "Looja",
+				"sortable" => 1
+			));
+			$t->define_field(array(
+				"name" => "modified",
+				"caption" => "Viimati muudetud",
+				"type" => "time",
+				"format" => "d.m.Y / H:i",
+				"sortable" => 1
+			));
+
 			$sres = new object_list(array(
 				"class_id" => CL_DOCUMENT,
 				"name" => "%".$s_name."%",
@@ -108,15 +140,28 @@ class links extends class_base
 				{
 					$url = $this->cfg["baseurl"]."/".$o->id();
 				}
-				$this->vars(array(
-					"name" => str_replace("'","",strip_tags($o->name())), 
-					"id" => $o->id(),
-					"url" => $url
+				$name = strip_tags($row["name"]);
+				$name = str_replace("'","",$name);
+
+				$row["pick"] = html::href(array(
+					"url" => 'javascript:ss("'.$url.'","'.$row["name"].'")',
+					"caption" => "Vali see"
 				));
-				$l.=$this->parse("LINE");
+				$row["name"] = html::href(array(
+					"url" => $this->mk_my_orb("change", array("id" => $row["oid"])),
+					"caption" => $row["name"]
+				));
+				$o = obj($row["oid"]);
+				$row["parent"] = $o->path_str(array(
+					"max_len" => 4
+				));
+				$t->define_data($row);
+								
 			}
 			
-			$this->vars(array("LINE" => $l));
+			$t->set_default_sortby("name");
+			$t->sort_by();
+			$this->vars(array("LINE" => $t->draw()));
 		}
 		else
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.45 2002/12/24 15:26:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.43 2003/10/06 14:32:24 kristo Exp $
 // keywords.aw - dokumentide võtmesõnad
 
 define("ARR_LISTID", 1);
@@ -14,18 +14,8 @@ class keywords extends aw_template
 	}
 
 
-	/** Kuvab keywordi lisamise vormi 
-		
-		@attrib name=new params=name default="0"
-		
-		@param parent required acl="add"
-		
-		@returns
-		
-		
-		@comment
-
-	**/
+	////
+	// !Kuvab keywordi lisamise vormi
 	function add($args = array())
 	{
 		extract($args);
@@ -37,18 +27,8 @@ class keywords extends aw_template
 		return $this->parse();
 	}
 
-	/** Kuvab keywordi muutmise vormi 
-		
-		@attrib name=change params=name default="0"
-		
-		@param id required acl="edit;view"
-		
-		@returns
-		
-		
-		@comment
-
-	**/
+	////
+	// !Kuvab keywordi muutmise vormi
 	function change($args = array())
 	{
 		extract($args);
@@ -63,17 +43,8 @@ class keywords extends aw_template
 		return $this->parse();
 	}
 
-	/** Submitib keywordi 
-		
-		@attrib name=submit params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
+	////
+	// !Submitib keywordi
 	function submit($args = array())
 	{
 		extract($args);
@@ -125,20 +96,10 @@ class keywords extends aw_template
 		}
 	}
 
-	/** Kuvab dokude nimekirja, mis mingi kindla võtmesõnaga "seotud" on. 
-		
-		@attrib name=doclist params=name default="0"
-		
-		@param id required
-		
-		@returns
-		
-		
-		@comment
-		argumendid
-		oid - objekti id
-
-	**/
+	////
+	// !Kuvab dokude nimekirja, mis mingi kindla võtmesõnaga "seotud" on.
+	// argumendid
+	// oid - objekti id
 	function doclist($args = array())
 	{
 		extract($args);
@@ -181,20 +142,10 @@ class keywords extends aw_template
 		return $this->parse();
 	}
 
-	/** Kuvab kasutajate nimekirja, kes mingi votmesona listis on. 
-		
-		@attrib name=listmembers params=name default="0"
-		
-		@param id required
-		
-		@returns
-		
-		
-		@comment
-		argumendid
-		id (int)
-
-	**/
+	////
+	// !Kuvab kasutajate nimekirja, kes mingi votmesona listis on.
+	// argumendid
+	// id (int) 
 	function listmembers($args = array())
 	{
 		extract($args);
@@ -223,18 +174,8 @@ class keywords extends aw_template
 		$this->vars(array("LINE" => $c));
 		return $this->parse();
 	}
-	/** Teavitab koiki votmesonalistide liikmeid muudatustest 
-		
-		@attrib name=notify params=name default="0"
-		
-		@param id required
-		
-		@returns
-		
-		
-		@comment
-
-	**/
+	////
+	// !Teavitab koiki votmesonalistide liikmeid muudatustest
 	function notify($args = array())
 	{
 		extract($args);
@@ -307,17 +248,8 @@ class keywords extends aw_template
 		};
 	}
 	
-	/** Handleb saidi sees täidetud "interests" vormi datat 
-		
-		@attrib name=submit_interests params=name nologin="1" default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
+	////
+	// !Handleb saidi sees täidetud "interests" vormi datat
 	function submit_interests($args = array())
 	{
 		extract($args);
@@ -343,17 +275,8 @@ class keywords extends aw_template
 		return $this->cfg["baseurl"] . $res;
 	}
 	
-	/** Handleb EBS stiilis huvideformist tulnud datat 
-		
-		@attrib name=submit_interests2 params=name nologin="1" default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
+	////
+	// !Handleb EBS stiilis huvideformist tulnud datat
 	function submit_interests2($args = array())
 	{
 		extract($args);
@@ -431,17 +354,8 @@ class keywords extends aw_template
 		return $retval;
 	}
 
-	/** Kuvab koikide keywordide vormi 
-		
-		@attrib name=list params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
+	////
+	// !Kuvab koikide keywordide vormi
 	function list_keywords($args = array())
 	{
 		$this->read_template("list.tpl");
@@ -514,17 +428,8 @@ class keywords extends aw_template
 		return $this->parse();
 	}
 	
-	/** Kustutab keywordide listist tulnud andmete pohjal keyworde 
-		
-		@attrib name=delete_keywords params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
+	////
+	// !Kustutab keywordide listist tulnud andmete pohjal keyworde 
 	function delete_keywords($args = array())
 	{
 		extract($args);
@@ -639,7 +544,6 @@ class keywords extends aw_template
 	// oid (int) - objekti (dokumendi id) millega märksõnad siduda
 	function update_keywords($args = array())
 	{
-		return;	// FIXME: this is fucked - old lists are gone and this probably does not work anyway
 		extract($args);
 		$keywordlist = explode(",",$keywords);
 		$categories = array();
@@ -668,7 +572,7 @@ class keywords extends aw_template
 	
 		// teeme kindlaks koik votmesonad, millel polnud ID-d (uued)
 		// loome ka uue listi votmesona jaoks
-		//$lists = get_instance("lists");
+		$lists = get_instance("lists");
 
 		foreach($klist as $val)
 		{
@@ -904,17 +808,6 @@ class keywords extends aw_template
 		return $this->parse();
 	}
 
-	/**  
-		
-		@attrib name=select_keywords params=name nologin="1" default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
 	function select_keywords($args = array())
 	{
 		extract($args);

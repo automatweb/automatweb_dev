@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.62 2003/09/10 13:31:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.63 2003/10/06 14:32:36 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -284,6 +284,13 @@ class aw_table
 					$v1 = $a[$this->vgroupdat[$vgel]["sort_el"]];
 					$v2 = $b[$this->vgroupdat[$vgel]["sort_el"]];
 					$this->sort_flag = $this->nfields[$this->vgroupdat[$vgel]["sort_el"]] ? SORT_NUMERIC : SORT_REGULAR;
+					if ($v1 == $v2)
+					{
+						// if they are equal, then try to sort by the display element
+						$v1 = $a[$vgel];
+						$v2 = $b[$vgel];
+						$this->sort_flag = $this->nfields[$vgel] ? SORT_NUMERIC : SORT_REGULAR;
+					}
 				}
 				else
 				{
@@ -310,6 +317,13 @@ class aw_table
 					$v1 = $a[$this->rgroupsortdat[$_rgcol]["sort_el"]];
 					$v2 = $b[$this->rgroupsortdat[$_rgcol]["sort_el"]];
 					$this->sort_flag = $this->nfields[$this->rgroupsortdat[$_rgcol]["sort_el"]] ? SORT_NUMERIC : SORT_REGULAR;
+					if ($v1 == $v2)
+					{
+						// if they are equal, then try to sort by the display element
+						$v1 = $a[$rgel];
+						$v2 = $b[$rgel];
+						$this->sort_flag = $this->nfields[$_rgcol] ? SORT_NUMERIC : SORT_REGULAR;
+					}
 				}
 				else
 				{
@@ -1018,6 +1032,10 @@ class aw_table
 				$this->group_style = $attrs["value"];
 				break;
 
+			case "group_add_els_style":
+				$this->group_add_els_style = $attrs["value"];
+				break;
+
 			// stiil, mida kasutada parajasti sorteeritud välja headeri näitamiseks
 			case "header_sorted":
 				$this->header_sorted = $attrs["value"];
@@ -1285,12 +1303,30 @@ class aw_table
 				$tbl.=$this->opentag(array(
 					"name" => "td",
 					"colspan" => count($this->rowdefs),
+				));
+				if (isset($rgroupby_sep[$rgel]["real_sep_before"]))
+				{
+					$tbl .= $rgroupby_sep[$rgel]["real_sep_before"];
+				}
+				
+				$tbl .= $this->opentag(array(
+					"name" => "span",
 					"classid" => ($this->col_styles[$v["name"]]["group_style"] ? $this->col_styles[$v["name"]]["group_style"] : $this->group_style)
 				));
 				$tbl.=$_a;
+				$tbl .= $this->closetag(array(
+					"name" => "span"
+				));
 				$this->lgrpvals[$rgel] = $_a;
 				// if we should display some other elements after the group element
 				// they will be passed in the $rgroupdat array
+				if (isset($this->group_add_els_style) && $this->group_add_els_style != "")
+				{
+					$tbl .= $this->opentag(array(
+						"name" => "span",
+						"classid" => $this->group_add_els_style
+					));
+				}
 				$val = "";
 				if (is_array($rgroupdat[$rgel]))
 				{
@@ -1307,6 +1343,12 @@ class aw_table
 					$val .= $rgroupby_sep[$rgel]["after"];
 				}
 				$tbl .= str_replace("[__jrk_replace__]",$this->rgroupcounts[$_a],$val);
+				if (isset($this->group_add_els_style) && $this->group_add_els_style != "")
+				{
+					$tbl .= $this->closetag(array(
+						"name" => "span",
+					));
+				}
 				$tbl.=$this->closetag(array("name" => "td"));
 				$tbl .= $this->closetag(array("name" => "tr"));
 

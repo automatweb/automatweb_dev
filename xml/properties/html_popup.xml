@@ -1,14 +1,14 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>url</name>
-            <type>textbox</type>
-            <size>40</size>
+            <name>show_obj</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_OBJ</reltype>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
-            <caption>Sisu (URL)</caption>
+            <caption>Sisu </caption>
       </property>
       <property>
             <name>width</name>
@@ -33,15 +33,27 @@
             <caption>Kõrgus</caption>
       </property>
       <property>
-            <name>menus</name>
-            <type>select</type>
-            <multiple>1</multiple>
-            <size>20</size>
+            <name>only_once</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
+            <caption>Ainult &amp;uuml;he korra sessiooni jooksul</caption>
+      </property>
+      <property>
+            <name>menus</name>
+            <type>text</type>
+            <callback>callback_get_menus</callback>
+            <method>serialize</method>
+            <table>objects</table>
+            <field>meta</field>
+            <group>general</group>
             <caption>Menüüd</caption>
       </property>
+      <classinfo>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
 </properties>
 

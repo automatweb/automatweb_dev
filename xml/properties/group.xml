@@ -28,33 +28,35 @@
       <property>
             <name>modified</name>
             <type>text</type>
-            <table>groups</table>
-            <group>general</group>
+            <table>objects</table>
             <field>modified</field>
+            <group>general</group>
             <caption>Muudetud</caption>
       </property>
       <property>
-            <name>modifiedby</name>
+            <name>mmodifiedby</name>
             <type>text</type>
-            <field>modifiedby</field>
+            <store>no</store>
             <table>groups</table>
             <group>general</group>
+            <field>mmodifiedby</field>
             <caption>Kes muutis</caption>
       </property>
       <property>
             <name>created</name>
             <type>text</type>
             <field>created</field>
-            <table>groups</table>
+            <table>objects</table>
             <group>general</group>
             <caption>Loodud</caption>
       </property>
       <property>
-            <name>createdby</name>
+            <name>mcreatedby</name>
             <type>text</type>
-            <field>createdby</field>
+            <store>no</store>
             <table>groups</table>
             <group>general</group>
+            <field>mcreatedby</field>
             <caption>Kes l&amp;otilde;i</caption>
       </property>
       <property>

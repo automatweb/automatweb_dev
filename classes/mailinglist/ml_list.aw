@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.28 2003/08/29 11:51:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.29 2003/10/06 14:32:27 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -223,7 +223,7 @@ class ml_list extends class_base
 
 				foreach($lines as $line)
 				{
-					list($name,$addr) = explode("\t",$line);
+					list($name,$addr) = explode(",",$line);
 					if (is_email($addr))
 					{
 						print "OK - n:$name, a:$addr<br />";
@@ -241,6 +241,7 @@ class ml_list extends class_base
 						flush();
 					};
 				};
+				die();
 				break;
 				
 			

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.47 2003/10/05 17:48:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.48 2003/10/06 14:32:25 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -1375,8 +1375,11 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			{
 				while (list($ooid,) = each($sel))
 				{
-					$this->_search_mk_call("objects", "delete_object", array("oid" => $ooid), $args);
-					$this->_search_mk_call("objects", "delete_aliases_of", array("oid" => $ooid), $args);
+					if($this->can('delete',$ooid))
+					{
+						$this->_search_mk_call("objects", "delete_object", array("oid" => $ooid), $args);
+						$this->_search_mk_call("objects", "delete_aliases_of", array("oid" => $ooid), $args);					
+					}
 				}
 			};
 		}

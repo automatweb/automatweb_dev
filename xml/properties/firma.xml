@@ -3,12 +3,14 @@
       <property>
             <name>navtoolbar</name>
             <type>toolbar</type>
-            <group>general</group>
             <store>no</store>
             <no_caption>1</no_caption>
+            <group>
+                  <num_0>general</num_0>
+                  <num_1>overview</num_1>
+            </group>
             <table>objects</table>
             <field>navtoolbar</field>
-            <caption></caption>
       </property>
       <property>
             <name>name</name>
@@ -115,9 +117,28 @@
             <field>firmajuht</field>
             <caption>Organisatsiooni juht</caption>
       </property>
+      <property>
+            <name>progress</name>
+            <type>text</type>
+            <callback>callback_org_actions</callback>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <table>objects</table>
+            <group>overview</group>
+            <field>progress</field>
+            <caption>org_actions</caption>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
       </classinfo>
+      <groupinfo>
+            <general>
+                  <caption>Üldine</caption>
+            </general>
+            <overview>
+                  <caption>Seotud tegevused</caption>
+            </overview>
+      </groupinfo>
       <tableinfo>
             <kliendibaas_firma>
                   <index>oid</index>

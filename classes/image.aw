@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.71 2003/09/24 16:34:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.72 2003/10/06 14:32:24 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -121,13 +121,12 @@ class image extends class_base
 			{
 				$url = $this->mk_my_orb("show", array("fastcall" => 1,"file" => basename($url)),"image",false,true,"/");
 			}
-                        $retval = str_replace("automatweb/", "", $url);
-                }
-                else
-                {
-                        $retval = "";
-                };
-	
+			$retval = str_replace("automatweb/", "", $url);
+		}
+		else
+		{
+			$retval = "";
+		};
 		return $retval;
 	}
 
@@ -167,7 +166,7 @@ class image extends class_base
 			$idata = $this->get_image_by_id($f["target"]);
 		}
 
-		if ($GLOBALS["print"] == 1 && $idata["meta"]["no_print"] == 1)
+		if (($GLOBALS["print"] == 1 || ($GLOBALS["class"] == "document" && $GLOBALS["action"] == "print"))  && $idata["meta"]["no_print"] == 1)
 		{
 			return "";
 		}
@@ -180,11 +179,17 @@ class image extends class_base
 			$alt = $idata["meta"]["alt"];
 			if ($idata["meta"]["file2"] != "")
 			{
-				$size = getimagesize($idata["meta"]["file2"]);
+				$size = @getimagesize($idata["meta"]["file2"]);
+			};
+			if ($idata["file"] != "")
+			{
+				$i_size = @getimagesize($idata["file"]);
 			};
 			$bi_show_link = $this->mk_my_orb("show_big", array("id" => $f["target"]));
 			$bi_link = "window.open('$bi_show_link','popup','width=".($size[0]).",height=".($size[1])."');";
 			$vars = array(
+				"width" => $i_size[0],
+				"height" => $i_size[1],
 				"imgref" => $idata["url"],
 				"imgcaption" => $idata["comment"],
 				"align" => $align[$matches[4]],
@@ -202,6 +207,7 @@ class image extends class_base
 				"bi_link" => $bi_link,
 				"author" => $idata["meta"]["author"]
 			);
+
 			$ha = ""; 
 			if ($idata["meta"]["author"] != "")
 			{
@@ -694,14 +700,13 @@ class image extends class_base
 
 	function callback_post_save($arr)
 	{
-		if ($this->do_resize)
+		$im = $this->get_image_by_id($arr["id"]);
+		if ($im['meta']['do_resize'] != '')
 		{
-			$im = $this->get_image_by_id($arr["id"]);
-			$img = $this->_imagecreatefromstring($this->get_file(array("file" => $im['file'])), $im['file']);
-		
-			$sz = getimagesize($im['file']);
-			$i_width = $sz[0];
-			$i_height = $sz[1];
+			$img = get_instance("core/converters/image_convert");
+			$img->load_from_file($im['file']);
+	
+			list($i_width, $i_height) = $img->size();
 
 			$width = $im['meta']['new_w'];
 			$height = $im['meta']['new_h'];
@@ -741,59 +746,12 @@ class image extends class_base
 				$height = (int)($i_height * (((int)substr($height, 0, -1))/100));
 			}
 
-			$n_img = imagecreatetruecolor($width, $height);
-			imagecopyresampled($n_img, $img, 0, 0, 0,0, $width, $height, $i_width, $i_height);
-			imagedestroy($img);
-
-			ob_start();
-			imagejpeg($n_img);
-			$fc = ob_get_contents();
-			ob_end_clean();
+			$img->resize_simple($width, $height);
 
 			$this->put_file(array(
 				"file" => $im['file'],
-				"content" => $fc
+				"content" => $img->get(IMAGE_JPEG)
 			));
-		}
-	}
-
-	function _imagecreatefromstring($str, $orig_filename)
-	{
-		if (function_exists("imagecreatefromstring"))
-		{
-			return imagecreatefromstring($str);
-		}
-		else
-		{
-			// save temp file
-			$tn = tempnam(aw_ini_get("server.tmpdir"), "aw_g_v2_conv");
-			$this->put_file(array(
-				"file" => $orig_filename,
-				"content" => $str
-			));
-			$_o = strtolower($orig_filename);
-			$ext = substr($_o, strrpos($_o, ".")+1);
-			if ($ext == "jpg" || $ext == "jpeg" || $ext == "pjpeg")
-			{
-				$img = imagecreatefromjpeg($tn);
-			}
-			else
-			if ($ext == "png")
-			{
-				$img = imagecreatefrompng($tn);
-			}
-			else
-			if ($ext == "gif")
-			{
-				$img = imagecreatefromgif($tn);
-			}
-			else
-			{
-				// try jpeg for default
-				$img = imagecreatefromjpeg($tn);
-			}
-			unlink($tn);
-			return $img;
 		}
 	}
 

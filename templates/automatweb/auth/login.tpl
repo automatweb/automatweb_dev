@@ -1,5 +1,5 @@
 <table border="0" cellspacing="1" cellpadding="2">
-<form name=login method="POST" action="/index.{VAR:ext}">
+<form name=login method="POST" action="{VAR:baseurl}/index.{VAR:ext}">
 <tr>
 <td colspan="2">
 <b>Selle ressursi kasutamiseks peate olema sisse logitud</b>

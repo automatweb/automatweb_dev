@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.51 2003/08/01 12:48:16 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.52 2003/10/06 14:32:25 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 class db_objects extends aw_template 
 {
@@ -436,7 +436,28 @@ class objects extends db_objects
 	function show($args = array())
 	{
 		extract($args);
-		$obj = $this->get_object($id);
+		$classes = aw_ini_get("classes");
+		$ret = "";
+
+		$o =&obj($id);
+
+		$clid = $o->class_id();
+		$i = get_instance($classes[$clid]["file"]);
+		if (method_exists($i, "parse_alias"))
+		{
+			$ret = $i->parse_alias(array(
+				"oid" => $id,
+				"alias" => array("target" => $id)
+			));
+			if (is_array($ret))
+			{
+				$ret = $ret["replacement"];
+			}
+		}
+
+		return $ret;
+
+		/*$obj = $this->get_object($id);
 		if (not($obj))
 		{
 			return false;
@@ -593,9 +614,6 @@ class objects extends db_objects
 					$caption = "View calendar";
 				};
 				$replacement = "<a target='new' href='$curl'>$caption</a>";
-				/*
-				$replacement = $cal->view(array("id" => $obj["oid"],"type" => "week"));
-				*/
 				break;
 
 			default:
@@ -603,7 +621,7 @@ class objects extends db_objects
 				$replacement = $obj["class_id"] . " This object class has no output yet<br />";
 		}
 		return $replacement;
-
+		*/
 	}
 
 	function get_fvalue($args = array())

@@ -8,7 +8,7 @@
 <!-- END SUB: start -->
 
 <!-- SUB: button -->
-	<td valign='middle'><a href="{VAR:url}" target="{VAR:target}" class="{VAR:class}" onClick="{VAR:onClick}" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('{VAR:name}','','{VAR:imgbase}/{VAR:imgover}',1)"><IMG name="{VAR:name}" SRC="{VAR:imgbase}/{VAR:img}" WIDTH="23" HEIGHT="22" BORDER=0 ALT="{VAR:tooltip}" title="{VAR:tooltip}" /></a></td>
+	<td valign='middle'><a title="{VAR:tooltip}" alt="{VAR:tooltip}" href="{VAR:url}" target="{VAR:target}" class="{VAR:class}" onClick="{VAR:onClick}" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('{VAR:name}','','{VAR:imgbase}/{VAR:imgover}',1)"><IMG name="{VAR:name}" SRC="{VAR:imgbase}/{VAR:img}" WIDTH="23" HEIGHT="22" BORDER=0 ALT="{VAR:tooltip}" title="{VAR:tooltip}" /></a></td>
 	<td><div style="width:5px;height:1px" /></td>
 <!-- END SUB: button -->
 

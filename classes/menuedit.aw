@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.301 2003/08/27 12:25:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.302 2003/10/06 14:32:24 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -69,12 +69,6 @@ class menuedit extends aw_template
 			$c = get_instance("config");
 			$c->show_favicon(array());
 		}
-
-		if (aw_global_get("no_menus") == 1)
-		{
-			return $params["text"];
-		}
-
 
 		// kontrollib sektsiooni ID-d, tagastab oige numbri kui tegemist oli
 		// aliasega, voi lopetab t, kui miskit oli valesti
@@ -148,6 +142,9 @@ class menuedit extends aw_template
 			$site_content->raw = $this->raw;
 			$res = $site_content->_gen_site_html($params);
 			$this->sel_menus = $site_content->sel_menus;
+			$this->sel_section = $site_content->sel_section;
+			$this->path = $site_content->path;
+
 			$apd = get_instance("layout/active_page_data");
 			$res .= $apd->on_shutdown_get_styles();
 			if ($use_cache && !aw_global_get("no_cache_content"))
@@ -159,6 +156,7 @@ class menuedit extends aw_template
 		else
 		{
 			// kui asi on caches, siis paneme kirja et mis lehte vaadatati.
+			$this->sel_section = $section;
 			$ch = $this->get_object_chain($section, true);
 			//reset($ch);
 			//while (list($k,$v) = each($ch))
@@ -180,6 +178,7 @@ class menuedit extends aw_template
 				$res = str_replace("[ss".$gid."]",gen_uniq_id(),$res);
 			}
 		}
+		$res .= $this->build_popups();
 		return $res;
 	}
 
@@ -244,13 +243,13 @@ class menuedit extends aw_template
 			if (is_number($artid))
 			{
 				$sid = (int)$sid;
-				$this->db_query("SELECT * FROM ml_mails WHERE id = $sid");
-				$ml_msg = $this->db_next();
+
+				$ml_msg = $this->get_object($sid);
 
 				$this->db_query("SELECT ml_users.*,objects.name as name FROM ml_users LEFT JOIN objects ON objects.oid = ml_users.id WHERE id = $artid");
 				if (($ml_user = $this->db_next()))
 				{
-					$this->_log(ST_MENUEDIT, SA_PAGEVIEW ,$ml_user["name"]." (".$ml_user["mail"].") tuli lehele $log meilist ".$ml_msg["subj"],$section);
+					$this->_log(ST_MENUEDIT, SA_PAGEVIEW ,$ml_user["name"]." (".$ml_user["mail"].") tuli lehele $log meilist ".$ml_msg["name"],$section);
 
 					// and also remember the guy
 					// set a cookie, that expires in 3 years
@@ -330,7 +329,16 @@ class menuedit extends aw_template
 			$set_lang_id = $_obj["lang_id"];
 		};
 
-		$q = "SELECT name FROM languages WHERE id = '$set_lang_id' AND status = 2";
+		// let logged-in users see not-active language stuff
+		if (aw_global_get("uid") != "")
+		{
+			$st = " AND status != 0 ";
+		}
+		else
+		{
+			$st = " AND status = 2 ";
+		}
+		$q = "SELECT name FROM languages WHERE id = '$set_lang_id' $st";
 		$this->db_query($q);
 		$row = $this->db_next();
 
@@ -385,7 +393,13 @@ class menuedit extends aw_template
 
 		if ($section == "")
 		{
-			return $frontpage < 1 ? 1 : $frontpage;
+			$ret = $frontpage < 1 ? 1 : $frontpage;
+
+			if (!headers_sent())
+			{
+				header("X-AW-Section: ".$frontpage);
+			}
+			return $ret;
 		}
 
 		if ($section == 'favicon.ico')
@@ -474,9 +488,14 @@ class menuedit extends aw_template
 				{
 					$this->_log(ST_MENUEDIT, SA_ACL_ERROR,sprintf(LC_MENUEDIT_TRIED_ACCESS,$section), $section);
 					// neat :), kui objekti ei leita, siis saadame 404 koodi
-					if ($this->cfg["404redir"])
+					$r404 = $this->cfg["404redir"];
+					if (is_array($r404))
 					{
-						header("Location: " . $this->cfg["404redir"]);
+						$r404 = $r404[aw_global_get("lang_id")];
+					}
+					if ($r404 && "/".$GLOBALS["section"] != $r404)
+					{
+						header("Location: " . $r404);
 					}
 					else
 					{
@@ -504,6 +523,11 @@ class menuedit extends aw_template
 				$section = $frontpage;
 			}
 		};
+
+		if (!headers_sent())
+		{
+			header("X-AW-Section: ".$section);
+		}
 		return $section;
 	}
 
@@ -622,5 +646,103 @@ class menuedit extends aw_template
 		return true;
 	}
 
+	// builds HTML popups
+	function build_popups()
+	{
+		// that sucks. We really need to rewrite that
+		// I mean we always read information about _all_ the popups
+		$pl = new object_list(array(
+			"status" => STAT_ACTIVE,
+			"class_id" => CL_HTML_POPUP
+		));
+		for ($o = $pl->begin(); !$pl->end(); $o = $pl->next())
+		{
+			$ar = new aw_array($o->meta("menus"));
+			$sub = $o->meta("section_include_submenus");
+
+			foreach($ar->get() as $key => $val)
+			{
+				$show = false;
+				if ($sub[$val])
+				{
+					if (!is_array($this->path))
+					{
+						$so = $this->get_object($this->sel_section);
+						$this->path = $this->get_path($this->sel_section,$so);
+					}
+					if (in_array($val, $this->path))
+					{
+						$show = true;
+					}
+				}
+				else
+				{
+					if ($val == $this->sel_section)
+					{
+						$show = true;
+					}
+				}
+
+				if ($o->meta("only_once") && aw_global_get("aw_popup_shown_".$o->id()) == 1)
+				{
+					$show = false;
+				}
+
+				if ($show)
+				{
+					$popups .= sprintf("window.open('%s','popup','top=0,left=0,toolbar=0,location=0,menubar=0,scrollbars=0,width=%s,height=%s');",
+						$this->mk_my_orb("show", array("id" => $o->meta("show_obj"), "no_menus" => 1), "objects"),
+						$o->meta("width"), 
+						$o->meta("height")
+					);
+					aw_session_set("aw_popup_shown_".$o->id(), "1");
+				}
+			}
+		}
+		$retval = (strlen($popups) > 0) ? "<script language='Javascript'>$popups</script>" : "";
+		return $retval;
+	}
+
+	function get_path($section,$obj)
+	{
+		// now find the path through the menu
+		$path = array();
+		if ($obj["class_id"] != CL_PSEUDO)
+		{
+			$sec = $obj["parent"];
+			$section = $obj["parent"];
+		}
+		else
+		{
+			$sec = $section; 
+		}
+		$cnt = 0;
+		$tmp = array();
+		// kontrollime seda ka, et kas see "sec" yldse olemas on,
+		// vastasel korral satume loputusse tsyklisse
+		while ($sec && ($sec != 1)) 
+		{
+			array_push($tmp,$sec);
+			if (!isset($this->mar[$sec]))
+			{
+				$mc = get_instance("menu_cache");
+				$this->mar[$sec] = $mc->get_cached_menu($sec);
+			}
+			$sec = $this->mar[$sec]["parent"];
+			$cnt++;
+			if ($cnt > 1000)
+			{
+				$this->raise_error(ERR_MNED_HIER, "Error in object hierarchy, $sec is it's own parent!", true);
+			}
+		}
+		// now the path is in the correct order on the "root" stack
+
+		for ($i=0; $i < $cnt; $i++) 
+		{
+			$path[$i+1] = array_pop($tmp);
+		};
+		// and now in the $path array
+		return $path;
+	}
 }
 ?>

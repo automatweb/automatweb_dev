@@ -1,10 +1,10 @@
 <!-- SUB: LINE -->
 <tr> 
 	<!-- SUB: CELL -->
-    <td bgcolor="#F6E2B1" colspan="{VAR:colspan}" rowspan="{VAR:rowspan}"> 
+    <td colspan="{VAR:colspan}" rowspan="{VAR:rowspan}">
       <table width="120" border="0" cellspacing="10">
         <tr align="center"> 
-          <td align="center" class="galtext">{VAR:content}</td>
+          <td align="center" class="textsmall">{VAR:content}</td>
         </tr>
       </table>
     </td>

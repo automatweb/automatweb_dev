@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/events.aw,v 2.10 2003/08/01 12:48:16 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/events.aw,v 2.11 2003/10/06 14:32:24 kristo Exp $
 // events.aw - the sucky sucky version of Vibe events
 
 // sisestamis/muutmisvorm peab nagu praegunegi muutmisvorm,
@@ -844,7 +844,7 @@ class events extends aw_template
 		$from = sprintf("%s <%s>",$yname,$ymail);
 		$msg = $meta["full"];
 		$msg = "$fname has invited you to $event[name], click the following link for more details: http://www.vibe.ee/?class=events&action=view&id=$id\n\n" . $msg;
-		mail($to,$subject,$msg,"From: $from");
+		send_mail($to,$subject,$msg,"From: $from");
 		print "<script language='javascript'>window.close()</script>";
 		exit;
 	}

@@ -44,6 +44,10 @@
 <td class="celltext"><input type="text" name="link_caption" value="{VAR:link_caption}"></td>
 </tr>
 <tr class="aste01">
+<td class="celltext">Lisa mailile PDF formaadis sisu:</td>
+<td class="celltext"><input type="checkbox" name="add_pdf" value="1" {VAR:add_pdf}></td>
+</tr>
+<tr class="aste01">
 <td class="celltext">Saada ka e-mailile, mis on elemendis:</td>
 <td class="celltext"><select name="email_el" class="formselect">{VAR:email_el}</select></td>
 </tr>

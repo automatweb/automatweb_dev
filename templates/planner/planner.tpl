@@ -15,7 +15,11 @@
 
 <!-- SUB: navigator -->
 <table border="0" cellpadding="0" cellspacing="0">	
-
+<tr>
+<td valign="top" class="caldaysback">
+{VAR:navi0}
+</td>
+</tr>
 <tr>
 <td valign="top" class="caldaysback">
 {VAR:navi1}

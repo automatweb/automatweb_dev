@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.40 2003/09/24 12:49:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.41 2003/10/06 14:32:24 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -436,7 +436,7 @@ class doc extends class_base
 		};
 		if (isset($this->_modified))
 		{
-			$coredata["modified"] = $this->_modified;
+			//$coredata["modified"] = $this->_modified;
 			$objdata["modified"] = $this->_modified;
 		};
 		if (isset($this->_preview))
@@ -449,12 +449,14 @@ class doc extends class_base
 			$objdata["lead"] = $this->_doc_strip_tags($objdata["lead"]);
 			$objdata["moreinfo"] = $this->_doc_strip_tags($objdata["moreinfo"]);
 		};
-		if (!$objdata["modified"])
+		/*
+		if (!$objdata["modified"] )
 		{
 			$objdata["modified"] = time();
 		}
+		*/
 		
-		if (!$objdata["tm"])
+		if (!$objdata["tm"] && !empty($args["form_data"]["tm"]))
 		{
 			$objdata["tm"] = date("d.m.y", $objdata["modified"]);
 		}
@@ -482,7 +484,7 @@ class doc extends class_base
                         "name" => "save",
                         "tooltip" => "Salvesta",
 			"target" => "_self",
-                        "url" => "javascript:document.changeform.submit();",
+                        "url" => "javascript:submit_changeform();",
                         "imgover" => "save_over.gif",
                         "img" => "save.gif",
                 ));
@@ -519,7 +521,7 @@ class doc extends class_base
 				"name" => "preview",
 				"tooltip" => "Eelvaade",
 				"target" => "_blank",
-				"url" => aw_global_get("baseurl") . "/" . $args["obj"]["oid"],
+				"url" => aw_ini_get("baseurl") . "/" . $args["obj"]["oid"],
 				"imgover" => "preview_over.gif",
 				"img" => "preview.gif",
 			));

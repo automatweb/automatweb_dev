@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/kliendibaas/Attic/tehing.aw,v 1.1 2003/08/29 14:30:48 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/kliendibaas/Attic/tehing.aw,v 1.2 2003/10/06 14:32:27 kristo Exp $
 // tehing.aw - Tehing 
 /*
 
@@ -23,34 +23,18 @@ class tehing extends class_base
 		));
 	}
 
-	//////
-	// class_base classes usually need those, uncomment them if you want to use them
-
-	/*
-	function get_property($args)
+	function change($args)
 	{
-		$data = &$args["prop"];
-		$retval = PROP_OK;
-		switch($data["name"])
-		{
-
-		};
-		return $retval;
-	}
-	*/
-
-	/*
-	function set_property($args = array())
-	{
-		$data = &$args["prop"];
-		$retval = PROP_OK;
-		switch($data["name"])
-                {
-
-		}
-		return $retval;
+		$args['strs'] = array(
+			'type' => 'TEHING',
+			'typeStr' => 'Tehing',
+			'typestr' => 'tehing',
+			'typestrs' => 'tehingu',
+		);
+		
+		$kohtumine = get_instance('kliendibaas/kohtumine');
+		$kohtumine->_change($args);
 	}	
-	*/
 
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed

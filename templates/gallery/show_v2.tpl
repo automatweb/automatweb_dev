@@ -1,12 +1,12 @@
-<table border="0" cellpadding="2" cellspacing="2">
+<table width="100%" border="0" cellpadding="2" cellspacing="2">
 	<tr>
-		<td bgcolor="#CED1D3" colspan="{VAR:num_cols}">
+		<td BGCOLOR="#FCF3DC" colspan="{VAR:num_cols}">
 			<table width="100%" border="0" cellpadding="2" cellspacing="0">
 				<tr>
-					<td class="aa_title">{VAR:name}</td>
+					<td BGCOLOR="#FCF3DC" class="textpealkiri">{VAR:name}</td>
 					<td align="right" class="textmiddle">
 						<!-- SUB: PAGESEL_BACK -->
-						<a href="{VAR:link}"><img SRC="{VAR:baseurl}/img/nool_back.gif"  WIDTH="10" HEIGHT="10" BORDER="0" ALT=""></a>
+						<a href="{VAR:link}"><</a>
 						<!-- END SUB: PAGESEL_BACK -->
 					
 						<!-- SUB: SEL_PAGE -->
@@ -23,7 +23,7 @@
 						<!-- END SUB: PAGE_SEP -->
 
 						<!-- SUB: PAGESEL_FWD -->
-            			<a href="{VAR:link}"><img SRC="{VAR:baseurl}/img/nool_ffd.gif" vspace="0" WIDTH="10" HEIGHT="10" BORDER="0" ALT=""></a> 
+            			<a href="{VAR:link}">></a>
 						<!-- END SUB: PAGESEL_FWD -->
 					</td>
 				</tr>
@@ -31,7 +31,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td bgcolor="#F6E2B1" colspan="{VAR:num_cols}">
+		<td bgcolor="#FFFFFF" colspan="{VAR:num_cols}">
 			<table width="100%" border="0" cellpadding="5" cellspacing="0">
 				<tr>
 					<td class="textmiddle">
@@ -49,7 +49,7 @@
 	</tr>
 	{VAR:layout}
 	<tr>
-		<td bgcolor="#CED1D3" colspan="{VAR:num_cols}">
+		<td bgcolor="#FFFFFF" colspan="{VAR:num_cols}">
 			<table width="100%" border="0" cellpadding="2" cellspacing="0">
 				<tr>
 					<td class="aa_weekday">&nbsp; </td>

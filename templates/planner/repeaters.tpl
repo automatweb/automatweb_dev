@@ -21,12 +21,12 @@ var sel_week = 1;
 var sel_mon = 1;
 var sel_year = 1;
 
-function generic_loader()
+function init_regions()
 {
-	check_week_state(100);
+	check_week_state(99);
 	check_mon_state(99)
 	toggle_year();
-	check_day_state(100);
+	check_day_state(99);
 }
 
 function toggle_day1(state,chact)
@@ -121,29 +121,6 @@ function check_day_state(id)
 		};
 	};
 
-	if (id == 100)
-	{
-		for (i = 1; i <= 3; i++)
-		{
-			if (document.repeater.region1.checked)
-			{
-				if (document.repeater.day[i - 1].checked)
-				{
-					eval("toggle_day" + i + "(false,false)");
-				}
-				else
-				{
-					eval("toggle_day" + i + "(true,true)");
-				};
-			}
-			else
-			{
-				document.repeater.day[i - 1].disabled = true;
-				eval("toggle_day" + i + "(true,false)");
-			};
-		};
-	}
-
 }
 
 function toggle_week1(state,chact)
@@ -218,32 +195,6 @@ function check_week_state(id)
 			}
 		};
 	};
-
-	if (id == 100)
-	{
-		for (i = 1; i <= 2; i++)
-		{
-			if (document.repeater.region2.checked)
-			{
-				if (document.repeater.week[i - 1].checked)
-				{
-					eval("toggle_week" + i + "(false,false)");
-				}
-				else
-				{
-					eval("toggle_week" + i + "(true,false)");
-
-				}
-			}
-			else
-			{
-				document.repeater.week[i - 1].disabled = true;
-				eval("toggle_week" + i + "(true,false)");
-			}
-		}
-	};
-				
-					
 };
 
 function toggle_mon1(state,chact)
@@ -257,7 +208,7 @@ function toggle_mon1(state,chact)
 
 function toggle_mon2(state,chact)
 {
-	document.repeater.yearpwhen.disabled = state;
+	document.repeater.months.disabled = state;
 	if (chact == true)
 	{
 		sel_mon = 2;
@@ -310,31 +261,6 @@ function check_mon_state(id)
 
 
 	};
-
-	if (id == 100)
-	{
-		if (document.repeater.region3.checked)
-		{
-			for (i = 1; i <= 2; i++)
-			{
-				if (document.repeater.month[i - 1].checked)
-				{
-					eval("toggle_mon" + i + "(false,false)");
-				}
-				else
-				{
-					eval("toggle_mon" + i + "(true,false)");
-				};
-			};
-		}
-		else
-		{
-			document.repeater.month[i - 1].disabled = true;
-			eval("toggle_mon" + i + "(true,false)");
-
-		};
-	}
-				
 };
 
 function toggle_year()
@@ -355,7 +281,7 @@ function toggle_year()
 <form method="POST" name="repeater">
 <!-- days -->
 <tr>
-<td align="center" rowspan="3" width="15" valign="top"><input type="checkbox" onClick="check_day_state(99)" name="region1" value="1" class="repform" {VAR:region1} {VAR:region1_disabled}></td>
+<td align="center" rowspan="3" width="15" valign="top"><input type="checkbox" onClick="check_day_state(99)" name="region1" value="1" class="repform" {VAR:region1}></td>
 <td align="center" width="15"><input type="radio" onClick="check_day_state(0)" name="day" value="1" class="repform" {VAR:day1}></td>
 <td class="reptext">
 	{VAR:LC_PLANNER_EVERY} <input type="text" name="dayskip" class="repform" value="{VAR:dayskip}" size="2" maxlength="2"> {VAR:LC_PLANNER_AFTER_DAY}
@@ -366,9 +292,9 @@ function toggle_year()
 <td class="reptext">
 	{VAR:LC_PLANNER_EV_WEEK_THOSE_DAYS}:
 	<input type="checkbox" name="wday[1]" value="1" {VAR:wday1}>E |
-	<input type="checkbox" name="wday[2]" value="2" {VAR:wday2}> T |
+	<input type="checkbox" name="wday[2]" value="2" {VAR:wday2>T |
 	<input type="checkbox" name="wday[3]" value="3" {VAR:wday3}>K |
-	<input type="checkbox" name="wday[4]" value="4" {VAR:wday4}> N |
+	<input type="checkbox" name="wday[4]" value="4" {VAR:wday4>N |
 	<input type="checkbox" name="wday[5]" value="5" {VAR:wday5}>R |
 	<input type="checkbox" name="wday[6]" value="6" {VAR:wday6}>L |
 	<input type="checkbox" name="wday[7]" value="7" {VAR:wday7}>P 
@@ -377,7 +303,7 @@ function toggle_year()
 <tr>
 <td align="center" width="15"><input type="radio" onClick="check_day_state(2)" name="day" value="3" {VAR:day3}></td>
 <td class="reptext">
-	{VAR:LC_PLANNER_EV_MONTH_THOSE_DAYS} (nt 9,19,29) <input type="text" size="20" class="repform" name="monpwhen2" value="{VAR:monpwhen2}">
+	{VAR:LC_PLANNER_EV_MONTH_THOSE_DAYS} (nt 9,19,29) <input type="text" size="20" class="repform" name="monpwhen2" value="{VAR:mp2}">
 </td>
 </tr>
 <!-- days end -->
@@ -399,12 +325,12 @@ function toggle_year()
 <td align="center" width="15"><input type="radio" onClick="check_week_state(1)" name="week" value="2" {VAR:week2}></td>
 <td class="reptext">
 	{VAR:LC_PLANNER_EV_MONTH_THOSE_WEEKS}:
-	<input type="checkbox" name="mweek[1]" value="1" {VAR:mweek1}>1 |
-	<input type="checkbox" name="mweek[2]" value="2" {VAR:mweek2}>2 |
-	<input type="checkbox" name="mweek[3]" value="2" {VAR:mweek3}>3 |
-	<input type="checkbox" name="mweek[4]" value="4" {VAR:mweek4}>4 |
-	<input type="checkbox" name="mweek[5]" value="5" {VAR:mweek5}>5 |
-	<input type="checkbox" name="mweek[last]" value="last" {VAR:mweeklast}>viimasel
+	<input type="checkbox" name="mweek" value="1" {VAR:monpwhen1}>1 |
+	<input type="checkbox" name="mweek" value="2" {VAR:monpwhen2}>2 |
+	<input type="checkbox" name="mweek" value="2" {VAR:monpwhen3}>3 |
+	<input type="checkbox" name="mweek" value="4" {VAR:monpwhen4}>4 |
+	<input type="checkbox" name="mweek" value="5" {VAR:monpwhen5}>5 |
+	<input type="checkbox" name="mweek" value="last" {VAR:monpwhen6}>viimasel
 </td>
 </tr>
 <!-- weeks end -->
@@ -451,9 +377,8 @@ function toggle_year()
 <tr>
 <td colspan="3" valign="top" class="reptext">
 <input type="radio" name="rep" value="1" checked>{VAR:LC_PLANNER_REPEAT_UNTIL_SAID} (forever)<br>
-<input type="radio" name="rep" value="2">{VAR:LC_PLANNER_RESERVE}<input type="text" class="repform" value="{VAR:repeats}" name="repeats" size="2"> {VAR:LC_PLANNER_ORDER_TIME}<br>
-<input type="radio" name="rep" value="3">{VAR:LC_PLANNER_REPEAT_UNTIL}
-{VAR:repend}
+<input type="radio" name="rep" value="2">{VAR:LC_PLANNER_RESERVE}<input type="text" class="repform" value="6" name="repeats" size="2"> {VAR:LC_PLANNER_ORDER_TIME}<br>
+<input type="radio" name="rep" value="3">{VAR:LC_PLANNER_REPEAT_UNTIL}(dd/mm/yyyy)<input type="text" size="2" class="repform" name="repend[day]">/<input type="text" size="2" class="repform" name="repend[mon]">/<input type="text" size="4" class="repform" name="repend[year]"><br>
 </td>
 </tr>
 <!-- repeat types end -->
@@ -468,5 +393,5 @@ function toggle_year()
 
 <!-- initialize regions -->
 <script language="javascript">
-//init_regions();
+init_regions();
 </script>

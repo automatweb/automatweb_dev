@@ -104,7 +104,14 @@ E-post: $mail";
 		{
 			$to = "content@struktuur.ee";
 		}
-		mail($to,"\"$title\"",$msg,"$headers");
+		$tos = explode(",", $to);
+		foreach($tos as $ml)
+		{
+			if ($ml != "")
+			{
+				send_mail($ml,"\"$title\"",$msg,"$headers");
+			}
+		}
 	}
 };
 

@@ -724,6 +724,18 @@ class user extends class_base
 		return $acls;
 	}
 
+	function on_delete_hook($oid)
+	{
+		// check if we are deleting the real thing
+		$is_bro = $this->db_fetch_field("select brother_of from objects where oid = '$oid'", "brother_of") != $oid;
+		if (!$is_bro)
+		{
+			// block user
+			$this->users->do_delete_user($this->users->get_uid_for_oid($oid));
+			$this->delete_brothers_of($oid);
+		}
+	}
+
 /*	function on_delete_alias($arr)
 	{
 		extract($arr);

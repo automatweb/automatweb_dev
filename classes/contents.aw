@@ -7,10 +7,23 @@ class contents extends aw_template
 		$this->init("contents");
 	}
 
-	function show($arr)
+	function show($arr = array())
 	{
 		extract($arr);
-		$this->read_template("show.tpl");
+		if (isset($arr["tpl"]))
+		{
+			$tpl = $arr["tpl"];
+		}
+		else
+		if (aw_ini_get("contents.template") != "")
+		{
+			$tpl = aw_ini_get("contents.template");
+		}
+		else
+		{
+			$tpl = "show.tpl";
+		}
+		$this->read_template($tpl);
 
 		$this->mned = get_instance("contentmgmt/site_content");
 		$this->mned->make_menu_caches();
@@ -20,13 +33,25 @@ class contents extends aw_template
 		
 		$this->per = get_instance("period");
 
+		$this->d_tpl = isset($d_tpl) && $d_tpl != "" ? $d_tpl : "lead.tpl";
+		
 		$this->period = aw_global_get("act_per_id");
+		if ($this->period < 2)
+		{
+			$this->period = 0;
+		}
 		
 		$this->count = 0;
-		$this->max_count = $arr["max"];
-
-		$this->count = 0;
-		$this->max_count = $arr["max"];
+		$this->max_count = isset($arr["max"]) ? $arr["max"] : $this->cfg["show_max"];
+		
+		if (!isset($arr["leadonly"]))
+		{
+			$this->leadonly = "1";
+		}
+		else
+		{
+			$this->leadonly = $arr["leadonly"];
+		}
 
 		// this will not work if there are different menu areas for 
 		// different languages .e.g menuedit.menu_defs[1][YLEMINE] = 66
@@ -98,12 +123,12 @@ class contents extends aw_template
 			$imgurl = $this->cfg["baseurl"] . "/automatweb/images/trans.gif";
 		};
 
-                $this->vars(array(
-                        "act_per_comment" => $act_per["comment"],
-                        "act_per_name" => $act_per["name"],
+		$this->vars(array(
+			"act_per_comment" => $act_per["comment"],
+			"act_per_name" => $act_per["name"],
 			"act_per_image_url" => $imgurl, 
-                        "MENU" => $this->l,
-                ));
+			"MENU" => $this->l,
+		));
 
 		return $this->parse();
 	}
@@ -113,24 +138,30 @@ class contents extends aw_template
 		$menus = $this->mc->get_cached_menu_by_parent($pid);
 		foreach($menus as $mid => $md)
 		{
-			if ($this->mned->has_sub_dox($md["oid"]))
+			if ($this->mned->has_sub_dox($md["oid"]) || true)
 			{
 				$s = "";
 
 				// now docs under the menu
+				$pers = "";
+				if ($this->period > 1)
+				{
+					$pers = "objects.period = '".$this->period."' AND";
+				}
 //				$this->doc->list_docs($md["oid"], $this->period, 2);
-				$this->doc->db_query("SELECT documents.lead AS lead,
-			documents.docid AS docid,
-			documents.title AS title,
-			documents.*,
-			objects.period AS period,
-			objects.class_id as class_id,
-			objects.parent as parent,
-			objects.period AS period
-			FROM documents
-			LEFT JOIN objects ON
-			(documents.docid = objects.brother_of)
-			WHERE objects.period = '".$this->period."' AND objects.parent = '$md[oid]' AND objects.status = 2 ORDER BY objects.jrk");
+				$q = "SELECT documents.lead AS lead,
+					documents.docid AS docid,
+					documents.title AS title,
+					documents.*,
+					objects.period AS period,
+					objects.class_id as class_id,
+					objects.parent as parent,
+					objects.period AS period
+					FROM documents
+					LEFT JOIN objects ON
+					(documents.docid = objects.brother_of)
+					WHERE $pers objects.parent = '$md[oid]' AND objects.status = 2 ORDER BY objects.jrk";
+				$this->doc->db_query($q);
 				while ($row = $this->doc->db_next())
 				{
 					$this->doc->save_handle();
@@ -138,8 +169,8 @@ class contents extends aw_template
 						"doc" => $this->doc->gen_preview(array(
 							"docid" => $row["docid"],
 							"doc" => $row,
-							"tpl" => "lead.tpl",
-							"leadonly" => 1
+							"tpl" => $this->d_tpl,
+							"leadonly" => $this->leadonly
 						))
 					));
 					$s.=$this->parse("STORY");
@@ -155,7 +186,10 @@ class contents extends aw_template
 				{
 					return;
 				}
-				$this->l.=$this->parse("MENU");
+				if ($s != "")
+				{
+					$this->l.=$this->parse("MENU");
+				}
 			}
 			$this->req_menus($md["oid"]);
 		}

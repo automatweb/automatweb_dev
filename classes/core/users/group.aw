@@ -24,16 +24,16 @@
 @property priority field=priority type=textbox size=15
 @caption Prioriteet
 
-@property modified type=text 
+@property modified type=text table=objects field=modified
 @caption Muudetud
 
-@property modifiedby type=text field=modifiedby
+@property mmodifiedby type=text store=no
 @caption Kes muutis
 
-@property created type=text field=created
+@property created type=text field=created table=objects
 @caption Loodud
 
-@property createdby type=text field=createdby
+@property mcreatedby type=text store=no
 @caption Kes l&otilde;i
 
 @property type type=select 
@@ -130,6 +130,24 @@ class group extends class_base
 				$prop['value'] = $this->time2date($prop['value'], 2);
 				break;
 
+			case "mcreatedby":
+				if ($arr["obj"]["oid"])
+				{
+					$o = obj($arr["obj"]["oid"]);
+					$prop['value'] = $o->createdby();
+					$prop["value"] = $prop["value"]->name();
+				}
+				break;
+				
+			case "mmodifiedby":
+				if ($arr["obj"]["oid"])
+				{
+					$o = obj($arr["obj"]["oid"]);
+					$prop['value'] = $o->modifiedby();
+					$prop["value"] = $prop["value"]->name();
+				}
+				break;
+				
 			case "type":
 				$prop['options'] = array(
 					GRP_REGULAR => 'Tavaline',
@@ -601,7 +619,10 @@ class group extends class_base
 
 	function callback_pre_save($arr)
 	{
-		$arr["coredata"]["name"] = $arr["form_data"]["name"];
+		if (isset($arr["form_data"]["name"]))
+		{
+			$arr["coredata"]["name"] = $arr["form_data"]["name"];
+		}
 	}
 
 	function on_delete_hook($oid)
