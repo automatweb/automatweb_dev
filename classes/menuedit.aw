@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.145 2002/08/06 15:10:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.146 2002/08/14 11:59:47 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -4663,8 +4663,11 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			reset($cut_objects);
 			while (list(,$oid) = each($cut_objects))
 			{
-				$this->upd_object(array("oid" => $oid, "parent" => $parent,"period" => $period,"lang_id" => aw_global_get("lang_id")));
-				$updmenus[] = $oid;
+				if ($oid != $parent)
+				{
+					$this->upd_object(array("oid" => $oid, "parent" => $parent,"period" => $period,"lang_id" => aw_global_get("lang_id")));
+					$updmenus[] = $oid;
+				}
 			}
 		}
 		$GLOBALS["cut_objects"] = array();
@@ -4674,7 +4677,10 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			reset($copied_objects);
 			while (list($oid,$str) = each($copied_objects))
 			{
-				$this->unserialize(array("str" => $str, "parent" => $parent, "period" => $period));
+				if ($oid != $parent)
+				{
+					$this->unserialize(array("str" => $str, "parent" => $parent, "period" => $period));
+				}
 			}
 		}
 
