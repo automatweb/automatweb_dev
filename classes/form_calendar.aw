@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_calendar.aw,v 2.11 2002/09/05 08:16:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_calendar.aw,v 2.12 2002/09/05 09:30:56 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 class form_calendar extends form_base
 {
@@ -669,6 +669,7 @@ class form_calendar extends form_base
 		$this->db_query($q);
 		$has_vacancies = true;
 		$has_cal_errors = false;
+		$has_errors = false;
 		$fch = get_instance("form_chain");
 		while($row = $this->db_next())
 		{
@@ -679,6 +680,7 @@ class form_calendar extends form_base
 			$__rel = $args["post_vars"][$row["el_relation"]];
 			preg_match("/lbopt_(\d+?)$/",$__rel,$m);
 			$_rel = (int)$m[1];
+
 
 			if ($row["count"] > 0)
 			{
@@ -708,6 +710,14 @@ class form_calendar extends form_base
 			$this->db_query($q);
 			$rowx = $this->db_next();
 			$this->restore_handle();
+			if ($chain_entry_id)
+			{
+				$rel2 = (int)$chain_entry_id;
+			}
+			else
+			{
+				$rel2 = $rowx["id"];
+			};
 			$vac = $this->get_vac_by_contr(array(
 					"start" => $args["post_vars"][$row["el_start"]],
 					"contr" => $cal_controller,
@@ -715,7 +725,7 @@ class form_calendar extends form_base
 					"entry_id" => $args["entry_id"],
 					"req_items" => $_req_items,
 					"rel" => $_rel,
-					"rel2" => $rowx["id"],
+					"rel2" => $rel2,
 					"id" => $id,
 			));
 
@@ -772,6 +782,10 @@ class form_calendar extends form_base
 			$__rel = $args["post_vars"][$row["el_relation"]];
 			preg_match("/lbopt_(\d+?)$/",$__rel,$m);
 			$_rel = (int)$m[1];
+			if ((int)$chain_entry_id)
+			{
+				$_rel = $chain_entry_id;
+			};
 			// :XXXXX
 			list($_d,$_m,$_y) = explode("-",date("d-m-Y",$_start));
 			$q = "INSERT INTO calendar2event (cal_id,entry_id,start,end,items,relation,form_id)

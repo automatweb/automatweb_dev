@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.140 2002/09/05 08:16:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.141 2002/09/05 09:30:56 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1051,7 +1051,10 @@ class form extends form_base
 			if (($arr = $this->get_spans($row, $a)))
 			{
 				$ds = isset($this->arr["def_style"]) ? $this->arr["def_style"] : 0;
-				$html.=$this->arr["contents"][$arr["r_row"]][$arr["r_col"]]->gen_user_html_not($ds,$arr["colspan"], $arr["rowspan"],$prefix,$elvalues,$no_submit);
+				if (is_object($this->arr["contents"][$arr["r_row"]][$arr["r_col"]]))
+				{
+					$html.=$this->arr["contents"][$arr["r_row"]][$arr["r_col"]]->gen_user_html_not($ds,$arr["colspan"], $arr["rowspan"],$prefix,$elvalues,$no_submit);
+				}
 			}
 		}
 		return $html;
@@ -1120,6 +1123,7 @@ class form extends form_base
 				"id" => $id,
 				"post_vars" => $this->post_vars,
 				"entry_id" => $entry_id,
+				"chain_entry_id" => $chain_entry_id,
 			));
 
 			if ($errors)
@@ -1270,7 +1274,8 @@ class form extends form_base
 			$fcal->make_event_relations(array(
 				"id" => $id,
 				"post_vars" => $this->post_vars,
-				"eid" => $entry_id,
+				"eid" => $eid,
+				"chain_entry_id" => $chain_entry_id,
 			));
 
 		}
@@ -1313,8 +1318,16 @@ class form extends form_base
 			$_period_cnt = (int)$this->arr["cal_period"];
 			$q = "DELETE FROM calendar2timedef WHERE cal_id = '$id'";
 			$this->db_query($q);
-			$q = "INSERT INTO calendar2timedef (oid,cal_id,entry_id,start,end,max_items,period,period_cnt)
-				VALUES ('$id','$id','$entry_id','$_start','$_end','$max','2','$_period_cnt')";
+			if ($chain_entry_id)
+			{
+				$q = "INSERT INTO calendar2timedef (oid,cal_id,entry_id,start,end,max_items,period,period_cnt,relation)
+					VALUES ('$id','$id','$entry_id','$_start','$_end','$_max','2','$_period_cnt','$chain_entry_id')";
+			}
+			else
+			{
+				$q = "INSERT INTO calendar2timedef (oid,cal_id,entry_id,start,end,max_items,period,period_cnt)
+					VALUES ('$id','$id','$entry_id','$_start','$_end','$_max','2','$_period_cnt')";
+			};
 			$this->db_query($q);
 		};
 
