@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.16 2002/06/10 15:50:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.17 2002/07/01 17:44:52 kristo Exp $
 // tegeleb ORB requestide handlimisega
 classload("aw_template","defs","xml_support");
 lc_load("automatweb");
@@ -49,24 +49,8 @@ class orb extends aw_template
 			bail_out();
 		};
 
-		global $orb_defs;
-		// import into local scope
-
-
-		if (!is_array($orb_defs[$class]))
-		{
-//			if ($orb_defs[$class] == "xml")
-//			{
-	
-				$orb_defs = $this->load_xml_orb_def($class);
-				$this->orb_defs = $orb_defs;
-/*			}
-			else
-			{
-				$this->raise_error(sprintf(E_ORB_ORB_CLASS_UNDEF,$class),$fatal,$silent);
-				bail_out();
-			};*/
-		};
+		$orb_defs = $this->load_xml_orb_def($class);
+		$this->orb_defs = $orb_defs;
 
 		global $DBG;
 		if ($DBG)
@@ -78,24 +62,7 @@ class orb extends aw_template
 
 		$action = ($action) ? $action : $orb_defs[$class]["default"];
 
-		//if ((aw_global_get("uid") == "") && (!isset($orb_defs[$class][$action]["nologin"])))
-		//{
-		// 	//need to do the transparent redirect in here
-		//	classload("config");
-		//	$c = new db_config;
-		//	$doc = $c->get_simple_config("orb_err_mustlogin");
-		//	if ($doc != "")
-		//	{
-		//		header("Location: $doc");
-		//		die();
-		//	}
-		//	else
-		//	{
-		//		$this->raise_error(ERR_ORB_LOGIN,E_ORB_LOGIN_REQUIRED,$fatal,$silent);
-		//	}
-		//};
 		$this->check_login(array("class" => $class,"action" => $action));
-
 
 		// action defineeritud?
 		if (!isset($action))
@@ -145,87 +112,58 @@ class orb extends aw_template
 
 		// loome parameetrite array
 		$params = array();
-		if ($xml)
+		// orb on defineeritud XML-i kaudu
+		if (isset($orb_defs[$class][$action]["all_args"]) && $orb_defs[$class][$action]["all_args"] == true)
 		{
-			// orb on defineeritud XML-i kaudu
-			if (isset($orb_defs[$class][$action]["all_args"]) && $orb_defs[$class][$action]["all_args"] == true)
-			{
-				$params = $GLOBALS["HTTP_GET_VARS"];
-			}
-			else
-			{
-				// required arguments
-				$required = $orb_defs[$class][$action]["required"];
-				$optional = $orb_defs[$class][$action]["optional"];
-				$defined = $orb_defs[$class][$action]["define"];
-				foreach($required as $key => $val)
-				{
-					if (!isset($vars[$key]))
-					{
-						$this->raise_error(ERR_ORB_CPARM,sprintf(E_ORB_CLASS_PARM,$key,$action,$class),$fatal,$silent);
-						bail_out();
-					};
-
-					$vartype = $orb_defs[$class][$action]["types"][$key];
-					if ($vartype == "int")
-					{
-						if ($vars[$key] != sprintf("%d",$vars[$key]))
-						{
-							$this->raise_error(ERR_ORB_NINT,sprintf(E_ORB_NOT_INTEGER,$key),$fatal,$silent);
-							bail_out();
-						};
-					};
-					$params[$key] = $vars[$key];
-				};
-	 
-				//optional arguments
-				foreach($optional as $key => $val)
-				{
-					$vartype = $orb_defs[$class][$action]["types"][$key];
-					if (isset($vars[$key]))
-					{
-						if ( ($vartype == "int") && ($vars[$key] != sprintf("%d",$vars[$key])) )
-						{
-							$this->raise_error(ERR_ORB_NINT,sprintf(E_ORB_NOT_INTEGER,$key),$fatal,$silent);
-							bail_out();
-						};
-						$params[$key] = $vars[$key];
-					}
-					else
-					if (isset($orb_defs[$class][$action]["defaults"][$key]))
-					{
-						$params[$key] = $orb_defs[$class][$action]["defaults"][$key];
-					}
-				};
-				$params = array_merge($params,$defined);
-			}
+			$params = $GLOBALS["HTTP_GET_VARS"];
 		}
 		else
 		{
-			// orb on defineeritud arrayga
-			reset($fun["params"]);
-			while (list(,$vname) = each($fun["params"]))
+			// required arguments
+			$required = $orb_defs[$class][$action]["required"];
+			$optional = $orb_defs[$class][$action]["optional"];
+			$defined = $orb_defs[$class][$action]["define"];
+			foreach($required as $key => $val)
 			{
-				if (!isset($vars[$vname]))
+				if (!isset($vars[$key]))
 				{
-					$this->raise_error(ERR_ORB_CPARM,sprintf(E_ORB_CLASS_PARM,$vname,$action,$class),$fatal,$silent);
+					$this->raise_error(ERR_ORB_CPARM,sprintf(E_ORB_CLASS_PARM,$key,$action,$class),$fatal,$silent);
+					bail_out();
 				};
 
-				$params[$vname] = $vars[$vname];
-			}
- 
-			if (is_array($fun["opt"]))
-			{
-				reset($fun["opt"]);
-				while(list(,$vname) = each($fun["opt"]))
+				$vartype = $orb_defs[$class][$action]["types"][$key];
+				if ($vartype == "int")
 				{
-					if (isset($vars[$vname]))
+					if ($vars[$key] != sprintf("%d",$vars[$key]))
 					{
-						$params[$vname] = $vars[$vname];
+						$this->raise_error(ERR_ORB_NINT,sprintf(E_ORB_NOT_INTEGER,$key),$fatal,$silent);
+						bail_out();
 					};
+				};
+				$params[$key] = $vars[$key];
+			};
+ 
+			//optional arguments
+			foreach($optional as $key => $val)
+			{
+				$vartype = $orb_defs[$class][$action]["types"][$key];
+				if (isset($vars[$key]))
+				{
+					if ( ($vartype == "int") && ($vars[$key] != sprintf("%d",$vars[$key])) )
+					{
+						$this->raise_error(ERR_ORB_NINT,sprintf(E_ORB_NOT_INTEGER,$key),$fatal,$silent);
+						bail_out();
+					};
+					$params[$key] = $vars[$key];
+				}
+				else
+				if (isset($orb_defs[$class][$action]["defaults"][$key]))
+				{
+					$params[$key] = $orb_defs[$class][$action]["defaults"][$key];
 				}
 			};
-		};
+			$params = array_merge($params,$defined);
+		}
 
 		if ($user)
 		{
