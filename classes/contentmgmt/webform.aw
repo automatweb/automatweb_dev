@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.5 2004/11/30 14:53:33 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.6 2004/12/02 16:44:12 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -206,7 +206,7 @@ class webform extends class_base
 					"confirm" => "Oled kindel, et tahad valitud sisestused kustutada?",
 				));
 				$tb->add_button(array(
-					"name" => "delete",
+					"name" => "export",
 					"tooltip" => "Ekspordi objektid",
 					"url" => html::get_change_url($object_export->id(), array(
 						"group" => "mktbl",
@@ -422,27 +422,24 @@ class webform extends class_base
 				));
 				$set_controllers = array(
 					array(
-						"name" => "Väli *elemendinimi* peab olema täidetud",
+						"name" => "*elemendinimi* peab olema täidetud",
 						"formula" => 'if($prop["value"] == ""){$retval = PROP_ERROR;}',
 						"errmsg" => "Väli %caption peab olema täidetud",
 					),
 					array(
-						"name" => "Väli *elemendinimi* peab olema valitud",
+						"name" => "*elemendinimi* peab olema valitud",
 						"formula" => 'if(!checked($prop["value"])){$retval = PROP_ERROR;}',
 						"errmsg" => "Väli %caption peab olema valitud",
+					),
+					array(
+						"name" => "Kontrolli e-maili õigsust",
+						"formula" => 'if(!is_email($prop["value"]){$retval = PROP_ERROR;}',
+						"errmsg" => "Välja %caption sisestatud e-mailiaadress pole korrektne",
 					),
 				);
 				$get_controllers = array(
 					array(
-						"name" => "Kuva sisestuses vormi täitja IP aadressi",
-						"formula" => "",
-					),
-					array(
-						"name" => "Kuva sisestuses vormi täitja host aadressi",
-						"formula" => "",
-					),
-					array(
-						"name" => "Kuva sisestuses vormi täitmise kuupäeva",
+						"name" => "Kuva sisestaja IP ja host aadress",
 						"formula" => "",
 					),
 				);
@@ -614,6 +611,16 @@ class webform extends class_base
 
 	function callback_props($arr)
 	{
+		$prop_order = array(
+			"textbox" => 0,
+			"textarea" => 1,
+			"text" => 2,
+			"classificator" => 3,
+			"hidden" => 4,
+			"date_select" => 5,
+			"submit" => 6,
+			"reset" => 7,
+		);
 		$no_props = array("status", "comment", "name", "register_id");
 		//arr($this->cfgform_i->all_props);
 		$this->read_template("avail_props.tpl");
@@ -627,14 +634,15 @@ class webform extends class_base
 		// these props won't go to heaven
 		foreach($this->cfgform_i->all_props as $key => $prop)
 		{
-			if(!in_array($prop["type"], $show_props) && !in_array($prop["type"], $no_props))
+			if(!in_array($prop_order[$prop["type"]], $show_props) && !in_array($prop["type"], $no_props))
 			{
-				$show_props[$prop["type"]] = $prop;
+				$show_props[$prop_order[$prop["type"]]] = $prop;
 			}
 			$ext_count[$prop["type"]]++;
 		}
 		$sc = "";
-		foreach($show_props as $key => $prop)
+		ksort($show_props);
+		foreach($show_props as $prop)
 		{
 			$this->vars(array(
 				"prp_name" => $this->trans_names[$prop["type"]],
@@ -899,6 +907,7 @@ class webform extends class_base
 		{
 			$this->all_rels[$rel->prop("to")] = $rel->prop("to.name");
 		}
+		asort($this->all_rels);
 		if($prop == "style")
 		{
 			classload("layout/active_page_data");
@@ -928,19 +937,19 @@ class webform extends class_base
 		);
 		foreach($this->cfgform_i->prplist as $key => $val)
 		{
-			$props[$key] = array(
-				"name" => "style[$key][prop]",
-				"caption" => $val["caption"]." stiil",
-				"type" => "select",
-				"options" => $this->all_rels,
-				"selected" => $sel_styles[$key]["prop"],
-			);
 			$props[$key."_capt"] = array(
 				"name" => "style[$key][caption]",
 				"caption" => $val["caption"]." pealkirja stiil",
 				"type" => "select",
 				"options" => $this->all_rels,
 				"selected" => $sel_styles[$key]["caption"],
+			);
+			$props[$key] = array(
+				"name" => "style[$key][prop]",
+				"caption" => $val["caption"]." elemendi stiil",
+				"type" => "select",
+				"options" => $this->all_rels,
+				"selected" => $sel_styles[$key]["prop"],
 			);
 		}
 		return $props;
@@ -953,7 +962,10 @@ class webform extends class_base
 			"name" => "prop1",
 			"type" => "text",
 			"no_caption" => 1,
-			"value" => $this->show(array("id" => $arr["obj_inst"]->id())),
+			"value" => $this->show(array(
+				"id" => $arr["obj_inst"]->id(),
+				"group" => $arr["request"]["group"],
+			)),
 		));
 	}
 
@@ -1028,12 +1040,24 @@ class webform extends class_base
 		$object_type = $obj_inst->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE");
 		$errors = aw_global_get("wf_errors");
 		$values = aw_global_get("wf_data");
-
+		
+		
+		if(strpos($_SERVER["REQUEST_URI"],"/automatweb") !== false)
+		{
+			$section = html::get_change_url($arr["id"], array(
+			 "group" => $arr["group"],
+			));
+		}
+		else
+		{
+			$section = aw_ini_get("baseurl")."/".aw_global_get("section");
+		}
+		
 		$rval = $this->draw_cfgform_from_ot(array(
 			"ot" => $object_type->id(),
 			"reforb" => $this->mk_reforb("save_form_data", array(
 				"id" => $arr["id"],
-				"return_url" => $obj_inst->prop("redirect"),
+				"return_url" => $section,
 			)),
 			"errors" => $errors,
 			"values" => $values,
@@ -1062,8 +1086,8 @@ class webform extends class_base
 					"name" => $pn."_err",
 					"type" => "text",
 					"store" => "no",
-					"value" => "<font color=red>".$errs[$pn]["msg"]."</font>",
-					"no_caption" => 1
+					"value" => "<font color=red style=".$sel_styles["error"].">".$errs[$pn]["msg"]."</font>",
+					"no_caption" => 1,
 				);
 			}
 			$ret[$pn] = $pd;
@@ -1073,13 +1097,6 @@ class webform extends class_base
 		$els = $rd->parse_properties(array(
 			"properties" => $els,
 		));
-		foreach($els as $key => $val)
-		{
-			// some goddamn this messes up the element captions, reorder them
-			$els[$key]["caption"] = $all_props[$key]["caption"];
-			$els[$key]["capt_ord"] = $all_props[$key]["wf_capt_ord"];
-			$els[$key]["style"] = $sel_styles[$key];
-		}
 		$def_caption_style = $arr["obj_inst"]->prop("def_caption_style");
 		$def_prop_style = $arr["obj_inst"]->prop("def_prop_style");
 		if(!empty($def_caption_style) or !empty($def_prop_style))
@@ -1096,9 +1113,26 @@ class webform extends class_base
 				}
 			}
 		}
+		foreach($els as $key => $val)
+		{
+			// some goddamn thing messes up the element captions, reorder them
+			//$els[$key]["caption"] = $all_props[$key]["caption"];
+			$els[$key]["capt_ord"] = $all_props[$key]["wf_capt_ord"];
+			if(is_array($sel_styles[$key]))
+			{
+				if(!empty($sel_styles[$key]["caption"]))
+				{
+					$els[$key]["style"]["caption"] = $sel_styles[$key]["caption"];
+				}
+				if(!empty($sel_styles[$key]["caption"]))
+				{
+					$els[$key]["style"]["prop"] = $sel_styles[$key]["prop"];
+				}
+			}
+		}
 		classload("cfg/htmlclient");
 		$htmlc = new htmlclient(array(
-			"template" => "webform.tpl",
+			"template" => "real_webform.tpl",
 			"styles" => safe_array($arr["obj_inst"]->meta("m_styles")),
 		));
 		$htmlc->start_output();
@@ -1129,8 +1163,8 @@ class webform extends class_base
 	**/
 	function save_form_data($arr)
 	{
-		$rval = aw_ini_get("baseurl").$arr["return_url"];
 		$obj_inst = obj($arr["id"]);
+		$rval = aw_ini_get("baseurl").$obj_inst->prop("redirect");
 		if(!$object_type = $obj_inst->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE"))
 		{
 			return $rval;
@@ -1148,7 +1182,7 @@ class webform extends class_base
 		{
 			aw_session_set("wf_errors", $is_valid);
 			aw_session_set("wf_data", $arr);
-			return aw_ini_get("baseurl")."/".aw_global_get("section");
+			return $arr["return_url"];
 		}
 		else
 		{
@@ -1264,7 +1298,7 @@ class webform extends class_base
 		{
 			foreach($arr["select"] as $val)
 			{
-				if(is_oid($val) && $this->can("view", $val))
+				if(is_oid($val) && $this->can("delete", $val))
 				{
 					$obj = obj($val);
 					if($obj->class_id = CL_REGISTER_DATA)
