@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.95 2002/02/18 13:48:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.96 2002/02/19 00:38:45 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -369,7 +369,15 @@ class menuedit extends aw_template
 				{
 					$uo = true;
 				}
-				$uo_parent = $this->tmp[$uo_parent]["parent"];
+				// awoid links to object itself
+				if ($uo_parent == $this->tmp[$uo_parent]["parent"])
+				{
+					$uo_parent = false;
+				}
+				else
+				{
+					$uo_parent = $this->tmp[$uo_parent]["parent"];
+				};
 			}
 			if ($uo)
 			{
