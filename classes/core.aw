@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.73 2002/01/07 16:33:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.74 2002/01/16 22:03:02 duke Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -128,8 +128,19 @@ class core extends db_connector
 		{
 			return false;
 		};
-	
+			
 		$metadata = aw_unserialize($old["metadata"]);
+		if ($overwrite)
+		{
+			if ($key)
+			{
+				$metadata[$key] = array();
+			}
+			else
+			{
+				$metadata = array();
+			};
+		}
 
 		if (is_array($data))
 		{
@@ -144,12 +155,20 @@ class core extends db_connector
 			// nothing to do, return
 			return false;
 		};
-
+		
 		$newmeta = aw_serialize($metadata,SERIALIZE_PHP);
 
-		$this->quote($newmeta);
-		$q = "UPDATE objects SET metadata = '$newmeta' WHERE oid = '$oid'";
-		$this->db_query($q);
+		if (not($serialize))
+		{
+			$this->quote($newmeta);
+			$q = "UPDATE objects SET metadata = '$newmeta' WHERE oid = '$oid'";
+			$this->db_query($q);
+			$retval = true;
+		}
+		else
+		{
+			$retval = $newmeta;
+		};
 		return $retval;
 	}
 
@@ -562,6 +581,14 @@ class core extends db_connector
 		$params["modifiedby"] = UID;
 		$params["modified"] = time();
 		$params["cachedirty"] = 1;
+		if ($params["metadata"])
+		{
+			$params["metadata"] = $this->set_object_metadata(array(
+						"oid" => $params["oid"],
+						"data" => $params["metadata"],
+						"serialize" => 1,
+			));
+		};
 		$this->quote($params);
 		$q_parts = array(); // siia sisse paneme päringu osad
 		while(list($k,$v) = each($params)) {
