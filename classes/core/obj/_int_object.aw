@@ -113,10 +113,9 @@ class _int_object
 		$oids = $GLOBALS["object_loader"]->param_to_oid_list($param["to"]);
 		foreach($oids as $oid)
 		{
-			$t = $param;
-			$t["to"] = $oid;
 			$c = new connection();
-			$c->change($t);
+			$param["to"] = $oid;
+			$c->change($param);
 		}
 	}
 
@@ -779,6 +778,7 @@ class _int_object
 		$this->ini = array();
 		$this->ini["site_id"] = aw_ini_get("site_id");
 		$this->ini["menuedit.recursive_aliases"] = aw_ini_get("menuedit.recursive_aliases");
+		$this->ini["rootmenu"] = aw_ini_get("rootmenu");
 	}
 
 	function _int_do_save()
@@ -838,7 +838,15 @@ class _int_object
 
 	function _int_path()
 	{
-		// TODO: _int_path
+		$ret = array();
+		$parent = $this->id();
+		while ($parent && $parent != $this->ini["rootmenu"])
+		{
+			$t = obj($parent);
+			$ret[] = $t;
+			$parent = $t->parent();
+		}
+		return $ret;
 	}
 
 	function _int_can($param)

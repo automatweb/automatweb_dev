@@ -329,4 +329,9 @@ class object
 	}
 }
 
+function &obj($param = NULL)
+{
+	return new object($param);
+}
+
 ?>
