@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.10 2003/06/04 19:17:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.11 2003/06/10 13:11:52 kristo Exp $
 class admin_menus extends aw_template
 {
 	// this will be set to document id if only one document is shown, a document which can be edited
@@ -500,7 +500,7 @@ class admin_menus extends aw_template
 	////
 	// !copies the selected objects
 	function copy($arr)
-	{arr($arr,1);
+	{
 		extract($arr);
 
 		// check if any objects that are to be copied need special handling
@@ -743,6 +743,8 @@ class admin_menus extends aw_template
 					}
 
 					// now create the damn thing.
+					$this->quote(&$mt);
+					$this->quote(&$mopts);
 					$id = $this->new_object(array(
 						"parent" => $_parent,
 						"class_id" => CL_PSEUDO,
