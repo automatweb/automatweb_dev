@@ -113,6 +113,7 @@ target="_blank" href="{VAR:baseurl}/index.aw?section={VAR:id}">Eelvaade</a></td>
 	Arhiveeri:	<input type='checkbox' name="archive" value=1>&nbsp;&nbsp;&nbsp;
 	Esilehel:	<input type='checkbox' name="esilehel" value=1 {VAR:esilehel}>&nbsp;&nbsp;&nbsp;
 	Esilehel tulbas:	<input type='checkbox' name="frontpage_left" value=1 {VAR:frontpage_left}>&nbsp;&nbsp;&nbsp;
+	Cache otsingu jaoks: <input type='checkbox' name='dcache' value=1 {VAR:dcache}>&nbsp;&nbsp;
 		</td>
 	</tr>
 </table>
