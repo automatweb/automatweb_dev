@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.28 2003/06/26 12:06:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.29 2003/07/04 13:40:44 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -12,6 +12,9 @@
 
 @property active type=checkbox ch_value=2 table=objects field=status
 @caption Aktiivne
+
+@property plugins type=callback callback=callback_get_doc_plugins table=objects field=meta method=serialize
+@caption Pluginad
 
 @property title type=textbox size=60
 @caption Pealkiri
@@ -142,6 +145,7 @@ class doc extends class_base
 	{
 		$this->init(array(
 			"clid" => CL_DOCUMENT,
+			"tpldir" => "automatweb/documents",
 		));
 	}
 
@@ -467,6 +471,24 @@ class doc extends class_base
 		extract($args);
 		$d = get_instance("document");
 		return $d->gen_preview(array("docid" => $args["id"]));
+	}
+	
+	function callback_get_doc_plugins($args = array())
+	{
+                $plugins = $this->parse_long_template(array(
+                        "parent"=> $args["obj"]["parent"],
+                        "template_dir" => $this->template_dir,
+                ));
+
+                $plg_ldr = get_instance("plugins/plugin_loader");
+                $plugindata = $plg_ldr->load_by_category(array(
+                        "category" => "document",
+                        "plugins" => $plugins,
+                        "method" => "get_property",
+                        "args" => $args["obj"]["meta"]["plugins"],
+                ));
+
+		return $plugindata;
 	}
 
 	// creates a list of brothers for a document
