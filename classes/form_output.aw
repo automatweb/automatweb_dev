@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.22 2002/08/02 13:33:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.23 2002/09/25 15:01:09 kristo Exp $
 
 class form_output extends form_base 
 {
@@ -475,8 +475,8 @@ class form_output extends form_base
 					continue;
 				}
 				
-				$rcol = $arr["r_col"];
-				$rrow = $arr["r_row"];
+				$rcol = (int)$arr["r_col"];
+				$rrow = (int)$arr["r_row"];
 				$cell = $this->output[$rrow][$rcol];
 
 				$element="";
@@ -504,8 +504,8 @@ class form_output extends form_base
 					"exp_down"	=> $this->mk_orb("exp_down", array("id" => $op_id, "col" => $col, "row" => $row)),
 					"split_ver"	=> $this->mk_orb("split_cell_ver", array("id" => $id, "col" => $col, "row" => $row)),
 					"split_hor"	=> $this->mk_orb("split_cell_hor", array("id" => $id, "col" => $col, "row" => $row)),
-					"ch_cell" => $this->mk_my_orb("ch_cell", array("id" => $id, "col" => $rcol, "row" => $rrow)),
-					"addel" => $this->mk_my_orb("add_element", array("id" => $id, "col" => $rcol, "row" => $rrow)),
+					"ch_cell" => $this->mk_my_orb("ch_cell", array("id" => $id, "col" => (int)$rcol, "row" => (int)$rrow)),
+					"addel" => $this->mk_my_orb("add_element", array("id" => $id, "col" => (int)$rcol, "row" => (int)$rrow)),
 					"style_name" => $style_select[$cell["style"]]
 				));
 
