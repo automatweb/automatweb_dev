@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.175 2004/03/02 16:50:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.176 2004/03/08 16:49:48 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -21,9 +21,6 @@ EMIT_MESSAGE(MSG_EVENT_ADD);
 	@property default_view type=select rel=1
 	@caption Aeg
 
-	@property content_generator type=select rel=1 group=advanced
-	@caption Näitamisfunktsioon
-
 	property event_cfgform type=relpicker reltype=RELTYPE_EVENT_ENTRY
 	caption Def. sündmuse sisetamise vorm
 
@@ -33,9 +30,6 @@ EMIT_MESSAGE(MSG_EVENT_ADD);
 	@property day_end type=time_select group=time_settings rel=1
 	@caption Päev lõpeb
 
-	@property only_days_with_events type=checkbox ch_value=1 group=advanced
-	@caption Näidatakse ainult sündmustega päevi
-
 	@property navigator_visible type=checkbox ch_value=1 default=1 group=advanced
 	@caption Näita navigaatorit
 	
@@ -43,25 +37,7 @@ EMIT_MESSAGE(MSG_EVENT_ADD);
 	@caption Kuud navigaatoris
 
 	@property my_projects type=checkbox ch_value=1 group=advanced
-	@caption Näita minu projekte
-
-	@property items_on_line type=textbox size=4 group=special rel=1
-	@caption Max. cell'e reas
-
-	@property event_direction type=chooser group=advanced rel=1
-	@caption Suund
-
-	@property range_start type=date_select group=time_settings rel=1
-	@caption Alates
-
-	@property event_time_item type=textbox size=4 group=time_settings rel=1
-	@caption Mitu päeva
-	
-	@property event_max_items type=textbox size=4 group=advanced rel=1
-	@caption Max. sündmusi 
-
-	@property use_template type=select group=advanced rel=1
-	@caption Template
+	@caption Näita projekte
 
 	@property event_folder type=relpicker reltype=RELTYPE_EVENT_FOLDER
 	@caption Sündmuste kataloog
@@ -87,11 +63,7 @@ EMIT_MESSAGE(MSG_EVENT_ADD);
 	@groupinfo general2 caption=Üldine parent=general
 	@groupinfo advanced caption=Sisuseaded parent=general
 	@groupinfo views caption=Sündmused submit=no
-	groupinfo show_day caption=Päev submit=no parent=views
-	groupinfo show_week caption=Nädal submit=no parent=views
-	groupinfo show_month caption=Kuu submit=no default=1 parent=views
 	@groupinfo time_settings caption=Ajaseaded parent=general
-	@groupinfo special caption=Spetsiaalne parent=general
 	@groupinfo add_event caption="Muuda sündmust"
 */
 
@@ -157,7 +129,6 @@ class planner extends class_base
 		);
 
 		$this->event_entry_classes = array(CL_TASK,CL_CRM_CALL,CL_CRM_OFFER,CL_CRM_MEETING);
-		$this->specialgroups = array("projects","calendars");
 	}
 
 	function get_event_classes()
@@ -231,12 +202,6 @@ class planner extends class_base
 				$data["options"] = array(1 => 1, 2 => 2, 3 => 3 );
 				break;
 
-			case "content_generator":
-				$orb = get_instance("orb");
-				$tmp = array("0" => "näita kalendri sisu") + $orb->get_classes_by_interface(array("interface" => "content"));
-				$data["options"] = $tmp;
-				break;
-
 			case "navtoolbar":
 				$this->gen_navtoolbar($arr);
 				break;
@@ -249,22 +214,6 @@ class planner extends class_base
 				};
 				break;
 
-			case "event_direction":
-				$data["options"] = array(
-					"1" => "tagasi",
-					"0" => "praegu",
-					"2" => "edasi",
-				);
-				break;
-
-			case "use_template":
-				$data["options"] = array(
-					"" => "",
-					"show_relative.tpl" => "Piltide üldvaade",
-					"disp_day2.tpl" => "Päev",
-				);
-				break;
-	
 			case "calendar_contents":
 				$this->gen_calendar_contents($arr);
 				break;
@@ -308,6 +257,7 @@ class planner extends class_base
 			$folders[] = $obj->prop("event_folder");
 		};
 
+		classload("date_calc");
 		if (empty($arr["start"]))
 		{
 			$di = get_date_range(array(
@@ -416,6 +366,8 @@ class planner extends class_base
 			(planner.end <= '${_end}' OR planner.end IS NULL) AND
 			objects.status != 0";
 
+		// lyhidalt. planneri tabelis peaks kirjas olema. No, but it can't be there 
+		// I need to connect that god damn recurrence table into this fucking place.
 
 		// I could probably optimize this even further by not processing folders,
 		// if events from a projects were requested.
@@ -435,6 +387,8 @@ class planner extends class_base
 			};
 		}
 
+		// now, I need another clue string .. perhaps even in that big fat ass query?
+
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
@@ -443,6 +397,32 @@ class planner extends class_base
 				"start" => $row["start"],
 				"end" => $row["end"],
 			);
+		};
+
+		$fldstr = join(",",$folders);
+
+		// now collect recurrence data
+		$q = "SELECT planner.id,planner.start,planner.end,recurrence.recur_start,recurrence.recur_end FROM planner,aliases,recurrence,objects
+			WHERE planner.id = objects.brother_of AND objects.parent IN ($fldstr) AND recurrence.recur_end >= ${_start} AND recurrence.recur_start <= ${_end}
+				AND planner.id = aliases.source AND objects.status != 0 AND aliases.target = recurrence.recur_id
+				AND aliases.type = " . CL_RECURRENCE;
+		//print $q;
+		$this->db_query($q);
+		while($row = $this->db_next())
+		{
+			// now, I have to include that information in my result set as well, otherwise
+			// the events outside my current scope will not show up even it they recur
+			// in the range I'm viewing at the moment
+			$evt_id = $row["id"];
+			if (empty($rv[$evt_id]))
+			{
+				$rv[$evt_id] = array(
+					"id" => $evt_id,
+					"start" => $row["start"],
+					"end" => $row["end"],
+				);
+			};
+			$this->recur_info[$row["id"]][] = $row["recur_start"];
 		};
 		return $rv;
 	}
@@ -461,40 +441,26 @@ class planner extends class_base
 			"type" => $type,
 		));
 
+		$start = $di["start"];
+		$end = $di["end"];
+
 		$obj = new object($id);
 		$this->id = $id;
-
-		$this->content_gen_class = "";
-		if ($obj->meta("content_generator") != "")
-		{
-			list($pf,$pm) = explode("/",$obj->meta("content_generator"));
-			$this->content_gen_class = $pf;
-			$this->content_gen_method = $pm;
-		};
 
 		$events = $this->get_event_list($args);
 		$reflist = array();
 		$this->events_done = true;
 		$rv = array();
+		$this->rec = array();
+		// that eidlist thingie is no good! I might have events out of my range which I still need to include
+		// I need folders! Folders! I'm telling you! Folders! Those I can probably include in my query!
 		foreach($events as $event)
 		{
 			// fuck me. plenty of places expect different data from me .. until I'm
 			// sure that nothing breaks, I can't remove this
 			$row = $event + $this->get_object($event["id"]);
+			$rec = array();
 			$gx = date("dmY",$event["start"]);
-			if ($this->content_gen_class)
-			{
-				$this->save_handle();
-				$row["realcontent"] = $this->do_orb_method_call(array(
-						"class" => $this->content_gen_class,
-						"action" => $this->content_gen_method,
-						"params" => array(
-							"id" => $event["id"],
-						),
-					));
-				$this->restore_handle();
-			}
-
 			$row["link"] = $this->get_event_edit_link(array(
 				"cal_id" => $this->id,
 				"event_id" => $event["id"],
@@ -520,7 +486,10 @@ class planner extends class_base
 			{
 				$row["event_icon_url"] = icons::get_icon_url($eo);
 				$rv[$gx][$row["brother_of"]] = $row;
-				$reflist[] = &$rv[$gx][$row["brother_of"]];
+				if ($args["flatlist"])
+				{
+					$reflist[] = &$rv[$gx][$row["brother_of"]];
+				};
 			};
 		};
 		$this->day_orb_link = $this->mk_my_orb("change",array("id" => $id,"group" => "views","viewtype" => "day"));
@@ -536,16 +505,9 @@ class planner extends class_base
 			"caption" => "header",
 			"subtitle" => 1,
 		);	
-		unset($xtmp["calendar"]);
 		$captions = array();
 		// still, would be nice to make 'em _real_ second level groups
 		// right now I'm simply faking 'em
-		$xtmp["calendars"] = array(
-			"caption" => "Kalendrid",
-		);
-		$xtmp["projects"] = array(
-			"caption" => "Projektid",
-		);
 		// now, just add another
 		foreach($xtmp as $key => $val)
 		{
@@ -565,86 +527,6 @@ class planner extends class_base
 		$this->emb_group = $emb_group;
 		$tmp["value"] = join(" | ",$captions);
 		return $tmp;
-	}
-
-	function do_special_group($arr)
-	{
-		// yes, it looks weird, but I need to load the properties to get
-		// to the groupinfo
-		if (in_array($this->emb_group,$this->specialgroups))
-		{
-			//$event_obj = new object($emb["id"]);
-			if ($this->emb_group == "projects")
-			{
-				$e_conns = $arr["event_obj"]->connections_to(array(
-					"from.class_id" => CL_PROJECT,
-				));
-
-				$prjlist = array();
-				foreach($e_conns as $conn)
-				{
-					$prjlist[$conn->prop("from")] = 1;
-				};
-
-				$users = get_instance("users");
-				$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
-				$conns = $user->connections_to(array(
-					"from.class_id" => CL_PROJECT,
-					"sort_by" => "from.name",
-				));
-
-				$all_props = array();
-
-				foreach($conns as $conn)
-				{
-					$all_props["prj_" . $conn->prop("from")] = array(
-						"type" => "checkbox",
-						"name" => "prj" . "[" .$conn->prop("from") . "]",
-						"caption" => html::href(array(
-							"url" => $this->mk_my_orb("change",array("id" => $conn->prop("from")),"project"),
-							"caption" => "<font color='black'>" . $conn->prop("from.name") . "</font>",
-						)),
-						"ch_value" => $prjlist[$conn->prop("from")],
-						"value" => 1,
-					);
-				};
-			}
-			elseif ($this->emb_group == "calendars")
-			{
-				$brlist = new object_list(array(
-					"brother_of" => $arr["event_obj"]->id(),
-					// ignore site id's for this list
-					"site_id" => array(),
-				));
-
-				for($o =& $brlist->begin(); !$brlist->end(); $o =& $brlist->next())
-				{
-					$plrlist[$o->parent()] = $o->id();
-				};
-
-				$all_props = array();
-
-				foreach($this->get_planners_with_folders() as $row)
-				{
-					if ($row["event_folder"] != $arr["event_obj"]->parent())
-					{
-						$folderdat = $this->get_object($row["event_folder"]);
-
-						$all_props["link_calendars_" . $row["oid"]] = array(
-							"type" => "checkbox",
-							"name" => "link_calendars" . "[" .$row["oid"] . "]",
-							"caption" => html::href(array(
-								"url" => $this->mk_my_orb("change",array("id" => $row["oid"]),"planner"),
-								"caption" => "<font color='black'>" . $row["name"] . "</font>",
-							)),
-							"ch_value" => $row["oid"],
-							"value" => isset($plrlist[$row["event_folder"]]) ? $row["oid"] : 0,
-						);
-					};
-				};
-			}
-		}
-		return $all_props;
 	}
 
 	////
@@ -706,9 +588,6 @@ class planner extends class_base
 			}
 			else
 			{
-				// something to think about: so how do I put that event in other calendars .. only documents
-				// have brother documents?
-
 				// 1 - get an instance of that class, for this I need to 
 				aw_session_set('org_action',aw_global_get('REQUEST_URI'));
 				$clfile = $this->cfg["classes"][$clid]["file"];
@@ -721,27 +600,14 @@ class planner extends class_base
 				};
 				$this->emb_group = $emb_group;
 			
-				$obj_to_load = $this->event_id;
-				$t->id = $obj_to_load;
+				$t->id = $this->event_id;
 
 				$all_props = $t->get_active_properties(array(
 					"group" => $emb_group,
 				));
-		
-				if (in_array($this->emb_group,$this->specialgroups))
-				{
-					$all_props = $this->do_special_group(array(
-						"event_obj" => &$event_obj,
-					));
-				};
-			
-				if ($this->event_id)
-				{
-					$t->obj_inst = $event_obj;
-				};		
-
 
 				$xprops = $t->parse_properties(array(
+						"obj_inst" => $event_obj,
 						"properties" => $all_props,
 						"name_prefix" => "emb",
 				));
@@ -763,7 +629,7 @@ class planner extends class_base
 				$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[clid]","value" => $clid);
 				if ($this->event_id)
 				{
-					$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[id]","value" => $obj_to_load);	
+					$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[id]","value" => $this->event_id);	
 				};
 			};
 		}
@@ -817,13 +683,6 @@ class planner extends class_base
 				"group" => $emb_group,
 			));
 				
-			if (in_array($this->emb_group,$this->specialgroups))
-			{
-				$all_props = $this->do_special_group(array(
-					"event_obj" => &$event_obj,
-				));
-			};
-
 			if ($this->event_id)
 			{
 				$t->obj_inst = $event_obj;
@@ -876,16 +735,6 @@ class planner extends class_base
 			};
 
 		};
-		/*
-		else
-		{
-			$resprops[] = array(
-				"type" => "text",
-				"value" => "Sündmusi ei saa lisada enne, kui oled valinud eventite sisestamise vormi",
-			);
-		};
-		*/
-
 		return $resprops;
 	}
 
@@ -912,7 +761,6 @@ class planner extends class_base
 			classload("doc");
 			$t = new doc();
 			$is_doc = true;
-
 			// nini. kui embedded object on document, siis saab vendade loomine special meaningu
 			// sest need tehakse siis vendadega. otherwise, 
 		};
@@ -928,118 +776,16 @@ class planner extends class_base
 		{
 			$this->emb_group = $emb["group"];
 		};
-		// huu! Is it really that easy?
-		if (in_array($this->emb_group,$this->specialgroups))
+
+		if (!empty($emb["id"]))
 		{
-			$this->event_id = $emb["id"];
 			$event_obj = new object($emb["id"]);
-			if ($event_obj->is_brother())
-			{
-				$event_obj = $event_obj->get_original();
-			};
-			if ($this->emb_group == "projects")
-			{
-				// 1) retreieve all connections that this event has to projects
-				// 2) remove those that were not explicitly checked in the form
-				// 3) create new connections which did not exist before
-				$e_conns = $event_obj->connections_to(array(
-					"from.class_id" => CL_PROJECT,
-				));
-
-				$new_ones = array();
-				if (is_array($args["request"]["emb"]["prj"]))
-				{
-					$new_ones = $args["request"]["emb"]["prj"];
-				};
-				
-				$prj_inst = get_instance("groupware/project");
-
-				foreach($e_conns as $conn)
-				{
-					if (!$new_ones[$conn->prop("from")])
-					{
-						$prj_inst->disconnect_event(array(
-							"id" => $conn->prop("from"),
-							"event_id" => $event_obj->id(),
-						));
-					};
-					unset($new_ones[$conn->prop("from")]);
-				};
-
-				foreach($new_ones as $new_id => $whatever)
-				{
-					$prj_inst->connect_event(array(
-						"id" => $new_id,
-						"event_id" => $emb["id"],
-					));
-				};
-
-			};
-			//if ($this->emb_group == "calendars" && !$is_doc)
-			if ($this->emb_group == "calendars")
-			{
-				// 1) retrieve all connections that this event has to projects
-				// 2) remove those that were not explicitly checked in the form
-				// 3) create new connections which did not exist before
-
-				// urk .. I need all brothers of the event object.
-
-				$brlist = new object_list(array(
-					"brother_of" => $event_obj->id(),
-				));
-
-				$plrlist = array();
-				
-				for($o =& $brlist->begin(); !$brlist->end(); $o =& $brlist->next())
-				{
-					if ($o->id() != $event_obj->id())
-					{
-						$plrlist[$o->parent()] = $o->id();
-					};
-				};
-
-				$all_props = array();
-
-				$new_ones = array();
-				if (is_array($args["request"]["emb"]["link_calendars"]))
-				{
-					$new_ones = $args["request"]["emb"]["link_calendars"];
-				};
-
-				foreach($plrlist as $plid => $evid)
-				{
-					if (!$new_ones[$plid])
-					{
-						$this->disconnect_event(array(
-							"event_id" => $evid,
-						));
-					};
-					unset($new_ones[$plid]);
-				};
-
-		
-				// now new_ones sisaldab nende kalendrite id-sid, millega ma pean seose looma
-				foreach($new_ones as $plid)
-				{
-					$this->connect_event(array(
-						"id" => $plid,
-						"event_id" => $emb["id"],
-					));
-				};
-			};
-		}
-		else
+			$emb["id"] = $event_obj->brother_of();
+		};
+		$this->event_id = $t->submit($emb);
+		if (!empty($emb["id"]))
 		{
-			if (!empty($emb["id"]))
-			{
-				$event_obj = new object($emb["id"]);
-				$emb["id"] = $event_obj->brother_of();
-			};
-			$this->event_id = $t->submit($emb);
-			if (!empty($emb["id"]))
-			{
-				$this->event_id = $event_obj->id();
-			};
+			$this->event_id = $event_obj->id();
 		};
 
 		//I really don't like this hack //axel
@@ -1102,7 +848,6 @@ class planner extends class_base
 		$args = &$arr["args"];
 		if ($this->event_id)
 		{
-			$form_data = &$arr["request"];
 			$args["event_id"] = $this->event_id;
 			if ($this->emb_group && $this->emb_group != "general")
 			{
@@ -1369,30 +1114,6 @@ class planner extends class_base
 
 
 	////
-	// !Näitab infot mingi eventi kohta
-	function show_event($args = array())
-	{
-		extract($args);
-		$uid = aw_global_get("uid");
-		// $q = "SELECT * FROM planner WHERE id = '$id' AND uid = '$uid'";
-		// $q = "SELECT * FROM msg_objects WHERE id = '$id'";
-		// $this->db_query($q);
-		// $row = $this->db_next();
-		//$_x = unserialize($row["content"]);
-		//$row = unserialize($_x["str"]);
-		$row = $args;
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"title" => $row["title"],
-			"id" => $row["att_id"],
-			"description" => $row["description"],
-			"start" => date("d-M H:i",$row["start"]),
-			"end" => date("d-M H:i",$row["end"]),
-		));
-		return $this->parse();
-	}
-		
-	////
 	// !Embed the repeater editor form inside the planner interface
 	function event_repeaters($args = array())
 	{
@@ -1442,37 +1163,6 @@ class planner extends class_base
 			VALUES ('$id','$uid','$start','$end','$title','$place','$description')";
 		$this->db_query($q);
 		return $id;
-	}
-
-
-	function callback_on_addalias($args = array())
-	{
-		// now, $args[alias] is a reference to the thingie we are interested in
-		// and $args[id] - is the source object ... I want to load the metadata
-		// of the source object
-		if ($args["reltype"] == RELTYPE_DC_RELATION)
-		{
-			$src = $this->get_object($args["id"]);
-			if ($src["class_id"] == CL_RELATION)
-			{
-				$type = $src["meta"]["values"]["CL_PLANNER"]["content_generator"];
-				if (!empty($type))
-				{
-					// noja kuhu phrsse ma selle siis redirectin?
-					$target = $this->get_object($args["alias"]);
-					$oldmeta = $target["meta"];
-					// this is probably bad, I need a better approach to mark
-					// content generators .. but for now this has to do
-					// ... cause, what if gallery_v2 is changed to something other?
-					$oldmeta["content_generator"][$type] = $args["id"];
-					$this->upd_object(array(
-						"oid" => $args["alias"],
-						"metadata" => $oldmeta,
-					));
-				};
-			};
-		};
-
 	}
 
 	function gen_navtoolbar(&$arr)
@@ -1600,36 +1290,6 @@ class planner extends class_base
 	}
 	
 	////
-	// !Returns a list of planners that have event folders .. 
-	function get_planners_with_folders($args = array())
-	{
-		$retval = array();
-
-		$planners = new object_list(array(
-			"class_id" => CL_PLANNER,
-			"sort_by" => "name",
-			"site_id" => array(),
-		));
-
-		for($o = $planners->begin(); !$planners->end(); $o = $planners->next())
-		{
-			if ($o->prop("event_folder") != 0)
-			{
-				$retval[] = array(
-					"oid" => $o->id(),
-					"name" => $o->name(),
-					"event_folder" => $o->prop("event_folder"),
-				);
-
-
-			};
-
-
-		};
-		return $retval;
-	}
-
-	////
 	// !Returns a link for editing an event
 	// cal_id - calendar id
 	// event_id - id of an event
@@ -1675,6 +1335,7 @@ class planner extends class_base
 					"link" => $event["link"],
 					"comment" => $event["comment"],
 				),
+				"recurrence" => $this->recur_info[$event["id"]],
 			));
 		};
 
@@ -1694,6 +1355,16 @@ class planner extends class_base
 		foreach($events as $event)
 		{
 			$rv[$event["start"]] = 1;
+		};
+		if (is_array($this->recur_info))
+		{
+			foreach($this->recur_info as $eid => $tm)
+			{
+				foreach($tm as $item)
+				{
+					$rv[$item] = 1;
+				};
+			};
 		};
 		return $rv;
 	}
