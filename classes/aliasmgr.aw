@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.83 2003/03/28 18:29:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.84 2003/03/31 10:12:56 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -151,13 +151,13 @@ class aliasmgr extends aw_template
 
 		$oid = (int)$oid;
 		$this->recover_idx_enumeration($oid);
-		$ret_type = ($ret_type) ? $ret_type : GET_ALIASES_BY_CLASS;
+		$ret_type = isset($ret_type) ? $ret_type : GET_ALIASES_BY_CLASS;
 		$this->alias_rel_type = array();
 
 		$obj = $this->get_object($oid);
 		// with this you can alter the sql clause to fetch only the data you are
 		// actually going to use
-		$modifier = ($modifier) ? $modifier : "aliases.*";
+		$modifier = isset($modifier) ? $modifier : "aliases.*";
 		$q = "SELECT $modifier, objects.class_id AS class_id, objects.name AS name
 			FROM aliases
 			LEFT JOIN objects ON (aliases.target = objects.oid)

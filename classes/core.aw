@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.172 2003/03/28 17:12:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.173 2003/03/31 10:12:56 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -193,12 +193,12 @@ class core extends db_connector
 	// all parameters must be quoted when entering this function
 	function upd_object($params) 
 	{
-		if (!$params["oid"])
+		if (empty($params["oid"]))
 		{
 			$this->raise_error(ERR_CORE_NO_OID, "core::upd_object() - called without an oid!", true, false);
 		};
 
-		if ($params["oid"] == $params["parent"])
+		if (isset($params["parent"]) && $params["oid"] == $params["parent"])
 		{
 			$this->raise_error(ERR_CORE_NO_OID,"core::upd_object() - object can't be it's own parent",true, false);
 		};
@@ -211,7 +211,7 @@ class core extends db_connector
 		$params["modifiedby"] = aw_global_get("uid");
 		// allow overwriting of the modified field. This SHOULD be temporary
 		// but right this is the fastest way to make AM not suck.
-		$params["modified"] = ($params["modified"]) ? $params["modified"] : time();
+		$params["modified"] = isset($params["modified"]) ? $params["modified"] : time();
 		$params["cachedirty"] = 1;
 		if (isset($params["metadata"]))
 		{
@@ -399,7 +399,7 @@ class core extends db_connector
 
 		$metadata = $obj['meta'];
 
-		if ($overwrite)
+		if (isset($overwrite))
 		{
 			if ($key)
 			{
@@ -434,7 +434,7 @@ class core extends db_connector
 			return false;
 		};
 		
-		if ($delete_key)
+		if (isset($delete_key))
 		{
 			unset($metadata[$key]);
 		};
@@ -781,7 +781,7 @@ class core extends db_connector
 			return $aliases;
 		};
 		$typestring = "";
-		if ($type)
+		if (isset($type))
 		{
 			$tlist = join(',',map('%d',$type));
 			$typestring = " AND objects.class_id IN ($tlist)";
