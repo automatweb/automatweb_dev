@@ -1,19 +1,97 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.51 2004/10/28 15:10:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.52 2004/11/09 17:13:07 sven Exp $
 // keywords.aw - dokumentide võtmesõnad
+/*
+@tableinfo keywords index=id master_table=keywords master_index=brother_of
+@classinfo syslog_type=ST_KEYWORDS relationmgr=yes status=no no_status=1
+
+@default table=keywords
+@default group=general
+
+@property keyword type=textbox
+@caption Märksõna
+*/
 
 define("ARR_LISTID", 1);
 define("ARR_KEYWORD", 2);
-
-class keywords extends aw_template 
+class keywords extends class_base
 {
-	function keywords($args = array())
+	function keywords()
 	{
-		$this->init("automatweb/keywords");
-		lc_load("definition");
+		$this->init(array(
+			"clid" => CL_KEYWORD,
+		));
 	}
 
+	
+	function get_property($arr)
+	{
+		$data = &$arr["prop"];
+		$retval = PROP_OK;
+		
+		switch($data["name"])
+		{
+			case 'name':
+				return PROP_IGNORE;
+			break;
+			case 'comment':
+				return PROP_IGNORE;
+			break;
+		}
+	}
 
+	/**
+		@attrib name=show_documents nologin=1
+		@param id required
+	**/
+	function show_documents($id)
+	{
+		extract($id);
+		$conn = new connection();
+		$conns = $conn->find(array(
+			"from.class_id" => CL_DOCUMENT,
+			"to" => $id,
+		));
+		
+		if($conns)
+		{
+			foreach ($conns as $item)
+			{
+				$from[] = $item["from"];
+			}
+			
+			$docs = new object_list(array(
+				"oid" => $from,
+				"class_id" => CL_DOCUMENT,
+			));
+			
+			if($docs->count() > 0)
+			{
+				
+				$this->read_template("/automatweb/keywords/doclist2.tpl");
+				//$this->submerge = 1;
+				foreach ($docs->arr() as $doc)
+				{
+					$this->vars(array(
+						"date" => get_lc_date($doc->prop("modified")),
+						"title" => $doc->prop("title"),
+						"author" => $doc->prop("author"),
+						"id" => $doc->id(),
+					));
+					$line.= $this->parse("LINE");			
+				}
+				$key_obj = &obj($id);
+				$this->vars(array(
+					"LINE" => $line,
+					"keyword" => $key_obj->prop("keyword"),
+				));
+				
+				$retval = $this->parse();
+			}
+		}
+		return $retval;
+	}
+	
 	/** Kuvab keywordi lisamise vormi 
 		
 		@attrib name=new params=name default="0"
@@ -26,7 +104,7 @@ class keywords extends aw_template
 		@comment
 
 	**/
-	function add($args = array())
+	/*function add($args = array())
 	{
 		extract($args);
 		$this->read_template("change.tpl");
@@ -35,7 +113,7 @@ class keywords extends aw_template
 			"reforb" => $this->mk_reforb("submit",array("parent" => $parent,"add" => 1)),
 		));
 		return $this->parse();
-	}
+	}*/
 
 	/** Kuvab keywordi muutmise vormi 
 		
@@ -48,7 +126,7 @@ class keywords extends aw_template
 		
 		@comment
 
-	**/
+	**//*
 	function change($args = array())
 	{
 		extract($args);
@@ -61,7 +139,7 @@ class keywords extends aw_template
 			"reforb" => $this->mk_reforb("submit",array("id" => $id)),
 		));
 		return $this->parse();
-	}
+	}*/
 
 	/** Submitib keywordi 
 		
@@ -73,7 +151,7 @@ class keywords extends aw_template
 		
 		@comment
 
-	**/
+	**//*
 	function submit($args = array())
 	{
 		extract($args);
@@ -100,7 +178,7 @@ class keywords extends aw_template
 		}
 		return $this->mk_my_orb("change",array("id" => $id));
 	}
-
+	*/
 	////
 	// Uuendab dokuga lingitud keywordide nimekrija
 	function update_relations($args = array())
@@ -1095,5 +1173,27 @@ class keywords extends aw_template
 		}
 		return $ret;
 	}
+	/*
+	function set_property($arr)
+	{
+		
+		$prop = &$arr["prop"];
+		$retval = PROP_OK;
+		switch($data["name"])
+		{
+			case "name":
+				
+			break;
+		};
+		return $retval;
+	}*/
+	
+	function callback_pre_save($arr)
+	{
+		$arr["obj_inst"]->set_prop("name", $arr["request"]["keyword"]);
+	}
+	
+	//This function finds and shows documents related to keyword
+
 };
 ?>
