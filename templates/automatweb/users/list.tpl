@@ -1,3 +1,10 @@
+Search: 
+<form action='orb.{VAR:ext}' method="GET">
+UID: <input type="text" name="s_uid" VALUE='{VAR:s_uid}'> <br>
+E-mail: <input type="text" name="s_mail" VALUE='{VAR:s_mail}'> <br>
+<input type="submit" value='Otsi'>
+{VAR:reforb}
+</form>
 Page: 
 <!-- SUB: SEL_PAGE -->
 {VAR:from} - {VAR:to} |
