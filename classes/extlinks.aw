@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.11 2001/12/06 17:08:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.12 2001/12/12 13:04:30 duke Exp $
 // extlinks.aw - Väliste linkide haldamise klass
 lc_load("extlinks");
 
@@ -48,6 +48,7 @@ class extlinks extends aw_template {
 		extract($args);
 		// koigepealt siis kysime koigi extrnal linkide aliased. 
 		// peale esimest kaivitamist jatame nad meelde, et edaspidi ei peaks rohkem paringuid tegema
+
 		if (!is_array($this->extlinkaliases))
 		{
 			$this->extlinkaliases = $this->get_aliases(array(
@@ -91,8 +92,14 @@ class extlinks extends aw_template {
 				"target" => $target,
 			);
 
-
-		$replacement = $this->localparse($tpls["link"],$vars);
+		if ($this->is_template($tpls["link"]))
+		{
+			$replacement = $this->localparse($tpls["link"],$vars);
+		}
+		else
+		{
+			$replacement = sprintf("<a href='%s' target='%s'>%s</a>",$url,$target,$link["name"]);
+		};
 		return $replacement;
 	}
 
