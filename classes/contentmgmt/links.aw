@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.2 2005/03/02 13:11:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.3 2005/03/21 09:42:15 kristo Exp $
 
 /*
 
@@ -162,7 +162,7 @@ class links extends class_base
 				$name = str_replace("'","",$name);
 
 				$row["pick"] = html::href(array(
-					"url" => 'javascript:ss("'.$url.'","'.$o->name().'")',
+					"url" => 'javascript:ss("'.$url.'","'.str_replace("'", "&#39;", $o->name()).'")',
 					"caption" => t("Vali see")
 				));
 				$row["name"] = html::href(array(

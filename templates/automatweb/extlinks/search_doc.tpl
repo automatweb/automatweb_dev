@@ -34,12 +34,7 @@ function ss(li,title)
 <tr class="aste06">
 		<td class="celltext" colspan=2>{VAR:LC_EXTLINKS_RESULT}:</td>
 		</tr>
-		<!-- SUB: LINE -->
-		<tr>
-	<td class="celltext"><a target="_blank" href='{VAR:baseurl}/{VAR:id}'>{VAR:name}</a></td>
-	<td class="celltext"><a href='javascript:ss("{VAR:url}","{VAR:name}")'>{VAR:LC_EXTLINKS_CHOOSE}</a></td>
-</tr>
-<!-- END SUB: LINE -->
+{VAR:LINE}
 </table>
 </td></tr></table>
 {VAR:reforb}
