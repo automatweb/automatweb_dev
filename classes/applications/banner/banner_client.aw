@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner_client.aw,v 1.2 2004/03/31 08:25:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner_client.aw,v 1.3 2004/04/06 15:15:56 kristo Exp $
 
 /*
 
@@ -23,7 +23,7 @@ class banner_client extends class_base
 			"clid" => CL_BANNER_CLIENT
 		));
 
-		$this->def_html = "<a href='".$this->cfg["baseurl"]."/banner.".$this->cfg["ext"]."?gid=%s&click=1&ss=[ss]'><img src='".$this->cfg["baseurl"]."/banner.".$this->cfg["ext"]."?gid=%s&ss=[ss]' border=0></a>";
+		$this->def_html = "<a href='/orb.aw?class=banner&action=proc_banner&gid=%s&click=1&ss=[ss]'><img src='/orb.aw?class=banner&action=proc_banner&gid=%s&ss=[ss]' border=0></a>";
 	}
 
 	function set_property($arr)
@@ -38,9 +38,11 @@ class banner_client extends class_base
 
 	function callback_post_save($arr)
 	{
-		if ($arr["obj_inst"]->prop("html") == "" && $arr["new"])
+		if ($arr["obj_inst"]->prop("html") == "")
 		{
-			$arr["obj_inst"]->prop("html", sprintf($this->def_html, $arr["obj_inst"]->id()));
+			$html = sprintf($this->def_html, $arr["obj_inst"]->id(),$arr["obj_inst"]->id());
+			$arr["obj_inst"]->set_prop("html", $html);
+			$arr["obj_inst"]->save();
 		}
 	}
 
