@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.52 2004/04/19 14:22:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.53 2004/05/12 13:51:28 kristo Exp $
 
 /*
 
@@ -348,7 +348,7 @@ class links extends class_base
 			if ($img->count() > 0 && $awf->can_be_embedded($o =& $img->begin()))
 			{
 				$img = $awf->get_url($o->id(),"");
-				$img = "<img border='0' src='$img' alt='".$link->prop("alt")."' title='".$link->prop("alt")."' />";
+				//$img = "<img border='0' src='$img' alt='".$link->prop("alt")."' title='".$link->prop("alt")."' />";
 			}
 			else
 			{
