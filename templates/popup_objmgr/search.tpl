@@ -51,7 +51,7 @@ function new_object()
 	{
 		cl = aselect.options[aselect.selectedIndex].value;
 		{
-			window.location.href="orb.{VAR:ext}?class="+cl+"&action=new&parent={VAR:parent}&return_url={VAR:return_url}";
+			window.location.href="orb.{VAR:ext}?class="+cl+"&action=new&parent={VAR:parent}&return_url=" + document.searchform.return_url.value;
 		};
 	};
 };
@@ -63,7 +63,7 @@ function selall()
 	len = document.searchform.elements.length;
 	for (i=0; i < len; i++)
 	{
-		if (document.searchform.elements[i].name.indexOf("check") != -1)
+		if (document.searchform.elements[i].name.indexOf('sel') != -1)
 		{
 			document.searchform.elements[i].checked=chk_status;
 			window.status = ""+i+" / "+len;
@@ -84,7 +84,7 @@ function SendValues()
 	{
 		if (document.searchform.elements[i].name.indexOf('sel') != -1)
 		{
-			if (document.searchform.elements[i].checked)
+			if (document.searchform.elements[i].checked == true)
 			{
 				str = 'selval[' + document.searchform.elements[i].value + ']';
 				label = document.searchform.elements[str].value;

@@ -160,18 +160,5 @@
             <field>meta</field>
             <method>serialize</method>
       </property>
-      <groupinfo>
-            <general>
-                  <caption>üldine</caption>
-                  <default>1</default>
-            </general>
-      </groupinfo>
-      <tableinfo>
-            <kliendibaas_firma>
-                  <index>oid</index>
-                  <master_table>objects</master_table>
-                  <master_index>oid</master_index>
-            </kliendibaas_firma>
-      </tableinfo>
 </properties>
 

@@ -126,7 +126,7 @@
       </property>
       <property>
             <name>ruuls_setup</name>
-            <type>text</type>
+            <callback>visual_conf</callback>
             <table>objects</table>
             <group>visual_conf</group>
             <field>meta</field>

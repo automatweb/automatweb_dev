@@ -7,6 +7,7 @@
 					<optional name="parent"/>
 					<optional name="multiple"/>
 					<optional name="check_name"/>
+					<optional name="force_clid"/>
 				</arguments>
 			</function>
 		</action>
@@ -14,6 +15,13 @@
 			<function name="search">
 				<arguments>
 
+				</arguments>
+			</function>
+		</action>
+		<action name="instant_get">
+			<function name="instant_get">
+				<arguments>
+					<optional name="instant_get"/>
 				</arguments>
 			</function>
 		</action>

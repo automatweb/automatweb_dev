@@ -17,9 +17,12 @@ function put_value(OptionValue,OptionText)
 	OptionList[OptionList.length] = new Option(OptionText, OptionValue, true);
 }
 
-function pop_select(url)
+function pop_select(url, width, height)
 {
-	aken=window.open(url,"popup:object manager","HEIGHT={VAR:height},WIDTH={VAR:width},scrollbars=yes,{VAR:params}");
+	wid = width ? width : 500;
+	hei = height ? height : 450;
+	props = "HEIGHT=" + hei + ",WIDTH=" + wid + ",scrollbars=yes,{VAR:params}";
+	aken=window.open(url,"popup:object manager",props);
 	aken.focus();
 }
 

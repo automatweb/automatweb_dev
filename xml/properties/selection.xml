@@ -2,11 +2,13 @@
 <properties>
       <property>
             <name>objects</name>
-            <type>text</type>
-            <table>objects</table>
-            <group>objects</group>
-            <field>meta</field>
+            <type>popup_objmgr</type>
+            <multiple>1</multiple>
             <method>serialize</method>
+            <field>meta</field>
+            <table>objects</table>
+            <width>500</width>
+            <group>objects</group>
             <caption>objektid valimis</caption>
       </property>
       <groupinfo>

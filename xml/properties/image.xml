@@ -12,7 +12,6 @@
             <type>text</type>
             <store>no</store>
             <group>general</group>
-            <field>file_show</field>
             <caption>Eelvaade </caption>
       </property>
       <property>
@@ -29,7 +28,6 @@
             <type>text</type>
             <group>img2</group>
             <store>no</store>
-            <field>file_show2</field>
             <caption>Eelvaade</caption>
       </property>
       <property>

@@ -22,21 +22,44 @@
       </property>
       <property>
             <name>pohitegevus</name>
-            <type>relpicker</type>
-            <reltype>POHITEGEVUS</reltype>
+            <type>popup_objmgr</type>
+            <clid>CL_TEGEVUSALA</clid>
+            <height>550</height>
+            <width>650</width>
             <table>kliendibaas_firma</table>
             <group>general</group>
             <field>pohitegevus</field>
             <caption>põhitegevus</caption>
       </property>
       <property>
-            <name>ettevotlusvorm</name>
-            <type>relpicker</type>
-            <reltype>TOOTED</reltype>
+            <name>korvaltegevused</name>
+            <type>popup_objmgr</type>
+            <clid>CL_TEGEVUSALA</clid>
             <multiple>1</multiple>
+            <method>serialize</method>
+            <field>meta</field>
+            <table>objects</table>
+            <group>general</group>
+            <caption>kõrvaltegevused</caption>
+      </property>
+      <property>
+            <name>ettevotlusvorm</name>
+            <type>popup_objmgr</type>
+            <clid>CL_ETTEVOTLUSVORM</clid>
             <table>kliendibaas_firma</table>
             <group>general</group>
             <field>ettevotlusvorm</field>
+            <caption>ettevõtlusvorm</caption>
+      </property>
+      <property>
+            <name>tooted</name>
+            <type>popup_objmgr</type>
+            <clid>CL_TOODE</clid>
+            <multiple>1</multiple>
+            <method>serialize</method>
+            <field>meta</field>
+            <table>objects</table>
+            <group>general</group>
             <caption>tooted</caption>
       </property>
       <property>
@@ -51,8 +74,9 @@
       </property>
       <property>
             <name>contact</name>
-            <type>relpicker</type>
-            <reltype>ADDRESS</reltype>
+            <type>popup_objmgr</type>
+            <clid>CL_ADDRESS</clid>
+            <change>1</change>
             <table>kliendibaas_firma</table>
             <group>general</group>
             <field>contact</field>
@@ -70,8 +94,8 @@
       </property>
       <property>
             <name>firmajuht</name>
-            <type>relpicker</type>
-            <reltype>FIRMAJUHT</reltype>
+            <type>popup_objmgr</type>
+            <change>1</change>
             <table>kliendibaas_firma</table>
             <group>general</group>
             <field>firmajuht</field>
