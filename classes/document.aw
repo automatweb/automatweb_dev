@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.142 2003/01/14 13:58:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.143 2003/01/14 16:37:37 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -3479,7 +3479,20 @@ class document extends aw_template
 			$bcc = "\nCc: $copy ";
 		}
 
-		mail("\"$to_name\" <".$to.">",str_replace("\n","",str_replace("\r","",$this->parse("title"))),$this->parse("mail"),"From: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
+		$tos = explode(",", $to);
+		foreach($tos as $to)
+		{
+			if ($to_name != "")
+			{
+				$_to = "\"$to_name\" <".$to.">";
+			}
+			else
+			{
+				$_to = $to;
+			}
+			echo "sending to $_to <br>";
+			mail($_to,str_replace("\n","",str_replace("\r","",$this->parse("title"))),$this->parse("mail"),"From: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
+		}
 
 		$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $section ","name");
 		$this->_log(ST_DOCUMENT, SA_SEND, "$from_name  $from saatis dokumendi <a href='".$this->cfg["baseurl"]."/?section=".$section."'>$name</a> $to_name $to  'le",$section);
