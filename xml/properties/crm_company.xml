@@ -600,7 +600,7 @@
                   <caption>Kontaktid</caption>
             </contacts>
             <oldcontacts>
-                  <caption>Nimekiri</caption>
+                  <caption>Isikud</caption>
                   <parent>contacts</parent>
                   <submit>no</submit>
             </oldcontacts>
@@ -610,7 +610,7 @@
                   <submit>no</submit>
             </contacts2>
             <cedit>
-                  <caption>Kontaktide muutmine</caption>
+                  <caption>Üldkontaktid</caption>
                   <parent>contacts</parent>
             </cedit>
             <overview>
