@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/connect.aw,v 2.1 2001/05/16 03:03:48 duke Exp $
 global $driver;
 global $db_host;
 global $db_base;

@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.1 2001/05/16 03:00:10 duke Exp $
 // Generic calendar class
 
 // php arvab by default, et pühapäev on 0.

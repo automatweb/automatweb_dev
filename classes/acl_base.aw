@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.1 2001/05/16 03:00:10 duke Exp $
 
 define(DENIED,0);
 define(ALLOWED,1);

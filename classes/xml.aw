@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml.aw,v 2.1 2001/05/16 03:00:10 duke Exp $
 // xml.aw - generic class for handling data in xml format.
 // at the moment (Apr 25, 2001) it can serialize PHP arrays to XML and vice versa
 class xml {

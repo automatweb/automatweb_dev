@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.1 2001/05/16 03:00:10 duke Exp $
 // planner.aw - päevaplaneerija
 // CL_CAL_EVEN on kalendri event
 classload("calendar","defs");

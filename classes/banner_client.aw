@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/banner_client.aw,v 2.1 2001/05/16 03:03:48 duke Exp $
 
 global $orb_defs;
 $orb_defs["banner_client"] = "xml";

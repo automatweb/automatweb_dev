@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/bugtrack.aw,v 2.1 2001/05/16 03:00:10 duke Exp $
 // generic bugtracki klass
 global $orb_defs;
 $orb_defs["bugtrack"] = array(

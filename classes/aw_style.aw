@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_style.aw,v 2.1 2001/05/16 03:00:10 duke Exp $
 // AW Style Engine.
 class aw_style {
 	var $tags;

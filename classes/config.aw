@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.1 2001/05/16 03:03:48 duke Exp $
 class db_config extends aw_template {
 	function db_config() {
 		$this->db_init();

@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/accessmgr.aw,v 2.1 2001/05/16 03:00:10 duke Exp $
 
 global $orb_defs;
 $orb_defs["accessmgr"] = array("list_access" => array("function" => "list_access", "params" => array())
