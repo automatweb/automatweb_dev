@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.6 2004/01/15 14:50:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.7 2004/01/15 16:13:36 duke Exp $
 // crm_address.aw - It's not really a physical address but a collection of data required to 
 // contact a person.
 /*
@@ -78,6 +78,7 @@ class crm_address extends class_base
 	function crm_address()
 	{
 		$this->init(array(
+			"tpldir" => "crm/address",
 			"clid" => CL_CRM_ADDRESS,
 		));
 	}
@@ -143,6 +144,33 @@ class crm_address extends class_base
 		};
 		return $retval;
 	}	
+
+	function request_execute($obj)
+	{
+		$this->read_template("show.tpl");
+		$this->vars(array(
+			"address" => $obj->prop("aadress"),
+			"postiindeks" => $obj->prop("postiindeks"),
+			"linn" => $this->_get_name_for_obj($obj->prop("linn")),
+			"maakond" => $this->_get_name_for_obj($obj->prop("maakond")),
+			"country" => $this->_get_name_for_obj($obj->prop("riik")),
+		));
+		return $this->parse();
+	}
+
+	function _get_name_for_obj($id)
+	{
+		if (empty($id))
+		{
+			$rv = "";
+		}
+		else
+		{
+			$obj = new object($id);
+			$rv = $obj->name();
+		};
+		return $rv;
+	}
 
 };
 ?>
