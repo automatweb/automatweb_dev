@@ -918,6 +918,46 @@ class msgboard extends aw_template
 		$ret = preg_replace("/&lt;http(.*)&gt;/","<a href='http\\1'>http\\1</a>",$ret);
 		return preg_replace("/&lt;ftp(.*)&gt;/","<a href='ftp\\1'>ftp\\1</a>",$ret);
 	}
+
+		// lauri muudetud -->
+	function get_count_all($topic)
+	{
+		$this->db_query("SELECT COUNT(board_id) AS cnt,board_id FROM comments WHERE board_id LIKE '$topic' GROUP BY board_id");
+		while ($row=$this->db_next())
+		{
+			$arr[$row["board_id"]]=$row["cnt"];
+		};
+
+		return $arr;
+	}
+
+	function get_count_new($topic)
+	{
+		global $aw_mb_last;
+		$a=unserialize(stripslashes($aw_mb_last));
+		if (!is_array($a))
+		{
+			return array();
+		};
+
+		$this->db_query("SELECT board_id FROM comments WHERE board_id LIKE '$topic'");
+		while ($row=$this->db_next())
+		{
+			$board[$row["board_id"]]=$row["board_id"];
+		};
+
+		foreach ($board as $k => $v)
+		{
+			if ($a[$v])
+			{
+				$tm= $a[$v];
+				$arr[$v]=$this->db_fetch_field("SELECT COUNT(*) as cnt FROM comments WHERE board_id= '$v' AND comments.time>= '$tm'","cnt");
+			};
+		};
+
+		return $arr;
+	}
+	// <-- lauri muudetud
 };
 }
 ?>
