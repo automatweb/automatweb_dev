@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.48 2001/09/26 07:26:14 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.49 2001/10/01 13:03:23 cvs Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -2432,14 +2432,24 @@ class document extends aw_template
 		return true;
 	}
 
+	////
+	// !Performs a search from all documents
+	// parent - alates millisest sektsioonist otsida
+	// str - mida otsida
+	// section - section id, mille sisu asemel otsingutulemusi naidatakse
+	// sortby - mille jargi otsingu tulemusi sortida
+	// from - alates millisest vastusest naitama hakatakse?
 	function do_search($parent,$str,$sec,$sortby,$from)
 	{
 		if ($sortby == "")
 			$sortby = "percent";
 
 		$this->tpl_init("automatweb/documents");
+		// kas ei peaks checkkima ka teiste argumentide oigsust?
 		$this->quote(&$str);
 
+		// otsingustringi polnud, redirect veateatele. Mdx, kas selle
+		// asemel ei voiks ka mingit custom dokut kasutada?
 		if ($str == "")
 		{
 			$this->read_template("search_none.tpl");
@@ -2448,22 +2458,41 @@ class document extends aw_template
 
 		$this->read_template("search.tpl");
 
-		// make list of menus
+		// genereerime listi koikidest menyydest, samasugune kood on ka
+		// mujal olemas, kas ei voiks seda kuidagi yhtlustada?
+
+		// besides, mulle tundub, et otsingutulemusi kuvades taidetakse seda koodi
+		// 2 korda .. teine kord menueditit. Tyhi too?
 		if ($GLOBALS["lang_menus"] == 1)
+		{
 			$ss = " AND (objects.lang_id = ".$GLOBALS["lang_id"]." OR menu.type = ".MN_CLIENT.")";
+		}
+		else
+		{
+			$ss = "";
+		};
 
 		$this->menucache = array();
-		$this->db_query("SELECT objects.oid as oid, objects.parent as parent,objects.last as last,objects.status as status
+		$this->db_query("SELECT objects.oid as oid, objects.parent as parent,objects.last as last,objects.status as status,objects.metadata as metadata
 										 FROM objects LEFT JOIN menu ON menu.id = objects.oid
 										 WHERE objects.class_id = 1 AND objects.status = 2 $ss");
 		$parent_list = array();
 		while ($row = $this->db_next())
 		{
-			if ($this->can("view",$row[parent]))
+			// peame tshekkima et kui tyyp pole sisse loginud et siis ei otsitaks users only menyyde alt
+			$can = true;
+			if ($GLOBALS["uid"] == "")
+			{
+				$meta = $this->get_object_metadata(array("metadata" => $row["metadata"]));
+				if ($meta["users_only"] == 1)
+				{
+					$can = false;
+				}
+			}
+			if ($can)
 			{
 				$this->menucache[$row[parent]][] = $row;
-				$parent_list[$row["parent"]] = $row["parent"];
-			};
+			}
 		}
 		// find the parent menus based on the search menu group id
 		classload("search_conf");
@@ -2473,14 +2502,14 @@ class document extends aw_template
 		$this->marr = array();
 		if (is_array($parens))
 		{
-			foreach($parens as $parent)
+			foreach($parens as $_parent)
 			{
 				// now, make a list of all menus below $parent
-				if ($this->can("view",$parent))
+				if ($this->can("view",$_parent))
 				{
-					$this->marr[] = $parent;
+					$this->marr[] = $_parent;
 					// list of default documents
-					$this->rec_list($parent);
+					$this->rec_list($_parent);
 				};
 			}
 		};
@@ -2488,10 +2517,14 @@ class document extends aw_template
 		$ml = join(",",$this->marr);
 		$ml2 = join(",",$this->darr);
 		if ($ml != "")
+		{
 			$ml = " AND objects.parent IN ($ml) ";
+		}
 
 		if ($ml2 != "")
+		{
 			$ml.= " AND objects.oid IN ($ml2) ";
+		}
 	
 		if ($sortby == "time")
 			$ml.=" ORDER BY objects.modified DESC";
@@ -2562,7 +2595,7 @@ class document extends aw_template
 		$q = "SELECT documents.*,objects.parent as parent, objects.modified as modified 
 										 FROM documents 
 										 LEFT JOIN objects ON objects.oid = documents.docid
-										 WHERE (documents.title LIKE '%".$str."%' OR documents.content LIKE '%".$str."%' $fasstr $mtalsstr) AND objects.status = 2 AND objects.lang_id = ".$GLOBALS["lang_id"]." AND (documents.no_search is null OR documents.no_search = 0) AND (objects.parent IN ($plist)) $ml";
+										 WHERE (documents.title LIKE '%".$str."%' OR documents.content LIKE '%".$str."%' $fasstr $mtalsstr) AND objects.status = 2 AND objects.lang_id = ".$GLOBALS["lang_id"]." AND (documents.no_search is null OR documents.no_search = 0) $ml";
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
@@ -2664,17 +2697,21 @@ class document extends aw_template
 	function rec_list($parent)
 	{
 		if (!is_array($this->menucache[$parent]))
+		{
 			return;
+		}
 
 		reset($this->menucache[$parent]);
 		while(list(,$v) = each($this->menucache[$parent]))
 		{
-			if ($v[status] == 2)
+			if ($v["status"] == 2)
 			{
-				$this->marr[] = $v[oid];
-				if ($v[last] > 0)
-					$this->darr[] = $v[last];
-				$this->rec_list($v[oid]);
+				$this->marr[] = $v["oid"];
+				if ($v["last"] > 0)
+				{
+					$this->darr[] = $v["last"];
+				}
+				$this->rec_list($v["oid"]);
 			}
 		}
 	}
