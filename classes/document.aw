@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.161 2003/03/05 16:53:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.162 2003/03/07 13:07:01 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -312,6 +312,7 @@ class document extends aw_template
 		$baseurl = $this->cfg["baseurl"];
 		$ext = $this->cfg["ext"];
 
+
 		// check if the menu had a form selected as a template - the difference is that then the template is not a filename
 		// but a number
 		if (is_number($tpl))
@@ -430,7 +431,6 @@ class document extends aw_template
 		{
 			$tpl = $this->cfg["print_tpl"];
 		}
-
 		// kui tpls anti ette, siis loeme template sealt,
 		// muidu failist.
 		if (isset($tpls) && strlen($tpls) > 0) 
@@ -444,7 +444,7 @@ class document extends aw_template
 		} 
 		else 
 		{
-			$this->read_any_template($tpl);
+			$this->read_template($tpl);
 		};
 
 		if ( ($meta["show_print"]) && (not($print)) && $leadonly != 1)
@@ -502,6 +502,7 @@ class document extends aw_template
 		{
 			$this->vars($GLOBALS["lc_doc"]);
 		}
+
 
 		// I don't think we should do that here
 		// $this->add_hit($docid);
