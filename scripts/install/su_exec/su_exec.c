@@ -23,7 +23,11 @@ typedef struct _trans {
 
 CMD_TRANS_ENTRY g_cmd_trans_tbl[] = {
 {"print", "echo" },
-{"copy", "cp"}
+{"copy", "cp"},
+{"mkdir", "mkdir"},
+{"chmod", "chmod"},
+{"ln", "ln"},
+{"rndc","rndc"}
 };
 
 char *g_err_line;
@@ -76,6 +80,7 @@ int open_and_parse_cmd_file(char *file, CMD_FILE *cf)
 			// command line
 			// find the real command from the trans_tbl
 			// get the first word from the line
+			memset(t_cmd, 0, 10000);
 			c_num = 0;
 			while(!(line[c_num] == ' ' || line[c_num] == '0'))
 			{
@@ -83,10 +88,14 @@ int open_and_parse_cmd_file(char *file, CMD_FILE *cf)
 				c_num++;
 			}
 
+//			printf("got command line = %s , c_num = %i \n", line, c_num);
+
 			for (i = 0, found = 0; (i < (sizeof(g_cmd_trans_tbl) / sizeof(CMD_TRANS_ENTRY))) && found == 0; i++)
 			{
+//				printf("try to match %s with %s \n", t_cmd, g_cmd_trans_tbl[i].to);
 				if (strcmp(t_cmd, g_cmd_trans_tbl[i].from) == 0)
 				{
+//					printf("found trans cmd for %s eq %s\n", t_cmd, g_cmd_trans_tbl[i].to);
 					strcpy(t_cmd, g_cmd_trans_tbl[i].to);
 					found = 1;
 				}
