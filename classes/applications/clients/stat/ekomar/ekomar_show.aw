@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/stat/ekomar/Attic/ekomar_show.aw,v 1.2 2005/02/09 16:30:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/stat/ekomar/Attic/ekomar_show.aw,v 1.3 2005/03/18 12:13:43 ahti Exp $
 // ekomar_show.aw - Ekomar 
 /*
 
@@ -16,7 +16,7 @@
 
 */
 
-define("RELTYPE_FOLDER", 1);
+//define("RELTYPE_FOLDER", 1);
 
 
 class ekomar_show extends class_base
