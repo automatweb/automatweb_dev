@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.14 2001/06/18 23:02:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.15 2001/06/18 23:54:57 duke Exp $
 // form_entry_element.aw - 
 session_register("clipboard");
 
@@ -357,17 +357,22 @@ load_vcl("date_edit");
 			return true;
 		}
 
+		////
+		// tagastab mingi elemendi väärtuse
 		function get_val($elvalues = array())
 		{
+			// kui entry on laetud, siis voetakse see sealt.
 			if ($this->entry_id)
 			{
 				$val = $this->entry;
 			}
 			else
+			// vastasel korral, kui $elvalues midagi sisaldab, siis saame info sealt
 			if (isset($elvalues[$this->arr["name"]]) && $elvalues[$this->arr["name"]] != "")
 			{
 				$val = $elvalues[$this->arr["name"]];
 			}
+			// finally, if nothing else succeeded, we will just use the default.
 			else
 			{
 				$val = $this->arr["default"];
@@ -385,122 +390,122 @@ load_vcl("date_edit");
 			$text = $this->arr["text"];
 
 			$elid = $this->id;
-																	
-			if ($this->arr["type"] == "textarea")
-			{
-				$html="<textarea NAME='".$prefix.$elid."' COLS='".$this->arr["ta_cols"]."' ROWS='".$this->arr["ta_rows"]."'>";
-				$html.=($this->get_val($elvalues))."</textarea>";
-			}
-			
-			if ($this->arr["type"] == "radiobutton")
-			{
-				$ch = ($this->entry_id ? checked($this->entry == $this->id) : checked($this->arr["default"] == 1));
-				$html="<input type='radio' NAME='".$prefix."radio_group_".$this->arr["group"]."' VALUE='".$this->id."' $ch>";
-			}
-			
-			if ($this->arr["type"] == "listbox")
-			{
-				$html="<select name='".$prefix.$elid."'>";
-				for ($b=0; $b < $this->arr["listbox_count"]; $b++)
-				{	
-					if ($this->entry_id)
-						$lbsel = ($this->entry == "element_".$this->id."_lbopt_".$b ? " SELECTED " : "");
-					else
-						$lbsel = ($this->arr["listbox_default"] == $b ? " SELECTED " : "");
-					$html.="<option $lbsel VALUE='element_".$this->id."_lbopt_".$b."'>".$this->arr["listbox_items"][$b];
-				}
-				$html.="</select>";
-			}
-				
-			if ($this->arr["type"] == "multiple")
-			{
-				$html="<select NAME='".$prefix.$elid."[]' MULTIPLE>";
 
-				if ($this->entry_id)
-					$ear = explode(",",$this->entry);
+			switch($this->arr["type"])
+			{
+				case "textarea":
+					$html="<textarea NAME='".$prefix.$elid."' COLS='".$this->arr["ta_cols"]."' ROWS='".$this->arr["ta_rows"]."'>";
+					$html.=($this->get_val($elvalues))."</textarea>";
+					break;
 
-				for ($b=0; $b < $this->arr["multiple_count"]; $b++)
-				{
-					$sel = false;
-					if ($this->entry_id)
-					{
-						reset($ear);
-						while (list(,$v) = each($ear))
-							if ($v == $b)
-								$sel = true;
+				case "radiobutton":
+					$ch = ($this->entry_id ? checked($this->entry == $this->id) : checked($this->arr["default"] == 1));
+					$html="<input type='radio' NAME='".$prefix."radio_group_".$this->arr["group"]."' VALUE='".$this->id."' $ch>";
+					break;
+
+				case "listbox":
+					$html="<select name='".$prefix.$elid."'>";
+					for ($b=0; $b < $this->arr["listbox_count"]; $b++)
+					{	
+						if ($this->entry_id)
+							$lbsel = ($this->entry == "element_".$this->id."_lbopt_".$b ? " SELECTED " : "");
+						else
+							$lbsel = ($this->arr["listbox_default"] == $b ? " SELECTED " : "");
+						$html.="<option $lbsel VALUE='element_".$this->id."_lbopt_".$b."'>".$this->arr["listbox_items"][$b];
 					}
+					$html.="</select>";
+					break;
+
+				case "multiple":
+					$html="<select NAME='".$prefix.$elid."[]' MULTIPLE>";
+
+					if ($this->entry_id)
+						$ear = explode(",",$this->entry);
+
+					for ($b=0; $b < $this->arr["multiple_count"]; $b++)
+					{
+						$sel = false;
+						if ($this->entry_id)
+						{
+							reset($ear);
+							while (list(,$v) = each($ear))
+								if ($v == $b)
+									$sel = true;
+						}
+						else
+							$sel = ($this->arr["multiple_defaults"][$b] == 1 ? true : false);
+	
+						$html.="<option ".($sel == true ? " SELECTED " : "")." VALUE='$b'>".$this->arr["multiple_items"][$b];
+					}
+					$html.="</select>";
+					break;
+
+				case "checkbox":
+					$sel = ($this->entry_id ? ($this->entry == 1 ? " CHECKED " : " " ) : ($this->arr["default"] == 1 ? " CHECKED " : ""));
+					$html = "<input type='checkbox' NAME='".$prefix.$elid."' VALUE='1' $sel>";
+					break;
+
+				case "textbox":
+					$l = $this->arr["length"] ? "SIZE='".$this->arr["length"]."'" : "";
+					$html = "<input type='text' NAME='".$prefix.$elid."' $l VALUE='".($this->get_val($elvalues))."'>";
+					break;
+
+
+				case "price":
+					$l = $this->arr["length"] ? "SIZE='".$this->arr["length"]."'" : "";
+					$html = "<input type='text' NAME='".$prefix.$elid."' $l VALUE='".($this->get_val($elvalues))."'>";
+					break;
+
+				case "submit":
+					$html = "<input type='submit' VALUE='".$this->arr["button_text"]."' onClick=\"return check_submit();\">";
+					break;
+
+				case "reset":
+					$html = "<input type='reset' VALUE='".$this->arr["button_text"]."'>";
+					break;
+
+				case "file":
+					$html = "<input type='file' NAME='".$prefix.$elid."'>";
+					break;
+
+				// yuck
+				case "link":
+					$html="<table border=0><tr><td align=right>".$this->arr["link_text"]."</td><td><input type='text' NAME='".$prefix.$elid."_text' VALUE='".($this->entry_id ? $this->entry["text"] : "")."'></td></tr>";
+					$html.="<tr><td align=right>".$this->arr["link_address"]."</td><td><input type='text' NAME='".$prefix.$elid."_address' VALUE='".($this->entry_id ? $this->entry["address"] : "")."'></td></tr></table>";
+					$html.="<a onClick=\"e_".$this->fid."_elname='".$prefix.$elid."_text';e_".$this->fid."_elname2='".$prefix.$elid."_address';\" href=\"javascript:remote('no',500,400,'".$this->mk_orb("search_doc", array(),"links")."')\">Vali dokument</a>";
+					break;
+
+				case "date":
+					$de = new date_edit(time());
+					$de->configure(array(
+						"year" => "",
+						"month" => "",
+						"day" => ""
+					));
+					$fy = $this->arr["from_year"];
+					$ty = $this->arr["to_year"];
+					$html = $de->gen_edit_form($prefix.$elid, ($this->entry_id ? $this->entry : time()),($fy ? $fy : 2000),($ty ? $ty : 2005));
+
+				default:
+
+					if ($this->arr["type"] == "")
+						$html .= $text;
 					else
-						$sel = ($this->arr["multiple_defaults"][$b] == 1 ? true : false);
-
-					$html.="<option ".($sel == true ? " SELECTED " : "")." VALUE='$b'>".$this->arr["multiple_items"][$b];
+					{
+						$sep_ver = ($this->arr["text_distance"] > 0 ? "<br><img src='/images/transa.gif' width='1' height='".$this->arr["text_distance"]."' border='0'><br>" : "<br>");
+						$sep_hor = ($this->arr["text_distance"] > 0 ? "<img src='/images/transa.gif' height='1' width='".$this->arr["text_distance"]."' border='0'>" : "");
+					if ($this->arr["text_pos"] == "up")
+						$html = $text.$sep_ver.$html;
+					else
+					if ($this->arr["text_pos"] == "down")
+						$html = $html.$sep_ver.$text;
+					else
+					if ($this->arr["text_pos"] == "right")
+						$html = $html.$sep_hor.$text;
+					else
+						$html = $text.$sep_hor.$html;		// default is on left of element
 				}
-				$html.="</select>";
-			}
-			
-			if ($this->arr["type"] == "checkbox")
-			{
-				$sel = ($this->entry_id ? ($this->entry == 1 ? " CHECKED " : " " ) : ($this->arr["default"] == 1 ? " CHECKED " : ""));
-				$html = "<input type='checkbox' NAME='".$prefix.$elid."' VALUE='1' $sel>";
-			}
-			
-			if ($this->arr["type"] == "textbox")
-			{
-				$l = $this->arr["length"] ? "SIZE='".$this->arr["length"]."'" : "";
-				$html = "<input type='text' NAME='".$prefix.$elid."' $l VALUE='".($this->get_val($elvalues))."'>";
-			}
-
-			if ($this->arr["type"] == "price")
-			{
-				$l = $this->arr["length"] ? "SIZE='".$this->arr["length"]."'" : "";
-				$html = "<input type='text' NAME='".$prefix.$elid."' $l VALUE='".($this->get_val($elvalues))."'>";
-			}
-
-			if ($this->arr["type"] == "submit")
-				$html = "<input type='submit' VALUE='".$this->arr["button_text"]."' onClick=\"return check_submit();\">";
-
-			if ($this->arr["type"] == "reset")
-				$html = "<input type='reset' VALUE='".$this->arr["button_text"]."'>";
-				
-			if($this->arr["type"] == "file")
-				$html = "<input type='file' NAME='".$prefix.$elid."'>";
-
-			if($this->arr["type"] == "link")
-			{
-				$html="<table border=0><tr><td align=right>".$this->arr["link_text"]."</td><td><input type='text' NAME='".$prefix.$elid."_text' VALUE='".($this->entry_id ? $this->entry["text"] : "")."'></td></tr>";
-				$html.="<tr><td align=right>".$this->arr["link_address"]."</td><td><input type='text' NAME='".$prefix.$elid."_address' VALUE='".($this->entry_id ? $this->entry["address"] : "")."'></td></tr></table>";
-				$html.="<a onClick=\"e_".$this->fid."_elname='".$prefix.$elid."_text';e_".$this->fid."_elname2='".$prefix.$elid."_address';\" href=\"javascript:remote('no',500,400,'".$this->mk_orb("search_doc", array(),"links")."')\">Vali dokument</a>";
-			}
-
-			if($this->arr["type"] == "date")
-			{
-				$de = new date_edit(time());
-				$de->configure(array(
-					"year" => "",
-					"month" => "",
-					"day" => ""
-				));
-				$fy = $this->arr["from_year"];
-				$ty = $this->arr["to_year"];
-				$html = $de->gen_edit_form($prefix.$elid, ($this->entry_id ? $this->entry : time()),($fy ? $fy : 2000),($ty ? $ty : 2005));
-			}
-
-			if ($this->arr["type"] == "")
-				$html .= $text;
-			else
-			{
-				$sep_ver = ($this->arr["text_distance"] > 0 ? "<br><img src='/images/transa.gif' width='1' height='".$this->arr["text_distance"]."' border='0'><br>" : "<br>");
-				$sep_hor = ($this->arr["text_distance"] > 0 ? "<img src='/images/transa.gif' height='1' width='".$this->arr["text_distance"]."' border='0'>" : "");
-				if ($this->arr["text_pos"] == "up")
-					$html = $text.$sep_ver.$html;
-				else
-				if ($this->arr["text_pos"] == "down")
-					$html = $html.$sep_ver.$text;
-				else
-				if ($this->arr["text_pos"] == "right")
-					$html = $html.$sep_hor.$text;
-				else
-					$html = $text.$sep_hor.$html;		// default is on left of element
-			}
+			};
 			
 			if ($this->arr["info"] != "")
 				$html .= "<br><font face='arial, geneva, helvetica' size='1'>&nbsp;&nbsp;$info</font>";
