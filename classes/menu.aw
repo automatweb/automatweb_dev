@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.74 2003/11/09 18:46:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.75 2003/11/13 11:20:58 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -556,7 +556,7 @@ class menu extends class_base
 			"caption" => "Meetodi väljundi kuvamisel näidatakse menüüsid",
 			"ch_value" => $arr["obj_inst"]->meta("pm_url_menus"),
 		);
-		
+				
 		return $nodes;
 	}
 			
