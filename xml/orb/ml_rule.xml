@@ -1,0 +1,41 @@
+<?xml version='1.0'?>
+<orb>
+
+	<class name="ml_rule">
+	
+		<action name="new">
+			<function name="orb_change">
+				<arguments>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_change">
+			<function name="orb_submit_change">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		
+		<action name="change">
+			<function name="orb_change">
+				<arguments>
+					<required name="id"/>
+					<optional name="parent"/>
+					<optional name="search"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="select_mail">
+			<function name="orb_select_mail">
+				<arguments>
+					<optional name="el"/>
+				</arguments>
+			</function>
+		</action>
+		
+		</class>
+	</orb>

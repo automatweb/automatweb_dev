@@ -1,0 +1,124 @@
+<?xml version='1.0'?>
+<orb>
+
+	<class name="ml_list">
+	
+		<action name="new">
+			<function name="orb_new">
+				<arguments>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_omadused">
+			<function name="orb_submit_omadused">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="omadused">
+			<function name="orb_omadused">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="change">
+			<function name="orb_change">
+				<arguments>
+					<required name="id"/>
+					<optional name="sortby"/>
+					<optional name="sort_order"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="delete">
+			<function name="orb_delete">
+				<arguments>
+					<required name="id"/>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="lf_remove">
+			<function name="orb_lf_remove">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="lf_cut">
+			<function name="orb_lf_cut">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="lf_copy">
+			<function name="orb_lf_copy">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="lf_paste">
+			<function name="orb_lf_paste">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="lf_movemembers">
+			<function name="orb_lf_movemembers">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="lf_addmember">
+			<function name="orb_lf_addmember">
+				<arguments>
+					<required name="lid"/>
+					<optional name="search"/>
+					<optional name="ids"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="lf_addmember_s">
+			<function name="orb_lf_addmember_s">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_lf_addmember">
+			<function name="orb_sumbit_lf_addmember">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="post_message">
+			<function name="post_message">
+				<arguments>
+					<required name="id"/>
+					<optional name="targets"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_post_message">
+			<function name="submit_post_message">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		</class>
+	</orb>

@@ -1,0 +1,86 @@
+<?xml version='1.0'?>
+<orb>
+
+	<class name="ml_mail">
+	
+		<action name="new">
+			<function name="orb_new">
+				<arguments>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_change">
+			<function name="orb_submit_change">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="change">
+			<function name="orb_change">
+				<arguments>
+					<required name="id"/>
+					<optional name="parent"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_send">
+			<function name="orb_submit_send">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="send">
+			<function name="orb_send">
+				<arguments>
+					<required name="id"/>
+					<optional name="parent"/>
+					<optional name="no_upper_bar"/>
+					<optional name="back"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="delete">
+			<function name="orb_delete">
+				<arguments>
+					<required name="id"/>
+					<optional name="parent"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="queue">
+			<function name="orb_queue">
+				<arguments>
+					<optional name="id"/>
+					<optional name="fid"/>
+					<optional name="show"/>
+					<optional name="sortby"/>
+					<optional name="sort_order"/>
+					<optional name="back"/>
+					<optional name="manager"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_manager">
+			<function name="orb_submit_manager">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="process_queue" nologin="1">
+			<function name="process_queue">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		</class>
+	</orb>
