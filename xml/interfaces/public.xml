@@ -9,4 +9,5 @@
 	<class id="messenger_v2" name="E-post"/>
 	<class id="planner" name="Kalender"/>
 	<class id="menu" name="Kaust"/>
+	<class id="shop_order_center" name="Lao tellimused"/>
 </interface>
