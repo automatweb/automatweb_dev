@@ -1,5 +1,5 @@
 <?php
-
+// $Header: /home/cvs/automatweb_dev/classes/layout/active_page_data.aw,v 1.6 2003/10/13 13:09:25 duke Exp $
 class active_page_data extends class_base
 {
 	function active_page_data()
@@ -46,6 +46,13 @@ class active_page_data extends class_base
 		aw_global_set("__aw_site_styles", $styles);
 	}
 
+	function add_serialized_css_style($text)
+	{
+		$serialized_styles = aw_global_get("__aw_serialized_styles");
+		$serialized_styles[] = $text;
+		aw_global_set("__aw_serialized_styles", $serialized_styles);
+	}
+
 	function on_shutdown_get_styles()
 	{
 		$styles = new aw_array(aw_global_get("__aw_site_styles"));
@@ -56,6 +63,12 @@ class active_page_data extends class_base
 		{
 			$ret .= $css->get_style_data_by_id($stylid);
 		}
+
+		$serialized_styles = new aw_array(aw_global_get("__aw_serialized_styles"));
+		foreach($serialized_styles->get() as $styletext)
+		{
+			$ret .= $styletext;
+		};
 
 		if ($ret != "")
 		{
