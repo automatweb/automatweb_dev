@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.16 2004/09/19 19:25:48 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.17 2004/10/05 07:13:12 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -56,6 +56,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 @property participant type=callback callback=cb_participant_selector store=no group=participants no_caption=1
 @caption Osalejad
+
+@property search_contact_company type=textbox store=no group=participants
+@caption Organisatsioon
 
 @property search_contact_firstname type=textbox store=no group=participants
 @caption Eesnimi
@@ -192,6 +195,13 @@ class crm_meeting extends class_base
 						'show_search' => 1,
 					)),
 				));
+
+				$tb->add_button(array(
+					'name' => 'save',
+					'img' => 'save.gif',
+					'tooltip' => 'Salvesta',
+					"action" => "save_participant_search_results"
+				));
 				$this->return_url=aw_global_get('REQUEST_URI');
 				break;
 			}
@@ -292,7 +302,11 @@ class crm_meeting extends class_base
 			foreach($arr['check'] as $person_id)
 			{
 				$obj = new object($person_id);
-				$obj->disconnect(array('from'=>$arr['event_id']));
+				$ev = obj($arr["event_id"]);
+				if ($obj->is_connected_to(array("to" => $ev->brother_of())))
+				{
+					$obj->disconnect(array('from'=>$ev->brother_of()));
+				}
 			}
 		}		
    }

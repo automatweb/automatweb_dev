@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.22 2004/09/14 09:12:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.23 2004/10/05 07:13:12 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -411,7 +411,6 @@ class planner extends class_base
 					"all_cal" => "Otsi kõigist kalendritest",
 				);
 			break;
-
 		}
 		return $retval;
 	}
@@ -862,11 +861,8 @@ class planner extends class_base
 					"group" => $emb_group,
 					"cfgform_id" => $event_cfgform,
 				));
-				/*
-				$all_props = $t->get_active_properties(array(
-					"group" => $emb_group,
-				));
-				*/
+
+				$this->do_handle_cae_props($all_props, $args["request"]);
 
 				$xprops = $t->parse_properties(array(
 						"obj_inst" => $event_obj,
@@ -894,6 +890,10 @@ class planner extends class_base
 				{
 					$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[id]","value" => $this->event_id);	
 				};
+				if ($args["request"]["cb_group"])
+				{
+					$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[cb_group]","value" => $args["request"]["cb_group"]);	
+				}
 			};
 		}
 		return $resprops;
@@ -1075,7 +1075,6 @@ class planner extends class_base
 			"viewtype" => $_REQUEST["viewtype"],
 		));
                 return $replacement;
-
 	}
 
 	////
@@ -2106,6 +2105,198 @@ class planner extends class_base
 		));
 
 		return $retval;
+	}
+
+	/**
+		@attrib name=search_contacts
+	**/
+	function search_contacts($arr)
+	{
+		return $this->mk_my_orb(
+			'change',
+			array(
+				'id' => $arr['id'],
+				'group' => $arr['group'],
+				'search_contact_firstname' => urlencode($arr["emb"]['search_contact_firstname']),
+				'search_contact_lastname' => urlencode($arr["emb"]['search_contact_lastname']),
+				'search_contact_code' => urlencode($arr["emb"]['search_contact_code']),
+				'search_contact_company' => urlencode($arr["emb"]['search_contact_company']),
+				"event_id" => $arr["event_id"],
+				"cb_group" => $arr["emb"]["cb_group"]
+			),
+			$arr['class']
+		);
+	}
+
+	/** checks if we are searching for event participants and adds a table with search results
+	**/
+	function do_handle_cae_props(&$props, $request)
+	{
+		if ($request["cb_group"] == "participants")
+		{
+			if ($request["search_contact_firstname"] != "" || $request["search_contact_lastname"] || $request["search_contact_code"] || $request["search_contact_company"])
+			{
+				$props["search_contact_firstname"]["value"] = $request["search_contact_firstname"];
+				$props["search_contact_lastname"]["value"] = $request["search_contact_lastname"];
+				$props["search_contact_company"]["value"] = $request["search_contact_company"];
+				$props["search_contact_code"]["value"] = $request["search_contact_code"];
+
+				$props["search_contact_results"] = array(
+					"name" => "search_contact_results",
+					"store" => "no",
+					"type" => "text",
+					"no_caption" => 1,
+					"caption" => "Tulemuste tabel",
+					"value" => $this->do_search_contact_results_tbl($request)
+				);
+			}
+		}
+	}
+
+	function _init_search_res_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "Nimi",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "phone",
+			"caption" => "Telefon",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "email",
+			"caption" => "E-post",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "position",
+			"caption" => "Ametinimetus",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "co",
+			"caption" => "Organisatsioon",
+			"align" => "center"
+		));
+
+		$t->define_chooser(array(
+			"name" => "sel_search",
+			"field" => "oid",
+		));
+	}
+
+	function do_search_contact_results_tbl($r)
+	{
+		classload("vcl/table");
+		$t = new aw_table();
+		$this->_init_search_res_t($t);
+
+		$filter = array("class_id" => CL_CRM_PERSON);
+		if ($r["search_contact_firstname"] != "")
+		{
+			$filter["firstname"] = "%".$r["search_contact_firstname"]."%";
+		}
+		if ($r["search_contact_lastname"] != "")
+		{
+			$filter["lastname"] = "%".$r["search_contact_lastname"]."%";
+		}
+		if ($r["search_contact_company"] != "")
+		{
+			$t_filt = array();
+			foreach(explode(",", $r["search_contact_company"]) as $bit)
+			{
+				$t_filt[] = "%".$bit."%";
+			}
+			$filter["CL_CRM_PERSON.work_contact.name"] = $t_filt;
+		}
+
+		$ol = new object_list($filter);
+
+		foreach($ol->arr() as $o)
+		{
+			$org_name = "";
+			if (is_oid($o->prop("work_contact")) && $this->can("view", $o->prop("work_contact")))
+			{
+				$or = obj($o->prop("work_contact"));
+				$org_name = $or->name();
+			}
+			$phone = "";
+			if (is_oid($o->prop("phone")) && $this->can("view", $o->prop("phone")))
+			{
+				$tmp = obj($o->prop("phone"));
+				$phone = $tmp->name();
+			}
+			$email = "";
+			if (is_oid($o->prop("email")) && $this->can("view", $o->prop("email")))
+			{
+				$tmp = obj($o->prop("email"));
+				$email = $tmp->prop("mail");
+			}
+			$rank = "";
+			if (is_oid($o->prop("rank")) && $this->can("view", $o->prop("rank")))
+			{
+				$tmp = obj($o->prop("rank"));
+				$rank = $tmp->name();
+			}
+			$t->define_data(array(
+				"name" => html::get_change_url($o->id(), array(), parse_obj_name($o->name())),
+				"co" => html::get_change_url($o->prop("work_contact"), array(), $org_name),
+				"phone" => $phone,
+				"email" => $email,
+				"position" => $rank,
+				"oid" => $o->id()
+			));
+		}
+
+		return $t->draw();
+	}
+
+	/**
+
+		@attrib name=save_participant_search_results
+
+	**/
+	function save_participant_search_results($arr)
+	{
+		$ss = safe_array($arr["sel_search"]);
+		if (count($ss))
+		{
+			foreach($ss as $part)
+			{
+				if ($this->can("view", $part))
+				{
+					// connect the person to the event.. it seems that's it?
+					$o = obj($part);
+					if (!$o->is_connected_to(array("to" => $part)))
+					{
+						$o->connect(array(
+							"to" => $arr["event_id"],
+							"reltype" => 8 // CRM_PERSON.RELTYPE_PERSON_MEETING
+						));
+					}
+				}				
+			}
+		}
+		return $this->mk_my_orb(
+			'change',
+			array(
+				'id' => $arr['id'],
+				'group' => $arr['group'],
+				'search_contact_firstname' => urlencode($arr["emb"]['search_contact_firstname']),
+				'search_contact_lastname' => urlencode($arr["emb"]['search_contact_lastname']),
+				'search_contact_code' => urlencode($arr["emb"]['search_contact_code']),
+				'search_contact_company' => urlencode($arr["emb"]['search_contact_company']),
+				"event_id" => $arr["event_id"],
+				"cb_group" => $arr["emb"]["cb_group"]
+			),
+			$arr['class']
+		);
 	}
 };
 ?>

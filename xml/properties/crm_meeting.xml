@@ -167,6 +167,16 @@
             <caption>Osalejad</caption>
       </property>
       <property>
+            <name>search_contact_company</name>
+            <table>objects</table>
+            <group>participants</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <store>no</store>
+            <caption>Organisatsioon</caption>
+      </property>
+      <property>
             <name>search_contact_firstname</name>
             <table>objects</table>
             <group>participants</group>

@@ -57,6 +57,19 @@
             <caption>Seostehaldur</caption>
       </property>
       <property>
+            <name>task_toolbar</name>
+            <table>objects</table>
+            <group>participants</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>
+            <![CDATA["Toolbar"]]>
+            </caption>
+      </property>
+      <property>
             <name>recurrence</name>
             <table>objects</table>
             <group>recurrence</group>
@@ -132,6 +145,80 @@
             <store>no</store>
             <caption>Meeldetuletus</caption>
       </property>
+      <property>
+            <name>participant</name>
+            <table>objects</table>
+            <group>participants</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>callback</type>
+            <callback>cb_participant_selector</callback>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Osalejad</caption>
+      </property>
+      <property>
+            <name>search_contact_company</name>
+            <table>objects</table>
+            <group>participants</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <store>no</store>
+            <caption>Organisatsioon</caption>
+      </property>
+      <property>
+            <name>search_contact_firstname</name>
+            <table>objects</table>
+            <group>participants</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <store>no</store>
+            <caption>Eesnimi</caption>
+      </property>
+      <property>
+            <name>search_contact_lastname</name>
+            <table>objects</table>
+            <group>participants</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <store>no</store>
+            <caption>Perenimi</caption>
+      </property>
+      <property>
+            <name>search_contact_code</name>
+            <table>objects</table>
+            <group>participants</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <store>no</store>
+            <caption>Isikukood</caption>
+      </property>
+      <property>
+            <name>search_contact_button</name>
+            <table>objects</table>
+            <group>participants</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>submit</type>
+            <store>no</store>
+            <action>search_contacts</action>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>search_contact_results</name>
+            <table>objects</table>
+            <group>participants</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Tulemuste tabel</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_TASK</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -157,6 +244,10 @@
             <reminders>
                   <caption>Meeldetuletused</caption>
             </reminders>
+            <participants>
+                  <caption>Osalejad</caption>
+                  <submit>no</submit>
+            </participants>
       </groupinfo>
       <tableinfo>
             <planner>

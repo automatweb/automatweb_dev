@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.15 2004/09/19 19:25:48 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.16 2004/10/05 07:13:12 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -30,6 +30,9 @@
 @default field=meta
 @default method=serialize
 
+@property task_toolbar type=toolbar no_caption=1 store=no group=participants
+@caption "Toolbar"
+
 @property recurrence type=releditor reltype=RELTYPE_RECURRENCE group=recurrence rel_id=first props=start,weekdays,end
 @caption Kordused
 
@@ -42,10 +45,32 @@
 @property comment_list type=comments group=comments no_caption=1
 @caption Kommentaarid
 
+@property participant type=callback callback=cb_participant_selector store=no group=participants no_caption=1
+@caption Osalejad
+
+@property search_contact_company type=textbox store=no group=participants
+@caption Organisatsioon
+
+@property search_contact_firstname type=textbox store=no group=participants
+@caption Eesnimi
+
+@property search_contact_lastname type=textbox store=no group=participants
+@caption Perenimi
+
+@property search_contact_code type=textbox store=no group=participants
+@caption Isikukood
+
+@property search_contact_button type=submit store=no group=participants action=search_contacts
+@caption Otsi
+
+@property search_contact_results type=table store=no group=participants no_caption=1
+@caption Tulemuste tabel
+
 @groupinfo recurrence caption=Kordumine
 @groupinfo calendars caption=Kalendrid
 @groupinfo projects caption=Projektid
 @groupinfo comments caption=Kommentaarid
+@groupinfo participants caption=Osalejad submit=no
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
 
@@ -176,6 +201,37 @@ class crm_call extends class_base
 					}
 				}
 			break;
+
+			case 'task_toolbar' :
+			{
+				$tb = &$data['toolbar'];
+				$tb->add_button(array(
+					'name' => 'del',
+					'img' => 'delete.gif',
+					'tooltip' => 'Kustuta valitud',
+					'action' => 'submit_delete_participants_from_calendar',
+				));
+
+				$tb->add_separator();
+
+				$tb->add_button(array(
+					'name' => 'Search',
+					'img' => 'search.gif',
+					'tooltip' => 'Otsi',
+					'url' => aw_url_change_var(array(
+						'show_search' => 1,
+					)),
+				));
+
+				$tb->add_button(array(
+					'name' => 'save',
+					'img' => 'save.gif',
+					'tooltip' => 'Salvesta',
+					"action" => "save_participant_search_results"
+				));
+				$this->return_url=aw_global_get('REQUEST_URI');
+				break;
+			}
 		}
 		return $retval;
 	}
@@ -216,6 +272,11 @@ class crm_call extends class_base
 	}
 
 
+	function cb_participant_selector($arr)
+	{
+		$elib = get_instance('calendar/event_property_lib');
+		return $elib->participant_selector($arr);
+	}
 
 };
 ?>
