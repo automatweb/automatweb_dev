@@ -16,29 +16,8 @@ if (!$tt->prog_acl("view", PRG_MENUEDIT))
 </head>
 
 <frameset cols="30%,*" frameborder="yes" framespacing=1>
-  <frame name="menuFrame" src="orb.aw?class=menuedit&action=folders" MARGINHEIGHT=0 MARGINWIDTH=0 scrolling=auto>
-<?php 
-$u = get_instance("users");
-$treetype = $u->get_user_config(array(
-	"uid" => aw_global_get("uid"),
-	"key" => "treetype",
-));
-
-if (!$treetype)
-{
-	$treetype = aw_ini_get("menuedit.tree_type");
-}
-
-if ($treetype == "java") 
-{ 
-	echo "scrolling=no"; 
-} 
-else 
-{ 
-	echo "scrolling=auto"; } 
-?> > 
-
-  <frame name="list" src="orb.aw?class=menuedit&action=right_frame&parent=<?php echo $parent; ?>&period=<?php echo $period; ?>" MARGINHEIGHT=0 MARGINWIDTH=0 scrolling=auto>
+  <frame name="menuFrame" src="orb.aw?class=admin_folders&action=folders" MARGINHEIGHT=0 MARGINWIDTH=0 scrolling=auto>
+  <frame name="list" src="orb.aw?class=admin_menus&action=right_frame&parent=<?php echo $parent; ?>&period=<?php echo $period; ?>" MARGINHEIGHT=0 MARGINWIDTH=0 scrolling=auto>
 </frameset>
 
 </html>

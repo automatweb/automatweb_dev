@@ -328,8 +328,6 @@ function classload($args)
 function get_instance($class,$args = array())
 {
 	enter_function("__global::get_instance",array());
-	$classdir = $GLOBALS["cfg"]["__default"]["classdir"];
-	$ext = $GLOBALS["cfg"]["__default"]["ext"];
 
 	$id = sprintf("instance::%s",$class);
 	$instance = aw_global_get($id);
@@ -339,6 +337,8 @@ function get_instance($class,$args = array())
 
 	if (not(is_object($instance)))
 	{
+		$classdir = $GLOBALS["cfg"]["__default"]["classdir"];
+		$ext = $GLOBALS["cfg"]["__default"]["ext"];
 		include_once($classdir."/".str_replace(".","", $class).".".$ext);
 		if (class_exists($lib))
 		{
@@ -417,11 +417,21 @@ function aw_startup()
 	$p = get_instance("periods");
 	$p->request_startup();
 
-	$u = get_instance("users");
-	$u->request_startup();
+	// this check reduces the startup memory usage for not logged in users by a whopping 1.3MB! --duke
+	if (($uid = aw_global_get("uid")) != "")
+	{
+		$u = get_instance("users");
+		$u->request_startup();
+	}
 
-	$syslog = get_instance("syslog/syslog");
-	$syslog->request_startup();
+	if (!is_array(aw_global_get("gidlist")))
+	{
+		aw_global_set("gidlist", array());
+		aw_global_set("gidlist_pri", array());
+	}
+
+	#$syslog = get_instance("syslog/syslog");
+	#$syslog->request_startup();
 
 	$m = get_instance("menuedit");
 	$m->request_startup();

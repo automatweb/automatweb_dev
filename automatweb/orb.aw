@@ -1,6 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.11 2003/04/03 22:32:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.12 2003/04/21 08:00:54 duke Exp $
+set_time_limit(0);
 include("const.aw");
+
 
 //$vars = array_merge($HTTP_POST_VARS,$HTTP_GET_VARS,$AW_GET_VARS,$_GET,$_POST);
 // _GET, _POST and friends were implemented in php 4.1.0
@@ -42,6 +44,7 @@ if ($vars["fastcall"] == 1)
 	die($inst->$action($vars));
 }
 include("admin_header.".aw_ini_get("ext"));
+
 
 classload("defs","orb");
 $t = new aw_template;

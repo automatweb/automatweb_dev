@@ -3,7 +3,11 @@ $uid = "";	// for the extra paranoid
 session_name("automatweb");
 session_start();
 
-classload("timer","aw_template","defs","users","objects","languages");
+classload("timer");
+classload("aw_template");
+classload("defs");
+classload("users");
+classload("languages");
 
 // you cannot aw_startup() here, it _will_ break things
 // reset aw_cache_* function globals
