@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.13 2002/11/27 10:43:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.14 2002/11/27 14:13:20 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -3012,6 +3012,47 @@ class form_table extends form_base
 	function create_email_links($str)
 	{
 		return preg_replace("/([-.a-zA-Z0-9_]*)@([-.a-zA-Z0-9_]*)/","<a href='mailto:\\1@\\2'>\\1@\\2</a>", $str);
+	}
+
+	function callback_alias_cache_get_url_hash($arr)
+	{
+		$url = preg_replace('/tbl_sk=[^&$]*/','',$arr['url']);
+		$ru = preg_replace('/old_sk=[^&$]*/','',$ru);
+		return gen_uniq_id($ru);
+	}
+
+	////
+	// !gets called when showing cached alias
+	function callback_alias_cache_show_alias($arr)
+	{
+		// mark down the path
+		$old_sk = $GLOBALS["old_sk"];
+		$tbl_sk = $GLOBALS["tbl_sk"];
+		$fg_table_sessions = aw_global_get("fg_table_sessions");
+
+		// copy the first part of the path from the previous search
+		$fg_table_sessions[$tbl_sk] = $fg_table_sessions[$old_sk];
+
+		// check that everyhting is normal
+		if (!is_array($fg_table_sessions[$tbl_sk]))
+		{
+			$fg_table_sessions[$tbl_sk] = Array();
+		}
+
+		if ($tbl_sk != "")
+		{
+			// and finally, add the current search to the path
+			$num = count($fg_table_sessions[$tbl_sk]);
+			$req = aw_global_get("REQUEST_URI");
+			$req = str_replace("&print=1", "", $req);
+			$req = str_replace("?print=1", "", $req);
+			if ($fg_table_sessions[$tbl_sk][$num-1] != $req)
+			{
+				$fg_table_sessions[$tbl_sk][] = $req;
+			}
+		}
+		aw_session_set("fg_table_sessions", $fg_table_sessions);
+		echo "called back alias cache <br>";
 	}
 }
 ?>
