@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.39 2004/07/01 14:39:44 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.40 2004/07/02 09:40:32 rtoomas Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -282,7 +282,7 @@ class crm_person extends class_base
 				//if the person is associated with a section then show the professions
 				//from the section and if not then show all the professions in the system
 				$conns = $arr['obj_inst']->connections_to(array(
-					'reltype'=>21 //@todo have to change to textual, crm_person.SECTION
+					'type'=>21 //@todo have to change to textual, crm_person.SECTION
 				));
 				if(sizeof($conns))
 				{
@@ -1161,7 +1161,7 @@ class crm_person extends class_base
 		{
 			$target_obj->connect(array(
 				'to' => $conn->prop('from'),
-				'reltype' => 2 //@todo have to change to textual
+				'reltype' => 21 //crm_section.reltype_section
 			));
 		}
 		
@@ -1178,7 +1178,7 @@ class crm_person extends class_base
 		{
 			$target_obj->connect(array(
 			  "to" => $conn->prop("from"),
-			  "reltype" => 6,
+			  "reltype" => 8, //cl_crm_company.reltype_workers
 			));
 		};
 	}
@@ -1202,10 +1202,9 @@ class crm_person extends class_base
 	{
 		$conn = $arr["connection"];
 		$target_obj = $conn->to();
-		$source_obj = $conn->from();
 		if ($target_obj->class_id() == CL_CRM_PERSON)
 		{
-			if($source_obj->is_connected_to(array('to'=>$conn->prop('to'))))
+			if($target_obj->is_connected_to(array('to'=>$conn->prop('from'))))
 			{
 				$target_obj->disconnect(array(
 					"from" => $conn->prop("from"),

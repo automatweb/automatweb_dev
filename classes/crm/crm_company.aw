@@ -1,10 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.43 2004/07/01 14:39:44 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.44 2004/07/02 09:40:32 rtoomas Exp $
 /*
-//on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
 //on_disconnect_person_from_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disconnect_person_from_org)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disconnect_section_from_org)
 HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 
 @classinfo relationmgr=yes
@@ -334,6 +334,7 @@ class crm_company extends class_base
 {
 	var $unit=0;
 	var $active_node = 0;
+	var $active_profession = 0;
 	var $group_not_shown = true;
 	var $data = null;
 	//bad name, it is in the meaning of
@@ -433,8 +434,7 @@ class crm_company extends class_base
 	
 		$conns = $obj->connections_from(array(
 			'type'=>$type1,
-			'sort_by' => 'from.jrk',
-			'sort_dir' => 'asc',
+			'sort_by' => 'to.jrk',
 		));
 		$conns = $conns;
 		//parent nodes'id actually
@@ -446,13 +446,10 @@ class crm_company extends class_base
 				continue;
 			//iga alam item saab ühe võrra suurema väärtuse
 			//if the 'to.id' eq active_node then it should be bold
+			$name=$conn->prop('to.name');
 			if($conn->prop('to')==$this->active_node)
 			{
-				$name='<b>'.$conn->prop('to.name').'</b>';
-			}
-			else
-			{
-				$name=$conn->prop('to.name');
+				$name='<b>'.$name.'</b>';
 			}
 			$tmp_obj = $conn->to();
 			
@@ -515,6 +512,11 @@ class crm_company extends class_base
 		{
 			$tmp_obj = new object($prof_conn->to());
 			$name = strlen($tmp_obj->prop('name_in_plural'))?$tmp_obj->prop('name_in_plural'):$tmp_obj->prop('name');
+			if($tmp_obj->id()==$this->active_profession)
+			{
+				$name = '<b>'.$name.'</b>';
+			}
+
 			$url = array();
 			$url = aw_url_change_var(array('cat'=>$prof_conn->prop('to'),$key=>$value));
 			$tree->add_item($this_level_id,
@@ -704,6 +706,7 @@ class crm_company extends class_base
 				$tree_inst = &$arr['prop']['vcl_inst'];
 				$node_id = 0;
 				$this->active_node = (int)$arr['request']['unit'];
+				$this->active_profession = (int)$arr['request']['cat'];
 				$this->generate_tree(&$tree_inst,$arr['obj_inst'],&$node_id,'RELTYPE_SECTION',array(),'unit',true);
 				break;
 			}
@@ -1356,7 +1359,7 @@ class crm_company extends class_base
 		return $this->overview;
 	}
 
-	// Invoked when a connection is created from person to organization || section
+	// Invoked when a connection is created from person to organization
 	// .. this will then create the opposite connection.
 	function on_connect_person_to_org($arr)
 	{
@@ -1368,14 +1371,6 @@ class crm_company extends class_base
 				"to" => $conn->prop("from"),
 				"reltype" => $this->crm_company_reltype_workers,
 			));
-		}
-		else if($target_obj->class_id() == CL_CRM_SECTION)
-		{
-			$target_obj->connect(array(
-				"to" => $conn->prop("from"),
-				"reltype" => $this->crm_section_reltype_workers,
-			));
-		
 		}
 	}
 
@@ -1406,11 +1401,19 @@ class crm_company extends class_base
 				"from" => $conn->prop("from"),
 			));
 		}
-		else if($target_obj->class_id() == CL_CRM_SECTION)
+	}
+
+	// Invoked when a connection from section to organization is removed
+	// .. this will then remove the opposite connection as well
+	function on_disconnect_section_from_org($arr)
+	{
+		$conn = $arr["connection"];
+		$target_obj = $conn->to();
+		if ($target_obj->class_id() == CL_CRM_COMPANY)
 		{
-			//$target_obj->disconnect(array(
-			//	"from" => $conn->prop("from"),
-			//));
+			$target_obj->disconnect(array(
+				"from" => $conn->prop("from"),
+			));
 		}
 	}
 	
@@ -2349,7 +2352,8 @@ class crm_company extends class_base
 					'CL_CRM_PERSON.RELTYPE_PHONE.name' => '%'
 				));
 		arr($ol);
-		die();*/
+		//die();
+		*/
 
 		$ol = new object_list($search_params);
 		//$ol = new object_list(array('class_id' => CL_CRM_PERSON,'firstname'=>'toomas','lastname'=>'koobas'));
@@ -2391,23 +2395,23 @@ class crm_company extends class_base
 	{
 		foreach($arr['check'] as $key=>$value)
 		{
-			$obj = null;
+			$obj = new object($value);
 			$reltype = 0;
-			if($arr['unit'])
+			$target = 0;
+			if(is_oid($arr['unit']))
 			{
-				$obj = new object($arr['unit']);
-				$reltype = 2; //crm_section.workers
+				$reltype = 21; //crm_person.reltype_section
+				$target = $arr['unit'];
 			}
 			else
 			{
-				$obj = new object($arr['id']);
-				$reltype = 8; //crm_company.workers	
+				$reltype = 6; //crm_person.reltype_work
+				$target = $arr['id'];
 			}
-			
 			$obj->connect(array(
-					'to' => $value,
-					'reltype' => $reltype 
-					));
+					'to'=>$target,
+					'reltype'=>$reltype,
+			));
 		}
 		return $this->mk_my_orb('change',array(
 								'id' => $arr['id'],

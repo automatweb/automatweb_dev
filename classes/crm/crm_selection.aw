@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_selection.aw,v 1.14 2004/06/17 14:33:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_selection.aw,v 1.15 2004/07/02 09:40:32 rtoomas Exp $
 /*
 @classinfo relationmgr=yes
 @default table=objects
@@ -403,11 +403,6 @@ class crm_selection extends class_base
 			}
 
 		};
-
-		/*header('Location: '.$uri);
-		die;
-		*/
-
 	}
 
 	function gen_selection_toolbar($arr)

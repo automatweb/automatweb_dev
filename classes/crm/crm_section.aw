@@ -1,7 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.6 2004/07/01 14:39:44 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.7 2004/07/02 09:40:32 rtoomas Exp $
 // crm_section.aw - Üksus
 /*
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disconnect_org_from_section)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_section)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disconnect_person_from_section)
 
 @classinfo syslog_type=ST_CRM_SECTION relationmgr=yes
 
@@ -104,6 +107,53 @@ class crm_section extends class_base
 			$rtrn[$conn->prop('to')] = $conn->prop('to.name');
 		}
 		return $rtrn;
+	}
+
+   // Invoked when a connection from organization to section is removed
+   // .. this will then remove the opposite connection as well if one exists
+   function on_disconnect_org_from_section($arr)
+   {
+      $conn = $arr["connection"];
+      $target_obj = $conn->to();
+      if ($target_obj->class_id() == CL_CRM_SECTION)
+      {
+			if($target_obj->is_connected_to(array('from' => $conn->prop('from'))))
+			{
+				$target_obj->disconnect(array(
+					"from" => $conn->prop("from"),
+				));
+			}
+      }
+   }
+
+	// Invoked when a connection is created from person to section
+   // .. this will then create the opposite connection.
+   function on_connect_person_to_section($arr)
+   {
+      $conn = $arr["connection"];
+      $target_obj = $conn->to();
+      if ($target_obj->class_id() == CL_CRM_SECTION)
+      {
+         $target_obj->connect(array(
+            "to" => $conn->prop("from"),
+            "reltype" => 2, //crm_section.reltype_section
+         ));
+      }
+   }
+	
+	function on_disconnect_person_from_section($arr)
+	{
+      $conn = $arr["connection"];
+      $target_obj = $conn->to();
+      if ($target_obj->class_id() == CL_CRM_SECTION)
+      {
+			if($target_obj->is_connected_to(array('to'=>$conn->prop('from'))))
+			{
+				$target_obj->disconnect(array(
+					"from" => $conn->prop("from"),
+				));
+			}
+      }
 	}
 }
 ?>
