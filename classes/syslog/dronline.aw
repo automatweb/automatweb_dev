@@ -2,6 +2,8 @@
 
 /*
 
+@classinfo syslog_type=ST_DRONLINE
+
 @default table=objects
 @default field=meta
 @default method=serialize
