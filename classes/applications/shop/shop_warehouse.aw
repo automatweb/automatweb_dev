@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.20 2004/12/01 14:04:14 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.21 2005/01/28 14:06:02 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -615,7 +615,15 @@ class shop_warehouse extends class_base
 					"name" => "sel[]",
 					"value" => $o->id()
 				)),
-				"is_menu" => ($o->class_id() == CL_MENU ? 0 : 1)
+				"is_menu" => ($o->class_id() == CL_MENU ? 0 : 1),
+				"ord" => html::textbox(array(
+					"name" => "set_ord[".$o->id()."]",
+					"value" => $o->ord(),
+					"size" => 5
+				)).html::hidden(array(
+					"name" => "old_ord[".$o->id()."]",
+					"value" => $o->ord()
+				))
 			));
 		}
 
@@ -642,6 +650,13 @@ class shop_warehouse extends class_base
 			"name" => "name",
 			"caption" => "Nimi",
 			"sortable" => 1,
+		));
+
+		$t->define_field(array(
+			"name" => "ord",
+			"caption" => "J&auml;rjekord",
+			"sortable" => 0,
+			"align" => "center"
 		));
 
 		$t->define_field(array(
@@ -2150,12 +2165,8 @@ class shop_warehouse extends class_base
 			"class_id" => CL_SHOP_PACKET,
 			"status" => $status
 		));
-		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		foreach($ol->arr() as $o)
 		{
-			if ($o->class_id() == CL_MENU)
-			{
-				continue;
-			}
 			$ret[] = $o;
 		}
 
@@ -2167,16 +2178,12 @@ class shop_warehouse extends class_base
 
 		$filt = array(
 			"parent" => $po->id(),
-			"class_id" => array(CL_MENU,CL_SHOP_PRODUCT),
+			"class_id" => array(CL_SHOP_PRODUCT),
 			"status" => array(STAT_ACTIVE, STAT_NOTACTIVE)
 		);
 		$ol = new object_list($filt);
-		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		foreach($ol->arr() as $o)
 		{
-			if ($o->class_id() == CL_MENU)
-			{
-				continue;
-			}
 			$ret[] = $o;
 		}
 
@@ -2229,6 +2236,8 @@ class shop_warehouse extends class_base
 		{
 			$soc->add_item($iid, 1);
 		}
+
+		$this->do_save_prod_ord($arr);
 
 		return $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
@@ -2336,6 +2345,24 @@ class shop_warehouse extends class_base
 		aw_session_del("wh_order_cur_order_id");
 
 		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => "search_search"));
+	}
+
+	function do_save_prod_ord($arr)
+	{
+		foreach(safe_array($arr["old_ord"]) as $oid => $o_ord)
+		{
+			if ($arr["set_ord"][$oid] != $o_ord)
+			{
+				$o = obj($oid);
+				$o->set_ord($arr["set_ord"][$oid]);
+				$o->save();
+			}
+		}
+	}
+
+	function callback_mod_reforb($arr)
+	{
+		$arr["tree_filter"] = $_GET["tree_filter"];
 	}
 }
 ?>

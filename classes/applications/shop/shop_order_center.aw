@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.19 2005/01/19 18:19:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.20 2005/01/28 14:06:02 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -152,10 +152,6 @@ class shop_order_center extends class_base
 				break;
 
 			case "sortbl":
-				if ($arr["obj_inst"]->prop("use_controller"))
-				{
-					return PROP_IGNORE;
-				}
 				$this->do_sortbl($arr);
 				break;
 
@@ -530,15 +526,18 @@ class shop_order_center extends class_base
 			// see if this folder has a special controller
 			$vals = safe_array($soc->meta("fld_controllers"));
 			$so = obj($arr["section"]);
+			enter_function("shop_order_center::show_items::path");
 			$path = $so->path();
 
 			foreach($path as $po)
 			{
-				if (!empty($vals[$po->id()]))
+				$po_id = $po->id();
+				if (!empty($vals[$po_id]))
 				{
-					$ctr = $vals[$po->id()];
+					$ctr = $vals[$po_id];
 				}
 			}
+			exit_function("shop_order_center::show_items::path");
 			
 			if (is_oid($ctr) && $this->can("view", $ctr))
 			{
@@ -637,12 +636,13 @@ class shop_order_center extends class_base
 			$i = $o->instance();
 			if ($tl_inst->is_on_cur_page())
 			{
+				$oid = $o->id();
 				$tl_inst->add_product($i->do_draw_product(array(
 					"prod" => $o,
 					"layout" => $layout,
 					"oc_obj" => $soc,
-					"quantity" => $soce[$o->id()]["ordered_num_enter"],
-					"is_err" => $soce[$o->id()]["is_err"],
+					"quantity" => $soce[$oid]["ordered_num_enter"],
+					"is_err" => $soce[$oid]["is_err"],
 					"prod_link_cb" => $arr["prod_link_cb"]
 				)));
 			}
