@@ -1,0 +1,63 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>groups</name>
+            <type>select</type>
+            <multiple>1</multiple>
+            <size>15</size>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Vali grupid, kellele pullouti näidatakse</caption>
+      </property>
+      <property>
+            <name>docs</name>
+            <type>objpicker</type>
+            <clid>CL_DOCUMENT</clid>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Vali dokument, mida näidata</caption>
+      </property>
+      <property>
+            <name>align</name>
+            <type>select</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Align</caption>
+      </property>
+      <property>
+            <name>right</name>
+            <type>textbox</type>
+            <size>10</size>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Paremalt</caption>
+      </property>
+      <property>
+            <name>width</name>
+            <type>textbox</type>
+            <size>10</size>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Laius</caption>
+      </property>
+      <property>
+            <name>template</name>
+            <type>select</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Template</caption>
+      </property>
+</properties>
+
