@@ -24,6 +24,21 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="hf_search">
+			<function name="hf_search">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_hf_search">
+			<function name="submit_hf_search">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
 		
