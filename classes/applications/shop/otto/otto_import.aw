@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.6 2004/10/15 07:44:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.7 2004/10/22 12:24:58 kristo Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -41,6 +41,14 @@
 
 @property fnames type=textarea rows=30 cols=80 group=files
 @caption Failinimed
+
+@groupinfo imgs caption="Pildid"
+
+@property imgs_csv type=textbox group=imgs
+@caption Piltide CSV faili url
+
+@property do_img_i type=checkbox ch_value=1 group=imgs
+@caption Teosta piltide import
 
 @reltype FOLDER value=1 clid=CL_MENU
 @caption kataloog
@@ -160,7 +168,7 @@ class otto_import extends class_base
 					}
 					$row = $this->char_replacement($row);
 					$row[4] = str_replace(".","", $row[4]);
-					$row[4] = substr(str_replace(" ","", $row[4]), 0, 6);
+					$row[4] = substr(str_replace(" ","", $row[4]), 0, 7);
 					$data[] = $row[4];
 				}
 			}
@@ -534,7 +542,7 @@ class otto_import extends class_base
 
 			if ($tmpf)
 			{
-				unlink($tmpf);
+				@unlink($tmpf);
 			}
 
 			echo ".. got $num titles <br>";
@@ -596,7 +604,7 @@ class otto_import extends class_base
 				$full_code = str_replace(".","", $row[4]);
 				$full_code = str_replace(" ","", $full_code);
 
-				$row[4] = substr(str_replace(".","", str_replace(" ","", $row[4])), 0, 6);
+				$row[4] = substr(str_replace(".","", str_replace(" ","", $row[4])), 0, 7);
 				$color = $row[3];
 				if ($row[2] != "")
 				{
@@ -616,7 +624,7 @@ class otto_import extends class_base
 
 			if ($tmpf)
 			{
-				unlink($tmpf);
+				@unlink($tmpf);
 			}
 
 			echo ".. got $num codes <br>\n";
@@ -709,7 +717,7 @@ class otto_import extends class_base
 
 			if ($tmpf)
 			{
-				unlink($tmpf);
+				@unlink($tmpf);
 			}
 			echo ".. got $num prices <br>\n";
 			$log[] = "lugesin failist $fld_url $num hinda";
@@ -1091,6 +1099,39 @@ class otto_import extends class_base
 					));
 				}
 			}
+
+			// check page
+			$pk_pages = array();
+			foreach($pko->connections_from(array("type" => 1)) as $c)
+			{
+				$tmp = $c->to();
+				$pk_pages[$tmp->prop("user18")] = $tmp->prop("user18");
+			}
+
+			if (true || count($pk_pages) == 1)
+			{
+				$page = reset($pk_pages);
+				//echo "cnt = 1 , user4 = ".$o->prop("user4")." page = $page <br>\n";
+				if ($pko->prop("user4") != $page)
+				{
+					$pko->set_prop("user4", $page);
+					$pko->save();
+
+					// check image table
+					if ($pko->prop("user3") != "")
+					{
+						$impg = $this->db_fetch_field("SELECT p_pg FROM otto_prod_img WHERE imnr = '".$pko->prop("user3")."'", "p_pg");
+						if ($impg != $page)
+						{
+							$this->db_query("UPDATE otto_prod_img SET p_pg = '$page' WHERE imnr = '".$pko->prop("user3")."'");
+							//echo "q = UPDATE otto_prod_img SET p_pg = '$page' WHERE imnr = '".$o->prop("user3")."' <br>";
+						}
+					}
+					echo "changed page to $page <br>\n";
+					flush();
+				}
+			}
+
 			$this->restore_handle();
 		}
 
@@ -1108,6 +1149,8 @@ class otto_import extends class_base
 		$this->fix_image_codes();
 
 		$this->fix_prices();
+
+		//$this->fix_package_pages(array());
 
 		// clear cache
 		$cache = get_instance("maitenance");
@@ -1406,6 +1449,63 @@ class otto_import extends class_base
 				$line.=$filestr[$pos];
 		}
 		return $linearr;
+	}
+
+	/** try to fix package page numbers by checking their products
+
+		@attrib name=fix_package_pages
+
+	**/
+	function fix_package_pages($arr)
+	{
+		echo "fixing package pages! <br>\n";
+		flush();
+
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_PACKET,
+			"oid" => 180396
+		));
+		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		{
+			echo "packet ".$o->name()." <br>\n";
+			flush();
+			// get prods from packet
+			$pages = array();
+			foreach($o->connections_from(array("type" => "RELTYPE_PRODUCT")) as $c)
+			{
+				$prod = $c->to();
+				$pages[$prod->prop("user18")] = $prod->prop("user18");
+			}
+
+			echo "gt pages as ".dbg::dump($pages)." <br>";
+
+			if (true || count($pages) == 1)
+			{
+				$page = reset($pages);
+				//echo "cnt = 1 , user4 = ".$o->prop("user4")." page = $page <br>\n";
+				if ($o->prop("user4") != $page)
+				{
+					$o->set_prop("user4", $page);
+					$o->save();
+
+					// check image table
+					if ($o->prop("user3") != "")
+					{
+						$impg = $this->db_fetch_field("SELECT p_pg FROM otto_prod_img WHERE imnr = '".$o->prop("user3")."'", "p_pg");
+						if ($impg != $page)
+						{
+							$this->db_query("UPDATE otto_prod_img SET p_pg = '$page' WHERE imnr = '".$o->prop("user3")."'");
+							//echo "q = UPDATE otto_prod_img SET p_pg = '$page' WHERE imnr = '".$o->prop("user3")."' <br>";
+						}
+					}
+					echo "changed page to $page <br>\n";
+					flush();
+				}
+			}
+		}
+
+		echo "all done. <br>\n";
+		flush();
 	}
 }
 
