@@ -557,7 +557,7 @@ class shop_table extends shop_base
 						}
 						else
 						{
-							if (($itmp = $this->find_num_places($place_arr,$row["period"])) != false)
+							if (($itmp = $this->find_num_places($place_arr,$row["period"])) != -10)
 							{
 								$i_total = $itmp;
 							}
@@ -733,7 +733,7 @@ class shop_table extends shop_base
 				return $row["max_items"];
 			}
 		}
-		return false;
+		return -10;
 	}
 }
 ?>

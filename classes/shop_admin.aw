@@ -803,7 +803,7 @@ class shop_admin extends shop_base
 				$this->db_query("SELECT * FROM order2form_entries WHERE order_id IN ($oids) order by order_id,name");
 				while ($row = $this->db_next())
 				{
-					$f->reset();
+					$f = new form;
 					$this->vars(array(
 						"nr" => $cnt++,
 						"name" => $f->show(array("id" => $row["form_id"], "entry_id" => $row["entry_id"], "op_id" => $sh_ofs[$row["form_id"]]["op_id_search"])),
@@ -819,7 +819,7 @@ class shop_admin extends shop_base
 					$no2 = "";
 					if ($row["order_id"] != $cur_order)
 					{
-						$f->reset();
+						$f = new form;
 						$info = "";
 						if ($orders[$row["order_id"]]["hotel_op_id"] != "")
 						{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.39 2001/10/15 04:50:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.40 2001/10/15 11:18:32 kristo Exp $
 // shop.aw - Shop
 lc_load("shop");
 global $orb_defs;
@@ -1548,6 +1548,7 @@ class shop extends shop_base
 		}
 		$arr["no_reforb"] = 1;
 		$arr["search"] = 1;
+		unset($arr["s_name"]);
 		$this->vars(array(
 			"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$section,
 			"search_reforb" => $this->mk_reforb($GLOBALS["action"],$arr),
@@ -1869,10 +1870,7 @@ class shop extends shop_base
 			}
 
 			$q = "SELECT max_items FROM shop_item2per_places WHERE tfrom <= $period AND tto >= $period AND per_type = $weeks AND item_id = ".$it["oid"];
-			if ($it["oid"] == 9471)
-			{
-				dbg("max_items_q = $q <br>");
-			}
+			dbg("max_items_q = $q <br>");
 			$this->db_query($q);
 			$tr = $this->db_next();
 			if (is_array($tr))
@@ -1880,10 +1878,7 @@ class shop extends shop_base
 				$it["max_items"] = $tr["max_items"];
 			}
 
-			if ($it["oid"] == 9471)
-			{
-				dbg("max_items_result = $it[max_items] <br>");
-			}
+			dbg("max_items_result = $it[max_items] <br>");
 			
 			if ($it["has_period"])
 			{
