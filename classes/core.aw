@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.33 2001/07/03 09:28:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.34 2001/07/10 21:29:56 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -19,6 +19,7 @@ class core extends db_connector
 		global $basedir;
 		$this->basedir = $basedir;
 		$this->parsers = "";
+		lc_load("definition");
 	}
 
 	////
@@ -319,7 +320,7 @@ class core extends db_connector
 	{
 		if (!is_array($arr))
 		{
-			print "Insufficient data to create an object. How did this happen anyway?";
+			print LC_CORE_HOW_HAPPENED;
 			die();
 		};
 		
@@ -398,7 +399,7 @@ class core extends db_connector
 			    modified = '$t',
 			    modifiedby = '$uid'
 			WHERE oid = '$oid'";
-		$this->_log("OBJECT","$oid kustutati");
+		$this->_log("OBJECT",sprintf(LC_CORE_TO_ERASED,$oid));
 		$this->db_query($q);
 	}
 
@@ -418,7 +419,7 @@ class core extends db_connector
 	{
 		if (!$params["oid"])
 		{
-			$this->raise_error("UPD_OBJECT called without object id",0);
+			$this->raise_error(LC_CORE_CALLED_WITHOUT_ID,0);
 		};
 		$params["modifiedby"] = UID;
 		$params["modified"] = time();
@@ -516,7 +517,7 @@ class core extends db_connector
 			VALUES('$source','$target','$target_data[class_id]','$extra')";
 
 		$this->db_query($q);
-		$this->_log("alias","Lisas objektile $source aliase");
+		$this->_log("alias",sprintf(LC_CORE_ADD_TO_OBJECT,$source));
 	}
 
 	////
@@ -792,7 +793,7 @@ class core extends db_connector
 			$int = (int)$oid;
 			if (strlen($oid) > strlen($int)) 
 			{
-				print "not an object";
+				print LC_CORE_NOT_AN_OBJECT;
 				die;
 			};
 		};
@@ -1245,6 +1246,14 @@ class core extends db_connector
 	}
 
 	////
+	// Tekitab lingi. duh. 
+	// params(array) - key/value paarid elementidest, mida lingi tekitamisel kasutada
+	function mk_link($args = array())
+	{
+		return join("/",map2("%s=%s",$args));
+	}
+
+	////
 	// !creates a list of menus above $parent and appends $text and assigns it to the correct variable
 	function mk_path($oid,$text = "",$period = 0)
 	{
@@ -1271,7 +1280,7 @@ class core extends db_connector
 	{
 		if (!$arr["file"])
 		{
-			$this->raise_error("get_file was called without filename",true);
+			$this->raise_error(LC_CORE_GET_FILE_NO_NAME,true);
 		};
 		if (!($fh = @fopen($arr["file"],"r")))
 		{
@@ -1292,7 +1301,7 @@ class core extends db_connector
 	{
 		if (!$arr["file"])
 		{
-			$this->raise_error("put_file was called without filename",true);
+			$this->raise_error(LC_CORE_PUT_FILE_NO_NAME,true);
 		};
 		$file = $arr["file"];
 		if (!($fh = fopen($file,"w")))
