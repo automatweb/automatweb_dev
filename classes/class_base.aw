@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.230 2004/03/02 21:13:32 duke Exp $
+// $Id: class_base.aw,v 2.232 2004/03/04 11:14:19 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -240,6 +240,8 @@ class class_base extends aw_template
 		{
 			$cfgform_id = $this->obj_inst->meta("cfgform_id");
 		};
+
+		$this->cfgform_id = $cfgform_id;
 		
 		$filter = array(
 			"clid" => $this->clid,
@@ -675,11 +677,13 @@ class class_base extends aw_template
 			{
 				return $cgid;
 			}
-			
+		
+			/*
 			$cfgu = get_instance("cfg/cfgutils");
 			$def = $this->get_file(array("file" => (aw_ini_get("basedir") . "/xml/documents/def_cfgform.xml")));
 			list($proplist,$grplist) = $cfgu->parse_cfgform(array("xml_definition" => $def));
 			$this->classinfo = $cfgu->get_classinfo();
+			*/
 		};
 
 		// okey, I need a helper class. Something that I can create, something can load
@@ -1588,6 +1592,16 @@ class class_base extends aw_template
 		$has_rte = false;
 		foreach($properties as $key => $val)
 		{
+			if ($val["editonly"] == 1 && empty($this->id))
+			{
+				continue;
+			};
+			
+			if ( isset($val["newonly"]) && !empty($this->id))
+			{
+				// and this as well
+				continue;
+			};
 
 			if (isset($val["callback"]) && method_exists($this->inst,$val["callback"]))
 			{
@@ -2345,8 +2359,16 @@ class class_base extends aw_template
 		$filter["group"] = $group;
 		$filter["rel"] = $this->is_rel;
 		$filter["ignore_layout"] = 1;
-		$filter["cfgform_id"] = $this->obj_inst->meta("cfgform_id");
-	
+		if ($args["cfgform"])
+		{
+			$filter["cfgform_id"] = $args["cfgform"];
+			$this->cfgform_id = $args["cfgform"];
+		}
+		else
+		{
+			$filter["cfgform_id"] = $this->obj_inst->meta("cfgform_id");
+		};
+
 		$properties = $this->get_property_group($filter);
 
 
@@ -3201,6 +3223,7 @@ class class_base extends aw_template
 		{
 			$this->classinfo = array();
 		};
+		$tmp = $cfgu->normalize_text_nodes($cfgu->get_classinfo());
 		$this->classinfo = array_merge($cfgu->normalize_text_nodes($cfgu->get_classinfo()),$this->classinfo);
 		return $rv;
 	}
