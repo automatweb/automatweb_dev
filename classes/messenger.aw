@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.115 2002/12/23 10:57:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.116 2003/01/03 14:12:36 kristo Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 lc_load("definition");
@@ -237,6 +237,15 @@ class messenger extends menuedit_light
 			$xml = $basedir . "/xml/messenger/menucode.xml";
 		}
 
+		if (file_exists($this->template_dir . "/menus.tpl"))
+		{
+			$tplfile = $this->template_dir . "/menus.tpl";
+		}
+		else
+		{
+			$tplfile = $basedir . "/templates/messenger/menus.tpl";
+		}
+
 		if ($this->object_id)
 		{
 			$xm->vars($vars);
@@ -247,7 +256,7 @@ class messenger extends menuedit_light
 			));
 			$xml_c = preg_replace('/<link>(.*)<\/link>/isU','<link>\\1&amp;messenger_id='.$this->object_id.'</link>', $xml_c);
 			$xm->load_from_memory(array(
-				"template" => $this->get_file(array("file" => $this->template_dir . "/menus.tpl")),
+				"template" => $this->get_file(array("file" => $tplfile)),
 				"xmldef" => $xml_c
 			));
 			$retval = $xm->create(array(
@@ -259,7 +268,7 @@ class messenger extends menuedit_light
 			$retval = $xm->build_menu(array(
 				"vars"	=> $vars,
 				"xml"	=> $xml,
-				"tpl"	=> $this->template_dir . "/menus.tpl",
+				"tpl"	=> $tplfile,
 				"activelist" => $activelist,
 			));
 		}
@@ -1267,6 +1276,7 @@ class messenger extends menuedit_light
 
 		//$message = str_replace("\n","\r\n",$message);
 		// kui meil on tarvis saata ka valiseid faile, siis teeme seda siin
+
 		if (sizeof($externals) > 0)
 		{
 			$dto = join(",",$to);
@@ -1455,6 +1465,7 @@ class messenger extends menuedit_light
 					"contenttype" => $row2["type"],
 				));
 			};
+			mail("duke@struktuur.ee","att test","attaching $fname");
 
 		};
 
