@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.28 2004/02/12 10:20:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.29 2004/02/25 15:46:40 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -265,7 +265,7 @@ class messenger_v2 extends class_base
 			"no_folders" => true,
 		));
 
-		$perpage = empty($this->perpage) ? 10 : $this->perpage;
+		$perpage = empty($this->perpage) ? 50 : $this->perpage;
 
 		$ft_page = (int)$GLOBALS["ft_page"];
 

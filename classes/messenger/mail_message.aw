@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.25 2004/02/12 11:17:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.26 2004/02/25 15:46:40 duke Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -57,7 +57,7 @@
 
 	classinfo relationmgr=yes
 
-	groupinfo general submit=no
+	@groupinfo general submit=no
 	@tableinfo messages index=id master_table=objects master_index=oid
 	
 	@property view_toolbar type=toolbar store=no no_caption=1 form=showmsg
@@ -539,6 +539,8 @@ class mail_message extends class_base
 		$user_cal = $pl->get_calendar_for_user(array(
 			"uid" => aw_global_get("uid"),
 		));
+
+		$user_cal = 0;
 
 		if (is_oid($user_cal))
 		{
