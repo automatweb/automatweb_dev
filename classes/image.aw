@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.59 2003/06/04 13:37:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.60 2003/06/19 14:29:14 duke Exp $
 // image.aw - image management
 /*
 	@default group=general
@@ -339,7 +339,7 @@ class image extends class_base
 			{
 				$id = $this->get_image_by_id($img_id);
 				// we need to return the image size as well
-				$sz = getimagesize($id['file']);
+				$sz = @getimagesize($id['file']);
  				return array("id" => $img_id,"url" => $id["url"], "sz" => $sz);
 			}
 			else
