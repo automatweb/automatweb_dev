@@ -251,6 +251,9 @@ class form_controller extends form_base
 		// load controllers
 		$eq = preg_replace("/{load:(\d*)}/e","\$this->_load_ctrl_eq(\\1)",$eq);
 
+		// include files
+		$eq = preg_replace("/{include:(.*)}/eU","\$this->_incl_file(\"\\1\")",$eq);
+
 		// now do element metadata as well
 		if (is_object($el_ref))
 		{
@@ -309,7 +312,7 @@ class form_controller extends form_base
 		$eq = str_replace("[el]","\"".$el_value."\"",$eq);
 
 		// and finally init all non-initialized vars to zero to avoid parse errors
-		$eq = preg_replace("/(\[[-a-zA-Z0-9 _:\(\)]*\])/","0",$eq);
+		$eq = preg_replace("/(\[[-a-zA-Z0-9 _:\(\)\.]*\])/","0",$eq);
 
 		exit_function("form_controller::replace_vars::".$co["oid"]);
 		return $eq;
@@ -760,6 +763,14 @@ class form_controller extends form_base
 	{
 		$co = $this->load_controller($id);
 		return $this->replace_vars($co,$co["meta"]["eq"],true,$this->form_ref, $this->el_ref, $this->entry);
+	}
+
+	function _incl_file($file)
+	{
+		$fn = aw_ini_get("site_basedir")."/".$file.".".aw_ini_get("ext");
+		$fc = $this->get_file(array("file" => $fn));
+		$fc = preg_replace("/{include:(.*)}/eU","\$this->_incl_file(\\1)",$fc);
+		return $fc;
 	}
 }
 
