@@ -1,84 +1,93 @@
 <?php
+define("PREFIX","html_import_");
 class html_import extends aw_template
 {
 	////////////////////////////////////
 	// the next functions are REQUIRED for all classes that can be added from menu editor interface
 	////////////////////////////////////
 
+//
+/*
+abx 
+function db_get_table($name)
+function mk_field_len($type,$length)
+*/
 	function html_import()
 	{
 		// change this to the folder under the templates folder, where this classes templates will be 
 		$this->init("html_import");
-		$this->temp_docu="well, iga erinevat tüüpi html lehe kohta peab tegema eraldi impordi objekti.
-		'source kataloog' on see kus html failid asuvad.
-		'näitefailid' ehk mille järgi hakkad kirjeldama datat.<br>
-		";
 	}
 
+	////
+	// ! get source code of html page and remove confusing linebreakes and tabs
+	// file - name of the file, must include path
 	function getfile($file)
 	{
-		$document=@implode("",@file($file));
+		$text=@implode("",@file(trim($file)));
 
-		$search = array ("'\t'", // strip tabs
-		                 "'\n'", // strip linebrakes
-		                 "'\r'",                 
+		$search = array (
+				"'\t'", // strip tabs
+				"'\n'", // strip linebrakes
+				"'\r'",                 
 		);
-		$replace = array ("",
-		                  "",
-		                  "",
+		$replace = array (
+				"",
+				"",
+				"",
 		);
-		$text = preg_replace ($search, $replace, $document);
-	
+/*
+		$search = array (
+				"\t", // strip tabs
+				"\n", // strip linebrakes
+				"\r",                 
+		);
+		$replace = array (
+				"",
+				"",
+				"",
+		);
+*/
+		$text = str_replace ("\r\n", "\r", $text);
+		$text = str_replace ("\r", "\r\n", $text);
+//		$text = str_replace ($search, $replace, $text);
+		
+		$text = preg_replace ($search, $replace, $text);
+
+
+
+		$text = str_replace ("<textarea", "<t_extarea", $text); // muidu pole võimalik testi õigesti kuvada
+		$text = str_replace ("</textarea>", "</t_extarea>", $text); // muidu pole võimalik testi õigesti kuvada
 		return $text;
 	}
 
 	////
-	// ! get everything between body tags
-	function getbody($html,$val="body")
+	// ! get contents of html body
+	// html - html code 
+	function getbody($html)
 	{
 		preg_match("'<body[^>]*?>(.*)?<\/body>'si", $html, $matches);
 		return $matches[1];
 	}
-
+	
+	////
+	// ! get html table out of html file
+	// 
 	function gettable($html,$val="",$begin,$end)
 	{
 		preg_match("'</tstart $begin>(<table[^>]*?>(.*)<\/table>)<\/tend $end>'si", $html, $matches);
 		return $matches[1];
 	}
 
-	////
-	// ! list fields of existing sql table
-	// table - tabele name will be prefixed by "html_import_"
-/*
-	function list_db_fields($table,$all=false)
-	{
-		$result = mysql_query("SELECT * FROM html_import_$table limit 1");
-		$fields = mysql_num_fields($result);
-		for ($i=0; $i < $fields; $i++)
-		{
-			$type  = mysql_field_type($result, $i);
-			$name  = mysql_field_name($result, $i);
-			$len   = mysql_field_len($result, $i);
-			$flags = mysql_field_flags($result, $i);
-			$str.=$type." ".$name." ".$len." ".$flags."\n";
-		}
-		return $str;
-	}
-
-*/
-
 
 	function drop_table($table)
 	{
-		return mysql_query("DROP table html_import_$table");
+		$this->db_query("DROP table ".PREFIX.$table);
 	}
 
-	function show_create_table($table)
+	function empty_table($table)
 	{
-		$res=@mysql_query("show create table html_import_$table");
-		return @mysql_result($res,0,1);
+		$this->db_query("delete from ".PREFIX.$table);
 	}
-
 
 	////
 	// ! crate sql table
@@ -94,37 +103,34 @@ class html_import extends aw_template
 		{
 			if ($ruul[$key]["mk_field"])
 			{
-				switch($sql_ruul[$key]["type"])
-				{
-					case "int": 
-						$tp="int(".($sql_ruul[$key]["size"]?$sql_ruul[$key]["size"]:"11").")";
-					break;
-					case "varchar": 
-						$tp="varchar(".($sql_ruul[$key]["size"]?$sql_ruul[$key]["size"]:"50").")";
-					break;
-					default: 
-						$tp="text";
-				}
+				$size=$sql_ruul[$key]["size"]?$sql_ruul[$key]["size"]:11;
+				$tp=$this->mk_field_len($sql_ruul[$key]["type"],$size);
 				$tp.=$sql_ruul[$key]["unique"]?" unique":"";
 				$cols[]=$val["mk_field"]." ".$tp;
 			}
-
 		}
 		$cols=$this->field_list($cols);
 		if ($add_id)
 		{
 			$cols="\nid int primary key auto_increment,".$cols;
 		}
-		$q="create table html_import_".$tablename." ($cols \n)";
+		if ($add_source)
+		{
+			$cols=",source text";
+		}
+
+		$q="create table ".PREFIX.$tablename." ($cols \n)";
 		if ($create)
 		{
 			$this->db_query($q);
 		}
-//echo $q;
 		return str_replace(",",",\n",$q);
 	}
 
 
+
+	////
+	// ! implode list with comma, removes empty entries
 	function field_list($arr)
 	{
 		if (is_array($arr))
@@ -133,7 +139,11 @@ class html_import extends aw_template
 			if ($val) 
 				$fi[$key]=$val;
 		}
-		else return 0;
+		else
+		{
+			return 0;
+		}
+
 		return @implode(",",$fi);
 	}
 
@@ -144,11 +154,24 @@ class html_import extends aw_template
 	{
 		extract($arr);
 		$ob = $this->get_object($id);
-		classload("linklist");				// selle linklistis oleva meetodi peaks oopis coressse panema
-		$path=$ob["meta"]["source_path"];
-		$files=linklist::get_templates($path);
+		classload("linklist");				
+
+		if ($ob["meta"]["file_list"])
+		{
+			$files=$ob["meta"]["files"];
+			$files=explode("\r",$files);
+		}
+		else
+		{
+			$path=$ob["meta"]["source_path"]."/";
+			$files=linklist::get_templates($path);// selle linklistis oleva meetodi peaks oopis coressse panema
+		}
+
+
+
 		if (!$files) 
 			{die("could not get files in $path");}
+
 		//tabeli jrk nr
 		$starts=$ob["meta"]["starts"];
 		$what=$ob["meta"]["ruul"];
@@ -165,7 +188,7 @@ class html_import extends aw_template
 			{
 				$this->pinu=array();//need peavad globaalselt iga kord nulli minema
 				$this->tblnr=0;
-				$file="$path/$val";
+				$file=$path.$val;
 				$source=$this->getfile($file);
 				if (is_int(strpos($source,$ob["meta"]["match"])))
 				{
@@ -196,20 +219,25 @@ class html_import extends aw_template
 					switch ($ob["meta"]["output"])
 					{
 						case "mk_my_table":
-							$total+=$this->db_insert("html_import_".$ob["meta"]["mk_my_table"],$fields,$tbl,true,true);
+							$total+=$this->db_insert(PREFIX.$ob["meta"]["mk_my_table"],$fields,$tbl,true,true);
 						break;
 
 						case "mk_my_query":
-							$total+=$this->db_insert("html_import_".$ob["meta"]["mk_my_table"],$fields,$tbl,true);
+							$total+=$this->db_insert(PREFIX.$ob["meta"]["mk_my_table"],$fields,$tbl,true);
 						break;
 						
 					}
-//					echo "imported data from $file<br>";
+					echo "<br>OK ".trim($file)."<br>";
 				}
 				else
 				{
+					echo " !! ".trim($file)."<br>";
 //					echo "could not import data from $file !! string comparision failed!!<br>";
 				}
+				flush();
+				set_time_limit(30);
+//				sleep(2);
+
 			}
 		}
 		echo "total: ".(int)$total."\n\r";
@@ -217,35 +245,36 @@ class html_import extends aw_template
 			echo "kui errorit ei tekkinud, siis andmed läksid vist baasi";
 		if ($ob["meta"]["output"]=="mk_my_query")
 			echo "";
-		echo "</pre></body></html>";
-		die("\n\rfinished");
-	}
 
+		echo "</pre></body></html>";
+		die();
+	}
 
 	////
 	// ! see on prosta tabel
 	function show_data($table,$limit=10)
 	{
 		$str.="<tr>";		
-		$res=mysql_query("select count(*) from $table");
-		$cnt=@mysql_result($res,0,0);
-			$str.="<td colspan=3>total in table:".(int)$cnt.", showing first $limit</td>";
-
+		$this->db_query("select count(*) from $table");
+		$rr=$this->db_next();
+		$str.="<td colspan=4>total in table:".(int)$rr["count(*)"].", showing first $limit</td>";
 		$str.="</tr>";
-		$res=mysql_query("select * from $table limit $limit");
+		$this->db_query("select * from $table limit $limit");		
 		$str.="<tr>";
-		$fields = @mysql_num_fields($res);
-		for ($i=0; $i < $fields; $i++)
+		foreach ($this->db_get_fields() as $key => $val)
 		{
-			$str.="<th><b>&nbsp;".mysql_field_name($res, $i)."</th>";
+			$arr=(array)$val;
+			$str.="<th><b>&nbsp;".$arr["name"]."</th>";
 		}
 		$str.="</tr>";
-		while ($row = @mysql_fetch_row($res))
+		while ($row = $this->db_next())
 		{
+			$i=0;
 			$str.="<tr>";
-			foreach($row as $key => $val)
+			foreach ($row as $key => $val)
 			{
-				
+				$i++;
+				if ($i != count($row))
 				$str.="<td>&nbsp;".((substr($val,0,50)==$val)?$val:substr($val,0,50)." ...")."</td>";
 			}
 			$str.="</tr>";
@@ -254,14 +283,14 @@ class html_import extends aw_template
 	}
 
 
-
-
+	////
+	// ! does the specified ruul really work
+	//  well it does if it looks pink
 	function ruul_test($arr)
 	{
 		extract($arr);
 		$ob = $this->get_object($id);
 		$examples=explode("\n",$ob["meta"]["example"]);
-
 		$source=$this->getfile($examples[$f]);
 		$ruuls=$ob["meta"]["ruul"];
 		if ($ruuls)
@@ -271,16 +300,19 @@ class html_import extends aw_template
 			$end=str_replace("/", "\/", $val["end"]);
 			if($begin && $end)
 			{	
-				$source=preg_replace("/($begin)(.*)($end)/sU", '\\1<span title="'.$val["desc"].'" style="background-color:#ffaaaa">\\2</span>\\3', $source);
+//				echo strpos($source,$begin);
+//				echo strrpos($source,$begin);
+//				if (strpos($source,$begin)<>strrpos($source,$begin)) // rohkem kui 1 match !!
+				{
+//					$warn="<font color=blue><b>algusstringe leiti rohkem kui üks!!</b></font>";
+				}
+				
+				$source=preg_replace("/($begin)(.*)($end)/Us", '\\1<span title="'.$val["desc"]." - ".$val["mk_field"].'" style="background-color:#ffaaaa">\\2'.$warn.'</span>\\3', $source);
 			}
 		}
 		echo $source;
 		die();
-
-	
-	
 	}
-
 
 //teeme pinu et siis kui mingi tabel on tabeli sees, algus ja lõpu id oleks õige
 	function caunt($link,$end,$aktiivne="")
@@ -303,6 +335,78 @@ class html_import extends aw_template
 		}
 	}
 
+	////
+	// !this gets called when the user clicks on change object 
+	// parameters:
+	// id - the id of the object to change
+	// return_url - optional, if set, "back" link should point to it
+	function sql_data($arr)
+	{
+		extract($arr);
+		$ob = $this->get_object($id);
+		if ($return_url != "")
+		{
+			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Muuda HTML import");
+		}
+		else
+		{
+			$this->mk_path($ob["parent"], "Muuda html_import");
+		}
+		$this->read_template("sql_data.tpl");
+
+		$examples=explode("\n",$ob["meta"]["example"]);
+		$html=$this->getfile($examples[0]);
+
+		if (is_int(strpos($html,$ob["meta"]["match"]))) //&& create lause õige && veerge on defineeritud
+		{
+			$import_link=$this->my_link("IMPORT",$this->mk_my_orb("tiri",array("id"=>$id)),"target=_blank");
+		}
+		else
+		{
+			$import_link="unikaalne string puudu või vale";
+		}
+
+		if ($drop_table)
+		{
+			$this->drop_table($ob["meta"]["mk_my_table"]);
+		}
+
+		if ($empty_table)
+		{
+			$this->empty_table($ob["meta"]["mk_my_table"]);
+		}
+
+		$this->db_list_tables();
+		while ($tb = $this->db_next_table())
+		{
+			if ($tb==PREFIX.$ob["meta"]["mk_my_table"])
+			{
+				$tbl_exists=true;
+				break 1;
+			}
+		}
+
+		if ($tbl_exists)
+		{
+			$empty_link=$this->my_link("EMPTY",$this->mk_my_orb("sql_data", array("id" => $id, "empty_table" => "yes", "return_url" => urlencode($return_url))));
+			$drop_link=$this->my_link("DROP",$this->mk_my_orb("sqlconf", array("id" => $id, "drop_table" => "yes", "return_url" => urlencode($return_url))));
+			$some_data=$this->show_data(PREFIX.$ob["meta"]["mk_my_table"],20);
+		}
+
+		$this->vars(array(
+			"table_name"=>PREFIX.$ob["meta"]["mk_my_table"],
+			"import"=> $import_link,
+			"empty_table"=>$empty_link,
+			"create_table"=>$create_link,
+			"drop_table"=>$drop_link,
+			"some_data"=>$some_data,
+			"toolbar" => $this->my_toolbar(array("id"=>$id)),
+			"reforb" => $this->mk_reforb("submit", array("id" => $id, "do"=>"sql_data", "return_url" => urlencode($return_url))),
+		));
+		return $this->parse();
+	}
+
+	
 	////
 	// !this gets called when the user clicks on change object 
 	// parameters:
@@ -350,36 +454,106 @@ class html_import extends aw_template
 
 		if (is_int(strpos($html,$ob["meta"]["match"]))) //&& create lause õige && veerge on defineeritud
 		{
-
-			$import_link="<a href=".$this->mk_my_orb("tiri",array("id"=>$id))." target=_blank>impordi</a>";
+			$import_link=$this->my_link("IMPORT",$this->mk_my_orb("tiri",array("id"=>$id)),"target=_blank");
 		}
 		else
 		{
 			$import_link="unikaalne string puudu või vale";
 		}
+
 		if ($drop_table)
 		{
-		echo "dropping";
 			$this->drop_table($ob["meta"]["mk_my_table"]);
 		}
 
+		$this->db_list_tables();
+		while ($tb = $this->db_next_table())
+		{
+			if ($tb==PREFIX.$ob["meta"]["mk_my_table"])
+			{
+				$tbl_exists=true;
+				break 1;
+			}
+		}
+
+		if ($create_table)
+		{
+			$this->mk_my_table($ob["meta"]["mk_my_table"],$ruul,$sql_ruul,$ob["meta"]["add_id"],$create_table);
+			$tbl_exists=1;
+		}
+		if (!$tbl_exists)
+		{
+			$create_link=$this->my_link("CREATE",$this->mk_my_orb("sqlconf", array("id" => $id, "create_table" => "yes", "return_url" => urlencode($return_url))));
+			$show_my_create=$this->mk_my_table($ob["meta"]["mk_my_table"],$ruul,$sql_ruul,$ob["meta"]["add_id"]);
+		}
+
+		if ($tbl_exists)
+		{
+			$show_create=$this->db_fetch_field("show create table ".PREFIX.$ob["meta"]["mk_my_table"],"Create Table");
+		}
+
 		$this->vars(array(
-			"gogo"=> $import_link,
-			"create_table"=>"<a href=\"".$this->mk_my_orb("sqlconf", array("id" => $id, "create_table" => "yes", "return_url" => urlencode($return_url)))."\">CREATE</a>",
-			"drop_table"=>"<a href=\"".$this->mk_my_orb("sqlconf", array("id" => $id, "drop_table" => "yes", "return_url" => urlencode($return_url)))."\">DROP</a>",
+			"create_table"=>$create_link,
 			"add_id"=>checked($ob["meta"]["add_id"]),
-			"mk_table"=> $this->mk_my_table($ob["meta"]["mk_my_table"],$ruul,$sql_ruul,$ob["meta"]["add_id"],$create_table),
-			"got_table"=>$this->show_create_table($ob["meta"]["mk_my_table"]),
+			"mk_table"=>$show_my_create,
+			"got_table"=>$show_create,
 			"ruul"=>$ruulid,
 			"toolbar" => $this->my_toolbar(array("id"=>$id)),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id, "do"=>"sqlconf", "return_url" => urlencode($return_url))),
-			"some_data"=>$this->show_data("html_import_".$ob["meta"]["mk_my_table"],20),
-
 		));
 		return $this->parse();
 	}
+
 	
+	////
+	// !mabe there is function like that, I could not find one
+	function my_link($caption,$url,$more="")
+	{
+		return "<a href=\"$url\" $more>$caption</a>";
+	}
 	
+
+	function output_conf($arr)
+	{
+		extract($arr);
+		$ob = $this->get_object($id);
+		if ($return_url != "")
+		{
+			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Muuda HTML import");
+		}
+		else
+		{
+			$this->mk_path($ob["parent"], "Muuda html_import");
+		}
+		$this->read_template("output_conf.tpl");
+
+		$tables = array();
+		$tbels = array();
+		$this->db_list_tables();
+		while ($tb = $this->db_next_table())
+		{
+			if (is_int(strpos($tb,PREFIX)))
+			{
+				$tables[$tb] = $tb;
+			}
+		}
+
+
+		$this->vars(array(
+			"is_my_table"=> checked($ob["meta"]["output"]=="mk_my_table"),
+			"is_my_csv"=> checked($ob["meta"]["output"]=="mk_my_csv"),
+			"is_my_query"=> checked($ob["meta"]["output"]=="mk_my_query"),
+			"is_my_xml"=> checked($ob["meta"]["output"]=="mk_my_xml"),
+			"mk_my_table"=> $ob["meta"]["mk_my_table"],
+			"tables"=>implode("<br />",$tables),
+			"mk_my_csv"=> $ob["meta"]["mk_my_csv"],
+			"mk_my_query"=> $ob["meta"]["mk_my_query"],
+			"mk_my_xml"=> $ob["meta"]["mk_my_xml"],
+			"toolbar" => $this->my_toolbar(array("id"=>$id)),
+			"reforb" => $this->mk_reforb("submit", array("id" => $id, "do"=>"output_conf", "return_url" => urlencode($return_url)))
+		));
+		return $this->parse();
+	}
 
 	////
 	// !this gets called when the user clicks on change object 
@@ -402,18 +576,11 @@ class html_import extends aw_template
 
 		$link=$this->mk_my_orb("change", array("id" => $id, "return_url" => urlencode($return_url)));
 
-
-		if (is_int(@strpos($html,$ob["meta"]["match"])))
-		{
-			$import_link="<a href=".$this->mk_my_orb("tiri",array("id"=>$id))." target=_blank>impordi</a>";
-		}
-		else
-		{
-			$import_link="unikaalne string confis puudu või vale";
-		}
-
 		$this->vars(array(
+			"file_list_on"=>checked($ob["meta"]["file_list"]),
+			"file_list_off"=>checked(!$ob["meta"]["file_list"]),
 			"example"=>$ob["meta"]["example"],
+			"files"=>$ob["meta"]["files"],
 			"singleon"=>checked($ob["meta"]["single"]),
 			"singleoff"=>checked(!$ob["meta"]["single"]),
 			"is_my_table"=> checked($ob["meta"]["output"]=="mk_my_table"),
@@ -430,7 +597,7 @@ class html_import extends aw_template
 			"comment"=>$ob["comment"],
 			"docu"=>$this->temp_docu,
 			"toolbar" => $this->my_toolbar(array("id"=>$id,"sid"=>$ob["meta"]["sid"])),
-			"reforb" => $this->mk_reforb("submit", array("id" => $id, "do"=>"change", "return_url" => urlencode($return_url)))
+			"reforb" => $this->mk_reforb("submit", array("id" => $id, "do"=>"change", "parent"=>$parent,"return_url" => urlencode($return_url)))
 		));
 		return $this->parse();
 	}
@@ -495,7 +662,10 @@ class html_import extends aw_template
 				}
 				$ruul["ruul_".$j]="ruul_".$j;
 				$rule["ruul_".$j]=array();
-	
+				$j++;
+				$ruul["ruul_".$j]="ruul_".$j;
+
+
 				foreach($ruul as $key=>$val)
 				{
 					$this->vars(array(
@@ -506,10 +676,12 @@ class html_import extends aw_template
 						"begin"=>$rule[$key]["begin"],
 						"end"=>$rule[$key]["end"],
 					));
-					$ruulid.=$this->parse("ruul");
+					$ruulid=$this->parse("ruul").$ruulid;
 				}
+
 				$ruulid=$this->parse("ruulbar").$ruulid;
 //				$source=$this->ruultest($html,$ob["meta"]["ruul"]);
+				$show="fail: ".$examples[0]."<br /><textarea cols=95 rows=15>".$html."</textarea><br /><br />".$source;
 			}
 			if (!$ob["meta"]["single"])
 			{
@@ -545,23 +717,37 @@ class html_import extends aw_template
 					}
 				}
 				$notest=1;
+				$show="fail: ".$examples[0]."<br /><textarea cols=95 rows=10>".$html."</textarea><br /><br />".$source;
 			}
 		}
+
+
 
 
 		$this->vars(array(
 			"match"=>$ob["meta"]["match"],
 			"ruul"=>$ruulid,
 			"reset"=> "<a href='$link&reset=1'>reset</a>",
-			"source"=>"fail: ".$examples[0]."<br /><textarea cols=95 rows=15>".$html."</textarea><br /><br />".$source,
+			"source"=>$show,
 			"ruul_test"=>$notest?"":$exmpl,
 			"toolbar" => $this->my_toolbar(array("id"=>$id,"sid"=>$ob["meta"]["sid"])),
-			"reforb" => $this->mk_reforb("submit", array("id" => $id, "starts"=>$starts, "do"=>"conf", "return_url" => urlencode($return_url)))
+			"reforb" => $this->mk_reforb("submit", array("id" => $id, "starts"=>$starts, "do"=>"conf", "return_url" => urlencode($return_url))),
+			"abx"=>"",
 		));
 		return $this->parse();
 	}
 
 
+	////
+	// ! makes array out of html table
+	// if html table is well formed and regular like 
+	// <table border=0><tr><td width=100>data1</td><td>data2</td></tr>...</table>
+	// then returns array(
+	//			array ("data_col_1","data_col_2",...),
+	//			...
+	//		)
+	// table - html table
+	// gets - list of columns to return (0 .. ), if not specified all columns will be returned
 	function table_to_array($table,$gets)
 	{
 		$html=preg_replace("/<\/td>/i", "#%#", $table);
@@ -603,14 +789,22 @@ class html_import extends aw_template
 	// first_row - elliminate firs row 
 	// insert - actually insert data into the sql base
 	//
-	function db_insert($table,$fields,$data,$first_row=true,$insert=false)
+	function db_insert($table,$fields,$data,$first_row=true,$insert=false,$source="")
 	{
 		if ($first_row) //esimesel real on ilmselt kirjeldused
 		{
 			unset($data[0]);
 		}
 //echo $fields;
+/*		if ($source=="yes") 
+		{
+			$sorts=", source";
+			$source=addslashes($source);
+		}
+		$query="insert into $table($fields, source) values ";		
+		*/
 		$query="insert into $table($fields) values ";
+
 
 		foreach($data as $key=> $val)
 		{
@@ -625,21 +819,21 @@ class html_import extends aw_template
 					$value="(".implode(",",$va).")";
 					$q=$query.$value.";";
 					$total++;
+
+					if ($insert)
+					{
+//						echo $q."\n";
+						$this->db_query($q);
+					}
+					else
+					{
+						echo $q."<br>";
+					}
 				}
 				else
 				{
 //					echo "tühi kirje!<br>";
 				}
-
-			if ($insert)
-			{
-				echo $q."\n";
-				$this->db_query($q);
-			}
-			else
-			{
-				echo $q."\n";
-			}
 
 		}
 		return $total;
@@ -713,21 +907,33 @@ class html_import extends aw_template
 					)
 				));
 		}
-		else{
+		elseif($do=="sql_data"){}
+		elseif($do=="output_conf"){
 			$this->upd_object(array(
 				"oid" => $id,
-				"name" => $name,
-				"comment" => $comment,
 				"metadata" => array(
-					"single"=>$single,
-					"source_path"=>$source_path,
-					"example"=>$example,
-					"db_table"=>$db_table,
 					"mk_my_table"=>$mk_my_table,
 					"mk_my_query"=>$mk_my_query,
 					"mk_my_csv"=>$mk_my_csv,
 					"mk_my_xml"=>$mk_my_xml,
 					"output"=>$output,
+					)
+				));
+		}
+		else{
+
+
+			$this->upd_object(array(
+				"oid" => $id,
+				"name" => $name,
+				"comment" => $comment,
+				"metadata" => array(
+					"files"=> $files,
+					"file_list"=> $file_list,
+					"single"=>$single,
+					"source_path"=>$source_path,
+					"example"=>$example,
+//					"db_table"=>$db_table,
 //					"separator"=>$separator,
 					)
 				));
@@ -744,6 +950,9 @@ class html_import extends aw_template
 				"class_id" => CL_HTML_IMPORT,
 				"comment" => $comment,
 				"metadata" => array(
+					"files"=> $files,
+					"file_list"=> $file_list,
+					"single"=>$single,
 					"source_path"=>$source_path,
 					"example"=>$example,
 				)
@@ -859,9 +1068,11 @@ class html_import extends aw_template
 			"imgover" => "save_over.gif",
 			"img" => "save.gif",
 		));
+
+		if ($id){
 		$toolbar->add_button(array(
 			"name" => "change",
-			"tooltip" => "change",
+			"tooltip" => "üld määrangud",
 			"url" => $this->mk_my_orb("change", array("id" => $id, "return_url" => urlencode($return_url))),
 			"imgover" => "settings_over.gif",
 			"img" => "settings.gif",
@@ -869,38 +1080,41 @@ class html_import extends aw_template
 
 		$toolbar->add_button(array(
 			"name" => "conf",
-			"tooltip" => "conf",
+			"tooltip" => "html struktuuri kirjeldus",
 			"url" => $this->mk_my_orb("conf", array("id" => $id, "return_url" => urlencode($return_url))),
+			"imgover" => "promo_over.gif",
+			"img" => "promo.gif",
+		));
+
+		$toolbar->add_button(array(
+			"name" => "output",
+			"tooltip" => "väljundi määramine",
+			"url" => $this->mk_my_orb("output_conf", array("id" => $id, "return_url" => urlencode($return_url))),
+			"imgover" => "archive_over.gif",
+			"img" => "archive.gif",
+		));
+
+		$toolbar->add_button(array(
+			"name" => "sqlconf",
+			"tooltip" => "sql tabeli loomine",
+			"url" => $this->mk_my_orb("sqlconf", array("id" => $id, "return_url" => urlencode($return_url))),
 			"imgover" => "preview_over.gif",
 			"img" => "preview.gif",
 		));
+
 		$toolbar->add_button(array(
-			"name" => "sqlconf",
-			"tooltip" => "sqlconf",
-			"url" => $this->mk_my_orb("sqlconf", array("id" => $id, "return_url" => urlencode($return_url))),
+			"name" => "sql_data",
+			"tooltip" => "import ja imporditud andmed",
+			"url" => $this->mk_my_orb("sql_data", array("id" => $id, "return_url" => urlencode($return_url))),
 			"imgover" => "import_over.gif",
 			"img" => "import.gif",
 		));
+		}
 		return $toolbar->get_toolbar();
 	}
 
 
 }
-
-
-
-
-/*
-	function tag_strip($target,$tag,$replace="")
-	{
-		foreach($tag as $key =>$val)
-		{
-			$tag[$key]="/<($val)([^>]*)>([^<>]*)<\/($val)>/i";
-		}
-		$html=preg_replace($tag, '\3'.$replace, $target);
-		return $html;
-	}
-*/
 
 
 ?>
