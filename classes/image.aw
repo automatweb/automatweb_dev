@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.78 2003/12/04 10:03:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.79 2003/12/11 12:27:59 duke Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -9,20 +9,17 @@
 	@property file type=fileupload table=images
 	@caption Pilt
 
-	@property cur_width type=text group=general,resize store=no 
-	@caption Laius
-
-	@property cur_height type=text group=general,resize store=no
-	@caption Kõrgus
+	@property dimensions type=text group=general,resize store=no
+	@caption Mõõtmed
 	
-	@property file_show type=text store=no editonly=1
-	@caption Eelvaade 
+	/@property file_show type=text store=no editonly=1
+	/@caption Eelvaade 
 
 	@property file2 type=fileupload group=img2 table=objects field=meta method=serialize 
 	@caption Suur pilt
 
-	@property file_show2 type=text group=img2 store=no editonly=1
-	@caption Eelvaade
+	/@property file_show2 type=text group=img2 store=no editonly=1
+	/@caption Eelvaade
 
 	@property file2_del type=checkbox ch_value=1 group=img2 store=no
 	@caption Kustuta suur pilt
@@ -555,15 +552,9 @@ class image extends class_base
 		switch($prop["name"])
 		{
 			case "file_show":
-				$imd = $this->get_image_by_id($arr['obj_inst']->id());
-				if ($imd['file'] != '')
-				{
-					$prop['value'] = html::img(array('url' => $imd['url']));
-				};
-				break;
-			
 			case "file_show2":
-				$url = $this->get_url($arr["obj_inst"]->prop("file2"));
+				$propname = ($prop["name"] == "file_show") ? "file" : "file2";
+				$url = $this->get_url($arr["obj_inst"]->prop($propname));
 				if ($url != '')
 				{
 					$prop['value'] = html::img(array('url' => $url));
@@ -583,17 +574,23 @@ class image extends class_base
 					$prop["error"] = $envir;
 					$retval = PROP_ERROR;
 				};
-				$prop["value"] = "";
+				$url = $this->get_url($arr["obj_inst"]->prop($prop["name"]));
+				if ($url != '')
+				{
+					$prop['value'] = html::img(array('url' => $url));
+				}
+				else
+				{
+					$prop["value"] = "";
+				};
 				break;
 
-			case "cur_width":
-			case "cur_height":
-				// damn, I really don't like that approach
+			case "dimensions":
 				$fl = $arr["obj_inst"]->prop("file");
 				if (!empty($fl))
 				{
 					$sz = @getimagesize($fl);
-					$prop["value"] = ($prop["name"] == "cur_width") ? $sz[0] : $sz[1];
+					$prop["value"] = $sz[0] . " X " . $sz[1];
 				}
 				else
 				{
