@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.26 2003/05/08 14:03:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.27 2003/05/08 17:05:29 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 classload("formgen/form_base");
 class form_calendar extends form_base
@@ -617,6 +617,7 @@ class form_calendar extends form_base
 		$q = "SELECT SUM(max_items) AS max FROM calendar2timedef
 			 WHERE oid = '$contr' AND relation IN ($rel) AND txtid = '$txtid'
 				AND start <= '$_end' AND end >= '$_start'";
+		#$GLOBALS["fg_dbg"] = 1;
 		if ($GLOBALS["fg_dbg"])
                 {
                         echo ("sql = $q <br>");
@@ -640,11 +641,21 @@ class form_calendar extends form_base
 		// siis langeb see event meid huvitava ajavahemiku sisse ja ma tean
 		// tema broneeritud ruumide summaga arvestama
 
-		$q = "SELECT SUM(items) AS sum FROM calendar2event
-			LEFT JOIN objects ON (calendar2event.entry_id = objects.oid)
-			WHERE oid != '$entry_id' AND relation = '$rel' AND txtid = '$txtid' AND
-				cal_id = '$cal_id' AND form_id = '$id' AND end >= '$_start' AND
-				start <= '$_end'";
+		if (isset($entry_id))
+		{
+			$q = "SELECT SUM(items) AS sum FROM calendar2event
+				LEFT JOIN objects ON (calendar2event.entry_id = objects.oid)
+				WHERE oid != '$entry_id' AND relation = '$rel' AND txtid = '$txtid' AND
+					cal_id = '$cal_id' AND form_id = '$id' AND end >= '$_start' AND
+					start <= '$_end' AND status != 0";
+		}
+		else
+		{
+			$q = "SELECT SUM(items) AS sum FROM calendar2event
+				WHERE relation = '$rel' AND txtid = '$txtid' AND
+					cal_id = '$cal_id' AND form_id = '$id' AND end >= '$_start' AND
+					start <= '$_end'";
+		};
 		if ($GLOBALS["fg_dbg"])
                 {
                         echo ("sql = $q <br>");
@@ -791,7 +802,13 @@ class form_calendar extends form_base
 		$this->db_query($q);
 		$has_vacancies = true;
 		$has_errors = false;
+		$this->fatal = true;
 		$fch = get_instance("formgen/form_chain");
+		/*
+		print "<pre>";
+		print_r($args["post_vars"]);
+		print "</pre>";
+		*/
 		while($row = $this->db_next())
 		{
 			// get the vacancy controller for the chain.
@@ -814,9 +831,19 @@ class form_calendar extends form_base
 					$relrow["req_items"] = $req_items;
 					$relrow["el_allow_exceed"] = $row["el_allow_exceed"];
 					$lb_sel = $args["post_vars"][$relrow["el_relation"]];
-					if (preg_match("/^element_\d*_lbopt_(\d*)$/",$lb_sel,$m))
+					/*
+					print "<pre>";
+					print_r($relrow);
+					print_r($lb_sel);
+					print_r($args["els"][$relrow["el_relation"]]);
+					print "</pre>";
+					*/
+
+					//if (preg_match("/^element_\d*_lbopt_(\d*)$/",$lb_sel,$m))
+					if (!empty($args["els"][$relrow["el_relation"]]["value"]))
 					{
-						$relrow["txtid"] = $args["els"][$relrow["el_relation"]]["lb_items"][$m[1]];
+						//$relrow["txtid"] = $args["els"][$relrow["el_relation"]]["lb_items"][$m[1]];
+						$relrow["txtid"] = $args["els"][$relrow["el_relation"]]["value"];
 						$rels[] = $relrow;
 					};
 				};
@@ -889,8 +916,10 @@ class form_calendar extends form_base
 						"max" => &$max,
 				));
 
+				//print "vac = $vac<br>";
 
-				//print "max = $max, req_items = $relval[req_items], us = $used_slots, vac = $vac<br>";
+
+				//print "<br>max = $max, req_items = $relval[req_items], us = $used_slots, vac = $vac, txtid = $relval[txtid]<br>";
 
 // vana veateade: $this->controller_errors[$err_el][] = "Calendar '$row[name]/$rowx[name]' does not have this many vacancies in the requested period.";
 
@@ -905,7 +934,7 @@ class form_calendar extends form_base
 					else
 					{
 						$this->fatal = false;
-						$msg = "On request only, but writing anyway!";
+						$msg = "On request!";
 					}
 					// where do we put the error message?
 					$err_el = ($relval["el_count"]) ? $relval["el_count"] : $row["el_start"];
@@ -996,28 +1025,37 @@ class form_calendar extends form_base
 						// gah, this sucks so much
 						preg_match("/lbopt_(\d+?)$/",$__rel,$m);
 						$_rel = (int)$m[1];
+			
 					};
 
 					$q = "INSERT INTO calendar2event (cal_id,entry_id,start,end,items,relation,form_id,txtid)
 						VALUES ('$row[cal_id]','$eid','$_start','$_end','$_cnt','$_rel','$id','$txtid')";
 					$this->db_query($q);
 					/*
-					if (aw_global_get("uid") == "erki")
+					if (aw_global_get("uid") == "erkihotel")
 					{
+						print "õige = ";
 						print $q;
-						print "\n";
+						print "<br>\n";
 						flush();
 					};
 					*/
 				};
 					
-				$_rel = $reval["el_relation"];
+				//$_rel = $reval["el_relation"];
+
+				$__rel = $args["post_vars"][$row["el_relation"]];
+				// gah, this sucks so much
+				preg_match("/lbopt_(\d+?)$/",$__rel,$m);
+				$_rel = (int)$m[1];
+
 				$q = "INSERT INTO calendar2event (cal_id,entry_id,start,end,items,relation,form_id,txtid)
 					VALUES ('$row[cal_id]','$eid','$_start','$_end','$_cnt','$_rel','$id','$txtid')";
 				$this->db_query($q);
-					/*
-					if (aw_global_get("uid") == "erki")
+				/*
+					if (aw_global_get("uid") == "erkihotel")
 					{
+						print "imelik = ";
 						print $q;
 						print "<br>\n";
 						flush();

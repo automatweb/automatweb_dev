@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.56 2003/05/08 15:47:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.57 2003/05/08 17:05:29 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1453,7 +1453,7 @@ class form extends form_base
 			$fcal->make_event_relations(array(
 				"id" => $id,
 				"post_vars" => $this->post_vars,
-				"eid" => $eid,
+				"eid" => $this->entry_id,
 				"chain_entry_id" => $chain_entry_id,
 				"els" => $els,
 			));
