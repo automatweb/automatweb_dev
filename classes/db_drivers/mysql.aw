@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.21 2004/10/08 01:32:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.22 2004/10/28 09:43:28 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql 
 {
@@ -98,7 +98,7 @@ class mysql
 			$this->num_fields = @mysql_num_fields($this->qID);
 		};
 		$this->rec_count = 0;
-		if ( (aw_ini_get("debug_mode") != 0) && $DUKE)
+		if ( (aw_ini_get("debug_mode") != 0) && ($DUKE || $GLOBALS["INTENSE_DUKE"]))
 		{
 			list($micro,$sec) = split(' ',microtime());
 			$ts_e = $sec + $micro;
