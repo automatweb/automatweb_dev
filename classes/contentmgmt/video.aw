@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/video.aw,v 1.1 2004/09/17 12:18:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/video.aw,v 1.2 2004/12/27 12:39:56 kristo Exp $
 // video.aw - Video 
 /*
 
@@ -89,12 +89,17 @@ class video extends class_base
 
 		$im = get_instance("image");
 
+		$image = "";
 		$imc = reset($ob->connections_from(array("type" => "RELTYPE_IMAGE")));
-		$imid = $imc->prop("to");
+		if ($imc)
+		{
+			$imid = $imc->prop("to");
+			$image = $im->make_img_tag($im->get_url_by_id($imid));
+		}
 
 		$this->vars(array(
 			"name" => $ob->prop("name"),
-			"image" => $im->make_img_tag($im->get_url_by_id($imid)),
+			"image" => $image,
 			"caption" => $ob->prop("caption"),
 		));
 
