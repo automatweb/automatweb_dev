@@ -56,6 +56,15 @@ class site_base extends aw_template
 	}
 
 	////
+	// !stub for parse_search_result_document, allows to perform site specific
+	// operations on search results (replacing aliases for example). I needed that
+	// for hightechestonia.com
+	function parse_search_result_document(&$doc)
+	{
+
+	}
+
+	////
 	// !this can be used in on_frontpage when we need to draw the menus on frontpage
 	function do_fp_menus_return($ret,$arr = array())
 	{
