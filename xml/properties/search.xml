@@ -7,34 +7,43 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>search</group>
+            <group>advanced</group>
             <caption>Server</caption>
       </property>
       <property>
             <name>s_name</name>
             <type>textbox</type>
+            <group>
+                  <num_0>search</num_0>
+                  <num_1>advanced</num_1>
+            </group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>search</group>
             <caption>Nimi</caption>
       </property>
       <property>
             <name>s_comment</name>
             <type>textbox</type>
+            <group>
+                  <num_0>search</num_0>
+                  <num_1>advanced</num_1>
+            </group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>search</group>
             <caption>Kommentaar</caption>
       </property>
       <property>
             <name>s_class_id</name>
             <type>select</type>
+            <group>
+                  <num_0>search</num_0>
+                  <num_1>advanced</num_1>
+            </group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>search</group>
             <caption>Tüüp</caption>
       </property>
       <property>
@@ -44,7 +53,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>search</group>
+            <group>advanced</group>
             <caption>OID</caption>
       </property>
       <property>
@@ -53,7 +62,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>search</group>
+            <group>advanced</group>
             <caption>Asukoht</caption>
       </property>
       <property>
@@ -62,34 +71,43 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>search</group>
+            <group>advanced</group>
             <caption>Keel</caption>
       </property>
       <property>
             <name>s_status</name>
-            <type>status</type>
+            <type>s_status</type>
+            <group>
+                  <num_0>search</num_0>
+                  <num_1>advanced</num_1>
+            </group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>search</group>
             <caption>Staatus</caption>
       </property>
       <property>
             <name>s_createdby</name>
             <type>textbox</type>
+            <group>
+                  <num_0>search</num_0>
+                  <num_1>advanced</num_1>
+            </group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>search</group>
             <caption>Looja</caption>
       </property>
       <property>
             <name>s_modifiedby</name>
             <type>textbox</type>
+            <group>
+                  <num_0>search</num_0>
+                  <num_1>advanced</num_1>
+            </group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>search</group>
             <caption>Muutja</caption>
       </property>
       <property>
@@ -98,7 +116,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>search</group>
+            <group>advanced</group>
             <caption>Alias</caption>
       </property>
       <property>
@@ -107,7 +125,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>search</group>
+            <group>advanced</group>
             <caption>Periood</caption>
       </property>
       <property>
@@ -116,7 +134,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>search</group>
+            <group>advanced</group>
             <caption>Saidi ID</caption>
       </property>
       <property>
@@ -133,8 +151,12 @@
             <search>
                   <caption>Lihtne_otsing</caption>
             </search>
+            <advanced>
+                  <caption>Advanced</caption>
+            </advanced>
             <results>
                   <caption>Tulemused</caption>
+                  <submit>no</submit>
             </results>
       </groupinfo>
 </properties>

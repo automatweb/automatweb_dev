@@ -1,23 +1,23 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.18 2003/01/16 17:07:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.19 2003/01/17 18:06:13 duke Exp $
 // search.aw - Search Manager
 
 /*
 	@default table=objects
 	@default field=meta
 	@default method=serialize
-	@default group=search
+	@default group=advanced
 
 	@property s_server type=objpicker clid=CL_AW_LOGIN
 	@caption Server
 
-	@property s_name type=textbox
+	@property s_name type=textbox group=search,advanced
 	@caption Nimi
 
-	@property s_comment type=textbox
+	@property s_comment type=textbox group=search,advanced
 	@caption Kommentaar
 
-	@property s_class_id type=select
+	@property s_class_id type=select group=search,advanced
 	@caption Tüüp
 
 	@property s_oid type=textbox size=5
@@ -29,16 +29,16 @@
 	@property s_lang_id type=select 
 	@caption Keel
 
-	@property s_status type=status
+	@property s_status type=s_status group=search,advanced
 	@caption Staatus
 
-	@property s_createdby type=textbox
+	@property s_createdby type=textbox group=search,advanced
 	@caption Looja
 
-	@property s_modifiedby type=textbox
+	@property s_modifiedby type=textbox group=search,advanced
 	@caption Muutja
 
-	@property s_alias type=textbox
+	@property s_alias type=textbox 
 	@caption Alias
 
 	@property s_period type=select
@@ -50,8 +50,9 @@
 	@property results type=text group=results callback=get_result_table
 	@caption Tulemused
 
-	@groupinfo search caption=Lihtne_otsing
-	@groupinfo results caption=Tulemused
+	@groupinfo search caption=Lihtne_otsing 
+	@groupinfo advanced caption=Advanced otsing
+	@groupinfo results caption=Tulemused submit=no
 
 */
 class search extends class_base
