@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.39 2004/11/07 12:08:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.40 2004/11/19 11:29:41 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -698,7 +698,7 @@ class sys extends aw_template
 					break;
 				}
 			}
-			echo "top urls: <br>";
+			echo "total number of sites touched: ".count($sites)."<br>top urls: <br>";
 			$num = 0;
 			foreach($urls as $url => $cnt)
 			{
