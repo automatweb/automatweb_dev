@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.38 2003/11/26 18:58:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.39 2003/12/03 12:11:47 kristo Exp $
 class admin_menus extends aw_template
 {
 	// this will be set to document id if only one document is shown, a document which can be edited
@@ -840,7 +840,7 @@ class admin_menus extends aw_template
 		}
 		$sel_objs+=$t;
 
-		$this->mk_path($parent,"",$period);
+		$this->mk_path($parent,"&nbsp;",$period);
 
 		$la = get_instance("languages");
 		$lar = $la->get_list();
