@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.29 2001/06/20 00:16:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.30 2001/06/28 18:04:17 kristo Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -1329,8 +1329,8 @@ class document extends aw_template
 											"status"  => $this->option_list($document["status"],array("2" => "Jah","1" => "Ei")),
 											"visible" => $this->option_list($document["visible"],array("1" => "Jah","0" => "Ei")),
 											"keywords"  => $document["keywords"],
-										  "lead"    => htmlentities(trim($document["lead"])),
-											"content" => htmlentities(trim($document["content"])),
+										  "lead"    => str_replace("\"","&quot;",trim($document["lead"])),
+											"content" => str_replace("\"","&quot;",trim($document["content"])),
 											"channel"	=> trim($document["channel"]),
 											"nobreaks"	=> $document["nobreaks"],
 											"tm"			=> trim($document["tm"]),
@@ -2232,5 +2232,221 @@ class document extends aw_template
 		return true;
 	}
 
+	function do_search($parent,$str,$sec,$sortby,$from)
+	{
+		if ($sortby == "")
+			$sortby = "percent";
+
+		$this->tpl_init("automatweb/documents");
+		$this->quote(&$str);
+
+		if ($str == "")
+		{
+			$this->read_template("search_none.tpl");
+			return $this->parse();
+		}
+
+		$this->read_template("search.tpl");
+
+		// make list of menus
+		if ($GLOBALS["lang_menus"] == 1)
+			$ss = " AND objects.lang_id = ".$GLOBALS["lang_id"];
+
+		$this->menucache = array();
+		$this->db_query("SELECT objects.oid as oid, objects.parent as parent,objects.last as last,objects.status as status
+										 FROM objects 
+										 WHERE objects.class_id = 1 AND objects.status = 2 $ss");
+		while ($row = $this->db_next())
+		{
+			$this->menucache[$row[parent]][] = $row;
+		}
+		// now, make a list of all menus below $parent
+		$this->marr = array($parent);
+		// list of default documents
+		$this->darr = array();
+		$this->rec_list($parent);
+
+		$ml = join(",",$this->marr);
+		$ml2 = join(",",$this->darr);
+		if ($ml != "")
+			$ml = " AND objects.parent IN ($ml) ";
+
+		if ($ml2 != "")
+			$ml.= " AND objects.oid IN ($ml2) ";
+	
+		if ($sortby == "time")
+			$ml.=" ORDER BY objects.modified DESC";
+
+		// oh crap. siin peab siis failide seest ka otsima. 
+		$mtfiles = array();
+		$this->db_query("SELECT id FROM files WHERE files.showal = 1 AND files.content LIKE '%$str%' ");
+		while ($row = $this->db_next())
+		{
+			$mtfiles[] = $row[id];
+		}
+		$fstr = join(",",$mtfiles);
+		if ($fstr != "")
+		{
+			// nyyd leiame k6ik aliased, mis vastavatele failidele tehtud on
+			$this->db_query("SELECT * FROM aliases WHERE target IN ($fstr)");
+			while ($row = $this->db_next())
+			{
+				$faliases[] = $row[source];
+			}
+			// nyyd on $faliases array dokumentidest, milles on tehtud aliased matchivatele failidele.
+			if (is_array($faliases))
+				$fasstr = "OR documents.docid IN (".join(",",$faliases).")";
+		}
+
+		// nini. otsime tabelite seest ka.
+		$mts = array();
+		$this->db_query("SELECT id FROM aw_tables WHERE contents LIKE '%$str%'");
+		while ($row = $this->db_next())
+		{
+			$mts[] = $row[id];
+		}
+
+		$mtsstr = join(",",$mts);
+		if ($mtsstr != "")
+		{
+			// nyyd on teada k6ik tabelid, ksu string sisaldub
+			// leiame k6ik aliased, mis on nendele tabelitele tehtud
+			$this->db_query("SELECT * FROM aliases WHERE target IN ($mtsstr)");
+			while ($row = $this->db_next())
+			{
+				$mtals[$row[source]] = $row[source];
+			}
+
+			// see on siis nimekiri dokudest, kuhu on tehtud aliased tabelitest, mis matchisid
+			$mtalsstr = "OR documents.docid IN (".join(",",$mtals).")";
+			//echo "ms = $mtalsstr<br>";
+		}
+
+		$cnt = 0;
+		//max number of occurrences of search string in document
+		$max_count = 0;
+		$docarr = array();
+
+//Mingi imelik echo oli.  
+/*
+		echo "ot: SELECT documents.*,objects.parent as parent, objects.modified as modified 
+										 FROM documents 
+										 LEFT JOIN objects ON objects.oid = documents.docid
+										 WHERE (documents.title LIKE '%".$str."%' OR documents.content LIKE '%".$str."%' $fasstr $mtalsstr) AND objects.status = 2 $ml";
+*/
+		$this->db_query("SELECT documents.*,objects.parent as parent, objects.modified as modified 
+										 FROM documents 
+										 LEFT JOIN objects ON objects.oid = documents.docid
+										 WHERE (documents.title LIKE '%".$str."%' OR documents.content LIKE '%".$str."%' $fasstr $mtalsstr) AND objects.status = 2 AND (documents.no_search is null OR documents.no_search = 0) $ml");
+		while($row = $this->db_next())
+		{
+			// find number of matches in document for search string, for calculating percentage
+			// if match is found in title, then multiply number by 5, to emphasize importance
+			$c = substr_count(strtoupper($row[content]),strtoupper($str)) + substr_count(strtoupper($row[title]),strtoupper($str))*5;
+			$max_count = max($c,$max_count);
+
+			// find the first paragraph of text
+			$co = strip_tags($row[content]);
+			$co = substr($co,0,strpos($co,"\n"));
+			$co = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$co);
+			$docarr[] = array("matches" => $c, "title" => $row[title],"section" => $row[docid],"content" => $co,"modified" => $this->time2date($row[modified],5),"tm" => $row[tm]);
+			
+			$cnt++;
+		}
+
+		if ($sortby == "percent")
+		{
+			$d2arr = array();
+			reset($docarr);
+			while (list(,$v) = each($docarr))
+			{
+				if ($max_count == 0)
+					$d2arr[100][] = $v;
+				else
+					$d2arr[($v[matches]*100) / $max_count][] = $v;
+			}
+
+			krsort($d2arr,SORT_NUMERIC);
+
+			$docarr = array();
+			reset($d2arr);
+			while (list($p,$v) = each($d2arr))
+			{
+				reset($v);
+				while (list(,$v2) = each($v))
+					$docarr[] = $v2;
+			}
+
+		}
+
+		$per_page = 10;
+
+		$num = 0;
+		reset($docarr);
+		while (list(,$v) = each($docarr))
+		{
+			if ($num >= $from && $num < ($from + $per_page))	// show $per_page matches per screen
+			{
+				if ($max_count == 0)
+					$sstr = 100;
+				else
+					$sstr = substr(($v[matches]*100) / $max_count,0,4);
+				$this->vars(array("title"			=> $v[title],
+													"percent"		=> $sstr,
+													"content"		=> preg_replace("/#(.*)#/","",$v[content]),
+													"modified"	=> $v[tm] == "" ? $v[modified] : $v[tm],
+													"section"		=> $v[section]));
+				$r.= $this->parse("MATCH");
+			}
+			$num++;
+		}
+
+		$this->vars(array("MATCH" => $r,"s_parent" => $parent,"sstring" => urlencode($str),"sstringn" => $str, "section" => $sec,"matches" => $cnt,"sortby" => $sortby));
+
+		// make prev page / next page
+		if ($cnt > $per_page)
+		{
+			if ($from > 0)
+			{
+				$this->vars(array("from" => $from-$per_page));
+				$prev = $this->parse("PREVIOUS");
+			}
+			if ($from+$per_page <= $cnt)
+			{
+				$this->vars(array("from" => $from+$per_page));
+				$next = $this->parse("NEXT");
+			}
+
+			for ($i=0; $i < $cnt / $per_page; $i++)
+			{
+				$this->vars(array("from" => $i*$per_page,"page_from" => $i*$per_page,"page_to" => ($i+1)*$per_page));
+				if ($i*$per_page == $from)
+					$pg.=$this->parse("SEL_PAGE");
+				else
+					$pg.=$this->parse("PAGE");
+			}
+		}
+		$this->vars(array("PREVIOUS" => $prev,"NEXT" => $next,"PAGE" => $pg,"SEL_PAGE" => "","from" => $from));
+		$ps = $this->parse("PAGESELECTOR");
+		$this->vars(array("PAGESELECTOR" => $ps));
+		return $this->parse();
+	}
+	function rec_list($parent)
+	{
+		if (!is_array($this->menucache[$parent]))
+			return;
+
+		reset($this->menucache[$parent]);
+		while(list(,$v) = each($this->menucache[$parent]))
+		{
+			if ($v[status] == 2)
+			{
+				$this->marr[] = $v[oid];
+				if ($v[last] > 0)
+					$this->darr[] = $v[last];
+				$this->rec_list($v[oid]);
+			}
+		}
+	}
 };
 ?>

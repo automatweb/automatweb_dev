@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.9 2001/06/21 07:37:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.10 2001/06/28 18:04:18 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 
 class form_base extends aw_template
@@ -355,9 +355,13 @@ class form_base extends aw_template
 					$li = new mlist($data["list"]);
 
 					if ($this->entry[$data["checkbox"]] == 1 || $data["checkbox"] < 1)
+					{
 						$li->db_add_user(array("name" => $this->entry[$data["name_tb"]], "email" => $this->entry[$data["textbox"]]));
+					}
 					else
+					{
 						$li->db_remove_user($this->entry[$data["textbox"]]);
+					};
 					break;
 
 				case "email":

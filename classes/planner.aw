@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.34 2001/06/26 23:42:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.35 2001/06/28 18:04:18 kristo Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -145,7 +145,7 @@ class planner extends calendar {
 	function admin_planner($args = array())
 	{
 		extract($args);
-		$this->tpl_init("automatweb/planner");
+//		$this->tpl_init("planner");
 		$args["act"] = "change";
 		$args["ids"] = "id=" . $args["id"];
 		$args["ctype"] = "oid";
@@ -204,7 +204,6 @@ class planner extends calendar {
 	// date - millisele kuupäevale keskenduda
 	function change($args = array())
 	{
-
 		extract($args);
 
 		// kui kuupäeva pole defineeritud, siis defaultime tänasele
@@ -1245,8 +1244,8 @@ class planner extends calendar {
 			$day = $max_day;
 		};
 		$date = "$day-$month-$year";
-		$parms = array();
-		$parms["date"] = $date;
+		$params = array();
+		$params["date"] = $date;
 		if ($ctype == "oid")
 		{
 			$params["id"] = $id;

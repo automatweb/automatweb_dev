@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/homedir.aw,v 2.2 2001/06/18 18:46:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/homedir.aw,v 2.3 2001/06/28 18:04:18 kristo Exp $
 // homedir.aw - Class for managing users home directory
 
 global $orb_defs;
@@ -11,6 +11,22 @@ class homedir extends users {
 	{
 		$this->db_init();
 		$this->tpl_init("homedir");
+	}
+
+	////
+	// !Draws a custom homedir
+	// folder(int) - milline folder hetkel aktiivne on?
+	function generate($args = array())
+	{
+		extract($args);
+		// first we need to check whether the object we are requesting is actually under the homedir
+		// of the user. Actually this should be done by checking ACL, but for now we will settle
+		// for this.
+
+
+
+
+
 	}
 
 	////

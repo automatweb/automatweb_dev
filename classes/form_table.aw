@@ -131,7 +131,8 @@ class form_table extends form_base
 			$this->vars(array(
 				"COL" => $c,
 				"change_checked" => checked($this->table["defs"][$col]["el"] == "change"),
-				"view_checked" => checked($this->table["defs"][$col]["el"] == "view")
+				"view_checked" => checked($this->table["defs"][$col]["el"] == "view"),
+				"special_checked" => checked($this->table["defs"][$col]["el"] == "special")
 			));
 			$this->parse("ROW");
 		}
@@ -169,6 +170,66 @@ class form_table extends form_base
 			$ret[$row["form_id"]] = $row["form_id"];
 		}
 		return $ret;
+	}
+
+	////
+	// !starts the table data definition for table $id
+	// $header_attribs = an array of get items in the url, used to sort the table
+	function start_table($id,$header_attribs)
+	{
+		load_vcl("table");
+		$this->t = new aw_table(array(
+			"prefix" => "fg_".$id,
+			"self" => $PHP_SELF,
+			"imgurl" => $GLOBALS["baseurl"] . "/automatweb/images"
+		));
+		$this->t->parse_xml_def_string($this->get_xml($id));
+		$this->t->set_header_attribs($header_attribs);
+	}
+
+	////
+	// !adds another row of data to the table
+	function row_data($dat)
+	{
+		$this->t->define_data($dat);
+	}
+
+	////
+	// !reads the loaded entries from array of forms $forms and adds another row of data to the table
+	function row_data_from_form($forms,$special = "")
+	{
+		$rds = array();
+		foreach($forms as $form)
+		{
+			$rds["el_change"] = "<a href='".$this->mk_my_orb("change", array("id" => $form->entry_id), "form_entry")."'>Muuda</a>";
+			$rds["el_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $form->id,"entry_id" => $form->entry_id, "op_id" => $form->arr["search_outputs"][$form->id]))."'>Vaata</a>";
+			$rds["el_special"] = $special;
+			for ($row = 0; $row < $form->arr["rows"]; $row++)
+			{
+				for ($col = 0; $col < $form->arr["cols"]; $col++)
+				{
+					$form->arr["contents"][$row][$col]->get_els(&$elar);
+					reset($elar);
+					while (list(,$el) = each($elar))
+					{
+						$rds["el_".$el->get_id()] = $el->get_value();
+					}
+				}
+			}
+		}
+		$this->t->define_data($rds);
+	}
+
+	////
+	// !draws the table and returns the html for the current table
+	function finish_table()
+	{
+		if (is_object($this->t))
+		{
+			$this->t->sort_by(array("field" => $GLOBALS["sortby"],"sorder" => $GLOBALS["sort_order"]));
+			return $this->get_css().$this->t->draw();
+		}
+		return "";
 	}
 
 	////

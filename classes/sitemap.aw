@@ -14,13 +14,15 @@ class sitemap extends aw_template
 		$m = new menuedit;
 		$m->db_listall(" objects.status = 2 ");
 		while ($row = $m->db_next())
+		{
 			$this->mar[$row[parent]][] = $row;
+		}
 
 		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_DOCUMENT." AND status = 2 AND lang_id = ".$GLOBALS["lang_id"]." ORDER BY jrk");
 		while ($row = $this->db_next())
 			$this->mar[$row[parent]][] = $row;
 
-		$parent = $GLOBALS["rootmenu"];
+		$parent = $GLOBALS["sitemap_rootmenu"];
 		return $this->req_map($parent);
 	}
 
@@ -46,12 +48,9 @@ class sitemap extends aw_template
 		reset($ar);
 		while (list(,$row) = each($ar))
 		{
-			if (!($menu_defs_v2[$row["oid"]] == "" && $this->level == 1))		// make sure we only get the menus that are visible on site also.
-			{
 				$this->vars(array("url" => $baseurl."/index.".$ext."/section=".$row[oid],"name" => $row[name],"oid" => $row[oid]));
 				$r.=$this->parse("ITEM");
 				$r.=$this->req_map($row[oid]);
-			}
 		}
 		$r.=$this->parse("LEVEL_END");
 		$this->level--;

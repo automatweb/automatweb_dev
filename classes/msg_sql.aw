@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msg_sql.aw,v 2.5 2001/06/25 16:05:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msg_sql.aw,v 2.6 2001/06/28 18:04:18 kristo Exp $
 // msg_sql.aw - sql draiver messengeri jaoks
 class msg_sql_driver extends core
 {
@@ -140,7 +140,7 @@ class msg_sql_driver extends core
 		$q = sprintf("SELECT objects.*,messages.* FROM objects
 			LEFT JOIN messages ON (objects.oid = messages.id)
 			WHERE class_id = %d AND parent = '$folder'
-			ORDER BY created DESC",CL_MESSAGE);
+			ORDER BY tm DESC",CL_MESSAGE);
 		$this->db_query($q);
 		$res = array();
 		while($row = $this->db_next())

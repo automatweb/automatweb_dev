@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.8 2001/06/20 03:21:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.9 2001/06/28 18:04:18 kristo Exp $
 classload("users_user","config","form");
 
 load_vcl("table");
@@ -899,6 +899,10 @@ class users extends users_user
 	function show_join_data($arr)
 	{
 		extract($arr);
+		if (!$tpl)
+		{
+			$tpl = "show_join_data.tpl";
+		}
 		global $uid,$last_join_uid;
 		$uuid = $uid;
 		if ($uuid == "")
@@ -916,10 +920,15 @@ class users extends users_user
 
 		// now get all the join forms for thew users join group and show dem!
 		$ops = array();
-		$this->db_query("SELECT id,j_op FROM forms WHERE subtype = ".FSUBTYPE_JOIN);
+		$aps = "";
+		if ($second)
+		{
+			$aps = "2";
+		}
+		$this->db_query("SELECT id,j_op".$aps." FROM forms WHERE subtype = ".FSUBTYPE_JOIN);
 		while ($row = $this->db_next())
 		{
-			$ops[$row["id"]] = $row["j_op"];
+			$ops[$row["id"]] = $row["j_op".$aps];
 		}
 
 		$udata = $this->get_user(array("uid" => $uuid));
@@ -938,7 +947,7 @@ class users extends users_user
 		}
 		else
 		{
-			$this->read_template("show_join_data.tpl");
+			$this->read_template($tpl);
 		}
 		$this->vars(array(
 			"username" => $uuid,

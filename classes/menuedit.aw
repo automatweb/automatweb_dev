@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.28 2001/06/21 03:51:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.29 2001/06/28 18:04:18 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -25,6 +25,11 @@ class menuedit extends aw_template
 		$this->cache = new cache;
 		$this->feature_icons_loaded = false;
 		$this->active_doc = false;
+		global $lc_menuedit;
+		if (is_array($lc_menuedit))
+		{
+			$this->vars($lc_menuedit);
+		}
 	}
 
 	function mk_folders($parent,$str)
@@ -612,7 +617,7 @@ class menuedit extends aw_template
 
 		$awt->stop("cycle");
 
-		$this->make_promo_boxes($section);
+		$this->make_promo_boxes($this->sel_section);
 		$this->make_poll();
 		$this->make_search();
 		$this->make_nadalanagu();
@@ -682,6 +687,10 @@ class menuedit extends aw_template
 		}
 		$this->vars(array("LEFT_PANE" => $lp, "RIGHT_PANE" => $rp));
 
+		if ($section == $GLOBALS["frontpage"])
+		{
+			$this->vars(array("IS_FRONTPAGE" => $this->parse("IS_FRONTPAGE")));
+		}
 		$awt->stop("menuedit_show");
 		if (!isset($d->li_cache))
 		{
@@ -2696,15 +2705,18 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		{
 			$sar = $sa[$GLOBALS["lang_id"]];
 			$rsar = array();
-			foreach($sar as $said => $saord)
+			if (is_array($sar))
 			{
-				$this->vars(array(
-					"sa_name" => $oblist[$said],
-					"sa_id" => $said,
-					"sa_ord" => $saord
-				));
-				$sal.=$this->parse("SA_ITEM");
-				$rsar[$said] = $said;
+				foreach($sar as $said => $saord)
+				{
+					$this->vars(array(
+						"sa_name" => $oblist[$said],
+						"sa_id" => $said,
+						"sa_ord" => $saord
+					));
+					$sal.=$this->parse("SA_ITEM");
+					$rsar[$said] = $said;
+				}
 			}
 		}
 		$this->vars(array("parent"			=> $row["parent"], 
@@ -3001,6 +3013,11 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			if ($row["clickable"] != 1)
 			{
 				$ap.="_SEP";		// non-clickable menu
+			};
+
+			if ($row["mid"] == 1)
+			{
+				$ap.="_MID";		// menu in center
 			};
 
 			if ($this->is_template($mn.$ap."_NOSUB") && $n == 0)

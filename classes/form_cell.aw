@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.8 2001/06/18 17:20:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.9 2001/06/28 18:04:18 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle fomi sees kirjas
@@ -227,14 +227,14 @@ class form_cell extends aw_template
 			$this->arr[$i]->del();
 	}
 
-	function gen_user_html_not($def_style, &$images, $colspan, $rowspan,$prefix = "",$elvalues)
+	function gen_user_html_not($def_style, &$images, $colspan, $rowspan,$prefix = "",$elvalues,$no_submit=false)
 	{
 		$el = 0;
 		$c = "";
 		$cs = "";
 		for ($i=0; $i < $this->cnt; $i++)
 		{
-			$c.=$this->arr[$i]->gen_user_html_not(&$images,$prefix,$elvalues);
+			$c.=$this->arr[$i]->gen_user_html_not(&$images,$prefix,$elvalues,$no_submit);
 			$el = &$this->arr[$i];
 		}
 		if ($c == "")
@@ -424,7 +424,6 @@ class form_cell extends aw_template
 	// !saves the elements in this cell
 	function submit_cell(&$arr,&$form)
 	{
-		$this->dequote(&$arr);
 		// gather all properties of the elements in the cell in their arrays from the submitted form
 		// and put them in the form's array of element properties
 		for ($i=0; $i < $this->cnt; $i++)

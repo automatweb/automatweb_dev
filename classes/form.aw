@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.26 2001/06/21 14:10:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.27 2001/06/28 18:04:18 kristo Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -674,7 +674,7 @@ $orb_defs["form"] = "xml";
 
 		////
 		// !generates one row of form elements
-		function mk_row_html($row,&$images,$prefix = "",$elvalues = array())
+		function mk_row_html($row,&$images,$prefix = "",$elvalues = array(),$no_submit = false)
 		{
 			$html = "";
 			for ($a=0; $a < $this->arr["cols"]; $a++)
@@ -682,7 +682,7 @@ $orb_defs["form"] = "xml";
 				if (($arr = $this->get_spans($row, $a)))
 				{
 					$ds = isset($this->arr["def_style"]) ? $this->arr["def_style"] : 0;
-					$html.=$this->arr["contents"][$arr["r_row"]][$arr["r_col"]]->gen_user_html_not($ds, &$images, $arr["colspan"], $arr["rowspan"],$prefix,$elvalues);
+					$html.=$this->arr["contents"][$arr["r_row"]][$arr["r_col"]]->gen_user_html_not($ds, &$images, $arr["colspan"], $arr["rowspan"],$prefix,$elvalues,$no_submit);
 				}
 			}
 			return $html;

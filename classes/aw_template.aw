@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.7 2001/06/18 21:11:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.8 2001/06/28 18:04:17 kristo Exp $
 // aw_template.aw - Templatemootor
 class tpl
 {
@@ -41,7 +41,6 @@ class aw_template extends acl_base
 	var $variables;    // siia paigutame imporditud muutujad
 	var $ignored;      // siia paigutame muutujad, mille sisu asendatakse tühjusega
 	var $expandsubs;   // kas <!-- SUB: blaa muutub {VAR:blaa}-ks?
-	var $template_dir; // millisest kataloomast templatesid loetakse (string)
 
 	// compatibility funktsioonid
 	function tpl_init($basedir = "",$expandsubs = 1)

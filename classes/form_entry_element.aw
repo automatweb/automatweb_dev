@@ -1,7 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.17 2001/06/21 03:51:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.18 2001/06/28 18:04:18 kristo Exp $
 // form_entry_element.aw - 
 session_register("clipboard");
+classload("currency");
 
 load_vcl("date_edit");
 
@@ -15,6 +16,7 @@ load_vcl("date_edit");
 			$this->parent = 0;
 			$this->entry_id = 0;
 			$this->id = 0;
+			$this->currency = new currency;
 		}
 
 		function gen_admin_html(&$cell)
@@ -156,7 +158,15 @@ load_vcl("date_edit");
 			$pc="";
 			if ($this->arr["type"] == "price")
 			{
-				$this->vars(array("price"	=> $this->arr["price"]));
+				classload("currency");
+				$cur = new currency;
+				$gl = $cur->get_list();
+				$this->vars(array(
+					"price"	=> $this->arr["price"],
+					"price_cur" => $this->picker($this->arr["price_cur"], $gl),
+					"price_sep" => $this->arr["price_sep"],
+					"price_show" => $this->multiple_option_list($this->arr["price_show"], $gl)
+				));
 				$pc = $this->parse("PRICE_ITEMS");
 			}
 
@@ -285,6 +295,19 @@ load_vcl("date_edit");
 				$this->arr["price"] = $$var;
 				$var=$base."_length";
 				$this->arr["length"] = $$var;
+				$var=$base."_price_cur";
+				$this->arr["price_cur"] = $$var;
+				$var=$base."_price_sep";
+				$this->arr["price_sep"] = $$var;
+				$var=$base."_price_show";
+				$this->arr["price_show"] = array();
+				if (is_array($$var))
+				{
+					foreach($$var as $curid)
+					{
+						$this->arr["price_show"][$curid] = $curid;
+					}
+				}
 			}
 
 			if ($this->arr["type"] == "textbox" || $this->arr["type"] == "textarea" || $this->arr["type"] == "checkbox" || $this->arr["type"] == "radiobutton")
@@ -380,7 +403,7 @@ load_vcl("date_edit");
 			return $val;
 		}
 
-		function gen_user_html_not(&$images,$prefix = "",$elvalues = array())		// function that doesn't use templates
+		function gen_user_html_not(&$images,$prefix = "",$elvalues = array(),$no_submit = false)		// function that doesn't use templates
 		{
 			$html="";
 			// since that was removed from images, I'll remove it from here as well
@@ -479,7 +502,10 @@ load_vcl("date_edit");
 					break;
 
 				case "submit":
-					$html = "<input type='submit' VALUE='".$this->arr["button_text"]."' onClick=\"return check_submit();\">";
+					if (!$no_submit)
+					{
+						$html = "<input type='submit' VALUE='".$this->arr["button_text"]."' onClick=\"return check_submit();\">";
+					}
 					break;
 
 				case "reset":
@@ -558,6 +584,7 @@ load_vcl("date_edit");
 				$var2= $prefix.$this->id."_address";
 				global $$var, $$var2;
 				$entry[$this->id] = array("text" => $$var, "address" => $$var2);
+				$this->entry_id = $id;
 				$this->entry = $entry[$this->id];
 				return;
 			}
@@ -587,6 +614,7 @@ load_vcl("date_edit");
 						$im->upload($$var, $$ft, $id, "",true,$$fn);
 					}
 					$this->entry = $entry[$this->id];
+					$this->entry_id = $id;
 				}
 				return;
 			}
@@ -602,6 +630,7 @@ load_vcl("date_edit");
 				global $$var;
 				$entry[$this->id] = join(",",$$var);
 				$this->entry = $entry[$this->id];
+				$this->entry_id = $id;
 				return;
 			}
 			else
@@ -612,14 +641,18 @@ load_vcl("date_edit");
 				$v = $$var;
 				$entry[$this->id] = mktime($v["hour"],$v["minute"],0,$v["month"],$v["day"],$v["year"]);
 				$this->entry = $entry[$this->id];
+				$this->entry_id = $id;
 				return;
 			}
 			else
+			{
 				$var = $prefix.$this->id;
+			}
 
 			global $$var;
 			$entry[$this->id] = $$var;
 			$this->entry = $$var;
+			$this->entry_id = $id;
 		}
 
 		function gen_show_html()
@@ -660,7 +693,25 @@ load_vcl("date_edit");
 				//$html.=$t->proc_text($this->entry, $this->entry_id);
 
 			if ($this->arr["type"] == "price")
+			{
 				$html.=$this->entry;
+				// currencies are cached the first time we ask for one
+				if ($this->arr["price_cur"])
+				{
+					$cur = $this->currency->get($this->arr["price_cur"]);
+					$in_dem = (double)$cur["rate"]*(double)$this->entry;
+					$html.=$cur["name"];
+					if (is_array($this->arr["price_show"]))
+					{
+						foreach($this->arr["price_show"] as $prid)
+						{
+							$cur = $this->currency->get($prid);
+							$val = round((double)$cur["rate"]*$in_dem,2);
+							$html.=$this->arr["price_sep"].$val.$cur["name"];
+						}
+					}
+				}
+			}
 
 			if ($this->arr["type"] == "date")
 			{

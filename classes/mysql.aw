@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.2 2001/06/15 21:09:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.3 2001/06/28 18:04:18 kristo Exp $
 // mysql.aw - MySQL draiver
 include("$classdir/root.$ext");
 class db_connector extends root {
@@ -164,7 +164,7 @@ class db_connector extends root {
 			{
 				if (is_array($arr[$k])) 
 				{
-					$this->dequote(&$arr);
+					$this->dequote(&$arr[$k]);
 				} 
 				else 
 				{

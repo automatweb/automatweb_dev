@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.7 2001/06/18 20:19:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.8 2001/06/28 18:04:18 kristo Exp $
 // klass piltide manageerimiseks
 global $orb_defs;
 $orb_defs["images"] = array("new"						=> array("function"	=> "add",		"params"	=> array("parent")),
@@ -34,6 +34,7 @@ class images extends aw_template
 					"imgcaption" => $idata["comment"],
 					"align" => $align[$matches[4]],
 					"plink" => $idata["link"],
+					"target" => ($idata["newwindow"] ? "target=\"_blank\"" : "")
 			);
  
 			if ($idata["link"] != "")

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.9 2001/06/28 01:17:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.10 2001/06/28 18:04:18 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 
 global $orb_defs;
@@ -39,8 +39,8 @@ class db_objects extends aw_template
 					"rows" => "*",
 					"frames" => $frames,
 				));
-
 				$retval = $frameset->generate();
+
 				break;
 
 			case "content":
@@ -128,8 +128,7 @@ class db_objects extends aw_template
 				$awf->cp(array("id" => $id,"parent" => $msgid));
 			}
 		};
-		print "<script language='javascript'>window.opener.document.writemessage.save.click();</script>";
-		print "<a href='javascript:window.close()'>Sulge aken</a>";
+		print "<script language='javascript'>parent.close();</script>";
 		exit;
 	}
 

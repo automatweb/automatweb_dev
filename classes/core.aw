@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.30 2001/06/27 23:28:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.31 2001/06/28 18:04:17 kristo Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -840,6 +840,11 @@ class core extends db_connector
 		$retval[$object["oid"]] = $object["name"];
 	
 		$found = $object["parent"];
+
+		if ($stop == $oid)
+		{
+			$found = false;
+		};
 
 		while($found)
 		{

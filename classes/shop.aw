@@ -117,7 +117,10 @@ class shop extends shop_base
 			"forms" => $this->picker($oba["owner_form"], $fl),
 			"o_form_id" => $oba["owner_form"],
 			"o_op_id" => $oba["owner_form_op"],
-			"ch_own" => $this->mk_orb("ch_owner_data", array("id" => $id))
+			"ch_own" => $this->mk_orb("ch_owner_data", array("id" => $id)),
+			"tables" => $this->mk_my_orb("change_tables", array("id" => $id)),
+			"o_op_id_voucher" => $oba["owner_form_op_voucher"],
+			"o_op_id_issued" => $oba["owner_form_op_issued"]
 		));
 		if ($oba["owner_form"])
 		{
@@ -168,7 +171,7 @@ class shop extends shop_base
 				$ss = ", owner_form_entry = '' ";
 			}
 			$this->upd_object(array("oid" => $id, "name" => $name, "comment" => $comment));
-			$this->db_query("UPDATE shop SET root_menu = $root, emails='$emails',owner_form = '$owner_form',owner_form_op = '$owner_form_op' $ss WHERE id = $id");
+			$this->db_query("UPDATE shop SET root_menu = $root, emails='$emails',owner_form = '$owner_form',owner_form_op = '$owner_form_op',owner_form_op_voucher = '$owner_form_op_voucher',owner_form_op_issued = '$owner_form_op_issued' $ss WHERE id = $id");
 		}
 		else
 		{
@@ -280,7 +283,7 @@ class shop extends shop_base
 		}
 
 		// some of the shop categories
-		$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu ON menu.id = objects.oid WHERE parent = $parent AND class_id = ".CL_PSEUDO." AND status = 2");
+		$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu ON menu.id = objects.oid WHERE parent = $parent AND class_id = ".CL_PSEUDO." AND status = 2 ORDER BY objects.jrk");
 		while ($row = $this->db_next())
 		{
 			if ($row["link"] != "")
@@ -297,11 +300,19 @@ class shop extends shop_base
 				"id" => $row["oid"],
 				"cat_link" => $link
 			));
-			$this->shop_menus.=$this->parse("CAT");
+			if ($row["clickable"])
+			{
+				$this->shop_menus.=$this->parse("CAT");
+			}
+			else
+			{
+				$this->shop_menus.=$this->parse("CAT_NOCLICK");
+			}
 		}
 		$this->vars(array(
 				"SHOW_CAT" => $this->shop_menus,
-				"CAT" => ""
+				"CAT" => "",
+				"CAT_NOCLICK" => ""
 		));
 
 		$this->vars(array(
@@ -342,6 +353,7 @@ class shop extends shop_base
 		$ityp = new item_type;
 		$ityp->mk_cache();		// cacheme k6ik tyybid selle klassi sees, et p2rast ei peaks iga itemi kohta eraldi p2ringut tegema
 
+		$has_items = false;
 		$this->db_query("SELECT objects.brother_of as oid,shop_items.* FROM objects LEFT JOIN shop_items ON shop_items.id = objects.brother_of WHERE parent = $section AND class_id = ".CL_SHOP_ITEM." AND status = 2");
 		while ($row = $this->db_next())
 		{
@@ -359,13 +371,15 @@ class shop extends shop_base
 			$tp+=(double)$shopping_cart["items"][$row["oid"]]["cnt"]*(double)$row["price"];	// selle arvutame p2rast kogusummast maha
 																																			// et saada korvi hind = baashind + selle lehe asjade hind
 			$this->parse("ITEM");
+			$has_items = true;
 		}
 
 		$this->vars(array(
 			"tot_price" => (double)$shopping_cart["price"]-(double)$tp,	
 			"reforb" => $this->mk_reforb("add_cart", array("shop_id" => $id, "section" => $section)),
 			"cart" => $this->mk_site_orb(array("action" => "view_cart", "shop_id" => $id, "section" => $section)),
-			"add_item" => $this->mk_my_orb("new", array("parent" => $section),"shop_item")
+			"add_item" => $this->mk_my_orb("new", array("parent" => $section),"shop_item"),
+			"HAS_ITEMS" => ($has_items ? $this->parse("HAS_ITEMS") : "")
 		));
 		return $this->parse();
 	}
@@ -411,7 +425,7 @@ class shop extends shop_base
 						// oh what a mindjob.
 						// we add prefix entry_.$entry_id._ to all elements in this entry and later when processing
 						// entry, we add the same prefix so we process the elements from the right form.
-						$this->vars(array("row" => $f->mk_row_html($rownum,$images,"entry_".$ar["cnt_entry"]."_")));
+						$this->vars(array("row" => $f->mk_row_html($rownum,$images,"entry_".$ar["cnt_entry"]."_",array(),true)));
 						$rowhtml.=$this->parse("F_ROW");
 					}
 	
@@ -507,25 +521,36 @@ class shop extends shop_base
 						}
 					}
 
-					// nyyd tshekime et kas j2lle on vaba see item kyllalt palju
-					if (!$this->is_item_available($it,$count,$f,$ar["period"]))
+					if ($count > 0)
 					{
-						// pold vabu itemeid sel ajal
-						global $status_msg;
-						$status_msg = E_SHOP_NO_FREE_ITEMS_DATE;
-						session_register("status_msg");
-						// kui ei old kyllalt kohti, siis rollime tellimuse sisestuse tagasi ka
-						$f->restore_entry($itt["cnt_form"],$ar["cnt_entry"],$old_entry);
-						return $this->mk_my_orb("view_cart", array("shop_id" => $shop_id, "section" => $section));
+						// nyyd tshekime et kas j2lle on vaba see item kyllalt palju
+						if (!$this->is_item_available($it,$count,$f,$ar["period"]))
+						{
+							// pold vabu itemeid sel ajal
+							global $status_msg;
+							$status_msg = E_SHOP_NO_FREE_ITEMS_DATE;
+							session_register("status_msg");
+							// kui ei old kyllalt kohti, siis rollime tellimuse sisestuse tagasi ka
+							$f->restore_entry($itt["cnt_form"],$ar["cnt_entry"],$old_entry);
+							return $this->mk_my_orb("view_cart", array("shop_id" => $shop_id, "section" => $section));
+						}
+
+						// now calc price
+						$price = $this->calc_price($itt,$it,$count,$f);
+
+						$GLOBALS["shopping_cart"]["items"][$item_id]["cnt"] = $count;
+						$GLOBALS["shopping_cart"]["items"][$item_id]["price"] = $price;
+						$GLOBALS["shopping_cart"]["items"][$item_id]["name"] = $it["name"];
+						$GLOBALS["shopping_cart"]["items"][$item_id]["cnt_entry"] = $ar["cnt_entry"];
 					}
-
-					// now calc price
-					$price = $this->calc_price($itt,$it,$count,$f);
-
-					$GLOBALS["shopping_cart"]["items"][$item_id]["cnt"] = $count;
-					$GLOBALS["shopping_cart"]["items"][$item_id]["price"] = $price;
-					$GLOBALS["shopping_cart"]["items"][$item_id]["name"] = $it["name"];
-					$GLOBALS["shopping_cart"]["items"][$item_id]["cnt_entry"] = $ar["cnt_entry"];
+					else
+					{
+						unset($GLOBALS["shopping_cart"]["items"][$item_id]);
+					}
+				}
+				else
+				{
+					unset($GLOBALS["shopping_cart"]["items"][$item_id]);
 				}
 			}
 		}
@@ -796,7 +821,9 @@ class shop extends shop_base
 			{
 				if ($ar["cnt"] > 0)
 				{
-					$this->db_query("INSERT INTO order2item(order_id,item_id,count,price,cnt_entry,period) VALUES($ord_id,$item_id,'".$ar["cnt"]."','".$ar["price"]."','".$ar["cnt_entry"]."','".$ar["period"]."')");
+					$it = $this->get_item($item_id);
+					$itt = $this->get_item_type($it["type_id"]);
+					$this->db_query("INSERT INTO order2item(order_id,item_id,count,price,cnt_entry,period,item_type,item_type_order) VALUES($ord_id,$item_id,'".$ar["cnt"]."','".$ar["price"]."','".$ar["cnt_entry"]."','".$ar["period"]."','".$it["type_id"]."','".$it["jrk"]."')");
 					$t_p += (double)$ar["cnt"] * (double)$ar["price"];
 				}
 			}
@@ -925,7 +952,8 @@ class shop extends shop_base
 			$itt = $this->get_item_type($row["type_id"]);
 		}
 
-		if (($row["has_period"] && !$row["has_objs"] && $row["has_max"]) || $parallel)
+		//($row["has_period"] && !$row["has_objs"] && $row["has_max"]) || 
+		if ($parallel)
 		{
 			$this->read_template("order_item_rep.tpl");
 			$parent = $this->do_shop_menus($shop,$section);
@@ -1219,7 +1247,9 @@ class shop extends shop_base
 				"ip" => $row["ip"],
 				"price" => $row["t_price"],
 				"view"	=> $this->mk_my_orb("view_order", array("shop" => $id, "order_id" => $row["id"],"section" => $section,"page" => $page)),
-				"fill"	=> $this->mk_my_orb("mark_order_filled", array("shop" => $id, "order_id" => $row["id"],"section" => $section,"page" => $page))
+				"fill"	=> $this->mk_my_orb("mark_order_filled", array("shop" => $id, "order_id" => $row["id"],"section" => $section,"page" => $page)),
+				"bill" => $this->mk_my_orb("view_bill", array("shop" => $id, "order_id" => $row["id"], "section" => $section)),
+				"vouchers" => $this->mk_my_orb("list_vouchers", array("shop" => $id, "order_id" => $row["id"], "section" => $section))
 			));
 			$is_f = "";
 			if (!isset($row["status"]))
@@ -1562,68 +1592,68 @@ class shop extends shop_base
 		$this->db_query("SELECT * FROM orders WHERE id = $order_id");
 		$order = $this->db_next();
 
-		$this->db_query("SELECT * FROM order2item WHERE order_id = $order_id");
+		$type2table = $this->get_tables_for_types($shop);
+
+		$cur_type = 0;
+		$first = true;
+
+		classload("form_table");
+		$ft = new form_table;
+
+		$item_form = new form;
+		$cnt_form = new form;
+		$this->db_query("SELECT * FROM order2item WHERE order_id = $order_id ORDER BY item_type_order");
 		while ($row = $this->db_next())
 		{
-			$o_items[$row["item_id"]] = $row;
-		}
-
-		classload("form");
-		$f = new form;
-		$images = new db_images;
-
-		$items = false;
-		$itm = "";
-		if (is_array($o_items))
-		{
-			reset($o_items);
-			while (list($item_id,$ar) = each($o_items))
+			$this->save_handle();
+			if ($cur_type != $row["item_type"])
 			{
-				if ($ar["count"] > 0)
+				if (!$first)
 				{
-					// now here we must show the name of the item followed by
-					// the rows from the cnt_form for that item that have selectrow checked
-
-					// so, get the item
-					$it = $this->get_item($item_id);
-					$itt = $this->get_item_type($it["type_id"]);
-					// load it's cnt_form
-					$f->load($itt["cnt_form"]);
-					// now find all the rows that are selected in the entry from the shopping cart
-					$f->load_entry($ar["cnt_entry"]);
-					$selrows = $this->get_selected_rows_in_form(&$f);
-
-					$rowhtml = "";
-					foreach($selrows as $rownum)
-					{
-						// here we must add the elements of row $rownum to the form we are assembling of the selected rows
-						// oh what a mindjob.
-						// we add prefix entry_.$entry_id._ to all elements in this entry and later when processing
-						// entry, we add the same prefix so we process the elements from the right form.
-						$this->vars(array("row" => $f->mk_show_text_row($rownum)));
-						$rowhtml.=$this->parse("F_ROW");
-					}
-					
-					$f->reset();
-					$this->vars(array(
-						"item" => $f->show(array("id" => $itt["form_id"], "op_id" => $itt["cart_op"], "entry_id" => $it["entry_id"])),
-						"view_item" => $this->mk_my_orb("order_item", array("item_id" => $item_id, "shop" => $shop)),
-						"name" => $it["name"],
-						"F_ROW" => $rowhtml
-					));
-					$itm.=$this->parse("ITEM");
+					// l6petame vana tabeli
+					$tx.=$ft->finish_table();
 				}
-			}
-		}
+				// ja alustame uut
+				$ft->start_table($type2table[$row["item_type"]],array("shop" => $shop, "order_id" => $order_id, "section" => $section,"class" =>  "shop", "action" => "view_bill"));
 
-		$tx = "";
+				$itt = $this->get_item_type($row["item_type"]);
+				// j2relikult muutus ka itemi sisestamise form, loadime
+				$item_form->load($itt["form_id"]);
+				$cnt_form->load($itt["cnt_form"]);
+				$cur_type = $row["item_type"];
+			}
+
+			$item = $this->get_item($row["item_id"]);
+			$item_parent_name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = ".$item["parent"],"name");
+			$item_form->load_entry($item["entry_id"]);
+
+			$cnt_form->load_entry($row["cnt_entry"]);
+
+			if ($row["period"] > 1)
+			{
+				// if there is a period set in the cart for this item, we must replace the date in the item's form 
+				// with the selected period
+				$el = $item_form->get_element_by_type("date", "from");
+				$item_form->set_element_value($el->get_id(),$row["period"]);
+			}
+
+			$ft->row_data_from_form(array(&$item_form,&$cnt_form),$item_parent_name);
+
+			$first = false;
+			$this->restore_handle();
+		}
+		$tx.=$ft->finish_table();
+
+		$f = new form;
+		$txx = "";
 		$this->db_query("SELECT entry_id,form_id FROM order2form_entries WHERE order_id = $order_id");
 		while ($row = $this->db_next())
 		{
 			$f->reset();
-			$f->load($row["form_id"]);
-			$f->load_entry($row["entry_id"]);
-			$tx.=$f->show_text();
+			$this->save_handle();
+			$op_id = $this->db_fetch_field("SELECT op_id FROM shop2order_form where shop_id = $shop AND of_id = ".$row["form_id"],"op_id");
+			$txx.=$f->show(array("id" => $row["form_id"],"entry_id" => $row["entry_id"], "op_id" => $op_id));
+			$this->restore_handle();
 		}
 
 		classload("users");
@@ -1631,18 +1661,175 @@ class shop extends shop_base
 
 		$f->reset();
 		$this->vars(array(
-			"ITEM" => $itm,
+			"ITEM" => $tx,
 			"user" => $order["user"],
-			"time" => $this->time2date($order["tm"],2),
+			"time" => $this->time2date($order["tm"],3),
 			"ip"	=> $order["ip"],
-			"inf_form" => $tx,
+			"number" => $order["id"],
+			"inf_form" => $txx,
 			"bill" => $this->mk_my_orb("view_bill", array("shop" => $shop, "order_id" => $order_id, "section" => $section)),
-			"date" => $this->time2date($order["tm"],2),
+			"date" => $this->time2date($order["tm"],3),
 			"owner_data" => $f->show(array("id" => $sh["owner_form"], "entry_id" => $sh["owner_form_entry"], "op_id" => $sh["owner_form_op"])),
 			"price" => $order["t_price"],
-			"log_info" => $u->show_join_data(array())
+			"log_info" => $u->show_join_data(array("tpl" => "join_data_nopwd.tpl"))
 		));
 
+		die($this->parse());
+	}
+
+	////
+	// !lets the user change the tables with what the bill is created for shop $id
+	function change_tables($arr)
+	{
+		extract($arr);
+		$sh = $this->get($id);
+		$this->mk_path($sh["parent"],"<a href='".$this->mk_my_orb("change", array("id" => $id))."'>Muuda poodi</a> / Muuda tabeleid");
+		$this->read_template("change_tables.tpl");
+
+		$itypes = $this->listall_item_types();
+		$f = new form;
+		$tables = $f->get_list_tables();
+
+		$this->db_query("SELECT * FROM shop2table WHERE shop_id = $id");
+		while ($row = $this->db_next())
+		{
+			$sh2t[$row["type_id"]] = $row["table_id"];
+		}
+
+		foreach($itypes as $typeid => $typename)
+		{
+			$this->vars(array(
+				"typename" => $typename,
+				"type_id" => $typeid,
+				"tables" => $this->picker($sh2t[$typeid], $tables)
+			));
+			$this->parse("TYPE");
+		}
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit_tables", array("id" => $id))
+		));
+		return $this->parse();
+	}
+
+	////
+	// !saves the tables that the user selected with what to sho items on the bill
+	function submit_tables($arr)
+	{
+		extract($arr);
+		
+		$this->db_query("DELETE FROM shop2table WHERE shop_id = '$id'");
+		if (is_array($tables))
+		{
+			foreach($tables as $typeid => $tableid)
+			{
+				$this->db_query("INSERT INTO shop2table(shop_id,table_id,type_id) VALUES($id,'$tableid','$typeid')");
+			}	
+		}
+
+		return $this->mk_my_orb("change_tables", array("id" => $id));
+	}
+
+	////
+	// !returns an array $type_id => $table_id as defined for the shop
+	function get_tables_for_types($shop)
+	{
+		$ret = array();
+		$this->db_query("SELECT * FROM shop2table WHERE shop_id = $shop");
+		while ($row = $this->db_next())
+		{
+			$ret[$row["type_id"]] = $row["table_id"];
+		}
+		return $ret;
+	}
+
+	////
+	// !generates a list of vouchers for order $order_id
+	function list_vouchers($arr)
+	{
+		extract($arr);
+		$this->read_template("list_vouchers.tpl");
+
+		$itypes = $this->listall_item_types(ALL_PROPS);
+
+		$this->db_query("select * from order2item where order_id = $order_id");
+		while ($row = $this->db_next())
+		{
+			if ($itypes[$row["item_type"]]["has_voucher"])
+			{
+				$this->save_handle();
+				$it = $this->get_item($row["item_id"]);
+				$parent_name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = ".$it["parent"],"name");
+
+				$this->vars(array(
+					"view_voucher" => $this->mk_my_orb("view_voucher", array("order_id" => $order_id, "shop" => $shop, "section" => $section, "item_id" => $row["item_id"])),
+					"parent_name" => $parent_name
+				));
+				$this->parse("VOUCHER");
+			}
+		}
+		$this->vars(array(
+			"to_list" => $this->mk_my_orb("order_history", array("id" => $shop, "order_id" => $order_id, "section" => $section))
+		));
+		return $this->parse();
+	}
+
+	////
+	// !shows the voucher for item $item_id of order $order_id to user
+	function view_voucher($arr)
+	{
+		extract($arr);
+		$this->read_template("voucher.tpl");
+
+		$sh = $this->get($shop);
+
+		$item = $this->get_item($item_id);
+		$parent_name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = ".$item["parent"],"name");
+
+		// yritame leida alguse ja l6pu kuup2evad.
+		$pers = array();
+		$this->db_query("SELECT period FROM order2item WHERE order_id = $order_id AND period > 1");
+		$row = $this->db_next();
+		$begin = $row["period"];
+		$row = $this->db_next();
+		$end = $row["period"];
+		if ($begin > $end)
+		{
+			$tmp = $end;
+			$end = $begin;
+			$begin = $tmp;
+		}
+
+		$f = new form;
+		$txx = "";
+		$this->db_query("SELECT entry_id,form_id FROM order2form_entries WHERE order_id = $order_id");
+		while ($row = $this->db_next())
+		{
+			$f->reset();
+			$this->save_handle();
+			$op_id = $this->db_fetch_field("SELECT op_id FROM shop2order_form where shop_id = $shop AND of_id = ".$row["form_id"],"op_id");
+			$txx.=$f->show(array("id" => $row["form_id"],"entry_id" => $row["entry_id"], "op_id" => $op_id));
+			$this->restore_handle();
+		}
+
+		$f = new form;
+		$issuedby = $f->show(array("id" => $sh["owner_form"], "entry_id" => $sh["owner_form_entry"], "op_id" => $sh["owner_form_op_issued"]));
+		$f->reset();
+
+		classload("users");
+		$u = new users;
+		$pt =  $u->show_join_data(array("tpl" => "join_data_nopwd.tpl","second" => true));
+
+		$this->vars(array(
+			"shop_owner_info" => $f->show(array("id" => $sh["owner_form"], "entry_id" => $sh["owner_form_entry"], "op_id" => $sh["owner_form_op_voucher"])),
+			"parent_name" => $parent_name,
+			"clients" => $txx,
+			"issuedby" => $issuedby,
+			"paythrough" => $pt,
+			"from" => $this->time2date($begin,3),
+			"to" => $this->time2date($end,3),
+			"voucher_no" => $order_id."_".$item_id,
+			"itemname" => $item["name"]
+		));
 		die($this->parse());
 	}
 }

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.10 2001/06/13 03:35:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.11 2001/06/28 18:04:18 kristo Exp $
 class mlist extends aw_template
 {
 	function mlist($id = 0)
@@ -91,7 +91,6 @@ class mlist extends aw_template
 		$this->vars(array("VARS" => $c));
 		return $this->parse();
 	}
-
 	// data[name], data[email], vars -> array(var_id, var_value), acl not checked
 	function db_add_user($data, $vars = "")
 	{
@@ -101,7 +100,7 @@ class mlist extends aw_template
 		if (($row = $this->db_next()))
 			return $row["id"];	// if such user exists, do not add another
 
-		$user_id = $this->new_object(array("parent" => $this->id, "name" => $name, "class_id" => CL_MAILINGLIST_MEMBER));
+		$user_id = $this->new_object(array("parent" => $this->id, "name" => $name, "class_id" => CL_MAILINGLIST_MEMBER,"status" => 2));
 		$this->db_query("INSERT INTO ml_users(id,mail) VALUES($user_id, '$email')");
 
 		if (gettype($vars) == "array")
