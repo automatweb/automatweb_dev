@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.21 2002/12/16 16:20:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.22 2002/12/17 11:04:34 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -2889,7 +2889,7 @@ class form_table extends form_base
 					$cl = "";
 					if ($this->table["pg_text_style"])
 					{
-						$cl = "class=\"style_".$this->table["pg_lb_style"]."\"";
+						$cl = "class=\"style_".$this->table["pg_text_style"]."\"";
 					}
 					for ($i = 0; $i < $num_pages; $i++)
 					{
