@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.55 2004/06/08 09:54:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.56 2004/06/08 13:45:41 kristo Exp $
 
 /*
 
@@ -400,12 +400,14 @@ class links extends class_base
 	// peab ehitama ka mehhanisimi spämmimise vältimiseks
 	function add_hit($id,$host,$uid) 
 	{
-		$o = obj($id);
+		/*$o = obj($id);
 		if ($o->can("edit"))
 		{
 			$o->set_prop("hits", $o->prop("hits")+1);
+			// this would clear the entire site cache and nothing can possibly change from this, so I'm commenting this out.
+			// does anyone really need this hit count thingie anyway?
 			$o->save();
-		}
+		}*/
 
 		$this->_log(ST_EXTLINK, SA_CLICK, $o->name(), $id);
 	}
