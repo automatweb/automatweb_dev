@@ -2,6 +2,7 @@
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_CRM_PERSON, on_save_person)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_CRM_COMPANY, on_save_co)
+
 */
 
 class crm_user_creator extends core
@@ -101,6 +102,11 @@ class crm_user_creator extends core
 				"reltype" => "RELTYPE_GROUP"
 			));
 		}
+		else
+		{
+			$grp->set_name($co->name());
+			$grp->save();
+		}
 		
 		return $grp;
 	}
@@ -149,6 +155,11 @@ class crm_user_creator extends core
 					"reltype" => "RELTYPE_GROUP"
 				));
 				
+			}
+			else
+			{
+				$grp->set_name($o->name());
+				$grp->save();
 			}
 
 			if ($o->class_id() == CL_CRM_SECTION)
