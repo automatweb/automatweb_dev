@@ -111,6 +111,14 @@ class dronline_conf extends class_base
 			$ui = get_instance('users');
 			$prop['options'] = $ui->get_user_picker(array('add_empty' => true));
 		}
+		if ($prop['name'] == 'from' && !$arr['obj']['oid'])
+		{
+			$prop['value'] = mktime(0,0,0,1,1,date("Y"));
+		}
+		if ($prop['name'] == 'to' && !$arr['obj']['oid'])
+		{
+			$prop['value'] = time();
+		}
 		return PROP_OK;
 	}
 
