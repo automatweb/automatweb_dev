@@ -142,7 +142,7 @@
             <group>advanced</group>
             <ch_value>1</ch_value>
             <table>objects</table>
-            <caption>Näita ainult leadi (kasutusel Nädalas)</caption>
+            <caption>Näita ainult leadi</caption>
       </property>
       <property>
             <name>grkeywords</name>
