@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.8 2004/06/04 11:49:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.9 2004/06/09 11:44:58 kristo Exp $
 // language.aw - Keel 
 /*
 
@@ -340,7 +340,9 @@ class language extends class_base
 		$loid = aw_global_get("lang_oid");
 		if ($loid)
 		{
+			aw_disable_acl();
 			$o = obj($loid);
+			aw_restore_acl();
 			$txts = new aw_array($o->meta("texts"));
 			$that->vars($txts->get());
 		}
