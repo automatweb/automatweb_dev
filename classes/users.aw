@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.44 2002/09/04 17:52:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.45 2002/09/12 15:27:27 duke Exp $
 // users.aw - User Management
 classload("users_user","config","form","objects","file");
 
@@ -42,7 +42,8 @@ class users extends users_user
 		// return a single key if asked
 		if ($key)
 		{
-			$retval = $tmp[$key];
+			$retval = $retval[$key];
+			//$retval = $tmp[$key];
 		}
 		// otherwise the whole config block
 		return $retval;
