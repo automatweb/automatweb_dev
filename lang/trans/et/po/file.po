@@ -1,0 +1,204 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 14:23:57 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/file.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/file.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/file.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/file.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/file.aw:prop_needs_translation
+msgid "Omaduse Vajab tõlget (needs_translation) caption"
+msgstr ""
+
+#: classes/file.aw:prop_needs_translation_comment
+msgid "Omaduse Vajab tõlget (needs_translation) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_needs_translation_help
+msgid "Omaduse Vajab tõlget (needs_translation) help"
+msgstr ""
+
+#: classes/file.aw:prop_is_translated
+msgid "Omaduse Tõlge kinnitatud (is_translated) caption"
+msgstr ""
+
+#: classes/file.aw:prop_is_translated_comment
+msgid "Omaduse Tõlge kinnitatud (is_translated) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_is_translated_help
+msgid "Omaduse Tõlge kinnitatud (is_translated) help"
+msgstr ""
+
+#: classes/file.aw:prop_filename
+msgid "Omaduse Faili nimi (filename) caption"
+msgstr ""
+
+#: classes/file.aw:prop_filename_comment
+msgid "Omaduse Faili nimi (filename) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_filename_help
+msgid "Omaduse Faili nimi (filename) help"
+msgstr ""
+
+#: classes/file.aw:prop_file
+msgid "Omaduse Vali fail (file) caption"
+msgstr ""
+
+#: classes/file.aw:prop_file_comment
+msgid "Omaduse Vali fail (file) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_file_help
+msgid "Omaduse Vali fail (file) help"
+msgstr ""
+
+#: classes/file.aw:prop_type
+msgid "Omaduse  (type) caption"
+msgstr ""
+
+#: classes/file.aw:prop_type_comment
+msgid "Omaduse  (type) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_type_help
+msgid "Omaduse  (type) help"
+msgstr ""
+
+#: classes/file.aw:prop_comment
+msgid "Omaduse Faili allkiri (comment) caption"
+msgstr ""
+
+#: classes/file.aw:prop_comment_comment
+msgid "Omaduse Faili allkiri (comment) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_comment_help
+msgid "Omaduse Faili allkiri (comment) help"
+msgstr ""
+
+#: classes/file.aw:prop_file_url
+msgid "Omaduse Url, kust saadakse faili sisu (file_url) caption"
+msgstr ""
+
+#: classes/file.aw:prop_file_url_comment
+msgid "Omaduse Url, kust saadakse faili sisu (file_url) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_file_url_help
+msgid "Omaduse Url, kust saadakse faili sisu (file_url) help"
+msgstr ""
+
+#: classes/file.aw:prop_showal
+msgid "Omaduse Näita kohe (showal) caption"
+msgstr ""
+
+#: classes/file.aw:prop_showal_comment
+msgid "Omaduse Näita kohe (showal) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_showal_help
+msgid "Omaduse Näita kohe (showal) help"
+msgstr ""
+
+#: classes/file.aw:prop_newwindow
+msgid "Omaduse Uues aknas (newwindow) caption"
+msgstr ""
+
+#: classes/file.aw:prop_newwindow_comment
+msgid "Omaduse Uues aknas (newwindow) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_newwindow_help
+msgid "Omaduse Uues aknas (newwindow) help"
+msgstr ""
+
+#: classes/file.aw:prop_show_framed
+msgid "Omaduse Näita saidi raamis (show_framed) caption"
+msgstr ""
+
+#: classes/file.aw:prop_show_framed_comment
+msgid "Omaduse Näita saidi raamis (show_framed) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_show_framed_help
+msgid "Omaduse Näita saidi raamis (show_framed) help"
+msgstr ""
+
+#: classes/file.aw:prop_j_time
+msgid "Omaduse Jõustumise kuupäev (j_time) caption"
+msgstr ""
+
+#: classes/file.aw:prop_j_time_comment
+msgid "Omaduse Jõustumise kuupäev (j_time) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_j_time_help
+msgid "Omaduse Jõustumise kuupäev (j_time) help"
+msgstr ""
+
+#: classes/file.aw:prop_act_date
+msgid "Omaduse Avaldamise kuupäev (act_date) caption"
+msgstr ""
+
+#: classes/file.aw:prop_act_date_comment
+msgid "Omaduse Avaldamise kuupäev (act_date) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_act_date_help
+msgid "Omaduse Avaldamise kuupäev (act_date) help"
+msgstr ""
+
+#: classes/file.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/file.aw:group_settings
+msgid "Grupi Seadistused (settings) pealkiri"
+msgstr ""
+
+#: classes/file.aw:group_dates
+msgid "Grupi Ajad (dates) pealkiri"
+msgstr ""
+
+#: classes/file.aw:rel_RELTYPE_KEYWORD
+msgid "Seose Märksõna (RELTYPE_KEYWORD) tekst"
+msgstr ""
+
+#: classes/file.aw:106
+msgid "fail puudub"
+msgstr ""
+
+#: classes/file.aw:948
+msgid "Need either id or parent"
+msgstr ""
+

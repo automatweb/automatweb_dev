@@ -1,0 +1,40 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 14:23:49 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/vcl/calendar.aw:486
+msgid "Päev"
+msgstr ""
+
+#: classes/vcl/calendar.aw:487
+msgid "Nädal"
+msgstr ""
+
+#: classes/vcl/calendar.aw:488
+msgid "Kuu"
+msgstr ""
+
+#: classes/vcl/calendar.aw:489
+msgid "Ülevaade"
+msgstr ""
+
+#: classes/vcl/calendar.aw:531
+msgid "Toimetused"
+msgstr ""
+
+#: classes/vcl/calendar.aw:1201
+msgid "Eelmine kuu"
+msgstr ""
+
+#: classes/vcl/calendar.aw:1202
+msgid "Järgmine kuu"
+msgstr ""
+

@@ -1,0 +1,296 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 14:23:35 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/contentmgmt/links.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_comment
+msgid "Omaduse Kommentaar lingikogusse (comment) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_comment_comment
+msgid "Omaduse Kommentaar lingikogusse (comment) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_comment_help
+msgid "Omaduse Kommentaar lingikogusse (comment) help"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_url
+msgid "Omaduse URL (url) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_url_comment
+msgid "Omaduse URL (url) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_url_help
+msgid "Omaduse URL (url) help"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_docid
+msgid "Omaduse  (docid) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_docid_comment
+msgid "Omaduse  (docid) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_docid_help
+msgid "Omaduse  (docid) help"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_hits
+msgid "Omaduse Klikke (hits) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_hits_comment
+msgid "Omaduse Klikke (hits) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_hits_help
+msgid "Omaduse Klikke (hits) help"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_url_int_text
+msgid "Omaduse Saidi sisene link (url_int_text) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_url_int_text_comment
+msgid "Omaduse Saidi sisene link (url_int_text) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_url_int_text_help
+msgid "Omaduse Saidi sisene link (url_int_text) help"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_alt
+msgid "Omaduse Alt tekst (alt) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_alt_comment
+msgid "Omaduse Alt tekst (alt) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_alt_help
+msgid "Omaduse Alt tekst (alt) help"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_newwindow
+msgid "Omaduse Uues aknas (newwindow) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_newwindow_comment
+msgid "Omaduse Uues aknas (newwindow) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_newwindow_help
+msgid "Omaduse Uues aknas (newwindow) help"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_doclinkcollection
+msgid "Omaduse Dokumendi lingikogusse (doclinkcollection) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_doclinkcollection_comment
+msgid "Omaduse Dokumendi lingikogusse (doclinkcollection) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_doclinkcollection_help
+msgid "Omaduse Dokumendi lingikogusse (doclinkcollection) help"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_use_javascript
+msgid "Omaduse Kasuta javascripti (use_javascript) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_use_javascript_comment
+msgid "Omaduse Kasuta javascripti (use_javascript) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_use_javascript_help
+msgid "Omaduse Kasuta javascripti (use_javascript) help"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_newwinwidth
+msgid "Omaduse Uue akna laius (newwinwidth) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_newwinwidth_comment
+msgid "Omaduse Uue akna laius (newwinwidth) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_newwinwidth_help
+msgid "Omaduse Uue akna laius (newwinwidth) help"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_newwinheight
+msgid "Omaduse Uue akna k&otilde;rgus (newwinheight) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_newwinheight_comment
+msgid "Omaduse Uue akna k&otilde;rgus (newwinheight) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_newwinheight_help
+msgid "Omaduse Uue akna k&otilde;rgus (newwinheight) help"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_newwintoolbar
+msgid "Omaduse Toolbar (newwintoolbar) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_newwintoolbar_comment
+msgid "Omaduse Toolbar (newwintoolbar) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_newwintoolbar_help
+msgid "Omaduse Toolbar (newwintoolbar) help"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_newwinlocation
+msgid "Omaduse Address bar (newwinlocation) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_newwinlocation_comment
+msgid "Omaduse Address bar (newwinlocation) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_newwinlocation_help
+msgid "Omaduse Address bar (newwinlocation) help"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_newwinmenu
+msgid "Omaduse Men&uuml;&uuml;d (newwinmenu) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_newwinmenu_comment
+msgid "Omaduse Men&uuml;&uuml;d (newwinmenu) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_newwinmenu_help
+msgid "Omaduse Men&uuml;&uuml;d (newwinmenu) help"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_newwinscroll
+msgid "Omaduse Skrollbarid (newwinscroll) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_newwinscroll_comment
+msgid "Omaduse Skrollbarid (newwinscroll) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_newwinscroll_help
+msgid "Omaduse Skrollbarid (newwinscroll) help"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_link_image
+msgid "Omaduse Pilt (link_image) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_link_image_comment
+msgid "Omaduse Pilt (link_image) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_link_image_help
+msgid "Omaduse Pilt (link_image) help"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_link_image_show
+msgid "Omaduse  (link_image_show) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_link_image_show_comment
+msgid "Omaduse  (link_image_show) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_link_image_show_help
+msgid "Omaduse  (link_image_show) help"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_link_image_check_active
+msgid "Omaduse Pilt aktiivne (link_image_check_active) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_link_image_check_active_comment
+msgid "Omaduse Pilt aktiivne (link_image_check_active) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_link_image_check_active_help
+msgid "Omaduse Pilt aktiivne (link_image_check_active) help"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_link_image_active_until
+msgid "Omaduse Pilt aktiivne kuni (link_image_active_until) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_link_image_active_until_comment
+msgid "Omaduse Pilt aktiivne kuni (link_image_active_until) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_link_image_active_until_help
+msgid "Omaduse Pilt aktiivne kuni (link_image_active_until) help"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:group_Javascript
+msgid "Grupi Javascript (Javascript) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:group_Pilt
+msgid "Grupi Pilt (Pilt) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:121 classes/contentmgmt/links.aw:166
+msgid "Vali see"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:125
+msgid "Nimetus"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:130
+msgid "Asukoht"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:135
+msgid "Looja"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:140
+msgid "Viimati muudetud"
+msgstr ""
+

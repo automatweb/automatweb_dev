@@ -1,0 +1,180 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 14:23:42 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/import/document_import.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_file
+msgid "Omaduse XML Fail (file) caption"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_file_comment
+msgid "Omaduse XML Fail (file) kommentaar"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_file_help
+msgid "Omaduse XML Fail (file) help"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_d_period
+msgid "Omaduse Periood (d_period) caption"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_d_period_comment
+msgid "Omaduse Periood (d_period) kommentaar"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_d_period_help
+msgid "Omaduse Periood (d_period) help"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_found
+msgid "Omaduse Leitud dokumendid (found) caption"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_found_comment
+msgid "Omaduse Leitud dokumendid (found) kommentaar"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_found_help
+msgid "Omaduse Leitud dokumendid (found) help"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_do_import
+msgid "Omaduse Impordi (do_import) caption"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_do_import_comment
+msgid "Omaduse Impordi (do_import) kommentaar"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_do_import_help
+msgid "Omaduse Impordi (do_import) help"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_location_tags
+msgid "Omaduse Asukohta m&auml;&auml;ravad tagid (formaat: rubriik_aktuaalne=890,rubriik_kala=900) (location_tags) caption"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_location_tags_comment
+msgid "Omaduse Asukohta m&auml;&auml;ravad tagid (formaat: rubriik_aktuaalne=890,rubriik_kala=900) (location_tags) kommentaar"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_location_tags_help
+msgid "Omaduse Asukohta m&auml;&auml;ravad tagid (formaat: rubriik_aktuaalne=890,rubriik_kala=900) (location_tags) help"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_field_tags
+msgid "Omaduse Sisuv&auml;lju m&auml;&auml;ravad tagid (formaat: rubriik_aktuaalne=890,rubriik_kala=900) (field_tags) caption"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_field_tags_comment
+msgid "Omaduse Sisuv&auml;lju m&auml;&auml;ravad tagid (formaat: rubriik_aktuaalne=890,rubriik_kala=900) (field_tags) kommentaar"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_field_tags_help
+msgid "Omaduse Sisuv&auml;lju m&auml;&auml;ravad tagid (formaat: rubriik_aktuaalne=890,rubriik_kala=900) (field_tags) help"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_end_tag
+msgid "Omaduse dokumenti l&otilde;petav tag (end_tag) caption"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_end_tag_comment
+msgid "Omaduse dokumenti l&otilde;petav tag (end_tag) kommentaar"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_end_tag_help
+msgid "Omaduse dokumenti l&otilde;petav tag (end_tag) help"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_content_transform
+msgid "Omaduse  (content_transform) caption"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_content_transform_comment
+msgid "Omaduse  (content_transform) kommentaar"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_content_transform_help
+msgid "Omaduse  (content_transform) help"
+msgstr ""
+
+#: classes/import/document_import.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/import/document_import.aw:group_settings
+msgid "Grupi Seaded (settings) pealkiri"
+msgstr ""
+
+#: classes/import/document_import.aw:rel_RELTYPE_DOCIMP_PERIOD
+msgid "Seose Periood (RELTYPE_DOCIMP_PERIOD) tekst"
+msgstr ""
+
+#: classes/import/document_import.aw:192
+msgid "Asukoht"
+msgstr ""
+
+#: classes/import/document_import.aw:196
+msgid "Pealkiri"
+msgstr ""
+
+#: classes/import/document_import.aw:200
+msgid "Autor"
+msgstr ""
+
+#: classes/import/document_import.aw:204
+msgid "Sisu"
+msgstr ""
+
+#: classes/import/document_import.aw:268
+msgid "Tagi %s sisu ette pane "
+msgstr ""
+
+#: classes/import/document_import.aw:280
+msgid "Tagi %s sisu taha pane "
+msgstr ""
+

@@ -1,0 +1,420 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 14:23:09 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/commune/profile.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_online
+msgid "Omaduse Online (online) caption"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_online_comment
+msgid "Omaduse Online (online) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_online_help
+msgid "Omaduse Online (online) help"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_age
+msgid "Omaduse Vanus (age) caption"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_age_comment
+msgid "Omaduse Vanus (age) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_age_help
+msgid "Omaduse Vanus (age) help"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_avatar_image
+msgid "Omaduse Avatar (avatar_image) caption"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_avatar_image_comment
+msgid "Omaduse Avatar (avatar_image) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_avatar_image_help
+msgid "Omaduse Avatar (avatar_image) help"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_user_text1
+msgid "Omaduse Telefon (user_text1) caption"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_user_text1_comment
+msgid "Omaduse Telefon (user_text1) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_user_text1_help
+msgid "Omaduse Telefon (user_text1) help"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_user_text2
+msgid "Omaduse ICQ (user_text2) caption"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_user_text2_comment
+msgid "Omaduse ICQ (user_text2) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_user_text2_help
+msgid "Omaduse ICQ (user_text2) help"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_user_text3
+msgid "Omaduse MSN (user_text3) caption"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_user_text3_comment
+msgid "Omaduse MSN (user_text3) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_user_text3_help
+msgid "Omaduse MSN (user_text3) help"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_user_blob1
+msgid "Omaduse Lisainfo (user_blob1) caption"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_user_blob1_comment
+msgid "Omaduse Lisainfo (user_blob1) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_user_blob1_help
+msgid "Omaduse Lisainfo (user_blob1) help"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_user_blob2
+msgid "Omaduse Lisainfo sõpradele (user_blob2) caption"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_user_blob2_comment
+msgid "Omaduse Lisainfo sõpradele (user_blob2) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_user_blob2_help
+msgid "Omaduse Lisainfo sõpradele (user_blob2) help"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_user_check1
+msgid "Omaduse E-post varjatud (user_check1) caption"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_user_check1_comment
+msgid "Omaduse E-post varjatud (user_check1) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_user_check1_help
+msgid "Omaduse E-post varjatud (user_check1) help"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_height
+msgid "Omaduse Kasv (height) caption"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_height_comment
+msgid "Omaduse Kasv (height) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_height_help
+msgid "Omaduse Kasv (height) help"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_weight
+msgid "Omaduse Kaal (weight) caption"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_weight_comment
+msgid "Omaduse Kaal (weight) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_weight_help
+msgid "Omaduse Kaal (weight) help"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_eyes_color
+msgid "Omaduse Silmade värv (eyes_color) caption"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_eyes_color_comment
+msgid "Omaduse Silmade värv (eyes_color) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_eyes_color_help
+msgid "Omaduse Silmade värv (eyes_color) help"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_hair_color
+msgid "Omaduse Juuksevärv (hair_color) caption"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_hair_color_comment
+msgid "Omaduse Juuksevärv (hair_color) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_hair_color_help
+msgid "Omaduse Juuksevärv (hair_color) help"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_hair_type
+msgid "Omaduse Juuste tüüp (hair_type) caption"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_hair_type_comment
+msgid "Omaduse Juuste tüüp (hair_type) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_hair_type_help
+msgid "Omaduse Juuste tüüp (hair_type) help"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_body_type
+msgid "Omaduse Keha tüüp (body_type) caption"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_body_type_comment
+msgid "Omaduse Keha tüüp (body_type) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_body_type_help
+msgid "Omaduse Keha tüüp (body_type) help"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_user_text5
+msgid "Omaduse Koduleht (user_text5) caption"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_user_text5_comment
+msgid "Omaduse Koduleht (user_text5) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_user_text5_help
+msgid "Omaduse Koduleht (user_text5) help"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_hobbies
+msgid "Omaduse Huvid/harrastused (hobbies) caption"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_hobbies_comment
+msgid "Omaduse Huvid/harrastused (hobbies) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_hobbies_help
+msgid "Omaduse Huvid/harrastused (hobbies) help"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_sexual_orientation
+msgid "Omaduse Seksuaalne orientatsioon (sexual_orientation) caption"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_sexual_orientation_comment
+msgid "Omaduse Seksuaalne orientatsioon (sexual_orientation) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_sexual_orientation_help
+msgid "Omaduse Seksuaalne orientatsioon (sexual_orientation) help"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_alcohol
+msgid "Omaduse Alkoholi tarbimine (alcohol) caption"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_alcohol_comment
+msgid "Omaduse Alkoholi tarbimine (alcohol) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_alcohol_help
+msgid "Omaduse Alkoholi tarbimine (alcohol) help"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_tobacco
+msgid "Omaduse Tubaka tarbimine (tobacco) caption"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_tobacco_comment
+msgid "Omaduse Tubaka tarbimine (tobacco) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_tobacco_help
+msgid "Omaduse Tubaka tarbimine (tobacco) help"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_user_field2
+msgid "Omaduse Haridustase (user_field2) caption"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_user_field2_comment
+msgid "Omaduse Haridustase (user_field2) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_user_field2_help
+msgid "Omaduse Haridustase (user_field2) help"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_occupation
+msgid "Omaduse Tegevusala (occupation) caption"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_occupation_comment
+msgid "Omaduse Tegevusala (occupation) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_occupation_help
+msgid "Omaduse Tegevusala (occupation) help"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_user_text4
+msgid "Omaduse Elukutse (user_text4) caption"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_user_text4_comment
+msgid "Omaduse Elukutse (user_text4) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_user_text4_help
+msgid "Omaduse Elukutse (user_text4) help"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_comments
+msgid "Omaduse Kommentaarid (comments) caption"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_comments_comment
+msgid "Omaduse Kommentaarid (comments) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:prop_comments_help
+msgid "Omaduse Kommentaarid (comments) help"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:group_settings
+msgid "Grupi Seaded (settings) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:group_settings_general
+msgid "Grupi Üldandmed (settings_general) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:group_settings_outlook
+msgid "Grupi Välimus (settings_outlook) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:group_settings_hobbies
+msgid "Grupi Harrastused (settings_hobbies) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:group_settings_habits
+msgid "Grupi Harjumused (settings_habits) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:group_settings_occupation
+msgid "Grupi Kool/Töö (settings_occupation) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:group_comments
+msgid "Grupi Kommentaarid (comments) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:rel_RELTYPE_PRF_EYES_COLOR
+msgid "Seose Silmade värv (RELTYPE_PRF_EYES_COLOR) tekst"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:rel_RELTYPE_PRF_HAIR_COLOR
+msgid "Seose Juuksevärv (RELTYPE_PRF_HAIR_COLOR) tekst"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:rel_RELTYPE_PRF_HAIR_TYPE
+msgid "Seose Juuksetüüp (RELTYPE_PRF_HAIR_TYPE) tekst"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:rel_RELTYPE_PRF_BODY_TYPE
+msgid "Seose Keha tüüp (RELTYPE_PRF_BODY_TYPE) tekst"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:rel_RELTYPE_PRF_SEX_ORIENT
+msgid "Seose Seksuaalne kalduvus (RELTYPE_PRF_SEX_ORIENT) tekst"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:rel_RELTYPE_PRF_ALCOHOL
+msgid "Seose Alkoholi tarbimine (RELTYPE_PRF_ALCOHOL) tekst"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:rel_RELTYPE_PRF_TOBACCO
+msgid "Seose Tubaka tarbimine (RELTYPE_PRF_TOBACCO) tekst"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:rel_RELTYPE_PERSON
+msgid "Seose Isikuobjekt (RELTYPE_PERSON) tekst"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:rel_RELTYPE_PRF_HEIGHT
+msgid "Seose Pikkus (RELTYPE_PRF_HEIGHT) tekst"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:rel_RELTYPE_PRF_WEIGHT
+msgid "Seose Kaal (RELTYPE_PRF_WEIGHT) tekst"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:rel_RELTYPE_IMAGE
+msgid "Seose Pilt (RELTYPE_IMAGE) tekst"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:rel_RELTYPE_AVATAR
+msgid "Seose Avatar (RELTYPE_AVATAR) tekst"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:rel_RELTYPE_CFG_MANAGER
+msgid "Seose Seadete haldur (RELTYPE_CFG_MANAGER) tekst"
+msgstr ""
+

@@ -1,0 +1,52 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 14:22:54 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/crm/crm_city.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/crm/crm_city.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_city.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/crm/crm_city.aw:prop_name
+msgid "Omaduse Linna nimetus (name) caption"
+msgstr ""
+
+#: classes/crm/crm_city.aw:prop_name_comment
+msgid "Omaduse Linna nimetus (name) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_city.aw:prop_name_help
+msgid "Omaduse Linna nimetus (name) help"
+msgstr ""
+
+#: classes/crm/crm_city.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/crm/crm_city.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_city.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/crm/crm_city.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+

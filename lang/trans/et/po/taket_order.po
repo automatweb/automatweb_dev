@@ -1,0 +1,128 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 14:22:52 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/taket/taket_order.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/taket/taket_order.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/taket/taket_order.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/taket/taket_order.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/taket/taket_order.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/taket/taket_order.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/taket/taket_order.aw:prop_comments
+msgid "Omaduse  (comments) caption"
+msgstr ""
+
+#: classes/taket/taket_order.aw:prop_comments_comment
+msgid "Omaduse  (comments) kommentaar"
+msgstr ""
+
+#: classes/taket/taket_order.aw:prop_comments_help
+msgid "Omaduse  (comments) help"
+msgstr ""
+
+#: classes/taket/taket_order.aw:prop_transport
+msgid "Omaduse  (transport) caption"
+msgstr ""
+
+#: classes/taket/taket_order.aw:prop_transport_comment
+msgid "Omaduse  (transport) kommentaar"
+msgstr ""
+
+#: classes/taket/taket_order.aw:prop_transport_help
+msgid "Omaduse  (transport) help"
+msgstr ""
+
+#: classes/taket/taket_order.aw:prop_timestmp
+msgid "Omaduse  (timestmp) caption"
+msgstr ""
+
+#: classes/taket/taket_order.aw:prop_timestmp_comment
+msgid "Omaduse  (timestmp) kommentaar"
+msgstr ""
+
+#: classes/taket/taket_order.aw:prop_timestmp_help
+msgid "Omaduse  (timestmp) help"
+msgstr ""
+
+#: classes/taket/taket_order.aw:prop_price
+msgid "Omaduse  (price) caption"
+msgstr ""
+
+#: classes/taket/taket_order.aw:prop_price_comment
+msgid "Omaduse  (price) kommentaar"
+msgstr ""
+
+#: classes/taket/taket_order.aw:prop_price_help
+msgid "Omaduse  (price) help"
+msgstr ""
+
+#: classes/taket/taket_order.aw:prop_contact
+msgid "Omaduse  (contact) caption"
+msgstr ""
+
+#: classes/taket/taket_order.aw:prop_contact_comment
+msgid "Omaduse  (contact) kommentaar"
+msgstr ""
+
+#: classes/taket/taket_order.aw:prop_contact_help
+msgid "Omaduse  (contact) help"
+msgstr ""
+
+#: classes/taket/taket_order.aw:prop_status
+msgid "Omaduse  (status) caption"
+msgstr ""
+
+#: classes/taket/taket_order.aw:prop_status_comment
+msgid "Omaduse  (status) kommentaar"
+msgstr ""
+
+#: classes/taket/taket_order.aw:prop_status_help
+msgid "Omaduse  (status) help"
+msgstr ""
+
+#: classes/taket/taket_order.aw:prop_user_id
+msgid "Omaduse  (user_id) caption"
+msgstr ""
+
+#: classes/taket/taket_order.aw:prop_user_id_comment
+msgid "Omaduse  (user_id) kommentaar"
+msgstr ""
+
+#: classes/taket/taket_order.aw:prop_user_id_help
+msgid "Omaduse  (user_id) help"
+msgstr ""
+
+#: classes/taket/taket_order.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/taket/taket_order.aw:group_
+msgid "Grupi  () pealkiri"
+msgstr ""
+

@@ -1,0 +1,264 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 14:23:47 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/translate/site_translation.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_utr_toolbar
+msgid "Omaduse TB (utr_toolbar) caption"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_utr_toolbar_comment
+msgid "Omaduse TB (utr_toolbar) kommentaar"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_utr_toolbar_help
+msgid "Omaduse TB (utr_toolbar) help"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_tr_toolbar
+msgid "Omaduse TB (tr_toolbar) caption"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_tr_toolbar_comment
+msgid "Omaduse TB (tr_toolbar) kommentaar"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_tr_toolbar_help
+msgid "Omaduse TB (tr_toolbar) help"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_inp_toolbar
+msgid "Omaduse TB (inp_toolbar) caption"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_inp_toolbar_comment
+msgid "Omaduse TB (inp_toolbar) kommentaar"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_inp_toolbar_help
+msgid "Omaduse TB (inp_toolbar) help"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_baselang
+msgid "Omaduse Baaskeel (baselang) caption"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_baselang_comment
+msgid "Omaduse Baaskeel (baselang) kommentaar"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_baselang_help
+msgid "Omaduse Baaskeel (baselang) help"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_targetlang
+msgid "Omaduse Sihtkeel (targetlang) caption"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_targetlang_comment
+msgid "Omaduse Sihtkeel (targetlang) kommentaar"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_targetlang_help
+msgid "Omaduse Sihtkeel (targetlang) help"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_targetlang_all
+msgid "Omaduse Kas kasutada k&otilde;iki keeli sihtkeelteks (targetlang_all) caption"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_targetlang_all_comment
+msgid "Omaduse Kas kasutada k&otilde;iki keeli sihtkeelteks (targetlang_all) kommentaar"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_targetlang_all_help
+msgid "Omaduse Kas kasutada k&otilde;iki keeli sihtkeelteks (targetlang_all) help"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_translated_all_langs
+msgid "Omaduse Kas objekt ilmub T&otilde;lgitud tabi alla ainult siis kui on t&otilde;litud k&otilde;kidesse keeltesse (translated_all_langs) caption"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_translated_all_langs_comment
+msgid "Omaduse Kas objekt ilmub T&otilde;lgitud tabi alla ainult siis kui on t&otilde;litud k&otilde;kidesse keeltesse (translated_all_langs) kommentaar"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_translated_all_langs_help
+msgid "Omaduse Kas objekt ilmub T&otilde;lgitud tabi alla ainult siis kui on t&otilde;litud k&otilde;kidesse keeltesse (translated_all_langs) help"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_translated
+msgid "Omaduse Tõlgitud (translated) caption"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_translated_comment
+msgid "Omaduse Tõlgitud (translated) kommentaar"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_translated_help
+msgid "Omaduse Tõlgitud (translated) help"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_untranslated
+msgid "Omaduse Tõlkimata (untranslated) caption"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_untranslated_comment
+msgid "Omaduse Tõlkimata (untranslated) kommentaar"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_untranslated_help
+msgid "Omaduse Tõlkimata (untranslated) help"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_in_progress
+msgid "Omaduse T&ouml;&ouml;s (in_progress) caption"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_in_progress_comment
+msgid "Omaduse T&ouml;&ouml;s (in_progress) kommentaar"
+msgstr ""
+
+#: classes/translate/site_translation.aw:prop_in_progress_help
+msgid "Omaduse T&ouml;&ouml;s (in_progress) help"
+msgstr ""
+
+#: classes/translate/site_translation.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/translate/site_translation.aw:group_translated
+msgid "Grupi Tõlgitud (translated) pealkiri"
+msgstr ""
+
+#: classes/translate/site_translation.aw:group_untranslated
+msgid "Grupi Tõlkimata (untranslated) pealkiri"
+msgstr ""
+
+#: classes/translate/site_translation.aw:group_in_progress
+msgid "Grupi T&ouml;&ouml;s (in_progress) pealkiri"
+msgstr ""
+
+#: classes/translate/site_translation.aw:group_utr_all
+msgid "Grupi Kõik (utr_all) pealkiri"
+msgstr ""
+
+#: classes/translate/site_translation.aw:group_utr_day
+msgid "Grupi Viimane päev (utr_day) pealkiri"
+msgstr ""
+
+#: classes/translate/site_translation.aw:group_utr_week
+msgid "Grupi Viimane nädal (utr_week) pealkiri"
+msgstr ""
+
+#: classes/translate/site_translation.aw:group_utr_month
+msgid "Grupi Viimane kuu (utr_month) pealkiri"
+msgstr ""
+
+#: classes/translate/site_translation.aw:group_ipr_all
+msgid "Grupi Kõik (ipr_all) pealkiri"
+msgstr ""
+
+#: classes/translate/site_translation.aw:group_ipr_day
+msgid "Grupi Viimane päev (ipr_day) pealkiri"
+msgstr ""
+
+#: classes/translate/site_translation.aw:group_ipr_week
+msgid "Grupi Viimane nädal (ipr_week) pealkiri"
+msgstr ""
+
+#: classes/translate/site_translation.aw:group_ipr_month
+msgid "Grupi Viimane kuu (ipr_month) pealkiri"
+msgstr ""
+
+#: classes/translate/site_translation.aw:group_tr_all
+msgid "Grupi Kõik (tr_all) pealkiri"
+msgstr ""
+
+#: classes/translate/site_translation.aw:group_tr_day
+msgid "Grupi Viimane päev (tr_day) pealkiri"
+msgstr ""
+
+#: classes/translate/site_translation.aw:group_tr_week
+msgid "Grupi Viimane nädal (tr_week) pealkiri"
+msgstr ""
+
+#: classes/translate/site_translation.aw:group_tr_month
+msgid "Grupi Viimane kuu (tr_month) pealkiri"
+msgstr ""
+
+#: classes/translate/site_translation.aw:rel_RELTYPE_CLASS
+msgid "Seose klass (RELTYPE_CLASS) tekst"
+msgstr ""
+
+#: classes/translate/site_translation.aw:224 classes/translate/site_translation.aw:370 classes/translate/site_translation.aw:515
+msgid "ID"
+msgstr ""
+
+#: classes/translate/site_translation.aw:230 classes/translate/site_translation.aw:376 classes/translate/site_translation.aw:521
+msgid "Originaali nimi"
+msgstr ""
+
+#: classes/translate/site_translation.aw:236 classes/translate/site_translation.aw:382 classes/translate/site_translation.aw:527
+msgid "Klass"
+msgstr ""
+
+#: classes/translate/site_translation.aw:243 classes/translate/site_translation.aw:389 classes/translate/site_translation.aw:534
+msgid "Baaskeel"
+msgstr ""
+
+#: classes/translate/site_translation.aw:250
+msgid "T&otilde;lgi"
+msgstr ""
+
+#: classes/translate/site_translation.aw:396 classes/translate/site_translation.aw:541
+msgid "Vaata t&otilde;lkeid"
+msgstr ""
+
+#: classes/translate/site_translation.aw:650 classes/translate/site_translation.aw:671 classes/translate/site_translation.aw:692
+msgid "Salvesta"
+msgstr ""
+

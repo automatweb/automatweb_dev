@@ -1,0 +1,1628 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 14:23:09 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/commune/commune.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_locations
+msgid "Omaduse Asukohad (locations) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_locations_comment
+msgid "Omaduse Asukohad (locations) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_locations_help
+msgid "Omaduse Asukohad (locations) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_profile_view
+msgid "Omaduse Vaata profiili (profile_view) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_profile_view_comment
+msgid "Omaduse Vaata profiili (profile_view) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_profile_view_help
+msgid "Omaduse Vaata profiili (profile_view) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_profile_change
+msgid "Omaduse Minu profiil (profile_change) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_profile_change_comment
+msgid "Omaduse Minu profiil (profile_change) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_profile_change_help
+msgid "Omaduse Minu profiil (profile_change) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_all_profiles_toolbar
+msgid "Omaduse Profiilide haldus (all_profiles_toolbar) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_all_profiles_toolbar_comment
+msgid "Omaduse Profiilide haldus (all_profiles_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_all_profiles_toolbar_help
+msgid "Omaduse Profiilide haldus (all_profiles_toolbar) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_all_profiles
+msgid "Omaduse Kõik minu profiilid (all_profiles) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_all_profiles_comment
+msgid "Omaduse Kõik minu profiilid (all_profiles) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_all_profiles_help
+msgid "Omaduse Kõik minu profiilid (all_profiles) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_my_images
+msgid "Omaduse Minu pildid (my_images) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_my_images_comment
+msgid "Omaduse Minu pildid (my_images) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_my_images_help
+msgid "Omaduse Minu pildid (my_images) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_switch_profile
+msgid "Omaduse Vaheta profiili piltide jaoks (switch_profile) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_switch_profile_comment
+msgid "Omaduse Vaheta profiili piltide jaoks (switch_profile) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_switch_profile_help
+msgid "Omaduse Vaheta profiili piltide jaoks (switch_profile) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_image_comments_toolbar
+msgid "Omaduse Kommentaaride haldus (image_comments_toolbar) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_image_comments_toolbar_comment
+msgid "Omaduse Kommentaaride haldus (image_comments_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_image_comments_toolbar_help
+msgid "Omaduse Kommentaaride haldus (image_comments_toolbar) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_show_image_comments
+msgid "Omaduse Pildi kommentaarid (show_image_comments) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_show_image_comments_comment
+msgid "Omaduse Pildi kommentaarid (show_image_comments) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_show_image_comments_help
+msgid "Omaduse Pildi kommentaarid (show_image_comments) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_head1
+msgid "Omaduse Muuda kasutajate sirvimise sätteid (head1) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_head1_comment
+msgid "Omaduse Muuda kasutajate sirvimise sätteid (head1) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_head1_help
+msgid "Omaduse Muuda kasutajate sirvimise sätteid (head1) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_browsing_conditions
+msgid "Omaduse  (browsing_conditions) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_browsing_conditions_comment
+msgid "Omaduse  (browsing_conditions) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_browsing_conditions_help
+msgid "Omaduse  (browsing_conditions) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_head2
+msgid "Omaduse Muuda kuvamise sätteid (head2) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_head2_comment
+msgid "Omaduse Muuda kuvamise sätteid (head2) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_head2_help
+msgid "Omaduse Muuda kuvamise sätteid (head2) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_view_conditions
+msgid "Omaduse  (view_conditions) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_view_conditions_comment
+msgid "Omaduse  (view_conditions) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_view_conditions_help
+msgid "Omaduse  (view_conditions) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_head3
+msgid "Omaduse Muuda teadete saamise/saatmise sätteid (head3) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_head3_comment
+msgid "Omaduse Muuda teadete saamise/saatmise sätteid (head3) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_head3_help
+msgid "Omaduse Muuda teadete saamise/saatmise sätteid (head3) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_message_conditions
+msgid "Omaduse  (message_conditions) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_message_conditions_comment
+msgid "Omaduse  (message_conditions) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_message_conditions_help
+msgid "Omaduse  (message_conditions) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_head4
+msgid "Omaduse Sõbralist (head4) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_head4_comment
+msgid "Omaduse Sõbralist (head4) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_head4_help
+msgid "Omaduse Sõbralist (head4) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_friend_list_toolbar
+msgid "Omaduse Sõprade haldus (friend_list_toolbar) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_friend_list_toolbar_comment
+msgid "Omaduse Sõprade haldus (friend_list_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_friend_list_toolbar_help
+msgid "Omaduse Sõprade haldus (friend_list_toolbar) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_friend_list
+msgid "Omaduse Sõbralist (friend_list) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_friend_list_comment
+msgid "Omaduse Sõbralist (friend_list) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_friend_list_help
+msgid "Omaduse Sõbralist (friend_list) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_head5
+msgid "Omaduse Ignoreeritute list (head5) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_head5_comment
+msgid "Omaduse Ignoreeritute list (head5) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_head5_help
+msgid "Omaduse Ignoreeritute list (head5) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_ignored_list_toolbar
+msgid "Omaduse Ignoreeritute haldus (ignored_list_toolbar) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_ignored_list_toolbar_comment
+msgid "Omaduse Ignoreeritute haldus (ignored_list_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_ignored_list_toolbar_help
+msgid "Omaduse Ignoreeritute haldus (ignored_list_toolbar) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_ignored_list
+msgid "Omaduse Ignoreeritute list (ignored_list) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_ignored_list_comment
+msgid "Omaduse Ignoreeritute list (ignored_list) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_ignored_list_help
+msgid "Omaduse Ignoreeritute list (ignored_list) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_head6
+msgid "Omaduse Blokeeritute list (head6) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_head6_comment
+msgid "Omaduse Blokeeritute list (head6) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_head6_help
+msgid "Omaduse Blokeeritute list (head6) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_blocked_list_toolbar
+msgid "Omaduse Blokeeritute haldus (blocked_list_toolbar) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_blocked_list_toolbar_comment
+msgid "Omaduse Blokeeritute haldus (blocked_list_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_blocked_list_toolbar_help
+msgid "Omaduse Blokeeritute haldus (blocked_list_toolbar) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_blocked_list
+msgid "Omaduse Blokeeritute list (blocked_list) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_blocked_list_comment
+msgid "Omaduse Blokeeritute list (blocked_list) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_blocked_list_help
+msgid "Omaduse Blokeeritute list (blocked_list) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_l_switch_profile
+msgid "Omaduse Vaheta profiili listide jaoks (l_switch_profile) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_l_switch_profile_comment
+msgid "Omaduse Vaheta profiili listide jaoks (l_switch_profile) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_l_switch_profile_help
+msgid "Omaduse Vaheta profiili listide jaoks (l_switch_profile) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_profile_search
+msgid "Omaduse Profiili otsing (profile_search) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_profile_search_comment
+msgid "Omaduse Profiili otsing (profile_search) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_profile_search_help
+msgid "Omaduse Profiili otsing (profile_search) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_prof_comments_toolbar
+msgid "Omaduse Kommentaaride toolbar (prof_comments_toolbar) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_prof_comments_toolbar_comment
+msgid "Omaduse Kommentaaride toolbar (prof_comments_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_prof_comments_toolbar_help
+msgid "Omaduse Kommentaaride toolbar (prof_comments_toolbar) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_prof_comments
+msgid "Omaduse Kommentaarid (prof_comments) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_prof_comments_comment
+msgid "Omaduse Kommentaarid (prof_comments) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_prof_comments_help
+msgid "Omaduse Kommentaarid (prof_comments) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_c_switch_profile
+msgid "Omaduse Vaheta profiili kommentaaride jaoks (c_switch_profile) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_c_switch_profile_comment
+msgid "Omaduse Vaheta profiili kommentaaride jaoks (c_switch_profile) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_c_switch_profile_help
+msgid "Omaduse Vaheta profiili kommentaaride jaoks (c_switch_profile) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_fake10
+msgid "Omaduse Horoskoop (fake10) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_fake10_comment
+msgid "Omaduse Horoskoop (fake10) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_fake10_help
+msgid "Omaduse Horoskoop (fake10) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_fake1
+msgid "Omaduse Sobivad kasutajad (fake1) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_fake1_comment
+msgid "Omaduse Sobivad kasutajad (fake1) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_fake1_help
+msgid "Omaduse Sobivad kasutajad (fake1) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_friends_panel
+msgid "Omaduse Sõbrad (friends_panel) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_friends_panel_comment
+msgid "Omaduse Sõbrad (friends_panel) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_friends_panel_help
+msgid "Omaduse Sõbrad (friends_panel) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_address_book_toolbar
+msgid "Omaduse Aadressiraamatu toolbar (address_book_toolbar) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_address_book_toolbar_comment
+msgid "Omaduse Aadressiraamatu toolbar (address_book_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_address_book_toolbar_help
+msgid "Omaduse Aadressiraamatu toolbar (address_book_toolbar) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_address_book
+msgid "Omaduse Aadressiraamat (address_book) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_address_book_comment
+msgid "Omaduse Aadressiraamat (address_book) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_address_book_help
+msgid "Omaduse Aadressiraamat (address_book) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_friend_groups_head
+msgid "Omaduse  (friend_groups_head) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_friend_groups_head_comment
+msgid "Omaduse  (friend_groups_head) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_friend_groups_head_help
+msgid "Omaduse  (friend_groups_head) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_friend_groups_toolbar
+msgid "Omaduse Sõbragruppide toolbar (friend_groups_toolbar) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_friend_groups_toolbar_comment
+msgid "Omaduse Sõbragruppide toolbar (friend_groups_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_friend_groups_toolbar_help
+msgid "Omaduse Sõbragruppide toolbar (friend_groups_toolbar) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_friend_groups
+msgid "Omaduse Sõbragrupid (friend_groups) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_friend_groups_comment
+msgid "Omaduse Sõbragrupid (friend_groups) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_friend_groups_help
+msgid "Omaduse Sõbragrupid (friend_groups) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_search_n_add
+msgid "Omaduse Otsi ja lisa (search_n_add) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_search_n_add_comment
+msgid "Omaduse Otsi ja lisa (search_n_add) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_search_n_add_help
+msgid "Omaduse Otsi ja lisa (search_n_add) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_f_switch_profile
+msgid "Omaduse Vaheta profiili sõprade jaoks (f_switch_profile) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_f_switch_profile_comment
+msgid "Omaduse Vaheta profiili sõprade jaoks (f_switch_profile) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_f_switch_profile_help
+msgid "Omaduse Vaheta profiili sõprade jaoks (f_switch_profile) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_friend_details
+msgid "Omaduse Vaata profiili (friend_details) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_friend_details_comment
+msgid "Omaduse Vaata profiili (friend_details) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_friend_details_help
+msgid "Omaduse Vaata profiili (friend_details) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_profile_comments
+msgid "Omaduse  (profile_comments) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_profile_comments_comment
+msgid "Omaduse  (profile_comments) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_profile_comments_help
+msgid "Omaduse  (profile_comments) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_rate
+msgid "Omaduse Hindamine või vaatamine (rate) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_rate_comment
+msgid "Omaduse Hindamine või vaatamine (rate) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_rate_help
+msgid "Omaduse Hindamine või vaatamine (rate) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_top_men
+msgid "Omaduse Top-mehed list (top_men) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_top_men_comment
+msgid "Omaduse Top-mehed list (top_men) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_top_men_help
+msgid "Omaduse Top-mehed list (top_men) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_top_women
+msgid "Omaduse Top-naised list (top_women) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_top_women_comment
+msgid "Omaduse Top-naised list (top_women) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_top_women_help
+msgid "Omaduse Top-naised list (top_women) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_last_added
+msgid "Omaduse Viimati lisatud pildid (last_added) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_last_added_comment
+msgid "Omaduse Viimati lisatud pildid (last_added) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_last_added_help
+msgid "Omaduse Viimati lisatud pildid (last_added) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_inbox
+msgid "Omaduse Inbox (inbox) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_inbox_comment
+msgid "Omaduse Inbox (inbox) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_inbox_help
+msgid "Omaduse Inbox (inbox) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_outbox
+msgid "Omaduse Outbox (outbox) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_outbox_comment
+msgid "Omaduse Outbox (outbox) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_outbox_help
+msgid "Omaduse Outbox (outbox) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_archive
+msgid "Omaduse Arhiiv (archive) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_archive_comment
+msgid "Omaduse Arhiiv (archive) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_archive_help
+msgid "Omaduse Arhiiv (archive) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_newmessage
+msgid "Omaduse Uue teate kirjutamine (newmessage) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_newmessage_comment
+msgid "Omaduse Uue teate kirjutamine (newmessage) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_newmessage_help
+msgid "Omaduse Uue teate kirjutamine (newmessage) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_forum
+msgid "Omaduse Foorum (forum) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_forum_comment
+msgid "Omaduse Foorum (forum) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_forum_help
+msgid "Omaduse Foorum (forum) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_my_forum_topics
+msgid "Omaduse Minu foorumiteemad (my_forum_topics) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_my_forum_topics_comment
+msgid "Omaduse Minu foorumiteemad (my_forum_topics) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_my_forum_topics_help
+msgid "Omaduse Minu foorumiteemad (my_forum_topics) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_forum_settings
+msgid "Omaduse  (forum_settings) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_forum_settings_comment
+msgid "Omaduse  (forum_settings) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_forum_settings_help
+msgid "Omaduse  (forum_settings) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_
+msgid "Omaduse  () caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop__comment
+msgid "Omaduse  () kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop__help
+msgid "Omaduse  () help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_my_communities_toolbar
+msgid "Omaduse Minu kogukondade toolbar (my_communities_toolbar) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_my_communities_toolbar_comment
+msgid "Omaduse Minu kogukondade toolbar (my_communities_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_my_communities_toolbar_help
+msgid "Omaduse Minu kogukondade toolbar (my_communities_toolbar) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_my_communities
+msgid "Omaduse Minu kogukonnad (my_communities) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_my_communities_comment
+msgid "Omaduse Minu kogukonnad (my_communities) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_my_communities_help
+msgid "Omaduse Minu kogukonnad (my_communities) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_categories
+msgid "Omaduse Kategooriad (categories) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_categories_comment
+msgid "Omaduse Kategooriad (categories) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_categories_help
+msgid "Omaduse Kategooriad (categories) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_community_search
+msgid "Omaduse Otsing (community_search) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_community_search_comment
+msgid "Omaduse Otsing (community_search) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_community_search_help
+msgid "Omaduse Otsing (community_search) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_my_statistics
+msgid "Omaduse Minu statistika (my_statistics) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_my_statistics_comment
+msgid "Omaduse Minu statistika (my_statistics) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_my_statistics_help
+msgid "Omaduse Minu statistika (my_statistics) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_general_statistics
+msgid "Omaduse Üldstatistika (general_statistics) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_general_statistics_comment
+msgid "Omaduse Üldstatistika (general_statistics) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_general_statistics_help
+msgid "Omaduse Üldstatistika (general_statistics) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_join_form
+msgid "Omaduse Liitu kasutajaks (join_form) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_join_form_comment
+msgid "Omaduse Liitu kasutajaks (join_form) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_join_form_help
+msgid "Omaduse Liitu kasutajaks (join_form) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_forgot_password
+msgid "Omaduse Unustasid salasõna? (forgot_password) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_forgot_password_comment
+msgid "Omaduse Unustasid salasõna? (forgot_password) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_forgot_password_help
+msgid "Omaduse Unustasid salasõna? (forgot_password) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_join_obj
+msgid "Omaduse Liitumisvorm (join_obj) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_join_obj_comment
+msgid "Omaduse Liitumisvorm (join_obj) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_join_obj_help
+msgid "Omaduse Liitumisvorm (join_obj) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_cfgmanager
+msgid "Omaduse Seadete haldur (cfgmanager) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_cfgmanager_comment
+msgid "Omaduse Seadete haldur (cfgmanager) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_cfgmanager_help
+msgid "Omaduse Seadete haldur (cfgmanager) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_pic_folder
+msgid "Omaduse Piltide kataloog (pic_folder) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_pic_folder_comment
+msgid "Omaduse Piltide kataloog (pic_folder) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_pic_folder_help
+msgid "Omaduse Piltide kataloog (pic_folder) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_persons_folder
+msgid "Omaduse Isikute kataloog (persons_folder) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_persons_folder_comment
+msgid "Omaduse Isikute kataloog (persons_folder) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_persons_folder_help
+msgid "Omaduse Isikute kataloog (persons_folder) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_communities_folder
+msgid "Omaduse Kogukondade kataloog (communities_folder) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_communities_folder_comment
+msgid "Omaduse Kogukondade kataloog (communities_folder) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_communities_folder_help
+msgid "Omaduse Kogukondade kataloog (communities_folder) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_organizations_folder
+msgid "Omaduse Organisatsioonide kataloog (organizations_folder) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_organizations_folder_comment
+msgid "Omaduse Organisatsioonide kataloog (organizations_folder) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_organizations_folder_help
+msgid "Omaduse Organisatsioonide kataloog (organizations_folder) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_profiles_folder
+msgid "Omaduse Profiilide kataloog (profiles_folder) caption"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_profiles_folder_comment
+msgid "Omaduse Profiilide kataloog (profiles_folder) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:prop_profiles_folder_help
+msgid "Omaduse Profiilide kataloog (profiles_folder) help"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_me
+msgid "Grupi Mina (me) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_profile
+msgid "Grupi Profiil (profile) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_profile_view
+msgid "Grupi Vaata (profile_view) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_profile_change
+msgid "Grupi Muuda (profile_change) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_all_profiles
+msgid "Grupi Kõik profiilid (all_profiles) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_images
+msgid "Grupi Pildid (images) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_my_images
+msgid "Grupi Minu pildid (my_images) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_switch_profile
+msgid "Grupi Vaheta profiili (switch_profile) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_show_image_comments
+msgid "Grupi  (show_image_comments) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_settings
+msgid "Grupi Sätted (settings) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_browsing_conditions
+msgid "Grupi Sirvimise sätted (browsing_conditions) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_view_conditions
+msgid "Grupi Kuvamise sätted (view_conditions) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_message_conditions
+msgid "Grupi Teadete sätted (message_conditions) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_lists
+msgid "Grupi Listid (lists) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_friend_list
+msgid "Grupi Sõbralist (friend_list) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_ignored_list
+msgid "Grupi Ignoreeritute list (ignored_list) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_blocked_list
+msgid "Grupi Blokeeritute list (blocked_list) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_l_switch_profile
+msgid "Grupi Vaheta profiili (l_switch_profile) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_profile_search
+msgid "Grupi Otsing (profile_search) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_comments
+msgid "Grupi Kommentaarid (comments) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_prof_comments
+msgid "Grupi Kommentaarid (prof_comments) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_c_switch_profile
+msgid "Grupi Vaheta profiili (c_switch_profile) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_horoscope
+msgid "Grupi Horoskoop (horoscope) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_matching_profiles
+msgid "Grupi Sobivad kasutajad (matching_profiles) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_friends
+msgid "Grupi Sõbrad (friends) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_prof_friends
+msgid "Grupi Minu sõbrad (prof_friends) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_address_book
+msgid "Grupi Aadressiraamat (address_book) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_friend_groups
+msgid "Grupi Sõbragrupid (friend_groups) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_search_n_add
+msgid "Grupi Otsi ja lisa (search_n_add) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_f_switch_profile
+msgid "Grupi Vaheta profiili (f_switch_profile) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_friend_details
+msgid "Grupi  (friend_details) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_ratings
+msgid "Grupi Hindamine (ratings) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_rate
+msgid "Grupi Hinda (rate) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_top_men
+msgid "Grupi Top-mehed (top_men) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_top_women
+msgid "Grupi Top-naised (top_women) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_last_added
+msgid "Grupi Viimati lisatud (last_added) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_messages
+msgid "Grupi Postkast (messages) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_inbox
+msgid "Grupi Inbox (inbox) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_outbox
+msgid "Grupi Outbox (outbox) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_archive
+msgid "Grupi Arhiiv (archive) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_newmessage
+msgid "Grupi Uus teade (newmessage) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_forumtab
+msgid "Grupi Foorum (forumtab) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_forum
+msgid "Grupi Foorum (forum) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_my_forum_topics
+msgid "Grupi Minu teemad (my_forum_topics) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_forum_settings
+msgid "Grupi Sätted (forum_settings) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_communities
+msgid "Grupi Kogukonnad (communities) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_my_communities
+msgid "Grupi Minu kogukonnad (my_communities) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_categories
+msgid "Grupi Kategooriad (categories) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_community_search
+msgid "Grupi Otsing (community_search) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_statistics
+msgid "Grupi Statistika (statistics) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_my_statistics
+msgid "Grupi Minu statistika (my_statistics) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_general_statistics
+msgid "Grupi Üldstatistika (general_statistics) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_join
+msgid "Grupi Liitumine (join) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_join_form
+msgid "Grupi Liitu kasutajaks (join_form) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_forgot_password
+msgid "Grupi Unustasid salasõna? (forgot_password) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_locations
+msgid "Grupi Sisuobjektid (locations) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:rel_RELTYPE_PROF_SEARCH
+msgid "Seose profiilide otsing (RELTYPE_PROF_SEARCH) tekst"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:rel_RELTYPE_FORUM
+msgid "Seose Kommuuni foorum (RELTYPE_FORUM) tekst"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:rel_RELTYPE_CONTENT
+msgid "Seose Sisuelement (RELTYPE_CONTENT) tekst"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:rel_RELTYPE_LAYOUT_LOGO
+msgid "Seose Kujunduse logo (RELTYPE_LAYOUT_LOGO) tekst"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:rel_RELTYPE_JOIN_OBJ
+msgid "Seose liitumisvorm (RELTYPE_JOIN_OBJ) tekst"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:rel_RELTYPE_CFG_MANAGER
+msgid "Seose seadete haldur (RELTYPE_CFG_MANAGER) tekst"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:rel_RELTYPE_VAR_META
+msgid "Seose isikute kataloog (RELTYPE_VAR_META) tekst"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:rel_RELTYPE_USER_GROUPS
+msgid "Seose kasutajagrupid (RELTYPE_USER_GROUPS) tekst"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:rel_RELTYPE_PIC_FOLDER
+msgid "Seose Piltide kataloog (RELTYPE_PIC_FOLDER) tekst"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:rel_RELTYPE_PERSONS_FOLDER
+msgid "Seose Isikute kataloog (RELTYPE_PERSONS_FOLDER) tekst"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:rel_RELTYPE_COMMUNITIES_FOLDER
+msgid "Seose Kogukondade kataloog (RELTYPE_COMMUNITIES_FOLDER) tekst"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:rel_RELTYPE_ORGANIZATIONS_FOLDER
+msgid "Seose Organisatsioonide kataloog (RELTYPE_ORGANIZATIONS_FOLDER) tekst"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:rel_RELTYPE_PROFILES_FOLDER
+msgid "Seose Profiilide kataloog (RELTYPE_PROFILES_FOLDER) tekst"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:536
+msgid "Minu piltidele lisatud kommentaarid"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:537
+msgid "Pildi aktsepteerimine moderaatori poolt"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:538
+msgid "Minu profiilile lisatud kommentaarid"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:539
+msgid "Uus sõber"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:540
+msgid "Keskmise hinde saatmine iga pildi kohta 1 kord päevas"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:541
+msgid "Minu foorumipostitustele vastamised"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:542
+msgid "mittesõpradelt laekunud teated"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:543
+msgid "sõpradelt laekunud teated"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:681
+msgid "siia tuleb horoskoop"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:769
+msgid "Muuda valitud kommentaaride staatust"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:775 classes/applications/commune/commune.aw:976
+msgid "Kustuta valitud kommentaarid"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:778
+msgid "soovid tõesti valitud kommentaarid kustutada?"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:798 classes/applications/commune/commune.aw:1743 classes/applications/commune/commune.aw:3857
+msgid "üldine"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:811
+msgid "Kustuta kontakte"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:814
+msgid "Oled kindel, et tahad valitud eemaldada?"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:818
+msgid "Otsi kontaktidesse"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:858
+msgid "Eemalda valitud %slistist"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:861
+msgid "Soovid tõesti valitud %s listist eemaldada?"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:871
+msgid "Otsi "
+msgstr ""
+
+#: classes/applications/commune/commune.aw:942
+msgid "Uus profiil"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:954
+msgid "Salvesta muutused"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:960
+msgid "Kustuta valitud profiilid"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:963
+msgid "Oled kindel, et soovid valitud profiilid kustutada?"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:979
+msgid "Oled kindel, et soovid valitud kommentaarid kustutada?"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:999
+msgid "Lisa uus profiil"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1005
+msgid "<small>Vali profiil:</small>"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1027
+msgid "Salvesta muutused oma profiilis"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1034
+msgid "Kustuta käesolev profiil"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1037
+msgid "Olete Te kindel, et soovite kustutada käesolevat profiili?"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1065
+msgid "Eemalda ennast valitud kogukondades"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1068
+msgid "oled ikka kindel?"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1178 classes/applications/commune/commune.aw:1244
+msgid "Kategooriad"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1201
+msgid "Ühtegi kategooriat pole veel defineeritud"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1236 classes/applications/commune/commune.aw:1607 classes/applications/commune/commune.aw:1783 classes/applications/commune/commune.aw:1856 classes/applications/commune/commune.aw:2176 classes/applications/commune/commune.aw:2242
+msgid "ID"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1240 classes/applications/commune/commune.aw:1612 classes/applications/commune/commune.aw:1788 classes/applications/commune/commune.aw:1861 classes/applications/commune/commune.aw:1944 classes/applications/commune/commune.aw:2181 classes/applications/commune/commune.aw:2247
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1248
+msgid "Liikmeid"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1253
+msgid "Sinu staatus"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1350
+msgid "Otsi"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1377 classes/applications/commune/commune.aw:1384 classes/applications/commune/commune.aw:1391 classes/applications/commune/commune.aw:1398
+msgid ""
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1407
+msgid "lisa sõbraks"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1415
+msgid "lisa kontaktidesse"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1423
+msgid "blokeeri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1431
+msgid "ignoreeri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1470
+msgid "Teema"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1474
+msgid "Postitusi"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1479
+msgid "Loomisaeg"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1483
+msgid "Viimane postitus"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1581
+msgid "näita kõiki"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1584
+msgid " päeva"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1590
+msgid "Ära näita vanemaid teemasid, kui"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1616
+msgid "E-post"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1655 classes/applications/commune/commune.aw:1688
+msgid "Saada sõnum"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1716 classes/applications/commune/commune.aw:2721 classes/applications/commune/commune.aw:4541
+msgid "Grupp"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1720
+msgid "Sõpru grupis"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1793 classes/applications/commune/commune.aw:2186
+msgid "Aeg"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1798 classes/applications/commune/commune.aw:2191
+msgid "Kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1802
+msgid "Staatus"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1835
+msgid "nähtav"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1835
+msgid "peidetud"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1923
+msgid "Pilte"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1927 classes/applications/commune/commune.aw:1935
+msgid "Sõpru"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1931
+msgid "Kommentaare"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1957
+msgid "Ignoreerituid"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1963
+msgid "Blokeerituid"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2089
+msgid "Minu sõbrad"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2107
+msgid "Minu kogukonnad"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2253
+msgid "Pildid"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2258
+msgid "Vaikeprofiil"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2290
+msgid "pildid ("
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2529
+msgid "[at]"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2548
+msgid "e-mailile"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2553
+msgid "postkasti"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2651
+msgid "Mõlemad"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2652 classes/applications/commune/commune.aw:2827
+msgid "Mees"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2653 classes/applications/commune/commune.aw:2827
+msgid "Naine"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2679
+msgid "Seade"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2685
+msgid "Sugu"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2689
+msgid "Vanus"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2701
+msgid "Seksuaalne orientatsioon"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2726
+msgid "Profiili kuvamise seaded"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2739
+msgid "ei näita antud grupile"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2808 classes/applications/commune/commune.aw:2974
+msgid "(isikut pole)"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2828 classes/applications/commune/commune.aw:3335
+msgid "lisatud: "
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2829 classes/applications/commune/commune.aw:3333
+msgid "hinne: "
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2991
+msgid "vanus: "
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2992
+msgid "sõpru: "
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3025
+msgid "sae pekki"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3064
+msgid "-- vali pilt --"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3093
+msgid "Pilt %s"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3108
+msgid "Pilt"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3118
+msgid "Pildi nimi"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3125 classes/applications/commune/commune.aw:3199
+msgid "Pildi kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3131 classes/applications/commune/commune.aw:3188
+msgid "Vali uus"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3137 classes/applications/commune/commune.aw:3193
+msgid "Vali olemasolev"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3145
+msgid "Hinne"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3156
+msgid "Vaatamisi"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3162
+msgid "Kustuta"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3178
+msgid "Kommentaarid (%s)"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3397
+msgid "Pildi hindamine"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3778
+msgid "ToolBar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3800
+msgid "Objekt"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3807
+msgid "Asukoht"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3857
+msgid "-- vali --"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3860
+msgid "Pane sõbragruppi"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3887
+msgid "Eemalda sõprade hulgast"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3901
+msgid "lisa sõprade hulka"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3917
+msgid "Eemalda ignoreeritute hulgast"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3931
+msgid "lisa ignoreeritute hulka"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3946
+msgid "Eemalda blokeeritute hulgast"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3959
+msgid "lisa blokeeritute hulka"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3973
+msgid "Kommenteeri!"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:4458
+msgid "Liitu!"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:4466
+msgid "Uuenda andmed!"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:4480
+msgid "Inboxi toolbar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:4486
+msgid "Sissetulnud kirjad"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:4499
+msgid "Outboxi toolbar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:4505
+msgid "Väljasaadetud kirjad"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:4518
+msgid "Arhiivi toolbar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:4524
+msgid "Arhiveeritud kirjad"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:4564
+msgid "aga sellist kasutajat pole üldse olemas"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:4701
+msgid "Kasutajanimi"
+msgstr ""
+

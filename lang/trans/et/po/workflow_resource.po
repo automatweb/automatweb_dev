@@ -1,0 +1,100 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 14:23:50 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/workflow/workflow_resource.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/workflow/workflow_resource.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/workflow/workflow_resource.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/workflow/workflow_resource.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/workflow/workflow_resource.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/workflow/workflow_resource.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/workflow/workflow_resource.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/workflow/workflow_resource.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/workflow/workflow_resource.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/workflow/workflow_resource.aw:prop_is_subcontract
+msgid "Omaduse allhange (is_subcontract) caption"
+msgstr ""
+
+#: classes/workflow/workflow_resource.aw:prop_is_subcontract_comment
+msgid "Omaduse allhange (is_subcontract) kommentaar"
+msgstr ""
+
+#: classes/workflow/workflow_resource.aw:prop_is_subcontract_help
+msgid "Omaduse allhange (is_subcontract) help"
+msgstr ""
+
+#: classes/workflow/workflow_resource.aw:prop_overview
+msgid "Omaduse  (overview) caption"
+msgstr ""
+
+#: classes/workflow/workflow_resource.aw:prop_overview_comment
+msgid "Omaduse  (overview) kommentaar"
+msgstr ""
+
+#: classes/workflow/workflow_resource.aw:prop_overview_help
+msgid "Omaduse  (overview) help"
+msgstr ""
+
+#: classes/workflow/workflow_resource.aw:prop_calendar
+msgid "Omaduse  (calendar) caption"
+msgstr ""
+
+#: classes/workflow/workflow_resource.aw:prop_calendar_comment
+msgid "Omaduse  (calendar) kommentaar"
+msgstr ""
+
+#: classes/workflow/workflow_resource.aw:prop_calendar_help
+msgid "Omaduse  (calendar) help"
+msgstr ""
+
+#: classes/workflow/workflow_resource.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/workflow/workflow_resource.aw:group_overview
+msgid "Grupi &Uuml;levaade (overview) pealkiri"
+msgstr ""
+
+#: classes/workflow/workflow_resource.aw:group_calendar
+msgid "Grupi Kalender (calendar) pealkiri"
+msgstr ""
+
+#: classes/workflow/workflow_resource.aw:rel_RELTYPE_EVENT
+msgid "Seose t&ouml;&ouml; (RELTYPE_EVENT) tekst"
+msgstr ""
+

@@ -1,0 +1,140 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 14:23:33 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_xml_fld
+msgid "Omaduse Serveri kataloog, kus asuvad xml failid (xml_fld) caption"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_xml_fld_comment
+msgid "Omaduse Serveri kataloog, kus asuvad xml failid (xml_fld) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_xml_fld_help
+msgid "Omaduse Serveri kataloog, kus asuvad xml failid (xml_fld) help"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_ct_fld
+msgid "Omaduse Serveri kataloog, kus asuvad sisu failid (ct_fld) caption"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_ct_fld_comment
+msgid "Omaduse Serveri kataloog, kus asuvad sisu failid (ct_fld) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_ct_fld_help
+msgid "Omaduse Serveri kataloog, kus asuvad sisu failid (ct_fld) help"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_subj_xml
+msgid "Omaduse Teemade xml fail (subj_xml) caption"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_subj_xml_comment
+msgid "Omaduse Teemade xml fail (subj_xml) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_subj_xml_help
+msgid "Omaduse Teemade xml fail (subj_xml) help"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_update_cache
+msgid "Omaduse  (update_cache) caption"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_update_cache_comment
+msgid "Omaduse  (update_cache) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_update_cache_help
+msgid "Omaduse  (update_cache) help"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_ct
+msgid "Omaduse Sisu (ct) caption"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_ct_comment
+msgid "Omaduse Sisu (ct) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_ct_help
+msgid "Omaduse Sisu (ct) help"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:group_content
+msgid "Grupi Sisu (content) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:rel_RELTYPE_TRANSFORM
+msgid "Seose andmete muundaja (RELTYPE_TRANSFORM) tekst"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:115
+msgid "Uuenda cache"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:137
+msgid "Nimi"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:147
+msgid "<b>Kataloogid</b>"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:158
+msgid "<b>Failid</b>"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:318
+msgid "the subject xml file (%s) does not exist!"
+msgstr ""
+

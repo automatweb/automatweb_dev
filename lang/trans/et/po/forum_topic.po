@@ -1,0 +1,120 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 14:23:27 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/contentmgmt/forum/forum_topic.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:prop_name
+msgid "Omaduse Pealkiri (name) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:prop_name_comment
+msgid "Omaduse Pealkiri (name) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:prop_name_help
+msgid "Omaduse Pealkiri (name) help"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:prop_comment
+msgid "Omaduse Sisu (comment) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:prop_comment_comment
+msgid "Omaduse Sisu (comment) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:prop_comment_help
+msgid "Omaduse Sisu (comment) help"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:prop_author_name
+msgid "Omaduse Autori nimi (author_name) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:prop_author_name_comment
+msgid "Omaduse Autori nimi (author_name) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:prop_author_name_help
+msgid "Omaduse Autori nimi (author_name) help"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:prop_author_email
+msgid "Omaduse Autori meil (author_email) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:prop_author_email_comment
+msgid "Omaduse Autori meil (author_email) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:prop_author_email_help
+msgid "Omaduse Autori meil (author_email) help"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:prop_locked
+msgid "Omaduse Teema lukus (locked) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:prop_locked_comment
+msgid "Omaduse Teema lukus (locked) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:prop_locked_help
+msgid "Omaduse Teema lukus (locked) help"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:prop_answers_to_mail
+msgid "Omaduse Soovin vastuseid e-mailile (answers_to_mail) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:prop_answers_to_mail_comment
+msgid "Omaduse Soovin vastuseid e-mailile (answers_to_mail) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:prop_answers_to_mail_help
+msgid "Omaduse Soovin vastuseid e-mailile (answers_to_mail) help"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:prop_subscribers_editor
+msgid "Omaduse  (subscribers_editor) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:prop_subscribers_editor_comment
+msgid "Omaduse  (subscribers_editor) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:prop_subscribers_editor_help
+msgid "Omaduse  (subscribers_editor) help"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:group_subscribers
+msgid "Grupi Mailinglist (subscribers) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:rel_RELTYPE_SUBSCRIBER
+msgid "Seose Tellija (RELTYPE_SUBSCRIBER) tekst"
+msgstr ""
+

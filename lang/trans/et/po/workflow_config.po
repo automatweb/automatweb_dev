@@ -1,0 +1,132 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 14:23:50 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/workflow/workflow_config.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/workflow/workflow_config.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/workflow/workflow_config.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/workflow/workflow_config.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/workflow/workflow_config.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/workflow/workflow_config.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/workflow/workflow_config.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/workflow/workflow_config.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/workflow/workflow_config.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/workflow/workflow_config.aw:prop_actor_rootmenu
+msgid "Omaduse Tegijate juurmenüü (actor_rootmenu) caption"
+msgstr ""
+
+#: classes/workflow/workflow_config.aw:prop_actor_rootmenu_comment
+msgid "Omaduse Tegijate juurmenüü (actor_rootmenu) kommentaar"
+msgstr ""
+
+#: classes/workflow/workflow_config.aw:prop_actor_rootmenu_help
+msgid "Omaduse Tegijate juurmenüü (actor_rootmenu) help"
+msgstr ""
+
+#: classes/workflow/workflow_config.aw:prop_action_rootmenu
+msgid "Omaduse Tegevuste juurmenüü (action_rootmenu) caption"
+msgstr ""
+
+#: classes/workflow/workflow_config.aw:prop_action_rootmenu_comment
+msgid "Omaduse Tegevuste juurmenüü (action_rootmenu) kommentaar"
+msgstr ""
+
+#: classes/workflow/workflow_config.aw:prop_action_rootmenu_help
+msgid "Omaduse Tegevuste juurmenüü (action_rootmenu) help"
+msgstr ""
+
+#: classes/workflow/workflow_config.aw:prop_entity_rootmenu
+msgid "Omaduse Juhtumite juurmenüü (entity_rootmenu) caption"
+msgstr ""
+
+#: classes/workflow/workflow_config.aw:prop_entity_rootmenu_comment
+msgid "Omaduse Juhtumite juurmenüü (entity_rootmenu) kommentaar"
+msgstr ""
+
+#: classes/workflow/workflow_config.aw:prop_entity_rootmenu_help
+msgid "Omaduse Juhtumite juurmenüü (entity_rootmenu) help"
+msgstr ""
+
+#: classes/workflow/workflow_config.aw:prop_entity_instance_rootmenu
+msgid "Omaduse Juhtumite sisestuste juurmenüü (entity_instance_rootmenu) caption"
+msgstr ""
+
+#: classes/workflow/workflow_config.aw:prop_entity_instance_rootmenu_comment
+msgid "Omaduse Juhtumite sisestuste juurmenüü (entity_instance_rootmenu) kommentaar"
+msgstr ""
+
+#: classes/workflow/workflow_config.aw:prop_entity_instance_rootmenu_help
+msgid "Omaduse Juhtumite sisestuste juurmenüü (entity_instance_rootmenu) help"
+msgstr ""
+
+#: classes/workflow/workflow_config.aw:prop_process_rootmenu
+msgid "Omaduse Protsesside juurmenüü (process_rootmenu) caption"
+msgstr ""
+
+#: classes/workflow/workflow_config.aw:prop_process_rootmenu_comment
+msgid "Omaduse Protsesside juurmenüü (process_rootmenu) kommentaar"
+msgstr ""
+
+#: classes/workflow/workflow_config.aw:prop_process_rootmenu_help
+msgid "Omaduse Protsesside juurmenüü (process_rootmenu) help"
+msgstr ""
+
+#: classes/workflow/workflow_config.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/workflow/workflow_config.aw:group_config_actor
+msgid "Grupi Tegijate seaded (config_actor) pealkiri"
+msgstr ""
+
+#: classes/workflow/workflow_config.aw:group_config_action
+msgid "Grupi Tegevuste seaded (config_action) pealkiri"
+msgstr ""
+
+#: classes/workflow/workflow_config.aw:group_config_entity
+msgid "Grupi Juhtumite seaded (config_entity) pealkiri"
+msgstr ""
+
+#: classes/workflow/workflow_config.aw:group_config_process
+msgid "Grupi Protsesside seaded (config_process) pealkiri"
+msgstr ""
+
+#: classes/workflow/workflow_config.aw:rel_RELTYPE_ROOTMENU
+msgid "Seose juurmenüü (RELTYPE_ROOTMENU) tekst"
+msgstr ""
+
