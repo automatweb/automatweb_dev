@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.167 2003/03/13 14:23:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.168 2003/03/17 15:25:16 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1298,6 +1298,7 @@ class core extends db_connector
 	// active(bool) - kui true, siis tagastame ainult aktiivsed objektid
 	// subclass - objects.subclass
 	// flags - objects.flags
+	// fields(string) - can be used to specify the names of fields you need
 	function get_objects_by_class($args = array())
 	{
 		extract($args);
@@ -1370,14 +1371,20 @@ class core extends db_connector
 		}
 
 		$ostr = isset($orderby) ? " ORDER BY $orderby " : "";
+
+		if (empty($fields))
+		{
+			$fields = " objects.* ";
+		}
+
 		// kui tegemist on menüüdega, siis joinime kylge ka menu tabeli
 		if ($cl === CL_PSEUDO)
 		{
-			$q = "SELECT objects.* FROM objects LEFT JOIN menu ON (objects.oid = menu.id) $where $ostr";
+			$q = "SELECT $fields FROM objects LEFT JOIN menu ON (objects.oid = menu.id) $where $ostr";
 		}
 		else
 		{
-			$q = "SELECT objects.* FROM objects $where $ostr";
+			$q = "SELECT $fields FROM objects $where $ostr";
 		};
 
 		$this->db_query($q);
@@ -1743,6 +1750,9 @@ class core extends db_connector
 	// this function has became such a spaghetti, that it really should be rewritten. --duke
 	function mk_my_orb($fun,$arr=array(),$cl_name="",$force_admin = false,$use_orb = array(),$separator = "&")
 	{
+		global $awt;
+		$awt->count("mk_my_orb");
+		$awt->start("my_my_orb");
 		if ($cl_name == "")
 		{
 			$cl_name = get_class($this);
@@ -1841,6 +1851,7 @@ class core extends db_connector
 				$ret = $this->cfg["baseurl"].$uo.$sec."class=$cl_name".$separator."action=$fun".$separator."$urs";
 			};
 		}
+		$awt->stop("my_my_orb");
 		return $ret;
 	}
 
