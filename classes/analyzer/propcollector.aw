@@ -138,6 +138,14 @@ class propcollector extends aw_template
 	{
 		$_x = new aw_array(explode(" ",$data));
 		$fields = array("name" => $name);
+		// add defaults first, propery definition can override those.
+		foreach($this->defaults as $key => $val)
+		{
+			if (!$fields[$key])
+			{
+				$fields[$key] = $val;
+			};
+		};
 		foreach($_x->get() as $field)
 		{
 			list($fname,$fvalue) = explode("=",$field);
@@ -151,7 +159,15 @@ class propcollector extends aw_template
 				}
 				else
 				{
-					$fields[$fname] = $fvalue;
+					if ($fname == "form" && substr($fvalue,0,1) == "+")
+					{
+						$fields[$fname] = array("add","edit",substr($fvalue,1));
+						// add to defaults, otherwise overwrite
+					}
+					else
+					{
+						$fields[$fname] = $fvalue;
+					};
 				};
 			};
 		};
@@ -167,14 +183,6 @@ class propcollector extends aw_template
 		if ("calendar" == $fields["type"])
 		{
 			$fields["store"] = "no";
-		};
-		// add defaults as well
-		foreach($this->defaults as $key => $val)
-		{
-			if (!$fields[$key])
-			{
-				$fields[$key] = $val;
-			};
 		};
 
 		// field defaults to the name of the property
