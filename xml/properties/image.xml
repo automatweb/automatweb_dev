@@ -1,0 +1,50 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>ffile</name>
+            <type>fileupload</type>
+            <field>ffile</field>
+            <caption>Pilt</caption>
+      </property>
+      <property>
+            <name>file_show</name>
+            <type>text</type>
+            <field>file_show</field>
+            <caption></caption>
+      </property>
+      <property>
+            <name>comment</name>
+            <table>objects</table>
+            <field>comment</field>
+            <type>textbox</type>
+            <caption>Pildi allkiri</caption>
+      </property>
+      <property>
+            <name>alt</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Alt</caption>
+      </property>
+      <property>
+            <name>link</name>
+            <type>textbox</type>
+            <table>images</table>
+            <field>link</field>
+            <caption>Link</caption>
+      </property>
+      <property>
+            <name>newwindow</name>
+            <type>checkbox</type>
+            <value>1</value>
+            <table>images</table>
+            <field>newwindow</field>
+            <caption>Uues aknas</caption>
+      </property>
+      <classinfo>
+            <objtable>images</objtable>
+            <objtable_index>id</objtable_index>
+      </classinfo>
+</properties>
+
