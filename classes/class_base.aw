@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.228 2004/03/02 15:58:41 duke Exp $
+// $Id: class_base.aw,v 2.229 2004/03/02 16:39:51 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -541,6 +541,7 @@ class class_base extends aw_template
 		$args = array(
 			"id" => $this->id,
 			"group" => $group,
+			"return" => $args["return"],
 			"period" => aw_global_get("period"),
 			"alias_to" => $request["alias_to"],
 			"return_url" => $request["return_url"],
@@ -1613,7 +1614,7 @@ class class_base extends aw_template
 					$val["vcl_inst"] = new releditor();
 				};
 				$argblock["prop"] = &$val;
-				$target_reltype = constant($val["reltype"]);
+				$target_reltype = @constant($val["reltype"]);
 				$argblock["prop"]["reltype"] = $target_reltype;
 				$argblock["prop"]["clid"] = $this->relinfo[$target_reltype]["clid"];
 				$relres = $val["vcl_inst"]->init_rel_editor($argblock);
