@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.14 2004/02/20 09:08:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.15 2004/11/07 19:40:43 kristo Exp $
 // form_entry_element.aw - 
 load_vcl("date_edit");
 lc_load("definition");
@@ -236,7 +236,7 @@ class form_entry_element extends form_element
 			{
 				if (!is_object($this->currency))
 				{
-					$this->currency = get_instance("currency");
+					$this->currency = get_instance(CL_CURRENCY);
 				}
 				if ($this->form->active_currency)
 				{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/currency.aw,v 2.8 2004/02/27 14:18:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.1 2004/11/07 19:40:42 kristo Exp $
 // currency.aw - Currency management
 
 /*

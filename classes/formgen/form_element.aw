@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.77 2004/11/07 19:26:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.78 2004/11/07 19:40:42 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -592,7 +592,7 @@ class form_element extends aw_template
 			$pc="";
 			if ($this->arr["type"] == "price")
 			{
-				$cur = get_instance("currency");
+				$cur = get_instance(CL_CURRENCY);
 				$gl = $cur->get_list();
 				$this->vars(array(
 					"price"	=> $this->arr["price"],

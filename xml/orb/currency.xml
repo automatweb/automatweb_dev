@@ -1,5 +1,5 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="currency" folder="" extends="class_base">
+	<class name="currency" folder="formgen" extends="class_base">
 	</class>
 </orb>
