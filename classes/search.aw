@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.6 2002/10/16 14:21:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.7 2002/10/16 14:35:10 duke Exp $
 // search.aw - Search Manager
 class search extends aw_template
 {
@@ -455,10 +455,9 @@ class search extends aw_template
 
 		$this->table = $table;
 
-
 		$this->vars(array(
 			"table" => $table,
-			"toolbar" => $toolbar->get_toolbar(),
+			"toolbar" => (is_object($toolbar)) ? $toolbar->get_toolbar() : "",
 			"reforb" => $this->mk_reforb("search",array("no_reforb" => 1,"search" => 1,"obj" => $args["obj"],"docid" => $docid, "parent" => $parent)),
 		));
 
