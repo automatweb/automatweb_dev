@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.146 2003/01/20 16:53:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.147 2003/01/23 08:39:06 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -89,7 +89,7 @@ class core extends db_connector
 			$this->raise_error(ERR_CORE_NO_TYPE, "core::new_object() - no class_id specified", true, false);
 		}
 
-		if (!$this->can('add', $arr['parent']))
+		if (!$this->can('add', $arr['parent']) || aw_global_get("uid") == "")
 		{
 			$this->raise_error(ERR_ACL_ERR, "core::new_object() - no can_add access for '$arr[parent]'!", true, false);
 		}
@@ -199,7 +199,7 @@ class core extends db_connector
 			$this->raise_error(ERR_CORE_NO_OID,"core::upd_object() - object can't be it's own parent",true, false);
 		};
 
-		if (!$this->can('edit', $params['oid']))
+		if (!$this->can('edit', $params['oid']) || aw_global_get("uid") == "")
 		{
 			$this->raise_error(ERR_ACL_ERR, "core::upd_object() - no can_edit access for $params[oid]!", true, false);
 		}
