@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.25 2004/01/13 16:24:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.26 2004/03/02 15:47:38 duke Exp $
 /*
         @default table=objects
         @default group=general
@@ -50,7 +50,7 @@ class xml_import extends class_base
                                 $id = $args["obj_inst"]->id();
                                 if ($id)
                                 {
-                                        $url = $this->mk_my_orb("invoke",array("id" => $id,"xml_import",0,1);
+                                        $url = $this->mk_my_orb("invoke",array("id" => $id,"xml_import"),0,1);
                                         $data["value"] = html::href(array("url" => $url,"caption" => "Käivita import","target" => "_blank"));
                                 };
                                 break;
