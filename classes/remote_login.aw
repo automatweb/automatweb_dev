@@ -1,72 +1,35 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.11 2002/12/02 11:18:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.12 2002/12/17 17:45:11 duke Exp $
 // remote_login.aw - AW remote login
+
+/*
+	@default table=objects
+	@default field=meta
+	@default method=serialize
+	@default group=general
+
+	@property login_uid type=textbox
+	@caption Kasutajanimi
+
+	@property login_password type=password
+	@caption Parool
+
+	@property server type=textbox
+	@caption Server
+
+*/
+
+
 class remote_login extends aw_template 
 {
 	function remote_login($args = array())
 	{
 		extract($args);
-		$this->init("automatweb/remote_login");
-	}
-
-	function change($args = array())
-	{
-		extract($args);
-		$this->read_template("change.tpl");
-		if ($parent)
-		{
-			$act = "Lisa AW login objekt";
-			$meta = array();
-		}
-		else
-		{
-			$obj = $this->get_obj_meta($id);
-			$parent = $obj["parent"];
-			$act = "Muuda AW login objekti";
-			$meta = $obj["meta"];
-		};
-
-		$this->mk_path($parent,$act);
-		$this->vars(array(
-			"name" => $obj["name"],
-			"server" => $meta["server"],
-			"uid" => $meta["login_uid"],
-			"password" => $meta["login_password"],
-			"reforb" => $this->mk_reforb("submit",array("id" => $id,"parent" => $parent)),
+		$this->init(array(
+			"tpldir" => "automatweb/remote_login",
+			"clid" => CL_AW_LOGIN,
 		));
-		return $this->parse();
 	}
-
-	function submit($args = array())
-	{
-		extract($args);
-		if ($id)
-		{
-			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $name,
-			));
-		}
-		else
-		{
-			$id = $this->new_object(array(
-				"parent" => $parent,
-				"name" => $name,
-				"class_id" => CL_AW_LOGIN,
-			));
-		};
-
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"data" => array(
-				"login_uid" => $uid,
-				"login_password" => $password,
-				"server" => $server
-			),
-		));
-		return $this->mk_my_orb("change",array("id" => $id));
-	}
-
 
 	function handshake($args = array())
 	{
