@@ -179,8 +179,12 @@ function init_config($arr)
 		// and write to cache if file is specified
 		if ($cache_file)
 		{
+			$f = @fopen($cache_file,"w");
+			if (!$f)
+			{
+				die("pagecache is not writable, cannot continue!");
+			};
 			$str = serialize($GLOBALS["cfg"]);
-			$f = fopen($cache_file,"w");
 			fwrite($f,$str);
 			fclose($f);
 		}
@@ -585,7 +589,6 @@ function __aw_error_handler($errno, $errstr, $errfile, $errline,  $context)
 		$content.="HTTP_SERVER_VARS[$k] = $v \n";
 	}
 
-	// try to find the user's email;
 	$head = "";
 	mail("vead@struktuur.ee", $subj, $content,$head);
 
