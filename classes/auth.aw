@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/auth.aw,v 2.6 2004/01/13 16:24:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/auth.aw,v 2.7 2004/08/23 10:51:29 kristo Exp $
 // auth.aw - authentication functions
 class auth extends aw_template 
 {
@@ -32,52 +32,6 @@ class auth extends aw_template
 			"reforb" => $this->mk_reforb("login",array(),'users'),
 		));
 		return $this->parse();
-	}
-
-	/** Performs the actual login 
-		
-		@attrib name=login params=name nologin="1" default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-		uhuh. yeah. ok, and why texactly is this duplicated here?
-		the users_user::login version seems to be much more secured to me - terryf
-
-	**/
-	function login($args = array())
-	{
-		global $uid;
-		extract($args);
-		$success = is_valid("uid",$uid);
-
-		if ($success)
-		{
-			$q = "SELECT * FROM users WHERE uid = '$uid' AND blocked = 0";
-			$this->db_query($q);
-			$udata = $this->db_next();
-			$success = is_array($udata);
-		}
-
-		if ($success)
-		{
-			$success = ($this->cfg["md5_passwords"]) ? 
-				md5($password) == $udata["password"] : 
-				$password == $udata["password"];
-		}
-
-		if ($success)
-		{
-			$this->_log(ST_USERS, SA_LOGIN,"$uid");
-			session_register("uid");
-		}
-		else
-		{
-			$this->_log(ST_USERS, SA_LOGIN_FAILED,"$uid");
-		};
-		return $this->cfg["baseurl"] . aw_global_get("request_uri_before_auth");
 	}
 }
 ?>

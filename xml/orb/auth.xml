@@ -8,12 +8,5 @@
 			</function>
 		</action>
 
-		<action name="login" nologin="1">
-			<function name="login">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 	</class>
 </orb>
