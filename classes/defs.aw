@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.120 2004/02/12 14:57:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.121 2004/02/13 11:11:27 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -942,6 +942,51 @@ if (!defined("DEFS"))
 			{
 				echo $msg."<br />\n";
 			}
+		}
+
+		function process_backtrace($bt)
+		{
+			$msg .= "<br><br> Backtrace: \n\n<Br><br>";
+			for ($i = count($bt)-1; $i > 0; $i--)
+			{
+				if ($bt[$i+1]["class"] != "")
+				{
+					$fnm = "method <b>".$bt[$i+1]["class"]."::".$bt[$i+1]["function"]."</b>";
+				}
+				else
+				if ($bt[$i+1]["function"] != "")
+				{
+					$fnm = "function <b>".$bt[$i+1]["function"]."</b>";
+				}
+				else
+				{
+					$fnm = "file ".$bt[$i]["file"];
+				}
+
+				$msg .= $fnm." on line ".$bt[$i]["line"]." called <br>\n";
+
+				if ($bt[$i]["class"] != "")
+				{
+					$fnm2 = "method <b>".$bt[$i]["class"]."::".$bt[$i]["function"]."</b>";
+				}
+				else
+				if ($bt[$i]["function"] != "")
+				{
+					$fnm2 = "function <b>".$bt[$i]["function"]."</b>";
+				}
+				else
+				{
+					$fnm2 = "file ".$bt[$i]["file"];
+				}
+
+				$msg .= $fnm2." with arguments ";
+
+				$awa = new aw_array($bt[$i]["args"]);
+				$msg .= "<font size=\"-1\">(".join(",", $awa->get()).") file = ".$bt[$i]["file"]."</font>";
+			
+				$msg .= " <br><br>\n\n";
+			}
+			return $msg;
 		}
 	}
 

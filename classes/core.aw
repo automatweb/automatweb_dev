@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.246 2004/02/12 14:49:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.247 2004/02/13 11:11:26 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1408,47 +1408,7 @@ class core extends acl_base
 		// also attach backtrace
 		if (function_exists("debug_backtrace"))
 		{
-			$msg .= "<br><br> Backtrace: \n\n<Br><br>";
-			$bt = debug_backtrace();
-			for ($i = count($bt)-1; $i > 0; $i--)
-			{
-				if ($bt[$i+1]["class"] != "")
-				{
-					$fnm = "method <b>".$bt[$i+1]["class"]."::".$bt[$i+1]["function"]."</b>";
-				}
-				else
-				if ($bt[$i+1]["function"] != "")
-				{
-					$fnm = "function <b>".$bt[$i+1]["function"]."</b>";
-				}
-				else
-				{
-					$fnm = "file ".$bt[$i]["file"];
-				}
-
-				$msg .= $fnm." on line ".$bt[$i]["line"]." called <br>\n";
-
-				if ($bt[$i]["class"] != "")
-				{
-					$fnm2 = "method <b>".$bt[$i]["class"]."::".$bt[$i]["function"]."</b>";
-				}
-				else
-				if ($bt[$i]["function"] != "")
-				{
-					$fnm2 = "function <b>".$bt[$i]["function"]."</b>";
-				}
-				else
-				{
-					$fnm2 = "file ".$bt[$i]["file"];
-				}
-
-				$msg .= $fnm2." with arguments ";
-
-				$awa = new aw_array($bt[$i]["args"]);
-				$msg .= "<font size=\"-1\">(".join(",", $awa->get()).") file = ".$bt[$i]["file"]."</font>";
-			
-				$msg .= " <br><br>\n\n";
-			}
+			$msg .= dbg::process:backtrace(debug_backtrace());
 		}
 
 		// meilime veateate listi ka
