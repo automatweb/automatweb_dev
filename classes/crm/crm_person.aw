@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.46 2004/07/08 07:24:21 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.47 2004/07/09 10:23:27 rtoomas Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -227,10 +227,12 @@ caption Andmed
 @reltype SECTION value=21 clid=CL_CRM_SECTION
 @caption Üksus
 
-//parem nimi teretulnud, person on cl_crm_company jaox
-//kliendihaldur
-@reltype HANDLER value=22 clid=CL_CRM_COMPANY
-@caption Kelle kliendihaldur
+//klient keda ma haldan
+@reltype CLIENT_IM_HANDLING value=22 clid=CL_CRM_COMPANY
+@caption Haldab klienti
+
+@reltype CLIENT_IM_SELLING_TO value=23 clid=CL_CRM_COMPANY
+@caption Vastutab müügi eest
 
 */
 
@@ -1198,10 +1200,27 @@ class crm_person extends class_base
 		$target_obj = $conn->to();
 		if ($target_obj->class_id() == CL_CRM_PERSON)
 		{
-			$target_obj->connect(array(
-			  "to" => $conn->prop("from"),
-			  "reltype" => RELTYPE_WORK
-			));
+			if($conn->prop('reltype')==8) 		//crm_company.reltype_workers
+			{
+				$target_obj->connect(array(
+				  "to" => $conn->prop("from"),
+				  "reltype" => RELTYPE_WORK
+				));
+			}
+			else if($conn->prop('reltype')==31) //crm_company.reltype_maintainer
+			{
+				$target_obj->connect(array(
+				  "to" => $conn->prop("from"),
+				  "reltype" => RELTYPE_CLIENT_IM_HANDLING,
+				));
+			}
+			else if($conn->prop('reltype')==32) //crm_company.reltype_seller
+			{
+				$target_obj->connect(array(
+				  "to" => $conn->prop("from"),
+				  "reltype" => RELTYPE_CLIENT_IM_SELLING_TO,
+				));
+			}
 		};
 	}
 
@@ -1213,9 +1232,27 @@ class crm_person extends class_base
 		$target_obj = $conn->to();
 		if ($target_obj->class_id() == CL_CRM_PERSON)
 		{
-			$target_obj->disconnect(array(
-				"from" => $conn->prop("from"),
-			));
+			if($conn->prop('reltype')==31) //crm_company.reltype_maintainer==31
+			{
+				$target_obj->disconnect(array(
+					"from" => $conn->prop("from"),
+					'type' => RELTYPE_CLIENT_IM_HANDLING,
+				));
+			}
+			else if($conn->prop('reltype')==32) //crm_company.reltype_seller == 32
+			{
+				$target_obj->disconnect(array(
+					"from" => $conn->prop("from"),
+					'type' => RELTYPE_CLIENT_IM_SELLING_TO,
+				));
+			}
+			else if($conn->prop('reltype')==8) //crm_company.reltype_worker==8
+			{
+				$target_obj->disconnect(array(
+					"from" => $conn->prop("from"),
+					'type' => RELTYPE_WORK,
+				));
+			}
 		};
 	}
 

@@ -1,9 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.51 2004/07/08 13:09:10 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.52 2004/07/09 10:23:27 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
-//on_disconnect_person_from_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disconnect_person_from_org)
 HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 
@@ -207,6 +206,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 @property customer_search_address type=textbox size=30 store=no parent=vbox_customers_right
 @caption Tänav/Küla
 
+@property customer_search_only orient=vertical type=chooser store=no parent=vbox_customers_right
+@caption Valim
+
 @property customer_search_submit type=submit size=15 store=no parent=vbox_customers_right
 @caption Otsi
 
@@ -326,6 +328,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 @reltype CATEGORY value=30 clid=CL_CRM_CATEGORY
 @caption Kategooria
 
+@reltype MAINTAINER value=31 clid=CL_CRM_PERSON
+@caption Persoon, kellele firma on klient
+
+@reltype SELLER value=32 clid=CL_CRM_PERSON
+@caption Persoon, kes müüs
+
 @classinfo no_status=1
 			
 */
@@ -357,6 +365,8 @@ class crm_company extends class_base
 	var $data = null;
 
 	var $customer_search_results;
+
+	var $users_person = null;
 	//bad name, it is in the meaning of
 	//show_contacts_search
 	var $do_search = 0;
@@ -403,6 +413,14 @@ class crm_company extends class_base
 
 	function crm_company()
 	{
+		$this->init(array(
+			'clid' => CL_CRM_COMPANY,
+			'tpldir' => 'firma',
+		));
+	}
+
+	function crm_company_init()
+	{
 		$this->customer_search_results = new object_list();
 		//default to company relation values
 		$this->reltype_section = $this->crm_company_reltype_section;
@@ -410,10 +428,22 @@ class crm_company extends class_base
 		$this->reltype_workers = $this->crm_company_reltype_workers;
 		$this->reltype_category = $this->crm_company_reltype_category;
 		//
-		$this->init(array(
-			'clid' => CL_CRM_COMPANY,
-			'tpldir' => 'firma',
+		$this->group_not_shown = false;
+		$name = aw_global_get('uid').' kliendid';
+		//tsekime kas kasutajal on isik objekt üldse tehtud ja seotud endaga
+		//eeldan, et kasutaja existeerib :)
+		$users = get_instance('users_user');
+		$user = new object($users->get_oid_for_uid(aw_global_get('uid')));
+		//getting the person
+		$conns = $user->connections_from(array(
+			'type' => 'RELTYPE_PERSON'
 		));
+		//kui on mitu, siis võtan esimese
+		if(sizeof($conns))
+		{
+			$tmp = current($conns);
+			$this->users_person = new object($tmp->prop('to'));
+		}
 	}
 
 	/*
@@ -563,29 +593,6 @@ class crm_company extends class_base
 		$data = &$arr['prop'];
 		$retval = PROP_OK;
 	
-		//groupinfo wants user's name for name
-		//damn, but this "if" will execute the number of propertys
-		//under my_customers times. I'll think of smthing, better yet, i'll ask duke
-		//just joking, will have a class variable 
-		if($arr['request']['group']=='my_customers' && $this->group_not_shown)
-		{
-			$this->group_not_shown = false;
-			$name = aw_global_get('uid').' kliendid';
-			//tsekime kas kasutajal on isik objekt üldse tehtud ja seotud endaga
-			//eeldan, et kasutaja existeerib :)
-			$user = new object(users::get_oid_for_uid(aw_global_get('uid')));
-			//getting the person
-			$conns = $user->connections_from(array(
-				'type' => 'RELTYPE_PERSON'
-			));
-			//kui on mitu, siis võtan esimese
-			if(sizeof($conns))
-			{
-				$tmp = current($conns);
-				$name = $tmp->prop('to.name').' kliendid';
-			}
-			$arr['groupinfo']['my_customers']['caption'] = $name;
-		}
 
 		if($arr['request']['group']=='relorg')
 		{
@@ -595,7 +602,6 @@ class crm_company extends class_base
 
 		switch($data['name'])
 		{
-
 			//START OF CUSTOMER SEARCH
 			case 'customer_search_name':
 				if($this->show_customer_search)
@@ -631,6 +637,27 @@ class crm_company extends class_base
 				if($this->show_customer_search)
 				{
 					$data['value'] = $arr['request']['customer_search_address'];
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
+				break;
+			case 'customer_search_only':
+				if($this->show_customer_search)
+				{
+					$obj = new object($arr['request']['id']);					
+					$data['options'] = array('all'=>'Otsi kogu süsteemist',
+														'company' => 'Otsi '.$obj->prop('name').' klientide hulgast',
+														'person' => 'Otsi '.$this->users_person->prop('name').' klientide hulgast');
+					if(in_array($arr['request']['customer_search_only'],array_keys($data['options'])))
+					{
+						$data['value'] = $arr['request']['customer_search_only'];
+					}
+					else
+					{
+						list($data['value'],) = each($data['options']);
+					}
 				}
 				else
 				{
@@ -1571,10 +1598,27 @@ class crm_company extends class_base
 		$target_obj = $conn->to();
 		if ($target_obj->class_id() == CL_CRM_COMPANY)
 		{
-			$target_obj->connect(array(
-				"to" => $conn->prop("from"),
-				"reltype" => $this->crm_company_reltype_workers,
-			));
+			if($conn->prop('reltype')==22) //crm_person.reltype_client_im_handling
+			{
+				$target_obj->connect(array(
+					"to" => $conn->prop("from"),
+					"reltype" => RELTYPE_MAINTAINER,
+				));
+			}
+			else if($conn->prop('reltype')==23) //crm_person.reltype_client_im_selling_to
+			{
+				$target_obj->connect(array(
+					"to" => $conn->prop("from"),
+					"reltype" => RELTYPE_SELLER,
+				));
+			}
+			else if($conn->prop('reltype') == 6) //crm_person.reltype_WORK
+			{
+				$target_obj->connect(array(
+					"to" => $conn->prop("from"),
+					"reltype" => $this->crm_company_reltype_workers,
+				));
+			}
 		}
 		else if($target_obj->class_id() == CL_CRM_SECTION)
 		{
@@ -1609,15 +1653,42 @@ class crm_company extends class_base
 		$target_obj = $conn->to();
 		if ($target_obj->class_id() == CL_CRM_COMPANY)
 		{
-			$target_obj->disconnect(array(
-				"from" => $conn->prop("from"),
-			));
-		}
-		else if($target_obj->class_id() == CL_CRM_SECTION)
-		{
-			//$target_obj->disconnect(array(
-			//	"from" => $conn->prop("from"),
-			//));
+			if($conn->prop('reltype') == 6)
+			{
+				if($target_obj->is_connected_to(array(
+						'to' => $conn->prop('from'),
+						'reltype' => RELTYPE_WORKER)))
+				{
+					$target_obj->disconnect(array(
+						"from" => $conn->prop("from"),
+						'type' => RELTYPE_WORKER,
+					));
+				}
+			}
+			else if($conn->prop('reltype') == 22) //crm_person.client_im_handling
+			{
+				if($target_obj->is_connected_to(array(
+						'to' => $conn->prop('from'),
+						'reltype' => RELTYPE_MAINTAINER)))
+				{
+					$target_obj->disconnect(array(
+						"from" => $conn->prop("from"),
+						'type' => RELTYPE_MAINTAINER,
+					));
+				}
+			}
+			else if($conn->prop('reltype') == 23) //crm_person.client_im_selling_to
+			{
+				if($target_obj->is_connected_to(array(
+						'to' => $conn->prop('from'),
+						'reltype' => RELTYPE_SELLER)))
+				{
+					$target_obj->disconnect(array(
+						"from" => $conn->prop("from"),
+						'type' => RELTYPE_SELLER,
+					));
+				}
+			}
 		}
 	}
 		
@@ -2150,6 +2221,7 @@ class crm_company extends class_base
 	*/
 	function callback_on_load($arr)
 	{
+		$this->crm_customer_init();
 		//for post stuff
 		if(array_key_exists('request',$arr))
 		{
@@ -2377,7 +2449,9 @@ class crm_company extends class_base
 			$arr['args']['customer_search_city'] = urlencode($arr['request']['customer_search_city']);
 			$arr['args']['customer_search_county'] = urlencode($arr['request']['customer_search_county']);
 			$arr['args']['customer_search_field'] = urlencode($arr['request']['customer_search_field']);
+			$arr['args']['customer_search_only'] = $arr['request']['customer_search_only'];
 			$arr['args']['customer_search'] = $this->show_customer_search;
+			$arr['args']['group'] = 'customers';
 		}
 	
 		if($arr['request']['unit'])
@@ -2744,6 +2818,8 @@ class crm_company extends class_base
 	*/
 	function get_customer_search_results($xfilter)
 	{	
+		$company_id = $xfilter['company_id'];
+		unset($xfilter['company_id']);
 		if (!sizeof($xfilter))
 		{
 			return false;
@@ -2851,6 +2927,46 @@ class crm_company extends class_base
 				$no_results=true;
 			}
 		}
+		
+		if($xfilter['customer_search_only']=='company')
+		{
+			//have to get the list of all the clients for this company
+			$company = new object($company_id);
+			$data = array();
+			$this->get_customers_for_company($company, &$data);
+			foreach($data as $value)
+			{
+				$xfilter['oid'][$value] = $value;	
+			}
+		}
+		else if($xfilter['customer_search_only']=='person')
+		{
+			//have to get the list of all the companys for
+			//this users person
+			$crm_person = get_instance('crm/crm_person');
+			$users = get_instance('users_user');
+			$person = $crm_person->get_person_by_user_id($users->get_oid_for_uid(aw_global_get('uid')));
+			//if the user has a person's object associated with him
+			if($person)
+			{
+				//genereerin listi persooni kõikidest firmadest
+				$person = new object($person);
+				$conns=$person->connections_from(array(
+							'type' => 22,//crm_person.reltype_CLIENT_IM_HANDLING
+							));
+				foreach($conns as $conn)
+				{
+					$xfilter['oid'][$conn->prop('to')] = $conn->prop('to');
+				}
+			}
+			else
+			{
+				//@todo võix visata errori, aga peax mõtlema kuidas see error peax välja nägema
+				//
+			}
+		}
+		unset($xfilter['customer_search_only']);
+		
 		if(!$no_results)
 		{
 			return new object_list($xfilter);
@@ -2862,7 +2978,7 @@ class crm_company extends class_base
 	}
 
 	/*
-		constrcuts the xfilter for get_customer_search_results
+		constructs the xfilter for get_customer_search_results
 	*/
 	function construct_customer_search_filter($arr)
 	{
@@ -2876,6 +2992,7 @@ class crm_company extends class_base
 											'customer_search_leader' => 'firmajuht');
 
 		$search_params = array('class_id'=>CL_CRM_COMPANY,'limit'=>100,'sort_by'=>'name');
+
 		foreach($searchable_fields as $key=>$value)
 		{
 			if($arr['request'][$key])
@@ -2887,6 +3004,18 @@ class crm_company extends class_base
 				$search_params[$value] = $tmp_arr;
 			}
 		}
+
+		if(!in_array($arr['request']['customer_search_only'], array('all','company','person')))
+		{
+			$search_params['customer_search_only'] = 'all';
+		}
+		else
+		{
+			$search_params['customer_search_only'] = $arr['request']['customer_search_only'];
+		}
+
+		$search_params['company_id'] = $arr['request']['id'];
+
 		if($arr['request']['no_results'])
 		{
 			$search_params['no_results'] = true;
@@ -3056,6 +3185,49 @@ class crm_company extends class_base
 								'unit' => $arr['unit'],
 								'group' => $arr['group'],
 							),$arr['class']);
+	}
+
+	//goes through all the relations and builds a set of id into $data
+	function get_customers_for_company($obj, $data, $category=false)
+	{
+		//if the $obj is a category
+		if($category)
+		{
+			$conns = $obj->connections_from(array(
+								'type' => 3,//crm_category.reltype_CUSTOMER
+						));
+		}
+		//if the $obj is a company
+		else
+		{
+			$conns = $obj->connections_from(array(
+								'type' => RELTYPE_CUSTOMER
+						));
+		}
+		foreach($conns as $conn)
+		{
+			$data[$conn->prop('to')] = $conn->prop('to');
+		}
+
+		//let's look through the categories
+		if($category)
+		{
+			$conns = $obj->connections_from(array(
+								'type' => 2, //crm_category.RELTYPE_CATEGORY
+						));
+		}
+		else
+		{
+			$conns = $obj->connections_from(array(
+								'type' => RELTYPE_CATEGORY,
+						));
+		}
+		
+		foreach($conns as $conn)
+		{
+			$obj = new object($conn->prop('to'));
+			$this->get_customers_for_company(&$obj,&$data,true);
+		}
 	}
 }
 ?>
