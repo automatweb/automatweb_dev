@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.22 2003/06/11 13:47:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.23 2003/06/12 14:30:52 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -39,6 +39,9 @@
 
 @property moreinfo type=textarea richtext=1 cols=60 rows=5
 @caption Lisainfo
+
+@property link_text type=textbox size=60
+@caption URL
 
 @property is_forum type=checkbox ch_value=1
 @caption Foorum
@@ -91,6 +94,9 @@
 
 @property refopt type=select table=objects store=no
 @caption Ref tüüp
+
+@property show_print type=checkbox ch_value=1 table=objects field=meta method=serialize
+@caption 'Prindi' nupp
 
 @property sections type=select multiple=1 size=20 group=vennastamine store=no
 @caption Sektsioonid
@@ -148,6 +154,13 @@ class doc extends class_base
 			case "name":
 			case "comment":
 				$retval = PROP_IGNORE;
+				break;
+
+			case "tm":
+				if (empty($args["obj"]["oid"]))
+				{
+					$data["value"] = date("d/m/Y");
+				};
 				break;
 
 			case "sections":
@@ -546,15 +559,23 @@ class doc extends class_base
 	{
 		$cfgforms = $this->get_cfgform_list();
 		$retval = array();
-		$retval["doc_default"] = array(
-			"caption" => "Dokument",
-			"link" => $this->mk_my_orb("new",array("parent" => $parent,"period" => $period),"document"),
-		);
+		if (aw_ini_get("document.no_static_forms") == 0)
+		{
+			$retval["doc_default"] = array(
+				"caption" => "Dokument",
+				"link" => $this->mk_my_orb("new",array("parent" => $parent,"period" => $period),"document"),
+			);
+		};
 
-		$retval["ng_doc"] = array(
-			"caption" => "Dokument 2.0",
-			"link" => $this->mk_my_orb("new",array("parent" => $parent,"period" => $period),"doc"),
-		);
+		// can't use empty on function 
+		$def_cfgform = aw_ini_get("document.default_cfgform");
+		if (empty($def_cfgform))
+		{
+			$retval["ng_doc"] = array(
+				"caption" => "Dokument 2.0",
+				"link" => $this->mk_my_orb("new",array("parent" => $parent,"period" => $period),"doc"),
+			);
+		};
 
 		foreach($cfgforms as $key => $val)
 		{
