@@ -78,6 +78,7 @@ class date_edit
 		};
 		$this->varname = $varname;
 		$this->timestamp = $timestamp;
+		$clid = "";
 		if ($this->classid != "")
 		{
 			$clid="class=\"$this->classid\"";
@@ -183,7 +184,7 @@ class date_edit
 					{
 						$retval.= "<option value='---'>---</option>\n";
 					}
-					$step = ($this->minute_step) ? $this->minute_step : 1;
+					$step = isset($this->minute_step) ? $this->minute_step : 1;
 					for ($i = 0; $i <= 59; $i = $i + $step) 
 					{
 						$retval .= sprintf("<option value='%s'%s>%02d</option>\n",$i,selected($i == $minute && $this->timestamp > 0),$i);
