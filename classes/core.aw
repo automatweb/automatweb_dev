@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.228 2003/10/22 14:16:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.229 2003/10/28 14:47:29 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -2149,7 +2149,11 @@ class core extends acl_base
 			$sps++;
 		}
 
-		aw_global_set("title_action", substr(strip_tags($text),$sps));
+		$old = aw_global_get("title_action");
+		if (empty($old))
+		{
+			aw_global_set("title_action", substr(strip_tags($text),$sps));
+		};
 		return $path;
 	}
 
