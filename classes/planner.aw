@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.18 2001/05/31 18:58:23 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.19 2001/06/12 18:20:35 duke Exp $
 // planner.aw - päevaplaneerija
 // CL_CAL_EVEN on kalendri event
 classload("calendar","defs");
@@ -22,6 +22,30 @@ class planner extends calendar {
 		$this->tpl_init("planner");
 		$this->db_init();
 	}
+
+	////
+	// !Joonistab menüü
+	// argumendid:
+	// activelist(array), levelite kaupa info selle kohta, millised elemendid
+	// aktiivsed on
+	// vars(array) - muutujad, mida xml-i sisse pannakse
+	function gen_menu($args = array())
+	{
+		extract($args);
+		global $basedir;
+		load_vcl("xmlmenu");
+		$xm = new xmlmenu();
+		$xm->vars($vars);
+		$xm->load_from_files(array(
+					"xml" => $basedir . "/xml/planner/menucode.xml",
+					"tpl" => $this->template_dir . "/menus.tpl",
+				));
+		return $xm->create(array(
+				"activelist" => $activelist,
+			));
+	}
+
+					
 
 	////
 	// !Loob uue kalendriobjejkti
@@ -64,17 +88,6 @@ class planner extends calendar {
 		{
 			$date = date("d-m-Y");
 		};
-		// menüü def
-		$args["date"] = $date;
-		$menu = array(
-			"today" => "?class=planner",
-			"overview" => "?class=planner&action=overview&date=$date",
-			"day" => "?class=planner&date=$date",
-			"week" => "?class=planner&action=show_week&date=$date",
-			"month" => "?class=planner&action=show_month&date=$date",
-			"new" => "?class=planner&action=addevent&date=$date",
-		);
-		$args["menu"] = $menu;
 		return $this->change($args);
 	}
 
@@ -90,16 +103,6 @@ class planner extends calendar {
 		{
 			$date = date("d-m-Y");
 		};
-		// menüü def
-		$menu = array(
-			"today" => "?class=planner&action=$act&$ids",
-			"overview" => "?class=planner&action=$act&disp=overview&$ids&date=$date",
-			"day" => "?class=planner&action=$act&$ids&date=$date",
-			"week" => "?class=planner&action=$act&disp=week&$ids&date=$date",
-			"month" => "?class=planner&action=$act&disp=month&$ids&date=$date",
-			"new" => "?class=planner&action=addevent&parent=$id&date=$date",
-		);
-		$args["menu"] = $menu;
 		return $this->change($args);
 	}
 	
@@ -110,7 +113,20 @@ class planner extends calendar {
 	// date - millisele kuupäevale keskenduda
 	function change($args = array())
 	{
+		
 		extract($args);
+		if ($disp == "day")
+		{
+			$act = ($date == date("d-m-Y")) ? "today" : "day";
+		}
+		else
+		{
+			$act = $disp;
+		};
+		$menubar = $this->gen_menu(array(
+				"activelist" => array($act),
+				"vars" => array("date" => $date),
+			));
 		$object = $this->get_object($id);
 
 			
@@ -560,19 +576,6 @@ class planner extends calendar {
 				break;
 		};
 
-		// joonistame menüü
-		$menudef = "";
-		foreach($menu as $key => $val)
-		{
-			if ($key == $disp)
-			{
-				$menudef .= $title . " &nbsp;&nbsp; ";
-			}
-			else
-			{
-				$menudef .= "<a href='$val'>$titles[$key]</a> &nbsp;&nbsp; ";
-			};
-		};
 		$this->read_template("planner.tpl");
 		$ylist = array(
 			"2001" => "2001",
@@ -608,6 +611,7 @@ class planner extends calendar {
 			"mlist" => $this->picker($m,$mlist),
 			"ylist" => $this->picker($y,$ylist),
 			"prev" => $prev,
+			"menubar" => $menubar,
 			"next" => $next));
 		return $this->parse();
 	}
@@ -637,6 +641,41 @@ class planner extends calendar {
 	function adm_event($args = array())
 	{
 		extract($args);
+		// kui me maandume siia läbi eventi lisamise lingi, siis teeme objekti ära,
+		// ning suuname kasutaja äsjaloodud eventi muutmisse ümber
+		if ($op == "add")
+		{
+			// date on hidden field muutmis/lisamisvormist. Sisaldab eventi kuupäeva dd-mm-yyyy
+			list($d,$m,$y) = split("-",$date);
+			// sellest teeme timestampi
+			$start = mktime(0,0,0,$m,$d,$y);
+			// kui parent on defineerimata, siis savelstame ta kodukataloogi alla
+			if (!$parent)
+			{
+				global $udata;
+				$parent = $udata["homefolder"];
+			};
+			$uid = UID;
+			$id = $this->new_object(array(	
+				"class_id" => CL_CAL_EVENT,
+				"parent" => $parent,
+				"name" => "",
+			),true);
+
+			$q = "INSERT INTO planner (id,uid,start) VALUES ('$id','$uid','$start')";
+			$this->db_query($q);
+			$status_msg = "Event on lisatud";
+			$retval = $this->mk_site_orb(array(
+					"action" => "editevent",
+					"id" => $id,
+				));
+			return $retval;
+		};
+			
+		$menubar = $this->gen_menu(array(
+			"activelist" => array("add","edit"),
+			"vars" => array("id" => $id),
+		));
 		if ($parent)
 		{
 			$this->tpl_init("automatweb/planner");
@@ -742,6 +781,7 @@ class planner extends calendar {
 				"yearskip" => $yearskip,
 				"yearpwhen" => $yearpwhen,
 				"reminder" => $row["reminder"],
+				"menubar" => $menubar,
 				"delete" => $delbut,
 				"private" => ($row["private"]) ? "checked" : "",
 				"place" => $row["place"],
@@ -755,8 +795,16 @@ class planner extends calendar {
 	
 	function repeaters($args = array())
 	{
-		$this->tpl_init("automatweb/planner");
-		$this->read_template("repeaters.tpl");
+		extract($args);
+		$menubar = $this->gen_menu(array(
+			"activelist" => array("add","repeaters"),
+			"vars" => array("id" => $id),
+		));
+		$this->tpl_init("planner");
+		$this->read_template("reps.tpl");
+		$this->vars(array(
+				"menubar" => $menubar,
+			));
 		return $this->parse();
 	}
 
