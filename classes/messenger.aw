@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.36 2001/05/29 02:28:22 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.37 2001/05/30 02:23:30 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -64,7 +64,7 @@ class msg_sql_driver extends db_connector
 		extract($args);
 		$this->attaches = array();
 		$reslist = array();
-		$q = "SELECT * FROM msg_objects WHERE message_id = '$id'";
+		$q = "SELECT * FROM objects WHERE parent = '$id'";
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
@@ -226,7 +226,7 @@ class messenger extends menuedit_light
 			$this->conf = $this->_get_msg_conf(array("conf" => $this->user["messenger"]));
 		};
 	}
-
+	
 	////
 	// !Initsialiseerib messengeri folderid kasutaja jaoks
 	function init_messenger($args = array())
@@ -624,6 +624,7 @@ class messenger extends menuedit_light
 						$msg["subject"] = "(no subject)";
 					};
 					// kui status == true, siis on teade loetud
+					$msg["attach"] = ($msg["num_att"] > 0) ? $this->parse("attach") : "";
 					$msg["id"] = $msg["oid"];
 					$msg["color"] = ($cnt % 2) ? "#EEEEEE" : "#FFFFFF";
 					$msg["style"] = ($msg["status"]) ? "textsmall" : "textsmallbold";
@@ -759,6 +760,7 @@ class messenger extends menuedit_light
 			"id" => $active_folder,
 		));
 	}
+
 	
 	//// 
 	// !Loob tühja teate
@@ -1198,13 +1200,30 @@ class messenger extends menuedit_light
 			"uid" => UID,
 		));
 
+		// id-d kasutame sellepärast, et integeri jargi otsimine on kiirem, kui 
+		// stringi (ntx UIDL)
 		$msg = $this->driver->msg_get(array(
 			"id" => $id,
 		));
-
+		
 		$folder_list = $this->_folder_list();
 
 		$this->read_template("message.tpl");
+		// koostame attachide nimekirja
+		$q = "SELECT * FROM objects WHERE parent = '$id'";
+		$this->db_query($q);
+		$c = 0;
+		$attaches = "";
+		while($row = $this->db_next())
+		{
+			$c++;
+			$this->vars(array(
+					"cnt" => $c,
+					"icon" => get_icon_url($row["class_id"],""),
+					"name" => $row["name"],
+				));
+			$attaches .= $this->parse("attach");
+		};
 		
 		$vars = array();
 
@@ -1255,6 +1274,7 @@ class messenger extends menuedit_light
 			"msg_font" => ($this->msgconf["msg_font"]) ? $this->msgconf["msg_font"] : "Courier",
 			"msg_font_size" => ($this->msgconf["msg_font_size"]) ? $this->msgconf["msg_font_size"] : "0",
 			"del_reforb" => $this->mk_reforb("delete",array("id" => $msg["id"])),
+			"attach" => $attaches,
 			"reply_reforb" => $this->mk_reforb("reply",array("id" => $msg["id"])),
 			"mailbox" => $this->picker($mailbox,$mboxes),
 			"mbox_name" => $mboxes[$mailbox],
@@ -1937,6 +1957,7 @@ class messenger extends menuedit_light
 		};
 
 		// teeme kasutaja inboxi asukoha kindlaks
+		// kuid siia tuleb ka filterdamine vahele panna
 		$q = "SELECT msg_inbox FROM users WHERE uid = '" . UID . "'";
 		$this->db_query($q);
 		$row = $this->db_next();
@@ -1988,8 +2009,10 @@ class messenger extends menuedit_light
 	function _get_pop3_messages($args = array())
 	{
 		extract($args);
-		classload("pop3");
+		classload("pop3","aw_mail","file");
 		$pop3 = new pop3();
+		$awm = new aw_mail();
+		$awf = new file();
 		$msgs = $pop3->get_messages($server,$uid,$password,false,$uidls);
 
 		$c = 0;
@@ -1998,49 +2021,48 @@ class messenger extends menuedit_light
 			foreach($msgs as $data)
 			{
 				$c++;
-				// siin peab olema mingi tsykkel, mis leiab kirjale ntx "Subject" välja
-				$msglines = explode("\n",$data["msg"]);
-				$header = "";
-				$content = "";
-				$inheader = true;
-				foreach($msglines as $line)
+				// prepare the class for new message
+				$awm->clean();
+				// we'll parse the message
+				$res = $awm->parse_message(array(
+							"data" => $data["msg"],
+							));
+
+				$body = $awm->get_part(array("part" => "body"));
+				$subject = $body["headers"]["Subject"];
+				$this->quote($subject);
+				$oid = $this->new_object(array(
+						"parent" => $parent,
+						"name" => $subject,
+						"class_id" => CL_MESSAGE),false);
+				
+
+				if ($res > 0)
 				{
-					if (preg_match("/^Subject: (.*)$/",$line,$mt))
+					for ($i = 1; $i <= $res; $i++)
 					{
-						$subject = trim($mt[1]);
-					};
-
-					if (preg_match("/^Date: (.*)$/",$line,$mt))
-					{
-						$tm = strtotime($mt[1]);
-					};
-					
-					if (preg_match("/^From: (.*)$/",$line,$mt))
-					{
-						$from = trim($mt[1]);
-					};
-					
-					if (preg_match("/^To: (.*)$/",$line,$mt))
-					{
-						$to = trim($mt[1]);
-					};
-
-					if (strlen(trim($line)) == 0)
-					{
-						$inheader = false;
-					};
-
-					if ($inheader)
-					{
-						$header .= $line;
-					}
-					else
-					{
-						$content .= $line;
+						$part = $awm->get_part(array("part" => $i));
+						if ($part["headers"]["Content-Name"])
+						{
+							$awf->put(array(
+									"store" => "fs",
+									"parent" => $oid,
+									"filename" => $part["headers"]["Content-Name"],
+									"type" => $part["headers"]["Content-Type"],
+									"content" => $part["body"],
+							));
+						};
 					};
 				};
+		
 				$uidl = trim($data["uidl"]);
 				// registreerime vastse teate
+				$subject = $body["headers"]["Subject"];
+				$from = $body["headers"]["From"];
+				$to = $body["headers"]["To"];
+				$content = $body["body"];
+				$tm = strtotime($body["headers"]["Date"]);
+				$header = join("\n",map2("%s: %s",$body["headers"]));
 				$this->quote($subject);
 				$this->quote($from);
 				$this->quote($to);
@@ -2048,13 +2070,10 @@ class messenger extends menuedit_light
 				$this->quote($uidl);
 				$this->quote($content);
 				$this->quote($header);
-				$oid = $this->new_object(array(
-						"parent" => $parent,
-						"name" => $subject,
-						"class_id" => CL_MESSAGE),false);
+				
 				// tyypi 2 on välised kirjad. as simpel as that.
-				$q = "INSERT INTO messages (id,pri,mfrom,mto,folder,subject,tm,type,uidl,message,headers)
-					VALUES('$oid','0','$from','$to','$parent','$subject','$tm','2','$uidl','$content','$header')";
+				$q = "INSERT INTO messages (id,pri,mfrom,mto,folder,subject,tm,type,uidl,message,headers,num_att)
+					VALUES('$oid','0','$from','$to','$parent','$subject','$tm','2','$uidl','$content','$header','$res')";
 				$this->db_query($q);
 
 
