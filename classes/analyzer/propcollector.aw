@@ -355,7 +355,10 @@ class propcollector extends aw_template
 	
 	function add_comment($comment)
 	{
-		$this->properties[$this->name]["comment"] = $comment;
+		if ($this->last_element == "property")
+		{
+			$this->properties[$this->name]["comment"] = $comment;
+		};
 	}
 
 	////
