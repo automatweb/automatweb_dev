@@ -6,7 +6,7 @@
 
 @default group=general
 
-@property ffile type=fileupload
+@property file type=fileupload
 @caption Pilt
 
 @property file_show type=text
@@ -403,56 +403,48 @@ class image extends class_base
 	function get_property($arr)
 	{
 		$prop = &$arr['prop'];
-		if ($prop['name'] == 'file_show' && $arr['obj']['oid'])
+		$retval = PROP_OK;
+		switch($prop["name"])
 		{
-			$imd = $this->get_image_by_id($arr['obj']['oid']);
-			if ($imd['file'] != '')
-			{
-				$prop['value'] = html::img(array('url' => $imd['url']));
-			}
-			else
-			{
-				return PROP_IGNORE;
-			}
-		}
-		else
-		if ($prop['name'] == 'ffile' && !$arr['obj']['oid'])
-		{
-			return PROP_IGNORE;
-		}
-		return PROP_OK;
+			case "file_show":
+				if ($arr["obj"]["oid"])
+				{
+					$imd = $this->get_image_by_id($arr['obj']['oid']);
+					if ($imd['file'] != '')
+					{
+						$prop['value'] = html::img(array('url' => $imd['url']));
+					};
+				}
+				else
+				{
+					$retval = PROP_IGNORE;
+				};
+				break;
+		};
+
+		return $retval;
 	}
 
 	function set_property($arr)
 	{
 		$prop = &$arr['prop'];
-		if ($prop['name'] == 'ffile' && $arr['obj']['oid'])
+		$retval = PROP_OK;
+		$form_data = &$arr["form_data"];
+		if ($prop['name'] == 'file')
 		{
-			global $ffile,$ffile_type;
+			global $file,$file_type;
 			$_fi = get_instance("file");
-			if (is_uploaded_file($ffile))
+			if (is_uploaded_file($file))
 			{
-				$fl = $_fi->_put_fs(array("type" => $ffile_type, "content" => $this->get_file(array("file" => $ffile))));
-				if ($this->db_fetch_field("SELECT id FROM images WHERE id = '".$arr['obj']['oid']."'", "id"))
-				{
-					$q = "UPDATE images SET file = '$fl' WHERE id = '".$arr['obj']['oid']."'";
-					$this->db_query($q);
-				}
-				else
-				{
-					$q = "INSERT INTO images (id, file) VALUES('".$arr['obj']['oid']."','$fl')";
-					$this->db_query($q);
-				}
+				$fl = $_fi->_put_fs(array("type" => $file_type, "content" => $this->get_file(array("file" => $file))));
+				$form_data["file"] = $fl;
 			}
-		}
-		if ($prop['name'] == 'ffile')
-		{
-			return PROP_IGNORE;
-		}
-		else
-		{
-			return PROP_OK;
+			else
+			{
+				$retval = PROP_IGNORE;
+			};
 		};
+		return $retval;
 	}
 }
 ?>
