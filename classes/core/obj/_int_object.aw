@@ -984,8 +984,13 @@ class _int_object
 	function _int_load_properties()
 	{
 		// then get the properties
+		$file = $this->ini["classes"][$this->obj["class_id"]]["file"];
+		if ($this->obj["class_id"] == 29)
+		{
+			$file = "doc";
+		}
 		list($this->properties, $this->tableinfo) = $GLOBALS["object_loader"]->load_properties(array(
-			"file" => $this->ini["classes"][$this->obj["class_id"]]["file"],
+			"file" => $file,
 			"clid" => $this->obj["class_id"]
 		));
 
@@ -1082,7 +1087,7 @@ class _int_object
 		$cnt = 0;
 		while ($parent && $parent != $this->ini["rootmenu"])
 		{
-			if ($GLOBALS["object_loader"]->ds->can("view", $parent))
+			if ($GLOBALS["object_loader"]->ds->can("view", $parent) && $GLOBALS["object_loader"]->ds->object_exists($parent))
 			{
 				$t = obj($parent);
 				$ret[] = $t;

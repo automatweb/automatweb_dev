@@ -119,6 +119,11 @@ class _int_obj_ds_decorator
 	{
 		$this->contained->dequote($dat);
 	}
+
+	function object_exists($oid)
+	{
+		$this->contained->object_exists($oid);
+	}
 }
 
 ?>

@@ -151,5 +151,10 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		}
 		$this->cache->file_invalidate_regex("objcache::search::(.*)::0");
 	}
+
+	function object_exists($oid)
+	{
+		return $this->contained->object_exists($oid);
+	}
 }
 ?>

@@ -705,6 +705,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->db_query("UPDATE objects SET status = '".STAT_DELETED."' WHERE oid = '$oid'");
 		$this->db_query("DELETE FROM aliases WHERE target = '$oid'");
 	}
+
+	function object_exists($oid)
+	{
+		return ($this->db_fetch_field("SELECT status FROM objects WHERE oid = '$oid'", "status") > 0);
+	}
 }
 
 ?>
