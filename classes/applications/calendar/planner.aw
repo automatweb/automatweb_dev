@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.46 2005/03/14 17:27:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.47 2005/03/18 11:58:51 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -158,6 +158,9 @@ define("REP_YEAR",4);
 @reltype CALENDAR_OWNERSHIP value=8 clid=CL_USER
 @caption Omanik
 
+@reltype OTHER_CALENDAR value=9 clid=CL_PLANNER
+@caption Teised
+
 */
 
 define("CAL_SHOW_DAY",1);
@@ -264,6 +267,7 @@ class planner extends class_base
 		$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
 		// now I need to figure out the calendar that is connected to the user object
 		// XXX: why the fuck is it so hard to gain access to defined relation types from here?
+		$x = $user->connections_to();
 		$conns = $user->connections_to(array(
 			"type" => 8, //RELTYPE_CALENDAR_OWNERSHIP
 		));
@@ -442,12 +446,8 @@ class planner extends class_base
 	{
 		$obj = new object($arr["id"]);
 
-		$folders = $event_ids = array();
-
-		if ($obj->prop("event_folder") != "")
-		{
-			$folders[] = $obj->prop("event_folder");
-		};
+		$event_ids = array();
+		$folders = $this->get_event_folders(array("id" => $obj->id()));
 
 		classload("date_calc");
 		if (empty($arr["start"]))
@@ -465,26 +465,6 @@ class planner extends class_base
 		{
 			$_start = $arr["start"];
 			$_end = $arr["end"];
-		};
-
-		// generate a list of folders from which to take events
-		// both calendars and projects have "event_folder"'s
-		$folderlist = $obj->connections_from(array(
-			"type" => RELTYPE_EVENT_SOURCE,
-		));
-
-		foreach($folderlist as $conn)
-		{
-			$_tmp = $conn->to();
-			$clid = $_tmp->class_id();
-			if ($clid == CL_PLANNER && $_tmp->prop("event_folder") != "")
-			{
-				$folders[] = $_tmp->prop("event_folder");
-			};
-			if ($clid == CL_PROJECT)
-			{
-				$folders[] = $_tmp->id();
-			};
 		};
 
 		// also include events from any projects that are connected to this calender
@@ -690,9 +670,10 @@ class planner extends class_base
 			"date" => isset($date) ? $date : date("d-m-Y"),
 			"type" => $type,
 		));
-
+	
 		$start = $di["start"];
 		$end = $di["end"];
+
 
 		$obj = new object($id);
 		$this->id = $id;
@@ -1551,14 +1532,22 @@ class planner extends class_base
 				$full_weeks = true;
 			}
 		}
+		$o = $arr["obj_inst"];
+
+
 		$arr["prop"]["vcl_inst"]->configure(array(
 			"tasklist_func" => array(&$this,"get_tasklist"),
 			"overview_func" => array(&$this,"get_overview"),
 			"full_weeks" => $full_weeks,
+			// päeva algus ja päeva lõpp on vaja ette anda!
+			"day_start" => $o->prop("day_start"),
+			"day_end" => $o->prop("day_end"),
 		));
 		
 		$def = $arr["obj_inst"]->prop("default_view");
 		$view = $_REQUEST["viewtype"];
+
+		// ok, would the author of the following turd please step up?
 		if($this->can("edit", $arr["obj_inst"]->id()) && ((($def == 1 || $def == 3) && ($view != $this->viewtypes[4])) || ($view == $this->viewtypes[3] || $view == $this->viewtypes[1] || $view == $this->viewtypes[5])))
 		{
 			$arr["prop"]["vcl_inst"]->adm_day = 1;
@@ -1583,11 +1572,12 @@ class planner extends class_base
 
 		foreach($events as $event)
 		{
-			if ($arr["request"]["clid_filt"] && $event["class_id"] != $arr["request"]["clid_filt"])
+			if (!empty($arr["request"]["clid_filt"]) && $event["class_id"] != $arr["request"]["clid_filt"])
 			{
 				continue;
 			}
-			if ($_GET["XX6"])
+			// recurrence information on lihtsalt nimekiri timestampidest, millel sündmus esineb
+			if (!$_GET["XX6"])
 			{
 				$arr["prop"]["vcl_inst"]->add_item(array(
 					"item_start" => $event["start"],
@@ -2476,6 +2466,22 @@ class planner extends class_base
 			"cb_group" => $arr["emb"]["cb_group"]
 		), $arr["class"]);
 	}
+
+	/*
+		@attrib name=wtf
+	*/
+	function wtf()
+	{
+		$ol = new object_list(array(
+			"parent" => 437,
+			"class_id" => CL_CRM_MEETING,
+		));
+		foreach($ol->arr() as $o)
+		{
+			arr($o->properties());
+		};
+
+	}
 	
 	/**
 		@attrib name=delete_events
@@ -2497,6 +2503,44 @@ class planner extends class_base
 			}
 		}
 		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"], "date" => $arr["date"]));
+	}
+
+	/** returns a list of folders for a specified calendar, this is more efficient that returning a list of events
+	**/
+	function get_event_folders($arr)
+	{
+		$cal_obj = new object($arr["id"]);
+		$folders = array();
+		
+		$evt_folder = $cal_obj->prop("event_folder");
+		if (is_oid($evt_folder))
+		{
+			$folders[] = $evt_folder;
+		};
+
+		// get others as well
+		$folderlist = $cal_obj->connections_from(array(
+			"type" => "RELTYPE_EVENT_SOURCE",
+		));
+
+		foreach($folderlist as $conn)
+		{
+			$_tmp = $conn->to();
+			$clid = $_tmp->class_id();
+			if ($clid == CL_PLANNER)
+			{
+				$evt_folder = $_tmp->prop("event_folder");
+				if (is_oid($evt_folder))
+				{
+					$folders[] = $evt_folder;
+				};
+			};
+			if ($clid == CL_PROJECT)
+			{
+				$folders[] = $_tmp->id();
+			};
+		};
+		return $folders;
 	}
 };
 ?>
