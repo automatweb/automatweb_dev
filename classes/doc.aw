@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.57 2003/11/26 15:37:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.58 2003/12/05 12:29:23 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -807,7 +807,7 @@ class doc extends class_base
 
 				$p_o->set_meta("active_documents", $docs);
 				$p_o->set_meta("active_documents_p", $docs_p);
-				if ($p_o->class_id() && $p_o->parent())
+				if ($p_o->class_id() && $p_o->parent() && $this->can("edit", $p_o->id()))
 				{
 					$p_o->save();
 				}
