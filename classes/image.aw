@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.112 2004/10/08 15:26:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.113 2004/10/08 15:59:56 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -612,11 +612,11 @@ class image extends class_base
 	{
 		if ($url == "")
 		{
-			return "<img border=\"0\" src=\"".aw_ini_get("baseurl")."/automatweb/images/trans.gif\" alt=\"$alt\">";
+			return "<img border=\"0\" src=\"".aw_ini_get("baseurl")."/automatweb/images/trans.gif\" alt=\"$alt\" title=\"$alt\">";
 		}
 		else
 		{
-			return "<img border=\"0\" src=\"$url\" alt=\"$alt\">";
+			return "<img border=\"0\" src=\"$url\" alt=\"$alt\" title=\"$alt\">";
 		}
 	}
 
@@ -990,9 +990,6 @@ class image extends class_base
 		{
 			return false;
 		}
-
-		$gc = get_instance("contentmgmt/gallery/gallery_conf");
-		$gc->do_check_tbl();
 
 		$oc = obj($pt);
 		$oc = $oc->path();
