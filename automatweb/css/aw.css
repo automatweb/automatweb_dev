@@ -1969,4 +1969,20 @@ font-weight: bold;
 color:#000000;
 }
 
+.aw04kalendertextsmall {
+font-family: Arial, verdana, sans-serif;
+font-size: 11px;
+color: #000000;
+}
+
+.aw04kalendertextsmall a {
+color: #000000;
+text-decoration:none;
+}
+
+.aw04kalendertextsmall a:hover {
+color: #0017AF;
+text-decoration:underline;
+}
+
 /* END KALENDER */
