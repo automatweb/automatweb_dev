@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.74 2002/01/08 02:08:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.75 2002/01/08 02:48:26 duke Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -2259,8 +2259,8 @@ class document extends aw_template
 		{
 			$row = $this->docarr[$k];
 			$this->vars(array("doc_id"		=> $row["docid"],
-													"doc_title"	=> $v,
-													"doc_title_s"	=> str_replace("\"","\\\"",$row["title"]),
+													"doc_title"	=> strip_tags($v),
+													"doc_title_s"	=> strip_tags(str_replace("\"","\\\"",$row["title"])),
 													"jrk"			  => $row["jrk"],
 													"modifiedby"	=> $row["modifiedby"],
 													"modified"		=> $this->time2date($row["modified"],2),
@@ -2836,7 +2836,7 @@ class document extends aw_template
 					$sstr = 100;
 				else
 					$sstr = substr(($v[matches]*100) / $max_count,0,4);
-				$this->vars(array("title"			=> $v[title],
+				$this->vars(array("title"			=> strip_tags($v[title]),
 													"percent"		=> $sstr,
 													"content"		=> preg_replace("/#(.*)#/","",$v[content]),
 													"modified"	=> $v[tm] == "" ? $v[modified] : $v[tm],
