@@ -1,6 +1,29 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="messenger">
+		<action name="new">
+			<function name="orb_new">
+				<arguments>
+					<required name="parent" type="int"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="change">
+			<function name="orb_change">
+				<arguments>
+					<required name="id" type="int"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit">
+			<function name="orb_submit">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="headers">
 			<function name="show_headers">
 				<arguments>
@@ -264,7 +287,7 @@
 		</action>
 
 		<action name="submitrules">
-			<function name="submitrule">
+			<function name="submitrules">
 				<arguments>
 				</arguments>
 			</function>
