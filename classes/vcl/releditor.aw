@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.33 2004/09/20 13:07:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.34 2004/11/01 15:44:30 duke Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -134,6 +134,7 @@ class releditor extends core
 		$act_props = array();
 		$use_form = $prop["use_form"];
 
+
 		if (!empty($use_form))
 		{
 			foreach($all_props as $key => $_prop)
@@ -144,6 +145,7 @@ class releditor extends core
 				};
 			};
 		};
+
 		
 		$form_type = $arr["request"][$this->elname];
 		$this->form_type = $form_type;
@@ -174,6 +176,7 @@ class releditor extends core
 		};
 		
 		//if (!empty($form_type) || $visual != "manager")
+			$pcount = sizeof($props);
 		//{
 			foreach($all_props as $key => $_prop)
 			{
@@ -183,6 +186,10 @@ class releditor extends core
 					$this->all_props[$key] = $_prop;
 					if (!empty($form_type) || $visual != "manager")
 					{
+						if (1 == $pcount)
+						{
+							$_prop["caption"] = $prop["caption"];
+						};
 						$act_props[$key] = $_prop;
 					};
 				};
