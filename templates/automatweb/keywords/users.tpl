@@ -13,6 +13,7 @@
 <td align="center" class="title">&nbsp;Nimi&nbsp;</td>
 <td align="center" class="title">&nbsp;E-post&nbsp;</td>
 <td align="center" class="title">&nbsp;Liitus&nbsp;</td>
+<td align="center" class="title">&nbsp;Info</td>
 <td align="center" class="title" width="*">&nbsp;&nbsp;</td>
 </tr>
 <!-- SUB: LINE -->
@@ -21,6 +22,7 @@
 <td class="fgtext">&nbsp;{VAR:name}&nbsp;</td>
 <td class="fgtext">&nbsp;{VAR:email}&nbsp;</td>
 <td class="fgtext">&nbsp;{VAR:tm}&nbsp;</td>
+<td class="fgtext">&nbsp;<a href="{VAR:baseurl}/automatweb/orb.{VAR:ext}?class=users&action=change&id={VAR:uid}">Info</a></td>
 <td class="fgtext" align="center">&nbsp;&nbsp;</td>
 </tr>
 <!-- END SUB: LINE -->
