@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.19 2004/03/25 17:33:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.20 2004/05/06 12:03:44 duke Exp $
 // imap.aw - IMAP login 
 /*
 
@@ -280,7 +280,7 @@ class imap extends class_base
 	
 	function search_folder($string)
 	{
-		$results = imap_search($this->mbox,$string,ST_UID);
+		$results = imap_search($this->mbox,$string,SE_UID);
 		return $results;
 	}
 
@@ -374,8 +374,15 @@ class imap extends class_base
 	function fetch_headers($arr)
 	{
 		$msg_no = imap_msgno($this->mbox,$arr["msgid"]);
-		$raw_headers = @imap_fetchbody($this->mbox,$msg_no,0);
-		return $raw_headers;
+		if ($arr["arr"])
+		{
+			return @imap_headerinfo($this->mbox,$msg_no);
+		}
+		else
+		{
+			return @imap_fetchbody($this->mbox,$msg_no,0);
+		};
+		
 	}
 
 	function dissect_part($this_part,$part_no)
@@ -526,9 +533,10 @@ class imap extends class_base
 		imap_append($this->mbox,$this->servspec . $this->outbox,
 			"From: $arr[from]\r\n"
 			."To: $arr[to]\r\n"
+			."Cc: $arr[cc]\r\n"
 			."Subject: $arr[subject]\r\n"
 			."\r\n"
-			.$arr[message] . "r\n"
+			.$arr[message] . "\r\n"
 		);
 	}
 
