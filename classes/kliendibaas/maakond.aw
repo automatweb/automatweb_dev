@@ -13,8 +13,8 @@
 	@property name type=textbox size=20
 	@caption Nimetus (tmp)
 
-	@property comment type=textarea
-	@caption Keeled
+//	@property comment type=textarea
+//	@caption Keeled
 
 	@property location type=textarea
 	@caption Asukoha kirjeldus
