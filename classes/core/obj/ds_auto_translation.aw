@@ -22,6 +22,11 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 
 		$lang_id = aw_global_get("lang_id");
 		$req_od = $this->contained->get_objdata($oid, $param);
+		if ($req_od["brother_of"] != $oid && $req_od["brother_of"])
+		{
+			$oid = $req_od["brother_of"];
+			$req_od = $this->contained->get_objdata($oid, $param);
+		}
 
 		// check if this object is part of the whole translation hooplaa or not. if not, just return the objdata
 		if (($req_od["flags"] & (OBJ_HAS_TRANSLATION|OBJ_IS_TRANSLATED|OBJ_NEEDS_TRANSLATION)) == 0)
