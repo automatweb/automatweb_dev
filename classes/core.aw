@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.79 2002/02/18 18:06:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.80 2002/02/27 14:12:25 duke Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -434,7 +434,8 @@ class core extends db_connector
 		$retval = array();
 		while($row = $this->db_next())
 		{
-			$retval[$row["gid"]] = $row["gid"];
+			$gid = sprintf("%d",$row["gid"]);
+			$retval[$gid] = $gid;
 		};
 
 		// oh, yes, this is higly not logical, to do this here,
