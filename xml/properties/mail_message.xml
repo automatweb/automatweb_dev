@@ -56,6 +56,15 @@
             <caption>Sisu</caption>
       </property>
       <property>
+            <name>attachments</name>
+            <type>text</type>
+            <store>no</store>
+            <table>messages</table>
+            <group>general</group>
+            <field>attachments</field>
+            <caption>Manused</caption>
+      </property>
+      <property>
             <name>msgrid</name>
             <type>hidden</type>
             <table>messages</table>
