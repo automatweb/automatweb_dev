@@ -21,7 +21,7 @@ class bugtrack extends aw_template
 
 	function bugtrack()
 	{
-		$this->mastersite="http://work.struktuur.ee";
+		$this->mastersite="http://aw.struktuur.ee";
 		global $sitekeys;
 		$this->sitekeys=$sitekeys;
 		if (!isset($sitekeys) || !is_array($sitekeys))
@@ -314,8 +314,8 @@ class bugtrack extends aw_template
 				break;
 		}
 
-		$headerarray[$this->mk_orb("list",array("setpage"=>"today"))]=$kiiredlink;
-		$headerarray[$this->mk_orb("list",array("setpage"=>"others"))]=$k6iklink;
+		$headerarray[$this->mk_my_orb("list",array("setpage"=>"today"))]=$kiiredlink;
+		$headerarray[$this->mk_my_orb("list",array("setpage"=>"others"))]=$k6iklink;
 		
 
 		switch ($bugtr_userfilt)
@@ -336,15 +336,15 @@ class bugtrack extends aw_template
 		};
 
 		$headerarray=array_merge($headerarray,array(
-			$this->mk_orb("list",array("setfilt"=>"my")) => $minulelink,
-			$this->mk_orb("list",array("setfilt"=>"allusers")) => $k6igilelink,
-			"javascript:remote(0,400,210,\"".$this->mk_orb("popupfilter",array())."\");" => "Filter"
+			$this->mk_my_orb("list",array("setfilt"=>"my")) => $minulelink,
+			$this->mk_my_orb("list",array("setfilt"=>"allusers")) => $k6igilelink,
+			"javascript:remote(0,400,210,\"".$this->mk_my_orb("popupfilter",array())."\");" => "Filter"
 			));
 
 
 		if ($this->prog_acl("add", PRG_BUGTRACK))
 		{
-			$headerarray[$this->mk_orb("new",array())] = "Lisa uus";
+			$headerarray[$this->mk_my_orb("new",array())] = "Lisa uus";
 		};
 
 		$t->define_header("BugTrack",$headerarray);
@@ -379,7 +379,7 @@ class bugtrack extends aw_template
 		{
 			$row["status"]=$this->statlist[$row["status"]];
 			$row["__pribgcolor"]=$this->pricolor[$row["pri"]];
-			$topic="bug_".$row["id"];
+			$topic="bug_".$row["id"]."&forum_id=".$GLOBALS["bugtrack_forum"];
 			$row["commentcount"]=(int)(isset($commentnewarr[$topic])?$commentnewarr[$topic]:$commentarr[$topic])." / ".(int)$commentarr[$topic];
 
 			//tee ¸le l‰inud teist v‰rvi
@@ -405,7 +405,7 @@ class bugtrack extends aw_template
 	//! suunab kommentaaridesse
 	function orb_popupshowcomments($arr)
 	{
-		$refr = "comments.aw?section=bug_".$arr["id"];
+		$refr = "/automatweb/comments.aw?section=bug_".$arr["id"]."&forum_id=".$arr["forum_id"];
 		http_refresh(0,$refr);
 	}
 
@@ -422,7 +422,7 @@ class bugtrack extends aw_template
 			"title" => $bug["title"],
 			"userlist" => $this->picker($bug["developer"],$this->get_userlist($bug["developer"])),
 			"statuslist" => $this->picker($bug["status"],$this->statlist),
-			"loc" => $this->mk_orb("submit_delegate",array("id"=>$id))
+			"loc" => $this->mk_my_orb("submit_delegate",array("id"=>$id))
 			));
 		return $this->parse();
 	}
@@ -448,7 +448,7 @@ class bugtrack extends aw_template
 				$bugtr_filt="";
 				break;
 		};
-		return $this->mk_orb("popupfilter",array("sendupdate"=>"1"));
+		return $this->mk_my_orb("popupfilter",array("sendupdate"=>"1"));
 
 	}
 	////
@@ -470,7 +470,7 @@ class bugtrack extends aw_template
 
 		if ($sendupdate)
 		{
-			$sendupdate="window.opener.location='".$this->mk_orb("list",array())."';";
+			$sendupdate="window.opener.location='".$this->mk_my_orb("list",array())."';";
 		};
 
 		$filta=$this->decode_filt($bugtr_filt);
@@ -493,7 +493,7 @@ class bugtrack extends aw_template
 			"ftypes" => join(",",$this->tablefieldtypes),
 			"foptions" => join(",",$optionarr),
 			"dedit" => $date_edit->gen_edit_form("dateval",time()),
-			"sendupdateurl" =>$this->mk_orb("popupfilter",array("sendupdate"=>"1")),
+			"sendupdateurl" =>$this->mk_my_orb("popupfilter",array("sendupdate"=>"1")),
 			"reforb" => $this->mk_reforb("submit_popupfilter", array())
 			));
 		
@@ -523,7 +523,7 @@ class bugtrack extends aw_template
 			));
 		$this->read_template("edit.tpl");
 		$this->vars(array("uid" => $bug["uid"],
-			"iframesrc" => "comments.aw?section=bug_".$id,
+			"iframesrc" => "/automatweb/comments.aw?section=bug_".$id."&forum_id=".$GLOBALS["bugtrack_forum"]."&type=flat",
 			"url" => $bug["url"],
 			"id"  => $bug["id"],
 			"prilist" => $this->picker($bug["pri"],$this->prilist),
@@ -540,7 +540,7 @@ class bugtrack extends aw_template
 			"sendmail2"	=> ($bug["sendmail2"] == 1 ? "CHECKED" : ""),
 			"time_fixed" => $date_edit->gen_edit_form("time_fixed",$bug["timeready"]),
 			"reforb" => $this->mk_reforb("submit_edit",array("id" => $bug["id"], "ref" => "hmm??")),
-			"backlink" => $this->mk_orb("list",array())
+			"backlink" => $this->mk_my_orb("list",array())
 			));
 		return $this->parse();
 	}
@@ -553,13 +553,17 @@ class bugtrack extends aw_template
 	////
 	// ! orb_new submit funktsioon
 	function orb_submit_new($arr)
-		{
+	{
 		if (!$this->prog_acl("add", PRG_BUGTRACK))
 		{
 			$this->prog_acl_error("add", PRG_BUGTRACK);
 		};
 		global $baseurl;
 		extract($arr);
+		//print_r($this->sitekeys);
+		//echo("damn mastersite=*".$this->mastersite."*
+//key=*".$this->sitekeys[$this->mastersite]."*<br>");
+//fuckinf word wrap
 		$rc = new replicator_client($this->mastersite."/automatweb/bugreplicate.aw",$this->sitekeys[$this->mastersite]);
 	
 //		$this->quote($text);
@@ -599,7 +603,7 @@ class bugtrack extends aw_template
 		$this->_log("bug","Lisas bugi $title");
 
 
-		return $this->mk_orb("list",array());
+		return $this->mk_my_orb("list",array());
 		
 	}
 
@@ -690,7 +694,7 @@ class bugtrack extends aw_template
 		// logi 
 		$this->_log("bug","Muutis bugi ".$bug["title"]);
 
-		return $this->mk_orb("list",array());
+		return $this->mk_my_orb("list",array());
 		
 	}
 
@@ -738,7 +742,7 @@ class bugtrack extends aw_template
 		$this->_log("bug","M‰‰ras bugi ".$bug["title"].$developer."-le");
 
 		return "<script language=\"Javascript\">
-		window.opener.location=\"".$this->mk_orb("list",array())."\";
+		window.opener.location=\"".$this->mk_my_orb("list",array())."\";
 		window.close();
 		</script>";
 	}
@@ -770,7 +774,7 @@ class bugtrack extends aw_template
 
 		$req=$rc->query("delete_bug",$arr,0);		
 		
-		http_refresh(0,$this->mk_orb("list",array()));
+		http_refresh(0,$this->mk_my_orb("list",array()));
 	}
 
 	// vajalikud queryd
