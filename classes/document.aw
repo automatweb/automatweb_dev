@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.103 2002/07/17 01:35:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.104 2002/07/17 02:42:37 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 classload("msgboard","aw_style","form_base","file");
@@ -2624,6 +2624,7 @@ class document extends aw_template
 
 		$this->tpl_init("automatweb/documents");
 		// kas ei peaks checkkima ka teiste argumentide oigsust?
+		$ostr = $str;
 		$this->quote(&$str);
 
 		// otsingustringi polnud, redirect veateatele. Mdx, kas selle
@@ -2795,10 +2796,27 @@ class document extends aw_template
 		$mc->make_caches();
 
 		$plist = join(",",$parent_list);
+		if ($ostr[0] == "\"")
+		{
+			$str = substr($str, 2,strlen($str)-4);
+			// search concrete quoted string
+			$docmatch = "documents.title LIKE '%".$str."%' OR documents.content LIKE '%".$str."%' OR documents.author LIKE '%".$str."%'";
+		}
+		else
+		{
+			// search all words
+			$wds = explode(" ",$str);
+			$docmatcha = array();
+			$docmatcha[] = join(" OR ",$this->map("documents.title LIKE '%%%s%%'",$wds));
+			$docmatcha[] = join(" OR ",$this->map("documents.content LIKE '%%%s%%'",$wds));
+			$docmatcha[] = join(" OR ",$this->map("documents.author LIKE '%%%s%%'",$wds));
+			$docmatch = join(" OR ", $docmatcha);
+
+		}
 		$q = "SELECT documents.*,objects.parent as parent, objects.modified as modified, objects.parent as parent 
 										 FROM documents 
 										 LEFT JOIN objects ON objects.oid = documents.docid
-										 WHERE (documents.title LIKE '%".$str."%' OR documents.content LIKE '%".$str."%') AND objects.status = 2 AND objects.lang_id = ".aw_global_get("lang_id")." AND objects.site_id = " . $this->cfg["site_id"] . " AND (documents.no_search is null OR documents.no_search = 0) $ml";
+										 WHERE ($docmatch) AND objects.status = 2 AND objects.lang_id = ".aw_global_get("lang_id")." AND objects.site_id = " . $this->cfg["site_id"] . " AND (documents.no_search is null OR documents.no_search = 0) $ml";
 		dbg("search_q = $q <br>");
 		$this->db_query($q);
 		while($row = $this->db_next())
@@ -3391,7 +3409,7 @@ class document extends aw_template
 		$keywords = array();
 		while($row = $this->db_next())
 		{
-			$keywords[$row["keyword"]] = sprintf(" <a href='%s' title='%s'>%s<sup><b>*</b></sup></a> ",$this->mk_my_orb("lookup",array("id" => $row["keyword_id"],"section" => $docid),"document"),"LINK",$row["keyword"]);
+			$keywords[$row["keyword"]] = sprintf(" <a href='%s' title='%s'>%s</a> ",$this->mk_my_orb("lookup",array("id" => $row["keyword_id"],"section" => $docid),"document"),"LINK",$row["keyword"]);
 		}
 
 		if (is_array($keywords))
@@ -3574,6 +3592,20 @@ class document extends aw_template
 			$c.=$this->parse("AUTHOR_DOC");
 		}
 		return $c;
+	}
+
+	function get_link($docid)
+	{
+		$lsu = aw_ini_get("menuedit.long_section_url");
+		$bu = aw_ini_get("baseurl");
+		if ($lsu)
+		{
+			return $bu."/?section=$docid";
+		}
+		else
+		{
+			return $bu."/".$docid;
+		}
 	}
 };
 ?>
