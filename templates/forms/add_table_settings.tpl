@@ -154,7 +154,13 @@
 														<!-- SUB: GRP2LINE -->
 														<tr>
 															<td class="celltext"><input type="text" class="formtext" name="rgrps[{VAR:grp_nr}][ord]" value="{VAR:gp_ord}" size="4"></td>
-															<td class="celltext"><SELECT CLASS="formselect" name="rgrps[{VAR:grp_nr}][el]"><option value=''>{VAR:els}</select></td>
+															<td class="celltext">N&auml;itamise:<br>
+															<SELECT CLASS="formselect" name="rgrps[{VAR:grp_nr}][el]"><option value=''>{VAR:els}</select><br>
+															Sortimise:<br>
+															<SELECT CLASS="formselect" name="rgrps[{VAR:grp_nr}][sort_el]"><option value=''>{VAR:sort_els}</select><br>
+															Sortimise j&auml;rjekord:<br>
+															<SELECT CLASS="formselect" name="rgrps[{VAR:grp_nr}][sort_order]">{VAR:sort_order}</select>
+															</td>
 															<td class="celltext"><input type="checkbox" class="formcheck" name="rgrps[{VAR:grp_nr}][vertical]" value="1" {VAR:gp_vertical}></td>
 															<td class="celltext"><input type="text" class="formtext" name="rgrps[{VAR:grp_nr}][pre_sep]" value="{VAR:pre_sep}" size="4"></td>
 															<td class="celltext"><input type="text" class="formtext" name="rgrps[{VAR:grp_nr}][after_sep]" value="{VAR:after_sep}" size="4"></td>
@@ -201,10 +207,29 @@
 												<td class="celltext" colspan="2"><input type="checkbox" class="formcheck" name="settings[doc_title_is_search]" value="1" {VAR:doc_title_is_search}> Dokumendi pealkirjas viimane otsing</td>
 											</tr>
 											<tr>
+												<td class="celltext" colspan="2"><input type="checkbox" class="formcheck" name="settings[doc_title_is_search_upper]" value="1" {VAR:doc_title_is_search_upper}> Dokumendi pealkirja viimane otsing suurte t&auml;htedega</td>
+											</tr>
+											<tr>
 												<td class="celltext" colspan="2"><input type="checkbox" class="formcheck" name="settings[doc_title_is_yah]" value="1" {VAR:doc_title_is_yah}> Dokumendi pealkirjas YAH riba</td>
 											</tr>
 											<tr>
+												<td class="celltext" colspan="2"><input type="checkbox" class="formcheck" name="settings[doc_title_is_yah_nolast]" value="1" {VAR:doc_title_is_yah_nolast}> &Auml;ra n&auml;ita viimast dokumendi pealkirja YAH'i isa</td>
+											</tr>
+											<tr>
+												<td class="celltext" colspan="2"><input type="checkbox" class="formcheck" name="settings[doc_title_is_yah_upper]" value="1" {VAR:doc_title_is_yah_upper}> Dokumendi pealkirja YAH Suurte t&auml;htedega</td>
+											</tr>
+											<tr>
 												<td class="celltext" colspan="2"><input type="text" class="formtext" name="settings[doc_title_is_yah_sep]" value="{VAR:doc_title_is_yah_sep}" size="3"> Dokumendi pealkirja yah eraldaja</td>
+											</tr>
+											<tr>
+												<td colspan="2" class="celltext">
+													<table border="0">
+														<tr>
+															<td class="celltext">Tabeli p&auml;isesse n&auml;ita: </td>
+															<td class="celltext"><select class="formselect" name="settings[table_header_aliases][]" multiple size="5">{VAR:table_header_aliases}</select> </td>
+														</tr>
+													</table>
+												</td>
 											</tr>
 											<tr>
 												<td class="celltext" colspan="2"><input type="checkbox" class="formcheck" name="settings[no_show_empty]" value="1" {VAR:no_show_empty}> &Auml;ra n&auml;ita t&uuml;hja tabelit</td>
@@ -213,17 +238,23 @@
 												<td class="celltext" colspan="2"><input type="textbox" class="formtext" name="settings[empty_table_text]" value="{VAR:empty_table_text}"> T&uuml;hja tabeli asemel tekst</td>
 											</tr>
 											<tr>
+												<td class="celltext" colspan="2"><select class="formselect" name="settings[empty_table_alias]"><option value=''>{VAR:empty_table_alias}</select> T&uuml;hja tabeli asemel alias</td>
+											</tr>
+											<tr>
 												<td class="celltext" colspan="2"><input type="checkbox" class="formcheck" name="settings[no_grpels_in_restrict]" value="1" {VAR:no_grpels_in_restrict}> &Auml;ra pane grupeerimislemente uude otsingusse</td>
 											</tr>
 											<tr>
 												<td class="celltext" colspan="2"><input type="checkbox" class="formcheck" name="settings[show_second_table]" value="1" {VAR:show_second_table}> Tabeli all on teine tabel</td>
 											</tr>
 											<tr>
+												<td colspan="2" class="celltext">Tabelite vahel: <select class="formselect" name="settings[show_second_table_tables_sep][]" multiple size="5">{VAR:show_second_table_tables_sep}</select> </td>
+											</tr>
+											<tr>
 												<td class="celltext" colspan="2">
 													<table border="0">
 														<tr>
 															<td class="celltext">Teise tabeli n&auml;itamisel kasutatavad aliased: </td>
-															<td class="celltext"><select class="formselect" multiple name="settings[show_second_table_aliases][]" size="10">{VAR:show_second_table_aliases}</select> </td>
+															<td class="celltext"><select class="formselect" multiple name="settings[show_second_table_aliases][]" size="5">{VAR:show_second_table_aliases}</select> </td>
 														</tr>
 													</table>
 												</td>
