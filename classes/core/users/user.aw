@@ -115,10 +115,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 
 @property groups type=text  store=no no_caption=1
 
-@default group=roles
-
-@property roles type=text  store=no no_caption=1
-
 @property home_folder type=hidden field=home_folder table=users
 
 @default group=jdata

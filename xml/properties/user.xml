@@ -233,18 +233,9 @@
             <field>groups</field>
       </property>
       <property>
-            <name>roles</name>
-            <table>users</table>
-            <group>roles</group>
-            <type>text</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>roles</field>
-      </property>
-      <property>
             <name>home_folder</name>
             <table>users</table>
-            <group>roles</group>
+            <group>groups</group>
             <type>hidden</type>
             <field>home_folder</field>
       </property>
