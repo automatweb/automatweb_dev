@@ -242,7 +242,7 @@ class users extends users_user
 			$up = $this->parse("up");
 		}
 
-		$q = "SELECT name,oid,class_id FROM objects
+		$q = "SELECT name,oid,class_id,name FROM objects
 			WHERE objects.parent = '$startfrom' and objects.status != 0";
 		$this->db_query($q);
 
@@ -250,14 +250,20 @@ class users extends users_user
 		$cnt = 0;
 		while($row = $this->db_next())
 		{
+			$class = $class_defs[$row["class_id"]]["file"];
+			$preview = $this->mk_my_orb("preview", array("id" => $row["oid"]),$class);
 			$cnt++;
 			switch ($row["class_id"])
 			{
 				case CL_PSEUDO:
 					$tpl = "folder";
 					break;
+				
+				case CL_FILE:
+					$preview = $GLOBALS["baseurl"]."/files.".$GLOBALS["ext"]."/id=".$row["oid"]."/".$row["name"];
+					break;
+
 				default:
-					$class = $class_defs[$row["class_id"]]["file"];
 					$tpl = "doc";
 					break;
 			};
@@ -266,7 +272,7 @@ class users extends users_user
 				"id" => $row["oid"],
 				"iconurl" => get_icon_url($row["class_id"],0),
 				"f_click" => $this->mk_my_orb("gen_home_dir", array("id" => $row["oid"])),
-				"preview" => $this->mk_my_orb("preview", array("id" => $row["oid"]),$class),
+				"preview" => $preview,
 				"change" => $this->mk_my_orb("change", array("id" => $row["oid"]),$class)
 			));
 

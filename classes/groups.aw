@@ -610,6 +610,10 @@ class groups extends users_user
 	{
 		extract($arr);
 		$this->dmsg("entered list_grps_user");
+		if (!$parent)
+		{
+			$parent = $this->db_fetch_field("SELECT gid FROM groups WHERE type = ".GRP_DEFAULT." AND name = '".$GLOBALS["uid"]."'","gid");
+		}
 
 		$this->read_template("list_grps_user.tpl");
 
@@ -619,13 +623,14 @@ class groups extends users_user
 		while ($row = $this->db_next())
 		{
 			$this->vars(array("name" => $row[name],"gid" => $row[gid],"priority" => $row[priority],"level" => $level+1,"type" => "Grupp","members" => $row[gcount], "modifiedby" => $row[modifiedby], "modified" => $this->time2date($row[modified],2), "goid" => $row[oid],
-												"change"	=> $this->mk_orb("change_user_grp", array("id" => $row[gid], "parent" => $parent)),
-												"delete"	=> $this->mk_orb("delete_user_grp", array("id" => $row[gid], "parent" => $parent)),
-												"grpmembers"	=> $this->mk_orb("user_grp_members", array("id" => $row[gid]))));
+												"change"	=> $this->mk_my_orb("change_user_grp", array("id" => $row[gid], "parent" => $parent)),
+												"delete"	=> $this->mk_my_orb("delete_user_grp", array("id" => $row[gid], "parent" => $parent)),
+												"grpmembers"	=> $this->mk_my_orb("user_grp_members", array("id" => $row[gid])),
+												"acl" => $this->mk_my_orb("edit", array("oid" => $row["oid"]), "acl")));
 			$l.=$this->parse("LINE");
 		}
 
-		$this->vars(array("addgrp" => $this->mk_orb("add_user_grp",array("parent" => $parent)),"LINE" => $l,
+		$this->vars(array("addgrp" => $this->mk_my_orb("add_user_grp",array("parent" => $parent)),"LINE" => $l,
 											"reforb"	=> $this->mk_reforb("submit_user_grp_priorities", array("parent" => $parent))));
 
 		return $this->parse();
@@ -667,7 +672,7 @@ class groups extends users_user
 			// deny access to everybody else
 //			$this->deny_obj_access($grp[oid]);
 		}
-		return $this->mk_orb("list_grps_user",array("parent" => $parent));
+		return $this->mk_my_orb("list_grps_user",array("parent" => $parent));
 	}
 
 	function do_grp_members($id)
@@ -824,7 +829,7 @@ class groups extends users_user
 		extract($arr);
 		$this->do_submit_gp_members($arr);
 		$gp = $this->fetchgroup($id);
-		return $this->mk_orb("list_grps_user", array("parent" => $gp[parent]));
+		return $this->mk_my_orb("list_grps_user", array("parent" => $gp[parent]));
 	}
 
 	function submit_grp_members($arr)
@@ -839,7 +844,7 @@ class groups extends users_user
 	{
 		extract($arr);
 		$this->deletegroup($id);
-		header("Location: ".$this->mk_orb("list_grps_user", array("parent" => $parent)));
+		header("Location: ".$this->mk_my_orb("list_grps_user", array("parent" => $parent)));
 	}
 
 	function submit_user_grp_priorities($arr)
@@ -855,7 +860,7 @@ class groups extends users_user
 			}
 		}
 
-		return $this->mk_orb("list_grps_user", array("parent" => $parent));
+		return $this->mk_my_orb("list_grps_user", array("parent" => $parent));
 	}
 
 	// hm. listib koik grupid?
