@@ -1,4 +1,4 @@
-<form action='reforb.{VAR:ext}' method=post>
+<form action='orb.{VAR:ext}' method=GET>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <tr>
 <td class="fcaption">Choose which join form group should be used:</td>
