@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/relmanager.aw,v 1.5 2004/02/17 14:38:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/relmanager.aw,v 1.6 2004/03/04 14:24:43 duke Exp $
 /*
 // !Displays a table of relations and adds one line with edit fields to allow adding
 // of new objects
@@ -24,6 +24,11 @@ class relmanager extends aw_template
 		$this->t = new aw_table(array("layout" => "generic"));
 
 		if ($arr["new"])
+		{
+			return false;
+		};
+
+		if (!is_object($obj))
 		{
 			return false;
 		};
