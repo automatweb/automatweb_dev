@@ -502,7 +502,7 @@ function savemenu() {
 		<td class="celltext"><select name="pmethod">{VAR:pmethods}</select></td>
 	</tr>
 	-->
-	/tr>
+	</tr>
 <!-- END SUB: PMETHOD -->
 
 	
