@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.36 2002/12/18 20:14:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.37 2003/01/10 12:31:54 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -469,8 +469,8 @@ class file extends class_base
 
 	function get_url($id,$name)	
 	{
-		//$retval = $this->mk_my_orb("preview", array("id" => $id),"file", false,true,"/")."/".urlencode($name);
-		$retval = $this->mk_my_orb("preview", array("id" => $id),"file", false,true);
+		$retval = $this->mk_my_orb("preview", array("id" => $id),"file", false,true,"/")."/".urlencode($name);
+//		$retval = $this->mk_my_orb("preview", array("id" => $id),"file", false,true);
 		return $retval;
 	}
 
