@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.183 2003/12/04 11:04:54 kristo Exp $
+// $Id: class_base.aw,v 2.184 2003/12/08 10:28:04 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1692,10 +1692,13 @@ class class_base extends aw_template
 		if (1 != $this->classinfo["allow_rte"])
 		{
 			$has_rte = false;
+		}
+		else
+		{
+			$has_rte = true;
 		};
 
 		$properties = $resprops;
-
 
 		$resprops = array();
 
@@ -2589,7 +2592,7 @@ class class_base extends aw_template
 				$_tmp = new aw_array($item["clid"]);
 				foreach($_tmp->get() as $clid)
 				{
-					$clidlist[] = constant($clid);
+					$clidlist[] = $clid;
 				};
 				$this->relclasses[$item["value"]] = $clidlist;
 			};
