@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.22 2003/10/17 13:11:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.23 2004/02/25 16:12:26 kristo Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
@@ -96,34 +96,6 @@ class cache extends core
 		{
 			return false;
 		};
-	}
-
-	////
-	// !writes a row to the cache table with the key $key - if the row exists, overwrites it, otherwise creates one
-	function db_set($key,$value)
-	{
-		$this->quote(&$value);
-		$this->db_query("REPLACE cache (id,content,valid) VALUES('$key','$value',1)");
-	}
-
-	////
-	// !tries to read the entry for $key from the cache table and if it exists, returns it, otherwise or if it is not valid, returns false
-	function db_get($key)
-	{
-		$this->db_query("SELECT * FROM cache WHERE id = '$key'");
-		$row = $this->db_next();
-		if (is_array($row) && $row["valid"] == 1)
-		{
-			return $row["content"];
-		}
-		return false;
-	}
-
-	////
-	// !sets the not-valid flag for the row in the cache
-	function db_invalidate($key)
-	{
-		$this->db_query("UPDATE cache SET valid = 0 WHERE id = '$key'");
 	}
 
 	function file_set($key,$value)
