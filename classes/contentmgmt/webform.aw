@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.12 2004/12/09 17:06:05 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.13 2004/12/10 13:16:00 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -66,6 +66,9 @@
 
 @property def_prop_style type=select group=styles field=meta method=serialize
 @caption Vaikimisi elemendi stiil
+
+@property def_form_style type=select group=styles field=meta method=serialize
+@caption Tabeli stiil
 
 @property styles type=callback callback=callback_styles group=styles no_caption=1
 @caption Stiilid
@@ -229,6 +232,13 @@ class webform extends class_base
 				$prop["options"] = array(0 => "-- Vali --") + $this->all_rels;
 				break;
 			case "def_prop_style":
+				$this->get_rel_props(array(
+					"obj_inst" => $arr["obj_inst"],
+					"prop" => "style",
+				));
+				$prop["options"] = array(0 => "-- Vali --") + $this->all_rels;
+				break;
+			case "def_form_style":
 				$this->get_rel_props(array(
 					"obj_inst" => $arr["obj_inst"],
 					"prop" => "style",
@@ -1184,6 +1194,7 @@ class webform extends class_base
 		$this->read_template("show_form.tpl");
 		$this->vars(array(
 			"form" => $html,
+			"webform_form" => "st".$arr["obj_inst"]->prop("def_form_style"),
 			"reforb" => $this->mk_reforb("save_form_data", $arr["reforb"]),
 		));
 		return $this->parse();

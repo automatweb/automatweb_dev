@@ -159,6 +159,15 @@
             <caption>Vaikimisi elemendi stiil</caption>
       </property>
       <property>
+            <name>def_form_style</name>
+            <table>objects</table>
+            <group>styles</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Tabeli stiil</caption>
+      </property>
+      <property>
             <name>styles</name>
             <table>objects</table>
             <group>styles</group>
