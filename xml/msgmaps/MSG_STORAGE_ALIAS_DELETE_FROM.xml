@@ -21,24 +21,24 @@
       <param>CL_CRM_PERSON</param>
 </num_3>
 <num_4>
-      <class>crm/crm_person</class>
-      <func>on_disconnect_org_from_person</func>
-      <param>CL_CRM_COMPANY</param>
-</num_4>
-<num_5>
-      <class>crm/crm_person</class>
-      <func>on_disconnect_section_from_person</func>
-      <param>CL_CRM_SECTION</param>
-</num_5>
-<num_6>
       <class>crm/crm_section</class>
       <func>on_disconnect_org_from_section</func>
       <param>CL_CRM_COMPANY</param>
-</num_6>
-<num_7>
+</num_4>
+<num_5>
       <class>crm/crm_section</class>
       <func>on_disconnect_person_from_section</func>
       <param>CL_CRM_PERSON</param>
+</num_5>
+<num_6>
+      <class>crm/crm_person</class>
+      <func>on_disconnect_org_from_person</func>
+      <param>CL_CRM_COMPANY</param>
+</num_6>
+<num_7>
+      <class>crm/crm_person</class>
+      <func>on_disconnect_section_from_person</func>
+      <param>CL_CRM_SECTION</param>
 </num_7>
 <num_8>
       <class>core/users/user</class>

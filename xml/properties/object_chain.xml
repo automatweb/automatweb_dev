@@ -1,16 +1,28 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>results</name>
-            <type>text</type>
-            <group>general</group>
+            <name>objs</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_OBJECT</reltype>
+            <multiple>1</multiple>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Otsingu tulemused</caption>
+            <group>general</group>
+            <caption>Vali objektid</caption>
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
+            <syslog_type>ST_OBJECT_CHAIN</syslog_type>
+            <no_status>1</no_status>
+            <no_comment>1</no_comment>
       </classinfo>
+      <reltypes>
+            <OBJECT>
+                  <value>1</value>
+                  <clid>CL_ALL</clid>
+                  <caption>objekt</caption>
+            </OBJECT>
+      </reltypes>
 </properties>
 

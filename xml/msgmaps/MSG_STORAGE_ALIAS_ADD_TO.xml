@@ -50,9 +50,4 @@
       <func>on_mconnect_to</func>
       <param>CL_MENU</param>
 </num_9>
-<num_10>
-      <class>object_chain</class>
-      <func>on_add_alias</func>
-      <param>CL_OBJECT_CHAIN</param>
-</num_10>
 </xml>

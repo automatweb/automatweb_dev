@@ -1,30 +1,5 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="object_chain" folder="" extends="aw_template">
-		<action name="new">
-			<function name="add">
-				<arguments>
-					<required name="parent" />
-					<optional name="return_url" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit">
-			<function name="submit">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="change">
-			<function name="change">
-				<arguments>
-					<required name="id" />
-					<optional name="return_url" />
-				</arguments>
-			</function>
-		</action>
-
+	<class name="object_chain" folder="" extends="class_base">
 	</class>
 </orb>
