@@ -2,8 +2,7 @@
 <tabledef>
 <data>
 <field name="qid" caption="#" talign="center" sortable="1" type="int" numeric="yea"/>
-<field name="lid" caption="List" talign="center" sortable="1"/>
-<field name="mid" caption="Meil" talign="center" sortable="1"/>
+<field name="subject" caption="Meil" talign="center" sortable="1"/>
 <field name="status" caption="Olek" talign="center" sortable="1"/>
 <field name="start_at" caption="Algus" talign="center" type="time" format="H:i d-M-y" sortable="1" numeric="yea"/>
 <field name="last_sent" caption="Viimane" talign="center" type="time" format="H:i:s" sortable="1" numeric="yea"/>
