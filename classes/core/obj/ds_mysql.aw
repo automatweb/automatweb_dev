@@ -195,22 +195,21 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 	function create_new_object($arr)
 	{
-		extract($arr);
-
 		// add default values to metadata as well
-		foreach($properties as $prop => $data)
+		foreach($arr["properties"] as $prop => $data)
 		{
 			if (empty($data["table"]))
 			{
 				continue;
 			}
 			
-			if ($data["table"] == "objects" && $data["field"] == "meta" && !isset($objdata["meta"][$data["name"]]) && !empty($data["default"]))
+			if ($data["table"] == "objects" && $data["field"] == "meta" && !isset($arr["objdata"]["meta"][$data["name"]]) && !empty($data["default"]))
 			{
-				$objdata["meta"][$data["name"]] = $data["default"];
+				$arr["objdata"]["meta"][$data["name"]] = $data["default"];
 			}
 		}
 
+		extract($arr);
 
 		$metadata = aw_serialize($objdata["meta"]);
 		$this->quote($metadata);
