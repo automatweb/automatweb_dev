@@ -951,7 +951,7 @@ class _int_object
 		// if any property is defined for metadata, we gots to sync from object to property
 		if (is_array($GLOBALS["properties"][$this->obj["class_id"]][$key]) && $GLOBALS["properties"][$this->obj["class_id"]][$key]["field"] == "meta" && $GLOBALS["properties"][$this->obj["class_id"]][$key]["table"] == "objects")
 		{
-			$this->obj["properties"][$key] = $value;
+			$this->_int_set_prop($key, $value);
 		}
 
 		$this->_int_do_implicit_save();
@@ -965,7 +965,15 @@ class _int_object
 
 	function prop($param)
 	{
-		$retval = $this->obj["properties"][$param];
+		// see if it is a metadata prop and if so return from that - might save some prop loads
+		//$this->_int_load_property_values();
+		$pd = $GLOBALS["properties"][$this->obj["class_id"]][$param];
+		if ($pd && $pd["field"] == "meta")
+		{
+			return $this->obj["meta"][$pd["name"]];
+		}
+		
+		$retval = $this->_int_get_prop($param);
 		return $retval;
 	}
 
@@ -1014,9 +1022,8 @@ class _int_object
 			));
 		}
 
-		$prev = $this->obj["properties"][$key];
-
-		$this->obj["properties"][$key] = $val;
+		$prev = $this->_int_get_prop($key);
+		$this->_int_set_prop($key, $val);
 
 		// if this is a relpicker property, create the relation as well
 		$propi = $GLOBALS["properties"][$this->obj["class_id"]][$key];
@@ -1086,10 +1093,9 @@ class _int_object
 			));
 		}
 
-		if (!is_array($this->obj["properties"]))
-		{
-			$this->obj["properties"] = array();
-		}
+		// make sure props are loaded
+		$this->_int_get_prop(NULL);
+
 		foreach($param as $key => $val)
 		{
 			$this->set_prop($key, $val);
@@ -1098,6 +1104,8 @@ class _int_object
 
 	function properties()
 	{
+		// make sure props are loaded
+		$this->_int_get_prop(NULL);
 		return $this->obj["properties"];
 	}
 
@@ -1106,6 +1114,7 @@ class _int_object
 		// returns something which resembles the return value of get_object
 		// this approach might suck, but it's a awfully big task to convert
 		// _everything_ and I'm running out of time
+		$this->_int_get_prop(NULL);
 		$retval = array();
 		if (is_array($this->obj["properties"]))
 		{
@@ -1220,6 +1229,7 @@ class _int_object
 		$this->obj = array();
 		$this->obj["properties"] = array();
 		$this->implicit_save = false;
+		$this->props_loaded = false;
 	}
 
 	function _int_load($oid)
@@ -1247,20 +1257,7 @@ class _int_object
 
 		$this->_int_load_properties();
 
-		$this->obj["properties"] = $GLOBALS["object_loader"]->ds->read_properties(array(
-			"properties" => $GLOBALS["properties"][$this->obj["class_id"]],
-			"tableinfo" => $GLOBALS["tableinfo"][$this->obj["class_id"]],
-			"objdata" => $this->obj,
-		));
-
-
-		foreach($GLOBALS["of2prop"][$this->obj["class_id"]] as $key => $val)
-		{
-			if (!$this->obj["properties"][$key])
-			{
-				$this->_int_sync_from_objfield_to_prop($key);
-			}
-		}
+		//$this->_int_load_property_values();
 
 		// yeees, this looks weird, BUT it is needed if the loaded object is not actually the one requested
 		// this can happen in ds_auto_translation for instance
@@ -1633,5 +1630,54 @@ class _int_object
 			"parent" => $parent
 		));
 	}
+
+	function _int_set_prop($prop, $val)
+	{
+		if (!$this->props_loaded)
+		{
+			$this->_int_load_property_values();
+		}
+		$this->obj["properties"][$prop] = $val;
+	}
+
+	function _int_get_prop($prop)
+	{
+		if (!$this->props_loaded)
+		{
+			$this->_int_load_property_values();
+		}
+		return $this->obj["properties"][$prop];
+	}
+
+	function _int_load_property_values()
+	{
+		$this->obj["properties"] = $GLOBALS["object_loader"]->ds->read_properties(array(
+			"properties" => $GLOBALS["properties"][$this->obj["class_id"]],
+			"tableinfo" => $GLOBALS["tableinfo"][$this->obj["class_id"]],
+			"objdata" => $this->obj,
+		));
+
+		foreach(safe_array($GLOBALS["of2prop"][$this->obj["class_id"]]) as $key => $val)
+		{
+			if (!$this->obj["properties"][$key])
+			{
+				$this->_int_sync_from_objfield_to_prop($key);
+			}
+		}
+		$this->props_loaded = true;
+	}
 }
+
+function do_fop()
+{
+	foreach($GLOBALS["objects"] as $oid => $od)
+	{
+		if (!$od->props_loaded)
+		{
+			echo "no props for ib $oid <br>";
+		}
+	}
+	echo "total obj count = ".count($GLOBALS["objects"])."<br>";
+}
+register_shutdown_function("do_fop");
 ?>
