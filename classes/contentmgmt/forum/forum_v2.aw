@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.28 2004/06/16 16:02:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.29 2004/06/17 14:21:43 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -374,6 +374,7 @@ class forum_v2 extends class_base
 				"parents" => $topic_list[$sub_folder_obj->id()],
 			));
 
+
 			$mdate = $last["created"];
 			$datestr = empty($date) ? "" : $this->time2date($mdate,2);
 
@@ -555,19 +556,17 @@ class forum_v2 extends class_base
 
 			$creator = $subtopic_obj->createdby();
 
-			if (!$last)
+			if ($last)
 			{
-				$last = array(
-					"created" => $subtopic_obj->created(),
-					"createdby" => $subtopic_obj->prop("author_name"),
-				);
+				$last["created"] = $this->time2date($last["created"],2);
 			};
+
 
 			$this->vars(array(
 				"name" => $subtopic_obj->name(),
 				"comment_count" => (int)$comm_counts[$subtopic_obj->id()],
-				"last_date" => $this->time2date($last["created"],2),
-				"last_createdby" => $last["createdby"],
+				"last_date" => $last["created"],
+				"last_createdby" => $last["uname"],
 				"author" => $subtopic_obj->prop("author_name"),
 				"open_topic_url" => $this->mk_my_orb("change",array(
 						"id" => $args["obj_inst"]->id(),
@@ -929,7 +928,8 @@ class forum_v2 extends class_base
 		$retval = array();
 		if (sizeof($args["parents"]) != 0)
 		{
-			$q = sprintf("SELECT parent,created,createdby FROM objects WHERE parent IN (%s) AND class_id = '%d'
+			// hm, but this does not work at all with multiple parents
+			$q = sprintf("SELECT parent,created,createdby,forum_comments.uname FROM objects LEFT JOIN forum_comments ON (objects.oid = forum_comments.id) WHERE parent IN (%s) AND class_id = '%d'
 				AND status != 0 ORDER BY created DESC LIMIT 1",join(",",$args["parents"]),CL_COMMENT);
 			$this->db_query($q);
 			$retval = $this->db_next();
