@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.46 2005/01/20 07:13:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.47 2005/02/21 08:56:23 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -139,7 +139,7 @@ class sys extends aw_template
 			$this->raise_error(ERR_DBSYNC_NOSERVER,"Failed opening connection to server $server",true);
 		};
 
-		$request = "http://" . $server . $url;
+		$request = $url;
 		$op = "GET $request HTTP/1.1\r\n";
 		$op .= "User-Agent: Autom@tWeb\r\n";
 		$op .= "Host: $server\r\n\r\n";
@@ -148,8 +148,8 @@ class sys extends aw_template
 		{
 			$this->errstr="Write error";
 			return 0;
-    }
-	  $ipd="";
+	    }
+		$ipd="";
 
 		while($data=fread($fp, 32768)) 
 		{
@@ -157,7 +157,6 @@ class sys extends aw_template
 		}
 
 		list(,$res) = explode("\r\n\r\n",$ipd);
-		
 		// 1) laeme serverist andmebaasi struktuuri
 		// 2) laeme kohalikust masinast baasi struktuuri
 		// 3) kuvame vordleva tabeli, kuhu saab erinevate kirjete juurde checkboxe panna
@@ -180,6 +179,7 @@ class sys extends aw_template
 	function db_compare_choose_donor($args = array())
 	{
 		$files = array(
+			"www2.just.ee" => "www2.just.ee",
 			"envir.struktuur.ee" => "envir.struktuur.ee",
 			"work.struktuur.ee" => "work.struktuur.ee",
 			"aw.struktuur.ee" => "aw.struktuur.ee",
