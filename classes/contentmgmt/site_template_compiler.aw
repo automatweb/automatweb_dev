@@ -58,9 +58,12 @@ class site_template_compiler extends aw_template
 		);
 	}
 
-	function compile($tpl)
+	function compile($path, $tpl)
 	{
 		enter_function("site_template_compiler::compile");
+
+		$this->tpl_init($path);
+
 		$this->read_template($tpl);
 		$this->parse_template_parts();
 		$this->compile_template_parts();
@@ -342,7 +345,7 @@ class site_template_compiler extends aw_template
 		}
 
 
-		if ($this->req_level == 1)
+		if ($this->req_level == 1 && aw_ini_get("template_compiler.no_menu_area_cache") != 1)
 		{		
 			$this->ops[] = array(
 				"op" => OP_AREA_CACHE_CHECK,
@@ -497,7 +500,7 @@ class site_template_compiler extends aw_template
 			);
 		}
 
-		if ($this->req_level == 1)
+		if ($this->req_level == 1  && aw_ini_get("template_compiler.no_menu_area_cache") != 1)
 		{
 			$this->ops[] = array(
 				"op" => OP_AREA_CACHE_SET,

@@ -74,23 +74,14 @@ class site_show extends class_base
 		classload("layout/active_page_data");
 		active_page_data::get_text_content(isset($arr["text"]) ? $arr["text"] : "");
 
-		//print "cc";
-		//flush();
-
 		// save path
-		//var_dump($this->section_obj);
-		//flush();
 		$this->path = $this->section_obj->path();
 		$this->path_ids = array();
-		//print "dd";
-		//flush();
 		foreach($this->path as $p_obj)
 		{
 			$this->path_ids[] = $p_obj->id();
 		}
 
-		//print "bb";
-		//flush();
 
 		// figure out the menu that is active
 		$this->sel_section = $this->_get_sel_section(aw_global_get("section"));
@@ -1161,7 +1152,7 @@ class site_show extends class_base
 		{
 			$cfg = get_instance("config");
 			$_id = $cfg->get_login_menus();
-			if ($_id)
+			if ($_id > 0)
 			{
 				$this->current_login_menu_id = $_id;
 			}
@@ -1188,7 +1179,7 @@ class site_show extends class_base
 
 	function do_draw_menus($arr)
 	{
-		if (!isset($arr["compiled_filename"]) || $arr["compiled_filename"] == "")
+		if (!isset($this->compiled_filename) || $this->compiled_filename == "")
 		{
 			error::throw(array(
 				"id" => ERR_NO_COMPILED,
@@ -1197,7 +1188,7 @@ class site_show extends class_base
 		}
 	
 		enter_function("site_show::do_draw_menus");
-		include_once($arr["compiled_filename"]);
+		include_once($this->compiled_filename);
 		exit_function("site_show::do_draw_menus");
 	}
 
@@ -1623,12 +1614,52 @@ class site_show extends class_base
 		return $link;
 	}
 
+	////
+	// !returns the file where the generated code for the template is, if it is in the cache
+	function get_cached_compiled_filename($arr)
+	{
+		$tpl = $arr["tpldir"]."/".$arr["template"];
+		$fn = aw_ini_get("cache.page_cache")."/compiled_menu_template::".str_replace("/","_",str_replace(".","_",$tpl))."-".aw_global_get("lang_id");
+		if (file_exists($fn) && is_readable($fn) && filectime($fn) > filectime($tpl))
+		{
+			return $fn;
+		}
+		return false;
+	}
+
+	////
+	// !compiles the template and saves the code in a cache file, returns the cache file
+	function cache_compile_template($path, $tpl)
+	{
+		$co = get_instance("contentmgmt/site_template_compiler");
+		$code = $co->compile($path, $tpl);
+
+		$tpl = $path."/".$tpl;
+		$fn = "compiled_menu_template::".str_replace("/","_",str_replace(".","_",$tpl))."-".aw_global_get("lang_id");
+
+		$ca = get_instance("cache");
+		$ca->file_set($fn, $code);
+
+		return aw_ini_get("cache.page_cache")."/".$fn;
+	}
+
 	function do_show_template($arr)
 	{
+		$tpldir = "../".str_replace($this->cfg["site_basedir"]."/", "", $this->cfg["tpldir"])."/automatweb/menuedit";
+
 		if (isset($arr["tpldir"]) && $arr["tpldir"] != "")
 		{
 			$this->tpl_init(sprintf("../%s/automatweb/menuedit",$arr["tpldir"]));
+			$tpldir = "../".$arr["tpldir"]."/automatweb/menuedit";;
 		}
+
+		$arr["tpldir"] = $tpldir;
+		// right. now, do the template compiler bit
+		if (!($this->compiled_filename = $this->get_cached_compiled_filename($arr)))
+		{
+			$this->compiled_filename = $this->cache_compile_template($tpldir, $arr["template"]);
+		}
+
 
 		$this->read_template($arr["template"]);
 
