@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.111 2003/06/03 13:17:48 duke Exp $
+// $Id: class_base.aw,v 2.112 2003/06/03 14:35:37 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -175,7 +175,7 @@ class class_base extends aw_template
 		$argblock = array(
 			"id" => $this->id,
 			// this should refer to the active group
-			"group" => isset($group) ? $group : "",
+			"group" => isset($args["group"]) ? $args["group"] : "",
 			"orb_class" => $orb_class,
 			"parent" => $this->$parent,
 			"period" => isset($args["period"]) ? $args["period"] : "",
