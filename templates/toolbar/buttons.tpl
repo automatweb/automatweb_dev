@@ -4,7 +4,6 @@
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 
 <tr>
-<!--<td width="1"><IMG SRC="images/awmenueditor_iconbar_back.gif" WIDTH="5" HEIGHT="32" BORDER=0 ALT=""></td>-->
 <td width="1" bgcolor="#EEEEEE"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="5" HEIGHT="32" BORDER=0 ALT=""></td>
 <td width="100%" height="32" background="{VAR:baseurl}/automatweb/images/awmenueditor_iconbar_back.gif">
 
