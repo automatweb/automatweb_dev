@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.97 2003/03/14 16:04:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.98 2003/03/19 18:06:53 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -12,6 +12,9 @@
 
 	@property default_view type=select group=advanced rel=1
 	@caption Default vaade
+
+	@property content_generator type=select group=advanced
+	@caption Näitamisfunktsioon
 
 	@property event_cfgform type=objpicker clid=CL_CFGFORM subclass=CL_DOCUMENT
 	@caption Sündmuse lisamise vorm
@@ -39,12 +42,12 @@
 
 	@property navigator_visible type=checkbox ch_value=1 default=1 group=advanced
 	@caption Näita navigaatorit
+	
+	@property navigator_months type=select group=advanced
+	@caption Kuud navigaatoris
 
 	@property use_tabpanel type=checkbox ch_value=1 default=1 group=advanced
 	@caption Kalendri näitamisel kasutatakse 'tabpanel' komponenti
-
-	@property navigator_months type=select 
-	@caption Kuud navigaatoris
 
 	@property event_folder type=select 
 	@caption Sündmuste kataloog
@@ -120,7 +123,7 @@ class planner extends class_base
 			"clid" => CL_PLANNER,
 		));
 		extract($args);
-		$this->date = ($date) ? $date : date("d-m-Y");
+		$this->date = isset($date) ? $date : date("d-m-Y");
 		lc_load("definition");
 		$this->lc_load("planner","lc_planner");
 			
@@ -159,6 +162,14 @@ class planner extends class_base
 			case "event_folder":
 				$data["options"] = $this->get_menu_list();
 				break;
+
+			case "content_generator":
+				$awo = get_instance("aw_orb");
+				$tmp = array("0" => "default") + $awo->get_classes_by_interface(array("interface" => "content"));
+				$data["options"] = $tmp;
+				break;
+
+
 		}
 		return $retval;
 	}
@@ -179,42 +190,7 @@ class planner extends class_base
 				break;
 
 			case "add_event":
-				$obj = $this->get_object($args["obj"]["oid"]);
-				$event_cfgform = $obj["meta"]["event_cfgform"];
-				$frm = $this->get_object($event_cfgform);
-				$t = get_instance("doc");
-				$savedata = $t->process_form_data(array(
-					"content" => $frm["meta"]["xml_definition"],
-					"form_data" => $args["form_data"],
-					"group_by" => "table",
-				));
-				// this really-really should be handled by class_base
-				$event_id = $args["form_data"]["event_id"];
-				foreach($savedata as $table => $fields)
-				{
-					if ($table == "objects")
-					{
-						$fields["oid"] = $event_id;
-						if ($savedata["documents"]["title"])
-						{
-							$fields["name"] = $savedata["documents"]["title"];
-						};
-						$this->upd_object($fields);
-					}
-					else
-					{
-						$data = join(",",map2("%s='%s'",$fields));
-						if ($table == "documents")
-						{
-							$q = sprintf("UPDATE documents SET %s WHERE docid = %d",$data,$event_id);
-						}
-						else
-						{
-							$q = sprintf("UPDATE %s SET %s WHERE id = %d",$table,$data,$event_id);
-						};
-						$this->db_query($q);
-					};
-				};
+				$this->create_planner_event($args);
 				break;
 		}
 		return $retval;
@@ -241,6 +217,7 @@ class planner extends class_base
 			"caption" => "Tööpäevad",
 		);
 		$daynames = explode("|",LC_WEEKDAY);
+		$wd = isset($args["obj"]["meta"]["workdays"]) ? $args["obj"]["meta"]["workdays"] : array();
 		for($i = 1; $i <= 7; $i++)
 		{
 			$tmp["items"][] = array(
@@ -248,7 +225,7 @@ class planner extends class_base
 				"name" => "workdays[$i]",
 				"label" => $daynames[$i],
 				"ch_value" => 1,
-				"value" => $args["obj"]["meta"]["workdays"][$i],
+				"value" => isset($wd[$i]) ? $wd[$i] : 0,
 			);
 		};
 		$retval = array("workdays" => $tmp);
@@ -259,14 +236,40 @@ class planner extends class_base
 	{
 		extract($args);
 		$obj = $this->get_object($id);
-		$folder = $obj["meta"]["event_folder"];
+		$this->content_gen_class = "";
+		if (!empty($obj["meta"]["content_generator"]))
+		{
+			list($pf,$pm) = explode("/",$obj["meta"]["content_generator"]);
+			$this->content_gen_class = $pf;
+			$this->content_gen_method = $pm;
+		};
+
+		$folder = (int)$obj["meta"]["event_folder"];
 		$q = "SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.oid) WHERE objects.parent = '$folder'";
 		$this->db_query($q);
 		$events = array();
+		// we sure pass around a LOT of data
 		while($row = $this->db_next())
 		{
 			$gx = date("dmY",$row["start"]);
-			$row["link"] = $this->mk_my_orb("change",array("id" => $id,"group" => "add_event","cb_view" => "show","event_id" => $row["oid"]));
+			if ($this->content_gen_class)
+			{
+				$this->save_handle();
+				$row["realcontent"] = $this->do_orb_method_call(array(
+						"class" => $this->content_gen_class,
+						"action" => $this->content_gen_method,
+						"params" => array(
+							"id" => $row["oid"],
+						),
+					));
+				$this->restore_handle();
+			}
+			$row["link"] = $this->mk_my_orb("change",array(
+				"id" => $id,
+				"group" => "add_event",
+				"cb_view" => "show",
+				"event_id" => $row["oid"],
+			));
 			$events[$gx][] = $row;
 		};
 		$this->day_orb_link = $this->mk_my_orb("change",array("id" => $id,"group" => "show_day","cb_view" => "show"));
@@ -400,9 +403,11 @@ class planner extends class_base
 		}
 		else
 		{
+			// hm, what I would build the join functionality into get_object?
 			$q = "SELECT * FROM planner LEFT JOIN documents ON (planner.id = documents.docid) LEFT JOIN objects ON (planner.id = objects.oid) WHERE planner.id = '$event_id'";
 			$this->db_query($q);
 			$row = $this->db_next();
+			$row["meta"] = aw_unserialize($row["metadata"]);
 		};
 
 
@@ -413,10 +418,16 @@ class planner extends class_base
 			$frm = $this->get_object($event_cfgform);
 			// events are documents
 			$t = get_instance("doc");
+			$tmp = $row;
+			// XXX: eek, this sucks.
+			if (is_array($row["meta"]))
+			{
+				$tmp = $tmp + $row["meta"];
+			};
 			$xprops = $t->get_properties_by_group(array(
 				"content" => $frm["meta"]["xml_definition"],
 				"group" => "general",
-				"values" => array("id" => $event_id) + $row,
+				"values" => array("id" => $event_id) + $tmp,
 			));
 
 		}
@@ -432,9 +443,74 @@ class planner extends class_base
 		return $xprops;
 	}
 
+	function create_planner_event($args = array())
+	{
+		$obj = $this->get_object($args["obj"]["oid"]);
+		$event_cfgform = $obj["meta"]["event_cfgform"];
+		$frm = $this->get_object($event_cfgform);
+		$t = get_instance("doc");
+		$savedata = $t->process_form_data(array(
+			"content" => $frm["meta"]["xml_definition"],
+			"form_data" => $args["form_data"],
+			"group_by" => "table",
+		));
+		// this really-really should be handled by class_base
+		$event_id = $args["form_data"]["event_id"];
+		$event_data = $this->get_object($event_id);
+
+		if (isset($args["form_data"]["cal1"]))
+		{
+			// delete all old brother documents
+			$q = "DELETE FROM objects WHERE brother_of = '$event_id' AND class_id = " .  CL_BROTHER_DOCUMENT;
+			$this->db_query($q);
+
+			// create a new one, IF it points to somewhere else
+			$other_cal = $this->get_object($args["form_data"]["cal1"]);
+			$other_folder = $other_cal["meta"]["event_folder"];
+			// create the new one
+			if ($other_folder)
+			{
+				$this->new_object(array(
+					"parent" => $other_folder,
+					"class_id" => CL_BROTHER_DOCUMENT,
+					"status" => STAT_ACTIVE,
+					"brother_of" => $event_id,
+				));
+			};
+		};
+
+		foreach($savedata as $table => $fields)
+		{
+			if ($table == "objects")
+			{
+				$fields["oid"] = $event_id;
+				if ($savedata["documents"]["title"])
+				{
+					$fields["name"] = $savedata["documents"]["title"];
+				};
+				$fields["metadata"] = $fields["meta"];
+				unset($fields["meta"]);
+				$this->upd_object($fields);
+			}
+			else
+			{
+					$data = join(",",map2("%s='%s'",$fields));
+					if ($table == "documents")
+					{
+						$q = sprintf("UPDATE documents SET %s WHERE docid = %d",$data,$event_id);
+					}
+					else
+					{
+						$q = sprintf("UPDATE %s SET %s WHERE id = %d",$table,$data,$event_id);
+					};
+					$this->db_query($q);
+			};
+		};
+	}
+
 	function callback_mod_reforb($args = array())
 	{
-		if ($this->event_id)
+		if (isset($this->event_id))
 		{
 			$args["event_id"] = $this->event_id;
 		};
@@ -2063,21 +2139,10 @@ class planner extends class_base
 				if ($e["class_id"] == CL_DOCUMENT)
 				{
 					$section = $e["id"];
+
 					if ($this->type == CAL_SHOW_DAY)
 					{
-						if ($e["forum_id"])
-						{
-							$this->vars(array(
-								"url" => $daylink . "&objid=$e[forum_id]",
-								"caption" => "Foorum",
-							));
-							$objlink .= $this->parse("objlink");
-						};
-						$this->vars(array(
-							"objlink" => $objlink,
-						));
-                                                $pv = $this->parse("objlinks");
-                                                $pv .= $d->gen_preview(array(
+                                                $pv = $d->gen_preview(array(
                                                         "docid" => $e["id"],
                                                 ));
 
@@ -2101,7 +2166,14 @@ class planner extends class_base
 					$_tmp = $this->parse("link");
 				};
 
-				$c .= $this->ev->draw($e);
+				if (isset($e["realcontent"]))
+				{
+					$c .= $e["realcontent"];
+				}
+				else
+				{
+					$c .= $this->ev->draw($e);
+				};
 			};
 		};
 
