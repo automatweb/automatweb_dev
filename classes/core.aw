@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.136 2002/12/09 08:59:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.137 2002/12/17 14:09:43 kristo Exp $
 // core.aw - Core functions
 define("ARR_NAME", 1);
 define("ARR_ALL",2);
@@ -569,7 +569,7 @@ class core extends db_connector
 		// but right this is the fastest way to make AM not suck.
 		$params["modified"] = ($params["modified"]) ? $params["modified"] : time();
 		$params["cachedirty"] = 1;
-		if ($params["metadata"])
+		if (isset($params["metadata"]))
 		{
 			$this->dequote(&$params['metadata']);
 			$params["metadata"] = $this->set_object_metadata(array(
@@ -577,9 +577,9 @@ class core extends db_connector
 				"data" => $params["metadata"],
 				"serialize" => 1,
 			));
+			$this->quote(&$params['metadata']);
 		};
 		$q_parts = array(); // siia sisse paneme päringu osad
-		$this->quote(&$params['metadata']);
 		while(list($k,$v) = each($params)) 
 		{
 			if ($k != "oid") 
@@ -588,6 +588,7 @@ class core extends db_connector
 			};
 		};
 		$q = " UPDATE objects SET " . join(",",$q_parts) . " WHERE oid = $params[oid] ";
+
 		$this->db_query($q);
 		aw_cache_set("objcache",$params["oid"],"");
 		$this->flush_cache();
