@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.1 2001/05/19 02:29:11 duke Exp $
 // mailinglist saadetavate mailide klass
 
 	class email extends aw_template
@@ -243,6 +244,36 @@
 			
 			return $ret;
 		}
+
+		////
+		// !saadab meili mingi listi liikmetele
+		// argumendid:
+		// list_id (int) - listi ID
+		// from - from
+		// subject - subject
+		// content - kirja sisu
+		function mail_members($args = array())
+		{
+			extract($args);
+			$q = "SELECT * FROM ml_users WHERE list_id = '$list_id'";
+			$this->db_query($q);
+			while($row = $this->db_next())
+			{
+				$f = popen("/usr/sbin/sendmail -f $from", "w");
+				fwrite($f, "From: $from\n");
+				fwrite($f, "To: ".$row["mail"] . ">\n");
+				fwrite($f, "Return-Path: $from\n");
+				fwrite($f, "Sender: $from\n");
+				fwrite($f, "Subject: ".$subject."\n\n");
+				
+				fwrite($f, "\n".$content."\n");
+				pclose($f);
+				echo "saatsin maili $row[mail]'le<br>";
+				flush();
+			};
+		}
+
+			
 		
 		function send_mail($id)
 		{
