@@ -1,6 +1,16 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>oc</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ORDER_CENTER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Tellimiskeskkond</caption>
+      </property>
+      <property>
             <name>template</name>
             <table>objects</table>
             <group>vis</group>
@@ -10,6 +20,16 @@
             <method>serialize</method>
             <automatic>1</automatic>
             <caption>Kujundusmall</caption>
+      </property>
+      <property>
+            <name>use_controller</name>
+            <table>objects</table>
+            <group>vis</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTROLLER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kasuta toodete n&amp;auml;itamiseks kontrollerit</caption>
       </property>
       <property>
             <name>prods</name>
@@ -48,6 +68,16 @@
                   <clid>CL_SHOP_PRODUCT_LAYOUT</clid>
                   <caption>toote kujundusmall</caption>
             </ITEM_LAYOUT>
+            <CONTROLLER>
+                  <value>3</value>
+                  <clid>CL_FORM_CONTROLLER</clid>
+                  <caption>kontroller</caption>
+            </CONTROLLER>
+            <ORDER_CENTER>
+                  <value>4</value>
+                  <clid>CL_SHOP_ORDER_CENTER</clid>
+                  <caption>tellimiskeskkond</caption>
+            </ORDER_CENTER>
       </reltypes>
 </properties>
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_special_offer.aw,v 1.4 2004/10/05 09:21:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_special_offer.aw,v 1.5 2004/10/14 13:29:38 kristo Exp $
 // shop_special_offer.aw - Poe eripakkumine 
 /*
 
@@ -8,11 +8,17 @@
 @default table=objects
 @default group=general
 
+@property oc type=relpicker reltype=RELTYPE_ORDER_CENTER field=meta method=serialize 
+@caption Tellimiskeskkond
+
 @groupinfo vis caption="N&auml;itamine"
 @default group=vis
 
 @property template type=relpicker reltype=RELTYPE_ITEM_LAYOUT field=meta method=serialize automatic=1
 @caption Kujundusmall
+
+@property use_controller type=relpicker reltype=RELTYPE_CONTROLLER field=meta method=serialize 
+@caption Kasuta toodete n&auml;itamiseks kontrollerit
 
 @groupinfo prods caption="Tooted"
 @default group=prods
@@ -24,6 +30,12 @@
 
 @reltype ITEM_LAYOUT value=2 clid=CL_SHOP_PRODUCT_LAYOUT
 @caption toote kujundusmall
+
+@reltype CONTROLLER value=3 clid=CL_FORM_CONTROLLER
+@caption kontroller
+
+@reltype ORDER_CENTER value=4 clid=CL_SHOP_ORDER_CENTER
+@caption tellimiskeskkond
 */
 
 class shop_special_offer extends class_base
@@ -153,18 +165,30 @@ class shop_special_offer extends class_base
 
 		asort($plut);
 
-		foreach($plut as $pid => $tmp)
+		if ($ob->prop("use_controller"))
 		{
-			$prod = obj($pid);
-			$prod_i = $prod->instance();
-
-
-			$html .= $prod_i->do_draw_product(array(
+			$param = array(
 				"layout" => $layout,
 				"prod" => $prod,
+				"prodat" => $prodat,
+				"plut" => $plut
 				"price" => $prodat[$prod->id()]["price"],
 				"price_comment" => $prodat[$prod->id()]["price_comment"]
-			));
+			);
+
+			$param["special_offer"] = $ob;
+			$fg = get_instance(CL_FORM_CONTROLLER);
+			$html = $fg->eval_controller($ob->prop("use_controller"), $param);
+		}
+		else
+		{
+			foreach($plut as $pid => $tmp)
+			{
+				$prod = obj($pid);
+				$prod_i = $prod->instance();
+
+				$html .= $prod_i->do_draw_product($param);
+			}
 		}
 
 		return $html;
