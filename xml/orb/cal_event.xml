@@ -6,6 +6,7 @@
 			<function name="add">
 				<arguments>
 					<required name="parent"/>
+					<optional name="folder"/>
 				</arguments>
 			</function>
 		</action>
@@ -20,6 +21,21 @@
 
 		<action name="submit">
 			<function name="submit">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="repeaters">
+			<function name="repeaters">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_repeaters">
+			<function name="submit_repeaters">
 				<arguments>
 				</arguments>
 			</function>
