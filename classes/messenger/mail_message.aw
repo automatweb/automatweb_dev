@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.10 2003/11/04 14:00:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.11 2003/11/04 19:28:09 duke Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -83,23 +83,33 @@ class mail_message extends class_base
                 $msgdata = $msgr->drv_inst->fetch_message(array(
                                 "msgid" => $arr["request"]["msgid"],
                 ));
-		
 
 		// kui ma nüüd vastan, siis ....
 		if ($this->act == "reply")
 		{
-			$msgdata["to"] = $msgdata["from"];
+			$msgdata["to"] = $msgdata["reply_to"];
 			$msgdata["from"] = $msgrobj->prop("fromname");
 			$msgdata["subject"] = "Re: " . $msgdata["subject"];
 			$msgdata["content"] = "\n\n\n" . str_replace("\n","\n> ",$msgdata["content"]);
 		}
 		elseif ($this->act == "reply2")
 		{
-			$msgdata["to"] = $msgdata["from"];
+			$msgdata["to"] = $msgdata["reply_to"];
 			$msgdata["from"] = $msgrobj->prop("fromname");
 			$msgdata["subject"] = "Re: " . $msgdata["subject"];
 			$msgdata["content"] = "";
 			$this->act = "reply";
+		}
+		elseif ($this->act == "reply3")
+		{
+			$addrs = explode(",",$msgdata["to"]);
+			$addrs = array_merge($addrs,explode(",",$msgdata["from"]));
+			$addrs = array_merge($addrs,explode(",",$msgdata["reply_to"]));
+			$uniqs = array_unique($addrs);
+			$msgdata["to"] = join(",",$uniqs);
+			$msgdata["from"] = $msgrobj->prop("fromname");
+			$msgdata["subject"] = "Re: " . $msgdata["subject"];
+			$msgdata["content"] = "\n\n\n" . str_replace("\n","\n> ",$msgdata["content"]);
 		}
 		elseif ($this->act == "forward")
 		{
@@ -338,6 +348,12 @@ class mail_message extends class_base
 				"name" => "reply2",
 				"url" => "javascript:document.changeform.subgroup.value='reply2';document.changeform.submit();",
 				"tooltip" => "Vasta/tühjalt",
+			));
+			
+			$tb->add_button(array(
+				"name" => "reply3",
+				"url" => "javascript:document.changeform.subgroup.value='reply3';document.changeform.submit();",
+				"tooltip" => "Vasta/kõigile",
 			));
 		};
 
