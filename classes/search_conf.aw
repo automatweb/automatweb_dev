@@ -182,8 +182,18 @@ class search_conf extends aw_template
 			"month" => "",
 			"day" => ""
 		));
+		
 		$date_from = date_edit::get_timestamp($date_from);
 		$date_to = date_edit::get_timestamp($date_to);
+
+		if (!$search)
+		{
+			$date_from = mktime(0,0,0,date("m"),date("d"),date("Y")-1);
+			$date_to = time();
+			$max_results = 50;
+		}
+
+				
 		$sstring_title = trim($sstring_title);
 		$sstring_author = trim($sstring_author);
 		$sstring = trim($sstring);
@@ -208,9 +218,9 @@ class search_conf extends aw_template
 			"c_type1" => selected($c_type == 1),
 			"c_type2" => selected($c_type == 2),
 			"c_type3" => selected($c_type == 3),
-			"max_results" => $this->picker($max_results, array("10" => "10", "20" => "20", "50" => "50", "100" => "100", "500" => "500")),
-			"date_from" => $de->gen_edit_form("date_from", $date_from, date("Y")-5, date("Y")+5, true),
-			"date_to" => $de->gen_edit_form("date_to", $date_to, date("Y")-5, date("Y")+5, true),
+			"max_results" => $this->picker($max_results, array("10" => "10", "20" => "20", "30" => "30", "40" => "40", "50" => "50", "60" => "60", "70" => "70", "80" => "80", "90" => "90", "100" => "100")),
+			"date_from" => $de->gen_edit_form("date_from", $date_from, 2002, date("Y")+5, true),
+			"date_to" => $de->gen_edit_form("date_to", $date_to, 2002, date("Y")+5, true),
 			"keywords" => $this->multiple_option_list($keys,$k->get_all_keywords(array("type" => ARR_KEYWORD))),
 			"reforb"	=> $this->mk_reforb("search", array("reforb" => 0,"search" => 1,"section" => aw_global_get("section"), "set_lang_id" => aw_global_get("lang_id")))
 		));
