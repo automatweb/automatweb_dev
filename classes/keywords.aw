@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.26 2001/06/09 00:54:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.27 2001/06/10 22:48:46 duke Exp $
 // keywords.aw - dokumentide võtmesõnad
 global $orb_defs;
 $orb_defs["keywords"] = "xml";
@@ -71,7 +71,9 @@ class keywords extends aw_template {
 		$this->read_template("users.tpl");
 		$this->info["site_title"] = "<a href='orb.aw?class=keywords&action=list'>Keywords</a>";
 		$q = "SELECT users.uid AS uid,
-				users.email AS email
+				users.email AS email,
+				ml_users.name AS name,
+				ml_users.tm AS tm
 				FROM ml_users
 				LEFT JOIN users ON (ml_users.uid = users.uid)
 				WHERE list_id = '$id'";
@@ -82,6 +84,8 @@ class keywords extends aw_template {
 			$this->vars(array(
 					"uid" => $row["uid"],
 					"email" => $row["email"],
+					"name" => $row["name"],
+					"tm" => ($row["tm"]) ? $this->time2date($row["tm"],2) : "(info puudub)",
 			));
 			$c .= $this->parse("LINE");
 		};
@@ -187,8 +191,10 @@ class keywords extends aw_template {
 		{
 			$res = urldecode($gotourl);
 		}
-		return $res;
+		global $baseurl;
+		return $baseurl . $res;
 	}
+	
 	////
 	// !Handleb EBS stiilis huvideformist tulnud datat
 	function submit_interests2($args = array())
@@ -222,15 +228,18 @@ class keywords extends aw_template {
 		$q = "SELECT * FROM keywords WHERE id IN ($inlist) ORDER BY category_id,keyword";
 		$this->db_query($q);
 		$kw = array();
+		$lists = array();
 		while($row = $this->db_next())
 		{
 			$kw[$row["category_id"]][] = $row["keyword"];
+			$lists[$row["keyword"]] = $row["list_id"];
 		};
 
 		// ja nyyd koostame meili
 		$txt = "";
 		$txt .= "Nimi: $name\n";
 		$txt .= "Aadress: $email\n";
+		$uid = UID;
 		foreach($kw as $key => $val)
 		{
 			$txt .= "\n" . $catnamelist[$key] . "\n";
@@ -238,8 +247,20 @@ class keywords extends aw_template {
 			foreach($val as $keyword)
 			{
 				$txt .= " - " . $keyword . "\n";
+				$lid = $lists[$keyword];
 			};
 		};
+		classload("list");
+		$list = new mlist();
+		$list->remove_user_from_lists(array(
+					"uid" => UID,
+		));
+		$list->add_user_to_lists(array(
+					"uid" => UID,
+					"name" => $name,
+					"email" => $email,
+					"list_ids" => $lists,
+				));
 		$from = sprintf("%s <%s>",$name,$email);
 		mail(KW_MAIL,KW_SUBJECT,$txt,"From: $from");
 		global $baseurl,$ext;
@@ -271,12 +292,22 @@ class keywords extends aw_template {
 			$keyword_counts[$row["keyword_id"]] = $row["cnt"];
 		};
 
-		$q = "SELECT * FROM keywords ORDER BY keyword";
+		$q = "SELECT *,keywordcategories.name AS cname FROM keywords
+			LEFT JOIN keywordcategories ON (keywords.category_id = keywordcategories.id)
+			ORDER BY category_id,keyword";
 		$this->db_query($q);
 		$c = "";
+		$last = "";
 		$this->info["site_title"] = "<a href='orb.aw?class=keywords&action=list'>Keywords</a>";
 		while($row = $this->db_next())
 		{
+			if ($last != $row["cname"])
+			{
+				$this->vars(array("title" => $row["cname"]));
+				$c .= $this->parse("HEADER");
+				$last = $row["cname"];
+			};
+				
 			if ($members[$row["list_id"]])
 			{
 				$people_count = $members[$row["list_id"]];
@@ -430,6 +461,7 @@ class keywords extends aw_template {
 		extract($args);
 		$this->quote($keywords);
 		$keywordlist = explode(",",$keywords);
+		$categories = array();
 		$klist = array();
 		$ids = array();
 		$cids = array();
@@ -437,6 +469,11 @@ class keywords extends aw_template {
 		foreach($keywordlist as $val)
 		{
 			$keyword = trim($val);
+			if (strpos($keyword,"/") > 0)
+			{
+				list($category,$keyword) = explode("/",$keyword);
+				$categories[$keyword] = $category;
+			};
 			$klist[] = $keyword;
 			$arg = join(",",map("'%s'",$klist));
 		};
@@ -455,10 +492,13 @@ class keywords extends aw_template {
 
 		foreach($klist as $val)
 		{
-			$val = trim($val);
-			if (strpos($val,"/") > 0)
+			$keyword = trim($val);
+			#if (strpos($val,"/") > 0)
+			if ($categories[$keyword])
 			{
-				list($category,$keyword) = explode("/",$val);
+				//list($category,$keyword) = explode("/",$val);
+				#$keyword = $val;
+				$category = $categories[$keyword];
 				$q = "SELECT * FROM keywordcategories WHERE name = '$category'";
 				$this->db_query($q);
 				$row = $this->db_next();
@@ -476,13 +516,9 @@ class keywords extends aw_template {
 				{
 					$catid = $row["id"];
 				};
-			}
-			else
-			{		
-				$keyword = $val;
 			};
 			// kui keywordi pole defineeritud, siis loome uue
-			if (!$ids[$val])
+			if (!$ids[$keyword])
 			{
 				// well, it looks almost like mysql_insert_id does not work always, so we screw around a little
 				$q = "SELECT MAX(id) AS id FROM keywords";
@@ -607,7 +643,6 @@ class keywords extends aw_template {
 		$udata = $this->_get_user_data();
 		classload("list");
 		$mlist = new mlist();
-		$kw = new keywords();
 		$act = $mlist->get_user_lists(array(
 					"uid" => UID,
 					));
@@ -679,6 +714,11 @@ class keywords extends aw_template {
 	function select_keywords($args = array())
 	{
 		extract($args);
+		classload("list");
+		$mlist = new mlist();
+		$act = $mlist->get_user_lists(array(
+					"uid" => UID,
+					));
 		$this->read_template("pick_keywords.tpl");
 		global $HTTP_REFERER;
 		$udata = $this->_get_user_data();
@@ -702,6 +742,7 @@ class keywords extends aw_template {
 				while($row = $this->db_next())
 				{
 					$this->vars(array(
+							"checked" => ($act[$row["list_id"]]) ? "checked" : "",
 							"keyword" => $row["keyword"],
 							"id" => $row["id"],
 					));
