@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.46 2004/09/09 11:11:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.47 2004/09/20 13:12:52 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -726,6 +726,7 @@ class promo extends class_base
 				{
 					echo "showing promo ".$o->name()." (".$o->id().") <br>";
 				}
+				enter_function("show_promo::".$o->name());
 				// visible. so show it
 				// get list of documents in this promo box
 				$pr_c = "";
@@ -890,6 +891,7 @@ class promo extends class_base
 				// if we dont do that we can get unwanted copys of promo boxes
 				// in places we dont want them
 				$inst->vars(array("title" => "", "content" => "","url" => ""));
+				exit_function("show_promo::".$o->name());
 			}
 		};
 
