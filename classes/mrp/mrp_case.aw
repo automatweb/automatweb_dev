@@ -1,9 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.5 2005/01/25 12:30:28 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.6 2005/01/26 13:25:27 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_MRP_CASE, on_save_case)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_CASE, on_new_case)
 
 @classinfo syslog_type=ST_MRP_CASE relationmgr=yes
 
@@ -15,6 +16,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_MRP_CASE, on_save_case)
 @groupinfo grp_case_workflow caption="Ressursid ja töövoog"
 @groupinfo grp_case_schedule caption="Kalender" submit=no
 @groupinfo grp_case_comments caption="Kommentaarid"
+@groupinfo grp_case_log caption="Logi" submit=no
 
 
 @default group=general
@@ -31,9 +33,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_MRP_CASE, on_save_case)
 	@property project_priority type=textbox
 	@caption Projekti prioriteet
 
-	@property sales_priority type=select
-	@caption Prioriteedihinnang müügimehelt
-
 	@property state type=text
 	@caption Staatus
 
@@ -47,6 +46,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_MRP_CASE, on_save_case)
 @default method=serialize
 	@property planned_date type=text store=no editonly=1
 	@caption Planeeritud valmimisaeg
+
+	@property sales_priority type=select
+	@caption Prioriteedihinnang müügimehelt
+
 
 
 @default group=grp_case_data
@@ -162,6 +165,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_MRP_CASE, on_save_case)
 
 @default group=grp_case_schedule
 	@property schedule_chart type=text store=no no_caption=1
+
+@default group=grp_case_log
+	@property log type=table store=no no_caption=1
 
 
 
@@ -288,6 +294,10 @@ class mrp_case extends class_base
 			case "workflow_table":
 				$this->create_workflow_table ($arr);
 				break;
+
+			case "log":
+				$this->_do_log($arr);
+				break;
 		}
 
 		return $retval;
@@ -348,7 +358,7 @@ class mrp_case extends class_base
 					// $job_number--;
 				// }
 
-				// $this->correct_job_order ($arr);
+				// $this->order_jobs ($arr);
 			// }
 		}
 		else
@@ -370,7 +380,7 @@ class mrp_case extends class_base
 				}
 			}
 
-			$this->correct_job_order ($arr);
+			$this->order_jobs ($arr);
 		}
 	}
 
@@ -846,16 +856,20 @@ class mrp_case extends class_base
 		}
 	}
 
-	function correct_job_order ($arr = array ())
+	/**
+		@attrib name=order_jobs
+		@param oid required type=int
+	**/
+	function order_jobs ($arr = array ())
 	{
 		$prerequisite_index = array ();
 		$job_index = array ();
 		$prerequisites = array ();
 		$jobs = array ();
 
-		if (is_oid ($arr["id"]))
+		if (is_oid ($arr["oid"]))
 		{
-			$this_object = obj ($arr["id"]);
+			$this_object = obj ($arr["oid"]);
 		}
 
 		if (is_object ($arr["obj_inst"]))
@@ -863,19 +877,23 @@ class mrp_case extends class_base
 			$this_object =& $arr["obj_inst"];
 		}
 
-		$connections = $this_object->connections_from(array ("type" => RELTYPE_MRP_PROJECT_JOB, "class_id" => CL_MRP_JOB));
+		$connections = $this_object->connections_from (array ("type" => RELTYPE_MRP_PROJECT_JOB, "class_id" => CL_MRP_JOB));
 
 		foreach ($connections as $connection)
 		{
 			$job = $connection->to ();
-			$job_id = $job->id ();
-			$job_index[] = $job_id;
-			$job_prerequisites = explode (",", $job->prop ("prerequisites"));
-			$prerequisite_index[$job_id] = $job_prerequisites;
 
-			foreach ($job_prerequisites as $prerequisite)
+			if ($job->prop ("state") != MRP_STATUS_DELETED)
 			{
-				$prerequisites[] = (int) $prerequisite;
+				$job_id = $job->id ();
+				$job_index[] = $job_id;
+				$job_prerequisites = explode (",", $job->prop ("prerequisites"));
+				$prerequisite_index[$job_id] = $job_prerequisites;
+
+				foreach ($job_prerequisites as $prerequisite)
+				{
+					$prerequisites[] = (int) $prerequisite;
+				}
 			}
 		}
 
@@ -936,15 +954,15 @@ class mrp_case extends class_base
 
 /**
     @attrib name=add_job
-	@param id required type=int
+	@param oid required type=int
 **/
 	function _add_job ($arr)
 	{
-		$arr["obj_inst"] = obj ($arr["id"]);
+		$arr["obj_inst"] = obj ($arr["oid"]);
 		$this->add_job ($arr);
 
 		$return_url = $this->mk_my_orb("change", array(
-			"id" => $arr["id"],
+			"id" => $arr["oid"],
 			"return_url" => urlencode ($arr["return_url"]),
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
@@ -1026,12 +1044,12 @@ class mrp_case extends class_base
 
 	/**
 		@attrib name=delete
-		@param id required type=int
+		@param oid required type=int
 	**/
 	function delete ($arr)
 	{
 		$sel = $arr["selection"];
-		$this_object = obj ($arr["id"]);
+		$this_object = obj ($arr["oid"]);
 
 		if (is_array($sel))
 		{
@@ -1043,19 +1061,8 @@ class mrp_case extends class_base
 				if ($this->can("delete", $o->id()))
 				{
 					$class = $o->class_id ();
-
-					if ($class = CL_MRP_JOB)
-					{
-						$o->set_prop ("state", MRP_STATUS_DELETED);
-					}
-
 					$o->delete ();
 				}
-			}
-
-			if ($class = CL_MRP_JOB)
-			{
-				$this->correct_job_order ($arr);
 			}
 		}
 
@@ -1073,6 +1080,85 @@ class mrp_case extends class_base
 		// save data to prisma server
 		$i = get_instance(CL_MRP_PRISMA_IMPORT);
 		$i->write_proj($arr["oid"]);
+	}
+
+	function on_delete_case ($arr)
+	{
+		$project = obj ($arr["oid"]);
+		$project->set_prop ("state", MRP_STATUS_DELETED);
+		$project->save ();
+
+		### delete project's jobs
+		$connections = $o->connections_from (array ("type" => RELTYPE_MRP_PROJECT_JOB, "class_id" => CL_MRP_JOB));
+
+		foreach ($connections as $connection)
+		{
+			$job = $connection->to ();
+			$job->set_prop ("state", MRP_STATUS_DELETED);
+			$job->delete ();
+		}
+	}
+
+	function _init_log_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "tm",
+			"caption" => t("Millal"),
+			"type" => "time",
+			"align" => "center",
+			"format" => "d.m.Y H:i",
+			"numeric" => 1,
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "job_id",
+			"caption" => t("T&ouml;&ouml"),
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "uid",
+			"caption" => t("Kasutaja"),
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "message",
+			"caption" => t("Kommentaar"),
+			"align" => "center",
+			"sortable" => 1
+		));
+	}
+
+	function _do_log($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_log_t($t);
+
+		$this->db_query("SELECT tm,objects.name as job_id, uid,message FROM mrp_log left join objects on objects.oid = mrp_log.job_id  WHERE project_id = ".$arr["obj_inst"]->id()." ORDER BY tm");
+		while ($row = $this->db_next())
+		{
+			$row["message"] = nl2br($row["message"]);
+			$t->define_data($row);
+		}
+	}
+
+	function on_new_case($arr)
+	{
+		$case_id = $arr["oid"];
+		$this->db_query("
+			INSERT INTO
+				mrp_log(
+					project_id,job_id,uid,tm,message
+				)
+				values(
+					$case_id,NULL,'".aw_global_get("uid")."',".time().",'Projekt lisati'
+				)
+		");
+				
 	}
 }
 

@@ -33,14 +33,6 @@
             <caption>Projekti prioriteet</caption>
       </property>
       <property>
-            <name>customer_priority</name>
-            <group>general</group>
-            <table>mrp_case</table>
-            <type>textbox</type>
-            <field>customer_priority</field>
-            <caption>Kliendi prioriteet</caption>
-      </property>
-      <property>
             <name>state</name>
             <group>general</group>
             <table>mrp_case</table>
@@ -76,13 +68,13 @@
             <caption>Planeeritud valmimisaeg</caption>
       </property>
       <property>
-            <name>available_resources</name>
+            <name>sales_priority</name>
             <group>general</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <type>hidden</type>
-            <no_caption>1</no_caption>
+            <type>select</type>
+            <caption>Prioriteedihinnang müügimehelt</caption>
       </property>
       <property>
             <name>format</name>
@@ -428,6 +420,16 @@
             <store>no</store>
             <no_caption>1</no_caption>
       </property>
+      <property>
+            <name>log</name>
+            <group>grp_case_log</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
       <classinfo>
             <syslog_type>ST_MRP_CASE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -450,8 +452,12 @@
                   <submit>no</submit>
             </grp_case_schedule>
             <grp_case_comments>
-                  <caption>Juhtumi kommentaarid</caption>
+                  <caption>Kommentaarid</caption>
             </grp_case_comments>
+            <grp_case_log>
+                  <caption>Logi</caption>
+                  <submit>no</submit>
+            </grp_case_log>
       </groupinfo>
       <tableinfo>
             <mrp_case>

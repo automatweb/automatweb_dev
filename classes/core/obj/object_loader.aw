@@ -2,9 +2,13 @@
 
 /*
 
-this message will get called whenever an object is saved as the class_id as the message type parameter
+this message will get called whenever an object is saved and given the class_id as the message type parameter
 and the object's id as the "oid" parameter
 EMIT_MESSAGE(MSG_STORAGE_SAVE)
+
+this message will get called whenever a new object is created and given class_id as the message type parameter
+and the object's id as the "oid" parameter
+EMIT_MESSAGE(MSG_STORAGE_NEW)
 
 */
 
@@ -260,6 +264,10 @@ class _int_object_loader extends core
 			// relocate the object in the global list
 			$GLOBALS["objects"][$t_oid] = $GLOBALS["objects"][$oid];
 			$GLOBALS["objects"][$oid] =& $GLOBALS["objects"][$t_oid];
+
+			post_message_with_param(MSG_STORAGE_NEW, $GLOBALS["objects"][$t_oid]->class_id(), array(
+				"oid" => $t_oid
+			));
 		}
 		// return the new value, so that the pointers go to the right place.
 		//
