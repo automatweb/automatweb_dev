@@ -36,6 +36,15 @@ $GLOBALS["of2prop"] = array();
 // if you create a new db-specific datasource (the last one in the chain), the file naming convention still applies, 
 // but it should derive from ds_base and call $this->init() from the constructor, that takes no parameters
 
+
+/////////////
+// TODO:
+// - separate, confable, possibly shared folders for caches: acl, search, connection, objdata/properties
+// - load all objdata with object_list, but don't unserialize metadata 
+// - don't load properties if not asked for, implement this by swithing the object instance in the objects array
+// - is object_list caching really worth it?
+// - merge objdata/propdata caches?
+
 class object
 {
 	var $oid;	// the object this instance points to
