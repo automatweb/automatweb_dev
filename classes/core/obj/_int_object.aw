@@ -1051,7 +1051,7 @@ class _int_object
 
 		// if this is a relpicker property, create the relation as well
 		$propi = $GLOBALS["properties"][$this->obj["class_id"]][$key];
-		if ($propi["type"] == "relpicker" && is_oid($val) && $GLOBALS["object_loader"]->ds->can("view", $val))
+		if (($propi["type"] == "relpicker" || $propi["type"] == "relmanager") && is_oid($val) && $GLOBALS["object_loader"]->ds->can("view", $val))
 		{
 			$this->connect(array(
 				"to" => $val,
