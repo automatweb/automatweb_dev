@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.69 2001/11/16 09:48:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.70 2001/11/18 16:20:15 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -2467,6 +2467,12 @@ class menuedit extends aw_template
 	function command_redirect($arr)
 	{
 		extract($arr);
+		if (!$oid && is_array($sel))
+		{
+			reset($sel);
+			list($oid) = each($sel);
+		}
+
 		$obj = $this->get_object($oid);
 
 		global $class_defs,$ext;
