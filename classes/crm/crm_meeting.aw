@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.22 2005/01/11 11:56:36 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.23 2005/01/11 15:01:44 ahti Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -29,6 +29,15 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 @property udeftb1 type=textbox user=1 field=meta method=serialize
 @caption User-defined textbox 1
+
+@property udeftb2 type=textbox user=1 field=meta method=serialize
+@caption User-defined textbox 2
+
+@property udeftb3 type=textbox user=1 field=meta method=serialize
+@caption User-defined textbox 3
+
+@property udefta1 type=textarea user=1 field=meta method=serialize
+@caption User-defined textarea 1
 
 @property content type=textarea cols=60 rows=30 table=documents
 @caption Sisu

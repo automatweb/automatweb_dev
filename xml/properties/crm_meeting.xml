@@ -67,6 +67,36 @@
             <caption>User-defined textbox 1</caption>
       </property>
       <property>
+            <name>udeftb2</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <user>1</user>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>User-defined textbox 2</caption>
+      </property>
+      <property>
+            <name>udeftb3</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <user>1</user>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>User-defined textbox 3</caption>
+      </property>
+      <property>
+            <name>udefta1</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textarea</type>
+            <user>1</user>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>User-defined textarea 1</caption>
+      </property>
+      <property>
             <name>content</name>
             <table>documents</table>
             <group>general</group>
