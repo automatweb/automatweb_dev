@@ -129,7 +129,7 @@ class acl_class extends aw_template
 				// ok, before we do this, we must check if another acl object, that
 				// has a higher priority, includes this folder<->group relation
 				// and if one is found, then we must not set the acl.
-				if (!$this->higher_priority_acl_exists($meta["priority"], $oid, $grp))
+				if (!$this->higher_priority_acl_exists($id,$meta["priority"], $oid, $grp))
 				{
 					if (!isset($o_grps[$grp]))
 					{
@@ -227,9 +227,9 @@ class acl_class extends aw_template
 			}
 		}
 
-		foreach($this->acl_object_cache as $oid => $obj)
+		foreach($this->acl_object_cache as $_oid => $obj)
 		{
-			if ($obj->relation_exists($oid, $grp) && $obj->get_priority() > $cur_acl)
+			if ($obj->relation_exists($oid, $grp) && $obj->get_priority() > $cur_priority)
 			{
 				return true;
 			}
