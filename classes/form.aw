@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.96 2002/06/13 22:04:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.97 2002/06/14 02:22:23 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -870,18 +870,10 @@ class form extends form_base
 			$this->load($id);
 		};
 
-		// FIXME: 11?
+		// XXX: 11?
 		if (!($this->can("view",$id) || $this->cfg["site_id"] == 11))
 		{
 			$this->acl_error("view",$id);
-		}
-
-		// xml based config forms are quite a lot different than usual forms and I don't want to
-		// clutter this class so I redirect to another class transparently
-		if ($this->type == FTYPE_CONFIG)
-		{
-			$xmlform = get_instance("xmlform");
-			return $xmlform->gen_preview(array("id" => $id,"xmldata" => $xmldata));
 		}
 
 		if ($form_action == "")
@@ -898,9 +890,12 @@ class form extends form_base
 
 		$section = aw_global_get("section");
 
+		// obj_id is for config forms and it allows us to specify the object into which we would have to save
+		// the data from the form
+
 		if (!isset($reforb) || $reforb == "")
 		{
-			$reforb = $this->mk_reforb("process_entry", array("id" => $this->id,"section" => $section));
+			$reforb = $this->mk_reforb("process_entry", array("id" => $this->id,"section" => $section,"obj_id" => $obj_id));
 		}
 
 		if (!$entry_id)
@@ -3125,9 +3120,19 @@ class form extends form_base
 		extract($arr);
 		$this->mk_path($parent,LC_FORM_ADD_FORM);
 		$this->read_template("form_add.tpl");
+		$o = get_instance("objects");
+		$mlist = $o->get_list();
+
+		// generate a list of files in the config directory. actually I only need this for
+		// config forms, so this will be gone from here as soon as I figure out another 
+		// way to show the file picker only if it is needed
+		$files = $this->get_directory(array("dir" => aw_ini_get("basedir") . "/xml/config"));
+
 		$this->vars(array(
 			"forms" => $this->picker(0,$this->get_list(FTYPE_ENTRY,true)),
 			"types" => $this->picker(-1,$this->ftypes),
+			"config_files" => is_array($files) ? $this->picker("planner.xml",$files) : "",
+			"el_default_folders" => $this->picker(-1,$mlist),
 			"reforb"	=> $this->mk_reforb("submit_add",array("parent" => $parent, "alias_doc" => $alias_doc))
 		));
 		return $this->parse();
@@ -3139,15 +3144,53 @@ class form extends form_base
 	{
 		extract($arr);
 
-		$id = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_FORM, "comment" => $comment));
+		$this->quote($name);
+
+		$id = $this->new_object(array(
+				"parent" => $parent,
+				"name" => $name,
+				"class_id" => CL_FORM,
+				"comment" => $comment,
+		));
 
 		// $type is integer now
 		$this->db_query("INSERT INTO forms(id, type,content,cols,rows) VALUES($id, $type,'',1,1)");
 		$this->db_query("CREATE TABLE form_".$id."_entries (id INT PRIMARY KEY,chain_id INT,INDEX(chain_id))");
 
 		$this->load($id);
+
+		// default folder for new elements. I _need_ to know  a folder for config forms
+		// put perhaps this is useful somewhere else as well
+		$this->arr["el_default_folder"] = $el_default_folder;
+
+		if ($type == FTYPE_CONFIG)
+		{
+			$this->arr["config_file"] = $config_file;
+
+			// call xmlform to create the elements
+			$xf = get_instance("xmlform");
+			$cfg_arr = $xf->gen_fg_elements(array(
+				"form_id" => $id,
+				"config_file" => $config_file,
+				"parent" => $el_default_folder,
+			));
+			$this->arr = $cfg_arr + $this->arr;
+
+			// XXX: register the config form
+			$ac = get_instance("config");
+			$cfgforms = $ac->get_simple_config("config_forms");
+			$config_forms = aw_unserialize($cfgforms);
+			$config_forms[$id] = $name;
+			$cfgforms = aw_serialize($config_forms);
+			$this->quote($cfgforms);
+			$ac->set_simple_config("config_forms",$cfgforms);
+			
+		}
+
+		// add the type of the form to the log message as well
 		$this->_log("form",$this->vars["LC_FORMS_LOG_NEW"] ." ". $this->ftypes[$type] ." ". $name);
 
+		// XXX: sucky-sucky
 		if ($alias_doc)
 		{
 			$this->add_alias($alias_doc, $id);
@@ -3163,6 +3206,8 @@ class form extends form_base
 			// why yes. yes I do :) -- terryf
 			$this->_clone_from($base,$id);
 		}
+		
+		$this->save();
 
 		// change is gen_grid
 		return $this->mk_orb("change", array("id" => $id));
@@ -3219,7 +3264,6 @@ class form extends form_base
 			}
 		}
 		$this->arr["search_from"][$base]=1;
-		$this->save();
 	}
 
 	////
@@ -3960,6 +4004,7 @@ class form extends form_base
 			"el_menus" => $this->multiple_option_list($this->arr["el_menus"], $menulist),
 			"el_menus2" => $this->multiple_option_list($this->arr["el_menus2"], $menulist),
 			"el_move_menus" => $this->multiple_option_list($this->arr["el_move_menus"], $menulist),
+			"el_default_folders" => $this->picker($this->arr["el_default_folder"],$menulist),
 			"form_controller_folders" => $this->multiple_option_list($this->arr["controller_folders"], $menulist),
 			"reforb"	=> $this->mk_reforb("save_folders", array("id" => $id))
 		));
@@ -4003,6 +4048,9 @@ class form extends form_base
 
 		// kataloogid, kust alt kontrollereid valida lastakse
 		$this->arr["controller_folders"] = $this->make_keys($form_controller_folders);
+
+		// default folder uute elementide jaoks
+		$this->arr["el_default_folder"] = $el_default_folder;
 
 		$this->arr["el_menus2"] = $this->make_keys($el_menus2);
 		$this->arr["main_folders"] = $this->make_keys($main_folders);
