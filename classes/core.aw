@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.122 2002/11/07 23:03:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.123 2002/11/14 15:16:35 duke Exp $
 // core.aw - Core functions
 
 // Core properties - common for all classes
@@ -88,11 +88,6 @@ class core extends db_connector
 	function set_opt($key,$val)
 	{
 		$this->$key = $val;
-		global $DBG;
-		if ($DBG)
-		{
-			print "setting $key to $val<br>";
-		}
 	}
 	
 	////
@@ -1243,7 +1238,7 @@ class core extends db_connector
 		{
 			$oid = $arg["oid"];
 			$class_id = $arg["class_id"];
-			$unserialize_meta = $arg["unserialize_meta"];
+			$unserialize_meta = ($arg["unserialize_meta"]) ? $arg["unserialize_meta"] : true;
 		}
 		else
 		{
