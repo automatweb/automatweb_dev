@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.10 2004/10/15 09:49:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.11 2004/10/17 21:07:35 duke Exp $
 // project.aw - Projekt 
 /*
 
@@ -210,14 +210,6 @@ class project extends class_base
 				//continue;
 			//};
 
-			global $XX5;
-			if ($XX5)
-			{
-				print date("d-m-Y",$o->prop("start1")) . "<br>";
-				print $o->prop("name") . "<br>";
-				print $o->id() . "<br>";
-			};
-
 
 			$start = $o->prop("start1");
 			$clid = $o->class_id();
@@ -347,7 +339,23 @@ class project extends class_base
 	{
 		aw_disable_acl();
 		$ol = new object_list(array(
-			"brother_of" => 4521
+			"brother_of" => 4521,
+			"lang_id" => array(),
+		));
+		echo dbg::dump($ol);
+
+		arr($ol);
+		foreach($ol->arr() as $o)
+		{
+			print "id = " . $o->id();
+			print "prnt = " . $o->parent();
+			print "<br>";
+		};
+		
+		aw_disable_acl();
+		$ol = new object_list(array(
+			"brother_of" => 5602,
+			"lang_id" => array(),
 		));
 		echo dbg::dump($ol);
 
@@ -486,25 +494,11 @@ class project extends class_base
 			// check whether this project has an attached image
 			if ($active_lang_only == 1 && $pr_obj->lang_id() != $lang_id)
 			{
-				/*
-				global $XX5;
-				if ($XX5)
-				{
-					print $pr_obj->id();
-					arr($pr_obj->properties());
-					arr($row);
-				};
-				*/
 				continue;
 			}
 			else
 			{
 			};
-
-			// XXX: 
-
-
-
 
 			obj_set_opt("no_auto_translation",1);
 			$fx = $pr_obj->get_first_obj_by_reltype(RELTYPE_ORIGINAL);
@@ -570,18 +564,11 @@ class project extends class_base
 
 			$this->_recurse_projects2($mpr->id());
 
-			//obj_set_opt("no_auto_translation",1);
 			$ol = new object_list(array(
-				//"brother_of" => array_keys($events),
 				"brother_of" => $ids,
 				"lang_id" => array(),
 			));
-			obj_set_opt("no_auto_translation",0);
 
-			$originals = array();
-			$pstrings = array();
-
-			$byp = array();
 
 			// how does it work? Events will be assigned to multiple projects
 			// by creating brothers in the event folders of the other projects
@@ -600,126 +587,15 @@ class project extends class_base
 			foreach($ol->arr() as $brot)
 			{
 				$prnt = new object($brot->parent());
-				$prnt_name = $prnt->name();
-				obj_set_opt("no_auto_translation",1);
-				$fx = $prnt->get_first_obj_by_reltype(RELTYPE_ORIGINAL);
-				if ($fx)
-				{
-					$prnt = $fx;
-				};
-
 				$prj_level = $this->_ptree[$prnt->id()];
-
-				$fx = $brot->get_first_obj_by_reltype(RELTYPE_ORIGINAL);
-				if ($fx)
-				{
-					$brot = $fx;
-				};
-				
-				obj_set_opt("no_auto_translation",0);
-
-				// vasakult paremale 2 ja siis 1
-				//dbg::p1("parent is " . $prnt->id() . " " . $prnt->name());
-				$bof = $brot->brother_of();
-				dbg::p1("id is " . $brot->id());
-				dbg::p1("bof is " . $bof);
-
-				
 				$orig = $brot->get_original();
-				$prnt = new object($brot->parent());
-
-				//$id = $brot->id();
-				//$oid = $orig->id();
-
-				$rid = $orig->parent();
 
 				if ($prj_level)
 				{
-					$pstrings[$rid][$prj_level] = $this->_pnames[$prnt->id()];
+					$events[$orig->id()]["parent_" . $prj_level . "_name"] = $this->_pnames[$prnt->id()];
 				};
 			};
 
-			global $XX5;
-			if ($XX5)
-			{
-				arr($this->subs);
-			};
-
-			$c = new connection();
-			$conns = $c->find(array(
-				"from.class_id" => CL_STAGING,
-				"type" => 2,
-			));
-
-			$links = array();
-			foreach($conns as $conn)
-			{
-				$links[$conn["to"]] = $conn["from"];
-			};
-
-			$conns = $c->find(array(
-				"from.class_id" => CL_STAGING,
-				"type" => 102,
-			));
-
-			$t_links = array();
-
-			foreach($conns as $conn)
-			{
-				$links[$conn["to"]] = $conn["from"];
-				$t_links[$conn["to"]] = $conn["from"];
-			};
-				
-			obj_set_opt("no_auto_translation",0);
-
-
-			foreach($events as $key => $event)
-			{
-				$check = $key;
-				if ($links[$check])
-				{
-					$check = $links[$check];
-				};
-				$evt = new object($event["id"]);
-				$evt_brother = $evt->brother_of();
-
-				$check = $event["parent"];
-
-				if ($pstrings[$check])
-				{
-					if (sizeof($pstrings[$check]) == 1)
-					{
-						$check = $t_links[$event["id"]];
-					};
-
-					if (is_array($pstrings[$check]))
-					{
-						foreach($pstrings[$check] as $pkey => $pval)
-						{
-							$pstr = "parent_" . ($pkey) . "_name";
-							$events[$key][$pstr] = $pval;
-						};
-					};
-				}
-				else
-				{
-					global $XX5;
-					if ($XX5)
-					{
-						print "tuuh";
-					};
-				};
-
-
-				global $XX5;
-				if ($XX5)
-				{
-					print "<h2>";
-					arr($events[$key]);
-					print "</h2>";
-				};
-
-			};
 		};
 
 		return $events;
@@ -992,14 +868,7 @@ class project extends class_base
 
 	function _recurse_projects2($parent)
 	{
-		obj_set_opt("no_auto_translation",1);
 		$prx = new object($parent);
-		$fx = $prx->get_first_obj_by_reltype(RELTYPE_ORIGINAL);
-		if ($fx)
-		{
-			$prx = $fx;
-		};
-
 		$parent = $prx->id();
 
 		$c = new connection();
@@ -1012,7 +881,6 @@ class project extends class_base
 		$subs = array();
 		$this->_pnames = array();
 		$this->_fullnames = array();
-		obj_set_opt("no_auto_translation",0);
 		$saast = array();
 		foreach($conns as $conn)
 		{
@@ -1026,15 +894,6 @@ class project extends class_base
 			$this->_pnames[$o2->id()] = $o2->name();
 		};
 
-		// no andke andeks, kuidas ma saan teada mis projektis mul mingi asi on?
-		// ma ei saagi :( - ma saan teada mis tasemetel projektid on .. ja see ongi
-		// kõik mida ma tean. Rohkem ei saa ma mitte kui kusagilt teada. Ja nii ongi :(
-
-		// seega see pnames kamm on täiesti mõttetu
-
-
-		obj_set_opt("no_auto_translation",0);
-
 		$this->subs = $subs;
 
 		$this->_ptree = array();
@@ -1044,7 +903,6 @@ class project extends class_base
 
 		$this->_finalize_tree($parent);
 
-		obj_set_opt("no_auto_translation",0);
 
 	}
 
@@ -1126,7 +984,6 @@ class project extends class_base
 			};
 			*/
 			$subprj_id = $prj_conn->prop("to");
-			dbg::p1("setting subprj_id to " . $subprj_id);
 			$to = $prj_conn->to();
 			$this->prj_map[$parent][$subprj_id] = $subprj_id;
 			$this->r_prj_map[$subprj_id] = $prj_id;
@@ -1593,34 +1450,7 @@ class project extends class_base
 		$level = 0;
 		$parent_selections = array();
 
-		global $XX9;
-		if ($XX9)
-		{
-			print "mpr is " . $o->id();
-		};
-		
-		obj_set_opt("no_auto_translation",1);
-		$trans_conns = $o2->connections_from(array(
-			"type" => RELTYPE_ORIGINAL,
-		));
-
-
-		if (sizeof($trans_conns) > 0)
-		{
-			$first = reset($trans_conns);
-			$o2 = new object($first->prop("to"));
-		};
-		
-		global $XX9;
-		if ($XX9)
-		{
-			print "mpr is now" . $o2->id() . "<br>";
-
-		}
-
-
-		// riight .. now how do I filter that thing?
-
+	
 		while ($o2 != false)
 		{
 			$level++;
@@ -1628,12 +1458,6 @@ class project extends class_base
 				"type" => 1, // SUBPROJECT
 				"from.class_id" => CL_PROJECT,
 			));
-			global $XX9;
-			if ($XX9)
-			{
-				print "sp = ";
-				arr($sp);
-			};
 			$first = reset($sp);
 			if (is_object($first))
 			{
@@ -1647,7 +1471,6 @@ class project extends class_base
 			$tmp = $o;
 			$o = $o2;
 		};
-		obj_set_opt("no_auto_translation",0);
 
 		return $tmp;
 	}
