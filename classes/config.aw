@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.48 2003/08/08 13:10:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.49 2003/09/25 11:22:30 duke Exp $
 
 class db_config extends aw_template 
 {
@@ -1110,20 +1110,6 @@ class config extends db_config
 			"mtype" => "homefolder", 
 			"url" => icons::check_url($v["url"]),
 			"select" => $this->mk_my_orb("sel_icon", array("rtype" => "other_icon","rid" => "homefolder"),"icons")
-		));
-		$this->parse("LINE");
-
-		$v = $ar["shared_folders"];
-		if ($v["url"] == "")
-		{
-			$v["url"] = $this->cfg["baseurl"]."/images/transa.gif";
-		}
-
-		$this->vars(array(
-			"type" => LC_CONFIG_HOME_CAT_SHAR_FOL, 
-			"mtype" => "shared_folders", 
-			"url" => icons::check_url($v["url"]),
-			"select" => $this->mk_my_orb("sel_icon", array("rtype" => "other_icon","rid" => "shared_folders"),"icons")
 		));
 		$this->parse("LINE");
 
