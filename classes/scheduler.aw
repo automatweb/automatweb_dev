@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.29 2004/12/10 14:23:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.30 2005/02/04 11:14:36 kristo Exp $
 // scheduler.aw - Scheduler
 class scheduler extends aw_template
 {
@@ -397,6 +397,27 @@ class scheduler extends aw_template
 
 		$this->repdata = $newdat;
 		$this->close_session(true);
+	}
+
+	/** searches the current schedule for events matching the mask and returns their info
+
+		@attrib api=1
+
+	**/
+	function find($evnt)
+	{
+		$this->open_session();
+		$newdat = array();
+		foreach($this->repdata as $e)
+		{
+			if ($this->match($evnt, $e))
+			{
+				$newdat[] = $e;
+			}
+		}
+	
+		$this->close_session();
+		return $newdat;
 	}
 
 	function match($mask, $event)
