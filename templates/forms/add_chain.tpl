@@ -31,6 +31,7 @@ function setLink(li,title)
 <td class="fform">Sisestused tabelis?</td>
 <td class="fform">Tabel</td>
 <td class="fform">V&auml;ljund tabelis</td>
+<td class="fform">Form ainult n&auml;itamiseks</td>
 </tr>
 <!-- SUB: FORM -->
 <tr>
@@ -43,6 +44,7 @@ function setLink(li,title)
 <td class="fform"><input type='checkbox' name='show_reps[{VAR:form_id}]' value='1' {VAR:show_reps} class='small_button'></td>
 <td class="fform"><select name='rep_tbls[{VAR:form_id}]' class='small_button'>{VAR:rep_tbls}</select></td>
 <td class="fform"><select name='rep_ops[{VAR:form_id}]' class='small_button'>{VAR:rep_ops}</select></td>
+<td class="fform"><input type="checkbox" class="small_button" value="1" name="no_load[{VAR:form_id}]" {VAR:no_load}></td>
 </tr>
 <!-- END SUB: FORM -->
 <tr>
