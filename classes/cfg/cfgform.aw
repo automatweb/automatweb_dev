@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.5 2002/11/21 17:24:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.6 2002/11/24 21:42:49 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -27,213 +27,6 @@ class cfgform extends aw_template
 		$this->init(array(
 			"clid" => CL_CFGFORM,
 		));
-	}
-
-	////
-	// !Use this instead of ch_form
-	// the stuff at the beginning is mostly of historical value only
-	// but a few objects (notably forum and mini_calendar) still make 
-	// use of this. As soon as I will fix those, I can rip these out.
-	function change_properties($args = array())
-	{
-		$args["no_filter"] = 1;
-		return $this->ch_form($args);
-	}
-	
-
-	function ch_form($args = array())
-	{
-		extract($args);
-		if (!is_object($clid))
-		{
-			// get lost!
-			return false;
-		};
-	
-		$this->clid = $clid;
-		$this->parent = $parent;
-		$this->reforb = $reforb;
-		$this->no_filter = $no_filter;
-		$this->submit = $submit;
-		$this->no_filter = true;
-		$this->obj = $obj;
-
-		$this->odata = array_merge($obj,$obj["meta"]);
-
-		// so first we retrieve the list of _all_ properties that apply
-		// to this object
-
-		// then we retrieve a list of _all_ visible properties
-		// and then we cycle over the first, and if requested, filtering
-		// out elements that are NOT in the second array.
-
-		// Perhaps there is a way to make this easier?
-
-		// like - first fetching the visible properties and then retrieving
-		// only the keys that are in that array _or_ marked as private
-
-		// get the generic properties
-		$props = $this->get_obj_properties($this->odata);
-		if (method_exists($clid,"get_properties"))
-		{
-			// the thing is - you can override the generic fields
-			// in your get_properties - if for some weird reason
-			// you'd want to do that.
-			$props = array_merge($props,$clid->get_properties($this->odata));
-		};
-
-
-		$this->create_path();
-		$this->start_form();
-		$this->html = get_instance("html");
-
-		#$this->filter_properties = $this->get_visible_properties();
-
-		$this->level = 0;
-		$this->path = array();
-		$this->req_draw_properties($props);
-
-		$this->end_form();
-
-		return $this->tb;
-	}
-	
-	////
-	// !This will cycle over the results of get_properties, doing
-	// callbacks in the progress, if needed
-	function req_draw_properties($block = array())
-	{
-		$this->level++;
-		foreach($block as $key => $val)
-		{
-			if ($this->level > 1)
-			{
-				array_push($this->path,"[" . $key . "]");
-			};
-
-			if ($this->level == 1)
-			{
-				$this->name = $key;
-			};
-
-			if (is_array($val))
-			{
-				// we do not show the element
-				$show = false;
-				// unless now filtering was explicitly requested
-				if ($this->no_filter)
-				{
-					$show = true;
-				}
-				// or we are in a nested deeped than 1 level
-				elseif ($this->level > 1)
-				{
-					$show = true;
-				}
-				// or this property is marked as private - and therefore
-				// is alway shown
-				elseif ($val["private"])
-				{
-					$show = true;
-				}
-				// or the variable is in the whitelist
-				elseif ($this->filter_properties[$key])
-				{
-					$show = true;
-				};
-
-				if ($show)
-				{
-					$val["name"] = $this->name . join("",$this->path);
-					$this->draw_property($val);
-				};
-
-			}
-			elseif (gettype($val) == "string")
-			{
-				if (method_exists($this->clid,$val))
-				{
-					$props = new aw_array($this->clid->$val($this->odata));
-					$this->req_draw_properties($props->get());
-				};
-			};
-		
-			if ($this->level > 1)
-			{
-				array_pop($this->path);
-			};
-		};
-		$this->level--;
-	}
-	
-
-	function start_form()
-	{
-		$this->tb = sprintf("<form action='reforb.%s' method='post' name='changeform'>",aw_ini_get("ext"));
-		$this->tb .= "\n<table border='0' cellspacing='1' cellpadding='1' bgcolor='#CCCCCC'>\n";
-	}
-
-	function end_form()
-	{
-		// and should we also add a submit button to the end?
-		// or deal with the save function using a toolbar?
-
-		if ($this->submit)
-		{
-			$this->tb .= "<tr><td class='chformleftcol' colspan='2' align='center'>";
-			$this->tb .= "<input type='submit' value='Salvesta' class='small_button'>";
-			$this->tb .= "</td></tr>";
-		};
-
-		$this->tb .= "\n</table>\n";
-		$this->tb .= $this->reforb;
-		$this->tb .= "</form>\n";
-	}
-
-	////
-	// !Draw a single line in the editing form.
-	function draw_property($data)
-	{
-		$this->tb .= "<tr>";
-		$this->tb .= "<td class='" . $this->leftcolstyle . "' width='150'>";
-		$this->tb .= $data["caption"];
-		$this->tb .= "</td>";
-
-		$this->tb .= "<td class='" . $this->rightcolstyle . "'>";
-		$this->tb .= $this->html->draw($data);
-		$this->tb .= "</td>";
-		$this->tb .= "</tr>\n";
-	}
-
-	////
-	// !Creates the YAH line - if possible
-	function create_path()
-	{
-		if (method_exists($this->clid,"get_metainfo"))
-		{
-			if (is_array($this->obj))
-			{
-				$title = $this->clid->get_metainfo("title_change");
-				if (strlen($title) == 0)
-				{
-					// default title
-					$title = "Muuda objekti";
-				};
-				$path_parent = $this->obj["parent"];
-			}
-			elseif ($this->parent)
-			{
-				$title = $this->clid->get_metainfo("title_add");
-				if (strlen($title) == 0)
-				{
-					// default title
-					$title = "Lisa objekt";
-				};
-				$path_parent = $this->parent;
-			};
-
-			$this->mk_path($path_parent,$title);
-		};
 	}
 		
 	function get_visible_properties()
@@ -314,6 +107,14 @@ class cfgform extends aw_template
 		));
 		
 		$this->t->define_field(array(
+			'name' => 'type',
+			'caption' => 'Tüüp',
+			'talign' => 'center',
+			'nowrap' => 1,
+		));
+		
+		
+		$this->t->define_field(array(
 			'name' => 'check',
 			'caption' => 'Vali',
 			'talign' => 'center',
@@ -352,6 +153,7 @@ class cfgform extends aw_template
 					$ord = $args["obj"]["meta"]["ord"][$name];
 					$this->t->define_data(array(
 						'caption' => $caption,
+						'type' => $property["type"],
 						'group' => $property['group'],
 						'check' => html::checkbox(array('name' => "properties[$name]",'checked' => $selprops[$name])),
 						'ord' => html::textbox(array('size' => 4, 'name' => "ord[$name]", 'value' => $ord)),
