@@ -363,13 +363,13 @@ class contacts extends aw_template {
 			));
 		classload("form");
 		$f = new form(CONTACT_FORM);
-		global $ext,$udata;
+		global $ext,$udata,$baseurl;
 		$folder = ($folder) ? $folder : $udata["home_folder"];
 		$form = $f->gen_preview(array(
 						"id" => CONTACT_FORM,
 						"entry_id" => ($args["id"]) ? $args["id"] : "",
 						"reforb" => $this->mk_reforb("submit",array("folder" => $folder)),
-						"form_action" => "/index.$ext",
+						"form_action" => "$baseurl/index.$ext",
 					));
 		$this->read_template("edit_contact.tpl");
 		$this->vars(array(
@@ -471,11 +471,11 @@ class contacts extends aw_template {
 		$this->read_template("search_contact.tpl");
 		classload("form");
 		$f = new form(2024);
-		global $ext;
+		global $ext,$baseurl;
 		$form = $f->gen_preview(array(
 						"id" => 2024,
 						"reforb" => $this->mk_reforb("submit_search",array()),
-						"form_action" => "/index.$ext",
+						"form_action" => "$baseurl/index.$ext",
 					));
 		$this->vars(array(
 				"menu" => $menu,
@@ -491,14 +491,42 @@ class contacts extends aw_template {
 		$menu = $this->gen_msg_menu(array(
 				"activelist" => array("contacts","search"),
 			));
+		
+		$this->_gen_contact_group_list();
+		
+		
 		$this->read_template("search_contact_res.tpl");
 		// FIXME:
 		classload("form");
 		$f = new form(2024);
+		$f->load(CONTACT_FORM);
+		$ids = $f->get_ids_by_name(array("names" => array("name","surname","email","phone")));
 		// vaja kuvada otsitulemused. kuidas?
+		$f->process_entry(array("id" => 2024));
+		$res = $f->search($f->entry_id,array_keys($this->flatlist));
+		$c = "";
+		if (is_array($f->cached_results))
+		{
+			list($entry_id,$results) = each($f->cached_results);
+			if (is_array($results))
+			{
+				foreach($results as $idx => $row)
+				{
+					$this->vars(array(
+							"name" => $row[$ids["name"]] . " " . $row[$ids["surname"]],
+							"phone" => $row[$ids["phone"]],
+							"id" => $idx,
+							"email" => $row[$ids["email"]],
+						));
+					$c .= $this->parse("line");
+				};
+			};
+		};
+		
+
 		$this->vars(array(
 				"menu" => $menu,
-				"form" => "Tulemused",
+				"line" => $c,
 		));
 		return $this->parse();
 	}
