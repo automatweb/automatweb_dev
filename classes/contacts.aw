@@ -562,17 +562,25 @@ class contacts extends aw_template
 			$this->indentlevel = 0;
 			$this->_indent_array($grps_by_parent,$udata["home_folder"]);
 			
-			// koostame nimekirja koigist selle formi entritest
-			classload("form");
-			$f = new form($this->cfg["form"]);
-			$f->load($this->cfg["form"]);
-			$ids = $f->get_ids_by_name(array("names" => array("name","surname","email","phone")));
-			
 			// see on selleks, et get_entries arvestaks ka neid kontakte, mis kodukataloogi
 			// on salvestatud
 			$grps[$udata["home_folder"]] = 1;
+			
+			// koostame nimekirja koigist selle formi entritest
+			if ($this->cfg["form"])
+			{
+				classload("form");
+				$f = new form($this->cfg["form"]);
+				$f->load($this->cfg["form"]);
+				$ids = $f->get_ids_by_name(array("names" => array("name","surname","email","phone")));
+				$dat = $f->get_entries(array("parent" => array_keys($grps), "all_data" => true));
+			}
+			else
+			{
+				$dat = array();
+			};
+			
 		
-			$dat = $f->get_entries(array("parent" => array_keys($grps), "all_data" => true));
 			
 			// siia salvestame koik entryd parentite kaupa grupeerituna
 			$entries_by_parent = array();
