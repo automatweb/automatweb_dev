@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.41 2005/01/19 15:00:30 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.42 2005/01/20 09:04:48 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -580,7 +580,6 @@ class webform extends class_base
 			$dir->set_parent($arr["obj_inst"]->parent());
 			$dir->set_class_id(CL_MENU);
 			$dir->set_name("Sisestused ".$arr["obj_inst"]->id());
-			$dir->set_status(STAT_ACTIVE);
 			$dir->save();
 			$dir->acl_set($group, array("can_add" => 1, "can_view" => 1));
 			$dir->save();
