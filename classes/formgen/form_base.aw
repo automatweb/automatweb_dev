@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.17 2003/05/14 15:44:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.18 2003/05/15 10:52:53 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -692,6 +692,7 @@ class form_base extends form_db_base
 						$el=get_instance("formgen/form_entry_element");
 						$el->load($op_cell["elements"][$i],&$this,$rcol,$rrow);
 
+						
 						// if the element is linked, then fake the elements entry
 						if ($op_cell["elements"][$i]["linked_element"] && $op_far[$op_cell["elements"][$i]["linked_form"]] == $op_cell["elements"][$i]["linked_form"])
 						{
@@ -718,14 +719,12 @@ class form_base extends form_db_base
 				}
 			}
 		}
-		else
+
+		for ($row = 0; $row < $this->arr["rows"]; $row++)
 		{
-			for ($row = 0; $row < $this->arr["rows"]; $row++)
+			for ($col = 0; $col < $this->arr["cols"]; $col++)
 			{
-				for ($col = 0; $col < $this->arr["cols"]; $col++)
-				{
-					$this->arr["contents"][$row][$col]->get_els(&$ret);
-				}
+				$this->arr["contents"][$row][$col]->get_els(&$ret);
 			}
 		}
 		return $ret;
