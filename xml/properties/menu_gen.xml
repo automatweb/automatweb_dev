@@ -11,102 +11,153 @@
             <caption>Kommentaar</caption>
       </property>
       <property>
-            <name>tyyp_AZ</name>
-            <type>checkbox</type>
-            <value>AZ</value>
+            <name>tyyp</name>
+            <type>select</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption>A..Za..z</caption>
+            <caption>tüüp</caption>
       </property>
       <property>
-            <name>tyyp_weekdays</name>
-            <type>checkbox</type>
-            <value>
-            <![CDATA["weekdays"]]>
-            </value>
+            <name>prefix</name>
+            <type>textbox</type>
+            <size>10</size>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption>created: group by weekdays</caption>
+            <caption>nimedele lisatakse eesliide</caption>
       </property>
       <property>
-            <name>tyyp_months</name>
-            <type>checkbox</type>
-            <value>
-            <![CDATA["months"]]>
-            </value>
+            <name>sufix</name>
+            <type>textbox</type>
+            <size>10</size>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption>created: group by months</caption>
+            <caption>nimedele lisatakse järelliide</caption>
+      </property>
+      <property>
+            <name>destination_path</name>
+            <type>select</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>uued kaustad salvesta sellesse kausta</caption>
+      </property>
+      <property>
+            <name>gen_and_deal</name>
+            <type>checkbox</type>
+            <value>ok</value>
+            <table>objects</table>
+            <group>how</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>genereeri kataloogid ja jaga neisse objektid</caption>
+      </property>
+      <property>
+            <name>group_by</name>
+            <type>select</type>
+            <table>objects</table>
+            <group>how</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>mille järgi objektid kataloogidesse grupeerida</caption>
+      </property>
+      <property>
+            <name>gen_rest_into</name>
+            <type>textbox</type>
+            <size>8</size>
+            <table>objects</table>
+            <group>how</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>tee kataloog, kuhu lähevad objektid, mida ei suudetud grupeerida, muidu objekte ei liigutata</caption>
+      </property>
+      <property>
+            <name>gen_only</name>
+            <type>checkbox</type>
+            <value>ok</value>
+            <table>objects</table>
+            <group>how</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>genereeri ainult kataloogid</caption>
+      </property>
+      <property>
+            <name>deal_excisting</name>
+            <type>checkbox</type>
+            <value>ok</value>
+            <table>objects</table>
+            <group>how</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>jaga objektid olemasolevatesse kataloogidesse</caption>
       </property>
       <property>
             <name>save_undo</name>
             <type>checkbox</type>
-            <value>
-            <![CDATA["saveundo"]]>
-            </value>
+            <value>saveundo</value>
             <table>objects</table>
-            <group>general</group>
+            <group>misc</group>
             <field>meta</field>
             <method>serialize</method>
             <caption>save undo</caption>
       </property>
       <property>
-            <name>gen</name>
-            <type>checkbox</type>
-            <value>
-            <![CDATA["gen"]]>
-            </value>
+            <name>make_catalogs</name>
+            <type>href</type>
+            <target>_blank</target>
+            <editonly>1</editonly>
             <table>objects</table>
-            <group>general</group>
+            <group>misc</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption>generate folders</caption>
+            <caption>tee kataloogid</caption>
       </property>
       <property>
             <name>undo</name>
-            <type>checkbox</type>
-            <value>
-            <![CDATA["undo"]]>
-            </value>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <type>href</type>
             <caption>undo last gen</caption>
-      </property>
-      <property>
-            <name>source_path</name>
-            <type>objpicker</type>
-            <clid>CL_PSEUDO</clid>
+            <target>_blank</target>
+            <editonly>1</editonly>
             <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>töötle kataloogi</caption>
-      </property>
-      <property>
-            <name>destination_path</name>
-            <type>generated</type>
-            <generator>destination_path</generator>
-            <table>objects</table>
-            <group>general</group>
+            <group>misc</group>
             <field>meta</field>
             <method>serialize</method>
       </property>
       <property>
-            <name>whee</name>
-            <type>generated</type>
-            <generator>make_dirs_link</generator>
+            <name>analyse_this</name>
+            <type>select</type>
+            <size>10</size>
+            <multiple>1</multiple>
             <table>objects</table>
-            <group>general</group>
+            <group>analyse</group>
             <field>meta</field>
             <method>serialize</method>
+            <caption>objektid võta kataloogi(de)st</caption>
+      </property>
+      <property>
+            <name>sub_menus</name>
+            <type>checkbox</type>
+            <value>ok</value>
+            <table>objects</table>
+            <group>analyse</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>otsi ka alamkataloogidest</caption>
+      </property>
+      <property>
+            <name>show_all_objects</name>
+            <type>text</type>
+            <table>objects</table>
+            <group>analyse</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>objektid</caption>
       </property>
 </properties>
 
