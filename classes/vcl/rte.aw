@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.3 2003/12/03 12:34:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.4 2004/02/26 14:09:51 duke Exp $
 // rte.aw - Rich Text Editor 
 /*
 
@@ -55,29 +55,30 @@ class rte extends class_base
 		$toolbar = &$arr["toolbar"];
 		$toolbar->add_separator();
 
-		// TODO: remap those URL-s so that I can use the toolbar in other situations
-		// besides the fixed toolbar.
+		$js_url_prefix = "";
+		if (!empty($arr["target"]))
+		{
+			$js_url_prefix = "parent.contentarea.";
+		};
+
                 $toolbar->add_button(array(
                         "name" => "bold",
                         "tooltip" => "Bold",
-                        "target" => "contentarea",
-                        "url" => "javascript:parent.contentarea.format_selection('bold');",
+                        "url" => "javascript:${js_url_prefix}format_selection('bold');",
                         "img" => "rte_bold.gif",
                 ));
 
                 $toolbar->add_button(array(
                         "name" => "italic",
                         "tooltip" => "Italic",
-                        "target" => "contentarea",
-                        "url" => "javascript:parent.contentarea.format_selection('italic');",
+                        "url" => "javascript:${js_url_prefix}format_selection('italic');",
                         "img" => "rte_italic.gif",
                 ));
 
                 $toolbar->add_button(array(
                         "name" => "underline",
                         "tooltip" => "Underline",
-                        "target" => "contentarea",
-                        "url" => "javascript:parent.contentarea.format_selection('underline');",
+                        "url" => "javascript:${js_url_prefix}format_selection('underline');",
                         "img" => "rte_underline.gif",
                 ));
 
@@ -86,24 +87,21 @@ class rte extends class_base
 		$toolbar->add_button(array(
                         "name" => "align_left",
                         "tooltip" => "Align left",
-                        "target" => "contentarea",
-                        "url" => "javascript:parent.contentarea.format_selection('justifyleft');",
+                        "url" => "javascript:${js_url_prefix}format_selection('justifyleft');",
                         "img" => "rte_align_left.gif",
                 ));
 
                 $toolbar->add_button(array(
                         "name" => "align_center",
                         "tooltip" => "Align center",
-                        "target" => "contentarea",
-                        "url" => "javascript:parent.contentarea.format_selection('justifycenter');",
+                        "url" => "javascript:${js_url_prefix}format_selection('justifycenter');",
                         "img" => "rte_align_center.gif",
                 ));
 
                 $toolbar->add_button(array(
                         "name" => "align_right",
                         "tooltip" => "Align right",
-                        "target" => "contentarea",
-                        "url" => "javascript:parent.contentarea.format_selection('justifyright');",
+                        "url" => "javascript:${js_url_prefix}format_selection('justifyright');",
                         "img" => "rte_align_right.gif",
                 ));
 
@@ -112,16 +110,14 @@ class rte extends class_base
                 $toolbar->add_button(array(
                         "name" => "num_list",
                         "tooltip" => "Numbered list",
-                        "target" => "contentarea",
-                        "url" => "javascript:parent.contentarea.format_selection('insertorderedlist');",
+                        "url" => "javascript:${js_url_prefix}format_selection('insertorderedlist');",
                         "img" => "rte_num_list.gif",
                 ));
 
 		$toolbar->add_button(array(
                         "name" => "bul_list",
                         "tooltip" => "Bulleted list",
-                        "target" => "contentarea",
-                        "url" => "javascript:parent.contentarea.format_selection('insertunorderedlist');",
+                        "url" => "javascript:${js_url_prefix}format_selection('insertunorderedlist');",
                         "img" => "rte_bul_list.gif",
                 ));
 
@@ -130,16 +126,14 @@ class rte extends class_base
                 $toolbar->add_button(array(
                         "name" => "outdent",
                         "tooltip" => "Outdent",
-                        "target" => "contentarea",
-                        "url" => "javascript:parent.contentarea.format_selection('outdent');",
+                        "url" => "javascript:${js_url_prefix}format_selection('outdent');",
                         "img" => "rte_outdent.gif",
                 ));
 
                 $toolbar->add_button(array(
                         "name" => "indent",
                         "tooltip" => "Indent",
-                        "target" => "contentarea",
-                        "url" => "javascript:parent.contentarea.format_selection('indent');",
+                        "url" => "javascript:${js_url_prefix}format_selection('indent');",
                         "img" => "rte_indent.gif",
                 ));
                
@@ -157,8 +151,7 @@ class rte extends class_base
 			"name" => "clearstyles",
 			"img" => "clearstyles.gif",
 			"tooltip" => "tühista stiilid",
-			"target" => "contentarea",
-			"url" => "javascript:parent.contentarea.clearstyles()",
+			"url" => "javascript:${js_url_prefix}clearstyles()",
 			"side" => "right",
                 ));
 	}
