@@ -21,6 +21,7 @@ text-decoration: none;
 <!-- SUB: FOLDERS -->
 
 <!-- END SUB: FOLDERS -->
+<a name="table"></a>
 <table class="{VAR:table_css_class}" border="0" width="100%" cellpadding="3" cellspacing="0">
 	<tr bgcolor="{VAR:header_bgcolor}" {VAR:style_text}>
 
@@ -45,10 +46,10 @@ text-decoration: none;
 </table>
 <center>
 <!-- SUB: ALPHABET -->
-<a href="{VAR:char_url}">{VAR:char}</a>&nbsp;&nbsp; 
+<a href="{VAR:char_url}#table">{VAR:char}</a>&nbsp;&nbsp; 
 <!-- END SUB: ALPHABET -->
 <!-- SUB: ALPHABET_SEL -->
-<a href="{VAR:char_url}"><strong>{VAR:char}</strong></a>&nbsp;
+<a href="{VAR:char_url}#table"><strong>{VAR:char}</strong></a>&nbsp;
 <!-- END SUB: ALPHABET_SEL -->
 </center>
 {VAR:reforb}
