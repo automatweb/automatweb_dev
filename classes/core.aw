@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.50 2001/08/12 23:21:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.51 2001/08/16 15:04:22 kristo Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -1170,6 +1170,37 @@ class core extends db_connector
 		$this->errorlevel++;
 
 		$this->_log("error",$msg);	
+		// meilime veateate listi ka
+		$subj = "Viga saidil ".$GLOBALS["baseurl"];
+		$content = "\nVeateade: ".$msg;
+		$content.= "\nfatal = ".($fatal ? "Jah" : "Ei" )."\n";
+		$content.= "PHP_SELF = ".$GLOBALS["PHP_SELF"]."\n";
+		$content.= "lang_id = ".$GLOBALS["lang_id"]."\n";
+		$content.= "uid = ".$GLOBALS["uid"]."\n";
+		$content.= "section = ".$GLOBALS["section"]."\n";
+		global $HTTP_COOKIE_VARS;
+		foreach($HTTP_COOKIE_VARS as $k => $v)
+		{
+			$content.="HTTP_COOKIE_VARS[$k] = $v \n";
+		}
+		global $HTTP_GET_VARS;
+		foreach($HTTP_GET_VARS as $k => $v)
+		{
+			$content.="HTTP_GET_VARS[$k] = $v \n";
+		}
+		global $HTTP_POST_VARS;
+		foreach($HTTP_POST_VARS as $k => $v)
+		{
+			$content.="HTTP_POST_VARS[$k] = $v \n";
+		}
+		global $HTTP_SERVER_VARS;
+		foreach($HTTP_SERVER_VARS as $k => $v)
+		{
+			$content.="HTTP_SERVER_VARS[$k] = $v \n";
+		}
+
+		mail("vead@struktuur.ee", $subj, $content);
+
 		if ($silent)
 		{
 			return;
@@ -1177,6 +1208,14 @@ class core extends db_connector
 
 		if ($fatal)
 		{
+			classload("config");
+			$co = new config;
+			$u = $co->get_simple_config("error_redirect");
+			if ($u != "")
+			{
+				header("Location: $u");
+				die();
+			}
 			die("<br><b>AW_ERROR: $msg</b><br>");
 		};
 	}

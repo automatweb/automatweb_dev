@@ -1,9 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.21 2001/08/16 10:54:46 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.22 2001/08/16 15:04:22 kristo Exp $
 
 global $orb_defs;
 $orb_defs["config"] = "xml";
 
+classload("aw_template");
 class db_config extends aw_template 
 {
 	function db_config() 
@@ -51,6 +52,7 @@ class db_config extends aw_template
 	
 		$al = $this->get_simple_config("after_login");
 		$doc = $this->get_simple_config("orb_err_mustlogin");
+		$err = $this->get_simple_config("error_redirect");
 		$if = $this->get_simple_config("user_info_form");
 		$op = $this->get_simple_config("user_info_op");
 
@@ -63,7 +65,8 @@ class db_config extends aw_template
 			"forms" => $this->picker($if,$fb->get_list(FTYPE_ENTRY,true)),
 			"ops" => $this->picker($op,$ops[$if]),
 			"search_doc" => $this->mk_orb("search_doc", array(),"links"),
-			"mustlogin" => $doc
+			"mustlogin" => $doc,
+			"error_redirect" => $err
 		));
 		return $this->parse();
 	}
@@ -926,6 +929,7 @@ class db_config extends aw_template
 		$this->set_simple_config("user_info_form",$user_info_form);
 		$this->set_simple_config("user_info_op",$user_info_op);
 		$this->set_simple_config("orb_err_mustlogin",$mustlogin);
+		$this->set_simple_config("error_redirect",$error_redirect);
 	}
 };
 
