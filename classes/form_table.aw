@@ -40,6 +40,7 @@ class form_table extends form_base
 			"header_sorted" => $this->picker(0,$css),
 			"content_style1" => $this->picker(0,$css),
 			"content_style2" => $this->picker(0,$css),
+			"link_style" => $this->picker(0,$css),
 			"content_sorted_style1" => $this->picker(0,$css),
 			"content_sorted_style2" => $this->picker(0,$css),
 			"moveto" => $this->multiple_option_list($this->table["moveto"], $ob->get_list())
@@ -128,6 +129,7 @@ class form_table extends form_base
 			$this->table["header_sorted"] = $header_sorted;
 			$this->table["content_style1"] = $content_style1;
 			$this->table["content_style2"] = $content_style2;
+			$this->table["link_style"] = $link_style;
 			$this->table["content_sorted_style1"] = $content_sorted_style1;
 			$this->table["content_sorted_style2"] = $content_sorted_style2;
 			$this->table["submit_text"] = $submit_text;
@@ -319,6 +321,7 @@ class form_table extends form_base
 			"header_sorted" => $this->picker($this->table["header_sorted"],$css),
 			"content_style1" => $this->picker($this->table["content_style1"],$css),
 			"content_style2" => $this->picker($this->table["content_style2"],$css),
+			"link_style" => $this->picker($this->table["link_style"],$css),
 			"content_sorted_style1" => $this->picker($this->table["content_sorted_style1"],$css),
 			"content_sorted_style2" => $this->picker($this->table["content_sorted_style2"],$css),
 			"moveto" => $this->multiple_option_list($this->table["moveto"], $ob->get_list()),
@@ -709,31 +712,31 @@ class form_table extends form_base
 
 		if ($this->table["header_normal"])
 		{
-			$op.= $s->get_css($this->table["header_normal"]);
+			$op.= $s->get_css($this->table["header_normal"],$this->table["link_style"]);
 		}
 		if ($this->table["header_sortable"])
 		{
-			$op.= $s->get_css($this->table["header_sortable"]);
+			$op.= $s->get_css($this->table["header_sortable"],$this->table["link_style"]);
 		}
 		if ($this->table["header_sorted"])
 		{
-			$op.= $s->get_css($this->table["header_sorted"]);
+			$op.= $s->get_css($this->table["header_sorted"],$this->table["link_style"]);
 		}
 		if ($this->table["content_style1"])
 		{
-			$op.= $s->get_css($this->table["content_style1"]);
+			$op.= $s->get_css($this->table["content_style1"],$this->table["link_style"]);
 		}
 		if ($this->table["content_style2"])
 		{
-			$op.= $s->get_css($this->table["content_style2"]);
+			$op.= $s->get_css($this->table["content_style2"],$this->table["link_style"]);
 		}
 		if ($this->table["content_sorted_style1"])
 		{
-			$op.= $s->get_css($this->table["content_sorted_style1"]);
+			$op.= $s->get_css($this->table["content_sorted_style1"],$this->table["link_style"]);
 		}
 		if ($this->table["content_sorted_style2"])
 		{
-			$op.= $s->get_css($this->table["content_sorted_style2"]);
+			$op.= $s->get_css($this->table["content_sorted_style2"],$this->table["link_style"]);
 		}
 		$op.="</style>\n";
 		$awt->stop("form_table::get_css");
