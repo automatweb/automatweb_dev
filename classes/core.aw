@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.197 2003/05/27 10:01:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.198 2003/06/03 15:31:24 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -717,9 +717,9 @@ class core extends db_connector
 
 	////
 	// !koostab aliaste nimekirja objekti jaoks
-	function get_aliases_for($oid,$type = -1,$sortby = "", $order = "",$join = "") 
+	function get_aliases_for($oid,$type = -1,$sortby = "", $order = "",$join = "",$reltype = -1) 
 	{
-		$ss = "";
+		$ss = $js = $fs = $rs = "";
 		if ($type != -1)
 		{
 			$ss = " AND aliases.type = '$type' ";
@@ -728,17 +728,19 @@ class core extends db_connector
 		{
 			$sortby = "id";
 		}
-		$js = "";
-		$fs = "";
 		if ($join != "")
 		{
 			$js = join(' ',map2('LEFT JOIN %s ON %s',$join));
 			$fs = ",".join(',',map2('%s.*',$join));
 		}
+		if ($reltype != -1)
+		{
+			$rs = " AND aliases.reltype = '$reltype' ";
+		};
 		$q = "SELECT aliases.*,objects.* $fs FROM aliases
 			LEFT JOIN objects ON
 			(aliases.target = objects.oid) $js
-			WHERE source = '$oid' $ss ORDER BY aliases.id ";
+			WHERE source = '$oid' $ss $rs ORDER BY aliases.id ";
 		$this->db_query($q);
 		$aliases = array();
 		while($row = $this->db_next()) 
