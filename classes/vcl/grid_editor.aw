@@ -1334,7 +1334,7 @@ class grid_editor extends class_base
 		$table = $this->parse();
 
 		$al = get_instance("aliasmgr");
-		$al->parse_oo_aliases($oid,&$table,array());
+		//$al->parse_oo_aliases($oid,&$table,array());
 		
 		return $table;
 	}
