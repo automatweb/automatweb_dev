@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.133 2004/04/12 07:35:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.134 2004/04/21 11:41:23 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -833,6 +833,41 @@ if (!defined("DEFS"))
 		$members = aw_cache_get("__aw_default_class_members", $class);
 		$members[$member] = $value;
 		aw_cache_set("__aw_default_class_members", $class, $members);
+	}
+
+	/** temporarily switches the current user to $arr[uid]
+
+
+	**/
+	function aw_switch_user($arr)
+	{
+		$old_uids = aw_global_get("old_uids");
+		if (!is_array($old_uids))
+		{
+			$old_uids = array();
+		}
+		array_push($old_uids, $arr["uid"]);
+		aw_global_set("old_uids", $old_uids);
+		
+		__aw_int_do_switch_user($arr["uid"]);
+	}
+
+	function __aw_int_do_switch_user($uid)
+	{
+		aw_global_set("uid", $uid);
+		$us = get_instance("users");
+		$us->request_startup();
+	}
+
+	function aw_restore_user()
+	{
+		$old_uids = aw_global_get("old_uids");
+		if (!is_array($old_uids))
+		{
+			$old_uids = array();
+		}
+		__aw_int_do_switch_user(array_pop($old_uids));
+		aw_global_set("old_uids", $old_uids);
 	}
 
 	////
