@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.12 2002/11/15 18:06:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.13 2002/11/27 15:46:56 duke Exp $
 // search.aw - Search Manager
 class search extends aw_template
 {
@@ -86,6 +86,7 @@ class search extends aw_template
 			"special" => "",
 			"alias" => "",
 			"redir_target" => "",
+			"oid" => "",
 		);
 
 		$_obj = $args["obj"];
@@ -261,6 +262,14 @@ class search extends aw_template
 						if ($val)
 						{
 							$parts["site_id"] = " site_id = '$val' ";
+						};
+						break;
+
+					case "oid":
+						if ($val)
+						{
+							$parts["oid"] = " oid = '$oid' ";
+							$partcount++;
 						};
 						break;
 
@@ -617,6 +626,17 @@ class search extends aw_template
 				"onChange" => "refresh_page(this)",
 			);
 		};
+		
+		if (!$fields["oid"])
+		{
+			$fields["oid"] = array(
+				"type" => "textbox",
+				"caption" => "ID",
+				"size" => 6,
+				"value" => $args["s"]["oid"],
+			);
+		};
+		
 
 		if (!$fields["location"])
 		{
