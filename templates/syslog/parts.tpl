@@ -21,7 +21,7 @@
 		{VAR:hits}
 	</td>
 	<td class="{VAR:style}" width="80%">
-		<img src="images/bar.gif" width="{VAR:width}" height="5">
+		<img src="{VAR:baseurl}/images/bar.gif" width="{VAR:width}" height="5">
 	</td>
 	</tr>
 	<!-- END SUB: hits_line -->
@@ -66,7 +66,7 @@
 		{VAR:logins}
 	</td>
 	<td class="{VAR:style}" width="80%">
-		<img src="images/bar.gif" width="{VAR:width}" height="5">
+		<img src="{VAR:baseurl}/images/bar.gif" width="{VAR:width}" height="5">
 	</td>
 	</tr>
 	<!-- END SUB: login_line -->
@@ -110,7 +110,7 @@
 		{VAR:hits}
 	</td>
 	<td class="{VAR:style}" width="80%">
-		<img src="images/bar.gif" width="{VAR:width}" height="5">
+		<img src="{VAR:baseurl}/images/bar.gif" width="{VAR:width}" height="5">
 	</td>
 	</tr>
 	<!-- END SUB: hosts_line -->
@@ -154,7 +154,7 @@
 		{VAR:changes}
 	</td>
 	<td class="{VAR:style}" width="80%">
-		<img src="images/bar.gif" width="{VAR:width}" height="5">
+		<img src="{VAR:baseurl}/images/bar.gif" width="{VAR:width}" height="5">
 	</td>
 	</tr>
 	<!-- END SUB: menus_line -->
@@ -202,7 +202,7 @@
 		<td class="{VAR:style}" nowrap><a target="new" href="{VAR:baseurl}/?section={VAR:oid}">{VAR:name}</a>&nbsp;</td>
 		<td class="{VAR:style}">{VAR:hits}</td>
 		<td class="{VAR:style}">
-			<img src="images/bar.gif" width="{VAR:width}" height="5">
+			<img src="{VAR:baseurl}/images/bar.gif" width="{VAR:width}" height="5">
 		</td>
 	</tr>
 	<!-- END SUB: objects_line -->
