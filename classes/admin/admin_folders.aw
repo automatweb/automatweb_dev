@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.9 2003/06/04 19:18:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.10 2003/06/17 12:00:50 kristo Exp $
 define("SHARED_FOLDER_ID",2147483647);
 class admin_folders extends aw_template
 {
@@ -455,7 +455,6 @@ class admin_folders extends aw_template
 	function mk_grp_tree($parent)
 	{
 		$t = get_instance("groups");
-		$t->listacl("objects.class_id = ".CL_GROUP." AND objects.status = 2");
 		$t->listgroups("parent","asc",0,2);
 		$grar = array();
 		while ($row = $t->db_next())
@@ -492,7 +491,7 @@ class admin_folders extends aw_template
 		reset($arr[$parent]);
 		while (list(,$row) = each($arr[$parent]))
 		{
-			if (!$this->can("view",$row["oid"]) || $row["gid"] == aw_ini_get("groups.all_users_grp"))
+			if (!$this->can("view",$row["oid"]) /*|| $row["gid"] == aw_ini_get("groups.all_users_grp")*/)
 			{
 				continue;
 			}
