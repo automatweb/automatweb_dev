@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.37 2005/02/09 13:07:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.38 2005/02/11 08:11:09 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -870,7 +870,7 @@ class aw_table extends aw_template
 								$val = $tmt[2];
 							}
 					
-							if ($val == 0)
+							if ($val < 1)
 							{
 								$val = "n/a";
 							}
