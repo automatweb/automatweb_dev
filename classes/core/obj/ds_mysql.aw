@@ -819,7 +819,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			{
 				$acld = ", objects.acldata as acldata, objects.parent as parent";
 			}
-			$q = "SELECT objects.oid as oid,objects.name as name,objects.parent as parent, objects.brother_of as brother_of  $acld FROM $joins WHERE $where ".$this->sby." ".$this->limit;
+			$q = "SELECT objects.oid as oid,objects.name as name,objects.parent as parent, objects.brother_of as brother_of,objects.status as status  $acld FROM $joins WHERE $where ".$this->sby." ".$this->limit;
 
 			$acldata = array();
 			$parentdata = array();
@@ -831,7 +831,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$ret[$row["oid"]] = $row["name"];
 				$parentdata[$row["oid"]] = $row["parent"];
 				$objdata[$row["oid"]] = array(
-					"brother_of" => $row["brother_of"]
+					"brother_of" => $row["brother_of"],
+					"status" => $row["status"]
 				);
 				if ($GLOBALS["cfg"]["acl"]["use_new_acl"])
 				{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.41 2004/12/02 13:54:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.42 2004/12/14 10:19:51 kristo Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -369,6 +369,7 @@ class object_list extends _int_obj_container_base
 		{
 			foreach($acldata as $a_oid => $a_dat)
 			{
+				$a_dat["status"] = $objdata[$a_oid]["status"];
 				$GLOBALS["__obj_sys_acl_memc"][$a_oid] = $a_dat;
 			}
 		}
@@ -505,7 +506,7 @@ class object_list extends _int_obj_container_base
 
 	function _int_get_at($oid)
 	{
-		if (!is_object($this->list[$oid]) && is_oid($oid))
+		if (!is_object($this->list[$oid]) && is_oid($oid) && $GLOBALS["object_loader"]->ds->can("view", $oid))
 		{
 			$this->list[$oid] = new object($oid);
 		}
@@ -521,7 +522,15 @@ class object_list extends _int_obj_container_base
 		// init list
 		foreach($this->list as $k => $v)
 		{
-			$this->_int_get_at($k);
+			$cn = $GLOBALS["object_loader"]->ds->can("view", $k);
+			if (is_oid($k) && $cn)
+			{
+				$this->_int_get_at($k);
+			}
+			else
+			{
+				unset($this->list[$k]);
+			}
 		}
 		uasort($this->list, array(&$this, "_int_sort_list_cb_cb"));
 		unset($this->cb);

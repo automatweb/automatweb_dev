@@ -421,6 +421,14 @@ class _int_object_loader
 					return false;
 				}
 
+				if (isset($tmp["status"]))
+				{
+					if ($tmp["status"] == 0)
+					{
+						return false;
+					}
+				}
+
 				$acld = safe_array($tmp["acldata"]);
 
 				// now, iterate over the current acl data with the current gidlist
