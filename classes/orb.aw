@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.34 2003/02/07 14:51:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.35 2003/02/13 14:44:12 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 class orb extends aw_template 
@@ -233,15 +233,12 @@ class orb extends aw_template
 
 	function load_xml_orb_def($class)
 	{
-		global $awt;
-		$awt->start("load_xml_orb_def");
 		$fc = get_instance("cache");
 		$fc->get_cached_file(array(
 			"fname" => "/xml/orb/$class.xml",
 			"unserializer" => array(&$this,"load_xml_orb_def_file"),
 			"loader" => array(&$this,"load_serialized_orb_def"),
 		));
-		$awt->stop("load_xml_orb_def");
 		return $this->_tmp;
 	}
 
