@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.25 2004/11/24 15:13:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.26 2005/01/28 14:14:13 ahti Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -151,11 +151,13 @@ class crm_offer extends class_base
 					$my_org = $this->u_i->get_current_company();
 					$my_org = &obj($my_org);
 				}
-				
 				$data = array();
-				$org_inst = get_instance(CL_CRM_COMPANY);
-				$org_inst->get_customers_for_company($my_org, &$data);
+				if($my_org)
+				{
+					$org_inst = get_instance(CL_CRM_COMPANY);
+					$org_inst->get_customers_for_company($my_org, &$data);
 				
+				}
 				foreach ($data as $key)
 				{
 					$obj = &obj($key);
