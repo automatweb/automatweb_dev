@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.166 2004/11/30 15:59:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.167 2004/12/10 10:12:28 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -178,7 +178,7 @@ if (!defined("DEFS"))
 		foreach($arg_list[0] as $arg1 => $arg2)
 		{
 			// remove old
-			$url = preg_replace("/$arg1=[^&]*/","", $url);
+			$url = preg_replace("/".preg_quote($arg1)."=[^&]*/","", $url);
 			if (!empty($arg2))
 			{
 				$url .= (strpos($url,"?") === false ? "?" : "&" ).$arg1."=".$arg2;
@@ -456,6 +456,7 @@ if (!defined("DEFS"))
 
 	function arr($arr,$die=false,$see_html=false)
 	{
+		dbg::process_backtrace(debug_backtrace());
 		echo '<hr/>';
 		$tmp = '';
 		ob_start();
