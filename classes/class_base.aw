@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.149 2003/09/24 12:49:53 kristo Exp $
+// $Id: class_base.aw,v 2.150 2003/09/24 16:32:28 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -710,8 +710,7 @@ class class_base extends aw_template
 			
 			if (is_object($this->tr))
 			{
-				$grp_id = md5("group" . basename($this->clfile,".aw") . $key);
-				$commtrans = $this->tr->get_by_id($grp_id,"caption");
+				$commtrans = $this->tr->get_by_id("group",$key,"caption");
 				if (!empty($commtrans))
 				{
 					$val["caption"] = $commtrans;
@@ -1624,13 +1623,12 @@ class class_base extends aw_template
 
 			if (is_object($this->tr))
 			{
-				$prop_id = md5("prop" . basename($this->clfile,".aw") . $val["name"]);
-				$commtrans = $this->tr->get_by_id($prop_id,"comment");
+				$commtrans = $this->tr->get_by_id("prop",$val["name"],"comment");
 				if (!empty($commtrans))
 				{
 					$val["comment"] = $commtrans;
 				};
-				$trans = $this->tr->get_by_id($prop_id,"caption");
+				$trans = $this->tr->get_by_id("prop",$val["name"],"caption");
 				if (!empty($trans))
 				{
 					$val["caption"] = $trans;
@@ -1668,9 +1666,13 @@ class class_base extends aw_template
 				// do not show alias manager if  no id
 			}
 			else
+			if ( isset($val["newonly"]) && !empty($this->id))
+			{
+				// skip it
+			}
+			else
 			if ($val["type"] == "hidden")
 			{
-				// do nothing
 				$resprops[$name] = $val;
 			}
 			else
@@ -2042,10 +2044,7 @@ class class_base extends aw_template
 		$this->load_object(array("id" => $this->id));
                 $this->load_obj_data(array("id" => $this->id));
 		
-		// load the freaking thing as an object.. so that I can 
-		// access it's properties
-
-		$obj = new object($this->id);
+		$this->obj_inst = new object($this->id);
 
 		$metadata = array();
 
@@ -2091,20 +2090,21 @@ class class_base extends aw_template
 
 			if ($method == "bitmask" && empty($pvalues[$field]))
 			{
-				$pvalues[$field] = $obj->prop($field);
+				$pvalues[$field] = $this->obj_inst->prop($field);
 			};
 
 			$property["value"] = $xval;
 
 
-			$argblock = array(
-				"prop" => &$property,
-				"obj" => &$this->coredata,
-				"objdata" => &$this->objdata,
-				"metadata" => &$metadata,
-				"form_data" => &$rawdata,
-				"new" => $new,
-			);
+                        $argblock = array(
+                                "prop" => &$property,
+                                "obj" => &$this->coredata,
+                                "objdata" => &$this->objdata,
+                                "metadata" => &$metadata,
+                                "form_data" => &$rawdata,
+                                "new" => $new,
+				"obj_inst" => &$this->obj_inst,
+                        );
 
 			$status = PROP_OK;
 
@@ -2190,8 +2190,6 @@ class class_base extends aw_template
 				{
 					$pvalues[$field] += $property["ch_value"];
 				};     
-				//print "name = $property[name]<br>";
-				//print "val = $property[value]<br>";
 			};
 
 			// XXX: this is not good!
@@ -2216,7 +2214,8 @@ class class_base extends aw_template
 			{
 				if ($name == "name")
 				{
-					$this->coredata["name"] = $property["value"];
+					$this->obj_inst->set_name($property["value"]);
+					//$this->coredata["name"] = $property["value"];
 				}
 				else
 				{
@@ -2225,18 +2224,23 @@ class class_base extends aw_template
 			}
 			else if ($method == "serialize")
 			{
-				$metadata[$name] = $property["value"];
+				$this->obj_inst->set_prop($name,$property["value"]);
+				//$metadata[$name] = $property["value"];
 			}
 			elseif ($table == "objects")
 			{
 				if ($method == "bitmask")
 				{
-					$this->coredata[$field] = $pvalues[$field];
+					$val = ($property["ch_value"] == $property["value"]) ? $property["ch_value"] : 0;
+					$this->obj_inst->set_prop($name,$val);
+					//$this->obj_inst->set_prop($name,$property["ch_value"]);
+					//$this->coredata[$field] = $pvalues[$field];
 				} 
 				else
 				if (isset($rawdata[$name]))
 				{
-					$this->coredata[$field] = $property["value"];
+					$this->obj_inst->set_prop($field,$property["value"]);
+					//$this->coredata[$field] = $property["value"];
 				};
 			}
 			else
@@ -2244,25 +2248,34 @@ class class_base extends aw_template
 				if (isset($property["value"]) && !empty($table))
 				{
 					$_field = ($name != $field) ? $field : $name;
-					$this->objdata[$table][$_field] = $property["value"];
+					$this->obj_inst->set_prop($_field,$property["value"]);
+					//$this->objdata[$table][$_field] = $property["value"];
 				};
 			};
 		};
 
+		/*
 		if (sizeof($metadata) > 0)
 		{
 			$this->coredata["metadata"] = $metadata;
 		};
+		*/
 
 		if ($this->is_rel && is_array($values) && sizeof($values) > 0)
 		{
 			$def = $this->cfg["classes"][$this->clid]["def"];
 			$_tmp = $this->get_object($this->id);
-			$old = $_tmp["meta"]["values"][$def];
-			$new = array_merge($old,$values);
-			$this->coredata["metadata"]["values"][$def] = $new;
+			$old = $_tmp["meta"]["values"];
+
+			$old2 = $old[$def];
+			$new = array_merge($old2,$values);
+			$old[$def] = $new;
+
+			$this->obj_inst->set_meta("values",$old);
 		}
 
+		// gee, I wonder how many pre_save handlers do I have to fix to get this thing working
+		// properly
 		$this->coredata["id"] = $this->id;
 		
 		if (method_exists($this->inst,"callback_pre_save"))
@@ -2272,6 +2285,7 @@ class class_base extends aw_template
 				"coredata" => &$this->coredata,
 				"objdata" => &$this->objdata,
 				"form_data" => &$args,
+				"obj_inst" => &$this->obj_inst,
 				"object" => array_merge($this->coredata,$this->objdata),
 			));
 		}
@@ -2280,22 +2294,28 @@ class class_base extends aw_template
                 //if (isset($this->cfgform_id) && is_numeric($this->cfgform_id))
                 if (isset($this->cfgform_id))
                 {
-                        $this->coredata["metadata"]["cfgform_id"] = $this->cfgform_id;
+			$this->obj_inst->set_meta("cfgform_id",$this->cfgform_id);
+                        //$this->coredata["metadata"]["cfgform_id"] = $this->cfgform_id;
                 };
 
-		$this->ds->ds_save_object(array("id" => $this->id,"clid" => $this->clid),$this->coredata);
-		$this->save_object(array("data" => $this->objdata));
+		//$this->ds->ds_save_object(array("id" => $this->id,"clid" => $this->clid),$this->coredata);
+		//$this->save_object(array("data" => $this->objdata));
 
-
-
+		$this->obj_inst->save();
 
 		if (method_exists($this->inst,"callback_post_save"))
 		{
+			// you really shouldn't attempt something fancy like trying
+			// to set properties in there. Well, you probably can
+			// but why would you want to, it's called post_save handler
+			// for a reason
 			$this->inst->callback_post_save(array(
 				"id" => $this->id,
 				"coredata" => $this->coredata,
+				"obj_inst" => $this->obj_inst,
 				"objdata" => $this->objdata,
 				"form_data" => &$args,
+				"obj_inst" => &$this->obj_inst,
 				"new" => $new,
 			));
 		}
