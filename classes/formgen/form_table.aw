@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.70 2004/11/02 09:54:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.71 2004/11/03 12:14:29 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -1354,12 +1354,16 @@ class form_table extends form_base
 
 	function get_data_for_alias($aid)
 	{
-		$c = new connection($aid);
+		$to = obj($this->table_id);
+		$c = reset($to->connections_from(array(
+			"to" => $aid
+		)));
 
 		$ret = array(
-			"class_id" => $c->prop("to.class_id"),
+			"id" => $c->prop("to"),
+			"source" => $c->prop("from"),
 			"target" => $c->prop("to"),
-			"real_id" => $c->prop("to")
+			"class_id" => $c->prop("to.class_id"),
 		);
 		return $ret;
 	}
@@ -1988,8 +1992,9 @@ class form_table extends form_base
 
 			if ($this->table["has_aliasmgr"])
 			{
+				$fta = $this->get_aliases_for_table();
 				$this->vars(array(
-					"aliases" => $this->mpicker($this->table["defs"][$col]["alias"], $this->get_aliases_for_table())
+					"aliases" => $this->mpicker($this->table["defs"][$col]["alias"], $fta)
 				));
 				$coldata[$col][5] = $this->parse("SEL_ALIAS");
 			}
