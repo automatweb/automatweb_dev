@@ -6,8 +6,6 @@
 
 @groupinfo folders caption=Kaustad
 @groupinfo clids caption=Objektit&uuml;&uuml;bid
-@groupinfo styles caption=Stiilid
-@groupinfo columns caption=Tulbad
 
 @default table=objects
 @default group=general
@@ -21,66 +19,18 @@
 @property show_folders type=checkbox ch_value=1 field=meta method=serialize
 @caption N&auml;ita katalooge
 
-@property show_add type=checkbox ch_value=1 field=meta method=serialize
-@caption N&auml;ita toolbari
-
-@property tree_type type=chooser  field=meta method=serialize default=1
-@caption Puu n&auml;itamise meetod
-
-@property groupfolder_acl type=checkbox ch_value=1 field=meta method=serialize
-@caption &Otilde;igused piiratud grupi kataloogide j&auml;rgi
-
-@property show_notact type=checkbox ch_value=1 field=meta method=serialize
-@caption N&auml;ita mitteaktiivseid objekte
+@property js_tree type=checkbox ch_value=1 field=meta method=serialize
+@caption Puu puhul kasuta javascripti
 
 @property clids type=callback callback=get_clids group=clids store=no
 @caption Klassid
 
-@property title_bgcolor type=colorpicker field=meta method=serialize group=styles
-@caption Pealkirja taustav&auml;rv
-
-@property even_bgcolor type=colorpicker field=meta method=serialize group=styles
-@caption Paaris rea taustav&auml;rv
-
-@property odd_bgcolor type=colorpicker field=meta method=serialize group=styles
-@caption Paaritu rea taustav&auml;rv
-
-@property header_css type=relpicker reltype=RELTYPE_CSS field=meta method=serialize  group=styles
-@caption Pealkirja stiil
-
-@property line_css type=relpicker reltype=RELTYPE_CSS field=meta method=serialize  group=styles
-@caption Rea stiil
-
-@property columns type=callback callback=callback_get_columns field=meta method=serialize group=columns
-@caption Tulbad
-
-@reltype FOLDER value=1 clid=CL_MENU
-@caption kataloog
-
-@reltype ADD_TYPE value=2 clid=CL_OBJECT_TYPE
-@caption lisatav objektit&uuml;&uuml;p
-
-@reltype ALL_ACCESS_GRP value=3 clid=CL_GROUP
-@caption projekti haldaja grupp
-
-@reltype CSS value=4 clid=CL_GROUP
-@caption css stiil
-
 */
 
+define("RELTYPE_FOLDER", 1);
 
 class object_treeview extends class_base
 {
-	var $all_cols = array(
-		"icon" => "Ikoon",
-		"name" => "Nimi",
-		"class_id" => "T&uuml;&uuml;p",
-		"modified" => "Muutmise kuup&auml;ev",
-		"modifiedby" => "Muutja",
-		"change" => "Muuda",
-		"select" => "Vali"
-	);
-	
 	function object_treeview()
 	{
 		$this->init(array(
@@ -90,75 +40,111 @@ class object_treeview extends class_base
 		$this->sub_merge = 1;
 	}
 
+	function callback_get_rel_types()
+	{
+		return array(
+			RELTYPE_FOLDER => "kataloog"
+		);
+	}
+
+	function callback_get_classes_for_relation($args = array())
+	{
+		if ($args["reltype"] == RELTYPE_FOLDER)
+		{
+			return array(CL_PSEUDO);
+		}
+	}
+
+	////
+	// !this should create a string representation of the object
+	// parameters
+	//    oid - object's id
+	function _serialize($arr)
+	{
+		extract($arr);
+		$ob = $this->get_object($oid);
+		if (is_array($ob))
+		{
+			return aw_serialize($ob, SERIALIZE_NATIVE);
+		}
+		return false;
+	}
+
+	////
+	// !this should create an object from a string created by the _serialize() function
+	// parameters
+	//    str - the string
+	//    parent - the folder where the new object should be created
+	function _unserialize($arr)
+	{
+		extract($arr);
+		$row = aw_unserialize($str);
+		$row['parent'] = $parent;
+		unset($row['brother_of']);
+		$this->quote(&$row);
+		$id = $this->new_object($row);
+		if ($id)
+		{
+			return true;
+		}
+		return false;
+	}
+
 	////
 	// !this will be called if the object is put in a document by an alias and the document is being shown
 	// parameters
 	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
 	function parse_alias($args)
 	{
-		return $this->show(array('id' => $args['alias']['target']));
+		extract($args);
+		return $this->show(array('id' => $alias['target']));
 	}
 
-	/**  
-		
-		@attrib name=show params=name default="0"
-		
-		@param id required
-		
-		@returns
-		
-		
-		@comment
-
-	**/
 	function show($arr)
 	{
 		extract($arr);
-		$ob = obj($id);
+		$ob = $this->get_object($id);
+
+		// make $ob['meta']['folders'] - gather all aliased menus there
+		$alias_reltype = new aw_array($ob["meta"]["alias_reltype"]);
+		$menu_ids = array_filter($alias_reltype->get(),create_function('$val','if ($val==RELTYPE_FOLDER) return true;'));
+		$ob['meta']['folders'] = $this->make_keys(array_keys($menu_ids));
+
+		// now, for all menus that have include_submenus defined, include submenus
+		$ar = new aw_array($ob['meta']['include_submenus']);
+		foreach($ar->get() as $mid)
+		{
+			$ob['meta']['folders'] += $this->make_keys(array_keys($this->get_objects_below(array(
+				"class" => CL_PSEUDO,
+				"parent" => $mid,
+				"status" => STAT_ACTIVE,
+				"full" => true,
+				"ret" => ARR_NAME
+			))));
+		}
 
 		$this->read_template('show.tpl');
 
-		$this->_insert_row_styles($ob);
-
-		// returns an array of object id's that are folders that are in the object
-		$fld = $this->_get_folders($ob);
-
 		// get all objects to show
-		$ol = $this->_get_objects($ob, $fld);
+		$ol = $this->_get_objects($ob);
 
 		// make folders
 		$this->vars(array(
-			"FOLDERS" => $this->_draw_folders($ob, $ol, $fld)
+			"FOLDERS" => $this->_draw_folders($ob, $ol)
 		));
-
-		// get all related object types
-		// and their cfgforms
-		// and make a nice little lut from them.
-		$class2cfgform = array();
-		foreach($ob->connections_from(array("type" => RELTYPE_ADD_TYPE)) as $c)
-		{
-			$addtype = $c->to();
-			if ($addtype->prop("use_cfgform"))
-			{
-				$class2cfgform[$addtype->prop("type")] = $addtype->prop("use_cfgform");
-			}
-		}
 
 		$cnt = 0;
 		$c = "";
-		$sel_cols = $ob->meta("sel_columns");
-
-		foreach($ol as $oid)
+		foreach($ol as $oid => $od)
 		{
-			$od = obj($oid);
 			$target = "";
-			if ($od->class_id() == CL_EXTLINK)
+			if ($od["class_id"] == CL_EXTLINK)
 			{
 				$li = get_instance("links");
 				list($url,$target,$caption) = $li->draw_link($oid);
 			}
 			else
-			if ($od->class_id() == CL_FILE)
+			if ($od["class_id"] == CL_FILE)
 			{
 				$fi = get_instance("file");
 				$fd = $fi->get_file_by_id($oid);
@@ -167,355 +153,84 @@ class object_treeview extends class_base
 				{
 					$target = "target=\"_blank\"";
 				}
-				$fileSizeBytes = number_format(filesize($od->prop('file')),2);
-				$fileSizeKBytes = number_format(filesize($od->prop('file'))/(1024),2);
-				$fileSizeMBytes = number_format(filesize($od->prop('file'))/(1024*1024),2);
-			}
-			else
-			if ($od->class_id() == CL_MENU)
-			{
-				$url = $this->mk_my_orb("show", array(
-					"section" => $od->id(),
-					"id" => $ob->id(),
-					"tv_sel" => $od->id()
-				));
 			}
 			else
 			{
 				$url = $this->cfg["baseurl"]."/".$oid;
 			}
-			classload("icons", "image");
-			$act = "";
-			if ($this->can("edit", $od->id()))
-			{
-				$fl = $this->cfg["classes"][$od->class_id()]["file"];
-				if ($fl == "document")
-				{
-					$fl = "doc";
-				}
-				$act .= html::href(array(
-					"url" => $this->mk_my_orb("change", array(
-						"id" => $od->id(), 
-						"section" => $od->parent(),
-						"cfgform" => $class2cfgform[$od->class_id()]
-					), $fl),
-					"caption" => html::img(array(
-						"border" => 0,
-						"url" =>  aw_ini_get("baseurl")."/automatweb/images/icons/edit.gif"
-					))
-				));
-			}
-			if ($this->can("delete", $od->id()))
-			{
-				$delete = html::href(array(
-					"url" => $this->mk_my_orb("delete", array("id" => $od->id(), "return_url" => urlencode(aw_ini_get("baseurl").aw_global_get("REQUEST_URI")))),
-					"caption" => html::img(array(
-						"border" => 0,
-						"url" =>  aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif"
-					))
-				));
-			}
-			$adder = $od->createdby();
-			$modder = $od->modifiedby();
+			classload("icons");
 			$this->vars(array(
 				"show" => $url,
-				"name" => parse_obj_name($od->name()),
-				"oid" => $od->id(),
+				"name" => $od['name'],
 				"target" => $target,
-				"sizeBytes" => $fileSizeBytes,
-				"sizeKBytes" => $fileSizeKBytes,
-				"sizeMBytes" => $fileSizeMBytes,
-				"comment" => $od->comment(),
-				"type" => $this->cfg["classes"][$od->class_id()]["name"],
-				"add_date" => $this->time2date($od->created(), 2),
-				"mod_date" => $this->time2date($od->modified(), 2),
-				"adder" => $adder->name(),
-				"modder" => $modder->name(),
-				"icon" => image::make_img_tag(icons::get_icon_url($od->class_id(), $od->name())),
-				"act" => $act,
-				"delete" => $delete,
-				"comment" => $od->comment(),
-				"bgcolor" => $this->_get_bgcolor($ob, $cnt)
+				"type" => $this->cfg["classes"][$od["class_id"]]["name"],
+				"add_date" => $this->time2date($od["modified"], 2),
+				"icon" => image::make_img_tag(icons::get_icon_url($od["class_id"], $od["name"]))
 			));
 
-			$del = "";
-			if ($this->can("delete", $od->id()))
+			if ($this->is_template("FILE_ODD"))
 			{
-				$del = $this->parse("DELETE");
-			}
-			$this->vars(array(
-				"DELETE" => $del
-			));
-
-			$tb = "";
-			$no_tb = "";
-			if ($ob->prop("show_add"))
-			{
-				$tb = $this->parse("HAS_TOOLBAR");
+				if ($cnt % 2)
+				{
+					$c.=$this->parse("FILE_ODD");
+				}
+				else
+				{
+					$c.=$this->parse("FILE");
+				}
 			}
 			else
 			{
-				$no_tb = $this->parse("NO_TOOLBAR");
+				$c .= $this->parse("FILE");
 			}
-			$this->vars(array(
-				"HAS_TOOLBAR" => $tb,
-				"NO_TOOLBAR" => $no_tb
-			));
 
-			// columns
-			foreach($this->all_cols as $colid => $coln)
-			{
-				$str = "";
-				if ($sel_cols[$colid] == 1)
-				{
-					$str = $this->parse("FILE_".$colid);
-				}
-				$this->vars(array(
-					"FILE_".$colid => $str
-				));
-			}
-			
-			$c.=$this->parse("FILE");
 			$cnt++;
-		}
-
-
-		$tb = "";
-		$no_tb = "";
-		if ($ob->prop("show_add"))
-		{
-			$tb = $this->parse("HEADER_HAS_TOOLBAR");
-		}
-		else
-		{
-			$no_tb = $this->parse("HEADER_NO_TOOLBAR");
 		}
 		$this->vars(array(
 			"FILE" => $c,
-			"HEADER_HAS_TOOLBAR" => $tb,
-			"HEADER_NO_TOOLBAR" => $no_tb,
-			"reforb" => $this->mk_reforb("submit_show", array(
-				"return_url" => aw_global_get("REQUEST_URI"),
-				"subact" => "0"
-			))
+			"FILE_ODD" => ""
 		));
 
-		// columns
-		foreach($this->all_cols as $colid => $coln)
-		{
-			$str = "";
-			if ($sel_cols[$colid] == 1)
-			{
-				$str = $this->parse("HEADER_".$colid);
-			}
-			$this->vars(array(
-				"HEADER_".$colid => $str
-			));
-		}
-
-		$res = $this->parse();
-		if ($ob->prop("show_add"))
-		{
-			$res = $this->_get_add_toolbar($ob).$res;
-		}
-		return $res;
+		return $this->parse();
 	}
 
-	/**  
-		
-		@attrib name=submit_show params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function submit_show($arr)
-	{
-		extract($arr);
-
-		if ($subact == "delete")
-		{
-			$ol = new object_list(array("oid" => $sel));
-			$ol->delete();
-		}
-
-		return $return_url;
-	}
-
-	function _get_objects($ob, $folders)
+	function _get_objects($ob)
 	{
 		$ret = array();
 
-		// if the folder is specified in the url, then show that
-		if ($GLOBALS["tv_sel"])
-		{
-			$parent = $GLOBALS["tv_sel"];
-		}
-		else
 		// right. if the user has said, that no tree should be shown
 		// then get files in all selected folders
-		if (!$ob->meta('show_folders'))
+		if (!$ob['meta']['show_folders'])
 		{
-			$parent = $folders;
+			$parent = $ob['meta']['folders'];
 		}
-
-		if (!$parent)
+		else
 		{
-			// if parent can't be found. then get the objects from all the root folders
-			$con = $ob->connections_from(array(
-				"type" => RELTYPE_FOLDER
-			));
-			$parent = array();
-			foreach($con as $c)
+			// if the folder is specified in the url, then show that
+			// else, the first selected folder
+			reset($ob['meta']['folders']);
+			list(,$parent) = each($ob['meta']['folders']);
+
+			if ($GLOBALS["tv_sel"])
 			{
-				$parent[$c->prop("to")] = $c->prop("to");
+				$parent = $GLOBALS["tv_sel"];
 			}
 		}
-
-		if (!is_array($ob->meta('clids')) || count($ob->meta('clids')) < 1)
+		if (!is_array($ob['meta']['clids']) || count($ob['meta']['clids']) < 1)
 		{
 			return array();
 		}
-
-		$ol = new object_list(array(
+		return $this->list_objects(array(
 			"parent" => $parent,
-			"status" => $ob->prop("show_notact") ? array(STAT_ACTIVE, STAT_NOTACTIVE) : STAT_ACTIVE,
-			"class_id" => $ob->meta('clids'),
-			"sort_by" => "objects.modified DESC",
-			"lang_id" => array()
+			"status" => STAT_ACTIVE,
+			"class" => $ob['meta']['clids'],
+			"return" => ARR_ALL
 		));
-		$ol->sort_by_cb(array(&$this, "_obj_list_sorter"));
-
-		return $this->make_keys($ol->ids());
 	}
 
-	function _obj_list_sorter($a, $b)
+	function _draw_folders($ob, $ol)
 	{
-		if ($a->class_id() == CL_MENU && $b->class_id() != CL_MENU)
-		{
-			return -1;
-		}
-		else
-		if ($a->class_id() != CL_MENU && $b->class_id() == CL_MENU)
-		{
-			return 1;
-		}
-		else
-		if ($a->class_id() != CL_MENU && $b->class_id() != CL_MENU)
-		{
-			return $a->modified() < $b->modified();
-		}
-		else
-		if ($a->class_id() == CL_MENU && $b->class_id() == CL_MENU)
-		{
-			return $a->modified() < $b->modified();
-		}
-	}
-
-	function _get_folders($ob)
-	{
-		// go over all related menus and add subtree id's together if the user has so said. 
-		$ret = array();
-		
-		$sub = $ob->meta("include_submenus");
-   		$igns = $ob->meta("ignoreself");
-
-		$glo = aw_global_get("gidlist_oid");
-
-		// check if the user is an admin
-		if (!$ob->prop("groupfolder_acl"))
-		{
-			$is_admin = true;
-		}
-		else
-		{
-			$is_admin = false;
-		}
-																		
-		$adm_c = $ob->connections_from(array(
-			"type" => RELTYPE_ALL_ACCESS_GRP
-		));
-		foreach($adm_c as $adm_conn)
-		{
-			$adm_g = $adm_conn->prop("to");
-			if (isset($glo[$adm_g]))
-			{
-				$is_admin = true;
-			}
-		}
-
-		// this used to give access to subfolders of given folders
-		$access_by_parent = array();
-
-		$conns = $ob->connections_from(array(
-			"type" => RELTYPE_FOLDER
-		));
-		foreach($conns as $conn)
-		{
-			$c_o = $conn->to();
-			if (!isset($this->first_folder))
-			{
-				$this->first_folder = $c_o->id();
-			}
-			
-			$cur_ids = array();
-
-			if ($sub[$c_o->id()])
-			{
-				$_ot = new object_tree(array(
-					"class_id" => CL_MENU,
-					"parent" => $c_o->id(),
-					"status" => STAT_ACTIVE,
-					"lang_id" => array()
-				));
-				$cur_ids = $_ot->ids();
-			}
-
-			if (!$igns[$c_o->id()])
-			{
-				$cur_ids[] = $c_o->id();
-			}
-
-			foreach($cur_ids as $c_id)
-			{
-				$add = $is_admin;
-				if (!$is_admin)
-				{
-					$c_id_o = obj($c_id);
-					$c_id_gr = $c_id_o->connections_from(array(
-						"type" => RELTYPE_ACL_GROUP
-					));
-					foreach($c_id_gr as $c_id_gr_c)
-					{
-						if (isset($glo[$c_id_gr_c->prop("to")]))
-						{
-							$add = true;
-							break;
-						}
-					}
-					if ($access_by_parent[$c_id_o->parent()])
-					{
-						$add = true;
-					}
-				}
-
-				if ($add)
-				{
-					$ret[$c_id] = $c_id;
-					$access_by_parent[$c_id] = true;
-				}
-			}
-		}
-
-		return $ret;
-	}
-
-	function _draw_folders($ob, $ol, $folders)
-	{
-		if (!$ob->meta('show_folders'))
+		if (!$ob['meta']['show_folders'])
 		{
 			return;
 		}
@@ -527,66 +242,51 @@ class object_treeview extends class_base
 			"root_name" => "",
 			"root_url" => "",
 			"root_icon" => "",
-			"type" => $ob->meta('tree_type')
+			"type" => ($ob['meta']['js_tree'] ? TREE_JS : TREE_HTML)
 		));
-
 		// now, insert all folders defined
-		foreach($folders as $fld)
+		// but first, leave out all folders that are set don't show self
+		$ar = new aw_array($ob['meta']['ignoreself']);
+		foreach($ar->get() as $_oid)
 		{
-			$i_o = obj($fld);
+			unset($ob['meta']['folders'][$_oid]);
+		}
+		$ar = new aw_array($ob['meta']['folders']);
+		foreach($ar->get() as $fld)
+		{
+			$i_o = $this->get_object($fld);
 			$parent = 0;
-			if (in_array($i_o->parent(),$folders))
+			if (in_array($i_o["parent"],$ar->get()))
 			{
-				$parent = $i_o->parent();
+				$parent = $i_o["parent"];
 			}
 
 			// find modification time
-			$tm = $i_o->modified();
-			foreach($ol as $o_oid)
+			$tm = $i_o["modified"];
+			foreach($ol as $od)
 			{
-				$o_o = obj($o_oid);
-
-				if ($o_o->parent() == $fld && $o_o->modified() > $tm)
+				if ($od["parent"] == $fld && $od["modified"] > $tm)
 				{
-					$tm = $o_o->modified();
+					$tm = $od["modified"];
 				}
 			}
 
 			$tv->add_item($parent, array(
 				"id" => $fld,
-				"name" => $i_o->name(),
+				"name" => $i_o["name"],
 				"url" => aw_url_change_var("tv_sel", $fld),
-				"icon" => icons::get_icon_url($i_o->class_id(), ""),
-				"comment" => $i_o->comment(),
+				"icon" => icons::get_icon_url($i_o["class_id"], ""),
 				"data" => array(
 					"changed" => $this->time2date($tm, 2)
 				)
 			));
 		}
 		$tv->set_selected_item($GLOBALS["tv_sel"]);
-
-		$pms = array();
-		// here's the trick. if the treeview is set to show_as_treeview for any section and we got here via an orb action in the url
-		// then show the tree from the current section
-		// 
-		// hehe, heuristics rule ;)
-		$t_c = $ob->connections_to(array(
-			"type" => 8,	// RELTYPE_OBJ_TREE from menu
-			"from.class_id" => CL_MENU
-		));
-		
-		if (isset($GLOBALS["class"]) && count($t_c) > 0)
-		{
-			$pms["rootnode"] = aw_global_get("section");
-		}
-		
-		return $tv->finalize_tree($pms);
+		return $tv->finalize_tree();
 	}
 
 	function get_clids($arr)
 	{
-		$clids = $arr["obj_inst"]->meta("clids");
-
 		$ret = array();
 		classload("aliasmgr");
 		$a = aliasmgr::get_clid_picker();
@@ -600,7 +300,7 @@ class object_treeview extends class_base
 				'ch_value' => 1,
 				'store' => 'no',
 				'group' => 'clids',
-				'value' => ($clids[$clid] == $clid)
+				'value' => $arr["obj"]["meta"]["clids"][$clid] == $clid
 			);
 		}
 		return $ret;
@@ -611,7 +311,7 @@ class object_treeview extends class_base
 		$prop =& $arr["prop"];
 		if ($prop['name'] == 'clids')
 		{
-			$_clids = array();
+			$arr['metadata']['clids'] = array();
 			classload("aliasmgr");
 			$a = aliasmgr::get_clid_picker();
 			foreach($a as $clid => $clname)
@@ -619,21 +319,14 @@ class object_treeview extends class_base
 				$rt = "clid_".$clid;
 				if (isset($arr["form_data"][$rt]) && $arr["form_data"][$rt] == 1)
 				{
-					$_clids[$clid] = $clid;
+					$arr['metadata']['clids'][$clid] = $clid;
 				}
 			}
-			$arr["obj_inst"]->set_meta("clids", $_clids);
 		}
-
-		if ($prop["name"] == "columns")
-		{
-			$arr["obj_inst"]->set_meta("sel_columns", $arr["request"]["column"]);
-		}
-
 		if ($prop["name"] == "folders")
 		{
-			$arr['obj_inst']->set_meta("include_submenus",$arr["request"]["include_submenus"]);
-			$arr['obj_inst']->set_meta("ignoreself",$arr["request"]["ignoreself"]);
+			$arr['metadata']["include_submenus"] = $arr["form_data"]["include_submenus"];
+			$arr['metadata']["ignoreself"] = $arr["form_data"]["ignoreself"];
 		};
 
 		return PROP_OK;
@@ -643,7 +336,8 @@ class object_treeview extends class_base
 	{
 		$prop = $args["prop"];
 		$nodes = array();
-
+		$include_submenus = $args["obj"]["meta"]["include_submenus"];
+		$ignoreself = $args["obj"]["meta"]["ignoreself"];
 		// now I have to go through the process of setting up a generic table once again
 		load_vcl("table");
 		$this->t = new aw_table(array(
@@ -678,34 +372,47 @@ class object_treeview extends class_base
 			"align" => "center",
 		));
 
-		$include_submenus = $args["obj_inst"]->meta("include_submenus");
-		$ignoreself = $args["obj_inst"]->meta("ignoreself");
-
-
-		$conns = $args["obj_inst"]->connections_from(array(
-			"type" => RELTYPE_FOLDER
-		));
-
-		foreach($conns as $conn)
+		$alias_reltype = $args["obj"]["meta"]["alias_reltype"];
+		// and from this array, I need to get the list of objects that
+		// have the reltype RELTYPE_FOLDER
+		if (is_array($alias_reltype))
 		{
-			$c_o = $conn->to();
+			$menu_ids = array_filter($alias_reltype,create_function('$val','if ($val==RELTYPE_FOLDER) return true;'));
+		};
 
-			$this->t->define_data(array(
-				"oid" => $c_o->id(),
-				"name" => $c_o->path_str(array(
-					"max_len" => 3
-				)) . "/" . $c_o->name(),
-				"check" => html::checkbox(array(
-					"name" => "include_submenus[".$c_o->id()."]",
-					"value" => $c_o->id(),
-					"checked" => $include_submenus[$c_o->id()],
-				)),
-				"ignoreself" => html::checkbox(array(
-					"name" => "ignoreself[".$c_o->id()."]",
-					"value" => $c_o->id(),
-					"checked" => $ignoreself[$c_o->id()],
-				)),
-			));
+		if (sizeof($menu_ids) > 0)
+		{
+			// now get those objects and put them into table
+			$q = sprintf("SELECT oid,name,status FROM objects
+					LEFT JOIN menu ON (objects.oid = menu.id) WHERE oid IN (%s)",join(",",array_keys($menu_ids)));
+
+			$this->db_query($q);
+			while($row = $this->db_next())
+			{
+				// it shouldn't be too bad, cause get_object is cached.
+				// still, it sucks.
+				$this->save_handle();
+				$chain = array_reverse($this->get_obj_chain(array(
+					"oid" => $row["oid"],
+				)), true);
+				
+				$path = join("/",array_slice($chain,-3));
+				$this->restore_handle();
+				$this->t->define_data(array(
+					"oid" => $row["oid"],
+					"name" => $path . "/" . $row["name"],
+					"check" => html::checkbox(array(
+						"name" => "include_submenus[$row[oid]]",
+						"value" => $row["oid"],
+						"checked" => $include_submenus[$row["oid"]],
+					)),
+					"ignoreself" => html::checkbox(array(
+						"name" => "ignoreself[$row[oid]]",
+						"value" => $row["oid"],
+						"checked" => $ignoreself[$row["oid"]],
+					)),
+				));
+			};
 		};
 		
 		$nodes[$prop["name"]] = array(
@@ -714,233 +421,6 @@ class object_treeview extends class_base
 			"value" => $this->t->draw(),
 		);
 		return $nodes;
-	}
-
-	function _get_add_toolbar($ob)
-	{
-		$this->tpl_init("automatweb/menuedit");
-		$this->read_template("js_add_menu.tpl");
-
-		$types_c = $ob->connections_from(array(
-			"type" => RELTYPE_ADD_TYPE
-		));
-
-		$menu = "";
-		$classes = aw_ini_get("classes");
-
-		$parent = $GLOBALS["tv_sel"] ? $GLOBALS["tv_sel"] : $this->first_folder;
-		$ot = get_instance("admin/object_type");
-		foreach($types_c as $c)
-		{
-			$c_o = $c->to();
-			$this->vars(array(
-				"url" => $ot->get_add_url(array("id" => $c_o, "parent" => $parent, "section" => $parent)),
-				"caption" => $classes[$c_o->prop("type")]["name"]
-			));
-			$menu .= $this->parse("MENU_ITEM");
-		}
-		$this->vars(array(
-			"menu_id" => "aw_menu_0",
-			"MENU_ITEM" => $menu
-		));
-		$this->vars(array("MENU" => $this->parse("MENU")));
-		
-		
-
-		$tb = get_instance("toolbar");
-		$tb->add_button(array(
-			"name" => "add",
-			"tooltip" => "Uus",
-			"url" => "#",
-			"onClick" => "return buttonClick(event, 'aw_menu_0');",
-			"img" => "new.gif",
-			"class" => "menuButton",
-		));
-
-		$tb->add_button(array(
-			"name" => "del",
-			"tooltip" => "Kustuta",
-			"url" => "#",
-			"onClick" => "document.objlist.subact.value='delete';document.objlist.submit()",
-			"img" => "delete.gif",
-			"class" => "menuButton",
-		));
-		return $this->parse().$tb->get_toolbar();
-	}
-
-	/**  
-		
-		@attrib name=delete params=name default="0"
-		
-		@param id required
-		@param return_url required
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function obj_delete($arr)
-	{
-		error::throw_if(!$arr["id"], array(
-			"id" => ERR_PARAM,
-			"msg" => "object_treeview::obj_delete(): no ibject id specified!"
-		));
-
-		$o = obj($arr["id"]);
-		$o->delete();
-	
-		return $arr["return_url"];
-	}
-
-	function get_folders_as_object_list($object)
-	{
-		$t_id = $object->prop("show_object_tree");
-		$first_level = true;
-		if (!$t_id)
-		{
-			$pa = $object->path();
-			foreach($pa as $p_o)
-			{
-				$t_id = $p_o->prop("show_object_tree");
-				if ($t_id)
-				{
-					break;
-				}
-			}
-			$first_level = false;
-		}
-		$this->tree_ob = obj($t_id);
-	
-		$ol = new object_list();
-
-		$folders = $this->_get_folders($this->tree_ob);
-		foreach($folders as $fld)
-		{
-			$i_o = obj($fld);
-			$parent = 0;
-			if (in_array($i_o->parent(),$folders))
-			{
-				$parent = $i_o->parent();
-			}
-			
-			if ($first_level)
-			{
-				if ($parent == 0)
-				{
-					$ol->add($fld);
-				}
-			}
-			else
-			{
-				if ($parent == $object->id())
-				{
-					$ol->add($fld);
-				}
-			}
-		}
-
-		return $ol;
-	}
-
-	function make_menu_link($sect_obj)
-	{
-		$link = $this->mk_my_orb("show", array("id" => $this->tree_ob->id(), "tv_sel" => $sect_obj->id(), "section" => $sect_obj->id()));;
-		return $link;
-	}
-
-	function get_yah_link($tree, $cur_menu)
-	{
-		return $this->mk_my_orb("show", array("id" => $tree, "tv_sel" => $cur_menu->id(), "section" => $cur_menu->id()));
-	}
-
-	function get_property($arr)
-	{
-		$prop =&$arr["prop"];
-		if ($prop["name"] == "tree_type")
-		{
-			$prop["options"] = array(
-				TREE_HTML => "HTML",
-				TREE_JS => "Javascript",
-				TREE_DHTML => "DHTML"
-			);
-		}
-		return PROP_OK;
-	}
-
-	function _insert_row_styles($o)
-	{
-		$style = "textmiddle";
-		if ($o->prop("line_css"))
-		{
-			$style = "st".$o->prop("line_css");
-			active_page_data::add_site_css_style($o->prop("line_css"));
-		}
-
-		$header_css = "textmiddle";
-		if ($o->prop("header_css"))
-		{
-			$header_css = "st".$o->prop("header_css");
-			active_page_data::add_site_css_style($o->prop("header_css"));
-		}
-
-		$header_bg = "#E0EFEF";
-		if ($o->prop("title_bgcolor"))
-		{
-			$header_bg = "#".$o->prop("title_bgcolor");
-		}
-
-		$this->vars(array(
-			"css_class" => $style,
-			"header_css_class" => $header_css,
-			"header_bgcolor" => $header_bg
-		));
-	}
-
-	function _get_bgcolor($ob, $line)
-	{
-		$ret = "";
-		if (($line % 2) == 1)
-		{
-			$ret = $ob->prop("odd_bgcolor");
-			if ($ret == "")
-			{
-				$ret = "#EFF7F7";
-			}
-		}
-		else
-		{
-			$ret = $ob->prop("even_bgcolor");
-			if ($ret == "")
-			{
-				$ret = "#FFFFFF";
-			}
-		}
-		return $ret;
-	}
-
-	function callback_get_columns($arr)
-	{
-		$cols = $arr["obj_inst"]->meta("sel_columns");
-
-		$ret = array();
-
-		foreach($this->all_cols as $colid => $coln)
-		{
-
-			$rt = "column[".$colid."]";
-			$ret[$rt] = array(
-				'name' => $rt,
-				'caption' => $coln,
-				'type' => 'checkbox',
-				'ch_value' => 1,
-				'store' => 'no',
-				'group' => 'columns',
-				'value' => $cols[$colid]
-			);
-		}
-		return $ret;
 	}
 }
 ?>
