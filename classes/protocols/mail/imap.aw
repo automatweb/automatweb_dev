@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.10 2003/10/28 15:51:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.11 2003/10/30 16:47:45 duke Exp $
 // imap.aw - IMAP login 
 /*
 
@@ -182,12 +182,15 @@ class imap extends class_base
 		$last_check = $ovr[$this->mboxspec];
 		$new_check = $this->_get_ovr_checksum($mboxinf);
 
+		//print "lc = $last_check<br>";
+		//print "nc = $new_check<br>";
+
 		$count = $mboxinf->Nmsgs;
 		$this->count = $count;
 
 
 		// mailbox has changed, reload from server
-		if (1 || $last_check != $new_check)
+		if ($last_check != $new_check)
 		{
 			// update ovr
 
@@ -225,6 +228,7 @@ class imap extends class_base
 					//print "fetching message with uid $msg_uid<br>";
 					//flush();
 					$overview = imap_fetch_overview($this->mbox,$msg_uid,FT_UID);
+					$str = imap_fetchstructure($this->mbox,$msg_uid,FT_UID);
 					//print "fetch done, processing<br>";
 					//flush();
 					$message = $overview[0];
@@ -241,6 +245,8 @@ class imap extends class_base
 						"seen" => $message->seen,
 						"answered" => $message->answered,
 						"recent" => $message->recent,
+							// 1 is multipart message
+						"has_attachments" => ($str->type == 1) ? true : false,
 					);
 					//print ".";
 					//flush();
