@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.8 2001/06/27 19:57:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.9 2001/06/28 01:17:07 duke Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 
 global $orb_defs;
@@ -18,19 +18,93 @@ class db_objects extends aw_template
 	function browser($args = array())
 	{
 		extract($args);
+		$this->tpl_init("objects");
 		load_vcl("html_frameset");
 		$retval = "";
 		switch($type)
 		{
-			default:
+			case "top":
+				$retval .= "<a href='#'>Objektid</a>&nbsp; &nbsp;<a href='#'>Kalender</a>";
+				break;
+
+			case "middle":
+				global $baseurl;
 				$frames = array(
-					"test1" => "test1.html",
-					"test2" => "test2.html",
+					"mleft" => "$baseurl/?class=objects&action=browser&type=content&msgid=$msgid",
+					"mright" => "$baseurl/?class=objects&action=browser&type=search",
+				);
+				
+				$frameset = new html_frameset(array(
+					"cols" => "60%,40%",
+					"rows" => "*",
+					"frames" => $frames,
+				));
+
+				$retval = $frameset->generate();
+				break;
+
+			case "content":
+				global $udata;
+				$this->read_template("homedir.tpl");
+				$prnt = ($parent) ? $parent : $udata["home_folder"];
+				$this->get_objects(array(
+						"parent" => $prnt,
+						"class_id" => array(CL_PSEUDO,CL_FILE),
+					));
+				$c = "";
+				$this->vars(array(
+						"msgid" => $msgid,
+				));
+				while($row = $this->db_next())
+				{
+
+					$this->vars(array(
+							"name" => $row["name"],
+							"oid" => $row["oid"],
+							"icon" => get_icon_url($row["class_id"],$row["name"]),
+					));
+					
+					$tpl = ($row["class_id"] == CL_PSEUDO) ? "line" : "object";
+					$c .= $this->parse($tpl);
+				};
+
+				$chain = $this->get_obj_chain(array(
+							"oid" => $prnt,
+							"stop" => $udata["home_folder"],
+						));
+
+				$fullpath = map2("<a href='?class=objects&action=browser&type=content&msgid=$msgid&parent=%s'>%s</a>",$chain);
+			        $fullpath = join(" &gt; " ,array_reverse($fullpath));
+
+				$this->vars(array(
+						"fullpath" => $fullpath,
+						"line" => $c,
+						"reforb" => $this->mk_reforb("submit_hd",array()),
+				));
+				$retval = $this->parse();
+				break;
+
+			case "search":
+				$this->read_template("search.tpl");
+				$retval = $this->parse();
+				break;
+
+			case "bottom":
+				$this->read_template("bottom.tpl");
+				$retval = $this->parse();
+				break;
+
+			default:
+				global $baseurl;
+				$frames = array(
+					"test1" => "$baseurl/?class=objects&action=browser&type=top",
+					"content" => "$baseurl/?class=objects&action=browser&type=middle&msgid=$msgid",
+					"test3" => "$baseurl/?class=objects&action=browser&type=bottom",
 				);
 				
 				$frameset = new html_frameset(array(
 					"cols" => "*",
-					"rows" => "10%,90%",
+					"rows" => "10%,80%,10%",
 					"frames" => $frames,
 				));
 
@@ -38,6 +112,24 @@ class db_objects extends aw_template
 				
 		}
 		print $retval;
+		exit;
+	}
+
+	function submit_hd($args = array())
+	{
+		extract($args);
+		if (is_array($check))
+		{
+			classload("file");
+			$awf = new file();
+			// kopeerime koik lisatud objektid teate juurde
+			foreach($check as $id)
+			{
+				$awf->cp(array("id" => $id,"parent" => $msgid));
+			}
+		};
+		print "<script language='javascript'>window.opener.document.writemessage.save.click();</script>";
+		print "<a href='javascript:window.close()'>Sulge aken</a>";
 		exit;
 	}
 
