@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.25 2004/02/25 15:45:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.26 2004/04/15 06:59:29 duke Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -85,14 +85,14 @@ class ml_member extends class_base
 			return $this->cfg["baseurl"] . "/" . $section;
 		};
 
-		$status = STAT_ACTIVE;
+		$status = 2;
 
 		
 		// I need to validate that stuff as well
 		if ($list_obj->prop("confirm_subscribe") != "")
 		{
 			// generate the confirm code
-			$status = STAT_DEACTIVE;
+			$status = 1; 
 			$ts = time();
 			$hash = substr(gen_uniq_id(),0,15);
 			// now I need to generate the confirm url
@@ -101,26 +101,38 @@ class ml_member extends class_base
 			
 		$objname = $name . " <" . $email . ">";
 
-		if (!$this->check_member(array("email" => $email,"folder" => $user_folder)))
+		if (sizeof($args["use_folders"]) > 0)
 		{
-			$objname = htmlspecialchars($objname);
-			// Why do we duplicate name and email in object metadata?
-			$member_obj = new object();
-			$member_obj->set_class_id($this->clid);
-                        $member_obj->set_parent($user_folder);
-			$member_obj->set_status($status);
-			$member_obj->set_name($objname);
+			$user_folders = $args["use_folders"];
+		}
+		else
+		{
+			$user_folders = array($user_folder);
+		};
 
-			$member_obj->set_prop("name",$name);
-			$member_obj->set_prop("mail",$email);
+		foreach($user_folders as $user_folder)
+		{
+			if (!$this->check_member(array("email" => $email,"folder" => $user_folder)))
+			{
+				$objname = htmlspecialchars($objname);
+				// Why do we duplicate name and email in object metadata?
+				$member_obj = new object();
+				$member_obj->set_class_id($this->clid);
+				$member_obj->set_parent($user_folder);
+				$member_obj->set_status($status);
+				$member_obj->set_name($objname);
 
-			$member_obj->set_meta("name",$name);
-			$member_obj->set_meta("email",$email);
-			$member_obj->set_meta("hash",$hash);
-			$member_obj->set_meta("time",$ts);
+				$member_obj->set_prop("name",$name);
+				$member_obj->set_prop("mail",$email);
 
-			$member_obj->save();
-	
+				$member_obj->set_meta("name",$name);
+				$member_obj->set_meta("email",$email);
+				$member_obj->set_meta("hash",$hash);
+				$member_obj->set_meta("time",$ts);
+
+				$member_obj->save();
+		
+			};
 		};
 		
 		if ($list_obj->prop("confirm_subscribe") != "" && $list_obj->prop("confirm_subscribe_msg") != "")

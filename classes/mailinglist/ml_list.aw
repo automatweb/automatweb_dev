@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.46 2004/03/25 16:39:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.47 2004/04/15 06:59:29 duke Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -11,6 +11,9 @@
 	
 	@property def_user_folder type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 rel=1
 	@caption Liikmete kaust
+
+	@property multiple_folders type=checkbox ch_value=1
+	@caption Lase liitumisel folderit valida
 
 	@property sub_form_type type=select rel=1
 	@caption Vormi tüüp
@@ -282,22 +285,58 @@ class ml_list extends class_base
 		// confirm code is added to the metad
 		$ml_member = get_instance(CL_ML_MEMBER);
 
-		if ($args["op"] == 1)
+		$allow = false;
+		$use_folders = array();
+
+		// need to check those folders
+		if ($list_obj->prop("multiple_folders") == 1)
 		{
-			$retval = $ml_member->subscribe_member_to_list(array(
-				"name" => $args["name"],
-				"email" => $args["email"],
-				"list_id" => $list_obj->id(),
-				"confirm_subscribe" => $list_obj->prop("confirm_subscribe"),
-				"confirm_message" => $list_obj->prop("confirm_subscribe_msg"),
-			));	
+			if (!empty($args["subscr_folder"]))
+			{
+				// check the list of selected folders against the actual connections to folders
+				// and ignore ones that are not connected - e.g. don't take candy from strangers
+				$conns = $list_obj->connections_from(array(
+					"type" => RELTYPE_MEMBER_PARENT,
+				));
+				foreach($conns as $conn)
+				{
+					if (!empty($args["subscr_folder"][$conn->prop("to")]))
+					{
+						$use_folders[] = $conn->prop("to");
+					};
+				};
+			};
+			if (sizeof($use_folders) > 0)
+			{
+				$allow = true;
+			};
+		}
+		else
+		{
+			$allow = true;
 		};
-		if ($args["op"] == 2)
+
+
+		if ($allow)
 		{
-			$retval = $ml_member->unsubscribe_member_from_list(array(
-				"email" => $args["email"],
-				"list_id" => $list_obj->id(),
-			));	
+			if ($args["op"] == 1)
+			{
+				$retval = $ml_member->subscribe_member_to_list(array(
+					"name" => $args["name"],
+					"email" => $args["email"],
+					"use_folders" => $use_folders,
+					"list_id" => $list_obj->id(),
+					"confirm_subscribe" => $list_obj->prop("confirm_subscribe"),
+					"confirm_message" => $list_obj->prop("confirm_subscribe_msg"),
+				));	
+			};
+			if ($args["op"] == 2)
+			{
+				$retval = $ml_member->unsubscribe_member_from_list(array(
+					"email" => $args["email"],
+					"list_id" => $list_obj->id(),
+				));	
+			};
 		};
 
 		$relobj = new object($rel_id);
@@ -305,6 +344,7 @@ class ml_list extends class_base
 		$mx1 = $relobj->meta("values");
 		$mx = $mx1["CL_ML_LIST"];
 
+		// XXX: need to give some kind of feedback to the user, if subscribing did not succeed
 		if (!empty($mx["redir_obj"]))
 		{
 			$retval = $this->cfg["baseurl"] . "/" . $mx["redir_obj"];
@@ -823,6 +863,24 @@ class ml_list extends class_base
 		}
 		$tpl = ($sub_form_type == 0) ? "subscribe.tpl" : "unsubscribe.tpl";
 		$this->read_template($tpl);
+		if ($this->is_template("FOLDER") && $tobj->prop("multiple_folders") == 1)
+		{
+			$folders = $tobj->connections_from(array(
+				"type" => RELTYPE_MEMBER_PARENT,
+			));
+			$c = "";
+			foreach($folders as $folder_conn)
+			{
+				$this->vars(array(
+					"folder_name" => $folder_conn->prop("to.name"),
+					"folder_id" => $folder_conn->prop("to"),
+				));
+				$c .= $this->parse("FOLDER");
+			};
+			$this->vars(array(
+				"FOLDER" => $c,
+			));
+		};
 		$this->vars(array(
 			"listname" => $tobj->name(),
 			"reforb" => $this->mk_reforb("subscribe",array(
