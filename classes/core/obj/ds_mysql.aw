@@ -880,7 +880,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->db_query("DELETE FROM aliases WHERE source = '$oid'");
 	}
 
-	function req_make_sql($params, $logic = "AND")
+	function req_make_sql($params, $logic = "AND", $dbg = false)
 	{
 		$sql = array();
 		$p_tmp = $params;
@@ -974,7 +974,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					}
 					if (isset($val->filter["logic"]))
 					{
-						$sql[] = "(".$this->req_make_sql($val->filter["conditions"], $val->filter["logic"]).")";
+						$aa = $this->req_make_sql($val->filter["conditions"], $val->filter["logic"],true);
+						if ($aa != "")
+						{
+							$sql[] = "(".$aa.")";
+						}
 					}
 				}
 				else
