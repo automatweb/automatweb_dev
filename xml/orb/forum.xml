@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="forum" folder="" extends="class_base">
+	<class name="forum" folder="contentmgmt/forum" extends="class_base">
 		<action name="notify_list">
 			<function name="notify_list">
 				<arguments>
