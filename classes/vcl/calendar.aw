@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.37 2004/12/15 12:25:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.38 2004/12/15 13:29:05 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -32,7 +32,7 @@ class vcalendar extends aw_template
 
 		if ($feature == "project_media")
 		{
-			if ($this->evt_tpl->is_template("project_media"))
+			if (is_object($this->evt_tpl) && $this->evt_tpl->is_template("project_media"))
 			{
 				$retval = true;
 			}
@@ -248,39 +248,49 @@ class vcalendar extends aw_template
 		{
 			$this->init_output($arr);
 		};
-		switch($this->range["viewtype"])
+		
+		$this->event_counter = 0;
+
+		if (!empty($arr["text"]))
 		{
-			case "month":
-				$awt->start("draw-month");
-				$content = $this->draw_month();
-				$awt->stop("draw-month");
-				$caption = locale::get_lc_month(date("m",$this->range["timestamp"]));
-				$caption .= " ";
-				$caption .= date("Y",$this->range["timestamp"]);
-				break;
+			$content = $arr["text"];
+		}
+		else
+		{
+			switch($this->range["viewtype"])
+			{
+				case "month":
+					$awt->start("draw-month");
+					$content = $this->draw_month();
+					$awt->stop("draw-month");
+					$caption = locale::get_lc_month(date("m",$this->range["timestamp"]));
+					$caption .= " ";
+					$caption .= date("Y",$this->range["timestamp"]);
+					break;
 
-			case "week":
-			case "last_events":
-				$content = $this->draw_week();
-				$ms = locale::get_lc_month(date("m",$this->range["start"]));
-				$me = locale::get_lc_month(date("m",$this->range["end"]));
-				$caption = date("j. ",$this->range["start"]) . "$ms - " . date("j. ",$this->range["end"]) . " " . $me;
-				break;
+				case "week":
+				case "last_events":
+					$content = $this->draw_week();
+					$ms = locale::get_lc_month(date("m",$this->range["start"]));
+					$me = locale::get_lc_month(date("m",$this->range["end"]));
+					$caption = date("j. ",$this->range["start"]) . "$ms - " . date("j. ",$this->range["end"]) . " " . $me;
+					break;
 
-			case "relative":
-				$content = $this->draw_relative();
-				$caption = date("j. ",$this->range["timestamp"]) . locale::get_lc_month(date("m",$this->range["timestamp"]));
-				break;
+				case "relative":
+					$content = $this->draw_relative();
+					$caption = date("j. ",$this->range["timestamp"]) . locale::get_lc_month(date("m",$this->range["timestamp"]));
+					break;
 
-			case "year":
-				$content = $this->draw_year();
-				$caption = "";
-				break;
+				case "year":
+					$content = $this->draw_year();
+					$caption = "";
+					break;
 
-	
-			default:
-				$content = $this->draw_day();
-				$caption = date("j. ",$this->range["timestamp"]) . locale::get_lc_month(date("m",$this->range["timestamp"])) . date(" Y",$this->range["timestamp"]);
+		
+				default:
+					$content = $this->draw_day();
+					$caption = date("j. ",$this->range["timestamp"]) . locale::get_lc_month(date("m",$this->range["timestamp"])) . date(" Y",$this->range["timestamp"]);
+			};
 		};
 		
 		classload("date_calc");
@@ -553,11 +563,22 @@ class vcalendar extends aw_template
 				{
 					continue;
 				};
-				
+
+				$block_id = date("Ymd",$reals);
+
+				// this will most most likely break templates with grids, but works
+				// fine with event lists .. which is the way it should be used anyway
+				if (empty($calendar_blocks[$block_id]) && 1 == $this->show_days_with_events)
+				{
+					continue;
+				};
+
 				$this->vars(array(
-					"EVENT" => $calendar_blocks[date("Ymd",$reals)],
+					"EVENT" => $calendar_blocks[$block_id],
 					"daynum" => date("j",$reals),
 					"dayname" => date("F d, Y",$reals),
+					"date" => locale::get_lc_date($reals,5),
+					"lc_weekday" => locale::get_lc_weekday(date("w",$reals)),
 					"daylink" => aw_url_change_var(array(
 						"viewtype" => "day",
 						"date" => date("d-m-Y",$reals),
@@ -602,6 +623,7 @@ class vcalendar extends aw_template
 		{
 			arr($this->items);
 		};
+
 
 		for ($i = 1; $i <= 12; $i++)
 		{
@@ -953,7 +975,7 @@ class vcalendar extends aw_template
 				}
 				else
 				{
-					$day_url = aw_url_change_var(array("viewtype" => "day","date" => date("d-m-Y",$reals)));
+					$day_url = aw_url_change_var(array("viewtype" => "day","event_id" => "","date" => date("d-m-Y",$reals)));
 				};
 
 				// cell_empty has class, doesn't have a link, used to show days with no events
@@ -1002,7 +1024,11 @@ class vcalendar extends aw_template
 			"viewtype" => "month",
 			"date" => date("d-m-Y",mktime(0,0,0,$m+1,$d,$y)),
 		));
-		$caption = "<div class='$style_title'><a href='$prev_url'>&lt;&lt;</a> <a href='$caption_url'>$caption</a> <a href='$next_url'>&gt;&gt;</a>";
+
+		$prev_month = t("Eelmine kuu");
+		$next_month = t("Järgmine kuu");
+
+		$caption = "<div class='$style_title'><a href='$prev_url' alt='$prev_month' title='$prev_month'>&lt;&lt;</a> <a href='$caption_url'>$caption</a> <a href='$next_url' alt='$next_month' title='$next_month'>&gt;&gt;</a>";
 		return $caption . "<table border=0 cellspacing=0 cellpadding=0 width='100%'><tr><td class='$style_background'><table border=0 cellpadding=0 cellspacing=1 width='100%'>" . $w . "</table></td></tr></table>";
 	}
 
@@ -1029,6 +1055,7 @@ class vcalendar extends aw_template
 
 		
 		$this->evt_tpl->vars(array(
+			"odd" => $this->event_counter % 2,
 			"time" => date("H:i",$evt["timestamp"]),
 			"date" => date("j-m-Y H:i",$evt["timestamp"]),
 			"datestamp" => date("d.m.Y",$evt["timestamp"]),
@@ -1043,7 +1070,10 @@ class vcalendar extends aw_template
 			"comment" => $evt["comment"],
 			"day_name" => strtoupper(substr(get_lc_weekday(date("w",$evt["start1"])),0,1)),
 			"date_and_time" => $dt . ". " . $mn,
+			"section" => aw_global_get("section")
 		));
+						
+		$this->event_counter++;
 
 
 		if (!empty($evt["comment"]))
