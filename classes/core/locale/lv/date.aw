@@ -1,6 +1,11 @@
 <?php
 class date
 {
+	function date()
+	{
+		$this->month = array("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
+	}
+
 	function get_lc_date($timestamp, $format)
 	{
 		if ($timestamp==0)
@@ -8,7 +13,6 @@ class date
 			$timestamp=time();
 		}
 		
-		$month = array("jaanuar", "veebruar", "m&auml;rts", "aprill", "mai", "juuni", "juuli", "august", "september", "oktoober", "november", "detsember");
 		switch ($format)
 		
 		{
@@ -27,6 +31,14 @@ class date
 			case 4:
 				$newdate=date("d. ", $timestamp).$month[date("m", $timestamp)-1].date(" Y",$timestamp);
 				return $newdate;
+
+			case 5:
+				$rv = ucfirst($this->month[date("m",$timestamp)-1]) . " " . date("d",$timestamp);
+				return $rv;
+			
+			case 6:
+				$rv = date("d.",$timestamp).$this->month[date("m",$timestamp)-1] . date(".Y",$timestamp);
+				return $rv;
 		}
 	}
 	

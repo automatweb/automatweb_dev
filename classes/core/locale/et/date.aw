@@ -8,35 +8,49 @@ class date
 
 	function get_lc_date($timestamp, $format)
 	{
-		if ($timestamp==0)
+		if (empty($timestamp))
 		{
-			$timestamp=time();
+			$timestamp = time();
 		}
+
+		$rv = "";
 		
 		switch ($format)
-		
 		{
 			case 1:
-				$newdate=date("d.m.y", $timestamp);
-				return $newdate;
+				$rv = date("d.m.y", $timestamp);
+				break;
+
 			case 2:
-			
-				$newdate=date("d.m.Y", $timestamp);
-				return $newdate;
+				$rv = date("d.m.Y", $timestamp);
+				break;
 				
 			case 3:
-				$newdate=date("d. ", $timestamp).$this->month[date("m", $timestamp)-1].date(" y",$timestamp);
-				return $newdate;
+				$rv = date("d. ", $timestamp).$this->month[date("m", $timestamp)-1].date(" y",$timestamp);
+				break;
 				
 			case 4:
-				$newdate=date("d. ", $timestamp).$this->month[date("m", $timestamp)-1].date(" Y",$timestamp);
-				return $newdate;
+				$rv = date("d. ", $timestamp).$this->month[date("m", $timestamp)-1].date(" Y",$timestamp);
+				break;
+
+			case 5:
+				$rv = date("d. ",$timestamp).$this->month[date("m",$timestamp)-1];
+				break;
+			
+			case 6:
+				$rv = date("d. ",$timestamp).$this->month[date("m",$timestamp)-1] . date(" Y",$timestamp);
+				break;
+				
+
+
 		}
+
+		return $rv;
 	}
 
 	function get_lc_weekday($num, $short = false)
 	{
-		$names = array("Esmaspäev","Teisipäev","Kolmapäev","Neljapäev","Reede","Laupäev","Pühapäev");
+		$names = array("esmaspäev","teisipäev","kolmapäev","neljapäev","reede","laupäev","pühapäev");
 		// array starts from 0, estonian weekdays from 1
 		$num--;
 		return $short ? substr($names[$num],0,1) : $names[$num];
@@ -44,7 +58,7 @@ class date
 	
 	function get_lc_month($num)
 	{
-		return ucfirst($this->month[$num-1]);
+		return $this->month[$num-1];
 	}
 	
 	

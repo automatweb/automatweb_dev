@@ -3,7 +3,7 @@ class date
 {
 	function date()
 	{
-		$this->month = array("january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december");
+		$this->month = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
 
 	}
 
@@ -31,6 +31,15 @@ class date
 			case 4:
 				$newdate=date("d. ", $timestamp).$this->month[date("m", $timestamp)-1].date(" Y",$timestamp);
 				return $newdate;
+			
+			case 5:
+				$rv = ucfirst($this->month[date("m",$timestamp)-1]) . " " . date("d",$timestamp);
+				return $rv;
+			
+			case 6:
+				$rv = ucfirst($this->month[date("m",$timestamp)-1]) . " " . date("d",$timestamp) . date(" Y",$timestamp);
+				return $rv;
+				
 		}
 	}
 	
@@ -43,7 +52,7 @@ class date
 
 	function get_lc_month($num)
 	{
-		return ucfirst($this->month[$num-1]);
+		return $this->month[$num-1];
 	}
 	
 	
