@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.44 2003/02/26 15:59:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.45 2003/02/27 12:17:48 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -644,6 +644,16 @@ class form extends form_base
 		extract($arr);
 		$this->load($id);
 
+		$this->do_add_row($arr);
+		$this->save();
+		$orb = $this->mk_orb("change", array("id" => $this->id));
+		header("Location: $orb");
+		return $orb;
+	}
+	
+	function do_add_row($arr)
+	{
+		extract($arr);
 		while ($count-- > 0)
 		{
 			$this->arr["rows"]++;
@@ -665,12 +675,8 @@ class form extends form_base
 				$this->arr["elements"][$after+1][$a] = array();
 			}
 		}
-		$this->save();
-		$orb = $this->mk_orb("change", array("id" => $this->id));
-		header("Location: $orb");
-		return $orb;
 	}
-	
+
 	////
 	// !Deletes column $col of form $id
 	function delete_column($arr)
@@ -1013,12 +1019,13 @@ class form extends form_base
 			}
 			if ($this->arr["try_fill"])
 			{
-				if (!isset($elvalues))
+				if (!isset($elvalues) || !is_array($elvalues))
 				{
 					$elvalues = array();
 				}
 				$u = get_instance("users");
-				$elvalues=$elvalues + $u->get_user_info(aw_global_get("uid"));
+				$ud = new aw_array($u->get_user_info(aw_global_get("uid")));
+				$elvalues=$elvalues + $ud->get();
 			}
 
 			if (is_array($elvalues))
@@ -5946,26 +5953,5 @@ class form extends form_base
 
 		return $this->mk_my_orb("joins", array("id" => $id));
 	}
-
-	////
-	// !returns el_id => el_ref for all elements in the form
-	function get_all_element_refs()
-	{
-		$ret = array();
-		for ($row = 0; $row < $this->arr["rows"]; $row++)
-		{
-			for ($col = 0; $col < $this->arr["cols"]; $col++)
-			{
-				$elar = array();
-				$this->arr["contents"][$row][$col]->get_els(&$elar);
-				while (list(,$el) = each($elar))
-				{
-					$ret[$el->get_id()] = $el;
-				}
-			}
-		}
-		return $ret;
-	}
-
 };	// class ends
 ?>
