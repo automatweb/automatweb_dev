@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.11 2003/01/17 18:01:25 duke Exp $
+// $Id: cfgutils.aw,v 1.12 2003/01/20 16:03:57 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -95,6 +95,18 @@ class cfgutils extends aw_template
 		return $result;
 	}
 
+	// I need a more generic solution for caching files
+	// basically, I want to be able to request a file and
+	// let the wrapper class figure out whether it needs
+	// to be reloaded/reparsed or whether we can simply
+	// decompress the serialized representation
+
+	// I think a separate class should do it? Or perhaps not
+	// should I just let the cache class handle it? 
+
+	// actually, the more I think about it the more I prefer
+	// the latter variant
+
 	////
 	// !Loads, unserializes and returns properties for a single class,
 	// optionally also caches them
@@ -115,13 +127,17 @@ class cfgutils extends aw_template
                 if ($source)
                 {
                         $parser = get_instance("xml/xml_path_parser");
-                        $parser->parse_data(array("content" => $source));
+                        //$parser->parse_data(array("content" => $source));
+
+                        $parser->parse_file(array("fname" => "/xml/properties/$file" . ".xml"));
+
+			// how on earth do I invoke functions on 
+
                         $properties = $parser->get_data("/properties/property");
 			$classinfo = $parser->get_data("/properties/classinfo");
 			$groupinfo = $parser->get_data("/properties/groupinfo");
 			$tableinfo = $parser->get_data("/properties/tableinfo");
-			// XXX: this means that we cannot specify any names or groups
-			// in the class_base definition - those will simply be overwritten
+			
 			$this->classinfo = $classinfo[0];
 			if (is_array($this->groupinfo))
 			{
@@ -150,6 +166,7 @@ class cfgutils extends aw_template
 	{
 		$this->_init_clist();
 		extract($args);
+		// this is the stuff we need to cache
 		$coreprops = $this->load_class_properties(array("file" => "class_base"));
 		if (!$file)
 		{
