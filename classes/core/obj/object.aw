@@ -358,9 +358,9 @@ class object
 		return $GLOBALS["objects"][$this->oid]->prop($param);
 	}
 
-	function prop_str($param)
+	function prop_str($param, $is_oid = NULL)
 	{
-		return $GLOBALS["objects"][$this->oid]->prop_str($param);
+		return $GLOBALS["objects"][$this->oid]->prop_str($param, $is_oid);
 	}
 
 	function get_property_list()

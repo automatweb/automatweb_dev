@@ -56,6 +56,25 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 
 @property pohitegevus type=relpicker reltype=RELTYPE_TEGEVUSALAD table=kliendibaas_firma
 @caption Põhitegevus
+
+------ Yldine - Lisainfo grupp----------
+@default group=add_info
+
+@property userta1 type=textarea rows=10 cols=50 table=objects field=meta method=serialize
+@caption User-defined TA 1
+
+@property userta2 type=textarea rows=10 cols=50 table=objects field=meta method=serialize
+@caption User-defined TA 2
+
+@property userta3 type=textarea rows=10 cols=50 table=objects field=meta method=serialize
+@caption User-defined TA 3
+
+@property userta4 type=textarea rows=10 cols=50 table=objects field=meta method=serialize
+@caption User-defined TA 4
+
+@property userta5 type=textarea rows=10 cols=50 table=objects field=meta method=serialize
+@caption User-defined TA 5
+
 --------------------------------------
 @default group=oldcontacts
 
@@ -305,6 +324,7 @@ property projects_listing_toolbar type=toolbar no_caption=1 parent=projects_tool
 @groupinfo general_sub caption="&Uuml;ldine" parent=general
 @groupinfo cedit caption="Üldkontaktid" parent=general
 @groupinfo org_sections caption="Tegevus" parent=general
+@groupinfo add_info caption="Lisainfo" parent=general
 
 @groupinfo people caption="Inimesed"
 
@@ -514,7 +534,7 @@ class crm_company extends class_base
 	{
 		$this->init(array(
 			'clid' => CL_CRM_COMPANY,
-			'tpldir' => 'firma',
+			'tpldir' => 'crm/crm_company',
 		));
 	}
 
@@ -4458,6 +4478,18 @@ class crm_company extends class_base
 			"sortable" => 1,
 		));
 	}
+
+	function get_all_org_sections($obj)
+	{
+		static $retval;
+		foreach ($obj->connections_from(array("type" => "RELTYPE_SECTION")) as $section)
+		{
+			$retval[$section->prop("to")] = $section->prop("to");
+			$section_obj = $section->to();
+			$this->get_all_org_sections($section_obj);
+		}
+		return $retval;	
+	}
 	
 	function do_my_projects_table(&$arr)
 	{	
@@ -4495,6 +4527,43 @@ class crm_company extends class_base
 				"project_created" => get_lc_date($project_obj->created()),
 			));
 		}
+	}
+
+	/** implement our own view!
+	**/
+	function view($arr)
+	{
+		if ($arr["cfgform"])
+		{
+			$cfg = get_instance("cfg/cfgform"); 
+			$props = $cfg->get_props_from_cfgform(array("id" => $arr["cfgform"]));
+		}
+		else
+		{
+			$cfg = get_instance("cfg/cfgutils");
+			$props = $cfg->load_properties(array(
+				"clid" => CL_CRM_COMPANY
+			));
+		}
+
+		$this->read_template("show.tpl");
+
+		$o = obj($arr["id"]);
+
+		foreach($props as $pn => $pd)
+		{
+			//echo "$pn => $pd[caption] <br>";
+			$this->vars(array(
+				"prop" => $pd["caption"],
+				"value" => $o->prop_str($pn, in_array($pn, array("ettevotlusvorm", "firmajuht", "telefax_id")))
+			));
+			$l .= $this->parse("LINE");
+		}
+
+		$this->vars(array(
+			"LINE" => $l
+		));
+		return $this->parse();
 	}
 }
 ?>

@@ -20,6 +20,16 @@
             <caption>Objekte sorteeritakse</caption>
       </property>
       <property>
+            <name>show_via_cfgform</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SHOW_CFGFORM</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Objekti vaatamine l&amp;auml;bi seadete vormi</caption>
+      </property>
+      <property>
             <name>folders</name>
             <table>objects</table>
             <group>folders</group>
@@ -57,6 +67,11 @@
                   <clid>CL_OBJECT_TYPE</clid>
                   <caption>n&amp;auml;idatav objektit&amp;uuml;&amp;uuml;p</caption>
             </SHOW_TYPE>
+            <SHOW_CFGFORM>
+                  <value>4</value>
+                  <clid>CL_CFGFORM</clid>
+                  <caption>v&amp;auml;ljundi seadete vorm</caption>
+            </SHOW_CFGFORM>
       </reltypes>
 </properties>
 

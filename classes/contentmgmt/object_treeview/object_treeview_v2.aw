@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.11 2004/07/13 15:01:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.12 2004/10/08 18:48:16 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2 
 /*
 
@@ -19,6 +19,9 @@
 
 @property show_add type=checkbox ch_value=1 field=meta method=serialize group=showing
 @caption N&auml;ita toolbari
+
+@property show_link_new_win type=checkbox ch_value=1 field=meta method=serialize group=showing
+@caption Vaata link uues aknas
 
 @property tree_type type=chooser  field=meta method=serialize default=1 group=showing
 @caption Puu n&auml;itamise meetod
@@ -113,6 +116,7 @@ class object_treeview_v2 extends class_base
 			case "columns":
 				$arr["obj_inst"]->set_meta("sel_columns", $arr["request"]["column"]);
 				$arr["obj_inst"]->set_meta("sel_columns_ord", $arr["request"]["column_ord"]);
+				$arr["obj_inst"]->set_meta("sel_columns_text", $arr["request"]["column_text"]);
 				break;
 
 			case "sortbl":
@@ -252,6 +256,12 @@ class object_treeview_v2 extends class_base
 			))
 		));
 
+		$udef_cols = $ob->meta("sel_columns_text");
+		if (!is_array($udef_cols))
+		{
+			$udef_cols = $col_list;
+		}
+
 		// columns
 		$h_str = "";
 		foreach($col_list as $colid => $coln)
@@ -260,7 +270,7 @@ class object_treeview_v2 extends class_base
 			if ($sel_cols[$colid] == 1)
 			{
 				$this->vars(array(
-					"h_text" => ($colid == "icon" ? "" : $coln)
+					"h_text" => ($colid == "icon" ? "" : $udef_cols[$colid])
 				));
 				$str = $this->parse("HEADER");
 				$this->vars(array(
@@ -286,6 +296,7 @@ class object_treeview_v2 extends class_base
 	{
 		$cols = $arr["obj_inst"]->meta("sel_columns");
 		$cols_ord = $arr["obj_inst"]->meta("sel_columns_ord");
+		$cols_text = $arr["obj_inst"]->meta("sel_columns_text");
 
 		$ret = array();
 		$ret[] = array(
@@ -309,40 +320,71 @@ class object_treeview_v2 extends class_base
 					'group' => 'columns',
 					'value' => "Jrk",
 				),
+				array(
+					'name' => "aaa113",
+					'caption' => "",
+					'type' => 'text',
+					'store' => 'no',
+					'group' => 'columns',
+					'value' => "Tekst",
+				),
 			),
 			"caption" => $coln
 		);
 
 		$cold = $this->_get_col_list($arr["obj_inst"]);
+
+		if (!is_array($cols_text))
+		{
+			$cols_text = $cold;
+		}
+
 		foreach($cold as $colid => $coln)
 		{
 			$rt = "column[".$colid."]";
 			$rto = "column_ord[".$colid."]";
+			$rtt = "column_text[".$colid."]";
+
+			$items = array(
+				array(
+					'name' => $rt,
+					'caption' => "",
+					'type' => 'checkbox',
+					'ch_value' => 1,
+					'store' => 'no',
+					'group' => 'columns',
+					'value' => $cols[$colid],
+				),
+				array(
+					'name' => $rto,
+					'caption' => "",
+					'type' => 'textbox',
+					"size" => 5,
+					'store' => 'no',
+					'group' => 'columns',
+					'value' => $cols_ord[$colid],
+				)
+			);
+
+			if ($cols[$colid])
+			{
+				$items[] = array(
+					'name' => $rtt,
+					'caption' => "",
+					'type' => 'textbox',
+					"size" => 40,
+					'store' => 'no',
+					'group' => 'columns',
+					'value' => $cols_text[$colid],
+				);
+			}
+
 
 			$ret[] = array(
 				"name" => "foo_".$colid,
 				"store" => "no",
 				"group" => "columns",
-				"items" => array(
-					array(
-						'name' => $rt,
-						'caption' => "",
-						'type' => 'checkbox',
-						'ch_value' => 1,
-						'store' => 'no',
-						'group' => 'columns',
-						'value' => $cols[$colid],
-					),
-					array(
-						'name' => $rto,
-						'caption' => "",
-						'type' => 'textbox',
-						"size" => 5,
-						'store' => 'no',
-						'group' => 'columns',
-						'value' => $cols_ord[$colid],
-					)
-				),
+				"items" => $items,
 				"caption" => $coln
 			);
 
@@ -502,13 +544,18 @@ class object_treeview_v2 extends class_base
 	{
 		extract($parms);
 		extract($arr);
+		$ld = array(
+			"url" => $url,
+			"caption" => $name,
+		);
+		if ($d_o->prop("show_link_new_win"))
+		{
+			$ld["target"] = "_blank";
+		}
+
 		$formatv = array(
 			"show" => $url,
-			"name" => html::href(array(
-				"url" => $url,
-				"caption" => $name,
-				"target" => "_blank"
-			)),
+			"name" => html::href($ld),
 			"oid" => $oid,
 			"target" => $target,
 			"sizeBytes" => $fileSizeBytes,
@@ -801,11 +848,11 @@ class object_treeview_v2 extends class_base
 
 		if ($ord == "asc")
 		{
-			return $comp_a < $comp_b ? 1 : -1;
+			return $comp_a > $comp_b ? 1 : -1;
 		}
 		else
 		{
-			return $comp_a > $comp_b ? -1 : 1;
+			return $comp_a < $comp_b ? -1 : 1;
 		}
 	}
 

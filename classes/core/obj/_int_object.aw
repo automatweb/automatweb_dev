@@ -961,7 +961,7 @@ class _int_object
 		return $retval;
 	}
 
-	function prop_str($param)
+	function prop_str($param, $is_oid = NULL)
 	{
 		$pd = $GLOBALS["properties"][$this->obj["class_id"]][$param];
 		if (!$pd)
@@ -969,16 +969,27 @@ class _int_object
 			return $this->prop($param);
 		}
 
+		$type = $pd["type"];
+		if ($is_oid)
+		{
+			$type = "oid";
+		}
+
 		$val = $this->obj["properties"][$param];
-		switch($pd["type"])
+		switch($type)
 		{
 			case "relmanager":
 			case "relpicker": 
 			case "classificator":
+			case "oid":
 				if (is_oid($val) && $GLOBALS["object_loader"]->ds->can("view", $val))
 				{
 					$tmp = new object($val);
 					$val = $tmp->name();
+				}
+				else
+				{
+					$val = "";
 				}
 				break;
 		}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.8 2004/08/23 09:33:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.9 2004/10/08 18:48:16 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -14,6 +14,9 @@
 @property sort_by type=select field=meta method=serialize
 @caption Objekte sorteeritakse
 
+@property show_via_cfgform type=relpicker reltype=RELTYPE_SHOW_CFGFORM field=meta method=serialize
+@caption Objekti vaatamine l&auml;bi seadete vormi
+
 @groupinfo folders caption="Kataloogid"
 @property folders type=table store=no callback=callback_get_menus editonly=1 group=folders
 @caption Kataloogid
@@ -27,6 +30,8 @@
 @reltype SHOW_TYPE value=3 clid=CL_OBJECT_TYPE
 @caption n&auml;idatav objektit&uuml;&uuml;p
 
+@reltype SHOW_CFGFORM value=4 clid=CL_CFGFORM
+@caption v&auml;ljundi seadete vorm
 */
 
 class otv_ds_obj extends class_base
@@ -266,7 +271,7 @@ class otv_ds_obj extends class_base
 		return $ret;
 	}
 
-	function get_fields($ob)
+	function get_fields($ob, $full_props = false)
 	{
 		$ret = array();
 
@@ -279,7 +284,14 @@ class otv_ds_obj extends class_base
 			$ps = $ot->get_properties($c->to());
 			foreach($ps as $pn => $pd)
 			{
-				$ret[$pn] = $pd["caption"];
+				if ($full_props)
+				{
+					$ret[$pn] = $pd;
+				}
+				else
+				{
+					$ret[$pn] = $pd["caption"];
+				}
 			}
 		}
 		
@@ -366,7 +378,7 @@ class otv_ds_obj extends class_base
 		$ol->sort_by_cb(array(&$this, "_obj_list_sorter"));
 
 		$classlist = aw_ini_get("classes");
-		$fields = $this->get_fields($ob);
+		$fields = $this->get_fields($ob, true);
 
 		$ret = array();
 		classload("icons", "image");
@@ -396,15 +408,22 @@ class otv_ds_obj extends class_base
 			else
 			if ($t->class_id() == CL_MENU)
 			{
-				$url = aw_url_change_var("tv_sel", $t->id()); /*$this->mk_my_orb("show", array(
-					"section" => $t->id(),
-					"id" => $t->id(),
-					"tv_sel" => $t->id()
-				));*/
+				$url = aw_url_change_var("tv_sel", $t->id()); 
 			}
 			else
 			{
-				$url = $this->cfg["baseurl"]."/".$t->id();
+				if (($_cff = $ob->prop("show_via_cfgform")))
+				{
+					$url = $this->mk_my_orb("view", array(
+						"id" => $t->id(),
+						"cfgform" => $_cff,
+						"section" => aw_global_get("section")
+					), $t->class_id());
+				}
+				else
+				{
+					$url = $this->cfg["baseurl"]."/".$t->id();
+				}			
 			}
 
 			$adr = $t->createdby();
@@ -434,13 +453,13 @@ class otv_ds_obj extends class_base
 				)),
 			);
 
-			foreach($fields as $ff_n => $ff_c)
+			foreach($fields as $ff_n => $ff_d)
 			{
 				if ($ff_n != "url")
 				{
 					if ($ff_n != "type")
 					{
-						$ret[$t->id()][$ff_n] = $t->prop($ff_n);
+						$ret[$t->id()][$ff_n] = $t->prop_str($ff_n);
 					}
 					else
 					{

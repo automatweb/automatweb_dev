@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.304 2004/10/06 09:13:41 ahti Exp $
+// $Id: class_base.aw,v 2.305 2004/10/08 18:48:15 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -3531,7 +3531,6 @@ class class_base extends aw_template
 			"filter" => $filter,
 		));
 
-
 		// I could use a different approach here ... for example, if I'm saving then
 		// only the properties that should be saved should be returned. or not?
 
@@ -3694,6 +3693,8 @@ class class_base extends aw_template
 		// groupinfo contains a flat list of all groups
 		// I need to figure out which group should I actually be using
 		// if there is one in the url and it actually exists, then use it
+
+
 		if (isset($this->groupinfo[$arr["group"]]))
 		{
 			$use_group = $arr["group"];
@@ -3744,6 +3745,7 @@ class class_base extends aw_template
 
 		// do it 2 cycles, first figure out which groups have properties
 		// so that I can select a new default group
+
 		foreach($cfg_props as $key => $val)
 		{
 			// ignore properties that are not defined in the defaults
