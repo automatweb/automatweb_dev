@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.83 2004/09/12 21:19:50 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.84 2004/09/12 22:03:28 sven Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -621,7 +621,8 @@ class crm_company extends class_base
 				'name'=>$name,
 				'url'=>aw_url_change_var(array(
 							$attrib=>$conn->prop('to'),
-							'cat'=>''
+							'cat'=>'',
+							'org_id' => '',
 				)),
 				'oid' => $conn->prop('to'),
 			);
@@ -1971,7 +1972,10 @@ class crm_company extends class_base
 		));
 		foreach ($ol->arr() as $tmp)
 		{	
-			$evts[$tmp->id()] = $tmp->id();
+			if($tmp->id() == $tmp->brother_of())
+			{
+				$evts[$tmp->id()] = $tmp->id();
+			}
 		}
 		
 		$this->overview = array();
