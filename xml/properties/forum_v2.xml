@@ -383,12 +383,12 @@
             <TOPIC_FOLDER>
                   <value>1</value>
                   <clid>CL_MENU</clid>
-                  <caption>Teemade kataloog</caption>
+                  <caption>Teemade kaust</caption>
             </TOPIC_FOLDER>
             <ADDRESS_FOLDER>
                   <value>2</value>
                   <clid>CL_MENU</clid>
-                  <caption>Listiliikmete kataloog</caption>
+                  <caption>Listiliikmete kaust</caption>
             </ADDRESS_FOLDER>
             <STYLE>
                   <value>3</value>
