@@ -444,6 +444,16 @@
             <caption>Kasuta alammen&amp;uuml;&amp;uuml;de n&amp;auml;itamiseks objektide nimekirja</caption>
       </property>
       <property>
+            <name>panes</name>
+            <table>menu</table>
+            <group>show</group>
+            <type>chooser</type>
+            <store>no</store>
+            <multiple>1</multiple>
+            <field>panes</field>
+            <caption>Paanid</caption>
+      </property>
+      <property>
             <name>left_pane</name>
             <table>menu</table>
             <group>show</group>
