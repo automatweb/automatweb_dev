@@ -45,6 +45,13 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="select_keywords">
+			<function name="select_keywords">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
 		
