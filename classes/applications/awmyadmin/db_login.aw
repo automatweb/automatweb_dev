@@ -75,7 +75,7 @@ class db_login extends class_base
 
 	function login_as($oid)
 	{
-		if (!$this->can("view", $oid))
+		if (!$this->can("view", $oid) || !is_oid($oid))
 		{
 			return false;
 		}

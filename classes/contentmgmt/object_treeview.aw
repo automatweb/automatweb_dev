@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.41 2005/02/07 12:10:08 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.42 2005/03/01 14:42:31 kristo Exp $
 
 /*
 
@@ -951,6 +951,12 @@ class object_treeview extends class_base
 			}
 			$first_level = false;
 		}
+
+		if (!is_oid($t_id) || !$this->can("view", $t_id))
+		{
+			return new object_list();
+		}
+
 		$this->tree_ob = obj($t_id);
 	
 		$ol = new object_list();
