@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.29 2004/07/21 13:22:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.30 2004/08/02 12:19:08 sven Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -15,6 +15,85 @@
 	@classinfo syslog_type=ST_MAILINGLIST_MEMBER
 	@classinfo no_status=1 no_comment=1
 
+	@default group=udef_fields
+	
+	@property udef_txbox1 type=textbox field=meta method=serialize
+	@caption Textbox 1
+	
+	@property udef_txbox2 type=textbox field=meta method=serialize
+	@caption Textbox 2
+	
+	@property udef_txbox3 type=textbox field=meta method=serialize
+	@caption Textbox 3
+	
+	@property udef_txbox4 type=textbox field=meta method=serialize
+	@caption Textbox 4
+	
+	@property udef_txbox5 type=textbox field=meta method=serialize
+	@caption Textbox 5
+	
+	@property udef_txbox6 type=textbox field=meta method=serialize
+	@caption Textbox 6
+	
+	@property udef_txbox7 type=textbox field=meta method=serialize
+	@caption Textbox 7
+	
+	@property udef_txbox8 type=textbox field=meta method=serialize
+	@caption Textbox 8
+	
+	@property udef_txbox9 type=textbox field=meta method=serialize
+	@caption Textbox 9
+	
+	@property udef_txbox10 type=textbox field=meta method=serialize
+	@caption Textbox 10
+	
+	@property udef_txarea1 type=textarea field=meta method=serialize
+	@caption Textarea 1
+	
+	@property udef_txarea2 type=textarea field=meta method=serialize
+	@caption Textarea 2
+	
+	@property udef_txarea3 type=textarea field=meta method=serialize
+	@caption Textarea 3
+	
+	@property udef_txarea4 type=textarea field=meta method=serialize
+	@caption Textarea 4
+	
+	@property udef_txarea5 type=textarea field=meta method=serialize
+	@caption Textarea 5
+	
+	@property udef_checkbox1 type=checkbox ch_value=1 field=meta method=serialize
+	@caption Checkbox 1
+	
+	@property udef_checkbox2 type=checkbox ch_value=1 field=meta method=serialize
+	@caption Checkbox 2
+	
+	@property udef_checkbox3 type=checkbox ch_value=1 field=meta method=serialize
+	@caption Checkbox 3
+	
+	@property udef_checkbox4 type=checkbox ch_value=1 field=meta method=serialize
+	@caption Checkbox 4
+	
+	@property udef_checkbox5 type=checkbox ch_value=1 field=meta method=serialize
+	@caption Checkbox 5
+	
+	@property udef_classificator1 type=classificator field=meta method=serialize
+	@caption Klassifikaator 1
+	
+	@property udef_classificator2 type=classificator field=meta method=serialize
+	@caption Klassifikaator 2
+	
+	@property udef_classificator3 type=classificator field=meta method=serialize
+	@caption Klassifikaator 3
+	
+	@property udef_classificator4 type=classificator field=meta method=serialize
+	@caption Klassifikaator 4
+	
+	@property udef_classificator5 type=classificator field=meta method=serialize
+	@caption Klassifikaator 5
+	
+	@groupinfo udef_fields caption=Muud väljad 
+	
 	@tableinfo ml_users index=id master_table=objects master_index=oid
 */
 
@@ -119,7 +198,38 @@ class ml_member extends class_base
 				$member_obj->set_meta("email",$email);
 				$member_obj->set_meta("hash",$hash);
 				$member_obj->set_meta("time",$ts);
-
+				
+				if(is_array($args["udef_fields"]["classificators"]))
+				{
+					foreach($args["udef_fields"]["textboxes"] as $key => $value)
+					{
+						$member_obj->set_prop("udef_txbox$key", $value);
+					}
+				}
+				
+				if(is_array($args["udef_fields"]["classificators"]))
+				{
+					foreach($args["udef_fields"]["textareas"] as $key => $value)
+					{
+						$member_obj->set_prop("udef_txarea$key", $value);
+					}
+				}
+				
+				if(is_array($args["udef_fields"]["classificators"]))
+				{
+					foreach($args["udef_fields"]["checkboxes"] as $key => $value)
+					{
+						$member_obj->set_prop("udef_checkbox$key", $value);
+					}
+				}
+				
+				if(is_array($args["udef_fields"]["classificators"]))
+				{
+					foreach($args["udef_fields"]["classificators"] as $key => $value)
+					{
+						$member_obj->set_prop("udef_classificator$key", $value);
+					}
+				}	
 				$member_obj->save();
 		
 			};
