@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.64 2001/11/22 16:54:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.65 2001/11/28 17:01:20 duke Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -1089,10 +1089,19 @@ class document extends aw_template
 
 		// fetchime vana dokumendi, et seda arhiivi salvestada
 		$old = $this->fetch($data["id"]);
-		if (defined("ARCHIVE") && ($data["archive"]))
+		// $data["archive"] means that "archive" checkbox was checked and that we should make 
+		// a copy of the current document to the archive
+
+		// $data["version"] means that we are working on a archive copy of a document and
+		// should therefore save the changes to archive and not to the document table
+		if (defined("ARCHIVE"))
 		{
 			classload("archive");
 			$arc = new archive();
+		};
+
+		if (defined("ARCHIVE") && ($data["archive"]) )
+		{
 			// teeme arhiivi, kui seda pole
 			// kallis vaataja, ma tean, et sulle meeldib jargnev rida kohe sitta moodi
 
@@ -1100,8 +1109,7 @@ class document extends aw_template
 			{
 				$arc->add(array("oid" => $data["id"]));
 			};
-	
-			$ser = $arc->serializer->php_serialize($old);
+
 			$arc_data = array();
 
 			foreach($this->archive_fields as $afield)
@@ -1113,11 +1121,35 @@ class document extends aw_template
 
 			$arc->commit(array(
 						"oid" => $data["id"],
-						"content" => $ser,
+						"ser_content" => $old,
 						"name" => $arc_name,
 						"data" => $arc_data,
 						"class_id" => CL_DOCUMENT,
 			));
+		};
+		
+		if (defined("ARCHIVE") && ($data["version"]) )
+		{
+			$actual = array_merge($old,$data);
+			$arc_data = array();
+			foreach($this->archive_fields as $afield)
+			{
+				$arc_data[$afield] = $data[$afield];
+			};
+			$arc_name = ($data["archive_name"]) ? $data["archive_name"] : $data["title"];
+			$arc->commit(array(
+						"oid" => $data["id"],
+						"ser_content" => $actual,
+						"name" => $arc_name,
+						"version" => $data["version"],
+						"data" => $arc_data,
+						"class_id" => CL_DOCUMENT,
+			));
+			
+			// logime aktsioone
+			$this->_log("document","muutis dokumenti <a href='".$GLOBALS["baseurl"]."/automatweb/".$this->mk_orb("change", array("id" => $id))."'>'".$data["title"]."'</a> arhiivikoopiat");
+			// laena mulle bensiini ja tikke, vanemuine
+			return $this->mk_my_orb("change", array("id" => $data["id"],"section" => $data["section"],"version" => $data["version"]));
 		};
 
 		// go on with our usual business
@@ -1574,8 +1606,20 @@ class document extends aw_template
 			$id = $oob["brother_of"];
 		}
 
-		$document = $this->fetch($id);
-		$this->mk_path($document["parent"],LC_DOCUMENT_CHANGE_DOC,$document["period"]);
+		// $version indicates that we should load an archived copy of this document
+		if ($version)
+		{
+			classload("archive");
+			$arc = new archive();
+			$document = $arc->checkout(array("oid" => $id,"version" => $version));
+			$addcap = "<span style='color: red'>(arhiivikoopia)</a>";
+		}
+		else
+		{
+			$document = $this->fetch($id);
+			$addcap = "";
+		};
+		$this->mk_path($document["parent"],LC_DOCUMENT_CHANGE_DOC . $addcap,$document["period"]);
 		
 		// kui class_id on 1, siis jarelikult me muudame
 		// mingi sektsiooni defaulte
@@ -1712,7 +1756,7 @@ class document extends aw_template
 											"tm"			=> trim($document["tm"]),
 											"subtitle"			=> trim($document["subtitle"]),
 											"link_text" => trim($document["link_text"]),
-											"reforb"	=> $this->mk_reforb("save", array("id" => $id,"section" => $section)),
+											"reforb"	=> $this->mk_reforb("save", array("id" => $id,"section" => $section,"version" => $version)),
 											"id" => $id,
 											"docid" => $id,
 											"previewlink" => $previewlink,
@@ -2275,6 +2319,7 @@ class document extends aw_template
 								"name" => "uid",
 								"caption" => "Muutja",
 								"talign" => "center",
+								"align" => "center",
 								"nowrap" => 1,
 								"sortable" => 1,
 		));
@@ -2286,20 +2331,40 @@ class document extends aw_template
 								"nowrap" => 1,
 								"sortable" => 1,
 		));
+		
+		$t->define_field(array(
+								"name" => "check",
+								"caption" => "Default",
+								"talign" => "center",
+								"align" => "center",
+								"nowrap" => 1,
+		));
 
 		$contents = $arc->get(array("oid" => $args["docid"]));
 		$obj = $this->get_object($args["docid"]);
 		$this->mk_path($obj["parent"],"Arhiiv"); 
 		$meta = $arc->serializer->php_unserialize($obj["meta"]);
 
+		$current = $this->fetch($args["docid"]);
+
+		$t->define_data(array(
+			"name" => sprintf("<a href='%s'><b>%s</b></a>",$this->mk_orb("change",array("id" => $args["docid"])),$current["title"]),
+			"uid" => '<b>' . $current["modifiedby"] . '</b>',
+			"date" => '<b>' . $this->time2date($current["modified"],9) . '</b>',
+			"check" => sprintf("<b><input type='radio' name='default' value='active' checked></b>"),
+		));
+
 		if (is_array($contents))
 		{
 			foreach($contents as $key => $val)
 			{
+				$name = ($meta["archive"][$key]["name"]) ? $meta["archive"][$key]["name"] : "(nimetu)";
+				$link = sprintf("<a href='%s'>%s</a>",$this->mk_orb("change",array("id" => $args["docid"],"version" => $key)),$name);
 				$t->define_data(array(
-						"name" => $meta["archive"][$key]["name"],
+						"name" => $link,
 						"uid" => $meta["archive"][$key]["uid"],
 						"date" => $this->time2date($val[FILE_MODIFIED],9),
+						"check" => sprintf("<input type='radio' name='default' value='%d'>",$key),
 				));
 			}
 		};
@@ -2311,9 +2376,65 @@ class document extends aw_template
 			"arc_table" => $t->draw(),
 			"preview"	=> $this->mk_my_orb("preview", array("id" => $docid)),
 			"menurl"	=> $this->mk_orb("sel_menus",array("id" => $docid)),
-			"docid" => $docid
+			"docid" => $docid,
+			"reforb" => $this->mk_reforb("submit_archive",array("id" => $docid)),
 		));
 		return $this->parse();
+	}
+
+	////
+	// !Submits the archive page
+	// id(int) - dokumendi id, millega tegemist on
+	// default(mixed) - aktiveeritava versiooni number voi 'active', kui valikut
+	// ei muudetud
+	function submit_archive($args = array())
+	{
+		extract($args);
+		// now, what we do if default is not active, is to copy the current
+		// document from the objects table to archive and also copy the requested
+		// copy from archive to the documents table
+		if ($default != "active")
+		{
+			$old = $this->fetch($id);
+
+			foreach($this->archive_fields as $afield)
+			{
+				$arc_data[$afield] = $old[$afield];
+			};
+
+			$arc_name = $old["title"];
+
+			classload("archive");
+			$arc = new archive();
+
+			$arc->commit(array(
+						"oid" => $id,
+						"ser_content" => $old,
+						"name" => $arc_name,
+						"data" => $arc_data,
+						"class_id" => CL_DOCUMENT,
+			));
+			// now the current document is archived, let's restore and older version
+			$document = $arc->checkout(array("oid" => $id,"version" => $default));
+			$q = "SELECT * FROM documents WHERE docid = '$id'";
+			$this->db_query($q);
+			// we do this, because we need to know what fields where are in the document table
+			$row = $this->db_next();
+			$values = array();
+			foreach($row as $key => $val)
+			{
+				if (not(is_number($key)) && ($key != "docid") && ($key != "rec") && $document[$key])
+				{
+					$values[$key] = " $key = '$document[$key]'";
+				};
+			};
+			$q = sprintf("UPDATE documents SET %s WHERE docid = '%d'",join(",",$values),$id);
+			$this->db_query($q);
+			$this->_log("document","aktiveeris dokumendi $id arhiiviversiooni");
+
+		};
+
+		return $this->mk_my_orb("archive",array("docid" => $id));
 	}
 
 	function preview($arr)
