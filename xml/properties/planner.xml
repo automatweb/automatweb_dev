@@ -51,6 +51,16 @@
             <caption>Päev lõpeb</caption>
       </property>
       <property>
+            <name>only_days_with_events</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <group>advanced</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Päeva vaates on ainult sündmustega päevad</caption>
+      </property>
+      <property>
             <name>tab_add_visible</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
