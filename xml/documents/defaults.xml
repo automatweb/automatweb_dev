@@ -6,6 +6,12 @@
 ]]>
 </tag>
 
+<tag id='ala'>
+<![CDATA[
+<span class="biggertext">\1</span>
+]]>
+</tag>
+
 <tag id='alapealkiri'>
 <![CDATA[
 </font></td><tr><td colspan="3" bgcolor="#004040" valign="middle">
@@ -138,12 +144,6 @@
 <div style="width: 100%; border-bottom: 1px solid #DCEFE6;">
 <span class="text"><strong>\1</strong></span>
 </div>
-]]>
-</tag>
-
-<tag id='ala'>
-<![CDATA[
-<span class="titlePri">\1</span>
 ]]>
 </tag>
 
