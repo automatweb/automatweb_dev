@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.151 2003/02/06 15:51:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.152 2003/02/06 16:00:40 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -537,7 +537,7 @@ class document extends aw_template
 			"act_per_id" => $pdat['id'],
 			"act_per_name" => $pdat['description'],
 			"act_per_comment" => $pdat['data']['comment'],
-			"act_per_image_url" => $pdata['data']['image_link'],
+			"act_per_image_url" => ($pdat['data']['image']['url']) ? $pdat['data']['image']['url'] : "/automatweb/images.trans.gif",
 		));
 		
 		$this->dequote(&$doc["title"]);

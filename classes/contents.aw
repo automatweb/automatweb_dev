@@ -62,6 +62,7 @@ class contents extends aw_template
                 $this->vars(array(
                         "act_per_comment" => $act_per["data"]["comment"],
                         "act_per_name" => $act_per["description"],
+			"act_per_image_url" => ($act_per['data']['image']['url']) ? $act_per['data']['image']['url'] : "/automatweb/images.trans.gif", 
                         "MENU" => $this->l,
                 ));
 
