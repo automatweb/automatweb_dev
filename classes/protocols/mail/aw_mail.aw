@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/aw_mail.aw,v 1.1 2004/10/29 19:06:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/aw_mail.aw,v 1.2 2004/12/30 15:56:28 ahti Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
@@ -371,7 +371,7 @@ class aw_mail {
 
 			//$this->headers["Content-Type"] = $contenttype;
 			$this->headers["Content-Transfer-Encoding"] = $encoding;
-			$this->mimeparts[0] = $pref . CRLF . CRLF . $emsg . CRLF;
+			$this->mimeparts[0] = $pref . CRLF . $emsg;
 		}
 		else
 		{	
@@ -589,7 +589,7 @@ class aw_mail {
 		{
 			if (!empty($this->body))
 			{
-				$msg = CRLF.$this->body.CRLF.CRLF;
+				$msg = $this->body;
 			};
 		};
 		return $msg;

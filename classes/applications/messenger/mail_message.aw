@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.4 2004/10/29 21:10:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.5 2004/12/30 15:56:28 ahti Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -12,6 +12,9 @@
 
 	@property uidl type=hidden
 	@caption UIDL
+	
+	@property mfrom_name type=hidden table=objects field=meta method=serialize
+	@caption Kellelt nimi
 	
 	@property mfrom type=select 
 	@caption Kellelt
@@ -60,7 +63,7 @@
 
 	classinfo relationmgr=yes
 
-	@groupinfo general submit=no
+	@groupinfo general caption="Üldine" submit=no
 	@tableinfo messages index=id master_table=objects master_index=oid
 	
 	@property view_toolbar type=toolbar store=no no_caption=1 form=showmsg

@@ -2,9 +2,9 @@
 <tabledef>
 <data>
 <field name="qid" caption="#" talign="center" sortable="1" type="int" numeric="yea"/>
-<field name="subject" caption="Meil" talign="center" sortable="1"/>
-<field name="status" caption="Olek" talign="center" sortable="1"/>
-<field name="start_at" caption="Algus" talign="center" type="time" format="H:i d-M-y" sortable="1" numeric="yea"/>
+<field name="subject" caption="Kiri" talign="center" sortable="1"/>
+<field name="status" caption="Staatus" talign="center" sortable="1"/>
+<field name="start_at" caption="Algus" talign="center" type="time" format="H:i d-m-y" sortable="1" numeric="yea"/>
 <field name="last_sent" caption="Viimane" talign="center" type="time" format="H:i:s" sortable="1" numeric="yea"/>
 <field name="perf" caption="Perf" talign="center" numeric="yea"/>
 <field name="patch_size" caption="Korraga" talign="center" sortable="1" type="int" numeric="yea"/>

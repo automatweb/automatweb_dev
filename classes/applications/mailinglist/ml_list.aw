@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.7 2004/12/27 09:02:20 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.8 2004/12/30 15:56:28 ahti Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -120,7 +120,10 @@
 
 	@property mail_last_batch type=text store=no 
 	@caption Viimane kiri saadeti
-
+	
+	@property list_source type=text store=no
+	@caption Listi liikmete allikas
+	
 	@property mail_report table type=table store=no no_caption=1
 	@caption Meili raport
 	
@@ -388,8 +391,13 @@ class ml_list extends class_base
 			aw_session_set("cb_errmsg",$errmsg);
 			return aw_global_get("HTTP_REFERER");
 		};
-
-
+		$fld = $list_obj->prop("def_user_folder");
+		$members = $this->get_all_members($fld);
+		if(in_array($args["mail"], $members))
+		{
+			$allow = false;
+		}
+		
 		$udef_fields["textboxes"] = $args["udef_txbox"];
 		$udef_fields["textareas"] = $args["udef_txtarea"];
 		$udef_fields["checkboxes"] = $args["udef_checkbox"];
@@ -454,7 +462,7 @@ class ml_list extends class_base
 		//arr($msg_obj->properties());
 		$message = nl2br($msg_obj->prop("message"));
 		$al = get_instance("aliasmgr");
-		$al->parse_oo_aliases($msg_obj->id(),&$message);
+		$al->parse_oo_aliases($msg_obj->id(), &$message);
 		
 		$c_title = $msg_obj->prop("msg_contener_title");
 		$c_content = $msg_obj->prop("msg_contener_content");
@@ -566,7 +574,21 @@ class ml_list extends class_base
 				));
 				*/
 				break;
-
+				
+			case "list_source":
+				$m_id = $arr["request"]["mail_id"];
+				if(is_oid($m_id) && $this->can("view", $m_id))
+				{
+					$msg = obj($m_id);
+					$s_id = $msg->meta("list_source");
+					if(is_oid($s_id) && $this->can("view", $s_id))
+					{
+						$source = obj($s_id);
+						$prop["value"] = $source->name();
+					}
+				}
+				break;
+				
 			case "mail_start_date":
 			case "mail_last_batch":
 				$list_id = $arr["obj_inst"]->id();
@@ -1181,6 +1203,7 @@ class ml_list extends class_base
 		while ($row = $this->db_next())
 		{
 			$mail_obj = new object($row["mid"]);
+			/*
 			if ($row["status"] != 2)
 			{
 				$stat_str = $mq->a_status[$row["status"]];
@@ -1188,8 +1211,9 @@ class ml_list extends class_base
 			}
 			else
 			{
+			*/
 				$status_str = $mq->a_status[$row["status"]];
-			};
+			//};
 			$row["subject"] = html::get_change_url($arr["obj_inst"]->id(), array(
 				"group" => "write_mail",
 				"msg_id" => $mail_obj->id(),
@@ -1711,11 +1735,12 @@ class ml_list extends class_base
 			"value" => $msg_obj->id(),
 		);
 
-		$filtered_props["relmgr"] = array(
-			"name" => "relmgr",
+		$filtered_props["aliasmgr"] = array(
+			"name" => "aliasmgr",
 			"type" => "aliasmgr",
+			"editonly" => 1,
+			"trans" => 1,
 		);
-
 		if($msg_obj)
 		{
 			$xprops = $writer->parse_properties(array(
@@ -1749,31 +1774,37 @@ class ml_list extends class_base
 		{
 			$msg_obj = &obj($msg_data["id"]);
 		}
-		if ($msg_data["send_away"] == 1 && is_oid($msg_data["template_selector"]))
+		if ($msg_data["send_away"] == 1)
 		{
-			$c_tile = $msg_obj->prop("msg_contener_title");
-			$c_content = $msg_obj->prop("msg_contener_content");
-			// use that template then!
-			// 1. load it
-			$o = new object($msg_data["template_selector"]);
-			$subject = $o->prop("subject");
-			if(!empty($subject))
-			{
-				$msg_data["name"] = $subject;
-			}
-			$template = $o->prop("content");
+			$msg_obj->set_meta("list_source", $arr["obj_inst"]->prop("def_user_folder"));
+			$msg_obj->save();
+			//arr($arr["obj_inst"]->prop("def_user_folder"));
 			$message = $msg_data["message"];
+			$c_title = $msg_obj->prop("msg_contener_title");
+			$c_content = $msg_obj->prop("msg_contener_content");
 			$al = get_instance("aliasmgr");
 			$al->parse_oo_aliases($msg_data["id"], &$message);
-			if ($o->prop("is_html") == 1)
+			$tpl = $msg_data["template_selector"];
+			if(is_oid($tpl) && $this->can("view", $tpl))
 			{
-				$message = nl2br($message);
-			};
-			$message = str_replace("#title#", $c_tile, $message);
-			$message = str_replace("#container#", $c_content, $message);
-			$template = str_replace("#content#", $message, $template);
-			
-			$msg_data["message"] = $template;
+				// use that template then!
+				// 1. load it
+				$o = new object($tpl);
+				$template = $o->prop("content");
+				$subject = $o->prop("subject");
+				if(!empty($subject))
+				{
+					$msg_data["name"] = $subject;
+				}
+				if ($o->prop("is_html") == 1)
+				{
+					$message = nl2br($message);
+				};
+				$template = str_replace("#title#", $c_title, $template);
+				$template = str_replace("#container#", $c_content, $template);
+				$message = str_replace("#content#", $message, $template);
+			}
+			$msg_data["message"] = $message;
 		};
 
 		$writer = get_instance(CL_MESSAGE);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.8 2004/12/23 09:47:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.9 2004/12/30 15:56:28 ahti Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -508,7 +508,7 @@ class ml_queue extends aw_template
 
 						// yo, increase the counter
 						$tm = time();
-						$q = "UPDATE ml_queue SET position=position+1,last_sent='$tm' WHERE qid='$qid'";
+						$q = "UPDATE ml_queue SET position=position+1, last_sent='$tm' WHERE qid='$qid'";
 						$this->db_query($q);
 						$this->restore_handle();
 					};
@@ -557,12 +557,14 @@ class ml_queue extends aw_template
 		$this->awm->clean();
 		if (!is_oid($msg["mail"]) || !$this->can("view", $msg["mail"]))
 		{
-			return "couldn't send mail<br />\n";
+			echo "couldn't send mail<br />\n";
+			return;
 		}
 		$msgobj = new object($msg["mail"]);
 		$is_html = $msgobj->prop("html_mail") == 1024;
 		//$is_html=$msg["type"] & MSG_HTML;
 		$message = $msg["message"];
+		//arr($is_html);
 		// compatiblity with old messenger .. yikes
 		echo "from = {$msg["mailfrom"]}  <br />";
 		$this->awm->create_message(array(
@@ -570,7 +572,8 @@ class ml_queue extends aw_template
 			"subject" => $msg["subject"],
 			"To" => $msg["target"],
 			"Sender"=>"bounces@struktuur.ee",
-			"body" => $is_html ? strip_tags(strtr($message,array("<br />"=>"\r\n","<br />"=>"\r\n","</p>"=>"\r\n","</p>"=>"\r\n"))) : $message,
+			"body" => $message,
+			//"body" => $is_html ? strip_tags(strtr($message,array("<br />" => "\r\n", "<br />" => "\r\n", "</p>" => "\r\n", "</p>" => "\r\n"))) : $message,
 		));
 
 		if ($is_html)
@@ -646,8 +649,15 @@ class ml_queue extends aw_template
 		// 3) calls preprocess_one_message for each one
 		set_time_limit(0);
 		$ret = "";
+		$sents = array();
 		foreach($member_list->arr() as $member)
 		{
+			// skip used addresses
+			if(in_array($member->prop("mail"), $sents))
+			{
+				continue;
+			}
+			$sents[] = $member->prop("mail");
 			$this->vars(array(
 				"name" => $member->prop("name"),
 				"mail" => $member->prop("mail"),
@@ -701,7 +711,7 @@ class ml_queue extends aw_template
 		$message = $arr["msg"]["message"];
 		$message = preg_replace("#\#pea\#(.*?)\#/pea\##si", '<div class="doc-title">\1</div>', $message);
 		$message = preg_replace("#\#ala\#(.*?)\#/ala\##si", '<div class="doc-titleSub">\1</div>', $message);
-		$message = $this->replace_tags($message,$data);
+		$message = $this->replace_tags($message, $data);
 		$subject = $this->replace_tags($arr["msg"]["subject"],$data);
 		$mailfrom = $this->replace_tags($arr["msg"]["mfrom"],$data);
 		$mailfrom = trim($mailfrom);

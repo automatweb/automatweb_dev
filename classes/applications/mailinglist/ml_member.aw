@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.2 2004/11/23 07:56:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.3 2004/12/30 15:56:28 ahti Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -111,6 +111,7 @@ class ml_member extends class_base
 			"clid" => CL_ML_MEMBER,
 		));
 		lc_load("definition");
+		$this->users = get_instance("users");
 	}
 	/*
 	function get_property($arr)
@@ -332,7 +333,20 @@ class ml_member extends class_base
 		$mailto = $m->prop("mail");
 		$memberdata["name"] = $m->prop("name");
 		$memberdata["id"] = $m->id();
-		
+		$memberdata["joined"] = get_lc_date($m->created(), 7);
+		if($from_user)
+		{
+			if($usr = reset($m->connections_to(array(
+				"type" => 6, //RELTYPE_EMAIL
+				"from.class_id" => CL_USER,
+			))))
+			{
+				$memberdata["name"] = $this->users->get_user_config(array(
+					"uid" => $usr->prop("from.name"),
+					"key" => "real_name",
+				));
+			}
+		}
 		return array($mailto,$memberdata);
 	}
 
