@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.143 2003/01/14 16:37:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.144 2003/01/14 16:38:36 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -3490,7 +3490,6 @@ class document extends aw_template
 			{
 				$_to = $to;
 			}
-			echo "sending to $_to <br>";
 			mail($_to,str_replace("\n","",str_replace("\r","",$this->parse("title"))),$this->parse("mail"),"From: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
 		}
 
