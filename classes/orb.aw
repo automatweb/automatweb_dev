@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.40 2003/03/17 18:48:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.41 2003/03/18 16:18:25 duke Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 class orb extends aw_template 
@@ -311,26 +311,34 @@ class orb extends aw_template
 			$tagtype = $val["type"];
  
 			// tagi parameetrid, array
-			$attribs = isset($val["attributes"]) ? $val["attributes"] : "";
+			$attribs = isset($val["attributes"]) ? $val["attributes"] : array();
  
 			// kui tegemist on nö "konteiner" tag-iga, siis...
 			if (in_array($tag,$containers))
 			{
 
-				if (in_array($tagtype,array("open","complete")))
+				if ((sizeof($attribs) > 0) && in_array($tagtype,array("open","complete")))
 				{
 					$$tag = $attribs["name"];
-					if (($tag == "action") && (isset($attribs["nologin"]) && $attribs["nologin"]))
+					if (($tag == "action") && !empty($attribs["nologin"]))
 					{
 						$orb_defs[$class][$attribs["name"]]["nologin"] = 1;
 					};
-					if (($tag == "action") && (isset($attribs["public"]) && $attribs["public"]))
+					if (($tag == "action") && !empty($attribs["is_public"]))
 					{
-						$orb_defs[$class][$attribs["name"]]["public"] = 1;
+						$orb_defs[$class][$attribs["name"]]["is_public"] = 1;
 					};
-					if (($tag == "action") && (isset($attribs["all_args"]) && $attribs["all_args"]))
+					if (($tag == "action") && !empty($attribs["is_content"]))
+					{
+						$orb_defs[$class][$attribs["name"]]["is_content"] = 1;
+					};
+					if (($tag == "action") && !empty($attribs["all_args"]))
 					{
 						$orb_defs[$class][$attribs["name"]]["all_args"] = true;
+					};
+					if (($tag == "action") && !empty($attribs["caption"]))
+					{
+						$orb_defs[$class][$attribs["name"]]["caption"] = $attribs["caption"];
 					};
 					if (isset($attribs["default"]) && $attribs["default"] && ($tag == "action"))
 					{
@@ -348,12 +356,12 @@ class orb extends aw_template
 						// default values for optional arguments
 						$orb_defs[$class][$action]["defaults"] = array();
 
-						if (!isset($attribs["xmlrpc"]))
+						if (!isset($attribs["xmlrpc"]) && isset($xmlrpc_defs["xmlrpc"]))
 						{
 							$orb_defs[$class][$action]["xmlrpc"] = $xmlrpc_defs["xmlrpc"];
 						}
 
-						if (!isset($attribs["xmlrpc"]))
+						if (!isset($attribs["xmlrpc"]) && isset($xmlrpc_defs["server"]))
 						{
 							$orb_defs[$class][$action]["server"] = $xmlrpc_defs["server"];
 						}
@@ -368,14 +376,20 @@ class orb extends aw_template
 					if ($tag == "class")
 					{
 						// klassi defauldid. kui funktsiooni juures pole, pannakse need
-						$xmlrpc_defs["xmlrpc"] = $attribs["xmlrpc"];
-						$xmlrpc_defs["server"] = $attribs["server"];
-						if ($attribs["extends"])
+						if (isset($attribs["xmlrpc"]))
+						{
+							$xmlrpc_defs["xmlrpc"] = $attribs["xmlrpc"];
+						};
+						if (isset($attribs["server"]))
+						{
+							$xmlrpc_defs["server"] = $attribs["server"];
+						};
+						if (isset($attribs["extends"]))
 						{
 							$extends = explode(",",$attribs["extends"]);
 							$orb_defs[$class]["_extends"] = $extends;
 						};
-						if ($attribs["folder"])
+						if (isset($attribs["folder"]))
 						{
 							$orb_defs[$class]["___folder"] = $attribs["folder"];
 						};
@@ -402,9 +416,16 @@ class orb extends aw_template
 						$val = 1;
 					};
 					$orb_defs[$class][$action][$tag][$attribs["name"]] = $val;
-					$orb_defs[$class][$action]["types"][$attribs["name"]] = $attribs["type"];
-					$orb_defs[$class][$action]["defaults"][$attribs["name"]] = $attribs["default"];
-					if ($attribs["acl"] != "")
+					if (isset($attribs["type"]))
+					{
+						$orb_defs[$class][$action]["types"][$attribs["name"]] = $attribs["type"];
+					};
+
+					if (isset($attribs["default"]))
+					{
+						$orb_defs[$class][$action]["defaults"][$attribs["name"]] = $attribs["default"];
+					};
+					if (isset($attribs["acl"]))
 					{
 						$orb_defs[$class][$action]["acl"][$attribs["name"]] = $attribs["acl"];
 					}
@@ -511,7 +532,7 @@ class orb extends aw_template
 					$aclarr = explode(";", $varacl);
 					foreach($aclarr as $aclid)
 					{
-						if (!$this->can($aclid, $varvalue))
+						if (!$this->can($aclid, (int)$varvalue))
 						{
 							$this->raise_error(ERR_ACL, "ORB:Teil puudub $aclid-&otilde;igus objektile id-ga $varvalue!",true, false);
 						}
