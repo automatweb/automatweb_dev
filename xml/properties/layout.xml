@@ -160,7 +160,7 @@
             <rows>10</rows>
             <cols>50</cols>
             <group>hfoot</group>
-            <caption>Header</caption>
+            <caption>P&amp;auml;is</caption>
       </property>
       <property>
             <name>footer</name>
@@ -171,7 +171,7 @@
             <rows>10</rows>
             <cols>50</cols>
             <group>hfoot</group>
-            <caption>Footer</caption>
+            <caption>Jalus</caption>
       </property>
       <classinfo>
             <syslog_type>ST_LAYOUT</syslog_type>
@@ -192,7 +192,7 @@
                   <caption>Tabeli sisu</caption>
             </aliases>
             <hfoot>
-                  <caption>Header ja footer</caption>
+                  <caption>P&amp;auml;is ja jalus</caption>
             </hfoot>
             <import>
                   <caption>Import</caption>

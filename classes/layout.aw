@@ -8,7 +8,7 @@
 @groupinfo layout caption=Tabel
 @groupinfo styles caption=Stiilid
 @groupinfo aliases caption="Tabeli sisu"
-@groupinfo hfoot caption="Header ja footer"
+@groupinfo hfoot caption="P&auml;is ja jalus"
 @groupinfo import caption=Import
 @groupinfo preview caption=Eelvaade
 
@@ -62,10 +62,10 @@
 @caption Millistes kataloogides n&auml;idatakse
 
 @property header type=textarea rows=10 cols=50 field=meta method=serialize group=hfoot
-@caption Header
+@caption P&auml;is
 
 @property footer type=textarea rows=10 cols=50 field=meta method=serialize group=hfoot
-@caption Footer
+@caption Jalus
 
 @reltype CELLSTYLE_FOLDER value=1 clid=CL_MENU
 @caption celli stiilide kataloog
