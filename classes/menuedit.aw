@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.93 2002/02/08 09:40:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.94 2002/02/13 13:14:31 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -351,24 +351,25 @@ class menuedit extends aw_template
 			// if the section is marked "users_only" and the visitor is not logged in, 
 			// then redirect him  or her to the default error page
 			// we must go though all the parent menus also 
+			$this->tmp = $this->mar;
 			$uo_parent = $this->sel_section;
 			$uo = false;
 			while ($uo_parent)
 			{
-				if (!is_array($this->mar[$uo_parent]) && $uo_parent)
+				if (!is_array($this->tmp[$uo_parent]) && $uo_parent)
 				{
 					//$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu ON menu.id = objects.oid WHERE objects.oid = $uo_parent");
 					//$this->mar[$uo_parent] = $this->db_next();
-					$this->mar[$uo_parent] = $this->get_menu($uo_parent);
+					$this->tmp[$uo_parent] = $this->get_menu($uo_parent);
 				}
 				$uo_meta = $this->get_object_metadata(array(
-					"metadata" => $this->mar[$uo_parent]["metadata"],
+					"metadata" => $this->tmp[$uo_parent]["metadata"],
 				));
 				if ($uo_meta["users_only"] == 1)
 				{
 					$uo = true;
 				}
-				$uo_parent = $this->mar[$uo_parent]["parent"];
+				$uo_parent = $this->tmp[$uo_parent]["parent"];
 			}
 			if ($uo)
 			{
@@ -3994,8 +3995,14 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$link = $baseurl."/";
 				if (defined("LONG_SECTION_URL"))
 				{
-					$link .= "?section=";
-					$link .= ($row["alias"] != "") ? $row["alias"] : $row["oid"];
+					if ($row["alias"] != "")
+					{
+						$link .= $row["alias"];
+					}
+					else
+					{
+						$link .= "?section=".$row["oid"];
+					}
 				}
 				else
 				{
