@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.134 2003/11/06 15:43:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.135 2003/11/10 21:44:03 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -59,8 +59,8 @@
 	@property use_menubar type=checkbox group=special rel=1 table=objects field=meta method=serialize ch_value=1
 	@caption Kasuta menubari
 
-@property user_calendar type=checkbox group=special rel=1 table=objects field=meta method=serialize
-@caption Kasutaja default kalender
+	@property user_calendar type=checkbox group=special rel=1 table=objects field=meta method=serialize
+	@caption Kasutaja default kalender
 
 	@property event_direction type=callback callback=cb_get_event_direction group=advanced rel=1
 	@caption Suund
@@ -112,10 +112,6 @@
 	@groupinfo add_event caption=Lisa_sündmus
 */
 
-// when and if I need to display an "add event" form inside another config form, I need to do this
-// in some weird way. query the properties of the embeddable object and put them where I want them
-// to be.
-
 // naff, naff. I need to create different views that contain different properties. That's something
 // I should have done a long time ago, so that I can create different planners
 define("WEEK",DAY * 7);
@@ -124,13 +120,26 @@ define("REP_WEEK",2);
 define("REP_MONTH",3);
 define("REP_YEAR",4);
 
-define("RELTYPE_SUMMARY_PANE",1);
-define("RELTYPE_EVENT_SOURCE",2);
-define("RELTYPE_EVENT",3);
-define("RELTYPE_DC_RELATION",4);
-define("RELTYPE_GET_DC_RELATION",5);
-define("RELTYPE_EVENT_FOLDER",6);
-define("RELTYPE_EVENT_ENTRY",7);
+/*
+@reltype EVENT_SOURCE value=2 clid=CL_PLANNER
+@caption võta sündmusi teistest kalendritest
+
+@reltype EVENT value=3
+@caption sündmus
+
+@reltype DC_RELATION value=4 clid=CL_RELATION
+@caption viide kalendri väljundile
+
+@reltype GET_DC_RELATION value=5 clid=CL_PLANNER
+@caption võta kalendri väljundid
+
+@reltype EVENT_FOLDER value=6 clid=CL_MENU
+@caption sündmuste kataloog
+
+@reltype EVENT_ENTRY value=7 clid=CL_CFGFORM,CL_CRM_CALL
+@caption sündmuse sisestamise vorm
+
+*/
 
 define("CAL_SHOW_DAY",1);
 define("CAL_SHOW_OVERVIEW",2);
@@ -160,6 +169,8 @@ class planner extends class_base
 				"4" => "month",
 				"5" => "relative",
 		);
+
+		$this->event_entry_classes = array(CL_TASK,CL_CRM_CALL,CL_CRM_OFFER,CL_CRM_DEAL,CL_CRM_MEETING);
 	}
 	
 	function my_calendar($arr)
@@ -177,45 +188,6 @@ class planner extends class_base
 		$arr["group"] = "show_week";
 		return $this->change($arr);
 	}
-
-	function callback_get_rel_types()
-        {
-                return array(
-			RELTYPE_SUMMARY_PANE => "näita kokkuvõtte paanis",
-			RELTYPE_EVENT_SOURCE => "võta sündmusi teistest kalendritest",
-			RELTYPE_EVENT => "sündmus",
-			RELTYPE_DC_RELATION => "viide kalendri väljundile",
-			RELTYPE_GET_DC_RELATION => "võta kalendri väljundid",
-			RELTYPE_EVENT_FOLDER => "sündmuste kataloog",
-			RELTYPE_EVENT_ENTRY => "sündmuse sisestamise vorm",	
-		);
-        }
-
-	function callback_get_classes_for_relation($args = array())
-	{
-		$retval = false;
-		switch($args["reltype"])
-		{
-			case RELTYPE_DC_RELATION:
-				$retval = array(CL_RELATION);
-				break;
-
-			case RELTYPE_EVENT_SOURCE:
-			case RELTYPE_GET_DC_RELATION:
-				$retval = array(CL_PLANNER);
-				break;
-
-			case RELTYPE_EVENT_FOLDER:
-				$retval = array(CL_PSEUDO);
-				break;
-
-			case RELTYPE_EVENT_ENTRY:
-				$retval = array(CL_CFGFORM);
-				break;
-		};
-		return $retval;
-        }
-
 
 	function get_property($args = array())
 	{
@@ -367,6 +339,7 @@ class planner extends class_base
 	function _init_event_source($args = array())
 	{
 		extract($args);
+		classload("icons");
 		classload("date_calc");
 		$di = get_date_range(array(
 			"date" => isset($date) ? $date : date("d-m-Y"),
@@ -451,6 +424,7 @@ class planner extends class_base
 				$row["name"] = $real_obj["name"];
 				$this->restore_handle();
 			};
+			$row["event_icon_url"] = icons::get_icon_url($row["class_id"]);
 			$events[$gx][$row["brother_of"]] = $row;
 		};
 		$this->day_orb_link = $this->mk_my_orb("change",array("id" => $id,"group" => "show_day"));
@@ -535,19 +509,103 @@ class planner extends class_base
 	function callback_get_add_event($args = array())
 	{
 		// yuck, what a mess
-		$obj = $this->get_object($args["request"]["id"]);
-		$meta = $obj["meta"];
+		$obj = $args["obj_inst"];
+		//$obj = $this->get_object($args["request"]["id"]);
+		$meta = $obj->meta();
+
+		// use the config form specified in the request url OR the default one from the
+		// object configuration
 		$event_cfgform = empty($args["request"]["cfgform_id"]) ? $meta["event_cfgform"] : $args["request"]["cfgform_id"];
-		$event_folder = $meta["event_folder"];
-
-		$event_id = $args["request"]["event_id"];
-		$dtitle = $args["request"]['title'];//axel
-
-		$this->event_id = $event_id;
+		// are we editing an existing event?
+		if (!empty($args["request"]["event_id"]))
+		{
+			$event_id = $args["request"]["event_id"];
+			$event_obj = new object($event_id);
+			$this->event_id = $event_id;
+			$clid = $event_obj->class_id();
+			if ($clid == CL_DOCUMENT)
+			{
+				unset($clid);
+			};
+		}
+		else
+		{
+			$clid = $args["request"]["clid"];
+		};
 
 		$res_props = array();
 
-		if ($event_cfgform)
+		// no there are 3 possible scenarios.
+		// 1 - if a clid is in the url, check whether it's one of those that can be used for enterint events
+		//  	then load the properties for that
+		// 2 - if cfgform_id is the url, let's presume it belongs to a document and load properties for that
+		// 3 - load the default entry form ...
+		// 4 - if that does not exist either, then return an error message
+		
+		if (isset($clid))
+		{
+			if (!in_array($clid,$this->event_entry_classes))
+			{
+				return array(array(
+					"type" => "text",
+					"value" => "Seda klassi ei saa kasutada sündmuste sisestamiseks",
+				));
+			}
+			else
+			{
+				// something to think about: so how do I put that event in other calendars .. only documents
+				// have brother documents?
+
+				// 1 - get an instance of that class, for this I need to 
+				$clfile = $this->cfg["classes"][$clid]["file"];
+				$t = get_instance($clfile);
+				$t->init_class_base();
+				$emb_group = "general";
+				if ($this->event_id && $args["request"]["cb_group"])
+				{
+					$emb_group = $args["request"]["cb_group"];
+				};
+			
+				$obj_to_load = $this->event_id;
+				$t->id = $obj_to_load;
+
+				$all_props = $t->get_active_properties(array(
+					"group" => $emb_group,
+				));
+			
+				if ($this->event_id)
+				{
+					$t->obj_inst = $event_obj;
+					//$t->load_obj_data(array("id" => $obj_to_load));
+				};		
+
+				$xprops = $t->parse_properties(array(
+						"properties" => $all_props,
+						"name_prefix" => "emb",
+				));
+
+				// would be nice to generalize this code somewhat, but for this I need
+				// to get saving/loading of other objects to work
+
+				$resprops = array();
+
+				foreach($xprops as $key => $val)
+				{
+					$val["emb"] = 1;
+					$resprops[$key] = $val;
+				};
+
+				$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[class]","value" => basename($clfile));
+				$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[action]","value" => "submit");
+				$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[group]","value" => $emb_group);
+				$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[clid]","value" => $clid);
+				if ($this->event_id)
+				{
+					$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[id]","value" => $obj_to_load);	
+				};
+			};
+		}
+		elseif ($event_cfgform)
 		{
 			aw_session_set('org_action',aw_global_get('REQUEST_URI'));
 			$ev_data = $this->get_object($event_id);
@@ -586,11 +644,13 @@ class planner extends class_base
 
 			if ($this->event_id)
 			{
-				$t->load_obj_data(array("id" => $obj_to_load));
+				$t->obj_inst = $event_obj;
 				//$t->id = $obj_to_load;
 			};
 
 			// sorry ass attempt to get editing of linked documents to work
+
+			// see gruppide tegemine on vaja kuidagi paremini tööle saada junõu
 			$xprops = array();
 			$xtmp = $t->groupinfo;
 			$tmp = array(
@@ -599,19 +659,15 @@ class planner extends class_base
 				"subtitle" => 1,
 			);	
 			$captions = array();
+			// still, would be nice to make 'em _real_ second level groups
+			// right now I'm simply faking 'em
 			foreach($xtmp as $key => $val)
 			{
 				if ($this->event_id && ($key != $emb_group))
 				{
-					$url = aw_global_get("QUERY_STRING");
-					if (strpos($url,"cb_group"))
-					{
-						$url = preg_replace("/&cb_group=\w*/","",$url);
-					};
-					$url .= "&cb_group=$key";
-					$url = "orb.aw?" . $url;
+					$new_group = ($key == "general") ? "" : $key;
 					$captions[] = html::href(array(
-							"url" => $url,
+							"url" => aw_url_change_var("cb_group",$new_group),
 							"caption" => $val["caption"],
 					));
 				}
@@ -622,64 +678,30 @@ class planner extends class_base
 			};
 			$this->emb_group = $emb_group;
 			$tmp["value"] = join(" | ",$captions);
-			$t->inst->set_calendars(array($obj["oid"]));
+			$t->inst->set_calendars(array($obj->id()));
 			$xprops = $t->parse_properties(array(
 					"properties" => $all_props,
+					"name_prefix" => "emb",
 			));
 			$resprops = array();
 			// bad, I need a way to detect the default group. 
 			// but for now this has to do.
 			$resprops["capt"] = $tmp;
-			$xprops['title']['value'] = $xprops['title']['value'] ? $xprops['title']['value'] : $dtitle;//axel
 			foreach($xprops as $key => $val)
 			{
-				// a põmst, kui nimes on [ sees, siis peab lahutama
-				$bracket = strpos($val["name"],"[");
-				if ($bracket > 0)
-				{
-					$pre = substr($val["name"],0,$bracket);
-					$aft = substr($val["name"],$bracket);
-					$newname = "emb[$pre]" . $aft;
-				
-				}
-				else
-				{
-					$newname = "emb[" . $val["name"] . "]";
-				};	
-				$xprops[$key]["name"] = $newname;
-				$resprops["emb_$key"] = $xprops[$key];
+				$resprops[$key] = $val;
 			};
 
-			$resprops[] = array(
-				"type" => "hidden",
-				"name" => "emb[class]",
-				"value" => "doc",
-			);
-			$resprops[] = array(
-				"type" => "hidden",
-				"name" => "emb[action]",
-				"value" => "submit",
-			);
-			$resprops[] = array(
-				"type" => "hidden",
-				"name" => "emb[group]",
-				"value" => $emb_group,
-			);
+			$resprops[] = array("type" => "hidden","name" => "emb[class]","value" => "doc");
+			$resprops[] = array("type" => "hidden","name" => "emb[action]","value" => "submit");
+			$resprops[] = array("type" => "hidden","name" => "emb[group]","value" => $emb_group);
 			if ($obj_to_load)
 			{
-				$resprops[] = array(
-					"type" => "hidden",
-					"name" => "emb[id]",
-					"value" => $obj_to_load,
-				);	
+				$resprops[] = array("type" => "hidden","name" => "emb[id]","value" => $obj_to_load);	
 			}
 			else
 			{
-				$resprops[] = array(
-					"type" => "hidden",
-					"name" => "emb[cfgform]",
-					"value" => $event_cfgform,
-				);	
+				$resprops[] = array("type" => "hidden","name" => "emb[cfgform]","value" => $event_cfgform);	
 			};
 
 		}
@@ -691,23 +713,31 @@ class planner extends class_base
 			);
 		};
 
-		// but, before I can add a new event, I need to know where to put those new objects
 		return $resprops;
 	}
 
 	function create_planner_event($args = array())
 	{
-		$obj = $this->get_object($args["obj"]["oid"]);
-		$event_cfgform = $obj["meta"]["event_cfgform"];
-		$event_folder = $obj["meta"]["event_folder"];
+		$event_folder = $args["obj_inst"]->prop("event_folder");
 		if (empty($event_folder))
 		{
 			return PROP_ERROR;
 		};
-		$frm = $this->get_object($event_cfgform);
-		classload("doc");
-		$t = new doc();
-		$emb = $args["form_data"]["emb"];
+		$emb = $args["request"]["emb"];
+		if (!empty($emb["clid"]))
+		{
+			$clfile = $this->cfg["classes"][$emb["clid"]]["file"];
+			$t = get_instance($clfile);
+			$t->init_class_base();
+		}
+		else
+		{
+			$obj = $this->get_object($args["obj"]["oid"]);
+			$event_cfgform = $obj["meta"]["event_cfgform"];
+			$frm = $this->get_object($event_cfgform);
+			classload("doc");
+			$t = new doc();
+		};
 		if (is_array($emb))
 		{
 			if (empty($emb["id"]))
@@ -720,10 +750,13 @@ class planner extends class_base
 		{
 			$this->emb_group = $emb["group"];
 		};
+		// huu! Is it really that easy?
 		$this->event_id = $t->submit($emb);
 		
 		//I really don't like this hack //axel
 		$gl = aw_global_get('org_action');
+
+		// so this has something to do with .. connectiong some obscure object to another .. eh?
 		preg_match('/alias_to_org=(\w*)/', $gl, $o);
 		preg_match('/reltype_org=(\w*)/', $gl, $r);
 		if (is_numeric($o[1]) && is_numeric($r[1]))
@@ -746,19 +779,19 @@ class planner extends class_base
 		};
 	}
 
-       function callback_mod_retval($args = array())
-       {
-                if ($this->event_id)
-                {
-                        $form_data = &$args["form_data"];
-                        $args = &$args["args"];
+	function callback_mod_retval($args = array())
+	{
+		if ($this->event_id)
+		{
+			$form_data = &$args["form_data"];
+			$args = &$args["args"];
 			$args["event_id"] = $this->event_id;
-			if ($this->emb_group)
+			if ($this->emb_group && $this->emb_group != "general")
 			{
 				$args["cb_group"] = $this->emb_group;
 			};
-                };
-        }
+		};
+	}
 
 	function callback_mod_tab($args = array())
 	{
@@ -1220,7 +1253,7 @@ class planner extends class_base
 		$this->vars(array(
 			"navi1" => "",
 			"navi2" => "",
-			"summary_header" => $summary_pane,
+			"summary_line" => "",
 			"cell" => "",
 			"week" => "",
 		));
@@ -1277,6 +1310,7 @@ class planner extends class_base
 			"menudef" => $menudef,
 			"caption" => $caption,
 			"navigator" => $navigator,
+			"summary_pane" => $summary_pane,
 			"disp"	=> $disp,
 			"month_name" => $mlist[(int)$m],
                         "year_name" => $ylist[$y],
@@ -2448,54 +2482,24 @@ class planner extends class_base
 		return $this->parse();
 	}
 
-	function mk_summary_pane($args = array())
+	function mk_summary_pane($arr)
 	{
-		$summary_objects = array();
-		$alias_reltype = new aw_array($args["alias_reltype"]);
-		foreach($alias_reltype->get() as $key => $val)
+		$tasklist = new object_list(array(
+			"class_id" => CL_TASK,
+			"parent" => $arr["event_folder"],
+			"status" => STAT_ACTIVE,
+		));
+
+		foreach($tasklist->arr() as $task)
 		{
-			if ($val == 1)
-			{
-				$summary_objects[] = $key;
-			};
+			$this->vars(array(
+				"caption" => $task->prop("name"),
+				"url" => $this->mk_my_orb("change",array("id" => $this->id,"event_id" => $task->id(),"group" => "add_event"),"planner"),
+			));
+			$summary .= $this->parse("summary_line");
 		};
-		// now cycle over all the summary_objects and generate the previews
-		$summary = "";
-		$sc = get_instance("search");
-		if (sizeof($summary_objects) > 0)
-		{
-			// right now I only support searches
-			$q = sprintf("SELECT oid,name FROM objects WHERE class_id = %d AND status = 2 AND oid IN (%s)",CL_SEARCH,join(",",$summary_objects));
-			$this->db_query($q);
-			while($row = $this->db_next())
-			{
-				$this->vars(array(
-					"caption" => $row["name"],
-					"url" => $this->mk_my_orb("view",array("id" => $row["oid"]),"search"),
-				));
-				$summary .= $this->parse("summary_header");
-				// I need to execute search for each search object
-				$results = new aw_array($sc->get_search_results(array("id" => $row["oid"])));
-				foreach($results->get() as $obj)
-				{
-					$use_class = $this->cfg["classes"][$obj["class_id"]]["file"];
-					$this->vars(array(
-						"caption" => ($obj["name"]) ? $obj["name"] : "(nimetu)",
-						"desc" => $obj["comment"],
-						"url" => $this->mk_my_orb("view",array("id" => $obj["oid"]),$use_class),
-					));
-					$summary .= $this->parse("summary_line");
-				};
 
-
-			};
-		
-
-
-		};
 		return $summary;
-
-
 	}
 
 	function cb_get_event_direction($args = array())
@@ -2562,26 +2566,51 @@ class planner extends class_base
 
 	function gen_navtoolbar(&$arr)
 	{
-		$id = $arr["obj"]["oid"];
+		$id = $arr["obj_inst"]->id();
                 if ($id)
                 {
 			$toolbar = &$arr["prop"]["toolbar"];
-
+			// would be nice to have a vcl component for doing drop-down menus
 			$this->read_template("js_popup_menu.tpl");
 			$menudata = "";
-			$alist = $this->get_aliases_for($id,-1,"","","",RELTYPE_EVENT_ENTRY);
-			if (is_array($alist))
+			$conns = $arr["obj_inst"]->connections_from(array(
+				"type" => RELTYPE_EVENT_ENTRY,
+			));
+			foreach($conns as $conn)
 			{
-				foreach($alist as $key => $val)
-				{
-					$this->vars(array(
-						"link" => $this->mk_my_orb("change",array("id" => $id,"group" => "add_event","cfgform_id" => $val["oid"])),
-						"text" => $val["name"],
-					));
+				$this->vars(array(
+					"link" => $this->mk_my_orb("change",array(
+						"id" => $id,
+						"group" => "add_event",
+						"cfgform_id" => $conn->prop("to"),
+					)),
+					"text" => $conn->prop("to.name"),
+				));
 
-					$menudata .= $this->parse("MENU_ITEM");
-				};
+				$menudata .= $this->parse("MENU_ITEM");
 			};
+
+			// now I need to figure out which other classes are valid for that relation type
+			$clidlist = $this->event_entry_classes;
+			foreach($clidlist as $clid)
+			{
+				$this->vars(array(
+					"link" => $this->mk_my_orb("change",array(
+						"id" => $id,
+						"group" => "add_event",
+						"clid" => $clid,
+					)),
+					"text" => $this->cfg["classes"][$clid]["name"],
+				));
+				$menudata .= $this->parse("MENU_ITEM");
+			};
+			/*
+			print "<pre>";
+			var_dump($this->relinfo);
+			var_dump($this->classinfo);
+			print "</pre>";
+			*/
+
 
 			$this->vars(array(
 				"MENU_ITEM" => $menudata,
@@ -2598,7 +2627,6 @@ class planner extends class_base
 				"url" => "",
 				"onClick" => "return buttonClick(event, 'create_event');",
                                 "img" => "new.gif",
-                                "imgover" => "new_over.gif",
                                 "class" => "menuButton",
                         ));
 
@@ -2609,7 +2637,6 @@ class planner extends class_base
 				"tooltip" => "Täna",
 				"url" => $this->mk_my_orb("change",array("id" => $id,"group" => "show_day","date" => $dt)),
 				"img" => "icon_cal_today.gif",
-				"imgover" => "icon_cal_today_over.gif",
 				"class" => "menuButton",
 			));
 			
@@ -2618,7 +2645,6 @@ class planner extends class_base
 				"tooltip" => "Kustuta märgitud sündmused",
 				"url" => "javascript:document.changeform.action.value='delete_events';document.changeform.submit();",
 				"img" => "delete.gif",
-				"imgover" => "delete_over.gif",
 				"class" => "menuButton",
 			));
 			
