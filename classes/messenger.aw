@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.20 2001/05/24 10:14:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.21 2001/05/24 10:22:39 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -596,17 +596,20 @@ class messenger extends menuedit_light
 			{
 				$msg["mtargets"] = $msg["createdby"];
 			};
-			$msg["subject"] = "Re: " . $msg["subject"];
+			$msg["subject"] = "Re: " . $this->MIME_decode($msg["subject"]);
 			$qchar = $this->conf["quotechar"];
+			$msg["message"] = $this->MIME_decode($msg["message"]);
 			$msg["message"] = str_replace("\n","\n$qchar",$msg["message"]);
 			$msg["message"] = "\n$qchar" . $msg["message"];
 			$msg_id = $reply;
+			print $msg["subject"];
 		}
 		elseif ($args["forward"])
 		{
 			$msg = $this->driver->msg_get(array("id" => $forward));
-			$msg["subject"] = "Fwd: " . $msg["subject"];
+			$msg["subject"] = "Fwd: " . $this->MIME_decode($msg["subject"]);
 			$qchar = $this->conf["quotechar"];
+			$msg["message"] = $this->MIME_decode($msg["message"]);
 			$msg["message"] = str_replace("\n","\n$qchar",$msg["message"]);
 			$msg["message"] = "\n$qchar" . $msg["message"];
 			$msg_id = $forward;
@@ -614,6 +617,7 @@ class messenger extends menuedit_light
 		// kui id-d kaasa ei antud, siis järeldame, et tegemist on päris uue kirja kirjutamisega
 		{
 			// loome uue teate kasutaja drafts folderisse
+			// this can be potentionally very, very bad
 			$msg_id = $this->_create_empty(array("parent" => $this->conf["msg_draft"]));
 			$msg = array();
 		};
@@ -976,7 +980,7 @@ class messenger extends menuedit_light
 			"id" => $msg["id"],
 			"msg_id" => $id,
 			"status" => $msg["status"],
-			"message" => nl2br($this->MIME_decde($msg["message"])),
+			"message" => nl2br($this->MIME_decode($msg["message"])),
 			"del_reforb" => $this->mk_reforb("delete",array("id" => $msg["id"])),
 			"reply_reforb" => $this->mk_reforb("reply",array("id" => $msg["id"])),
 			"mailbox" => $this->picker($mailbox,$mboxes),
