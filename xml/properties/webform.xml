@@ -114,6 +114,17 @@
             <caption>Subaction</caption>
       </property>
       <property>
+            <name>aliasmgr2</name>
+            <table>objects</table>
+            <group>form</group>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>aliasmgr</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Seostehaldur</caption>
+      </property>
+      <property>
             <name>availtoolbar</name>
             <table>objects</table>
             <group>props</group>
@@ -134,6 +145,16 @@
             <callback>callback_props</callback>
             <no_caption>1</no_caption>
             <caption>Omadused</caption>
+      </property>
+      <property>
+            <name>form_groups</name>
+            <table>objects</table>
+            <group>special</group>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Kasuta vormi gruppe</caption>
       </property>
       <property>
             <name>style_folder</name>
@@ -222,7 +243,7 @@
       <property>
             <name>search</name>
             <table>objects</table>
-            <group>search</group>
+            <group>set_controllers</group>
             <method>serialize</method>
             <field>meta</field>
             <type>text</type>
@@ -285,6 +306,10 @@
                   <caption>Omadused</caption>
                   <submit>no</submit>
             </props>
+            <specail>
+                  <caption>Spetsiaal</caption>
+                  <submit>no</submit>
+            </specail>
             <styles>
                   <caption>Stiilid</caption>
             </styles>
@@ -297,7 +322,7 @@
                   <submit>no</submit>
             </show_entries>
             <entries>
-                  <caption>Näita sisestusi</caption>
+                  <caption>N&amp;auml;ita sisestusi</caption>
                   <submit>no</submit>
                   <parent>show_entries</parent>
             </entries>
@@ -316,7 +341,7 @@
                   <parent>controllers</parent>
             </set_controllers>
             <get_controllers>
-                  <caption>Näitamine</caption>
+                  <caption>N&amp;auml;itamine</caption>
                   <parent>controllers</parent>
             </get_controllers>
       </groupinfo>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.52 2005/02/01 12:39:45 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.53 2005/02/02 09:30:41 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -35,7 +35,6 @@
 
 @property error_location type=chooser multiple=1 default=0
 @caption Kuva veateateid
-
 ------------- end: general -------------
 
 
@@ -50,6 +49,9 @@
 
 @property subaction type=hidden store=no group=form,props
 @caption Subaction
+
+@property aliasmgr2 type=aliasmgr no_caption=1 store=no group=form
+@caption Seostehaldur
 ------------- end: form -------------
 
 
@@ -63,6 +65,21 @@
 @property props type=callback callback=callback_props no_caption=1
 @caption Omadused
 ------------- end: props -------------
+
+
+------------- special -------------
+@groupinfo specail caption="Spetsiaal" submit=no
+@default group=special
+
+@property form_groups type=checkbox ch_value=1
+@caption Kasuta vormi gruppe
+
+//@property availtoolbar type=toolbar no_caption=1
+//@caption Toolbar
+
+//@property props type=callback callback=callback_props no_caption=1
+//@caption Omadused
+------------- end: special -------------
 
 
 ------------- styles -------------
@@ -97,7 +114,7 @@
 
 
 ------------- entries -------------
-@groupinfo entries caption="Näita sisestusi" submit=no parent=show_entries
+@groupinfo entries caption="N&auml;ita sisestusi" submit=no parent=show_entries
 
 @property entries_toolbar type=toolbar group=entries,search no_caption=1
 @caption Sisestuste toolbar
@@ -109,7 +126,7 @@
 
 ------------- search -------------
 @groupinfo search caption="Otsing" parent=show_entries submit_method=get submit=no
-@default group=search
+@default group=set_controllers
 
 @property search type=text no_caption=1
 @caption Otsing
@@ -132,7 +149,7 @@
 
 
 ------------- get_controllers -------------
-@groupinfo get_controllers caption="Näitamine" parent=controllers
+@groupinfo get_controllers caption="N&auml;itamine" parent=controllers
 @default group=get_controllers
 
 @property get_controller_folder type=relpicker reltype=RELTYPE_CONTROLLER_FOLDER
@@ -200,19 +217,20 @@ class webform extends class_base
 			"textbox" => t("V&auml;ike tekstikast"),
 			"classificator" => t("Valikv&auml;li"),
 			"date_select" => t("Kuup&auml;evavalik"),
+			"checkbox"=> t("Liitu mailinglistiga"),
 			"textarea" => t("Suur tekstikast"),
 			"hidden" => t("Peidetud v&auml;li"),
 			"submit" => t("Saada nupp"),
 			"reset" => t("T&uuml;hista nupp"),
 		);
 		$this->def_props = array(
-			"firstname" => "Eesnimi",
-			"lastname" => "Perekonnanimi",
-			"co_name" => "Organisatsioon",
-			"address" => "Aadress",
-			"phone" => "Telefon",
-			"fax" => "Faks",
-			"email" => "E-post",
+			"firstname" => t("Eesnimi"),
+			"lastname" => t("Perekonnanimi"),
+			"co_name" => t("Organisatsioon"),
+			"address" => t("Aadress"),
+			"phone" => t("Telefon"),
+			"fax" => t("Faks"),
+			"email" => t("E-post"),
 		);
 		$this->no_props = $this->make_keys(array("status", "name", "comment", "register_id", "person_id"));
 	}
@@ -288,13 +306,13 @@ class webform extends class_base
 				break;
 
 			case "form_type_value":
-				$prop["value"] = $arr["obj_inst"]->prop("form_type") != CL_CALENDAR_REGISTRATION_FORM ? t("Tavaline vorm") : t("Sündmusele registreerimine");
+				$prop["value"] = $arr["obj_inst"]->prop("form_type") != CL_CALENDAR_REGISTRATION_FORM ? t("Tavaline vorm") : t("S&uuml;ndmusele registreerimine");
 				break;
 				
 			case "form_type":
 				$prop["options"] = array(
 					CL_REGISTER_DATA => t("Tavaline vorm"),
-					CL_CALENDAR_REGISTRATION_FORM => t("Sündmusele registreerimine"),
+					CL_CALENDAR_REGISTRATION_FORM => t("S&uuml;ndmusele registreerimine"),
 				);
 				break;
 				
@@ -361,7 +379,7 @@ class webform extends class_base
 				$tb->add_button(array(
 					"name" => "save",
 					"tooltip" => "Salvesta",
-					"url" => "javascript:submit_changeform()",
+					"action" => "",
 					"img" => "save.gif",
 				));
 				
@@ -536,7 +554,7 @@ class webform extends class_base
 		$arr["obj_inst"]->save();
 		$this->p_clid = $arr["request"]["form_type"];
 		$form = obj();
-		$form->set_name(($this->p_clid == CL_REGISTER_DATA ? "Registri andmed " : "Sündmuse vorm ").$arr["obj_inst"]->id());
+		$form->set_name(($this->p_clid == CL_REGISTER_DATA ? "Registri andmed " : "S&uuml;ndmuse vorm ").$arr["obj_inst"]->id());
 		$form->set_parent($arr["obj_inst"]->id());
 		$form->set_class_id($this->p_clid);
 		$form->set_status(STAT_ACTIVE);
@@ -675,14 +693,17 @@ class webform extends class_base
 		}
 		$set_controllers = array(
 			array(
-				"name" => "Määra saatja aadressiks",
-				"formula" => 'aw_global_set("global_name", $prop["value"]);',
-				"errmgs" => "send_from_mail",
+				"name" => "M&auml;&auml;ra saaja aadressiks",
+				"formula" => '$value = is_array($prop["value"]) ? $prop["value"] : array($prop["value"]);$vals = array();foreach($value as $val){if(is_oid($val) && $this->can("view", $val)){$obj = obj($val);$vals[$val] = $obj->name();}}if(!empty($vals)){aw_global_set("recievers_name", $vals);}',
 			),
 			array(
-				"name" => "*elemendinimi* peab olema täidetud",
+				"name" => "M&auml;&auml;ra saatja aadressiks",
+				"formula" => 'aw_global_set("global_name", $prop["value"]);',
+			),
+			array(
+				"name" => "*elemendinimi* peab olema t&auml;idetud",
 				"formula" => 'if($prop["value"] == ""){$retval = PROP_ERROR;}',
-				"errmsg" => "%caption peab olema täidetud",
+				"errmsg" => "%caption peab olema t&auml;idetud",
 			),
 			array(
 				"name" => "*elemendinimi* peab olema valitud",
@@ -690,7 +711,7 @@ class webform extends class_base
 				"errmsg" => "%caption peab olema valitud",
 			),
 			array(
-				"name" => "Kontrolli e-maili õigsust",
+				"name" => "Kontrolli e-maili &otilde;igsust",
 				"formula" => 'if(!is_email($prop["value"])){$retval = PROP_ERROR;}',
 				"errmsg" => "%caption sisestatud e-mailiaadress pole korrektne",
 			),
@@ -969,11 +990,6 @@ class webform extends class_base
 		{
 			foreach($this->cfgform_i->grplist as $key => $val)
 			{
-				// we should not have numeric group id-s
-				// actually it's more about a few ghosts I had lying 
-				// around, and this will get rid of them but we
-				// really don't NEED numeric group id-s
-				// /me does the jedi mind trick - duke
 				if (!is_numeric($key))
 				{
 					$by_group[$key] = array();
@@ -1010,9 +1026,9 @@ class webform extends class_base
 		);
 		$prp_types = array(
 			"" => "-- vali --",
-			"mselect" => "Mitmerealine rippmenüü",
-			"select" => "Rippmenüü",
-			"checkboxes" => "Märkeruut",
+			"mselect" => "Mitmerealine rippmen&uuml;&uuml;",
+			"select" => "Rippmen&uuml;&uuml;",
+			"checkboxes" => "M&auml;rkeruut",
 			"radiobuttons" => "Raadionupp",
 		);
 		$object_type = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE");
@@ -1096,7 +1112,7 @@ class webform extends class_base
 				elseif($prpdata["type"] == "text")
 				{
 					$this->vars(array(
-						"prp_value" => "",
+						"prp_value" => $property["value"],
 					));
 					$clf2 = $this->parse("clf2");
 				}
@@ -1462,17 +1478,25 @@ class webform extends class_base
 				}
 			}
 		}
+		$id = $arr["obj_inst"]->id();
+		$aliasmgr = get_instance("aliasmgr");
 		$tmp = $els;
 		foreach($tmp as $key => $val)
 		{
+			if(!empty($all_props[$key]["value"]))
+			{
+				$els[$key]["value"] = nl2br($all_props[$key]["value"]);
+			}
+			$aliasmgr->parse_oo_aliases($id, $els[$key]["caption"]);
 			// some goddamn thing messes up the element captions, reorder them
 			//$els[$key]["caption"] = $all_props[$key]["caption"];
 			$els[$key]["capt_ord"] = $all_props[$key]["wf_capt_ord"];
 			
 			// treat all text properties as an ordinary text property
+			
 			if($all_props[$key]["type"] == "text" && empty($all_props[$key]["wf_capt_ord"]))
 			{
-				$els[$key]["subtitle"] = 1;
+				//$els[$key]["subtitle"] = 1;
 			}
 			else
 			{
@@ -1681,9 +1705,17 @@ class webform extends class_base
 			$o->set_name(trim($name));
 			$o->set_prop("register_id", $register->id());
 			$o->save();
-			$emails = $obj_inst->connections_from(array(
+			$emxs = $obj_inst->connections_from(array(
 				"type" => "RELTYPE_EMAIL",
 			));
+			$emails = array();
+			foreach($emxs as $emx)
+			{
+				$email = $emx->to();
+				$emails[$email->id()] = $email->prop("mail");
+			}
+			$emls = safe_array(aw_global_get("recievers_name"));
+			$emails = $emails + $emls;
 			$nm = aw_global_get("global_name");
 			if(!empty($nm))
 			{
@@ -1701,10 +1733,10 @@ class webform extends class_base
 			$awm = get_instance("protocols/mail/aw_mail");
 			foreach($emails as $eml)
 			{
-				$email = $eml->to();
+				
 				$awm->create_message(array(
 					"subject" => $obj_inst->name(),
-					"to" => $email->prop("mail"),
+					"to" => $eml,
 					"body" => $body,
 				) + $prx);
 				$awm->gen_mail();

@@ -68,6 +68,16 @@
             <caption>Kuhu suunata peale t&amp;auml;itmist</caption>
       </property>
       <property>
+            <name>entry_check</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <multiple>1</multiple>
+            <caption>Sisestuste kontroll</caption>
+      </property>
+      <property>
             <name>mail_to_user</name>
             <table>objects</table>
             <group>emails</group>
