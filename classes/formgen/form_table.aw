@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.26 2003/01/07 16:13:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.27 2003/01/10 08:02:31 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -861,7 +861,15 @@ class form_table extends form_base
 		// here. add the table header aliases to the table string
 		$tbl .= $this->render_aliases($this->table["table_header_aliases"]);
 
+		if ($this->table['text_style'])
+		{
+			$tbl .= "<span class=\"style_".$this->table['text_style']."\">";
+		}
 		$tbl .= $this->do_render_text_aliases($this->do_pageselector(nl2br($this->table["header"])));
+		if ($this->table['text_style'])
+		{
+			$tbl .= "</span>";
+		}
 
 		if (!$no_form_tags)
 		{
@@ -915,7 +923,15 @@ class form_table extends form_base
 			$tbl.="</form>";
 		}
 
+		if ($this->table['text_style'])
+		{
+			$tbl .= "<span class=\"style_".$this->table['text_style']."\">";
+		}
 		$tbl .= $this->do_render_text_aliases($this->do_pageselector(nl2br($this->table["footer"])));
+		if ($this->table['text_style'])
+		{
+			$tbl .= "</span>";
+		}
 
 		if ($this->table["no_show_empty"] && $this->num_lines < 1)
 		{
@@ -1241,6 +1257,10 @@ class form_table extends form_base
 		if ($this->table["pg_text_style"])
 		{
 			$op.= $this->chk_get_css($this->table["pg_text_style"],$this->table["pg_text_style_link"]);
+		}
+		if ($this->table["text_style"])
+		{
+			$op.= $this->chk_get_css($this->table["text_style"],$this->table["text_style_link"]);
 		}
 
 		for ($col = 0; $col < $this->table["cols"]; $col++)
@@ -2223,6 +2243,8 @@ class form_table extends form_base
 			"pg_text_style_link" => $this->picker($this->table["pg_text_style_link"], $css),
 			"pg_lb_style" => $this->picker($this->table["pg_lb_style"], $css),
 			"sum_style" => $this->picker($this->table["sum_style"],$css),
+			"text_style" => $this->picker($this->table["text_style"],$css),
+			"text_style_link" => $this->picker($this->table["text_style_link"],$css),
 			"reforb" => $this->mk_reforb("new_submit_styles", array("id" => $id))
 		));
 

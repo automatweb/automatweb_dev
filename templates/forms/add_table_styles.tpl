@@ -83,6 +83,12 @@
 											<tr>
 												<td class="celltext">Listboks lehek&uuml;ljevaliku stiil:</td><td class="celltext"><select name="styles[pg_lb_style]" class="formselect">{VAR:pg_lb_style}</select></td>
 											</tr>
+											<tr>
+												<td class="celltext">Header ja footer teksti stiil:</td><td class="celltext"><select name="styles[text_style]" class="formselect">{VAR:text_style}</select></td>
+											</tr>
+											<tr>
+												<td class="celltext">Header ja footer teksti linkide stiil:</td><td class="celltext"><select name="styles[text_style_link]" class="formselect">{VAR:text_style_link}</select></td>
+											</tr>
 										</table>
 
 										<table border="0" cellpadding="0" cellspacing="0" width="100%">
