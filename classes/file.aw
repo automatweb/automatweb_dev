@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.73 2004/05/06 11:16:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.74 2004/05/06 11:18:24 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -123,25 +123,6 @@ class file extends class_base
 						))." ".$name.", ".$filesize,
 					"target" => "_blank",
 				));
-				break;
-
-
-			case "view":
-				$fname = basename($arr["obj_inst"]->prop("file"));
-				if (empty($fname))
-				{
-					$retval = PROP_IGNORE;
-				}
-				else
-				{
-					$file = $this->cfg["site_basedir"]."/files/".$fname[0]."/".$fname;
-					$size = @filesize($file);
-					$data["value"] = html::href(array(
-						"url" => $this->get_url($arr["obj_inst"]->id(), $arr["obj_inst"]->name()),
-						"caption" => sprintf("%s (%dK)",$arr["obj_inst"]->prop("name"),$size/1024),
-						"target" => "_blank",
-					));
-				};
 				break;
 
 			case "file":
