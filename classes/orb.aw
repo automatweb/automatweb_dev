@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.18 2002/07/11 21:01:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.19 2002/07/17 15:42:09 duke Exp $
 // tegeleb ORB requestide handlimisega
 classload("aw_template","defs","xml_support");
 lc_load("automatweb");
@@ -37,6 +37,10 @@ class orb extends aw_template
 
 		$silent = 0;
 
+		$this->silent = $silent;
+		$this->fatal = $fatal;
+
+
 		// class defineeritud?
 		if (!isset($class))
 		{
@@ -45,16 +49,8 @@ class orb extends aw_template
 		};
 		
 		// laeme selle klassi siis
-		classload($class);
+		$orb_defs = $this->try_load_class($class);
 
-		if (!class_exists($class))
-		{
-			$this->raise_error(ERR_ORB_NOTFOUND,sprintf(E_ORB_CLASS_NOT_FOUND,$class),$fatal,$silent);
-			bail_out();
-		};
-
-		// FIXME: we should cache that def instead of parsing xml every time
-		$orb_defs = $this->load_xml_orb_def($class);
 		$this->orb_defs = $orb_defs;
 
 		$action = ($action) ? $action : $orb_defs[$class]["default"];
@@ -68,15 +64,44 @@ class orb extends aw_template
 			bail_out();
 		};
 
+		// create an array of class names that should be loaded.
+		$cl2load = array($class);
+		if (is_array($orb_defs[$class]["_extends"]))
+		{
+			$cl2load = array_merge($cl2load,$orb_defs[$class]["_extends"]);
+		};
 
-		// leiame actionile vastava funktsiooni
-		$fun = $orb_defs[$class][$action]; 
-		// kas asi on defineeritud xml-is?
-		$xml = $orb_defs[$class][$action]["xml"];
-		if (!is_array($fun))
+		$found = false;
+
+		foreach($cl2load as $clname)
+		{
+			// not yet found
+			if (not($found))
+			{
+				// only load if definitions for this class are
+				// not yet loaded (master class)
+				if (not($orb_defs[$clname]))
+				{
+					$orb_defs = $this->try_load_class($clname);
+				};
+
+				$fun = $orb_defs[$clname][$action];
+
+				if (is_array($fun))
+				{
+					$found = true;
+					$class = $clname;
+				};
+			};
+
+		};
+
+		// still not found?
+		if (not($found))
 		{
 			$this->raise_error(ERR_ORB_CAUNDEF,sprintf(E_ORB_CLASS_ACTION_UNDEF,$action,$class),$fatal,$silent);
 			bail_out();
+
 		};
 
 		if (isset($vars["reforb"]) && $vars["reforb"] == 1)
@@ -195,8 +220,8 @@ class orb extends aw_template
 		return;
 	}
 
-	// laeb XML failist orbi definitsiooni
-	// why exactly is this function here and not in the orb class?
+	////
+	// !laeb XML failist orbi definitsiooni
 	function load_xml_orb_def($class)
 	{
 		$basedir = $this->cfg["basedir"];
@@ -225,7 +250,7 @@ class orb extends aw_template
 	
 		// ja siia moodustub loplik struktuur
 		$orb_defs = array();
-	
+
 		foreach($values as $key => $val)
 		{
 			// parajasti töödeldava tag-i nimi
@@ -263,8 +288,6 @@ class orb extends aw_template
 					if ($tag == "function")
 					{
 						$orb_defs[$class][$action][$tag] = $$tag;
-						// seda saab kasutada monede lisakontrollide jaoks
-						$orb_defs[$class][$action]["xml"] = 1;
 						// initsialiseerime need arrayd
 						$orb_defs[$class][$action]["required"] = array();
 						$orb_defs[$class][$action]["optional"] = array();
@@ -296,7 +319,12 @@ class orb extends aw_template
 						// klassi defauldid. kui funktsiooni juures pole, pannakse need
 						$xmlrpc_defs["xmlrpc"] = $attribs["xmlrpc"];
 						$xmlrpc_defs["server"] = $attribs["server"];
-					}
+						if ($attribs["extends"])
+						{
+							$extends = explode(",",$attribs["extends"]);
+							$orb_defs[$class]["_extends"] = $extends;
+						};
+					};
 				}
 				elseif ($tagtype == "close")
 				{
@@ -372,6 +400,22 @@ class orb extends aw_template
 			//	$this->raise_error(ERR_ORB_LOGIN,E_ORB_LOGIN_REQUIRED,$fatal,$silent);
 			//}
 		};
+	}
+
+	function try_load_class($class)
+	{
+		// laeme selle klassi siis
+		classload($class);
+
+		if (!class_exists($class))
+		{
+			$this->raise_error(ERR_ORB_NOTFOUND,sprintf(E_ORB_CLASS_NOT_FOUND,$class),$this->fatal,$this->silent);
+		bail_out();
+		};
+		
+		// FIXME: we should cache that def instead of parsing xml every time
+		return $this->load_xml_orb_def($class);
+
 	}
 }
 ?>
