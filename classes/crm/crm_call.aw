@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.9 2004/03/08 16:49:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.10 2004/03/09 13:04:52 duke Exp $
 // crm_call.aw - phone call
 /*
 
@@ -15,7 +15,7 @@
 @caption Algus
 
 @property end type=datetime_select field=end 
-@caption Kestus
+@caption Lõpp
 
 @property content type=textarea cols=60 rows=30 field=description
 @caption Sisu
