@@ -16,6 +16,7 @@
 					<required name="id" acl="edit;view"/>
 					<optional name="section"/>
 					<optional name="version"/>
+					<optional name="period"/>
 				</arguments>
 			</function>
 		</action>

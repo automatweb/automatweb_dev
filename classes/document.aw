@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.184 2003/05/20 11:20:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.185 2003/05/21 12:13:42 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -1832,7 +1832,7 @@ class document extends aw_template
 		};
 
 		$url = $this->mk_my_orb("change",array("id" => $id,"period" => $document["period"]));
-		$this->mk_path($document["parent"],"<a href='$url'>" . LC_DOCUMENT_CHANGE_DOC . $addcap . "</a>");
+		$this->mk_path($document["parent"],"<a href='$url'>" . LC_DOCUMENT_CHANGE_DOC . $addcap . "</a>", $period);
 		
 		// keelte valimise asjad
 		if ($this->is_template("DOC_BROS"))
