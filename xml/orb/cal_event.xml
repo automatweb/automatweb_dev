@@ -68,6 +68,12 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="test">
+			<function name="test" all_args="1">
+				<arguments/>
+			</function>
+		</action>
 		
 
 	</class>

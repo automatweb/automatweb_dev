@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="xml_import">
+	<class name="xml_import" extends="cal_event">
 
 		<action name="new">
 			<function name="change">
@@ -10,6 +10,12 @@
 
 		<action name="change">
 			<function name="change">
+				<required name="id" type="int"/>
+			</function>
+		</action>
+
+		<action name="repeaters">
+			<function name="repeaters">
 				<required name="id" type="int"/>
 			</function>
 		</action>

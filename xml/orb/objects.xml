@@ -49,6 +49,12 @@
 			</function>
 		</action>
 
+		<action name="search_new" all_args="1">
+			<function name="search_new">
+				<arguments/>
+			</function>
+		</action>
+
 	</class>
 </orb>
 		
