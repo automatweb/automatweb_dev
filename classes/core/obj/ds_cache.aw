@@ -186,7 +186,12 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		{
 			$this->cache->file_invalidate($cfn."-$func-$oid");
 		}
-		$this->cache->file_invalidate_regex($cfn."-search-(.*)-0");
+		// if it is connection, then the next invalidate_regex will nuke it anyway
+		if ("connection" != $cfn)
+		{
+			//$this->cache->file_invalidate_regex($cfn."-search-(.*)-0");
+			$this->cache->file_invalidate_regex($cfn."-search-(.*)");
+		};
 		$this->cache->file_invalidate_regex("connection(.*)");
 		$this->cache->flush_cache();
 	}
