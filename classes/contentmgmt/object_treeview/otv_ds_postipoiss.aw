@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.5 2004/04/29 15:27:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.6 2004/05/06 12:22:30 kristo Exp $
 // otv_ds_postipoiss.aw - Objektinimekirja Postipoisi datasource 
 /*
 
@@ -27,7 +27,7 @@
 class otv_ds_postipoiss extends class_base
 {
 	var $all_cols = array(
-		"dok_nr" => "Dokumendi Nr",
+/*		"dok_nr" => "Dokumendi Nr",
 		"serial_nr" => "Serial Nr",
 		"alg_dok_nr" => "Alg dok Nr",
 		"jrk_nr" => "J&auml;rjekord",
@@ -50,7 +50,30 @@ class otv_ds_postipoiss extends class_base
 		"sisu" => "Sisu",
 		"tahtaeg" => "Tahtaeg",
 		"toimik" => "Toimik",
-		"vastamiskuupaev" => "Vastamiskuupaev"
+		"vastamiskuupaev" => "Vastamiskuupaev"*/
+		"indeks" => "Indeks",
+		"reg_kpv" => "Registreerimise kpv",
+		"regist_nr" => "Registreerimise nr",
+		"osakond" => "Osakond",
+		"toimik" => "Toimik",
+		"sisse" => "Suund",
+		"sec_access" => "Juurdep&auml;&auml;s",
+		"teemad" => "Teemad",
+		"saatja_kpv" => "Saatja kuupaev",
+		"saatja_indeks" => "Saatja indeks",
+		"saatmisviis" => "Saatmisviis",
+		"asutus" => "P&auml;ritolu",
+		"isik" => "Koostaja",
+		"aadress" => "Aadress",
+		"postiindeks" => "Postiindeks",
+		"linn" => "Linn",
+		"pealkiri" => "Pealkiri",
+		"sisu" => "Sisu",
+		"lisad" => "Lisad",
+		"ikood" => "Kellelt",
+		"tahtaeg" => "Tahtaeg",
+		"vastamis_kpv" => "Vastamiskuupaev",
+		"resolutsioon" => "Resolutsioon",
 	);
 
 	function otv_ds_postipoiss()
@@ -156,9 +179,9 @@ class otv_ds_postipoiss extends class_base
 			$mdd = mktime(0,0,0, $_m, $_d, $y);
 
 			list($fn) = explode(",", $fd["viide"]);
-			$fsb = filesize($o->prop("ct_fld")."/".$fn);
+			$fsb = @filesize($o->prop("ct_fld")."/".$fn);
 			$rowd = $fd + array(
-				"id" => $fd["dok_nr"],
+				"id" => $fd["tegevused"]["tegevus"]["dok_nr"],
 				"name" => $fd["pealkiri"],
 				"url" => aw_ini_get("baseurl")."/".$o->id().":".str_replace(".xml", "", $fe) ,
 				"target" => "",
@@ -173,13 +196,20 @@ class otv_ds_postipoiss extends class_base
 				"fileSizeKBytes" => number_format($fsb / 1024, 2),
 				"fileSizeMBytes" => number_format($fsb / (1024 * 1024))
 			);
-			$ret[$fd["dok_nr"]] = $rowd;
+			$ret[$fd["tegevused"]["tegevus"]["dok_nr"]] = $rowd;
 		}
 		return $ret;
 	}
 
 	function get_folders($o)
 	{
+		if (!file_exists($o->prop("subj_xml")))
+		{
+			error::trhow(array(
+				"id" => ERR_NO_FILE,
+				"msg" => "the subject xml file (".$o->prop("subj_xml").") does not exist!"
+			));
+		}
 		// parse the subject xml file
 		$fc = $this->get_file(array(
 			"file" => $o->prop("subj_xml")
@@ -192,7 +222,8 @@ class otv_ds_postipoiss extends class_base
 		xml_parse_into_struct($parser,$fc,&$values,&$tags);
 		if (xml_get_error_code($parser))
 		{
-			$this->bitch_and_die($parser,$fc);
+			echo dbg::dump($parser);
+			echo dbg::dump($fc);
 		};
 		// R.I.P. parser
 		xml_parser_free($parser);
@@ -317,6 +348,7 @@ class otv_ds_postipoiss extends class_base
 	
 	function convert_unicode($source)
 	{
+		//return iconv('UTF-8','ISO-8859-4', $source);
 		// utf8_decode doesn't work here
 		$retval = str_replace(chr(0xC3). chr(0xB5),"õ",$source);
 		$retval = str_replace(chr(0xC3). chr(0xBC),"ü",$retval);
@@ -332,8 +364,12 @@ class otv_ds_postipoiss extends class_base
 		$retval = str_replace(chr(0xC5). chr(0xA1),"&#0353;",$retval);
 		$retval = str_replace(chr(0xC5). chr(0xBD),"&#381;",$retval);
 		$retval = str_replace(chr(0xC5). chr(0xBE),"&#382;",$retval);
-
 		return $retval;
+	}
+
+	function get_add_types()
+	{
+		return array();
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.1 2004/04/29 12:21:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.2 2004/05/06 12:22:30 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -425,6 +425,16 @@ class otv_ds_obj extends class_base
 	function check_acl($acl, $o, $id)
 	{
 		return $this->can($acl, $id);
+	}
+
+	function get_add_types($o)
+	{
+		$ret = array();
+		foreach($o->connections_from(array("type" => "RELTYPE_ADD_TYPE")) as $c)
+		{
+			$ret[] = $c->to();
+		}
+		return $ret;
 	}
 }
 ?>

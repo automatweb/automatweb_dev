@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.3 2004/04/29 14:59:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.4 2004/05/06 12:22:30 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2 
 /*
 
@@ -109,6 +109,13 @@ class object_treeview_v2 extends class_base
 		return $this->show(array("id" => $arr["alias"]["target"]));
 	}
 
+	/**
+		
+		@attrib name=show nologin=1
+
+		@param id required type=int acl=view
+		@param tv_sel optional type=int 
+	**/
 	function show($arr)
 	{
 		extract($arr);
@@ -381,38 +388,27 @@ class object_treeview_v2 extends class_base
 		$this->tpl_init("automatweb/menuedit");
 		$this->read_template("js_add_menu.tpl");
 
-		$types_c = $ob->connections_from(array(
-			"type" => RELTYPE_ADD_TYPE
-		));
+		// must read these from the datasource
+		$ds_o = obj($ob->prop("ds"));
+		$ds_i = $ds_o->instance();
+		$types = $ds_i->get_add_types($ds_o);
+
 
 		$menu = "";
 		$classes = aw_ini_get("classes");
 
 		$parent = $GLOBALS["tv_sel"] ? $GLOBALS["tv_sel"] : $this->first_folder;
 
-/*		$p_o = obj($parent);
-		if ($p_o->class_id() == CL_SERVER_FOLDER)
+		$ot = get_instance("admin/object_type");
+		foreach($types as $c_o)
 		{
 			$this->vars(array(
-				"url" => $this->mk_my_orb("add_file", array("id" => $p_o->id(), "section" => aw_global_get("section")), "server_folder"),
-				"caption" => $classes[CL_FILE]["name"]
+				"url" => $ot->get_add_url(array("id" => $c_o->id(), "parent" => $parent, "section" => $parent)),
+				"caption" => $c_o->prop("name")
 			));
 			$menu .= $this->parse("MENU_ITEM");
 		}
-		else
-		{*/
-			$ot = get_instance("admin/object_type");
-			foreach($types_c as $c)
-			{
-				$c_o = $c->to();
 
-				$this->vars(array(
-					"url" => $ot->get_add_url(array("id" => $c_o, "parent" => $parent, "section" => $parent)),
-					"caption" => $c_o->prop("name")
-				));
-				$menu .= $this->parse("MENU_ITEM");
-			}
-//		}
 		$this->vars(array(
 			"menu_id" => "aw_menu_0",
 			"MENU_ITEM" => $menu
@@ -544,6 +540,55 @@ class object_treeview_v2 extends class_base
 			return 0;
 		}
 		return $this->__sby[$a] >  $this->__sby[$b] ? 1 : 0;
+	}
+
+	function get_folders_as_object_list($object, $level, $parent_o)
+	{
+		$this->tree_ob = $object;
+	
+		$ol = new object_list();
+
+		$d_o = obj($this->tree_ob->prop("ds"));
+		$d_inst = $d_o->instance();
+	
+		$folders = $d_inst->get_folders($d_o);
+		foreach($folders as $fld)
+		{
+			$i_o = obj($fld["id"]);
+			$parent = 0;
+			if (in_array($i_o->parent(),$folders))
+			{
+				$parent = $i_o->parent();
+			}
+			
+			if ($level == 0)
+			{
+				if ($parent == 0)
+				{
+					$ol->add($fld["id"]);
+				}
+			}
+			else
+			{
+				if ($parent == $object->id())
+				{
+					$ol->add($fld["id"]);
+				}
+			}
+		}
+
+		return $ol;
+	}
+
+	function make_menu_link($sect_obj)
+	{
+		$link = $this->mk_my_orb("show", array("id" => $this->tree_ob->id(), "tv_sel" => $sect_obj->id(), "section" => $sect_obj->id()));;
+		return $link;
+	}
+
+	function get_yah_link($tree, $cur_menu)
+	{
+		return $this->mk_my_orb("show", array("id" => $tree, "tv_sel" => $cur_menu->id(), "section" => $cur_menu->id()));
 	}
 }
 ?>
