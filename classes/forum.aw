@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.65 2003/02/06 11:23:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.66 2003/02/06 11:28:17 duke Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 
@@ -791,7 +791,14 @@ topic");
 		$aw_mb_last[$board] = time();
 		setcookie("aw_mb_last",serialize($aw_mb_last),time()+24*3600*1000,"/");
 
-		return $this->parse() . $this->add_comment(array_merge(array("board" => $board,"parent" => $parent,"section" => $this->section,"act" => "show_threaded"),$add_params));
+		$retval = $this->parse();
+
+		if (!$args["no_add_comment"])
+		{
+			$retval .= $this->add_comment(array_merge(array("board" => $board,"parent" => $parent,"section" => $this->section,"act" => "show_threaded"),$add_params));
+		};
+
+		return $retval;
 	}
 	////
 	// !Submits a message list
