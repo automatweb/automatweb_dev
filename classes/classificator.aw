@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.24 2004/08/23 11:52:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.25 2004/08/26 09:28:19 duke Exp $
 
 /*
 
@@ -38,6 +38,7 @@ class classificator extends class_base
 	function get_property(&$arr)
 	{
 		$prop =& $arr["prop"];
+		classload("aliasmgr");
 		if ($prop['name'] == "clids")
 		{
 			$prop['options'] = aliasmgr::get_clid_picker();
@@ -51,7 +52,7 @@ class classificator extends class_base
 		extract($arr);
 		$ob = new object($id);
 		$this->db_query("DELETE FROM classificator2menu WHERE clf_id = '".$id."'");
-		$arr = $ob->prop("folders");
+		$arr = new aw_array($ob->prop("folders"));
 		foreach($arr->get() as $_fid => $_tt)
 		{
 			$_arr = new aw_array($ob->prop('clids'));
