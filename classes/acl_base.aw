@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.64 2004/03/16 09:46:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.65 2004/03/16 13:16:00 kristo Exp $
 
 lc_load("definition");
 
@@ -433,24 +433,25 @@ class acl_base extends db_connector
 
 			$str = "";
 			$gl = aw_global_get("gidlist_oid");
+			// turn off acl checks for this
+			$tmp = $GLOBALS["cfg"]["acl"]["no_check"];
+			$GLOBALS["cfg"]["acl"]["no_check"] = 1;
 			foreach($gl as $g_oid)
 			{	
-				if ($this->can("view", $g_oid))
+				$o = obj($g_oid);
+				if ($o->prop("type") == 1)
 				{
-					$o = obj($g_oid);
-					if ($o->prop("type") == 1)
-					{
-						continue;
-					}
-					$str .= "goid= $g_oid , type = ".$o->prop("type")." pri = ".$o->prop("priority")." ";
-					if ($o->prop("priority") > $can_adm_max)
-					{
-						$can_adm = $o->prop("can_admin_interface");
-						$can_adm_max = $o->prop("priority");
-						$can_adm_oid = $g_oid;
-					}
+					continue;
+				}
+				$str .= "goid= $g_oid , type = ".$o->prop("type")." pri = ".$o->prop("priority")." ";
+				if ($o->prop("priority") > $can_adm_max)
+				{
+					$can_adm = $o->prop("can_admin_interface");
+					$can_adm_max = $o->prop("priority");
+					$can_adm_oid = $g_oid;
 				}
 			}
+			$GLOBALS["cfg"]["acl"]["no_check"] = $tmp;
 
 			if (aw_ini_get("site_id") == 84)
 			{
