@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.39 2004/11/15 15:53:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.40 2004/11/15 16:05:59 kristo Exp $
 
 define("ST_TABLE",0);
 define("ST_CELL",1);
@@ -546,6 +546,54 @@ class style extends aw_template
 		}
 
 		return $st["num_fcols"];
+	}
+
+	function get_lrow_style($id)
+	{
+		$st = $this->mk_cache($id);
+		if ($st["class_id"] == CL_CSS)
+		{
+			$tmp = obj($id);
+			return $tmp->prop("lrow_style");
+		}
+
+		return $st["lrow_style"];
+	}
+
+	function get_lcol_style($id)
+	{
+		$st = $this->mk_cache($id);
+		if ($st["class_id"] == CL_CSS)
+		{
+			$tmp = obj($id);
+			return $tmp->prop("lcol_style");
+		}
+
+		return $st["lcol_style"];
+	}
+
+	function get_num_lrows($id)
+	{
+		$st = $this->mk_cache($id);
+		if ($st["class_id"] == CL_CSS)
+		{
+			$tmp = obj($id);
+			return $tmp->prop("num_lrows");
+		}
+
+		return $st["num_lrows"];
+	}
+
+	function get_num_lcols($id)
+	{
+		$st = $this->mk_cache($id);
+		if ($st["class_id"] == CL_CSS)
+		{
+			$tmp = obj($id);
+			return $tmp->prop("num_lcols");
+		}
+
+		return $st["num_lcols"];
 	}
 
 	function get_text_begin_str($id)
