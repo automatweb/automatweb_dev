@@ -381,7 +381,13 @@ class _int_object
 				$ret[] = $pt[$i]->name();
 			}
 		}
-		return join(" / ", $ret);
+		$tmp = join(" / ", $ret);
+		if ($tmp == "")
+		{
+			$tmp = $this->name();
+		}
+
+		return $tmp;
 	}
 
 	function can($param)
