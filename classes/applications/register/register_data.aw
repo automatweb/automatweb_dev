@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.26 2005/01/06 12:33:16 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.27 2005/01/25 11:37:07 dragut Exp $
 // register_data.aw - Registri andmed 
 /*
 @classinfo syslog_type=ST_REGISTER_DATA relationmgr=yes no_comment=1
@@ -1163,15 +1163,28 @@ class register_data extends class_base
 			{
 			
 				$mail_addr_from = $register_obj->prop("mail_address_from");
-				if(is_oid($mail_addr_from))
+				if (empty($mail_addr_from))
 				{
-					$mail_addr_from = obj($mail_addr_from);
+					// v6tab from aadressi sisse loginud kasutaja küljes
+					if (aw_global_get("uid") != "")
+					{
+						$u = obj(aw_global_get("uid_oid"));
+						$mail_addr_from = $u->prop("email");
+					}
+				}
+				else
+				{
+					if(is_oid($mail_addr_from))
+					{
+						$mail_addr_from = obj($mail_addr_from);
+						$mail_addr_from = $mail_addr_from->prop("mail");
+					}
 				}
 				$mail_subj = $register_obj->prop("mail_subject");
 			
 				$headers = "To: ".$mail_addresses_to."\r\n";
 				
-				$headers .= "From: ".$mail_addr_from->prop("mail")."\r\n";
+				$headers .= "From: ".$mail_addr_from."\r\n";
 				$url = $this->mk_my_orb("change", array("id" => $arr['id']));
 				$mail_addresses_to = substr($mail_addresses_to, 0, (strlen($mail_addresses_to)-2));
 /*
