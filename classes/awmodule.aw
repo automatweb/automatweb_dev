@@ -1,12 +1,11 @@
 <?php
 
-classload("form");
 class awmodule extends aw_template
 {
 	function awmodule()
 	{
 		$this->init("awmodule");
-		$this->form = new form;
+		$this->form = get_instance("formgen/form");
 	}
 
 	function add($arr)

@@ -1,15 +1,13 @@
 <?php
 // ~1220 rida jama:)
 
-classload("form","form_base","sql_filter");
-
 class search_filter extends aw_template
 {
 	function search_filter()
 	{
 		$this->init("automatweb/filter");
 		lc_load("definition");
-		$this->sql_filter=new sql_filter();
+		$this->sql_filter=get_instance("sql_filter");
 	}
 
 
@@ -20,7 +18,7 @@ class search_filter extends aw_template
 		$this->mk_path($parent,"Lisa Filter");
 		$this->read_template("new_filter.tpl");
 
-		$this->fb=new form_base();
+		$this->fb=get_instance("formgen/form_base");
 		$formlist=$this->fb->get_list(FTYPE_ENTRY,false,true);
 
 		$chainlist=array();
@@ -244,7 +242,7 @@ class search_filter extends aw_template
 			}
 		};
 		
-		$this->form=new form();
+		$this->form=get_instance("formgen/form");
 		
 		//Okay, let's build the array
 		foreach ($formids as $k => $fid)
@@ -414,8 +412,7 @@ class search_filter extends aw_template
 		$this->id=$filter_id;
 		$this->__load_data();
 
-		classload("table");
-		$tbl=new table();
+		$tbl=get_instance("table");
 		
 		$arr["is_filter"]=1;
 		$arr["filter"]=$this->id;
@@ -551,8 +548,7 @@ class search_filter extends aw_template
 		
 		$this->__load_data();
 
-		classload("table");
-		$tbl=new table();
+		$tbl=get_instance("table");
 		$rec=$this->get_object($this->data["stat_id"]);
 		if ($this->data["stat_id"] && $rec["status"]!=0)
 		{
@@ -630,9 +626,7 @@ class search_filter extends aw_template
 		}
 
 		//siin tuleb stuffi näidata
-		classload("form_table");
-
-		$this->ft=new form_table();
+		$this->ft=get_instance("formgen/form_table");
 		$table_id=$this->data["output_id"];
 		$this->ft->start_table($table_id);
 
@@ -824,8 +818,7 @@ class search_filter extends aw_template
 		// Siin hakkab näitama statistika tabelit all
 		if ($this->data["stat_show"] && $this->data["stat_id"])
 		{
-			classload("table");
-			$tbl=new table();
+			$tbl=get_instance("table");
 			// tee veel avg funktsioonid korda, sest neil tuleb lõpus summa / ridade arv
 			$tbl->fl_external=array();
 
@@ -929,8 +922,7 @@ class search_filter extends aw_template
 		$parent=$r["parent"];
 		$name=$r["name"];
 
-		classload("form_table");
-		$this->ft=new form_table();
+		$this->ft=get_instance("formgen/form_table");
 
 		$this->__load_data();
 		$this->__load_filter();
@@ -1079,8 +1071,7 @@ class search_filter extends aw_template
 	function orb_output_submit($arr)
 	{
 		extract($arr);
-		classload("form_table");
-		$this->ft=new form_table();
+		$this->ft=get_instance("formgen/form_table");
 		$this->ft->submit($arr);
 		
 		return $this->mk_my_orb("output",array("id" => $filter_id));

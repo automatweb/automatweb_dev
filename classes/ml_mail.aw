@@ -1,6 +1,5 @@
 <?php
 
-classload("config","form_base","ml_list","messenger");
 class ml_mail extends aw_template
 {
 	function ml_mail()
@@ -8,10 +7,10 @@ class ml_mail extends aw_template
 		$this->init("automatweb/mlist");
 		lc_load("definition");
 
-		$this->dbconf=new db_config();
+		$this->dbconf=get_instance("config");
 		$this->formid=$this->dbconf->get_simple_config("ml_form");
 		$this->searchformid=$this->dbconf->get_simple_config("ml_search_form");
-		$this->mgr = new messenger(array("fast"));
+		$this->mgr = get_instance("messenger", array("fast"));
 
 		// queue status
 		$this->a_status=array(
@@ -67,7 +66,7 @@ class ml_mail extends aw_template
 
 		$this->read_template("ml_mail_change.tpl");
 
-		$fb=new form_base();
+		$fb=get_instance("formgen/form_base");
 		
 		$els=$fb->get_elements_for_forms(array($this->formid));
 		$elstring=join("&nbsp;",map("#%s#",$els));
@@ -268,7 +267,7 @@ class ml_mail extends aw_template
 		{
 			$title="Meililistid";
 
-			$fb=new form_base();
+			$fb=get_instance("formgen/form_base");
 			$flist=$fb->get_list(FTYPE_ENTRY);
 			$sflist=$fb->get_list(FTYPE_SEARCH);
 
@@ -392,7 +391,7 @@ class ml_mail extends aw_template
 		$msg=$d->msg_get(array("id" => $mid));// mid on message id
 
 		// tee vorm
-		$f=new form();
+		$f=get_instance("formgen/form");
 		$f->load($this->formid);
 		
 		//võta need elemendid, mis on siin listis kasutusel

@@ -205,7 +205,7 @@ class search_conf extends aw_template
 			if ($grps[$s_parent]["search_form"])
 			{
 				// do form search
-				$finst = get_instance("form");
+				$finst = get_instance("formgen/form");
 				// we must load the form before we can set element values
 				$finst->load($grps[$s_parent]["search_form"]);
 
@@ -770,7 +770,7 @@ class search_conf extends aw_template
 
 		$o = get_instance("objects");
 
-		$f = get_instance("form");
+		$f = get_instance("formgen/form");
 		$flist = $f->get_flist(array(
 			"type" => FTYPE_SEARCH, 
 			"addempty" => true, 

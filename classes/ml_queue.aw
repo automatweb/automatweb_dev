@@ -3,7 +3,6 @@ define('MSG_LIST',512);
 // näitab et tegemist on html teatega
 define('MSG_HTML',1024);
 
-classload("config","form_base","ml_list");
 function decho($a)
 {
 	if ($GLOBALS["__debug"])
@@ -24,7 +23,7 @@ class ml_queue extends aw_template
 		$this->init("automatweb/mlist");
 		lc_load("definition");
 
-		$this->dbconf=new db_config();
+		$this->dbconf=get_instance("config");
 		$this->formid=$this->dbconf->get_simple_config("ml_form");
 		$this->searchformid=$this->dbconf->get_simple_config("ml_search_form");
 		$this->mailel=$this->dbconf->get_simple_config("ml_mail_el");
@@ -108,7 +107,7 @@ class ml_queue extends aw_template
 		$t->define_header("Queue $title",$headerarray);
 		$t->parse_xml_def($this->cfg["basedir"] . "/xml/mlist/queue.xml");
 
-		$ml = new ml_list();
+		$ml = get_instance("ml_list");
 		$lists = $ml->get_lists_and_groups(array());//võta kõik listide & gruppide nimed, et polex vaja iga kord queryda
 
 		$q = "SELECT * FROM ml_queue $filt";
@@ -155,7 +154,7 @@ class ml_queue extends aw_template
 		{
 			$title="Meililistid";
 
-			$fb=new form_base();
+			$fb=get_instance("formgen/form_base");
 			$flist=$fb->get_list(FTYPE_ENTRY);
 			$sflist=$fb->get_list(FTYPE_SEARCH);
 
@@ -579,7 +578,7 @@ class ml_queue extends aw_template
 		// tee form
 		if (!isset($this->f))
 		{
-			$this->f=new form();
+			$this->f=get_instance("formgen/form");
 		};
 		$this->f->load($this->formid);
 		$this->f->load_entry($member);
@@ -607,7 +606,7 @@ class ml_queue extends aw_template
 
 		if (!isset($this->users))
 		{
-			$this->users = new users();
+			$this->users = get_instance("users");
 		};
 		aw_global_set("gidlist",$this->users->get_gids_by_uid($r["uid"]));
 
@@ -615,7 +614,7 @@ class ml_queue extends aw_template
 		// tee listi obj
 		if (!isset($this->ml))
 		{
-			$this->ml=new ml_list();
+			$this->ml=get_instance("ml_list");
 		};
 
 		$data=array();

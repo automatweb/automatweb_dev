@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/shop_item.aw,v 2.26 2002/06/10 15:50:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/shop_item.aw,v 2.27 2002/10/30 11:01:27 kristo Exp $
 
 define("PRICE_PER_WEEK",1);
 define("PRICE_PER_2WEEK",2);
@@ -34,8 +34,7 @@ class shop_item extends shop_base
 		else
 		{
 			$this->read_template("edit_item.tpl");
-			classload("form");
-			$f = new form;
+			$f = get_instance("formgen/form");
 
 			classload("objects");
 			$o = new db_objects;
@@ -85,8 +84,7 @@ class shop_item extends shop_base
 	function submit($arr)
 	{
 		extract($arr);
-		classload("form");
-		$f = new form;
+		$f = get_instance("formgen/form");
 
 		if ($id)
 		{
@@ -132,9 +130,6 @@ class shop_item extends shop_base
 
 		$this->read_template("edit_item.tpl");
 
-		classload("form");
-		$f = new form;
-
 		$shcats = array("0" => "");
 		classload("shop");
 		$shop = new shop;
@@ -153,11 +148,12 @@ class shop_item extends shop_base
 			"minute" => ""
 		));
 
-		classload("form_base");
-		$fb = new form_base;
+		$fb = get_instance("formgen/form_base");
 		$fl = $fb->get_list(FTYPE_ENTRY,true);
 
 		$eq = $this->get_eq($itt["eq_id"]);
+
+		$f = get_instance("formgen/form");
 		$this->vars(array( 
 			"item" => $f->gen_preview(array(
 										"id" => $itt["form_id"],
@@ -237,8 +233,7 @@ class shop_item extends shop_base
 		// now we copy the form_entry object
 		$old_item = $this->get_record("shop_items","id",$id);
 
-		classload("form_entry");
-		$f_entry = new form_entry();
+		$f_entry = get_instance("formgen/form_entry");
 		
 		classload("planner");
 		$planner = new planner();
@@ -748,8 +743,7 @@ class shop_item extends shop_base
 			"day" => "",
 		));
 		$eq = $this->get_eq($itt["eq_id"]);
-		classload("form_base");
-		$fb = new form_base;
+		$fb = get_instance("formgen/form_base");
 		$fl = $fb->get_list(FTYPE_ENTRY,true);
 		$cnt_form = $o["cnt_form"] ? $o["cnt_form"] : $itt["cnt_form"];
 		$f_opl = $fb->get_op_list($cnt_form);

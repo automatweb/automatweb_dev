@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.47 2002/07/23 05:19:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.48 2002/10/30 11:01:27 kristo Exp $
 // shop.aw - Shop
 
 session_register("shopping_cart");
@@ -41,8 +41,7 @@ class shop extends shop_base
 		classload("objects");
 		$ob = new db_objects;
 
-		classload("form_base");
-		$fb = new form_base;
+		$fb = get_instance("formgen/form_base");
 		$fl = $fb->get_list(FTYPE_ENTRY);
 
 		classload("currency");
@@ -73,11 +72,7 @@ class shop extends shop_base
 		classload("objects");
 		$ob = new db_objects;
 
-		classload("form_base");
-		$fb = new form_base;
-
-		classload("form_base");
-		$fb = new form_base;
+		$fb = get_instance("formgen/form_base");
 
 		$op_list = $fb->get_op_list();
 
@@ -178,8 +173,7 @@ class shop extends shop_base
 		$sh = $this->get($id);
 		$this->mk_path($sh["parent"],"<a href='".$this->mk_my_orb("change", array("id" => $id))."'>Change target</a> / Change shop owners data");
 
-		classload("form");
-		$f = new form;
+		$f = get_instance("formgen/form");
 		return $f->gen_preview(array(
 							"id" => $sh["owner_form"],
 							"entry_id" => $sh["owner_form_entry"],
@@ -194,8 +188,7 @@ class shop extends shop_base
 		extract($arr);
 		$sh = $this->get($id);
 
-		classload("form");
-		$f = new form;
+		$f = get_instance("formgen/form");
 		$f->process_entry(array("id" => $sh["owner_form"], "entry_id" => $sh["entry_id"]));
 
 		$this->db_query("UPDATE shop SET owner_form_entry = ".$f->entry_id." WHERE id = $id");
@@ -302,7 +295,7 @@ class shop extends shop_base
 					$_itypes[$row["type_id"]] = $this->get_item_type($row["type_id"]);
 				}
 
-				if ($this->is_item_available(&$row,1,new form(),$min_p,$max_p,$_itypes[$row["type_id"]]))
+				if ($this->is_item_available(&$row,1,get_instance("formgen/form"),$min_p,$max_p,$_itypes[$row["type_id"]]))
 				{
 					$_ms[$row["parent"]] = true;
 					dbg("available <br>");
@@ -412,7 +405,6 @@ class shop extends shop_base
 		global $shopping_cart;
 		$section = $this->do_shop_menus($id,$section);
 
-		classload("form");
 		classload("item_type");
 		$ityp = new item_type;
 		$ityp->mk_cache();		// cacheme k6ik tyybid selle klassi sees, et p2rast ei peaks iga itemi kohta eraldi p2ringut tegema
@@ -431,11 +423,11 @@ class shop extends shop_base
 		{
 			$this->save_handle();
 			$itt = $ityp->get_item_type($row["type_id"]);
-			if ($this->is_item_available($row,1,new form(), $min_p,$max_p,$itt))
+			if ($this->is_item_available($row,1,get_instance("formgen/form"), $min_p,$max_p,$itt))
 			{
 				$it_price = $this->get_list_price($row["oid"],$row["price"],$shop);
 
-				$f = new form;
+				$f = get_instance("formgen/form");
 				$f->set_active_currency($ucur);
 				$f->load($itt["form_id"]);
 				$f->load_entry($row["entry_id"]);
@@ -488,9 +480,7 @@ class shop extends shop_base
 		global $shopping_cart;
 		$this->read_template("show_cart.tpl");
 
-		classload("form");
-		$f = new form;
-
+		$f = get_instance("formgen/form");
 		$t_price = 0;
 	
 		$shop = $this->get($shop_id);
@@ -504,7 +494,7 @@ class shop extends shop_base
 			{
 				if ($ar["cnt"] > 0)
 				{
-					$f = new form;
+					$f = get_instance("formgen/form");
 					$f->set_active_currency($ucur);
 					// now here we must show the name of the item followed by
 					// the rows from the cnt_form for that item that have selectrow checked
@@ -626,8 +616,7 @@ class shop extends shop_base
 		// here we must update the cnt_form entries from the entered data, 
 		// forms are separated by prefixes entry_.$entry_id._
 
-		classload("form");
-		$f = new form;
+		$f = get_instance("formgen/form");
 
 		$shop_o = $this->get($shop_id);
 
@@ -740,7 +729,7 @@ class shop extends shop_base
 		else
 		{
 			// parsime price_eq'st v2lja formi elementide nimed ja asendame need numbritega ja siis laseme evali()'i peale
-			$f_kaup = new form;
+			$f_kaup = get_instance("formgen/form");
 			$f_kaup->load($itt["form_id"]);
 			$f_kaup->load_entry($it["entry_id"]);
 			$f_kaup->set_element_value_by_type("price", $el_price);
@@ -813,8 +802,7 @@ class shop extends shop_base
 		extract($arr);
 		$this->read_template("order.tpl");
 
-		classload("form");
-		$f = new form;
+		$f = get_instance("formgen/form");
 
 		// read the default values for this form from the join form that the user filled when he joined
 		$elvals = array();
@@ -824,7 +812,7 @@ class shop extends shop_base
 		$jf = unserialize($udata["join_form_entry"]);
 		if (is_array($jf))
 		{
-			$f = new form();
+			$f = get_instance("formgen/form");
 			foreach($jf as $joinform => $joinentry)
 			{
 				$f->load($joinform);
@@ -920,8 +908,7 @@ class shop extends shop_base
 	{
 		extract($arr);
 		global $order_forms;
-		classload("form");
-		$f = new form;
+		$f = get_instance("formgen/form");
 		$f->process_entry(array("id" => $order_forms["order"][$num]["form"],"entry_id" => $prev_eid));
 		if ($prev_eid)
 		{
@@ -967,8 +954,7 @@ class shop extends shop_base
 
 		$sh = $this->get($shop_id);
 
-		classload("form");
-		$f = new form;
+		$f = get_instance("formgen/form");
 
 		global $shopping_cart;
 		if (is_array($shopping_cart["items"]))
@@ -1064,8 +1050,7 @@ class shop extends shop_base
 		}
 
 		// save the user info
-		classload("form");
-		$f = new form;
+		$f = get_instance("formgen/form");
 
 		$uid = aw_global_get("uid");
 		
@@ -1201,9 +1186,8 @@ class shop extends shop_base
 			$shop = $this->find_shop_id($section);
 		}
 
-		classload("form");
 		global $shopping_cart;
-		$f = new form;
+		$f = get_instance("formgen/form");
 
 		$shop_o = $this->get($shop);
 		$ucur = $this->get_act_cur($shop_o);
@@ -1257,7 +1241,7 @@ class shop extends shop_base
 				$reps = $pl->get_events(array( "start" => max($row["per_from"],time()), "limit" => $rep_cnt,"index_time" => true,"event" => $row["per_event_id"],"end" => time()+800*24*3600));
 				if (is_array($reps))
 				{
-					$f = new form;
+					$f = get_instance("formgen/form");
 					$f->set_active_currency($ucur);
 					$f->load($itt["form_id"]);
 					$f->load_entry($row["entry_id"]);
@@ -1284,7 +1268,7 @@ class shop extends shop_base
 							$t1 = $min_p;
 							$t2 = $max_p;
 						}
-						if ($this->is_item_available($row,1,new form(),$t1,$t2,$itt))
+						if ($this->is_item_available($row,1,get_instance("formgen/form"),$t1,$t2,$itt))
 						{
 							$item = $f->show(array("id" => $itt["form_id"], "entry_id" => $row["entry_id"],"op_id" => $itt["long_op"],"no_load_entry" => true));
 						}
@@ -1390,8 +1374,7 @@ class shop extends shop_base
 			$itt = $this->get_item_type($it["type_id"]);
 			$cnt_form = $it["cnt_form"] ? $it["cnt_form"] : $itt["cnt_form"];
 
-			classload("form");
-			$f = new form;
+			$f = get_instance("formgen/form");
 
 			$old_entry = false;
 			if ($shopping_cart["items"][$item_id]["cnt_entry"])
@@ -1736,8 +1719,7 @@ class shop extends shop_base
 			$o_items[$row["item_id"]] = $row;
 		}
 
-		classload("form");
-		$f = new form;
+		$f = get_instance("formgen/form");
 
 		$items = false;
 		$itm = "";
@@ -2101,13 +2083,12 @@ class shop extends shop_base
 		$cur_type = 0;
 		$first = true;
 
-		classload("form_table");
-		$ft = new form_table;
+		$ft = get_instance("formgen/form_table");
 
 		$allitemsarr = array();
 
-		$item_form = new form;
-		$cnt_form = new form;
+		$item_form = get_instance("formgen/form");
+		$cnt_form = get_instance("formgen/form");
 		$periods = array();
 		$this->db_query("SELECT * FROM order2item WHERE order_id = $order_id ORDER BY item_type_order");
 		while ($row = $this->db_next())
@@ -2180,7 +2161,7 @@ class shop extends shop_base
 		}
 		$weeks = ($max_p - $min_p)/(24*3600*7);
 
-		$f = new form;
+		$f = get_instance("formgen/form");
 		$txx = "";
 		$this->db_query("SELECT entry_id,form_id FROM order2form_entries WHERE order_id = $order_id");
 		while ($row = $this->db_next())
@@ -2197,7 +2178,7 @@ class shop extends shop_base
 		$ar = $u->get_join_entries();
 		foreach($ar as $foid => $eid)
 		{
-			$f = new form;
+			$f = get_instance("formgen/form");
 			$f->load($foid);
 			$f->load_entry($eid);
 			$tmp = $f;
@@ -2248,13 +2229,12 @@ class shop extends shop_base
 		$cur_type = 0;
 		$first = true;
 
-		classload("form_table");
-		$ft = new form_table;
+		$ft = get_instance("formgen/form_table");
 
 		$allitemsarr = array();
 
-		$item_form = new form;
-		$cnt_form = new form;
+		$item_form = get_instance("formgen/form");
+		$cnt_form = get_instance("formgen/form");
 		$this->db_query("SELECT * FROM order2item WHERE order_id = $order_id ORDER BY item_type_order");
 		while ($row = $this->db_next())
 		{
@@ -2307,7 +2287,7 @@ class shop extends shop_base
 		}
 		$tx.=$ft->finalize_table();
 
-		$f = new form;
+		$f = get_instance("formgen/form");
 		$txx = "";
 		$this->db_query("SELECT entry_id,form_id FROM order2form_entries WHERE order_id = $order_id");
 		while ($row = $this->db_next())
@@ -2324,7 +2304,7 @@ class shop extends shop_base
 		$ar = $u->get_join_entries();
 		foreach($ar as $foid => $eid)
 		{
-			$f = new form;
+			$f = get_instance("formgen/form");
 			$f->load($foid);
 			$f->load_entry($eid);
 			$tmp = $f;
@@ -2468,7 +2448,7 @@ class shop extends shop_base
 			$begin = $tmp;
 		}
 
-		$f = new form;
+		$f = get_instance("formgen/form");
 		$txx = "";
 		$this->db_query("SELECT entry_id,form_id FROM order2form_entries WHERE order_id = $order_id");
 		while ($row = $this->db_next())
@@ -2480,7 +2460,7 @@ class shop extends shop_base
 			$this->restore_handle();
 		}
 
-		$f = new form;
+		$f = get_instance("formgen/form");
 		$issuedby = $f->show(array("id" => $sh["owner_form"], "entry_id" => $sh["owner_form_entry"], "op_id" => $sh["owner_form_op_issued"]));
 		$f->reset();
 
@@ -2490,7 +2470,7 @@ class shop extends shop_base
 
 		$order_entry_id = $this->db_fetch_field("SELECT cnt_entry FROM order2item WHERE item_id = $item_id AND order_id = $order_id","cnt_entry");
 
-		$f2 = new form;
+		$f2 = get_instance("formgen/form");
 		$itemname = $item["name"];
 		if ($item["cnt_extra_op"])
 		{
@@ -2635,7 +2615,7 @@ class shop extends shop_base
 			// k6igist tellimusega seotud formi sisestustest niiet kui neid muudetakse siis vana tellimus j22b ikka samax
 			// ja kui tehakse uus, siis lithsalt vana tellimuse sisestused j22vad ajaloo hammasrataste vahele
 			// k6igepealt loadime formi
-			$f = new form;
+			$f = get_instance("formgen/form");
 			$f->load($row["cnt_form"] ? $row["cnt_form"] : $row["type_cnt_form"]);
 			// nyyd loadime praeguse entry
 			$f->load_entry($row["cnt_entry"]);
@@ -2666,7 +2646,7 @@ class shop extends shop_base
 			// ja siin tuleb nende formide sisestustest samuti koopiad teha et neid ka muuta saax. ohjah. tegelt see on n6me matean
 			// et need tulex tegelt m2llu (sessiooni) loadida ja siis seal muuta kuni tellimus kinnitataxe
 			// but hell, this works and this shit has got to be ready in the morning
-			$f = new form;
+			$f = get_instance("formgen/form");
 			$f->load($row["form_id"]);
 			$f->load_entry($row["entry_id"]);
 			$f->process_entry(array("id" => $row["form_id"], "no_process_entry" => true,"no_load_form" => true));
@@ -2761,7 +2741,7 @@ class shop extends shop_base
 			$itt = $this->get_item_type($it["type_id"]);
 
 			// load it's cnt_form
-			$f = new form;
+			$f = get_instance("formgen/form");
 			$f->load($it["cnt_form"] ? $it["cnt_form"] : $itt["cnt_form"]);
 			// now find all the rows that are selected in the entry from the shopping cart
 			$f->load_entry($row["cnt_entry"]);

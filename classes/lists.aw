@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.17 2002/09/23 17:47:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.18 2002/10/30 11:05:33 kristo Exp $
 // lists.aw - listide haldus
 class lists extends aw_template
 {
@@ -82,7 +82,7 @@ class lists extends aw_template
 			}
 
 			$els = array();
-			$finst = get_instance("form");
+			$finst = get_instance("formgen/form");
 			foreach($jf_list as $fid => $fname)
 			{
 				$finst->load($fid);

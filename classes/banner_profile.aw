@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/banner_profile.aw,v 2.5 2002/06/10 15:50:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/banner_profile.aw,v 2.6 2002/10/30 11:10:46 kristo Exp $
 
 classload("banner");
 class banner_profile extends banner
@@ -25,8 +25,7 @@ class banner_profile extends banner
 
 		$this->mk_path($parent, LC_ADD_BANNER_PROFILE);
 
-		classload("form");
-		$f = new form;
+		$f = get_instance("formgen/form");
 
 		return $f->gen_preview(array(
 			"id" => $fid,
@@ -38,8 +37,7 @@ class banner_profile extends banner
 	{
 		extract($arr);
 
-		classload("form");
-		$f = new form;
+		$f = get_instance("formgen/form");
 
 		$fid = $this->get_cval("banner_profile_form");
 
@@ -82,8 +80,7 @@ class banner_profile extends banner
 
 		$this->mk_path($o["parent"], LC_CHANGE_BANNER_PROFILE);
 
-		classload("form");
-		$f = new form;
+		$f = get_instance("formgen/form");
 
 		return $f->gen_preview(array(
 			"id" => $fid,

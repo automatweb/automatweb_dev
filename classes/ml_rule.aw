@@ -15,7 +15,6 @@
 	define("A_DELETE",3);
 	define("A_DONTSEND",4);
 
-classload("ml_list","form_base","config");
 // ruulid
 class ml_rule extends aw_template
 {
@@ -25,7 +24,7 @@ class ml_rule extends aw_template
 	function ml_rule()
 	{
 		$this->init("automatweb/mlist");
-		$this->dbconf=new db_config();
+		$this->dbconf=get_instance("config");
 		$this->formid=$this->dbconf->get_simple_config("ml_form");
 		$this->searchformid=$this->dbconf->get_simple_config("ml_search_form");
 		lc_load("definition");
@@ -53,7 +52,7 @@ class ml_rule extends aw_template
 		
 		if (!isset($this->ml))
 		{
-			$this->ml = new ml_list();
+			$this->ml = get_instance("ml_list");
 		};
 		load_vcl("date_edit");
 		$date_edit = new date_edit(time());
@@ -68,7 +67,7 @@ class ml_rule extends aw_template
 
 		if (!isset($this->fr))
 		{
-			$this->fr=new form();
+			$this->fr=get_instance("formgen/form");
 		};
 		$farr=array(
 			"id" => $this->searchformid,//searchformid
@@ -223,7 +222,7 @@ class ml_rule extends aw_template
 			//echo("need to save entry data");//dbg
 			if (!isset($this->fr))
 			{
-				$this->fr=new form();
+				$this->fr=get_instance("formgen/form");
 			};
 		
 			$this->fr->process_entry(array(
@@ -406,7 +405,7 @@ class ml_rule extends aw_template
 				//echo("doing form::search() entry=".$r["trig_entry"]);//dbg
 				if (!isset($this->fr))
 				{
-					$this->fr=new form();
+					$this->fr=get_instance("formgen/form");
 				};
 				$this->fr->load($this->searchformid);
 				$matchedids=$this->fr->search($r["trig_entry"]);
@@ -463,7 +462,7 @@ class ml_rule extends aw_template
 				$t["ml_sent_mails"]=1;
 				if (!isset($this->ml))
 				{
-					$this->ml=new ml_list();
+					$this->ml=get_instance("ml_list");
 				};
 				$vn=$this->ml->get_all_varnames();
 				$vars=unserialize($r["trig_usedvars"]);
@@ -570,7 +569,7 @@ class ml_rule extends aw_template
 					case A_ADDLIST:
 						if (!isset($this->ml))
 						{
-							$this->ml=new ml_list();
+							$this->ml=get_instance("ml_list");
 						};
 						list($lid,$lgroup)=explode(":",$r["actionid"]);
 						$lid=(int)$lid;
@@ -583,7 +582,7 @@ class ml_rule extends aw_template
 						
 						if (!isset($this->ml))
 						{
-							$this->ml=new ml_list();
+							$this->ml=get_instance("ml_list");
 						};
 						list($lid,$lgroup)=explode(":",$r["actionid"]);
 						$lid=(int)$lid;
@@ -595,7 +594,7 @@ class ml_rule extends aw_template
 						if (!isset($this->mlmember))
 						{
 							classload("ml_member");
-							$this->mlmember=new ml_member();
+							$this->mlmember=get_instance("ml_member");
 						};
 						$this->mlmember->orb_delete(array("id" => $mid,"_inner_call" => 1));
 						//echo("A_DELETE $mid<br>");//dbg

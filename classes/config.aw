@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.34 2002/07/16 19:22:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.35 2002/10/30 11:09:29 kristo Exp $
 
 classload("aw_template","xml","objects","languages","icons");
 class db_config extends aw_template 
@@ -56,8 +56,7 @@ class db_config extends aw_template
 		$btadm = $this->get_simple_config("bugtrack_admgid");
 		$al = $this->get_simple_config("useradd::autologin");
 
-		classload("form_base");
-		$fb = new form_base;
+		$fb = get_instance("formgen/form_base");
 		$ops = $fb->get_op_list($if);
 
 		classload("users");
@@ -231,8 +230,7 @@ class db_config extends aw_template
 				LEFT JOIN objects ON objects.oid = forms.id
 				WHERE objects.status != 0 AND forms.type = ".FTYPE_ENTRY);
 			
-		classload("form");
-		$f = new form;
+		$f = get_instance("formgen/form");
 		$ops = $f->get_op_list();
 		while ($row = $this->db_next())
 		{
@@ -1044,8 +1042,7 @@ class db_config extends aw_template
 		
 		$cf = $this->get_simple_config("contact_form");
 
-		classload("form_base");
-		$fb = new form_base;
+		$fb = get_instance("formgen/form_base");
 		$fa = $fb->get_list(FTYPE_ENTRY);
 		reset($fa);
 		while (list($fid,$name) = each($fa))

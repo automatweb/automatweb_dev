@@ -1,6 +1,5 @@
 <?php
 
-classload("config","form");
 class ml_list extends aw_template
 {
 	function ml_list()
@@ -8,7 +7,7 @@ class ml_list extends aw_template
 		$this->init("automatweb/mlist");
 		lc_load("definition");
 
-		$this->dbconf=new db_config();
+		$this->dbconf=get_instance("config");
 		$this->formid=$this->dbconf->get_simple_config("ml_form");
 		$this->searchformid=$this->dbconf->get_simple_config("ml_search_form");
 	}
@@ -426,7 +425,7 @@ class ml_list extends aw_template
 	//! Siia tuleb siis, kui listi liikete lisamise juures vajutada OTSI
 	function orb_lf_addmember_s($arr)
 	{
-		$f=new form();
+		$f=get_instance("formgen/form");
 		$arr["redirect_after"]="boo";
 
 		// kas tingimata peab selle otsingu vahepeal entryks tegema
@@ -467,7 +466,7 @@ class ml_list extends aw_template
 
 		$this->read_template("lf_addmember.tpl");
 		
-		$f=new form();
+		$f=get_instance("formgen/form");
 		//echo("searchformid=$this->searchformid");//dbg
 		$fparse=$f->gen_preview(array(
 			"id" => $this->searchformid,
@@ -883,7 +882,7 @@ class ml_list extends aw_template
 	//! Tagastab kõik formi elemendid id => name 
 	function get_all_varnames()
 	{
-		$fb=new form_base();
+		$fb=get_instance("formgen/form_base");
 		
 		return $fb->get_elements_for_forms(array($this->formid));
 	}

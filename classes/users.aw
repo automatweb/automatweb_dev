@@ -1,14 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.53 2002/10/09 10:21:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.55 2002/10/30 11:00:53 kristo Exp $
 // users.aw - User Management
-classload("users_user","config","form","objects","file");
 
 load_vcl("table","date_edit");
-
 session_register("add_state");
-
 define("PER_PAGE", 20);
 
+classload("users_user");
 class users extends users_user
 {
 	function users()
@@ -483,6 +481,25 @@ class users extends users_user
 			$this->save(array("uid" => $arr["id"], "email" => $arr["email"]));
 		}
 
+		if ($send_welcome_mail && $arr["pwd"] == "")
+		{
+			$udata = $this->get_user(array("uid" => $arr["id"]));
+
+			// send him some email as well if the users selected to do so
+			$c = get_instance("config");
+			$mail = $c->get_simple_config("join_mail".aw_global_get("LC"));
+			$mail = str_replace("#parool#", $udata["password"],$mail);
+			$mail = str_replace("#kasutaja#", $arr["id"],$mail);
+			$mail = str_replace("#liituja_andmed#", str_replace("\n\n","\n",$this->show_join_data(array("nohtml" => true, "user" => $arr["id"]))),$mail);
+
+			mail($udata["email"],$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
+			$jsa = $c->get_simple_config("join_send_also");
+			if ($jsa != "")
+			{
+				mail($jsa,$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
+			}
+		}
+
 		$this->_log("user", "$arr[id] changed password");
 		if (is_admin())
 		{
@@ -545,8 +562,7 @@ class users extends users_user
 			}
 
 			// send him some email as well
-			classload("config");
-			$c = new config;
+			$c = get_instance("config");
 			$mail = $c->get_simple_config("join_mail".aw_global_get("LC"));
 			$mail = str_replace("#parool#", $add_state["pass"],$mail);
 			$mail = str_replace("#kasutaja#", $add_state["uid"],$mail);
@@ -596,6 +612,23 @@ class users extends users_user
 				"join_grp" => $join_grp
 			));
 			$this->update_dyn_user($add_state["uid"]);
+
+			if ($send_welcome_mail)
+			{
+				// send him some email as well if the users selected to do so
+				$c = get_instance("config");
+				$mail = $c->get_simple_config("join_mail".aw_global_get("LC"));
+				$mail = str_replace("#parool#", $add_state["pass"],$mail);
+				$mail = str_replace("#kasutaja#", $add_state["uid"],$mail);
+				$mail = str_replace("#liituja_andmed#", str_replace("\n\n","\n",$this->show_join_data(array("nohtml" => true, "user" => $add_state["uid"]))),$mail);
+
+				mail($add_state["email"],$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
+				$jsa = $c->get_simple_config("join_send_also");
+				if ($jsa != "")
+				{
+					mail($jsa,$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
+				}
+			}
 
 			$add_state = "";
 			aw_session_set("session_filled_forms",array());
@@ -723,7 +756,7 @@ class users extends users_user
 				// new approach here - user can pick an entry for the form as well now. 
 				$this->read_template("show_form.tpl");
 			
-				$f = get_instance("form");
+				$f = get_instance("formgen/form");
 				$this->vars(array(
 					"form" => $f->gen_preview(array("id" => $jfrm, "tpl" => "show_noform.tpl")),
 					"entries" => $this->picker('',$f->get_entries(array("id" => $jfrm, "addempty" => true))),
@@ -856,7 +889,7 @@ class users extends users_user
 		$u = $this->fetch($id);
 		$fs = unserialize($u["join_form_entry"]);
 
-		$t = new form;
+		$t = get_instance("formgen/form");
 		return $t->gen_preview(array(
 			"id" => $fid, 
 			"entry_id" => $fs[$fid], 
@@ -873,7 +906,7 @@ class users extends users_user
 		$u = $this->fetch($user_id);
 		$fs = unserialize($u["join_form_entry"]);
 
-		$t = new form;
+		$t = get_instance("formgen/form");
 		$t->process_entry(array(
 			"id" => $fid,
 			"entry_id" => $fs[$fid]
@@ -908,11 +941,13 @@ class users extends users_user
 		{
 			$tpl = "show_join_data.tpl";
 		}
-		$uid = aw_global_get("uid");
-		$uuid = $uid;
-		if ($uuid == "")
+		if ($user != "")
 		{
 			$uuid = $user;
+		}
+		if ($uuid == "")
+		{
+			$uuid = aw_global_get("uid");
 		}
 		if ($uuid == "")
 		{
@@ -941,7 +976,7 @@ class users extends users_user
 		{
 			$jf = unserialize($udata["join_form_entry"]);
 			{
-				$f = new form();
+				$f = get_instance("formgen/form");
 				if (is_array($jf))
 				{
 					foreach($jf as $joinform => $joinentry)
@@ -999,8 +1034,7 @@ class users extends users_user
 			$udata = $this->get_user(array("uid" => $username));
 		}	
 
-		classload("config");
-		$c = new config;
+		$c = get_instance("config");
 		$mail = $c->get_simple_config("remind_pwd_mail");
 		$mail = str_replace("#parool#", $udata["password"],$mail);
 		$mail = str_replace("#kasutaja#", $username,$mail);
@@ -1034,7 +1068,7 @@ class users extends users_user
 		if (is_array($jf))
 		{
 			$elvs = array();
-			$f = new form();
+			$f = get_instance("formgen/form");
 			foreach($jf as $joinform => $joinentry)
 			{
 				$f->load($joinform);
@@ -1106,8 +1140,7 @@ class users extends users_user
 		$this->read_template("user_settings.tpl");
 		$this->mk_path(0,"<a href='".$this->mk_orb("gen_list", array())."'>Kasutajad</a> / Muuda kasutaja $id m&auml;&auml;ranguid");
 		
-		classload("languages");
-		$l = new languages;
+		$l = get_instance("languages");
 		$llist = $l->listall();
 		foreach($llist as $lrow)
 		{
@@ -1119,8 +1152,7 @@ class users extends users_user
 			$lp.=$this->parse("LANG");
 		}
 
-		classload("currency");
-		$cu = new currency;
+		$cu = get_instance("currency");
 		$cul = $cu->get_list();
 
 		$userconfig = $this->get_user_config(array("uid" => $id));
@@ -1136,13 +1168,11 @@ class users extends users_user
 			$ccr .= $this->parse("CUR");
 		}
 
-		classload("config");
-		$co = new db_config;
+		$co = get_instance("config");
 		$fo = $co->get_simple_config("user_info_form");
 		if ($fo)
 		{
-			classload("form");
-			$f = new form;
+			$f = get_instance("formgen/form");
 			$eid = $this->get_user_config(array("uid" => $id, "key" => "info_entry"));
 			$this->vars(array("form" => $f->gen_preview(array("id" => $fo, "entry_id" => $eid,"silent_errors" => true,"reforb" => $this->mk_reforb("submit_user_info", array("entry_id" => $eid,"u_uid" => $id),"users")))));
 		}
@@ -1165,12 +1195,10 @@ class users extends users_user
 	function submit_user_info($arr)
 	{
 		extract($arr);
-		classload("form");
-		classload("config");
-		$co = new db_config;
+		$co = get_instance("config");
 		$fo = $co->get_simple_config("user_info_form");
 
-		$f = new form;
+		$f = get_instance("formgen/form");
 		$f->process_entry(array("id" => $fo, "entry_id" => $entry_id));
 
 		$this->set_user_config(array("uid" => $u_uid, "key" => "info_entry", "value" => $f->entry_id));
@@ -1180,16 +1208,14 @@ class users extends users_user
 
 	function show_user_info()
 	{
-		classload("config");
-		$co = new db_config;
+		$co = get_instance("config");
 		$fo = $co->get_simple_config("user_info_form");
 		if ($fo)
 		{
-			classload("form");
-			$f = new form;
 			$eid = $this->get_user_config(array("uid" => aw_global_get("uid"), "key" => "info_entry"));
 			if ($eid)
 			{
+				$f = get_instance("formgen/form");
 				return $f->show(array("id" => $fo, "entry_id" => $eid,"op_id" => $co->get_simple_config("user_info_op")));
 			}
 		}
@@ -1203,8 +1229,7 @@ class users extends users_user
 
 		$this->set_user_config(array("uid" => $id, "data" => array("user_currency" => $currency,"calendar" => $calendar)));
 
-		classload("languages");
-		$t = new languages;
+		$t = get_instance("languages");
 
 		$admin_lang = $adminlang;
 		$admin_lang_lc = $t->get_langid($admin_lang);
@@ -1617,7 +1642,7 @@ class users extends users_user
 
 		$grp = $this->get_user_group(aw_global_get("uid"));
 
-		$obj = new objects;
+		$obj = get_instance("objects");
 		$ol = $obj->get_list();
 
 		$num = $this->db_fetch_field("SELECT COUNT(*) as cnt FROM acl WHERE gid = ".$grp["gid"],"cnt");
@@ -1961,7 +1986,7 @@ class users extends users_user
 			if (!$ex_entry)
 			{
 				// this also marks the session_filled_forms array
-				$f = get_instance("form");
+				$f = get_instance("formgen/form");
 				$f->process_entry(array("id" => $id, "values" => $GLOBALS["HTTP_GET_VARS"], "entry_id" => $entry_id));
 			}
 		}
@@ -1985,7 +2010,7 @@ class users extends users_user
 			// new approach here - user can pick an entry for the form as well now. 
 			$this->read_template("show_form.tpl");
 		
-			$f = get_instance("form");
+			$f = get_instance("formgen/form");
 			$f_ref = $this->mk_reforb("process_entry", array("id" => $id,"no_reforb" => true));
 
 			$this->vars(array(

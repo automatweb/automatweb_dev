@@ -99,30 +99,6 @@ class shop_stat extends shop
 			$shmenus = $shmenus + $shop->get_shop_categories($shid);
 		}
 
-/*		// uh, nii, nyyd tuleks siis v2lja m6elda k6ikide valitud poodide kaupade koguse formid
-		// ja nende seest sisestuselemendid v6tta ja lasta tyybil valida et mille kohta ta tahab statti
-
-		//  make menu id list
-		$shmenus = join(",",$this->map2("%s",$shmenus));
-
-		// get all count forms
-		$shforms = array();
-		$this->db_query("SELECT distinct cnt_form as cnt_form FROM shop_items LEFT JOIN objects ON objects.oid = shop_items.id WHERE id IN ($shmenus) AND objects.status != 0");
-		while ($row = $this->db_next())
-		{
-			$shforms[] = $row["cnt_form"];
-		}
-
-		// now get all count form elements
-		// oh fuck, to do this, we have to load all the forms and make a list of elements in each of them. BIJAATCH!
-		classload("form");
-		$f = new form;
-		foreach ($shforms as $form_id)
-		{
-			$f->load($id);
-			$f->
-		}*/
-
 		$this->vars(array(
 			"change" => $this->mk_my_orb("change_stat", array("id" => $id)),
 			"t_from" => $de->gen_edit_form("from", 0),

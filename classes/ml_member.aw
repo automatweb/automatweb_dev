@@ -1,6 +1,5 @@
 <?php
 
-classload("config","form_base","ml_list","ml_rule");
 class ml_member extends aw_template
 {
 	////
@@ -10,7 +9,7 @@ class ml_member extends aw_template
 		$this->init("automatweb/mlist");
 		lc_load("definition");
 
-		$this->dbconf=new db_config();
+		$this->dbconf=get_instance("config");
 		$this->formid=$this->dbconf->get_simple_config("ml_form");
 	}
 
@@ -22,7 +21,7 @@ class ml_member extends aw_template
 		is_array($arr)? extract($arr) : $parent=$arr;
 
 		$this->mk_path($parent,"Lisa meililisti liige");
-		$f=new form();
+		$f=get_instance("formgen/form");
 		$fparse=$f->gen_preview(array(
 			"id" => $this->formid,
 			"reforb" => $this->mk_reforb("submit_new",array(
@@ -41,7 +40,7 @@ class ml_member extends aw_template
 
 		$arr["parent"]=$parent;
 		$arr["redirect_after"]="boo";
-		$f=new form();
+		$f=get_instance("formgen/form");
 		$f->process_entry($arr);
 		// siit läheb veidi ümber nurga et saaks obj tüübiks CL_ML_MEMBER
 		$entry_id=$f->entry_id;
@@ -58,10 +57,10 @@ class ml_member extends aw_template
 		$this->quote(&$arr);
 		extract($arr);
 		$arr["redirect_after"]="boo";
-		$f=new form();
+		$f=get_instance("formgen/form");
 		$f->process_entry($arr);
 
-		$rule=new ml_rule();
+		$rule=get_instance("ml_rule");
 		$rule->check_entry(array($entry_id));
 
 		$this->_log("mlist","muutis liiget $f->entry_name");
@@ -75,7 +74,7 @@ class ml_member extends aw_template
 	{
 		$this->quote(&$arr);
 		extract($arr);
-		$ml=new ml_list();
+		$ml=get_instance("ml_list");
 		
 		$mname = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $id","name");
 
@@ -131,7 +130,7 @@ class ml_member extends aw_template
 		
 		// kui tuldi listi juurest siis näita teed listi folderini
 		$o=$this->get_object($id);
-		$ml=new ml_list();
+		$ml=get_instance("ml_list");
 		if ($lid)
 		{
 			$this->mk_path($o["parent"],$ml->_get_lf_path($lid)."Muuda meililisti liiget");
@@ -141,7 +140,7 @@ class ml_member extends aw_template
 			$this->mk_path($o["parent"],"Muuda meililisti liiget");				
 		};
 
-		$f=new form();
+		$f=get_instance("formgen/form");
 		$fparse=$f->gen_preview(array(
 			"id" => $this->formid,
 			"entry_id" => $id,
@@ -180,7 +179,7 @@ class ml_member extends aw_template
 	{
 		extract($arr);
 		$o=$this->get_object($id);
-		$ml=new ml_list();
+		$ml=get_instance("ml_list");
 		$link="<a href=\"".$this->mk_my_orb("change",array("id" => $id,"lid" => $lid))."\">Muuda meililisti liiget</a> / Saadetud meilid";
 
 		if ($lid)
@@ -257,7 +256,7 @@ class ml_member extends aw_template
 
 		$this->db_query("DELETE FROM form_".$this->formid."_entries where id='$id'");
 		
-		$ml = new ml_list();
+		$ml = get_instance("ml_list");
 		$ml->remove_member_from_list(array("lid" => $id));
 
 		if (!$ar["_inner_call"])		

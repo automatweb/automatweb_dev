@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.78 2002/09/13 15:49:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.79 2002/10/30 11:03:11 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 classload("calendar","defs");
@@ -338,7 +338,7 @@ class planner extends calendar
 		/// XXX: check whether that object has OBJ_HAS_CALENDAR flag
 		if ($object["class_id"] == CL_FORM_CHAIN)
 		{
-			$fch = get_instance("form_chain");
+			$fch = get_instance("formgen/form_chain");
 			$fch->load_chain($object["oid"]);
 
 			$vac_cont = (int)$fch->chain["cal_controller"];
@@ -372,8 +372,7 @@ class planner extends calendar
 		if ($ev_table)
 		{
 			// retrieve all entries that belong to this calendar.
-			classload("form_calendar");
-			$fc = new form_calendar();
+			$fc = get_instance("formgen/form_calendar");
 			$events = $fc->get_events(array(
 				"eid" => $object["oid"],
 				"start" => $di["start"],
@@ -385,7 +384,7 @@ class planner extends calendar
 			$this->raw_events = $fc->raw_events;
 			$this->raw_headers = $fc->raw_headers;
 			$this->cached_chain_ids = array();
-			$this->ft = get_instance("form_table");
+			$this->ft = get_instance("formgen/form_table");
 			$this->table_id = $ev_table;
 			// event_display_table can be empty
 			if ($this->table_id)
@@ -513,7 +512,7 @@ class planner extends calendar
 		// that is the outer frame
 		$navigator = "";
 
-
+		$this->conf["navigator_visible"] = 1;
 		if ($this->conf["navigator_visible"])
 		{
 			$this->vars(array("cell" => ""));

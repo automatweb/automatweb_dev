@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/events2.aw,v 2.4 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/events2.aw,v 2.5 2002/10/30 11:07:28 kristo Exp $
 // events2.aw - FormGen based events
 
 class events2 extends aw_template 
@@ -34,8 +34,7 @@ class events2 extends aw_template
 
 				$this->db_query($q);
 				
-				classload("form");
-				$f = new form();
+				$f = get_instance("formgen/form");
 		
 				$lines = $f->show(array(
 						"id" => 12438,
@@ -61,8 +60,7 @@ class events2 extends aw_template
 	function _gen_search_form($args = array())
 	{
 		extract($args);
-		classload("form");
-		$f = new form();
+		$f = get_instance("formgen/form");
 				
    	$form = $f->gen_preview(array(
 				"id" => 12168,
@@ -105,8 +103,7 @@ class events2 extends aw_template
 
 	function submit_search($args = array())
 	{
-		classload("form");
-		$f = new form();
+		$f = get_instance("formgen/form");
 				
 		$retval = "";
 

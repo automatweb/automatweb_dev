@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.37 2002/10/18 14:18:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.38 2002/10/30 11:04:20 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 classload("cache");
 class db_objects extends aw_template 
@@ -427,7 +427,7 @@ class objects extends db_objects
 		$this->db_query("SELECT * FROM element2form WHERE el_id = ".$oid);
 		while ($drow = $this->db_next())
 		{
-			$fup = new form;
+			$fup = get_instance("formgen/form");
 			$fup->load($drow["form_id"]);
 			for ($row = 0;$row < $fup->arr["rows"]; $row++)
 			{
@@ -526,8 +526,7 @@ class objects extends db_objects
 				break;
 
 			case CL_FORM_ENTRY:
-				classload("form");
-				$t = new form();
+				$t = get_instance("formgen/form");
 				$frm = $t->get_form_for_entry($obj["oid"]);
 				$ops = $t->get_op_list($frm);
 				list($x,$y) = each($ops);
@@ -544,8 +543,7 @@ class objects extends db_objects
 				break;
 
 			case CL_FORM_OUTPUT:
-				classload("form");
-				$t = new form();
+				$t = get_instance("formgen/form");
 				$frm = $t->get_op_forms($obj["oid"]);
 				$x = $y = 0;
 				if (is_array($frm))
@@ -562,8 +560,7 @@ class objects extends db_objects
 
 			
 			case CL_FORM:
-				classload("form");
-				$t = new form();
+				$t = get_instance("formgen/form");
 				$replacement = $t->gen_preview(array(
 					"id" => $obj["oid"],
 					"form_action" => "/reforb.".$this->cfg["ext"],
@@ -571,8 +568,7 @@ class objects extends db_objects
 				break;
 			
 			case CL_FORM_CHAIN:
-				classload("form_chain");
-				$t = new form_chain();
+				$t = get_instance("formgen/form_chain");
 				$replacement = $t->show(array(
 					"id" => $obj["oid"],
 				));

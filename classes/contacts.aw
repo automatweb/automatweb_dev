@@ -23,8 +23,7 @@ class contacts extends aw_template
 		$folder = ($folder) ? $folder : $udata["home_folder"];
 		$this->_gen_contact_group_list();
  
-		classload("form");
-		$f = new form();
+		$f = get_instance("formgen/form");
 		$f->load($this->cfg["form"]);
 		$el = $f->get_element_by_name("grupp");
 		$ef = &$f->get_element_by_id($el->id);
@@ -55,8 +54,7 @@ class contacts extends aw_template
 	function submitimport($args = array())
 	{
 		extract($args);
-		classload("form");
-		$f = new form($this->cfg["form"]);
+		$f = get_instance("formgen/form");
 		// save the form entry, and now .. should we show it?
 		$args["id"] = $this->cfg["form"];
 		$args["parent"] = $args[0];
@@ -217,8 +215,7 @@ class contacts extends aw_template
 			));
 			$glist .= $this->parse("gline");
 		};
-		classload("form");
-		$f = new form($this->cfg["form"]);
+		$f = get_instance("formgen/form");
 		$f->load($this->cfg["form"]);
 		$ids = $f->get_ids_by_name(array("names" => array("name","surname","email","phone")));
 		$ear = $f->get_entries(array("parent" => $folder,"all_data" => true));
@@ -355,8 +352,7 @@ class contacts extends aw_template
 		$menu = $this->gen_msg_menu(array(
 				"activelist" => array("contact",($args["id"]) ? "list" : "add"),
 			));
-		classload("form");
-		$f = new form($this->cfg["form"]);
+		$f = get_instance("formgen/form");
 		$udata = $this->get_user();
 		$folder = ($folder) ? $folder : $udata["home_folder"];
 		$form = $f->gen_preview(array(
@@ -378,8 +374,7 @@ class contacts extends aw_template
 	function submit($args = array())
 	{
 		extract($args);
-		classload("form");
-		$f = new form($this->cfg["form"]);
+		$f = get_instance("formgen/form");
 		// save the form entry, and now .. should we show it?
 		$args["id"] = $this->cfg["form"];
 		$args["parent"] = $folder;
@@ -463,8 +458,7 @@ class contacts extends aw_template
 			"activelist" => array("search"),
 		));
 		$this->read_template("search_contact.tpl");
-		classload("form");
-		$f = new form(2024);
+		$f = get_instance("formgen/form");
 		$form = $f->gen_preview(array(
 			"id" => 2024,
 			"reforb" => $this->mk_reforb("submit_search",array()),
@@ -489,8 +483,7 @@ class contacts extends aw_template
 		
 		$this->read_template("search_contact_res.tpl");
 		// FIXME:
-		classload("form");
-		$f = new form(2024);
+		$f = get_instance("formgen/form");
 		$f->load($this->cfg["form"]);
 		$ids = $f->get_ids_by_name(array("names" => array("name","surname","email","phone")));
 		// vaja kuvada otsitulemused. kuidas?
@@ -569,8 +562,7 @@ class contacts extends aw_template
 			// koostame nimekirja koigist selle formi entritest
 			if ($this->cfg["form"])
 			{
-				classload("form");
-				$f = new form($this->cfg["form"]);
+				$f = get_instance("formgen/form");
 				$f->load($this->cfg["form"]);
 				$ids = $f->get_ids_by_name(array("names" => array("name","surname","email","phone")));
 				$dat = $f->get_entries(array("parent" => array_keys($grps), "all_data" => true));

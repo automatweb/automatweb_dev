@@ -18,7 +18,7 @@ class basket_order extends basket
 		$this->mk_path($order["parent"], "Vaata telimust");
 		$ob = $this->get_basket($order["meta"]["basket_id"]);
 
-		$ff = get_instance("form");
+		$ff = get_instance("formgen/form");
 		$ff->load($ob["meta"]["order_form"]);
 		$ff->load_entry($order["meta"]["of_entry"]);
 
@@ -51,7 +51,7 @@ class basket_order extends basket
 		}
 		else
 		{
-			$finst = get_instance("form");
+			$finst = get_instance("formgen/form");
 			$finst->load($ob["meta"]["order_form"]);
 			$htmlmail = $finst->show(array(
 				"id" => $ob["meta"]["order_form"],

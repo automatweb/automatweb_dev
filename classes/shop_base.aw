@@ -204,7 +204,7 @@ class shop_base extends aw_template
 		{
 			$ofa[$ofid] = $ofid;
 		}
-		$fb = new form_base;
+		$fb = get_instance("formgen/form_base");
 		$fl = $fb->get_list(FTYPE_ENTRY);
 		$op_list = $fb->get_op_list();
 		foreach($ofs as $of_id => $row)

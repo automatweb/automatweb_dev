@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/item_type.aw,v 2.7 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/item_type.aw,v 2.8 2002/10/30 11:06:56 kristo Exp $
 // item_type.aw - kaupade tüübid
 
 classload("shop_base");
@@ -20,8 +20,7 @@ class item_type extends shop_base
 		$this->read_template("add_item_type.tpl");
 		$this->mk_path($parent, LC_ITEM_TYPE_ADD);
 
-		classload("form_base");
-		$fb = new form_base;
+		$fb = get_instance("formgen/form_base");
 
 		$op_list = $fb->get_op_list();
 
@@ -90,8 +89,7 @@ class item_type extends shop_base
 		$this->mk_path($itt["parent"], LC_ITEM_TYPE_CHANGE);
 		$this->read_template("add_item_type.tpl");
 
-		classload("form_base");
-		$fb = new form_base;
+		$fb = get_instance("formgen/form_base");
 
 		$op_list = $fb->get_op_list();
 

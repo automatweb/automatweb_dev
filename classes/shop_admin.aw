@@ -2,7 +2,6 @@
 
 classload("shop_base","shop_menuedit");
 classload("shop");
-classload("form");
 classload("objects");
 class shop_admin extends shop_base
 {
@@ -123,8 +122,7 @@ class shop_admin extends shop_base
 		extract($arr);
 		$sh = $this->get($shop_id);
 
-		classload("form");
-		$f = new form;
+		$f = get_instance("formgen/form");
 		$ret = $f->gen_preview(array(
 			"id" => $sh["owner_form"],
 			"entry_id" => $sh["owner_form_entry"],
@@ -152,7 +150,7 @@ class shop_admin extends shop_base
 
 		$sh = $this->get($shop_id);
 
-		$f = new form;
+		$f = get_instance("formgen/form");
 		$ops = $f->get_op_list($sh["owner_form"]);
 
 		$this->do_core_change_tables($shop_id);
@@ -615,7 +613,7 @@ class shop_admin extends shop_base
 			if ($orss != "")
 			{
 				// ni ja nyt n2itame siis nimekirja. v2ljund valitakse poe confist
-				$f = new form;
+				$f = get_instance("formgen/form");
 				$cur_form = 0;
 				$this->db_query("SELECT * FROM order2form_entries LEFT JOIN objects ON objects.oid = order2form_entries.entry_id WHERE order_id IN ($orss) ORDER BY objects.name");
 				while ($row = $this->db_next())
@@ -762,7 +760,7 @@ class shop_admin extends shop_base
 					$cnt_data[$row["order_id"]] = $row["cnt"];
 				}
 
-				$f = new form;
+				$f = get_instance("formgen/form");
 
 				$cur_order = 0;
 				$cnt = 1;
@@ -809,7 +807,7 @@ class shop_admin extends shop_base
 					{
 						foreach($o2fe[$_ordid] as $row)
 						{
-							$f = new form;
+							$f = get_instance("formgen/form");
 							$this->vars(array(
 								"nr" => $cnt++,
 								"name" => $f->show(array("id" => $row["form_id"], "entry_id" => $row["entry_id"], "op_id" => $sh_ofs[$row["form_id"]]["op_id_search"])),
@@ -825,7 +823,7 @@ class shop_admin extends shop_base
 							$no2 = "";
 							if ($_ordid != $cur_order)
 							{
-								$f = new form;
+								$f = get_instance("formgen/form");
 								$info = "";
 								if ($ordata["hotel_op_id"] != "" && (int)$ordata["hotel_form_id"] > 0 && (int)$ordata["hotel_op_id"] > 0)
 								{
