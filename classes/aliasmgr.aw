@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.16 2002/01/07 20:18:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.17 2002/01/14 18:30:01 duke Exp $
 
 global $orb_defs;
 $orb_defs["aliasmgr"] = "xml";
@@ -186,6 +186,16 @@ class aliasmgr extends aw_template {
 				"generator" => "_pullout_aliases",
 				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"pullout"),
 				"chlink" => $this->mk_my_orb("change",array(),"pullout"),
+				"field" => "id"
+		);
+		
+		$this->defs["poll"] = array(
+				"alias" => "k",
+				"title" => "poll",
+				"class_id" => CL_POLL,
+				"generator" => "_poll_aliases",
+				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"poll"),
+				"chlink" => $this->mk_my_orb("change",array(),"poll"),
 				"field" => "id"
 		);
 		
@@ -432,6 +442,25 @@ class aliasmgr extends aw_template {
 		while (list(,$v) = each($menu_chains))
 		{	
 			$url = $this->mk_my_orb("change", array("id" => $v["id"]),"pullout");
+			$mchain = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
+			$v["url"] = $url;
+			$this->t->define_data(array(
+				"name"                => $mchain,
+				"modified"            => $this->time2date($v["modified"],2),
+				"modifiedby"          => $v["modifiedby"],
+				"description"             => $v["comment"],
+			));
+			$this->_common_parts($v);
+		};
+	}
+	
+	function _poll_aliases($args = array())
+	{
+		$menu_chains = $this->get_aliases_for($this->id,CL_POLL,$_sby, $s_link_order);
+		reset($menu_chains);
+		while (list(,$v) = each($menu_chains))
+		{	
+			$url = $this->mk_my_orb("change", array("id" => $v["id"],"return_url" => urlencode($this->return_url)),"poll");
 			$mchain = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
 			$v["url"] = $url;
 			$this->t->define_data(array(
@@ -745,7 +774,7 @@ class aliasmgr extends aw_template {
 		$this->dellinks[$this->counter] = $id;
 		$this->t->merge_data(array(
 			"title" => $this->defs[$this->def_id]["title"],
-			"check" => sprintf("<input type='checkbox' name='check' value='%d'>",$this->counter),
+			"check" => sprintf("<input type='checkbox' name='check' value='%d'>",$this->def_id),
 			"icon"	=> sprintf("<img src='%s'>",get_icon_url($this->defs[$this->def_id]["class_id"],"")),
 			"alias" => sprintf("<input type='text' size='5' value='%s' onClick='this.select()' onBlur='this.value=\"%s\"'>",$alias,$alias),
 		));
