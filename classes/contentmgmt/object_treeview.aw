@@ -208,6 +208,10 @@ class object_treeview extends class_base
 			}
 		}
 
+		if (count($ret) < 1)
+		{
+			$ret[$ob->parent()] = $ob->parent();
+		}
 		return $ret;
 	}
 
