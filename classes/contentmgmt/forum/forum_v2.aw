@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.3 2003/07/01 15:19:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.4 2003/07/02 12:07:26 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -363,49 +363,15 @@ class forum_v2 extends class_base
 
 		$t->request = $args["request"];
 
-		$xprops = $t->parse_properties(array(
-			"properties" => $all_props,
-		));
+		$all_props[] = array("type" => "hidden","name" => "class","value" => "forum_topic");
+		$all_props[] = array("type" => "hidden","name" => "action","value" => "submit");
+		$all_props[] = array("type" => "hidden","name" => "group","value" => $emb_group);
+		$all_props[] = array("type" => "hidden","name" => "parent","value" => $args["request"]["folder"]);
 
-		$resprops = array();
-		foreach($xprops as $key => $val)
-		{
-			// a põmst, kui nimes on [ sees, siis peab lahutama
-			$bracket = strpos($val["name"],"[");
-			if ($bracket > 0)
-			{
-				$pre = substr($val["name"],0,$bracket);
-				$aft = substr($val["name"],$bracket);
-				$newname = "emb[$pre]" . $aft;
-			}
-			else
-			{
-				$newname = "emb[" . $val["name"] . "]";
-			};
-			$xprops[$key]["name"] = $newname;
-			$resprops["emb_$key"] = $xprops[$key];
-		};
-		$resprops[] = array(
-			"type" => "hidden",
-			"name" => "emb[class]",
-			"value" => "forum_topic",
-		);
-		$resprops[] = array(
-			"type" => "hidden",
-			"name" => "emb[action]",
-			"value" => "submit",
-		);
-		$resprops[] = array(
-			"type" => "hidden",
-			"name" => "emb[group]",
-			"value" => $emb_group,
-		);
-		$resprops[] = array(
-			"type" => "hidden",
-			"name" => "emb[parent]",
-			"value" => $args["request"]["folder"],
-		);
-		return $resprops;
+		return $t->parse_properties(array(
+			"properties" => $all_props,
+			"name_prefix" => "emb",
+		));
 	}
 	
 	function callback_gen_add_comment($args = array())
@@ -417,53 +383,20 @@ class forum_v2 extends class_base
 		{
 			$emb_group = $args["request"]["cb_group"];
 		};
+
 		$all_props = $t->get_active_properties(array(
 			"group" => $emb_group,
 		));
+		
+		$all_props[] = array("type" => "hidden","name" => "class","value" => "forum_comment");
+		$all_props[] = array("type" => "hidden","name" => "action","value" => "submit");
+		$all_props[] = array("type" => "hidden","name" => "group","value" => $emb_group);
+		$all_props[] = array("type" => "hidden","name" => "parent","value" => $args["request"]["topic"]);
 
-		$xprops = $t->parse_properties(array(
+		return $t->parse_properties(array(
 			"properties" => $all_props,
+			"name_prefix" => "emb",
 		));
-
-		$resprops = array();
-		foreach($xprops as $key => $val)
-		{
-			// a põmst, kui nimes on [ sees, siis peab lahutama
-			$bracket = strpos($val["name"],"[");
-			if ($bracket > 0)
-			{
-				$pre = substr($val["name"],0,$bracket);
-				$aft = substr($val["name"],$bracket);
-				$newname = "emb[$pre]" . $aft;
-			}
-			else
-			{
-				$newname = "emb[" . $val["name"] . "]";
-			};
-			$xprops[$key]["name"] = $newname;
-			$resprops["emb_$key"] = $xprops[$key];
-		};
-		$resprops[] = array(
-			"type" => "hidden",
-			"name" => "emb[class]",
-			"value" => "forum_comment",
-		);
-		$resprops[] = array(
-			"type" => "hidden",
-			"name" => "emb[action]",
-			"value" => "submit",
-		);
-		$resprops[] = array(
-			"type" => "hidden",
-			"name" => "emb[group]",
-			"value" => $emb_group,
-		);
-		$resprops[] = array(
-			"type" => "hidden",
-			"name" => "emb[parent]",
-			"value" => $args["request"]["topic"],
-		);
-		return $resprops;
 	}
 
 	function create_forum_topic($args)
