@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.91 2002/02/21 15:45:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.92 2002/02/21 18:13:21 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1151,7 +1151,6 @@ class form extends form_base
 			// see logimine on omal kohal ainult siis, kui täitmine toimub
 			// läbi veebi.
 			$this->_log("form","T&auml;itis formi $this->name");
-			$this->do_actions($this->entry_id);
 		}
 		else
 		{
@@ -1159,6 +1158,7 @@ class form extends form_base
 			$this->update_entry_data($this->entry_id,$this->entry);
 			$this->_log("form","Muutis formi $this->name sisestust $this->entry_id");
 		}
+		$this->do_actions($this->entry_id);
 
 		// paneme kirja, et kasutaja t2itis selle formi et siis kasutajax regimisel saame seda kontrollida.
 		$GLOBALS["session_filled_forms"][$this->id] = $this->entry_id;
