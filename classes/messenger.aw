@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.1 2001/05/17 09:38:07 duke Exp $
 /*       _\|/_
          (o o)
  +----oOO-{_}-OOo----------------------------------+
@@ -512,9 +513,19 @@ class messenger extends menuedit_light
 					$msg["subject"] = "(no subject)";
 				};
 				$cnt++;
+				if ($msg["status"])
+				{
+					$pref = "";
+					$suf = "";
+				}
+				else
+				{
+					$pref = "<b>";
+					$suf = "</b>";
+				};
 				$msg["status"] = ($msg["status"]) ? "loetud" : "lugemata";
-				$msg["from"] = "<a href='?class=messenger&action=do_search&field=modifiedby&value=$msg[modifiedby]&folders=$folder'>" . $msg["modifiedby"] . "</a>";
-				$msg["subject"] = "<a href='?class=messenger&action=show&id=$msg[id]'>" . $msg["subject"] . "</a>";
+				$msg["from"] = "$pref<a href='?class=messenger&action=do_search&field=modifiedby&value=$msg[modifiedby]&folders=$folder'>" . $msg["modifiedby"] . "</a>$suf";
+				$msg["subject"] = "$pref<a href='?class=messenger&action=show&id=$msg[id]'>" . $msg["subject"] . "</a>$suf";
 				$msg["pri"] = ($msg["pri"]) ? $msg["pri"] : 0;
 				$msg["cnt"] = $cnt;
 				$t->define_data($msg);
@@ -837,6 +848,10 @@ class messenger extends menuedit_light
 				$delivery = "fldr";
 			};
 			// loome targeti jaoks uue teate objekti
+			if ($args["sendmail"])
+			{
+				$delivery = "mail";
+			};
 			if ($delivery == "fldr")
 			{
 				$oid = $this->new_object(array(
@@ -932,6 +947,10 @@ class messenger extends menuedit_light
 				"l1" => "search",
 				));
 		//$folder_list = $this->_folder_list();
+		if (!is_array($folders))
+		{
+			$folders = array($folders => $folders);
+		};
 		$results = $this->driver->msg_search(array(
 					"field" => $field,
 					"value" => $value,
