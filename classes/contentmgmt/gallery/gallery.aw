@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery.aw,v 1.5 2004/06/02 10:52:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery.aw,v 1.6 2004/06/15 08:48:13 kristo Exp $
 
 class gallery extends aw_template
 {
@@ -96,12 +96,21 @@ class gallery extends aw_template
 
 		if ($id)
 		{
-			$this->upd_object(array("oid" => $id, "name" => $name, "comment" => $comment));
+			$o = obj($id);
+			$o->set_name($name);
+			$o->set_comment($comment);
+			$o->save();
 		}
 		else
 		{
 			$parent = $parent ? $parent : $this->cfg["rootmenu"];
-			$id = $this->new_object(array("parent" => $parent,"name" => $name, "comment" => $comment, "class_id" => CL_GALLERY));
+			$o = obj();
+			$o->set_parent($parent);
+			$o->set_name($name);
+			$o->set_comment($comment);
+			$o->set_class_id(CL_GALLERY);
+			$id = $o->save();
+
 			$this->db_query("INSERT INTO galleries VALUES($id,'')");
 			if ($alias_to)
 			{
