@@ -379,6 +379,7 @@ class site_content extends menuedit
 			"uid" => aw_global_get("uid"),
 			"date" => $this->time2date(time(), 2),
 			"date2" => $this->time2date(time(), 8),
+			"datedate" => time(),
 			"date3" => date("d").". ".get_lc_month(date("n")).". ".date("Y"),
 			"IS_FRONTPAGE" => ($section == $frontpage ? $this->parse("IS_FRONTPAGE") : ""),
 			"IS_FRONTPAGE2" => ($section == $frontpage ? $this->parse("IS_FRONTPAGE2") : ""),
@@ -1368,7 +1369,6 @@ class site_content extends menuedit
 	{
 		// now build "you are here" links from the path
 		$ya = "";  
-		$show = false;
 		$cnt = count($path);
 
 		$this->title_yah = "";
@@ -1381,57 +1381,43 @@ class site_content extends menuedit
 				$alias_path = array();
 			}
 
-			if ($show)
+			$ref = $this->mar[$path[$i+1]];
+			if ($ref["alias"])
 			{
-				$ref = $this->mar[$path[$i+1]];
-				if ($ref["alias"])
+				if (sizeof($alias_path) == 0)
 				{
-					if (sizeof($alias_path) == 0)
-					{
-						$use_aliases = true;
-					};
-
-					if ($use_aliases)
-					{
-						array_push($alias_path,$ref["alias"]);
-					};
-
-					if ($use_aliases)
-					{
-						$linktext = join("/",$alias_path);
-					};
-
-					$link = $this->cfg["baseurl"]."/".$linktext;
-				}
-				else
-				{
-					$use_aliases = false;
-					$link = $this->cfg["baseurl"]."/".$this->mar[$path[$i+1]]["oid"];
+					$use_aliases = true;
 				};
-
-				if ($this->mar[$path[$i+1]]["link"] != "")
+				if ($use_aliases)
 				{
-					$link = $this->mar[$path[$i+1]]["link"];
-				}
-
-				$this->vars(array(
-					"link" => $link,
-					"text" => str_replace("&nbsp;"," ",strip_tags($this->mar[$path[$i+1]]["name"])), 
-					"ysection" => $this->mar[$path[$i+1]]["oid"]
-				));
-
-				$check_subs = ($this->subs[$this->mar[$path[$i+1]]["oid"]] > 0) || aw_ini_get("menuedit.yah_no_subs");
-
-				if ($this->mar[$path[$i+1]]["clickable"] == 1 && $check_subs)
+					array_push($alias_path,$ref["alias"]);
+				};
+				if ($use_aliases)
 				{
-					$ya.=$this->parse("YAH_LINK");
-					$this->title_yah.=" / ".$this->mar[$path[$i+1]]["name"];
-				}
+					$linktext = join("/",$alias_path);
+				};
+				$link = $this->cfg["baseurl"]."/".$linktext;
 			}
-			// don't show things that are before $frontpage
-			if (isset($path[$i]) && isset($this->mar[$path[$i]]) && $this->mar[$path[$i]]["oid"] == $this->cfg["rootmenu"])
+			else
 			{
-				$show = true;
+				$use_aliases = false;
+				$link = $this->cfg["baseurl"]."/".$this->mar[$path[$i+1]]["oid"];
+			};
+
+			if ($this->mar[$path[$i+1]]["link"] != "")
+			{
+				$link = $this->mar[$path[$i+1]]["link"];
+			}
+			$this->vars(array(
+				"link" => $link,
+				"text" => str_replace("&nbsp;"," ",strip_tags($this->mar[$path[$i+1]]["name"])), 
+				"ysection" => $this->mar[$path[$i+1]]["oid"]
+			));
+			$check_subs = ($this->subs[$this->mar[$path[$i+1]]["oid"]] > 0) || aw_ini_get("menuedit.yah_no_subs");
+			if ($this->mar[$path[$i+1]]["clickable"] == 1 && $check_subs)
+			{
+				$ya.=$this->parse("YAH_LINK");
+				$this->title_yah.=" / ".$this->mar[$path[$i+1]]["name"];
 			}
 		}
 
@@ -2100,7 +2086,8 @@ class site_content extends menuedit
 				"docid" => $section,
 				"boldlead" => 1,
 				"keywords" => 1,
-				"tpl" => $template
+				"tpl" => $template,
+				"no_strip_lead" => 1,
 			));
 			$this->vars(array("docid" => $section));
 			$this->active_doc = $section;
