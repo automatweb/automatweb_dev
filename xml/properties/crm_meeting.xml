@@ -1,6 +1,16 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>is_done</name>
+            <type>checkbox</type>
+            <table>objects</table>
+            <field>flags</field>
+            <method>bitmask</method>
+            <ch_value>8</ch_value>
+            <group>general</group>
+            <caption>Tehtud</caption>
+      </property>
+      <property>
             <name>start1</name>
             <type>datetime_select</type>
             <field>start</field>
