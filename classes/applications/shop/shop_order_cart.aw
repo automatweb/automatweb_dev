@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.7 2004/06/09 12:53:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.8 2004/06/15 08:10:29 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -249,7 +249,7 @@ class shop_order_cart extends class_base
 		}
 	}
 
-	function do_create_order_from_cart($oc, $warehouse = NULL)
+	function do_create_order_from_cart($oc, $warehouse = NULL, $params = array())
 	{
 		$so = get_instance("applications/shop/shop_order");
 		$oc = obj($oc);
@@ -265,7 +265,7 @@ class shop_order_cart extends class_base
 			$so->add_item($iid, $quant);
 		}
 
-		return $so->finish_order();
+		return $so->finish_order($params);
 	}
 
 	function start_order()

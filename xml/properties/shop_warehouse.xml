@@ -190,6 +190,16 @@
             <caption>Tellija organisatsioon</caption>
       </property>
       <property>
+            <name>order_current_person</name>
+            <table>objects</table>
+            <group>order_current</group>
+            <type>popup_search</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <clid>CL_CRM_PERSON</clid>
+            <caption>Tellija isik</caption>
+      </property>
+      <property>
             <name>order_current_form</name>
             <table>objects</table>
             <group>order_current</group>

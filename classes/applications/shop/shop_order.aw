@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.4 2004/06/09 12:53:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.5 2004/06/15 08:10:29 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -308,8 +308,10 @@ class shop_order extends class_base
 
 	/** returns order id 
 	**/
-	function finish_order()
+	function finish_order($params = array())
 	{
+		extract($params);
+
 		$wh = $this->order_warehouse->instance();
 
 		$oi = obj();
@@ -317,6 +319,9 @@ class shop_order extends class_base
 		$oi->set_name("Tellimus laost ".$this->order_warehouse->name());
 		$oi->set_class_id(CL_SHOP_ORDER);
 		$oi->set_prop("warehouse", $this->order_warehouse->id());
+
+		$oi->set_meta("user_data", $params["user_data"]);
+
 		if ($this->order_center)
 		{
 			$oi->set_prop("oc", $this->order_center->id());
@@ -342,8 +347,13 @@ class shop_order extends class_base
 		}
 
 		// connect to current person/company
-		$us = get_instance("core/users/user");
-		if (($pers_id = $us->get_current_person()))
+		if (!$pers_id)
+		{
+			$us = get_instance("core/users/user");
+			$pers_id = $us->get_current_person();
+		}
+
+		if ($pers_id)
 		{
 			$oi->connect(array(
 				"to" => $pers_id,
@@ -356,7 +366,13 @@ class shop_order extends class_base
 				"reltype" => 20 // RELTYPE_ORDER
 			));
 		}
-		if (($com_id = $us->get_current_company()))
+
+		if (!$com_id)
+		{
+			$com_id = $us->get_current_company();
+		}
+
+		if ($com_id)
 		{
 			$oi->connect(array(
 				"to" => $com_id,
@@ -472,8 +488,44 @@ class shop_order extends class_base
 			));
 		}
 
+		$awa = new aw_array($o->meta("user_data"));
+		foreach($awa->get() as $ud_k => $ud_v)
+		{
+			$this->vars(array(
+				"user_data_".$ud_k => $ud_v
+			));
+		}
+
+		$pl = "";
+		if ($this->is_template("PROD_LONG"))
+		{
+			$oc = obj($o->prop("oc"));
+			$oc_i = $oc->instance();
+
+			foreach($o->connections_from(array("type" => "RELTYPE_PRODUCT")) as $c)
+			{
+				$prod = $c->to();
+				$inst = $prod->instance();
+
+				$this->vars(array(
+					"prod_html" => $inst->do_draw_product(array(
+						"prod" => $prod,
+						"layout" => $oc_i->get_long_layout_for_prod(array(
+							"soc" => $oc,
+							"prod" => $prod
+						)),
+						"oc_obj" => $oc,
+						"quantity" => $tp[$prod->id()],
+					))
+				));
+				
+				$pl .= $this->parse("PROD_LONG");
+			}
+		}
+
 		$this->vars(array(
 			"PROD" => $p,
+			"PROD_LONG" => $pl,
 			"total" => number_format($total,2),
 			"id" => $o->id(),
 			"order_pdf" => $this->mk_my_orb("gen_pdf", array("id" => $o->id()))
