@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.2 2001/05/30 00:42:36 duke Exp $
 // file.aw - Failide haldus
 global $orb_defs;
 $orb_defs["file"] = "xml";
@@ -11,7 +12,76 @@ class file extends aw_template
 		$this->tpl_init("file");
 		$this->db_init();
 	}
+	
 	////
+	// !Selle funktsiooni abil salvestatakse fail systeemi sisse,
+	// soltuvalt parameetrist store väärtusest
+	// argumendid:
+	// store(string) - kuhu fail salvestada ("db" || "file")
+	// filename(string) - faili nimi
+	// type(string) - faili tyyp (MIME)
+	// content(string) - faili sisu
+	function put($args = array())
+	{
+		extract($args);
+		$retval = "";
+		if ($store == "fs")
+		{
+			$retval = $this->_put_fs($args);
+		};
+		return $retval;
+
+	}
+
+	////
+	// !Salvestab faili failisysteemi. For internal use, s.t. kutsutakse välja put-i seest
+	function _put_fs($args = array())
+	{
+		// first, we need to find a path to put the file
+		global $basedir;
+		print "bs = $basedir<br>";
+		print "<pre>";
+		print_r($args);
+		print "</pre>";
+	}
+
+	////
+	// !checks whether the directory needed for file storing exists and is writable
+	function check_environment($args = array())
+	{
+		$retval = "";
+		if (!defined("SITE_DIR"))
+		{
+			$retval .= "SITE_DIR on defineerimata, ei saa tööd jätkata<br>";
+		}
+		else
+		{
+			$dir = SITE_DIR . "/files";
+			$preflist = array("0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f");
+			$dirlist[] = $dir;
+			foreach($preflist as $prefix)
+			{
+				$dirlist[] = $dir . "/" . $prefix;
+			};
+
+			foreach($dirlist as $dir)
+			{
+				if (!file_exists($dir))
+				{
+					$retval .= "Kataloog $dir puudub<br>";
+				}
+				elseif (!is_dir($dir))
+				{
+					$retval .= "$dir ei ole kataloog<br>";
+				}
+				elseif (!is_writable($dir))
+				{
+					$retval .= "$dir ei ole kirjutatav<br>";
+				};
+			};
+		};
+		return $retval;
+	}
 
 	////
 	// !Kuvab faili lisamise vormi
@@ -93,6 +163,7 @@ class file extends aw_template
 
 				// See kahekordne kvootimine oli millegipärast vajalik, aga vat hetkel ma ma küll
 				// ei mäleta milleks täpselt
+
 				$this->quote(&$fc);
 				$this->quote(&$fc);
 
