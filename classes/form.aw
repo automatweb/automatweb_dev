@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.6 2001/05/21 10:43:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.7 2001/05/22 05:02:10 kristo Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -668,6 +668,7 @@ $orb_defs["form"] = "xml";
 			}
 
 			$this->read_template("show.tpl",1);
+			$this->vars(array("form_id" => $id));
 			$images = new db_images;
 
 			$c="";

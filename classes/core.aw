@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.6 2001/05/22 03:14:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.7 2001/05/22 05:02:10 kristo Exp $
 /*       _\|/_
          (o o)
  +----oOO-{_}-OOo----------------------------------+
@@ -860,7 +860,7 @@ class core extends db_connector
 		else
 		{
 			// user side
-			return $GLOBALS["baseurl"]."?class=$cl_name&action=$fun&$urs";
+			return $GLOBALS["baseurl"]."/?class=$cl_name&action=$fun&$urs";
 		}
 	}
 
