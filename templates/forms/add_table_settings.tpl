@@ -207,6 +207,15 @@
 												<td class="celltext" colspan="2"><input type="text" class="formtext" name="settings[doc_title_is_yah_sep]" value="{VAR:doc_title_is_yah_sep}" size="3"> Dokumendi pealkirja yah eraldaja</td>
 											</tr>
 											<tr>
+												<td class="celltext" colspan="2"><input type="checkbox" class="formcheck" name="settings[no_show_empty]" value="1" {VAR:no_show_empty}> &Auml;ra n&auml;ita t&uuml;hja tabelit</td>
+											</tr>
+											<tr>
+												<td class="celltext" colspan="2"><input type="textbox" class="formtext" name="settings[empty_table_text]" value="{VAR:empty_table_text}"> T&uuml;hja tabeli asemel tekst</td>
+											</tr>
+											<tr>
+												<td class="celltext" colspan="2"><input type="checkbox" class="formcheck" name="settings[no_grpels_in_restrict]" value="1" {VAR:no_grpels_in_restrict}> &Auml;ra pane grupeerimislemente uude otsingusse</td>
+											</tr>
+											<tr>
 												<td class="celltext" colspan="2"><input type="checkbox" class="formcheck" name="settings[show_second_table]" value="1" {VAR:show_second_table}> Tabeli all on teine tabel</td>
 											</tr>
 											<tr>
