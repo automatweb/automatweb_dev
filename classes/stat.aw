@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/stat.aw,v 2.4 2001/07/28 03:27:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/stat.aw,v 2.5 2002/01/16 08:11:51 kristo Exp $
 // stat.aw - generating statictis from the syslog
 // klass, mille abil saab genereerida statistikat syslog tabelist
 class db_stat extends aw_template
@@ -16,6 +16,7 @@ class db_stat extends aw_template
 		$this->start = mktime(0,0,0,$this->month,1,2000);
 		$this->dm = date("t",$this->start);
 		$this->end = mktime(23,59,59,$this->month+1,0,2000);
+		$this->filter_uid = $GLOBALS["filter_uid"];
 		lc_load("definition");
 	}
 
@@ -177,9 +178,13 @@ class db_stat extends aw_template
         		$cf = "dayofmonth(from_unixtime(tm))";
 		};
 
+		if ($GLOBALS["filter_uid"] != "")
+		{
+			$fu = " AND uid = '".$GLOBALS["filter_uid"]."' ";
+		}
 		$q = "SELECT count(*) AS hits,$cf AS tm1,tm
 			FROM syslog
-			WHERE ($this->timeframe AND (type IN ('pageview','cachehit'))) ".$this->mk_bipstr()."
+			WHERE ($this->timeframe AND (type IN ('pageview','cachehit'))) $fu ".$this->mk_bipstr()."
 			GROUP BY tm1";
 		$this->db_query($q);
 		
@@ -251,9 +256,13 @@ class db_stat extends aw_template
 	{
 		$this->read_template("parts.tpl");
 
+		if ($GLOBALS["filter_uid"] != "")
+		{
+			$fu = " AND uid = '".$GLOBALS["filter_uid"]."' ";
+		}
 		$q = "SELECT COUNT(*) AS hits,ip
 			FROM syslog
-			WHERE ($this->timeframe AND (type = 'pageview' OR type = 'cachehit')) ".$this->mk_bipstr()."
+			WHERE ($this->timeframe AND (type = 'pageview' OR type = 'cachehit')) $fu ".$this->mk_bipstr()."
 			GROUP BY ip
 			ORDER BY hits DESC
 			LIMIT $limit";
@@ -272,16 +281,31 @@ class db_stat extends aw_template
 					  "width" => round( (200*$row[hits]) / $top) + 1));
 			$h .= $this->parse("hosts_line");
 		};
-		$this->vars(array("total" => $total,
-				  "hosts_line" => $h));
+
+		// mitmelt erinevalt iplt k2idi
+		$q = "SELECT COUNT(distinct(ip)) AS hits
+			FROM syslog
+			WHERE ($this->timeframe AND (type = 'pageview' OR type = 'cachehit')) $fu ".$this->mk_bipstr();
+		$this->db_query($q);
+		$res = $this->db_next();
+
+		$this->vars(array(
+			"total" => $total,
+			"hosts_line" => $h,
+			"num_ips" => $res["hits"]
+		));
 		return $this->parse("hosts");
 	}
 	function stat_by_login($limit)
 	{
 		$this->read_template("parts.tpl");
+		if ($GLOBALS["filter_uid"] != "")
+		{
+			$fu = " AND uid = '".$GLOBALS["filter_uid"]."' ";
+		}
 		$q = "SELECT COUNT(*) AS logins,uid
 			FROM syslog
-			WHERE ($this->timeframe AND type = 'auth') ".$this->mk_bipstr()."
+			WHERE ($this->timeframe AND type = 'auth') $fu ".$this->mk_bipstr()."
 			GROUP BY uid
 			ORDER BY logins DESC
 			LIMIT $limit";
@@ -310,10 +334,14 @@ class db_stat extends aw_template
 	{
 		$this->read_template("parts.tpl");
 
+		if ($GLOBALS["filter_uid"] != "")
+		{
+			$fu = " AND uid = '".$GLOBALS["filter_uid"]."' ";
+		}
 		$q = "SELECT COUNT(*) AS hits,syslog.oid AS oid,objects.name AS oname
 			FROM syslog
 			LEFT JOIN objects ON (syslog.oid = objects.oid)
-			WHERE ($this->timeframe AND (type = 'pageview' OR type = 'cachehit')) ".$this->mk_bipstr()."
+			WHERE ($this->timeframe AND (type = 'pageview' OR type = 'cachehit')) $fu ".$this->mk_bipstr()."
 			GROUP BY oid
 			ORDER BY hits DESC
 			LIMIT $limit";
@@ -341,10 +369,14 @@ class db_stat extends aw_template
 	function stat_by_menu($limit)
 	{
 		$this->read_template("parts.tpl");
+		if ($GLOBALS["filter_uid"] != "")
+		{
+			$fu = " AND uid = '".$GLOBALS["filter_uid"]."' ";
+		}
 		$q = "SELECT COUNT(*) AS changes,syslog.oid AS oid,objects.name AS mname
 			FROM syslog
 			LEFT JOIN objects ON (syslog.oid = objects.oid)
-			WHERE ($this->timeframe AND syslog.type = 'menuedit') ".$this->mk_bipstr()."
+			WHERE ($this->timeframe AND syslog.type = 'menuedit') $fu ".$this->mk_bipstr()."
 			GROUP BY oid
 			ORDER BY changes DESC
 			LIMIT $limit";
@@ -372,9 +404,13 @@ class db_stat extends aw_template
 	// autentimisi (sisselogimisi) 
 	function stat_by_auth($limit)
 	{
+		if ($GLOBALS["filter_uid"] != "")
+		{
+			$fu = " AND uid = '".$GLOBALS["filter_uid"]."' ";
+		}
 		$q = "SELECT COUNT(*) AS cnt,uid
 			FROM syslog
-			WHERE ($this->tf AND type = 'auth') ".$this->mk_bipstr()."
+			WHERE ($this->tf AND type = 'auth') $fu ".$this->mk_bipstr()."
 			GROUP BY uid
 			ORDER BY cnt DESC
 			LIMIT $limit";
@@ -384,9 +420,13 @@ class db_stat extends aw_template
 	// linkidele klikkimised
 	function stat_by_links($limit)
 	{
+		if ($GLOBALS["filter_uid"] != "")
+		{
+			$fu = " AND uid = '".$GLOBALS["filter_uid"]."' ";
+		}
 		$q = "SELECT COUNT(*) AS cnt,oid
 			FROM syslog
-			WHERE ($this->tf AND type = 'link') ".$this->mk_bipstr()."
+			WHERE ($this->tf AND type = 'link') $fu ".$this->mk_bipstr()."
 			GROUP BY oid
 			ORDER BY cnt DESC
 			LIMIT $limit";
