@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.48 2004/05/13 14:49:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.49 2004/05/24 10:54:12 duke Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -171,18 +171,7 @@ class ml_list extends class_base
 		));
 
 		$id = (int)$id;//teate id
-
-		// yes, it works only for one list from now on. 
-		// first char is ":", strip it
-		$target = substr($targets[0],1);
-		$this->quote($target);
-
-		// that's just horrible. lookup by name. oh well
-
-		$q = "SELECT oid FROM objects WHERE class_id=".CL_ML_LIST." AND NAME = '$target' AND status != 0";
-		$this->db_query($q);
-		$listdata = $this->db_next();
-
+		$listinfo = new object($targets);
 		$listrida = "";
 
 		$this->vars(array(
@@ -195,7 +184,7 @@ class ml_list extends class_base
 			"listrida" => $listrida,
 			"reforb" => $this->mk_reforb("submit_post_message",array(
 				"id" => $id,
-				"list_id" => $listdata["oid"],
+				"list_id" => $listinfo->id(),
 			)),
 		));
 
@@ -968,7 +957,9 @@ class ml_list extends class_base
 		$row = $this->db_fetch_row("SELECT count(*) AS cnt FROM ml_sent_mails WHERE lid = '$list_id' AND mail = '$mail_id'");
 		$served_count = $row["cnt"];
 
+		$q2 = "SELECT total,position FROM ml_queue WHERE lid = '$list_id' AND mid = '$mail_id'";
 		$row2 = $this->db_fetch_row("SELECT total,position FROM ml_queue WHERE lid = '$list_id' AND mid = '$mail_id'");
+
 		$served_count = $row2["position"];
 		$member_count = $row2["total"];
 
