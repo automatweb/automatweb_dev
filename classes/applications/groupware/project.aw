@@ -1,12 +1,28 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.6 2004/08/25 08:56:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.7 2004/09/09 14:11:35 duke Exp $
 // project.aw - Projekt 
 /*
 
 @classinfo syslog_type=ST_PROJECT relationmgr=yes
 
 @default table=objects
-@default group=general
+@default group=general2
+
+@property name type=textbox
+@caption Nimi
+
+@property status type=status
+@caption Staatus
+
+@property doc type=relpicker reltype=RELTYPE_PRJ_DOCUMENT field=meta method=serialize
+@caption Loe lähemalt
+
+@default group=web_settings
+@property project_navigator type=checkbox ch_value=1 field=meta method=serialize
+@caption Näita projektide navigaatorit
+
+@property use_template type=select field=meta method=serialize
+@caption Välimus
 
 @default group=event_list
 
@@ -20,12 +36,12 @@
 @property add_event callback=callback_get_add_event group=add_event store=no
 @caption Lisa sündmus
 
-// kas see on nüüd see kuradima eraldi tab
-
 @default group=files
 @property file_editor type=releditor reltype=RELTYPE_PRJ_FILE mode=manager props=filename,file,comment
 @caption Failid
 
+@groupinfo general2 parent=general caption="Üldine"
+@groupinfo web_settings parent=general caption="Veebiseadistused"
 @groupinfo event_list caption="Sündmused" submit=no
 @groupinfo add_event caption="Muuda sündmust"
 @groupinfo files caption="Failid"
@@ -48,19 +64,21 @@
 @reltype PRJ_CFGFORM value=6 clid=CL_CFGFORM
 @caption Seadete vorm
 
-*/
+@reltype PRJ_DOCUMENT value=7 clid=CL_DOCUMENT
+@caption Dokument
 
-// so I need to connect configuration forms to projects
+*/
 
 class project extends class_base
 {
 	function project()
 	{
 		$this->init(array(
-			"clid" => CL_PROJECT
+			"clid" => CL_PROJECT,
+			"tpldir" => "applications/groupware/project",
 		));
 
-		$this->event_entry_classes = array(CL_CALENDAR_EVENT);
+		$this->event_entry_classes = array(CL_CALENDAR_EVENT,CL_STAGING);
 	}
 
 	function get_property($arr)
@@ -76,8 +94,16 @@ class project extends class_base
 			case "event_toolbar":
 				$this->gen_event_toolbar($arr);
 				break;
+
+			case "use_template":
+                                $data["options"] = array(
+                                        "weekview" => "Nädala vaade",
+                                );
+                                break;
 		}
 		return $retval;
+
+		// PUC; PUC; PUC; how do I get this beast working properly?
 	}
 
 	function set_property($arr)
@@ -100,12 +126,6 @@ class project extends class_base
 	// !Optionally this also needs to support date range ..
 	function gen_event_list($arr)
 	{
-		/*
-		$lds = $this->get_events_for_project(array(
-			"project_id" => $arr["obj_inst"]->id(),
-		));
-		*/
-		
 		$t = &$arr["prop"]["vcl_inst"];
 
 		$arr["prop"]["vcl_inst"]->configure(array(
@@ -121,38 +141,71 @@ class project extends class_base
 		$end = $range["end"];
 		classload("icons");
 
-		$this->overview = array();
+		$o = $arr["obj_inst"];
 
-		//if (sizeof($lds) > 0)
-		//{
-			$ol = new object_list(array(
-				//"oid" => $lds,
-				"parent" => $arr["obj_inst"]->id(),
-				"sort_by" => "planner.start",
-				new object_list_filter(array("non_filter_classes" => CL_CRM_MEETING)),
+		$this->overview = array();
+		
+		$this->used = array();
+		enter_function("recurse_projects");
+		$this->_recurse_projects(0,$o->id());
+		exit_function("recurse_projects");
+
+		// create a list of all subprojects, so that we can show events from all projects
+		$parents = array($arr["obj_inst"]->id());
+		if (is_array($this->prj_map))
+		{
+			foreach($this->prj_map as $key => $val)
+			{
+				foreach($val as $k1 => $v1)
+				{
+					$parents[$k1] = $k1;
+				};
+			};
+		};
+
+		// aga vaat siin on mingi jama ..
+		$ol = new object_list(array(
+			"parent" => $parents,
+			"sort_by" => "planner.start",
+			new object_list_filter(array("non_filter_classes" => CL_CRM_MEETING)),
+		));
+
+		for($o =& $ol->begin(); !$ol->end(); $o =& $ol->next())
+		{
+			$clinf = $this->cfg["classes"][$o->class_id()];
+			$link = $this->mk_my_orb("change",array(
+				"id" => $o->id(),
+				"return_url" => urlencode(aw_global_get("REQUEST_URI")),
+			),$o->class_id());
+			/*
+			$link = html::get_change_url(array(
+				"oid" => $o->id(),
+				"params" => array(
+					"return_url" => aw_global_get("REQUEST_URI"),
+				),
+			));
+			*/
+			/*
+			$link = $this->mk_my_orb("change",array(
+				"id" => $arr["obj_inst"]->id(),
+				"event_id" => $o->id(),
+				"group" => "add_event",
+			),$this->clid);
+			*/
+			$t->add_item(array(
+				"timestamp" => $o->prop("start1"),
+				"data" => array(
+					"name" => $o->prop("name"),
+					"icon" => icons::get_icon_url($o),
+					"link" => $link,
+				),
 			));
 
-
-			for($o =& $ol->begin(); !$ol->end(); $o =& $ol->next())
+			if ($o->prop("start1") > $range["overview_start"])
 			{
-				$clinf = $this->cfg["classes"][$o->class_id()];
-				$t->add_item(array(
-					"timestamp" => $o->prop("start1"),
-					"data" => array(
-						"name" => $o->prop("name"),
-						"icon" => icons::get_icon_url($o),
-						"link" => $this->mk_my_orb("change",array("id" => $o->id()),$clinf["file"]),
-					),
-				));
-
-				if ($o->prop("start1") > $range["overview_start"])
-				{
-					$this->overview[$o->prop("start1")] = 1;
-				};
-
-
+				$this->overview[$o->prop("start1")] = 1;
 			};
-		//};
+		};
 	}
 
 	function get_overview($arr = array())
@@ -253,33 +306,58 @@ class project extends class_base
 		return $ev_id_list;
 	}
 
+	// nii, see asi tuleb nüüd ringi teha nii, et ta toetaks subprojecte ka
+
 	function get_events($arr)
 	{
 		// okey, I need a generic function that should be able to return events from the range I am
 		// interested in
 		extract($arr);
-		$parent = $arr["id"];
+		$parents = array($arr["id"]);
+		
+		$this->used = array();
+		enter_function("recurse_projects");
+		$this->_recurse_projects(0,$arr["id"]);
+		exit_function("recurse_projects");
+		
+		if (is_array($this->prj_map))
+		{
+			foreach($this->prj_map as $key => $val)
+			{
+				foreach($val as $k1 => $v1)
+				{
+					$parents[$k1] = $k1;
+				};
+			};
+		};
+
+		$parent = join(",",$parents);
+
+
 		$_start = $arr["range"]["start"];
 		$_end = $arr["range"]["end"];
-		$q = "SELECT objects.oid AS id,objects.class_id,objects.brother_of,objects.name,planner.start,planner.end
+		$q = "SELECT objects.oid AS id,objects.parent,objects.class_id,objects.brother_of,objects.name,planner.start,planner.end
                         FROM planner
                         LEFT JOIN objects ON (planner.id = objects.brother_of)
                         WHERE planner.start >= '${_start}' AND
                         (planner.end <= '${_end}' OR planner.end IS NULL) AND
-                        objects.status != 0 AND parent = ${parent}";
+                        objects.status != 0 AND parent IN (${parent})";
 		$this->db_query($q);
 		$events = array();
 		$pl = get_instance(CL_PLANNER);
 		while($row = $this->db_next())
 		{
+			// now figure out which project this thing belongs to?
 			$events[] = array(
 				"start" => $row["start"],
 				"name" => $row["name"],
 				"id" => $row["id"],
+				"project_weblink" => aw_ini_get("baseurl") . "/" . $row["parent"],
 				"link" => $this->mk_my_orb("change",array(
 					"id" => $row["id"],
 				),$row["class_id"],true,true),
 			);
+			$ids[$row["id"]] = $row["id"];
 		};
 		return $events;
 	}
@@ -389,11 +467,13 @@ class project extends class_base
 	function gen_event_toolbar($arr)
 	{
 		$tb = &$arr["prop"]["vcl_inst"];
+		/*
 		$tb->add_menu_button(array(
 			"name" => "new",
 			"img" => "new.gif",
 			"tooltip" => "Uus",
 		));
+		*/
 
 		$o = $arr["obj_inst"];
 		$inst = $o->instance();
@@ -406,17 +486,19 @@ class project extends class_base
 		{
 			if (in_array($key,$int["clid"]))
 			{
+				/*
 				$tb->add_menu_item(array(
 					"parent" => "new",
 					"text" => $val["name"],
 					"link" => "link",
 				));
+				*/
 
 
 			};
 		};
 
-		$tb->add_separator();
+		//$tb->add_separator();
 
 		$tb->add_menu_button(array(
 			"name" => "subprj",
@@ -427,43 +509,76 @@ class project extends class_base
 		// see nupp peaks kuvama ka alamprojektid
 
 		$this->used = array();
+		enter_function("recurse_projects");
 		$this->_recurse_projects(0,$o->id());
+		exit_function("recurse_projects");
 
-		foreach($this->prj_map as $parent => $items)
+		$form_connections = $arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_PRJ_CFGFORM",
+		));
+
+		$forms = array();
+		foreach($form_connections as $form_connection)
 		{
-			foreach($items as $prj_id)
+			$forms[$form_connection->prop("to")] = $form_connection->prop("to.name");
+		};
+
+		// now, I need information about what confi
+		if (is_array($this->prj_map))
+		{
+			foreach($this->prj_map as $parent => $items)
 			{
-				$use_parent = $parent == 0 ? "subprj" : $parent;
-				$pro = new object($prj_id);
-				if ($this->prj_map[$prj_id])
+				foreach($items as $prj_id)
 				{
+					$use_parent = $parent == 0 ? "subprj" : $parent;
+					$pro = new object($prj_id);
 					$tb->add_sub_menu(array(
 						"name" => $prj_id,
 						"parent" => $use_parent,
 						"text" => $pro->name(),
-					));
-				}
-				else
-				{
-					$tb->add_sub_menu(array(
-						"name" => $prj_id,
-						"parent" => $use_parent,
-						"text" => $pro->name(),
-						"link" => "link",
 					));
 
-					$tb->add_menu_item(array(
-						"name" => "x_" . $prj_id,
-						"parent" => $prj_id,
-						"text" => "Etendus",
-						"link" => $this->mk_my_orb("change",array(
-							"id" => $o->id(),
-							"group" => "add_event",
-							"clid" => CL_CALENDAR_EVENT,
-						)),
-					));
+					// right then, I need a way to create links with correct parent
+					// now - how do I do that?
+
+					if (!$this->prj_map[$prj_id])
+					{
+						foreach($forms as $form_id => $form_name)
+						{
+							$tb->add_menu_item(array(
+								"name" => "x_" . $prj_id . "_" . $form_id,
+								"parent" => $prj_id,
+								"text" => $form_name,
+								"link" => $this->mk_my_orb("new",array(
+									"parent" => $prj_id,
+									"group" => "change",
+								),CL_STAGING),
+								/*
+								"link" => $this->mk_my_orb("change",array(
+									"id" => $o->id(),
+									"group" => "add_event",
+									"clid" => CL_CALENDAR_EVENT,
+									"cfgform_id" => $form_id,
+								)),
+								*/
+							));
+						};
+					};
 				};
 			};
+		}
+		else
+		{
+			$tb->add_menu_item(array(
+				"name" => "x_" . $o->id(),
+				"parent" => "subprj",
+				"text" => "Etendus",
+				"link" => $this->mk_my_orb("change",array(
+					"id" => $o->id(),
+					"group" => "add_event",
+					"clid" => CL_STAGING,
+				)),
+			));
 		};
 
 		// and now .. to the lowest level ... I need to add configuration forms .. or that other stuff
@@ -509,6 +624,7 @@ class project extends class_base
 			$subprj_id = $prj_conn->prop("to");
 			if (empty($this->used[$subprj_id]))
 			{
+				// krt, kuidagi peab ju 
 				$this->used[$subprj_id] = $subprj_id;
 				$this->prj_map[$parent][$subprj_id] = $subprj_id;
 				$this->_recurse_projects($subprj_id,$subprj_id);
@@ -539,6 +655,7 @@ class project extends class_base
 			{
 				$event_obj = $event_obj->get_original();
 			};
+			$event_cfgform = $event_obj->meta("cfgform_id");
 			$this->event_id = $event_id;
 			$clid = $event_obj->class_id();
 			if ($clid == CL_DOCUMENT || $clid == CL_BROTHER_DOCUMENT)
@@ -548,7 +665,15 @@ class project extends class_base
 		}
 		else
 		{
-			$clid = $args["request"]["clid"];
+			if (!empty($args["request"]["clid"]))
+                        {
+                                $clid = $args["request"]["clid"];
+                        }
+                        elseif (is_oid($event_cfgform))
+                        {
+                                $cfgf_obj = new object($event_cfgform);
+                                $clid = $cfgf_obj->prop("subclass");
+                        };
 		};
 
 		$res_props = array();
@@ -589,9 +714,10 @@ class project extends class_base
 			
 				$t->id = $this->event_id;
 
-				$all_props = $t->get_active_properties(array(
-					"group" => $emb_group,
-				));
+				$all_props = $t->get_property_group(array(
+                                        "group" => $emb_group,
+                                        "cfgform_id" => $event_cfgform,
+                                ));
 
 				$xprops = $t->parse_properties(array(
 						"obj_inst" => $event_obj,
@@ -614,6 +740,7 @@ class project extends class_base
 				$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[action]","value" => "submit");
 				$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[group]","value" => $emb_group);
 				$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[clid]","value" => $clid);
+				$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[cfgform]","value" => $event_cfgform);
 				if ($this->event_id)
 				{
 					$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[id]","value" => $this->event_id);	
@@ -756,5 +883,171 @@ class project extends class_base
 			return false;
 		};
 	}
+
+	function callback_mod_retval($arr)
+	{
+		$args = &$arr["args"];
+		if ($this->event_id)
+		{
+			$args["event_id"] = $this->event_id;
+			if ($this->emb_group && $this->emb_group != "general")
+			{
+				$args["cb_group"] = $this->emb_group;
+			};
+		};
+	}
+
+	function request_execute($o)
+	{
+		$rv = "";
+		if ($o->prop("project_navigator") == 1)
+		{
+			//$rv .= "here be navigator<p>";
+		};
+
+		$prj_id = $o->id();
+
+		// a project can be a subproject of another project which in turn
+		// can be a subproject of a third project and so on.
+
+		// the following code tries to figure out the very first project
+		// in that chain - the one that is not a subproject of any other
+		// projects
+		$o2 = $o;
+		$tmp = $o;
+		$obj = $o;
+
+		while ($o2 != false)
+		{
+			$sp = $o->connections_to(array(
+				"type" => 1, // SUBPROJECT
+				"from.class_id" => CL_PROJECT,
+			));
+			$first = reset($sp);
+			if (is_object($first))
+			{
+				$o2 = $first->from();
+			}
+			else
+			{
+				$o2 = false;
+			};
+			$tmp = $o;
+			$o = $o2;
+		};
+
+		$super_project = $tmp;
+
+		$project_tree = array();
+
+		$project_tree[1] = $this->_get_subprojects(array(
+			"from" => array($super_project->id()),
+		));
+
+		$project_tree[2] = $this->_get_subprojects(array(
+			"from" => $project_tree[1],
+		));
+	
+		$project_tree[3] = $this->_get_subprojects(array(
+			"from" => $project_tree[2],
+		));
+
+		// create a list of all links between web pages and projects
+		// (connections from menu to project) 
+		$all = $project_tree[1] + $project_tree[2] + $project_tree[3];
+		
+		$conn = new connection();
+		$conns = $conn->find(array(
+			"to" => $all,
+			"from.class_id" => CL_MENU,
+			"reltype" => RELTYPE_CONTENT_FROM,
+		));
+
+		$valid = array();
+
+		foreach($conns as $connection)
+		{
+			$to_id = $connection["to"];
+			$from_id = $connection["from"];
+			$has_webpage[$to_id] = $from_id;
+		};
+		
+		$names = array();
+		if (sizeof($has_webpage) > 0)
+		{
+			$name_list = new object_list(array(
+				"oid" => $has_webpage,
+			));
+			$names = $name_list->names();
+		};
+
+		$all = array();
+
+		// 1. remove all projects that do not have an attached webpage
+		// 2. set web page id as value for projects which have one - this allows for creating
+		//  navigation menus for the site
+		for ($i = 1; $i <= 3; $i++)
+		{
+			foreach($project_tree[$i] as $project_id)
+			{
+				unset($project_tree[$i][$project_id]);
+				if ($has_webpage[$project_id])
+				{
+					$project_tree[$i][$has_webpage[$project_id]] = $names[$has_webpage[$project_id]];
+					$all[$project_id] = $project_id;
+				};
+			};
+		};
+
+		$sel_id = $has_webpage[$prj_id];
+
+
+		$this->read_template("show.tpl");
+		$this->vars(array(
+			"projects1" => $this->picker($sel_id,array("0" => "--vali--") + $project_tree[1]),
+			"projects2" => $this->picker($sel_id,array("0" => "--vali--") + $project_tree[2]),
+			"projects3" => $this->picker($sel_id,array("0" => "--vali--") + $project_tree[3]),
+		));
+
+		$cal_view = get_instance(CL_CALENDAR_VIEW);
+		$caldata = $cal_view->parse_alias(array(
+			"obj_inst" => $obj,
+			"use_template" => "weekview",
+		));
+
+		$this->vars(array(
+			"calendar" => $caldata,
+		));
+
+		return $this->parse();
+	}
+
+	/** Returns an array of subproject id-s, suitable for feeding to object_list
+
+	**/
+
+	function _get_subprojects($arr)
+	{
+		$conn = new connection();
+		$conns = $conn->find(array(
+			"from" => $arr["from"],
+			"from.class_id" => CL_PROJECT,
+			"reltype" => RELTYPE_SUBPROJECT,
+		));
+
+		$res = array();
+		if (is_array($conns))
+		{
+			foreach($conns as $conn)
+			{
+				$to = $conn["to"];
+				$from = $conn["from"];
+				$res[$to] = $to;
+			};
+		};
+
+		return $res;
+	}
+
 };
 ?>
