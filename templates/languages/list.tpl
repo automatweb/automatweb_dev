@@ -1,48 +1,73 @@
-<form action='languages.{VAR:ext}' method=get name='q'>
+<form action='languages.{VAR:ext}' method=POST name='q'>
+
+<!--tabelraam-->
+<table width="100%" cellspacing="0" cellpadding="1">
+<tr><td class="tableborder">
+
+	<!--tabelshadow-->
+	<table width="100%" cellspacing="0" cellpadding="0">
+	<tr><td width="1" class="tableshadow"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""></td><td class="tableshadow"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""><br>
+		<!--tabelsisu-->
+		<table width="100%" cellspacing="0" cellpadding="0">
+		<tr><td><td class="tableinside" height="29">
+
+
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td width="5"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="5" HEIGHT="1" BORDER=0 ALT=""></td>
+
+
+
+
+<td class="celltitle">&nbsp;<b>{VAR:LC_LANGUAGES_BIG_LANGUAGES}:&nbsp;</td>
+<td align="left"><!--add--><IMG
+SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a href="languages.{VAR:ext}?type=add"
+onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('new','','{VAR:baseurl}/automatweb/images/blue/awicons/new_over.gif',1)"><img
+name="new" alt="{VAR:LC_LANGUAGES_ADD}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/new.gif" width="25" height="25"></a><!--save--><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a href="javascript:document.q.submit()" 
+onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseurl}/automatweb/images/blue/awicons/save_over.gif',1)"><img name="save" alt="{VAR:LC_LANGUAGES_SAVE}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/save.gif" width="25" height="25"></a></td>
+</tr></table>
+
+
+		</td></tr></table>
+	</td></tr></table>
+</td></tr></table>
+
+
+
+
+
+
+
+
+
 <table border="0" cellspacing="0" cellpadding="0" width=100%>
 <tr>
-<td bgcolor="#CCCCCC">
+<td bgcolor="#FFFFFF">
 
-<table border="0" cellspacing="1" cellpadding="0" width=100%>
-	<tr>
-		<td height="15" colspan="11" class="fgtitle">&nbsp;<b>{VAR:LC_LANGUAGES_BIG_LANGUAGES}:&nbsp;<a href='languages.{VAR:ext}?type=add'>{VAR:LC_LANGUAGES_ADD}</a> | <a href='javascript:document.q.submit()'>{VAR:LC_LANGUAGES_SAVE}</a></b></td>
-	</tr>
-	<tr>
-		<td align=center class="title">&nbsp;{VAR:LC_LANGUAGES_NAME}&nbsp;</td>
-		<td align=center class="title">&nbsp;{VAR:LC_LANGUAGES_LANGUAGE_ID}&nbsp;</td>
-		<td align=center class="title">&nbsp;{VAR:LC_LANGUAGES_CHARSET}&nbsp;</td>
-		<td align=center class="title">&nbsp;{VAR:LC_LANGUAGES_CHOSEN}&nbsp;</td>
-		<td align=center class="title">&nbsp;{VAR:LC_LANGUAGES_ADMIN}&nbsp;</td>
-		<td align=center class="title">&nbsp;{VAR:LC_LANGUAGES_ACTIVE}?&nbsp;</td>
-		<td align="center" colspan="2" class="title">&nbsp;{VAR:LC_LANGUAGES_ACTION}&nbsp;</td>
+
+
+
+
+<table border="0" cellspacing="1" cellpadding="2" width=100%>
+<tr class="aste05">
+
+		<td align=center class="celltext" width="20%">&nbsp;{VAR:LC_LANGUAGES_NAME}&nbsp;</td>
+		<td align=center class="celltext" width="20%">&nbsp;{VAR:LC_LANGUAGES_LANGUAGE_ID}&nbsp;</td>
+		<td align=center class="celltext" width="20%">&nbsp;{VAR:LC_LANGUAGES_CHARSET}&nbsp;</td>
+		<td align=center class="celltext" width="10%">&nbsp;{VAR:LC_LANGUAGES_CHOSEN}&nbsp;</td>
+		<td align=center class="celltext" width="10%">&nbsp;{VAR:LC_LANGUAGES_ADMIN}&nbsp;</td>
+		<td align=center class="celltext" width="10%">&nbsp;{VAR:LC_LANGUAGES_ACTIVE}?&nbsp;</td>
+		<td align="center" colspan="2" width="10%" class="celltext">&nbsp;{VAR:LC_LANGUAGES_ACTION}&nbsp;</td>
 	</tr>
 <!-- SUB: LINE -->
-<tr>
-<td class="fgtext" align=center>&nbsp;{VAR:name}&nbsp;</td>
-<td class="fgtext" align=center>&nbsp;{VAR:acceptlang}&nbsp;</td>
-<td class="fgtext" align=center>&nbsp;{VAR:charset}&nbsp;</td>
-<!-- SUB: SEL -->
-<td class="fgtext" align="center">&nbsp;<font color=red>{VAR:LC_LANGUAGES_ACTIVE}</font>&nbsp;</td>
-<!-- END SUB: SEL -->
-
-<!-- SUB: NSEL -->
-<td class="fgtext" align="center">&nbsp;<a href='languages.{VAR:ext}?type=set_sel&id={VAR:id}'>{VAR:LC_LANGUAGES_ACTIVATE}</a>&nbsp;</td>
-<!-- END SUB: NSEL -->
-
-<!-- SUB: CSEL -->
-<td class="fgtext" align="center">&nbsp;{VAR:LC_LANGUAGES_ACTIVATE}&nbsp;</td>
-<!-- END SUB: CSEL -->
-
-<td class="fgtext" align="center">&nbsp;<input type='radio' name='adminlang' value='{VAR:id}' {VAR:check}>&nbsp;</td>
-
-<!-- SUB: ACTIVE -->
-<td class="fgtext" align="center">&nbsp;<a href='languages.{VAR:ext}?type=set_nactive&id={VAR:id}'>{VAR:LC_LANGUAGES_ACTIVE}</a>&nbsp;</td>
-<!-- END SUB: ACTIVE -->
-<!-- SUB: NACTIVE -->
-<td class="fgtext" align="center">&nbsp;<a href='languages.{VAR:ext}?type=set_active&id={VAR:id}'>{VAR:LC_LANGUAGES_ACTIVATE}</a>&nbsp;</td>
-<!-- END SUB: NACTIVE -->
-<td class="fgtext2" align=center>&nbsp;<a href='languages.{VAR:ext}?type=change&id={VAR:id}'>{VAR:LC_LANGUAGES_CHANGE}</a>&nbsp;</td>
-<td class="fgtext2" align=center>&nbsp;<a href='javascript:box2("Are You sure you wish to delete language?","languages.{VAR:ext}?type=delete&id={VAR:id}")'>{VAR:LC_LANGUAGES_DELETE}</a>&nbsp;</td>
+<tr class="aste07"	>
+<td class="celltext" align=center>&nbsp;{VAR:name}&nbsp;</td>
+<td class="celltext" align=center>&nbsp;{VAR:acceptlang}&nbsp;</td>
+<td class="celltext" align=center>&nbsp;{VAR:charset}&nbsp;</td>
+<td class="celltext" align="center">&nbsp;<input type="radio" name="selected" value='{VAR:id}' {VAR:selected}>&nbsp;</td>
+<td class="celltext" align="center">&nbsp;<input type='radio' name='adminlang' value='{VAR:id}' {VAR:check}>&nbsp;</td>
+<td class="celltext" align="center">&nbsp;<input type="checkbox" name="act[{VAR:id}]" value='1' {VAR:active}>&nbsp;</td>
+<td class="celltext" align=center><a href='languages.{VAR:ext}?type=change&id={VAR:id}'><IMG SRC="{VAR:baseurl}/automatweb/images/blue/obj_edit.gif" WIDTH="16" HEIGHT="16" BORDER=0 ALT="{VAR:LC_LANGUAGES_CHANGE}"></a></td>
+<td class="celltext" align=center><a href='javascript:box2("Are You sure you wish to delete language?","languages.{VAR:ext}?type=delete&id={VAR:id}")'><IMG SRC="{VAR:baseurl}/automatweb/images/blue/obj_delete.gif" WIDTH="16" HEIGHT="16" BORDER=0 ALT="{VAR:LC_LANGUAGES_DELETE}"></a></td>
 </tr>
 <!-- END SUB: LINE -->
 </table>

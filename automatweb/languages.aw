@@ -49,7 +49,7 @@ switch($type)
 		$admin_lang_lc = $t->get_langid($admin_lang);
 		setcookie("admin_lang",$admin_lang,time()*24*3600*1000,"/");
 		setcookie("admin_lang_lc",$admin_lang_lc,time()*24*3600*1000,"/");
-		
+		$t->save_list($HTTP_POST_VARS);
 
 	default:
 		$title = "Keeled";

@@ -13,10 +13,6 @@ function hideall() {
 	theobjs["menu1b"].objHide();
 	theobjs["menu2"].objHide();
 	theobjs["menu2b"].objHide();
-	theobjs["menu3"].objHide();
-	theobjs["menu3b"].objHide();
-	theobjs["menu4"].objHide();
-	theobjs["menu4b"].objHide();
 };
 
 function toggle(layer) {
@@ -41,17 +37,6 @@ function toggle1(layer1,layer2) {
 <tr> 
 <td align="center" height="17" class="peaLingidText"><a class="peaLingid" href="javascript:toggle1('menu1','menu1b')">{VAR:LC_FORMS_TOIMETA}</a><img src='/images/transa.gif' width=10 height=1></td>
 <td align="center" height="17" class="peaLingidText"><a href="javascript:toggle1('menu2','menu2b')" class="peaLingid" >{VAR:LC_FORMS_SETTINGS}</a><img src='/images/transa.gif' width=10 height=1></td>
-<!-- 
-<td align="center" height="17" class="peaLingidText">
-<!-- SUB: FILLED_FORMS -->
-<a href="javascript:toggle1('menu3','menu3b')" class="peaLingid">{VAR:LC_FORMS_FILLED_FORMS}</a><img src='/images/transa.gif' width=10 height=1>
-<!-- END SUB: FILLED_FORMS -->
-</td>
-<td align="center" height="17" class="peaLingidText">
-<!-- SUB: OP_1 -->
-<a href="javascript:toggle1('menu4','menu4b')" class="peaLingid">{VAR:LC_FORMS_OUTPUTS}</a><img src='/images/transa.gif' width=10 height=1>
-<!-- END SUB: OP_1 -->
-&nbsp;</td>-->
 </tr>
 </table>
 </td>
@@ -117,41 +102,8 @@ function toggle1(layer1,layer2) {
 <a class="alamlingid" href='{VAR:translate}'>{VAR:LC_FORMS_LANGS}</a><img src='/images/transa.gif' WIDTH=8 height=1 border=0>
 
 <a class="alamlingid" href='{VAR:tables}'>{VAR:LC_FORMS_TABLES}</a><img src='/images/transa.gif' WIDTH=8 height=1 border=0>
-<!--
-<a class="alamlingid" href='forms.{VAR:ext}?type=html&id={VAR:form_id}'>HTML</a>
--->
 </div>
 <!-- end# menu 2 -->
-
-<!-- begin# menu 3 T2idetud formid -->
-<div id="menu3" class="menyy3"><table border="0" cellspacing="0" cellpadding="0"><tr><td align="center" height="17"><a href="#" target="main" class="peaLingidText">{VAR:LC_FORMS_FILLED_FORMS}</a></td></tr></table></div>
-
-<div id="menu3b" class="alammenyy">{VAR:LC_FORMS_FILLED_FORMS}> 
-<!-- SUB: CAN_FILLED -->
-<a href='forms.{VAR:ext}?type=filled_forms&id={VAR:form_id}' class="alamlingid">{VAR:LC_FORMS_FILLED_FORMS}</a><img src='/images/transa.gif' WIDTH=8 height=1 border=0>
-<!-- END SUB: CAN_FILLED -->
-
-<!-- SUB: CAN_IMPORT_DATA -->
-<a href='forms.{VAR:ext}?type=import_contents&id={VAR:form_id}' class="alamlingid">{VAR:LC_FORMS_IMPORT_INSIDE}</a><img src='/images/transa.gif' WIDTH=8 height=1 border=0>
-<!-- END SUB: CAN_IMPORT_DATA -->
-</div>
-<!-- end# menu 3 -->
-
-<!-- begin# menu 4 v2ljundid -->
-<div id="menu4" class="menyy4"><table border="0" cellspacing="0" cellpadding="0"><tr><td align="center" height="17"><a href="#" target="main" class="peaLingidText">{VAR:LC_FORMS_OUTPUTS}</a></td></tr></table></div>
-
-<div id="menu4b" class="alammenyy">{VAR:LC_FORMS_OUTPUTS}> 
-<a href='{VAR:list_op}' class="alamlingid">{VAR:LC_FORMS_OUTPUTS}</a><img src='/images/transa.gif' WIDTH=8 height=1 border=0>
-<!-- SUB: OP_SEL -->
-<br><img src='/images/transa.gif' height=17 width=7 border=0>
-V&auml;ljund> 
-<a href='{VAR:change_op}' class="alamlingid">{VAR:LC_FORMS_CHANGE_OUTPUT}</a><img src='/images/transa.gif' WIDTH=8 height=1 border=0>
-<a href='{VAR:op_preview}' class="alamlingid">{VAR:LC_FORMS_PREVIEW}</a><img src='/images/transa.gif' WIDTH=8 height=1 border=0>
-<a href='{VAR:op_style}' class="alamlingid">{VAR:LC_FORMS_OUTPUT_STYLE}</a><img src='/images/transa.gif' WIDTH=8 height=1 border=0>
-<a href='{VAR:op_meta}' class="alamlingid">{VAR:LC_FORMS_OUTPUT_METAINFO}</a><img src='/images/transa.gif' WIDTH=8 height=1 border=0>
-<!-- END SUB: OP_SEL -->
-</div>
-<!-- end# menu 4 -->
 
 </div>
 <img src='/images/transa.gif' width=1 height=60>
@@ -164,13 +116,5 @@ toggle1('menu1', 'menu1b');
 <!-- SUB: SETTINGS_SEL -->
 toggle1('menu2', 'menu2b');
 <!-- END SUB: SETTINGS_SEL -->
-
-<!-- SUB: FILLED_SEL -->
-toggle1('menu3', 'menu3b');
-<!-- END SUB: FILLED_SEL -->
-
-<!-- SUB: OUTPUT_SEL -->
-toggle1('menu4', 'menu4b');
-<!-- END SUB: OUTPUT_SEL -->
 </script>
 <!-- END SUB: FG_MENU -->

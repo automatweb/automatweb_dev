@@ -22,18 +22,13 @@ class languages extends aw_template
 		$this->db_query("SELECT * FROM languages WHERE status != 0");
 		while ($row = $this->db_next())
 		{
-			$this->vars(array("id" => $row["id"], "name" => $row["name"], "charset" => $row["charset"],"acceptlang" => $row["acceptlang"]));
-			$ac = $row["status"] == 1 ? $this->parse("NACTIVE") : $this->parse("ACTIVE");
-
-			$sel = ($GLOBALS["lang_id"]) == $row["id"] ? $this->parse("SEL") : $this->parse("NSEL");
-
 			$this->vars(array(
-				"ACTIVE" => $ac, 
-				"NACTIVE" => "", 
-				"SEL" => $sel, 
-				"NSEL" => "",
-				"CSEL" => "",
-				"check" => checked($admin_lang == $row["id"])
+				"id" => $row["id"], 
+				"name" => $row["name"], 
+				"charset" => $row["charset"],
+				"acceptlang" => $row["acceptlang"],
+				"selected" => checked($GLOBALS["lang_id"] == $row["id"]),
+				"active" => checked($row["status"] == 2),
 			));
 			$l.=$this->parse("LINE");
 		}
@@ -57,9 +52,14 @@ class languages extends aw_template
 		return $this->db_next();
 	}
 
-	function listall()
+	function listall($ignore_status = false)
 	{
-		$this->db_query("SELECT * FROM languages WHERE status = 2");
+		if (!$ignore_status)
+		{
+			$wg = "WHERE status = 2";
+		}
+
+		$this->db_query("SELECT * FROM languages $wg ");
 		$ret = array();
 		while ($row = $this->db_next())
 			$ret[] = $row;
@@ -158,6 +158,22 @@ class languages extends aw_template
 		}
 		$a = $this->fetch($id);
 		return $a["acceptlang"];
+	}
+
+	function save_list($arr)
+	{
+		extract($arr);
+
+		$this->set_active($selected);
+
+		$lar = $this->listall(true);
+		foreach($lar as $l)
+		{
+			if ($l["status"] != 0)
+			{
+				$this->set_status($l["id"],((int)$act[$l["id"]])+1);
+			}
+		}
 	}
 };
 ?>
