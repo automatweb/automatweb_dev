@@ -15,28 +15,30 @@
 	@property reg_nr type=textbox size=10 maxlenght=20
 	@caption registri nr
 
-	@property pohitegevus type=relpicker reltype=POHITEGEVUS
+	@property pohitegevus type=popup_objmgr clid=CL_TEGEVUSALA height=550 width=650
 	@caption põhitegevus
 
-	@property ettevotlusvorm type=relpicker reltype=KORVALTEGEVUSED multiple=1
+	@property korvaltegevused type=popup_objmgr clid=CL_TEGEVUSALA multiple=1 method=serialize field=meta table=objects
+//	@property korvaltegevused type=popup_objmgr method=serialize multiple=1
 	@caption kõrvaltegevused
 
-	@property ettevotlusvorm type=relpicker reltype=ETTEVOTLUSVORM
+	@property ettevotlusvorm type=popup_objmgr clid=CL_ETTEVOTLUSVORM
 	@caption ettevõtlusvorm
 
-	@property ettevotlusvorm type=relpicker reltype=TOOTED multiple=1
+	@property tooted type=popup_objmgr clid=CL_TOODE multiple=1 method=serialize field=meta table=objects
+//	@property tooted type=popup_objmgr clid=CL_TOODE multiple=1 field=meta method=serialize table=objects
 	@caption tooted
 
 	@property kaubamargid type=textarea cols=25 rows=2
 	@caption kaubamärgid
 
-	@property contact type=relpicker reltype=ADDRESS
+	@property contact type=popup_objmgr clid=CL_ADDRESS change=1
 	@caption aadress
 
 	@property tegevuse_kirjeldus type=textarea cols=25 rows=2
 	@caption tegevuse kirjeldus
 
-	@property firmajuht type=relpicker reltype=FIRMAJUHT
+	@property firmajuht type=popup_objmgr change=1
 	@caption firmajuht
 */
 
@@ -60,16 +62,39 @@ class firma extends class_base
 			TOOTED => 'tooted',
 		);
 	}
-
+/*
+function callback_submit_relation_list($a)
+{
+print_r($a);die();
+}*/
 	function firma()
 	{
 		$this->init(array(
 			'clid' => CL_FIRMA,
 		));
 	}
-
+/*
+	function set_property($args = array())
+	{
+		$data = &$args["prop"];
+		$form = &$args["form_data"];
+		$retval = PROP_OK;
+		switch($data['name'])
+		{
+//			case 'korvaltegevused':
+///				$form['korvaltegevused'] = unserialize($this->make_keys($form['korvaltegevused']));
+//				print_r($args);
+//		die;
+//		$retval = PROP_IGNORE;
+			break;
+		};
+		return $retval;
+	}
+*/
 	function get_property($args)
 	{
+		//print_r($args);
+			//die();
 		$data = &$args['prop'];
 		$retval = true;
 		$meta=$args['obj']['meta'];
@@ -83,6 +108,13 @@ class firma extends class_base
 			case 'alias':
 				$retval=PROP_IGNORE;
 			break;
+/*			case 'korvaltegevused':
+				$data['value'] = $args['objdata']['korvaltgevused'];
+				//print_r($data['value']);
+				//die();
+			break;
+*/
+
 		};
 		return $retval;
 	}

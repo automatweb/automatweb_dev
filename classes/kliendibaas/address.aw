@@ -58,7 +58,7 @@ class address extends class_base
 		);
 	}
 
-	function contact()
+	function address()
 	{
 		$this->init(array(
 			'clid' => CL_ADDRESS,

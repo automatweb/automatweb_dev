@@ -12,7 +12,8 @@
 	@default group=objects
 	@groupinfo objects caption=objectid
 
-	@property objects type=text
+	@property objects type=popup_objmgr multiple=1 method=serialize field=meta table=objects width=500
+//	@property objects type=text
 	@caption objektid valimis
 
 
@@ -34,9 +35,10 @@ class selection extends class_base
 			case 'alias':
 				$retval=PROP_IGNORE;
 			break;
-			case 'objects':
-				$data['value']=$this->obj_list($args['obj']).'mida nendega peale hakata on su oma deela';
-			break;
+//			case 'objects':
+//arr($data,1);
+//				$data['value']=$this->obj_list($args['obj']).'mida nendega peale hakata on su oma deela';
+//			break;
 
 		}
 
@@ -57,6 +59,7 @@ class selection extends class_base
 		}
 		return $objs;
 	}
+
 
 	function get_selection($oid)
 	{
