@@ -1,5 +1,9 @@
 <?xml version='1.0'?>
 <messenger>
+	<getmail>
+		<caption>Get mail</caption>
+		<link>?class=messenger&amp;action=get_mail</link>
+	</getmail>
 	<write>
 		<caption>Uus teade</caption>
 		<link>?class=messenger&amp;action=write</link>
