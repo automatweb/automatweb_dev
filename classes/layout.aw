@@ -4,7 +4,6 @@
 
 @classinfo syslog_type=ST_LAYOUT relationmgr=yes
 
-@groupinfo general caption=Üldine
 @groupinfo settings caption=M&auml;&auml;rangud
 @groupinfo layout caption=Tabel
 @groupinfo styles caption=Stiilid
@@ -51,7 +50,7 @@
 @property import_sep type=textbox size=1 group=import method=serialize
 @caption Mis märgiga on tulbad eraldatud?
 
-@property show_in_folders type=relpicker reltype=RELTYPE_SHOW_FOLDER multiple=1 rel=1 method=serialize
+@property show_in_folders type=relpicker reltype=RELTYPE_SHOW_FOLDER multiple=1 rel=1 method=serialize group=general
 @caption Millistes kataloogides n&auml;idatakse
 
 */
@@ -67,41 +66,6 @@ class layout extends class_base
 			'tpldir' => 'grid_editor',
 			'clid' => CL_LAYOUT
 		));
-	}
-
-	////
-	// !this should create a string representation of the object
-	// parameters
-	//    oid - object's id
-	function _serialize($arr)
-	{
-		extract($arr);
-		$ob = $this->get_object($oid);
-		if (is_array($ob))
-		{
-			return aw_serialize($ob, SERIALIZE_NATIVE);
-		}
-		return false;
-	}
-
-	////
-	// !this should create an object from a string created by the _serialize() function
-	// parameters
-	//    str - the string
-	//    parent - the folder where the new object should be created
-	function _unserialize($arr)
-	{
-		extract($arr);
-		$row = aw_unserialize($str);
-		$row['parent'] = $parent;
-		unset($row['brother_of']);
-		$this->quote(&$row);
-		$id = $this->new_object($row);
-		if ($id)
-		{
-			return true;
-		}
-		return false;
 	}
 
 	////
@@ -130,105 +94,100 @@ class layout extends class_base
 	function get_property(&$arr)
 	{
 		$prop = &$arr['prop'];
-		if ($prop['name'] == "grid")
+		$retval = PROP_OK;
+		switch($prop["name"])
 		{
-			$ge = get_instance("vcl/grid_editor");
-			$prop['value'] = $ge->on_edit($arr['obj']['meta']['grid'], $arr['obj']['oid']);
+			case "grid":
+				$ge = get_instance("vcl/grid_editor");
+				$prop['value'] = $ge->on_edit($arr['obj_inst']->meta('grid'), $arr['obj_inst']->id());
+				break;
+
+			case "grid_aliases":
+				$ge = get_instance("vcl/grid_editor");
+				$prop['value'] = $ge->on_aliases_edit($arr['obj_inst']->meta('grid'), $arr['obj_inst']->id());
+				break;
+
+			case "grid_styles":
+				$ge = get_instance("vcl/grid_editor");
+				$prop['value'] = $ge->on_styles_edit($arr['obj_inst']->meta('grid'), $arr['obj_inst']->id());
+				break;
+
+			case "grid_preview":
+				$ge = get_instance("vcl/grid_editor");
+				$prop['value'] = $ge->show($arr['obj_inst']->meta('grid'), $arr['obj_inst']->id());
+				break;
+
+			case "table_style":
+				$st = get_instance("style");
+				$prop['options'] = $st->get_select(0, ST_TABLE, true);
+				break;
+
+			case "rows":
+				$ge = get_instance("vcl/grid_editor");
+				$ge->_init_table($arr['obj_inst']->meta('grid'));
+				$prop['value'] = $ge->get_num_rows();
+				break;
+
+			case "columns":
+				$ge = get_instance("vcl/grid_editor");
+				$ge->_init_table($arr['obj_inst']->meta('grid'));
+				$prop['value'] = $ge->get_num_cols();
+				break;
 		}
-		else
-		if ($prop['name'] == "grid_aliases")
-		{
-			$ge = get_instance("vcl/grid_editor");
-			$prop['value'] = $ge->on_aliases_edit($arr['obj']['meta']['grid'], $arr['obj']['oid']);
-		}
-		else
-		if ($prop['name'] == "grid_styles")
-		{
-			$ge = get_instance("vcl/grid_editor");
-			$prop['value'] = $ge->on_styles_edit($arr['obj']['meta']['grid'], $arr['obj']['oid']);
-		}
-		else
-		if ($prop['name'] == "grid_preview")
-		{
-			$ge = get_instance("vcl/grid_editor");
-			$prop['value'] = $ge->show($arr['obj']['meta']['grid'], $arr['obj']['oid']);
-		}
-		else
-		if ($prop['name'] == "table_style")
-		{
-			$st = get_instance("style");
-			$prop['options'] = $st->get_select(0, ST_TABLE, true);
-		}
-		else
-		if ($prop['name'] == "rows")
-		{
-			$ge = get_instance("vcl/grid_editor");
-			$ge->_init_table($arr['obj']['meta']['grid']);
-			$prop['value'] = $ge->get_num_rows();
-		}
-		else
-		if ($prop['name'] == "columns")
-		{
-			$ge = get_instance("vcl/grid_editor");
-			$ge->_init_table($arr['obj']['meta']['grid']);
-			$prop['value'] = $ge->get_num_cols();
-		}
-		return PROP_OK;
+		return $retval;
 	}
 
 	function set_property(&$arr)
 	{
 		$prop = &$arr['prop'];
-		if ($prop['name'] == "grid")
+		$retval = PROP_OK;
+		switch($prop["name"])
 		{
-			$ge = get_instance("vcl/grid_editor");
-			$prop['value'] = $ge->on_edit_submit($arr['obj']['meta']['grid'], $arr['form_data']);
-		}
-		else
-		if ($prop['name'] == "grid_aliases")
-		{
-			$ge = get_instance("vcl/grid_editor");
-			$arr['metadata']['grid'] = $ge->on_aliases_edit_submit($arr['obj']['meta']['grid'], $arr['form_data']);
-		}
-		else
-		if ($prop['name'] == "grid_styles")
-		{
-			$ge = get_instance("vcl/grid_editor");
-			$arr['metadata']['grid'] = $ge->on_styles_edit_submit($arr['obj']['meta']['grid'], $arr['form_data']);
-		}
-		else
-		if ($prop['name'] == "rows")
-		{
-			$ge = get_instance("vcl/grid_editor");
-			$ge->_init_table($arr['obj']['meta']['grid']);
-			$ge->set_num_rows($arr["form_data"]["rows"]);
-			$ge->set_num_cols($arr["form_data"]["columns"]);
-			$arr['metadata']['grid'] = $ge->_get_table();
-		}
-		else
-		if ($prop['name'] == "columns")
-		{
-			$ge = get_instance("vcl/grid_editor");
-			$ge->_init_table($arr['obj']['meta']['grid']);
-			$ge->set_num_cols($arr["form_data"]["columns"]);
-			$ge->set_num_rows($arr["form_data"]["rows"]);
-			$arr['metadata']['grid'] = $ge->_get_table();
-		}
-		else
-		if ($prop["name"] == "import_file")
-		{
-			global $import_file;
-			if (is_uploaded_file($import_file))
-			{
+			case "grid":
 				$ge = get_instance("vcl/grid_editor");
-				$arr["metadata"]["grid"] = $ge->do_import(array(
-					"sep" => $arr["form_data"]["import_sep"],
-					"remove_empty" => $arr["form_data"]["import_remove_empty"],
-					"file" => $import_file
-				));
-			}
+				$prop['value'] = $ge->on_edit_submit($arr['obj_inst']->meta('grid'), $arr['request']);
+				break;
+
+			case "grid_aliases":
+				$ge = get_instance("vcl/grid_editor");
+				$arr['metadata']['grid'] = $ge->on_aliases_edit_submit($arr['obj_inst']->meta('grid'), $arr['request']);
+				break;
+
+			case "grid_styles":
+				$ge = get_instance("vcl/grid_editor");
+				$arr['metadata']['grid'] = $ge->on_styles_edit_submit($arr['obj_inst']->meta('grid'), $arr['request']);
+				break;
+
+			case "rows":
+				$ge = get_instance("vcl/grid_editor");
+				$ge->_init_table($arr['obj_inst']->meta('grid'));
+				$ge->set_num_rows($arr["request"]["rows"]);
+				$ge->set_num_cols($arr["request"]["columns"]);
+				$arr["obj_inst"]->set_meta("grid",$ge->_get_table());
+				break;
+
+			case "columns":
+				$ge = get_instance("vcl/grid_editor");
+				$ge->_init_table($arr['obj_inst']->meta('grid'));
+				$ge->set_num_cols($arr["request"]["columns"]);
+				$ge->set_num_rows($arr["request"]["rows"]);
+				$arr["obj_inst"]->set_meta("grid",$ge->_get_table());
+				break;
+
+			case "import_file":
+				global $import_file;
+				if (is_uploaded_file($import_file))
+				{
+					$ge = get_instance("vcl/grid_editor");
+					$arr["obj_inst"]->set_meta("grid",$ge->do_import(array(
+						"sep" => $arr["request"]["import_sep"],
+						"remove_empty" => $arr["request"]["import_remove_empty"],
+						"file" => $import_file
+					)));
+				}
+				break;
 		}
-		return PROP_OK;
+		return $retval;
 	}
 
 	function _do_import($arr)
@@ -362,8 +321,8 @@ class layout extends class_base
 	// !returns the layout data that can be fed to grid editor. useful when you can select a default layout
 	function get_layout($oid)
 	{
-		$ob = $this->get_object($oid);
-		return $ob['meta']['grid'];
+		$ob = new object($oid);
+		return $ob->meta("grid");
 	}
 }
 ?>
