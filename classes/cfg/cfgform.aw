@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.30 2004/04/30 08:47:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.31 2004/05/11 10:51:02 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -279,7 +279,25 @@ class cfgform extends class_base
 		};
 		if (isset($this->cfg_proplist) && is_array($this->cfg_proplist))
 		{
-			uasort($this->cfg_proplist,array($this,"__sort_props_by_ord"));
+			$tmp = array();
+			$cnt = 0;
+			foreach($this->cfg_proplist as $key => $val)
+			{
+				if (empty($val["ord"]))
+				{
+					$cnt++;
+					$val["tmp_ord"] = $cnt;
+				};	
+				$tmp[$key] = $val;
+			};
+			uasort($tmp,array($this,"__sort_props_by_ord"));
+			$cnt = 0;
+			$this->cfg_proplist = array();
+			foreach($tmp as $key => $val)
+			{
+				unset($val["tmp_ord"]);
+				$this->cfg_proplist[$key] = $val;
+			};
 			$obj_inst->set_meta("cfg_proplist",$this->cfg_proplist);
 		};
 		if (isset($this->cfg_groups))
@@ -388,7 +406,8 @@ class cfgform extends class_base
 	{
 		if (empty($el1["ord"]) && empty($el2["ord"]))
 		{
-			return 0;
+			return (int)($el1["tmp_ord"] - $el2["tmp_ord"]);
+			//return 0;
 		};
 		return (int)($el1["ord"] - $el2["ord"]);
 	}
