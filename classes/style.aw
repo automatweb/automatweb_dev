@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.37 2004/10/28 10:13:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.38 2004/11/05 13:22:02 kristo Exp $
 
 define("ST_TABLE",0);
 define("ST_CELL",1);
@@ -502,6 +502,11 @@ class style extends aw_template
 	function get_frow_style($id)
 	{
 		$st = $this->mk_cache($id);
+		if ($st["class_id"] == CL_CSS)
+		{
+			$tmp = obj($id);
+			return $tmp->prop("frow_style");
+		}
 
 		return $st["frow_style"];
 	}
@@ -509,6 +514,11 @@ class style extends aw_template
 	function get_fcol_style($id)
 	{
 		$st = $this->mk_cache($id);
+		if ($st["class_id"] == CL_CSS)
+		{
+			$tmp = obj($id);
+			return $tmp->prop("fcol_style");
+		}
 
 		return $st["fcol_style"];
 	}
@@ -516,6 +526,11 @@ class style extends aw_template
 	function get_num_frows($id)
 	{
 		$st = $this->mk_cache($id);
+		if ($st["class_id"] == CL_CSS)
+		{
+			$tmp = obj($id);
+			return $tmp->prop("num_frows");
+		}
 
 		return $st["num_frows"];
 	}
@@ -523,6 +538,11 @@ class style extends aw_template
 	function get_num_fcols($id)
 	{
 		$st = $this->mk_cache($id);
+		if ($st["class_id"] == CL_CSS)
+		{
+			$tmp = obj($id);
+			return $tmp->prop("num_fcols");
+		}
 
 		return $st["num_fcols"];
 	}
@@ -605,24 +625,44 @@ class style extends aw_template
 	function get_header_style($id)
 	{
 		$st = $this->mk_cache($id);
+		if ($st["class_id"] == CL_CSS)
+		{
+			$tmp = obj($id);
+			return $tmp->prop("header_style");
+		}
 		return $st["header_style"];
 	}
 
 	function get_footer_style($id)
 	{
 		$st = $this->mk_cache($id);
+		if ($st["class_id"] == CL_CSS)
+		{
+			$tmp = obj($id);
+			return $tmp->prop("footer_style");
+		}
 		return $st["footer_style"];
 	}
 
 	function get_odd_style($id)
 	{
 		$st = $this->mk_cache($id);
+		if ($st["class_id"] == CL_CSS)
+		{
+			$tmp = obj($id);
+			return $tmp->prop("odd_style");
+		}
 		return $st["odd_style"];
 	}
 
 	function get_even_style($id)
 	{
 		$st = $this->mk_cache($id);
+		if ($st["class_id"] == CL_CSS)
+		{
+			$tmp = obj($id);
+			return $tmp->prop("even_style");
+		}
 		return $st["even_style"];
 	}
 
@@ -856,7 +896,7 @@ class style extends aw_template
 
 			$st = $tmp;
 
-			if ($st)
+			if (is_oid($st) && $this->can("view", $st))
 			{
 				active_page_data::add_serialized_css_style($this->get_css($st));
 				return "<span class=\"".$this->get_style_name($st)."\">$text</a>";
