@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.126 2002/07/12 16:57:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.127 2002/07/12 18:29:10 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -2589,6 +2589,8 @@ class menuedit extends aw_template
 					"ftpl_view" => $ftpl_view,
 					"aip_filename" => $arr["aip_filename"],
 					"pclass" => $pclass,
+					"pm_url_admin" => $pm_url_admin,
+					"pm_url_menus" => $pm_url_menus,
 				),
 			));
 			
@@ -3371,6 +3373,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$this->vars(array(
 				"pclasses" => $this->picker($meta["pclass"],$pclasses),
 				"pmethods" => "",
+				"pm_url_admin" => checked($meta["pm_url_admin"]),
+				"pm_url_menus" => checked($meta["pm_urm_menus"])
 			));
 
 			$pm = $this->parse("PMETHOD");
@@ -4147,7 +4151,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				};
 				if (not($err))
 				{
-					$link = $this->mk_my_orb($_act,$values,$_cl,false,false);
+					$link = $this->mk_my_orb($_act,$values,$_cl,$row["meta"]["pm_url_admin"],!$row["meta"]["pm_url_menus"]);
 				}
 				else
 				{
