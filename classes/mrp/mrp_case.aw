@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.50 2005/03/30 15:49:37 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.51 2005/03/30 17:10:03 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -649,6 +649,7 @@ class mrp_case extends class_base
 			if ($this->can ("view", $job["oid"]))
 			{
 				$job = obj ($job["oid"]);
+				$project= obj ($job->prop ("project"));
 				$resource_id = $job->prop ("resource");
 
 				if (!in_array ($resource_id, $project_resources))
@@ -659,8 +660,8 @@ class mrp_case extends class_base
 				$length = $job->prop ("planned_length");
 				$resource = obj ($resource_id);
 				$start = $job->prop ("starttime");
-				$colour = $this->state_colours[$job->prop ("state")];
-				$job_name = $this_object->name () . " - " . $resource->name ();
+				$colour = ($job->prop ("project") == $this_object->id ()) ? MRP_COLOUR_HILIGHTED : $this->state_colours[$job->prop ("state")];
+				$job_name = $project->name () . " - " . $resource->name ();
 
 				$bar = array (
 					"row" => $resource_id,
@@ -1818,7 +1819,7 @@ class mrp_case extends class_base
 
 			### log event
 			$ws = get_instance(CL_MRP_WORKSPACE);
-			$ws->mrp_log ($this_object->id (), NULL, "Projekt katkestati");
+			$ws->mrp_log ($project->id (), NULL, "Projekt katkestati");
 
 			return $return_url;
 		}
