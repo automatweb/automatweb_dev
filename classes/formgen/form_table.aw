@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.31 2003/02/02 14:59:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.32 2003/02/02 15:03:33 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -629,7 +629,8 @@ class form_table extends form_base
 					$str = "<a href='mailto:".$str."'>".$str."</a>";
 				}
 
-				if (trim($str) != "")
+				$_a = preg_replace("/<a (.*)>(.*)<\/a>/U","\\2",$str);
+				if (trim($_a) != "")
 				{
 					$this->table_not_empty_cols[$col] = true;
 				}
