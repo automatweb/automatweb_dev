@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.17 2003/06/04 19:20:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.18 2003/06/17 11:56:44 kristo Exp $
 load_vcl("table");
 
 session_register("group_folders");
@@ -37,7 +37,11 @@ class groups extends users_user
 
 		while ($row = $this->db_next())
 		{
-			$this->grpcache[$row[parent]][] = $row;
+			if (!$row["parent"])
+			{
+				$row["parent"] = 0;
+			}
+			$this->grpcache[$row["parent"]][] = $row;
 		};
 
 		$this->vars(array(
