@@ -20,4 +20,9 @@
       <func>on_disconnect_org_from_person</func>
       <param>CL_CRM_COMPANY</param>
 </num_3>
+<num_4>
+      <class>crm/crm_person</class>
+      <func>on_disconnect_section_from_person</func>
+      <param>CL_CRM_SECTION</param>
+</num_4>
 </xml>
