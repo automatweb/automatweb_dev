@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.164 2003/11/05 13:17:14 duke Exp $
+// $Id: class_base.aw,v 2.165 2003/11/05 14:53:37 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1898,6 +1898,7 @@ class class_base extends aw_template
 		$this->load_coredata(array(
 			"id" => $args["id"],
 		));
+		$this->obj_inst = new object($args["id"]);
 		$this->request = $args;
 
 		$this->id = $args["id"];
@@ -1952,6 +1953,7 @@ class class_base extends aw_template
 		$this->load_coredata(array(
 			"id" => $args["id"],
 		));
+		$this->obj_inst = new object($args["id"]);
 		$this->request = $args;
 
 		$obj = $this->get_object($args["id"]);
