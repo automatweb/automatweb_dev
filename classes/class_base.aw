@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.93 2003/04/13 17:01:32 duke Exp $
+// $Id: class_base.aw,v 2.94 2003/04/15 10:15:07 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -287,7 +287,6 @@ class class_base extends aliasmgr
 		{
 			$content = $cli->get_result();
 		};
-
 
 		return $this->gen_output(array(
 			"parent" => isset($parent) ? $parent : "",
@@ -1331,6 +1330,7 @@ class class_base extends aliasmgr
 			};
 
 			// override original property definitions with those in config form
+			$orig = $val;
 			if (!empty($this->cfgform_id))
 			{
 				$val = array_merge($_all_props[$k],$val);
@@ -1341,6 +1341,14 @@ class class_base extends aliasmgr
 				{
 					$val["caption"] = $_all_props[$k]["caption"];
 				};	
+				
+				if (($_all_props[$k]["type"] == "textarea") && (empty($orig["richtext"])))
+				{
+					unset($val["richtext"]);
+				};
+
+
+
 			}
 
 			if (empty($val["view"]))
