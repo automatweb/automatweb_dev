@@ -40,9 +40,9 @@ class relation extends class_base
 		));
 
 		// cause get_instance does not work with subfolders
-		classload($cldef["file"]);
+		// hell yes it does! - terryf
 		$clname = $cldef["file"];
-		$t = new $clname;
+		$t = get_instance($clname);
 
 		$t->init_class_base();
 
