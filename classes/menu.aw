@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.88 2004/04/13 12:36:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.89 2004/04/13 16:25:26 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -70,6 +70,9 @@
 
 	@property img_timing type=textbox size=3 field=meta method=serialize group=presentation
 	@caption Viivitus piltide vahel (sek.)
+	
+	@property imgrelmanager type=relmanager reltype=IMAGE store=no group=presentation
+	@caption Vali pilte
 
 	@property img_act type=relpicker reltype=RELTYPE_IMAGE field=meta method=serialize group=presentation
 	@caption Aktiivse menüü pilt
@@ -92,12 +95,19 @@
 	@property docs_per_period type=textbox size=3 group=docs_from table=objects field=meta method=serialize
 	@caption Dokumente perioodist
 
+	// ----------------
+
+	@property sa_manager type=relmanager reltype=SEEALSO group=relations store=no
+	@caption Seosehaldur
+
 	@property seealso type=table group=relations store=no
 	@caption Menüüd, mille all see menüü on "vaata lisaks" menüü
 	@comment Nende menüüde lisamine ja eemaldamine käib läbi seostehalduri
 
 	@property seealso_order type=textbox group=relations size=3 table=objects field=meta method=serialize
 	@caption Järjekorranumber (vaata lisaks)
+
+	// ---------------
 
 	@property link type=textbox group=show
 	@caption Menüü link
@@ -237,7 +247,7 @@
 	@reltype IMAGE value=14 clid=CL_IMAGE
 	@caption pilt
 
-	@reltype SUBMENUS value=16 clid=CL_SHOP_ORDER_CENTER
+	@reltype SUBMENUS value=16 clid=CL_SHOP_ORDER_CENTER,CL_CRM_SECTION
 	@caption alammen&uuml;&uuml;d objektist
 */
 
@@ -252,6 +262,11 @@ class menu extends class_base
 			"tpldir" => "automatweb/menu",
 			"clid" => CL_MENU,
 		));
+	}
+
+	function __callback_on_load($arr)
+	{
+		$this->cfgmanager = 128946;
 	}
 	
 	function get_property($arr)
