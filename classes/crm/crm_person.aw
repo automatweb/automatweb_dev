@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.21 2004/04/13 13:28:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.22 2004/04/13 16:07:24 duke Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -62,15 +62,18 @@ caption Pildi/foto url
 
 @property aliasmgr type=aliasmgr group=description no_caption=1 store=no
 @caption Seostehaldur
+
 @property work_contact type=relpicker reltype=RELTYPE_WORK table=kliendibaas_isik group=contact
 @caption Organisatsioon
 
 @property rank type=relpicker reltype=RELTYPE_RANK table=kliendibaas_isik automatic=1 group=contact
 @caption Ametinimetus
 
+@property sect type=relpicker reltype=RELTYPE_SECTION table=kliendibaas_isik automatic=1 group=contact field=section
+@caption Üksus
+
 property personal_contact type=relpicker reltype=RELTYPE_ADDRESS table=kliendibaas_isik
 caption Kodused kontaktandmed
-
 
 @default group=contact
 	
@@ -215,6 +218,9 @@ caption Andmed
 
 @reltype ORDER value=20 clid=CL_SHOP_ORDER
 @caption tellimus
+
+@reltype SECTION value=21 clid=CL_CRM_SECTION
+@caption Üksus
 
 
 */
