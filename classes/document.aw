@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.292 2004/10/29 19:27:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.293 2004/11/02 09:59:18 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1431,7 +1431,8 @@ class document extends aw_template
 
 		if (aw_global_get("print"))
 		{
-			die($retval);
+			$apd = get_instance("layout/active_page_data");		
+			die($retval.$apd->on_shutdown_get_styles());
 		}
 
 		return $retval;
