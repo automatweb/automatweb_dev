@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.34 2002/08/29 03:16:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.35 2002/09/30 06:57:33 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle formi sees kirjas
@@ -420,7 +420,6 @@ class form_cell extends form_base
 			$shctrlok = true;
 			$errs = array();
 			$shcs = $this->arr[$i]->get_show_controllers();
-			$controllers_ok = true;
 			foreach($shcs as $ctlid)
 			{
 				$res = $this->form->controller_instance->do_check($ctlid, $this->arr[$i]->get_controller_value(), &$this->form, $this->arr[$i]);
