@@ -193,6 +193,7 @@ function init_config($arr)
 	}
 
 	// siin ei saa veel aw_global_get'i kasutada, kuna defsi pole veel laetud
+	$GLOBALS["cfg"]["__default"]["site_tpldir"] = $GLOBALS["cfg"]["__default"]["tpldir"];
 	global $PHP_SELF;
 	if (strpos($PHP_SELF,"automatweb")) 
 	{
