@@ -74,6 +74,7 @@
 					<optional name="remote_ip"/>
 					<optional name="reforb"/>
 					<optional name="remote_host"/>
+					<optional name="return"/>
 				</arguments>
 			</function>
 		</action>
