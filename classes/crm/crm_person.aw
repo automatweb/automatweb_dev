@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.5 2003/12/10 16:25:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.6 2004/01/13 14:14:23 duke Exp $
 /*
 @classinfo relationmgr=yes
 @tableinfo kliendibaas_isik index=oid master_table=objects master_index=oid
@@ -32,8 +32,8 @@
 @property nickname type=textbox size=10 maxlength=20
 @caption Hüüdnimi
 
-@property messenger type=textbox size=30 maxlength=200
-@caption Msn/yahoo/aol/icq
+property messenger type=textbox size=30 maxlength=200
+caption Msn/yahoo/aol/icq
 
 @property birthday type=textbox size=10 maxlength=20
 @caption Sünnipäev
@@ -46,9 +46,6 @@
 
 @property children type=relpicker reltype=RELTYPE_CHILDREN
 @caption Lapsed
-
-//	@property digitalID type=textbox size=20 maxlength=300
-//	@caption Digitaalallkiri(fail vms)?
 
 @property pictureurl type=textbox size=40 maxlength=200
 @caption Pildi/foto url
@@ -68,12 +65,31 @@
 @property comment type=textarea cols=40 rows=3 table=objects field=comment
 @caption Kommentaar
 
-@default group=overview
-@groupinfo overview caption="Seotud tegevused"
+@default group=contact
+@caption Kontaktandmed
 
-@property progress type=text callback=callback_org_actions store=no no_caption=1
+@property email type=textbox store=no 
+@caption E-post
+
+@default group=overview
+
+@property org_actions type=calendar no_caption=1 group=all_actions viewtype=relative
 @caption org_actions
 
+@property org_calls type=calendar no_caption=1 group=calls viewtype=relative
+@caption Kõned
+
+@property org_meetings type=calendar no_caption=1 group=meetings viewtype=relative
+@caption Kohtumised
+
+@property org_tasks type=calendar no_caption=1 group=tasks viewtype=relative
+@caption Toimetused
+
+@groupinfo overview caption=Tegevused
+@groupinfo all_actions caption="Kõik" parent=overview submit=no
+@groupinfo calls caption="Kõned" parent=overview submit=no
+@groupinfo meetings caption="Kohtumised" parent=overview submit=no
+@groupinfo tasks caption="Toimetused" parent=overview submit=no
 
 @default group=forms
 @default field=meta
@@ -90,6 +106,7 @@ selection.aw
 
 @default group=show
 @groupinfo show caption=Visiitkaart submit=no
+@groupinfo contact caption=Kontaktandmed
 @property dokus type=text callback=show_isik
 
 @classinfo no_status=1
@@ -145,11 +162,14 @@ CREATE TABLE `kliendibaas_isik` (
 @reltype RANK value=7 clid=CL_CRM_PROFESSION
 @caption ametinimetus
 
-@reltype ISIK_KOHTUMINE value=8 clid=CL_CRM_MEETING
+@reltype MEETING value=8 clid=CL_CRM_MEETING
 @caption kohtumine
 
-@reltype ISIK_KONE value=9 clid=CL_CRM_CALL
+@reltype CALL value=9 clid=CL_CRM_CALL
 @caption kõne
+
+@reltype TASK value=9 clid=CL_TASK
+@caption toimetus
 
 
 */
@@ -173,13 +193,17 @@ class crm_person extends class_base
 		
 		switch($data["name"])
 		{
-			case 'lastname':
+			case "lastname":
 				if ($form['firstname'] || $form['lastname'])
 				{
 					$title = $form['title'] ? $form['title'].' ' : '';
 					$arr["obj_inst"]->set_name($title.$form['firstname']." ".$form['lastname']);
 				}
-			break;
+				break;
+
+			case "email":
+				$this->upd_contact_data($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -191,36 +215,43 @@ class crm_person extends class_base
 
 		switch($data["name"])
 		{
-			case 'templates':
-				$tpls = $this->get_directory(array('dir' => $this->cfg['tpldir'].'/isik/visit/'));
+			case "templates":
+				$tpls = $this->get_directory(array(
+					"dir" => $this->cfg["tpldir"]."/isik/visit/",
+				));
 				$data['options'] = $tpls;
 				break;
 
-			case 'name':
-				$data['value'] = $arr['obj']['name'];
+			case "forms":
+				$data["multiple"] = 1;
 				break;
 
-			case 'forms':
-				$data['multiple'] = 1;
-				break;
-
-			case 'navtoolbar':
+			case "navtoolbar":
 				$this->isik_toolbar($arr);
 				break;
-			break;
+
+			case "email":
+				$personal_contact = $arr["obj_inst"]->prop("personal_contact");
+				if ($personal_contact)
+				{
+					$pc = new object($personal_contact);
+					$addr = new object($pc->prop("primary_mail"));
+					$data["value"] = $addr->prop("mail");
+				};
+				break;
+				
+
+			case "org_actions":
+                        case "org_calls":
+                        case "org_meetings":
+                        case "org_tasks":
+                                $this->do_org_actions(&$arr);
+                                break;
 		}
 		return $retval;
 
 	}
 
-	function callback_org_actions($args)
-	{
-		// oh fuck you. isikuga seotud tegevuse nimekiri. fuck, fuck, fuck.
-		$inst = get_instance('crm/crm_company');
-		return $inst->callback_org_actions($args);
-	}
-
-	
 	function isik_toolbar(&$args)
 	{
 		$toolbar = &$args["prop"]["toolbar"];
@@ -378,6 +409,46 @@ class crm_person extends class_base
 		return $nodes;
 	}
 
+	function fetch_person_by_id($arr)
+	{
+		$o = new object($arr["id"]);
+
+
+
+	}
+
+	function upd_contact_data($arr)
+	{
+		// I need to figure out whether this person has a personal contact set?
+		$personal_contact = $arr["obj_inst"]->prop("personal_contact");
+		if (is_oid($personal_contact))
+		{
+			// load the contact object
+			$pc = new object($personal_contact);
+		}
+		else
+		{
+			$pc = new object();
+			$pc->set_class_id(CL_CRM_ADDRESS);
+			$pc->set_name($arr["obj_inst"]->name());
+			$pc->set_parent($arr["obj_inst"]->parent());
+			$pc->save();
+
+			$arr["obj_inst"]->connect(array(
+				"to" => $pc->id(),
+				"reltype"=> RELTYPE_ADDRESS,
+			));
+
+			$arr["obj_inst"]->set_prop("personal_contact",$pc->id());
+		};
+
+
+		$addr_inst = get_instance(CL_CRM_ADDRESS);
+		$addr_inst->set_email_addr(array(
+			"obj_id" => $pc->id(),
+			"email" => $arr["prop"]["value"],
+		));
+	}
 
 	function show($args)
 	{
@@ -467,7 +538,6 @@ class crm_person extends class_base
 		return $this->parse();
 	}
 
-
 	function fetch_all_data($id)
 	{
 //vot siuke päring, ära küsi
@@ -546,6 +616,97 @@ class crm_person extends class_base
 	{
 		extract($args);
 		return $this->show(array('id' => $alias['target']));
+	}
+	
+	function do_org_actions($arr)
+	{
+		$ob = $arr["obj_inst"];
+		$args = array();
+		switch($arr["prop"]["name"])
+		{
+			case "org_calls":
+				$args["type"] = RELTYPE_CALL;
+				break;
+			
+			case "org_meetings":
+				$args["type"] = RELTYPE_MEETING;
+				break;
+			
+			case "org_tasks":
+				$args["type"] = RELTYPE_TASK;
+				break;
+		};
+		$conns = $ob->connections_from($args);
+		$t = &$arr["prop"]["vcl_inst"];
+
+		$range = $arr["prop"]["vcl_inst"]->get_range(array(
+			"date" => $arr["request"]["date"],
+			"viewtype" => !empty($arr["request"]["viewtype"]) ? $arr["request"]["viewtype"] : $arr["prop"]["viewtype"],
+		));
+		$start = $range["start"];
+		$end = $range["end"];
+
+		$overview_start = $range["overview_start"];
+
+		$classes = $this->cfg["classes"];
+
+		$return_url = urlencode(aw_global_get("REQUEST_URI"));
+		$planner = get_instance(CL_PLANNER);
+
+		foreach($conns as $conn)
+		{
+			$item = new object($conn->prop("to"));
+			if ($item->prop("start1") < $overview_start)
+			{
+				continue;
+			};
+			
+			$cldat = $classes[$item->class_id()];
+
+			if ($item->class_id() == CL_CRM_CALL)
+			{
+				if ($item->prop("is_done") == "")
+				{
+					$icon = "call-todo.gif";
+				}
+				else
+				{
+					$icon = "call-done.gif";
+				};
+			}
+			else
+			{
+				$icon = "";
+			};
+		
+			// I need to filter the connections based on whether they write to calendar
+			// or not.
+			$link = $planner->get_event_edit_link(array(
+				"cal_id" => $this->cal_id,
+				"event_id" => $item->id(),
+				"return_url" => $return_url,
+			));
+
+			if ($item->prop("start1") > $start)
+			{
+				$t->add_item(array(
+					"timestamp" => $item->prop("start1"),
+					"data" => array(
+						"name" => "<font color='gray'>" . $cldat["name"] . " </font><em>" . $item->name() . "</em>",
+						"link" => $link,
+						"modifiedby" => $item->prop("modifiedby"),
+						"icon" => $icon,
+					),
+				));
+			};
+
+			if ($item->prop("start1") > $overview_start)
+			{
+				$t->add_overview_item(array(
+					"timestamp" => $item->prop("start1"),
+				));
+			};
+		}
 	}
 
 }

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.5 2004/01/09 13:56:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.6 2004/01/13 14:14:23 duke Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -19,7 +19,7 @@ default group=calendar
 @property content type=textarea cols=60 rows=30 table=planner field=description
 @caption Sisu
 
-@property aliasmgr type=aliasmgr no_caption=1
+@property aliasmgr type=aliasmgr no_caption=1 store=no
 @caption Aliastehaldur
 
 default group=other_calendars

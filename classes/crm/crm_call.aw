@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.5 2004/01/09 13:56:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.6 2004/01/13 14:14:23 duke Exp $
 // crm_call.aw - phone call
 /*
 
@@ -20,7 +20,7 @@
 @property content type=textarea cols=60 rows=30 field=description
 @caption Sisu
 
-@property aliasmgr type=aliasmgr no_caption=1
+@property aliasmgr type=aliasmgr no_caption=1 store=no
 @caption Aliastehaldur
 
 @tableinfo planner index=id master_table=objects master_index=brother_of

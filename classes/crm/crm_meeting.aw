@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.3 2004/01/09 13:56:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.4 2004/01/13 14:14:23 duke Exp $
 // kohtumine.aw - Kohtumine 
 /*
 
@@ -20,7 +20,7 @@
 @property summary type=textarea cols=60 rows=30 table=planner field=description
 @caption Kokkuvõte
 
-@property aliasmgr type=aliasmgr no_caption=1
+@property aliasmgr type=aliasmgr no_caption=1 store=no
 @caption Aliastehaldur
 
 @tableinfo documents index=docid master_table=objects master_index=brother_of

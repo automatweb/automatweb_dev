@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.7 2004/01/06 13:46:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.8 2004/01/13 14:14:23 duke Exp $
 /*
 @classinfo relationmgr=yes
 @tableinfo kliendibaas_firma index=oid master_table=objects master_index=oid
@@ -21,7 +21,10 @@
 @property pohitegevus type=relpicker reltype=RELTYPE_TEGEVUSALAD table=kliendibaas_firma
 @caption Põhitegevus
 
-@property ettevotlusvorm type=relpicker reltype=RELTYPE_ETTEVOTLUSVORM table=kliendibaas_firma
+property ettevotlusvorm type=relpicker reltype=RELTYPE_ETTEVOTLUSVORM table=kliendibaas_firma
+caption Õiguslik vorm
+
+@property ettevotlusvorm type=objpicker clid=CL_CRM_CORPFORM table=kliendibaas_firma
 @caption Õiguslik vorm
 
 @property tooted type=relpicker reltype=RELTYPE_TOOTED method=serialize field=meta table=objects
@@ -42,6 +45,9 @@
 @property firmajuht type=chooser orient=vertical table=kliendibaas_firma  editonly=1
 @caption Organisatsiooni juht
 
+@property human_resources type=table store=no group=humanres no_caption=1
+@caption Inimesed
+
 @default group=overview
 
 @property org_actions type=calendar no_caption=1 group=all_actions viewtype=relative
@@ -56,6 +62,7 @@
 @property org_tasks type=calendar no_caption=1 group=tasks viewtype=relative
 @caption Toimetused
 
+@groupinfo humanres caption="Inimesed"
 @groupinfo overview caption="Seotud tegevused" 
 @groupinfo all_actions caption="Kõik" parent=overview submit=no
 @groupinfo calls caption="Kõned" parent=overview submit=no
@@ -153,6 +160,10 @@ class crm_company extends class_base
 			case "org_tasks":
 				$this->do_org_actions(&$arr);
 				break;
+
+			case "human_resources":
+				$this->do_human_resources($arr);
+				break;
 			
 		};
 		return $retval;
@@ -165,6 +176,63 @@ class crm_company extends class_base
 		$this->cal_id = $users->get_user_config(array(
 			"uid" => aw_global_get("uid"),
 			"key" => "user_calendar",
+		));
+	}
+
+	function do_human_resources($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+                        'name' => 'name',
+                        'caption' => 'Nimi',
+                        'sortable' => '1',
+			'callback' => array(&$this, 'callb_human_name'),
+			'callb_pass_row' => true,
+                ));
+		$t->define_field(array(
+                        'name' => 'phone',
+                        'caption' => 'Telefon',
+                        'sortable' => '1',
+                ));
+		$t->define_field(array(
+                        'name' => 'email',
+                        'caption' => 'E-post',
+                        'sortable' => '1',
+                ));
+		$t->define_field(array(
+                        'name' => 'rank',
+                        'caption' => 'Ametinimetus',
+                        'sortable' => '1',
+                ));
+		$t->define_field(array(
+                        'name' => 'lastaction',
+                        'caption' => 'Viimane tegevus',
+                        'sortable' => '1',
+                ));
+		$conns = $arr["obj_inst"]->connections_from(array(
+			"type" => RELTYPE_WORKERS,
+		));
+
+		$crmp = get_instance(CL_CRM_PERSON);
+
+		// now I need a way to figure out the phone number for a person and I think
+		// the best way to accomplish that would be in the crm_person class
+		foreach($conns as $conn)
+		{
+			$idat = $crmp->fetch_all_data($conn->prop("to"));
+			$t->define_data(array(
+				"name" => $conn->prop("to.name"),
+				"id" => $conn->prop("to"),
+			));
+		};
+
+	}
+
+	function callb_human_name($arr)
+	{
+		return html::href(array(
+			"url" => $this->mk_my_orb("change",array("id" => $arr["id"]),CL_CRM_PERSON),
+			"caption" => $arr["name"],
 		));
 	}
 	

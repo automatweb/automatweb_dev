@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.4 2004/01/06 18:23:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.5 2004/01/13 14:14:23 duke Exp $
 // crm_address.aw - It's not really a physical address but a collection of data required to 
 // contact a person.
 /*
@@ -14,9 +14,8 @@
 	
 	@default table=kliendibaas_address
 	
-	@property email type=textbox store=no
+	@property email type=textbox store=no editonly=1
 	@caption Meiliaadress
-
 	
 	@property aadress type=textbox size=50 maxlength=100
 	@caption Tänav/Küla
@@ -52,8 +51,11 @@
 	@property comment type=textarea cols=65 rows=3 table=objects field=comment
 	@caption Kommentaar
 	
-	@property primary_mail type=relpicker reltype=RELTYPE_EMAIL table=kliendibaas_address field=e_mail group=settings
-	@caption Primaarne meiliaadress 
+	property primary_mail type=relpicker reltype=RELTYPE_EMAIL table=kliendibaas_address field=e_mail group=settings
+	caption Primaarne meiliaadress 
+
+	@property xmail type=relmanager table=kliendibaas_address field=e_mail group=settings reltype=RELTYPE_EMAIL props=mail
+	@caption Meiliaadressid
 
 	@classinfo no_status=1
 	@groupinfo settings caption=Seadistused
@@ -187,21 +189,41 @@ class crm_address extends class_base
 				break;
 
 			case "email":
-				$this->create_email_obj($arr);
+				//$this->create_email_obj($arr);
 				break;
+
+			case "xmail":
+				$this->process_xmail($arr);
+				break;
+
+
+
+				
 		};
 		return $retval;
 	}	
 
 	function create_email_obj($arr)
 	{
-		// first I need to check whether the address has connection an e-mail address object
-		$primary_mail = $arr["obj_inst"]->prop("primary_mail");
+		$this->set_email_addr(array(
+			"obj_id" => $arr["obj_inst"]->id(),
+			"email" => $arr["prop"]["value"],
+		));
+	}
+
+	////
+	// !Sets the email address (and creates any required objects)
+	// obj_id - object id of address object
+	// email - email address
+	function set_email_addr($arr)
+	{
+		$obj_inst = new object($arr["obj_id"]);
+		$primary_mail = $obj_inst->prop("primary_mail");
 		if (is_oid($primary_mail))
 		{
 			// update the e-mail address in that object
 			$pc = new object($primary_mail);
-			$val = $arr["prop"]["value"];
+			$val = $arr["email"];
 			$pc->set_name($val);
 			$pc->set_prop("mail",$val);
 			$pc->save();
@@ -211,18 +233,91 @@ class crm_address extends class_base
 			// create a new one and connect it to the current object
 			$pc = new object();
 			$pc->set_class_id(CL_ML_MEMBER);
-			$pc->set_parent($arr["obj_inst"]->parent());
-			$pc->set_name($arr["prop"]["value"]);
-			$pc->set_prop("mail",$arr["prop"]["value"]);
+			// aw.. the thing does not have an address eh?
+			$pc->set_parent($obj_inst->parent());
+			$pc->set_name($arr["email"]);
+			$pc->set_prop("mail",$arr["email"]);
 			$pc->save();
 
-			$arr["obj_inst"]->connect(array(
+			$obj_inst->connect(array(
 				"to" => $pc->id(),
 				"reltype"=> RELTYPE_EMAIL,
 			));
 
-			$arr["obj_inst"]->set_prop("primary_mail",$pc->id());
+			$obj_inst->set_prop("primary_mail",$pc->id());
 		};
+	}
+
+	function process_xmail($arr)
+	{
+		/*
+			[cb_emb] => Array
+			(
+			    [xmail] => Array
+				(
+				    [new] => Array
+					(
+					    [mail] => eleleeleeee
+					)
+
+				)
+
+			)
+		*/
+
+		// parent comes from the form. I might want to validate it though
+		// Now I need to figure out the class .. action is submit.
+
+		$prop = $arr["prop"];
+
+		$target_reltype = constant($prop["reltype"]);
+		$clid = $arr["relinfo"][$target_reltype]["clid"][0];
+
+		// now get a bloody instance of that object.
+
+		$inst = get_instance($clid);
+		$inst->id_only = true;
+		
+		$req = $arr["request"]["cb_emb"]["xmail"];
+
+		if (empty($req["new"]["mail"]))
+		{
+			return false;
+		}
+
+		$member_id = $inst->submit(array(
+			"name" => $req["new"]["mail"],
+			"mail" => $req["new"]["mail"],
+			"parent" => $req["new"]["parent"],
+		));
+			
+		$arr["obj_inst"]->connect(array(
+			"to" => $member_id,
+			"reltype"=> RELTYPE_EMAIL,
+		));
+
+		// now connect it.
+		/*
+
+		print_r($inst);
+
+		print "teeheee";
+
+		print "<pre>";
+		print_r($clid);
+		print "--";
+		print_r($arr["relinfo"]);
+		print "</pre>";
+
+		$prop = $arr["prop"];
+		
+		print "processing xmail";
+		print "<pre>";
+		print_r($req);
+		print "---<br>";
+		print_r($prop);
+		print "</pre>";
+		*/
 
 	}
 
