@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.9 2002/11/14 09:16:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.10 2002/11/14 12:38:29 duke Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -686,6 +686,12 @@ class form_element extends aw_template
 					"hr_ord" => $this->arr["hour_ord"],
 					"minute_ord" => $this->arr["minute_ord"],
 					"second_ord" => $this->arr["second_ord"],
+					"year_textbox" => checked($this->arr["year_textbox"]),
+					"month_textbox" => checked($this->arr["month_textbox"]),
+					"day_textbox" => checked($this->arr["day_textbox"]),
+					"hr_textbox" => checked($this->arr["hr_textbox"]),
+					"minute_textbox" => checked($this->arr["minute_textbox"]),
+					"second_textbox" => checked($this->arr["second_textbox"]),
 					// use a textbox for entering dates
 					"visual_use_textbox" => checked($this->arr["visual_use_textbox"]),
 				));
@@ -1217,6 +1223,18 @@ class form_element extends aw_template
 			$this->arr["minute_ord"] = $$var;
 			$var=$base."_second_ord";
 			$this->arr["second_ord"] = $$var;
+			$var=$base."_year_textbox";
+			$this->arr["year_textbox"] = $$var;
+			$var=$base."_month_textbox";
+			$this->arr["month_textbox"] = $$var;
+			$var=$base."_day_textbox";
+			$this->arr["day_textbox"] = $$var;
+			$var=$base."_hr_textbox";
+			$this->arr["hr_textbox"] = $$var;
+			$var=$base."_minute_textbox";
+			$this->arr["minute_textbox"] = $$var;
+			$var=$base."_second_textbox";
+			$this->arr["second_textbox"] = $$var;
 			$var=$base."_visual_use_textbox";
 			$this->arr["visual_use_textbox"] = $$var;
 		}
@@ -2293,27 +2311,32 @@ class form_element extends aw_template
 					$has_some = false;
 					if ($this->arr["has_year"])
 					{
-						$bits["year"] = $this->arr["year_ord"];
+						$key = ($this->arr["year_textbox"]) ? "year_textbox" : "year";
+						$bits[$key] = $this->arr["year_ord"];
 						$has_some = true;
 					}
 					if ($this->arr["has_month"])
 					{
-						$bits["month"] = $this->arr["month_ord"];
+						$key = ($this->arr["month_textbox"]) ? "month_textbox" : "month";
+						$bits[$key] = $this->arr["month_ord"];
 						$has_some = true;
 					}
 					if ($this->arr["has_day"])
 					{
-						$bits["day"] = $this->arr["day_ord"];
+						$key = ($this->arr["day_textbox"]) ? "day_textbox" : "day";
+						$bits[$key] = $this->arr["day_ord"];
 						$has_some = true;
 					}
 					if ($this->arr["has_hr"])
 					{
-						$bits["hour"] = $this->arr["hour_ord"];
+						$key = ($this->arr["hr_textbox"]) ? "hour_textbox" : "hour";
+						$bits[$key] = $this->arr["hour_ord"];
 						$has_some = true;
 					}
 					if ($this->arr["has_minute"])
 					{
-						$bits["minute"] = $this->arr["minute_ord"];
+						$key = ($this->arr["minute_textbox"]) ? "minute_textbox" : "minute";
+						$bits[$key] = $this->arr["minute_ord"];
 						$has_some = true;
 					}
 					if ($this->arr["has_second"])
