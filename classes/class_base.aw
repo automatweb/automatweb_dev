@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.251 2004/04/13 12:20:07 duke Exp $
+// $Id: class_base.aw,v 2.252 2004/04/13 15:23:57 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -108,6 +108,7 @@ class class_base extends aw_template
 			"comments" => "vcl/comments",
 			"container" => "vcl/container",
 			"table" => "vcl/table",
+			"relpicker" => "vcl/relpicker",
 		);
 		parent::init($arg);
 	}
@@ -1592,15 +1593,6 @@ class class_base extends aw_template
 			$val["no_caption"] = 1;
 		};
 
-		if (($val["type"] == "relpicker") && ($val["reltype"]))
-		{
-			$this->cfgu->el_relpicker_reltype(array(
-				"id" => $this->target_obj,
-				"val" => &$val,
-				"relinfo" => $this->relinfo[$val["reltype"]],
-			));
-		};
-
 	}
 
 	////
@@ -1745,9 +1737,11 @@ class class_base extends aw_template
                                 {
                                         $res = $ot->init_vcl_property(array(
                                                 "property" => &$val,
+						"id" => $this->id,
                                                 "clid" => $this->clid,
                                                 "obj_inst" => &$this->obj_inst,
 						"columns" => $this->columninfo,
+						"relinfo" => $this->relinfo,
                                         ));
 
                                         if (is_array($res))
@@ -2708,44 +2702,6 @@ class class_base extends aw_template
 				continue;
 			};
 
-			if ($property["type"] == "relpicker" && $property["automatic"] == 1)
-			{
-				if (!$this->new)
-				{
-					$conns = $this->obj_inst->connections_from(array(
-						"type" => $this->relinfo[$property["reltype"]]["value"],
-					));
-				};
-
-				// no existing connection, create a new one
-				if ($this->new || sizeof($conns) == 0)
-				{
-					if ($property["value"] != 0)
-					{
-						$this->obj_inst->connect(array(
-							"to" => $property["value"],
-							"reltype" => $this->relinfo[$property["reltype"]]["value"],
-						));
-					};
-				}
-				else
-				{
-					// alter existing connection
-					list(,$existing) = each($conns);
-					if ($property["value"] == 0)
-					{
-						$existing->delete();
-					}
-					else
-					{
-						$existing->change(array(
-							"to" => $property["value"],
-						));
-					};
-				};
-
-			};
-		
 			/*
 			if ($property["type"] == "callback")
 			{
