@@ -8,7 +8,7 @@ classload("aw_template");
 classload("defs");
 classload("users");
 classload("languages");
-classload("core/error");
+classload("core/error", "core/obj/object");
 
 // you cannot aw_startup() here, it _will_ break things
 // reset aw_cache_* function globals
