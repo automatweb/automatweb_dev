@@ -2,6 +2,7 @@
 <head>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset={VAR:charset}"> 
 <title>{VAR:title_action}{VAR:uid}@AutomatWeb</title>
+<link REL="icon" HREF="{VAR:baseurl}/automatweb/images/icons/favicon.ico" TYPE="image/x-icon">
 <link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/awplanner.css">
 <link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/site.css">
 <link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/fg_menu.css">
@@ -74,7 +75,7 @@ div.menuBar a.menuButton,
 div.menu,
 div.menu a.menuItem {
   font-family: "MS Sans Serif", Arial, sans-serif;
-  font-size: 11pt;
+  font-size: 11px;
   font-style: normal;
   font-weight: normal;
   color: #000000;
