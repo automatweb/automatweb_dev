@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.3 2001/05/31 13:38:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.4 2001/06/06 08:36:19 duke Exp $
 
 define(DENIED,0);
 define(ALLOWED,1);
@@ -343,7 +343,7 @@ class acl_base extends core
 	function prog_acl($right,$progid)
 	{
 		global $prog_cache,$SITE_ID;
-		if (!defined("UID"))
+		if ((!defined("UID")) or (strlen(UID) == 0))
 		{
 			return DENIED;
 		}
