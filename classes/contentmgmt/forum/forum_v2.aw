@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.20 2004/02/09 20:51:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.21 2004/02/13 11:42:15 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -19,13 +19,13 @@
 	@caption Listiliikmete kataloog
 	@comment Sellesse kataloogi paigutatakse "listi liikmete" objektid
 
-	@property topics_on_page type=chooser 
+	@property topics_on_page type=select
 	@caption Teemasid lehel
 
-	@property comments_on_page type=chooser 
+	@property comments_on_page type=select
 	@caption Postitusi lehel
 
-	@property topic_depth type=chooser default=1 
+	@property topic_depth type=select default=1 
 	@caption Teemade sügavus
 
 	@property topic_selector type=text group=topic_selector no_caption=1
@@ -702,15 +702,25 @@ class forum_v2 extends class_base
 
 		$fld = $topic_obj->parent();
 
+		$show = true;
 		foreach($o->path() as $_to)
 		{
-			$key = $_to->id();
-			$name = $_to->name();
+			if (!$show)
+			{
+				continue;
+			}
+
+			if ($key == aw_global_get("section"))
+			{
+				$show = false;
+			}
+
 			if ($key == $args["obj_inst"]->prop("topic_folder"))
 			{
-				break;
-			}
-			if ($key == $fld)
+				$show = false;
+			};
+
+			/*if ($key == $fld)
 			{
 				$name = html::href(array(
 					"url" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"group" => $args["request"]["group"],"folder" => $fld,"section" => aw_global_get("section"),"_alias" => get_class($this))),
@@ -718,11 +728,11 @@ class forum_v2 extends class_base
 				));
 			}
 			else
-			{
+			{*/
 				$obj = new object($key);
 				if ($obj->class_id() == CL_MENU)
 				{
-					if ($obj->id() == $args["obj_inst"]->prop("topic_folder"))
+					/*if ($obj->id() == $args["obj_inst"]->prop("topic_folder"))
 					{
 						$name = html::href(array(
 							"url" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"group" => $args["request"]["group"],"section" => aw_global_get("section"),"_alias" => get_class($this))),
@@ -730,15 +740,15 @@ class forum_v2 extends class_base
 						));
 					}
 					else
-					{
+					{*/
 						$name = html::href(array(
 							"url" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"group" => $args["request"]["group"],"folder" => $obj->id(),"section" => aw_global_get("section"),"_alias" => get_class($this))),
 							"caption" => $name,
 						));
-					};
+					//};
 				};
 						
-			};
+			//};
 			$path[] = $name;
 		};
 
@@ -896,7 +906,6 @@ class forum_v2 extends class_base
 	{
 		if ($this->topic_id)
 		{
-			$form_data = &$args["request"];
                 	$emb = $args["request"]["emb"];
 			$args = &$args["args"];
 			$args["folder"] = $emb["parent"];

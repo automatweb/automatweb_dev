@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.4 2003/12/03 12:35:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.5 2004/02/13 11:42:15 duke Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -64,14 +64,14 @@ class forum_comment extends class_base
 		switch($data["name"])
 		{
 			case "uname":
-				if (empty($args["obj"]["oid"]))
+				if (!is_oid($args["obj_inst"]->id()))
 				{
 					$data["value"] = $_COOKIE["aw_mb_name"];
 					$this->dequote($data["value"]);
 				};
 				break;
 			case "uemail":
-				if (empty($args["obj"]["oid"]))
+				if (!is_oid($args["obj_inst"]->id()))
 				{
 					$data["value"] = $_COOKIE["aw_mb_mail"];
 					$this->dequote($data["value"]);
@@ -95,8 +95,8 @@ class forum_comment extends class_base
 				if (!empty($data["value"]) && !headers_sent())
 				{
 					$t = time();
-					setcookie("aw_mb_name",$args["form_data"]["uname"],time()+24*3600*1000);
-					setcookie("aw_mb_mail",$args["form_data"]["uemail"],time()+24*3600*1000);
+					setcookie("aw_mb_name",$args["request"]["uname"],time()+24*3600*1000);
+					setcookie("aw_mb_mail",$args["request"]["uemail"],time()+24*3600*1000);
 				};
 				break;
 	
