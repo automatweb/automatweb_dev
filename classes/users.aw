@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.135 2005/01/28 13:59:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.136 2005/03/03 13:00:11 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1498,6 +1498,7 @@ class users extends users_user
 			$admg = $this->addgroup(0,"Administraatorid", GRP_REGULAR,0,10000,0,$ini_opts["groups.tree_root"]);
 			echo "Administraatorid <br>\n";
 			flush();
+			$osi_vars["groups.admins"] = $this->get_oid_for_gid($admg);
 
 			$nlg = $this->addgroup(0, "Sisse logimata kasutajad", GRP_REGULAR, 0, 1, 0, $ini_opts["groups.tree_root"]);
 			$this->set_cval("non_logged_in_users_group", $nlg);
@@ -1522,15 +1523,17 @@ class users extends users_user
 			$admo->set_prop("can_admin_interface", 1);
 			$admo->save();
 
-			$this->addgroup(0,"Toimetajad", GRP_REGULAR,0,5000,0,$ini_opts["groups.tree_root"]);
+			$editors = $this->addgroup(0,"Toimetajad", GRP_REGULAR,0,5000,0,$ini_opts["groups.tree_root"]);
 			echo "Toimetajad <br>\n";
 			flush();
-			$this->addgroup(0,"Kliendid", GRP_REGULAR,0,2500,0,$ini_opts["groups.tree_root"]);
+			$osi_vars["groups.editors"] = $this->get_oid_for_gid($editors);
+
+			/*$this->addgroup(0,"Kliendid", GRP_REGULAR,0,2500,0,$ini_opts["groups.tree_root"]);
 			echo "Kliendid <br>\n";
 			flush();
 			$this->addgroup(0,"Partnerid", GRP_REGULAR,0,3000,0,$ini_opts["groups.tree_root"]);
 			echo "Partnerid <br>\n";
-			flush();
+			flush();*/
 
 			// create default user
 			$us = get_instance("core/users/user");
