@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.33 2004/06/04 11:28:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.34 2004/06/07 15:55:59 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -79,7 +79,7 @@ caption Identiteet
 
 @groupinfo main_view caption="Kirjad" submit=no 
 @groupinfo search caption=Otsing submit=no submit_action=change submit_method=GET
-@groupinfo rules caption=Ruulid submit=no
+@groupinfo rules caption=Reeglid submit=no
 
 @reltype MAIL_IDENTITY value=1 clid=CL_MESSENGER_IDENTITY
 @caption messengeri identiteet
