@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.29 2004/12/01 12:12:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.30 2004/12/01 15:01:32 ahti Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -25,7 +25,7 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 	@caption Aeg
 
 	property event_cfgform type=relpicker reltype=RELTYPE_EVENT_ENTRY
-	caption Def. sündmuse sisetamise vorm
+	caption Def. s&uuml;ndmuse sisetamise vorm
 
 	@property day_start type=time_select group=time_settings rel=1
 	@caption Päev algab
@@ -43,7 +43,7 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 	@caption Näita projekte
 
 	@property event_folder type=relpicker reltype=RELTYPE_EVENT_FOLDER
-	@caption Sündmuste kataloog
+	@caption S&uuml;ndmuste kataloog
 
 	@property workdays type=chooser multiple=1 group=advanced
 	@caption Näidatavad päevad
@@ -66,10 +66,10 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 	@caption Kalendri sisu
 
 	@property add_event callback=callback_get_add_event group=add_event 
-	@caption Lisa sündmus
+	@caption Lisa s&uuml;ndmus
 
 	@property create_event_table type=table group=create_events no_caption=1
-	@caption Loo sündmused
+	@caption Loo s&uuml;ndmused
 
 	@property vacancies type=text group=create_vacancies type=table no_caption=1
 	@caption Ajad
@@ -89,16 +89,16 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 	@property search type=hidden store=no
 	
 	@property event_search_name type=textbox
-	@caption Sündmuse nimi
+	@caption S&uuml;ndmuse nimi
 	
 	@property event_search_content type=textbox
-	@caption Sündmuse sisu
+	@caption S&uuml;ndmuse sisu
 	
 	@property event_search_comment type=textbox
-	@caption Sündmuse kommentaar
+	@caption S&uuml;ndmuse kommentaar
 	
 	@property event_search_type type=chooser multiple=1 ch_value=1 orient=vertical
-	@caption Sündmuse tüüp
+	@caption S&uuml;ndmuse t&uuml;&uuml;p
 	
 	@property event_search_add type=chooser multiple=1 orient=vertical
 	@caption Lisatingimused
@@ -111,16 +111,16 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 	
 	
 	@groupinfo general caption=Seaded
-	@groupinfo general2 caption=Üldine parent=general
+	@groupinfo general2 caption=&Uuml;ldine parent=general
 	@groupinfo advanced caption=Sisuseaded parent=general
 	@groupinfo vac_settings caption="Vabad ajad" parent=general
-	@groupinfo views caption=Sündmused submit=no submit_method=get
+	@groupinfo views caption=S&uuml;ndmused submit=no submit_method=get
 	@groupinfo vacancies caption="Vabad ajad" 
-	@groupinfo create_events caption="Sündmuste lisamine" parent=vacancies
+	@groupinfo create_events caption="S&uuml;ndmuste lisamine" parent=vacancies
 	@groupinfo create_vacancies caption="Vabad ajad" parent=vacancies
 	@groupinfo create_vacancies_cal caption="Vabad ajad (kalendrivaade)" parent=vacancies
 	@groupinfo time_settings caption=Ajaseaded parent=general
-	@groupinfo add_event caption="Muuda sündmust"
+	@groupinfo add_event caption="Muuda s&uuml;ndmust"
 */
 
 // naff, naff. I need to create different views that contain different properties. That's something
@@ -134,10 +134,10 @@ define("REP_YEAR",4);
 
 /*
 @reltype EVENT_SOURCE value=2 clid=CL_PLANNER,CL_PROJECT
-@caption võta sündmusi
+@caption võta s&uuml;ndmusi
 
 @reltype EVENT value=3 clid=CL_TASK,CL_CRM_CALL,CL_CRM_MEETING
-@caption sündmus
+@caption s&uuml;ndmus
 
 @reltype DC_RELATION value=4 clid=CL_RELATION
 @caption viide kalendri väljundile
@@ -146,10 +146,10 @@ define("REP_YEAR",4);
 @caption võta kalendri väljundid
 
 @reltype EVENT_FOLDER value=6 clid=CL_MENU,CL_PLANNER
-@caption sündmuste kataloog
+@caption s&uuml;ndmuste kataloog
 
 @reltype EVENT_ENTRY value=7 clid=CL_CFGFORM,CL_CRM_CALL
-@caption sündmuse sisestamise vorm
+@caption s&uuml;ndmuse sisestamise vorm
 
 @reltype CALENDAR_OWNERSHIP value=8 clid=CL_USER
 @caption Omanik

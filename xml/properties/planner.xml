@@ -84,7 +84,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_EVENT_FOLDER</reltype>
-            <caption>Sündmuste kataloog</caption>
+            <caption>S&amp;uuml;ndmuste kataloog</caption>
       </property>
       <property>
             <name>workdays</name>
@@ -159,7 +159,7 @@
             <method>serialize</method>
             <store>no</store>
             <callback>callback_get_add_event</callback>
-            <caption>Lisa sündmus</caption>
+            <caption>Lisa s&amp;uuml;ndmus</caption>
       </property>
       <property>
             <name>create_event_table</name>
@@ -170,7 +170,7 @@
             <store>no</store>
             <type>table</type>
             <no_caption>1</no_caption>
-            <caption>Loo sündmused</caption>
+            <caption>Loo s&amp;uuml;ndmused</caption>
       </property>
       <property>
             <name>vacancies</name>
@@ -236,7 +236,7 @@
             <method>serialize</method>
             <store>no</store>
             <type>textbox</type>
-            <caption>Sündmuse nimi</caption>
+            <caption>S&amp;uuml;ndmuse nimi</caption>
       </property>
       <property>
             <name>event_search_content</name>
@@ -246,7 +246,7 @@
             <method>serialize</method>
             <store>no</store>
             <type>textbox</type>
-            <caption>Sündmuse sisu</caption>
+            <caption>S&amp;uuml;ndmuse sisu</caption>
       </property>
       <property>
             <name>event_search_comment</name>
@@ -256,7 +256,7 @@
             <method>serialize</method>
             <store>no</store>
             <type>textbox</type>
-            <caption>Sündmuse kommentaar</caption>
+            <caption>S&amp;uuml;ndmuse kommentaar</caption>
       </property>
       <property>
             <name>event_search_type</name>
@@ -269,7 +269,7 @@
             <multiple>1</multiple>
             <ch_value>1</ch_value>
             <orient>vertical</orient>
-            <caption>Sündmuse tüüp</caption>
+            <caption>S&amp;uuml;ndmuse t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
             <name>event_search_add</name>
@@ -311,7 +311,7 @@
                   <caption>Seaded</caption>
             </general>
             <general2>
-                  <caption>Üldine</caption>
+                  <caption>&amp;Uuml;ldine</caption>
                   <parent>general</parent>
             </general2>
             <advanced>
@@ -323,7 +323,7 @@
                   <parent>general</parent>
             </vac_settings>
             <views>
-                  <caption>Sündmused</caption>
+                  <caption>S&amp;uuml;ndmused</caption>
                   <submit>no</submit>
                   <submit_method>get</submit_method>
             </views>
@@ -331,7 +331,7 @@
                   <caption>Vabad ajad</caption>
             </vacancies>
             <create_events>
-                  <caption>Sündmuste lisamine</caption>
+                  <caption>S&amp;uuml;ndmuste lisamine</caption>
                   <parent>vacancies</parent>
             </create_events>
             <create_vacancies>
@@ -347,7 +347,7 @@
                   <parent>general</parent>
             </time_settings>
             <add_event>
-                  <caption>Muuda sündmust</caption>
+                  <caption>Muuda s&amp;uuml;ndmust</caption>
             </add_event>
       </groupinfo>
       <reltypes>
@@ -357,7 +357,7 @@
                         <num_0>CL_PLANNER</num_0>
                         <num_1>CL_PROJECT</num_1>
                   </clid>
-                  <caption>võta sündmusi</caption>
+                  <caption>võta s&amp;uuml;ndmusi</caption>
             </EVENT_SOURCE>
             <EVENT>
                   <value>3</value>
@@ -366,7 +366,7 @@
                         <num_1>CL_CRM_CALL</num_1>
                         <num_2>CL_CRM_MEETING</num_2>
                   </clid>
-                  <caption>sündmus</caption>
+                  <caption>s&amp;uuml;ndmus</caption>
             </EVENT>
             <DC_RELATION>
                   <value>4</value>
@@ -384,7 +384,7 @@
                         <num_0>CL_MENU</num_0>
                         <num_1>CL_PLANNER</num_1>
                   </clid>
-                  <caption>sündmuste kataloog</caption>
+                  <caption>s&amp;uuml;ndmuste kataloog</caption>
             </EVENT_FOLDER>
             <EVENT_ENTRY>
                   <value>7</value>
@@ -392,7 +392,7 @@
                         <num_0>CL_CFGFORM</num_0>
                         <num_1>CL_CRM_CALL</num_1>
                   </clid>
-                  <caption>sündmuse sisestamise vorm</caption>
+                  <caption>s&amp;uuml;ndmuse sisestamise vorm</caption>
             </EVENT_ENTRY>
             <CALENDAR_OWNERSHIP>
                   <value>8</value>
