@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.48 2004/06/14 14:32:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.49 2004/07/26 13:07:43 rtoomas Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -316,6 +316,14 @@ class html extends aw_template
 		return $ret.">";
 	}
 
+	/*
+		$args
+			url - url, kuhu peale klikki peaks browser suuna võtma	
+			target - kus freimis peax avanema
+			onClick - onClick aktsioon
+			title - Kui mouse hoverib peal, siis mis info juttu näidata
+			caption - tekst mida näeb kasutaja
+	*/
 	function href($args = array())
 	{
 		extract($args);
