@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.39 2002/02/18 17:39:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.40 2002/02/18 17:44:24 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -586,6 +586,12 @@ if (!defined("DEFS"))
 	{
 		$inst =& _aw_cache_init();
 		$inst->$cache[$key] = $val;
+	}
+
+	function aw_cache_flush($cache)
+	{
+		$inst =& _aw_cache_init();
+		$inst->$cache = array();
 	}
 };
 
