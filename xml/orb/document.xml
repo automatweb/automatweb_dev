@@ -26,15 +26,6 @@
 			</function>
 		</action>
 
-		<action name="submit_add" >
-			<function name="submit_add">
-				<arguments>
-					<required name="parent" acl="add"/>
-					<required name="period" />
-				</arguments>
-			</function>
-		</action>
-
 		<action name="change" is_public="1" caption="Edit document">
 			<function name="change">
 				<arguments>

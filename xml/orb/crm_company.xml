@@ -1,5 +1,54 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="crm_company" folder="crm" extends="class_base">
+		<action name="submit_new_task" >
+			<function name="submit_new_task">
+				<arguments>
+					<required name="id" type="int" acl="view"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="search_for_contacts" >
+			<function name="search_for_contacts">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_new_call" >
+			<function name="submit_new_call">
+				<arguments>
+					<required name="id" type="int" acl="view"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_new_meeting" >
+			<function name="submit_new_meeting">
+				<arguments>
+					<required name="id" type="int" acl="view"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_delete_relations" >
+			<function name="submit_delete_relations">
+				<arguments>
+					<required name="id" type="int" acl="view"/>
+					<optional name="unit" type="int"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_delete_customer_relations" >
+			<function name="submit_delete_customer_relations">
+				<arguments>
+					<required name="id" type="int" acl="view"/>
+					<optional name="customer" type="int"/>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
