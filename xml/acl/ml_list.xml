@@ -1,0 +1,11 @@
+<?xml version='1.0'?>
+<data>
+<field caption="GID" value="gid"/>
+<field caption="Grupi nimi" value="name"/>
+<field caption="Saata" value="can_send" special="1" help="Lubab sellesse listi meile saata"/>
+<field caption="Liikmeid lisada" value="can_add_users" special="1" help="Lubab sellesse listi liikmeid lisada"/>
+<field caption="Liikmeid eemaldada" value="can_delete_users" special="1" help="Lubab sellest listist liikmeid eemaldada"/>
+<field caption="Kustutada" value="can_delete" special="1" help="Lubab objekti ja alamobjekte kustutata" />
+<field caption="Muutujaid muuta" value="can_change_variables" special="1" help="Lubab listis kasutatavaid muutujaid muuta"/>
+<field caption="Muutujate ACLi muuta" value="can_change_variable_acl" special="1" help="Lubab listis kasutatavate muutujate ACli muuta"/>
+</data>

@@ -1,0 +1,6 @@
+<?xml version='1.0'?>
+<data>
+<field caption="GID" value="gid"/>
+<field caption="Muutuja nimi" value="name"/>
+<field caption="Saata" value="can_send" special="1" help="Lubab seda muutujat meilides kasutada"/>
+</data>
