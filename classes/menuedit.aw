@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.143 2002/08/02 13:29:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.144 2002/08/06 10:39:59 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -1696,12 +1696,22 @@ class menuedit extends aw_template
 	// see oli siin java puu sees perioodide testimise jaoks
 	function get_periods()
 	{
-		printf("%d\t%s\t%d\n",1,"jaanuar",0);
-		printf("%d\t%s\t%d\n",1,"veebruar",0);
-		printf("%d\t%s\t%d\n",1,"märts",0);
-		printf("%d\t%s\t%d\n",1,"aprill",0);
-		printf("%d\t%s\t%d\n",1,"mai",1);
-		exit;
+		$per = get_instance("periods");
+		$active = $per->rec_get_active_period();
+                $per->clist();
+                while($row = $per->db_next())
+                {
+			if ($row["id"] == $active)
+			{
+				$act = 1;
+			}
+			else
+			{
+				$act = 0;
+			};
+			//printf("%d\t%s\t%d\n",$row["id"],$row["description"],$act);
+			printf("%d\t%s\t%d\n",$row["id"],"xxx",$act);
+		};
 	}
 
 
@@ -4050,9 +4060,17 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				if (in_array($row["oid"],$path))	// this menu is selected
 				{
 					$_tmp = "";
-					if ($this->is_template($mn.$ap.".HAS_SUBITEMS_".$name."_L".$this->level."_SEL"))
+					//if ($this->is_template($mn.$ap.".HAS_SUBITEMS_".$name."_L".$this->level."_SEL"))
+					list(,$_basename) = explode(".",$mn.$ap.".HAS_SUBITEMS_".$name."_L".$this->level."_SEL");
+					if ($this->is_template($_basename))
 					{
-						$_tmp = $this->parse($mn.$ap.".HAS_SUBITEMS_".$name."_L".$this->level."_SEL");
+						$_tmp = $this->parse($_basename);
+					}
+					else
+					if ($this->is_template($ap.".HAS_SUBITEMS_".$name."_L".$this->level."_SEL"))
+					{
+						//$_tmp = $this->parse($mn.$ap.".HAS_SUBITEMS_".$name."_L".$this->level."_SEL");
+						$_tmp = $this->parse($ap.".HAS_SUBITEMS_".$name."_L".$this->level."_SEL");
 					}
 					$this->vars(array(
 							"HAS_SUBITEMS_".$name."_L".$this->level."_SEL" => $_tmp
@@ -4298,6 +4316,19 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				{
 					$link = $this->cfg["baseurl"].$link;
 				}
+				$exp->fn_type = aw_ini_get("search.rewrite_url_type");
+				$link = $exp->rewrite_link($link);
+				if (strpos($link, "class=search_conf") === false || strpos($link, "action=search") === false)
+				{
+					$link = $exp->add_session_stuff($link, aw_global_get("lang_id"));
+					$_tl = $link;
+					$link = aw_ini_get("baseurl")."/".$exp->get_hash_for_url(str_replace($this->cfg["baseurl"],"",$link),aw_global_get("lang_id"));
+//					echo "made hash for link $_tl = $link <br>";
+				}
+				else
+				{
+					$link = str_replace($this->cfg["baseurl"],aw_ini_get("search.baseurl"),$link);
+				};
 				
 				if ($link != $this->cfg["baseurl"]."/index.".$this->cfg["ext"] && 
 						$link != $this->cfg["baseurl"]."/" &&
