@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="groups" folder="www/dev/terryf/automatweb_dev/classes" extends="users_user">
+	<class name="groups" folder="" extends="users_user">
 		<action name="gen_pick_list" >
 			<function name="gen_pick_list">
 				<arguments>

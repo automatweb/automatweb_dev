@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="aip_pdf" folder="www/dev/terryf/automatweb_dev/classes" extends="aw_template">
+	<class name="aip_pdf" folder="" extends="aw_template">
 		<action name="listfiles" >
 			<function name="listfiles">
 				<arguments>

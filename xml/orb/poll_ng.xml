@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="poll_ng" folder="www/dev/terryf/automatweb_dev/classes" extends="class_base">
+	<class name="poll_ng" folder="" extends="class_base">
 		<action name="vote" nologin="1">
 			<function name="vote">
 				<arguments>

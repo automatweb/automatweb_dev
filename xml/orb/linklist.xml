@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="linklist" folder="www/dev/terryf/automatweb_dev/classes" extends="class_base">
+	<class name="linklist" folder="" extends="class_base">
 		<action name="show" >
 			<function name="show">
 				<arguments>

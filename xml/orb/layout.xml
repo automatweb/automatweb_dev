@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="layout" folder="www/dev/terryf/automatweb_dev/classes" extends="class_base">
+	<class name="layout" folder="" extends="class_base">
 		<action name="sel_style" all_args="1">
 			<function name="sel_style">
 				<arguments>
