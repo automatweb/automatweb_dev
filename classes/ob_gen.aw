@@ -33,9 +33,18 @@ class ob_gen extends aw_template
 						"sisu_table" => $sisu_table,
 						"save_to_parent" => $save_to_parent,
 						"source_table" => $source_table,
-						"create_object" => $create_object,
+						"class_id" => $class_id,
 						"use_object" => $use_object,
 						"use_sisu" => $use_sisu,
+					),
+				));
+			}
+			elseif($do=="log_setup")
+			{
+				$this->upd_object(array(
+					"oid" => $id,
+					"metadata" =>array(
+						"log" => $log,
 					),
 				));
 			}
@@ -65,12 +74,10 @@ class ob_gen extends aw_template
 				"comment" => $comment,
 				"class_id" => CL_OB_GEN,
 				"metadata" =>array(
-					"status" => $status,
 					"limit" => $limit,
-					"sisu_table" => $sisu_table,
-					"save_to_parent" => $save_to_parent,
 					"source_table" => $source_table,
-					"create_object" => $create_object,
+					"use_object" => $use_object,
+					"use_sisu" => $use_sisu,
 				),
 			));
 			$do="change";
@@ -153,18 +160,43 @@ class ob_gen extends aw_template
 		}
 		
 
-		return $oid?$oid:$this->db_last_insert_id;
+		$oid=$oid?$oid:$this->db_last_insert_id;
 		*/		$this->newcount++;
+		return array('oid'=>$oid, "msg"=>$msg, );
 	}
 
-	
+
+	function normalizer($arr)
+	{
+		extract($arr);
+		$ob = $this->get_object($id);
+//		echo "<pre>";	
+		
+		$ob['meta']['source_table']="testtest";
+		$field="tekst;
+		$row = $this->db_fetch_row("select max(id),min(id) from ".$ob['meta']['source_table'], "id");
+		$max = $this->db_fetch_row("select id from ".$ob['meta']['source_table']." where id=min(id)", "id");			
+
+		for ($id=$min;$id<=$max;$id++)
+		{
+			$val = $this->db_fetch_field("select $field from ".$ob['meta']['source_table']." where id=$id");
+			if ($val)
+			{
+					//process val
+				$val="juhhaidii";
+				$q="update ".$ob['meta']['source_table']." set $field=$val where id=$id";
+				$this->db_query($q);
+			}
+		}
+//		echo "</pre>";			
+		die();
+	}
 	
 	function generate_objects($arr)
 	{
 		extract($arr);
 		$ob = $this->get_object($id);
-
-		echo "<pre>";
+//		echo "<pre>";
 		$alg=0;
 		$lopp=$ob['meta']['limit'];
 		$this->newcount=0;
@@ -172,10 +204,19 @@ class ob_gen extends aw_template
 
 		if ($ob['meta']['use_object'])
 		{
-			$object_data['class_id']=$ob['meta']['create_object'];
-			$object_data['parent']=$ob['meta']['parent'];
-			$object_data['status']=$ob['meta']['status'];
+			$object_data=array(
+				'class_id'=>$ob['meta']['class_id'],
+				'parent'=>$ob['meta']['parent'],
+				'status'=>$ob['meta']['status'],
+			);
 		}
+
+		if ($ob['meta']['log']['display']||$ob['meta']['log']['db_table'])
+		{
+			//setup log
+		}
+
+
 
 		do
 		{
@@ -186,18 +227,18 @@ class ob_gen extends aw_template
 			$skipped=0;
 			if (is_array($data))
 			foreach ($data as $row)
-			{ 
+			{
 				$object=array();
 				$sisu=array();
 				$meta=array();
 				if($test_limit && ($this->newcount >= $test_limit ))
 				{
-					break 2;
+					break 2; // vsjoo, rohkem pole vaja midagi teha
 				}
 				$skipit=0;
 				if (!is_array($row)) 
 				{
-					break;
+					break; // see select on ammendunud
 				}
 
 				$this->quote($row);
@@ -212,7 +253,7 @@ class ob_gen extends aw_template
 							//echo "$val\n";$skipit=1;
 							echo "skipped, already got ".$val."!\n";
 							$skipped++;
-							continue 2;
+							continue 2; //juba olemas, järgmine rida andmeid ette
 //							break;
 						}
 						else
@@ -224,7 +265,7 @@ class ob_gen extends aw_template
 
 					foreach($whats as $what)
 					{
-						if ($ob['meta'][$what][$key])
+						if ($ob['meta'][$what][$key]){
 						if ($ob['meta']['dejoin'][$what][$key] && $ob['meta']['dejoin_table'][$what][$key] && $ob['meta']['dejoin_field'][$what][$key] && $val)
 						{
 
@@ -239,18 +280,19 @@ class ob_gen extends aw_template
 
 								$get_oid=$this->db_fetch_field($q, 'oid');
 
-								if($ob['meta']['remember'][$what][$key]) //jätame melde mida baasist küsisime
+								if($ob['meta']['remember'][$what][$key]) //jätame meelde mida baasist küsisime
 								{
 									$remembered[$what][$key][$val]=$get_oid;
 								}
 	
-								$$what+=array($ob['meta'][$what][$key] => $get_oid?$get_oid:"NULL");
+								$$what+=array($ob['meta'][$what][$key] => $get_oid?$get_oid:NULL);
 							}
 
 						}
 						else
 						{
 							$$what+=array($ob['meta'][$what][$key] => $val);
+						}
 						}
 
 					}
@@ -306,6 +348,56 @@ class ob_gen extends aw_template
 	}
 
 
+
+	////
+	// ! make toolbar
+	// oid - if not set only save button will be shown
+	// got_source bool if true add obj conf tab and log_setup tab
+	// return_url
+	function my_toolbar($arr)
+	{
+		extract($arr);
+		$toolbar = get_instance("toolbar",array("imgbase" => "/automatweb/images/blue/awicons"));
+		$toolbar->add_button(array(
+			"name" => "save",
+			"tooltip" => "salvesta",
+			"url" => "javascript:document.add.submit()",
+			"imgover" => "save_over.gif",
+			"img" => "save.gif",
+		));
+		if ($oid)
+		{
+			$toolbar->add_button(array(
+				"name" => "change",
+				"tooltip" => "üld määrangud",
+				"url" => $this->mk_my_orb("change",array("id" => $oid,"return_url" => urlencode($return_url))),
+				"imgover" => "settings_over.gif",
+				"img" => "settings.gif",
+			));
+
+			if ($got_source)
+			{
+				$toolbar->add_button(array(
+					"name" => "ob_conf",
+					"tooltip" => "objekti conf",
+					"url" => $this->mk_my_orb("ob_conf",array("id" => $oid,"return_url" => urlencode($return_url))),
+					"imgover" => "promo_over.gif",
+					"img" => "promo.gif",
+				));
+				$toolbar->add_button(array(
+					"name" => "log_setup",
+					"tooltip" => "logi setup",
+					"url" => $this->mk_my_orb("log_setup",array("id" => $oid,"return_url" => urlencode($return_url))),
+					"imgover" => "blaa_over.gif",
+					"img" => "blaa.gif",
+				));
+			}
+
+		}
+		return $toolbar->get_toolbar();
+	}
+
+
 	////
 	// !this gets called when the user clicks on ob_conf 
 	// parameters:
@@ -324,22 +416,6 @@ class ob_gen extends aw_template
 			$this->mk_path($ob["parent"], "Muuda ob_gen");
 		}
 		$this->read_template("ob_conf.tpl");
-		$toolbar = get_instance("toolbar",array("imgbase" => "/automatweb/images/blue/awicons"));
-		$toolbar->add_button(array(
-			"name" => "save",
-			"tooltip" => "salvesta",
-			"url" => "javascript:document.add.submit()",
-			"imgover" => "save_over.gif",
-			"img" => "save.gif",
-		));
-
-		$toolbar->add_button(array(
-			"name" => "change",
-			"tooltip" => "üld määrangud",
-			"url" => $this->mk_my_orb("change",array("id" => $id,"return_url" => urlencode($return_url))),
-			"imgover" => "settings_over.gif",
-			"img" => "settings.gif",
-		));
 
 		if ($ob['meta']['sisu_table'])
 		{
@@ -411,14 +487,18 @@ class ob_gen extends aw_template
 
 		$this->vars(array(
 			"ob_conf_table" => $this->ob_conf_table($data),
-			"toolbar" => $toolbar->get_toolbar(),
+			"toolbar" => $this->my_toolbar(array("oid"=>$id, "return_url"=>$return_url,"got_source"=>$ob['meta']['source_table']?true:false)),
 			"genereeri" => $this->mk_my_orb("generate_objects", array("id" => $id)),
 			"genereeri5" => $this->mk_my_orb("generate_objects", array("id" => $id, "test_limit" => 10)),
+
+			"normalizer" => $this->mk_my_orb("normalizer", array("id" => $id)),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id, "do" => "ob_conf","return_url" => urlencode($return_url)))
 		));
 
 		return $this->parse();
 	}
+
+
 
 
 	function picker_list_db_tables()
@@ -464,17 +544,6 @@ class ob_gen extends aw_template
 
 		$chunks=array("1" => 1,"10" => 10,"100" => 100);
 		
-		if ($ob['meta']['source_table'])
-		{
-			$toolbar->add_button(array(
-				"name" => "ob_conf",
-				"tooltip" => "objekti conf",
-				"url" => $this->mk_my_orb("ob_conf",array("id" => $id,"return_url" => urlencode($return_url))),
-				"imgover" => "promo_over.gif",
-				"img" => "promo.gif",
-			));
-
-		}
 
 		if ($ob['meta']['use_object'])
 		{
@@ -491,7 +560,7 @@ class ob_gen extends aw_template
 			asort($list_classes);
 
 			$this->vars(array(
-				"list_classes" => $this->picker($ob['meta']['create_object'],$list_classes),		
+				"list_classes" => $this->picker($ob['meta']['class_id'],$list_classes),		
 				"status" => $this->picker($ob['meta']['status'],array(0=> 'mitteaktiivsed',2=> 'aktiivsed')),		
 				"parents" => $this->picker($ob['meta']['save_to_parent'], $parents),
 			));
@@ -510,9 +579,8 @@ class ob_gen extends aw_template
 
 		}
 
-
-
 		$this->vars(array(
+
 			"name" => $ob["name"],
 			"comment" => $ob['comment'],
 			"chunks" => $this->picker($ob["meta"]["limit"],$chunks),
@@ -521,42 +589,46 @@ class ob_gen extends aw_template
 			"use_sisu" =>checked($ob['meta']['use_sisu']),
 			"sisu" => $sisu,
 			"object" => $object,
-			"toolbar" => $toolbar->get_toolbar(),
+			"toolbar" => $this->my_toolbar(array("oid"=>$id, "return_url"=>$return_url,"got_source"=>$ob['meta']['source_table']?true:false)),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id, "parent" => $parent, "do" => "change","return_url" => urlencode($return_url)))
 		));
 
 		return $this->parse();
 	}
 
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
 	////
-	// !this will be called if the object is put in a document by an alias and the document is being shown
-	// parameters
-	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
-	function parse_alias($args)
-	{
-		extract($args);
-		return $this->show(array("id" => $alias["target"]));
-	}
-
-	////
-	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
-	function show($arr)
+	// !setup logging
+	// parameters:
+	//    id - the id of the object to change
+	//    return_url - optional, if set, "back" link should point to it
+	function log_setup($arr)
 	{
 		extract($arr);
 		$ob = $this->get_object($id);
-
-		$this->read_template("show.tpl");
-
+		if ($return_url != "")
+		{
+			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Muuda ob_gen");
+		}
+		else
+		{
+			$this->mk_path($ob["parent"], "Muuda ob_gen");
+		}
+		$this->read_template("log_setup.tpl");
+	
 		$this->vars(array(
-			"name" => $ob["name"]
+			"display" => checked($ob['meta']['log']['display']),
+			"db_table" => checked($ob['meta']['log']['db_table']),
+			"made_objects" => checked($ob['meta']['log']['made_objects']),
+			"a_source_field" => checked($ob['meta']['log']['a_source_field']),
+ 			"log_warnings" => checked($ob['meta']['log']['log_warnings']),
+//			"" => $ob['meta'][],
+			"toolbar" => $this->my_toolbar(array("oid"=>$id, "return_url"=>$return_url,"got_source"=>$ob['meta']['source_table']?true:false)),
+			"reforb" => $this->mk_reforb("submit", array("id" => $id, "parent" => $parent, "do" => "log_setup","return_url" => urlencode($return_url)))
 		));
 
 		return $this->parse();
 	}
+
 
 	////////////////////////////////////
 	// object persistance functions - used when copying/pasting object
@@ -598,22 +670,6 @@ class ob_gen extends aw_template
 		return false;
 	}
 
-	////
-	// !this is not required 99% of the time, but you can override adding aliases to documents - when the user clicks
-	// on "pick this" from the aliasmanager "add existing object" list and this function exists in the class, then it will be called
-	// parameters
-	//   id - the object to which the alias is added
-	//   alias - id of the object to add as alias
-/*	function addalias($arr)
-	{
-		extract($arr);
-		// this is the default implementation, don't include this function if you're not gonna change it
-		$this->add_alias($id,$alias);
-		header("Location: ".$this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"));
-	}*/
-
-
-
 
 
 	function ob_conf_table($data)
@@ -645,7 +701,7 @@ class ob_gen extends aw_template
 			));
 		}
 
-//		if ($data["meta"])
+
 		{
 			$t->define_field(array(
 				"name" => "meta",
@@ -657,7 +713,6 @@ class ob_gen extends aw_template
 			));
 		}
 
-//		if ($data["sisu"])
 		{
 			$t->define_field(array(
 				"name" => "sisu",
@@ -667,19 +722,7 @@ class ob_gen extends aw_template
 //				"width" => "10",
 			));
 		}
-/*
-//		if ($data["dejoin"])
-		{
-			$t->define_field(array(
-				"name" => "dejoin",
-				"caption" => "võta mõnest teisest tabelist vastav oid",
-				"valign" => "top",
-				"nowrap" => "1",
-//				"width" => "10",
-			));
-		}
-*/
-//		if ($data["unique"])
+
 		{
 			$t->define_field(array(
 				"name" => "unique",
