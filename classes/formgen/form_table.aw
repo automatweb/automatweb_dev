@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.25 2003/01/07 16:04:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.26 2003/01/07 16:13:38 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -535,7 +535,7 @@ class form_table extends form_base
 								$this->pricel_sum += str_replace(",",".", $dat["ev_".$element_id])*$basket_count;
 								if (((double)$dat["ev_".$element_id]*(double)$basket_count) > 0)
 								{
-									$str .= (double)$dat["ev_".$element_id]*(double)$basket_count;
+									$str .= (double)str_replace(",",".",$dat["ev_".$element_id])*(double)$basket_count;
 								}
 							}
 							exit_function("form_table::row_data::formel_price", array());
