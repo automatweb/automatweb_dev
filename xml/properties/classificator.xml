@@ -11,14 +11,6 @@
             <caption>Kommentaar</caption>
       </property>
       <property>
-            <name>status</name>
-            <type>status</type>
-            <field>status</field>
-            <table>objects</table>
-            <group>general</group>
-            <caption>Staatus</caption>
-      </property>
-      <property>
             <name>folders</name>
             <type>relpicker</type>
             <reltype>RELTYPE_FOLDER</reltype>

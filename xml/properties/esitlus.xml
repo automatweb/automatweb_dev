@@ -1,14 +1,6 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>status</name>
-            <type>status</type>
-            <field>status</field>
-            <table>objects</table>
-            <method>serialize</method>
-            <caption>Staatus</caption>
-      </property>
-      <property>
             <name>pealkiri</name>
             <type>textbox</type>
             <table>objects</table>
