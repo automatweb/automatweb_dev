@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline_conf.aw,v 1.15 2004/03/10 09:51:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline_conf.aw,v 1.16 2005/02/16 09:41:42 kristo Exp $
 /*
 
 @default table=objects
@@ -56,7 +56,7 @@
 @caption Blokeeritavate aadresside kataloogid
 
 @property ip_block_folders_subs type=checkbox ch_value=1 group=ipfilter
-@caption Kas n&auml;idata ka alamkataloogid
+@caption Kas kehtestada ka alamkaustadele
 
 @property ip_allow_folders type=objpicker clid=CL_MENU multiple=1 group=ipfilter
 @caption N&auml;idatavate aadresside kataloogid

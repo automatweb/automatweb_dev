@@ -164,7 +164,7 @@
             <group>ipfilter</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Kas n&amp;auml;idata ka alamkataloogid</caption>
+            <caption>Kas kehtestada ka alamkaustadele</caption>
       </property>
       <property>
             <name>ip_allow_folders</name>
