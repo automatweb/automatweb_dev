@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.70 2004/06/26 09:47:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.71 2004/08/30 09:29:11 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -2065,6 +2065,7 @@ class form_element extends aw_template
 		if ($this->arr["el_css_style"])
 		{
 			$css = "class=\"st".$this->arr["el_css_style"]."\"";
+			$el_css_class = "st".$this->arr["el_css_style"];
 			classload("layout/active_page_data");
 			active_page_data::add_site_css_style($this->arr["el_css_style"]);
 		}
@@ -2665,6 +2666,10 @@ class form_element extends aw_template
 			case "date":
 				load_vcl("date_edit");
 				$de = new date_edit(time());
+				if ($el_css_class)
+				{
+					$de->set("classid", $el_css_class);
+				}
 				$bits = array();
 				$has_some = false;
 				if ($this->arr["has_year"])
@@ -2701,6 +2706,11 @@ class form_element extends aw_template
 				{
 					load_vcl("date_edit");
 					$de = new date_edit(time());
+					if ($el_css_class)
+					{
+						$de->set("classid", $el_css_class);
+					}
+
 					$bits = array();
 					$has_some = false;
 					if ($this->arr["has_year"])
