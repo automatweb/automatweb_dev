@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.51 2003/04/23 14:03:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.52 2003/04/25 13:02:57 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -959,6 +959,7 @@ class form extends form_base
 		}
 		else
 		{
+			enter_function("form::load_chain_data");
 			if ($load_entry_data)
 			{
 				if ($load_entry_data_form)
@@ -976,46 +977,31 @@ class form extends form_base
 				foreach($lf_els as $lf_el)
 				{
 					$elvalues[$lf_el->get_el_name()] = $lf_fm->entry[$lf_el->get_id()];
-					$els = $this->get_element_by_name($lf_el->get_el_name(), RET_ALL);
-					if (is_array($els))
-					{
-						foreach($els as $el)
-						{
-							$usr_val = false;
-							if ($lf_el->get_type() == "textbox" && $el->get_type() == "listbox")
-							{
-								$usr_val = true;
-							}
-							$this->set_element_value($el->get_id(), $lf_fm->entry[$lf_el->get_id()], $usr_val);
-						}
-					}
 				}
 			}
 			if ($load_chain_data)
 			{
-				$ed = $this->get_chain_entry($load_chain_data);
+				enter_function("form::load_chain_data::gce");
+				$ed = $this->get_chain_entry($load_chain_data, true);
+				exit_function("form::load_chain_data::gce");
 				foreach($ed as $c_fid => $c_eid)
 				{
+					enter_function("form::load_chain_data::cgfi");
 					$lf_fm =& $this->cache_get_form_instance($c_fid);
-					$lf_fm->load_entry($c_eid);
+					exit_function("form::load_chain_data::cgfi");
+					enter_function("form::load_chain_data::gae");
 					$lf_els = $lf_fm->get_all_els();
+					exit_function("form::load_chain_data::gae");
+					
+					enter_function("form::load_chain_data::le");
+					$lf_fm->load_entry($c_eid);
+					exit_function("form::load_chain_data::le");
+					enter_function("form::load_chain_data::iter");
 					foreach($lf_els as $lf_el)
 					{
 						$elvalues[$lf_el->get_el_name()] = $lf_fm->entry[$lf_el->get_id()];
-						$els = $this->get_element_by_name($lf_el->get_el_name(), RET_ALL);
-						if (is_array($els))
-						{
-							foreach($els as $el)
-							{
-								$usr_val = false;
-								if ($lf_el->get_type() == "textbox" && $el->get_type() == "listbox")
-								{
-									$usr_val = true;
-								}
-								$this->set_element_value($el->get_id(), $lf_fm->entry[$lf_el->get_id()], $usr_val);
-							}
-						}
 					}
+					exit_function("form::load_chain_data::iter");
 				}
 			}
 			if ($this->arr["try_fill"])
@@ -1031,18 +1017,22 @@ class form extends form_base
 
 			if (is_array($elvalues))
 			{
-				foreach($elvalues as $_ename => $_eval)
+				for ($row = 0; $row < $this->arr["rows"]; $row++)
 				{
-					$els = $this->get_element_by_name($_ename, RET_ALL);
-					if (is_array($els))
+					for($col = 0; $col < $this->arr["cols"]; $col++)
 					{
-						foreach($els as $el)
+						for($idx = 0; $idx < $this->arr["contents"][$row][$col]->cnt; $idx++)
 						{
-							$this->set_element_value($el->get_id(), $_eval, true);
+							$el =& $this->arr["contents"][$row][$col]->arr[$idx];
+							if (isset($elvalues[$el->get_el_name()]))
+							{
+								$this->arr["contents"][$row][$col]->arr[$idx]->set_value($elvalues[$el->get_el_name()], false);
+							}
 						}
 					}
 				}
 			}
+			exit_function("form::load_chain_data");
 		}
 
 		$this->read_template((isset($tpl) ? $tpl : "show.tpl"),1);
