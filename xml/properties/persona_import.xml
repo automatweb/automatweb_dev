@@ -101,6 +101,19 @@
             <reltype>RELTYPE_CRM_DB</reltype>
             <caption>Kasutatav kliendibaas</caption>
       </property>
+      <property>
+            <name>recur_edit</name>
+            <table>objects</table>
+            <group>autoimport</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>releditor</type>
+            <reltype>RELTYPE_RECURRENCE</reltype>
+            <use_form>emb</use_form>
+            <rel_id>first</rel_id>
+            <store>no</store>
+            <caption>Automaatse impordi seadistamine</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PERSONA_IMPORT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -109,6 +122,9 @@
             <settings>
                   <caption>Seaded</caption>
             </settings>
+            <autoimport>
+                  <caption>Automaatne import</caption>
+            </autoimport>
       </groupinfo>
       <reltypes>
             <CRM_DB>
@@ -126,6 +142,16 @@
                   <clid>CL_MENU</clid>
                   <caption>Kaust</caption>
             </FOLDER>
+            <LOGFILE>
+                  <value>4</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Logifail</caption>
+            </LOGFILE>
+            <RECURRENCE>
+                  <value>5</value>
+                  <clid>CL_RECURRENCE</clid>
+                  <caption>Kordus</caption>
+            </RECURRENCE>
       </reltypes>
 </properties>
 
