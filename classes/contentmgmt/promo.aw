@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.32 2004/04/22 13:09:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.33 2004/05/12 12:39:03 duke Exp $
 // promo.aw - promokastid.
 
 /*
@@ -451,6 +451,10 @@ class promo extends class_base
 		if ($ob->prop("sort_by"))
 		{
 			$_ob = $ob->prop("sort_by")." ".$ob->prop("sort_ord");
+			if ($ob->prop("sort_by") == "documents.modified")
+			{
+				$_ob .= " ,objects.created DESC";
+			};
 		}
 		if (($_ob != "") && (sizeof($def->get()) > 0))
 		{
@@ -671,6 +675,7 @@ class promo extends class_base
 				{
 					$docid = array($docid);
 				}
+
 
 				$d_cnt = 0;
 				foreach($docid as $d)
