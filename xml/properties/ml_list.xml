@@ -86,6 +86,16 @@
             <method>serialize</method>
             <caption>Liikmed</caption>
       </property>
+      <property>
+            <name>import_textfile</name>
+            <type>fileupload</type>
+            <store>no</store>
+            <group>general</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Impordi liikmed tekstifailist</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_MAILINGLIST</syslog_type>
             <relationmgr>yes</relationmgr>
