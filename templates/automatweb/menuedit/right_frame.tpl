@@ -134,6 +134,8 @@ function go_acl(id)
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 <tr><td class="{VAR:viewstyle}" style="border:1px solid #BBB">
 {VAR:table}
+
 </td></tr></table>
+
 {VAR:reforb}
 </form>

@@ -1,9 +1,12 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+            "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset={VAR:charset}">
 <title>{VAR:title_action}{VAR:uid}@AutomatWeb</title>
 <link REL="icon" HREF="{VAR:baseurl}/automatweb/images/icons/favicon.ico" TYPE="image/x-icon">
 <link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/aw.css" />
+
 
 <!-- SUB: aw_styles -->
 <!-- END SUB: aw_styles -->
@@ -13,34 +16,6 @@
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/cbobjects.js"></script>
 
 
-<script type="text/javascript">
-<!--
-function activate_window()
-{
-	if (window != window.top)
-	{
-		if (top.document.getElementById('status') == '[object HTMLDivElement]') //et siis kontrollime kas aken on desktopis
-		{
-			top.winMakeActive2((window.name.indexOf('frei') == 1) ? window.name : parent.window.name);
-		}
-	}
-}
-function update_window_title()
-{
-	if (window != window.top)
-	{
-		if (top.document.getElementById('status') == '[object HTMLDivElement]') //et siis kontrollime kas aken on desktopis
-		{
-			winn =(window.name.indexOf('frei') == 1) ? window.name : parent.window.name;
-			top.document.getElementById('wc' + winn.substr(1)).innerHTML = document.title;
-			top.document.getElementById('icn' + winn.substr(1)).innerHTML = document.title.substr(0,16);
-			top.document.getElementById('icna' + winn.substr(1)).title = document.title;
-		}
-	}
-}
-
-// -->
-</script>
 <script type="text/javascript">
 <!--
 function remote(toolbar,width,height,file)
@@ -77,20 +52,12 @@ function check_generic_loader()
 </script>
 </head>
 <body link="#0000ff" vlink="#0000ff" onmousedown="activate_window();" onLoad="update_window_title();create_objects(); check_generic_loader();">
+
 <!-- SUB: YAH -->
-<table border="0" width="100%" cellspacing="0" cellpadding="2" style="border-bottom:solid 2px white;">
-<tr>
-<td align="left" class="yah">&nbsp;
-{VAR:site_title}
-</td>
-</tr>
-</table>
+<div class="aw04yah">{VAR:site_title}</div>
 <!-- END SUB: YAH -->
+
 {VAR:content}
-<!--
-<div align="center">
-<font face="Verdana,Arial,Helvetica,sans-serif" size="-2" color="#8AABBE">AutomatWeb&reg;<br><br></font>
-</div>
--->
+
 </body>
 </html>
