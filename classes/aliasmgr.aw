@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.172 2005/03/27 08:46:01 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.173 2005/04/05 10:41:37 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -273,6 +273,16 @@ class aliasmgr extends aw_template
 		$obj = obj($oid);
 		$als = $obj->meta("aliaslinks");
 
+		$ids = array();
+		foreach($obj->connections_from() as $c)
+		{
+			$ids[] = $c->prop("to");
+		}
+
+		// fetch objs in object_list, it's fastah
+		$ol = new object_list(array("oid" => $ids));
+		$ol->arr();
+
 		foreach($obj->connections_from() as $c)
 		{
 			$tp = $c->prop();
@@ -297,6 +307,13 @@ class aliasmgr extends aw_template
 	// args[meta][aliases] - optional, if set, result of get_oo_aliases for object $oid
 	function parse_oo_aliases($oid,&$source,$args = array())
 	{
+		$_res = preg_match_all("/(#)(\w+?)(\d+?)(v|k|p|)(#)/i",$source,$matches,PREG_SET_ORDER);
+		if (!$_res)
+		{
+			// if no aliases are in text, don't do nothin
+			return;
+		}
+
 		extract($args);
 
 		$o = obj($oid);
