@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.50 2003/02/05 20:15:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.51 2003/02/12 15:44:57 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -602,7 +602,7 @@ class users_user extends aw_template
 		$this->db_query("INSERT INTO menu (id,type) VALUES($hfid,".MN_HOME_FOLDER.")");
 
 
-		if (aw_ini_get("auth.md5_passwords") || $use_mdb_passwords)
+		if (aw_ini_get("auth.md5_passwords") || $use_md5_passwords)
 		{
 			$password = md5($password);
 		};
