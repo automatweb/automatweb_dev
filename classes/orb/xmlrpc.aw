@@ -1,7 +1,12 @@
 <?php
 
-class xmlrpc
+class xmlrpc extends aw_template
 {
+	function xmlrpc()
+	{
+		$this->init("");
+	}
+
 	////
 	// !sends the request to the remote server, retrieves the response and decodes it
 	function do_request($arr)
@@ -15,7 +20,6 @@ class xmlrpc
 			"request" => $xml,
 			"session" => $arr["remote_session"]
 		));
-
 		return $this->decode_response($resp);
 	}
 
@@ -68,6 +72,7 @@ class xmlrpc
 			if ($val["tag"] == "value")
 			{
 				$val["value"] = str_replace("__faking_bitchass_barbara_streisand__","&", $val["value"]);
+				$this->dequote(&$val["value"]);
 				$try = aw_unserialize($val["value"]);
 				if (is_array($try))
 				{
@@ -162,7 +167,7 @@ class xmlrpc
 			if ($in_value && ($token["tag"] == "struct") )
 			{
 				$in_value = false;
-				$tmp = _rpc_extract_struct($values);
+				$tmp = $this->req_decode_xml($values);
 				$result["params"][$name] = $tmp["params"];
 			};
 
