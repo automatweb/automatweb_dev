@@ -27,6 +27,8 @@
 @property comment type=textarea
 @caption Kommentaar
 
+@property submit type=submit value=Saada
+
 @classinfo hide_tabs=1
 @forminfo stat onsubmit=submit_upload
 */
@@ -77,7 +79,7 @@ class stat_uploader extends class_base
 	**/
 	function final()
 	{
-		print "No kuule aitähh, faili sain kätte";
+		return $this->obj->prop("final");
 	}
 
 	/** 
@@ -116,44 +118,44 @@ class stat_uploader extends class_base
 		{
 			$errors = true;
 			$propvalues["reg"]["value"] = " ";
-			$propvalues["reg"]["error"] = "Sisestage registrikood";
+			$propvalues["reg"]["error"] = "Sisestage äriregistrikood!";
 		}
 		//else if (!in_array($reg,$this->reg))
 		else if (!$mx)
 		{
 			$errors = true;
 			$propvalues["reg"]["value"] = $reg;
-			$propvalues["reg"]["error"] = "Sellist registrikoodi ei ole olemas!";
+			$propvalues["reg"]["error"] = "Sellist äriregistrikoodi ei ole olemas!";
 		};
 
 		// parool
 		if (empty($password))
 		{
 			$errors = true;
-			$propvalues["password"]["error"] = "Sisestage parool!";
+			$propvalues["password"]["error"] = "Sisestage tunnuskood!";
 		}
 		else if ($password != $this->password)
 		{
 			$errors = true;
-			$propvalues["password"]["error"] = "Registrikood ja parool ei klapi!";
+			$propvalues["password"]["error"] = "Äriregistrikood ja tunnuskood ei klapi!";
 		};
 
 		if (empty($name))
 		{
 			$errors = true;
-			$propvalues["name"]["error"] = "Sisestage oma nimi!";
+			$propvalues["name"]["error"] = "Sisestage oma ees- ja perekonnanimi!";
 		};
 		if (empty($email))
 		{
 			$errors = true;
-			$propvalues["email"]["error"] = "Sisestage oma kontaktandmed!";
+			$propvalues["email"]["error"] = "Sisestage oma telefoninumber või e-post!";
 		};
 
 		$filedat = $_FILES["file"];
 		if (empty($filedat["tmp_name"]))
 		{
 			$errors = true;
-			$propvalues["file"]["error"] = "Palun valige fail!";
+			$propvalues["file"]["error"] = "Palun valige aruande fail!";
 		}
 		else
 		{
@@ -170,7 +172,7 @@ class stat_uploader extends class_base
 			{
 				$errors = true;
 				$propvalues["file"]["value"] = " ";
-				$propvalues["file"]["error"] = "$filename pole lubatud failide nimekirjas";
+				$propvalues["file"]["error"] = "Selline failitüüp ($filename) ei ole lubatud";
 			};
 		};
 
@@ -184,7 +186,7 @@ class stat_uploader extends class_base
 			$stat = move_uploaded_file($filedat["tmp_name"],$new_name);
 			chmod($new_name,0666);
 			$this->log_upload(array(
-				"file" => $this->filestore . "/" . $n_basename . ".txt",
+				"file" => $this->filestore . "/log/" . $n_basename . ".txt",
 				"ip" => gethostbyaddr($_SERVER["REMOTE_ADDR"]),
 				"name" => $name,
 				"reg" => $reg,

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/stat_report/Attic/stat_report.aw,v 1.3 2004/03/29 15:58:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/stat_report/Attic/stat_report.aw,v 1.4 2004/03/30 11:02:12 duke Exp $
 // stat_report.aw - Stati aruannete upload 
 /*
 
@@ -10,10 +10,13 @@
 @default field=meta
 @default method=serialize
 
-@property whitelist type=textarea cols=40 rows=20 group=whitelist
+@property whitelist type=textarea cols=40 rows=20 group=settings
 @caption Lubatud laiend (iga laiend eraldi real)
 
-@groupinfo whitelist caption=Seadistamine
+@property final type=textarea cols=60 rows=10 group=settings
+@caption Õnnestunud uploadi kviteeriv tekst
+
+@groupinfo settings caption=Seadistamine
 
 @reltype REPORT_TYPE value=1 clid=CL_META
 @caption Aruannete tyybid
