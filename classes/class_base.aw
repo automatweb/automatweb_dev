@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.269 2004/05/20 11:15:50 duke Exp $
+// $Id: class_base.aw,v 2.270 2004/05/24 15:41:38 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -241,7 +241,7 @@ class class_base extends aw_template
 				{
 					// this is a relation!
 					$this->is_rel = true;
-					$def = $this->_ct["def"];
+					$def = $this->_ct[$this->clid]["def"];
 					$meta = $this->obj_inst->meta("values");
 					$this->values = $meta[$def];
 					$this->values["name"] = $this->obj_inst->name();
@@ -278,6 +278,13 @@ class class_base extends aw_template
 		};
 
 		$this->cfgform_id = $cfgform_id;
+
+		global $XX4;
+		if ($XX4)
+		{
+			$this->cfgform_id = "";
+			$cfgform_id = "";
+		};
 		
 		$filter = array(
 			"clid" => $this->clid,
@@ -734,6 +741,11 @@ class class_base extends aw_template
 					"clid" => $this->clid,
 					"new" => $this->new,
 				));
+
+				if ($args["goto"])
+				{
+					return $args["goto"];
+				};
 			};
 		};
 
