@@ -1,110 +1,55 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/currency.aw,v 2.7 2004/01/13 16:24:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/currency.aw,v 2.8 2004/02/27 14:18:53 kristo Exp $
 // currency.aw - Currency management
+
+/*
+
+@classinfo syslog_type=ST_CURRENCY no_status=1 
+
+@default group=general
+
+@property comment type=textbox table=objects field=comment 
+@caption Kurss saksa marga suhtes
+
+*/
 
 define("RET_NAME",1);
 define("RET_ARR",2);
 
-class currency extends aw_template
+class currency extends class_base
 {
 	function currency()
 	{
-		$this->init("currency");
+		$this->init(array(
+			"tpldir" => "currency",
+			"clid" => CL_CURRENCY
+		));
 		$this->sub_merge = 1;
 		$this->lc_load("currency","lc_currency");	
 		lc_load("definition");
 	}
 
-	/**  
-		
-		@attrib name=new params=name default="0"
-		
-		@param parent required acl="add"
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function add($arr)
-	{
-		extract($arr);
-		$this->read_template("add_currency.tpl");
-		$this->mk_path($parent, LC_CURRENCY_ADD);
-
-		$this->vars(array(
-			"reforb" => $this->mk_reforb("submit", array("parent" => $parent))
-		));
-		return $this->parse();
-	}
-
-	/**  
-		
-		@attrib name=submit params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function submit($arr)
-	{
-		extract($arr);
-		if ($id)
-		{
-			$this->upd_object(array("oid" => $id, "name" => $name, "comment" => $ratio));
-		}
-		else
-		{
-			$id = $this->new_object(array("parent" => $parent, "class_id" => CL_CURRENCY, "name" => $name, "comment" => $ratio));
-		}
-		return $this->mk_my_orb("change", array("id" => $id));
-	}
-
-	/**  
-		
-		@attrib name=change params=name default="0"
-		
-		@param id required acl="edit;view"
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function change($arr)
-	{
-		extract($arr);
-		$o = $this->get_object($id);
-		$this->mk_path($o["parent"], "LC_CURRENCY_CHANGE");
-		$this->read_template("add_currency.tpl");
-
-		$this->vars(array(
-			"name" => $o["name"],
-			"ratio" => $o["comment"],
-			"reforb" => $this->mk_reforb("submit", array("id" => $id))
-		));
-		return $this->parse();
-	}
-
 	function get_list($type = RET_NAME)
 	{
 		$ret = array();
-		$this->db_query("SELECT oid,name,comment as rate FROM objects WHERE class_id = ".CL_CURRENCY." AND status != 0 AND site_id = ".$this->cfg["site_id"]);
-		while ($row = $this->db_next())
+		$ol = new object_list(array(
+			"class_id" => CL_CURRENCY,
+			"lang_id" => array()
+		));
+		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
 			if ($type == RET_NAME)
 			{
-				$ret[$row["oid"]] = $row["name"];
+				$ret[$o->id()] = $o->name();
 			}
 			else
 			if ($type == RET_ARR)
 			{
-				$ret[$row["oid"]] = $row;
+				$ret[$o->id()] = array(
+					"oid" => $o->id(),
+					"name" => $o->name(),
+					"rate" => $o->comment()
+				);
 			}
 		}
 		return $ret;

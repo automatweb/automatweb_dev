@@ -1,0 +1,16 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>comment</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <field>comment</field>
+            <group>general</group>
+            <caption>Kurss saksa marga suhtes</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_CURRENCY</syslog_type>
+            <no_status>1</no_status>
+      </classinfo>
+</properties>
+
