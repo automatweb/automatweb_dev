@@ -1,0 +1,14 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="events2">
+
+		<action name="submit_add_event">
+			<function name="submit_add_event">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>
+		
