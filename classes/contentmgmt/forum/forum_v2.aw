@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.69 2005/03/10 12:49:12 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.70 2005/03/18 13:42:16 ahti Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_connect_menu)
@@ -1802,7 +1802,7 @@ class forum_v2 extends class_base
 		$conns = $c->find(array(
 			"from" => $forum_id,
 			"to" => $check_ids,
-			"type" => RELTYPE_FORUM_ADMIN,
+			"type" => 5 //RELTYPE_FORUM_ADMIN,
 		));
 
 		return sizeof($conns) > 0;
@@ -1812,7 +1812,7 @@ class forum_v2 extends class_base
 	function on_connect_menu($arr)
 	{
 		$conn = &$arr["connection"];
-		if ($conn->prop("reltype") == RELTYPE_TOPIC_FOLDER)
+		if ($conn->prop("reltype") == 1) //RELTYPE_TOPIC_FOLDER
 		{
 			// now I need to grant certian privileges
 			$nlg = $this->get_cval("non_logged_in_users_group");
