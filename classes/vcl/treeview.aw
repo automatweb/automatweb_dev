@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.20 2004/01/13 16:24:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.21 2004/01/14 15:21:23 kristo Exp $
 // treeview.aw - tree generator
 /*
 
@@ -684,7 +684,7 @@ class treeview extends class_base
 		$ic = get_instance("icons");
 
 		$ol = $ot->to_list();
-		for($o = $ol->begin(); !$ol->end(); $ol->next())
+		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
 			$tv->add_item($o->parent(),array(
 				"name" => parse_obj_name($o->name()),

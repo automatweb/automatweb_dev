@@ -19,8 +19,14 @@
 @property goal type=textarea field=meta method=serialize
 @caption Eesmärk
 
+@property entity_actor type=relpicker rel=1 reltype=RELTYPE_ACTOR field=meta method=serialize
+@caption Tegija
+
 @reltype INSTRUCTION clid=CL_IMAGE,CL_FILE value=1
 @caption instruktsioon
+
+@reltype ACTOR clid=CL_ACTOR value=2
+@caption tegija
 
 */
 

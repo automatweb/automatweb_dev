@@ -2,7 +2,8 @@
 <properties>
       <property>
             <name>root</name>
-            <type>select</type>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
             <field>meta</field>
             <method>serialize</method>
             <table>objects</table>
@@ -20,8 +21,8 @@
       </property>
       <property>
             <name>icon_root</name>
-            <type>objpicker</type>
-            <clid>CL_ICON</clid>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ICON</reltype>
             <field>meta</field>
             <method>serialize</method>
             <table>objects</table>
@@ -39,8 +40,8 @@
       </property>
       <property>
             <name>icon_folder_open</name>
-            <type>objpicker</type>
-            <clid>CL_ICON</clid>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ICON</reltype>
             <field>meta</field>
             <method>serialize</method>
             <table>objects</table>
@@ -49,13 +50,28 @@
       </property>
       <property>
             <name>icon_folder_closed</name>
-            <type>objpicker</type>
-            <clid>CL_ICON</clid>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ICON</reltype>
             <field>meta</field>
             <method>serialize</method>
             <table>objects</table>
             <group>general</group>
             <caption>Kinnise kausta ikoon</caption>
       </property>
+      <classinfo>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <reltypes>
+            <FOLDER>
+                  <value>1</value>
+                  <clid>CL_MENU</clid>
+                  <caption>root kataloog</caption>
+            </FOLDER>
+            <ICON>
+                  <value>2</value>
+                  <clid>CL_ICON</clid>
+                  <caption>ikoon</caption>
+            </ICON>
+      </reltypes>
 </properties>
 

@@ -512,14 +512,33 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				o_s.status != 0 AND
 				o_t.status != 0
 		";
+
 		if ($arr["from"])
 		{
-			$sql .= " AND source = '".$arr["from"]."' ";
+			if (is_array($arr["from"]))
+			{
+				$awa = new aw_array($arr["from"]);
+				$sql .= " AND source IN ('".$awa->to_sql()."') ";
+			}
+			else
+			{
+				$sql .= " AND source = '".$arr["from"]."' ";
+			}
 		}
+
 		if ($arr["to"])
 		{
-			$sql .= " AND target = '".$arr["to"]."' ";
+			if (is_array($arr["to"]))
+			{
+				$awa = new aw_array($arr["to"]);
+				$sql .= " AND target IN ('".$awa->to_sql()."') ";
+			}
+			else
+			{
+				$sql .= " AND target = '".$arr["to"]."' ";
+			}
 		}
+
 		if ($arr["type"])
 		{
 			$sql .= " AND reltype = '".$arr["type"]."' ";
@@ -627,6 +646,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	{
 		$this->db_query("UPDATE objects SET status = '".STAT_DELETED."', modified = ".time().",modifiedby = '".aw_global_get("uid")."' WHERE oid = '$oid'");
 		$this->db_query("DELETE FROM aliases WHERE target = '$oid'");
+		$this->db_query("DELETE FROM aliases WHERE source = '$oid'");
 	}
 
 	function object_exists($oid)

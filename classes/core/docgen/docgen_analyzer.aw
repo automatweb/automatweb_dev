@@ -3,7 +3,7 @@
 /** aw code analyzer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_analyzer.aw,v 1.6 2004/01/13 16:24:24 kristo Exp $
+	@cvs $Id: docgen_analyzer.aw,v 1.7 2004/01/14 15:21:22 kristo Exp $
 
 	@comment 
 	analyses aw code
@@ -1036,7 +1036,9 @@ class docgen_analyzer extends class_base
 					{
 						echo "make orb defs for $file\n";
 
-						$od = str_replace($this->cfg["basedir"]."/classes/", "", $this->_get_orb_defs($cldat));
+						$od = str_replace(substr($this->cfg["basedir"]."/classes/",1), "", $this->_get_orb_defs($cldat));
+						$od = str_replace(substr($this->cfg["basedir"]."/classes",1), "", $od);
+
 						$this->put_file(array(
 							"file" => $this->cfg["basedir"]."/xml/orb/".$class.".xml",
 							"content" => $od

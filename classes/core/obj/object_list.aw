@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.17 2004/01/13 16:13:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.18 2004/01/14 15:21:22 kristo Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -259,7 +259,7 @@ class object_list extends _int_obj_container_base
 	// !Some kind of replacement for core->object_list .. returns id=>name pairs of objects
 	// parameters:
 	//	$add_folders - if true, objects paths are returned instead of just names
-	function names($arr)
+	function names($arr = array())
 	{
 		$ret = array();
 		for ($o =& $this->begin(), $cnt = 0; !$this->end(); $o =& $this->next(), $cnt++)

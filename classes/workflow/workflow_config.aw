@@ -21,14 +21,14 @@
 @caption Tegevuste juurmenüü
 
 @property entity_rootmenu type=relpicker reltype=RELTYPE_ROOTMENU group=config_entity
-@caption Olemite juurmenüü
+@caption Juhtumite juurmenüü
 
 @property process_rootmenu type=relpicker reltype=RELTYPE_ROOTMENU group=config_process
 @caption Protsesside juurmenüü
 
 @groupinfo config_actor caption="Tegijate seaded"
 @groupinfo config_action caption=Tegevuste seaded"
-@groupinfo config_entity caption="Olemite seaded"
+@groupinfo config_entity caption="Juhtumite seaded"
 @groupinfo config_process caption="Protsesside seaded"
 
 @reltype ROOTMENU value=1 clid=CL_MENU

@@ -14,7 +14,7 @@
 @caption Kirjeldus
 
 @property entity_cfgform type=relpicker reltype=RELTYPE_ENT_CFGFORM field=aw_cfgform_id table=aw_wf_entity_types
-@caption Olem (konfivorm)
+@caption Konfivorm
 
 @property entity_process type=relpicker reltype=RELTYPE_PROCESS field=aw_process_id table=aw_wf_entity_types
 @caption Protsess

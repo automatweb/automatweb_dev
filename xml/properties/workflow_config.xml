@@ -39,7 +39,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Olemite juurmenüü</caption>
+            <caption>Juhtumite juurmenüü</caption>
       </property>
       <property>
             <name>process_rootmenu</name>
@@ -67,7 +67,7 @@
                   <caption>Tegevuste</caption>
             </config_action>
             <config_entity>
-                  <caption>Olemite seaded</caption>
+                  <caption>Juhtumite seaded</caption>
             </config_entity>
             <config_process>
                   <caption>Protsesside seaded</caption>

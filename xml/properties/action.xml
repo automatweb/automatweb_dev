@@ -26,6 +26,17 @@
             <group>general</group>
             <caption>Eesmärk</caption>
       </property>
+      <property>
+            <name>entity_actor</name>
+            <type>relpicker</type>
+            <rel>1</rel>
+            <reltype>RELTYPE_ACTOR</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Tegija</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_ACTION</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -35,5 +46,20 @@
                   <caption>Üldine</caption>
             </general>
       </groupinfo>
+      <reltypes>
+            <INSTRUCTION>
+                  <clid>
+                        <num_0>CL_IMAGE</num_0>
+                        <num_1>CL_FILE</num_1>
+                  </clid>
+                  <value>1</value>
+                  <caption>instruktsioon</caption>
+            </INSTRUCTION>
+            <ACTOR>
+                  <clid>CL_ACTOR</clid>
+                  <value>2</value>
+                  <caption>tegija</caption>
+            </ACTOR>
+      </reltypes>
 </properties>
 

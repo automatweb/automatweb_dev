@@ -24,7 +24,7 @@
 	@default store=no
 	
 	@property show_entities type=callback callback=callback_show_entities group=show_entities
-	@caption Olemid
+	@caption Juhtumid
 
 	@property show_actions type=callback callback=callback_show_actions group=show_actions
 	@caption Tegevused
@@ -38,7 +38,7 @@
 	@property show_documentation type=text group=show_documentation
 	@caption Juhendmaterjalid
 	
-	@groupinfo show_entities caption=Olemid submit=no
+	@groupinfo show_entities caption=Juhtumid submit=no
 	@groupinfo show_processes caption=Protessid submit=no
 	@groupinfo show_actions caption=Tegevused submit=no
 	@groupinfo show_actors caption=Tegijad submit=no
@@ -139,7 +139,7 @@ class workflow extends class_base
 
 		if (empty($entity_rootmenu_id))
 		{
-			$data["error"] = "Olemite rootmenüü on valimata!";
+			$data["error"] = "Juhtumite rootmenüü on valimata!";
 			return PROP_ERROR;
 		};
 
@@ -165,6 +165,17 @@ class workflow extends class_base
 
 		$this->process_rootmenu = new object($process_rootmenu_id);
 
+		$actor_rootmenu_id = $this->cfg_obj->prop("actor_rootmenu");
+
+		if (empty($actor_rootmenu_id))
+		{
+			$data["error"] = "Tegijate rootmenüü on valimata!";
+			return PROP_ERROR;
+		}
+		else
+		{
+			$this->actor_rootmenu = new object($actor_rootmenu_id);
+		};
 
 		return $retval;
 
@@ -197,37 +208,85 @@ class workflow extends class_base
 			return $status;
 		};
 
-		$actor_rootmenu_id = $this->cfg_obj->prop("actor_rootmenu");
-
-		if (empty($actor_rootmenu_id))
+		$troot = obj($_GET["tree_filter"] ? $_GET["tree_filter"] : $this->actor_rootmenu);
+		if ($troot->class_id() == CL_MENU)
 		{
-			$data["error"] = "Tegijate rootmenüü on valimata!";
-			return PROP_ERROR;
+			$actor_tree_filter = new object_tree(array(
+				"parent" => $troot->id(),
+				"class_id" => CL_ACTOR
+			));
+			$actor_list = $actor_tree_filter->to_list();
 		}
 		else
 		{
-			$actor_rootmenu = new object($actor_rootmenu_id);
-		};
-	
-		$this->clidlist = array(CL_MENU,CL_ACTOR);	
-		$thtml = $this->_build_tree($actor_rootmenu->id());
+			$actor_list = new object_list();
+			$actor_list->add($troot);
+		}
 
-		load_vcl("table");
-		$this->t = new aw_table(array(
-			"xml_def" => "workflow/actor_list",
-			"layout" => "generic",
+		$tb = get_instance("toolbar");
+
+		$etype_list = new object_list(array(
+			"class_id" => CL_ENTITY,
+			"entity_actor" => $actor_list->ids()
 		));
+			
+		$process_list = new object_list();
+		for($o = $etype_list->begin(); !$etype_list->end(); $o = $etype_list->next())
+		{
+			$process_list->add($o->prop("entity_process"));
+		}
 
-		$tb = $this->gen_view_toolbar();
-		
-		// gaah
-		$_data = "<table width='100%' border='0' cellspacing='0' cellpadding='0'><tr><td valign='top' width='100'>$thtml</td><td valign='top'>" . $tb->get_toolbar() . $this->t->draw() . "</td></tr></table>";
+		switch($_GET["sub_tab"])
+		{
+			default:
+			case "entity":
+				$list_html = $this->_do_entity_table(array(
+					"filter" => array(
+						"entity_type" => $etype_list->ids()
+					)
+				));
 
-		$data["value"] = $_data;
-		$data["type"] = "text";
-		$data["no_caption"] = 1;
-		return array($data);
+				$tb->add_button(array(
+					"name" => "save",
+					"tooltip" => "Salvesta",
+					"url" => "javascript:document.changeform.submit();",
+					"img" => "save.gif",
+					"class" => "menuButton",
+				));
+				break;
 
+			case "process":
+				$list_html = $this->_do_process_table(array(
+					"filter" => array(
+						"oid" => $process_list->ids()
+					)
+				));
+				break;
+
+			case "actions":
+				$list_html = $this->_do_actions_table(array(
+					"filter" => array(
+						"processes" => $process_list->ids()
+					)
+				));
+				break;
+
+			case "actors":
+				$list_html = $this->_do_actor_table(array(
+					"filter" => array(
+						"oid" => $actor_list->ids()
+					)
+				));
+				break;
+		}
+
+		return $this->_finalize_data(array(
+			"rootmenu" => $this->actor_rootmenu,
+			"tb" => $tb,
+			"list_html" => $list_html,
+			"data" => $data,
+			"class_id" => CL_ACTOR
+		));
 	}
 	
 	function callback_show_actions($args = array())
@@ -239,86 +298,81 @@ class workflow extends class_base
 			return $status;
 		};
 
+		$troot = obj($_GET["tree_filter"] ? $_GET["tree_filter"] : $this->action_rootmenu);
+		if ($troot->class_id() == CL_MENU)
+		{
+			$action_tree_filter = new object_tree(array(
+				"parent" => $troot->id(),
+				"class_id" => CL_ACTION
+			));
+			$action_list = $action_tree_filter->to_list();
+		}
+		else
+		{
+			$action_list = new object_list();
+			$action_list->add($troot);
+		}
 
-		$process_tree = new object_tree(array(
-			"parent" => $this->process_rootmenu,
-			"class_id" => CL_PROCESS
-		));
+		$tb = get_instance("toolbar");
 
-		classload("vcl/treeview");
-		$tv = treeview::tree_from_objects(array(
-			"tree_opts" => array(
-				"type" => TREE_DHTML,
-				"tree_id" => "wrkflw",
-				"persist_state" => true,
-			),
-			"root_item" => $this->process_rootmenu,
-			"ot" => $process_tree,
-			"var" => "process_filter"
-		));
+		// get processes for actions
+		// to do that, we get all aliases that go TO the list of actions
+		$process_list = new object_list();
 
-		$thtml = $tv->finalize_tree();
+		$con = new connection();
+		foreach($con->find(array("to" => $action_list->ids())) as $c)
+		{
+			// now get the from , that's the process
+			$process_list->add($c["from"]);
+		}
 
 		switch($_GET["sub_tab"])
 		{
 			default:
 			case "entity":
-				// get entity type list from ot
-				$entity_list = $entity_tree->to_list();
-				$entity_types = array();
-				for ($o = $entity_list->begin(); !$entity_list->end(); $o = $entity_list->next())
-				{
-					if ($o->class_id() == CL_ENTITY)
-					{
-						$entity_types[] = $o->id();
-					}
-				}
+				// get entity types for processes
+				$etype_list = new object_list(array(
+					"class_id" => CL_ENTITY,
+					"entity_process" => $process_list->ids()
+				));
 
 				$list_html = $this->_do_entity_table(array(
 					"filter" => array(
-						"entity_type" => $entity_types
+						"entity_type" => $etype_list->ids()
 					)
+				));
+
+				$tb->add_button(array(
+					"name" => "save",
+					"tooltip" => "Salvesta",
+					"url" => "javascript:document.changeform.submit();",
+					"img" => "save.gif",
+					"class" => "menuButton",
 				));
 				break;
 
 			case "process":
-				// get list of processes, filtered by entity type
-				$entity_list = $entity_tree->to_list();
-				$processes = array();
-				for ($o = $entity_list->begin(); !$entity_list->end(); $o = $entity_list->next())
-				{
-					if ($o->class_id() == CL_ENTITY)
-					{
-						$processes[$o->prop("entity_process")] = $o->prop("entity_process");
-					}
-				}
 				$list_html = $this->_do_process_table(array(
 					"filter" => array(
-						"oid" => $processes
+						"oid" => $process_list->ids()
 					)
 				));
 				break;
 
 			case "actions":
-				// get list of processes, filtered by entity type
-				$entity_list = $entity_tree->to_list();
-				$processes = array();
-				for ($o = $entity_list->begin(); !$entity_list->end(); $o = $entity_list->next())
-				{
-					if ($o->class_id() == CL_ENTITY)
-					{
-						$processes[$o->prop("entity_process")] = $o->prop("entity_process");
-					}
-				}
 				$list_html = $this->_do_actions_table(array(
 					"filter" => array(
-						"processes" => $processes
+						"oid" => $action_list->ids()
 					)
 				));
 				break;
 
 			case "actors":
-				$entity_list = $entity_tree->to_list();
+				$entity_list = new object_list(array(
+					"class_id" => CL_ENTITY,
+					"entity_process" => $process_list->ids()
+				));
+
 				$actors = array();
 				for ($o = $entity_list->begin(); !$entity_list->end(); $o = $entity_list->next())
 				{
@@ -332,27 +386,13 @@ class workflow extends class_base
 				break;
 		}
 
-		/*$this->clidlist = array(CL_MENU,CL_ACTION);
-		$thtml = $this->_build_tree($action_rootmenu->id());
-
-		load_vcl("table");
-		$this->t = new aw_table(array(
-			"xml_def" => "workflow/action_list",
-			"layout" => "generic",
+		return $this->_finalize_data(array(
+			"rootmenu" => $this->action_rootmenu,
+			"tb" => $tb,
+			"list_html" => $list_html,
+			"data" => $data,
+			"class_id" => CL_ACTION
 		));
-		*/
-
-		$tb = $this->gen_view_toolbar();
-		
-		// gaah
-		$_data = "<table width='100%' border='0' cellspacing='0' cellpadding='0'><tr><td valign='top' width='100'>$thtml</td><td valign='top'>" . $tb->get_toolbar() . $list_html . "</td></tr></table>";
-		
-
-		$data["value"] = $_data;
-		$data["type"] = "text";
-		$data["no_caption"] = 1;
-	
-		return array($data);
 	}
 	
 	function callback_show_entities($args = array())
@@ -379,7 +419,7 @@ class workflow extends class_base
 		};
 
 		$entity_tree_filter = new object_tree(array(
-			"parent" => ($_GET["entity_filter"] ? $_GET["entity_filter"] : $this->entity_rootmenu),
+			"parent" => ($_GET["tree_filter"] ? $_GET["tree_filter"] : $this->entity_rootmenu),
 			"class_id" => CL_ENTITY
 		));
 		$entity_list = $entity_tree_filter->to_list();
@@ -487,7 +527,8 @@ class workflow extends class_base
 			"rootmenu" => $this->entity_rootmenu,
 			"tb" => $tb,
 			"list_html" => $list_html,
-			"data" => $data
+			"data" => $data,
+			"class_id" => CL_ENTITY
 		));
 	}
 
@@ -711,31 +752,18 @@ class workflow extends class_base
 			return $status;
 		};
 
-		$process_tree = new object_tree(array(
-			"parent" => $this->process_rootmenu,
+		$process_tree_filter = new object_tree(array(
+			"parent" => ($_GET["tree_filter"] ? $_GET["tree_filter"] : $this->process_rootmenu),
 			"class_id" => CL_PROCESS
 		));
+		$process_list = $process_tree_filter->to_list();
 
-		classload("vcl/treeview");
-		$tv = treeview::tree_from_objects(array(
-			"tree_opts" => array(
-				"type" => TREE_DHTML,
-				"tree_id" => "wrkflw",
-				"persist_state" => true,
-			),
-			"root_item" => $this->process_rootmenu,
-			"ot" => $process_tree,
-			"var" => "process_filter"
-		));
-
-		$thtml = $tv->finalize_tree();
+		$tb = get_instance("toolbar");
 
 		switch($_GET["sub_tab"])
 		{
 			default:
 			case "entity":
-				// get entity type list from ot
-				$process_list = $process_tree->to_list();
 				$etype_list = new object_list(array(
 					"class_id" => CL_ENTITY,
 					"entity_process" => $process_list->ids()
@@ -745,11 +773,25 @@ class workflow extends class_base
 						"entity_type" => $etype_list->ids()
 					)
 				));
+
+				$tb->add_button(array(
+					"name" => "save",
+					"tooltip" => "Salvesta",
+					"url" => "javascript:document.changeform.submit();",
+					"img" => "save.gif",
+					"class" => "menuButton",
+				));
 				break;
 
 			case "process":
-				// get list of processes, filtered by entity type
-				$process_list = $process_tree->to_list();
+				$tb->add_button(array(
+					"name" => "add",
+					"tooltip" => "Uus protsess",
+					"url" => $this->mk_my_orb("view",array("id" => $args["obj_inst"]->id(),"group" => "show_processes","subgroup" => "add_process")),
+					"img" => "new.gif",
+					"class" => "menuButton",
+				));
+
 				$list_html = $this->_do_process_table(array(
 					"filter" => array(
 						"oid" => $process_list->ids()
@@ -758,7 +800,6 @@ class workflow extends class_base
 				break;
 
 			case "actions":
-				$process_list = $process_tree->to_list();
 				$list_html = $this->_do_actions_table(array(
 					"filter" => array(
 						"processes" => $process_list->ids()
@@ -767,15 +808,18 @@ class workflow extends class_base
 				break;
 
 			case "actors":
-				$process_list = $process_tree->to_list();
-				$etype_list = new object_list(array(
+				$entity_list = new object_list(array(
 					"class_id" => CL_ENTITY,
 					"entity_process" => $process_list->ids()
 				));
+
 				$actors = array();
-				for ($o = $etype_list->begin(); !$etype_list->end(); $o = $etype_list->next())
+				for ($o = $entity_list->begin(); !$entity_list->end(); $o = $entity_list->next())
 				{
-					$actors[$o->prop("entity_actor")] = $o->prop("entity_actor");
+					if ($o->class_id() == CL_ENTITY)
+					{
+						$actors[$o->prop("entity_actor")] = $o->prop("entity_actor");
+					}
 				}
 				$list_html = $this->_do_actor_table(array(
 					"filter" => array(
@@ -785,94 +829,13 @@ class workflow extends class_base
 				break;
 		}
 
-		
-		/*if (!empty($args["request"]["treeroot"]))
-		{
-			$this->req_treeroot = $args["request"]["treeroot"];
-		}
-		else
-		{
-			$this->req_treeroot = $process_rootmenu->id();
-		};
-
-		$this->treeroot_obj = new object($this->req_treeroot);
-
-		$treeroot_clid = $this->treeroot_obj->class_id();
-		$this->treeurl = $this->mk_my_orb("view",array(
-			"id" => $args["obj_inst"]->id(),
-			"group" => "show_processes",
+		return $this->_finalize_data(array(
+			"rootmenu" => $this->process_rootmenu,
+			"tb" => $tb,
+			"list_html" => $list_html,
+			"data" => $data,
+			"class_id" => CL_PROCESS
 		));
-
-		$this->clidlist = array(CL_MENU);
-		$this->parent_list = array();
-
-		$this->items = array();
-		$this->items[] = array("name" => "Põhiprotsessid");
-		$this->items[] = array("name" => "Tugiprotsessid");
-		
-			
-		$thtml = $this->_build_tree($process_rootmenu->id());
-
-		load_vcl("table");
-		$this->t = new aw_table(array(
-			"xml_def" => "workflow/process_list",
-			"layout" => "generic",
-		));
-
-		$processes =  new object_list(array(
-			"parent" => $this->parent_list,
-			"class_id" => CL_PROCESS,
-		));
-		
-		$ed_url = $this->mk_my_orb("view",array("id" => $args["obj_inst"]->id(),"group" => "show_processes","subgroup" => "mod_process"));
-                        
-		for($o = $processes->begin(); !$processes->end(); $o = $processes->next())
-		{
-			$ra = $o->prop("root_action");
-			$this->satisfy_any(array("action" => $ra));
-			$val["root_action"] = $this->actions[$ra]->name();
-			$val["name"] = html::href(array(
-				"url" => $ed_url . "&oid=" . $o->id(),
-				"caption" => $o->name(),
-			));
-			$this->t->define_data($val);
-		}*/
-		
-		$tb = get_instance("toolbar");
-
-		if (isset($menu))
-		{
-			$tb->add_cdata($menu);
-		};
-
-		$tb->add_button(array(
-			"name" => "add",
-			"tooltip" => "Uus protsess",
-			"url" => $this->mk_my_orb("view",array("id" => $args["obj_inst"]->id(),"group" => "show_processes","subgroup" => "add_process")),
-			"img" => "new.gif",
-			"class" => "menuButton",
-		));
-
-		classload("vcl/tabpanel");
-		$tp = tabpanel::simple_tabpanel(array(
-			"panel_props" => array("tpl" => "headeronly"),
-			"var" => "sub_tab", 
-			"default" => "entities",
-			"opts" => array(
-				"entities" => "Olemid",
-				"process" => "Protsessid",
-				"actions" => "Tegevused",
-				"actors" => "Tegijad"
-			)
-		));
-
-		// gaah
-		$_data = "<table width='100%' border='0' cellspacing='0' cellpadding='0'><tr><td valign='top' width='20%'>$thtml</td><td valign='top'>" . $tb->get_toolbar() . $tp->get_tabpanel(array("content" => $list_html)) . "</td></tr></table>";
-
-		$data["value"] = $_data;
-		$data["type"] = "text";
-		$data["no_caption"] = 1;
-		return array($data);
 	}
 	
 	function callback_add_process($args = array())
@@ -1145,16 +1108,16 @@ class workflow extends class_base
 
 		$this->db_query($q);
 
-		$current_logtrail = array(
+		/*$current_logtrail = array(
 			"actor" => $_entity_actor,
 			"action" => $_entity_action,
 			"process" => $_entity_process,
-		);
+		);*/
 
 		$ent_obj = new object($_entity_id);
-		$ent_obj->set_meta("current_logtrail",$current_logtrail);
+		//$ent_obj->set_meta("current_logtrail",$current_logtrail);
+		$ent_obj->set_prop("state", $_entity_action);
 		$ent_obj->save();
-
 	}
 
 	function gen_view_toolbar($args = array())
@@ -1212,21 +1175,20 @@ class workflow extends class_base
 
 	function process_entities($args = array())
 	{
-		$to_advance = new aw_array($args["request"]["advance"]);
+		$to_advance = new aw_array($args["request"]["next_action"]);
 		foreach($to_advance->get() as $key => $val)
 		{
 			// advance those entities to the next stadium
 			if ($val > 0)
 			{
 				$ent = new object($key);
-
-				$ctrail = $ent->meta("current_logtrail");
+				$ent_type = obj($ent->prop("entity_type"));
 
 				$this->process_entity(array(
 					"entity_id" => $key,
 					"action_id" => $val,
-					"process_id" => $ctrail["process"],
-					"actor_id" => $ctrail["actor"],
+					"process_id" => $ent_type->prop("entity_process"),
+					"actor_id" => $ent_type->prop("entity_actor"),
 				));
 
 			};
@@ -1242,9 +1204,17 @@ class workflow extends class_base
 			"layout" => "generic",
 		));
 
-		$filter = array("class_id" => CL_WORKFLOW_ENTITY_INSTANCE) + $arr["filter"];
-		
-		$ol = new object_list($filter);
+		if (is_array($arr["filter"]["entity_type"]) && count($arr["filter"]["entity_type"]) < 1)
+		{
+			$ol = new object_list();
+		}
+		else
+		{
+			$filter = array("class_id" => CL_WORKFLOW_ENTITY_INSTANCE) + $arr["filter"];
+			$ol = new object_list($filter);
+		}
+
+		$wfe = get_instance("workflow/workflow_entity_instance");
 
 		for ($e = $ol->begin(); !$ol->end(); $e = $ol->next())
 		{
@@ -1254,12 +1224,19 @@ class workflow extends class_base
 
 			$mod = $e->modifiedby();
 
+			$cur_state = $wfe->get_current_state($e->id());
+
 			$t->define_data(array(
 				"name" => $e->name(),
 				"type" => $type_o->name(),
 				"actor" => $actor_o->name(),
 				"modifiedby" => $mod->name(),
-				"process" => $process_o->name()
+				"process" => $process_o->name(),
+				"action" => $cur_state->name(),
+				"next_action" => html::select(array(
+					"name" => "next_action[".$e->id()."]",
+					"options" => array(0 => "") + $wfe->get_possible_next_states($e->id())
+				))
 			));
 		}
 
@@ -1279,7 +1256,14 @@ class workflow extends class_base
 
 		$filter = array("class_id" => CL_PROCESS) + $arr["filter"];
 		
-		$ol = new object_list($filter);
+		if (is_array($filter["oid"]) && count($filter["oid"]) < 1)
+		{
+			$ol = new object_list();
+		}
+		else
+		{
+			$ol = new object_list($filter);
+		}
 
 		for ($e = $ol->begin(); !$ol->end(); $e = $ol->next())
 		{
@@ -1287,10 +1271,21 @@ class workflow extends class_base
 
 			$mod = $e->modifiedby();
 
+			$entity_types = new object_list(array(
+				"class_id" => CL_ENTITY,
+				"entity_process" => $e->id()
+			));
+
+			$el = new object_list(array(
+				"class_id" => CL_WORKFLOW_ENTITY_INSTANCE,
+				"entity_type" => $entity_types->ids()
+			));
+
 			$t->define_data(array(
 				"name" => $e->name(),
 				"modifiedby" => $mod->name(),
 				"root_action" => $ra_o->name(),
+				"entity_count" => $el->count()
 			));
 		}
 
@@ -1310,7 +1305,14 @@ class workflow extends class_base
 
 		$filter = array("class_id" => CL_ACTOR) + $arr["filter"];
 		
-		$ol = new object_list($filter);
+		if (is_array($filter["oid"]) && count($filter["oid"]) < 1)
+		{
+			$ol = new object_list();
+		}
+		else
+		{
+			$ol = new object_list($filter);
+		}
 
 		for ($e = $ol->begin(); !$ol->end(); $e = $ol->next())
 		{
@@ -1333,33 +1335,77 @@ class workflow extends class_base
 			"layout" => "generic",
 		));
 
-		$filter = array(
-			"class_id" => CL_PROCESS,
-			"oid" => $arr["filter"]["processes"]
-		);
-		
-		$ol = new object_list($filter);
-
-		for ($e = $ol->begin(); !$ol->end(); $e = $ol->next())
+		if (isset($arr["filter"]["processes"]))
 		{
-			$conn = $e->connections_from(array(
-				"type" => 10 // RELTYPE_ACTION from process
-			));
-			foreach($conn as $c)
-			{
-				$a = $c->to();
+			$filter = array(
+				"class_id" => CL_PROCESS,
+				"oid" => $arr["filter"]["processes"]
+			);
 
+			if (count($arr["filter"]["processes"]) < 1)
+			{
+				$ol = new object_list();
+			}
+			else
+			{
+				$ol = new object_list($filter);
+			}
+
+			for ($e = $ol->begin(); !$ol->end(); $e = $ol->next())
+			{
+				$conn = $e->connections_from(array(
+					"type" => 10 // RELTYPE_ACTION from process
+				));
+				foreach($conn as $c)
+				{
+					$a = $c->to();
+
+					$mod = $e->modifiedby();
+
+					$t->define_data(array(
+						"actor" => "",
+						"uid" => $mod->name(),
+						"process" => $e->name(),
+						"action" => $a->name()
+					));
+				}
+			}
+		}
+		else
+		{
+			$filter = array("class_id" => CL_ACTION) + $arr["filter"];
+
+			if (is_array($arr["filter"]["oid"]) && count($arr["filter"]["oid"]) < 1)
+			{
+				$ol = new object_list();
+			}
+			else
+			{
+				$ol = new object_list($filter);
+			}
+
+			for ($e = $ol->begin(); !$ol->end(); $e = $ol->next())
+			{
+				$process_list = new object_list();
+
+				$con = new connection();
+				foreach($con->find(array("to" => $e->id())) as $c)
+				{
+					// now get the from , that's the process
+					$process_list->add($c["from"]);
+				}
+						
 				$mod = $e->modifiedby();
 
 				$t->define_data(array(
 					"actor" => "",
 					"uid" => $mod->name(),
-					"process" => $e->name(),
-					"action" => $a->name()
+					"process" => join(",", $process_list->names()),
+					"action" => $e->name()
 				));
 			}
 		}
-
+		
 		$t->set_default_sortby("action");
 		$t->sort_by();
 		return $t->draw();
@@ -1394,7 +1440,7 @@ class workflow extends class_base
 			"var" => "sub_tab", 
 			"default" => "entities",
 			"opts" => array(
-				"entities" => "Olemid",
+				"entities" => "Juhtumid",
 				"process" => "Protsessid",
 				"actions" => "Tegevused",
 				"actors" => "Tegijad"
@@ -1415,7 +1461,7 @@ class workflow extends class_base
 		$this->vars(array(
 			"tree" => $this->_get_tree(array(
 				"rootmenu" => $rootmenu,
-				"class_id" => CL_ENTITY
+				"class_id" => $class_id
 			)),
 			"toolbar" => $tb->get_toolbar(),
 			"table" => $this->_get_tabs($list_html),

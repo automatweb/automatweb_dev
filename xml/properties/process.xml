@@ -35,7 +35,27 @@
             <method>serialize</method>
             <group>general</group>
             <table>objects</table>
-            <caption>Juurfunktsioon</caption>
+            <caption>Juurtegevus</caption>
+      </property>
+      <property>
+            <name>end_action</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ACTION</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <table>objects</table>
+            <caption>L&amp;otilde;pptegevus</caption>
+      </property>
+      <property>
+            <name>transition_folder</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <table>objects</table>
+            <caption>J&amp;auml;rgnevuste kataloog</caption>
       </property>
       <property>
             <name>id</name>
@@ -62,5 +82,33 @@
                   <caption>Tegevused</caption>
             </actions>
       </groupinfo>
+      <reltypes>
+            <INSTRUCTION>
+                  <clid>
+                        <num_0>CL_IMAGE</num_0>
+                        <num_1>CL_FILE</num_1>
+                  </clid>
+                  <value>1</value>
+                  <caption>instruktsioon</caption>
+            </INSTRUCTION>
+            <TRANSITION>
+                  <clid>CL_WORKFLOW_TRANSITION</clid>
+                  <value>2</value>
+                  <caption>j&amp;auml;rgnevus</caption>
+            </TRANSITION>
+            <FOLDER>
+                  <clid>CL_MENU</clid>
+                  <value>3</value>
+                  <caption>j&amp;auml;rgnevuste kataloog</caption>
+            </FOLDER>
+            <ACTION>
+                  <clid>
+                        <num_0>CL_ACTION</num_0>
+                        <num_1>CL_PROCESS</num_1>
+                  </clid>
+                  <value>10</value>
+                  <caption>tegevus</caption>
+            </ACTION>
+      </reltypes>
 </properties>
 

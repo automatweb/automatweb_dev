@@ -42,7 +42,7 @@
             <view>show</view>
             <store>no</store>
             <field>show_entities</field>
-            <caption>Olemid</caption>
+            <caption>Juhtumid</caption>
       </property>
       <property>
             <name>show_actions</name>
@@ -96,7 +96,7 @@
                   <caption>Üldine</caption>
             </general>
             <show_entities>
-                  <caption>Olemid</caption>
+                  <caption>Juhtumid</caption>
                   <submit>no</submit>
             </show_entities>
             <show_processes>

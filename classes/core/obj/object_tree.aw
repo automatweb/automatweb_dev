@@ -54,7 +54,7 @@ class object_tree extends _int_obj_container_base
 		{
 			foreach($objs as $oid => $o)
 			{
-				$ol->add($o);
+				$ol->add($oid);
 			}
 		}
 		return $ol;
@@ -243,6 +243,8 @@ class object_tree extends _int_obj_container_base
 				"msg" => "object_tree::filter(): parent filter parameter mut always be passed!"
 			));
 		}
+
+		$filter["parent"] = $GLOBALS["object_loader"]->param_to_oid($filter["parent"]);
 
 		$this->_int_init_empty();
 		$this->_int_req_filter($filter);

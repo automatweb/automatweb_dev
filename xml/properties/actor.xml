@@ -26,5 +26,15 @@
                   <caption>Üldine</caption>
             </general>
       </groupinfo>
+      <reltypes>
+            <INSTRUCTION>
+                  <clid>
+                        <num_0>CL_IMAGE</num_0>
+                        <num_1>CL_FILE</num_1>
+                  </clid>
+                  <value>1</value>
+                  <caption>instruktsioon</caption>
+            </INSTRUCTION>
+      </reltypes>
 </properties>
 

@@ -11,32 +11,28 @@
       </property>
       <property>
             <name>entity_cfgform</name>
-            <type>objpicker</type>
-            <clid>CL_CFGFORM</clid>
-            <subclass>CL_DOCUMENT</subclass>
-            <field>meta</field>
-            <method>serialize</method>
-            <table>objects</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ENT_CFGFORM</reltype>
+            <field>aw_cfgform_id</field>
+            <table>aw_wf_entity_types</table>
             <group>general</group>
-            <caption>Olem (konfivorm)</caption>
+            <caption>Konfivorm</caption>
       </property>
       <property>
             <name>entity_process</name>
-            <type>objpicker</type>
-            <clid>CL_PROCESS</clid>
-            <field>meta</field>
-            <method>serialize</method>
-            <table>objects</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PROCESS</reltype>
+            <field>aw_process_id</field>
+            <table>aw_wf_entity_types</table>
             <group>general</group>
             <caption>Protsess</caption>
       </property>
       <property>
             <name>entity_actor</name>
-            <type>objpicker</type>
-            <clid>CL_ACTOR</clid>
-            <field>meta</field>
-            <method>serialize</method>
-            <table>objects</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ACTOR</reltype>
+            <field>aw_actor_id</field>
+            <table>aw_wf_entity_types</table>
             <group>general</group>
             <caption>Tegija</caption>
       </property>
@@ -44,5 +40,37 @@
             <syslog_type>ST_ENTITY</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
+      <tableinfo>
+            <aw_wf_entity_types>
+                  <index>aw_id</index>
+                  <master_table>objects</master_table>
+                  <master_index>brother_of</master_index>
+            </aw_wf_entity_types>
+      </tableinfo>
+      <reltypes>
+            <INSTRUCTION>
+                  <clid>
+                        <num_0>CL_IMAGE</num_0>
+                        <num_1>CL_FILE</num_1>
+                  </clid>
+                  <value>1</value>
+                  <caption>instruktsioon</caption>
+            </INSTRUCTION>
+            <ENT_CFGFORM>
+                  <clid>CL_CFGFORM</clid>
+                  <value>2</value>
+                  <caption>konfiguratsioonivorm</caption>
+            </ENT_CFGFORM>
+            <ACTOR>
+                  <clid>CL_ACTOR</clid>
+                  <value>3</value>
+                  <caption>tegija</caption>
+            </ACTOR>
+            <PROCESS>
+                  <clid>CL_PROCESS</clid>
+                  <value>4</value>
+                  <caption>protsess</caption>
+            </PROCESS>
+      </reltypes>
 </properties>
 

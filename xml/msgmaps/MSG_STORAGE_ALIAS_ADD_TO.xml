@@ -1,18 +1,18 @@
 <?xml version='1.0'?>
 <xml>
 <num_0>
-      <class>object_chain</class>
-      <func>on_add_alias</func>
-      <param>CL_OBJECT_CHAIN</param>
-</num_0>
-<num_1>
       <class>calendar/cal_event</class>
       <func>on_add_alias</func>
       <param>CL_CAL_EVENT</param>
-</num_1>
-<num_2>
+</num_0>
+<num_1>
       <class>formgen/form_entry</class>
       <func>on_add_alias</func>
       <param>CL_FORM_ENTRY</param>
+</num_1>
+<num_2>
+      <class>object_chain</class>
+      <func>on_add_alias</func>
+      <param>CL_OBJECT_CHAIN</param>
 </num_2>
 </xml>

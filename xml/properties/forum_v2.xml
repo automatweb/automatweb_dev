@@ -1,6 +1,17 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>topic_folder</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_TOPIC_FOLDER</reltype>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Teemade kataloog</caption>
+            <comment>Sellest kataloogist võetakse foorumi teemasid</comment>
+      </property>
+      <property>
             <name>address_folder</name>
             <type>relpicker</type>
             <reltype>RELTYPE_ADDRESS_FOLDER</reltype>
@@ -61,6 +72,26 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Konteiner</caption>
+      </property>
+      <property>
+            <name>topic</name>
+            <type>hidden</type>
+            <store>no</store>
+            <group>container</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Topic ID (sys)</caption>
+      </property>
+      <property>
+            <name>subaction</name>
+            <type>hidden</type>
+            <store>no</store>
+            <group>container</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Subact (sys)</caption>
       </property>
       <property>
             <name>show</name>
@@ -219,6 +250,16 @@
             <caption>Kommentaari kasutajainfo stiil</caption>
       </property>
       <property>
+            <name>style_comment_time</name>
+            <type>relpicker</type>
+            <group>styles</group>
+            <reltype>RELTYPE_STYLE</reltype>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kommentaari aja stiil</caption>
+      </property>
+      <property>
             <name>style_comment_text</name>
             <type>relpicker</type>
             <group>styles</group>
@@ -227,6 +268,36 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Kommentaari teksti stiil</caption>
+      </property>
+      <property>
+            <name>style_form_caption</name>
+            <type>relpicker</type>
+            <group>styles</group>
+            <reltype>RELTYPE_STYLE</reltype>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Sisestusvormi pealkirja stiil</caption>
+      </property>
+      <property>
+            <name>style_form_text</name>
+            <type>relpicker</type>
+            <group>styles</group>
+            <reltype>RELTYPE_STYLE</reltype>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Sisestusvormi teksti stiil</caption>
+      </property>
+      <property>
+            <name>style_form_element</name>
+            <type>relpicker</type>
+            <group>styles</group>
+            <reltype>RELTYPE_STYLE</reltype>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Sisestusvormi elemendi stiil</caption>
       </property>
       <classinfo>
             <syslog_type>ST_FORUM</syslog_type>

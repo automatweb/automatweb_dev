@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.197 2004/01/13 16:55:22 kristo Exp $
+// $Id: class_base.aw,v 2.198 2004/01/14 15:21:22 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -102,6 +102,7 @@ class class_base extends aw_template
 		@param alias_to optional
 		@param return_url optional
 		@param reltype optional type=int
+
 		
 		@returns
 		
@@ -111,6 +112,11 @@ class class_base extends aw_template
 		any other data, then you'll need to use other field name
 
 	**/
+	function new_change($args)
+	{
+		return $this->change($args);
+	}
+
 	/**  
 		
 		@attrib name=change params=name all_args="1" default="0"

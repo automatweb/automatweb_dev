@@ -218,7 +218,11 @@ class _int_object
 		$cs = $GLOBALS["object_loader"]->ds->find_connections($filter);
 		foreach($cs as $c_d)
 		{
-			if ($this->can("view", $c_d["from"]) && $this->can("view", $c_d["to"]))
+			if ($this->can("view", $c_d["from"]) && 
+				$this->can("view", $c_d["to"]) && 
+				$GLOBALS["object_loader"]->object_exists($c_d["from"]) && 
+				$GLOBALS["object_loader"]->object_exists($c_d["to"])
+			)
 			{
 				$ret[] =& new connection($c_d);
 			}
@@ -288,7 +292,11 @@ class _int_object
 		$cs = $GLOBALS["object_loader"]->ds->find_connections($filter);
 		foreach($cs as $c_d)
 		{
-			if ($this->can("view", $c_d["from"]) && $this->can("view", $c_d["to"]))
+			if ($this->can("view", $c_d["from"]) && 
+				$this->can("view", $c_d["to"]) &&
+				$GLOBALS["object_loader"]->object_exists($c_d["from"]) && 
+				$GLOBALS["object_loader"]->object_exists($c_d["to"])
+			)
 			{
 				$ret[] =& new connection($c_d);
 			}

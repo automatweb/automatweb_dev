@@ -105,6 +105,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	function delete_object($oid)
 	{
 		$this->_clear_cache($oid);
+		$this->_clear_cache($oid, "connection");
 		return $this->contained->delete_object($oid);
 	}
 
