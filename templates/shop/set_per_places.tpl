@@ -11,22 +11,18 @@
 	<tr>
 		<td class="fcaption2">{VAR:LC_SHOP_FROM}:</td>
 		<td class="fcaption2">{VAR:LC_SHOP_TO}:</td>
-		<!-- SUB: CUR_H -->
-		<td class="fcaption2">{VAR:cur_name}:</td>
-		<!-- END SUB: CUR_H -->
 		<td class="fcaption2">{VAR:LC_SHOP_WEEK_PRICE}:</td>
 		<td class="fcaption2">{VAR:LC_SHOP_2_WEEK_PRICE}:</td>
+		<td class="fcaption2">{VAR:LC_SHOP_PLACES}:</td>
 		<td class="fcaption2">{VAR:LC_SHOP_DELETE}:</td>
 	</tr>
 	<!-- SUB: PERIOD -->
 	<tr>
 		<td class="fcaption2">{VAR:from}</td>
 		<td class="fcaption2">{VAR:to}</td>
-		<!-- SUB: CUR -->
-		<td class="fcaption2"><input type='text' name='price[{VAR:id}][{VAR:cur_id}]' value='{VAR:price}' size=5 class='small_button'></td>
-		<!-- END SUB: CUR -->
 		<td class="fcaption2"><input type='radio' name='price_type[{VAR:id}]' value='1' {VAR:week_check}></td>
 		<td class="fcaption2"><input type='radio' name='price_type[{VAR:id}]' value='2' {VAR:2week_check}></td>
+		<td class="fcaption2"><input type='text' name='available[{VAR:id}]' value='{VAR:avail}' size=3/td>
 		<td class="fcaption2"><input type='checkbox' name='del[{VAR:id}]' value=1></td>
 	</tr>
 	<!-- END SUB: PERIOD -->
