@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.45 2005/01/18 09:10:53 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.46 2005/01/28 14:07:23 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -183,7 +183,8 @@ class vcalendar extends aw_template
 	{
 		if ($GLOBALS["DD"] == 1)
 		{
-			echo "id = ".$arr["data"]["id"]." name = ".$arr["data"]["name"]." start = ".date("d.m.Y H:i", $arr["data"]["start1"])." <br>";
+			arr($arr);
+			//echo "id = ".$arr["data"]["id"]." name = ".$arr["data"]["name"]." start = ".date("d.m.Y H:i", $arr["data"]["start1"])." <br>";
 		}
 
 		if (!empty($arr["item_start"]))
@@ -196,9 +197,12 @@ class vcalendar extends aw_template
 			if ($arr["item_start"] > $arr["item_end"])
 			{
 				// hehe, textbook problem .. swap variables
+				$arr["item_end"] = $arr["item_start"];
+				/*
 				$tmp = $arr["item_end"];
 				$arr["item_end"] = $item["start"];
 				$arr["item_start"] = $tmp;
+				*/
 
 			};
 		};
@@ -208,6 +212,14 @@ class vcalendar extends aw_template
 		$this->el_count++;
 		$data = $arr["data"];
 		$data["timestamp"] = $arr["timestamp"];
+		if ($arr["item_start"])
+		{
+			$data["item_start"] = $arr["item_start"];
+		};
+		if ($arr["item_end"])
+		{
+			$data["item_end"] = $arr["item_end"];
+		};
 		$data["_id"] = $this->el_count;
 		$data["id"] = $arr["data"]["id"];
 		$data['comment'] = $arr['data']['comment'];
@@ -234,6 +246,7 @@ class vcalendar extends aw_template
 			for ($i = $arr["item_start"]; $i <= $arr["item_end"]; $i = $i + 86400)
 			{
 				$use_date = date("Ymd",$i);
+				// but .. I do not need to use those references .. yees?
 				$this->items[$use_date][] = &$this->evt_list[$this->el_count];
 			};
 		};
@@ -1172,9 +1185,23 @@ class vcalendar extends aw_template
 		{
 			$dchecked = $this->evt_tpl->parse("DCHECKED");
 		}
+		if ($_GET["XX6"])
+		{
+			arr($evt);
+		};
+
+		if ($evt["item_start"] && $evt["item_end"] && $evt["item_start"] != $evt["item_end"])
+		{
+			$time = date("H:i",$evt["item_start"]) . " - " . date("H:i",$evt["item_end"]);
+		}
+		else
+		{
+			$time = date("H:i",$evt["timestamp"]);
+		};
+		
 		$this->evt_tpl->vars(array(
 			"odd" => $this->event_counter % 2,
-			"time" => date("H:i",$evt["timestamp"]),
+			"time" => $time,
 			"date" => date("j-m-Y H:i",$evt["timestamp"]),
 			"datestamp" => date("d.m.Y",$evt["timestamp"]),
 			"aw_date" => date("d-m-Y",$evt["timestamp"]),
