@@ -88,6 +88,35 @@
             <caption>Viimase impordi logi</caption>
       </property>
       <property>
+            <name>orig_img</name>
+            <table>objects</table>
+            <group>imgs</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>10</size>
+            <store>no</store>
+            <caption>Algne pilt</caption>
+      </property>
+      <property>
+            <name>view_img</name>
+            <table>objects</table>
+            <group>imgs</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+      </property>
+      <property>
+            <name>to_img</name>
+            <table>objects</table>
+            <group>imgs</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <store>no</store>
+            <caption>Mis pildid asendada</caption>
+      </property>
+      <property>
             <name>fnames</name>
             <table>objects</table>
             <group>files</group>
@@ -236,6 +265,9 @@
             <no_comment>1</no_comment>
       </classinfo>
       <groupinfo>
+            <imgs>
+                  <caption>Pildid</caption>
+            </imgs>
             <files>
                   <caption>Failid</caption>
             </files>

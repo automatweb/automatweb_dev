@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.19 2005/02/15 13:15:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.20 2005/02/15 15:30:49 kristo Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -37,10 +37,21 @@
 @property last_import_log type=text store=no
 @caption Viimase impordi logi
 
+@groupinfo imgs caption="Pildid"
+@default group=imgs
+
+	@property orig_img type=textbox size=10 store=no
+	@caption Algne pilt
+
+	@property view_img type=text
+
+	@property to_img type=textbox store=no
+	@caption Mis pildid asendada
+
 @groupinfo files caption="Failid"
 
-@property fnames type=textarea rows=30 cols=80 group=files
-@caption Failinimed
+	@property fnames type=textarea rows=30 cols=80 group=files
+	@caption Failinimed
 
 @groupinfo foldersa caption="Kataloogid"
 
@@ -120,6 +131,16 @@ class otto_import extends class_base
 			case "folders":
 				$this->do_folders_tbl($arr);
 				break;
+
+			case "view_img":
+				$prop["value"] = "<a href='javascript:void(0)' onClick='viewimg()'>Vaata pilti</a>";
+				$prop["value"] .= "<script language=\"javascript\">\n";
+				$prop["value"] .= "function viewimg() { var url;\n
+					url = \"http://image01.otto.de/pool/OttoDe/de_DE/images/formata/\"+document.changeform.orig_img.value+\".jpg\";
+					window.open(url,\"popupx\", \"width=400,height=600\");
+				}\n";
+				$prop["value"] .= "</script>\n";
+				break;
 		};
 		return $retval;
 	}
@@ -143,6 +164,23 @@ class otto_import extends class_base
 							");
 						}
 					}
+				}
+				break;
+
+			case "to_img":
+				if ($prop["value"] != "" && $arr["request"]["orig_img"] != "")
+				{
+					// do replace
+					$toims = explode(",", $prop["value"]);
+					$q = "
+						UPDATE 
+							otto_prod_img
+						SET 
+							show_imnr = '".$arr["request"]["orig_img"]."' 
+						WHERE
+							imnr IN (".join(",", map("'%s'", $toims)).")
+					";
+					$this->db_query($q);
 				}
 				break;
 		}
