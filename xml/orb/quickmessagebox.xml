@@ -4,7 +4,7 @@
 		<action name="delete_message" >
 			<function name="delete_message">
 				<arguments>
-					<required name="sel" type="int" acl="delete"/>
+					<required name="sel" />
 				</arguments>
 			</function>
 		</action>

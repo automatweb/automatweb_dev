@@ -8,5 +8,12 @@
 			</function>
 		</action>
 
+		<action name="fixxer" >
+			<function name="fixer">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

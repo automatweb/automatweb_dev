@@ -1,18 +1,6 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="commune" folder="applications/commune" extends="class_base">
-		<action name="commaction" >
-			<function name="commaction">
-				<arguments>
-					<required name="id" type="int" acl="view"/>
-					<required name="commact" />
-					<optional name="profile" type="int" acl="view"/>
-					<optional name="user" type="int" acl="view"/>
-					<optional name="group" />
-				</arguments>
-			</function>
-		</action>
-
 		<action name="new_profile" all_args="1">
 			<function name="new_profile">
 				<arguments>
@@ -35,6 +23,7 @@
 				<arguments>
 					<required name="id" type="int" acl="view"/>
 					<optional name="group" />
+					<required name="sel" />
 					<optional name="return_url" />
 				</arguments>
 			</function>
@@ -84,7 +73,7 @@
 		<action name="hide_prof_com" all_args="1">
 			<function name="hide_prof_com">
 				<arguments>
-					<required name="selected" type="int" acl="view"/>
+					<required name="sel" type="int" acl="view"/>
 					<required name="profile_id" />
 					<optional name="group" />
 					<optional name="return_url" />
@@ -95,7 +84,7 @@
 		<action name="delete_prof_com" all_args="1">
 			<function name="delete_prof_com">
 				<arguments>
-					<required name="selected" type="int" acl="view"/>
+					<required name="sel" type="int" acl="view"/>
 					<required name="profile_id" />
 					<optional name="group" />
 					<optional name="return_url" />
@@ -106,7 +95,7 @@
 		<action name="delete_comments" all_args="1">
 			<function name="delete_comments">
 				<arguments>
-					<required name="selected" type="int" acl="view"/>
+					<required name="sel" type="int" acl="view"/>
 					<required name="img_id" />
 					<optional name="group" />
 					<optional name="return_url" />
@@ -122,10 +111,29 @@
 			</function>
 		</action>
 
+		<action name="hit_that_shit" >
+			<function name="hit_that_shit">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="delete_message" >
 			<function name="delete_message">
 				<arguments>
 					<required name="sel" type="int" acl="delete"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="commaction" >
+			<function name="commaction">
+				<arguments>
+					<required name="id" type="int" acl="view"/>
+					<required name="commact" />
+					<optional name="profile" type="int" acl="view"/>
+					<optional name="cuser" type="int" acl="view"/>
+					<optional name="group" />
 				</arguments>
 			</function>
 		</action>
@@ -138,33 +146,25 @@
 			</function>
 		</action>
 
+		<action name="remove_from_community" all_args="1">
+			<function name="remove_from_community">
+				<arguments>
+					<required name="id" type="int"/>
+					<required name="sel" type="int" acl="view"/>
+					<optional name="group" />
+					<optional name="return_url" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="change" nologin="1" is_public="1" all_args="1" caption="Kommuuni sisu">
 			<function name="change">
 				<arguments>
-					<required name="id" type="int" acl="view"/>
+					<optional name="id" type="int" acl="view"/>
 					<optional name="group" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="public_rate" nologin="1" caption="Hindamine">
-			<function name="public_rate">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="show_nothing" nologin="1">
-			<function name="show_nothing">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="public_show_profile" nologin="1" caption="Näita profiili">
-			<function name="public_show_profile">
-				<arguments>
-					<required name="profile" type="int" acl="view"/>
+					<optional name="period" />
+					<optional name="alias_to" />
+					<optional name="return_url" />
 				</arguments>
 			</function>
 		</action>
