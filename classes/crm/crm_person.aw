@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.20 2004/04/13 08:23:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.21 2004/04/13 13:28:06 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -212,6 +212,9 @@ caption Andmed
 
 @reltype CV value=19 clid=CL_CV
 @caption CV
+
+@reltype ORDER value=20 clid=CL_SHOP_ORDER
+@caption tellimus
 
 
 */

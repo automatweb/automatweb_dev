@@ -385,6 +385,11 @@
                   <clid>CL_CV</clid>
                   <caption>CV</caption>
             </CV>
+            <ORDER>
+                  <value>20</value>
+                  <clid>CL_SHOP_ORDER</clid>
+                  <caption>tellimus</caption>
+            </ORDER>
       </reltypes>
 </properties>
 

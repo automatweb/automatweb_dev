@@ -508,6 +508,11 @@
                   <clid>CL_CRM_COMPANY</clid>
                   <caption>Konkurent</caption>
             </COMPETITOR>
+            <ORDER>
+                  <value>27</value>
+                  <clid>CL_SHOP_ORDER</clid>
+                  <caption>tellimus</caption>
+            </ORDER>
       </reltypes>
 </properties>
 

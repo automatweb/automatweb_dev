@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.18 2004/04/13 08:23:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.19 2004/04/13 13:28:06 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -203,6 +203,9 @@ groupinfo humanres caption="Inimesed" submit=no
 
 @reltype COMPETITOR value=26 clid=CL_CRM_COMPANY
 @caption Konkurent
+
+@reltype ORDER value=27 clid=CL_SHOP_ORDER
+@caption tellimus
 
 @classinfo no_status=1
 			
