@@ -28,6 +28,7 @@
 	<property>
 		<name>content</name>
 		<group>general</group>
+		<richtext>1</richtext>
 		<caption>Sisu</caption>
 	</property>
 	<property>

@@ -82,7 +82,9 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 				$ret = $this->contained->get_objdata($conns2[0]["to"]);
 				$ret["lang_id"] = $req_od["lang_id"];
 				$ret["meta"] = $req_od["meta"];
-				$ret["flags"] |= $req_od["flags"];
+				// just the bit about OBJ_IS_TRANSLATED
+				$ret["flags"] = $ret["flags"] & (~OBJ_IS_TRANSLATED);	// first unset it
+				$ret["flags"] |= $req_od["flags"] & OBJ_IS_TRANSLATED; // now or the one from the translated object back
 				return $ret;
 			}
 			else
@@ -91,7 +93,8 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 				$ret = $this->contained->get_objdata($conns[0]["from"]);
 				$ret["lang_id"] = $req_od["lang_id"];
 				$ret["meta"] = $req_od["meta"];
-				$ret["flags"] |= $req_od["flags"];
+				$ret["flags"] = $ret["flags"] & (~OBJ_IS_TRANSLATED);	// first unset it
+				$ret["flags"] |= $req_od["flags"] & OBJ_IS_TRANSLATED; // now or the one from the translated object back
 				return $ret;
 			}
 		}

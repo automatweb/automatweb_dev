@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.230 2003/11/03 16:52:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.231 2003/11/04 09:59:25 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -280,6 +280,8 @@ class core extends acl_base
 			    modifiedby = '".aw_global_get("uid")."'
 			WHERE $where";
 		$this->db_query($q);
+		$this->db_query("DELETE FROM aliases where target = '$oid'");
+
 		aw_cache_set("objcache",$oid,"");
 		if ($flush)
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.6 2003/09/24 12:49:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.7 2003/11/04 09:59:25 kristo Exp $
 // object_translation.aw - Objekti tõlge 
 
 // create method accepts the following arguments:
@@ -75,7 +75,7 @@ class object_translation extends aw_template
 		if (count($conns) > 0)
 		{
 			// it already has the translation, don't create a new one, just go to changing
-			return $this->mk_my_orb("change",array("id" => $conns[0]->prop("to")),$fl);
+			return $this->mk_my_orb("change",array("id" => $conns[0]->prop("to"), "set_lang_id" => $conns[0]->prop("to.lang_id")),$fl);
 		}
 		// 3 - clone all the data from the original object ...
 		$orig_inst = get_instance($fl);
@@ -118,7 +118,7 @@ class object_translation extends aw_template
 			"reltype" => RELTYPE_ORIGINAL
 		));
 
-		return $this->mk_my_orb("change",array("id" => $clone_id),$fl);
+		return $this->mk_my_orb("change",array("id" => $clone_id, "set_lang_id" => $dstlang_id),$fl);
 	}
 
 	function get_original($oid)

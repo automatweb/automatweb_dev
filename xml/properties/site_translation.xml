@@ -74,6 +74,16 @@
             <caption>Kas kasutada k&amp;otilde;iki keeli sihtkeelteks</caption>
       </property>
       <property>
+            <name>translated_all_langs</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <caption>Kas objekt ilmub T&amp;otilde;lgitud tabi alla ainult siis kui on t&amp;otilde;litud k&amp;otilde;kidesse keeltesse</caption>
+      </property>
+      <property>
             <name>translated</name>
             <group>
                   <num_0>tr_day</num_0>

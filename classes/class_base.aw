@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.162 2003/10/31 13:50:21 duke Exp $
+// $Id: class_base.aw,v 2.163 2003/11/04 09:59:25 kristo Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -1083,16 +1083,13 @@ class class_base extends aw_template
 			$this->classinfo = array_merge($this->classinfo,$this->classconfig);
 		};
 		
-		if ($this->use_mode == "edit")
+		if ($this->classinfo["trans"]["text"] == 1 && $this->id)
 		{
-			if ($this->classinfo["trans"]["text"] == 1)
+			$o_t = get_instance("translate/object_translation");
+			$t_list = $o_t->translation_list($this->id, true);
+			if (in_array($this->id, $t_list))
 			{
-				$o_t = get_instance("translate/object_translation");
-				$t_list = $o_t->translation_list($this->id, true);
-				if (in_array($this->id, $t_list))
-				{
-					$this->is_translated = 1;
-				}
+				$this->is_translated = 1;
 			}
 		}
 
@@ -1191,7 +1188,7 @@ class class_base extends aw_template
 			$argblock = array(
 				"id" => isset($this->id) ? $this->id : "",
 				"obj" => &$this->coredata,
-                                "objdata" => &$this->objdata,
+				"objdata" => &$this->objdata,
 			);
 
 			// generated elements count as one for this purpose
@@ -1980,7 +1977,8 @@ class class_base extends aw_template
 			}
 			if (isset($rawdata["lang_id"]))
 			{
-				$o->set_lang_id($rawdata["lang_id"]);
+				$lg = get_instance("languages");
+				$o->set_lang($lg->get_langid($rawdata["lang_id"]));
 			}
 			$o->save();
 			$id = $o->id();
@@ -2043,7 +2041,7 @@ class class_base extends aw_template
 
 
 		$this->load_object(array("id" => $this->id));
-                $this->load_obj_data(array("id" => $this->id));
+		$this->load_obj_data(array("id" => $this->id));
 		
 		$this->obj_inst = new object($this->id);
 
@@ -2106,7 +2104,7 @@ class class_base extends aw_template
 				"request" => &$rawdata,
                                 "new" => $new,
 				"obj_inst" => &$this->obj_inst,
-                        );
+			);
 
 			$status = PROP_OK;
 

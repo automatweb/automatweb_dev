@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/site_translation.aw,v 1.5 2003/09/24 12:49:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/site_translation.aw,v 1.6 2003/11/04 09:59:25 kristo Exp $
 // site_translation.aw - Saidi tõlge 
 /*
 
@@ -25,6 +25,9 @@
 
 @property targetlang_all type=checkbox ch_value=1 group=general field=meta method=serialize
 @caption Kas kasutada k&otilde;iki keeli sihtkeelteks
+
+@property translated_all_langs type=checkbox ch_value=1 group=general field=meta method=serialize
+@caption Kas objekt ilmub T&otilde;lgitud tabi alla ainult siis kui on t&otilde;litud k&otilde;kidesse keeltesse
 
 @property translated group=tr_day,tr_week,tr_month,tr_all type=text store=no no_caption=1
 @caption Tõlgitud
@@ -185,16 +188,12 @@ class site_translation extends class_base
 
 		$filter = array(
 			"flags" => array(
-				"mask" => OBJ_IS_TRANSLATED|OBJ_NEEDS_TRANSLATION,
+				"mask" => OBJ_NEEDS_TRANSLATION,
 				"flags" => OBJ_NEEDS_TRANSLATION
 			),
 			"class_id" => in_array($args["request"]["clid"],$this->clid) ? $args["request"]["clid"] : $this->clid,
 			"lang_id" => $this->base_lang_id,
 		);
-		if ($start)
-		{
-			$filter["modified"] = ">=$start";
-		}
 		$thingies = new object_list($filter);
 
 		$clist = aw_ini_get("classes");
@@ -249,19 +248,47 @@ class site_translation extends class_base
 		{
 			$langs = array($l->fetch($l->get_langid_for_code($this->target_lang_code)));
 		}
+		// untranslated stuff is the objects that are marked as "needs translation" and 
+		// has no translation objects created in any language
 		foreach($thingies->arr() as $item)
 		{
 			$lch = array();
+
+			$g_modified = $item->modified();
+
+			$co = $item->connections_from(array(
+				"type" => RELTYPE_TRANSLATION
+			));
+			$co_lg = array();
+			foreach($co as $c)
+			{
+				$co_lg[$c->prop("to.lang_id")] = $c;
+				$g_modified = max($g_modified, $c->prop("to.modified"));
+			}
+
+
 			foreach($langs as $lid => $lg)
 			{
-				if ($item->lang() != $lg["acceptlang"])
+				if ($item->lang() != $lg["acceptlang"] && (!isset($co_lg[$lid])))
 				{
+					// check if this language translation is not in the translated objects list
 					$lch[] = html::href(array(
 						"url" => $this->mk_my_orb("create",array("id" => $item->id(),"dstlang" => $lg["acceptlang"]),"object_translation"),
 						"caption" => $lg["name"],
 						"target" => "_blank"
 					));
 				}
+			}
+
+			if ($start && $g_modified < $start)
+			{
+				continue;
+			}
+
+
+			if (count($lch) < 1)
+			{
+				continue;
 			}
 
 			$clfile = $this->cfg["classes"][$item->class_id()]["file"];
@@ -307,18 +334,16 @@ class site_translation extends class_base
 			$args["request"]["clid"] = CL_MENU;
 		}
 
+		$o = $args["obj_inst"];
+
 		$filter = array(
 			"flags" => array(
-				"mask" => OBJ_IS_TRANSLATED|OBJ_NEEDS_TRANSLATION,
-				"flags" => OBJ_NEEDS_TRANSLATION|OBJ_IS_TRANSLATED
+				"mask" => OBJ_NEEDS_TRANSLATION,
+				"flags" => OBJ_NEEDS_TRANSLATION
 			),
 			"class_id" => in_array($args["request"]["clid"],$this->clid) ? $args["request"]["clid"] : $this->clid,
 			"lang_id" => $this->base_lang_id,
 		);
-		if ($start)
-		{
-			$filter["modified"] = ">=$start";
-		}
 		$thingies = new object_list($filter);
 
 		load_vcl("table");
@@ -371,34 +396,61 @@ class site_translation extends class_base
 
 		foreach($thingies->arr() as $item)
 		{
+			$g_modified = $item->modified();
+
 			$co = $item->connections_from(array(
 				"type" => RELTYPE_TRANSLATION
 			));
 			$lch = array();
 			foreach($co as $conn)
 			{
-				if ($conn->prop("to.lang_id") != $langs[$item->lang()]["id"])
+				if (($conn->prop("to.lang_id") != $langs[$item->lang()]["id"]) && 
+					(($conn->prop("to.flags") & OBJ_IS_TRANSLATED) == OBJ_IS_TRANSLATED))
 				{
-					$lch[] = html::href(array(
+					$lch[$langs_id[$conn->prop("to.lang_id")]["acceptlang"]] = html::href(array(
 						"url" => $this->mk_my_orb("create",array("id" => $item->id(),"dstlang" => $langs_id[$conn->prop("to.lang_id")]["acceptlang"]),"object_translation"),
 						"caption" => $langs_id[$conn->prop("to.lang_id")]["name"],
 						"target" => "_blank"
 					));
+					$g_modified = max($g_modified, $conn->prop("to.modified"));
 				}
 			}
 
-			$clfile = $this->cfg["classes"][$item->class_id()]["file"];
-			$t->define_data(array(
-				"id" => $item->id(),
-				"name" => html::href(array(
-					"url" => $this->mk_my_orb("change", array("id" => $item->id()), $clfile),
-					"caption" => $item->name(),
-					"target" => "_blank"
-				)),
-				"class_id" => $item->class_id(),
-				"base_lang" => $this->base_lang_code,
-				"action" => join(" | ", $lch),
-			));
+			if ($start && $g_modified < $start)
+			{
+				continue;
+			}
+
+			ksort($lch);
+
+			// now, don't show the object if it is not translated to any languages
+			// if it is, then check if all languages are marked fully translated and the translation object requires it
+			$show = true;
+
+			if (count($lch) < 1)
+			{
+				$show = false;
+			}
+			if ($o->prop("translated_all_langs") && count($lch) != (count($langs)- 1))
+			{
+				$show = false;
+			}
+
+			if ($show)
+			{
+				$clfile = $this->cfg["classes"][$item->class_id()]["file"];
+				$t->define_data(array(
+					"id" => $item->id(),
+					"name" => html::href(array(
+						"url" => $this->mk_my_orb("change", array("id" => $item->id()), $clfile),
+						"caption" => $item->name(),
+						"target" => "_blank"
+					)),
+					"class_id" => $this->cfg["classes"][$item->class_id()]["name"],
+					"base_lang" => $this->base_lang_code,
+					"action" => join(" | ", $lch),
+				));
+			}
 		};
 
 		return $t->draw();
@@ -432,17 +484,15 @@ class site_translation extends class_base
 
 		$filter = array(
 			"flags" => array(
-				"mask" => OBJ_IS_TRANSLATED|OBJ_NEEDS_TRANSLATION, 
+				"mask" => OBJ_NEEDS_TRANSLATION, 
 				"flags" => OBJ_NEEDS_TRANSLATION
 			),
 			"class_id" => in_array($args["request"]["clid"],$this->clid) ? $args["request"]["clid"] : $this->clid,
 			"lang_id" => $this->base_lang_id,
 		);
-		if ($start)
-		{
-			$filter["modified"] = ">=$start";
-		}
 		$thingies = new object_list($filter);
+
+		$o = new object($args["obj"]["oid"]);
 
 		load_vcl("table");
 		$t = new aw_table(array(
@@ -494,13 +544,35 @@ class site_translation extends class_base
 
 		foreach($thingies->arr() as $item)
 		{
+			$g_modified = $item->modified();
+
 			$co = $item->connections_from(array(
 				"type" => RELTYPE_TRANSLATION
 			));
 			$lch = array();
+			// show all objects that have some translation objects that are not marked completed
+			$all_translated = count($conn) == (count($langs) - 1);
+
 			foreach($co as $conn)
 			{
-				if ($conn->prop("to.lang_id") != $langs[$item->lang()]["id"])
+				if (($conn->prop("to.flags") & OBJ_IS_TRANSLATED) != OBJ_IS_TRANSLATED)
+				{
+					$all_translated = false;
+				}
+
+				$show = true;
+				if (!$o->prop("translated_all_langs"))
+				{
+					$show = (($conn->prop("to.lang_id") != $langs[$item->lang()]["id"]) && 
+					(($conn->prop("to.flags") & OBJ_IS_TRANSLATED) != OBJ_IS_TRANSLATED));
+				}
+				else
+				{
+					// show it even if the translation is completed
+					$show = $conn->prop("to.lang_id") != $langs[$item->lang()]["id"];
+				}
+
+				if ($show)
 				{
 					$lch[] = html::href(array(
 						"url" => $this->mk_my_orb("create",array("id" => $item->id(),"dstlang" => $langs_id[$conn->prop("to.lang_id")]["acceptlang"]),"object_translation"),
@@ -508,7 +580,28 @@ class site_translation extends class_base
 						"target" => "_blank"
 					));
 				}
+				$g_modified = max($g_modified, $conn->prop("to.modified"));
 			}
+
+			// modified is set to latest translation save
+			if ($start && $g_modified < $start)
+			{
+				continue;
+			}
+
+			if ($o->prop("translated_all_langs"))
+			{
+				if ($all_translated)
+				{
+					continue;
+				}
+			}
+
+			if (count($lch) < 1)
+			{
+				continue;
+			}
+	
 
 			$clfile = $this->cfg["classes"][$item->class_id()]["file"];
 			$t->define_data(array(
@@ -518,7 +611,7 @@ class site_translation extends class_base
 					"caption" => $item->name(),
 					"target" => "_blank"
 				)),
-				"class_id" => $item->class_id(),
+				"class_id" => $this->cfg["classes"][$item->class_id()]["name"],
 				"base_lang" => $this->base_lang_code,
 				"action" => join(" | ", $lch),
 			));

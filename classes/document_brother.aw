@@ -1,5 +1,169 @@
 <?php
 
+/*
+
+@classinfo trans=1
+
+@default table=documents
+@default group=general
+
+@property navtoolbar type=toolbar no_caption=1 store=no
+@caption Toolbar
+
+@property active type=checkbox ch_value=2 table=objects field=status
+@caption Aktiivne
+
+@property plugins type=callback callback=callback_get_doc_plugins table=objects field=meta method=serialize
+@caption Pluginad
+
+@property title type=textbox size=60 trans=1
+@caption Pealkiri
+
+@property subtitle type=textbox size=60 trans=1
+@caption Alapealkiri
+
+@property author type=textbox size=60 trans=1
+@caption Autor
+
+@property photos type=textbox size=60 trans=1
+@caption Fotode autor
+
+@property keywords type=textbox size=60 trans=1
+@caption Võtmesõnad
+
+@property names type=textbox size=60 trans=1
+@caption Nimed
+
+@property lead type=textarea richtext=1 cols=60 rows=10 trans=1
+@caption Lead
+
+@property content type=textarea richtext=1 cols=60 rows=30 trans=1
+@caption Sisu
+
+@property moreinfo type=textarea richtext=1 cols=60 rows=5 trans=1
+@caption Lisainfo
+
+@property link_text type=textbox size=60
+@caption URL
+
+@property is_forum type=checkbox ch_value=1
+@caption Foorum
+
+@property showlead type=checkbox ch_value=1 default=1
+@caption Näita leadi
+
+@property show_modified type=checkbox ch_value=1
+@caption Näita muutmise kuupäeva
+
+//---------------
+@property no_right_pane type=checkbox ch_value=1 group=settings
+@caption Ilma parema paanita
+
+@property no_left_pane type=checkbox ch_value=1 group=settings
+@caption Ilma vasaku paanita
+
+@property title_clickable type=checkbox ch_value=1 group=settings
+@caption Pealkiri klikitav
+
+@property clear_styles type=checkbox ch_value=1 store=no
+@caption Tühista stiilid
+
+@property link_keywords type=checkbox ch_value=1 store=no
+@caption Lingi võtmesõnad
+
+@property esilehel type=checkbox ch_value=1 group=settings
+@caption Esilehel
+
+@property frontpage_left type=checkbox ch_value=1
+@caption Esilehel tulbas
+
+@property dcache type=checkbox store=no
+@caption Cache otsingu jaoks
+
+@property dcache_content type=hidden field=dcache 
+@property rating type=hidden 
+@property num_ratings type=hidden 
+
+
+@property show_title type=checkbox ch_value=1
+@caption Näita pealkirja
+
+@property no_search type=checkbox ch_value=1
+@caption Jäta otsingust välja
+
+@property cite type=textarea cols=60 rows=10
+@caption Tsitaat
+
+@property tm type=textbox size=20
+@caption Kuupäev
+
+@property show_print type=checkbox ch_value=1 table=objects field=meta method=serialize default=1
+@caption 'Prindi' nupp
+
+@property sections type=select multiple=1 size=20 group=vennastamine store=no
+@caption Sektsioonid
+
+@property aliasmgr type=aliasmgr store=no editonly=1 group=relationmgr trans=1
+@caption Aliastehaldur
+
+@property start type=date_select table=planner group=calendar
+@caption Algab (kp)
+
+@property start1 type=datetime_select field=start table=planner group=calendar
+@caption Algab 
+
+@property createdby table=objects field=createdby group=general type=text
+@caption Kes tegi
+
+@property user1 table=documents group=general type=textbox size=60
+@caption Kasutaja defineeritud 1
+
+@property user2 table=documents group=general type=textarea rows=2 cols=60
+@caption Kasutaja defineeritud 2
+
+@property user3 table=documents group=general type=textarea rows=2 cols=60
+@caption Kasutaja defineeritud 3
+
+@property user4 table=documents group=general type=textarea rows=2 cols=60
+@caption Kasutaja defineeritud 4
+
+@property user5 table=documents group=general type=textarea rows=2 cols=60
+@caption Kasutaja defineeritud 5
+
+@property user6 table=documents group=general type=textarea rows=5 cols=60
+@caption Kasutaja defineeritud 6
+
+@property language type=text group=general type=text store=no
+@caption Keel
+
+@property duration type=time_select field=end table=planner group=calendar
+@caption Kestab
+
+@property link_calendars type=callback store=no callback=callback_gen_link_calendars group=calendar
+@caption Vali kalendrid, millesse see sündmus veel salvestatakse.
+
+@property calendar_relation type=select field=meta method=serialize group=general table=objects
+@caption Põhikalender
+
+@property gen_static type=checkbox store=no
+@caption Genereeri staatiline
+
+
+@property sbt type=submit value=Salvesta store=no 
+
+@groupinfo calendar caption=Kalender
+@groupinfo vennastamine caption=Vennastamine
+@groupinfo settings caption=Seadistused
+@groupinfo relationmgr caption=Seostehaldur submit=no
+
+@tableinfo documents index=docid master_table=objects master_index=brother_of
+@tableinfo planner index=id master_table=objects master_index=brother_of
+
+@classinfo trans=1
+
+*/
+
+
 classload("document");
 class document_brother extends document
 {

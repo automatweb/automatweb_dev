@@ -775,19 +775,7 @@ class _int_object
 
 		$prev = $this->obj["properties"][$key];
 
-		if ($this->properties[$key]["method"] == "bitmask")
-		{
-			$mask = $this->properties[$key]["ch_value"];
-			$field = $this->properties[$key]["field"];
-			$prev = $this->obj["properties"][$field];
-			$sx = (($prev & $mask) xor $val) ? ($val) ? $mask : -$mask : 0;
-			$this->obj["properties"][$field] += (($prev & $mask) xor $val) ? ($val) ? $mask : -$mask : 0;
-		}
-		else
-		{
-			$field = $key;
-			$this->obj["properties"][$key] = $val;
-		};
+		$this->obj["properties"][$key] = $val;
 
 		// if this is an object field property, sync to object field
 		if ($this->properties[$key]["table"] == "objects")
@@ -795,6 +783,15 @@ class _int_object
 			if ($this->properties[$key]["field"] == "meta")
 			{
 				$this->obj["meta"][$this->properties[$key]["name"]] = $val;
+			}
+			if ($this->properties[$key]["method"] == "bitmask")
+			{
+				// it's flags, sync to that
+				$mask = $this->obj["flags"];
+				// zero out cur field bits
+				$mask = $mask & (~((int)$this->properties[$key]["ch_value"]));
+				$mask = $mask | $val;
+				$this->obj["flags"] = $mask;
 			}
 			else
 			{
