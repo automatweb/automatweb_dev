@@ -1,0 +1,123 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>tpl_lead</name>
+            <type>select</type>
+            <table>menu</table>
+            <group>show</group>
+            <field>tpl_lead</field>
+            <caption>Template näitamiseks</caption>
+      </property>
+      <property>
+            <name>tpl_edit</name>
+            <type>select</type>
+            <table>menu</table>
+            <group>show</group>
+            <field>tpl_edit</field>
+            <caption>Template muutmiseks</caption>
+      </property>
+      <property>
+            <name>type</name>
+            <type>select</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Kasti tüüp</caption>
+      </property>
+      <property>
+            <name>link</name>
+            <type>textbox</type>
+            <table>menu</table>
+            <group>general</group>
+            <field>link</field>
+            <caption>Link</caption>
+      </property>
+      <property>
+            <name>link_caption</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Lingi kirjeldus</caption>
+      </property>
+      <property>
+            <name>no_title</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <value>1</value>
+            <group>show</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Ilma pealkirjata</caption>
+      </property>
+      <property>
+            <name>groups</name>
+            <type>select</type>
+            <multiple>1</multiple>
+            <size>15</size>
+            <group>show</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Grupid, kellele kasti näidata</caption>
+      </property>
+      <property>
+            <name>section</name>
+            <type>select</type>
+            <multiple>1</multiple>
+            <size>15</size>
+            <group>menus</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vali menüüd, mille all kasti näidata</caption>
+      </property>
+      <property>
+            <name>last_menus</name>
+            <type>select</type>
+            <multiple>1</multiple>
+            <size>15</size>
+            <group>menus</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vali menüüd, mille alt viimaseid dokumente võetakse</caption>
+      </property>
+      <property>
+            <name>ndocs</name>
+            <type>textbox</type>
+            <size>4</size>
+            <group>menus</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Mitu viimast dokumenti</caption>
+      </property>
+      <classinfo>
+            <objtable>menu</objtable>
+            <objtable_index>id</objtable_index>
+      </classinfo>
+      <groupinfo>
+            <general>
+                  <caption>Üldine</caption>
+                  <default>1</default>
+            </general>
+            <menus>
+                  <caption>Menüüd</caption>
+            </menus>
+            <show>
+                  <caption>Näitamine</caption>
+            </show>
+      </groupinfo>
+      <tableinfo>
+            <menu>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </menu>
+      </tableinfo>
+</properties>
+
