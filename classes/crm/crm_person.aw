@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.29 2004/05/25 08:30:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.30 2004/06/16 07:45:47 ahti Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -209,7 +209,7 @@ CREATE TABLE `kliendibaas_isik` (
 @reltype PHONE value=13 clid=CL_CRM_PHONE
 @caption Telefon
 
-@reltype PROFILE value=14 clid=CL_PROFIIL
+@reltype PROFILE value=14 clid=CL_PROFILE
 @caption Profiil
 
 reltype USER_DATA value=15 
