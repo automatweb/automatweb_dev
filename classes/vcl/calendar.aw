@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.41 2004/12/16 15:59:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.42 2004/12/16 19:33:45 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -101,6 +101,11 @@ class vcalendar extends aw_template
 		if (!empty($arr["full_weeks"]))
 		{
 			$this->full_weeks = $arr["full_weeks"];
+		};
+
+		if (!empty($arr["target_section"]))
+		{
+			$this->target_section = $arr["target_section"];
 		};
 
 
@@ -481,6 +486,37 @@ class vcalendar extends aw_template
 		// a correct url
 		$urlsufix = strpos(aw_global_get("REQUEST_URI"),"?") === false ? "?" : "";
 
+		$prevlink = aw_url_change_var(array(
+			"date" => $this->range["prev"],
+			"section" => $this->target_section,
+		));
+
+		$nextlink = aw_url_change_var(array(
+			"date" => $this->range["next"],
+			"section" => $this->target_section,
+		));
+
+		if ($this->template_has_var("prevweek_link"))
+		{
+			$weekrange = get_date_range(array(
+				"type" => "week",
+				"time" => $this->range["timestamp"],
+			));
+
+			$this->vars(array(
+				"prevweek_link" => aw_url_change_var(array(
+					"viewtype" => "week",
+					"date" => $weekrange["prev"],
+					"target_section" => $this->target_section,
+				)),
+				"nextweek_link" => aw_url_change_var(array(
+					"viewtype" => "week",
+					"date" => $weekrange["next"],
+					"target_section" => $this->target_section,
+				)),
+			));
+		};
+
 		$this->vars(array(
 			"PAGE" => $ts,
 			"mininaviurl" => aw_url_change_var("date","") . $urlsufix,
@@ -489,8 +525,8 @@ class vcalendar extends aw_template
 			"years" => html::picker($y,$years),
 			"content" => $content,
 			"caption" => $caption,
-			"prevlink" => aw_url_change_var("date",$this->range["prev"]),
-			"nextlink" => aw_url_change_var("date",$this->range["next"]),
+			"prevlink" => $prevlink,
+			"nextlink" => $nextlink,
 			"overview" => $mn,
 			"today_url" => aw_url_change_var(array("viewtype" => "day","date" => date("d-m-Y"))),
 			"today_date" => date("d.m.Y"),
@@ -1026,7 +1062,12 @@ class vcalendar extends aw_template
 				}
 				else
 				{
-					$day_url = aw_url_change_var(array("viewtype" => "day","event_id" => "","date" => date("d-m-Y",$reals)));
+					$day_url = aw_url_change_var(array(
+						"viewtype" => "day",
+						"event_id" => "",
+						"date" => date("d-m-Y",$reals),
+						"section" => $this->target_section,
+					));
 				};
 
 				// cell_empty has class, doesn't have a link, used to show days with no events
@@ -1064,16 +1105,22 @@ class vcalendar extends aw_template
 		$mon = locale::get_lc_month(date("m",$arr["timestamp"]));
 		$caption =  $mon . " " . date("y",$arr["timestamp"]);
 
-		$caption_url = aw_url_change_var(array("viewtype" => "month","date" => date("d-m-Y",$arr["timestamp"])));
+		$caption_url = aw_url_change_var(array(
+			"viewtype" => "month",
+			"date" => date("d-m-Y",$arr["timestamp"]),
+			"section" => $this->target_section,
+		));
 
 		$prev_url = aw_url_change_var(array(
 			"viewtype" => "month",
 			"date" => date("d-m-Y",mktime(0,0,0,$m-1,$d,$y)),
+			"section" => $this->target_section,
 		));
 		
 		$next_url = aw_url_change_var(array(
 			"viewtype" => "month",
 			"date" => date("d-m-Y",mktime(0,0,0,$m+1,$d,$y)),
+			"section" => $this->target_section,
 		));
 
 		$prev_month = t("Eelmine kuu");
