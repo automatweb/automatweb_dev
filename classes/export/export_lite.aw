@@ -765,13 +765,14 @@ class export_lite extends aw_template
 		));
 		
 		$op = "HEAD / HTTP/1.0\r\n";
+		$op .= "User-Agent: AW-EXPORT-LITE\r\n";
 		$op .= "Host: $host".($port != 80 ? ":".$port : "" )."\r\n\r\n";
 
 		print "<pre>";
 		print "Acquiring session\n";
 		flush();
 
-//		echo "op = $op <br />";
+		//echo "op = $op <br />";
 		$socket->write($op);
 
 		$ipd="";
@@ -781,8 +782,8 @@ class export_lite extends aw_template
 			$ipd .= $data;
 		};
 
-//		echo "ipd = $ipd <br />";
-		if (preg_match("/automatweb=(\w+?);/",$ipd,$matches))
+		//echo "ipd = $ipd <br />";
+		if (preg_match("/automatweb=(.*);/",$ipd,$matches))
 		{
 			$cookie = $matches[1];
 		};
