@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.83 2003/09/08 14:18:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.84 2003/12/10 14:11:18 duke Exp $
 error_reporting(E_ALL ^ E_NOTICE);
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
@@ -200,7 +200,6 @@ define("FSUBTYPE_CAL_CONF2",32);
 // whether a form has any relation to a calendar
 define("FORM_USES_CALENDAR",58);
 
-
 // object flags - bitmask
 define("OBJ_FLAGS_ALL", (1 << 30)-1);	// this has all the flags checked, so you can build masks, by negating this
 
@@ -209,6 +208,8 @@ define("OBJ_HAS_CALENDAR",1);
 define("OBJ_NEEDS_TRANSLATION",2);
 // this will be set for objects whose translation has been checked/confirmed
 define("OBJ_IS_TRANSLATED",4);
+// this will be used for objects with calendar functionality
+define("OBJ_IS_DONE",8);
 
 // objektide subclassid - objects.subclass sees juusimiseks
 
