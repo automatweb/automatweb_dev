@@ -1,5 +1,0 @@
-<?xml version='1.0'?>
-<orb>
-	<class name="job_offer" folder="personalihaldus" extends="class_base">
-	</class>
-</orb>
