@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/xmlmenu.aw,v 2.1 2001/06/09 00:01:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/xmlmenu.aw,v 2.2 2001/06/21 19:57:11 duke Exp $
 // xmlmenu.aw - xml-i ja aw_template abil menüüde genereerimise skript
 classload("defs");
 class xmlmenu {
@@ -14,6 +14,25 @@ class xmlmenu {
 		$this->tpl = new aw_template();
 		$this->xmldef = $this->tpl->localparse($xmldef,$vars);
 	}
+
+	//// Ehitab menüü
+	// argumendid:
+	// vars(array) - muutujad
+	// xml(string) - path to xml definiton
+	// tpl(string) - path to template
+	// activelist(array) - list of active items
+	function build_menu($args = array())
+	{
+		extract($args);
+		$this->load_from_files(array(
+				"xml" => $xml,
+				"tpl" => $tpl,
+			));
+                return $this->create(array(
+                                "activelist" => $activelist,
+                        ));
+	}
+
 	
 	//// Impordib muutujad, mida kas template voi xml defi sees kasutakse
 	function vars($args = array())
