@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.8 2003/09/17 15:11:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.9 2003/10/05 20:42:14 duke Exp $
 // period.aw - periods 
 /*
 
@@ -65,9 +65,9 @@ class period extends class_base
 		$this->init_active_period_cache();
 	}
 
-	function get_property($args)
+	function get_property($arr)
 	{
-		$data = &$args["prop"];
+		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
@@ -83,13 +83,13 @@ class period extends class_base
 				break;
 
 			case "preview":
-				$perdat = $this->get_record("periods","obj_id",$args["obj"]["oid"]);
+				$perdat = $this->get_record("periods","obj_id",$arr["obj_inst"]->id());
 				// mk_my_orb doesn't let me create URL's to the site from admin,
 				// and I don't have time to fix it, so I have to do this.
 				$url = $this->cfg["baseurl"] . "?class=contents&action=show&period=$perdat[id]";
 				$data["value"] = html::href(array(
 					"url" => $url,
-					"caption" => $args["prop"]["caption"],
+					"caption" => $arr["prop"]["caption"],
 					"target" => "_blank",
 				));
 				break;
@@ -98,14 +98,14 @@ class period extends class_base
 		return $retval;
 	}
 
-	function set_property($args)
+	function set_property($arr)
 	{
-		$data = &$args["prop"];
+		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
 			case "activity":
-				$this->activate_period($args["form_data"]["activeperiod"],$this->oid);
+				$this->activate_period($arr["form_data"]["activeperiod"],$this->oid);
 				break;
 		};
 		return $retval;
@@ -150,14 +150,14 @@ class period extends class_base
 		}
 	}
 
-	function callback_post_save($args = array())
+	function callback_post_save($arr)
 	{
 		if (!empty($args["new"]))
 		{
-			$q = sprintf("INSERT periods (oid,obj_id) VALUES (%d,%d)",$this->oid,$args["id"]);
+			$q = sprintf("INSERT periods (oid,obj_id) VALUES (%d,%d)",$this->oid,$arr["obj_inst"]->id());
 			$this->db_query($q);
 		};
-		$perdata = $this->db_fetch_row("SELECT id FROM periods WHERE obj_id = $args[id]");
+		$perdata = $this->db_fetch_row("SELECT id FROM periods WHERE obj_id = " . $arr["obj_inst"]->id());
 		$id = $perdata["id"];
 		$this->cache->file_invalidate($this->cf_name.$id);
 		aw_cache_set("per_by_id", $id, false);
