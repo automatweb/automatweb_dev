@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.19 2002/12/10 13:26:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.20 2002/12/11 11:40:26 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -47,7 +47,7 @@ class form_element extends aw_template
 			),
 			"button" => array(
 				"" => "",
-				"submit" => "Submit", 
+				"submit" => "Submit",
 				"reset" => "Reset",
 				"delete" => "Kustuta",
 				"url" => "URL",
@@ -60,7 +60,7 @@ class form_element extends aw_template
 			),
 			"date" => array(
 				"" => "",
-				"from" => "Algus", 
+				"from" => "Algus",
 				"to" => "L&otilde;pp",
 				"expires" => "Aegumine",
 				"created" => "Loomine",
@@ -68,13 +68,16 @@ class form_element extends aw_template
 			),
 			"alias" => array(
 				"single" => "Ühekordne",
-				"multiple" => "Mitmekordne", 
+				"multiple" => "Mitmekordne",
 			),
 			"timeslice" => array(
 				"" => "",
 				"period" => "Periood",
 				"release" => "Release period",
 			),
+			"hidden" => array(
+				"" => ""
+			)
 		);
 
 		var $all_types = array(
@@ -91,14 +94,14 @@ class form_element extends aw_template
 			'date' => "Kuup&auml;ev",
 			'alias' => "Alias",
 			'timeslice' => "Ajaühik",
-	
+			'hidden' => 'Peidetud'
 		);
 
 	function form_element()
 	{
 		$this->init("");
 		$this->lc_load("form_element","lc_form_element");
-	
+
 		// we need that for wysiwyg "textareas"
 		$this->is_ie = !(strpos(aw_global_get("HTTP_USER_AGENT"),"MSIE") === false);
 
@@ -107,7 +110,7 @@ class form_element extends aw_template
 			'day' => $this->vars["SUBTYPE_TS_DAY"],
 		);
 
-	}	
+	}
 
 	////
 	// !Loads the element's settings from the data array passed as $arr
@@ -138,12 +141,12 @@ class form_element extends aw_template
 			"classid" => "small_button"
 		));
 
-		// now load the subtypes from the db or if they are not specified in the db, use all of them. 
+		// now load the subtypes from the db or if they are not specified in the db, use all of them.
 		// this function puts types and subtypes in $this->subtypes
 		$this->get_types_cached();
 
 			$this->vars(array(
-				"cell_id"									=> "element_".$this->id, 
+				"cell_id"									=> "element_".$this->id,
 				"cell_text"								=> htmlentities($this->arr["text"]),
 				"cell_name"								=> htmlentities($this->arr["name"]),
 				"cell_type_name"					=> htmlentities($this->arr["type_name"]),
@@ -182,7 +185,7 @@ class form_element extends aw_template
 				"search_field_in_set"			=> checked($this->arr["search_field_in_set"]),
 				"link_newwindow"					=> checked($this->arr["link_newwindow"])
 			));
-	
+
 			$this->vars(array(
 				"HAS_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_CONTROLLER") : "")
 			));
@@ -270,8 +273,8 @@ class form_element extends aw_template
 			}
 
 			$lb = "";
-			if ($this->arr["type"] == "listbox")		
-			{	
+			if ($this->arr["type"] == "listbox")
+			{
 				$this->vars(array(
 					"must_fill_checked" => checked($this->arr["must_fill"] == 1),
 					"must_error" => $this->arr["must_error"],
@@ -302,7 +305,7 @@ class form_element extends aw_template
 					}
 					$this->vars(array("LISTBOX_ITEMS_ACTIVITY" => $at));
 					$lb.=$this->parse("LISTBOX_ITEMS");
-				}	
+				}
 				$this->vars(array(
 					"HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE"),
 					"ACTIVITY" => $this->parse("ACTIVITY")
@@ -348,8 +351,8 @@ class form_element extends aw_template
 			}
 
 			$mu = "";
-			if ($this->arr["type"] == "multiple")		
-			{	
+			if ($this->arr["type"] == "multiple")
+			{
 				for ($b=0; $b < ($this->arr["multiple_count"]+1); $b++)
 				{
 					$this->vars(array(
@@ -363,7 +366,7 @@ class form_element extends aw_template
 						"num" => $b
 					));
 					$mu.=$this->parse("MULTIPLE_ITEMS");
-				}	
+				}
 				$this->vars(array(
 					"lb_size" => $this->arr["mb_size"]
 				));
@@ -439,7 +442,7 @@ class form_element extends aw_template
 				));
 				$gp = $this->parse("RADIO_ITEMS");
 			}
-			
+
 			$dt="";
 			if ($this->arr["type"] == "textbox")
 			{
@@ -574,7 +577,7 @@ class form_element extends aw_template
 					"aliaslist" => $this->picker($this->arr["alias"],$aliaslist),
 					"aliastype" => $this->picker($this->arr["alias_type"],$atypelist),
 				));
-				
+
 				$al = $this->parse("ALIASES");
 			}
 
@@ -660,7 +663,7 @@ class form_element extends aw_template
 					}
 				}
 				$has_all = false;
-				if ($this->arr["has_year"] != 1 && $this->arr["has_month"] != 1 && $this->arr["has_day"] != 1 && 
+				if ($this->arr["has_year"] != 1 && $this->arr["has_month"] != 1 && $this->arr["has_day"] != 1 &&
 						$this->arr["has_hr"] != 1 && $this->arr["has_minute"] != 1 && $this->arr["has_second"] != 1)
 				{
 					$has_all = true;
@@ -704,6 +707,11 @@ class form_element extends aw_template
 				));
 			}
 
+			if ($this->arr['type'] == 'hidden')
+			{
+				$dt = $this->parse("DEFAULT_TEXT");
+			}
+			
 			if ($this->form->arr["save_table"] == 1)
 			{
 				$tar = array("" => "");
@@ -737,8 +745,8 @@ class form_element extends aw_template
 				$this->vars(array("TABLE_LB" => $_tbp));
 			}
 			$this->vars(array(
-				"LISTBOX_ITEMS"		=> $lb, 
-				"MULTIPLE_ITEMS"	=> $mu, 
+				"LISTBOX_ITEMS"		=> $lb,
+				"MULTIPLE_ITEMS"	=> $mu,
 				"TEXTAREA_ITEMS"	=> $ta,
 				"RADIO_ITEMS"			=> $gp,
 				"DEFAULT_TEXT"		=> $dt,
@@ -751,7 +759,7 @@ class form_element extends aw_template
 				"DATE_ITEMS"			=> $di,
 				"ALIASES"			=> $al,
 			));
-	}	
+	}
 
 	function do_core_save(&$arr)
 	{
@@ -1090,7 +1098,7 @@ class form_element extends aw_template
 			
 		}
 
-		if ($this->arr["type"] == "textbox" || $this->arr["type"] == "textarea" || $this->arr["type"] == "checkbox" || $this->arr["type"] == "radiobutton")
+		if ($this->arr["type"] == "textbox" || $this->arr["type"] == "textarea" || $this->arr["type"] == "checkbox" || $this->arr["type"] == "radiobutton" || $this->arr['type'] == 'hidden')
 		{
 			$var=$base."_def";
 			$this->arr["default"] = $$var;
@@ -2378,8 +2386,12 @@ class form_element extends aw_template
 					$html .= $de->gen_edit_form($element_name, ($vl ? $vl : $def),($fy ? $fy : 2000),($ty ? $ty : 2005),true);
 				};
 				break;
+				
+			case "hidden":
+				$html .= '<input type="hidden" name="'.$element_name.'" value="'.$this->get_val($elvalues).'">';
+				break;
 		};
-		
+
 		if ($this->arr["type"] != "")
 		{
 			$sep_ver = ($this->arr["text_distance"] > 0 ? "<br /><img src='/images/transa.gif' width='1' height='".$this->arr["text_distance"]."' border='0' /><br />" : "<br />");
@@ -2391,7 +2403,7 @@ class form_element extends aw_template
 		}
 		else
 		if ($this->arr["text_pos"] == "down")
-		{	
+		{
 			$html = $html.$sep_ver.$text;
 		}
 		else
@@ -2447,7 +2459,7 @@ class form_element extends aw_template
 		}
 		else
 		// if a default value controller is specified, then get the value from that
-		if ($this->arr["default_controller"]) 
+		if ($this->arr["default_controller"])
 		{
 			$val = $this->form->controller_instance->eval_controller($this->arr["default_controller"], "", &$this->form, $this);
 		}
