@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.5 2001/05/22 05:07:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.6 2001/05/22 05:42:23 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -1759,11 +1759,16 @@ class messenger extends menuedit_light
 	{
 		extract($args);
 		global $status_msg;
+		$q = "SELECT folder FROM messages WHERE id = '$id'";
+		$this->db_query($q);
+		$row = $this->db_next();
+		$folder = $row["folder"];
 		$status_msg = "Teade kustutati";
 		session_register("status_msg");
 		$this->driver->msg_delete($args);
 		return $this->mk_site_orb(array(
-			"action" => "folders",
+			"action" => "folder",
+			"id" => $folder,
 		));
 	}
 	
