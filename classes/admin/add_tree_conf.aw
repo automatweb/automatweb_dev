@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.19 2004/10/22 10:25:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.20 2004/10/28 11:11:57 kristo Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -85,7 +85,9 @@ class add_tree_conf extends class_base
 			$visible = array();
 			$usable = array();
 			$alias_add = array();
-			foreach($this->cfg["classfolders"] as $id => $d)
+			
+			$clsf = aw_ini_get("classfolders");
+			foreach($clsf as $id => $d)
 			{
 				$visible["fld"][$id] = 1;
 			}
@@ -150,7 +152,8 @@ class add_tree_conf extends class_base
 		}
 
 		$this->level++;
-		foreach($this->cfg["classfolders"] as $id => $cfd)
+		$clsf = aw_ini_get("classfolders");
+		foreach($clsf as $id => $cfd)
 		{
 			if ($cfd["parent"] == $parent)
 			{

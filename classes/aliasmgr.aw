@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.156 2004/10/27 16:23:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.157 2004/10/28 11:12:00 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -1351,15 +1351,6 @@ HTM;
 			{
 				// add folders
 				$nm = $cldat["name"];
-/*				if ($cldat["parents"] != "")
-				{
-					list($pt) = explode(",", $cldat["parents"]);
-					while (isset($this->cfg["classfolders"][$pt]))
-					{
-						$nm = $this->cfg["classfolders"][$pt]["name"]."/".$nm;
-						$pt = $this->cfg["classfolders"][$pt]["parent"];
-					}
-				}*/
 				$ret[$clid] = $nm;
 			}
 		}

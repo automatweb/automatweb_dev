@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.86 2004/10/27 12:04:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.87 2004/10/28 11:11:57 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -153,11 +153,12 @@ class admin_menus extends aw_template
 			}
 		}
 
-		if (is_array($this->cfg["classfolders"]))
+		$clsf = aw_ini_get("classfolders");
+		if (is_array($clsf))
 		{
 			// uh, but isn't this highly inefficient? to cycle over the array each 
 			// fscking time?
-			foreach($this->cfg["classfolders"] as $fid => $fdata)
+			foreach($clsf as $fid => $fdata)
 			{
 				if ($fdata["parent"] == $prnt)
 				{
