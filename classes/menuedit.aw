@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.332 2004/09/09 16:09:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.333 2004/10/08 15:26:13 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -534,7 +534,22 @@ class menuedit extends aw_template
 			if (!(($section > 0) && $this->can("view", $section))) 
 			{
 				$this->_log(ST_MENUEDIT, SA_NOTEXIST,sprintf(LC_MENUEDIT_TRIED_ACCESS2,$section), $section);
-				$section = $frontpage;
+				if ($show_errors)
+				{
+					if (aw_ini_get("menuedit.login_on_no_access") == 1)
+					{
+						classload("auth");
+						auth::redir_to_login();
+					}
+					else
+					{
+						$this->_do_error_redir($section);
+					}
+				}
+				else
+				{
+					$section = $frontpage;
+				}
 			}
 			else
 			{
