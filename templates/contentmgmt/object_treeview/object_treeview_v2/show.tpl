@@ -22,7 +22,7 @@ text-decoration: none;
 
 <!-- END SUB: FOLDERS -->
 <table class="{VAR:table_css_class}" border="0" width="100%" cellpadding="3" cellspacing="0">
-	<tr bgcolor="{VAR:header_bgcolor}">
+	<tr bgcolor="{VAR:header_bgcolor}" {VAR:style_text}>
 
 		<!-- SUB: HEADER -->
 		<td class="{VAR:header_css_class}">{VAR:h_text}</td>
@@ -30,7 +30,7 @@ text-decoration: none;
 
 	</tr>
 	<!-- SUB: FILE -->
-	<tr bgcolor="{VAR:bgcolor}">
+	<tr bgcolor="{VAR:bgcolor}" {VAR:style_text}>
 
 		<!-- SUB: COLUMN -->
 		<td class="{VAR:css_class}">{VAR:content}</td>
