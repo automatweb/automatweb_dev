@@ -40,9 +40,12 @@ function ch(el, f_el,suf)
 	clearList(el);
 	for (i=0; i < elements.length; i++)
 	{
-		if (elements[i][0] == sf)
+		if (typeof(elements[i]) != "undefined")
 		{
-			el.options[el.length] = new Option(elements[i][2],""+elements[i][1],false,false);
+			if (elements[i][0] == sf)
+			{
+				el.options[el.length] = new Option(elements[i][2],""+elements[i][1],false,false);
+			}
 		}
 	}
 }
