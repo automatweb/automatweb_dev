@@ -82,6 +82,7 @@ function submit_changeform()
 }
 </script>
 </form>
+</table>
 
 <!-- SUB: iframe_body_style -->
 body {
