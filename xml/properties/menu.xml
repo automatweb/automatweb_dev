@@ -143,6 +143,15 @@
             <caption>Näita ainult leadi</caption>
       </property>
       <property>
+            <name>show_lead_template</name>
+            <table>objects</table>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>advanced</group>
+            <caption>Leadi template</caption>
+      </property>
+      <property>
             <name>grkeywords</name>
             <table>objects</table>
             <type>select</type>
@@ -275,7 +284,7 @@
             <name>sa_manager</name>
             <table>menu</table>
             <type>relmanager</type>
-            <reltype>SEEALSO</reltype>
+            <reltype>RELTYPE_SEEALSO</reltype>
             <group>relations</group>
             <store>no</store>
             <field>sa_manager</field>
