@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.17 2001/05/23 07:05:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.18 2001/05/23 07:08:57 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -458,7 +458,7 @@ class messenger extends menuedit_light
 		$fld_info = $this->get_object($folder);
 		$folder_name = $fld_info["name"];
 
-		if ($folder == $this->user["msg_inbox"])
+		if ($id == $inbox)
 		{
 			$folder_name = "Inbox ($folder_name)";
 		};
@@ -467,7 +467,7 @@ class messenger extends menuedit_light
 
 		// Kirjade nimekiri selles folderis
 		$msglist = $this->driver->msg_list(array(
-			"folder" => $folder));
+			"folder" => $id));
 
 		$c = "";
 		$cnt = 0;
@@ -547,7 +547,7 @@ class messenger extends menuedit_light
 
 		$this->vars(array(
 			"line" => $c,
-			"folders_dropdown" => $this->picker($folder,$folder_list),
+			"folders_dropdown" => $this->picker($id,$folder_list),
 			"active_folder" => $folder,
 			"message_count" => verbalize_number($cnt),
 			"folder_name" => $folder_name,
