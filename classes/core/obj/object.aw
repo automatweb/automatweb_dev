@@ -41,7 +41,6 @@ $GLOBALS["of2prop"] = array();
 /////////////
 // TODO:
 // - separate, confable, possibly shared folders for caches: acl, search, connection, objdata/properties
-// - load all objdata with object_list, but don't unserialize metadata 
 // - don't load properties if not asked for, implement this by swithing the object instance in the objects array
 // - is object_list caching really worth it?
 // - merge objdata/propdata caches?
