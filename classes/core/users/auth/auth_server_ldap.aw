@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_ldap.aw,v 1.1 2004/10/18 15:37:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_ldap.aw,v 1.2 2004/10/19 21:02:06 duke Exp $
 // auth_server_ldap.aw - Autentimisserver LDAP 
 /*
 
@@ -23,7 +23,6 @@ class auth_server_ldap extends class_base
 	function auth_server_ldap()
 	{
 		$this->init(array(
-			"tpldir" => "core/users/auth/auth_server_ldap",
 			"clid" => CL_AUTH_SERVER_LDAP
 		));
 	}
@@ -52,7 +51,7 @@ class auth_server_ldap extends class_base
 
 	function check_auth($server, $credentials)
 	{
-		if (!function_exists("ldap_connect"))
+		if (!extension_loaded("ldap"))
 		{
 			error::throw(array(
 				"id" => "ERR_NO_LDAP",
