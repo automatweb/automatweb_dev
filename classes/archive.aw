@@ -92,6 +92,23 @@ class archive extends aw_template {
 			"file" => $fname,
 			"content" => $args["content"],
 		));
+		$meta = $this->obj_get_meta(array("oid" => $oid));
+
+		$arc = $meta["archive"];
+
+		$arc[$tstamp] = array(
+			"timestamp" => $tstamp,
+			"uid" => UID,
+			"name" => $name,
+			"comment" => $comment,
+		);
+
+		$this->obj_set_meta(array(
+			"oid" => $oid,
+			"meta" => array("archive" => $arc),
+		));
+
+		return $timestamp;
 	}
 
 	////
