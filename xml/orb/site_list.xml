@@ -37,13 +37,6 @@
 			</function>
 		</action>
 
-		<action name="init_list" all_args="1">
-			<function name="init_list">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="get_server_id_by_ip" all_args="1">
 			<function name="get_server_id_by_ip">
 				<arguments>

@@ -287,7 +287,7 @@ class site_list extends class_base
 			if ($dat)
 			{
 				unset($arr['id']);
-				$sets = join(",", map2("%s = '%s'", $arr));
+				$sets = join(",", map2("%s = '%s'", $arr["fields"]));
 				$q = "UPDATE aw_site_list SET $sets WHERE id = '$id'";
 //				echo "updateq = $q <br />";
 				$this->db_query($q);
@@ -440,81 +440,6 @@ class site_list extends class_base
 			$ret[$row['id']] = $row;
 		}
 		return $ret;
-	}
-
-	/**  
-		
-		@attrib name=init_list params=name all_args="1" default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function init_list($arr)
-	{
-		extract($arr);
-		// the way this works is, it reads from the fg created table and sends the data to register.aw.com via xmlrpc
-
-//		aw_global_set("xmlrpc_dbg",1);
-		// first, the servers
-		$srvc = 0;
-		$this->db_query("
-			SELECT 
-				id AS id,
-				ev_37693 AS name,
-				ev_37695 AS ip,
-				ev_37697 AS comment
-			FROM form_37691_entries
-			LEFT JOIN objects ON objects.oid = form_37691_entries.id
-			WHERE objects.status != 0
-		");
-		while ($row = $this->db_next())
-		{
-			// send it via xmlrpc to site list server
-			echo "id = $row[id] name = $row[name] ip = $row[ip] comment = $row[comment] <br />";
-			unset($row['rec']);
-			$this->do_orb_method_call(array(
-				"class" => "site_list", 
-				"action" => "update_server", 
-//				"method" => "xmlrpc",
-//				"server" => "register.automatweb.com",
-				"params" => $row
-			));
-			$srvc++;
-		}
-
-		$sic = 0;
-		$this->db_query("
-			SELECT 
-				ev_37700 AS id,
-				ev_37686 AS name,
-				ev_37688 AS url,
-				form_37691_entries.id AS server_id,
-				el_41423 AS site_used,
-				ev_48054 AS code_branch
-			FROM form_37683_entries
-			LEFT JOIN objects ON objects.oid = form_37683_entries.id
-			LEFT JOIN form_37691_entries ON form_37691_entries.el_37693 = form_37683_entries.ev_37690
-			WHERE objects.status != 0
-		");
-		while ($row = $this->db_next())
-		{
-			// send it via xmlrpc to site list server
-			echo "id = $row[id] name = $row[name] url = $row[url] server_id = $row[server_id] site_used = $row[site_used] code_branch = $row[code_branch]  <br />";
-			unset($row['rec']);
-			$this->do_orb_method_call(array(
-				"class" => "site_list", 
-				"action" => "update_site", 
-//				"method" => "xmlrpc",
-//				"server" => "register.automatweb.com",
-				"params" => $row
-			));
-			$sic++;
-		}
-		echo "sent $srvc serverit ja $sic saiti <br />";
 	}
 
 	/** returns the id of the server that is marked as serving on ip address $ip 
