@@ -526,47 +526,99 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	// if class id is present, properties can also be filtered, otherwise only object table fields
 	function search($params)
 	{
-		$where = array();
+		$this->used_tables = array();
 
-		if ($params["class_id"] && !is_array($params["class_id"]))
+		// load property defs and table defs
+		if (isset($params["class_id"]))
 		{
-			$classes = aw_ini_get("classes");
-			list($properties, $tableinfo) = $GLOBALS["object_loader"]->load_properties(array(
-				"file" => $classes[$params["class_id"]]["file"],
-				"clid" => $params["class_id"]
-			));
-			if (isset($tableinfo["documents"]))
+			$clids = $params["class_id"];
+			if (!is_array($params["class_id"]))
 			{
-				$where["documents"] = array();
+				$clids = array($clids);
 			}
-		}
-		else
-		if (is_array($params["class_id"]))
-		{
+
 			$classes = aw_ini_get("classes");
-			$properties = array();
-			$tableinfo = array();
-			foreach($params["class_id"] as $clid)
+			$this->properties = array();
+			$this->tableinfo = array();
+
+			foreach($clids as $clid)
 			{
 				list($tmp, $tmp2) = $GLOBALS["object_loader"]->load_properties(array(
 					"file" => ($clid == CL_DOCUMENT ? "doc" : $classes[$clid]["file"]),
 					"clid" => $clid
 				));
-				$properties += $tmp;
+				$this->properties += $tmp;
 				if (is_array($tmp2))
 				{
-					$tableinfo += $tmp2;
+					$this->tableinfo += $tmp2;
 				}
-				if (isset($tableinfo["documents"]))
+				if (isset($this->tableinfo["documents"]))
 				{
-					$where["documents"] = array();
+					$this->used_tables["documents"] = "documents";
 				}
 			}
 		}
 
-		$stat = false;
-		$sby = "";
+		$this->stat = false;
+		$this->sby = "";
+		$this->limit = "";
 
+		$where = $this->req_make_sql($params);
+
+		if (!$this->stat)
+		{
+			$where .= ($where != "" ? " AND " : "")." objects.status != 0 ";
+		}
+
+		if (!isset($params["site_id"]))
+		{
+			$where .= ($where != "" ? " AND " : "")." objects.site_id = '".aw_ini_get("site_id")."' ";
+		}
+
+		if (!isset($params["lang_id"]))
+		{
+			$where .= ($where != "" ? " AND " : "")." objects.lang_id = '".aw_global_get("lang_id")."' ";
+		}
+
+		// make joins
+		$js = array();
+		foreach($this->used_tables as $tbl)
+		{
+			if ($tbl != "objects")
+			{
+				$js[] = " LEFT JOIN $tbl ON $tbl.".$this->tableinfo[$tbl]["index"]." = objects.brother_of ";
+			}
+		}
+		$joins = join("", $js);
+
+		$ret = array();
+		if ($where != "")
+		{
+			$q = "SELECT objects.oid FROM objects $joins WHERE $where ".$this->sby." ".$this->limit;
+			//echo "q = $q <br />";
+			$this->db_query($q);
+			while ($row = $this->db_next())
+			{
+				$ret[$row["oid"]] = $row["oid"];
+			}
+		}
+		return $ret;
+	}
+
+	function delete_object($oid)
+	{
+		$this->db_query("UPDATE objects SET status = '".STAT_DELETED."' WHERE oid = '$oid'");
+		$this->db_query("DELETE FROM aliases WHERE target = '$oid'");
+	}
+
+	function object_exists($oid)
+	{
+		return ($this->db_fetch_field("SELECT status FROM objects WHERE oid = '$oid'", "status") > 0);
+	}
+
+	function req_make_sql($params, $logic = "AND")
+	{
+		$sql = array();
 		foreach($params as $key => $val)
 		{
 			if ($val === NULL)
@@ -574,28 +626,30 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				continue;
 			}
 
-			if ($key == "status")
+			if ("sort_by" == (string)($key))
 			{
-				$stat = true;
-			}
-			if ($key == "sort_by")
-			{
-				$sby = " ORDER BY $val ";
+				$this->sby = " ORDER BY $val ";
 				continue;
 			}
-			if ($key == "limit")
+
+			if ("limit" == (string)($key))
 			{
-				$limit = " LIMIT $val ";
+				$this->limit = " LIMIT $val ";
 				continue;
+			}
+
+			if ("status" == (string)($key))
+			{
+				$this->stat = true;
 			}
 
 			$tbl = "objects";
 			$fld = $key;
-			if (isset($properties[$key]))
+			if (isset($this->properties[$key]))
 			{
-				$tbl = $properties[$key]["table"];
-				$fld = $properties[$key]["field"];
-				if ($fld == "meta" || $properties[$key]["method"] == "serialize")
+				$tbl = $this->properties[$key]["table"];
+				$fld = $this->properties[$key]["field"];
+				if ($fld == "meta" || $this->properties[$key]["method"] == "serialize")
 				{
 					error::throw(array(
 						"id" => ERR_FIELD,
@@ -604,10 +658,16 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 			}
 
-			if (($properties[$key]["method"] == "bitmask" || $key == "flags") && is_array($val))
+			$this->used_tables[$tbl] = $tbl;
+
+			if (($this->properties[$key]["method"] == "bitmask" || $key == "flags") && is_array($val))
 			{
-				$val = "& ".$val["mask"]." = ".$val["flags"];
-				$where[$tbl][] = $tbl.".".$fld." ".$val;
+				$sql[] = $tbl.".".$fld." & ".$val["mask"]." = ".$val["flags"];
+			}
+			else
+			if (is_object($val) && get_class($val) == "object_list_filter")
+			{
+				$sql[] = "(".$this->req_make_sql($val->filter["conditions"], $val->filter["logic"]).")";
 			}
 			else
 			if (is_array($val) || (is_object($val) && get_class($val) == "aw_array"))
@@ -631,7 +691,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$str = join(" OR ", $str);
 				if ($str != "")
 				{
-					$where[$tbl][] = " ( $str ) ";
+					$sql = " ( $str ) ";
 				}
 			}
 			else
@@ -639,76 +699,20 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				if ($key == "modified" || $key == "flags")
 				{
 					// pass all arguments .. &, >, < or whatever the user wants to
-					$where[$tbl][] = $tbl.".".$fld." ".$val;
+					$sql[] = $tbl.".".$fld." ".$val;
 				}
 				else
 				if (strpos($val,"%") !== false)
 				{
-					$where[$tbl][] = $tbl.".".$fld." LIKE '".$val."'";
+					$sql[] = $tbl.".".$fld." LIKE '".$val."'";
 				}
 				else
 				{
-					$where[$tbl][] = $tbl.".".$fld." = '".$val."'";
+					$sql[] = $tbl.".".$fld." = '".$val."'";
 				}
 			}
 		}
-
-		if (!$stat)
-		{
-			$where["objects"][] = " objects.status != 0 ";
-		}
-
-		if (!isset($params["site_id"]))
-		{
-			$where["objects"][] = " objects.site_id = '".aw_ini_get("site_id")."' ";
-		}
-
-		if (!isset($params["lang_id"]))
-		{
-			$where["objects"][] = " objects.lang_id = '".aw_global_get("lang_id")."' ";
-		}
-
-		// make joins
-		$js = array();
-		$t_w = array();
-		foreach($where as $tbl => $flds)
-		{
-			if ($tbl != "objects")
-			{
-				$js[] = " LEFT JOIN $tbl ON $tbl.".$tableinfo[$tbl]["index"]." = objects.brother_of ";
-			}
-			foreach($flds as $fld)
-			{
-				$t_w[] = $fld;
-			}
-		}
-		$joins = join("", $js);
-		$where = join(" AND ", $t_w);
-
-		$ret = array();
-
-		if ($where != "")
-		{
-			$q = "SELECT objects.oid FROM objects $joins WHERE $where $sby $limit";
-			//echo "q = $q <br />";
-			$this->db_query($q);
-			while ($row = $this->db_next())
-			{
-				$ret[$row["oid"]] = $row["oid"];
-			}
-		}
-		return $ret;
-	}
-
-	function delete_object($oid)
-	{
-		$this->db_query("UPDATE objects SET status = '".STAT_DELETED."' WHERE oid = '$oid'");
-		$this->db_query("DELETE FROM aliases WHERE target = '$oid'");
-	}
-
-	function object_exists($oid)
-	{
-		return ($this->db_fetch_field("SELECT status FROM objects WHERE oid = '$oid'", "status") > 0);
+		return join(" ".$logic." ", $sql);
 	}
 }
 
