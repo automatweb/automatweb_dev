@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.9 2004/12/03 16:05:09 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.10 2004/12/03 16:43:38 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -12,7 +12,7 @@
 @caption Initsialiseeri objekt
 
 @property def_mail type=textbox method=serialize field=meta
-@caption E-mailiaadress, millelt saadetakse sisestusi e-mailile
+@caption Saatja e-mail
 
 @property obj_name type=select multiple=1 size=3 field=meta method=serialize
 @caption Millised sisestatud väärtused pannakse nimeks
@@ -433,7 +433,7 @@ class webform extends class_base
 					),
 					array(
 						"name" => "Kontrolli e-maili õigsust",
-						"formula" => 'if(!is_email($prop["value"]){$retval = PROP_ERROR;}',
+						"formula" => 'if(!is_email($prop["value"])){$retval = PROP_ERROR;}',
 						"errmsg" => "Välja %caption sisestatud e-mailiaadress pole korrektne",
 					),
 					array(
@@ -981,14 +981,9 @@ class webform extends class_base
 		));
 		foreach ($this->cfgform_i->prplist as $prop)
 		{
-			$caption = $prop["caption"];
-			if(!$caption)
-			{
-				$caption = $prop["name"];
-			}
 			$retval[] = array(
 				"name" => "view_controllers[".$prop["name"]."]",
-				"caption" => $caption,
+				"caption" => $prop["caption"],
 				"type" => "select",
 				"multiple" => 1,
 				"size" => 3,
@@ -1009,14 +1004,9 @@ class webform extends class_base
 		));
 		foreach ($this->cfgform_i->prplist as $prop)
 		{
-			$caption = $prop["caption"];
-			if(!$caption)
-			{
-				$caption = $prop["name"];
-			}
 			$retval[] = array(
 				"name" => "controllers[".$prop["name"]."]",
-				"caption" => $caption,
+				"caption" => $prop["caption"],
 				"type" => "select",
 				"multiple" => 1,
 				"size" => 3,
@@ -1058,7 +1048,7 @@ class webform extends class_base
 		$rval = $this->draw_cfgform_from_ot(array(
 			"ot" => $object_type->id(),
 			"reforb" => array(
-				"section" => $section,
+				"return_url" => $section,
 				"id" => $arr["id"],
 			),
 			"errors" => $errors,

@@ -16,7 +16,7 @@
             <type>textbox</type>
             <method>serialize</method>
             <field>meta</field>
-            <caption>E-mailiaadress, millelt saadetakse sisestusi e-mailile</caption>
+            <caption>Saatja e-mail</caption>
       </property>
       <property>
             <name>obj_name</name>
