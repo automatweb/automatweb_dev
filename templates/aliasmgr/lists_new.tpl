@@ -30,14 +30,36 @@ function redir()
 {
 	with(document.foo)
 	{
-		if (aselect.selectedIndex == 0)
+		cl = aselect.options[aselect.selectedIndex].value;
+		if (cl == "capt_new_object")
 		{
-			alert('Vali alias!');
+			alert('Vali objekti tüüp!');
+		}
+		else
+		if (cl == "capt_new_relation")
+		{
+			alert('Vali seose tüüp!');
 		}
 		else
 		{
-			cl = aselect.options[aselect.selectedIndex].value;
-			window.location.href="orb.{VAR:ext}?class="+cl+"&action=new&parent={VAR:parent}&period={VAR:period}&alias_to={VAR:id}&return_url={VAR:return_url}";
+			if (cl.indexOf("reltype_") == 0)
+			{
+				is_reltype = 1;
+			}
+			else
+			{
+				is_reltype = 0;
+			};
+			if (is_reltype)
+			{
+				// the string "reltype_" is 8 characters long
+				reltype = cl.substr(8,2);
+				window.location.href="{VAR:create_relation_url}&reltype=" + reltype;
+			}
+			else
+			{
+				window.location.href="orb.{VAR:ext}?class="+cl+"&action=new&parent={VAR:parent}&period={VAR:period}&alias_to={VAR:id}&return_url={VAR:return_url}";
+			};
 		};
 	};
 };
