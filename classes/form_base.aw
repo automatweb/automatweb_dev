@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.42 2002/08/24 19:07:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.43 2002/08/29 03:16:40 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -146,14 +146,6 @@ class form_base extends form_db_base
 					$this->arr["contents"][$row][$col]->get_els(&$ret);
 					foreach($ret as $el)
 					{
-						// check if the element can be seen..
-						if (($arr = $this->get_spans($row, $col)))
-						{
-							$el_tbls["els"][$el->get_id()]["table"] = $el->get_save_table();
-							$el_tbls["els"][$el->get_id()]["col"] = $el->get_save_col();
-							$el_tbls["els"][$el->get_id()]["col2"] = $el->get_save_col2();
-						}
-
 						if ($this->arr["has_controllers"])
 						{
 							// save all the controllers used in this form to the database so we can easily look them up later
@@ -194,7 +186,39 @@ class form_base extends form_db_base
 						}
 					}
 				}
+			}
+		}
 
+		for ($col = 0; $col < $this->arr["cols"]; $col++)		
+		{
+			for ($row = 0; $row < $this->arr["rows"]; $row++)
+			{
+				// if we are adding rows/columns, then those objects might not be initialized yet
+				if (is_object($this) && is_object($this->arr["contents"][$row][$col]))
+				{
+					// check if the cell can be seen..
+					if (($arr = $this->get_spans($row, $col)))
+					{
+						if (is_object($this) && is_object($this->arr["contents"][$arr["r_row"]][$arr["r_col"]]))
+						{
+							$ret = array();
+							$this->arr["contents"][$arr["r_row"]][$arr["r_col"]]->get_els(&$ret);
+							foreach($ret as $el)
+							{
+								$el_tbls["els"][$el->get_id()]["table"] = $el->get_save_table();
+								$el_tbls["els"][$el->get_id()]["col"] = $el->get_save_col();
+								$el_tbls["els"][$el->get_id()]["col2"] = $el->get_save_col2();
+							}
+						}
+					}
+				}
+			}
+		}
+
+		for ($col = 0; $col < $this->arr["cols"]; $col++)		
+		{
+			for ($row = 0; $row < $this->arr["rows"]; $row++)
+			{
 				$this->arr["contents"][$row][$col] = "";
 			}
 		}
@@ -917,6 +941,15 @@ class form_base extends form_db_base
 				$this->arr["contents"][$row][$col] -> set_entry(&$this->entry, $entry_id);
 			};
 		};
+	}
+
+	////
+	// !this function "unloads" the current form entry
+	function unload_entry()
+	{
+		$this->entry_id = 0;
+		$this->entry = array();
+		$this->read_entry_from_array(0);
 	}
 
 	////
