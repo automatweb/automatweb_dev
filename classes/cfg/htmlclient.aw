@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.22 2003/03/13 13:47:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.23 2003/03/18 13:34:51 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -36,7 +36,7 @@ class htmlclient extends aw_template
 	{
 		// if value is array, then try to interpret
 		// it as a list of elements.
-		if (is_array($args["items"]))
+		if (isset($args["items"]) && is_array($args["items"]))
 		{
 			$res = "";
 			foreach($args["items"] as $el)
@@ -57,7 +57,7 @@ class htmlclient extends aw_template
 			$this->orb_vars[$args["name"]] = $args["value"];
 		}
 		else
-		if ($args["no_caption"])
+		if (isset($args["no_caption"]))
 		{
 			$this->put_content($args);
 		}
@@ -83,6 +83,7 @@ class htmlclient extends aw_template
 
 		// of course this should be here, where the hell else do you
 		// want it to be?
+		$val = "";
 		if ($args["type"] == "status")
 		{
 			if (!$args["value"])
@@ -274,18 +275,18 @@ class htmlclient extends aw_template
 
 			case "checkbox":
 				$retval = html::checkbox(array(
-					'label' => $arr['label'],
-					'name' => $arr['name'],
-					'value' => $arr['ch_value'],
-					'checked' => ($arr['value'] == $arr['ch_value'])
+					"label" => isset($arr["label"]) ? $arr["label"] : "",
+					"name" => $arr["name"],
+					"value" => $arr["ch_value"],
+					"checked" => ($arr["value"] == $arr["ch_value"])
 				));
 				break;
 
 			case "radiobutton":
 				$retval = html::radiobutton(array(
-					'name' => $arr['name'],
-					'value' => $arr['rb_value'],
-					'checked' => ($arr['value'] == $arr['rb_value'])
+					"name" => $arr["name"],
+					"value" => $arr["rb_value"],
+					"checked" => ($arr["value"] == $arr["rb_value"])
 				));
 				break;
 
