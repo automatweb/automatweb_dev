@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.36 2005/01/18 09:10:53 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.37 2005/01/18 13:38:09 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -2452,7 +2452,8 @@ class planner extends class_base
 	**/
 	function save_participant_search_results($arr)
 	{
-		foreach($ss as $part)
+		extract($arr);
+		foreach($sel_search as $part)
 		{
 			if (is_oid($part) && $this->can("view", $part))
 			{
