@@ -312,5 +312,13 @@ class layout extends class_base
 			RELTYPE_CELLSTYLE_FOLDER => "celli stiilide kataloog",
 		);
 	}
+
+	////
+	// !returns the layout data that can be fed to grid editor. useful when you can select a default layout
+	function get_layout($oid)
+	{
+		$ob = $this->get_object($oid);
+		return $ob['meta']['grid'];
+	}
 }
 ?>
