@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.62 2005/03/29 10:08:25 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.63 2005/03/29 10:50:21 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -2842,7 +2842,8 @@ if ($_GET["mrp_set_all_resources_available"])
 			"limit" => 30,
 			"minstart" => ($arr["request"]["group"] == "grp_printer_current" || $arr["request"]["group"] == "grp_printer" ? get_day_start() : NULL),
 			"maxend" => ($arr["request"]["group"] == "grp_printer_current" || $arr["request"]["group"] == "grp_printer" ? NULL : get_day_start()),
-			"onlydone" => ($arr["request"]["group"] == "grp_printer_done" ? true : false)
+			"onlydone" => ($arr["request"]["group"] == "grp_printer_done" ? true : false),
+			"not_done" => ($arr["request"]["group"] == "grp_printer_done" ? false : true),
 		));
 
 		$workers = $this->get_workers_for_resources($res);
@@ -3102,7 +3103,12 @@ if ($_GET["mrp_set_all_resources_available"])
 
 		if ($arr["onlydone"])
 		{
-			$filt["status"] = MRP_STATUS_DONE;
+			$filt["state"] = MRP_STATUS_DONE;
+		}
+
+		if ($arr["not_done"])
+		{
+			$filt["state"] = new obj_predicate_not(MRP_STATUS_DONE);
 		}
 
 		if ($arr["maxend"] > 100 )
