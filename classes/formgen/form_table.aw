@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.30 2003/01/30 12:34:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.31 2003/02/02 14:59:23 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -2177,6 +2177,13 @@ class form_table extends form_base
 		{
 			$this->table["defs"][$i]["els"] = $this->make_keys($cols[$i]["els"]);
 			$this->table["defs"][$i]["controllers"] = $this->make_keys($cols[$i]["controllers"]);
+			if ($this->table["defs"][$i]["link_el"])
+			{
+				$lel = $this->table["defs"][$i]["link_el"];
+				$ret[$els[$lel]][$lel] = $lel;
+				$this->table["defs"][$i]["el_forms"][$lel] = $els[$lel];
+			}
+
 			foreach($this->table["defs"][$i]["els"] as $elid)
 			{
 				$this->table["defs"][$i]["el_forms"][$elid] = $els[$elid];
