@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.30 2004/12/08 14:20:19 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.31 2004/12/10 10:07:02 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -1497,12 +1497,12 @@ class object_treeview_v2 extends class_base
 			$ef = safe_array($ob->meta("sel_columns_editable"));
 
 			$fld = $d_inst->get_folders($d_o);
-			$ol = $d_inst->get_objects($d_o, $fld, $arr["tv_sel"]);
-			foreach($ol as $o)
+			$ol = $d_inst->get_objects($d_o, $fld, $arr["tv_sel"]); 
+			foreach($ol as $oid => $o)
 			{
-				if ($d_inst->check_acl("edit", $d_o, $o["id"]))
+				if ($d_inst->check_acl("edit", $d_o, $oid))
 				{
-					$d_inst->update_object($ef, $o["id"], $objs[$o["id"]]);
+					$d_inst->update_object($ef, $oid, $objs[$oid]);
 				}
 			}
 		}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.14 2004/12/02 16:08:43 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.15 2004/12/10 10:06:46 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -633,6 +633,10 @@ class otv_ds_obj extends class_base
 	**/
 	function update_object($ef, $id, $data)
 	{
+		if ($data === NULL)
+		{
+			return;
+		}
 		$o = obj($id);
 		$mod = false;
 		foreach($ef as $fn => $tmp)

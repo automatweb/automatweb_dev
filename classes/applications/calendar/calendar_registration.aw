@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_registration.aw,v 1.5 2004/12/01 12:12:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_registration.aw,v 1.6 2004/12/10 10:08:55 kristo Exp $
 // calendar_registration.aw - Kalendri sündmusele registreerumine 
 /*
 
@@ -89,6 +89,10 @@ class calendar_registration extends class_base
 
 	function show($arr)
 	{
+		if (!is_oid($arr["id"]) || !$this->can("view", $arr["id"]))
+		{
+			return "";
+		}
 		$ob = new object($arr["id"]);
 		$this->read_template("show.tpl");
 
