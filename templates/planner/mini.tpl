@@ -80,34 +80,34 @@
 <tr>
 	<!-- SUB: today_cell -->
 	<td class="calcelltoday">
-	<a href="{VAR:url}">{VAR:content}</a>
+	<a href="{VAR:url}" {VAR:attribs}>{VAR:content}</a>
 	</td>
 	<!-- END SUB: today_cell -->
 
 	<!-- SUB: cell -->
 	<td class="calcell">
-	<a href="{VAR:url}">{VAR:content}</a>
+	<a href="{VAR:url}" {VAR:attribs}>{VAR:content}</a>
 	</td>
 	<!-- END SUB: cell -->
-	
+
 	<!-- SUB: empty_cell -->
 	<td align="center">
 	&nbsp;
 	</td>
 	<!-- END SUB: empty_cell -->
-	
+
 	<!-- SUB: active_cell -->
 	<td class="calcellact">
-	<a href="{VAR:url}">{VAR:content}</a>
+	<a href="{VAR:url}" {VAR:attribs}>{VAR:content}</a>
 	</td>
 	<!-- END SUB: active_cell -->
-	
+
 	<!-- SUB: current_cell -->
 	<td class="calcellcurr">
-	<a href="{VAR:url}">{VAR:content}</a>
+	<a href="{VAR:url}" {VAR:attribs}>{VAR:content}</a>
 	</td>
 	<!-- END SUB: current_cell -->
-	
+
 	<!-- SUB: deactive_cell -->
 	<td class="calcelldeact">
 	{VAR:content}

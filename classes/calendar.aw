@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.23 2003/06/11 14:08:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.24 2003/07/03 16:13:24 axel Exp $
 // Generic calendar class
 
 // php arvab by default, et pühapäev on 0.
@@ -481,6 +481,7 @@ class calendar extends aw_template
 			$this->vars(array(
 				"content" => date("d",$i),
 				"url" => $arr["day_orb_link"] . "&date=${dxx}",
+				'attribs' => isset($arr['more']) ? str_replace('{VAR:url}',$arr["day_orb_link"] ."&date=${dxx}",$arr['more']) : '',
 			));
 
 			if ($i == $today)
