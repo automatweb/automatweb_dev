@@ -12,6 +12,12 @@
 				<required name="id" type="int"/>
 			</function>
 		</action>
+		
+		<action name="fetch">
+			<function name="fetch">
+				<required name="id" type="int"/>
+			</function>
+		</action>
 
 		<action name="submit">
 			<function name="submit"/>
