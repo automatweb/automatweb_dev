@@ -3,7 +3,8 @@
 	<tr>
 	<td>
 	
-	<table border="0" cellpadding="0" cellspacing="0" bgcolor="#EEEEEE" height="30" style="border-collapse: collapse;">
+	<!--<table border="0" cellpadding="0" cellspacing="0" bgcolor="#EEEEEE" height="30" style="border-collapse: collapse;">-->
+	<table border="0" cellpadding="0" cellspacing="0" bgcolor="#EEEEEE" height="30">
 	<tr>
 <!-- END SUB: start -->
 
@@ -19,7 +20,8 @@
 
 <!-- SUB: separator -->
 	<td style="width: 2px;">
-	<td style="background-color: #FFF; border-left: 1px solid #CCC; width: 2px;"></td>
+	<td style="background-color: #CCC; width: 1px;"></td>
+	<td style="background-color: #FFF; width: 1px;"></td>
 <!-- END SUB: separator -->
 
 <!-- SUB: cdata -->
@@ -35,7 +37,7 @@
 
 <!-- SUB: right_side -->
 <td align="right">
-	<table border="0" cellspacing="0" cellpadding="0" height="30" style="border-collapse: collapse;">
+	<table border="0" cellspacing="0" cellpadding="0" height="30">
 	<tr>
 	<td align="right" valign="center">
 			{VAR:right_side_content}
