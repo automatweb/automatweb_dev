@@ -159,6 +159,10 @@ class propcollector extends aw_template
 		{
 			$fields["store"] = "no";
 		};
+		if ("calendar" == $fields["type"])
+		{
+			$fields["store"] = "no";
+		};
 		// add defaults as well
 		foreach($this->defaults as $key => $val)
 		{
