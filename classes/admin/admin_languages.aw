@@ -137,7 +137,11 @@ class admin_languages extends languages
 
 	function set_status($id,$status)
 	{
-		$this->db_query("UPDATE languages SET status = $status, modified = '".time()."', modifiedby = '".aw_global_get("uid")."' WHERE id = $id");
+		$ld = $this->fetch($id, true);
+		if ($status != $ld["status"])
+		{
+			$this->db_query("UPDATE languages SET status = $status, modified = '".time()."', modifiedby = '".aw_global_get("uid")."' WHERE id = $id");
+		}
 		$this->init_cache(true);
 	}
 
