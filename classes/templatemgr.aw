@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/templatemgr.aw,v 2.17 2004/04/22 13:09:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/templatemgr.aw,v 2.18 2004/05/17 13:34:08 kristo Exp $
 
 class templatemgr extends aw_template
 {
@@ -65,8 +65,13 @@ class templatemgr extends aw_template
 		$id = (int)$args["id"];
 		if (!($ret = aw_cache_get("templatemgr::get_template_file_by_id", $id)))
 		{
-			$ret = $this->db_fetch_field("SELECT filename FROM template WHERE id = '$id'", "filename");
-			aw_cache_set("templatemgr::get_template_file_by_id", $id, $ret);
+			// if no cache, read all templates into cache - this should be a bit faster than several queries
+			$this->db_query("SELECT id,filename FROM template");
+			while ($row = $this->db_next())
+			{
+				aw_cache_set("templatemgr::get_template_file_by_id", $row["id"], $row["filename"]);
+			}
+			$ret = aw_cache_get("templatemgr::get_template_file_by_id", $id);
 		}
 		return $ret;
 	}
