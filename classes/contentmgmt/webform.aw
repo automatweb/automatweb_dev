@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.38 2005/01/06 15:55:16 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.39 2005/01/12 16:18:00 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -681,11 +681,19 @@ class webform extends class_base
 				"name" => "Kuva sisestaja IP ja host aadress",
 				"formula" => 'if(empty($prop["value"])){$request[$prop["name"]] = "IP: ".$_SERVER["REMOTE_ADDR"];}',
 			),
+			array(
+				"name" => "Sisesta dokumendi pealkiri",
+				"formula" => 'if(empty($prop["value"])){if(is_oid($request["doc_id"]) && $this->can("view", $request["doc_id"]){$doc = obj($request["doc_id"]);$request[$prop["value"]] = $doc->name();}}',
+			),
 			//Host: ".$_SERVER["REMOTE_HOST"]."\n
 		);
 		$get_controllers = array(
 			array(
 				"name" => "Kuva sisestaja IP ja host aadress",
+				"formula" => '$value = $arr["obj_inst"]->prop($prop["name"]);if(!empty($value)){$prop["type"] = "text";$prop["value"] = nl2br($value);}',
+			),
+			array(
+				"name" => "Sisesta dokumendi pealkiri",
 				"formula" => '$value = $arr["obj_inst"]->prop($prop["name"]);if(!empty($value)){$prop["type"] = "text";$prop["value"] = nl2br($value);}',
 			),
 		);
@@ -1243,7 +1251,7 @@ class webform extends class_base
 		$id = $arr["alias"]["target"];
 		if(is_oid($id) && $this->can("view", $id))
 		{
-			return $this->show(array("id" => $id));
+			return $this->show(array("id" => $id, "doc_id" => $arr["oid"]));
 		}
 	}
 
@@ -1320,6 +1328,7 @@ class webform extends class_base
 					"class" => $ftype != CL_CALENDAR_REGISTRATION_FORM ? "webform" : "calendar_registration_form_conf",
 					"return_url" => $section,
 					"id" => $ftype != CL_CALENDAR_REGISTRATION_FORM ? $arr["id"] : $ef_id,
+					"doc_id" => $arr["doc_id"],
 				),
 				"errors" => $errors,
 				"values" => $values,
