@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_periods.aw,v 1.2 2003/04/25 09:21:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_periods.aw,v 1.3 2003/05/01 17:31:02 kristo Exp $
 // this is here so that orb will work...
 classload("periods");
 class admin_periods extends periods
@@ -171,6 +171,7 @@ class admin_periods extends periods
 			$table->define_data($row);
 		};
 		
+		$table->set_default_sortby("id");
 		$table->sort_by(array("sortby" => $sortby));
 
 		$this->vars(array(
