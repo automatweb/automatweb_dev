@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.6 2004/11/08 12:31:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.7 2004/12/27 14:52:35 kristo Exp $
 // recycle_bin.aw - Prügikast 
 /*
 @default table=objects
@@ -105,11 +105,19 @@ class recycle_bin extends class_base
 	
 		$classes = aw_ini_get("classes");
 		
+		get_instance("icons");
 		
 		$query = "SELECT * FROM objects WHERE status=0";
 		$this->db_query($query);
-		get_instance("icons");
+		$rows = array();
 		while ($row = $this->db_next())
+		{
+			$rows[$row["oid"]] = $row;
+		}
+
+		$paths = $this->_get_paths($rows);
+		
+		foreach($rows as $row)
 		{
 			$table->define_data(array(
 				"name" => $row["name"],
@@ -124,6 +132,8 @@ class recycle_bin extends class_base
 				"class" => $classes[$row["class_id"]]["name"],
 				"icon" => html::img(array(
 					"url" => icons::get_icon_url($row["class_id"]),
+					"alt" => $paths[$row["oid"]],
+					"title" => $paths[$row["oid"]]
 				))
 			));	
 		}
@@ -146,6 +156,13 @@ class recycle_bin extends class_base
     		"img" => "refresh.gif",
     		"tooltip" => "Uuenda",
     		"url" => aw_url_change_var(array()),
+    	));
+    	$tb->add_button(array(
+    		"name" => "delete",
+    		"img" => "delete.gif",
+    		"tooltip" => "Kustuta",
+    		"action" => "final_delete",
+			"confirm" => "Kas olete 100% kindel et soovite valitud objekte l&otilde;plikult kustutada?"
     	));
 	}
 
@@ -182,6 +199,107 @@ class recycle_bin extends class_base
 		$c->file_invalidate_regex(".*");
 
 		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"]), $arr["class"]);	
+	}
+
+	function _get_paths($rows)
+	{
+		$o2n = array();
+		foreach($rows as $row)
+		{
+			$o2n[$row["oid"]] = array($row["name"], $row["parent"]);
+			$o2n[$row["parent"]] = array(NULL, NULL);
+		}
+
+		while ($this->_fetch($o2n))
+		{
+			;
+		}
+
+		$ret = array();
+		foreach($rows as $row)
+		{
+			$pt = array();
+			$id = $o2n[$row["oid"]][1];
+			while ($o2n[$id][1] && $id != $this->cfg["admin_rootmenu2"])
+			{
+				$pt[] = $o2n[$id][0];
+				$id = $o2n[$id][1];
+			}
+			$ret[$row["oid"]] = join(" / ", array_reverse($pt));
+		}
+		return $ret;
+	}
+
+	function _fetch(&$o2n)
+	{
+		$ids = array();
+		foreach($o2n as $id => $n)
+		{
+			if ($n[0] === NULL && $id)
+			{
+				$ids[] = $id;
+			}
+		}
+
+		if (!count($ids))
+		{
+			return false;
+		}
+
+		$sql = "SELECT oid,name,parent FROM objects WHERE oid in (".join(",", $ids).")";
+		$this->db_query($sql);
+		while ($row = $this->db_next())
+		{
+			$o2n[$row["oid"]] = array($row["name"], $row["parent"]);
+			if ($row["parent"] && !isset($o2n[$row["parent"]]))
+			{
+				$o2n[$row["parent"]] = array(NULL,NULL);
+			}
+		}
+		return true;
+	}
+
+	/**
+
+		@attrib name=final_delete
+
+	**/
+	function final_delete($arr)
+	{
+		$cl = aw_ini_get("classes");
+
+		foreach(safe_array($arr["mark"]) as $id)
+		{
+			// get class
+			$clid = $this->db_fetch_field("SELECT class_id FROM objects WHERE oid = '$id'", "class_id");
+			
+			// load props by clid
+			$file = $cl[$clid]["file"];
+			if ($clid == 29)
+			{
+				$file = "doc";
+			}
+
+			list($properties, $tableinfo, $relinfo) = $GLOBALS["object_loader"]->load_properties(array(
+				"file" => $file,
+				"clid" => $clid
+			));
+
+			$tableinfo = safe_array($tableinfo);
+			$tableinfo["objects"] = array(
+				"index" => "oid"
+			);
+			foreach($tableinfo as $tbl => $inf)
+			{
+				$sql = "DELETE FROM $tbl WHERE $inf[index] = '$id' LIMIT 1";
+				$this->db_query($sql);
+			}
+		}
+
+		return $this->mk_my_orb("change", array(
+			"id" => $arr["id"],
+			"group" => $arr["group"]
+		));	
 	}
 }
 ?>

@@ -15,5 +15,12 @@
 			</function>
 		</action>
 
+		<action name="final_delete">
+			<function name="final_delete">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
