@@ -935,5 +935,39 @@ class group extends class_base
 			$this->remove_acl_group_from_obj($gid, $from->id());
 		}
 	}
+
+	/** adds the user $user to group $group (storage objects)
+
+	**/
+	function add_user_to_group($user, $group)
+	{
+		// old tables
+		$this->users->add_users_to_group_rec($group->prop("gid"), array($user->prop("uid")), false, true);
+
+
+		// for each group in path from the to-add group
+		foreach($group->path() as $p_o)
+		{
+			if ($p_o->class_id() != CL_GROUP)
+			{
+				continue;
+			}
+
+			// connection from user to group
+			$user->connect(array(
+				"to" => $p_o->id(),
+				"reltype" => 1 // RELTYPE_GRP
+			));
+
+			// connection to group from user
+			$p_o->connect(array(
+				"to" => $user->id(),
+				"reltype" => 2 // RELTYPE_MEMBER
+			));
+
+			// brother under group
+			$user->create_brother($p_o->id());
+		}
+	}
 }
 ?>

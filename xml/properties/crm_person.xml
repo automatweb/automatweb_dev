@@ -393,6 +393,10 @@
                   <clid>CL_PROFIIL</clid>
                   <caption>Profiil</caption>
             </PROFILE>
+            <USER_DATA>
+                  <value>15</value>
+                  <caption>Andmed</caption>
+            </USER_DATA>
       </reltypes>
 </properties>
 

@@ -134,6 +134,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_USER, on_add_alias)
 @reltype GRP value=1 clid=CL_GROUP
 @caption Grupp
 
+@reltype PERSON value=2 clid=CL_CRM_PERSON
+@caption isik
+
+@reltype USER_DATA value=3
+@caption Andmed
+
+
 */
 
 class user extends class_base
