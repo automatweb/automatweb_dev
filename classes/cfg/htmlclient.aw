@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.83 2004/11/29 13:58:48 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.84 2004/12/02 11:34:05 ahti Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -16,6 +16,7 @@ class htmlclient extends aw_template
 		$this->res = "";
 		$this->layout_mode = "default";
 		$this->form_target = "";
+		$this->tpl_vars = $arr["tpl_vars"] ? $arr["tpl_vars"] : array();
 		$this->styles = $arr["styles"] ? $arr["styles"] : array();
 		$this->tabs = ($arr["tabs"] === false) ? false : true;
 		if (!empty($arr["layout_mode"]))
@@ -122,6 +123,10 @@ class htmlclient extends aw_template
 			$tpl = $this->use_template;
 		};
 		$this->read_template($tpl);
+		if(!empty($this->tpl_vars))
+		{
+			$this->vars($this->tpl_vars));
+		}
 		$script = aw_global_get("SCRIPT_NAME");
 		//$handler = empty($script) ? "index" : "orb";
 		if($this->tplmode == "groups")
@@ -331,7 +336,7 @@ class htmlclient extends aw_template
 	{
 		$this->vars(array(
 			"error_text" => "Viga sisendandmetes",
-			"webform_error" => $this->style["error"] ? "st".$this->style["error"] : "webform_error",
+			"webform_error" => $this->style["error"] ? "st".$this->style["error"] : "",
 		));
 		$this->error = $this->parse("ERROR");
 	}
@@ -455,8 +460,8 @@ class htmlclient extends aw_template
 		$tpl_vars = array(
 				"caption" => $caption,
 				"element" => $this->draw_element($args),
-				"webform_caption" => !empty($args["style"]["caption"]) ? "st".$args["style"]["caption"] : "webform_caption",
-				"webform_element" => !empty($args["style"]["prop"]) ? "st".$args["style"]["prop"] : "webform_element",
+				"webform_caption" => !empty($args["style"]["caption"]) ? "st".$args["style"]["caption"] : "",
+				"webform_element" => !empty($args["style"]["prop"]) ? "st".$args["style"]["prop"] : "",
 		);
 		if($this->tplmode == "groups" && $this->sub_tpl->is_template($args["name"]))
 		{
@@ -496,7 +501,7 @@ class htmlclient extends aw_template
 			"sbt_caption" => $arr["caption"] ? $arr["caption"] : "Salvesta",
 			"name" => $arr["name"] ? $arr["name"] : "",
 			"action" => $arr["action"] ? $arr["action"] : "",
-			"webform_content" => !empty($arr["style"]["prop"]) ? "st".$arr["style"]["prop"] : "webform_content",
+			"webform_content" => !empty($arr["style"]["prop"]) ? "st".$arr["style"]["prop"] : "",
 		);
 		if($this->tplmode =="groups" && $this->sub_tpl->is_template($arr["name"]))
 		{
@@ -548,7 +553,7 @@ class htmlclient extends aw_template
 		$name = "HEADER";
 		$tpl_vars = array(
 			"caption" => $args["caption"],
-			"webform_header" => !empty($args["style"]["prop"]) ? "st".$args["style"]["prop"] : "webform_header",
+			"webform_header" => !empty($args["style"]["prop"]) ? "st".$args["style"]["prop"] : "",
 		);
 		if($this->tplmode == "groups" && $this->sub_tpl->is_template($args["name"]))
 		{
@@ -573,7 +578,7 @@ class htmlclient extends aw_template
 		$name = "SUB_TITLE";
 		$tpl_vars = array(
 			"value" => !empty($args["value"]) ? $args["value"] : $args["caption"],
-			"webform_subtitle" => !empty($args["style"]["prop"]) ? "st".$args["style"]["prop"] : "webform_subtitle",
+			"webform_subtitle" => !empty($args["style"]["prop"]) ? "st".$args["style"]["prop"] : "",
 		);
 		if($this->tplmode == "groups" && $this->sub_tpl->is_template($args["name"]))
 		{
@@ -598,7 +603,7 @@ class htmlclient extends aw_template
 		$tpl_vars = array(
 			//"value" => $args["value"],
 			"value" => $this->draw_element($args),
-			"webform_content" => !empty($args["style"]["prop"]) ? "st".$args["style"]["prop"] : "webform_content",
+			"webform_content" => !empty($args["style"]["prop"]) ? "st".$args["style"]["prop"] : "",
 		);
 		if($this->tplmode == "groups" && $this->sub_tpl->is_template($args["name"]))
 		{
