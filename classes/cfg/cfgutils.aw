@@ -54,6 +54,12 @@ class cfgutils extends aw_template
 		return $retval;
 	}
 
+	function get_clid_by_file($args = array())
+	{
+		$this->_init_clist();
+		return array_search($args["file"],$this->clist);
+	}
+
 	////
 	// !I also need to generate a list of all class id's, which have
 	// any properties defined.
