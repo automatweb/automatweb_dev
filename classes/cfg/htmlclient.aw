@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.3 2002/11/07 10:52:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.4 2002/11/12 16:54:55 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -16,6 +16,7 @@ class htmlclient extends aw_template
 		$this->style1 = "chformleftcol";
 		$this->style2 = "chformrightcol";
 		$this->style_subheader = "chformsubheader";
+		$this->style_content = "chformrightcol";
 		$this->html = get_instance("html");
 	}
 
@@ -53,9 +54,13 @@ class htmlclient extends aw_template
 		{
 			$this->put_line($args);
 		}
-		else
+		elseif ($args["caption"])
 		{
 			$this->put_header($args);
+		}
+		else
+		{
+			$this->put_content($args);
 		};
 	}
 
@@ -63,7 +68,10 @@ class htmlclient extends aw_template
 	{
 		if ($args["type"] == "checkbox")
 		{
-			$args["checked"] = $args["value"];
+			if (!$args["checked"])
+			{
+				$args["checked"] = $args["value"];
+			};
 			$args["value"] = 1;
 		};
 
@@ -142,6 +150,15 @@ class htmlclient extends aw_template
 		$this->res .= "<tr>\n";
 		$this->res .= "\t<td colspan='2' class='" . $this->style_subheader . "' width='160'>";
 		$this->res .= $args["caption"];
+		$this->res .= "</td>\n";
+		$this->res .= "</tr>\n";
+	}
+	
+	function put_content($args)
+	{
+		$this->res .= "<tr>\n";
+		$this->res .= "\t<td colspan='2' class='" . $this->style_content . "' width='160'>";
+		$this->res .= $args["value"];
 		$this->res .= "</td>\n";
 		$this->res .= "</tr>\n";
 	}
