@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.13 2001/10/02 10:16:58 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.14 2001/10/18 09:07:54 cvs Exp $
 classload("images");
 lc_load("gallery");
 global $orb_defs;
@@ -194,7 +194,9 @@ class gallery extends aw_template
 			"page" => $page,
 			"reforb" => $this->mk_reforb("c_submit", array("id" => $id,"page" => $page)),
 			"del_row" => $this->mk_orb("del_row", array("id" => $id, "page" => $page)),
-			"del_col" => $this->mk_orb("del_col", array("id" => $id, "page" => $page))
+			"del_col" => $this->mk_orb("del_col", array("id" => $id, "page" => $page)),
+			"is_slideshow" => checked($this->arr["is_slideshow"]==1),
+			"is_automatic_slideshow" => checked($this->arr["is_automatic_slideshow"]==1),
 		));
 		return $this->parse();
 	}
@@ -345,6 +347,8 @@ class gallery extends aw_template
 				}
 			}
 		}
+		$this->arr["is_slideshow"] == $is_slideshow;
+		$this->arr["is_automatic_slideshow"] == $is_automatic_slideshow;
 		$this->save();
 		return $this->mk_orb("admin", array("id" => $id, "page" => $page));
 	}
