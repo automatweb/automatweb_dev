@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.82 2003/03/13 13:45:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.83 2003/03/28 18:29:07 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -11,7 +11,7 @@ class aliasmgr extends aw_template
 	function aliasmgr($args = array())
 	{
 		extract($args);
-		$this->use_class = ($args["use_class"]) ? $args["use_class"] : get_class($this);
+		$this->use_class = isset($args["use_class"]) ? $args["use_class"] : get_class($this);
 		$this->init("aliasmgr");
 
 		$this->contents = "";
@@ -167,7 +167,7 @@ class aliasmgr extends aw_template
 		while($row = $this->db_next())
 		{
 			$row["aliaslink"] = $obj["meta"]["aliaslinks"][$row["target"]];
-			if ($filter)
+			if (isset($filter))
 			{
 				$row = &$filter[0]->$filter[1]($row);
 				if (is_array($row))
