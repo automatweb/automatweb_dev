@@ -7,6 +7,11 @@
 <td class="fform">Komment:</td><td class="fform"><input type='comment' NAME='name' size="40"></td>
 </tr>
 <tr>
+<td class="fform">Muutmisvorm:</td><td class="fform">
+	<select name="form">{VAR:forms}</select>
+</td>
+</tr>
+<tr>
 <td class="fform" colspan=2>Baasklass:</td>
 </tr>
 <!-- SUB: classlist -->

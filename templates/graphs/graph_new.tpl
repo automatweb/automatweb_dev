@@ -1,33 +1,38 @@
-<table border="0" cellspacing="0" cellpadding="0" width=100%>
-	<tr>
-		<td height="15" colspan="4" class="fgtitle">&nbsp;<b>
-		</b></td>
-	</tr>
-	<tr><td>&nbsp;</tr></td>
-<tr><td>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td bgcolor="#CCCCCC">
 <form method="post" action="reforb.{VAR:ext}">
-<TABLE border=0>
+
+<table border=0 cellspacing=0 cellpadding=0>
+<tr><td class="aste01">
+
+<table border=0 cellspacing=0 cellpadding=2>
+<tr>
+
+	<TD class="celltext" align="right">{VAR:LC_GRAPH_NAME}:</td>
+	<TD class="celltext"><input type="text" name="name" value="{VAR:LC_GRAPH_GRAPH}" class="formtext" size="40"></td>
+</tr>
+
 <TR>
-	<TD class="fcaption2">{VAR:LC_GRAPH_NAME}:<TD colspan=2 class="fcaption2"><input type="text" name="name" value="{VAR:LC_GRAPH_GRAPH}">
+	<TD class="celltext" align="right">{VAR:LC_GRAPH_COMM}:</td>
+	<TD class="celltext"><textarea name="comment" COLS=40 ROWS=5 wrap='soft' class="formtext"></textarea></td>
+</tr>
 <TR>
-	<TD class="fcaption2">{VAR:LC_GRAPH_COMM}:<TD colspan=2 class="fcaption2"><textarea name="comment" COLS=50 ROWS=5 wrap='soft'></textarea></tr>
-<TR>
-	<TD colspan=3 class="fcaption2">{VAR:LC_GRAPH_TYPE}:</TD>
-</TR>
-	<TD colspan=3 class="fcaption2">
-		<select name="type" value="">
+	<TD class="celltext">{VAR:LC_GRAPH_TYPE}:</TD>
+	<TD class="celltext">
+		<select name="type" value="" class="formselect2">
 		<option value="2">{VAR:LC_GRAPH_POST}</option>
 		<option value="1">{VAR:LC_GRAPH_LINE}</option>
 		<option value="0">{VAR:LC_GRAPH_PIE}</option>
-		</select>	
+		</select>
+	</td>
 
 </TR>
-</TABLE>   
-<input type="submit" name="Submit" value="{VAR:LC_GRAPH_FOR}">
-</TABLE>
+<TR>
+	<td>&nbsp;</td>
+	<TD class="celltext"><input type="submit" name="Submit" value="{VAR:LC_GRAPH_FOR}" class="formbutton"></TD>
+</TR>
+   
+
+</table>
+</td></tr></table>
+
 {VAR:reforb}
 </form>
-</TABLE>  
