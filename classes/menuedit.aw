@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.49 2001/08/22 16:16:09 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.50 2001/08/22 23:12:26 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -378,6 +378,12 @@ class menuedit extends aw_template
 
 		// you are here links		
 		$this->vars(array("YAH_LINK" => $this->make_yah($path)));
+
+		// language selecta
+		if ($this->is_template("LANG"))
+		{
+			$this->make_langs();
+		}
 
 		// write info about viewing to the syslog
 		$this->do_syslog(&$this->mar,&$path,count($path)-1,$section);
@@ -950,6 +956,7 @@ class menuedit extends aw_template
 				objects.alias as alias,
 				objects.brother_of as brother_of,
 				objects.metadata as metadata,
+				objects.class_id as class_id,
 				menu.link as link,
 				menu.type as mtype,
 				menu.clickable as clickable,
@@ -1019,7 +1026,7 @@ class menuedit extends aw_template
 		{
 			$docid = array();
 			$cnt = 0;
-			$this->db_query("SELECT oid FROM objects WHERE (parent = $section AND status = 2 AND class_id = 7 AND objects.lang_id=".$GLOBALS["lang_id"].") OR (class_id = ".CL_BROTHER_DOCUMENT." AND status = 2 AND parent = $section) ORDER BY jrk");
+			$this->db_query("SELECT oid FROM objects WHERE (parent = $obj[oid] AND status = 2 AND class_id = 7 AND objects.lang_id=".$GLOBALS["lang_id"].") OR (class_id = ".CL_BROTHER_DOCUMENT." AND status = 2 AND parent = $obj[oid]) ORDER BY jrk");
 			while ($row = $this->db_next())
 			{
 				$docid[$cnt++] = $row["oid"];
@@ -2393,7 +2400,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			}
 			$pers = serialize($par);
 			// pildi uploadimine
-			global $img, $img_type;
+			global $img, $img_type,$img_act,$img_act_type;
 			$tt = "";
 			if ($img != "none" && $img != "")
 			{
@@ -2403,6 +2410,24 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$tt = "img_id  = ".$im["id"].",";
 				$img = $t->get_img_by_id($im["id"]);
 				$tt.="img_url = '".$img["url"]."',";
+			}
+			$tt2 = "";
+			if ($img_act != "none" && $img_act != "")
+			{
+				classload("images");
+				$t = new db_images;
+				$im = $t->_upload(array("filename" => $img_act, "file_type" => $img_act_type, "oid" => $id));
+				$this->set_object_metadata(array(
+					"oid" => $id,
+					"key" => "img_act_id",
+					"value" => $im["id"],
+				));
+				$img = $t->get_img_by_id($im["id"]);
+				$this->set_object_metadata(array(
+					"oid" => $id,
+					"key" => "img_act_url",
+					"value" => $img["url"],
+				));
 			}
 			if ($number > 0)
 			{
@@ -2884,8 +2909,10 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				}
 			}
 		}
+		$img2 = $meta["img_act_url"] != "" ? "<img src='".$meta["img_act_url"]."'>" : "";
 		$this->vars(array("parent"			=> $row["parent"], 
 											"SA_ITEM"			=> $sal,
+											"image_act"		=> $img2,
 											"seealso"			=> $this->multiple_option_list($rsar,$oblist),
 											"ADMIN_FEATURE"	=> $af,
 											"name"				=> $row["name"], 
@@ -3149,11 +3176,23 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		reset($this->mpr[$parent]);
 		while (list(,$row) = each($this->mpr[$parent]))
 		{
+			$bro = false;
+			// here we fake the brother menus
+			if ($row["class_id"] == CL_BROTHER)
+			{
+				$trow = $this->mar[$row["brother_of"]];
+				$trow["parent"] = $row["parent"];
+				$trow["oid"] = $row["oid"];
+				$row = $trow;
+				$bro = true;
+			}
 			// je, I know, this will kind of slow down things
 			// hmhm. taimisin seda vibe esilehel - 0.05 sek. niiet mitte oluliselt. - terryf
 			// kuigi, seda siin funxioonis kasutatakse aint n2dala vasaku paani tegemisex exole. ja see v6ix ikka n2dala koodis olla. 
 			// njah, praegu ainult nädalas. Aga idee on selles, et metainfo välja kasutad ka muu info salvestamiseks,
 			// mitte teha jarjest uusi valju juurde - duke
+			// 
+			// ok, point taken. nyt kasutatakse seda objekti metadatat ka ntx sellex et selektitud menyy pildi urli salvestada. - terryf
 			$meta = $this->get_object_metadata(array(
 					"metadata" => $row["metadata"],
 			));
@@ -3191,7 +3230,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			};
 			
 			// only show content menus
-			if ($row["mtype"] != MN_CONTENT && $row["mtype"] != MN_CLIENT)
+			if ($row["mtype"] != MN_CONTENT && $row["mtype"] != MN_CLIENT && $row["mtype"] != MN_HOME_FOLDER_SUB)
 			{
 				continue;
 			}
@@ -3235,20 +3274,18 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				}
 			}
 
-			//if (($GLOBALS["frontpage"] == $section))
-			//{
-				// joonistame rekursiivselt alammenüüd.
-				$n = $this->req_draw_menu($row["oid"], $name, &$path,$parent_tpl);
-			//};
+			$n = $this->req_draw_menu($row["oid"], $name, &$path,$parent_tpl);
 
 			if ($cnt == 0 && $this->is_template($mn."_BEGIN"))
 			{
 				$ap.="_BEGIN";	// first one of this level menus
 			};
 			
+			$this_selected = false;
 			if (in_array($row["oid"],$path) && $row["clickable"] == 1)
 			{
 				$ap.="_SEL";		// a selected menu
+				$this_selected = true;
 			};
 
 			if ($row["clickable"] != 1)
@@ -3313,9 +3350,24 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 			$target = ($row["target"] == 1) ? sprintf("target='%s'","_new") : "";
 
-			if ( isset($row["img_url"]) && ($row["img_url"] != "") )
+			if ($this_selected)
 			{
-				$imgurl = preg_replace("/^http:\/\/.*\//","/",$row["img_url"]);
+				if ($meta["img_act_url"] != "")
+				{
+					$imgurl = $meta["img_act_url"];
+				}
+				else
+				{
+					$imgurl = $row["img_url"];
+				}
+			}
+			else
+			{
+				$imgurl = $row["img_url"];
+			}
+			if ($imgurl != "")
+			{
+				$imgurl = preg_replace("/^http:\/\/.*\//","/",$imgurl);
 				$imgurl = sprintf("<img src='%s' border='0'>",$imgurl);
 			}
 			else
@@ -3334,7 +3386,6 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			if ($is_mid)
 			{
 				$l_mid.=$this->parse($mn.$ap);
-				echo "<!-- parsing ",$mn.$ap," -->\n";
 			}
 			else
 			{
@@ -3344,7 +3395,6 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			if (!$no_mid)
 			{
 				$this->vars(array($mn."_MID" => ""));
-				echo "<!-- insert mid for $row[name] -->\n";
 			}
 			if ($this->is_template($mn."2"))
 			{
@@ -4249,6 +4299,33 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			}
 		}
 		return "menuedit.".$GLOBALS["ext"]."?parent=".$parent."&type=menus&period=".$period;
+	}
+
+	function make_langs()
+	{
+		classload("languages");
+		$langs = new languages;
+		$lar = $langs->listall();
+		$l = "";
+		foreach($lar as $row)
+		{
+			$this->vars(array(
+				"name" => $row["name"],
+				"lang_id" => $row["id"]
+			));
+			if ($row["id"] == $lang_id)
+			{
+				$l.=$this->parse("SEL_LANG");
+			}
+			else
+			{
+				$l.=$this->parse("LANG");
+			}
+		}
+		$this->vars(array(
+			"LANG" => $l,
+			"SEL_LANG" => ""
+		));
 	}
 }
 ?>
