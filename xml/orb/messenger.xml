@@ -27,6 +27,7 @@
 			<function name="pick_folder">
 				<arguments>
 					<optional name="id"/>
+					<required name="attach"/>
 				</arguments>
 			</function>
 		</action>
