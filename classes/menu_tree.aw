@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.14 2003/07/15 16:22:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.15 2003/07/18 12:29:30 kristo Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -50,23 +50,25 @@ class menu_tree extends class_base
 
 		}
 		return PROP_OK;
-        }
+	}
 
 	function parse_alias($args = array())
 	{
 		extract($args);
 		$this->shown = array();
 
-		$obj = $this->get_object($alias["target"]);
-		$menus = $obj["meta"]["menus"];
-		$this->children_only = !empty($obj["meta"]["children_only"]) ? true : false;
-		$tpl = ($obj["meta"]["template"]) ? $obj["meta"]["template"] : "menu_tree.tpl";
-                $tpl = str_replace("/","",$tpl);
+		$obj = obj($alias["target"]);
+		$menus = $obj->meta("menus");
+
+		$cho = $obj->meta("children_only");
+		$this->children_only = !empty($cho) ? true : false;
+		$tpl = ($obj->meta("template") ? $obj->meta("template") : "menu_tree.tpl");
+		$tpl = str_replace("/","",$tpl);
+
 		$folder_list = array();
 		// FIXME: this should use menu cache 
 		if (is_array($menus))
 		{
-
 			$this->tpl_name = "content";
 			$this->spacer = "&nbsp";
 			$this->sq = 3;
