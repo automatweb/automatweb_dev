@@ -55,5 +55,21 @@
       <classinfo>
             <relationmgr>yes</relationmgr>
       </classinfo>
+      <reltypes>
+            <OBJ>
+                  <value>2</value>
+                  <clid>
+                        <num_0>CL_DOCUMENT</num_0>
+                        <num_1>CL_FILE</num_1>
+                        <num_2>CL_IMAGE</num_2>
+                  </clid>
+                  <caption>sisu objekt</caption>
+            </OBJ>
+            <FOLDER>
+                  <value>1</value>
+                  <clid>CL_MENU</clid>
+                  <caption>sisu objekt</caption>
+            </FOLDER>
+      </reltypes>
 </properties>
 

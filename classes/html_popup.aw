@@ -1,6 +1,6 @@
 <?php
 // html_popup.aw - a class to deal with javascript popups
-// $Header: /home/cvs/automatweb_dev/classes/Attic/html_popup.aw,v 2.9 2004/04/30 08:50:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/html_popup.aw,v 2.10 2004/07/09 11:26:50 kristo Exp $
 
 /*
 	@classinfo relationmgr=yes
@@ -26,11 +26,14 @@
 	@caption Menüüd
 
 
+	@reltype OBJ value=2 clid=CL_DOCUMENT,CL_FILE,CL_IMAGE
+	@caption sisu objekt
+
+	@reltype FOLDER value=1 clid=CL_MENU
+	@caption sisu objekt
+
 
 */
-
-define("RELTYPE_FOLDER", 1);
-define("RELTYPE_OBJ", 2);
 
 class html_popup extends class_base
 {
@@ -50,37 +53,6 @@ class html_popup extends class_base
 		{
 		};
 		return $retval;
-	}
-
-	function callback_get_classes_for_relation($args = array())
-	{
-		if ($args["reltype"] == RELTYPE_FOLDER)
-		{
-			return array(CL_PSEUDO);
-		}
-		else
-		if ($args["reltype"] == RELTYPE_OBJ)
-		{
-			$cls = array();
-			$tmp = aw_ini_get("classes");
-			foreach($tmp as $clid => $cl)
-			{
-				if ($cl["alias"] != "")
-				{
-					$cls[$clid] = $cl["name"];
-				}
-			}
-			asort($cls);
-			return array_keys($cls);
-		}
-	}
-
-	function callback_get_rel_types()
-	{
-		return array(
-			RELTYPE_FOLDER => "n&auml;ita selle menu&uuml;&uuml; all",
-			RELTYPE_OBJ => "sisu objekt",
-		);
 	}
 
 	function callback_get_menus($args = array())
