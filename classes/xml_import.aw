@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.15 2003/05/02 16:09:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.16 2003/06/10 15:04:32 kristo Exp $
 /*
         @default table=objects
         @default group=general
@@ -348,6 +348,9 @@ class xml_import extends class_base
 		$parser = xml_parser_create();
 		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
 		// xml data arraysse
+		print "<pre>";
+		print_r(htmlspecialchars($contents));
+		print "</pre>";
 		xml_parse_into_struct($parser,$contents,&$values,&$tags);
 		if (xml_get_error_code($parser))
 		{
@@ -543,8 +546,8 @@ class xml_import extends class_base
 		$retval = str_replace(chr(0xC3). chr(0xB4),"õ",$retval);
 		$retval = str_replace(chr(0xC3). chr(0x84),"Ä",$retval);
 		$retval = str_replace(chr(0xC3). chr(0x9C),"Ü",$retval);
-		$retval = str_replace(chr(0xC5). chr(0xA0),"&Scaron;",$retval);
-		$retval = str_replace(chr(0xC5). chr(0xA1),"&scaron;",$retval);
+		$retval = str_replace(chr(0xC5). chr(0xA0),"&#0352;",$retval);
+		$retval = str_replace(chr(0xC5). chr(0xA1),"&#0353;",$retval);
 		$retval = str_replace(chr(0xC5). chr(0xBD),"&#381;",$retval);
 		$retval = str_replace(chr(0xC5). chr(0xBE),"&#382;",$retval);
 		
@@ -571,6 +574,7 @@ class xml_import extends class_base
 		$q = "DELETE FROM ut_oppekavad";
 		$this->db_query($q);
 		$oppekava_url = $oppeaasta_url = "";
+		$aasta_urls = array();
 
 		foreach($values as $key => $val)
 		{
@@ -582,33 +586,52 @@ class xml_import extends class_base
 			{
 				$oppeaasta_url = $val["value"];
 			};
-			if ( ($val["tag"] == "aasta"))
+			if ( ($val["tag"] == "aasta") && ($val["type"] == "complete"))
 			{
 				$aasta = $val["value"];
 				$aasta_id = $val["attributes"]["id"];
-			};
-			if ( ($val["tag"] == "oppekava")  && ( ($val["type"] == "complete") || ($val["type"] == "open")) )
-			{
-				$attr = $val["attributes"];		
-				$nimetus = $this->convert_unicode($attr["nimetus"]);
-				$nimetus_en = $attr["nimetus_en"];
-				$id = $attr["id"];
-				$kood = $attr["kood"];
-				$this->quote($nimetus);
-				$this->quote($nimetus_en);
-				$this->quote($kava_url);
-				$this->quote($aasta_url);
-				$kava_url = str_replace("[oppekava_id]",$id,$oppekava_url);
 				$aasta_url = str_replace("[oppekava_id]",$id,$oppeaasta_url);
 				$aasta_url = str_replace("[oppeaasta_id]",$aasta_id,$aasta_url);
 				$aasta_url = str_replace("[oppeaasta]",$aasta,$aasta_url);
-				$aasta = "";
-				$aasta_id = "";
-				$q = "INSERT INTO ut_oppekavad (id,kood,nimetus,nimetus_en,oppekava_url,oppeaasta_url)
-					VALUES('$id','$kood','$nimetus','$nimetus_en','$kava_url','$aasta_url')";
+				$aasta_urls[$aasta] = "<a href='$aasta_url'>$aasta a</a>";
+			};
+			if ( ($val["tag"] == "oppekava")  && ( ($val["type"] == "complete") || ($val["type"] == "open")) )
+			//if ( ($val["tag"] == "oppekava")  && ($val["type"] == "open") )
+			{
+				$aasta_urls = array();
+				$attr = $val["attributes"];		
+				$nimetus = $this->convert_unicode($attr["nimetus"]);
+				$nimetus_en = $attr["nimetus_en"];
+				$oppeaste = $attr["oppeaste"];
+				$id = $attr["id"];
+				$kood = $attr["kood"];
+			};
+
+			if ( ($val["tag"] == "oppekava") && ( ($val["type"] == "complete") || ($val["type"] == "close") ))
+			{
+				if (strlen($nimetus) == 0)
+				{
+					$attr = $val["attributes"];		
+					$nimetus = $this->convert_unicode($attr["nimetus"]);
+					$nimetus_en = $attr["nimetus_en"];
+					$oppeaste = $attr["oppeaste"];
+					$id = $attr["id"];
+					$kood = $attr["kood"];
+				};
+				$this->quote($nimetus);
+				$this->quote($nimetus_en);
+				$kava_url = str_replace("[oppekava_id]",$id,$oppekava_url);
+				$this->quote($kava_url);
+				ksort($aasta_urls);
+				$aasta_url_str = join(", ",$aasta_urls);
+				$this->quote($aasta_url_str);
+				$q = "INSERT INTO ut_oppekavad (id,kood,nimetus,nimetus_en,oppekava_url,oppeaasta_url,oppeaste)
+					VALUES('$id','$kood','$nimetus','$nimetus_en','$kava_url','$aasta_url_str','$oppeaste')";				
 				print $q;
 				print "<br>";
+				$nimetus = $nimetus_en = $oppeaste = $id = $kood = "";
 				$this->db_query($q);
+
 			};
 
 
