@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.16 2004/10/15 12:08:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.17 2004/10/18 08:45:39 kristo Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -329,7 +329,7 @@ class add_tree_conf extends class_base
 		}
 
 		$ret = $us[$class_id] == 1;
-		if ($ret)
+		if ($class_id != CL_MENU && $ret)
 		{
 			$v = $atc->meta("visible");
 			// also, if the class is in some groups and for all those groups access has been turned off
