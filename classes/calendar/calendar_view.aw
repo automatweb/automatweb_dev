@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.6 2004/05/17 10:45:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.7 2004/06/03 11:14:28 duke Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -336,43 +336,43 @@ class calendar_view extends class_base
 
 		// XXX: fuck this
 
-		if ($this->obj_inst->prop("minical_day_with_events") != "")
+		if ($this->obj_inst->prop("minical_day_with_events") != 0)
 		{
 			active_page_data::add_site_css_style($this->obj_inst->prop("minical_day_with_events"));
 			$style["minical_day_with_events"] = "st" . $this->obj_inst->prop("minical_day_with_events");
 		};
 		
-		if ($this->obj_inst->prop("minical_day_without_events") != "")
+		if ($this->obj_inst->prop("minical_day_without_events") != 0)
 		{
 			active_page_data::add_site_css_style($this->obj_inst->prop("minical_day_without_events"));
 			$style["minical_day_without_events"] = "st" . $this->obj_inst->prop("minical_day_without_events");
 		};
 		
-		if ($this->obj_inst->prop("minical_day_today") != "")
+		if ($this->obj_inst->prop("minical_day_today") != 0)
 		{
 			active_page_data::add_site_css_style($this->obj_inst->prop("minical_day_today"));
 			$style["minical_day_today"] = "st" . $this->obj_inst->prop("minical_day_today");
 		};
 		
-		if ($this->obj_inst->prop("minical_day_active") != "")
+		if ($this->obj_inst->prop("minical_day_active") != 0)
 		{
 			active_page_data::add_site_css_style($this->obj_inst->prop("minical_day_active"));
 			$style["minical_day_active"] = "st" . $this->obj_inst->prop("minical_day_active");
 		};
 		
-		if ($this->obj_inst->prop("minical_day_deactive") != "")
+		if ($this->obj_inst->prop("minical_day_deactive") != 0)
 		{
 			active_page_data::add_site_css_style($this->obj_inst->prop("minical_day_deactive"));
 			$style["minical_day_deactive"] = "st" . $this->obj_inst->prop("minical_day_deactive");
 		};
 		
-		if ($this->obj_inst->prop("minical_title") != "")
+		if ($this->obj_inst->prop("minical_title") != 0)
 		{
 			active_page_data::add_site_css_style($this->obj_inst->prop("minical_title"));
 			$style["minical_title"] = "st" . $this->obj_inst->prop("minical_title");
 		};
 
-		if ($this->obj_inst->prop("minical_background") != "")
+		if ($this->obj_inst->prop("minical_background") != 0)
 		{
 			active_page_data::add_site_css_style($this->obj_inst->prop("minical_background"));
 			$style["minical_background"] = "st" . $this->obj_inst->prop("minical_background");
