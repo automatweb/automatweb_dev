@@ -1,0 +1,26 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>comment</name>
+            <type>textarea</type>
+            <field>comment</field>
+            <cols>40</cols>
+            <rows>3</rows>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Kommentaar</caption>
+      </property>
+      <property>
+            <name>vorm</name>
+            <type>textbox</type>
+            <size>10</size>
+            <table>kliendibaas_ettevotlusvorm</table>
+            <group>general</group>
+            <caption>vorm</caption>
+      </property>
+      <classinfo>
+            <objtable>kliendibaas_ettevotlusvorm</objtable>
+            <objtable_index>oid</objtable_index>
+      </classinfo>
+</properties>
+

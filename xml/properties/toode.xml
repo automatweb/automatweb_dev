@@ -1,0 +1,47 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>comment</name>
+            <type>textarea</type>
+            <field>comment</field>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Kommentaar</caption>
+      </property>
+      <property>
+            <name>kood</name>
+            <type>textbox</type>
+            <size>8</size>
+            <table>kliendibaas_toode</table>
+            <group>general</group>
+            <caption>Toote kood</caption>
+      </property>
+      <property>
+            <name>toode</name>
+            <type>textbox</type>
+            <size>40</size>
+            <table>kliendibaas_toode</table>
+            <group>general</group>
+            <caption>Toode</caption>
+      </property>
+      <property>
+            <name>toode_en</name>
+            <type>textbox</type>
+            <size>40</size>
+            <table>kliendibaas_toode</table>
+            <group>general</group>
+            <caption>Toode (i.k.)</caption>
+      </property>
+      <property>
+            <name>kirjeldus</name>
+            <type>textarea</type>
+            <table>kliendibaas_toode</table>
+            <group>general</group>
+            <caption>Toote kirjeldus</caption>
+      </property>
+      <classinfo>
+            <objtable>kliendibaas_toode</objtable>
+            <objtable_index>oid</objtable_index>
+      </classinfo>
+</properties>
+

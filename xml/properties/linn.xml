@@ -1,0 +1,30 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>comment</name>
+            <type>textarea</type>
+            <table>kliendibaas_riik</table>
+            <group>general</group>
+            <caption>Keeled</caption>
+      </property>
+      <property>
+            <name>name</name>
+            <type>textbox</type>
+            <size>20</size>
+            <table>kliendibaas_riik</table>
+            <group>general</group>
+            <caption>Nimetus (tmp)</caption>
+      </property>
+      <property>
+            <name>location</name>
+            <type>textarea</type>
+            <table>kliendibaas_riik</table>
+            <group>general</group>
+            <caption>Asukoha kirjeldus</caption>
+      </property>
+      <classinfo>
+            <objtable>kliendibaas_riik</objtable>
+            <objtable_index>oid</objtable_index>
+      </classinfo>
+</properties>
+
