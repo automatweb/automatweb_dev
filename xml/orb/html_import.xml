@@ -1,0 +1,83 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="html_import">
+		<action name="new">
+			<function name="add">
+				<arguments>
+					<optional name="parent"/>
+					<optional name="alias_to"/>
+					<optional name="return_url"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="show">
+			<function name="show">
+				<arguments>
+					<optional name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="tiri">
+			<function name="tiri">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="ruul_test">
+			<function name="ruul_test">
+				<arguments>
+					<required name="f"/>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit">
+			<function name="submit">
+				<arguments>
+					<optional name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="change">
+			<function name="change">
+				<arguments>
+					<optional name="starts"/>
+					<required name="id"/>
+					<optional name="return_url"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="conf">
+			<function name="conf">
+				<arguments>
+					<optional name="reset"/>
+					<optional name="starts"/>
+					<required name="id"/>
+					<optional name="return_url"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="sqlconf">
+			<function name="sqlconf">
+				<arguments>
+					<optional name="create_table"/>
+					<optional name="drop_table"/>
+					<optional name="reset"/>
+					<optional name="starts"/>
+					<required name="id"/>
+					<optional name="return_url"/>
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>
+		

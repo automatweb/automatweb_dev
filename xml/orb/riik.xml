@@ -1,0 +1,52 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="riik" folder="kliendibaas">
+		<action name="new">
+			<function name="change">
+				<arguments>
+					<optional name="parent"/>
+					<optional name="return_url"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="show">
+			<function name="show">
+				<arguments>
+					<optional name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit">
+			<function name="submit">
+				<arguments>
+					<optional name="parent"/>
+					<optional name="id"/>
+					<optional name="return_url"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="change">
+			<function name="change">
+				<arguments>
+					<optional name="parent"/>
+					<optional name="id"/>
+					<optional name="return_url"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="delete">
+			<function name="delete">
+				<arguments>
+					<required name="id"/>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>
+		
