@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.42 2001/11/02 11:37:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.43 2001/11/14 06:30:19 cvs Exp $
 // form_entry_element.aw - 
 session_register("clipboard");
 classload("currency");
@@ -97,12 +97,12 @@ lc_load("definition");
 
 			global $lang_id;
 			$html = "";
-			$this->entry .= " ";
 			if ($this->arr["type"] == "textarea")
 			{
+				$this->entry .= " ";
 				$src = ($this->form->allow_html) ? $this->entry : htmlspecialchars($this->entry);
 				$src = preg_replace("/((http(s?):\/\/)|(www\.))(.+?)\s/i", "<a href=\"http$3://$4$5\" target=\"_blank\">$2$4$5</a>", $src);
-				$src = preg_replace("/(\w*?\@.*\.\w*)/i","<a href=\"mailto:$1\">$1</a>",$src);
+				$src = preg_replace("/(\S*?\@.*\.\w*)/i","<a href=\"mailto:$1\">$1</a>",$src);
 				$html = str_replace("\n","<br>",$src);
 			}
 					
@@ -140,15 +140,16 @@ lc_load("definition");
 			{
 				$ec=explode(",",$this->entry);
 				reset($ec);
-				while (list(, $v) = each($ec))
+				foreach($ec as $v)
 				{
+					$vx = (int)$v;
 					if ($this->form->lang_id != $lang_id)
 					{
-						$html.=($this->arr["multiple_lang_items"][$lang_id][$v]." ");
+						$html.=($this->arr["multiple_lang_items"][$lang_id][$vx]." ");
 					}
 					else
 					{
-						$html.=($this->arr["multiple_items"][$v]." ");
+						$html.=($this->arr["multiple_items"][$vx]." ");
 					}
 				}
 			}
@@ -167,9 +168,10 @@ lc_load("definition");
 					
 			if ($this->arr["type"] == "textbox")
 			{
+				$this->entry .= " ";
 				$src = ($this->form->allow_html) ? $this->entry : htmlspecialchars($this->entry);
 				$src = preg_replace("/((http(s?):\/\/)|(www\.))(.+?)\s/i", "<a href=\"http$3://$4$5\" target=\"_blank\">$2$4$5</a>", $src);
-				$src = preg_replace("/(\w*?\@.*)\s/i","<a href=\"mailto:$1\">$1</a>",$src);
+				$src = preg_replace("/(\S*?\@.*)\s/i","<a href=\"mailto:$1\">$1</a>",$src);
 				$html = $src;
 			}
 
