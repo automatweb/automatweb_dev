@@ -1,0 +1,56 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>url</name>
+            <type>textbox</type>
+            <size>40</size>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>URL</caption>
+      </property>
+      <property>
+            <name>width</name>
+            <type>textbox</type>
+            <size>4</size>
+            <maxlength>4</maxlength>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Laius</caption>
+      </property>
+      <property>
+            <name>height</name>
+            <type>textbox</type>
+            <size>4</size>
+            <maxlength>4</maxlength>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Kõrgus</caption>
+      </property>
+      <property>
+            <name>frameborder</name>
+            <type>checkbox</type>
+            <value>1</value>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Ümbritseda raamiga</caption>
+      </property>
+      <property>
+            <name>scrolling</name>
+            <type>select</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Kerimisribad</caption>
+      </property>
+</properties>
+
