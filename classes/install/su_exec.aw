@@ -39,7 +39,7 @@ class su_exec extends class_base
 
 		flush();
 		$cmdline = $this->cfg['basedir']."/scripts/install/su_exec/su_exec $fn";
-		$res = `$cmdline &`;
+		$res = system($cmdline);
 	
 		//echo "exect $cmdline , res = $res <br />\n";
 		unlink($fn);
