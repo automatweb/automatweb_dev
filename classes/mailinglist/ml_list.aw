@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.38 2004/02/05 11:56:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.39 2004/02/05 13:27:22 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -138,6 +138,122 @@ class ml_list extends class_base
 			"clid" => CL_ML_LIST,
 		));
 		lc_load("definition");
+	}
+
+
+	/** saadab teate $id listidesse $targets(array stringidest :listinimi:grupinimi)
+		
+		@attrib name=post_message
+		
+		@param id required 
+		@param targets optional 
+		
+	**/
+	function post_message($args)
+	{
+		extract($args);
+		$this->mk_path(0,"<a href='".aw_global_get("route_back")."'>Tagasi</a>&nbsp;/&nbsp;Saada teade");
+
+		$this->read_template("post_message.tpl");
+
+		load_vcl("date_edit");
+		$date_edit = new date_edit(time());
+		$date_edit->configure(array(
+			"day" => "",
+			"month" => "",
+			"year" => "",
+			"hour" => "",
+			"minute" => "",
+			"classid" => "small_button",
+		));
+
+		$id = (int)$id;//teate id
+
+		// yes, it works only for one list from now on. 
+		// first char is ":", strip it
+		$target = substr($targets[0],1);
+		$this->quote($target);
+
+		// that's just horrible. lookup by name. oh well
+
+		$q = "SELECT oid FROM objects WHERE class_id=".CL_ML_LIST." AND NAME = '$target' AND status != 0";
+		$this->db_query($q);
+		$listdata = $this->db_next();
+
+		$listrida = "";
+
+		$this->vars(array(
+			"title" => $target,
+			"date_edit" => $date_edit->gen_edit_form("start_at",time()-13)
+		));
+		$listrida.=$this->parse("listrida");
+		
+		$this->vars(array(
+			"listrida" => $listrida,
+			"reforb" => $this->mk_reforb("submit_post_message",array(
+				"id" => $id,
+				"list_id" => $listdata["oid"],
+			)),
+		));
+
+		return $this->parse();
+	}
+
+	/** See händleb juba õiget postitust, siis kui on valitud saatmise ajavahemikud
+		
+		@attrib name=submit_post_message
+		
+		
+	**/
+	function submit_post_message($args)
+	{
+		extract($args);
+		
+		
+		$id=(int)$id;
+		load_vcl('date_edit');
+		unset($aid);
+		$total=0;
+
+		$list_id = $args["list_id"];
+		$_start_at = date_edit::get_timestamp($start_at);
+		$_delay = $delay * 60;
+		$_patch_size = $patch_size;
+
+		/*
+		if (!isset($aid))
+		{
+			// tee sisestus avoidmids tabelisse
+			$this->db_query("INSERT INTO ml_avoidmids (avoidmids) VALUES ('')");
+			$aid=$this->db_last_insert_id();
+		};
+		*/
+
+		$count = $this->get_member_count($list_id);
+		$total++;
+
+		// mark the queue as "processing" - 5
+		$this->db_query("INSERT INTO ml_queue (lid,mid,gid,uid,aid,status,start_at,last_sent,patch_size,delay,position,total)
+			VALUES ('$list_id','$id','$gid','".aw_global_get("uid")."','$aid','5','$_start_at','0','$_patch_size','$_delay','0','$count')");
+
+		$qid = $this->db_last_insert_id();
+		
+		$mlq = get_instance("mailinglist/ml_queue");
+		$mlq->preprocess_messages(array(
+			"mail_id" => $id,
+			"list_id" => $list_id,
+			"qid" => $qid,
+		));
+
+		// now I should mark the queue as "ready to send" or 0
+		$q = "UPDATE ml_queue SET status = 0 WHERE qid = '$qid'";
+		$this->db_query($q);
+		
+		$this->_log(ST_MAILINGLIST, SA_SEND,"saatis meili $id listi ".$v["name"].":$gname", $lid);
+			
+		//$this->db_query("UPDATE ml_avoidmids SET usagec='$total' WHERE aid='$aid'");
+
+		return aw_global_get("route_back");
 	}
 
 	/** (un)subscribe an address from(to) a list 
@@ -607,111 +723,6 @@ class ml_list extends class_base
 			"time" => time()+120,	// every 2 minutes
 		));
 		return $url;
-	}
-
-	////
-	//! saadab teate $id listidesse $targets(array stringidest :listinimi:grupinimi)
-	function post_message($args)
-	{
-		extract($args);
-		$this->mk_path(0,"<a href='".aw_global_get("route_back")."'>Tagasi</a>&nbsp;/&nbsp;Saada teade");
-
-		$this->read_template("post_message.tpl");
-
-		load_vcl("date_edit");
-		$date_edit = new date_edit(time());
-		$date_edit->configure(array(
-			"day" => "",
-			"month" => "",
-			"year" => "",
-			"hour" => "",
-			"minute" => "",
-			"classid" => "small_button",
-		));
-
-		$id = (int)$id;//teate id
-
-		// yes, it works only for one list from now on. 
-		// first char is ":", strip it
-		$target = substr($targets[0],1);
-		$this->quote($target);
-
-		// that's just horrible. lookup by name. oh well
-
-		$q = "SELECT oid FROM objects WHERE class_id=".CL_ML_LIST." AND NAME = '$target' AND status != 0";
-		$this->db_query($q);
-		$listdata = $this->db_next();
-
-		$listrida = "";
-
-		$this->vars(array(
-			"title" => $target,
-			"date_edit" => $date_edit->gen_edit_form("start_at",time()-13)
-		));
-		$listrida.=$this->parse("listrida");
-		
-		$this->vars(array(
-			"listrida" => $listrida,
-			"reforb" => $this->mk_reforb("submit_post_message",array(
-				"id" => $id,
-				"list_id" => $listdata["oid"],
-			)),
-		));
-
-		return $this->parse();
-	}
-
-	////
-	//! See händleb juba õiget postitust, siis kui on valitud saatmise ajavahemikud
-	function submit_post_message($args)
-	{
-		extract($args);
-		
-		
-		$id=(int)$id;
-		load_vcl('date_edit');
-		unset($aid);
-		$total=0;
-
-		$list_id = $args["list_id"];
-		$_start_at = date_edit::get_timestamp($start_at);
-		$_delay = $delay * 60;
-		$_patch_size = $patch_size;
-
-		/*
-		if (!isset($aid))
-		{
-			// tee sisestus avoidmids tabelisse
-			$this->db_query("INSERT INTO ml_avoidmids (avoidmids) VALUES ('')");
-			$aid=$this->db_last_insert_id();
-		};
-		*/
-
-		$count = $this->get_member_count($list_id);
-		$total++;
-
-		// mark the queue as "processing" - 5
-		$this->db_query("INSERT INTO ml_queue (lid,mid,gid,uid,aid,status,start_at,last_sent,patch_size,delay,position,total)
-			VALUES ('$list_id','$id','$gid','".aw_global_get("uid")."','$aid','5','$_start_at','0','$_patch_size','$_delay','0','$count')");
-
-		$qid = $this->db_last_insert_id();
-		
-		$mlq = get_instance("mailinglist/ml_queue");
-		$mlq->preprocess_messages(array(
-			"mail_id" => $id,
-			"list_id" => $list_id,
-			"qid" => $qid,
-		));
-
-		// now I should mark the queue as "ready to send" or 0
-		$q = "UPDATE ml_queue SET status = 0 WHERE qid = '$qid'";
-		$this->db_query($q);
-		
-		$this->_log(ST_MAILINGLIST, SA_SEND,"saatis meili $id listi ".$v["name"].":$gname", $lid);
-			
-		//$this->db_query("UPDATE ml_avoidmids SET usagec='$total' WHERE aid='$aid'");
-
-		return aw_global_get("route_back");
 	}
 
 	function get_members($id,$from = 0, $to = 0)
