@@ -1,5 +1,5 @@
 <?php
-// $Id: page.aw,v 1.7 2005/03/02 13:11:36 kristo Exp $
+// $Id: page.aw,v 1.8 2005/03/22 16:20:04 kristo Exp $
 // page.aw - Generic HTML page
 /*
 	@default table=objects
@@ -49,7 +49,7 @@ class page extends class_base
 				$id = $arr["obj_inst"]->id();
 				$data["value"] = html::href(array(
 					"url" => $this->cfg["baseurl"] . "/orb.aw?class=page&action=show&id=$id",
-					"caption" => "Näita lehte",
+					"caption" => t("Näita lehte"),
 					"target" => "_blank",
 				));
 
@@ -76,7 +76,7 @@ class page extends class_base
 		$obj = new object($id);
 		if ($obj->class_id() != CL_PAGE)
 		{
-			die("kõtt");
+			die(t("kõtt"));
 		};
 		if ($section)
 		{

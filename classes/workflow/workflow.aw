@@ -66,7 +66,7 @@ class workflow extends class_base
 			case "preview":
 				$data["value"] = html::href(array(
 					"url" => $this->mk_my_orb("view",array("id" => $arr["obj_inst"]->id())),
-					"caption" => "Näita",
+					"caption" => t("Näita"),
 					"target" => "_blank",
 				));
 				break;
@@ -116,7 +116,7 @@ class workflow extends class_base
 
 		if (empty($cfgid))
 		{
-			$data["error"] = "Konfiguratsiooniobjekt on valimata!";
+			$data["error"] = t("Konfiguratsiooniobjekt on valimata!");
 			return PROP_ERROR;
 		};
 		
@@ -126,7 +126,7 @@ class workflow extends class_base
 
 		if (empty($entity_rootmenu_id))
 		{
-			$data["error"] = "Juhtumite rootmenüü on valimata!";
+			$data["error"] = t("Juhtumite rootmenüü on valimata!");
 			return PROP_ERROR;
 		};
 
@@ -137,7 +137,7 @@ class workflow extends class_base
 
 		if (empty($entity_rootmenu_id))
 		{
-			$data["error"] = "Juhtumite sisestuste rootmenüü on valimata!";
+			$data["error"] = t("Juhtumite sisestuste rootmenüü on valimata!");
 			return PROP_ERROR;
 		};
 
@@ -148,7 +148,7 @@ class workflow extends class_base
 
 		if (empty($action_rootmenu_id))
 		{
-			$data["error"] = "Tegevuste rootmenüü on valimata!";
+			$data["error"] = t("Tegevuste rootmenüü on valimata!");
 			return PROP_ERROR;
 		}
 
@@ -158,7 +158,7 @@ class workflow extends class_base
 
 		if (empty($process_rootmenu_id))
 		{
-			$data["error"] = "Protsesside rootmenüü on valimata!";
+			$data["error"] = t("Protsesside rootmenüü on valimata!");
 			return PROP_ERROR;
 		};
 
@@ -168,7 +168,7 @@ class workflow extends class_base
 
 		if (empty($actor_rootmenu_id))
 		{
-			$data["error"] = "Tegijate rootmenüü on valimata!";
+			$data["error"] = t("Tegijate rootmenüü on valimata!");
 			return PROP_ERROR;
 		}
 		else
@@ -247,7 +247,7 @@ class workflow extends class_base
 
 				$tb->add_button(array(
 					"name" => "save",
-					"tooltip" => "Salvesta",
+					"tooltip" => t("Salvesta"),
 					"url" => "javascript:document.changeform.submit();",
 					"img" => "save.gif",
 					"class" => "menuButton",
@@ -348,7 +348,7 @@ class workflow extends class_base
 
 				$tb->add_button(array(
 					"name" => "save",
-					"tooltip" => "Salvesta",
+					"tooltip" => t("Salvesta"),
 					"url" => "javascript:document.changeform.submit();",
 					"img" => "save.gif",
 					"class" => "menuButton",
@@ -436,7 +436,7 @@ class workflow extends class_base
 			case "entity":
 				$tb->add_menu_button(array(
 					"name" => "add",
-					"tooltip" => "Uus",
+					"tooltip" => t("Uus"),
 				));
 
 				// get entity type list from ot
@@ -468,7 +468,7 @@ class workflow extends class_base
 
 				$tb->add_button(array(
 					"name" => "save",
-					"tooltip" => "Salvesta",
+					"tooltip" => t("Salvesta"),
 					"url" => "javascript:document.changeform.submit();",
 					"img" => "save.gif",
 					"class" => "menuButton",
@@ -540,7 +540,7 @@ class workflow extends class_base
 	{
 		if (!$data["request"]["entity_id"])
 		{
-			die("you did not pick a process<br />");
+			die(t("you did not pick a process<br />"));
 		};
 
 		$tdata = array();
@@ -585,7 +585,7 @@ class workflow extends class_base
 	{
 		$data = array();
 		$data["type"] = "text";
-		$data["caption"] = "Log";
+		$data["caption"] = t("Log");
 		$oid = $args["request"]["oid"];
 		load_vcl("table");
 		$this->t = new aw_table(array("xml_def" => "workflow/entity_log","layout" => "generic"));
@@ -659,7 +659,7 @@ class workflow extends class_base
 
 				$tb->add_button(array(
 					"name" => "save",
-					"tooltip" => "Salvesta",
+					"tooltip" => t("Salvesta"),
 					"url" => "javascript:document.changeform.submit();",
 					"img" => "save.gif",
 					"class" => "menuButton",
@@ -669,7 +669,7 @@ class workflow extends class_base
 			case "process":
 				$tb->add_button(array(
 					"name" => "add",
-					"tooltip" => "Uus protsess",
+					"tooltip" => t("Uus protsess"),
 					"url" => $this->mk_my_orb("view",array("id" => $args["obj_inst"]->id(),"group" => "show_processes","subgroup" => "add_process")),
 					"img" => "new.gif",
 					"class" => "menuButton",
@@ -793,10 +793,10 @@ class workflow extends class_base
 
 	function create_entity($args = array())
 	{
-		die("create ent");
+		die(t("create ent"));
 		if (!$args["request"]["entity_id"])
 		{
-			die("you did not pick a process<br />");
+			die(t("you did not pick a process<br />"));
 		};
 
 		$data = array();
@@ -872,7 +872,7 @@ class workflow extends class_base
 		$tb = get_instance("vcl/toolbar");
 		$tb->add_button(array(
 			"name" => "add",
-			"tooltop" => "Uus",
+			"tooltop" => t("Uus"),
 			"url" => "#",
 			"img" => "new.gif",
 			"class" => "menuButton",
@@ -993,7 +993,7 @@ class workflow extends class_base
 			$nacts = array(0 => "") + $wfe->get_possible_next_states($e->id());
 			if (count($nacts) < 2)
 			{
-				$na = "Protsess on l&otilde;ppenud!";
+				$na = t("Protsess on l&otilde;ppenud!");
 			}
 			else
 			{
@@ -1215,10 +1215,10 @@ class workflow extends class_base
 			"var" => "sub_tab", 
 			"default" => "entities",
 			"opts" => array(
-				"entities" => "Juhtumid",
-				"process" => "Protsessid",
-				"actions" => "Tegevused",
-				"actors" => "Tegijad"
+				"entities" => t("Juhtumid"),
+				"process" => t("Protsessid"),
+				"actions" => t("Tegevused"),
+				"actors" => t("Tegijad")
 			)
 		));
 

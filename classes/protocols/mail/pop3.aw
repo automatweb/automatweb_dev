@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/pop3.aw,v 1.1 2003/09/03 15:32:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/pop3.aw,v 1.2 2005/03/22 16:20:04 kristo Exp $
 // pop3.aw - POP3 login 
 /*
 
@@ -25,9 +25,6 @@ class pop3 extends class_base
 {
 	function pop3()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
-		// if they exist at all. the default folder does not actually exist, 
-		// it just points to where it should be, if it existed
 		$this->init(array(
 			"tpldir" => "protocols/mail/pop3",
 			"clid" => CL_PROTO_POP3
@@ -69,7 +66,7 @@ class pop3 extends class_base
 		$this->fp = fsockopen($server, 110, &$errno, &$errstr);
 		if (!$this->fp)
 		{
-			$this->raise_error(ERR_POP3_CONNECT,"pop3: error connecting, $errno , $errstr",true);
+			$this->raise_error(ERR_POP3_CONNECT,sprintf(t("pop3: error connecting, %s , %s"), $errno, $errstr),true);
 			return false;
 		}
 		//print "connected!<br>";
@@ -104,7 +101,7 @@ class pop3 extends class_base
 				return false;
 			}
 		}
-                return false;
+		return false;
 	}
 
 	function get_messages($arr)
@@ -122,21 +119,21 @@ class pop3 extends class_base
 		$this->send_command("USER $user");
 		if (!$this->get_status($this->read_response()))
 		{
-			$this->raise_error(ERR_POP3_INVUSER,"pop3: Invalid username $user!",true);
+			$this->raise_error(ERR_POP3_INVUSER,sprintf(t("pop3: Invalid username %s!"), $user),true);
 			return false;
 		}
 
 		$this->send_command("PASS $pass");
 		if (!$this->get_status($this->read_response()))
 		{
-			$this->raise_error(ERR_POP3_INVPWD,"pop3: Invalid password for user $user!",true);
+			$this->raise_error(ERR_POP3_INVPWD,sprintf(t("pop3: Invalid password for user %s!"), $user),true);
 			return false;
 		}
 
 		$this->send_command("STAT");
 		if (!$this->get_status($res = $this->read_response()))
 		{
-			$this->raise_error(ERR_POP3_STAT,"pop3:  weird error $res after STAT!",true);
+			$this->raise_error(ERR_POP3_STAT,sprintf(t("pop3:  weird error %s after STAT!"), $res),true);
 			return false;
 		}
 		preg_match("/\+OK (.*) (.*)/",$res,$mt);
@@ -145,7 +142,7 @@ class pop3 extends class_base
 		$this->send_command("UIDL");
 		if (!$this->get_status($res = $this->read_response()))
 		{
-			$this->raise_error(ERR_POP3_UIDL,"pop3:  weird error $res after UIDL!",true);
+			$this->raise_error(ERR_POP3_UIDL,sprintf(t("pop3:  weird error %s after UIDL!"), $res),true);
 			return false;
 		}
 		$muidls = array();
@@ -215,7 +212,7 @@ class pop3 extends class_base
 		$this->send_command("RETR $num");
 		if (!$this->get_status($res = $this->read_response()))
 		{
-			$this->raise_error(ERR_POP3_RETR,"pop3: imelik error $res after RETR $num !",true);
+			$this->raise_error(ERR_POP3_RETR,sprintf(t("pop3: imelik error %s after RETR %s !"), $res, $num),true);
 			return false;
 		}
 		$ret = "";

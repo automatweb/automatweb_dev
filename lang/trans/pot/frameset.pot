@@ -1,0 +1,24 @@
+#: classes/vcl/frameset.aw:104
+msgid "1 vasakul, 2 paremal"
+msgstr ""
+
+#: classes/vcl/frameset.aw:208
+msgid "Raam <b>'%s'</b>"
+msgstr ""
+
+#: classes/vcl/frameset.aw:210
+msgid "Default sisu"
+msgstr ""
+
+#: classes/vcl/frameset.aw:217
+msgid "Default lehe stiil"
+msgstr ""
+
+#: classes/vcl/frameset.aw:224
+msgid "Border"
+msgstr ""
+
+#: classes/vcl/frameset.aw:230
+msgid "Keritav"
+msgstr ""
+

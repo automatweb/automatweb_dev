@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.7 2004/08/25 08:37:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.8 2005/03/22 16:20:04 kristo Exp $
 // rte.aw - Rich Text Editor 
 /*
 
@@ -61,87 +61,87 @@ class rte extends class_base
 			$js_url_prefix = "parent.contentarea.";
 		};
 
-                $toolbar->add_button(array(
-                        "name" => "bold",
-                        "tooltip" => "Bold",
-                        "url" => "javascript:${js_url_prefix}format_selection('bold');",
-                        "img" => "rte_bold.gif",
-                ));
-
-                $toolbar->add_button(array(
-                        "name" => "italic",
-                        "tooltip" => "Italic",
-                        "url" => "javascript:${js_url_prefix}format_selection('italic');",
-                        "img" => "rte_italic.gif",
-                ));
-
-                $toolbar->add_button(array(
-                        "name" => "underline",
-                        "tooltip" => "Underline",
-                        "url" => "javascript:${js_url_prefix}format_selection('underline');",
-                        "img" => "rte_underline.gif",
-                ));
-
-                $toolbar->add_separator();
+		$toolbar->add_button(array(
+			"name" => "bold",
+			"tooltip" => t("Bold"),
+			"url" => "javascript:${js_url_prefix}format_selection('bold');",
+			"img" => "rte_bold.gif",
+		));
 
 		$toolbar->add_button(array(
-                        "name" => "align_left",
-                        "tooltip" => "Align left",
-                        "url" => "javascript:${js_url_prefix}format_selection('justifyleft');",
-                        "img" => "rte_align_left.gif",
-                ));
-
-                $toolbar->add_button(array(
-                        "name" => "align_center",
-                        "tooltip" => "Align center",
-                        "url" => "javascript:${js_url_prefix}format_selection('justifycenter');",
-                        "img" => "rte_align_center.gif",
-                ));
-
-                $toolbar->add_button(array(
-                        "name" => "align_right",
-                        "tooltip" => "Align right",
-                        "url" => "javascript:${js_url_prefix}format_selection('justifyright');",
-                        "img" => "rte_align_right.gif",
-                ));
-
-                $toolbar->add_separator();
-
-                $toolbar->add_button(array(
-                        "name" => "num_list",
-                        "tooltip" => "Numbered list",
-                        "url" => "javascript:${js_url_prefix}format_selection('insertorderedlist');",
-                        "img" => "rte_num_list.gif",
-                ));
+			"name" => "italic",
+			"tooltip" => t("Italic"),
+			"url" => "javascript:${js_url_prefix}format_selection('italic');",
+			"img" => "rte_italic.gif",
+		));
 
 		$toolbar->add_button(array(
-                        "name" => "bul_list",
-                        "tooltip" => "Bulleted list",
-                        "url" => "javascript:${js_url_prefix}format_selection('insertunorderedlist');",
-                        "img" => "rte_bul_list.gif",
-                ));
+			"name" => "underline",
+			"tooltip" => t("Underline"),
+			"url" => "javascript:${js_url_prefix}format_selection('underline');",
+			"img" => "rte_underline.gif",
+		));
 
-                $toolbar->add_separator();
+		$toolbar->add_separator();
 
-                $toolbar->add_button(array(
-                        "name" => "outdent",
-                        "tooltip" => "Outdent",
-                        "url" => "javascript:${js_url_prefix}format_selection('outdent');",
-                        "img" => "rte_outdent.gif",
-                ));
+		$toolbar->add_button(array(
+			"name" => "align_left",
+			"tooltip" => t("Align left"),
+			"url" => "javascript:${js_url_prefix}format_selection('justifyleft');",
+			"img" => "rte_align_left.gif",
+		));
 
-                $toolbar->add_button(array(
-                        "name" => "indent",
-                        "tooltip" => "Indent",
-                        "url" => "javascript:${js_url_prefix}format_selection('indent');",
-                        "img" => "rte_indent.gif",
-                ));
+		$toolbar->add_button(array(
+			"name" => "align_center",
+			"tooltip" => t("Align center"),
+			"url" => "javascript:${js_url_prefix}format_selection('justifycenter');",
+			"img" => "rte_align_center.gif",
+		));
+
+		$toolbar->add_button(array(
+			"name" => "align_right",
+			"tooltip" => t("Align right"),
+			"url" => "javascript:${js_url_prefix}format_selection('justifyright');",
+			"img" => "rte_align_right.gif",
+		));
+
+		$toolbar->add_separator();
+
+		$toolbar->add_button(array(
+			"name" => "num_list",
+			"tooltip" => t("Numbered list"),
+			"url" => "javascript:${js_url_prefix}format_selection('insertorderedlist');",
+			"img" => "rte_num_list.gif",
+		));
+
+		$toolbar->add_button(array(
+			"name" => "bul_list",
+			"tooltip" => t("Bulleted list"),
+			"url" => "javascript:${js_url_prefix}format_selection('insertunorderedlist');",
+			"img" => "rte_bul_list.gif",
+		));
+
+		$toolbar->add_separator();
+
+		$toolbar->add_button(array(
+			"name" => "outdent",
+			"tooltip" => t("Outdent"),
+			"url" => "javascript:${js_url_prefix}format_selection('outdent');",
+			"img" => "rte_outdent.gif",
+		));
+
+		$toolbar->add_button(array(
+			"name" => "indent",
+			"tooltip" => T("Indent"),
+			"url" => "javascript:${js_url_prefix}format_selection('indent');",
+			"img" => "rte_indent.gif",
+		));
 
 		$toolbar->add_separator();
 
 		$toolbar->add_button(array(
 			"name" => "source",
-			"tooltip" => "HTML",
+			"tooltip" => T("HTML"),
 			"target" => "_self",
 			"url" => "javascript:oldurl=window.location.href;window.location.href=oldurl + '&no_rte=1';",
 		));
@@ -159,10 +159,10 @@ class rte extends class_base
 		$toolbar->add_button(array(
 			"name" => "clearstyles",
 			"img" => "clearstyles.gif",
-			"tooltip" => "tühista stiilid",
+			"tooltip" => T("Tühista stiilid"),
 			"url" => "javascript:${js_url_prefix}clearstyles()",
 			"side" => "right",
-                ));
+		));
 	}
 
 	function draw_editor($arr)

@@ -16,7 +16,7 @@ class protocol_finder
 		}
 		error::raise(array(
 			"id" => ERR_NO_PROTOCOL,
-			"msg" => "protocol_fnider::inst($url): no protocol implemented for url"
+			"msg" => sprintf(t("protocol_fnider::inst(%s): no protocol implemented for url"), $url)
 		));
 	}
 }

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/comments.aw,v 1.9 2004/11/24 10:26:02 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/comments.aw,v 1.10 2005/03/22 16:20:04 kristo Exp $
 // comments VCL component
 
 // what kind of forms do I need?
@@ -45,7 +45,7 @@ class comments extends class_base
 		{
 			$res .= "<h2>" . $this->obj->name() . "</h2>";
 		};
-		$res .= count($comms) . " kommentaari<br><br>";
+		$res .= count($comms) . t(" kommentaari<br><br>");
 		$res .= "$pager<br><br>";
 		$c = 0;
 		foreach($comms as $row)
@@ -77,23 +77,23 @@ class comments extends class_base
 			$prname . "_capt2" => array(
 				"type" => "text",
 				"subtitle" => 1,
-				"value" => "Lisa kommentaar",
+				"value" => t("Lisa kommentaar"),
 				"name" => $prname . "[capt2]",
 			),
 			$prname . "_capt" => array(
 				"type" => "text",
-				"caption" => "Kasutaja",
+				"caption" => t("Kasutaja"),
 				"value" => "<b>" . aw_global_get("uid") . "</b>",
 				"name" => $prname . "[capt]",
 			),
 			$prname . "_comment" => array(
 				"type" => "textarea",
-				"caption" => "Kommentaar",
+				"caption" => t("Kommentaar"),
 				"name" => $prname . "[comment]",
 			),
 			$prname . "_obj_id" => array(
 				"type" => "hidden",
-				"caption" => "",
+				"caption" => t(""),
 				"value" => $parent,
 				"name" => $prname . "[obj_id]",
 			),

@@ -1,0 +1,36 @@
+#: classes/vcl/rte.aw:66
+msgid "Bold"
+msgstr ""
+
+#: classes/vcl/rte.aw:73
+msgid "Italic"
+msgstr ""
+
+#: classes/vcl/rte.aw:80
+msgid "Underline"
+msgstr ""
+
+#: classes/vcl/rte.aw:89
+msgid "Align left"
+msgstr ""
+
+#: classes/vcl/rte.aw:96
+msgid "Align center"
+msgstr ""
+
+#: classes/vcl/rte.aw:103
+msgid "Align right"
+msgstr ""
+
+#: classes/vcl/rte.aw:112
+msgid "Numbered list"
+msgstr ""
+
+#: classes/vcl/rte.aw:119
+msgid "Bulleted list"
+msgstr ""
+
+#: classes/vcl/rte.aw:128
+msgid "Outdent"
+msgstr ""
+

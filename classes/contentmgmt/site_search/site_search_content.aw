@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.43 2005/03/22 09:25:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.44 2005/03/22 16:20:04 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -150,23 +150,23 @@ class site_search_content extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			"name" => "act",
-			"caption" => "Vaikimisi",
+			"caption" => t("Vaikimisi"),
 			"align" => "center",
 		));
 
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 		));
 
 		$t->define_field(array(
 			"name" => "sorder",
-			"caption" => "Vaikimisi järjestus",
+			"caption" => t("Vaikimisi järjestus"),
 		));
 		
 		$t->define_field(array(
 			"name" => "caption",
-			"caption" => "Pealkiri",
+			"caption" => t("Pealkiri"),
 		));
 
 		$conns = $o->connections_from(array(
@@ -181,11 +181,11 @@ class site_search_content extends class_base
 		$propname = $arr["prop"]["name"];
 
 		$sort_opts = array(
-			0 => "--vali--",
-			S_ORD_TIME => "Kuupäeva järgi (uuem enne)",
-			S_ORD_TIME_ASC => "Kuupäeva järgi (vanem enne)",
-			S_ORD_TITLE => "Pealkirja j&auml;rgi",
-			S_ORD_CONTENT => "Sisu j&auml;rgi",
+			0 => t("--vali--"),
+			S_ORD_TIME => t("Kuupäeva järgi (uuem enne)"),
+			S_ORD_TIME_ASC => t("Kuupäeva järgi (vanem enne)"),
+			S_ORD_TITLE => t("Pealkirja j&auml;rgi"),
+			S_ORD_CONTENT => t("Sisu j&auml;rgi"),
 		);
 
 		foreach($conns as $conn)

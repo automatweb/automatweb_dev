@@ -1,0 +1,20 @@
+#: classes/contentmgmt/site_search/site_search_content_grp.aw:75
+msgid "Klass"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content_grp.aw:79
+msgid "ID"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content_grp.aw:87
+msgid "Nimi"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content_grp.aw:92
+msgid "k.a. alammenüüd"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content_grp.aw:100
+msgid "mitteaktiivsed"
+msgstr ""
+

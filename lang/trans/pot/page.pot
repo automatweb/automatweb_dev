@@ -1,0 +1,8 @@
+#: classes/vcl/page.aw:52
+msgid "Näita lehte"
+msgstr ""
+
+#: classes/vcl/page.aw:79
+msgid "kõtt"
+msgstr ""
+

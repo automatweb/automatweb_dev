@@ -1,0 +1,92 @@
+#: classes/workflow/workflow.aw:69
+msgid "Näita"
+msgstr ""
+
+#: classes/workflow/workflow.aw:119
+msgid "Konfiguratsiooniobjekt on valimata!"
+msgstr ""
+
+#: classes/workflow/workflow.aw:129
+msgid "Juhtumite rootmenüü on valimata!"
+msgstr ""
+
+#: classes/workflow/workflow.aw:140
+msgid "Juhtumite sisestuste rootmenüü on valimata!"
+msgstr ""
+
+#: classes/workflow/workflow.aw:151
+msgid "Tegevuste rootmenüü on valimata!"
+msgstr ""
+
+#: classes/workflow/workflow.aw:161
+msgid "Protsesside rootmenüü on valimata!"
+msgstr ""
+
+#: classes/workflow/workflow.aw:171
+msgid "Tegijate rootmenüü on valimata!"
+msgstr ""
+
+#: classes/workflow/workflow.aw:250
+msgid "Salvesta"
+msgstr ""
+
+#: classes/workflow/workflow.aw:351
+msgid "Salvesta"
+msgstr ""
+
+#: classes/workflow/workflow.aw:439
+msgid "Uus"
+msgstr ""
+
+#: classes/workflow/workflow.aw:471
+msgid "Salvesta"
+msgstr ""
+
+#: classes/workflow/workflow.aw:543
+msgid "you did not pick a process<br />"
+msgstr ""
+
+#: classes/workflow/workflow.aw:588
+msgid "Log"
+msgstr ""
+
+#: classes/workflow/workflow.aw:662
+msgid "Salvesta"
+msgstr ""
+
+#: classes/workflow/workflow.aw:672
+msgid "Uus protsess"
+msgstr ""
+
+#: classes/workflow/workflow.aw:796
+msgid "create ent"
+msgstr ""
+
+#: classes/workflow/workflow.aw:799
+msgid "you did not pick a process<br />"
+msgstr ""
+
+#: classes/workflow/workflow.aw:875
+msgid "Uus"
+msgstr ""
+
+#: classes/workflow/workflow.aw:996
+msgid "Protsess on l&otilde;ppenud!"
+msgstr ""
+
+#: classes/workflow/workflow.aw:1218
+msgid "Juhtumid"
+msgstr ""
+
+#: classes/workflow/workflow.aw:1219
+msgid "Protsessid"
+msgstr ""
+
+#: classes/workflow/workflow.aw:1220
+msgid "Tegevused"
+msgstr ""
+
+#: classes/workflow/workflow.aw:1221
+msgid "Tegijad"
+msgstr ""
+

@@ -1,0 +1,44 @@
+#: classes/workflow/process.aw:77
+msgid "--vali--"
+msgstr ""
+
+#: classes/workflow/process.aw:78
+msgid "põhiprotsess"
+msgstr ""
+
+#: classes/workflow/process.aw:79
+msgid "tugiprotsess"
+msgstr ""
+
+#: classes/workflow/process.aw:191
+msgid "Muuda"
+msgstr ""
+
+#: classes/workflow/process.aw:213
+msgid "lisa j&auml;rgnevus"
+msgstr ""
+
+#: classes/workflow/process.aw:237
+msgid "J&auml;rgnevuse otsad ei tohi samad olla!"
+msgstr ""
+
+#: classes/workflow/process.aw:250
+msgid "Selline j&auml;rgnevus on juba olemas!"
+msgstr ""
+
+#: classes/workflow/process.aw:287
+msgid "Juurtegevus on valimata"
+msgstr ""
+
+#: classes/workflow/process.aw:297
+msgid "L&otilde;pptegevus on valimata"
+msgstr ""
+
+#: classes/workflow/process.aw:303
+msgid "J&auml;rgnevuste kataloog on valimata!"
+msgstr ""
+
+#: classes/workflow/process.aw:315
+msgid "Objektil puuduvad 'tegevus' tüüpi seosed"
+msgstr ""
+

@@ -1,0 +1,80 @@
+#: classes/contentmgmt/join/join_site.aw:152
+msgid "E-maili sisu, mis saadetakse kasutajale liitumisel (kasutajanime alias #kasutaja#, parooli alias #parool# ja parooli muutmise lingi alias #pwd_hash#)."
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:235
+msgid "Reegel"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:241
+msgid "Grupp"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:247
+msgid "Muuda"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:268
+msgid "Muuda"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:278
+msgid "Omadus"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:282
+msgid "T&auml;idetav"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:287
+msgid "N&otilde;utav"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:297
+msgid "Omadus"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:301
+msgid "Lehek&uuml;lg"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:306
+msgid "J&auml;rjekord"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:316
+msgid "Sisestatud number"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:321
+msgid "Lehe nimi"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:347
+msgid "Tekst"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:454
+msgid "<b>Vahepealkirjad</b>"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:691
+msgid "<font color='#FF0000'>J&auml;rgnev v&auml;li peab olema t&auml;idetud!</font>"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:743
+msgid "Liitun"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:1430
+msgid "Liitumise meili from aadress (%s)"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:1441
+msgid "Liitumise meili subjekt (%s)"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:1454
+msgid "Liitumise meil (%s)"
+msgstr ""
+

@@ -1,0 +1,20 @@
+#: classes/vcl/comments.aw:48
+msgid " kommentaari<br><br>"
+msgstr ""
+
+#: classes/vcl/comments.aw:80
+msgid "Lisa kommentaar"
+msgstr ""
+
+#: classes/vcl/comments.aw:85
+msgid "Kasutaja"
+msgstr ""
+
+#: classes/vcl/comments.aw:91
+msgid "Kommentaar"
+msgstr ""
+
+#: classes/vcl/comments.aw:96
+msgid ""
+msgstr ""
+

@@ -74,9 +74,9 @@ class process extends class_base
 
 			case "ptype":
 				$data["options"] = array(
-					"0" => "--vali--",
-					"1" => "põhiprotsess",
-					"2" => "tugiprotsess",
+					"0" => t("--vali--"),
+					"1" => t("põhiprotsess"),
+					"2" => t("tugiprotsess"),
 				);
 				break;
 		}
@@ -188,7 +188,7 @@ class process extends class_base
 				"to" => $this->actiondata[$transition->prop("to_act")],
 				"edit" => html::href(array(
 					"url" => $this->mk_my_orb("change", array("id" => $transition->id()), "workflow_transition"),
-					"caption" => "Muuda"
+					"caption" => t("Muuda")
 				)),
 				"del" => html::checkbox(array(
 					"name" => "del[]",
@@ -210,7 +210,7 @@ class process extends class_base
 				"name" => "add_action[to_act]",
 				"options" => $this->actiondata,
 			)),
-			"edit" => "lisa j&auml;rgnevus",
+			"edit" => t("lisa j&auml;rgnevus"),
 			"del" => ""
 		));
 
@@ -234,7 +234,7 @@ class process extends class_base
 		{
 			if ($add_action["from_act"] == $add_action["to_act"])
 			{
-				$args["prop"]["error"] = "J&auml;rgnevuse otsad ei tohi samad olla!";
+				$args["prop"]["error"] = t("J&auml;rgnevuse otsad ei tohi samad olla!");
 				return PROP_ERROR;
 			}
 
@@ -247,7 +247,7 @@ class process extends class_base
 			));
 			if ($ol->count() > 0)
 			{
-				$args["prop"]["error"] = "Selline j&auml;rgnevus on juba olemas!";
+				$args["prop"]["error"] = t("Selline j&auml;rgnevus on juba olemas!");
 				return PROP_ERROR;
 			}
 			else
@@ -284,7 +284,7 @@ class process extends class_base
 		}
 		else
 		{
-			$data["error"] = "Juurtegevus on valimata";
+			$data["error"] = t("Juurtegevus on valimata");
 			return PROP_ERROR;
 		};
 
@@ -294,13 +294,13 @@ class process extends class_base
 		}
 		else
 		{
-			$data["error"] = "L&otilde;pptegevus on valimata";
+			$data["error"] = t("L&otilde;pptegevus on valimata");
 			return PROP_ERROR;
 		};
 
 		if (!$args["obj_inst"]->prop("transition_folder"))
 		{
-			$data["error"] = "J&auml;rgnevuste kataloog on valimata!";
+			$data["error"] = t("J&auml;rgnevuste kataloog on valimata!");
 			return PROP_ERROR;
 		}
 
@@ -312,7 +312,7 @@ class process extends class_base
 
 		if (sizeof($conns) == 0)
 		{
-			$data["error"] = "Objektil puuduvad 'tegevus' tüüpi seosed";
+			$data["error"] = t("Objektil puuduvad 'tegevus' tüüpi seosed");
 			return PROP_ERROR;
 		};
 

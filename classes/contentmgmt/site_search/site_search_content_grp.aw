@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.18 2005/03/22 09:21:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.19 2005/03/22 16:20:04 kristo Exp $
 // site_seaarch_content_grp.aw - Saidi sisu otsingu grupp 
 /*
 
@@ -72,11 +72,11 @@ class site_search_content_grp extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			"name" => "class",
-			"caption" => "Klass",
+			"caption" => t("Klass"),
 		));			
 		$t->define_field(array(
 			"name" => "oid",
-			"caption" => "ID",
+			"caption" => t("ID"),
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
@@ -84,12 +84,12 @@ class site_search_content_grp extends class_base
 		));
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"talign" => "center",
 		));
 		$t->define_field(array(
 			"name" => "check",
-			"caption" => "k.a. alammenüüd",
+			"caption" => t("k.a. alammenüüd"),
 			"talign" => "center",
 			"width" => 80,
 			"align" => "center",
@@ -97,7 +97,7 @@ class site_search_content_grp extends class_base
 		
 		$t->define_field(array(
 			"name" => "check_na",
-			"caption" => "mitteaktiivsed",
+			"caption" => t("mitteaktiivsed"),
 			"talign" => "center",
 			"width" => 80,
 			"align" => "center",

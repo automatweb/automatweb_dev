@@ -42,3 +42,39 @@ msgstr ""
 msgid "Fraas"
 msgstr ""
 
+#: classes/contentmgmt/site_search/site_search_content.aw:153
+msgid "Vaikimisi"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:159
+msgid "Nimi"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:164
+msgid "Vaikimisi järjestus"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:169
+msgid "Pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:184
+msgid "--vali--"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:185
+msgid "Kuupäeva järgi (uuem enne)"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:186
+msgid "Kuupäeva järgi (vanem enne)"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:187
+msgid "Pealkirja j&auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:188
+msgid "Sisu j&auml;rgi"
+msgstr ""
+

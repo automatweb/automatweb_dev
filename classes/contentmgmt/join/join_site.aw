@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.15 2005/03/18 12:21:27 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.16 2005/03/22 16:20:04 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -149,7 +149,7 @@ class join_site extends class_base
 				break;
 
 			case "joinmail_legend":
-				$data["value"] = "E-maili sisu, mis saadetakse kasutajale liitumisel (kasutajanime alias #kasutaja#, parooli alias #parool# ja parooli muutmise lingi alias #pwd_hash#).";
+				$data["value"] = t("E-maili sisu, mis saadetakse kasutajale liitumisel (kasutajanime alias #kasutaja#, parooli alias #parool# ja parooli muutmise lingi alias #pwd_hash#).");
 				break;
 		};
 		return $retval;
@@ -232,19 +232,19 @@ class join_site extends class_base
 	{
 		$t->define_field(array(
 			"name" => "rule",
-			"caption" => "Reegel",
+			"caption" => t("Reegel"),
 			"align" => "center",
 			"sortable" => 1
 		));
 		$t->define_field(array(
 			"name" => "to_grp",
-			"caption" => "Grupp",
+			"caption" => t("Grupp"),
 			"align" => "center",
 			"sortable" => 1
 		));
 		$t->define_field(array(
 			"name" => "edit",
-			"caption" => "Muuda",
+			"caption" => t("Muuda"),
 			"align" => "center",
 		));
 	}
@@ -265,7 +265,7 @@ class join_site extends class_base
 				"to_grp" => $go->name(),
 				"edit" => html::href(array(
 					"url" => $this->mk_my_orb("change", array("id" => $to->id()), $to->class_id()),
-					"caption" => "Muuda"
+					"caption" => t("Muuda")
 				))
 			));
 		}
@@ -275,16 +275,16 @@ class join_site extends class_base
 	{
 		$t->define_field(array(
 			"name" => "prop",
-			"caption" => "Omadus"
+			"caption" => t("Omadus")
 		));
 		$t->define_field(array(
 			"name" => "visible",
-			"caption" => "T&auml;idetav",
+			"caption" => t("T&auml;idetav"),
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "required",
-			"caption" => "N&otilde;utav",
+			"caption" => t("N&otilde;utav"),
 			"align" => "center"
 		));
 		$t->set_sortable(false);
@@ -294,16 +294,16 @@ class join_site extends class_base
 	{
 		$t->define_field(array(
 			"name" => "prop",
-			"caption" => "Omadus"
+			"caption" => t("Omadus")
 		));
 		$t->define_field(array(
 			"name" => "page",
-			"caption" => "Lehek&uuml;lg",
+			"caption" => t("Lehek&uuml;lg"),
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "ord",
-			"caption" => "J&auml;rjekord",
+			"caption" => t("J&auml;rjekord"),
 			"align" => "center"
 		));
 		$t->set_sortable(false);
@@ -313,12 +313,12 @@ class join_site extends class_base
 	{
 		$t->define_field(array(
 			"name" => "page_name",
-			"caption" => "Sisestatud number",
+			"caption" => t("Sisestatud number"),
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "page_title",
-			"caption" => "Lehe nimi",
+			"caption" => t("Lehe nimi"),
 			"align" => "center"
 		));
 	}
@@ -344,7 +344,7 @@ class join_site extends class_base
 	{
 		$t->define_field(array(
 			"name" => "sep_name",
-			"caption" => "Tekst",
+			"caption" => t("Tekst"),
 			"align" => "center"
 		));
 	}
@@ -451,7 +451,7 @@ class join_site extends class_base
 
 		// insert all separators 
 		$prop["vcl_inst"]->define_data(array(
-			"prop" => "<b>Vahepealkirjad</b>",
+			"prop" => t("<b>Vahepealkirjad</b>"),
 			"visible" => "",
 			"required" => ""
 		));
@@ -688,7 +688,7 @@ class join_site extends class_base
 						"name" => "err_".$clid."_".$oldn,
 						"type" => "text",
 						"no_caption" => 1,
-						"value" => "<font color='#FF0000'>J&auml;rgnev v&auml;li peab olema t&auml;idetud!</font>"
+						"value" => t("<font color='#FF0000'>J&auml;rgnev v&auml;li peab olema t&auml;idetud!</font>")
 					);
 					$htmlc->add_property($errp);
 				}
@@ -740,7 +740,7 @@ class join_site extends class_base
 		aw_global_set("no_cache", 1);
 
 		$o = obj($arr["id"]);
-		$tx = "Liitun";
+		$tx = t("Liitun");
 		if ($o->prop("join_but_text"))
 		{
 			$tx = $o->prop("join_but_text");
@@ -1427,7 +1427,7 @@ class join_site extends class_base
 				"table" => "objects",
 				"field" => "meta",
 				"method" => "serialize",
-				"caption" => "Liitumise meili from aadress (".$ldata["name"].")",
+				"caption" => sprintf(t("Liitumise meili from aadress (%s)"), $ldata["name"]),
 				"value" => $jmt[$lid]["from"]
 			);
 
@@ -1438,7 +1438,7 @@ class join_site extends class_base
 				"table" => "objects",
 				"field" => "meta",
 				"method" => "serialize",
-				"caption" => "Liitumise meili subjekt (".$ldata["name"].")",
+				"caption" => sprintf(t("Liitumise meili subjekt (%s)"), $ldata["name"]),
 				"value" => $jmt[$lid]["subj"]
 			);
 
@@ -1451,7 +1451,7 @@ class join_site extends class_base
 				"table" => "objects",
 				"field" => "meta",
 				"method" => "serialize",
-				"caption" => "Liitumise meil (".$ldata["name"].")",
+				"caption" => sprintf(t("Liitumise meil (%s)"), $ldata["name"]),
 				"value" => $jmt[$lid]["text"]
 			);
 

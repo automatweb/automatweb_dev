@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/Attic/frameset.aw,v 1.9 2004/02/11 09:24:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/Attic/frameset.aw,v 1.10 2005/03/22 16:20:04 kristo Exp $
 // frameset.aw - frameset generator
 /*
 	@default table=objects
@@ -101,7 +101,7 @@ class frameset extends class_base
 			"frames" => array("left",$tmp),
 		);
 		
-		$this->frame_names["l1r2"] = "1 vasakul, 2 paremal";
+		$this->frame_names["l1r2"] = t("1 vasakul, 2 paremal");
 	}
 
 	/**  
@@ -109,12 +109,6 @@ class frameset extends class_base
 		@attrib name=show params=name
 		
 		@param id required
-		
-		@returns
-		
-		
-		@comment
-
 	**/
 	function show($arr)
 	{
@@ -211,29 +205,29 @@ class frameset extends class_base
 		$names = new aw_array($this->names);
 		foreach($names->get() as $name)
 		{
-			$nodes[] = array("caption" => "Raam <b>'$name'</b>");
+			$nodes[] = array("caption" => sprintf(t("Raam <b>'%s'</b>"), $name));
 			$nodes[] = array(
-				"caption" => "Default sisu",
+				"caption" => t("Default sisu"),
 				"type" => "textbox",
 				"size" => 50,
 				"name" => "framedata[$name][source]",
 				"value" => $arr["prop"]["value"][$name]["source"],
 			);
 			$nodes[] = array(
-				"caption" => "Default lehe stiil",
+				"caption" => t("Default lehe stiil"),
 				"type" => "objpicker",
 				"name" => "framedata[$name][style]",
 				"clid" => "CL_PAGE",
 				"value" => $arr["prop"]["value"][$name]["style"],
 			);
 			$nodes[] = array(
-				"caption" => "Border",
+				"caption" => t("Border"),
 				"type" => "checkbox",
 				"name" => "framedata[$name][frameborder]",
 				"checked" => checked($arr["prop"]["value"][$name]["frameborder"]),
 			);
 			$nodes[] = array(
-				"caption" => "Keritav",
+				"caption" => t("Keritav"),
 				"type" => "select",
 				"name" => "framedata[$name][scrolling]",
 				"value" => $arr["prop"]["value"][$name]["scrolling"],
