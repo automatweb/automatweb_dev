@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.15 2004/12/06 13:14:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.16 2004/12/08 07:50:23 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -492,9 +492,13 @@ class register_search extends class_base
 				"name" => $this->fts_name,
 				"type" => "textbox",
 				"caption" => $fdata[$this->fts_name]["caption"],
-				"value" => $request["rsf"][$this->fts_name],
-				"zee_shaa_helper" => 1
+				"value" => $request["rsf"][$this->fts_name]
 			);
+			
+			if (aw_ini_get("site_id") == 125)
+			{
+				$tmp[$this->fts_name]["zee_shaa_helper"] = 1;
+			}
 		}
 
 		$i = get_instance($clid);
