@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.79 2003/02/21 12:47:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.80 2003/03/12 14:40:22 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -152,6 +152,7 @@ class aliasmgr extends aw_template
 		$oid = (int)$oid;
 		$this->recover_idx_enumeration($oid);
 		$ret_type = ($ret_type) ? $ret_type : GET_ALIASES_BY_CLASS;
+		$this->alias_rel_type = array();
 
 		$obj = $this->get_object($oid);
 		// with this you can alter the sql clause to fetch only the data you are
@@ -177,6 +178,7 @@ class aliasmgr extends aw_template
 			elseif ($ret_type == GET_ALIASES_BY_CLASS)
 			{
 				$retval[$row["class_id"]][$row["idx"]] = $row;
+				$this->alias_rel_type[$row["target"]] = $row["reltype"];
 			}
 			else
 			{
@@ -571,13 +573,27 @@ class aliasmgr extends aw_template
 
 			if ($alias["relobj_id"])
 			{
-				// create a clickable link to the relation object, if one is
-				// present. Basic functionality comes from the class_based
-				// but the class_base based class can override it of course
-				$alias["reltype"] = html::href(array(
-					"url" => $this->mk_my_orb("edit_relation",array("id" => $alias["relobj_id"],"return_url" => $return_url),$classes[$alias["type"]]["file"]),
-					"caption" => $this->reltypes[$reltype_id],
-				));
+				// this is where we will have to create different links
+				// due the lack of better ideas, I'll just check against
+				// recognized class_id-s right now
+				if ($alias["type"] == CL_ACTION)
+				{
+					$alias["reltype"] = html::href(array(
+						"url" => $this->mk_my_orb("edit_relation",array("id" => $alias["relobj_id"],"return_url" => $return_url),"action"),
+						"caption" => $this->reltypes[$reltype_id],
+					));
+
+				}
+				else
+				{
+					// create a clickable link to the relation object, if one is
+					// present. Basic functionality comes from the class_based
+					// but the class_base based class can override it of course
+					$alias["reltype"] = html::href(array(
+						"url" => $this->mk_my_orb("edit_relation",array("id" => $alias["relobj_id"],"return_url" => $return_url),$classes[$alias["type"]]["file"]),
+						"caption" => $this->reltypes[$reltype_id],
+					));
+				};
 			}
 			else
 			{
@@ -744,7 +760,6 @@ class aliasmgr extends aw_template
 	{
 		$_aliases = $this->get_oo_aliases(array("oid" => $oid));
 
-
 		// paneme aliases kirja
 		if (is_array($_aliases) && $oid)
 		{
@@ -753,6 +768,7 @@ class aliasmgr extends aw_template
 				"metadata" => array(
 					"aliases_by_class" => $_aliases,
 					"aliases" => "",
+					"alias_reltype" => $this->alias_rel_type,
 				),
 			));
 		};
@@ -828,8 +844,6 @@ class aliasmgr extends aw_template
 			}
 		}
 	
-		//array_unshift($this->reltypes,"Seose tüüp");
-		
 		$reltypes = html::select(array(
 			"options" => $this->reltypes,
 			"name" => "reltype",
