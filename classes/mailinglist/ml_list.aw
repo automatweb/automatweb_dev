@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.25 2003/06/04 19:16:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.26 2003/06/13 17:16:57 duke Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -30,6 +30,9 @@
 
 	@property member_list type=text store=no group=members
 	@caption Liikmed
+
+	@property import_textfile type=fileupload store=no group=general
+	@caption Impordi liikmed tekstifailist
 	
 	@groupinfo members caption=Liikmed submit=no
 	@classinfo syslog_type=ST_MAILINGLIST
@@ -179,6 +182,46 @@ class ml_list extends class_base
 					};
 				};
 				break;
+
+			case "import_textfile":	
+                        	global $import_textfile;
+				$imp = $import_textfile;
+				if (!is_uploaded_file($import_textfile))
+				{
+					return PROP_OK;
+				}
+				$this->list_ob = $this->get_object($args["obj"]["oid"], true);
+				$fld = $this->list_ob["meta"]["def_user_folder"];
+				echo "Impordin kasutajaid kataloogi $fld... <Br>";
+				$first = true;
+				$contents = file_get_contents($imp);
+				$lines = explode("\n",$contents);
+
+				$ml_member = get_instance("mailinglist/ml_member");
+				set_time_limit(0);
+
+				foreach($lines as $line)
+				{
+					list($name,$addr) = explode("\t",$line);
+					if (is_email($addr))
+					{
+						print "OK - n:$name, a:$addr<br>";
+						flush();
+						$retval = $ml_member->subscribe_member_to_list(array(
+							"name" => $name,
+							"email" => $addr,
+							"list_id" => $args["obj"]["oid"],
+						));
+						usleep(500000);
+					}
+					else
+					{
+						print "IGN - n:$name, a:$addr<br>";
+						flush();
+					};
+				};
+				break;
+				
 			
 			case "automatic_form":
 					$id = $args["obj"]["oid"];
@@ -208,7 +251,10 @@ class ml_list extends class_base
 	{
 		$ml_list_members = $this->get_members($args["list_id"]);
 		load_vcl("table");
-		$t = new aw_table(array("xml_def" => "mlist/member_list"));
+		$t = new aw_table(array(
+			"xml_def" => "mlist/member_list",
+			"layout" => "generic",
+		));
 		$ml_member_inst = get_instance("mailinglist/ml_member");
 		if (is_array($ml_list_members))
 		{	
