@@ -12,15 +12,6 @@
             <caption>Kasuta jumpboxi</caption>
       </property>
       <property>
-            <name>no_cmenu</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <group>advanced</group>
-            <table>menu</table>
-            <field>no_cmenu</field>
-            <caption>Eemalda rippmen&amp;uuml;&amp;uuml;st</caption>
-      </property>
-      <property>
             <name>alias</name>
             <type>textbox</type>
             <group>general</group>
