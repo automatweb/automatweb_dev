@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/datasource.aw,v 2.7 2002/12/18 16:45:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/datasource.aw,v 2.8 2002/12/19 18:05:57 duke Exp $
 // type of the data, I'm storing it in the subclass field of the objects table
 // so that I can retrieve all sources with the same type with one query
 define("DS_XML",1);
@@ -24,7 +24,7 @@ define("DS_XML",1);
 	@caption Faili url
 */
 
-class datasource extends aw_template
+class datasource extends class_base
 {
 	function datasource($args = array())
 	{

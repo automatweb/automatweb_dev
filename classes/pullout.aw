@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/pullout.aw,v 2.6 2002/12/17 18:26:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/pullout.aw,v 2.7 2002/12/19 18:03:11 duke Exp $
 // pullout.aw - Pullout manager
 
 /*
@@ -27,7 +27,7 @@
 	@caption Template
 */
 				
-class pullout extends aw_template
+class pullout extends class_base
 {
 	function pullout()
 	{

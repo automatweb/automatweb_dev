@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/object_type.aw,v 2.4 2002/12/17 18:00:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/object_type.aw,v 2.5 2002/12/19 18:03:11 duke Exp $
 // object_type.aw - objekti klass (lisamise puu jaoks)
 /*
 	@default table=objects
@@ -12,7 +12,7 @@
 
 */
 
-class object_type extends aw_template
+class object_type extends class_base
 {
 	function object_type()
 	{

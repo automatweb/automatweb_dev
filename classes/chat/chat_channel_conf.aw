@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/chat/Attic/chat_channel_conf.aw,v 1.1 2002/12/17 17:24:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/chat/Attic/chat_channel_conf.aw,v 1.2 2002/12/19 18:04:25 duke Exp $
 // chat_channel_conf.aw - IRC kanali konff
 /*
 	@default table=objects
@@ -13,7 +13,8 @@
 	@property kanal type=textbox
 	@caption Kanal
 */
-class chat_channel_conf extends aw_template{
+class chat_channel_conf extends class_base
+{
 	
 	function chat_channel_conf(){
 		$this->init(array(

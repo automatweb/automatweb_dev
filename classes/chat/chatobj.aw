@@ -1,5 +1,5 @@
 <?php
-// $Id: chatobj.aw,v 1.1 2002/12/17 17:14:05 duke Exp $
+// $Id: chatobj.aw,v 1.2 2002/12/19 18:04:25 duke Exp $
 // chatobj.aw - Chat object
 
 /*
@@ -49,7 +49,7 @@
 
 */
 
-class chatobj extends aw_template
+class chatobj extends class_base
 {
 	
 	function chatobj()

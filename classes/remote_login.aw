@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.12 2002/12/17 17:45:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.13 2002/12/19 18:03:11 duke Exp $
 // remote_login.aw - AW remote login
 
 /*
@@ -20,7 +20,7 @@
 */
 
 
-class remote_login extends aw_template 
+class remote_login extends class_base
 {
 	function remote_login($args = array())
 	{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/chat/Attic/chatserver.aw,v 1.1 2002/12/17 17:20:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/chat/Attic/chatserver.aw,v 1.2 2002/12/19 18:04:25 duke Exp $
 // chatserver.aw - IRC server object
 /*
 	@default table=objects
@@ -17,7 +17,7 @@
 	@caption Port
 
 */
-class chatserver extends aw_template
+class chatserver extends class_base
 {
 	
 	function chatserver()

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/chat/Attic/chat_list.aw,v 1.1 2002/12/17 17:30:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/chat/Attic/chat_list.aw,v 1.2 2002/12/19 18:04:25 duke Exp $
 // chat_list.aw - Jutuka listiobjekt
 /*
 	@default table=objects
@@ -16,7 +16,7 @@
 */
 
 
-class chat_list extends aw_template
+class chat_list extends class_base
 {
 	function chat_list()
 	{
