@@ -2,6 +2,7 @@
 function setLink(li,title)
 {
 	document.b88.url.value=li;
+	document.b88.elements[2].value=title; // nime element
 }
 </script>
 
