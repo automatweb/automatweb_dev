@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.91 2001/08/31 09:30:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.92 2001/09/12 17:59:57 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 lc_load("messenger");
@@ -12,8 +12,13 @@ $orb_defs["messenger"] = "xml";
 define('MSG_INTERNAL',1);
 // väline, ntx pop3 serverist võetud teade
 define('MSG_EXTERNAL',2);
-// meililisti saatimiseks mõeldud teade
-define('MSG_LIST',3);
+
+define('MSG_MASKOUT',63999);// !(MSG_LIST+MSG_HTML)
+define('MSG_MASKNOTHTML',64511);// !MSG_HTML
+// meililisti saatmiseks mõeldud teade
+define('MSG_LIST',512);
+// näitab et tegemist on html teatega
+define('MSG_HTML',1024);
 
 // teadete staatused
 define('MSG_STATUS_UNREAD',0);
@@ -470,6 +475,7 @@ class messenger extends menuedit_light
 				"type" => "time",
 				"format" => "H:i d-M-Y",
 				"nowrap" => 1,
+				"numeric" => 1,
 				"sortable" => 1,
 		));
 
@@ -525,7 +531,7 @@ class messenger extends menuedit_light
 					$msg["id"] = $msg["oid"];
 					$msg["color"] = ($cnt % 2) ? "#EEEEEE" : "#FFFFFF";
 					$msg["style"] = ($msg["status"]) ? "textsmall" : "textsmallbold";
-					if ($msg["type"] == MSG_EXTERNAL)
+					if (($msg["type"] & MSG_MASKOUT) == MSG_EXTERNAL)
 					{
 						$from = $this->MIME_decode($msg["mfrom"]);
 						$ofrom = $mfrom;
@@ -734,27 +740,6 @@ class messenger extends menuedit_light
 		return $oid;
 	}
 
-	// lauri muudetud -->
-
-	////
-	// ! Paneb teate $args["id"] tüübiks MSG_LIST
-	function set_list_message($args = array())
-	{
-		extract($args);
-		$q ="UPDATE messages SET type = '".MSG_LIST."' WHERE id ='$id'";
-		$this->db_query($q);
-	}
-
-	function set_list($args = array())
-	{
-		extract($args);
-		$this->set_list_message(array("id" => $id));
-		return $this->mk_site_orb(array(
-						"action" => "edit",
-						"id" => $id,
-					));
-	}
-	// <--
 
 	function reply_message($args = array())
 	{	
@@ -829,7 +814,7 @@ class messenger extends menuedit_light
 			};
 			$quote = true;
 			
-			if ($msg["type"] == MSG_EXTERNAL)
+			if ($msg["type"] & MSG_MASKOUT== MSG_EXTERNAL)
 			{
 				$msg["mtargets1"] = str_replace("\"","",$msg["mfrom"]);
 			}
@@ -942,20 +927,22 @@ class messenger extends menuedit_light
 			$attach .= $this->parse("attach");
 		};
 
+
 		// topime kogutud info template sisse
 		$this->vars($msg);
 
 		// lauri muudetud -->
 		$this->vars(array(
-			"msg_field_width" => ($this->msgconf["msg_field_width"]) ? $this->msgconf["msg_field_width"] : 50));
+			"msg_field_width" => ($this->msgconf["msg_field_width"]) ? $this->msgconf["msg_field_width"] : 50,
+			"msg_box_width" => ($this->msgconf["msg_box_width"]) ? $this->msgconf["msg_box_width"] : 60,
+			"msg_box_height" => ($this->msgconf["msg_box_height"]) ? $this->msgconf["msg_box_height"] : 20,
+			"is_list_msg" => $msg["type"] & MSG_LIST ? 1:0
+			));
 
-		if ($msg["type"] == MSG_LIST)
+		if ($msg["type"] & MSG_LIST)
 		{
 			classload("ml_list");
 			$mlist = new ml_list();
-
-			$saatmisekiri = $this->parse("listisaatmine");
-
 			$muutujad= $mlist->get_all_varnames();
 			foreach($muutujad as $k => $v)
 			{
@@ -987,12 +974,20 @@ class messenger extends menuedit_light
 				"muutujalist" => $muutujalist,
 				"stambilist" => $stamps));
 			$muutujad = $this->parse("muutujad");
-		} else
-		{
-			$this->vars(array("msg_id" => $msg_id));
-			$saatmisekiri = $this->parse("tavalinesaatmine");
 		};
 		// <--
+		
+		if ($msg["type"] & MSG_HTML)
+		{
+			$textedit=$this->parse("htmledit");
+			$switch="text";
+			$switchval="3";
+		} else
+		{
+			$textedit=$this->parse("textedit");
+			$switch="html";
+			$switchval="2";
+		};
 
 		if ($this->msgconf["msg_confirm_send"])
 		{
@@ -1007,8 +1002,12 @@ class messenger extends menuedit_light
 			"msg_id" => $msg_id,
 			"send" => $send,
 			// lauri muudetud -->
-			"saatmisekiri" => $saatmisekiri,
+
 			"muutujad" => $muutujad,
+			"textedit" => $textedit,
+			"htmledit" => "",
+			"switch" => $switch,
+			"switchval" => $switchval,
 			// <--
 			"siglist" => $siglist,
 			"idlist" => $idlist,
@@ -1071,6 +1070,11 @@ class messenger extends menuedit_light
 		
 			// and finally we will save the message
 			$args["num_att"] = $num_att;
+			
+			if ($_makelist)
+			{
+				$save=1;
+			};
 			$this->save_message($args);
 		};
 
@@ -1091,22 +1095,10 @@ class messenger extends menuedit_light
 						));
 		};
 
-		// lauri muudetud -->
-		$rmsg=$this->driver->msg_get(array("id" => $msg_id));
-		if ($rmsg["type"] == MSG_LIST)
-		{
-			classload("ml_list");
-			$mlist=new ml_list();
-			global $route_back;
-			$route_back=$this->mk_site_orb(array());
-			session_register("route_back");
-			return $mlist->route_post_message($rmsg);//tagastab urli saatmise aegade määramisele
-		};
-		// <--
-
 		// Kuna me siia joudsime, siis jarelikult on meil vaja meil laiali saata
 		// koigepealt splitime mtargetsi komade pealt ära ja eemaldame whitespace
-		
+
+		$args=array_merge($args,$rmsg);
 		$this->post_message($args);	
 
 		// at this moment we just return from this function call
@@ -1149,7 +1141,7 @@ class messenger extends menuedit_light
 		};
 
 		// now we should be ok, let's separate internal and external addresses
-		$externals = $internals = array();
+		$externals = $internals = $lists= array();
 	
 		// kysime info teate kohta.
 		$mdata = $this->get_object($msg_id);
@@ -1161,9 +1153,12 @@ class messenger extends menuedit_light
 				$externals[] = $val;
 				$to[] = $val;
 			}
-			else
+			elseif ($val[0]!= ":")  //selle järgi tunneb listi ära
 			{
 				$internals[] = $val;
+			}else
+			{
+				$lists[]=$val;
 			};
 		};
 
@@ -1194,20 +1189,24 @@ class messenger extends menuedit_light
 		{
 			$dto = join(",",$to);
 			$dcc = join(",",$cc);
+
 			$this->deliver(array(
 					"identity" => $identity,
 					"subject" => $subject,
 					"to" => $dto,
 					"cc" => $dcc,
-					"message" => stripslashes($message),
+					"message" => /*stripslashes(*/$message/*)*/,
 					"msg_id" => $msg_id,
+					"type" => $args["type"],
 				));
 					
 		};
 
 		global $udata;
+
 		if (sizeof($internals) > 0)
 		{
+
 			classload("email");
 			$awe = new email();
 			foreach($internals as $internal)
@@ -1234,10 +1233,13 @@ class messenger extends menuedit_light
 						"message" => $message,
 						"msg_id" => $msg_id,
 						"alist" => $members,
+						"type" => $args["type"],
 					));
 				};
 			};
 		};
+
+
 
 		// ja lopuks liigutame ta draftist ära outboxi
 		// aga seda peaks tegema ainult siis, kui ta ka toesti oli draftis.
@@ -1247,6 +1249,22 @@ class messenger extends menuedit_light
 			$q = "UPDATE objects SET parent = '$outbox' WHERE oid = '$msg_id'";
 			$this->db_query($q);
 		}
+
+		// siin kutsume välja meililistidesse saatmise (kui vaja)
+		if (sizeof($lists))
+		{
+			classload("ml_list");
+			$mllist=new ml_list();
+			global $route_back;
+			session_register("route_back");
+			$route_back=$this->mk_site_orb(array(
+							"action" => "edit",
+							"id" => $msg_id,
+						));
+			$url=$mllist->route_post_message(array("id" => $msg_id, "targets" => $lists));
+			Header("Location: $url");
+			die();
+		};
 	}
 
 	function deliver($args = array())
@@ -1277,15 +1295,28 @@ class messenger extends menuedit_light
 		$q = "UPDATE messages SET mfrom = '$mfrom',tm=$tm WHERE id = '$msg_id'";
 		$this->db_query($q);
 
+		//echo("in deliver type=$type");//dbg
+		if ($type & MSG_HTML == 0)
+		{
+			$body=strip_tags($message);//see oli enne handle_message()s. mix seda vaja yldse on?? kes siis plaintexti tage topib
+		} else
+		{
+			$body=strip_tags(strtr($message,array("<br>"=>"\r\n","<BR>"=>"\r\n","</p>"=>"\r\n","</P>"=>"\r\n")));
+		};
 		$this->awm->create_message(array(
 				"froma" => $froma,
 				"fromn" => $fromn,
 				"subject" => $subject,
 				"to" => $to,
 				"cc" => $cc,
-				"body" => $message,
+				"body" => $body,
 			));
 
+		// tsekka, kas on html teade
+		if ($type & MSG_HTML)
+		{
+			$this->awm->htmlbodyattach(array("data"=>$message));
+		};
 		// Nyyd otsime valja koik attachitavad failid ja lisame need ka kirjale
 
 		$this->get_objects_by_class(array(
@@ -1324,13 +1355,13 @@ class messenger extends menuedit_light
 			{
 				$this->awm->set_header("To",$addr);
 				$this->awm->gen_mail();
-				print ".";
+				//print ".";
 				flush();
 			}
-			print "<br>";
+			/*print "<br>";
 			print sizeof($alist) . " kirja saadetud<br>";
 			print "<a href='$baseurl/?class=messenger'>tagasi messengeri</a>";
-			exit;
+			exit;*///mis se on siis ?? lauri
 		}
 		else
 		{
@@ -1404,6 +1435,38 @@ class messenger extends menuedit_light
 	{
 		extract($args);
 		// lauri muudetud: lisasin mfrom välja
+		unset($sethtml);
+		if ($_sethtml=="3")// html => text
+		{
+			//echo("<textarea cols=80 rows=15>$message</textarea>");//dbg
+			$message=strip_tags(strtr($message,array("<br>"=>"\r\n","<BR>"=>"\r\n","</p>"=>"\r\n","</P>"=>"\r\n")));
+			//echo("<textarea cols=80 rows=15>$message</textarea>");//dbg
+			$sethtml=", type = type & ".MSG_MASKNOTHTML;
+			if ($_makelist)
+			{
+				$sethtml.=" | ".MSG_LIST;
+			};
+		};
+		
+
+		if ($_sethtml=="2")// text => html
+		{
+			$message=strtr($message,array("\r"=>"","\n"=>"<br>"));
+			$sethtml=", type = type | ".MSG_HTML;
+			if ($_makelist)
+			{
+				$sethtml.=" | ".MSG_LIST;
+			};
+		};
+
+		if (!$sethtml && $_makelist)
+		{
+			$sethtml=", type = type | ".MSG_LIST;
+		};
+		// siin tuleb vaadata, et messages.type != NULL kuna siis ei saa & ega | operaatoreid kasutada
+		$this->db_query("UPDATE messages SET type='0' WHERE id='$msg_id' AND type IS NULL");
+		
+		
 		$q = "UPDATE messages
 			SET 
 				message = '$message',
@@ -1412,6 +1475,7 @@ class messenger extends menuedit_light
 				mtargets2 = '$mtargets2',
 				mfrom = '$mfrom',
 				pri = '$pri'
+				$sethtml
 			WHERE id = '$msg_id'";
 		$this->db_query($q);
 
@@ -1798,7 +1862,7 @@ class messenger extends menuedit_light
 		$vars = array();
 
 		// Sõltuvalt message tüübist on vaja erinevad template väljad täita erinevate väärtustega
-		switch($msg["type"])
+		switch($msg["type"] & MSG_MASKOUT)
 		{
 			case MSG_EXTERNAL:
 				// replace < and > in the fields with correspondening HTML entitites
@@ -1865,12 +1929,20 @@ class messenger extends menuedit_light
 		$cc = ($cc) ? $this->parse("cc") : "";
 
 		$message = $msg["message"];
-		$message = htmlspecialchars($message);
+		if ($msg["type"] & MSG_HTML)
+		{
+		} else
+		{
+	
+			$message = htmlspecialchars($message);
+			$message = $this->MIME_decode($message);
+			$message = preg_replace("/(\r)/","",$message);
+			$message = preg_replace("/(\n)/","<br>",$message);
+	
+		};
 		$message = preg_replace("/(http|https|ftp)(:\/\/\S+?)\s/si","<a href=\"\\1\\2\" target=\"_blank\">\\1\\2</a>", $message);
 
-		$message = $this->MIME_decode($message);
-		$message = preg_replace("/(\r)/","",$message);
-		$message = preg_replace("/(\n)/","<br>",$message);
+		
 		$this->vars(array("msg_id" => $args["id"]));
 		
 		// soltuvalt "op"-ist naitame kas show voi preview sectionit muutmistemplatest

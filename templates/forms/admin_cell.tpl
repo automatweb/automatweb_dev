@@ -28,9 +28,9 @@
 <!-- SUB: EL_ADD -->
 
 <!-- SUB: EL_NLAST -->
-&nbsp;|&nbsp;<a href="forms.{VAR:ext}?type=add_element&f_id={VAR:form_id}&col={VAR:form_col}&row={VAR:form_row}&after={VAR:after}" >Lisa siia</a>
+&nbsp;|&nbsp;<!-- <a href="forms.{VAR:ext}?type=add_element&f_id={VAR:form_id}&col={VAR:form_col}&row={VAR:form_row}&after={VAR:after}" >Lisa siia</a>-->
 <!-- END SUB: EL_NLAST -->
-&nbsp;|&nbsp;<a href="forms.{VAR:ext}?type=add_element&f_id={VAR:form_id}&col={VAR:form_col}&row={VAR:form_row}" >{VAR:LC_FORMS_ADD_TO_END}</a>
+&nbsp;|&nbsp;<!-- <a href="forms.{VAR:ext}?type=add_element&f_id={VAR:form_id}&col={VAR:form_col}&row={VAR:form_row}" >{VAR:LC_FORMS_ADD_TO_END}</a> -->
 <!-- END SUB: EL_ADD -->
 
 <!-- SUB: EL_ACL -->

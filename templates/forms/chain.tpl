@@ -1,6 +1,6 @@
 <table border=0>
 <tr>
-<td class="textsmall" bgcolor="#DBDBB7" align="center">
+<td class="textsmall" bgcolor="#B2D6DF" align="center">
 <!-- SUB: FORM -->
 &nbsp;<a href='{VAR:url}'>{VAR:name}</a>&nbsp; |
 <!-- END SUB: FORM -->

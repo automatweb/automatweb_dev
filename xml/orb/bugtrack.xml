@@ -37,8 +37,8 @@
 			<function name="orb_list">
 				<arguments>
 					<optional name="sortby"/>
-					<optional name="setfilt"/>
-					<optional name="setpage"/>
+					<optional name="setfilter"/>
+					<optional name="_setfilter"/>
 				</arguments>
 			</function>
 		</action>
@@ -51,25 +51,7 @@
 			</function>
 		</action>
 		
-		<action name="popupfilter">
-			<function name="orb_popupfilter">
-				<arguments>
-					<optional name="setfilt"/>
-					<optional name="value"/>
-					<optional name="op"/>
-					<optional name="expr"/>
-					<optional name="field"/>
-					<optional name="sendupdate"/>
-				</arguments>
-			</function>
-		</action>
-		
-		<action name="submit_popupfilter">
-			<function name="orb_submit_popupfilter">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
+	
 		
 		<action name="delegate">
 			<function name="orb_popupdelegate">
@@ -93,6 +75,134 @@
 			<function name="orb_popupshowcomments">
 				<arguments>
 					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="filters">
+			<function name="orb_filters">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="filters_newgroup">
+			<function name="orb_filters_newgroup">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="filters_delgroup">
+			<function name="orb_filters_delgroup">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="filters_rengroup">
+			<function name="orb_filters_rengroup">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="filters_new">
+			<function name="orb_filters_new">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="filters_del">
+			<function name="orb_filters_del">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="filters_cut">
+			<function name="orb_filters_cut">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="filters_paste">
+			<function name="orb_filters_paste">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="filters_up">
+			<function name="orb_filters_up">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="filters_down">
+			<function name="orb_filters_down">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="filter_edit">
+			<function name="orb_filter_edit">
+				<arguments>
+					<required name="id"/>
+					<optional name="change_part"/>
+					<optional name="is_change_part"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="filter_edit_add">
+			<function name="orb_filter_edit_add">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="filter_edit_del">
+			<function name="orb_filter_edit_del">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="filter_edit_up">
+			<function name="orb_filter_edit_up">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="filter_edit_down">
+			<function name="orb_filter_edit_down">
+				<arguments>
+					<required name="id"/>
+
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_filter_edit">
+			<function name="orb_submit_filter_edit">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="filter_edit_change_part">
+			<function name="orb_filter_edit_change_part">
+				<arguments>
 				</arguments>
 			</function>
 		</action>

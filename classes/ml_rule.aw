@@ -19,7 +19,6 @@
 
 	classload("ml_list","form_base","config");
 	// ruulid
-	// I decided that i don't want to be a real programmer and thus i'll try to comment the functions :)
 	class ml_rule extends aw_template
 	{
 
@@ -85,11 +84,15 @@
 			};
 
 			$fparse=$this->fr->gen_preview($farr);
-			$fparse=preg_replace("/<input(.?)type='submit'(.+?)>/","",$fparse);
-			$fparse=preg_replace("/<input(.+?)name='id'(.+?)>/","",$fparse);
+			//echo("<textarea>$fparse</textarea>");
+			$fparse=preg_replace("/<input(.+?)type='submit'(.+?)>/i","",$fparse);
+			$fparse=preg_replace("/<input(.+?)name='id'(.+?)>/i","",$fparse);
+			//echo("<textarea>$fparse</textarea>");
+			
+			
 
 
-			$alllists=$this->ml->get_lists_and_groups(0,1,0,0,"&nbsp;");//$checkacl=0,$fullnames=0,$id=0,$new=0,$spacer=" "
+			$alllists=$this->ml->get_lists_and_groups(array("spacer" => "&nbsp;","fullnames"=> 1));
 			$allvars=$this->ml->get_all_varnames();
 			$trig_usedvars=unserialize($r["trig_usedvars"]);
 			$t_usedvars=array_flip(is_array($trig_usedvars)?$trig_usedvars:array());
@@ -191,20 +194,19 @@
 		//! Händleb ruuli muutmise sumbitti
 		function orb_submit_change($arr)
 		{
-
-//echo("<pre>arr=");print_r($arr);echo("</pre>");//dbg
+			//echo("<pre>arr=");print_r($arr);echo("</pre>");//dbg
 			extract($arr);
 
 			if (!$id)
 			{
-				//echo("no id");//dbg
+				//echo("teen uue <br>");//dbg
 				$id=$this->new_object(array(
 					"class_id" => CL_ML_RULE,
 					"name" => $name, 
 					"parent" => $parent
 					));
-				//echo("id=$id");//dbg
 				$this->db_query("INSERT INTO ml_rules (rid) VALUES ('$id')");
+				//echo("id=$id<br>");//dbg
 			};
 
 			$this->db_query("UPDATE objects SET name='$name' WHERE oid = '$id'");
@@ -278,13 +280,14 @@
 				trig_mailsent='$t_mailsent', trig_mailsentat='$t_mailsentat', trig_mailsentat2='$t_mailsentat2',
 				trig_mailsubj='$t_mailsubj', trig_usedvars='$t_usedvars', trig_not = '$trig_not', $t_entry action='$action',
 				actionid='$actionid' WHERE rid='$id'";
-			//echo("q=$q<br>");//dbg
+			//echo("query==<b>$q</b><br>");//dbg
 			$this->db_query($q);
 
 			// Votnii, siin nüüd vaadatakse, et kas vajutati otsi või täida nuppe
+			//echo("lõpp");//dbg
 			if ($subaction=="search")
 			{
-				return $this->mk_my_orb("change",array("id" => $id,"parent" => $parent, "search" => 1));
+				return $this->mk_my_orb("change",array("id" => $id,"parent" => $parent, "search" => 1,"_"=>"_#searcha"));
 			} else
 			if ($subaction=="execute")
 			{
@@ -629,6 +632,18 @@
 		function check_inlist($lidgid,$members)
 		{
 			$selrules=$this->select_rules(array("type" => "inlist", "dta" => $lidgid));
+			$selrules["return_infoz"]=1;
+			$matches=$this->match_rules($selrules,$members);
+			$ruledta=$matches["rarr"];
+			unset($matches["rarr"]);
+			$this->execute_rules($matches,$ruledta);
+		}
+
+		////
+		//! Seda tuleb kutsuda liikmete andmete muutmisel
+		function check_entry($members)
+		{
+			$selrules=$this->select_rules(array("type" => "entry"));
 			$selrules["return_infoz"]=1;
 			$matches=$this->match_rules($selrules,$members);
 			$ruledta=$matches["rarr"];

@@ -54,6 +54,10 @@ class form_chain extends form_base
 		$ct["after_show_entry"] = $after_show_entry;
 		$ct["after_show_op"] = $after_show_op;
 
+		$ct["during_show_entry"] = $during_show_entry;
+		$ct["during_show_op"] = $during_show_op;
+		$ct["op_pos"] = $op_pos;
+
 		$this->chain = $ct;
 		uksort($ct["forms"],array($this,"__ch_sort"));
 		
@@ -162,7 +166,13 @@ class form_chain extends form_base
 			"entries" => $this->mk_my_orb("show_chain_entries", array("id" => $id)),
 			"ops" => $this->picker($this->chain["after_show_op"], $this->listall_ops()),
 			"after_show_entry" => checked($this->chain["after_show_entry"] == 1),
-			"LANG_H" => $lh
+			"during_show_entry" => checked($this->chain["during_show_entry"] == 1),
+			"op_up" => checked($this->chain["op_pos"] == "up"),
+			"op_down" => checked($this->chain["op_pos"] == "down"),
+			"op_left" => checked($this->chain["op_pos"] == "left"),
+			"op_right" => checked($this->chain["op_pos"] == "right"),
+			"d_ops" => $this->picker($this->chain["during_show_op"], $this->listall_ops()),
+			"LANG_H" => $lh,
 		));
 		return $this->parse();
 	}
@@ -178,7 +188,9 @@ class form_chain extends form_base
 			));
 		};
 		$f = $this->aliases[$matches[3] - 1];
-		$ar = array("id" => $f["target"], "section" => $oid);
+		global $section;
+		$ar = array("id" => $f["target"], "section" => $section);
+
 		if ($GLOBALS["form_id"])
 		{
 			$ar["form_id"] = $GLOBALS["form_id"];
@@ -187,6 +199,7 @@ class form_chain extends form_base
 		{
 			$ar["entry_id"] = $GLOBALS["entry_id"];
 		}
+		$ar["from_alias"] = true;
 		$replacement = $this->show($ar);
 		return $replacement;
 	}
@@ -197,8 +210,11 @@ class form_chain extends form_base
 		{
 			return $this->chain["default_form"];
 		}
-		reset($this->chain["forms"]);
-		list($fid,) = each($this->chain["forms"]);
+		if (is_array($this->chain["forms"]))
+		{
+			reset($this->chain["forms"]);
+			list($fid,) = each($this->chain["forms"]);
+		}
 		return $fid;
 	}
 
@@ -246,13 +262,13 @@ class form_chain extends form_base
 			{
 				$ff.=$sep;
 			}
-			if ($section)
+			if ($section && $from_alias)
 			{
 				$url = $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$section."/form_id=".$fid."/entry_id=".$entry_id;
 			}
 			else
 			{
-				$url = $this->mk_my_orb("show", array("id" => $id, "section" => 0, "form_id" => $fid, "entry_id" => $entry_id));
+				$url = $this->mk_my_orb("show", array("id" => $id, "section" => $section, "form_id" => $fid, "entry_id" => $entry_id));
 			}
 			if (isset($this->chain["lang_form_names"]))
 			{
@@ -285,6 +301,42 @@ class form_chain extends form_base
 			"SEL_FORM" => "",
 			"SEP" => ""
 		));
+
+		if ($this->chain["during_show_entry"] && $entry_id && $this->chain["during_show_op"])
+		{
+			// siin on j2relikult $ear array olemas k6ikidest formi sisestustest ja tuleb n2idata v2ljundit valitud kohas
+			$show_form_id = 0;
+			$this->db_query("SELECT * FROM output2form WHERE op_id = ".$this->chain["during_show_op"]);
+			while ($row = $this->db_next())
+			{
+				if ($ear[$row["form_id"]])
+				{
+					$show_form_id = $row["form_id"];
+					break;
+				}
+			}
+			if ($show_form_id)
+			{
+				$f = new form;
+				$entry = $f->show(array("id" => $show_form_id, "entry_id" => $ear[$show_form_id],"op_id" => $this->chain["during_show_op"]));
+				switch ($this->chain["op_pos"])
+				{
+					case "down":
+						$this->vars(array("down_entry" => $entry));
+						break;
+					case "left":
+						$this->vars(array("left_entry" => $entry));
+						break;
+					case "right":
+						$this->vars(array("right_entry" => $entry));
+						break;
+					case "up":
+					default:
+						$this->vars(array("up_entry" => $entry));
+						break;
+				}
+			}
+		}
 		$awt->stop("form_chain::show");
 		return $this->parse();
 	}
@@ -310,11 +362,23 @@ class form_chain extends form_base
 
 		$this->load_chain($id);
 		$tfid = $form_id;
-		if ($this->chain["gotonext"][$form_id])
+		if ($this->chain["gotonext"][$form_id] && !isset($GLOBALS["no_chain_forward"]))
 		{
 			$prev = 0;
 			foreach($this->chain["forms"] as $fid)
 			{
+				if (isset($GLOBALS["chain_backward"]))
+				{
+					if ($fid == $form_id)
+					{
+						if ($prev)
+						{
+							$form_id = $prev;
+						}
+						break;
+					}
+				}
+
 				if ($prev == $form_id)
 				{
 					$form_id = $fid;
@@ -324,7 +388,7 @@ class form_chain extends form_base
 			}
 		}
 
-		if ($tfid == $form_id)
+		if ($tfid == $form_id && !isset($GLOBALS["no_chain_forward"]))
 		{
 			// check that if we are after the last form then if the user has selected that we should show the entry then do so
 			if ($this->chain["after_show_entry"] == 1 && $this->chain["after_show_op"] > 0  && $this->chain["gotonext"][$form_id] == 1)
@@ -333,13 +397,13 @@ class form_chain extends form_base
 			}
 		}
 
-		if ($section)
+		if ($section && $GLOBALS["class"] == "")
 		{
 			$url = $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$section."/form_id=".$form_id."/entry_id=".$chain_entry_id;
 		}
 		else
 		{
-			$url = $this->mk_my_orb("show", array("id" => $id, "section" => 0, "form_id" => $form_id, "entry_id" => $chain_entry_id));
+			$url = $this->mk_my_orb("show", array("id" => $id, "section" => $section, "form_id" => $form_id, "entry_id" => $chain_entry_id));
 		}
 		return $url;
 	}

@@ -24,8 +24,7 @@ function varvivalik(which)
 <table border="0" cellspacing="1" cellpadding="0" width=100%>
 <tr>
 <td height="15" colspan="11" class="fgtitle">&nbsp;<b>CSS Editor:&nbsp;
-<b><a href="{VAR:link_groups}">Grupid</a> | <a href="{VAR:link_sys_styles}">Süsteemsed stiilid</a> | <a href="{VAR:link_my_styles}">Minu stiilid</a> |
-<a href="javascript:document.cssedit.submit()"><font color="red">Salvesta</font></b>
+<b><a href="javascript:document.cssedit.submit()"><font color="red">Salvesta</font></b>
 </td>
 </tr>
 </table>

@@ -17,10 +17,17 @@
 			</function>
 		</action>
 		
-		<action name="add_html">
+		<action name="add_html" >
 			<function name="add_html">
 				<arguments>
 					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="add_html_step2" all_args="1">
+			<function name="add_html_step2">
+				<arguments>
 				</arguments>
 			</function>
 		</action>

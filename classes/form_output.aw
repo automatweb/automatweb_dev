@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.15 2001/08/12 23:21:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.16 2001/09/12 17:59:57 duke Exp $
 
 global $orb_defs;
 $orb_defs["form_output"] = "xml";
@@ -234,9 +234,55 @@ class form_output extends form_base
 		$st = new style;
 
 		$this->vars(array(
-			"reforb" => $this->mk_reforb("submit", array("parent" => $parent)),
+			"reforb" => $this->mk_reforb("add_html_step2", array("parent" => $parent,"reforb" => 0)),
 			"forms" => $this->multiple_option_list(array(), $this->get_list(FTYPE_ENTRY,true,true)),
-			"styles" => $this->picker(0,$st->get_select(0,ST_TABLE))
+			"forms2" => $this->multiple_option_list(array(), $this->get_list(FTYPE_ENTRY,true,true)),
+			"styles" => $this->picker(0,$st->get_select(0,ST_TABLE)),
+			"meth" => "GET"
+		));
+		$this->parse("ADD");
+		return $this->parse();
+	}
+
+	////
+	// !Kuvab vormi, kust saab valida HTML väljundi jaoks vajalikud atribuudid. ja nyyd ka juba valitud alusformide j2rjekorda
+	function add_html_step2($arr)
+	{
+		extract($arr);
+		$this->read_template("add_output.tpl");
+		$this->mk_path($parent,LC_FORM_OUTPUT_ADD_OUT_STYLE);
+
+		classload("style");
+		$st = new style;
+
+		$bof = array();
+		foreach($baseform as $bf)
+		{
+			// don't ask me why but for some weirdass reason the forms get duplicated in the array twice. so we avoid that
+			if (!$bof[$bf])
+			{
+				$this->vars(array(
+					"form_id" => $bf,
+					"form_name" => $this->db_fetch_field("SELECT name FROM objects WHERE oid = $bf","name")
+				));
+				$a2.=$this->parse("ADD_2_LINE");
+				$bof[$bf] = $bf;
+			}
+		}
+		foreach($forms as $fo)
+		{
+			$fos[$fo] = $fo;
+		}
+
+		$this->vars(array(
+			"ADD_2_LINE" => $a2,
+			"reforb" => $this->mk_reforb("submit", array("parent" => $parent)),
+			"forms" => $this->multiple_option_list($fos, $this->get_list(FTYPE_ENTRY,true,true)),
+			"forms2" => $this->multiple_option_list($bof, $this->get_list(FTYPE_ENTRY,true,true)),
+			"styles" => $this->picker($table_style,$st->get_select(0,ST_TABLE)),
+			"meth" => "POST",
+			"name" => $name,
+			"comment" => $comment
 		));
 		$this->parse("ADD");
 		return $this->parse();
@@ -258,10 +304,11 @@ class form_output extends form_base
 			if (is_array($baseform))
 			{
 				// if the user selected a form to base this op on, make it look like the form.
+				asort($ord);
 				classload("form");
 				$f = new form;
 				$this->output= array();
-				foreach($baseform as $bfid)
+				foreach($ord as $bfid => $or)
 				{
 					$f->load($bfid);
 
@@ -332,7 +379,8 @@ class form_output extends form_base
 			"comment" => $this->comment,
 			"admin" => $this->mk_orb("admin_op", array("id" => $id)),
 			"forms" => $this->multiple_option_list($this->get_op_forms($id), $this->get_list(FTYPE_ENTRY,false,true)),
-			"styles" => $this->picker($this->output["table_style"],$st->get_select(0,ST_TABLE))
+			"styles" => $this->picker($this->output["table_style"],$st->get_select(0,ST_TABLE)),
+			"meth" => "POST"
 		));
 		$this->parse("CHANGE");
 		return $this->parse();
@@ -629,10 +677,13 @@ class form_output extends form_base
 		$awt->start("form_output::save_output");
 		$awt->count("form_output::save_output");
 
-		// saveme xml
+/*		// saveme xml
 		classload("xml");
 		$x = new xml;
-		$tp = $x->xml_serialize($this->output);
+		$tp = $x->xml_serialize($this->output);*/
+		classload("php");
+		$p = new php_serializer;
+		$tp = $p->php_serialize($this->output);
 		$this->quote(&$tp);
 		$this->db_query("UPDATE form_output SET op = '$tp' WHERE id = $id");
 		$this->upd_object(array("oid" => $id));

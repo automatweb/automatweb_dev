@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.44 2001/09/12 15:08:34 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.45 2001/09/12 17:59:57 duke Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -160,7 +160,7 @@ class document extends aw_template
 			{
 				$pstr = "objects.parent = $parent";
 			};
-			$ordby = "objects.modified";
+			$ordby = "objects.modified DESC";
 		}
 		else
 		{
@@ -192,7 +192,7 @@ class document extends aw_template
 			$lm = "LIMIT ".$row["ndocs"];
 		};
 
-		if (!$ordby)
+		if ($ordby == "")
 		{
 			$ordby = "objects.jrk";
 		}
@@ -255,10 +255,10 @@ class document extends aw_template
 			 $data["cite"] = trim($data["cite"]);
 		};
 		$this->dequote($data);
-		if (preg_match("/<P(.*)>((&nbsp;)*)<\/P>/",$data["lead"]))
+/*		if (preg_match("/<P(.*)>((&nbsp;)*)<\/P>/",$data["lead"]))
 		{
 			$data["lead"] = "";
-		}
+		}*/
 		$this->data = $data;
 		return $data;
 	}

@@ -1,59 +1,31 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_search_element.aw,v 2.8 2001/08/12 23:21:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_search_element.aw,v 2.9 2001/09/12 17:59:57 duke Exp $
 
 lc_load("form");
 	class form_search_element extends form_element
 	{
 		function form_search_element()
 		{
+			global $awt;
 			$this->tpl_init("forms");
 			$this->db_init();
 
 			$this->entry_id = 0;
 			$this->sub_merge = 1;
-			global $lc_form;
-		if (is_array($lc_form))
-		{
-			$this->vars($lc_form);}
+			$awt->start("form_search_element::new()");
+			$awt->stop("form_search_element::new()");
 		}
 
 		function gen_admin_html()
 		{
+			global $lc_form;
+			if (is_array($lc_form))
+			{
+				$this->vars($lc_form);
+			}
 			$this->read_template("admin_element.tpl");
 
-			global $elements_created;
-
-			if (!$elements_created)
-			{
-				// make javascript arrays for form elements
-				$formcache = array(0 => "");
-				$tarr = $this->form->get_search_targets();
-				$tarstr = join(",",$this->map2("%s",$tarr));
-				if ($tarstr != "")
-				{
-					$this->db_query("SELECT name, oid FROM objects WHERE status != 0 AND oid IN ($tarstr)");
-					while ($row = $this->db_next())
-					{
-						$formcache[$row["oid"]] = $row["name"];
-					}
-				
-					$el_num = 0;
-					$this->db_query("SELECT objects.name as el_name, element2form.el_id as el_id,element2form.form_id as form_id FROM element2form LEFT JOIN objects ON objects.oid = element2form.el_id WHERE element2form.form_id IN ($tarstr)");
-					while ($row = $this->db_next())
-					{
-						$this->vars(array(
-							"el_num" => $el_num++,
-							"el_id" => $row["el_id"],
-							"el_text" => $row["el_name"],
-							"form_id" => $row["form_id"]
-						));
-						$this->parse("ELDEFS");
-					}
-				}
-				$this->vars(array("SEARCH_SCRIPT" => $this->parse("SEARCH_SCRIPT")));
-				$GLOBALS["elements_created"] = true;
-				$GLOBALS["formcache"] = $formcache;
-			}
+			$this->do_search_script();
 
 			$this->do_core_admin();
 
@@ -158,7 +130,8 @@ lc_load("form");
 			$awt->stop("form_search_element::gen_user_html_not");
 		}
 
-		function process_entry(&$entry, $id)
+		// lauri lisas siia 20.aug.2001 prefix muutuja, mis puudu oli
+		function process_entry(&$entry, $id, $prefix)
 		{
 			global $awt;
 			$awt->start("form_search_element::process_entry");
@@ -166,7 +139,7 @@ lc_load("form");
 
 			if ($this->arr["ver2"])	// backward compatibility is a bitch
 			{
-				$r=  $this->core_process_entry(&$entry,$id);
+				$r=  $this->core_process_entry(&$entry,$id,$prefix);
 				$awt->stop("form_search_element::process_entry");
 				return $r;
 			}

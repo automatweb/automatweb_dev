@@ -102,6 +102,7 @@
 		<action name="pick">
 			<function name="pick">
 				<arguments>
+					<optional name="listmsg"/>
 				</arguments>
 			</function>
 		</action>

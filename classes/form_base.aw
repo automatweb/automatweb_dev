@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.22 2001/08/31 09:08:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.23 2001/09/12 17:59:57 duke Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 lc_load("form");
@@ -1123,6 +1123,9 @@ class form_base extends aw_template
 
 		$this->db_query("SELECT objects.*,form_tables.* FROM objects LEFT JOIN form_tables ON form_tables.id = objects.oid WHERE oid = $id");
 		$row = $this->db_next();
+		#print "<pre>";
+		#print_r($row);
+		#print "</pre>";
 		$this->table_name = $row["name"];
 		$this->table_comment = $row["comment"];
 		$this->table_id = $id;

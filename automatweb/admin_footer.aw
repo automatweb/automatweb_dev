@@ -2,6 +2,15 @@
 // siin imporditakse muutujad saidi raami sisse
 // ja väljastatakse see
 $sf->read_template("index.tpl");
+
+// tehakse kindlaks, milline custom_css, ja kas üldse laadida?
+if (not($no_custom_css))
+{
+	$sf->vars(array("custom" => $uid));
+	$custom = $sf->parse("custom_css");
+	$sf->vars(array("custom_css" => $custom));
+};
+
 if (isset($menu) && is_array($menu)) 
 {
 	$menustr = join(" | ",$menu);
@@ -42,7 +51,6 @@ $vars = array(
 			"content"			=> $content,
 			"site_title"			=> (isset($site_title) ? $site_title : ""),
 			"menu"				=> $menustr,
-			"custom_css"			=> (isset($custom_css) ? $custom_css : ""),
 			"menubar"			=> (isset($menubar) ? $menubar : ""),
 			"jsinclude"  			=> (isset($js_include) ? $js_include : ""),
 			"qcount"				=> $qcount,

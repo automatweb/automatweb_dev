@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/shop_item.aw,v 2.20 2001/07/26 16:49:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/shop_item.aw,v 2.21 2001/09/12 17:59:57 duke Exp $
 lc_load("shop");
 global $orb_defs;
 $orb_defs["shop_item"] = "xml";
@@ -43,7 +43,6 @@ class shop_item extends shop_base
 		else
 		{
 			$this->read_template("edit_item.tpl");
-
 			classload("form");
 			$f = new form;
 
@@ -62,6 +61,23 @@ class shop_item extends shop_base
 			));
 			return $this->parse();
 		}
+	}
+
+	function do_item_menu($id,$ret = "")
+	{
+		if ($ret == "")
+		{
+			$ret = $this->parse();
+		}
+		$this->read_template("admin_system_menu.tpl");
+		$menu_items = array(
+			"change" => array("name" => "General", "url" => $this->mk_my_orb("change", array("id" => $id), "",false,true)),
+			"change_categories" => array("name" => "Categories", "url" => $this->mk_my_orb("change_categories", array("id" => $id), "",false,true)),
+			"change_settings" => array("name" => "Settings", "url" => $this->mk_my_orb("change_settings", array("id" => $id), "",false,true)),
+			"change_period" => array("name" => "Periodical prices/places", "url" => $this->mk_my_orb("change_period", array("id" => $id), "",false,true)),
+		);
+
+		return $this->do_menu($menu_items).$ret;
 	}
 
 	////
@@ -169,7 +185,7 @@ class shop_item extends shop_base
 			"cnt_form" => $this->picker($o["cnt_form"], $fl),
 			"item_eq" => $this->picker($o["price_eq"], $this->listall_eqs(true)),
 		));
-		return $this->parse();
+		return $this->do_item_menu($id);
 	}
 
 	////
@@ -366,7 +382,10 @@ class shop_item extends shop_base
 			// just delete all brothaz
 			$this->db_query("UPDATE objects SET status = 0 WHERE class_id = ".CL_SHOP_ITEM." AND brother_of = $id");
 		}
-		return $this->mk_my_orb("change", array("id" => $id));
+
+		$this->db_query("UPDATE shop_items SET redir = '$redir' WHERE id = '$id'");
+
+		return $this->mk_my_orb("change_categories", array("id" => $id),"",false,true);
 	}
 
 	function submit_opts($arr)
@@ -678,6 +697,65 @@ class shop_item extends shop_base
 			"t_sold" => $it["sold_items"]
 		));
 		return $this->parse();
+	}
+
+	function change_categories($arr)
+	{
+		extract($arr);
+		$this->read_template("edit_item_categories.tpl");
+		$o = $this->get_item($id,true);
+		
+		$shcats = array("0" => "");
+		classload("shop");
+		$shop = new shop;
+		$shs = $shop->get_list();	// list shops
+		foreach($shs as $sh_id => $sh_name)
+		{
+			$shcats = $shcats + $shop->get_shop_categories($sh_id);
+		}
+
+		$this->vars(array( 
+			"menus" => $this->multiple_option_list($this->get_brother_list($id),$shcats),
+			"reforb" => $this->mk_reforb("submit_bros", array("id" => $id)),
+			"redir" => $this->picker($o["redir"], $shcats),
+		));
+		return $this->do_item_menu($id);
+	}
+
+	function change_settings($arr)
+	{
+		extract($arr);
+		$this->read_template("edit_item_settings.tpl");
+		$o = $this->get_item($id,true);
+		$itt = $this->get_item_type($o["type_id"]);
+		
+		$de = new date_edit(time());
+		$de->configure(array(
+			"year" => "",
+			"month" => "",
+			"day" => "",
+			"hour" => "", 
+			"minute" => ""
+		));
+		$eq = $this->get_eq($itt["eq_id"]);
+		classload("form_base");
+		$fb = new form_base;
+		$fl = $fb->get_list(FTYPE_ENTRY,true);
+		$this->vars(array( 
+			"reforb" => $this->mk_reforb("submit_opts", array("id" => $id)),
+			"has_max" => checked($o["has_max"]),
+			"max_items" => $o["max_items"],
+			"has_period" => checked($o["has_period"]),
+			"has_objs" => checked($o["has_objs"]),
+			"type" => $itt["name"],
+			"price_eq" => $eq["name"],
+			"per_from" => $de->gen_edit_form("per_from", $o["per_from"],2001,2010),
+			"sel_period" => $this->mk_my_orb("repeaters", array("id" => $o["per_event_id"]),"planner",false,true),
+			"per_cnt" => $o["per_cnt"],
+			"cnt_form" => $this->picker($o["cnt_form"], $fl),
+			"item_eq" => $this->picker($o["price_eq"], $this->listall_eqs(true)),
+		));
+		return $this->do_item_menu($id);
 	}
 }
 ?>

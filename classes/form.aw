@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.64 2001/09/11 10:24:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.65 2001/09/12 17:59:57 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1008,7 +1008,8 @@ class form extends form_base
 	// elements are assumed to be prefixed by $prefix
 	// optional argument $chain_entry_id - if creating a new entry and it is specified, the entry is created with that chain entry id
 	// parent (id) - mille alla entry salvestada
-
+	// no_load_form - if true, the form is not loaded
+	// no_process_entry - no entry is read from user entered data, the loaded entry is just saved
 	function process_entry($arr)
 	{
 		global $awt;
@@ -1029,7 +1030,10 @@ class form extends form_base
 			$this->post_vars = $HTTP_POST_VARS;
 		};
 
-		$this->load($id);
+		if (!$no_load_form)
+		{
+			$this->load($id);
+		}
 
 		if ($entry_id)	// tshekime et kas see entry on ikka loaditud formi jaox ja kui pole, siis ignoorime seda
 		{
@@ -1046,12 +1050,10 @@ class form extends form_base
 			// minema. parent argument overraidib selle
 			$parent = isset($parent) ? $parent: $this->arr["ff_folder"];
 			
-			// what the hell is that single "form_entry" doing there in the middle?
 			// we override the lang_id here, because entries that have been entered over
 			// XML-RPC do not know what their language_id might be, so specify one.
 			$params = array(
 				"parent" => $parent,
-				"0"	=> "form_entry",
 				"class_id" => CL_FORM_ENTRY,
 				"lang_id" => $lang_id,
 			);
@@ -1071,12 +1073,15 @@ class form extends form_base
 			$prefix = "";
 		}
 
-		for ($i=0; $i < $this->arr["rows"]; $i++)
+		if (!$no_process_entry)
 		{
-			for ($a=0; $a < $this->arr["cols"]; $a++)
+			for ($i=0; $i < $this->arr["rows"]; $i++)
 			{
-				// form_cell->process_entry
-				$this->arr["contents"][$i][$a] -> process_entry(&$this->entry, $entry_id,$prefix);
+				for ($a=0; $a < $this->arr["cols"]; $a++)
+				{
+					// form_cell->process_entry
+					$this->arr["contents"][$i][$a] -> process_entry(&$this->entry, $entry_id,$prefix);
+				}
 			}
 		}
 
@@ -1389,6 +1394,7 @@ class form extends form_base
 	////
 	// !shows entry $entry_id of form $id using output $op_id
 	// if $no_load_entry == true, the loaded entry is used
+	// if $no_load_op == true, the loaded output is used
 	function show($arr)
 	{
 		global $awt;
@@ -1416,7 +1422,10 @@ class form extends form_base
 			return $r;
 		}
 
-		$this->load_output($op_id);
+		if (!$no_load_op)
+		{
+			$this->load_output($op_id);
+		}
 		
 		if (!$no_load_entry)
 		{

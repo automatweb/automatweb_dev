@@ -1,9 +1,22 @@
 <?php
-
+define('MSG_LIST',512);
+// näitab et tegemist on html teatega
+define('MSG_HTML',1024);
 	global $orb_defs;
 	$orb_defs["ml_queue"] = "xml";
 
 	classload("config","form_base","ml_list");
+	function decho($a)
+	{
+		if ($GLOBALS["__debug"])
+			echo($a);
+	};
+	function dprint_r($a)
+	{
+		if ($GLOBALS["__debug"])
+			print_r($a);
+	};
+
 	class ml_queue extends aw_template
 	{
 		////
@@ -84,6 +97,9 @@
 			{
 				$headerarray=array();
 			};
+
+			$headerarray['javascript:Do("queue_delete")']="Kustuta";
+			$headerarray['javascript:Do("queue_send_now")']="Saada kohe";
 			
 			switch ($show)
 			{
@@ -109,13 +125,14 @@
 			$t->parse_xml_def($this->basedir . "/xml/mlist/queue.xml");
 
 			$ml = new ml_list();
-			$lists = $ml->get_lists_and_groups(0,0,0,0,"");//võta kõik listide & gruppide nimed, et polex vaja iga kord queryda
+			$lists = $ml->get_lists_and_groups(array());//võta kõik listide & gruppide nimed, et polex vaja iga kord queryda
 
 			$q = "SELECT * FROM ml_queue $filt";
 			$this->db_query($q);
 
 			while ($row = $this->db_next())
 			{
+				//echo("<pre>");print_r($row);echo("</pre>");//dbg
 				$listname = $lists[$row["lid"].":0"];
 				$groupids=explode("|",$row["gid"]);
 				$gnames=array();
@@ -127,7 +144,7 @@
 					};
 				};
 
-				$row["lid"] = $listname;
+				$row["lid"] = "<a href='javascript:remote(0,450,270,\"".$this->mk_my_orb("queue_change",array("id"=>$row["qid"]))."\");'>$listname</a>";
 				if (sizeof($gnames)>0)
 				{
 					$row["lid"] .= ":".join(",",$gnames);
@@ -143,6 +160,7 @@
 				$row["delay"]/=60;
 				$row["status"]=$this->a_status[$row["status"]];
 				$row["protsent"]=$this->queue_ready_indicator($row["position"],$row["total"]);
+				$row["vali"]="<input type='checkbox' NAME='sel[]' value='".$row["qid"]."'>";
 				$t->define_data($row);
 			};
 
@@ -169,14 +187,19 @@
 					"form" => $this->picker($this->formid,$flist),
 					"searchform" => $this->picker($this->searchformid,$sflist),
 					"mailel" => $this->picker($this->mailel,$ml->get_all_varnames()),
-					"reforb" => $this->mk_reforb("submit_manager",array()),
+					
 				));
-				$manager=$this->parse("MGR");
+				$mparse=$this->parse("MGR");
 			};
 
 			$this->vars(array(
 				"QUEUE" => $queue,
-				"MGR" => $manager));
+				"MGR" => $mparse,
+				"reforb" => $this->mk_reforb("submit_manager",array(
+						"show" => $show,
+						"fid" => $fid,
+						"manager"=> $manager)),
+				));
 			return $this->parse();
 		}
 
@@ -264,9 +287,47 @@
 		function orb_queue_delete($arr)
 		{
 			extract($arr);
-			$this->db_query("DELETE FROM ml_queue WHERE qid='$id'");
-			return "<script language='JavaScript'>opener.history.go(0);window.close();</script>";
+			if (is_array($sel))
+			{
+				$q="";
+				foreach($sel as $v)
+				{
+					$q.=($q?",":"")."'".(int)$v."'";
+				};
+				$this->db_query("DELETE FROM ml_queue WHERE qid IN ($q)");
+			};
+			return $this->mk_my_orb("queue",array(
+				"id" => $id,
+				"show" => $show,
+				"fid" => $fid,
+				"manager" => $manager));
 		}
+
+		////
+		//! Märgib itemi $id kohe saatmiseks
+		function orb_queue_send_now($arr)
+		{
+			extract($arr);
+			if (is_array($sel))
+			{
+				$q="";
+				foreach($sel as $v)
+				{
+					$q.=($q?",":"")."'".(int)$v."'";
+				};
+				$delta=time()-2;
+				$w="UPDATE ml_queue SET start_at=$delta-delay WHERE qid IN ($q) AND status=0";
+				$this->db_query($w);
+				$w="UPDATE ml_queue SET last_sent=$delta-delay WHERE qid IN ($q) AND status!=0";
+				$this->db_query($w);
+			};
+			return $this->mk_my_orb("queue",array(
+				"id" => $id,
+				"show" => $show,
+				"fid" => $fid,
+				"manager" => $manager));
+		}
+
 
 		////
 		//! teeb progress bari
@@ -282,6 +343,7 @@
 				$p=(int)((int)$osa * 100 / (int)$kogu);
 			};
 			$not_p=100-$p;
+			//echo("qri($osa,$kogu)=$p");//dbg
 			
 			// tekst pane sinna, kus on rohkem ruumi.
 			if ($p>$not_p)
@@ -299,7 +361,7 @@
 		function increase_avoidmids_ready($aid)
 		{
 			$r=$this->db_fetch_field("SELECT usagec FROM ml_avoidmids WHERE aid='$aid'","usagec");
-			echo("<i>inc_avoidmids $aid r=$r</i><br>");
+			decho("<i>inc_avoidmids $aid r=$r</i><br>");
 			if ($r<=1)
 			{
 				$this->db_query("DELETE FROM ml_avoidmids WHERE aid='$aid'");
@@ -314,7 +376,7 @@
 		// siit võix debugi asjad välja korjata (kus on //dbg) kui asi kasutusse läheb
 		function process_queue($arr)
 		{
-			echo("process_queue:<br>");//dbg
+			decho("process_queue:<br>");//dbg
 			$tm=time();
 			$awm=0;
 			// võta need, mida pole veel üldse saadetud või on veel saata & aeg on alustada
@@ -322,7 +384,7 @@
 			while ($r = $this->db_next())
 			{
 				$qid=(int)$r["qid"];
-				echo("doing item $qid<br>");flush();//dbg
+				decho("doing item $qid<br>");flush();//dbg
 				// vaata kas see item on ikka lahti (ntx seda skripti võib kogemata 2 tk korraga joosta)
 				$this->save_handle();
 				$status=$this->db_fetch_field("SELECT status FROM ml_queue WHERE qid ='$qid'","status");
@@ -342,12 +404,12 @@
 						if (!$awm)
 						{
 								classload("aw_mail");
-								echo("aw mail loaded<br>");//dbg
+								decho("aw mail loaded<br>");//dbg
 								classload("msg_sql");
 								classload("users");
 								$awm=1;
 						};
-						echo("saadan  meili<br>");flush();//dbg
+						decho("saadan  meili<br>");flush();//dbg
 						$this->save_handle();
 						//lukusta queue item
 						$this->db_query("UPDATE ml_queue SET status = 3 WHERE qid = '$qid'");
@@ -358,7 +420,7 @@
 							$stat=$this->do_queue_item($r);//1 pooleli (veel meile) 2 valmis (meili ei leitud enam)
 							$c++;
 						};
-						echo("saadetud<br>");flush();//dbg
+						decho("saadetud<br>");flush();//dbg
 
 						
 						//Kui on valmis, siis peab näitur näitama 100%
@@ -379,7 +441,7 @@
 					} else //dbg
 					{
 						$veel=$r["delay"]-($tm-$r["last_sent"]);
-						echo("järgmise batchini on veel $veel sekundit<br>");flush();
+						decho("järgmise batchini on veel $veel sekundit<br>");flush();
 					};
 				} else
 				{
@@ -388,7 +450,7 @@
 					if (!$awm)
 					{
 							classload("aw_mail");
-							echo("aw mail loaded<br>");//dbg
+							decho("aw mail loaded<br>");//dbg
 							classload("msg_sql");
 							classload("users");
 							$awm=1;
@@ -397,14 +459,14 @@
 					//lukusta queue item
 					$this->db_query("UPDATE ml_queue SET status = 3 WHERE qid = '$qid'");
 
-					echo("saadan  meili<br>");flush();//dbg
+					decho("saadan  meili<br>");flush();//dbg
 					$stat=1;
 					while ($stat==1)
 					{
 						$stat=$this->do_queue_item($r);
 					};
 
-					echo("saadetud<br>");flush();//dbg
+					decho("saadetud<br>");flush();//dbg
 					$this->increase_avoidmids_ready($r["aid"]);
 					$this->db_query("UPDATE ml_queue SET status = 2,position=total WHERE qid = '$qid'");
 					$this->restore_handle();
@@ -417,7 +479,7 @@
 				DEFINE("UID",$this->originaluid);
 				// neid gruppi kuuluvusi pole vist vaja uuesti processida, pohh nendega :)
 			};
-			echo("valmis");//dbg
+			decho("valmis");//dbg
 			die("die");
 			return "";//hmhm
 		}
@@ -426,7 +488,7 @@
 		//! Protsessib queue itemist $r järgmise liikme
 		function do_queue_item($r)
 		{
-			echo("<b>do_queue_item::</b><br>");
+			decho("<b>do_queue_item::</b><br>");
 			extract($r);
 			// vali järgmine meililisti liige tabelist
 			if ($gid != "0" &&  $gid)
@@ -444,7 +506,7 @@
 			while (!$ok)
 			{
 				//liikmed kellele on juba saadetud või kellele ei tohi saata 
-				echo("avoidmids=$avoidmids<br>");//dbg
+				decho("avoidmids=$avoidmids<br>");//dbg
 				if ($avoidmids != "")
 				{
 					$midnotin="AND mid NOT IN (".$avoidmids.")";
@@ -454,13 +516,13 @@
 				};
 
 				$q="SELECT mid FROM ml_list2member WHERE lid='$lid' $gidin $midnotin LIMIT 1";
-				echo("q=$q<br>");//dbg
+				decho("q=$q<br>");//dbg
 				$this->db_query($q);
 				$member=$this->db_next();
 
 				if ($member["rec"] == 0)// kui enam liikmeid ei ole
 				{
-					echo("liikmed otsas<br>");
+					decho("liikmed otsas<br>");
 					return 2;
 				}
 					
@@ -481,10 +543,10 @@
 				{
 					$aavoidmids=array();// et ei tekiks seda tobedat 0 => "" entryt
 				};
-				print_r($aavoidmids);
+				dprint_r($aavoidmids);
 				$aavoidmids[]=$member;
 				$avoidmids=join(",",$aavoidmids);
-				echo("pärast avoidmids=$avoidmids<br>");//dbg
+				decho("pärast avoidmids=$avoidmids<br>");//dbg
 
 				$q="UPDATE ml_avoidmids SET avoidmids='$avoidmids' WHERE aid='$aid'";
 				$this->db_query($q);
@@ -493,15 +555,31 @@
 				$q="UPDATE ml_queue SET position=position+1,last_sent='$tm' WHERE qid='$qid'";
 				$this->db_query($q);
 			};
-			echo("<b>out of do_queue_item</b><br>");
+			decho("<b>out of do_queue_item</b><br>");
 			return 1;
+		}
+
+		function replace_tags($text,$data)
+		{
+			$nohtml=strip_tags($text);
+			preg_match_all("/#(.+?)#/e",$nohtml,$matches);
+			if (is_array($matches) && is_array($matches[1]))
+			{
+				foreach($matches[1] as $v)
+				{
+					$this->used_variables[$v]=1;
+					$text=preg_replace("/#$v#/",$data[$v]?$data[$v]:"",$text);
+					decho("matced $v<br>");
+				};
+			};
+			return $text;
 		}
 
 		////
 		//! Saadab meili $mid liikmele $member .$r on queue itemi andmed
 		function send_message($mid,$member,$r=array())
 		{
-			echo("sending msg $mid to $member<br>");
+			decho("sending msg $mid to $member<br>");
 			$lid=$r["lid"];
 
 			// võta meil
@@ -519,7 +597,7 @@
 			$this->f->load($this->formid);
 			$this->f->load_entry($member);
 			$memberdata=$this->f->get_element_values();
-			echo("memberdata=<pre>");print_r($memberdata);echo("</pre>");//dbg
+			decho("memberdata=<pre>");dprint_r($memberdata);decho("</pre>");//dbg
 			
 			
 
@@ -527,9 +605,9 @@
 			$row = $this->get_object($lid);
 			$last=unserialize($row["last"]);
 			$vars=unserialize($last["vars"]);
-			echo("vars=<pre>");print_r($vars);echo("</pre>");//dbg
+			decho("vars=<pre>");dprint_r($vars);decho("</pre>");//dbg
 
-			echo("impersonating ".$r["uid"]."<br>");//dbg
+			decho("impersonating ".$r["uid"]."<br>");//dbg
 			
 			// save original UID
 			if (!isset($this->originaluid))
@@ -567,13 +645,13 @@
 					$data[$stamp["name"]]=$content;
 				};
 			};
-			echo("stamps=<pre>");print_r($data);echo("</pre>");//dbg
+			decho("stamps=<pre>");dprint_r($data);decho("</pre>");//dbg
 			
 			// otsi meili seest kasutatud muutujaid & stambid
-			preg_match_all("/#(.+?)#/",$msg["message"],$uvm);
+			/*preg_match_all("/#(.+?)#/",$msg["message"],$uvm);
 			is_array($uvm)?$uvm=array_values($uvm[1]):$uvm=array();
 
-			$used_vars=$uvm;// saadetud  meilide tabla jaox
+			$used_vars=$uvm;// saadetud  meilide tabla jaox*/
 			
 
 			// võta ainult need muutujad, millele saatjal on "send" õigus
@@ -595,18 +673,27 @@
 			};
 			
 			$data["sendtime"]=$this->time2date(time(),2);
-			echo("data=<pre>");print_r($data);echo("</pre>");//dbg
+			decho("data=<pre>");dprint_r($data);decho("</pre>");//dbg
 			
-			// kas ilma e-ta ka töötax või??
-			$message=preg_replace("/#(.+?)#/e","\$data[\"\\1\"]",$msg["message"]);
-			$subject=preg_replace("/#(.+?)#/e","\$data[\"\\1\"]",$msg["subject"]);
-			$mailfrom=preg_replace("/#(.+?)#/e","\$data[\"\\1\"]",$msg["mfrom"]);
+			$this->used_variables=array();
+			$message=$this->replace_tags($msg["message"],$data);
+			$subject=$this->replace_tags($msg["subject"],$data);
+			decho("mail contans mfrom value of ".$msg["mfrom"]."<br>");//dbg
+			$mfrom=$this->replace_tags($msg["mfrom"],$data);
+
+			$used_vars=array_keys($this->used_variables);
+
+			decho("used vars=<pre>");dprint_r($used_vars);decho("</pre>");
+			
+			//$message=preg_replace("/#(.+?)#/e","\$data[\"\\1\"]",$msg["message"]);
+			//$subject=preg_replace("/#(.+?)#/e","\$data[\"\\1\"]",$msg["subject"]);
+			//$mailfrom=preg_replace("/#(.+?)#/e","\$data[\"\\1\"]",$msg["mfrom"]);
 
 			// pane logi tablasse kirja meili saatmine
-			$this->db_query("INSERT INTO ml_sent_mails (mail,member,uid,lid,tm,vars,message,subject,mailfrom) VALUES
-				('$mid','$member','".UID."','$lid','".time()."',',".join(",",$used_vars).",','$message','$subject','$mailfrom')");
+			
+			$this->db_query("INSERT INTO ml_sent_mails (mail,member,uid,lid,tm,vars,message,subject,mailfrom) VALUES ('$mid','$member','".UID."','$lid','".time()."',',".join(",",$used_vars).",','$message','$subject','$mailfrom')");
 
-			echo("<textarea cols=60 rows=40>mailfrom=$mailfrom\nmailto=$mailto\nusbject=$subject\nmessage=$message</textarea>");//dbg
+			decho("<textarea cols=60 rows=40>mailfrom=$mfrom\nmailto=$mailto\nusbject=$subject\nmessage=$message</textarea>");//dbg
 			
 			
 
@@ -617,15 +704,24 @@
 			};
 
 			$this->awm->clean();
+			decho("msg[type]=$msg[type] html=".($msg["type"] & MSG_HTML)."<br>");
+			$is_html=$msg["type"] & MSG_HTML;
+
 			$this->awm->create_message(array(
-				"froma" => $mailfrom,
+				"froma" => $mfrom,
 				"subject" => $subject,
 				"To" => $mailto,
-				"body" => $message,
+				"Sender"=>"lauri@struktuur.ee",
+				"body" => $is_html?strip_tags(strtr($message,array("<br>"=>"\r\n","<BR>"=>"\r\n","</p>"=>"\r\n","</P>"=>"\r\n"))):$message,
 			));
 
+			if ($is_html)
+			{
+				$this->awm->htmlbodyattach(array("data"=>$message));
+			};
+
 			// kopeeritud messenger.aw rida 1265
-			$this->get_objects_by_class(array("class" => CL_FILE,"parent" => $msg_id,));
+			$this->get_objects_by_class(array("class" => CL_FILE,"parent" => $mid,));
 			while($row = $this->db_next())
 			{
 				$this->save_handle();
@@ -656,7 +752,7 @@
 			};
 
 			$this->mlrule->check_mailsent(array("mid" => $mid, "subject" => $subject, "vars" => ",".join(",",$used_vars).","),array($member));
-			echo("<b>SENT!</b>");//dbg
+			decho("<b>SENT!</b>");//dbg
 		}
 
 	};

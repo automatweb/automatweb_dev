@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.18 2001/08/30 21:24:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.19 2001/09/12 17:59:57 duke Exp $
 define(PER_PAGE,10);
 define(PER_FLAT_PAGE,20);
 define(TOPICS_PER_PAGE,7);
@@ -51,8 +51,8 @@ class msgboard extends aw_template
 		session_register("commentvotes");
 		global $baseurl;
 		// this sucks, really
-		header("Location: $baseurl/comments.aw?action=topics");
-		exit;
+//		header("Location: $baseurl/comments.aw?action=topics");
+//		exit;
 		return;
 	}	
 
@@ -118,7 +118,7 @@ class msgboard extends aw_template
 		$num_pages = ($total / PER_PAGE);
 		for ($i=0; $i <= $num_pages; $i++)
 		{
-			$this->vars(array("pagenum" => $i, "ltext" => $i));
+			$this->vars(array("pagenum" => $i, "ltext" => $i,"from" => $i*PER_PAGE, "to" => min($total,($i+1)*PER_PAGE)));
 			if ($i == $page)
 				$p.=$this->parse("SEL_PAGE");
 			else
@@ -320,6 +320,9 @@ class msgboard extends aw_template
 		global $HTTP_SESSION_VARS;
 		$votes = $HTTP_SESSION_VARS["commentvotes"];
 		
+		$forumdat = $this->get_object($forum_id);
+		$meta = $this->get_object_metadata(array("metadata" => $forumdat["metadata"]));
+
 		$votedata = $this->get_object_metadata(array(
 					"oid" => $id,
 					"key" => "votes",
@@ -401,7 +404,7 @@ class msgboard extends aw_template
 		$num_pages = ($total / PER_FLAT_PAGE);
 		for ($i=0; $i <= $num_pages; $i++)
 		{
-			$this->vars(array("pagenum" => $i, "ltext" => $i));
+			$this->vars(array("pagenum" => $i, "ltext" => $i,"from" => $i*PER_PAGE, "to" => min($total,($i+1)*PER_PAGE)));
 			if ($page == $i)
 				$p.=$this->parse("SEL_PAGE");
 			else
@@ -413,7 +416,7 @@ class msgboard extends aw_template
 			$ps = $this->parse("PAGES");
 		}
 
-		$this->vars(array("topic_id" => $id));
+		$this->vars(array("topic_id" => $id,"forum_id" => $forum_id));
 		$l = (isset($votes[$id])) ? $this->parse("ALREADY_VOTED") : $this->parse("VOTE_FOR_TOPIC");
 				
 
@@ -425,7 +428,8 @@ class msgboard extends aw_template
 		));
 
 		$ret = $this->parse();
-		return $ret.$this->add(0,$id,$page,$forum_id);
+		$addform = ($meta["comments"]) ? $this->add(0,$id,$page,$forum_id) : "";
+		return $ret.$addform;
 	}
 
 	function search($id,$forum_id)
@@ -496,7 +500,7 @@ class msgboard extends aw_template
 		$num_pages = ($cnt / PER_FLAT_PAGE);
 		for ($i=0; $i <= $num_pages; $i++)
 		{
-			$this->vars(array("url" => $this->make_url(array("page" => $i)), "ltext" => $i));
+			$this->vars(array("url" => $this->make_url(array("page" => $i)), "ltext" => $i,"from" => $i*PER_PAGE, "to" => min($cnt,($i+1)*PER_PAGE)));
 			if ($page == $i)
 				$p.=$this->parse("SEL_PAGE");
 			else

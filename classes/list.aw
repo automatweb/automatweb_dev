@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.13 2001/07/26 16:49:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.14 2001/09/12 17:59:57 duke Exp $
 lc_load("mailinglist");
 class mlist extends aw_template
 {
@@ -202,6 +202,9 @@ class mlist extends aw_template
 	// name (string) -
 	// email (string) -
 	// lists (array of int) - listide id-d, kuhu kasutaja liita
+
+	// FIXME: peab tegema ka objektid igale listikasutajale. Maksimaalselt tuleks ära
+	// kasutada olemasolevaid objekte - just kustutamisel.
 	function add_user_to_lists($args = array())
 	{	
 		$this->quote($args);

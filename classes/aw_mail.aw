@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.14 2001/07/08 18:42:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.15 2001/09/12 17:59:57 duke Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
@@ -18,7 +18,7 @@ define('HTML','text/html');
 define('CHARSET','iso-8859-4');
 define('INLINE','inline');
 define('ATTACH','attachment');
-define('CRLF',"\n");
+define('CRLF',"\r\n");
 define('BASE64','base64');
 
 class aw_mail {
@@ -207,7 +207,7 @@ class aw_mail {
 			// no further actions, we just fill the $body variable.
 			else
 			{
-				$body .= $line . "\n";
+				$body .= $line . "\r\n";
 			};
 		}; // foreach
 
@@ -382,6 +382,46 @@ class aw_mail {
 		return sizeof($this->mimeparts);
 	}
 
+	// lauri muudetud 01.09.2001 -->
+	////
+	// !Generates html stuff around html body
+	function gen_htmlbody($body)
+	{
+		return (substr($body,0,6)=="<html>")?$body:
+			"<html><head><title></title></head><body>$body</body></html>";
+	}
+
+	////
+	// !Defines an alternative html body
+	// argumendid:
+	// data(string) html data
+	function htmlbodyattach($args=array())
+	{
+		extract($args);
+		// nii, kuidas seda siis teha? 
+		// tuleb teha juurde yx mime part, mille Content-Type: multipart/alternative;
+		// sinna sisse paneme vana message body ja eraldatult uue html body.
+		$boundary='AW'.chr(rand(65,91)).'--'.md5(uniqid(rand()))."YAXPAH";
+
+		$atc="Content-Type: multipart/alternative;".CRLF." boundary=\"$boundary\"".CRLF.CRLF;
+
+		$atc.="--".$boundary.CRLF;
+		$atc.="Content-Type: text/html; charset=".CHARSET . CRLF;
+		$atc.="Content-Transfer-Encoding: 7bit".CRLF.CRLF.$this->gen_htmlbody($data).CRLF.CRLF;
+
+		$atc.="--".$boundary.CRLF;
+		$atc.="Content-Type: text/plain; charset=".CHARSET . CRLF;
+		$atc.="Content-Transfer-Encoding: 7bit".CRLF.CRLF.$this->body.CRLF;
+		$atc.="--".$boundary/*.CRLF*/;//crlf paneb see build.. func ise lıppu
+		
+
+		// see peab kindlalt olema esimene ‰tt‰ts.
+		$this->mimeparts=array_merge(array($atc),$this->mimeparts);
+		unset($this->body);
+	}
+
+	// <--
+	
 	////
 	// !Attaches a file to the message
 	// argumendid:
@@ -501,6 +541,10 @@ class aw_mail {
 		$email .= $this->build_message();
 		$to = $this->headers["To"];
 		$subject = $this->headers["Subject"];
+		if (not($this->headers["Content-Type"]))
+		{
+			$this->set_header("Content-Type","text/plain; charset=\"iso-8859-4\"");
+		};
 		unset($this->headers["To"]);
 		unset($this->headers["Subject"]);
 		$this->set_header("Message-Id",$this->gen_message_id());
@@ -509,9 +553,15 @@ class aw_mail {
 		{
 			if ($value)
 			{
-				$headers .= sprintf("%s: %s%s",$name,$value,CRLF);
+				$headers .= sprintf("%s: %s%s",$name,$value,"\n");
 			};
 		}
+		if ($GLOBALS["__debug"])
+		{
+			echo("<textarea cols=80 rows=15>blj‰‰ \nto=$to \nsubj=$subject \nheaders:");
+			print_r($headers);
+			echo("email=$email</textarea>");
+		};
 		mail($to,$subject,$email,$headers);
 		
 	}

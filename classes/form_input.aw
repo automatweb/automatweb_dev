@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_input.aw,v 2.4 2001/07/27 02:51:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_input.aw,v 2.5 2001/09/12 17:59:57 duke Exp $
 // form_input.aw - Tegeleb vormi sisestustega, hetkel ainult XML.
 global $orb_defs;
 $orb_defs["form_input"] = "xml";
@@ -20,10 +20,41 @@ class form_input extends form_base
 		extract($args);
 		$this->read_template("xml_input.tpl");
 		$this->mk_path($parent,"Uus XML sisend");
+
+		$forms = $this->get_list(FTYPE_ENTRY,true,true);
+		
+		$c = "";
+		foreach($forms as $key => $val)
+		{
+			$this->vars(array(
+				"oid" => $key,
+				"ename" => $val,
+			));
+
+			$c .= $this->parse("line");
+		};
+
+		$chains = $this->get_objects_below(array(
+				"class" => CL_FORM_CHAIN,
+		));
+
+		foreach($chains as $key => $val)
+		{
+			$this->vars(array(
+				"oid" => $key,
+				"ename" => $val["name"],
+			));
+
+			$c2 .= $this->parse("line2");
+		};
+
 		$this->vars(array(
 			"forms" => $this->multiple_option_list($sel, $this->get_list(FTYPE_ENTRY,true,true)),
 			"reforb" => $this->mk_reforb("submit_add",array("parent" => $parent)),
+			"line" => $c,
+			"line2" => $c2,
 		));
+
 		return $this->parse();
 	}
 
@@ -41,8 +72,8 @@ class form_input extends form_base
 		
 		$this->set_object_metadata(array(
 			"oid" => $new_id,
-			"key" => "forms",
-			"value" => $forms,
+			"key" => "form",
+			"value" => $select,
 		));
 		return $this->mk_orb("change",array("id" => $new_id));
 	}
@@ -57,7 +88,36 @@ class form_input extends form_base
 
 		$this->read_template("xml_input.tpl");
 		$this->mk_path($object["parent"],"Muuda XML sisendit");
-		$sel = ($meta["forms"]) ? array_flip($meta["forms"]) : array();
+		$sel = ($meta["form"]) ? $meta["form"] : 0;
+
+		$forms = $this->get_list(FTYPE_ENTRY,true,true);
+		
+		$c = "";
+		foreach($forms as $key => $val)
+		{
+			$this->vars(array(
+				"oid" => $key,
+				"ename" => $val,
+				"checked" => checked($key == $sel),
+			));
+
+			$c .= $this->parse("line");
+		};
+
+		$chains = $this->get_objects_below(array(
+				"class" => CL_FORM_CHAIN,
+		));
+
+		foreach($chains as $key => $val)
+		{
+			$this->vars(array(
+				"oid" => $key,
+				"ename" => $val["name"],
+				"checked" => checked($key == $sel),
+			));
+
+			$c2 .= $this->parse("line2");
+		};
 
 		$this->vars(array(
 			"adminurl" => $this->mk_orb("edit_input",array("id" => $id)),
@@ -68,12 +128,16 @@ class form_input extends form_base
 				"onlyactive" => true,
 		));
 
+		#$c = "";
+
+
 		$this->vars(array(
 			"name" => $object["name"],
 			"comment" => $object["comment"],
 			"admin" => $this->parse("admin"),
-			"forms" => $this->multiple_option_list($sel, $forms),
 			"reforb" => $this->mk_reforb("submit_change",array("id" => $id)),
+			"line" => $c,
+			"line2" => $c2,
 		));
 
 		return $this->parse();
@@ -92,8 +156,8 @@ class form_input extends form_base
 		
 		$this->set_object_metadata(array(
 			"oid" => $id,
-			"key" => "forms",
-			"value" => $forms,
+			"key" => "form",
+			"value" => $select,
 		));
 		return $this->mk_orb("change",array("id" => $id));
 	}
@@ -112,65 +176,75 @@ class form_input extends form_base
 		$els = array();
 		$elements = $meta["elements"];
 		global $uid;
-		if (is_array($meta["forms"]))
+		$cs = $this->get_object($meta["form"]);
+
+		$farr = array();
+		if ($cs["class_id"] == CL_FORM)
 		{
-			foreach($meta["forms"] as $fid)
+			$farr[$cs["oid"]] = $cs["name"];
+		}
+		elseif ($cs["class_id"] == CL_FORM_CHAIN)
+		{
+			classload("form_chain");
+			$t = new form_chain();
+			$t->load_chain($cs["oid"]);
+			$farr = $t->chain["forms"];
+		};
+			
+
+		foreach($farr as $key => $val)
+		{
+		//if (is_array($meta["forms"]))
+		//{
+			$c = "";
+			$tmp = $this->get_form_elements(array("id" => $key)); 
+
+			$this->vars(array(
+				"fname" => $this->name,
+				"form_id" => $key,
+			));
+
+			foreach($tmp as $tkey => $tval)
 			{
-				$c = "";
-				$tmp = $this->get_form_elements(array("id" => $fid)); 
-				if ($uid == "duke")
+				switch($tval["type"])
 				{
-					print "<pre>";
-					print_r($tmp);
-					print "</pre>";
+					case "submit":
+						break;
+
+					case "button":
+						break;
+
+					default:
+
+						if ($tval["name"])
+						{
+							$name = $tval["name"];
+						}
+						else
+						{
+							$name = $elements[$tval["id"]]["name"];
+						};
+
+						$this->vars(array(
+							"name" => $name,
+							"type" => $tval["type"],
+							"id" => $tval["id"],
+							"extname" => $elements[$tval["id"]]["name"],
+							"checked" => ($elements[$tval["id"]]) ? "checked" : "",
+						));
+						$c .= $this->parse("element");
 				};
 
-				$this->vars(array(
-					"fname" => $this->name,
-					"form_id" => $fid,
-				));
-
-				foreach($tmp as $tkey => $tval)
-				{
-					switch($tval["type"])
-					{
-						case "submit":
-							break;
-
-						case "button":
-							break;
-
-						default:
-
-							if ($tval["name"])
-							{
-								$name = $tval["name"];
-							}
-							else
-							{
-								$name = $elements[$tval["id"]]["name"];
-							};
-
-							$this->vars(array(
-								"name" => $name,
-								"type" => $tval["type"],
-								"id" => $tval["id"],
-								"extname" => $elements[$tval["id"]]["name"],
-								"checked" => ($elements[$tval["id"]]) ? "checked" : "",
-							));
-							$c .= $this->parse("element");
-					};
-
-				};
-				$this->vars(array("element" => $c));
-				$forms .= $this->parse("form");
-				$els = $els + $tmp;
 			};
+			$this->vars(array("element" => $c));
+			$forms .= $this->parse("form");
+			$els = $els + $tmp;
 		};
 
 		$this->vars(array(
 			"form" => $forms,
 			"reforb" => $this->mk_reforb("submit_edit",array("id" => $id)),
+			"edurl" => $this->mk_orb("change",array("id" => $id)),
 		));
 
 		return $this->parse();

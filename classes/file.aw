@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.14 2001/08/12 23:21:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.15 2001/09/12 17:59:57 duke Exp $
 // file.aw - Failide haldus
 global $orb_defs;
 $orb_defs["file"] = "xml";
@@ -51,10 +51,11 @@ class file extends aw_template
 				{
 					header("Content-type: text/html");
 				};
-                		
-				preg_match("/<body (.*)>(.*)<\/body>/imsU",$fi["content"],$map);
+    
+				$replacement = $fi["content"];
+//				preg_match("/<body (.*)>(.*)<\/body>/imsU",$fi["content"],$map);
 				// return only the body of the file
-                		$replacement = str_replace("\n","",$map[2]);
+  //              		$replacement = str_replace("\n","",$map[2]);
 			}
 			else
 			{

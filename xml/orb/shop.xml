@@ -37,7 +37,7 @@
 			<function name="view_cart">
 				<arguments>
 					<required name="shop_id"/>
-					<required name="section"/>
+					<optional name="section"/>
 				</arguments>
 			</function>
 		</action>
@@ -198,7 +198,7 @@
 				<arguments>
 					<required name="shop"/>
 					<required name="order_id"/>
-					<required name="section"/>
+					<optional name="section"/>
 				</arguments>
 			</function>
 		</action>
@@ -208,7 +208,7 @@
 				<arguments>
 					<required name="shop"/>
 					<required name="order_id"/>
-					<required name="section"/>
+					<optional name="section"/>
 				</arguments>
 			</function>
 		</action>
@@ -235,7 +235,7 @@
 				<arguments>
 					<required name="shop"/>
 					<required name="order_id"/>
-					<required name="section"/>
+					<optional name="section"/>
 				</arguments>
 			</function>
 		</action>
@@ -245,7 +245,7 @@
 				<arguments>
 					<required name="shop"/>
 					<required name="order_id"/>
-					<required name="section"/>
+					<optional name="section"/>
 					<required name="item_id"/>
 				</arguments>
 			</function>
@@ -256,7 +256,7 @@
 				<arguments>
 					<required name="shop"/>
 					<required name="order_id"/>
-					<required name="section"/>
+					<optional name="section"/>
 				</arguments>
 			</function>
 		</action>
@@ -276,7 +276,18 @@
 			<function name="cancel_current">
 				<arguments>
 					<required name="shop"/>
-					<required name="section"/>
+					<optional name="section"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="del_pass_entry">
+			<function name="delentry">
+				<arguments>
+					<required name="shop_id"/>
+					<optional name="section"/>
+					<required name="num"/>
+					<required name="eid"/>
 				</arguments>
 			</function>
 		</action>

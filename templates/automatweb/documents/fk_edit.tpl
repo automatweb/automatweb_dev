@@ -10,6 +10,22 @@ function remote2(url) {
 OpenWindow = window.open(url);
 }
 
+var sel_chain = 0;
+
+function del_chain()
+{
+	if (!sel_chain)
+	{
+		alert('Vali form, mille aliast kustutada soovid!');
+		window.location="#";
+		return true;
+	}
+
+	window.location="orb.{VAR:ext}?class=document&action=delete_alias&docid={VAR:id}&id="+sel_chain;
+	return true;
+}
+
+
 var sel_link = 0;
 
 function ch_link()
@@ -640,6 +656,66 @@ function format(what,opt)
 		</td>
 	</tr>
 <!-- END SUB: NO_FORMS -->
+
+<!-- SUB: HAS_CHAINS -->
+	<tr>
+		<td colspan=2><img src='{VAR:baseurl}/images/transa.gif' width=10 height=16></td>
+	</tr>
+	<tr>
+		<td valign=top>
+			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
+				<tr>
+					<td class="title">Vormi p&auml;rjad</td>
+				</tr>
+			</table>
+		</td>
+		<td>
+			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
+				<tr>
+					<td class="title" colspan=7><a href="{VAR:addchain}">Lisa uus</a> | <a href="javascript:ch_chain()">Muuda</a> | <a href="javascript:del_chain()">Kustuta</a></td>
+				</tr>
+				<tr>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&chain_sortby=name&chain_order={VAR:chain_order}'>Nimi</a> {VAR:chain_name_img}</td>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&chain_sortby=comment&chain_order={VAR:chain_order}'>Kirjeldus</a> {VAR:chain_comment_img}</td>
+					<td align="center" class="fcaption5_hele">Alias</td>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&chain_sortby=modifiedby&chain_order={VAR:chain_order}'>Muutja</a> {VAR:chain_modifiedby_img}</td>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&chain_sortby=modified&chain_order={VAR:chain_order}'>Muudetud</a> {VAR:chain_modified_img}</td>
+					<td class="title" align="center" colspan=2>Vali</td>
+				</tr>
+				<!-- SUB: CHAIN_LINE -->
+				<tr>
+					<td align="center" class="fcaption5_hele_taust"><a href='{VAR:ch_chain}'>{VAR:name}</a></td>
+					<td align="center" class="fcaption5_hele_taust">{VAR:comment}</td>
+					<td align="center" class="fcaption5_hele_taust"><input class='tekstikast_n'  onBlur='this.value="{VAR:alias}";' onClick='this.select()' type='text' value='{VAR:alias}' size=5 class='small_button'></td>
+					<td align="center" class="fcaption5_hele_taust">{VAR:modifiedby}</td>
+					<td align="center" class="fcaption5_hele_taust">{VAR:modified}</td>
+					<td align="center" class="title" width=1><input type='radio' name='chains' value='{VAR:id}' onClick="sel_chain={VAR:id};"></td>
+					<td align="center" class="title" width=1><input type='checkbox' name='chains_c[{VAR:id}]' value=1></td>
+				</tr>
+				<!-- END SUB: CHAIN_LINE -->
+			</table>
+		</td>
+	</tr>
+<!-- END SUB: HAS_CHAINS -->
+
+<!-- SUB: NO_CHAINS -->
+	<tr>
+		<td valign=top>
+			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
+				<tr>
+					<td class="title">Vormi p&auml;rjad</td>
+				</tr>
+			</table>
+		</td>
+		<td>
+			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
+				<tr>
+					<td class="title" colspan=7><a href="{VAR:addchain}">Lisa uus</a></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+<!-- END SUB: NO_CHAINS -->
 
 <!-- SUB: HAS_FILES -->
 	<tr>

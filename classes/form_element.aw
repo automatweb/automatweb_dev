@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.20 2001/09/11 06:39:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.21 2001/09/12 17:59:57 duke Exp $
 // form_element.aw - vormi element.
 lc_load("form");
 global $orb_defs;
@@ -1233,6 +1233,7 @@ class form_element extends aw_template
 			$var = $prefix.$this->id."_text";
 			$var2= $prefix.$this->id."_address";
 			// fuck you. fuck YOU. 
+			// ok, is it really THAT hard to change this into $this->form->post_vars[$var] or what are you whining about? :p - terryf
 			global $$var, $$var2;
 			$entry[$this->id] = array("text" => $$var, "address" => $$var2);
 			$this->entry_id = $id;
@@ -1281,10 +1282,11 @@ class form_element extends aw_template
 		{
 			// this is not good, I hade to hack around this naming scheme in
 			// XML-RPC.
+			// um, could you explain what's wrong with it? - terryf
 			$var = $this->form->post_vars[$prefix."radio_group_".$this->arr["group"]];
 		}
 		else
-			// I think the listboxes are handled as well here.
+		// I think the listboxes are handled as well here.
 		if ($this->arr["type"] == "multiple")
 		{
 			$var = $prefix.$this->id;
@@ -1570,6 +1572,8 @@ class form_element extends aw_template
 			$cnt=0;
 			foreach($fc as $line)
 			{
+				$line = str_replace("\r","",$line);
+				$line = str_replace("\n","",$line);
 				if ($line == "")
 				{
 					$line = " ";
@@ -1595,6 +1599,8 @@ class form_element extends aw_template
 			$cnt=0;
 			foreach($fc as $line)
 			{
+				$line = str_replace("\r","",$line);
+				$line = str_replace("\n","",$line);
 				if ($line == "")
 				{
 					$line = " ";

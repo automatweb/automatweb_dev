@@ -1,15 +1,18 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.30 2001/08/12 23:21:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.31 2001/09/12 17:59:57 duke Exp $
 // form_entry_element.aw - 
 session_register("clipboard");
 classload("currency");
 lc_load("form");
 load_vcl("date_edit");
+lc_load("definition");
 
 	class form_entry_element extends form_element
 	{
 		function form_entry_element()
 		{
+			global $awt;
+			$awt->start("form_entry_element::new()");
 			$this->tpl_init("forms");
 			$this->db_init();
 
@@ -17,16 +20,16 @@ load_vcl("date_edit");
 			$this->entry_id = 0;
 			$this->id = 0;
 			$this->currency = new currency;
-			lc_load("definition");
+			$awt->stop("form_entry_element::new()");
+		}
+
+		function gen_admin_html()
+		{
 			global $lc_form;
 			if (is_array($lc_form))
 			{
 				$this->vars($lc_form);
 			}
-		}
-
-		function gen_admin_html()
-		{
 			$this->read_template("admin_element.tpl");
 
 			$this->do_core_admin();

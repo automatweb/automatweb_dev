@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.7 2001/07/28 03:27:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.8 2001/09/12 17:59:57 duke Exp $
 lc_load("style");
 global $orb_defs;
 // hey I just thought of another thing! you can have several aliases for 1 function :) wooho!
@@ -434,12 +434,8 @@ $style_cache = array();
 			return $stl;
 		}
 
-		////
-		// !returns the css definition that matches style $id
-		function get_css($id)
+		function _get_css($st)
 		{
-			$st = $this->mk_cache($id);
-			
 			$fstr = array();
 			if ($st["font1"] != "")		
 			{
@@ -506,10 +502,29 @@ $style_cache = array();
 				$fstyles[] = "width: ".$st["width"].";";
 			}
 
-			$fsstr = join("\n",$fstyles);
+			return  join("\n",$fstyles);
+		}
+
+		////
+		// !returns the css definition that matches style $id
+		function get_css($id,$a_id = 0)
+		{
+			$st = $this->mk_cache($id);
+			
+			$fsstr = $this->_get_css($st);
 			if ($fsstr != "")
 			{
 				$str = ".style_".$id." { \n".$fsstr." \n} \n";
+			}
+			if ($a_id)
+			{
+				$st = $this->mk_cache($a_id);
+				
+				$fsstr = $this->_get_css($st);
+				if ($fsstr != "")
+				{
+					$str = $str."\n.style_".$id." a { \n".$fsstr." \n} \n";
+				}
 			}
 			return $str;
 		}

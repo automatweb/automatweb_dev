@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.52 2001/09/12 14:57:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.53 2001/09/12 17:59:57 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -1113,6 +1113,7 @@ class menuedit extends aw_template
 				{
 					$pstr = "objects.parent = $obj[oid]";
 				};
+				$ordby = "objects.modified DESC";
 			}
 			else
 			{
@@ -1125,7 +1126,11 @@ class menuedit extends aw_template
 
 			$docid = array();
 			$cnt = 0;
-			$this->db_query("SELECT oid FROM objects WHERE ($pstr AND status = 2 AND class_id = 7 AND objects.lang_id=".$GLOBALS["lang_id"].") OR (class_id = ".CL_BROTHER_DOCUMENT." AND status = 2 AND $pstr) ORDER BY jrk $lm");
+			if ($ordby == "")
+			{
+				$ordby = "objects.jrk";
+			}
+			$this->db_query("SELECT oid FROM objects WHERE ($pstr AND status = 2 AND class_id = 7 AND objects.lang_id=".$GLOBALS["lang_id"].") OR (class_id = ".CL_BROTHER_DOCUMENT." AND status = 2 AND $pstr) ORDER BY $ordby $lm");
 			while ($row = $this->db_next())
 			{
 				$docid[$cnt++] = $row["oid"];

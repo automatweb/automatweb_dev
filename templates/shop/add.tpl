@@ -142,7 +142,7 @@ function idxforvalue(el,val)
 </tr>
 <!-- SUB: CH_OWN -->
 <tr>
-	<td class="fcaption2" colspan=2><a href='{VAR:ch_own}'>{VAR:LC_SHOP_PROPERTY}</a></td>
+	<td class="fcaption2" colspan=2><a href='{VAR:ch_own}'>Owner properties</a></td>
 </tr>
 <!-- END SUB: CH_OWN -->
 

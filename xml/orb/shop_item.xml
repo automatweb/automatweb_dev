@@ -73,6 +73,22 @@
 			</function>
 		</action>
 
+		<action name="change_categories">
+			<function name="change_categories">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="change_settings">
+			<function name="change_settings">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
 		

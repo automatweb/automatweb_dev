@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.18 2001/08/12 23:21:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.19 2001/09/12 17:59:57 duke Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle fomi sees kirjas
@@ -12,6 +12,7 @@
 // why? iizi. cause the element properies are saved in the form and therefore the form must always be loaded
 // so we have to go through form->load to get the cells' elements.
 lc_load("form");
+lc_load("definition");
 class form_cell extends form_base
 {
 	function form_cell()
@@ -19,16 +20,6 @@ class form_cell extends form_base
 		$this->tpl_init("forms");
 		$this->db_init();
 		$this->sub_merge = 1;
-		lc_load("definition");
-
-		// we need to know whether we are inside an interactive session and 
-		// only load the language constants if we really need them. This saves
-		// us some memory, albeit not too much.
-		global $lc_form;
-		if (is_array($lc_form))
-		{
-			$this->vars($lc_form);
-		}
 	}
 
 	////
@@ -37,35 +28,33 @@ class form_cell extends form_base
 	function mk_element($type, &$r, &$form)
 	{
 		global $awt;
-		$awt->start("form_cell::mk_element");
-		$awt->count("form_cell::mk_element");
-
 		switch($type)
 		{
 			case FORM_ENTRY:
-				$tmp = new form_entry_element();
+				//$tmp = new form_entry_element();
+				$t = "form_entry_element";
 				break;
 			case FORM_SEARCH:
-				$tmp = new form_search_element();
+				//$tmp = new form_search_element();
+				$t = "form_search_element";
 				break;
 			case FORM_RATING:
-				$tmp = new form_entry_element();
+				//$tmp = new form_entry_element();
+				$t = "form_entry_element";
 				break;
 			default:
 				$this->raise_error("form_cell->mk_element($type) , error in type!",true);
 		}
+		$awt->start("form_entry_element::load");
+		$tmp = new $t;
+		$awt->stop("form_entry_element::load");
 		$tmp->load(&$r,&$form,$this->col, $this->row);
 		$this->arr[$this->cnt] = $tmp;
 		$this->cnt++;
-		$awt->stop("form_cell::mk_element");
 	}
 
 	function load(&$form, $row, $col)
 	{
-		global $awt;
-		$awt->start("form_cell::load");
-		$awt->count("form_cell::load");
-
 		$this->type = $form->get_type();
 		$this->col = $col;
 		$this->row = $row;
@@ -74,28 +63,33 @@ class form_cell extends form_base
 		$this->parent = $form->get_parent();
 		$this->form = &$form;
 
-		$arr = &$form->get_el_arr();
-
-		if (is_array($arr[$row][$col]))
+		if (is_array($this->form->arr["elements"][$row][$col]))
 		{
-			reset($arr[$row][$col]);
-			while (list($k,$v) = each($arr[$row][$col]))
+			global $awt;
+			$awt->start("form_cell::load::cycle");
+			reset($this->form->arr["elements"][$row][$col]);
+			while (list($k,$v) = each($this->form->arr["elements"][$row][$col]))
 			{
 				if (is_number($k))
 				{
 					$this->mk_element($this->type, &$v, &$form);
 				}
 			}
+			$awt->stop("form_cell::load::cycle");
 		}
 
-		$this->style = isset($arr[$row][$col]["style"]) ? $arr[$row][$col]["style"] : 0;
-		$awt->stop("form_cell::load");
+		$this->style = isset($this->form->arr["elements"][$row][$col]["style"]) ? $this->form->arr["elements"][$row][$col]["style"] : 0;
 	}
 
 	////
 	// !Displays cell administration form for previously loaded cell
 	function admin_cell()
 	{
+		global $lc_form;
+		if (is_array($lc_form))
+		{
+			$this->vars($lc_form);
+		}
 		$this->read_template("admin_cell.tpl");
 		$this->mk_path($this->parent, "<a href='".$this->mk_orb("change", array("id" => $this->id),"form").LC_FORM_CELL_CHANGE_FORM_CHANGE_CELL);
 
@@ -163,6 +157,11 @@ class form_cell extends form_base
 	// !Adds a new element in the folder $parent and associates it with the currently loaded form also. 
 	function add_element($wizard_step)
 	{
+		global $lc_form;
+		if (is_array($lc_form))
+		{
+			$this->vars($lc_form);
+		}
 		$this->mk_path($this->parent, "<a href='".$this->mk_orb("change", array("id" => $this->id),"form").LC_FORM_CELL_CHANGE_FROM_ADD_ELEMENT);
 		if (!$wizard_step)
 		{
@@ -234,6 +233,8 @@ class form_cell extends form_base
 				$arr["ord"] = $ord;
 				$arr["linked_element"] = 0;
 				$arr["linked_form"] = 0;
+				$arr["linked_element"] = 0;
+				$arr["rel_table_id"] = 0;
 				$this->form->arr["elements"][$this->row][$this->col][$el] = $arr;
 				$this->form->save();
 			}
@@ -267,6 +268,7 @@ class form_cell extends form_base
 		$arr["linked_element"] = 0;
 		$arr["linked_form"] = 0;
 		$arr["type_name"] = "";
+		$arr["rel_table_id"] = 0;
 		$this->form->arr["elements"][$this->row][$this->col][$el] = $arr;
 		return $el;
 	}
@@ -288,6 +290,11 @@ class form_cell extends form_base
 	{
 		if (!$this->facl->get(can_action))
 			$this->raise_error("ACL ERROR: You do not have access to do this! (admin_cell_actions)",true);
+		global $lc_form;
+		if (is_array($lc_form))
+		{
+			$this->vars($lc_form);
+		}
 
 		$this->read_template("admin_cell_actions.tpl");
 		$c = "";
@@ -311,19 +318,18 @@ class form_cell extends form_base
 		$awt->start("form_cell::gen_user_html_not");
 		$awt->count("form_cell::gen_user_html_not");
 
-		$el = 0;
 		$c = "";
 		$cs = "";
 		for ($i=0; $i < $this->cnt; $i++)
 		{
 			$c.=$this->arr[$i]->gen_user_html_not($prefix,$elvalues,$no_submit);
-			$el = &$this->arr[$i];
 		}
 		if ($c == "")
 		{
 			$c = "<img src='/images/transa.gif' height=1 width=1 border=0>";
 		}
 
+		$awt->start("form_cell::gen_user_html_not::style");
 		$style_id=$this->style;
 		if (!$style_id)
 		{
@@ -347,6 +353,7 @@ class form_cell extends form_base
 
 		$cs.= "</td>";
 		
+		$awt->stop("form_cell::gen_user_html_not::style");
 		$awt->stop("form_cell::gen_user_html_not");
 		return $cs;
 	}
@@ -418,6 +425,11 @@ class form_cell extends form_base
 	// !generates the form for selecting cell style
 	function pickstyle()
 	{
+		global $lc_form;
+		if (is_array($lc_form))
+		{
+			$this->vars($lc_form);
+		}
 		$this->mk_path($this->parent,"<a href='".$this->mk_orb("change",array("id" => $this->id),"form")."'>Muuda formi</a> / <a href='".$this->mk_orb("admin_cell",array("id" => $this->id, "row" => $this->row, "col" => $this->col),"form").LC_FORM_CELL_CHANDE_CELL);
 		$this->read_template("pickstyle.tpl");
 

@@ -92,6 +92,20 @@ function setsel(el,val)
 	<td class="fgtext">{VAR:LC_FORMS_TYPE_NAME}:</td>
 	<td class="fgtext"><input type='text' class="small_button" NAME='{VAR:cell_id}_type_name' VALUE='{VAR:cell_type_name}'></td>
 </tr>
+<!-- SUB: RELATION_LB -->
+<tr>
+	<td class="fgtext">Seose form:</td>
+	<td class="fgtext"><select class='small_button' NAME='{VAR:cell_id}_rel_form' onChange="ch(document.f1.{VAR:cell_id}_rel_element, this)">{VAR:rel_forms}</select></td>
+	<td class="fgtext">Seose element:</td>
+	<td class="fgtext"><select class='small_button' NAME='{VAR:cell_id}_rel_element'><option value=''></select>
+	<script language="javascript">
+		ch(document.f1.{VAR:cell_id}_rel_element, document.f1.{VAR:cell_id}_rel_form);
+		setsel(document.f1.{VAR:cell_id}_rel_element,"{VAR:rel_el}");
+	</script>
+	</td>
+</tr>
+<!-- END SUB: RELATION_LB -->
+
 <!-- SUB: LISTBOX_SORT -->
 <tr>
 <td class="fgtext">{VAR:LC_FORMS_SORTING}:</td>
@@ -213,8 +227,14 @@ function setsel(el,val)
 <tr>
 <td class="fgtext">{VAR:LC_FORMS_TEXT_ON_BUTTON}:</td>
 <td class="fgtext"><input type='text' CLASS="small_button" NAME='{VAR:cell_id}_btext' VALUE='{VAR:button_text}'></td>
+<td class="fgtext">Kas p&auml;rjas ei minda edasi:</td>
+<td class="fgtext"><input type="checkbox" name="{VAR:cell_id}_chain_forward" value="1" {VAR:chain_forward}></td>
+</tr>
+<tr>
 <td class="fgtext">&nbsp;</td>
 <td class="fgtext">&nbsp;</td>
+<td class="fgtext">Kas p&auml;rjas minnakse tagasi:</td>
+<td class="fgtext"><input type="checkbox" name="{VAR:cell_id}_chain_backward" value="1" {VAR:chain_backward}></td>
 </tr>
 <!-- END SUB: BUTTON_ITEMS -->
 

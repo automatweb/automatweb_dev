@@ -1,5 +1,5 @@
 <?php
-
+// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.2 2001/09/12 17:59:57 duke Exp $
 class php_serializer 
 {
 	function php_serialize($arr)

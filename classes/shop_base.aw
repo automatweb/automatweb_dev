@@ -139,10 +139,10 @@ class shop_base extends aw_template
 		return $shop;
 	}
 
-	function listall_items($type = FOR_SELECT)
+	function listall_items($type = FOR_SELECT,$constraint = "")
 	{
 		$ret = array();
-		$this->db_query("SELECT objects.* FROM objects WHERE class_id = ".CL_SHOP_ITEM." AND status = 2");
+		$this->db_query("SELECT objects.*,shop_items.* FROM objects LEFT JOIN shop_items ON shop_items.id = objects.oid WHERE class_id = ".CL_SHOP_ITEM." AND status = 2 $constraint");
 		while ($row = $this->db_next())
 		{
 			if ($type == FOR_SELECT)
@@ -152,6 +152,184 @@ class shop_base extends aw_template
 			else
 			{
 				$ret[$row["oid"]] = $row;
+			}
+		}
+		return $ret;
+	}
+
+	function get($id)
+	{
+		$this->db_query("SELECT shop.*,objects.* FROM objects LEFT JOIN shop ON shop.id = objects.oid WHERE objects.oid = $id");
+		return $this->db_next();
+	}
+
+	function do_core_change_tables($id)
+	{
+		$itypes = $this->listall_item_types();
+		$f = new form;
+		$tables = $f->get_list_tables();
+
+		$this->db_query("SELECT * FROM shop2table WHERE shop_id = $id");
+		while ($row = $this->db_next())
+		{
+			$sh2t[$row["type_id"]] = $row["table_id"];
+		}
+
+		foreach($itypes as $typeid => $typename)
+		{
+			$this->vars(array(
+				"typename" => $typename,
+				"type_id" => $typeid,
+				"tables" => $this->picker($sh2t[$typeid], $tables)
+			));
+			$this->parse("TYPE");
+		}
+	}
+
+	function get_article_menus($shop_id)
+	{
+		$ret = array();
+		$this->db_query("SELECT * FROM shop2article_menu WHERE shop_id = '$shop_id'");
+		while ($row = $this->db_next())
+		{
+			$ret[$row["menu_id"]] = $row["menu_id"];
+		}
+		return $ret;
+	}
+
+	function save_article_menus($shop_id, $sel)
+	{
+		$this->db_query("DELETE FROM shop2article_menu WHERE shop_id = '$shop_id'");
+		foreach($sel as $mid)
+		{
+			$this->db_query("INSERT INTO shop2article_menu (shop_id, menu_id) VALUES('$shop_id','$mid')");
+		}
+	}
+
+	function do_core_admin_ofs($id)
+	{
+		$ofs = $this->get_ofs_for_shop($id);
+		foreach($ofs as $ofid => $chk)
+		{
+			$ofa[$ofid] = $ofid;
+		}
+		$fb = new form_base;
+		$fl = $fb->get_list(FTYPE_ENTRY);
+		$op_list = $fb->get_op_list();
+		foreach($ofs as $of_id => $row)
+		{
+			$this->vars(array(
+				"of_id" => $of_id,
+				"of_name" => $this->db_fetch_field("SELECT name FROM objects WHERE oid = ".$of_id,"name"),
+				"of_checked" => checked($row["repeat"]),
+				"of_ops" => $this->picker($row["op_id"],$op_list[$of_id]),
+				"of_ops_long" => $this->picker($row["op_id_long"],$op_list[$of_id]),
+				"of_ops_search" => $this->picker($row["op_id_search"],$op_list[$of_id])
+			));
+			$of.=$this->parse("OF");
+		}
+		$this->vars(array(
+			"OF" => $of,
+			"of" => $this->multiple_option_list($ofa,$fl),
+		));
+	}
+
+	function get_ofs_for_shop($id)
+	{
+		$ret = array();
+		$this->db_query("SELECT of_id,repeat,op_id,op_id_long,op_id_search FROM shop2order_form WHERE shop_id = $id");
+		while ($row = $this->db_next())
+		{
+			$ret[$row["of_id"]] = $row;
+		}
+		return $ret;
+	}
+
+	function do_core_save_ofs($id,$order_form,$of_rep,$of_op,$of_op_long,$of_op_search)
+	{
+		$this->db_query("DELETE FROM shop2order_form WHERE shop_id = '$id'");
+		if (is_array($order_form))
+		{
+			foreach($order_form as $of_id)
+			{
+				$this->db_query("INSERT INTO shop2order_form(shop_id,of_id,repeat,op_id,op_id_long,op_id_search) values($id,$of_id,'".$of_rep[$of_id]."','".$of_op[$of_id]."','".$of_op_long[$of_id]."','".$of_op_search[$of_id]."')");
+			}
+		}
+	}
+
+	function do_menu($items)
+	{
+		global $action;
+		$im = "";
+		foreach($items as $iid => $idata)
+		{
+			$this->vars(array(
+				"url"	=> $idata["url"],
+				"text" => $idata["name"]
+			));
+			if ($action == $iid)
+			{
+				$im.=$this->parse("SEL_ITEM");
+			}
+			else
+			{
+				$im.=$this->parse("ITEM");
+			}
+		}
+		$this->vars(array(
+			"ITEM" => $im,
+			"SEL_ITEM" => ""
+		));
+		return $this->parse();
+	}
+
+	function listall_shop_tables()
+	{
+		$ret = array();
+		$this->db_query("SELECT oid,name FROM objects WHERE class_id = ".CL_SHOP_TABLE." AND status != 0 ");
+		while ($row = $this->db_next())
+		{
+			$ret[$row["oid"]] = $row["name"];
+		}
+		return $ret;
+	}
+
+	function get_tables_for_types()
+	{
+		$ret = array();
+		$this->db_query("SELECT * FROM shop_table2item_type");
+		while ($row = $this->db_next())
+		{
+			$ret[$row["type_id"]] = $row["table_id"];
+		}
+		return $ret;
+	}
+
+	////
+	// !returns all items that are not deleted and not under deleted menus either
+	// parameters: constraint = string that is placed in WHERE clause of item select query
+	// type == FOR_SELECT - returns array of item_id => item_name
+	// type == ALL_PROPS - returns array of item_id => item_props_array
+	function get_item_picker($arr = array())
+	{
+		extract($arr);
+		classload("objects");
+		$ob = new objects;
+		$menus = $ob->get_list();
+		$items = $this->listall_items(ALL_PROPS,$arr["constraint"]);
+		$ret = array();
+		foreach($items as $iid => $irow)
+		{
+			if (isset($menus[$irow["parent"]]))
+			{
+				if ($type == ALL_PROPS)
+				{
+					$ret[$iid] = $irow;
+				}
+				else
+				{
+					$ret[$iid] = $menus[$irow["parent"]]."/".$irow["name"];
+				}
 			}
 		}
 		return $ret;

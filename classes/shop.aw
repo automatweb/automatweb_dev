@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.33 2001/08/12 23:21:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.34 2001/09/12 17:59:57 duke Exp $
 // shop.aw - Shop
 lc_load("shop");
 global $orb_defs;
@@ -87,12 +87,6 @@ class shop extends shop_base
 		classload("form_base");
 		$fb = new form_base;
 
-		$ofs = $this->get_ofs_for_shop($id);
-		foreach($ofs as $ofid => $chk)
-		{
-			$ofa[$ofid] = $ofid;
-		}
-
 		classload("form_base");
 		$fb = new form_base;
 
@@ -132,7 +126,6 @@ class shop extends shop_base
 			"comment" => $oba["comment"],
 			"root" => $this->picker($oba["root_menu"],$ob->get_list()),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
-			"of" => $this->multiple_option_list($ofa,$fl),
 			"stat_by_turnover" => $this->mk_my_orb("turnover_stat", array("id" => $id)),
 			"orders" => $this->mk_my_orb("admin_orders", array("id" => $id)),
 			"emails" => $oba["emails"],
@@ -154,31 +147,9 @@ class shop extends shop_base
 		$this->parse("CHANGE");
 		$this->parse("CHANGE2");
 
-		foreach($ofs as $of_id => $row)
-		{
-			$this->vars(array(
-				"of_id" => $of_id,
-				"of_name" => $this->db_fetch_field("SELECT name FROM objects WHERE oid = ".$of_id,"name"),
-				"of_checked" => checked($row["repeat"]),
-				"of_ops" => $this->picker($row["op_id"],$op_list[$of_id])
-			));
-			$of.=$this->parse("OF");
-		}
-		$this->vars(array(
-			"OF" => $of
-		));
-		return $this->parse();
-	}
+		$this->do_core_admin_ofs($id);
 
-	function get_ofs_for_shop($id)
-	{
-		$ret = array();
-		$this->db_query("SELECT of_id,repeat,op_id FROM shop2order_form WHERE shop_id = $id");
-		while ($row = $this->db_next())
-		{
-			$ret[$row["of_id"]] = $row;
-		}
-		return $ret;
+		return $this->parse();
 	}
 
 	////
@@ -205,14 +176,8 @@ class shop extends shop_base
 		}
 
 		// update order_forms
-		$this->db_query("DELETE FROM shop2order_form WHERE shop_id = '$id'");
-		if (is_array($order_form))
-		{
-			foreach($order_form as $of_id)
-			{
-				$this->db_query("INSERT INTO shop2order_form(shop_id,of_id,repeat,op_id) values($id,$of_id,'".$of_rep[$of_id]."','".$of_op[$of_id]."')");
-			}
-		}
+		$this->do_core_save_ofs($id,$order_form);
+
 		return $this->mk_my_orb("change", array("id" => $id));
 	}
 
@@ -744,12 +709,6 @@ class shop extends shop_base
 		return strlen($b) - strlen($a);
 	}
 
-	function get($id)
-	{
-		$this->db_query("SELECT shop.*,objects.* FROM objects LEFT JOIN shop ON shop.id = objects.oid WHERE objects.oid = $id");
-		return $this->db_next();
-	}
-
 	////
 	// !shows the ordering form that the user must fill to order stuff
 	function order($arr)
@@ -832,7 +791,8 @@ class shop extends shop_base
 				$prev_entry = $f->show(array("id" => $ar["form"], "entry_id" => $ar["entry"], "op_id" => $order_forms["order"][$num]["op_id"]));
 				$this->vars(array(
 					"entry" => $prev_entry,
-					"chentry" => $this->mk_my_orb("order", array("shop_id" => $shop_id, "section" => $section, "num" => $ar["num"],"eid" => $ar["entry"]))
+					"chentry" => $this->mk_my_orb("order", array("shop_id" => $shop_id, "section" => $section, "num" => $ar["num"],"eid" => $ar["entry"])),
+					"delentry" => $this->mk_my_orb("del_pass_entry", array("shop_id" => $shop_id, "section" => $section, "num" => $ar["num"], "eid" => $ar["entry"]))
 				));
 				$pe.=$this->parse("prev_entry");
 			}
@@ -917,9 +877,11 @@ class shop extends shop_base
 		global $shopping_cart;
 		if (is_array($shopping_cart["items"]))
 		{
+			$canceled_order_id = 0;
 			if ($shopping_cart["order_id"])
 			{
 				$this->do_cancel_order($shopping_cart["order_id"]);
+				$canceled_order_id = $shopping_cart["order_id"];
 			}
 			// leiame perioodi alguse
 			$min_p = 2147483648;
@@ -958,8 +920,9 @@ class shop extends shop_base
 					$f->load($it["cnt_form"] ? $it["cnt_form"] : $itt["cnt_form"]);
 					// now find all the rows that are selected in the entry from the shopping cart
 					$f->load_entry($ar["cnt_entry"]);
-
-					if (!($free_items = $this->is_item_available($it,$ar["cnt"],$f,$min_p)))
+	
+					// if the period is specified for the item use that one, so we do the friggin back flights correctly
+					if (!($free_items = $this->is_item_available($it,$ar["cnt"],$f,$ar["period"] ? $ar["period"] : $min_p)))
 					{
 						// if no item is available, abort the order
 						global $status_msg;
@@ -1014,7 +977,15 @@ class shop extends shop_base
 		$month = mktime(8,42,17,date("n"),1,date("Y"));
 
 		// and also log the order
-		$ord_id = $this->db_fetch_field("SELECT MAX(id) AS id FROM orders","id")+1;
+		if (!$canceled_order_id)
+		{
+			$ord_id = $this->db_fetch_field("SELECT MAX(id) AS id FROM orders","id")+1;
+		}
+		else
+		{
+			$ord_id = $canceled_order_id;
+		}
+
 		$this->db_query("INSERT INTO orders(id,tm,user,ip,shop_id,day,month,wd,hr) VALUES($ord_id,".time().",'$uid','".get_ip()."','$shop_id','$day','$month','$wd','$hr')");
 
 		// kirjutame baasi alles siin, p2rast kontrollimist et kas k6ik ikka olemas on
@@ -1261,7 +1232,8 @@ class shop extends shop_base
 	
 		if (!is_array($period))
 		{
-			$period[$item_id] = 1;
+			// if period is not set then fake it to be the date from the shopping cart
+			$period[$item_id] = $this->get_cart_min_period();
 		}
 
 		$shop_o = $this->get($shop);
@@ -1780,10 +1752,13 @@ class shop extends shop_base
 	// note that data has no defined type, it must not be manipulated, just passed to do_order_item 
 	function is_item_available(&$it, $count,&$f,$period)
 	{
+		global $shopping_cart;
+		// this thing also has to figure out if we are changing an existing order and then not count the items ordered in that
+		// of course only if the order dates are the same. phuq. 
 		if ($it["has_max"])
 		{
 			// check if there still are $count items available. 
-			$hm = $this->db_fetch_field("SELECT max_items FROM shop_item2per_prices WHERE tfrom <= $period AND tto >= $period","max_items");
+			$hm = $this->db_fetch_field("SELECT max_items FROM shop_item2per_prices WHERE tfrom <= $period AND tto >= $period AND item_id = ".$it["oid"],"max_items");
 			if ($hm > 0)
 			{
 				$it["max_items"] = $hm;
@@ -1837,11 +1812,15 @@ class shop extends shop_base
 					// is periodic - and therefore must have some periods defined
 					// so we find the period for which the order was placed and check if for that period there are still some available
 
-					// the period only has one date - the start date and that must be 
-//					$period = $f->get_element_value_by_type("date","from");
-
-//					echo "preiod = ", $this->time2date($period,2), "<br>";
 					$num_sold = $this->db_fetch_field("SELECT num_sold FROM shop_item_period_avail WHERE period = $period AND item_id = ".$it["oid"],"num_sold");
+
+					// nini. siin leiame kas me muudame olemasolevat tellimust ja kas selles on see sama kaup samal ajal tellitud
+					if ($shopping_cart["order_id"] && $shopping_cart["old_items"][$it["oid"]]["period"] == $period)
+					{
+						// kui on samal ajal tellitud siis lisame vanas tellimuses tellitud asjade arvu juurde max itemsitele
+						$it["max_items"] += $shopping_cart["old_items"][$it["oid"]]["cnt"];
+					}
+
 					if (($it["max_items"] - $num_sold) >= $count)
 					{
 						return $period;
@@ -2173,25 +2152,8 @@ class shop extends shop_base
 		$this->mk_path($sh["parent"],"<a href='".$this->mk_my_orb("change", array("id" => $id))."'>Change target</a> / Change tables");
 		$this->read_template("change_tables.tpl");
 
-		$itypes = $this->listall_item_types();
-		$f = new form;
-		$tables = $f->get_list_tables();
+		$this->do_core_change_tables($id);
 
-		$this->db_query("SELECT * FROM shop2table WHERE shop_id = $id");
-		while ($row = $this->db_next())
-		{
-			$sh2t[$row["type_id"]] = $row["table_id"];
-		}
-
-		foreach($itypes as $typeid => $typename)
-		{
-			$this->vars(array(
-				"typename" => $typename,
-				"type_id" => $typeid,
-				"tables" => $this->picker($sh2t[$typeid], $tables)
-			));
-			$this->parse("TYPE");
-		}
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_tables", array("id" => $id))
 		));
@@ -2424,13 +2386,35 @@ class shop extends shop_base
 
 		$GLOBALS["shopping_cart"] = array("order_id" => $order_id,"price" => $t_price);
 
-		$this->db_query("SELECT * FROM order2item WHERE order_id = $order_id ORDER BY item_type_order");
+		$this->db_query("SELECT order2item.*,shop_items.cnt_form as cnt_form, shop_item_types.cnt_form as type_cnt_form FROM order2item LEFT JOIN shop_items ON shop_items.id = order2item.item_id LEFT JOIN shop_item_types ON shop_item_types.id = shop_items.type_id WHERE order_id = $order_id ORDER BY item_type_order");
 		while ($row = $this->db_next())
 		{
+			// siinkohal paneme kirja ka selle et mis kuup2evade kohta eelnev tellimus tehtud on et siis olex p2rast is_item_available
+			// sees lihtsam tshekkida et kas on vaja selle tellimuse sees tellitud arv vaja maha lahutada v6i ei
+			// ja yldse, teeme koopia eelnevast tellimusest ka et saax kohe selle j2rgi v6rrelda
+			$GLOBALS["shopping_cart"]["old_items"][$row["item_id"]]["cnt"] = $row["count"];
+			$GLOBALS["shopping_cart"]["old_items"][$row["item_id"]]["price"] = $row["price"];
+			$GLOBALS["shopping_cart"]["old_items"][$row["item_id"]]["period"] = $row["period"];
+			$GLOBALS["shopping_cart"]["old_items"][$row["item_id"]]["cnt_entry"] = $row["entry_id"];
+
 			$GLOBALS["shopping_cart"]["items"][$row["item_id"]]["cnt"] = $row["count"];
 			$GLOBALS["shopping_cart"]["items"][$row["item_id"]]["price"] = $row["price"];
-			$GLOBALS["shopping_cart"]["items"][$row["item_id"]]["cnt_entry"] = $row["cnt_entry"];
 			$GLOBALS["shopping_cart"]["items"][$row["item_id"]]["period"] = $row["period"];
+			$GLOBALS["shopping_cart"]["items"][$row["item_id"]]["cnt_entry"] = $row["entry_id"];
+
+			// nini. nyt teeme trikka. nimelt on probleem selles et kui tellimust muuta a mitte kinnitada, 
+			// siis ei tohi baasis olev tellimus muutuda - sellex teeme pisikse h2ki ja teeme koopia 
+			// k6igist tellimusega seotud formi sisestustest niiet kui neid muudetakse siis vana tellimus j22b ikka samax
+			// ja kui tehakse uus, siis lithsalt vana tellimuse sisestused j22vad ajaloo hammasrataste vahele
+			// k6igepealt loadime formi
+			$f = new form;
+			$f->load($row["cnt_form"] ? $row["cnt_form"] : $row["type_cnt_form"]);
+			// nyyd loadime praeguse entry
+			$f->load_entry($row["cnt_entry"]);
+			// ja nyt salvestame ta kohe 2ra aga id'd ette ei anna, nii saamegi koopia
+			$f->process_entry(array("id" => $row["cnt_form"] ? $row["cnt_form"] : $row["type_cnt_form"],"no_process_entry" => true,"no_load_form" => true));
+	
+			$GLOBALS["shopping_cart"]["items"][$row["item_id"]]["cnt_entry"] = $f->entry_id;
 		}
 
 
@@ -2451,7 +2435,15 @@ class shop extends shop_base
 		$this->db_query("SELECT * FROM order2form_entries WHERE order_id = $order_id");
 		while ($row = $this->db_next())
 		{
-			$GLOBALS["order_forms"]["entries"][] =array("num" => $row["num"], "form" => $row["form_id"], "entry" => $row["entry_id"], "name" => $row["name"]);
+			// ja siin tuleb nende formide sisestustest samuti koopiad teha et neid ka muuta saax. ohjah. tegelt see on n6me matean
+			// et need tulex tegelt m2llu (sessiooni) loadida ja siis seal muuta kuni tellimus kinnitataxe
+			// but hell, this works and this shit has got to be ready in the morning
+			$f = new form;
+			$f->load($row["form_id"]);
+			$f->load_entry($row["entry_id"]);
+			$f->process_entry(array("id" => $row["form_id"], "no_process_entry" => true,"no_load_form" => true));
+
+			$GLOBALS["order_forms"]["entries"][] =array("num" => $row["num"], "form" => $row["form_id"], "entry" => $f->entry_id, "name" => $row["name"]);
 			if ($cur_form != $row["form_id"])
 			{
 				$cur_form = $row["form_id"];
@@ -2514,6 +2506,14 @@ class shop extends shop_base
 		$GLOBALS["shopping_cart"] = array();
 
 		return $this->mk_my_orb("order_history", array("id" => $shop, "section" => $section));
+	}
+
+	function delentry($arr)
+	{
+		extract($arr);
+		global $order_forms;
+		unset($order_forms["entries"][$num]);
+		header("Location: ".$this->mk_my_orb("order", array("shop_id" => $shop_id, "section" => $section,"num" => 0)));
 	}
 }
 ?>

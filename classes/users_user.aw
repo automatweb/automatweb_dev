@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.16 2001/08/25 15:14:12 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.17 2001/09/12 17:59:57 duke Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -687,6 +687,8 @@ class users_user extends aw_template
 //		$this->db_query("DELETE FROM groupmembergroups WHERE parent = $gid OR child = $gid");
 		$this->db_query("DELETE FROM acl WHERE gid = $gid");
 
+		$this->_log("user", "Kustutas grupi ".$this->grpcache[$gid]["name"]);
+
 		if (!is_array($this->grpcache[$gid]))
 			return;
 
@@ -719,6 +721,7 @@ class users_user extends aw_template
 
 		// make a list of all users
 		$users = array();
+		// uid == "" oli kunagi kasutusel selleks, et saaks sisselogimata kasutajat gruppidesse panna ja talle õigusi anda.
 		$this->db_query("SELECT * FROM users WHERE uid != '' ");
 		while ($row = $this->db_next())
 		{

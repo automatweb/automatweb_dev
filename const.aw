@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.37 2001/09/06 12:13:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.38 2001/09/12 17:59:53 duke Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -406,6 +406,8 @@ define("CL_SHOP_TABLE",75);
 
 define("CL_CSS_GROUP",76); // Oh yeah, I know it should be next to CL_CSS
 
+define("CL_SEARCH_FILTER",78);
+
 // can_add määrab ära kas, seda klassi näidatakse Lisa listboxis
 
 // nimekiri k6ikidest klassidest ikoonide jaox
@@ -464,7 +466,8 @@ $class_defs = array(	CL_PSEUDO => array("name" => LC_CONST_MENU,"file" => "menue
 			CL_ML_MEMBER => array("name" => "Meililisti liige","file" => "ml_member","can_add" => 1),
 			CL_ML_STAMP => array("name" => "Meililisti stamp","file" => "ml_stamp","can_add" => 1),
 			CL_ML_RULE => array("name" => "Meililisti ruul","file" => "ml_rule","can_add" => 1),
-			CL_SHOP_TABLE => array("name" => "Kaupade tabel", "file" => "shop_table", "can_add" => 1)
+			CL_SHOP_TABLE => array("name" => "Kaupade tabel", "file" => "shop_table", "can_add" => 1),
+			CL_SEARCH_FILTER => array("name" => "Otsimise filter", "file" => "search_filter", "can_add" => 1),
 );
 // kliendid. 
 // hierarhia esimene element on root

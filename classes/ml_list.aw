@@ -269,8 +269,9 @@
 			{
 				$headerarray['javascript:Do("lf_remove");'] = "Eemalda";
 			};
-
-			$headerarray["extra"]="<td class='fgtitle_new' colspan='2'><select name='listsel' align='left' class='fgtitle_button'>".$this->picker(array(),$this->get_lists_and_groups(0,0,$id,1,"&nbsp;"))."</select>&nbsp;&nbsp;<a href='javascript:Liiguta();' class='fgtitle_link'><strong>Liiguta</strong></a></td>";
+			
+			
+			$headerarray["extra"]="<td class='fgtitle_new' colspan='2'><select name='listsel' align='left' class='fgtitle_button'>".$this->picker(array(),$this->get_lists_and_groups(array("id" => $id, "new" => 1, "spacer" => "&nbsp;")))."</select>&nbsp;&nbsp;<a href='javascript:Liiguta();' class='fgtitle_link'><strong>Liiguta</strong></a></td>";
 			$headerarray["extrasize"]=2;
 			$t->parse_xml_def($this->basedir."/xml/mlist/lf_folder.xml");
 			$t->define_header("MEILILIST",$headerarray);
@@ -731,9 +732,17 @@
 		////
 		//! Annab kõik listi grupid
 		// tagastab array lgroup => name
-		function get_list_groups($id)
+		function get_list_groups($id,$xmlmdata=0)
 		{
-			$arr=$this->get_object_metadata(array("oid" => $id ,"key" => "groups"));
+			$args=array("key" => "groups");
+			if (is_string($xmlmdata))
+			{
+				$args["metadata"]=$xmlmdata;
+			} else
+			{
+				$args["oid"] = $id;
+			};
+			$arr=$this->get_object_metadata($args);
 			// kustutatud gruppe ei näita
 			if (is_array($arr))
 			{
@@ -805,8 +814,10 @@
 		// fullnames- kas näidata alamgruppe nii "list:grupp", muidu näitab ainult "grupp"
 		// new- kas näidata iga listi all -- uus grupp -- 
 		// spacer- mis lisada iga grupi ette
-		function get_lists_and_groups($checkacl=0,$fullnames=0,$id=0,$new=0,$spacer=" ")
+		// prefix-mix lisada iga rea ette
+		function get_lists_and_groups($args=array()/*$checkacl=0,$fullnames=0,$id=0,$new=0,$spacer=" "*/)
 		{
+			extract($args);
 			$ar=array();
 			$lists=$this->get_all_lists($checkacl);
 			
@@ -822,7 +833,7 @@
 			foreach($lists as $id => $name)
 			{
 				$g=$this->get_list_groups($id);
-				$ar["$id:0"]=$name;
+				$ar["$id:0"]=$prefix.$name;
 				
 				if (is_array($g))
 				{
@@ -830,7 +841,7 @@
 					if ($k)
 					{
 						$fn=$fullnames ? "$name:":"";
-						$ar["$id:$k"]="$spacer$spacer$fn$v";
+						$ar["$id:$k"]="$spacer$spacer$prefix$fn$v";
 					};
 				};
 				
@@ -901,20 +912,22 @@
 		// messengerist saatmise osa
 
 		////
-		//! Messenger kutsub välja kui näeb et teate tüüp on listiteade (saatmisel)
+		//! Messenger kutsub välja kui on valitud liste targetiteks
+		// vajab targets ja id
 		function route_post_message($args = array())
 		{
 			extract($args);
-			/*echo("in ml_list::route_post_message<pre>");//dbg
-			print_r($args);
-			echo("</pre>");*/
-			$url=$this->mk_my_orb("post_message",array("id" => $id, "targets" => $mtargets1),"",1);
-			/*echo("redirect to=$url");//dbg*/
+			//echo("in ml_list::route_post_message<pre>");//dbg
+			//print_r($args);
+			//echo("</pre>");
+
+			$url=$this->mk_my_orb("post_message",array("id" => $id, "targets" => $targets),"",1);
+			//echo("redirect to=$url");//dbg
 			return $url;
 		}
 
 		////
-		//! saadab teate $id listidesse $targets
+		//! saadab teate $id listidesse $targets(array stringidest :listinimi:grupinimi)
 		function post_message($args)
 		{
 			extract($args);
@@ -936,24 +949,51 @@
 
 			$id=(int)$id;//teate id
 
-			// parse jura targets ist välja
-			$trgarr=explode(",",$targets);
-			/*echo("<pre>trgarr=");print_r($trgarr);echo("</pre>");//dbg*/
 			// siin tee selline trikk, et järjesta arrayd vähe teise süsteemi järgi ringi 
+			$names=array();
+			$_names="";
+			foreach($targets as $v)
+			{
+				list($shit,$lname,$gname)=explode(":",$v);
+				if (!isset($names[$lname]))
+				{
+					$_names.=($_names!=""?",":"")."'$lname'";
+				};
+				$names[$lname]=1;
+			};
+
+			
+			$listdata=array();
+			$q="SELECT name,oid,metadata FROM objects WHERE class_id=".CL_ML_LIST." AND NAME IN($_names)";
+			unset($names);
+			unset($_names);
+			$this->db_query($q);
+			while ($listdta = $this->db_next())
+			{
+				$listdata[$listdta["name"]]=array(
+					"id" => $listdta["oid"],
+					"groups" => array_flip($this->get_list_groups(0,$listdta["metadata"]))
+				);
+			};
 			
 
+
 			$lists=array();
-			foreach($trgarr as $v)
+			foreach($targets as $v)
 			{
 				$item=explode(":",$v);
-				$lists[(int)$item[0]]["name"]=$item[2];
-				$lists[(int)$item[0]]["c"][(int)$item[1]]=$item[3]?$item[3]:" ";
+
+				$lid=$listdata[$item[1]]["id"];
+				$gid=$item[2] ? $listdata[$item[1]]["groups"][$item[2]] : 0;
+
+				$lists[(int)$lid]["name"]=$item[1];
+				$lists[(int)$lid]["c"][(int)$gid]=$item[2]?$item[2]:" ";
 			};
 
 			// Kui on määratud mingi listi grupid ja ka list ise, siis tegelikult mõeldakse
 			// listi enda all listi kõiki ülejäänud gruppe. Niisiis tuleb see muutus siin teha
 
-			/*echo("<pre>lists=");print_r($lists);echo("</pre>");//dbg*/
+			//echo("<pre>lists=");print_r($lists);echo("</pre>");//dbg
 			foreach($lists as $lid => $v)
 			{
 				/*echo("doing $lid s=".sizeof($v["c"])."0=*".isset($v["c"]["0"])."*<pre>");print_r($v);echo("</pre><br>");*/
@@ -961,8 +1001,9 @@
 					{
 						/*echo("bljää!$lid<br>");//dbg*/
 						// võta kõik grupid ja leia need, mida pole määratud
-						$allgrps=$this->get_list_groups($lid);
-						/*echo("allgrps=");print_r($allgrps);//dbg*/
+						//$allgrps=$this->get_list_groups($lid);
+						$allgrps=array_flip($listdata[$v["name"]]["groups"]);
+
 						foreach ($v["c"] as $del => $jura)
 						{
 							/*echo("unsetting $del<br>");*/
@@ -984,7 +1025,7 @@
 					$this->vars(array(
 						"lidgid" => "$lid:$gid",
 						"title" => $v["name"].($gname?":".$gname :""),
-						"date_edit" => $date_edit->gen_edit_form("start_at[$lid:$gid]",time()+1*60)
+						"date_edit" => $date_edit->gen_edit_form("start_at[$lid:$gid]",time()-13)
 						));
 					$listrida.=$this->parse("listrida");
 				};

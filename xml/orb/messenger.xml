@@ -83,6 +83,14 @@
 			</function>
 		</action>
 
+		<action name="set_list_message">
+			<function name="set_list">
+				<arguments>
+					<optional name="msg_id"/>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="show_attach">
 			<function name="show_attach">
 				<arguments>

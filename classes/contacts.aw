@@ -118,7 +118,7 @@ class contacts extends aw_template {
 
 	function _indent_array($arr,$level)
 	{
-		if (!is_array($arr))
+		if (!is_array($arr) ||!is_array($arr[$level]))
 		{
 			return;
 		};
@@ -534,6 +534,7 @@ class contacts extends aw_template {
 	
 	function pick($args = array())
 	{
+		extract($args);
 		$this->read_template("pick_contacts.tpl");
 
 		// siia paneme koikide gruppide flat listi
@@ -542,115 +543,141 @@ class contacts extends aw_template {
 		// ja siia parenti jargi grupeerituna
 		$grps_by_parent = array();
 		
-		// Koostame nimekirja koigist selle kasutaja kontaktigruppidest
-		global $udata;
-		$fldr = $udata["home_folder"];
+		
+			// Koostame nimekirja koigist selle kasutaja kontaktigruppidest
+			global $udata;
+			$fldr = $udata["home_folder"];
 
-		do
-		{
-			// kysime koik sellel levelil asuvad objektid
-			$groups = $this->_get_groups_by_level($fldr);
-
-			// sorteerime nad parentite jargi ära
-			// ja paigutame ka flat massiivi
-			foreach($groups as $key => $val)
+			do
 			{
-				$grps_by_parent[$val["parent"]][$key] = $val["name"];
-				$grps[$key] = $val["name"];
-			};
-		
-			// koostame parentite nimekirja jargmise tsykli jaoks
-			$fldr = array_keys($groups);
-	
-		// kordame nii kaua, kuni yhtegi objekti enam ei leitud
-		} while(sizeof($groups) > 0);
-		
-		// nyyd on dropdowni jaoks vaja koostada idenditud nimekiri koigist objektidest
-		$this->flatlist = array($udata["home_folder"] => LC_CONTACT_NOT_SORTED);
-		$this->indentlevel = 0;
-		$this->_indent_array($grps_by_parent,$udata["home_folder"]);
-		
-		// koostame nimekirja koigist selle formi entritest
-		classload("form");
-		$f = new form(CONTACT_FORM);
-		$f->load(CONTACT_FORM);
-		$ids = $f->get_ids_by_name(array("names" => array("name","surname","email","phone")));
-		
-		// see on selleks, et get_entries arvestaks ka neid kontakte, mis kodukataloogi
-		// on salvestatud
-		$grps[$udata["home_folder"]] = 1;
-	
-		$f->get_entries(array("parent" => array_keys($grps)));
-		
-		// siia salvestame koik entryd parentite kaupa grupeerituna
-		$entries_by_parent = array();
+				// kysime koik sellel levelil asuvad objektid
+				$groups = $this->_get_groups_by_level($fldr);
 
-		while($row = $f->db_next())
-		{
-			$name = sprintf("%s %s <%s>",$row[$ids["name"]],$row[$ids["surname"]],$row[$ids["email"]]);
-			$entries[$row["oid"]] = $name;
-			$entries_by_parent[$row["parent"]][] = $name;
-		};
-		
-		$cnt = 1;
-		$g = "";
-		$gl = "";
-		$garr = "";
-		$gd = 0;
-
-
-	
-		foreach($grps as $oid => $name)
-		{
-			$this->vars(array(
-					"oid" => $oid,
-					"gid" => $oid,
-				));
-
-			if (is_array($entries_by_parent[$oid]))
-			{
-				foreach($entries_by_parent[$oid] as $key => $gname)
+				// sorteerime nad parentite jargi ära
+				// ja paigutame ka flat massiivi
+				foreach($groups as $key => $val)
 				{
-					$gname = str_replace("\"","\\\"",$gname);
-					$this->vars(array(
-							"id" => $key,
-							"name" => $gname,
-							"gd" => $gd,
-						));
-					$gl .= $this->parse("gline");
-					$garr .= $this->parse("garr");
-					$gd++;
+					$grps_by_parent[$val["parent"]][$key] = $val["name"];
+					$grps[$key] = $val["name"];
 				};
-			};
-
-			$this->vars(array("gline" => $gl));
-			$gl = "";
-			$g .= $this->parse("group");
-		};
+			
+				// koostame parentite nimekirja jargmise tsykli jaoks
+				$fldr = array_keys($groups);
 		
-		// listid
-		$this->get_objects_by_class(array(
-					"class" => CL_MAILINGLIST,
-				));
-		$gd = 0;
-		$larr = "";
-		while($row = $this->db_next())
-		{
-			$this->vars(array(
-					"name" => $row["name"],
-					"gd" => $gd,
-				));
-			$gd++;
-			$larr .= $this->parse("larr");
-		};
-		$this->vars(array("larr" => $larr));
-		$g .= $this->parse("group");
+			// kordame nii kaua, kuni yhtegi objekti enam ei leitud
+			} while(sizeof($groups) > 0);
+			
+			// nyyd on dropdowni jaoks vaja koostada idenditud nimekiri koigist objektidest
+			$this->flatlist = array($udata["home_folder"] => LC_CONTACT_NOT_SORTED);
+			$this->indentlevel = 0;
+			$this->_indent_array($grps_by_parent,$udata["home_folder"]);
+			
+			// koostame nimekirja koigist selle formi entritest
+			classload("form");
+			$f = new form(CONTACT_FORM);
+			$f->load(CONTACT_FORM);
+			$ids = $f->get_ids_by_name(array("names" => array("name","surname","email","phone")));
+			
+			// see on selleks, et get_entries arvestaks ka neid kontakte, mis kodukataloogi
+			// on salvestatud
+			$grps[$udata["home_folder"]] = 1;
+		
+			$f->get_entries(array("parent" => array_keys($grps)));
+			
+			// siia salvestame koik entryd parentite kaupa grupeerituna
+			$entries_by_parent = array();
+
+			while($row = $f->db_next())
+			{
+				$name = sprintf("%s %s <%s>",$row[$ids["name"]],$row[$ids["surname"]],$row[$ids["email"]]);
+				$entries[$row["oid"]] = $name;
+				$entries_by_parent[$row["parent"]][] = $name;
+			};
+			
+			$cnt = 1;
+			$g = "";
+			$gl = "";
+			$garr = "";
+			$gd = 0;
 
 
-		$dummy = array("0" => LC_CONTACT_ALL,"1" => LC_CONTACT_LISTS);
+		
+			foreach($grps as $oid => $name)
+			{
+				$this->vars(array(
+						"oid" => $oid,
+						"gid" => $oid,
+					));
+
+				if (is_array($entries_by_parent[$oid]))
+				{
+					foreach($entries_by_parent[$oid] as $key => $gname)
+					{
+						$gname = str_replace("\"","\\\"",$gname);
+						$this->vars(array(
+								"id" => $key,
+								"name" => $gname,
+								"gd" => $gd,
+							));
+						$gl .= $this->parse("gline");
+						$garr .= $this->parse("garr");
+						$gd++;
+					};
+				};
+
+				$this->vars(array("gline" => $gl));
+				$gl = "";
+				$g .= $this->parse("group");
+			};
+			
+			// listid
+			$this->get_objects_by_class(array(
+						"class" => CL_MAILINGLIST,
+					));
+			$gd = 0;
+			$larr = "";
+			while($row = $this->db_next())
+			{
+				$this->vars(array(
+						"name" => $row["name"],
+						"gd" => $gd,
+					));
+				$gd++;
+				$larr .= $this->parse("larr");
+			};
+			$this->vars(array("larr" => $larr));
+			$g .= $this->parse("group");
+
+
+		
+			$dummy = array("0" => LC_CONTACT_ALL,"1" => LC_CONTACT_LISTS, "2" => "Uued listid");
+			
+			classload("ml_list");
+			$mlist = new ml_list();
+			$arr = $mlist->get_lists_and_groups(array("check_acl" => 1, "fullnames" => 1, "prefix" => ":", "spacer"=> " "));//check_acl =1,
+
+			$gd = 0;
+			$l2arr = "";
+			foreach($arr as $lid_gid => $name)
+			{
+				$this->vars(array(
+						"name" => $name,
+						"gd" => $gd,
+					));
+				$gd++;
+				$l2arr .= $this->parse("l2arr");
+			};
+			$this->vars(array("l2arr" => $l2arr,"oid" => "0"));
+			//$g = $this->parse("group");
+			$listcontacts = $this->parse("listcontacts");
+
+			
+
+
 		$this->vars(array(
 				"groups" => $this->picker(-1,$dummy + $this->flatlist),
 				"group" => $g,
+				"is_list_msg" => $listmsg,
 				"garr" => $garr,
 				"hf" => $udata["home_folder"],
 			));

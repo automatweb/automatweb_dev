@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.13 2001/07/29 18:37:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.14 2001/09/12 17:59:57 duke Exp $
 // klass piltide manageerimiseks
 global $orb_defs;
 $orb_defs["images"] = array("new"						=> array("function"	=> "add",		"params"	=> array("parent")),
@@ -291,6 +291,11 @@ class db_images extends aw_template
 				$this->create_dir($start);
 			};
 			// leiame faili nime, millesse kirjutada
+			if ($ext == "")
+			{
+				$ext = list(,$ext) = split(".",$params["filename"]);
+			}
+
 			$target = $this->imgdir."/$start/$fname.$ext";
 			// kopeerime faili
 			if (copy($filename,$target)) 

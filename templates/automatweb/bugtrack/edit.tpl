@@ -10,16 +10,8 @@
 	<td class="fcaption2"><strong>{VAR:url}</strong></td>
 </tr>
 <tr>
-	<td class="fcaption2">Pealkiri</td>
-	<td class="fcaption2">{VAR:title}</td>
-</tr>
-<tr>
-	<td class="fcaption2">Prioriteet</td>
-	<td class="fform">
-		<select name="pri">
-			{VAR:prilist}
-		</select>
-         </td>
+	<td class="fcaption2">Pealkiri : Prioriteet</td>
+	<td class="fcaption2">{VAR:title} <input type="text" name="pri" value="{VAR:pri}"></td>
 </tr>
 <tr>
 	<td class="fcaption2">Staatus</td>
@@ -32,7 +24,7 @@
 <tr>
 	<td class="fcaption2">Kellele</td>
 	<td class="fform">
-		<select name="developer">
+		<select name="developer[]" multiple>
 			{VAR:developerlist}
 		</select></td>
 </tr>
@@ -45,8 +37,9 @@
 	<td class="fform">{VAR:time_fixed}</td>
 </tr>
 <tr>
-	<td class="fcaption2" colspan=2>Kas soovite teadet emailiga, kui bugi on parandatud? Saadetakse aadressile "{VAR:sendmail2_mail}" 
-	<input type='checkbox' NAME='sendmail2' value=1 {VAR:sendmail2}> </td>
+	
+	<td class="fcaption2" colspan=2><input type='checkbox' NAME='sendmail2' value=1 {VAR:sendmail2}>Kas soovite ülesande täitmisest teadet aadressile "{VAR:sendmail2_mail}" 
+	 </td>
 </tr>
 <tr>
 	<td class="fcaption2" colspan=2>Lisa aadress(e) kuhu tahad teate saada (eralda komaga): 

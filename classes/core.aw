@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.52 2001/08/16 16:02:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.53 2001/09/12 17:59:57 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -1197,6 +1197,11 @@ class core extends db_connector
 		global $HTTP_SERVER_VARS;
 		foreach($HTTP_SERVER_VARS as $k => $v)
 		{
+			// we will not send out the password or the session key
+			if ( ($k == "PHP_AUTH_PW") || ($k == "automatweb") )
+			{
+				continue;
+			};
 			$content.="HTTP_SERVER_VARS[$k] = $v \n";
 		}
 
@@ -1207,7 +1212,7 @@ class core extends db_connector
 		{
 			$head="From: $uid<".$udata["email"].">\n";
 		}
-		mail("vead@struktuur.ee", $subj, $content,$head);
+		// mail("vead@struktuur.ee", $subj, $content,$head);
 
 		if ($silent)
 		{
@@ -1321,7 +1326,10 @@ class core extends db_connector
 	// or the orb (orb.aw) - for the admin interface
 	// you can force it to point to the admin interface
 	// this function also handles array arguments! 
-	function mk_my_orb($fun,$arr=array(),$cl_name="",$force_admin = false)
+	// crap, I hate this but I gotta do it - shoulda used array arguments or something -
+	// if $use_orb == 1 then the url will go through orb.aw, not index.aw - which means that it will be shown
+	// directly, without drawing menus and stuff
+	function mk_my_orb($fun,$arr=array(),$cl_name="",$force_admin = false,$use_orb = false)
 	{
 		global $ext;
 		if ($cl_name == "")
@@ -1376,8 +1384,13 @@ class core extends db_connector
 		}
 		else
 		{
+			$uo = "/?";
+			if ($use_orb)
+			{
+				$uo = "/orb.$ext?";
+			}
 			// user side
-			return $GLOBALS["baseurl"]."/?".$sec."class=$cl_name&action=$fun&$urs";
+			return $GLOBALS["baseurl"].$uo.$sec."class=$cl_name&action=$fun&$urs";
 		}
 	}
 
@@ -1481,9 +1494,17 @@ class core extends db_connector
 		$path = "";
 		$ch = $this->get_object_chain($oid);
 		reset($ch);
+		$use = true;
 		while (list(,$row) = each($ch))
 		{
-			$path="<a href='menuedit.$ext?parent=".$row["oid"]."&type=objects&period=".$period."'>".$row["name"]."</a> / ".$path;
+			if ($row["oid"] == $GLOBALS["admin_rootmenu2"])
+			{
+				$use = false;
+			}
+			if ($use)
+			{
+				$path="<a href='menuedit.$ext?parent=".$row["oid"]."&type=objects&period=".$period."'>".$row["name"]."</a> / ".$path;
+			}
 		}
 
 		$GLOBALS["site_title"] = $path.$text;

@@ -68,7 +68,7 @@ switch($action)
 		break;
 
 	default:
-		$content = $t->list_docs(array("period" => $period));
+		$content = $t->list_docs_a(array("period" => $period));
 }
 include("admin_footer.$ext");
 ?>

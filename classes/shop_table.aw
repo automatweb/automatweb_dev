@@ -13,23 +13,6 @@ class shop_table extends shop_base
 		$this->tpl_init("shop");
 	}
 
-	function get_item_picker()
-	{
-		classload("objects");
-		$ob = new objects;
-		$menus = $ob->get_list();
-		$items = $this->listall_items(ALL_PROPS);
-		$ret = array();
-		foreach($items as $iid => $irow)
-		{
-			if (isset($menus[$irow["parent"]]))
-			{
-				$ret[$iid] = $menus[$irow["parent"]]."/".$irow["name"];
-			}
-		}
-		return $ret;
-	}
-
 	function add($arr)
 	{
 		extract($arr);
@@ -149,6 +132,14 @@ class shop_table extends shop_base
 				"EL" => $el,
 				"tot_checked" => checked($st["table"]["rows"][$i]["total"] == 1),
 				"used_checked" => checked($st["table"]["rows"][$i]["used"] == 1),
+				"parent_checked" => checked($st["table"]["rows"][$i]["parent"] == 1),
+				"price_checked" => checked($st["table"]["rows"][$i]["price"] == 1),
+				"bron_checked" => checked($st["table"]["rows"][$i]["bron"] == 1),
+				"f_percent_checked" => checked($st["table"]["rows"][$i]["f_percent"] == 1),
+				"money_checked" => checked($st["table"]["rows"][$i]["money"] == 1),
+				"name_checked" => checked($st["table"]["rows"][$i]["name"] == 1),
+				"i_id_checked" => checked($st["table"]["rows"][$i]["i_id"] == 1),
+				"view_checked" => checked($st["table"]["rows"][$i]["view"] == 1),
 			));
 			$li.=$this->parse("LINE");
 		}
@@ -172,25 +163,42 @@ class shop_table extends shop_base
 		$this->read_template("show_table.tpl");
 		$this->mk_path($sht["parent"], "Vaata tabelit");
 
+		$by_item_type = $arr["type_id"] ? true : false;
+		$by_item_id = !$by_item_type;
+
+		if ($arr["item_id"])
+		{
+			$sht["table"]["item"] = $arr["item_id"];
+		}
+
 		if ($sht["table"]["item"])
 		{
 			$it = $this->get_item($sht["table"]["item"]);
-			if ($it)
+		}
+
+		if ($it || $type_id)
+		{
+			if (!$type_id)
 			{
-				$typ = $this->get_item_type($it["type_id"]);
-				$f1 = new form;
-				$f1->load($typ["form_id"]);
-				$f2 = new form;
-				$f2->load($typ["cnt_form"]);
-				$els = $f1->get_all_elements();
-				$tels = $f2->get_all_elements();
-				foreach($tels as $telid => $telname)
-				{
-					$els[$telid] = $telname;
-				}
+				$type_id = $it["type_id"];
+			}
+			$typ = $this->get_item_type($type_id);
+			if ($it["cnt_form"])
+			{
+				$typ["cnt_form"] = $it["cnt_form"];
+			}
+			$f1 = new form;
+			$f1->load($typ["form_id"]);
+			$f2 = new form;
+			$f2->load($typ["cnt_form"]);
+			$els = $f1->get_all_elements();
+			$tels = $f2->get_all_elements();
+			foreach($tels as $telid => $telname)
+			{
+				$els[$telid] = $telname;
 			}
 		}
-		
+
 		for ($i=0; $i < $sht["table"]["nnum_cols"]; $i++)
 		{
 			$this->vars(array(
@@ -201,8 +209,21 @@ class shop_table extends shop_base
 		$this->vars(array("TITLE" => $he));
 
 		// k6igepealt loeme kauba sisestuse sisse ja liidame selle iga kord andmetega kokku
-		$this->db_query("SELECT * FROM form_".$typ["form_id"]."_entries WHERE id = ".$it["entry_id"]);
-		$itdata = $this->db_next();
+		if ($by_item_id)
+		{
+			// kui teeme kauga kohta, siis loeme aint yhe
+			$this->db_query("SELECT * FROM form_".$typ["form_id"]."_entries WHERE id = ".$it["entry_id"]);
+			$itdata[$sht["table"]["item"]] = $this->db_next();
+		}
+		else
+		{
+			// a kui teeme kauba tyybi kohta, siis loeme k6ik selle tyybi sisestused
+			$this->db_query("SELECT form_".$typ["form_id"]."_entries.*,shop_items.id as item_id FROM shop_items LEFT JOIN form_".$typ["form_id"]."_entries ON form_".$typ["form_id"]."_entries.id = shop_items.entry_id WHERE shop_items.type_id = $type_id");
+			while ($row = $this->db_next())
+			{
+				$itdata[$row["item_id"]] = $row;
+			}
+		}
 
 		// ysnaga, p2ring on order2item tabelisse, kus on kirjas itemite tellimused
 		// filtreerime sealt v2lja aint 6ige itemi
@@ -228,26 +249,85 @@ class shop_table extends shop_base
 			}
 		}
 
-		// leiame perioodide j2rgi kui palju kasutatud on
-		$avail = array();
-		$this->db_query("SELECT * FROM shop_item_period_avail WHERE item_id = ".$sht["table"]["item"]);
-		while ($row = $this->db_next())
+		if (!$group_by)
 		{
-			$avail[$row["period"]]["used"] = $row["num_sold"];
-			$avail[$row["period"]]["total"] = $it["max_items"];
+			$group_by = "period";
 		}
 
-		// ja nyt kui palju mis perioodil on
-		$this->db_query("SELECT * FROM shop_item2per_prices WHERE item_id = ".$sht["table"]["item"]." AND per_type = ".PRICE_PER_WEEK);
-		while ($row = $this->db_next())
+		if (!$clause)
 		{
-			if ($row["max_items"] > 0)
+			// otsime itemi id j2rgi by default
+			$clause = "item_id = ".$sht["table"]["item"];
+		}
+
+		if ($from && $to)
+		{
+			$time_clause = "AND (period >= $from AND period <= $to)";
+			$time_clause2 = "AND (tto >= $from)";
+		}
+
+		if ($by_item_id)
+		{
+			// kui teeme yhe kauba kohta, siis t2hendab et perioodid on eraldi
+			// leiame perioodide j2rgi kui palju kasutatud on
+
+			$avail = array();
+			$this->db_query("SELECT * FROM shop_item_period_avail WHERE item_id = ".$sht["table"]["item"]." $time_clause");
+			while ($row = $this->db_next())
 			{
-				$avail[$row["tfrom"]]["total"] = $row["max_items"];
+				$avail[$row["period"]]["used"] = $row["num_sold"];
+				$avail[$row["period"]]["total"] = $it["max_items"];
+			}
+
+			// ja nyt kui palju mis perioodil on
+			$this->db_query("SELECT * FROM shop_item2per_prices WHERE item_id = ".$sht["table"]["item"]." AND per_type = ".PRICE_PER_WEEK." $time_clause2");
+			while ($row = $this->db_next())
+			{
+				if ($row["max_items"] > 0)
+				{
+					$avail[$row["tfrom"]]["total"] = $row["max_items"];
+				}
+			}
+		}
+		else
+		{
+			// kui teeme kaubagrupi j2rgi, siis summeerime asjad iga kauba kohta kokku yle k6ikide perioodide
+			$avail = array();
+			$this->db_query("SELECT SUM(num_sold) as num_sold,item_id FROM shop_item_period_avail LEFT JOIN shop_items ON shop_items.id = shop_item_period_avail.item_id WHERE type_id = $type_id $time_clause GROUP BY $group_by");
+			while ($row = $this->db_next())
+			{
+				$avail[$row["item_id"]]["used"] = $row["num_sold"];
+			}
+
+			// ja nyt kui palju mis perioodil on
+			// oh puts. siin tuleb ju k6ikide itemite k6ik perioodid l2bi k2ia ja k2sici kokku liita sest
+			// kui pole m22ratud perioodile kogust siis on see default kogus. 
+			// siin tuleb liita ka need perioodid, kus pole miskit myydud mdx, kuna siis on lihtsalt t2ituvus 0 exole
+			$this->db_query("SELECT shop_item2per_prices.*,shop_items.max_items as item_max_items FROM shop_item2per_prices LEFT JOIN shop_items ON shop_items.id = shop_item2per_prices.item_id WHERE type_id = $type_id $time_clause2 AND per_type = ".PRICE_PER_WEEK);
+			while ($row = $this->db_next())
+			{
+				if ($row["max_items"] > 0)
+				{
+					$avail[$row["item_id"]]["total"] +=$row["max_items"];
+				}
+				else
+				{
+					$avail[$row["item_id"]]["total"] +=$row["item_max_items"];
+				}
 			}
 		}
 
-		$q = "SELECT order2item.*,".join(",",$tosum)." FROM order2item LEFT JOIN form_".$typ["cnt_form"]."_entries ON form_".$typ["cnt_form"]."_entries.id = order2item.cnt_entry WHERE item_id = ".$sht["table"]["item"]." GROUP BY period";
+		$tos = join(",",$tosum);
+		if ($tos != "")
+		{
+			$tos=",".$tos;
+		}
+
+		if ($from && $to)
+		{
+			$time_clause = "AND (order2item.period >= $from AND order2item.period <= $to)";
+		}
+		$q = "SELECT parent_object.name as parent_name,objects.name as item_name, order2item.*,AVG(order2item.price) as avg_price,SUM(order2item.price) as sum_price $tos FROM order2item LEFT JOIN form_".$typ["cnt_form"]."_entries ON form_".$typ["cnt_form"]."_entries.id = order2item.cnt_entry LEFT JOIN objects ON objects.oid = order2item.item_id LEFT JOIN objects as parent_object ON parent_object.oid = objects.parent WHERE $clause $time_clause AND parent_object.status != 0 AND objects.status != 0 GROUP BY ".$group_by;
 //		echo "q = $q <Br>\n";
 		$this->db_query($q);
 		while ($row = $this->db_next())
@@ -268,14 +348,66 @@ class shop_table extends shop_base
 							}
 							else
 							{
+								if ($by_item_id)
+								{
+									$i_total = $avail[$row["period"]]["total"];
+									$i_used = $avail[$row["period"]]["used"];
+								}
+								else
+								{
+									$i_total = $avail[$row["item_id"]]["total"];
+									$i_used = $avail[$row["item_id"]]["used"];
+								}
 								if ($elid == "used")
 								{
-									$vals[] = $avail[$row["period"]]["total"] - $avail[$row["period"]]["used"];
+									$vals[] = $i_total - $i_used;
 								}
 								else
 								if ($elid == "total")
 								{
-									$vals[] = $avail[$row["period"]]["total"];
+									$vals[] = $i_total;
+								}
+								else
+								if ($elid == "parent")
+								{
+									$vals[] = $row["parent_name"];
+								}
+								else
+								if ($elid == "price")
+								{
+									$vals[] = $row["avg_price"];
+								}
+								else
+								if ($elid == "bron")
+								{
+									$vals[] = $i_used;
+								}
+								else
+								if ($elid == "f_percent")
+								{
+									if ($i_total < 1)
+									{
+										$vals[] = "0";
+									}
+									else
+									{
+										$vals[] = floor(((100.0 * $i_used) / $i_total)*100.0)/100.0;
+									}
+								}
+								else
+								if ($elid == "money")
+								{
+									$vals[] = $row["sum_price"];
+								}
+								else
+								if ($elid == "name")
+								{
+									$vals[] = $row["item_name"];
+								}
+								else
+								if ($elid == "i_id")
+								{
+									$vals[] = $row["item_id"];
 								}
 								else
 								if (isset($row["ev_".$elid]))
@@ -284,7 +416,7 @@ class shop_table extends shop_base
 								}
 								else
 								{
-									$vals[] = $itdata["ev_".$elid];
+									$vals[] = $itdata[$row["item_id"]]["ev_".$elid];
 								}
 							}
 						}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.7 2001/07/12 04:23:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.8 2001/09/12 17:59:57 duke Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -32,7 +32,10 @@ $acl_ids = array("0" =>	 "can_edit",
 								"44" => "can_copy",
 								"46" => "can_view_users",
 								"48" => "can_change_users",
-								"50" => "can_delete_users");
+								"50" => "can_delete_users",
+								"52" => "can_add_users",
+								"54" => "can_change_variables",
+								"56" => "can_change_variable_acl");
 
 global $acl_default;
 $acl_default = array("can_view" => ALLOWED);
@@ -53,7 +56,9 @@ class acl_base extends core
 		while (list($bitpos, $name) = each($acl_ids))
 			$qstr[] = " ((acl >> $bitpos) & 3) AS $name";
 
-		return join(",",$qstr);
+		$s =  join(",",$qstr);
+//		echo $s,"<br><br>";
+		return $s;
 	}
 
 	function get_acl_groups_for_obj($oid)

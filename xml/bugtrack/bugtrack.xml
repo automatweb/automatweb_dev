@@ -3,8 +3,8 @@
 
 <definitions>
 <titlebar style="title"/>
-<header_normal   value="ftitle2"/>
-<header_sortable value="ftitle2"/>
+<header_normal   value="title"/>
+<header_sortable value="title"/>
 <header_sorted   value="titlesel"/>
 <content_style1  value="fgtext"/>
 <content_style2  value="fgtext"/>
@@ -15,14 +15,14 @@
 <framebgcolor bgcolor="#CCCCCC"/>
 <tableattribs border="0" cellspacing="1" cellpadding="2" width="100%"/>
 <default_order order="desc" value="pri"/>
-<actionrows value="2"/>
 </definitions>
 
+<actsion link="class=bugtrack&amp;action=edit" field="id" caption="Muuda" style="fgtext2"/>
+<actison link="class=bugtrack&amp;action=delete" field="id" caption="Kustuta" style="fgtext2"/>
+<actison row="2" link="class=bugtrack&amp;action=showcomments" field="id" caption="Komment" style="fgtext2" remote="500,400"/>
+<actison row="2" link="class=bugtrack&amp;action=delegate&amp;no_menus=1" field="id" caption="Määra" style="fgtext2" remote="300,200"/>
+
 <actions>
-<action link="class=bugtrack&amp;action=edit" field="id" caption="Muuda" style="fgtext2"/>
-<action link="class=bugtrack&amp;action=delete" field="id" caption="Kustuta" style="fgtext2"/>
-<action row="2" link="class=bugtrack&amp;action=showcomments" field="id" caption="Komment" style="fgtext2" remote="500,400"/>
-<action row="2" link="class=bugtrack&amp;action=delegate" field="id" caption="Määra" style="fgtext2" remote="300,200"/>
 </actions>
 
 <data>
@@ -30,12 +30,12 @@
 <field name="title" caption="Pealkiri" talign="left" sortable="1"/>
 <field name="pri" caption="Pri" talign="center" sortable="1" chgbgcolor="__pribgcolor" type="int"/>
 <field name="status" caption="Status" talign="center" sortable="1"/>
-<field name="tm" caption="Lisatud" talign="center" type="time" format="H:i d-M-Y" sortable="1"/>
-<field name="timeready" caption="Parandada" talign="center" type="time" format="H:i d-M-Y" sortable="1" chgbgcolor="__trbgcolor"/>
+<field name="tm" caption="Lisatud" talign="center" type="time" format="H:i d-M-y" sortable="1"/>
+<field name="timeready" caption="Parandada" talign="center" type="time" format="H:i d-M-y" sortable="1" chgbgcolor="__trbgcolor"/>
 <field name="uid" caption="Kes" talign="center" sortable="1"/>
 <field name="developer" caption="Kellele" talign="center" sortable="1"/>
 <field name="site" caption="Site" talign="center" sortable="1"/>
-<field name="commentcount" caption="komment" talign="center" sortable="1"/>
+<field name="vali" caption="Vali" talign="center"/>
 </data>
 
 </tabledef>

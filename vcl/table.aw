@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.9 2001/08/12 23:21:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.10 2001/09/12 18:00:11 duke Exp $
 global $PHP_SELF;
 $js_table = "
 function xnavi_alfa(char_to_look_for) {
@@ -82,9 +82,27 @@ class aw_table
 	{
 		$this->headerstring = $caption;
 		$hlinks = array();
+		// lauri muudetud -->
+		if ($this->headerlinkclassid)
+		{
+			$hlcl=" class='".$this->headerlinkclassid."' ";
+		};
+		// <--
 		while(list($k,$v) = each($links))
 		{
-			$hlinks[] = sprintf("<a href='$k'>$v</a>",$k,$v);
+						// lauri muudetud -->
+			if ($k=="extra")
+			{
+				$this->headerextra = $v;
+			} else
+			if ($k=="extrasize")
+			{
+				$this->headerextrasize= $v;
+			} else
+			{
+				$hlinks[] = sprintf("<a href='$k' $hlcl>$v</a>",$k,$v);
+			};
+			// <--
 		};
 		$this->headerlinks = join(" | ",$hlinks);
 			
@@ -201,6 +219,7 @@ class aw_table
 		} else {
 			$flag = SORT_REGULAR;
 		};
+
  
 		if ($sorder == "asc") 
 		{
@@ -323,13 +342,16 @@ class aw_table
 
 		if ($this->headerstring)
 		{
-			$colspan = sizeof($this->rowdefs) + sizeof($this->actions);
+			// lauri muudetud
+			$colspan = sizeof($this->rowdefs) + sizeof($this->actions)-(int)$this->headerextrasize;
 			$tbl .= $this->opentag(array("name" => "tr"));
 			$tbl .= $this->opentag(array("name" => "td","colspan" => $colspan,"classid" => $this->titlestyle));
 			$tbl .= "<strong>" . $this->headerstring . ": ";
 			$tbl .= $this->headerlinks;
 			$tbl .= "</strong>";
 			$tbl .= $this->closetag(array("name" => "td"));
+			// lauri muudetud
+			$tbl .= $this->headerextra;
 			$tbl .= $this->closetag(array("name" => "tr"));
 		}
 		
@@ -665,6 +687,8 @@ class aw_table
 
 			case "titlebar":
 				$this->titlestyle = $attrs["style"];
+				// lauri muudetud
+				$this->headerlinkclassid = $attrs["linkclass"];
 				break;
 
 			// tavalise (mittesorteeritava) headeri stiil
@@ -751,6 +775,10 @@ class aw_table
 	function define_field($args = array())
 	{
 		$this->rowdefs[] = $args;
+		if ($args["numeric"])
+		{
+			$this->nfields[$args["name"]] = 1;
+		};
 	}
 
 	function _xml_end_element($parser,$name) 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/replicator.aw,v 2.3 2001/07/28 03:27:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/replicator.aw,v 2.4 2001/09/12 17:59:57 duke Exp $
 
 
 classload("connect");
@@ -24,7 +24,8 @@ class replicator_host extends db_connector
 		// kui on sessiooni avamise käsk
 		if ($func=="OPEN")
 		{
-			srand((double)microtime() * 1202020);
+			// no prize for anyone who can tell why the next line is not * 65536
+			srand((double)microtime() * 131337);
 			$rand=md5(uniqid(rand()));
 			if (!$this->db_query("INSERT INTO $this->table (ip,tm,rand) values ('$REMOTE_ADDR','".time()."','$rand')",false))
 				$error="can't allocate tid";
@@ -52,10 +53,10 @@ class replicator_host extends db_connector
 			
 			$correcthash=md5($rec["IP"].$rec["RAND"].$this->key.$rec["RAND"]);
 
-			//echo("ip=".$rec["IP"]." rand=".$rec["RAND"]." key=".$this->key." <br>,thus, hash=$correcthash<br> client sent=$hash<br><br>");
+			//echo("ip=".$rec["IP"]." rand=".$rec["RAND"]." key=".$this->key." <br>,thus, hash=$correcthash<br> client sent=$hash<br><br>");//dbg
 			if ($hash!=$correcthash || $rec["IP"]!=$REMOTE_ADDR)
 			{
-				$error="wrong hash";
+				$error="wrong hash"/*."ip=".$rec["IP"]."rand=".$rec["RAND"]." key=".$this->key." <br>,thus,hash=$correcthash<br> client sent=$hash<br><br>"*/;
 			} else
 			{
 				if ($func=="CLOSE")
@@ -91,7 +92,10 @@ class replicator_client extends db_connector
 	{
 		global $SERVER_ADDR;
 
-		$this->url=(substr($url,0,7)=="http://"?"":"http://").$url;
+		$jobu=strlen($url);
+
+		$this->url=(substr($url,0,7)=="http://")?substr($url,7,strlen($url)-7):$url;
+		$this->url="http://"."bugtrack:turvaauk@".$this->url;
 		$open_result=$this->_query(array("func"=>"OPEN"));
 
 		if (!$open_result["tid"] || !$open_result["rand"])
@@ -103,7 +107,8 @@ class replicator_client extends db_connector
 			return;
 		} 
 		$this->tid=$open_result["tid"];
-		//echo "<br>making hash:md5($SERVER_ADDR.{$open_result["rand"]}.$key.{$open_result["rand"]})";//DBG
+		//echo("key=*$key*");
+		//echo "<br>makinghash:md5($SERVER_ADDR.{$open_result["rand"]}.$key.{$open_result["rand"]})";//DBG
 		$this->hash=md5($SERVER_ADDR.$open_result["rand"].$key.$open_result["rand"]);
 
 
@@ -114,7 +119,10 @@ class replicator_client extends db_connector
 		$q=$this->url."?transaction=".urlencode(serialize($arr));
 		//echo "<br>query=$q<br>";//DBG
 		$ret=@file($q);
-		//echo "<br>ret=".join("",$ret).",";print_r(unserialize(join("",$ret)));echo "<br>";//DBG
+		//echo
+//"<br>ret=".join("",$ret).",";print_r(unserialize(join("",$ret)));echo
+//"<br>";//DBG
+//
 		if (!is_array($ret))
 			return array("error"=>"httpquery failed ".urldecode($q));
 		return unserialize(join("",$ret));

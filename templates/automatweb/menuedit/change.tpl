@@ -107,6 +107,10 @@ function savemenu() {
 		<td class="fgtext_g"><b>{VAR:id}</b></td>
 	</tr>
 	<tr>
+		<td class="title" width=10%>&nbsp;Templatede kataloog&nbsp;</td>
+		<td class="fgtext_g"><select name="tpl_dir">{VAR:tpl_dir}</select></td>
+	</tr>
+	<tr>
 		<td class="title" width=10%>&nbsp;{VAR:LC_MENUEDIT_TEMPL_EDIT}&nbsp;</td>
 		<td class="fgtext_g"><select name="tpl_edit">{VAR:tpl_edit}</select></td>
 	</tr>

@@ -3,7 +3,7 @@
 	global $orb_defs;
 	$orb_defs["ml_member"] ="xml";
 
-	classload("config","form_base","ml_list");
+	classload("config","form_base","ml_list","ml_rule");
 	class ml_member extends aw_template
 	{
 		////
@@ -64,6 +64,9 @@
 			$arr["redirect_after"]="boo";
 			$f=new form();
 			$f->process_entry($arr);
+
+			$rule=new ml_rule();
+			$rule->check_entry(array($entry_id));
 
 			$this->_log("mlist","muutis liiget $f->entry_name");
 			return $this->mk_my_orb("change",array("id" => $entry_id,"parent" => $parent, "lid" => $lid));
@@ -202,7 +205,8 @@
 			$t->set_header_attribs(array(
 				"class" => "ml_member",
 				"action" => "sent",
-				"lid" => $lid
+				"lid" => $lid,
+				"id" => $id,
 			));
 
 			$t->define_header("Saadetud meilid",array());
@@ -213,7 +217,7 @@
 
 			while ($row = $this->db_next())
 			{
-				$this->save_handle();
+//				$this->save_handle();
 				
 				$this->save_handle();
 				$row["eid"]=$row["id"];

@@ -322,6 +322,13 @@
 				</arguments>
 			</function>
 		</action>
+		
+		<action name="convels">
+			<function name="convels">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 
 		<action name="conventries">
 			<function name="conventries">
@@ -376,6 +383,13 @@
 
 		<action name="convindexes">
 			<function name="convindexes">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="convformat">
+			<function name="convformat">
 				<arguments>
 				</arguments>
 			</function>

@@ -27,6 +27,14 @@
 	<!-- END SUB: H_EL -->
 	<td class="fcaption2">Kogus</td>
 	<td class="fcaption2">J&auml;&auml;k</td>
+	<td class="fcaption2">Parent men&uuml;&uuml;</td>
+	<td class="fcaption2">Hind (keskmine)</td>
+	<td class="fcaption2">Broneeritud</td>
+	<td class="fcaption2">T&auml;ituvuse %</td>
+	<td class="fcaption2">Summa</td>
+	<td class="fcaption2">Nimi</td>
+	<td class="fcaption2">Vaata</td>
+	<td class="fcaption2">ID</td>
 	<td class="fcaption2">Pealkiri</td>
 </tr>
 <!-- SUB: LINE -->
@@ -37,6 +45,14 @@
 <!-- END SUB: EL -->
 <td class="fcaption2" align="center"><input type='checkbox' name='els[{VAR:line_num}][total]' value='1' {VAR:tot_checked}></td>
 <td class="fcaption2" align="center"><input type='checkbox' name='els[{VAR:line_num}][used]' value='1' {VAR:used_checked}></td>
+<td class="fcaption2" align="center"><input type='checkbox' name='els[{VAR:line_num}][parent]' value='1' {VAR:parent_checked}></td>
+<td class="fcaption2" align="center"><input type='checkbox' name='els[{VAR:line_num}][price]' value='1' {VAR:price_checked}></td>
+<td class="fcaption2" align="center"><input type='checkbox' name='els[{VAR:line_num}][bron]' value='1' {VAR:bron_checked}></td>
+<td class="fcaption2" align="center"><input type='checkbox' name='els[{VAR:line_num}][f_percent]' value='1' {VAR:f_percent_checked}></td>
+<td class="fcaption2" align="center"><input type='checkbox' name='els[{VAR:line_num}][money]' value='1' {VAR:money_checked}></td>
+<td class="fcaption2" align="center"><input type='checkbox' name='els[{VAR:line_num}][name]' value='1' {VAR:name_checked}></td>
+<td class="fcaption2" align="center"><input type='checkbox' name='els[{VAR:line_num}][view]' value='1' {VAR:view_checked}></td>
+<td class="fcaption2" align="center"><input type='checkbox' name='els[{VAR:line_num}][i_id]' value='1' {VAR:i_id_checked}></td>
 <td class="fcaption2" align="center"><input type='text' name='title[{VAR:line_num}]' value='{VAR:title}' class='small_button'></td>
 </tr>
 <!-- END SUB: LINE -->
