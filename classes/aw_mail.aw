@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.29 2003/12/17 08:14:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.30 2004/09/09 11:15:40 kristo Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
@@ -15,9 +15,6 @@ define('WARNING','This is a MIME encoded message');
 define('OCTET','application/octet-stream');
 define('TEXT','text/plain');
 define('HTML','text/html');
-// ISO-8859-4 (Latin4)
-// Latin4 introduced letters for Estonian (et), the Baltic languages Latvian (lv, Lettish) and Lithuanian (lt)
-define('CHARSET','iso-8859-4');
 define('INLINE','inline');
 define('ATTACH','attachment');
 define('CRLF',"\n");
@@ -33,6 +30,8 @@ class aw_mail {
 	// method(string) - mis meetodi abil meili saadame?
 	function aw_mail($args = array())
 	{
+		$ll = get_instance("languages");
+		define('CHARSET',$ll->get_charset());
 		return $this->clean($args);
 	}
 
@@ -611,7 +610,8 @@ class aw_mail {
 		$subject = $this->headers["Subject"];
 		if (not($this->headers["Content-Type"]))
 		{
-			$this->set_header("Content-Type","text/plain; charset=\"iso-8859-4\"");
+			$ll = get_instance("languages");
+			$this->set_header("Content-Type","text/plain; charset=\"".$ll->get_charset()."\"");
 		};
 
 		unset($this->headers["To"]);
