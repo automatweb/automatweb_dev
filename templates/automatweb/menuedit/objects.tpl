@@ -238,7 +238,9 @@ SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a
 href="javascript:document.foo.submit()" onClick="return ddelete()"
 onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('delete','','{VAR:baseurl}/automatweb/images/blue/awicons/delete_over.gif',1)"><img name="delete" alt="{VAR:LC_MENUEDIT_DELETE}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/delete.gif" width="25" height="25"></a><IMG
 SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a
-href="javascript:document.foo.submit()" onClick="return doSubmit('change')" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('edit','','{VAR:baseurl}/automatweb/images/blue/awicons/edit_over.gif',1)"><img name="edit" alt="{VAR:LC_MENUEDIT_CHANGE}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/edit.gif" width="25" height="25"></a><!--show--><IMG
+href="javascript:document.foo.submit()" onClick="return doSubmit('change')" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('edit','','{VAR:baseurl}/automatweb/images/blue/awicons/edit_over.gif',1)"><img name="edit" alt="{VAR:LC_MENUEDIT_CHANGE}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/edit.gif" width="25" height="25"></a><IMG
+SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><!--settings--><a
+href="javascript:document.foo.submit()" onClick="return doSubmit('configure')" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('settings','','{VAR:baseurl}/automatweb/images/blue/awicons/settings_over.gif',1)"><img name="settings" alt="" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/settings.gif" width="25" height="25"><!--show--><IMG
 SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a
 href="javascript:window.parent.objects.location.href=show()" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('show','','{VAR:baseurl}/automatweb/images/blue/awicons/show_over.gif',1)"><img name="show" alt="{VAR:LC_MENUEDIT_SHOW}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/show.gif" width="25" height="25"></a><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><img
 SRC="{VAR:baseurl}/automatweb/images/blue/awicons/seperator.gif" width="6" height="25"><IMG
@@ -263,9 +265,6 @@ SRC="{VAR:baseurl}/automatweb/images/blue/awicons/seperator.gif" width="6" heigh
 
 </td></tr>
 </table>
-
-
-
 
 
 
