@@ -1,58 +1,15 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.30 2003/05/20 11:49:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.31 2003/05/20 11:55:51 duke Exp $
 // this is here so that orb will work...
-
-/*
-	Vajalikud väljad on:
-		description e. nimetus (aasta,kuu) periods->description
-		comment e. teema periods->data->comment
-		archived checkbox periods->archived
-		image fileupload periods->data->image
-		image_link textbox periods->data->image_link
-		pyear textbox periods->data->pyear
-
-	konvertimisskript peab tegema iga perioodi jaoks objektitabelisse
-	kirjed ja siduma need periooditabeli kirjetega.
-		
-		
-
-
-*/
-
-/*
-	@property description type=textbox table=periods
-	@caption Nimetus (aasta,kuu)
-
-	@property archived type=checkbox ch_value=1 value=1 table=periods
-	@caption Arhiveeritud
-
-	@property image type=fileupload table=periods field=data method=serialize
-	@caption Pilt
-
-	@property image_link type=textbox table=periods field=data method=serialize
-	@caption Pildi link
-
-	@property pyear type=select table=periods field=data method=serialize
-	@caption Aasta
-
-	@tableinfo periods index=obj_id master_table=objects master_index=oid
-
-
-
-
-*/
-class periods extends class_base
+class periods extends aw_template
 {
 	function periods($oid = 0)
 	{
-		$this->init(array(
-			"clid" => CL_PERIOD,
-			"tpldir" => "automatweb/periods",
-		));
 		if (!$oid)
 		{
 			$oid = $this->cfg["per_oid"];
 		}
+		$this->init("automatweb/periods");
 		lc_load("definition");
 		$this->oid = $this->cfg["per_oid"];
 		$this->lc_load("periods","lc_periods");	
