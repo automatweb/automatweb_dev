@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.16 2004/10/05 07:13:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.17 2004/10/13 11:01:19 duke Exp $
 // crm_call.aw - phone call
 /*
 
@@ -36,10 +36,10 @@
 @property recurrence type=releditor reltype=RELTYPE_RECURRENCE group=recurrence rel_id=first props=start,weekdays,end
 @caption Kordused
 
-@property calendar_selector type=callback callback=cb_calendar_selector store=no group=calendars
+@property calendar_selector type=calendar_selector store=no group=calendars
 @caption Kalendrid
 
-@property project_selector type=callback callback=cb_project_selector store=no group=projects
+@property project_selector type=project_selector store=no group=projects
 @caption Projektid
 
 @property comment_list type=comments group=comments no_caption=1
@@ -114,17 +114,6 @@ class crm_call extends class_base
 		return $done;
 	}
 
-	function cb_project_selector($arr)
-	{
-		$elib = get_instance("calendar/event_property_lib");
-		return $elib->project_selector($arr);
-	}
-
-	function cb_calendar_selector($arr)
-	{
-		$elib = get_instance("calendar/event_property_lib");
-		return $elib->calendar_selector($arr);
-	}
 
 	function get_property($arr)
 	{
@@ -258,15 +247,6 @@ class crm_call extends class_base
 
 		switch($data["name"])
 		{
-			case "project_selector":
-				$elib = get_instance("calendar/event_property_lib");
-				$elib->process_project_selector($arr);
-				break;
-
-			case "calendar_selector":
-				$elib = get_instance("calendar/event_property_lib");
-				$elib->process_calendar_selector($arr);
-				break;
 		};
 		return $retval;
 	}

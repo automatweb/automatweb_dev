@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.23 2004/10/08 01:32:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.24 2004/10/13 11:01:19 duke Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -40,10 +40,10 @@
 
 @default method=serialize
 
-@property calendar_selector type=callback callback=cb_calendar_selector store=no group=calendars
+@property calendar_selector type=calendar_selector store=no group=calendars
 @caption Kalendrid
 
-@property project_selector type=callback callback=cb_project_selector store=no group=projects
+@property project_selector type=project_selector store=no group=projects
 @caption Projektid
 
 ------- Paketid --------
@@ -133,7 +133,7 @@ class crm_offer extends class_base
 		switch($prop["name"])
 		{
 			case "start1":
-				return PROP_IGNORE;
+			//	return PROP_IGNORE;
 			break;
 		
 			case "orderer":
@@ -435,35 +435,14 @@ class crm_offer extends class_base
 		}	
 	}
 	
-	function cb_project_selector($arr)
-	{
-		$elib = get_instance("calendar/event_property_lib");
-		return $elib->project_selector($arr);
-	}
-
-	function cb_calendar_selector($arr)
-	{
-		$elib = get_instance("calendar/event_property_lib");
-		return $elib->calendar_selector($arr);
-	}
-
 	function set_property($arr)
 	{
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-			case "project_selector":
-				$elib = get_instance("calendar/event_property_lib");
-				$elib->process_project_selector($arr);
-				break;
-
-			case "calendar_selector":
-				$elib = get_instance("calendar/event_property_lib");
-				$elib->process_calendar_selector($arr);
-				break;
 			case "start1":
-				$data["value"] = $arr["obj_inst"]->created();
+				//$data["value"] = $arr["obj_inst"]->created();
 			break;
 			case "salesman":
 				if($data["value"])
@@ -595,8 +574,8 @@ class crm_offer extends class_base
 					$arr["obj_inst"]->create_brother($parent);
 				}
 			}
-			$arr["obj_inst"]->set_prop("start1", $arr["obj_inst"]->created());
-			$arr["obj_inst"]->save();
+			//$arr["obj_inst"]->set_prop("start1", $arr["obj_inst"]->created());
+			//$arr["obj_inst"]->save();
 		}
 	}
 	

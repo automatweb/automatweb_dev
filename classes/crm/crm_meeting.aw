@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.17 2004/10/05 07:13:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.18 2004/10/13 11:01:20 duke Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -42,13 +42,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @property recurrence type=releditor reltype=RELTYPE_RECURRENCE group=recurrence rel_id=first props=start,recur_type,end,weekdays,interval_daily,interval_weekly,interval_montly,interval_yearly,
 @caption Kordused
 
-@property calendar_selector type=callback callback=cb_calendar_selector store=no group=calendars
+@property calendar_selector type=calendar_selector store=no group=calendars
 @caption Kalendrid
 
 @property other_selector type=callback callback=cb_calendar_others store=no group=others
 @caption Teised
 
-@property project_selector type=callback callback=cb_project_selector store=no group=projects
+@property project_selector type=project_selector store=no group=projects
 @caption Projektid
 
 @property comment_list type=comments group=comments no_caption=1
@@ -225,17 +225,6 @@ class crm_meeting extends class_base
 		return $elib->participant_selector($arr);
 	}
 
-	function cb_project_selector($arr)
-	{
-		$elib = get_instance("calendar/event_property_lib");
-		return $elib->project_selector($arr);
-	}
-
-	function cb_calendar_selector($arr)
-	{
-		$elib = get_instance("calendar/event_property_lib");
-		return $elib->calendar_selector($arr);
-	}
 	
 	function cb_calendar_others($arr)
 	{
@@ -262,16 +251,6 @@ class crm_meeting extends class_base
 		}
 		switch($data["name"])
 		{
-			case "project_selector":
-				$elib = get_instance("calendar/event_property_lib");
-				$elib->process_project_selector($arr);
-				break;
-
-			case "calendar_selector":
-				$elib = get_instance("calendar/event_property_lib");
-				$elib->process_calendar_selector($arr);
-				break;
-			
 			case "other_selector":
 				$elib = get_instance("calendar/event_property_lib");
 				$elib->process_other_selector($arr);
