@@ -116,6 +116,9 @@ class _int_object
 		$oids = $GLOBALS["object_loader"]->param_to_oid_list($param["to"]);
 		foreach($oids as $oid)
 		{
+			$to = obj($oid);
+			$oid = $to->brother_of();
+
 			// check if a connection to the same object with the same reltype already exists
 			// if it does, then don't do it again.
 			$cprms = array("to" => $oid);
@@ -129,11 +132,9 @@ class _int_object
 				continue;
 			}
 
-			$to = obj($oid);
-
 			$c = new connection();
 			$param["from"] = $this->obj["brother_of"];
-			$param["to"] = $to->brother_of();
+			$param["to"] = $oid;
 			$c->change($param);
 		}
 	}
