@@ -9,6 +9,14 @@
             <caption>Algab</caption>
       </property>
       <property>
+            <name>end</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>datetime_select</type>
+            <field>end</field>
+            <caption>Lõpeb</caption>
+      </property>
+      <property>
             <name>utextbox1</name>
             <table>objects</table>
             <group>general</group>
