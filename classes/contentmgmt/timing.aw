@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/timing.aw,v 1.2 2004/12/09 17:58:53 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/timing.aw,v 1.3 2004/12/09 18:18:38 ahti Exp $
 // timing.aw - Ajaline aktiivsus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_DOCUMENT, on_tconnect_from)
@@ -121,7 +121,7 @@ class timing extends class_base
 		$atrue = true;
 		$datrue = true;
 		$act = $arr["request"]["activate"];
-		$deact = $arr["activate"]["deactivate"];
+		$deact = $arr["request"]["deactivate"];
 		foreach(safe_array($act) as $value)
 		{
 			if($value == "---")
@@ -138,19 +138,19 @@ class timing extends class_base
 		}
 		if($atrue)
 		{
-			$event = $this->mk_my_orb("init_action", array(
+			$event = str_replace("/automatweb", "", $this->mk_my_orb("init_action", array(
 				"subaction" => "activate", 
 				"id" => $arr["obj_inst"]->id(),
-			));
+			)));
 			$scheduler->remove(array("event" => $event));
 			$scheduler->evnt_add(mktime($act["hour"], $act["minute"], 0, $act["month"], $act["day"], $act["year"]), $event);
 		}
 		if($datrue)
 		{
-			$event = $this->mk_my_orb("init_action", array(
+			$event = str_replace("/automatweb", "", $this->mk_my_orb("init_action", array(
 				"subaction" => "deactivate", 
 				"id" => $arr["obj_inst"]->id(),
-			));
+			)));
 			$scheduler->remove(array("event" => $event));
 			$scheduler->evnt_add(mktime($deact["hour"], $deact["minute"], 0, $deact["month"], $deact["day"], $deact["year"]), $event);
 		}
