@@ -634,7 +634,7 @@ class form_db_base extends aw_template
 			"to_tbl" => false,
 			"to_el" => false
 		);
-		if (!$srfi["save_table"])
+		if (!$srfi["save_table"] || ($srfi["save_tables_obj_tbl"] != ""))
 		{
 			$this->_joins[] = array(
 				"from_tbl" => $tn, 
