@@ -307,6 +307,20 @@ function lc_site_load($file,&$obj)
 //	exit_function("__global::lc_site_load");
 }
 
+function aw_classload($args)
+{
+//	enter_function("__global::classload",array());
+	$arg_list = func_get_args();
+	while(list(,$lib) = each($arg_list))
+	{
+		// let's not allow including ../../../etc/passwd :)
+		$lib = str_replace(".","", $lib);
+		$lib = $GLOBALS["cfg"]["__default"]["classdir"]."/".$lib.".".$GLOBALS["cfg"]["__default"]["ext"];
+		include_once($lib);
+	};
+//	exit_function("__global::classload");
+}
+
 
 // nyyd on voimalik laadida ka mitu librat yhe calliga 
 // a la classload("users","groups","someothershit");
@@ -322,7 +336,16 @@ function classload($args)
 	{
 		// let's not allow including ../../../etc/passwd :)
 		$lib = str_replace(".","", $lib);
-		$lib = $GLOBALS["cfg"]["__default"]["classdir"]."/".$lib.".".$GLOBALS["cfg"]["__default"]["ext"];
+		// check if we need to load a site class instead
+		if (isset($GLOBALS["cfg"]["__default"]["site_classes"][$lib]))
+		{
+			$lib = $GLOBALS["cfg"]["__default"]["site_classes"][$lib];
+			$lib = $GLOBALS["cfg"]["__default"]["site_basedir"]."/classes/".$lib.".".$GLOBALS["cfg"]["__default"]["ext"];
+		}
+		else
+		{
+			$lib = $GLOBALS["cfg"]["__default"]["classdir"]."/".$lib.".".$GLOBALS["cfg"]["__default"]["ext"];
+		}
 		include_once($lib);
 	};
 //	exit_function("__global::classload");
@@ -332,6 +355,13 @@ function get_instance($class,$args = array())
 {
 	enter_function("__global::get_instance",array());
 
+	$site = false;
+	if (isset($GLOBALS["cfg"]["__default"]["site_classes"][$class]))
+	{
+		$class = $GLOBALS["cfg"]["__default"]["site_classes"][$class];
+		$site = true;
+	}
+
 	$id = sprintf("instance::%s",$class);
 	$instance = aw_global_get($id);
 
@@ -340,7 +370,14 @@ function get_instance($class,$args = array())
 
 	if (not(is_object($instance)))
 	{
-		$classdir = $GLOBALS["cfg"]["__default"]["classdir"];
+		if ($site)
+		{
+			$classdir = $GLOBALS["cfg"]["__default"]["site_basedir"]."/classes";
+		}
+		else
+		{
+			$classdir = $GLOBALS["cfg"]["__default"]["classdir"];
+		}
 		$ext = $GLOBALS["cfg"]["__default"]["ext"];
 		include_once($classdir."/".str_replace(".","", $class).".".$ext);
 		if (class_exists($lib))
