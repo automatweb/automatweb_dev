@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.223 2004/02/26 18:58:07 duke Exp $
+// $Id: class_base.aw,v 2.224 2004/02/27 11:56:21 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -328,7 +328,8 @@ class class_base extends aw_template
 			};
 		};
 		
-		$gdata = isset($this->subgroup) ? $this->groupinfo[$this->subgroup] : $this->groupinfo[$this->activegroup];
+		$gdata = !empty($this->subgroup) ? $this->groupinfo[$this->subgroup] : $this->groupinfo[$this->use_group];
+
 		$lm = $this->classinfo(array("name" => "fixed_toolbar"));
 
 		// turn of submit button, if the toolbar is being shown
