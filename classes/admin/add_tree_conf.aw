@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.6 2004/03/03 10:39:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.7 2004/03/04 16:31:04 kristo Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -108,39 +108,42 @@ class add_tree_conf extends class_base
 
 	function _req_do_table(&$t, $parent, $visible, $usable, $alias_add)
 	{
-		foreach($this->cfg["classes"] as $cl_id => $cld)
+		if ($this->level == -1)
 		{
-			if (!$cld["can_add"] || !isset($cld["parents"]))
+			foreach($this->cfg["classes"] as $cl_id => $cld)
 			{
-				continue;
-			}
-
-			if ($cld["parents"] == 0)
-			{
-				$ala = "";
-				if ($cld["alias"] != "")
+				if (!$cld["can_add"] || !isset($cld["parents"]))
 				{
-					$ala = html::checkbox(array(
-						"name" => "alias_add[$cl_id]",
-						"value" => 1,
-						"checked" => $alias_add[$cl_id] == 1
-					));
+					continue;
 				}
 
-				$t->define_data(array(
-					"name" => str_repeat("&nbsp;", ($this->level+1) * 10).$cld["name"],
-					"visible" => html::checkbox(array(
-						"name" => "visible[obj][$cl_id]",
-						"value" => 1,
-						"checked" => $visible["obj"][$cl_id] == 1
-					)),
-					"usable" => html::checkbox(array(
-						"name" => "usable[$cl_id]",
-						"value" => 1,
-						"checked" => $usable[$cl_id] == 1
-					)),
-					"alias_add" => $ala,
-				));
+				if ($cld["parents"] == 0)
+				{
+					$ala = "";
+					if ($cld["alias"] != "")
+					{
+						$ala = html::checkbox(array(
+							"name" => "alias_add[$cl_id]",
+							"value" => 1,
+							"checked" => $alias_add[$cl_id] == 1
+						));
+					}
+
+					$t->define_data(array(
+						"name" => str_repeat("&nbsp;", ($this->level+1) * 10).$cld["name"],
+						"visible" => html::checkbox(array(
+							"name" => "visible[obj][$cl_id]",
+							"value" => 1,
+							"checked" => $visible["obj"][$cl_id] == 1
+						)),
+						"usable" => html::checkbox(array(
+							"name" => "usable[$cl_id]",
+							"value" => 1,
+							"checked" => $usable[$cl_id] == 1
+						)),
+						"alias_add" => $ala,
+					));
+				}
 			}
 		}
 
