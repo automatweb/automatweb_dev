@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.287 2004/07/16 11:07:49 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.288 2004/07/16 11:11:03 rtoomas Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1099,7 +1099,7 @@ class core extends acl_base
 		if (not(($fh = fopen($file,"w"))))
 		{
 			$this->raise_error(ERR_CORE_NOP_OPEN_FILE,"Couldn't open file '$file' for writing",true);
-		};
+		}
 		else
 		{
 			fwrite($fh,$arr["content"]);
