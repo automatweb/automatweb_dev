@@ -24,6 +24,13 @@
 </tr>
 <!-- END SUB: ADD_2_LINE -->
 
+<!-- SUB: ADD2 -->
+<tr>
+	<td class="fcaption">Vali elemendid:</td>
+	<td class="fcpation"><select name='elements[]' multiple class='small_button' size="20">{VAR:els}</select></td>
+</tr>
+<!-- END SUB: ADD2 -->
+
 <!-- SUB: CHANGE -->
 <tr>
 <td class="fcaption" colspan=2><a href='{VAR:admin}'>{VAR:LC_FORMS_ADMIN}</a></td>
