@@ -163,7 +163,7 @@ class image extends aw_template
 	function get_url($url) 
 	{
 		$url = $this->mk_my_orb("show", array("fastcall" => 1,"file" => basename($url)),"image",false,true,"/");
-		return $url;
+		return str_replace("automatweb/", "", $url);
 	}
 
 	function parse_alias_list($arr)
@@ -468,6 +468,10 @@ class image extends aw_template
 		}
 		else
 		{
+			if ($url == "")
+			{
+				$url = "/automatweb/images/trans.gif";
+			}
 			$url = aw_ini_get("baseurl").$url;
 		}
 		$url = str_replace("automatweb/", "", $url);
