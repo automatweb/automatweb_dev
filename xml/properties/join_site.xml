@@ -30,15 +30,6 @@
             <caption>Kas kasutaja logitakse automaatselt sisse liitumisel</caption>
       </property>
       <property>
-            <name>classes</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>table</type>
-            <store>no</store>
-            <field>classes</field>
-            <caption>Vali klassid</caption>
-      </property>
-      <property>
             <name>join_properties</name>
             <table>objects</table>
             <group>sel_props</group>
@@ -74,6 +65,15 @@
             <store>no</store>
             <field>join_properties_page_titles</field>
             <caption>Liitumise Lehtede Pealkirjad</caption>
+      </property>
+      <property>
+            <name>join_seps</name>
+            <table>objects</table>
+            <group>seps</group>
+            <type>table</type>
+            <store>no</store>
+            <field>join_seps</field>
+            <caption>Vahepealkirjad</caption>
       </property>
       <property>
             <name>rules_show</name>
@@ -128,9 +128,6 @@
             <no_status>1</no_status>
       </classinfo>
       <groupinfo>
-            <classes>
-                  <caption>Klassid</caption>
-            </classes>
             <props>
                   <caption>Vormid</caption>
             </props>
@@ -146,6 +143,10 @@
                   <parent>props</parent>
                   <caption>Lehtede Pealkirjad</caption>
             </page_titles>
+            <seps>
+                  <parent>props</parent>
+                  <caption>Vahepealkirjad</caption>
+            </seps>
             <rules>
                   <caption>Reeglid</caption>
             </rules>
@@ -182,6 +183,15 @@
                   <clid>CL_GROUP</clid>
                   <caption>reegli grupp</caption>
             </RULE_GRP>
+            <REL_OBJ>
+                  <value>5</value>
+                  <clid>
+                        <num_0>CL_CRM_USER</num_0>
+                        <num_1>CL_USER</num_1>
+                        <num_2>CL_CRM_COMPANY</num_2>
+                  </clid>
+                  <caption>default seoste objektid</caption>
+            </REL_OBJ>
       </reltypes>
 </properties>
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site_rule.aw,v 1.2 2004/04/21 14:52:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site_rule.aw,v 1.3 2004/04/30 08:39:07 kristo Exp $
 // join_site_rule.aw - Liitumise Reegel 
 /*
 
@@ -110,7 +110,10 @@ class join_site_rule extends class_base
 			{
 				// now get the data object from the person obj
 				$dataid = reset($person->connections_from(array("type" => 15 /* RELTYPE_USER_DATA from crm_person */)));
-				$data = obj($dataid->prop("to"));
+				if ($dataid)
+				{
+					$data = obj($dataid->prop("to"));
+				}
 			}
 
 			$awd = new aw_array($d);

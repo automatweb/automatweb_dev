@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.4 2004/04/21 14:52:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.5 2004/04/30 08:39:07 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -17,16 +17,12 @@
 @property autologin type=checkbox ch_value=1 field=meta method=serialize 
 @caption Kas kasutaja logitakse automaatselt sisse liitumisel
 
-@groupinfo classes caption="Klassid"
-
-@property classes type=table store=no
-@caption Vali klassid
-
 @groupinfo props caption="Vormid"
 
 @groupinfo sel_props parent=props caption="Vali elemendid"
 @groupinfo mk_pages parent=props caption="Koosta lehed"
 @groupinfo page_titles parent=props caption="Lehtede Pealkirjad"
+@groupinfo seps parent=props caption="Vahepealkirjad"
 
 @property join_properties type=table store=no group=sel_props
 @caption Liitumisel k&uuml;sitavad v&auml;ljad
@@ -39,6 +35,9 @@
 
 @property join_properties_page_titles type=table store=no group=page_titles
 @caption Liitumise Lehtede Pealkirjad
+
+@property join_seps type=table store=no group=seps
+@caption Vahepealkirjad
 
 
 @groupinfo rules caption="Reeglid"
@@ -74,6 +73,9 @@
 @reltype RULE_GRP value=4 clid=CL_GROUP
 @caption reegli grupp
 
+@reltype REL_OBJ value=5 clid=CL_CRM_USER,CL_USER,CL_CRM_COMPANY
+@caption default seoste objektid
+
 */
 
 class join_site extends class_base
@@ -90,7 +92,10 @@ class join_site extends class_base
 			"textbox" => 1,
 			"datetime" => 1,
 			"password" => 1,
-			"relmanager" => 1
+			"relmanager" => 1,
+			"relpicker" => 1,
+			"date_select" => 1,
+			"chooser" => 1
 		);
 	}
 
@@ -110,6 +115,10 @@ class join_site extends class_base
 
 			case "join_properties_page_titles":
 				$this->_do_join_props_pages_titles($arr);
+				break;
+
+			case "join_seps":
+				$this->_do_join_seps($arr);
 				break;
 
 			case "preview":
@@ -146,6 +155,10 @@ class join_site extends class_base
 
 			case "join_properties_page_titles":
 				$this->_save_join_properties_page_titles($arr);
+				break;
+
+			case "join_seps":
+				$this->_save_join_seps($arr);
 				break;
 
 			case "rule_to_grp":
@@ -307,6 +320,40 @@ class join_site extends class_base
 		}
 	}
 
+	function _init_seps_tbl(&$t)
+	{
+		$t->define_field(array(
+			"name" => "sep_name",
+			"caption" => "Tekst",
+			"align" => "center"
+		));
+	}
+
+	function _do_join_seps($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_seps_tbl($t);
+		$t->set_sortable(false);
+
+		$awa = new aw_array($arr["obj_inst"]->meta("join_seps"));
+		foreach($awa->get() as $sepid => $sep)
+		{
+			$t->define_data(array(
+				"sep_name" => html::textbox(array(
+					"name" => "join_seps[$sepid]",
+					"value" => $sep
+				))
+			));
+		}
+
+		$t->define_data(array(
+			"sep_name" => html::textbox(array(
+				"name" => "join_seps[new]",
+				"value" => ""
+			))
+		));
+	}
+
 	function _do_join_props($arr)
 	{
 		$prop =& $arr["prop"];
@@ -343,7 +390,7 @@ class join_site extends class_base
 				$req = html::checkbox(array(
 					"name" => "required[$clid][".$nprop["name"]."]",
 					"value" => 1,
-					"checked" => ($required[$clid][$nprop["name"]] == 1 || !is_array($required[$clid]))
+					"checked" => ($required[$clid][$nprop["name"]] == 1)
 				));
 				if ($clid == CL_USER)
 				{
@@ -361,7 +408,7 @@ class join_site extends class_base
 					"visible" => html::checkbox(array(
 						"name" => "visible[$clid][".$nprop["name"]."]",
 						"value" => 1,
-						"checked" => ($visible[$clid][$nprop["name"]] == 1 || !is_array($visible[$clid]))
+						"checked" => ($visible[$clid][$nprop["name"]] == 1)
 					)),
 					"required" => $req
 				));
@@ -379,6 +426,31 @@ class join_site extends class_base
 		$propn = $arr["obj_inst"]->meta("propn");
 		$page = $arr["obj_inst"]->meta("page");
 		$visible = $arr["obj_inst"]->meta("visible");
+
+		// insert all separators 
+		$prop["vcl_inst"]->define_data(array(
+			"prop" => "<b>Vahepealkirjad</b>",
+			"visible" => "",
+			"required" => ""
+		));
+		$seps = new aw_array($arr["obj_inst"]->meta("join_seps"));
+		foreach($seps->get() as $sepid => $sepn)
+		{
+			$prop["vcl_inst"]->define_data(array(
+				"prop" => $sepn,
+				"page" => html::textbox(array(
+					"name" => "page[sep][$sepid]",
+					"value" => $page["sep"][$sepid],
+					"size" => 5
+				)),
+				"ord" => html::textbox(array(
+					"name" => "ord[sep][$sepid]",
+					"value" => $ord["sep"][$sepid],
+					"size" => 5
+				)),
+			));
+		}
+		
 
 		foreach($this->_get_clids($arr["obj_inst"]) as $clid)
 		{
@@ -412,7 +484,7 @@ class join_site extends class_base
 					$prop["vcl_inst"]->define_data(array(
 						"prop" => html::textbox(array(
 							"name" => "propn[$clid][".$nprop["name"]."]",
-							"value" => $propn[$clid][$nprop["name"]]
+							"value" => ($propn[$clid][$nprop["name"]] == "" ? $nprop["caption"] : $propn[$clid][$nprop["name"]])
 						)),
 						"page" => html::textbox(array(
 							"name" => "page[$clid][".$nprop["name"]."]",
@@ -456,6 +528,9 @@ class join_site extends class_base
 			$propn[$clid] = is_array($arr["request"]["propn"][$clid]) ? $arr["request"]["propn"][$clid] : array();
 			$page[$clid] = is_array($arr["request"]["page"][$clid]) ? $arr["request"]["page"][$clid] : array();
 		}		
+		$ord["sep"] = is_array($arr["request"]["ord"]["sep"]) ? $arr["request"]["ord"]["sep"] : array();
+		$page["sep"] = is_array($arr["request"]["page"]["sep"]) ? $arr["request"]["page"]["sep"] : array();
+
 		$arr["obj_inst"]->set_meta("ord", $ord);
 		$arr["obj_inst"]->set_meta("propn", $propn);
 		$arr["obj_inst"]->set_meta("page", $page);
@@ -464,6 +539,27 @@ class join_site extends class_base
 	function _save_join_properties_page_titles($arr)
 	{
 		$arr["obj_inst"]->set_meta("page_str", $arr["request"]["page_str"]);
+	}
+
+	function _save_join_seps($arr)
+	{
+		$awa = new aw_array($arr["request"]["join_seps"]);
+		$dat = array();
+		$maxid = 0;
+		foreach($awa->get() as $sepid => $sept)
+		{
+			if ($sept != "" && $sepid != "new")
+			{
+				$dat[$sepid] = $sept;
+				$maxid = $sepid;
+			}
+		}
+
+		if ($arr["request"]["join_seps"]["new"] != "")
+		{
+			$dat[$maxid+1] = $arr["request"]["join_seps"]["new"];
+		}
+		$arr["obj_inst"]->set_meta("join_seps", $dat);
 	}
 
 	function parse_alias($arr)
@@ -514,8 +610,6 @@ class join_site extends class_base
 				continue;
 			}
 
-			$np = array();
-			
 			// get properties for clid
 			$props = $cfgu->load_properties(array(
 				"file" => $cln,
@@ -772,32 +866,12 @@ class join_site extends class_base
 
 		$obj = obj($arr["id"]);
 
-
-		$change = false;
-		$sessd = aw_global_get("site_join_status");
-		$awa = new aw_array($sessd["typo_".CL_USER]);
-		foreach($awa->get() as $pn => $pv)
-		{
-			$change = true;
-			$u_o->set_prop($pn, $pv);
-		}
-		if ($change)
-		{
-			$u_o->save();
-		}
-
-
 		$sessd = aw_global_get("site_join_status");
 
 		$person = obj();
 		$person->set_class_id(CL_CRM_PERSON);
 		$person->set_parent($obj->prop("obj_folder"));
 		$person->set_name($sessd["typo_".CL_CRM_PERSON]["firstname"]." ".$sessd["typo_".CL_CRM_PERSON]["lastname"]);
-		$awa = new aw_array($sessd["typo_".CL_CRM_PERSON]);
-		foreach($awa->get() as $pn => $pv)
-		{
-			$person->set_prop($pn, $pv);
-		}
 		$p_id = $person->save();
 
 		$u_o->connect(array(
@@ -810,11 +884,6 @@ class join_site extends class_base
 		$com->set_class_id(CL_CRM_COMPANY);
 		$com->set_parent($obj->prop("obj_folder"));
 		$com->set_name($sessd["typo_".CL_CRM_COMPANY]["name"]);
-		$awa = new aw_array($sessd["typo_".CL_CRM_COMPANY]);
-		foreach($awa->get() as $pn => $pv)
-		{
-			$com->set_prop($pn, $pv);
-		}
 		$c_id = $com->save();
 
 		$person->connect(array(
@@ -832,31 +901,21 @@ class join_site extends class_base
 			$o = new object();
 			$o->set_class_id($clid);
 			$o->set_parent($obj->prop("obj_folder"));
+			$o_id = $o->save();
+			$this->create_obj_access($o_id, $u_o->prop("uid"));
 
-			$hase = false;
-			$awa = new aw_array($sessd["typo_".$clid]);
-			foreach($awa->get() as $pn => $pv)
-			{
-				$o->set_prop($pn, $pv);
-				$hase = true;
-			}
-			if ($hase)
-			{
-				$o_id = $o->save();
-				$this->create_obj_access($o_id, $u_o->prop("uid"));
-
-				$u_o->connect(array(
-					"to" => $o_id,
-					"reltype" => 3 // RELTYPE_USER_DATA from core/users/user
-				));
-
-				$person->connect(array(
-					"to" => $o_id,
-					"reltype" => 15 // RELTYPE_USER_DATA from crm/crm_person
-				));
-			}
+			$u_o->connect(array(
+				"to" => $o_id,
+				"reltype" => 3 // RELTYPE_USER_DATA from core/users/user
+			));
+			$person->connect(array(
+				"to" => $o_id,
+				"reltype" => 15 // RELTYPE_USER_DATA from crm/crm_person
+			));
 		}
 
+		// also, do update, all complex element crap is in there
+		$this->_do_update_data_objects($obj, $u_o, $arr);
 		aw_restore_user();
 	}
 
@@ -943,28 +1002,24 @@ class join_site extends class_base
 		{
 			$us = get_instance("users");
 			$u_o = obj($us->get_oid_for_uid(aw_global_get("uid")));
+			$visible[CL_USER]["uid_entry"] = false;
 		}		
 
 		$sessd = aw_global_get("site_join_status");
 
 		$tp = array();
-		$clss = array();
 		// for each cfgform related
 		foreach($this->_get_clids($ob) as $clid)
 		{
-			$cln = basename($this->cfg["classes"][$clid]["file"]);
-
-			$clss[$clid] = $this->cfg["classes"][$clid]["name"];
-
-			$np = array();
-			
 			// get properties for clid
 			$props = $cfgu->load_properties(array(
-				"file" => $cln,
+				"file" => basename($this->cfg["classes"][$clid]["file"]),
 				"clid" => $clid
 			));
+			$relinfo = $cfgu->relinfo;
 
-			$data_o = false;
+			$data_o = obj();
+			$data_o->set_class_id($clid);
 			// get data object if user is logged
 			if ($u_o)
 			{
@@ -997,7 +1052,20 @@ class join_site extends class_base
 				}
 			}
 
+			$ttp = array();
 			foreach($props as $pid => $prop)
+			{	
+				if ($visible[$clid][$pid])
+				{
+					$ttp[$pid] = $prop;
+				}
+			}
+
+			$class_inst = get_instance($clid);
+			$class_inst->init_class_base();
+			$ttp = $class_inst->parse_properties(array("properties" => $ttp, "obj_inst" => $data_o));
+
+			foreach($ttp as $pid => $prop)
 			{	
 				if ($visible[$clid][$prop["name"]])
 				{
@@ -1024,6 +1092,49 @@ class join_site extends class_base
 							"value" => "<font color='#FF0000'>J&auml;rgnev v&auml;li peab olema t&auml;idetud!</font>"
 						);
 					}
+
+					// if it's a relpicker, get the rels from the default rel object
+					// and insert them in there
+					if ($props[$pid]["type"] == "relpicker")
+					{
+						$tmp = reset($ob->connections_from(array(
+							"type" => 5, // RELTYPE_REL_OBJ 
+							"to.class_id" => $clid
+						)));
+						if ($tmp)
+						{
+							$relv = $relinfo[$prop["reltype"]]["value"];
+							$relto = $tmp->to();
+							$data = array();
+							foreach($relto->connections_from(array("type" => $relv)) as $c)
+							{
+								$data[$c->prop("to")] = $c->prop("to.name");
+							}
+							$prop["options"] = $data;
+						}
+					}
+					/*else
+					if ($prop["type"] == "relmanager" && $data_o)
+					{
+						$prop["real_obj"] = $data_o;
+					}
+					else
+					if ($prop["type"] == "chooser")
+					{
+						$tmp_do = $data_o;
+						if (!is_object($tmp_do))
+						{
+							$tmp_do = obj();
+							$tmp_do->set_class_id($clid);
+						}
+						$tmp_param = array(
+							"obj_inst" => &$tmp_do,
+							"prop" => &$prop,
+							"request" => $params
+						);
+						$class_inst->get_property($tmp_param);
+					}*/
+
 					// set value in property
 					if ($data_o)
 					{
@@ -1043,6 +1154,23 @@ class join_site extends class_base
 				}
 			}
 		}
+
+		// add seprator props
+		$seps = new aw_array($ob->meta("join_seps"));
+		foreach($seps->get() as $sepid => $sepn)
+		{
+			$pid = "typo_sep[jsep_".$sepid."]";
+			$tp[$pid] = array(
+				"type" => "text",
+				"name" => $pid,
+				//"no_caption" => 1,
+				"subtitle" => 1,
+				"value" => $sepn
+			);
+		}
+		
+		// now that we got all props, re-order them based on the order on the pages page
+		$this->_do_final_sort_props($ob, $tp);
 
 		if ($params["err_return_url"] != "")
 		{
@@ -1084,8 +1212,6 @@ class join_site extends class_base
 
 			$clss[$clid] = $this->cfg["classes"][$clid]["name"];
 
-			$np = array();
-			
 			// get properties for clid
 			$props = $cfgu->load_properties(array(
 				"file" => $cln,
@@ -1127,21 +1253,101 @@ class join_site extends class_base
 
 			if ($data_o)
 			{
-				$tp = array();
-				foreach($props as $pid => $prop)
-				{	
-					if ($visible[$clid][$prop["name"]])
-					{
-						$oldn = str_replace($wn."[", "", str_replace("]", "", $prop["name"]));
-						$wn = "typo_".$clid;
-						$cf_sd = $data[$wn];
-						$data_o->set_prop($pid, $cf_sd[$oldn]);
-					}
-				}
-
-				$data_o->save();
+				$this->_do_fake_form_submit(array(
+					"data_o" => $data_o,
+					"props" => $props,
+					"visible" => $visible,
+					"clid" => $clid,
+					"data" => $data
+				));
 			}
 		}
+	}
+
+	function _do_fake_form_submit($arr)
+	{
+		extract($arr);
+		$submit_data = array(
+			"return" => "id",
+			"id" => $data_o->id(),
+			"cb_no_groups" => 1
+		);
+		foreach($props as $pid => $prop)
+		{	
+			if ($visible[$clid][$prop["name"]])
+			{
+				$oldn = str_replace($wn."[", "", str_replace("]", "", $prop["name"]));
+				$wn = "typo_".$clid;
+				$cf_sd = $data[$wn];
+				if ($clid == CL_USER)
+				{
+					$data_o->set_prop($pid, $cf_sd[$oldn]);
+				}
+
+				if ($prop["type"] == "relmanager")
+				{
+					$submit_data["cb_emb"] = $data["cb_emb"][$wn];
+				}
+				else
+				{
+					$submit_data[$pid] = $cf_sd[$oldn];
+				}
+			}
+		}
+
+		if ($clid == CL_USER)
+		{
+			$data_o->save();
+		}
+		else
+		{
+			$data_o_inst = $data_o->instance();
+			$data_o_inst->submit($submit_data);
+		}
+	}
+
+	function __prop_sorter($a, $b)
+	{
+		// get order from prop name
+		preg_match("/typo_(.*)\[(.*)\]/U", $a["name"], $a_mt);
+		preg_match("/typo_(.*)\[(.*)\]/U", $b["name"], $b_mt);	
+		$a_clid = $a_mt[1];
+		$a_prop = $a_mt[2];
+
+		$b_clid = $b_mt[1];
+		$b_prop = $b_mt[2];
+
+		if ($a_clid == "sep")
+		{
+			list(, $a_prop) = explode("_", $a_prop);
+			$a_ord = $this->__sort_ord[$a_clid][$a_prop];
+		}
+		else
+		{
+			$a_ord = $this->__sort_ord[$a_clid][$a_prop];
+		}
+
+		if ($b_clid == "sep")
+		{
+			list(, $b_prop) = explode("_", $b_prop);
+			$b_ord = $this->__sort_ord[$b_clid][$b_prop];
+		}
+		else
+		{
+			$b_ord = $this->__sort_ord[$b_clid][$b_prop];
+		}
+
+		if ($a_ord == $b_ord)
+		{
+			return 0;
+		}
+		return ($a_ord < $b_ord) ? -1 : 1;
+	}
+
+	function _do_final_sort_props(&$ob, &$tp)
+	{
+		$this->__sort_ord = $ob->meta("ord");
+		uasort($tp, array(&$this, "__prop_sorter"));
 	}
 }
 ?>
