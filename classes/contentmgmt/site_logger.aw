@@ -1,36 +1,5 @@
 <?php
 
-function log_pv($mt)
-{
-	//list($usec, $sec) = explode(" ", $mt);
-	$start = $mt ;((float)$usec + (float)$sec);
-
-	list($usec, $sec) = explode(" ", microtime());
-	$end = ((float)$usec + (float)$sec);
-
-	$time = $end - $start;
-
-	if ($time > 1000)
-	{
-		$time = "0";
-	}
-
-	// log pv to file
-	$fn = aw_ini_get("basedir")."/files/logs/";
-	if (!is_dir($fn))
-	{
-		@mkdir($fn);
-	}
-	$fn .= date("Y-m-d").".log";
-
-	$f = @fopen($fn, "a");
-	if ($f)
-	{
-		fwrite($f, date("d.m.Y H:i:s")." ".aw_ini_get("site_id")." ".aw_ini_get("baseurl")." ".aw_global_get("REQUEST_URI")." $time \n");
-		fclose($f);
-	}
-}
-
 class site_logger extends core
 {
 	function site_logger()

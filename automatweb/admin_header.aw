@@ -27,6 +27,7 @@ $LC = aw_global_get("LC");
 
 
 $awt = new aw_timer;
+register_shutdown_function("log_pv", $GLOBALS["awt"]->timers["__global"]["started"]);
 
 __init_aw_session_track();
 
