@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.76 2003/01/20 14:25:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.77 2003/02/01 20:23:52 duke Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1221,16 +1221,9 @@ class users extends users_user
 			$this->vars(array("form" => $f->gen_preview(array("id" => $fo, "entry_id" => $eid,"silent_errors" => true,"reforb" => $this->mk_reforb("submit_user_info", array("entry_id" => $eid,"u_uid" => $id),"users")))));
 		}
 
-		$calendars = array();
-		$this->get_objects_by_class(array("class" => CL_CALENDAR));
-		while($row = $this->db_next())
-		{
-			$calendars[$row["oid"]] = ($row["name"]) ? $row["name"] : "(nimetu)";
-		};
 		$this->vars(array(
 			"LANG" => $lp,
 			"CUR" => $ccr,
-			"calendar" => $this->picker($userconfig["calendar"],$calendars),
 			"treetype" => $this->picker($userconfig["treetype"],array("0" => "Default (saidi konfist)","dhtml" => "DHTML","java" => "Java")),
 			"addobject_type" => $this->picker($userconfig["addobject_type"],array("" => "Java","dhtml" => "DHTML")),
 			"reforb" => $this->mk_reforb("submit_settings", array("id" => $id))
