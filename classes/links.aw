@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.31 2003/06/10 15:44:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.32 2003/07/18 11:51:53 kristo Exp $
 
 /*
 
@@ -86,51 +86,35 @@ class links extends class_base
 	function search_doc($arr)
 	{
 		$this->read_template("search_doc.tpl");
-		$this->vars(array("index_file" => $this->cfg["index_file"]));
-		global $s_name, $s_content,$s_class_id;
+		$this->vars(array(
+			"index_file" => $this->cfg["index_file"]
+		));
+		global $s_name, $s_content;
+
 		$baseurl = $this->cfg["baseurl"];
 		$ext = $this->cfg["ext"];
+
 		if ($s_name != "" || $s_content != "")
 		{
-			if ($s_class_id == "item")
+			$se = array();
+			if ($s_name != "")
 			{
-				$se = "";
-				if ($s_name != "")
-				{
-					$se = " AND name LIKE '%".$s_name."%' ";
-				}
-				$this->db_query("SELECT objects.name as name,objects.oid as oid,objects.parent as parent FROM objects WHERE objects.status != 0 AND (objects.site_id = ".$this->cfg["site_id"]." OR objects.site_id IS NULL) AND (objects.class_id = ".CL_SHOP_ITEM.") $se");
+				$se[] = " name LIKE '%".$s_name."%' ";
 			}
-			else
+			if ($s_content != "")
 			{
-				$se = array();
-				if ($s_name != "")
-				{
-					$se[] = " name LIKE '%".$s_name."%' ";
-				}
-				if ($s_content != "")
-				{
-					$se[] = " content LIKE '%".$s_content."%' ";
-				}
-				$this->db_query("SELECT documents.title as name,objects.oid as oid,objects.parent as parent FROM objects LEFT JOIN documents ON documents.docid=objects.oid WHERE objects.status != 0  AND (objects.site_id = ".$this->cfg["site_id"]." OR objects.site_id IS NULL) AND (objects.class_id = ".CL_DOCUMENT." OR objects.class_id = ".CL_PERIODIC_SECTION." ) AND ".join("AND",$se));
+				$se[] = " content LIKE '%".$s_content."%' ";
 			}
+			$this->db_query("SELECT documents.title as name,objects.oid as oid,objects.parent as parent FROM objects LEFT JOIN documents ON documents.docid=objects.oid WHERE objects.status != 0  AND (objects.site_id = ".$this->cfg["site_id"]." OR objects.site_id IS NULL) AND (objects.class_id = ".CL_DOCUMENT." OR objects.class_id = ".CL_PERIODIC_SECTION." ) AND ".join("AND",$se));
 			while ($row = $this->db_next())
 			{
-				if ($s_class_id == "item")
+				if (aw_ini_get("menuedit.long_section_url"))
 				{
-					$url = $this->mk_site_orb(array("action" => "order_item", "item_id" => $row["oid"], "section" => $row["parent"],"class" => "shop"));
-					$url = substr($url,strlen($baseurl));
+					$url = "/".$this->cfg["index_file"].".".$ext."/section=".$row["oid"];
 				}
 				else
 				{
-					if (aw_ini_get("menuedit.long_section_url"))
-					{
-						$url = "/".$this->cfg["index_file"].".".$ext."/section=".$row["oid"];
-					}
-					else
-					{
-						$url = "/".$row["oid"];
-					}
+					$url = "/".$row["oid"];
 				}
 				$name = strip_tags($row["name"]);
 				$name = str_replace("'","",$name);
@@ -153,7 +137,6 @@ class links extends class_base
 			"s_name"	=> $s_name,
 			"s_content"	=> $s_content,
 			"doc_sel" => checked($s_class_id != "item"),
-			"item_sel" => checked($s_class_id == "item")
 		));
 		return $this->parse();
 	}

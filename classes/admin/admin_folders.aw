@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.11 2003/06/26 15:31:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.12 2003/07/18 11:54:23 kristo Exp $
 define("SHARED_FOLDER_ID",2147483647);
 class admin_folders extends aw_template
 {
@@ -70,9 +70,7 @@ class admin_folders extends aw_template
 				menu.links as links,
 				menu.icon_id as icon_id,
 				menu.admin_feature as admin_feature,
-				menu.periodic as mperiodic,
-				menu.is_shop as is_shop,
-				menu.shop_id as shop_id
+				menu.periodic as mperiodic
 			FROM objects 
 				LEFT JOIN menu ON menu.id = objects.oid
 				WHERE (objects.class_id = ".CL_PSEUDO." OR objects.class_id = ".CL_BROTHER.")  AND $where $aa

@@ -476,36 +476,6 @@ define("LC_SEARCH_CONF_WITH_KEYWORD"," wiht keywords ");
 define("LC_SEARCH_CONF_LOOK_ANSWER","Looked for %s , %s , to answer get %s document");
 define("LC_SEARCH_CONF_FROM_STRING"," from string '%s'");
 
-//shop.aw
-define("LC_SHOP_HI_USER","Hi!\n\n user %s (ip address: ");
-define("LC_SHOP_TIME",") time ");
-define("LC_SHOP_CHANGED_ORDER","\nchanged order %d and \n");
-define("LC_SHOP_ORDERED_PRODUCT"," ordered following products: \n\n");
-define("LC_SHOP_TOTAL_PRICE","\n\nPrice together: ");
-define("LC_SHOP_BILL_NR","\n\nBill number: ");
-define("LC_SHOP_ORDERES_DATA","\n\nOrderer entered following data:\n\n");
-define("LC_SHOP_ORDER","Order");
-define("LC_SHOP_ORDER_ABOLISH","Order canceled");
-define("LC_SHOP_ORDER_NAME","Name: ");
-define("LC_SHOP_ORDER_TYPE","Amount and type \n");
-define("LC_SHOP_ORDER_USER","\n\nUser ");
-define("LC_SHOP_ABOLISH_ORDER"," canceled order nr %s \n");
-
-//shop_eq.aw
-define("LC_SHOP_EQ_ADD_FORMULA","Add formula");
-define("LC_SHOP_EQ_CHANGE_FORMULA","Change formula");
-
-//SHOP_ITEM
-define("LC_SHOP_ITEM_ADD_PRODUCT","Add article");
-define("LC_SHOP_ITEM_CHANGE_PRODUCT","Change article");
-
-//shop_stat.aw
-define("LC_SHOP_STAT_ADD_SHOP_STAT","Add shop statistics");
-define("LC_SHOP_STAT_SHOPS_STAT","Shops statistics");
-define("LC_SHOP_STAT_CHANGE_SHOP_STAT","Change shop statistics");
-define("LC_SHOP_STAT_BY_WEEKDAYS","'>Statistics</a> / By articla");
-define("LC_SHOP_STAT_BY_HOUR","'>Statistics</a> / By hours");
-
 //stat.aw
 define("LC_STAT_LOOKS_BY_HOURS","Looks by housr");
 define("LC_STAT_LOOKS_BY_DAYS","Looks by days");

@@ -492,36 +492,6 @@ define("LC_SEARCH_CONF_WITH_KEYWORD"," keywordidega ");
 define("LC_SEARCH_CONF_LOOK_ANSWER","Otsis %s alt, %s , vastuseks saadi %s dokumenti");
 define("LC_SEARCH_CONF_FROM_STRING"," stringist '%s'");
 
-//shop.aw
-define("LC_SHOP_HI_USER","Tere!\n\n kasutaja %s (ip aadress: ");
-define("LC_SHOP_TIME",") kell ");
-define("LC_SHOP_ORDERED_PRODUCT"," tellis järgmised tooted: \n\n");
-define("LC_SHOP_CHANGED_ORDER","\nmuutes tellimust %d ");
-define("LC_SHOP_TOTAL_PRICE","\n\nKokku hind: ");
-define("LC_SHOP_BILL_NR","\n\nArve number: ");
-define("LC_SHOP_ORDERES_DATA","\n\nTellija sisestas enda kohta järgmised andmed:\n\n");
-define("LC_SHOP_ORDER","Tellimus");
-define("LC_SHOP_ORDER_ABOLISH","Tellimus tühistati");
-define("LC_SHOP_ORDER_NAME","Nimi: ");
-define("LC_SHOP_ORDER_TYPE","Kogus ja tüüp: \n");
-define("LC_SHOP_ORDER_USER","\n\nKasutaja ");
-define("LC_SHOP_ABOLISH_ORDER"," tühistas tellimuse nr %s \n");
-
-//shop_eq.aw
-define("LC_SHOP_EQ_ADD_FORMULA","Lisa valem");
-define("LC_SHOP_EQ_CHANGE_FORMULA","Muuda valemit");
-
-//SHOP_ITEM.aw
-define("LC_SHOP_ITEM_ADD_PRODUCT","Lisa kaup");
-define("LC_SHOP_ITEM_CHANGE_PRODUCT","Muuda kaupa");
-
-//shop_stat.aw
-define("LC_SHOP_STAT_ADD_SHOP_STAT","Lisa poe statistika");
-define("LC_SHOP_STAT_SHOPS_STAT","Poodide statisika");
-define("LC_SHOP_STAT_CHANGE_SHOP_STAT","Muuda poe statistikat");
-define("LC_SHOP_STAT_BY_WEEKDAYS","'>Statistika</a> / N&auml;dalap&auml;evade kaupa");
-define("LC_SHOP_STAT_BY_HOUR","'>Statistika</a> / Tundide kaupa");
-
 //stat.aw
 define("LC_STAT_LOOKS_BY_HOURS","Vaatamised tundide lõikes");
 define("LC_STAT_LOOKS_BY_DAYS","Vaatamised päevade lõikes");

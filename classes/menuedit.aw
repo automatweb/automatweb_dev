@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.297 2003/07/07 15:00:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.298 2003/07/18 11:53:03 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -227,9 +227,7 @@ class menuedit extends aw_template
 				menu.links as links,
 				menu.icon_id as icon_id,
 				menu.admin_feature as admin_feature,
-				menu.periodic as mperiodic,
-				menu.is_shop as is_shop,
-				menu.shop_id as shop_id
+				menu.periodic as mperiodic
 			FROM objects 
 				LEFT JOIN menu ON menu.id = objects.oid
 				WHERE (objects.class_id = ".CL_PSEUDO." OR objects.class_id = ".CL_BROTHER.")  AND $where $aa
