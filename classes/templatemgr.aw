@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/templatemgr.aw,v 2.15 2004/03/30 11:01:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/templatemgr.aw,v 2.16 2004/04/12 12:59:18 kristo Exp $
 
 class templatemgr extends aw_template
 {
@@ -186,5 +186,43 @@ class templatemgr extends aw_template
 		return $template;
         }
 
+	/** returns an array of templates that are in template folder $folder, checks site side first, then admin
+
+	**/
+	function template_picker($arr)
+	{
+		$fp_site = $this->cfg["site_tpldir"]."/".$arr["folder"];
+		$fp_adm = $this->cfg["basedir"]."/templates/".$arr["folder"];
+		$ret = array();
+		if (is_dir($fp_site))
+		{
+			$dc = $this->get_directory(array(
+				"dir" => $fp_site
+			));
+			foreach($dc as $file)
+			{
+				if (substr($file, -3) == "tpl")
+				{
+					$ret[$file] = $file;
+				}
+			}
+		}
+
+		if (count($ret) == 0)
+		{
+			$dc = $this->get_directory(array(
+				"dir" => $fp_adm
+			));
+			foreach($dc as $file)
+			{
+				if (substr($file, -3) == "tpl")
+				{
+					$ret[$file] = $file;
+				}
+			}
+		}
+
+		return $ret;
+	}
 }
 ?>
