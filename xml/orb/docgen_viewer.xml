@@ -58,5 +58,36 @@
 			</function>
 		</action>
 
+		<action name="do_db_update" >
+			<function name="do_db_update">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="view_usage" >
+			<function name="view_usage">
+				<arguments>
+					<required name="file" />
+					<required name="v_class" />
+					<required name="func" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="topf" >
+			<function name="topf">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="doc_class_list" >
+			<function name="doc_class_list">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
