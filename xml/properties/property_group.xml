@@ -3,8 +3,9 @@
       <property>
             <name>rootmenu</name>
             <table>objects</table>
-            <type>objpicker</type>
-            <clid>CL_MENU</clid>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MENU</reltype>
             <field>meta</field>
             <method>serialize</method>
             <caption>Rootmenüü</caption>
@@ -12,18 +13,30 @@
       <property>
             <name>subclass</name>
             <table>objects</table>
-            <type>generated</type>
-            <generator>callback_get_class_list</generator>
+            <group>general</group>
+            <type>callback</type>
+            <callback>callback_get_class_list</callback>
             <field>subclass</field>
             <caption>Klassid</caption>
       </property>
       <property>
             <name>generate</name>
             <table>objects</table>
+            <group>general</group>
             <editonly>1</editonly>
             <type>text</type>
             <field>generate</field>
             <caption>Genereeri objektid</caption>
       </property>
+      <classinfo>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <reltypes>
+            <MENU>
+                  <value>1</value>
+                  <clid>CL_MENU</clid>
+                  <caption>kataloog</caption>
+            </MENU>
+      </reltypes>
 </properties>
 

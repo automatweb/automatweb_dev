@@ -1,18 +1,24 @@
 <?php
 // property_group.aw - Property group object
 /*
+	@classinfo relationmgr=yes
+
 	@default table=objects
+	@default group=general
 	
-	@property rootmenu type=objpicker clid=CL_MENU field=meta method=serialize
+	@property rootmenu type=relpicker reltype=RELTYPE_MENU field=meta method=serialize
 	@caption Rootmenüü
 
-	@property subclass type=generated generator=callback_get_class_list field=subclass
+	@property subclass type=callback callback=callback_get_class_list field=subclass
 	@caption Klassid
 
 	@property generate editonly=1 type=text
 	@caption Genereeri objektid
+
+	@reltype MENU value=1 clid=CL_MENU
+	@caption kataloog
 */
-class property_group extends aw_template
+class property_group extends class_base
 {
         function property_group($args = array())
         {
@@ -28,7 +34,7 @@ class property_group extends aw_template
 		// this is only shown for new objects
 		if (!$args["new"])
 		{
-			return false;
+			return array();
 		};
 
 		$cx = get_instance("cfg/cfgutils");
@@ -82,17 +88,17 @@ class property_group extends aw_template
 	function generate($args = array())
 	{
 		$id = $args["id"];
-		$obj = $this->get_object($id);
+		$obj = obj($id);
 		// retrieve a list of properties for this class_id
 		$cfgu = get_instance("cfg/cfgutils");
 		$props = $cfgu->load_class_properties(array(
-			"clid" => $obj["subclass"],
+			"clid" => $obj->subclass(),
 		));
 		// create a menu under the rootmenu with the name of this object
-		$name = $obj["name"];
-		$comment = $obj["comment"];
-		$parent = $obj["meta"]["rootmenu"];
-		$subclass = $obj["subclass"];
+		$name = $obj->name();
+		$comment = $obj->comment();
+		$parent = $obj->prop("rootmenu");
+		$subclass = $obj->subclass();
 		$grandparent = $this->new_object(array(
 			"parent" => $parent,
 			"name" => $name,
