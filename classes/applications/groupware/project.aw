@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.24 2004/12/15 10:34:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.25 2004/12/16 15:13:27 duke Exp $
 // project.aw - Projekt 
 /*
 
@@ -524,6 +524,12 @@ class project extends class_base
 			$stat_str AND objects.parent IN (${parent}) order by planner.start"; // $limit
 
 
+		if (aw_global_get("uid") == "duke")
+		{
+			print $q;
+		};
+
+
 		// SELECT objects.oid AS id, objects.parent, objects.class_id, objects.brother_of, objects.name, planner.start, planner.end FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE ((planner.start >= '1099260000' AND planner.start <= '1104530399') OR (planner.end >= '1099260000' AND planner.end <= '1104530399')) AND objects.status != 0 AND objects.parent IN (2186)
 
 		enter_function("project::query");
@@ -624,6 +630,7 @@ class project extends class_base
 			enter_function("assign-event");
 			$events[$event_brother] = array(
 				"start" => $row["start"],
+				"end" => $row["end"],
 				"pr" => $prid,
 				"name" => $e_obj->name(),
 				"parent" => $event_parent,
@@ -1755,9 +1762,9 @@ class project extends class_base
 		$ol = new object_list(array(
 			"parent" => $arr["id"],
 			"sort_by" => "planner.start",
+			"site_id" => array(),
 			new object_list_filter(array("non_filter_classes" => CL_CRM_MEETING)),
 		));
-
 
 		foreach($ol->arr() as $o)
 		{
