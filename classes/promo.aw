@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.16 2002/09/25 15:05:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.17 2002/10/02 07:07:18 kristo Exp $
 
 classload("objects");
 classload("menuedit","users");
@@ -170,28 +170,6 @@ class promo extends aw_template
 			"no_title" => checked($no_title)
 		));
 		return $this->parse();
-	}
-
-	////
-	// !override the mk_path on core.aw , cause in menuedit mk_path is used in the upper frame, not in the objects frame
-	// !and thus must go to a different place when clicked.
-	function mk_path($oid,$text = "",$period = 0,$set = true)
-	{
-		$ext = $this->cfg["ext"];
-
-		$ch = $this->get_object_chain($oid,false,$this->cfg["admin_rootmenu2"]);
-		$path = "";
-		reset($ch);
-		while (list(,$row) = each($ch))
-		{
-			$path="<a target='list' href='".$this->mk_my_orb("right_frame",array("fastcall" => 1,"parent" => $row["oid"],"period" => $period),"menuedit")."'>".strip_tags($row["name"])."</a> / ".$path;
-		}
-
-		if ($set)
-		{
-			$GLOBALS["site_title"] = $path.$text;
-		}
-		return $path;
 	}
 }
 ?>
