@@ -273,15 +273,6 @@
             <type>select</type>
             <caption>templiidid</caption>
       </property>
-      <property>
-            <name>dokus</name>
-            <table>objects</table>
-            <group>show</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <callback>show_isik</callback>
-      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
@@ -316,10 +307,6 @@
             <forms>
                   <caption>Väljundid</caption>
             </forms>
-            <show>
-                  <caption>Visiitkaart</caption>
-                  <submit>no</submit>
-            </show>
       </groupinfo>
       <tableinfo>
             <kliendibaas_isik>
