@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.48 2005/03/30 12:54:15 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.49 2005/04/02 23:02:01 ahti Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -512,7 +512,7 @@ html::select(array(
 				)),
 				"sepa" => html::textbox(array(
 					"name" => $pname."[$sname][sepa]",
-					"value" => $oldvals[$sname]["ord"],
+					"value" => $oldvals[$sname]["sepa"],
 					"size" => 3,
 				)),
 				"sepb" => html::textbox(array(
