@@ -3,13 +3,24 @@
       <property>
             <name>rootnode</name>
             <type>textbox</type>
-            <size>10</size>
+            <size>40</size>
             <maxlength>10</maxlength>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Juurika ID</caption>
+            <caption>Juurika ID (eralda komadega)</caption>
+      </property>
+      <property>
+            <name>exception_node</name>
+            <type>textbox</type>
+            <size>40</size>
+            <maxlength>10</maxlength>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Erandite ID (eralda komadega)</caption>
       </property>
       <property>
             <name>outdir</name>

@@ -78,6 +78,25 @@
             <method>serialize</method>
             <caption>Erldaja</caption>
       </property>
+      <property>
+            <name>has_sub_menus</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kas j&amp;auml;rgmise taseme men&amp;uuml&amp;uuml;d on selle taseme men&amp;uuml;&amp;uuml;de vahel</caption>
+      </property>
+      <property>
+            <name>has_sub_menus_sep</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>J&amp;auml;rgmise taseme men&amp;uuml;&amp;uuml;de eraldaja</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_MENU_AREA_LEVEL</syslog_type>
             <relationmgr>yes</relationmgr>

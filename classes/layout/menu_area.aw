@@ -104,24 +104,39 @@ class menu_area extends class_base
 		);
 	}
 
-	function callback_pre_save($arr)
+	function callback_post_save($arr)
 	{
-		$od =&$arr["coredata"]["metadata"];
+		extract($arr);
+		$ob = $this->get_object($id);
+		
+		$od = $ob['meta'];
+
 		// check if the objects for the levels exist and that there are not too meny of them.
 		$num = $od["num_levels"];
 		for($i = 0; $i < $num; $i++)
 		{
-			if (!$od["level_objs"][$i])
+			$exists = false;
+			if ($od["level_objs"][$i])
+			{
+				// check if it is not deleted
+				$stat = $this->db_fetch_field("SELECT status FROM objects WHERE oid = '".$od["level_objs"][$i]."'", "status");
+				if ($stat >= 1)
+				{
+					$exists = true;
+				}
+			}
+			
+			if (!$exists)
 			{
 				// create object for that level
 				$oid = $this->new_object(array(
-					"parent" => $arr["object"]["parent"],
-					"name" => $arr["object"]["name"]." tase ".($i+1),
+					"parent" => $ob["parent"],
+					"name" => $ob["name"]." tase ".($i+1),
 					"class_id" => CL_MENU_AREA_LEVEL,
 					"status" => 2,
 					"metadata" => array(
 						"level" => $i,
-						"menu_area" => $arr["object"]["oid"]
+						"menu_area" => $ob["oid"]
 					)
 				));
 				$od["level_objs"][$i] = $oid;
@@ -139,6 +154,12 @@ class menu_area extends class_base
 				unset($od["level_objs"][$level]);
 			}
 		}
+
+		$this->set_object_metadata(array(
+			"oid" => $id,
+			"key" => "level_objs", 
+			"value" => $od['level_objs']
+		));
 	}
 
 	function gen_mod_levels($arr)
@@ -173,6 +194,18 @@ class menu_area extends class_base
 	{
 		$ob = $this->get_object($oid);
 		return $ob['meta']['root_folder'];
+	}
+
+	////
+	// !returns the next menu level id for this menu area
+	// params:
+	//	id - the id of the menu area
+	//	cur_level - the current menu level (if 1, this returns id for level 2 , etc)
+	function get_next_level_id($arr)
+	{
+		extract($arr);
+		$ob = $this->get_object($id);
+		return $ob['meta']['level_objs'][$cur_level+1];
 	}
 }
 ?>

@@ -36,6 +36,12 @@
 @property separator type=textbox size=10
 @caption Erldaja
 
+@property has_sub_menus type=checkbox ch_value=1
+@caption Kas j&auml;rgmise taseme men&uuml&uuml;d on selle taseme men&uuml;&uuml;de vahel
+
+@property has_sub_menus_sep type=textbox 
+@caption J&auml;rgmise taseme men&uuml;&uuml;de eraldaja
+
 */
 
 define("RELTYPE_STYLE",1);
@@ -113,6 +119,14 @@ class menu_area_level extends class_base
 		$ma = get_instance("layout/menu_area");
 		$rootmenu = $ma->get_root_menu($this->ob["meta"]["menu_area"]);
 
+		if ($this->ob['meta']['has_sub_menus'])
+		{
+			$next_level_id = $ma->get_next_level_id(array(
+				"id" => $this->ob["meta"]["menu_area"],
+				"cur_level" => $this->ob['meta']['level']
+			));
+		}
+
 		$root_menu_level = 0;
 		foreach($path as $level => $oid)
 		{
@@ -125,8 +139,12 @@ class menu_area_level extends class_base
 		}
 
 		$cont = "";
-		if (($root_menu_level && ($parent = $path[$root_menu_level+$this->ob['meta']['level']])) || ($this->ob['meta']['level'] == 0))
+		if (($root_menu_level && ($parent = $path[$root_menu_level+$this->ob['meta']['level']])) || ($this->ob['meta']['level'] == 0) || $force_show)
 		{
+			if ($force_show)
+			{
+				$parent = $force_parent;
+			}
 			if ($this->ob['meta']['level'] == 0)
 			{
 				$parent = $rootmenu;
@@ -139,12 +157,24 @@ class menu_area_level extends class_base
 			$cnt_menus = count($menus);
 			foreach($menus as $idx => $menu_data)
 			{
-				$names[] = $this->draw_menu_item(array(
+				$names[] = $prepend_sep.$this->draw_menu_item(array(
 					"data" => $menu_data,
 					"total" => $cnt_menus,
 					"cur" => $idx,
 					"active" => in_array($menu_data["oid"], $path)
 				));
+
+				if ($this->ob['meta']['has_sub_menus'] && $next_level_id)
+				{
+					// find next level menus and draw them
+					$nl = get_instance("layout/menu_area_level");
+					$names[] = $nl->show(array(
+						"id" => $next_level_id,
+						"force_show" => true,
+						"force_parent" => $menu_data["oid"],
+						"prepend_sep" => $prepend_sep.$this->ob['meta']['has_sub_menus_sep']
+					));
+				}
 			}
 			return join($this->ob['meta']['separator'], $names);
 		}
@@ -221,6 +251,12 @@ class menu_area_level extends class_base
 		{
 			return $link;
 		}
+	}
+
+	function get_property($arr)
+	{
+		$prop =& $arr['prop'];
+		return PROP_OK;
 	}
 }
 ?>

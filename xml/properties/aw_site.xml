@@ -88,6 +88,16 @@
             <caption>Vali templatede kataloogid, mis uude saiti kopeerida</caption>
       </property>
       <property>
+            <name>select_layout</name>
+            <type>relpicker</type>
+            <reltype>RELATION_LAYOUT</reltype>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vali uue saidi default layout</caption>
+      </property>
+      <property>
             <name>gen_site</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
@@ -117,6 +127,7 @@
       </property>
       <classinfo>
             <syslog_type>ST_SITE</syslog_type>
+            <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
             <general>
