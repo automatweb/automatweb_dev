@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.74 2003/07/07 15:03:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.75 2003/07/08 11:58:42 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -457,6 +457,7 @@ class form extends form_base
 		$this->arr["hide_empty_rows"] = $hide_empty_rows;
 		$this->arr["calendar_controller"] = $calendar_controller;
 		$this->arr["sql_writer_redirect_after"] = $sql_writer_redirect_after;
+		$this->arr["no_use_eid_once"] = $no_use_eid_once;
 
 		if ($is_translatable && !$this->arr["is_translatable"])
 		{
@@ -855,7 +856,8 @@ class form extends form_base
 			"search_act_lang_only" => checked($this->arr["search_act_lang_only"]),
 			"hide_empty_rows" => checked($this->arr["hide_empty_rows"]),
 			"is_translatable" => checked($this->arr["is_translatable"]),
-			"sql_writer_redirect_after" => htmlspecialchars($this->arr["sql_writer_redirect_after"])
+			"sql_writer_redirect_after" => htmlspecialchars($this->arr["sql_writer_redirect_after"]),
+			"no_use_eid_once" => checked($this->arr["no_use_eid_once"])
 		));
 
 		$ns = "";
@@ -1518,9 +1520,6 @@ class form extends form_base
 			$this->db_query($q);
 		};
 
-		$fact = get_instance("formgen/form_actions");
-		$fact->do_actions(&$this, $this->entry_id);
-
 		// paneme kirja, et kasutaja t2itis selle formi et siis kasutajax regimisel saame seda kontrollida.
 		$sff = aw_global_get("session_filled_forms");
 		$sff[$this->id] = $this->entry_id;
@@ -1533,10 +1532,13 @@ class form extends form_base
 			$ml_rule_inst->exec_dynamic_rules();
 		}
 
-		if ($this->set_use_eid_once == true)
+		if ($this->set_use_eid_once == true && !$this->arr["no_use_eid_once"])
 		{
 			aw_session_set("form_use_entry_id_once_".$this->id, $this->entry_id);
 		}
+
+		$fact = get_instance("formgen/form_actions");
+		$fact->do_actions(&$this, $this->entry_id);
 
 		if (isset($redirect_after) && $redirect_after)
 		{
