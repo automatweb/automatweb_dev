@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.84 2003/02/05 03:56:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.85 2003/02/14 11:33:49 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -1550,7 +1550,8 @@ class planner extends class_base
 		}
 		else
 		{
-			list($date,$start,$end) = $this->get_week_range(array(
+			classload("calendar");
+			list($date,$start,$end) = calendar::get_week_range(array(
 				"date" => $date,
 			));
 			$next = date("d-m-Y",strtotime("+1 week",$start));
