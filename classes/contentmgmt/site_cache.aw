@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.13 2004/04/27 10:52:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.14 2004/05/04 12:08:08 duke Exp $
 
 class site_cache extends aw_template
 {
@@ -15,33 +15,54 @@ class site_cache extends aw_template
 			$arr["template"] = "main.tpl";
 		}
 
-
 		$log = get_instance("contentmgmt/site_logger");
 		$log->add($arr);
 
-		if ($content = $this->get_cached_content($arr))
-		{
-			return $this->do_final_content_checks($content);
-		}
-
+		//if (aw_ini_get("menuedit.content_from_class_base") == 1 && aw_global_get("section") != aw_ini_get("frontpage"))
 		if (aw_ini_get("menuedit.content_from_class_base") == 1)
 		{
 			$arr["content_only"] = 1;
+		}
+		else
+		if ($content = $this->get_cached_content($arr))
+		{
+			return $this->do_final_content_checks($content);
 		}
 		// okey, now
 
 		$inst = get_instance("contentmgmt/site_show");
 		$content = $inst->show($arr);
+		if (!aw_global_get("no_cache"))
+		{
+			$this->set_cached_content($arr, $content);
+		}
 
 		if (aw_ini_get("menuedit.content_from_class_base") == 1)
 		{
 			// now I'm assuming that frontpage is set to some kind of AW object
-			$obj = new object(aw_ini_get("frontpage"));
+			$obj = new object(aw_ini_get("site_container"));
 			$t = get_instance($obj->class_id());
-			$content = $t->change(array(
-				"id" => aw_ini_get("frontpage"),
-				"content" => $content,
-			));
+
+			if (aw_global_get("section") != aw_ini_get("frontpage") || empty($_REQUEST["group"]))
+			{
+				// see kuvab vajaliku sisu
+				$content = $t->change(array(
+					"id" => aw_ini_get("site_container"),
+					"group" => $_REQUEST["group"],
+					"content" => $content,
+				));
+			}
+			else
+			{
+				// see kuvab muutmisvormi
+				$content = $t->change(array(
+					"id" => aw_ini_get("site_container"),
+					"group" => $_REQUEST["group"],
+				));
+
+
+			};
+
 		};
 
 		$this->set_cached_content($arr, $content);
