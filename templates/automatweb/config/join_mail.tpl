@@ -1,24 +1,26 @@
 <br>
 <form action='reforb.{VAR:ext}' method=POST>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
+<!-- SUB: LANG -->
 <tr bgcolor="#C9EFEF">
-<td class="plain">E-maili sisu, mis saadetakse kasutajale liitumisel (kasutajate andmete alias on #liituja_andmed# , kasutajanime alias #kasutaja# ja parooli alias #parool#).</td>
+<td class="plain">E-maili sisu, mis saadetakse kasutajale liitumisel (kasutajate andmete alias on #liituja_andmed# , kasutajanime alias #kasutaja# ja parooli alias #parool#). ({VAR:name})</td>
 </tr>
 <tr bgcolor="#C9EFEF">
-<td class="plain">Subject: <input type='text' name='join_mail_subj' value='{VAR:join_mail_subj}'></td>
+<td class="plain">Subject: <input type='text' name='join_mail_subj[{VAR:acceptlang}]' value='{VAR:join_mail_subj}'></td>
 </tr>
 <tr bgcolor="#C9EFEF">
-<td class="plain"><textarea name='join_mail' cols=70 rows=20 wrap=hard>{VAR:join_mail}</textarea></td>
+<td class="plain"><textarea name='join_mail[{VAR:acceptlang}]' cols=70 rows=20 wrap=hard>{VAR:join_mail}</textarea></td>
 </tr>
 <tr bgcolor="#C9EFEF">
-<td class="plain">E-maili sisu, mis saadetakse kasutajale kui tal on parool meelest l2inud (kasutajate andmete alias on #liituja_andmed# , kasutajanime alias #kasutaja# ja parooli alias #parool#).</td>
+<td class="plain">E-maili sisu, mis saadetakse kasutajale kui tal on parool meelest l2inud (kasutajate andmete alias on #liituja_andmed# , kasutajanime alias #kasutaja# ja parooli alias #parool#). ({VAR:name})</td>
 </tr>
 <tr bgcolor="#C9EFEF">
-<td class="plain">Subject: <input type='text' name='pwd_mail_subj' value='{VAR:pwd_mail_subj}'></td>
+<td class="plain">Subject: <input type='text' name='pwd_mail_subj[{VAR:acceptlang}]' value='{VAR:pwd_mail_subj}'></td>
 </tr>
 <tr bgcolor="#C9EFEF">
-<td class="plain"><textarea name='pwd_mail' cols=70 rows=20 wrap=hard>{VAR:pwd_mail}</textarea></td>
+<td class="plain"><textarea name='pwd_mail[{VAR:acceptlang}]' cols=70 rows=20 wrap=hard>{VAR:pwd_mail}</textarea></td>
 </tr>
+<!-- END SUB: LANG -->
 <tr bgcolor="#C9EFEF">
 <td class="plain">Mis aadressile saadetakse liitujatele saadetud e-mailid:</td>
 </tr>

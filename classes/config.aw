@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.27 2001/11/20 13:44:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.28 2001/11/22 22:12:29 kristo Exp $
 
 global $orb_defs;
 $orb_defs["config"] = "xml";
@@ -954,13 +954,27 @@ class config extends db_config
 	{
 		$this->read_template("join_mail.tpl");
 
+		classload("languages");
+		$la = new languages;
+		$ll = $la->listall();
+
+		foreach($ll as $lid => $ldata)
+		{
+			$this->vars(array(
+				"join_mail" => $this->get_simple_config("join_mail".$ldata["acceptlang"]),
+				"pwd_mail" => $this->get_simple_config("remind_pwd_mail".$ldata["acceptlang"]),
+				"join_mail_subj" => $this->get_simple_config("join_mail_subj".$ldata["acceptlang"]),
+				"pwd_mail_subj" => $this->get_simple_config("remind_pwd_mail_subj".$ldata["acceptlang"]),
+				"acceptlang" => $ldata["acceptlang"],
+				"name" => $ldata["name"]
+			));
+			$lb.=$this->parse("LANG");
+		}
+
 		$this->vars(array(
-			"join_mail" => $this->get_simple_config("join_mail"),
-			"pwd_mail" => $this->get_simple_config("remind_pwd_mail"),
-			"join_mail_subj" => $this->get_simple_config("join_mail_subj"),
-			"pwd_mail_subj" => $this->get_simple_config("remind_pwd_mail_subj"),
+			"LANG" => $lb,
+			"reforb" => $this->mk_reforb("submit_join_mail", array()),
 			"join_send_also" => $this->get_simple_config("join_send_also"),
-			"reforb" => $this->mk_reforb("submit_join_mail", array())
 		));
 
 		return $this->parse();
@@ -970,10 +984,17 @@ class config extends db_config
 	{
 		extract($arr);
 
-		$this->set_simple_config("join_mail",$join_mail);
-		$this->set_simple_config("remind_pwd_mail",$pwd_mail);
-		$this->set_simple_config("join_mail_subj",$join_mail_subj);
-		$this->set_simple_config("remind_pwd_mail_subj",$pwd_mail_subj);
+		classload("languages");
+		$la = new languages;
+		$ll = $la->listall();
+
+		foreach($ll as $lid => $ldata)
+		{
+			$this->set_simple_config("join_mail".$ldata["acceptlang"],$join_mail[$ldata["acceptlang"]]);
+			$this->set_simple_config("remind_pwd_mail".$ldata["acceptlang"],$pwd_mail[$ldata["acceptlang"]]);
+			$this->set_simple_config("join_mail_subj".$ldata["acceptlang"],$join_mail_subj[$ldata["acceptlang"]]);
+			$this->set_simple_config("remind_pwd_mail_subj".$ldata["acceptlang"],$pwd_mail_subj[$ldata["acceptlang"]]);
+		}
 		$this->set_simple_config("join_send_also",$join_send_also);
 
 		return $this->mk_orb("join_mail", array());

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.28 2001/11/20 13:40:23 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.29 2001/11/22 22:12:29 kristo Exp $
 classload("users_user","config","form");
 
 load_vcl("table");
@@ -693,19 +693,19 @@ class users extends users_user
 			session_register("last_join_uid");
 
 			// send him some email as well
-/*			classload("config");
+			classload("config");
 			$c = new config;
-			$mail = $c->get_simple_config("join_mail");
+			$mail = $c->get_simple_config("join_mail".$GLOBALS["LC"]);
 			$mail = str_replace("#parool#", $add_state["pass"],$mail);
 			$mail = str_replace("#kasutaja#", $add_state["uid"],$mail);
 			$mail = str_replace("#liituja_andmed#", str_replace("\n\n","\n",$this->show_join_data(array("nohtml" => true))),$mail);
 
-			mail($add_state["email"],$c->get_simple_config("join_mail_subj"),$mail,"From: ".MAIL_FROM);
+			mail($add_state["email"],$c->get_simple_config("join_mail_subj".$GLOBALS["LC"]),$mail,"From: ".MAIL_FROM);
 			$jsa = $c->get_simple_config("join_send_also");
 			if ($jsa != "")
 			{
-				mail($jsa,$c->get_simple_config("join_mail_subj"),$mail,"From: ".MAIL_FROM);
-			}*/
+				mail($jsa,$c->get_simple_config("join_mail_subj".$GLOBALS["LC"]),$mail,"From: ".MAIL_FROM);
+			}
 			$add_state = "";
 			$GLOBALS["session_filled_forms"] = array();
 
