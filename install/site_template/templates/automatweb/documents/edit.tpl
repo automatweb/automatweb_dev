@@ -86,14 +86,6 @@ target="_blank" href="{VAR:baseurl}/index.aw?section={VAR:id}">Eelvaade</a></td>
 </td>
 </tr>
 
-<script language="javascript">
-function doSubmit()
-{
-	document.doc.submit();
-	return true;
-}
-</script>
-
 <tr>
 <td class="celltext"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Pealkiri&nbsp;</b></td>
 <td class="celltext"><input class='tekstikast' type="text" name="title" size="80" value="{VAR:title}"></td>
