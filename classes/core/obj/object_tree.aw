@@ -9,13 +9,13 @@ class object_tree extends _int_obj_container_base
 	////////////////////////////////////////////
 	// public functions
 
-	function object_tree($param)
+	function object_tree($param = NULL)
 	{
-		if (!$param != NULL && !is_array($param))
+		if ($param != NULL && !is_array($param))
 		{
 			error::throw(array(
 				"id" => ERR_PARAM,
-				"msg" => "object_tree:conectructor(): if you specify a parameter, it must be a filter array!"
+				"msg" => "object_tree:constructor(): if you specify a parameter, it must be a filter array!"
 			));
 		}
 
