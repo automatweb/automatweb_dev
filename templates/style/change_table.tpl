@@ -109,6 +109,14 @@ href="javascript:this.document.aa.submit();">Salvesta</a>
 <td class="celltext">Footer {VAR:LC_STYLE_STYLE}:</td>
 <td class="celltext"><select class="small_button" name='st[footer_style]'><option value=''>{VAR:footer_style}</select></td>
 </tr>
+<tr>
+<td class="celltext">Paaritu rea stiil:</td>
+<td class="celltext"><select class="small_button" name='st[odd_style]'><option value=''>{VAR:odd_style}</select></td>
+</tr>
+<tr>
+<td class="celltext">Paaris rea stiil:</td>
+<td class="celltext"><select class="small_button" name='st[even_style]'><option value=''>{VAR:even_style}</select></td>
+</tr>
 </table>
 </td>
 </tr>
