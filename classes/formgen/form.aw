@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.42 2003/02/21 13:39:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.43 2003/02/21 13:42:15 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -884,7 +884,7 @@ class form extends form_base
 		{
 			$this->load($id);
 		};
-		if (!($this->can("view",$id)))
+		if (!($this->can("view",$id)) && !aw_ini_get("menuedit.no_view_acl_checks"))
 		{
 			$this->acl_error("view",$id);
 		}
@@ -1593,7 +1593,7 @@ class form extends form_base
 
 		if (!$no_load_op)
 		{
-			if (!($this->can("view",$op_id)))
+			if (!($this->can("view",$op_id)) && !aw_ini_get("menuedit.no_view_acl_checks"))
 			{
 				$this->acl_error("view",$op_id);
 			}
@@ -1619,7 +1619,7 @@ class form extends form_base
 				$this->raise_error(ERR_F_OP_NO_SESSION_FORM,"Sessioonist lugemise formi pole valitud v&auml;ljundile $op_id ",true);
 			}
 
-			if (!($this->can("view",$id)))
+			if (!$this->can("view",$id) && !aw_ini_get("menuedit.no_view_acl_checks"))
 			{
 				$this->acl_error("view",$id);
 			}
@@ -1628,7 +1628,7 @@ class form extends form_base
 
 		if (!$no_load_entry)
 		{
-			if (!($this->can("view",$entry_id)))
+			if (!$this->can("view",$entry_id) && !aw_ini_get("menuedit.no_view_acl_checks")) 
 			{
 				$this->acl_error("view",$entry_id);
 			}
@@ -3065,7 +3065,7 @@ class form extends form_base
 					$cnt = 0;
 					while ($row = $this->db_next())
 					{
-						if ($this->can("view",$row["entry_id"])  || $this->cfg["site_id"] == 11)
+						if ($this->can("view",$row["entry_id"])  || $this->cfg["site_id"] == 11 || aw_ini_get("menuedit.no_view_acl_checks"))
 						{
 							$cnt++;
 
@@ -3141,7 +3141,7 @@ class form extends form_base
 							continue;
 						}
 						$used_ids[$row["chain_entry_id"]]=1;
-						if ($this->can("view",$row["entry_id"])  || $this->cfg["site_id"] == 11)
+						if ($this->can("view",$row["entry_id"])  || $this->cfg["site_id"] == 11 || aw_ini_get("menuedit.no_view_acl_checks"))
 						{
 							$cnt++;
 							// kui on p2rg, siis muudame p2rga
