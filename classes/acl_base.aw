@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.37 2003/06/04 19:22:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.38 2003/06/26 15:30:45 kristo Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -553,6 +553,7 @@ class acl_base extends core
 				objects.name as obj_name, 
 				objects.oid,
 				objects.createdby as createdby,
+				objects.parent as obj_parent,
 				acl.gid,
 				groups.name as grp_name,
 				".$this->sql_unpack_string()."
