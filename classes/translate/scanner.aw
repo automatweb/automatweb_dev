@@ -174,10 +174,8 @@ class scanner extends aw_template
 			{
 				$ctx = $proptype;
 			};
-				
+
 			$id = md5("prop" . $basefile . $propname);
-	
-			
 			$this->strings[$id] = array(
 				"id" => $id,
 				"file" => $basefile,
