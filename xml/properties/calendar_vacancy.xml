@@ -26,6 +26,15 @@
             <caption>Osalejad</caption>
       </property>
       <property>
+            <name>morph_to</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <field>morph_to</field>
+            <caption>Muuda</caption>
+      </property>
+      <property>
             <name>task_toolbar</name>
             <table>objects</table>
             <group>participants</group>

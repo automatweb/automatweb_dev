@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_vacancy.aw,v 1.2 2004/10/05 07:16:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_vacancy.aw,v 1.3 2004/10/07 21:25:45 kristo Exp $
 // calendar_vacancy.aw - Vakants 
 /*
 
@@ -16,6 +16,9 @@
 
 @property info_on_object type=text store=no
 @caption Osalejad
+
+@property morph_to type=text store=no
+@caption Muuda
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
 
@@ -75,14 +78,19 @@ class calendar_vacancy extends class_base
 		$new_obj->set_status(STAT_ACTIVE);
 		$new_obj->set_prop("start1",$start);
 		$new_obj->set_prop("end",$end);
+		$new_obj->set_flag(OBJ_WAS_VACANCY, true);
 
 		$new_obj->save();
+		$vac_obj->delete();
+
+		if ($arr["ret_id"])
+		{
+			return $new_obj->id();
+		}
+
 
 		$pl = get_instance(CL_PLANNER);
-		//$user_calendar = $pl->get_calendar_for_user();
 		$user_calendar = $arr["cal_id"];
-
-		$vac_obj->delete();
 
 		// 1. get parent
 		// 2. get times
@@ -119,7 +127,34 @@ class calendar_vacancy extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-         case 'info_on_object':
+			case "morph_to":
+				$vac = $arr["obj_inst"];
+				$cal_id = 
+				$prop["value"] = html::href(array(
+					"url" => $this->mk_my_orb("reserve_slot",array(
+						"id" => $vac->id(),
+						"clid" => CL_CRM_MEETING,
+						"cal_id" => $arr["request"]["id"],
+					),CL_CALENDAR_VACANCY),
+					"caption" => "Uus kohtumine",
+				))." | ".html::href(array(
+					"url" => $this->mk_my_orb("reserve_slot",array(
+						"id" => $vac->id(),
+						"clid" => CL_CRM_CALL,
+						"cal_id" => $arr["request"]["id"],
+					),CL_CALENDAR_VACANCY),
+					"caption" => "Uus k&otilde;ne",
+				))." | ".html::href(array(
+					"url" => $this->mk_my_orb("reserve_slot",array(
+						"id" => $vac->id(),
+						"clid" => CL_TASK,
+						"cal_id" => $arr["request"]["id"],
+					),CL_CALENDAR_VACANCY),
+					"caption" => "Uus toimetus",
+				));
+				break;
+
+			case 'info_on_object':
 				if(is_object($arr['obj_inst']) && is_oid($arr['obj_inst']->id()))
 				{
 					$conns = $arr['obj_inst']->connections_to(array(
