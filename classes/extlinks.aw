@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.18 2002/06/17 10:42:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.19 2002/07/02 12:49:55 duke Exp $
 // extlinks.aw - Väliste linkide haldamise klass
 
 
@@ -48,6 +48,10 @@ class extlinks extends aw_template
 		}
 		else
 		{
+			if ($this->img)
+			{
+				$caption = $this->img;
+			};
 			$replacement = sprintf("<a href='%s' %s>%s</a>",$url,$target,$caption);
 		};
 		return $replacement;
@@ -75,6 +79,7 @@ class extlinks extends aw_template
 			$linksrc = $this->mk_my_orb("show", array("id" => $link["id"]),"links",false,true);
 		};
 
+
 		if ($link["link_image_check_active"] && ($link["active_until"] <= time()) )
 		{
 			$awf = get_instance("file");
@@ -85,7 +90,7 @@ class extlinks extends aw_template
 			if ($row && $awf->can_be_embedded(&$row))
 			{
 				$img = $awf->get_url($row["oid"],"");
-				$img = "<img border='0' src='$img'>";
+				$img = "<img border='0' src='$img' alt='$link[alt]' title='$link[alt]' />";
 			}
 			else
 			{

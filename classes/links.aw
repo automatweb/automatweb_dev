@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.16 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.17 2002/07/02 12:49:55 duke Exp $
 
 classload("extlinks");
 class links extends extlinks
@@ -103,6 +103,7 @@ class links extends extlinks
 			"newwindow" => checked($link["newwindow"]),
 			"link_image_active_until" => $de->gen_edit_form("active_until",$active_until),
 			"link_image_check_active" => checked($link["link_image_check_active"]),
+			"alt" => $link["alt"],
 		));
 		return $this->parse();
 	}
@@ -121,6 +122,9 @@ class links extends extlinks
 				"name" => $name,
 				"class_id" => CL_EXTLINK,
 				"comment" => $comment,
+				"metadata" => array(
+					"alt" => $alt,
+				),
 			));
 
 			$this->add_link(array(
@@ -151,6 +155,9 @@ class links extends extlinks
 				"name" => $name,
 				"parent" => $parent,
 				"comment" => $comment,
+				"metadata" => array(
+					"alt" => $alt,
+				),
 			));
 
 			$linkid = $id;
@@ -179,6 +186,7 @@ class links extends extlinks
 			"newwinscroll" => $newwinscroll,
 			"link_image_active_until" => $de->get_timestamp($active_until),
 			"link_image_check_active" => $link_image_check_active,
+			"alt" => $alt,
 		);
 
 		$this->obj_set_meta(array("oid" => $linkid,"meta" => $meta));
