@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.90 2002/01/31 22:43:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.91 2002/02/01 12:00:42 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -1021,6 +1021,7 @@ class menuedit extends aw_template
 			$this->li_cache = $d->li_cache;
 		}
 
+		// that sucks. We really need to rewrite that
 		$q = "SELECT * FROM objects WHERE status = 2 AND class_id = " . CL_HTML_POPUP;
 		$this->db_query($q);
 		$popups = "";
@@ -4549,7 +4550,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		global $awt,$lang_id,$SITE_ID;
 		$awt->start("menuedit::make_menu_caches");
 		$cache = new cache();
-		$ms = $cache->db_get("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID);
+		$ms = $cache->file_get("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID);
 		if (!$ms)
 		{
 			// make one big array for the whole menu
@@ -4577,7 +4578,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 			$cache = new cache();
 			$c_d = aw_serialize($cached,SERIALIZE_NATIVE);
-			$cache->db_set("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID,$c_d);
+			$cache->file_set("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID,$c_d);
 		}
 		else
 		{
@@ -5506,7 +5507,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	{
 		$cache = new cache;
 		global $lang_id,$SITE_ID;
-		$cache->db_invalidate("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID);
+		$cache->file_invalidate("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID);
 	}
 
 	function get_menu_keywords($id)

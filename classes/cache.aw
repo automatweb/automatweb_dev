@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.4 2001/11/07 17:21:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.5 2002/02/01 12:00:42 kristo Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud muutujas PAGE_CACHE
@@ -109,6 +109,32 @@ class cache extends core
 	function db_invalidate($key)
 	{
 		$this->db_query("UPDATE cache SET valid = 0 WHERE id = '$key'");
+	}
+
+	function file_set($key,$value)
+	{
+		if (defined("PAGE_CACHE"))
+		{
+			$fname = PAGE_CACHE . "/$key";
+			$this->put_file(array("file" => $fname, "content" => $value));
+		}
+	}
+
+	function file_get($key)
+	{
+		if (!defined("PAGE_CACHE"))
+		{
+			return false;
+		}
+		return $this->get_file(array("file" => PAGE_CACHE."/".$key));
+	}
+
+	function file_invalidate($key)
+	{
+		if (defined("PAGE_CACHE"))
+		{
+			unlink(PAGE_CACHE."/".$key);
+		}
 	}
 };
 ?>
