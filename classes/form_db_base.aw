@@ -280,7 +280,7 @@ class form_db_base extends aw_template
 		if (is_array($_tmp))
 		{
 			// go through the tables related to this one one by one and have them write their data
-			foreach($_tmp as $r_tbl => $r_tbl)
+			foreach($_tmp as $r_tbl)
 			{
 				$this->req_create_entry_data($r_tbl,$entry_id,$entry_data,$chain_entry_id);
 			}
@@ -370,7 +370,7 @@ class form_db_base extends aw_template
 		if (is_array($_tmp))
 		{
 			// go through the tables related to this one one by one and have them write their data
-			foreach($_tmp as $r_tbl => $r_tbl)
+			foreach($_tmp as $r_tbl)
 			{
 				$this->req_update_entry_data($r_tbl,$entry_id,$entry_data);
 			}
@@ -840,7 +840,7 @@ class form_db_base extends aw_template
 		$srfi = $this->cache_get_form_eldat($start_relations_from);
 		if (!$srfi["save_table"])
 		{
-			$sql.=", objects.modified as modified, objects.created as created, objects.modifiedby as modifiedby ";
+			$sql.=", objects.modified as modified, objects.modifiedby as modifiedby, objects.created as created, objects.createdby as createdby ";
 		}
 
 		// and if we are doing grouping, always add a count() column, because we might need it when showing the table
