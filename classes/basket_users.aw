@@ -116,6 +116,9 @@ class basket_users extends basket
 			$row["view"] = sprintf("<a href='%s'><b>%s</b></a>",$this->mk_my_orb("change",array("id" => $row["oid"]),"basket_order"),"Vaata");
 			$this->t->define_data($row);
 		}
+		$this->t->set_numeric_field('oid');
+		$this->t->set_default_sortby('oid');
+		$this->t->set_default_sorder('desc');
 		$this->t->sort_by();
 
 		$this->vars(array(

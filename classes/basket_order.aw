@@ -18,13 +18,17 @@ class basket_order extends basket
 		$this->mk_path($order["parent"], "Vaata telimust");
 		$ob = $this->get_basket($order["meta"]["basket_id"]);
 
+		$sbs = aw_global_get("shop_basket");
+		$sbs[$order['meta']['basket_id']] = $order['meta'];
+		aw_global_set("shop_basket", $sbs);
+
 		$ff = get_instance("formgen/form");
 		$ff->load($ob["meta"]["order_form"]);
 		$ff->load_entry($order["meta"]["of_entry"]);
 
 		$this->vars(array(
-			"uid" => $ob["createdby"],
-			"time" => $this->time2date($ob["created"],2),
+			"uid" => $order["createdby"],
+			"time" => $this->time2date($order["created"],2),
 			"order_id" => $id,
 			"of_entry" => $ff->show_text()
 		));
@@ -59,7 +63,7 @@ class basket_order extends basket
 				"entry_id" => $order["meta"]["of_entry"],
 				"op_id" => $ob["meta"]["order_form_op"]
 			));
-			$htmlmail.="<br><br>".$this->_draw_basket_ft($ob, $order["meta"]);
+			$htmlmail.="<br><br>".$this->_draw_basket_ft($ob, $order["meta"], true);
 		}
 
 		$this->vars(array(

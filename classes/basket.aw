@@ -196,9 +196,12 @@ class basket extends aw_template
 	function set_item_price($arr)
 	{
 		extract($arr);
-		$tmp = aw_global_get("shop_basket");
-		$tmp[$this->current_basket_id]["prices"][$item_id] = $price;
-		aw_session_set("shop_basket", $tmp);
+		if ($price != "")
+		{
+			$tmp = aw_global_get("shop_basket");
+			$tmp[$this->current_basket_id]["prices"][$item_id] = $price;
+			aw_session_set("shop_basket", $tmp);
+		}
 	}
 
 	////
