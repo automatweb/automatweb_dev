@@ -1,5 +1,19 @@
 <?xml version='1.0'?>
 <planner>
+	<add>
+		<caption>Lisa</caption>
+		<link>?class=planner&amp;action=addevent&amp;date={VAR:date}</link>
+		<sublinks>
+			<edit>
+				<caption>Muuda</caption>
+				<link>?class=planner&amp;action=editevent&amp;id={VAR:id}</link>
+			</edit>
+			<repeaters>
+				<caption>Kordused</caption>
+				<link>?class=planner&amp;action=repeaters&amp;id={VAR:id}</link>
+			</repeaters>
+		</sublinks>
+	</add>
 	<today>
 		<caption>Täna</caption>
 		<link>?class=planner</link>
@@ -20,8 +34,4 @@
 		<caption>Kuu</caption>
 		<link>?class=planner&amp;action=show_month&amp;date={VAR:date}</link>
 	</month>
-	<add>
-		<caption>Lisa</caption>
-		<link>?class=planner&amp;action=addevent&amp;date={VAR:date}</link>
-	</add>
 </planner>

@@ -42,7 +42,7 @@ OpenWindow = window.open("images.{VAR:ext}?type=list&parent=" + oid, "remote", w
 	</td>
 	<td class="fcaption2">
 		{VAR:imglist}
-		| <a href="javascript:iremote({VAR:docid})">Kõik</a> | <a href="{VAR:add_image}">Lisa uus&gt;&gt;&gt;</a>
+		| <a href="javascript:iremote({VAR:docid})">Kõik</a> | <a href="{VAR:add_img}">Lisa uus&gt;&gt;&gt;</a>
 	</td>
 </tr>
 <tr>

@@ -1,7 +1,7 @@
 <?php
 include("const.aw");
 include("$basedir/automatweb/admin_header.$ext");
-classload("defs","timer","aw_template","documents","menuedit");
+classload("defs","timer","aw_template","document","menuedit");
 $awt = new aw_timer();
 
 session_register("msgboard_type");
