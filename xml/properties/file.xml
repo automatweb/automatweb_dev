@@ -89,6 +89,7 @@
       </property>
       <classinfo>
             <trans>1</trans>
+            <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
       </classinfo>
       <groupinfo>
@@ -106,5 +107,12 @@
                   <master_index>oid	</master_index>
             </files>
       </tableinfo>
+      <reltypes>
+            <KEYWORD>
+                  <value>2</value>
+                  <clid>CL_KEYWORD</clid>
+                  <caption>Märksõna</caption>
+            </KEYWORD>
+      </reltypes>
 </properties>
 

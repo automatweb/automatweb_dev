@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.93 2004/10/27 06:54:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.94 2004/11/09 17:43:47 sven Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -18,7 +18,7 @@
 //
 
 /*
-	@classinfo trans=1
+	@classinfo trans=1 relationmgr=yes
 	@default table=files
 	@default group=general
 
@@ -55,13 +55,14 @@
 	@property act_date type=date_select group=dates
 	@caption Avaldamise kuupäev
 
-
 	@groupinfo settings caption=Seadistused
-    	@groupinfo dates caption=Ajad
+    @groupinfo dates caption=Ajad
 
 	@tableinfo files index=id master_table=objects master_index=oid	
 	@classinfo no_status=1
 
+	@reltype KEYWORD value=2 clid=CL_KEYWORD
+	@caption Märksõna
 */
 
 
