@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.41 2005/01/24 12:12:15 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.42 2005/01/26 22:51:09 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -89,27 +89,27 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 	@default group=views
 	@default store=no
 	
-	@property search type=hidden store=no
+	property search type=hidden store=no
 	
-	@property event_search_name type=textbox
+	@property event_search_name type=textbox group=search
 	@caption S&uuml;ndmuse nimi
 	
-	@property event_search_content type=textbox
+	@property event_search_content type=textbox group=search
 	@caption S&uuml;ndmuse sisu
 	
-	@property event_search_comment type=textbox
+	@property event_search_comment type=textbox group=search
 	@caption S&uuml;ndmuse kommentaar
 	
-	@property event_search_type type=chooser multiple=1 ch_value=1 orient=vertical
+	@property event_search_type type=chooser multiple=1 ch_value=1 orient=vertical group=search
 	@caption S&uuml;ndmuse t&uuml;&uuml;p
 	
-	@property event_search_add type=chooser multiple=1 orient=vertical
+	@property event_search_add type=chooser multiple=1 orient=vertical group=search
 	@caption Lisatingimused
 	
-	@property event_search_button type=submit
+	@property event_search_button type=submit group=search
 	@caption Otsi
 
-	@property event_search_results_table type=table store=no no_caption=1
+	@property event_search_results_table type=table store=no no_caption=1 group=search
 	
 	
 	
@@ -124,6 +124,7 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 	@groupinfo create_vacancies_cal caption="Vabad ajad (kalendrivaade)" parent=vacancies
 	@groupinfo time_settings caption=Ajaseaded parent=general
 	@groupinfo add_event caption="Muuda s&uuml;ndmust"
+	@groupinfo search caption="Otsing" submit_method=get
 */
 
 // naff, naff. I need to create different views that contain different properties. That's something
@@ -317,10 +318,6 @@ class planner extends class_base
 				break;
 
 			case "calendar_contents":
-				if($arr["request"]["search"] == 1)
-				{
-					return PROP_IGNORE;
-				}
 				$this->gen_calendar_contents($arr);
 				break;
 
@@ -337,28 +334,11 @@ class planner extends class_base
 				break;
 
 			case "event_search_name":
-				if(!$arr["request"]["search"] == 1)
-				{
-					return PROP_IGNORE;
-				}
-				$data["value"] = $arr["request"]["event_search_name"];
+			case "event_search_content":
+			case "event_search_comment":
+				$data["value"] = $arr["request"][$data["name"]];
 				break;
 			
-			case "event_search_content":
-				if(!$arr["request"]["search"] == 1)
-				{
-					return PROP_IGNORE;
-				}
-				$data["value"] = $arr["request"]["event_search_content"];
-				break;
-
-			case "event_search_comment":
-				if(!$arr["request"]["search"] == 1)
-				{
-					return PROP_IGNORE;
-				}
-				$data["value"] = $arr["request"]["event_search_comment"];
-				break;
 
 			case "event_search_type":
 				
@@ -383,19 +363,9 @@ class planner extends class_base
 					);
 				}
 				
-				if(!$arr["request"]["search"] == 1)
-				{
-					return PROP_IGNORE;
-				}
-			break;
-			case "event_search_button":
-				if(!$arr["request"]["search"] == 1)
-				{
-					return PROP_IGNORE;
-				}
-			break;
+				break;
 			case "event_search_results_table":
-				if($arr["request"]["search"] == 1  && ($arr["request"]["event_search_name"] or $arr["request"]["event_search_content"] or $arr["request"]["event_search_type"]))
+				if(($arr["request"]["event_search_name"] or $arr["request"]["event_search_content"] or $arr["request"]["event_search_type"]))
 				{
 					$results = $this->do_event_search($arr["request"]);
 					if($results->count() > 0)
@@ -411,15 +381,11 @@ class planner extends class_base
 				{
 					return PROP_IGNORE;
 				}
-			break;
+				break;
 			case "search":
 				$data["value"] = $arr["request"]["search"];
-			break;
+				break;
 			case "event_search_add":
-				if(!$arr["request"]["search"] == 1)
-				{
-					return PROP_IGNORE;
-				}
 				if($arr["request"]["event_search_add"])
 				{
 					$data["value"] = $arr["request"]["event_search_add"];
@@ -1432,12 +1398,14 @@ class planner extends class_base
 
 			$dt = date("d-m-Y",time());
 
+			/*
 			$toolbar->add_button(array(
 				"name" => "search",
 				"tooltip" => t("Otsi kalendri sündmust"),
 				"url" => aw_url_change_var(array("search" => 1)),
 				"img" => "search.gif",
 			));
+			*/
 			
 			$toolbar->add_button(array(
 				"name" => "today",
@@ -1465,7 +1433,7 @@ class planner extends class_base
 			}
 			
 
-			if ($arr["obj_inst"]->prop("my_projects") == 1 && !$arr["request"]["search"])
+			if ($arr["obj_inst"]->prop("my_projects") == 1)
 			{
 				$toolbar->add_separator();
 
