@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.71 2003/03/27 18:23:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.72 2003/05/19 15:31:04 duke Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -823,12 +823,18 @@ topic");
 		};
 		if (!$no_comments)
 		{
-			setcookie("aw_mb_read",serialize($this->aw_mb_read),time()+24*3600*1000,"/");
+			if (!headers_sent())
+			{
+				setcookie("aw_mb_read",serialize($this->aw_mb_read),time()+24*3600*1000,"/");
+			}
 		}
 
 		$aw_mb_last = unserialize(stripslashes($HTTP_COOKIE_VARS["aw_mb_last"]));
 		$aw_mb_last[$board] = time();
-		setcookie("aw_mb_last",serialize($aw_mb_last),time()+24*3600*1000,"/");
+		if (!headers_sent())
+		{
+			setcookie("aw_mb_last",serialize($aw_mb_last),time()+24*3600*1000,"/");
+		}
 
 		$retval = $this->parse();
 
