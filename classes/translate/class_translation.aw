@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/class_translation.aw,v 1.1 2003/09/23 17:10:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/class_translation.aw,v 1.2 2003/09/24 16:28:23 duke Exp $
 // translation.aw - Tõlge 
 /*
 
@@ -11,8 +11,8 @@
 @property lang_code type=select field=meta method=serialize
 @caption Keel
 
-@property catalog type=select field=subclass 
-@caption Kataloog
+@property subclass type=select newonly=1
+@caption Klass
 
 @property info type=text editonly=1 store=no group=general,workbench
 @caption Info 
@@ -23,10 +23,8 @@
 @property workbench type=callback callback=callback_gen_workbench store=no group=workbench no_caption=1
 @caption Tõlkimine
 
-
 @groupinfo workbench caption="Tõlgi"
 @classinfo relationmgr=yes
-
 
 */
 
@@ -70,15 +68,11 @@ class class_translation extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-			case "catalog":
-				if (empty($args["obj"]["oid"]))
-				{
-					$data["options"] = aw_ini_get("translate.ids");
-				}
-				else
-				{
-					$retval = PROP_IGNORE;
-				};
+			case "subclass":
+				$cfgu = get_instance("cfg/cfgutils");
+				$cxlist = $cfgu->get_classes_with_properties();
+				asort($cxlist);
+				$data["options"] = $cxlist;
 				break;
 
 			case "lang_code":
@@ -94,25 +88,9 @@ class class_translation extends class_base
 
 			case "info":
 				$langs = aw_ini_get("languages.list");
-				$ids = aw_ini_get("translate.ids");
-				$data["value"] = "Keel: " . $args["obj_inst"]->prop("lang_code"). "<br>" . "Kataloog: " . $ids[$args["obj_inst"]->subclass()];
+				$data["value"] = "Keel: " . $args["obj_inst"]->prop("lang_code"). "<br>" . "Klass: " . $this->cfg["classes"][$args["obj_inst"]->subclass()]["name"];
 				break;
 
-			case "preview":
-				// oh, oh, oh. But I really really do need to know which catalogs contain
-				// translations for which classes
-
-				// yah, well. I just need to figure out which asd aädsölas d
-				if ($args["obj"]["subclass"] == TR_FORUM)
-				{
-					// hrm I should replace this with some call to return a random
-					// object id
-					$data["value"] = html::href(array(
-						"url" => $this->mk_my_orb("change",array("id" => 96227,"trid" => $args["obj"]["oid"]),"forum_v2"),
-						"caption" => "Foorumi eelvaade",
-					));
-				}
-				break;
 		}
 		return $retval;
 	}
@@ -148,85 +126,75 @@ class class_translation extends class_base
 
 	function callback_pre_edit($arr)
 	{
-		$scr = get_instance("translate/scanner");
-		$ids = aw_ini_get("translate.ids");
-		$trans_id = $ids[$arr["obj_inst"]->subclass()];
-		$fname = $outname = $this->cfg["basedir"] . "/xml/trtemplate/" . $trans_id . ".xml";
-		$this->dt = $scr->_unser($fname);
+	
+		$subclass = $arr["obj_inst"]->prop("subclass");
 
-		// now . would be nice to reorder those things
-		/*
-		print "<pre>";
-		print_r($this->dt);
-		print "</pre>";
-		*/
-
-		$files = array();
-		foreach($this->dt as $item)
-		{
-			if (!in_array($item["file"],$files))
-			{
-				$files[] = $item["file"];
-			};
-		}
-
-		// those things should be ordered by files first, then tabs .. and under
-		// each tab we should have the properties belonging to that tab.
-
-
-		// without that, I'm afraid this thing is being pretty useless
-
-		$clist = aw_ini_get("classes");
-
-		$clids = array();
-
-		$by_file = array();
-
-		foreach($clist as $clid => $cldata)
-		{
-			if (!empty($cldata["file"]))
-			{
-				$by_file[basename($cldata["file"])] = $clid;
-			};
-		};
-
-		// now that I have the class names, I need to figure out whether
-		// any test objects have been created. If not, creat them
-		$conns = $arr["obj_inst"]->connections_from(array(
-			"type" => RELTYPE_TEST,
+		// let us just read the fucking properties and be done with it
+		$cfgu = get_instance("cfg/cfgutils");
+		$props = $cfgu->load_properties(array(
+			"clid" => $subclass,
 		));
 
+		$groupinfo = $cfgu->groupinfo;
+
+		$this->dt = array();
+		foreach($props as $key => $val)
+		{
+			// this way it does not change if a class file is renamed
+			$id = md5("prop" . $subclass . $key);
+			$this->dt[$id] = array(
+				"ctx" => $val["type"],
+				"caption" => $val["caption"],
+				"comment" => $val["comment"],
+			);
+				
+		}
+
+		$classname = $this->cfg["classes"][$subclass]["name"];
+
+		foreach($groupinfo as $key => $val)
+		{
+			$id = md5("group" . $subclass . $key);
+			$this->dt[$id] = array(
+				"ctx" => "tab",
+				"caption" => $val["caption"],
+				"comment" => $val["comment"],
+			);
+		};
+		
+		$conns = $arr["obj_inst"]->connections_from(array(
+			"type" => RELTYPE_TEST,
+			"class" => $subclass,
+		));
+
+		// if there isn't one yet, create a test object and connect it to the current one
 		if (sizeof($conns) == 0)
 		{
 			$parent = $arr["obj_inst"]->parent();
-			foreach($files as $item)
-			{
-				// create new objects and connect them to the current one
-				$clid = $by_file[$item];
-				$o = new object(array(
-					"name" => "test $item", 
-					"parent" => $parent,
-					"class_id" => $by_file[$item],
-				));
-				$o->save();
+			$o = new object(array(
+				"name" => "test $name", 
+				"parent" => $parent,
+				"class_id" => $subclass,
+			));
+			$o->save();
 
-				$arr["obj_inst"]->connect(array(
-					"from" => $arr["obj_inst"]->id(),
-					"to" => $o->id(),
-					"reltype" => RELTYPE_TEST,
-				));
-			}
+			$arr["obj_inst"]->connect(array(
+				"from" => $arr["obj_inst"]->id(),
+				"to" => $o->id(),
+				"reltype" => RELTYPE_TEST,
+			));
 		}
 
 	}
 
-	function callback_gen_workbench($args)
+	function callback_gen_workbench($arr)
 	{
 		// first, load the correct translation file
 		$this->read_template("table.tpl");
-		$prop = $args["prop"];
+		$prop = $arr["prop"];
 		$c = "";
 		$cntr = 0;
+		$trans = $arr["obj_inst"]->meta("trans");
 		foreach($this->dt as $key => $val)
 		{
 			$this->vars(array(
@@ -236,8 +204,8 @@ class class_translation extends class_base
 				"cap_orig" => $val["caption"],
 				"comm_orig" => $val["comment"],
 				"file" => $val["file"],
-				"cap_trans" => $args["obj"]["meta"]["trans"][$key]["caption"],
-				"comm_trans" => $args["obj"]["meta"]["trans"][$key]["comment"],
+				"cap_trans" => $trans[$key]["caption"],
+				"comm_trans" => $trans[$key]["comment"],
 			));
 			$cntr++;
 			$c .= $this->parse("ITEM");
@@ -249,40 +217,12 @@ class class_translation extends class_base
 		return array($prop);
 	}
 
-	function callback_pre_save($args)
+	function callback_pre_save($arr)
 	{
-		$dc =& $args["coredata"];
-		$dc["metadata"]["trans"] = $args["form_data"]["trans"];
-	}
-
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	////
-	// !this will be called if the object is put in a document by an alias and the document is being shown
-	// parameters
-	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
-	function parse_alias($args)
-	{
-		extract($args);
-		return $this->show(array('id' => $alias['target']));
-	}
-
-	////
-	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
-	function show($arr)
-	{
-		extract($arr);
-		$ob = $this->get_object($id);
-
-		$this->read_template('show.tpl');
-
-		$this->vars(array(
-			'name' => $ob['name']
-		));
-
-		return $this->parse();
+		if (!empty($arr["form_data"]["trans"]))
+		{
+			$arr["obj_inst"]->set_meta("trans",$arr["form_data"]["trans"]);
+		};
 	}
 }
 ?>
