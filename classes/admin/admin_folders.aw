@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.19 2003/11/05 13:28:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.20 2003/12/15 13:15:47 kristo Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -30,7 +30,7 @@ class admin_folders extends aw_template
 	// !Listib koik objektid
 	function db_listall()
 	{
-		$where = "objects.status != 0 AND (menu.type != ".MN_FORM_ELEMENT . " AND menu.type != ".MN_HOME_FOLDER . ")";
+		$where = "objects.status != 0 AND ((menu.type != ".MN_FORM_ELEMENT . " AND menu.type != ".MN_HOME_FOLDER . ") OR menu.type IS NULL)";
 		$aa = "";
 		if ($this->cfg["lang_menus"] == 1)
 		{
@@ -58,7 +58,7 @@ class admin_folders extends aw_template
 				menu.admin_feature as admin_feature
 			FROM objects 
 				LEFT JOIN menu ON menu.id = objects.oid
-				WHERE (objects.class_id = ".CL_MENU." OR objects.class_id = ".CL_BROTHER.")  AND $where $aa
+				WHERE (objects.class_id = ".CL_MENU." OR objects.class_id = ".CL_BROTHER." OR objects.class_id = ".CL_GROUP.")  AND $where $aa
 				ORDER BY objects.parent, jrk,objects.created";
 		$this->db_query($q);
 	}
@@ -88,7 +88,7 @@ class admin_folders extends aw_template
 		$this->tree = get_instance("vcl/treeview");
 
 		$treetype = aw_ini_get("menuedit.treetype");
-		
+
 		$rn = empty($this->use_parent) ? $this->cfg["admin_rootmenu2"] : $this->use_parent;
 
 		// FIXME: orders mk_my_orb to use empty arguments
