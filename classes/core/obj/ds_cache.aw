@@ -204,12 +204,6 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 				echo "_set_cache set file ".$cfn."-$fn-$oid  <br>";
 			}
 		$this->cache->file_set($cfn."-$fn-$oid", $str);
-		if ("objcache"  == $cfn)
-		{
-			// this is a VERY expensive query and up until now it was done
-			// when doing connections_from
-			$this->cache->flush_cache();
-		};
 	}
 
 	function _clear_cache($oid, $cfn = "objcache")
@@ -258,6 +252,14 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 			$this->cache->file_invalidate_regex("menuedit-menu_cache(.*)");
 			$this->menu_cache_flushed = true;
 		}
+
+		$full_flush = !$GLOBALS["__obj_sys_opts"]["no_full_flush"];
+		if ("objcache" == $cfn && $full_flush)
+		{
+			// this is a VERY expensive query and up until now it was done
+			// when doing connections_from
+			$this->cache->flush_cache();
+		};
 	}
 }
 ?>
