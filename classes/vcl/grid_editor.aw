@@ -1023,7 +1023,7 @@ class grid_editor extends class_base
 		return $this->arr;
 	}
 
-	function show($data, $oid)
+	function show($data, $oid, $tpls = array())
 	{
 		$this->_init_table($data);
 
@@ -1079,7 +1079,7 @@ class grid_editor extends class_base
 		$table.=$rs."</table>";
 
 		$al = get_instance("aliasmgr");
-		$al->parse_oo_aliases($oid,&$table,array());
+		$al->parse_oo_aliases($oid,&$table,array("templates" => $tpls));
 
 		return $table;
 	}
@@ -1360,10 +1360,10 @@ class grid_editor extends class_base
 
 		if ($this->arr["table_style"])
 		{
-			$this->frow_style = $stc->get_frow_style($this->arr["table_style"]);
-			$this->fcol_style = $stc->get_fcol_style($this->arr["table_style"]);
-			$this->num_frows = $stc->get_num_frows($this->arr["table_style"]);
-			$this->num_fcols = $stc->get_num_fcols($this->arr["table_style"]);
+			$this->frow_style = $this->style_inst->get_frow_style($this->arr["table_style"]);
+			$this->fcol_style = $this->style_inst->get_fcol_style($this->arr["table_style"]);
+			$this->num_frows = $this->style_inst->get_num_frows($this->arr["table_style"]);
+			$this->num_fcols = $this->style_inst->get_num_fcols($this->arr["table_style"]);
 		}
 	}
 
