@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.34 2004/12/10 10:05:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.35 2004/12/15 11:14:25 ahti Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -1001,14 +1001,13 @@ class aw_table extends aw_template
 						{
 							$stl =  "style=\"background:".$v[$this->chooser_config["chgbgcolor"]]."\"";
 						}
-
 						if($chooser_value)
 						{
-							$tbl .= "<td align='center' $stl><input type='checkbox' name='${name}' value='${chooser_value}' ${onclick}></td>";				
+							$tbl .= "<td align='center' $stl><input type='checkbox' name='${name}' value='${chooser_value}' ${onclick} ".($v[$this->chooser_config["name"]] ? "checked" : "")."></td>";
 						}
 						else
 						{
-							$tbl .= "<td align='center'>&nbsp;</td>";				
+							$tbl .= "<td align='center'>&nbsp;</td>";
 						}
 					};
 					$tbl .= "</tr>\n";
