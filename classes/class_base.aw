@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.372 2005/03/28 08:17:45 ahti Exp $
+// $Id: class_base.aw,v 2.373 2005/03/29 11:28:41 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1905,8 +1905,14 @@ class class_base extends aw_template
 		{
 			// I need to implement this in storage .. so that $obj->prop('blag')
 			// gives the correct result .. all connections of that type
-			$property["value"] = $this->obj_inst->prop($property["name"]);
-
+			if ($this->view == 1)
+			{
+				$property["value"] = $this->obj_inst->prop_str($property["name"]);
+			}
+			else
+			{
+				$property["value"] = $this->obj_inst->prop($property["name"]);
+			}
 		}
 
 		if ($property["method"] == "bitmask")
@@ -2255,7 +2261,13 @@ class class_base extends aw_template
 				{
 					$tmp = new object($val["value"]);
 					$val["value"] = $tmp->name();
-				};
+				}
+				else
+				if ($this->view && $val["orig_type"] == "select" && is_array($val["value"]) && count(is_array($val["value"])))
+				{
+					$tmp_ol = new object_list(array("oid" => $val["value"]));
+					$val["value"] = join(", ", $tmp_ol->names());
+				}
 			};
 
 
