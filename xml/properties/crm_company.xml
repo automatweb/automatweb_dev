@@ -648,6 +648,73 @@
             <store>no</store>
             <field>offers_listing_table</field>
       </property>
+      <property>
+            <name>offers_current_org_id</name>
+            <table>objects</table>
+            <group>offers</group>
+            <type>hidden</type>
+            <store>no</store>
+            <field>offers_current_org_id</field>
+      </property>
+      <property>
+            <name>objects_listing_toolbar</name>
+            <table>objects</table>
+            <group>org_objects</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <parent>objects_toolbar</parent>
+            <store>no</store>
+            <field>objects_listing_toolbar</field>
+      </property>
+      <property>
+            <name>objects_listing_tree</name>
+            <table>objects</table>
+            <group>org_objects</group>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>objects_tree</parent>
+            <store>no</store>
+            <field>objects_listing_tree</field>
+      </property>
+      <property>
+            <name>objects_listing_table</name>
+            <table>objects</table>
+            <group>org_objects</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>objects_table</parent>
+            <store>no</store>
+            <field>objects_listing_table</field>
+      </property>
+      <property>
+            <name>projects_listing_tree</name>
+            <table>objects</table>
+            <group>org_projects</group>
+            <no_caption>1</no_caption>
+            <type>treeview</type>
+            <parent>projects_tree</parent>
+            <store>no</store>
+            <field>projects_listing_tree</field>
+      </property>
+      <property>
+            <name>projects_listing_table</name>
+            <table>objects</table>
+            <group>org_projects</group>
+            <no_caption>1</no_caption>
+            <type>table</type>
+            <parent>projects_table</parent>
+            <store>no</store>
+            <field>projects_listing_table</field>
+      </property>
+      <property>
+            <name>my_projects</name>
+            <table>objects</table>
+            <group>my_projects</group>
+            <no_caption>1</no_caption>
+            <type>table</type>
+            <store>no</store>
+            <field>my_projects</field>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
@@ -761,6 +828,11 @@
                   <submit>no</submit>
                   <parent>org_projects_main</parent>
             </org_projects>
+            <my_projects>
+                  <caption>Minu projektid</caption>
+                  <parent>org_projects_main</parent>
+                  <submit>no</submit>
+            </my_projects>
       </groupinfo>
       <tableinfo>
             <kliendibaas_firma>
@@ -1041,6 +1113,40 @@
                   <parent>offers_main</parent>
                   <group>offers</group>
             </offers_table>
+            <objects_toolbar>
+                  <type>hbox</type>
+                  <group>org_objects</group>
+            </objects_toolbar>
+            <objects_main>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>org_objects</group>
+            </objects_main>
+            <objects_tree>
+                  <type>vbox</type>
+                  <parent>objects_main</parent>
+                  <group>org_objects</group>
+            </objects_tree>
+            <objects_table>
+                  <type>vbox</type>
+                  <parent>objects_main</parent>
+                  <group>org_objects</group>
+            </objects_table>
+            <projects_main>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>org_projects</group>
+            </projects_main>
+            <projects_tree>
+                  <type>vbox</type>
+                  <parent>projects_main</parent>
+                  <group>org_projects</group>
+            </projects_tree>
+            <projects_table>
+                  <type>vbox</type>
+                  <parent>projects_main</parent>
+                  <group>org_projects</group>
+            </projects_table>
       </layout>
 </properties>
 

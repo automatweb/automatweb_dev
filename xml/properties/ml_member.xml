@@ -253,6 +253,7 @@
             <type>date_select</type>
             <field>meta</field>
             <method>serialize</method>
+            <year_from>1930</year_from>
             <caption>Kuup&amp;auml;ev 1</caption>
       </property>
       <property>
@@ -262,6 +263,7 @@
             <type>date_select</type>
             <field>meta</field>
             <method>serialize</method>
+            <year_from>1930</year_from>
             <caption>Kuup&amp;auml;ev 2</caption>
       </property>
       <classinfo>

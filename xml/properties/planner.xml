@@ -1,11 +1,27 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>name</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>textbox</type>
+            <field>name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>status</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>status</type>
+            <field>status</field>
+            <caption>Staatus</caption>
+      </property>
+      <property>
             <name>default_view</name>
             <table>objects</table>
+            <group>general2</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>general2</group>
             <type>select</type>
             <rel>1</rel>
             <caption>Aeg</caption>
@@ -13,9 +29,9 @@
       <property>
             <name>day_start</name>
             <table>objects</table>
+            <group>time_settings</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>time_settings</group>
             <type>time_select</type>
             <rel>1</rel>
             <caption>Päev algab</caption>
@@ -23,9 +39,9 @@
       <property>
             <name>day_end</name>
             <table>objects</table>
+            <group>time_settings</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>time_settings</group>
             <type>time_select</type>
             <rel>1</rel>
             <caption>Päev lõpeb</caption>
@@ -33,9 +49,9 @@
       <property>
             <name>navigator_visible</name>
             <table>objects</table>
+            <group>advanced</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>advanced</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <default>1</default>
@@ -44,18 +60,18 @@
       <property>
             <name>navigator_months</name>
             <table>objects</table>
+            <group>advanced</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>advanced</group>
             <type>select</type>
             <caption>Kuud navigaatoris</caption>
       </property>
       <property>
             <name>my_projects</name>
             <table>objects</table>
+            <group>advanced</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>advanced</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <caption>Näita projekte</caption>
@@ -63,9 +79,9 @@
       <property>
             <name>event_folder</name>
             <table>objects</table>
+            <group>general2</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>general2</group>
             <type>relpicker</type>
             <reltype>RELTYPE_EVENT_FOLDER</reltype>
             <caption>Sündmuste kataloog</caption>
@@ -73,9 +89,9 @@
       <property>
             <name>workdays</name>
             <table>objects</table>
+            <group>advanced</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>advanced</group>
             <type>chooser</type>
             <multiple>1</multiple>
             <caption>Näidatavad päevad</caption>
@@ -83,9 +99,9 @@
       <property>
             <name>vac_count</name>
             <table>objects</table>
+            <group>vac_settings</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>vac_settings</group>
             <type>textbox</type>
             <size>2</size>
             <default>10</default>
@@ -94,9 +110,9 @@
       <property>
             <name>vac_length</name>
             <table>objects</table>
+            <group>vac_settings</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>vac_settings</group>
             <type>textbox</type>
             <size>2</size>
             <default>90</default>
@@ -105,9 +121,9 @@
       <property>
             <name>navtoolbar</name>
             <table>objects</table>
+            <group>views</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>views</group>
             <store>no</store>
             <type>toolbar</type>
             <no_caption>1</no_caption>
@@ -116,9 +132,9 @@
       <property>
             <name>project</name>
             <table>objects</table>
+            <group>views</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>views</group>
             <store>no</store>
             <type>hidden</type>
             <caption>Projekti ID</caption>
@@ -126,9 +142,9 @@
       <property>
             <name>calendar_contents</name>
             <table>objects</table>
+            <group>views</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>views</group>
             <store>no</store>
             <type>calendar</type>
             <no_caption>1</no_caption>
@@ -138,9 +154,9 @@
       <property>
             <name>add_event</name>
             <table>objects</table>
+            <group>add_event</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>add_event</group>
             <store>no</store>
             <callback>callback_get_add_event</callback>
             <caption>Lisa sündmus</caption>
@@ -148,9 +164,9 @@
       <property>
             <name>create_event_table</name>
             <table>objects</table>
+            <group>create_events</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>create_events</group>
             <store>no</store>
             <type>table</type>
             <no_caption>1</no_caption>
@@ -159,9 +175,9 @@
       <property>
             <name>vacancies</name>
             <table>objects</table>
+            <group>create_vacancies</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>create_vacancies</group>
             <store>no</store>
             <type>table</type>
             <no_caption>1</no_caption>
@@ -170,13 +186,97 @@
       <property>
             <name>confirm_vacancies</name>
             <table>objects</table>
+            <group>create_vacancies</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>create_vacancies</group>
             <store>no</store>
             <type>checkbox</type>
             <no_caption>1</no_caption>
             <caption>Kinnita vabad ajad</caption>
+      </property>
+      <property>
+            <name>search</name>
+            <table>objects</table>
+            <group>views</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <store>no</store>
+            <type>hidden</type>
+      </property>
+      <property>
+            <name>event_search_name</name>
+            <table>objects</table>
+            <group>views</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <store>no</store>
+            <type>textbox</type>
+            <caption>Sündmuse nimi</caption>
+      </property>
+      <property>
+            <name>event_search_content</name>
+            <table>objects</table>
+            <group>views</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <store>no</store>
+            <type>textbox</type>
+            <caption>Sündmuse sisu</caption>
+      </property>
+      <property>
+            <name>event_search_comment</name>
+            <table>objects</table>
+            <group>views</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <store>no</store>
+            <type>textbox</type>
+            <caption>Sündmuse kommentaar</caption>
+      </property>
+      <property>
+            <name>event_search_type</name>
+            <table>objects</table>
+            <group>views</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <store>no</store>
+            <type>chooser</type>
+            <multiple>1</multiple>
+            <ch_value>1</ch_value>
+            <orient>vertical</orient>
+            <caption>Sündmuse tüüp</caption>
+      </property>
+      <property>
+            <name>event_search_add</name>
+            <table>objects</table>
+            <group>views</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <store>no</store>
+            <type>chooser</type>
+            <multiple>1</multiple>
+            <orient>vertical</orient>
+            <caption>Lisatingimused</caption>
+      </property>
+      <property>
+            <name>event_search_button</name>
+            <table>objects</table>
+            <group>views</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <store>no</store>
+            <type>submit</type>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>event_search_results_table</name>
+            <table>objects</table>
+            <group>views</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <store>no</store>
+            <type>table</type>
+            <no_caption>1</no_caption>
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
@@ -200,6 +300,7 @@
             <views>
                   <caption>Sündmused</caption>
                   <submit>no</submit>
+                  <submit_method>get</submit_method>
             </views>
             <vacancies>
                   <caption>Vabad ajad</caption>

@@ -6,19 +6,94 @@
             <group>forum</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FORUM</reltype>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
             <caption>Foorum</caption>
       </property>
       <property>
-            <name>calendar</name>
+            <name>calendar_view_toolbar</name>
             <table>objects</table>
-            <group>calendar</group>
+            <group>calendar_view</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Kalendri toolbar</caption>
+      </property>
+      <property>
+            <name>calendar_view</name>
+            <table>objects</table>
+            <group>calendar_view</group>
             <field>meta</field>
             <method>serialize</method>
             <type>calendar</type>
             <store>no</store>
+            <no_caption>1</no_caption>
             <caption>Kalender</caption>
+      </property>
+      <property>
+            <name>add_event</name>
+            <table>objects</table>
+            <group>add_event</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>callback</type>
+            <callback>callback_add_event</callback>
+            <no_caption>1</no_caption>
+            <caption>Lisa sündmus</caption>
+      </property>
+      <property>
+            <name>forum_settings</name>
+            <table>objects</table>
+            <group>forum_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>callback</type>
+            <callback>callback_forum_settings</callback>
+            <caption>Foorumi seaded</caption>
+      </property>
+      <property>
+            <name>calendar_settings</name>
+            <table>objects</table>
+            <group>calendar_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>callback</type>
+            <callback>callback_calendar_settings</callback>
+            <store>no</store>
+            <caption>Kalendri seaded</caption>
+      </property>
+      <property>
+            <name>categories</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CATEGORIES</reltype>
+      </property>
+      <property>
+            <name>moderators_toolbar</name>
+            <table>objects</table>
+            <group>moderators</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Moderaatorite toolbar</caption>
+      </property>
+      <property>
+            <name>moderators</name>
+            <table>objects</table>
+            <group>moderators</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <caption>Moderaatorid</caption>
       </property>
       <classinfo>
             <syslog_type>ST_COMMUNITY</syslog_type>
@@ -27,13 +102,52 @@
       <groupinfo>
             <forum>
                   <caption>Foorum</caption>
+                  <submit>no</submit>
             </forum>
             <calendar>
                   <caption>Kalender</caption>
-                  <submit>no</submit>
             </calendar>
+            <calendar_view>
+                  <caption>Sisuvaade</caption>
+                  <parent>calendar</parent>
+                  <submit>no</submit>
+            </calendar_view>
+            <add_event>
+                  <caption>Lisa sündmus</caption>
+                  <parent>calendar</parent>
+            </add_event>
+            <settings>
+                  <caption>Seaded</caption>
+            </settings>
+            <forum_settings>
+                  <caption>Foorumi seaded</caption>
+                  <parent>settings</parent>
+            </forum_settings>
+            <calendar_settings>
+                  <caption>Kalendri seaded</caption>
+                  <parent>settings</parent>
+            </calendar_settings>
+            <moderators>
+                  <caption>Moderaatorid</caption>
+                  <submit>no</submit>
+            </moderators>
       </groupinfo>
       <reltypes>
+            <MODERATOR>
+                  <value>3</value>
+                  <clid>CL_USER</clid>
+                  <caption>moderaator</caption>
+            </MODERATOR>
+            <MEMBER>
+                  <value>4</value>
+                  <clid>CL_PROFILE</clid>
+                  <caption>kogukonna liige</caption>
+            </MEMBER>
+            <BLOCKED>
+                  <value>5</value>
+                  <clid>CL_USER</clid>
+                  <caption>blokeeritud kasutaja</caption>
+            </BLOCKED>
             <FORUM>
                   <value>1</value>
                   <clid>CL_FORUM_V2</clid>
@@ -44,6 +158,16 @@
                   <clid>CL_PLANNER</clid>
                   <caption>kalender</caption>
             </CALENDAR>
+            <CATEGORIES>
+                  <value>6</value>
+                  <clid>CL_META</clid>
+                  <caption>kogukondade kategooriad</caption>
+            </CATEGORIES>
+            <CFG_MANAGER>
+                  <value>7</value>
+                  <clid>CL_CFGMANAGER</clid>
+                  <caption>seadete haldur</caption>
+            </CFG_MANAGER>
       </reltypes>
 </properties>
 

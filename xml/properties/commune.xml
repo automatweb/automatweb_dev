@@ -559,10 +559,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
+            <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <caption>Minu foorumid</caption>
+            <caption>Minu foorumiteemad</caption>
       </property>
       <property>
             <name>forum_settings</name>
@@ -570,7 +570,8 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
+            <type>callback</type>
+            <callback>callback_forum_settings</callback>
             <no_caption>1</no_caption>
             <store>no</store>
       </property>
@@ -961,7 +962,7 @@
                   <tabgroup>left</tabgroup>
             </forum>
             <my_forum_topics>
-                  <caption>Minu foorumid</caption>
+                  <caption>Minu teemad</caption>
                   <parent>forumtab</parent>
                   <submit>no</submit>
                   <tabgroup>left</tabgroup>
@@ -969,7 +970,6 @@
             <forum_settings>
                   <caption>Sätted</caption>
                   <parent>forumtab</parent>
-                  <submit>no</submit>
                   <tabgroup>left</tabgroup>
             </forum_settings>
             <communities>

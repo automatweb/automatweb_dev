@@ -16,5 +16,12 @@
 			</function>
 		</action>
 
+		<action name="do_event_search" >
+			<function name="do_event_search">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
