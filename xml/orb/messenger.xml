@@ -122,6 +122,15 @@
 			</function>
 		</action>
 		
+		<action name="reply_all">
+			<function name="reply_message">
+				<arguments>
+					<define name="all" value="1"/>
+					<required name="reply"/>
+				</arguments>
+			</function>
+		</action>
+		
 		<action name="forward">
 			<function name="forward_message">
 				<arguments>
