@@ -370,7 +370,7 @@ class languages extends aw_template
 		{
 			// if a language is active, we must check if perhaps someone kas de-activated it in the mean time
 			$la = $this->fetch($lang_id);
-			if ($la["status"] != 2)
+			if (!($la["status"] == 2 || ($la["status"] == 1 && aw_global_get("uid") != "")))
 			{
 				// if so, try to come up with a better one.
 				$lang_id = $this->find_best();
@@ -386,6 +386,7 @@ class languages extends aw_template
 			$LC = "et";
 		}
 		aw_global_set("LC", $LC);
+		aw_global_set("admin_lang_lc",$LC);
 		// and we should be all done. if after this, lang_id will still be not set I won't be able to write the
 		// code that fixes it anyway. 
 	}
