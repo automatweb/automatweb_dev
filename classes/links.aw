@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.50 2004/04/14 10:27:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.51 2004/04/15 10:29:20 kristo Exp $
 
 /*
 
@@ -285,6 +285,8 @@ class links extends class_base
 	{
 		extract($args);
 
+		$this->img = false;
+
 		list($url,$target,$caption) = $this->draw_link($alias["target"]);
 		if ($this->img)
 		{
@@ -346,7 +348,7 @@ class links extends class_base
 			if ($img->count() > 0 && $awf->can_be_embedded($o =& $img->begin()))
 			{
 				$img = $awf->get_url($o->id(),"");
-				//$img = "<img border='0' src='$img' alt='".$link->prop("alt")."' title='".$link->prop("alt")."' />";
+				$img = "<img border='0' src='$img' alt='".$link->prop("alt")."' title='".$link->prop("alt")."' />";
 			}
 			else
 			{
@@ -355,7 +357,7 @@ class links extends class_base
 
 			$this->img = $img;
 		}
-		
+
 		if ($link->prop("use_javascript"))
 		{
 			$target = sprintf("onClick='javascript:window.open(\"%s\",\"w%s\",\"toolbar=%d,location=%d,menubar=%d,scrollbars=%d,width=%d,height=%d\")'",
