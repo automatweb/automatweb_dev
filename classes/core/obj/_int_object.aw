@@ -1132,7 +1132,10 @@ class _int_object
 				));
 			}
 		}
-		$ret[] = obj($this->ini["rootmenu"]);
+		if ($GLOBALS["object_loader"]->ds->can("view", $this->ini["rootmenu"]))
+		{
+			$ret[] = obj($this->ini["rootmenu"]);
+		}
 		return array_reverse($ret);
 	}
 
