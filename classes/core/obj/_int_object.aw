@@ -267,13 +267,18 @@ class _int_object
 				$ret[$c_id] =& new connection($c_d);
 			}
 		}
-
 		if ($param["sort_by"] != "")
 		{
 			usort($ret, create_function('$a,$b', 'return strcasecmp($a->prop("'.$param["sort_by"].'"), $b->prop("'.$param["sort_by"].'"));'));
 		}
-
-		return $ret;
+		if($param['sort_dir'] == 'asc')
+		{
+			return array_reverse($ret);
+		}
+		else
+		{
+			return $ret;
+		}
 	}
 
 	function connections_to($param = NULL)
