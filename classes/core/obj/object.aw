@@ -429,6 +429,28 @@ class object
 	{
 		return $GLOBALS["objects"][$this->oid]->is_connected_to($param);
 	}
+
+	function acl_set($group, $acl)
+	{
+		if (!$this->is_connected_to(array("to" => $group->id())))
+		{
+			$this->connect(array(
+				"to" => $group->id(),
+				"reltype" => RELTYPE_ACL
+			));
+		}
+
+		$GLOBALS["object_loader"]->save_acl(
+			$this->id(),
+			$group->prop("gid"),
+			$acl
+		);
+	}
+
+	function acl_del($g_oid)
+	{
+		
+	}
 }
 
 function &obj($param = NULL)

@@ -8,7 +8,7 @@ EMIT_MESSAGE(MSG_STORAGE_SAVE)
 
 */
 
-class _int_object_loader
+class _int_object_loader extends core
 {
 	// private variables, only object system classes can use these
 	var $ds; 					// data source
@@ -18,6 +18,8 @@ class _int_object_loader
 
 	function _int_object_loader()
 	{
+		$this->init();
+
 		// init the datasource from the ini file setting
 		$datasources = aw_ini_get("objects.default_datasource");
 		if ($datasources == "")
