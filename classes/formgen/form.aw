@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.38 2003/02/13 15:39:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.39 2003/02/14 15:58:42 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -107,7 +107,7 @@ class form extends form_base
 			}
 
 			$fl = true;
-			for ($row = 0; $row < $this->arr["rows"]; $row++)
+			/*for ($row = 0; $row < $this->arr["rows"]; $row++)
 			{
 				$els = $this->arr["contents"][$row][$a]->get_elements();
 				reset($els);
@@ -118,7 +118,7 @@ class form extends form_base
 						$fl = false;
 					}
 				}
-			}
+			}*/
 			$this->vars(array(
 				"form_col" => $a,
 				"del_col"		=> $this->mk_orb("del_col",array("id" => $this->id, "col" => $a))
@@ -684,6 +684,17 @@ class form extends form_base
 		extract($arr);
 		$this->load($id);
 
+		$this->do_delete_column($arr);
+
+		$this->save();
+		$orb = $this->mk_orb("change" , array("id" => $this->id));
+		header("Location: $orb");
+		return $orb;
+	}
+	
+	function do_delete_column($arr)
+	{
+		extract($arr);
 		for ($i=0; $i < $this->arr["rows"]; $i++)
 		{
 			// we don't delete the element from the database, we jsut delete it
@@ -707,12 +718,8 @@ class form extends form_base
 		}
 
 		$this->arr["cols"]--;
-		$this->save();
-		$orb = $this->mk_orb("change" , array("id" => $this->id));
-		header("Location: $orb");
-		return $orb;
 	}
-	
+
 	////
 	// !Deletes row $row from form $id
 	function delete_row($arr)
@@ -720,6 +727,17 @@ class form extends form_base
 		extract($arr);
 		$this->load($id);
 
+		$this->do_delete_row($arr);
+		
+		$this->save();
+		$orb = $this->mk_orb("change", array("id" => $this->id));
+		header("Location: $orb");
+		return $orb;
+	}
+
+	function do_delete_row($arr)
+	{
+		extract($arr);
 		for ($i=0; $i < $this->arr["cols"]; $i++)
 		{
 			$this->arr["elements"][$row][$i] = array();
@@ -740,11 +758,6 @@ class form extends form_base
 		}
 
 		$this->arr["rows"]--;
-		
-		$this->save();
-		$orb = $this->mk_orb("change", array("id" => $this->id));
-		header("Location: $orb");
-		return $orb;
 	}
 
 	////
@@ -3561,6 +3574,7 @@ class form extends form_base
 		{
 			for ($col = 0; $col < $this->arr["cols"]; $col++)
 			{
+				$elar = array();
 				$this->arr["contents"][$row][$col]->get_els(&$elar);
 				while (list(,$el) = each($elar))
 				{
@@ -5935,6 +5949,25 @@ class form extends form_base
 		$this->save();
 
 		return $this->mk_my_orb("joins", array("id" => $id));
+	}
+
+	////
+	// !returns el_id => el_ref for all elements in the form
+	function get_all_elements()
+	{
+		$ret = array();
+		for ($row = 0; $row < $this->arr["rows"]; $row++)
+		{
+			for ($col = 0; $col < $this->arr["cols"]; $col++)
+			{
+				$this->arr["contents"][$row][$col]->get_els(&$elar);
+				while (list(,$el) = each($elar))
+				{
+					$ret[$el->get_id()] = $el;
+				}
+			}
+		}
+		return $ret;
 	}
 
 };	// class ends
