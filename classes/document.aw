@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.319 2005/03/17 19:18:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.320 2005/03/18 11:37:26 ahti Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -73,7 +73,7 @@ class document extends aw_template
 		$me = obj($parent);
 		$gm_subs = $me->meta("section_include_submenus");
 		$gm_c = $me->connections_from(array(
-			"type" => RELTYPE_DOCS_FROM_MENU
+			"type" => "RELTYPE_DOCS_FROM_MENU",
 		));
 		foreach($gm_c as $gm)
 		{
