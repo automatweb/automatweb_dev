@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.25 2002/02/12 15:31:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.26 2002/02/13 00:06:58 duke Exp $
 
 global $orb_defs;
 $orb_defs["aliasmgr"] = "xml";
@@ -24,7 +24,8 @@ class aliasmgr extends aw_template {
 	function _init_aliases($args = array())
 	{
 		$this->defs = array();
-		$obj = $this->get_object($this->id);
+		$obj = $this->get_obj_meta($this->id);
+		$this->obj_data = $obj;
 		$this->parent = $obj["parent"];
 
 		// yes, we define all aliases separately, so later on
@@ -1004,8 +1005,9 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 	function parse_oo_aliases($oid,&$source,$args = array())
 	{
 		extract($args);
-		$this->_init_aliases();
 		$oid = sprintf("%d",$oid);
+		$this->id = $oid;
+		$this->_init_aliases();
 		// we get all aliases for that object. alltho we really should only
 		// get the ones which we actually need. But how?
 		$q = "SELECT aliases.*, objects.class_id AS class_id
@@ -1015,6 +1017,7 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
+			$row["aliaslink"] = $this->obj_data["meta"]["aliaslinks"][$row["target"]];
 			$aliases[$row["class_id"]][] = $row;
 		};
 
