@@ -22,7 +22,7 @@ class tpledit extends aw_template {
 		$meta = $this->obj_get_meta(array("oid" => $args["oid"]));
 		$t = new aw_table(array(
                                 "prefix" => "tpledit_browse",
-                                "imgurl"    => $GLOBALS["baseurl"]."/img",
+                                "imgurl"    => $GLOBALS["baseurl"]."/images",
                                 "tbgcolor" => "#C3D0DC",
                         ));
 		$t->parse_xml_def($GLOBALS["basedir"]."/xml/generic_table.xml");
