@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.17 2001/11/20 13:40:23 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.18 2001/12/20 11:07:34 duke Exp $
 classload("images");
 lc_load("gallery");
 global $orb_defs;
@@ -27,12 +27,13 @@ class gallery extends aw_template
 	function parse_alias($args = array())
 	{
 		extract($args);
-		if (!is_array($this->galaliases))
+		if (!is_array($this->galaliases) || ($oid != $this->cached_oid) )
 		{
 			$this->galaliases = $this->get_aliases(array(
 								"oid" => $oid,
 								"type" => CL_GALLERY,
 						));
+			$this->cached_oid = $oid;
 		};
 		$g = $this->galaliases[$matches[3] - 1];
 		$this->load($g["target"],$GLOBALS["page"]);
