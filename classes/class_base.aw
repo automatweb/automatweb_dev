@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.168 2003/11/08 07:12:36 duke Exp $
+// $Id: class_base.aw,v 2.169 2003/11/09 18:18:54 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1200,6 +1200,7 @@ class class_base extends aw_template
 		};
 		
 		$this->classinfo = $cfgu->get_classinfo();
+		$this->relinfo = $cfgu->get_relinfo();
 		if (is_array($this->classconfig))
 		{
 			$this->classinfo = array_merge($this->classinfo,$this->classconfig);
@@ -1917,7 +1918,14 @@ class class_base extends aw_template
 		$reltypes = $this->get_rel_types();
 
 		$clid_list = array();
-		if (method_exists($this->inst,"callback_get_classes_for_relation"))
+		if (sizeof($this->relinfo) > 0)
+		{
+			foreach($reltypes as $key => $val)
+			{
+				$rel_type_classes[$key] = $this->relclasses[$key];
+			};
+		}
+		elseif (method_exists($this->inst,"callback_get_classes_for_relation"))
 		{
 			foreach ($reltypes as $key => $val)
 			{
@@ -1962,16 +1970,24 @@ class class_base extends aw_template
 		$this->toolbar_type = ((isset($obj['meta']['use_menubar']) && ($obj['meta']['use_menubar'] == '1')) ? 'menubar' : 'tabs');
 
 
-		$reltypes = $this->get_rel_types();
-		
 		$almgr = get_instance("aliasmgr",array("use_class" => get_class($this->orb_class)));
 
 		$realprops = $this->get_active_properties(array(
 				"clfile" => $this->clfile,
 				"group" => $group,
 		));
+		
+		$reltypes = $this->get_rel_types();
 
 		$clid_list = array();
+		if (sizeof($this->relinfo) > 0)
+		{
+			foreach($reltypes as $key => $val)
+			{
+				$rel_type_classes[$key] = $this->relclasses[$key];
+			};
+		}
+		else
 		if (method_exists($this->inst,"callback_get_classes_for_relation"))
 		{
 			$clid_list = $this->inst->callback_get_classes_for_relation(array(
@@ -2577,34 +2593,29 @@ class class_base extends aw_template
 
 	function get_rel_types()
 	{
-		if (method_exists($this->inst,"callback_get_rel_types"))
+		$reltypes = array();
+		if (sizeof($this->relinfo) > 0)
+		{
+			foreach($this->relinfo as $item)
+			{
+				$reltypes[$item["value"]] = $item["caption"];
+				$clidlist = array();
+				$_tmp = new aw_array($item["clid"]);
+				foreach($_tmp->get() as $clid)
+				{
+					$clidlist[] = constant($clid);
+				};
+				$this->relclasses[$item["value"]] = $clidlist;
+			};
+		}
+		elseif (method_exists($this->inst,"callback_get_rel_types"))
 		{
 			$reltypes = $this->inst->callback_get_rel_types();
 		}
-		else
-		{
-			$reltypes = array();
-		};
 
 		$reltypes[0] = "alias";
-
-		$this->rel_type_classes = $this->get_rel_type_classes();
 		return $reltypes;
 	}
-
-	function get_rel_type_classes()
-	{
-		if (method_exists($this->inst,"callback_get_rel_type_classes"))
-		{
-			$reltypes = $this->inst->callback_get_rel_type_classes();
-		}
-		else
-		{
-			$reltypes = array();
-		};
-		return $reltypes;
-	}
-
 
 	////
 	function view($args = array())
