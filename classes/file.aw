@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.37 2003/01/10 12:31:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.38 2003/01/17 13:20:36 duke Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -43,14 +43,11 @@
 	@property view type=text editonly=1
 	@caption Näita faili
 
-	@property j_time type=date_select 
+	@property j_time type=date_select group=dates
 	@caption Jõustumise kuupäev
 
-	@property act_date type=date_select
+	@property act_date type=date_select group=dates
 	@caption Avaldamise kuupäev
-
-	@classinfo objtable=files
-	@classinfo objtable_index=id
 
 	@groupinfo general caption=Üldine default=1
         @groupinfo dates caption=Ajad
@@ -103,6 +100,7 @@ class file extends class_base
 		$data = &$args["prop"];
 		$form_data = &$args["form_data"];
 		global $file, $file_type,$file_name;
+		$retval = PROP_OK;
 		if ($data["name"] == "file")
 		{
 			if (is_uploaded_file($file))
@@ -129,10 +127,14 @@ class file extends class_base
 					$this->db_query("INSERT INTO aip_files (filename, tm, menu_id, id) VALUES('$file_name','".time()."','".$parent."','$pid')");
 				}
 				*/
+			}
+			else
+			{
+				$retval = PROP_IGNORE;
 			};
 		};
 		// cause everything is alreay handled here
-		return PROP_OK;
+		return $retval;
 	}
 
 	////
