@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.11 2001/07/30 01:08:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.12 2001/08/02 01:15:51 duke Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -389,6 +389,8 @@ class users_user extends aw_template
 		$this->_log("group",$GLOBALS["uid"] . " muutis grupi \"$data[gid]\" andmeid");
 	}
 
+	///
+	// FIXME: positsioneeritud parameetrid sakivad
 	function listgroups($gorderby = -1,$gsorder = -1,$type = -1,$type2 = -1,$parent=-1) 
 	{
 		if ($gorderby != -1) 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.14 2001/07/26 12:55:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.15 2001/08/02 01:15:51 duke Exp $
 
 global $orb_defs;
 $orb_defs["config"] = "xml";
@@ -59,6 +59,68 @@ class db_config extends aw_template
 		));
 		return $this->parse();
 	}
+
+	////
+	// !Kuvab dünaamiliste gruppide nimekirja ja lubab igale login menüü valida
+	function login_menus($args = array())
+	{
+		$this->read_template("login_menu.tpl");
+
+		if (not(defined("LOGIN_MENUS")))
+		{
+			$this->raise_error("LOGIN_MENUS on defineerimata.",true);
+		};
+
+		$obj = $this->get_objects_below(array("parent" => LOGIN_MENUS,"class" => CL_PSEUDO));
+
+		$menus = array();
+
+		foreach($obj as $key => $val)
+		{
+			$menus[$key] = $val["name"];
+		};
+
+		classload("users_user");
+		$u = new users_user();
+		$u->listgroups(-1,-1,-1,-1,0);
+		$c = "";
+
+		while($row = $u->db_next())
+		{
+			$this->vars(array(
+				"gid" => $row["gid"],
+				"group" => $row["name"],
+				"menus" => $this->picker($row["login_menu"],$menus),
+			));
+
+			$c .= $this->parse("LINE");
+		};
+
+		$this->vars(array(
+			"LINE" => $c,
+			"reforb" => $this->mk_reforb("submit_login_menus",array()),
+		));
+		return $this->parse();
+	}
+
+
+	////
+	// !Submitib login_menus funktsioonis tehtud valikud
+	function submit_login_menus($args = array())
+	{
+		extract($args);
+		// $menu on array, key on gid, value on login menüü, mida see grupp kasutama peaks
+		if (is_array($menu))
+		{
+			foreach($menu as $key => $val)
+			{
+				$q = "UPDATE groups SET login_menu = '$val' WHERE gid = '$key'";
+				$this->db_query($q);
+			};
+		}
+		return $this->mk_my_orb("login_menus",array());
+	}
+
 
 	// see laseb saidile liitumisvormi valida
 	function sel_join_form()
