@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_queue.aw,v 1.17 2003/11/26 12:22:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_queue.aw,v 1.18 2003/11/27 16:10:53 duke Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 classload("messenger");
@@ -19,17 +19,13 @@ class ml_queue extends aw_template
 		$this->init("automatweb/mlist");
 		lc_load("definition");
 
-		$this->dbconf=get_instance("config");
-		$this->searchformid=$this->dbconf->get_simple_config("ml_search_form");
-		$this->mailel=$this->dbconf->get_simple_config("ml_mail_el");
-		
 		// queue status
 		$this->a_status=array(
-			"0" => "uus",
-			"1" => "pooleli",
-			"2" => "valmis",
-			"3" => "hetkel saadab",
-			"4" => "peatatud"
+			ML_QUEUE_NEW => "uus",
+			ML_QUEUE_IN_PROGRESS => "pooleli",
+			ML_QUEUE_READY => "valmis",
+			ML_QUEUE_SENDING => "hetkel saadab",
+			ML_QUEUE_STOPPED => "peatatud"
 		);
 	}
 
@@ -582,28 +578,6 @@ class ml_queue extends aw_template
 		aw_cache_set("ml_queue::send_message::mails::$mid::$lid", $mailto, true);
 
 		echo "yeah <br />";
-		
-		// save original UID
-		if (!isset($this->originaluid))
-		{
-			$this->originaluid=$r["uid"];
-		};
-		// impersonate the user who originally sent this msg
-		// tegelt võix õigusi kuidagi lihtsamalt teiste kasutajate alt kontrollida saada?
-		$GLOBALS["uid"]=$r["uid"];
-		aw_global_set("uid", $r["uid"]);
-
-		if (!isset($this->users))
-		{
-			$this->users = get_instance("users");
-		};
-
-		// I _think_ this mess with gids and users had something to do with
-		// generating a list of stamps that the user has a read access to
-
-		// damn, it's ugly  --duke
-		aw_global_set("gidlist",$this->users->get_gids_by_uid($r["uid"]));
-
 		
 		// tee listi obj
 		// but I don't see it being used anywhere
