@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.139 2002/12/18 16:59:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.140 2002/12/19 10:39:59 kristo Exp $
 // core.aw - Core functions
 define("ARR_NAME", 1);
 define("ARR_ALL",2);
@@ -1850,7 +1850,14 @@ class core extends db_connector
 		if ((stristr($this->REQUEST_URI,"/automatweb")!=false) || $force_admin)
 		{
 			// admin side.
-			$ret =  $this->cfg["baseurl"]."/automatweb/orb.".$this->cfg["ext"].$qm.$sec."class=$cl_name".$separator."action=$fun".$separator."$urs";
+			if ($use_orb == false)
+			{
+				$ret =  $this->cfg["baseurl"]."/index.".$this->cfg["ext"].$qm.$sec."class=$cl_name".$separator."action=$fun".$separator."$urs";
+			}
+			else
+			{
+				$ret =  $this->cfg["baseurl"]."/automatweb/orb.".$this->cfg["ext"].$qm.$sec."class=$cl_name".$separator."action=$fun".$separator."$urs";
+			}
 		}
 		else
 		{
