@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.4 2004/05/06 12:22:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.5 2004/05/19 16:08:22 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2 
 /*
 
@@ -22,6 +22,12 @@
 
 @property tree_type type=chooser  field=meta method=serialize default=1 group=showing
 @caption Puu n&auml;itamise meetod
+
+@property per_page type=textbox size=5 field=meta method=serialize group=showing
+@caption Mitu rida lehel
+
+@property sortbl type=table store=no group=showing
+@caption Andmete sorteerimine
 
 @groupinfo styles caption="Stiilid"
 @property title_bgcolor type=colorpicker field=meta method=serialize group=styles
@@ -86,6 +92,10 @@ class object_treeview_v2 extends class_base
 					TREE_DHTML => "DHTML"
 				);
 				break;
+
+			case "sortbl":
+				$this->do_sortbl($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -99,6 +109,10 @@ class object_treeview_v2 extends class_base
 			case "columns":
 				$arr["obj_inst"]->set_meta("sel_columns", $arr["request"]["column"]);
 				$arr["obj_inst"]->set_meta("sel_columns_ord", $arr["request"]["column_ord"]);
+				break;
+
+			case "sortbl":
+				$this->do_save_sortbl($arr);
 				break;
 		}
 		return $retval;
@@ -162,6 +176,15 @@ class object_treeview_v2 extends class_base
 		$sel_cols = $ob->meta("sel_columns");
 
 		$col_list = $this->_get_col_list($ob);
+
+		$this->__is = $ob->meta("itemsorts");
+		usort($ol, array(&$this, "__is_sorter"));
+
+		// now do pages
+		if ($ob->prop("per_page"))
+		{
+			$this->do_pageselector($ol, $ob->prop("per_page"));
+		}
 
 		foreach($ol as $odata)
 		{
@@ -589,6 +612,162 @@ class object_treeview_v2 extends class_base
 	function get_yah_link($tree, $cur_menu)
 	{
 		return $this->mk_my_orb("show", array("id" => $tree, "tv_sel" => $cur_menu->id(), "section" => $cur_menu->id()));
+	}
+
+	function do_sortbl(&$arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_sortbl($t);
+
+		$cols = $this->_get_col_list($arr["obj_inst"]);
+		$tmp = $arr["obj_inst"]->meta("sel_columns");
+		$elements = array("" => "");
+		foreach($cols as $colid => $coln)
+		{
+			if (1 == $tmp[$colid])
+			{
+				$elements[$colid] = $coln;
+			}
+		}
+		
+		
+		$maxi = 0;
+		$is = new aw_array($arr["obj_inst"]->meta("itemsorts"));
+		foreach($is->get() as $idx => $sd)
+		{
+			$t->define_data(array(
+				"sby" => html::select(array(
+					"options" => $elements,
+					"selected" => $sd["element"],
+					"name" => "itemsorts[$idx][element]"
+				)),
+				"sby_ord" => html::select(array(
+					"options" => array("asc" => "Kasvav", "desc" => "Kahanev"),
+					"selected" => $sd["ord"],
+					"name" => "itemsorts[$idx][ord]"
+				))
+			));
+			$maxi = max($maxi, $idx);
+		}
+		$maxi++;
+
+		$t->define_data(array(
+			"sby" => html::select(array(
+				"options" => $elements,
+				"selected" => "",
+				"name" => "itemsorts[$maxi][element]"
+			)),
+			"sby_ord" => html::select(array(
+				"options" => array("asc" => "Kasvav", "desc" => "Kahanev"),
+				"selected" => "",
+				"name" => "itemsorts[$maxi][ord]"
+			))
+		));
+
+		$t->set_sortable(false);
+	}
+
+	function do_save_sortbl(&$arr)
+	{
+		$awa = new aw_array($arr["request"]["itemsorts"]);
+		$res = array();
+		foreach($awa->get() as $idx => $dat)
+		{
+			if ($dat["element"])
+			{
+				$res[] = $dat;
+			}
+		}
+
+		$arr["obj_inst"]->set_meta("itemsorts", $res);
+	}
+
+	function _init_sortbl(&$t)
+	{
+		$t->define_field(array(
+			"name" => "sby",
+			"caption" => "Sorditav v&auml;li",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "sby_ord",
+			"caption" => "Kasvav / kahanev",
+			"align" => "center"
+		));
+	}
+
+	function __is_sorter($a, $b)
+	{
+		$comp_a = NULL;
+		$comp_b = NULL;
+		// find the first non-matching element
+		foreach($this->__is as $isd)
+		{
+			$comp_a = $a[$isd["element"]];
+			$comp_b = $b[$isd["element"]];
+			$ord = $isd["ord"];
+			if ($comp_a != $comp_b)
+			{
+				break;
+			}
+		}
+		// sort by that element
+		if ($comp_a  == $comp_b)
+		{
+			return 0;
+		}
+
+		if ($ord == "asc")
+		{
+			return $comp_a > $comp_b ? 1 : -1;
+		}
+		else
+		{
+			return $comp_a > $comp_b ? -1 : 1;
+		}
+	}
+
+	function do_pageselector(&$list, $per_page)
+	{
+		$page = $GLOBALS["page"];
+		$start = $page * $per_page;
+		$end = ($page + 1) * $per_page;
+		$cnt = 0;
+
+		$num = count($list);
+		$num_p = $num / $per_page;
+
+		foreach($list as $k => $v)
+		{
+			if (!($cnt >= $start && $cnt < $end))
+			{
+				unset($list[$k]);
+			}
+			$cnt++;
+		}
+
+		$ps = "";
+		for ($i = 0; $i <  $num_p; $i++)
+		{
+			$this->vars(array(
+				"url" => aw_url_change_var("page", $i),
+				"page" => ($i * $per_page)." - ".min($num, ((($i+1) * $per_page)-1))
+			));
+			if ($i == $page)
+			{
+				$ps .= $this->parse("PAGE_SEL");
+			}
+			else
+			{
+				$ps .= $this->parse("PAGE");
+			}
+		}
+
+		$this->vars(array(
+			"PAGE_SEL" => "",
+			"PAGE" => $ps
+		));
 	}
 }
 ?>

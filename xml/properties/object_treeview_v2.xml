@@ -41,6 +41,25 @@
             <caption>Puu n&amp;auml;itamise meetod</caption>
       </property>
       <property>
+            <name>per_page</name>
+            <table>objects</table>
+            <group>showing</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Mitu rida lehel</caption>
+      </property>
+      <property>
+            <name>sortbl</name>
+            <table>objects</table>
+            <group>showing</group>
+            <type>table</type>
+            <store>no</store>
+            <field>sortbl</field>
+            <caption>Andmete sorteerimine</caption>
+      </property>
+      <property>
             <name>title_bgcolor</name>
             <table>objects</table>
             <group>styles</group>

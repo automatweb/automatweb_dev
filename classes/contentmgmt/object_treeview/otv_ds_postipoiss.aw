@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.7 2004/05/12 13:46:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.8 2004/05/19 16:08:22 kristo Exp $
 // otv_ds_postipoiss.aw - Objektinimekirja Postipoisi datasource 
 /*
 
@@ -57,20 +57,26 @@ class otv_ds_postipoiss extends class_base
 		"reg_kpv" => "Registreeritud",
 		"osakond" => "Valdkond",
 		"toimik" => "Toimik",
+		"sep1" => "",
 		"saatja_kpv" => "Saatja kuup&auml;ev",
 		"saatja_indeks" => "Saatja nr.",
+		"sep2" => "",
 		"pool1" => "Lepingu pool",
 		"kellelt" => "Kellelt",
+		"sep3" => "",
 		"kellelt_isik" => "",
 		"pool2" => "Lepingu pool",
 		"Kellele" => "Kellele",
+		"sep4" => "",
 		"kellele_isik" => "",
 		"pealkiri" => "Pealkiri",
 		"sisu" => "Sisu",
 		"lisad" => "Lisad",
 		"resolutsioon" => "Resolutsioon",
+		"sep5" => "",
 		"tahtaeg" => "T&auml;htaeg",
 		"vastamis_kpv" => "Vastatud",
+		"sep6" => "",
 		"isik" => "T&auml;itja/L&auml;bivaataja",
 		"koostaja" => "Koostaja",
 		"koostajad" => "Osav&otilde;tjad",
@@ -198,7 +204,12 @@ class otv_ds_postipoiss extends class_base
 				"fileSizeKBytes" => number_format($fsb / 1024, 2),
 				"fileSizeMBytes" => number_format($fsb / (1024 * 1024))
 			);
-			$ret[$fd["tegevused"]["tegevus"]["dok_nr"]] = $rowd;
+			$tmp = array();
+			foreach($rowd as $k => $v)
+			{
+				$tmp[$k] = convert_unicode($v);
+			}
+			$ret[$fd["tegevused"]["tegevus"]["dok_nr"]] = $tmp;
 		}
 		return $ret;
 	}
@@ -233,7 +244,7 @@ class otv_ds_postipoiss extends class_base
 		$data = array();
 		foreach($values as $key => $val)
 		{
-			$val["value"] = $this->convert_unicode($val["value"]);
+			$val["value"] = convert_unicode($val["value"]);
 			if ($val["tag"] == "teema" && $val["type"] == "open")
 			{
 				$cur = array();
@@ -290,6 +301,41 @@ class otv_ds_postipoiss extends class_base
 		$this->read_template("show.tpl");
 
 		$this->vars($fd);
+		$lineno = 0;
+		foreach($this->all_cols as $f_n => $f_v)
+		{
+			if (substr($f_n, 0, 3) == "sep" && $hasc)
+			{
+				$lines .= $this->parse("LINE_SEP");
+				$lineno = 0;
+				$hasc = false;
+			}
+
+			if (!empty($fd[$f_n]))
+			{
+				$this->vars(array(
+					"desc" => $f_v,
+					"value" => convert_unicode($fd[$f_n])
+				));
+				if ($lineno % 2)
+				{
+					$lines .= $this->parse("LINE_ODD");
+				}
+				else
+				{
+					$lines .= $this->parse("LINE_EVEN");
+				}
+				$hasc = true;
+				$lineno ++;
+			}
+		}
+		$this->vars(array(
+			"LINE_ODD" => $lines,
+			"LINE_EVEN" => "",
+			"LINE_SEP" => ""
+		));
+
+
 		$fs = explode(",", $fd["viide"]);
 		$fstr = array();
 		$cnt = 1;
@@ -348,27 +394,6 @@ class otv_ds_postipoiss extends class_base
 		return $this->all_cols;
 	}
 	
-	function convert_unicode($source)
-	{
-		//return iconv('UTF-8','ISO-8859-4', $source);
-		// utf8_decode doesn't work here
-		$retval = str_replace(chr(0xC3). chr(0xB5),"õ",$source);
-		$retval = str_replace(chr(0xC3). chr(0xBC),"ü",$retval);
-		$retval = str_replace(chr(0xC3). chr(0xB6),"ö",$retval);
-		$retval = str_replace(chr(0xC3). chr(0xA4),"ä",$retval);
-		$retval = str_replace(chr(0xC3). chr(0x96),"Ö",$retval);
-		$retval = str_replace(chr(0xC3). chr(0x95),"Õ",$retval);
-		$retval = str_replace(chr(0xC3). chr(0xB4),"õ",$retval);
-		$retval = str_replace(chr(0xC3). chr(0x84),"Ä",$retval);
-		$retval = str_replace(chr(0xC3). chr(0x9C),"Ü",$retval);
-		$retval = str_replace(chr(0xC5). chr(0xA0),"&#0352;",$retval);
-		$retval = str_replace(chr(0xC3). chr(0xA9),"&#0233;",$retval);
-		$retval = str_replace(chr(0xC5). chr(0xA1),"&#0353;",$retval);
-		$retval = str_replace(chr(0xC5). chr(0xBD),"&#381;",$retval);
-		$retval = str_replace(chr(0xC5). chr(0xBE),"&#382;",$retval);
-		return $retval;
-	}
-
 	function get_add_types()
 	{
 		return array();
