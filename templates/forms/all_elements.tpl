@@ -32,6 +32,7 @@
 </table>
 Vali stiil:<select name='setstyle' class='small_button'>{VAR:styles}</select><br>
 Vali kataloog, kuhu elemendid liigutada:<select name='setfolder' class='small_button'>{VAR:folders}</select><br>
+Vali elemendi t&uuml;&uuml;p, mis lisada:<select name='addel' class='small_button'>{VAR:types}</select><br>
 <input type='submit' value='Salvesta' class='small_button'>
 {VAR:reforb}
 </form>
