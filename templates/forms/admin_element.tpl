@@ -152,6 +152,12 @@ function toggle_file_link_newwin()
 	<td class="fgtext">Ainult kasutaja enda sisestused:</td>
 	<td class="fgtext">&nbsp;<input type='checkbox' class='small_button' value='1' name='{VAR:cell_id}_user_entries_only' {VAR:user_entries_only}></td>
 </tr>
+<tr>
+	<td class="fgtext">Ainult selle p&auml;rja sisestused:</td>
+	<td class="fgtext">&nbsp;<input type='checkbox' class='small_button' value='1' name='{VAR:cell_id}_chain_entries_only' {VAR:chain_entries_only}></td>
+	<td class="fgtext">&nbsp;</td>
+	<td class="fgtext">&nbsp;</td>
+</tr>
 <!-- END SUB: SEARCH_RELATION -->
 
 <!-- SUB: CONFIG_KEY -->

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.75 2002/09/30 06:54:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.76 2002/09/30 08:05:02 kristo Exp $
 // form_element.aw - vormi element.
 classload("image");
 
@@ -289,7 +289,8 @@ class form_element extends aw_template
 						"listbox_activity_name" => "element_".$this->id."_lbact_".$b,
 						"listbox_activity_value" => $this->arr["listbox_activity"][$b],
 						"num" => $b,
-						"user_entries_only" => checked($this->arr["user_entries_only"] == 1)
+						"user_entries_only" => checked($this->arr["user_entries_only"] == 1),
+						"chain_entries_only" => checked($this->arr["chain_entries_only"] == 1),
 					));
 					$at = "";
 					if ($this->arr["subtype"] == "activity")
@@ -899,6 +900,9 @@ class form_element extends aw_template
 
 				$var = $base."_user_entries_only";
 				$this->arr["user_entries_only"] = $$var;
+
+				$var = $base."_chain_entries_only";
+				$this->arr["chain_entries_only"] = $$var;
 
 				$rel_changed = false;
 				$var = $base."_rel_form";
@@ -1857,48 +1861,51 @@ class form_element extends aw_template
 				}
 
 //				for ($b=0; $b < $cnt; $b++)
-				foreach($larr as $b => $value)
-				{	
-					$_v = "element_".$this->id."_lbopt_".$b;
+				if (is_array($larr))
+				{
+					foreach($larr as $b => $value)
+					{	
+						$_v = "element_".$this->id."_lbopt_".$b;
 
-					$lbsel = ($_lbsel == $_v ? " SELECTED " : "");
-		
-					if (is_array($larr))
-					{
-//						list($key,$value) = each($larr);
-						$key = $b;
-						
-
-						// now check all listbox item controllers for this lb item and if any of them fail, don't show item
-						$controllers_ok = true;
-						if (is_array($this->arr["lb_item_controllers"]))
+						$lbsel = ($_lbsel == $_v ? " SELECTED " : "");
+			
+						if (is_array($larr))
 						{
-							foreach($this->arr["lb_item_controllers"] as $ctrlid)
+	//						list($key,$value) = each($larr);
+							$key = $b;
+							
+
+							// now check all listbox item controllers for this lb item and if any of them fail, don't show item
+							$controllers_ok = true;
+							if (is_array($this->arr["lb_item_controllers"]))
 							{
-								if (($res = $this->form->controller_instance->do_check($ctrlid, $value, &$this->form, $this)) !== true)
+								foreach($this->arr["lb_item_controllers"] as $ctrlid)
 								{
-									$controllers_ok = false;
+									if (($res = $this->form->controller_instance->do_check($ctrlid, $value, &$this->form, $this)) !== true)
+									{
+										$controllers_ok = false;
+									}
 								}
 							}
-						}
 
-						if ($controllers_ok)
-						{
-							if ($ext)
+							if ($controllers_ok)
 							{
-								$lb_opts .= "<option $lbsel value='$key'>$value</option>\n";
-							}
-							else
-							{
-								// teeb pisikest trikka - kui on otsinguform ja me n2itame parajasti viimast elementi - see on automaagiliselt
-								// lisatud tyhi element, siis topime selle hoopis k6ige esimeseks a numbri j2tame samax. voh. 
-								if (($this->form->type == FTYPE_SEARCH || $this->form->type == FTYPE_FILTER_SEARCH )&& $b == ($cnt-1))
+								if ($ext)
 								{
-									$lb_opts ="<option $lbsel VALUE='element_".$this->id."_lbopt_".$b."'>".$value.$lb_opts."</option>\n";
+									$lb_opts .= "<option $lbsel value='$key'>$value</option>\n";
 								}
 								else
 								{
-									$lb_opts.="<option $lbsel VALUE='element_".$this->id."_lbopt_".$b."'>".$value."</option>\n";
+									// teeb pisikest trikka - kui on otsinguform ja me n2itame parajasti viimast elementi - see on automaagiliselt
+									// lisatud tyhi element, siis topime selle hoopis k6ige esimeseks a numbri j2tame samax. voh. 
+									if (($this->form->type == FTYPE_SEARCH || $this->form->type == FTYPE_FILTER_SEARCH )&& $b == ($cnt-1))
+									{
+										$lb_opts ="<option $lbsel VALUE='element_".$this->id."_lbopt_".$b."'>".$value.$lb_opts."</option>\n";
+									}
+									else
+									{
+										$lb_opts.="<option $lbsel VALUE='element_".$this->id."_lbopt_".$b."'>".$value."</option>\n";
+									}
 								}
 							}
 						}
