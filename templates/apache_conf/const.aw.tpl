@@ -1,6 +1,8 @@
 <?php
 $aw_dir = "{VAR:aw_dir}";
-$site_dir = getcwd();
+$site_dir = __FILE__;
+$lsl = strrpos($site_dir, "/");
+$site_dir = substr($site_dir, 0, $lsl);
 $lsl = strrpos($site_dir, "/");
 $site_dir = substr($site_dir, 0, $lsl);
 
