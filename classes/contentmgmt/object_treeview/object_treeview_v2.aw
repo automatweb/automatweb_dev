@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.47 2005/01/19 10:35:23 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.48 2005/01/20 08:48:07 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -526,12 +526,7 @@ class object_treeview_v2 extends class_base
 					"char" => ($ob->prop("alphabet_in_lower_case")) ? strtolower($character) : $character, 
 					"char_url" => aw_ini_get("baseurl")."/".$oid."?char=".$character,
 				));
-				// need that htmlentites/urldecode hack to make ALL characters 
-				// display bold if they are selected
-				// damn - with this is some security issue - damn
-			//	if ($character == htmlentities(urldecode($_GET['char'])))
-			// seems have to come out with some other solution
-				if ($character == $_GET['char'])
+				if ($character == htmlentities(urldecode($_GET['char'])))
 				{
 					$alphabet_parsed .= $this->parse("ALPHABET_SEL");
 				}
