@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/groupware/Attic/project.aw,v 1.4 2003/11/19 16:04:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/groupware/Attic/project.aw,v 1.5 2003/11/19 17:57:04 duke Exp $
 // project.aw - Projekt 
 /*
 
@@ -17,7 +17,7 @@
 @caption alamprojekt
 
 @reltype PARTICIPANT clid=CL_USER value=2
-@caption kasutaja
+@caption osaleja
 
 @reltype PRJ_EVENT value=3 clid=CL_TASK,CL_CRM_CALL,CL_CRM_OFFER,CL_CRM_DEAL,CL_CRM_MEETING
 @caption Sündmus
