@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.39 2002/07/18 10:44:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.40 2002/07/24 09:44:30 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -289,7 +289,7 @@ class aliasmgr extends aw_template
 		);
 
 		$this->defs['chatobj']=array(
-			'alias'			=>	'c',
+			'alias'			=>	'chatobj',
 			'title'			=>	'Jutuka objekt',
 			'class'			=>	'chatobj',
 			'class_id'	=>	CL_CHATOBJ,
@@ -304,7 +304,7 @@ class aliasmgr extends aw_template
 		);
 
 		$this->defs['chat_channel_conf']=array(
-			'alias'			=>	'h',
+			'alias'			=>	'chatconf',
 			'title'			=>	'Jutuka kanali konf.',
 			'class'			=>	'chat_channel_conf',
 			'class_id'	=>	CL_CHAT_CHANNEL_CONF,
@@ -319,7 +319,7 @@ class aliasmgr extends aw_template
 		);
 
 		$this->defs['chatserver']=array(
-			'alias'			=>	's',
+			'alias'			=>	'chatserver',
 			'title'			=>	'Jutuka server',
 			'class'			=>	'chatserver',
 			'class_id'	=>	CL_CHATSERVER,
@@ -376,11 +376,11 @@ class aliasmgr extends aw_template
     if ($s_name != "" || $s_comment != "" || $s_type > 0)
     {
 			$se = array();
-			if ($s_name != "")
+			if ($s_name != "" && $s_name != "%")
 			{
 				$se[] = " objects.name LIKE '%".$s_name."%' ";
 			}
-			if ($s_comment != "")
+			if ($s_comment != "" && $s_comment != "%")
 			{
 				$se[] = " objects.comment LIKE '%".$s_comment."%' ";
 			}
