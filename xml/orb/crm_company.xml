@@ -129,5 +129,26 @@
 			</function>
 		</action>
 
+		<action name="cut_p">
+			<function name="cut_p">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="copy_p">
+			<function name="copy_p">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="paste_p">
+			<function name="paste_p">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
