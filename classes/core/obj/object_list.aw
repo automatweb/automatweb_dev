@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.35 2004/09/16 08:54:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.36 2004/10/29 12:35:43 kristo Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -427,12 +427,24 @@ class object_list extends _int_obj_container_base
 
 	function _int_sort_list_default_sort($a, $b)
 	{
-		if ($a->prop($this->_sby_prop) == $b->prop($this->_sby_prop))
+		$sb = $this->_sby_prop;
+		if ($GLOBALS["object_loader"]->is_object_member_fun($sb))
+		{
+			$val1 = $a->$sb();
+			$val2 = $b->$sb();
+		}
+		else
+		{
+			$val1 = $a->prop($sb);
+			$val2 = $b->prop($sb);
+		}
+
+		if ($val1 == $val2)
 		{
 			return 0;
 		}
 
-		if ($a->prop($this->_sby_prop) < $b->prop($this->_sby_prop))
+		if ($val1 < $val2)
 		{
 			if ($this->_sby_order == "asc")
 			{
@@ -444,7 +456,7 @@ class object_list extends _int_obj_container_base
 			}
 		}
 
-		if ($a->prop($this->_sby_prop) > $b->prop($this->_sby_prop))
+		if ($val1 > $val2)
 		{
 			if ($this->_sby_order == "asc")
 			{
