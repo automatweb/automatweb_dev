@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.122 2003/06/16 10:35:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.123 2003/06/19 12:29:32 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -879,7 +879,7 @@ class planner extends class_base
 
 		$xdate = $d . $m . $y;
 
-		$this->mk_path($object["parent"],"Kalender $object[name]");
+		//$this->mk_path($object["parent"],"Kalender $object[name]");
 		
 		$_cal = get_instance("calendar",array("tpldir" => "planner"));
 		classload("date_calc");
@@ -887,6 +887,7 @@ class planner extends class_base
 			"date" => $date,
 			"type" => $type,
 			"direction" => $this->conf["event_direction"],
+			"event_time_item" => $this->conf["event_time_item"],
 		));
 
 
@@ -1585,6 +1586,7 @@ class planner extends class_base
 		$this->read_template("show_relative.tpl");
 		$empty = $this->parse("CELL");
 		$cells = array();
+
 		foreach($args["events"] as $key => $val)
 		{
 			foreach($val as $vkey => $vval)
@@ -1602,6 +1604,7 @@ class planner extends class_base
 					$this->vars(array(
 						"lead" => $vval["lead"],
 						"date" => date("d.m.Y",$vval["start"]),
+						"time" => date("H:i",$vval["start"]),
 						"title" => $vval["title"],
 						"ev_link" => $ev_link,
 					));
@@ -1614,6 +1617,10 @@ class planner extends class_base
 		if (sizeof($cells) < $items_on_line)
 		{
 			$items_on_line = sizeof($cells);
+		};
+		if ($items_on_line == 0)
+		{
+			$items_on_line = 1;
 		};
 		
 		$linecount = ceil(sizeof($cells) / $items_on_line);
@@ -2104,11 +2111,15 @@ class planner extends class_base
 				$day_orb_link .= "&date=$day-$mon-$year";
 
 				// draw header
-				$lcw = substr(get_lc_weekday($w),0,1);
+				$wd_name = get_lc_weekday($w);
+
+				$lcw = substr($wd_name,0,1);
 				$_days = array("P","E","T","K","N","R","L");
 				$this->vars(array(
 					"cellwidth" => $width . "%",
 					"hcell" => strtoupper($lcw) . " " . date("d-M",$thisday),
+					"weekday_name" => ucfirst($wd_name),
+					"month_name" => get_lc_month($mon),
 					"hcell_weekday" => $_days[date("w",$thisday)],
 					"hcell_weekday_en" => date("D",$thisday),
 					"day_message" => in_array($w,$workdays) ? $this->cfg["workday_message"] : $this->cfg["freeday_message"],
