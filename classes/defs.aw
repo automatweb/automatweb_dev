@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.17 2001/06/21 03:51:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.18 2001/06/21 12:25:38 kristo Exp $
 // defs.aw - common functions (C) StruktuurMeedia 2000,2001
 
 ////
@@ -287,7 +287,7 @@ function is_valid($set,$string)
 function is_number($parm)
 {
 	$intparm = (int)$parm;
-	$retval = ($intparm === $parm) ? true : false;
+	$retval = ($intparm == $parm) ? true : false;
 	return $retval;
 }
 

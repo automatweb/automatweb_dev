@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.31 2001/06/20 05:21:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.32 2001/06/21 12:25:38 kristo Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -589,15 +589,24 @@ class planner extends calendar {
 		// mone teise DB peale portima hakkame.
 		$tp = ($type) ? " AND planner.type = $type " : " AND planner.type = NULL ";
 
-		$eselect = ($event) ? "AND planner.id = '$event'" : "";
+		$eselect = (isset($event)) ? "AND planner.id = '$event'" : "";
 		$limit = ($limit) ? $limit : 999999;
 		$retval = array();
 		$reps = array();
-		$q = "SELECT * FROM planner
+		if (isset($event))
+		{
+			$q = "SELECT * FROM planner
+				LEFT JOIN objects ON (planner.id = objects.oid)
+				WHERE objects.status = 2 AND planner.id = $event";
+		}
+		else
+		{
+			$q = "SELECT * FROM planner
 			LEFT JOIN objects ON (planner.id = objects.oid)
 			WHERE objects.status = 2 $selector $eselect $tp
-				AND ((start >= '$start' AND start <= '$end') OR (rep_until >= '$start'))
+				AND ( (start >= '$start') OR (start <= '$end') OR (rep_until >= '$start'))
 				ORDER BY start";
+		};	
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
@@ -607,7 +616,15 @@ class planner extends calendar {
 			// ntx päevade puhul hakatakse tsyklit valest kohast ..
 			// ehk siis repeateri algusest. 
 			$ex = ($end > $row["rep_until"]) ? $row["rep_until"] : $end;
-			$repeater->init($start,$row["start"],$ex);
+			if (isset($event))
+			{
+				$start2 = ($row["start"] > $start) ? $row["start"] : $start;
+				$repeater->init($start,$start2,$ex);
+			}
+			else
+			{
+				$repeater->init($start,$row["start"],$ex);
+			};
 			
 			$this->save_handle();
 			$q = "SELECT * FROM planner_repeaters WHERE eid = '$row[oid]' ORDER BY type DESC";
@@ -657,7 +674,6 @@ class planner extends calendar {
 				}
 			};
 		};
-		
 		return (sizeof($retval) > 0) ? $retval : false;
 	}
 

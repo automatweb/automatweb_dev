@@ -17,6 +17,8 @@ session_register("shopping_cart");
 
 define("ORD_FILLED",1);
 
+define("PER_PAGE",10);
+
 lc_load("shop");
 classload("shop_base");
 class shop extends shop_base
@@ -828,7 +830,9 @@ class shop extends shop_base
 
 		// zero out the customers shopping cart as well.
 		$GLOBALS["shopping_cart"] = array();
-		return $url;
+
+		// now show the order 
+		return $this->mk_my_orb("view_order", array("shop" => $shop_id, "order_id" => $ord_id, "section" => $section));
 	}
 	
 	////
@@ -951,7 +955,7 @@ class shop extends shop_base
 				$rep_cnt = $row["per_cnt"];
 				$pl = new planner;
 				// get the events for this planner from today to 800 days, limiting the number of events to $rep_num
-				$reps = $pl->get_events(array( "start" => time(), "limit" => $rep_cnt,"index_time" => true,"event" => $row["per_event_id"],"end" => time()*800*24*3600));
+				$reps = $pl->get_events(array( "start" => time(), "limit" => $rep_cnt,"index_time" => true,"event" => $row["per_event_id"],"end" => time()+800*24*3600));
 				if (is_array($reps))
 				{
 					$f = new form;
@@ -1177,7 +1181,32 @@ class shop extends shop_base
 			$ss = " AND user = '$uid' ";
 		}
 
-		$this->db_query("SELECT * FROM orders WHERE shop_id = $id $ss ORDER BY tm DESC");
+		// make pageselector
+		$cnt = $this->db_fetch_field("SELECT count(*) as cnt FROM orders WHERE shop_id = $id $ss","cnt");
+		$num_pages = $cnt / PER_PAGE;
+
+		for ($i=0; $i < $num_pages; $i++)
+		{
+			$this->vars(array(
+				"from" => $i*PER_PAGE,
+				"to" => min(($i+1)*PER_PAGE,$cnt),
+				"goto_page" => $this->mk_my_orb("order_history", array("id" => $id, "section" => $section, "page" => $i))
+			));
+			if ($i == $page)
+			{
+				$pg.=$this->parse("SEL_PAGE");
+			}
+			else
+			{
+				$pg.=$this->parse("PAGE");
+			}
+		}
+		$this->vars(array(
+			"PAGE" => $pg,
+			"SEL_PAGE" => ""
+		));
+
+		$this->db_query("SELECT * FROM orders WHERE shop_id = $id $ss ORDER BY tm DESC LIMIT ".($page*PER_PAGE).",".PER_PAGE);
 		while ($row = $this->db_next())
 		{
 			$this->vars(array(
@@ -1185,8 +1214,8 @@ class shop extends shop_base
 				"user" => $row["user"],
 				"ip" => $row["ip"],
 				"price" => $row["t_price"],
-				"view"	=> $this->mk_my_orb("view_order", array("shop" => $id, "order_id" => $row["id"],"section" => $section)),
-				"fill"	=> $this->mk_my_orb("mark_order_filled", array("shop" => $id, "order_id" => $row["id"],"section" => $section))
+				"view"	=> $this->mk_my_orb("view_order", array("shop" => $id, "order_id" => $row["id"],"section" => $section,"page" => $page)),
+				"fill"	=> $this->mk_my_orb("mark_order_filled", array("shop" => $id, "order_id" => $row["id"],"section" => $section,"page" => $page))
 			));
 			$is_f = "";
 			if (!isset($row["status"]))
@@ -1216,7 +1245,7 @@ class shop extends shop_base
 	{
 		extract($arr);
 		$this->db_query("UPDATE orders SET status = ".ORD_FILLED." WHERE id = $order_id");
-		header("Location: ".$this->mk_orb("admin_orders", array("id" => $shop,"section" => $section)));
+		header("Location: ".$this->mk_orb("order_history", array("id" => $shop,"section" => $section,"page" => $page)));
 		die();
 	}
 
@@ -1307,7 +1336,9 @@ class shop extends shop_base
 			"user" => $order["user"],
 			"time" => $this->time2date($order["tm"],2),
 			"ip"	=> $order["ip"],
-			"inf_form" => $tx
+			"inf_form" => $tx,
+			"bill" => $this->mk_my_orb("view_bill", array("shop" => $shop, "order_id" => $order_id, "section" => $section)),
+			"order_hist" => $this->mk_my_orb("order_history", array("id" => $shop, "section" => $section, "page" => $page))
 		));
 		return $this->parse();
 	}
@@ -1513,6 +1544,102 @@ class shop extends shop_base
 				$this->db_query("UPDATE shop_item_period_avail SET num_sold = num_sold + $cnt");
 			}
 		}
+	}
+
+	////
+	// !shows the bill for order $order_id to user
+	function view_bill($arr)
+	{
+		extract($arr);
+		$sh = $this->get($shop);
+		$this->read_template("bill.tpl");
+
+		// load the entry from the database
+		$this->db_query("SELECT * FROM orders WHERE id = $order_id");
+		$order = $this->db_next();
+
+		$this->db_query("SELECT * FROM order2item WHERE order_id = $order_id");
+		while ($row = $this->db_next())
+		{
+			$o_items[$row["item_id"]] = $row;
+		}
+
+		classload("form");
+		$f = new form;
+		$images = new db_images;
+
+		$items = false;
+		$itm = "";
+		if (is_array($o_items))
+		{
+			reset($o_items);
+			while (list($item_id,$ar) = each($o_items))
+			{
+				if ($ar["count"] > 0)
+				{
+					// now here we must show the name of the item followed by
+					// the rows from the cnt_form for that item that have selectrow checked
+
+					// so, get the item
+					$it = $this->get_item($item_id);
+					$itt = $this->get_item_type($it["type_id"]);
+					// load it's cnt_form
+					$f->load($itt["cnt_form"]);
+					// now find all the rows that are selected in the entry from the shopping cart
+					$f->load_entry($ar["cnt_entry"]);
+					$selrows = $this->get_selected_rows_in_form(&$f);
+
+					$rowhtml = "";
+					foreach($selrows as $rownum)
+					{
+						// here we must add the elements of row $rownum to the form we are assembling of the selected rows
+						// oh what a mindjob.
+						// we add prefix entry_.$entry_id._ to all elements in this entry and later when processing
+						// entry, we add the same prefix so we process the elements from the right form.
+						$this->vars(array("row" => $f->mk_show_text_row($rownum)));
+						$rowhtml.=$this->parse("F_ROW");
+					}
+					
+					$f->reset();
+					$this->vars(array(
+						"item" => $f->show(array("id" => $itt["form_id"], "op_id" => $itt["cart_op"], "entry_id" => $it["entry_id"])),
+						"view_item" => $this->mk_my_orb("order_item", array("item_id" => $item_id, "shop" => $shop)),
+						"name" => $it["name"],
+						"F_ROW" => $rowhtml
+					));
+					$itm.=$this->parse("ITEM");
+				}
+			}
+		}
+
+		$tx = "";
+		$this->db_query("SELECT entry_id,form_id FROM order2form_entries WHERE order_id = $order_id");
+		while ($row = $this->db_next())
+		{
+			$f->reset();
+			$f->load($row["form_id"]);
+			$f->load_entry($row["entry_id"]);
+			$tx.=$f->show_text();
+		}
+
+		classload("users");
+		$u = new users;
+
+		$f->reset();
+		$this->vars(array(
+			"ITEM" => $itm,
+			"user" => $order["user"],
+			"time" => $this->time2date($order["tm"],2),
+			"ip"	=> $order["ip"],
+			"inf_form" => $tx,
+			"bill" => $this->mk_my_orb("view_bill", array("shop" => $shop, "order_id" => $order_id, "section" => $section)),
+			"date" => $this->time2date($order["tm"],2),
+			"owner_data" => $f->show(array("id" => $sh["owner_form"], "entry_id" => $sh["owner_form_entry"], "op_id" => $sh["owner_form_op"])),
+			"price" => $order["t_price"],
+			"log_info" => $u->show_join_data(array())
+		));
+
+		die($this->parse());
 	}
 }
 ?>
