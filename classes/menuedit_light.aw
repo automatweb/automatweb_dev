@@ -171,10 +171,10 @@ class menuedit_light extends aw_template
 					{
 						$tpl = $this->tlist[$this->level + 1][0];
 					};
-					if ($v["alias"] && sizeof($this->alias_stack) == $this->level)
+					if ($v["alias"])
 					{
 						  $id = join("/",$this->alias_stack);
-						  $id .= "/" . $v["alias"];
+						  $id .= ($id == "" ? "" : "/") . $v["alias"];
 					}
 					else
 					{
