@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.5 2003/04/25 12:52:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.6 2003/04/28 16:20:13 duke Exp $
 // livelink_import.aw - Import livelingist
 
 /*
@@ -150,7 +150,12 @@ class livelink_import extends class_base
 		$this->fileprefix = $args["fileprefix"];
 
 		$this->docs_to_retrieve = array();
+		$this->file_id_list = array();
                 $this->need2update = array();
+
+		// first, we create a list of _all_ files inside the table
+		// then .. after we have done our processing, we should have 
+		// a list of stuff that we can actually delete
 
 		ob_implicit_flush(1);
 
@@ -177,6 +182,23 @@ class livelink_import extends class_base
                         $this->fetch_node($node_id);
                 };
 
+		if (sizeof($this->file_id_list) > 0)
+		{
+			$flist = join(",",$this->file_id_list);
+			print "and now I'm going to delete these files";
+			$q = "SELECT filename FROM livelink_files WHERE id IN ($flist)";
+			$this->db_query($q);
+			while($row = $this->db_next())
+			{
+				$outfile = $this->outdir . "/" . basename($row["filename"]);		
+				print "deleting $outfile<br>";
+				unlink($outfile);
+			};
+
+			$q = "DELETE FROM livelink_files WHERE id IN ($flist)";
+			$this->db_query($q);
+		};
+
 		# clean up too after ourselves
 		unlink($outf);
 
@@ -191,6 +213,8 @@ class livelink_import extends class_base
 			$id = $attribs["id"];
 			$parent = $attribs["parentid"];
 			$modified = strtotime($attribs["modified"]);
+			$rootnode = $this->rootnode;
+
 
 			$old = $this->db_fetch_row("SELECT * FROM livelink_folders WHERE id = '$id'");
 			if (in_array($id,$this->exceptions))
@@ -204,8 +228,8 @@ class livelink_import extends class_base
 				$this->quote($name);
 				$this->quote($description);
 				print "creating $name\n";
-				$q = "INSERT INTO livelink_folders  (id,name,description,parent,modified)
-					VALUES ('$id','$name','$description','$parent','$modified')";
+				$q = "INSERT INTO livelink_folders  (id,name,description,parent,modified,rootnode)
+					VALUES ('$id','$name','$description','$parent','$modified','$rootnode')";
 				print $q;
 				print "\n";
 				$this->need2update[] = $id;
@@ -218,10 +242,18 @@ class livelink_import extends class_base
 				print "renewing $name\n";
 				$this->quote($name);
 				$this->quote($description);
+			
+				$q = "SELECT id FROM livelink_files WHERE parent = '$id' AND rootnode = '$rootnode'";
+				$this->db_query($q);
+				while($row = $this->db_next())
+				{
+					$this->file_id_list[$row["id"]] = $row["id"];
+				};
 
 				$q = "UPDATE livelink_folders SET
 					name = '$name',description = '$description',parent = '$parent',
-					modified = '$modified'
+					modified = '$modified',	
+					rootnode = '$rootnode'
 					WHERE id = '$id'";
 				$this->need2update[] = $id;
 
@@ -238,9 +270,14 @@ class livelink_import extends class_base
 		if ($name == "llnode" && isset($attribs["objtype"]) && ($attribs["objtype"] > 0))
 		{
 			// only retrieve the docs, if the parent has been modified
+			// siin me koostame siis nimekirja docid-dest, mida oleks vaja uuendada
 			if (in_array($attribs["parentid"],$this->need2update))
 			{
 				$this->docs_to_retrieve[] = $attribs["id"];
+				if (isset($this->file_id_list[$attribs["id"]]))
+				{
+					unset($this->file_id_list[$attribs["id"]]);
+				};
 			};
 		}
 	}
@@ -321,6 +358,7 @@ class livelink_import extends class_base
 				$iconurl = sprintf("<img src='/img/%s' alt='%s' title='%s' />",$this->icons[$this->fext],$this->fext,$this->fext);
 				$this->quote($iconurl);
 			};
+			$rootnode = $this->rootnode;
 			if (in_array($parent,$this->exceptions))
 			{
 				$this->write_outfile();
@@ -333,8 +371,8 @@ class livelink_import extends class_base
 				$this->quote($filename);
 				// wah, wah
 				$this->write_outfile();
-				$q = "INSERT INTO livelink_files (id,parent,name,filename,modified,icon)
-				VALUES('$id','$parent','$name','$filename','$modified','$iconurl')";
+				$q = "INSERT INTO livelink_files (id,parent,name,filename,modified,icon,rootnode)
+				VALUES('$id','$parent','$name','$filename','$modified','$iconurl','$rootnode')";
 				$this->db_query($q);
 			}
 			else
@@ -347,7 +385,7 @@ class livelink_import extends class_base
 				$this->write_outfile();
 				$q = "UPDATE livelink_files SET
 				parent = '$parent',name = '$name',filename = '$filename',
-				modified = '$modified',
+				modified = '$modified', rootnode = '$rootnode',
 				icon = '$iconurl'
 				WHERE id = '$id'";
 				$this->db_query($q);
