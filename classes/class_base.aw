@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.350 2005/01/03 13:36:11 kristo Exp $
+// $Id: class_base.aw,v 2.351 2005/01/04 14:55:34 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -4011,7 +4011,8 @@ class class_base extends aw_template
 			};
 
 			$propdata = array_merge($all_properties[$key],$val);
-			if (empty($val["default"]))
+			// XXX: cfgform defaults are supported for checkboxes only right now
+			if ($val["type"] == "checkbox" && empty($val["default"]))
 			{
 				unset($propdata["default"]);
 			};
