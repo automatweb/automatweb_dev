@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.17 2004/11/07 19:26:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.18 2005/03/20 16:46:12 kristo Exp $
 classload("formgen/form_base");
 class form_output extends form_base 
 {
@@ -688,8 +688,6 @@ class form_output extends form_base
 			$this->parse("LINE");
 		}
 
-		$ob = get_instance("objects");
-
 		$this->vars(array(
 			"aliasmgr" => $this->mk_my_orb("aliasmgr",array("id" => $id)),
 		));
@@ -699,7 +697,7 @@ class form_output extends form_base
 			"reforb"	=> $this->mk_reforb("submit_admin", array("id" => $id, "op_id" => $op_id)),
 			"addr_reforb" => $this->mk_reforb("add_n_rows", array("id" => $id,"after" => $this->output["rows"]-1)),
 			"addc_reforb" => $this->mk_reforb("add_n_cols", array("id" => $id,"after" => $this->output["cols"]-1)),
-			"folders" => $this->picker(0,$ob->get_list(false,true)),
+			"folders" => $this->picker(0,$this->get_menu_list(false,true)),
 			"css_styles" => $this->picker(0,$css->get_select(true)),
 			"ALIASMGR" => ($this->output["has_aliasmgr"]) ? $this->parse("ALIASMGR") : "",
 			"change" => $this->mk_my_orb("change",array("id" => $id)),
@@ -1348,8 +1346,7 @@ class form_output extends form_base
 		if (!$wizard_step)
 		{
 			$this->read_template("add_el_wiz1.tpl");
-			$o = get_instance("objects");
-			$mlist = $o->get_list();
+			$mlist = $this->get_menu_list();
 			
 			$this->vars(array(
 				"reforb" => $this->mk_reforb("add_element", array("id" => $id, "row" => $row, "col" => $col,"wizard_step" => 1),"form_output"),

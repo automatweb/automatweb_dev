@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.60 2005/02/01 14:52:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.61 2005/03/20 16:46:11 kristo Exp $
 // keywords.aw - dokumentide võtmesõnad
 /*
 @tableinfo keywords index=id master_table=keywords master_index=brother_of
@@ -1113,8 +1113,7 @@ class keywords extends class_base
 			$kwds[$row["oid"]] = $row;
 		}
 
-		$ob = get_instance("objects");
-		$menus = $ob->get_list();
+		$menus = $this->get_menu_list();
 
 		$ret = array();
 		foreach($kwds as $kid => $kdata)

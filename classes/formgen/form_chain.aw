@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.27 2005/01/21 13:19:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.28 2005/03/20 16:46:12 kristo Exp $
 // form_chain.aw - form chains
 
 classload("formgen/form_base");
@@ -32,12 +32,11 @@ class form_chain extends form_base
 		$this->mk_path($parent,LC_FORM_CHAIN_ADD_WREATH);
 		$this->read_template("add_chain.tpl");
 
-		$ob = get_instance("objects");
 		$this->vars(array(
 			"forms" => $this->multiple_option_list(array(),$this->get_list(FTYPE_ENTRY,false,true)),
 			"reforb" => $this->mk_reforb("submit", array("parent" => $parent,"alias_doc" => $alias_doc)),
 			"search_doc" => $this->mk_orb("search_doc", array(),"links"),
-			"folders" => $this->picker(0,$ob->get_list())
+			"folders" => $this->picker(0,$this->get_menu_list())
 		));
 		return $this->parse();
 	}
@@ -264,9 +263,6 @@ class form_chain extends form_base
 			}
 		}
 
-		$ob = get_instance("objects");
-
-
 		$forms = $this->get_flist(array(
 			"type" => FTYPE_ENTRY,
 		));
@@ -306,7 +302,7 @@ class form_chain extends form_base
 			"LANG_H" => $lh,
 			"search_doc" => $this->mk_orb("search_doc", array(),"links"),
 			"after_redirect" => checked($this->chain["after_redirect"] == 1),
-			"folders" => $this->picker($this->chain["save_folder"],$ob->get_list()),
+			"folders" => $this->picker($this->chain["save_folder"],$this->get_menu_list()),
 			"has_calendar" => checked($fc["flags"] && OBJ_HAS_CALENDAR),
 			//"cal_forms" => $this->picker($this->chain["cal_form"],$selected_forms),
 			"cal_controllers" => $this->picker($this->chain["cal_controller"],$cntforms),

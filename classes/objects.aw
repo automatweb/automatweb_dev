@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.65 2005/03/20 16:21:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.66 2005/03/20 16:46:11 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 class objects extends core
 {
@@ -165,11 +165,6 @@ class objects extends core
 	function orb_serialize($arr)
 	{
 		return parent::serialize($arr);
-	}
-
-	function get_list($ignore_langmenus = false,$empty = false,$rootobj = -1) 
-	{
-		return $this->get_menu_list($ignore_langmenus,$empty,$rootobj);
 	}
 }
 

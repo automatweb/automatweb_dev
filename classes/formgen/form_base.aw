@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.25 2004/06/21 11:48:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.26 2005/03/20 16:46:11 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -467,8 +467,7 @@ class form_base extends form_db_base
 
 		if ($addfolders)
 		{
-			$ob = get_instance("objects");
-			$ol = $ob->get_list();
+			$ol = $this->get_menu_list();
 		}
 
 		if ($type)
@@ -991,8 +990,7 @@ class form_base extends form_db_base
 		}
 
 		// get list of menus
-		$ob = get_instance("objects");
-		$ol = $ob->get_list();
+		$ol = $this->get_menu_list();
 		
 		// get list of elements in the current form or output
 		$elarr = $is_op ? $this->get_all_elements_in_op() : $this->get_all_elements();

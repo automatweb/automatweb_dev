@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.75 2005/03/01 20:44:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.76 2005/03/20 16:46:12 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -1458,12 +1458,11 @@ class form_table extends form_base
 		$this->mk_path($parent, "Lisa formi tabel");
 
 		$lang = get_instance("languages");
-		$obj = get_instance("objects");
 
 		$this->vars(array(
 			"languages" => $this->mpicker(array(), $lang->get_list()),
 			"forms" => $this->mpicker(array(), $this->get_flist(array("type" => FTYPE_ENTRY, "addfolders" => true, "sort" => true))),
-			"folders" => $this->mpicker(array(), $obj->get_list()),
+			"folders" => $this->mpicker(array(), $this->get_menu_list()),
 			"reforb" => $this->mk_reforb("new_submit_settings", array("parent" => $parent))
 		));
 
@@ -1685,7 +1684,6 @@ class form_table extends form_base
 		$this->do_menu();
 
 		$lang = get_instance("languages");
-		$obj = get_instance("objects");
 		$us = get_instance("users");
 
 		$els = $this->get_tbl_elements();
@@ -1696,7 +1694,7 @@ class form_table extends form_base
 			"comment" => $this->table_comment,
 			"languages" => $this->mpicker($this->table["languages"], $lang->get_list()),
 			"forms" => $this->mpicker($this->table["forms"], $this->get_flist(array("type" => FTYPE_ENTRY, "addfolders" => true, "sort" => true))),
-			"folders" => $this->mpicker($this->table["moveto"], $obj->get_list()),
+			"folders" => $this->mpicker($this->table["moveto"], $this->get_menu_list()),
 			"has_print_button" => checked($this->table["print_button"]),
 			"has_grpnames" => checked($this->table["has_grpnames"]),
 			"has_groupacl" => checked($this->table["has_groupacl"]),

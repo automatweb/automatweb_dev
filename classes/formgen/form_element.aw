@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.81 2004/11/30 13:54:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.82 2005/03/20 16:46:12 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -665,7 +665,6 @@ class form_element extends aw_template
 						"bops" => $this->picker($this->arr["button_op"],$opl[$this->fid])
 					));
 				}
-				$ob = get_instance("objects");
 
 				$img = "";
 				if ($this->arr["button_img"]["url"] != "")
@@ -681,7 +680,7 @@ class form_element extends aw_template
 					"chain_forward" => checked($this->arr["chain_forward"]==1),
 					"chain_backward" => checked($this->arr["chain_backward"]==1),
 					"chain_finish" => checked($this->arr["chain_finish"]==1),
-					"folders" => $this->picker($this->arr["confirm_moveto"],$ob->get_list()),
+					"folders" => $this->picker($this->arr["confirm_moveto"],$this->get_menu_list()),
 					"redirect" => $this->arr["confirm_redirect"],
 					"order_form" => $this->picker($this->arr["order_form"],$this->form->get_list(FTYPE_ENTRY)),
 					"button_img" => $img,
@@ -1935,15 +1934,14 @@ class form_element extends aw_template
 	function change_pos($arr,&$f)
 	{
 		$this->read_template("change_pos.tpl");
-		$o = get_instance("objects");
 		$obj = obj($this->id);
 		if (!(is_array($f->arr["el_menus"]) && count($f->arr["el_menus"]) > 0))
 		{
-			$mlist = $o->get_list();
+			$mlist = $this->get_menu_list();
 		}
 		else
 		{
-			$tlist = $o->get_list();
+			$tlist = $this->get_menu_list();
 			foreach($f->arr["el_menus"] as $menuid)
 			{
 				$mlist[$menuid] = $tlist[$menuid];

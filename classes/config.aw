@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.67 2005/03/03 13:01:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.68 2005/03/20 16:46:11 kristo Exp $
 
 class db_config extends aw_template 
 {
@@ -322,8 +322,6 @@ class config extends db_config
 
 		$us = get_instance("users");
 
-		$ob_i = get_instance("objects");
-		
 		$la = get_instance("languages");
 		$li = $la->get_list(array("all_data" => true));
 		$r_al = "";
@@ -390,7 +388,7 @@ class config extends db_config
 			"ERROR_REDIRECT" => $r_el,
 			"reforb" => $this->mk_reforb("submit_loginaddr"),
 			"autologin" => checked($al),
-			"ipp" => $this->picker($ipp, $ob_i->get_list())
+			"ipp" => $this->picker($ipp, $this->get_menu_list())
 		));
 		return $this->parse();
 	}

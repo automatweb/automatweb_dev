@@ -26,8 +26,7 @@ class keyword_db extends aw_template
 	
 		$this->mk_path($parent, "Lisa keywordide baas");
 
-		$ob = get_instance("objects");
-		$ol = $ob->get_list();
+		$ol = $this->get_menu_list();
 		$this->vars(array(
 			"keyw_cats" => $this->multiple_option_list(array(),$ol),
 			"bro_cats" => $this->multiple_option_list(array(),$ol),
@@ -107,8 +106,7 @@ class keyword_db extends aw_template
 		$obj = new object($id);
 		$this->mk_path($obj->parent(), "Muuda keywordide baasi");
 
-		$ob = get_instance("objects");
-		$ol = $ob->get_list();
+		$ol = $this->get_menu_list();
 		$this->vars(array(
 			"name" => $obj->name(),
 			"keyw_cats" => $this->multiple_option_list($this->get_keyw_cats($id),$ol),

@@ -16,7 +16,6 @@ class search_conf extends aw_template
 		$lang_id = aw_global_get("lang_id");
 		$SITE_ID = $this->cfg["site_id"];
 
-		$ob = get_instance("objects");
 		$c = get_instance("config");
 		$conf = unserialize($c->get_simple_config("search_conf"));
 
@@ -24,13 +23,13 @@ class search_conf extends aw_template
 		{
 			$this->read_template("conf1.tpl");
 			$this->vars(array(
-				"section" => $ob->multiple_option_list($conf[$SITE_ID][$lang_id]["sections"],$ob->get_list())
+				"section" => $this->multiple_option_list($conf[$SITE_ID][$lang_id]["sections"],$this->get_menu_list())
 			));
 			return $this->parse();
 		}
 		else
 		{
-			$sarr = $ob->get_list();
+			$sarr = $this->get_menu_list();
 
 			$this->read_template("conf2.tpl");
 			reset($conf[$SITE_ID][$lang_id]["sections"]);
@@ -981,8 +980,6 @@ class search_conf extends aw_template
 		$this->mk_path(0,"<a href='".$this->mk_my_orb("change", array())."'>Gruppide nimekiri</a> / Muuda gruppi");
 		$grps = $this->get_groups();
 
-		$o = get_instance("objects");
-
 		$f = get_instance("formgen/form");
 		$flist = $f->get_flist(array(
 			"type" => FTYPE_SEARCH, 
@@ -997,7 +994,7 @@ class search_conf extends aw_template
 			"name" => $grps[$id]["name"],
 			"ord" => $grps[$id]["ord"],
 			"id" => $id,
-			"menus" => $this->multiple_option_list($grps[$id]["menus"],$o->get_list()),
+			"menus" => $this->multiple_option_list($grps[$id]["menus"],$this->get_menu_list()),
 			"no_usersonly" => checked($grps[$id]["no_usersonly"] == 1),
 			"users_only" => checked($grps[$id]["users_only"] == 1),
 			"static_search" => checked($grps[$id]["static_search"] == 1),

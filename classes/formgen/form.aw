@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.114 2004/11/24 08:40:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.115 2005/03/20 16:46:11 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -393,11 +393,10 @@ class form extends form_base
 			$this->vars(array("COL" => $cols));
 			$this->parse("LINE");
 		}
-		$ob = get_instance("objects");
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_all_els2", array("id" => $id)),
 			"styles" => $this->picker(0,$stylesel),
-			"folders" => $this->picker(0,(is_array($this->arr["el_move_menus"]) &&  count($this->arr["el_move_menus"]) > 0 ? array("" => "" ) + $this->arr["el_move_menus"] : $ob->get_list(false,true))),
+			"folders" => $this->picker(0,(is_array($this->arr["el_move_menus"]) &&  count($this->arr["el_move_menus"]) > 0 ? array("" => "" ) + $this->arr["el_move_menus"] : $this->get_menu_list(false,true))),
 			"types" => $this->picker(0,$this->listall_el_types(true)),
 			"controllers" => $this->multiple_option_list(array(), $this->get_list_controllers(true))
 		));
@@ -554,11 +553,10 @@ class form extends form_base
 			$this->vars(array("COL" => $cols));
 			$this->parse("LINE");
 		}
-		$ob = get_instance("objects");
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_all_els", array("id" => $id)),
 			"styles" => $this->picker(0,$stylesel),
-			"folders" => $this->picker(0,(is_array($this->arr["el_move_menus"]) &&  count($this->arr["el_move_menus"]) > 0 ? array("" => "" ) + $this->arr["el_move_menus"] : $ob->get_list(false,true))),
+			"folders" => $this->picker(0,(is_array($this->arr["el_move_menus"]) &&  count($this->arr["el_move_menus"]) > 0 ? array("" => "" ) + $this->arr["el_move_menus"] : $this->get_menu_list(false,true))),
 			"types" => $this->picker(0,$this->listall_el_types(true)),
 			"controllers" => $this->multiple_option_list(array(), $this->get_list_controllers(true))
 		));
@@ -1151,8 +1149,7 @@ class form extends form_base
 		$this->if_init($id,"settings.tpl", LC_FORM_CHANGE_SETTINGS);
 
 		$t = get_instance("style");
-		$o = get_instance("objects");
-		$menulist = $o->get_list();
+		$menulist = $this->get_menu_list();
 		$ops = $this->get_op_list($id);
 
 		// Why such an obsession with bit masks instead of just using
@@ -4208,8 +4205,7 @@ class form extends form_base
 		extract($arr);
 		$this->mk_path($parent,LC_FORM_ADD_FORM);
 		$this->read_template("form_add.tpl");
-		$o = get_instance("objects");
-		$mlist = $o->get_list();
+		$mlist = $this->get_menu_list();
 
 		// generate a list of files in the config directory. actually I only need this for
 		// config forms, so this will be gone from here as soon as I figure out another 
@@ -5266,8 +5262,7 @@ class form extends form_base
 		extract($arr);
 		$this->if_init($id,"settings_folders.tpl", LC_FORM_CHANGE_FOLDERS);
 		
-		$o = get_instance("objects");
-		$_menulist = $o->get_list();
+		$_menulist = $this->get_menu_list();
 
 		$_tp = $this->get_list(FTYPE_ENTRY,false,true);
 		asort($_tp);
@@ -5344,8 +5339,7 @@ class form extends form_base
 		$this->arr["relation_forms"] = $this->make_keys($relation_forms);
 
 		// kataloogid kuhu saab elemente liigutada
-		$iobj = get_instance("objects");
-		$ms = $iobj->get_list();
+		$ms = $this->get_menu_list();
 		$this->arr["el_move_menus"] = array();
 		if (is_array($el_move_menus))
 		{

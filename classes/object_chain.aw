@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.20 2004/06/28 19:50:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.21 2005/03/20 16:46:11 kristo Exp $
 // object_chain.aw - Objektipärjad
 
 /*
@@ -192,8 +192,7 @@ class object_chain extends aw_template
 			"types" => $this->multiple_option_list($this->make_keys($s_type),$tar)
 		));
 
-		$ob = get_instance("objects");
-		$ol = $ob->get_list(false,false,1);
+		$ol = $this->get_menu_list(false,false,1);
 
 		$toar = array_values($meta["objs"]);
 		if ($search && ($s_name != "%" || $s_comment != "%" || $s_type || $s_id_from != "" || $s_id_to != "" || $s_parent != ""))

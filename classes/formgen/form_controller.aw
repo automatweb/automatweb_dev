@@ -208,8 +208,7 @@ class form_controller extends form_base
 			$wh = " AND objects.parent IN(".join(",",$parents).") ";
 		}
 
-		$obj = get_instance("objects");
-		$ol = $obj->get_list();
+		$ol = $this->get_menu_list();
 
 		$this->db_query("SELECT oid,name,parent FROM objects WHERE class_id = ".CL_FORM_CONTROLLER." AND status != 0 $wh");
 		while($row = $this->db_next())

@@ -1,5 +1,5 @@
 <?php
-// $Id: menu_alias.aw,v 2.12 2004/10/05 09:21:30 kristo Exp $
+// $Id: menu_alias.aw,v 2.13 2005/03/20 16:46:11 kristo Exp $
 // menu_alias.aw - Deals with menu aliases
 class menu_alias extends aw_template
 {
@@ -79,8 +79,7 @@ class menu_alias extends aw_template
 			$title = "Lisa menüü link";
 		};
 		$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / $title");
-		$dbo = get_instance("objects");
-		$olist = $dbo->get_list();
+		$olist = $this->get_menu_list();
 
 		$this->vars(array(
 			"menu" => $this->picker($obj->last(),$olist),

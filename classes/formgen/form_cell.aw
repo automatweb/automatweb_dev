@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_cell.aw,v 1.18 2005/01/18 10:47:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_cell.aw,v 1.19 2005/03/20 16:46:12 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle formi sees kirjas
@@ -173,8 +173,7 @@ class form_cell extends form_base
 		$this->mk_path($this->parent, "<a href='".$churl.LC_FORM_CELL_CHANGE_FROM_ADD_ELEMENT);
 		$this->read_template("add_el_wiz1.tpl");
 
-		$o = get_instance("objects");
-		$tlist = $o->get_list();
+		$tlist = $this->get_menu_list();
 
 		if (!(is_array($this->form->arr["el_menus"]) && count($this->form->arr["el_menus"]) > 0))
 		{

@@ -1,6 +1,6 @@
 <?php
 
-classload("config","planner");
+classload("config","applications/calendar/planner");
 
 define("FN_TYPE_SECID",1);
 define("FN_TYPE_NAME",2);
@@ -70,7 +70,7 @@ class export extends aw_template
 		if (!$cal_id)
 		{
 			$pl = new planner;
-			$pl->submit_add(array("parent" => 1));
+			//$pl->submit_add(array("parent" => 1));
 			$cal_id = $pl->id;
 			$event_id = false; 
 
@@ -86,13 +86,12 @@ class export extends aw_template
 		}
 
 		$fr = aw_unserialize($this->get_cval("export::rule_folders".aw_global_get("lang_id")));
-		$o = get_instance("objects");
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_export"),
 			"folder" => $folder,
 			"url" => $url,
 			"zip_file" => $this->get_cval("export::zip_file"),
-			"aw_zip_folder" => $this->picker($this->get_cval("export::aw_zip_folder"),$o->get_list()),
+			"aw_zip_folder" => $this->picker($this->get_cval("export::aw_zip_folder"),$this->get_menu_list()),
 			"aw_zip_fname" => $this->get_cval("export::aw_zip_fname"),
 			"sel_period" => $this->mk_my_orb("repeaters", array("id" => $event_id),"cal_event",false,true),
 			"automatic" => checked($this->get_cval("export::automatic") == 1),
@@ -103,7 +102,7 @@ class export extends aw_template
 			"fn_type_4" => checked($fn_type == FN_TYPE_ALIAS),
 			"gen_url" => $this->mk_my_orb("do_export"),
 			"rules" => $this->mk_my_orb("rules"),
-			"rule_folders" => $this->multiple_option_list($fr,$o->get_list()),
+			"rule_folders" => $this->multiple_option_list($fr,$this->get_menu_list()),
 			"public_symlink_name" => $this->get_cval("export::public_symlink_name"),
 			"pick_active" => $this->mk_my_orb("pick_active_version", array()),
 			"view_log" => $this->mk_my_orb("view_log", array()),
@@ -245,12 +244,12 @@ class export extends aw_template
 
 		if (file_exists(aw_ini_get("server.tmpdir")."/exp_running_sid".aw_ini_get("site_id")))
 		{
-			$mt = filemtime(aw_ini_get("server.tmpdir")."/exp_running_sid".aw_ini_get("site_id")));
+			$mt = filemtime(aw_ini_get("server.tmpdir")."/exp_running_sid".aw_ini_get("site_id"));
 			if ((time() - $mt) < 600)
 			{
 				die("eksport juba k&auml;ib!");
 			}
-			unlink(aw_ini_get("server.tmpdir")."/exp_running_sid".aw_ini_get("site_id")));
+			unlink(aw_ini_get("server.tmpdir")."/exp_running_sid".aw_ini_get("site_id"));
 		}
 		// ok, this is the complicated bit.
 		// so, how do we do this? first. forget the time limit, this is gonna take a while.
@@ -316,12 +315,10 @@ class export extends aw_template
 		// build a list of all the menus and submenus for this rule
 		if ($rule_id)
 		{
-			$o = get_instance("objects");
 			$allmenus = array();
 			foreach($this->loaded_rule["meta"]["menus"] as $mnid)
 			{
 				// since rules do not recurse on submenus neither should we here.
-//				$allmenus += $o->get_list(false,false,$mnid);
 				$allmenus += array($mnid => $mnid);
 			}
 
@@ -951,9 +948,8 @@ class export extends aw_template
 		extract($arr);
 		$this->read_template("add_rule.tpl");
 		$this->mk_path($parent,"Lisa");
-		$o = get_instance("objects");
 		$fr = aw_unserialize($this->get_cval("export::rule_folders".aw_global_get("lang_id")));
-		$lst = $o->get_list();
+		$lst = $this->get_menu_list();
 		$ls = array();
 		foreach($fr as $mnid)
 		{
@@ -1020,13 +1016,12 @@ class export extends aw_template
 		$this->load_rule($id);
 		$this->mk_path($this->loaded_rule["parent"],"Muuda ekspordi ruuli");
 		$this->read_template("add_rule.tpl");
-		$o = get_instance("objects");
 		$fr = aw_unserialize($this->get_cval("export::rule_folders".aw_global_get("lang_id")));
-		$lst = $o->get_list();
+		$lst = $this->get_menu_list();
 		$ls = array();
 		foreach($fr as $mnid)
 		{
-			$ls += $o->get_list(false, false, $mnid);
+			$ls += $this->get_menu_list(false, false, $mnid);
 			$ls[$mnid] = $lst[$mnid];
 		}
 		$this->vars(array(
