@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.220 2003/02/02 16:11:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.221 2003/02/02 17:33:03 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -1127,35 +1127,39 @@ class menuedit extends aw_template
 				}
 				if ($obj !== false)
 				{
-					// vaatame, kas selle nimega aliast on?
-					$obj = $this->_get_object_by_alias($sval/*,$prnt*/);
-					//$obj = $this->_get_object_by_alias2($sval,$prnt);
-
-					// need to check one more thing, IF prnt = 0 then fetch the parent
-					// of this object and see whether it has an alias. if so, do not
-					// let him access this menu directly
-
-					// and why the hell not? 
-					// this broke aw.struktuur.ee and why is it good anyway? - terryf
-
-/*					if ($prnt == 0)
+					// ok, ini option: menuedit.recursive_aliases  - if true, aliases are checked by parents
+					if ($this->cfg['recursive_aliases'])
 					{
-						$pobj = $this->get_object($obj["parent"]);
-						if (strlen($pobj["alias"]) > 0)
+						// vaatame, kas selle nimega aliast on?
+						$obj = $this->_get_object_by_alias($sval,$prnt);
+
+						// need to check one more thing, IF prnt = 0 then fetch the parent
+						// of this object and see whether it has an alias. if so, do not
+						// let him access this menu directly
+						if ($prnt == 0)
+						{
+							$pobj = $this->get_object($obj["parent"]);
+							if (strlen($pobj["alias"]) > 0)
+							{
+								$obj = false;
+							}
+						};
+
+						if ( ($prnt != 0) && ($obj["parent"] != $prnt) )
 						{
 							$obj = false;
 						}
-					};*/
-
-/*					if ( ($prnt != 0) && ($obj["parent"] != $prnt) )
-					{
-						$obj = false;
+						else
+						{
+							$prnt = $obj["oid"];
+						};
 					}
 					else
-					{*/
+					{
+						// vaatame, kas selle nimega aliast on?
+						$obj = $this->_get_object_by_alias($sval);
 						$prnt = $obj["oid"];
-//					};
-
+					}
 				};
 			};
 
