@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.290 2003/04/25 08:58:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.291 2003/05/04 19:00:01 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -144,7 +144,9 @@ class menuedit extends aw_template
 		{
 			// seda objekti pold caches
 			$site_content = get_instance("contentmgmt/site_content");
+			$site_content->raw = $this->raw;
 			$res = $site_content->_gen_site_html($params);
+			$this->sel_menus = $site_content->sel_menus;
 			if ($use_cache && !aw_global_get("no_cache_content"))
 			{
 				$cache->set($section,$cp,$res);
