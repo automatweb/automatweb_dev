@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_remote_settings.aw,v 1.2 2005/01/20 11:36:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_remote_settings.aw,v 1.3 2005/02/21 08:52:15 kristo Exp $
 // auth_remote_settings.aw - Automaatne sissep&auml;&auml;s 
 /*
 
@@ -275,9 +275,10 @@ class auth_remote_settings extends class_base
 			"params" => array(
 				"c_uid" => $arr["remote_uid"],
 				"c_hash" => $arr["remote_hash"]
-			)
+			),
+			"no_errors" => 1
 		));
-		if ($srv)
+		if ($res)
 		{
 			// get conf obj
 			$conf = $this->_get_conf_obj();
@@ -303,6 +304,10 @@ class auth_remote_settings extends class_base
 					die();
 				}
 			}
+		}
+		else
+		{
+			die("Antud link ei võimalda abikeskkonda siseneda, palun kontakteeruge <a href='mailto:support@automatweb.com'>administraatoriga</a> ");
 		}
 	}
 
