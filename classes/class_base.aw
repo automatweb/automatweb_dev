@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.109 2003/06/02 13:13:07 duke Exp $
+// $Id: class_base.aw,v 2.110 2003/06/02 14:55:24 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -1148,7 +1148,11 @@ class class_base extends aw_template
 
 		// figure out which group is active
 		// it the group argument is a defined group, use that
-
+		if (isset($this->action))
+		{
+			$use_group = $this->action;
+		}
+		else
 		if ( $args["group"] && !empty($this->groupinfo[$args["group"]]) )
 		{
 			$use_group = $args["group"];
