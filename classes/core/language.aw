@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.7 2004/06/02 10:49:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.8 2004/06/04 11:49:51 kristo Exp $
 // language.aw - Keel 
 /*
 
@@ -71,13 +71,13 @@ class language extends class_base
 
 		// check if we need to upgrade
 		$tbl = $this->db_get_table("languages");
-		if (!isset($tbl["fields"]["oid"]))
+		/*if (!isset($tbl["fields"]["oid"]))
 		{
 			die("Keeled tuleb konvertida uuele s&uuml;steemile, seda saab teha ".html::href(array(
 				"url" => $this->mk_my_orb("lang_new_convert", array(), "converters"),
 				"caption" => "siit"
 			)));
-		}
+		}*/
 	}
 
 	//////
