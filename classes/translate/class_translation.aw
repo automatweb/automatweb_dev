@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/class_translation.aw,v 1.2 2003/09/24 16:28:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/class_translation.aw,v 1.3 2004/03/16 10:29:27 duke Exp $
 // translation.aw - Tõlge 
 /*
 
@@ -219,9 +219,9 @@ class class_translation extends class_base
 
 	function callback_pre_save($arr)
 	{
-		if (!empty($arr["form_data"]["trans"]))
+		if (!empty($arr["request"]["trans"]))
 		{
-			$arr["obj_inst"]->set_meta("trans",$arr["form_data"]["trans"]);
+			$arr["obj_inst"]->set_meta("trans",$arr["request"]["trans"]);
 		};
 	}
 }
