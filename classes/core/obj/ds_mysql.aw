@@ -202,6 +202,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			{
 				continue;
 			}
+
 			
 			if ($data["table"] == "objects" && $data["field"] == "meta" && !isset($arr["objdata"]["meta"][$data["name"]]) && !empty($data["default"]))
 			{
@@ -231,6 +232,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				'1',						'".$metadata."',				'".$objdata["subclass"]."',	'".$objdata["flags"]."'
 		)";
 		//echo "q = <pre>". htmlentities($q)."</pre> <br />";
+
 		$this->db_query($q);
 		$oid = $this->db_last_insert_id();
 

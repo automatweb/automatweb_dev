@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.55 2004/02/27 11:20:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.56 2004/03/09 15:39:20 kristo Exp $
 
 class db_config extends aw_template 
 {
@@ -48,7 +48,6 @@ class db_config extends aw_template
 	{
 		$_data = $this->_get_login_menus();
 		$data = $_data[aw_global_get("lang_id")];
-
 		if (!is_array($data))
 		{
 			return;
@@ -73,7 +72,6 @@ class db_config extends aw_template
 		};
 
 		return $cur_menu;
-
 	}
 
 	function _get_login_menus($args = array())
