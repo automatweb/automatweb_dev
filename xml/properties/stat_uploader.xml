@@ -57,6 +57,14 @@
             <caption>Kommentaar</caption>
       </property>
       <property>
+            <name>MAX_FILE_SIZE</name>
+            <group>general</group>
+            <form>stat</form>
+            <type>hidden</type>
+            <field>MAX_FILE_SIZE</field>
+            <caption>Faili max. suurus</caption>
+      </property>
+      <property>
             <name>submit</name>
             <group>general</group>
             <form>stat</form>
