@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.79 2004/09/03 14:09:57 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.80 2004/09/06 15:02:26 sven Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -10,9 +10,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 @tableinfo kliendibaas_firma index=oid master_table=objects master_index=oid
 
 @default table=objects
-@default group=general
+@default group=general_sub
 
-@property navtoolbar type=toolbar store=no no_caption=1 group=general,all_actions,meetings,tasks,calls editonly=1
+@property navtoolbar type=toolbar store=no no_caption=1 group=general_sub,all_actions,meetings,tasks,calls editonly=1
 
 @property name type=textbox size=30 maxlenght=255 table=objects
 @caption Organisatsiooni nimi
@@ -23,9 +23,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 @property reg_nr type=textbox size=10 maxlength=20 table=kliendibaas_firma
 @caption Registri number
 
-@property pohitegevus type=relpicker reltype=RELTYPE_TEGEVUSALAD table=kliendibaas_firma
-@caption Põhitegevus
-
 //@property ettevotlusvorm type=relpicker reltype=RELTYPE_ETTEVOTLUSVORM table=kliendibaas_firma 
 //@caption Õiguslik vorm
 
@@ -35,14 +32,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 //@property ettevotlusvorm type=objpicker clid=CL_CRM_CORPFORM table=kliendibaas_firma 
 //@caption Õiguslik vorm
 
-@property tooted type=relpicker reltype=RELTYPE_TOOTED method=serialize field=meta table=objects
-@caption Tooted
 
-@property kaubamargid type=textarea cols=65 rows=3 table=kliendibaas_firma
-@caption Kaubamärgid
-
-@property tegevuse_kirjeldus type=textarea cols=65 rows=3 table=kliendibaas_firma
-@caption Tegevuse kirjeldus
 
 @property logo type=textbox size=40 method=serialize field=meta table=objects
 @caption Organisatsiooni logo(url)
@@ -50,6 +40,24 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 @property firmajuht type=chooser orient=vertical table=kliendibaas_firma  editonly=1
 @caption Kontaktisik
 
+@property year_founded type=date_select table=kliendibaas_firma year_from=1800
+@caption Asutatud
+
+------ Üldine - Tegevused grupp -----
+@default group=org_sections
+
+@property kaubamargid type=textarea cols=65 rows=3 table=kliendibaas_firma
+@caption Kaubamärgid
+
+@property tegevuse_kirjeldus type=textarea cols=65 rows=3 table=kliendibaas_firma
+@caption Tegevuse kirjeldus
+
+@property tooted type=relpicker reltype=RELTYPE_TOOTED method=serialize field=meta table=objects
+@caption Tooted
+
+@property pohitegevus type=relpicker reltype=RELTYPE_TEGEVUSALAD table=kliendibaas_firma
+@caption Põhitegevus
+--------------------------------------
 @default group=oldcontacts
 
 @property addresslist type=text store=no no_caption=1 group=oldcontacts
@@ -295,11 +303,15 @@ property projects_listing_toolbar type=toolbar no_caption=1 parent=projects_tool
 @property my_projects type=table no_caption=1 store=no group=my_projects
 
 -------------------------------------------------
+@groupinfo general_sub caption="&Uuml;ldine" parent=general
+@groupinfo cedit caption="Üldkontaktid" parent=general
+@groupinfo org_sections caption="Tegevus" parent=general
+
+@groupinfo people caption="Inimesed"
 
 @groupinfo contacts caption="Kontaktid"
-@groupinfo oldcontacts caption="Isikud" parent=contacts submit=no
-@groupinfo contacts2 caption="Kontaktid" parent=contacts submit=no
-@groupinfo cedit caption="Üldkontaktid" parent=contacts
+@groupinfo oldcontacts caption="Isikud" parent=people submit=no
+@groupinfo contacts2 caption="Puuvaade" parent=people submit=no
 @groupinfo overview caption="Tegevused" 
 @groupinfo all_actions caption="Kõik" parent=overview submit=no
 @groupinfo calls caption="Kõned" parent=overview submit=no
@@ -316,17 +328,15 @@ property projects_listing_toolbar type=toolbar no_caption=1 parent=projects_tool
 @groupinfo competitors caption="Konkurendid" parent=relorg
 
 
-@groupinfo personal caption="Värbamine"
-@groupinfo personal_offers caption="Tööpakkumised" parent=personal submit=no
-@groupinfo personal_candits caption="Kandideerijad" parent=personal submit=no
+@groupinfo personal_offers caption="Tööpakkumised" parent=people submit=no
+@groupinfo personal_candits caption="Kandideerijad" parent=people submit=no
 
-@groupinfo offers caption="Pakkumised" submit=no
+@groupinfo offers caption="Pakkumised" submit=no parent=relorg
 @groupinfo org_objects_main caption="Objektid" submit=no
 @groupinfo org_objects caption="Objektid" submit=no parent=org_objects_main
 
-@groupinfo org_projects_main caption="Projektid" submit=no
-@groupinfo org_projects caption="Projektid" submit=no parent=org_projects_main
-@groupinfo my_projects caption="Minu projektid" parent=org_projects_main submit=no
+@groupinfo org_projects caption="Projektid" submit=no parent=relorg
+@groupinfo my_projects caption="Minu projektid" parent=relorg submit=no
 
 @reltype ETTEVOTLUSVORM value=1 clid=CL_CRM_CORPFORM
 @caption Õiguslik vorm
@@ -713,16 +723,22 @@ class crm_company extends class_base
 		}	
 	}
 	
-	function callback_mod_tab($arr)
+	function callback_mod_tab(&$arr)
 	{
-		if($arr['id']=='customers')
+		switch ($arr['id'])
 		{
-			$tmp_obj = new object($arr['request']['id']);
-			$arr['caption'] = $tmp_obj->prop('name');
-		}
-		else if($arr['id']=='my_customers')
-		{
-			$arr['caption'] = $this->users_person->prop('name');	
+			case 'customers':
+				$tmp_obj = new object($arr['request']['id']);
+				$arr['caption'] = $tmp_obj->prop('name');
+			break;
+			
+			case 'my_customers':
+					$arr['caption'] = $this->users_person->prop('name');			
+			break;
+			case 'people':
+				$arr['link'] = aw_url_change_var(array("group" => "contacts2"));
+				//arr($arr);
+			break;
 		}
 	}
 
@@ -740,7 +756,6 @@ class crm_company extends class_base
 			$this->show_customer_search=true;
 			$arr['request']['no_results'] = 1;
 		}*/
-
 		switch($data['name'])
 		{
 			//hägish, panen nime kõrval html lingi ka
@@ -760,6 +775,10 @@ class crm_company extends class_base
 					),CL_CRM_ADDRESS);
 				}
 				$data['caption'] .= '<br><a href="'.$url.'">Muuda</a>';
+			break;
+			
+			case "tabpanel":
+				//arr($data);
 			break;
 			
 			case "my_projects":
