@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.29 2003/01/26 18:38:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.30 2003/01/30 12:34:40 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -391,8 +391,8 @@ class form_table extends form_base
 				// do this better. 
 				// first we compile the elements in the column together into one string and add their 
 				// separators
-				$str = "";
-				$noshowstr = "";
+				$str = array();
+				$noshowstr = array();
 				foreach($cc["els"] as $elid)
 				{
 					if ($dat["ev_".$elid] != "")
@@ -400,22 +400,18 @@ class form_table extends form_base
 						if ($cc["el_show"][$elid] == 1)
 						{
 							$cursums[$elid] += $dat["ev_".$elid];
-							$str .= $this->table["defs"][$col]["el_sep_pre"][$elid];
 							if ($cc['el_main_types'][$elid] == 'date' && count($cc['els']) == 1)
 							{
-								$str .= $dat["el_".$elid];
+								$str[$elid] = $dat["el_".$elid];
 							}
 							else
 							{
-								$str .= $dat["ev_".$elid];
+								$str[$elid] = $dat["ev_".$elid];
 							}
-							$str .= $this->table["defs"][$col]["el_sep"][$elid];
 						}
 						else
 						{
-							$noshowstr .= $this->table["defs"][$col]["el_sep_pre"][$elid];
-							$noshowstr .= $cc['el_main_types'][$elid] == 'date' ? $dat["el_".$elid] : $dat["ev_".$elid];
-							$noshowstr .= $this->table["defs"][$col]["el_sep"][$elid];
+							$noshowstr[$elid] = $cc['el_main_types'][$elid] == 'date' ? $dat["el_".$elid] : $dat["ev_".$elid];
 						}
 					}
 					else
@@ -424,9 +420,7 @@ class form_table extends form_base
 						// order element will never have a value in the data
 						if ($elid == "order" )
 						{
-							$str .= $this->table["defs"][$col]["el_sep_pre"][$elid];
-							$str .= $this->get_order_url($col,$dat, $form_id);
-							$str .= $this->table["defs"][$col]["el_sep"][$elid];
+							$str[$elid] = $this->get_order_url($col,$dat, $form_id);
 						}
 						else
 						if ($elid == "formel")
@@ -501,7 +495,7 @@ class form_table extends form_base
 									};
 
 									$el_ref->form->set_form_html_name($this->get_html_name_for_tbl_form());
-									$str .= $el_ref->gen_user_html_not(
+									$str[$elid] .= $el_ref->gen_user_html_not(
 										"",
 										array($el_ref->get_el_name() => $bcount),
 										false,
@@ -535,13 +529,42 @@ class form_table extends form_base
 								$this->pricel_sum += str_replace(",",".", $dat["ev_".$element_id])*$basket_count;
 								if (((double)$dat["ev_".$element_id]*(double)$basket_count) > 0)
 								{
-									$str .= (double)str_replace(",",".",$dat["ev_".$element_id])*(double)$basket_count;
+									$str[$elid] .= (double)str_replace(",",".",$dat["ev_".$element_id])*(double)$basket_count;
 								}
 							}
 							exit_function("form_table::row_data::formel_price", array());
 						}
 					}
 				}
+
+				// now go over the $str and $noshowstr arrays and put separators between them
+				// if the values are not empty
+				$_tstr = array();
+				$_preve = 0;
+				foreach($str as $_elid => $_elv)
+				{
+					if ($_elv != "")
+					{
+						$_tstr[$_elid] .= $this->table["defs"][$col]["el_sep_pre"][$_elid];
+						$_tstr[$_elid] .= $_elv;
+						$_tstr[$_elid] .= $this->table["defs"][$col]["el_sep"][$_elid];
+					}
+				}
+				$str = join($this->table["defs"][$col]["col_el_sep"],$_tstr);
+
+				$_tstr = array();
+				foreach($noshowstr as $_elid => $_elv)
+				{
+					if ($_elv != "")
+					{
+						$_tstr[$_elid] .= $this->table["defs"][$col]["el_sep_pre"][$_elid];
+						$_tstr[$_elid] .= $_elv;
+						$_tstr[$_elid] .= $this->table["defs"][$col]["el_sep"][$_elid];
+					}
+				}
+				$noshowstr = join($this->table["defs"][$col]["col_el_sep"],$_tstr);
+
+				
 				$textvalue = $str;
 
 				// then we add the aliases to the column
@@ -2034,6 +2057,7 @@ class form_table extends form_base
 			$this->vars(array(
 				"HAS_FTABLE_ALIASES" => ($has_ftable_aliases ? $this->parse("HAS_FTABLE_ALIASES") : ""),
 				"col_not_active" => checked($this->table["defs"][$col]["not_active"]),
+				"col_el_sep" => $this->table["defs"][$col]["col_el_sep"]
 			));
 			$coldata[$col][9] = $this->parse("SEL_SETTINGS");
 
