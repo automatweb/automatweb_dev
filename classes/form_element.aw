@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.52 2002/06/27 22:16:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.53 2002/06/27 22:49:25 duke Exp $
 // form_element.aw - vormi element.
 classload("image");
 
@@ -9,6 +9,9 @@ class form_element extends aw_template
 	{
 		// FIXME: need stringid lokaliseerida
 		$this->lc_load("form_element","lc_form_element");
+	
+		// we need that for wysiwyg "textareas"
+		$this->is_ie = !(strpos(aw_global_get("HTTP_USER_AGENT"),"MSIE") === false);
 
 		$this->all_subtypes=array(
 			"textbox" => array(
@@ -1559,12 +1562,11 @@ class form_element extends aw_template
 			$html.="<input type='hidden' name='".$prefix.$elid."' value='".$this->get_val($elvalues)."'>";
 		}
 
-		$is_ie = !(strpos(aw_global_get("HTTP_USER_AGENT"),"MSIE") === false);
 		switch($this->arr["type"])
 		{
 			case "textarea":
 				// only IE supports wysiwyg editor
-				if (($this->arr["wysiwyg"] == 1) && ($is_ie))
+				if (($this->arr["wysiwyg"] == 1) && ($this->is_ie))
 				{
 					$html.="<input type=\"hidden\" name=\"_el_".$prefix.$elid."\" value=\"".htmlspecialchars($this->get_val($elvalues))."\">";
 					$html.="<iframe name=\"_ifr_".$prefix.$elid."\" onFocus=\"sel_el='_el_".$prefix.$elid."'\" frameborder=\"1\" width=\"".($this->arr["ta_cols"]*10)."\" height=\"".($this->arr["ta_rows"]*10)."\"></iframe>\n";
@@ -1834,6 +1836,7 @@ class form_element extends aw_template
 					}
 					if ($this->arr["subtype"] == "submit" || $this->arr["type"] == "submit" || $this->arr["subtype"] == "confirm")
 					{
+						/*
 						if ($this->arr["chain_forward"] == 1)
 						{
 							$bname="name=\"no_chain_forward\"";
@@ -1848,6 +1851,10 @@ class form_element extends aw_template
 						{
 							$bname = "name=\"confirm\"";
 						}
+						*/
+
+						$bname = sprintf("name='submit[%d]'",$this->id);
+
 						$html .= "<input $csscl $disabled $bname type='$btype' $bsrc VALUE='".$butt."' onClick=\"return check_submit();\">\n";
 					}
 					else
@@ -2083,17 +2090,44 @@ class form_element extends aw_template
 			$var = $this->form->post_vars[$prefix."radio_group_".$this->arr["group"]];
 		}
 		else
-		if ($this->arr["type"] == "button" && $this->arr["subtype"] == "confirm")
-		{
+		//if ($this->arr["type"] == "button" && $this->arr["subtype"] == "confirm")
+		//{
 			// confirm button moves the entry to another folder
 
 			// but we don't use a prefix when creating a confirm button,
 			// which means we can just ignore it (prefix) here.
-			if (isset($GLOBALS[$prefix."confirm"]))
-			{
+		//	if (isset($GLOBALS[$prefix."confirm"]))
+		//	{
 				// just set the entry parent to the correct value, the object will actually be updated a bit later
-				$this->form->entry_parent = $this->arr["confirm_moveto"];
-			}
+		//		$this->form->entry_parent = $this->arr["confirm_moveto"];
+		//	}
+		//}
+		//else
+		if ($this->arr["type"] == "button")
+		{
+			$s_arr = $this->form->post_vars["submit"];
+			$clicked = false;
+			if (is_array($s_arr))
+			{
+				reset($s_arr);
+				list($skey,) = each($s_arr);
+				if ($skey == $this->id)
+				{
+					$clicked = true;
+				};
+			};
+
+			if ($clicked)
+			{
+				// let the form know that _this_ button was clicked
+				$this->form->set_opt("submit_id",$skey);
+
+				if ($this->arr["subtype"] == "confirm")
+				{
+					$this->form->set_opt("entry_parent",$this->arr["confirm_moveto"]);
+				}
+			};
+
 		}
 		else
 		if ($this->arr["type"] == "multiple")
@@ -2164,7 +2198,7 @@ class form_element extends aw_template
 			$var = array("count" => $count, "type" => $type);
 		}
 		else
-		if ($this->arr["type"] == "textarea" && $this->arr["wysiwyg"] == 1)
+		if ($this->arr["type"] == "textarea" && $this->arr["wysiwyg"] == 1 && ($this->is_ie))
 		{
 			$var = $this->form->post_vars["_el_".$prefix.$this->id];
 		}
