@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.11 2003/01/30 12:33:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.12 2003/02/25 15:25:59 duke Exp $
 // mysql.aw - MySQL draiver
 class mysql 
 {
@@ -42,7 +42,7 @@ class mysql
 	function db_query($qtext,$errors = true) 
 	{
 		global $DUKE;
-		if ($DUKE)
+		if ( (aw_ini_get("debug_mode") != 0) && $DUKE)
 		{
 			print '<pre>';
 			print_r(preg_replace("/\t/","",$qtext));
@@ -88,7 +88,7 @@ class mysql
 			$this->num_fields = @mysql_num_fields($this->qID);
 		};
 		$this->rec_count = 0;
-		if ($DUKE)
+		if ( (aw_ini_get("debug_mode") != 0) && $DUKE)
 		{
 			list($micro,$sec) = split(' ',microtime());
 			$ts_e = $sec + $micro;
