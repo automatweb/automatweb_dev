@@ -1,4 +1,4 @@
-<form action='reforb.{VAR:ext}' method='post' name='changeform' enctype='multipart/form-data'>
+<form action='orb.{VAR:ext}' method='post' name='changeform' enctype='multipart/form-data'>
 <input type='hidden' NAME='MAX_FILE_SIZE' VALUE='500000'>
 <table border='0' width='100%' cellspacing='1' cellpadding='1' bgcolor='#FFFFFF'>
 
