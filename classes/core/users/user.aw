@@ -808,7 +808,7 @@ class user extends class_base
 			{
 				continue;
 			}
-			if (!$this->can("edit", $row["oid"]))
+			if (!$this->can("view", $row["oid"]))
 			{
 				continue;
 			}
