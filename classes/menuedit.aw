@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.254 2003/03/07 10:38:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.255 2003/03/07 17:31:57 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -2941,6 +2941,13 @@ class menuedit extends aw_template
 						));
 					}
 					$has_image = true;
+				}
+				else
+				{
+					$this->vars(array(
+						"menu_image_".$_i => "",
+						"menu_image_".$_i."_url" => ""
+					));
 				}
 			}
 
