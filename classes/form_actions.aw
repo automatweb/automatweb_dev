@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.6 2001/10/15 05:13:39 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.7 2001/11/01 22:10:57 kristo Exp $
 
 // form_actions.aw - creates and executes form actions
 lc_load("form");
@@ -8,6 +8,7 @@ $orb_defs["form_actions"] =
 array("list_actions"	=> array("function" => "list_actions", "params" => array("id")),
 			"add_action"		=> array("function" => "add_action", "params" => array("id")),
 			"submit_action" => array("function" => "submit_action", "params" => array()),
+			"delete_action" => array("function" => "delete_action", "params" => array("id", "aid")),
 			"change_action" => array("function" => "change_action", "params" => array("id", "aid"),"opt" => array( "level"))
 			);
 
@@ -225,6 +226,13 @@ class form_actions extends form_base
 					break;
 			}
 		}
+	}
+
+	function delete_action($arr)
+	{
+		extract($arr);
+		$this->db_query("DELETE FROM form_actions WHERE id = $aid");
+		return $this->mk_my_orb("list_actions",array("id" => $id));
 	}
 }
 ?>
