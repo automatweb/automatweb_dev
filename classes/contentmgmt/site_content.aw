@@ -84,7 +84,7 @@ class site_content extends menuedit
 
 
 		// read all the menus and other necessary info into arrays from the database
-		dbg::p("active language for menus is ".aw_global_get("lang_id")."<br>");
+		dbg::p("active language for menus is ".aw_global_get("lang_id")."<br />");
 
 		$this->make_menu_caches();
 
@@ -313,7 +313,7 @@ class site_content extends menuedit
 			while (list($id,$name) = each($menu_defs))
 			{
 				$nx = $name;
-				dbg::p("drawing $id,$name<br>");
+				dbg::p("drawing $id,$name<br />");
 
 				// SIC! check whether login menus are defined and
 				// if so, overwrite the one defined in aw.ini
@@ -467,7 +467,7 @@ class site_content extends menuedit
 			$rp = "";
 			if ($this->is_template("logged.asdasdas"))
 			{
-				print "logged is inside LEFT_PANE<br>";
+				print "logged is inside LEFT_PANE<br />";
 
 			}
 		
@@ -968,7 +968,7 @@ class site_content extends menuedit
 			// if no correct combination exists, use the default
 			if ($GLOBALS["DBUG2"] == 1)
 			{
-				echo "try for template $mn $ap <br>";
+				echo "try for template $mn $ap <br />";
 			}
 			if (!$this->is_template($mn.$ap))
 			{
@@ -1195,7 +1195,7 @@ class site_content extends menuedit
 						$l_mid.=$this->parse($mn.$ap);
 						if ($GLOBALS["DBUG"] == 1)
 						{
-							echo "parse is_mid $mn $ap <br>";
+							echo "parse is_mid $mn $ap <br />";
 						}
 					}
 					else
@@ -1203,7 +1203,7 @@ class site_content extends menuedit
 						$l.=$this->parse($mn.$ap);
 						if ($GLOBALS["DBUG"] == 1)
 						{
-							echo "parse $mn $ap <br>";
+							echo "parse $mn $ap <br />";
 						}
 					}
 				}
@@ -1565,7 +1565,7 @@ class site_content extends menuedit
 					$link = $exp->add_session_stuff($link, aw_global_get("lang_id"));
 					$_tl = $link;
 					$link = $this->cfg["baseurl"]."/".$exp->get_hash_for_url(str_replace($this->cfg["baseurl"],"",$link),aw_global_get("lang_id"));
-//					echo "made hash for link $_tl = $link <br>";
+//					echo "made hash for link $_tl = $link <br />";
 				}
 				else
 				{
@@ -1583,7 +1583,7 @@ class site_content extends menuedit
 						$link = $exp->add_session_stuff($link, aw_global_get("lang_id"));
 						$_tl = $link;
 						$link = $this->cfg["baseurl"]."/".$exp->get_hash_for_url(str_replace($this->cfg["baseurl"],"",$link),aw_global_get("lang_id"));
-	//					echo "made hash for link $_tl = $link <br>";
+	//					echo "made hash for link $_tl = $link <br />";
 					}
 					else
 					{
@@ -2839,7 +2839,7 @@ class site_content extends menuedit
 			case CL_IMAGE:
 				$t = get_instance("image");
 				$idata = $t->get_image_by_id($obj["oid"]);
-				$this->replacement = sprintf("<img src='%s'><br>%s",$idata["url"],$idata["comment"]);
+				$this->replacement = sprintf("<img src='%s'><br />%s",$idata["url"],$idata["comment"]);
 
 				if ($this->raw)
 				{

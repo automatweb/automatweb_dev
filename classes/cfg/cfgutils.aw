@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.21 2003/07/25 15:44:11 duke Exp $
+// $Id: cfgutils.aw,v 1.22 2003/08/01 13:27:47 axel Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -231,7 +231,7 @@ class cfgutils extends aw_template
                 // full cavity search
                 if (preg_match("/\W/",$file))
                 {
-                        die("Invalid clid - $file<bR>");
+                        die("Invalid clid - $file<br />");
                 };
 		$objprops = $this->load_class_properties(array(
 			"file" => $file,

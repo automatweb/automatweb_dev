@@ -14,7 +14,7 @@ class grid_editor extends class_base
 	function _init_table($data)
 	{
 		$this->arr = $data;
-//		echo "data = <pre>", var_dump($data),"</pre> <br>";
+//		echo "data = <pre>", var_dump($data),"</pre> <br />";
 		// do a sanity check on the table
 		if ($this->arr["cols"]  < 1 || $this->arr["rows"]  < 1)
 		{

@@ -105,7 +105,7 @@ class propcollector extends aw_template
 					$counter++;
 				};
 				$this->cl_end();
-				//print "parsed $name<br>";
+				//print "parsed $name<br />";
 			};
 		};
 		printf("Updated %d files out of %d\nAll done.\n",$counter,$total);

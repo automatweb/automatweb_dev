@@ -309,7 +309,7 @@ class ml_mail extends aw_template
 	// täidab meili queuet
 	function process_queue($arr)
 	{
-		echo("process_queue:<br>");//dbg
+		echo("process_queue:<br />");//dbg
 		$tm=time();
 		$awm=0;
 		// võta need, mida pole veel üldse saadetud või on veel saata & aeg on alustada
@@ -317,7 +317,7 @@ class ml_mail extends aw_template
 		while ($r = $this->db_next())
 		{
 			$qid=(int)$r["qid"];
-			echo("doing item $qid<br>");flush();//dbg
+			echo("doing item $qid<br />");flush();//dbg
 			// kui on vaja vahet pidada ja ei tohi kõiki korraga saata
 			if ($r["delay"] && $r["patch_size"])
 			{
@@ -327,7 +327,7 @@ class ml_mail extends aw_template
 				{
 					if (!$awm)
 					{
-						echo("aw mail loaded<br>");//dbg
+						echo("aw mail loaded<br />");//dbg
 						$awm=1;
 					};
 					echo("saadan alates ".($r["position"]+1)."(incl) ".$r["patch_size"]." meili");flush();//dbg
@@ -335,7 +335,7 @@ class ml_mail extends aw_template
 					//lukusta queue item
 					$this->db_query("UPDATE ml_queue SET status = 3 WHERE qid = '$qid'");
 					$this->send_list_message($r,$r["position"]+1,$r["patch_size"]);
-					echo("peale send_list_message<br>");flush();//dbg
+					echo("peale send_list_message<br />");flush();//dbg
 					if ($r["patch_size"]+$r["position"]>=$r["total"])
 					{
 						$stat="2";//valmis
@@ -403,7 +403,7 @@ class ml_mail extends aw_template
 		$list_members = $ml_list_inst->get_members($lid);
 		foreach($list_members as $m)
 		{
-			echo("liige ".$m["oid"]."<br>");flush();//dbg
+			echo("liige ".$m["oid"]."<br />");flush();//dbg
 
 			// put all the variables for the user into $l array
 			$l = array();
@@ -420,7 +420,7 @@ class ml_mail extends aw_template
 					}
 				}
 			}
-			echo "vars = <pre>", var_dump($l),"</pre> <br>";
+			echo "vars = <pre>", var_dump($l),"</pre> <br />";
 
 			$l["time"]=$this->time2date(time(),2);
 
@@ -428,18 +428,18 @@ class ml_mail extends aw_template
 			$message=preg_replace("/#(.+?)#/e","\$l[\"\\1\"]",$msg["message"]);
 			$subject=preg_replace("/#(.+?)#/e","\$l[\"\\1\"]",$msg["subject"]);
 
-			echo("clean<br>");flush();//dbg
+			echo("clean<br />");flush();//dbg
 			$awm->clean();
-			echo("create<br>");flush();//dbg
+			echo("create<br />");flush();//dbg
 			$awm->create_message(array(
 				"froma" => $msg["mfrom"],
 				"Subject" => $subject,
 				"To" => $mtargets1,
 				"body" => $message
 			));
-			echo("gen mail<br>");flush();//dbg
+			echo("gen mail<br />");flush();//dbg
 			$awm->gen_mail();
-			echo("done gen mail<br>");flush();//dbg
+			echo("done gen mail<br />");flush();//dbg
 			$position++;
 		};
 		$tm=time();

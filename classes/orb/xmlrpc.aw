@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/orb/Attic/xmlrpc.aw,v 1.10 2003/06/25 14:55:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/orb/Attic/xmlrpc.aw,v 1.11 2003/08/01 13:27:53 axel Exp $
 class xmlrpc extends aw_template
 {
 	var $allowed = array("I4","BOOLEAN","STRING", "DOUBLE","DATETIME.ISO8601","BASE64", "STRUCT", "ARRAY");
@@ -16,7 +16,7 @@ class xmlrpc extends aw_template
 		$xml = $this->make_request_xml($arr);
 		if (aw_global_get("xmlrpc_dbg"))
 		{
-			echo "sending request = <pre>", htmlspecialchars($xml),"</pre> <br>";
+			echo "sending request = <pre>", htmlspecialchars($xml),"</pre> <br />";
 		}
 
 		$this->no_errors = $arr["no_errors"];
@@ -69,7 +69,7 @@ class xmlrpc extends aw_template
 		//if (aw_global_get("xmlrpc_dbg"))
 		if (aw_global_get("xmlrpc_dbg"))
 		{
-			echo "resp xml = <pre>", htmlspecialchars($xml),"</pre> <br>";
+			echo "resp xml = <pre>", htmlspecialchars($xml),"</pre> <br />";
 		}
 		$result = array();
 
@@ -91,75 +91,75 @@ class xmlrpc extends aw_template
 
 		reset($this->vals);
 		list(,$tmp) = each($this->vals);
-//		echo "expect methodresponse open got $tmp[tag] $tmp[type] <br>";
+//		echo "expect methodresponse open got $tmp[tag] $tmp[type] <br />";
 		list(,$is_err) = each($this->vals);
 		if ($is_err["tag"] == "FAULT")
 		{
-//			echo "in fault: got $tmp[tag] $tmp[type] <br>";
+//			echo "in fault: got $tmp[tag] $tmp[type] <br />";
 			list(,$tmp) = each($this->vals);	// value open
-//			echo "in fault: expect value open got $tmp[tag] $tmp[type] <br>";
+//			echo "in fault: expect value open got $tmp[tag] $tmp[type] <br />";
 			list(,$tmp) = each($this->vals);	// struct open
-//			echo "in fault: expect struct open got $tmp[tag] $tmp[type] <br>";
+//			echo "in fault: expect struct open got $tmp[tag] $tmp[type] <br />";
 
 			// faultcode member
 			list(,$tmp) = each($this->vals);	// member open
-//			echo "in fault: expect member open got $tmp[tag] $tmp[type] <br>";
+//			echo "in fault: expect member open got $tmp[tag] $tmp[type] <br />";
 			list(,$faultcode_name_v) = each($this->vals);	// name complete
-//			echo "in fault: expect name complete got $faultcode_name_v[tag] $faultcode_name_v[type] <br>";
+//			echo "in fault: expect name complete got $faultcode_name_v[tag] $faultcode_name_v[type] <br />";
 			list(,$tmp) = each($this->vals);	// value open
-//			echo "in fault: expect value open got $tmp[tag] $tmp[type] <br>";
+//			echo "in fault: expect value open got $tmp[tag] $tmp[type] <br />";
 			// chomp value
 			$faultcode = $this->_proc_unser_data();
 			list(,$tmp) = each($this->vals);	// value close
-//			echo "in fault: expect value close got $tmp[tag] $tmp[type] <br>";
+//			echo "in fault: expect value close got $tmp[tag] $tmp[type] <br />";
 			list(,$tmp) = each($this->vals);	// member close
-//			echo "in fault: expect member close got $tmp[tag] $tmp[type] <br>";
+//			echo "in fault: expect member close got $tmp[tag] $tmp[type] <br />";
 
 			// faultstring
 			list(,$tmp) = each($this->vals);	// member open
-//			echo "in fault: expect member open got $tmp[tag] $tmp[type] <br>";
+//			echo "in fault: expect member open got $tmp[tag] $tmp[type] <br />";
 			list(,$faultstring_name) = each($this->vals);	// name complete
-//			echo "in fault: expect name complete got $faultstring_name[tag] $faultstring_name[type] <br>";
+//			echo "in fault: expect name complete got $faultstring_name[tag] $faultstring_name[type] <br />";
 			list(,$tmp) = each($this->vals);	// value open
-//			echo "in fault: expect value open got $tmp[tag] $tmp[type] <br>";
+//			echo "in fault: expect value open got $tmp[tag] $tmp[type] <br />";
 			// chomp value
 			$faultstring = $this->_proc_unser_data();
 			list(,$tmp) = each($this->vals);	// value close
-//			echo "in fault: expect value close got $tmp[tag] $tmp[type] <br>";
+//			echo "in fault: expect value close got $tmp[tag] $tmp[type] <br />";
 			list(,$tmp) = each($this->vals);	// member close
-//			echo "in fault: expect member close got $tmp[tag] $tmp[type] <br>";
+//			echo "in fault: expect member close got $tmp[tag] $tmp[type] <br />";
 
 			list(,$tmp) = each($this->vals);	// struct close
-//			echo "in fault: expect member close got $tmp[tag] $tmp[type] <br>";
+//			echo "in fault: expect member close got $tmp[tag] $tmp[type] <br />";
 			list(,$tmp) = each($this->vals);	// value close
-//			echo "in fault: expect value close got $tmp[tag] $tmp[type] <br>";
+//			echo "in fault: expect value close got $tmp[tag] $tmp[type] <br />";
 			list(,$tmp) = each($this->vals);	// value close
-//			echo "in fault: expect fault close got $tmp[tag] $tmp[type] <br>";
+//			echo "in fault: expect fault close got $tmp[tag] $tmp[type] <br />";
 			list(,$tmp) = each($this->vals);	// value close
-//			echo "in fault: expect methodresponse close got $tmp[tag] $tmp[type] <br>";
+//			echo "in fault: expect methodresponse close got $tmp[tag] $tmp[type] <br />";
 			$errs = aw_ini_get("errors");
 			$faultcodestr = $errs[$faultcode][def];
-			$this->raise_error(ERR_XMLRPC_FAULT, "Got remote error!<br><br> code: $faultcodestr ($faultcode)<br> string: $faultstring", true, false);
+			$this->raise_error(ERR_XMLRPC_FAULT, "Got remote error!<br /><br /> code: $faultcodestr ($faultcode)<br /> string: $faultstring", true, false);
 		}
 		else
 		{
-//			echo "in resp: expect params open got $is_err[tag] $is_err[type] <br>";
+//			echo "in resp: expect params open got $is_err[tag] $is_err[type] <br />";
 			list(,$tmp) = each($this->vals);	// param open
-//			echo "in resp: expect param open got $tmp[tag] $tmp[type] <br>";
+//			echo "in resp: expect param open got $tmp[tag] $tmp[type] <br />";
 			list(,$tmp) = each($this->vals);	// value open
-//			echo "in resp: expect value open got $tmp[tag] $tmp[type] <br>";
+//			echo "in resp: expect value open got $tmp[tag] $tmp[type] <br />";
 
 			$retval = $this->_proc_unser_data();
 
 			list(,$tmp) = each($this->vals);	// value close
-//			echo "in resp: expect value close got $tmp[tag] $tmp[type] <br>";
+//			echo "in resp: expect value close got $tmp[tag] $tmp[type] <br />";
 			list(,$tmp) = each($this->vals);	// param close
-//			echo "in resp: expect param close got $tmp[tag] $tmp[type] <br>";
+//			echo "in resp: expect param close got $tmp[tag] $tmp[type] <br />";
 			list(,$tmp) = each($this->vals);	// params close
-//			echo "in resp: expect params close got $tmp[tag] $tmp[type] <br>";
+//			echo "in resp: expect params close got $tmp[tag] $tmp[type] <br />";
 
 			list(,$tmp) = each($this->vals);	// value close
-//			echo "in resp: expect methodresponse close got $tmp[tag] $tmp[type] <br>";
+//			echo "in resp: expect methodresponse close got $tmp[tag] $tmp[type] <br />";
 
 			return $retval;
 		}

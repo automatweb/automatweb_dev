@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.81 2003/07/17 12:24:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.82 2003/08/01 13:27:49 axel Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -1299,7 +1299,7 @@ class form extends form_base
 
 		if (!$no_process_entry)
 		{
-//			echo "ctrlchk <br>";
+//			echo "ctrlchk <br />";
 			$this->controller_queue = array();
 			$this->value_controller_queue = array();
 			for ($i=0; $i < $this->arr["rows"]; $i++)
@@ -1331,7 +1331,7 @@ class form extends form_base
 					$ctrl["val"] = $this->get_element_value($ctrl["el_id"],true);
 				}
 				$res = $this->controller_instance->do_check($ctrl["ctrlid"], $ctrl["val"], &$this, $this->get_element_by_id($ctrl["el_id"]));
-//				echo "ctrlid = $ctrl[ctrlid] val - $ctrl[val] <br>";
+//				echo "ctrlid = $ctrl[ctrlid] val - $ctrl[val] <br />";
 				if ($res !== true)
 				{
 					if (!$res)
@@ -1344,7 +1344,7 @@ class form extends form_base
 						$controllers_ok = false;
 					}
 					$controller_warnings_ok = false;
-//						echo "ctrlid $ctrl[ctrlid] failed! <br>";
+//						echo "ctrlid $ctrl[ctrlid] failed! <br />";
 				}
 			}
 
@@ -1391,7 +1391,7 @@ class form extends form_base
 				$controller_warnings_ok = $fcal->fatal;
 				$has_cal_errors = $errors;
 			};
-//			echo "ctrlok = $controllers_ok warnok = $controller_warnings_ok <br>";
+//			echo "ctrlok = $controllers_ok warnok = $controller_warnings_ok <br />";
 			if ( (!$controllers_ok) || ($has_errors) || (!$controller_warnings_ok))
 			{
 				// ok, now the error messages are in $this->controller_errors
@@ -1681,7 +1681,7 @@ class form extends form_base
 			}
 			if ($GLOBALS["fg_op_dbg"] == 1)
 			{
-				echo "op_id = $op_id <br>";
+				echo "op_id = $op_id <br />";
 			}
 			$this->load_output($op_id);
 		}
@@ -2384,13 +2384,13 @@ class form extends form_base
 			$form_table->current_search_form_inst =& $this;
 
 			$used_els = $form_table->get_used_elements();
-//			echo "used_els = <pre>", print_r($used_els),"</pre> <br>";
+//			echo "used_els = <pre>", print_r($used_els),"</pre> <br />";
 
 			$group_els = $form_table->get_group_by_elements();
-//			echo "group_els = <pre>", var_dump($group_els),"</pre> <br>";
+//			echo "group_els = <pre>", var_dump($group_els),"</pre> <br />";
 
 			$group_collect_els = $form_table->get_group_by_collect_elements();
-//			echo "group_cllect_els = <pre>", var_dump($group_collect_els),"</pre> <br>";
+//			echo "group_cllect_els = <pre>", var_dump($group_collect_els),"</pre> <br />";
 		}
 		else
 		{
@@ -2434,8 +2434,8 @@ class form extends form_base
 				$cal_id = $this->arr["search_chain"];
 				$contr = $fc->chain["cal_controller"];
 				/*
-				print "loading calendar for " . $this->arr["search_chain"] . "<br>";
-				print "controller is $contr<br>";
+				print "loading calendar for " . $this->arr["search_chain"] . "<br />";
+				print "controller is $contr<br />";
 				*/
 				$q = "SELECT * FROM calendar2forms WHERE cal_id = '$cal_id'";
 				$this->db_query($q);
@@ -2493,9 +2493,9 @@ class form extends form_base
 				"used_els" => $used_els,
 			));
 //			print $sql;
-//			print "<br>";
+//			print "<br />";
 			$this->db_query($sql,false);
-		//	print "SQL = $sql<br>";
+		//	print "SQL = $sql<br />";
 		//	flush();
 			list(,$__gr) = each($used_els);
 			if (is_array($__gr))
@@ -2532,14 +2532,14 @@ class form extends form_base
 		};
 
 		// now get the search query
-//		echo "getting search query , used_els = <pre>",var_dump($used_els) ,"</pre><br>";
+//		echo "getting search query , used_els = <pre>",var_dump($used_els) ,"</pre><br />";
 
 		$sql = $this->get_search_query(array(
 			"used_els" => $used_els,
 			"group_els" => $group_els,
 			"group_collect_els" => $group_collect_els
 		));
-//		echo "sql = $sql <br>";
+//		echo "sql = $sql <br />";
 		$result = "";
 		$this->db_query($sql,false);
 		$cur_row = 0;
@@ -2582,20 +2582,20 @@ class form extends form_base
 					$this->restore_handle();
 				};
 
-				//print "processing entry $row[entry_id]<br>";
+				//print "processing entry $row[entry_id]<br />";
 				if ($has_calendar)
 				{
 					$vacs = $groups[$row[$_key]];
-					//print "key = $_key<br>";
-					//print "vacs = $vacs<br>";
+					//print "key = $_key<br />";
+					//print "vacs = $vacs<br />";
 					if ($vacs > -1.1)
 					{
-						//print "added line<br>";
+						//print "added line<br />";
 						$form_table->row_data($row,$this->arr["start_search_relations_from"],$section,$op,$cid,$row["chain_entry_id"]);
 					}
 					else
 					{
-						dbg::p("no show because no vacancies <br>");
+						dbg::p("no show because no vacancies <br />");
 					}
 				}
 				else
@@ -2638,7 +2638,7 @@ class form extends form_base
 			$result = $form_table->finalize_table(array("no_form_tags" => $no_form_tags));
 			if ($this->arr["search_show_csv_link"] == 1)
 			{
-				$result = "Leiti $row_count rida. <a href='".aw_url_change_var("get_csv_file", 1)."'>CSV</a><br>".$result;
+				$result = "Leiti $row_count rida. <a href='".aw_url_change_var("get_csv_file", 1)."'>CSV</a><br />".$result;
 			}
 
 			if ($GLOBALS["get_csv_file"] == 1)
@@ -2880,10 +2880,10 @@ class form extends form_base
 
 			$this->main_search_form = $mid;
 			$matches = array();
-			dbg::p("form_search_q1 = $query  <br>\n");
+			dbg::p("form_search_q1 = $query  <br />\n");
 //		flush();
 			$this->db_query($query);
-//		echo "q finished \n <br>";
+//		echo "q finished \n <br />";
 //		flush();
 
 			while ($row = $this->db_next())
@@ -3038,7 +3038,7 @@ class form extends form_base
 				$query = "SELECT * FROM form_".$id."_entries";
 			}
 
-			dbg::p("form_search_q2 = $query <br>");
+			dbg::p("form_search_q2 = $query <br />");
 			$matches = array();
 			$this->db_query($query);
 			while ($row = $this->db_next())
@@ -3133,7 +3133,7 @@ class form extends form_base
 			{
 				if ($el->arr["subtype"]=="num")
 					$ft->runtime_col_types[$el->arr["id"]]="numeric";
-				if ($GLOBALS["dbg_num"]) echo("setting num for ".$el->arr["id"]."<br>");
+				if ($GLOBALS["dbg_num"]) echo("setting num for ".$el->arr["id"]."<br />");
 			};
 			if ($GLOBALS["dbg_num"]) {echo("<pre>");print_r($ft->runtime_col_types);echo("</pre>");};
 			*/
@@ -3383,8 +3383,8 @@ class form extends form_base
 
 			if ($this->cfg["site_id"] == 14 || $this->cfg["site_id"] == 50)
 			{
-				$url = "&nbsp;&nbsp;<a href='".aw_global_get("REQUEST_URI")."&get_csv_file=1' target=_blank>CSV</a><br>";
-				$tbl="Otsingu tulemusena leiti ".$cnt." kirjet. <br>".$url.$tbl;
+				$url = "&nbsp;&nbsp;<a href='".aw_global_get("REQUEST_URI")."&get_csv_file=1' target=_blank>CSV</a><br />";
+				$tbl="Otsingu tulemusena leiti ".$cnt." kirjet. <br />".$url.$tbl;
 			}
 			return $tbl;
 		}
@@ -3606,7 +3606,7 @@ class form extends form_base
 							}
 
 							$this->arr["elements"][$row][$col][$newel] = $elval;
-//								echo "elval linked form = $base , real = ", $this->arr["elements"][$row][$col][$newel]["linked_form"]," <br>";
+//								echo "elval linked form = $base , real = ", $this->arr["elements"][$row][$col][$newel]["linked_form"]," <br />";
 							// save element props also
 							$prp = aw_serialize($this->arr["elements"][$row][$col][$newel],SERIALIZE_XML);
 							$this->quote(&$prp);
@@ -4191,14 +4191,14 @@ class form extends form_base
 		while ($row = $this->db_next())
 		{
 			$this->save_handle();
-			echo "element ".$row["name"]." id ".$row["oid"]."<br>";
+			echo "element ".$row["name"]." id ".$row["oid"]."<br />";
 			$fa = unserialize($row["forms"]);
 			if (is_array($fa))
 			{
 				foreach($fa as $fid)
 				{
 					$this->db_query("INSERT INTO element2form(el_id,form_id) VALUES(".$row["oid"].",$fid)");
-					echo "in form $fid <br>";
+					echo "in form $fid <br />";
 				}
 			}
 			flush();
@@ -4213,7 +4213,7 @@ class form extends form_base
 		{
 			$this->save_handle();
 			$this->upd_object(array("oid" => $row["oid"], "class_id" => CL_FORM_ELEMENT));
-			echo "oid = ", $row["oid"], "name = ",$row["name"], "<br>";
+			echo "oid = ", $row["oid"], "name = ",$row["name"], "<br />";
 			$this->restore_handle();
 		}
 	}
@@ -4258,7 +4258,7 @@ class form extends form_base
 			{
 				$this->save_handle();
 				
-				echo "q = ALTER TABLE form_".$row["oid"]."_entries ADD ev_".$erow["el_id"]." text <Br>";
+				echo "q = ALTER TABLE form_".$row["oid"]."_entries ADD ev_".$erow["el_id"]." text <br />";
 				flush();
 				$this->db_query("ALTER TABLE form_".$row["oid"]."_entries ADD ev_".$erow["el_id"]." text");
 				
@@ -4284,7 +4284,7 @@ class form extends form_base
 			$form = get_instance("formgen/form");
 			$form->load($frow["oid"]);
 
-			echo "form ",$frow["oid"],"<br>\n";
+			echo "form ",$frow["oid"],"<br />\n";
 			flush();
 			$cnt = 0;
 			$this->db_query("SELECT * FROM form_".$frow["oid"]."_entries");
@@ -4293,7 +4293,7 @@ class form extends form_base
 				$cnt++;
 				if (($cnt % 100) == 0)
 				{
-					echo "cnt = $cnt <br>\n";
+					echo "cnt = $cnt <br />\n";
 					flush();
 				}
 				$this->save_handle();
@@ -4312,7 +4312,7 @@ class form extends form_base
 								$ev = $el->get_value();
 //								$ev = preg_replace("/<(.*)>(.*)<\/(.*)>/imsU","",$ev);
 								$ev = strip_tags($ev);
-	echo "value for element ", $el->get_id(), " set to $ev <br>\n";
+	echo "value for element ", $el->get_id(), " set to $ev <br />\n";
 	flush();
 								$this->db_query("UPDATE form_".$frow["oid"]."_entries SET ev_".$el->get_id()." = '".$ev."' WHERE id = ".$erow["id"]);
 //							}
@@ -4925,7 +4925,7 @@ class form extends form_base
 		$this->db_query("SELECT oid FROM objects WHERE class_id = ".CL_FORM." AND status != 0");
 		while ($row = $this->db_next())
 		{
-			echo "form $row[oid] \n<br>";
+			echo "form $row[oid] \n<br />";
 			flush();
 			$f = get_instance("formgen/form");
 			$f->load($row["oid"]);
@@ -4935,7 +4935,7 @@ class form extends form_base
 		$this->db_query("SELECT oid FROM objects WHERE class_id = ".CL_FORM_OUTPUT." AND status != 0");
 		while ($row = $this->db_next())
 		{
-			echo "form_op $row[oid] \n<br>";
+			echo "form_op $row[oid] \n<br />";
 			flush();
 			$f = get_instance("formgen/form_output");
 			$f->load_output($row["oid"]);
@@ -5696,7 +5696,7 @@ class form extends form_base
 			$this->arr["cal_count"] = $_count;
 			$this->arr["cal_period"] = $_period;
 		};
-		//print "start = $_start, end = $_end, count = $_count, period = $_period<br>";
+		//print "start = $_start, end = $_end, count = $_count, period = $_period<br />";
 
 		$this->save();
 		return $this->mk_my_orb("calendar",array("id" => $id));
@@ -5782,7 +5782,7 @@ class form extends form_base
 		if ($this->arr["sql_writer"] && $this->arr["sql_writer_form"])
 		{
 			$tf = get_instance("formgen/form");
-			$search_res .= "<br>".$tf->gen_preview(array(
+			$search_res .= "<br />".$tf->gen_preview(array(
 				"id" => $this->arr["sql_writer_form"],
 				"tpl" => "show_noform.tpl",
 			));
@@ -5839,20 +5839,20 @@ class form extends form_base
 		}
 
 		$this->load($id);
-//		echo "load $id <br>";
+//		echo "load $id <br />";
 
 		global $HTTP_POST_VARS;
-//		echo "post vars = <pre>", var_dump($HTTP_POST_VARS),"</pre> <br>";
+//		echo "post vars = <pre>", var_dump($HTTP_POST_VARS),"</pre> <br />";
 		// process the writer form entry
 		$wrf = get_instance("formgen/form");
 		$wrf->process_entry(array(
 			"id" => $this->arr["sql_writer_form"],
 		));
-//		echo "proc entry for ", $this->arr["sql_writer_form"]," <br>";
+//		echo "proc entry for ", $this->arr["sql_writer_form"]," <br />";
 		$writer_entry_id = $wrf->entry_id;
 
 		// load the form whose entries we will change
-//		echo "load to write form ",$wrf->arr["sql_writer_writer_form"]," <br>";
+//		echo "load to write form ",$wrf->arr["sql_writer_writer_form"]," <br />";
 
 		$wrf = get_instance("formgen/form");
 		$wrf->load($this->arr["sql_writer_form"]);
@@ -6051,7 +6051,7 @@ class form extends form_base
 		));
 
 		$this->matched_chain_entries = array();
-//		echo "sql = $sql <br>";
+//		echo "sql = $sql <br />";
 		$this->db_query($sql);
 		while ($row = $this->db_next())
 		{

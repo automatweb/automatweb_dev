@@ -179,7 +179,7 @@ class property_group extends aw_template
 		};
 		foreach($groups as $group)
 		{
-			print "creating group $group<br>";
+			print "creating group $group<br />";
 			$group_id = $this->new_object(array(
 				"parent" => $grandparent,
 				"name" => $group,
@@ -209,7 +209,7 @@ class property_group extends aw_template
 			};
 		};
 		$this->flush_cache();
-		print "all done!<br>";
+		print "all done!<br />";
 	}
 };
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.21 2003/07/09 17:29:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.22 2003/08/01 13:27:46 axel Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -97,7 +97,7 @@ class converters extends aw_template
 				"value" => $imgar
 			));
 
-			echo "menu $row[oid] <br>\n";
+			echo "menu $row[oid] <br />\n";
 			flush();
 			$this->restore_handle();
 		}
@@ -143,7 +143,7 @@ class converters extends aw_template
 
 		while($row = $this->db_next())
 		{
-			print "doing $row[oid]<br>";
+			print "doing $row[oid]<br />";
 			$this->save_handle();
 			$meta_add = aw_unserialize($row["comment"]);
 			$last_menus = aw_unserialize($row["sss"]);
@@ -192,7 +192,7 @@ class converters extends aw_template
 			print_r($meta);
 			print "</pre>";
 			$this->restore_handle();
-			print "done<br>";
+			print "done<br />";
 			sleep(1);
 			flush();
 		};
@@ -212,13 +212,13 @@ class converters extends aw_template
 			foreach($updates as $q)
 			{
 				print $q;
-				print "<br>";
+				print "<br />";
 				flush();
 				$this->db_query($q);
 				sleep(1);
 			};
 		};			
-		print "all done!<br>";
+		print "all done!<br />";
 	}
 
 	// parent argument should specify the folder under which to create the periods
@@ -271,7 +271,7 @@ class converters extends aw_template
 				$this->save_handle();
 				$undat = aw_unserialize($row["data"]);
 				$comment = $undat["comment"];
-				print "converting $row[description]<br>";
+				print "converting $row[description]<br />";
 				flush();
 				if (!empty($undat["image"]["id"]))
 				{
@@ -353,14 +353,14 @@ class converters extends aw_template
 				{
 					$this->db_query('update users set oid='.$oid.' where uid="'.$val['uid'].'"');
 				}
-				echo "created object for user $val[uid] <br>\n";
+				echo "created object for user $val[uid] <br />\n";
 				flush();
 			}
 			else
 			if ($val["parent"] != aw_ini_get("users.root_folder"))
 			{
 				$this->db_query("UPDATE objects SET parent = ".aw_ini_get("users.root_folder")." WHERE oid = '".$val['oid']."'");
-				echo "moved object to folder for user $val[uid] <br>\n";
+				echo "moved object to folder for user $val[uid] <br />\n";
 				flush();
 			}
 		}
@@ -400,13 +400,13 @@ class converters extends aw_template
 			}
 			$sql = "UPDATE objects SET parent = $rootmenu WHERE oid = $row[oid]";
 			$this->db_query($sql);
-			echo "grupp: $row[gid] , oid = $row[oid] <br>\n";
+			echo "grupp: $row[gid] , oid = $row[oid] <br />\n";
 			flush();
 
 			// now we must also create brothers of all the group members below this group
 			$u_objs = array();
 			$sql = "SELECT oid, brother_of FROM objects WHERE parent = $row[oid] AND class_id = ".CL_USER." AND status != 0";
-//			echo "sql = $sql <br>";
+//			echo "sql = $sql <br />";
 			$this->db_query($sql);
 			while($urow = $this->db_next())
 			{
@@ -439,16 +439,16 @@ class converters extends aw_template
 				{
 					$this->delete_object($bro, false, false);
 					$o_uid = $this->db_fetch_field("SELECT uid FROM users WHERE oid = $real", "uid");
-					echo "deleted bro for $o_uid (oid = $real) <br>\n";
+					echo "deleted bro for $o_uid (oid = $real) <br />\n";
 					flush();
 				}
 			}
 
-//			echo "u_objs = ".dbg::dump($u_objs)." <br>";
+//			echo "u_objs = ".dbg::dump($u_objs)." <br />";
 			// and add bros for the ones that are missing
 			foreach($g_objs as $real)
 			{
-//				echo "real = $real <br>\n";
+//				echo "real = $real <br />\n";
 //				flush();
 				if (!isset($u_objs[$real]))
 				{
@@ -461,7 +461,7 @@ class converters extends aw_template
 						"no_flush" => 1,
 						"status" => STAT_ACTIVE
 					));
-					echo "lisasin kasutaja venna $o_uid parent = $row[oid] , oid is $_t<br>\n";
+					echo "lisasin kasutaja venna $o_uid parent = $row[oid] , oid is $_t<br />\n";
 					flush();
 				}
 			}
@@ -526,7 +526,7 @@ class converters extends aw_template
 			}
 			$sql = "UPDATE objects SET parent = $poid WHERE oid = $row[oid]";
 			$this->db_query($sql);
-			echo "grupp $row[gid] <br>\n";
+			echo "grupp $row[gid] <br />\n";
 			flush();
 
 			// now we must also create brothers of all the group members below this group
@@ -564,7 +564,7 @@ class converters extends aw_template
 				{
 					$this->delete_object($bro, false, false);
 					$o_uid = $this->db_fetch_field("SELECT uid FROM users WHERE oid = $real", "uid");
-					echo "deleted bro for $o_uid (oid = $real) <br>\n";
+					echo "deleted bro for $o_uid (oid = $real) <br />\n";
 					flush();
 				}
 			}
@@ -583,7 +583,7 @@ class converters extends aw_template
 						"status" => STAT_ACTIVE,
 						"no_flush" => 1
 					));
-					echo "lisasin kasutaja venna $o_uid <br>\n";
+					echo "lisasin kasutaja venna $o_uid <br />\n";
 					flush();
 				}
 			}
@@ -625,7 +625,7 @@ class converters extends aw_template
 		));
 		foreach($objs as $obj)
 		{
-			echo "converting object $obj[name] ($obj[oid]) <br>\n";
+			echo "converting object $obj[name] ($obj[oid]) <br />\n";
 			$obj["meta"] = $this->get_object_metadata(array(
 				"metadata" => $obj["metadata"]
 			));
@@ -636,7 +636,7 @@ class converters extends aw_template
 			// now, add them back
 			if ($obj["meta"]["role"])
 			{
-//				echo "role = ".$obj["meta"]["role"]." <br>";
+//				echo "role = ".$obj["meta"]["role"]." <br />";
 				core::addalias(array(
 					"id" => $obj["oid"],
 					"alias" => $obj["meta"]["role"],
@@ -645,7 +645,7 @@ class converters extends aw_template
 			}
 			if ($obj["meta"]["chain"])
 			{
-//				echo "chain = ".$obj["meta"]["chain"]." <br>";
+//				echo "chain = ".$obj["meta"]["chain"]." <br />";
 				core::addalias(array(
 					"id" => $obj["oid"],
 					"alias" => $obj["meta"]["chain"],
@@ -656,7 +656,7 @@ class converters extends aw_template
 
 			foreach($_ar->get() as $gid)
 			{
-//				echo "gid = $gid <br>";
+//				echo "gid = $gid <br />";
 				$u = get_instance("users");
 				core::addalias(array(
 					"id" => $obj["oid"],
@@ -673,7 +673,7 @@ class converters extends aw_template
 						"alias" => $obj['oid'],
 						"reltype" => 3
 					));
-					echo "add alias to group ".$u->get_oid_for_gid($gid)." <br>";
+					echo "add alias to group ".$u->get_oid_for_gid($gid)." <br />";
 				}
 			}
 		}
@@ -686,11 +686,11 @@ class converters extends aw_template
 			"class" => CL_FORM
 		));
 
-		echo "converting formgen tables! <br><br>\n";
+		echo "converting formgen tables! <br /><br />\n";
 
 		foreach($ol as $oid => $_d)
 		{
-			echo "form $oid <br>\n";
+			echo "form $oid <br />\n";
 			flush();
 			$tbl = "form_".$oid."_entries";
 			aw_global_set("__from_raise_error",1);
@@ -719,7 +719,7 @@ class converters extends aw_template
 
 	function convert_really_old_aliases()
 	{
-		echo "converting really old image aliases... <br>\n\n<br>";
+		echo "converting really old image aliases... <br />\n\n<br />";
 		flush();
 		$this->db_query("SELECT oid FROM objects WHERE class_id = ".CL_DOCUMENT." AND status != 0");
 		while ($row = $this->db_next())
@@ -741,7 +741,7 @@ class converters extends aw_template
 				$this->save_handle();
 				if (!$this->db_fetch_field("SELECT id FROM aliases WHERE source = '$id' AND target = '$row[oid]'", "id"))
 				{
-					echo "adding alias for image $row[oid] to document $id <br>\n";
+					echo "adding alias for image $row[oid] to document $id <br />\n";
 					flush();
 					$this->addalias(array(
 						"id" => $id,
@@ -760,7 +760,7 @@ class converters extends aw_template
 	{
 		$this->_copy_makes_brother_fg();
 		$this->_copy_makes_brother_menu();
-		die("all done! <br>");
+		die("all done! <br />");
 	}
 
 	function _copy_makes_brother_fg()
@@ -774,7 +774,7 @@ class converters extends aw_template
 			if ($id)
 			{
 				$this->db_query("UPDATE objects SET brother_of = oid WHERE oid = '$id'");
-				echo "fixed form $id <br>\n";
+				echo "fixed form $id <br />\n";
 				flush();
 			}
 			$this->restore_handle();
@@ -792,7 +792,7 @@ class converters extends aw_template
 			if ($id)
 			{
 				$this->db_query("UPDATE objects SET brother_of = oid WHERE oid = '$id'");
-				echo "fixed menu $id <br>\n";
+				echo "fixed menu $id <br />\n";
 				flush();
 			}
 			$this->restore_handle();
@@ -862,7 +862,7 @@ class converters extends aw_template
 			// $val'i keyd on sourced .. ja kuhu pekki ma jrk panen?
 			foreach($val as $vkey => $vval)
 			{
-				print "creating relation from $vkey to $key with jrk $vval<br>";
+				print "creating relation from $vkey to $key with jrk $vval<br />";
 				flush();
 				$almgr->create_alias(array(
 					"id" => $vkey,
@@ -870,7 +870,7 @@ class converters extends aw_template
 					"data" => $vval,
 					"reltype" => 5,
 				));
-				print "done<br>";
+				print "done<br />";
 				flush();
 				// and just if I my ask do I put the freaking jrk?
 				// no other way than to serialize it into "data"

@@ -346,12 +346,12 @@ function &obj($param = NULL)
 
 function dump_obj_table($pre)
 {
-	echo "---------------------------------------- object table dump: <br>$pre <br>\n";
+	echo "---------------------------------------- object table dump: <br />$pre <br />\n";
 	foreach($GLOBALS["objects"] as $oid => $obj)
 	{
-		echo "oid in list $oid , data: {oid => ".$obj->id().", name = ".$obj->name()." } <br>\n";
+		echo "oid in list $oid , data: {oid => ".$obj->id().", name = ".$obj->name()." } <br />\n";
 	}
-	echo "++++++++++<br>\n";
+	echo "++++++++++<br />\n";
 	flush();
 }
 ?>

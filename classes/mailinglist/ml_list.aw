@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.26 2003/06/13 17:16:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.27 2003/08/01 13:27:53 axel Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -192,7 +192,7 @@ class ml_list extends class_base
 				}
 				$this->list_ob = $this->get_object($args["obj"]["oid"], true);
 				$fld = $this->list_ob["meta"]["def_user_folder"];
-				echo "Impordin kasutajaid kataloogi $fld... <Br>";
+				echo "Impordin kasutajaid kataloogi $fld... <br />";
 				$first = true;
 				$contents = file_get_contents($imp);
 				$lines = explode("\n",$contents);
@@ -205,7 +205,7 @@ class ml_list extends class_base
 					list($name,$addr) = explode("\t",$line);
 					if (is_email($addr))
 					{
-						print "OK - n:$name, a:$addr<br>";
+						print "OK - n:$name, a:$addr<br />";
 						flush();
 						$retval = $ml_member->subscribe_member_to_list(array(
 							"name" => $name,
@@ -216,7 +216,7 @@ class ml_list extends class_base
 					}
 					else
 					{
-						print "IGN - n:$name, a:$addr<br>";
+						print "IGN - n:$name, a:$addr<br />";
 						flush();
 					};
 				};
@@ -547,17 +547,17 @@ class ml_list extends class_base
 		//echo("<pre>lists=");print_r($lists);echo("</pre>");//dbg
 		foreach($lists as $lid => $v)
 		{
-			/*echo("doing $lid s=".sizeof($v["c"])."0=*".isset($v["c"]["0"])."*<pre>");print_r($v);echo("</pre><br>");*/
+			/*echo("doing $lid s=".sizeof($v["c"])."0=*".isset($v["c"]["0"])."*<pre>");print_r($v);echo("</pre><br />");*/
 			if ($v["c"][0] && sizeof($v["c"])>1)//kui on list ja on ka gruppe sellest
 				{
-					/*echo("blj‰‰!$lid<br>");//dbg*/
+					/*echo("blj‰‰!$lid<br />");//dbg*/
 					// vıta kıik grupid ja leia need, mida pole m‰‰ratud
 					//$allgrps=$this->get_list_groups($lid);
 					$allgrps=array_flip($listdata[$v["name"]]["groups"]);
 
 					foreach ($v["c"] as $del => $jura)
 					{
-						/*echo("unsetting $del<br>");*/
+						/*echo("unsetting $del<br />");*/
 						unset($allgrps[$del]);
 					};
 					/*echo("after=");print_r($allgrps);//dbg*/
@@ -623,11 +623,11 @@ class ml_list extends class_base
 			foreach($v["c"] as $gid => $gname)
 			{
 				$key="$lid:$gid";
-				//echo($lid." -".$v["name"].":$gid- $gname key=$key<br>");//dbg
+				//echo($lid." -".$v["name"].":$gid- $gname key=$key<br />");//dbg
 				$_start_at=date_edit::get_timestamp($start_at[$key]);
 				$_delay=$delay[$key] * 60;
 				$_patch_size=$patch_size[$key];
-				//echo("$_start_at $_delay $_patch_size<br>");//dbg
+				//echo("$_start_at $_delay $_patch_size<br />");//dbg
 
 				$lgroupa=explode("|",$gid);
 				foreach($lgroupa as $_k => $_v)
@@ -640,7 +640,7 @@ class ml_list extends class_base
 				//echo("lgroup=$lgroup");//dbg
 
 				$count = $this->get_member_count($lid);
-				//echo("count=$count<br><br>");//dbg
+				//echo("count=$count<br /><br />");//dbg
 
 				if (!isset($aid))
 				{
@@ -769,27 +769,27 @@ class ml_list extends class_base
 		global $awt;
 		if (aw_global_get("uid") == "kix")
 		{
-			echo "amtl, line = ".__LINE__." ".$awt->get("fg")."<br>\n";
+			echo "amtl, line = ".__LINE__." ".$awt->get("fg")."<br />\n";
 			flush();
 		}
 		$this->load_list($lid);
 		if (aw_global_get("uid") == "kix")
 		{
-			echo "amtl, line = ".__LINE__." ".$awt->get("fg")."<br>\n";
+			echo "amtl, line = ".__LINE__." ".$awt->get("fg")."<br />\n";
 			flush();
 		}
 		$folder = $this->list_ob["meta"]["def_user_folder"];
 
-//		echo "try add user for list $lid base on $mid <br>";
+//		echo "try add user for list $lid base on $mid <br />";
 
 		// check if this member exists in this list already
 		$members = $this->get_members($lid);
 		if (aw_global_get("uid") == "kix")
 		{
-			echo "amtl, line = ".__LINE__." ".$awt->get("fg")."<br>\n";
+			echo "amtl, line = ".__LINE__." ".$awt->get("fg")."<br />\n";
 			flush();
 		}
-//		echo "members for list eq ".join(",", array_keys($members))." checking new member $mid<br>";
+//		echo "members for list eq ".join(",", array_keys($members))." checking new member $mid<br />";
 		$found = false;
 		foreach($members as $_mmid => $mdat)
 		{
@@ -800,14 +800,14 @@ class ml_list extends class_base
 			}
 			if ($checkoid == $mid)
 			{
-//				echo "found $mid for $checkoid <Br>";
+//				echo "found $mid for $checkoid <br />";
 				$found = true;
 			}
 		}
 		$mdat = $this->get_object($mid);
 		if (aw_global_get("uid") == "kix")
 		{
-			echo "amtl, line = ".__LINE__." ".$awt->get("fg")."<br>\n";
+			echo "amtl, line = ".__LINE__." ".$awt->get("fg")."<br />\n";
 			flush();
 		}
 
@@ -819,17 +819,17 @@ class ml_list extends class_base
 				"class_id" => CL_ML_MEMBER,
 				"brother_of" => ($mdat["brother_of"] ? $mdat["brother_of"] : $mdat["oid"])
 			));
-//			echo "not found, adding $mdat[name] <Br>";
+//			echo "not found, adding $mdat[name] <br />";
 			if (aw_global_get("uid") == "kix")
 			{
-				echo "amtl, line = ".__LINE__." ".$awt->get("fg")."<br>\n";
+				echo "amtl, line = ".__LINE__." ".$awt->get("fg")."<br />\n";
 				flush();
 			}
 			$mlm = get_instance("mailinglist/ml_member");
 			$mlm->update_member_name($id);
 			if (aw_global_get("uid") == "kix")
 			{
-				echo "amtl, line = ".__LINE__." ".$awt->get("fg")."<br>\n";
+				echo "amtl, line = ".__LINE__." ".$awt->get("fg")."<br />\n";
 				flush();
 			}
 		}

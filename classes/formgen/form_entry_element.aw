@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.7 2003/07/01 19:31:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.8 2003/08/01 13:27:51 axel Exp $
 // form_entry_element.aw - 
 load_vcl("date_edit");
 lc_load("definition");
@@ -130,7 +130,7 @@ class form_entry_element extends form_element
 			}
 			$src = ($allow_html) ? $this->entry : htmlspecialchars($this->entry);
 			$src = create_links($src);
-			$html = str_replace("\n","<br>",$src);
+			$html = str_replace("\n","<br />",$src);
 		}
 				
 		if ($this->arr["type"] == "radiobutton")
@@ -390,7 +390,7 @@ class form_entry_element extends form_element
 		{
 			if ($this->arr["type"] != "")
 			{
-				$sep_ver = ($this->arr["text_distance"] > 0 ? "<br><img src='$baseurl/images/transa.gif' width='1' height='".$this->arr["text_distance"]."' border='0'><br>" : "<br>");
+				$sep_ver = ($this->arr["text_distance"] > 0 ? "<br /><img src='$baseurl/images/transa.gif' width='1' height='".$this->arr["text_distance"]."' border='0'><br />" : "<br />");
 				$sep_hor = ($this->arr["text_distance"] > 0 ? "<img src='$baseurl/images/transa.gif' height='1' width='".$this->arr["text_distance"]."' border='0'>" : "");
 			}
 			if ($this->arr["text_pos"] == "up")
@@ -415,14 +415,14 @@ class form_entry_element extends form_element
 
 		if ($info != "")
 		{
-			$html .= "<br><font face='arial, geneva, helvetica' size='1'>&nbsp;&nbsp;$info</font>";
+			$html .= "<br /><font face='arial, geneva, helvetica' size='1'>&nbsp;&nbsp;$info</font>";
 		}
 
 		if (!$this->arr["ignore_text"])
 		{
 			if ($this->arr["sep_type"] == 1)	// reavahetus
 			{
-				$html.="<br>";
+				$html.="<br />";
 			}
 			else
 			if ($this->arr["sep_pixels"] > 0)
@@ -432,7 +432,7 @@ class form_entry_element extends form_element
 
 			if ($this->arr["sep_type"] == 1)	// reavahetus
 			{
-				$html.="<br>";
+				$html.="<br />";
 			}
 			else
 			// this is bad too. We need an image called transa.gif for each site.

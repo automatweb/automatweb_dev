@@ -86,11 +86,11 @@ class site_list extends class_base
 		
 		$str = $t->draw();
 
-		$str .= "Kokku $cnt saiti<Br>\n";
-		$str .= "Kasutusel $cnt_used saiti <br>\n";
-		$str .= "Serverite kaupa: <br>\n";
+		$str .= "Kokku $cnt saiti<br />\n";
+		$str .= "Kasutusel $cnt_used saiti <br />\n";
+		$str .= "Serverite kaupa: <br />\n";
 		$str .= $this->_get_server_stats();
-		$str .= "Koodiversioonide kaupa: <br>\n";
+		$str .= "Koodiversioonide kaupa: <br />\n";
 		$str .= $this->_get_cver_stats();
 
 		return $str;
@@ -258,7 +258,7 @@ class site_list extends class_base
 				unset($arr['id']);
 				$sets = join(",", map2("%s = '%s'", $arr));
 				$q = "UPDATE aw_site_list SET $sets WHERE id = '$id'";
-//				echo "updateq = $q <br>";
+//				echo "updateq = $q <br />";
 				$this->db_query($q);
 			}
 			else
@@ -266,7 +266,7 @@ class site_list extends class_base
 				$keys = join(",",array_keys($arr));
 				$vals = join(",", map("'%s'",array_values($arr)));
 				$q = "INSERT INTO aw_site_list($keys) VALUES($vals)";
-//				echo "insert q = $q <br>";
+//				echo "insert q = $q <br />";
 				$this->db_query($q);
 			}
 		}
@@ -291,7 +291,7 @@ class site_list extends class_base
 			$keys = join(",",array_keys($arr));
 			$vals = join(",", map("'%s'",array_values($arr)));
 			$q = "INSERT INTO aw_site_list($keys) VALUES($vals)";
-//			echo "insert q = $q <br>";
+//			echo "insert q = $q <br />";
 			$this->db_query($q);
 		}
 		return $id;
@@ -318,7 +318,7 @@ class site_list extends class_base
 				unset($arr['id']);
 				$sets = join(",", map2("%s = '%s'", $arr));
 				$q = "UPDATE aw_server_list SET $sets WHERE id = '$id'";
-//				echo "updateq = $q <br>";
+//				echo "updateq = $q <br />";
 				$this->db_query($q);
 			}
 			else
@@ -326,7 +326,7 @@ class site_list extends class_base
 				$keys = join(",",array_keys($arr));
 				$vals = join(",", map("'%s'",array_values($arr)));
 				$q = "INSERT INTO aw_server_list($keys) VALUES($vals)";
-//				echo "insert q = $q <br>";
+//				echo "insert q = $q <br />";
 				$this->db_query($q);
 			}
 		}
@@ -337,7 +337,7 @@ class site_list extends class_base
 			$keys = join(",",array_keys($arr));
 			$vals = join(",", map("'%s'",array_values($arr)));
 			$q = "INSERT INTO aw_server_list($keys) VALUES($vals)";
-//			echo "insert q = $q <br>";
+//			echo "insert q = $q <br />";
 			$this->db_query($q);
 		}
 	}
@@ -413,7 +413,7 @@ class site_list extends class_base
 		while ($row = $this->db_next())
 		{
 			// send it via xmlrpc to site list server
-			echo "id = $row[id] name = $row[name] ip = $row[ip] comment = $row[comment] <br>";
+			echo "id = $row[id] name = $row[name] ip = $row[ip] comment = $row[comment] <br />";
 			unset($row['rec']);
 			$this->do_orb_method_call(array(
 				"class" => "site_list", 
@@ -442,7 +442,7 @@ class site_list extends class_base
 		while ($row = $this->db_next())
 		{
 			// send it via xmlrpc to site list server
-			echo "id = $row[id] name = $row[name] url = $row[url] server_id = $row[server_id] site_used = $row[site_used] code_branch = $row[code_branch]  <br>";
+			echo "id = $row[id] name = $row[name] url = $row[url] server_id = $row[server_id] site_used = $row[site_used] code_branch = $row[code_branch]  <br />";
 			unset($row['rec']);
 			$this->do_orb_method_call(array(
 				"class" => "site_list", 
@@ -453,7 +453,7 @@ class site_list extends class_base
 			));
 			$sic++;
 		}
-		echo "sent $srvc serverit ja $sic saiti <br>";
+		echo "sent $srvc serverit ja $sic saiti <br />";
 	}
 
 	////

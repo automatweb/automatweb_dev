@@ -147,14 +147,14 @@ class group extends class_base
 		
 			case "import_desc":
 				$prop['value'] = "
-					Kasutajate importimise faili formaat on j&auml;rgmine:<br>
-					uid,password,nimi,email,aktiivne alates, aktiivne kuni <br>
-					v&auml;ljad on eraldatud komadega, iga kasutaja on eraldi real <br>
-					kuup&auml;evade formaadi t&auml;pne kirjeldus on <a href=\"http://www.gnu.org/manual/tar-1.12/html_chapter/tar_7.html\">siin</a> <Br>
-					n&auml;ide: <br>
-					kix,parool,Kristo Iila, kristo@struktuur.ee, 2003-09-17, 2005-09-17 <Br>
-					<br>
-					v&auml;ljad nimi,email,aktiivne_alates, aktiivne kuni v&otilde;ib soovi korral &auml;ra j&auml;tta<br>
+					Kasutajate importimise faili formaat on j&auml;rgmine:<br />
+					uid,password,nimi,email,aktiivne alates, aktiivne kuni <br />
+					v&auml;ljad on eraldatud komadega, iga kasutaja on eraldi real <br />
+					kuup&auml;evade formaadi t&auml;pne kirjeldus on <a href=\"http://www.gnu.org/manual/tar-1.12/html_chapter/tar_7.html\">siin</a> <br />
+					n&auml;ide: <br />
+					kix,parool,Kristo Iila, kristo@struktuur.ee, 2003-09-17, 2005-09-17 <br />
+					<br />
+					v&auml;ljad nimi,email,aktiivne_alates, aktiivne kuni v&otilde;ib soovi korral &auml;ra j&auml;tta<br />
 				";
 				break;
 		}
@@ -191,7 +191,7 @@ class group extends class_base
 			{
 				return PROP_OK;
 			}
-			echo "Impordin kasutajaid ... <Br>";
+			echo "Impordin kasutajaid ... <br />";
 			$first = true;
 			$f = fopen($imp,"r");
 			while(($row = fgetcsv($f, 10000,",")))
@@ -242,7 +242,7 @@ class group extends class_base
 					));
 				}
 
-				echo "Importisin kasutaja $uid ... <Br>\n";
+				echo "Importisin kasutaja $uid ... <br />\n";
 				flush();
 				$first = false;
 			}
@@ -530,7 +530,7 @@ class group extends class_base
 		else
 		if ($a_o["class_id"] == CL_USER)
 		{
-//			echo "remove users from group , , id = $id gid = ".$this->users->get_gid_for_oid($id)." alias = $alias, uid = ".$this->users->get_uid_for_oid($alias)." <br>";
+//			echo "remove users from group , , id = $id gid = ".$this->users->get_gid_for_oid($id)." alias = $alias, uid = ".$this->users->get_uid_for_oid($alias)." <br />";
 			$this->users->remove_users_from_group_rec(
 				$this->users->get_gid_for_oid($id),
 				array($this->users->get_uid_for_oid($alias))

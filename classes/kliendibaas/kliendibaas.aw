@@ -627,7 +627,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		}
 		else
 		{
-			$t='<br>ei leidnud<br>';
+			$t='<br />ei leidnud<br />';
 		}
 }
 
@@ -956,7 +956,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 							'search_history' => $key,
 						)
 					)
-				)).'<br>';
+				)).'<br />';
 			}
 		}
 
@@ -1218,7 +1218,7 @@ foreach ($arr as $key => $val)
 	if (($val['kood1'] && $val['kood']) && ($val['kood1']<>$val['kood']))
 	{
 		$this->db_query("update kliendibaas_tegevusala set kood='".$val['kood']."' where kood='".$val['kood1']."'");
-//		echo $val['kood1'].'=>'.$val['kood'].'<br>';
+//		echo $val['kood1'].'=>'.$val['kood'].'<br />';
 	}
 }
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.10 2003/05/09 17:12:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.11 2003/08/01 13:27:50 axel Exp $
 // form_chain.aw - form chains
 
 classload("formgen/form_base");
@@ -312,12 +312,12 @@ class form_chain extends form_base
 			$entry_id = $this->db_fetch_field("SELECT id FROM form_chain_entries WHERE chain_id = $id AND uid = '".aw_global_get("uid")."'","id");
 		}
 
-//		echo "entry_id = $entry_id <br>";
+//		echo "entry_id = $entry_id <br />";
 		if ($entry_id && !$this->chain["rep"][$form_id] && !$form_entry_id)
 		{
 			$ear = $this->get_chain_entry($entry_id);
 			$form_entry_id = $ear[$form_id];
-//			echo "ear = <pre>", var_dump($ear),"</pre> <br>";
+//			echo "ear = <pre>", var_dump($ear),"</pre> <br />";
 		}
 
 		$sep = $this->parse("SEP");
@@ -393,7 +393,7 @@ class form_chain extends form_base
 		global $load_chain_data;
 		$lcd = $load_chain_data;
 
-//		echo "showng form $form_id entry $form_entry_id $led $lcd <br>";
+//		echo "showng form $form_id entry $form_entry_id $led $lcd <br />";
 		$cur_form .= $f->gen_preview(array(
 			"id" => $form_id,
 			"entry_id" => $form_entry_id, 
@@ -527,7 +527,7 @@ class form_chain extends form_base
 			// $f_r[form_from] is it.
 			// $f_r[el_from] is the element id which contains the information we want
 			/*
-			print "form: $f_r[form_from] el: $f_r[el_from]<br>";
+			print "form: $f_r[form_from] el: $f_r[el_from]<br />";
 			*/
 
 			// and now the final step - figure out, which 
@@ -553,7 +553,7 @@ class form_chain extends form_base
 			*/
 
 			/*
-			print "chain_entry_id = $chain_entry_id<br>";
+			print "chain_entry_id = $chain_entry_id<br />";
 			print "<pre>";
 			print_r($_xxx);
 			print "</pre>";
@@ -561,7 +561,7 @@ class form_chain extends form_base
 
 			$update_fcal_timedef = $chain_entry_id;
 			$cal_id = $id;
-			//print "updating time definition<br>";
+			//print "updating time definition<br />";
 		};
 		
 		$f = get_instance("formgen/form");
@@ -578,7 +578,7 @@ class form_chain extends form_base
 		$this->quote(&$f->entry_name);
 		$submitted_form_id = $form_id;
 
-//		echo "err = $f->has_controller_errors , nce  =$new_chain_entry <Br>";
+//		echo "err = $f->has_controller_errors , nce  =$new_chain_entry <br />";
 		if ($f->has_controller_errors && $new_chain_entry)
 		{
 			$this->delete_object($chain_entry_id);
@@ -750,7 +750,7 @@ class form_chain extends form_base
 			$f = get_instance("formgen/form_chain");
 			$f->load_chain($row["oid"]);
 
-			echo "chain $row[oid] <br>";
+			echo "chain $row[oid] <br />";
 			flush();
 			// for each entry in chain
 			$this->save_handle();
@@ -759,7 +759,7 @@ class form_chain extends form_base
 			{
 				$this->save_handle();
 				// create object for it
-				echo "entry $erow[id] for chain $row[oid] <br>";
+				echo "entry $erow[id] for chain $row[oid] <br />";
 				$chain_entry_id = $this->new_object(array(
 					"parent" => $f->chain["save_folder"],
 					"class_id" => CL_CHAIN_ENTRY,
@@ -769,7 +769,7 @@ class form_chain extends form_base
 				$e = $this->get_chain_entry($erow["id"]);
 				foreach($e as $fid => $fentry_id)
 				{
-					echo "form_entry $fentry_id for form $fid of chain_entry $erow[id] for chain $row[oid] <br>";
+					echo "form_entry $fentry_id for form $fid of chain_entry $erow[id] for chain $row[oid] <br />";
 					flush();
 					$this->db_query("UPDATE form_".$fid."_entries SET chain_id = $chain_entry_id WHERE chain_id = $erow[id]");
 				}
@@ -828,14 +828,14 @@ class form_chain extends form_base
 		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_FORM);
 		while ($row = $this->db_next())
 		{
-			echo "form $row[oid] <br>";
+			echo "form $row[oid] <br />";
 			flush();
 			$this->save_handle();
 			// for each entry
 			$this->db_query("SELECT id FROM form_".$row["oid"]."_entries");
 			while ($erow = $this->db_next())
 			{
-				echo "entry $erow[id] <br>";
+				echo "entry $erow[id] <br />";
 				flush();
 				// update form_entries table's form_id
 				$this->save_handle();

@@ -40,7 +40,7 @@ class form_export_db extends form_base
 			}
 		}
 
-		echo "ekspordin, palun oodake .... <br>\n\n";
+		echo "ekspordin, palun oodake .... <br />\n\n";
 		flush();
 
 		// create table
@@ -72,10 +72,10 @@ class form_export_db extends form_base
 			$this->db_query($sql);
 			$this->restore_handle();
 			$cnt++;
-			echo "rida $cnt <br>\n";
+			echo "rida $cnt <br />\n";
 			flush();
 		}
-		echo "Eksportisin $cnt sisestust tabelisse $tbl!<br>\n\n\n\n\n\n";
+		echo "Eksportisin $cnt sisestust tabelisse $tbl!<br />\n\n\n\n\n\n";
 		flush();
 		die();
 	}

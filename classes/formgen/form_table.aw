@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.46 2003/07/08 08:43:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.47 2003/08/01 13:27:51 axel Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -125,7 +125,7 @@ class form_table extends form_base
 
 		if ($GLOBALS["tbl_dbg"] || $GLOBALS["fg_tbl_dbg"])
 		{
-			echo "table id = $id <br>";
+			echo "table id = $id <br />";
 		}
 
 		enter_function("form_table::groupsettings");
@@ -1039,7 +1039,7 @@ class form_table extends form_base
 				"search_form" => $search_form
 			));
 //			$GLOBALS["fg_dbg"] = 0;
-//			echo "second table (id $use_table) search restrictions el = ",$this->table["show_second_table_search_el"]," val = $sve <br>";
+//			echo "second table (id $use_table) search restrictions el = ",$this->table["show_second_table_search_el"]," val = $sve <br />";
 
 			if ($this->table["show_second_table_where"] != "above")
 			{
@@ -2684,7 +2684,7 @@ class form_table extends form_base
 
 		$url .= "&restrict_search_el[]=".$cc["search_el"];
 		$url .= "&restrict_search_val[]=".urlencode($row_data["ev_".$cc["search_map"]]);
-//		echo "sm = ",$row_data["ev_".$cc["search_map"]]," <br>";
+//		echo "sm = ",$row_data["ev_".$cc["search_map"]]," <br />";
 		if ($this->table["has_yah"])
 		{
 			$url .= "&restrict_search_yah[]=".urlencode($textvalue);
@@ -3273,7 +3273,7 @@ class form_table extends form_base
 			}
 		}
 		aw_session_set("fg_table_sessions", $fg_table_sessions);
-		echo "called back alias cache <br>";
+		echo "called back alias cache <br />";
 	}
 
 	function create_email_links($str)

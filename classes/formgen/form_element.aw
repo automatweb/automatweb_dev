@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.59 2003/07/17 12:26:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.60 2003/08/01 13:27:50 axel Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -1967,7 +1967,7 @@ class form_element extends aw_template
 			count($this->form->controller_errors[$this->id]) > 0)
 		{
 			$html.="<font color='red' size='2'>";
-			$html.=join("<br />",$this->form->controller_errors[$this->id])."<Br />";
+			$html.=join("<br />",$this->form->controller_errors[$this->id])."<br />";
 			$html.="</font>";
 		}
 
@@ -2654,7 +2654,7 @@ class form_element extends aw_template
 				{
 					$def = time();
 				}
-//				echo "aentry_id = $this->entry_id , $this->entry <br>";
+//				echo "aentry_id = $this->entry_id , $this->entry <br />";
 				$vl = $this->get_val($elvalues);
 				if ($this->arr["hidden"])
 				{
@@ -2732,7 +2732,7 @@ class form_element extends aw_template
 		// if value controiller is set, always use that
 		if ($this->arr["value_controller"] && (!$this->form->arr["sql_writer_writer"] || $do_val_ctrl)) 
 		{
-//			echo "entry = $this->entry <br>";
+//			echo "entry = $this->entry <br />";
 			$val = $this->form->controller_instance->eval_controller($this->arr["value_controller"], $this->entry, &$this->form, &$this);
 		}
 		else
@@ -2809,7 +2809,7 @@ class form_element extends aw_template
 //// oh no you don't! this broke saving form entries that had relation listboxes in them!
 //		if ( ($this->arr["type"] == "listbox") && ($this->arr["subtype"] == "relation") )
 //		{
-			//print "Updating relation!<br>";
+			//print "Updating relation!<br />";
 //		}
 //		else
 		if ($this->arr["type"] == "button")

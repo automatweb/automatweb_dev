@@ -149,7 +149,7 @@ class action extends workflow_common
 				"checked" => (isset($prev[$key])),
 			));
 
-			$el .= "<br>";
+			$el .= "<br />";
 			
 			$el2 = html::checkbox(array(
 				"name" => "next[$key]",
@@ -157,7 +157,7 @@ class action extends workflow_common
 				"checked" => (isset($next[$key])),
 			));
 
-			$el2 .= "<br>";
+			$el2 .= "<br />";
 
 			$prevlist .= $el;
 			$nextlist .= $el2;

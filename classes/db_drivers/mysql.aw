@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.13 2003/03/13 15:34:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.14 2003/08/01 13:27:49 axel Exp $
 // mysql.aw - MySQL draiver
 class mysql 
 {
@@ -25,14 +25,14 @@ class mysql
 		if (!$this->dbh) 
 		{
 			echo "Can't connect to database";
-			print '<br>';
+			print '<br />';
 			print mysql_error();
 			exit;
 		};
 		if (not(@mysql_select_db($base,$this->dbh)))
 		{
 			echo "Can't connect to database";
-			print '<br>';
+			print '<br />';
 			print mysql_error();
 			exit;	
 		};
@@ -93,7 +93,7 @@ class mysql
 			list($micro,$sec) = split(' ',microtime());
 			$ts_e = $sec + $micro;
 			$tm = sprintf("%0.04f",$ts_e - $ts_s);
-			echo "query took $tm seconds <br>";
+			echo "query took $tm seconds <br />";
 		}
 		return true;
 	}

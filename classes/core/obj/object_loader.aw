@@ -151,7 +151,7 @@ class _int_object_loader
 			$str = "new_object_temp_id_".$cnt;
 		}
 		$GLOBALS["objects"][$str] =& new _int_object();
-		echo "created new temp obj id! $str <br>";
+		echo "created new temp obj id! $str <br />";
 		return $str;
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.10 2003/06/11 17:29:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.11 2003/08/01 13:27:51 axel Exp $
 // livelink_import.aw - Import livelingist
 
 /*
@@ -159,9 +159,9 @@ class livelink_import extends class_base
 
 		ob_implicit_flush(1);
 
-                print "going to fetch structure<br>";
+                print "going to fetch structure<br />";
                 $outf = $this->fetch_structure();
-                print "done!<br>";
+                print "done!<br />";
 
                 # parse the structure
                 $xml_parser = xml_parser_create();
@@ -191,7 +191,7 @@ class livelink_import extends class_base
 			while($row = $this->db_next())
 			{
 				$outfile = $this->outdir . "/" . basename($row["filename"]);		
-				print "deleting $outfile<br>";
+				print "deleting $outfile<br />";
 				unlink($outfile);
 			};
 
@@ -290,7 +290,7 @@ class livelink_import extends class_base
 
 	function _xml_end_element($parser,$name)
         {
-                //print "name $name ends<br>";
+                //print "name $name ends<br />";
         }
 
 	function fetch_structure()
@@ -314,7 +314,7 @@ class livelink_import extends class_base
 	{
 		$outfile = tempnam($this->tmpdir,"aw-");	
 		$cmdline = "wget -O $outfile 'https://dok.ut.ee/livelink/livelink?func=LL.login&username=avatud&password=avatud'  'https://dok.ut.ee/livelink/livelink?func=ll&objId=$node_id&objAction=XMLExport&scope=sub&versioninfo=current&schema&content=base64'";
-		print "executing $cmdline<br>";
+		print "executing $cmdline<br />";
 		passthru($cmdline);
 		// check whether opening succeeded?
 		$fc = join("",file($outfile));
@@ -325,7 +325,7 @@ class livelink_import extends class_base
 		fclose($fh);
 		sleep(3);
 
-		print "entering parser<br>";
+		print "entering parser<br />";
 		
 		$this->parse_file($outfile);
 		unlink($outfile);
@@ -417,7 +417,7 @@ class livelink_import extends class_base
 	function write_outfile()
 	{
 		$outfile = $this->outdir . "/" . $this->filename;
-		print "writing $outfile<br>>";
+		print "writing $outfile<br />>";
 		$fh = fopen($outfile,"w");
 		fwrite($fh,base64_decode(trim($this->content)));
 		fclose($fh);
@@ -432,7 +432,7 @@ class livelink_import extends class_base
 
                 if (($name == "version") && isset($attribs["filename"]))
                 {
-			#print "version node properties:<br>";
+			#print "version node properties:<br />";
                         $this->filename = $this->id . "-" . $attribs["filename"];
 			$fext  = array_pop(explode('.', $attribs["filename"]));	
 			$this->fext = $fext;
@@ -445,9 +445,9 @@ class livelink_import extends class_base
                 {
                         $this->parentid = $attribs["parentid"];
                         #$this->desc = $attribs["description"];
-			print "setting name to $attribs[name]<br>";
+			print "setting name to $attribs[name]<br />";
 			$this->desc = $attribs["name"];
-			print "llnode node properties:<br>";
+			print "llnode node properties:<br />";
 			print "<pre>";
 			print_r($attribs);
 			print "</pre>";

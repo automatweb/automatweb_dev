@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.24 2003/07/23 11:39:28 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.25 2003/08/01 13:27:46 axel Exp $
 class admin_menus extends aw_template
 {
 	// this will be set to document id if only one document is shown, a document which can be edited
@@ -377,12 +377,12 @@ class admin_menus extends aw_template
 			));
 			$retval .= $this->parse("MENU_ITEM");
 		}
-/*
+
 		$this->vars(array(
-			"link" => $this->mk_my_orb("mk_shortcut", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1","period" => $period), "admin_menus",true,true),
-			"text" => "(Tee kiirviide)",
+			'link' => $this->mk_my_orb('mk_shortcut', array('id' => $id), 'admin/shortcut'),
+			'text' => 'Tee kiirviide',
 		));
-		$retval .= $this->parse("MENU_ITEM");*/
+		$retval .= $this->parse("MENU_ITEM");
 
 		if ($ret_data)
 		{
@@ -654,14 +654,6 @@ class admin_menus extends aw_template
 		aw_session_set("copied_objects",array());
 		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
 		//return "javascript:go_go(".$parent.",'".$period."')";
-	}
-
-	function mk_shortcut($arr)
-	{
-		extract($arr);
-		//make brother
-
-		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
 	}
 
 	function make_menu_caches($where = "objects.status = 2")
@@ -990,7 +982,6 @@ class admin_menus extends aw_template
 			{
 				$row["cutcopied"] = "#FCFCF4";
 			}
-			$iu = icons::get_icon_url($row["class_id"],$row["name"]);
 
 			$row["lang_id"] = $lar[$row["lang_id"]];
 
@@ -1028,16 +1019,27 @@ class admin_menus extends aw_template
 
 
 			$this->restore_handle();
-
+			
+			$iu = icons::get_icon_url($row["class_id"],$row["name"]);
 			$row["icon"] = '<img src="'.$iu.'">';
 			$this->t->set_default_sortby(array("name" => "name"));
 			$caption = ($row["name"] == '' ? "(nimeta)" : $row["name"]);
 
-			//$row["name"] = '<!-- '.$caption.' --><a href="'.$chlink.'"><img src="'.$iu.'" border="0">&nbsp;&nbsp;&nbsp;'.$caption."</a>";
 			$row["name"] = '<a href="'.$chlink.'">'.$caption."</a>";
-			
+
+			if ($row["class_id"] == CL_SHORTCUT)
+			{
+				$row["class_id"] = '(shortcut)';
+			}
+			else
+			{
+				$row["class_id"] = $this->cfg["classes"][$row["class_id"]]["name"];
+			}
+						
+						
 			$row["link"] = "<a href=\"".$this->cfg["baseurl"]."/".$row["oid"]."\">Link</a>";
-			$row["class_id"] = $this->cfg["classes"][$row["class_id"]]["name"];
+			
+			
 			$row["hidden_jrk"] = $row["jrk"];
 			if ($can_change)
 			{

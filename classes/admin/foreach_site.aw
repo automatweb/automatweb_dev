@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/foreach_site.aw,v 1.1 2003/06/06 13:23:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/foreach_site.aw,v 1.2 2003/08/01 13:27:46 axel Exp $
 // foreach_site.aw - foreach site 
 
 class foreach_site extends class_base
@@ -48,14 +48,14 @@ class foreach_site extends class_base
 			}
 
 			
-			echo "<b>exec for site $url <br>\n";
+			echo "<b>exec for site $url <br />\n";
 
 			$url = $url."/".str_replace("/automatweb","",$eurl);
 
-			echo "complete url is $url <br><br>\n\n</b>";
+			echo "complete url is $url <br /><br />\n\n</b>";
 			flush();
 
-			echo "------------------------------------------------------------------------------------------------------------------------------------<Br><br>\n\n";
+			echo "------------------------------------------------------------------------------------------------------------------------------------<br /><br />\n\n";
 
 			preg_match("/^http:\/\/(.*)\//U",$url, $mt);
 			$_url = $mt[1];
@@ -63,15 +63,15 @@ class foreach_site extends class_base
 			$awt = get_instance("aw_test");
 			$awt->handshake(array("host" => $_url));
 
-			echo "do send req $url ",substr($url,strlen("http://")+strlen($_url))," <br>";
+			echo "do send req $url ",substr($url,strlen("http://")+strlen($_url))," <br />";
 			$req = $awt->do_send_request(array(
 				"host" => $_url, 
 				"req" => substr($url,strlen("http://")+strlen($_url))
 			));
 
-			echo "result = $req <br>";		
+			echo "result = $req <br />";		
 
-			echo "------------------------------------------------------------------------------------------------------------------------------------<Br><br>\n\n";
+			echo "------------------------------------------------------------------------------------------------------------------------------------<br /><br />\n\n";
 
 		}
 		die();

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.2 2003/07/25 15:52:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.3 2003/08/01 13:27:53 axel Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -127,9 +127,9 @@ class mail_message extends class_base
 		));
 
 		$awm->gen_mail();
-		print "Selle akna võib peale kirja saatmist sulgeda<br>";
-		print "-------<br>";
-		print "saadetud<br>";
+		print "Selle akna võib peale kirja saatmist sulgeda<br />";
+		print "-------<br />";
+		print "saadetud<br />";
 		die();
 	}
 

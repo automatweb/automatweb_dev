@@ -23,7 +23,7 @@ class pgsql
 		if (!$this->dbh) 
 		{
 			echo "Can't connect to database";
-			print "<br>";
+			print "<br />";
 			exit;
 		};
 		$this->db_base = $base;
@@ -71,7 +71,7 @@ class pgsql
 			};*/
 
 			echo $qtext . "\n";
-			echo "<br>\n";
+			echo "<br />\n";
 			echo pg_last_error($this->dbh);
 		} 
 		else 
@@ -84,7 +84,7 @@ class pgsql
 		{
 			list($micro,$sec) = split(" ",microtime());
 			$ts_e = $sec + $micro;
-			echo "query took ".($ts_e - $ts_s)." seconds <br>";
+			echo "query took ".($ts_e - $ts_s)." seconds <br />";
 		}
 		return true;
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.122 2003/08/01 12:48:16 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.123 2003/08/01 13:27:46 axel Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -1414,8 +1414,8 @@ class messenger extends menuedit_light
 		else
 		{
 			// HTML mail
-			//$body=strip_tags(strtr($message,array("<br />"=>"\r\n","<br />"=>"\r\n","</p>"=>"\r\n","</P>"=>"\r\n")));
-			$body=strtr($message,array("<br />"=>"\r\n","<br />"=>"\r\n","</p>"=>"\r\n","</P>"=>"\r\n"));
+			//$body=strip_tags(strtr($message,array("<br />"=>"\r\n","<br />"=>"\r\n","</p>"=>"\r\n","</p>"=>"\r\n")));
+			$body=strtr($message,array("<br />"=>"\r\n","<br />"=>"\r\n","</p>"=>"\r\n","</p>"=>"\r\n"));
 		};
 		$this->awm->create_message(array(
 			"froma" => $froma,
@@ -1582,7 +1582,7 @@ class messenger extends menuedit_light
 		if ($_sethtml=="3")// html => text
 		{
 			//echo("<textarea cols=80 rows=15>$message</textarea>");//dbg
-			$message=strip_tags(strtr($message,array("<br />"=>"\r\n","<br />"=>"\r\n","</p>"=>"\r\n","</P>"=>"\r\n")));
+			$message=strip_tags(strtr($message,array("<br />"=>"\r\n","<br />"=>"\r\n","</p>"=>"\r\n","</p>"=>"\r\n")));
 			//echo("<textarea cols=80 rows=15>$message</textarea>");//dbg
 			$sethtml=", type = type & ".MSG_MASKNOTHTML;
 			if ($_makelist)

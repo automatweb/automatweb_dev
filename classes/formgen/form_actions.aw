@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.14 2003/07/07 13:26:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.15 2003/08/01 13:27:50 axel Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -580,7 +580,7 @@ class form_actions extends form_base
 		if ($data["output"] > 0)
 		{
 			// we have to form a special html message
-			$body = strtr($msg,array("<br>"=>"\r\n","<BR>"=>"\r\n","</p>"=>"\r\n","</P>"=>"\r\n"));
+			$body = strtr($msg,array("<br />"=>"\r\n","<br />"=>"\r\n","</p>"=>"\r\n","</p>"=>"\r\n"));
 		}
 		else
 		{
@@ -612,7 +612,7 @@ class form_actions extends form_base
 			// don't try to send to invalid addresses
 			if (is_email($addr))
 			{
-//				echo "sending to $addr <br>";
+//				echo "sending to $addr <br />";
 				$this->awm->set_header("Subject",$data["subject"]);
 				$this->awm->set_header("From",$data["from"]);
 				$this->awm->set_header("To",$addr);
@@ -621,7 +621,7 @@ class form_actions extends form_base
 			}
 			else
 			{
-				print "$addr is invalid<br>";
+				print "$addr is invalid<br />";
 			};
 		}
 	}
@@ -658,7 +658,7 @@ class form_actions extends form_base
 					$app_html .= html::href(array(
 						'url' => $this->mk_my_orb("show", array("id" => $fid, "entry_id" => $eid),"form"),
 						'caption' => LC_FORM_BASE_USER.aw_global_get("uid").LC_FORM_BASE_INFO
-					)).'<br>';
+					)).'<br />';
 				}
 			}
 		}
@@ -714,7 +714,7 @@ class form_actions extends form_base
 				"body" => $msg.$app.$link_url,
 			));
 			
-			$app = $msg_html.'<br>'.$app_html.'<br>'.html::href(array(
+			$app = $msg_html.'<br />'.$app_html.'<br />'.html::href(array(
 				'url' => $link_url,
 				'caption' => $data['link_caption']
 			));
@@ -733,7 +733,7 @@ class form_actions extends form_base
 					"body" => $msg.$app.$link_url,
 				));
 			
-				$app = $msg_html.'<br>'.$app_html.'<br>'.html::href(array(
+				$app = $msg_html.'<br />'.$app_html.'<br />'.html::href(array(
 					'url' => $link_url,
 					'caption' => $data['link_caption']
 				));

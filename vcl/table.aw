@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.59 2003/07/23 11:45:57 axel Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.60 2003/08/01 13:27:54 axel Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 

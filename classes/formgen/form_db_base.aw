@@ -395,7 +395,7 @@ class form_db_base extends aw_template
 		// and now just turn it into a query - hey, this is easy
 		$idx_col = $this->arr["save_tables"][$tbl];
 		$q = "UPDATE $tbl SET ".join(",",map2("%s = '%s'",$dat,0,true))." WHERE $idx_col = '$entry_id'";
-//		echo "q = $q <br>";
+//		echo "q = $q <br />";
 		$this->db_query($q);
 
 		// and now recurse to the other tables
@@ -496,7 +496,7 @@ class form_db_base extends aw_template
 			}
 		}
 		$sql = "SELECT $sql_data FROM $sql_join WHERE $idx_tbl.$idx_col = '$entry_id' $lang LIMIT 1";
-		if ($GLOBALS["fg_re_dbg"] == 1)	echo "read_entry sql = $sql <br>";
+		if ($GLOBALS["fg_re_dbg"] == 1)	echo "read_entry sql = $sql <br />";
 
 		$this->db_query($sql);
 		$row = $this->db_next();
@@ -550,27 +550,27 @@ class form_db_base extends aw_template
 		// first the where part - these _must_ be called in this order cause they init member variables that they use
 		$sql_where = $this->get_sql_where_clause();
 
-//		echo "sw = $sql_where <br>";
+//		echo "sw = $sql_where <br />";
 		// now put all the joins into sql
 		$sql_join = $this->get_sql_joins_for_search($used_els,$this->arr["start_search_relations_from"],false,$ret_id_only);
-//		echo "sj = $sql_join <br>";
+//		echo "sj = $sql_join <br />";
 
 		// now get fetch data part
 		$sql_data = $this->get_sql_fetch_for_search($this->_joins,$this->arr["start_search_relations_from"],$used_els, $group_collect_els, $group_els,false,$ret_id_only);
-//		echo "sd = $sql_data <br>";
+//		echo "sd = $sql_data <br />";
 
 		// this adds deleted object checking if the form entries have objects attached
 		$sql_where = $this->get_sql_where_objects_part($sql_where);
-//		echo "sw = $sql_where <br>";
+//		echo "sw = $sql_where <br />";
 
 		// if we are showing a form table and it has groupings set, they will end up here and this turns them into sql
 		$sql_grpby = $this->get_sql_grpby($group_els);
-//		echo "sg = $sql_grpby <br>";
+//		echo "sg = $sql_grpby <br />";
 
 		$sql = "SELECT ".$sql_data." FROM ".$sql_join.$sql_where.$sql_grpby;
 		if ($GLOBALS["fg_dbg"]) 
 		{
-			echo ("sql = $sql <br>");
+			echo ("sql = $sql <br />");
 		}
 		return $sql;
 	}
@@ -731,7 +731,7 @@ class form_db_base extends aw_template
 		$sql = "";
 		$first = true;
 		$this->join_sql_used = array($tn => $tn);
-//						echo "rrjoins = <pre>", var_dump($this->_joins),"</pre> <br>";
+//						echo "rrjoins = <pre>", var_dump($this->_joins),"</pre> <br />";
 		foreach($this->_joins as $jdata)
 		{
 			if ($first)
@@ -787,7 +787,7 @@ class form_db_base extends aw_template
 			}
 			$first = false;
 		}
-//		echo " sql = $sql <br>";
+//		echo " sql = $sql <br />";
 		return $sql;
 	}
 
@@ -976,7 +976,7 @@ class form_db_base extends aw_template
 		{
 			$sql.=", count(*) as ev_cnt ";
 		}
-//		echo "sql = $sql <br>";
+//		echo "sql = $sql <br />";
 		return $sql;
 	}
 
@@ -1179,17 +1179,17 @@ class form_db_base extends aw_template
 						if ($el->arr["search_logical"])
 						{
 							$value = $el->arr["search_logical_prepend"]." ".$value." ".$el->arr["search_logical_append"];
-//							echo "val= $value <br>";
+//							echo "val= $value <br />";
 							// here we try to parse the damn text entered in the element
 							// let's try and do NOT / AND / OR / () here
 							$qstr = "";
 							$pics = explode(" ",$value);
-//							echo "pics = <pre>", htmlentities(var_dump($pics)),"</pre> <br>";
+//							echo "pics = <pre>", htmlentities(var_dump($pics)),"</pre> <br />";
 							reset($pics);
 							while (list(,$pic) = each($pics))
 //							foreach($pics as $pic)
 							{
-//								echo "pic = $pic <br>";
+//								echo "pic = $pic <br />";
 								if ($pic == "")
 								{
 									continue;
@@ -1320,7 +1320,7 @@ class form_db_base extends aw_template
 									$qstr .= " $elname2 IS NOT NULL ";
 								}
 							}
-//							echo "got qstr $qstr <br>";
+//							echo "got qstr $qstr <br />";
 							if ($qstr != "")
 							{
 								if ($query != "")
@@ -1518,7 +1518,7 @@ class form_db_base extends aw_template
 		$this->req_build_form_relation_tree($f_root, $no_reverse_rels);
 		aw_session_set("_fr_forms_used::".((int)$f_root)."::".((int)$no_reverse_rels),$this->_fr_forms_used);
 		aw_session_set("form_rel_tree::".((int)$f_root)."::".((int)$no_reverse_rels), $this->form_rel_tree);
-//		echo "built form relations tree, starting from $f_root: <br><pre>", var_dump($this->form_rel_tree),"</pre> <Br>";
+//		echo "built form relations tree, starting from $f_root: <br /><pre>", var_dump($this->form_rel_tree),"</pre> <br />";
 	}
 
 	////
@@ -1664,16 +1664,16 @@ class form_db_base extends aw_template
 		{
 			return;
 		}
-//	echo "build_join_rels_from_path path eq <pre>", var_dump($path),"</pre> <br>";
+//	echo "build_join_rels_from_path path eq <pre>", var_dump($path),"</pre> <br />";
 		reset($path);
 		while(list(,$fid) = each($path))
 		{
-//			echo "got $fid from path <br>";
+//			echo "got $fid from path <br />";
 			// get next from path
 			if (!list(,$n_fid) = each($path))
 			{
 				// we are at the last form - so exit
-//				echo "returnig because of eop <br>";
+//				echo "returnig because of eop <br />";
 				return;
 			}
 
@@ -1682,13 +1682,13 @@ class form_db_base extends aw_template
 
 			$f_dat = $this->cache_get_form_eldat($fid);
 			$t_dat = $this->cache_get_form_eldat($n_fid);
-//			echo "eldat = $n_fid = <pre>", var_dump($t_dat),"</pre> <br>";
+//			echo "eldat = $n_fid = <pre>", var_dump($t_dat),"</pre> <br />";
 		
-//			echo "get from f_dat elfrom = ",$this->form_rel_tree[$fid][$n_fid]["el_from"]," <br>";
+//			echo "get from f_dat elfrom = ",$this->form_rel_tree[$fid][$n_fid]["el_from"]," <br />";
 			$f_el = $f_dat["els"][$this->form_rel_tree[$fid][$n_fid]["el_from"]];
 			$t_el = $t_dat["els"][$this->form_rel_tree[$fid][$n_fid]["el_to"]];
-//			echo "f_el = <pre>", var_dump($f_el),"</pre> <br>";
-//			echo "join from $fid to $n_fid , from el = $f_el[table] $f_el[col] , to el = $t_el[table] $t_el[col] <br>";
+//			echo "f_el = <pre>", var_dump($f_el),"</pre> <br />";
+//			echo "join from $fid to $n_fid , from el = $f_el[table] $f_el[col] , to el = $t_el[table] $t_el[col] <br />";
 
 			if ($this->form_rel_tree[$fid][$n_fid]["el_from"] == "chain_id")
 			{
@@ -1712,7 +1712,7 @@ class form_db_base extends aw_template
 				$to_el = $t_el["col"];
 			}
 
-//			echo "from table = ", $f_el["table"]," from el = ", $f_el["col"]," to table = ", $t_el["table"]," to col = ",$t_el["col"]," <br>";
+//			echo "from table = ", $f_el["table"]," from el = ", $f_el["col"]," to table = ", $t_el["table"]," to col = ",$t_el["col"]," <br />";
 			// and mark down the join
 			if ($from_tbl == "" && $from_el == "")
 			{
@@ -1819,7 +1819,7 @@ class form_db_base extends aw_template
 		}
 
 		$q = "SELECT $id_col $rel_el as el_val FROM ".$rel_tbl.$join.$where.$gpby.$order_by;
-		if ($GLOBALS["fg_dbg"] == 2) echo "_grlc q = $q <br>";
+		if ($GLOBALS["fg_dbg"] == 2) echo "_grlc q = $q <br />";
 
 		// try to read the result from the cache
 /*		if (($ret = aw_cache_get("get_entries_for_element_cache", $q.((int)$ret_values).((int)$ret_ids))))

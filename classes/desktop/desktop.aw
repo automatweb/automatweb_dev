@@ -290,8 +290,8 @@ function pop(url,w,h)
 		foreach($paths as $folder)
 		{
 			$arr = $this->get_directory(array('dir' => $path.$folder));
-			echo '<b>'.$path.$folder.'<br>';
-			echo $uri.$folder.'</b><br>';
+			echo '<b>'.$path.$folder.'<br />';
+			echo $uri.$folder.'</b><br />';
 
 			foreach($arr as $key => $val)
 			echo '<img src='.$uri.$folder.$val.' /> '.$val.' <br />';

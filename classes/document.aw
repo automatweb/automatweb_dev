@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.202 2003/08/01 12:48:16 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.203 2003/08/01 13:27:46 axel Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -1212,7 +1212,7 @@ class document extends aw_template
 			$clearable_fields = array("content","lead","title");
 			foreach($clearable_fields as $_field)
 			{
-				$data[$_field] = strip_tags($data[$_field], "<b><i><u><p><P><em><ul><li><ol><strong>");
+				$data[$_field] = strip_tags($data[$_field], "<b><i><u><p><p><em><ul><li><ol><strong>");
 			};
 		}
 
@@ -2625,7 +2625,7 @@ class document extends aw_template
 			else
 			{
 				$p1 = strpos($row["content"],"<br />");
-				$p2 = strpos($row["content"],"</P>");
+				$p2 = strpos($row["content"],"</p>");
 				$pos = min($p1,$p2);
 				$co = substr($row["content"],0,$pos);
 				$co = strip_tags($co);
@@ -3054,19 +3054,19 @@ class document extends aw_template
 	// and yes, NS4 is a steaming pile of crap and should die. Mozilla is so much better
 	function mk_ns4_compat(&$text)
 	{
-		if ( (substr_count($text,"<P>") > 1) || (substr_count($text,"<p>") > 1) )
+		if ( (substr_count($text,"<p>") > 1) || (substr_count($text,"<p>") > 1) )
 		{
 			$text = str_replace("</p>","<br /><br />",$text);	
-			$text = str_replace("</P>","<br /><br />",$text);	
+			$text = str_replace("</p>","<br /><br />",$text);	
 		}
 		else
 		{
-			$text = str_replace("</P>","",$text);	
+			$text = str_replace("</p>","",$text);	
 			$text = str_replace("</p>","",$text);	
 		}
 		
 		$text = str_replace("<p>","",$text);
-		$text = str_replace("<P>","",$text);
+		$text = str_replace("<p>","",$text);
 	}
 
 	////

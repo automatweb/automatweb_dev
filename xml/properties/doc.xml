@@ -331,6 +331,73 @@
             <caption>Algab </caption>
       </property>
       <property>
+            <name>createdby</name>
+            <table>objects</table>
+            <field>createdby</field>
+            <group>general</group>
+            <type>text</type>
+            <caption>Kes tegi</caption>
+      </property>
+      <property>
+            <name>user1</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>60</size>
+            <field>user1</field>
+            <caption>Kasutaja defineeritud 1</caption>
+      </property>
+      <property>
+            <name>user2</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>textarea</type>
+            <rows>2</rows>
+            <cols>60</cols>
+            <field>user2</field>
+            <caption>Kasutaja defineeritud 2</caption>
+      </property>
+      <property>
+            <name>user3</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>textarea</type>
+            <rows>2</rows>
+            <cols>60</cols>
+            <field>user3</field>
+            <caption>Kasutaja defineeritud 3</caption>
+      </property>
+      <property>
+            <name>user4</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>textarea</type>
+            <rows>2</rows>
+            <cols>60</cols>
+            <field>user4</field>
+            <caption>Kasutaja defineeritud 4</caption>
+      </property>
+      <property>
+            <name>user5</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>textarea</type>
+            <rows>2</rows>
+            <cols>60</cols>
+            <field>user5</field>
+            <caption>Kasutaja defineeritud 5</caption>
+      </property>
+      <property>
+            <name>user6</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>textarea</type>
+            <rows>5</rows>
+            <cols>60</cols>
+            <field>user6</field>
+            <caption>Kasutaja defineeritud 6</caption>
+      </property>
+      <property>
             <name>duration</name>
             <type>time_select</type>
             <field>end</field>

@@ -910,7 +910,7 @@ class workflow extends class_base
 		// and then I should be on my way 
 		if (!$args["form_data"]["entity_process"])
 		{
-			die("you did not pick a process<br>");
+			die("you did not pick a process<br />");
 		};
 
 		$proc_obj = $this->get_object(array(
@@ -936,13 +936,13 @@ class workflow extends class_base
 		$obj = $this->get_object($args["obj"]["oid"]);
 		if (!$obj)
 		{
-			die("could not load workflow object<br>");
+			die("could not load workflow object<br />");
 		};
 
 		$cf_obj = $this->get_object($obj["meta"]["config"]);
 		if (!$cf_obj)
 		{
-			die("could not load configuration object for workflow<br>");
+			die("could not load configuration object for workflow<br />");
 		};
 
 		$entity_root = $cf_obj["meta"]["entity_rootmenu"];
@@ -950,7 +950,7 @@ class workflow extends class_base
 		// really is a menu
 		if (!$entity_root)
 		{
-			die("entity root menu is not set<br>");
+			die("entity root menu is not set<br />");
 		}
 		
 		// but how do I know which config form was used to create this particular object?

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/banner/Attic/banner.aw,v 1.4 2002/12/05 11:02:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/banner/Attic/banner.aw,v 1.5 2003/08/01 13:27:46 axel Exp $
 
 // act_type's:
 // 0 - always active
@@ -628,7 +628,7 @@ class banner extends aw_template
 			}
 			if ($aw_uid != "")
 			{
-				echo "aw_uid = $aw_uid <br>";
+				echo "aw_uid = $aw_uid <br />";
 				$this->db_query("UPDATE banner_users SET aw_uid = $aw_uid WHERE buid = '$aw_banner_uid'");
 			}
 		}
@@ -1240,7 +1240,7 @@ class banner extends aw_template
 		$t_t = $time_to["hour"]*3600+$time_to["minute"]*60;
 		$t_f = $time_from["hour"]*3600+$time_from["minute"]*60;
 
-//		echo "wday_from = ", $wday_from["hour"], ", w_f = $w_f<br>";
+//		echo "wday_from = ", $wday_from["hour"], ", w_f = $w_f<br />";
 		$wd = array();
 		if (is_array($wday))
 		{

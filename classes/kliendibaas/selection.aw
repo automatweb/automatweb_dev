@@ -585,7 +585,7 @@ class selection extends class_base
 
 		if (empty($obj['meta']['template']))
 		{
-			$this->sel_tpl = '{VAR:name}<br>';
+			$this->sel_tpl = '{VAR:name}<br />';
 		}
 		else
 		{

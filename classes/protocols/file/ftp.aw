@@ -91,18 +91,18 @@ class ftp extends class_base
 			$timeout = 10;
 		}
 		
-		echo "connect, ".dbg::dump($arr)." <br>";
+		echo "connect, ".dbg::dump($arr)." <br />";
 		if (($this->handle = ftp_connect($host)) == FALSE)
 		{
-			echo "err_connect! <br>";
+			echo "err_connect! <br />";
 			return FTP_ERR_CONNECT;
 		}
 		if (ftp_login($this->handle, $user, $pass) == FALSE)
 		{
-			echo "err login! <br>";
+			echo "err login! <br />";
 			return FTP_ERR_LOGIN;
 		}
-		echo "success , $this->handle <br>";
+		echo "success , $this->handle <br />";
 	}
 
 	////
@@ -111,12 +111,12 @@ class ftp extends class_base
 	{
 		if (!$this->handle)
 		{
-			echo "notkonnekted! <Br>";
+			echo "notkonnekted! <br />";
 			return FTP_ERR_NOTCONNECTED;
 		}
 		$_t = ftp_nlist($this->handle, $folder);
 		$arr = new aw_array($_t);
-		echo "ret ".dbg::dump($_t)." folder = $folder <br>";
+		echo "ret ".dbg::dump($_t)." folder = $folder <br />";
 		return $arr->get();
 	}
 

@@ -108,7 +108,7 @@ class _int_obj_ds_local_sql extends acl_base
 		// do a query for each table
 		foreach($tables as $table)
 		{
-			//echo "table = $table <br>";
+			//echo "table = $table <br />";
 			$fields = array();
 			foreach($tbl2prop[$table] as $prop)
 			{
@@ -118,7 +118,7 @@ class _int_obj_ds_local_sql extends acl_base
 			if (count($fields) > 0)
 			{
 				$q = "SELECT ".join(",", $fields)." FROM $table WHERE ".$tableinfo[$table]["index"]." = '".$objdata["brother_of"]."'";
-				//echo "q = $q <br>";
+				//echo "q = $q <br />";
 				$data = $this->db_fetch_row($q);
 				if (is_array($data))
 				{
@@ -167,7 +167,7 @@ class _int_obj_ds_local_sql extends acl_base
 				'".$objdata["jrk"]."',		'".$objdata["period"]."',		'".$objdata["alias"]."',	'".$objdata["periodic"]."',
 				'1',						'".$metadata."',				'".$objdata["subclass"]."',	'".$objdata["flags"]."'
 		)";
-		//echo "q = <pre>". htmlentities($q)."</pre> <br>";
+		//echo "q = <pre>". htmlentities($q)."</pre> <br />";
 		$this->db_query($q);
 		$oid = $this->db_last_insert_id();
 
@@ -218,7 +218,7 @@ class _int_obj_ds_local_sql extends acl_base
 			}
 
 			$q = "INSERT INTO $tbl (".$idx.$fds.") VALUES('".$oid."'".$vls.")";
-			//echo "q = <pre>". htmlentities($q)."</pre> <br>";
+			//echo "q = <pre>". htmlentities($q)."</pre> <br />";
 			$this->db_query($q);
 		}
 		
@@ -263,7 +263,7 @@ class _int_obj_ds_local_sql extends acl_base
 			
 			WHERE oid = '".$objdata["oid"]."'
 		";
-//		echo "q = <pre>". htmlentities($q)."</pre> <br>";
+//		echo "q = <pre>". htmlentities($q)."</pre> <br />";
 		$this->db_query($q);
 
 		// now save all properties
@@ -317,7 +317,7 @@ class _int_obj_ds_local_sql extends acl_base
 			if ($sets != "")
 			{
 				$q = "UPDATE $tbl SET $sets WHERE ".$tableinfo[$tbl]["index"]." = '".$objdata["brother_of"]."'";
-				//echo "q = <pre>". htmlentities($q)."</pre> <br>";
+				//echo "q = <pre>". htmlentities($q)."</pre> <br />";
 				$this->db_query($q);
 			}
 		}
@@ -520,7 +520,7 @@ class _int_obj_ds_local_sql extends acl_base
 		if ($where != "")
 		{
 			$q = "SELECT oid FROM objects $joins WHERE $where $sby";
-			//echo "q = $q <br>";
+			//echo "q = $q <br />";
 			$this->db_query($q);
 			while ($row = $this->db_next())
 			{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.17 2003/06/13 17:16:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.18 2003/08/01 13:27:53 axel Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -267,7 +267,7 @@ class ml_member extends class_base
 
 		//	id,mail,member,uid,tm,vars,message,subject,mailfrom
 		$r["tm"]=$this->time2date($r["tm"],2);
-		$r["message"]=str_replace("\n","<br>",$r["message"]);
+		$r["message"]=str_replace("\n","<br />",$r["message"]);
 		
 		$this->vars($r);
 		return $this->parse();
@@ -371,12 +371,12 @@ class ml_member extends class_base
 		extract($arr);
 		if (!$parent)
 		{
-//			echo "create_member::no_parent! <Br>";
+//			echo "create_member::no_parent! <br />";
 			return;
 		}
 		if (!$conf)
 		{
-//			echo "create_member::no_conf! <Br>";
+//			echo "create_member::no_conf! <br />";
 			return;
 		}
 		$id = $this->new_object(array(
@@ -539,7 +539,7 @@ class ml_member extends class_base
 			$user_forms = $ml_list_inst->get_forms_for_list($lid);
 			foreach($user_forms as $uf_id)
 			{
-				//echo "uf_id = $uf_id <br>";
+				//echo "uf_id = $uf_id <br />";
 				if (($uf_eid = $m["meta"]["form_entries"][$uf_id]))
 				{
 					$uf_inst =& $form_inst->cache_get_form_instance($uf_id);

@@ -77,7 +77,7 @@ class ipaddress extends class_base
 		{
 			if (!$this->db_table_exists("ipaddresses"))
 			{
-				echo "creating table! <br>";
+				echo "creating table! <br />";
 				$this->db_query("CREATE TABLE ipaddresses (id int primary key, ip varchar(30))");
 				$this->db_query("ALTER TABLE ipaddresses ADD INDEX ip (ip)");
 			}

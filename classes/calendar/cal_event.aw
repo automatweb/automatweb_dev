@@ -1,6 +1,6 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_event.aw,v 1.2 2003/01/16 17:00:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_event.aw,v 1.3 2003/08/01 13:27:47 axel Exp $
 
 /*
 	@default table=objects
@@ -658,7 +658,7 @@ class cal_event extends class_base
 			if ( ($this->daynum % $this->dayskip) == 0)
 			{
 				$this->found = true;
-				//print "$this->daynum JAGUB $this->dayskip<br>";
+				//print "$this->daynum JAGUB $this->dayskip<br />";
 			}
 		}
 		// on _those_ days inside the week
@@ -667,7 +667,7 @@ class cal_event extends class_base
 			if ($this->repeats["wday"][$this->wd])
 			{
 				$this->found = true;
-				//print "$this->wd päev matchib DAYS_IN_WEEK ruuliga<br>";
+				//print "$this->wd päev matchib DAYS_IN_WEEK ruuliga<br />";
 			};
 		}
 		// on _those_ days inside the month
@@ -676,7 +676,7 @@ class cal_event extends class_base
 			if (in_array($this->d,$this->days))
 			{
 				$this->found = true;
-				//print "$this->d päev matchib DAYS_IN_MONTH ruuliga<br>";
+				//print "$this->d päev matchib DAYS_IN_MONTH ruuliga<br />";
 			};
 		}
 	}
@@ -723,7 +723,7 @@ class cal_event extends class_base
 		{
 			$this->weeknum = 1; // global week number
 			$this->daynum = 1; // global day number
-			//print "fresh start, (gwkn)!<br>";
+			//print "fresh start, (gwkn)!<br />";
 		};
 		
 		$wkn = 1; // week number in this month
@@ -761,16 +761,16 @@ class cal_event extends class_base
 					{
 						if (($gwkn % $weekskip) == 0)
 						{
-							//print "$gwkn jagub $weekskip<br>";
+							//print "$gwkn jagub $weekskip<br />";
 							//print $gwkn % $weekskip;
-							//print "<br>";
+							//print "<br />";
 						};
 					}
 					elseif ($week == 2)
 					{
 						if ($mweek[$wkn])
 						{
-							//print "$wkn matchib ruuliga WEEKS_IN_MONTH<br>";
+							//print "$wkn matchib ruuliga WEEKS_IN_MONTH<br />";
 						};
 					};
 
@@ -790,7 +790,7 @@ class cal_event extends class_base
 				$this->rep_count++;
 				
 				// something weird is going on
-				//print "<b>MATCH:</b> " . date("l, d-m-Y",$ts) . "<br>";;
+				//print "<b>MATCH:</b> " . date("l, d-m-Y",$ts) . "<br />";;
 				$ts = mktime(23,59,59,$this->start_month,$this->start_day + $this->daynum,$this->start_year);
 
 				// temp workaround for "every week on those days";
@@ -800,7 +800,7 @@ class cal_event extends class_base
 				{
 					$this->reps[] = $this->gdaynum + $delta;
 				};
-				//print "<b>MATCH:</b> " . date("l, d-m-Y",$ts) . "<br>";;
+				//print "<b>MATCH:</b> " . date("l, d-m-Y",$ts) . "<br />";;
 				$this->found = false;
 				// check whether we have reached the max count
 				if ( isset($this->max_rep_count) && ($this->rep_count == $this->max_rep_count) )
@@ -923,13 +923,13 @@ class cal_event extends class_base
 					if ($m != 1)
 					{
 						$this->from_scratch = true;
-						//print "fresh start (m1)!<br>";
+						//print "fresh start (m1)!<br />";
 					}
 				}
 				elseif ( $last_mon != ($m - 1) )
 				{
 					$this->from_scratch = true;
-					//print "fresh start (m2)!<br>";
+					//print "fresh start (m2)!<br />";
 				};
 				$last_mon = $m;
 		
@@ -939,7 +939,7 @@ class cal_event extends class_base
 				}
 				else
 				{
-					//print "<i>Processing:</i> $m/$y<br>";
+					//print "<i>Processing:</i> $m/$y<br />";
 					$this->_process_month(array("month" => $m,"year" => $y));
 					if ($this->finished)
 					{
@@ -947,7 +947,7 @@ class cal_event extends class_base
 					};
 				};
 				$this->from_scratch = false;
-				//print "<br>";
+				//print "<br />";
 			}
 		}
 		return $this->rep_end;

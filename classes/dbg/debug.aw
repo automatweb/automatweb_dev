@@ -27,12 +27,12 @@ class debug extends class_base
 						$fn = $fld."/".$file;
 						if (is_dir($fn))
 						{
-							echo "recursing into $fn <br>\n";
+							echo "recursing into $fn <br />\n";
 							$this->_req_inc($fn);
 						}
 						else
 						{
-							echo "including $fn <br>\n";
+							echo "including $fn <br />\n";
 							include_once($fn);
 						}
 					}

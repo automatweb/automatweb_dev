@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.32 2003/08/01 12:48:16 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.33 2003/08/01 13:27:46 axel Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -446,9 +446,9 @@ class doc extends class_base
 	{
 		$arg = strip_tags($arg,"<b>,<i>,<u>,<br />,<p><ul><li><ol>");
 		$arg = str_replace("<p>","",$arg);
-		$arg = str_replace("<P>","",$arg);
+		$arg = str_replace("<p>","",$arg);
 		$arg = str_replace("</p>","",$arg);
-		$arg = str_replace("</P>","",$arg);
+		$arg = str_replace("</p>","",$arg);
 		return $arg;
 	}
 

@@ -74,7 +74,7 @@ class form_stat_table extends form_base
 			}
 			$this->s_table["meta"]["num_rows"] = $cnt;
 		}
-//		echo "data = <pre>", var_dump($this->s_table["meta"]),"</pre> <br>";
+//		echo "data = <pre>", var_dump($this->s_table["meta"]),"</pre> <br />";
 		$this->save_stat_table();
 
 		return $this->mk_my_orb("change", array("id" => $id));
@@ -119,7 +119,7 @@ class form_stat_table extends form_base
 
 //		$this->mk_data();
 
-		echo "col_data = <pre>", var_dump($this->col_data),"</pre> <br>";
+		echo "col_data = <pre>", var_dump($this->col_data),"</pre> <br />";
 
 		$els = $this->get_elements_for_forms($this->s_table["meta"]["forms"],false,true);
 

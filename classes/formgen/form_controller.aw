@@ -226,15 +226,15 @@ class form_controller extends form_base
 		{
 				$awt->start("eval_controller::$id");
 				$awt->count("eval_controller::$id");
-				echo "eval_controller_ref $id for entry $entry , el ".(is_object($el_ref) ? $el_ref->get_id() : "")." <br>";
+				echo "eval_controller_ref $id for entry $entry , el ".(is_object($el_ref) ? $el_ref->get_id() : "")." <br />";
 		}
 		$co = $this->load_controller($id);
 		$eq = $this->replace_vars($co,$co["meta"]["eq"],true,$form_ref, $el_ref, $entry);
 
 		$eq = "\$res = ".$eq.";\$contr_finish = true;";
-		dbg::p2("controller id $id: evaling $eq <br>");
+		dbg::p2("controller id $id: evaling $eq <br />");
 		@eval($eq);
-		dbg::p2("evaled $id, res: ".dbg::dump($res)." <br>");
+		dbg::p2("evaled $id, res: ".dbg::dump($res)." <br />");
 		if (!$contr_finish)
 		{
 			$this->dequote(&$eq);
@@ -242,7 +242,7 @@ class form_controller extends form_base
 		}
 		if ($_COOKIE["profile_controllers"] == "1")
 		{
-			echo "got result $res, elapsed time = ".$awt->elapsed("eval_controller::$id")." <br><br>";
+			echo "got result $res, elapsed time = ".$awt->elapsed("eval_controller::$id")." <br /><br />";
 		}
 
 		exit_function("form_controller::eval_controller");
@@ -271,15 +271,15 @@ class form_controller extends form_base
 		if ($_COOKIE["profile_controllers"] == "1")
 		{
 				$awt->start("eval_controller::$id");
-				echo "eval_controller $id for entry $entry , el ".(is_object($el_ref) ? $el_ref->get_id() : "")." <br>";
+				echo "eval_controller $id for entry $entry , el ".(is_object($el_ref) ? $el_ref->get_id() : "")." <br />";
 		}
 		$co = $this->load_controller($id);
 		$eq = $this->replace_vars($co,$co["meta"]["eq"],true,$form_ref, $el_ref, $entry);
 
 		$eq = "\$res = ".$eq.";\$contr_finish = true;";
-		dbg::p2("controller id $id: evaling $eq <br>");
+		dbg::p2("controller id $id: evaling $eq <br />");
 		@eval($eq);
-		dbg::p2("evaled $id, res: ".dbg::dump($res)." <br><br>");
+		dbg::p2("evaled $id, res: ".dbg::dump($res)." <br /><br />");
 		if (!$contr_finish)
 		{
 			$this->dequote(&$eq);
@@ -287,7 +287,7 @@ class form_controller extends form_base
 		}
 		if ($_COOKIE["profile_controllers"] == "1")
 		{
-			echo "got result $res, elapsed time = ".$awt->elapsed("eval_controller::$id")." <br>";
+			echo "got result $res, elapsed time = ".$awt->elapsed("eval_controller::$id")." <br />";
 		}
 
 		exit_function("form_controller::eval_controller");
@@ -325,12 +325,12 @@ class form_controller extends form_base
 		{
 			foreach($co["meta"]["vars"] as $var => $vd)
 			{
-//				echo "var = '$var' <br>";
+//				echo "var = '$var' <br />";
 				if (strpos($eq,"[".$var."]") !== false)
 				{
-//					echo "included <br>";
+//					echo "included <br />";
 					$val = str_replace("\"", "\\\"", $this->get_var_value($co, $var, &$form_ref));
-//					echo "val = $val <br>";
+//					echo "val = $val <br />";
 					if ($add_quotes)
 					{
 						$val = "\"".str_replace("\"","\\\"",$val)."\"";
@@ -347,7 +347,7 @@ class form_controller extends form_base
 			foreach($els as $el)
 			{
 				$var = $el->get_el_name();
-	//			echo "var = '$var' eq = $eq <br>";
+	//			echo "var = '$var' eq = $eq <br />";
 				if (strpos($eq,"[".$var."]") !== false)
 				{
 					$val = str_replace("\"", "\\\"", $el->get_controller_value());
@@ -355,7 +355,7 @@ class form_controller extends form_base
 					{
 						$val = "\"".str_replace("\"","\\\"",$val)."\"";
 					}
-	//				echo "replace '$var' with '$val' <Br>";
+	//				echo "replace '$var' with '$val' <br />";
 					$eq = str_replace("[".$var."]",$val,$eq);
 				}
 			}
@@ -615,24 +615,24 @@ class form_controller extends form_base
 					{
 						$chd = $this->get_chain_entry($chent, true);
 						$entry_id = $chd[$o_fid];
-//						echo "got entry id in THIS chain as $entry_id <br>";
+//						echo "got entry id in THIS chain as $entry_id <br />";
 						// now read the related form's entry id, then get the chain entry id from that
 						$rel_eid = $this->db_fetch_field("SELECT el_".$o_elid." as val FROM form_".$o_fid."_entries WHERE id = '$entry_id'", "val");
 					}
 					// get the chain entry and find the corect form entry from that
 					list($_tmp, $_tmp2, $_tmp_lbopt, $rel_eid) = explode("_", $rel_eid);
-//					echo "got rel_eid as $rel_eid , fid = $fid<br>";
+//					echo "got rel_eid as $rel_eid , fid = $fid<br />";
 					$t_fid = $this->get_form_for_entry($rel_eid);
 					if ($t_fid)
 					{
 						$rel_ch_eid = $this->db_fetch_field("SELECT chain_id FROM form_".$t_fid."_entries WHERE id = '$rel_eid'", "chain_id");
 					}
-//					echo "got rel_ch_eid as $rel_ch_eid <br>";
+//					echo "got rel_ch_eid as $rel_ch_eid <br />";
 					
 					$chd = $this->get_chain_entry($rel_ch_eid, true);
-//					echo "got chd as ".dbg::dump($chd)." <br>";
+//					echo "got chd as ".dbg::dump($chd)." <br />";
 					$entry_id = $chd[$fid];
-//					echo "got entry_id as $entry_id <br>";
+//					echo "got entry_id as $entry_id <br />";
 					if (!$entry_id)
 					{
 						// if the entry for this form has not been made in the chain or is in a related form, 
@@ -656,15 +656,15 @@ class form_controller extends form_base
 			if ($et_type == "session")
 			{
 				$sff = aw_global_get("session_filled_forms");
-//				echo "sff = <pre>", var_dump($sff),"</pre> fid = $fid <br>";
+//				echo "sff = <pre>", var_dump($sff),"</pre> fid = $fid <br />";
 				$entry_id = $sff[$fid];
-//				echo "entry id for form $fid = $entry_id <br>";
+//				echo "entry id for form $fid = $entry_id <br />";
 			}
 			else
 			if ($et_type == "writer_entry")
 			{
 				$entry_id = aw_global_get("current_writer_entry");
-//				echo "got eid $entry_id <br>";
+//				echo "got eid $entry_id <br />";
 			}
 			else
 			if ($et_type == "element_sum")
@@ -678,7 +678,7 @@ class form_controller extends form_base
 			{
 				if ($form->entry_id != $entry_id)
 				{
-//					echo "loading entry for form $form->id , entry = $entry_id <br>";
+//					echo "loading entry for form $form->id , entry = $entry_id <br />";
 					enter_function("form_controller::get_var_value::le::form::".$form->id."::eid::".$entry_id);
 					$form->load_entry($entry_id, true);
 					exit_function("form_controller::get_var_value::le::form::".$form->id."::eid::".$entry_id);
@@ -690,14 +690,14 @@ class form_controller extends form_base
 					enter_function("form_controller::get_var_value::gcv");
 					$val = $el->get_controller_value();
 					exit_function("form_controller::get_var_value::gcv");
-//					echo "val = $val entry = $el->entry , elid = $elid <br>";
+//					echo "val = $val entry = $el->entry , elid = $elid <br />";
 					exit_function("form_controller::get_var_value");
 					return $val;
 				}
 				else
 				{
 					$val = $form->entry[$elid];
-//					echo "returning pure val for element $elid <br>";
+//					echo "returning pure val for element $elid <br />";
 					exit_function("form_controller::get_var_value");
 					return $val;
 				}
@@ -803,7 +803,7 @@ class form_controller extends form_base
 								"element" => $elid,
 								"type" => $typ
 							));
-//							echo "tried to remove from form $fid controller $id , element $elid , type = $typ <br>";
+//							echo "tried to remove from form $fid controller $id , element $elid , type = $typ <br />";
 							$f->save();
 						}
 					}

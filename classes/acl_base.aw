@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.40 2003/08/01 12:48:15 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.41 2003/08/01 13:27:46 axel Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -521,16 +521,16 @@ class acl_base extends db_connector
 	{
 		header ("HTTP/1.1 404 Not Found");
 		echo "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">";
-		echo "<HTML><HEAD>";
-		echo "<TITLE>404 Not Found</TITLE>";
-		echo "</HEAD><BODY>";
-		echo "<H1>Not Found</H1>";
+		echo "<html><head>";
+		echo "<title>404 Not Found</title>";
+		echo "</head><body>";
+		echo "<h1>Not Found</h1>";
 		echo "The requested URL ".aw_global_get("REQUEST_URI")." ";
-		echo "was not found on this server.<P>";
-		echo "<HR>";
+		echo "was not found on this server.<p>";
+		echo "<hr />";
 		echo "<ADDRESS>Apache/1.3.14 Server at ".aw_global_get("HTTP_HOST");
 		echo "Port 80</ADDRESS>";
-		echo "</BODY></HTML>";
+		echo "</body></html>";
 		die();
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.29 2003/07/07 17:13:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.30 2003/08/01 13:27:50 axel Exp $
 // form_calendar.aw - manages formgen controlled calendars
 classload("formgen/form_base");
 class form_calendar extends form_base
@@ -109,7 +109,7 @@ class form_calendar extends form_base
 				$el_end,$start,$el_start,$end);
 		if ($GLOBALS["fg_dbg"])
                 {
-                        echo ("sql = $q <br>");
+                        echo ("sql = $q <br />");
                 }
 
 		$this->db_query($q);
@@ -178,7 +178,7 @@ class form_calendar extends form_base
 			WHERE cal_id = '$cal_id' AND relation = '$ctrl' AND start >= '$start' AND end <= '$end' AND objects.status != 0";
 		if ($GLOBALS["fg_dbg"])
                 {
-                        echo ("sql = $q <br>");
+                        echo ("sql = $q <br />");
                 }
 		$this->db_query($q);
 		$events = array();
@@ -411,13 +411,13 @@ class form_calendar extends form_base
 				AND relation IN ($r_entry_id) AND start <= '$end' AND end >= '$start'";
 		if ($GLOBALS["fg_dbg"]) 
 		{
-			echo ("sql = $q <br>");
+			echo ("sql = $q <br />");
 		}
 
 		$this->db_query($q);
 		$row2 = $this->db_next();
 		$max = (int)$row2["max"];
-		//print "loading window for $entry_id - it has $max max slots<br>";
+		//print "loading window for $entry_id - it has $max max slots<br />";
 		// and now, for each calendar figure out how many
 		// free spots does it have in the requested period.
 		// for this, I'll have to query the calendar2event table
@@ -432,11 +432,11 @@ class form_calendar extends form_base
 				AND end >= '$start' AND start <= '$end'";
 		if ($GLOBALS["fg_dbg"]) 
 		{
-			echo ("sql = $q <br>");
+			echo ("sql = $q <br />");
 		}
 		/*
 		print $q;
-		print "<br>";
+		print "<br />";
 		*/
 		$this->db_query($q);
 		$row2 = $this->db_next();
@@ -444,9 +444,9 @@ class form_calendar extends form_base
 		$vac = $max - $sum - $req_items;
 		if ($GLOBALS["fg_dbg"]) 
 		{
-			print "id = $r_entry_id, max avail = $max, reserved = $sum, vac = $vac, requested = $req_items<br>\n";
-			print "$sum ruumi on broneeritud<br>\n";
-			print "$vac j‰‰ks j‰rgi<br>\n";
+			print "id = $r_entry_id, max avail = $max, reserved = $sum, vac = $vac, requested = $req_items<br />\n";
+			print "$sum ruumi on broneeritud<br />\n";
+			print "$vac j‰‰ks j‰rgi<br />\n";
 		}
 		return $vac;
 	}
@@ -466,7 +466,7 @@ class form_calendar extends form_base
 		$q = "SELECT * FROM calendar2timedef LEFT JOIN objects ON (calendar2timedef.entry_id = objects.oid) WHERE calendar2timedef.oid = '$eform' AND start <= '$end' AND end >= '$start' AND relation = '$ctrl' AND status = 2";
 		if ($GLOBALS["fg_dbg"])
                 {
-                        echo ("sql = $q <br>");
+                        echo ("sql = $q <br />");
                 }
 		$this->db_query($q);
 		$this->start = $start;
@@ -620,7 +620,7 @@ class form_calendar extends form_base
 		#$GLOBALS["fg_dbg"] = 1;
 		if ($GLOBALS["fg_dbg"])
                 {
-                        echo ("sql = $q <br>");
+                        echo ("sql = $q <br />");
                 }
 
 
@@ -631,7 +631,7 @@ class form_calendar extends form_base
 	
 
 		/*print $q;
-		print "<br>";
+		print "<br />";
 		*/
 		// and now, for each calendar figure out how many
 		// free spots does it have in the requested period.
@@ -658,12 +658,12 @@ class form_calendar extends form_base
 		};
 		if ($GLOBALS["fg_dbg"])
                 {
-                        echo ("sql = $q <br>");
+                        echo ("sql = $q <br />");
                 }
 		$this->db_query($q);
 		$row2 = $this->db_next();
 		$sum = (int)$row2["sum"];
-		//print "max = $max, sum = $sum, req = $req_items<br>\n";
+		//print "max = $max, sum = $sum, req = $req_items<br />\n";
 		$vac = $max - $sum - $req_items;
 		$x = &$args;
 		$x["max"] = $max;
@@ -765,7 +765,7 @@ class form_calendar extends form_base
 		// $f_r[form_from] is it.
 		// $f_r[el_from] is the element id which contains the information we want
 		/*
-		print "form: $f_r[form_from] el: $f_r[el_from]<br>";
+		print "form: $f_r[form_from] el: $f_r[el_from]<br />";
 		*/
 
 		// and now the final step - figure out, which
@@ -797,7 +797,7 @@ class form_calendar extends form_base
 				WHERE form_id = '$id'";
 		if ($GLOBALS["fg_dbg"])
                 {
-                        echo ("sql = $q <br>");
+                        echo ("sql = $q <br />");
                 }
 		$this->db_query($q);
 		$has_vacancies = true;
@@ -916,10 +916,10 @@ class form_calendar extends form_base
 						"max" => &$max,
 				));
 
-				//print "vac = $vac<br>";
+				//print "vac = $vac<br />";
 
 
-				//print "<br>max = $max, req_items = $relval[req_items], us = $used_slots, vac = $vac, txtid = $relval[txtid]<br>";
+				//print "<br />max = $max, req_items = $relval[req_items], us = $used_slots, vac = $vac, txtid = $relval[txtid]<br />";
 
 // vana veateade: $this->controller_errors[$err_el][] = "Calendar '$row[name]/$rowx[name]' does not have this many vacancies in the requested period.";
 
@@ -1043,7 +1043,7 @@ class form_calendar extends form_base
 					{
 						print "ıige = ";
 						print $q;
-						print "<br>\n";
+						print "<br />\n";
 						flush();
 					};
 					*/
@@ -1064,7 +1064,7 @@ class form_calendar extends form_base
 					{
 						print "imelik = ";
 						print $q;
-						print "<br>\n";
+						print "<br />\n";
 						flush();
 					};
 					*/

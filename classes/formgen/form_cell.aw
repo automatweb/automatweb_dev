@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_cell.aw,v 1.10 2003/07/17 12:27:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_cell.aw,v 1.11 2003/08/01 13:27:50 axel Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle formi sees kirjas
@@ -353,7 +353,7 @@ class form_cell extends form_base
 			}
 			else
 			{
-				$erstr = join("<br>", $errs);
+				$erstr = join("<br />", $errs);
 				if ($erstr != "")
 				{
 					$c .= "<font color='red' size='2'>".$erstr."</font>";
@@ -449,7 +449,7 @@ class form_cell extends form_base
 				if ($res !== true)
 				{
 					$shctrlok = false;
-					//echo "show controller $ctlid failed for element ".$this->arr[$i]->get_id()." <br>";
+					//echo "show controller $ctlid failed for element ".$this->arr[$i]->get_id()." <br />";
 				}
 			}
 			if ($shctrlok)

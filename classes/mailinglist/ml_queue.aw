@@ -341,7 +341,7 @@ class ml_queue extends aw_template
 	function increase_avoidmids_ready($aid)
 	{
 		$r=$this->db_fetch_field("SELECT usagec FROM ml_avoidmids WHERE aid='$aid'","usagec");
-		//decho("<i>inc_avoidmids $aid r=$r</i><br>");
+		//decho("<i>inc_avoidmids $aid r=$r</i><br />");
 		if ($r<=1)
 		{
 			$this->db_query("DELETE FROM ml_avoidmids WHERE aid='$aid'");
@@ -363,18 +363,18 @@ class ml_queue extends aw_template
 			"event" => $this->mk_my_orb("process_queue", array(), "", false, true),
 			"time" => time()+120,	// every 2 minutes
 		));
-		echo "adding scheduler ! <br>\n";
+		echo "adding scheduler ! <br />\n";
 		flush();
-		//decho("process_queue:<br>");//dbg
+		//decho("process_queue:<br />");//dbg
 		$tm=time();
 		// võta need, mida pole veel üldse saadetud või on veel saata & aeg on alustada
 		$this->db_query("SELECT * FROM ml_queue WHERE status IN (0,1) AND start_at<='$tm'");
-		echo "select <Br>\n";
+		echo "select <br />\n";
 		flush();
 		while ($r = $this->db_next())
 		{
 			$qid=(int)$r["qid"];
-			//decho("doing item $qid<br>");flush();//dbg
+			//decho("doing item $qid<br />");flush();//dbg
 			// vaata kas see item on ikka lahti (ntx seda skripti võib kogemata 2 tk korraga joosta)
 			$this->save_handle();
 			$status=$this->db_fetch_field("SELECT status FROM ml_queue WHERE qid ='$qid'","status");
@@ -391,7 +391,7 @@ class ml_queue extends aw_template
 				// vaata, kas on aeg saata
 				if (!$r["last_sent"] || ($tm-$r["last_sent"]) >= $r["delay"])
 				{
-					//decho("saadan  meili<br>");flush();//dbg
+					//decho("saadan  meili<br />");flush();//dbg
 					$this->save_handle();
 					//lukusta queue item
 					$this->db_query("UPDATE ml_queue SET status = 3 WHERE qid = '$qid'");
@@ -402,7 +402,7 @@ class ml_queue extends aw_template
 						$stat=$this->do_queue_item($r);//1 pooleli (veel meile) 2 valmis (meili ei leitud enam)
 						$c++;
 					};
-					//decho("saadetud<br>");flush();//dbg
+					//decho("saadetud<br />");flush();//dbg
 
 					
 					//Kui on valmis, siis peab näitur näitama 100%
@@ -425,7 +425,7 @@ class ml_queue extends aw_template
 				else //dbg
 				{
 					$veel=$r["delay"]-($tm-$r["last_sent"]);
-					//decho("järgmise batchini on veel $veel sekundit<br>");flush();
+					//decho("järgmise batchini on veel $veel sekundit<br />");flush();
 				};
 			} 
 			else
@@ -436,14 +436,14 @@ class ml_queue extends aw_template
 				//lukusta queue item
 				$this->db_query("UPDATE ml_queue SET status = 3 WHERE qid = '$qid'");
 
-				//decho("saadan  meili<br>");flush();//dbg
+				//decho("saadan  meili<br />");flush();//dbg
 				$stat=1;
 				while ($stat==1)
 				{
 					$stat=$this->do_queue_item($r);
 				};
 
-				//decho("saadetud<br>");flush();//dbg
+				//decho("saadetud<br />");flush();//dbg
 				$this->increase_avoidmids_ready($r["aid"]);
 				$this->db_query("UPDATE ml_queue SET status = 2,position=total WHERE qid = '$qid'");
 				$this->restore_handle();
@@ -467,7 +467,7 @@ class ml_queue extends aw_template
 	//! Protsessib queue itemist $r järgmise liikme
 	function do_queue_item($r)
 	{
-		//decho("<b>do_queue_item::</b><br>");
+		//decho("<b>do_queue_item::</b><br />");
 		extract($r);
 		// vali järgmine meililisti liige tabelist
 		$gidin = false;
@@ -494,7 +494,7 @@ class ml_queue extends aw_template
 					break;
 				}
 			}
-			echo ("found member $_mid <br>");
+			echo ("found member $_mid <br />");
 /*			if ($avoidmids != "")
 			{
 				$midnotin="AND mid NOT IN (".$avoidmids.")";
@@ -505,13 +505,13 @@ class ml_queue extends aw_template
 			};
 
 			$q="SELECT mid FROM ml_list2member WHERE lid='$lid' $gidin $midnotin LIMIT 1";
-			decho("q=$q<br>");//dbg
+			decho("q=$q<br />");//dbg
 			$this->db_query($q);
 			$member=$this->db_next();*/
 
 			if (!$found)// kui enam liikmeid ei ole
 			{
-				//decho("liikmed otsas<br>");
+				//decho("liikmed otsas<br />");
 				return 2;
 			}
 				
@@ -536,7 +536,7 @@ class ml_queue extends aw_template
 			//dprint_r($aavoidmids);
 			$aavoidmids[]=$member;
 			$avoidmids=join(",",$aavoidmids);
-			//decho("pärast avoidmids=$avoidmids<br>");//dbg
+			//decho("pärast avoidmids=$avoidmids<br />");//dbg
 
 			$q="UPDATE ml_avoidmids SET avoidmids='$avoidmids' WHERE aid='$aid'";
 			$this->db_query($q);
@@ -545,7 +545,7 @@ class ml_queue extends aw_template
 			$q="UPDATE ml_queue SET position=position+1,last_sent='$tm' WHERE qid='$qid'";
 			$this->db_query($q);
 		};
-		//decho("<b>out of do_queue_item</b><br>");
+		//decho("<b>out of do_queue_item</b><br />");
 		return 1;
 	}
 
@@ -559,7 +559,7 @@ class ml_queue extends aw_template
 			{
 				$this->used_variables[$v]=1;
 				$text=preg_replace("/#$v#/",$data[$v]?$data[$v]:"",$text);
-				//decho("matced $v<br>");
+				//decho("matced $v<br />");
 			};
 		};
 		return $text;
@@ -569,7 +569,7 @@ class ml_queue extends aw_template
 	//! Saadab meili $mid liikmele $member .$r on queue itemi andmed
 	function send_message($mid,$member,$r=array())
 	{
-		//decho("sending msg $mid to $member<br>");
+		//decho("sending msg $mid to $member<br />");
 		$lid=$r["lid"];
 
 		// võta meil
@@ -599,7 +599,7 @@ class ml_queue extends aw_template
 		}
 		aw_cache_set("ml_queue::send_message::mails::$mid::$lid", $mailto, true);
 
-		echo "yeah <br>";
+		echo "yeah <br />";
 		
 		// save original UID
 		if (!isset($this->originaluid))
@@ -643,7 +643,7 @@ class ml_queue extends aw_template
 		$this->used_variables=array();
 		$message=$this->replace_tags($msg["message"],$data);
 		$subject=$this->replace_tags($msg["subject"],$data);
-		//decho("mail contans mfrom value of ".$msg["mfrom"]."<br>");//dbg
+		//decho("mail contans mfrom value of ".$msg["mfrom"]."<br />");//dbg
 		$mfrom=$this->replace_tags($msg["mfrom"],$data);
 
 		$used_vars=array_keys($this->used_variables);
@@ -667,20 +667,20 @@ class ml_queue extends aw_template
 		};
 
 		$this->awm->clean();
-		//decho("msg[type]=$msg[type] html=".($msg["type"] & MSG_HTML)."<br>");
+		//decho("msg[type]=$msg[type] html=".($msg["type"] & MSG_HTML)."<br />");
 		$is_html=$msg["type"] & MSG_HTML;
 
 		$messenger = get_instance("messenger");
 		$froma = $mfrom != "" ? $mfrom : $messenger->get_default_froma($msg_meta["identity"]);
 		$fromn = $mfrom != "" ? "" : $messenger->get_default_fromn($msg_meta["identity"]);
-		echo "froma = $froma , fromn = $fromn  <br>";
+		echo "froma = $froma , fromn = $fromn  <br />";
 		$this->awm->create_message(array(
 			"froma" => $froma,
 			"fromn" => $fromn,
 			"subject" => $subject,
 			"To" => $mailto,
 			"Sender"=>"duke@struktuur.ee",
-			"body" => $is_html?strip_tags(strtr($message,array("<br>"=>"\r\n","<BR>"=>"\r\n","</p>"=>"\r\n","</P>"=>"\r\n"))):$message,
+			"body" => $is_html?strip_tags(strtr($message,array("<br />"=>"\r\n","<br />"=>"\r\n","</p>"=>"\r\n","</p>"=>"\r\n"))):$message,
 		));
 
 		if ($is_html)

@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.24 2003/07/25 15:51:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.25 2003/08/01 13:27:47 axel Exp $
 
 /*
 
@@ -336,11 +336,11 @@ class gallery_v2 extends class_base
 			$conf_id = $this->_get_conf_for_folder($ob["parent"]);
 			$conf_o = $this->get_object($conf_id);
 
-			echo "Impordin faile, palun oodake... <Br><br>\n\n";
+			echo "Impordin faile, palun oodake... <br /><br />\n\n";
 			flush();
 			foreach($files as $file)
 			{
-				echo "Leidsin pildi $file <br>\n";
+				echo "Leidsin pildi $file <br />\n";
 				flush();
 
 				if ($meta["import_ftp"] == 1)
@@ -424,13 +424,13 @@ class gallery_v2 extends class_base
 
 				// and now we need to add the image to the first empty slot
 				$r = $this->_get_next_free_pos($meta, $_pg, $_row, $_col, $ob);
-//				echo "r = ".dbg::dump($r)." <br>";
+//				echo "r = ".dbg::dump($r)." <br />";
 				if ($r === false && $meta['import_add_pages'] == 1)
 				{
 					// add page to the end
 					$this->_add_page(&$meta, $ob);
 					$r = $this->_get_next_free_pos($meta, $_pg, $_row, $_col, $ob);
-//					echo "r after add page = ".dbg::dump($r)." <br>";
+//					echo "r after add page = ".dbg::dump($r)." <br />";
 				}
 
 				if ($r != false)
@@ -438,7 +438,7 @@ class gallery_v2 extends class_base
 					$_pg = $r[0];
 					$_row = $r[1];
 					$_col = $r[2];
-//					echo "free page = $_pg row = $_row , col = $_col <br>";
+//					echo "free page = $_pg row = $_row , col = $_col <br />";
 					$meta['page_data'][$_pg]['content'][$_row][$_col]['img'] = $idata;
 					$meta['page_data'][$_pg]['content'][$_row][$_col]['tn'] = $tn_idata;
 					$this->db_query("INSERT INTO g_img_rel(img_id, tn_id) VALUES('".$idata["id"]."','".$tn_idata["id"]."')");
@@ -454,7 +454,7 @@ class gallery_v2 extends class_base
 				"oid" => $arr["id"],
 				"metadata" => $meta
 			));
-			echo "Valmis! <a href='".$this->mk_my_orb("change", array("id" => $arr["id"], "group" => "import"))."'>Tagasi</a><br>\n";
+			echo "Valmis! <a href='".$this->mk_my_orb("change", array("id" => $arr["id"], "group" => "import"))."'>Tagasi</a><br />\n";
 			die();
 		}
 	}
@@ -477,7 +477,7 @@ class gallery_v2 extends class_base
 		{
 			$page = 1;
 		}		
-//		echo "gnfp p $page r $row c $col <br>";
+//		echo "gnfp p $page r $row c $col <br />";
 		for ($_page = 1; $_page <= $meta['num_pages']; $_page++)
 		{
 			if (!$meta['page_data'][$_page]['layout'])
@@ -487,36 +487,36 @@ class gallery_v2 extends class_base
 				$meta['page_data'][$_page]['layout'] = $l->get_layout($this->_get_default_layout($ob));
 			}
 
-//			echo "scanning .. page $_page , rows = ".$meta['page_data'][$_page]['layout']['rows']." <br>";
+//			echo "scanning .. page $_page , rows = ".$meta['page_data'][$_page]['layout']['rows']." <br />";
 			for ($_row = 0; $_row < $meta['page_data'][$_page]['layout']['rows']; $_row++)
 			{
-//				echo "scanning .. page $_page , row $_row ,  cols = ".$meta['page_data'][$_page]['layout']['cols']." <br>";
+//				echo "scanning .. page $_page , row $_row ,  cols = ".$meta['page_data'][$_page]['layout']['cols']." <br />";
 				for ($_col = 0; $_col < $meta['page_data'][$_page]['layout']['cols']; $_col++)
 				{
-//					echo "scanning .. page $_page , row = $_row , col = $_col <br>";
+//					echo "scanning .. page $_page , row = $_row , col = $_col <br />";
 					
 					$col_data = $meta['page_data'][$_page]['content'][$_row][$_col];
-//					echo "col data = ".dbg::dump($col_data)." <br>";
+//					echo "col data = ".dbg::dump($col_data)." <br />";
 					if ($_page == $page && $_row >= $row)
 					{
 						if ($_row == $row)
 						{
 							if ($_col >= $col)
 							{
-//								echo "first half = row <br>";
+//								echo "first half = row <br />";
 								if (!$col_data["img"]["id"])
 								{
-//									echo "found it! <br>";
+//									echo "found it! <br />";
 									return array($_page, $_row, $_col);
 								}
 							}
 						}
 						else
 						{
-//							echo "first page <br>";
+//							echo "first page <br />";
 							if (!$col_data["img"]["id"])
 							{
-//								echo "found! <br>";
+//								echo "found! <br />";
 								return array($_page, $_row, $_col);
 							}
 						}
@@ -524,10 +524,10 @@ class gallery_v2 extends class_base
 					else
 					if ($_page > $page)
 					{
-//						echo "other page! <br>";
+//						echo "other page! <br />";
 						if (!$col_data["img"]["id"])
 						{	
-//							echo "found! <br>";
+//							echo "found! <br />";
 							return array($_page, $_row, $_col);
 						}
 					}

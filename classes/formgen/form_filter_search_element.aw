@@ -30,7 +30,7 @@ class form_filter_search_element extends form_search_element
 	function gen_partcache()
 	{
 		$partcache = aw_global_get("partcache");
-		//echo("gen_partcache() partsloaded=$partsloaded<br>");//dbg
+		//echo("gen_partcache() partsloaded=$partsloaded<br />");//dbg
 		if (!aw_global_get("partsloaded"))
 		{
 			$partcache=Array(-1=>"");

@@ -321,7 +321,7 @@ class db_table_contents extends class_base
 				if (!($is_del == 1 && in_array($rc, $sela->get())))
 				{
 					$q = "UPDATE ".$ob['meta']['db_table']." SET $tochangestr WHERE ".$keys[$rc];
-//					echo "q = $q <br>";
+//					echo "q = $q <br />";
 					$db->save_handle();
 					$db->db_query($q);
 					$db->restore_handle();
@@ -334,7 +334,7 @@ class db_table_contents extends class_base
 			foreach($sela->get() as $k)
 			{
 				$q = "DELETE FROM ".$ob['meta']['db_table']." WHERE ".$keys[$k];
-//				echo "q = $q <br>";
+//				echo "q = $q <br />";
 				$db->save_handle();
 				$db->db_query($q);
 				$db->restore_handle();

@@ -88,7 +88,7 @@ class xml_path_parser
 	{
 		array_push($this->context,$name);
 		$ctx = "/" . join("/",$this->context);
-//                print "$name starts, ctx = $ctx<br>";
+//                print "$name starts, ctx = $ctx<br />";
 
 		array_walk($this->paths,array(&$this,'depthwalker'),1);
 
@@ -102,7 +102,7 @@ class xml_path_parser
 
 	function xml_end_element($parser,$name)
 	{
-//                print "$name ends<br>";
+//                print "$name ends<br />";
 
 		array_walk($this->paths,array(&$this,'depthwalker'),-1);
 		$ctx = "/" . join("/",$this->context);
