@@ -119,6 +119,16 @@
             <caption>Millise v&amp;auml;lja v&amp;auml;&amp;auml;rtuse esit&amp;auml;he j&amp;auml;rgi filtreeritakse</caption>
       </property>
       <property>
+            <name>hide_content_table_by_default</name>
+            <table>objects</table>
+            <group>showing</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Vaikimisi &amp;auml;ra n&amp;auml;ita sisu tabelit</caption>
+      </property>
+      <property>
             <name>title_bgcolor</name>
             <table>objects</table>
             <group>styles</group>
