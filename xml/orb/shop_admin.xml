@@ -1,0 +1,203 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="shop_admin">
+		<action name="gen_frameset">
+			<function name="gen_frameset">
+				<arguments>
+					<required name="shop_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="show_top_frame">
+			<function name="show_top_frame">
+				<arguments>
+					<required name="shop_id"/>
+					<optional name="menu_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="system_general">
+			<function name="do_system_general">
+				<arguments>
+					<required name="shop_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_system_general">
+			<function name="submit_system_general">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="system_requisites">
+			<function name="do_system_requisites">
+				<arguments>
+					<required name="shop_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_system_requisites">
+			<function name="submit_system_requisites">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="system_invoice">
+			<function name="do_system_invoice">
+				<arguments>
+					<required name="shop_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_system_invoice">
+			<function name="submit_system_invoice">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="system_nrseries">
+			<function name="do_system_nrseries">
+				<arguments>
+					<required name="shop_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_system_nrseries">
+			<function name="submit_system_nrseries">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="system_catalogues">
+			<function name="do_system_catalogues">
+				<arguments>
+					<required name="shop_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_system_catalogues">
+			<function name="submit_system_catalogues">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="system_other">
+			<function name="do_system_other">
+				<arguments>
+					<required name="shop_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_system_other">
+			<function name="submit_system_other">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="categories_frame">
+			<function name="categories_frame">
+				<arguments>
+					<required name="shop_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="categories_tree">
+			<function name="categories_tree">
+				<arguments>
+					<required name="shop_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="categories_right">
+			<function name="categories_right">
+				<arguments>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="article_frame">
+			<function name="article_frame">
+				<arguments>
+					<required name="shop_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="article_tree">
+			<function name="article_tree">
+				<arguments>
+					<required name="shop_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="article_right">
+			<function name="article_right">
+				<arguments>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="currency_redirect">
+			<function name="currency_redirect">
+				<arguments>
+					<required name="shop_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="formula_redirect">
+			<function name="formula_redirect">
+				<arguments>
+					<required name="shop_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="arttype_redirect">
+			<function name="arttype_redirect">
+				<arguments>
+					<required name="shop_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="detailed_reservations" all_args="1">
+			<function name="detailed_reservations">
+				<arguments>
+					<required name="shop_id"/>
+					<optional name="search"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="passengers" all_args="1">
+			<function name="passengers">
+				<arguments>
+					<required name="shop_id"/>
+					<optional name="search"/>
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>
+		

@@ -287,6 +287,7 @@
 					<required name="shop_id"/>
 					<optional name="section"/>
 					<required name="num"/>
+					<required name="c_num"/>
 					<required name="eid"/>
 				</arguments>
 			</function>
