@@ -415,6 +415,7 @@
             <name>left_pane</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <default>1</default>
             <table>menu</table>
             <group>show</group>
             <field>left_pane</field>
@@ -424,6 +425,7 @@
             <name>right_pane</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <default>1</default>
             <table>menu</table>
             <group>show</group>
             <field>right_pane</field>
