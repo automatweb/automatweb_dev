@@ -130,7 +130,10 @@ class _int_object
 		foreach($oids as $oid)
 		{
 			$c = new connection();
-			$conn_id = $c->find($this->obj["oid"], $oid);
+			$conn_id = $c->find(array(
+				"from" => $this->obj["oid"],
+				"to" => $oid,
+			));
 			if (!$conn_id)
 			{
 				error::throw(array(
@@ -138,7 +141,7 @@ class _int_object
 					"msg" => "object::disconnect(): could not find connection to object $oid from object ".$this->obj["oid"]
 				));
 			}
-			$c->load($conn_id);
+			$c->load($conn_id[0]["id"]);
 			$c->delete();
 		}
 	}
