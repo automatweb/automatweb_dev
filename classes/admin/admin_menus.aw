@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.42 2004/01/05 14:20:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.43 2004/01/05 17:36:03 duke Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -1184,6 +1184,11 @@ class admin_menus extends aw_template
 		$la = get_instance("languages");
 
 		if (!$sortby)
+		{
+			$sortby = "hidden_jrk";
+		};
+
+		if ($sortby == "jrk")
 		{
 			$sortby = "hidden_jrk";
 		};
