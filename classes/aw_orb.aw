@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_orb.aw,v 2.1 2002/07/11 20:10:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_orb.aw,v 2.2 2002/08/20 10:06:12 duke Exp $
 // aw_orb.aw - new and improved ORB
 
 class aw_orb extends aw_template
@@ -84,8 +84,8 @@ class aw_orb extends aw_template
 				$meth["values"]["id"] = $cl->get_opt("shown_document");
 			}
 			$meth["values"]["period"] = $cl->get_opt("period");
-			$data = $cl->get_opt("data");
-			$meth["values"]["parent"] = $data["parent"];
+			//$data = $cl->get_opt("data");
+			$meth["values"]["parent"] = $cl->get_opt("parent");
 		};
 		return $meth;
 	}

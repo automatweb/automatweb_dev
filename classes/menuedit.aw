@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.146 2002/08/14 11:59:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.147 2002/08/20 10:06:12 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -738,6 +738,28 @@ class menuedit extends aw_template
 			));
 		}
 
+		if ($this->mar[$section]["parent"] == 39790 || $this->mar[$this->mar[$section]["parent"]]["parent"] == 39790 || ($section == $GLOBALS["frontpage"] && $GLOBALS["lang_id"] == 4))
+		{
+			$this->vars(array(
+				"IS_AWCOM_FRONTPAGE_ENG" => $this->parse("IS_AWCOM_FRONTPAGE_ENG"),
+				"MOSTIMP" => '<span class="pealkiri2">'.$this->mar["39790"]["name"].'</span>'
+			));
+		}
+
+		$eng = "";
+		$neng = "";
+		if ($GLOBALS["lang_id"] == 4)
+		{
+			$eng = $this->parse("ENG");
+		}
+		else
+		{
+			$neng = $this->parse("NOT_ENG");
+		}
+		$this->vars(array(
+			"ENG" => $eng,
+			"NOT_ENG" => $neng
+		));
 
 
 		if ($section == $frontpage)
@@ -4787,6 +4809,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$d = get_instance("document");
 		$cont = "";
 		// if $section is a periodic document then emulate the current period for it and show the document right away
+		$d->set_opt("parent",$section);
 		if ($obj["class_id"] == CL_PERIODIC_SECTION)
 		{
 			$template = $this->get_long_template($section);
@@ -4870,6 +4893,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$template = $this->get_long_template($section);
 
 		$metaref = array();
+		
+		$d->set_opt("parent",$section);
 		
 		if (is_array($docid)) 
 		{
