@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.18 2004/12/30 10:05:39 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.19 2004/12/30 10:42:36 ahti Exp $
 // register_data.aw - Registri andmed 
 /*
 @classinfo syslog_type=ST_REGISTER_DATA relationmgr=yes no_comment=1
@@ -180,23 +180,19 @@
 @property usersubtitle5 type=text store=no subtitle=1
 @caption Subtitle5
 
-@property udefhidden1 type=hidden
-@property udefhidden2 type=hidden
-@property udefhidden3 type=hidden 
-
-@property usertext1 type=text field=meta method=serialize group=general table=objects
+@property usertext1 type=text store=no
 @caption Usertext1
 
-@property usertext2 type=text field=meta method=serialize group=general table=objects
+@property usertext2 type=text store=no
 @caption Usertext2
 
-@property usertext3 type=text field=meta method=serialize group=general table=objects
+@property usertext3 type=text store=no
 @caption Usertext3
 
-@property usertext4 type=text field=meta method=serialize group=general table=objects
+@property usertext4 type=text store=no
 @caption Usertext4
 
-@property usertext5 type=text field=meta method=serialize group=general table=objects
+@property usertext5 type=text store=no
 @caption Usertext5
 
 @property usertext6 type=text store=no
@@ -221,9 +217,14 @@
 @caption User-defined reset 1
 
 
+
 @default table=objects
 @default method=serialize
 @default field=meta
+
+@property udefhidden1 type=hidden
+@property udefhidden2 type=hidden
+@property udefhidden3 type=hidden 
 
 ---------------- textbox ----------------
 
@@ -1103,63 +1104,7 @@ class register_data extends class_base
 			}
 		}
 	}
-	
-	function callback_post_save($arr)
-	{
-//ok -  siia tuleb siis see maili saatmime- should be easy
 
-// let's fool around with the nail sending only if new warning is submitted
-
-		if($arr['new'] == 1)
-		{
-//			arr($arr);
-			$tmp_cfgform = obj($arr['request']['cfgform']);
-			$conns = $tmp_cfgform->connections_to(array("from.class_id" => CL_REGISTER));
-			$register_obj = $conns[0]->from();
-			
-			$mail_addr_to = $register_obj->prop("mail_address_to");
-			
-//			arr($mail_addr_to);
-	
-			$mail_addresses_to = "";
-			$mail_addresses = new aw_array($mail_addr_to);
-			foreach($mail_addresses->get() as $address)
-			{
-				if(is_oid($address))
-				{
-					$tmp = obj($address);
-					$mail_addresses_to .= $tmp->prop("mail").", ";
-				}
-			}
-			
-
-			if(!empty($mail_addresses_to))
-			{
-			
-				$mail_addr_from = $register_obj->prop("mail_address_from");
-				if(is_oid($mail_addr_from))
-				{
-					$mail_addr_from = obj($mail_addr_from);
-				}
-				$mail_subj = $register_obj->prop("mail_subject");
-			
-				$headers = "To: ".$mail_addresses_to."\r\n";
-				
-				$headers .= "From: ".$mail_addr_from->prop("mail")."\r\n";
-				$url = $this->mk_my_orb("change", array("id" => $arr['id']));
-				$mail_addresses_to = substr($mail_addresses_to, 0, (strlen($mail_addresses_to)-2));
-/*
-				arr("address_to: ".$mail_addresses_to);
-				arr("addr_to ".$mail_addr_to);
-				arr("addr_from ".$mail_addr_from);
-				arr("subj ".$mail_subj);
-				arr("headers ".$headers);
-*/				
-				send_mail($mail_addresses_to, $mail_subj, $url, $headers);
-			}
-		}
-
-	}
 	function parse_alias($arr)
 	{
 		return $this->show(array("id" => $arr["alias"]["target"]));
@@ -1185,7 +1130,6 @@ class register_data extends class_base
 				$return_url = $url;
 			}
 		}
-		
 		return $cf->draw_cfgform_from_ot(array(
 			"ot" => $ot_id,
 			"reforb" => $this->mk_reforb("save_form_data", array(
@@ -1205,7 +1149,6 @@ class register_data extends class_base
 	function save_form_data($arr)
 	{
 		$rval = aw_ini_get("baseurl").$arr["return_url"];
-
 		$obj_inst = obj($arr["id"]);
 		$ot = get_instance(CL_OBJECT_TYPE);
 		if(!$ot_id = $ot->get_obj_for_class(array(
