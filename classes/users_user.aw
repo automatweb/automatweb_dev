@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.9 2001/07/12 04:23:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.10 2001/07/12 23:08:30 duke Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -111,7 +111,6 @@ class users_user extends aw_template
 	// !Logib kasutaja sisse
 	function login($params = array())
 	{
-		global $uid;
 		$uid		= $params["uid"];
 		$password	= $params["password"];
 		// need on selleks, et ei peaks global $REMOTE_ADDR tegema, vms
@@ -120,7 +119,10 @@ class users_user extends aw_template
 
 		$t 		= time();
 		$msg		= "";
-		$success	= true;
+		// by default eeldame, et kasutaja on jobu ja ei saa
+		// sisse logida
+		$success	= false;
+		$load_user 	= true;
 
 		// 2 voiks ka konstandiga asendada, 
 		// samuti voiks kontrollida, kas kasutajanimi (parool) liiga pikk ei ole
@@ -131,7 +133,7 @@ class users_user extends aw_template
 			$msg = sprintf(E_USR_UID_TOO_SHORT,$uid,$password);
 			$this->send_alert($msg);
 			$this->_log("auth",$msg);
-			$success = false;
+			$load_user = false;
 		}
 		// eelnevad kommentaarid kaivad ka parooli kontrollimise kohta
 		elseif (strlen($password) < 2)
@@ -139,44 +141,44 @@ class users_user extends aw_template
 			$msg = sprintf(E_USR_PASS_TOO_SHORT,$uid,$password);
 			$this->send_alert($msg);
 			$this->_log("auth",$msg);
-			$success = false;
+			$load_user = false;
 		}
 		elseif (!is_valid("uid",$uid))
 		{
 			$msg = "Vigane kasutajanimimi $uid";
 			$this->send_alert($msg);
 			$this->_log("auth",$msg);
-			$success = false;
+			$load_user = false;
 		};
 
-		if ($success)
+		if ($load_user)
 		{
 			$q = "SELECT * FROM users WHERE uid = '$uid' AND blocked = 0";
 			$this->db_query($q);
 			$udata = $this->db_next();
 		};
-		if ($udata)
+	
+		if (is_array($udata))
 		{
+			if ($password == $udata["password"])
+			{
+				$success = true;
+			}
+			else
+			{
+				$msg = sprintf(E_USR_WRONG_PASS,$uid,$password);
+				$this->send_alert($msg);
+				$this->_log("auth",$msg);
+			};
 		}
 		else
 		{
 			$msg = "Sellist kasutajat pole $uid";
 			$this->send_alert($msg);
 			$this->_log("auth",$msg);
-			$success = false;
 			session_unregister("uid");
-			unset($uid);
-			return false;
 		};
 
-		if (($password != $udata["password"]))
-		{
-			// vale parool
-			$msg = sprintf(E_USR_WRONG_PASS,$uid,$password);
-			$this->send_alert($msg);
-			$this->_log("auth",$msg);
-			$success = false;
-		};
 		if ($success)
 		{
 			// njah. Mitte ei taha. Aga midagi yle ka ei jaa. Logime vaese bastardi sisse
@@ -197,23 +199,23 @@ class users_user extends aw_template
 		$this->msg = $msg;
 		// caller voib kontrollida - if (!$users->login("fubar"))
 		//				login failed	
-		if ($success && $params["reforb"])
+		// no fucking way. this function returns either true
+		// or false. If you want to read an url then use 
+		// $users->url or something.
+		if ($success) 
 		{
-			global $baseurl;
 			session_register("uid");
+		};
+
+		if ($params["reforb"])
+		{
 			classload("config");
 			$t = new db_config;
 			$url = $t->get_simple_config("after_login");
-			if ($url == "")
-			{
-				$url = $baseurl;
-			}
-			return $url;
-		}
-		else
-		{
-			return $success;
+			$this->url = (strlen($url) > 0) ? $url : $baseurl;
 		};
+	
+		return $success;
 	}
 
 	////
