@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.44 2004/07/02 09:40:32 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.45 2004/07/02 12:10:47 rtoomas Exp $
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
 //on_disconnect_person_from_org handles the connection from person to section too
@@ -827,6 +827,7 @@ class crm_company extends class_base
 			//contact_search_code
 			//contact_search_sex
 		}
+		return PROP_OK;
 	}
 
 	function callback_pre_edit($arr)
@@ -1979,7 +1980,7 @@ class crm_company extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr['unit'] = $this->unit;
-		$arr['return_url'] = aw_global_get('REQUEST_URI');
+		//$arr['return_url'] = aw_global_get('REQUEST_URI');
 	}
 
 	function callback_mod_retval($arr)
