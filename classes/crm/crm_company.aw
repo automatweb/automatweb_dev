@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.41 2004/06/30 09:22:31 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.42 2004/06/30 09:27:03 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -884,7 +884,7 @@ class crm_company extends class_base
 				{
 					$tmp_arr2[] = $pdat['ranks_arr'][$value2];
 				}
-				$section = current($pdat['sections_arr']).', '.join(', ',$tmp_arr2);
+				$section = current($pdat['sections_arr']);//.', '.join(', ',$tmp_arr2);
 				//damn, i'm not sure if a person can have multiple sections?
 				//until then the break stays here
 				break;
