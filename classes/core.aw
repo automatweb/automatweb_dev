@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.188 2003/05/14 09:45:52 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.189 2003/05/14 11:18:38 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -782,7 +782,7 @@ class core extends db_connector
 		{
 			// note that the index inside the idx array is always one less than the 
 			// number in the alias. (e.g. oid of #f1# is stored at the position 0, etc)
-			$aliases[] = $row;
+			$aliases[$row["idx"]-1] = $row;
 		};
 		
 		return $aliases;
