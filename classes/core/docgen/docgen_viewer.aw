@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.14 2004/07/12 06:11:38 duke Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.15 2004/08/17 07:55:00 rtoomas Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -12,12 +12,21 @@
 /*
 
 @classinfo no_status=1 no_comment=1 relationmgr=yes
-
+@default table=objects
 @default group=general 
 
 @property foorum type=relpicker reltype=RELTYPE_FORUM field=meta method=serialize table=objects
 
 @property view type=text store=no 
+
+@groupinfo more_options caption="Seaded"
+@default group=more_options
+
+@property refresh_text type=text store=no value=Uuenda
+@caption Uuenda
+
+@property refresh_properties type=submit store=no value=Uuenda
+@caption Uuenda
 
 @reltype FORUM value=1 clid=CL_FORUM_V2
 @caption foorum
@@ -31,6 +40,23 @@ class docgen_viewer extends class_base
 			"tpldir" => "core/docgen",
 			"clid" => CL_AW_DOCGEN_VIEWER
 		));
+	}
+
+	function set_property($arr)
+	{
+		$prop = &$arr['prop'];
+		
+		switch($prop['name'])
+		{
+			case 'refresh_properties':
+				$documenter = new aw_language_documenter;
+				$documenter->parse_files($this->cfg['classdir']);
+				$arr['obj_inst']->set_meta('properties_data',serialize($documenter));
+				$arr['obj_inst']->save();
+			break;
+		}
+		
+		return PROP_OK;
 	}
 
 	function get_property($arr)
@@ -237,6 +263,39 @@ class docgen_viewer extends class_base
 
 		$str = $this->parse();
 		return $str;
+	}
+
+	/**
+		@attrib name=prop_info
+
+		@param option required
+		@param id required
+	**/
+	function prop_info($arr)
+	{
+		$obj = new object($arr['id']);
+		$data = unserialize($obj->meta('properties_data'));
+
+		if(isset($data->options[$arr['option']]))
+		{
+			if ("@property" == $arr['option'])
+			{
+				foreach($data->prop_attrib_map as $prop_type => $prop_attribs)
+				{
+					echo "<b>".$arr['option']."</b> ";
+					echo " <font color='orange'><b>type=".$prop_type."</b></font> ";
+					print aw_language_documenter::format_arr($prop_attribs,array("group","table","field"));
+					print "<br>";
+					print "<br>";
+				};
+			}
+			else
+			{
+				echo "<b>".$arr['option']."</b> ";
+				print aw_language_documenter::format_arr($data->options[$arr['option']]);
+			};
+			echo "<br>";
+		}
 	}
 
 	/** displays information to the user about a class
@@ -852,6 +911,12 @@ class docgen_viewer extends class_base
 			"target" => "classlist",
 			"caption" => "Eraldi dokumentatsioon"
 		));
+		
+		$ret[] = html::href(array(
+			"url" => $this->mk_my_orb("proplist",array('id'=>$arr['id'])),
+			"target" => "classlist",
+			"caption" => "Classbase tagid"
+		));
 
 		if ($arr["id"])
 		{
@@ -871,6 +936,74 @@ class docgen_viewer extends class_base
 			"content" => "&nbsp;&nbsp;".join(" | ", $ret)
 		));
 		return $this->parse();
+	}
+
+	/**
+	
+		@attrib name=proplist
+		@param id required
+	**/
+	function doc_proplist($arr)
+	{
+		$this->read_template("proplist.tpl");
+		$tv = get_instance(CL_TREEVIEW);
+		
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"tree_id" => "dcgclsss",
+			"persist_state" => true,
+			"root_name" => "Classes",
+			"url_target" => "list"
+		));
+
+		$this->ic = get_instance("icons");
+		
+		$this->_req_mk_prop_tree(array(
+						'id' => $arr['id'],
+						'tree' => &$tv, 
+						'classdir' => $this->cfg["classdir"],
+		));
+		
+		$this->vars(array(
+			"list" => $tv->finalize_tree(array(
+				"rootnode" => 0,
+			))
+		));
+
+		return $this->parse();
+	}
+
+	function _req_mk_prop_tree($arr)
+	{
+		$tree = &$arr['tree'];
+		$obj = new object($arr['id']);
+		$data = unserialize($obj->meta('properties_data'));
+
+		if(!$data)
+		{
+			//have to generate the data
+			$documenter = new aw_language_documenter;
+			$documenter->parse_files($arr['classdir']);
+			$obj->set_meta('properties_data',serialize($documenter));
+			$obj->save();
+		}
+
+
+		foreach($data->options as $option_name=>$option)
+		{
+			$tree->add_item(0,array(
+				'name' => $option_name,
+				'id' => $option_name,
+				'url' => $this->mk_my_orb(
+								'prop_info',
+								array(
+									'option' => $option_name,
+									'id' => $obj->id(),
+								)
+				),
+				'target' => 'propinfo',
+			));
+		}
 	}
 
 	/**
@@ -971,4 +1104,131 @@ class docgen_viewer extends class_base
 		return $hasf;
 	}
 }
+
+
+class aw_language_documenter
+{
+	var $options = array();
+	var $prop_attrib_map = array();
+	var $files_parsed = 0;
+
+	function parse_files($dirname)
+	{
+		$handle = opendir($dirname);
+		while($file = readdir($handle))
+		{
+			if($file=='.' || $file=='..' || $file=="CVS")
+				continue;
+			if(is_dir($dirname.'/'.$file))
+			{
+				$this->parse_files($dirname.'/'.$file);
+			}
+			else
+			{
+				if(substr($file,strlen($file)-2)=='aw')
+				{	
+					$this->parse_file($dirname.'/'.$file);
+				}
+			}
+		}
+		closedir($handle);
+	}
+
+	function parse_file($file)
+	{
+		$lines = file($file);
+		$lines = array_filter($lines,array($this,'is_option'));
+		foreach($lines as $line)
+		{
+			$tmp_arr = explode(' ',trim($line));
+			if(sizeof($tmp_arr)==0)
+				continue;
+			$first_element = $tmp_arr[0];
+			unset($tmp_arr[0]);
+			if(!array_key_exists($first_element,$this->options))
+			{
+				$this->options[$first_element] = array();
+			}
+			$this->generate_option_attributes($first_element,$tmp_arr);
+		}
+		$lines=array();
+	}
+
+	function generate_option_attributes($key,$arr)
+	{
+		$rtrn = array();
+		$attribs = array();
+		foreach($arr as $value)
+		{
+			//if(!in_array($value,$this->options[$key]))
+			{
+				//if key=value
+				$tmp_arr = explode('=',$value);
+				if(sizeof($tmp_arr)>1)
+				{
+					$attribs[$tmp_arr[0]] = $tmp_arr[1];
+					//vaatame kas key existib
+					if(!array_key_exists($tmp_arr[0],$this->options[$key]))
+					{
+						$this->options[$key][$tmp_arr[0]] = array();
+					}
+					//vaatame kas juba selline param väärtus existeib
+					if(!in_array($tmp_arr[1],$this->options[$key][$tmp_arr[0]]))
+					{
+						$this->options[$key][$tmp_arr[0]][] = $tmp_arr[1];
+					}
+
+				}
+			}
+		}
+		
+		if ("@property" == $key && isset($attribs["type"]))
+		{
+			$type = $attribs["type"];
+			unset($attribs["type"]);
+			foreach($attribs as $akey => $avalue)
+			{
+				$this->prop_attrib_map[$type][$akey][$avalue] = $avalue;
+			};
+		};
+		return $rtrn;
+	}
+
+	function is_option($string)
+	{
+		if($string{0}=='@')
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	function format_arr($source,$hide_keys = array())
+	{
+		$tmp = "";
+		foreach($source as $key2=>$value2)
+		{
+			$tmp .= "<font color='green'>".$key2."</font>=";
+			$tmp .= ' ';
+			if(!in_array($key2,$hide_keys) && is_array($value2) && sizeof($value2)<10)
+			{
+				$tmp.= '<b>{</b> <font color="gray">';
+				$tmp.= join(' | ',$value2);
+				$tmp.=' </font><b>}</b>&nbsp;';
+			}
+			else
+			{
+				$tmp.= '<b>{</b><font color="gray">...</font><b>}</b>&nbsp;';
+			}
+		};
+		return $tmp;
+	}
+
+
+}
+
+
 ?>
