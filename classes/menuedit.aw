@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.167 2002/10/22 09:57:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.168 2002/10/22 15:56:54 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -899,6 +899,11 @@ class menuedit extends aw_template
 
 			$docid = array();
 			$cnt = 0;
+			if ($ordby == "")
+			{
+				$ordby = $this->cfg["document_list_order_by"];
+			}
+
 			if ($ordby == "")
 			{
 				$ordby = "objects.jrk";
