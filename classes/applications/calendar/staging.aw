@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.1 2004/10/08 15:55:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.2 2004/10/13 11:06:44 duke Exp $
 // staging.aw - Lavastus 
 /*
 
@@ -39,7 +39,7 @@ property utextbox8 type=textbox no_caption=1
 @property utextarea1 type=textarea cols=90 rows=10 trans=1
 @caption Kirjeldus
 
-@property project_selector type=callback callback=cb_project_selector store=no group=projects all_projects=1
+@property project_selector type=project_selector store=no group=projects all_projects=1
 @caption Projektid
 
 @property trans type=translator store=no group=trans props=name,utextarea1
@@ -155,12 +155,6 @@ class staging extends class_base
 	}
 
 
-	function cb_project_selector($arr)
-        {
-                $elib = get_instance("calendar/event_property_lib");
-                return $elib->project_selector($arr);
-        }
-
 
 	function set_property($arr = array())
 	{
@@ -172,10 +166,6 @@ class staging extends class_base
 				$this->create_copies($arr);
 				break;
 
-			case "project_selector":
-				$elib = get_instance("calendar/event_property_lib");
-				$elib->process_project_selector($arr);
-				break;
 		}
 		return $retval;
 	}	
@@ -327,6 +317,12 @@ class staging extends class_base
 			$o = $first->from();
 		};
 
+		// see raisk võtab jah originaalist
+
+		$brother_list = new object_list(array(
+			"brother_of" => $o->id(),
+		));
+
 
 		// siin loome (mitte ei uuenda) koopiaid - koopia tegemisel
 		// 1. teha uus objekt
@@ -348,6 +344,14 @@ class staging extends class_base
 		{
 			$trans_clone[$tr_conn->prop("to.lang_id")] = $tr_conn->prop("to");
 		};
+
+		// get a list of brothers, get a list of ...
+
+		// can't I create a simpler infrastructure for this shit?
+
+		// get a list of brothers ... get a list of translations from each brother
+
+		// now recreate all that structure
 
 
 		// update existing objects
@@ -388,6 +392,7 @@ class staging extends class_base
 					$props = $arr["obj_inst"]->properties();
 
 					// XX: miks ma ei saa omadusi üle tuua? :(
+					// loome uue koopia objekti
 					$new_obj = new object($o->properties());
 					$new_obj->set_prop("start1",$ts);
 					$new_obj->save_new();
@@ -412,6 +417,8 @@ class staging extends class_base
 					dbg::p1("created new object with id " . $new_obj->id());
 
 					// now create copies of translation objects and connect them
+
+					// for each new copy I have to copy all the translations as well
 					obj_set_opt("no_auto_translation", 1);
 					foreach($trans_clone as $trans_obj_id)
 					{
