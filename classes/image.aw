@@ -34,6 +34,7 @@ class image extends aw_template
 
 	function submit($arr)
 	{
+		$this->quote($arr);
 		extract($arr);
 
 		$_fi = new file;
@@ -55,7 +56,10 @@ class image extends aw_template
 				"oid" => $id,
 				"name" => $name,
 				"comment" => $comment,
-				"parent" => $parent
+				"parent" => $parent,
+				"metadata" => array(
+					"alt" => $alt,
+				),
 			));
 		}
 		else
@@ -70,7 +74,10 @@ class image extends aw_template
 				"class_id" => CL_IMAGE,
 				"status" => 2,
 				"name" => $name,
-				"comment" => $comment
+				"comment" => $comment,
+				"metadata" => array(
+					"alt" => $alt,
+				),
 			));
 
 			if ($file != "" && $file != "none")
@@ -126,6 +133,7 @@ class image extends aw_template
 			"comment" => $obj["comment"],
 			"img" => $ima,
 			"link" => $img["link"],
+			"alt" => $img["meta"]["alt"],
 			"newwindow" => checked($img["newwindow"]==1),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id, "return_url" => $return_url,"alias_to" => $alias_to))
 		));
@@ -140,6 +148,7 @@ class image extends aw_template
 		$this->db_query($q);
 		$row = $this->db_fetch_row();
 		$row["url"] = $this->get_url($row["file"]);
+		$row["meta"] = aw_unserialize($row["metadata"]);
 		return $row;
 	}
 
@@ -173,13 +182,15 @@ class image extends aw_template
 		$align= array("k" => "align=\"center\"", "p" => "align=\"right\"" , "v" => "align=\"left\"" ,"" => "");
 		if ($idata)
 		{
+			$alt = $idata["meta"]["alt"];
 			$vars = array(
 				"imgref" => $idata["url"],
 				"imgcaption" => $idata["comment"],
 				"align" => $align[$matches[4]],
 				"plink" => $idata["link"],
 				"target" => ($idata["newwindow"] ? "target=\"_blank\"" : ""),
-				"img_name" => $idata["name"]
+				"img_name" => $idata["name"],
+				"alt" => $alt,
 			);
  
 			if ($this->is_flash($idata["file"]))
@@ -202,11 +213,11 @@ class image extends aw_template
 				{
 					if ($idata["comment"] != "")
 					{
-						$replacement = sprintf("<a href='%s' target='_blank'><img src='%s' border='0'></a><br>%s",$idata["link"],$idata["url"],$idata["comment"]);
+						$replacement = sprintf("<a href='%s' target='_blank'><img src='%s' border='0' alt='$alt' title='$alt'></a><br>%s",$idata["link"],$idata["url"],$idata["comment"]);
 					}
 					else
 					{
-						$replacement = sprintf("<a href='%s' target='_blank'><img src='%s' border='0'></a>",$idata["link"],$idata["url"]);
+						$replacement = sprintf("<a href='%s' target='_blank'><img src='%s' border='0' alt='$alt' title='$alt'></a>",$idata["link"],$idata["url"]);
 					}
 				};
 			}
@@ -234,11 +245,11 @@ class image extends aw_template
 				{
 					if ($idata["comment"] != "")
 					{
-						$replacement = sprintf("<img src='%s'><br>%s",$idata["url"],$idata["comment"]);
+						$replacement = sprintf("<img src='%s' alt='$alt' title='$alt'><br>%s",$idata["url"],$idata["comment"]);
 					}
 					else
 					{
-						$replacement = sprintf("<img src='%s'>",$idata["url"]);
+						$replacement = sprintf("<img src='%s' alt='$alt' title='$alt'>",$idata["url"]);
 					}
 				};
 			}	
