@@ -266,14 +266,25 @@ class isik extends class_base
 			}
 		}
 
+		
+		if (($row['lastname'] == '') &&($row['firstname'] == ''))
+		{
+			$row['firstname'] = $row['name'];
+		}
+
 		if ($row['picture'])
 		{
 			$img = get_instance('image');
 
 			$im = $img->get_image_by_id($row['picture']);
+//			$row['PILT'] = $img->view(array('id' => $row['picture'], 'height' => '65'));
+
 			$row['picture_url'] = $im['url'];
 
-			$row['picture'] = $img->view(array('id' => $row['picture'], 'height' => '65'));
+			$this->vars($row);
+
+
+			$row['PILT'] = $this->parse('PILT');
 		}
 		else
 		{
@@ -283,10 +294,7 @@ class isik extends class_base
 //		$row['picture']=$row['picture']?html::img(array('src' => $row['picture'])):'';
 		//$row['picture'].=$row['pictureurl']?html::img(array('url' => $row['pictureurl'])):'';
 
-		if (($row['lastname'] == '') &&($row['firstname'] == ''))
-		{
-			$row['firstname'] = $row['name'];
-		}
+
 		$row['comment'] = $obj['comment'];
 		$row['k_e_mail']=(!empty($row['k_e_mail']))?html::href(array('url' => 'mailto:'.$row['k_e_mail'], 'caption' => $row['k_e_mail'])):'';
 		$row['w_e_mail']=(!empty($row['w_e_mail']))?html::href(array('url' => 'mailto:'.$row['w_e_mail'],'caption' => $row['w_e_mail'])):'';
