@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.45 2004/07/05 14:05:46 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.46 2004/07/08 07:24:21 rtoomas Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -1060,6 +1060,29 @@ class crm_person extends class_base
 	////
 	// !Perhaps I can make a single function that returns the latest event (if any)
 	// for each connection?
+	function get_latest_event()
+	{
+		/*$person = $this->get_person_by_user_id(users_user::get_oid_for_uid(aw_global_get('uid')));
+		if($person)
+		{
+			$person = new object($person);
+			$options = array(RELTYPE_PERSON_CALL=>'start1',
+									RELTYPE_PERSON_MEETING=>'start1',
+									RELTYPE_PERSON_TASK=>'start1');
+			foreach($options as $reltype=>$property)
+			{
+				$conns = $person->connections_from(array(
+								'reltype'=>$reltype
+							));
+				ARR($conns);
+			}
+			die();
+			$conns = $person->connections_from(array(
+							'reltype' => $reltypes
+						));
+			arr($conns);
+		}*/
+	}
 	
 	function do_org_actions($arr)
 	{
