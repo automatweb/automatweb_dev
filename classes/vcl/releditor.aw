@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.15 2004/04/26 10:48:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.16 2004/05/06 12:31:13 duke Exp $
 /*
 	Displays a form for editing an connection
 */
@@ -133,7 +133,6 @@ class releditor extends aw_template
 		{
 			$all_props = $t->get_property_group($filter);
 		};
-			
 
 		$act_props = array();
 
@@ -417,7 +416,7 @@ class releditor extends aw_template
 						"tmp_name" => $tmpname,
 						"type" => $filetype,
 						"name" => $filename,
-						"contents" => $contents,
+						"contents" => base64_encode($contents),
 					);
 					$el_count++;
 				}
