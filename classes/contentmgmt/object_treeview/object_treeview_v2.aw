@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.55 2005/01/31 13:34:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.56 2005/02/03 12:00:12 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -318,6 +318,8 @@ class object_treeview_v2 extends class_base
 				$arr["obj_inst"]->set_meta("sel_columns", $arr["request"]["column"]);
 				$arr["obj_inst"]->set_meta("sel_columns_ord", $arr["request"]["column_ord"]);
 				$arr["obj_inst"]->set_meta("sel_columns_text", $arr["request"]["column_text"]);
+				$arr["obj_inst"]->set_meta("sel_columns_sep_before", $arr["request"]["column_sep_before"]);
+				$arr["obj_inst"]->set_meta("sel_columns_sep_after", $arr["request"]["column_sep_after"]);
 				$arr["obj_inst"]->set_meta("sel_columns_editable", $arr["request"]["column_edit"]);
 ////
 // don't save empty fields
@@ -769,8 +771,22 @@ class object_treeview_v2 extends class_base
 		));
 
 		$t->define_field(array(
+			"name" => "sep_before",
+			"caption" => "Eraldaja enne",
+			"sortable" => 1,
+			"align" => "center"
+		));
+
+		$t->define_field(array(
 			"name" => "text",
 			"caption" => "Tekst",
+			"sortable" => 1,
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "sep_after",
+			"caption" => "Eraldaja p&auml;rast",
 			"sortable" => 1,
 			"align" => "center"
 		));
@@ -798,6 +814,8 @@ class object_treeview_v2 extends class_base
 		$cols = $arr["obj_inst"]->meta("sel_columns");
 		$cols_ord = $arr["obj_inst"]->meta("sel_columns_ord");
 		$cols_text = $arr["obj_inst"]->meta("sel_columns_text");
+		$cols_sep_before = $arr["obj_inst"]->meta("sel_columns_sep_before");
+		$cols_sep_after = $arr["obj_inst"]->meta("sel_columns_sep_after");
 		$cols_edit = $arr["obj_inst"]->meta("sel_columns_editable");
 		$cols_fields = $arr["obj_inst"]->meta("sel_columns_fields");
 
@@ -823,7 +841,7 @@ class object_treeview_v2 extends class_base
 
 		foreach($cold as $colid => $coln)
 		{
-			$text = $editable = $fields = "";
+			$text = $editable = $fields = $sep_before = $sep_after = "";
 
 
 			if ($cols[$colid])
@@ -832,6 +850,18 @@ class object_treeview_v2 extends class_base
 					"name" => "column_text[".$colid."]",
 					"value" => $cols_text[$colid],
 					"size" => 40
+				));
+
+				$sep_before = html::textbox(array(
+					"name" => "column_sep_before[".$colid."]",
+					"value" => $cols_sep_before[$colid],
+					"size" => 5
+				));
+
+				$sep_after = html::textbox(array(
+					"name" => "column_sep_after[".$colid."]",
+					"value" => $cols_sep_after[$colid],
+					"size" => 5
 				));
 
 				$editable = html::checkbox(array(
@@ -919,6 +949,8 @@ class object_treeview_v2 extends class_base
 				"text" => $text,
 				"editable" => $editable,
 				"fields" => $fields,
+				"sep_before" => $sep_before,
+				"sep_after" => $sep_after
 			));
 		}
 
@@ -1189,6 +1221,8 @@ class object_treeview_v2 extends class_base
 		extract($arr);
 
 		$show_link = $this->_get_link($name, $url, $parms['tree_obj_ih']);
+		$sep_before = $parms["tree_obj_ih"]->meta("sel_columns_sep_before");
+		$sep_after = $parms["tree_obj_ih"]->meta("sel_columns_sep_after");
 
 		$formatv = array(
 			"show" => $url,
@@ -1285,6 +1319,15 @@ class object_treeview_v2 extends class_base
 						$content = $this->_get_link($content, $url, $parms['tree_obj_ih']);
 					}
 				}	
+
+				if ($sep_before[$colid] != "")
+				{
+					$content = $sep_before[$colid].$content;
+				}
+				if ($sep_after[$colid] != "")
+				{
+					$content .= $sep_after[$colid];
+				}
 				$this->vars(array(
 					"content" => $content
 				));
