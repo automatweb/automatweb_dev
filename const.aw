@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.35 2001/08/12 23:21:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.36 2001/08/23 17:51:15 duke Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -9,6 +9,44 @@ define("AW_VERSION","2.0.0");
 
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
+// right. here comes the error handler! badaboom!
+function handle_errors($errno, $errmsg, $filename, $linenum,$vars)
+{
+	// format a nice message and pass it on to core::raise_error
+	$errortype = array (
+                1   =>  "Error",
+                2   =>  "Warning",
+                4   =>  "Parsing Error",
+                8   =>  "Notice",
+                16  =>  "Core Error",
+                32  =>  "Core Warning",
+                64  =>  "Compile Error",
+                128 =>  "Compile Warning",
+                256 =>  "User Error",
+                512 =>  "User Warning",
+                1024=>  "User Notice"
+	);
+	$not_errors = array(8,2);
+	if (!in_array($errno,$not_errors))
+	{
+		echo "$errno $errmsg $filename $linenum <br>";
+		$msg = "PHP ERROR on line $linenum of file $filename: $errmsg (".$errortype[$errno]."). \n Variables: ";
+		if (is_array($variables))
+		{
+			foreach($variables as $k => $v)
+			{
+				$msg.="$k = $v \n";
+			}
+		}
+		classload("core","aw_template");	
+		$co = new core;
+		$co->db_init();
+		$co->raise_error($msg,false,true);
+	}
+}
+//error_reporting(0);
+//set_error_handler("handle_errors");
+
 // ---------------------------------------------------------------------------
 // do we need that line here?
 $tpldirs["stat.struktuur.ee"] = "/www/stat/templates";
@@ -361,7 +399,8 @@ define("CL_CSS",71); // CSS objekt
 
 define("CL_ML_LIST",72);
 define("CL_ML_MEMBER",73);
-define("CL_ML_MAIL",74);
+define("CL_ML_STAMP",74);
+define("CL_ML_RULE",77);//õumaigaad, someone has taken 75:)
 
 define("CL_SHOP_TABLE",75);
 
@@ -420,10 +459,11 @@ $class_defs = array(	CL_PSEUDO => array("name" => LC_CONST_MENU,"file" => "menue
 			CL_FORM_XML_INPUT => array("name" => "XML sisend", "file" => "form_input", "can_add" => 1),
 			CL_FORUM => array("name" => "Foorum", "file" => "forum", "can_add" => 1),
 			CL_OBJECT_VOTE => array("name" => "Objektide hääletus","file" => "object_vote","can_add" => 1),
-			CL_CSS => array("name" => "CSS Editor","file" => "css","can_add" => 0),
+			CL_CSS => array("name" => "CSS stiil","file" => "css","can_add" => 1),
 			CL_ML_LIST => array("name" => "Meililist","file" => "ml_list","can_add" => 1),
-			CL_ML_MAIL => array("name" => "Meililisti meil","file" => "ml_mail","can_add" => 1),
 			CL_ML_MEMBER => array("name" => "Meililisti liige","file" => "ml_member","can_add" => 1),
+			CL_ML_STAMP => array("name" => "Meililisti stamp","file" => "ml_stamp","can_add" => 1),
+			CL_ML_RULE => array("name" => "Meililisti ruul","file" => "ml_rule","can_add" => 1),
 			CL_SHOP_TABLE => array("name" => "Kaupade tabel", "file" => "shop_table", "can_add" => 1)
 );
 // kliendid. 
@@ -517,6 +557,7 @@ define("PRG_CSS_EDITOR",44);
 define("PRG_LOGIN_MENU",45); // vastavalt grupile login menüü määramine
 define("PRG_ML_MANAGER",47);
 define("PRG_CONFIG_ERRORS",48);	// sisselogimist vajavate veateadete konfimine
+define("PRG_CSS_SYS_EDITOR",49); // süsteemsete stiilide editor
 
 
 // MN_* konstandid on defineeritud $basedir/lang/$lc/common.aw sees
@@ -566,8 +607,9 @@ PRG_BANNER_PROFILES		=> array("name" => MN_BANNER_PROFILES,"url" => "orb.aw?clas
 PRG_EKOMAR						=> array("name" => MN_EKOMAR,            "url" => "orb.$ext?class=ekomar&action=list_files"),
 PRG_KEYWORD						=> array("name" => MN_KEYWORD,					"url" => "orb.aw?class=keywords&action=list"),
 PRG_CONF_JOIN_MAIL		=> array("name" => MN_JOIN_MAIL,				"url" => "orb.aw?class=config&action=join_mail"),
-PRG_CSS_EDITOR		=> array("name" => "CSS editor",				"url" => "orb.aw?class=css&action=list"),
-PRG_ML_MANAGER		=> array("name" => "Meililistid",				"url" => "orb.aw?class=ml_mail&action=queue&manager=1"),
+PRG_CSS_EDITOR		=> array("name" => "Kasutaja CSS editor",				"url" => "orb.aw?class=css&action=list"),
+PRG_CSS_SYS_EDITOR		=> array("name" => "Süsteemi CSS editor",				"url" => "orb.aw?class=css&action=syslist"),
+PRG_ML_MANAGER		=> array("name" => "Meililistid",				"url" => "orb.aw?class=ml_queue&action=queue&manager=1"),
 PRG_CONFIG_ERRORS	=> array("name" => "Config/Veateated",			"url" => "orb.aw?class=config&action=errors")
 );
 
@@ -583,4 +625,6 @@ PRG_CONFIG_ERRORS	=> array("name" => "Config/Veateated",			"url" => "orb.aw?clas
 	define("LINKC_MENUSPERLINE",3);
 // lingikogus et mitu linki per line
 	define("LINKC_LINKSPERLINE",3);
+
+
 ?>
