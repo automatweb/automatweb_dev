@@ -817,7 +817,7 @@ class _int_object
 			{
 				if ($this->properties[$key]["method"] == "serialize")
 				{
-					$this->obj[$this->properties[$key]["field"]][$this->properties[$key]["name"]] = $this->obj["properties"][$field];
+					$this->obj[$this->properties[$key]["field"]][$this->properties[$key]["name"]] = $this->obj["properties"][$key];
 				}
 				else
 				{

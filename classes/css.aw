@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.33 2003/12/03 12:03:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.34 2003/12/03 14:17:07 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 /*
 
@@ -131,6 +131,7 @@ class css extends class_base
 	// name - stiili nimi, data, array css atribuutidest
 	function _gen_css_style($name,$data = array())
 	{
+//		echo "name = $name , data = ".dbg::dump($data);
 		$retval = ".$name {\n";
 		if (!(is_array($data)))
 		{
@@ -360,6 +361,10 @@ class css extends class_base
 	function callback_pre_edit($arr)
 	{
 		$cssmeta = $arr["obj_inst"]->meta("css");
+		if (is_array($cssmeta) && count($cssmeta) > 0)
+		{
+			return;
+		}
 		$_t = new aw_array($cssmeta);
 		foreach($_t->get() as $k => $v)
 		{
@@ -370,7 +375,7 @@ class css extends class_base
 	function callback_pre_save($arr)
 	{
 		$meta = $arr["obj_inst"]->meta();	
-		$cssmeta = $arr["obj_inst"]->meta("css");
+		$cssmeta = array(); //$arr["obj_inst"]->meta("css");
 		$_t = new aw_array($meta);
 		foreach($_t->get() as $k => $v)
 		{
