@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.24 2002/06/26 11:14:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.25 2002/07/17 07:47:38 kristo Exp $
 // aw_template.aw - Templatemootor
 
 classload("acl_base");
@@ -107,6 +107,13 @@ class aw_template extends acl_base
 		return $res;
 	}
         
+	////
+	// !damn the name kinda sucks, but oh well. anyway - shortcut to multiple_option_list()
+	function mpicker($active, $array)
+	{
+		return $this->multiple_option_list($active, $array);
+	}
+
 	// shortcut eelmisele
 	// TODO: move to defs.aw
 	function picker($active,$array)
