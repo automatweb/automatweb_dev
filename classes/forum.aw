@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.47 2002/07/18 10:48:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.48 2002/08/07 11:06:04 duke Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 
@@ -14,7 +14,7 @@ class forum extends aw_template
 		// $this->sub_merge = 1;
 		// to keep track of how many topics we have already drawn
 		$this->topic_count = 0; 
-	
+
 		if ($this->embedded)
 		{	
 			global $section;
@@ -24,7 +24,12 @@ class forum extends aw_template
 				$this->section = $section;
 			}
 		};
-	
+
+		if ($section)
+		{
+			$this->section = $section;
+		};
+
 		// yikes
 		classload("users_user");
 		$u = new users_user();
@@ -490,6 +495,10 @@ class forum extends aw_template
 			}
 		};
 		extract($args);
+		if ($section)
+		{
+			$this->section = $section;
+		};
 		$object = $this->get_object($id);
 		#$parent = $this->get_object($object["parent"]);
 		// kui kaasa antakse section argument, siis peaks kontrollima
@@ -497,7 +506,8 @@ class forum extends aw_template
 		$text = $this->mk_orb("configure",array("id" => $id));
 		$this->mk_path($object["parent"],"<a href='$text'>$object[name]</a> / Lisa teema");
 		$this->forum_id = $id;
-		$tabs = $this->tabs(array("search","flat","details"));
+		$tabs = $this->tabs(array("flat","details","newtopic","mark_all_read","archive","search"),"new
+topic");
 		$this->read_template("add_topic.tpl");
 		$this->mk_links(array(
 			"id" => $id,
@@ -557,6 +567,7 @@ class forum extends aw_template
 		$this->mk_path($forum_obj["parent"],$flink . " / $board_obj[name]");
 		$this->_query_comments(array("board" => $board));
 		$this->comm_count = 0;
+		$this->section = $section;
 		$this->board = $board;
 		if (not($id))
 		{
@@ -566,15 +577,16 @@ class forum extends aw_template
 
 		$content = "";
 
-		$tab_base = array("addcomment","flatcomments","threadedcomments","threadedsubjects","no_response","search","details");
-		$tabs = $this->tabs($tab_base,"flatcomments");
+	
+		$tabs = $this->tabs(array("flat","addcomment","flatcomments","threadedcomments","threadedsubjects","no_response","search","details"),"flatcomments");	
 		if ($addcomment)
 		{
-			$tabs = $this->tabs($tab_base,"addcomment");
+			$tabs = $this->tabs(array("flat","addcomment","flatcomments","threadedcomments","threadedsubjects","no_response","search","details"),"addcomment");
+
 		}
 		elseif ($no_response)
 		{
-			$tabs = $this->tabs($tab_base,"no_response");
+			$tabs = $this->tabs(array("flat","addcomment","flatcomments","threadedcomments","threadedsubjects","no_response","search","details"),"no_response");
 		};
 		$rated = "";
 		if ($meta["rated"])
@@ -748,6 +760,7 @@ class forum extends aw_template
 		$this->mk_path($forum_obj["parent"],$flink . " / $board_obj[name]");
 		$this->forum_id = $forum_obj["oid"];
 		$this->board = $board;
+		$this->section = $section;
 		
 		$this->_query_comments(array("board" => $board));
 	
@@ -757,16 +770,14 @@ class forum extends aw_template
 			$rated = $this->_draw_ratings($meta["rates"],$board_meta);
 		};
 	
-		$tab_base = array("addcomment","flatcomments","threadedcomments","threadedsubjects","no_response","search","details");
-
 		if ($no_comments)
 		{
-			$tabs = $this->tabs($tab_base,"threadedsubjects");
+			$tabs = $this->tabs(array("flat","addcomment","flatcomments","threadedcomments","threadedsubjects","no_response","search","details"),"threadedsubjects");
 			$this->read_template("subjects_threaded.tpl");
 		}
 		else
 		{
-			$tabs = $this->tabs($tab_base,"threadedcomments");
+			$tabs = $this->tabs(array("flat","addcomment","flatcomments","threadedcomments","threadedsubjects","no_response","search","details"),"threadedcomments");
 			$this->read_template("messages_threaded.tpl");
 		};
 
@@ -976,8 +987,9 @@ class forum extends aw_template
 		$this->mk_links(array("board" => $board_obj["oid"],"id" => $board_obj["parent"]));
 		$this->board = $board_obj["oid"];
 		$this->mk_path($forum_obj["parent"],$flink . " / $board_obj[name]");
+		$this->section = $section;
 		$tabs = $this->tabs(array("addcomment","threadedcomments","threadedsubjects","no_response","search","details"),"addcomment");
-		if ($row)
+		 if ($row)
 		{
 			$this->read_template("messages.tpl");
 			$this->vars(array(
@@ -1081,6 +1093,7 @@ class forum extends aw_template
 		{
 			$reply = "";
 		};
+		$this->section = $section;
 		$cnt = $this->db_fetch_field("SELECT count(*) AS cnt 
 			FROM comments WHERE board_id = '$board'","cnt");
 		$this->mk_links(array("board" => $board));
@@ -1208,12 +1221,21 @@ class forum extends aw_template
 	function topics($args = array())
 	{
 		extract($args);
-
 		$o = $this->get_obj_meta($id);
+		$this->section = $section;
 
 		$this->forum_id = $id;
 		$this->from = $from;
-		$tabs = $this->tabs(array("newtopic","search","mark_all_read","details"));
+		if ($archive)
+                {
+                        $act_tab = "archive";
+                }
+                else
+                {
+                        $act_tab = "flat";
+                };
+
+		$tabs = $this->tabs(array("flat","details","newtopic","mark_all_read","archive","search"),$act_tab);
 		$this->topicsonpage = ($o["meta"]["topicsonpage"]) ? $o["meta"]["topicsonpage"] : 5;
 
 		$this->mk_path($o["parent"], "Foorum");
@@ -1263,9 +1285,14 @@ class forum extends aw_template
 		$this->forum_id = $id;
 		$this->from = $from;
 		$this->board = $id;
+		$this->section = $section;
 		$this->topicsonpage = ($o["meta"]["topicsonpage"]) ? $o["meta"]["topicsonpage"] : 5;
-		$tabs = $this->tabs(array("newtopic","flat","search","mark_all_read"));
+		$tabs = $this->tabs(array("flat","details","newtopic","mark_all_read","archive","search"),"details");
 		$this->read_template("list_topics_detail.tpl");
+		
+		global $HTTP_COOKIE_VARS;
+		$aw_mb_last = unserialize(stripslashes($HTTP_COOKIE_VARS["aw_mb_last"]));
+		$this->last_read = $aw_mb_last[$id];
 
 		$this->cid = $args["cid"];
 		$content = $this->_draw_all_topics(array(
@@ -1311,6 +1338,8 @@ class forum extends aw_template
 		  // neither is defined .. what the hell do you want anyway?
 			return;
 		};
+		$this->section = $section;
+		$tabs = $this->tabs(array("flat","details","newtopic","mark_all_read","archive","search"),"search");
 		$this->read_template("search.tpl");
 		$o = $this->get_object($board);
 		$board_obj = $this->get_obj_meta($board);
@@ -1332,6 +1361,8 @@ class forum extends aw_template
 	function submit_search($args = array())
 	{
 		extract($args);
+		$this->section = $section;
+		$tabs = $this->tabs(array("flat","details","newtopic","mark_all_read","archive","search"),"search");
 		$this->read_template("search_results.tpl");
 		if (not($board))
 		{
@@ -1423,7 +1454,7 @@ class forum extends aw_template
     $parent = $tobj["last"];
 		$id = $target;
 		$section = $oid;
-		
+
 		$vars = $GLOBALS["HTTP_GET_VARS"];
 		if (is_array($vars))
 		{
@@ -1433,7 +1464,7 @@ class forum extends aw_template
 				$orb = new orb(array(
 					"class" => $vars["alias"],
 					"action"=> $vars["action"],
-					"vars" => array_merge($vars,array("section" => $oid)),
+					"vars" => array_merge($vars,array("section" => aw_global_get("section"))),
 				));
 				$content = $orb->get_data();
 				if (substr($content,0,5) == "http:")
@@ -1560,6 +1591,13 @@ class forum extends aw_template
 
 		// mille vastu võrrelda=
 		$check_against = ($args["modified"] > $args["created"]) ? $args["modified"] : $args["created"];
+		global $DBUG;
+		if ($DBUG)
+		{
+			print "<pre>";
+			print "ca = " . $this->last_read . "<br>";
+			print "</pre>";
+		}
 		$mark = ($check_against > $this->last_read) ? $this->parse("NEW_MSGS") : "";
 
 		$this->vars(array(
