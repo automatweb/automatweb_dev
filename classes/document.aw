@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.252 2004/04/30 09:08:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.253 2004/05/11 06:32:26 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -684,10 +684,17 @@ class document extends aw_template
 
 		if (strpos($doc['content'], "#login#") !== false)
 		{
-			$li = get_instance("aw_template");
-			$li->init();
-			$li->read_template("login.tpl");
-			$doc['content'] = str_replace("#login#", $li->parse(), $doc['content']);
+			if (aw_global_get("uid") == "")
+			{
+				$li = get_instance("aw_template");
+				$li->init();
+				$li->read_template("login.tpl");
+				$doc['content'] = str_replace("#login#", $li->parse(), $doc['content']);
+			}
+			else
+			{
+				$doc['content'] = str_replace("#login#", "", $doc['content']);
+			}
 		}		
 	
 		if (isset($params["vars"]) && is_array($params["vars"]))
@@ -960,6 +967,93 @@ class document extends aw_template
 			for ($i=0; $i < $points; $i++)
 				$pts.=$this->parse("RATE");
 		};
+
+		if ($this->is_template("LINKLIST"))
+		{
+
+			$pos = strpos($doc["content"],"Vaata lisaks:");
+			if ($pos !== false)
+			{
+				$doc["content"] = substr($doc["content"],0,$pos);
+			};
+			$pos = strpos($doc["content"],"Samal teemal:");
+			if ($pos !== false)
+			{
+				$doc["content"] = substr($doc["content"],0,$pos);
+			};
+			$dc_obj = new object($doc["docid"]);
+			$conns = $dc_obj->connections_from(array(
+				"class" => array(CL_EXTLINK),
+			));
+			$ll = "";
+			foreach($conns as $item)
+			{
+				$this->vars(array(
+					"url" => aw_ini_get("baseurl") . "/" . $item->prop("to"),
+					"caption" => $item->prop("to.name"),
+				));
+				$ll .= $this->parse("LINKITEM");
+			};
+			$conns2 = $dc_obj->connections_to(array(
+				"class" => array(CL_EXTLINK),
+			));		
+			foreach($conns2 as $item)
+			{
+				$this->vars(array(
+					"url" => aw_ini_get("baseurl") . "/" . $item->prop("to"),
+					"caption" => $item->prop("to.name"),
+				));
+				$ll .= $this->parse("LINKITEM");
+			};
+			if (sizeof($conns) > 0 || sizeof($conns2) > 0)
+			{
+				$this->vars(array(
+					"LINKITEM" => $ll,
+				));
+				$this->vars(array(
+					"LINKLIST" => $this->parse("LINKLIST"),
+				));
+			};
+
+			// generate a list of objects
+		}
+		
+		if ($this->is_template("DOCLIST"))
+		{
+
+			$pos = strpos($doc["content"],"Vaata lisaks:");
+			if ($pos !== false)
+			{
+				$doc["content"] = substr($doc["content"],0,$pos);
+			};
+			$pos = strpos($doc["content"],"Samal teemal:");
+			if ($pos !== false)
+			{
+				$doc["content"] = substr($doc["content"],0,$pos);
+			};
+			$dc_obj = new object($doc["docid"]);
+			$conns = $dc_obj->connections_from(array(
+				"class" => array(CL_DOCUMENT),
+			));
+			$ll = "";
+			foreach($conns as $item)
+			{
+				$this->vars(array(
+					"url" => aw_ini_get("baseurl") . "/" . $item->prop("to"),
+					"caption" => $item->prop("to.name"),
+				));
+				$ll .= $this->parse("DOCITEM");
+			};
+			if (sizeof($conns) > 0)
+			{
+				$this->vars(array(
+					"DOCITEM" => $ll,
+				));
+				$this->vars(array(
+					"DOCLIST" => $this->parse("DOCLIST"),
+				));
+			};
+		}
 
 		$fr = "";
 
