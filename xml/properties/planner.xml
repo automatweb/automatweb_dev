@@ -61,58 +61,6 @@
             <caption>Näidatakse ainult sündmustega päevi</caption>
       </property>
       <property>
-            <name>tab_add_visible</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <default>1</default>
-            <group>advanced</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>
-            <![CDATA["Lisa event" nähtav]]>
-            </caption>
-      </property>
-      <property>
-            <name>tab_day_visible</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <default>1</default>
-            <group>time_settings</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>
-            <![CDATA["Päev" nähtav]]>
-            </caption>
-      </property>
-      <property>
-            <name>tab_week_visible</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <default>1</default>
-            <group>time_settings</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>
-            <![CDATA["Nädal" nähtav]]>
-            </caption>
-      </property>
-      <property>
-            <name>tab_month_visible</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <default>1</default>
-            <group>advanced</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>
-            <![CDATA["Kuu" nähtav]]>
-            </caption>
-      </property>
-      <property>
             <name>navigator_visible</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
@@ -133,15 +81,14 @@
             <caption>Kuud navigaatoris</caption>
       </property>
       <property>
-            <name>use_tabpanel</name>
+            <name>my_projects</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <default>1</default>
             <group>advanced</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kalendri näitamisel kasutatakse 'tabpanel' komponenti</caption>
+            <caption>Näita minu projekte</caption>
       </property>
       <property>
             <name>items_on_line</name>
@@ -365,11 +312,15 @@
       <reltypes>
             <EVENT_SOURCE>
                   <value>2</value>
-                  <clid>CL_PLANNER</clid>
-                  <caption>võta sündmusi teistest kalendritest</caption>
+                  <clid>
+                        <num_0>CL_PLANNER</num_0>
+                        <num_1>CL_PROJECT</num_1>
+                  </clid>
+                  <caption>võta sündmusi</caption>
             </EVENT_SOURCE>
             <EVENT>
                   <value>3</value>
+                  <clid>CL_TASK</clid>
                   <caption>sündmus</caption>
             </EVENT>
             <DC_RELATION>
