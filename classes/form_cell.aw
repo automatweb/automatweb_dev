@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.31 2002/07/23 12:58:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.32 2002/07/23 16:41:09 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle fomi sees kirjas
@@ -384,7 +384,7 @@ class form_cell extends form_base
 		}
 		else
 		{
-			$stc = new style;
+			$stc = get_instance("style");
 			if ($style_id)
 			{
 				$cs.= $stc->get_cell_begin_str($style_id,$colspan,$rowspan);
