@@ -233,7 +233,7 @@ if ($class['folder'] != "")
 		foreach($dirs as $fld)
 		{
 			$dir .= "/".$fld;
-			if (!folder_exists($dir))
+			if (!is_dir($dir))
 			{
 				mkdir($dir,0775);
 				echo "created $dir ...\n";
