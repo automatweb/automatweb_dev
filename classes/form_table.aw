@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.12 2001/09/05 13:13:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.13 2001/09/07 10:26:45 duke Exp $
 global $orb_defs;
 $orb_defs["form_table"] = "xml";
 lc_load("form");
@@ -146,6 +146,8 @@ class form_table extends form_base
 			$this->table["view_new_win"] = $view_new_win;
 			$this->table["new_win_x"] = $new_win_x;
 			$this->table["new_win_y"] = $new_win_y;
+			$this->table["closewin"] = $closewin;
+			$this->table["closewin_value"] = $closewin_value;
 			classload("xml");
 			$x = new xml;
 			$co = $x->xml_serialize($this->table);
@@ -326,6 +328,8 @@ class form_table extends form_base
 			"new_win_x" => ($this->table["new_win_x"]) ? $this->table["new_win_x"] : 100,
 			"new_win_y" => ($this->table["new_win_y"]) ? $this->table["new_win_y"] : 100,
 			"view_new_win" => checked($this->table["view_new_win"]),
+			"closewin" => checked($this->table["closewin"]),
+			"closewin_value" => $this->table["closewin_value"],
 			"header_normal" => $this->picker($this->table["header_normal"],$css),
 			"header_sortable" => $this->picker($this->table["header_sortable"],$css),
 			"header_sorted" => $this->picker($this->table["header_sorted"],$css),
