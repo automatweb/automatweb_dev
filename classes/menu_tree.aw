@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.12 2003/06/20 13:32:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.13 2003/07/01 10:21:13 kristo Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -25,6 +25,7 @@ class menu_tree extends class_base
 		$this->init(array(
 			"clid" => CL_MENU_TREE,
 		));
+		$this->strip_tags = aw_ini_get("menuedit.strip_tags");
 	}
 
 	function get_property($args)
@@ -180,6 +181,10 @@ class menu_tree extends class_base
 			// hmm?
 			$this->dequote($row);
 			$this->dequote($row);
+			if ($this->strip_tags)
+			{
+				$row["name"] = strip_tags($row["name"]);
+			}
 			$can = true;
 			if ($nsuo)
 			{
