@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.87 2002/01/31 01:10:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.88 2002/02/07 08:04:04 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -2594,7 +2594,18 @@ class form extends form_base
 			}
 			$awt->stop("form::do_search::qandstuff");
 			$awt->start("form::do_search::finish_table");
-			$ft->t->sort_by(array("field" => $GLOBALS["sortby"],"sorder" => $GLOBALS["sort_order"]));
+			$_sby = $GLOBALS["sortby"];
+			$_so = $GLOBALS["sort_order"];
+			if ($_sby == "")
+			{
+				$_sby = "ev_".$ft->table["defaultsort"];
+				$_so = "asc";
+			}
+			if ($ft->table["group"])
+			{
+				$_grpby = "ev_".$ft->table["group"];
+			}
+			$ft->t->sort_by(array("field" => $_sby,"sorder" => $_so,"group_by" => $_grpby));
 			$tbl = $ft->get_css();
 			$tbl.="<form action='reforb.aw' method='POST'>\n";
 			if ($ft->table["submit_top"])
@@ -2613,7 +2624,7 @@ class form extends form_base
 			{
 				$tbl.="&nbsp;<input type='submit' value='".$ft->table["user_button_text"]."' onClick=\"window.location='".$ft->table["user_button_url"]."';return false;\">";
 			}
-			$tbl.=$ft->t->draw();
+			$tbl.=$ft->t->draw(array("groupby" => $_grpby));
 
 			if ($ft->table["submit_bottom"])
 			{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.24 2001/11/22 16:42:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.25 2002/02/07 08:04:05 kristo Exp $
 global $orb_defs;
 $orb_defs["form_table"] = "xml";
 lc_load("form");
@@ -41,6 +41,7 @@ class form_table extends form_base
 			"content_style1" => $this->picker(0,$css),
 			"content_style2" => $this->picker(0,$css),
 			"link_style" => $this->picker(0,$css),
+			"group_style" => $this->picker(0,$css),
 			"content_sorted_style1" => $this->picker(0,$css),
 			"content_sorted_style2" => $this->picker(0,$css),
 			"moveto" => $this->multiple_option_list($this->table["moveto"], $ob->get_list())
@@ -137,6 +138,7 @@ class form_table extends form_base
 			$this->table["content_style1"] = $content_style1;
 			$this->table["content_style2"] = $content_style2;
 			$this->table["link_style"] = $link_style;
+			$this->table["group_style"] = $group_style;
 			$this->table["content_sorted_style1"] = $content_sorted_style1;
 			$this->table["content_sorted_style2"] = $content_sorted_style2;
 			$this->table["submit_text"] = $submit_text;
@@ -148,6 +150,10 @@ class form_table extends form_base
 			$this->table["user_button_url"] = $user_button_url;
 			$this->table["view_col"] = $viewcol;
 			$this->table["change_col"] = $changecol;
+			$this->table["defaultsort"] = $defaultsort;
+			$this->table["defaultsort_form"] = $els[$defaultsort];
+			$this->table["group"] = $group_el;
+			$this->table["group_form"] = $els[$group_el];
 			$this->table["view_new_win"] = $view_new_win;
 			$this->table["new_win_x"] = $new_win_x;
 			$this->table["new_win_y"] = $new_win_y;
@@ -260,6 +266,8 @@ class form_table extends form_base
 			"COL" => $co,
 			"v_elements" => $this->picker($this->table["view_col"], array(0 => "") + $els),
 			"c_elements" => $this->picker($this->table["change_col"], array(0 => "") + $els),
+			"ds_elements" => $this->picker($this->table["defaultsort"], array(0 => "") + $els),
+			"g_elements" => $this->picker($this->table["group"], array(0 => "") + $els),
 		));
 
 		classload("style");
@@ -287,6 +295,7 @@ class form_table extends form_base
 			"content_style1" => $this->picker($this->table["content_style1"],$css),
 			"content_style2" => $this->picker($this->table["content_style2"],$css),
 			"link_style" => $this->picker($this->table["link_style"],$css),
+			"group_style" => $this->picker($this->table["group_style"],$css),
 			"content_sorted_style1" => $this->picker($this->table["content_sorted_style1"],$css),
 			"content_sorted_style2" => $this->picker($this->table["content_sorted_style2"],$css),
 			"moveto" => $this->multiple_option_list($this->table["moveto"], $ob->get_list()),
@@ -510,7 +519,14 @@ class form_table extends form_base
 
 		if (is_object($this->t))
 		{
-			$this->t->sort_by(array("field" => $GLOBALS["sortby"],"sorder" => $GLOBALS["sort_order"]));
+			$_sby = $GLOBALS["sortby"];
+			$_so = $GLOBALS["sort_order"];
+			if ($_sby == "")
+			{
+				$_sby = "ev_".$this->table["defaultsort"];
+				$_so = "asc";
+			}
+			$this->t->sort_by(array("field" => $_sby,"sorder" => $_so));
 			$css = $this->get_css();
 			$contents = $this->t->draw();
 			return $this->get_css().$contents;
@@ -685,6 +701,14 @@ class form_table extends form_base
 				}
 			}
 		}
+		if ($this->table["defaultsort_form"] && $this->table["defaultsort"])
+		{
+			$ret[$this->table["defaultsort_form"]][$this->table["defaultsort"]] = $this->table["defaultsort"];
+		}
+		if ($this->table["group_form"] && $this->table["group"])
+		{
+			$ret[$this->table["group_form"]][$this->table["group"]] = $this->table["group"];
+		}
 		$awt->stop("form_table::get_used_elements");
 		return $ret;
 	}
@@ -775,7 +799,8 @@ class form_table extends form_base
 				<content_style1 value=\"style_".$this->table["content_style1"]."\"/>
 				<content_style2 value=\"style_".$this->table["content_style2"]."\"/>
 				<content_style1_selected value=\"style_".$this->table["content_sorted_style1"]."\"/>
-				<content_style2_selected value=\"style_".$this->table["content_sorted_style2"]."\"/>\n";
+				<content_style2_selected value=\"style_".$this->table["content_sorted_style2"]."\"/>
+				<group_style value=\"style_".$this->table["group_style"]."\"/>\n";
 
 		classload("style");
 		$s = new style;
