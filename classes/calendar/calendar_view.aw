@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.17 2004/12/15 15:30:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.18 2004/12/16 16:00:04 duke Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -301,6 +301,7 @@ class calendar_view extends class_base
 			foreach ($conns as $conn)
 			{
 				$to_o = $conn->to();
+				//$to_o->properties();
 
 				$events = $this->get_events_from_object(array(
 					"obj_inst" => $to_o,
@@ -449,7 +450,9 @@ class calendar_view extends class_base
 			$args["full_weeks"] = $arr["full_weeks"];
 		};
 
+
 		$vcal->configure($args);
+
 
 		$viewtype = $this->obj_inst->prop("default_view");
 		if ($viewtype == "")
@@ -517,6 +520,7 @@ class calendar_view extends class_base
 			//$arr["event_template"] = "groupitem.tpl";
 		};
 
+
 		$vcal->init_output(array("event_template" => $arr["event_template"]));
 
 		if ($use_template == "last_events")
@@ -530,6 +534,7 @@ class calendar_view extends class_base
 		};
 
 		$this->_export_events($exp_args);
+
 
 		classload("layout/active_page_data");
 
@@ -583,6 +588,7 @@ class calendar_view extends class_base
 				"type" => RELTYPE_EVENT_SOURCE,
 			));
 
+
 			$rv = "";
 
 			$rv = html::href(array(
@@ -603,11 +609,12 @@ class calendar_view extends class_base
 			foreach ($conns as $conn)
 			{
 				$to_o = $conn->to();
-
+		
 				$events = $this->get_events_from_object(array(
 					"obj_inst" => $to_o,
 					"range" => $range,
 				));
+
 
 				$vcal->items = array();
 				
@@ -619,19 +626,19 @@ class calendar_view extends class_base
 					$data["name"] = $evt_obj->name();
 					$data["icon"] = "event_icon_url";
 					$vcal->add_item(array(
-						"timestamp" => $event["start"],
+						"item_start" => $event["start"],
+						"item_end" => $event["end"],
 						"data" => $data,
 					));
 				};
+
 				if (sizeof($events) > 0)
 				{
 					$rv .= $vcal->draw_day(array("caption" => $to_o->name()));
 				};
-
-					
 			};
-		};
 
+		};
 
 		return $rv;
 	}
