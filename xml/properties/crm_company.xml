@@ -59,7 +59,7 @@
             <name>ettevotlusvorm</name>
             <table>kliendibaas_firma</table>
             <group>general</group>
-            <type>chooser</type>
+            <type>select</type>
             <field>ettevotlusvorm</field>
             <caption>Õiguslik vorm</caption>
       </property>
