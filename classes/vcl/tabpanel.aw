@@ -1,5 +1,5 @@
 <?php
-// $Id: tabpanel.aw,v 1.2 2002/11/26 12:37:00 duke Exp $
+// $Id: tabpanel.aw,v 1.3 2002/12/19 17:16:15 duke Exp $
 // tabpanel.aw - class for creating tabbed dialogs
 class tabpanel extends aw_template
 {
@@ -21,7 +21,19 @@ class tabpanel extends aw_template
 	// link(string)
 	function add_tab($args = array())
 	{
-		$subtpl = ($args["active"]) ? "sel_tab" : "tab";
+		if ($args["active"])
+		{
+			$subtpl = "sel_tab";
+		}
+		else
+		{
+			$subtpl = "tab";
+		};
+		// now link? so let's show the tab as disabled
+		if (strlen($args["link"]) == 0)
+		{
+			$subtpl = "disabled_tab";
+		};
 		$this->vars(array(
 			"caption" => $args["caption"],
 			"link" => $args["link"],
