@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.40 2001/07/28 00:17:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.41 2001/07/30 13:26:22 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -206,7 +206,7 @@ class menuedit extends aw_template
 			header("Location: $baseurl/$url");
 			exit;
 		};
-		
+
 		if ($obj["class_id"] == CL_BROTHER_DOCUMENT)
 		{
 			$section=$obj["parent"];
@@ -240,6 +240,7 @@ class menuedit extends aw_template
 		// laeme dokumentide klassi
 		classload("periods","document");
 		$d = new document();
+		$this->doc = new document();
 		
 		// leiame, kas on tegemist perioodilise rubriigiga
 		$periodic = $this->is_periodic($section);
@@ -904,6 +905,7 @@ class menuedit extends aw_template
 				objects.jrk as jrk,
 				objects.alias as alias,
 				objects.brother_of as brother_of,
+				objects.metadata as metadata,
 				menu.link as link,
 				menu.type as mtype,
 				menu.clickable as clickable,
@@ -2234,11 +2236,19 @@ class menuedit extends aw_template
 			));
  
 			$meta["users_only"] = $arr["users_only"];
+			$meta["show_lead"] = $arr["show_lead"];
 
+			// 2 updates, this is so wrong.
 			$this->set_object_metadata(array(
 				"oid" => $id,
 				"key" => "users_only",
 				"value" => $arr["users_only"],
+			));
+			
+			$this->set_object_metadata(array(
+				"oid" => $id,
+				"key" => "show_lead",
+				"value" => $arr["show_lead"],
 			));
 
 			$sar = array(); $oidar = array();
@@ -2842,6 +2852,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 											"comment"			=> $row["comment"], 
 											"links"				=> checked($row["links"]), 
 											"users_only"  => ($meta["users_only"] == 1) ? "checked" : "",
+											"show_lead" => ($meta["show_lead"] == 1) ? "checked" : "",
 											"id"					=> $id,
 											"active"	    => ($row["status"] == 2) ? "checked" : "",
 											"clickable"	    => ($row["clickable"] == 1) ? "checked" : "",
@@ -3090,6 +3101,37 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		reset($this->mpr[$parent]);
 		while (list(,$row) = each($this->mpr[$parent]))
 		{
+			// je, I know, this will kind of slow down things
+			$meta = $this->get_object_metadata(array(
+					"metadata" => $row["metadata"],
+			));
+
+
+			// see on siis nädala parema paani leadide näitamine
+			// nõme häkk. FIX ME.
+			if ($meta["show_lead"])
+			{
+				$activeperiod = $GLOBALS["act_per_id"];
+				$this->save_handle();
+				$q = "SELECT objects.oid,documents.* AS lead FROM objects LEFT JOIN documents ON (objects.oid = documents.docid) WHERE parent = $row[oid] AND status = 2 AND objects.period = '$activeperiod' AND class_id = " . CL_PERIODIC_SECTION;
+				$this->db_query($q);
+				$xdat = $this->db_next();
+
+				if (!$xdat)
+				{
+					continue;
+				};
+
+				$done = $this->doc->gen_preview(array("docid" => $xdat["oid"], "tpl" => "nadal_film_side_lead.tpl","leadonly" => 1, "section" => $row["oid"],    "strip_img" => 1));
+
+				$this->vars(array("lugu" => $done));
+				
+				$this->restore_handle();
+				
+
+
+			};
+
 			if ($check_acl)
 			{
 				// sellele menüüle pole oigusi, me ei näita seda
@@ -3104,6 +3146,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			{
 				continue;
 			}
+
 			if ($row["hide_noact"])
 			{
 				// also go through the menus below this one to find out if there are any documents beneath those
@@ -3122,6 +3165,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 			$this->vars(array($mn2."_N" => ""));
 			$ap = "";
+
 			if ($this->is_template($mn."_N"))
 			{
 				if (!in_array($row["parent"],$path))
@@ -3136,6 +3180,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 			//if (($GLOBALS["frontpage"] == $section))
 			//{
+				// joonistame rekursiivselt alammenüüd.
 				$n = $this->req_draw_menu($row["oid"], $name, &$path,$parent_tpl);
 			//};
 
@@ -3143,6 +3188,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			{
 				$ap.="_BEGIN";	// first one of this level menus
 			};
+			
 			if (in_array($row["oid"],$path) && $row["clickable"] == 1)
 			{
 				$ap.="_SEL";		// a selected menu
