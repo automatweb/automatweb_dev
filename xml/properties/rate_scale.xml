@@ -71,14 +71,16 @@
             <caption>Kasutaja defineeritud skaala</caption>
       </property>
       <property>
-            <name>ud_scale</name>
+            <name>no_rate</name>
             <table>objects</table>
             <group>scale</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>generated</type>
-            <generator>get_udscale_entries</generator>
-            <caption></caption>
+            <type>chooser</type>
+            <multiple>1</multiple>
+            <caption>
+            <![CDATA[Lisa "ei hinda" valik]]>
+            </caption>
       </property>
       <classinfo>
             <syslog_type>ST_RATE_SCALE</syslog_type>
