@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.278 2004/06/14 12:05:01 duke Exp $
+// $Id: class_base.aw,v 2.279 2004/06/14 14:32:43 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -116,6 +116,7 @@ class class_base extends aw_template
 		// XXX: this is temporary
 		$this->vcl_delayed_init = array(
 			"comments" => 1,
+			"popup_search" => 1
 		);
 		parent::init($arg);
 	}
@@ -1898,6 +1899,7 @@ class class_base extends aw_template
 						"relinfo" => $this->relinfo,
                                         ));
 
+
                                         if (is_array($res))
                                         {
                                                 foreach($res as $rkey => $rval)
@@ -2000,6 +2002,7 @@ class class_base extends aw_template
 
 		foreach($properties as $key => $val)
 		{
+
 			if ($val["name"] == "tabpanel" && $this->view)
 			{
 				continue;
@@ -2010,7 +2013,7 @@ class class_base extends aw_template
 			{
 				continue;
 			};
-			
+
 			if ($val["name"] == "comment" && $this->classinfo["no_comment"]["text"] == 1)
 			{
 				continue;
@@ -2130,6 +2133,7 @@ class class_base extends aw_template
 				$status = $this->inst->get_property($argblock);
 				$awt->stop("get_property_${pname}");
 			};
+
 			
 			$val["_parsed"] = 1;
 
