@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.58 2004/06/28 19:50:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.59 2004/11/07 19:26:32 kristo Exp $
 // table.aw - tabelite haldus
 class table extends aw_template
 {
@@ -186,7 +186,7 @@ class table extends aw_template
 
 		$st = get_instance("style");
 		$stylesel = $st->get_select(0,ST_CELL,true);
-		$css = get_instance("css");
+		$css = get_instance(CL_CSS);
 		$tmp = $css->get_select();
 		$stylesel = $stylesel + $tmp;
 
@@ -1445,7 +1445,7 @@ class table extends aw_template
 
 		$st = get_instance("style");
 		$stylesel = $st->get_select(0,ST_CELL,true);
-		$css = get_instance("css");
+		$css = get_instance(CL_CSS);
 		$tmp = $css->get_select();
 		$stylesel = $stylesel + $tmp;
 
@@ -1902,7 +1902,7 @@ class table extends aw_template
 		$retval = $table;
 
 		$css_file = "";
-		$css = get_instance("css");
+		$css = get_instance(CL_CSS);
 		$used = array();
 		foreach($used_css_styles as $stylid => $stylid)
 		{

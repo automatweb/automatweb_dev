@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.16 2004/06/21 11:48:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.17 2004/11/07 19:26:38 kristo Exp $
 classload("formgen/form_base");
 class form_output extends form_base 
 {
@@ -694,7 +694,7 @@ class form_output extends form_base
 			"aliasmgr" => $this->mk_my_orb("aliasmgr",array("id" => $id)),
 		));
 
-		$css = get_instance("css");
+		$css = get_instance(CL_CSS);
 		$this->vars(array(
 			"reforb"	=> $this->mk_reforb("submit_admin", array("id" => $id, "op_id" => $op_id)),
 			"addr_reforb" => $this->mk_reforb("add_n_rows", array("id" => $id,"after" => $this->output["rows"]-1)),

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.76 2004/11/05 13:49:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.77 2004/11/07 19:26:38 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -149,7 +149,7 @@ class form_element extends aw_template
 		// now load the subtypes from the db or if they are not specified in the db, use all of them.
 		// this function puts types and subtypes in $this->subtypes
 		$this->get_types_cached();
-		$css = get_instance("css");
+		$css = get_instance(CL_CSS);
 
 			$this->vars(array(
 				"cell_id"									=> "element_".$this->id,

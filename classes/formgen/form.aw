@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.112 2004/11/05 13:50:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.113 2004/11/07 19:26:38 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -294,7 +294,7 @@ class form extends form_base
 		}
 		$this->vars(array("HE" => $hh));
 
-		$css = get_instance("css");
+		$css = get_instance(CL_CSS);
 
 		$this->vars(array("form_id" => $this->id));
 		for ($i=0; $i < $this->arr["rows"]; $i++)
@@ -490,7 +490,7 @@ class form extends form_base
 
 		$style = get_instance("style");
 		$stylesel = $style->get_select(0,ST_CELL,true);
-		$css = get_instance("css");
+		$css = get_instance(CL_CSS);
 		$tmp = $css->get_select();
 		$stylesel = $stylesel + $tmp;
 
@@ -1726,7 +1726,7 @@ class form extends form_base
 		if (is_array($this->styles))
 		{
 			$css_file = "";
-			$css = get_instance("css");
+			$css = get_instance(CL_CSS);
 			$used = array();
 			foreach($this->styles as $stylid => $stylname)
 			{

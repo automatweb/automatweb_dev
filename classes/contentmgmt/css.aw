@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.43 2004/11/05 14:11:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/css.aw,v 1.1 2004/11/07 19:26:34 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 /*
 
