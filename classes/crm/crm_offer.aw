@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.19 2004/09/05 19:36:31 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.21 2004/09/10 10:40:56 sven Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -31,7 +31,7 @@
 @property prev_status type=hidden store=no
 
 @property sum type=textbox table=aw_crm_offer size=7
-@caption Hind(ilma KM)
+@caption Hind (ilma KM)
 
 @property is_done type=checkbox table=objects field=flags method=bitmask ch_value=8 // OBJ_IS_DONE
 @caption Tehtud
@@ -133,6 +133,7 @@ class crm_offer extends class_base
 			case "start1":
 				return PROP_IGNORE;
 			break;
+		
 			case "orderer":
 				if(!($arr["new"] == 1))
 				{
@@ -180,6 +181,10 @@ class crm_offer extends class_base
 			break;
 			
 			case "is_done":
+				if(aw_global_get("uid") == "sven")
+				{
+					arr($prop);
+				}
 				return PROP_IGNORE;
 			break;
 			

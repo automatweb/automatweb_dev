@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.80 2004/09/06 15:02:26 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.81 2004/09/10 10:35:42 sven Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -1969,10 +1969,9 @@ class crm_company extends class_base
 			"orderer" => $arr["obj_inst"]->id(),
 			"class_id" => CL_CRM_OFFER,
 		));
-		
 		foreach ($ol->arr() as $tmp)
 		{	
-			$evts[$tmp->brother_of()] = $tmp->brother_of();	
+			$evts[$tmp->id()] = $tmp->id();
 		}
 		
 		$this->overview = array();
