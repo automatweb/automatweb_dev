@@ -19,7 +19,7 @@ function get_property($arr)
 {
     $prop = &$arr["prop"];
     $retval = PROP_OK;
-    switch($data["name"])
+    switch($prop["name"])
     {
         case "opsystem":
             $prop["options"] = array(
