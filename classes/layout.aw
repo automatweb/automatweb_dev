@@ -100,10 +100,12 @@ class layout extends class_base
 		}
 
 
-		$ob = $this->get_object($alias["target"]);
+		$ob = obj($alias["target"]);
 		$ge = get_instance("vcl/grid_editor");
-		$ob['meta']['grid']['table_style'] = $ob['meta']['table_style'];
-		return $ge->show($ob['meta']['grid'], $alias["target"], &$tpls);
+		$grid = $ob->meta('grid');
+		$grid['table_style'] = $ob->meta('table_style');
+
+		return $ge->show($grid, $alias["target"], &$tpls);
 	}
 
 	////
@@ -225,22 +227,20 @@ class layout extends class_base
 	{
 		extract($arr);
 		$this->read_template("pickstyle.tpl");
-		$ob = $this->get_object($oid);
+		$ob = obj($oid);
 
-		//$css = get_instance("css");
-		//$stylesel = $css->get_select();
 		// make style pick list
 		// folders:
 		$styles = array();
-		$folders = new aw_array($ob['meta']['cell_style_folders']);
-		foreach($folders->get() as $fld)
-		{
-			$styles += $this->list_objects(array(
-				"parent" => $fld,
-				"class" => CL_CSS,
-				"add_folders" => true
-			));
-		}
+		$folders = new aw_array($ob->meta('cell_style_folders'));
+
+		$ol = new object_list(array(
+			"parent" => $folders,
+			"class_id" => CL_CSS,
+		));
+		$styles = $ol->names(array(
+			"add_folders" => true
+		));
 
 		$this->vars(array(
 			"stylessel" => $this->option_list("", $styles),
@@ -307,12 +307,10 @@ class layout extends class_base
 		}
 
 		// now save object
-		$this->upd_object(array(
-			"oid" => $oid,
-			"metadata" => array(
-				"grid" => $ge->_get_table()
-			)
-		));
+		$o = obj($oid);
+		$o->set_meta("grid", $ge->_get_table());
+		$o->save();
+
 		return $this->mk_my_orb("sel_style", array(
 			"cols" => $cols,
 			"rows" => $rows,
