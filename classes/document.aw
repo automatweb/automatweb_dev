@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.67 2001/12/04 21:11:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.68 2001/12/05 14:03:09 duke Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -2372,6 +2372,14 @@ class document extends aw_template
 		));
 		
 		$t->define_field(array(
+								"name" => "pick",
+								"caption" => "Vali",
+								"talign" => "center",
+								"nowrap" => 1,
+								"align" => "center",
+		));
+		
+		$t->define_field(array(
 								"name" => "check",
 								"caption" => "Default",
 								"talign" => "center",
@@ -2404,6 +2412,8 @@ class document extends aw_template
 						"uid" => $meta["archive"][$key]["uid"],
 						"date" => $this->time2date($val[FILE_MODIFIED],9),
 						"check" => sprintf("<input type='radio' name='default' value='%d'>",$key),
+						"pick" => sprintf("<input type='checkbox' name='check[%d]' value=1>",$key),
+
 				));
 			}
 		};
@@ -2432,6 +2442,19 @@ class document extends aw_template
 		// now, what we do if default is not active, is to copy the current
 		// document from the objects table to archive and also copy the requested
 		// copy from archive to the documents table
+		if ($delete)
+		{
+			if (is_array($check))
+			{
+				foreach($check as $key => $val)
+				{
+
+
+				}
+			}
+		}
+
+
 		if ($default != "active")
 		{
 			$old = $this->fetch($id);
@@ -2635,7 +2658,7 @@ class document extends aw_template
 		else 
 		{
 			$this->add_alias($id,$alias);
-			header("Location: ".$this->mk_orb("change",array("id" => $id)));
+			header("Location: ".$this->mk_orb("list_aliases",array("id" => $id),"aliasmgr"));
 		}
 	}
 
@@ -2912,7 +2935,7 @@ class document extends aw_template
 	{
 		extract($arr);
 		$this->delete_alias($docid,$id);
-		header("Location: ".$this->mk_orb("change", array("id" => $docid)));
+		header("Location: ".$this->mk_orb("list_aliases", array("id" => $docid),"aliasmgr"));
 	}
 
 	function add_bro($arr)
