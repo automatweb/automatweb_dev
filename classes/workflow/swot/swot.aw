@@ -14,7 +14,7 @@
 @default table=objects
 @default group=general
 
-@property swot_folder type=relpicker reltype=RELTYPE_FOLDER multiple=1 field=meta method=serialize
+@property swot_folder type=relpicker reltype=RELTYPE_SWOT_FOLDER multiple=1 field=meta method=serialize
 @caption SWOT Objektide kataloogid
 
 @property strengths type=text group=strengths field=meta method=serialize no_caption=1
@@ -31,9 +31,11 @@
 
 @property view type=text group=view field=meta method=serialize no_caption=1
 
+@reltype SWOT_FOLDER value=1 clid=CL_MENU
+@caption SWOT objektide kataloog
+
 */
 
-define("RELTYPE_FOLDER",1);
 
 class swot extends class_base
 {
@@ -43,21 +45,6 @@ class swot extends class_base
 			'tpldir' => 'workflow/swot/swot',
 			'clid' => CL_SWOT
 		));
-	}
-
-	function callback_get_rel_types()
-	{
-		return array(
-			RELTYPE_FOLDER => "SWOT objektide kataloog"
-		);
-	}
-
-	function callback_get_classes_for_relation($args = array())
-	{
-		if ($args["reltype"] == RELTYPE_FOLDER)
-		{
-			return array(CL_PSEUDO);
-		}
 	}
 
 	function get_property(&$arr)
