@@ -1214,11 +1214,6 @@ class _int_object
 
 	function _int_load($oid)
 	{
-		enter_function("object::load::base");
-		if ($GLOBALS["OBJ_TRACE"])
-		{
-			echo "object::_int_load($oid) <br>";
-		}
 		if (!$GLOBALS["object_loader"]->ds->can("view", $oid))
 		{
 			error::throw(array(
@@ -1261,7 +1256,6 @@ class _int_object
 		// this can happen in ds_auto_translation for instance
 		$GLOBALS["objects"][$oid] = $this;
 		$GLOBALS["objects"][$this->obj["oid"]] = $this;
-		exit_function("object::load::base");
 	}
 
 	function _int_load_properties()
@@ -1307,10 +1301,6 @@ class _int_object
 
 	function _int_do_save()
 	{
-		if ($GLOBALS["OBJ_TRACE"])
-		{
-			echo "object::_int_do_save($oid) <br>";
-		}
 		// first, update modifier fields
 		
 		$this->_int_set_of_value("modified", time());
