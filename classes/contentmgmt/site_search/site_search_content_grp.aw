@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.5 2004/02/13 16:13:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.6 2004/03/09 15:34:09 kristo Exp $
 // site_seaarch_content_grp.aw - Saidi sisu otsingu grupp 
 /*
 
@@ -11,7 +11,7 @@
 @property users_only type=checkbox ch_value=1 field=meta method=serialize
 @caption Ainult sisse logitud kasutajatele
 
-@property menus type=text store=no callback=callback_get_menus edit_only=1
+@property menus type=text store=no callback=callback_get_menus editonly=1
 @caption Vali men&uuml;&uuml;d
 
 @reltype MENU value=1 clid=CL_MENU
@@ -57,6 +57,12 @@ class site_search_content_grp extends class_base
 
 	function callback_get_menus($args = array())
 	{
+		/*
+		if (!is_oid($args["obj_inst"]->id()))
+		{
+			return;
+		}
+		*/
 		$prop = $args["prop"];
 		$nodes = array();
 		$section_include_submenus = $args["obj_inst"]->meta("section_include_submenus");

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.9 2004/03/08 17:54:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.10 2004/03/09 15:34:09 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -123,7 +123,7 @@ class site_search_content extends class_base
 	{
 		$ret = array();
 		$co = $obj->connections_from(array(
-			"type" => 2 // RELTYPE_SEARCH_GRP
+			"type" => 2 //RELTYPE_SEARCH_GRP
 		));
 		foreach($co as $c)
 		{
@@ -723,7 +723,7 @@ class site_search_content extends class_base
 			"sort_by" => $sort_by,
 			"str" => $str,
 			"per_page" => ($o->meta("per_page") ? $o->meta("per_page") : 20),
-			"params" => array("id" => $id, "str" => $str, "sort_by" => $sort_by, "group" => $group),
+			"params" => array("id" => $id, "str" => $str, "sort_by" => $sort_by, "group" => $group, "section" => aw_global_get("section")),
 			"page" => $page
 		));
 		
