@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.100 2004/11/15 17:15:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.101 2004/11/16 13:23:23 kristo Exp $
 
 /*
 
@@ -827,7 +827,7 @@ class site_show extends class_base
 
 				if ($d->title != "")
 				{
-					$this->site_title = " / ".$d->title;
+					$this->site_title = $d->title;
 				}
 				
 				if (is_array($d->blocks))
