@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.371 2005/03/24 10:19:14 ahti Exp $
+// $Id: class_base.aw,v 2.372 2005/03/28 08:17:45 ahti Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -106,7 +106,6 @@ class class_base extends aw_template
 			"classificator" => "cfg/classificator",
 			"comments" => "vcl/comments",
 			"container" => "vcl/container",
-			"table" => "vcl/table",
 			"relpicker" => "vcl/relpicker",
 			"tabpanel" => "vcl/tabpanel",
 			"reminder" => "vcl/reminder",
@@ -117,7 +116,9 @@ class class_base extends aw_template
 			"project_selector" => "applications/groupware/vcl/project_selector",
 			"calendar_selector" => "applications/calendar/vcl/calendar_selector",
 			"participant_selector" => "applications/calendar/vcl/participant_selector",
+			"multi_calendar" => "applications/calendar/vcl/multi_calendar",
 			"date_chooser" => "vcl/date_chooser",
+			"table" => "vcl/table",
 			"relationmgr" => "vcl/relationmgr",
 		);
 
@@ -1927,11 +1928,14 @@ class class_base extends aw_template
 				{
 					// &$properties[$key], $value, $argblock
 					// $prop, $controller_oid, $arr
+					$retval = $view_controller_inst->check_property(&$properties[$key], $value, $argblock);
+					/*
 					$retval = $view_controller_inst->check_property(array(
 						"prop" => &$properties[$key],
 						"controller_oid" => $value,
 						"arr" => $argblock,
 					));
+					*/
 					if($retval == PROP_IGNORE)
 					{
 						unset($properties[$key]);
@@ -2157,7 +2161,6 @@ class class_base extends aw_template
 				$has_rte = true;
 			};
 		}
-			
 
 		if (1 != $this->classinfo(array("name" => "allow_rte")))
 		{
@@ -2183,7 +2186,6 @@ class class_base extends aw_template
 		// need to cycle over the property nodes, do replacements
 		// where needed and then cycle over the result and generate
 		// the output
-
 
 		foreach($properties as $key => $val)
 		{
@@ -2971,6 +2973,8 @@ class class_base extends aw_template
 					$prpdata["value"] = $val;
 					// $controller_id, $args["id"], &$prpdata, &$arr["request"], $val, &$this->obj_inst
 					// $controller_oid, $obj_id, &$prop, $request, $entry, $obj_inst
+					$controller_ret = $controller_inst->check_property($controller_id, $args["id"], &$prpdata, &$arr["request"], $val, &$this->obj_inst);
+					/*
 					$controller_ret = $controller_inst->check_property(array(
 						"controller_oid" => $controller_id,
 						"obj_id" => $args["id"],
@@ -2979,6 +2983,7 @@ class class_base extends aw_template
 						"entry" => $val,
 						"obj_inst" => &$this->obj_inst,
 					));
+					*/
 					if ($controller_ret != PROP_OK)
 					{
 						$ctrl_obj = new object($controller_id);
