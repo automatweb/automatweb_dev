@@ -197,6 +197,11 @@ class db_objects extends aw_template
 	{
 		$this->save_handle();
 		$plist = join(",",$parents);
+		if($plist != "")
+		{
+			$this->restore_handle();
+			return;
+		}
 		$q = sprintf("SELECT * FROM objects WHERE class_id = '%d' AND parent IN (%s)",
 				$this->class_id,
 				$plist);
