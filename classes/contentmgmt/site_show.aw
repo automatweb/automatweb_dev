@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.57 2004/05/19 10:07:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.58 2004/05/27 08:47:54 kristo Exp $
 
 /*
 
@@ -70,6 +70,7 @@ class site_show extends class_base
 
 		$this->_init_path_vars($arr);
 
+
 		// figure out the menu that is active
 		$this->sel_section = $this->_get_sel_section(aw_global_get("section"));
 		if (aw_ini_get("config.object_translation"))
@@ -96,7 +97,9 @@ class site_show extends class_base
 			$this->right_pane = false;
 		}
 
+
 		$this->do_check_properties(&$arr);
+
 
 		$apd = get_instance("layout/active_page_data");
 		$awt->start("xshow2");
@@ -1987,7 +1990,7 @@ class site_show extends class_base
 	{
 		$tpl = $arr["tpldir"]."/".$arr["template"];
 		$fn = $this->cache->get_fqfn("compiled_menu_template-".str_replace("/","_",str_replace(".","_",$tpl))."-".aw_global_get("lang_id"));
-		if (file_exists($fn) && is_readable($fn) && filectime($fn) > filectime($tpl))
+		if (@file_exists($fn) && @is_readable($fn) && @filectime($fn) > @filectime($tpl))
 		{
 			return $fn;
 		}
