@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.19 2001/11/07 17:41:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.20 2001/11/15 08:29:28 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -253,6 +253,11 @@ class users_user extends aw_template
 		{
 			// suck. 
 			global $baseurl;
+			global $verbosity;
+			if ($verbosity = 1)
+			{
+				$msg = "Vigane kasutajanimi või parool";
+			}
 			header("Refresh: 3;url=$baseurl");
 			print $msg;
 			exit;
