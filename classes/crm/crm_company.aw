@@ -3841,12 +3841,15 @@ class crm_company extends class_base
 	{
 		$table = &$arr["prop"]["vcl_inst"];
 		
-		$table->define_field(array(
-			"name" => "org",
-			"caption" => "Organisatsioon",
-			"sortable" => "1",
-			"align" => "center",
-		));
+		if(!$arr["request"]["org_id"])
+		{
+			$table->define_field(array(
+				"name" => "org",
+				"caption" => "Organisatsioon",
+				"sortable" => "1",
+				"align" => "center",
+			));
+		}
 		
 		$table->define_field(array(
 			"name" => "offer_name",
