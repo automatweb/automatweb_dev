@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.30 2002/06/10 15:50:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.31 2002/07/11 20:09:28 duke Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 classload("cache");
 class db_objects extends aw_template 
@@ -249,10 +249,15 @@ class objects extends db_objects
 		$this->db_objects();
 	}
 
+	////
+	// !Object search
+	// otype(int) - allow to search only for a single object type
+	// one(int) - use picker template (search_one) 
 	function search($arr)
 	{
 		$this->tpl_init("automatweb/objects");
 		$this->sub_merge = 1;
+		extract($arr);
 
 		// search types:
 		// 0 or not set	: the usual object search
@@ -266,7 +271,18 @@ class objects extends db_objects
 		}
 		else
 		{
-			$this->read_template("search.tpl");
+			if ($one)
+			{
+				$prnt_url = $this->mk_my_orb("login_menus",array(),"config");
+				$this->mk_path(0,"<a href='$prnt_url'>Action menüüd</a> / Vali menüü");
+				$tpl = "search_one.tpl";
+			}
+			else
+			{
+				$tpl = "search.tpl";
+			};
+
+			$this->read_template($tpl);
 		};
 
 		// FIXME: loeb globaalsest skoobist parameetreid (NB! need on arrayd)
@@ -329,6 +345,7 @@ class objects extends db_objects
 					"parent_name" => $row["parent_name"],
 					"oid" => $row["oid"],
 					"class_id" => $row["class_id"],
+					"pick" => urldecode($return_url) . "&pick=$row[oid]",
 					"parent_parent_name" => $row["parent_parent_name"],
 					"parent_parent_parent_name" => $row["parent_parent_parent_name"]
 				));
@@ -352,13 +369,23 @@ class objects extends db_objects
 			$s["type"] = 0;
 		}
 
-		$tar = array(0 => " " . LC_OBJECTS_ALL);
-		reset($this->cfg["classes"]);
-		while (list($v,) = each($this->cfg["classes"]))
+		if ($otype)
 		{
-			$tar[$v] = $this->cfg["classes"][$v]["name"];
+			$tar[$otype] = $this->cfg["classes"][$otype]["name"];
 		}
+		else
+		{
+			$tar = array(0 => " " . LC_OBJECTS_ALL);
+			reset($this->cfg["classes"]);
+			while (list($v,) = each($this->cfg["classes"]))
+			{
+				$tar[$v] = $this->cfg["classes"][$v]["name"];
+			}
+		};
+
+		// sort type list by name
 		asort($tar);
+
 		classload("users");
 		$u = new users;
 		$uids = $u->listall_acl();
@@ -366,7 +393,7 @@ class objects extends db_objects
 
 
 		$li = $this->get_list(false,true);
-		$li[1] = "Root";
+		//$li[1] = "Root";
 		$this->vars(array(
 			"s_name"	=> $s["name"],
 			"s_comment"	=> $s["comment"],
@@ -376,7 +403,7 @@ class objects extends db_objects
 			"modifiedby" => $this->picker($s["modifiedby"],$uids),
 			"active"	=> checked($s["active"]),
 			"alias"		=> $s["alias"],
-			"reforb" => $this->mk_reforb("search_submit", array("stype" => $arr["stype"],"target" => $arr["target"])),
+			"reforb" => $this->mk_reforb("search_submit", array("stype" => $stype,"target" => $target,"otype" => $otype,"one" => $one,"return_url" => urlencode($return_url))),
 		));
 		return $this->parse();
 	}
@@ -452,7 +479,7 @@ class objects extends db_objects
 		$m = new menuedit;
 		$m->invalidate_menu_cache($updmenus);
 
-		return $this->mk_my_orb("search", array("s[name]" => $s["name"],"s[comment]" => $s["comment"],"s[class_id]" => $s["class_id"],"s[parent]" => $s["parent"],"s[createdby]" => $s["createdby"], "s[modifiedby]" => $s["modifiedby"], "s[active]" => $s["active"], "s[alias]" => $s["alias"],"stype" => $stype,"target" => $target));
+		return $this->mk_my_orb("search", array("s[name]" => $s["name"],"s[comment]" => $s["comment"],"s[class_id]" => $s["class_id"],"s[parent]" => $s["parent"],"s[createdby]" => $s["createdby"], "s[modifiedby]" => $s["modifiedby"], "s[active]" => $s["active"], "s[alias]" => $s["alias"],"stype" => $stype,"target" => $target,"otype" => $otype,"one" => $one,"return_url" => urlencode($return_url)));
 	}
 						
 	function _search_rename_form_element($oid,$name)
@@ -689,7 +716,8 @@ class objects extends db_objects
 					$ctrl = $cform->id;
 				};
 
-				$curl = $this->mk_my_orb("view",array("type" => "week","id" => $obj["oid"],"ctrl" => $ctrl,"ctrle" => $ceid,"chain_id" => $cform->id),"planner",false,true);
+				//$curl = $this->mk_my_orb("view",array("type" => "week","id" => $obj["oid"],"ctrl" => $ctrl,"ctrle" => $ceid,"chain_id" => $cform->id),"planner",false,true);
+				$curl = $this->mk_my_orb("view",array("type" => "week","id" => $ceid),"planner",false,true);
 				if (not($caption))
 				{
 					$caption = "Näita kalendrit";
