@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.12 2003/01/20 16:03:57 duke Exp $
+// $Id: cfgutils.aw,v 1.13 2003/02/05 03:54:50 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -138,17 +138,28 @@ class cfgutils extends aw_template
 			$groupinfo = $parser->get_data("/properties/groupinfo");
 			$tableinfo = $parser->get_data("/properties/tableinfo");
 			
+			$tmp = array();
+			if (is_array($groupinfo[0]))
+			{	
+				foreach($groupinfo[0] as $key => $val)
+				{
+					$tmp[$key] = $this->normalize_text_nodes($val[0]);
+
+				};
+			};
+			$groupinfo = $tmp;
+			
 			$this->classinfo = $classinfo[0];
 			if (is_array($this->groupinfo))
 			{
-				if (is_array($groupinfo[0]))
+				if (is_array($groupinfo))
 				{
-					$this->groupinfo = $this->groupinfo + $groupinfo[0];
+					$this->groupinfo = $this->groupinfo + $groupinfo;
 				};
 			}
 			else
 			{
-				$this->groupinfo = $groupinfo[0];
+				$this->groupinfo = $groupinfo;
 			};
 			$this->tableinfo = $tableinfo[0];
                 };
@@ -179,6 +190,7 @@ class cfgutils extends aw_template
                 };
 		$objprops = $this->load_class_properties(array("file" => $file));
 
+		/*
 		if (is_array($this->groupinfo))
 		{
 			$tmp = array();
@@ -189,6 +201,7 @@ class cfgutils extends aw_template
 			};
 		};
 		$this->groupinfo = $tmp;
+		*/
 		if (is_array($objprops))
 		{
 			foreach($objprops as $objprop)
@@ -215,6 +228,7 @@ class cfgutils extends aw_template
 		};
 
 
+
 		if (is_array($this->tableinfo))
 		{
 			$tmp = array();
@@ -225,6 +239,59 @@ class cfgutils extends aw_template
 		};
 		$this->tableinfo = $tmp;
 		return array_merge($coreprops,$objprops);
+	}
+
+	function parse_definition($args = array())
+	{
+                if ($args["content"])
+                {
+                        $parser = get_instance("xml/xml_path_parser");
+                        //$parser->parse_data(array("content" => $source));
+
+                        $parser->parse_data(array("content" => $args["content"]));
+
+			// how on earth do I invoke functions on 
+
+                        $properties = $parser->get_data("/properties/property");
+
+			$classinfo = $parser->get_data("/properties/classinfo");
+			$groupinfo = $parser->get_data("/properties/groupinfo");
+			$tableinfo = $parser->get_data("/properties/tableinfo");
+
+			$tmp = array();
+			if (is_array($groupinfo[0]))
+			{	
+				foreach($groupinfo[0] as $key => $val)
+				{
+					$tmp[$key] = $this->normalize_text_nodes($val[0]);
+
+				};
+			};
+			$this->groupinfo = $tmp;
+
+			$this->classinfo = $classinfo[0];
+			if (is_array($this->groupinfo))
+			{
+				if (is_array($groupinfo))
+				{
+					$this->groupinfo = $this->groupinfo + $groupinfo;
+				};
+			}
+			else
+			{
+				$this->groupinfo = $groupinfo;
+			};
+			$this->tableinfo = $tableinfo[0];
+	
+			$res = array();
+			foreach($properties as $key => $val)
+			{
+				$_tmp = $this->normalize_text_nodes($val);
+				$name = $_tmp["name"];
+				$res[$name] = $_tmp;
+			};
+			return $res;
+		}
 	}
 
 	function get_classinfo()
