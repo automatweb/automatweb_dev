@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.26 2003/02/20 18:08:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.27 2003/02/28 13:39:55 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -332,7 +332,12 @@ class poll extends aw_template
 
 	function get_active_poll()
 	{
-		$apid = $this->get_cval("active_poll_id");
+		$apid = $this->get_cval("active_poll_id_".aw_ini_get("site_id"));
+		if (!$apid)
+		{
+			// try the old way
+			$apid = $this->db_fetch_field("SELECT oid FROM objects WHERE class_id = ".CL_POLL." AND status = 2 AND parent =".aw_ini_get("site_id"),"oid");
+		}
 		return $this->get_object($apid);
 	}
 
@@ -415,7 +420,7 @@ class poll extends aw_template
 	{
 		extract($args);
 		$cfg = get_instance("config");
-		$cfg->set_simple_config("active_poll_id", $id);
+		$cfg->set_simple_config("active_poll_id_".aw_ini_get("site_id"), $id);
 		return $this->mk_my_orb("list",array());
 	}
 
