@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.45 2004/01/13 16:24:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.46 2004/01/16 13:21:04 duke Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -331,11 +331,13 @@ class admin_menus extends aw_template
 			$retval .= $this->parse("MENU_ITEM");
 		}
 
+		/*
 		$this->vars(array(
 			'link' => $this->mk_my_orb('mk_shortcut', array('id' => $id), 'admin/shortcut'),
 			'text' => 'Tee kiirviide',
 		));
 		$retval .= $this->parse("MENU_ITEM");
+		*/
 
 		if ($ret_data)
 		{
