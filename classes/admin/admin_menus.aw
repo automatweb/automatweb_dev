@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.82 2004/10/14 13:48:47 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.83 2004/10/25 12:45:46 duke Exp $
 
 class admin_menus extends aw_template
 {
@@ -1209,89 +1209,6 @@ class admin_menus extends aw_template
 			"period" => empty($period) && $menu_obj->prop("periodic") == 1 ? $current_period : $period,
 		));
 
-		$this->read_template("js_add_menu.tpl");
-
-		$whole_menu = "";
-
-
-		foreach($this->add_menu as $item_id => $item_collection)
-		{
-			$menu_data = "";
-			foreach($item_collection as $el_id => $el_data)
-			{
-				//if this el_id has children, make it a submenu
-				$children = isset($this->add_menu[$el_id]) ? sizeof($this->add_menu[$el_id]) : 0;
-				if (isset($el_data["separator"]))
-				{
-					$tpl = "MENU_SEPARATOR";
-				}
-				elseif ($children > 0)
-				{
-					$tpl = "MENU_ITEM_SUB";
-				}
-				else
-				{
-					if ($el_data["link"] != "")
-					{
-						$tpl = "MENU_ITEM";
-					}	
-					else
-					{
-						$tpl = "MENU_ITEM_SHOW";
-					}
-				};
-			
-				$this->vars(array(
-					"caption" => isset($el_data["caption"]) ? $el_data["caption"] : "",
-					"url" => isset($el_data["link"]) ? $el_data["link"] : "",
-					"sub_menu_id" => "aw_menu_" . $el_id,
-				));
-				$menu_data .= $this->parse($tpl);
-			};
-			$this->vars(array(
-				"MENU_ITEM" => $menu_data,
-				"menu_id" => "aw_menu_" . $item_id,
-			));
-			$whole_menu .= $this->parse("MENU");
-		};
-
-		// make applet for adding objects
-		$this->vars(array(
-			"icon_over" => $this->cfg["baseurl"]."/automatweb/images/icons/new2_over.gif",
-			"icon" => $this->cfg["baseurl"]."/automatweb/images/icons/new2.gif",
-			"oid" => $parent,
-			"bgcolor" => "#D4D7DA",
-			"nr" => 2,
-			"key" => "addmenu",
-			"val" => 1,
-			"name" => "",
-			"height" => 22,
-			"width" => 23,
-		));
-
-		$view_types = array(
-			'big' => array('caption' => 'Suured ikoonid','title' => ''),
-			'small' => array('caption' => 'Väiksed ikoonid','title' => ''),
-			'detail' => array('caption' => 'Detailne vaade','title' => ''),
-		);
-
-		$items = '';
-		foreach($view_types as $key => $val)
-		{
-			$this->vars(array(
-				'caption' => $val['caption'],
-				'title' => $val['title'],
-				'url' => preg_replace('/&view_type=[^&$]*/','',aw_global_get('REQUEST_URI')).'&view_type='.$key,
-			));
-			$items .= $this->parse('MENU_ITEM');
-		}
-
-		$this->vars(array(
-			'items' => $items,
-			'menu_id' => 'view_type',
-		));
-		$view_button_menu = $this->parse('MENU2');
-
 		$la = get_instance("languages");
 
 		if (!$sortby)
@@ -1321,14 +1238,11 @@ class admin_menus extends aw_template
 		$toolbar = $this->rf_toolbar(array(
 			"parent" => $parent,
 			"period" => $period,
-			"add_applet" => $whole_menu,
 			"sel_count" => count($sel_objs),
 		));
+		
 
 		$toolbar_data = $toolbar->get_toolbar();
-		$toolbar_data .= $whole_menu;
-		$toolbar_data .= $view_button_menu;
-
 
 		$icons = (($view_type == 'big') || ($view_type == 'small'));
 
@@ -1337,6 +1251,7 @@ class admin_menus extends aw_template
 			"table" => $pageselector.($icons ? $the_icons : $this->t->draw()),
 			"reforb" => $this->mk_reforb("submit_rf", array("parent" => $parent, "period" => $period, "sortby" => $sortby, "sort_order" => $sort_order)),
 			"parent" => $parent,
+			"oid" => $parent,
 			"period" => $period,
 			"lang_name" => $la->get_langid(),
 			"toolbar" => $toolbar_data,
@@ -1352,14 +1267,44 @@ class admin_menus extends aw_template
 		
 		if ($this->can("add", $parent))
 		{
-			$toolbar->add_button(array(
-				"name" => "add",
-				"tooltop" => "Uus",
-				"url" => "#",
-				"onClick" => "return buttonClick(event, 'aw_menu_0');",
-				"img" => "new.gif",
-				"class" => "menuButton",
+			$toolbar->add_menu_button(array(
+				"name" => "new",
+				"tooltip" => "Uus",
 			));
+
+			foreach($this->add_menu as $item_id => $item_collection)
+			{
+				foreach($item_collection as $el_id => $el_data)
+				{
+					//if this el_id has children, make it a submenu
+					$children = isset($this->add_menu[$el_id]) ? sizeof($this->add_menu[$el_id]) : 0;
+					$parnt = is_numeric($item_id) && $item_id == 0 ? "new" : $item_id;
+					if ($el_data["separator"])
+					{
+						$toolbar->add_menu_separator(array(
+							"parent" => $parnt,
+						));
+					}
+					else
+					if ($children)
+					{
+						$toolbar->add_sub_menu(array(
+							"parent" => $parnt,
+							"name" => $el_id,
+							"text" => $el_data["caption"],
+						));
+					}
+					else
+					{
+						$toolbar->add_menu_item(array(
+							"parent" => $parnt,
+							"text" => $el_data["caption"],
+							"link" => $el_data["link"],
+						));
+					};
+
+				};
+			};
 		};
 
 		if (empty($no_save))
@@ -1435,16 +1380,25 @@ class admin_menus extends aw_template
 			"url" => $this->mk_my_orb("import",array("parent" => $parent)),
 			"img" => "import.gif",
 		));
+		
+		$view_types = array(
+			"big" => "Suured ikoonid",
+			"small" => "Väiksed ikoonid",
+			"detail" => "Detailne vaade",
+		);
 
-		$toolbar->add_button(array(
-			"name" => "view_type",
-			"tooltip" => "detailne/Ikooni vaade",
+		$toolbar->add_menu_button(array(
+			"name" => "viewtype",
 			"img" => "preview.gif",
-			"url" => "#",
-			"onClick" => "return buttonClick(event, 'view_type');",
-			"class" => "menuButton",
 		));
-
+		foreach($view_types as $key => $val)
+		{
+			$toolbar->add_menu_item(array(
+				"parent" => "viewtype",
+				"text" => $val,
+				"link" => aw_url_change_var("view_type",$key),
+			));
+		}
 
 		if (isset($callback) && is_array($callback) && sizeof($callback) == 2)
 		{
