@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.29 2004/12/08 11:22:38 dragut Exp $
-// object_treeview_v2.aw - Objektide nimekiri v2 
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.30 2004/12/08 14:20:19 dragut Exp $
+// object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
 @classinfo syslog_type=ST_OBJECT_TREEVIEW_V2 relationmgr=yes no_status=1 no_comment=1
@@ -67,6 +67,9 @@
 @property group_header_bgcolor type=colorpicker
 @caption Grupeeriva rea taustav&auml;rv
 
+@property table_css type=relpicker reltype=RELTYPE_CSS
+@caption Tabeli stiil
+
 @property header_css type=relpicker reltype=RELTYPE_CSS
 @caption Pealkirja stiil
 
@@ -103,7 +106,7 @@ class object_treeview_v2 extends class_base
 		"select" => "Vali"
 	);
 
-	var $alphabet = array("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u", "v", "&otilde;", "&auml;", "&ouml;", "&uuml;", "x", "y", "z");
+	var $alphabet = array("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "&otilde;", "&auml;", "&ouml;", "&uuml;");
 
 	function object_treeview_v2()
 	{
@@ -227,7 +230,10 @@ class object_treeview_v2 extends class_base
 
 	function parse_alias($arr)
 	{
-		return $this->show(array("id" => $arr["alias"]["target"]));
+		return $this->show(array(
+			"id" => $arr["alias"]["target"],
+			"oid" => $arr['oid'],
+		));
 	}
 
 	/**
@@ -254,7 +260,7 @@ class object_treeview_v2 extends class_base
 		$d_o = obj($ob->prop("ds"));
 		$d_inst = $d_o->instance();
 
-		$this->_insert_row_styles($ob);
+		$this->_insert_styles($ob);
 
 		// returns an array of object id's that are folders that are in the object
 		$fld = $d_inst->get_folders($d_o);
@@ -273,7 +279,7 @@ class object_treeview_v2 extends class_base
 
 		// make folders
 		$this->vars(array(
-			"FOLDERS" => $this->_draw_folders($ob, $ol, $fld)
+			"FOLDERS" => $this->_draw_folders($ob, $ol, $fld, $oid)
 		));
 
 		// get all related object types
@@ -331,6 +337,7 @@ class object_treeview_v2 extends class_base
 // some filtering according to $_GET['tv_sel']
 				if(($d_o->prop("use_meta_as_folders") == 1) && empty($_GET['char']))
 				{
+//				arr($ol_value);
 					if(!empty($_GET['tv_sel']) && ($fld[$_GET['tv_sel']]['name'] != $ol_value[$ob->meta("group_by_folder")]))
 					{
 
@@ -347,11 +354,6 @@ class object_treeview_v2 extends class_base
 					if((strlen($_GET['char']) == 1) && ($f[0] != $_GET['char']))
 					{
 						unset($ol[$ol_key]);
-					}
-					else
-					if($_GET['char'] == "all")
-					{
-
 					}
 				}
 			}
@@ -506,18 +508,23 @@ class object_treeview_v2 extends class_base
 		if(!empty($filter_by_char_field))
 		{
 			$alphabet_parsed = "";
-			foreach($this->alphabet as $char)
+			foreach($this->alphabet as $character)
 			{
+				$character_value = $character;
+				if(!empty($_GET['char']) && $character == $_GET['char'])
+				{
+					$character_value = "<strong>".$character."</strong>";
+				}
 				$this->vars(array(
-					"char" => $char,
-					"char_url" => aw_url_change_var("char", $char, aw_url_change_var("tv_sel", "")),
+					"char" => $character_value,
+					"char_url" => aw_ini_get("baseurl")."/".$oid."?char=".$character,
 				));
 				$alphabet_parsed .= $this->parse("ALPHABET");
 			}
 // lets put a link at the end of the alphabet to make all fields to show
 			$this->vars(array(
 				"char" => t("K&otilde;ik"),
-				"char_url" => aw_url_change_var("char", "all", aw_url_change_var("tv_sel", "")),
+				"char_url" => aw_ini_get("baseurl")."/".$oid."?char=all",
 			));
 			$alphabet_parsed .= $this->parse("ALPHABET");
 		}
@@ -749,7 +756,7 @@ class object_treeview_v2 extends class_base
 		$t->sort_by();
 	}
 
-	function _insert_row_styles($o)
+	function _insert_styles($o)
 	{
 		$style = "textmiddle";
 		classload("layout/active_page_data");
@@ -773,6 +780,14 @@ class object_treeview_v2 extends class_base
 			active_page_data::add_site_css_style($o->prop("group_css"));
 		}
 
+// lets put a css style for table too
+		$table_css = "textmiddle";
+		if ($o->prop("table_css"))
+		{
+			$table_css = "st".$o->prop("table_css");
+			active_page_data::add_site_css_style($o->prop("table_css"));
+		}
+
 		$header_bg = "#E0EFEF";
 		if ($o->prop("title_bgcolor"))
 		{
@@ -789,6 +804,7 @@ class object_treeview_v2 extends class_base
 
 		$this->vars(array(
 			"css_class" => $style,
+			"table_css_class" => $table_css,
 			"header_css_class" => $header_css,
 			"group_css_class" => $group_css,
 			"header_bgcolor" => $header_bg
@@ -817,7 +833,7 @@ class object_treeview_v2 extends class_base
 		return $ret;
 	}
 
-	function _draw_folders($ob, $ol, $folders)
+	function _draw_folders($ob, $ol, $folders, $oid)
 	{
 		if (!$ob->meta('show_folders'))
 		{
@@ -842,7 +858,8 @@ class object_treeview_v2 extends class_base
 			$tv->add_item($fld["parent"], array(
 				"id" => $fld["id"],
 				"name" => $fld["name"],
-				"url" => aw_url_change_var("page", NULL, aw_url_change_var("tv_sel", $fld["id"], aw_url_change_var("char", ""))),
+//				"url" => aw_url_change_var("page", NULL, aw_url_change_var("tv_sel", $fld["id"], aw_url_change_var("char", ""))),
+				"url" => aw_ini_get("baseurl")."/".$oid."?tv_sel=".$fld['id'],
 				"icon" => $fld["icon"],
 				"comment" => $fld["comment"],
 				"data" => array(

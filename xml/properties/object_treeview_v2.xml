@@ -165,6 +165,16 @@
             <caption>Grupeeriva rea taustav&amp;auml;rv</caption>
       </property>
       <property>
+            <name>table_css</name>
+            <table>objects</table>
+            <group>styles</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CSS</reltype>
+            <caption>Tabeli stiil</caption>
+      </property>
+      <property>
             <name>header_css</name>
             <table>objects</table>
             <group>styles</group>

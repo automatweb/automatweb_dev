@@ -21,7 +21,7 @@ text-decoration: none;
 <!-- SUB: FOLDERS -->
 
 <!-- END SUB: FOLDERS -->
-<table border="0" width="100%" cellpadding="3" cellspacing="0">
+<table class="{VAR:table_css_class}" border="0" width="100%" cellpadding="3" cellspacing="0">
 	<tr bgcolor="{VAR:header_bgcolor}">
 
 		<!-- SUB: HEADER -->
