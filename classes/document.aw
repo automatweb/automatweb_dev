@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.280 2004/09/14 13:54:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.281 2004/09/15 16:29:43 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -272,7 +272,7 @@ class document extends aw_template
 
 		$baseurl = $this->cfg["baseurl"];
 		$ext = $this->cfg["ext"];
-
+		
 		global $awt;
 
 		// küsime dokumendi kohta infot
@@ -308,11 +308,11 @@ class document extends aw_template
 				return $fl["content"];
 			};
 		}
-
+		
 		if (($params["tpl_auto"] || true) && !$params["tpl"])
 		{
 			// do template autodetect from parent
-			if ($leadonly)
+			if ($leadonly > -1)
 			{
 				$tpl = $this->get_lead_template($doc["parent"]);
 			}
@@ -403,6 +403,7 @@ class document extends aw_template
 		$this->no_right_pane = $doc["no_right_pane"];
 		$this->no_left_pane = $doc["no_left_pane"];
 
+
 	
 		// use special template for printing if one is set in the cfg file
 		if (aw_global_get("print") && ($this->cfg["print_tpl"]) )
@@ -424,7 +425,7 @@ class document extends aw_template
 		{
 			$this->read_any_template($tpl);
 		};
-
+		
 
 		$awt->start("phase3");
 		if (( ($meta["show_print"]) && (not($print)) && $leadonly != 1) && !$is_printing)
@@ -602,6 +603,7 @@ class document extends aw_template
 
 		$awt->stop("phase5");
 		$awt->start("phase6");
+		
 	
 		// laeme vajalikud klassid
 		// kui vaja on n?idata ainult dokumendi leadi, siis see tehakse siin
@@ -686,6 +688,7 @@ class document extends aw_template
 				$doc["content"] = $txt;
 			};
 		};
+		
 
 		// all the style magic is performed inside the style engine
 		$doc["content"] = $this->style_engine->parse_text($doc["content"]); 
@@ -748,6 +751,7 @@ class document extends aw_template
 		$awt->stop("phase6");
 		$awt->start("phase7");
 		$awt->start("phase71");
+		
 	
 		// v6tame pealkirjast <p> maha
 		$doc["title"] = preg_replace("/<p>(.*)<\/p>/is","\\1",$doc["title"]);
@@ -1006,6 +1010,7 @@ class document extends aw_template
 			for ($i=0; $i < $points; $i++)
 				$pts.=$this->parse("RATE");
 		};
+		
 
 		$dc_obj = new object($doc["docid"]);
 		if ($this->is_template("LINKLIST") && $dc_obj->prop("no_topic_links") != 1)
@@ -1218,6 +1223,7 @@ class document extends aw_template
 
 		$l = get_instance(CL_LANGUAGE);
 		$l->do_insert_texts($this);
+
 
 		$this->vars(array(
 			"sel_lang_img_url" => $sel_lang_img_url,
