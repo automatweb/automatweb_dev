@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.30 2001/05/27 04:13:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.31 2001/05/27 04:54:08 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -621,7 +621,7 @@ class messenger extends menuedit_light
 					$msg["subject"] = "<a href='?class=messenger&action=show&id=$msg[id]'>" . $subject . "</a>";
 					$msg["pri"] = ($msg["pri"]) ? $msg["pri"] : 0;
 					$msg["cnt"] = $cnt;
-					$msg["tm"] = $this->time2date($row["tm"]);
+					$msg["tm"] = $this->time2date($msg["tm"],1);
 					$this->vars($msg);
 					$c .= $this->parse("line");
 				};
@@ -777,15 +777,26 @@ class messenger extends menuedit_light
 
 		// loome nimekirja signatuuridest
 		$siglist = "";
-		if (is_array($this->conf["signatures"]))
+		if (is_array($this->msgconf["msg_signatures"]))
 		{	
 			// ilge vägistamine käib
 			$siglist = array();
-			foreach($this->conf["signatures"] as $sigkey => $sigdata)
+			foreach($this->msgconf["msg_signatures"] as $sigkey => $sigdata)
 			{
 				$siglist[$sigkey] = $sigdata["name"];
 			};
 			$siglist = $this->picker($this->conf["defsig"],$siglist);
+		};
+
+		$idlist = "";
+		if (is_array($this->msgconf["msg_identities"]))
+		{
+			$idlist = array();
+			foreach($this->msgconf["msg_identities"] as $idkey => $idata)
+			{
+				$idlist[$idkey] = $idata["name"] . " " . $idata["surname"];
+			};
+			$idlist = $this->picker(666,$idlist);
 		};
 
 		$attach = "";	
@@ -809,6 +820,7 @@ class messenger extends menuedit_light
 			"msg_id" => $msg_id,
 			"send" => $send,
 			"siglist" => $siglist,
+			"idlist" => $idlist,
 			"prilist" => $this->picker($this->msgconf["msg_default_pri"],array("0","1","2","3","4","5","6","7","8","9")),
 			"attach" => $attach,
 			"menu" => $menu,
@@ -838,13 +850,29 @@ class messenger extends menuedit_light
 		#$etargets = explode(",",$etargets);
 
 		$external = false;
+		
+		// signatuur loppu
+		$message = $args["message"];
+		$message .= "\n--\n" . $this->msgconf["msg_signatures"][$args["signature"]];
+		
 		if ($etargets)
 		{
 			$external = true;
 			classload("aw_mail");
 			$awm = new aw_mail();
+			if ($identity != "default")
+			{
+				$froma = $this->msgconf["msg_identities"]["email"];
+				$fromn = $this->msgconf["msg_identities"]["name"] . " " . $this->msgconf["msg_identities"]["surname"];
+			}
+			else
+			{
+				$froma = $udata["email"];
+				$fromn = "";
+			};
 			$awm->create(array(
-					"froma" => $udata["email"],
+					"froma" => $froma,
+					"fromn" => $fromn,
 					"subject" => $subject,
 					"to" => $etargets,
 					"body" => stripslashes($message),
@@ -900,10 +928,6 @@ class messenger extends menuedit_light
 		$uid = UID;
 		$t = time();
 		
-		// signatuur loppu
-		$message = $args["message"];
-		$message .= $this->conf["sigsep"] . "\n";
-		$message .= $this->conf["signatures"][$this->conf["defsig"]]["content"];
 		$this->quote($message);
 
 		// $mto sisaldab aadresse
@@ -1347,17 +1371,17 @@ class messenger extends menuedit_light
 				// Kõigepealt koostame olemasolevate signatuuride nimekirja
 				$siglist = "";
 				$cnt = 0;
-				if (is_array($conf["signatures"]))
+				if (is_array($this->msgconf["msg_signatures"]))
 				{
 					$this->read_template("signatures.tpl");
-					foreach($conf["signatures"] as $signum => $sigdat)
+					foreach($this->msgconf["msg_signatures"] as $signum => $sigdat)
 					{
 						$cnt++;
 						$this->vars(array(
 								"signum" => $signum,
 								"cnt" => $cnt, 
 								"signame" => $sigdat["name"],
-								"signature" => nl2br($sigdat["content"]),
+								"signature" => nl2br($sigdat["signature"]),
 								"default" => checked($this->conf["defsig"] == $signum),
 							));
 						$siglist .= $this->parse("sig");
@@ -1564,6 +1588,72 @@ class messenger extends menuedit_light
 		$ref = $this->mk_site_orb(array(
 				"action" => "configure",
 				"page" => "identities",
+		));
+		return $ref;
+	}
+
+	////
+	// !Kuvab olemasoleva voi uue signatuuri muutmis/lisamisvormi
+	function edit_signature($args = array())
+	{
+		$menu = $this->gen_msg_menu(array(
+				"activelist" => array("configure","signatures"),
+				));
+		$this->read_template("edit_signature.tpl");
+		extract($args);
+		if (isset($id))
+		{
+			$vars = $this->msgconf["msg_signatures"][$id];
+			$title = "Muuda signatuuri";
+			$this->vars($vars);
+		}
+		else
+		{
+			$title = "Uus signatuur";
+		};
+		$this->vars(array(
+				"menu" => $menu,
+				"title" => $title,
+				"reforb" => $this->mk_reforb("submit_signature",array("id" => $id)),
+			));
+		return $this->parse();
+	}
+
+	////
+	// !Submitib uue voi olemasoleva signatuuri
+	function submit_signature($args = array())
+	{
+		$siglist = $this->msgconf["msg_signatures"];
+		if (!is_array($siglist))
+		{
+			$siglist = array();
+		};
+		$datablock = array(
+				"name" => $args["name"],
+				"signature" => $args["signature"],
+			);
+		if (isset($args["id"]))
+		{
+			$siglist[$args["id"]] = $datablock;
+		}
+		else
+		{
+			$siglist[] = $datablock;
+		};
+		$this->msgconf["msg_signatures"] = $siglist;
+		classload("users");
+		$users = new users();
+		$users->set_user_config(array(
+						"uid" => UID,
+						"key" => "messenger",
+						"value" => $this->msgconf,
+					));
+		global $status_msg;
+		$status_msg = (isset($args["id"])) ? "Signatuur on salvestatud" : "Signatuur on lisatud";
+		session_register("status_msg");
+		$ref = $this->mk_site_orb(array(
+				"action" => "configure",
+				"page" => "signature",
 		));
 		return $ref;
 	}
