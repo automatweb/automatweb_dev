@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.65 2004/10/14 13:43:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.66 2004/10/19 21:30:55 duke Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -298,7 +298,11 @@ class aw_template extends core
 
 	function template_has_var_full($varname)
 	{
-		$tmp = join("\n", $this->v2_arr);
+		static $tmp = "";
+		if (empty($tmp))
+		{
+			$tmp = join("\n", $this->v2_arr);
+		};
 		return strpos($tmp,"{VAR:" . $varname . "}") !== false; 
 	}
 
