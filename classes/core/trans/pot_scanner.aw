@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.12 2005/03/31 11:12:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.13 2005/03/31 11:15:42 kristo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -80,7 +80,7 @@ class pot_scanner extends core
 		// manual scanner :(
 		$strings = $this->_scan_file_props($file_from);
 
-		$meth_name_chars = "1234567890qwertyuiopasdfghjklzxcvbnm_QWERTYUIOPASDFGHJKLZXCVBNM";
+		$meth_name_chars = "\"1234567890qwertyuiopasdfghjklzxcvbnm_QWERTYUIOPASDFGHJKLZXCVBNM";
 
 		$fc = $this->get_file(array("file" => $file_from));
 		
