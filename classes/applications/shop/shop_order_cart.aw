@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.8 2004/06/15 08:10:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.9 2004/06/17 13:39:53 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -54,7 +54,7 @@ class shop_order_cart extends class_base
 
 	/** shows the cart to user
 		
-		@attrib name=show_cart
+		@attrib name=show_cart nologin="1"
 
 		@param oc optional type=int
 		@param section optional type=int
@@ -124,10 +124,70 @@ class shop_order_cart extends class_base
 			$str .= $this->parse("PROD");
 		}
 
+		$swh = get_instance(CL_SHOP_WAREHOUSE);
+		$wh_o = obj($oc->prop("warehouse"));
+
+		// fake user data
+		$wh_o->set_meta("order_cur_ud", $_SESSION["cart"]["user_data"]);
+
+		$els = $swh->callback_get_order_current_form(array(
+			"obj_inst" => $wh_o
+		));
+
+		$htmlc = get_instance("cfg/htmlclient");
+		$htmlc->start_output();
+		foreach($els as $pn => $pd)
+		{
+			$htmlc->add_property($pd);
+		}
+		$htmlc->finish_output();
+
+		$html = $htmlc->get_result(array(
+			"raw_output" => 1
+		));
+
+		if (aw_global_get("uid") != "")
+		{
+			$us = get_instance("core/users/user");
+			$objs = array(
+				"user_data_user_" => obj($us->get_current_user()),
+				"user_data_person_" => obj($us->get_current_person()),
+				"user_data_org_" => obj($us->get_current_company()),
+			);
+			$vars = array();
+			foreach($objs as $prefix => $obj)
+			{
+				$ops = $obj->properties();
+				
+				foreach($ops as $opk => $opv)
+				{
+					$vars[$prefix.$opk] = $opv;
+				}
+			}
+
+			$this->vars($vars);
+		}
+
 		$this->vars(array(
+			"user_data_form" => $html,
 			"PROD" => $str,
 			"total" => number_format($total, 2),
 			"reforb" => $this->mk_reforb("submit_add_cart", array("oc" => $arr["oc"], "update" => 1, "section" => $arr["section"]))
+		));
+
+		$ll = $lln = "";
+		if (aw_global_get("uid") != "")
+		{
+			$ll = $this->parse("logged");
+		}
+		else
+		{
+			$lln = $this->parse("not_logged");
+		}
+
+		$this->vars(array(
+			"logged" => $ll,
+			"not_logged" => $lln
 		));
 
 		return $this->parse();
@@ -135,7 +195,7 @@ class shop_order_cart extends class_base
 
 	/** order submit page, must add items to cart
 
-		@attrib name=submit_add_cart
+		@attrib name=submit_add_cart nologin="1"
 
 		@param oc required type=int acl=view
 		@param add_to_cart optional
@@ -223,6 +283,8 @@ class shop_order_cart extends class_base
 			die();
 		}
 
+		$_SESSION["cart"]["user_data"] = $GLOBALS["user_data"];
+
 		$awa = new aw_array($arr["add_to_cart"]);
 		foreach($awa->get() as $iid => $quant)
 		{
@@ -240,6 +302,9 @@ class shop_order_cart extends class_base
 		{
 			// do confirm order and show user
 			$ordid = $this->do_create_order_from_cart($arr["oc"]);
+			$ordo = obj($ordid);
+			$ordo->set_meta("user_data", $_SESSION["cart"]["user_data"]);
+			$ordo->save();
 			$this->start_order();
 			return $this->mk_my_orb("show", array("id" => $ordid, "section" => $arr["section"]), "shop_order");
 		}

@@ -38,6 +38,24 @@
             <caption>Tellija andmete vorm</caption>
       </property>
       <property>
+            <name>data_form_person</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Isiku nime element andmete vormis</caption>
+      </property>
+      <property>
+            <name>data_form_company</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Organisatsiooni nime element andmete vormis</caption>
+      </property>
+      <property>
             <name>only_active_items</name>
             <table>objects</table>
             <group>general</group>

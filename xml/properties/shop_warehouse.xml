@@ -209,6 +209,57 @@
             <field>order_current_form</field>
             <caption>Tellimuse info vorm</caption>
       </property>
+      <property>
+            <name>search_tb</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>search_tb</field>
+            <caption>Otsingo toolbar</caption>
+      </property>
+      <property>
+            <name>search_form</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>callback</type>
+            <callback>callback_get_search_form</callback>
+            <submit_method>get</submit_method>
+            <store>no</store>
+            <field>search_form</field>
+            <caption>Otsinguvorm</caption>
+      </property>
+      <property>
+            <name>search_res</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>search_res</field>
+            <caption>Otsingu tulemused</caption>
+      </property>
+      <property>
+            <name>search_cur_ord_text</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>search_cur_ord_text</field>
+            <caption>Hetke tellimus text</caption>
+      </property>
+      <property>
+            <name>search_cur_ord</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>search_cur_ord</field>
+            <caption>Hetke tellimus tabel</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_WAREHOUSE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -257,6 +308,10 @@
                   <parent>order</parent>
                   <caption>Praegune tellimus</caption>
             </order_current>
+            <search>
+                  <caption>Otsi</caption>
+                  <submit_method>get</submit_method>
+            </search>
       </groupinfo>
       <tableinfo>
             <aw_shop_warehouses>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.5 2004/06/15 08:10:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.6 2004/06/17 13:39:53 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -16,6 +16,12 @@
 
 @property orderer_company type=relpicker reltype=RELTYPE_ORG table=aw_shop_orders field=aw_orderer_company 
 @caption Tellija
+
+@property seller_person type=relpicker reltype=RELTYPE_PERSON table=objects field=meta method=serialize
+@caption M&uuml;ja esindaja
+
+@property seller_company type=relpicker reltype=RELTYPE_ORG table=objects field=meta method=serialize
+@caption M&uuml;ja
 
 @property oc type=relpicker reltype=RELTYPE_ORDER_CENTER table=aw_shop_orders field=aw_oc_id 
 @caption Tellimiskeskkond
@@ -386,6 +392,30 @@ class shop_order extends class_base
 			));
 		}
 
+		// seller, seller_company fro current user
+		if (aw_global_get("uid") != "")
+		{
+			$us = get_instance("core/users/user");
+			$c_com_id = $us->get_current_company();
+			if ($wh->is_manager_co($this->order_warehouse, $c_com_id))
+			{
+				$oi->connect(array(
+					"to" => $c_com_id,
+					"reltype" => 4 // RELTYPE_ORG
+				));
+				$oi->set_prop("seller_company", $c_com_id);
+				
+				$c_per_id = $us->get_current_person();
+				
+				$oi->connect(array(
+					"to" => $c_per_id,
+					"reltype" => 3 // RELTYPE_PERSON
+				));
+				$oi->set_prop("seller_person", $c_per_id);
+			}
+		}
+		
+
 		// now, products
 		$mp = array();
 		$sum = 0;
@@ -442,13 +472,17 @@ class shop_order extends class_base
 
 	/** shows thes order
 
-		@attrib name=show
+		@attrib name=show nologin="1"
 
 		@param id required type=int acl=view
 	**/
 	function show($arr)
 	{
-		$this->read_template("show.tpl");
+		if (!$arr["template"])
+		{
+			$arr["template"] = "show.tpl";
+		}
+		$this->read_any_template($arr["template"]);
 		
 		$o = obj($arr["id"]);
 		$tp = $o->meta("ord_content");
@@ -464,7 +498,8 @@ class shop_order extends class_base
 			$this->vars(array(
 				"name" => $prod->name(),
 				"quant" => $tp[$prod->id()],
-				"price" => number_format($pr,2)
+				"price" => number_format($pr,2),
+				"tot_price" => number_format(((int)($tp[$prod->id()]) * $pr), 2)
 			));
 
 			$total += ($pr * $tp[$prod->id()]);
@@ -472,21 +507,63 @@ class shop_order extends class_base
 			$p .= $this->parse("PROD");
 		}
 
+		$objs = array();
+
+		$oc = obj($o->prop("oc"));
+		$oc_i = $oc->instance();
+
 		// get person
 		if ($o->prop("orderer_person"))
 		{
-			$po = obj($o->prop("orderer_person"));
+			$po = obj($o->prop("orderer_person") && $this->can("view", $o->prop("orderer_person")));
 			$this->vars(array(
 				"person_name" => $po->name(),
 			));
+			$objs["user_data_person_"] = $po;
 		}
-		if ($o->prop("orderer_company"))
+		else
+		if (($pp = $oc->prop("data_form_person")))
+		{
+			$_ud = $o->meta("user_data");
+			$this->vars(array(
+				"person_name" => $ud[$pp],
+			));
+		}
+
+		if ($o->prop("orderer_company") && $this->can("view", $o->prop("orderer_company")))
 		{
 			$co = obj($o->prop("orderer_company"));
 			$this->vars(array(
 				"company_name" => $co->name(),
 			));
+
+			$objs["user_data_org_"] = $co;
 		}
+		else
+		if (($pp = $oc->prop("data_form_company")))
+		{
+			$_ud = $o->meta("user_data");
+			$this->vars(array(
+				"person_name" => $ud[$pp],
+			));
+		}
+
+		if (aw_global_get("uid") != "")
+		{
+			$vars = array();
+			foreach($objs as $prefix => $obj)
+			{
+				$ops = $obj->properties();
+				
+				foreach($ops as $opk => $opv)
+				{
+					$vars[$prefix.$opk] = $opv;
+				}
+			}
+
+			$this->vars($vars);
+		}
+
 
 		$awa = new aw_array($o->meta("user_data"));
 		foreach($awa->get() as $ud_k => $ud_v)
@@ -499,9 +576,6 @@ class shop_order extends class_base
 		$pl = "";
 		if ($this->is_template("PROD_LONG"))
 		{
-			$oc = obj($o->prop("oc"));
-			$oc_i = $oc->instance();
-
 			foreach($o->connections_from(array("type" => "RELTYPE_PRODUCT")) as $c)
 			{
 				$prod = $c->to();
@@ -523,7 +597,30 @@ class shop_order extends class_base
 			}
 		}
 
+		// sellers
+		$hs = "";
+		if (is_oid($o->prop("seller_company")) && $this->can("view", $o->prop("seller_company")))
+		{
+			$seller_comp = obj($o->prop("seller_company"));
+			$seller_person = obj();
+			if (is_oid($o->prop("seller_person")) && $this->can("view", $o->prop("seller_person")))
+			{
+				$seller_person = obj($o->prop("seller_person"));
+			}
+			$this->vars(array(
+				"seller_company" => $seller_comp->name(),
+				"seller_person" => $seller_person->name()
+			));
+			$hs = $this->parse("HAS_SELLER");
+		}
+		else
+		{
+			$hs = $this->parse("NO_SELLER");
+		}
+
 		$this->vars(array(
+			"HAS_SELLER" => $hs,
+			"NO_SELLER" => "",
 			"PROD" => $p,
 			"PROD_LONG" => $pl,
 			"total" => number_format($total,2),
@@ -538,6 +635,21 @@ class shop_order extends class_base
 			));
 		}
 
+		$ll = $lln = "";
+		if (aw_global_get("uid") != "")
+		{
+			$ll = $this->parse("logged");
+		}
+		else
+		{
+			$lln = $this->parse("not_logged");
+		}
+
+		$this->vars(array(
+			"logged" => $ll,
+			"not_logged" => $lln
+		));
+
 		return $this->parse();
 	}
 
@@ -545,13 +657,13 @@ class shop_order extends class_base
 	{
 		$m = $o->modifiedby();
 		$mb = $m->name();
-		if ($o->prop("orderer_person"))
+		if (is_oid($o->prop("orderer_person")) && $this->can("view", $o->prop("orderer_person")))
 		{
 			$_person = obj($o->prop("orderer_person"));
 			$mb = $_person->name();
 		}
 
-		if ($o->prop("orderer_company"))
+		if (is_oid($o->prop("orderer_company")) && $this->can("view", $o->prop("orderer_company")))
 		{
 			$_comp = obj($o->prop("orderer_company"));
 			$mb .= " / ".$_comp->name();
@@ -574,29 +686,30 @@ class shop_order extends class_base
 
 	/** generates a pdf from the order
 
-		@attrib name=gen_pdf
+		@attrib name=gen_pdf nologin="1"
 
 		@param id required type=int acl=view
 
 	**/
 	function gen_pdf($arr)
 	{
-		$arr["is_pdf"] = 1;
-		$html = $this->show($arr);
-
 		$o = obj($arr["id"]);
 		if ($o->prop("oc"))
 		{
 			$oc_o = obj($o->prop("oc"));
-			$tpl = $oc_o->prop("pdf_template");
-			if ($tpl != "")
+			$arr["template"] = $oc_o->prop("pdf_template");
+
+			$arr["is_pdf"] = 1;
+			$html = $this->show($arr);
+
+			/*if ($tpl != "")
 			{
 				$this->read_template($tpl);
 				$this->vars(array(
 					"content" => $html
 				));
 				$html = $this->parse();
-			}
+			}*/
 		}
 
 		header("Content-type: application/pdf");

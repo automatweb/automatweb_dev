@@ -19,20 +19,21 @@
 			</function>
 		</action>
 
-		<action name="add_to_cart" >
-			<function name="add_to_cart">
-				<arguments>
-					<required name="id" type="ind" acl="view"/>
-					<optional name="sel" />
-				</arguments>
-			</function>
-		</action>
-
 		<action name="gen_order" >
 			<function name="gen_order">
 				<arguments>
 					<required name="id" type="int" acl="view"/>
 					<optional name="user_data" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="add_to_cart" >
+			<function name="add_to_cart">
+				<arguments>
+					<required name="id" type="ind" acl="view"/>
+					<optional name="sel" />
+					<optional name="group" />
 				</arguments>
 			</function>
 		</action>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.7 2004/06/14 14:28:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.8 2004/06/17 13:39:53 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -21,6 +21,12 @@
 
 @property data_form type=relpicker reltype=RELTYPE_ORDER_FORM table=objects field=meta method=serialize
 @caption Tellija andmete vorm
+
+@property data_form_person type=select field=meta method=serialize
+@caption Isiku nime element andmete vormis
+
+@property data_form_company type=select field=meta method=serialize
+@caption Organisatsiooni nime element andmete vormis
 
 @property only_active_items type=checkbox ch_value=1 table=objects field=meta method=serialize
 @caption Ainult aktiivsed tooted
@@ -72,6 +78,21 @@ class shop_order_center extends class_base
 
 			case "sortbl":
 				$this->do_sortbl($arr);
+				break;
+
+			case "data_form_person":
+			case "data_form_company":
+				if (!$arr["obj_inst"]->prop("data_form"))
+				{	
+					return PROP_IGNORE;
+				}
+				$opts = array("" => "");
+				$props = $this->get_properties_from_data_form($arr["obj_inst"]);
+				foreach($props as $pn => $pd)
+				{
+					$opts[$pn] = $pd["caption"];
+				}
+				$prop["options"] = $opts;
 				break;
 		};
 		return $retval;
@@ -387,12 +408,21 @@ class shop_order_center extends class_base
 
 		$this->do_sort_packet_list($pl, $soc->meta("itemsorts"));
 
-		return $this->do_draw_prods_with_layout(array(
+
+		// also show docs
+		$ss = get_instance("contentmgmt/site_show");
+		$tmp = array();
+		$ss->_init_path_vars($tmp);
+		$html = $ss->show_documents($tmp);
+		
+		$html .= $this->do_draw_prods_with_layout(array(
 			"t_layout" => $t_layout, 
 			"layout" => $layout, 
 			"pl" =>  $pl,
 			"soc" => $soc
 		));
+
+		return $html;
 	}
 
 	function get_prod_layout_for_folder($soc, $section)
@@ -596,6 +626,51 @@ class shop_order_center extends class_base
 		{
 			return $comp_a > $comp_b ? -1 : 1;
 		}
+	}
+
+	function get_properties_from_data_form($oc)
+	{
+		$ret = array();
+
+		// get data form from that
+		if (!$oc->prop("data_form"))
+		{
+			return $ret;
+		}
+
+		// get props from conf form
+		$cff = obj($oc->prop("data_form"));
+		$class_id = $cff->prop("ctype");
+		if (!$class_id)
+		{
+			return $ret;
+		}
+		$class_i = get_instance($class_id);
+		$cf_ps = $class_i->load_from_storage(array(
+			"id" => $cff->id()
+		));
+
+
+		// get all props
+		$cfgx = get_instance("cfg/cfgutils");
+		$all_ps = $cfgx->load_properties(array(
+			"clid" => $class_id,
+		));
+
+		// rewrite names as user_data[prop]
+		foreach($cf_ps as $pn => $pd)
+		{
+			if ($pn == "is_translated" || $pn == "needs_translation")
+			{
+				continue;
+			}
+			$ret[$pn] = $all_ps[$pn];
+			$ret[$pn]["caption"] = $pd["caption"];
+			$ret[$pn]["name"] = "user_data[$pn]";
+			$ret[$pn]["value"] = $cud[$pn];
+		}
+
+		return $ret;
 	}
 }
 ?>

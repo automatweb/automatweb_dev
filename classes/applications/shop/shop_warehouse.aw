@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.11 2004/06/15 08:10:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.12 2004/06/17 13:39:53 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -80,6 +80,26 @@
 
 @property order_current_form type=callback callback=callback_get_order_current_form store=no group=order_current
 @caption Tellimuse info vorm
+
+// search tab
+@groupinfo search caption="Otsi" submit_method=get
+@default group=search
+
+@property search_tb type=toolbar store=no no_caption=1
+@caption Otsingo toolbar
+
+@property search_form type=callback callback=callback_get_search_form submit_method=get store=no
+@caption Otsinguvorm
+
+@property search_res type=table store=no no_caption=1
+@caption Otsingu tulemused
+
+@property search_cur_ord_text type=text store=no no_caption=1
+@caption Hetke tellimus text
+
+@property search_cur_ord type=table store=no no_caption=1
+@caption Hetke tellimus tabel
+
 
 ////////// reltypes
 @reltype CONFIG value=1 clid=CL_SHOP_WAREHOUSE_CONFIG
@@ -193,11 +213,21 @@ class shop_warehouse extends class_base
 				break;
 
 			case "order_current_table":
+			case "search_cur_ord":
+				$this->save_ord_cur_tbl($arr);
 				$this->do_order_cur_table($arr);
 				break;
 
-			case "order_current_org":
-				$prop["options"];
+			case "search_res":
+				$this->do_search_res_tbl($arr);
+				break;
+
+			case "search_tb":
+				$this->do_search_tb($arr);
+				break;
+	
+			case "search_cur_ord_text":
+				$data["value"] = "<br><br>Hetkel korvis olevad kaubad:";
 				break;
 		};
 		return $retval;
@@ -226,6 +256,7 @@ class shop_warehouse extends class_base
 				break;
 
 			case "order_current_table":
+			case "search_cur_ord":
 				$this->save_ord_cur_tbl($arr);
 				break;
 		}
@@ -1186,18 +1217,37 @@ class shop_warehouse extends class_base
 		{
 			$m = $o->modifiedby();
 			$mb = $m->name();
-			if ($o->prop("orderer_person"))
+			if (is_oid($o->prop("orderer_person")) && $this->can("view", $o->prop("orderer_company")))
 			{
 				$_person = obj($o->prop("orderer_person"));
 				$mb = $_person->name();
 			}
+			else
+			if (is_oid($o->prop("oc")))
+			{
+				$oc = obj($o->prop("oc"));
+				if (($pp = $oc->prop("data_form_person")))
+				{
+					$_ud = $o->meta("user_data");
+					$mb = $_ud[$pp];
+				}
+			}
 
-			if ($o->prop("orderer_company"))
+			if (is_oid($o->prop("orderer_company")) && $this->can("view", $o->prop("orderer_company")))
 			{
 				$_comp = obj($o->prop("orderer_company"));
 				$mb .= " / ".$_comp->name();
 			}
-
+			else
+			if (is_oid($o->prop("oc")))
+			{
+				$oc = obj($o->prop("oc"));
+				if (($pp = $oc->prop("data_form_company")))
+				{
+					$_ud = $o->meta("user_data");
+					$mb = $_ud[$pp];
+				}
+			}
 			$t->define_data(array(
 				"name" => $o->name(),
 				"modifiedby" => $mb,
@@ -1635,6 +1685,29 @@ class shop_warehouse extends class_base
 		return ($a == $b ? 0 : ((strlen($a) < strlen($b)) ? -1 : 1));
 	}
 
+	function callback_pre_edit($arr)
+	{
+		if (!$arr["obj_inst"]->prop("order_current_org") && 
+			is_oid($arr["obj_inst"]->prop("order_current_person")) && 
+			$this->can("view", $arr["obj_inst"]->prop("order_current_person"))
+		)
+		{
+			// get the org from the person 
+			$pers = obj($arr["obj_inst"]->prop("order_current_person"));
+			$conn = reset($pers->connections_from(array(
+				"type" => "RELTYPE_WORK"
+			)));
+			if ($conn)
+			{
+				$arr["obj_inst"]->set_prop("order_current_org", $conn->prop("to"));
+				$tmp = $arr["obj_inst"]->meta("popup_search[order_current_org]");
+				$tmp[$conn->prop("to")] = $conn->prop("to");
+				$arr["obj_inst"]->set_meta("popup_search[order_current_org]", $tmp);
+				$arr["obj_inst"]->save();
+			}
+		}
+	}
+
 	function callback_pre_save($arr)
 	{
 		if ($arr["request"]["group"] == "order_current")
@@ -1656,46 +1729,120 @@ class shop_warehouse extends class_base
 			return $ret;
 		}
 		$oc = obj($o->prop("order_center"));
+		$oc_i = $oc->instance();
 
-		// get data form from that
-		if (!$oc->prop("data_form"))
+		$props = $oc_i->get_properties_from_data_form($oc);
+
+		if (($pp = $oc->prop("data_form_person")) && is_oid($o->prop("order_current_person")))
 		{
-			return $ret;
+			$po = obj($o->prop("order_current_person"));
+			$props[$pp]["value"] = $po->name();
+			$props[$pp]["type"] = "hidden";
+			$props[$pp."_show"] = $props[$pp];
+			$props[$pp."_show"]["type"] = "text";
 		}
 
-		// get props from conf form
-		$cff = obj($oc->prop("data_form"));
-		$class_id = $cff->prop("ctype");
-		if (!$class_id)
+		if (($pp = $oc->prop("data_form_company")) && $o->prop("order_current_org"))
 		{
-			return $ret;
+			$po = obj($o->prop("order_current_org"));
+			$props[$pp]["value"] = $po->name();
+			$props[$pp]["type"] = "hidden";
+			$props[$pp."_show"] = $props[$pp];
+			$props[$pp."_show"]["type"] = "text";
 		}
-		$class_i = get_instance($class_id);
-		$cf_ps = $class_i->load_from_storage(array(
-			"id" => $cff->id()
+
+		return $props;
+	}
+
+	function do_search_res_tbl($arr)
+	{
+		if (!$arr["obj_inst"]->prop("conf"))
+		{
+			return;
+		}
+		$conf = obj($arr["obj_inst"]->prop("conf"));
+		if (!$conf->prop("search_form"))
+		{
+			return;
+		}
+		$sf = obj($conf->prop("search_form"));
+		$sf_i = $sf->instance();
+
+		$sf_i->get_search_result_table(array(
+			"ob" => $sf,
+			"t" => &$arr["prop"]["vcl_inst"],
+			"request" => $arr["request"]
 		));
 
+		// add select column
+		$arr["prop"]["vcl_inst"]->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
+	}
 
-		// get all props
-		$cfgx = get_instance("cfg/cfgutils");
-		$all_ps = $cfgx->load_properties(array(
-			"clid" => $class_id,
+	/** finishes the order 
+
+		@attrib name=gen_order
+
+		@param id required type=int acl=view
+		@param user_data optional
+	**/
+	function gen_order($arr)
+	{
+		$o = obj($arr["id"]);
+		$oc = $o->prop("order_center");
+		error::throw_if(!$oc, array(
+			"id" => ERR_NO_OC,
+			"msg" => "shop_warehouse::gen_order(): no order center object selected!"
 		));
 
-		// rewrite names as user_data[prop]
-		foreach($cf_ps as $pn => $pd)
-		{
-			if ($pn == "is_translated" || $pn == "needs_translation")
-			{
-				continue;
-			}
-			$ret[$pn] = $all_ps[$pn];
-			$ret[$pn]["caption"] = $pd["caption"];
-			$ret[$pn]["name"] = "user_data[$pn]";
-			$ret[$pn]["value"] = $cud[$pn];
-		}
+		$soc = get_instance("applications/shop/shop_order_cart");
+		$ordid = $soc->do_create_order_from_cart($oc, $arr["id"], array(
+			"pers_id" => $o->prop("order_current_person"),
+			"com_id" => $o->prop("order_current_org"),
+			"user_data" => $o->meta("order_cur_ud")
+		));
+		$soc->clear_cart();
+		return $this->mk_my_orb("gen_pdf", array(
+			"id" => $ordid
+		), "applications/shop/shop_order");
+	}
 
-		return $ret;
+	function callback_get_search_form($arr)
+	{
+		if (!$arr["obj_inst"]->prop("conf"))
+		{
+			return;
+		}
+		$conf = obj($arr["obj_inst"]->prop("conf"));
+		if (!$conf->prop("search_form"))
+		{
+			return;
+		}
+		$sf = obj($conf->prop("search_form"));
+		$sf_i = $sf->instance();
+
+		return $sf_i->get_callback_properties($sf);
+	}
+
+	function do_search_tb($arr)
+	{
+		$tb =& $arr["prop"]["toolbar"];
+
+		$tb->add_button(array(
+			"name" => "add_to_order",
+			"img" => "import.gif",
+			"tooltip" => "Lisa tellimusse",
+			"action" => "add_to_cart"
+		));
+
+		$tb->add_button(array(
+			"name" => "go_to_order",
+			"img" => "save.gif",
+			"tooltip" => "Moodusta pakkumine",
+			"url" => $this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => "order_current"))
+		));
 	}
 
 	///////////////////////////////////////////////
@@ -1720,15 +1867,14 @@ class shop_warehouse extends class_base
 		{
 			$status = STAT_ACTIVE;
 		}
-		$ot = new object_tree(array(
-			"parent" => (!empty($arr["parent"]) ? $arr["parent"] : $conf->prop("pkt_fld")),
-			"class_id" => array(CL_MENU,CL_SHOP_PACKET),
-			"status" => $status
-		));
 
 		$ret = array();
 	
-		$ol = $ot->to_list();
+		$ol = new object_list(array(
+			"parent" => (!empty($arr["parent"]) ? $arr["parent"] : $conf->prop("pkt_fld")),
+			"class_id" => CL_SHOP_PACKET,
+			"status" => $status
+		));
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
 			if ($o->class_id() == CL_MENU)
@@ -1738,13 +1884,11 @@ class shop_warehouse extends class_base
 			$ret[] = $o;
 		}
 
-		$ot = new object_tree(array(
+		$ol = new object_list(array(
 			"parent" => (!empty($arr["parent"]) ? $arr["parent"] : $conf->prop("prod_fld")),
 			"class_id" => array(CL_MENU,CL_SHOP_PRODUCT),
 			"status" => array(STAT_ACTIVE, STAT_NOTACTIVE)
 		));
-
-		$ol = $ot->to_list();
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
 			if ($o->class_id() == CL_MENU)
@@ -1792,6 +1936,7 @@ class shop_warehouse extends class_base
 
 		@param id required type=ind acl=view
 		@param sel optional
+		@param group optional
 	**/
 	function add_to_cart($arr)
 	{
@@ -1810,32 +1955,24 @@ class shop_warehouse extends class_base
 		));
 	}
 
-	/** finishes the order 
+	/** checks if the company $id is a manager company for  warehouse $wh
 
-		@attrib name=gen_order
-
-		@param id required type=int acl=view
-		@param user_data optional
 	**/
-	function gen_order($arr)
+	function is_manager_co($wh, $id)
 	{
-		$o = obj($arr["id"]);
-		$oc = $o->prop("order_center");
-		error::throw_if(!$oc, array(
-			"id" => ERR_NO_OC,
-			"msg" => "shop_warehouse::gen_order(): no order center object selected!"
-		));
-
-		$soc = get_instance("applications/shop/shop_order_cart");
-		$ordid = $soc->do_create_order_from_cart($oc, $arr["id"], array(
-			"pers_id" => $o->prop("order_current_person"),
-			"com_id" => $o->prop("order_current_org"),
-			"user_data" => $o->meta("order_cur_ud")
-		));
-		$soc->clear_cart();
-		return $this->mk_my_orb("gen_pdf", array(
-			"id" => $ordid
-		), "applications/shop/shop_order");
+		if (!$wh->prop("conf"))
+		{
+			return false;
+		}
+		$conf = obj($wh->prop("conf"));
+		$awa = new aw_array($conf->prop("manager_cos"));
+		$mc = $awa->get();
+		
+		if ($mc[$id])
+		{
+			return true;
+		}
+		return false;
 	}
 }
 ?>

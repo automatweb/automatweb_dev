@@ -70,6 +70,16 @@
             <method>serialize</method>
             <caption>Lao tellijate kataloog</caption>
       </property>
+      <property>
+            <name>search_form</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SEARCH_FORM</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Lao otsinguvorm</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_WAREHOUSE_CONFIG</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -80,6 +90,11 @@
                   <clid>CL_MENU</clid>
                   <caption>kataloog</caption>
             </FOLDER>
+            <SEARCH_FORM>
+                  <value>2</value>
+                  <clid>CL_CB_SEARCH</clid>
+                  <caption>otsinguvorm</caption>
+            </SEARCH_FORM>
       </reltypes>
 </properties>
 

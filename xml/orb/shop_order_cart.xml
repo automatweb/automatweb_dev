@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="shop_order_cart" folder="applications/shop" extends="class_base">
-		<action name="show_cart" >
+		<action name="show_cart" nologin="1">
 			<function name="show">
 				<arguments>
 					<optional name="oc" type="int"/>
@@ -10,7 +10,7 @@
 			</function>
 		</action>
 
-		<action name="submit_add_cart" >
+		<action name="submit_add_cart" nologin="1">
 			<function name="submit_add_cart">
 				<arguments>
 					<required name="oc" type="int" acl="view"/>
