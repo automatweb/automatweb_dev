@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.356 2005/01/11 14:18:45 kristo Exp $
+// $Id: class_base.aw,v 2.357 2005/01/21 11:44:59 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -575,7 +575,7 @@ class class_base extends aw_template
 		$properties = array("tabpanel" => $panel) + $properties;
 
 		$awt->start("parse-properties");
-		
+
 		$resprops = $this->parse_properties(array(
 			"properties" => &$properties,
 		));
@@ -2910,8 +2910,8 @@ class class_base extends aw_template
 		{
 			$controller_inst = get_instance(CL_CFGCONTROLLER);
 			$controllers = $this->get_all_controllers($arr["cfgform_id"]);
-			$cf = get_instance("cfg/cfgform");
-			$props = $cf->get_props_from_cfgform(array("id" => $arr["cfgform_id"]));
+			//$cf = get_instance("cfg/cfgform");
+			//$props = $cf->get_props_from_cfgform(array("id" => $arr["cfgform_id"]));
 		};
 		
 		$res = array();
@@ -3104,7 +3104,9 @@ class class_base extends aw_template
 		$errors = $this->validate_data(array(
 			"request" => $args,
 			"cfgform_id" => $args["cfgform"],
+			"props" => &$properties,
 		));
+
 
 		$pvalues = array();
 
@@ -3155,12 +3157,17 @@ class class_base extends aw_template
 
 			$name = $property["name"];
 			$type = $property["type"];
-				
+			
 			$xval = isset($rawdata[$name]) ? $rawdata[$name] : "";
 
 			if ($new && empty($xval) && !empty($property["default"]))
 			{
 				$xval = $property["default"];
+			};
+
+			if (!empty($property["value"]))
+			{
+				$xval = $property["value"];
 			};
 
 			if ($property["type"] == "checkbox")
