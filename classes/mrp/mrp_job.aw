@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.35 2005/03/29 11:26:28 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.36 2005/03/29 14:05:17 kristo Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -197,7 +197,10 @@ class mrp_job extends class_base
 				break;
 
 			case "resource":
-				$prop["value"] = $this->resource->name ();
+				if (is_object($this->resource))
+				{
+					$prop["value"] = $this->resource->name ();
+				}
 				break;
 
 			case "length":
@@ -402,9 +405,9 @@ class mrp_job extends class_base
 			{
 				$prerequisite = obj ($prerequisite_oid);
 
-				if (((int) $prerequisite->prop ("state")) !== MRP_STATUS_DONE)
+				if (((int) $prerequisite->prop ("state")) === MRP_STATUS_DONE)
 				{
-					$prerequisites_done = false;
+					$prerequisites_done = true;
 				}
 				else
 				{
