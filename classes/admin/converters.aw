@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.23 2003/10/06 11:24:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.24 2003/11/13 11:08:01 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -957,6 +957,29 @@ class converters extends aw_template
 
 		}
 
+	}
+
+	////
+	// !creates the active_documents list for each folder in the system. the shitty part about this is, of course that 
+	// all section modifiers will be fucked. 
+	function convert_active_documents_list()
+	{
+		set_time_limit(0);
+		echo "creating active document lists! <br>\n";
+		flush();
+		$ol = new object_list(array(
+			"class_id" => array(CL_DOCUMENT, CL_PERIODIC_SECTION)
+		));
+		
+		$di = get_instance("doc");
+		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		{
+			echo "document ".$o->name()." (".$o->id()." ) <br>\n";
+			flush();
+			$di->on_save_document(array("oid" => $o->id()));
+		}
+
+		die("all done!");
 	}
 };
 ?>

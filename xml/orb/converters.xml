@@ -74,6 +74,12 @@
 				</arguments>		
 			</function>
 		</action>
+		<action name="convert_active_documents_list" nologin="1">
+			<function name="convert_active_documents_list">
+				<arguments>
+				</arguments>		
+			</function>
+		</action>
 	</class>
 </orb>
 		
