@@ -27,20 +27,13 @@
 			</function>
 		</action>
 		
-		<action name="delete_alias">
-			<function name="del_alias">
-				<arguments>
-					<required name="id"/>
-					<required name="oid"/>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="addalias">
 			<function name="addalias">
 				<arguments>
 					<required name="id"/>
 					<required name="alias"/>
+					<optional name="_cl"/>
+					<optional name="_ac"/>
 				</arguments>
 			</function>
 		</action>
