@@ -224,7 +224,7 @@ $lc_form["LC_FORMS_CHOOSE_LOOKED_FORMS"]="Choose search forms";
 $lc_form["LC_FORMS_PREVIEW"]="Preview";
 $lc_form["LC_FORMS_ALL_ELEMENTS"]="All elements";
 $lc_form["LC_FORMS_IMPORT_DATA"]="Import data";
-$lc_form["LC_FORMS_TABLE_STYLES"]="Table styles";
+$lc_form["LC_FORMS_TABLE_STYLES"]="Table settings";
 $lc_form["LC_FORMS_FORM_ACTIONS"]="Form actions";
 $lc_form["LC_FORMS_CHOOSE_CATALOGUES"]="Choose catalogues";
 $lc_form["LC_FORMS_IMPORT_INSIDE"]="Import message";
@@ -302,4 +302,6 @@ $lc_form["LC_FORMS_FIND"]="Search";
 $lc_form["LC_FORMS_CHECKBOX_VALUE"] = "Checkbox value:";
 $lc_form["LC_FORMS_RADIO_VALUE"] = "Radiobutton value:";
 
+$lc_form["LC_FORMS_CHOOSE_MOVE_FOLDERS"] = "Choose folders where elements can be moved";
+$lc_form["LC_FORMS_IGNORE_TEXT"] = "Ignore text";
 ?>

@@ -205,7 +205,7 @@ $lc_form["LC_FORMS_CHOOSE_LOOKED_FORMS"]="Vali otsitavad formid";
 $lc_form["LC_FORMS_PREVIEW"]="Eelvaade";
 $lc_form["LC_FORMS_ALL_ELEMENTS"]="K&otilde;ik elemendid";
 $lc_form["LC_FORMS_IMPORT_DATA"]="Impordi andmeid";
-$lc_form["LC_FORMS_TABLE_STYLES"]="Tabeli stiilid";
+$lc_form["LC_FORMS_TABLE_STYLES"]="Tabeli m&auml;&auml;rangud";
 $lc_form["LC_FORMS_FORM_ACTIONS"]="Formi actionid";
 $lc_form["LC_FORMS_CHOOSE_CATALOGUES"]="Vali kataloogid";
 $lc_form["LC_FORMS_IMPORT_INSIDE"]="Impordi sisu";
@@ -291,4 +291,8 @@ $lc_form["LC_FORMS_ARE_YOU_SURE_DEL_ROW"]="Oled kindel, et soovid seda rida kust
 
 $lc_form["LC_FORMS_CHECKBOX_VALUE"] = "Checkboxi v&auml;&auml;rtus:";
 $lc_form["LC_FORMS_RADIO_VALUE"] = "Radiobuttoni v&auml;&auml;rtus:";
+
+$lc_form["LC_FORMS_CHOOSE_MOVE_FOLDERS"] = "Vali kataloogid kuhu saab elemente liigutada";
+$lc_form["LC_FORMS_IGNORE_TEXT"] = "Ignoreeri teksti";
+
 ?>
