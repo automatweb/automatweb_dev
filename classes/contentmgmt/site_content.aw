@@ -360,7 +360,10 @@ class site_content extends menuedit
 		{
 			$this->vars(array("HAS_YAH" => $this->parse("HAS_YAH")));
 		}
-		$this->vars(array("YAH_LINK" => $yah));
+		$this->vars(array(
+			"YAH_LINK" => $yah,
+			"site_yah" => strip_tags($yah),
+		));
 
 		if (aw_ini_get("menuedit.context_langs") == 1)
 		{
