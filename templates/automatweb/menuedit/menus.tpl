@@ -12,6 +12,18 @@ var answer=confirm(caption)
 if (answer)
 window.location=url
 }
+
+function cut()
+{
+	foo.action.value="cut";
+	foo.submit();
+}
+
+function paste()
+{
+	foo.action.value="paste";
+	foo.submit();
+}
 // -->
 </script>
 
@@ -37,7 +49,12 @@ window.location=url
 | <a href='{VAR:self}?type=add_promo&parent={VAR:parent}' class="fgtitle_link">Lisa promo kast</a>
 <!-- END SUB: CAN_ADD_PROMO -->
  | <a href='#' onClick='window.location.reload()' class="fgtitle_link">V&auml;rskenda</a>
- | <a href='{VAR:import}' class="fgtitle_link">Impordi</a></b>
+ | <a href='{VAR:import}' class="fgtitle_link">Impordi</a>
+ | <a href='javascript:cut()' class="fgtitle_link">Cut</a>
+<!-- SUB: PASTE -->
+ | <a href='javascript:paste()' class="fgtitle_link">Paste</a>
+<!-- END SUB: PASTE -->
+</b>
 </td>
 <td height="15" colspan="11" class="fgtitle_new" valign=center background="images/uus_sinine.gif" align=right><a href='http://www.automatweb.com' target="_new"><img border=0 src='images/jessss1.gif'></a>
 </td>
@@ -62,24 +79,30 @@ window.location=url
 <td align="center" colspan="4" class="title">&nbsp;Tegevus&nbsp;</td>
 <td align="center" class="title">&nbsp;Vali&nbsp;</td>
 </tr>
+<!-- SUB: CUT -->
+fgtext2
+<!-- END SUB: CUT -->
+<!-- SUB: NORMAL -->
+fgtext
+<!-- END SUB: NORMAL -->
 
 <!-- SUB: LINE -->
 <tr>
-<td height="15" class="fgtext" align=center>&nbsp;&nbsp;<a href='menuedit_right.{VAR:ext}?parent={VAR:menu_id}&period={VAR:period}' target='list'><img border=0 src='images/ftv2folderclosed.gif'></a>&nbsp;</td>
-<td height="15" class="fgtext">&nbsp;<a href='menuedit_right.{VAR:ext}?parent={VAR:menu_id}&period={VAR:period}' target='list'>{VAR:name}</a>&nbsp;</td>
-<td class="fgtext" align=center>&nbsp;
+<td height="15" class="{VAR:is_cut}" align=center>&nbsp;&nbsp;<a href='menuedit_right.{VAR:ext}?parent={VAR:menu_id}&period={VAR:period}' target='list'><img border=0 src='images/ftv2folderclosed.gif'></a>&nbsp;</td>
+<td height="15" class="{VAR:is_cut}">&nbsp;<a href='menuedit_right.{VAR:ext}?parent={VAR:r_menu_id}&period={VAR:period}' target='list'>{VAR:name}</a>&nbsp;</td>
+<td class="{VAR:is_cut}" align=center>&nbsp;
 <!-- SUB: NFIRST -->
 <input class='small_button' type=text NAME='ord[{VAR:menu_id}]' VALUE='{VAR:menu_order}' SIZE=2 MAXLENGTH=3><input type='hidden' name='old_ord[{VAR:menu_id}]' value='{VAR:menu_order}'>
 <!-- END SUB: NFIRST -->
 &nbsp;</td>
-<td align="center" class="fgtext">&nbsp;
+<td align="center" class="{VAR:is_cut}">&nbsp;
 <!-- SUB: CAN_ACTIVE -->
 <input type='checkbox' NAME='act[{VAR:menu_id}]' {VAR:menu_active}><input type='hidden' NAME='old_act[{VAR:menu_id}]' VALUE='{VAR:menu_active2}'>
 <!-- END SUB: CAN_ACTIVE -->
 &nbsp;</td>
-<td align="center" class="fgtext" nowrap>&nbsp;{VAR:modifiedby}&nbsp;</td>
-<td align="center" class="fgtext" nowrap>&nbsp;{VAR:modified}&nbsp;</td>
-<td align="center" class="fgtext">&nbsp;
+<td align="center" class="{VAR:is_cut}" nowrap>&nbsp;{VAR:modifiedby}&nbsp;</td>
+<td align="center" class="{VAR:is_cut}" nowrap>&nbsp;{VAR:modified}&nbsp;</td>
+<td align="center" class="{VAR:is_cut}">&nbsp;
 <!-- SUB: PERIODIC -->
 <input type='checkbox' NAME='prd[{VAR:menu_id}]' {VAR:prd1}><input type='hidden' NAME='old_prd[{VAR:menu_id}]' VALUE='{VAR:prd2}'>
 <!-- END SUB: PERIODIC -->
@@ -102,10 +125,10 @@ kustutada?','{VAR:delete}')">Kustuta</a>
 &nbsp;</td>
 <td class="fgtext2">&nbsp;
 <!-- SUB: CAN_ACL -->
-<a href='editacl.{VAR:ext}?oid={VAR:menu_id}&file=menu.xml'>ACL</a>
+<a href='editacl.{VAR:ext}?oid={VAR:r_menu_id}&file=menu.xml'>ACL</a>
 <!-- END SUB: CAN_ACL -->
 &nbsp;</td>
-<td class="fgtext2">&nbsp;<input type='checkbox' NAME='cp[{VAR:menu_id}]' VALUE=1 {VAR:copied}>&nbsp;</td>
+<td class="fgtext2">&nbsp;<input type='checkbox' NAME='sel[{VAR:menu_id}]' VALUE=1>&nbsp;</td>
 </tr>
 <!-- END SUB: LINE -->
 </table>

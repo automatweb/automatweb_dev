@@ -30,6 +30,7 @@ function savemenu() {
 <a href="javascript:show_tab(1)"><B>General</b></a> |
 <a href="javascript:show_tab(2)"><b>Templated</b></a> |
 <a href="javascript:show_tab(3)"><B>Automaatsed tegevused</b></a> |
+<a href="javascript:show_tab(9)"><b>Vaata lisaks</b></a> | 
 <!-- SUB: CAN_BROTHER -->
 <a href="javascript:show_tab(4)"><b>Vennastamine</b></a> |
 <!-- END SUB: CAN_BROTHER -->
@@ -74,7 +75,7 @@ function savemenu() {
 		<td class="fgtext_g" colspan=11><input type='text' NAME='alias' VALUE='{VAR:alias}' size=50></td>
 	</tr>
 	<tr>
-		<td class="title" colspan=11>&nbsp;Mitu viimast dokumenti:&nbsp; <input type='text' NAME='ndocs' VALUE='{VAR:ndocs}' size=3> &nbsp;Number testi k&uuml;simuste jaoks:&nbsp;<input type='text' NAME='number' VALUE='{VAR:number}' size=3></td>
+		<td class="title" colspan=11>&nbsp;Mitu viimast dokumenti:&nbsp; <input type='text' NAME='ndocs' VALUE='{VAR:ndocs}' size=3> &nbsp;Number testi k&uuml;simuste jaoks:&nbsp;<input type='text' NAME='number' VALUE='{VAR:number}' size=3>Laius:&nbsp;<input type='text' NAME='width' VALUE='{VAR:width}' size=3></td>
 	</tr>
 	<tr>
 		<td class="title" >&nbsp;<a href='config.{VAR:ext}?type=sel_icon&rtype=menu_icon&rid={VAR:id}'>AW Ikoon:</a>&nbsp;</td>
@@ -303,6 +304,37 @@ See on vennastatud men&uuml;&uuml;, mille vanem vend asub <a href='menuedit.{VAR
 	<tr>
 		<td class="title">Vali pood:</td>
 		<td class="fgtext_g">&nbsp;<select name='shop' size=10 class='small_button'>{VAR:shop}</select></td>
+	</tr>
+</table>
+</td>
+</tr>
+</table>
+</div>
+
+<div id="xtab9" class="tab">
+<table border="0" cellspacing="0" cellpadding="0" width=680>
+<tr>
+<td bgcolor="#CCCCCC">
+<table border=0 cellspacing=1 cellpadding=1 width=680>
+	<tr>
+		<td class="title" width=10%>&nbsp;ID:&nbsp;</td>
+		<td class="fgtext_g"><b>{VAR:id}</b></td>
+	</tr>
+	<tr>
+		<td class="title">&nbsp;</td>
+		<td class="fgtext_g">&nbsp;</td>
+	</tr>
+	<tr>
+		<td class="title">&nbsp;</td>
+		<td class="fgtext_g"><select MULTIPLE SIZE=20 name="seealso[]">{VAR:seealso}</select></td>
+	</tr>
+	<tr>
+		<td class="title" width=10% nowrap>&nbsp;</td>
+		<td class="fgtext_g">&nbsp;</td>
+	</tr>
+	<tr>
+		<td class="title" width=10% nowrap>&nbsp;<font color="red">Legend:</font>&nbsp;</td>
+		<td class="fgtext_g">&nbsp;Vali men&uuml;&uuml;d mis tulevad vasakule selle men&uuml;&uuml;alla</td>
 	</tr>
 </table>
 </td>
