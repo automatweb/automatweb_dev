@@ -27,8 +27,32 @@
             <group>general</group>
             <caption>Definitsioon</caption>
       </property>
+      <property>
+            <name>property_list</name>
+            <type>callback</type>
+            <callback>callback_gen_property_list</callback>
+            <store>no</store>
+            <group>prplist</group>
+            <caption>Omadused</caption>
+      </property>
+      <property>
+            <name>group_list</name>
+            <type>callback</type>
+            <callback>callback_gen_group_list</callback>
+            <store>no</store>
+            <group>grplist</group>
+            <caption>Grupid</caption>
+      </property>
       <classinfo>
             <corefields>name,comment,status</corefields>
       </classinfo>
+      <groupinfo>
+            <prplist>
+                  <caption>Omadused</caption>
+            </prplist>
+            <grplist>
+                  <caption>Grupid</caption>
+            </grplist>
+      </groupinfo>
 </properties>
 
