@@ -1,8 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.119 2002/09/27 07:11:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.121 2002/10/30 15:34:34 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
-classload("msgboard","aw_style","form_base","file");
 // erinevad dokumentide muutmise templated.
 //  kui soovid uut lisada, siis paned selle kataloogi 
 //  /www/automatweb/public/templates/automatweb/documents
@@ -29,7 +28,7 @@ class document extends aw_template
 		// see on selleks, kui on vaja perioodilisi dokumente naidata
 		$this->period = $period;
 		
-		$this->style_engine = new aw_style;
+		$this->style_engine = get_instance("aw_style");
 		$this->lc_load("document","lc_document");
 		lc_load("definition");
 			
@@ -206,6 +205,11 @@ class document extends aw_template
 	// !Fetces a document from the database
 	function fetch($docid) 
 	{
+		if (is_array($docid))
+		{
+			extract($docid);
+		}
+
 		if (not($this->can("view",$docid)))
 		{
 			$this->data = false;
@@ -700,7 +704,7 @@ class document extends aw_template
 		// this is useless. do we use that code anywhere?
 		if (!(strpos($doc["content"], "#board_last5#") === false))
 		{
-			$mb = new msgboard;
+			$mb = get_instance("msgboard");
 			$doc["content"] = str_replace("#board_last5#",$mb->mk_last5(),$doc["content"]);
 		}
 
@@ -716,8 +720,7 @@ class document extends aw_template
 
 		// noja, mis fucking "undef" see siin on?
 		// damned if I know , v6tax ta 2kki 2ra siis? - terryf 
-		classload("aliasmgr");
-		$al = new aliasmgr();
+		$al = get_instance("aliasmgr");
 
 		if (!isset($text) || $text != "undef") 
 		{
@@ -806,8 +809,7 @@ class document extends aw_template
 
 			// siin tuleb n2idata kasutaja liitumisformi, kuhu saab passwordi ja staffi kribada.
 			// aga aint sel juhul, kui kasutaja on enne t2itnud k6ik miski grupi formid.
-			classload("users");
-			$dbu = new users;
+			$dbu = get_instance("users");
 			if ($qt)
 			{
 				$doc["content"] = preg_replace("/#liitumisform info=&quot;(.*)&quot;#/",$dbu->get_join_form($maat[1]),$doc["content"]);
@@ -874,8 +876,7 @@ class document extends aw_template
 				"num_comments" => sprintf("%d",$num_comments),
 				"comm_link" => $this->mk_my_orb("show_threaded",array("board" => $docid),"forum"),
 			));
-			classload("forum");
-			$forum = new forum();
+			$forum = get_instance("forum");
 			$fr = $forum->add_comment(array("board" => $docid));
 
 			if ($num_comments > 0)
@@ -891,8 +892,7 @@ class document extends aw_template
 		}
 
 		$langs = "";
-		classload("languages");
-		$l = new languages;
+		$l = get_instance("languages");
 		$larr = $l->listall();
 		reset($larr);
 		while (list(,$v) = each($larr))
@@ -1004,8 +1004,7 @@ class document extends aw_template
 		{
 			$lab = unserialize($doc["lang_brothers"]);
 			$langs = "";
-			classload("languages");
-			$l = new languages;
+			$l = get_instance("languages");
 			$larr = $l->listall();
 			reset($larr);
 			while (list(,$v) = each($larr))
@@ -1170,8 +1169,7 @@ class document extends aw_template
 		// should therefore save the changes to archive and not to the document table
 		if (aw_ini_get("archive.use"))
 		{
-			classload("archive");
-			$arc = new archive();
+			$arc = get_instance("archive");
 		};
 
 		if (aw_ini_get("archive.use") && ($data["archive"]) )
@@ -1235,8 +1233,7 @@ class document extends aw_template
 		if ($data["cite"]) {$data["cite"] = trim($data["cite"]);};
 		if ($data["keywords"] || $data["link_keywords"])
 		{
-			classload("keywords");
-			$kw = new keywords;
+			$kw = get_instance("keywords");
 			if ($data["keywords"])
 			{
 				$kw->update_keywords(array(
@@ -1497,8 +1494,7 @@ class document extends aw_template
 			$sar[$arow["parent"]] = $arow["parent"];
 		}
 
-		classload("objects");
-		$ob = new db_objects;
+		$ob = get_instance("objects");
 
 		$this->vars(array("docid" => $id,"sections"		=> $this->multiple_option_list($sar,$ob->get_list())));
 		return $this->parse();
@@ -1732,8 +1728,7 @@ class document extends aw_template
 		// $version indicates that we should load an archived copy of this document
 		if ($version)
 		{
-			classload("archive");
-			$arc = new archive();
+			$arc = get_instance("archive");
 			$document = $arc->checkout(array("oid" => $id,"version" => $version));
 			$addcap = "<span style='color: red'>(arhiivikoopia)</a>";
 		}
@@ -1759,8 +1754,7 @@ class document extends aw_template
 		if ($this->is_template("DOC_BROS"))
 		{
 			$lang_brothers = unserialize($document["lang_brothers"]);
-			classload("languages");
-			$t = new languages;
+			$t = get_instance("languages");
 			$ar = $t->listall();
 			reset($ar);
 			while (list(,$v) = each($ar))
@@ -1811,29 +1805,32 @@ class document extends aw_template
 		$this->vars(array(
 			"aliasmgr_link" => $this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"),
 		));
-		classload("keywords");
-		$kw = new keywords();
+		$kw = get_instance("keywords");
 		$keywords = $kw->get_keywords(array(
 			"oid" => $id,
 		));
 
-		classload("languages");
-		$t = new languages;
+		$t = get_instance("languages");
 
 		$meta = $this->get_object_metadata(array("oid" => $id));
 
-		$conf = new config;
+		$conf = get_instance("config");
 		$df = $conf->get_simple_config("docfolders".aw_global_get("LC"));
 		if ($df != "")
 		{
-			$xml = new xml;
+			$xml = get_instance("xml");
 			$_df = $xml->xml_unserialize(array("source" => $df));
 			$this->vars(array(
 				"docfolders" => $this->picker($oob["parent"],$_df)
 			));
 		}
+		$is_ie = false;
+		if (!(strpos(aw_global_get("HTTP_USER_AGENT"),"MSIE") === false))
+		{
+			$is_ie = true;
+		}
 
-    $this->vars(array("title" => str_replace("\"","&quot;",$document["title"]),
+    $this->vars(array("title" => ($is_ie ? str_replace("\"","&quot;",$document["title"]) : $document["title"]),
 											"jrk1"  => $this->picker($document["jrk1"],$jrk),
 										  "jrk2"  => $this->picker($document["jrk2"],$jrk),
 										  "jrk3"  => $this->picker($document["jrk3"],$jrk),
@@ -1859,9 +1856,9 @@ class document extends aw_template
 											"status"  => $this->option_list($document["status"],array("2" => "Jah","1" => "Ei")),
 											"visible" => $this->option_list($document["visible"],array("1" => "Jah","0" => "Ei")),
 											"keywords"  => $document["keywords"],
-										  "lead"    => str_replace("\"","&quot;",trim($document["lead"])),
+										  "lead"    => ($is_ie ? str_replace("\"","&quot;",trim($document["lead"])) : $document["lead"]),
 											"alias" => $document["alias"],
-											"content" => str_replace("\"","&quot;",trim($document["content"])),
+											"content" => ($is_ie ? str_replace("\"","&quot;",trim($document["content"])) : $document["content"]),
 											"channel"	=> trim($document["channel"]),
 											"nobreaks"	=> $document["nobreaks"],
 											"tm"			=> trim($document["tm"]),
@@ -1927,8 +1924,7 @@ class document extends aw_template
 		$this->read_template("archive.tpl");
 		$this->mk_path(0,"Arhiiv");
 
-		classload("archive");
-		$arc = new archive();
+		$arc = get_instance("archive");
 		$t = new aw_table(array(
 			"prefix" => "mailbox",
 			"tbgcolor" => "#C3D0DC",
@@ -2058,8 +2054,7 @@ class document extends aw_template
 
 			$arc_name = $old["title"];
 
-			classload("archive");
-			$arc = new archive();
+			$arc = get_instance("archive");
 
 			$arc->commit(array(
 				"oid" => $id,
@@ -2103,8 +2098,7 @@ class document extends aw_template
 		$this->mk_path($document["parent"],LC_DOCUMENT_LANG);
 
 		$lang_brothers = unserialize($document["lang_brothers"]);
-		classload("languages");
-		$t = new languages;
+		$t = get_instance("languages");
 		$ar = $t->listall();
 		reset($ar);
 		$first = true;
@@ -2280,8 +2274,7 @@ class document extends aw_template
 				$dcnt++;
 		}
 
-		classload("objects");
-		$ob = new db_objects;
+		$ob = get_instance("objects");
 	 
 		$this->vars(array(
 			"default_doc" => $default_doc,
@@ -2397,14 +2390,12 @@ class document extends aw_template
 			$sar[$arow["parent"]] = $arow["parent"];
 		}
 
-		classload("objects");
-		$ob = new db_objects;
+		$ob = get_instance("objects");
 		$ol = $ob->get_list(true);
 
-		classload("config");
-		$conf = new config;
+		$conf = get_instance("config");
 		$df = $conf->get_simple_config("docfolders".aw_global_get("LC"));
-		$xml = new xml;
+		$xml = get_instance("xml");
 		$_df = $xml->xml_unserialize(array("source" => $df));
 
 		$ndf = array();
@@ -2588,8 +2579,7 @@ class document extends aw_template
 			$ss = "";
 		};
 
-		classload("search_conf");
-		$sc = new search_conf;
+		$sc = get_instance("search_conf");
 		$search_groups = $sc->get_groups();
 		$search_group = $search_groups[$parent];
 
@@ -2972,13 +2962,13 @@ class document extends aw_template
 		extract($arr);
 		$this->read_template("user_docs.tpl");
 
-		$ob = new objects;
+		$ob = get_instance("objects");
 		$obl = $ob->get_list(false,false,$this->cfg["rootmenu"]);
-		$conf = new config;
+		$conf = get_instance("config");
 		$df = $conf->get_simple_config("docfolders".aw_global_get("LC"));
 		if ($df != "")
 		{
-			$xml = new xml;
+			$xml = get_instance("xml");
 			$_df = $xml->xml_unserialize(array("source" => $df));
 		}
 
@@ -3157,8 +3147,7 @@ class document extends aw_template
 
 		// mida me siis teeme? n2itame formi, mis seal muud ikka. formi entry id paneme doku metadatasse ntx. 
 
-		classload("form");
-		$f = new form;
+		$f = get_instance("formgen/form");
 		$f->load($template);
 		$co = $f->gen_preview(array(
 			"entry_id" => $meta["entry_id"],
@@ -3183,8 +3172,7 @@ class document extends aw_template
 			"metadata" => $obj["meta"]
 		));
 
-		classload("form");
-		$f = new form;
+		$f = get_instance("formgen/form");
 		$f->process_entry(array(
 			"id" => $this->get_edit_template($obj["parent"]),
 			"entry_id" => $meta["entry_id"],
@@ -3212,8 +3200,7 @@ class document extends aw_template
 			"metadata" => $obj["metadata"]
 		));
 
-		classload("form");
-		$f = new form;
+		$f = get_instance("formgen/form");
 
 		$tx = $f->show(array(
 			"id" => $f->get_form_for_entry($meta["entry_id"]),
@@ -3221,8 +3208,7 @@ class document extends aw_template
 			"op_id" => $tpl
 		));
 		
-		classload("aliasmgr");
-		$al = new aliasmgr();
+		$al = get_instance("aliasmgr");
 		$al->parse_oo_aliases($docid,&$tx,array());
 
 	}
@@ -3433,8 +3419,7 @@ class document extends aw_template
 	function feedback($arr)
 	{
 		extract($arr);
-		classload("feedback");
-		$feedback = new db_feedback;
+		$feedback = get_instance("feedback");
 		$inf = $this->fetch($section);
 		$this->read_template("feedback.tpl");
 		$this->vars(array(
@@ -3484,9 +3469,8 @@ class document extends aw_template
 	function submit_feedback($arr)
 	{
 		extract($arr);
-		classload("feedback");
 		$inf = $this->fetch($docid);
-		$feedback = new db_feedback;
+		$feedback = get_instance("feedback");
 		$arr["title"] = $inf["title"];
 		$feedback->add_feedback($arr);
 		$this->_log("document", "$eesnimi $perenimi , email:$mail saatis feedbacki", $docid);
@@ -3508,10 +3492,12 @@ class document extends aw_template
 		extract($arr);
 		$dat = $this->get_record("objects","oid",$section);
 		$this->_log("document", "Printis dokumendi $dat[name] ",$section);
-		die($this->gen_preview(array(
+		echo($this->gen_preview(array(
 			"docid" => $section,
 			"tpl" => "print.tpl"
 		)));
+		aw_shutdown();
+		die();
 	}
 
 	function author_docs($author)
@@ -3588,27 +3574,148 @@ class document extends aw_template
 		$obj = $this->get_object($id);
 
 		// doc parent
-		$exp->fetch_and_save_page($this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".$obj["parent"], aw_global_get("lang_id"), true);
+		$exp->fetch_and_save_page($this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".$obj["parent"], $obj["lang_id"], true);
 
 		$exp->exp_reset();
 
 		// doc 
-		$exp->fetch_and_save_page($this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".$id, aw_global_get("lang_id"), true);
+		$exp->fetch_and_save_page($this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".$id, $obj["lang_id"], true);
 		// print doc
-		$exp->fetch_and_save_page($this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".$id."&print=1", aw_global_get("lang_id"), true);
+		$exp->fetch_and_save_page($this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".$id."&print=1", $obj["lang_id"], true);
 		die("<Br><br>Valmis, tagasi dokumendi muutmise juurde saab <a href='".$this->mk_my_orb("change", array("id" => $id))."'>siit</a>");
 	}
 
 	////
 	// !Generates a list of name => type fields for the search engine
-	function _get_s_fields()
+	function search_callback_get_fields(&$fields,$args)
 	{
-		return array(
-			"title" => "textbox",
-			"lead" => "textbox",
-			"author" => "textbox",
-			"content" => "textbox",
+		$fields = array();
+		$fields["name"] = array(
+			"type" => "textbox",
+			"caption" => "Pealkiri",
+			"value" => $args["name"],
 		);
+
+		$fields["lead"] = array(
+			"type" => "textbox",
+			"caption" => "Lead",
+			"value" => $args["lead"],
+		);
+
+		$fields["content"] = array(
+			"type" => "textbox",
+			"caption" => "Sisu",
+			"value" => $args["content"],
+		);
+		
+		$fields["author"] = array(
+			"type" => "textbox",
+			"caption" => "Autor",
+			"value" => $args["author"],
+		);
+
+		$periods = get_instance("periods");
+
+		$mlist = $periods->period_list($args["period"]);
+
+		$fields["period"] = array(
+			"type" => "multiple",
+			"caption" => "Periood",
+			"options" => $mlist,
+			"selected" => $args["period"],
+		);
+
+		$fields["alias"] = "n/a";
+		$fields["class_id"] = "n/a";
+	}
+
+	function search_callback_get_query($args,$parts)
+	{
+		if ($args["lead"])
+		{
+			$parts["lead"] = " documents.lead LIKE '%$args[lead]%' ";
+		};
+		
+		if ($args["author"])
+		{
+			$parts["author"] = " documents.lead LIKE '%$args[author]%' ";
+		};
+		
+		if ($args["content"])
+		{
+			$parts["content"] = " documents.content LIKE '%$args[content]%' ";
+		};
+
+		if (is_array($args["period"]))
+		{
+			$parts["content"] = " documents.period IN (" . join(",",$args["period"]) . ") ";
+		};
+
+		$where = join(" AND ",$parts);
+		$q = "SELECT * FROM documents LEFT JOIN objects ON documents.docid = objects.oid WHERE $where";
+		return $q;
+	}
+
+	function search_callback_modify_data($row,$args)
+	{
+		$url = $this->mk_my_orb("change",array("id" => $row["oid"]),"document");
+		$row["name"] = "<a href='$url'>$row[name]</a>";
+	}
+
+	function docsearch($args = array())
+	{
+		$search = get_instance("search");
+		$this->read_template("docsearch.tpl");
+		$args["clid"] = "document";
+		$os = $this->mk_my_orb("search",array("parent" => $args["parent"]),"search");
+		$url = $this->mk_my_orb("docsearch",array("parent" => $args["parent"]));
+		$this->mk_path($args["parent"],"<a href='$os'>Objektiotsing</a> / <a href='$url'>Dokumentide otsing</a>");
+		$form = $search->show($args);
+		$results = $search->get_results();
+		$this->vars(array(
+			"form" => $form,
+			"reforb" => $this->mk_reforb("docsearch",array("no_reforb" => 1,"search" => 1, "parent" => $args["parent"])),
+			"table" => $results,
+		));
+		return $this->parse();
+	}
+
+	function get_properties($args = array())
+	{
+		$fields = array();
+		$fields["showlead"] = array(
+			"type" => "checkbox",
+			"caption" => "Näita leadi",
+			"value" => $args["showlead"],
+			"store" => "table",
+			"table" => "documents",
+			"idfield" => "docid",
+		);
+		$fields["title_clickable"] = array(
+			"type" => "checkbox",
+			"caption" => "Pealkiri klikitav",
+			"value" => $args["title_clickable"],
+			"store" => "table",
+			"table" => "documents",
+			"idfield" => "docid",
+		);
+		$fields["no_right_pane"] = array(
+			"type" => "checkbox",
+			"caption" => "Ilma parema paanita",
+			"value" => $args["no_right_pane"],
+			"store" => "table",
+			"table" => "documents",
+			"idfield" => "docid",
+		);
+		$fields["is_forum"] = array(
+			"type" => "checkbox",
+			"caption" => "Omab foorumit",
+			"value" => $args["is_forum"],
+			"store" => "table",
+			"table" => "documents",
+			"idfield" => "docid",
+		);
+		return $fields;
 	}
 };
 ?>
