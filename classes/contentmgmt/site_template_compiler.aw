@@ -79,7 +79,7 @@ class site_template_compiler extends aw_template
 	function compile($path, $tpl, $mdefs = NULL, $no_cache = false)
 	{
 		enter_function("site_template_compiler::compile");		
-		$this->tpl_init($path);
+		$this->tpl_init($path, true);
 		$this->no_use_ma_cache = $no_cache;
 		//echo "compiling \$this->read_template($tpl,true)<br>";
 		$success = $this->read_template($tpl,true);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.62 2004/08/13 13:12:12 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.63 2004/08/16 09:52:10 kristo Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -23,7 +23,7 @@ class aw_template extends core
 		}
 	}
 
-	function tpl_init($basedir = "")
+	function tpl_init($basedir = "", $has_top_level_folder = false)
 	{
 		if (!isset($this->cfg) || !is_array($this->cfg))
 		{
@@ -34,9 +34,18 @@ class aw_template extends core
 
 		if (substr($basedir,0,1) != "/" && !preg_match("/^[a-z]:/i", substr($basedir,0,2)))
 		{
-			$this->template_dir = $this->cfg["tpldir"] . "/$basedir";
-			$this->adm_template_dir = $this->cfg["basedir"] . "/templates/$basedir";
-			$this->site_template_dir = $this->cfg["site_tpldir"]."/".$basedir;
+			if ($has_top_level_folder)
+			{
+				$this->template_dir = $this->cfg["site_basedir"] . "/$basedir";
+				$this->adm_template_dir = $this->cfg["basedir"] . "/templates/$basedir";
+				$this->site_template_dir = $this->cfg["site_basedir"]."/".$basedir;
+			}
+			else
+			{
+				$this->template_dir = $this->cfg["tpldir"] . "/$basedir";
+				$this->adm_template_dir = $this->cfg["basedir"] . "/templates/$basedir";
+				$this->site_template_dir = $this->cfg["site_tpldir"]."/".$basedir;
+			}
 		}
 		else
 		{
