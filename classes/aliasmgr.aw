@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.17 2002/01/14 18:30:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.18 2002/01/22 14:48:18 duke Exp $
 
 global $orb_defs;
 $orb_defs["aliasmgr"] = "xml";
@@ -155,6 +155,7 @@ class aliasmgr extends aw_template {
 		$this->defs["menu_chains"] = array(
 				"alias" => "mc",
 				"title" => "menüüpärg",
+				"class_id" => CL_MENU_CHAIN,
 				"generator" => "_menu_chain_aliases",
 				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"menu_chain"),
 				"chlink" => $this->mk_my_orb("change",array(),"menu_chain"),
@@ -164,6 +165,7 @@ class aliasmgr extends aw_template {
 		$this->defs["object_chain"] = array(
 				"alias" => "oc",
 				"title" => "objektipärg",
+				"class_id" => CL_OBJECT_CHAIN,
 				"generator" => "_object_chain_aliases",
 				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"object_chain"),
 				"chlink" => $this->mk_my_orb("change",array(),"object_chain"),
@@ -174,6 +176,7 @@ class aliasmgr extends aw_template {
 				"alias" => "m",
 				"title" => "menüü link",
 				"generator" => "_menu_aliases",
+				"class_id" => CL_PSEUDO,
 				"addlink" => $this->mk_my_orb("add_alias",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"menu"),
 				"chlink" => $this->mk_my_orb("change",array(),"menu"),
 				"field" => "id"
@@ -212,6 +215,157 @@ class aliasmgr extends aw_template {
 	}
 
 	////
+	// !Allows to search for objects to include in the document
+	// intended to replace pickobject.aw
+	function search($args = array())
+	{
+		extract($args);
+		$this->_init_aliases();
+		$this->read_template("search_doc.tpl");
+		                global $s_name, $s_comment,$s_type,$SITE_ID;
+                if ($s_name != "" || $s_comment != "" || $s_type > 0)
+                {
+			$se = array();
+			if ($s_name != "")
+			{
+				$se[] = " objects.name LIKE '%".$s_name."%' ";
+			}
+			if ($s_comment != "")
+			{
+				//$se[] = " objects.comment LIKE '%".$s_comment."%' ";
+			}
+			if ($s_type > 0)
+			{
+				$se[] = " objects.class_id = '".$s_type."' ";
+			}
+			else
+			{
+				$se[] = " objects.class_id IN (".join(",",$this->typearr).") ";
+			}
+
+			$q = "SELECT objects.name as name,objects.oid as oid,objects.class_id as class_id,objects.created as created,objects.createdby as createdby,objects.modified as modified,objects.modifiedby
+as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pobjs.oid = objects.parent AND objects.status != 0 AND (objects.site_id = $SITE_ID OR objects.site_id IS NULL) AND ".join("AND",$se);
+			$this->db_query($q);
+			while ($row = $this->db_next())
+			{
+				$this->vars(array(
+					"name" => $row["name"],
+					"id" => $row["oid"],
+					"type"  => $GLOBALS["class_defs"][$row["class_id"]]["name"],
+					"created" => $this->time2date($row["created"],2),
+					"modified" => $this->time2date($row["modified"], 2),
+					"createdby" => $row["createdby"],
+					"modifiedby" => $row["modifiedby"],
+					"parent_name" => $row["parent_name"],
+					"pick_url" => $this->mk_orb("addalias",array("id" => $docid, "alias" => $row["oid"]),"document"),
+				));
+				$l.=$this->parse("LINE");
+			}
+			$this->vars(array("LINE" => $l));
+		}
+		else
+		{
+			$s_name = "%";
+			$s_comment = "%";
+			$s_type = 0;
+		}
+
+		$tar = array(0 => LC_OBJECTS_ALL);
+		foreach($this->defs as $key => $val)
+		{
+			$clid = $val["class_id"];
+			$tar[$clid] = $GLOBALS["class_defs"][$clid]["name"];
+		}
+		$this->vars(array("docid" => $docid,
+				"s_name"  => $s_name,
+				"s_type"  => $s_type,
+				"s_comment" => $s_comment,
+				"pick_link" => $this->mk_my_orb("pick",array("id" => $docid)),
+				"types" => $this->picker($s_type, $tar)));
+		return $this->parse();
+	}	
+	
+	////
+	// !kasutatakse dokude juurde aliaste lisamiseks
+	//function gen_pick_list($parent,$docid,&$mstring) 
+	function gen_pick_list($args = array()) 
+	{
+		extract($args);
+		$docid = $id;
+		$this->_init_aliases();
+		foreach($this->defs as $key => $val)
+		{
+			$clid = $val["class_id"];
+			$typearr[] = $clid;
+		}
+		$this->tpl_init("automatweb/objects");
+		$parent = 1;
+		if ($parent > 0) 
+		{
+			$parentlist = $this->get_object_chain($parent,true);
+			while(list($p_oid,$p_cap) = each($parentlist)) 
+			{
+				if ($p_oid == $parent) 
+				{
+					$mmap[] = $p_cap["name"];
+				} 
+				else 
+				{
+					$mmap[] = sprintf("<a href='%s?docid=%d&parent=%d'>%s</a>",$PHP_SELF,$docid,$p_oid,$p_cap["name"]);
+				};
+			};
+			$mstring = join(" &gt; ",array_reverse($mmap));
+		};
+
+		$this->read_template("pick.tpl");
+		$this->vars(array("search" => $this->mk_my_orb("search",array("docid" => $docid))));
+		//$this->listall_types($parent,$this->typearr2);
+		$lines = "";
+		$count = 0;
+		while($row = $this->db_next()) 
+		{
+			$count++;
+			$this->vars(array("oid" => $row[oid]));
+			extract($row);
+			// saveme handle, sest count_by_parent vajab handlerit
+      $this->save_handle();
+			$subs = $this->count_by_parent($row[oid],$typearr);
+			print "<pre>";
+			print_r($subs);
+			print "</pre>";
+      $this->restore_handle();
+			// kui selle objekti all on veel elemente, siis saab expandida
+			if ($subs > 0) 
+			{
+				$expandurl = "<a href='$PHP_SELF?type=search&parent=$oid&docid=$docid'><b>+</b></a> ($subs)";
+			} 
+			else 
+			{
+				$expandurl = "($subs)";
+			};
+			$this->vars(array("oid" => $oid,
+						"parent"				=> $parent,
+						"name"					=> $name,
+						"rec"						=> $count,
+						"modifier"			=> $modifiers[$class_id],
+						"modifiedby"		=> $row[modifiedby],
+						"created"				=> $this->time2date($created),
+						"modified"			=> $this->time2date($modified),
+						"class"					=> $GLOBALS["class_defs"][$class_id][name],
+						"docid"					=> $docid,
+						"expandurl"     => $expandurl,
+						"pickurl"				=> (in_array($class_id,$this->typearr) ? "<a href='".$this->mk_orb("addalias",array("id" => $docid, "alias" => $oid),"document")."'>Võta see</a>" : "")));
+			$lines .= $this->parse("line");
+		};
+		$this->vars(array(
+			"line"    => $lines,
+		  "total"   => verbalize_number($count),
+      "parent"  => $parent,
+		  "message" => $message));
+    return $this->parse();
+	}
+
+	////
 	// !This is the main function which lists all the aliases
 	// id(int) - the object (right now only document is supported)
 	// that we will use to display aliases for
@@ -224,6 +378,11 @@ class aliasmgr extends aw_template {
 		$this->sortby = $sortby;
 		$this->sort_order = $sort_order;
 		$this->read_template("lists.tpl");
+		$meta = $this->get_object_metadata(array(
+			"oid" => $id,
+			"key" => "aliaslinks",
+		));
+		$this->aliaslinks = $meta;
 		load_vcl("table");
 
 		$this->t = new aw_table(array(
@@ -269,6 +428,15 @@ class aliasmgr extends aw_template {
 			"align" => "center",
 			"class" => "celltext",
 			//"nowrap" => "1",
+                ));
+		$this->t->define_field(array(
+			"name" => "link",
+			"caption" => "Link",
+			"talign" => "center",
+			"width" => 50,
+			"align" => "center",
+			"class" => "celltext",
+			"nowrap" => "1",
                 ));
 		$this->t->define_field(array(
 			"name" => "modifiedby",
@@ -345,10 +513,23 @@ class aliasmgr extends aw_template {
 			"chlinks" => join("\n",map2("chlinks[%s] = \"%s\";",$this->chlinks)),
 			"dellinks" => join("\n",map2("dellinks[%s] = %s;",$this->dellinks)),
 			"delorb" => $this->mk_my_orb("delete_alias",array("docid" => $this->id),"document"),
+			"reforb" => $this->mk_reforb("submit_list",array("id" => $this->id)),
 			"target_def" => $targets,
 		));
 			
 		return $this->parse();
+	}
+
+	function submit_list($args = array())
+	{
+		extract($args);
+		$this->set_object_metadata(array(
+			"oid" => $id,
+			"key" => "aliaslinks",
+			"value" => $link,
+			"overwrite" => 1,
+		));
+		return $this->mk_my_orb("list_aliases",array("id" => $id));
 	}
 		
 	// 
@@ -775,6 +956,7 @@ class aliasmgr extends aw_template {
 		$this->t->merge_data(array(
 			"title" => $this->defs[$this->def_id]["title"],
 			"check" => sprintf("<input type='checkbox' name='check' value='%d'>",$this->def_id),
+			"link" => sprintf("<input type='checkbox' name='link[%d]' value='1' %s>",$id,$this->aliaslinks[$id] ? "checked" : ""),
 			"icon"	=> sprintf("<img src='%s'>",get_icon_url($this->defs[$this->def_id]["class_id"],"")),
 			"alias" => sprintf("<input type='text' size='5' value='%s' onClick='this.select()' onBlur='this.value=\"%s\"'>",$alias,$alias),
 		));
