@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.4 2001/06/14 08:47:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.5 2001/07/03 08:23:43 duke Exp $
 
-define("PER_PAGE",10);
-define("PER_FLAT_PAGE",20);
-define("TOPICS_PER_PAGE",7);
+define(PER_PAGE,10);
+define(PER_FLAT_PAGE,20);
+define(TOPICS_PER_PAGE,7);
 
 class msgboard extends aw_template
 {
@@ -13,6 +13,47 @@ class msgboard extends aw_template
 		$this->tpl_init("msgboard");
 	}
 
+
+	function submit_votes($args = array())
+	{
+		if (!defined("UID"))
+		{
+			print "sa pole sisse logitud ja ei saa hääletada";
+			return;
+		};
+		classload("users");
+		$u = new users();
+		extract($args);
+		$oldvotes = array();
+		$oldvotes = $u->get_user_config(array(
+						"uid" => UID,
+						"key" => "commentvotes",
+		));
+		if (is_array($vote))
+		{
+			foreach($vote as $key => $val)
+			{
+				$topicvotes = $this->get_object_metadata(array(
+									"oid" => $key,
+									"key" => "votes",
+				));
+				$oldvotes[$key] = $val;
+				$topicvotes["votes"] = $topicvotes["votes"] + 1;
+				$topicvotes["total"] = $topicvotes["total"] + $val;
+				$this->set_object_metadata(array(
+								"oid" => $key,
+								"key" => "votes",
+								"value" => $topicvotes,
+				));
+			};
+		};
+		$u->set_user_config(array(
+					"uid" => UID,
+					"key" => "commentvotes",
+					"value" => $oldvotes,
+		));
+		return;
+	}
 
 	function show($id,$page)
 	{
@@ -420,6 +461,19 @@ class msgboard extends aw_template
 
 	function list_topics()
 	{
+		classload("users");
+		$u = new users();
+		if (defined("UID"))
+		{
+			$votes = $u->get_user_config(array(
+						"uid" => UID,
+						"key" => "commentvotes",
+			));
+		}
+		else
+		{
+			$votes = array();
+		};
 		global $page;
 		$this->read_template("list_topics.tpl");
 
@@ -452,10 +506,30 @@ class msgboard extends aw_template
 		{
 			if ($cnt >= ($page * TOPICS_PER_PAGE) && $cnt <= (($page+1) * TOPICS_PER_PAGE))
 			{
-				$nc = $numcomments[$row[oid]]["cnt"];
-				$lc = $numcomments[$row[oid]]["mtime"];
-				$this->vars(array("topic" => $row[name], "from" => $row[last],"created" => $this->time2date($row[created],2), "text" => str_replace("\n","<br>",$row[comment]),"topic_id" => $row[oid],"cnt" => ( $nc < 1 ? "0" : $nc),
-													"lastmessage" => $this->time2date($lc,2)));
+				$nc = $numcomments[$row["oid"]]["cnt"];
+				$lc = $numcomments[$row["oid"]]["mtime"];
+				// FIXME: We already have the data from the previous query
+				$this->save_handle();
+
+				$votedata = $this->get_object_metadata(array(
+								"oid" => $row["oid"],
+								"key" => "votes",
+				));
+				
+				$this->restore_handle();
+
+				$votecount = ($votedata["votes"]) ? $votedata["votes"] : 1;
+				$this->vars(array(
+						"topic" => $row["name"],
+						"from" => $row["last"],
+						"created" => $this->time2date($row["created"],2), 
+						"text" => str_replace("\n","<br>",$row["comment"]),
+						"topic_id" => $row["oid"],
+						"cnt" => ( $nc < 1 ? "0" : $nc),
+						"rate" => sprintf("%0.2f",$votedata["total"] / $votecount),
+						"color" => ($this->line % 2) ? "#CCCCCC" : "#FFFFFF",
+						"lastmessage" => $this->time2date($lc,2),
+				));
 				// priviligeerimata kasutajad ei nae kustuta linki. praegu kasutan menuediti oigusi selleks 
 				$dt = $this->prog_acl("view",PRG_MENUEDIT) ? $this->parse("DELETE") : "";
 
@@ -466,7 +540,7 @@ class msgboard extends aw_template
 				}
 				else
 				{
-					$tm = $aw_mb_last[$row[oid]];
+					$tm = $aw_mb_last[$row["oid"]];
 					$nnew = $this->db_fetch_field("SELECT count(*) as cnt FROM comments WHERE comments.time >= $tm AND board_id = '".$row[oid]."'","cnt");
 					$nc = $nnew > 0 ? $this->parse("NEW_MSGS") : "";
 				}
@@ -474,11 +548,15 @@ class msgboard extends aw_template
 
 				$this->vars(array("DELETE" => $dt,"NEW_MSGS" => $nc));
 				$l.=$this->parse($this->line & 1 ? "TOPIC_EVEN" : "TOPIC_ODD");
+				if (defined("UID"))
+				{
+					$l .= ($votes[$row["oid"]]) ? $this->parse("ALREADY_VOTED") : $this->parse("VOTE_FOR_TOPIC");
+				};
 				$this->line++;
 			}
 			$cnt++;
 		}
-		$this->vars(array("TOPIC_EVEN" => $l, "TOPIC_ODD" => "", "DELETE" => ""));
+		$this->vars(array("TOPIC_EVEN" => $l));
 		return $this->parse();
 	}
 
@@ -800,9 +878,9 @@ class msgboard extends aw_template
 		setcookie("aw_mb_last",serialize($this->aw_mb_last),time()+24*3600*1000,"/");
 
 		$subj = strpos($subj,"Re:")===false ? "Re: ".$subj : $subj;
-		$comment = join("\r\n",$this->map("> %s",explode("\r\n",wordwrap($comment,33,"\r\n",1))));
+//		$comment = join("\r\n",$this->map("> %s",explode("\r\n",wordwrap($comment,33,"\r\n",1))));
 
-		$this->vars(array("a_subj" => $subj, "a_comment" => $comment,
+		$this->vars(array("a_subj" => $subj, "a_comment" => "",
 											"topic_id" => $id, "msg_id" => $msg ? $msg : 0));
 
 		return $this->parse();
