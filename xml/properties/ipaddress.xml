@@ -1,0 +1,35 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>status</name>
+            <type>status</type>
+            <field>status</field>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>addr</name>
+            <type>textbox</type>
+            <table>ipaddresses</table>
+            <field>ip</field>
+            <group>general</group>
+            <caption>IP Aadress</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_IPADDRESS</syslog_type>
+      </classinfo>
+      <groupinfo>
+            <general>
+                  <caption>Üldine</caption>
+            </general>
+      </groupinfo>
+      <tableinfo>
+            <ipaddresses>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>id</master_index>
+            </ipaddresses>
+      </tableinfo>
+</properties>
+

@@ -122,6 +122,55 @@
             <method>serialize</method>
             <caption>Tegevused</caption>
       </property>
+      <property>
+            <name>ip_save_folder</name>
+            <type>select</type>
+            <group>ipfilter</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kataloog, kuhu salvestatakse IP aadressid</caption>
+      </property>
+      <property>
+            <name>ip_block_folders</name>
+            <type>select</type>
+            <multiple>1</multiple>
+            <group>ipfilter</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Blokeeritavate aadresside kataloogid</caption>
+      </property>
+      <property>
+            <name>ip_block_folders_subs</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <group>ipfilter</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kas n&amp;auml;idata ka alamkataloogid</caption>
+      </property>
+      <property>
+            <name>ip_allow_folders</name>
+            <type>select</type>
+            <multiple>1</multiple>
+            <group>ipfilter</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>N&amp;auml;idatavate aadresside kataloogid</caption>
+      </property>
+      <property>
+            <name>ip_allow_folders_subs</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <group>ipfilter</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kas n&amp;auml;idata ka alamkataloogid</caption>
+      </property>
       <groupinfo>
             <general>
                   <caption>Üldine</caption>
@@ -135,13 +184,9 @@
             <combo>
                   <caption>Kombineeritud</caption>
             </combo>
+            <ipfilter>
+                  <caption>IPfilter</caption>
+            </ipfilter>
       </groupinfo>
-      <tableinfo>
-            <kliendibaas_contact>
-                  <index>oid</index>
-                  <master_table>objects</master_table>
-                  <master_index>oid</master_index>
-            </kliendibaas_contact>
-      </tableinfo>
 </properties>
 

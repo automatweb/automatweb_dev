@@ -47,6 +47,24 @@
             <caption>Kuni</caption>
       </property>
       <property>
+            <name>def_span</name>
+            <type>select</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>M&amp;auml;&amp;auml;ratud vahemik</caption>
+      </property>
+      <property>
+            <name>g_default_tab</name>
+            <type>select</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Default tab</caption>
+      </property>
+      <property>
             <name>save_as_obj</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
@@ -65,6 +83,74 @@
             <group>general</group>
             <caption>Log objekti nimi</caption>
       </property>
+      <property>
+            <name>lock_q</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Lukusta objektide salvestamine</caption>
+      </property>
+      <property>
+            <name>lock_filter</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Lukusta p&amp;auml;ringu tegemine</caption>
+      </property>
+      <property>
+            <name>bg_queries</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Cache p&amp;auml;ringud taustal</caption>
+      </property>
+      <property>
+            <name>rerun_queries_at</name>
+            <type>objpicker</type>
+            <clid>CL_REPEATER_OBJ</clid>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Cache uueneb automaatselt vastavalt kordusele</caption>
+      </property>
+      <property>
+            <name>rerun_queries</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Uuenda p&amp;auml;ringute&amp;nbsp;cache kohe</caption>
+      </property>
+      <property>
+            <name>bg_query_status</name>
+            <type>text</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Tausta p&amp;auml;ringute staatus</caption>
+      </property>
+      <property>
+            <name>bg_query_created</name>
+            <type>text</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Cache viimati muudetud</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_DRONLINE</syslog_type>
       </classinfo>
@@ -74,11 +160,11 @@
             </general>
       </groupinfo>
       <tableinfo>
-            <kliendibaas_contact>
-                  <index>oid</index>
+            <dronline_bg_status>
+                  <index>id</index>
                   <master_table>objects</master_table>
-                  <master_index>oid</master_index>
-            </kliendibaas_contact>
+                  <master_index>id</master_index>
+            </dronline_bg_status>
       </tableinfo>
 </properties>
 

@@ -46,6 +46,10 @@ function setLink(li,title)
 <td class="plain"><input type="checkbox" name="autologin" value='1' {VAR:autologin}></td>
 </tr>
 <tr bgcolor="#C9EFEF">
+<td class="plain">IP Aadressite default kataloog:</td>
+<td class="plain"><select name='ipp'>{VAR:ipp}</select></td>
+</tr>
+<tr bgcolor="#C9EFEF">
 <td class="plain" colspan=2><input type='submit' value='Salvesta'></td>
 </tr>
 <tr bgcolor="#C9EFEF">

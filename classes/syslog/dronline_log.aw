@@ -32,7 +32,7 @@ class dronline_log extends class_base
 			'cur_range' => $ob['meta']['cur_range']
 		));
 
-		return $ret;
+		return $ob['meta']['conf_desc'].$ret;
 	}
 
 	////
@@ -80,20 +80,9 @@ class dronline_log extends class_base
 		return $this->show(array('id' => $alias['target']));
 	}
 
-	////
-	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
 	function show($arr)
 	{
-		extract($arr);
-		$ob = $this->get_object($id);
-
-		$this->read_template('show.tpl');
-
-		$this->vars(array(
-			'name' => $ob['name']
-		));
-
-		return $this->parse();
+		return $this->change($arr);
 	}
 }
 ?>

@@ -1,9 +1,10 @@
-<table border='0' cellpadding='0' cellspacing='0'>
-<tr>
-<form action='orb.{VAR:ext}' method="GET" name="selrange">
-<td><a href='javascript:document.selrange.submit()'><img src='{VAR:baseurl}/automatweb/images/icons/save.gif' border='0'></a></td>
-<td><select name='cur_range'>{VAR:ranges}</select></td>
-</tr>
-{VAR:reforb}
-</form>
-</table>
+<span class="awtabseltext">
+<!-- SUB: RANGE -->
+<a href='{VAR:range_url}'>{VAR:range}</a>
+<!-- SUB: RANGE -->
+
+<!-- SUB: SEL_RANGE -->
+<a href='{VAR:range_url}'><font color="#000000">{VAR:range}</font></a>
+<!-- SUB: SEL_RANGE -->
+
+</span>

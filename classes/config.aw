@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.41 2003/01/02 15:33:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.42 2003/01/16 16:51:59 kristo Exp $
 
 class db_config extends aw_template 
 {
@@ -462,12 +462,15 @@ class config extends db_config
 		$bt = $this->get_simple_config("bugtrack_developergid");
 		$btadm = $this->get_simple_config("bugtrack_admgid");
 		$al = $this->get_simple_config("useradd::autologin");
+		$ipp = $this->get_cval("ipaddresses::default_folder");
 
 		$fb = get_instance("formgen/form_base");
 		$ops = $fb->get_op_list($if);
 
 		$us = get_instance("users");
 
+		$ob_i = get_instance("objects");
+		
 		$this->vars(array(
 			"favicon" => "<img src='".$this->mk_my_orb("favicon", array(),"config", false,true)."'>",
 			"after_login" => $al,
@@ -481,6 +484,7 @@ class config extends db_config
 			"reforb" => $this->mk_reforb("submit_loginaddr"),
 			"autologin" => checked($al),
 			"cfgform_link" => $this->mk_my_orb("class_cfgforms",array()),
+			"ipp" => $this->picker($ipp, $ob_i->get_list())
 		));
 		return $this->parse();
 	}
@@ -1526,6 +1530,7 @@ class config extends db_config
 		$this->set_simple_config("bugtrack_developergid",$bt_gid);
 		$this->set_simple_config("bugtrack_admgid",$bt_adm);
 		$this->set_simple_config("useradd::autologin",$autologin);
+		$this->set_simple_config("ipaddresses::default_folder",$ipp);
 
 		// if favicon was uploaded, handle it. 
 		global $favicon;
