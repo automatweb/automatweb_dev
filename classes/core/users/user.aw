@@ -1766,6 +1766,5 @@ class user extends class_base
     	));
     	return $groups->begin();
 	}
-
 }
 ?>
