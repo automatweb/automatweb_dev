@@ -10,12 +10,19 @@ class basket_users extends basket
 	function add($arr)
 	{
 		extract($arr);
-		$this->mk_path($parent,"Lisa kasutaja tellimuste nimekiri");
+		if ($return_url != "")
+		{
+			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Lisa kasutaja tellimuste nimekiri");
+		}
+		else
+		{
+			$this->mk_path($parent,"Lisa kasutaja tellimuste nimekiri");
+		}
 		$this->read_template("add_uo_list.tpl");
 
 		$this->vars(array(
 			"baskets" => $this->picker(0,$this->list_objects(array("class" => CL_SHOP_BASKET, "addempty" => true))),
-			"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "alias_doc" => $alias_doc))
+			"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "alias_to" => $alias_to,"return_url" => $return_url))
 		));
 		return $this->parse();
 	}
@@ -39,9 +46,9 @@ class basket_users extends basket
 			));
 		}
 
-		if ($alias_doc)
+		if ($alias_to)
 		{
-			$this->add_alias($alias_doc, $id);
+			$this->add_alias($alias_to, $id);
 		}
 
 		$this->set_object_metadata(array(
@@ -50,20 +57,27 @@ class basket_users extends basket
 				"basket" => $basket,
 			)
 		));
-		return $this->mk_my_orb("change", array("id" => $id));
+		return $this->mk_my_orb("change", array("id" => $id, "return_url" => urlencode($return_url)));
 	}
 
 	function change($arr)
 	{
 		extract($arr);
 		$ob = $this->get_basket($id);
-		$this->mk_path($ob["parent"], "Muuda kasutaja tellimuste nimekirja");
+		if ($return_url != "")
+		{
+			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Muuda kasutaja tellimuste nimekirja");
+		}
+		else
+		{
+			$this->mk_path($ob["parent"], "Muuda kasutaja tellimuste nimekirja");
+		}
 		$this->read_template("add_uo_list.tpl");
 
 		$this->vars(array(
 			"name" => $ob["name"],
 			"baskets" => $this->picker($ob["meta"]["basket"],$this->list_objects(array("class" => CL_SHOP_BASKET, "addempty" => true))),
-			"reforb" => $this->mk_reforb("submit", array("id" => $id))
+			"reforb" => $this->mk_reforb("submit", array("id" => $id, "return_url" => urlencode($return_url)))
 		));
 
 		return $this->parse();
