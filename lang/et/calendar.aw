@@ -1,8 +1,9 @@
 <?php
-define("CAL_DAY","Päev");
-define("CAL_WEEK","Nädal");
-define("CAL_MONTH","Kuu");
-define("CAL_OVERVIEW","Ülevaade");
+global $lc_calendar;
 
-define("CAL_CH_TITLE","Muuda kalendrit");
+$lc_calendar["LC_CALENDAR_TODAY"]="Täna";
+$lc_calendar["LC_CALENDAR_LAST"]="Eelmine";
+$lc_calendar["LC_CALENDAR_WEEK"]="nädal";
+$lc_calendar["LC_CALENDAR_NEXT"]="Järgmine";
+$lc_calendar["LC_CALENDAR_YEAR"]="Aasta";
 ?>

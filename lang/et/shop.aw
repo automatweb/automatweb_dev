@@ -68,4 +68,46 @@ $lc_shop["LC_SHOP_BLUE"] = "sinine";
 
 $lc_shop["LC_SHOP_SHOW_FREE"] = "N&auml;ita kauba tellimusi";
 $lc_shop["LC_SHOP_NUMP_EQ"] = "Reisijate arvu valem";
+
+$lc_shop["LC_SHOP_DEFAULT_CUR"] = "Vaikimisi valuuta";
+
+$lc_shop["LC_SHOP_NAME"] = "Nimi";
+$lc_shop["LC_SHOP_CHOOSE_TYPE"] = "Vali tüüp";
+$lc_shop["LC_SHOP_NEXT"] = "Edasi";
+$lc_shop["LC_SHOP_TARGET"] = "Sihtkoht";
+$lc_shop["LC_SHOP_TOT_TO"] = "Kogukäive";
+$lc_shop["LC_SHOP_TOT_ORD"] = "Kokku tellimusi";
+$lc_shop["LC_SHOP_ORD_AV"] = "Keskmine tellimus";
+$lc_shop["LC_SHOP_DET_STAT"] = "Detailne statistika";
+$lc_shop["LC_SHOP_BY_DAYS"] = "Päevade kaupa";
+$lc_shop["LC_SHOP_BY_MONTHS"] = "Kuude kaupa";
+$lc_shop["LC_SHOP_BY_WEEKDAYS"] = "Nädalapäevade kaupa";
+$lc_shop["LC_SHOP_BY_HOURS"] = "Tundide kaupa";
+$lc_shop["LC_SHOP_SHOW"] = "Näita";
+$lc_shop["LC_SHOP_MONTH"] = "Kuu";
+$lc_shop["LC_SHOP_ORDERED_ITEMS"] = "Tellitud";
+$lc_shop["LC_SHOP_TOTAL"] = "Kokku";
+$lc_shop["LC_SHOP_IS"] = "on";
+$lc_shop["LC_SHOP_GREEN"] = "roheline";
+$lc_shop["LC_SHOP_RED"] = "punane";
+$lc_shop["LC_SHOP_AVERAGE"] = "keskmine";
+$lc_shop["LC_SHOP_NUMB_OF_ORDERS"] = "ja tellimuste arv on";
+$lc_shop["LC_SHOP_BLUE"] = "sinine";
+$lc_shop["LC_SHOP_HOUR"] = "Tund";
+$lc_shop["LC_SHOP_WEEKDAY"] = "Nädalapäev";
+$lc_shop["LC_SHOP_BY_CAT"] = "Kategooriate kaupa";
+$lc_shop["LC_SHOP_PERIOD"] = "Periood";
+$lc_shop["LC_SHOP_START"] = "Algus";
+$lc_shop["LC_SHOP_END"] = "Lõpp";
+$lc_shop["LC_SHOP_RESERVED"] = "Reserveeritud";
+$lc_shop["LC_SHOP_FREE"] = "Vabu";
+$lc_shop["LC_SHOP_CHOOSE_TARGETS"] = "Vali sihtkohad (kui need ";
+$lc_shop["LC_SHOP_TO_STAT"] = "Käibe statistika";
+$lc_shop["LC_SHOP_CHOOSE_FORMULA"] = "Vali hinnavalem (kui see on erinev kauba tüübi juures defineeritust)";
+$lc_shop["LC_SHOP_CHOOSE_Q_FORM"] = "Vali koguse vorm (kui see on erinev kauba tüübi juures defineeritust)";
+$lc_shop["LC_SHOP_IP"] = "IP aadress";
+$lc_shop["LC_SHOP_MARK_PAID"] = "Märgi makstuks";
+$lc_shop["LC_SHOP_ORDER_PAID"] = "Broneering on tasutud";
+
+
 ?>

@@ -1,8 +1,9 @@
 <?php
-define("CAL_DAY","Day");
-define("CAL_WEEK","Week");
-define("CAL_MONTH","Month");
-define("CAL_OVERVIEW","Overview");
+global $lc_calendar;
 
-define("CAL_CH_TITLE","Change calendar");
+$lc_calendar["LC_CALENDAR_TODAY"]="Today";
+$lc_calendar["LC_CALENDAR_LAST"]="Last";
+$lc_calendar["LC_CALENDAR_WEEK"]="week";
+$lc_calendar["LC_CALENDAR_NEXT"]="Next";
+$lc_calendar["LC_CALENDAR_YEAR"]="Year";
 ?>

@@ -1,5 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/lang/en/messenger.aw,v 1.2 2001/07/16 06:01:42 kristo Exp $
+
+global $lc_messenger;
+// $Header: /home/cvs/automatweb_dev/lang/en/messenger.aw,v 1.3 2001/07/26 16:54:26 kristo Exp $
 // messenger.aw - Messengeri lokaliseeringud
 
 // väljad otsinguvormis
@@ -12,4 +14,11 @@ define("MSG_CONNECTOR_AND"," and ");
 define("MSG_CONNECTOR_OR", " or ");
 
 define("MSG_SEARCH_REMARK","Mark folders You wish to search from");
+
+$lc_messenger["LC_MESSENGER_FROM"] = "From";
+$lc_messenger["LC_MESSENGER_SUBJECT"] = "Subject";
+$lc_messenger["LC_MESSENGER_TIME"] = "Time";
+$lc_messenger["LC_MESSENGER_STATUS"] = "Status";
+$lc_messenger["LC_MESSENGER_NEW_MESSAGE"] = "New message";
+
 ?>

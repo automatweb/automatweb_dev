@@ -51,4 +51,32 @@ $lc_graph["LC_GRAPH_DATA"] = "Data";
 $lc_graph["LC_GRAPH_VALUES"] = "Values";
 $lc_graph["LC_GRAPH_REPRE"] = "Represents";
 
+$lc_graph["LC_GRAPH_CHOOSE_FILE"] = "Choose file";
+$lc_graph["LC_GRAPH_DEFAULT_SETTINGS"] = "Graph default settings";
+$lc_graph["LC_GRAPH_CLOSE_THIS_WINDOW"] = "Close the window";
+
+$lc_graph["LC_GRAPH_TO_CONFIG"] = "Config";
+
+$lc_graph["LC_GRAPH_TABLES"] = "Tables";
+$lc_graph["LC_GRAPH_SMALL_DATA"] = "data";
+
+$lc_graph["LC_GRAPH_INSERT_DATA_BY_SEP_COMMA"] = "Insert data by separating them by commas";
+$lc_graph["LC_GRAPH_CANT_INSERT_NEG_VALUES"] = "Can't insert negative values";
+$lc_graph["LC_GRAPH_UPLOAD_CSV"] = "Upload CSV file for graph data";
+$lc_graph["LC_GRAPH_COLOR"] = "Color";
+
+$lc_graph["LC_GRAPH_FIRST_LINE_COLOR"] = "First line color";
+$lc_graph["LC_GRAPH_SECOND_LINE_COLOR"] = "Second line color";
+$lc_graph["LC_GRAPH_SELECTED"] = "Selected";
+
+$lc_graph["LC_GRAPH_CONFIG"] = "Config";
+$lc_graph["LC_GRAPH_GRAPHS"] = "GRAPHS";
+$lc_graph["LC_GRAPH_DELETE"] = "Delete";
+$lc_graph["LC_GRAPH_ADD"] = "Add";
+$lc_graph["LC_GRAPH_DERSCRIPTION"] = "Description";
+$lc_graph["LC_GRAPH_ACTIVITY"] = "Action";
+$lc_graph["LC_GRAPH_ALL"] = "All";
+$lc_graph["LC_GRAPH_CHANGE"] = "Change";
+$lc_graph["LC_GRAPH_LOOK"] = "Watch";
+
 ?>

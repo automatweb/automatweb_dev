@@ -9,4 +9,297 @@ $lc_form["LC_FORM_INPUT"] = "Entry";
 $lc_form["LC_FORM_SEARCH"] = "Search";
 $lc_form["LC_FORM_RESEARCH"] = "Rating";
 $lc_form["LC_FORM_BASE"] = "Base form:";
+
+$lc_form["LC_FORMS_EMAIL"]="E-mail";
+
+$lc_form["LC_FORMS_AFTER_FILLING_FORM_IF"]="after filling a form if in checkbox";
+$lc_form["LC_FORMS_USER_WHOS_EMAIL"]="user whos e-mail is in textbox";
+$lc_form["LC_FORMS_AND_NAME_IN_CHECKBOX"]="and name in textbox";
+$lc_form["LC_FORMS_IS_MARK_ADD_TO_LIST"]="is mark, add to list";
+
+$lc_form["LC_FORMS_NAME"]="Name";
+$lc_form["LC_FORMS_DISCRIPTION"]="Description";
+$lc_form["LC_FORMS_ALL"]="All";
+
+$lc_form["LC_FORMS_BIG_ACTIONS"]="ACTIONS";
+$lc_form["LC_FORMS_ADD"]="Add";
+$lc_form["LC_FORMS_ACTION"]="Action";
+$lc_form["LC_FORMS_CHANGE"]="Change";
+$lc_form["LC_FORMS_DELETE"]="Delete";
+
+$lc_form["LC_FORMS_COMMENT"]="Commentary";
+$lc_form["LC_FORMS_TYPE"]="Type";
+$lc_form["LC_FORMS_SEND_FORM_TO_EMAIL_AFTER_FILLING"]="After filling send form to e-mail";
+$lc_form["LC_FORMS_MOVE_FORM_ENTRIES_OTHER_CATEGORY"]="Move form entries to other category";
+$lc_form["LC_FORMS_ESPOUSE_MAILLIST"]="Join with mailinglist";
+
+$lc_form["LC_FORMS_FILL_ONE_TIME"]="Filled once";
+$lc_form["LC_FORMS_CHOOSE_FORMS"]="Choose forms";
+$lc_form["LC_FORMS_ORDER"]="Order";
+$lc_form["LC_FORMS_AFTER_FILLING_GO_FORWARD"]="After filling go forward";
+$lc_form["LC_FORMS_IMPORT_ENTRIES"]="Import entries";
+$lc_form["LC_FORMS_ENTRIES"]="Entries";
+
+$lc_form["LC_FORMS_ADD_NEW_ELEMENT"]="Add new element";
+$lc_form["LC_FORMS_CHOOSE_CATALOGUE_WHERE_ADD_ELEMENT"]="Choose catalogue where should place the element";
+$lc_form["LC_FORMS_ELEMENT_NAME"]="Element name";
+$lc_form["LC_FORMS_ADD_EXISTING_ELEMENT"]="Add exiting element";
+$lc_form["LC_FORMS_CHOOSE_ELEMENT"]="Choose element";
+$lc_form["LC_FORMS_SEARCH"]="Search";
+
+$lc_form["LC_FORMS_CHOOSE_TABLE_STYLE"]="Choose table style";
+$lc_form["LC_FORMS_CHOOS_SUBFORM"]="Choose baseform";
+$lc_form["LC_FORMS_ADMIN"]="Administer";
+
+$lc_form["LC_FORMS_HOW_MANY_COLUMNS"]="How many columns";
+$lc_form["LC_FORMS_TABLE_STYLE"]="Table style";
+$lc_form["LC_FORMS_TABLE_STYLE_ORDINARY"]="Title style common";
+$lc_form["LC_FORMS_TABLE_STYLE_POSS_SORT"]="Title style sortable";
+$lc_form["LC_FORMS_TABLE_STYLE_SORTED"]="Title style sorted";
+$lc_form["LC_FORMS_CELL_STYLE_1"]="Celli styte 1";
+$lc_form["LC_FORMS_CELL_STYLE_2"]="Celli style 2";
+$lc_form["LC_FORMS_SORTED_CELL_SYLE_1"]="Sorted cell style 1";
+$lc_form["LC_FORMS_SORTED_CELL_SYLE_2"]="Sorted cell style 2";
+$lc_form["LC_FORMS_CHOOSE_FORMS_WHERE_ELEMENTS_TAKEN"]="Choose forms where elements are taken";
+$lc_form["LC_FORMS_CHOOSE_CATALOGUES_WHERE_ENTRIES"]="Choose catalogues where entries can move";
+$lc_form["LC_FORMS_TEXT"]="Text";
+$lc_form["LC_FORMS_SUBSMIT_BUTTON"]="Submit button";
+$lc_form["LC_FORMS_UP"]="up";
+$lc_form["LC_FORMS_DOWN"]="  down  ";
+$lc_form["LC_FORMS_ADD_BUTTON"]="Add button";
+$lc_form["LC_FORMS_ADDRESS"]="Address";
+$lc_form["LC_FORMS_CHOOSE_WHICH_COUMN_ELEMENT"]="Chose in which column the element locates";
+$lc_form["LC_FORMS_COLUMN"]="Column";
+$lc_form["LC_FORMS_CHANGING"]="Changing";
+$lc_form["LC_FORMS_LOOKING"]="Looking";
+$lc_form["LC_FORMS_CREATED"]="Created";
+$lc_form["LC_FORMS_CHANGED"]="Changed";
+$lc_form["LC_FORMS_ACTIVITY"]="Activity";
+$lc_form["LC_FORMS_CHANGING_POSITION"]="Changing position";
+$lc_form["LC_FORMS_COLUMN_TITLE"]="Column title";
+$lc_form["LC_FORMS_SORTABLE"]="Sortable";
+$lc_form["LC_FORMS_CHANGER"]="Changer";
+
+$lc_form["LC_FORMS_MAKE_OUTPUT"]="Compose output";
+$lc_form["LC_FORMS_EXPLONATION"]="Explanation";
+
+$lc_form["LC_FORMS_BIG_ELEMENTS"]="ELEMENTS";
+$lc_form["LC_FORMS_SAVE"]="Save";
+$lc_form["LC_FORMS_SETTINGS"]="Settings";
+$lc_form["LC_FORMS_STYLES"]="Stytes";
+$lc_form["LC_FORMS_SMALL_ACTIONS"]="Actions";
+$lc_form["LC_FORMS_CONTROLLERS"]="Controllers";
+
+$lc_form["LC_FORMS_FORM_WHERE_ELEMENT_IS_TAKEN"]="Form in which element is taken";
+$lc_form["LC_FORMS_ELEMENT_FROM_FORM"]="Element from form";
+$lc_form["LC_FORMS_ORDINARY_TEXT"]="Common text";
+$lc_form["LC_FORMS_TEXTBOX"]="Textibox";
+$lc_form["LC_FORMS_MULTILINE_TEXT"]="Multiline text";
+$lc_form["LC_FORMS_ADDING_FILE"]="Adding file";
+$lc_form["LC_FORMS_HYPERLINK"]="Hyperlink";
+$lc_form["LC_FORMS_BUTTON"]="Button";
+$lc_form["LC_FORMS_PRICE"]="Price";
+$lc_form["LC_FORMS_DATE"]="Date";
+$lc_form["LC_FORMS_DELETE_THIS_ELEMENT"]="Delete this element";
+$lc_form["LC_FORMS_SUBTYPE"]="Subtype";
+$lc_form["LC_FORMS_TYPE_NAME"]="Type name";
+$lc_form["LC_FORMS_SORTING"]="Sorting";
+$lc_form["LC_FORMS_BY_ORDER"]="By order";
+$lc_form["LC_FORMS_BY_ALPHABET"]="By alphabet";
+$lc_form["LC_FORMS_IMPORT"]="Import";
+$lc_form["LC_FORMS_IS_MARKED_ELEMENTS"]="Will marked elements";
+$lc_form["LC_FORMS_WILL_BE_DELETED"]="Deleted";
+$lc_form["LC_FORMS_ADDING_NEW"]="Add new";
+$lc_form["LC_FORMS_SIZE"]="Size";
+$lc_form["LC_FORMS_WITDH"]="Width";
+$lc_form["LC_FORMS_HIGHT"]="Heigth";
+$lc_form["LC_FORMS_ORIGINAL_TEXT"]="Original text";
+$lc_form["LC_FORMS_FROM_YEAR_TO_YEAR"]="From what year to what year";
+$lc_form["LC_FORMS_DISPLAYING"]="Displaying";
+$lc_form["LC_FORMS_AS_A_PICTURE"]="as picture";
+$lc_form["LC_FORMS_LINKED_AS_FILE"]="linked as file";
+$lc_form["LC_FORMS_DISPLAY_NOW"]="display now";
+$lc_form["LC_FORMS_MAKING_ALIAS"]="make alias";
+$lc_form["LC_FORMS_LINK_TEXT"]="Link text";
+$lc_form["LC_FORMS_DESCRIBE_TEXT"]="Description text";
+$lc_form["LC_FORMS_GROUP"]="Group";
+$lc_form["LC_FORMS_ORIGINALLY_SELECTED"]="Originally selected";
+$lc_form["LC_FORMS_LENGTH"]="Lenght";
+$lc_form["LC_FORMS_OUTPUT"]="Output";
+$lc_form["LC_FORMS_TEXT_ON_BUTTON"]="Text on button";
+$lc_form["LC_FORMS_DEFAULT_PRICE"]="Default price";
+$lc_form["LC_FORMS_WHICH_CURRENCY_PRICE_SAVED"]="In which currency is price inserted";
+$lc_form["LC_FORMS_WHICH_CURRENCY_SHOW_PRICE"]="In which currency is price also displayed";
+$lc_form["LC_FORMS_PRICE_SEPARATOR"]="Price separator";
+$lc_form["LC_FORMS_DISTANCE_FROM_ELEMENT"]="Distance from element";
+$lc_form["LC_FORMS_TEXT_POSITION"]="Text position";
+$lc_form["LC_FORMS_BIG_UP"]="In up";
+$lc_form["LC_FORMS_BIG_DOWN"]="In down";
+$lc_form["LC_FORMS_IN_LEFT"]="In left";
+$lc_form["LC_FORMS_IN_RIGHT"]="In right";
+$lc_form["LC_FORMS_CHANGE_ELEMENT_POSITION"]="Change element position";
+$lc_form["LC_FORMS_AFTER_ELEMENT"]="After element";
+$lc_form["LC_FORMS_ROW_EXCHANGE"]="rowchange";
+$lc_form["LC_FORMS_PIXELS"]="pixels";
+$lc_form["LC_FORMS_SHOULD_BE_FILLED"]="Must be filled";
+$lc_form["LC_FORMS_ERROR_NOTE"]="Error message";
+
+$lc_form["LC_FORMS_ELEMENT_TEXT"]="Element text";
+$lc_form["LC_FORMS_ELEMENT_TYPE"]="Element type";
+$lc_form["LC_FORMS_ELEMENT_MAX_LENGTH"]="Element max length";
+$lc_form["LC_FORMS_ELEMENT_MIN_LENGTH"]="Element min length";
+$lc_form["LC_FORMS_CAN_INSERT_ONLY"]="Can insert only";
+$lc_form["LC_FORMS_EMAIL_ADDRESS"]="E-maili address";
+$lc_form["LC_FORMS_NUMBERS"]="Numbers";
+$lc_form["LC_FORMS_LETTERS"]="Letters";
+$lc_form["LC_FORMS_ELEMENT_IS_REQUIRED"]="Element is oblicatory";
+$lc_form["LC_FORMS_DELETE_THIS_ELEMENT"]="Delete this element";
+$lc_form["LC_FORMS_DISPLAYING_NOW"]="desplay now";
+$lc_form["LC_FORMS_HOW_MANY_LETTERS_WIDE"]="How many letters wide";
+$lc_form["LC_FORMS_HOW_MANY_LETTER_HIGTH"]="How many lettersize";
+$lc_form["LC_FORMS_IN_LIST"]="On list";
+$lc_form["LC_FORMS_ELEMENT_FROM_FORM"]="Element taken from form";
+$lc_form["LC_FORMS_WHICH_OF_SELECTED_FORM"]="Which of choosen form";
+$lc_form["LC_FORMS_CHOOSEN_ELEMENT_TYPE"]="Choosed element type";
+$lc_form["LC_FORMS_TEXT_BOX"]="Textbox";
+$lc_form["LC_FORMS_CHOOSE_STYLE"]="Choose style";
+$lc_form["LC_FORMS_CHOOSE_CALALOGUE_WHERE_MOVE_ELEMENT"]="Choose catalogue where element should move";
+$lc_form["LC_FORMS_CHOOSE_ELEMENT_TYPE_WHAT_ADD"]="Choose element type what should be add";
+
+$lc_form["LC_FORMS_BIG_CATEGORYS"]="CATEGORIES";
+$lc_form["LC_FORMS_ADD_CATEGORY"]="Add catagory";
+$lc_form["LC_FORMS_CHOOSE_DEFAULT_STYLE"]="Choose default style";
+$lc_form["LC_FORMS_FORMS"]="FORMS";
+$lc_form["LC_FORMS_EXPORT"]="Eksport";
+$lc_form["LC_FORMS_CUT"]="Cut";
+$lc_form["LC_FORMS_FILL"]="Fill";
+$lc_form["LC_FORMS_FILLED_FORMS"]="Filled forms";
+$lc_form["LC_FORMS_TOIMETA"]="Administrate";
+$lc_form["LC_FORMS_OUTPUTS"]="Output";
+
+$lc_form["LC_FORMS_ELEMENT"]="Element";
+$lc_form["LC_FORMS_STYLE"]="Style";
+
+$lc_form["LC_FORMS_CHOOSE_CAT_WHERE_IS_ELEMENT"]="Choose catalogue where element situates";
+$lc_form["LC_FORMS_CHOOSE_CELL_WHERE_ELEMENT"]="Choose cell, where element situates";
+$lc_form["LC_FORMS_CHOOSE_CELL_WHERE_ELMENT_COPY"]="Choose cell, where copy the element (add new elements)";
+$lc_form["LC_FORMS_HOW_MANY_EL_MAKE"]="How many elenets to make";
+
+$lc_form["LC_FORMS_SMALL_CATEGORYS"]="Categories";
+$lc_form["LC_FORMS_CHOOSE_OUTPUT"]="Choosed output";
+$lc_form["LC_FORMS_LOOK_BY_FILLER"]="Search by filler";
+$lc_form["LC_FORMS_BIG_DATA"]="DATA";
+$lc_form["LC_FORMS_WHEN_WAS_FILLED"]="When was filled";
+$lc_form["LC_FORMS_WHO_FILLED"]="Who filled";
+$lc_form["LC_FORMS_LOOKS"]="Looks";
+$lc_form["LC_FORMS_CHOOSE_PAGE"]="Choose page";
+$lc_form["LC_FORMS_SHOW"]="Show";
+
+$lc_form["LC_FORMS_CHOOSE_OUTPUT_WHICH_SHOWS"]="Choose output with which entries are shown";
+
+$lc_form["LC_FORMS_ADD_ELEMENT"]="Add element";
+$lc_form["LC_FORMS_ROW"]="rows.";
+$lc_form["LC_FORMS_COLUMN"]="columns.";
+
+$lc_form["LC_FORMS_UPLOAD_FILE"]="Upload file";
+$lc_form["LC_FORMS_FILE_TYPE"]="File type";
+$lc_form["LC_FORMS_TAB_DELIMITED"]="Tab-delimited";
+$lc_form["LC_FORMS_ENTER_DELIMITED"]="Enter-delimited";
+$lc_form["LC_FORMS_HOW_MANY_ROWS_ADD"]="How many row to add";
+$lc_form["LC_FORMS_CHOOSE_FILE"]="Choose file";
+
+$lc_form["LC_FORMS_CHOOSE_WHICH_COLUMN_IS_EL"]="Choose which column rosponds to element";
+$lc_form["LC_FORMS_CHOOSE_WHISH_ROWS_IGNORED"]="Choose which row should be ingored";
+
+$lc_form["LC_FORMS_FILE"]="File";
+
+$lc_form["LC_FORMS_MAKE_DATA_AND_FORMEL_EQU"]="Correspond file data and fom elements";
+$lc_form["LC_FORMS_EMPTY"]="Empty";
+
+$lc_form["LC_FORMS_IMPORT_FORMS"]="Import forms";
+
+$lc_form["LC_FORMS_FILLED_FORMS"]="Filled forms";
+$lc_form["LC_FORMS_ADMIN_FORM"]="Admin form";
+$lc_form["LC_FORMS_CHOOSE_LOOKED_FORMS"]="Choose search forms";
+$lc_form["LC_FORMS_PREVIEW"]="Preview";
+$lc_form["LC_FORMS_ALL_ELEMENTS"]="All elements";
+$lc_form["LC_FORMS_IMPORT_DATA"]="Import data";
+$lc_form["LC_FORMS_TABLE_STYLES"]="Table styles";
+$lc_form["LC_FORMS_FORM_ACTIONS"]="Form actions";
+$lc_form["LC_FORMS_CHOOSE_CATALOGUES"]="Choose catalogues";
+$lc_form["LC_FORMS_IMPORT_INSIDE"]="Import message";
+$lc_form["LC_FORMS_CHANGE_OUTPUT"]="Change output";
+$lc_form["LC_FORMS_OUTPUT_STYLE"]="Output style";
+$lc_form["LC_FORMS_OUTPUT_METAINFO"]="Output metainfo";
+
+
+$lc_form["LC_FORMS_LOOKED"]="Looked";
+$lc_form["LC_FORMS_FILLED"]="Filled";
+$lc_form["LC_FORMS_POSITION"]="Position";
+
+//OBJECTS.TPL
+$lc_form["LC_FORMS_OBJECTS"]="OBJECTS";
+$lc_form["LC_FORMS_REFRESH"]="Refresh";
+$lc_form["LC_FORMS_ACTIVE"]="Active";
+$lc_form["LC_FORMS_CHOOSE"]="Choose";
+
+$lc_form["LC_FORMS_CHOOSE_OUTPUT_TYPE"]="Choose output type";
+
+$lc_form["LC_FORMS_ROW_ROW"]="row";
+$lc_form["LC_FORMS_COLUMN"]="column";
+
+$lc_form["LC_FORMS_TIMES"]="times";
+
+$lc_form["LC_FORMS_DEL_TABLE_COL"]="Delete";
+$lc_form["LC_FORMS_TABLE_ADD_COL"]="Add after";
+
+$lc_form["LC_FORMS_LANGS"]="Translate";
+
+$lc_form["LC_FORMS_BACK_COL"]="Background color";
+$lc_form["LC_FORMS_CHOOSE_COL"]="choose color";
+$lc_form["LC_FORMS_SIDE_WIDTH"]="Side width";
+$lc_form["LC_FORMS_DEFAULT_STYLE"]="Default style";
+
+$lc_form["LC_FORMS_BIG_CHOOSE_STYLE"]="CHOOSE STYLE";
+
+$lc_form["LC_FORMS_WHAT_OUTPUT_TO_USE"]="Which outputti to use";
+$lc_form["LC_FORMS_CHOOSE_WHTA_INPUT_FORM_FILL"]="Choose in which form entries are searched when filleng the form";
+
+$lc_form["LC_FORMS_FORM_TRIED_FILL_USER_DATA"]="Can form tried to fill with data that user entered when joining";
+$lc_form["LC_FORMS_AFTER_FILLING"]="After filling";
+$lc_form["LC_FORMS_CHANGE_INPUT"]="change entry";
+$lc_form["LC_FORMS_GOT_TO_ADDRESS"]="go to address";
+$lc_form["LC_FORMS_SEARCH_RESULTS_SHOW_TABLE"]="Should search results shown as table";
+$lc_form["LC_FORMS_CHOOSE_TABLE"]="Choose table";
+$lc_form["LC_FORMS_CHOOSE_ELEMENT_WHAT_PUT_FORM_ENTRY"]="Choose element which message will be put form entrys object name";
+
+$lc_form["LC_FORMS_CHOOSE_CATALOGUE_WHERE_SAVES_FORM_INFO"]="Catalogue where info in form is saved";
+$lc_form["LC_FORMS_CHOOSE_CATALOGUE_WHERE_SAVES_FORM_EL"]="Catalogue where elements pulled from form is saved";
+$lc_form["LC_FORMS_CHOOSE_CATALOGUE_WHERE_CAN_SAVE_NEW_EL"]="Choose catalogues where can save new elements";
+$lc_form["LC_FORMS_TABLE_ADD_COL"]="Choose catalogues where elements are taken";
+
+$lc_form["LC_FORMS_CHANGE_PICTURES"]="Change pictures";
+$lc_form["LC_FORMS_WHEN"]="When";
+$lc_form["LC_FORMS_BIG_ORDER"]="ORDER";
+
+$lc_form["LC_FORMS_CHANGE_OUTPUT"]="Change output";
+
+$lc_form["LC_FORMS_FORWARD"]="Forward";
+$lc_form["LC_FORMS_ARE_YOU_SURE_DEL_ACTION"]="Are you sure you want delete this action";
+$lc_form["LC_FORMS_ADD"]="Add";
+$lc_form["LC_FORMS_ADD_TO_END"]="Add to end";
+$lc_form["LC_FORMS_ARE_YOU_SURE_DEL_CAT"]="Are you sure you want delete this category";
+$lc_form["LC_FORMS_ARE_YOU_SURE_DEL_ENT"]="Are you sure you want delete this entry";
+$lc_form["LC_FORMS_DELETE_LEFT_CELL"]="Delete left cell";
+$lc_form["LC_FORMS_DELETE_UP_CELL"]="Delete upper cell";
+$lc_form["LC_FORMS_DELETE_RIGHT_CELL"]="Delete right cell";
+$lc_form["LC_FORMS_DEV_CELL_VERT"]="Devide cell vertically in half ";
+$lc_form["LC_FORMS_DEV_CELL_HOR"]="Devide cell horizontally in half";
+$lc_form["LC_FORMS_DELETE_LOWER_CELL"]="Delete lower cell";
+$lc_form["LC_FORMS_ARE_YOU_SURE_DEL_OUTPUT"]="Are you sure you want delete this output";
+$lc_form["LC_FORMS_FIND"]="Search";
+
+$lc_form["LC_FORMS_CHECKBOX_VALUE"] = "Checkbox value:";
+$lc_form["LC_FORMS_RADIO_VALUE"] = "Radiobutton value:";
+
 ?>

@@ -2,7 +2,7 @@
 
 global $lc_graph;
 $lc_graph["LC_GRAPH_GRAPH"] = "Graafik";
-$lc_graph["LC_GRAPH_GRAPH1"] = "GRAAGIK";
+$lc_graph["LC_GRAPH_GRAPH1"] = "GRAAFIK";
 $lc_graph["LC_GRAPH_NAME"] = "Nimi";
 $lc_graph["LC_GRAPH_COMM"] = "Kommentaar";
 $lc_graph["LC_GRAPH_TYPE"] = "Graafiku t&uuml;&uuml;p";
@@ -50,5 +50,33 @@ $lc_graph["LC_GRAPH_SHREPRE"] = "Näitan kirjeldusi";
 $lc_graph["LC_GRAPH_DATA"] = "Andmed";
 $lc_graph["LC_GRAPH_VALUES"] = "Väärtused";
 $lc_graph["LC_GRAPH_REPRE"] = "Kirjeldused";
+
+$lc_graph["LC_GRAPH_CHOOSE_FILE"] = "Vali fail";
+$lc_graph["LC_GRAPH_DEFAULT_SETTINGS"] = "Graafiku vaikimisi seaded";
+$lc_graph["LC_GRAPH_CLOSE_THIS_WINDOW"] = "Sulge see aken";
+
+$lc_graph["LC_GRAPH_INSERT_DATA_BY_SEP_COMMA"] = "Sisesta andmed eraldades need komaga";
+$lc_graph["LC_GRAPH_CANT_INSERT_NEG_VALUES"] = "Sisestada ei tohiks negatiivseid väärtusi";
+$lc_graph["LC_GRAPH_UPLOAD_CSV"] = "Uploadi CSV file graafiku andmeteks";
+$lc_graph["LC_GRAPH_COLOR"] = "Värv";
+$lc_graph["LC_GRAPH_FIRST_LINE_COLOR"] = "Esimese joone värv";
+$lc_graph["LC_GRAPH_SECOND_LINE_COLOR"] = "Teise joone värv";
+$lc_graph["LC_GRAPH_SELECTED"] = "Valitud";
+
+$lc_graph["LC_GRAPH_CONFIG"] = "Konfima";
+
+$lc_graph["LC_GRAPH_FIRST_LINE_COLOR"] = "Esimese joone värv";
+$lc_graph["LC_GRAPH_SECOND_LINE_COLOR"] = "Teise joone värv";
+$lc_graph["LC_GRAPH_SELECTED"] = "Valitud";
+
+$lc_graph["LC_GRAPH_GRAPHS"] = "GRAAFIKUD";
+$lc_graph["LC_GRAPH_DELETE"] = "Kustuta";
+$lc_graph["LC_GRAPH_ADD"] = "Lisa";
+$lc_graph["LC_GRAPH_DERSCRIPTION"] = "Kirjeldus";
+$lc_graph["LC_GRAPH_ACTIVITY"] = "Tegevus";
+$lc_graph["LC_GRAPH_ALL"] = "K&otilde;ik";
+$lc_graph["LC_GRAPH_CHANGE"] = "Muuda";
+$lc_graph["LC_GRAPH_LOOK"] = "Vaata";
+
 
 ?>

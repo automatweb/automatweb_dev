@@ -566,7 +566,7 @@ define("LC_TABLE_DELETE_UPPER_CELL","Delete uppere  cell");
 define("LC_TABLE_DELETE_LEFT_CELL","Delete left cell");
 define("LC_TABLE_DELETE_RIGHT_CELL","Delete right cell");
 define("LC_TABLE_DELETE_LOWER_CELL","Delete lower cell");
-define("LC_TABLE_ADD_TABLE","</a> / Add table");
+define("LC_TABLE_ADD_TABLE","Add table");
 
 //tests.aw
 define("LC_TESTS_QUESTIONS","Questions");

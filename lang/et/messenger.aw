@@ -1,8 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/lang/et/messenger.aw,v 2.1 2001/07/03 01:49:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/lang/et/messenger.aw,v 2.2 2001/07/26 16:54:28 kristo Exp $
 // messenger.aw - Messengeri lokaliseeringud
 
 // väljad otsinguvormis
+global $lc_messenger;
+
 define("MSG_FIELD_FROM","Kellelt");
 define("MSG_FIELD_TO","Kellele");
 define("MSG_FIELD_SUBJECT","Teema");
@@ -43,6 +45,15 @@ define("MSG_FROM_CHECK_FAILED","E-mail address for this account has not been set
 
 define("MSG_EDIT_SIGNATURE","Muuda signatuur");
 define("MSG_NEW_SIGNATURE","Uus signatuur");
+
+$lc_messenger["LC_MESSENGER_FROM"] = "Kellelt";
+$lc_messenger["LC_MESSENGER_SUBJECT"] = "Teema";
+$lc_messenger["LC_MESSENGER_TIME"] = "Aeg";
+$lc_messenger["LC_MESSENGER_STATUS"] = "Staatus";
+$lc_messenger["LC_MESSENGER_NEW_MESSAGE"] = "Uus teade";
+
+
+
 
 
 ?>
