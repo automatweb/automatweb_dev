@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.52 2004/06/11 16:25:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.53 2004/06/17 14:34:04 duke Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -231,15 +231,6 @@ class ml_list extends class_base
 		$_delay = $delay * 60;
 		$_patch_size = $patch_size;
 
-		/*
-		if (!isset($aid))
-		{
-			// tee sisestus avoidmids tabelisse
-			$this->db_query("INSERT INTO ml_avoidmids (avoidmids) VALUES ('')");
-			$aid=$this->db_last_insert_id();
-		};
-		*/
-
 		$count = $this->get_member_count($list_id);
 		$total++;
 
@@ -391,8 +382,6 @@ class ml_list extends class_base
 			print $message;
 
 		};
-		#arr($msg_obj->properties());
-		#arr($msg_obj->meta());
 	}
 
 	function get_property($arr)
