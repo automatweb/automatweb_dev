@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.81 2003/03/13 13:34:03 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.82 2003/03/13 13:45:24 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -1019,6 +1019,33 @@ class aliasmgr extends aw_template
 			$q = "ALTER TABLE aliases ADD reltype bigint unsigned not null";
 			$this->db_query($q);
 		}; 
+	}
+	
+	////
+	// !returns an array of class_id => class name's that you can feed to picker()
+	function get_clid_picker()
+	{
+		$ret = array();
+		foreach($this->cfg["classes"] as $clid => $cldat)
+		{
+			if ($cldat["name"] != "")
+			{
+				// add folders
+				$nm = $cldat["name"];
+/*				if ($cldat["parents"] != "")
+				{
+					list($pt) = explode(",", $cldat["parents"]);
+					while (isset($this->cfg["classfolders"][$pt]))
+					{
+						$nm = $this->cfg["classfolders"][$pt]["name"]."/".$nm;
+						$pt = $this->cfg["classfolders"][$pt]["parent"];
+					}
+				}*/
+				$ret[$clid] = $nm;
+			}
+		}
+		asort($ret);
+		return $ret;
 	}
 }
 ?>
