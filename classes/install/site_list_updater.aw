@@ -21,6 +21,10 @@ class site_list_updater extends aw_template
 	**/
 	function on_login($arr)
 	{
+		if (!function_exists('mcrypt_module_open'))
+		{
+			return;
+		}
 		// check if there has been an update in the last hour
 		// if so, do nothing
 		if ($this->_get_last_update_time() > (time() - (3600*24)))
