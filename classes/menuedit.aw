@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.6 2001/05/22 01:07:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.7 2001/05/22 02:29:35 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -2304,21 +2304,27 @@ classload("cache","validator","defs");
 					$nn = "number = '$number',";
 				}
 
+				global $lang_id;
 				// teeme seealso korda.
 				if (is_array($seealso))
 				{
-					$sa = array();
+					$sa = unserialize($menu["seealso"]);	// v6tame vana
+					$sa[$lang_id] = array();							// nullime sealt k2esoleva keele 2ra
+
 					reset($seealso);
 					while (list(,$sid) = each($seealso))
 					{
-						$sa[$sid] = $sid;
+						$sa[$lang_id][$sid] = $sid;					// ja paneme uued itemid asemele
 					}
 					$seealso = serialize($sa);
 				}
 				else
 				{
-					$seealso = "";
+					$sa = unserialize($menu["seealso"]);	// v6tame vana
+					$sa[$lang_id] = array();							// nullime sealt k2esoleva keele 2ra
+					$seealso = serialize($sa);						
 				}
+
 				$this->upd_object($charr);
 				$this->_log("menuedit","Muutis men&uuml;&uuml;d $name");
 				$q = "UPDATE menu SET 
@@ -2710,43 +2716,43 @@ classload("cache","validator","defs");
 
 			$sa = unserialize($row["seealso"]);
 			$oblist = $ob->get_list();
-			$this->vars(array("parent"			=> $row[parent], 
-												"seealso"			=> $this->multiple_option_list($sa,$oblist),
+			$this->vars(array("parent"			=> $row["parent"], 
+												"seealso"			=> $this->multiple_option_list($sa[$GLOBALS["lang_id"]],$oblist),
 												"ADMIN_FEATURE"	=> $af,
-												"name"				=> $row[name], 
-												"number"			=> $row[number],
-												"comment"			=> $row[comment], 
-												"links"				=> checked($row[links]), 
+												"name"				=> $row["name"], 
+												"number"			=> $row["number"],
+												"comment"			=> $row["comment"], 
+												"links"				=> checked($row["links"]), 
 												"id"					=> $id,
-												"active"	    => ($row[status] == 2) ? "checked" : "",
-												"clickable"	    => ($row[clickable] == 1) ? "checked" : "",
-												"hide_noact"   => ($row[hide_noact] == 1) ? "checked" : "",
-												"alias"				=> $row[alias],
-												"created"			=> $this->time2date($row[created],2),
-												"target"		=> ($row[target]) ? "checked" : "",
-												"autoactivate" => ($row[autoactivate]) ? "checked" : "",
-                        "autodeactivate" => ($row[autodeactivate]) ? "checked" : "",
+												"active"	    => ($row["status"] == 2) ? "checked" : "",
+												"clickable"	    => ($row["clickable"] == 1) ? "checked" : "",
+												"hide_noact"   => ($row["hide_noact"] == 1) ? "checked" : "",
+												"alias"				=> $row["alias"],
+												"created"			=> $this->time2date($row["created"],2),
+												"target"		=> ($row["target"]) ? "checked" : "",
+												"autoactivate" => ($row["autoactivate"]) ? "checked" : "",
+                        "autodeactivate" => ($row["autodeactivate"]) ? "checked" : "",
                         "activate_at" => $d_edit->gen_edit_form("activate_at",$activate_at),
                         "deactivate_at" => $d_edit->gen_edit_form("deactivate_at",$deactivate_at),
-												"createdby"		=> $row[createdby],
-												"modified"		=> $this->time2date($row[modified],2),
-												"modifiedby"	=> $row[modifiedby],
-												"tpl_edit" => $this->option_list($row[tpl_edit],$edit_templates),
-												"tpl_view" => $this->option_list($row[tpl_view],$long_templates),
-												"tpl_lead" => $this->option_list($row[tpl_lead],$short_templates),
-												"section"			=> $this->multiple_option_list($sets[section],$oblist),
-												"sss"					=> $this->multiple_option_list(unserialize($row[sss]),$oblist),
-												"link"				=> $row[link],
-												"sep_checked"	=> ($row[type] == 4 ? "CHECKED" : ""),
-												"mid"	=> ($row[mid] == 1 ? "CHECKED" : ""),
-												"doc_checked"	=> ($row[type] == 6 ? "CHECKED" : ""),
+												"createdby"		=> $row["createdby"],
+												"modified"		=> $this->time2date($row["modified"],2),
+												"modifiedby"	=> $row["modifiedby"],
+												"tpl_edit" => $this->option_list($row["tpl_edit"],$edit_templates),
+												"tpl_view" => $this->option_list($row["tpl_view"],$long_templates),
+												"tpl_lead" => $this->option_list($row["tpl_lead"],$short_templates),
+												"section"			=> $this->multiple_option_list($sets["section"],$oblist),
+												"sss"					=> $this->multiple_option_list(unserialize($row["sss"]),$oblist),
+												"link"				=> $row["link"],
+												"sep_checked"	=> ($row["type"] == 4 ? "CHECKED" : ""),
+												"mid"	=> ($row["mid"] == 1 ? "CHECKED" : ""),
+												"doc_checked"	=> ($row["type"] == 6 ? "CHECKED" : ""),
 												"sections"		=> $this->multiple_option_list($sar,$ob->get_list(false,true)),
-												"real_id"			=> $row[brother_of],
+												"real_id"			=> $row["brother_of"],
 												"reforb"			=> $this->mk_reforb("submit",array("id" => $id, "parent" => $parent,"period" => $period)),
-												"ndocs"				=> $row[ndocs],
+												"ndocs"				=> $row["ndocs"],
 												"ex_menus"		=> $this->multiple_option_list($ob->get_list(false,false,$id),$ob->get_list(false,false,$id)),
-												"icon"				=> $row[icon_id] ? 
-												"<img src='".$GLOBALS["baseurl"]."/icon.".$GLOBALS["ext"]."?id=".$row[icon_id]."'>" : "",
+												"icon"				=> $row["icon_id"] ? 
+												"<img src='".$GLOBALS["baseurl"]."/icon.".$GLOBALS["ext"]."?id=".$row["icon_id"]."'>" : "",
 												"IS_LAST"			=> $il,
 												"shop"				=> $this->picker($row["shop_id"],$shs),
 												"is_shop"			=> checked($row["is_shop"]),
@@ -2754,8 +2760,8 @@ classload("cache","validator","defs");
 												));
 
 			$this->vars(array(
-				"CAN_BROTHER" => $row[class_id] == CL_PSEUDO ? $this->parse("CAN_BROTHER") : "",
-				"IS_BROTHER" => $row[class_id] == CL_PSEUDO ? "" : $this->parse("IS_BROTHER"),
+				"CAN_BROTHER" => $row["class_id"] == CL_PSEUDO ? $this->parse("CAN_BROTHER") : "",
+				"IS_BROTHER" => $row["class_id"] == CL_PSEUDO ? "" : $this->parse("IS_BROTHER"),
 				"IS_SHOP"	=> ($row["is_shop"] ? $this->parse("IS_SHOP") : "")
 			));
 
@@ -3043,12 +3049,12 @@ classload("cache","validator","defs");
 	// !draws MENU_$name_SEEALSO_ITEM 's for the menu given in $row
 	function do_seealso_items($row,$name)
 	{
-		global $ext,$baseurl;
+		global $ext,$baseurl,$lang_id;
 		$sa = unserialize($row["seealso"]);
-		if (is_array($sa))
+		if (is_array($sa[$lang_id]))
 		{
-			reset($sa);
-			while (list($said,) = each($sa))
+			reset($sa[$lang_id]);
+			while (list($said,) = each($sa[$lang_id]))
 			{
 				$samenu = $this->mar[$said];
 				if (!is_array($samenu))
