@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.47 2001/09/21 20:19:46 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.48 2001/09/26 07:26:14 cvs Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -2456,9 +2456,14 @@ class document extends aw_template
 		$this->db_query("SELECT objects.oid as oid, objects.parent as parent,objects.last as last,objects.status as status
 										 FROM objects LEFT JOIN menu ON menu.id = objects.oid
 										 WHERE objects.class_id = 1 AND objects.status = 2 $ss");
+		$parent_list = array();
 		while ($row = $this->db_next())
 		{
-			$this->menucache[$row[parent]][] = $row;
+			if ($this->can("view",$row[parent]))
+			{
+				$this->menucache[$row[parent]][] = $row;
+				$parent_list[$row["parent"]] = $row["parent"];
+			};
 		}
 		// find the parent menus based on the search menu group id
 		classload("search_conf");
@@ -2466,13 +2471,19 @@ class document extends aw_template
 		$parens = $sc->get_menus_for_grp($parent);
 		$this->darr = array();
 		$this->marr = array();
-		foreach($parens as $parent)
+		if (is_array($parens))
 		{
-			// now, make a list of all menus below $parent
-			$this->marr[] = $parent;
-			// list of default documents
-			$this->rec_list($parent);
-		}
+			foreach($parens as $parent)
+			{
+				// now, make a list of all menus below $parent
+				if ($this->can("view",$parent))
+				{
+					$this->marr[] = $parent;
+					// list of default documents
+					$this->rec_list($parent);
+				};
+			}
+		};
 
 		$ml = join(",",$this->marr);
 		$ml2 = join(",",$this->darr);
@@ -2547,12 +2558,18 @@ class document extends aw_template
 										 LEFT JOIN objects ON objects.oid = documents.docid
 										 WHERE (documents.title LIKE '%".$str."%' OR documents.content LIKE '%".$str."%' $fasstr $mtalsstr) AND objects.status = 2 $ml";
 */
-		$this->db_query("SELECT documents.*,objects.parent as parent, objects.modified as modified 
+		$plist = join(",",$parent_list);
+		$q = "SELECT documents.*,objects.parent as parent, objects.modified as modified 
 										 FROM documents 
 										 LEFT JOIN objects ON objects.oid = documents.docid
-										 WHERE (documents.title LIKE '%".$str."%' OR documents.content LIKE '%".$str."%' $fasstr $mtalsstr) AND objects.status = 2 AND objects.lang_id = ".$GLOBALS["lang_id"]." AND (documents.no_search is null OR documents.no_search = 0) $ml");
+										 WHERE (documents.title LIKE '%".$str."%' OR documents.content LIKE '%".$str."%' $fasstr $mtalsstr) AND objects.status = 2 AND objects.lang_id = ".$GLOBALS["lang_id"]." AND (documents.no_search is null OR documents.no_search = 0) AND (objects.parent IN ($plist)) $ml";
+		$this->db_query($q);
 		while($row = $this->db_next())
 		{
+			if (not($this->can("view",$row["docid"])))
+			{
+				continue;
+			};
 			// find number of matches in document for search string, for calculating percentage
 			// if match is found in title, then multiply number by 5, to emphasize importance
 			$c = substr_count(strtoupper($row[content]),strtoupper($str)) + substr_count(strtoupper($row[title]),strtoupper($str))*5;
