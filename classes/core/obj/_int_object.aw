@@ -1062,6 +1062,11 @@ class _int_object
 
 	function _int_load_properties()
 	{
+		if (isset($GLOBALS["properties"][$this->obj["class_id"]]) && isset($GLOBALS["tableinfo"][$this->obj["class_id"]]) && isset($GLOBALS["of2prop"][$this->obj["class_id"]]))
+		{
+			return;
+		}
+
 		// then get the properties
 		$file = $GLOBALS["cfg"]["classes"][$this->obj["class_id"]]["file"];
 		if ($this->obj["class_id"] == 29)

@@ -291,14 +291,13 @@ class _int_object_loader
 		// cfgu->load_properties is expensive, so we cache the results.
 		// why here? because it does a lot more than just load properties
 		// and it's a bit tricky to cache all that information there --duke
-		$cache_key = join("",$arr);
-		$rv = aw_cache_get("props",$cache_key);
-		if (empty($rv))
-		{
-			$props = $this->cfgu->load_properties($arr);
-			$rv = array($props, $this->cfgu->tableinfo);
-			aw_cache_set("props",$cache_key,$rv);
-		};
+		// 
+		// removed the caching from here, it is done in object::_int_load_properties
+		// it won't call this function if an object of the same class id has been loaded before
+		// so doing the caching here is just wasting memory now. 
+		// - terryf
+		$props = $this->cfgu->load_properties($arr);
+		$rv = array($props, $this->cfgu->tableinfo);
 		return $rv;
 	}
 
