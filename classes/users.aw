@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.50 2002/09/24 17:41:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.51 2002/09/24 18:52:49 duke Exp $
 // users.aw - User Management
 classload("users_user","config","form","objects","file");
 
@@ -1741,26 +1741,16 @@ class users extends users_user
 			$q = "SELECT * FROM users WHERE email = '$email' AND blocked = 0";
 		};
 		$this->db_query($q);
-		$row = $this->db_next();
-		if ($type == "email")
+		global $status_msg;
+		while($row = $this->db_next())
 		{
-			$uid = $row["uid"];
-		};
-		if (not($row))
-		{
-			global $status_msg;
-			$status_msg = "Sellist kasutajat pole registreeritud";
-			session_register("status_msg");
-			return $this->mk_my_orb("send_hash",array());
-		}
-		else
-		{
+			if ($type == "email")
+			{
+				$uid = $row["uid"];
+			};
 			if (not(is_email($row["email"])))
 			{
-				global $status_msg;
-				$status_msg = "Sellel kasutajal puudub korrektne e-posti aadress. Palun pöörduge veebisaidi haldaja poole";
-				session_register("status_msg");
-				return $this->mk_my_orb("send_hash",array());
+				$status_msg .= "Kasutajal $uid puudub korrektne e-posti aadress. Palun pöörduge veebisaidi haldaja poole";
 			};
 			$ts = time();
 			$hash = substr(gen_uniq_id(),0,15);
@@ -1777,7 +1767,6 @@ class users extends users_user
 				"value" => $ts,
 			));
 
-			global $status_msg;
 			$host = aw_global_get("HTTP_HOST");
 			$churl = $this->mk_my_orb("pwhash",array("u" => $uid,"k" => $hash),"users",0,0);
 
@@ -1786,10 +1775,10 @@ class users extends users_user
 			$msg = "Tere $row[uid]\n\nTeie isikliku parooli vahetamiseks kodulehel $host tuleb teil klikkida lingil\n\n$churl\n\nLingile klikkides avanab Teile parooli muutmise leht. Soovitame parool välja vahetada!\n\nProbleemide korral saatke email $email.\n\nKõike paremat soovides,\n$host";
 			$from = sprintf("%s <%s>",$this->cfg["webmaster_name"],$this->cfg["webmaster_mail"]);
 			mail($row["email"],"Paroolivahetus saidil ".aw_global_get("HTTP_HOST"),$msg,"From: $from");
-			$status_msg = "<br>Parooli muutmise link saadeti  aadressile <b>$row[email]</b>. Vaata oma postkasti<br>Täname!";
-			session_register("status_msg");
-			return $this->mk_my_orb("send_hash",array());
+			$status_msg .= "Parooli muutmise link saadeti  aadressile <b>$row[email]</b>. Vaata oma postkasti<br>Täname!<br>";
 		};
+		session_register("status_msg");
+		return $this->mk_my_orb("send_hash",array());
 	}
 
 	////
