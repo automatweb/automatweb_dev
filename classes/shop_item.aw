@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/shop_item.aw,v 2.22 2001/10/02 10:05:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/shop_item.aw,v 2.23 2001/10/14 15:17:26 kristo Exp $
 lc_load("shop");
 global $orb_defs;
 $orb_defs["shop_item"] = "xml";
@@ -20,7 +20,8 @@ class shop_item extends shop_base
 		if (is_array($lc_shop))
 		{
 			$this->vars($lc_shop);
-		lc_load("definition");}
+			lc_load("definition");
+		}
 	}
 
 	////
@@ -74,7 +75,8 @@ class shop_item extends shop_base
 			"change" => array("name" => "General", "url" => $this->mk_my_orb("change", array("id" => $id), "",false,true)),
 			"change_categories" => array("name" => "Categories", "url" => $this->mk_my_orb("change_categories", array("id" => $id), "",false,true)),
 			"change_settings" => array("name" => "Settings", "url" => $this->mk_my_orb("change_settings", array("id" => $id), "",false,true)),
-			"change_period" => array("name" => "Periodical prices/places", "url" => $this->mk_my_orb("set_per_prices", array("id" => $id), "",false,true)),
+			"change_period" => array("name" => "Periodical prices", "url" => $this->mk_my_orb("set_per_prices", array("id" => $id), "",false,true)),
+			"change_per_items" => array("name" => "Periodical places", "url" => $this->mk_my_orb("set_per_places", array("id" => $id), "",false,true)),
 		);
 
 		return $this->do_menu($menu_items).$ret;
@@ -116,7 +118,7 @@ class shop_item extends shop_base
 			// now also set the item to be a brother of itself, so we can user brother_of for joining purposes l8r
 			$this->upd_object(array("oid" => $id, "brother_of" => $id));
 		}
-		return $this->mk_my_orb("change", array("id" => $id));
+		return $this->mk_my_orb("change", array("id" => $id),"",false,true);
 	}
 
 	////
@@ -285,6 +287,19 @@ class shop_item extends shop_base
 				$q = "INSERT INTO shop_item2per_prices 
 					(item_id,tfrom,tto,price,per_type)
 					VALUES ('$new_id','$row[tfrom]','$row[tto]','$price','$row[per_type]')";
+				$this->db_query($q);
+				$this->restore_handle();
+			}
+			// samuti perioodilised kogused shop_item2per_places tabelist
+			$q = "SELECT * FROM shop_item2per_places WHERE item_id = $args[id]";
+			$this->db_query($q);
+			while( $row = $this->db_next() )
+			{
+				$this->save_handle();
+
+				$q = "INSERT INTO shop_item2per_places 
+					(item_id,tfrom,tto,per_type)
+					VALUES ('$new_id','$row[tfrom]','$row[tto]','$row[per_type]')";
 				$this->db_query($q);
 				$this->restore_handle();
 			}
@@ -469,7 +484,7 @@ class shop_item extends shop_base
 			}
 		}
 
-		$this->db_query("UPDATE shop_items SET has_max = '$has_max',max_items = '$max_items',has_period = '$has_period' , has_objs = '$has_objs' , calendar_id = '$calendar_id',per_from = '$per_from',per_event_id = '$event_id',per_cnt = '$per_cnt',cnt_form = '$cnt_form', price_eq = '$item_eq',cnt_extra_op = '$sel_extra_op' WHERE id = $id");
+		$this->db_query("UPDATE shop_items SET has_max = '$has_max',max_items = '$max_items',has_period = '$has_period' , has_objs = '$has_objs' , calendar_id = '$calendar_id',per_from = '$per_from',per_event_id = '$event_id',per_cnt = '$per_cnt',cnt_form = '$cnt_form', price_eq = '$item_eq',cnt_extra_op = '$sel_extra_op',close_days = '$close_item_days' WHERE id = $id");
 
 		return $this->mk_my_orb("change_settings", array("id" => $id),"",false,true);
 	}
@@ -510,7 +525,7 @@ class shop_item extends shop_base
 			$this->vars(array(
 				"from" => $i*PR_PER_PAGE,
 				"to" => min(($i+1)*PR_PER_PAGE,$count),
-				"pageurl" => $this->mk_my_orb("set_per_prices", array("id" => $id, "page" => $i))
+				"pageurl" => $this->mk_my_orb("set_per_prices", array("id" => $id, "page" => $i),"",false,true)
 			));
 			if ($i == $page)
 			{
@@ -527,7 +542,7 @@ class shop_item extends shop_base
 			"PAGE" => ""
 		));
 
-		$this->db_query("SELECT * FROM shop_item2per_prices WHERE item_id = $id LIMIT ".($page*PR_PER_PAGE).",".PR_PER_PAGE);
+		$this->db_query("SELECT * FROM shop_item2per_prices WHERE item_id = $id ORDER BY tfrom LIMIT ".($page*PR_PER_PAGE).",".PR_PER_PAGE);
 		while ($row = $this->db_next())
 		{
 			$this->vars(array(
@@ -536,7 +551,6 @@ class shop_item extends shop_base
 				"id" => $row["id"],
 				"week_check" => checked($row["per_type"] == PRICE_PER_WEEK),
 				"2week_check" => checked($row["per_type"] == PRICE_PER_2WEEK),
-				"avail" => $row["max_items"]
 			));
 			$prices = unserialize($row["price"]);
 			$cc = "";
@@ -598,7 +612,7 @@ class shop_item extends shop_base
 				$this->save_handle();
 				$pricsstr = serialize($price[$row["id"]]);
 				$this->quote(&$pricsstr);
-				$this->db_query("UPDATE shop_item2per_prices SET tfrom = $tfrom, tto = $tto, price ='".$pricsstr."',per_type = '".$price_type[$row["id"]]."',max_items='".$available[$row["id"]]."' WHERE id = ".$row["id"]);
+				$this->db_query("UPDATE shop_item2per_prices SET tfrom = $tfrom, tto = $tto, price ='".$pricsstr."',per_type = '".$price_type[$row["id"]]."' WHERE id = ".$row["id"]);
 				$this->restore_handle();
 			}
 		}
@@ -618,9 +632,9 @@ class shop_item extends shop_base
 			$tto = mktime(0,0,0,$to[0]["month"],$to[0]["day"],$to[0]["year"]);
 			$pricsstr = serialize($price[0]);
 			$this->quote(&$pricsstr);
-			$this->db_query("INSERT INTO shop_item2per_prices(item_id,tfrom,tto,price,per_type,max_items) VALUES($id,$tfrom,$tto,'".$pricsstr."','".$price_type[0]."','".$available[0]."')");
+			$this->db_query("INSERT INTO shop_item2per_prices(item_id,tfrom,tto,price,per_type) VALUES($id,$tfrom,$tto,'".$pricsstr."','".$price_type[0]."')");
 		}
-		return $this->mk_my_orb("set_per_prices", array("id" => $id,"page" => $page));
+		return $this->mk_my_orb("set_per_prices", array("id" => $id,"page" => $page),"",false,true);
 	}
 
 	function check_environment(&$sys, $fix = false)
@@ -734,14 +748,18 @@ class shop_item extends shop_base
 			"year" => "",
 			"month" => "",
 			"day" => "",
-			"hour" => "", 
-			"minute" => ""
 		));
 		$eq = $this->get_eq($itt["eq_id"]);
 		classload("form_base");
 		$fb = new form_base;
 		$fl = $fb->get_list(FTYPE_ENTRY,true);
-		$f_opl = $fb->get_op_list($o["cnt_form"] ? $o["cnt_form"] : $itt["cnt_form"]);
+		$cnt_form = $o["cnt_form"] ? $o["cnt_form"] : $itt["cnt_form"];
+		$f_opl = $fb->get_op_list($cnt_form);
+		if (!is_array($f_opl[$cnt_form]))
+		{
+			$f_opl[$cnt_form] = array();
+		}
+		$f_opl[$cnt_form] = array(0 => "") + $f_opl[$cnt_form];
 		$this->vars(array( 
 			"reforb" => $this->mk_reforb("submit_opts", array("id" => $id)),
 			"has_max" => checked($o["has_max"]),
@@ -755,9 +773,120 @@ class shop_item extends shop_base
 			"per_cnt" => $o["per_cnt"],
 			"cnt_form" => $this->picker($o["cnt_form"], $fl),
 			"item_eq" => $this->picker($o["price_eq"], $this->listall_eqs(true)),
-			"extra_ops" => $this->picker($o["cnt_extra_op"], $f_opl[($o["cnt_form"] ? $o["cnt_form"] : $itt["cnt_form"])])
+			"extra_ops" => $this->picker($o["cnt_extra_op"], $f_opl[$cnt_form]),
+			"close_item_days" => $o["close_days"]
 		));
 		return $this->do_item_menu($id);
+	}
+
+	////
+	// !lets the user change item's max items count for different periods
+	function set_per_places($arr)
+	{
+		extract($arr);
+		$it = $this->get_item($id);
+		$this->mk_path($it["parent"],"<a href='".$this->mk_my_orb("change", array("id" => $id))."'>Muuda</a> / Muuda kohtade arvu");
+		$this->read_template("set_per_places.tpl");
+
+		load_vcl("date_edit");
+		$de = new date_edit(time());
+		$de->configure(array(
+			"year" => "",
+			"month" => "",
+			"day" => ""
+		));
+
+		$count = $this->db_fetch_field("SELECT COUNT(*) AS cnt FROM  shop_item2per_places WHERE item_id = $id", "cnt");
+		$num_pages = $count / PR_PER_PAGE;
+		for ($i=0; $i < $num_pages; $i++)
+		{
+			$this->vars(array(
+				"from" => $i*PR_PER_PAGE,
+				"to" => min(($i+1)*PR_PER_PAGE,$count),
+				"pageurl" => $this->mk_my_orb("set_per_places", array("id" => $id, "page" => $i),"",false,true)
+			));
+			if ($i == $page)
+			{
+				$pp.=$this->parse("SEL_PAGE");
+			}
+			else
+			{
+				$pp.=$this->parse("PAGE");
+			}
+		}
+
+		$this->vars(array(
+			"SEL_PAGE" => $pp,
+			"PAGE" => ""
+		));
+
+		$this->db_query("SELECT * FROM shop_item2per_places WHERE item_id = $id ORDER BY tfrom LIMIT ".($page*PR_PER_PAGE).",".PR_PER_PAGE);
+		while ($row = $this->db_next())
+		{
+			$this->vars(array(
+				"from" => $de->gen_edit_form("from[".$row["id"]."]",$row["tfrom"]),
+				"to" => $de->gen_edit_form("to[".$row["id"]."]",$row["tto"]),
+				"id" => $row["id"],
+				"week_check" => checked($row["per_type"] == PRICE_PER_WEEK),
+				"2week_check" => checked($row["per_type"] == PRICE_PER_2WEEK),
+				"avail" => $row["max_items"]
+			));
+			$per.=$this->parse("PERIOD");
+		}
+
+		if (($page+1)*PR_PER_PAGE >= $count)
+		{
+			$this->vars(array(
+				"from" => $de->gen_edit_form("from[0]",time()),
+				"to" => $de->gen_edit_form("to[0]",time()),
+				"avail" => 0,
+				"id" => 0,
+				"week_check" => "",
+				"2week_check" => ""
+			));
+			$per.=$this->parse("PERIOD");
+		}
+
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit_per_places", array("id" => $id,"page" => $page),"",false,true),
+			"PERIOD" => $per
+		));
+		return $this->do_item_menu($id);
+	}
+
+	function submit_per_places($arr)
+	{
+		extract($arr);
+		
+		$this->db_query("SELECT * FROM shop_item2per_places WHERE item_id = $id");
+		while ($row = $this->db_next())
+		{
+			if (isset($price_type[$row["id"]]))
+			{
+				$tfrom = mktime(0,0,0,$from[$row["id"]]["month"],$from[$row["id"]]["day"],$from[$row["id"]]["year"]);
+				$tto = mktime(0,0,0,$to[$row["id"]]["month"],$to[$row["id"]]["day"],$to[$row["id"]]["year"]);
+				$this->save_handle();
+				$this->db_query("UPDATE shop_item2per_places SET tfrom = $tfrom, tto = $tto, per_type = '".$price_type[$row["id"]]."',max_items='".$available[$row["id"]]."' WHERE id = ".$row["id"]);
+				$this->restore_handle();
+			}
+		}
+
+		if (is_array($del))
+		{
+			foreach($del as $did => $o)
+			{
+				$this->db_query("DELETE FROM shop_item2per_places WHERE id = $did");
+			}
+		}
+
+		if ($price_type[0] > 0)
+		{
+			// lisame uue ka
+			$tfrom = mktime(0,0,0,$from[0]["month"],$from[0]["day"],$from[0]["year"]);
+			$tto = mktime(0,0,0,$to[0]["month"],$to[0]["day"],$to[0]["year"]);
+			$this->db_query("INSERT INTO shop_item2per_places(item_id,tfrom,tto,per_type,max_items) VALUES($id,$tfrom,$tto,'".$price_type[0]."','".$available[0]."')");
+		}
+		return $this->mk_my_orb("set_per_places", array("id" => $id,"page" => $page),"",false,true);
 	}
 }
 ?>

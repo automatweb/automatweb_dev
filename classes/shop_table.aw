@@ -280,7 +280,7 @@ class shop_table extends shop_base
 			}
 
 			// ja nyt kui palju mis perioodil on
-			$this->db_query("SELECT * FROM shop_item2per_prices WHERE item_id = ".$sht["table"]["item"]." AND per_type = ".PRICE_PER_WEEK." $time_clause2");
+			$this->db_query("SELECT * FROM shop_item2per_places WHERE item_id = ".$sht["table"]["item"]." AND per_type = ".PRICE_PER_WEEK." $time_clause2");
 			while ($row = $this->db_next())
 			{
 				if ($row["max_items"] > 0)
@@ -303,7 +303,7 @@ class shop_table extends shop_base
 			// oh puts. siin tuleb ju k6ikide itemite k6ik perioodid l2bi k2ia ja k2sici kokku liita sest
 			// kui pole m22ratud perioodile kogust siis on see default kogus. 
 			// siin tuleb liita ka need perioodid, kus pole miskit myydud mdx, kuna siis on lihtsalt t2ituvus 0 exole
-			$this->db_query("SELECT shop_item2per_prices.*,shop_items.max_items as item_max_items FROM shop_item2per_prices LEFT JOIN shop_items ON shop_items.id = shop_item2per_prices.item_id WHERE type_id = $type_id $time_clause2 AND per_type = ".PRICE_PER_WEEK);
+			$this->db_query("SELECT shop_item2per_places.*,shop_items.max_items as item_max_items FROM shop_item2per_places LEFT JOIN shop_items ON shop_items.id = shop_item2per_places.item_id WHERE type_id = $type_id $time_clause2 AND per_type = ".PRICE_PER_WEEK);
 			while ($row = $this->db_next())
 			{
 				if ($row["max_items"] > 0)

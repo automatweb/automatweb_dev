@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.36 2001/10/02 10:05:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.37 2001/10/14 15:17:25 kristo Exp $
 // shop.aw - Shop
 lc_load("shop");
 global $orb_defs;
@@ -37,8 +37,8 @@ class shop extends shop_base
 		{
 			$this->vars($lc_shop);
 		
-	lc_load("definition");
-	}
+			lc_load("definition");
+		}
 	}
 
 	////
@@ -366,6 +366,7 @@ class shop extends shop_base
 		$ityp->mk_cache();		// cacheme k6ik tyybid selle klassi sees, et p2rast ei peaks iga itemi kohta eraldi p2ringut tegema
 
 		$min_p = $this->get_cart_min_period();
+		$max_p = $this->get_cart_max_period();
 		$has_items = false;
 		$q = "SELECT objects.brother_of as oid,shop_items.* FROM objects LEFT JOIN shop_items ON shop_items.id = objects.brother_of WHERE parent = $section AND class_id = ".CL_SHOP_ITEM." AND status = 2";
 		$this->db_query($q);
@@ -377,9 +378,9 @@ class shop extends shop_base
 		while ($row = $this->db_next())
 		{
 			$this->save_handle();
-			if ($this->is_item_available($row,1,new form(), $min_p))
+			$itt = $ityp->get_item_type($row["type_id"]);
+			if ($this->is_item_available($row,1,new form(), $min_p,$max_p,$itt))
 			{
-				$itt = $ityp->get_item_type($row["type_id"]);
 
 				$it_price = $this->get_list_price($row["oid"],$row["price"],$shop);
 
@@ -535,7 +536,8 @@ class shop extends shop_base
 		{
 			return 1;
 		}
-		foreach($shopping_cart["items"] as $iid => $idata)
+		$tmp = $shopping_cart["items"];
+		foreach($tmp as $iid => $idata)
 		{
 			if ($idata["period"] && $min_p > $idata["period"] && $idata["period"] > 1)
 			{
@@ -543,6 +545,25 @@ class shop extends shop_base
 			}
 		}
 		return $min_p;
+	}
+
+	function get_cart_max_period()
+	{
+		global $shopping_cart;
+		$max_p = 0;
+		if (!is_array($shopping_cart["items"]))
+		{
+			return 1;
+		}
+		$tmp = $shopping_cart["items"];
+		foreach($tmp as $iid => $idata)
+		{
+			if ($idata["period"] && $max_p < $idata["period"] && $idata["period"] > 1)
+			{
+				$max_p = $idata["period"];
+			}
+		}
+		return $max_p;
 	}
 
 	////
@@ -564,6 +585,7 @@ class shop extends shop_base
 		{
 			// leiame perioodi alguse
 			$min_p = $this->get_cart_min_period();
+			$max_p = $this->get_cart_max_period();
 			reset($shopping_cart["items"]);
 			while (list($item_id,$ar) = each($shopping_cart["items"]))
 			{
@@ -602,7 +624,7 @@ class shop extends shop_base
 					if ($count > 0)
 					{
 						// nyyd tshekime et kas j2lle on vaba see item kyllalt palju
-						if (!$this->is_item_available($it,$count,$f,$min_p))
+						if (!$this->is_item_available($it,$count,$f,$ar["period"] ? $ar["period"] : $min_p,$max_p,$itt))
 						{
 							// pold vabu itemeid sel ajal
 							global $status_msg;
@@ -614,7 +636,7 @@ class shop extends shop_base
 						}
 
 						// now calc price
-						$price = $this->calc_price($itt,$it,$count,$f,$shop_o);
+						$price = $this->calc_price($itt,$it,$count,$f,$shop_o,$this->get_cart_num_weeks());
 
 						$GLOBALS["shopping_cart"]["items"][$item_id]["cnt"] = $count;
 						$GLOBALS["shopping_cart"]["items"][$item_id]["price"] = $price;
@@ -635,10 +657,17 @@ class shop extends shop_base
 		return $this->mk_site_orb(array("action" => "view_cart", "shop_id" => $shop_id, "section" => $section));
 	}
 
+	function get_cart_num_weeks()
+	{
+		$min_p = $this->get_cart_min_period();
+		$max_p = $this->get_cart_max_period();
+		return ($max_p - $min_p) / (24*3600*7);
+	}
+
 	////
 	// !calculates the price for item $it of type $itt , count of items is $count and the form filled for the order is loaded in $f
 	// uses the equasion specified in $itt and if none is specified, the price specified in form $f or the item's form that is loaded
-	function calc_price($itt,$it,$count,$f,$shop)
+	function calc_price($itt,$it,$count,$f,$shop,$num_weeks = 0)
 	{
 		$eq = $this->get_eq($it["price_eq"] ? $it["price_eq"] : $itt["eq_id"]);
 
@@ -666,13 +695,13 @@ class shop extends shop_base
 			$f_kaup->set_element_value_by_type("price", $el_price);
 			$f->set_element_value_by_type("price", $el_price);
 
-			$price = $this->do_parse_eq($eq,array($f,$f_kaup));
+			$price = $this->do_parse_eq($eq,array($f,$f_kaup),$num_weeks);
 		}
 
 		return (int)($price+0.5);
 	}
 
-	function do_parse_eq($eq,$farr,$num_weeks = 0)
+	function do_parse_eq($eq,$farr,$num_weeks = 0,$debug = false)
 	{
 		$els = $this->parse_eq_variables($eq["comment"]);
 
@@ -699,6 +728,7 @@ class shop extends shop_base
 				$elval = "0.0";
 			}
 			$replaces[$elname] = $elval;
+
 //			$eq = str_replace($elname,$elval,$eq);
 		}
 
@@ -710,9 +740,13 @@ class shop extends shop_base
 //			echo "$k => $v <br>";
 			$eq = str_replace($k,$v,$eq);
 		}
-//		echo "eq = $eq <br>";
 		eval($eq.";");
-//		echo "calc price = $price <br>";
+/*		if ($GLOBALS["uid"] == "erki" && $debug == true)
+		{
+			echo "eq = $eq <br>";
+			echo "calc price = $price <br>";
+			echo "two_weeks = $two_weeks <br>lend_only = $lend_only <br>c_tingimus = $c_tingimus <br>two_weeks_calc = $two_weeks_calc <br>";
+	} */
 		return $price;
 	}
 
@@ -896,14 +930,8 @@ class shop extends shop_base
 				$canceled_order_id = $shopping_cart["order_id"];
 			}
 			// leiame perioodi alguse
-			$min_p = 2147483648;
-			foreach($shopping_cart["items"] as $iid => $idata)
-			{
-				if ($idata["period"] && $min_p > $idata["period"] && $idata["period"] > 1)
-				{
-					$min_p = $idata["period"];
-				}
-			}
+			$min_p = $this->get_cart_min_period();
+			$max_p = $this->get_cart_max_period();
 
 			$has_items = false;
 			reset($shopping_cart["items"]);
@@ -934,7 +962,7 @@ class shop extends shop_base
 					$f->load_entry($ar["cnt_entry"]);
 	
 					// if the period is specified for the item use that one, so we do the friggin back flights correctly
-					if (!($free_items = $this->is_item_available($it,$ar["cnt"],$f,$ar["period"] ? $ar["period"] : $min_p)))
+					if (!($free_items = $this->is_item_available($it,$ar["cnt"],$f,$ar["period"] ? $ar["period"] : $min_p,$max_p,$itt)))
 					{
 						// if no item is available, abort the order
 						global $status_msg;
@@ -944,7 +972,16 @@ class shop extends shop_base
 					}
 					else
 					{
-						$this->do_order_item($it,$ar["cnt"],$free_items);
+						// niisis. siin tuleb bronnida tavalised asjad kogu perioodi peale
+						// va siis kui see on tagasilend ehk siis max_periodiga item - siis aint selle tagasilennu kuup2evale
+						if ($ar["period"] == $max_p)
+						{
+							$this->do_order_item($it,$ar["cnt"],$max_p,$max_p,$itt);
+						}
+						else
+						{
+							$this->do_order_item($it,$ar["cnt"],$min_p,$max_p,$itt);
+						}
 					}
 
 					$selrows = $this->get_selected_rows_in_form(&$f);
@@ -1116,6 +1153,9 @@ class shop extends shop_base
 		$ucur = $this->get_act_cur($shop_o);
 		$f->set_active_currency($ucur);
 
+		$max_p = $this->get_cart_max_period();
+		$min_p = $this->get_cart_min_period();
+
 		// ok, now, if $parallel is set then we must show several items side by side, but 
 		// that only makes sense for isems that has_periods and !has_objs and has_max
 		if ($item_id)
@@ -1176,13 +1216,27 @@ class shop extends shop_base
 						}
 						$f->set_element_value($el->get_id(),$time);
 
-						if ($this->is_item_available($row,1,new form(),$time))
+						if ($parallel)
+						{
+							$t1 = $time;
+							$t2 = $time;
+						}
+						else
+						{
+							$t1 = $min_p;
+							$t2 = $max_p;
+						}
+						if ($this->is_item_available($row,1,new form(),$t1,$t2,$itt))
 						{
 							$item = $f->show(array("id" => $itt["form_id"], "entry_id" => $row["entry_id"],"op_id" => $itt["long_op"],"no_load_entry" => true));
 						}
 						else
 						{
-							$item = "No items available in this period (".$this->time2date($time,5).")";
+							$this->vars(array(
+								"it_time" => $this->time2date($time,5)
+							));
+							$item = $this->parse("NOT_AVAILABLE");
+							$this->vars(array("NOT_AVAILABLE" => ""));
 						}
 						$this->vars(array(
 							"item" => $item,
@@ -1255,7 +1309,19 @@ class shop extends shop_base
 		{
 			// if period is not set then fake it to be the date from the shopping cart
 			$period[$item_id] = $this->get_cart_min_period();
+			$max_p = $this->get_cart_max_period();
 			$is_period_item = false;
+		}
+		else
+		{
+			$max_p = 0;
+			foreach($period as $item_id => $iperiod)
+			{
+				if ($iperiod > $max_p)
+				{
+					$max_p = $iperiod;
+				}
+			}
 		}
 
 		$shop_o = $this->get($shop);
@@ -1302,11 +1368,11 @@ class shop extends shop_base
 				}
 			}
 
-			if (!$this->is_item_available($it,$count,$f,$iperiod))
+			if (!$this->is_item_available($it,$count,$f,$iperiod,$max_p,$itt))
 			{
 				// pold vabu itemeid sel ajal
 				global $status_msg;
-				$status_msg = E_SHOP_NO_FREE_ITEMS_DATE;
+				$status_msg = E_SHOP_NO_FREE_ITEMS_DATE." ".$this->time2date($iperiod,5);
 				session_register("status_msg");
 				// kui ei old kyllalt kohti, siis rollime tellimuse sisestuse tagasi ka
 				$f->restore_entry($it["cnt_form"] ? $it["cnt_form"] : $itt["cnt_form"],$shopping_cart["items"][$item_id]["cnt_entry"],$old_entry);
@@ -1318,7 +1384,7 @@ class shop extends shop_base
 			// et keegi teine samal ajal ei saax seda sama aja peale bronnida a minu vaene v2ike pea ei v6ta seda praegusel hetkel
 
 			// calculate price
-			$price = $this->calc_price($itt,$it,$count,$f,$shop_o);
+			$price = $this->calc_price($itt,$it,$count,$f,$shop_o,$this->get_cart_num_weeks());
 		
 			$GLOBALS["shopping_cart"]["items"][$item_id]["cnt"] = $count;
 			$GLOBALS["shopping_cart"]["items"][$item_id]["price"] = $price;
@@ -1479,8 +1545,11 @@ class shop extends shop_base
 			$this->vars(array("IS_F" => $is_f,"FILLED" => "","IS_PAID" => $isp));
 			$this->parse("LINE");
 		}
+		$arr["no_reforb"] = 1;
+		$arr["search"] = 1;
 		$this->vars(array(
-			"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$section
+			"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$section,
+			"search_reforb" => $this->mk_reforb($GLOBALS["action"],$arr),
 		));
 		return $this->parse();
 	}
@@ -1784,19 +1853,37 @@ class shop extends shop_base
 	// !this checks if $count items $it are still available for the dates specified int $f's loaded entry
 	// returns the data to be passed to do_order_item or false if not enough items are available
 	// note that data has no defined type, it must not be manipulated, just passed to do_order_item 
-	function is_item_available(&$it, $count,&$f,$period)
+	function is_item_available(&$it, $count,&$f,$period,$period_end,$itt)
 	{
 		global $shopping_cart;
 		// this thing also has to figure out if we are changing an existing order and then not count the items ordered in that
 		// of course only if the order dates are the same. phuq. 
 		if ($it["has_max"])
 		{
-			// check if there still are $count items available. 
-			$hm = $this->db_fetch_field("SELECT max_items FROM shop_item2per_prices WHERE tfrom <= $period AND tto >= $period AND item_id = ".$it["oid"],"max_items");
-			if ($hm > 0)
+			// check if there still are $count items available for the correct number of weeks
+			$weeks = ($period_end - $period)/(24*3600*7);
+			if ($weeks < 1)
 			{
-				$it["max_items"] = $hm;
+				$weeks = 1;
 			}
+
+			$q = "SELECT max_items FROM shop_item2per_places WHERE tfrom <= $period AND tto >= $period AND per_type = $weeks AND item_id = ".$it["oid"];
+			if ($it["oid"] == 9471)
+			{
+				dbg("max_items_q = $q <br>");
+			}
+			$this->db_query($q);
+			$tr = $this->db_next();
+			if (is_array($tr))
+			{
+				$it["max_items"] = $tr["max_items"];
+			}
+
+			if ($it["oid"] == 9471)
+			{
+				dbg("max_items_result = $it[max_items] <br>");
+			}
+			
 			if ($it["has_period"])
 			{
 				// if the item has periods and has objects for each period then we figure out for which time span the
@@ -1845,24 +1932,38 @@ class shop extends shop_base
 					// if the item is periodic, but doesn't have objects for it, then it 
 					// is periodic - and therefore must have some periods defined
 					// so we find the period for which the order was placed and check if for that period there are still some available
-
-					$num_sold = $this->db_fetch_field("SELECT num_sold FROM shop_item_period_avail WHERE period = $period AND item_id = ".$it["oid"],"num_sold");
-
-					// nini. siin leiame kas me muudame olemasolevat tellimust ja kas selles on see sama kaup samal ajal tellitud
-					if ($shopping_cart["order_id"] && $shopping_cart["old_items"][$it["oid"]]["period"] == $period)
-					{
-						// kui on samal ajal tellitud siis lisame vanas tellimuses tellitud asjade arvu juurde max itemsitele
-						$it["max_items"] += $shopping_cart["old_items"][$it["oid"]]["cnt"];
-					}
-
-					if (($it["max_items"] - $num_sold) >= $count)
-					{
-						return $period;
-					}
-					else
+					if (time() > ($period - $it["close_days"]*24*3600))
 					{
 						return false;
 					}
+
+					for ($i=0; $i < $weeks; $i++)
+					{
+						$num_sold = $this->db_fetch_field("SELECT num_sold FROM shop_item_period_avail WHERE period = $period AND item_id = ".$it["oid"],"num_sold");
+
+						// nini. siin leiame kas me muudame olemasolevat tellimust ja kas selles on see sama kaup samal ajal tellitud
+						if ($shopping_cart["order_id"] && $shopping_cart["old_items"][$it["oid"]]["period"] == $period)
+						{
+							// kui on samal ajal tellitud siis lisame vanas tellimuses tellitud asjade arvu juurde max itemsitele
+							$it["max_items"] += $shopping_cart["old_items"][$it["oid"]]["cnt"];
+						}
+
+						if ($it["oid"] == 9471)
+						{
+							dbg("count = $count , num_sold = $num_sold , max items = $it[max_items] <br>");
+						}
+
+						if (($it["max_items"] - $num_sold) < $count)
+						{
+							return false;
+						}
+						if (!$itt["has_voucher"])
+						{
+							return $period;
+						}
+						$period+=(24*3600*7);
+					}
+					return $period;
 				}
 			}
 			else
@@ -1885,7 +1986,7 @@ class shop extends shop_base
 		}
 	}
 
-	function do_order_item($it,$cnt,$free_items)
+	function do_order_item($it,$cnt,$free_items,$end_period,$itt)
 	{
 		// update the item's sold count
 		$this->db_query("UPDATE shop_items SET sold_items = sold_items + ".$cnt." WHERE id = ".$it["oid"]);
@@ -1906,17 +2007,33 @@ class shop extends shop_base
 		else
 		if ($it["has_period"])
 		{
-			// period but no objects, then $free_items contains the period for which to order the items
-			// we must update the free count in the correct period
-			$this->db_query("SELECT * FROM shop_item_period_avail WHERE item_id = ".$it["oid"]." AND period = $free_items");
-			if (!($row = $this->db_next()))
+			// figure out how many weeks we must order
+			$weeks = ($end_period - $free_items)/(24*3600*7);
+			if ($weeks < 1)
 			{
-				// there is no record and we must create one
-				$this->db_query("INSERT INTO shop_item_period_avail(item_id,period,num_sold) VALUES(".$it["oid"].",$free_items,$cnt)");
+				$weeks = 1;
 			}
-			else
+			for ($i=0; $i < $weeks; $i++)
 			{
-				$this->db_query("UPDATE shop_item_period_avail SET num_sold = num_sold + $cnt WHERE item_id = ".$it["oid"]." AND period = $free_items");
+				// period but no objects, then $free_items contains the period for which to order the items
+				// we must update the free count in the correct period
+				$this->db_query("SELECT * FROM shop_item_period_avail WHERE item_id = ".$it["oid"]." AND period = $free_items");
+				if (!($row = $this->db_next()))
+				{
+					// there is no record and we must create one
+					$this->db_query("INSERT INTO shop_item_period_avail(item_id,period,num_sold) VALUES(".$it["oid"].",$free_items,$cnt)");
+				}
+				else
+				{
+					$this->db_query("UPDATE shop_item_period_avail SET num_sold = num_sold + $cnt WHERE item_id = ".$it["oid"]." AND period = $free_items");
+				}
+
+				// only order first period for planes. ugh. 
+				if (!$itt["has_voucher"])
+				{
+					return;
+				}
+				$free_items+=(24*3600*7);
 			}
 		}
 	}
@@ -2046,7 +2163,7 @@ class shop extends shop_base
 		if ($sh["commission_eq"])
 		{
 			$eq = $this->get_eq($sh["commission_eq"]);
-			$commission = $this->do_parse_eq($eq,$allitemsarr,$weeks);
+			$commission = $this->do_parse_eq($eq,$allitemsarr,$weeks, true);
 		}
 		$f->reset();
 		$this->vars(array(
@@ -2288,6 +2405,7 @@ class shop extends shop_base
 		$sh = $this->get($shop);
 
 		$item = $this->get_item($item_id);
+		$itype = $this->get_item_type($item["type_id"]);
 		$parent_name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = ".$item["parent"],"name");
 
 		// yritame leida alguse ja l6pu kuup2evad.
@@ -2324,6 +2442,14 @@ class shop extends shop_base
 		$u = new users;
 		$pt =  $u->show_join_data(array("tpl" => "join_data_nopwd.tpl","second" => true));
 
+		$order_entry_id = $this->db_fetch_field("SELECT cnt_entry FROM order2item WHERE item_id = $item_id AND order_id = $order_id","cnt_entry");
+
+		$f2 = new form;
+		$itemname = $item["name"];
+		if ($item["cnt_extra_op"])
+		{
+			$itemname .= "<br>".$f2->show(array("id" => ($item["cnt_form"] ? $item["cnt_form"] : $itype["cnt_form"]), "entry_id" => $order_entry_id, "op_id" => $item["cnt_extra_op"]));
+		}
 		$this->vars(array(
 			"shop_owner_info" => $f->show(array("id" => $sh["owner_form"], "entry_id" => $sh["owner_form_entry"], "op_id" => $sh["owner_form_op_voucher"])),
 			"parent_name" => $parent_name,
@@ -2333,7 +2459,7 @@ class shop extends shop_base
 			"from" => $this->time2date($begin,3),
 			"to" => $this->time2date($end,3),
 			"voucher_no" => $order_id."_".$item_id,
-			"itemname" => $item["name"]
+			"itemname" => $itemname
 		));
 		die($this->parse());
 	}

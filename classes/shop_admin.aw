@@ -53,7 +53,7 @@ class shop_admin extends shop_base
 			1 => array(
 								 array("name" => "System", "url" => $this->mk_my_orb("system_general", array("shop_id" => $shop_id),"",false,true)),
 								 array("name" => "Categories", "url" => $this->mk_my_orb("categories_frame", array("shop_id" => $shop_id),"",false,true)),
-								 array("name" => "Users", "url" => "#"),
+//								 array("name" => "Users", "url" => "#"),
 								 array("name" => "Groups/rights", "url" => "#"),
 								 array("name" => "Currencies", "url" => $this->mk_my_orb("currency_redirect", array("shop_id" => $shop_id),"",false,true)),
 								 array("name" => "Languages", "url" => "languages.$ext"),
@@ -66,14 +66,14 @@ class shop_admin extends shop_base
 			3 => array(
 								 array("name" => "All reservations", "url" => $this->mk_my_orb("admin_orders", array("id" => $shop_id),"shop",true,true)),
 								 array("name" => "Detailed reservations", "url" => $this->mk_my_orb("detailed_reservations", array("shop_id" => $shop_id),"shop_admin",false,true)),
-//								 array("name" => "Passengers", "url" => $this->mk_my_orb("passengers", array("shop_id" => $shop_id),"shop_admin",false,true)),
+								 array("name" => "Passengers", "url" => $this->mk_my_orb("passengers", array("shop_id" => $shop_id),"shop_admin",false,true)),
 								 array("name" => "Detailed Passengers list", "url" => $this->mk_my_orb("passengers_detail", array("shop_id" => $shop_id),"shop_admin",false,true)),
 								 array("name" => "Statistics", "url" => $this->mk_my_orb("change", array("id" => "3443", "parent" => "3430"),"shop_stat", false, true)),
 								),
 			4 => array(
 								 array("name" => "Add new user", "url" => "#"),
-								 array("name" => "Add new group", "url" => "#"),
-								 array("name" => "View users", "url" => "#"),
+//								 array("name" => "Add new group", "url" => "#"),
+								 array("name" => "View users", "url" => "orb.aw?class=users&action=gen_list"),
 								),
 			
 		);
@@ -347,12 +347,14 @@ class shop_admin extends shop_base
 				$arr[$row["parent"]][] = $row;
 			}
 		}
+		
+		$root_o = $this->get_object($sh["root_menu"]);
 
-		$tr = $m->rec_tree($arr,$sh["root_menu"], 0);
+		$tr = $m->rec_tree($arr,$root_o["parent"], 0);
 		$m->vars(array(
 			"TREE" => $tr,
 			"DOC" => "",
-			"root" => $sh["root_menu"],
+			"root" => $root_o["parent"],
 			"uid" => $GLOBALS["uid"],
 			"date" => $this->time2date(time(),2)
 		));
@@ -427,8 +429,6 @@ class shop_admin extends shop_base
 			"year" => "",
 			"month" => "",
 			"day" => "",
-			"hour" => "",
-			"minute" => ""
 		));
 	
 		$t_from = mktime($from["hour"],$from["minute"],0,$from["month"],$from["day"],$from["year"]);
@@ -563,8 +563,6 @@ class shop_admin extends shop_base
 			"year" => "",
 			"month" => "",
 			"day" => "",
-			"hour" => "",
-			"minute" => ""
 		));
 	
 		$t_from = mktime($from["hour"],$from["minute"],0,$from["month"],$from["day"],$from["year"]);
@@ -659,7 +657,7 @@ class shop_admin extends shop_base
 				// ni ja nyt n2itame siis nimekirja. v2ljund valitakse poe confist
 				$f = new form;
 				$cur_form = 0;
-				$this->db_query("SELECT * FROM order2form_entries WHERE order_id IN ($orss) ORDER BY form_id");
+				$this->db_query("SELECT * FROM order2form_entries LEFT JOIN objects ON objects.oid = order2form_entries.entry_id WHERE order_id IN ($orss) ORDER BY objects.name");
 				while ($row = $this->db_next())
 				{
 					if ($cur_form != $row["form_id"])
