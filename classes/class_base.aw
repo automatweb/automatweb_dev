@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.122 2003/06/12 14:32:28 duke Exp $
+// $Id: class_base.aw,v 2.123 2003/06/18 15:23:55 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -177,7 +177,7 @@ class class_base extends aw_template
 		$argblock = array(
 			"id" => $this->id,
 			// this should refer to the active group
-			"group" => isset($args["group"]) ? $args["group"] : "",
+			"group" => isset($args["group"]) ? $args["group"] : $this->activegroup,
 			"orb_class" => $orb_class,
 			"parent" => $this->parent,
 			"period" => isset($args["period"]) ? $args["period"] : "",
@@ -753,6 +753,7 @@ class class_base extends aw_template
 			"rel" => isset($args["rel"]) ? $args["rel"] : "",
 		));
 
+
 		// figure out which group is active
 		// it the group argument is a defined group, use that
 		if (isset($this->action))
@@ -849,7 +850,12 @@ class class_base extends aw_template
 					elseif (empty($sub_group) && $tmp["group"] == $this->activegroup)
 					{
 						$property_list[$key] = $tmp;
-					};
+					}
+					elseif ($args["load_defaults"] && !empty($tmp["default"]))
+					{
+						$tmp["group"] = $this->activegroup;
+						$property_list[$key] = $tmp;
+					}
 				};
 			}
 			else
@@ -1631,7 +1637,6 @@ class class_base extends aw_template
 		$raw = aw_unserialize($args["str"]);
 		$this->init_class_base();
 
-
 		$this->process_data(array(
 			"parent" => $args["parent"],
 			"rawdata" => $raw,
@@ -1653,19 +1658,15 @@ class class_base extends aw_template
 		
 		$new = false;
 		$this->id = isset($id) ? $id : "";
+		
 
-		$realprops = $this->get_active_properties(array(
-				"clfile" => $this->clfile,
-				"all" => empty($group) ? true : false,
-				"group" => $group,
-				"cb_view" => $cb_view,
-				"rel" => $this->is_rel,
-		));
+		// basically, if this is a new object, then I need to load all the properties 
+		// that have default values and add them to the bunch.
 
-
+		
 		// only create the object, if one of the tables used by the object
 		// is the objects table
-		if (empty($id) && isset($this->tables["objects"]))
+		if (empty($id))
 		{
 			$period = aw_global_get("period");
 			$id = $this->ds->ds_new_object(array(),array(
@@ -1688,6 +1689,19 @@ class class_base extends aw_template
 			$new = true;
 			$this->id = $id;
 		};
+
+		$this->new = $new;
+		
+		// the question is .. should I call set_property for those too?
+		// and how do I load the stuff with defaults?
+		$realprops = $this->get_active_properties(array(
+				"clfile" => $this->clfile,
+				"all" => empty($group) ? true : false,
+				"group" => $group,
+				"cb_view" => $cb_view,
+				"rel" => $this->is_rel,
+				"load_defaults" => $new ? true : false,
+		));
 
 		if (isset($this->tables["objects"]))
 		{
@@ -1725,6 +1739,11 @@ class class_base extends aw_template
 			$type = $property["type"];
 
                         $xval = isset($rawdata[$name]) ? $rawdata[$name] : "";
+			if (empty($xval) && !empty($property["default"]))
+			{
+				$xval = $property["default"];
+			};
+
                         if ($property["type"] == "checkbox")
                         {
                                 // set value to 0 for unchecked checkboxes
@@ -1835,7 +1854,7 @@ class class_base extends aw_template
 			$method = $property["method"];
 			$table = $property["table"];
 			$field = !empty($property["field"]) ? $property["field"] : $property["name"];
-			
+
 			if ($this->is_rel)
 			{
 				if ($name == "name")
@@ -1868,6 +1887,7 @@ class class_base extends aw_template
 			};
 		};
 
+
 		if (sizeof($metadata) > 0)
 		{
 			$this->coredata["metadata"] = $metadata;
@@ -1883,7 +1903,7 @@ class class_base extends aw_template
 		}
 
 		$this->coredata["id"] = $this->id;
-
+		
 		if (method_exists($this->inst,"callback_pre_save"))
 		{
 			$this->inst->callback_pre_save(array(
@@ -1904,6 +1924,7 @@ class class_base extends aw_template
 
 		$this->ds->ds_save_object(array("id" => $this->id,"clid" => $this->clid),$this->coredata);
 		$this->save_object(array("data" => $this->objdata));
+
 
 		if (method_exists($this->inst,"callback_post_save"))
 		{
