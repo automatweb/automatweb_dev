@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.18 2002/12/02 11:18:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.19 2002/12/11 12:29:05 duke Exp $
 // Generic calendar class
 
 // php arvab by default, et pühapäev on 0.
@@ -197,6 +197,10 @@ class calendar extends aw_template
 	function parse_alias($args = array())
 	{
 		$cal = $this->get_object($args["alias"]["target"]);
+		if (!is_array($cal["meta"]))
+		{
+			$cal["meta"] = array();
+		};
 		$args = $cal["meta"] + array("id" => $args["oid"],"target" => $cal["oid"]);
 		return $this->gen_month($args);
 	}
