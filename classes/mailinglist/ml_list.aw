@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.37 2004/01/08 16:11:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.38 2004/02/05 11:56:13 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -138,6 +138,66 @@ class ml_list extends class_base
 			"clid" => CL_ML_LIST,
 		));
 		lc_load("definition");
+	}
+
+	/** (un)subscribe an address from(to) a list 
+		
+		@attrib name=subscribe nologin="1" 
+		
+		@param id required type=int 
+		@param rel_id required type=int 
+		
+	**/
+	function subscribe($args = array())
+	{
+		$list_id = $args["id"];
+		$rel_id = $args["rel_id"];
+		$rx = $this->db_fetch_row("SELECT * FROM aliases WHERE target = '$list_id' AND relobj_id = '$rel_id'");
+		if (empty($rx))
+		{
+			die("miskit on mäda");
+		};
+
+		$list_obj = new object($list_id);
+
+		// I have to check whether subscribing requires confirmation, and if so, send out the confirm message
+		// subscribe confirm works like this - we still subscribe the member to the list, but make
+		// her status "deactive" and generate her a confirmation code
+		// confirm code is added to the metad
+		$ml_member = get_instance(CL_ML_MEMBER);
+
+		if ($args["op"] == 1)
+		{
+			$retval = $ml_member->subscribe_member_to_list(array(
+				"name" => $args["name"],
+				"email" => $args["email"],
+				"list_id" => $list_obj->id(),
+				"confirm_subscribe" => $list_obj->prop("confirm_subscribe"),
+				"confirm_message" => $list_obj->prop("confirm_subscribe_msg"),
+			));	
+		};
+		if ($args["op"] == 2)
+		{
+			$retval = $ml_member->unsubscribe_member_from_list(array(
+				"email" => $args["email"],
+				"list_id" => $list_obj->id(),
+			));	
+		};
+
+		$relobj = new object($rel_id);
+
+		$mx1 = $relobj->meta("values");
+		$mx = $mx1["CL_ML_LIST"];
+
+		if (!empty($mx["redir_obj"]))
+		{
+			$retval = $this->cfg["baseurl"] . "/" . $mx["redir_obj"];
+		}
+		elseif ($list_obj->prop("redir_obj") != "")
+		{
+			$retval = $this->cfg["baseurl"] . "/" . $list_obj->prop("redir_obj");
+		}
+		return $retval;
 	}
 
 	function get_property($arr)
@@ -714,58 +774,6 @@ class ml_list extends class_base
 		));
 		return $this->parse();
 
-	}
-
-	function subscribe($args = array())
-	{
-		$list_id = $args["id"];
-		$rel_id = $args["rel_id"];
-		$rx = $this->db_fetch_row("SELECT * FROM aliases WHERE target = '$list_id' AND relobj_id = '$rel_id'");
-		if (empty($rx))
-		{
-			die("miskit on mäda");
-		};
-
-		$list_obj = new object($list_id);
-
-		// I have to check whether subscribing requires confirmation, and if so, send out the confirm message
-		// subscribe confirm works like this - we still subscribe the member to the list, but make
-		// her status "deactive" and generate her a confirmation code
-		// confirm code is added to the metad
-		$ml_member = get_instance(CL_ML_MEMBER);
-
-		if ($args["op"] == 1)
-		{
-			$retval = $ml_member->subscribe_member_to_list(array(
-				"name" => $args["name"],
-				"email" => $args["email"],
-				"list_id" => $list_obj->id(),
-				"confirm_subscribe" => $list_obj->prop("confirm_subscribe"),
-				"confirm_message" => $list_obj->prop("confirm_subscribe_msg"),
-			));	
-		};
-		if ($args["op"] == 2)
-		{
-			$retval = $ml_member->unsubscribe_member_from_list(array(
-				"email" => $args["email"],
-				"list_id" => $list_obj->id(),
-			));	
-		};
-
-		$relobj = new object($rel_id);
-
-		$mx1 = $relobj->meta("values");
-		$mx = $mx1["CL_ML_LIST"];
-
-		if (!empty($mx["redir_obj"]))
-		{
-			$retval = $this->cfg["baseurl"] . "/" . $mx["redir_obj"];
-		}
-		elseif ($list_obj->prop("redir_obj") != "")
-		{
-			$retval = $this->cfg["baseurl"] . "/" . $list_obj->prop("redir_obj");
-		}
-		return $retval;
 	}
 
 	       ////
