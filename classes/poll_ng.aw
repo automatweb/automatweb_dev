@@ -1,6 +1,6 @@
 <?php
 // poll_ng.aw - New generation poll
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll_ng.aw,v 1.6 2004/01/13 16:24:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll_ng.aw,v 1.7 2004/02/11 09:26:39 duke Exp $
 
 /*
 
@@ -67,8 +67,8 @@ class poll_ng extends class_base
                         "align" => "center",
                         "nowrap" => "1",
                 ));
-		
-		$o = obj($args["obj"]["oid"]);
+	
+		$o = $args["obj_inst"];
 		foreach($o->connections_from(array("type" => 1)) as $c)
 		{
 			$this->t->define_data(array(
