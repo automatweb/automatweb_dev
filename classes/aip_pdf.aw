@@ -213,6 +213,10 @@ class aip_pdf extends aw_template
 					$fc = $this->get_file(array(
 						"file" => $folder."/".$act["file"],
 					));
+					$_fs_filename = $f->_put_fs(array(
+						"type" => "application/pdf",
+						"content" => $fc
+					));
 
 					$_tt = $this->split_filename($act["file"]);
 					$pr = $this->find_parent_for_file($act["file"],$parent,strlen($_tt[0]." ".$_tt[1].".".$_tt[2]));
@@ -224,12 +228,10 @@ class aip_pdf extends aw_template
 						"jrk" => $_tt[3]
 					));
 
-					$this->quote(&$fc);
-					$this->quote(&$fc);
-					@$this->db_query("INSERT INTO files (id,type,content)
-							VALUES('$pid','application/pdf','$fc')");
+					@$this->db_query("INSERT INTO files (id,type,file)
+							VALUES('$pid','application/pdf','$_fs_filename')");
 	
-					$_sz = filesize($folder."/".$act["file"]);
+					$_sz = filesize($_fs_filename);
 					$this->set_object_metadata(array(
 						"oid" => $pid,
 						"key" => "file_size",
@@ -266,11 +268,14 @@ class aip_pdf extends aw_template
 						$fc = $this->get_file(array(
 							"file" => $folder."/".$act["file"],
 						));
-						$this->quote(&$fc);
-						$this->quote(&$fc);
+						$f = get_instance("file");
+						$_fs_filename = $f->_put_fs(array(
+							"type" => "application/pdf",
+							"content" => $fc
+						));
 
-						$this->db_query("UPDATE files SET content = '$fc'	WHERE id = $id");
-						$_sz = filesize($folder."/".$act["file"]);
+						$this->db_query("UPDATE files SET file = '$_fs_filename' WHERE id = $id");
+						$_sz = filesize($_fs_filename);
 						$this->set_object_metadata(array(
 							"oid" => $id,
 							"key" => "file_size", 
@@ -286,9 +291,9 @@ class aip_pdf extends aw_template
 				if ($act["action"] == DELETE_FILE)
 				{
 					// delete from aw
-					$row = $this->db_fetch_row("SELECT * FROM aip_files WHERE filename = '$fn'");
+					$row = $this->db_fetch_row("SELECT * FROM aip_files WHERE filename = '$act[file]'");
 					$this->delete_object($row["id"]);
-					$this->db_query("DELETE FROM aip_files WHERE id = '$row[id]'");
+					$this->db_query("DELETE FROM aip_files WHERE id = '$act[file]'");
 				}
 				flush();
 			}
@@ -312,16 +317,16 @@ class aip_pdf extends aw_template
 		while($row = $this->db_next())
 		{
 			// now check if the parent menu exists
-			if ($this->mar[$row["parent"]])
-			{
+//			if ($this->mar[$row["parent"]])
+//			{
 				$ret[$row["filename"]] = $row;
-			}
-			else
-			{
-				$this->save_handle();
-				$this->db_query("DELETE FROM aip_files WHERE id = $row[id]");
-				$this->restore_handle();
-			}
+//			}
+//			else
+//			{
+//				$this->save_handle();
+//				$this->db_query("DELETE FROM aip_files WHERE id = $row[id]");
+//				$this->restore_handle();
+//			}
 		}
 		return $ret;
 	}
@@ -341,12 +346,21 @@ class aip_pdf extends aw_template
 					// here we need to figure out the status of the file - new / changed / unchanged
 					$mt = filemtime($folder."/".$file);
 
-					if (!$fd[$file])	// enne faili polnud
+					$found = false;
+					foreach($fd as $_dat)
+					{
+						if (strtoupper($_dat["filename"]) == strtoupper($file))
+						{
+							$found = true;
+							$fd_tm = $_dat["tm"];
+						}
+					}
+					if (!$found)	// enne faili polnud
 					{
 						$stat = FILE_STAT_NEW;
 					}
 					else
-					if ($fd[$file]["tm"] < $mt)	// fail on uuem kui see mis baasis on
+					if ($fd_tm < $mt)	// fail on uuem kui see mis baasis on
 					{
 						$stat = FILE_STAT_MODIFIED;
 					}

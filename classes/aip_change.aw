@@ -519,6 +519,10 @@ class aip_change extends aw_template
 					$fc = $this->get_file(array(
 						"file" => $folder."/".$act["file"],
 					));
+					$_fs_filename = $f->_put_fs(array(
+						"content" => $fc,
+						"type" => "application/pdf"
+					));
 
 					$_tt = $this->split_filename($act["file"]);
 					$pr = $this->find_parent_for_file($act["file"],$parent,strlen($_tt[0]." ".$_tt[1].".".$_tt[2]));
@@ -530,12 +534,10 @@ class aip_change extends aw_template
 						"jrk" => $_tt[3]
 					));
 
-					$this->quote(&$fc);
-					$this->quote(&$fc);
-					$this->db_query("INSERT INTO files (id,type,content)
-							VALUES('$pid','application/pdf','$fc')");
+					$this->db_query("INSERT INTO files (id,type,file)
+							VALUES('$pid','application/pdf','$_fs_filename')");
 	
-					$_sz = filesize($folder."/".$act["file"]);
+					$_sz = filesize($_fs_filename);
 					$this->set_object_metadata(array(
 						"oid" => $pid,
 						"key" => "file_size",
@@ -571,10 +573,13 @@ class aip_change extends aw_template
 						$fc = $this->get_file(array(
 							"file" => $folder."/".$act["file"],
 						));
-						$this->quote(&$fc);
-						$this->quote(&$fc);
+						$f = get_instance("file");
+						$_fs_filename = $f->_put_fs(array(
+							"content" => $fc,
+							"type" => "application/pdf"
+						));
 
-						$this->db_query("UPDATE files SET content = '$fc'	WHERE id = $id");
+						$this->db_query("UPDATE files SET file = '$_fs_filename' WHERE id = $id");
 						$_sz = filesize($folder."/".$act["file"]);
 						$this->set_object_metadata(array(
 							"oid" => $id,
@@ -742,12 +747,21 @@ class aip_change extends aw_template
 					// here we need to figure out the status of the file - new / changed / unchanged
 					$mt = filemtime($folder."/".$file);
 
-					if (!$fd[$file])	// enne faili polnud
+					$found = false;
+					foreach($fd as $_dat)
+					{
+						if (strtoupper($_dat["filename"]) == strtoupper($file))
+						{
+							$found = true;
+							$fd_tm = $_dat["tm"];
+						}
+					}
+					if (!$found)	// enne faili polnud
 					{
 						$stat = FILE_STAT_NEW;
 					}
 					else
-					if ($fd[$file]["tm"] < $mt)	// fail on uuem kui see mis baasis on
+					if ($fd_tm < $mt)	// fail on uuem kui see mis baasis on
 					{
 						$stat = FILE_STAT_MODIFIED;
 					}
