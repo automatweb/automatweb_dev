@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.54 2001/06/04 08:37:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.55 2001/06/05 13:45:16 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -1838,6 +1838,7 @@ class messenger extends menuedit_light
 		if ($id == "new")
 		{
 			$pop3conf[] = $confblock;
+			$id = sizeof($pop3conf) - 1;
 			$status_msg = "Konto on lisatud";
 		}
 		else
@@ -1859,7 +1860,7 @@ class messenger extends menuedit_light
 					"value" => $conf,
 		));
 		session_register("status_msg");
-		return $this->mk_my_orb("configure",array("page" => "accounts"));
+		return $this->mk_my_orb("configure_pop3",array("id" => $id));
 	}
 
 	////
