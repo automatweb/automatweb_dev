@@ -4,6 +4,7 @@
 // ---------------------------------------------------------------------------
 
 // aw version - [major release].[minor release].[fix number]
+// $Header: /home/cvs/automatweb_dev/const.aw,v 1.3 2001/05/15 20:09:53 duke Exp $
 define(AW_VERSION,"2.0.0");
 
 // here we define basic constants needed by all components
