@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.35 2003/02/10 14:09:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.36 2003/02/11 15:34:50 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -2744,7 +2744,11 @@ class form_table extends form_base
 				$alias_data = $cc["alias_data"][$aid];
 				if ($alias_data["class_id"] == CL_FORM_TABLE)
 				{
-					$str = $this->get_ftable_alias_url($str, $alias_data["target"], $dat, $col, $cc, $form_id, $textvalue);
+					// don't make the link if the cell content is itself a link
+					if (strpos($str, "<a href=") === false)
+					{
+						$str = $this->get_ftable_alias_url($str, $alias_data["target"], $dat, $col, $cc, $form_id, $textvalue);
+					}
 				}
 				else
 				if ($alias_data["class_id"] == CL_FORM_OUTPUT)
