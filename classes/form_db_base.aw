@@ -52,8 +52,8 @@ class form_db_base extends aw_template
 			// sigh. would be really nice if we could have elements of another type - integer for example
 			// that would make some searches really faster, but alas - formgen is about as type-neutral
 			// as you can get. sucks. 
-			$this->db_query("ALTER TABLE form_".$fid."_entries ADD el_$el TEXT");
-			$this->db_query("ALTER TABLE form_".$fid."_entries ADD ev_$el TEXT");
+			$this->db_query("ALTER TABLE form_".$fid."_entries ADD el_$el TEXT DEFAULT ''");
+			$this->db_query("ALTER TABLE form_".$fid."_entries ADD ev_$el TEXT DEFAULT ''");
 
 			// add indexes to form tables aswell
 			// can't add these - mysql has a limit of 10 indexes per table :((
@@ -878,6 +878,7 @@ class form_db_base extends aw_template
 				$relf =& $this->cache_get_form_eldat($el->arr["linked_form"]);
 				$linked_el = $relf["els"][$el->arr["linked_element"]];
 				$elname = form_db_base::mk_tblcol($linked_el["table"],$linked_el["col2"],$el->arr["linked_form"]);
+				$elname2 = form_db_base::mk_tblcol($linked_el["table"],$linked_el["col"],$el->arr["linked_form"]);
 
 				// include only elements into which the user has entered a value
 				if (($value = trim($el->get_value())) != "")	
@@ -978,11 +979,11 @@ class form_db_base extends aw_template
 							{
 								if ($el->arr["search_all_text"] != 1)
 								{
-									$qstr = " $elname LIKE '%$matches[1]%' ";
+									$qstr = " $elname2 LIKE '%$matches[1]%' ";
 								}
 								else
 								{
-									$qstr = " $elname = '$matches[1]' ";
+									$qstr = " $elname2 = '$matches[1]' ";
 								}
 							}
 							else
@@ -1004,11 +1005,11 @@ class form_db_base extends aw_template
 								{
 									if ($el->arr["search_all_text"] != 1)
 									{
-										$qstr = " $elname LIKE '%$value%' ";
+										$qstr = " $elname2 LIKE '%$value%' ";
 									}
 									else
 									{
-										$qstr = " $elname = '$value' ";
+										$qstr = " $elname2 = '$value' ";
 									}
 								};
 							};
@@ -1049,22 +1050,22 @@ class form_db_base extends aw_template
 										$nextnot = false;
 										if ($el->arr["search_all_text"] != 1)
 										{
-											$qstr .= " $elname NOT LIKE '%$pic%' ";
+											$qstr .= " $elname2 NOT LIKE '%$pic%' ";
 										}
 										else
 										{
-											$qstr .= " $elname != '$pic' ";
+											$qstr .= " $elname2 != '$pic' ";
 										}
 									}
 									else
 									{
 										if ($el->arr["search_all_text"] != 1)
 										{
-											$qstr .= " $elname LIKE '%$pic%' ";
+											$qstr .= " $elname2 LIKE '%$pic%' ";
 										}
 										else
 										{
-											$qstr .= " $elname = '$pic' ";
+											$qstr .= " $elname2 = '$pic' ";
 										}
 									}
 								}
@@ -1083,11 +1084,11 @@ class form_db_base extends aw_template
 						{
 							if ($el->arr["search_all_text"] != 1)
 							{
-								$qstr = " $elname LIKE '%$value%' ";
+								$qstr = " $elname2 LIKE '%$value%' ";
 							}
 							else
 							{
-								$qstr = " $elname = '$value' ";
+								$qstr = " $elname2 = '$value' ";
 							}
 						}
 
@@ -1473,10 +1474,13 @@ class form_db_base extends aw_template
 	// rel_unique - if true, only distinct values are returned
 	// ret_values - if set, the return value is just the result array
 	// ret_ids - if set, array index is entry_id
+	// user_entries_only - if set, only entries that were created by the current user are returned
 	function get_entries_for_element($args)
 	{
 		extract($args);
 		$this->save_handle();
+
+		$where = "";
 
 		$inst =& $this->cache_get_form_eldat($rel_form);
 		if ($inst["save_table"] == 1)
@@ -1492,6 +1496,10 @@ class form_db_base extends aw_template
 			$rel_el = $rel_tbl.".ev_".$rel_element;
 			$id_col = $rel_tbl.".id as id,";
 			$join = " LEFT JOIN objects ON objects.oid = ".$rel_tbl.".id  WHERE objects.status != 0 ";
+			if ($user_entries_only)
+			{
+				$where = " AND objects.createdby = '".aw_global_get("uid")."' ";
+			}
 		}
 
 		$order_by = "";
@@ -1508,7 +1516,7 @@ class form_db_base extends aw_template
 			$gpby = " GROUP BY $rel_el ";
 		}
 
-		$q = "SELECT $id_col $rel_el as el_val FROM ".$rel_tbl.$join.$gpby.$order_by;
+		$q = "SELECT $id_col $rel_el as el_val FROM ".$rel_tbl.$join.$where.$gpby.$order_by;
 		if ($GLOBALS["fg_dbg"] == 2) echo "_grlc q = $q <br>";
 
 		// try to read the result from the cache
@@ -1551,6 +1559,11 @@ class form_db_base extends aw_template
 	function get_sql_grpby($grpby)
 	{
 		$gpb = array();
+		if (!is_array($grpby))
+		{
+			return false;
+		};
+
 		foreach($grpby as $fid => $fdat)
 		{
 			if ($fid)
