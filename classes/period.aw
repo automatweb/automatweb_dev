@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.3 2003/05/13 12:08:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.4 2003/05/20 12:15:51 duke Exp $
 // period.aw - periods 
 /*
 
@@ -106,8 +106,7 @@ class period extends class_base
 				$this->activate_period($args["form_data"]["activeperiod"],$this->oid);
 				break;
 		};
-
-
+		return $retval;
 	}
 
 	function callback_get_activity_list($args = array())
