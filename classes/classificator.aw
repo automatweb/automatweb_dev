@@ -21,9 +21,10 @@
 @property clids type=select multiple=1 
 @caption Klassid millele kehtib
 
-*/
+@reltype FOLDER value=1 clid=CL_MENU
+@caption hallatav kataloog
 
-define("RELTYPE_FOLDER", 1);
+*/
 
 class classificator extends class_base
 {
@@ -32,41 +33,6 @@ class classificator extends class_base
 		$this->init(array(
 			'clid' => CL_CLASSIFICATOR
 		));
-	}
-
-	////
-	// !this should create a string representation of the object
-	// parameters
-	//    oid - object's id
-	function _serialize($arr)
-	{
-		extract($arr);
-		$ob = $this->get_object($oid);
-		if (is_array($ob))
-		{
-			return aw_serialize($ob, SERIALIZE_NATIVE);
-		}
-		return false;
-	}
-
-	////
-	// !this should create an object from a string created by the _serialize() function
-	// parameters
-	//    str - the string
-	//    parent - the folder where the new object should be created
-	function _unserialize($arr)
-	{
-		extract($arr);
-		$row = aw_unserialize($str);
-		$row['parent'] = $parent;
-		unset($row['brother_of']);
-		$this->quote(&$row);
-		$id = $this->new_object($row);
-		if ($id)
-		{
-			return true;
-		}
-		return false;
 	}
 
 	function get_property(&$arr)
@@ -83,31 +49,17 @@ class classificator extends class_base
 	function callback_post_save($arr)
 	{
 		extract($arr);
-		$ob = $this->get_object($id);
+		$ob = new object($id);
 		$this->db_query("DELETE FROM classificator2menu WHERE clf_id = '".$id."'");
-		$arr = new aw_array($ob['meta']['folders']);
+		$arr = $ob->prop("folders");
 		foreach($arr->get() as $_fid => $_tt)
 		{
-			$_arr = new aw_array($ob['meta']['clids']);
+			$_arr = new aw_array($ob->prop('clids'));
 			foreach($_arr->get() as $clid)
 			{
+				// so how do I use storage for queries like this? -- duke
 				$this->db_query("INSERT INTO classificator2menu(menu_id, class_id, clf_id) VALUES('".$_tt."','".$clid."','".$id."')");
 			}
-		}
-	}
-
-	function callback_get_rel_types()
-	{
-		return array(
-			RELTYPE_FOLDER => "hallatav kataloog"
-		);
-	}
-
-	function callback_get_classes_for_relation($args = array())
-	{
-		if ($args["reltype"] == RELTYPE_FOLDER)
-		{
-			return array(CL_PSEUDO);
 		}
 	}
 
