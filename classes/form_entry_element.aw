@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.59 2002/09/26 16:14:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.60 2002/09/30 06:54:13 kristo Exp $
 // form_entry_element.aw - 
 classload("currency");
 load_vcl("date_edit");
@@ -24,8 +24,9 @@ class form_entry_element extends form_element
 		$this->lc_load("form","lc_form");
 
 		$this->read_template("admin_element.tpl");
+
 		$this->vars(array(
-			"cell_id"									=> "element_".$this->id, 
+			"cell_id" => "element_".$this->id, 
 		));
 
 		// here we create the listboxes for selecting tables
@@ -193,6 +194,10 @@ class form_entry_element extends form_element
 				$src = strrev(chunk_split(strrev(trim($src)),3,$this->arr["thousands_sep"]));
 				// chunk split adds one too many separators, so remove that
 				$src = substr($src,strlen($this->arr["thousands_sep"]));
+			}
+			if ($this->arr["subtype"] == "email")
+			{
+				$src = "<a href='mailto:".$src."'>$src</a>";
 			}
 			$html = $src;
 		}
