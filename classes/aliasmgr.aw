@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.69 2003/01/17 14:48:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.70 2003/01/30 16:27:35 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -528,7 +528,7 @@ class aliasmgr extends aw_template
 	// parameters
 	//   id - the object to which the alias is added
 	//   alias - id of the object to add as alias
-	function addalias($arr)
+	function orb_addalias($arr)
 	{
 		extract($arr);
 		$aliases = explode(",",$alias);

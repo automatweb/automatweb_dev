@@ -33,7 +33,7 @@
 		</action>
 		
 		<action name="addalias">
-			<function name="addalias">
+			<function name="orb_addalias">
 				<arguments>
 					<required name="id"/>
 					<required name="alias"/>
