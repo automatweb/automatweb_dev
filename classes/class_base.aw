@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.78 2003/02/21 12:49:07 duke Exp $
+// $Id: class_base.aw,v 2.79 2003/03/05 13:03:59 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -1468,23 +1468,35 @@ class class_base extends aliasmgr
 			{
 				if ($field == "meta")
 				{
-					$property["value"] = $this->coredata["meta"][$property["name"]];
+					if (isset($this->coredata["meta"][$property["name"]]))
+					{
+						$property["value"] = $this->coredata["meta"][$property["name"]];
+					};
 				}
 				else
 				{
-					$property["value"] = $this->coredata[$property["name"]];
+					if (isset($this->coredata[$property["name"]]))
+					{
+						$property["value"] = $this->coredata[$property["name"]];
+					};
 				};
 			}
 			else
 			{
 				if ($property["method"] == "serialize")
 				{
-					$property["value"] = aw_unserialize($this->objdata[$field]);
+					if (isset($this->objdata[$field]))
+					{
+						$property["value"] = aw_unserialize($this->objdata[$field]);
+					};
 				}
 				else
 				{
 					$_field = ($property["name"] != $property["field"]) ? $property["field"] : $property["name"];
-					$property["value"] = $this->objdata[$_field];
+					if (isset($this->objdata[$_field]))
+					{
+						$property["value"] = $this->objdata[$_field];
+					};
 				};
 			};
 		};
