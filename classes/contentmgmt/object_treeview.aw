@@ -717,7 +717,7 @@ class object_treeview extends class_base
 			foreach($a as $clid => $clname)
 			{
 				$rt = "clid_".$clid;
-				if (isset($arr["form_data"][$rt]) && $arr["form_data"][$rt] == 1)
+				if (isset($arr["request"][$rt]) && $arr["request"][$rt] == 1)
 				{
 					$_clids[$clid] = $clid;
 				}
