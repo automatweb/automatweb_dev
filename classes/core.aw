@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.51 2001/08/16 15:04:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.52 2001/08/16 16:02:42 kristo Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -1178,6 +1178,7 @@ class core extends db_connector
 		$content.= "lang_id = ".$GLOBALS["lang_id"]."\n";
 		$content.= "uid = ".$GLOBALS["uid"]."\n";
 		$content.= "section = ".$GLOBALS["section"]."\n";
+		$content.= "url = ".$GLOBALS["baseurl"].$GLOBALS["REQUEST_URI"]."\n-----------------------\n";
 		global $HTTP_COOKIE_VARS;
 		foreach($HTTP_COOKIE_VARS as $k => $v)
 		{
@@ -1199,7 +1200,14 @@ class core extends db_connector
 			$content.="HTTP_SERVER_VARS[$k] = $v \n";
 		}
 
-		mail("vead@struktuur.ee", $subj, $content);
+		// try to find the user's email;
+		$head = "";
+		global $udata;
+		if (is_array($udata) && $uid != "")
+		{
+			$head="From: $uid<".$udata["email"].">\n";
+		}
+		mail("vead@struktuur.ee", $subj, $content,$head);
 
 		if ($silent)
 		{
