@@ -186,15 +186,6 @@
             <caption>Saada tervitusmeil</caption>
       </property>
       <property>
-            <name>roles</name>
-            <table>users</table>
-            <group>roles</group>
-            <type>text</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>roles</field>
-      </property>
-      <property>
             <name>objects_own</name>
             <table>users</table>
             <group>objects_own</group>
@@ -240,6 +231,15 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <field>groups</field>
+      </property>
+      <property>
+            <name>roles</name>
+            <table>users</table>
+            <group>roles</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>roles</field>
       </property>
       <property>
             <name>home_folder</name>
@@ -364,9 +364,6 @@
             <chpwd>
                   <caption>Parool</caption>
             </chpwd>
-            <roles>
-                  <caption>Rollid</caption>
-            </roles>
             <objects>
                   <caption>Objektid ja &amp;Otilde;igused</caption>
             </objects>

@@ -21,11 +21,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 @classinfo syslog_type=ST_USERS relationmgr=yes no_status=1
 
 @groupinfo chpwd caption="Parool"
-@groupinfo roles caption=Rollid
 @groupinfo objects caption="Objektid ja &Otilde;igused"
 @groupinfo objects_own caption="Enda tehtud" parent=objects
 @groupinfo objects_other caption="Teiste tehtud" parent=objects
-@groupinfo roles caption="Rollid"
 @groupinfo groups caption=Grupid
 @groupinfo jdata caption="Liitumise info"
 @groupinfo stat caption=Statistika
@@ -100,11 +98,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 
 @property resend_welcome store=no type=checkbox ch_value=1
 @caption Saada tervitusmeil
-
-@default group=roles
-
-@property roles type=text store=no no_caption=1
-@caption Rollid
 
 @default group=objects
 
@@ -269,10 +262,6 @@ class user extends class_base
 
 			case "groups":
 				$prop['value'] = $this->_get_group_membership($arr["obj_inst"]->prop("uid"), $arr["obj_inst"]->id());
-				break;
-
-			case "roles":
-				$prop['value'] = $this->_get_roles($arr["obj_inst"]->prop("uid"));
 				break;
 
 			case "objects_own":
@@ -852,16 +841,6 @@ class user extends class_base
 			}
 		}
 		return -1;
-	}
-
-	function _get_roles($uid)
-	{
-		// get user gid
-		$gid = $this->users->get_gid_by_uid($uid);
-
-		// show roles table by group
-		$gr = get_instance(CL_GROUP);
-		return $gr->_get_roles($gid);
 	}
 
 	function _get_objects($uid, $own)
