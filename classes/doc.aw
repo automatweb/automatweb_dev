@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.65 2004/03/08 19:16:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.66 2004/03/09 12:23:19 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -234,11 +234,13 @@ class doc extends class_base
 				break;
 
 			case "language":
+				/*
 				$objdata = $arr["obj_inst"];
 				$lg = get_instance("languages");
 				$lang_list = $lg->get_list();
 				$lang_id = $lg->get_langid_for_code($objdata->lang());
 				$data["value"] = $lang_list[$lang_id];
+				*/
 				break;
 		};
 		return $retval;
@@ -257,14 +259,6 @@ class doc extends class_base
 				));
 				break;
 			
-			case "cal_event":
-				$this->create_event(array(
-					"id" => $args["obj_inst"]->id(),
-					"form_data" => $args["request"],
-				));
-				$retval = PROP_IGNORE;
-				break;
-
 			case "link_calendars":
 				$this->update_link_calendars($args);
 				break;
@@ -477,28 +471,12 @@ class doc extends class_base
 	function gen_navtoolbar($arr)
 	{
 		$toolbar = &$arr["prop"]["toolbar"];
-		if ($this->classinfo["raw_output"] == 1)
-		{
-			$toolbar->add_button(array(
-				"name" => "save",
-				"tooltip" => "Salvesta",
-				"target" => "contentarea",
-				"url" => "javascript:parent.contentarea.submit_changeform();",
-				"url" => "javascript:submit_changeform();",
-				"img" => "save.gif",
-			));
-		}
-		else
-		{
-			$toolbar->add_button(array(
-				"name" => "save",
-				"tooltip" => "Salvesta",
-	//			"target" => "contentarea",
-	//			"url" => "javascript:parent.contentarea.submit_changeform();",
-				"url" => "javascript:submit_changeform();",
-				"img" => "save.gif",
-			));
-		};
+		$toolbar->add_button(array(
+			"name" => "save",
+			"tooltip" => "Salvesta",
+			"url" => "javascript:submit_changeform();",
+			"img" => "save.gif",
+		));
 
 	
 		if (is_object($arr["obj_inst"]) && $arr["obj_inst"]->id())
@@ -506,7 +484,6 @@ class doc extends class_base
 			$toolbar->add_button(array(
 				"name" => "preview",
 				"tooltip" => "Eelvaade",
-				"target" => "contentarea",
 				"url" => aw_global_get("baseurl") . "/" . $arr["obj_inst"]->id(),
 				"img" => "preview.gif",
 			));
