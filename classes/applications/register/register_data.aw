@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.20 2004/12/30 11:06:28 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.21 2004/12/30 14:16:59 dragut Exp $
 // register_data.aw - Registri andmed 
 /*
 @classinfo syslog_type=ST_REGISTER_DATA relationmgr=yes no_comment=1
@@ -1089,6 +1089,7 @@ class register_data extends class_base
 
 	function callback_pre_save($arr)
 	{
+
 		if ($arr["new"] && $arr["request"]["set_register_id"])
 		{
 			$arr["obj_inst"]->set_prop("register_id", $arr["request"]["set_register_id"]);
@@ -1107,9 +1108,7 @@ class register_data extends class_base
 	function callback_post_save($arr)
 	{
 
-// let's fool around with the nail sending only if new warning is submitted
-
-		if($arr['new'] == 1)
+		if($arr['new'] && $arr['request']['cfgform'])
 		{
 //			arr($arr);
 			$tmp_cfgform = obj($arr['request']['cfgform']);
