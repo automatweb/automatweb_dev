@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/html_frameset.aw,v 2.0 2001/06/27 19:35:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/Attic/html_frameset.aw,v 1.1 2004/01/10 16:06:58 kristo Exp $
 
 /*
 $ht = new html_frameset(array(
