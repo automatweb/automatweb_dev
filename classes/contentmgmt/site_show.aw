@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.63 2004/06/09 13:02:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.64 2004/06/09 20:24:37 kristo Exp $
 
 /*
 
@@ -554,11 +554,6 @@ class site_show extends class_base
 				$filter["limit"] = $obj->prop("ndocs"); 
 			};
 
-			if ($arr["all_langs"])
-			{
-				$filter["lang_id"] = array();
-			}
-
 			$docid = array();
 			$cnt = 0;
 			if ($ordby == "")
@@ -598,6 +593,11 @@ class site_show extends class_base
 			$filter["class_id"] = array(CL_DOCUMENT, CL_PERIODIC_SECTION, CL_BROTHER_DOCUMENT);
 			$filter["lang_id"] = aw_global_get("lang_id");
 			$filter["sort_by"] = $ordby;
+
+			if ($arr["all_langs"])
+			{
+				$filter["lang_id"] = array();
+			}
 
 			$documents = new object_list($filter);
 
