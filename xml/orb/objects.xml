@@ -1,47 +1,26 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="objects">
-		<action name="search">
+	<class name="objects" folder="" extends="db_objects">
+		<action name="search" >
 			<function name="search">
 				<arguments>
 					<optional name="stype" type="int"/>
 					<optional name="target" type="int"/>
 					<optional name="otype" type="int"/>
 					<optional name="one" type="int"/>
-					<optional name="return_url"/>
+					<optional name="return_url" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_hd">
-			<function name="submit_hd">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="hf_search">
-			<function name="hf_search">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-		
-		<action name="submit_hf_search">
-			<function name="submit_hf_search">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="search_submit">
+		<action name="search_submit" >
 			<function name="search_submit">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="show">
+		<action name="show" nologin="1">
 			<function name="show">
 				<arguments>
 					<required name="id" type="int"/>
@@ -49,14 +28,46 @@
 			</function>
 		</action>
 
-		<action name="search_new" all_args="1">
-			<function name="search_new">
-				<arguments/>
+		<action name="db_query" >
+			<function name="orb_db_query">
+				<arguments>
+					<required name="sql" />
+				</arguments>
 			</function>
 		</action>
 
+		<action name="delete_object" >
+			<function name="orb_delete_object">
+				<arguments>
+					<required name="oid" />
+				</arguments>
+			</function>
+		</action>
 
-		<action name="get_list">
+		<action name="delete_aliases_of" >
+			<function name="orb_delete_aliases_of">
+				<arguments>
+					<required name="oid" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_db_pwd" nologin="1">
+			<function name="orb_get_db_pwd">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="aw_ini_get_mult" nologin="1">
+			<function name="aw_ini_get_mult">
+				<arguments>
+					<required name="vals" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_list" nologin="1" all_args="1">
 			<function name="orb_get_list">
 				<arguments>
 					<optional name="ignore_langmenus" />
@@ -66,52 +77,13 @@
 			</function>
 		</action>
 
-		<action name="list_objects">
-			<function name="list_objects">
+		<action name="serialize" nologin="1">
+			<function name="orb_serialize">
 				<arguments>
-					<optional name="class"/>
-					<optional name="addempty"/>
-					<optional name="parent"/>
-					<optional name="onlyactive"/>
-					<optional name="name"/>
-					<optional name="return"/>
-					<optional name="subclass"/>
-					<optional name="flags"/>
+					<required name="oid" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="serialize">
-			<function name="serialize">
-				<arguments>
-					<optional name="oid"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="db_query">
-			<function name="orb_db_query">
-				<arguments>
-					<required name="sql"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="delete_object">
-			<function name="orb_delete_object">
-				<arguments>
-					<required name="oid"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="delete_aliases_of">
-			<function name="orb_delete_aliases_of">
-				<arguments>
-					<required name="oid"/>
-				</arguments>
-			</function>
-		</action>
 	</class>
 </orb>
-		
