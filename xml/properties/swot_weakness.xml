@@ -19,14 +19,6 @@
             <group>general</group>
             <caption>Klassifikaator</caption>
       </property>
-      <property>
-            <name>status</name>
-            <type>status</type>
-            <field>status</field>
-            <table>objects</table>
-            <group>general</group>
-            <caption>Staatus</caption>
-      </property>
       <classinfo>
             <syslog_type>ST_SWOT_WEAKNESS</syslog_type>
       </classinfo>
