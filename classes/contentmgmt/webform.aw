@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.56 2005/02/09 13:31:44 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.57 2005/02/11 13:06:28 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -239,6 +239,9 @@ class webform extends class_base
 			"email" => t("E-post"),
 		);
 		$this->form_types = array(
+			CL_REGISTER_DATA => t("Tavaline vorm"),
+			CL_CALENDAR_REGISTRATION_FORM => t("S&uuml;ndmusele registreerimine"),
+			CL_SHOP_PRODUCT => t("Toode"),
 		);
 		$this->no_props = $this->make_keys(array("status", "name", "comment", "register_id", "person_id"));
 	}
@@ -255,9 +258,10 @@ class webform extends class_base
 			}
 			if(!$arr["new"])
 			{
-				if($obj_inst->prop("form_type") != CL_CALENDAR_REGISTRATION_FORM )
+				$form = $this->make_keys(array_keys($this->form_types));
+				if(in_array($obj_inst->prop("form_type"), $form))
 				{
-					$this->p_clid = CL_REGISTER_DATA;
+					$this->p_clid = $form[$obj_inst->prop("form_type")];
 				}
 				else
 				{
@@ -314,15 +318,11 @@ class webform extends class_base
 				break;
 
 			case "form_type_value":
-				$prop["value"] = $arr["obj_inst"]->prop("form_type") != CL_CALENDAR_REGISTRATION_FORM ? t("Tavaline vorm") : t("S&uuml;ndmusele registreerimine");
+				$prop["value"] = $this->form_types[$arr["obj_inst"]->prop("form_type")];
 				break;
 				
 			case "form_type":
-				$prop["options"] = array(
-					CL_REGISTER_DATA => t("Tavaline vorm"),
-					CL_CALENDAR_REGISTRATION_FORM => t("S&uuml;ndmusele registreerimine"),
-					CL_SHOP_PRODUCT => t("Toode"),
-				);
+				$prop["options"] = $this->form_types;
 				break;
 				
 			case "search":
@@ -563,13 +563,15 @@ class webform extends class_base
 		$arr["obj_inst"]->save();
 		$this->p_clid = $arr["request"]["form_type"];
 		$form = obj();
-		$form->set_name(($this->p_clid == CL_REGISTER_DATA ? "Registri andmed " : "S&uuml;ndmuse vorm ").$arr["obj_inst"]->id());
-		$form->set_parent($arr["obj_inst"]->id());
+		$parent = $this->p_clid == CL_SHOP_PRODUCT ? $arr["request"]["parent"] : $arr["obj_inst"]->id();
+		//arr($this->p_clid);
+		$form->set_name($this->p_clid == CL_SHOP_PRODUCT ? $arr["request"]["name"] : $this->form_types[$this->p_clid]." ".$arr["obj_inst"]->id());
+		$form->set_parent($parent);
 		$form->set_class_id($this->p_clid);
 		$form->set_status(STAT_ACTIVE);
 		$form->save();
 		$cfgform = obj();
-		$cfgform->set_parent($arr["obj_inst"]->id());
+		$cfgform->set_parent($parent);
 		$cfgform->set_class_id(CL_CFGFORM);
 		$cfgform->set_name("Seadete vorm ".$arr["obj_inst"]->id());
 		$cfgform->set_status(STAT_ACTIVE);
@@ -590,7 +592,7 @@ class webform extends class_base
 		));
 		
 		$object_type = obj();
-		$object_type->set_parent($arr["obj_inst"]->id());
+		$object_type->set_parent($parent);
 		$object_type->set_class_id(CL_OBJECT_TYPE);
 		$object_type->set_name("Objekti tp ".$arr["obj_inst"]->id());
 		$object_type->set_status(STAT_ACTIVE);
@@ -606,6 +608,10 @@ class webform extends class_base
 			"reltype" => "RELTYPE_OBJECT_CFGFORM",
 		));
 		
+		if($this->p_clid == CL_SHOP_PRODUCT)
+		{
+			return;
+		}
 		$metamgr = obj();
 		$metamgr->set_parent($arr["obj_inst"]->id());
 		$metamgr->set_class_id(CL_METAMGR);
@@ -616,7 +622,7 @@ class webform extends class_base
 			"to" => $metamgr->id(),
 			"reltype" => "RELTYPE_METAMGR",
 		));
-		if($arr["request"]["form_type"] == CL_REGISTER_DATA)
+		if($this->p_clid == CL_REGISTER_DATA)
 		{
 			$nlg = $this->get_cval("non_logged_in_users_group");
 			$g_oid = users::get_oid_for_gid($nlg);
@@ -1549,10 +1555,9 @@ class webform extends class_base
 			$els[$key]["capt_ord"] = $all_props[$key]["wf_capt_ord"];
 			
 			// treat all text properties as an ordinary text property
-			
-			if($all_props[$key]["type"] == "text" && empty($all_props[$key]["wf_capt_ord"]))
+			if($all_props[$key]["type"] == "text" && empty($all_props[$key]["value"]))
 			{
-				//$els[$key]["subtitle"] = 1;
+				$els[$key]["subtitle"] = 1;
 			}
 			else
 			{

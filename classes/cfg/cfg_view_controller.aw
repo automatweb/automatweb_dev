@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfg_view_controller.aw,v 1.1 2004/11/18 17:34:45 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfg_view_controller.aw,v 1.2 2005/02/11 13:06:27 ahti Exp $
 // cfg_view_controller.aw - NÃ&auml;itamise kontroller 
 /*
 
@@ -34,7 +34,7 @@ class cfg_view_controller extends class_base
 	{
 		$retval = PROP_OK;
 		$controller_inst = &obj($controller_oid);
-		eval($controller_inst->prop("formula"));		
+		eval($controller_inst->prop("formula"));
 		return $retval;
 	}
 }
