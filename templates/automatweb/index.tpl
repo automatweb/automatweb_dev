@@ -152,7 +152,6 @@ div.menu div.menuItemSep {
 </td>
 </tr>
 </table>
-<div style="width:1px;height:1px" ></div>
 <table border="0" cellpadding="0" cellspacing="0">
 {VAR:content}
 </table>
