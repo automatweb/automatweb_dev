@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.21 2002/02/18 13:38:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.22 2002/02/18 19:50:22 duke Exp $
 // aw_template.aw - Templatemootor
 class tpl
 {
@@ -150,27 +150,39 @@ class aw_template extends acl_base
 
 	////
 	// !Loeb template failist
-	function read_template($filename,$dbg = 0)
+	function read_template($filename,$silent = 0)
 	{
 		// loeme faili sisse
 		$filename = $this->template_dir . "/$filename";
 		$this->template_filename = $filename;
 		$source = $this->get_file(array("file" => $filename));
 		$this->names = array();
-		
-		if (!$source)
+
+		if ($source)
 		{
-			global $tpldir;
-			//$name = substr($filename,strlen($tpldir) + 1);
-			$name = $filename;
-			$this->raise_error(ERR_TPL_NOTPL,"Template '$name' not found",true);
+			$retval = $this->use_template($source);
+		}
+		else
+		{
+			if ($silent)
+			{
+				$retval = false;
+			}
+			else
+			{
+				global $tpldir;
+				//$name = substr($filename,strlen($tpldir) + 1);
+				$name = $filename;
+				// raise_error drops out, therefore $retval has no meaning here
+				$this->raise_error(ERR_TPL_NOTPL,"Template '$name' not found",true);
+			};
 		};
-		return $this->use_template($source);
+		return $retval;
 	}
 	
 	////
 	// !Loeb template failist
-	function read_adm_template($filename,$dbg = 0)
+	function read_adm_template($filename,$silent = 0)
 	{
 		// loeme faili sisse
 		$filename = $this->adm_template_dir . "/$filename";
@@ -178,14 +190,26 @@ class aw_template extends acl_base
 
 		$source = $this->get_file(array("file" => $filename));
 		
-		if (!$source)
+		if ($source)
 		{
-			global $tpldir;
-			//$name = substr($filename,strlen($tpldir) + 1);
-			$name = $filename;
-			$this->raise_error(ERR_TPL_NOTPL,"Template '$name' not found",true);
+			$retval = $this->use_template($source);
+		}
+		else
+		{
+			if ($silent)
+			{
+				$retval = false;
+			}
+			else
+			{
+				global $tpldir;
+				//$name = substr($filename,strlen($tpldir) + 1);
+				$name = $filename;
+				// raise_error drops out, therefore $retval has no meaning here
+				$this->raise_error(ERR_TPL_NOTPL,"Template '$name' not found",true);
+			};
 		};
-		return $this->use_template($source);
+		return $retval;
 	}
 	
 	////
