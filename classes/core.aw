@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.18 2001/06/01 06:23:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.19 2001/06/05 11:56:58 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -507,6 +507,36 @@ class core extends db_connector
 	}
 
 	////
+	// !tagastab koigi objekti juurde kuuluvate aliaste nimekirja. Alternatiiv eelmisele sisuliselt
+	// argumendid
+	// oid(int) - objekti id, mis meid huvitab
+	// type(int or array) - meid huvitavate objektide tyybiidentifikaatorid
+	function get_aliases($args = array())
+	{
+		extract($args);
+		
+		// map2 supports both arrays and strings and returns array
+		$tlist = join(',',map2('%d',$type));
+
+		$q = "SELECT aliases.*,objects.*
+			FROM aliases
+			LEFT JOIN objects ON
+			(aliases.target = objects.oid)
+			WHERE source = '$oid' AND objects.class_id IN ($tlist)
+			ORDER BY aliases.id";
+		$this->db_query($q);
+		$aliases = array();
+		while($row = $this->db_next())
+		{
+			// note that the index inside the idx array is always one less than the 
+			// number in the alias. (e.g. oid of #f1# is stored at the position 0, etc)
+			$aliases[] = $row;
+		};
+		
+		return $aliases;
+	}
+
+	////
 	// !returns array of aliases pointing to object $oid
 	function get_aliases_of($oid) 
 	{
@@ -533,6 +563,141 @@ class core extends db_connector
 	function delete_aliases_of($oid)
 	{
 		$this->db_query("DELETE FROM aliases WHERE source = $oid");
+	}
+
+	////
+	// !Registreerib uue aliasteparseri
+	// argumendid:
+	// class(string) - klassi nimi, passed to classload. May be empty
+	// function(string) - function to be called for this alias. May be empty.
+	// reg(string) - regulaaravaldis, samal kujul nagu preg_replace esimene argument
+
+	// aw shit, siin ei saa ju rekursiivseid aliaseid kasutada. Hm .. aga kas neid
+	// siis yldse kusagil kasutatakse? No ikka .. tabelis voib olla pilt.
+
+	function register_parser($args = array())
+	{
+		// esimesel kasutamisel loome uue nö dummy objekti, mille sisse
+		// edaspidi registreerime koikide parserite callback meetodid
+		if (!is_object($this->parsers))
+		{
+			classload("dummy");
+			$this->parsers = new dummy();
+			// siia paneme erinevad regulaaravaldised
+			$this->parsers->reglist = array();
+		};
+
+		extract($args);
+
+		if ($class && $function)
+		{
+			if (!is_object($this->parsers->$class))
+			{
+				classload($class);
+				$this->parsers->$class = new $class;
+			};
+		
+			$block = array(
+				"reg" => $reg,
+				"class" => $class,
+				"parserchain" => array(),
+				"function" => $function,
+			);
+		}
+		else
+		{
+			// kui klassi ja funktsiooni polnud defineeritud, siis järelikult
+			// soovitakse siia alla registreerida nö. sub_parsereid.
+			$block = array(
+				"reg" => $reg,
+				"parserchain" => array(),
+			);
+		};
+		$this->parsers->reglist[] = $block;
+		
+		// tagastab äsja registreeritud parseriobjekti ID nimekirjas
+		return sizeof($this->parsers->reglist) - 1;
+	}
+
+	////
+	// !Registreerib alamparseri
+	// argumendid:
+	// idx(int) - millise $match array elemendi peale erutuda
+	// match(string) - mis peaks elemendi väärtuses olema, et see välja kutsuks
+	// reg_id(int) - millise master parseri juurde see registreerida
+	// class(string) - klass
+	// function(string) - funktsiooni nimi
+	function register_sub_parser($args = array())
+	{
+		extract($args);	
+		classload($class);
+		if (!is_object($this->parsers->$class))
+		{
+			classload($class);
+			$this->parsers->$class = new $class;
+		};
+
+		$block = array(
+			"idx" => $idx,
+			"match" => $match,
+			"class" => $class,
+			"function" => $function,
+			"templates" => ($templates) ? $templates : array(),
+		);
+
+		$this->parsers->reglist[$reg_id]["parserchain"][] = $block;
+	}
+
+	////
+	// !Parsib mingi tekstibloki kasutates selleks register_parser ja register_sub_parser funktsioonide abil
+	// registreeritud parsereid
+	// argumendid:
+	// text(string) - tekstiblokk
+	// oid(int) - objekti id, mille juurde see kuulub
+	function parse_aliases($args = array())
+	{
+		global $awt;
+		$awt->start("parse_aliases");
+		extract($args);
+		// tuleb siis teha tsykkel yle koigi registreeritud regulaaravaldiste
+		foreach($this->parsers->reglist as $pkey => $parser)
+		{
+			// itereerime seni, kuni see äsjaleitud regulaaravaldis enam ei matchi.
+			while(preg_match($parser["reg"],$text,$matches))
+			{
+				// siia tuleb tekitada mingi if lause, mis 
+				// vastavalt sellele kas parserchain on defineeritud voi mitte, kutsub oige asja välja
+				#$replacement = "";
+				if (sizeof($parser["parserchain"] > 0))
+				{
+					foreach($parser["parserchain"] as $skey => $sval)
+					{
+						if ($matches[$sval["idx"]] == $sval["match"])
+						{
+							$cls = $sval["class"];
+							$fun = $sval["function"];
+							$tpls = array();
+							foreach($sval["templates"] as $tpl)
+							{
+								$tpls[$tpl] = $this->templates[$tpl];
+							};
+							$params = array(
+								"oid" => $oid,
+								"idx" => $sval["idx"],
+								"matches" => $matches,
+								"tpls" => $tpls,
+							);
+							$replacement = $this->parsers->$cls->$fun($params);
+						};
+					};
+				};
+				
+				$text = preg_replace("/$matches[0]/",$replacement,$text);
+				$replacement = "";
+			};
+		};
+		$awt->stop("parse_aliases");
+		return $text;
 	}
 
 	////
