@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.276 2004/06/09 15:11:04 kristo Exp $
+// $Id: class_base.aw,v 2.277 2004/06/11 09:18:54 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -3341,20 +3341,13 @@ class class_base extends aw_template
 	// !Returns a list of config forms used by this
 	function get_cfgform_list($args = array())
 	{
-		$this->get_objects_by_class(array(
-			"class" => CL_CFGFORM,
-			"subclass" => $this->clid,
-			"fields" => "oid,name",
+		$ol = new object_list(array(
+			"class_id" => CL_CFGFORM,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"subclass" => $this->clid
 		));
-
-		$retval = array();
-
-		// I also have to add a list of the plain old document types here
-		while ($row = $this->db_next())
-		{
-			$retval[$row["oid"]] = $row["name"];
-		};	
-		return $retval;
+		return $ol->names();
 	}
 
 	function get_property_group2($arr)
