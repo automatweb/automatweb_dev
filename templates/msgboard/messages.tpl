@@ -10,16 +10,16 @@
 <!-- SUB: message -->
 <table width="500" border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td><a name="c{VAR:id}">{VAR:LC_MSGBOARD_WHO}: <a href="mailto:{VAR:email}"><b>{VAR:from}</b></a> @ {VAR:time} p = {VAR:parent}</td>
+    <td bgcolor="#CCCCCC" class="header3"><a name="c{VAR:id}">{VAR:LC_MSGBOARD_WHO}: <a href="mailto:{VAR:email}"><b>{VAR:from}</b></a> @ {VAR:time} p = {VAR:parent}</td>
   </tr>
   <tr>
-    <td height="18" valign="top"{VAR:LC_MSGBOARD_SUBJECT}: <b>{VAR:subj}</b></td>
+    <td height="18" class="header4" valign="top">{VAR:LC_MSGBOARD_SUBJECT}: <b>{VAR:subj}</b></td>
   </tr>
   <tr>
-    <td>{VAR:comment}</td>
+    <td class="header4">{VAR:comment}</td>
 	</tr>
   <tr>
-    <td valign="bottom" height="18"> <a href="{VAR:reply_link}"><b>{VAR:LC_MSGBOARD_ANSWER}</b></a>
+    <td class="header4" valign="bottom" height="18"> <a href="{VAR:reply_link}"><b>{VAR:LC_MSGBOARD_ANSWER}</b></a>
 		</td>
   </tr>
 </table>

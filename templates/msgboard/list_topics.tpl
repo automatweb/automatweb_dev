@@ -1,20 +1,21 @@
 <table width="100%" border="0" cellspacing="14" cellpadding="0" height="100" class="sisuteks">
 	<tr> 
 		<td align="left" valign="top"> 
-			<table width="98%" border="0" cellspacing="1" cellpadding="0" height="100%" bgcolor="#FFCC66" class="sisuteks">
+			<table width="98%" border="0" cellspacing="1" cellpadding="0" height="100%" class="sisuteks">
 				<tr> 
 					<td align="left" valign="top" class="maintext"> 
 						<table width="100%" border="0" cellspacing="0" cellpadding="0" class="sisuteks" align="center">
 							<tr> 
-								<td colspan="4" height="14"> 
+								<td colspan="4" height="14" class="header3"> 
 									<div align="center">
 																			<a href="{VAR:newtopic_link}" class="sisuteks">{VAR:LC_MSGBOARD_NEW_SUBJECT}</a> | 
 																			<a href="{VAR:search_link}" class="sisuteks">{VAR:LC_MSGBOARD_SEARCH} </a> | 
-																			<a href="{VAR:mark_all_read}" class="sisuteks">{VAR:LC_MSGBOARD_ALL_READ} </a>
+																			<a href="{VAR:mark_all_read}" class="sisuteks">{VAR:LC_MSGBOARD_ALL_READ} </a> |
+																			<a href="{VAR:props_link}" class="sisuteks">H‰‰lestamine </a> | 
 									</div>
 								</td>
 							</tr>
-							<tr bgcolor="#CCCCCC"> 
+							<tr bgcolor="#CCCCCC" class="header4"> 
 								<td colspan=2>   
 									<div align="left"><b>{VAR:LC_MSGBOARD_TITLE}</b></div>
 								</td>
@@ -27,8 +28,8 @@
 							</tr>
 							<!-- SUB: TOPIC_EVEN -->
 							<tr> 
-								<td class="sisuteks" bgcolor="#CCCCCC" valign="top">{VAR:image}</td>
-								<td class="sisuteks" bgcolor="#CCCCCC" valign="top"><a href="{VAR:topic_link}" class="sisuteks">{VAR:topic}</a>
+								<td class="header5" bgcolor="#CCCCCC" valign="top">{VAR:image}</td>
+								<td class="header5" bgcolor="#CCCCCC" valign="top"><a href="{VAR:topic_link}">{VAR:topic}</a>
 									<!-- SUB: NEW -->
 										<font color="#990000">{VAR:LC_MSGBOARD_NEW}!</font>
 									<!-- END SUB: NEW -->
@@ -38,11 +39,11 @@
 									<!-- END SUB: DELETE -->
 									
 								</td>
-								<td height="21" bgcolor="#CCCCCC"> 
-									<div class="sisuteks" align="center">{VAR:from}</div>
+								<td height="21" class="header5"> 
+									<div class="header5" align="center">{VAR:from}</div>
 								</td>
-								<td height="21" bgcolor="#CCCCCC"> 
-									<div class="sisuteks" align="center">{VAR:created}</div>
+								<td height="21" class="header5"> 
+									<div class="header5" align="center">{VAR:created}</div>
 								</td>
 							</tr>
 							<!-- END SUB: TOPIC_EVEN -->
@@ -50,15 +51,15 @@
 							<!-- SUB: TOPIC_ODD -->
 							<tr> 
 							<td class="foorum_cont" bgcolor="#FFFFFF" valign="top">{VAR:image} </td>
-							<td class="foorum_cont" bgcolor="#FFFFFF" valign="top"><a href="{VAR:topic_link}" class="sisuteks">{VAR:topic}</a>
+							<td class="header4" bgcolor="#FFFFFF" valign="top"><a href="{VAR:topic_link}" class="header4">{VAR:topic}</a>
 										{VAR:DELETE}
 										{VAR:NEW}
 								</td>
-								<td height="21" bgcolor="#FFFFFF"> 
-									<div class="sisuteks" align="center">{VAR:from}</div>
+								<td height="21" class="header4"> 
+									<div class="header4" align="center">{VAR:from}</div>
 								</td>
-								<td height="21" bgcolor="#FFFFFF"> 
-									<div class="sisuteks" align="center">{VAR:created}</div>
+								<td height="21" class="header4"> 
+									<div class="header4" align="center">{VAR:created}</div>
 								</td>
 							</tr>
 							<!-- END SUB: TOPIC_ODD -->

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.13 2001/11/15 12:03:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.14 2001/11/15 12:08:00 cvs Exp $
 global $orb_defs;
 $orb_defs["forum"] = "xml";
 lc_load("msgboard");
@@ -37,6 +37,8 @@ class forum extends aw_template
 		$this->read_template("add_forum.tpl");
 		$this->mk_path($parent,"Lisa foorum");
 		$this->vars(array(
+			"onpage" => $this->picker($meta["onpage"],array(10 => 10,15 => 15,20 => 20,25 => 25,30 => 30)),
+			"topicsonpage" => $this->picker($meta["topicsonpage"],array(10 => 10,15 => 15,20 => 20,25 => 25,30 => 30)),
 			"reforb" => $this->mk_reforb("submit_properties", array("parent" => $parent)),
 			"comments" => checked(1),
 		));
@@ -372,6 +374,7 @@ class forum extends aw_template
 	function change($args = array())
 	{
 		extract($args);
+
 		$o = $this->get_obj_meta($id);
 
 		$this->forum_id = $id;
@@ -511,7 +514,7 @@ class forum extends aw_template
 			"value" => $topicsonpage,
 		));
 
-		if ($pxarent)
+		if ($xparent)
 		{
 			$parobj = $this->get_object($parent);
 			if ($parobj["class_id"] == CL_DOCUMENT)
@@ -727,6 +730,7 @@ class forum extends aw_template
 		$this->vars(array(
 			"topic" => ($args["name"]) ? $args["name"] : "nimetu",
 			"created" => $this->time2date($args["created"],2),
+			"from" => $args["createdby"],
 			"createdby" => ($args["last"]) ? $args["last"] : $args["createdby"],
 			"last" => $this->time2date($args["modified"],2),
 			"lastmessage" => $this->time2date($args["modified"],2),
