@@ -15,18 +15,31 @@ class xml_path_parser
 		);
 	}
 
-		
-
 	function parse_file($args = array())
 	{
 		$basedir = aw_ini_get("basedir");
-		$this->parse_data(array("content" => join("",file($basedir . $args["fname"]))));
+		$fname = $args["fname"];
+		$cf = get_instance("cache");
+                $cf->get_cached_file(array(
+                        "fname" => $fname,
+                        "unserializer" => array(&$this,"parse_data"),
+			"loader" => array(&$this,"load_data"),
+                ));
+
+		//$this->parse_data(array("content" => join("",file($basedir . $args["fname"]))));
 	}
 	
 	function parse_data($args = array())
 	{
 		$this->content = $args["content"];
 		$this->_setup_parser();
+		$retval = &$this->children;
+		return $retval;
+	}
+
+	function load_data($args = array())
+	{
+		$this->children = $args["data"];
 	}
 
 	function get_data($path)
