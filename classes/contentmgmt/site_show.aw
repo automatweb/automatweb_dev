@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.119 2005/03/04 12:14:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.120 2005/03/08 13:25:53 kristo Exp $
 
 /*
 
@@ -1356,51 +1356,38 @@ class site_show extends class_base
 		// IF it does NOT, then find connection of type RELTYPE_ORIGINAL from the object
 		// if there is ONE, then ot points to the original. 
 		// if there are none, then the object is not translated
+
+		// check the other way - if there is a ORIGINAL then it si translated
 		$c = new connection();
 		$conn = $c->find(array(
 			"from" => $obj->id(),
-			"type" => RELTYPE_TRANSLATION
+			"type" => RELTYPE_ORIGINAL
 		));
-		if (count($conn) == 0)
-		{
-			$conn = $c->find(array(
-				"from" => $obj->id(),
-				"type" => RELTYPE_ORIGINAL
-			));
-			error::raise_if(count($conn) > 1, array(
-				"id" => ERR_TRANS,
-				"msg" => "site_show::make_context_langs(): found more than one RELTYPE_ORIGINAL translation from object ".$obj->id()
-			));
-			
-			if (count($conn) == 1)
-			{
-				reset($conn);
-				list(,$f_conn) = each($conn);
-				$conn = $c->find(array(
-					"from" => $f_conn["to"],
-					"type" => RELTYPE_TRANSLATION
-				));
 
-				$orig_id = $f_conn["to"];
-				$orig_lang = $lref[$f_conn["to.lang_id"]]["acceptlang"];
-			}
-			else
-			{
-				$conn = array();
-				$orig_id = $obj->id();
-				$orig_lang = $obj->lang();
-			}
-		}
-		else
+		if (count($conn) == 0)
 		{
 			$orig_id = $obj->id();
 			$orig_lang = $obj->lang();
+		}
+		else
+		{
+			reset($conn);
+			list(,$f_conn) = each($conn);
+
+			$orig_id = $f_conn["to"];
+			$orig_lang = $lref[$f_conn["to.lang_id"]]["acceptlang"];
 		}
 
 		// now $conn contains all the translation relations from the original obj to the translated objs
 		$lang2trans = array(
 			$orig_lang => $orig_id
 		);
+
+		$conn = $c->find(array(
+			"from" => $orig_id,
+			"type" => RELTYPE_TRANSLATION
+		));
+
 		foreach($conn as $c)
 		{
 			$lang2trans[$lref[$c["to.lang_id"]]["acceptlang"]] = $c["to"];
