@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.37 2003/04/16 17:33:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.38 2003/04/23 14:21:17 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -509,6 +509,7 @@ class form_element extends aw_template
 					"down_button_img" => image::make_img_tag(image::check_url($this->arr["down_button_img"]["url"])),
 					"up_button_use_img" => checked($this->arr["up_button_use_img"]),
 					"down_button_use_img" => checked($this->arr["down_button_use_img"]),
+					"show_as_text" => checked($this->arr["show_as_text"])
 				));
 				$this->vars(array(
 					"HAS_SIMPLE_CONTROLLER" => $this->parse("HAS_SIMPLE_CONTROLLER"),
@@ -516,6 +517,7 @@ class form_element extends aw_template
 					"HAS_DEFAULT_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_DEFAULT_CONTROLLER") : ""),
 					"CHECK_LENGTH" => $this->parse("CHECK_LENGTH"),
 					"HAS_ADD_SUB_BUTTONS" => ($this->arr["up_down_button"] ? $this->parse("HAS_ADD_SUB_BUTTONS") : ""),
+					"TEXTBOX_ITEMS" => $this->parse("TEXTBOX_ITEMS")
 				));
 				$dt = $this->parse("DEFAULT_TEXT");
 				$this->vars(array("HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE")));
@@ -1219,6 +1221,9 @@ class form_element extends aw_template
 			$this->arr["up_button_img"] = $img->add_upload_image($var, $this->id, $this->arr["up_button_img"]["id"]);
 			$var=$base."_down_button_img";
 			$this->arr["down_button_img"] = $img->add_upload_image($var, $this->id, $this->arr["down_button_img"]["id"]);
+
+			$var = $base."_show_as_text";
+			$this->arr["show_as_text"] = $$var;
 		}
 
 		if ($this->arr["type"] == 'file')
@@ -2018,33 +2023,7 @@ class form_element extends aw_template
 
 			case "listbox":
 				// kui seoseelement siis feigime sisu
-				$rel = false;
-				if ($this->arr["subtype"] == "relation" && $this->arr["rel_element"] && $this->arr["rel_form"])
-				{
-					$rel = true;
-					if ($this->form->type == FTYPE_ENTRY)
-					{
-						$this->arr["gefe_add_empty"] = true;
-					}
-					$this->make_relation_listbox_content();
-				}
-				else
-				if ($this->arr["lb_data_from_form"] && $this->arr["lb_data_from_el"])
-				{
-					$opts = array(
-						"rel_form" => $this->arr["lb_data_from_form"],
-						"rel_element" => $this->arr["lb_data_from_el"],
-						"sort_by_alpha" => $this->arr["sort_by_alpha"],
-						"rel_unique" => $this->arr["rel_unique"],
-						"ret_ids" => true,
-					);
-					list($cnt,$vals) = $this->form->get_entries_for_element($opts);
-					foreach($vals as $e_id => $e_val)
-					{
-						$this->arr["listbox_items"][$e_id] = $e_val;
-					}
-					$this->arr["listbox_count"] = $cnt;
-				}
+				$rel = $this->_init_listbox_content();
 
 				if ($this->arr["value_controller"] && $this->form->arr["has_controllers"])
 				{
@@ -2288,6 +2267,11 @@ class form_element extends aw_template
 						'name' => $element_name,
 						'value' => htmlentities($this->get_val($elvalues))
 					));
+				}
+				else
+				if ($this->arr["show_as_text"])
+				{
+					$html .= $this->get_val($elvalues);
 				}
 				else
 				{
@@ -2850,12 +2834,19 @@ class form_element extends aw_template
 			$var = $this->form->post_vars["_el_".$prefix.$this->id];
 		}
 		else
+		if ($this->arr["type"] == "listbox")
+		{
+			$this->_init_listbox_content();
+			$var = $this->form->post_vars[$prefix.$this->id];
+		}
+		else
 		{
 			$var = $this->form->post_vars[$prefix.$this->id];
 		}
 
+		
 		// if value controiller is set, always use that
-		if ($this->arr["value_controller"] && !$this->form->arr["sql_writer_writer"]) 
+		if ($this->arr["value_controller"] && !$this->form->arr["sql_writer_writer"]) 	
 		{
 			//$var = $this->form->controller_instance->eval_controller($this->arr["value_controller"], $var, &$this->form, $this);
 			$this->form->value_controller_queue[] = array(
@@ -3601,6 +3592,37 @@ class form_element extends aw_template
 			}
 			$this->arr["multiple_count"] = count($vals);;
 		}
+	}
+
+	function _init_listbox_content()
+	{
+		if ($this->arr["subtype"] == "relation" && $this->arr["rel_element"] && $this->arr["rel_form"])
+		{
+			$rel = true;
+			if ($this->form->type == FTYPE_ENTRY)
+			{
+				$this->arr["gefe_add_empty"] = true;
+			}
+			$this->make_relation_listbox_content();
+		}
+		else
+		if ($this->arr["lb_data_from_form"] && $this->arr["lb_data_from_el"])
+		{
+			$opts = array(
+				"rel_form" => $this->arr["lb_data_from_form"],
+				"rel_element" => $this->arr["lb_data_from_el"],
+				"sort_by_alpha" => $this->arr["sort_by_alpha"],
+				"rel_unique" => $this->arr["rel_unique"],
+				"ret_ids" => true,
+			);
+			list($cnt,$vals) = $this->form->get_entries_for_element($opts);
+			foreach($vals as $e_id => $e_val)
+			{
+				$this->arr["listbox_items"][$e_id] = $e_val;
+			}
+			$this->arr["listbox_count"] = $cnt;
+		}
+		return $rel;
 	}
 }
 ?>
