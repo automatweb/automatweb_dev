@@ -120,6 +120,26 @@ class object
 		return $GLOBALS["objects"][$this->oid]->connections_to($param);
 	}
 
+	function get_first_conn_by_reltype($type = NULL)
+	{
+		$conns = $GLOBALS["objects"][$this->oid]->connections_from(array(
+			"type" => $type,
+		));
+		return reset($conns); // reset($empty_arr) gives bool(false)
+	}
+
+	function get_first_obj_by_reltype($type = NULL)
+	{
+		$conns = $GLOBALS["objects"][$this->oid]->connections_from(array(
+			"type" => $type,
+		));
+		if ($first = reset($conns))
+		{
+			return $first->to();
+		}
+		return false;
+	}
+
 	function path($param = NULL)
 	{
 		return $GLOBALS["objects"][$this->oid]->path($param);
