@@ -1,28 +1,64 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.11 2002/01/31 01:10:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.12 2002/03/27 02:21:18 duke Exp $
 // syslog.aw - syslog management
 // syslogi vaatamine ja analüüs
 lc_load("syslog");
 class db_syslog extends aw_template
 {
-	
 	function db_syslog()
 	{
-		$this->db_init();
-		$this->tpl_init("syslog");
+		$this->init("syslog");
 		lc_load("definition");
 		global $lc_syslog;
+		$this->syslog_site_id = (aw_global_get("syslog_site_id")) ? aw_global_get("syslog_site_id") : aw_ini_get("site_id");
 		if (is_array($lc_syslog))
 		{
 			$this->vars($lc_syslog);
+		}
 	}
+
+	function display_sites()
+	{
+		$this->read_adm_template("sites.tpl");
+		$old = aw_unserialize($this->get_cval("syslog_sites"));
+		$c = "";
+		$q = "SELECT distinct(site_id) FROM syslog";
+		$this->db_query($q);
+		while($row = $this->db_next())
+		{
+			if ($row["site_id"] > 0)
+			{
+				$this->vars(array(
+					"id" => $row["site_id"],
+					"name" => $old[$row["site_id"]],
+					"active" => ($row["site_id"] == $this->syslog_site_id) ? "checked" : "",
+				));
+				$c .= $this->parse("line");
+			};
+		};
+		$this->vars(array("line" => $c));
+		$retval = $this->parse();
+		return $retval;
 	}
-	
+
+	function save_sites($args = array())
+	{
+		$names = $args["name"];
+		$name_ser = aw_serialize($names,SERIALIZE_NATIVE);
+		classload("config");
+		$conf = new db_config();
+		$conf->set_simple_config("syslog_sites",$name_ser);
+		global $syslog_site_id;
+		$syslog_site_id = ($args["syslog_site_id"]) ? $args["syslog_site_id"] : $GLOBALS["SITE_ID"];
+		session_register("syslog_site_id");
+	}
+
+
 	function display_last_10()
 	{
 		// faking global muutujad?
 		global $syslog_types,$syslog_params,$filter_uid;
-		$this->read_template("parts.tpl");
+		$this->read_adm_template("parts.tpl");
 		if (is_array($syslog_types))
 		{
 			if (count($syslog_types) > 1)	// dummy on alati olemas, j2relikult kui midagi tshekitud veel on, siis on 2
@@ -40,7 +76,7 @@ class db_syslog extends aw_template
 			$ss = "";
 		};
 		$parts = $this->parse("selectors");
-		$this->read_template("syslog.tpl");
+		$this->read_adm_template("syslog.tpl");
 
 		if (!is_array($syslog_params))
 		{
@@ -49,16 +85,16 @@ class db_syslog extends aw_template
 		};
 
 		global $number,$from, $to,$user,$ip_addr,$act,$update,$sortby,$uid_c,$email_c;
-		if (isset($number))		$syslog_params[number] = $number;
-		if (isset($from))			$syslog_params[from] = $from;
-		if (isset($to))				$syslog_params[to] = $to;
-		if (isset($user))			$syslog_params[user] = $user;
-		if (isset($ip_addr))	$syslog_params[ip_addr] = $ip_addr;
-		if (isset($act))			$syslog_params[act] = $act;
-		if (isset($update))		$syslog_params[update] = $update;
-		if (isset($sortby))		$syslog_params[sortby] = $sortby;
-		if (isset($uid_c))		$syslog_params[uid_c] = $uid_c;
-		if (isset($email_c))	$syslog_params[email_c] = $email_c;
+		if (isset($number))		$syslog_params["number"] = $number;
+		if (isset($from))			$syslog_params["from"] = $from;
+		if (isset($to))				$syslog_params["to"] = $to;
+		if (isset($user))			$syslog_params["user"] = $user;
+		if (isset($ip_addr))	$syslog_params["ip_addr"] = $ip_addr;
+		if (isset($act))			$syslog_params["act"] = $act;
+		if (isset($update))		$syslog_params["update"] = $update;
+		if (isset($sortby))		$syslog_params["sortby"] = $sortby;
+		if (isset($uid_c))		$syslog_params["uid_c"] = $uid_c;
+		if (isset($email_c))	$syslog_params["email_c"] = $email_c;
 
 		if ($syslog_params["filter_uid"] != "" && $syslog_params["user"] == "")
 		{
@@ -84,32 +120,42 @@ class db_syslog extends aw_template
 			"filter_uid" => $fu
 		));
 
-		if ($syslog_params[update] < 1)
-			$syslog_params[update] = 5;
+		if ($syslog_params["update"] < 1)
+		{
+			$syslog_params["update"] = 5;
+		}
 			
-		$this->vars(array("update" => $syslog_params[update]));
+		$this->vars(array("update" => $syslog_params["update"]));
 
 		$nums = array("-1" => LC_SYSLOG_ALL);
-		$this->vars(array("number" => $syslog_params[number]));
+		$this->vars(array("number" => $syslog_params["number"]));
 
-		if ($syslog_params[from] != "")
+		if ($syslog_params["from"] != "")
 		{
-			list($f_day,$f_mon,$f_year) = explode("-",$syslog_params[from]);
+			list($f_day,$f_mon,$f_year) = explode("-",$syslog_params["from"]);
 			$f_t = mktime(0,0,0,$f_mon,$f_day,$f_year);
 			if ($ss == "")
+			{
 				$ss = "WHERE syslog.tm > $f_t ";
+			}
 			else
+			{
 				$ss .= " AND syslog.tm > $f_t ";
+			}
 		};
 
-		if ($syslog_params[to] != "")
+		if ($syslog_params["to"] != "")
 		{
-			list($t_day,$t_mon,$t_year) = explode("-",$syslog_params[to]);
+			list($t_day,$t_mon,$t_year) = explode("-",$syslog_params["to"]);
 			$t_t = mktime(0,0,0,$t_mon,$t_day,$t_year);
 			if ($ss == "")
+			{
 				$ss = "WHERE syslog.tm < $t_t ";
+			}
 			else
+			{
 				$ss .= " AND syslog.tm < $t_t ";
+			}
 		};
 
 		classload("users_user");
@@ -124,54 +170,83 @@ class db_syslog extends aw_template
 		$this->vars(array("user" => $this->option_list($syslog_params["user"],$users)));
 
 		if ($ss == "")
-			$ss = " WHERE uid LIKE '%".$syslog_params[user]."%' ";
+		{
+			$ss = " WHERE uid LIKE '%".$syslog_params["user"]."%' ";
+		}
 		else
-			$ss.=" AND uid LIKE '%".$syslog_params[user]."%' ";		
+		{
+			$ss.=" AND uid LIKE '%".$syslog_params["user"]."%' ";		
+		}
 
-		if ($syslog_params[ip_addr] != "")
+		if ($syslog_params["ip_addr"] != "")
 		{
 			if ($ss == "")
-				$ss ="WHERE ip LIKE '%".$syslog_params[ip_addr]."%' ";
+			{
+				$ss ="WHERE ip LIKE '%".$syslog_params["ip_addr"]."%' ";
+			}
 			else
-				$ss.=" AND ip LIKE '%".$syslog_params[ip_addr]."%' ";
+			{
+				$ss.=" AND ip LIKE '%".$syslog_params["ip_addr"]."%' ";
+			}
 		};
 
-		if ($syslog_params[act] != "")
+		if ($syslog_params["act"] != "")
 		{
 			if ($ss == "")
+			{
 				$ss = "WHERE ";
+			}
 			else
+			{
 				$ss.= " AND ";
-			$ss.=" action LIKE '%".$syslog_params[act]."%' ";
+			}
+			$ss.=" action LIKE '%".$syslog_params["act"]."%' ";
 		};
 		
 		$lim = "";
-		if ($syslog_params[number] != -1)
+		if ($syslog_params["number"] != -1)
 		{
-			if ($syslog_params[number] < 10)
+			if ($syslog_params["number"] < 10)
 			{
-				$syslog_params[number] = 10;
+				$syslog_params["number"] = 10;
 				$lim = " LIMIT 10";
 			}
 			else
-				$lim = " LIMIT ".$syslog_params[number];
+			{
+				$lim = " LIMIT ".$syslog_params["number"];
+			}
 		}
 		
-		if ($syslog_params[uid_c] != "")
+		if ($syslog_params["uid_c"] != "")
 		{
 			if ($ss == "")
-				$ss = " WHERE syslog.action LIKE '".$syslog_params[uid_c]."%' ";
+			{
+				$ss = " WHERE syslog.action LIKE '".$syslog_params["uid_c"]."%' ";
+			}
 			else
-				$ss .= " AND syslog.action LIKE '".$syslog_params[uid_c]."%' ";
+			{
+				$ss .= " AND syslog.action LIKE '".$syslog_params["uid_c"]."%' ";
+			}
 		}
 
-		if ($syslog_params[email_c] != "")
+		if ($syslog_params["email_c"] != "")
 		{
 			if ($ss == "")
-				$ss = " WHERE syslog.action LIKE '%(%".$syslog_params[email_c]."%)%' ";
+			{
+				$ss = " WHERE syslog.action LIKE '%(%".$syslog_params["email_c"]."%)%' ";
+			}
 			else
-				$ss .= " AND syslog.action LIKE '%(%".$syslog_params[email_c]."%)%' ";
+			{
+				$ss .= " AND syslog.action LIKE '%(%".$syslog_params["email_c"]."%)%' ";
+			}
 		}
+
+		
+		if (aw_ini_get("syslog.has_site_id") == 1)
+		{
+			$ss .= " AND syslog.site_id = " . $this->syslog_site_id;
+		};
+
 		
 		$q = "SELECT * FROM syslog 
 			$ss
@@ -184,35 +259,38 @@ class db_syslog extends aw_template
 		$this->db_query($q);
 
     load_vcl("table");
-    $t = new aw_table(array("prefix" 	=> "syslog", 
-                            "sortby" 	=> $syslog_params[sortby],
-                            "lookfor" => "",
-                            "imgurl" 	=> $GLOBALS["baseurl"]."/images",
-                            "self" 		=> $PHP_SELF));
-    $t->parse_xml_def($GLOBALS["basedir"]."/xml/syslog.xml");
+    $t = new aw_table(array(
+			"prefix" 	=> "syslog", 
+      "sortby" 	=> $syslog_params["sortby"],
+      "lookfor" => "",
+      "imgurl" 	=> aw_ini_get("baseurl")."/images",
+      "self" 		=> aw_global_get("PHP_SELF")
+		));
+    $t->parse_xml_def(aw_ini_get("basedir")."/xml/syslog.xml");
                                                                                             
 		$content = "";
 		while($row = $this->db_next())
 		{
-			$addr = $row[ip];
-			preg_match("/(.*) \((.*)\) /",$row[action],$mat);
-			$action = str_replace($mat[1]." (".$mat[2].") ","",$row[action]);
+			$addr = $row["ip"];
+			preg_match("/(.*) \((.*)\) /",$row["action"],$mat);
+			$action = str_replace($mat[1]." (".$mat[2].") ","",$row["action"]);
 		
 			if (!$blocked_ips[$addr])
 			{
-				$t->define_data(array(	"when" => $row[tm],
-							"uid"   => ($row[uid]) ? "<b>$row[uid]</b>" : $row["tafkap"],
-							"action"	=> $action,
-							"ip"		=> "<a href=\"javascript:ipexplorer('".$addr."')\">".$addr."</a>",
-							"parts"	=> $parts,
-							"uid_c"	=> "&nbsp;".$mat[1]."&nbsp;",
-							"email_c"	=> "&nbsp;".$mat[2]."&nbsp;"));
+				$t->define_data(array(	
+					"when" => $row["tm"],
+					"uid"   => ($row["uid"]) ? "<b>$row[uid]</b>" : $row["tafkap"],
+					"action"	=> $action,
+					"ip"		=> "<a href=\"javascript:ipexplorer('".$addr."')\">".$addr."</a>",
+					"parts"	=> $parts,
+					"uid_c"	=> "&nbsp;".$mat[1]."&nbsp;",
+					"email_c"	=> "&nbsp;".$mat[2]."&nbsp;"
+				));
 			};
 		};
 		
 		$t->sort_by(array("field" => $sortby));
 	
-
 		if ($to && $from)
 		{
 			$pstring = "$from - $to";
@@ -221,16 +299,19 @@ class db_syslog extends aw_template
 		{
 			$pstring = date("H:i");
 		};
-			$this->vars(array(	"LINE"	=> $t->draw(),
-						"pstring"	=> $pstring,
-						"from"	=> $syslog_params[from],
-						"to"		=> $syslog_params[to],
-						"ip_addr"	=> $syslog_params[ip_addr],
-						"act"		=> $syslog_params[act],
-						"parts"		=> $parts,
-						"uid_c"	=> $syslog_params[uid_c],
-						"email_c" => $syslog_params[email_c])); return
-			$this->parse("MAIN");
+		$this->vars(array(	
+			"LINE"	=> $t->draw(),
+			"pstring"	=> $pstring,
+			"from"	=> $syslog_params["from"],
+			"to"		=> $syslog_params["to"],
+			"ip_addr"	=> $syslog_params["ip_addr"],
+			"act"		=> $syslog_params["act"],
+			"parts"		=> $parts,
+			"uid_c"	=> $syslog_params["uid_c"],
+			"email_c" => $syslog_params["email_c"]
+		)); 
+		return
+		$this->parse("MAIN");
 	}
 
 	function check_environment(&$sys, $fix = false)
