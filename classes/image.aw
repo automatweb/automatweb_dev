@@ -1,11 +1,13 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.119 2004/11/15 16:11:03 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.120 2004/11/18 10:40:50 ahti Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
 	@default group=general
 	@default table=objects
-
+	
+	@property subclass type=hidden
+	
 	@property ord table=objects field=jrk type=text size=5
 	@caption J&auml;rjekord
 
