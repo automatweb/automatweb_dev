@@ -1,9 +1,29 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="remote">
+		<action name="config">
+			<function name="config">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_config">
+			<function name="submit_config">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 
 		<action name="test">
 			<function name="test">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="send">
+			<function name="send">
 				<arguments>
 				</arguments>
 			</function>
