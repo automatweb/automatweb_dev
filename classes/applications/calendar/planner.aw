@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.6 2004/08/30 12:59:37 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.7 2004/08/30 14:49:10 sven Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -1888,31 +1888,57 @@ class planner extends class_base
 		{
 			$calender_list = new object_list(array(
 				"class_id" => CL_PLANNER,
+				"lang_id" => array(),
+				"site_id" => array(),
 			));
-			
 			$list = array();
 			foreach ($calender_list->arr() as $cal)
 			{
-				$list = $list + $this->get_event_list(array(
-					"id" => $cal->id(),
-					"start" => 1,
-				));
+				//echo $cal->prop("event_folder")."X<br>";
+				if($cal->prop("event_folder"))
+				{
+					$parents[] = $cal->prop("event_folder");
+					/*$tmp_list[$cal->id()] = $this->get_event_list(array(
+						"id" => $cal->id(),
+						"start" => 1,
+						"end" => time()*2,
+					));*/
+				}
 			}
+			/*
+			$list = array();
+			foreach ($tmp_list as $key => $events)
+			{
+				foreach ($events as $key => $event)
+				{
+					$list[] = $key;
+				}
+			}*/
 		}
 		else
 		{
 			$list = $this->get_event_list(array(
 				"id" => $arr["id"],
 				"start" => 1,
+				"end" => time() * 2,
 			));
+			$list = array_keys($list);
 		}
 		
 		$params = array(
-			"oid" => array_keys($list),
 			"name" => "%".$arr["event_search_name"]."%",
 			"comment" => "%".$arr["event_search_comment"]."%",
 			"content" => "%".$arr["event_search_content"]."%",
 		);
+		
+		if (is_array($parents))
+		{
+			$params["parent"] = $parents;
+		}
+		else
+		{
+			$params["oid"] = $list;
+		}
 		
 		if($arr["event_search_done"])
 		{
@@ -1926,8 +1952,8 @@ class planner extends class_base
 		else
 		{
 			$params["class_id"] = $this->event_entry_classes;
-		} 
-
+		}
+	
 		$event_ol = new object_list($params);
 		return $event_ol;
 	}
