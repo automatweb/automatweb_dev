@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.12 2002/11/21 17:25:42 duke Exp $
+// $Id: class_base.aw,v 2.13 2002/11/24 15:36:54 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -73,20 +73,17 @@ class class_base extends aliasmgr
 	}
 
 	////
-	// !Generate a form for adding or changing an object
-	function change($args = array())
+	// !Generates a form for adding an object
+	function add($args = array())
 	{
-		// XXX: this needs some SERIOUS cleanup
-		if ($args["ds_name"])
+		$this->init_class_base();
+		if (!$this->ds->ds_can_add($args))
 		{
-			$this->ds_name = $args["ds_name"];
+			die($this->ds->get_error_text());
 		};
 
-		$this->check_class();
-
+		$this->parent = $args["parent"];
 		extract($args);
-		$this->_init_object(array("id" => $id,"parent" => $parent));
-
 		$active = ($group) ? $group : "general";
 		$this->group = $active;
 
@@ -96,17 +93,12 @@ class class_base extends aliasmgr
 				"group" => $group,
 		));
 
-		// if the object is divided between 2 tables, then this
-		// loads data from the second table
-		$this->load_object();
-
 		// here be some magic to determine the correct output client
 		// this means we could create a TTY client for AW :)
 		// actually I'm thinking of native clients and XML-RPC
 		// output client is probably the first that should be
 		// implemented.
 		$cli = get_instance("cfg/" . $this->output_client);
-		$cli->start_output();
 
 		// there are two ways for a class to change the properties
 		// 1 - get_property callback - usually used to change some
@@ -190,12 +182,147 @@ class class_base extends aliasmgr
                         {
                                 $this->convert_element(&$val);
                         };
+                        $cli->add_property($val);
+                };
 
-                        // add properties - one line at a time
-                        if (is_string($val) && method_exists($this,$val))
+		$orb_class = $this->cfg["classes"][$this->clid]["file"];
+
+		if ($orb_class == "document")
+		{
+			$orb_class = "doc";
+		};
+
+                $cli->finish_output(array(
+					"action" => "submit",
+					"data" => array(
+						"id" => $id,
+						"group" => $group,
+						"orb_class" => $orb_class,
+						"parent" => $parent,
+						"period" => $period,
+					),
+		));
+
+		if (!$content)
+		{
+			$content = $cli->get_result();
+		};
+
+		return $this->gen_output(array(
+			"parent" => $parent,
+			"content" => $content,
+		));
+	}
+
+	////
+	// !Generate a form for adding or changing an object
+	function change($args = array())
+	{
+		$this->init_class_base();
+
+		extract($args);
+
+		$active = ($group) ? $group : "general";
+		$this->group = $active;
+
+		// I need an easy way to turn off individual properties
+		$realprops = $this->get_active_properties(array(
+				"clfile" => $this->clfile,
+				"group" => $group,
+		));
+
+		// if the object is divided between 2 tables, then this
+		// loads data from the second table
+		$this->load_object(array("id" => $id));
+
+		// here be some magic to determine the correct output client
+		// this means we could create a TTY client for AW :)
+		// actually I'm thinking of native clients and XML-RPC
+		// output client is probably the first that should be
+		// implemented.
+		$cli = get_instance("cfg/" . $this->output_client);
+
+		// there are two ways for a class to change the properties
+		// 1 - get_property callback - usually used to change some
+		// fields of the property - common use is to set the contents
+		// of an select field
+
+		// 2 - generator - which should return full property definitions
+		// in the same format they come from load_properties.
+		// those can be called dynamic properties I suppose
+		// since they don't have to exist anywhere in the property
+		// definitions
+	
+		// I really doubt that get_property appears out of blue
+		// while we are generating the output form
+		$callback = method_exists($this->inst,"get_property");
+
+		// need to cycle over the property nodes, do replacements
+		// where needed and then cycle over the result and generate
+		// the output
+		$resprops = array();
+                foreach($realprops as $key => $val)
+                {
+                        if (is_array($val))
                         {
-				// this should NOT be here
-                                $content = $this->$val();
+                                $this->get_value(&$val);
+                        };
+
+                        $argblock = array(
+                                "prop" => &$val,
+                                "obj" => &$this->coredata,
+                                "objdata" => &$this->objdata,
+                        );
+
+			// callbackiga saad muuta ühe konkreetse omaduse sisu
+                        if ($callback)
+                        {
+                                $status = $this->inst->get_property($argblock);
+                        };
+
+			// I need other way to retrieve a list of dynamically
+			// generated properties from the class and display those
+			if ($status === PROP_IGNORE)
+			{
+				// do nothing
+			}
+			else
+			if ($val["editonly"] && !$this->id)
+			{
+				// skip editonly elements for new objects
+			}
+			else
+			if ($val["type"] == "generated" && method_exists($this->inst,$val["generator"]))
+			{
+				$meth = $val["generator"];
+				$vx = $this->inst->$meth($argblock);
+				$resprops = array_merge($resprops,$vx);
+			}
+			elseif ($val["type"] == "hidden")
+			{
+				// do nothing
+			}
+                        else
+                        {
+                                $resprops[] = $val;
+                        };
+                }
+
+                $content = "";
+
+                foreach($resprops as $val)
+                {
+                        if (is_array($val["items"]))
+                        {
+                                foreach($val["items"] as $subkey => $subval)
+                                {
+                                        $this->convert_element(&$subval);
+                                        $val["items"][$subkey] = $subval;
+                                }
+                        }
+                        else
+                        {
+                                $this->convert_element(&$val);
                         };
                         $cli->add_property($val);
                 };
@@ -243,15 +370,7 @@ class class_base extends aliasmgr
 			$this->ds_name = $args["ds_name"];
 		};
 
-		$this->check_class();
-
-		// if this is a new object, then _init_object tries to load
-		// the parent object as a menu. If that fails, the code
-		// will never return here.
-		$this->_init_object(array(
-			"id" => $args["id"],
-			"parent" => $args["parent"],
-		));
+		$this->init_class_base();
 
 		if (method_exists($this->inst,"callback_pre_save"))
 		{
@@ -271,14 +390,15 @@ class class_base extends aliasmgr
 					"parent" => $parent,
 					"name" => $name,
 					"comment" => $comment,
+					"period" => $period,
 					"class_id" => $this->clid,
 					"alias" => $alias,
 					"status" => isset($status) ? $status : 1,
 			));
 
 			$this->new = true;
-			$this->id = $id;
-		};
+		}
+		$this->id = $id;
 
 		// and read it back again
 		$this->coredata = $this->ds->ds_get_object(array(
@@ -306,7 +426,7 @@ class class_base extends aliasmgr
 		// calls might actually want to modify (GASP!) the
 		// data, that gets saved
 
-		$this->load_object();
+		$this->load_object(array("id" => $id));
 
 		$resprops = array();
 		$savedata = array();
@@ -418,6 +538,13 @@ class class_base extends aliasmgr
 		};
 
 		$coredata["id"] = $id;
+
+		$period = aw_global_get("period");
+		if ($period)
+		{
+			$coredata["period"] = $period;
+		};
+
 		$this->ds->ds_save_object(array("id" => $id,"clid" => $this->clid),$coredata);
 		$this->save_object(array("data" => $objdata));
 
@@ -439,63 +566,32 @@ class class_base extends aliasmgr
 			$this->_log($classname, "Muutis $classname objekti $name ($id)", $id);
 		};
 
-
-		if ($this->ds_name == "ds_local_file")
-		{
-			$ds_name = $this->ds_name;
-		}
-		else
-		{
-			$ds_name = "";
-		};
-                return $this->mk_my_orb("change",array("id" => $id,"group" => $group,"ds_name" => $ds_name),get_class($this->orb_class));
+                return $this->mk_my_orb("change",array("id" => $id,"group" => $group,"period" => aw_global_get("period")),get_class($this->orb_class));
 	}
 
 	////
-	// !This decides whether to perform the requested action or not
-	// acl checks for example
-	function check_class()
+	// !This checks whether we have all required data and sets up the correct
+	// environment if so.
+	function init_class_base()
 	{
+		// only classes which have defined properties
+		// can use class_base
 		$cfgu = get_instance("cfg/cfgutils");
 		$has_properties = $cfgu->has_properties(array("file" => get_class($this->orb_class)));
 		if (!$has_properties)
 		{
 			die("this class does not have any defined properties ");
 		};
+
+		// XXX: this will probably go away
 		$this->ds = get_instance("datasource/" . $this->ds_name);
-	}
 
-	////
-	// !Stuff that is shared between all tabs goes into here
-	function _init_object($args = array())
-	{
-		$cp = $this->get_class_picker(array("field" => "file"));
+		// figure out the name of the file, that contains the required
+		// class
+		$this->cp = $this->get_class_picker(array("field" => "file"));
 		$this->clid = $this->orb_class->get_opt("clid");
-
-		if ($args["id"])
-		{
-			$this->coredata = $this->ds->ds_get_object(array(
-				"id" => $args["id"],
-				"class_id" => $this->clid,
-			));
-
-			$this->id = $this->coredata["oid"];
-			$this->parent = $this->coredata["parent"];
-                        $this->clfile = $cp[$this->coredata["class_id"]];
-			
-		}
-		else
-		{
-			if (!$this->ds->ds_can_add($args))
-			{
-				die($this->ds->get_error_text());
-			};
-
-			$this->parent = $args["parent"];
-			$this->clfile = $cp[$this->clid];
-
-		}
-
+		$this->clfile = $this->cp[$this->clid];
+		
 		// temporary - until we are sure that will will not go back to
 		// the old interface
 		if ($this->clid == 1)
@@ -533,7 +629,7 @@ class class_base extends aliasmgr
 			$parent = $args["parent"];
 		};
 
-		$this->mk_path($parent,$title);
+		$this->mk_path($parent,$title,aw_global_get("period"));
 
 		$grpnames = new aw_array($this->groupnames);
 		
@@ -570,23 +666,41 @@ class class_base extends aliasmgr
 				"active" => ( ($this->action == "list_aliases") || ($this->action == "search_aliases") ),
 			));
 		};
-		
-		return $this->tp->get_tabpanel(array(
-			"content" => $args["content"],
-		));
 
+		$vars = array();
+		if ($this->classinfo["toolbar"])
+		{
+			$this->gen_toolbar();
+			$vars = array(
+				"toolbar" => $this->toolbar,
+				"toolbar2" => $this->toolbar2,
+			);
+		};
 
+		$vars["content"] = $args["content"];
+
+		return $this->tp->get_tabpanel($vars);
 	}
 
 	function load_object($args = array())
 	{
+		if ($args["id"])
+		{
+			$this->coredata = $this->ds->ds_get_object(array(
+				"id" => $args["id"],
+				"class_id" => $this->clid,
+			));
+
+			$this->id = $this->coredata["oid"];
+			$this->parent = $this->coredata["parent"];
+		};
+
 		$table = $this->classinfo["objtable"]["text"];
 		$idfield = $this->classinfo["objtable_index"]["text"];
-		$id = $this->id;
-		if ($id && $table && $idfield)
+		if ($args["id"] && $table && $idfield)
 		{
 			$this->objdata = $this->ds->ds_get_object(array(
-				"id" => $id,
+				"id" => $args["id"],
 				"table" => $table,
 				"idfield" => $idfield,
 			));
@@ -889,6 +1003,22 @@ class class_base extends aliasmgr
 
 	}
 
+	function gen_toolbar($args = array())
+	{
+		$toolbar = get_instance("toolbar");
+		if (method_exists($this->inst,"callback_get_toolbar"))
+		{
+			$this->inst->callback_get_toolbar(array(
+				"toolbar" => &$toolbar,
+				"id" => $this->id,
+			));
+		};
+		$this->toolbar = $toolbar->get_toolbar();
+		$this->toolbar2 = $toolbar->get_toolbar(array("id" => "bottom"));
+
+
+	}
+
 	// wrappers for alias manager
 
 	////
@@ -897,8 +1027,7 @@ class class_base extends aliasmgr
 	function list_aliases($args = array())
 	{
 		extract($args);
-		$this->check_class();
-		$this->_init_object(array("id" => $id));
+		$this->init_class_base();
 
 		$this->action = $action;
 
@@ -921,8 +1050,7 @@ class class_base extends aliasmgr
 	function search_aliases($args = array())
 	{
 		extract($args);
-		$this->check_class();
-		$this->_init_object(array("id" => $id));
+		$this->init_class_base();
 
 		$this->action = $action;
 
