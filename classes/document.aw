@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.181 2003/05/15 14:53:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.182 2003/05/15 16:32:45 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -447,36 +447,6 @@ class document extends aw_template
 			$this->read_any_template($tpl);
 		};
 
-		// now I need to gather information about the different templates
-		$awdoc = get_instance("doc");
-		$plugins = $awdoc->parse_long_template(array(
-			"inst" => $this,
-		));
-
-		$plg_arg = array();
-		foreach($plugins as $plg_name)
-		{
-			$plg_arg[$plg_name] = array(
-				"value" => $doc["meta"]["plugins"][$plg_name],
-				"tpl" => $this->templates["plugin.$plg_name"],
-			);
-		}
-		
-		$plg_ldr = get_instance("plugins/plugin_loader");
-		$plugindata = $plg_ldr->load_by_category(array(
-			"category" => get_class($this),
-			"plugins" => $plugins,
-			"method" => "show",
-			"args" => $plg_arg,
-		));
-
-		$pvars = array();
-		foreach($plugindata as $key => $val)
-		{
-			$pvars["plugin.${key}"] = $val;
-		};
-
-		$this->vars($pvars);
 
 		if (( ($meta["show_print"]) && (not($print)) && $leadonly != 1) && !$is_printing)
 		{
@@ -1161,6 +1131,38 @@ class document extends aw_template
 			}
 			$this->vars(array("FILE" => $fff));
 		}
+		
+		// now I need to gather information about the different templates
+		$awdoc = get_instance("doc");
+		$plugins = $awdoc->parse_long_template(array(
+			"inst" => $this,
+		));
+
+		$plg_arg = array();
+		foreach($plugins as $plg_name)
+		{
+			$plg_arg[$plg_name] = array(
+				"value" => $doc["meta"]["plugins"][$plg_name],
+				"tpl" => $this->templates["plugin.$plg_name"],
+			);
+		}
+		
+		$plg_ldr = get_instance("plugins/plugin_loader");
+		$plugindata = $plg_ldr->load_by_category(array(
+			"category" => get_class($this),
+			"plugins" => $plugins,
+			"method" => "show",
+			"args" => $plg_arg,
+		));
+
+		$pvars = array();
+		foreach($plugindata as $key => $val)
+		{
+			$name = "plugin.${key}";
+			$pvars[$name] = $this->parse($name);
+		};
+
+		$this->vars($pvars);
  
 
 		$retval = $this->parse();
