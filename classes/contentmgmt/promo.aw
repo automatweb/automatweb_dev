@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.49 2004/10/08 15:51:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.50 2004/10/22 14:59:52 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -564,7 +564,8 @@ class promo extends class_base
 			"link" => $ob->prop("link"),
 			"link_caption" => $ob->prop("link_caption"),
 			"image" => $image,
-			"image_url" => $image_url
+			"image_url" => $image_url,
+			"image_or_title" => ($image == "" ? $ob->meta("caption") : $image),
 		));
 
 		if (!$ob->meta('no_title'))
@@ -829,7 +830,8 @@ class promo extends class_base
 					"link_caption" => $o->meta("link_caption"),
 					"promo_doc_count" => (int)$d_cnt,
 					"image" => $image, 
-					"image_url" => $image_url
+					"image_url" => $image_url,
+					"image_or_title" => ($image == "" ? $o->meta("caption") : $image),
 				));
 
 				// which promo to use? we need to know this to use
