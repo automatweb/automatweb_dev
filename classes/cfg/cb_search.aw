@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.12 2004/10/22 12:28:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.13 2004/10/28 09:37:29 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -494,7 +494,7 @@ class cb_search extends class_base
 
 				// if there are any criteria for search from folder, add them to the filter
 				$this->_add_parent_filter($arr["obj_inst"], $sdata);
-
+			
 				$olist_cnt = new object_list($sdata);
 
 				if ($data["per_page"])

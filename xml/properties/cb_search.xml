@@ -94,6 +94,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>submit</type>
+            <store>no</store>
             <caption>Otsi</caption>
       </property>
       <property>
