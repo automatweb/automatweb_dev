@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="ekomar_show" folder="" extends="class_base">
+	<class name="ekomar_show" folder="applications/clients/stat/ekomar" extends="class_base">
 		<action name="show_file" nologin="1">
 			<function name="show_file">
 				<arguments>

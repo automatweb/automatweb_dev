@@ -54,6 +54,15 @@
 			</function>
 		</action>
 
+		<action name="delete_mails">
+			<function name="delete_mails">
+				<arguments>
+					<required name="id" type="int" />
+					<optional name="group" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="delete_members">
 			<function name="delete_members">
 				<arguments>

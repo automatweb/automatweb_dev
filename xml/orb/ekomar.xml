@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="ekomar" folder="" extends="aw_template">
+	<class name="ekomar" folder="applications/clients/stat/ekomar" extends="aw_template">
 		<action name="list_files">
 			<function name="list_files">
 				<arguments>
