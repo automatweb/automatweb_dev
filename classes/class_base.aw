@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.208 2004/02/11 11:57:25 kristo Exp $
+// $Id: class_base.aw,v 2.209 2004/02/11 17:06:48 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -96,6 +96,32 @@ class class_base extends aw_template
 		parent::init($arg);
 	}
 
+	function init_storage_object($arr)
+	{
+		$this->use_mode = "new";
+
+		$this->parent = $arr["parent"];
+		$this->id = "";
+		$this->new = 1;
+		$this->obj_inst = new object();
+		$this->reltype = isset($arr["reltype"]) ? $arr["reltype"] : "";
+
+
+	}
+
+	function load_storage_object($arr)
+	{
+		$this->id = $arr["id"];
+
+		$this->obj_inst = new object($this->id);
+
+		$this->parent = "";
+
+		$this->use_mode = "edit";
+		$this->subgroup = isset($args["subgroup"]) ? $args["subgroup"] : "";
+	}
+
+
 	/** Generate a form for adding or changing an object 
 		
 		@attrib name=new params=name all_args="1" default="0"
@@ -162,59 +188,52 @@ class class_base extends aw_template
 			$args["action"] = "view";
 		};
 
-		if ($args["action"] == "new")
+		$use_form = $args["form"];
+
+		if (empty($use_form))
 		{
-			$this->use_mode = "new";
-
-			$this->parent = $args["parent"];
-			$this->id = "";
-			$this->new = 1;
-			$this->obj_inst = new object();
-			$this->reltype = isset($args["reltype"]) ? $args["reltype"] : "";
-		}
-		elseif (($args["action"] == "change") || ($args["action"] == "view"))
-		{
-			$this->id = $args["id"];
-
-			$this->obj_inst = new object($this->id);
-
-			// this is an EXPERIMENTAL interface, please do not be usink it before
-			// consulting with duke.
-			if (method_exists($this->inst,"callback_load_object"))
+			if ($args["action"] == "new")
 			{
-				$this->inst->callback_load_object(array(
-					"request" => $args,
-				));
-			};
-
-			$this->parent = "";
-
-			$this->use_mode = "edit";
-
-			if ($this->obj_inst->class_id() == CL_RELATION)
+				$this->init_storage_object($args);
+			}
+			elseif (($args["action"] == "change") || ($args["action"] == "view"))
 			{
-				$this->is_rel = true;
-				$def = $this->cfg["classes"][$this->clid]["def"];
-				$meta = $this->obj_inst->meta("values");
-				$this->values = $meta[$def];
-				$this->values["name"] = $this->obj_inst->name();
-			};
+				$this->load_storage_object($args);
+				// I'm breaking this CL_RELATION thingie for now. I have to. Or don't I?
+				// I absolutely freaking _HATE_ this magic with $this->values, it shucks
+				// so much.
 
-			$this->subgroup = isset($args["subgroup"]) ? $args["subgroup"] : "";
+				/*
+				if ($this->obj_inst->class_id() == CL_RELATION)
+				{
+					$this->is_rel = true;
+					$def = $this->cfg["classes"][$this->clid]["def"];
+					$meta = $this->obj_inst->meta("values");
+					$this->values = $meta[$def];
+					$this->values["name"] = $this->obj_inst->name();
+				};
+				*/
+
+			};
 		};
 
-		// hmm, and maybe .. just maybe this is something else that a class would want to override . or?
-		$cfgform_id = $this->get_cfgform_for_object(array(
-			"meta" => $this->obj_inst->meta(),
-			"args" => $args,
-		));
-
-		$this->validate_cfgform($cfgform_id);
-
-		if ($this->classinfo["fixed_toolbar"])
+		// yees, this means that other forms besides add and edit cannot use custom config forms
+		// at least not yet.
+		if (empty($use_form))
 		{
-			$this->layout_mode = "fixed_toolbar";
-		}
+			// hmm, and maybe .. just maybe this is something else that a class would want to override . or?
+			$cfgform_id = $this->get_cfgform_for_object(array(
+				"meta" => $this->obj_inst->meta(),
+				"args" => $args,
+			));
+
+			$this->validate_cfgform($cfgform_id);
+
+			if ($this->classinfo["fixed_toolbar"])
+			{
+				$this->layout_mode = "fixed_toolbar";
+			}
+		};
 
 		// XXX: temporary -- duke
 		if ($args["fxt"])
@@ -228,12 +247,26 @@ class class_base extends aw_template
 				"group" => isset($args["group"]) ? $args["group"] : "",
 				"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
 				"rel" => $this->is_rel,
+				"form" => isset($args["form"]) ? $args["form"] : "",
 				// only load the toolbar if we are shoing the container .. hm, perhaps
 				// there is a better way to accomplish that?
 				// gah, I'm really not that proud of this shit
 				"type" => ($this->layout_mode == "fixed_toolbar" && empty($args["cb_part"])) ? "toolbar" : "",
 		));
 
+		if (!empty($args["form"]) && isset($this->forminfo[$args["form"]]["onload"]))
+		{
+			$onload_method = $this->forminfo[$args["form"]]["onload"];
+			if (method_exists($this->inst,$onload_method))
+			{
+				$this->inst->$onload_method($args);
+			}
+			else
+			{
+				print "this class does not have a $onload_method method<br>";
+				die();
+			};
+		};
 		
 		if ($args["fxt"])
 		{
@@ -328,10 +361,14 @@ class class_base extends aw_template
 					// nii, kuidas kuradi moodi ma nüüd selle vormi targeti teada saan?
 					$cli->set_form_target("_parent");
 				};
-				// tabs and YAH are in the upper frame, so we don't show them below
-				$this->classinfo["hide_tabs"] = 1;
-				$this->classinfo["no_yah"] = 1;
 			};
+		};
+
+		if ($args["cb_part"] == 1)
+		{
+			// tabs and YAH are in the upper frame, so we don't show them below
+			$this->classinfo["hide_tabs"] = 1;
+			$this->classinfo["no_yah"] = 1;
 		};
 
 
@@ -490,19 +527,8 @@ class class_base extends aw_template
 
 		$this->validate_cfgform($cgid);
 
-		// this is an EXPERIMENTAL interface, please do not be usink it before
-		// consulting with duke.
-		if (method_exists($this->inst,"callback_save_object"))
-		{
-			return $this->inst->callback_save_object(array(
-				"request" => $args,
-			));
-		}
-		else
-		{
-			$args["rawdata"] = $args;
-			$save_ok = $this->process_data($args);
-		};
+		$args["rawdata"] = $args;
+		$save_ok = $this->process_data($args);
 
 
 		$args = array(
@@ -577,7 +603,7 @@ class class_base extends aw_template
 	// ! Log the action
 	function log_obj_change()
 	{
-		$name = isset($this->coredata["name"]) ? $this->coredata["name"] : "";
+		$name = $this->obj_inst->name();
 
 		$syslog_type = ST_CONFIG;
 		if (isset($this->classinfo['syslog_type']))
@@ -587,14 +613,7 @@ class class_base extends aw_template
 
 		// XXX: if I want to save data that does not belong to 
 		// objects table, then I don't want to log it like this --duke
-		if (isset($this->new))
-		{
-			$this->_log($syslog_type, SA_ADD, $name, $this->id);
-		}
-		else
-		{
-			$this->_log($syslog_type, SA_CHANGE, $name, $this->id);
-		};
+		$this->_log($syslog_type, isset($this->new) ? SA_ADD : SA_CHANGE, $name, $this->id);
 	}
 
 	function validate_cfgform($id = false)
@@ -843,7 +862,10 @@ class class_base extends aw_template
 	{
 		$classname = $this->cfg["classes"][$this->clid]["name"];
 
-		$name = $this->obj_inst->name();
+		if (is_object($this->obj_inst))
+		{
+			$name = $this->obj_inst->name();
+		};
 		$return_url = !empty($this->request["return_url"]) ? urlencode($this->request["return_url"]) : "";
 		// XXX: pathi peaks htmlclient tegema
 		$title = isset($args["title"]) ? $args["title"] : "";
@@ -893,6 +915,7 @@ class class_base extends aw_template
 			)) . " / " . $title;
 		};
 
+		// but that doesn't really belong to classinfo
 		if (empty($this->classinfo["no_yah"]))
 		{
 			$this->mk_path($parent,$title,aw_global_get("period"));
@@ -1100,6 +1123,7 @@ class class_base extends aw_template
 			"content" => isset($args["content"]) ? $args["content"] : "",
 			"rel" => isset($args["rel"]) ? $args["rel"] : "",
 			"type" => isset($args["type"]) ? $args["type"] : "",
+			"form" => isset($args["form"]) ? $args["form"] : "",
 		));
 
 		// figure out which group is active
@@ -1126,7 +1150,6 @@ class class_base extends aw_template
 			};
 		};
 
-		
 		if (empty($this->id))
 		{
 			$use_group = "general";
@@ -1356,6 +1379,16 @@ class class_base extends aw_template
 		// and this handles the generic cases
 		else
 		{
+			if (!empty($args["form"]))
+			{
+				$filter["form"] = $args["form"];
+			};
+			/*
+			if ($this->clid == CL_MESSAGE)
+			{
+				$filter["form"] = "showmsg";
+			};
+			*/
 			$_all_props = $cfgu->load_properties(array(
 				"clid" => $this->clid,
 				"filter" => $filter,
@@ -1677,17 +1710,6 @@ class class_base extends aw_template
 				"truncate_names" => 1,
 				"add_folders" => true,
 			));
-		};
-
-		if (($val["type"] == "cfgform_picker") && $val["clid"])
-		{
-			$class_id = constant($val["clid"]);
-			$val["options"] = $this->list_objects(array(
-				"class" => CL_CFGFORM,
-				"subclass" => isset($class_id) ? $class_id : "",
-				"addempty" => true,
-			));
-			$val["type"] = "select";
 		};
 
 		if (empty($val["value"]) && ($val["type"] == "aliasmgr") && isset($this->id))
@@ -2675,12 +2697,15 @@ class class_base extends aw_template
 
 			if ($property["type"] == "relpicker" && $property["automatic"] == 1)
 			{
-				$conns = $this->obj_inst->connections_from(array(
-					"type" => $this->relinfo[$property["reltype"]]["value"],
-				));
+				if (!$this->new)
+				{
+					$conns = $this->obj_inst->connections_from(array(
+						"type" => $this->relinfo[$property["reltype"]]["value"],
+					));
+				};
 
 				// no existing connection, create a new one
-				if (sizeof($conns) == 0)
+				if ($this->new || sizeof($conns) == 0)
 				{
 					if ($property["value"] != 0)
 					{
@@ -2725,11 +2750,16 @@ class class_base extends aw_template
 
 			if ($type == "relmanager")
 			{
-				
+				$argblock["prop"] = $property;
+				//$target_reltype = $this->relinfo[$property["reltype"]];
+				//$argblock["prop"]["reltype"] = $target_reltype;
+				//var_dump($this->relinfo);
+				$argblock["prop"]["relinfo"] = $this->relinfo[$property["reltype"]];
 
-
-
-
+				classload("vcl/relmanager");
+				$vcl_inst = new relmanager();
+				// XXX: would be nice if this could return an error message as well
+				$vcl_inst->process_relmanager($argblock);
 			};
 
 
