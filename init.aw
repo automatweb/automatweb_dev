@@ -526,6 +526,8 @@ function aw_startup()
 	$m = get_instance("menuedit");
 	$m->request_startup();
 
+	__init_aw_session_track();
+
 //	list($micro,$sec) = split(" ",microtime());
 //	$ts_e = $sec + $micro;
 	// the following breaks reforb
@@ -610,6 +612,38 @@ function exit_function($name,$ret = "")
 		$awt->stop($name);
 	}
 	$GLOBALS["exit_function_calls"]++;
+}
+
+function __init_aw_session_track()
+{
+	if (($tmp = $_SESSION["aw_session_track"]["aw"]["do_redir"]) != "")
+	{
+		$_SESSION["aw_session_track"]["aw"]["do_redir"] = "";
+		header("Location: ".$tmp);
+		die();
+	}
+
+	if (($tmp = $_SESSION["aw_session_track"]["aw"]["do_message"]) != "")
+	{
+		$_SESSION["aw_session_track"]["aw"]["do_message"] = "";
+		echo "<script language=\"javascript\">alert(\"".$tmp."\");</script>";
+	}
+
+	// add session tracking options
+	$_SESSION["aw_session_track"] = array(
+		"server" => array(
+			"ip" => $_SERVER["REMOTE_ADDR"],
+			"referer" => $_SERVER["HTTP_REFERER"],
+			"ru" => $GLOBALS["REQUEST_URI"],
+			"site" => $GLOBALS["HTTP_HOST"],
+		),
+		"aw" => array(
+			"site_id" => aw_ini_get("site_id"),
+			"lang_id" => aw_global_get("lang_id"),
+			"uid" => aw_global_get("uid"),
+			"timestamp" => time()
+		)
+	);
 }
 
 $GLOBALS["error_handler_calls"] = 0;
