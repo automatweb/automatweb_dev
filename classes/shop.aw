@@ -52,12 +52,14 @@ class shop extends shop_base
 		$fb = new form_base;
 		$fl = $fb->get_list(FORM_ENTRY);
 
+		$eq = $this->listall_eqs(false);
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit", array("parent" => $parent)),
 			"root" => $this->picker($parent,$ob->get_list()),
 			"of" => $this->multiple_option_list(0,$fl),
 			"forms" => $this->picker(0,$fl),
-			"commission_eq" => $this->picker(0, $this->listall_eqs(false))
+			"commission_eq" => $this->picker(0, $eq),
+			"nump_eq" => $this->picker(0, $eq)
 		));
 		return $this->parse();
 	}
@@ -113,6 +115,7 @@ class shop extends shop_base
 			}
 		}
 
+		$eq = $this->listall_eqs(false);
 		$this->vars(array(
 			"name" => $oba["name"],
 			"comment" => $oba["comment"],
@@ -129,7 +132,8 @@ class shop extends shop_base
 			"tables" => $this->mk_my_orb("change_tables", array("id" => $id)),
 			"o_op_id_voucher" => $oba["owner_form_op_voucher"],
 			"o_op_id_issued" => $oba["owner_form_op_issued"],
-			"commission_eq" => $this->picker($oba["commission_eq"], $this->listall_eqs(false))
+			"commission_eq" => $this->picker($oba["commission_eq"], $eq),
+			"nump_eq" => $this->picker($oba["nump_eq"], $eq)
 		));
 		if ($oba["owner_form"])
 		{
@@ -180,12 +184,12 @@ class shop extends shop_base
 				$ss = ", owner_form_entry = '' ";
 			}
 			$this->upd_object(array("oid" => $id, "name" => $name, "comment" => $comment));
-			$this->db_query("UPDATE shop SET root_menu = $root, emails='$emails',owner_form = '$owner_form',owner_form_op = '$owner_form_op',owner_form_op_voucher = '$owner_form_op_voucher',owner_form_op_issued = '$owner_form_op_issued',commission_eq ='$commission_eq' $ss WHERE id = $id");
+			$this->db_query("UPDATE shop SET root_menu = $root, emails='$emails',owner_form = '$owner_form',owner_form_op = '$owner_form_op',owner_form_op_voucher = '$owner_form_op_voucher',owner_form_op_issued = '$owner_form_op_issued',commission_eq ='$commission_eq',nump_eq = '$nump_eq' $ss WHERE id = $id");
 		}
 		else
 		{
 			$id = $this->new_object(array("parent" => $parent, "class_id" => CL_SHOP, "status" => 1, "name" => $name, "comment" => $comment));
-			$this->db_query("INSERT INTO shop(id,root_menu,emails,owner_form,owner_form_op,commission_eq) VALUES($id,'$root','$emails','$owner_form','$owner_form_op','$commission_eq')");
+			$this->db_query("INSERT INTO shop(id,root_menu,emails,owner_form,owner_form_op,commission_eq,nump_eq) VALUES($id,'$root','$emails','$owner_form','$owner_form_op','$commission_eq','$nump_eq')");
 		}
 
 		// update order_forms
@@ -362,10 +366,15 @@ class shop extends shop_base
 		$ityp = new item_type;
 		$ityp->mk_cache();		// cacheme k6ik tyybid selle klassi sees, et p2rast ei peaks iga itemi kohta eraldi p2ringut tegema
 
+		$min_p = $this->get_cart_min_period();
 		$has_items = false;
 		$this->db_query("SELECT objects.brother_of as oid,shop_items.* FROM objects LEFT JOIN shop_items ON shop_items.id = objects.brother_of WHERE parent = $section AND class_id = ".CL_SHOP_ITEM." AND status = 2");
 		while ($row = $this->db_next())
 		{
+			if (!$this->is_item_available($row,1,new form(), $min_p))
+			{
+				continue;
+			}
 			$itt = $ityp->get_item_type($row["type_id"]);
 
 			$it_price = $this->get_list_price($row["oid"],$row["price"]);
@@ -394,7 +403,8 @@ class shop extends shop_base
 			"reforb" => $this->mk_reforb("add_cart", array("shop_id" => $id, "section" => $section)),
 			"cart" => $this->mk_site_orb(array("action" => "view_cart", "shop_id" => $id, "section" => $section)),
 			"add_item" => $this->mk_my_orb("new", array("parent" => $section),"shop_item"),
-			"HAS_ITEMS" => ($has_items ? $this->parse("HAS_ITEMS") : "")
+			"HAS_ITEMS" => ($has_items ? $this->parse("HAS_ITEMS") : ""),
+			"cancel_current" => $this->mk_my_orb("cancel_current", array("shop" => $id, "section" => $section))
 		));
 		return $this->parse();
 	}
@@ -494,6 +504,23 @@ class shop extends shop_base
 		return $this->parse();
 	}
 
+	function get_cart_min_period()
+	{
+		$min_p = 2147483648;
+		if (!is_array($shopping_cart["items"]))
+		{
+			return 1;
+		}
+		foreach($shopping_cart["items"] as $iid => $idata)
+		{
+			if ($idata["period"] && $min_p > $idata["period"] && $idata["period"] > 1)
+			{
+				$min_p = $idata["period"];
+			}
+		}
+		return $min_p;
+	}
+
 	////
 	// !saves the changes the user made to quantities in the shopping cart view
 	function submit_cart($arr)
@@ -510,14 +537,7 @@ class shop extends shop_base
 		if (is_array($shopping_cart["items"]))
 		{
 			// leiame perioodi alguse
-			$min_p = 2147483648;
-			foreach($shopping_cart["items"] as $iid => $idata)
-			{
-				if ($idata["period"] && $min_p > $idata["period"] && $idata["period"] > 1)
-				{
-					$min_p = $idata["period"];
-				}
-			}
+			$min_p = $this->get_cart_min_period();
 			reset($shopping_cart["items"]);
 			while (list($item_id,$ar) = each($shopping_cart["items"]))
 			{
@@ -638,7 +658,7 @@ class shop extends shop_base
 			foreach($farr as $f)
 			{
 				$el = $f->get_element_by_name($elname);
-				if ($el)
+				if ($el && $el->get_value(true) > 0)	// try to find element with value
 				{
 					break;
 				}
@@ -653,7 +673,9 @@ class shop extends shop_base
 			}
 			$eq = str_replace($elname,$elval,$eq);
 		}
+//		echo "eq = $eq <br>";
 		eval("\$price = ".$eq.";");
+//		echo "calc price = $price <br>";
 		return $price;
 	}
 
@@ -694,7 +716,10 @@ class shop extends shop_base
 		global $order_forms;
 		if ($first)
 		{
-			$order_forms = false;
+			if (!$GLOBALS["shopping_cart"]["order_id"])
+			{
+				$order_forms = false;
+			}
 			$num = 0;
 		}
 		else
@@ -708,7 +733,7 @@ class shop extends shop_base
 		// now! we must show all the selected forms in a row, and repeat the ones that are marked as repeating
 		// get all the forms
 		$ofs = $this->get_ofs_for_shop($shop_id);
-		if (!is_array($order_forms))
+		if (!is_array($order_forms) )
 		{
 			// first time, so fill arrays
 			$order_forms["entries"] = array();
@@ -735,19 +760,29 @@ class shop extends shop_base
 
 		if ($order_forms["current_cnt"] > 0 || $num > 0)
 		{
-			$prev_entry = "";
+			$pe = "";
 			foreach($order_forms["entries"] as $ar)
 			{
 				$f->reset();
-				$prev_entry .= $f->show(array("id" => $ar["form"], "entry_id" => $ar["entry"], "op_id" => $order_forms["order"][$num]["op_id"]))."<br>";
+				$prev_entry = $f->show(array("id" => $ar["form"], "entry_id" => $ar["entry"], "op_id" => $order_forms["order"][$num]["op_id"]));
+				$this->vars(array(
+					"entry" => $prev_entry,
+					"chentry" => $this->mk_my_orb("order", array("shop_id" => $shop_id, "section" => $section, "num" => $ar["num"],"eid" => $ar["entry"]))
+				));
+				$pe.=$this->parse("prev_entry");
 			}
 		}
+		if ($num < 1)
+		{
+			$num = 0;
+		}
 		$this->vars(array(
-			"prev_entry" => $prev_entry,
+			"prev_entry" => $pe,
 			"form" => $f->gen_preview(array(
 									"elvalues" => $elvals,
+									"entry_id" => $eid,
 									"id" => $order_forms["order"][$num]["form"], 
-									"reforb" => $this->mk_reforb("pre_submit_order", array("shop_id" => $shop_id, "section" => $section,"num" => $num)),
+									"reforb" => $this->mk_reforb("pre_submit_order", array("shop_id" => $shop_id, "section" => $section,"num" => $num,"prev_eid" => $eid)),
 									"form_action" => "/index.".$GLOBALS["ext"]
 								)),
 			"shop_id" => $shop_id,
@@ -766,26 +801,39 @@ class shop extends shop_base
 		global $order_forms;
 		classload("form");
 		$f = new form;
-		$f->process_entry(array("id" => $order_forms["order"][$num]["form"]));
-		$order_forms["entries"][] = array("form" => $order_forms["order"][$num]["form"], "entry" => $f->entry_id,"name" => $f->entry_name);
-
-		// now check if we sould move on
-		if ($order_forms["order"][$num]["chk"] != 1)
+		$f->process_entry(array("id" => $order_forms["order"][$num]["form"],"entry_id" => $prev_eid));
+		if ($prev_eid)
 		{
-			// yes we should
-			$num++;
-			$order_forms["current_cnt"] = 0;
-			if ($num == $order_forms["max_cnt"])
+			foreach($order_forms["entries"] as $nnum => $ar)
 			{
-				// but that was the last form so continue to the real submit function
-				header("Location: ".$this->mk_my_orb("submit_order", array("shop_id" => $shop_id, "section" => $section)));
-				die();
+				if ($ar["entry"] == $prev_eid)
+				{
+					$order_forms["entries"][$num]["name"] = $f->entry_name;
+				}
 			}
 		}
 		else
 		{
-			// increment this forms entry count
-			$order_forms["current_cnt"]++;
+			$order_forms["entries"][] = array("num" => $num, "form" => $order_forms["order"][$num]["form"], "entry" => $f->entry_id,"name" => $f->entry_name);
+
+			// now check if we sould move on
+			if ($order_forms["order"][$num]["chk"] != 1)
+			{
+				// yes we should
+				$num++;
+				$order_forms["current_cnt"] = 0;
+				if ($num == $order_forms["max_cnt"])
+				{
+					// but that was the last form so continue to the real submit function
+					header("Location: ".$this->mk_my_orb("submit_order", array("shop_id" => $shop_id, "section" => $section)));
+					die();
+				}
+			}
+			else
+			{
+				// increment this forms entry count
+				$order_forms["current_cnt"]++;
+			}
 		}
 		return $this->mk_my_orb("order", array("shop_id" => $shop_id, "section" => $section, "num" => $num));
 	}
@@ -846,8 +894,8 @@ class shop extends shop_base
 
 					$selrows = $this->get_selected_rows_in_form(&$f);
 
-					$mail.="Nimi: ".$it["name"]."\n";
-					$mail.="Kogus ja tüüp: \n";
+					$mail.=LC_SHOP_ORDER_NAME.$it["name"]."\n";
+					$mail.=LC_SHOP_ORDER_TYPE;
 					$rowhtml = "";
 
 					foreach($selrows as $rownum)
@@ -855,7 +903,7 @@ class shop extends shop_base
 						// here we must add the elements of row $rownum to the email we are assembling of the selected rows
 						$mail.=$f->mk_show_text_row($rownum)."\n";
 					}
-					$mail.="\nHind: ".$ar["price"];
+					$mail.="Hind: ".$ar["price"]."\n\n";
 					$t_price += $ar["price"];
 				}
 			}
@@ -888,7 +936,7 @@ class shop extends shop_base
 				{
 					$it = $this->get_item($item_id);
 					$itt = $this->get_item_type($it["type_id"]);
-					$this->db_query("INSERT INTO order2item(order_id,item_id,count,price,cnt_entry,period,item_type,item_type_order) VALUES($ord_id,$item_id,'".$ar["cnt"]."','".$ar["price"]."','".$ar["cnt_entry"]."','".$ar["period"]."','".$it["type_id"]."','".$it["jrk"]."')");
+					$this->db_query("INSERT INTO order2item(order_id,item_id,count,price,cnt_entry,period,item_type,item_type_order) VALUES($ord_id,$item_id,'".$ar["cnt"]."','".$ar["price"]."','".$ar["cnt_entry"]."','".$min_p."','".$it["type_id"]."','".$itt["jrk"]."')");
 				}
 			}
 		}
@@ -902,17 +950,17 @@ class shop extends shop_base
 			{
 				$ename = $ar["name"];
 			}
-			$this->db_query("INSERT INTO order2form_entries(order_id,form_id,entry_id) values($ord_id,'".$ar["form"]."','".$ar["entry"]."')");
+			$this->db_query("INSERT INTO order2form_entries(order_id,form_id,entry_id,num,name) values($ord_id,'".$ar["form"]."','".$ar["entry"]."','".$ar["num"]."','".$ar["name"]."')");
 		}
 
 		// now we must also send an email to somebody notifying them of the new order.
 		// the email must contain all the info about the purchase, including all the
 		// items and their counts and also the order form data.
-		$mail = "Tere!\n\n kasutaja $uid (ip aadress: ".get_ip().") kell ".$this->time2date(time(),2)." tellis järgmised tooted: \n\n".$mail."\n\nKokku hind: ".$t_price;
+		$mail = sprintf(LC_SHOP_HI_USER,$uid).get_ip().LC_SHOP_TIME.$this->time2date(time(),2).LC_SHOP_ORDERED_PRODUCT.$mail.LC_SHOP_TOTAL_PRICE.$t_price.LC_SHOP_BILL_NR.$ord_id;
 
 		$this->db_query("UPDATE orders SET t_price = '$t_price', name='$ename' WHERE id = $ord_id");
 		
-		$mail.="\n\nTellija sisestas enda kohta järgmised andmed:\n\n";
+		$mail.=LC_SHOP_ORDERES_DATA;
 		foreach($order_forms["entries"] as $ar)
 		{
 			$f->load($ar["form"]);
@@ -923,11 +971,12 @@ class shop extends shop_base
 		$emails = explode(",",$sh["emails"]);
 		foreach($emails as $email)
 		{
-			mail($email,"Tellimus", $mail,"From: automatweb@automatweb.com\n");
+			mail($email,LC_SHOP_ORDER, $mail,"From: automatweb@automatweb.com\n");
 		}
 
 		// zero out the customers shopping cart as well.
 		$GLOBALS["shopping_cart"] = array();
+		$GLOBALS["order_forms"] = array();
 
 		// now show the order 
 		return $this->mk_my_orb("view_order", array("shop" => $shop_id, "order_id" => $ord_id, "section" => $section));
@@ -965,37 +1014,6 @@ class shop extends shop_base
 		));
 
 		return $this->parse();
-	}
-
-	function find_shop_id($section)
-	{
-		// now here's the possibility that $shop was omitted. therefore we must figure it out ourself
-		// we do that by loading all the root folders for all the shops
-		// and then traversing the object tree from the current point upwards until we hit a shop root folder.
-		// what if we don't ? hm. well. error message sounds l33t :p
-		$shfolders = array();
-		$this->db_query("SELECT id,root_menu FROM objects,shop WHERE objects.oid = shop.id AND objects.status != 0 AND objects.class_id = ".CL_SHOP);
-		while ($row = $this->db_next())
-		{
-			$shfolders[$row["root_menu"]] = $row["id"];
-		}
-
-		$oc = $this->get_object_chain($section);
-		foreach($oc as $oid => $orow)
-		{
-			if ($shfolders[$oid])
-			{
-				// and we found a matching root folder!
-				$shop = $shfolders[$oid];
-				break;
-			}
-		}
-
-		if (!$shop)
-		{
-			$this->raise_error("can't find the matching shop for the item!", true);
-		}
-		return $shop;
 	}
 
 	////
@@ -1124,7 +1142,8 @@ class shop extends shop_base
 			"it_cnt"	=> $shopping_cart["items"][$row["oid"]]["cnt"],
 			"order_item" => $this->mk_my_orb("order_item", array("item_id" => $row["oid"], "shop" => $shop, "section" => $parent)),
 			"cart" => $this->mk_my_orb("view_cart", array("shop_id" => $shop, "section" => $parent)),
-			"add_item" => $this->mk_my_orb("new", array("parent" => $parent),"shop_item")
+			"add_item" => $this->mk_my_orb("new", array("parent" => $parent),"shop_item"),
+			"cancel_current" => $this->mk_my_orb("cancel_current", array("shop" => $shop, "section" => $parent))
 		));
 		return $this->parse();
 	}
@@ -1314,6 +1333,91 @@ class shop extends shop_base
 		));
 
 		$this->db_query("SELECT * FROM orders WHERE shop_id = $id $ss ORDER BY tm DESC LIMIT ".($page*SHOP_PER_PAGE).",".SHOP_PER_PAGE);
+		while ($row = $this->db_next())
+		{
+			$this->vars(array(
+				"when" => $this->time2date($row["tm"], 2),
+				"user" => $row["user"],
+				"ip" => $row["ip"],
+				"price" => $row["t_price"],
+				"view"	=> $this->mk_my_orb("view_order", array("shop" => $id, "order_id" => $row["id"],"section" => $section,"page" => $page)),
+				"fill"	=> $this->mk_my_orb("mark_order_filled", array("shop" => $id, "order_id" => $row["id"],"section" => $section,"page" => $page)),
+				"bill" => $this->mk_my_orb("view_bill", array("shop" => $id, "order_id" => $row["id"], "section" => $section)),
+				"vouchers" => $this->mk_my_orb("list_vouchers", array("shop" => $id, "order_id" => $row["id"], "section" => $section)),
+				"change" => $this->mk_my_orb("change_order", array("shop" => $id, "order_id" => $row["id"], "section" => $section,"page" => $page)),
+				"cancel"	=> $this->mk_my_orb("cancel_order", array("shop" => $id, "order_id" => $row["id"],"section" => $section,"page" => $page)),
+				"order_id" => $row["id"],
+				"name" => $row["name"]
+			));
+			$is_f = "";
+			if (!isset($row["status"]))
+			{
+				$row["status"] = 0;
+			}
+			if ($row["status"] != ORD_FILLED)
+			{
+				$is_f = $this->parse("IS_F");
+			}
+			else
+			{
+				$is_f = $this->parse("FILLED");
+			}
+			$this->vars(array("IS_F" => $is_f,"FILLED" => ""));
+			$this->parse("LINE");
+		}
+		$this->vars(array(
+			"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$section
+		));
+		return $this->parse();
+	}
+
+	////
+	// !shows the orders for shop $id , item $item_id and period $period on the admin side and lets you  manage them
+	function admin_item_orders($arr)
+	{
+		extract($arr);
+		$this->read_template("admin_orders.tpl");
+		$sh = $this->get($id);
+		$this->mk_path($sh["parent"], "<a href='".$this->mk_orb("change", array("id" => $id))."'>Change target</a> / Orders");
+
+		// make pageselector
+		$cnt = $this->db_fetch_field("SELECT count(distinct(order_id)) as cnt FROM order2item WHERE item_id = $item_id AND period = $period","cnt");
+		$num_pages = $cnt / SHOP_PER_PAGE;
+
+		for ($i=0; $i < $num_pages; $i++)
+		{
+			$this->vars(array(
+				"from" => $i*SHOP_PER_PAGE,
+				"to" => min(($i+1)*SHOP_PER_PAGE,$cnt),
+				"goto_page" => $this->mk_my_orb("admin_item_orders", array("id" => $id, "section" => $section, "page" => $i,"item_id" => $item_id, "period" => $period))
+			));
+			if ($i == $page)
+			{
+				$pg.=$this->parse("SEL_PAGE");
+			}
+			else
+			{
+				$pg.=$this->parse("PAGE");
+			}
+		}
+		$this->vars(array(
+			"PAGE" => $pg,
+			"SEL_PAGE" => ""
+		));
+
+		// figure out the order id's
+		$oids = array();
+		$this->db_query("SELECT distinct(order_id) as order_id FROM order2item WHERE item_id = $item_id AND period = $period");
+		while ($row = $this->db_next())
+		{
+			$oids[] = $row["order_id"];
+		}
+		$oidstr = join(",",$oids);
+
+		if ($oidstr != "")
+		{
+			$this->db_query("SELECT * FROM orders WHERE id IN ($oidstr) ORDER BY tm DESC LIMIT ".($page*SHOP_PER_PAGE).",".SHOP_PER_PAGE);
+		}
 		while ($row = $this->db_next())
 		{
 			$this->vars(array(
@@ -1735,9 +1839,6 @@ class shop extends shop_base
 
 			$cnt_form->load_entry($row["cnt_entry"]);
 
-			$allitemsarr[] = $cnt_form;
-			$allitemsarr[] = $item_form;
-
 			if ($row["period"] > 1)
 			{
 				// if there is a period set in the cart for this item, we must replace the date in the item's form 
@@ -1745,6 +1846,15 @@ class shop extends shop_base
 				$el = $item_form->get_element_by_type("date", "from");
 				$item_form->set_element_value($el->get_id(),$row["period"]);
 			}
+
+			$tmp = $cnt_form;
+			$tmp->ee = "aa".$item["entry_id"];	// make fucking sure we get a copy
+
+			$allitemsarr[] = $tmp;
+
+			$tmp = $item_form;
+			$tmp->ee = "cc".$item["entry_id"];	// make fucking sure we get a copy
+			$allitemsarr[] = $tmp;
 
 			$ft->row_data_from_form(array(&$item_form,&$cnt_form),$item_parent_name);
 
@@ -2035,11 +2145,44 @@ class shop extends shop_base
 			$GLOBALS["shopping_cart"]["items"][$row["item_id"]]["period"] = $row["period"];
 		}
 
+
+		$ofs = $this->get_ofs_for_shop($shop);
+		// first time, so fill arrays
+		$cnt = 0;
+		foreach($ofs as $fid => $row)
+		{
+			$GLOBALS["order_forms"]["order"][$cnt]["form"] = $fid;
+			$GLOBALS["order_forms"]["order"][$cnt]["chk"] = $row["repeat"];
+			$GLOBALS["order_forms"]["order"][$cnt]["op_id"] = $row["op_id"];
+			$cnt++;
+		}
+		$GLOBALS["order_forms"]["max_cnt"] = $cnt;
+		$GLOBALS["order_forms"]["current_cnt"] = 0;
+
+		$cur_form = 0;
+		$this->db_query("SELECT * FROM order2form_entries WHERE order_id = $order_id");
+		while ($row = $this->db_next())
+		{
+			$GLOBALS["order_forms"]["entries"][] =array("num" => $row["num"], "form" => $row["form_id"], "entry" => $row["entry_id"], "name" => $row["name"]);
+			$GLOBALS["order_forms"]["current_cnt"]++;
+			if ($cur_form != $row["form_id"])
+			{
+				$cur_form = $row["form_id"];
+				$GLOBALS["order_forms"]["current_cnt"]=0;
+			}
+		}
+
+		global $order_forms;
+		session_register("order_forms");
+
 		return $this->view_cart(array("shop_id" => $shop, "section" => $section));
 	}
 
 	function do_cancel_order($order_id)
 	{
+		$this->db_query("SELECT * FROM orders WHERE id = $order_id");
+		$ret = $this->db_next();
+
 		$this->db_query("SELECT * FROM order2item WHERE order_id = $order_id ORDER BY item_type_order");
 		while ($row = $this->db_next())
 		{
@@ -2055,12 +2198,25 @@ class shop extends shop_base
 		$this->db_query("DELETE FROM order2item WHERE order_id = $order_id");
 		$this->db_query("DELETE FROM orders WHERE id = $order_id");
 		$this->db_query("DELETE FROM order2form_entries WHERE order_id = $order_id");
+		return $ret;
 	}
 
 	function cancel_order($arr)
 	{
 		extract($arr);
-		$this->do_cancel_order($order_id);
+		$order = $this->do_cancel_order($order_id);
+
+		$sh = $this->get($shop);
+
+		$mail = LC_SHOP_ORDER_USER.$GLOBALS["uid"].sprintf(LC_SHOP_ABOLISH_ORDER,$order_id);
+		$mail.= $this->time2date(time(),2);
+
+		$emails = explode(",",$sh["emails"]);
+		foreach($emails as $email)
+		{
+			mail($email,LC_SHOP_ORDER, $mail,"From: automatweb@automatweb.com\n");
+		}
+
 		return $this->mk_my_orb("order_history", array("id" => $shop, "section" => $section));
 	}
 
