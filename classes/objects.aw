@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.32 2002/07/17 02:25:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.33 2002/07/23 21:15:21 duke Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 classload("cache");
 class db_objects extends aw_template 
@@ -7,6 +7,7 @@ class db_objects extends aw_template
 	function db_objects() 
 	{
 		$this->init("");
+		$this->lc_load("objects","lc_objects");
 		lc_load("definition");
 	}
 
@@ -734,6 +735,84 @@ class objects extends db_objects
 		}
 		return $replacement;
 
+	}
+
+	////
+	// !New generation search
+	function search_new($args = array())
+	{
+		extract($args);
+		$xf = get_instance("xmlform");
+		$this->values = array(
+			"name" => "nimi",
+			"comment" => "comment",
+		);
+		$result = $xf->gen_html(array(
+			"obj" => $this,
+			"values" => $this->values,
+			"form" => "search_object",
+			"map" => "search_object",
+		));
+		return $result;
+	}
+
+	function get_fvalue($args = array())
+	{
+		extract($args);
+		switch($_keyname)
+		{
+			case "name":
+				$retval = ($this->values["name"]) ? $this->values["name"] : "%";
+				break;
+
+			case "comment":
+				$retval = ($this->values["comment"]) ? $this->values["comment"] : "%";
+				break;
+
+			case "type":
+				$tar = array();
+				if ($otype)
+				{
+					$tar[$otype] = $this->cfg["classes"][$otype]["name"];
+				}
+				else
+				{
+					$tar = array(0 => " " . LC_OBJECTS_ALL);
+					reset($this->cfg["classes"]);
+					while (list($v,) = each($this->cfg["classes"]))
+					{
+						$name = $this->cfg["classes"][$v]["name"];
+						if ($name)
+						{
+							$tar[$v] = $name;
+						};
+					}
+				};
+
+				// sort type list by name
+				asort($tar);
+				$retval = $tar;
+				break;
+
+			case "parent":
+				$retval = $this->get_list(false,true);
+				break;
+
+			case "createdby":
+				$this->u = get_instance("users");
+				$uids[""] = "";
+				$this->uids = array_merge($uids,$this->u->listall_acl());
+				asort($this->uids);
+				$retval = $this->uids;
+			
+			case "modifiedby":
+				$retval = $this->uids;
+				
+
+			default:
+				
+		};
+		return $retval;
 	}
 }
 
