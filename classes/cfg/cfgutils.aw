@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.45 2004/06/11 08:41:51 kristo Exp $
+// $Id: cfgutils.aw,v 1.46 2004/09/04 18:49:08 kristo Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -299,6 +299,8 @@ class cfgutils extends aw_template
 				{
 					$res[$name] = $_tmp;
 				};
+
+				$this->normalize_prop_array($res[$name]);
 			};
 		};
 
@@ -553,5 +555,17 @@ class cfgutils extends aw_template
 		return $res;
 	}
 
+	function normalize_prop_array(&$p)
+	{
+		if (!isset($p["method"]))
+		{
+			$p["method"] = "";
+		}
+
+		if (!isset($p["store"]))
+		{
+			$p["store"] = "";
+		}
+	}
 };
 ?>
