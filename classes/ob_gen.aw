@@ -378,6 +378,18 @@ html::checkbox(array('name'=>'remember['.$what.']['.$field.']['.$nr.']','checked
 	}
 
 
+	/**  
+		
+		@attrib name=clear_log params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function clear_log($arr)
 	{
 		extract($oid);
@@ -566,6 +578,20 @@ break;
 
 
 // vat siin hakataksegi neid objekte kokku panema....
+	/**  
+		
+		@attrib name=generate_objects params=name default="0"
+		
+		@param id required
+		@param alg optional
+		@param test_limit optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function generate_objects($arr)
 	{
 		extract($arr);

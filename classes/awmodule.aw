@@ -8,6 +8,18 @@ class awmodule extends aw_template
 		$this->form = get_instance("formgen/form");
 	}
 
+	/**  
+		
+		@attrib name=new params=name default="0"
+		
+		@param parent required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add($arr)
 	{
 		extract($arr);

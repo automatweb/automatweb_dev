@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.13 2003/12/23 14:39:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.14 2004/01/13 16:24:22 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_RATE relationmgr=yes
@@ -159,6 +159,20 @@ class rate extends class_base
 		return number_format((float)$ob['meta']['__ratings'][$type],2,".",",");
 	}
 
+	/**  
+		
+		@attrib name=rate params=name nologin="1" default="0"
+		
+		@param oid required type=int
+		@param return_url required
+		@param rate required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add_rate($arr)
 	{
 		extract($arr);
@@ -195,6 +209,19 @@ class rate extends class_base
 		die();
 	}
 
+	/**  
+		
+		@attrib name=show params=name nologin="1" default="0"
+		
+		@param id required type=int
+		@param gallery_id optional type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show(&$arr)
 	{
 		extract($arr);

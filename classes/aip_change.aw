@@ -18,6 +18,18 @@ class aip_change extends aw_template
 		lc_site_load("aip_change", &$this);
 	}
 
+	/**  
+		
+		@attrib name=new params=name default="0"
+		
+		@param parent required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add($arr)
 	{
 		extract($arr);
@@ -50,6 +62,17 @@ class aip_change extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit($arr)
 	{
 		extract($arr);
@@ -141,6 +164,18 @@ class aip_change extends aw_template
 		return $this->mk_my_orb("change", array("id" => $id), "", false, true);
 	}
 
+	/**  
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change($arr)
 	{
 		extract($arr);
@@ -207,6 +242,17 @@ class aip_change extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=list params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_list($arr)
 	{
 		extract($arr);
@@ -308,6 +354,17 @@ class aip_change extends aw_template
 		return $tb->get_toolbar().get_add_menu(array("section" => aip::get_root()));
 	}
 
+	/**  
+		
+		@attrib name=submit_list params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_list($arr)
 	{
 		extract($arr);
@@ -338,6 +395,18 @@ class aip_change extends aw_template
 		return $this->get_object($id);
 	}
 
+	/**  
+		
+		@attrib name=delete params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_delete($arr)
 	{
 		extract($arr);
@@ -375,6 +444,18 @@ class aip_change extends aw_template
 		return array_merge($ret,$add);
 	}
 
+	/**  
+		
+		@attrib name=do_change params=name nologin="1" default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function do_change($arr)
 	{
 		extract($arr);
@@ -644,6 +725,18 @@ class aip_change extends aw_template
 		echo "<a href='".$this->mk_my_orb("list", array(), "aip_change", false, true)."'>Tagasi</a>";
 	}
 
+	/**  
+		
+		@attrib name=show_files params=name nologin="1" default="0"
+		
+		@param type optional default="1"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show_files($arr)
 	{
 		// make list of all active changes for this type
@@ -1106,8 +1199,18 @@ class aip_change extends aw_template
 		return true;
 	}
 
-	////
-	// !this publishes the file - makes it the default change in it's category
+	/** this publishes the file - makes it the default change in it's category 
+		
+		@attrib name=do_publish params=name nologin="1" default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function do_publish($arr)
 	{
 		extract($arr);
@@ -1136,6 +1239,17 @@ class aip_change extends aw_template
 		}
 	}
 
+	/**  
+		
+		@attrib name=check_events params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function check_events()
 	{
 		$ol = $this->list_objects(array(

@@ -1,6 +1,6 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_event.aw,v 1.4 2003/12/04 16:37:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_event.aw,v 1.5 2004/01/13 16:24:19 kristo Exp $
 
 /*
 	@default table=objects
@@ -333,8 +333,18 @@ class cal_event extends class_base
 		return $this->parse();
 	}
 
-	////
-	// !Kuvab repeaterite sisestamise vormi
+	/** Kuvab repeaterite sisestamise vormi 
+		
+		@attrib name=repeaters params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function repeaters($args = array())
 	{
 		extract($args);
@@ -548,8 +558,17 @@ class cal_event extends class_base
 		return $this->parse();
 	}
 
-	////
-	// !Saves the repeaters and calculates the dates when the correspondending event occurs
+	/** Saves the repeaters and calculates the dates when the correspondending event occurs 
+		
+		@attrib name=submit_repeaters params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_repeaters($args = array())
 	{
 		extract($args);
@@ -960,8 +979,21 @@ class cal_event extends class_base
 		return $this->rep_end;
 	}		
 	
-	////
-	// !Allows to search for objects to include in the document
+	/** Allows to search for objects to include in the document 
+		
+		@attrib name=search params=name default="0"
+		
+		@param id required type=int
+		@param s_name optional
+		@param s_type optional
+		@param s_comment optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function search($args = array())
 	{
 		extract($args);
@@ -1059,8 +1091,18 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		};
 	}
 
-	////
-	// !Displays the form for setting reminders
+	/** Displays the form for setting reminders 
+		
+		@attrib name=reminder params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function reminder($args = array())
 	{
 		extract($args);

@@ -230,6 +230,19 @@ class crm_selection extends class_base
 		));
 	}
 	
+	/**  
+		
+		@attrib name=delete_from_selection params=name default="0"
+		
+		@param id required
+		@param return_url required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function delete_from_selection($args)
 	{
 		//arr($args,1);
@@ -246,6 +259,19 @@ class crm_selection extends class_base
 		die;
 	}
 
+	/**  
+		
+		@attrib name=save_selection params=name default="0"
+		
+		@param id required
+		@param return_url required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function save_selection($args)
 	{
 		//arr($args,1);
@@ -268,6 +294,19 @@ class crm_selection extends class_base
 	}
 
 
+	/**  
+		
+		@attrib name=add_to_selection params=name default="0"
+		
+		@param id required
+		@param return_url required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add_to_selection($args)
 	{
 		// see on siis mingi sitt, mis teeb kas uue selektsiooni või liigutab asju 
@@ -468,8 +507,18 @@ class crm_selection extends class_base
 		return ($a[$this->sortby] > $b[$this->sortby]) ? +1 : -1;
 	}
 
-	////
-	// !Displays active items from selection using a template 
+	/** Displays active items from selection using a template 
+		
+		@attrib name=show params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show($arr)
 	{
 		$obj = new object($arr["id"]);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.17 2004/01/13 14:15:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.18 2004/01/13 16:24:15 kristo Exp $
 // scheduler.aw - Scheduler
 class scheduler extends aw_template
 {
@@ -63,8 +63,18 @@ class scheduler extends aw_template
 		}
 	}
 
-	////
-	// !updates the scheduled events that use repeater $id
+	/** updates the scheduled events that use repeater $id 
+		
+		@attrib name=update_repeaters params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function update_repeaters($arr)
 	{
 		extract($arr);
@@ -189,8 +199,17 @@ class scheduler extends aw_template
 		$this->session_fp = false;
 	}
 
-	////
-	// !this is where the event processing will take place
+	/** this is where the event processing will take place 
+		
+		@attrib name=do_events params=name nologin="1" default="1"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function do_events($arr)
 	{
 		extract($arr);
@@ -399,8 +418,19 @@ class scheduler extends aw_template
 		$this->close_log_session(true);
 	}
 
-	////
-	// !ui for scheduler
+	/** ui for scheduler 
+		
+		@attrib name=show params=name default="0"
+		
+		@param sortby optional
+		@param sort_order optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show($arr)
 	{
 		extract($arr);
@@ -431,8 +461,17 @@ class scheduler extends aw_template
 		return $this->parse();
 	}
 
-	////
-	// !shows log entries
+	/** shows log entries 
+		
+		@attrib name=show_log params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show_log($arr)
 	{
 		extract($arr);
@@ -456,6 +495,18 @@ class scheduler extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=show_log_entry params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show_log_entry($arr)
 	{
 		extract($arr);
@@ -474,8 +525,18 @@ class scheduler extends aw_template
 		return $this->parse();
 	}
 
-	////
-	// !Displays UI for adding or editing a scheduler object
+	/** Displays UI for adding or editing a scheduler object 
+		
+		@attrib name=new params=name default="0"
+		
+		@param parent required type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add_sched($args = array())
 	{
 		$caption = "Lisa uus scheduler";
@@ -491,6 +552,18 @@ class scheduler extends aw_template
 
 	}
 
+	/**  
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change_sched($args = array())
 	{
 		extract($args);
@@ -541,6 +614,17 @@ class scheduler extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit($args = array())
 	{
 		extract($args);
@@ -570,6 +654,17 @@ class scheduler extends aw_template
 		return $this->mk_my_orb("change",array("id" => $id));
 	}
 
+	/**  
+		
+		@attrib name=search_objs params=name all_args="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function search_objs($args = array())
 	{
 		extract($args);
@@ -666,6 +761,19 @@ class scheduler extends aw_template
 		return $clids;
 	}
 
+	/**  
+		
+		@attrib name=set_time params=name default="0"
+		
+		@param id required type=int
+		@param cycle optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function set_time($args = array())
 	{
 		extract($args);
@@ -706,8 +814,19 @@ class scheduler extends aw_template
 		return $this->parse();
 	}
 
-	////
-	// !Deletes a repeater.
+	/** Deletes a repeater. 
+		
+		@attrib name=delete_repeater params=name default="0"
+		
+		@param id required type=int
+		@param cycle required type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function delete_repeater($args = array())
 	{
 		extract($args);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.4 2003/11/17 14:15:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.5 2004/01/13 16:24:23 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -204,10 +204,20 @@ class site_search_content extends class_base
 		return $this->parse();
 	}
 
-	////
-	// !this will get called via scheduler to generate the static content to search from
-	// parameters:
-	//	id - required, id of the search object
+	/** this will get called via scheduler to generate the static content to search from 
+		
+		@attrib name=generate_static params=name nologin="1" default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+		parameters:
+		id - required, id of the search object
+
+	**/
 	function generate_static($arr)
 	{
 		extract($arr);
@@ -686,6 +696,22 @@ class site_search_content extends class_base
 		return $arr;
 	}
 
+	/**  
+		
+		@attrib name=do_search params=name nologin="1" default="0"
+		
+		@param id required
+		@param group optional
+		@param page optional
+		@param str optional
+		@param sort_by optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function do_search($arr)
 	{
 		extract($this->set_defaults($arr));

@@ -1,24 +1,25 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="site_search_content" folder="contentmgmt/site_search" extends="class_base">
+	<class name="site_search_content" folder="www/dev/terryf/awcl/classes/contentmgmt/site_search" extends="class_base">
 		<action name="generate_static" nologin="1">
 			<function name="generate_static">
 				<arguments>
-					<required name="id"/>
+					<required name="id" />
 				</arguments>
 			</function>
 		</action>
+
 		<action name="do_search" nologin="1">
 			<function name="do_search">
 				<arguments>
-					<required name="id"/>
-					<optional name="group"/>
-					<optional name="page"/>
-					<optional name="str"/>
-					<optional name="sort_by"/>
+					<required name="id" />
+					<optional name="group" />
+					<optional name="page" />
+					<optional name="str" />
+					<optional name="sort_by" />
 				</arguments>
 			</function>
 		</action>
+
 	</class>
 </orb>
-		

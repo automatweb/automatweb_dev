@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.98 2003/12/09 15:56:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.99 2004/01/13 16:24:15 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -39,8 +39,17 @@ class users extends users_user
 		return $retval;
 	}
 
-	////
-	// !generates list of users
+	/** generates list of users 
+		
+		@attrib name=gen_list params=name all_args="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function gen_list($arr)
 	{
 		if (!$this->prog_acl("view", PRG_USERS))
@@ -230,8 +239,18 @@ class users extends users_user
 		return $this->parse();
 	}
 
-	////
-	// !user changing from the admin interface
+	/** user changing from the admin interface 
+		
+		@attrib name=change params=name default="0"
+		
+		@param id optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change($arr)
 	{
 		aw_session_set("session_filled_forms", array());
@@ -271,6 +290,18 @@ class users extends users_user
 		return $jfrm;
 	}
 
+	/**  
+		
+		@attrib name=do_change params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function do_change($arr)
 	{
 		extract($arr);
@@ -313,8 +344,19 @@ class users extends users_user
 		}
 	}
 
-	////
-	// !generates the form for changing the users ($id) password
+	/** generates the form for changing the users ($id) password 
+		
+		@attrib name=change_pwd params=name is_public="1" caption="Change password" default="0"
+		
+		@param id optional
+		@param error optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change_pwd($arr)
 	{
 		extract($arr);
@@ -339,8 +381,17 @@ class users extends users_user
 		return $this->parse();
 	}
 
-	////
-	// !saves the uses changed password
+	/** saves the uses changed password 
+		
+		@attrib name=submit_change_pwd params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_change_pwd($arr)
 	{
 		extract($arr);
@@ -401,8 +452,18 @@ class users extends users_user
 		}
 	}
 
-	////
-	// !deletes the user
+	/** deletes the user 
+		
+		@attrib name=delete params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function delete($arr)
 	{
 		extract($arr);
@@ -410,8 +471,17 @@ class users extends users_user
 		header("Location: ".$this->mk_orb("gen_list", array()));
 	}
 
-	////
-	// !adds the user and ssets all join form entries from site interface
+	/** adds the user and ssets all join form entries from site interface 
+		
+		@attrib name=submit_user_site params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_user_site($arr)
 	{
 		extract($arr);
@@ -478,8 +548,17 @@ class users extends users_user
 		return $this->mk_orb("add_user", array("level" => 1, "join_grp" => $join_grp));
 	}
 
-	////
-	// !adds the user and ssets all join form entries from admin interface
+	/** adds the user and ssets all join form entries from admin interface 
+		
+		@attrib name=submit_user params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_user($arr)
 	{
 		extract($arr);
@@ -588,8 +667,19 @@ class users extends users_user
 		return true;
 	}
 
-	////
-	// !this da thang, users added from the admin interface will use this function extensively. w00p!
+	/** this da thang, users added from the admin interface will use this function extensively. w00p! 
+		
+		@attrib name=add_user params=name default="0"
+		
+		@param level optional
+		@param join_grp optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add_user($arr)
 	{
 		extract($arr);
@@ -820,8 +910,18 @@ class users extends users_user
 		return $ret;
 	}
 
-	////
-	// !shows the form $fid with the entry the user entered when he/she joined
+	/** shows the form $fid with the entry the user entered when he/she joined 
+		
+		@attrib name=udata params=name is_public="1" caption="Edit information" default="0"
+		
+		@param fid optional type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function do_change_site($arr)
 	{
 		extract($arr);
@@ -851,8 +951,17 @@ class users extends users_user
 		));
 	}
 
-	////
-	// !this saves the data entered in the form and flushes all necessary caches and group memberships
+	/** this saves the data entered in the form and flushes all necessary caches and group memberships 
+		
+		@attrib name=save_udata params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_do_change_site($arr)
 	{
 		extract($arr);
@@ -979,8 +1088,17 @@ class users extends users_user
 		return $this->parse();
 	}
 
-	////
-	// !this actually sends the reminder-email
+	/** this actually sends the reminder-email 
+		
+		@attrib name=submit_pwd_remind params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_pwd_remind($arr)
 	{
 		extract($arr);
@@ -1089,8 +1207,18 @@ class users extends users_user
 		return $ar;
 	}
 
-	////
-	// !showus user selectable settings
+	/** showus user selectable settings 
+		
+		@attrib name=settings params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function settings($arr)
 	{
 		extract($arr);
@@ -1151,6 +1279,17 @@ class users extends users_user
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_user_info params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_user_info($arr)
 	{
 		extract($arr);
@@ -1165,6 +1304,17 @@ class users extends users_user
 		return $this->mk_my_orb("settings", array("id" => $u_uid));
 	}
 
+	/**  
+		
+		@attrib name=show_user_info params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show_user_info()
 	{
 		$co = get_instance("config");
@@ -1180,8 +1330,17 @@ class users extends users_user
 		}
 	}
 
-	////
-	// !saves users settings
+	/** saves users settings 
+		
+		@attrib name=submit_settings params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_settings($arr)
 	{
 		extract($arr);
@@ -1205,8 +1364,23 @@ class users extends users_user
 		return $this->mk_my_orb("settings", array("id" => $id));
 	}
 
-	////
-	// !statistics about users
+	/** statistics about users 
+		
+		@attrib name=user_stats params=name default="0"
+		
+		@param s_uid optional
+		@param from optional
+		@param to optional
+		@param stat_type optional
+		@param stat_span optional
+		@param graph_type optional default="BarGraph"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function user_stats($arr)
 	{
 		extract($arr);
@@ -1541,6 +1715,17 @@ class users extends users_user
 		));
 	}
 
+	/**  
+		
+		@attrib name=convusers params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function convusers()
 	{
 		$this->db_query("SELECT * FROM users");
@@ -1554,6 +1739,17 @@ class users extends users_user
 		}
 	}
 
+	/**  
+		
+		@attrib name=convsyslog params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function convsyslog()
 	{
 		$this->db_query("SELECT * FROM syslog");
@@ -1572,8 +1768,19 @@ class users extends users_user
 		}
 	}
 
-	////
-	// !displays objects that the user s_uid has been assigned acls to
+	/** displays objects that the user s_uid has been assigned acls to 
+		
+		@attrib name=user_acl params=name default="0"
+		
+		@param s_uid required
+		@param page optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function user_acl($arr)
 	{
 		extract($arr);
@@ -1663,6 +1870,17 @@ class users extends users_user
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_user_acl params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_user_acl($arr)
 	{
 		extract($arr);
@@ -1682,9 +1900,18 @@ class users extends users_user
 		return $this->mk_my_orb("user_acl", array("s_uid" => $s_uid,"page" => $page));
 	}
 
-	////
-	// !Generates an unique hash, which when used in a url can be used to let the used change
-	// his/her password
+	/** Generates an unique hash, which when used in a url can be used to let the used change 
+		
+		@attrib name=send_hash params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+		his/her password
+
+	**/
 	function send_hash($args = array())
 	{
 		extract($args);
@@ -1704,6 +1931,17 @@ class users extends users_user
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_send_hash params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_send_hash($args = array())
 	{
 		extract($args);
@@ -1752,8 +1990,19 @@ class users extends users_user
 		return $this->mk_my_orb("send_hash",array());
 	}
 
-	////
-	// !Allows the user to change his/her password
+	/** Allows the user to change his/her password 
+		
+		@attrib name=pwhash params=name nologin="1" default="0"
+		
+		@param k required
+		@param u required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function password_hash($args = array())
 	{	
 		extract($args);
@@ -1818,6 +2067,21 @@ class users extends users_user
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=change_pwd_hash params=name nologin="1" default="0"
+		
+		@param pass1 required
+		@param pass2 required
+		@param a required
+		@param change optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change_pwd_hash($args = array())
 	{
 		global $a;
@@ -1853,8 +2117,17 @@ class users extends users_user
 		return $this->parse();
 	}
 
-	////
-	// !Submits the password
+	/** Submits the password 
+		
+		@attrib name=submit_password_hash params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_password_hash($args = array())
 	{
 		extract($args);
@@ -1973,6 +2246,17 @@ class users extends users_user
 		}
 	}
 
+	/**  
+		
+		@attrib name=submit_ua_form params=name all_args="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_ua_form($arr)
 	{
 		extract($arr);
@@ -2063,6 +2347,17 @@ class users extends users_user
 		}
 	}
 
+	/**  
+		
+		@attrib name=createpwd params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function createpwd($arr)
 	{
 		extract($arr);
@@ -2076,6 +2371,17 @@ class users extends users_user
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_createpwd params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_createpwd($arr)
 	{
 		extract($arr);
@@ -2094,10 +2400,19 @@ class users extends users_user
 //		return $this->mk_my_orb("gen_list");
 	}
 
-	////
-	// !Encrypts the passwords in the database with md5
-	// don't forget to turn on auth.md5_passwords after you do that,
-	// otherwise it will be impossible to log in.
+	/** Encrypts the passwords in the database with md5 
+		
+		@attrib name=pwconv params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+		don't forget to turn on auth.md5_passwords after you do that,
+		otherwise it will be impossible to log in.
+
+	**/
 	function pwconv($args = array())
 	{
 		print "Encrypting passwords with MD5. This may take a few moments<br />";
@@ -2216,6 +2531,18 @@ class users extends users_user
 		$ini_opts["auth.md5_passwords"] = 1;
 	}
 
+	/**  
+		
+		@attrib name=import params=name default="0"
+		
+		@param gid optional type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function import($arr)
 	{
 		extract($arr);
@@ -2229,6 +2556,17 @@ class users extends users_user
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_import params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_import($arr)
 	{
 		extract($arr);

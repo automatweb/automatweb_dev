@@ -1,33 +1,21 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="doc" extends="class_base">
-		<action name="new" all_args="1" is_public="1" caption="Lisa Dokument">
-			<function name="change">
-				<arguments>
-					<required name="parent" type="int" acl="add"/>
-					<optional name="period"/>
-					<optional name="alias_to" type="int"/>
-					<optional name="return_url"/>
-					<optional name="reltype" type="int"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="show">
+	<class name="doc" folder="www/dev/terryf/awcl/classes" extends="class_base">
+		<action name="show" >
 			<function name="show">
 				<arguments>
-					<required name="id"/>
+					<required name="id" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="show_pic1" is_content="1" caption="Näita pilti">
+		<action name="show_pic1" caption="Näita pilti">
 			<function name="show_pic1">
 				<arguments>
-					<required name="id"/>
+					<required name="id" />
 				</arguments>
 			</function>
 		</action>
+
 	</class>
 </orb>
-		

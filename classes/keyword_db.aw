@@ -7,6 +7,18 @@ class keyword_db extends aw_template
 		$this->init("automatweb/keywords");
 	}
 
+	/**  
+		
+		@attrib name=new params=name default="0"
+		
+		@param parent required acl="add"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add($arr)
 	{
 		extract($arr);
@@ -24,6 +36,17 @@ class keyword_db extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit($arr)
 	{
 		extract($arr);
@@ -65,6 +88,18 @@ class keyword_db extends aw_template
 		return $this->mk_my_orb("change", array("id" => $id));
 	}
 
+	/**  
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required acl="edit;view"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change($arr)
 	{
 		extract($arr);

@@ -16,6 +16,18 @@ class form_controller extends form_base
 		$this->form_base();
 	}
 
+	/**  
+		
+		@attrib name=new params=name default="0"
+		
+		@param parent required type=int acl="add"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add($arr)
 	{
 		extract($arr);
@@ -39,6 +51,17 @@ class form_controller extends form_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit($arr)
 	{
 		extract($arr);
@@ -76,6 +99,18 @@ class form_controller extends form_base
 		return $this->mk_my_orb("change", array("id" => $id));
 	}
 
+	/**  
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required type=int acl="edit;view"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change($arr)
 	{
 		extract($arr);
@@ -398,8 +433,18 @@ class form_controller extends form_base
 		return $eq;
 	}
 
-	////
-	// !presents the interface for adding variables to controller
+	/** presents the interface for adding variables to controller 
+		
+		@attrib name=add_var params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add_var($arr)
 	{
 		extract($arr);
@@ -413,8 +458,17 @@ class form_controller extends form_base
 		return $this->parse();
 	}
 
-	////
-	// !saves the variable prefs
+	/** saves the variable prefs 
+		
+		@attrib name=submit_var params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_var($arr)
 	{
 		extract($arr);
@@ -454,6 +508,19 @@ class form_controller extends form_base
 		}
 	}
 
+	/**  
+		
+		@attrib name=change_var params=name default="0"
+		
+		@param id required
+		@param var_name required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change_var($arr)
 	{
 		extract($arr);
@@ -734,6 +801,19 @@ class form_controller extends form_base
 		exit_function("form_controller::get_var_value");
 	}
 
+	/**  
+		
+		@attrib name=del_var params=name default="0"
+		
+		@param id required
+		@param var_name optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function del_var($arr)
 	{
 		extract($arr);
@@ -751,8 +831,18 @@ class form_controller extends form_base
 		return $this->loaded_controller["meta"]["show_errors_showctl"];
 	}
 
-	////
-	// !shows the user in what forms what elements use this controller and lets the user remove it
+	/** shows the user in what forms what elements use this controller and lets the user remove it 
+		
+		@attrib name=form_list params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function form_list($arr)
 	{
 		extract($arr);
@@ -797,8 +887,17 @@ class form_controller extends form_base
 		return $ret;
 	}
 
-	////
-	// !saves the changes the user has made to the element list
+	/** saves the changes the user has made to the element list 
+		
+		@attrib name=submit_form_list params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_form_list($arr)
 	{
 		extract($arr);

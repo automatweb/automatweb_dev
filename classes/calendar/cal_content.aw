@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_content.aw,v 1.3 2003/07/17 15:46:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_content.aw,v 1.4 2004/01/13 16:24:19 kristo Exp $
 /*
 
 	@classinfo syslog_type=ST_CAL_CONTENT
@@ -55,6 +55,18 @@ class cal_content extends class_base
 		return $retval;
 	}
 
+	/**  
+		
+		@attrib name=view params=name default="0"
+		
+		@param id required type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function view($args = array())
 	{
 		$obj = $this->get_object(array(

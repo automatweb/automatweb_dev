@@ -1,5 +1,5 @@
 <?php
-// $Id: page.aw,v 1.5 2003/12/03 11:01:06 duke Exp $
+// $Id: page.aw,v 1.6 2004/01/13 16:24:33 kristo Exp $
 // page.aw - Generic HTML page
 /*
 	@default table=objects
@@ -56,6 +56,19 @@ class page extends class_base
 		};
 	}
 
+	/**  
+		
+		@attrib name=show params=name default="0"
+		
+		@param id required
+		@param section optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show($arr)
 	{
 		extract($arr);

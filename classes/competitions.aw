@@ -48,6 +48,29 @@ class competitions extends aw_template
 		return false;
 	}
 
+	/**  
+		
+		@attrib name=list params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	/**  
+		
+		@attrib name=my_list params=name default="0"
+		
+		@param my_list define value="1"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function mk_list($arr)
 	{
 		extract($arr);
@@ -135,6 +158,17 @@ class competitions extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=add params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add($arr)
 	{
 		extract($arr);
@@ -146,6 +180,17 @@ class competitions extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit($arr)
 	{
 		extract($arr);
@@ -195,6 +240,18 @@ class competitions extends aw_template
 		return $this->mk_my_orb("change", array("id" => $id));
 	}
 
+	/**  
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change($arr)
 	{
 		extract($arr);
@@ -282,6 +339,18 @@ class competitions extends aw_template
 		return $this->db_next();
 	}
 	
+	/**  
+		
+		@attrib name=vcomment params=name default="0"
+		
+		@param cid required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function vcomment($arr)
 	{
 		extract($arr);
@@ -302,6 +371,17 @@ class competitions extends aw_template
 	}
 
 
+	/**  
+		
+		@attrib name=toplist params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function toplist()
 	{
 		$this->db_query('select t3.user as lahendaja, SUM(t1.vote) as punkte, t3.id from comp_votes as t1, competitions as t2, comp_solutions as t3 where t1.sol_id=t3.id and t1.comp_id=t2.id and t2.status="2" and t2.vote_end<now() group by lahendaja order by punkte desc');
@@ -327,6 +407,18 @@ class competitions extends aw_template
 	}
 	
 
+	/**  
+		
+		@attrib name=view params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function view($arr)
 	{
 		extract($arr);
@@ -498,6 +590,17 @@ class competitions extends aw_template
 		return $this->db_next();
 	}
 
+	/**  
+		
+		@attrib name=submit_view params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_view($arr)
 	{
 		extract($arr);

@@ -7,6 +7,18 @@ class ut_stat_table extends aw_template
 		$this->init("ut_stat_table");
 	}
 
+	/**  
+		
+		@attrib name=draw params=name default="0"
+		
+		@param section optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function draw($section)
 	{
 		if (is_array($section))
@@ -97,6 +109,22 @@ class ut_stat_table extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=list params=name nologin="1" default="0"
+		
+		@param teaduskond required
+		@param oppevorm required
+		@param oppeaste required
+		@param oppekava required
+		@param section optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_list($arr)
 	{
 		extract($arr);

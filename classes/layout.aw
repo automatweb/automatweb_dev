@@ -225,6 +225,17 @@ class layout extends class_base
 
 	}
 
+	/**  
+		
+		@attrib name=sel_style params=name all_args="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function sel_style($arr)
 	{
 		extract($arr);
@@ -256,6 +267,17 @@ class layout extends class_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_styles params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_styles($arr)
 	{
 		extract($arr);

@@ -175,8 +175,18 @@ class bugtrack extends aw_template
 
 	// Siit hakkab visuaalne osa:
 
-	////
-	//! Näitab bugi lisamise formi
+	/**  
+		
+		@attrib name=new params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+		! Näitab bugi lisamise formi
+
+	**/
 	function orb_new($arr) 
 	{
 		if (!$this->prog_acl("add", PRG_BUGTRACK))
@@ -227,8 +237,23 @@ class bugtrack extends aw_template
 
 
 
-	////
-	//! Listib kõik bugid. 
+	/**  
+		
+		@attrib name=list params=name default="0"
+		
+		@param sortby optional
+		@param setfilter optional
+		@param _setfilter optional
+		@param page optional default="0"
+		@param search_sess optional
+		
+		@returns
+		
+		
+		@comment
+		! Listib kõik bugid.
+
+	**/
 	function orb_list($args)
 	{
 		if (!$this->prog_acl("view", PRG_BUGTRACK))
@@ -335,8 +360,19 @@ class bugtrack extends aw_template
 		return $this->parse();
 	}
 
-	////
-	//! Näitab developeri määramise akent
+	/**  
+		
+		@attrib name=delegate params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+		! Näitab developeri määramise akent
+
+	**/
 	function orb_popupdelegate($arr)
 	{
 		extract($arr);
@@ -354,8 +390,18 @@ class bugtrack extends aw_template
 	}
 
 
-	////
-	// !Näitab bugi editimise formi.
+	/** Näitab bugi editimise formi. 
+		
+		@attrib name=edit params=name default="0"
+		
+		@param id required type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_edit($arr)
 	{
 		extract($arr);
@@ -434,8 +480,17 @@ class bugtrack extends aw_template
 
 	// ORB submit funktsioonid
 
-	////
-	// ! orb_new submit funktsioon
+	/** orb_new submit funktsioon 
+		
+		@attrib name=submit_new params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_submit_new($arr)
 	{
 		if (!$this->prog_acl("add", PRG_BUGTRACK))
@@ -523,8 +578,18 @@ class bugtrack extends aw_template
 
 	}
 
-	////
-	// ! orb_edit submit funktsioon
+	/** orb_edit submit funktsioon 
+		
+		@attrib name=submit_edit params=name default="0"
+		
+		@param id required type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_submit_edit($arr)
 	{
 		extract($arr);
@@ -573,8 +638,21 @@ class bugtrack extends aw_template
 		return $this->mk_my_orb("edit",array("id" => $id),"",false,true);
 	}
 
-	////
-	//! orb delegate sumbit funktsioon
+	/**  
+		
+		@attrib name=submit_delegate params=name default="0"
+		
+		@param id required
+		@param developer required
+		@param status required
+		
+		@returns
+		
+		
+		@comment
+		! orb delegate sumbit funktsioon
+
+	**/
 	function orb_submit_delegate($arr)
 	{
 		if (!$this->prog_acl("admin", PRG_BUGTRACK))
@@ -624,8 +702,18 @@ class bugtrack extends aw_template
 	}
 
 
-	////
-	// !Kustutab bugi
+	/** Kustutab bugi 
+		
+		@attrib name=delete params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_delete($arr) 
 	{
 		if (!$this->prog_acl("admin", PRG_BUGTRACK)  && ($bug["uid"]!=aw_global_get("uid") || !aw_global_get("uid")))
@@ -810,8 +898,21 @@ class bugtrack extends aw_template
 		};
 	}
 
-	////
-	//! Näitab filtri muutmise akent
+	/**  
+		
+		@attrib name=filter_edit params=name default="0"
+		
+		@param id required
+		@param change_part optional
+		@param is_change_part optional
+		
+		@returns
+		
+		
+		@comment
+		! Näitab filtri muutmise akent
+
+	**/
 	function orb_filter_edit($arr)
 	{
 		extract($arr);
@@ -831,6 +932,17 @@ class bugtrack extends aw_template
 	}
 
 	// paneb valitud filtrid cut olekusse
+	/**  
+		
+		@attrib name=filters_cut params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_filters_cut($arr)
 	{
 		extract($arr);
@@ -850,8 +962,18 @@ class bugtrack extends aw_template
 		return $this->mk_my_orb("filters",array(),"",false,true);
 	}
 
-	////
-	// eemaldab cut olekus filtrid gruppidest ja lisab nad target gruppi
+	/**  
+		
+		@attrib name=filters_paste params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+		eemaldab cut olekus filtrid gruppidest ja lisab nad target gruppi
+
+	**/
 	function orb_filters_paste($arr)
 	{
 		extract($arr);
@@ -965,6 +1087,17 @@ class bugtrack extends aw_template
 	}
 
 	// kustutab yhe filtri grupi seest
+	/**  
+		
+		@attrib name=filters_del params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_filters_del($arr)
 	{
 		extract($arr);
@@ -998,11 +1131,33 @@ class bugtrack extends aw_template
 		return $this->mk_my_orb("filters",array(),"",false,true);
 	}
 
+	/**  
+		
+		@attrib name=filters_down params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_filters_down($arr)
 	{
 		return $this->orb_filters_move(array_merge($arr,array("delta"=>"1")));
 	}
 
+	/**  
+		
+		@attrib name=filters_up params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_filters_up($arr)
 	{
 		return $this->orb_filters_move(array_merge($arr,array("delta"=>"-1")));
@@ -1031,6 +1186,18 @@ class bugtrack extends aw_template
 		return $this->mk_my_orb("filters",array(),"",false,true);
 	}
 
+	/**  
+		
+		@attrib name=submit_filter_edit params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_submit_filter_edit($arr)
 	{
 		extract($arr);
@@ -1042,11 +1209,35 @@ class bugtrack extends aw_template
 		return $this->mk_my_orb("filter_edit",array("id" => $id),"",false,true);
 	}
 
+	/**  
+		
+		@attrib name=filter_edit_down params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_filter_edit_down($arr)
 	{
 		return $this->orb_filter_edit_move(array_merge($arr,array("delta"=>"1")));
 	}
 
+	/**  
+		
+		@attrib name=filter_edit_up params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_filter_edit_up($arr)
 	{
 		return $this->orb_filter_edit_move(array_merge($arr,array("delta"=>"-1")));
@@ -1064,6 +1255,17 @@ class bugtrack extends aw_template
 		return $this->mk_my_orb("filter_edit",array("id" => $id),"",false,true);
 	}
 
+	/**  
+		
+		@attrib name=filters_export params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_filters_export($arr)
 	{
 		extract($arr);
@@ -1082,6 +1284,18 @@ class bugtrack extends aw_template
 
 	}
 
+	/**  
+		
+		@attrib name=filters_import params=name default="0"
+		
+		@param gid optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_filters_import($arr)
 	{
 		extract($arr);
@@ -1093,6 +1307,17 @@ class bugtrack extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_filters_import params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_submit_filters_import($arr)
 	{
 		global $fail;
@@ -1131,6 +1356,17 @@ class bugtrack extends aw_template
 		die("<script language='javascript'>window.close();</script>");
 	}
 
+	/**  
+		
+		@attrib name=filters params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_filters($arr)
 	{
 		$this->read_template("filters.tpl");
@@ -1188,6 +1424,17 @@ class bugtrack extends aw_template
 		return $this->m.$this->parse();
 	}
 
+	/**  
+		
+		@attrib name=filter_edit_change_part params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_filter_edit_change_part($arr)
 	{
 		extract($arr);
@@ -1200,6 +1447,18 @@ class bugtrack extends aw_template
 	}
 
 	// filtrile yhe tingimuse lisamine
+	/**  
+		
+		@attrib name=filter_edit_add params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_filter_edit_add($arr)
 	{
 		extract($arr);
@@ -1213,6 +1472,18 @@ class bugtrack extends aw_template
 	}
 
 	// filtrile yhe tingimuse kustutamine
+	/**  
+		
+		@attrib name=filter_edit_del params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_filter_edit_del($arr)
 	{
 		extract($arr);
@@ -1230,6 +1501,17 @@ class bugtrack extends aw_template
 		return $this->mk_my_orb("filter_edit",array("id" => $id),"",false,true);
 	}
 
+	/**  
+		
+		@attrib name=filters_newgroup params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_filters_newgroup($arr)
 	{
 		extract($arr);
@@ -1247,6 +1529,17 @@ class bugtrack extends aw_template
 		return $this->mk_my_orb("filters",array(),"",false,true);
 	}
 
+	/**  
+		
+		@attrib name=filters_delgroup params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_filters_delgroup($arr)
 	{
 		extract($arr);
@@ -1272,6 +1565,17 @@ class bugtrack extends aw_template
 		return $this->mk_my_orb("filters",array(),"",false,true);
 	}
 
+	/**  
+		
+		@attrib name=filters_rengroup params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_filters_rengroup($arr)
 	{
 		extract($arr);
@@ -1288,6 +1592,17 @@ class bugtrack extends aw_template
 		return $this->mk_my_orb("filters",array(),"",false,true);
 	}
 
+	/**  
+		
+		@attrib name=filters_new params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_filters_new($arr)
 	{
 		extract($arr);
@@ -1525,6 +1840,20 @@ class bugtrack extends aw_template
 		return $headerarray;
 	}
 
+	/**  
+		
+		@attrib name=search params=name default="0"
+		
+		@param search_sess optional
+		@param search optional
+		@param page optional default="0"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_search($arr)
 	{
 		// search code here.
@@ -1567,6 +1896,17 @@ class bugtrack extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_search params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_orb_search($arr)
 	{
 		extract($arr);
@@ -1850,6 +2190,20 @@ class bugtrack extends aw_template
 		return $ret;
 	}
 
+	/**  
+		
+		@attrib name=list_errors params=name default="0"
+		
+		@param groupby optional
+		@param sortby optional
+		@param sort_order optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_list_errors($arr)
 	{
 		extract($arr);
@@ -1888,6 +2242,22 @@ class bugtrack extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=add_error params=name nologin="1" default="0"
+		
+		@param site_url required
+		@param err_type required
+		@param err_msg required
+		@param err_content required
+		@param err_uid required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add_error($arr)
 	{
 		$this->quote(&$arr);
@@ -1898,6 +2268,18 @@ class bugtrack extends aw_template
 
 	}
 
+	/**  
+		
+		@attrib name=show_error params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_show_error($arr)
 	{
 		extract($arr);
@@ -1924,6 +2306,18 @@ class bugtrack extends aw_template
 		return $this->db_next();
 	}
 
+	/**  
+		
+		@attrib name=show_type params=name default="0"
+		
+		@param type_id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_show_error_type($arr)
 	{
 		extract($arr);
@@ -1968,6 +2362,18 @@ class bugtrack extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=show_site params=name default="0"
+		
+		@param site required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_show_site_errors($arr)
 	{
 		extract($arr);
@@ -2011,6 +2417,17 @@ class bugtrack extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=show_types params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_show_types($arr)
 	{
 		extract($arr);
@@ -2043,6 +2460,18 @@ class bugtrack extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=err_type_comment params=name default="0"
+		
+		@param type_id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_err_type_comment($arr)
 	{
 		extract($arr);
@@ -2070,6 +2499,17 @@ class bugtrack extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_err_type_comment params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_submit_err_type_comment($arr)
 	{
 		extract($arr);

@@ -56,6 +56,18 @@ class db_table_admin extends class_base
 		return PROP_OK;
 	}
 
+	/**  
+		
+		@attrib name=admin params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function admin($arr)
 	{
 		extract($arr);
@@ -77,6 +89,19 @@ class db_table_admin extends class_base
 		));
 	}
 
+	/**  
+		
+		@attrib name=admin_col params=name default="0"
+		
+		@param id required
+		@param field optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function admin_col($arr)
 	{
 		extract($arr);
@@ -120,6 +145,17 @@ class db_table_admin extends class_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_admin params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_admin($arr)
 	{
 		extract($arr);
@@ -139,6 +175,17 @@ class db_table_admin extends class_base
 		return $this->mk_my_orb('admin', array('id' => $id));
 	}
 
+	/**  
+		
+		@attrib name=submit_admin_col params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_admin_col($arr)
 	{
 		extract($arr);
@@ -173,6 +220,18 @@ class db_table_admin extends class_base
 		return $this->mk_my_orb('admin_col', array('id' => $id, 'field' => $field));
 	}
 
+	/**  
+		
+		@attrib name=admin_indexes params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function admin_indexes($arr)
 	{
 		extract($arr);
@@ -257,6 +316,17 @@ class db_table_admin extends class_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_admin_indexes params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_admin_indexes($arr)
 	{
 		extract($arr);
@@ -276,6 +346,19 @@ class db_table_admin extends class_base
 		return $this->mk_my_orb('admin_indexes', array('id' => $id));
 	}
 
+	/**  
+		
+		@attrib name=admin_index params=name default="0"
+		
+		@param id required
+		@param index optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function admin_index($arr)
 	{
 		extract($arr);
@@ -325,6 +408,17 @@ class db_table_admin extends class_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_admin_index params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_admin_index($arr)
 	{
 		extract($arr);

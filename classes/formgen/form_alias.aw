@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_alias.aw,v 1.3 2003/10/06 14:32:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_alias.aw,v 1.4 2004/01/13 16:24:27 kristo Exp $
 
 classload("formgen/form");
 class form_alias extends form_base
@@ -9,6 +9,42 @@ class form_alias extends form_base
 		$this->form_base();
 	}
 
+	/**  
+		
+		@attrib name=new_entry_alias params=name default="0"
+		
+		@param return_url required
+		@param parent optional
+		@param alias_to optional
+		@param sf optional
+		@param entry_id optional
+		@param form_submit optional
+		@param id optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	/**  
+		
+		@attrib name=new params=name default="0"
+		
+		@param return_url required
+		@param parent optional
+		@param alias_to optional
+		@param sf optional
+		@param entry_id optional
+		@param form_submit optional
+		@param id optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function new_entry_alias($arr)
 	{
 		extract($arr);
@@ -67,6 +103,17 @@ class form_alias extends form_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_entry_alias params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_entry_alias($arr)
 	{
 		extract($arr);
@@ -89,6 +136,32 @@ class form_alias extends form_base
 		return $return_url;
 	}
 
+	/**  
+		
+		@attrib name=change_entry_alias params=name default="0"
+		
+		@param id required
+		@param return_url required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	/**  
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required
+		@param return_url required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change_entry_alias($arr)
 	{
 		extract($arr);

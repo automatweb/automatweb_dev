@@ -7,6 +7,17 @@ class codestat extends aw_template
 		$this->tpl_init("");
 	}
 
+	/**  
+		
+		@attrib name=show params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show($arr)
 	{
 		extract($arr);

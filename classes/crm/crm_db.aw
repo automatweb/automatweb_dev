@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.6 2004/01/06 13:23:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.7 2004/01/13 16:24:25 kristo Exp $
 // crm_db.aw - CRM database
 /*
 	@classinfo relationmgr=yes
@@ -1458,6 +1458,17 @@ class crm_db extends class_base
 		$toolbar->add_cdata($str);
 	}
 
+	/**  
+		
+		@attrib name=process_organizations params=name all_args="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function process_organizations($arr)
 	{
 		unset($arr["MAX_FILE_SIZE"]);

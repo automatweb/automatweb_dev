@@ -1,18 +1,13 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="admin_folders" folder="admin" default="1">
-		<action name="folders">
+	<class name="admin_folders" folder="www/dev/terryf/awcl/classes/admin" extends="aw_template">
+		<action name="folders" >
 			<function name="show_folders">
 				<arguments>
-					<optional name="period"/>
+					<optional name="period" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="gen_toolbar">
-			<function name="gen_toolbar">
-				<arguments/>
-			</function>
-		</action>
 	</class>
 </orb>

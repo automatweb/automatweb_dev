@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/banner/Attic/banner_site.aw,v 1.2 2002/12/05 11:02:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/banner/Attic/banner_site.aw,v 1.3 2004/01/13 16:24:18 kristo Exp $
 
 classload("banner/banner");
 class banner_site extends banner
@@ -11,8 +11,18 @@ class banner_site extends banner
 		$this->lc_load("banner","lc_banner");
 	}
 
-	////
-	// !generates form for adding a banner site
+	/** generates form for adding a banner site 
+		
+		@attrib name=new params=name default="0"
+		
+		@param parent required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add($arr)
 	{
 		extract($arr);
@@ -27,8 +37,19 @@ class banner_site extends banner
 		return $this->parse();
 	}
 
-	////
-	// !generates the form for changing banner site $id
+	/** generates the form for changing banner site $id 
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required
+		@param parent optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change($arr)
 	{
 		extract($arr);
@@ -48,8 +69,17 @@ class banner_site extends banner
 		return $this->parse();
 	}
 
-	////
-	// !saves the banner site info or adds if necessary
+	/** saves the banner site info or adds if necessary 
+		
+		@attrib name=submit params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit($arr)
 	{
 		extract($arr);
@@ -94,8 +124,18 @@ class banner_site extends banner
 		return $ca_sel;
 	}
 
-	////
-	// !generates a list of banners for site with stats
+	/** generates a list of banners for site with stats 
+		
+		@attrib name=stats params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function stats($arr)
 	{
 		extract($arr);
@@ -186,8 +226,18 @@ class banner_site extends banner
 		return $this->parse();
 	}
 
-	////
-	// !shows stats for site $id on a day-to-day basis
+	/** shows stats for site $id on a day-to-day basis 
+		
+		@attrib name=site_stats_by_day params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function site_stats_by_day($arr)
 	{
 		extract($arr);
@@ -211,8 +261,18 @@ class banner_site extends banner
 		return $this->parse();
 	}
 
-	////
-	// !shows stats for site $id for days of the week.
+	/** shows stats for site $id for days of the week. 
+		
+		@attrib name=site_stats_by_dow params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function site_stats_by_dow($arr)
 	{
 		extract($arr);
@@ -236,8 +296,18 @@ class banner_site extends banner
 		return $this->parse();
 	}
 
-	////
-	// !shows stats for site $id for hours of the day.
+	/** shows stats for site $id for hours of the day. 
+		
+		@attrib name=site_stats_by_hr params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function site_stats_by_hr($arr)
 	{
 		extract($arr);
@@ -261,8 +331,18 @@ class banner_site extends banner
 		return $this->parse();
 	}
 
-	////
-	// !profile stats for banner site $id
+	/** profile stats for banner site $id 
+		
+		@attrib name=stat_by_profile params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function stat_by_profile($arr)
 	{
 		extract($arr);

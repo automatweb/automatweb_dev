@@ -487,9 +487,20 @@ class group extends class_base
 		return $acls;
 	}
 
-	////
-	// !removes role $role_id from group $gid 
-	// - does this, by finding all acl objects that contain this group and that role, then removing the group from those acls
+	/** removes role $role_id from group $gid 
+		
+		@attrib name=remove_role_from_group params=name default="0"
+		
+		@param role_id required
+		@param gid required
+		
+		@returns
+		
+		
+		@comment
+		- does this, by finding all acl objects that contain this group and that role, then removing the group from those acls
+
+	**/
 	function remove_role_from_group($arr)
 	{
 		extract($arr);

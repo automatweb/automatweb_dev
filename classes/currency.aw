@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/currency.aw,v 2.6 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/currency.aw,v 2.7 2004/01/13 16:24:13 kristo Exp $
 // currency.aw - Currency management
 
 define("RET_NAME",1);
@@ -15,6 +15,18 @@ class currency extends aw_template
 		lc_load("definition");
 	}
 
+	/**  
+		
+		@attrib name=new params=name default="0"
+		
+		@param parent required acl="add"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add($arr)
 	{
 		extract($arr);
@@ -27,6 +39,17 @@ class currency extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit($arr)
 	{
 		extract($arr);
@@ -41,6 +64,18 @@ class currency extends aw_template
 		return $this->mk_my_orb("change", array("id" => $id));
 	}
 
+	/**  
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required acl="edit;view"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change($arr)
 	{
 		extract($arr);

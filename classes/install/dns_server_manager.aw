@@ -7,17 +7,37 @@ class dns_server_manager extends class_base
 		$this->init();
 	}
 
+	/**  
+		
+		@attrib name=can_manage_server params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function can_manage_server($arr)
 	{
 		extract($arr);
 		return true;
 	}
 
-	////
-	// !adds or updates site in the current ns config
-	// parameters:
-	//   domain - the domain to add or update
-	//   ip - the ip address for the domain
+	/** adds or updates site in the current ns config 
+		
+		@attrib name=add_or_update_site params=name nologin="1" all_args="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+		parameters:
+		domain - the domain to add or update
+		ip - the ip address for the domain
+
+	**/
 	function add_or_update_site($arr)
 	{
 		extract($arr);

@@ -70,9 +70,18 @@ class templatemgr extends aw_template
 		return $ret;
 	}
 
-	////
-	// !returns a list of all template folders that are for this site
-	// return value is array, key is complete template folder path and value is the path, starting from the site basefolder
+	/** returns a list of all template folders that are for this site 
+		
+		@attrib name=get_template_folder_list params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+		return value is array, key is complete template folder path and value is the path, starting from the site basefolder
+
+	**/
 	function get_template_folder_list($arr)
 	{
 		extract($arr);

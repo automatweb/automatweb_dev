@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/banner/Attic/banner.aw,v 1.5 2003/08/01 13:27:46 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/banner/Attic/banner.aw,v 1.6 2004/01/13 16:24:18 kristo Exp $
 
 // act_type's:
 // 0 - always active
@@ -58,8 +58,19 @@ class banner extends aw_template
 		));
 	}
 
-	////
-	// !generates form for adding a banner on admin side
+	/** generates form for adding a banner on admin side 
+		
+		@attrib name=new params=name default="0"
+		
+		@param parent optional
+		@param client optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add($arr)
 	{
 		extract($arr);
@@ -72,6 +83,29 @@ class banner extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	/**  
+		
+		@attrib name=submit_site params=name default="0"
+		
+		@param site required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit($arr)
 	{
 		extract($arr);
@@ -215,6 +249,19 @@ class banner extends aw_template
 		$this->parse("CHANGE");
 	}
 
+	/**  
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required
+		@param parent optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change($arr)
 	{
 		extract($arr);
@@ -636,8 +683,18 @@ class banner extends aw_template
 		return $budata;
 	}
 
-	////
-	// !shows detailed statistics for banner $id
+	/** shows detailed statistics for banner $id 
+		
+		@attrib name=showstats params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function showstats($arr)
 	{
 		extract($arr);
@@ -731,6 +788,20 @@ class banner extends aw_template
 		return $ret;
 	}
 
+	/**  
+		
+		@attrib name=activate params=name default="0"
+		
+		@param client required
+		@param banner required
+		@param active optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function activate($arr)
 	{
 		extract($arr);
@@ -745,6 +816,19 @@ class banner extends aw_template
 		header("Location: ".$this->mk_orb("list_banners", array("client" => $client)));
 	}
 
+	/**  
+		
+		@attrib name=delete params=name default="0"
+		
+		@param client required
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function delete($arr)
 	{
 		extract($arr);
@@ -769,8 +853,17 @@ class banner extends aw_template
 		die();
 	}
 
-	////
-	// !lets the user select the form for creating banner profiles.
+	/** lets the user select the form for creating banner profiles. 
+		
+		@attrib name=config params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function config($arr)
 	{
 		$this->read_template("config.tpl");
@@ -801,8 +894,17 @@ class banner extends aw_template
 		return $this->parse();
 	}
 
-	////
-	// !saves the form the user selected from banner config
+	/** saves the form the user selected from banner config 
+		
+		@attrib name=submit_config params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_config($arr)
 	{
 		extract($arr);
@@ -863,8 +965,18 @@ class banner extends aw_template
 		}
 	}
 
-	////
-	// !shows a list of banners to banner buyer $id, site side
+	/** shows a list of banners to banner buyer $id, site side 
+		
+		@attrib name=buyer_banners params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function buyer_banners($arr)
 	{
 		extract($arr);
@@ -915,8 +1027,18 @@ class banner extends aw_template
 		return $this->parse();
 	}
 
-	////
-	// !saves the status of banners
+	/** saves the status of banners 
+		
+		@attrib name=submit_status_site params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_status_site($arr)
 	{
 		extract($arr);
@@ -937,8 +1059,18 @@ class banner extends aw_template
 		return $this->mk_orb("buyer_banners", array("id" => $g_id));
 	}
 
-	////
-	// !generates the html for changing the banner $id on user side
+	/** generates the html for changing the banner $id on user side 
+		
+		@attrib name=change_site params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change_site($arr)
 	{
 		extract($arr);
@@ -954,8 +1086,17 @@ class banner extends aw_template
 		return $this->parse();
 	}
 
-	////
-	// !generates form for adding a banner on user side
+	/** generates form for adding a banner on user side 
+		
+		@attrib name=add_site params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add_site($arr)
 	{
 		extract($arr);
@@ -968,8 +1109,19 @@ class banner extends aw_template
 		return $this->parse();
 	}
 
-	////
-	// !deletes banner $id from the user side
+	/** deletes banner $id from the user side 
+		
+		@attrib name=delete_site params=name default="0"
+		
+		@param id required
+		@param cl_id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function delete_site($arr)
 	{
 		extract($arr);
@@ -1181,8 +1333,18 @@ class banner extends aw_template
 		}
 	}
 
-	////
-	// !lets the user select periods for the banner
+	/** lets the user select periods for the banner 
+		
+		@attrib name=sel_banner_periods params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function sel_banner_periods($arr)
 	{
 		extract($arr);
@@ -1228,8 +1390,17 @@ class banner extends aw_template
 		return $this->parse();
 	}
 
-	////
-	// !saves the banners' periods
+	/** saves the banners' periods 
+		
+		@attrib name=submit_periods params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_periods($arr)
 	{
 		extract($arr);
@@ -1289,8 +1460,27 @@ class banner extends aw_template
 		return $bid;
 	}
 
-	////
-	// !generates a brchart for the daily statistics
+	/** generates a brchart for the daily statistics 
+		
+		@attrib name=stat_chart params=name default="0"
+		
+		@param xvals required
+		@param yvals required
+		@param data required
+		@param data2 optional
+		@param data3 optional
+		@param data4 optional
+		@param title optional
+		@param xtitle optional
+		@param ytitle optional
+		@param typestr optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function stat_chart($arr)
 	{
 		extract($arr);
@@ -1357,8 +1547,18 @@ class banner extends aw_template
 		die;				
 	}
 
-	////
-	// !generates a list of users. why would anybody want to see it? damned if I know, but a man's gotta do whut a man's gotta do
+	/** generates a list of users. why would anybody want to see it? damned if I know, but a man's gotta do whut a man's gotta do 
+		
+		@attrib name=show_users params=name default="0"
+		
+		@param page optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show_users($arr)
 	{
 		extract($arr);
@@ -1405,8 +1605,19 @@ class banner extends aw_template
 		return $this->parse();
 	}
 
-	////
-	// !shows a list of banners seen and clicked on by user $buid, on page $page of list
+	/** shows a list of banners seen and clicked on by user $buid, on page $page of list 
+		
+		@attrib name=user_banners params=name default="0"
+		
+		@param buid required
+		@param page optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function user_banners($arr)
 	{
 		extract($arr);
@@ -1466,8 +1677,19 @@ class banner extends aw_template
 		return $this->parse();
 	}
 
-	////
-	// !generates a list of profiles user $buid has
+	/** generates a list of profiles user $buid has 
+		
+		@attrib name=user_profiles params=name default="0"
+		
+		@param buid required
+		@param page optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function user_profiles($arr)
 	{
 		extract($arr);
@@ -1485,8 +1707,19 @@ class banner extends aw_template
 		return $this->parse();
 	}
 
-	////
-	// !shows a history of user $buid
+	/** shows a history of user $buid 
+		
+		@attrib name=user_history params=name default="0"
+		
+		@param buid required
+		@param page optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function user_history($arr)
 	{
 		extract($arr);
@@ -1528,8 +1761,17 @@ class banner extends aw_template
 		return $this->parse();
 	}
 
-	////
-	// !shows a list of profiles and stats for them
+	/** shows a list of profiles and stats for them 
+		
+		@attrib name=show_profiles params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show_profiles($arr)
 	{
 		extract($arr);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.51 2004/01/07 18:40:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.52 2004/01/13 16:24:13 kristo Exp $
 
 class db_config extends aw_template 
 {
@@ -96,6 +96,17 @@ class config extends db_config
 		$this->db_config();
 	}
 
+	/**  
+		
+		@attrib name=join_mail params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function join_mail($arr)
 	{
 		$this->read_template("join_mail.tpl");
@@ -125,6 +136,17 @@ class config extends db_config
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_join_mail params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_join_mail($arr)
 	{
 		extract($arr);
@@ -144,6 +166,17 @@ class config extends db_config
 		return $this->mk_orb("join_mail", array());
 	}
 
+	/**  
+		
+		@attrib name=errors params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function errors($arr)
 	{
 		$this->read_template("errors.tpl");
@@ -171,6 +204,17 @@ class config extends db_config
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_errors params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_errors($arr)
 	{
 		extract($arr);
@@ -205,8 +249,17 @@ class config extends db_config
 		return aw_unserialize($es);
 	}
 
-	////
-	// !lets the user set it so that different groups get redirected to diferent pages when logging in
+	/** lets the user set it so that different groups get redirected to diferent pages when logging in 
+		
+		@attrib name=grp_redirect params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function grp_redirect($arr)
 	{
 		$this->read_template("login_grp_redirect.tpl");
@@ -232,6 +285,17 @@ class config extends db_config
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_grp_redirect params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_grp_redirect($arr)
 	{
 		extract($arr);
@@ -252,6 +316,19 @@ class config extends db_config
 		return $this->mk_my_orb("grp_redirect", array());
 	}
 
+	/**  
+		
+		@attrib name=menu_icon params=name default="0"
+		
+		@param id required
+		@param icon_id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function set_menu_icon($arr)
 	{
 		extract($arr);
@@ -268,12 +345,34 @@ class config extends db_config
 
 	}
 
+	/**  
+		
+		@attrib name=favicon params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show_favicon($arr)
 	{
 		header("Content-type: image/x-icon");
 		die($this->get_simple_config("favicon"));
 	}
 	
+	/**  
+		
+		@attrib name=config params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function gen_config()
 	{
 		$this->mk_path(0,LC_CONFIG_SITE);
@@ -364,8 +463,17 @@ class config extends db_config
 		return $this->parse();
 	}
 	
-	////
-	// !Kuvab dünaamiliste gruppide nimekirja ja lubab igale login menüü valida
+	/** Kuvab dünaamiliste gruppide nimekirja ja lubab igale login menüü valida 
+		
+		@attrib name=login_menus params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function login_menus($args = array())
 	{
 		$this->read_template("login_menu.tpl");
@@ -421,8 +529,17 @@ class config extends db_config
 		return $this->parse();
 	}
 
-	////
-	// !Submitib login_menus funktsioonis tehtud valikud
+	/** Submitib login_menus funktsioonis tehtud valikud 
+		
+		@attrib name=submit_login_menus params=name all_args="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_login_menus($args = array())
 	{
 		extract($args);
@@ -462,6 +579,17 @@ class config extends db_config
 
 
 	// see laseb saidile liitumisvormi valida
+	/**  
+		
+		@attrib name=sel_join_form params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function sel_join_form($arr)
 	{
 		extract($arr);
@@ -550,6 +678,17 @@ class config extends db_config
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_email_els params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_email_els($arr)
 	{
 		extract($arr);
@@ -561,6 +700,17 @@ class config extends db_config
 		return $this->mk_my_orb("sel_join_form");
 	}
 
+	/**  
+		
+		@attrib name=save_jf params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function save_jf($arr)
 	{
 		extract($arr);
@@ -585,6 +735,17 @@ class config extends db_config
 		return $this->mk_my_orb("sel_join_form");
 	}
 
+	/**  
+		
+		@attrib name=class_icons params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function class_icons()
 	{
 		$this->mk_path(0,sprintf(LC_CONFIG_CLASS_ICONS,$this->mk_my_orb("config")));
@@ -614,6 +775,17 @@ class config extends db_config
 		return $this->parse();
 	}
 	
+	/**  
+		
+		@attrib name=class_cfgforms params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function class_cfgforms()
 	{
 		$this->mk_path(0,"Klasside konfiguratsioonivormid");
@@ -668,6 +840,17 @@ class config extends db_config
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_class_cfgforms params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_class_cfgforms($args = array())
 	{
 		extract($args);
@@ -677,6 +860,17 @@ class config extends db_config
 		return $this->mk_my_orb("class_cfgforms",array());
 	}
 
+	/**  
+		
+		@attrib name=export_class_icons params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function export_class_icons($arr)
 	{
 		extract($arr);
@@ -718,6 +912,18 @@ class config extends db_config
 		return $ret;
 	}
 
+	/**  
+		
+		@attrib name=import_class_icons params=name default="0"
+		
+		@param level optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function import_class_icons($arr)
 	{
 		extract($arr);
@@ -737,6 +943,19 @@ class config extends db_config
 		}
 	}
 
+	/**  
+		
+		@attrib name=class_icon params=name default="0"
+		
+		@param id required
+		@param icon_id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function set_class_icon($arr,$p2 = false)
 	{
 		if (is_array($arr))
@@ -761,6 +980,17 @@ class config extends db_config
 		header("Location: ".$this->mk_my_orb("class_icons"));
 	}
 
+	/**  
+		
+		@attrib name=file_icons params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function file_icons()
 	{
 		$this->mk_path(0,LC_CONFIG_FILETYPE_ICONS);
@@ -797,6 +1027,17 @@ class config extends db_config
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=export_file_icons params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function export_file_icons($arr)
 	{
 		extract($arr);
@@ -879,6 +1120,18 @@ class config extends db_config
 		echo sprintf(LC_CONFIG_ALL_BEEN_IMPORTED,$cnt,$this->mk_my_orb($goto));
 	}
 
+	/**  
+		
+		@attrib name=import_file_icons params=name default="0"
+		
+		@param level optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function import_file_icons($arr)
 	{
 		extract($arr);
@@ -898,6 +1151,17 @@ class config extends db_config
 		}
 	}
 
+	/**  
+		
+		@attrib name=add_filetype params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add_filetype($arr)
 	{
 		extract($arr);
@@ -911,6 +1175,18 @@ class config extends db_config
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=change_filetype params=name default="0"
+		
+		@param extt required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change_filetype($arr)
 	{
 		extract($arr);
@@ -926,6 +1202,17 @@ class config extends db_config
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_filetype params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_filetype($arr)
 	{
 		extract($arr);
@@ -938,6 +1225,19 @@ class config extends db_config
 		return $this->mk_my_orb("change_filetype", array("extt" => $extt));
 	}
 
+	/**  
+		
+		@attrib name=file_icon params=name default="0"
+		
+		@param id required
+		@param icon_id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function set_file_icon($arr)
 	{
 		extract($arr);
@@ -959,6 +1259,18 @@ class config extends db_config
 		die();
 	}
 
+	/**  
+		
+		@attrib name=delete_filetype params=name default="0"
+		
+		@param extt required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function delete_filetype($arr)
 	{
 		extract($arr);
@@ -970,6 +1282,17 @@ class config extends db_config
 		die();
 	}
 
+	/**  
+		
+		@attrib name=program_icons params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function program_icons()
 	{
 		$this->mk_path(0,sprintf(LC_CONFIG_PROGRAMS_ICONS,$this->mk_my_orb("config")));
@@ -996,6 +1319,17 @@ class config extends db_config
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=export_program_icons params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function export_program_icons($arr)
 	{
 		extract($arr);
@@ -1040,6 +1374,18 @@ class config extends db_config
 		return $ret;
 	}
 
+	/**  
+		
+		@attrib name=import_program_icons params=name default="0"
+		
+		@param level optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function import_program_icons($arr)
 	{
 		extract($arr);
@@ -1059,6 +1405,19 @@ class config extends db_config
 		}
 	}
 
+	/**  
+		
+		@attrib name=program_icon params=name default="0"
+		
+		@param id required
+		@param icon_id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function set_program_icon($arr)
 	{
 		extract($arr);
@@ -1076,6 +1435,17 @@ class config extends db_config
 		header("Location: ".$this->mk_my_orb("program_icons"));
 	}
 
+	/**  
+		
+		@attrib name=other_icons params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function other_icons()
 	{
 		$this->mk_path(0,sprintf(LC_CONFIG_ELSE_ICONS,$this->mk_my_orb("config")));
@@ -1145,6 +1515,19 @@ class config extends db_config
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=other_icon params=name default="0"
+		
+		@param id required
+		@param icon_id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function set_other_icon($arr)
 	{
 		extract($arr);
@@ -1160,6 +1543,17 @@ class config extends db_config
 		header("Location: ".$this->mk_my_orb("other_icons"));
 	}
 
+	/**  
+		
+		@attrib name=export_other_icons params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function export_other_icons($arr)
 	{
 		extract($arr);
@@ -1204,6 +1598,18 @@ class config extends db_config
 		return $ret;
 	}
 
+	/**  
+		
+		@attrib name=import_other_icons params=name default="0"
+		
+		@param level optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function import_other_icons($arr)
 	{
 		extract($arr);
@@ -1261,12 +1667,34 @@ class config extends db_config
 		echo "Importisin $cnt ikooni. <a href='".$this->mk_my_orb("other_icons")."'>Tagasi</a><br />";
 	}
 
+	/**  
+		
+		@attrib name=import params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function import()
 	{
 		$this->read_template("import.tpl");
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=export params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function export()
 	{
 		$this->read_template("export.tpl");
@@ -1276,6 +1704,17 @@ class config extends db_config
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=exp_icons params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function do_export($arr)
 	{
 		extract($arr);
@@ -1312,6 +1751,18 @@ class config extends db_config
 		die(serialize($ex));
 	}
 
+	/**  
+		
+		@attrib name=import_all_icons params=name default="0"
+		
+		@param level optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function import_all_icons($arr)
 	{
 		extract($arr);
@@ -1390,6 +1841,17 @@ class config extends db_config
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_loginaddr params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_loaginaddr($arr)
 	{
 		extract($arr);

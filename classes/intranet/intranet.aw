@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/intranet/intranet.aw,v 1.1 2003/11/05 13:36:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/intranet/intranet.aw,v 1.2 2004/01/13 16:24:29 kristo Exp $
 // intranet.aw - Intranet 
 /*
 
@@ -81,8 +81,18 @@ class intranet extends class_base
 		return $this->show(array("id" => $alias["target"]));
 	}
 
-	////
-	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
+	/** this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias 
+		
+		@attrib name=show params=name default="0"
+		
+		@param id required type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show($arr)
 	{
 		extract($arr);

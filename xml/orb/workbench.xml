@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="workbench" folder="admin" extends="class_base">
-		<action name="gen_workbench">
+	<class name="workbench" folder="www/dev/terryf/awcl/classes/admin" extends="class_base">
+		<action name="gen_workbench" >
 			<function name="gen_workbench">
 				<arguments>
 					<optional name="id" type="int"/>
@@ -9,16 +9,15 @@
 			</function>
 		</action>
 
-		<action name="gen_folders">
+		<action name="gen_folders" >
 			<function name="gen_folders">
 				<arguments>
 					<optional name="id" type="int"/>
 					<optional name="parent" type="int"/>
-					<optional name="period"/>
+					<optional name="period" />
 				</arguments>
 			</function>
 		</action>
 
 	</class>
 </orb>
-		

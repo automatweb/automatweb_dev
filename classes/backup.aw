@@ -7,6 +7,17 @@ class backup extends aw_template
 		$this->init("backup");
 	}
 
+	/**  
+		
+		@attrib name=backup params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_backup($arr)
 	{
 		extract($arr);
@@ -19,6 +30,17 @@ class backup extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_backup params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_backup($arr)
 	{
 		extract($arr);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.2 2003/12/24 11:13:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.3 2004/01/13 16:24:17 kristo Exp $
 // config_login_menus.aw - Login men&uuml;&uuml;d 
 /*
 
@@ -188,6 +188,17 @@ class config_login_menus extends class_base
 		};
 	}
 
+	/**  
+		
+		@attrib name=find_active_edit params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function find_active_edit($arr)
 	{
 		$ol = new object_list(array(

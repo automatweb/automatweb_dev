@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.20 2004/01/13 14:11:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.21 2004/01/13 16:24:30 kristo Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -569,6 +569,18 @@ class mail_message extends class_base
 		};
 	}
 
+	/**  
+		
+		@attrib name=deliver params=name default="0"
+		
+		@param id required type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function deliver($args)
 	{
 		$oid = $args["id"];
@@ -622,8 +634,21 @@ class mail_message extends class_base
 		return array($rv);
 	}
 	
-	////
-	// !Can be used to download message parts
+	/** Can be used to download message parts 
+		
+		@attrib name=get_part params=name default="0"
+		
+		@param msgrid required type=int
+		@param msgid required type=int
+		@param mailbox required
+		@param part required type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function get_part($arr)
 	{
 		$msgid = $arr["msgid"];

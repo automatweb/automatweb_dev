@@ -172,6 +172,21 @@ class document_brother extends document
 		$this->document();
 	}
 
+	/**  
+		
+		@attrib name=new params=name is_public="1" default="0"
+		
+		@param parent required
+		@param period optional
+		@param s_name optional
+		@param s_content optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add($arr)
 	{
 		extract($arr);
@@ -270,8 +285,21 @@ class document_brother extends document
 		return $this->parse();
 	}
 
-	////
-	// !creates a brother of document $id under menu $parent 
+	/** creates a brother of document $id under menu $parent 
+		
+		@attrib name=create_bro params=name default="0"
+		
+		@param parent required
+		@param id required
+		@param s_name optional
+		@param s_content optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function create_bro($arr)
 	{
 		extract($arr);

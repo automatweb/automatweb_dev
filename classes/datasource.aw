@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/datasource.aw,v 2.9 2003/11/20 13:55:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/datasource.aw,v 2.10 2004/01/13 16:24:13 kristo Exp $
 // type of the data, I'm storing it in the subclass field of the objects table
 // so that I can retrieve all sources with the same type with one query
 define("DS_XML",1);
@@ -96,9 +96,19 @@ class datasource extends class_base
 		}
 	}
 
-	////
-	// !Raw interface for accessing the data from a source. Mainly for debugging
-	// purposes.
+	/** Raw interface for accessing the data from a source. Mainly for debugging 
+		
+		@attrib name=fetch params=name default="0"
+		
+		@param id required type=int
+		
+		@returns
+		
+		
+		@comment
+		purposes.
+
+	**/
 	function fetch($args = array())
 	{
 		$read = $this->retrieve($args);

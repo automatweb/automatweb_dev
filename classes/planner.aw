@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.153 2004/01/13 14:13:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.154 2004/01/13 16:24:14 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -162,6 +162,17 @@ class planner extends class_base
 		$this->specialgroups = array("projects","calendars");
 	}
 	
+	/**  
+		
+		@attrib name=my_calendar params=name is_public="1" caption="Minu kalender" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function my_calendar($arr)
 	{
 		$users = get_instance("users");

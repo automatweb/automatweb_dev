@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_test.aw,v 2.5 2003/08/01 12:48:16 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_test.aw,v 2.6 2004/01/13 16:24:12 kristo Exp $
 // aw_test.aw - AW remote control
 class aw_test extends aw_template 
 {
@@ -9,6 +9,30 @@ class aw_test extends aw_template
 		$this->init("automatweb/aw_test");
 	}
 	
+	/**  
+		
+		@attrib name=new params=name default="0"
+		
+		@param parent required type=int acl="add"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	/**  
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change($args = array())
 	{
 		extract($args);
@@ -41,6 +65,17 @@ class aw_test extends aw_template
 	}
 
 
+	/**  
+		
+		@attrib name=submit params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit($args = array())
 	{
 		extract($args);

@@ -1,89 +1,12 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="planner" extends="class_base">
+	<class name="planner" folder="www/dev/terryf/awcl/classes" extends="class_base">
 		<action name="my_calendar" is_public="1" caption="Minu kalender">
 			<function name="my_calendar">
-				<arguments/>
-			</function>
-		</action>
-		<action name="view" nologin="1">
-			<function name="view">
-				<arguments>
-					<required name="id" type="int"/>
-					<optional name="date"/>
-					<optional name="type"/>
-					<optional name="ctrl" type="int"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="redir">
-			<function name="redir">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="delete_events" all_args="1">
-			<function name="delete_events">
-				<arguments/>
-			</function>
-		</action>
-
-		<action name="new_event">
-			<function name="new_event">
-				<arguments>
-					<required name="parent" type="int"/>
-					<optional name="date"/>
-					<optional name="time"/>
-				</arguments>
-			</function>
-		</action>
-		
-		<action name="change_event">
-			<function name="change_event">
-				<arguments>
-					<required name="id" type="int"/>
-					<optional name="date"/>
-				</arguments>
-			</function>
-		</action>
-		
-		<action name="event_repeaters">
-			<function name="event_repeaters">
-				<arguments>
-					<required name="id" type="int"/>
-					<optional name="cycle"/>
-				</arguments>
-			</function>
-		</action>
-		
-		<action name="delete_repeater">
-			<function name="delete_repeater">
-				<arguments>
-					<required name="id" type="int"/>
-					<required name="cycle" type="int"/>
-				</arguments>
-			</function>
-		</action>
-		
-		<action name="event_reminder">
-			<function name="event_reminder">
-				<arguments>
-					<required name="id" type="int"/>
-				</arguments>
-			</function>
-		</action>
-		
-		<action name="event_object_search">
-			<function name="event_object_search">
-				<arguments>
-					<required name="id" type="int"/>
-					<optional name="s_name"/>
-					<optional name="s_type"/>
-					<optional name="s_comment"/>
-				</arguments>
-			</function>
-		</action>
+	</class>
 </orb>
-		

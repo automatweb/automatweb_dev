@@ -23,6 +23,17 @@ class db_server_explorer extends class_base
 		));
 	}
 
+	/**  
+		
+		@attrib name=submit params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit($arr)
 	{
 		$ret = parent::submit($arr);
@@ -36,11 +47,22 @@ class db_server_explorer extends class_base
 		}
 	}
 
-	////
-	// !this gets called when the user clicks on change object 
-	// parameters:
-	//    id - the id of the object to change
-	//    return_url - optional, if set, "back" link should point to it
+	/** this gets called when the user clicks on change object 
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required
+		@param return_url optional
+		
+		@returns
+		
+		
+		@comment
+		parameters:
+		id - the id of the object to change
+		return_url - optional, if set, "back" link should point to it
+
+	**/
 	function show($arr)
 	{
 		extract($arr);
@@ -52,6 +74,18 @@ class db_server_explorer extends class_base
 		die($this->parse());
 	}
 
+	/**  
+		
+		@attrib name=tree params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function tree($arr)
 	{
 		extract($arr);
@@ -112,6 +146,19 @@ class db_server_explorer extends class_base
 		return $tree->finalize_tree();
 	}
 
+	/**  
+		
+		@attrib name=show_server params=name default="0"
+		
+		@param id required
+		@param server_id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show_server($arr)
 	{
 		extract($arr);
@@ -183,6 +230,20 @@ class db_server_explorer extends class_base
 		return parent::mk_path(0,$path);
 	}
 
+	/**  
+		
+		@attrib name=show_database params=name default="0"
+		
+		@param id required
+		@param server_id required
+		@param db_id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show_database($arr)
 	{
 		extract($arr);
@@ -243,6 +304,76 @@ class db_server_explorer extends class_base
 		return $t->draw();
 	}
 
+	/**  
+		
+		@attrib name=show_table params=name default="0"
+		
+		@param id required type=int
+		@param table required
+		@param db_id required type=int
+		@param server_id required type=int
+		@param type optional default="admin"
+		@param sql optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	/**  
+		
+		@attrib name=admin_col params=name default="0"
+		
+		@param id required type=int
+		@param table required
+		@param db_id required type=int
+		@param server_id required type=int
+		@param type optional default="admin_col"
+		@param sql optional
+		@param field optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	/**  
+		
+		@attrib name=admin_indexes params=name default="0"
+		
+		@param id required type=int
+		@param table required
+		@param db_id required type=int
+		@param server_id required type=int
+		@param type optional default="admin_indexes"
+		@param sql optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	/**  
+		
+		@attrib name=admin_index params=name default="0"
+		
+		@param id required type=int
+		@param table required
+		@param db_id required type=int
+		@param server_id required type=int
+		@param type optional default="admin_index"
+		@param sql optional
+		@param index optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show_table($arr)
 	{
 		extract($arr);
@@ -456,6 +587,17 @@ class db_server_explorer extends class_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_admin_col params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_admin_col($arr)
 	{
 		extract($arr);
@@ -496,6 +638,17 @@ class db_server_explorer extends class_base
 		));
 	}
 
+	/**  
+		
+		@attrib name=submit_admin params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_admin($arr)
 	{
 		extract($arr);
@@ -618,6 +771,17 @@ class db_server_explorer extends class_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_admin_indexes params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_admin_indexes($arr)
 	{
 		extract($arr);
@@ -642,6 +806,17 @@ class db_server_explorer extends class_base
 		));
 	}
 
+	/**  
+		
+		@attrib name=submit_admin_index params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_admin_index($arr)
 	{
 		extract($arr);

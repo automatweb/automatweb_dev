@@ -1,33 +1,35 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="dns">
+	<class name="dns" folder="www/dev/terryf/awcl/classes" extends="aw_template">
 		<action name="query_form" nologin="1">
 			<function name="query_form">
-				<arguments/>
+				<arguments>
+				</arguments>
 			</function>
 		</action>
 
 		<action name="query" nologin="1">
 			<function name="query">
 				<arguments>
-					<required name="domain"/>
+					<required name="domain" />
 				</arguments>
 			</function>
 		</action>
 
 		<action name="dns_form" nologin="1">
 			<function name="dns_form">
-				<arguments/>
+				<arguments>
+				</arguments>
 			</function>
 		</action>
 
 		<action name="dns_query" nologin="1">
 			<function name="dns_query">
 				<arguments>
-					<required name="domain"/>
+					<required name="domain" />
 				</arguments>
 			</function>
 		</action>
+
 	</class>
 </orb>
-		

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.45 2003/11/25 08:45:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.46 2004/01/13 16:24:14 kristo Exp $
 
 /*
 
@@ -85,6 +85,19 @@ class links extends class_base
 		$this->lc_load("extlinks","lc_extlinks");
 	}
 
+	/**  
+		
+		@attrib name=search_doc params=name default="0"
+		
+		@param s_name optional
+		@param s_content optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function search_doc($arr)
 	{
 		extract($arr);
@@ -178,6 +191,18 @@ class links extends class_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=show params=name nologin="1" default="0"
+		
+		@param id required type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show($arr)
 	{
 		extract($arr);

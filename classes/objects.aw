@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.53 2003/12/03 12:05:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.54 2004/01/13 16:24:14 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 class db_objects extends aw_template 
 {
@@ -114,10 +114,24 @@ class objects extends db_objects
 		$this->db_objects();
 	}
 
-	////
-	// !Object search
-	// otype(int) - allow to search only for a single object type
-	// one(int) - use picker template (search_one) 
+	/** Object search 
+		
+		@attrib name=search params=name default="0"
+		
+		@param stype optional type=int
+		@param target optional type=int
+		@param otype optional type=int
+		@param one optional type=int
+		@param return_url optional
+		
+		@returns
+		
+		
+		@comment
+		otype(int) - allow to search only for a single object type
+		one(int) - use picker template (search_one)
+
+	**/
 	function search($arr)
 	{
 		$s = get_instance("search");
@@ -291,6 +305,17 @@ class objects extends db_objects
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=search_submit params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function search_submit($arr)
 	{
 		extract($arr);
@@ -429,10 +454,20 @@ class objects extends db_objects
 	}
 
 
-	////
-	// !Displays an object. Any object.
-	// and yes, it's not very smart. all the functionality to generate a preview of an object
-	// should be inside the correspondending class
+	/** Displays an object. Any object. 
+		
+		@attrib name=show params=name nologin="1" default="0"
+		
+		@param id required type=int
+		
+		@returns
+		
+		
+		@comment
+		and yes, it's not very smart. all the functionality to generate a preview of an object
+		should be inside the correspondending class
+
+	**/
 	function show($args = array())
 	{
 		extract($args);
@@ -683,6 +718,18 @@ class objects extends db_objects
 		return $retval;
 	}
 
+	/**  
+		
+		@attrib name=db_query params=name default="0"
+		
+		@param sql required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_db_query($arr)
 	{
 		extract($arr);
@@ -695,12 +742,36 @@ class objects extends db_objects
 		return $ret;
 	}
 
+	/**  
+		
+		@attrib name=delete_object params=name default="0"
+		
+		@param oid required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_delete_object($arr)
 	{
 		extract($arr);
 		return $this->delete_object($oid);
 	}
 
+	/**  
+		
+		@attrib name=delete_aliases_of params=name default="0"
+		
+		@param oid required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_delete_aliases_of($arr)
 	{
 		extract($arr);
@@ -917,6 +988,17 @@ class objects extends db_objects
 		$dbi->db_query("INSERT INTO acl(gid,oid,acl) VALUES(1,$client_id, 9223372036854775807)");
 	}
 
+	/**  
+		
+		@attrib name=get_db_pwd params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_get_db_pwd($arr)
 	{
 		extract($arr);
@@ -928,6 +1010,18 @@ class objects extends db_objects
 		);
 	}
 
+	/**  
+		
+		@attrib name=aw_ini_get_mult params=name nologin="1" default="0"
+		
+		@param vals required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function aw_ini_get_mult($arr)
 	{
 		extract($arr);

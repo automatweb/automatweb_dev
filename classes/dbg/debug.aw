@@ -7,6 +7,17 @@ class debug extends class_base
 		$this->init();
 	}
 
+	/**  
+		
+		@attrib name=syntaxcheck params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function syntaxcheck()
 	{
 		// include all the class files

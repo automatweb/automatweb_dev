@@ -9,8 +9,17 @@ class packagemgr_server extends class_base
 		$this->init("packagemgr");
 	}
 
-	////
-	// !shows the user a list 
+	/** shows the user a list 
+		
+		@attrib name=list params=name default="1"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_list($arr)
 	{
 		extract($arr);
@@ -69,6 +78,17 @@ class packagemgr_server extends class_base
 		return $tb->get_toolbar().$t->draw();
 	}
 
+	/**  
+		
+		@attrib name=new_package params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function new_package($arr)
 	{
 		extract($arr);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_queue.aw,v 1.21 2003/12/23 17:07:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_queue.aw,v 1.22 2004/01/13 16:24:29 kristo Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 classload("messenger/messenger_v2");
@@ -31,8 +31,18 @@ class ml_queue extends aw_template
 	}
 
 
-	////
-	//! Händlib "vasakus puus oleva proge" submitti
+	/**  
+		
+		@attrib name=submit_manager params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+		! Händlib "vasakus puus oleva proge" submitti
+
+	**/
 	function orb_submit_manager($arr)
 	{
 		$this->dbconf->set_simple_config("ml_form",$arr["form"]);
@@ -42,11 +52,27 @@ class ml_queue extends aw_template
 	}
 
 
-	////
-	//! Näitab queuet
-	// kui manager=1 siis näitab ka mänegeri
-	// kui show on "list" siis näitab ainult listiga $fid seotud itemeid
-	// kui show on "mail" siis näitab ainult meiliga $fid seotud itemeid
+	/**  
+		
+		@attrib name=queue params=name default="0"
+		
+		@param id optional
+		@param fid optional
+		@param show optional
+		@param sortby optional
+		@param sort_order optional
+		@param manager optional
+		
+		@returns
+		
+		
+		@comment
+		! Näitab queuet
+		kui manager=1 siis näitab ka mänegeri
+		kui show on "list" siis näitab ainult listiga $fid seotud itemeid
+		kui show on "mail" siis näitab ainult meiliga $fid seotud itemeid
+
+	**/
 	function orb_queue($arr)
 	{
 		extract($arr);
@@ -168,8 +194,19 @@ class ml_queue extends aw_template
 		return $this->parse();
 	}
 
-	////
-	//! Näitab queue itemi $id muutmist (reschedulemist)
+	/**  
+		
+		@attrib name=queue_change params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+		! Näitab queue itemi $id muutmist (reschedulemist)
+
+	**/
 	function orb_queue_change($arr)
 	{
 		extract($arr);
@@ -213,8 +250,18 @@ class ml_queue extends aw_template
 		return $this->parse();
 	}
 
-	////
-	//! Händleb queue itemi reschedulemist
+	/**  
+		
+		@attrib name=submit_queue_change params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+		! Händleb queue itemi reschedulemist
+
+	**/
 	function orb_submit_queue_change($arr)
 	{
 		extract($arr);
@@ -249,8 +296,18 @@ class ml_queue extends aw_template
 		die("<script language='JavaScript'>opener.history.go(0);window.close();</script>");
 	}
 
-	////
-	//! Kustutab queue itemi $id
+	/**  
+		
+		@attrib name=queue_delete params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+		! Kustutab queue itemi $id
+
+	**/
 	function orb_queue_delete($arr)
 	{
 		extract($arr);
@@ -278,8 +335,18 @@ class ml_queue extends aw_template
 		}
 	}
 
-	////
-	//! Märgib itemi $id kohe saatmiseks
+	/**  
+		
+		@attrib name=queue_send_now params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+		! Märgib itemi $id kohe saatmiseks
+
+	**/
 	function orb_queue_send_now($arr)
 	{
 		extract($arr);
@@ -358,9 +425,19 @@ class ml_queue extends aw_template
 		$this->restote_handle();
 	}
 
-	////
-	//! Processes all active mailing list queues
-	// Invoked from the scheduler
+	/**  
+		
+		@attrib name=process_queue params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+		! Processes all active mailing list queues
+		Invoked from the scheduler
+
+	**/
 	function process_queue($arr)
 	{
 		set_time_limit(0);

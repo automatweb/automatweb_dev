@@ -11,6 +11,18 @@ class search_filter extends aw_template
         }
 
 
+	/**  
+		
+		@attrib name=new params=name default="0"
+		
+		@param parent required acl="add"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
         function orb_new($arr)
         {
                 is_array($arr)? extract($arr) : $parent=$arr;
@@ -36,6 +48,17 @@ class search_filter extends aw_template
                 return $this->parse();
         }
 
+	/**  
+		
+		@attrib name=submit_new params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
         function orb_submit_new($arr)
         {
                 is_array($arr)? extract($arr) : $parent=$arr;
@@ -72,6 +95,17 @@ class search_filter extends aw_template
         }
 
 
+	/**  
+		
+		@attrib name=submit_change params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
         function orb_submit_change($arr)
         {
                 extract($arr);
@@ -84,6 +118,21 @@ class search_filter extends aw_template
                 return $this->mk_my_orb("change",array("id" => $id));
         }
 
+	/**  
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required acl="view;edit"
+		@param parent optional
+		@param change_part optional
+		@param is_change_part optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
         function orb_change($arr)
         {
                 is_array($arr)? extract($arr) : $parent=$arr;
@@ -154,6 +203,17 @@ class search_filter extends aw_template
                 $this->obj_set_meta(array("oid" => $this->id,"meta" => $arr));
         }
 
+	/**  
+		
+		@attrib name=convert_objects params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
         function convert_objects()
         {
                 $this->get_objects_by_class(array("class"=>CL_SEARCH_FILTER));
@@ -365,6 +425,18 @@ class search_filter extends aw_template
         // see on selline func mis kudagi petab 2ra kliendi
         // See vist on obsolete kuna nüüd saab niigi otsinguformi filtriga siduda??
         // -->
+	/**  
+		
+		@attrib name=tf_fulltext_search params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
         function orb_totally_fake_fulltext_search($arr)
         {
                 extract($arr);
@@ -379,6 +451,19 @@ class search_filter extends aw_template
                 return $html;
         }
 
+	/**  
+		
+		@attrib name=do_tf_fulltext_search params=name default="0"
+		
+		@param id required
+		@param true_fulltext optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
         function orb_do_totally_fake_fulltext_search($arr)
         {
                 extract($arr);
@@ -395,6 +480,18 @@ class search_filter extends aw_template
         }
         // <--
 
+	/**  
+		
+		@attrib name=stat_select_submit params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
         function orb_stat_select_submit($arr)
         {
                 extract($arr);
@@ -406,6 +503,18 @@ class search_filter extends aw_template
                 return $this->mk_my_orb("stat",array("id" => $filter_id));
         }
 
+	/**  
+		
+		@attrib name=stat_new_submit params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
         function orb_stat_new_submit($arr)
         {
                 extract($arr);
@@ -428,6 +537,18 @@ class search_filter extends aw_template
         }
 
         // Sellega valitakse statistika andmed ehk funktsioonid siis
+	/**  
+		
+		@attrib name=statdata params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
         function orb_statdata($arr)
         {
                 extract($arr);
@@ -486,6 +607,18 @@ class search_filter extends aw_template
                 return $this->make_upper_menu($arr,"statdata").$this->parse().$legend;
         }
 
+	/**  
+		
+		@attrib name=submit_statdata params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
         function orb_submit_statdata($arr)
         {
                 extract($arr);
@@ -537,6 +670,18 @@ class search_filter extends aw_template
                 return $this->mk_my_orb("statdata",array("id"=>$id));
         }
 
+	/**  
+		
+		@attrib name=stat params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
         function orb_stat($arr)
         {
                 extract($arr);
@@ -591,6 +736,20 @@ class search_filter extends aw_template
         }
 
 
+	/**  
+		
+		@attrib name=search params=name default="0"
+		
+		@param id required
+		@param get_csv_file optional
+		@param no_menu optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
         function orb_search($arr)
         {
                 extract($arr);
@@ -843,6 +1002,17 @@ class search_filter extends aw_template
                 return $parse;
         }
 
+	/**  
+		
+		@attrib name=submit_select_forms params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
         function orb_submit_select_forms($arr)
         {
                 extract($arr);
@@ -858,6 +1028,17 @@ class search_filter extends aw_template
                 return $this->mk_my_orb("output",array("id" => $id));
         }
 
+	/**  
+		
+		@attrib name=submit_select_fields params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
         function orb_submit_select_fields($arr)
         {
                 extract($arr);
@@ -873,6 +1054,18 @@ class search_filter extends aw_template
                 return $this->mk_my_orb("output",array("id" => $id));
         }
         
+	/**  
+		
+		@attrib name=output_use params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
         function orb_output_use($arr)
         {
                 extract($arr);
@@ -898,6 +1091,18 @@ class search_filter extends aw_template
                 return $this->make_upper_menu($arr,"").$this->parse();
         }
 
+	/**  
+		
+		@attrib name=submit_output_use params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
         function orb_submit_output_use($arr)
         {
                 extract($arr);
@@ -913,6 +1118,18 @@ class search_filter extends aw_template
         }
 
         // Jube! siin tuleb ymber teha kudagi
+	/**  
+		
+		@attrib name=output params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
         function orb_output($arr)
         {
                 extract($arr);
@@ -1068,6 +1285,18 @@ class search_filter extends aw_template
                 return $this->make_upper_menu($arr,"output").$cparse;
         }
 
+	/**  
+		
+		@attrib name=output_submit params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
         function orb_output_submit($arr)
         {
                 extract($arr);
@@ -1209,6 +1438,17 @@ class search_filter extends aw_template
         }
 
 
+	/**  
+		
+		@attrib name=filter_edit_change_part params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
         function orb_filter_edit_change_part($arr)
         {
                 extract($arr);
@@ -1220,6 +1460,17 @@ class search_filter extends aw_template
                 return $this->mk_my_orb("change",array("change_part"=> $chgnum,"is_change_part"=>1, "id" => $id));
         }
 
+	/**  
+		
+		@attrib name=filter_edit_add params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
         function orb_filter_edit_add($arr)
         {
                 extract($arr);
@@ -1236,6 +1487,17 @@ class search_filter extends aw_template
         }
 
         // filtrile yhe tingimuse kustutamine
+	/**  
+		
+		@attrib name=filter_edit_del params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
         function orb_filter_edit_del($arr)
         {
                 extract($arr);

@@ -28,6 +28,17 @@ class dns extends aw_template
 		$this->init("dns");
 	}
 
+	/**  
+		
+		@attrib name=query_form params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function query_form($args = array())
 	{
 		$this->read_adm_template("enter_whois_query.tpl");
@@ -37,6 +48,18 @@ class dns extends aw_template
 		return $this->parse();
 	}
 	
+	/**  
+		
+		@attrib name=query params=name nologin="1" default="0"
+		
+		@param domain required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function query($args = array())
 	{
 		extract($args);
@@ -65,6 +88,17 @@ class dns extends aw_template
 		};
 	}
 	
+	/**  
+		
+		@attrib name=dns_form params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function dns_form($args = array())
 	{
 		$this->read_adm_template("enter_domain_query.tpl");
@@ -74,6 +108,18 @@ class dns extends aw_template
 		return $this->parse();
 	}
 	
+	/**  
+		
+		@attrib name=dns_query params=name nologin="1" default="0"
+		
+		@param domain required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function dns_query($args = array())
 	{
 		extract($args);

@@ -3,7 +3,7 @@
 /** aw code analyzer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_analyzer.aw,v 1.5 2003/09/23 09:03:25 kristo Exp $
+	@cvs $Id: docgen_analyzer.aw,v 1.6 2004/01/13 16:24:24 kristo Exp $
 
 	@comment 
 	analyses aw code
@@ -17,6 +17,17 @@ class docgen_analyzer extends class_base
 		$this->init("core/docgen");
 	}
 
+	/**  
+		
+		@attrib name=class_list params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function class_list()
 	{
 		$p = get_instance("parser");
@@ -37,6 +48,18 @@ class docgen_analyzer extends class_base
 		die($f);
 	}
 
+	/**  
+		
+		@attrib name=frames params=name default="1"
+		
+		@param aa define value="100"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function frameset()
 	{
 		$this->read_template("frameset.tpl");
@@ -111,7 +134,6 @@ class docgen_analyzer extends class_base
 	{
 		extract($arr);
 
-		die($this->get_doc_comment_from_orb_def("docgen_analyzer"));
 		$data = $this->analyze_file($file);
 		//echo dbg::dump($data);
 
@@ -123,9 +145,17 @@ class docgen_analyzer extends class_base
 		return $op;
 	}
 
-	function analyze_file($file)
+	function analyze_file($file, $is_fp = false)
 	{
-		$this->tokens = token_get_all(file_get_contents(aw_ini_get("basedir")."/classes".$file));
+		if (!$is_fp)
+		{
+			$fp = aw_ini_get("basedir")."/classes".$file;
+		}
+		else
+		{
+			$fp = $file;
+		}
+		$this->tokens = token_get_all(file_get_contents($fp));
 
 		$this->data = array();
 		$this->brace_level = 0;
@@ -752,12 +782,15 @@ class docgen_analyzer extends class_base
 
 				$xml .= " ".join(" ", $x_a).">\n";
 
+				$xml .= "\t\t\t<function name=\"$f_name\">\n";
+				$xml .= "\t\t\t\t<arguments>\n";
+	
 				// make parameters
 				$par = new aw_array($f_data["doc_comment"]["params"]);
 
 				foreach($par->get() as $p_name => $p_dat)
 				{
-					$xml .= "\t\t\t<".$p_dat["req"]." name=\"$p_name\"";
+					$xml .= "\t\t\t\t\t<".$p_dat["req"]." name=\"$p_name\"";
 					
 					$x_p = array();
 					if (isset($p_dat["type"]) && $p_dat["type"] != "")
@@ -782,20 +815,29 @@ class docgen_analyzer extends class_base
 
 					$xml .= " ".join(" ", $x_p)."/>\n";
 				}
-				$xml .= "\t\t</action>\n";
+				$xml .= "\t\t\t\t</arguments>\n";
+				$xml .= "\t\t\t</function>\n";
+				$xml .= "\t\t</action>\n\n";
 			}
 		}
 		$xml .= "\t</class>\n";
 		$xml .= "</orb>\n";
 		return $xml;
 	}
-
+	
 	function get_doc_comment_from_orb_def($class)
 	{
 		$o = get_instance("orb");
 		$dat = $o->load_xml_orb_def($class);
 		$dat = $dat[$class];
-		echo dbg::dump($dat);
+
+		// also, copy the file to the /www/dev/terryf/awcl/classes folder with the correct subfolders
+		$from = "/www/dev/terryf/automatweb_dev/classes/".$dat["___folder"]."/".$class.".aw";
+		$to = "/www/dev/terryf/awcl/classes/".$dat["___folder"]."/".$class.".aw";
+		echo "copied $from to $to <br>\n";
+		copy($from, $to);
+		flush();
+
 		foreach($dat as $nm => $inf)
 		{
 			if ($nm == "_extends" || $nm == "___folder" || $nm == "default")
@@ -804,7 +846,7 @@ class docgen_analyzer extends class_base
 
 			}
 
-			echo "Comment for function $inf[function] = <br><br>\n";
+			//echo "Comment for function $inf[function] = <br><br>\n";
 
 			$comm  = "\t/** short comment \n";
 			$comm .= "\t\t\n";
@@ -816,7 +858,7 @@ class docgen_analyzer extends class_base
 			$x_a["caption"] = $inf["caption"];
 			$x_a["default"] = (int)($nm == $dat["default"]);
 
-			$comm .= "\t\t@attrib name=".$nm." ".join(" ", map2("%s=\"%s\"",$x_a))."\n\t\t\n";
+			$comm .= "\t\t@attrib name=".$nm." params=name ".join(" ", map2("%s=\"%s\"",$x_a))."\n\t\t\n";
 
 			// make params
 			foreach($inf["required"] as $p_n => $param)
@@ -829,7 +871,7 @@ class docgen_analyzer extends class_base
 
 				if ($inf["acl"][$p_n] != "")
 				{
-					$comm .= " acl=\"".$inf["types"][$p_n]."\"";
+					$comm .= " acl=\"".$inf["acl"][$p_n]."\"";
 				}
 
 				if ($inf["defaults"][$p_n] != "")
@@ -883,13 +925,128 @@ class docgen_analyzer extends class_base
 			}
 			$comm .= "\t\t\n";
 			$comm .= "\t\t@returns\n";
-			$comm .= "\t\tReturn data desc\n";
+			$comm .= "\t\t\n";
 			$comm .= "\t\t\n";
 			$comm .= "\t\t@comment\n";
-			$comm .= "\t\t\n";
+			$comm .= "long comment\n";
 			$comm .= "\t**/\n";
-			echo "comm = ".nl2br(htmlentities($comm))." <br>";
+			//echo "comm = ".nl2br(htmlentities($comm))." <br>";
+
+			// now, write the actual comment to the file
+			// first, run the file through the analyzer
+			// then extract the beginning line of the function
+			// and insert the comment before that. 
+			$this->analyze_file($to, true);
+
+			$start_line = $this->data["classes"][$class]["functions"][$inf["function"]]["start_line"]-1;
+			$newf = "";
+			$fls = file($to);
+
+			$last_oc_line = 0;
+			foreach($fls as $ln => $tline)
+			{
+				if (trim($tline) == "////")
+				{
+					$last_oc_line = $ln;
+				}
+				if ($ln == $start_line)
+				{
+					break;
+				}
+				if (substr(trim($tline), 0, 8) == "function")
+				{
+					$last_oc_line = 0;
+				}
+			}
+
+			$oc = "";
+			$shortc = "";
+			foreach($fls as $ln => $tline)
+			{
+				if ($ln == $start_line)
+				{
+					$newf .= str_replace("short comment", $shortc, str_replace("long comment", $oc, $comm));
+				}
+
+				if ($ln >= $last_oc_line && $ln < $start_line && $last_oc_line)
+				{
+					if ($ln == $last_oc_line)
+					{
+						continue;
+					}
+
+					if (substr(trim($tline), 0, 4) == "// !")
+					{
+						$shortc = trim(substr(trim($tline), 4));
+					}
+					else
+					{
+						$oc .= "\t\t".trim(substr(trim($tline), 2))."\n";
+					}
+				}
+				else
+				{
+					$newf .= $tline;
+				}
+			}
+			$this->put_file(array(
+				"file" => $to,
+				"content" => $newf
+			));
+			echo "did function $inf[function] <br>\n";
+			flush();
 		}
+	}
+
+	function make_doc_comments_from_orb_defs()
+	{
+		// get all files in the xml/orb folder and do the trick for them
+		$dc = $this->get_directory(array("dir" => aw_ini_get("basedir")."/xml/orb"));
+		foreach($dc as $file)
+		{
+			$this->get_doc_comment_from_orb_def(basename($file,".xml"));
+		}
+		//$this->get_doc_comment_from_orb_def("docgen_analyzer");
+		//die("all done<br>");
+	}
+
+	function make_orb_defs_from_doc_comments()
+	{
+		$p = get_instance("parser");
+		$files = array();
+		$p->_get_class_list(&$files, $this->cfg["basedir"]."/classes");
+
+		foreach($files as $file)
+		{
+			// check if file is modified
+			$clmod = @filemtime($file);
+			$xmlmod = @filemtime($this->cfg["basedir"]."/xml/orb/".basename($file, ".aw").".xml");
+
+			if ($clmod >= $xmlmod)
+			{
+				$this->analyze_file($file, true);
+				if (!is_array($this->data["classes"]) || count($this->data["classes"]) < 1)
+				{
+					continue;
+				}
+
+				foreach($this->data["classes"] as $class => $cldat)
+				{
+					if (is_array($cldat["functions"]) && $class != "" && strtolower($class) == strtolower(basename($file, ".aw")))
+					{
+						echo "make orb defs for $file\n";
+
+						$od = str_replace($this->cfg["basedir"]."/classes/", "", $this->_get_orb_defs($cldat));
+						$this->put_file(array(
+							"file" => $this->cfg["basedir"]."/xml/orb/".$class.".xml",
+							"content" => $od
+						));
+					}
+				}
+				flush();
+			}
+		}
+		echo ("all done\n");
 	}
 }
 ?>

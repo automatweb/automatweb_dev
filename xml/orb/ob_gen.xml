@@ -1,31 +1,23 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="ob_gen" extends="class_base">
-		<action name="generate_objects">
-			<function name="generate_objects">
-				<arguments>
-					<required name="id"/>
-					<optional name="alg"/>
-					<optional name="test_limit"/>
-				</arguments>
-			</function>
-		</action>
-		<action name="normalizer">
-			<function name="normalizer">
-				<arguments>
-					<required name="id"/>
-					<optional name="return_url"/>
-					<required name="tyyp"/>
-				</arguments>
-			</function>
-		</action>
-		<action name="clear_log">
+	<class name="ob_gen" folder="www/dev/terryf/awcl/classes" extends="class_base">
+		<action name="clear_log" >
 			<function name="clear_log">
 				<arguments>
-					<required name="id"/>
+					<required name="id" />
 				</arguments>
 			</function>
 		</action>
+
+		<action name="generate_objects" >
+			<function name="generate_objects">
+				<arguments>
+					<required name="id" />
+					<optional name="alg" />
+					<optional name="test_limit" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
-		

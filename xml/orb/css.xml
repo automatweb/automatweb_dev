@@ -1,11 +1,5 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="css" extends="class_base">
-		<action name="colorpicker">
-			<function name="colorpicker">
-				<arguments/>
-			</function>
-		</action>
+	<class name="css" folder="www/dev/terryf/awcl/classes" extends="class_base">
 	</class>
 </orb>
-		

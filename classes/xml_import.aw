@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.24 2003/11/20 13:55:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.25 2004/01/13 16:24:16 kristo Exp $
 /*
         @default table=objects
         @default group=general
@@ -72,8 +72,18 @@ class xml_import extends class_base
 
 
 
-	////
-	// !Wrapper to display the repeater editing interface inside this classes frame
+	/** Wrapper to display the repeater editing interface inside this classes frame 
+		
+		@attrib name=repeaters params=name default="0"
+		
+		@param id required type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function repeaters($args = array())
 	{
 		extract($args);
@@ -97,6 +107,18 @@ class xml_import extends class_base
 
 	}
 
+	/**  
+		
+		@attrib name=invoke params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function invoke($args = array())
 	{
 		extract($args);
@@ -138,6 +160,17 @@ class xml_import extends class_base
 		exit;
 	}
 
+	/**  
+		
+		@attrib name=import_tudengid params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function import_tudengid($args = array())
 	{
 		//o$contents = join("",file("/home/duke/tudengid.xml"));
@@ -188,6 +221,17 @@ class xml_import extends class_base
 		$this->sync_with_temp("ut_tudengid","temp_ut_tudengid");
 	}
 	
+	/**  
+		
+		@attrib name=import_struktuurid params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function import_struktuurid($args = array())
 	{
 		$contents = $args["source"];
@@ -331,6 +375,17 @@ class xml_import extends class_base
 		$this->sync_with_temp("ut_struktuurid","temp_ut_struktuurid");
 	}
 	
+	/**  
+		
+		@attrib name=import_tootajad params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function import_tootajad($args = array())
 	{
 		$contents = $args["source"];

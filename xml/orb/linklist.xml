@@ -1,44 +1,24 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="linklist" extends="class_base">
-		<action name="show">
+	<class name="linklist" folder="www/dev/terryf/awcl/classes" extends="class_base">
+		<action name="show" >
 			<function name="show">
 				<arguments>
-					<optional name="id"/>
-					<optional name="cd"/>
-					<optional name="search"/>
+					<optional name="id" />
+					<optional name="cd" />
+					<optional name="search" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="goto">
+		<action name="goto" >
 			<function name="link_redirect">
 				<arguments>
-					<optional name="id"/>
-					<optional name="lkid"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="stats_">
-			<function name="stats_">
-				<arguments>
-					<optional name="id"/>
-					<optional name="return_url"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="stats">
-			<function name="stats">
-				<arguments>
-					<required name="id"/>
-					<optional name="return_url"/>
-					<optional name="test"/>
+					<optional name="id" />
+					<optional name="lkid" />
 				</arguments>
 			</function>
 		</action>
 
 	</class>
 </orb>
-

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_users_import.aw,v 1.2 2004/01/06 14:28:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_users_import.aw,v 1.3 2004/01/13 16:24:32 kristo Exp $
 // taket_users_import.aw - Taketi kasutajate import 
 /*
 HANDLE_MESSAGE(MSG_USER_LOGIN, update_user_info)
@@ -34,9 +34,21 @@ class taket_users_import extends class_base
 		return $this->import_users(array("id" => $arr["alias"]["target"]));
 	}
 
-	////
-	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
+	/** this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias 
+		
+		@attrib name=import_users params=name default="0"
+		
+		@param username optional
+		@param password optional
+		@param changed optional
+		
+		@returns
+		
+		
+		@comment
+		
 
+	**/
 	function import_users($arr)
 	{
 		if(!$this->can('add',aw_ini_get('taket.users_parent')))

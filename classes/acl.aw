@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl.aw,v 2.10 2003/06/04 19:22:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl.aw,v 2.11 2004/01/13 16:24:12 kristo Exp $
 // acl.aw - Access Control Lists
 
 class acl extends aw_template 
@@ -37,8 +37,18 @@ class acl extends aw_template
 
 	}
 
-	////
-	// !Salvestab ACL vormi sisu
+	/** Salvestab ACL vormi sisu 
+		
+		@attrib name=submit_acl params=name default="0"
+		
+		@param oid required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_acl($args = array())
 	{
 		$this->ui_save_acl($args);
@@ -192,6 +202,17 @@ class acl extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_acl_groups params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_acl_groups($arr)
 	{
 		extract($arr);
@@ -217,6 +238,17 @@ class acl extends aw_template
 		return $from;
 	}
 
+	/**  
+		
+		@attrib name=save_acl params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function ui_save_acl($arr)
 	{
 		extract($arr);

@@ -1,5 +1,5 @@
 <?php
-// $Id: menu_alias.aw,v 2.6 2003/11/13 11:20:19 kristo Exp $
+// $Id: menu_alias.aw,v 2.7 2004/01/13 16:24:14 kristo Exp $
 // menu_alias.aw - Deals with menu aliases
 class menu_alias extends aw_template
 {
@@ -10,8 +10,60 @@ class menu_alias extends aw_template
 		));
 	}
 
-	////
-	// !Displays the form for adding a new menu alias
+	/** Displays the form for adding a new menu alias 
+		
+		@attrib name=add_alias params=name default="0"
+		
+		@param parent required type=int
+		@param return_url optional
+		@param alias_to optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	/**  
+		
+		@attrib name=new params=name default="0"
+		
+		@param parent required type=int
+		@param return_url optional
+		@param alias_to optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	/**  
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required type=int
+		@param return_url optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	/**  
+		
+		@attrib name=change_alias params=name default="0"
+		
+		@param id required type=int
+		@param return_url optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change_alias($args = array())
 	{
 		extract($args);
@@ -37,6 +89,17 @@ class menu_alias extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_alias params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_alias($args = array())
 	{
 		extract($args);

@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.33 2003/12/03 12:13:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.34 2004/01/13 16:24:22 kristo Exp $
 
 /*
 
@@ -100,6 +100,21 @@ class gallery_v2 extends class_base
 	}
 
 
+	/**  
+		
+		@attrib name=view params=name nologin="1" default="0"
+		
+		@param id optional type=int
+		@param page optional type=int
+		@param col optional type=int
+		@param row optional type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function view($args = array())
 	{
 		return $this->show(array(
@@ -1000,6 +1015,22 @@ class gallery_v2 extends class_base
 		return $ret;
 	}
 
+	/**  
+		
+		@attrib name=show_image params=name nologin="1" default="0"
+		
+		@param id optional type=int
+		@param page optional type=int
+		@param col optional type=int
+		@param row optional type=int
+		@param img_id optional type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show_image($arr)
 	{
 		extract($arr);
@@ -1403,6 +1434,21 @@ class gallery_v2 extends class_base
 		return array($n_page, $n_row, $n_col);
 	}
 
+	/**  
+		
+		@attrib name=send params=name nologin="1" default="0"
+		
+		@param id required
+		@param page required
+		@param col required
+		@param row required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function send($arr)
 	{
 		extract($arr);
@@ -1414,6 +1460,21 @@ class gallery_v2 extends class_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_send params=name nologin="1" default="0"
+		
+		@param id required
+		@param page required
+		@param col required
+		@param row required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_send($arr)
 	{
 		extract($arr);
@@ -1477,11 +1538,21 @@ class gallery_v2 extends class_base
 		return $ret;
 	}
 	
-	////
-	// !this is a content generator - right now used by the calendar only
-	// shows a gallery attached to an object - or event
-	// it should probably be improved a bit, since right now it uses a tambov
-	// constant to decide WHICH attached gallery to show
+	/** this is a content generator - right now used by the calendar only 
+		
+		@attrib name=show_aliased params=name nologin="1" caption="Näita galeriid" default="0"
+		
+		@param id required type=int
+		
+		@returns
+		
+		
+		@comment
+		shows a gallery attached to an object - or event
+		it should probably be improved a bit, since right now it uses a tambov
+		constant to decide WHICH attached gallery to show
+
+	**/
 	function show_aliased($args = array())
 	{
 		extract($args);
@@ -1500,11 +1571,21 @@ class gallery_v2 extends class_base
 		return $retval;
 	}
 
-	////
-	// !This is another content generator, except that this one shows the image
-	// with the highest rate from the attached gallery, and it has the same
-	// flaw as the above show_aliased, since it uses a seemingly random attached
-	// gallery
+	/** This is another content generator, except that this one shows the image 
+		
+		@attrib name=show_top_image params=name nologin="1" caption="Parim pilt" default="0"
+		
+		@param id required type=int
+		
+		@returns
+		
+		
+		@comment
+		with the highest rate from the attached gallery, and it has the same
+		flaw as the above show_aliased, since it uses a seemingly random attached
+		gallery
+
+	**/
 	function show_top_image($args = array())
 	{
 		extract($args);

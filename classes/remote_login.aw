@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.15 2003/08/01 12:48:16 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.16 2004/01/13 16:24:14 kristo Exp $
 // remote_login.aw - AW remote login
 
 /*
@@ -187,6 +187,17 @@ class remote_login extends class_base
 		return $ob["meta"]["server"];
 	}
 
+	/**  
+		
+		@attrib name=getcookie params=name nologin="1" is_public="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function getcookie($arr)
 	{
 		die("Relax, take a cookie.");

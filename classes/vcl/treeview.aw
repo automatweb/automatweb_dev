@@ -1,27 +1,36 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.19 2003/10/28 14:36:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.20 2004/01/13 16:24:33 kristo Exp $
 // treeview.aw - tree generator
 /*
+
+	@classinfo relationmgr=yes
+
         @default table=objects
         @default group=general
 
-        @property root type=select field=meta method=serialize
+        @property root type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
         @caption Root objekt
 
 	@property rootcaption type=textbox field=meta method=serialize
 	@caption Root objekti nimi
 	
-	@property icon_root type=objpicker clid=CL_ICON field=meta method=serialize
+	@property icon_root type=relpicker reltype=RELTYPE_ICON field=meta method=serialize
 	@caption Root objekti ikoon
         
 	@property treetype type=select field=meta method=serialize
         @caption Puu tüüp
 
-	@property icon_folder_open type=objpicker clid=CL_ICON field=meta method=serialize
+	@property icon_folder_open type=relpicker reltype=RELTYPE_ICON field=meta method=serialize
 	@caption Lahtise kausta ikoon
 
-	@property icon_folder_closed type=objpicker clid=CL_ICON field=meta method=serialize
+	@property icon_folder_closed type=relpicker reltype=RELTYPE_ICON field=meta method=serialize
 	@caption Kinnise kausta ikoon
+
+	@reltype FOLDER value=1 clid=CL_MENU
+	@caption root kataloog
+
+	@reltype ICON value=2 clid=CL_ICON
+	@caption ikoon
 */
 
 define("TREE_HTML", 1);
@@ -51,11 +60,6 @@ class treeview extends class_base
 		$data = &$args["prop"];
 		switch($data["name"])
 		{
-			case "root":
-				$ob = get_instance("objects");
-                                $data["options"] = $ob->get_list();
-				break;
-
 			case "treetype":
 				$data["options"] = array("" => "--vali--","dhtml" => "DHTML (Ftiens)");
 				break;
@@ -124,8 +128,18 @@ class treeview extends class_base
 		return $retval;
 	}
 
-	////
-	// !Public/ORB interface
+	/** Public/ORB interface 
+		
+		@attrib name=show params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show($args = array())
 	{
 		extract($args);
@@ -642,6 +656,45 @@ class treeview extends class_base
 		}
 		$this->level--;
 	}
-	
+
+	////
+	// !takes an object_tree and returns a treeview 
+	// the treeview will have all the objects in the object_tree
+	// as tree items.
+	// parameters:
+	//	tree_opts - options to pass to the treeview constructor
+	//	root_item - object instance that contains the root item
+	//	ot - object_tree instance that contains the needed objects
+	//	var - variable name. links in the tree will be made with
+	//		aw_url_change_var($var, $item->id()) - the $var variable will
+	//		contain the active tree item
+	function tree_from_objects($arr)
+	{
+		extract($arr);
+		$tv = get_instance(CL_TREEVIEW);
+		$tree_opts["root_url"] = aw_url_change_var($var, $arr["root_item"]->id());
+		
+		$tv->start_tree($tree_opts);
+		$tv->add_item(0,array(
+			"name" => parse_obj_name($root_item->name()),
+			"id" => $root_item->id(),
+			"url" => aw_url_change_var($var, $root_item->id()),
+		));
+
+		$ic = get_instance("icons");
+
+		$ol = $ot->to_list();
+		for($o = $ol->begin(); !$ol->end(); $ol->next())
+		{
+			$tv->add_item($o->parent(),array(
+				"name" => parse_obj_name($o->name()),
+				"id" => $o->id(),
+				"url" => aw_url_change_var($var, $o->id()),
+				"icon" => ($o->class_id() == CL_MENU) ? "" : $ic->get_icon_url($o->class_id(),"")
+			));
+		}
+
+		return $tv;
+	}	
 };
 ?>

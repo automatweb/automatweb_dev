@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.67 2003/12/05 12:32:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.68 2004/01/13 16:24:14 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -578,8 +578,18 @@ class file extends class_base
 		return $ret;
 	}
 
-	////
-	// !Näitab faili. DUH.
+	/** Näitab faili. DUH. 
+		
+		@attrib name=preview params=name nologin="1" default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show($id)
 	{
 		if (is_array($id))
@@ -604,6 +614,18 @@ class file extends class_base
 		die($fc["content"]);
 	}
 
+	/**  
+		
+		@attrib name=view params=name nologin="1" default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function view($args = array())
 	{
 		extract($args);

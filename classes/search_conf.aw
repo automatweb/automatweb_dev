@@ -128,8 +128,36 @@ class search_conf extends aw_template
 		return $ret;
 	}
 
-	////
-	// !shows the search form
+	/** shows the search form 
+		
+		@attrib name=search params=name nologin="1" default="0"
+		
+		@param s_parent optional
+		@param s_keywords optional
+		@param sstring_title optional
+		@param sstring_author optional
+		@param date_from optional
+		@param date_to optional
+		@param sstring optional
+		@param a2c_log optional
+		@param t2c_log optional
+		@param c2k_log optional
+		@param d2k_log optional
+		@param search optional
+		@param page optional
+		@param t_type optional
+		@param c_type optional
+		@param sortby optional
+		@param section optional
+		@param search_all optional
+		@param max_results optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function search($arr)
 	{
 		extract($arr);
@@ -812,6 +840,28 @@ class search_conf extends aw_template
 	}
 
 	// updates documents timestamp from document::tm and objects::modified to documents::modified
+	/**  
+		
+		@attrib name=upd_dox params=name nologin="1" default="0"
+		
+		@param s_parent optional
+		@param s_keywords optional
+		@param sstring_title optional
+		@param sstring optional
+		@param t2c_log optional
+		@param c2k_log optional
+		@param search optional
+		@param page optional
+		@param t_type optional
+		@param c_type optional
+		@param sortby optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function upd_dox()
 	{
 		$this->db_query("SELECT objects.oid as oid,objects.modified as modified,documents.tm as tm,documents.title as title FROM objects LEFT JOIN documents ON documents.docid = objects.oid WHERE objects.class_id = 7");
@@ -837,6 +887,17 @@ class search_conf extends aw_template
 		}
 	}
 
+	/**  
+		
+		@attrib name=change params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change($arr)
 	{
 		$this->read_template("change.tpl");
@@ -869,6 +930,17 @@ class search_conf extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_conf params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_conf($arr)
 	{
 		extract($arr);
@@ -877,6 +949,18 @@ class search_conf extends aw_template
 		return $this->mk_my_orb("change");
 	}
 
+	/**  
+		
+		@attrib name=change_grp params=name default="0"
+		
+		@param id optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change_grp($arr)
 	{
 		extract($arr);
@@ -915,6 +999,17 @@ class search_conf extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_change_grp params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_change_grp($arr)
 	{
 		extract($arr);
@@ -997,6 +1092,18 @@ class search_conf extends aw_template
 		}
 	}
 
+	/**  
+		
+		@attrib name=delete_grp params=name default="0"
+		
+		@param id optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function delete_grp($arr)
 	{
 		extract($arr);
@@ -1012,6 +1119,17 @@ class search_conf extends aw_template
 		return $grps[$gp]["menus"];
 	}
 
+	/**  
+		
+		@attrib name=search_log params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function search_log($arr)
 	{
 		extract($arr);

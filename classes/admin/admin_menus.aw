@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.44 2004/01/08 12:24:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.45 2004/01/13 16:24:17 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -351,8 +351,18 @@ class admin_menus extends aw_template
 		return aw_ini_get("icons.server")."/prog_".$fid.".gif";
 	}
 
-	////
-	// !shows menus importing form
+	/** shows menus importing form 
+		
+		@attrib name=import params=name default="0"
+		
+		@param parent required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function import($arr)
 	{
 		extract($arr);
@@ -362,8 +372,18 @@ class admin_menus extends aw_template
 		return $this->parse();
 	}
 
-	////
-	// !does the actual menu importing bit
+	/** does the actual menu importing bit 
+		
+		@attrib name=submit_import params=name default="0"
+		
+		@param parent required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_import($arr)
 	{
 		extract($arr);
@@ -442,8 +462,17 @@ class admin_menus extends aw_template
 		}
 	}
 
-	////
-	// !cuts the selected objects
+	/** cuts the selected objects 
+		
+		@attrib name=cut params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function cut($arr)
 	{
 		extract($arr);
@@ -462,8 +491,17 @@ class admin_menus extends aw_template
 		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
 	}
 
-	////
-	// !copies the selected objects
+	/** copies the selected objects 
+		
+		@attrib name=copy params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function copy($arr)
 	{
 		extract($arr);
@@ -499,6 +537,20 @@ class admin_menus extends aw_template
 		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
 	}
 
+	/**  
+		
+		@attrib name=copy_feedback params=name default="0"
+		
+		@param parent required
+		@param period optional
+		@param sel optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function copy_feedback($arr)
 	{
 		extract($arr);
@@ -512,6 +564,17 @@ class admin_menus extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_copy_feedback params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_copy_feedback($arr)
 	{
 		extract($arr);
@@ -534,8 +597,17 @@ class admin_menus extends aw_template
 		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
 	}
 
-	////
-	// !pastes the cut objects
+	/** pastes the cut objects 
+		
+		@attrib name=paste params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function paste($arr)
 	{
 		extract($arr);
@@ -809,8 +881,22 @@ class admin_menus extends aw_template
 
 	}
 
-	////
-	// !Displays the right frame table .. uh, what a name. 
+	/** Displays the right frame table .. uh, what a name. 
+		
+		@attrib name=right_frame params=name default="0"
+		
+		@param parent optional
+		@param period optional
+		@param sortby optional
+		@param sort_order optional
+		@param view_type optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function right_frame($arr)
 	{
 		extract($arr);
@@ -1380,6 +1466,17 @@ class admin_menus extends aw_template
 		return $toolbar;
 	}
 
+	/**  
+		
+		@attrib name=submit_rf params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_rf($arr)
 	{
 		extract($arr);
@@ -1418,6 +1515,17 @@ class admin_menus extends aw_template
 		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period, "sortby" => $sortby, "sort_order" => $sort_order));
 	}
 
+	/**  
+		
+		@attrib name=delete params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function new_delete($arr)
 	{
 		extract($arr);
@@ -1438,6 +1546,17 @@ class admin_menus extends aw_template
 		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period, "sortby" => $sortby, "sort_order" => $sort_order));
 	}
 
+	/**  
+		
+		@attrib name=change_redir params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change_redir($arr)
 	{
 		extract($arr);

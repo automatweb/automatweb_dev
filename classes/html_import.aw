@@ -250,6 +250,19 @@ html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'chec
 	}
 
 
+	/**  
+		
+		@attrib name=create_table params=name default="0"
+		
+		@param id required
+		@param return_url required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function create_table($arr)
 	{
 		extract($arr);
@@ -258,6 +271,19 @@ html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'chec
 		header('Location:'.$return_url);
 	}
 
+	/**  
+		
+		@attrib name=empty_table params=name default="0"
+		
+		@param id required
+		@param return_url required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function empty_table($arr)
 	{
 		extract($arr);
@@ -267,6 +293,19 @@ html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'chec
 	}
 
 
+	/**  
+		
+		@attrib name=drop_table params=name default="0"
+		
+		@param id required
+		@param return_url required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function drop_table($arr)
 	{
 		extract($arr);
@@ -766,8 +805,20 @@ html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'chec
 	}
 
 
-	////
-	// ! will perform the import proccess
+	/** will perform the import proccess 
+		
+		@attrib name=import params=name default="0"
+		
+		@param id required
+		@param samm optional
+		@param next optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function tiri($arr)
 	{
 		extract($arr);
@@ -901,10 +952,21 @@ echo '<a href="'.$this->mk_my_orb('import', array('id' => $arr['id'],'next' => $
 
 	}
 
-	////
-	// ! does the specified ruul really work
-	//  well it does if it looks pink
-	// oid - required
+	/** does the specified ruul really work 
+		
+		@attrib name=ruul_test params=name default="0"
+		
+		@param f required
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+		well it does if it looks pink
+		oid - required
+
+	**/
 	function ruul_test($arr)
 	{
 		extract($arr);

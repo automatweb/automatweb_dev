@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/graph.aw,v 2.11 2003/08/01 12:48:16 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/graph.aw,v 2.12 2004/01/13 16:24:14 kristo Exp $
 // graph.aw - graafikute haldamine
 
 define("TYPE_PIE",0);
@@ -28,6 +28,19 @@ class graph extends aw_template
 
 	
 	//Uue graafiku lisamise pildi ettemanamine
+	/**  
+		
+		@attrib name=new params=name default="0"
+		
+		@param parent required acl="add"
+		@param alias_doc optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add($arr)
 	{
 		extract($arr);
@@ -36,6 +49,17 @@ class graph extends aw_template
 		return $this->parse();
 	}
 	//Uue graafikuga tegelemine
+	/**  
+		
+		@attrib name=submit params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function base_add($ar)
 	{
 		extract($ar);
@@ -119,6 +143,17 @@ class graph extends aw_template
 		return $this->parse();
 	}
 	
+	/**  
+		
+		@attrib name=savepie params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function save_pie($ar) 
 	{
 		extract($ar);
@@ -139,6 +174,30 @@ class graph extends aw_template
 		return $this->mk_orb("conf",array("id"=>$id));
 	}
 	
+	/**  
+		
+		@attrib name=conf params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	/**  
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required acl="edit;view"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function configure($ar)
 	{
 		//extract($ar);
@@ -185,6 +244,18 @@ class graph extends aw_template
 		die;				
 	}
 
+	/**  
+		
+		@attrib name=show params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show($ar)
 	{
 		//extract($ar);
@@ -231,6 +302,20 @@ class graph extends aw_template
 		}
 	}
 
+	/**  
+		
+		@attrib name=gotbarline params=name default="0"
+		
+		@param id required
+		@param type required
+		@param name required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function line_bar_add($ar)
 	{
 		extract($ar);
@@ -255,6 +340,19 @@ class graph extends aw_template
 		}
 	}
 
+	/**  
+		
+		@attrib name=savedatasrc params=name default="0"
+		
+		@param id required
+		@param datasrc required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function save_datasrc_bar_line($ar) 
 	{
 		extract($ar);
@@ -336,6 +434,17 @@ class graph extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=savelinebar params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function line_bar_save($ar)
 	{
 		extract($ar);
@@ -355,6 +464,18 @@ class graph extends aw_template
 	}
 
 	//Annab by default n2idatava graafikute listi
+	/**  
+		
+		@attrib name=list params=name default="0"
+		
+		@param parent required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function glist($ar)
 	{	
 		($ar["parent"]=="0")?$asdf="":$asdf=" AND parent=$parent";
@@ -385,6 +506,19 @@ class graph extends aw_template
 	}
 		
 	//Kustutab graafiku(d)
+	/**  
+		
+		@attrib name=delete params=name default="0"
+		
+		@param id required
+		@param parent required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function delete_graph($ar)
 	{
 		extract($ar);
@@ -392,6 +526,18 @@ class graph extends aw_template
 		header("Location:orb.".$this->cfg["ext"]."?class=menuedit&action=obj_list&parent=$parent");
 	}
 	//Näitab preview pilti, sinna sisse imetakse templatest ka graph->show() meetodiga pilt ise
+	/**  
+		
+		@attrib name=preview params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function preview($id)
 	{
 		//for .. aah. just a hack
@@ -576,6 +722,18 @@ class graph extends aw_template
 		}
 	}
 	//Kasutaja data sisestamiseks vajaliku template parsimine jne
+	/**  
+		
+		@attrib name=userdata params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function insert_data($ar)
 	{
 		$id=$ar["id"];
@@ -623,6 +781,18 @@ class graph extends aw_template
 	}
 
 	//Salvestab kasutaja andmed
+	/**  
+		
+		@attrib name=savedata params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function save_userdata($ar)
 	{
 		extract($ar);
@@ -633,6 +803,18 @@ class graph extends aw_template
 		return $this->mk_orb("userdata",array("id"=>$id));
 	}
 	
+	/**  
+		
+		@attrib name=meta params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show_meta($ar)
 	{
 		extract($ar);
@@ -661,6 +843,18 @@ class graph extends aw_template
 		return $this->parse();
 	}
 	
+	/**  
+		
+		@attrib name=savemeta params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function save_meta($ar)
 	{
 		extract($ar);
@@ -675,6 +869,18 @@ class graph extends aw_template
 		return $this->parse();
 	}
 	
+	/**  
+		
+		@attrib name=upload params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function handle_upload($ar)
 	{
 		extract($ar);

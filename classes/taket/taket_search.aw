@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_search.aw,v 1.1 2004/01/02 02:58:30 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_search.aw,v 1.2 2004/01/13 16:24:32 kristo Exp $
 // taket_search.aw - Taketi Otsing 
 /*
 
@@ -48,6 +48,26 @@ class taket_search extends class_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=parse_submit_info params=name default="0"
+		
+		@param tootekood optional
+		@param asendustooted optional
+		@param otsitunnus optional
+		@param laos optional
+		@param kogus optional
+		@param reforb optional
+		@param start optional
+		@param orderBy optional
+		@param direction optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function parse_submit_info($arr)
 	{
 		//determine the xml-rpc call

@@ -1,8 +1,7 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="form_entry" folder="formgen">
-
-		<action name="change">
+	<class name="form_entry" folder="www/dev/terryf/awcl/classes/formgen" extends="aw_template">
+		<action name="change" >
 			<function name="change">
 				<arguments>
 					<required name="id" acl="edit;view"/>
@@ -10,14 +9,5 @@
 			</function>
 		</action>
 
-		<action name="delete">
-			<function name="delete">
-				<arguments>
-					<required name="id" acl="delete"/>
-				</arguments>
-			</function>
-		</action>
-
 	</class>
 </orb>
-		

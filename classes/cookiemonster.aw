@@ -9,8 +9,17 @@ class cookiemonster extends aw_template
 		$this->init("cookiemonster");
 	}
 
-	////
-	// !generates a list of cookies in the user's browser
+	/** generates a list of cookies in the user's browser 
+		
+		@attrib name=list params=name default="1"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function gen_list($arr)
 	{
 		extract($arr);
@@ -31,8 +40,17 @@ class cookiemonster extends aw_template
 		return $this->parse();
 	}
 
-	////
-	// !saves changes
+	/** saves changes 
+		
+		@attrib name=munch params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function munch($arr)
 	{
 		extract($arr);

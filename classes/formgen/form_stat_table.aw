@@ -7,6 +7,18 @@ class form_stat_table extends form_base
 		$this->form_base();
 	}
 
+	/**  
+		
+		@attrib name=new params=name default="0"
+		
+		@param parent required acl="add"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add($arr)
 	{
 		extract($arr);
@@ -20,6 +32,17 @@ class form_stat_table extends form_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit($arr)
 	{
 		extract($arr);
@@ -80,6 +103,18 @@ class form_stat_table extends form_base
 		return $this->mk_my_orb("change", array("id" => $id));
 	}
 
+	/**  
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required acl="edit;view"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change($arr)
 	{
 		extract($arr);

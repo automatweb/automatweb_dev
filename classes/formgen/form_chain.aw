@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.12 2003/08/27 12:25:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.13 2004/01/13 16:24:27 kristo Exp $
 // form_chain.aw - form chains
 
 classload("formgen/form_base");
@@ -13,6 +13,19 @@ class form_chain extends form_base
 		$this->lc_load("form","lc_form");
 	}
 
+	/**  
+		
+		@attrib name=new params=name default="0"
+		
+		@param parent required acl="add"
+		@param alias_doc optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add($arr)
 	{
 		extract($arr);
@@ -29,8 +42,17 @@ class form_chain extends form_base
 		return $this->parse();
 	}
 
-	////
-	// !Submits a new form chain
+	/** Submits a new form chain 
+		
+		@attrib name=submit params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit($arr)
 	{
 		extract($arr);
@@ -148,6 +170,18 @@ class form_chain extends form_base
 		return 0;
 	}
 
+	/**  
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required acl="edit;view"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change($arr)
 	{
 		extract($arr);
@@ -289,13 +323,31 @@ class form_chain extends form_base
 		return $fid;
 	}
 
-	////
-	// !shows the form chain
-	// args:
-	// id - chain id
-	// section - the document's id in what we are
-	// form_id - the active form in the chain, if omitted the default is opened
-	// entry_id - the chain entry id
+	/** shows the form chain 
+		
+		@attrib name=show params=name nologin="1" default="0"
+		
+		@param id required
+		@param section optional
+		@param form_id optional
+		@param entry_id optional
+		@param form_entry_id optional
+		@param start_el optional
+		@param end_el optional
+		@param start optional
+		@param end optional
+		
+		@returns
+		
+		
+		@comment
+		args:
+		id - chain id
+		section - the document's id in what we are
+		form_id - the active form in the chain, if omitted the default is opened
+		entry_id - the chain entry id
+
+	**/
 	function show($arr)
 	{
 		extract($arr);
@@ -500,8 +552,17 @@ class form_chain extends form_base
 		return $this->parse();
 	}
 
-	////
-	// !this is invoked when a form in the chain is submitted
+	/** this is invoked when a form in the chain is submitted 
+		
+		@attrib name=submit_form params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_form($arr)
 	{
 		extract($arr);
@@ -743,6 +804,18 @@ class form_chain extends form_base
 		$this->db_query("UPDATE form_chain_entries SET ids = '$tx',tm = '".time()."' WHERE id = $chain_entry_id");
 	}
 
+	/**  
+		
+		@attrib name=show_chain_entries params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show_chain_entries($arr)
 	{
 		extract($arr);
@@ -764,6 +837,19 @@ class form_chain extends form_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=delete_entry params=name default="0"
+		
+		@param id required
+		@param entry_id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function delete_entry($arr)
 	{
 		extract($arr);
@@ -781,6 +867,17 @@ class form_chain extends form_base
 		header("Location: ".$this->mk_my_orb("show_chain_entries", array("id" => $id)));
 	}
 
+	/**  
+		
+		@attrib name=convchainentries params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function convchainentries($arr)
 	{
 		// for each chain

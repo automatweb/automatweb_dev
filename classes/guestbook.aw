@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/guestbook.aw,v 2.7 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/guestbook.aw,v 2.8 2004/01/13 16:24:14 kristo Exp $
 
 class guestbook extends aw_template
 {
@@ -28,6 +28,19 @@ class guestbook extends aw_template
 		return $replacement;
 	}
 
+	/**  
+		
+		@attrib name=new params=name default="0"
+		
+		@param parent required acl="add"
+		@param docid optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add($arr)
 	{
 		extract($arr);
@@ -37,6 +50,17 @@ class guestbook extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_gb params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_gb($arr)
 	{
 		extract($arr);
@@ -74,6 +98,20 @@ class guestbook extends aw_template
 		return $this->mk_orb("obj_list", array("parent" => $parent), "menuedit");
 	}
 
+	/**  
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required acl="edit;view"
+		@param parent optional
+		@param docid optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change($arr)
 	{
 		extract($arr);
@@ -126,6 +164,19 @@ class guestbook extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=add_entry params=name default="0"
+		
+		@param id required
+		@param url required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add_entry($arr)
 	{
 		extract($arr);

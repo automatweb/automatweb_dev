@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/maitenance.aw,v 1.3 2003/08/27 12:25:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/maitenance.aw,v 1.4 2004/01/13 16:24:14 kristo Exp $
 // maitenance.aw - Saidi hooldus 
 /*
 
@@ -67,6 +67,19 @@ class maitenance extends class_base
 		return $str;
 	}
 	
+	/**  
+		
+		@attrib name=ta_convert params=name default="0"
+		
+		@param next optional
+		@param samm optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function ta_convert($args)
 	{
 		$tegevusala_parent = 50387;
@@ -164,6 +177,21 @@ class maitenance extends class_base
 		return $m[1];
 	}
 	
+	/**  
+		
+		@attrib name=kb_convert params=name default="0"
+		
+		@param next optional
+		@param samm optional
+		@param convert optional
+		@param parent optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function kb_convert($args)
 	{
 		//teha siia igat tüüpi objektidele eraldi kataloogid		
@@ -819,38 +847,50 @@ class maitenance extends class_base
 		//--end-------------------		
 		}
 		
-	////
-	//   id - the id of the object where the alias will be attached
-	//   alias - the id of the object to attach as an alias
-	//   relobj_id - reference to the relation object
-	//   reltype - type of the relation
-	//   no_cache - if true, cache is not updated
-	//   
-	
-	/*
-	addalias(array(
-		'' => '',
-		'reltype' => 5,
-	));
-	*/
-
-
-	echo 	''.$str.' 
-	<a href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm)).'">järgmised '.$samm.'</a><br />
-	<a href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm = 5)).'">järgmised '.$samm.'</a><br />
-	<a href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm = 10)).'">järgmised '.$samm.'</a><br />
-	<a href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm = 25)).'">järgmised '.$samm.'</a><br />
-	<a href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm = 50)).'">järgmised '.$samm.'</a><br />
-	<a href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm = 100)).'">järgmised '.$samm.'</a><br />
-	<a href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm = 150)).'">järgmised '.$samm.'</a><br />
-	<a href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm = 200)).'">järgmised '.$samm.'</a><br />
-	<a href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm = 350)).'">järgmised '.$samm.'</a><br />
-			
-		<script>alert("valma");</script>';
+	/**  
 		
-		die('end');
-	}
-	
+		@attrib name=cache_clear params=name default="0"
+		
+		@param clear optional
+		@param list optional
+		
+		@returns
+		
+		
+		@comment
+		id - the id of the object where the alias will be attached
+		alias - the id of the object to attach as an alias
+		relobj_id - reference to the relation object
+		reltype - type of the relation
+		no_cache - if true, cache is not updated
+		
+		
+		
+		dalias(array(
+		=> '',
+		eltype' => 5,
+		;
+		
+		
+		
+		ho 	''.$str.'
+		href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm)).'">järgmised '.$samm.'</a><br />
+		href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm = 5)).'">järgmised '.$samm.'</a><br />
+		href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm = 10)).'">järgmised '.$samm.'</a><br />
+		href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm = 25)).'">järgmised '.$samm.'</a><br />
+		href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm = 50)).'">järgmised '.$samm.'</a><br />
+		href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm = 100)).'">järgmised '.$samm.'</a><br />
+		href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm = 150)).'">järgmised '.$samm.'</a><br />
+		href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm = 200)).'">järgmised '.$samm.'</a><br />
+		href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm = 350)).'">järgmised '.$samm.'</a><br />
+		
+		cript>alert("valma");</script>';
+		
+		e('end');
+		
+		
+
+	**/
 	function cache_clear($args)
 	{
 		echo "<br />

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/accessmgr.aw,v 2.12 2003/01/07 14:25:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/accessmgr.aw,v 2.13 2004/01/13 16:24:12 kristo Exp $
 
 class accessmgr extends aw_template
 {
@@ -44,6 +44,17 @@ class accessmgr extends aw_template
 		}
 	}
 
+	/**  
+		
+		@attrib name=list_access params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function list_access($arr)
 	{
 		$this->read_template("list.tpl");

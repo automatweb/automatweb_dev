@@ -18,7 +18,13 @@
 
 
 	@property root_action type=relpicker reltype=RELTYPE_ACTION field=meta method=serialize group=general
-	@caption Juurfunktsioon
+	@caption Juurtegevus
+
+	@property end_action type=relpicker reltype=RELTYPE_ACTION field=meta method=serialize group=general
+	@caption L&otilde;pptegevus
+
+	@property transition_folder type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize group=general
+	@caption J&auml;rgnevuste kataloog
 
 	@property id type=hidden table=objects field=oid group=actions
 
@@ -27,49 +33,27 @@
 
 	@groupinfo actions caption=Tegevused
 
+	@reltype INSTRUCTION clid=CL_IMAGE,CL_FILE value=1
+	@caption instruktsioon
+
+	@reltype TRANSITION clid=CL_WORKFLOW_TRANSITION value=2
+	@caption j&auml;rgnevus
+
+	@reltype FOLDER clid=CL_MENU value=3
+	@caption j&auml;rgnevuste kataloog
+
+	@reltype ACTION clid=CL_ACTION,CL_PROCESS value=10
+	@caption tegevus
 */
 
-define(ROOT_ACTION,1);
-define(RELTYPE_ACTION,10);
-
-classload("workflow/workflow_common");
-class process extends workflow_common
+class process extends class_base
 {
 	function process()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
-	    // if they exist at all. the default folder does not actually exist, 
-	    // it just points to where it should be, if it existed
 		$this->init(array(
 			'tpldir' => 'workflow',
 			'clid' => CL_PROCESS
 		));
-	}
-
-	function callback_get_rel_types()
-	{
-		$common = array();
-		$common[RELTYPE_ACTION] = "tegevus";
-		$common = $common + parent::callback_get_rel_types();
-		return $common;
-	}
-
-	function _get_classes_for_relation($reltype)
-	{
-		$retval = false;
-		switch($reltype)
-		{
-			case RELTYPE_ACTION:
-				$retval = array(CL_ACTION,CL_PROCESS);
-				break;
-		};
-		return $retval;
-	}
-
-	function callback_get_classes_for_relation($args = array())
-	{
-		$retval = parent::callback_get_classes_for_relation($args);
-		return $retval;
 	}
 
 	function get_property($args)
@@ -106,7 +90,7 @@ class process extends workflow_common
 		switch($data["name"])
 		{
 			case "action_list":
-				$this->set_actions(&$args);
+				$retval = $this->set_actions(&$args);
 				break;
 		};
 		return $retval;
@@ -114,16 +98,189 @@ class process extends workflow_common
 
 	function action_list(&$data,&$args)
 	{
-		// this is where we let the user create a list of actions
-		// and let him choose the root action for example
+		if ($this->_get_actiondata($data, $args) == PROP_ERROR)
+		{
+			return PROP_ERROR;
+		}
 
-		$this->read_template("actions.tpl");
+		$data["value"] = $this->_do_action_grid($args["obj_inst"]).$this->_do_transition_table($args["obj_inst"]);
+		$data["no_caption"] = 1;
+		return PROP_OK;
+	}
 
+	function _do_action_grid($process)
+	{
+		$this->read_template("action_grid.tpl");
+
+		$numa = count($this->actiondata);
+
+		$per_row = (int)floor(sqrt($numa-2)+0.99);
+
+		reset($this->actiondata);
+		
+		$r = "";
+
+		$rows = count($this->grid);
+		for($row = 0; $row < $rows; $row++)
+		{
+			$c = "";
+			$cols = $per_row;
+			for($col = 0; $col < $cols; $col++)
+			{
+				$_t_id = $this->grid[$row][$col]["id"];
+				$_t_name = $this->grid[$row][$col]["n"];
+				if ($_t_id == $this->root_action_id || $_t_id == $this->end_action_id)
+				{
+					$_t_name = "<b>".$_t_name."</b>";
+				}
+
+
+				if (!$_t_id)
+				{
+					$c .= $this->parse("COL_EMPTY");
+				}
+				else
+				{
+					$this->vars(array(
+						"name" => $_t_name,
+						"colspan" => 1,
+						"align" => "left"
+					));
+			
+					$this->_parse_transitions($process, $_t_id, $per_row, $row, $col);
+
+					$c .= $this->parse("COL");
+				}
+			}
+
+			$this->vars(array(
+				"COL" => $c,
+				"COL_EMPTY" => ""
+			));
+
+			$r .= $this->parse("ROW");
+		}
+
+		$this->vars(array(
+			"ROW" => $r
+		));
+
+		return $this->parse();
+	}
+
+	function _do_transition_table($process)
+	{
+		load_vcl("table");
+		$t = new aw_table(array(
+			"xml_def" => "workflow/transition_table",
+			"layout" => "generic",
+		));
+		
+		$transition_list = new object_list(array(
+			"class_id" => CL_WORKFLOW_TRANSITION,
+			"process_id" => $process->id()
+		));
+		for ($transition = $transition_list->begin(); !$transition_list->end(); $transition = $transition_list->next())
+		{
+			$t->define_data(array(
+				"name" => $transition->name(),
+				"from" => $this->actiondata[$transition->prop("from_act")],
+				"to" => $this->actiondata[$transition->prop("to_act")],
+				"edit" => html::href(array(
+					"url" => $this->mk_my_orb("change", array("id" => $transition->id()), "workflow_transition"),
+					"caption" => "Muuda"
+				)),
+				"del" => html::checkbox(array(
+					"name" => "del[]",
+					"value" => $transition->id()
+				))
+			));
+		}
+
+		$t->define_data(array(
+			"name" => html::textbox(array(
+				"name" => "add_action[name]",
+				"value" => "",
+			)),
+			"from" => html::select(array(
+				"name" => "add_action[from_act]",
+				"options" => $this->actiondata,
+			)),
+			"to" => html::select(array(
+				"name" => "add_action[to_act]",
+				"options" => $this->actiondata,
+			)),
+			"edit" => "lisa j&auml;rgnevus",
+			"del" => ""
+		));
+
+		return $t->draw();
+	}
+
+	function set_actions($args = array())
+	{
+		extract($args["request"]);
+
+		$process = $args["obj_inst"];
+
+		if (is_array($del))
+		{
+			$ol = new object_list(array("oid" => $del, "class_id" => CL_WORKFLOW_TRANSITION));
+			$ol->delete();
+		}
+
+		// check if the add action is filled
+		if (isset($add_action) && $add_action["name"] != "" && $add_action["from_act"] && $add_action["to_act"])
+		{
+			if ($add_action["from_act"] == $add_action["to_act"])
+			{
+				$args["prop"]["error"] = "J&auml;rgnevuse otsad ei tohi samad olla!";
+				return PROP_ERROR;
+			}
+
+			// check if it already exists
+			$ol = new object_list(array(
+				"class_id" => CL_WORKFLOW_TRANSITION,
+				"process_id" => $process->id(),
+				"from_act" => $add_action["from_act"],
+				"to_act" => $add_action["to_act"]
+			));
+			if ($ol->count() > 0)
+			{
+				$args["prop"]["error"] = "Selline j&auml;rgnevus on juba olemas!";
+				return PROP_ERROR;
+			}
+			else
+			{
+				$o = obj();
+				$o->set_class_id(CL_WORKFLOW_TRANSITION);
+				$o->set_parent($process->prop("transition_folder"));
+				$o->set_name($add_action["name"]);
+				$o->set_prop("process_id", $process->id());
+				$o->set_prop("from_act", $add_action["from_act"]);
+				$o->set_prop("to_act", $add_action["to_act"]);
+				$o->set_status(STAT_ACTIVE);
+				$o->save();
+				$o->connect(array(
+					"to" => $process->id(),
+					"reltype" => RELTYPE_TRANSITION
+				));
+				$process->connect(array(
+					"to" => $o->id(),
+					"reltype" => 2 // RELTYPE_PROCESS from transition
+				));
+			}
+		}
+		return PROP_OK;
+	}
+
+	function _get_actiondata(&$data, &$args)
+	{
 		// phase 1, kuvame objekti juurfunktsiooni.
 		// ja sinna juurde lingi "defineeri järgmine tegevus"
-		if ($args["obj"]["meta"]["root_action"])
+		if ($args["obj_inst"]->meta("root_action"))
 		{
-			$root_action = new object($args["obj"]["meta"]["root_action"]);
+			$this->root_action_id = $args["obj_inst"]->meta("root_action");
 		}
 		else
 		{
@@ -131,8 +288,22 @@ class process extends workflow_common
 			return PROP_ERROR;
 		};
 
-		$action_info = $args["obj"]["meta"]["action_info"];
-		$this->action_info = $action_info;
+		if ($args["obj_inst"]->meta("end_action"))
+		{
+			$this->end_action_id = $args["obj_inst"]->meta("end_action");
+		}
+		else
+		{
+			$data["error"] = "L&otilde;pptegevus on valimata";
+			return PROP_ERROR;
+		};
+
+		if (!$args["obj_inst"]->prop("transition_folder"))
+		{
+			$data["error"] = "J&auml;rgnevuste kataloog on valimata!";
+			return PROP_ERROR;
+		}
+
 
 		$conns = $args["obj_inst"]->connections_from(array(
 			"type" => RELTYPE_ACTION,
@@ -144,126 +315,331 @@ class process extends workflow_common
 			return PROP_ERROR;
 		};
 
-
-		// list all non-root actions
-		$actions = array();
+		$tt = array();
 		foreach($conns as $conn)
 		{
-			if ($conn->to() != $root_action->id())
-			{
-				$actions[] = $conn->prop("to");
-			};
+			$tt[] = $conn->to();
 		}
-		
-		if (sizeof($actions) == 0)
+
+		$this->grid = $this->_optimize_action_layout($tt, $args["obj_inst"]);
+
+		// now, make the actiondata from the grid
+		$this->actiondata = array();
+		$this->actiondata_ord = array();
+		$rows = count($this->grid);
+		for($ridx = 0; $ridx < $rows; $ridx++)
 		{
-			$data["error"] = "Objektil pole piisavalt (>1)'tegevus' tüüpi seoseid";
-			return PROP_ERROR;
-		};
-
-		$actiondata[$root_action->id()] = $root_action->name();
-
-		$q = sprintf("SELECT * FROM objects WHERE oid IN (%s)",join(",",$actions));
-		$this->db_query($q);
-		$el = $line = "";
-		while($row = $this->db_next())
-		{
-			$actiondata[$row["oid"]] = $row["name"];
-		};
-
-		$this->actiondata = $actiondata;
-
-		$line .= $this->_draw_action_line(array($root_action->id()));
-	
-		$next = $root_action->id();	
-		$this->root_action_id = $root_action->id();
-		if (is_array($action_info))
-		{
-			foreach($action_info as $key => $val)
+			$cols = count($this->grid[$ridx]);
+			for($cidx = 0; $cidx < $cols; $cidx++)
 			{
-				$line .= $this->_draw_action_line($action_info[$next]);
-				unset($action_info[$next]);
-				$next = $this->next;
-			};
-		};
+				$cd = $this->grid[$ridx][$cidx];
+				$this->actiondata[$cd["id"]] = $cd["n"];
+				$this->actiondata_ord[$cd["id"]] = ($ridx * $per_row) + $cidx;
+			}
+		}
 
-
-		$this->vars(array(
-			"line" => $line,
+		$conns = $args["obj_inst"]->connections_from(array(
+			"type" => RELTYPE_TRANSITION,
 		));
 
-
-		$data["value"] = $this->parse();
-		$data["no_caption"] = 1;
-
-		return PROP_OK;
+		$this->transitions = array();
+		foreach($conns as $conn)
+		{
+			$this->transitions[$conn->prop("to")] = $conn->prop("to.name");
+		}
 	}
 
-	function _draw_action_line($list = array())
+	function _parse_transitions($process, $_t_id, $per_row, $row, $col)
 	{
-		$data = new aw_array($list);
-		$el = "";
-		$this->next = "";
-		$retval = false;
-		while(list(,$val) = $data->next())
+		$ars = array(
+			"UP_ARROW_LEFT" => array(),
+			"UP_ARROW_RIGHT" => array(),
+			"UP_ARROW" => array(),
+			"LEFT_ARROW" => array(),
+			"RIGHT_ARROW" => array(),
+			"DOWN_ARROW_RIGHT" => array(),
+			"DOWN_ARROW" => array(),
+			"DOWN_ARROW_LEFT" => array(),
+		);
+
+		// go over all transitions that are from this action
+		// and for each figure out the direction it is on the diagram
+		// and make the arrows in the correct direction.
+		$ol = new object_list(array(
+			"class_id" => CL_WORKFLOW_TRANSITION,
+			"process_id" => $process->id(),
+			"from_act" => $_t_id
+		));
+		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
-			// I can not have the action itself in the list
-			$tmp = array();
-			foreach($this->actiondata as $_key => $_val)
-			{
-				if (($_key != $val) && ($_key != $this->root_action_id))
-				{
-					$tmp[$_key] = $_val;
-				};
-			};
+			$to = $o->prop("to_act");
+			// now, figure out the direction that the to action has from the current
+			list($to_row, $to_col) = $this->_o_get_pos($this->grid, $to);
 
-			if (sizeof($tmp) > 0)
+			if ($to_row == $row && $to_col < $col)
 			{
+				// left
+				$ars["LEFT_ARROW"][] = $o->name();
+			}
+			else
+			if ($to_col == $col && $to_row < $row)
+			{
+				// up
+				$ars["UP_ARROW"][] = $o->name();
+			}
+			else
+			if ($to_col < $col && $to_row < $row)
+			{
+				// up left
+				$ars["UP_ARROW_LEFT"][] = $o->name();
+			}
+			else
+			if ($to_col > $col && $to_row < $row)
+			{
+				// up right
+				$ars["UP_ARROW_RIGHT"][] = $o->name();
+			}
+			else
+			// down or right
+			if ($to_row == $row && $to_col > $col)
+			{
+				// right
+				$ars["RIGHT_ARROW"][] = $o->name();
+			}
+			else
+			// down
+			if ($to_col == $col && $to_row > $row)
+			{
+				// up
+				$ars["DOWN_ARROW"][] = $o->name();
+			}
+			else
+			if ($to_col < $col && $to_row > $row)
+			{
+				// up left
+				$ars["DOWN_ARROW_LEFT"][] = $o->name();
+			}
+			else
+			if ($to_col > $col && $to_row > $row)
+			{
+				// up right
+				$ars["DOWN_ARROW_RIGHT"][] = $o->name();
+			}
+		}
 
+		// now, parse all the arrows as the array says
+		foreach($ars as $sub => $names)
+		{
+			$arstr = "";
+			if (count($names) > 0)
+			{
 				$this->vars(array(
-					"caption" => $this->actiondata[$val],
-					"id" => $val,
-					"actlist" => $this->mpicker($this->action_info[$val],$tmp),
+					"alt" => join(",", $names)
 				));
-
-				$this->next = $val;
-
-				$el .= $this->parse("element");
-			};
-		};
-
-		if (sizeof($tmp) > 0)
-		{
+				$arstr = $this->parse($sub);
+			}
 			$this->vars(array(
-				"element" => $el,
+				$sub => $arstr
 			));
-
-			$retval = $this->parse("line");
-		};
-
-		return $retval;
-
+		}
 	}
 
-	function set_actions($args = array())
+	function _optimize_action_layout($acts, $process)
 	{
-		$next_data = $args["form_data"]["next"];
-		// and now that I have that information, I quite simply have to create
-		// relations between the key in the next array and the values of the
-		// next array.
+		// ok, try to do the layout of actions here
+		// idea is:
+		// 1 - put the default layout in an array
+		// 2 - increase cnt, go over array
+		// 3 - for each action that has a transition check the distance
+		// 4 - if distance > 1
+		// 5 - swap the related action and the that is closest on the same direction
+		// 6 - if cnt < 10, goto 2
+		
 
-		// aha. but what IF an action can be point to a different next action
-		// in another process? That would mean we are screwed, or not?
-		$writeout = array();
-		if (is_array($next_data))
+		$per_row = (int)floor(sqrt(count($acts)-2)+0.99);
+		$grid = array();
+
+		// 1
+		$this->_o_init_grid($grid, $per_row, $acts);
+		//echo "default layout = <br>";
+		//$this->_o_dump_grid($grid);
+
+		$transitions = $this->_o_get_trans($process);
+
+		// 2
+		for($i = 0; $i < 10; $i++)
 		{
-			foreach($next_data as $el => $values)
+			$swaps = $this->_o_opt_grid($grid, $transitions);
+			//echo "after transform no $i , grid = <Br>";
+			//$this->_o_dump_grid($grid);
+			if (!$swaps)
 			{
-				$writeout[$el] = $this->make_keys($values);
-			};
-		};
-		$args["obj_inst"]->set_meta("action_info",$writeout);
+				break;
+			}
+		}
+
+		return $grid;
 	}
 
+	function _o_opt_grid(&$grid, $transitions)
+	{
+		$did_swap = false;
+		foreach($transitions as $t)
+		{
+			// 3
+			list($from_row, $from_col) = $this->_o_get_pos($grid, $t->prop("from_act"));
+			list($to_row, $to_col) = $this->_o_get_pos($grid, $t->prop("to_act"));
+	
+			$distance = $this->_o_get_distance($from_row, $from_col, $to_row, $to_col);
+			//echo "distance from [$from_row, $from_col] to [$to_row, $to_col] = $distance <br>";
+
+			// 4
+			if ($distance > 1)
+			{
+				// 5
+
+				// find the one to swap with
+				if ($to_row == $from_row)
+				{
+					$swap_row = $to_row;
+					if ($to_col > $from_col)
+					{
+						$swap_col = $from_col+1;
+					}
+					else
+					if ($to_col < $from_col)
+					{
+						$swap_col = $from_col-1;
+					}
+				}
+				else
+				if ($to_col == $from_col)
+				{
+					$swap_col = $to_col;
+					if ($to_row > $from_row)
+					{
+						$swap_row = $from_row+1;
+					}
+					else
+					if ($to_row < $from_row)
+					{
+						$swap_row = $from_row-1;
+					}
+				}
+				
+				$t = $grid[$swap_row][$swap_col];
+				$grid[$swap_row][$swap_col] = $grid[$to_row][$to_col];
+				$grid[$to_row][$to_col] = $t;
+				$did_swap = true;
+			}
+		}
+
+		return $did_swap;
+	}
+
+	function _o_get_distance($f_r, $f_c, $t_r, $t_c)
+	{
+		if ($f_r == $t_r && $f_c == $t_c)
+		{
+			return 0;
+		}
+
+		// ignore diagonals for now
+		if ($f_r == $t_r)
+		{
+			// rows are same, cols different
+			return abs($f_c - $t_c);
+		}
+		else
+		if ($f_c == $t_c)
+		{
+			return abs($f_r - $t_r);
+		}
+		return 1;
+	}
+
+	function _o_get_pos($grid, $actid)
+	{
+		foreach($grid as $r => $rd)
+		{
+			foreach($rd as $c => $cd)
+			{
+				if ($cd["id"] == $actid)
+				{
+					return array($r, $c);
+				}
+			}
+		}
+		return false;
+	}
+
+	function _o_get_trans($o)
+	{
+		$conns = $o->connections_from(array(
+			"type" => RELTYPE_TRANSITION,
+		));
+
+		$ret = array();
+		foreach($conns as $conn)
+		{
+			$ret[] = $conn->to();
+		}
+		return $ret;
+	}
+
+	function _o_init_grid(&$grid, $per_row, $acts)
+	{
+		$idx = $per_row;
+		$grid = array();
+		foreach($acts as $act)
+		{
+			$actid = $act->id();
+			$actn = $act->name();
+
+			if ($actid == $this->root_action_id)
+			{
+				$grid[0][0] = array(
+					"id" => $actid,
+					"n" => $actn
+				);
+			}
+			else
+			if ($actid == $this->end_action_id)
+			{
+				$grid[$per_row+1][0] = array(
+					"id" => $actid,
+					"n" => $actn
+				);
+			}
+			else
+			{
+				$row = (int)($idx / $per_row);
+				$col = $idx % $per_row;
+
+				$grid[$row][$col] = array(
+					"id" => $actid,
+					"n" => $actn
+				);
+				$idx++;
+			}
+		}
+	}
+
+	function _o_dump_grid($grid)
+	{
+		echo "<pre>";
+		$rows = count($grid);
+		for($ridx = 0; $ridx < $rows; $ridx++)
+		{
+			$cols = count($grid[$ridx]);
+			for($cidx = 0; $cidx < $cols; $cidx++)
+			{
+				$cd = $grid[$ridx][$cidx];
+				echo "($ridx,$cidx) = [".$cd["n"]."]\t\t";
+			}
+			echo "\n";
+		}
+		echo "</pre>";
+	}
 }
 ?>

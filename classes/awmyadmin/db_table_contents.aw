@@ -52,6 +52,18 @@ class db_table_contents extends class_base
 		return PROP_OK;
 	}
 
+	/**  
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change($arr)
 	{
 		extract($arr);
@@ -74,6 +86,19 @@ class db_table_contents extends class_base
 		return $tbp->get_tabpanel(array('content' => parent::change($arr)));
 	}
 
+	/**  
+		
+		@attrib name=content params=name default="0"
+		
+		@param id required
+		@param page optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function content($arr)
 	{
 		extract($arr);
@@ -136,6 +161,19 @@ class db_table_contents extends class_base
 		return $tbp->get_tabpanel(array('content' => $this->parse()));
 	}
 
+	/**  
+		
+		@attrib name=admin_content params=name default="0"
+		
+		@param id required
+		@param page optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function admin_content($arr)
 	{
 		extract($arr);
@@ -280,6 +318,17 @@ class db_table_contents extends class_base
 		return $p_tbp;
 	}
 
+	/**  
+		
+		@attrib name=submit_admin_content params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_admin_content($arr)
 	{
 		extract($arr);

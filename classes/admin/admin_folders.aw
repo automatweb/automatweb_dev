@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.23 2004/01/09 11:40:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.24 2004/01/13 16:24:17 kristo Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -12,6 +12,18 @@ class admin_folders extends aw_template
 		lc_load("definition");
 	}
 
+	/**  
+		
+		@attrib name=folders params=name default="0"
+		
+		@param period optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show_folders($arr)
 	{
 		extract($arr);

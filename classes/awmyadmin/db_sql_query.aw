@@ -25,6 +25,19 @@ class db_sql_query extends class_base
 		));
 	}
 
+	/**  
+		
+		@attrib name=change params=name all_args="1" default="0"
+		
+		@param id required
+		@param group optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change($arr)
 	{
 		extract($arr);

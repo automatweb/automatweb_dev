@@ -655,6 +655,17 @@ class dronline extends class_base
 		return $this->parse();
 	}	
 
+	/**  
+		
+		@attrib name=saveblock params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function saveblock($arr)
 	{
 		extract($arr);
@@ -1119,6 +1130,17 @@ class dronline extends class_base
 		return $this->get_sao_tb($arr,$id).$t->draw();
 	}
 
+	/**  
+		
+		@attrib name=submit_block params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_block($arr)
 	{
 		extract($arr);
@@ -1526,6 +1548,18 @@ class dronline extends class_base
 		}
 	}
 
+	/**  
+		
+		@attrib name=run_bg_queries params=name nologin="1" default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function run_bg_queries($arr)
 	{
 		extract($arr);

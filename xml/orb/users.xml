@@ -1,86 +1,86 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="users">
+	<class name="users" folder="www/dev/terryf/awcl/classes" extends="users_user">
 		<action name="gen_list" all_args="1">
 			<function name="gen_list">
-			</function>
-		</action>
-
-		<action name="add_user">
-			<function name="add_user">
 				<arguments>
-					<optional name="level"/>
-					<optional name="join_grp"/>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_user">
-			<function name="submit_user">
-			
-			</function>
-		</action>
-		
-		<action name="submit_user_site" nologin="1">
-			<function name="submit_user_site">
-			
-			</function>
-		</action>
-		
-		<action name="change">
+		<action name="change" >
 			<function name="change">
 				<arguments>
-					<optional name="id"/>
+					<optional name="id" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="do_change">
+		<action name="do_change" >
 			<function name="do_change">
 				<arguments>
-					<required name="id"/>
+					<required name="id" />
 				</arguments>
 			</function>
 		</action>
-		
+
 		<action name="change_pwd" is_public="1" caption="Change password">
 			<function name="change_pwd">
 				<arguments>
-					<optional name="id"/>
-					<optional name="error"/>
+					<optional name="id" />
+					<optional name="error" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_change_pwd">
+		<action name="submit_change_pwd" >
 			<function name="submit_change_pwd">
-
+				<arguments>
+				</arguments>
 			</function>
 		</action>
 
-		<action name="delete">
+		<action name="delete" >
 			<function name="delete">
 				<arguments>
-					<required name="id"/>
-				</arguments>
-			</function>
-		</action>
-		
-		<action name="login" nologin="1">
-			<function name="login">
-				<arguments>
-					<required name="uid"/>
-					<required name="password"/>
-					<optional name="remote_ip"/>
-					<optional name="reforb"/>
-					<optional name="remote_host"/>
-					<optional name="return"/>
+					<required name="id" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="logout" is_public="1" nologin="1" caption="Log out">
-			<function name="orb_logout">
+		<action name="submit_user_site" nologin="1">
+			<function name="submit_user_site">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_user" >
+			<function name="submit_user">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="add_user" >
+			<function name="add_user">
+				<arguments>
+					<optional name="level" />
+					<optional name="join_grp" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="udata" is_public="1" caption="Edit information">
+			<function name="do_change_site">
+				<arguments>
+					<optional name="fid" type="int"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="save_udata" >
+			<function name="submit_do_change_site">
 				<arguments>
 				</arguments>
 			</function>
@@ -93,103 +93,114 @@
 			</function>
 		</action>
 
-		<action name="settings">
+		<action name="settings" >
 			<function name="settings">
 				<arguments>
-					<required name="id"/>
+					<required name="id" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_settings">
-			<function name="submit_settings">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit_user_info">
+		<action name="submit_user_info" >
 			<function name="submit_user_info">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="user_stats">
+		<action name="show_user_info" >
+			<function name="show_user_info">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_settings" >
+			<function name="submit_settings">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="user_stats" >
 			<function name="user_stats">
 				<arguments>
-					<optional name="s_uid"/>
-					<optional name="from"/>
-					<optional name="to"/>
-					<optional name="stat_type"/>
-					<optional name="stat_span"/>
+					<optional name="s_uid" />
+					<optional name="from" />
+					<optional name="to" />
+					<optional name="stat_type" />
+					<optional name="stat_span" />
 					<optional name="graph_type" default="BarGraph"/>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="convusers">
+		<action name="convusers" >
 			<function name="convusers">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="convsyslog">
+		<action name="convsyslog" >
 			<function name="convsyslog">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="user_acl">
+		<action name="user_acl" >
 			<function name="user_acl">
 				<arguments>
-					<required name="s_uid"/>
-					<optional name="page"/>
+					<required name="s_uid" />
+					<optional name="page" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_user_acl">
-			<function name="submit_user_acl"/>
+		<action name="submit_user_acl" >
+			<function name="submit_user_acl">
+				<arguments>
+				</arguments>
+			</function>
 		</action>
 
 		<action name="send_hash" nologin="1">
-			<function name="send_hash"/>
+			<function name="send_hash">
+				<arguments>
+				</arguments>
+			</function>
 		</action>
-		
+
 		<action name="submit_send_hash" nologin="1">
-			<function name="submit_send_hash"/>
+			<function name="submit_send_hash">
+				<arguments>
+				</arguments>
+			</function>
 		</action>
 
 		<action name="pwhash" nologin="1">
 			<function name="password_hash">
 				<arguments>
-					<required name="k"/>
-					<required name="u"/>
+					<required name="k" />
+					<required name="u" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="change_pwd_hash" nologin="1">
+			<function name="change_pwd_hash">
+				<arguments>
+					<required name="pass1" />
+					<required name="pass2" />
+					<required name="a" />
+					<optional name="change" />
 				</arguments>
 			</function>
 		</action>
 
 		<action name="submit_password_hash" nologin="1">
-			<function name="submit_password_hash"/>
-		</action>
-
-		<action name="show_user_info">
-			<function name="show_user_info"/>
-		</action>
-
-		<action name="udata" is_public="1" caption="Edit information">
-			<function name="do_change_site">
-				<arguments>
-					<optional name="fid" type="int"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="save_udata">
-			<function name="submit_do_change_site">
+			<function name="submit_password_hash">
 				<arguments>
 				</arguments>
 			</function>
@@ -202,39 +213,28 @@
 			</function>
 		</action>
 
-		<action name="createpwd">
+		<action name="createpwd" >
 			<function name="createpwd">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_createpwd">
+		<action name="submit_createpwd" >
 			<function name="submit_createpwd">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="change_pwd_hash" nologin="1">
-			<function name="change_pwd_hash">
+		<action name="pwconv" >
+			<function name="pwconv">
 				<arguments>
-					<required name="pass1"/>
-					<required name="pass2"/>
-					<required name="a"/>
-					<optional name="change"/>
 				</arguments>
 			</function>
-
 		</action>
 
-		<action name="pwconv">
-			<function name="pwconv">
-				<arguments/>
-			</function>
-		</action>
-
-		<action name="import">
+		<action name="import" >
 			<function name="import">
 				<arguments>
 					<optional name="gid" type="int"/>
@@ -242,10 +242,12 @@
 			</function>
 		</action>
 
-		<action name="submit_import">
+		<action name="submit_import" >
 			<function name="submit_import">
-				<arguments/>
+				<arguments>
+				</arguments>
 			</function>
 		</action>
+
 	</class>
 </orb>

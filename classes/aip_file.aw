@@ -8,8 +8,22 @@ class aip_file extends file
 		$this->file();
 	}
 
-	////
-	// !Kuvab faili lisamise vormi
+	/** Kuvab faili lisamise vormi 
+		
+		@attrib name=new params=name default="0"
+		
+		@param parent optional
+		@param id optional
+		@param msg_id optional
+		@param return_url optional
+		@param alias_to optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add($arr)
 	{
 		extract($arr);
@@ -43,6 +57,21 @@ class aip_file extends file
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required
+		@param parent optional
+		@param return_url optional
+		@param doc optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change($arr)
 	{
 		extract($arr);
@@ -143,14 +172,38 @@ class aip_file extends file
         }
 
 
+	/**  
+		
+		@attrib name=submit_change params=name default="0"
+		
+		@param parent required
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_change($arr)
 	{
 		$this->_submit_change($arr);
 		return $this->mk_my_orb("change",array("id" => $arr['id']),'',false,true);
 	}
 
-	////
-	// !Lisab faili lisamisvormist tulnud info pohjal
+	/** Lisab faili lisamisvormist tulnud info pohjal 
+		
+		@attrib name=submit_add params=name default="0"
+		
+		@param parent required
+		@param id optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_add($arr)
 	{
 		extract($arr);

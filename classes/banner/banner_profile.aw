@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/banner/Attic/banner_profile.aw,v 1.1 2002/11/04 00:47:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/banner/Attic/banner_profile.aw,v 1.2 2004/01/13 16:24:18 kristo Exp $
 
 classload("banner/banner");
 class banner_profile extends banner
@@ -11,8 +11,18 @@ class banner_profile extends banner
 		$this->lc_load("banner","lc_banner");
 	}
 
-	////
-	// !displays the form for creating a new profile
+	/** displays the form for creating a new profile 
+		
+		@attrib name=new params=name default="0"
+		
+		@param parent required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add($arr)
 	{
 		extract($arr);
@@ -33,6 +43,17 @@ class banner_profile extends banner
 		));
 	}
 
+	/**  
+		
+		@attrib name=submit params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit($arr)
 	{
 		extract($arr);
@@ -62,8 +83,19 @@ class banner_profile extends banner
 		return $this->mk_orb("change", array("id" => $id));
 	}
 
-	////
-	// !generates the form for changing banner profile
+	/** generates the form for changing banner profile 
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required
+		@param parent optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change($arr)
 	{
 		extract($arr);

@@ -14,6 +14,17 @@ class admin_languages extends languages
 		parent::init();
 	}
 
+	/**  
+		
+		@attrib name=admin_list params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function gen_list()
 	{
 		$this->mk_path(0,"Keeled");
@@ -58,6 +69,17 @@ class admin_languages extends languages
 	// from the languages.list ini setting (acceptlang key). Want to define a new language?
 	// first define it in the INI file. 
 
+	/**  
+		
+		@attrib name=add params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add()
 	{
 		$this->mk_path(0,"<a href='".$this->mk_my_orb("admin_list")."'>Keeled</a> / Lisa");
@@ -76,6 +98,18 @@ class admin_languages extends languages
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change($arr)
 	{
 		extract($arr);
@@ -103,6 +137,17 @@ class admin_languages extends languages
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_add params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit($arr)
 	{
 		extract($arr);
@@ -163,6 +208,17 @@ class admin_languages extends languages
 		$this->init_cache(true);
 	}
 
+	/**  
+		
+		@attrib name=submit_admin params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_admin($arr)
 	{
 		extract($arr);
@@ -178,6 +234,18 @@ class admin_languages extends languages
 		return $this->mk_my_orb("admin_list");
 	}
 
+	/**  
+		
+		@attrib name=delete params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_delete($arr)
 	{
 		extract($arr);

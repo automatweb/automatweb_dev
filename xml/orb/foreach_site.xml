@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="foreach_site" folder="admin" extends="class_base">
+	<class name="foreach_site" folder="www/dev/terryf/awcl/classes/admin" extends="class_base">
 		<action name="exec" default="1">
 			<function name="exec">
 				<arguments>
@@ -8,12 +8,12 @@
 			</function>
 		</action>
 
-		<action name="submit_exec">
+		<action name="submit_exec" >
 			<function name="submit_exec">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
+
 	</class>
 </orb>
-		

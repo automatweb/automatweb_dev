@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/banner/Attic/banner_buyer.aw,v 1.1 2002/11/04 00:47:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/banner/Attic/banner_buyer.aw,v 1.2 2004/01/13 16:24:18 kristo Exp $
 
 classload("banner/banner");
 class banner_buyer extends banner
@@ -11,8 +11,18 @@ class banner_buyer extends banner
 		$this->lc_load("banner","lc_banner");
 	}
 
-	////
-	// !generates form for adding a banner buyer
+	/** generates form for adding a banner buyer 
+		
+		@attrib name=new params=name default="0"
+		
+		@param parent required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add($arr)
 	{
 		extract($arr);
@@ -25,8 +35,19 @@ class banner_buyer extends banner
 		return $this->parse();
 	}
 
-	////
-	// !generates the form for changing a banner buyer $id
+	/** generates the form for changing a banner buyer $id 
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required
+		@param parent optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change($arr)
 	{
 		extract($arr);
@@ -43,8 +64,17 @@ class banner_buyer extends banner
 		return $this->parse();
 	}
 
-	////
-	// !saves the banner buyer info or adds if necessary
+	/** saves the banner buyer info or adds if necessary 
+		
+		@attrib name=submit params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit($arr)
 	{
 		extract($arr);
@@ -67,8 +97,18 @@ class banner_buyer extends banner
 		return $this->get_object($id);
 	}
 
-	////
-	// !generates statistics for banner buyer $id
+	/** generates statistics for banner buyer $id 
+		
+		@attrib name=buyer_banner_stats params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function buyer_banner_stats($arr)
 	{
 		extract($arr);
@@ -135,8 +175,18 @@ class banner_buyer extends banner
 		return $this->parse();
 	}
 
-	////
-	// !shows stats for bannerbuyer $id on a day-to-day basis
+	/** shows stats for bannerbuyer $id on a day-to-day basis 
+		
+		@attrib name=stat_by_day params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function stat_by_day($arr)
 	{
 		extract($arr);
@@ -148,8 +198,18 @@ class banner_buyer extends banner
 		return $this->parse();
 	}
 
-	////
-	// !shows stats for banner buyer $id for days of the week.
+	/** shows stats for banner buyer $id for days of the week. 
+		
+		@attrib name=stat_by_dow params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function stat_by_dow($arr)
 	{
 		extract($arr);
@@ -161,8 +221,18 @@ class banner_buyer extends banner
 		return $this->parse();
 	}
 
-	////
-	// !shows stats for banner buyer $id for hours of the day.
+	/** shows stats for banner buyer $id for hours of the day. 
+		
+		@attrib name=stat_by_hr params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function stat_by_hr($arr)
 	{
 		extract($arr);
@@ -175,8 +245,18 @@ class banner_buyer extends banner
 		return $this->parse();
 	}
 
-	////
-	// !profile stats for  banner buyer $id
+	/** profile stats for  banner buyer $id 
+		
+		@attrib name=stat_by_profile params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function stat_by_profile($arr)
 	{
 		extract($arr);
@@ -188,8 +268,19 @@ class banner_buyer extends banner
 		return $this->parse();
 	}
 
-	////
-	// !lets the user select a banner buyer and redirects to the correct url or if only one banner buyer is visible redirect immediately
+	/** lets the user select a banner buyer and redirects to the correct url or if only one banner buyer is visible redirect immediately 
+		
+		@attrib name=sel_buyer_redirect params=name default="0"
+		
+		@param fun required
+		@param r_class required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function sel_buyer_redirect($arr)
 	{
 		extract($arr);

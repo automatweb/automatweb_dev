@@ -1,5 +1,5 @@
 <?php
-// $Id: site_threepane.aw,v 1.9 2003/12/03 11:10:32 duke Exp $
+// $Id: site_threepane.aw,v 1.10 2004/01/13 16:24:31 kristo Exp $
 // site_threepane.aw - simpel 3 paaniga sait.
 /*
 	@default table=objects
@@ -66,6 +66,19 @@ class site_threepane extends class_base
 		return $retval;
 	}
 
+	/**  
+		
+		@attrib name=show params=name default="0"
+		
+		@param id required
+		@param type optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show($args = array())
 	{
 		extract($args);

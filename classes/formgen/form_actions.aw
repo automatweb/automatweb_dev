@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.16 2003/10/06 14:32:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.17 2004/01/13 16:24:27 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -17,8 +17,18 @@ class form_actions extends form_base
 		);
 	}
 
-	////
-	// !listst the actions for form $id
+	/** listst the actions for form $id 
+		
+		@attrib name=list_actions params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function list_actions($arr)
 	{
 		extract($arr);
@@ -43,8 +53,18 @@ class form_actions extends form_base
 		return $this->do_menu_return();
 	}
 
-	////
-	// !Generates the form for adding actions
+	/** Generates the form for adding actions 
+		
+		@attrib name=add_action params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add_action($arr)
 	{
 		extract($arr);
@@ -60,8 +80,17 @@ class form_actions extends form_base
 		return $this->parse();
 	}
 
-	////
-	// !saves or adds the submitted action
+	/** saves or adds the submitted action 
+		
+		@attrib name=submit_action params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_action($arr)
 	{
 		extract($arr);
@@ -169,11 +198,23 @@ class form_actions extends form_base
 		}
 	}
 
-	////
-	// !generates the html for changing action $aid of form $id , page $level
-	// I would really really like to get rid of that stupid level 2 and settle with one
-	// form for each page. But that then means that I have to somehow embed the 
-	// form fields for writing name and comment for the action inside all other forms
+	/** generates the html for changing action $aid of form $id , page $level 
+		
+		@attrib name=change_action params=name default="0"
+		
+		@param id required acl="edit;view"
+		@param aid required
+		@param level optional
+		
+		@returns
+		
+		
+		@comment
+		I would really really like to get rid of that stupid level 2 and settle with one
+		form for each page. But that then means that I have to somehow embed the
+		form fields for writing name and comment for the action inside all other forms
+
+	**/
 	function change_action($arr)
 	{
 		extract($arr);
@@ -233,6 +274,19 @@ class form_actions extends form_base
 		}
 	}
 
+	/**  
+		
+		@attrib name=delete_action params=name default="0"
+		
+		@param id required
+		@param aid required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function delete_action($arr)
 	{
 		extract($arr);

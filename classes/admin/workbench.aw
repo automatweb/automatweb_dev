@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/workbench.aw,v 1.2 2003/12/16 13:32:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/workbench.aw,v 1.3 2004/01/13 16:24:17 kristo Exp $
 // workbench.aw - Töölaud 
 /*
 
@@ -60,8 +60,18 @@ class workbench extends class_base
 	}	
 	*/
 
-	////
-	// !It should be able to display a decent workbench withoud loading an object
+	/** It should be able to display a decent workbench withoud loading an object 
+		
+		@attrib name=gen_workbench params=name default="0"
+		
+		@param id optional type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function gen_workbench($arr)
 	{
 		$this->read_template("default_frameset.tpl");
@@ -92,6 +102,20 @@ class workbench extends class_base
 		*/
 	}
 
+	/**  
+		
+		@attrib name=gen_folders params=name default="0"
+		
+		@param id optional type=int
+		@param parent optional type=int
+		@param period optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function gen_folders($arr)
 	{
 		$this->read_template("index_folders.tpl");

@@ -7,6 +7,21 @@ class contents extends aw_template
 		$this->init("contents");
 	}
 
+	/**  
+		
+		@attrib name=show params=name nologin="1" is_public="1" caption="Show" default="1"
+		
+		@param leadonly optional type=int
+		@param max optional type=int
+		@param tpl optional
+		@param d_tpl optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show($arr = array())
 	{
 		extract($arr);
@@ -195,6 +210,17 @@ class contents extends aw_template
 		}
 	}
 
+	/**  
+		
+		@attrib name=admin params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function admin($arr)
 	{
 		extract($arr);
@@ -211,6 +237,17 @@ class contents extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_admin params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_admin($arr)
 	{
 		extract($arr);

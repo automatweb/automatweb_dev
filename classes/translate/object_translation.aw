@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.8 2003/11/13 11:09:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.9 2004/01/13 16:24:32 kristo Exp $
 // object_translation.aw - Objekti tõlge 
 
 // create method accepts the following arguments:
@@ -24,12 +24,21 @@ class object_translation extends aw_template
 		));
 	}
 
-	////
-	// !Creates a new translation of an object and a relation with the old one
-	// id(int) - id of the object we should use for cloning
-	// srclang(str) - id of the original language
-	//	if srclang is not defined, use the language defined in the object id
-	// dstlang(str) - id of the target language
+	/** Creates a new translation of an object and a relation with the old one 
+		
+		@attrib name=create params=name all_args="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+		id(int) - id of the object we should use for cloning
+		srclang(str) - id of the original language
+		if srclang is not defined, use the language defined in the object id
+		dstlang(str) - id of the target language
+
+	**/
 	function create($args = array())
 	{
 		// steps
@@ -195,8 +204,19 @@ class object_translation extends aw_template
 		return $ret;
 	}
 
-	////
-	// !shows a message that the object has not been translated yet
+	/** shows a message that the object has not been translated yet 
+		
+		@attrib name=show_trans params=name nologin="1" default="0"
+		
+		@param section required
+		@param set_lang_id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show_trans($arr)
 	{
 		extract($arr);

@@ -7,6 +7,18 @@ class aip_html_tree extends class_base
 		$this->init("aip_html_tree");
 	}
 
+	/**  
+		
+		@attrib name=show params=name nologin="1" default="1"
+		
+		@param parent optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show($arr)
 	{
 		extract($arr);

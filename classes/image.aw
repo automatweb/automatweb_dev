@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.79 2003/12/11 12:27:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.80 2004/01/13 16:24:14 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -391,6 +391,18 @@ class image extends class_base
 		return array("id" => $id,"url" => $this->get_url($fl), "sz" => $sz);
 	}
 
+	/**  
+		
+		@attrib name=show params=name nologin="1" default="0"
+		
+		@param file required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show($arr)
 	{
 		extract($arr);
@@ -472,6 +484,18 @@ class image extends class_base
 		die();
 	}
 
+	/**  
+		
+		@attrib name=view params=name nologin="1" default="0"
+		
+		@param id required type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function view($args = array())
 	{
 		$idata = $this->get_image_by_id($args["id"]);
@@ -784,6 +808,18 @@ class image extends class_base
 		}
 	}
 
+	/**  
+		
+		@attrib name=show_big params=name nologin="1" default="0"
+		
+		@param id required type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show_big($arr)
 	{
 		extract($arr);

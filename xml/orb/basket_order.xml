@@ -1,10 +1,10 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="basket_order" extends="basket">
+	<class name="basket_order" folder="www/dev/terryf/awcl/classes" extends="basket">
 		<action name="change" nologin="1">
 			<function name="change">
 				<arguments>
-					<required name="id"/>
+					<required name="id" />
 				</arguments>
 			</function>
 		</action>
@@ -12,17 +12,10 @@
 		<action name="another" nologin="1">
 			<function name="another">
 				<arguments>
-					<required name="id"/>
+					<required name="id" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="orders" nologin="1">
-			<function name="user_orders">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
 	</class>
 </orb>
-		

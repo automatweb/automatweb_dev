@@ -1,30 +1,12 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="popup_objmgr" extends="class_base">
-		<action name="show">
-			<function name="show">
-				<arguments>
-					<optional name="parent"/>
-					<optional name="multiple"/>
-					<optional name="check_name"/>
-					<optional name="force_clid"/>
-				</arguments>
-			</function>
-		</action>
+	<class name="popup_objmgr" folder="www/dev/terryf/awcl/classes" extends="class_base">
 		<action name="search" all_args="1">
 			<function name="search">
 				<arguments>
+				</arguments>
+			</function>
+		</action>
 
-				</arguments>
-			</function>
-		</action>
-		<action name="instant_get">
-			<function name="instant_get">
-				<arguments>
-					<optional name="instant_get"/>
-				</arguments>
-			</function>
-		</action>
 	</class>
 </orb>
-		

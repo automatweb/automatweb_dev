@@ -1,43 +1,49 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="admin_languages" folder="admin">
-		<action name="admin_list">
+	<class name="admin_languages" folder="www/dev/terryf/awcl/classes/admin" extends="languages">
+		<action name="admin_list" >
 			<function name="gen_list">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
-		<action name="submit_admin">
-			<function name="submit_admin">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-		<action name="add">
+
+		<action name="add" >
 			<function name="add">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
-		<action name="submit_add">
+
+		<action name="change" >
+			<function name="change">
+				<arguments>
+					<required name="id" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_add" >
 			<function name="submit">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
-		<action name="change">
-			<function name="change">
+
+		<action name="submit_admin" >
+			<function name="submit_admin">
 				<arguments>
-					<required name="id"/>
 				</arguments>
 			</function>
 		</action>
-		<action name="delete">
+
+		<action name="delete" >
 			<function name="orb_delete">
 				<arguments>
-					<required name="id"/>
+					<required name="id" />
 				</arguments>
 			</function>
 		</action>
+
 	</class>
 </orb>

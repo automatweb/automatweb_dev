@@ -336,6 +336,18 @@ class menu_gen extends class_base
 	}
 
 
+	/**  
+		
+		@attrib name=make_the_catalogs params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
  	function make_the_catalogs($arr)
 	{
 		extract($arr);

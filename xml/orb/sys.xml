@@ -1,14 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="sys">
-		<action name="check" nologin="1">
-			<function name="check">
-				<arguments>
-					<optional name="fix"/>
-				</arguments>
-			</function>
-		</action>
-
+	<class name="sys" folder="www/dev/terryf/awcl/classes" extends="aw_template">
 		<action name="gen_db_struct" nologin="1">
 			<function name="gen_db_struct">
 				<arguments>
@@ -16,21 +8,20 @@
 			</function>
 		</action>
 
-		<action name="submit_compare_db" nologin="1">
-			<function name="submit_compare_db">
+		<action name="gen_create_tbl" nologin="1">
+			<function name="gen_create_tbl">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="get_table">
-			<function name="get_table">
+		<action name="convimages" >
+			<function name="convimages">
 				<arguments>
-					<required name="name"/>
 				</arguments>
 			</function>
 		</action>
-		
+
 		<action name="dbsync" nologin="1">
 			<function name="db_compare_choose_donor">
 				<arguments>
@@ -45,20 +36,28 @@
 			</function>
 		</action>
 
-		<action name="convimages">
-			<function name="convimages">
+		<action name="submit_compare_db" nologin="1">
+			<function name="submit_compare_db">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="gen_create_tbl" nologin="1">
-			<function name="gen_create_tbl">
+		<action name="check" nologin="1">
+			<function name="check">
 				<arguments>
+					<optional name="fix" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_table" >
+			<function name="get_table">
+				<arguments>
+					<required name="name" />
 				</arguments>
 			</function>
 		</action>
 
 	</class>
 </orb>
-		

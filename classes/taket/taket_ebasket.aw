@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_ebasket.aw,v 1.2 2004/01/06 14:28:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_ebasket.aw,v 1.3 2004/01/13 16:24:32 kristo Exp $
 // taket_ebasket.aw - Ostukorv
 /*
 
@@ -38,8 +38,21 @@ class taket_ebasket extends class_base
 		return $this->show(array("id" => $arr["alias"]["target"]));
 	}
 
-	////
-	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
+	/** this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias 
+		
+		@attrib name=show params=name default="0"
+		
+		@param saved optional
+		@param inputErr optional
+		@param sort optional
+		@param dir optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show($arr)
 	{				
 		include('IXR_Library.inc.php');
@@ -231,6 +244,21 @@ class taket_ebasket extends class_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=send_order params=name default="0"
+		
+		@param transport optional
+		@param kontakttelefon optional
+		@param eesperenimi optional
+		@param transport_name optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function send_order($arr)
 	{
 		//if all the fields weren't filled
@@ -345,6 +373,19 @@ class taket_ebasket extends class_base
 		return $this->mk_my_orb('show',array(),'taket_tellimuste_list');
 	}
 
+	/**  
+		
+		@attrib name=add_item params=name default="0"
+		
+		@param product_code required
+		@param quantity required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add_item($arr)
 	{	
 		//getting product info		
@@ -426,6 +467,24 @@ class taket_ebasket extends class_base
 
 	//saves the changes after the user has pushed the
 	//check-out button
+	/**  
+		
+		@attrib name=save_ebasket params=name default="0"
+		
+		@param productId optional
+		@param quantity optional
+		@param seesperenimi optional
+		@param skontakttelefon optional
+		@param stransport optional
+		@param sort optional
+		@param dir optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function save_ebasket($arr){
 		//let's get id of the current user
 		$user_id=users::get_oid_for_uid(aw_global_get('uid'));

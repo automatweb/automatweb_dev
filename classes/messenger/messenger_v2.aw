@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.24 2004/01/13 14:11:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.25 2004/01/13 16:24:30 kristo Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -88,6 +88,17 @@ class messenger_v2 extends class_base
 		$this->outbox = "INBOX.Sent-mail";
 	}
 
+	/**  
+		
+		@attrib name=my_messages params=name is_public="1" caption="Minu kirjad" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function my_messages($arr)
 	{
 		$users = get_instance("users");
@@ -556,8 +567,18 @@ class messenger_v2 extends class_base
 		};
 	}
 
-	////
-	// !called from ORB/scheduler, runs all the filter on INBOX
+	/** called from ORB/scheduler, runs all the filter on INBOX 
+		
+		@attrib name=run_filters params=name nologin="1" default="0"
+		
+		@param id required type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function run_filters($arr)
 	{
 		$msgr_obj = new object($arr["id"]);
@@ -586,6 +607,18 @@ class messenger_v2 extends class_base
 
 	}
 
+	/**  
+		
+		@attrib name=test_filters params=name default="0"
+		
+		@param id required type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function test_filters($arr)
 	{
 		$this->_connect_server(array(

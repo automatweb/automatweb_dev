@@ -1,13 +1,13 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="property_group" folder="cfg" extends="class_base">
-		<action name="generate">
+	<class name="property_group" folder="www/dev/terryf/awcl/classes/cfg" extends="aw_template">
+		<action name="generate" >
 			<function name="generate">
 				<arguments>
 					<required name="id" type="int"/>
 				</arguments>
 			</function>
 		</action>
+
 	</class>
 </orb>
-		

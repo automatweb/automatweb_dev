@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.23 2003/09/25 10:29:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.24 2004/01/13 16:24:15 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -10,8 +10,17 @@ class sys extends aw_template
 		$this->lc_load("syslog","lc_syslog");
 	}
 
-	////
-	// !Genereerib andmebaasi struktuuri väljundi XML-is
+	/** Genereerib andmebaasi struktuuri väljundi XML-is 
+		
+		@attrib name=gen_db_struct params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function gen_db_struct($args = array())
 	{
 		$tables = $this->db_get_struct();
@@ -24,8 +33,17 @@ class sys extends aw_template
 		exit;
 	}
 
-	////
-	// !Genereerib andmebaasi tabelite loomise sqli
+	/** Genereerib andmebaasi tabelite loomise sqli 
+		
+		@attrib name=gen_create_tbl params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function gen_create_tbl($args = array())
 	{
 		$ret = array();
@@ -44,8 +62,18 @@ class sys extends aw_template
 		exit;
 	}
 
-	////
-	// Lisab piltidele aliases
+	/**  
+		
+		@attrib name=convimages params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+		Lisab piltidele aliases
+
+	**/
 	function convimages($args = array())
 	{
 		extract($args);
@@ -138,6 +166,17 @@ class sys extends aw_template
 		return $res;
 	}
 
+	/**  
+		
+		@attrib name=dbsync params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function db_compare_choose_donor($args = array())
 	{
 		$files = array(
@@ -159,12 +198,21 @@ class sys extends aw_template
 		return $this->parse();
 	}
 
-	////
-	// !Võrdleb kahte gen_db_sync poolt genereeritud andmebaasi definitsiooni
-	// argumendid:
-	// left,right(array) - baaside definitsioonid
-	// vasakul on sisseloetud, ehk external definitsioon, pareml on kohalik baas, kus vajalike
-	// väljade juures on linnukesed.
+	/** Võrdleb kahte gen_db_sync poolt genereeritud andmebaasi definitsiooni 
+		
+		@attrib name=db_compare_dbs params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+		argumendid:
+		left,right(array) - baaside definitsioonid
+		vasakul on sisseloetud, ehk external definitsioon, pareml on kohalik baas, kus vajalike
+		väljade juures on linnukesed.
+
+	**/
 	function _db_compare_dbs($args)
 	{
 		extract($args);
@@ -305,6 +353,17 @@ class sys extends aw_template
 		return array($res1,$res2,$res3);
 	}
 
+	/**  
+		
+		@attrib name=submit_compare_db params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_compare_db($args = array())
 	{
 		global $donor_struct;
@@ -409,9 +468,19 @@ class sys extends aw_template
 		}
 	}
 
-	////
-	// !Calls the check_enviroment methods of all listed modules
-	// could be handy to check whether the system is configured correctly
+	/** Calls the check_enviroment methods of all listed modules 
+		
+		@attrib name=check params=name nologin="1" default="0"
+		
+		@param fix optional
+		
+		@returns
+		
+		
+		@comment
+		could be handy to check whether the system is configured correctly
+
+	**/
 	function check($args = array())
 	{
 		// modules whose check_environment functions are called
@@ -561,6 +630,18 @@ class sys extends aw_template
 	}
 
 
+	/**  
+		
+		@attrib name=get_table params=name default="0"
+		
+		@param name required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function get_table($args = array())
 	{
 		extract($args);

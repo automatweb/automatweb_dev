@@ -1,98 +1,105 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="converters" folder="admin">
-	
-		<action name="menu_convimages">
+	<class name="converters" folder="www/dev/terryf/awcl/classes/admin" extends="aw_template">
+		<action name="menu_convimages" >
 			<function name="menu_convimages">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
-		
-		<action name="menu_reset_template_sets">
+
+		<action name="menu_reset_template_sets" >
 			<function name="menu_reset_template_sets">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="promo_convert">
+		<action name="promo_convert" >
 			<function name="promo_convert">
-				<arguments/>
+				<arguments>
+				</arguments>
 			</function>
 		</action>
-		
-		<action name="convert_aliases">
-			<function name="convert_aliases">
-				<arguments/>
-			</function>	
-		</action>	
 
-		<action name="convert_periods">
+		<action name="convert_aliases" >
+			<function name="convert_aliases">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="convert_periods" >
 			<function name="convert_periods">
 				<arguments>
 					<optional name="parent" type="int"/>
-				</arguments>		
+				</arguments>
 			</function>
 		</action>
 
-		<action name="groups_convert">
+		<action name="groups_convert" >
 			<function name="groups_convert">
 				<arguments>
-				</arguments>		
+				</arguments>
 			</function>
 		</action>
 
-		<action name="convert_acl_to_classbase">
+		<action name="convert_acl_to_classbase" >
 			<function name="convert_acl_to_classbase">
 				<arguments>
-				</arguments>		
+				</arguments>
 			</function>
 		</action>
 
 		<action name="convert_fg_tables_deleted" nologin="1">
 			<function name="convert_fg_tables_deleted">
 				<arguments>
-				</arguments>		
+				</arguments>
 			</function>
 		</action>
 
-		<action name="convert_really_old_aliases">
+		<action name="convert_really_old_aliases" >
 			<function name="convert_really_old_aliases">
 				<arguments>
-				</arguments>		
+				</arguments>
 			</function>
 		</action>
-		<action name="convert_seealso_menus" nologin="1">
-			<function name="convert_seealso_menus">
-				<arguments/>
-			</function>
-		</action>
+
 		<action name="convert_copy_makes_brother" nologin="1">
 			<function name="convert_copy_makes_brother">
 				<arguments>
-				</arguments>		
+				</arguments>
 			</function>
 		</action>
+
+		<action name="convert_seealso_menus" nologin="1">
+			<function name="convert_seealso_menus">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="convert_active_documents_list" nologin="1">
 			<function name="convert_active_documents_list">
 				<arguments>
-				</arguments>		
+				</arguments>
 			</function>
 		</action>
+
 		<action name="convert_doc_templates" nologin="1">
 			<function name="convert_doc_templates">
 				<arguments>
-					<required name="parent"/>
-				</arguments>		
+					<required name="parent" />
+				</arguments>
 			</function>
 		</action>
+
 		<action name="convert_menu_images" nologin="1">
 			<function name="convert_menu_images">
 				<arguments>
-				</arguments>		
+				</arguments>
 			</function>
 		</action>
+
 	</class>
 </orb>
-		

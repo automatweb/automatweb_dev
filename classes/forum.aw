@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.84 2003/12/03 12:01:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.85 2004/01/13 16:24:14 kristo Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -165,6 +165,19 @@ class forum extends class_base
 		return $retval;
 	}
 
+	/**  
+		
+		@attrib name=notify_list params=name default="0"
+		
+		@param id required type=int
+		@param sortby optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function notify_list($args = array())
 	{
 		extract($args);
@@ -231,6 +244,17 @@ class forum extends class_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_notify_list params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_notify_list($args = array())
 	{
 		extract($args);
@@ -418,8 +442,19 @@ class forum extends class_base
 		};
 	}
 
-	////
-	// !Kuvab uue topicu lisamise vormi
+	/** Kuvab uue topicu lisamise vormi 
+		
+		@attrib name=add_topic params=name nologin="1" default="0"
+		
+		@param id required type=int
+		@param section optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add_topic($args = array())
 	{
 		// this first setting should really be configurable on per-forum basis
@@ -470,8 +505,17 @@ topic");
 		return $this->parse();
 	}
 
-	////
-	// !Lisab uue topicu
+	/** Lisab uue topicu 
+		
+		@attrib name=submit_topic params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_topic($args = array())
 	{
 		$this->quote($args);
@@ -502,8 +546,47 @@ topic");
 		return $retval;
 	}
 
-	////
-	// !Shows a flat list of messages
+	/** Shows a flat list of messages 
+		
+		@attrib name=show params=name nologin="1" default="0"
+		
+		@param board required type=int
+		@param section optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	/**  
+		
+		@attrib name=no_response params=name nologin="1" default="0"
+		
+		@param board required type=int
+		@param section optional
+		@param no_response define value="1"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	/**  
+		
+		@attrib name=addcomment params=name nologin="1" default="0"
+		
+		@param board required type=int
+		@param section optional
+		@param addcomment define value="1"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show($args = array())
 	{
 		extract($args);
@@ -667,8 +750,17 @@ topic");
 
 	}
 
-	////
-	// !Submits a vote to a topic
+	/** Submits a vote to a topic 
+		
+		@attrib name=submit_vote params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_vote($args = array())
 	{
 		extract($args);
@@ -695,8 +787,22 @@ topic");
 		return $this->mk_my_orb("show",array("board" => $board));
 	}
 
-	////
-	// !Shows a threaded list of messages
+	/** Shows a threaded list of messages 
+		
+		@attrib name=show_threaded params=name nologin="1" default="0"
+		
+		@param board required type=int
+		@param section optional
+		@param cid optional type=int
+		@param from optional type=int
+		@param no_comments optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show_threaded($args = array())
 	{
 		$this->level = 0;
@@ -857,8 +963,17 @@ topic");
 
 		return $retval;
 	}
-	////
-	// !Submits a message list
+	/** Submits a message list 
+		
+		@attrib name=submit_messages params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_messages($args = array())
 	{
 		extract($args);
@@ -1023,8 +1138,19 @@ topic");
 	}
 			
 
-	////
-	// !displays a reply form
+	/** displays a reply form 
+		
+		@attrib name=reply params=name nologin="1" default="0"
+		
+		@param parent required type=int
+		@param section optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function reply($args = array())
 	{
 		extract($args);
@@ -1209,8 +1335,17 @@ topic");
 		return $cnt;
 	}
 
-	////
-	// !Submits comment to a topic
+	/** Submits comment to a topic 
+		
+		@attrib name=submit_comment params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_comment($args = array())
 	{
 		$this->quote($args);
@@ -1335,9 +1470,22 @@ topic");
 
 	}
 
-	////
-	// !Shows a list of topics for a forum
-	// id(int) - forum id
+	/** Shows a list of topics for a forum 
+		
+		@attrib name=topics params=name nologin="1" default="0"
+		
+		@param id required type=int
+		@param from optional type=int
+		@param section optional
+		@param archive optional
+		
+		@returns
+		
+		
+		@comment
+		id(int) - forum id
+
+	**/
 	function topics($args = array())
 	{
 		extract($args);
@@ -1400,8 +1548,21 @@ topic");
 		return $this->parse();
 	}
 
-	////
-	// !Displays a detailed list of topics
+	/** Displays a detailed list of topics 
+		
+		@attrib name=topics_detail params=name nologin="1" default="0"
+		
+		@param id required type=int
+		@param from optional type=int
+		@param cid optional type=int
+		@param section optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function topics_detail($args = array())
 	{
 		extract($args);
@@ -1441,6 +1602,17 @@ topic");
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_topics params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_topics($args = array())
 	{
 		extract($args);
@@ -1467,8 +1639,20 @@ topic");
 	}
 
 
-	////
-	// !Shows the search form
+	/** Shows the search form 
+		
+		@attrib name=search params=name nologin="1" default="0"
+		
+		@param id optional type=int
+		@param board optional type=int
+		@param section optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function search($args = array())
 	{
 		extract($args);
@@ -1498,8 +1682,17 @@ topic");
 		return $this->parse();
 	}
 
-	////
-	// !Performs the actual search
+	/** Performs the actual search 
+		
+		@attrib name=submit_search params=name nologin="1" all_args="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_search($args = array())
 	{
 		extract($args);
@@ -1598,8 +1791,19 @@ topic");
 
 	}
 
-	////
-	// !Marks all the boards in the current forum as read
+	/** Marks all the boards in the current forum as read 
+		
+		@attrib name=mark_all_read params=name nologin="1" default="0"
+		
+		@param id required type=int
+		@param section optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function mark_all_read($args = array())
 	{
 		extract($args);
@@ -1986,6 +2190,19 @@ topic");
 
 	///
 	// !deletes a topic from the board. What about the comments though?
+	/**  
+		
+		@attrib name=delete_topic params=name default="0"
+		
+		@param forum_id required type=int
+		@param board required type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function del_topic($arr)
 	{
 		extract($arr);
@@ -2003,8 +2220,18 @@ topic");
 
 	}
 
-	////
-	// !Allows to change the topic
+	/** Allows to change the topic 
+		
+		@attrib name=change_topic params=name default="0"
+		
+		@param board required type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change_topic($arr)
 	{
 		extract($arr);
@@ -2023,8 +2250,17 @@ topic");
 	}
 
 
-	////
-	// !Submits the changed topic
+	/** Submits the changed topic 
+		
+		@attrib name=save_topic params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function save_topic($arr)
 	{
 		extract($arr);
@@ -2052,8 +2288,20 @@ topic");
 		return $retval;
 	}
 
-	////
-	// !Deletes a message from a board
+	/** Deletes a message from a board 
+		
+		@attrib name=del_msg params=name default="0"
+		
+		@param comment required type=int
+		@param board required type=int
+		@param section optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function del_msg($arr)
 	{
 		extract($arr);

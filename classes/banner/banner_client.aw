@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/banner/Attic/banner_client.aw,v 1.2 2002/12/05 11:02:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/banner/Attic/banner_client.aw,v 1.3 2004/01/13 16:24:18 kristo Exp $
 
 classload("banner/banner");
 class banner_client extends banner
@@ -12,8 +12,18 @@ class banner_client extends banner
 		$this->lc_load("banner","lc_banner");
 	}
 
-	////
-	// !generates the form for adding a client
+	/** generates the form for adding a client 
+		
+		@attrib name=new params=name default="0"
+		
+		@param parent required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add($arr)
 	{
 		extract($arr);
@@ -23,8 +33,19 @@ class banner_client extends banner
 		return $this->parse();
 	}
 
-	////
-	// !generates the form for changing a client
+	/** generates the form for changing a client 
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required
+		@param parent optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change($arr)
 	{
 		extract($arr);
@@ -43,8 +64,17 @@ class banner_client extends banner
 		return $this->parse();
 	}
 
-	////
-	// !saves changes or adds a client
+	/** saves changes or adds a client 
+		
+		@attrib name=submit params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit($arr)
 	{
 		extract($arr);
@@ -71,8 +101,18 @@ class banner_client extends banner
 		return $this->db_next();
 	}
 
-	////
-	// !allows the user to change the html that is used to show baners.
+	/** allows the user to change the html that is used to show baners. 
+		
+		@attrib name=ch_html params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function ch_html($arr)
 	{
 		extract($arr);
@@ -88,8 +128,18 @@ class banner_client extends banner
 		return $this->parse();
 	}
 
-	////
-	// !saves the html for banner $id
+	/** saves the html for banner $id 
+		
+		@attrib name=submit_html params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_html($arr)
 	{
 		extract($arr);
@@ -97,8 +147,18 @@ class banner_client extends banner
 		return $this->mk_orb("ch_html", array("id" => $id));
 	}
 
-	////
-	// !generates a list of banners for client with stats
+	/** generates a list of banners for client with stats 
+		
+		@attrib name=client_stats params=name default="0"
+		
+		@param client required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function client_stats($arr)
 	{
 		extract($arr);
@@ -182,8 +242,18 @@ class banner_client extends banner
 		return $this->parse();
 	}
 
-	////
-	// !shows stats for client $client on a day-to-day basis
+	/** shows stats for client $client on a day-to-day basis 
+		
+		@attrib name=client_stats_by_day params=name default="0"
+		
+		@param client required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function client_stats_by_day($arr)
 	{
 		extract($arr);
@@ -200,8 +270,18 @@ class banner_client extends banner
 		return $this->parse();
 	}
 
-	////
-	// !shows stats for client $client for days of the week.
+	/** shows stats for client $client for days of the week. 
+		
+		@attrib name=client_stats_by_dow params=name default="0"
+		
+		@param client required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function client_stats_by_dow($arr)
 	{
 		extract($arr);
@@ -218,8 +298,18 @@ class banner_client extends banner
 		return $this->parse();
 	}
 
-	////
-	// !shows stats for client $client for hours of the day.
+	/** shows stats for client $client for hours of the day. 
+		
+		@attrib name=client_stats_by_hr params=name default="0"
+		
+		@param client required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function client_stats_by_hr($arr)
 	{
 		extract($arr);
@@ -238,8 +328,18 @@ class banner_client extends banner
 		return $this->parse();
 	}
 
-	////
-	// !profile stats for banner client $client
+	/** profile stats for banner client $client 
+		
+		@attrib name=stat_by_profile params=name default="0"
+		
+		@param client required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function stat_by_profile($arr)
 	{
 		extract($arr);

@@ -1,141 +1,85 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="db_server_explorer" folder="awmyadmin" extends="class_base">
-		<action name="submit">
+	<class name="db_server_explorer" folder="www/dev/terryf/awcl/classes/awmyadmin" extends="class_base">
+		<action name="submit" >
 			<function name="submit">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="change">
+		<action name="change" >
 			<function name="show">
 				<arguments>
-					<required name="id"/>
-					<optional name="return_url"/>
+					<required name="id" />
+					<optional name="return_url" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="top">
-			<function name="top">
-				<arguments>
-					<required name="id"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="tree">
+		<action name="tree" >
 			<function name="tree">
 				<arguments>
-					<required name="id"/>
+					<required name="id" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="change_conf">
-			<function name="change">
-				<arguments>
-					<required name="id"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="show_server">
+		<action name="show_server" >
 			<function name="show_server">
 				<arguments>
-					<required name="id"/>
-					<required name="server_id"/>
+					<required name="id" />
+					<required name="server_id" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="show_database">
+		<action name="show_database" >
 			<function name="show_database">
 				<arguments>
-					<required name="id"/>
-					<required name="server_id"/>
-					<required name="db_id"/>
+					<required name="id" />
+					<required name="server_id" />
+					<required name="db_id" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="show_table">
+		<action name="admin_index" >
 			<function name="show_table">
 				<arguments>
 					<required name="id" type="int"/>
-					<required name="table"/>
+					<required name="table" />
 					<required name="db_id" type="int"/>
 					<required name="server_id" type="int"/>
-					<optional name="type" default="admin"/>
-					<optional name="sql"/>
+					<optional name="type" default="admin_index"/>
+					<optional name="sql" />
+					<optional name="index" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_admin">
-			<function name="submit_admin">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="admin_col">
-			<function name="show_table">
-				<arguments>
-					<required name="id" type="int"/>
-					<required name="table"/>
-					<required name="db_id" type="int"/>
-					<required name="server_id" type="int"/>
-					<optional name="type" default="admin_col"/>
-					<optional name="sql"/>
-					<optional name="field"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit_admin_col">
+		<action name="submit_admin_col" >
 			<function name="submit_admin_col">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="admin_indexes">
-			<function name="show_table">
+		<action name="submit_admin" >
+			<function name="submit_admin">
 				<arguments>
-					<required name="id" type="int"/>
-					<required name="table"/>
-					<required name="db_id" type="int"/>
-					<required name="server_id" type="int"/>
-					<optional name="type" default="admin_indexes"/>
-					<optional name="sql"/>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_admin_indexes">
+		<action name="submit_admin_indexes" >
 			<function name="submit_admin_indexes">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="admin_index">
-			<function name="show_table">
-				<arguments>
-					<required name="id" type="int"/>
-					<required name="table"/>
-					<required name="db_id" type="int"/>
-					<required name="server_id" type="int"/>
-					<optional name="type" default="admin_index"/>
-					<optional name="sql"/>
-					<optional name="index"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit_admin_index">
+		<action name="submit_admin_index" >
 			<function name="submit_admin_index">
 				<arguments>
 				</arguments>
@@ -144,4 +88,3 @@
 
 	</class>
 </orb>
-		

@@ -1,21 +1,23 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="workflow" folder="workflow" extends="class_base">
-		<action name="view">
+	<class name="workflow" folder="www/dev/terryf/awcl/classes/workflow" extends="class_base">
+		<action name="view" >
 			<function name="view">
 				<arguments>
 					<required name="id" type="int"/>
-					<optional name="group"/>
-					<optional name="subgroup"/>
-					<optional name="treeroot"/>
-					<optional name="sgid"/>
-					<optional name="entity_id"/>
+					<optional name="group" />
+					<optional name="subgroup" />
+					<optional name="treeroot" />
+					<optional name="sgid" />
+					<optional name="entity_id" />
 					<optional name="oid" type="int"/>
+					<optional name="sub_tab" />
+					<optional name="entity_filter" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="process_entity">
+		<action name="process_entity" >
 			<function name="process_entity">
 				<arguments>
 					<required name="id" type="int"/>
@@ -25,6 +27,6 @@
 				</arguments>
 			</function>
 		</action>
+
 	</class>
 </orb>
-		

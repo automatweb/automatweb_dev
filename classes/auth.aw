@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/auth.aw,v 2.5 2003/08/29 14:32:05 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/auth.aw,v 2.6 2004/01/13 16:24:12 kristo Exp $
 // auth.aw - authentication functions
 class auth extends aw_template 
 {
@@ -8,8 +8,17 @@ class auth extends aw_template
 		$this->init("automatweb/auth");
 	}
 
-	////
-	// !Generates the login form
+	/** Generates the login form 
+		
+		@attrib name=show_login params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show_login($args = array())
 	{
 		$this->read_adm_template("login.tpl");
@@ -25,10 +34,19 @@ class auth extends aw_template
 		return $this->parse();
 	}
 
-	////
-	// !Performs the actual login
-	// uhuh. yeah. ok, and why texactly is this duplicated here? 
-	// the users_user::login version seems to be much more secured to me - terryf
+	/** Performs the actual login 
+		
+		@attrib name=login params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+		uhuh. yeah. ok, and why texactly is this duplicated here?
+		the users_user::login version seems to be much more secured to me - terryf
+
+	**/
 	function login($args = array())
 	{
 		global $uid;

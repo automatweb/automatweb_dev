@@ -7,6 +7,17 @@ class aip_ctl_list extends aw_template
 		$this->init("aip_ctl_list");
 	}
 
+	/**  
+		
+		@attrib name=list params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_list($arr)
 	{
 		extract($arr);
@@ -69,6 +80,17 @@ class aip_ctl_list extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=upload params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function upload($arr)
 	{
 		extract($arr);
@@ -120,6 +142,17 @@ class aip_ctl_list extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_upload params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_upload($arr)
 	{
 		extract($arr);
@@ -185,6 +218,17 @@ class aip_ctl_list extends aw_template
 		return $this->mk_my_orb("upload", array(), "", false, true);
 	}
 
+	/**  
+		
+		@attrib name=log params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_log($arr)
 	{
 		extract($arr);

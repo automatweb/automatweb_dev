@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.26 2003/11/07 12:27:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.27 2004/01/13 16:24:15 kristo Exp $
 
 define("ST_TABLE",0);
 define("ST_CELL",1);
@@ -72,6 +72,18 @@ class style extends aw_template
 	}
 
 	// parent
+	/**  
+		
+		@attrib name=list params=name default="0"
+		
+		@param parent required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function glist($arr)
 	{
 		extract($arr);
@@ -96,6 +108,30 @@ class style extends aw_template
 	}
 
 	// parent
+	/**  
+		
+		@attrib name=add params=name default="0"
+		
+		@param parent required acl="add"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	/**  
+		
+		@attrib name=new params=name default="0"
+		
+		@param parent required acl="add"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add($arr)
 	{
 		extract($arr);
@@ -108,6 +144,18 @@ class style extends aw_template
 	}
 
 	// parent, id
+	/**  
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required acl="view;edit"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change($arr)
 	{
 		extract($arr);
@@ -202,6 +250,17 @@ class style extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_sel params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_sel($arr)
 	{
 		// lisame 6ige tyybiga
@@ -215,6 +274,17 @@ class style extends aw_template
 		return $this->mk_orb("change", array("parent" => $arr["parent"], "id" => $id));
 	}
 
+	/**  
+		
+		@attrib name=submit params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit($arr)
 	{
 		extract($arr);
@@ -228,6 +298,19 @@ class style extends aw_template
 		return $this->mk_orb("change",array("parent" => $parent, "id" => $id));
 	}
 
+	/**  
+		
+		@attrib name=delete params=name default="0"
+		
+		@param parent required
+		@param id required acl="delete"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function delete($arr)
 	{
 		extract($arr);

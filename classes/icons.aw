@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/icons.aw,v 2.25 2003/11/10 19:19:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/icons.aw,v 2.26 2004/01/13 16:24:14 kristo Exp $
 
 class icons extends aw_template
 {
@@ -10,6 +10,20 @@ class icons extends aw_template
 		lc_load("definition");
 	}
 
+	/**  
+		
+		@attrib name=new params=name default="0"
+		
+		@param parent required
+		@param alias_to optional
+		@param return_url optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_add($arr)
 	{
 		extract($arr);
@@ -29,6 +43,19 @@ class icons extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=icon_db params=name default="0"
+		
+		@param page optional
+		@param grp optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function gen_db($arr)
 	{	
 		extract($arr);
@@ -119,6 +146,17 @@ class icons extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=add_icon params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add()
 	{
 		$this->mk_path(0,sprintf(LC_ICONS_SITE_CONFIG_ADD,$this->mk_my_orb("config", array(),"config"),$this->mk_my_orb("icon_db")));
@@ -130,6 +168,17 @@ class icons extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=add_zip params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add_zip()
 	{
 		$this->mk_path(0,sprintf(LC_ICONS_SITE_CONFIG_ADD,$this->mk_my_orb("config", array(),"config"),$this->mk_my_orb("icon_db")));
@@ -141,6 +190,17 @@ class icons extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_icon($arr)
 	{
 		extract($arr);
@@ -205,6 +265,31 @@ class icons extends aw_template
 		return $this->mk_my_orb("change", array("id" => $id));
 	}
 
+	/**  
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required
+		@param return_url optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	/**  
+		
+		@attrib name=change_icon params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change($arr)
 	{
 		extract($arr);
@@ -268,6 +353,18 @@ class icons extends aw_template
 		return $ret;
 	}
 
+	/**  
+		
+		@attrib name=show params=name default="0"
+		
+		@param id required type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show()
 	{
 		$arg = func_get_arg(0);
@@ -301,6 +398,19 @@ class icons extends aw_template
 		return $this->cfg["baseurl"]."/automatweb/icon.".$this->cfg["ext"]."?id=".$row["id"];
 	}
 
+	/**  
+		
+		@attrib name=delete_icon params=name default="0"
+		
+		@param id required
+		@param page optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function delete($arr)
 	{
 		extract($arr);
@@ -308,6 +418,17 @@ class icons extends aw_template
 		header("Location: ".$this->mk_my_orb("icon_db", array("page" => $page)));
 	}
 
+	/**  
+		
+		@attrib name=del_icons params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function del_icons($arr)
 	{
 		extract($arr);
@@ -321,6 +442,22 @@ class icons extends aw_template
 		return $this->mk_my_orb("icon_db");
 	}
 
+	/**  
+		
+		@attrib name=sel_icon params=name default="0"
+		
+		@param rtype required
+		@param rid required
+		@param sstring optional
+		@param sstring2 optional
+		@param grp optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function sel_icon($arr)
 	{
 		extract($arr);
@@ -413,6 +550,17 @@ class icons extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=export_icons params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function export($arr)
 	{
 		extract($arr);
@@ -442,6 +590,18 @@ class icons extends aw_template
 		return $ret;
 	}
 
+	/**  
+		
+		@attrib name=import_icons params=name default="0"
+		
+		@param level optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function import($arr)
 	{
 		extract($arr);
@@ -510,6 +670,17 @@ class icons extends aw_template
 		return $row["id"];
 	}
 
+	/**  
+		
+		@attrib name=submit_icon_zip params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function upload_zip($arr)
 	{
 		extract($arr);
@@ -681,8 +852,17 @@ class icons extends aw_template
 		return $c_file;
 	}
 
-	////
-	// !aads the selected icons to a new group
+	/** aads the selected icons to a new group 
+		
+		@attrib name=grp_icons params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function grp_icons($arr)
 	{
 		extract($arr);
@@ -693,8 +873,18 @@ class icons extends aw_template
 		return $this->mk_my_orb("ic_grp_name", array("ics"=> $ics));
 	}
 
-	////
-	// !asks user new grp name
+	/** asks user new grp name 
+		
+		@attrib name=ic_grp_name params=name default="0"
+		
+		@param ics required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function ic_grp_name($arr)
 	{
 		extract($arr);
@@ -714,8 +904,17 @@ class icons extends aw_template
 		return $this->parse();
 	}
 
-	////
-	// !creates the new group of icons
+	/** creates the new group of icons 
+		
+		@attrib name=submit_ic_grp params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_ic_grp($arr)
 	{
 		extract($arr);
@@ -730,8 +929,17 @@ class icons extends aw_template
 		return $this->mk_my_orb("icon_db", array("grp" => $grp));
 	}
 
-	////
-	// !deletes icon group $id
+	/** deletes icon group $id 
+		
+		@attrib name=del_grp params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function del_grp($arr)
 	{
 		extract($arr);
@@ -792,6 +1000,17 @@ class icons extends aw_template
 		return aw_ini_get("icons.server")."/prog_".$fid.".gif";
 	}
 
+	/**  
+		
+		@attrib name=save_class_icons params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function save_class_icons()
 	{
 		classload("icons");

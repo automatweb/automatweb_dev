@@ -504,10 +504,22 @@ class linklist extends class_base
 	}
 
 
-	////
-	// !linklist, currently shows a predefined catalogs at the top and below links of the active catalog or
-	// form output maching the serach criteria
-	//
+	/** linklist, currently shows a predefined catalogs at the top and below links of the active catalog or 
+		
+		@attrib name=show params=name default="0"
+		
+		@param id optional
+		@param cd optional
+		@param search optional
+		
+		@returns
+		
+		
+		@comment
+		form output maching the serach criteria
+		
+
+	**/
 	function show($arr)
 	{
 	return 'jee';
@@ -886,10 +898,21 @@ class linklist extends class_base
 		return $this->show(array('id' => $alias['target']));
 	}
 
-	////
-	// !this adds a hit to the external link (and possibly some information about user) and redirects user to the url,
-	// browser's back button does not return to this page :)
-	//
+	/** this adds a hit to the external link (and possibly some information about user) and redirects user to the url, 
+		
+		@attrib name=goto params=name default="0"
+		
+		@param id optional
+		@param lkid optional
+		
+		@returns
+		
+		
+		@comment
+		browser's back button does not return to this page :)
+		
+
+	**/
 	function link_redirect($arr)
 	{
 		extract($arr); //id = link id

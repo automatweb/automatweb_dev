@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_import.aw,v 1.2 2002/12/05 11:02:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_import.aw,v 1.3 2004/01/13 16:24:28 kristo Exp $
 classload("formgen/form_base");
 class form_import extends form_base
 {
@@ -11,8 +11,18 @@ class form_import extends form_base
 		$this->lc_load("form","lc_form");
 	}
 
-	////
-	// !shows the form which allows user to select a csv file and upload it.
+	/** shows the form which allows user to select a csv file and upload it. 
+		
+		@attrib name=import_form_entries params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function import_form_entries($arr)
 	{
 		extract($arr);
@@ -26,8 +36,17 @@ class form_import extends form_base
 		return $this->parse();
 	}
 
-	////
-	// !receives the uploaded file and moves it into a temporary directory for further processing
+	/** receives the uploaded file and moves it into a temporary directory for further processing 
+		
+		@attrib name=submit_form params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_form($arr)
 	{
 		extract($arr);
@@ -46,9 +65,20 @@ class form_import extends form_base
 		return $this->mk_my_orb("select_form_els", array("id" => $id, "file" => $fname));
 	}
 
-	////
-	// !Step 2 of import, shows a combined table of the fields from the csv file and and all form
-	// elements
+	/** Step 2 of import, shows a combined table of the fields from the csv file and and all form 
+		
+		@attrib name=select_form_els params=name default="0"
+		
+		@param id required
+		@param file required
+		
+		@returns
+		
+		
+		@comment
+		elements
+
+	**/
 	function select_form_els($arr)
 	{
 		extract($arr);
@@ -109,8 +139,17 @@ class form_import extends form_base
 		return $this->parse();
 	}
 
-	////
-	// !here we have gathered all the necessary info and must perform the real import
+	/** here we have gathered all the necessary info and must perform the real import 
+		
+		@attrib name=submit_form_els params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_form_els($arr)
 	{
 		extract($arr);
@@ -222,6 +261,18 @@ class form_import extends form_base
 		return $this->mk_my_orb("change", array("id" => $id),"form");
 	}
 
+	/**  
+		
+		@attrib name=import_chain_entries params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function import_chain_entries($arr)
 	{
 		extract($arr);
@@ -235,6 +286,17 @@ class form_import extends form_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_chain params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_chain($arr)
 	{
 		extract($arr);
@@ -252,6 +314,19 @@ class form_import extends form_base
 		return $this->mk_my_orb("select_chain_els", array("id" => $id, "file" => $fname));
 	}
 
+	/**  
+		
+		@attrib name=select_chain_els params=name default="0"
+		
+		@param id required
+		@param file required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function select_chain_els($arr)
 	{
 		extract($arr);
@@ -311,8 +386,17 @@ class form_import extends form_base
 		return $this->parse();
 	}
 
-	////
-	// !here we have gathered all the necessary info and must perform the real import
+	/** here we have gathered all the necessary info and must perform the real import 
+		
+		@attrib name=submit_chain_els params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_chain_els($arr)
 	{
 		extract($arr);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.15 2004/01/13 15:47:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.16 2004/01/13 16:24:21 kristo Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -1048,6 +1048,17 @@ class forum_v2 extends class_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=add_topic params=name all_args="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add_topic($arr)
 	{
 		$this->read_template("add_topic.tpl");
@@ -1066,6 +1077,17 @@ class forum_v2 extends class_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_topic params=name all_args="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_topic($arr)
 	{
 		$t = get_instance("contentmgmt/forum/forum_topic");
@@ -1083,6 +1105,17 @@ class forum_v2 extends class_base
 		));
 	}
 	
+	/**  
+		
+		@attrib name=submit_comment params=name all_args="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_comment($arr)
 	{
 		$t = get_instance("contentmgmt/forum/forum_comment");

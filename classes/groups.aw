@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.19 2003/08/27 13:47:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.20 2004/01/13 16:24:14 kristo Exp $
 load_vcl("table");
 
 session_register("group_folders");
@@ -299,6 +299,17 @@ class groups extends users_user
 		return $ret;
 	}
 
+	/**  
+		
+		@attrib name=gen_pick_list params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function gen_pick_list()
 	{
 		global $parent,$all,$oid,$groups;
@@ -325,6 +336,17 @@ class groups extends users_user
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_acl_groups params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_acl_groups($arr = array())
 	{
 		$acl = get_instance("acl");
@@ -509,6 +531,18 @@ class groups extends users_user
 		}
 	}
 
+	/**  
+		
+		@attrib name=list_grps_user params=name default="0"
+		
+		@param parent optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function list_grps_user($arr)
 	{
 		extract($arr);
@@ -550,6 +584,18 @@ class groups extends users_user
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=add_user_grp params=name default="0"
+		
+		@param parent required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add_user_grp($arr)
 	{
 		extract($arr);
@@ -561,6 +607,19 @@ class groups extends users_user
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=change_user_grp params=name default="0"
+		
+		@param id required
+		@param parent required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change_user_grp($arr)
 	{
 		extract($arr);
@@ -577,6 +636,17 @@ class groups extends users_user
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_user_grp params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_user_grp($arr)
 	{
 		extract($arr);
@@ -631,6 +701,18 @@ class groups extends users_user
 		));
 	}
 
+	/**  
+		
+		@attrib name=grp_members params=name default="0"
+		
+		@param gid required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function grp_members($arr)
 	{
 		extract($arr);
@@ -645,6 +727,18 @@ class groups extends users_user
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=user_grp_members params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function user_grp_members($arr)
 	{
 		extract($arr);
@@ -733,6 +827,17 @@ class groups extends users_user
 		}
 	}
 
+	/**  
+		
+		@attrib name=submit_user_grp_members params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_user_grp_members($arr)
 	{
 		extract($arr);
@@ -741,6 +846,17 @@ class groups extends users_user
 		return $this->mk_my_orb("list_grps_user", array("parent" => $gp["parent"]));
 	}
 
+	/**  
+		
+		@attrib name=submit_grp_members params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_grp_members($arr)
 	{
 		extract($arr);
@@ -749,6 +865,19 @@ class groups extends users_user
 		return $this->mk_orb("grp_members", array("gid" => $arr["gid"]));
 	}
 
+	/**  
+		
+		@attrib name=delete_user_grp params=name default="0"
+		
+		@param id required
+		@param parent required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function delete_user_grp($arr)
 	{
 		extract($arr);
@@ -756,6 +885,17 @@ class groups extends users_user
 		header("Location: ".$this->mk_my_orb("list_grps_user", array("parent" => $parent)));
 	}
 
+	/**  
+		
+		@attrib name=submit_user_grp_priorities params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_user_grp_priorities($arr)
 	{
 		extract($arr);
@@ -773,6 +913,18 @@ class groups extends users_user
 	}
 
 	// hm. listib koik grupid?
+	/**  
+		
+		@attrib name=list_grps params=name default="0"
+		
+		@param parent required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function list_grps($arr)
 	{
 		extract($arr);
@@ -863,6 +1015,18 @@ class groups extends users_user
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_priorities params=name default="0"
+		
+		@param parent required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_priorities($arr)
 	{
 		extract($arr);
@@ -878,6 +1042,19 @@ class groups extends users_user
 		return $this->mk_orb("list_grps", array("parent" => $parent));
 	}
 
+	/**  
+		
+		@attrib name=change params=name default="0"
+		
+		@param gid required
+		@param parent required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change($arr)
 	{
 		extract($arr);
@@ -916,6 +1093,17 @@ class groups extends users_user
 		}
 	}
 
+	/**  
+		
+		@attrib name=submit_grp params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_grp($arr)
 	{
 		extract($arr);
@@ -1012,6 +1200,19 @@ class groups extends users_user
 	}
 
 	// seda jälle kasutab orb
+	/**  
+		
+		@attrib name=add params=name default="0"
+		
+		@param parent required
+		@param search_form optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add($arr)
 	{
 		extract($arr);
@@ -1050,6 +1251,19 @@ class groups extends users_user
 		}
 	}
 
+	/**  
+		
+		@attrib name=delete params=name default="0"
+		
+		@param parent required
+		@param gid required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function delete_grp($arr)
 	{
 		extract($arr);
@@ -1057,6 +1271,18 @@ class groups extends users_user
 		header("Location: ".$this->mk_orb("list_grps", array("parent" => $parent)));
 	}
 
+	/**  
+		
+		@attrib name=mk_grpframe params=name default="0"
+		
+		@param parent required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function mk_grpframe($arr)
 	{
 		extract($arr);

@@ -1,6 +1,6 @@
 <?php
 // poll_ng.aw - New generation poll
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll_ng.aw,v 1.5 2003/12/04 16:37:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll_ng.aw,v 1.6 2004/01/13 16:24:14 kristo Exp $
 
 /*
 
@@ -120,6 +120,21 @@ class poll_ng extends class_base
 		return $retval;
 	}
 
+	/**  
+		
+		@attrib name=vote params=name nologin="1" default="0"
+		
+		@param oid required type=int
+		@param poll required type=int
+		@param choice required type=int
+		@param section optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function vote($args = array())
 	{
 		// XXX: block voting robots, IP check, etc ...

@@ -39,6 +39,17 @@ class export extends aw_template
 		$this->hash2url[2]["http://editwww3.ut.ee/index.aw?set_lang_id=2"] = "english";
 	}
 
+	/**  
+		
+		@attrib name=export params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_export($arr)
 	{
 		extract($arr);
@@ -101,6 +112,17 @@ class export extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_export params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_export($arr)
 	{
 		extract($arr);
@@ -184,6 +206,18 @@ class export extends aw_template
 		$this->changed_files = array();
 	}
 
+	/**  
+		
+		@attrib name=do_export params=name nologin="1" default="0"
+		
+		@param rule_id optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function do_export($arr)
 	{
 		extract($arr);
@@ -888,6 +922,18 @@ class export extends aw_template
 //		echo "rule = <pre>", var_dump($this->loaded_rule),"</pre> <br />";
 	}
 
+	/**  
+		
+		@attrib name=new params=name default="0"
+		
+		@param parent required acl="add"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add_rule($arr)
 	{
 		extract($arr);
@@ -909,6 +955,17 @@ class export extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_rule params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_rule($arr)
 	{
 		extract($arr);
@@ -963,6 +1020,18 @@ class export extends aw_template
 		return $this->mk_my_orb("change", array("id" => $id));
 	}
 
+	/**  
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required acl="edit;view"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change_rule($arr)
 	{
 		extract($arr);
@@ -1603,6 +1672,18 @@ class export extends aw_template
 		return $found; 
 	}
 
+	/**  
+		
+		@attrib name=stop_rule params=name default="0"
+		
+		@param id optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function stop_rule($arr)
 	{
 		extract($arr);
@@ -1612,6 +1693,17 @@ class export extends aw_template
 		die("Kirjutasin expordi stop flagi faili ".aw_ini_get("server.tmpdir")."/aw.export.stop<br /><a href='".$this->mk_my_orb("change", array("id" => $id))."'>Tagasi</a>");
 	}
 
+	/**  
+		
+		@attrib name=pick_active_version params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function pick_active($arr)
 	{
 		classload("html");
@@ -1656,6 +1748,17 @@ class export extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_pick_active params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_pick_active($arr)
 	{
 		extract($arr);
@@ -1720,6 +1823,18 @@ class export extends aw_template
 		echo "finished! <br />\n";
 	}
 
+	/**  
+		
+		@attrib name=view_log params=name default="0"
+		
+		@param page optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function view_log($arr)
 	{
 		extract($arr);
@@ -1789,6 +1904,19 @@ class export extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=view_log_entry params=name default="0"
+		
+		@param id required
+		@param type optional default="errors"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function view_log_entry($arr)
 	{
 		classload("html");
@@ -1880,6 +2008,18 @@ class export extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=del_log_entry params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function del_log_entry($arr)
 	{
 		extract($arr);
@@ -1887,6 +2027,18 @@ class export extends aw_template
 		return $this->mk_my_orb("view_log");
 	}
 
+	/**  
+		
+		@attrib name=delete_version params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function delete_version($arr)
 	{
 		extract($arr);
@@ -1971,6 +2123,17 @@ class export extends aw_template
 		$this->fetch_and_save_page("http://editwww.ut.ee/index.aw?set_lang_id=2", 2, true);
 	}
 
+	/**  
+		
+		@attrib name=iexport params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function iexport($arr)
 	{
 		extract($arr);
@@ -1985,6 +2148,18 @@ class export extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_iexport params=name default="0"
+		
+		@param urls optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_iexport($arr)
 	{
 		extract($arr);

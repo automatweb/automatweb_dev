@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/foreach_site.aw,v 1.2 2003/08/01 13:27:46 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/foreach_site.aw,v 1.3 2004/01/13 16:24:17 kristo Exp $
 // foreach_site.aw - foreach site 
 
 class foreach_site extends class_base
@@ -11,6 +11,17 @@ class foreach_site extends class_base
 		));
 	}
 
+	/**  
+		
+		@attrib name=exec params=name default="1"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function exec($arr)
 	{
 		$this->read_template("exec.tpl");
@@ -21,6 +32,17 @@ class foreach_site extends class_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_exec params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_exec($arr)
 	{
 		extract($arr);

@@ -26,6 +26,17 @@ class popup_objmgr extends class_base
 
 	}
 
+	/**  
+		
+		@attrib name=search params=name all_args="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function search($args = array())
 	{
 		extract($args);

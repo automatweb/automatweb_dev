@@ -28,6 +28,17 @@ class menu_separator extends class_base
 		return $this->show(array('id' => $alias['target']));
 	}
 
+	/**  
+		
+		@attrib name=show params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show($arr)
 	{
 		return '<hr />';

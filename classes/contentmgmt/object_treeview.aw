@@ -66,6 +66,18 @@ class object_treeview extends class_base
 		return $this->show(array('id' => $args['alias']['target']));
 	}
 
+	/**  
+		
+		@attrib name=show params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show($arr)
 	{
 		extract($arr);
@@ -260,6 +272,17 @@ class object_treeview extends class_base
 		return $res;
 	}
 
+	/**  
+		
+		@attrib name=submit_show params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_show($arr)
 	{
 		extract($arr);
@@ -690,6 +713,19 @@ class object_treeview extends class_base
 		return $this->parse().$tb->get_toolbar();
 	}
 
+	/**  
+		
+		@attrib name=delete params=name default="0"
+		
+		@param id required
+		@param return_url required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function obj_delete($arr)
 	{
 		error::throw_if(!$arr["id"], array(

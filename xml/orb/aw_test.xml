@@ -1,40 +1,20 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="aw_test">
-		<action name="new">
-			<function name="change">
-				<arguments>
-					<required name="parent" type="int" acl="add"/>
-				</arguments>
-			</function>
-		</action>
-		
-		<action name="change">
+	<class name="aw_test" folder="www/dev/terryf/awcl/classes" extends="aw_template">
+		<action name="change" >
 			<function name="change">
 				<arguments>
 					<required name="id" type="int"/>
 				</arguments>
 			</function>
 		</action>
-		
-		<action name="submit">
-			<function name="submit"/>
+
+		<action name="submit" >
+			<function name="submit">
+				<arguments>
+				</arguments>
+			</function>
 		</action>
 
-		<action name="test">
-			<function name="test">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-		
-		<action name="send">
-			<function name="send">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-		
 	</class>
 </orb>
-		

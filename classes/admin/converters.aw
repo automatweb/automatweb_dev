@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.27 2004/01/06 11:43:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.28 2004/01/13 16:24:17 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -12,6 +12,17 @@ class converters extends aw_template
 
 	}
 
+	/**  
+		
+		@attrib name=menu_convimages params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function menu_convimages()
 	{
 		$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu on menu.id = objects.oid WHERE class_id = ".CL_PSEUDO." AND status != 0");
@@ -103,6 +114,17 @@ class converters extends aw_template
 		}
 	}
 	
+	/**  
+		
+		@attrib name=menu_reset_template_sets params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function menu_reset_template_sets()
 	{
 		$q = "SELECT oid FROM objects WHERE class_id = 1";
@@ -126,6 +148,17 @@ class converters extends aw_template
 		}
 	}
 	
+	/**  
+		
+		@attrib name=promo_convert params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function promo_convert($args = array())
 	{
 		$q = sprintf("SELECT oid,name,comment,metadata,menu.sss FROM objects LEFT JOIN menu ON (objects.oid = menu.id) WHERE class_id = %d AND site_id = %d",CL_PROMO,aw_ini_get("site_id"));
@@ -270,6 +303,17 @@ class converters extends aw_template
 
 	}
 	
+	/**  
+		
+		@attrib name=convert_aliases params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function convert_aliases()
 	{
 		$q = "SELECT target,source,type,relobj_id FROM aliases LEFT JOIN objects ON (aliases.relobj_id = objects.oid) WHERE objects.class_id = 179 AND relobj_id != 0";
@@ -294,6 +338,18 @@ class converters extends aw_template
 	}
 
 	// parent argument should specify the folder under which to create the periods
+	/**  
+		
+		@attrib name=convert_periods params=name default="0"
+		
+		@param parent optional type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function convert_periods($args)
 	{
 		$tableinfo = $this->db_get_table("periods");
@@ -392,6 +448,17 @@ class converters extends aw_template
 		
 	}
 
+	/**  
+		
+		@attrib name=groups_convert params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function groups_convert()
 	{
 		set_time_limit(0);
@@ -688,6 +755,17 @@ class converters extends aw_template
 	}
 
 	///////////////////////////////
+	/**  
+		
+		@attrib name=convert_acl_to_classbase params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function convert_acl_to_classbase()
 	{
 		// go over all acl objects and make aliases for the selected roles/chains/groups
@@ -752,6 +830,17 @@ class converters extends aw_template
 		die("Valmis!");
 	}
 
+	/**  
+		
+		@attrib name=convert_fg_tables_deleted params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function convert_fg_tables_deleted()
 	{
 		$ol = $this->list_objects(array(
@@ -789,6 +878,17 @@ class converters extends aw_template
 		die();
 	}
 
+	/**  
+		
+		@attrib name=convert_really_old_aliases params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function convert_really_old_aliases()
 	{
 		echo "converting really old image aliases... <br />\n\n<br />";
@@ -828,6 +928,17 @@ class converters extends aw_template
 		}
 	}
 
+	/**  
+		
+		@attrib name=convert_copy_makes_brother params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function convert_copy_makes_brother()
 	{
 		$this->_copy_makes_brother_fg();
@@ -871,6 +982,17 @@ class converters extends aw_template
 		}
 	}
 
+	/**  
+		
+		@attrib name=convert_seealso_menus params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function convert_seealso_menus()
 	{
 		/*
@@ -952,9 +1074,18 @@ class converters extends aw_template
 
 	}
 
-	////
-	// !creates the active_documents list for each folder in the system. the shitty part about this is, of course that 
-	// all section modifiers will be fucked. 
+	/** creates the active_documents list for each folder in the system. the shitty part about this is, of course that 
+		
+		@attrib name=convert_active_documents_list params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+		all section modifiers will be fucked.
+
+	**/
 	function convert_active_documents_list()
 	{
 		set_time_limit(0);
@@ -975,6 +1106,18 @@ class converters extends aw_template
 		die("all done!");
 	}
 
+	/**  
+		
+		@attrib name=convert_doc_templates params=name nologin="1" default="0"
+		
+		@param parent required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function convert_doc_templates($arr)
 	{
 		$parent = $arr["parent"];
@@ -1004,6 +1147,17 @@ class converters extends aw_template
 		}
 	}
 
+	/**  
+		
+		@attrib name=convert_menu_images params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function convert_menu_images($arr)
 	{
 		echo "converting menu image aliases<br>\n";

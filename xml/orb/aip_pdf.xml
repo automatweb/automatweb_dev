@@ -1,67 +1,67 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="aip_pdf">
-		<action name="listfiles">
+	<class name="aip_pdf" folder="www/dev/terryf/awcl/classes" extends="aw_template">
+		<action name="listfiles" >
 			<function name="listfiles">
 				<arguments>
-					<optional name="section"/>
+					<optional name="section" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_list">
+		<action name="submit_list" >
 			<function name="submit_list">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="log">
+		<action name="log" >
 			<function name="orb_log">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="view_log">
+		<action name="view_log" >
 			<function name="view_log">
 				<arguments>
-					<required name="id"/>
+					<required name="id" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="configure">
+		<action name="configure" >
 			<function name="configure">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_configure">
+		<action name="submit_configure" >
 			<function name="submit_configure">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="report">
+		<action name="report" >
 			<function name="report">
 				<arguments>
-					<optional name="changed"/>
-					<optional name="added"/>
-					<optional name="nochange"/>
-					<optional name="deleted"/>
+					<optional name="changed" />
+					<optional name="added" />
+					<optional name="nochange" />
+					<optional name="deleted" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_report">
+		<action name="submit_report" >
 			<function name="submit_report">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
+
 	</class>
 </orb>
-		

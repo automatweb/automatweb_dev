@@ -145,6 +145,18 @@ class property_group extends aw_template
 		return PROP_OK;
 	}
 
+	/**  
+		
+		@attrib name=generate params=name default="0"
+		
+		@param id required type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function generate($args = array())
 	{
 		$id = $args["id"];

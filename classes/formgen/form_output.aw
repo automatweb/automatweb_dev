@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.9 2003/04/23 14:21:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.10 2004/01/13 16:24:28 kristo Exp $
 classload("formgen/form_base");
 class form_output extends form_base 
 {
@@ -16,9 +16,19 @@ class form_output extends form_base
 		$this->style_instance = get_instance("style");
 	}
 
-	////
-	// !Kuvab vormi, kust saab valida väljundi tüüpide vahel
-	// regrettably I had to call this add, or ORB will break
+	/** Kuvab vormi, kust saab valida väljundi tüüpide vahel 
+		
+		@attrib name=new params=name default="0"
+		
+		@param parent required acl="add"
+		
+		@returns
+		
+		
+		@comment
+		regrettably I had to call this add, or ORB will break
+
+	**/
 	function add($args = array())
 	{
 		extract($args);
@@ -31,8 +41,17 @@ class form_output extends form_base
 		return $this->parse();
 	}
 
-	////
-	// !Soltuvalt eelnevast vormist valitud tüübile teeb redirecti oigesse kohta
+	/** Soltuvalt eelnevast vormist valitud tüübile teeb redirecti oigesse kohta 
+		
+		@attrib name=choose_output_type params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function choose_output_type($args = array())
 	{
 		extract($args);
@@ -47,8 +66,31 @@ class form_output extends form_base
 		return $url;
 	}
 
-	////
-	//
+	/**  
+		
+		@attrib name=add_xml params=name default="0"
+		
+		@param parent required
+		
+		@returns
+		
+		
+		@comment
+		
+
+	**/
+	/**  
+		
+		@attrib name=edit_xml params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function edit_xml($args = array())
 	{
 		extract($args);
@@ -75,8 +117,18 @@ class form_output extends form_base
 		return $this->parse();
 	}
 
-	////
-	// 
+	/**  
+		
+		@attrib name=submit_xml params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+		
+
+	**/
 	function submit_xml($args = array())
 	{
 		extract($args);
@@ -109,8 +161,19 @@ class form_output extends form_base
 		return $url;
 	}
 
-	////
-	// 
+	/**  
+		
+		@attrib name=xml_op params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+		
+
+	**/
 	function xml_op($args = array())
 	{
 		$this->mk_path($id,"Koosta XML väljund");
@@ -200,6 +263,17 @@ class form_output extends form_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_xml_output params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_xml_output($args = array())
 	{
 		extract($args);
@@ -221,8 +295,18 @@ class form_output extends form_base
 		return $this->mk_my_orb("xml_op",array("id" => $id));
 	}
 
-	////
-	// !Kuvab vormi, kust saab valida HTML väljundi jaoks vajalikud atribuudid.
+	/** Kuvab vormi, kust saab valida HTML väljundi jaoks vajalikud atribuudid. 
+		
+		@attrib name=add_html params=name default="0"
+		
+		@param parent required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add_html($arr)
 	{
 		extract($arr);
@@ -242,8 +326,17 @@ class form_output extends form_base
 		return $this->parse();
 	}
 
-	////
-	// !Kuvab vormi, kust saab valida HTML väljundi jaoks vajalikud atribuudid. ja nyyd ka juba valitud alusformide j2rjekorda
+	/** Kuvab vormi, kust saab valida HTML väljundi jaoks vajalikud atribuudid. ja nyyd ka juba valitud alusformide j2rjekorda 
+		
+		@attrib name=add_html_step2 params=name all_args="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add_html_step2($arr)
 	{
 		extract($arr);
@@ -299,6 +392,17 @@ class form_output extends form_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit($arr)
 	{
 		extract($arr);
@@ -380,6 +484,18 @@ class form_output extends form_base
 		return $this->mk_orb("change", array("id" => $id));
 	}
 
+	/**  
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required acl="edit;view"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change($arr)
 	{
 		extract($arr);
@@ -424,8 +540,18 @@ class form_output extends form_base
 		echo "</table>";
 	}
 
-	////
-	// !generates the grid used in changing the output $id
+	/** generates the grid used in changing the output $id 
+		
+		@attrib name=admin_op params=name default="0"
+		
+		@param id required acl="edit;view"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function admin($arr)
 	{
 		extract($arr);
@@ -585,8 +711,18 @@ class form_output extends form_base
 		return $this->parse();
 	}
 
-	////
-	// !Wrapper for including alias manager in form output editing
+	/** Wrapper for including alias manager in form output editing 
+		
+		@attrib name=aliasmgr params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function aliasmgr($args = array())
 	{
 		extract($args);
@@ -599,6 +735,20 @@ class form_output extends form_base
 
 	}
 
+	/**  
+		
+		@attrib name=add_n_rows params=name default="0"
+		
+		@param id required acl="edit;view"
+		@param after optional
+		@param count optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add_n_rows($arr)
 	{
 		extract($arr);
@@ -609,6 +759,20 @@ class form_output extends form_base
 		return $this->mk_my_orb("admin_op", array("id" => $id));
 	}
 
+	/**  
+		
+		@attrib name=add_n_cols params=name default="0"
+		
+		@param id required acl="edit;view"
+		@param after optional
+		@param count optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add_n_cols($arr)
 	{
 		extract($arr);
@@ -619,8 +783,18 @@ class form_output extends form_base
 		return $this->mk_my_orb("admin_op", array("id" => $id));
 	}
 
-	////
-	// !saves the output grid ($id)
+	/** saves the output grid ($id) 
+		
+		@attrib name=submit_admin params=name default="0"
+		
+		@param id required acl="edit;view"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_admin($arr)
 	{
 		extract($arr);
@@ -681,8 +855,17 @@ class form_output extends form_base
 		return $this->mk_orb("admin_op", array("id" => $id));
 	}
 
-	////
-	// !saves cell and contained element's properties
+	/** saves cell and contained element's properties 
+		
+		@attrib name=submit_admin_cell params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_admin_cell($arr)
 	{
 		extract($arr);
@@ -726,8 +909,19 @@ class form_output extends form_base
 		$this->_log(ST_FORM_OP, SA_CHANGE,sprintf(LC_FORM_OUTPUT_CHANGED_STYLE,$name), $id);
 	}
 
-	////
-	// !adds a column to output $id after $after
+	/** adds a column to output $id after $after 
+		
+		@attrib name=add_col params=name default="0"
+		
+		@param id required acl="edit;view"
+		@param after optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add_col($arr)
 	{
 		extract($arr);
@@ -755,8 +949,19 @@ class form_output extends form_base
 		return $orb;
 	}
 
-	////
-	// !deletes the column $col of output $id
+	/** deletes the column $col of output $id 
+		
+		@attrib name=del_col params=name default="0"
+		
+		@param id required acl="edit;view"
+		@param col optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function del_col($arr)
 	{
 		extract($arr);
@@ -784,8 +989,19 @@ class form_output extends form_base
 		return $orb;
 	}
 
-	////
-	// !adds a row to output $id after row $after
+	/** adds a row to output $id after row $after 
+		
+		@attrib name=add_row params=name default="0"
+		
+		@param id required acl="edit;view"
+		@param after optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add_row($arr)
 	{
 		extract($arr);
@@ -813,8 +1029,19 @@ class form_output extends form_base
 		return $orb;
 	}
 
-	////
-	// !deletes row $row of output $id 
+	/** deletes row $row of output $id 
+		
+		@attrib name=del_row params=name default="0"
+		
+		@param id required acl="edit;view"
+		@param row optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function del_row($arr)
 	{
 		extract($arr);
@@ -842,8 +1069,20 @@ class form_output extends form_base
 		return $orb;
 	}
 
-	////
-	// !merges the cell ($row, $col) in output $id with the cell immediately above it
+	/** merges the cell ($row, $col) in output $id with the cell immediately above it 
+		
+		@attrib name=exp_up params=name default="0"
+		
+		@param id required acl="edit;view"
+		@param row optional
+		@param col optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function exp_up($arr)
 	{
 		extract($arr);
@@ -855,8 +1094,20 @@ class form_output extends form_base
 		return $orb;
 	}
 
-	////
-	// !merges the cell ($row,$col) in output $id with the cell below it
+	/** merges the cell ($row,$col) in output $id with the cell below it 
+		
+		@attrib name=exp_down params=name default="0"
+		
+		@param id required acl="edit;view"
+		@param row optional
+		@param col optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function exp_down($arr)
 	{
 		extract($arr);
@@ -868,8 +1119,20 @@ class form_output extends form_base
 		return $orb;
 	}
 
-	////
-	// !merges the cell ($row,$col) in output $id with the cell to the left of it
+	/** merges the cell ($row,$col) in output $id with the cell to the left of it 
+		
+		@attrib name=exp_left params=name default="0"
+		
+		@param id required acl="edit;view"
+		@param row optional
+		@param col optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function exp_left($arr)
 	{
 		extract($arr);
@@ -881,8 +1144,20 @@ class form_output extends form_base
 		return $orb;
 	}
 
-	////
-	// !merges the cell ($row,$col) in output $id with the cell to the right of it
+	/** merges the cell ($row,$col) in output $id with the cell to the right of it 
+		
+		@attrib name=exp_right params=name default="0"
+		
+		@param id required acl="edit;view"
+		@param row optional
+		@param col optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function exp_right($arr)
 	{
 		extract($arr);
@@ -894,8 +1169,20 @@ class form_output extends form_base
 		return $orb;
 	}
 
-	////
-	// !splits the cell ($row,$col) in output $id vertically
+	/** splits the cell ($row,$col) in output $id vertically 
+		
+		@attrib name=split_cell_ver params=name default="0"
+		
+		@param id required acl="edit;view"
+		@param row optional
+		@param col optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function split_cell_ver($arr)
 	{
 		extract($arr);
@@ -907,8 +1194,20 @@ class form_output extends form_base
 		return $orb;
 	}
 
-	////
-	// !splits the cell ($row,$col) in output $id horizontally
+	/** splits the cell ($row,$col) in output $id horizontally 
+		
+		@attrib name=split_cell_hor params=name default="0"
+		
+		@param id required acl="edit;view"
+		@param row optional
+		@param col optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function split_cell_hor($arr)
 	{
 		extract($arr);
@@ -920,6 +1219,20 @@ class form_output extends form_base
 		return $orb;
 	}
 
+	/**  
+		
+		@attrib name=ch_cell params=name default="0"
+		
+		@param id required acl="edit;view"
+		@param row required
+		@param col required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function ch_cell($arr)
 	{
 		extract($arr);
@@ -1032,8 +1345,20 @@ class form_output extends form_base
 		return $ret;
 	}
 
-	////
-	// !Adds an element to the end of celll $row $col
+	/** Adds an element to the end of celll $row $col 
+		
+		@attrib name=add_element params=name default="0"
+		
+		@param id required acl="edit;view"
+		@param row required
+		@param col required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add_element($arr)
 	{
 		extract($arr);
@@ -1092,8 +1417,18 @@ class form_output extends form_base
 		}
 	}
 
-	////
-	// !shows the form texts translation form
+	/** shows the form texts translation form 
+		
+		@attrib name=translate params=name default="0"
+		
+		@param id required acl="edit;view"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function translate($arr)
 	{
 		extract($arr);
@@ -1386,6 +1721,17 @@ class form_output extends form_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_translate params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_translate($arr)
 	{
 		extract($arr);

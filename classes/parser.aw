@@ -34,8 +34,17 @@ class parser extends aw_template
 		}
 	}
 
-	////
-	// !user interface for the parser
+	/** user interface for the parser 
+		
+		@attrib name=opts params=name default="1"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function opts($arr)
 	{
 		extract($arr);
@@ -64,8 +73,17 @@ class parser extends aw_template
 		return $this->parse();
 	}
 
-	////
-	// !translate the variables from the parser ui to the parser func
+	/** translate the variables from the parser ui to the parser func 
+		
+		@attrib name=submit_parse params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_parse($arr)
 	{
 		extract($arr);
@@ -77,11 +95,23 @@ class parser extends aw_template
 		));
 	}
 
-	////
-	// !goes through all files in class directory and if $add_enter_func = true, adds enter_function / exit_function calls
-	// and if remove_enter_func is true, removes the enter/exit_function calls
-	// if neither is, set, simply displays the list of functions for every class
-	// processes all files in classes array
+	/** goes through all files in class directory and if $add_enter_func = true, adds enter_function / exit_function calls 
+		
+		@attrib name=parse params=name default="0"
+		
+		@param add_enter_func optional
+		@param remove_enter_func optional
+		@param classes optional
+		
+		@returns
+		
+		
+		@comment
+		and if remove_enter_func is true, removes the enter/exit_function calls
+		if neither is, set, simply displays the list of functions for every class
+		processes all files in classes array
+
+	**/
 	function orb_parse($arr)
 	{
 		extract($arr);

@@ -270,6 +270,17 @@ function pop(url,w,h)
 	
 
 
+	/**  
+		
+		@attrib name=show_icons params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show_icons()
 	{
 
@@ -297,6 +308,18 @@ function pop(url,w,h)
 	}
 
 
+	/**  
+		
+		@attrib name=show_desktop params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show_desktop($args = array())
 	{
 		$ob = $this->get_object($args['id']);
@@ -811,6 +834,29 @@ function pop(url,w,h)
 	}
 
 
+	/**  
+		
+		@attrib name=pipe params=name default="0"
+		
+		@param id required
+		@param element optional
+		@param top optional
+		@param left optional
+		@param W optional
+		@param I optional
+		@param WS optional
+		@param WC optional
+		@param WI optional
+		@param reorder optional
+		@param orderby optional
+		@param fetch_object optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function pipe($args)
 	{
 //		if (!isset($args['element'])) return die('*');
@@ -922,6 +968,19 @@ function pop(url,w,h)
 		die;
 	}
 
+	/**  
+		
+		@attrib name=dodelete params=name default="0"
+		
+		@param id required
+		@param class_id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function dodelete($args)
 	{
 
@@ -1186,6 +1245,18 @@ function pop(url,w,h)
 		return $this->show(array('id' => $alias['target']));
 	}
 
+	/**  
+		
+		@attrib name=redirect params=name default="0"
+		
+		@param url required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function redirect($args)
 	{
 

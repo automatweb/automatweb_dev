@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.15 2004/01/09 11:34:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.16 2004/01/13 16:24:14 kristo Exp $
 // period.aw - periods 
 /*
 
@@ -444,6 +444,17 @@ class period extends class_base
 		}
 	}
 
+	/**  
+		
+		@attrib name=list params=name nologin="1" is_public="1" caption="List" default="1"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function site_list($arr)
 	{
 		$this->read_template("arhiiv.tpl");

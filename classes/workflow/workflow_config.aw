@@ -45,23 +45,16 @@ class workflow_config extends class_base
 {
 	function workflow_config()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
-		// if they exist at all. the default folder does not actually exist, 
-		// it just points to where it should be, if it existed
 		$this->init(array(
 			'clid' => CL_WORKFLOW_CONFIG
 		));
 	}
 
 	function get_property($args = array())
-        {
+	{
 		$data = &$args["prop"];
 		$name = $data["name"];
 		$retval = PROP_OK;
-
-		switch($data["name"])
-		{
-		};
 	}
 }
 ?>

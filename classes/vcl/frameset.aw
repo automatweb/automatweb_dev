@@ -1,5 +1,5 @@
 <?php
-// $Id: frameset.aw,v 1.7 2003/08/01 13:27:54 axel Exp $
+// $Id: frameset.aw,v 1.8 2004/01/13 16:24:32 kristo Exp $
 // frameset.aw - frameset generator
 /*
 	@default table=objects
@@ -104,6 +104,18 @@ class frameset extends class_base
 		$this->frame_names["l1r2"] = "1 vasakul, 2 paremal";
 	}
 
+	/**  
+		
+		@attrib name=show params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show($args = array())
 	{
 		extract($args);

@@ -9,8 +9,18 @@ class apache_alias extends aw_template
 		$this->init("apache_alias");
 	}
 
-	////
-	// !Generates a list of registered aliases
+	/** Generates a list of registered aliases 
+		
+		@attrib name=list params=name default="0"
+		
+		@param page optional type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function gen_list($args = array())
 	{
 		extract($args);
@@ -80,8 +90,29 @@ class apache_alias extends aw_template
 		return $this->parse();
 	}
 
-	////
-	// !Allows to add or change apache aliases
+	/** Allows to add or change apache aliases 
+		
+		@attrib name=new params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	/**  
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change($args = array())
 	{
 		extract($args);
@@ -120,8 +151,17 @@ class apache_alias extends aw_template
 		return $this->parse();
 	}
 	
-	////
-	// !Submits a new or existing alias
+	/** Submits a new or existing alias 
+		
+		@attrib name=submit params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit($args = array())
 	{
 		extract($args);
@@ -171,8 +211,18 @@ class apache_alias extends aw_template
 		return $this->mk_my_orb("list",array());
 	}
 
-	////
-	// !Deletes an alias
+	/** Deletes an alias 
+		
+		@attrib name=remove params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function remove($args = array())
 	{
 		extract($args);

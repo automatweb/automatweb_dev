@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.50 2003/10/06 14:32:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.51 2004/01/13 16:24:15 kristo Exp $
 // table.aw - tabelite haldus
 class table extends aw_template
 {
@@ -137,6 +137,18 @@ class table extends aw_template
 		// $this->table_loaded = true;
 	}
 
+	/**  
+		
+		@attrib name=aliases params=name default="0"
+		
+		@param id required type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function aliases($args = array())
 	{
 		$this->read_template("table_aliases.tpl");
@@ -153,8 +165,18 @@ class table extends aw_template
 		return $this->parse();
 	}
 
-	////
-	// !Table configuration form
+	/** Table configuration form 
+		
+		@attrib name=configure params=name default="0"
+		
+		@param id required type=int acl="view;edit"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function configure($args = array())
 	{
 		extract($args);
@@ -186,8 +208,17 @@ class table extends aw_template
 		return $this->parse();
 	}
 
-	////
-	// !submits table configuration
+	/** submits table configuration 
+		
+		@attrib name=submit_config params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_config($args = array())
 	{
 		extract($args);
@@ -230,8 +261,21 @@ class table extends aw_template
 		return $this->mk_my_orb("configure",array("id" => $id));
 	}
 
-	////
-	// Change	
+	/**  
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required acl="view;edit"
+		@param is_filter optional
+		@param filter optional
+		
+		@returns
+		
+		
+		@comment
+		Change
+
+	**/
 	function gen_admin_html($arr)
 	{
 		extract($arr);
@@ -356,6 +400,20 @@ class table extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=admin params=name default="0"
+		
+		@param id required acl="view;edit"
+		@param is_filter optional
+		@param filter optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function gen_admin2_html($arr)
 	{
 		extract($arr);
@@ -466,6 +524,17 @@ class table extends aw_template
 		}
 	}
 		
+	/**  
+		
+		@attrib name=submit params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit($arr)
 	{
 		$this->load_table($arr["id"]);
@@ -690,12 +759,40 @@ class table extends aw_template
 		$this->save_table(array(), false);
 	}
 
+	/**  
+		
+		@attrib name=add_col params=name default="0"
+		
+		@param id required acl="view;edit"
+		@param after required
+		@param num required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add_col($arr)
 	{
 		$this->do_add_col($arr);
 		header("Location: ".$this->mk_orb("styles", array("id" => $arr["id"])));
 	}
 
+	/**  
+		
+		@attrib name=nadd_col params=name default="0"
+		
+		@param id required acl="view;edit"
+		@param after required
+		@param num required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function nadd_col($arr)
 	{
 		$this->do_add_col($arr);
@@ -852,12 +949,40 @@ class table extends aw_template
 		$this->save_table(array(), false);
 	}
 
+	/**  
+		
+		@attrib name=add_row params=name default="0"
+		
+		@param id required acl="view;edit"
+		@param after required
+		@param num required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add_row($arr)
 	{
 		$this->do_add_row($arr);
 		header("Location: ".$this->mk_orb("styles", array("id" => $arr["id"])));
 	}
 
+	/**  
+		
+		@attrib name=nadd_row params=name default="0"
+		
+		@param id required acl="view;edit"
+		@param after required
+		@param num required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function nadd_row($arr)
 	{
 		$this->do_add_row($arr);
@@ -925,12 +1050,38 @@ class table extends aw_template
 		$this->save_table(array(), false);
 	}
 
+	/**  
+		
+		@attrib name=del_col params=name default="0"
+		
+		@param id required acl="view;edit"
+		@param col required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function del_col($arr)
 	{
 		$this->do_del_col($arr);
 		header("Location: ".$this->mk_orb("styles", array("id" => $arr["id"])));
 	}
 
+	/**  
+		
+		@attrib name=ndel_col params=name default="0"
+		
+		@param id required acl="view;edit"
+		@param col required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function ndel_col($arr)
 	{
 		$this->do_del_col($arr);
@@ -998,18 +1149,56 @@ class table extends aw_template
 		$this->save_table(array(), false);
 	}
 
+	/**  
+		
+		@attrib name=del_row params=name default="0"
+		
+		@param id required acl="view;edit"
+		@param row required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function del_row($arr)
 	{
 		$this->do_del_row($arr);
 		header("Location: ".$this->mk_orb("styles", array("id" => $arr["id"])));
 	}
 
+	/**  
+		
+		@attrib name=ndel_row params=name default="0"
+		
+		@param id required acl="view;edit"
+		@param row required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function ndel_row($arr)
 	{
 		$this->do_del_row($arr);
 		header("Location: ".$this->mk_orb("change", array("id" => $arr["id"])));
 	}
 
+	/**  
+		
+		@attrib name=styles params=name default="0"
+		
+		@param id required acl="view;edit"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function gen_styles($arr)
 	{
 		extract($arr);
@@ -1148,6 +1337,17 @@ class table extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_styles params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_styles($arr)
 	{
 		extract($arr);
@@ -1159,6 +1359,17 @@ class table extends aw_template
 		return $this->mk_orb("styles", array("id" => $id));
 	}
 
+	/**  
+		
+		@attrib name=submit_admin params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_admin($arr)
 	{
 		extract($arr);
@@ -1179,6 +1390,18 @@ class table extends aw_template
 		return $this->mk_orb("admin", array("id" => $id));
 	}
 
+	/**  
+		
+		@attrib name=pick_style params=name default="0"
+		
+		@param id required acl="view;edit"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function pick_style($arr)
 	{
 		extract($arr);
@@ -1227,6 +1450,17 @@ class table extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_pickstyle params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_pickstyle($arr)
 	{
 		extract($arr);
@@ -1450,8 +1684,18 @@ class table extends aw_template
 		return $evl;
 	}
 
-	////
-	// !Generates the preview for the tablegen (with navigation bar)
+	/** Generates the preview for the tablegen (with navigation bar) 
+		
+		@attrib name=view params=name default="0"
+		
+		@param id required type=id
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function gen_preview($args = array())
 	{
 		extract($args);
@@ -1741,6 +1985,21 @@ class table extends aw_template
 		}
 	}
 
+	/**  
+		
+		@attrib name=exp_right params=name default="0"
+		
+		@param id required acl="view;edit"
+		@param col required
+		@param row required
+		@param cnt required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function exp_right($arr)
 	{
 		extract($arr);
@@ -1778,6 +2037,20 @@ class table extends aw_template
 		header("Location: ".$this->mk_orb("styles",array("id" => $id)));
 	}
 
+	/**  
+		
+		@attrib name=split_ver params=name default="0"
+		
+		@param id required acl="view;edit"
+		@param col required
+		@param row required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function split_ver($arr)
 	{
 		extract($arr);
@@ -1857,6 +2130,21 @@ class table extends aw_template
 		header("Location: ".$this->mk_orb("styles",array("id" => $id)));
 	}
 
+	/**  
+		
+		@attrib name=exp_left params=name default="0"
+		
+		@param id required acl="view;edit"
+		@param col required
+		@param row required
+		@param cnt required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function exp_left($arr)
 	{
 		extract($arr);
@@ -1882,6 +2170,21 @@ class table extends aw_template
 		header("Location: ".$this->mk_orb("styles",array("id" => $id)));
 	}
 
+	/**  
+		
+		@attrib name=exp_up params=name default="0"
+		
+		@param id required acl="view;edit"
+		@param col required
+		@param row required
+		@param cnt required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function exp_up($arr)
 	{
 		extract($arr);
@@ -1908,6 +2211,20 @@ class table extends aw_template
 		header("Location: ".$this->mk_orb("styles",array("id" => $id)));
 	}
 
+	/**  
+		
+		@attrib name=split_hor params=name default="0"
+		
+		@param id required acl="view;edit"
+		@param col required
+		@param row required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function split_hor($arr)
 	{
 		extract($arr);
@@ -1987,6 +2304,21 @@ class table extends aw_template
 		header("Location: ".$this->mk_orb("styles",array("id" => $id)));
 	}
 
+	/**  
+		
+		@attrib name=exp_down params=name default="0"
+		
+		@param id required acl="view;edit"
+		@param col required
+		@param row required
+		@param cnt required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function exp_down($arr)
 	{
 		extract($arr);
@@ -2024,6 +2356,18 @@ class table extends aw_template
 		header("Location: ".$this->mk_orb("styles",array("id" => $id)));
 	}
 
+	/**  
+		
+		@attrib name=gen_import params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function gen_import($arr)
 	{
 		extract($arr);
@@ -2102,6 +2446,17 @@ class table extends aw_template
 		return $linearr;
 	}
 
+	/**  
+		
+		@attrib name=import params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function import($arr)
 	{
 		global $fail,$separator;
@@ -2250,6 +2605,20 @@ class table extends aw_template
 		return $this->mk_orb("change",array("id" => $arr[id]));
 	}
 
+	/**  
+		
+		@attrib name=new params=name default="0"
+		
+		@param parent required acl="add"
+		@param alias_to optional
+		@param return_url optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add($arr)
 	{
 		extract($arr);
@@ -2262,6 +2631,17 @@ class table extends aw_template
 		return $this->parse();
 	}
 	
+	/**  
+		
+		@attrib name=submit_add params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_add($arr)
 	{
 		extract($arr);
@@ -2303,8 +2683,20 @@ class table extends aw_template
 		return $txt;
 	}
 
-	////
-	// lisab tabla ja teeb doku juurde aliase ka
+	/**  
+		
+		@attrib name=add_doc params=name default="0"
+		
+		@param id required
+		@param parent required acl="add"
+		
+		@returns
+		
+		
+		@comment
+		lisab tabla ja teeb doku juurde aliase ka
+
+	**/
 	function add_doc($arr)
 	{
 		extract($arr);
@@ -2315,8 +2707,20 @@ class table extends aw_template
 		return $this->parse();
 	}
 
-	////
-	// saveb tabeli ja lisab aliase
+	/**  
+		
+		@attrib name=submit_doc params=name default="0"
+		
+		@param id required
+		@param parent required
+		
+		@returns
+		
+		
+		@comment
+		saveb tabeli ja lisab aliase
+
+	**/
 	function submit_doc($arr)
 	{
 		extract($arr);
@@ -2328,6 +2732,19 @@ class table extends aw_template
 		return $this->mk_orb("change", array("id" => $tid), "table");
 	}
 
+	/**  
+		
+		@attrib name=delete params=name default="0"
+		
+		@param id required acl="delete"
+		@param parent required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function delete($arr)
 	{
 		extract($arr);

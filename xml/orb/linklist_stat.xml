@@ -1,28 +1,27 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="linklist_stat">
-		<action name="submit">
-			<function name="submit">
+	<class name="linklist_stat" folder="www/dev/terryf/awcl/classes" extends="aw_template">
+		<action name="change" >
+			<function name="change">
 				<arguments>
-					<optional name="parent"/>
-					<required name="id"/>
-					<required name="sid"/>
+					<optional name="parent" />
+					<optional name="id" />
+					<optional name="stat" />
+					<optional name="sid" />
+					<optional name="return_url" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="change">
-			<function name="change">
+		<action name="submit" >
+			<function name="submit">
 				<arguments>
-					<optional name="parent"/>
-					<optional name="id" acl="edit;view"/>
-					<optional name="stat"/>
-					<optional name="sid"/>
-					<optional name="return_url"/>
+					<required name="id" />
+					<required name="sid" />
+					<optional name="parent" />
 				</arguments>
 			</function>
 		</action>
 
 	</class>
 </orb>
-		

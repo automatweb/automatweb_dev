@@ -8,6 +8,17 @@ class site_list extends class_base
 		$this->check_db();
 	}
 
+	/**  
+		
+		@attrib name=site_list params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_list($arr)
 	{
 		extract($arr);
@@ -156,6 +167,17 @@ class site_list extends class_base
 		return $t->draw();
 	}
 
+	/**  
+		
+		@attrib name=server_list params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_server_list($arr)
 	{
 		extract($arr);
@@ -233,19 +255,28 @@ class site_list extends class_base
 		}
 	}
 
-	////
-	// !adds or updates site
-	// parameters:
-	//   id - site id
-	//   name - site name
-	//   url - site url
-	//   server_id - aw_server_list.id
-	//   ip - site ip address
-	//   site_used - boolean - whether the site is active
-	//   code_branch - the code that the site runs
-	//   data - random data
-	//
-	// if site_id is not specified, then a new unique id will be created and entered to the database
+	/** adds or updates site 
+		
+		@attrib name=update_site params=name all_args="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+		parameters:
+		id - site id
+		name - site name
+		url - site url
+		server_id - aw_server_list.id
+		ip - site ip address
+		site_used - boolean - whether the site is active
+		code_branch - the code that the site runs
+		data - random data
+		
+		if site_id is not specified, then a new unique id will be created and entered to the database
+
+	**/
 	function orb_update_site($arr)
 	{
 		extract($arr);
@@ -297,15 +328,24 @@ class site_list extends class_base
 		return $id;
 	}
 
-	////
-	// !adds or updates a server
-	// parameters:
-	//   id - server id
-	//   name - server name
-	//   ip - server ip address
-	//   comment - user comment for site
-	//
-	// if site_id is not specified, then a new unique id will be created and entered to the database
+	/** adds or updates a server 
+		
+		@attrib name=update_server params=name all_args="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+		parameters:
+		id - server id
+		name - server name
+		ip - server ip address
+		comment - user comment for site
+		
+		if site_id is not specified, then a new unique id will be created and entered to the database
+
+	**/
 	function orb_update_server($arr)
 	{
 		extract($arr);
@@ -342,10 +382,20 @@ class site_list extends class_base
 		}
 	}
 
-	////
-	// !returns a list of sites matching filter
-	// params:
-	//   server_id - filter by server id
+	/** returns a list of sites matching filter 
+		
+		@attrib name=get_site_list params=name default="0"
+		
+		@param server_id optional
+		
+		@returns
+		
+		
+		@comment
+		params:
+		server_id - filter by server id
+
+	**/
 	function orb_get_site_list($arr)
 	{
 		extract($arr);
@@ -392,6 +442,17 @@ class site_list extends class_base
 		return $ret;
 	}
 
+	/**  
+		
+		@attrib name=init_list params=name all_args="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function init_list($arr)
 	{
 		extract($arr);
@@ -456,26 +517,56 @@ class site_list extends class_base
 		echo "sent $srvc serverit ja $sic saiti <br />";
 	}
 
-	////
-	// !returns the id of the server that is marked as serving on ip address $ip
+	/** returns the id of the server that is marked as serving on ip address $ip 
+		
+		@attrib name=get_server_id_by_ip params=name all_args="1" default="0"
+		
+		@param ip required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function get_server_id_by_ip($arr)
 	{
 		extract($arr);
 		return $this->db_fetch_field("SELECT id FROM aw_server_list WHERE ip LIKE '%$ip%'","id");
 	}
 
-	////
-	// !returns the id of the site that has the url $url
+	/** returns the id of the site that has the url $url 
+		
+		@attrib name=get_site_id_by_url params=name all_args="1" default="0"
+		
+		@param url required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function get_site_id_by_url($arr)
 	{
 		extract($arr);
 		return $this->db_fetch_field("SELECT id FROM aw_site_list WHERE url LIKE '%$url%'","id");
 	}
 
-	////
-	// !returns all data that we have on the site
-	// parameters:
-	//   site_id - the id of the site whose data is returned
+	/** returns all data that we have on the site 
+		
+		@attrib name=get_site_data params=name default="0"
+		
+		@param site_id required
+		
+		@returns
+		
+		
+		@comment
+		parameters:
+		site_id - the id of the site whose data is returned
+
+	**/
 	function get_site_data($arr)
 	{
 		extract($arr);
@@ -492,6 +583,18 @@ class site_list extends class_base
 		return $this->db_fetch_row("SELECT * FROM aw_server_list WHERE id = '$server_id'");
 	}
 
+	/**  
+		
+		@attrib name=change_site params=name default="0"
+		
+		@param id required type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change_site($arr)
 	{
 		extract($arr);
@@ -510,6 +613,17 @@ class site_list extends class_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_change_site params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_change_site($arr)
 	{
 		extract($arr);
@@ -519,6 +633,18 @@ class site_list extends class_base
 		return $this->mk_my_orb("change_site", array("id" => $id));
 	}
 
+	/**  
+		
+		@attrib name=change_server params=name default="0"
+		
+		@param id required type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change_server($arr)
 	{
 		extract($arr);
@@ -535,6 +661,17 @@ class site_list extends class_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_change_server params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_change_server($arr)
 	{
 		extract($arr);

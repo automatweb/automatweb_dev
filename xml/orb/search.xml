@@ -1,9 +1,10 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="search" extends="class_base">
-		<action name="search" all_args="1" default="1">
+	<class name="search" folder="www/dev/terryf/awcl/classes" extends="class_base">
+		<action name="search" default="1" all_args="1">
 			<function name="show">
-				<arguments/>
+				<arguments>
+				</arguments>
 			</function>
 		</action>
 
@@ -21,6 +22,6 @@
 				</arguments>
 			</function>
 		</action>
+
 	</class>
 </orb>
-		

@@ -1,24 +1,27 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="dronline" folder="syslog" extends="class_base">
-		<action name="saveblock">
+	<class name="dronline" folder="www/dev/terryf/awcl/classes/syslog" extends="class_base">
+		<action name="saveblock" >
 			<function name="saveblock">
+				<arguments>
+				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_block">
+		<action name="submit_block" >
 			<function name="submit_block">
+				<arguments>
+				</arguments>
 			</function>
 		</action>
 
 		<action name="run_bg_queries" nologin="1">
 			<function name="run_bg_queries">
-				<parameters>
-					<required name="id"/>
-				</parameters>
+				<arguments>
+					<required name="id" />
+				</arguments>
 			</function>
 		</action>
 
 	</class>
 </orb>
-		

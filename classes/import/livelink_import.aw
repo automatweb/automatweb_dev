@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.13 2003/10/06 14:32:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.14 2004/01/13 16:24:28 kristo Exp $
 // livelink_import.aw - Import livelingist
 
 /*
@@ -98,6 +98,18 @@ class livelink_import extends class_base
 		return array($error,$msg);
 	}
 
+	/**  
+		
+		@attrib name=invoke params=name default="0"
+		
+		@param id required type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function invoke($args = array())
 	{
 		$obj = $this->get_object(array(

@@ -1,39 +1,44 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="forum" extends="class_base">
-		<action name="configure">
-			<function name="configure">
+	<class name="forum" folder="www/dev/terryf/awcl/classes" extends="class_base">
+		<action name="notify_list" >
+			<function name="notify_list">
 				<arguments>
 					<required name="id" type="int"/>
+					<optional name="sortby" />
 				</arguments>
 			</function>
 		</action>
-		
-		<action name="topics" nologin="1">
-			<function name="topics">
-				<arguments>
-					<required name="id" type="int"/>
-					<optional name="from" type="int"/>
-					<optional name="section"/>
-					<optional name="archive"/>
-				</arguments>
-			</function>
-		</action>
-		
-		<action name="submit_topics" nologin="1">
-			<function name="submit_topics">
+
+		<action name="submit_notify_list" >
+			<function name="submit_notify_list">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
-		
-		<action name="topics_detail" nologin="1">
-			<function name="topics_detail">
+
+		<action name="add_topic" nologin="1">
+			<function name="add_topic">
 				<arguments>
 					<required name="id" type="int"/>
-					<optional name="from" type="int"/>
-					<optional name="cid" type="int"/>
-					<optional name="section"/>
+					<optional name="section" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_topic" nologin="1">
+			<function name="submit_topic">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="addcomment" nologin="1">
+			<function name="show">
+				<arguments>
+					<required name="board" type="int"/>
+					<optional name="section" />
+					<define name="addcomment" value="1"/>
 				</arguments>
 			</function>
 		</action>
@@ -44,137 +49,130 @@
 				</arguments>
 			</function>
 		</action>
-		
-		<action name="add_topic" nologin="1">
-			<function name="add_topic">
-				<arguments>
-					<required name="id" type="int"/>
-					<optional name="section"/>
-				</arguments>
-			</function>
-		</action>
-		<action name="submit_topic" nologin="1">
-			<function name="submit_topic">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-		<action name="show" nologin="1">
-			<function name="show">
-				<arguments>
-					<required name="board" type="int"/>
-					<optional name="section"/>
-				</arguments>
-			</function>
-		</action>
+
 		<action name="show_threaded" nologin="1">
 			<function name="show_threaded">
 				<arguments>
 					<required name="board" type="int"/>
-					<optional name="section"/>
+					<optional name="section" />
 					<optional name="cid" type="int"/>
 					<optional name="from" type="int"/>
-					<optional name="no_comments"/>
+					<optional name="no_comments" />
 				</arguments>
 			</function>
 		</action>
-		<action name="no_response" nologin="1">
-			<function name="show">
-				<arguments>
-					<required name="board" type="int"/>
-					<optional name="section"/>
-					<define name="no_response" value="1"/>
-				</arguments>
-			</function>
-		</action>
-		<action name="submit_messages">
+
+		<action name="submit_messages" >
 			<function name="submit_messages">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
-		<action name="addcomment" nologin="1">
-			<function name="show">
-				<arguments>
-					<required name="board" type="int"/>
-					<optional name="section"/>
-					<define name="addcomment" value="1"/>
-				</arguments>
-			</function>
-		</action>
+
 		<action name="reply" nologin="1">
 			<function name="reply">
 				<arguments>
 					<required name="parent" type="int"/>
-					<optional name="section"/>
+					<optional name="section" />
 				</arguments>
 			</function>
 		</action>
+
 		<action name="submit_comment" nologin="1">
 			<function name="submit_comment">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
+
+		<action name="topics" nologin="1">
+			<function name="topics">
+				<arguments>
+					<required name="id" type="int"/>
+					<optional name="from" type="int"/>
+					<optional name="section" />
+					<optional name="archive" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="topics_detail" nologin="1">
+			<function name="topics_detail">
+				<arguments>
+					<required name="id" type="int"/>
+					<optional name="from" type="int"/>
+					<optional name="cid" type="int"/>
+					<optional name="section" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_topics" nologin="1">
+			<function name="submit_topics">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="search" nologin="1">
 			<function name="search">
 				<arguments>
 					<optional name="id" type="int"/>
 					<optional name="board" type="int"/>
-					<optional name="section"/>
+					<optional name="section" />
 				</arguments>
 			</function>
 		</action>
+
 		<action name="submit_search" nologin="1" all_args="1">
 			<function name="submit_search">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
+
 		<action name="mark_all_read" nologin="1">
 			<function name="mark_all_read">
-				<required name="id" type="int"/>
-				<optional name="section"/>
+				<arguments>
+					<required name="id" type="int"/>
+					<optional name="section" />
+				</arguments>
 			</function>
 		</action>
 
-		<action name="delete_topic">
+		<action name="delete_topic" >
 			<function name="del_topic">
-				<required name="forum_id" type="int"/>
-				<required name="board" type="int"/>
+				<arguments>
+					<required name="forum_id" type="int"/>
+					<required name="board" type="int"/>
+				</arguments>
 			</function>
 		</action>
 
-		<action name="change_topic">
+		<action name="change_topic" >
 			<function name="change_topic">
-				<required name="board" type="int"/>
+				<arguments>
+					<required name="board" type="int"/>
+				</arguments>
 			</function>
 		</action>
 
-		<action name="save_topic">
+		<action name="save_topic" >
 			<function name="save_topic">
+				<arguments>
+				</arguments>
 			</function>
 		</action>
 
-		<action name="del_msg">
+		<action name="del_msg" >
 			<function name="del_msg">
-				<required name="comment" type="int"/>
-				<required name="board" type="int"/>
-				<optional name="section"/>
+				<arguments>
+					<required name="comment" type="int"/>
+					<required name="board" type="int"/>
+					<optional name="section" />
+				</arguments>
 			</function>
 		</action>
-		
-		<action name="notify_list">
-			<function name="notify_list">
-				<required name="id" type="int"/>
-				<optional name="sortby"/>
-			</function>
-		</action>
-		
-		<action name="submit_notify_list">
-			<function name="submit_notify_list">
-			</function>
-		</action>
-</class>
+
+	</class>
 </orb>
-		

@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.1 2003/12/17 16:08:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.2 2004/01/13 16:24:21 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -201,6 +201,19 @@ class poll extends class_base
 		setcookie("polls_clicked", serialize($poa),time()+24*3600*1000,"/");
 	}
 
+	/**  
+		
+		@attrib name=show params=name nologin="1" default="0"
+		
+		@param poll_id required type=int
+		@param answer_id optional type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show($id)
 	{
 		if (is_array($id))

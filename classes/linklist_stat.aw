@@ -6,6 +6,22 @@ class linklist_stat extends aw_template
 		$this->init("linklist");
 	}
 
+	/**  
+		
+		@attrib name=change params=name default="0"
+		
+		@param parent optional
+		@param id optional acl=""
+		@param stat optional
+		@param sid optional
+		@param return_url optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change($arr)
 	{
 		$ob = $this->get_object($id); //NB see on siin lingikogu object mitte lingikogu_stat
@@ -209,6 +225,20 @@ select count from linikogu_stat where oid=666:_ {VAR:caunt_linke} <br />
 	}
 
 
+	/**  
+		
+		@attrib name=submit params=name default="0"
+		
+		@param id required
+		@param sid required
+		@param parent optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit($arr)
 	{
 		extract($arr);

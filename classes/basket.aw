@@ -7,6 +7,20 @@ class basket extends aw_template
 		$this->init("basket");
 	}
 
+	/**  
+		
+		@attrib name=new params=name default="0"
+		
+		@param parent required acl="add"
+		@param alias_to optional
+		@param return_url optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add($arr)
 	{
 		extract($arr);
@@ -32,6 +46,17 @@ class basket extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit($arr)
 	{
 		extract($arr);
@@ -71,6 +96,19 @@ class basket extends aw_template
 		return $this->mk_my_orb("change", array("id" => $id, "return_url" => urlencode($return_url)));
 	}
 
+	/**  
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required acl="edit;view"
+		@param return_url optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change($arr)
 	{
 		extract($arr);
@@ -231,10 +269,20 @@ class basket extends aw_template
 		return $this->draw_basket(array("id" => $alias["target"]));
 	}
 
-	////
-	// !shows the stuff that the current user has in the basket and lets you finalize the order
-	// params:
-	//   id - the id of the basket
+	/** shows the stuff that the current user has in the basket and lets you finalize the order 
+		
+		@attrib name=show params=name nologin="1" default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+		params:
+		id - the id of the basket
+
+	**/
 	function draw_basket($arr)
 	{
 		extract($arr);
@@ -268,15 +316,24 @@ class basket extends aw_template
 		return $this->parse();
 	}
 
-	////
-	// !this gets called, when the user clicks the "submit order" button
-	// it will save the order as an object under the menu specified in the basket's config,
-	// process the submitted order form
-	// and send email to all the necessary addresses
-	// then it will clear the basket from memory and from the user's config
-	// and finally redirect to the url specified in the basket's config
-	// params:
-	//   id - the oid of the basket that got submitted
+	/** this gets called, when the user clicks the "submit order" button 
+		
+		@attrib name=finalize_order params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+		it will save the order as an object under the menu specified in the basket's config,
+		process the submitted order form
+		and send email to all the necessary addresses
+		then it will clear the basket from memory and from the user's config
+		and finally redirect to the url specified in the basket's config
+		params:
+		id - the oid of the basket that got submitted
+
+	**/
 	function finalize_order($arr)
 	{
 		extract($arr);
@@ -414,14 +471,28 @@ class basket extends aw_template
 		return $ob["meta"]["after_order"] == "" ? urldecode($ret_url) : $ob["meta"]["after_order"];
 	}
 
-	////
-	// !adds item to basket and redirects to specified url
-	// params:
-	//   item_id - form entry id of item to add to basket
-	//   form_id - form id of entry to add to basket
-	//   basket_id - if of the basket to add item to
-	//   count - number of items to add to basket
-	//   redir - url of page to redirect to
+	/** adds item to basket and redirects to specified url 
+		
+		@attrib name=add_item params=name nologin="1" default="0"
+		
+		@param basket_id required type=int
+		@param item_id required type=int
+		@param form_id required type=int
+		@param redir required
+		@param count optional
+		
+		@returns
+		
+		
+		@comment
+		params:
+		item_id - form entry id of item to add to basket
+		form_id - form id of entry to add to basket
+		basket_id - if of the basket to add item to
+		count - number of items to add to basket
+		redir - url of page to redirect to
+
+	**/
 	function orb_add_item($arr)
 	{
 		extract($arr);

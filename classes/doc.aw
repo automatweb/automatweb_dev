@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.61 2003/12/29 10:49:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.62 2004/01/13 16:24:13 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -514,6 +514,18 @@ class doc extends class_base
 
 	}
 
+	/**  
+		
+		@attrib name=show params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show($args = array())
 	{
 		extract($args);
@@ -686,9 +698,19 @@ class doc extends class_base
 		};
 	}
 
-	////
-	// !Shows the pic1 element. Well, I think I could use a generic solution for displaying different
-	// values
+	/** Shows the pic1 element. Well, I think I could use a generic solution for displaying different 
+		
+		@attrib name=show_pic1 params=name caption="Näita pilti" default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+		values
+
+	**/
 	function show_pic1($args = array())
 	{
 		$retval = "";

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_tellimuste_list.aw,v 1.1 2004/01/02 02:58:30 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_tellimuste_list.aw,v 1.2 2004/01/13 16:24:32 kristo Exp $
 // taket_tellimuste_list.aw - Taket tellimuste nimekiri 
 /*
 
@@ -30,8 +30,19 @@ class taket_tellimuste_list extends class_base
 		return $this->show(array("id" => $arr["alias"]["target"]));
 	}
 
-	////
-	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
+	/** this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias 
+		
+		@attrib name=show params=name default="0"
+		
+		@param sort optional
+		@param dir optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show($arr)
 	{
 		$ob = new object($arr["id"]);
@@ -115,6 +126,20 @@ class taket_tellimuste_list extends class_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=show_order params=name default="0"
+		
+		@param order_id required
+		@param sort optional
+		@param dir optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show_order($arr)
 	{
 		$this->read_template('show_order.tpl');

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/stat.aw,v 1.1 2002/12/23 14:04:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/stat.aw,v 1.2 2004/01/13 16:24:31 kristo Exp $
 // stat.aw - generating statictis from the syslog
 // klass, mille abil saab genereerida statistikat syslog tabelist
 class db_stat extends aw_template
@@ -502,6 +502,21 @@ class stat extends db_stat
 		$this->db_stat($params);
 	}
 
+	/**  
+		
+		@attrib name=show params=name default="1"
+		
+		@param from optional
+		@param to optional
+		@param month optional
+		@param day optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show($arr)
 	{
 		extract($arr);
@@ -531,6 +546,18 @@ class stat extends db_stat
 		return $c;
 	}
 
+	/**  
+		
+		@attrib name=graph params=name default="0"
+		
+		@param id optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function graph($arr)
 	{
 		extract($arr);
@@ -542,6 +569,17 @@ class stat extends db_stat
 		die();
 	}
 
+	/**  
+		
+		@attrib name=compare params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function compare($arr)
 	{
 		extract($arr);
@@ -578,6 +616,17 @@ class stat extends db_stat
 		return $c;
 	}
 
+	/**  
+		
+		@attrib name=cgraph params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function cgraph($arr)
 	{
 		extract($arr);

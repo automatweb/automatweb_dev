@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/flash.aw,v 1.5 2003/12/04 10:03:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/flash.aw,v 1.6 2004/01/13 16:24:14 kristo Exp $
 // flash.aw - Deals with flash applets
 /*
 
@@ -139,6 +139,18 @@ class flash extends class_base
 		return $this->view(array('id' => $alias['target']));
 	}
 
+	/**  
+		
+		@attrib name=show params=name nologin="1" default="0"
+		
+		@param file required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show($arr)
 	{
 		extract($arr);

@@ -1,20 +1,21 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="shortcut" folder="admin" extends="class_base">
-		<action name="mk_shortcut">
-			<function name="mk_shortcut">
-				<arguments>
-					<required name="id"/>
-				</arguments>
-			</function>
-		</action>
-		<action name="view">
+	<class name="shortcut" folder="www/dev/terryf/awcl/classes/admin" extends="class_base">
+		<action name="view" >
 			<function name="view">
 				<arguments>
-					<required name="id"/>
+					<required name="id" />
 				</arguments>
 			</function>
 		</action>
+
+		<action name="mk_shortcut" >
+			<function name="mk_shortcut">
+				<arguments>
+					<required name="id" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
-

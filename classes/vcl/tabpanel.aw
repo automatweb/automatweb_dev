@@ -1,5 +1,5 @@
 <?php
-// $Id: tabpanel.aw,v 1.6 2003/03/13 14:29:53 duke Exp $
+// $Id: tabpanel.aw,v 1.7 2004/01/13 16:24:33 kristo Exp $
 // tabpanel.aw - class for creating tabbed dialogs
 class tabpanel extends aw_template
 {
@@ -101,6 +101,42 @@ class tabpanel extends aw_template
 			"content" => $args["content"],
 		));
 		return $this->parse();
+	}
+
+	////
+	// !returns an instance of tabpanel, with the given tabs loaded.
+	// usage:
+	//	$tb = tabpanel::simple_tabpanel(array(
+	//		"panel_props" => array("tpl" => "headeronly"),
+	//		"var" => "cool_tab",
+	//		"default" => "entities",
+	//		"opts" => array(
+	//			"entities" => "Olemid",
+	//			"processes" => "Protsessid
+	//		)
+	//	));
+	//	this will create a tabpanel with two tabs, active is derived from the "cool_tab" variable in the url
+	//	links are made using aw_url_change_var($var, key_for_tab)
+	//	the default tab is in the "default" parameter
+	//	the tabpanel is created, using the options in the "panel_props" parameter
+	function simple_tabpanel($arr)
+	{
+		if (!isset($_GET[$arr["var"]]) || empty($_GET[$arr["var"]]))
+		{
+			$_GET[$arr["var"]] = $arr["default"];
+		}
+
+		$tb = new tabpanel($arr["panel_props"]);
+		foreach($arr["opts"] as $k => $v)
+		{
+			$tb->add_tab(array(
+				"link" => aw_url_change_var($arr["var"], $k),
+				"caption" => $v,
+				"active" => ($_GET[$arr["var"]] == $k)
+			));
+		}
+
+		return $tb;
 	}
 };
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/events.aw,v 2.11 2003/10/06 14:32:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/events.aw,v 2.12 2004/01/13 16:24:13 kristo Exp $
 // events.aw - the sucky sucky version of Vibe events
 
 // sisestamis/muutmisvorm peab nagu praegunegi muutmisvorm,
@@ -43,6 +43,18 @@ class events extends aw_template
 		);
 	}
 
+	/**  
+		
+		@attrib name=delete params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function event_delete($args = array())
 	{
 		extract($args);
@@ -53,10 +65,19 @@ class events extends aw_template
 		return $this->mk_my_orb("list",array());
 	}
 
-	////
-	// !Kuvab eventite nimekirja mingi tunnuse alusel
-	// Sellele saaks ette anda mitmesuguseid argumente, a la
-	// my events, list by place, list by organizer .. vmt.
+	/** Kuvab eventite nimekirja mingi tunnuse alusel 
+		
+		@attrib name=list params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+		Sellele saaks ette anda mitmesuguseid argumente, a la
+		my events, list by place, list by organizer .. vmt.
+
+	**/
 	function event_list($args = array())
 	{
 		extract($args);
@@ -262,11 +283,34 @@ class events extends aw_template
 		return $this->parse();
 	}
 
-	////
-	// !Kuvab eventi lisamis/muutmisvormi
-	// eventi lisamisel kuvatakse koigepealt esimene leht sisestamisvormist, 
-	// selle submittimisel genereeritakse ID, mille abil siis kuvatakse
-	// edaspidi koik teised muutmislehed.
+	/** Kuvab eventi lisamis/muutmisvormi 
+		
+		@attrib name=add params=name default="0"
+		
+		@param page optional
+		
+		@returns
+		
+		
+		@comment
+		eventi lisamisel kuvatakse koigepealt esimene leht sisestamisvormist,
+		selle submittimisel genereeritakse ID, mille abil siis kuvatakse
+		edaspidi koik teised muutmislehed.
+
+	**/
+	/**  
+		
+		@attrib name=edit params=name default="0"
+		
+		@param id required
+		@param page optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function event_edit($args = array())
 	{
 		extract($args);
@@ -425,8 +469,17 @@ class events extends aw_template
 		return $head . $this->parse() . $foot;
 	}
 
-	////
-	// !Submits an event
+	/** Submits an event 
+		
+		@attrib name=submit params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function event_submit($args = array())
 	{
 		extract($args);
@@ -571,6 +624,17 @@ class events extends aw_template
 		return $this->mk_my_orb("edit",array("page" => $page,"id" => $id));
 	}
 
+	/**  
+		
+		@attrib name=search params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function event_search($args = array())
 	{
 		load_vcl("date_edit");
@@ -605,6 +669,17 @@ class events extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=do_search params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function do_search($args = array())
 	{
 		extract($args);
@@ -739,6 +814,17 @@ class events extends aw_template
 		return array($start,$end,$calendar);
 	}
 
+	/**  
+		
+		@attrib name=my_events params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function my_events($args = array())
 	{
 		if (aw_global_get("uid") == "")
@@ -783,6 +869,17 @@ class events extends aw_template
 		};
 	}
 
+	/**  
+		
+		@attrib name=submit_my_events params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_my_events($args = array())
 	{
 		extract($args);
@@ -812,6 +909,18 @@ class events extends aw_template
 		return $this->mk_my_orb("my_events",array());
 	}
 
+	/**  
+		
+		@attrib name=invite params=name nologin="1" default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function invite($args = array())
 	{
 		$this->read_template("invite.tpl");
@@ -827,6 +936,17 @@ class events extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_invite params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_invite($args = array())
 	{
 		extract($args);
@@ -849,6 +969,18 @@ class events extends aw_template
 		exit;
 	}
 
+	/**  
+		
+		@attrib name=view params=name nologin="1" default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function event_view($args = array())
 	{
 		extract($args);

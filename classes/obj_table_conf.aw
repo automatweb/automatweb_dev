@@ -51,12 +51,24 @@ class obj_table_conf extends aw_template
 		$this->init("obj_table_conf");
 	}
 
-	////
-	// !called, when adding a new object 
-	// parameters:
-	//    parent - the folder under which to add the object
-	//    return_url - optional, if set, the "back" link should point to it
-	//    alias_to - optional, if set, after adding the object an alias to the object with oid alias_to should be created
+	/** called, when adding a new object 
+		
+		@attrib name=new params=name default="0"
+		
+		@param parent required acl="add"
+		@param alias_to optional
+		@param return_url optional
+		
+		@returns
+		
+		
+		@comment
+		parameters:
+		parent - the folder under which to add the object
+		return_url - optional, if set, the "back" link should point to it
+		alias_to - optional, if set, after adding the object an alias to the object with oid alias_to should be created
+
+	**/
 	function add($arr)
 	{
 		extract($arr);
@@ -89,10 +101,19 @@ class obj_table_conf extends aw_template
 		return $this->parse();
 	}
 
-	////
-	// !this gets called when the user submits the object's form
-	// parameters:
-	//    id - if set, object will be changed, if not set, new object will be created
+	/** this gets called when the user submits the object's form 
+		
+		@attrib name=submit params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+		parameters:
+		id - if set, object will be changed, if not set, new object will be created
+
+	**/
 	function submit($arr)
 	{
 		extract($arr);
@@ -157,11 +178,22 @@ class obj_table_conf extends aw_template
 		return $this->mk_my_orb("change", array("id" => $id, "return_url" => urlencode($return_url)));
 	}
 
-	////
-	// !this gets called when the user clicks on change object 
-	// parameters:
-	//    id - the id of the object to change
-	//    return_url - optional, if set, "back" link should point to it
+	/** this gets called when the user clicks on change object 
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required acl="view;edit"
+		@param return_url optional
+		
+		@returns
+		
+		
+		@comment
+		parameters:
+		id - the id of the object to change
+		return_url - optional, if set, "back" link should point to it
+
+	**/
 	function change($arr)
 	{
 		extract($arr);

@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.134 2004/01/07 13:16:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.135 2004/01/13 16:24:12 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -16,9 +16,29 @@ class aliasmgr extends aw_template
 		$this->lc_load("aliasmgr","lc_aliasmgr");
 	}
 
-	////
-	// !Allows to search for objects to include in the document
-	// intended to replace pickobject.aw
+	/** Allows to search for objects to include in the document 
+		
+		@attrib name=search params=name all_args="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+		intended to replace pickobject.aw
+
+	**/
+	/**  
+		
+		@attrib name=search_aliases params=name all_args="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function search($args = array())
 	{
 		extract($args);
@@ -191,8 +211,17 @@ class aliasmgr extends aw_template
 		}
 	}
 
-	////
-	// !Submits the alias list
+	/** Submits the alias list 
+		
+		@attrib name=submit_list params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_list($args = array())
 	{
 		extract($args);
@@ -514,11 +543,24 @@ class aliasmgr extends aw_template
 
 	}
 
-	////
-	// !the new alias lister
-	// params:
-	//   id - the object whose aliases we will observe
-	//   reltypes(array) - array of relation types
+	/** the new alias lister 
+		
+		@attrib name=list_aliases params=name default="0"
+		
+		@param id required type=int
+		@param table optional
+		@param sortby optional
+		@param sort_order optional
+		
+		@returns
+		
+		
+		@comment
+		params:
+		id - the object whose aliases we will observe
+		reltypes(array) - array of relation types
+
+	**/
 	function list_aliases($args)
 	{
 		extract($args);
@@ -744,6 +786,20 @@ class aliasmgr extends aw_template
 		};
 	}
 
+	/**  
+		
+		@attrib name=addalias params=name default="0"
+		
+		@param id required
+		@param alias required
+		@param reltype optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_addalias($args = array())
 	{
 		$this->create_alias($args);

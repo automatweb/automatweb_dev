@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.50 2004/01/06 11:56:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.51 2004/01/13 16:24:28 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -1474,6 +1474,30 @@ class form_table extends form_base
 		</script>";
 	}
 
+	/**  
+		
+		@attrib name=new params=name default="0"
+		
+		@param parent required acl="add"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	/**  
+		
+		@attrib name=new_new params=name default="0"
+		
+		@param parent required acl="add"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function new_add($arr)
 	{
 		extract($arr);
@@ -1493,6 +1517,17 @@ class form_table extends form_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=new_submit_settings params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function new_submit_settings($arr)
 	{
 		extract($arr);
@@ -1675,6 +1710,18 @@ class form_table extends form_base
 		return $this->mk_my_orb("new_change_settings", array("id" => $id));
 	}
 
+	/**  
+		
+		@attrib name=new_change_settings params=name default="0"
+		
+		@param id required acl="edit;view"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function new_change_settings($arr)
 	{
 		extract($arr);
@@ -1943,6 +1990,30 @@ class form_table extends form_base
 		));
 	}
 
+	/**  
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required acl="edit;view"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	/**  
+		
+		@attrib name=new_change_cols params=name default="0"
+		
+		@param id required acl="edit;view"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function new_change_cols($arr)
 	{
 		extract($arr);
@@ -2217,6 +2288,17 @@ class form_table extends form_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=new_submit_cols params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function new_submit_cols($arr)
 	{
 		extract($arr);
@@ -2327,6 +2409,18 @@ class form_table extends form_base
 		return 0;
 	}
 
+	/**  
+		
+		@attrib name=new_change_styles params=name default="0"
+		
+		@param id required acl="edit;view"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function new_change_styles($arr)
 	{
 		extract($arr);
@@ -2366,6 +2460,17 @@ class form_table extends form_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=new_submit_styles params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function new_submit_styles($arr)
 	{
 		extract($arr);
@@ -2377,6 +2482,18 @@ class form_table extends form_base
 		return $this->mk_my_orb("new_change_styles", array("id" => $id));
 	}
 
+	/**  
+		
+		@attrib name=new_change_translate params=name default="0"
+		
+		@param id required acl="edit;view"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function new_change_translate($arr)
 	{
 		extract($arr);
@@ -2483,6 +2600,17 @@ class form_table extends form_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=new_submit_translate params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function new_submit_translate($arr)
 	{
 		extract($arr);
@@ -2505,6 +2633,18 @@ class form_table extends form_base
 		return $this->mk_my_orb("new_change_translate", array("id" => $id));
 	}
 
+	/**  
+		
+		@attrib name=new_change_aliasmgr params=name default="0"
+		
+		@param id required acl="edit;view"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function new_change_aliasmgr($arr)
 	{
 		extract($arr);
@@ -3022,6 +3162,18 @@ class form_table extends form_base
 		));	 
 	}
 	
+	/**  
+		
+		@attrib name=change_grpsettings params=name default="0"
+		
+		@param id required acl="edit;view"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change_grpsettings($arr)
 	{
 		extract($arr);
@@ -3063,6 +3215,17 @@ class form_table extends form_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_grpsettings params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_grpsettings($arr)
 	{
 		extract($arr);
@@ -3160,8 +3323,18 @@ class form_table extends form_base
 		$this->data_num_rows = $num;
 	}
 
-	////
-	// !if we put a submit button in the table and the user presses it, this is where we end up
+	/** if we put a submit button in the table and the user presses it, this is where we end up 
+		
+		@attrib name=submit_table params=name nologin="1" default="0"
+		
+		@param return required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_table($arr)
 	{
 		extract($arr);

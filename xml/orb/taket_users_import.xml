@@ -1,15 +1,15 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="taket_users_import" folder="taket" extends="class_base">
-		<action name='import_users'>
-			<function name='import_users'>
+	<class name="taket_users_import" folder="www/dev/terryf/awcl/classes/taket" extends="class_base">
+		<action name="import_users" >
+			<function name="import_users">
 				<arguments>
-					<optional name='username'/>
-					<optional name='password'/>
-					<optional name='changed'/>
+					<optional name="username" />
+					<optional name="password" />
+					<optional name="changed" />
 				</arguments>
 			</function>
 		</action>
+
 	</class>
 </orb>
-		

@@ -8,8 +8,18 @@ class basket_order extends basket
 		$this->basket();
 	}
 
-	////
-	// !shows the order $id
+	/** shows the order $id 
+		
+		@attrib name=change params=name nologin="1" default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change($arr)
 	{
 		extract($arr);
@@ -78,6 +88,18 @@ class basket_order extends basket
 
 	/////
 	// !starts a new order based on order $id
+	/**  
+		
+		@attrib name=another params=name nologin="1" default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function another($arr)
 	{
 		extract($arr);

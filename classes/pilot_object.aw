@@ -54,6 +54,20 @@ class pilot_object extends class_base
 //		);
 //	}
 
+	/**  
+		
+		@attrib name=form params=name default="0"
+		
+		@param id required
+		@param feedback optional
+		@param feedback_cl optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function form($args)
 	{
 		$form = $this->get_object($args['id']);

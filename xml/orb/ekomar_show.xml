@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="ekomar_show"  extends="class_base">
+	<class name="ekomar_show" folder="www/dev/terryf/awcl/classes" extends="class_base">
 		<action name="show_file" nologin="1">
 			<function name="show_file">
 				<arguments>
@@ -8,6 +8,6 @@
 				</arguments>
 			</function>
 		</action>
+
 	</class>
 </orb>
-		

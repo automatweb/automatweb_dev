@@ -1,13 +1,12 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="rate" folder="contentmgmt/rate" extends="class_base">
-
+	<class name="rate" folder="www/dev/terryf/awcl/classes/contentmgmt/rate" extends="class_base">
 		<action name="rate" nologin="1">
 			<function name="add_rate">
 				<arguments>
-					<required name="oid"/>
-					<required name="return_url"/>
-					<required name="rate"/>
+					<required name="oid" type="int"/>
+					<required name="return_url" />
+					<required name="rate" />
 				</arguments>
 			</function>
 		</action>
@@ -15,12 +14,11 @@
 		<action name="show" nologin="1">
 			<function name="show">
 				<arguments>
-					<required name="id"/>
-					<optional name="gallery_id"/>
+					<required name="id" type="int"/>
+					<optional name="gallery_id" type="int"/>
 				</arguments>
 			</function>
 		</action>
 
 	</class>
 </orb>
-		

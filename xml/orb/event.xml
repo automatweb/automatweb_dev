@@ -1,0 +1,5 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="event" folder="www/dev/terryf/awcl/classes" extends="aw_template">
+	</class>
+</orb>

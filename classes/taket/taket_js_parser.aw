@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_js_parser.aw,v 1.1 2004/01/02 02:58:30 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_js_parser.aw,v 1.2 2004/01/13 16:24:32 kristo Exp $
 // taket_js_parser.aw - Taketi JS Parser 
 /*
 
@@ -43,6 +43,17 @@ class taket_js_parser extends class_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=get_js params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function get_js($arr)
 	{
 		$this->read_template('input_data.tpl');

@@ -9,6 +9,17 @@ class ekomar extends aw_template
 		$this->sub_merge = 1;
 	}
 
+	/**  
+		
+		@attrib name=list_files params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function list_files()
 	{
 		$this->read_template("list_files.tpl");
@@ -40,6 +51,17 @@ class ekomar extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=add_file params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add_file($arr)
 	{
 		$this->read_template("add_file.tpl");
@@ -51,6 +73,17 @@ class ekomar extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_file params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_file($arr)
 	{
 		extract($arr);
@@ -95,6 +128,18 @@ class ekomar extends aw_template
 		return $this->mk_orb("list_files", array());
 	}
 
+	/**  
+		
+		@attrib name=change_file params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change_file($arr)
 	{
 		$this->mk_path(0,"<a href='".$this->mk_orb("list_files", array())."'>Failide nimekiri</a> / Muuda faili");
@@ -106,6 +151,18 @@ class ekomar extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=delete_file params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function delete_file($arr)
 	{
 		extract($arr);
@@ -113,6 +170,17 @@ class ekomar extends aw_template
 		header("Location: ".$this->mk_orb("list_files", array()));
 	}
 
+	/**  
+		
+		@attrib name=import_cos params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function import_firms($arr)
 	{
 		extract($arr);
@@ -193,6 +261,17 @@ VALUES($cnt,'$f_ark','$f_name','$f_fname','$f_contact','$f_phone','$f_email','$f
 		return $row[file];
 	}
 
+	/**  
+		
+		@attrib name=upload_cos params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function uplaod_cos($arr)
 	{
 		$this->read_template("upload_cos.tpl");

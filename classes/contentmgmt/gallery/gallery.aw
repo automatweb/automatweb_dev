@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery.aw,v 1.3 2003/10/22 14:16:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery.aw,v 1.4 2004/01/13 16:24:22 kristo Exp $
 
 class gallery extends aw_template
 {
@@ -25,8 +25,19 @@ class gallery extends aw_template
 		return $this->show(array("page" => $page,"section" => $section));
 	}
 		
-	////
-	// !generates the form for adding a gallery
+	/** generates the form for adding a gallery 
+		
+		@attrib name=new params=name default="0"
+		
+		@param parent required acl="add"
+		@param alias_to optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add($arr)
 	{
 		extract($arr);
@@ -39,8 +50,18 @@ class gallery extends aw_template
 		return $this->parse();
 	}
 
-	////
-	// !generates the form for changing a gallery
+	/** generates the form for changing a gallery 
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required acl="edit;view"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change($arr)
 	{
 		extract($arr);
@@ -61,8 +82,17 @@ class gallery extends aw_template
 		return $this->parse();
 	}
 
-	////
-	// !saves or creates the gallery
+	/** saves or creates the gallery 
+		
+		@attrib name=submit params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function csubmit($arr)
 	{
 		extract($arr);
@@ -120,8 +150,19 @@ class gallery extends aw_template
 		}
 	}
 
-	////
-	// !generates the form for uploading pictures for gallery $id, page $page
+	/** generates the form for uploading pictures for gallery $id, page $page 
+		
+		@attrib name=admin params=name default="0"
+		
+		@param id required acl="edit;view"
+		@param page optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function admin($arr)
 	{
 		extract($arr);
@@ -200,6 +241,20 @@ class gallery extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=add_row params=name default="0"
+		
+		@param id required acl="edit;view"
+		@param page optional
+		@param rows optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add_rows($arr)
 	{
 		extract($arr);
@@ -210,6 +265,20 @@ class gallery extends aw_template
 		die();
 	}
 
+	/**  
+		
+		@attrib name=add_col params=name default="0"
+		
+		@param id required acl="edit;view"
+		@param page optional
+		@param cols optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add_cols($arr)
 	{
 		extract($arr);
@@ -220,6 +289,19 @@ class gallery extends aw_template
 		die();
 	}
 
+	/**  
+		
+		@attrib name=del_col params=name default="0"
+		
+		@param id required acl="edit;view"
+		@param page optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function del_col($arr)
 	{
 		extract($arr);
@@ -234,6 +316,19 @@ class gallery extends aw_template
 		die();
 	}
 
+	/**  
+		
+		@attrib name=del_row params=name default="0"
+		
+		@param id required acl="edit;view"
+		@param page optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function del_row($arr)
 	{
 		extract($arr);
@@ -255,8 +350,17 @@ class gallery extends aw_template
 		$this->db_query($q);
 	}
 
-	////
-	// !saves the uploaded pictures for gallery $id, on page $page
+	/** saves the uploaded pictures for gallery $id, on page $page 
+		
+		@attrib name=c_submit params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit($arr)
 	{
 		extract($arr);
@@ -341,8 +445,19 @@ class gallery extends aw_template
 		return $this->mk_orb("admin", array("id" => $id, "page" => $page));
 	}
 
-	////
-	// !adds a page to the gallery and returns to grid
+	/** adds a page to the gallery and returns to grid 
+		
+		@attrib name=add_page params=name default="0"
+		
+		@param id required acl="edit;view"
+		@param page optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add_page($arr)
 	{
 		extract($arr);
@@ -362,6 +477,23 @@ class gallery extends aw_template
 		return ($a["ord"] < $b["ord"]) ? -1 : 1;
 	}
 
+	/**  
+		
+		@attrib name=show params=name nologin="1" default="0"
+		
+		@param id optional
+		@param page optional
+		@param col optional
+		@param row optional
+		@param section optional
+		@param nr optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function show($page)
 	{
 		if (is_array($page))
@@ -630,6 +762,19 @@ class gallery extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=del_page params=name default="0"
+		
+		@param id required acl="edit;view"
+		@param page optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function del_page($arr)
 	{
 		extract($arr);

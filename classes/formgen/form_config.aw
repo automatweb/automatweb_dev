@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_config.aw,v 1.2 2002/10/30 10:58:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_config.aw,v 1.3 2004/01/13 16:24:27 kristo Exp $
 // form_config.aw - FormGen configuration
 
 classload("formgen/form_base");
@@ -11,6 +11,17 @@ class form_config extends form_base
 		$this->tpl_init("forms/configure");
 	}
 
+	/**  
+		
+		@attrib name=config params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function config()
 	{
 		$this->read_template("config.tpl");
@@ -73,6 +84,17 @@ class form_config extends form_base
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit($arr)
 	{
 		extract($arr);

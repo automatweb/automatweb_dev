@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.58 2004/01/13 07:34:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.59 2004/01/13 16:24:15 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -288,14 +288,23 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		return $nodes;
 	}
 
-	////
-	// !Shows a search form
-	// this is the core for interactive searching. It allows to enter data
-	// for search fields and displays the form and/or the results table
-	// args:
-	// fields(array) - list of fields you want in the search form
-	// 	fields = array("name" => "%","comment" => "%");
-	// 	obj - reference to caller
+	/** Shows a search form 
+		
+		@attrib name=search params=name all_args="1" default="1"
+		
+		
+		@returns
+		
+		
+		@comment
+		this is the core for interactive searching. It allows to enter data
+		for search fields and displays the form and/or the results table
+		args:
+		fields(array) - list of fields you want in the search form
+		fields = array("name" => "%","comment" => "%");
+		obj - reference to caller
+
+	**/
 	function show($args = array())
 	{
 		$val = $args['s']['class_id'];
@@ -1386,6 +1395,17 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 	}
 
+	/**  
+		
+		@attrib name=submit_table params=name all_args="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_table($args = array())
 	{
 		extract($args);
@@ -1819,6 +1839,18 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		};
 	}
 
+	/**  
+		
+		@attrib name=view params=name all_args="1" default="0"
+		
+		@param id required type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function view($args = array())
 	{
 		extract($args);

@@ -41,6 +41,15 @@ msg:
 		echo "Cmdline php not found, cannot create message maps"; \
 	fi
 
+orb:
+	@echo "Generating orb definitions"
+	@if test -e scripts/php; \
+		then \
+		./scripts/php -n -d register_argc_argv=1 -q -f ./scripts/mk_orb.aw \
+	else \
+		echo "Cmdline php not found, cannot create orb definitions"; \
+	fi
+
 class:
 	@scripts/php -n -q scripts/mk_class/mk_class.aw
 

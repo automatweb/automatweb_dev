@@ -29,6 +29,18 @@ class aip_pdf extends aw_template
 		return make_toolbar($this->section, &$this, "javascript:document.q.submit()", true);
 	}
 
+	/**  
+		
+		@attrib name=listfiles params=name default="0"
+		
+		@param section optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function listfiles($arr)
 	{
 		extract($arr);
@@ -127,6 +139,17 @@ class aip_pdf extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_list params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_list($arr)
 	{
 		extract($arr);
@@ -524,6 +547,17 @@ class aip_pdf extends aw_template
 		return $ret;
 	}
 
+	/**  
+		
+		@attrib name=log params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function orb_log($arr)
 	{
 		extract($arr);
@@ -551,6 +585,18 @@ class aip_pdf extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=view_log params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function view_log($arr)
 	{
 		extract($arr);
@@ -645,6 +691,17 @@ class aip_pdf extends aw_template
 		return true;
 	}
 
+	/**  
+		
+		@attrib name=configure params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function configure($arr)
 	{
 		extract($arr);
@@ -663,6 +720,17 @@ class aip_pdf extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_configure params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_configure($arr)
 	{
 		extract($arr);
@@ -674,6 +742,21 @@ class aip_pdf extends aw_template
 		return $this->mk_my_orb("configure", array(), "", false, true);
 	}
 
+	/**  
+		
+		@attrib name=report params=name default="0"
+		
+		@param changed optional
+		@param added optional
+		@param nochange optional
+		@param deleted optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function report($arr)
 	{
 		extract($arr);
@@ -741,6 +824,17 @@ class aip_pdf extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_report params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_report($arr)
 	{
 		extract($arr);

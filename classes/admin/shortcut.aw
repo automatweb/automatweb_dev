@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/shortcut.aw,v 1.1 2003/07/31 08:13:17 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/shortcut.aw,v 1.2 2004/01/13 16:24:17 kristo Exp $
 // shortcut.aw - Shortcut 
 /*
 
@@ -26,6 +26,18 @@ class shortcut extends class_base
 		));
 	}
 
+	/**  
+		
+		@attrib name=view params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function view($args)
 	{
 		$val = $this->get_object($args['id']);
@@ -41,6 +53,18 @@ class shortcut extends class_base
 		die;
 	}
 	
+	/**  
+		
+		@attrib name=mk_shortcut params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function mk_shortcut($args)
 	{
 		$val = $this->get_object($args['id']);

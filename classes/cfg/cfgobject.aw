@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/cfgobject.aw,v 1.4 2003/04/24 07:47:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/cfgobject.aw,v 1.5 2004/01/13 16:24:20 kristo Exp $
 // cfgobject.aw - configuration objects
 // adds, changes and in general handles configuration objects
 
@@ -10,8 +10,18 @@ class cfgobject extends aw_template
 		$this->init("cfgobject");
 	}
 
-	////
-	// !Adds a new configuration object
+	/** Adds a new configuration object 
+		
+		@attrib name=new params=name default="0"
+		
+		@param parent required acl="add"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add($args = array())
 	{
 		extract($args);
@@ -46,8 +56,18 @@ class cfgobject extends aw_template
 		return $this->parse();
 	}
 
-	////
-	// !Allows to change the configuration object
+	/** Allows to change the configuration object 
+		
+		@attrib name=change params=name default="0"
+		
+		@param id required acl="edit;view"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change($args = array())
 	{
 		extract($args);
@@ -189,8 +209,17 @@ class cfgobject extends aw_template
 		return $this->parse();
 	}
 
-	////
-	// !Submits the configuration object
+	/** Submits the configuration object 
+		
+		@attrib name=submit params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit($args = array())
 	{
 		extract($args);
@@ -349,6 +378,17 @@ class cfgobject extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=search params=name all_args="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function search($args = array())
 	{
 		extract($args);
@@ -414,6 +454,17 @@ class cfgobject extends aw_template
 		$row["change"] = "<input type='checkbox' name='sel[]' value='$row[oid]'>";
 	}
 
+	/**  
+		
+		@attrib name=save_objects params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function save_objects($args = array())
 	{
 		extract($args);

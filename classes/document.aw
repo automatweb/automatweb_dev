@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.230 2004/01/06 12:03:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.231 2004/01/13 16:24:13 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -176,8 +176,18 @@ class document extends aw_template
 		$this->db_query($q);
 	}
 
-	////
-	// !Fetces a document from the database
+	/** Fetces a document from the database 
+		
+		@attrib name=fetch params=name default="0"
+		
+		@param docid required type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function fetch($docid, $no_acl_checks = false) 
 	{
 		if (is_array($docid))
@@ -1137,8 +1147,18 @@ class document extends aw_template
 		}; // eoi
 	}
 
-	////
-	// !Salvestab dokumendi
+	/** Salvestab dokumendi 
+		
+		@attrib name=save params=name default="0"
+		
+		@param id required acl="edit;view"
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function save($data) 
 	{
 		$this->quote($data);
@@ -1435,6 +1455,19 @@ class document extends aw_template
 
 	}
 
+	/**  
+		
+		@attrib name=new params=name is_public="1" caption="New document" default="0"
+		
+		@param parent required acl="add"
+		@param period optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function add($arr)
 	{
 		extract($arr);
@@ -1451,6 +1484,19 @@ class document extends aw_template
 		die();
 	}
 
+	/**  
+		
+		@attrib name=submit_add params=name default="0"
+		
+		@param parent required acl="add"
+		@param period required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_add($arr)
 	{
 		extract($arr);
@@ -1566,8 +1612,20 @@ class document extends aw_template
 		return $this->mk_my_orb("change", array("id" => $lid));
 	}
 
-	////
-	// !Displays the document edit form
+	/** Displays the document edit form 
+		
+		@attrib name=change params=name is_public="1" caption="Edit document" default="0"
+		
+		@param id required type=int acl="edit;view"
+		@param section optional
+		@param period optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function change($arr)
 	{
 		$baseurl = $this->cfg["baseurl"];
@@ -1780,6 +1838,18 @@ class document extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=sellang params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function sel_lang_bros($arr)
 	{
 		extract($arr);
@@ -1861,11 +1931,38 @@ class document extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=seb_s params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function seb_s($arr)
 	{
 		return $this->mk_orb("sellang", array("id" => $arr["id"],"slang_id" => $arr["slang_id"],"sstring" => $arr["sstring"]));
 	}
 
+	/**  
+		
+		@attrib name=set_lang_bro params=name default="0"
+		
+		@param id required
+		@param sstring required
+		@param slang_id required
+		@param bro required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function set_lang_bro($arr)
 	{
 		extract($arr);
@@ -1975,6 +2072,18 @@ class document extends aw_template
 		}
 	}
 
+	/**  
+		
+		@attrib name=sel_menus params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function sel_menus($arr)
 	{
 		extract($arr);
@@ -2002,6 +2111,18 @@ class document extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_menus params=name default="0"
+		
+		@param id required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_menus($arr)
 	{
 		extract($arr);
@@ -2132,13 +2253,27 @@ class document extends aw_template
 		return true;
 	}
 
-	////
-	// !Performs a search from all documents
-	// parent - alates millisest sektsioonist otsida
-	// str - mida otsida
-	// section - section id, mille sisu asemel otsingutulemusi naidatakse
-	// sortby - mille jargi otsingu tulemusi sortida
-	// from - alates millisest vastusest naitama hakatakse?
+	/** Performs a search from all documents 
+		
+		@attrib name=search params=name nologin="1" default="0"
+		
+		@param parent optional
+		@param str optional
+		@param section optional
+		@param sortby optional
+		@param from optional
+		
+		@returns
+		
+		
+		@comment
+		parent - alates millisest sektsioonist otsida
+		str - mida otsida
+		section - section id, mille sisu asemel otsingutulemusi naidatakse
+		sortby - mille jargi otsingu tulemusi sortida
+		from - alates millisest vastusest naitama hakatakse?
+
+	**/
 	function do_search($arr = array())
 	{
 		extract($arr);
@@ -2685,6 +2820,20 @@ class document extends aw_template
 		}
 	}
 
+	/**  
+		
+		@attrib name=lookup params=name nologin="1" default="0"
+		
+		@param id required
+		@param sortby optional
+		@param origin optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function lookup($args = array())
 	{
 		$SITE_ID = $this->cfg["site_id"];
@@ -2934,8 +3083,18 @@ class document extends aw_template
 		}
 	}
 
-	////
-	// !lets the user send a document to someone else
+	/** lets the user send a document to someone else 
+		
+		@attrib name=send params=name nologin="1" default="0"
+		
+		@param section required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function send($arr)
 	{
 		extract($arr);
@@ -2950,8 +3109,17 @@ class document extends aw_template
 		return $this->parse();
 	}
 
-	////
-	// !actually sends the document as a link via e-mail
+	/** actually sends the document as a link via e-mail 
+		
+		@attrib name=submit_send params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_send($arr)
 	{
 		extract($arr);
@@ -2988,6 +3156,18 @@ class document extends aw_template
 		return $this->cfg["baseurl"]."/?section=".$section;
 	}
 
+	/**  
+		
+		@attrib name=feedback params=name nologin="1" default="0"
+		
+		@param section required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function feedback($arr)
 	{
 		extract($arr);
@@ -3043,6 +3223,17 @@ class document extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=submit_feedback params=name nologin="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function submit_feedback($arr)
 	{
 		extract($arr);
@@ -3054,6 +3245,18 @@ class document extends aw_template
 		return $this->mk_my_orb("thanks", array("section" => $docid,"eesnimi" => $eesnimi));
 	}
 
+	/**  
+		
+		@attrib name=thanks params=name nologin="1" default="0"
+		
+		@param eesnimi optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function thanks($arr)
 	{
 		extract($arr);
@@ -3064,6 +3267,18 @@ class document extends aw_template
 		return $this->parse();
 	}
 
+	/**  
+		
+		@attrib name=print params=name nologin="1" default="0"
+		
+		@param section required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function do_print($arr)
 	{
 		extract($arr);
@@ -3276,6 +3491,17 @@ class document extends aw_template
 		$row["name"] = "<a href='$url'>$row[name]</a>";
 	}
 
+	/**  
+		
+		@attrib name=docsearch params=name all_args="1" default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
 	function docsearch($args = array())
 	{
 		$search = get_instance("search");
