@@ -39,10 +39,30 @@ class grid_editor extends class_base
 				}
 			}
 		}
+
+		// go over the map and eliminate empty indexes
+		$nm = array();
+		foreach($this->arr["map"] as $row => $rowd)
+		{
+			if ($row !== "")
+			{
+				foreach($rowd as $col => $cold)
+				{
+					if ($col !== "")
+					{
+						$nm[$row][$col]["row"] = (int)$this->arr["map"][$row][$col]["row"];
+						$nm[$row][$col]["col"] = (int)$this->arr["map"][$row][$col]["col"];
+					}
+				}
+			}
+		}
+		$this->arr["map"] = $nm;
 	}
 
 	function get_spans($i, $a, $map = -1,$rows = -1, $cols = -1)	// row, col
 	{
+		$i = (int)$i;
+		$a = (int)$a;
 		if ($map == -1)
 		{
 			$map = $this->arr["map"];
@@ -796,10 +816,13 @@ class grid_editor extends class_base
 	function _exp_right($arr)
 	{
 		extract($arr);
+		$col = (int)$col;
+		$row = (int)$row;
 		// here we must first find the right bound for the area being expanded and use that instead the $row, because
 		// that is an arbitrary position in the area really.
 		for ($c=0; $c < $cnt; $c++)
 		{
+			$r = 0;
 			for ($i=$col; $i < $this->arr["cols"]; $i++)
 			{
 				if ($this->arr["map"][$row][$i] == $this->arr["map"][$row][$col])
