@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/flash.aw,v 1.7 2004/03/15 13:41:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/flash.aw,v 1.8 2004/06/16 15:42:42 duke Exp $
 // flash.aw - Deals with flash applets
 /*
 
@@ -137,6 +137,12 @@ class flash extends class_base
 		extract($args);
 		return $this->view(array('id' => $alias['target']));
 	}
+
+	function request_execute($obj_inst)
+	{
+		die($this->view(array("id" => $obj_inst->id())));
+	}
+
 
 	/**  
 		
