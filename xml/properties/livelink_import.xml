@@ -1,0 +1,50 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>outdir</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kataloog, kuhu failid kirjutada</caption>
+      </property>
+      <property>
+            <name>fileprefix</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Prefiks tabelisse kirjutatavatele failinimedele</caption>
+      </property>
+      <property>
+            <name>message</name>
+            <type>text</type>
+            <editonly>1</editonly>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Objekti staatus</caption>
+      </property>
+      <property>
+            <name>invoke</name>
+            <type>text</type>
+            <editonly>1</editonly>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Käivita</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_LIVELINK_IMPORT</syslog_type>
+      </classinfo>
+      <groupinfo>
+            <general>
+                  <caption>Üldine</caption>
+            </general>
+      </groupinfo>
+</properties>
+
