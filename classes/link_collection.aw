@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/link_collection.aw,v 2.7 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/link_collection.aw,v 2.8 2002/06/13 23:06:36 kristo Exp $
 // link_collection.aw - Lingikogude haldus
 
 class link_collection extends aw_template 
@@ -193,7 +193,7 @@ class link_collection extends aw_template
 			while($in_collection && (list($key,$val) = each($chain)))
 			{
 				$this->vars(array(
-					"url" => $this->mk_link(array("section" => $oid,"lcb" => $val["oid"])),
+					"url" => $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/".$this->mk_link(array("section" => $oid,"lcb" => $val["oid"])),
 					"name" => $val["name"],
 				));
 				// stop processing when we find the actual link collection
@@ -215,7 +215,7 @@ class link_collection extends aw_template
 			$cnt++;
 			$this->vars(array(
 				"name" => $row["name"],
-				"url" => $this->mk_link(array("section" => $oid,"lcb" => $row["oid"])),
+				"url" => $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/".$this->mk_link(array("section" => $oid,"lcb" => $row["oid"])),
 			));
 			$cols[$cnt % SECTION_COLUMNS] .= $this->parse("SECTIONS_COL");
 		};
