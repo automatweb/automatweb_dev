@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.2 2001/05/19 23:29:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.3 2001/05/20 23:36:46 duke Exp $
 // mailinglist saadetavate mailide klass
 
 	class email extends aw_template
@@ -8,10 +8,12 @@
 		{
 			$this->db_init();
 			$this->tpl_init("mailinglist");
+			$this->sent = array();
 		}
 
 		function list_mails($parent)
 		{
+			$p = $this->get_object($parent);
 			$this->read_template("list_mails.tpl");
 			$this->vars(array("parent" => $parent));
 			$c = "";
@@ -20,27 +22,39 @@
 											 WHERE objects.class_id = 20 AND objects.status != 0 AND objects.parent = $parent");
 			while ($row = $this->db_next())
 			{
-				if ($row[mail_from_name] != "")
-					$from = $row[mail_from_name]." &lt;".$row[mail_from]."&gt;";
+				if ($row["mail_from_name"] != "")
+					$from = $row["mail_from_name"]." &lt;".$row["mail_from"]."&gt;";
 				else
-					$from = $row[mail_from];
-				$this->vars(array("mail_id"					=> $row[id],
+					$from = $row["mail_from"];
+				$this->vars(array("mail_id"					=> $row["id"],
 													"mail_from"				=> $from,
-													"mail_subj"				=> $row[subj],
-													"mail_sent"				=> ($row[sent] == 0 ? "Ei" : "Jah"),
-													"mail_sent_when"	=> ($row[sent] == 0 ? "&nbsp;" : $this->time2date($row[sent],2))));
+													"mail_subj"				=> $row["subj"],
+													"mail_sent"				=> ($row["sent"] == 0 ? "Ei" : "Jah"),
+													"mail_sent_when"	=> ($row["sent"] == 0 ? "&nbsp;" : $this->time2date($row["sent"],2))));
 				
 				$mc = $this->parse("M_CHANGE");
 				$md = $this->parse("M_DELETE");
 				$ma = $this->parse("M_ACL");
 				$ms = $this->parse("M_SEND");
 
-				$this->vars(array("M_CHANGE" => $mc, "M_DELETE" => $md, "M_ACL" => $ma, "M_SEND" => $ms));
+				$this->vars(array(
+						"M_CHANGE" => $mc,
+						"M_DELETE" => $md,
+						"M_ACL" => $ma,
+						"M_SEND" => $ms,
+						"checked" => ($p["last"] == $row["oid"]) ? "checked" : ""));
 
 				$c.=$this->parse("LINE");
 			}
-			$this->vars(array("LINE" => $c));
+			$this->vars(array("LINE" => $c,"id" => $parent));
 			return $this->parse();
+		}
+
+		function submit_default($args = array())
+		{
+			extract($args);
+			$q = "UPDATE objects SET last = '$default' WHERE oid = '$id'";
+			$this->db_query($q);
 		}
 
 		function mk_ml_vars($parent)
@@ -259,17 +273,25 @@
 			$this->db_query($q);
 			while($row = $this->db_next())
 			{
-				$f = popen("/usr/sbin/sendmail -f $from", "w");
-				fwrite($f, "From: $from\n");
-				fwrite($f, "To: ".$row["mail"] . ">\n");
-				fwrite($f, "Return-Path: $from\n");
-				fwrite($f, "Sender: $from\n");
-				fwrite($f, "Subject: ".$subject."\n\n");
+				if ($cache && (!$this->sent[$row["mail"]]))
+				{
+					$c = str_replace("#nimi#",$row["name"],$content);
+					$f = popen("/usr/sbin/sendmail -f $from", "w");
+					fwrite($f, "From: $from\n");
+					fwrite($f, "To: ".$row["mail"] . ">\n");
+					fwrite($f, "Return-Path: $from\n");
+					fwrite($f, "Sender: $from\n");
+					fwrite($f, "Subject: ".$subject."\n\n");
 				
-				fwrite($f, "\n".$content."\n");
-				pclose($f);
-				echo "saatsin maili $row[mail]'le<br>";
-				flush();
+					fwrite($f, "\n".$c."\n");
+					pclose($f); 
+					echo "saatsin maili $row[mail]'le<br>";
+					if ($cache)
+					{
+						$this->sent[$row["mail"]] = 1;
+					};
+					flush();
+				};
 			};
 		}
 
