@@ -154,7 +154,7 @@ class links extends extlinks
 		
 		if ($docid)
 		{
-			return $this->mk_my_orb("change", array("id" => $docid), "document");
+			return $this->mk_my_orb("list_aliases", array("id" => $docid), "aliasmgr");
 		}
 		else
 		{
@@ -171,13 +171,13 @@ class links extends extlinks
 		$this->delete_object($id);
 		$this->delete_alias($parent,$id);
 		if ($p_obj["class_id"] != CL_PSEUDO)
-                {
-			header("Location: ".$this->mk_my_orb("change",array("id" => $parent),"document"));
-                }
-                else
-                {
-                        header("Location: ".$this->mk_orb("obj_list", array("parent" => $parent),"menuedit"));
-                };
+		{
+			return $this->mk_my_orb("change",array("id" => $parent),"document");
+		}
+		else
+		{
+			header("Location: ".$this->mk_orb("obj_list", array("parent" => $parent),"menuedit"));
+		};
 	}
 
 	function search_doc($arr)
