@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.285 2003/04/22 12:49:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.286 2003/04/23 07:00:13 duke Exp $
 // menuedit.aw - menuedit. heh.
 // meeza thinks we should split this class. One part should handle showing stuff
 // and the other the admin side -- duke
@@ -1345,37 +1345,6 @@ class menuedit extends aw_template
 			"75" => LC_MENUEDIT_CATALOG,
 			"77" => LC_MENUEDIT_PMETHOD,
 		);
-	}
-
-	// shouldn't this be somewhere else? --duke
-	function create_homes()
-	{
-		$this->db_query("SELECT * FROM users");
-		while ($row = $this->db_next())
-		{
-			$this->save_handle();
-			$id = $this->new_object(array("parent" => 1, "name" => $row["uid"], "class_id" => 1, "comment" => $row["uid"]." kodukataloog"));
-			$this->db_query("INSERT INTO menu (id,type) VALUES($id,".MN_HOME_FOLDER.")");
-			$this->db_query("UPDATE users SET home_folder = $id WHERE uid = '$row[uid]'");
-			echo "created for $row[uid] , id = $id<br>";
-			flush();
-			$this->restore_handle();
-		}
-
-		$this->invalidate_menu_cache();
-	}
-
-	////
-	// !sets the icon ($icon_id) for menu $id
-	function set_menu_icon($id,$icon_id)
-	{
-		$af = $this->db_fetch_field("SELECT admin_feature FROM menu WHERE id = $id","admin_feature");
-		if ($af)
-		{
-			$c = get_instance("config");
-			$c->set_program_icon(array("id" => $af,"icon_id" => $icon_id));
-		}
-		$this->db_query("UPDATE menu SET icon_id = $icon_id WHERE id = $id");
 	}
 
 	function req_draw_menu($parent,$name,&$path,$ignore_path)
@@ -3448,7 +3417,7 @@ class menuedit extends aw_template
 			// fetch it directly from the database
 			if (not($obj))
 			{
-				$obj = $this->get_obj_meta($parent);
+				$obj = $this->get_object($parent);
 			};
 
 			// only use metadata from menus
