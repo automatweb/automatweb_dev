@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.108 2004/03/01 12:12:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.109 2004/03/05 09:41:38 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -301,37 +301,85 @@ class users extends users_user
 		$row = $this->db_next();
 		if ($row)
 		{
-			$add_state["error"] = LC_USERADD_ERROR_EXISTS;;
+			if (defined("LC_USERADD_ERROR_EXISTS"))
+			{
+				$te = LC_USERADD_ERROR_EXISTS;
+			}
+			else
+			{
+				$te = "Sellise kasutajanimega kasuta on juba olemas!";
+			}
+			$add_state["error"] = $te;
 			return false;
 		}
 
 		if (!is_valid("uid",$a_uid))
 		{
-			$add_state["error"] = LC_USERADD_ERROR_SYMBOL;
+			if (defined("LC_USERADD_ERROR_SYMBOL"))
+			{
+				$te = LC_USERADD_ERROR_SYMBOL;
+			}
+			else
+			{
+				$te = "Kasutajanimes tohivad sisalduda ainult t&auml;hed, numbrid ja alakriips!";
+			}
+			$add_state["error"] = $te;
 			return false;
 		}
 
 		if ($pass != $pass2)
 		{
-			$add_state["error"] = LC_USERADD_ERROR_PWD;
+			if (defined("LC_USERADD_ERROR_PWD"))
+			{
+				$te = LC_USERADD_ERROR_PWD;
+			}
+			else
+			{
+				$te = "Sisestatud paroolid on erinevad!";
+			}
+			$add_state["error"] = $te;
 			return false;
 		}
 
 		if (!is_valid("password", $pass))
 		{
-			$add_state["error"] = LC_USERADD_ERROR_PWD_SYMBOL;
+			if (defined("LC_USERADD_ERROR_PWD_SYMBOL"))
+			{
+				$te = LC_USERADD_ERROR_PWD_SYMBOL;
+			}
+			else
+			{
+				$te = "Parool tohib sisaldada ainult numbreid, t&auml;hti ja alakriipsu!";
+			}
+			$add_state["error"] = $te;
 			return false;
 		}
 
 		if (strlen($a_uid) < 3)
 		{
-			$add_state["error"] = LC_USERADD_ERROR_SHORT;
+			if (defined("LC_USERADD_ERROR_SHORT"))
+			{
+				$te = LC_USERADD_ERROR_SHORT;
+			}
+			else
+			{
+				$te = "Kasutajanimes peab olema v&auml;hemalt 3 t&auml;hte!";
+			}
+			$add_state["error"] = $te;
 			return false;
 		}
 
 		if (strlen($pass) < 3)
 		{
-			$add_state["error"] = LC_USERADD_ERROR_PWD_SHORT;
+			if (defined("LC_USERADD_ERROR_PWD_SHORT"))
+			{
+				$te = LC_USERADD_ERROR_PWD_SHORT;
+			}
+			else
+			{
+				$te = "Paroolis peab olema v&auml;hemalt 3 t&auml;hte!";
+			}
+			$add_state["error"] = $te;
 			return false;
 		}
 		$add_state["error"] = "";
@@ -1123,7 +1171,10 @@ class users extends users_user
 					{
 						$GLOBALS["cfg"]["__default"]["admin_rootmenu2"] = $o["meta"]["admin_rootmenu2"][aw_global_get("lang_id")];
 						$GLOBALS["cfg"]["__default"]["rootmenu"] = $o["meta"]["admin_rootmenu2"][aw_global_get("lang_id")];
-						$GLOBALS["cfg"]["__default"]["frontpage"] = $o["meta"]["admin_rootmenu2"][aw_global_get("lang_id")];
+					}
+					if (is_array($o["meta"]["grp_frontpage"]) && $o["meta"]["grp_frontpage"][aw_global_get("lang_id")])
+					{
+						$GLOBALS["cfg"]["__default"]["frontpage"] = $o["meta"]["grp_frontpage"][aw_global_get("lang_id")];
 					}
 				}
 			}

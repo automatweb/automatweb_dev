@@ -60,6 +60,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_GROUP, on_remove_alias
 @property admin_rootmenu2 type=callback callback=get_admin_rootmenus field=meta method=serialize table=objects
 @caption Admin rootmen&uuml;&uuml;
 
+@property grp_frontpage type=callback callback=get_grp_frontpage field=meta method=serialize table=objects
+@caption Esileht
+
 @property can_admin_interface type=checkbox ch_value=1 field=meta table=objects method=serialize
 @caption Kas saab administreerimiskeskkonda
 
@@ -617,6 +620,31 @@ class group extends class_base
 				"method" => "serialize",
 				"caption" => "Admin rootmen&uuml;&uuml; ($lname)",
 				"value" => $meta["admin_rootmenu2"][$lid],
+				"reltype" => "RELTYPE_ADMIN_ROOT"
+			);
+		}
+		return $ret;
+	}
+
+	function get_grp_frontpage($arr)
+	{
+		$ret = array();
+		$la = get_instance("languages");
+		$ll = $la->get_list();
+
+		$meta = $arr["obj_inst"]->meta();
+
+		foreach($ll as $lid => $lname)
+		{
+			$ret["grp_frontpage[$lid]"] = array(
+				"name" => "grp_frontpage[$lid]",
+				"type" => "relpicker",
+				"group" => "settings",
+				"table" => "objects",
+				"field" => "meta",
+				"method" => "serialize",
+				"caption" => "Esileht ($lname)",
+				"value" => $meta["grp_frontpage"][$lid],
 				"reltype" => "RELTYPE_ADMIN_ROOT"
 			);
 		}

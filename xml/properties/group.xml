@@ -89,6 +89,16 @@
             <caption>Admin rootmen&amp;uuml;&amp;uuml;</caption>
       </property>
       <property>
+            <name>grp_frontpage</name>
+            <type>callback</type>
+            <callback>get_grp_frontpage</callback>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Esileht</caption>
+      </property>
+      <property>
             <name>can_admin_interface</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
