@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.20 2005/01/19 12:49:42 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.21 2005/01/21 12:45:27 ahti Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -764,14 +764,13 @@ class event_search extends class_base
 				foreach($ft_fields as $ft_field)
 				{
 					$or_parts[$ft_field] = "%" . $arr["fulltext"] . "%";
-
-				};
+				}
 				//arr($or_parts);
 				$search[] = new object_list_filter(array(
 					"logic" => "OR",
 					"conditions" => $or_parts,
 				));
-			};
+			}
 			$clinf = aw_ini_get("classes");
 			$edata = array();
 			$ecount = array();
@@ -784,7 +783,7 @@ class event_search extends class_base
 					"brother_of" => $ol->ids(),
 				));
 				*/
-				$this->read_template("search_results.tpl");
+				$this->read_template(($search["brother_of"] ? "show_event.tpl" : "search_results.tpl"));
 				$tabledef = $ob->meta("result_table");
 				//arr($tabledef);
 				uasort($tabledef, array($this, "__sort_props_by_ord"));
@@ -974,18 +973,23 @@ class event_search extends class_base
 						$val[] = $v;
 					}
 					$val = implode(" ".$tabledef[$sname]["sep"]." ", $val);
-					$this->vars(array("cell" => $val));
+					$this->vars(array(
+						"cell" => $val,
+						"colcaption" => $propdef["caption"],
+					));
 					$cdat .= $this->parse("CELL");
 					$this->vars(array("CELL" => $cdat));
 				}
 				$nmx = "content";
 				if(!empty($eval["content"]) && $tabledef["content"]["active"])
 				{
+					$eval["content"] = nl2br($eval["content"]);
 					$aliasmrg->parse_oo_aliases($ekey, $eval["content"]);
 					$content = $eval["content"];
 				}
 				elseif(!empty($eval["utextarea1"]) && $tabledef["content"]["active"])
 				{
+					$eval["utextarea1"] = nl2br($eval["utextarea1"]);
 					$aliasmrg->parse_oo_aliases($ekey, $eval["utextarea1"]);
 					$content = $eval["utextarea1"];
 					
@@ -1120,13 +1124,12 @@ class event_search extends class_base
 			$this->vars(array(
 				"EVENT" => $res,
 			));
-
-
+			$result = $this->parse();
 			$htmlc->add_property(array(
 				"name" => "results",
 				"type" => "text",
 				"no_caption" => 1,
-				"value" => $this->parse(),
+				"value" => $result,
 			));
 		};
 
@@ -1145,8 +1148,7 @@ class event_search extends class_base
 		$html = $htmlc->get_result(array(
 			"form_only" => 1
 		));
-
-		return $html;
+		return $search["brother_of"] ? $result : $html;
 
 		// kuupva numbrid on lihtsalt selectid
 	}

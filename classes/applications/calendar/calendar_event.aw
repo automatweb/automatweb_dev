@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.11 2004/12/13 12:45:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.12 2005/01/21 12:45:27 ahti Exp $
 // calendar_event.aw - Kalendri sündmus 
 /*
 
@@ -225,7 +225,7 @@ class calendar_event extends class_base
 			   $htmlc->add_property(array(
 			      "name" => $propname,
 			      "caption" => $propdata["caption"],
-			      "value" => $value,
+			      "value" => nl2br($value),
 			      "type" => "text",
 			   ));
 			};
