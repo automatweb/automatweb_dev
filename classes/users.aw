@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.96 2003/11/19 16:21:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.97 2003/12/03 12:11:19 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1961,6 +1961,7 @@ class users extends users_user
 					{
 						$GLOBALS["cfg"]["__default"]["admin_rootmenu2"] = $o["meta"]["admin_rootmenu2"][aw_global_get("lang_id")];
 						$GLOBALS["cfg"]["__default"]["rootmenu"] = $o["meta"]["admin_rootmenu2"][aw_global_get("lang_id")];
+						$GLOBALS["cfg"]["__default"]["frontpage"] = $o["meta"]["admin_rootmenu2"][aw_global_get("lang_id")];
 					}
 				}
 			}
