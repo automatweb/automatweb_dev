@@ -3,6 +3,7 @@
       <property>
             <name>file</name>
             <type>fileupload</type>
+            <table>images</table>
             <group>general</group>
             <field>file</field>
             <caption>Pilt</caption>
