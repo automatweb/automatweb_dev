@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/vcl/participant_selector.aw,v 1.2 2004/12/01 12:13:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/vcl/participant_selector.aw,v 1.3 2004/12/08 07:30:03 kristo Exp $
 class participant_selector extends core
 {
 	function participant_selector()
@@ -55,11 +55,14 @@ class participant_selector extends core
 			'sortable' => '1',
 		));
 
-		$table->define_chooser(array(
-			'name' => 'check',
-			'field' => 'id',
-			'caption' => 'X',
-		));
+		if (!$_GET["get_csv_file"])
+		{
+			$table->define_chooser(array(
+				'name' => 'check',
+				'field' => 'id',
+				'caption' => 'X',
+			));
+		}
 
 		$conns = $arr['obj_inst']->connections_to(array());
 		//arr($conns);
@@ -85,6 +88,14 @@ class participant_selector extends core
 		$tbl = $arr["prop"];
 		$tbl["type"] = "table";
 		$tbl["vcl_inst"] = &$table;
+
+		if ($_GET["get_csv_file"])
+		{
+			header("Content-type: application/vnd.ms-excel");
+			header("Content-disposition: inline; filename=".t("osalejad.xls").";");
+			$table->sort_by();
+			die($table->draw());
+		}
 
 		return array(
 			$propname => $tbl,

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.14 2004/12/01 11:48:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.15 2004/12/08 07:29:33 kristo Exp $
 // Shared functionality for event classes
 class event_property_lib extends aw_template
 {
@@ -283,7 +283,7 @@ class event_property_lib extends aw_template
 			'caption' => t('Ametinimetus'),
 			'sortable' => '1',
 		));
-		if ($arr["request"]["get_csv_file"] != 1)
+		if ($_GET["get_csv_file"] != 1)
 		{
 			$table->define_chooser(array(
 				'name' => 'check',
@@ -337,10 +337,10 @@ class event_property_lib extends aw_template
 			}
 		}
 
-		if ($arr["request"]["get_csv_file"] == 1)
+		if ($_GET["get_csv_file"] == 1)
 		{
 			header("Content-type: application/vnd.ms-excel");
-			header("Content-disposition: inline; filename=osalejad.xls;");
+			header("Content-disposition: inline; filename=".t("osalejad.xls").";");
 			$table->sort_by();
 			die($table->draw());
 		}
