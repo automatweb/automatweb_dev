@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.117 2002/09/09 12:30:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.118 2002/09/23 17:47:27 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 classload("msgboard","aw_style","form_base","file");
@@ -529,8 +529,8 @@ class document extends aw_template
 		// period
 
 		classload("periods");
-		$db_periods = new db_periods(aw_ini_get("per_oid"));
-		$act_per = $db_periods->get_active_period(aw_ini_get("per_oid"));
+		$db_periods = new db_periods($this->cfg["per_oid"]);
+		$act_per = $db_periods->get_active_period($this->cfg["per_oid"]);
 		$this->title = $doc["title"];
 
 		//if (aw_global_get("in_archive"))
@@ -2004,7 +2004,7 @@ class document extends aw_template
 				$t->define_data(array(
 					"name" => $link,
 					"uid" => $meta["archive"][$key]["uid"],
-					"date" => $this->time2date($val["FILE_MODIFIED"],9),
+					"date" => $this->time2date($val[FILE_MODIFIED],9),
 					"check" => sprintf("<input type='radio' name='default' value='%d'>",$key),
 					"pick" => sprintf("<input type='checkbox' name='check[%d]' value=1>",$key),
 				));
@@ -2945,7 +2945,7 @@ class document extends aw_template
 				if (aw_ini_get("search.rewrite_urls"))
 				{
 					$sec = $exp->rewrite_link(document::get_link($sec));
-					$sec = aw_ini_get("baseurl")."/".$exp->get_hash_for_url($sec,aw_global_get("lang_id"));
+					$sec = $this->cfg["baseurl"]."/".$exp->get_hash_for_url($sec,aw_global_get("lang_id"));
 					$sec = str_replace("_","/",$sec);
 				}
 
@@ -3335,6 +3335,17 @@ class document extends aw_template
 					"reg_id" => $mp,
 					"function" => "search",
 					));
+		
+		// change password
+		$mp = $this->register_parser(array(
+					"reg" => "/(#)password_form(#)/i",
+					));
+
+		$this->register_sub_parser(array(
+					"class" => "users",
+					"reg_id" => $mp,
+					"function" => "change_pwd_hash",
+		));
 
 		// parooli meeldetuletus. bijaatch!
 		$mp = $this->register_parser(array(

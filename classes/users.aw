@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.48 2002/09/23 14:13:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.49 2002/09/23 17:47:27 duke Exp $
 // users.aw - User Management
 classload("users_user","config","form","objects","file");
 
@@ -1829,6 +1829,41 @@ class users extends users_user
 		$this->vars(array(
 			"uid" => $uid,
 			"reforb" => $this->mk_reforb("submit_password_hash",array("uid" => $uid,"pwhash" => $pwhash)),
+		));
+		return $this->parse();
+	}
+
+	function change_pwd_hash($args = array())
+	{
+		global $a;
+		$this->quote($a);
+		$q = "SELECT * FROM storage WHERE skey = '$a'";
+		$this->db_query($q);
+		$row = $this->db_next();
+		if (!$row)
+		{
+			return "<span style='color: red'>Sellist võtit pole väljastatud!</span><br>";
+		};
+
+		if ($args["change"])
+		{
+			if ($args["pass1"] && $args["pass2"])
+			{
+				$_data = aw_unserialize($row["data"]);
+				$newpass = md5($args["pass1"]);
+				$q = "UPDATE users SET password = '$newpass' WHERE uid = '$_data[uid]'";
+				$this->db_query($q);
+				return $this->login(array("uid" => $_data["uid"], "password" => $args["pass1"]));
+			}
+			else
+			{
+				return "<span style='color: red'>Viga parooli sisestamisel</a>";
+			};
+		};
+
+		$this->read_template("hash_change_password_plain.tpl");
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("change_pwd_hash",array("no_reforb" => 1, "change" => 1,"a" => $a)),
 		));
 		return $this->parse();
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.19 2002/09/23 11:15:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.20 2002/09/23 17:47:27 duke Exp $
 // mailinglist saadetavate mailide klass
 class email extends aw_template
 {
@@ -294,11 +294,21 @@ class email extends aw_template
 		reset($this->varis);
 		while (list($var_id, $var_name) = each($this->varis))
 		{
-			$this->db_query("SELECT value FROM ml_var_values WHERE var_id = $var_id AND user_id = $uid");
+			$q = "SELECT value FROM ml_var_values WHERE var_id = $var_id AND user_id = $uid";
+			$this->db_query($q);
 			$row = $this->db_next();
 			
 			$ret = str_replace("#".$var_name."#", $row["value"], $ret);
+
+			if ($var_name == "kasutajanimi")
+			{
+				$_member_uid = $row["value"];
+			};
 		}
+
+		$ret = $this->mk_pw_hash($ret,$_member_uid);
+
+
 		
 		// links
 		$this->db_query("SELECT * FROM objects WHERE parent = $mail_id AND class_id = 25 AND status != 0 ORDER BY oid");
@@ -332,6 +342,25 @@ class email extends aw_template
 		}
 		
 		return $ret;
+	}
+
+	function mk_pw_hash($c,$uid)
+	{
+		if (strpos($c,"#pwhash#"))
+		{
+			$hash = substr($this->gen_uniq_id(),0,15);
+			$c = str_replace("#pwhash#","a=$hash",$c);
+
+			$data = array("uid" => $uid,"ts" => time());
+
+			$_data = aw_serialize($data);		
+			$this->quote($_data);
+
+			$q = "REPLACE INTO storage (skey,data) VALUES ('$hash','$_data')";
+			$this->db_query($q);
+		};
+
+		return $c;
 	}
 
 	////

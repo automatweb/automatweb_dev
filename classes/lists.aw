@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.16 2002/09/23 11:37:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.17 2002/09/23 17:47:27 duke Exp $
 // lists.aw - listide haldus
 class lists extends aw_template
 {
@@ -112,7 +112,7 @@ class lists extends aw_template
 			{
 				$pwd_var_id = array_search("password", $existing_variables);
 			}
-
+			
 			// create #kasutajanimi# variable
 			if (!in_array("kasutajanimi",$existing_variables))
 			{
