@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_contents.aw,v 1.4 2004/11/16 11:16:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_contents.aw,v 1.5 2005/01/26 12:09:11 kristo Exp $
 // db_table_contents.aw - Andmebaasi tabeli sisu
 
 /*
@@ -15,6 +15,9 @@
 
 	@property db_table type=select 
 	@caption Tabel
+
+	@property sproc_params type=textbox
+	@caption Protsedduri parameetrid
 
 	@property per_page type=textbox size=5
 	@caption Mitu rida lehel
@@ -65,8 +68,21 @@ class db_table_contents extends class_base
 					{
 						$tbls[$tbl] = $tbl;
 					}
+					asort($tbls);
 				}
 				$args['prop']['options'] = $tbls;
+				break;
+
+			case "sproc_params":
+				$base = get_instance(CL_DB_LOGIN);
+				if ($base->login_as($args['obj_inst']->prop('db_base')))
+				{
+					$table_type = $base->db_get_table_type($args["obj_inst"]->prop("db_table"));
+					if ($table_type != DB_TABLE_TYPE_STORED_PROC)
+					{
+						return PROP_IGNORE;
+					}
+				}
 				break;
 
 			case "content":
@@ -110,33 +126,62 @@ class db_table_contents extends class_base
 	{
 		$ob = $arr["obj_inst"];
 		$t =& $arr["prop"]["vcl_inst"];
-
 		$db = get_instance(CL_DB_LOGIN);
 		$db->login_as($ob->prop('db_base'));
-		$tbl = $db->db_get_table($ob->prop('db_table'));
 
-		foreach($tbl['fields'] as $fn => $fd)
+		if ($db->db_get_table_type($ob->prop('db_table')) == DB_TABLE_TYPE_STORED_PROC)
 		{
-			$t->define_field(array(
-				'name' => $fn,
-				'caption' => $fn,
-				'sortable' => 1,
-				'numeric' => (in_array(strtolower($fd['type']),$this->numeric_types) ? true : false)
-			));
-		}
+			$q = $ob->prop('db_table')." ".$ob->prop("sproc_params");
+			$db->db_query($q);
+			$first = true;
+			while ($row = $db->db_next())
+			{
+				if ($first)
+				{
+					foreach($row as $fn => $fd)
+					{
+						$t->define_field(array(
+							'name' => $fn,
+							'caption' => $fn,
+							'sortable' => 1,
+						));
+					}
+				}
+				$first = false;
 
-		$per_page = $ob->prop('per_page');
-		$page = $arr["request"]["page"];
-		$db->db_query('SELECT * FROM '.$ob->prop('db_table').' LIMIT '.($page*$per_page).','.((int)$per_page));
-		while ($row = $db->db_next())
-		{
-			$t->define_data($row);
+				$t->define_data($row);
+			}
+			$t->sort_by();
 		}
-		$t->sort_by();
+		else
+		{
+			$tbl = $db->db_get_table($ob->prop('db_table'));
+
+			foreach($tbl['fields'] as $fn => $fd)
+			{
+				$t->define_field(array(
+					'name' => $fn,
+					'caption' => $fn,
+					'sortable' => 1,
+					'numeric' => (in_array(strtolower($fd['type']),$this->numeric_types) ? true : false)
+				));
+			}
+
+			$per_page = $ob->prop('per_page');
+			$page = $arr["request"]["page"];
+			$q = 'SELECT * FROM '.$ob->prop('db_table');
+			$db->db_query_lim($q, ($page*$per_page),((int)$per_page));
+			while ($row = $db->db_next())
+			{
+				$t->define_data($row);
+			}
+			$t->sort_by();
+		}
 	}
 
 	function do_content_pager($arr)
 	{
+		return;
 		$ob = $arr["obj_inst"];
 		$t =& $arr["prop"]["vcl_inst"];
 
@@ -200,7 +245,7 @@ class db_table_contents extends class_base
 		$page = $arr["request"]["page"];
 
 		$keys = array();
-		$db->db_query('SELECT * FROM '.$ob->prop('db_table').' LIMIT '.($page*$per_page).','.((int)$per_page));
+		$db->db_query_lim('SELECT * FROM '.$ob->prop('db_table'), ($page*$per_page),((int)$per_page));
 		$rc = 0;
 		while ($row = $db->db_next())
 		{
@@ -367,6 +412,26 @@ class db_table_contents extends class_base
 		}
 	}
 
+	function callback_mod_tab($arr)
+	{
+//		echo dbg::dump($arr);
+		if ($arr["id"] == "admcontent")
+		{
+			$db = get_instance(CL_DB_LOGIN);
+			$db->login_as($arr["obj_inst"]->prop('db_base'));
+
+			if ($db->db_get_table_type($arr["obj_inst"]->prop('db_table')) == DB_TABLE_TYPE_STORED_PROC)
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	////////////////////////////////////////////////////////////////////
+	// datasource interface methods
+	////////////////////////////////////////////////////////////////////
+
 	function get_fields($o, $params = array())
 	{
 		if (!$o->prop("db_base"))
@@ -375,12 +440,26 @@ class db_table_contents extends class_base
 		}
 		$db = get_instance(CL_DB_LOGIN);
 		$db->login_as($o->prop('db_base'));
-		$tbl = $db->db_get_table($o->prop('db_table'));
 
 		$ret = array();
-		foreach($tbl['fields'] as $fn => $fd)
+
+		if ($db->db_get_table_type($o->prop('db_table')) == DB_TABLE_TYPE_STORED_PROC)
 		{
-			$ret[$fn] = $fn;
+			$q = $o->prop('db_table')." ".$o->prop("sproc_params");
+			$row = $db->db_fetch_row($q);
+			foreach($row as $fn => $fd)
+			{
+				$ret[$fn] = $fn;
+			}
+		}
+		else
+		{
+			$tbl = $db->db_get_table($o->prop('db_table'));
+
+			foreach($tbl['fields'] as $fn => $fd)
+			{
+				$ret[$fn] = $fn;
+			}
 		}
 		return $ret;
 	}
@@ -394,7 +473,17 @@ class db_table_contents extends class_base
 
 		$db = get_instance(CL_DB_LOGIN);
 		$db->login_as($o->prop('db_base'));
-		$db->db_query('SELECT * FROM '.$o->prop('db_table'));
+
+		if ($db->db_get_table_type($o->prop('db_table')) == DB_TABLE_TYPE_STORED_PROC)
+		{
+			$q = $o->prop('db_table')." ".$o->prop("sproc_params");
+			$db->db_query($q);
+		}
+		else
+		{
+			$q = 'SELECT * FROM '.$ob->prop('db_table');
+			$db->db_query($q);
+		}
 
 		$ret = array();
 		while ($row = $db->db_next())

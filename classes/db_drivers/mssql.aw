@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mssql.aw,v 1.3 2004/10/08 01:32:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mssql.aw,v 1.4 2005/01/26 12:09:11 kristo Exp $
 // mysql.aw - MySQL draiver
 class mssql
 {
@@ -37,6 +37,29 @@ class mssql
 			exit;	
 		};
 		$this->db_base = $base;
+	}
+
+	function db_query_lim($qt, $limit = 0, $count = 0)
+	{
+		$sb = substr(trim($qt), 0, 6);
+		if (strtolower(trim($sb)) == "select" && ($limit + $count) > 0)
+		{
+			$qt = "SELECT TOP ".($limit+$count)." ".substr($qt, 7);
+			$this->db_query($qt);
+			if ($limit > 0)
+			{
+				$cnt = $limit;
+				while ($cnt)
+				{
+					$cnt--;
+					$this->db_next();
+				}
+			}
+		}
+		else
+		{
+			return $this->db_query($qt);
+		}
 	}
 
 	function db_query($qtext,$errors = true) 
@@ -253,16 +276,17 @@ class mssql
 
 	function db_list_tables()
 	{
-		$this->tID = mysql_list_tables($this->db_base);
-		$this->tablecount = mysql_num_rows($this->tID);
+		$this->db_query("SELECT name FROM sysobjects");
 	}
 
 	function db_next_table()
 	{
-		static $cnt = 0;
-		$res = ($cnt < $this->tablecount) ? mysql_tablename($this->tID,$cnt) : false;
-		$cnt++;
-		return $res;
+		$ret = $this->db_next();
+		if (!$ret)
+		{
+			return false;
+		}
+		return $ret["name"];
 	}
 	
 	function db_get_fields()
@@ -293,43 +317,23 @@ class mssql
 	function db_get_table($name)
 	{
 		$ret = array('name' => $name,'fields' => array());
-		$fID = @mysql_list_fields($this->db_base, $name, $this->dbh);
-		if (!$fID)
-		{
-			return false;
-		}
 
-		$numfields = mysql_num_fields($fID);
-		for ($i=0; $i < $numfields; $i++)
-		{
-			$_name = mysql_field_name($fID,$i);
-			$type = mysql_field_type($fID,$i);
-			$len =  mysql_field_len($fID,$i);
-			$flags = mysql_field_flags($fID,$i);
-			$ret['fields'][$_name] = array('name' => $_name, 'length' => $len, 'type' => $type, 'flags' => '');
-		}
-
-		$this->db_query("DESCRIBE $name");
+		$this->db_query_lim("SELECT syscolumns.name as name FROM sysobjects LEFT JOIN syscolumns ON syscolumns.id = sysobjects.id WHERE sysobjects.name = '".$name."' ");
 		while ($row = $this->db_next())
 		{
-			$ret['fields'][$row['Field']]['name'] = $row['Field'];
-			if (strpos($row['Type'],'(') === false)
-			{
-				$ret['fields'][$row['Field']]['length'] = $row['Type'] == 'text' ? 65535 : ($row['Type'] == 'mediumtext' ? 1024*1024*16 : 0 );
-				$ret['fields'][$row['Field']]['type'] = $row['Type'];
-			}
-			else
-			{
-				preg_match('/(.*)\((.*)\)/', $row['Type'], $mt);
-				$ret['fields'][$row['Field']]['length'] = $mt[2];
-				$ret['fields'][$row['Field']]['type'] = $mt[1];
-			}
-			$ret['fields'][$row['Field']]['null'] = $row['Null'];
-			$ret['fields'][$row['Field']]['default'] = $row['Default'];
-			$ret['fields'][$row['Field']]['flags'] = $row['Extra'];
+			$_name = $row["name"];
+			$type = "";
+			$len =  $row["length"];
+			$flags = "";
+			$ret['fields'][$_name] = array(
+				'name' => $_name, 
+				'length' => $len, 
+				'type' => $type, 
+				'flags' => '',
+				'default' => $row['cdefault']
+			);
 		}
 
-		// indeksid
 		return $ret;
 	}
 
@@ -709,6 +713,17 @@ class mssql
 		{
 			return "[".$fn."]";
 		}
+	}
+
+	function db_get_table_type($tbl)
+	{
+		$inf = $this->db_fetch_row("SELECT * FROM sysobjects WHERE name = '$tbl'");
+		$typestr = trim(strtolower($inf["type"]));
+		if ($typestr == "p")
+		{
+			return DB_TABLE_TYPE_STORED_PROC;
+		}
+		return DB_TABLE_TYPE_TABLE;
 	}
 };
 ?>

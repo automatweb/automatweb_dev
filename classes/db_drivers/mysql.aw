@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.24 2005/01/24 14:06:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.25 2005/01/26 12:09:11 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql 
 {
@@ -37,6 +37,11 @@ class mysql
 			exit;	
 		};
 		$this->db_base = $base;
+	}
+
+	function db_query_lim($qt, $limit, $count)
+	{
+		return $this->db_query($qt." LIMIT ".$limit.($count > 0 ? ",".$count : ""));
 	}
 
 	function db_query($qtext,$errors = true) 
@@ -714,6 +719,11 @@ class mysql
 	function db_fn($fn)
 	{
 		return $fn;
+	}
+
+	function db_get_table_type($tbl)
+	{
+		return DB_TABLE_TYPE_TABLE;
 	}
 };
 ?>

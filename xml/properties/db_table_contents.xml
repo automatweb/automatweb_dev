@@ -21,6 +21,15 @@
             <caption>Tabel</caption>
       </property>
       <property>
+            <name>sproc_params</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Protsedduri parameetrid</caption>
+      </property>
+      <property>
             <name>per_page</name>
             <table>objects</table>
             <group>general</group>

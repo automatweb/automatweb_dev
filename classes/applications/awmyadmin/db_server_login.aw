@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_server_login.aw,v 1.1 2004/05/21 11:08:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_server_login.aw,v 1.2 2005/01/26 12:09:11 kristo Exp $
 // db_server_login.aw - Andmebaasi serveri login
 
 /*
@@ -16,7 +16,7 @@
 	@property server_admin_user type=textbox 
 	@caption Admin kasutaja
 
-	@property server_admin_pass type=textbox 
+	@property server_admin_pass type=password
 	@caption Admin parool
 
 	@property server_driver type=select 

@@ -1,10 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.23 2004/10/08 01:32:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.24 2005/01/26 12:09:11 kristo Exp $
 // this is the class that allows us to connect to multiple datasources at once
 // it replaces the mysql class which was used up to now, but still routes all
 // db functions to it so that everything stays working and it also provides
 // means to create and manage alternate database connections
 
+define("DB_TABLE_TYPE_STORED_PROC", 1);
+define("DB_TABLE_TYPE_TABLE", 2);
 
 /*
 	// this still works
@@ -121,6 +123,16 @@ class db_connector
 	function db_query($qtext,$errors = true)
 	{
 		$retval = $this->dc[$this->default_cid]->db_query($qtext,$errors);
+		if (!$retval)
+		{
+			$this->db_last_error = $this->dc[$this->default_cid]->db_last_error;
+		};
+		return $retval;
+	}
+
+	function db_query_lim($qtext,$limit,$count = 0)
+	{
+		$retval = $this->dc[$this->default_cid]->db_query_lim($qtext,$limit, $count);
 		if (!$retval)
 		{
 			$this->db_last_error = $this->dc[$this->default_cid]->db_last_error;
@@ -402,6 +414,13 @@ class db_connector
 	function db_fn($fn)
 	{
 		return $this->dc[$this->default_cid]->db_fn($fn);
+	}
+
+	/** returns the type of the table, as one of the DB_TABLE_TYPE constants
+	**/
+	function db_get_table_type($tbl)
+	{
+		return $this->dc[$this->default_cid]->db_get_table_type($tbl);
 	}
 };
 ?>

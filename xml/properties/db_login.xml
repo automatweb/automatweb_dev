@@ -35,7 +35,7 @@
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>textbox</type>
+            <type>password</type>
             <caption>Parool</caption>
       </property>
       <property>

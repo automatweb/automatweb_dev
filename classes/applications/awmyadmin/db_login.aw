@@ -17,7 +17,7 @@
 	@property db_user type=textbox 
 	@caption Kasutajanimi
 
-	@property db_pass type=textbox 
+	@property db_pass type=password
 	@caption Parool
 
 	@property db_create_ifnexist type=checkbox ch_value=1
