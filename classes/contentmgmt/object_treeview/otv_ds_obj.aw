@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.24 2005/03/08 13:29:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.25 2005/03/08 14:33:14 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -48,7 +48,7 @@
 @reltype META value=6 clid=CL_META
 @caption Muutuja
 
-@reltype TRANSFORM value=7 clid=CL_DATA_FILTER
+@reltype TRANSFORM value=7 clid=CL_OTV_DATA_FILTER
 @caption andmete muundaja
 */
 
@@ -360,6 +360,12 @@ class otv_ds_obj extends class_base
 		}
 
 		$ret["jrk"] = "J&auml;rjekord";
+		foreach($ob->connections_from(array("type" => "RELTYPE_TRANSFORM")) as $c)
+		{
+			$tr = $c->to();
+			$tr_i = $tr->instance();
+			$tr_i->transform($tr, $ret);
+		}
 		return $ret;
 	}
 	
@@ -615,6 +621,13 @@ class otv_ds_obj extends class_base
 			}
 			$ret[$t->id()]["name"] = $_name;
 			$ret[$t->id()]["jrk"] = $t->ord();
+		}
+
+		foreach($ob->connections_from(array("type" => "RELTYPE_TRANSFORM")) as $c)
+		{
+			$tr = $c->to();
+			$tr_i = $tr->instance();
+			$tr_i->transform($tr, $ret);
 		}
 
 		return $ret;

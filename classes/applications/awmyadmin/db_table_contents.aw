@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_contents.aw,v 1.8 2005/03/08 13:29:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_contents.aw,v 1.9 2005/03/08 14:33:14 kristo Exp $
 // db_table_contents.aw - Andmebaasi tabeli sisu
 
 /*
@@ -37,7 +37,7 @@
 	@reltype DB_LOGIN value=1 clid=CL_DB_LOGIN 
 	@caption andmebaasi login
 
-	@reltype TRANSFORM value=2 clid=CL_DATA_FILTER
+	@reltype TRANSFORM value=2 clid=CL_OTV_DATA_FILTER
 	@caption andmete muundaja
 
 */

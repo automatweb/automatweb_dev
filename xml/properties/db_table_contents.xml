@@ -123,7 +123,7 @@
             </DB_LOGIN>
             <TRANSFORM>
                   <value>2</value>
-                  <clid>CL_DATA_FILTER</clid>
+                  <clid>CL_OTV_DATA_FILTER</clid>
                   <caption>andmete muundaja</caption>
             </TRANSFORM>
       </reltypes>

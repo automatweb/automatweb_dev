@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_data_filter.aw,v 1.1 2005/03/08 13:29:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_data_filter.aw,v 1.2 2005/03/08 14:33:14 kristo Exp $
 // otv_data_filter.aw - Andmeallika andmete muundaja 
 /*
 
-@classinfo syslog_type=ST_OTV_DATA_FILTER relationmgr=yes
+@classinfo syslog_type=ST_OTV_DATA_FILTER relationmgr=yes no_status=1
 
 @default table=objects
 @default group=general
@@ -90,11 +90,11 @@ class otv_data_filter extends class_base
 		foreach($replaces as $idx => $row)
 		{
 			$t->define_data(array(
-				"from" => html::textbox(
+				"from" => html::textbox(array(
 					"name" => "replaces[$idx][from]",
 					"value" => htmlspecialchars($replaces[$idx]["from"])
 				)),
-				"to" => html::textbox(
+				"to" => html::textbox(array(
 					"name" => "replaces[$idx][to]",
 					"value" => htmlspecialchars($replaces[$idx]["to"])
 				)),
@@ -107,7 +107,7 @@ class otv_data_filter extends class_base
 	function _save_str_replace($arr)
 	{
 		$sr = array();
-		forach(safe_array($arr["request"]["replace"]) as $row)
+		foreach(safe_array($arr["request"]["replaces"]) as $row)
 		{
 			if ($row["from"] != "" && $row["to"] != "")
 			{
@@ -121,13 +121,13 @@ class otv_data_filter extends class_base
 	{
 		$t->define_field(array(
 			"name" => "from",
-			"caption" => "Mis asendada",
+			"caption" => "T&auml;hekoodid, mis asendada",
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "to",
-			"caption" => "Millega asendada",
+			"caption" => "T&auml;hekoodid, millega asendada",
 			"align" => "center"
 		));
 	}
@@ -142,11 +142,11 @@ class otv_data_filter extends class_base
 		foreach($replaces as $idx => $row)
 		{
 			$t->define_data(array(
-				"from" => html::textbox(
+				"from" => html::textbox(array(
 					"name" => "replaces[$idx][from]",
 					"value" => htmlspecialchars($replaces[$idx]["from"])
 				)),
-				"to" => html::textbox(
+				"to" => html::textbox(array(
 					"name" => "replaces[$idx][to]",
 					"value" => htmlspecialchars($replaces[$idx]["to"])
 				)),
@@ -159,7 +159,7 @@ class otv_data_filter extends class_base
 	function _save_char_replace($arr)
 	{
 		$sr = array();
-		forach(safe_array($arr["request"]["replace"]) as $row)
+		foreach(safe_array($arr["request"]["replaces"]) as $row)
 		{
 			if ($row["from"] != "" && $row["to"] != "")
 			{
@@ -174,6 +174,41 @@ class otv_data_filter extends class_base
 		$arr["return_url"] = post_ru();
 	}
 
+	function callback_pre_save($arr)
+	{
+		// compile the replaces to code looping over a data array :)
+		$code = "foreach(\$data as \$k => \$v) {";
+
+		$repl = "";
+		$dat = safe_array($arr["obj_inst"]->meta("str_replace"));
+		foreach($dat as $row)
+		{
+			$repl .= "str_replace(\"".$this->_code_escape($row["from"])."\", \"".$this->_code_escape($row["to"])."\","; 
+		}
+
+		$dat2 = safe_array($arr["obj_inst"]->meta("char_replace"));
+		foreach($dat2 as $row)
+		{
+			$from = join(".", map("chr(%s)", explode(",", $row["from"])));
+			$to = join(".", map("chr(%s)", explode(",", $row["to"])));
+			$repl .= "str_replace($from, $to,"; 
+		}
+
+		if (($num = (count($dat) + count($dat2))))
+		{
+			$code .= "\$data[\$k] = ".$repl."\$v".str_repeat(")", $num).";";
+		}
+
+		$code .= "}";
+
+		$arr["obj_inst"]->set_meta("code", $code);
+	}
+
+	function _code_escape($str)
+	{
+		return str_replace("\"", "\\\"", $str);
+	}
+
 	/** transforms the data given according to the rules
 
 		@attrib api=1
@@ -185,7 +220,11 @@ class otv_data_filter extends class_base
 	**/
 	function transform($o, &$data)
 	{
-		
+		$code = $o->meta("code");
+		if ($code != "")
+		{
+			eval($code);
+		}
 	}
 }
 ?>
