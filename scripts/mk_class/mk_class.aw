@@ -3,7 +3,12 @@
 
 function file_get_contents($name)
 {
-	$f = fopen($name, "r");
+	$f = @fopen($name, "r");
+	if (!$f)
+	{
+		echo "\nERROR: file $name not found!\n\n";
+		exit(1);
+	}
 	$fc = fread($f, filesize($name));
 	fclose($f);
 	return $fc;
