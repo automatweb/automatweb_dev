@@ -1,0 +1,433 @@
+<?php
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_pp_search.aw,v 1.1 2004/08/30 10:50:21 kristo Exp $
+// otv_ds_pp_search.aw - Objektinimekirja pp andmeallika otsing 
+/*
+
+@classinfo syslog_type=ST_OTV_DS_PP_SEARCH relationmgr=yes no_status=1 no_comment=1
+
+@default table=objects
+@default group=general
+@default field=meta
+@default method=serialize
+
+@property pp type=relpicker reltype=RELTYPE_PP
+@caption Postipoisi andmeallikas, kust otsida
+
+@groupinfo sform caption="Otsinguvorm"
+@default group=sform
+
+@property sform_t type=table no_caption=1
+@caption Otsinguvorm
+
+
+@groupinfo stbl caption="Tulemuste tabel"
+@default group=stbl
+
+@property stbl_t type=table no_caption=1
+@caption Otsinguvormi tulemuste tabel
+
+
+@groupinfo srch caption="Otsi" submit_method=get
+@default group=srch
+
+@property srch type=callback callback=callback_get_srch
+
+@property srch_res type=table no_caption=1
+
+
+
+@reltype PP value=1 clid=CL_OTV_DS_POSTIPOISS
+@caption postipoisi andmeallikas
+
+*/
+
+class otv_ds_pp_search extends class_base
+{
+	function otv_ds_pp_search()
+	{
+		$this->init(array(
+			"tpldir" => "contentmgmt/object_treeview/otv_ds_pp_search",
+			"clid" => CL_OTV_DS_PP_SEARCH
+		));
+	}
+
+	function get_property($arr)
+	{
+		$prop = &$arr["prop"];
+		$retval = PROP_OK;
+		switch($prop["name"])
+		{
+			case "sform_t":
+				$this->do_sform_t_tbl($arr);
+				break;
+
+			case "stbl_t":
+				$this->do_stbl_t_tbl($arr);
+				break;
+
+			case "srch_res":
+				$this->do_srch_res_t($arr);
+				break;
+		};
+		return $retval;
+	}
+
+	function set_property($arr = array())
+	{
+		$prop = &$arr["prop"];
+		$retval = PROP_OK;
+		switch($prop["name"])
+		{
+			case "sform_t":
+				$arr["obj_inst"]->set_meta("sform", $arr["request"]["td"]);
+				break;
+
+			case "stbl_t":
+				$arr["obj_inst"]->set_meta("stbl", $arr["request"]["td"]);
+				break;
+		}
+		return $retval;
+	}	
+
+	function _init_sform_t_tbl(&$t)
+	{
+		$t->define_field(array(
+			"name" => "prop",
+			"caption" => "Element"
+		));
+		$t->define_field(array(
+			"name" => "in_form",
+			"caption" => "Otsitav",
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "ord",
+			"caption" => "J&auml;rjekord",
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "caption",
+			"caption" => "Tekst",
+			"align" => "center"
+		));
+	}
+
+	function do_sform_t_tbl($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_sform_t_tbl($t);
+
+		$td = $arr["obj_inst"]->meta("sform");
+
+		$i = get_instance(CL_OTV_DS_POSTIPOISS);
+		$flds = $i->get_fields();
+
+		foreach($flds as $fldid => $fldc)
+		{
+			if (!is_array($td[$fldid]))
+			{
+				$td[$fldid] = array("caption" => $fldc);
+			}
+
+			$t->define_data(array(
+				"prop" => $fldc,
+				"in_form" => html::checkbox(array(
+					"name" => "td[$fldid][in_form]",
+					"value" => 1,
+					"checked" => ($td[$fldid]["in_form"] == 1)
+				)),
+				"ord" => html::textbox(array(
+					"name" => "td[$fldid][ord]",
+					"value" => $td[$fldid]["ord"],
+					"size" => 5
+				)),
+				"caption" => html::textbox(array(
+					"name" => "td[$fldid][caption]",
+					"value" => $td[$fldid]["caption"],
+				))
+			));
+		}
+		$t->set_sortable(false);
+	}
+
+	function _init_stbl_t_tbl(&$t)
+	{
+		$t->define_field(array(
+			"name" => "prop",
+			"caption" => "Element"
+		));
+		$t->define_field(array(
+			"name" => "in_tbl",
+			"caption" => "Tabelis",
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "sortable",
+			"caption" => "Sorditav",
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "defaultsort",
+			"caption" => "Vaikimisi sorteeritud",
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "viewcol",
+			"caption" => "Vaatamise tulp",
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "ord",
+			"caption" => "J&auml;rjekord",
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "caption",
+			"caption" => "Tekst",
+			"align" => "center"
+		));
+	}
+
+	function do_stbl_t_tbl($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_stbl_t_tbl($t);
+
+		$td = $arr["obj_inst"]->meta("stbl");
+
+		$i = get_instance(CL_OTV_DS_POSTIPOISS);
+		$flds = $i->get_fields();
+
+		foreach($flds as $fldid => $fldc)
+		{
+			if (!is_array($td[$fldid]))
+			{
+				$td[$fldid] = array("caption" => $fldc);
+			}
+
+			$defs = "";
+			if ($td[$fldid]["sortable"])
+			{
+				$defs = html::radiobutton(array(
+					"name" => "td[__defaultsort]",
+					"value" => $fldid,
+					"checked" => ($td["__defaultsort"] == $fldid)
+				));
+			}
+
+			$vc = "";
+			if ($td[$fldid]["in_tbl"])
+			{
+				$vc = html::radiobutton(array(
+					"name" => "td[__viewcol]",
+					"value" => $fldid,
+					"checked" => ($td["__viewcol"] == $fldid)
+				));
+			}
+
+			$t->define_data(array(
+				"prop" => $fldc,
+				"in_tbl" => html::checkbox(array(
+					"name" => "td[$fldid][in_tbl]",
+					"value" => 1,
+					"checked" => ($td[$fldid]["in_tbl"] == 1)
+				)),
+				"sortable" => html::checkbox(array(
+					"name" => "td[$fldid][sortable]",
+					"value" => 1,
+					"checked" => ($td[$fldid]["sortable"] == 1)
+				)),
+				"defaultsort" => $defs,
+				"viewcol" => $vc,
+				"ord" => html::textbox(array(
+					"name" => "td[$fldid][ord]",
+					"value" => $td[$fldid]["ord"],
+					"size" => 5
+				)),
+				"caption" => html::textbox(array(
+					"name" => "td[$fldid][caption]",
+					"value" => $td[$fldid]["caption"],
+				))
+			));
+		}
+		$t->set_sortable(false);
+	}
+
+	function callback_get_srch($arr)
+	{
+		// make form
+		return $this->get_properties_for_form($arr["obj_inst"], $arr["request"]);
+	}
+
+	function get_properties_for_form($o, $request)
+	{
+		$ret = array();
+
+		$sf = safe_array($o->meta("sform"));
+
+		uasort($sf, create_function('$a,$b', 'if ($a["ord"] == $b["ord"]) { return 0;} return $a["ord"] > $b["ord"];'));
+
+		foreach($sf as $fld => $fld_dat)		
+		{
+			if (!$fld_dat["in_form"])
+			{
+				continue;
+			}
+			$ret[$fld] = array(
+				"name" => $fld,
+				"caption" => $fld_dat["caption"],
+				"value" => $request[$fld],
+				"type" => "textbox",
+				"store" => "no"
+			);
+		}
+		
+		return $ret;
+	}
+
+	function make_res_table(&$t, $o)
+	{
+		$td = safe_array($o->meta("stbl"));
+		uasort($td, create_function('$a,$b', 'if ($a["ord"] == $b["ord"]) { return 0;} return $a["ord"] > $b["ord"];'));
+
+		foreach($td as $tf => $tf_dat)
+		{
+			if (($tf_dat["in_tbl"] != 1))
+			{
+				continue;
+			}
+
+			$t->define_field(array(
+				"name" => "aw_".$tf,
+				"caption" => $tf_dat["caption"],
+				"align" => "center",
+				"sortable" => $tf_dat["sortable"]
+			));
+
+			if ($td["__defaultsort"] == $tf)
+			{
+				$t->set_default_sortby($tf);
+			}
+		}
+	}
+
+	function populate_result_table(&$t, $req, $o)
+	{
+		$td = safe_array($o->meta("stbl"));
+
+		$sql = $this->get_search_sql($o, $req);
+
+		$this->db_query($sql);
+		while ($row = $this->db_next())
+		{
+			if ($td["__viewcol"])
+			{
+				$row["aw_".$td["__viewcol"]] = html::href(array(
+					"url" => $row["aw_url"],
+					"caption" => $row["aw_".$td["__viewcol"]]
+				));
+			}
+			$t->define_data($row);
+		}
+		$t->sort_by();
+		return;
+	}
+
+	function get_search_sql($o, $req)
+	{
+		$pts = array();
+
+		$this->quote(&$req);
+
+		$sf = safe_array($o->meta("sform"));
+		foreach($sf as $fld => $fld_dat)		
+		{
+			if (!$fld_dat["in_form"])
+			{
+				continue;
+			}
+
+			if ($req[$fld] != "")
+			{
+				$pts[] = " aw_".$fld." LIKE '%".$req[$fld]."%' ";
+			}
+		}
+
+		$ptss = join(" AND ", $pts);
+		if ($ptss != "")
+		{
+			$ptss = "AND ( ".$ptss." ) ";
+		}
+		else
+		{
+			$ptss = " AND 1 = 0 ";
+		}
+
+		return "SELECT * FROM aw_otv_ds_pp_cache WHERE aw_pp_id = ".$o->prop("pp")." ".$ptss;
+	}
+
+	function do_srch_res_t($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->make_res_table($t, $arr["obj_inst"]);
+
+		$this->populate_result_table($t, $arr["request"], $arr["obj_inst"]);
+	}
+
+	function parse_alias($arr)
+	{
+		return $this->show(array("id" => $arr["alias"]["target"]));
+	}
+
+	function show($arr)
+	{
+		$ob = new object($arr["id"]);
+		$request = $_GET;
+
+		$props = $this->callback_get_srch(array(
+			"obj_inst" => $ob,
+			"request" => $request
+		));
+
+		$htmlc = get_instance("cfg/htmlclient");
+		$htmlc->start_output();
+		foreach($props as $pn => $pd)
+		{
+			$htmlc->add_property($pd);
+		}
+		$htmlc->add_property(array(
+			"name" => "search",
+			"caption" => "Otsi",
+			"type" => "submit",
+			"store" => "no"
+		));
+		$htmlc->finish_output();
+
+		$html = $htmlc->get_result(array(
+			"raw_output" => 1
+		));
+
+		classload("vcl/table");
+		$t = new aw_table(array(
+			"layout" => "generic"
+		));
+		$this->do_srch_res_t(array(
+			"prop" => array(
+				"vcl_inst" => &$t
+			),
+			"obj_inst" => &$ob,
+			"request" => $request,
+		));
+		$table = $t->draw();
+		
+		$this->read_template("show.tpl");
+		$this->vars(array(
+			"form" => $html,
+			"section" => aw_global_get("section"),
+			"table" => $table,
+			
+		));
+		return $this->parse();
+	}
+}
+?>
