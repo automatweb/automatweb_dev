@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/flash.aw,v 1.1 2005/02/13 12:13:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/flash.aw,v 1.2 2005/03/08 13:26:12 kristo Exp $
 // flash.aw - Deals with flash applets
 /*
 
@@ -117,7 +117,7 @@ class flash extends class_base
 	{
 		if ($url)
 		{
-			$url = $this->mk_my_orb("show", array("fastcall" => 1,"file" => basename($url)),"flash",false,true,"/");
+			$url = $this->mk_my_orb("show", array("file" => basename($url)),"flash",false,true,"/");
 			$url = str_replace("automatweb/","",$url);
 		}
 		else
