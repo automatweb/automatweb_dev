@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.37 2005/03/21 21:48:59 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.38 2005/03/22 11:13:10 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -255,21 +255,21 @@ define ("MRP_DATE_FORMAT", "j/m/Y H.i");
 
 class mrp_case extends class_base
 {
-	var $states = array (
-		MRP_STATUS_NEW => t("Uus"),
-		MRP_STATUS_PLANNED => t("Töösse planeeritud"),
-		MRP_STATUS_INPROGRESS => t("Töös"),
-		MRP_STATUS_ABORTED => t("Katkestatud"),
-		MRP_STATUS_DONE => t("Valmis"),
-		MRP_STATUS_LOCKED => t("Lukustatud"),
-		MRP_STATUS_PAUSED => t("Paus",
-		MRP_STATUS_DELETED => t("Kustutatud"),
-		MRP_STATUS_ONHOLD => t("Plaanist väljas"),
-		MRP_STATUS_ARCHIVED => t("Arhiveeritud"),
-	);
-
 	function mrp_case()
 	{
+		$this->states = array (
+			MRP_STATUS_NEW => t("Uus"),
+			MRP_STATUS_PLANNED => t("Töösse planeeritud"),
+			MRP_STATUS_INPROGRESS => t("Töös"),
+			MRP_STATUS_ABORTED => t("Katkestatud"),
+			MRP_STATUS_DONE => t("Valmis"),
+			MRP_STATUS_LOCKED => t("Lukustatud"),
+			MRP_STATUS_PAUSED => t("Paus"),
+			MRP_STATUS_DELETED => t("Kustutatud"),
+			MRP_STATUS_ONHOLD => t("Plaanist väljas"),
+			MRP_STATUS_ARCHIVED => t("Arhiveeritud"),
+		);
+	
 		$this->init(array(
 			"tpldir" => "mrp/mrp_case",
 			"clid" => CL_MRP_CASE
