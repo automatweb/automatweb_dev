@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.7 2001/11/01 10:38:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.8 2001/11/02 08:57:14 duke Exp $
 global $orb_defs;
 $orb_defs["forum"] = "xml";
 lc_load("msgboard");
@@ -192,6 +192,7 @@ class forum extends aw_template
 	function display_comment($args = array())
 	{
 		$this->vars(array(
+			"SHOW_COMMENT" => "",
 			"spacer" => $args["spacer"],
 			"level" => $args["level"],
 			"from" => $args["name"],
@@ -201,7 +202,13 @@ class forum extends aw_template
 			"time" => $this->time2date($args["time"],2),
 			"comment" => $args["comment"],
 			"reply_link" => $this->mk_my_orb("reply",array("parent" => $args["id"])),
+			"open_link" => $this->mk_my_orb("topics_detail",array("id" => $this->forum_id,"cid" => $args["id"],"from" => $this->from)),
 		));
+
+		if ($this->is_template("SHOW_COMMENT") && ($this->cid == $args["id"]))
+		{
+			$this->vars(array("SHOW_COMMENT" => $this->parse("SHOW_COMMENT")));
+		};
 
 		return $this->parse("message");
 	}
@@ -289,11 +296,43 @@ class forum extends aw_template
 			"props_link" => $this->mk_my_orb("edit_properties",array("id" => $id)),
 			"search_link" => $this->mk_my_orb("search",array("board" => $id)),
 			"mark_all_read" => $this->mk_my_orb("mark_all_read",array("id" => $id)),
+			"topic_detail_link" => $this->mk_my_orb("topics_detail",array("id" => $id,"from" => $from)),
 			"TOPIC" => $content,
 			"TOPIC_EVEN" => $content,
 		));
 		return $this->parse();
 	}
+
+	function topics_detail($args = array())
+	{
+		extract($args);
+		$o = $this->get_obj_meta($id);
+
+		$this->forum_id = $id;
+		$this->from = $from;
+		$this->topicsonpage = ($o["meta"]["topicsonpage"]) ? $o["meta"]["topicsonpage"] : 5;
+		$this->read_template("list_topics_detail.tpl");
+
+		$this->cid = $args["cid"];
+		$content = $this->_draw_all_topics(array(
+						"id" => $id,
+						"details" => 1,
+		));
+		
+		$this->vars(array(
+			"newtopic_link" => $this->mk_my_orb("add_topic",array("id" => $id)),
+			"topics_link" => $this->mk_my_orb("topics",array("id" => $id,"from" => $from)),
+			"props_link" => $this->mk_my_orb("edit_properties",array("id" => $id)),
+			"search_link" => $this->mk_my_orb("search",array("board" => $id)),
+			"mark_all_read" => $this->mk_my_orb("mark_all_read",array("id" => $id)),
+			"topic_detail_link" => $this->mk_my_orb("topics_detail",array("id" => $id)),
+			"TOPIC" => $content,
+			"TOPIC_EVEN" => $content,
+		));
+
+		return $this->parse();
+	}
+
 		
 
 	////
@@ -459,6 +498,7 @@ class forum extends aw_template
 			));
 
 
+
 			$this->vars(array(
 				"newtopic_link" => $this->mk_my_orb("add_topic",array("id" => $id,"section" => $oid)),
 				"search_link" => $this->mk_my_orb("search",array("board" => $id,"section" => $oid)),
@@ -522,12 +562,29 @@ class forum extends aw_template
 						"total" => sizeof($obj),
 						"onpage" => $this->topicsonpage,
 						"active" => $this->from,
+						"details" => $args["details"],
 			));
 			$cnt = 0;
 			foreach($obj as $key => $item)
 			{
 				if ( ($cnt >= $from) && ($cnt <= $to) )
 				{
+					if ($args["details"])
+					{
+						// this is a tad ineffective, because we query 
+						// for each topic, instead of getting the comments
+						// as a batch
+						$this->_query_comments(array("board" => $item["oid"]));
+						// put the comments into tree
+						while($row = $this->db_next())
+						{
+							$this->comments[$row["parent"]][] = $row;
+						};
+						$this->rec_comments(0);
+						$this->vars(array("message" => $this->content));
+						$this->content = "";
+						$this->comments = array();
+					}
 					$content .= $this->_draw_topic(array_merge($item,array("section" => $oid)));
 				}
 				$cnt++;
@@ -628,8 +685,9 @@ class forum extends aw_template
 			{
 				$tpl = "PAGE";
 			};
+			$pg_action = ($args["details"]) ? "topics_detail" : "topics";
 			$this->vars(array(
-				"pagelink" => $this->mk_my_orb("topics",array("id" => $this->forum_id,"from" => $page_start)),
+				"pagelink" => $this->mk_my_orb($pg_action,array("id" => $this->forum_id,"from" => $page_start)),
 				"linktext" => $i,
 			));
 			$content .= $this->parse($tpl);
