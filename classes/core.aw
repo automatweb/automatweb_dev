@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.84 2002/03/12 23:42:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.85 2002/03/13 03:15:18 kristo Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -2059,6 +2059,15 @@ class core extends db_connector
 			aw_cache_set("gm_cache",$id,$row);
 			return $row;
 		};
+	}
+
+	////
+	// !this should be called from the constructor of each class
+	function init($tpldir)
+	{
+		$this->db_init();
+		$this->tpl_init($tpldir);
+		aw_config_init_class(&$this);
 	}
 };
 ?>
