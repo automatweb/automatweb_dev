@@ -3,7 +3,7 @@ include("const.aw");
 include("admin_header.".aw_ini_get("ext"));
 classload("aw_template");
 $tt = new aw_template;
-$tt->db_init();
+$tt->init("");
 if (!$tt->prog_acl("view", PRG_MENUEDIT))
 {
 	$tt->prog_acl_error("view", PRG_MENUEDIT);

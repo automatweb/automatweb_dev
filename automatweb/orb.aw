@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.8 2002/08/29 03:06:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.9 2002/10/14 07:55:55 kristo Exp $
 include("const.aw");
 
 //$vars = array_merge($HTTP_POST_VARS,$HTTP_GET_VARS,$AW_GET_VARS,$_GET,$_POST);
@@ -33,7 +33,7 @@ include("admin_header.".aw_ini_get("ext"));
 
 classload("defs","orb");
 $t = new aw_template;
-$t->db_init();
+$t->init("");
 if (!$t->prog_acl_auth("view", PRG_MENUEDIT))
 {
 	$t->auth_error();
