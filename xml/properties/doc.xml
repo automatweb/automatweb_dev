@@ -458,6 +458,13 @@
             <field>cb_part</field>
             <caption>cb_part</caption>
       </property>
+      <property>
+            <name>nobreaks</name>
+            <type>hidden</type>
+            <table>documents</table>
+            <group>general</group>
+            <field>nobreaks</field>
+      </property>
       <classinfo>
             <trans>1</trans>
       </classinfo>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.59 2003/12/08 12:17:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.60 2003/12/10 13:54:01 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -154,6 +154,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 
 @property cb_part type=hidden value=1 group=general,settings store=no
 @caption cb_part
+
+@property nobreaks type=hidden table=documents
 
 @groupinfo calendar caption=Kalender
 @groupinfo vennastamine caption=Vennastamine
