@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.21 2002/12/11 12:52:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.22 2002/12/11 16:24:21 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -75,9 +75,6 @@ class form_element extends aw_template
 				"period" => "Periood",
 				"release" => "Release period",
 			),
-			"hidden" => array(
-				"" => ""
-			)
 		);
 
 		var $all_types = array(
@@ -94,7 +91,6 @@ class form_element extends aw_template
 			'date' => "Kuup&auml;ev",
 			'alias' => "Alias",
 			'timeslice' => "Ajaühik",
-			'hidden' => 'Peidetud'
 		);
 
 	function form_element()
@@ -178,6 +174,7 @@ class form_element extends aw_template
 				"default_controller" 			=> $this->picker($this->arr["default_controller"], $this->form->get_list_controllers(true)),
 				"value_controller" 				=> $this->picker($this->arr["value_controller"], $this->form->get_list_controllers(true)),
 				"disabled" 								=> checked($this->arr["disabled"]),
+				'hidden' 									=> checked($this->arr['hidden']),
 				"search_all_text"					=> checked($this->arr["search_all_text"]),
 				"search_separate_words"		=> checked($this->arr["search_separate_words"]),
 				"search_logical"					=> checked($this->arr["search_logical"]),
@@ -707,11 +704,6 @@ class form_element extends aw_template
 				));
 			}
 
-			if ($this->arr['type'] == 'hidden')
-			{
-				$dt = $this->parse("DEFAULT_TEXT");
-			}
-			
 			if ($this->form->arr["save_table"] == 1)
 			{
 				$tar = array("" => "");
@@ -779,7 +771,7 @@ class form_element extends aw_template
 		$cnt =0;
 		if (is_array($this->arr["table"]))
 		{
-			$cnt = count($this->arr["table"]); 
+			$cnt = count($this->arr["table"]);
 		}
 		$this->arr["table"] = array();
 		$num = 0;
@@ -878,6 +870,9 @@ class form_element extends aw_template
 
 		$var=$base."_disabled";
 		$this->arr["disabled"] = $$var;
+
+		$var=$base.'_hidden';
+		$this->arr['hidden'] = $$var;
 
 		// metadata
 		$this->arr["metadata"] = array();
@@ -1098,7 +1093,7 @@ class form_element extends aw_template
 			
 		}
 
-		if ($this->arr["type"] == "textbox" || $this->arr["type"] == "textarea" || $this->arr["type"] == "checkbox" || $this->arr["type"] == "radiobutton" || $this->arr['type'] == 'hidden')
+		if ($this->arr["type"] == "textbox" || $this->arr["type"] == "textarea" || $this->arr["type"] == "checkbox" || $this->arr["type"] == "radiobutton")
 		{
 			$var=$base."_def";
 			$this->arr["default"] = $$var;
@@ -1887,6 +1882,14 @@ class form_element extends aw_template
 		{
 			case "textarea":
 				// only IE supports wysiwyg editor
+				if ($this->arr['hidden'])
+				{
+					$html .= html::hidden(array(
+						'name' => $element_name,
+						'value' => $this->get_val($elvalues)
+					));
+				}
+				else
 				if (($this->arr["wysiwyg"] == 1) && ($this->is_ie))
 				{
 					$html.="<input type=\"hidden\" name=\"_el_".$element_name."\" value=\"".htmlspecialchars($this->get_val($elvalues))."\" />";
@@ -1918,12 +1921,15 @@ class form_element extends aw_template
 					$rel = true;
 					$this->make_relation_listbox_content();
 				}
-				$html .="<select $disabled $stat_check name='".$element_name."'";
-				if ($this->arr["lb_size"] > 1)
+				if (!$this->arr['hidden'])
 				{
-					$html.=" size=\"".$this->arr["lb_size"]."\"";
+					$html .="<select $disabled $stat_check name='".$element_name."'";
+					if ($this->arr["lb_size"] > 1)
+					{
+						$html.=" size=\"".$this->arr["lb_size"]."\"";
+					}
+					$html.=">";
 				}
-				$html.=">";
 				$cnt = $this->arr["listbox_count"];
 
 				if ($lang_id != $this->form->lang_id && !$rel)
@@ -1960,16 +1966,16 @@ class form_element extends aw_template
 				if (is_array($larr))
 				{
 					foreach($larr as $b => $value)
-					{	
+					{
 						$_v = "element_".$this->id."_lbopt_".$b;
 
 						$lbsel = ($_lbsel == $_v ? " SELECTED " : "");
-			
+
 						if (is_array($larr))
 						{
 	//						list($key,$value) = each($larr);
 							$key = $b;
-							
+
 
 							// now check all listbox item controllers for this lb item and if any of them fail, don't show item
 							$controllers_ok = true;
@@ -1989,11 +1995,18 @@ class form_element extends aw_template
 								if ($ext)
 								{
 									$lb_opts .= "<option $lbsel value='$key'>$value</option>\n";
+									if ($this->arr['hidden'] && $_lbsel == $_v)
+									{
+										$html .= html::hidden(array(
+											'name' => $element_name,
+											'value' => $key
+										));
+									}
 								}
 								else
 								{
 									// teeb pisikest trikka - kui on otsinguform ja me n2itame parajasti viimast elementi - see on automaagiliselt
-									// lisatud tyhi element, siis topime selle hoopis k6ige esimeseks a numbri j2tame samax. voh. 
+									// lisatud tyhi element, siis topime selle hoopis k6ige esimeseks a numbri j2tame samax. voh.
 									if (($this->form->type == FTYPE_SEARCH || $this->form->type == FTYPE_FILTER_SEARCH )&& $b == ($cnt-1))
 									{
 										$lb_opts ="<option $lbsel VALUE='element_".$this->id."_lbopt_".$b."'>".$value.$lb_opts."</option>\n";
@@ -2002,12 +2015,22 @@ class form_element extends aw_template
 									{
 										$lb_opts.="<option $lbsel VALUE='element_".$this->id."_lbopt_".$b."'>".$value."</option>\n";
 									}
+									if ($this->arr['hidden'] && $_lbsel == $_v)
+									{
+										$html .= html::hidden(array(
+											'name' => $element_name,
+											'value' => "element_".$this->id."_lbopt_".$b
+										));
+									}
 								}
 							}
 						}
 					}
 				}
-				$html.=$lb_opts."</select>\n";
+				if (!$this->arr['hidden'])
+				{
+					$html.=$lb_opts."</select>\n";
+				}
 				break;
 
 			case "multiple":
@@ -2092,8 +2115,8 @@ class form_element extends aw_template
 					if ($this->arr["up_down_count_el_form"] && $this->arr["up_down_count_el_el"])
 					{
 						// now figure out the damn value. but how the hell do we do that??!!
-						// damn, this is not good, but I see no other way. 
-						// the data where the value for the element should be, gets passed as $udcnt_values 
+						// damn, this is not good, but I see no other way.
+						// the data where the value for the element should be, gets passed as $udcnt_values
 						$udcnt = (int)$udcnt_values["ev_".$this->arr["up_down_count_el_el"]];
 					}
 					$onc = "fg_increment(\"".$this->form->get_form_html_name()."\",\"".$element_name."\",".$udcnt.");return false";
@@ -2116,7 +2139,17 @@ class form_element extends aw_template
 						$aft .= "<input type='button' onClick='$onc' value='-'>";
 					}
 				}
-				$html .= "<input $disabled $stat_check type='$tb_type' NAME='".$element_name."' $l VALUE=\"".(htmlentities($this->get_val($elvalues)))."\" />$aft\n";
+				if ($this->arr['hidden'])
+				{
+					$html .= html::hidden(array(
+						'name' => $element_name,
+						'value' => htmlentities($this->get_val($elvalues))
+					));
+				}
+				else
+				{
+					$html .= "<input $disabled $stat_check type='$tb_type' NAME='".$element_name."' $l VALUE=\"".(htmlentities($this->get_val($elvalues)))."\" />$aft\n";
+				}
 				break;
 
 
@@ -2410,10 +2443,6 @@ class form_element extends aw_template
 //				echo "aentry_id = $this->entry_id , $this->entry <br>";
 				$vl = $this->get_val($elvalues);
 				$html .= $de->gen_edit_form($element_name, ($vl ? $vl : $def),($fy ? $fy : 2000),($ty ? $ty : 2005),true);
-				break;
-				
-			case "hidden":
-				$html .= '<input type="hidden" name="'.$element_name.'" value="'.$this->get_val($elvalues).'">';
 				break;
 		};
 
