@@ -67,6 +67,21 @@
 			</function>
 		</action>
 
+		<action name="del_objects">
+			<function name="del_objects">
+				<arguments>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_add_folder">
+			<function name="submit_add_folder">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="gen_home_dir">
 			<function name="gen_home_dir">
 				<arguments>

@@ -200,81 +200,76 @@ class users extends users_user
 	}
 
 	
+	////
+	// !deletes the objects from the users home folder that are selected
+	function del_objects($arr)
+	{
+		extract($arr);
+		if (is_array($delete))
+		{
+			reset($delete);
+			while (list(,$id) = each($delete))
+			{
+				$this->delete_object($id);
+			}
+		}
+		return $this->mk_site_orb(array("action" => "gen_home_dir", "id" => $parent));
+	}
 
 	////
 	//! Genereerib sisselogitud kasutaja kodukataloogi
 	function gen_home_dir($args = array())
 	{
-		global $udata;
-		#$parent = $args["id"];
+		global $udata,$baseurl,$class_defs;
 		$parent = $args["id"];
 
 		$tpl = ($args["tpl"]) ? $args["tpl"] : "homefolder.tpl";
 		$this->read_template($tpl);
 
-		// koigepealt teeme kodukataloogi id kindlaks
-		$this->db_query("SELECT menu.*,objects.* FROM menu
-					LEFT JOIN objects ON objects.oid = menu.id
-					WHERE oid = $udata[home_folder]");
-		$hf = $this->db_next();
 		$result = array();
-		$startfrom = ($parent == 0) ? $hf["oid"] : $parent;
-
-		// kasutaja grupp
-		$q = "SELECT gid FROM objects
-			LEFT JOIN groups ON (objects.oid = groups.oid)
-			WHERE objects.class_id = 38 AND objects.name = '$udata[uid]'";
-		$this->db_query($q);
-		$row = $this->db_next();
-		$usergroup = $row["gid"];
-		
+		$startfrom = ($parent == 0) ? $udata["home_folder"] : $parent;
+	
 		$thisone = $this->get_object($startfrom);
 		$prnt = $this->get_object($thisone["parent"]);
+
 		$up = "";
-		if ($parent)
+		if ($parent && $parent != $udata["home_folder"])
 		{
-			if ($prnt["oid"] != $hf["oid"])
-			{
-				$this->vars(array(
-					"id" => "id=$prnt[oid]",
-				));
-			};
 			$this->vars(array(
-				"name" => $prnt["name"],
+				"to_parent" => $this->mk_my_orb("gen_home_dir",array("id" => $thisone["parent"])),
+				"name" => $prnt["name"]
 			));
 			$up = $this->parse("up");
 		}
-		$q = "SELECT objects.*,menu.* FROM objects
-			LEFT JOIN menu ON (objects.oid = menu.id)
+
+		$q = "SELECT name,oid,class_id FROM objects
 			WHERE objects.parent = '$startfrom' and objects.status != 0";
 		$this->db_query($q);
+
 		$folders = "";
 		$cnt = 0;
 		while($row = $this->db_next())
 		{
 			$cnt++;
-			$this->vars(array(
-				"name" => $row["name"],
-				"id" => $row["oid"],
-				#"iconurl" => "images/ftv2doc.gif",
-				"iconurl" => get_icon_url($row["class_id"],0),
-			));
-			global $baseurl;
-			global $class_defs;
 			switch ($row["class_id"])
 			{
 				case CL_PSEUDO:
 					$tpl = "folder";
 					break;
 				default:
-					$inf = $class_defs[$row["class_id"]];
-					$class = $inf["file"];
-					$this->vars(array(
-						"class" => $class,
-					));
+					$class = $class_defs[$row["class_id"]]["file"];
 					$tpl = "doc";
 					break;
 			};
+			$this->vars(array(
+				"name" => $row["name"],
+				"id" => $row["oid"],
+				"iconurl" => get_icon_url($row["class_id"],0),
+				"f_click" => $this->mk_my_orb("gen_home_dir", array("id" => $row["oid"])),
+				"preview" => $this->mk_my_orb("preview", array("id" => $row["oid"]),$class),
+				"change" => $this->mk_my_orb("change", array("id" => $row["oid"]),$class)
+			));
+
 			$folders .= $this->parse($tpl);
 		};
 		$delete = "";
@@ -283,16 +278,30 @@ class users extends users_user
 			$delete = $this->parse("delete");
 		};
 
-		$this->vars(array("folder" => $folders,
-				  "doc" => $docs,
-				  "name" => $thisone["name"],
-				  "parent" => $startfrom,
-				  "delete" => $delete,
-				  "usergroup" => $usergroup,
-				  "total" => $cnt,
-				  "up" => $up,
-				 ));
+		$this->vars(array(
+			"folder" => $folders,
+			"doc" => "",
+			"name" => $thisone["name"],
+			"parent" => $startfrom,
+			"delete" => $delete,
+			"total" => $cnt,
+			"up" => $up,
+			"reforb1" => $this->mk_reforb("del_objects", array("parent" => $startfrom)),	// delete form
+			"reforb2" => $this->mk_reforb("submit_add_folder", array("parent" => $startfrom)),	// add form
+			"home_f" => $this->mk_my_orb("gen_home_dir"),
+		));
 		return $this->parse();
+	}
+
+	////
+	// !creates a new forlder int the users home folder
+	function submit_add_folder($arr)
+	{
+		extract($arr);
+		$id = $this->new_object(array("parent" => $parent, "class_id" => CL_PSEUDO, "status" => 2, "name" => $f_name));
+		$this->db_query("INSERT INTO menu(id,type) values($id,".MN_HOME_FOLDER_SUB.")");
+
+		return $this->mk_my_orb("gen_home_dir", array("id" => $parent));
 	}
 
 	////

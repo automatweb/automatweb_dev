@@ -798,6 +798,34 @@ class core extends db_connector
 		return $this->db_next();
 	}
 
+	////
+	// !my proposed version of da ORB makah!
+	// the idea is this that it determines itself whether we go through the site (index.aw)
+	// or the orb (orb.aw) - for the admin interface
+	// you can force it to point to the admin interface
+	function mk_my_orb($fun,$arr=array(),$cl_name="",$force_admin = false)
+	{
+		global $ext;
+		if ($cl_name == "")
+		{
+			$cl_name = get_class($this);
+		}
+		$urs = join("&",$this->map2("%s=%s",$arr));
+
+		// now figure out if we are in the admin interface. 
+		// how do we do that? easy :) we check the url for $baseurl/automatweb :)
+		if (substr($GLOBALS["REQUEST_URI"],0,11) == "/automatweb" || $force_admin)
+		{
+			// admin side.
+			return "orb.$ext?class=$cl_name&action=$fun&$urs";
+		}
+		else
+		{
+			// user side
+			return $GLOBALS["baseurl"]."?class=$cl_name&action=$fun&$urs";
+		}
+	}
+
 	// kui user = 1, siis suunatakse tagasi Saidi sisse. Now, I do realize that this is not
 	// the best solution, but for now, it works
 	function mk_orb($fun,$arr, $cl_name = "",$user = "")
@@ -810,8 +838,15 @@ class core extends db_connector
 
 		if ($user)
 		{
-			$url = HOMEDIR . "?id=" . $arr["parent"];
-
+			if (strpos(HOMEDIR,"?") === false)
+			{
+				$sep = "?";
+			}
+			else
+			{
+				$sep = "&";
+			}
+			$url = HOMEDIR.$sep."id=" . $arr["parent"];
 		}
 		else
 		{
