@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.18 2003/04/28 16:09:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.19 2003/05/05 14:21:16 kristo Exp $
 
 /*
 
@@ -888,7 +888,8 @@ class gallery_v2 extends class_base
 			"id" => $obj['oid'],
 			"page" => $page,
 			"row" => $row,
-			"col" => $col
+			"col" => $col,
+			"img_id" => $pd['img']['id']
 		))."')";
 		$this->has_images = true;
 
@@ -924,7 +925,14 @@ class gallery_v2 extends class_base
 		extract($arr);
 		
 		$ob = $this->get_object($id);
-		$pd = $ob['meta']['page_data'][$page]['content'][$row][$col];
+		if ($img_id)
+		{
+			$pd = $this->_find_image($img_id, $ob);
+		}
+		else
+		{
+			$pd = $ob['meta']['page_data'][$page]['content'][$row][$col];
+		}
 
 		$this->read_any_template("show_v2_image.tpl");
 
@@ -1233,15 +1241,15 @@ class gallery_v2 extends class_base
 		if ($conf_o["meta"][$p."logo_corner"] == CORNER_LEFT_TOP)
 		{
 			imagecopymerge(
-				$img, 
-				$l_img, 
-				$conf_o["meta"][$p."logo_dist_x"], 
-				$conf_o["meta"][$p."logo_dist_y"], 
-				0,
-				0, 
-				imagesx($l_img), 
-				imagesy($l_img), 
-				($conf_o["meta"][$p."logo_transparency"] ? $conf_o["meta"][$p."logo_transparency"] : 100)
+				$img, 			// dst_im
+				$l_img, 		// src_im
+				$conf_o["meta"][$p."logo_dist_x"], 	// dstx
+				$conf_o["meta"][$p."logo_dist_y"], 	// dsty 
+				0,		// srcx
+				0, 		// srcy 
+				imagesx($l_img), 	// dstw
+				imagesy($l_img), 	// dsth
+				($conf_o["meta"][$p."logo_transparency"] ? $conf_o["meta"][$p."logo_transparency"] : 99)
 			);
 		}
 		else
@@ -1442,7 +1450,7 @@ class gallery_v2 extends class_base
 		{
 			return false;
 		};
-		$q = "SELECT target FROM aliases WHERE source = '$args[id]' AND type = " . CL_GALLERY_V2;
+		$q = "SELECT target FROM aliases WHERE source = '$args[id]' AND type = " . $this->clid;
 		$this->db_query($q);
 		$row = $this->db_next();
 		if (empty($row))
@@ -1493,24 +1501,7 @@ class gallery_v2 extends class_base
 			$pd = $this->_find_image($row["oid"],$glv);
 			if ($row)
 			{
-				$w = $pd['img']['sz'][0];
-				$h = $pd['img']['sz'][1]+70;
-				$link = "javascript:remote('no',$w,$h,'".$this->mk_my_orb("show_image", array(
-					"id" => $glv['oid'],
-					"page" => $pd["page"],
-					"row" => $pd["row"],
-					"col" => $pd["col"]
-				))."')";
-
-				$tp = new aw_template;
-				$tp->tpl_init("gallery");
-				$tp->read_template("show_v2_top_content.tpl");
-				$tp->vars(array(
-					"link" => $link,
-					"img" => image::make_img_tag(image::check_url($pd['tn']['url'])),
-					//"rating" => $row["val"],
-				));
-				$retval .= $tp->parse();
+				$retval = image::make_img_tag(image::check_url($pd['tn']['url']));
 			};
 		}
 		return $retval;

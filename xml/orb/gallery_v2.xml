@@ -5,23 +5,32 @@
 		<action name="show_image" nologin="1">
 			<function name="show_image">
 				<arguments>
-					<optional name="id"/>
-					<optional name="page"/>
-					<optional name="col"/>
-					<optional name="row"/>
+					<optional name="id" type="int"/>
+					<optional name="page" type="int"/>
+					<optional name="col" type="int"/>
+					<optional name="row" type="int"/>
+					<optional name="img_id" type="int"/>
 				</arguments>
 			</function>
 		</action>
 		<action name="view" nologin="1">
 			<function name="view">
 				<arguments>
-					<optional name="id"/>
-					<optional name="page"/>
-					<optional name="col"/>
-					<optional name="row"/>
+					<optional name="id" type="int"/>
+					<optional name="page" type="int"/>
+					<optional name="col" type="int"/>
+					<optional name="row" type="int"/>
 				</arguments>
 			</function>
 		</action>
+
+		<action name="show_aliased" nologin="1" is_content="1" caption="Näita galeriid">
+			<function name="show_aliased">
+				<arguments>
+					<required name="id" type="int"/>
+				</arguments>
+			</function>
+		</action>		
 
 		<action name="send" nologin="1">
 			<function name="send">
@@ -41,6 +50,22 @@
 					<required name="page"/>
 					<required name="col"/>
 					<required name="row"/>
+				</arguments>
+			</function>
+		</action>
+
+
+		<action name="conv">
+			<function name="conv">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="show_top_image" nologin="1" caption="Parim pilt" is_content="1">
+			<function name="show_top_image">
+				<arguments>
+					<required name="id" type="int"/>
 				</arguments>
 			</function>
 		</action>
