@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/homedir.aw,v 2.4 2001/07/12 04:23:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/homedir.aw,v 2.5 2001/09/18 00:37:58 kristo Exp $
 // homedir.aw - Class for managing users home directory
 
 global $orb_defs;
@@ -186,21 +186,24 @@ class homedir extends users {
 		static $indent = 0;
 		$indent++;
 		static $cnt = 0;
-		while(list($key,$val) = each($items[$section]))
+		if (is_array($items[$section]))
 		{
-			$cnt++;
-			$this->vars(array(
-					"id" => $val["oid"],
-					"indent" => str_repeat("&nbsp;",$indent * 3),
-					"name" => $val["name"],
-					"color" => ($cnt % 2) ? "#EEEEEE" : "#FFFFFF",
-				));
-			$tpl = ($this->active == $key) ? "activefolder" : "folders";
-			$this->folders .= $this->parse($tpl);
-			if ( (is_array($items[$key])) && ($this->path[$key]))
+			while(list($key,$val) = each($items[$section]))
 			{
-				$this->_show_hf_folder($items,$key);
-			};
+				$cnt++;
+				$this->vars(array(
+						"id" => $val["oid"],
+						"indent" => str_repeat("&nbsp;",$indent * 3),
+						"name" => $val["name"],
+						"color" => ($cnt % 2) ? "#EEEEEE" : "#FFFFFF",
+					));
+				$tpl = ($this->active == $key) ? "activefolder" : "folders";
+				$this->folders .= $this->parse($tpl);
+				if ( (is_array($items[$key])) && ($this->path[$key]))
+				{
+					$this->_show_hf_folder($items,$key);
+				};
+			}
 		}
 		$indent--;
 	}

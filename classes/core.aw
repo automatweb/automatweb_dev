@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.54 2001/09/17 13:20:33 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.55 2001/09/18 00:37:58 kristo Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -1217,7 +1217,7 @@ class core extends db_connector
 		{
 			$head="From: $uid<".$udata["email"].">\n";
 		}
-		// mail("vead@struktuur.ee", $subj, $content,$head);
+		mail("vead@struktuur.ee", $subj, $content,$head);
 
 		if ($silent)
 		{
@@ -1229,11 +1229,12 @@ class core extends db_connector
 			classload("config");
 			$co = new config;
 			$u = $co->get_simple_config("error_redirect");
-			if ($u != "")
+			if ($ux != "")
 			{
 				header("Location: $u");
 				die();
 			}
+			flush();
 			die("<br><b>AW_ERROR: $msg</b><br>");
 		};
 	}

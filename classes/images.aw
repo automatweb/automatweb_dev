@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.14 2001/09/12 17:59:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.15 2001/09/18 00:37:58 kristo Exp $
 // klass piltide manageerimiseks
 global $orb_defs;
 $orb_defs["images"] = array("new"						=> array("function"	=> "add",		"params"	=> array("parent")),
@@ -68,14 +68,27 @@ class images extends aw_template
 	{
 		$this->di->mk_path($arr["parent"], LC_IMAGES_ADD_PIC);
 		$this->di->read_template("nupload.tpl");
-		$this->di->vars(array("reforb" => $this->mk_reforb("submit", array("parent" => $arr["parent"]))));
+
+		classload("objects");
+		$ob = new objects;
+		$this->di->vars(array(
+			"reforb" => $this->mk_reforb("submit", array())
+			"menus" => $this->picker($parent, $ob->get_list())
+		));
 		return $this->di->parse();
 	}
 
 	function submit($arr)
 	{	
 		global $pilt, $pilt_type,$comment;
-		$ar = $this->di->_upload(array("filename" => $pilt, "file_type" => $pilt_type, "oid" => $arr["parent"], "descript" => $comment,"link" => $arr["link"], "newwindow" => $arr["newwindow"]));
+		$ar = $this->di->_upload(array(
+			"filename" => $pilt, 
+			"file_type" => $pilt_type, 
+			"oid" => $arr["parent"], 
+			"descript" => $comment,
+			"link" => $arr["link"], 
+			"newwindow" => $arr["newwindow"]
+		));
 		return $this->mk_my_orb("change", array("id" => $arr["parent"]),"document");
 	}
 

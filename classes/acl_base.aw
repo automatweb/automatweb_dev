@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.8 2001/09/12 17:59:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.9 2001/09/18 00:37:58 kristo Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -124,7 +124,7 @@ class acl_base extends core
 //			echo "gidlist empty <br>";
 			return false;
 		}
-		$q = "SELECT *,objects.parent as parent,".$this->sql_unpack_string().",groups.priority as priority,acl.oid as oid FROM acl 
+		$q = "SELECT *,acl.id as acl_rel_id, objects.parent as parent,".$this->sql_unpack_string().",groups.priority as priority,acl.oid as oid FROM acl 
 										 LEFT JOIN groups ON groups.gid = acl.gid
 										 LEFT JOIN objects ON objects.oid = acl.oid
 										 WHERE acl.oid = $oid AND acl.gid IN (".$gidstr.") 
@@ -134,6 +134,7 @@ class acl_base extends core
 		$this->db_query($q);
 		$row = $this->db_next();
 //		echo "<pre>",var_dump($row),"</pre><Br>";
+
 		return $row;
 	}
 
@@ -141,17 +142,22 @@ class acl_base extends core
 	function can($access, $oid)
 	{
 		global $acl_default,$no_check_acl;
+		$o_oid = $oid;
 		if ($no_check_acl)
 		{
 			return true;
 		}
 
+		global $awt;
+		$awt->start("acl::can");
+		$awt->count("acl::can");
 		$access="can_".$access;
 
 		$this->save_handle();
 
 		$max_priority = -1;
 		$max_acl = $acl_default;
+		$max_acl["acl_rel_id"] = "666";
 		$cnt = 0;
 		// here we must traverse the tree from $oid to 1, gather all the acls and return the one with the highest priority
 //		echo "entering can, access = $access, oid = $oid<Br>";
@@ -207,6 +213,45 @@ class acl_base extends core
 		$this->restore_handle();
 		// and now return the highest found
 //		return 1;
+		
+		$awt->stop("acl::can");
+		// nini ja nyt kui see on aw.struktuur.ee siis kysime java k2est ka
+		global $SITE_ID,$uid;
+		if ($SITE_ID == 12 && $GLOBALS["use_acl_server"] && $o_oid)
+		{
+			$awt->start("acl::can_server");
+			$fd = fsockopen("127.0.0.1", 10000,$errno,$errstr,10);
+			if (!$fd)
+			{
+				echo "ACL: error: $errstr ($errno) <br>\n";
+				flush();
+			}
+			else
+			{
+				if ($uid == "")
+				{
+					$uid = ",";
+				}
+				fputs($fd,"-1 ".$SITE_ID." ".$uid." ".$o_oid."\n");
+				while (!feof($fd))
+				{ 
+					$s_res.=fgets ($fd,100);
+				}
+				fclose ($fd);
+				// parsime tulemuse laiali
+				$s_rights = explode(",",$s_res);
+				foreach($s_rights as $s_line)
+				{
+					list($s_r_name, $s_r_value) = explode(" ",$s_line);
+					if ((int)($max_acl[$s_r_name]) != (int)($s_r_value) && $s_r_name != "can_view")
+					{
+						echo "ACL conflict: site $SITE_ID user $uid object $o_oid - conflict in $s_r_name , aw got ",$max_acl[$s_r_name]," acl server got $s_r_value , gid-oid relation id: ",$max_acl["acl_rel_id"]," (request was: -1 ".$SITE_ID." ".$uid." ".$o_oid." , return $s_res)<br>\n";
+						flush();
+					}
+				}
+			}
+			$awt->stop("acl::can_server");
+		}
 		return $max_acl[$access];
 		//ret//urn 1;
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.45 2001/09/12 17:59:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.46 2001/09/18 00:37:58 kristo Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -2438,11 +2438,19 @@ class document extends aw_template
 		{
 			$this->menucache[$row[parent]][] = $row;
 		}
-		// now, make a list of all menus below $parent
-		$this->marr = array($parent);
-		// list of default documents
+		// find the parent menus based on the search menu group id
+		classload("search_conf");
+		$sc = new search_conf;
+		$parens = $sc->get_menus_for_grp($parent);
 		$this->darr = array();
-		$this->rec_list($parent);
+		$this->marr = array();
+		foreach($parens as $parent)
+		{
+			// now, make a list of all menus below $parent
+			$this->marr[] = $parent;
+			// list of default documents
+			$this->rec_list($parent);
+		}
 
 		$ml = join(",",$this->marr);
 		$ml2 = join(",",$this->darr);

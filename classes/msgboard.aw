@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.19 2001/09/12 17:59:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.20 2001/09/18 00:37:58 kristo Exp $
 define(PER_PAGE,10);
 define(PER_FLAT_PAGE,20);
 define(TOPICS_PER_PAGE,7);
@@ -84,8 +84,8 @@ class msgboard extends aw_template
 
 		$this->read_template("messages.tpl");
 		
-		$this->vars(array("forum_id" => $forum_id));
-	
+		$this->vars(array("forum_id" => $forum_id,"topic_id" => $id));
+
 		if ($this->is_template("TOPIC"))
 		{
 			$this->db_query("SELECT * FROM objects where class_id = ".CL_MSGBOARD_TOPIC." AND oid = '$id'");
@@ -96,7 +96,8 @@ class msgboard extends aw_template
 					"created" => $this->time2date($row["created"], 2),
 					"text" => str_replace("\n","<Br>",$row["comment"]),
 					"from" => $row["last"],
-					"topic_id" => $id
+					"topic_id" => $id,
+					"forum_id" => $forum_id
 				));
 				$top = $this->parse("TOPIC");
 			}
@@ -171,9 +172,10 @@ class msgboard extends aw_template
 					"KUSTUTA" => ""
 				));
 
-				// FIXME: ACLi peab siin kasutama
-				if ($uid != "")
+				if ($this->prog_acl("view",PRG_MENUEDIT))
+				{
 					$this->vars(array("KUSTUTA" => $this->parse("KUSTUTA")));
+				}
 
 				$str.=$this->parse("message");
 
@@ -334,6 +336,7 @@ class msgboard extends aw_template
 		$this->vars(array(
 			"forum_id" => $forum_id,
 			"rate" => sprintf("%0.2f",$votedata["total"] / $votecount),
+			"topic_id" => $id
 		));
 
 		if ($this->is_template("TOPIC"))
@@ -389,9 +392,10 @@ class msgboard extends aw_template
 					"KUSTUTA" => "",
 				));
 
-				// FIXME: kontrolli ACLi
-				if ($uid != "")
+				if ($this->prog_acl("view",PRG_MENUEDIT))
+				{
 					$this->vars(array("KUSTUTA" => $this->parse("KUSTUTA")));
+				}
 
 				$str.=$this->parse("message");
 			}
