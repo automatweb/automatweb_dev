@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.59 2004/06/17 13:59:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.60 2004/07/09 12:45:31 duke Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -42,6 +42,12 @@ class aw_template extends core
 		$this->_init_vars();
 
 		$this->use_eval = false;
+	}
+
+	function get_template_dir()
+	{
+		$rv = substr($this->template_dir,strlen($this->cfg["tpldir"])+1);
+		return $rv;
 	}
 
 	function _init_vars()
