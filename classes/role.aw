@@ -4,7 +4,6 @@
 
 @classinfo syslog_type=ST_ROLE relationmgr=yes
 
-@groupinfo general caption=Üldine
 @groupinfo acls caption="Lubatud &otilde;igused"
 
 @default group=general
@@ -122,7 +121,7 @@ class role extends class_base
 				$a = $this->acl_list_acls();
 				foreach($a as $a_bp => $a_name)
 				{
-					if ($arr["form_data"]["acl_".$a_bp] == 1)
+					if ($arr["request"]["acl_".$a_bp] == 1)
 					{
 						$acls[$a_name] = $a_name;
 					}
@@ -135,7 +134,7 @@ class role extends class_base
 				$a = $this->acl_list_acls();
 				foreach($a as $a_bp => $a_name)
 				{
-					if ($arr["form_data"]["acl_set_".$a_bp] == 1)
+					if ($arr["request"]["acl_set_".$a_bp] == 1)
 					{
 						$acls_set[$a_name] = $a_name;
 					}
@@ -144,10 +143,10 @@ class role extends class_base
 				break;
 
 			case 'save_acl':
-				if ($arr["form_data"]["save_acl"] == 1)
+				if ($arr["request"]["save_acl"] == 1)
 				{
 					$ac = get_instance("acl_class");
-					$rows = $ac->get_acls_for_role($arr["obj"]["oid"]);
+					$rows = $ac->get_acls_for_role($arr["obj_inst"]->id());
 					foreach($rows as $acid)
 					{
 						$ac->update_acl($acid);
@@ -158,13 +157,5 @@ class role extends class_base
 		return PROP_OK;
 	}
 
-/*	function get_property(&$arr)
-	{
-		if ($arr["prop"]["name"] == "save_acl" && !$arr["obj"]["oid"])
-		{
-			return PROP_IGNORE;
-		}
-		return PROP_OK;
-	}*/
 }
 ?>
