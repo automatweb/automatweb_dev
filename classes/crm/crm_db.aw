@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.7 2004/01/13 16:24:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.8 2004/02/17 15:09:24 duke Exp $
 // crm_db.aw - CRM database
 /*
 	@classinfo relationmgr=yes
@@ -12,25 +12,23 @@
 	@property selections type=relpicker reltype=RELTYPE_SELECTIONS group=general
 	@caption Vaikimisi valim
 
-	@default group=firmad
-	@groupinfo firmad submit=no caption=Organisatsioonid
-			
-	@property orgtoolbar type=toolbar store=no no_caption=1
+	@default group=f2
+	@groupinfo f2 submit=no caption=Otsing parent=org
 	
-	@property search_form type=text no_caption=1
-	@caption otsing
-	
-	@property sfield type=textbox
-	@property exclude type=textbox
-		
-	@property manageri type=text callback=firma_manager
-	
-	
-	@property make_search type=textbox size=1
-	@property search_type type=textbox size=1
-	
-////////////////////////////////////////////////////////////
+	@property orgtoolbar type=toolbar store=no no_caption=1 group=firmad,f2
+	@caption Org. toolbar
 
+	@property search_form1 type=form sclass=crm_org_search sform=crm_search
+	@caption Compound search
+
+	@default group=firmad
+	@groupinfo firmad submit=no caption=Nimekiri parent=org
+
+	@groupinfo org caption=Organisatsioonid
+			
+	@property manageri type=text callback=firma_manager
+	@caption Firmade nimekiri
+	
 	@default group=tegevusalad
 	@groupinfo tegevusalad submit=no caption=Tegevusalad 
 
@@ -94,6 +92,8 @@
 
 */
 
+// do I really want to put that thing in here?
+
 /*
 @reltype SELECTIONS value=1 clid=CL_CRM_SELECTION
 @caption Valimid
@@ -155,7 +155,6 @@ class crm_db extends class_base
 
 		$data = &$args['prop'];
 		$retval = PROP_OK;
-		$meta = &$args['obj']['meta'];
 		$req = &$args['request'];
 		
 		//// valim///
@@ -217,7 +216,8 @@ class crm_db extends class_base
 			case 'pagelimit':
 				$data['options'] = array ('10' => '10', '20' => '20', '30' => '30');
 				break;
-			
+		
+			/*
 			case 'search_form':
 
 				$data['value'] = $this->search_form($args);
@@ -240,6 +240,7 @@ class crm_db extends class_base
 				$args["obj_inst"]->set_meta("search_type",0);
 				$retval=PROP_IGNORE;
 				break;
+			*/
 						
 			case 'select':
 				$retval=PROP_IGNORE;
@@ -261,19 +262,6 @@ class crm_db extends class_base
 		$retval = PROP_OK;
 		switch($data['name'])
 		{
-		
-			case 'sfield':
-				if (!$form['sfield'])
-				{
-					$retval = PROP_IGNORE;
-				}
-				else
-				{
-					aw_session_set("crm_db_search",$form["sfield"]);
-					$retval = PROP_IGNORE;
-				};
-				break;
-			
 			case 'default_kliendibaas':
 				$users = get_instance("users");
                                 $users->set_user_config(array(
@@ -292,17 +280,17 @@ class crm_db extends class_base
 	function callback_sector_manager($args)
 	{
 	
+		$obj = $args["obj_inst"];
 		$tase = $args['request']['tase'] ? $args['request']['tase'] : 1;
 		$kood = $args['request']['kood'] ? $args['request']['kood'] : '0';
 		$teg_oid = $args['request']['teg_oid'] ? $args['request']['teg_oid'] : 0;
 		
 		$fpage = $args['request']['tpage'] ? $args['request']['tpage'] : '1';
-		$flimit = $args['obj']['meta']['tlimit'] ? $args['obj']['meta']['tlimit'] : 20;		
+		$flimit = 20;
 		
 		$tase = ($tase>3)?3:$tase;
 
 		$limit = 100; // siia vaja ka aretada leheküljed //axel 
-
 
 		// võtame tegevusalasid kusagilt alt, wuh? või siis ei võta? või mida see parent_in tegigi
 		
@@ -384,7 +372,7 @@ class crm_db extends class_base
 		$yahbar = '';
 		foreach($yah as $val)
 		{
-			if ($val[OID])
+			if ($val["oid"])
 				$yahbar = $val['name'].' / '.$yahbar;
 		
 		}
@@ -395,18 +383,18 @@ class crm_db extends class_base
 			$code = $val['kood'];
 			$cnt = $this->db_fetch_field('select count(*) as cnt from aliases as t1 left join objects as t2 on t1.target=t2.oid 
 				left join objects as t3 on t1.source=t3.oid		
-				where t1.target="'.$val[OID].'" and t1.reltype=5 and t1.source<>0 and t2.status=1
+				where t1.target="'.$val["oid"].'" and t1.reltype=5 and t1.source<>0 and t2.status=1
 				and t3.parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).'
 				','cnt');
 
 			$t->define_data(
 				array(
 					'tegevusala' => '<a href="'.$this->mk_my_orb('change', array(
-				'id' => $args['obj'][OID],
+				'id' => $args['obj_inst']->id(),
 				'group' => 'tegevusalad',
 				'tase' => ($tase + 1),
 				'kood' => $val['kood'],
-				'teg_oid' => $val[OID],
+				'teg_oid' => $val["oid"],
 				)).'">'.$val['name'],'</a>',
 				'fcount' => ($cnn ? ($cnn.' / '):'').$cnt,
 				)
@@ -523,12 +511,15 @@ class crm_db extends class_base
 		return '<>0';
 	}
 
-	
 	function firma_manager($args)
 	{
 		$letter = $args['request']['letter'] ? $args['request']['letter'] : 'A';
 		$fpage = $args['request']['fpage'] ? $args['request']['fpage'] : '1';
-		$flimit = $args['obj']['meta']['flimit'] ? $args['obj']['meta']['flimit'] : 20;
+		$flimit = 20;
+		if ($args["obj_inst"]->prop("flimit") != "")
+		{
+			$flimit = $args["obj_inst"]->prop("flimit");
+		};
 		$letters = '';
 		$pages = '<style> BUTTON {height:23px;spacing:0px;padding:0px;}</style>';
 		$showpagenr = array();
@@ -536,8 +527,6 @@ class crm_db extends class_base
 		// I need to be able to generate search forms from property definitions.
 		
 		//echo 
-		$make_search = ($args['obj']['meta']['make_search'] && !$args['request']['no_search']) ? true : false;
-		
 			//t1 objects(firma)
 			//t2 kliendibaas_firma
 			//t3 objects(ettevotlusvorm) -> kliendibaas_firma
@@ -571,116 +560,14 @@ class crm_db extends class_base
 
 		// kuidas faking moodi ma selle päringu kokku pean nüüd panema sinu arvates, ah?
 		
-		if ($make_search)
-		{	
-			$search_params = '';
-			$exclude = $args['obj_inst']->meta('exclude');
-			//$sfield = $args['obj_inst']->meta('sfield');
-			$sfield = aw_global_get("crm_db_search");
-
-			if ($sfield[$id = 'name'])
-			{
-				$not = $exclude[$id]? 'not' : '';
-				
-				$strs = explode(',',$sfield[$id]);
-				$strq = array();
-				foreach($strs as $val)
-				{
-					$strq[] = 't1.'.$id.' '.$not.' like ("%'.addslashes(trim($val)).'%") ';
-				}
-				$search_params .= ' and ('.implode(' and ',$strq).') ';
-			}
-
-			if ($sfield[$id = 'not_name'])
-			{
-				$not = $exclude[$id]? 'not' : '';
-				
-				$strs = explode(',',$sfield[$id]);
-				$id = 'name';
-				$strq = array();
-				foreach($strs as $val)
-				{
-					$strq[] = 't1.'.$id.'  like ("%'.addslashes(trim($val)).'%") ';
-				}
-				$search_params .= ' and not ('.implode(' or ',$strq).') ';
-			}
-		
-			
-						
-			if ($sfield[$id = 'reg_nr'])
-			{
-				$not = $exclude[$id]? 'not' : '';
-				$search_params .= ' and t2.'.$id.' '.$not.' like ("%'.addslashes($sfield[$id]).'%") ';
-			}
-
-			if ($sfield[$id = 'ettevotlusvorm'])
-			{
-				$op = $exclude[$id]? '<>' : '=';
-				$search_params .= ' and t2.'.$id.' '.$op.''.$sfield[$id].' ';
-			}
-			
-			if ($sfield[$id = 'linn'])
-			{
-				$op = $exclude[$id]? '<>' : '=';
-				$search_params .= ' and t6.'.$id.' '.$op.''.$sfield[$id].' ';
-			}
-			
-			if ($sfield[$id = 'maakond'])
-			{
-				$op = $exclude[$id]? '<>' : '=';
-				$search_params .= ' and t6.'.$id.' '.$op.''.$sfield[$id].' ';
-			}
-			
-			if ($sfield[$id = 'address'])
-			{
-				$strs = explode(',',$sfield[$id]);
-				$strq = array();
-				foreach($strs as $val)
-				{
-					$strq[] = 't4.name '.$not.' like ("%'.addslashes(trim($val)).'%") ';
-				}
-				$search_params .= ' and ('.implode(' and ',$strq).') ';
-			}
-
-			if ($sfield[$id = 'not_address'])
-			{
-				$strs = explode(',',$sfield[$id]);
-				$strq = array();
-				foreach($strs as $val)
-				{
-					$strq[] = 't4.name  like ("%'.addslashes(trim($val)).'%") ';
-				}
-				$search_params .= ' and not ('.implode(' or ',$strq).') ';
-			}
-						
-			
-			
-			
-			if ($sfield[$id = 'firmajuht'])
-			{
-				$not = $exclude[$id]? 'not' : '';
-				$search_params .= ' and t5.name '.$not.' like ("%'.addslashes($sfield[$id]).'%") ';
-			}
-			
-			$cnt = $this->db_fetch_field('select count(*) as cnt from objects as t1 
-				'.implode(' ',$join_tables).'
-				where 
-				t1.class_id='.CL_CRM_COMPANY.' and t1.status<>0 and
-				t1.parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).'
-				'.$search_params.'
-				','cnt');
-			
-		}
-		elseif (!$args['obj']['meta']['search_type'])
-		{
-			$cnt = $this->db_fetch_field('
-			select count(*) as cnt from objects as t1
-			where 
-			t1.class_id='.CL_CRM_COMPANY.' and t1.status<>0 and
-			t1.parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).'
-			and t1.name like ("'.$letter.'%")
-			','cnt');
-		}
+		// seeb meil siis nimekirja, eksju. onju. ahju?
+		$cnt = $this->db_fetch_field('
+		select count(*) as cnt from objects as t1
+		where 
+		t1.class_id='.CL_CRM_COMPANY.' and t1.status<>0 and
+		t1.parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).'
+		and t1.name like ("'.$letter.'%")
+		','cnt');
 		
 		if ($cnt)
 		if ($cnt>$flimit)
@@ -691,7 +578,7 @@ class crm_db extends class_base
 			{
 			$uri = "'".$this->mk_my_orb('change',
 					array(
-						'id' => $args['obj'][OID],
+						'id' => $args['obj_inst']->id(),
 						'group' => 'firmad',
 						'fpage' => $i,
 						'letter' => $letter,
@@ -752,98 +639,58 @@ class crm_db extends class_base
 		t13.name as telefon, t14.name as pohitegevus
 		';
 		
-		if ($make_search)
-		{
-			$q = '
-			select '.$select_fields.'
-			from objects as t1 
-			'.implode(' ',$join_tables).'
-			where 
-			t1.class_id='.CL_CRM_COMPANY.' and t1.status<>0 and
-			t1.parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).'
-			'.$search_params.'
-			order by t1.name
-			'.$limit.'
-			';
-		}
-		else
-		{		
-			$q = '
-			select '.$select_fields.'
-			from objects as t1 
-			'.implode(' ',$join_tables).'
-			where 
-			t1.class_id='.CL_CRM_COMPANY.' and t1.status<>0 and
-			t1.parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).'
-			and t1.name like ("'.$letter.'%")
-			order by t1.name
-			'.$limit.'
-			';
+		$q = '
+		select '.$select_fields.'
+		from objects as t1 
+		'.implode(' ',$join_tables).'
+		where 
+		t1.class_id='.CL_CRM_COMPANY.' and t1.status<>0 and
+		t1.parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).'
+		and t1.name like ("'.$letter.'%")
+		order by t1.name
+		'.$limit.'
+		';
 			
-		}
-
-
-		if ($args['obj']['meta']['search_type'] && !$make_search)
-		{
-				
-		}
-		else
-		{
-				$arr = $this->db_fetch_array($q);
-				$firmad = $this->firmad_table($arr);
-				
-		}
-
+		$arr = $this->db_fetch_array($q);
+		$firmad = $this->firmad_table($arr);
 		// sellest sitast tuleb ju ikka ka tabeligeneka featuur teha. geezas christ and mother of god
 		// but how do I implement it in there?
 
 
-		// mis kuradi nimede esitähed?
-		if (!$args['obj']['meta']['search_type'])
+		$all_letters = $this->db_fetch_array('select substring(name,1,1) as letter from objects 
+		where class_id='.CL_CRM_COMPANY.' and status<>0 and parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).' 
+		group by substring(name,1,1)
+		order by substring(name,1,1)
+		limit 50
+		'
+		);
+		
+		
+		
+		if(is_array($all_letters))
 		{
-			$all_letters = $this->db_fetch_array('select substring(name,1,1) as letter from objects 
-			where class_id='.CL_CRM_COMPANY.' and status<>0 and parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).' 
-			group by substring(name,1,1)
-			order by substring(name,1,1)
-			limit 50
-			'
-			);
-		}
-		
-		
-		
-		//if (!$args['obj']['meta']['search_type'] && is_array($arr))
-		if(!$make_search && is_array($all_letters))
-		foreach($all_letters as $val)
-		{
-			$uri = "'".$this->mk_my_orb('change',
-					array(
-						'id' => $args['obj'][OID],
-						'group' => 'firmad',
-//						'kood'=>$row['kood'],
-						'page' => $i,
-						'letter' => $val['letter'],
-						'no_search' => '1',						
-//						'level'=> $level,
-//						'section' =>$req['section'],
-					)
-				)."'";
-			
-		
-			if ($val["letter"])
+			foreach($all_letters as $val)
 			{
-				$letters.='<button style="width:21px" onclick="document.location='.$uri.';return false;">'.
-				(($val['letter']==$letter) ? '<b><u>'.$val['letter'].'</u></b>' : $val['letter']).
-				'</button>';
-			};
-		
-		}
-
-	//arr($arr);
-
-		//echo count($arr);
-		
-		
+				$uri = "'".$this->mk_my_orb('change',
+						array(
+							'id' => $args['obj_inst']->id(),
+							'group' => 'firmad',
+							'page' => $i,
+							'letter' => $val['letter'],
+							'no_search' => '1',						
+						)
+					)."'";
+				
+			
+				if ($val["letter"])
+				{
+					$letters.='<button style="width:21px" onclick="document.location='.$uri.';return false;">'.
+					(($val['letter']==$letter) ? '<b><u>'.$val['letter'].'</u></b>' : $val['letter']).
+					'</button>';
+				};
+			
+			}
+		};
 				
 		$nodes = array();
 		$nodes['teg'] = array(
@@ -953,153 +800,6 @@ class crm_db extends class_base
 		return $rv;
 	}	
 
-	function search_form($args)
-	{
-		if ($args['obj_inst']->meta('search_type') == "0")
-		{
-			$this->read_template('search_default.tpl');
-			return $this->parse();
-		}
-		
-		$search_template = 'search_'.$args['obj_inst']->meta('search_type').'.tpl';
-		$form = '';
-
-		$this->read_template($search_template);
-	
-		$sfield = aw_global_get("crm_db_search");
-		//$sfield = $args['obj_inst']->meta('sfield');
-		$exclude = $args['obj_inst']->meta('exclude');
-		
-		$this->vars(array(
-			'id' => $id = 'name',
-			'value' => htmlentities($sfield[$id]),
-			'exclude' => checked($exclude[$id]),
-			'caption' => 'Nimi',
-		));
-		$form .= $this->parse('search_field_textbox');
-		
-		$this->vars(array(
-			'id' => $id = 'not_name',
-			'value' => htmlentities($sfield[$id]),
-			'exclude' => checked($exclude[$id]),
-			'caption' => ' ei sisalda ',
-			'br' => '<br />',
-		));
-		$form .= $this->parse('search_field_textbox');
-		
-		$this->vars(array(
-			'id' => $id = 'reg_nr',
-			'value' => $sfield[$id],
-			'exclude' => checked($exclude[$id]),
-			'caption' => 'Reg nr.',
-			'br' => '<br />',
-		));
-		$form.= $this->parse('search_field_textbox');
-		
-		$this->vars(array(
-			'id' => $id = 'address',
-			'value' => htmlentities($sfield[$id]),
-			'exclude' => checked($exclude[$id]),
-			'caption' => 'Aadress',
-			'br' => '',
-		));
-		$form.= $this->parse('search_field_textbox');
-
-		$this->vars(array(
-			'id' => $id = 'not_address',
-			'value' => htmlentities($sfield[$id]),
-			'exclude' => checked($exclude[$id]),
-			'caption' => 'ei sisalda',
-			'br' => '<br />',
-		));
-		$form.= $this->parse('search_field_textbox');
-		
-		
-		$this->vars(array(
-			'id' => $id = 'firmajuht',
-			'value' => htmlentities($sfield[$id]),
-			'exclude' => checked($exclude[$id]),
-			'caption' => 'Organisatsiooni juht',
-			'br' => '<br />',
-		));
-		$form.= $this->parse('search_field_textbox');
-
-		//ettevõtlusvorm
-		$id = 'ettevotlusvorm';
-		$arr = $this->db_fetch_array('select oid, name from objects where 
-			class_id='.CL_CRM_CORPFORM.' and 
-			parent'.$this->parent_in($this->got_aliases[ETTEVOTLUSVORM_CAT]). ' order by name'
-		);
-		$options ='<option value="0"> - kõik - </option>';
-		foreach($arr as $val)
-		{
-			$options.='<option value="'.$val[OID].'" '.(($val[OID]==$sfield[$id])?'selected':'').'>'.$val['name'].'</option>';
-		}
-		$this->vars(array(
-			'id' => $id,
-			'options' => $options,
-			'exclude' => checked($exclude[$id]),
-			'caption' => 'Õiguslik vorm',
-		));
-		$form.= $this->parse('search_field_select');
-		
-		//linn
-		$id = 'linn';
-		$arr = $this->db_fetch_array('select oid, name from objects where 
-			class_id='.CL_CRM_CITY.' and 
-			parent'.$this->parent_in($this->got_aliases[LINN_CAT]). ' order by name'
-		);
-		$options ='<option value="0"> - kõik - </option>';
-		foreach($arr as $val)
-		{
-			$options.='<option value="'.$val[OID].'" '.(($val[OID]==$sfield[$id])?'selected':'').'>'.$val['name'].'</option>';
-		}
-		$this->vars(array(
-			'id' => $id,
-			'options' => $options,
-			'exclude' => checked($exclude[$id]),
-			'caption' => 'Linn/Vald/Alev',
-		));
-		$form.= $this->parse('search_field_select');
-		
-		//maakond
-		$id = 'maakond';
-		$arr = $this->db_fetch_array('select oid, name from objects where 
-			class_id='.CL_CRM_COUNTY.' and 
-			parent'.$this->parent_in($this->got_aliases[MAAKOND_CAT]). ' order by name'
-		);
-		$options ='<option value="0"> - kõik - </option>';
-		foreach($arr as $val)
-		{
-			$options.='<option value="'.$val[OID].'" '.(($val[OID]==$sfield[$id])?'selected':'').'>'.$val['name'].'</option>';
-		}
-		$this->vars(array(
-			'id' => $id,
-			'options' => $options,
-			'exclude' => checked($exclude[$id]),
-			'caption' => 'Maakond',
-		));
-		$form.= $this->parse('search_field_select');
-
-/*		$this->vars(array(
-			'id' => 'reg_nr',
-			'value' => '',
-			'exclude' => '',
-		));
-		$name = $this->parse('search_field_textbox');
-*/
-
-		$this->vars(array(
-			'search_field_textbox' => $form,
-		));
-		
-		
-		
-		return $this->parse();
-	
-	}
-
-
 	// organisatsioonide toolbar
 	function org_toolbar(&$args)
 	{
@@ -1168,36 +868,10 @@ class crm_db extends class_base
                 }
 
 		$toolbar->add_separator();
-
 		$toolbar->add_menu_button(array(
-			"name" => "search_event",
-			"tooltip" => "otsi organisatsioone",
-			"img" => "search.gif",
-		));
-
-		$stype = array(
-			'org' => 'Otsi organisatsioone', 
-			'isik' => 'Otsi isikuid',
-		);
-		if (is_array($stype))
-		{
-			foreach($stype as $key => $val)
-			{
-				$toolbar->add_menu_item(array(
-					"parent" => "search_event",
-					'link' => aw_global_get('REQUEST_URI'),
-					'text' => $val,
-					'onClick' => "document.getElementById('search_type').value = '".$key."';document.forms[0].submit();return false;"
-				));
-			};
-		};
-			
-		$toolbar->add_button(array(
-			"name" => "list_only",
-			"tooltip" => "Organisatsioonide nimekiri",
-			'onClick' => "document.getElementById('search_type').value = '0';document.forms[0].submit();return false;",
-			"url" => '',
-			"img" => "prog_42.gif",
+			"name" => "go_navigate",
+			"tooltip" => "Ava valim",
+			"img" => "iother_shared_folders.gif",
 		));
 
 		$toolbar->add_separator();
@@ -1205,8 +879,8 @@ class crm_db extends class_base
 		$toolbar->add_button(array(
 			"name" => "delete",
 			"tooltip" => "Kustuta",
-			//"url" => "javascript:void(0);",
-			"url" => "javascript:document.changeform.action.value='process_organizations'; document.changeform.submit();",
+			"action" => "delete_organizations",
+			"confirm" => "Kustutada valitud organisatsioonid?",
 			"img" => "delete.gif",
 		));
 		
@@ -1216,53 +890,37 @@ class crm_db extends class_base
 		));
 
 		$ops = array();
+		$ops[0] = "-- vali valim --";
 
 		foreach($conns as $conn)
 		{
 			$ops[$conn->prop("to")] = $conn->prop("to.name");
+			$toolbar->add_menu_item(array(
+				"parent" => "go_navigate",
+				"text" => $conn->prop("to.name"),
+				"url" => $this->mk_my_orb("change",array("id" => $conn->prop("to")),CL_CRM_SELECTION),
+			));
 		};
 
-		$REQUEST_URI = aw_global_get("REQUEST_URI");
-
-		$ops[0] = '- lisa uude valimisse -';
                 $str .= html::select(array(
-                        'name' => 'add_to_selection',
-                        'options' => $ops,
-                        'selected' => $selected,
+                        "name" => "add_to_selection",
+                        "options" => $ops,
+                        "selected" => $selected,
                 ));
 
 		$toolbar->add_separator(array(
 			"side" => "right",
 		));
-
 		$toolbar->add_cdata($str,"right");
-
-		$parent = $args["obj_inst"]->parent();
-
 		$toolbar->add_button(array(
-			"name" => 'go_add',
+			"name" => "go_add",
 			"tooltip" => "Lisa valitud valimisse",
-			"url" => "javascript:void(0);",
+			"action" => "copy_to_selection",
+			"confirm" => "Paiguta valitud organisatsioonid sellesse valimisse?",
 			"img" => "import.gif",
 			"side" => "right",
-			'onClick' => "go_manage_selection(document.changeform.add_to_selection.value,'".$REQUEST_URI."','add_to_selection','".$parent."');return true;",
 		));
 
-		$str = "";
-		$toolbar->add_button(array(
-			"name" => 'change_it',
-			"tooltip" => 'Muuda valimit',
-			"url" => "javascript:void(0);",
-			"img" => "edit.gif",
-			"side" => "right",
-			'onClick' => "JavaScript:if (document.changeform.add_to_selection.value < 1){return false}; url='".$this->mk_my_orb('change',array('group' => 'contents'),'crm_selection')."&id=' + document.changeform.add_to_selection.value; window.open(url);",
-		));
-
-		$str .= html::hidden(array('name' => 'new_selection_name'));
-                $str .= $this->get_file(array("file" => $this->cfg['tpldir'].'/selection/go_add_to_selection.script'));
-		$toolbar->add_cdata($str);
-		
-	
 	}	
 
 	////
@@ -1460,36 +1118,75 @@ class crm_db extends class_base
 
 	/**  
 		
-		@attrib name=process_organizations params=name all_args="1" default="0"
+		@attrib name=delete_organizations params=name all_args="1" 
 		
-		
-		@returns
-		
-		
-		@comment
-
 	**/
-	function process_organizations($arr)
+	function delete_organizations($arr)
 	{
 		unset($arr["MAX_FILE_SIZE"]);
 		unset($arr["action"]);
+		unset($arr["reforb"]);
+		unset($arr["add_to_selection"]);
+
 		$sel = new aw_array($arr["sel"]);
 		foreach($sel->get() as $obj_id)
 		{
 			$o = new object($obj_id);
 			$o->delete();
 		};
-		foreach($arr as $key => $val)
-		{
-			if ($key != "sel" && $key != "reforb" && $val)
-			{
-				$tmp[$key] = $val;
-				// kuidas ma need vidinad kokku panen, a?
-				
+		unset($arr["sel"]);
+		$tmp = $arr;
 
-			};
+		if (is_array($arr["search_form1"]))
+		{
+			$tmp["search_form1"] = $arr["search_form1"];
 		};
-		return $this->mk_my_orb("change",$tmp);
+		
+		// now I need to redirect back to whatever that url was
+		$rv = $this->mk_my_orb("change",$tmp);
+		return $rv;
+	}
+	
+	/**  
+		
+		@attrib name=copy_to_selection params=name all_args="1" 
+		
+	**/
+	function copy_to_selection($arr)
+	{
+		unset($arr["MAX_FILE_SIZE"]);
+		unset($arr["action"]);
+		unset($arr["reforb"]);
+
+		$selinst = get_instance(CL_CRM_SELECTION);
+		$selinst->add_to_selection(array(
+			"add_to_selection" => $arr["add_to_selection"],
+			"sel" => $arr["sel"],
+		));
+
+		$sel = new aw_array($arr["sel"]);
+
+		unset($arr["sel"]);
+		$tmp = $arr;
+
+		if (is_array($arr["search_form1"]))
+		{
+			$tmp["search_form1"] = $arr["search_form1"];
+		};
+		
+		// now I need to redirect back to whatever that url was
+		$rv = $this->mk_my_orb("change",$tmp);
+		return $rv;
+	}
+
+	function callback_mod_retval($arr)
+	{
+		$args = &$arr["args"];
+		// no I need add all those things in search_form1 do my request vars
+		if (is_array($arr["request"]["search_form1"]))
+		{
+			$args["search_form1"] = $arr["request"]["search_form1"];
+		};
 	}
 };
 ?>

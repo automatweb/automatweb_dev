@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.12 2004/02/03 10:40:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.13 2004/02/17 15:09:24 duke Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -50,16 +50,35 @@ caption Õiguslik vorm
 @property firmajuht type=chooser orient=vertical table=kliendibaas_firma  editonly=1
 @caption Organisatsiooni juht
 
-@property addresslist type=text store=no group=humanres no_caption=1
+@default group=humanres
+
+@property human_resources type=table store=no 
+@caption Inimesed
+
+@default group=contacts
+
+@property addresslist type=text store=no 
 @caption Aadressid
 
-@property human_resources type=table store=no group=humanres no_caption=1
-@caption Inimesed
+@property phone_id type=relmanager table=kliendibaas_firma reltype=RELTYPE_PHONE props=name
+@caption Telefon
+
+@property url_id type=relmanager table=kliendibaas_firma reltype=RELTYPE_URL props=name
+@caption Veebiaadress
+
+@property email_id type=relmanager table=kliendibaas_firma reltype=RELTYPE_EMAIL props=mail
+@caption E-posti aadressid
+
+@property telefax_id type=relmanager table=kliendibaas_firma reltype=RELTYPE_TELEFAX props=name
+@caption Fax
 
 @default group=tasks_overview
 
 @property tasks_call type=text store=no no_caption=1
 @caption Kõned
+
+@property org_add_call type=releditor reltype=RELTYPE_CALL props=name,comment,start1,is_done,content store=no
+@caption Lisa kõne
 
 @default group=overview
 
@@ -75,13 +94,14 @@ caption Õiguslik vorm
 @property org_tasks type=calendar no_caption=1 group=tasks viewtype=relative
 @caption Toimetused
 
-@groupinfo humanres caption="Kontaktid" submit=no
+@groupinfo contacts caption="Kontaktid" 
+@groupinfo humanres caption="Inimesed" submit=no
 @groupinfo overview caption="Tegevused" 
 @groupinfo all_actions caption="Kõik" parent=overview submit=no
 @groupinfo calls caption="Kõned" parent=overview submit=no
 @groupinfo meetings caption="Kohtumised" parent=overview submit=no
 @groupinfo tasks caption="Toimetused" parent=overview submit=no
-@groupinfo tasks_overview caption="Ülevaade" submit=no
+@groupinfo tasks_overview caption="Ülevaade" 
 
 @reltype ETTEVOTLUSVORM value=1 clid=CL_CRM_CORPFORM
 @caption Õiguslik vorm
@@ -124,6 +144,9 @@ caption Õiguslik vorm
 
 @reltype PHONE value=17 clid=CL_CRM_PHONE
 @caption Telefon
+
+@reltype TELEFAX value=18 clid=CL_CRM_PHONE
+@caption Fax
 
 @classinfo no_status=1
 			
@@ -681,6 +704,41 @@ class crm_company extends class_base
 			));
 		}
 		
+	}
+
+	////
+	// !Listens to MSG_EVENT_ADD broadcasts and creates
+	// connections between a CRM_PERSON and a CRM_COMPANY
+	// if an event is added to a person.
+	function register_humanres_event($arr)
+	{
+		$event_obj = new object($arr["event_id"]);
+		$typemap = array(
+			CL_CRM_CALL => 12,
+			CL_TASK => 13,
+			CL_CRM_MEETING => 11,
+		);
+
+		$reltype = $typemap[$event_obj->class_id()];
+		if (empty($reltype))
+		{
+			return false;
+		};
+
+		$per_obj = new object($arr["person_id"]);
+
+		$conns = $per_obj->connections_to(array(
+			"type" => 8,
+		));
+
+		foreach($conns as $conn)
+		{
+			$org_obj = $conn->from();
+			$org_obj->connect(array(
+				"to" => $arr["event_id"],
+				"reltype" => $reltype,
+			));
+		}
 	}
 
 
