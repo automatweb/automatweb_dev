@@ -4,17 +4,13 @@ define("COMP_STATUS_PROPOSED",1);
 define("COMP_STATUS_CONFIRMED",2);
 define("YEAR", 3600*24*370);	// sekundeid 1s aastas
 
-global $orb_defs;
-$orb_defs["competitions"] = "xml";
-
 classload("file");
 
 class competitions extends aw_template
 {
 	function competitions()
 	{
-		$this->tpl_init("competitions");
-		$this->db_init();
+		$this->init("competitions");
 
 		$this->status_codes = array(
 			COMP_STATUS_PROPOSED => "Soovitatud",
@@ -47,8 +43,7 @@ class competitions extends aw_template
 
 	function is_admin_user()
 	{
-		global $gidlist,$competition_admin_group;
-		if (in_array($competition_admin_group,$gidlist))
+		if (in_array($this->cfg["admin_group"],aw_global_get("gidlist")))
 		{
 			return true;
 		}
@@ -68,8 +63,7 @@ class competitions extends aw_template
 		{
 			if ($my_list == 1)
 			{
-				global $uid;
-				$cons = " WHERE proposed_by = '$uid'";
+				$cons = " WHERE proposed_by = '".aw_global_get("uid")."'";
 			}
 			else
 			{
@@ -157,7 +151,7 @@ class competitions extends aw_template
 	function submit($arr)
 	{
 		extract($arr);
-		global $uid;
+		$uid = aw_global_get("uid");
 		if ($id)
 		{
 			// siin tuleks kontrollida ka et kas on muutmise 6igust sellele kombile
@@ -207,7 +201,7 @@ class competitions extends aw_template
 	{
 		extract($arr);
 		$comp = $this->get_comp($id);
-		global $uid;
+		$uid = aw_global_get("uid");
 		if (!($comp["proposed_by"] == $uid || $this->is_admin_user()))
 		{
 			$this->raise_error("No access to change this competition", true);
@@ -400,7 +394,7 @@ class competitions extends aw_template
 		else
 		if ($this->is_voting($row))
 		{
-			global $uid;
+			$uid = aw_global_get("uid");
 			// loeme k6ik selle v6istluse entryd ja logitud kasutaja poolt neile antud h22led. sql ruulib.
 			$this->db_query("SELECT comp_solutions.*,comp_votes.vote as vote FROM comp_solutions LEFT JOIN comp_votes ON (comp_votes.sol_id = comp_solutions.id AND comp_votes.user = '$uid') WHERE comp_solutions.comp_id = $id");
 			
@@ -446,7 +440,7 @@ class competitions extends aw_template
 		else
 		if ($this->is_closed($row))
 		{
-			global $uid;
+			$uid = aw_global_get("uid");
 			$cnt = 1;
 			// loeme k6ik selle v6istluse entryd ja summeerime nende hinded kokku
 			$this->db_query("SELECT comp_solutions.*,sum(comp_votes.vote) as vote FROM comp_solutions LEFT JOIN comp_votes ON comp_votes.sol_id = comp_solutions.id WHERE comp_solutions.comp_id = $id  GROUP BY comp_votes.sol_id ORDER BY vote DESC");
@@ -502,8 +496,7 @@ class competitions extends aw_template
 
 	function get_user_solution($comp_id)
 	{
-		global $uid;
-		$this->db_query("SELECT * FROM comp_solutions WHERE comp_id = $comp_id AND user = '$uid'");
+		$this->db_query("SELECT * FROM comp_solutions WHERE comp_id = $comp_id AND user = '".aw_global_get("uid")."'");
 		return $this->db_next();
 	}
 
@@ -511,7 +504,7 @@ class competitions extends aw_template
 	{
 		extract($arr);
 
-		global $uid;
+		$uid = aw_global_get("uid");
 		$row = $this->get_comp($id);
 		if ($this->is_active($row))
 		{
@@ -527,7 +520,7 @@ class competitions extends aw_template
 
 				$f = new file;
 				$fdat = $f->put(array("store" => "fs", "filename" => $entry_name, "type" => $entry_type,"content" => $fc));
-				$furl = $GLOBALS["baseurl"]."/files.aw/id=".$fdat["id"]."/".urlencode($entry_name);
+				$furl = aw_ini_get("baseurl")."/files.".aw_ini_get("ext")."/id=".$fdat["id"]."/".urlencode($entry_name);
 			}
 
 			if ($sol)
