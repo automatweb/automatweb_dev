@@ -3,7 +3,7 @@
 	<class name="forum">
 
 		<action name="new">
-			<function name="change">
+			<function name="configure">
 				<arguments>
 					<required name="parent" type="int"/>
 					<define name="new" value="1"/>
@@ -19,11 +19,20 @@
 		</action>
 
 		<action name="change">
-			<function name="change">
+			<function name="topics">
 				<arguments>
 					<required name="id" type="int"/>
 					<optional name="parent" type="int"/>
 					<optional name="from"/>
+					<optional name="section"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="configure">
+			<function name="configure">
+				<arguments>
+					<required name="id" type="int"/>
 				</arguments>
 			</function>
 		</action>
