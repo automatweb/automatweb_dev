@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.358 2005/01/26 12:14:39 ahti Exp $
+// $Id: class_base.aw,v 2.359 2005/01/26 23:22:41 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -227,7 +227,7 @@ class class_base extends aw_template
 		
 		$this->is_translated = 0;
 
-		if (empty($args["action"]))
+		if (!isset($args["action"]))
 		{
 			$args["action"] = "view";
 		};
@@ -726,10 +726,26 @@ class class_base extends aw_template
 			aw_session_del("cb_values");
 		}
 
+
+		if ($args["form"] == "new" || $args["form"] == "change")
+		{
+			$orb_action = "change";
+		}
+		else
+		{
+			$orb_action = $args["action"];
+		};
+		
+		if ($this->view == 1)
+		{
+			$orb_action = "view";
+		};
+
 		$rv =  $this->gen_output(array(
 			"parent" => $this->parent,
 			"content" => isset($content) ? $content : "",
-			"orb_action" => $this->view == 1 ? "view" : "",
+			//"orb_action" => $this->view == 1 ? "view" : "",
+			"orb_action" => $orb_action,
 		));
 		$awt->stop("final-bit");
 		$awt->stop("cb-change");
@@ -1138,9 +1154,10 @@ class class_base extends aw_template
 
 		$activegroup = $this->use_group;
 
+
 		$orb_action = isset($args["orb_action"]) ? $args["orb_action"] : "";
 
-		if (empty($orb_action))
+		if (!isset($orb_action))
 		{
 			$orb_action = "change";
 		};	
@@ -1175,6 +1192,11 @@ class class_base extends aw_template
 					{
 						$link_args->set_at("_alias",get_class($this));
 					};
+					$link = $this->mk_my_orb($orb_action,$link_args->get(),get_class($this->orb_class));
+				}
+				elseif (!empty($this->use_form) && $this->use_form != "new")
+				{
+					$link_args->set_at("group",$key);
 					$link = $this->mk_my_orb($orb_action,$link_args->get(),get_class($this->orb_class));
 				}
 				else
