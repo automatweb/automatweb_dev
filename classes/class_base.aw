@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.206 2004/02/05 13:27:14 duke Exp $
+// $Id: class_base.aw,v 2.207 2004/02/05 16:06:59 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -517,8 +517,15 @@ class class_base extends aw_template
 		if (!$save_ok)
 		{
 			$args["parent"] = $form_data["parent"];
-			unset($args["id"]);
-			$action = "new";
+			if ($this->new)
+			{
+				$action = "new";
+				unset($args["id"]);
+			}
+			else
+			{
+				$action = "change";
+			};
 		}
 		else
 		{
