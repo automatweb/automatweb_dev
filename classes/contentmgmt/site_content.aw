@@ -1632,7 +1632,7 @@ class site_content extends menuedit
 				FROM objects 
 				LEFT JOIN menu ON menu.id = objects.oid
 				LEFT JOIN template ON template.id = menu.tpl_lead
-				WHERE objects.status = 2 AND objects.class_id = 22 AND (objects.site_id = ".$this->cfg["site_id"]." OR objects.site_id is null) $lai
+				WHERE objects.status = 2 AND objects.class_id = ".CL_PROMO." AND (objects.site_id = ".$this->cfg["site_id"]." OR objects.site_id is null) $lai
 				ORDER by jrk";
 		$this->db_query($q);
 		$promos = array();
@@ -1665,6 +1665,7 @@ class site_content extends menuedit
 			$doc->doc_count = 0;
 
 			$show_promo = false;
+
 
 			if ($meta["all_menus"])
 			{
@@ -1943,11 +1944,7 @@ class site_content extends menuedit
 		$imgs = false;
 		$smi = "";
 		$sel_image = "";
-		// why the fuck did I put this in?!?!
 
-		// I don't know, but we need SEL_MENU_IMAGE for director, so I'm
-		// making this work again. -- duke
-		//return false;
 		while ($sel_image == "" && $si_parent)
 		{
 			$sel_menu_meta = $this->mar[$si_parent]["meta"];
@@ -1955,7 +1952,11 @@ class site_content extends menuedit
 			{
 				$sel_menu_o_img_url = image::check_url($this->mar[$si_parent]["img_url"]);
 			}
-//			echo "si_parent = $si_parent , meta = <pre>", var_dump($sel_menu_meta),"</pre> <br>";
+			if ($sel_menu_meta["images_from_menu"])
+			{
+				$sel_menu_meta["menu_images"] = $this->mar[$sel_menu_meta["images_from_menu"]]["meta"]["menu_images"];
+			}
+
 			if (is_array($sel_menu_meta["menu_images"]) && count($sel_menu_meta["menu_images"]) > 0)
 			{
 				$imgs = true;
@@ -1990,6 +1991,12 @@ class site_content extends menuedit
 					"url" => image::check_url($dat["url"])
 				));
 				$smi .= $this->parse("SEL_MENU_IMAGE");
+				if ($dat["url"] != "")
+				{
+					$this->vars(array(
+						"sel_menu_image_".$nr => "<img name='sel_menu_image_".$nr."' src='".image::check_url($dat["url"])."' border='0'>"
+					));
+				}
 			}
 		}
 		$this->vars(array(
