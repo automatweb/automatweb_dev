@@ -62,7 +62,7 @@
 
 											<!-- SUB: SEL_ALIAS -->
 											Vali alias:<Br>
-											<select class="formselect" name="cols[{VAR:col_id}][alias]" size="5">{VAR:aliases}</select>
+											<select class="formselect" name="cols[{VAR:col_id}][alias][]" multiple size="5">{VAR:aliases}</select>
 											<!-- END SUB: SEL_ALIAS -->
 
 											<!-- SUB: SEL_GRPS -->
@@ -112,6 +112,8 @@
 											<input type="radio" name="cols[{VAR:col_id}][image_type]" value="img" {VAR:img_type_img}> Pilt <Br>
 											<input type="radio" name="cols[{VAR:col_id}][image_type]" value="tximg" {VAR:img_type_tximg}> Tekst ja pilt <Br>
 											<input type="radio" name="cols[{VAR:col_id}][image_type]" value="imgtx" {VAR:img_type_imgtx}> Pilt ja tekst<Br>
+
+											<input type="textbox" class="formtext" size="3" name="cols[{VAR:col_id}][thousands_sep]" value="{VAR:thousands_sep}"> Tuhandete eraldaja<Br>
 											<!-- END SUB: SEL_IMAGE -->
 										</table>
 

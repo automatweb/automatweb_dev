@@ -36,6 +36,9 @@
 												<td class="celltext">Tavaline pealkirja stiil:</td><td class="celltext"><select name="styles[header_normal]" class="formselect">{VAR:header_normal}</select></td>
 											</tr>
 											<tr>
+												<td class="celltext">Tavalise pealkirja lingi stiil:</td><td class="celltext"><select name="styles[header_link]" class="formselect">{VAR:header_link}</select></td>
+											</tr>
+											<tr>
 												<td class="celltext">Sorditav pealkirja stiil:</td><td class="celltext"><select name="styles[header_sortable]" class="formselect">{VAR:header_sortable}</select></td>
 											</tr>
 											<tr>
@@ -64,6 +67,9 @@
 											</tr>
 											<tr>
 												<td class="celltext">Grupi rea stiil:</td><td class="celltext"><select name="styles[group_style]" class="formselect">{VAR:group_style}</select></td>
+											</tr>
+											<tr>
+												<td class="celltext">Grupi rea lingi stiil:</td><td class="celltext"><select name="styles[group_link_style]" class="formselect">{VAR:group_link_style}</select></td>
 											</tr>
 											<tr>
 												<td class="celltext">Kirjete summeerimise stiil:</td><td class="celltext"><select name="styles[sum_style]" class="formselect">{VAR:sum_style}</select></td>

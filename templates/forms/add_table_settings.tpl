@@ -160,10 +160,22 @@
 												<td class="celltext" colspan="2"><input type="checkbox" name="settings[has_pages]" value="1" {VAR:has_pages}> Kirjeid näidatakse lehekülgede kaupa</td>
 											</tr>
 											<tr>
+												<td class="celltext" colspan="2"><input type="text" class="formtext" name="settings[records_per_page]" value="{VAR:records_per_page}" size="5"> kirjet lehel</td>
+											</tr>
+											<tr>
 												<td class="celltext" colspan="2"><input type="radio" name="settings[has_pages_type]" value="text" {VAR:has_pages_text}> Tekstipõhine leheküljevalik</td>
 											</tr>
 											<tr>
 												<td class="celltext" colspan="2"><input type="radio" name="settings[has_pages_type]" value="lb" {VAR:has_pages_lb}> Dropdown leheküljevalik</td>
+											</tr>
+											<tr>
+												<td class="celltext" colspan="2"><input type="checkbox" name="settings[has_pages_up]" value="1" {VAR:has_pages_up}> Leheküljevalik &uuml;leval <input type="checkbox" name="settings[has_pages_down]" value="1" {VAR:has_pages_down}> Leheküljevalik all </td>
+											</tr>
+											<tr>
+												<td class="celltext" colspan="2"><input type="text" class="formtext" name="settings[page_sep_pixels]" value="{VAR:page_sep_pixels}" size="5"> Pikslit tabeli ja leheküljevaliku vahel </td>
+											</tr>
+											<tr>
+												<td class="celltext" colspan="2"><input type="checkbox" class="formcheck" name="settings[skip_one_liners]" value="1" {VAR:skip_one_liners}> Kui tabelis on ainult yks rida mis on lingitud, siis suuna sinna edasi</td>
 											</tr>
 											<tr>
 												<td class="celltext" colspan="2">
