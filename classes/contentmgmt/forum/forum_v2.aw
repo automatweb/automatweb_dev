@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.14 2004/01/13 14:16:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.15 2004/01/13 15:47:37 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -11,9 +11,9 @@
 	@default field=meta
 	@default method=serialize
 
-	property topic_folder type=relpicker reltype=RELTYPE_TOPIC_FOLDER
-	caption Teemade kataloog
-	comment Sellest kataloogist võetakse foorumi teemasid
+	@property topic_folder type=relpicker reltype=RELTYPE_TOPIC_FOLDER
+	@caption Teemade kataloog
+	@comment Sellest kataloogist võetakse foorumi teemasid
 	
 	@property address_folder type=relpicker reltype=RELTYPE_ADDRESS_FOLDER
 	@caption Listiliikmete kataloog
@@ -33,6 +33,12 @@
 
 	@property container type=text store=no group=container no_caption=1
 	@caption Konteiner
+
+	@property topic type=hidden store=no group=container
+	@caption Topic ID (sys)
+
+	@property subaction type=hidden store=no group=container
+	@caption Subact (sys)
 
 	@property show type=callback callback=callback_gen_contents store=no no_caption=1 group=contents
 	@caption Foorumi sisu
@@ -79,8 +85,20 @@
 	@property style_comment_user type=relpicker group=styles reltype=RELTYPE_STYLE
 	@caption Kommentaari kasutajainfo stiil
 
+	@property style_comment_time type=relpicker group=styles reltype=RELTYPE_STYLE
+	@caption Kommentaari aja stiil
+
 	@property style_comment_text type=relpicker group=styles reltype=RELTYPE_STYLE
 	@caption Kommentaari teksti stiil
+
+	@property style_form_caption type=relpicker group=styles reltype=RELTYPE_STYLE
+	@caption Sisestusvormi pealkirja stiil
+
+	@property style_form_text type=relpicker group=styles reltype=RELTYPE_STYLE
+	@caption Sisestusvormi teksti stiil
+
+	@property style_form_element type=relpicker group=styles reltype=RELTYPE_STYLE
+	@caption Sisestusvormi elemendi stiil
 
 	@groupinfo container caption=Foorum submit=no
 	@groupinfo topic_selector caption="Teemad" 
@@ -132,6 +150,28 @@ class forum_v2 extends class_base
 				$data["value"] = $this->get_topic_selector($arr);
 				break;
 
+			case "topic":
+				if (!empty($arr["request"]["topic"]))
+				{
+					$data["value"] = $arr["request"]["topic"];
+				}
+				else
+				{
+					$retval = PROP_IGNORE;
+				};
+				break;
+
+			case "subaction":
+				if (!empty($arr["request"]["topic"]))
+				{
+					$data["value"] = "submit_comment";
+				}
+				else
+				{
+					$retval = PROP_IGNORE;
+				};
+				break;
+
 		};	
 		return $retval;
 	} 
@@ -155,7 +195,8 @@ class forum_v2 extends class_base
 				break;
 
 			case "container":
-				$this->update_container($arr);
+				// now, I have to 
+				$this->update_contents($arr);
 				break;
 		}
 		return $retval;
@@ -394,6 +435,15 @@ class forum_v2 extends class_base
 		return $c;
 	}
 
+	function update_contents($arr)
+	{
+		if ($arr["request"]["subaction"] == "submit_comment")
+		{
+			$this->submit_comment($arr["request"]);
+			$this->topic_id = $arr["request"]["topic"];
+		};
+	}
+
 	function get_folder_tree($arr)
 	{
 		$this->tree = array();
@@ -432,7 +482,7 @@ class forum_v2 extends class_base
 
 		$obj_chain = $this->get_obj_chain(array(
 			"oid" => $topic_obj->id(),
-			"stop" => $args["fld"],
+			"stop" => $args["request"]["folder"],
 		));
 
 		$path = array();
@@ -570,6 +620,7 @@ class forum_v2 extends class_base
 		$topic_obj = new object($args["request"]["topic"]);
 
 		$this->_add_style("style_comment_user");
+		$this->_add_style("style_comment_time");
 		$this->_add_style("style_comment_text");
 		$this->vars($this->style_data);
 
@@ -677,14 +728,24 @@ class forum_v2 extends class_base
 			"comment" => $topic_obj->comment(),
 			"COMMENT" => $c,
 			"path" => join(" &gt; ",array_reverse($path)),
+		));
+
+		$rv = $this->parse();
+
+		// XXX: implement topic lock
+		$this->read_template("add_comment.tpl");
+		$this->_add_style("style_form_caption");
+		$this->_add_style("style_form_text");
+		$this->_add_style("style_form_element");
+		$this->vars($this->style_data);
+		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_comment",array(
 				"id" => $args["obj_inst"]->id(),
 				"section" => aw_global_get("section"),
 				"topic" => $topic_obj->id(),
 			)),
 		));
-
-		return $this->parse();
+		return $rv . $this->parse();
 
 	}
 
@@ -819,6 +880,7 @@ class forum_v2 extends class_base
 			$args["folder"] = $emb["parent"];
 			$args["topic"] = $this->topic_id;
 			$args["group"] = "contents";
+			$args["page"] = $args["request"]["page"];
 		}
 	}
 
@@ -989,6 +1051,11 @@ class forum_v2 extends class_base
 	function add_topic($arr)
 	{
 		$this->read_template("add_topic.tpl");
+		$this->obj_inst = new object($arr["id"]);
+		$this->_add_style("style_form_caption");
+		$this->_add_style("style_form_text");
+		$this->_add_style("style_form_element");
+		$this->vars($this->style_data);
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_topic",array(
 				"id" => $arr["id"],
@@ -1024,7 +1091,9 @@ class forum_v2 extends class_base
 		unset($emb["id"]);
 		$emb["parent"] = $arr["topic"];
                 $this->comm_id = $t->submit($emb);
+
 		return $this->mk_my_orb("change",array(
+			"id" => $arr["id"],
 			"group" => "container",
 			"section" => $arr["section"],
 			"topic" => $arr["topic"],
