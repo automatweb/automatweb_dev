@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.2 2002/10/30 10:58:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.3 2002/11/01 08:57:30 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -177,6 +177,7 @@ class form_element extends aw_template
 				"search_all_text"					=> checked($this->arr["search_all_text"]),
 				"search_separate_words"		=> checked($this->arr["search_separate_words"]),
 				"search_logical"					=> checked($this->arr["search_logical"]),
+				"search_separate_words_sep" => $this->arr["search_separate_words_sep"]
 			));
 	
 			$this->vars(array(
@@ -447,6 +448,7 @@ class form_element extends aw_template
 				{
 					$udcel_els = array(0 => "");
 				}
+				classload("image");
 				$this->vars(array(
 					"must_fill_checked" => checked($this->arr["must_fill"] == 1),
 					"must_error" => $this->arr["must_error"],
@@ -794,6 +796,10 @@ class form_element extends aw_template
 		$var = $base."_search_separate_words";
 		global $$var;
 		$this->arr["search_separate_words"] = $$var;
+
+		$var = $base."_search_separate_words_sep";
+		global $$var;
+		$this->arr["search_separate_words_sep"] = $$var;
 
 		$var = $base."_search_logical";
 		global $$var;

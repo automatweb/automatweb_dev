@@ -653,7 +653,7 @@ function toggle_file_link_newwin()
 <td class="fgtext">Otsingul t&auml;pne vaste:</td>
 <td class="fgtext"><input type='checkbox' CLASS="small_button" NAME='{VAR:cell_id}_search_all_text' VALUE='1' {VAR:search_all_text}></td>
 <td class="fgtext">Jaga otsing s&otilde;nadeks:</td>
-<td class="fgtext"><input type='checkbox' CLASS="small_button" NAME='{VAR:cell_id}_search_separate_words' VALUE='1' {VAR:search_separate_words}></td>
+<td class="fgtext"><input type='checkbox' CLASS="small_button" NAME='{VAR:cell_id}_search_separate_words' VALUE='1' {VAR:search_separate_words}> s&otilde;nade eraldaja: <input type='text' name='{VAR:cell_id}_search_separate_words_sep' value='{VAR:search_separate_words_sep}' class='small_button' size='2'></td>
 </tr>
 <tr>
 <td class="fgtext">Otsing on loogiline lause:</td>

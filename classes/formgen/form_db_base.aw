@@ -1016,7 +1016,12 @@ class form_db_base extends aw_template
 							else
 							{
 								// now split it at the spaces
-								$pieces = explode(" ",$value);
+								$sep = " ";
+								if ($el->arr["search_separate_words_sep"] != "")
+								{
+									$sep = $el->arr["search_separate_words_sep"];
+								}
+								$pieces = explode($sep,$value);
 								if (is_array($pieces))
 								{
 									if ($el->arr["search_all_text"] != 1)
