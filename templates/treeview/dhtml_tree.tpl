@@ -149,6 +149,7 @@ open_nodes = new Array({VAR:open_nodes});
 	font-size: 11px;
 	text-decoration: none;
 	vertical-align: middle;
+	white-space: nowrap;
 }
 
 .nodetextbuttonlike {
@@ -170,23 +171,26 @@ open_nodes = new Array({VAR:open_nodes});
 <!-- END SUB: HAS_ROOT -->
 <!-- hästi tore oleks, kui ma saaks need folderite ikoonid kuidagi automaatselt lisada -->
 <!-- SUB: TREE_NODE -->
-<script language='JavaScript1.2'>
-   if(attached_sections[{VAR:menu_level}]==undefined)
-   {
-      attached_sections[{VAR:menu_level}] = new Array();
-   }
-	tmp = '{VAR:id}';
-	if(is_numeric(tmp))
-	{
-		attached_sections[{VAR:menu_level}][tmp] = tmp;
-	}
+<script language="text/javascript">
+if(attached_sections[{VAR:menu_level}]==undefined)
+{
+	attached_sections[{VAR:menu_level}] = new Array();
+}
+tmp = '{VAR:id}';
+if(is_numeric(tmp))
+{
+	attached_sections[{VAR:menu_level}][tmp] = tmp;
+}
 </script>
+<div style="width: 250px">
 <div class="nodetext"><a attachedsection="{VAR:id}" id="{VAR:id}treenode" onClick="toggle_children(this,{VAR:menu_level});return false;" href="javascript:void();"><span id="icon-{VAR:id}" class="iconcontainer"><img src="{VAR:node_image}" border="0" style="vertical-align:middle;"></span><span><img id="iconfld-{VAR:id}" src="{VAR:iconurl}" border="0" style="vertical-align:middle;"></span></a>&nbsp;<a href="{VAR:url}" target="{VAR:target}">{VAR:name}</a>
 <!-- SUB: SUB_NODES -->
 <div id="{VAR:id}" data_loaded="{VAR:data_loaded}" style="padding-left: 16px; display: {VAR:display}; ">
 <!-- SUB: SINGLE_NODE -->
 <div class="nodetext"><span class="iconcontainer"><img src="{VAR:iconurl}" border="0" style="vertical-align:middle; margin-left: 16px;"></span>&nbsp;<a target="{VAR:target}" href="{VAR:url}">{VAR:name}</a></div>
 <!-- END SUB: SINGLE_NODE -->
+</div>
 <!-- END SUB: SUB_NODES -->
 </div></div>
 <!-- END SUB: TREE_NODE -->
+</div>
