@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml.aw,v 2.10 2002/07/23 21:22:13 duke Exp $
-// xml.aw - generic class for handling data in xml format.
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml.aw,v 2.11 2002/10/22 13:24:25 duke Exp $
+// xml.aw - xml serializer
 // at the moment (Apr 25, 2001) it can serialize PHP arrays to XML and vice versa
 class xml 
 {
@@ -14,6 +14,8 @@ class xml
 		$this->xml_version = isset($args["xml_version"]) ? $args["xml_version"] : "1.0";
 		// numbriliste elementide prefix arrayde serialiseerimise juures
 		$this->num_prefix = isset($args["num_prefix"]) ? $args["num_prefix"] : "num_";
+
+		$this->child_id = array();
 	}
 
 	// lopetab xml definitsiooni (s.t. lisab versiooninumbri ning root tagi
@@ -22,6 +24,13 @@ class xml
 		$data = $args["data"];
 		$retval = sprintf("<?xml version='%s'?>\n<%s>\n%s</%s>\n",$this->xml_version,$this->ctag,$data,$this->ctag);
 		return $retval;
+	}
+
+	////
+	// !Set a name for children nodes. This is used instead of num_XX if applicable
+	function set_child_id($key,$id)
+	{
+		$this->child_id[$key] = $id;
 	}
 
 	////
@@ -81,6 +90,7 @@ class xml
 	// arg - array
 	function xml_serialize($arg = array())
 	{
+		$this->parents = array();
 		$tmp = $this->_xml_serialize($arg);
 		$r = $this->_complete_definition(array(
 			"data" => $tmp,
@@ -96,7 +106,7 @@ class xml
 		{
 			return;
 		};
-		
+
 		if (sizeof($arg) == 0)
 		{
 			return;
@@ -115,14 +125,21 @@ class xml
 			// numbrilised tagid pole paraku lubatud, seega liidame neile prefiksina "num_" ette
 			if (gettype($key) == "integer")
 			{
-				$key = $this->num_prefix . $key;
+				$plen = sizeof($this->parents);
+				if ($plen >= 1)
+				{
+					$pkey = $this->parents[$plen-1];
+				};
+				$key = ($this->child_id[$pkey]) ? $this->child_id[$pkey] : $this->num_prefix . $key;
 			};
 		
 			if (is_array($val))
 			{
 				$level++;
 				$realval .= sprintf("%s<%s>\n",$spacer,$key);
+				array_push($this->parents,$key);
 				$realval .= $this->_xml_serialize($val,$level);
+				array_pop($this->parents);
 				$realval .= sprintf("%s</%s>\n",$spacer,$key);
 				$level--;
 			}
