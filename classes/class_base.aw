@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.284 2004/07/01 13:37:16 duke Exp $
+// $Id: class_base.aw,v 2.285 2004/07/02 12:13:55 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -576,6 +576,15 @@ class class_base extends aw_template
 			"return_url" => !empty($this->request["return_url"]) ? urlencode($this->request["return_url"]) : "",
 			"subgroup" => $this->subgroup,
 		) + (isset($this->request["extraids"]) && is_array($this->request["extraids"]) ? array("extraids" => $this->request["extraids"]) : array());
+
+		if (is_oid($this->request["object_type"]) && $this->can("view",$this->request["object_type"]))
+		{
+			$ot_obj = new object($this->request["object_type"]);
+			if ($ot_obj->class_id() == CL_OBJECT_TYPE)
+			{
+				$argblock["_object_type"] = $this->request["object_type"];
+			};
+		};
 
 		if ($args["no_rte"])
                 {
@@ -2728,6 +2737,12 @@ class class_base extends aw_template
 		else
 		{
 			$this->obj_inst = $o;
+		};
+
+		if (is_oid($args["_object_type"]) && $this->can("view",$this->request["_object_type"]))
+		{
+			$ot_obj = new object($this->request["_object_type"]);
+			$o->set_meta("object_type",$args["_object_type"]);
 		};
 
 		$filter = array();
