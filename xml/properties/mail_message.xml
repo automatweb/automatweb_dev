@@ -1,14 +1,14 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>mailtoolbar</name>
+            <name>edit_toolbar</name>
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
             <group>general</group>
             <table>messages</table>
-            <field>mailtoolbar</field>
-            <caption>Toolbar</caption>
+            <field>edit_toolbar</field>
+            <caption>Kirja redigeerimise toolbar</caption>
       </property>
       <property>
             <name>uidl</name>
@@ -20,8 +20,7 @@
       </property>
       <property>
             <name>mfrom</name>
-            <type>callback</type>
-            <callback>callback_get_identities</callback>
+            <type>select</type>
             <group>general</group>
             <table>messages</table>
             <field>mfrom</field>
@@ -37,6 +36,15 @@
             <caption>Kellele</caption>
       </property>
       <property>
+            <name>cc</name>
+            <type>textbox</type>
+            <field>mtargets1</field>
+            <size>80</size>
+            <group>general</group>
+            <table>messages</table>
+            <caption>Koopia</caption>
+      </property>
+      <property>
             <name>name</name>
             <type>textbox</type>
             <size>80</size>
@@ -44,15 +52,6 @@
             <group>general</group>
             <field>name</field>
             <caption>Teema</caption>
-      </property>
-      <property>
-            <name>date</name>
-            <type>text</type>
-            <store>no</store>
-            <group>general</group>
-            <table>messages</table>
-            <field>date</field>
-            <caption>Kuupäev</caption>
       </property>
       <property>
             <name>html_mail</name>
@@ -76,17 +75,23 @@
       </property>
       <property>
             <name>attachments</name>
-            <type>text</type>
-            <store>no</store>
+            <type>relmanager</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_ATTACHMENT</reltype>
+            <props>
+                  <num_0>comment</num_0>
+                  <num_1>file</num_1>
+            </props>
             <group>general</group>
-            <table>messages</table>
-            <field>attachments</field>
             <caption>Manused</caption>
       </property>
       <property>
             <name>msgrid</name>
             <type>hidden</type>
             <store>no</store>
+            <form>all</form>
             <group>general</group>
             <table>messages</table>
             <field>msgrid</field>
@@ -96,6 +101,7 @@
             <name>msgid</name>
             <type>hidden</type>
             <store>no</store>
+            <form>all</form>
             <group>general</group>
             <table>messages</table>
             <field>msgid</field>
@@ -105,11 +111,70 @@
             <name>mailbox</name>
             <type>hidden</type>
             <store>no</store>
+            <form>all</form>
             <group>general</group>
             <table>messages</table>
             <field>mailbox</field>
             <caption>Mailbox</caption>
       </property>
+      <property>
+            <name>cb_part</name>
+            <type>hidden</type>
+            <store>no</store>
+            <form>all</form>
+            <group>general</group>
+            <table>messages</table>
+            <field>cb_part</field>
+            <caption>Cb part</caption>
+      </property>
+      <property>
+            <name>view_toolbar</name>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <form>showmsg</form>
+            <group>general</group>
+            <table>messages</table>
+            <field>view_toolbar</field>
+            <caption>Kirja vaatamise toolbar</caption>
+      </property>
+      <property>
+            <name>msg_headers</name>
+            <type>text</type>
+            <store>no</store>
+            <form>showmsg</form>
+            <no_caption>1</no_caption>
+            <group>general</group>
+            <table>messages</table>
+            <field>msg_headers</field>
+            <caption>Kirja päised</caption>
+      </property>
+      <property>
+            <name>msg_content</name>
+            <type>text</type>
+            <store>no</store>
+            <form>showmsg</form>
+            <no_caption>1</no_caption>
+            <group>general</group>
+            <table>messages</table>
+            <field>msg_content</field>
+            <caption>Kirja sisu</caption>
+      </property>
+      <property>
+            <name>msg_attachments</name>
+            <type>text</type>
+            <store>no</store>
+            <form>showmsg</form>
+            <no_caption>1</no_caption>
+            <group>general</group>
+            <table>messages</table>
+            <field>msg_attachments</field>
+            <caption>Manused</caption>
+      </property>
+      <classinfo>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+      </classinfo>
       <groupinfo>
             <general>
                   <submit>no</submit>
@@ -122,5 +187,20 @@
                   <master_index>oid</master_index>
             </messages>
       </tableinfo>
+      <reltypes>
+            <ATTACHMENT>
+                  <value>1</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Manus</caption>
+            </ATTACHMENT>
+      </reltypes>
+      <forminfo>
+            <showmsg>
+                  <onload>load_remote_message</onload>
+            </showmsg>
+            <showheaders>
+                  <onload>load_remote_message</onload>
+            </showheaders>
+      </forminfo>
 </properties>
 
