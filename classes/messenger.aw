@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.19 2001/05/23 17:41:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.20 2001/05/24 10:14:35 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -534,7 +534,8 @@ class messenger extends menuedit_light
 					$msg["id"] = $msg["oid"];
 					$msg["color"] = ($msg["status"]) ? "#FFFFFF" : "#EEEEEE";
 					$msg["from"] = $msg["mfrom"];
-					$msg["subject"] = "$pref<a href='?class=messenger&action=show&id=$msg[id]'>" . $msg["subject"] . "</a>$suf";
+					$subject = $this->MIME_decode($msg["subject"]);
+					$msg["subject"] = "<a href='?class=messenger&action=show&id=$msg[id]'>" . $subject . "</a>";
 					$msg["pri"] = ($msg["pri"]) ? $msg["pri"] : 0;
 					$msg["cnt"] = $cnt;
 					$msg["tm"] = $this->time2date($row["tm"]);
@@ -955,7 +956,7 @@ class messenger extends menuedit_light
 			$vars = array(
 				"mfrom" => htmlspecialchars($msg["mfrom"]),
 				"mtargets" => htmlspecialchars($msg["mto"]),
-				"subject" => htmlspecialchars($msg["subject"]),
+				"subject" => htmlspecialchars($this->MIME_decode($msg["subject"])),
 			);
 		}
 		else
@@ -975,7 +976,7 @@ class messenger extends menuedit_light
 			"id" => $msg["id"],
 			"msg_id" => $id,
 			"status" => $msg["status"],
-			"message" => nl2br($msg["message"]),
+			"message" => nl2br($this->MIME_decde($msg["message"])),
 			"del_reforb" => $this->mk_reforb("delete",array("id" => $msg["id"])),
 			"reply_reforb" => $this->mk_reforb("reply",array("id" => $msg["id"])),
 			"mailbox" => $this->picker($mailbox,$mboxes),
@@ -1932,6 +1933,75 @@ class messenger extends menuedit_light
 		return $this->mk_site_orb(array(
 			"action" => "folders",
 		));
+	}
+
+	////
+	// !Dekodeerib MIME encodingus teate
+	function MIME_decode($string)
+	{
+		$pos = strpos($string,'=?');
+		if ($pos == false)
+		{
+			return $string;
+		};
+
+		// take out any spaces between multiple encoded words
+		$string = preg_replace('|\?=\s=\?|', '?==?', $string);
+
+		$preceding = substr($string, 0, $pos); // save any preceding text
+
+		$search = substr($string, $pos + 2, 75); // the mime header spec says this is the longest a single encoded word can be
+	        $d1 = strpos($search, '?');
+		if (!is_int($d1)) {
+			return $string;
+		}
+
+		$charset = substr($string, $pos + 2, $d1);
+		$search = substr($search, $d1 + 1);
+
+		$d2 = strpos($search, '?');
+		if (!is_int($d2)) {
+			return $string;
+		}
+
+		$encoding = substr($search, 0, $d2);
+		$search = substr($search, $d2+1);
+
+		$end = strpos($search, '?=');
+		if (!is_int($end)) {
+			return $string;
+		}
+
+		$encoded_text = substr($search, 0, $end);
+		$rest = substr($string, (strlen($preceding . $charset . $encoding . $encoded_text) + 6));
+
+		switch ($encoding) {
+			case 'Q':
+			case 'q':
+				$encoded_text = str_replace('_', '%20', $encoded_text);
+				$encoded_text = str_replace('=', '%', $encoded_text);
+				$decoded = urldecode($encoded_text);
+
+				if (strtolower($charset) == 'windows-1251') {
+					$decoded = convert_cyr_string($decoded, 'w', 'k');
+				}
+				break;
+
+			case 'B':
+			case 'b':
+				$decoded = urldecode(base64_decode($encoded_text));
+
+				if (strtolower($charset) == 'windows-1251') {
+					$decoded = convert_cyr_string($decoded, 'w', 'k');
+				}
+				break;
+
+			default:
+				$decoded = '=?' . $charset . '?' . $encoding . '?' . $encoded_text . '?=';
+				break;
+			}
+
+		return $preceding . $decoded . $this->MIME_decode($rest);
 	}
 
 };
