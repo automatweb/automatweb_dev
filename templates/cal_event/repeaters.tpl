@@ -129,4 +129,3 @@ onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('delete','','{VAR:bas
 </td>
 </tr>
 </table>
-<br>

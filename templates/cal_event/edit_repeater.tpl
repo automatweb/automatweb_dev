@@ -381,6 +381,19 @@ function toggle_year()
 <hr size=1 width="100%">
 </td>
 </tr>
+<tr>
+<td colspan="3" class="celltext">
+Korduse aeg erineb eventi omast: <input type="checkbox" name="own_time" value="1" {VAR:own_time}>
+&nbsp;&nbsp;
+<strong>Kell:</strong>
+{VAR:time}
+</td>
+</tr>
+<tr>
+<td colspan="3" class="celltext">
+<hr size=1 width="100%">
+</td>
+</tr>
 <!-- days -->
 <tr>
 <td align="center" rowspan="3" width="15" valign="top" class="celltext">
