@@ -946,17 +946,33 @@ class site_show extends class_base
 			));
 			if ($row["id"] == $lang_id)
 			{
-				$l.=$this->parse("SEL_LANG");
+				if ($this->is_template("SEL_LANG_BEGIN") && $l == "")
+				{
+					$l.=$this->parse("SEL_LANG_BEGIN");
+				}
+				else
+				{
+					$l.=$this->parse("SEL_LANG");
+				}
 				$sel_lang = $row;
 			}
 			else
 			{
-				$l.=$this->parse("LANG");
+				if ($this->is_template("SEL_LANG_BEGIN") && $l == "")
+				{
+					$l.=$this->parse("LANG_BEGIN");
+				}
+				else
+				{
+					$l.=$this->parse("LANG");
+				}
 			}
 		}
 		$this->vars(array(
 			"LANG" => $l,
 			"SEL_LANG" => "",
+			"SEL_LANG_BEGIN" => "",
+			"LANG_BEGIN" => "",
 			"sel_charset" => $sel_lang["charset"],
 			"se_lang_id" => $lang_id
 		));

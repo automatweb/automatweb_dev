@@ -61,7 +61,7 @@ function submit_changeform()
 {
 	//alert('submitting form');
 	{VAR:submit_handler}
-	document.changeform.submit();
+	//document.changeform.submit();
 }
 </script>
 </form>

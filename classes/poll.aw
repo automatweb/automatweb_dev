@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.42 2003/10/06 14:32:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.43 2003/10/08 15:27:49 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -289,7 +289,7 @@ class poll extends aw_template
 		}
 		else
 		{
-			$parent = ($parent) ? $parent : 0;
+			$parent = ($parent) ? $parent : aw_ini_get("poll.parent");
 			$id = $this->new_object(array(
 				"name" => $name[$lang_id],
 				"comment" => $comment[$lang_id],

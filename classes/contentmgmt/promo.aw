@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.13 2003/10/06 14:32:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.14 2003/10/08 15:27:49 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -595,8 +595,16 @@ class promo extends class_base
 					$docid = array($docid);
 				}
 
+				$d_cnt = 0;
 				foreach($docid as $d)
 				{
+					if (($d_cnt % 2)  == 1)
+					{
+						if (file_exists(aw_ini_get("tpldir")."/automatweb/documents/".$row["filename"]."2"))
+						{
+							$row["filename"] .= "2";
+						}
+					}
 					$cont = $doc->gen_preview(array(
 						"docid" => $d,
 						"tpl" => $tpl_filename,
@@ -609,6 +617,7 @@ class promo extends class_base
 						"no_acl_checks" => aw_ini_get("menuedit.no_view_acl_checks"),
 					));
 					$pr_c .= str_replace("\r","",str_replace("\n","",$cont));
+					$d_cnt++;
 				}
 
 				$inst->vars(array(
