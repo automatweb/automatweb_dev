@@ -51,9 +51,7 @@
 <!-- END SUB: LINE -->
 	<tr>
 		<td class="fform" colspan="8" align="center">
-			<!--
 			<input type="submit" value="Salvesta">
-			-->
 			<input type="hidden" name="oid" value="{VAR:oid}">
 			<input type="hidden" name="oldactiveperiod" value="{VAR:oldactiveperiod}">
 			<input type="hidden" name="type" value="savestatus">
