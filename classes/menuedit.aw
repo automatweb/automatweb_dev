@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.345 2005/03/15 09:29:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.346 2005/03/17 19:18:35 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -578,11 +578,6 @@ class menuedit extends aw_template
 		return $section;
 	}
 
-	function get_feature_icon_url($fid)
-	{
-		return aw_ini_get("icons.server")."/prog_".$fid.".gif";
-	}
-
 	////
 	// !Tagastab nimekirja erinevatest mentpidest
 	function get_type_sel()
@@ -615,48 +610,6 @@ class menuedit extends aw_template
 		$ss->_init_path_vars($tmp);
 		$ss->sel_section = $ss->_get_sel_section(aw_global_get("section"));
 		return $ss->build_popups();
-	}
-
-	function get_path($section,$obj)
-	{
-		// now find the path through the menu
-		$path = array();
-		if ($obj["class_id"] != CL_MENU)
-		{
-			$sec = $obj["parent"];
-			$section = $obj["parent"];
-		}
-		else
-		{
-			$sec = $section; 
-		}
-		$cnt = 0;
-		$tmp = array();
-		// kontrollime seda ka, et kas see "sec" yldse olemas on,
-		// vastasel korral satume loputusse tsyklisse
-		while ($sec && ($sec != 1)) 
-		{
-			array_push($tmp,$sec);
-			if (!isset($this->mar[$sec]))
-			{
-				$mc = get_instance("menu_cache");
-				$this->mar[$sec] = $mc->get_cached_menu($sec);
-			}
-			$sec = $this->mar[$sec]["parent"];
-			$cnt++;
-			if ($cnt > 1000)
-			{
-				$this->raise_error(ERR_MNED_HIER, "Error in object hierarchy, $sec is it's own parent!", true);
-			}
-		}
-		// now the path is in the correct order on the "root" stack
-
-		for ($i=0; $i < $cnt; $i++) 
-		{
-			$path[$i+1] = array_pop($tmp);
-		};
-		// and now in the $path array
-		return $path;
 	}
 
 	function _do_error_redir($section)

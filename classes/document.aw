@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.318 2005/03/17 18:26:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.319 2005/03/17 19:18:35 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1152,7 +1152,7 @@ class document extends aw_template
 				"num_comments" => sprintf("%d",$num_comments),
 				"comm_link" => $this->mk_my_orb("show_threaded",array("board" => $docid,"section" => $_sect),"forum"),
 			));
-			$forum = get_instance("forum");
+			$forum = get_instance(CL_FORUM);
 			$fr = $forum->add_comment(array("board" => $docid,"section" => $_sect));
 
 			if ($num_comments > 0)
