@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.105 2003/05/16 13:12:11 duke Exp $
+// $Id: class_base.aw,v 2.106 2003/05/16 15:31:23 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -851,9 +851,18 @@ class class_base extends aw_template
 			// that we already got
 			if (($key != "objects") && isset($this->realfields[$key]) && (sizeof($this->realfields[$key]) > 0) )
 			{
+				// this is a bit awkard, since it assumes that the data from objects
+				// table is already loaded .. but it should be anyway
 				if ($val["master_table"] == "objects")
 				{
-					$id_arg = $args["id"];
+					if (isset($this->coredata[$val["master_index"]]))
+					{
+						$id_arg = $this->coredata[$val["master_index"]];
+					}
+					else
+					{
+						$id_arg = $args["id"];
+					};
 				};
 
 				$tmp = $this->load_object(array(
@@ -873,6 +882,7 @@ class class_base extends aw_template
 				$fields = $this->fields[$key];
 				// for objects, we always load the parent field as well
 				$fields["parent"] = "direct";
+				$fields["brother_of"] = "direct";
 				$fields["metadata"] = "serialize";
 				$tmp = $this->load_object(array(
 					"id" => $args["id"],
@@ -1087,6 +1097,14 @@ class class_base extends aw_template
 
 		foreach($this->tableinfo as $table => $data)
 		{
+			$id_arg = $id;
+			if ($data["master_table"] == "objects")
+			{
+				if (isset($this->coredata[$data["master_index"]]))
+				{
+					$id_arg = $this->coredata[$data["master_index"]];
+				};
+			};
 			$idfield = $data["index"];
 			// NB! no record is created in the "other" table before we
 			// actually have something to write there besides the id itself
@@ -1098,7 +1116,7 @@ class class_base extends aw_template
 					"table" => $table,
 					"idfield" => $idfield,
 					"replace" => true,
-					"id" => $id),$args["data"][$table]
+					"id" => $id_arg),$args["data"][$table]
 				);
 			};	
 		};	
@@ -1241,6 +1259,7 @@ class class_base extends aw_template
 				};
 			};
 		};
+
 
 		// I need to replace this with a better check if I want to be able
 		// to use config forms in other situations besides editing objects
