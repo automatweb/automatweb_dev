@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.1 2001/05/16 03:03:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.2 2001/05/18 18:46:59 cvs Exp $
 class db_config extends aw_template {
 	function db_config() {
 		$this->db_init();
@@ -807,6 +807,56 @@ class db_config extends aw_template {
 			if ($ar[ot] != "")
 			{
 				$this->do_core_import_other_icons($ar[ot]);
+			}
+		}
+	}
+
+	// see laseb kontakti formi valida
+	function sel_contact_form()
+	{
+		global $ext;
+		$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / Vali kontakti sisestamise form");
+
+		$this->read_template("sel_form.tpl");
+		
+		$cf = $this->get_simple_config("contact_form");
+
+		classload("form_base");
+		$fb = new form_base;
+		$fa = $fb->get_list(FTYPE_ENTRY);
+		reset($fa);
+		while (list($fid,$name) = each($fa))
+		{
+			$this->vars(array(
+				"form_id"	=> $row["oid"],
+				"form_name" 	=> $row["name"],
+				"checked" 	=> checked($cf == $row["oid"])
+			));
+			$l.=$this->parse("LINE");
+		}
+		$this->vars(array("LINE" => $l, "SEL_LINE" => ""));
+
+		return $this->parse();
+	}
+
+	function save_jf($arr)
+	{
+		extract($arr);
+
+		// k6igepealt v6tame k6ik maha
+		$this->db_query("UPDATE forms SET subtype = 0, grp = '' WHERE subtype = ".FSUBTYPE_JOIN);
+
+		if (is_array($sf))
+		{
+			reset($sf);
+			// fid-id on vormide id-d
+			// fg on vormide grupid
+			$this->quote($fg);
+			while(list($fid,$v) = each($sf))
+			{
+				$q = sprintf("UPDATE forms SET subtype = '%s', grp = '%s',j_name = '%s', j_order='%s' WHERE id = $fid",
+					FSUBTYPE_JOIN,$fg[$fid],$fn[$fid],$fo[$fid]);
+				$this->db_query($q);
 			}
 		}
 	}

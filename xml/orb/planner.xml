@@ -91,7 +91,7 @@
 		</action>
 
 		<action name="dummy">
-		'	<function name="dummy">
+			<function name="dummy">
 				<arguments>
 					<required name="date"/>
 				</arguments>

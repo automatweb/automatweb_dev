@@ -959,14 +959,14 @@ class db_documents extends aw_template
 
 		$doc[content] = str_replace("#current_time#",$this->time2date(time(),2),$doc[content]);
 
-		if (!(strpos($doc[content],"<liitumisform") === false))
+		if (!(strpos($doc[content],"#liitumisform") === false))
 		{
-			preg_match("/<liitumisform info=\"(.*)\">/",$doc[content], $maat);
+			preg_match("/#liitumisform info=\"(.*)\"#/",$doc[content], $maat);
 
 			// siin tuleb n2idata kasutaja liitumisformi, kuhu saab passwordi ja staffi kribada.
 			// aga aint sel juhul, kui kasutaja on enne t2itnud k6ik miski grupi formid.
 			$dbu = new users;
-			$doc[content] = preg_replace("/<liitumisform info=\"(.*)\">/",$dbu->get_join_form($maat[1]),$doc[content]);
+			$doc[content] = preg_replace("/#liitumisform info=\"(.*)\"#/",$dbu->get_join_form($maat[1]),$doc[content]);
 		}
 		$awt->stop("db_documents->gen_preview()::misc_replaces");
 

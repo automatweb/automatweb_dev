@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.2 2001/05/17 15:09:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.3 2001/05/18 18:46:59 cvs Exp $
 classload("users_user","config","form");
 
 load_vcl("table");
@@ -711,11 +711,12 @@ class users extends users_user
 			return "Andmete muutmiseks peate olema sisse logitud!<br>";
 		}
 
+		$this->update_dyn_user($id);
 		$u = $this->fetch($id);
 		$fs = unserialize($u[join_form_entry]);
 
 		$t = new form;
-		return $t->gen_preview(array("id" => $fid, "entry_id" => $fs[$fid], "extraids" => array("redirect_after" => $GLOBALS["baseurl"]."/andmed?fid=$fid")));
+		return $t->gen_preview(array("id" => $fid, "entry_id" => $fs[$fid], "extraids" => array("redirect_after" => $GLOBALS["baseurl"]."/?special=2&fid=$fid")));
 	}
 }
 ?>

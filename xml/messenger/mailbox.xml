@@ -14,14 +14,15 @@
 <default_order value="tm"/>
 </definitions>
 
-<action link="class=messenger&amp;action=show" field="id" caption="Ava" style="msgline2"/>
 
 <data>
 <field name="from" caption="Kellelt" sortable="1" talign="center" nowrap="1" />
+<field name="pri" caption="Pri" talign="center" nowrap="1" sortable="1"/>
 <field name="subject" caption="Teema" sortable="1" talign="center" nowrap="1"/>
 <field name="tm" caption="Aeg" talign="center" nowrap="1" sortable="1" type="time" format="H:i d-M-Y" />
-<field name="pri" caption="Pri" talign="center" nowrap="1" sortable="1"/>
 <field name="status" caption="Staatus" talign="center" sortable="1"/>
 </data>
 
 </tabledef>
+
+<!--<action link="class=messenger&amp;action=show" field="id" caption="Ava" style="msgline2"/>-->

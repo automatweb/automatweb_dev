@@ -129,6 +129,7 @@ class users_user extends aw_template {
 			$this->send_alert($msg);
 			$this->_log("auth",$msg);
 			$success = false;
+			echo $msg;
 		}
 		// eelnevad kommentaarid kaivad ka parooli kontrollimise kohta
 		elseif (strlen($password) < 2)
@@ -137,6 +138,7 @@ class users_user extends aw_template {
 			$this->send_alert($msg);
 			$this->_log("auth",$msg);
 			$success = false;
+			echo $msg;
 		}
 		elseif (!is_valid("uid",$uid))
 		{
@@ -144,6 +146,7 @@ class users_user extends aw_template {
 			$this->send_alert($msg);
 			$this->_log("auth",$msg);
 			$success = false;
+			echo $msg;
 		};
 
 		if ($success)
@@ -151,6 +154,7 @@ class users_user extends aw_template {
 			$q = "SELECT * FROM users WHERE uid = '$uid' AND blocked = 0";
 			$this->db_query($q);
 			$udata = $this->db_next();
+			echo $msg;
 		};
 		if (!is_array($udata))
 		{
@@ -158,6 +162,7 @@ class users_user extends aw_template {
 			$this->send_alert($msg);
 			$this->_log("auth",$msg);
 			$success = false;
+			echo $msg;
 		}
 
 		if (($password != $udata["password"]))
@@ -167,6 +172,7 @@ class users_user extends aw_template {
 			$this->send_alert($msg);
 			$this->_log("auth",$msg);
 			$success = false;
+			echo $msg;
 		};
 		if ($success)
 		{

@@ -281,7 +281,7 @@ function is_valid($set,$string)
 	$i = 0;
 	while( ($i < strlen($string) && (!($valid === false))))
 	{
-		$valid = strpos($checkagainst,$string[$i]);
+		$valid = !(strpos($checkagainst,$string[$i]) === false);
 		$i++;
 	};
 	return $valid;

@@ -5,7 +5,7 @@
 		<action name="list_grps_user">
 			<function name="list_grps_user">
 				<arguments>
-					<required name="parent"/>
+					<optional name="parent"/>
 				</arguments>
 			</function>
 		</action>

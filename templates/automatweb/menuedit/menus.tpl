@@ -45,9 +45,6 @@ function paste()
 <a href='{VAR:addmenu}' class="fgtitle_link">Lisa</a>
 <!-- END SUB: ADD_CAT -->
 | <a href='javascript:foo.submit()' class="fgtitle_link">Salvesta</a>
-<!-- SUB: CAN_ADD_PROMO -->
-| <a href='{VAR:self}?type=add_promo&parent={VAR:parent}' class="fgtitle_link">Lisa promo kast</a>
-<!-- END SUB: CAN_ADD_PROMO -->
  | <a href='#' onClick='window.location.reload()' class="fgtitle_link">V&auml;rskenda</a>
  | <a href='{VAR:import}' class="fgtitle_link">Impordi</a>
  | <a href='javascript:cut()' class="fgtitle_link">Cut</a>
