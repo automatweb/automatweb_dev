@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.87 2001/07/27 01:50:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.88 2001/07/31 23:29:06 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 lc_load("messenger");
@@ -793,12 +793,16 @@ class messenger extends menuedit_light
 	
 		$qchar = $this->msgconf["msg_quotechar"];
 		$quote = false;
+		$sprefix = "";
 
 		if ($args["reply"])
 		{
 			$msg_id = $reply;
 			$msg = $this->driver->msg_get(array("id" => $newid));
-			$sprefix = "Re: ";
+			if (strpos($msg["subject"],"Re: ") === false)
+			{
+				$sprefix = "Re: ";
+			};
 			$quote = true;
 			
 			if ($msg["type"] == MSG_EXTERNAL)
@@ -814,7 +818,10 @@ class messenger extends menuedit_light
 		{
 			$msg_id = $forward;
 			$msg = $this->driver->msg_get(array("id" => $msg_id));
-			$sprefix = "Fwd: ";
+			if (strpos($msg["subject"],"Fwd: ") === false)
+			{
+				$sprefix = "Fwd: ";
+			};
 			$quote = true;
 		}
 		else
@@ -1755,6 +1762,7 @@ class messenger extends menuedit_light
 		$cc = ($cc) ? $this->parse("cc") : "";
 
 		$message = $msg["message"];
+		$message = htmlspecialchars($message);
 		$message = ereg_replace("((ftp://)|(http://))(([[:alnum:]]|[[:punct:]])*)", "<a href=\"\\0\" target='_new'>\\0</a>",$message);
 
 		$message = $this->MIME_decode($message);
