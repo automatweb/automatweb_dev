@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.46 2003/01/15 17:27:12 duke Exp $
+// $Id: class_base.aw,v 2.47 2003/01/16 12:43:47 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -167,48 +167,7 @@ class class_base extends aliasmgr
 		));
 
 
-
-		// load the object data, if there is anything to load at all
-		foreach($this->tables as $key => $val)
-		{
-			// that we already got
-			if ($key != "objects")
-			{
-				if ($val["master_table"] == "objects")
-				{
-					$id_arg = $args["id"];
-				};
-
-				$tmp = $this->load_object(array(
-					"table" => $key,
-					"idfield" => $val["index"],
-					"id" => $id_arg,
-					"fields" => $this->realfields[$key],
-				));
-				$this->data[$key] = $tmp;
-				$this->objdata = $tmp;
-			}
-			else
-			{
-				// load the core data (cause the parent might have a configuration
-				// form set) and then I need to know the id of the parent, before
-				// I can fetch all the properties
-				$fields = $this->fields[$key];
-				// for objects, we always load the parent field as well
-				$fields["parent"] = "direct";
-				$tmp = $this->load_object(array(
-					"id" => $args["id"],
-					"table" => "objects",
-					"idfield" => "oid",
-					"fields" => $fields,
-				));
-				$tmp["oid"] = $this->id;
-				$this->data[$key] = $tmp;
-				$this->parent = $tmp["parent"];
-				$this->coredata = $tmp;
-			};
-		};
-
+		$this->load_obj_data(array("id" => $this->id));
 
 		if (method_exists($this->inst,"callback_pre_edit"))
 		{
@@ -603,6 +562,50 @@ class class_base extends aliasmgr
 		$this->inst = get_instance($clfile);
 	}
 
+	function load_obj_data($args = array())
+	{	
+		// load the object data, if there is anything to load at all
+		foreach($this->tables as $key => $val)
+		{
+			// that we already got
+			if ($key != "objects")
+			{
+				if ($val["master_table"] == "objects")
+				{
+					$id_arg = $args["id"];
+				};
+
+				$tmp = $this->load_object(array(
+					"table" => $key,
+					"idfield" => $val["index"],
+					"id" => $id_arg,
+					"fields" => $this->realfields[$key],
+				));
+				$this->data[$key] = $tmp;
+				$this->objdata = $tmp;
+			}
+			else
+			{
+				// load the core data (cause the parent might have a configuration
+				// form set) and then I need to know the id of the parent, before
+				// I can fetch all the properties
+				$fields = $this->fields[$key];
+				// for objects, we always load the parent field as well
+				$fields["parent"] = "direct";
+				$tmp = $this->load_object(array(
+					"id" => $args["id"],
+					"table" => "objects",
+					"idfield" => "oid",
+					"fields" => $fields,
+				));
+				$tmp["oid"] = $this->id;
+				$this->data[$key] = $tmp;
+				$this->parent = $tmp["parent"];
+				$this->coredata = $tmp;
+			};
+		};
+	}	
+
 	function gen_output($args = array())
 	{
 		// XXX: figure out a way to do better titles
@@ -656,11 +659,18 @@ class class_base extends aliasmgr
 		$activegroup = ($this->activegroup) ? $this->activegroup : $this->group;
 		$activegroup = ($this->action) ? $this->action : $activegroup;
 
+		$orb_action = $args["orb_action"];
+
+		if (!$orb_action)
+		{
+			$orb_action = "change";
+		};	
+
 		foreach($grpnames->get() as $key => $val)
 		{
 			if ($this->id)
 			{
-				$link = $this->mk_my_orb("change",array("id" => $this->id,"group" => $key),get_class($this->orb_class));
+				$link = $this->mk_my_orb($orb_action,array("id" => $this->id,"group" => $key),get_class($this->orb_class));
 			}
 			else
 			{
@@ -783,7 +793,8 @@ class class_base extends aliasmgr
 		));
 	
 		$argblock = array(
-			'oid' => $this->id
+			'oid' => $this->id,
+			'request' => $this->request,
 		);
 
 		// ok, first add all the generated props to the props array 
@@ -1456,5 +1467,62 @@ class class_base extends aliasmgr
 		$reltypes[0] = "alias";
 		return $reltypes;
 	}
+
+	////
+	function view($args = array())
+	{
+		// create an instance of the class servicing the object ($this->inst)
+		// create an instance of the datasource ($this->ds)
+		// set $this->clid and $this->clfile (Do I need the latter at all?)
+		$this->init_class_base();
+
+		extract($args);
+
+		$this->id = $id;
+		
+		// get a list of active properties for this object
+		// I need an easy way to turn off individual properties
+		$realprops = $this->get_active_properties(array(
+				"clfile" => $this->clfile,
+				"group" => $args["group"],
+		));
+		
+		$this->load_obj_data(array("id" => $this->id));
+		// parse the properties - resolve generated properties and
+		// do any callbacks
+		$resprops = $this->parse_properties(array(
+			"properties" => &$realprops,
+		));
+
+		// so now I have a list of properties along with their values,
+		// and some information about the layout - and I want to display
+		// that stuff now
+		
+		// here be some magic to determine the correct output client
+		// this means we could create a TTY client for AW :)
+		// actually I'm thinking of native clients and XML-RPC
+		// output client is probably the first that should be
+		// implemented.
+		$cli = get_instance("cfg/htmlpreview");
+
+		foreach($resprops as $val)
+		{
+			$cli->add_property($val);
+		};
+
+		$cli->finish_output(array());
+
+		$content = $cli->get_result();
+		$classname = get_class($this->orb_class);
+		$title = "Vaata $classname objekti " . $this->coredata["name"];
+
+		return $this->gen_output(array(
+			"parent" => $parent,
+			"content" => $content,
+			"title" => $title,
+			"orb_action" => "view",
+		));
+	}
+
 };
 ?>
