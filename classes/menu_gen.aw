@@ -142,7 +142,7 @@ class menu_gen extends class_base
 				$clss = aw_ini_get("classes");
 				foreach($objects as $val)
 				{
-					if ($val['class_id'] == CL_PSEUDO)
+					if ($val['class_id'] == CL_MENU)
 					{
 						$str.='<b>'.$val['name'].'</b> - '.$clss[$val['class_id']]['name'].'<br />';
 					}
@@ -392,7 +392,7 @@ class menu_gen extends class_base
 		}
 		elseif($meta['deal_excisting'])
 		{
-			$mde=$this->find_objects_under_parent($meta['analyse_this'],false,CL_PSEUDO,ARR_NAME);
+			$mde=$this->find_objects_under_parent($meta['analyse_this'],false,CL_MENU,ARR_NAME);
 			foreach ($mde as $key => $name)
 			{
 				$made[$name]=array('oid' => $key,'name' => $name);

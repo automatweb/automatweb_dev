@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.60 2004/10/17 11:21:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.61 2004/10/28 15:07:23 duke Exp $
 
 class db_config extends aw_template 
 {
@@ -502,7 +502,7 @@ class config extends db_config
 				"group" => $row["name"],
 				"name" => $name,
 				"priority" =>  ($data[$row["gid"]]["pri"]) ? $data[$row["gid"]]["pri"] : 0,
-				"search" => $this->mk_my_orb("search",array("otype" => CL_PSEUDO,"one" => 1,"return_url" => $return_url),"objects"),
+				"search" => $this->mk_my_orb("search",array("otype" => CL_MENU,"one" => 1,"return_url" => $return_url),"objects"),
 				"login_menu" => $this->picker($midx, $menus)
 			));
 

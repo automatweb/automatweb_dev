@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.108 2004/10/05 07:21:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.109 2004/10/28 15:11:47 duke Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -5069,7 +5069,7 @@ class form extends form_base
 	**/
 	function convtype()
 	{
-		$this->db_query("SELECT objects.*,menu.* FROM objects,menu WHERE objects.oid = menu.id AND objects.class_id = ".CL_PSEUDO." AND menu.type = ".MN_FORM_ELEMENT);
+		$this->db_query("SELECT objects.*,menu.* FROM objects,menu WHERE objects.oid = menu.id AND objects.class_id = ".CL_MENU." AND menu.type = ".MN_FORM_ELEMENT);
 		while ($row = $this->db_next())
 		{
 			$this->save_handle();

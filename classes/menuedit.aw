@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.334 2004/10/13 13:29:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.335 2004/10/28 15:07:23 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -220,7 +220,7 @@ class menuedit extends aw_template
 				menu.periodic as mperiodic
 			FROM objects 
 				LEFT JOIN menu ON menu.id = objects.oid
-				WHERE (objects.class_id = ".CL_PSEUDO." OR objects.class_id = ".CL_BROTHER.")  AND $where $aa
+				WHERE (objects.class_id = ".CL_MENU." OR objects.class_id = ".CL_BROTHER.")  AND $where $aa
 				ORDER BY objects.parent, jrk,objects.created";
 		$this->db_query($q);
 	}
@@ -624,7 +624,7 @@ class menuedit extends aw_template
 	{
 		// now find the path through the menu
 		$path = array();
-		if ($obj["class_id"] != CL_PSEUDO)
+		if ($obj["class_id"] != CL_MENU)
 		{
 			$sec = $obj["parent"];
 			$section = $obj["parent"];
