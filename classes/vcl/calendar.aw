@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.30 2004/11/03 14:34:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.31 2004/11/19 11:59:03 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -13,6 +13,37 @@ class vcalendar extends aw_template
 
 
 		$this->container_template = "container.tpl";
+
+		$this->output_initialized = false;
+		
+	}
+
+	function has_feature($feature)
+	{
+		$retval = false;
+		// call this after configure ..
+		if ($feature == "first_image")
+		{
+			if ($this->evt_tpl->template_has_var("first_image"))
+			{
+				$retval = true;
+			}
+		};
+		return $retval;
+
+	}
+
+	function init_output($arr)
+	{
+		$this->evt_tpl = get_instance("aw_template");
+		$this->evt_tpl->tpl_init($this->cal_tpl_dir);
+		$tpl = $this->range["viewtype"] == "relative" ? "sub_event2.tpl" : "sub_event.tpl";
+		if ($arr["event_template"])
+		{
+			$tpl = $arr["event_template"];
+		};
+		$this->evt_tpl->read_template($tpl);
+		$this->output_initialized = true;
 	}
 
 	function init_calendar($arr)
@@ -205,15 +236,10 @@ class vcalendar extends aw_template
 			$this->range["viewtype"] = "day";
 		};
 
-		$this->evt_tpl = get_instance("aw_template");
-
-		$this->evt_tpl->tpl_init($this->cal_tpl_dir);
-		$tpl = $this->range["viewtype"] == "relative" ? "sub_event2.tpl" : "sub_event.tpl";
-		if ($arr["event_template"])
+		if (!$this->output_initialized)
 		{
-			$tpl = $arr["event_template"];
+			$this->init_output($arr);
 		};
-		$this->evt_tpl->read_template($tpl);
 		switch($this->range["viewtype"])
 		{
 			case "month":
@@ -972,27 +998,6 @@ class vcalendar extends aw_template
 		if (isset($evt["url"]))
 		{
 			$evt["link"] = $evt["url"];
-		};
-	
-		// XXX: this should SO not be here
-		if ($this->evt_tpl->template_has_var("first_image"))
-		{
-			$evt_obj = new object($evt["id"]);
-			$pic_conns = $evt_obj->connections_from(array(
-				"type" => "RELTYPE_PICTURE",
-			));
-			$first = reset($pic_conns);
-			$img_url = "/img/trans.gif";
-			$img = get_instance(CL_IMAGE);
-			if (is_object($first))
-			{
-				$img_url = $img->get_url_by_id($first->prop("to"));
-			}
-			else if (!empty($evt["project_image"]))
-			{
-				$img_url = $evt["project_image"];
-			};
-			$evt["first_image"] = $img_url;
 		};
 
 		$this->evt_tpl->vars(array(
