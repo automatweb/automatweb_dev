@@ -1,14 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.13 2001/06/19 15:09:56 duke Exp $
-if (defined("DEFS_LOADED"))
-{
-}
-else
-{
-	define("DEFS_LOADED",1);
-// common functions (C) StruktuurMeedia 2000,2001
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.14 2001/06/20 00:29:59 duke Exp $
+// defs.aw - common functions (C) StruktuurMeedia 2000,2001
 
-// saadab 404 Not found vmt.
+////
+// !saadab 404 Not found vmt.
 function bail_out()
 {
 	header("HTTP/1.1 404 Not Found");
@@ -169,6 +164,8 @@ function verbalize_number($number)
 	return $ret;
 }
 
+////
+// !Tagastab mingile klassile vastava ikooni
 function get_icon_url($clid,$name)
 {
 	classload("config");
@@ -216,7 +213,8 @@ function get_icon_url($clid,$name)
 		return $i == "" ? "/images/icon_aw.gif" : $i;
 }
 
-// tagastab lokaliseeritud kuunime numbri järgi
+////
+// !tagastab lokaliseeritud kuunime numbri järgi
 function get_lc_month($id)
 {
 	$mnames = explode("|",LC_MONTH);
@@ -224,7 +222,8 @@ function get_lc_month($id)
 	return $mnames[$id];
 }
 
-// tagastab lokaliseeritud päevanime
+////
+// !tagastab lokaliseeritud päevanime
 function get_lc_weekday($id)
 {
 	$daynames = explode("|",LC_WEEKDAY);
@@ -238,7 +237,8 @@ function format_text($text)
 	return $text;
 }
 
-// väljastab refresh headeri koos muude vajalike tilullidega
+////
+// !väljastab refresh headeri koos muude vajalike tilullidega
 function http_refresh($delay,$url)
 {
 	header("Refresh: $delay;url=$url");
@@ -281,6 +281,8 @@ function is_valid($set,$string)
 	return $valid;
 }
 
+////
+// !Kas argument on integer?
 function is_number($parm)
 {
 	$intparm = (int)$parm;
@@ -288,7 +290,8 @@ function is_number($parm)
 	return $retval;
 }
 
-// resolvib ip aadressiks. cacheb kiiruse huvides tulemusi
+////
+// !resolvib ip aadressiks. cacheb kiiruse huvides tulemusi
 // voib kasutada ntx syslogi juures
 function aw_gethostbyaddr($addr)
 {
@@ -310,7 +313,8 @@ function aw_gethostbyaddr($addr)
 	return array($solved[$addr],$addr);
 };
 
-// kontrollime, kas parameeter on ikka IP aadress
+////
+// !kontrollime, kas parameeter on ikka IP aadress
 function is_ip($addr)
 {
 	// match 1 to 3 digits
@@ -341,34 +345,36 @@ function is_ip($addr)
 	return $valid;
 };
 
+////
+// !Genereerib md5 hashi kas parameetrist voi suvalisest arvust.
 function gen_uniq_id($param = "")
 {
-	# genereerib md5 checksumi kas siis parameetrist voi 
-	# juhuslikust arvust
-	# md5sum on alati 32 märki pikk
-	if (strlen($param) > 0)
-	{
-		$result = md5($param);
-	}
-	else
-	{
-		$result = md5(uniqid(rand()));
-	};
+	// genereerib md5 checksumi kas siis parameetrist voi 
+	// juhuslikust arvust
+	// md5sum on alati 32 märki pikk
+	$src = (strlen($param) > 0) ? $param : uniqid(rand());
+	$result = md5($src);
 	return $result;
 };
 
+////
+// !Kasutamiseks vormides checkboxide kuvamise juures, vastavalt argumendi tõeväärtusele
+// tagastab kas stringi "checked" voi tühja stringi.
 function checked($arg)
 {
-	return ($arg) ? "checked" : "";
+	return ($arg) ? "CHECKED" : "";
 }
 
-// for <select elements
+////
+// !Kasutamiseks vormides listboxide juures, vastavalt argumendi tõeväärtusele
+// tagastab kas stringi "selected" voi tühja stringi
 function selected($arg)
 {
 	return ($arg) ? "SELECTED" : "";
 }
 
-// kontrollime, kas parameeter on kuupäev (kujul pp-kk-aaaa)
+////
+// !kontrollime, kas parameeter on kuupäev (kujul pp-kk-aaaa)
 function is_date($param)
 {
 	$valid = preg_match("/^(\d{1,2}?)-(\d{1,2}?)-(\d{4}?)$/",$param,$parts);
@@ -392,12 +398,16 @@ function is_date($param)
 	//};
 	return $valid;
 };
-	
+
+////
+// !Genereerib XML headeri
 function gen_xml_header($version = "1.0") 
 {
 		return "<" . "?xml version='$version'?" . ">\n";
 };
 
+////
+// !Genereerib XML tagi
 function gen_xml_tag($name,$data) 
 {
 	if (is_array($data)) 
@@ -442,7 +452,6 @@ function map($format,$array)
 // format peab siis sisaldama vähemalt kahte kohta muutujate jaoks
 
 // kui $type != 0, siis pööratakse array nö ringi ... key ja val vahetatakse ära	
-// TODO: viia defs.aw-sse
 function map2($format,$array,$type = 0)
 {
 	$retval = array();
@@ -481,8 +490,8 @@ function jerk_alert($contents)
 	mail($to,$subject,$contents,$headers);
 };
 
-
-// hiljem voib siia turvakontrolli kylge ehitada
+////
+// !hiljem voib siia turvakontrolli kylge ehitada
 function get_file($arr)
 {
 	if (!$arr["file"])
@@ -516,6 +525,9 @@ function get_ip()
 	return $ip;
 }
 
+////
+// !Kas argument on e-maili aadress?
+// FIXME: should be rewritten. There are easier ways to do this with preg_match function
 function is_email ($address = "") 
 {
 	if(empty($Address)) 
@@ -528,7 +540,7 @@ function is_email ($address = "")
 	{
 		// @-i pole
 		return false;
-  }
+	}
 
 	list($User,$Host) = split("@",$Address);
 
@@ -546,7 +558,4 @@ function is_email ($address = "")
 
 	return true;
 };
-
-};
- 
 ?>
