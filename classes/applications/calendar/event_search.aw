@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.6 2004/12/01 15:15:41 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.7 2004/12/06 14:41:50 kristo Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -377,7 +377,9 @@ class event_search extends class_base
 	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
 	function parse_alias($arr)
 	{
-		return $this->show(array("id" => $arr["alias"]["target"]));
+		$args = $_GET;
+		$args["id"] = $arr["alias"]["to"];
+		return $this->show($args);
 	}
 
 	function get_search_results($arr)
@@ -455,10 +457,24 @@ class event_search extends class_base
 		$search = array();
 		load_vcl("date_edit");
 		$dt = new date_edit();
+		
 		$start_tm = $dt->get_timestamp($arr["start_date"]);
 		$end_tm = $dt->get_timestamp($arr["end_date"]);
-
-		//arr($formconfig);
+		
+		
+		if($start_tm ==-1 || !$end_tm ==-1)
+		{
+			$start_tm = mktime(0,0,0,date('m'), 1, date('Y'));
+			$end_tm = mktime(0,0,0,date('m'), 31, date('Y'));
+			
+			$arr["start_date"]["month"] = date('m');
+			$arr["start_date"]["year"] = date('Y');
+			$arr["start_date"]["day"] = 1;
+			
+			$arr["end_date"]["month"] = date('m');
+			$arr["end_date"]["year"] = date('Y');
+			$arr["end_date"]["day"] = 31;
+		}
 		
 		if($formconfig["fulltext"]["active"])
 		{
@@ -520,11 +536,14 @@ class event_search extends class_base
 
 		// perform the search only if a start_date has been selected - this means no search
 		// when first viewing the page with search form
+		
+		//arr($arr);
 		if ($start_tm != -1 && $end_tm != -1)
 		{
 			$do_search = true;
 		};
-
+		//$do_search = true;
+		
 		if ($do_search)
 		{
 			$search["parent"] = array();
@@ -584,7 +603,6 @@ class event_search extends class_base
 			$edata = array();
 			$ecount = array();
 			// there is a fatal flaw in my logic
-			//arr($search);
 			if (sizeof($search["parent"]) != 0)
 			{
 				$ol = new object_list($search);
@@ -668,8 +686,13 @@ class event_search extends class_base
 				"brother_of" => $origs,
 			));
 			$pr1 = $formconfig["project1"]["rootnode"];
+			
 			foreach($blist->arr() as $b_o)
 			{
+				if (!is_oid($b_o->parent()) || !$this->can("view", $b_o->parent()))
+				{
+					continue;
+				}
 				$p2 = new object($b_o->parent());
 				//$id = $b_o->id();
 				if ($p2->parent() == $pr1)
@@ -685,8 +708,9 @@ class event_search extends class_base
 			//arr($edata);
 			$res = "";
 			
-	
-			foreach($edata as $eval)
+			$aliasmrg = get_instance("aliasmgr");
+							
+			foreach($edata as $ekey => $eval)
 			{
 				//if (!empty($eval["parent1"]) && !empty($eval["parent2"]))
 				//{
@@ -701,7 +725,7 @@ class event_search extends class_base
 								
 								if($formconfig["start_date"]["format"] == 1)
 								{
-									$val = date("d-m-Y",$val)."&nbsp;|&nbsp;".date("H:m",$val)." - ".date("H:m", $eval["end"]);
+									$val = date("d-m-Y",$val)."&nbsp;&nbsp;|&nbsp;&nbsp;".date("H:m",$val)." - ".date("H:m", $eval["end"]);
 								}
 								else
 								{
@@ -723,13 +747,16 @@ class event_search extends class_base
 									"caption" => $val,
 								));
 							};
+							
+							$aliasmrg->parse_oo_aliases($ekey,$val);
+							
 							$this->vars(array("cell" => $val));
 						 	//print "exporting $sname" . $eval[$sname];
 							$cdat .= $this->parse("CELL");
 						};
 						$this->vars(array("CELL" => $cdat));
 				};
-				
+				$aliasmrg->parse_oo_aliases($ekey, $eval["utextarea1"]);
 				$this->vars(array(
 					"fulltext" => $eval["utextarea1"],
 				));
@@ -748,7 +775,6 @@ class event_search extends class_base
 					));
 				}
 				
-				//arr($eval["utextarea1"]);
 				$res .= $this->parse("EVENT");
 			};
 			
@@ -818,7 +844,7 @@ class event_search extends class_base
 			$this->vars(array(
 				"begin_month_name" => locale::get_lc_month($arr["start_date"]["month"]),
 				"begin_year" => $arr["start_date"]["year"],
-				"next_month_url" => $this->mk_my_orb("search", $next_month_args, "event_search"),
+				"next_month_url" => str_replace("class", "alias", $this->mk_my_orb("search", $next_month_args, "event_search")),
 				"perv_month_url" => $this->mk_my_orb("search", $prev_month_args, "event_search"),
 				"next_weeks" => $res_weeks,
 			));
@@ -838,10 +864,11 @@ class event_search extends class_base
 
 		$htmlc->finish_output(array(
 			"data" => array(
-				"class" => get_class($this),
+				"class" => "",//get_class($this),
 				"section" => aw_global_get("section"),
 				"action" => "search",
 				"id" => $ob->id(),
+				"alias" => get_class($this),
 			),
 			"method" => "get",
 			"form_handler" => aw_ini_get("baseurl") . "/" . aw_global_get("section"),
