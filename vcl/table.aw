@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.58 2003/06/26 15:32:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.59 2003/07/23 11:45:57 axel Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -379,7 +379,7 @@ class aw_table
 	function draw($arr = array())
 	{
 		// väljastab tabeli
-		if (!is_array($this->rowdefs)) 
+		if (!is_array($this->rowdefs))
 		{
 			print "Don't know what to do";
 			return;
@@ -442,7 +442,7 @@ class aw_table
 			$tbl .= $this->headerextra;
 			$tbl .= $this->closetag(array("name" => "tr"));
 		}
-		
+
 		// if we show title under grouping elements, then we must not show it on the first line!
 		if (empty($this->titlebar_under_groups) && empty($arr["no_titlebar"]))
 		{
@@ -482,7 +482,7 @@ class aw_table
 				));
 
 				// if the column is sortable, turn it into a link
-				if (isset($v["sortable"])) 
+				if (isset($v["sortable"]))
 				{
 					// by default (the column is not sorted) don't show any arrows
 					$sufix = "";
@@ -505,8 +505,8 @@ class aw_table
 					$url .= $sep."sortby=".$v["name"]."&sort_order=".$so;
 
 					$tbl .= "<b><a href='$url'>$v[caption] $sufix</a></b>";
-				} 
-				else 
+				}
+				else
 				{
 					$tbl .= $v["caption"];
 				};
@@ -514,7 +514,7 @@ class aw_table
 			};
 
 			// kui actionid on defineeritud, siis joonistame nende jaoks vajaliku headeri
-			if (is_array($this->actions) && (sizeof($this->actions) > 0)) 
+			if (is_array($this->actions) && (sizeof($this->actions) > 0))
 			{
 				$tbl .= $this->opentag(array(
 					"name" => "td",
@@ -538,7 +538,7 @@ class aw_table
 		}
 
 		// koostame tabeli sisu
-		if (is_array($this->data)) 
+		if (is_array($this->data))
 		{
 			// ts?kkel ?le data
 			$counter = 0; // kasutame ridadele erineva v?rvi andmiseks
@@ -559,8 +559,8 @@ class aw_table
 
 				// rida algab
 				$tbl .= $this->opentag(array("name" => "tr", "class" => ((($counter % 2) == 0) ? $this->tr_style2 : $this->tr_style1)));
-			
-				$tmp = "";	
+
+				$tmp = "";
 				// grpupeerimine
 				if (isset($rgroupby) && is_array($rgroupby))
 				{
@@ -571,7 +571,7 @@ class aw_table
 					$counter = 1;
 				}
 				$tbl .= $tmp;
-				
+
 				// ts?kkel ?le rowdefsi, et andmed oleksid oiges j?rjekorras
 				foreach($this->rowdefs as $k1 => $v1)
 				{
@@ -615,10 +615,10 @@ class aw_table
 						{
 							$style_key = (($counter % 2) == 0) ? "content_sorted_style2" : "content_sorted_style1";
 							$bgcolor = ($counter % 2) ? $this->selbgcolor1 : $this->selbgcolor2;
-						} 
-						else 
+						}
+						else
 						{
-							
+
 							$style_key = (($counter % 2) == 0) ? "content_style2" : "content_style1";
 							$bgcolor = ($counter % 2) ? $this->bgcolor1 : $this->bgcolor2;
 						};
@@ -646,7 +646,7 @@ class aw_table
 							};
 						}
 					}
-						
+
 					// moodustame celli
 					$rowspan = isset($this->actionrows) ? $this->actionrows : $rowspan;
 					$tbl .= $this->opentag(array(
@@ -661,11 +661,11 @@ class aw_table
 						"bgcolor" => isset($v["bgcolor"]) ? $v["bgcolor"] : $bgcolor,
 					));
 
-					if ($v1["name"] == "rec") 
+					if ($v1["name"] == "rec")
 					{
 						$val = $counter;
-					} 
-					else 
+					}
+					else
 					{
 						if (isset($v1["strformat"]))
 						{
@@ -683,12 +683,12 @@ class aw_table
 						$v1["type"] = "";
 					};
 
-					if (isset($v1["type"]) && $v1["type"] == "time") 
+					if (isset($v1["type"]) && $v1["type"] == "time")
 					{
 						$val = date($v1["format"],$val);
 					};
 
-					if (empty($val) && $v1["type"]!="int") 
+					if (empty($val) && $v1["type"]!="int")
 					{
 						$val = "&nbsp;";
 					};
@@ -725,9 +725,9 @@ class aw_table
 					{
 						$tbl.= $this->opentag(array("name"=>"tr"));
 					};
-					$style = (($counter % 2) == 0) ? $this->style1 : $this->style2; 
+					$style = (($counter % 2) == 0) ? $this->style1 : $this->style2;
 					// joonistame actionid
-					foreach($this->actions as $ak => $av) 
+					foreach($this->actions as $ak => $av)
 					{
 						// joonista ainult need actionid, mis siia ritta kuuluvad
 						if ($this->actionrows ? ($arow == $av["row"] || ($arow==1 && !$av["row"]) ):1)
@@ -919,7 +919,7 @@ class aw_table
 	}
 
 	// xml funktsioonid
-	function _xml_start_element($parser,$name,$attrs) 
+	function _xml_start_element($parser,$name,$attrs)
 	{
 		if (!isset($attrs["value"]))
 		{
