@@ -3,21 +3,21 @@
       <property>
             <name>default_view</name>
             <type>select</type>
-            <group>advanced</group>
             <rel>1</rel>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>general</group>
             <caption>Default vaade</caption>
       </property>
       <property>
             <name>content_generator</name>
             <type>select</type>
-            <group>advanced</group>
             <rel>1</rel>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>general</group>
             <caption>Näitamisfunktsioon</caption>
       </property>
       <property>
@@ -166,7 +166,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Cell'e reas</caption>
+            <caption>Max. cell'e reas</caption>
       </property>
       <property>
             <name>event_direction</name>
@@ -305,6 +305,7 @@
             <show_month>
                   <caption>Kuu</caption>
                   <submit>no</submit>
+                  <default>1</default>
             </show_month>
             <add_event>
                   <caption>Lisa_sündmus</caption>
