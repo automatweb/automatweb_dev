@@ -2,7 +2,6 @@
 <tr>
 <td class="midText" valign="top">
 {VAR:time}
-id = {VAR:id}
 </td>
 <td class="midText" valign="top">
 <a href="{VAR:baseurl}/{VAR:id}?date={VAR:datestamp}">{VAR:name}</a>
