@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.3 2004/06/10 07:20:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.4 2004/06/11 08:42:19 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -54,7 +54,7 @@ class cb_search extends class_base
 	{
 		$this->init(array(
 			"clid" => CL_CB_SEARCH,
-			"tpldir" => "applications/register/register_search"
+			"tpldir" => "cfg/cb_search"
 		));
 	}
 
@@ -353,6 +353,15 @@ class cb_search extends class_base
 
 		list($f_props) = $this->get_props_from_obj($arr["obj_inst"]);
 
+		$classfps = array();
+		foreach($f_props as $f_pn => $f_pd)
+		{
+			if ($f_pd["type"] == "classificator")
+			{
+				$classfps[$f_pn] = $f_pn;
+			}
+		}
+
 		// now do the actual bloody search
 		foreach($this->search_data as $clid => $data)
 		{
@@ -363,7 +372,7 @@ class cb_search extends class_base
 				$sdata[] = new object_list_filter(array("non_filter_classes" => $clid));
 				foreach($data as $key => $val)
 				{
-					if ($key == "per_page")
+					if ($key == "per_page" || $key == "fts_search")
 					{
 						continue;
 					}
@@ -405,7 +414,16 @@ class cb_search extends class_base
 				$olist = new object_list($sdata);
 				for($o = $olist->begin(); !$olist->end(); $o = $olist->next())
 				{
+					// not so simple - need to replace classificators with vals
 					$row = $o->properties();
+					foreach($classfps as $classfp)
+					{
+						if (is_oid($row[$classfp]))
+						{
+							$tmp = obj($row[$classfp]);
+							$row[$classfp] = $tmp->name();
+						}
+					}
 					$vparms = array("id" => $o->id());
 					if ($arr["obj_inst"]->prop("view_cf"))
 					{
