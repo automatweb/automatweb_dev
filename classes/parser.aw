@@ -11,6 +11,29 @@ class parser extends aw_template
 		$this->whitear = array(" ","\t","\n","\r","\$",";","\"","'","(",")");
 	}
 
+	function _get_class_list(&$files, $classdir)
+	{
+		if (($dir = opendir($classdir)))
+		{
+			while (($file = readdir($dir)) !== false)
+			{
+				$fn = $classdir."/".$file;
+				if ($file != "." && $file != ".." && $file != "parser.aw" && $file != "timer.aw")
+				{
+					if (is_dir($fn))
+					{
+						$this->_get_class_list(&$files, $fn);
+					}
+					else
+					if (is_file($fn) && substr($file,strlen($file)-3) == ".aw")
+					{
+						$files[] = $fn;
+					}
+				}
+			}
+		}
+	}
+
 	////
 	// !user interface for the parser
 	function opts($arr)
@@ -19,21 +42,10 @@ class parser extends aw_template
 		$pd = aw_unserialize($this->get_cval("parser::class_status"));
 
 		$this->read_adm_template("list_classes.tpl");
-		$classdir = $this->cfg["classdir"];
+
 		$files = array();
-		if (($dir = opendir($classdir)))
-		{
-			while (($file = readdir($dir)) !== false)
-			{
-				if ($file != "." && $file != ".." && is_file($classdir."/".$file))
-				{
-					if (substr($file,strlen($file)-3) == ".aw")
-					{
-						$files[] = $file;
-					}
-				}
-			}
-		}
+		$this->_get_class_list(&$files, $this->cfg["classdir"]);
+
 		sort($files);
 		foreach($files as $file)
 		{
@@ -87,7 +99,7 @@ class parser extends aw_template
 
 			foreach($classes as $class)
 			{
-				$_class = $this->cfg["classdir"]."/".$class;
+				$_class = $class;//$this->cfg["classdir"]."/".$class;
 				echo "loading and parsing file $_class <br>\n";
 				flush();
 				$this->do_parse($_class);
@@ -102,7 +114,7 @@ class parser extends aw_template
 				$this->classes = $this->saved_trees[$class]["classes"];
 				$this->fun_returns = $this->saved_trees[$class]["fun_returns"];
 
-				$_class = $this->cfg["classdir"]."/".$class;
+				$_class = $class;//$this->cfg["classdir"]."/".$class;
 				if ($show_tree)
 				{
 					$this->display_tree();
