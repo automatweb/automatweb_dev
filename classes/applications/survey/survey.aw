@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey.aw,v 1.5 2004/10/29 15:49:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey.aw,v 1.6 2005/03/10 12:41:13 ahti Exp $
 // survey.aw - Ankeet 
 /*
 
@@ -161,7 +161,7 @@ class survey extends class_base
 		{
 			$arr["obj_inst"]->connect(array(
 				"to" => $user,
-				"reltype" => RELTYPE_OWNER,
+				"reltype" => "RELTYPE_OWNER",
 			));
 		};
 		*/
