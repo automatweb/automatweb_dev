@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.35 2004/08/23 09:38:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.36 2004/10/22 11:47:45 kristo Exp $
 
 define("ST_TABLE",0);
 define("ST_CELL",1);
@@ -331,6 +331,10 @@ class style extends aw_template
 	function get_table_string($id)
 	{
 		$st = $this->mk_cache($id);
+		if ($st["class_id"] == CL_CSS)
+		{
+			return "class=\"".$this->get_style_name($st["oid"])."\"";
+		}
 
 		if ($st["bgcolor"] != "")
 		{
@@ -637,6 +641,8 @@ class style extends aw_template
 			$st = $this->get($id);
 			$stl = unserialize($st["style"]);
 			$stl["name"] = $st["name"];
+			$stl["class_id"] = $st["class_id"];
+			$stl["oid"] = $st["oid"];
 			aw_cache_set("style_cache",$id,$stl);
 		}
 		return $stl;
@@ -790,6 +796,81 @@ class style extends aw_template
 		$this->db_query("INSERT INTO	styles(id,style,type) values($oid,'".$row["style"]."','".$row["type"]."')");
 
 		return $oid;
+	}
+
+	////////////////////////////////////
+	// new sty le management methods
+	
+	function get_table_style_picker()
+	{
+		$ret = $this->get_select(0, ST_TABLE, true);
+		$ol = new object_list(array(
+			"class_id" => CL_CSS,
+			"lang_id" => array(),
+		));
+		foreach($ol->names() as $id => $nm)
+		{
+			$ret[$id] = "CSS: ".$nm;
+		}
+		return $ret;
+	}
+
+	function apply_style_to_text($st, $text, $param)
+	{
+		if (!is_oid($st) || !$this->can("view", $st))
+		{
+			return $text;
+		}
+
+		$o = obj($st);
+		if ($o->class_id() == CL_CSS)
+		{
+			active_page_data::add_site_css_style($st);
+			return "<span class=\"".$this->get_style_name($st)."\">$text</a>";
+		}
+		else
+		{
+			$tmp = false;
+
+			if ($param["is_header"])
+			{
+				$tmp = $this->get_header_style($st);
+			}
+			else
+			if ($param["is_footer"])
+			{
+				$tmp = $this->get_footer_style($st);
+			}
+			else
+			if ($param["is_odd"])
+			{
+				$tmp = $this->get_odd_style($st);
+			}
+			else
+			if ($param["is_even"])
+			{
+				$tmp = $this->get_even_style($st);
+			}
+
+			$st = $tmp;
+
+			if ($st)
+			{
+				active_page_data::add_serialized_css_style($this->get_css($st));
+				return "<span class=\"".$this->get_style_name($st)."\">$text</a>";
+			}
+		}
+		return $text;
+	}
+
+	function get_style_name($id)
+	{
+		$o = obj($id);
+		if (($nm = trim($o->prop("site_css"))) != "")
+		{
+			return $nm;
+		}
+		return "st".$id;
 	}
 }
 ?>

@@ -130,11 +130,7 @@ class layout extends class_base
 			if ($grid["table_style"])
 			{
 				$st = get_instance("style");
-				if (($hs = $st->get_header_style($grid["table_style"])))
-				{
-					active_page_data::add_site_css_style($hs);
-					$h_tmp = "<span class=\"st".$hs."\">".$h_tmp."</span>";
-				}
+				$h_tmp = $st->apply_style_to_text($grid["table_style"], $h_tmp, array("is_header" => true));
 			}
 			$tmp = $h_tmp.$tmp;
 		}
@@ -146,11 +142,7 @@ class layout extends class_base
 			if ($grid["table_style"])
 			{
 				$st = get_instance("style");
-				if (($hs = $st->get_footer_style($grid["table_style"])))
-				{
-					active_page_data::add_site_css_style($hs);
-					$h_tmp = "<span class=\"st".$hs."\">".$h_tmp."</span>";
-				}
+				$h_tmp = $st->apply_style_to_text($grid["table_style"], $h_tmp, array("is_footer" => true));
 			}
 			$tmp .= $h_tmp;
 		}
@@ -223,7 +215,7 @@ class layout extends class_base
 
 			case "table_style":
 				$st = get_instance("style");
-				$prop['options'] = $st->get_select(0, ST_TABLE, true);
+				$prop['options'] = $st->get_table_style_picker();
 				break;
 
 			case "rows":

@@ -192,6 +192,15 @@
             <caption>Kasutaja css</caption>
       </property>
       <property>
+            <name>site_css</name>
+            <group>general</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Saidi css failis defineeritud stiil</caption>
+      </property>
+      <property>
             <name>pre</name>
             <group>preview</group>
             <table>objects</table>

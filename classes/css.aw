@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.39 2004/04/06 15:42:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.40 2004/10/22 11:47:45 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 /*
 
@@ -67,6 +67,9 @@
 
 @property user_css type=textarea width=30 height=5 
 @caption Kasutaja css
+
+@property site_css type=textbox 
+@caption Saidi css failis defineeritud stiil
 
 @property pre type=text group=preview no_caption=1
 @caption Eelvaade
