@@ -439,7 +439,9 @@
 
 		<action name="new_cal_rel">
 			<function name="edit_cal_rel">
-				<arguments/>
+				<arguments>
+					<required name="form_id" type="int"/>
+				</arguments>
 			</function>
 		</action>
 		
@@ -447,6 +449,7 @@
 			<function name="edit_cal_rel">
 				<arguments>
 					<required name="id" type="int"/>
+					<required name="form_id" type="int"/>
 				</arguments>
 			</function>
 		</action>
@@ -454,6 +457,15 @@
 		<action name="submit_cal_rel">
 			<function name="submit_cal_rel">
 				<arguments/>
+			</function>
+		</action>
+		
+		<action name="del_cal_rel">
+			<function name="del_cal_rel">
+				<arguments>
+					<required name="id" type="int"/>
+					<required name="form_id" type="int"/>
+				</arguments>
 			</function>
 		</action>
 
