@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.1 2003/06/04 13:57:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.2 2003/06/26 17:26:00 duke Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -16,6 +16,9 @@
 
 @property uemail type=textbox
 @caption E-post
+
+@property remember type=checkbox store=no
+@caption Jäta nimi ja e-post meelde
 
 @property commtext type=textarea 
 @caption Kommentaar
@@ -60,6 +63,19 @@ class forum_comment extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "uname":
+				if (empty($args["obj"]["oid"]))
+				{
+					$data["value"] = $_COOKIE["aw_mb_name"];
+				};
+				break;
+			case "uemail":
+				if (empty($args["obj"]["oid"]))
+				{
+					$data["value"] = $_COOKIE["aw_mb_mail"];
+				};
+				break;
+			case "status":
 			case "comment":
 				$retval = PROP_IGNORE;
 				break;
@@ -67,15 +83,29 @@ class forum_comment extends class_base
 		return $retval;
 	}
 
-	function show_add_tpl($arr)
+	function set_property($args = array())
 	{
-		$this->read_template("add_comment.tpl");
-		$this->vars(array(
-			"reforb" => $this->mk_reforb("submit",array("parent" => $arr["parent"],"retval" => $arr["returl"],"status" => STAT_ACTIVE,"period" => aw_global_get("act_per_id"))),
+		$data = &$args["prop"];
+		$retval = PROP_OK;
+		switch($data["name"])
+		{
+			case "status":
+				$data["value"] = STAT_ACTIVE;
+				break;
 
-		));
-		return $this->parse();
-	}
+			case "remember":
+				if (!headers_sent())
+				{
+					$t = time();
+					setcookie("aw_mb_name",$args["form_data"]["uname"],time()+24*3600*1000);
+					setcookie("aw_mb_mail",$args["form_data"]["uemail"],time()+24*3600*1000);
+				};
+				break;
+	
+		};
+                return $retval;
+        }
+
 
 	////
 	// !Returns a list of comments
@@ -85,39 +115,27 @@ class forum_comment extends class_base
 		$qparts = array(
 			"parent" => $arr["parent"],
 			"class_id" => $this->clid,
-			"status" => STAT_ACTIVE,
+			//"status" => STAT_ACTIVE,
 		);
 		if (!empty($arr["period"]))
 		{
 			$qparts["period"] = $arr["period"];
 		};
-		$q = sprintf("SELECT name,created,createdby,commtext FROM objects
+		$q = sprintf("SELECT oid,name,created,createdby,commtext FROM objects
 				LEFT JOIN forum_comments ON (objects.oid = forum_comments.id)
 				WHERE (%s) ORDER BY created",join(" AND ",map2("%s='%s'",$qparts)));
 
 		$this->db_query($q);
 
-		// don't read the template/show anything if there are no comments,
-		// perhaps this should be configurable though
-		if (sizeof($this->num_rows()) > 0)
-                {
-			$this->sub_merge = 1;
-			$this->read_template("comment_list.tpl");
-			while($row = $this->db_next())
-			{
-				$this->vars(array(
-					"user" => $row["createdby"],
-					"date" => date("d-M-y H:i",$row["created"]),
-					"commtext" => $row["commtext"],
-					"name" => $row["name"],
-				));
-				$this->parse("one_comment");
-			};
-			$retval = $this->parse();
-                }
+		$retval = array();
+
+		while($row = $this->db_next())
+		{
+			$retval[$row["oid"]] = $row;
+		};
+
 		return $retval;
 	}
-
 
 	////////////////////////////////////
 	// object persistance functions - used when copying/pasting object
