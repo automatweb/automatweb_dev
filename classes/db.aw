@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.12 2002/12/17 14:04:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.13 2002/12/18 15:05:00 kristo Exp $
 // this is the class that allows us to connect to multiple datasources at once
 // it replaces the mysql class which was used up to now, but still routes all
 // db functions to it so that everything stays working and it also provides
@@ -77,6 +77,13 @@ class db_connector extends root
 	}
 
 	////
+	// !Creates a connection with default arguments
+	function db_init($args = array())
+	{
+		$this->init($args);
+	}
+
+	////
 	// !Creates a connection to a data source
 	// host, base, user, pass are self-explanatory
 	// driver is the type of the SQL driver to use
@@ -86,7 +93,7 @@ class db_connector extends root
 		extract($args);
 		// FIXME: validate arguments
 
-		// FIXME: dc is not an object if the $driver class had a syntax error
+		// dc is not an object if the $driver class had a syntax error
 		$dc = get_instance("db_drivers/".$driver);
 		if (!is_object($dc))
 		{
@@ -108,13 +115,6 @@ class db_connector extends root
 		return $dc;
 	}
 
-	////
-	// !Creates a connection with default arguments
-	function db_init($args = array())
-	{
-		$this->init($args);
-	}
-
 	// route all functions to default/primary driver
 	function db_query($qtext,$errors = true)
 	{
@@ -129,7 +129,6 @@ class db_connector extends root
 	function db_last_insert_id()
 	{
 		return $this->dc[$this->default_cid]->db_last_insert_id();
-
 	}
 
 	function db_fetch_row($sql = "")
