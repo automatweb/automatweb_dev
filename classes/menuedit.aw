@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.276 2003/04/08 19:28:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.277 2003/04/09 10:54:32 kristo Exp $
 // menuedit.aw - menuedit. heh.
 // meeza thinks we should split this class. One part should handle showing stuff
 // and the other the admin side -- duke
@@ -1820,99 +1820,57 @@ class menuedit extends aw_template
 		{
 			$ourl = $this->mk_my_orb("right_frame", array("id" => $id, "parent" => $obj["oid"],"period" => $period), "menuedit",true,true);
 			$ourl = "javascript:go_open(".$obj["oid"].")";
-
-			if ($type == "js")
-			{
-				$this->vars(array(
-					"link" => $ourl,
-					"text" => "Open"
-				));
-				$retval = $this->parse("MENU_ITEM");
-			}
-			else
-			{
-				$retval = "0|0|Open|".$ourl."|list".$sep;
-			}
+			$this->vars(array(
+				"link" => $ourl,
+				"text" => "Open"
+			));
+			$retval = $this->parse("MENU_ITEM");
 		}
 
 		if ($this->can("edit", $id))
 		{
 			$churl = $this->mk_my_orb("change", array("id" => $id, "parent" => $obj["parent"],"period" => $period), $this->cfg["classes"][$obj["class_id"]]["file"],true,true);
-			if ($type == "js")
-			{
-				$this->vars(array(
-					"link" => $churl,
-					"text" => "Change"
-				));
-				$retval .= $this->parse("MENU_ITEM");
-			}
-			else
-			{
-				$retval .= "1|0|Change|".$churl."|list".$sep;
-			}
+			$this->vars(array(
+				"link" => $churl,
+				"text" => "Change"
+			));
+			$retval .= $this->parse("MENU_ITEM");
 
 			$cuturl = $this->mk_my_orb("cut", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1"), "menuedit",true,true);
-			if ($type == "js")
-			{
-				$this->vars(array(
-					"link" => $cuturl,
-					"text" => "Cut"
-				));
-				$retval .= $this->parse("MENU_ITEM");
-			}
-			else
-			{
-				$retval .= "2|0|Cut|".$cuturl."|list".$sep;
-			}
-		}
-
-		$copyurl = $this->mk_my_orb("copy", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1","period" => $period), "menuedit",true,true);
-		if ($type == "js")
-		{
 			$this->vars(array(
-				"link" => $copyurl,
-				"text" => "Copy"
+				"link" => $cuturl,
+				"text" => "Cut"
 			));
 			$retval .= $this->parse("MENU_ITEM");
 		}
-		else
-		{
-			$retval .= "3|0|Copy|".$copyurl."|list".$sep;
-		}
+
+		$copyurl = $this->mk_my_orb("copy", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1","period" => $period), "menuedit",true,true);
+		$this->vars(array(
+			"link" => $copyurl,
+			"text" => "Copy"
+		));
+		$retval .= $this->parse("MENU_ITEM");
 
 		if ($this->can("delete", $id))
 		{
 			//$delurl = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1","period" => $period), "menuedit",true,true);
 			$delurl = "javascript:go_delete($id,".$obj['parent'].")";
-			if ($type == "js")
-			{
-				$this->vars(array(
-					"link" => $delurl,
-					"text" => "Delete"
-				));
-			}
-			else
-			{
-				$retval .= "4|0|Delete|".$delurl."|list".$sep;
-			}
+			$this->vars(array(
+				"link" => $delurl,
+				"text" => "Delete"
+			));
+			$retval .= $this->parse("MENU_ITEM");
 		}
 
 		if ($this->can("admin", $id))
 		{
 			//$delurl = $baseurl."/automatweb/editacl.".$this->cfg["ext"]."?file=menu.xml&oid=".$id;
 			$delurl = "javascript:go_acl(".$id.")";
-			if ($type == "js")
-			{
-				$this->vars(array(
-					"link" => $delurl,
-					"text" => "ACL"
-				));
-				$retval .= $this->parse("MENU_ITEM");
-			}
-			else
-			{
-				$retval .= "5|0|ACL|".$delurl."|list".$sep;
-			}
+			$this->vars(array(
+				"link" => $delurl,
+				"text" => "ACL"
+			));
+			$retval .= $this->parse("MENU_ITEM");
 		}
 
 		if ($ret_data)
