@@ -22,32 +22,14 @@
 			</newsearch>
 		</sublinks>
 	</search>
-	<contacts>
-		<caption>Kontaktid</caption>
-		<link>?class=contacts</link>
-		<sublinks>
-			<list>
-				<caption>Nimekiri</caption>
-				<link>?class=contacts</link>
-			</list>
-			<search>
-				<caption>Otsi</caption>
-				<link>?class=contacts&amp;action=search</link>
-			</search>
-			<newgroup>
-				<caption>Uus grupp</caption>
-				<link>?class=contacts&amp;action=add_group&amp;{VAR:folder}</link>
-			</newgroup>
-			<newcontact>
-				<caption>Uus kontakt</caption>
-				<link>?class=messenger&amp;action=add&amp;{VAR:folder}</link>
-			</newcontact>
-		</sublinks>
-	</contacts>
 	<configure>
 		<caption>H‰‰lestamine</caption>
 		<link>?class=messenger&amp;action=configure</link>
 		<sublinks>
+			<general>
+				<caption>‹ldine</caption>
+				<link>?class=messenger&amp;action=configure&amp;page=general</link>
+			</general>
 			<folders>
 				<caption>Folderite asukoht</caption>
 				<link>?class=messenger&amp;action=configure&amp;page=folders</link>
@@ -62,10 +44,6 @@
 					</new>
 				</sublinks>
 			</signature>
-			<general>
-				<caption>‹ldine</caption>
-				<link>?class=messenger&amp;action=configure&amp;page=general</link>
-			</general>
 			<accounts>
 				<caption>Kontod</caption>
 				<link>?class=messenger&amp;action=configure&amp;page=accounts</link>
