@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.340 2004/12/10 10:10:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.341 2004/12/22 09:40:08 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -427,7 +427,6 @@ class menuedit extends aw_template
 		// sektsioon ei olnud numbriline
 		if (!is_oid($section))
 		{
-
 			if ($this->cfg['recursive_aliases'])
 			{
 				// first I have to check whether the alias contains /-s and if so, split

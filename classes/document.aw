@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.307 2004/12/20 23:51:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.308 2004/12/22 09:40:07 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -513,6 +513,7 @@ class document extends aw_template
 
 		// I don't think we should do that here
 		// $this->add_hit($docid);
+
 
 		if ($mk_compat)
 		{
