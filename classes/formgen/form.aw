@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.76 2003/07/08 17:48:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.77 2003/07/09 07:47:27 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -5082,7 +5082,7 @@ class form extends form_base
 		}
 		$this->vars(array(
 			"save_table" => checked($this->arr["save_table"] == 1),
-			"tables" => $this->multiple_option_list($this->arr["save_tables"], $tables),
+			"tables" => $this->multiple_option_list($this->make_keys(array_keys($this->arr["save_tables"])), $tables),
 			"TABLE" => $tabel,
 			"reforb" => $this->mk_reforb("submit_tables", array("id" => $id))
 		));
