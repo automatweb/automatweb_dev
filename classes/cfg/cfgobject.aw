@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/cfgobject.aw,v 1.9 2004/06/15 08:48:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/cfgobject.aw,v 1.10 2004/06/21 11:48:58 kristo Exp $
 // cfgobject.aw - configuration objects
 // adds, changes and in general handles configuration objects
 
@@ -304,10 +304,13 @@ class cfgobject extends aw_template
 
 					if ($props_to_set[$row["class_id"]])
 					{
-						$this->upd_object(array(
-							"oid" => $row["oid"],
-							"metadata" => $props_to_set[$row["class_id"]],
-						));
+						$tmp = obj($row["oid"]);
+						$awa = new aw_array($props_to_set[$row["class_id"]]);
+						foreach($awa->get() as $k => $v)
+						{
+							$tmp->set_meta($k, $v);
+						}
+						$tmp->save();
 					};
 
 					$this->restore_handle();

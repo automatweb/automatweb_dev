@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.15 2004/06/15 08:47:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.16 2004/06/21 11:48:59 kristo Exp $
 classload("formgen/form_base");
 class form_output extends form_base 
 {
@@ -817,7 +817,9 @@ class form_output extends form_base
 					}
 					if ($elsel[$row][$col][$i] == 1 && $setfolder)
 					{
-						$this->upd_object(array("oid" => $cell["elements"][$i]["id"], "parent" => $setfolder));
+						$o = obj($cell["elements"][$i]["id"]);
+						$o->set_parent($setfolder);
+						$o->save(); 
 					}
 					else
 					if ($elsel[$row][$col][$i] == 1 && $setcss !== "")
@@ -907,7 +909,8 @@ class form_output extends form_base
 		$tp = aw_serialize($this->output,SERIALIZE_PHP);
 		$this->quote(&$tp);
 		$this->db_query("UPDATE form_output SET op = '$tp' WHERE id = $id");
-		$this->upd_object(array("oid" => $id));
+		$o = obj($id);
+		$o->save(); 
 		$this->_log(ST_FORM_OP, SA_CHANGE,sprintf(LC_FORM_OUTPUT_CHANGED_STYLE,$name), $id);
 	}
 

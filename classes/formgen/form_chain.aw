@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.18 2004/06/20 16:37:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.19 2004/06/21 11:48:59 kristo Exp $
 // form_chain.aw - form chains
 
 classload("formgen/form_base");
@@ -688,10 +688,11 @@ class form_chain extends form_base
 		else
 		if ($f->has_controller_warnings && $new_chain_entry)
 		{
-			$this->upd_object(array(
-				"oid" => $chain_entry_id,
-				"name" => $f->entry_name
-			));
+			aw_disable_acl();
+			$tmp = obj($chain_entry_id);
+			$tmp->set_name($f->entry_name);
+			$tmp->save();
+			aw_restore_acl();
 
 			$sbt = $f->get_opt("el_submit");
 
@@ -700,10 +701,11 @@ class form_chain extends form_base
 		else
 		{
 			// now update the chain entry object with the form entry name
-			$this->upd_object(array(
-				"oid" => $chain_entry_id,
-				"name" => $f->entry_name
-			));
+			aw_disable_acl();
+			$tmp = obj($chain_entry_id);
+			$tmp->set_name($f->entry_name);
+			$tmp->save();
+			aw_restore_acl();
 
 			$sbt = $f->get_opt("el_submit");
 

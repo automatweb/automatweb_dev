@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.24 2004/06/09 21:01:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.25 2004/06/21 11:48:59 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -245,13 +245,16 @@ class form_base extends form_db_base
 
 		$el_tbls["is_translatable"] = $this->arr["is_translatable"];
 
-		$this->upd_object(array(
-			"oid" => $this->id,
-			"name" => $this->name,
-			"comment" => $this->comment,
-			"metadata" => $this->meta,
-			"flags" => $this->flags,
-		));
+		$tmp = obj($this->id);
+		$tmp->set_name($this->name);
+		$tmp->set_comment($this->comment);
+		$tmp->set_flags($this->flags);
+		$awa = new aw_array($this->meta);
+		foreach($awa->get() as $k => $v)
+		{
+			$tmp->set_meta($k, $v);
+		}
+		$tmp->save();
 
 		$contents = aw_serialize($this->arr,SERIALIZE_PHP);
 		$this->quote(&$contents);

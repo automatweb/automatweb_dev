@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.100 2004/06/20 16:37:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.101 2004/06/21 11:48:58 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -615,7 +615,9 @@ class form extends form_base
 			{
 				if ($setfolder)
 				{
-					$this->upd_object(array("oid" => $selid, "parent" => $setfolder));
+					$tmp = obj($selid);
+					$tmp->set_parent($parent);
+					$tmp->save();
 				}
 			}
 		}
@@ -4119,13 +4121,17 @@ class form extends form_base
 					if ($active[$fid][$eid] == 1 && $status == 1)	// new status active, old not active
 					{
 						// make obj active
-						$this->upd_object(array("oid" => $eid, "status" => 2));
+						$tmp = obj($eid);
+						$tmp->set_status(2);
+						$tmp->save();
 					}
 					else
 					if ($active[$fid][$eid] != 1 && $status == 2)	// new status not active, old active
 					{
 						// make not active
-						$this->upd_object(array("oid" => $eid, "status" => 1));
+						$tmp = obj($eid);
+						$tmp->set_status(1);
+						$tmp->save();
 					}
 				}
 			}
@@ -4140,7 +4146,9 @@ class form extends form_base
 					if ($chpos[$fid][$eid] != 0 && $loc != $chpos[$fid][$eid])	// location selected and changed
 					{
 						// change location
-						$this->upd_object(array("oid" => $eid, "parent" => $chpos[$fid][$eid]));
+						$tmp = obj($eid);
+						$tmp->set_parent($chpos[$fid][$eid]);
+						$tmp->save();
 					}
 				}
 			}
@@ -4602,7 +4610,9 @@ class form extends form_base
 		extract($arr);
 		$this->load($id);
 		
-		$this->upd_object(array("oid" => $el_id, "parent" => $parent));
+		$tmp = obj($el_id);
+		$tmp->set_parent($parent);
+		$tmp->save();
 
 		if (is_array($c_cell))
 		{
@@ -4764,7 +4774,10 @@ class form extends form_base
 	function submit_metainfo(&$arr)
 	{
 		extract($arr);
-		$this->upd_object(array("oid" => $id, "name" => $name, "comment" => $comment));
+		$tmp = obj($id);
+		$tmp->set_name($name);
+		$tmp->set_comment($comment);
+		$tmp->save();
 		$this->_log(ST_FORM, SA_CHANGE, $this->name, $id);
 		return $this->mk_orb("metainfo",  array("id" => $id));
 	}
@@ -5033,7 +5046,9 @@ class form extends form_base
 		while ($row = $this->db_next())
 		{
 			$this->save_handle();
-			$this->upd_object(array("oid" => $row["oid"], "class_id" => CL_FORM_ELEMENT));
+			$tmp = obj($row["oid"]);
+			$tmp->set_class_id(CL_FORM_ELEMENT);
+			$tmp->save();
 			echo "oid = ", $row["oid"], "name = ",$row["name"], "<br />";
 			$this->restore_handle();
 		}

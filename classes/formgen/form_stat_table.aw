@@ -142,11 +142,14 @@ class form_stat_table extends form_base
 
 	function save_stat_table()
 	{
-		$this->upd_object(array(
-			"oid" => $this->s_table["oid"],
-			"name" => $this->s_table["name"],
-			"metadata" => $this->s_table["meta"]
-		));
+		$o = obj($this->s_table["oid"]);
+		$o->set_name($this->s_table["name"]);
+		$awa = new aw_array($this->s_table["meta"]);
+		foreach($awa->get() as $k => $v)
+		{
+			$o->set_meta($k, $v);
+		}
+		$o->save(); 
 	}
 
 	function mk_admin_preview()

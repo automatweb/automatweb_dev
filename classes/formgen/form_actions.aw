@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.24 2004/06/15 08:47:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.25 2004/06/21 11:48:58 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -171,15 +171,13 @@ class form_actions extends form_base
 			}
 			else
 			{
-				$this->upd_object(array(
-					"name" => $name, 
-					"comment" => $comment ,
-					"oid" => $action_id,
-					"metadata" => array(
-						"activate_on_button" => $this->make_keys($activate_on_button),
-						"controllers" => $this->make_keys($controllers)
-					)
-				));
+				$tmp = obj($action_id);
+				$tmp->set_name($name);
+				$tmp->set_comment($comment);
+				$tmp->set_meta("activate_on_button", $this->make_keys($activate_on_button));
+				$tmp->set_meta("controllers",$this->make_keys($controllers));
+				$tmp->save();
+
 				$this->db_query("UPDATE form_actions SET type = '$type' WHERE id = $action_id");
 				return $this->mk_orb("change_action", array("id" => $id, "aid" => $action_id, "level" => 2));
 			}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.68 2004/06/09 21:01:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.69 2004/06/21 11:48:59 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -1434,7 +1434,9 @@ class form_element extends aw_template
 		if ($this->arr["ord"] != $$var)
 		{
 			$this->arr["ord"] = $$var;
-			$this->upd_object(array("oid" => $this->id, "jrk" => $$var));
+			$o = obj($this->id);
+			$o->set_ord($$var);
+			$o->save(); 
 		}
 
 		$var = $base."_subtype";
@@ -1809,7 +1811,9 @@ class form_element extends aw_template
 		{
 			$id = $this->id;
 		}
-		$this->upd_object(array("oid" => $id, "name" => $name));
+		$o = obj($id);
+		$o->set_name($name);
+		$o->save(); 
 		// ok now here we must fuckin load all the forms that contain this element and fuckin change all elements names in those. 
 		// shit I hate this but I suppose it's gotta be done
 		$this->save_handle();

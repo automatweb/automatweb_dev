@@ -168,8 +168,15 @@ class form_db_base extends aw_template
 		$this->save_handle();
 		if (!($this->arr["save_table"] == 1 && $this->arr["save_tables_obj_tbl"] == ""))
 		{
-			$this->quote(&$arr['name']);
-			$this->upd_object($arr + array("no_flush" => 1));
+			aw_disable_acl();
+			$tmp = obj($arr["oid"]);
+			$tmp->set_name($arr["name"]);
+			if ($arr["parent"])
+			{
+				$tmp->set_parent($arr["parent"]);
+			}
+			$tmp->save();
+			aw_restor_acl();
 		}
 		$this->restore_handle();
 	}
