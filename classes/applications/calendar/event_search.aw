@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.10 2005/01/11 11:56:36 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.11 2005/01/11 13:43:15 ahti Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -63,7 +63,7 @@
 @reltype EVENT_CFGFORM value=1 clid=CL_CFGFORM
 @caption Sündmuse vorm
 
-@reltype EVENT_SOURCE value=3 clid=CL_MENU,CL_PROJECT,CL_PLANNER
+@reltype EVENT_SOURCE value=3 clid=CL_MENU,CL_PLANNER
 @caption Sündmuste allikas
 
 @reltype EVENT_SHOW value=4 clid=CL_CFGFORM
@@ -608,9 +608,19 @@ class event_search extends class_base
 			$tmp = obj($rn1);
 			if($tmp->class_id() == CL_MENU)
 			{
-				$search_p1 = true;
+				$prj_ch1 = $this->_get_project_choices($rn1);
+				// if there are projects to choose from, search from them, else assume that it's a event folder
+				if(!empty($prj_ch1))
+				{
+					$search_p1 = true;
+					$prj_ch1 = array("0" => t("kõik")) + $prj_ch1;
+				}
+				else
+				{
+					$rn1 = $tmp->id();
+				}
 			}
-			if($tmp->class_id() == CL_PLANNER)
+			elseif($tmp->class_id() == CL_PLANNER)
 			{
 				$r = $tmp->prop("event_folder");
 				if(is_oid($r) && $this->can("view", $r))
@@ -625,9 +635,18 @@ class event_search extends class_base
 			$tmp = obj($rn2);
 			if($tmp->class_id() == CL_MENU)
 			{
-				$search_p2 = true;
+				$prj_ch2 = $this->_get_project_choices($rn2);
+				if(!empty($prj_ch2))
+				{
+					$search_p2 = true;
+					$prj_ch2 = array("0" => t("kõik")) + $prj_ch2;
+				}
+				else
+				{
+					$rn2 = $tmp->id();
+				}
 			}
-			if($tmp->class_id() == CL_PLANNER)
+			elseif($tmp->class_id() == CL_PLANNER)
 			{
 				$r = $tmp->prop("event_folder");
 				if(is_oid($r) && $this->can("view", $r))
@@ -642,7 +661,7 @@ class event_search extends class_base
 				"name" => "project1",
 				"caption" => $formconfig["project1"]["caption"],
 				"type" => "select",
-				"options" => $this->_get_project_choices($rn1),
+				"options" => $prj_ch1,
 				"value" => $arr["project1"],
 			));
 		}
@@ -653,7 +672,7 @@ class event_search extends class_base
 				"name" => "project2",
 				"caption" => $formconfig["project2"]["caption"],
 				"type" => "select",
-				"options" => $this->_get_project_choices($rn2),
+				"options" => $prj_ch2,
 				"value" => $arr["project2"],
 			));
 		}
@@ -1057,7 +1076,7 @@ class event_search extends class_base
 			"parent" => $parent,
 			"class_id" => array(CL_PROJECT, CL_PLANNER),
 		));
-		return array("0" => t("kõik")) + $ol->names();
+		return $ol->names();
 
 	}
 
