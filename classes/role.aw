@@ -1,113 +1,43 @@
 <?php
 
-class role extends aw_template
+/*
+
+@classinfo syslog_type=ST_ROLE relationmgr=yes
+
+@groupinfo general caption=Üldine
+@groupinfo acls caption="Lubatud &otilde;igused"
+
+@default group=general
+@default table=objects
+
+@property changes_desc type=text store=no
+@caption Muudetavad &otilde;igused
+
+@property changes type=callback callback=get_changeables store=no
+@caption Muudetavad &otilde;igused
+
+@default group=acls
+
+@property acls type=callback callback=get_acls store=no
+@caption Lubatud
+
+@property save_acl_sep type=text store=no no-caption=1
+@caption 
+
+@property save_acl type=checkbox ch_value=1 store=no
+@caption Uuenda ACL
+
+
+*/
+
+class role extends class_base
 {
 	function role()
 	{
-		$this->init("role");
-	}
-
-	function add($arr)
-	{
-		extract($arr);
-		$this->read_template("add.tpl");
-		$this->mk_path($parent,"Lisa ACL");
-
-		$acl_ids = aw_ini_get("acl.ids");
-		foreach($acl_ids as $bit => $name)
-		{
-			$this->vars(array(
-				"acl_name" => $name
-			));
-			$acls .= $this->parse("ACLS");
-		}
-
-		$this->vars(array(
-			"ACLS" => $acls,
-			"reforb" => $this->mk_reforb("submit", array("parent" => $parent))
+		$this->init(array(
+			"tpldir" => "role",
+			"clid" => CL_ROLE
 		));
-		return $this->parse();
-	}
-
-	function submit($arr)
-	{
-		extract($arr);
-
-		if ($id)
-		{
-			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $name
-			));
-		}
-		else
-		{
-			$id = $this->new_object(array(
-				"parent" => $parent,
-				"name" => $name,
-				"class_id" => CL_ROLE
-			));
-		}
-
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "acls",
-			"value" => $this->make_keys($acls)
-		));
-
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "acls_set",
-			"value" => $this->make_keys($acls_set)
-		));
-
-		if ($save_acl)
-		{
-			$ac = get_instance("acl_class");
-			$rows = $ac->get_acls_for_role($id);
-			foreach($rows as $acid)
-			{
-				$ac->update_acl($acid);
-			}
-		}
-		return $this->mk_my_orb("change", array("id" => $id));
-	}
-
-	function change($arr)
-	{
-		extract($arr);
-		$this->read_template("add.tpl");
-		$o = $this->get_object($id);
-		$this->mk_path($o["parent"],"Muuda rolli");
-
-		$meta = $this->get_object_metadata(array(
-			"metadata" => $o["metadata"]
-		));
-		$acl_ids = aw_ini_get("acl.ids");
-		foreach($acl_ids as $bit => $name)
-		{
-			$this->vars(array(
-				"acl_name" => $name,
-				"checked" => checked($meta["acls"][$name] == $name),
-				"checked_set" => checked($meta["acls_set"][$name] == $name)
-			));
-			$as = "";
-			if ($meta["acls"][$name] == $name)
-			{
-				$as = $this->parse("ACL_SET");
-			}
-			$this->vars(array(
-				"ACL_SET" => $as
-			));
-			$acls .= $this->parse("ACLS");
-		}
-
-		$this->vars(array(
-			"name" => $o["name"],
-			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
-			"ACLS" => $acls,
-		));
-		return $this->parse();
 	}
 
 	function get_acl_mask($role)
@@ -134,5 +64,101 @@ class role extends aw_template
 		}
 		return $ret;
 	}
+
+	function get_changeables($arr)
+	{
+		$acls = array();
+		$a = $this->acl_list_acls();
+		foreach($a as $a_bp => $a_name)
+		{
+			$rt = "acl_".$a_bp;
+			$acls[$rt] = array(
+				'name' => $rt,
+				'caption' => $a_name,
+				'type' => 'checkbox',
+				'ch_value' => 1,
+				'store' => 'no',
+				'group' => 'objects',
+				'value' => $arr["obj"]["meta"]["acls"][$a_name] == $a_name
+			);
+		}
+		return $acls;
+	}
+
+	function get_acls($arr)
+	{
+		$acls = array();
+		$a = $this->acl_list_acls();
+		foreach($a as $a_bp => $a_name)
+		{
+			if ($arr["obj"]["meta"]["acls"][$a_name] == $a_name)
+			{
+				$rt = "acl_set_".$a_bp;
+				$acls[$rt] = array(
+					'name' => $rt,
+					'caption' => $a_name,
+					'type' => 'checkbox',
+					'ch_value' => 1,
+					'store' => 'no',
+					'group' => 'objects',
+					'value' => $arr["obj"]["meta"]["acls_set"][$a_name] == $a_name
+				);
+			}
+		}
+		return $acls;
+	}
+
+	function set_property(&$arr)
+	{
+		$prop =& $arr["prop"];
+		switch($prop['name'])
+		{
+			case 'changes':
+				$arr["metadata"]["acls"] = array();
+				$a = $this->acl_list_acls();
+				foreach($a as $a_bp => $a_name)
+				{
+					if ($arr["form_data"]["acl_".$a_bp] == 1)
+					{
+						$arr["metadata"]["acls"][$a_name] = $a_name;
+					}
+				}
+				break;
+
+			case 'acls':
+				$arr["metadata"]["acls_set"] = array();
+				$a = $this->acl_list_acls();
+				foreach($a as $a_bp => $a_name)
+				{
+					if ($arr["form_data"]["acl_set_".$a_bp] == 1)
+					{
+						$arr["metadata"]["acls_set"][$a_name] = $a_name;
+					}
+				}
+				break;
+
+			case 'save_acl':
+				if ($arr["form_data"]["save_acl"] == 1)
+				{
+					$ac = get_instance("acl_class");
+					$rows = $ac->get_acls_for_role($arr["obj"]["oid"]);
+					foreach($rows as $acid)
+					{
+						$ac->update_acl($acid);
+					}
+				}
+				break;
+		}
+		return PROP_OK;
+	}
+
+/*	function get_property(&$arr)
+	{
+		if ($arr["prop"]["name"] == "save_acl" && !$arr["obj"]["oid"])
+		{
+			return PROP_IGNORE;
+		}
+		return PROP_OK;
+	}*/
 }
 ?>
