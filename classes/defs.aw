@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.105 2003/10/06 14:32:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.106 2003/10/14 10:18:47 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -10,6 +10,12 @@ if (!defined("DEFS"))
 	define("SERIALIZE_NATIVE",3);
 	define("SERIALIZE_PHP_NOINDEX",4);
 	define("SERIALIZE_XMLRPC", 5);
+
+        function create_email_links($str)
+        {
+                $str = preg_replace("/([-.a-zA-Z0-9_]*)@([-.a-zA-Z0-9_]*)/","<a href='mailto:\\1@\\2'>\\1@\\2</a>", $str);
+		return preg_replace("/((\W|^))((http(s?):\/\/)|(www\.))(\S+)/im", "$2<a href=\"http$5://$6$7\" target=\"_blank\">$4$6$7</a>", $str); 
+        }
 
 	function post_message($msg, $params)
 	{
