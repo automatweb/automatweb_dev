@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.45 2005/03/30 11:45:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.46 2005/03/31 11:16:04 ahti Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -380,11 +380,123 @@ class releditor extends core
 		$awt = new vcl_table(array(
 			"layout" => "generic",
 		));
-
+		if ($arr["prop"]["table_edit_fields"])
+		{
+			$ed_fields = new aw_array($arr["prop"]["table_edit_fields"]);
+			$ed_fields = $ed_fields->get();
+		};
+		if($arr["prop"]["filt_edit_fields"] == 1)
+		{
+			$ed_fields = array();
+		}
 		$fdata = array();
+		$conns = array();
+		$filt_props = array();
+		if(!$arr["new"])
+		{
+			$conns = $arr["obj_inst"]->connections_from(array(
+				"type" => $arr["prop"]["reltype"],
+			));
+			$name = $arr["prop"]["name"];
+			foreach($conns as $conn)
+			{
+				if ($arr["prop"]["direct_links"] == 1)
+				{
+					$url = $this->mk_my_orb("change",array("id" => $conn->prop("to"),"return_url" => urlencode(aw_global_get("REQUEST_URI"))),$conn->prop("to.class_id"));
+				}
+				else
+				{
+					$url = aw_url_change_var(array($this->elname => $conn->prop("to")));
+				};
+				$target = $conn->to();
+				$clinst = $target->instance();
+				$rowdata = array(
+					"id" => $conn->prop("to"),
+					"conn_id" => $conn->id(),
+					"name" => $conn->prop("to.name"),
+					"edit" => html::href(array(
+						"caption" => "Muuda",
+						"url" => $url,
+					)),
+					"_active" => ($arr["request"][$this->elname] == $conn->prop("to")),
+				);
+				$property_list = $target->get_property_list();
+				$export_props = array();
+				foreach($property_list as $_pn => $_pd)
+				{
+					/*
+					if (empty($fdata[$_pn]))
+					{
+						continue;
+					};
+					*/
+					$prop = $_pd;
+					$prop["value"] = $target->prop($_pn);
+					// now lets call get_property on that beast
+					$test = $clinst->get_property(array(
+						"prop" => &$prop,
+						"obj_inst" => $target,
+					));
+					if (PROP_OK != $test)
+					{
+						continue;
+					};
+					if ($_pd["type"] == "date_select")
+					{
+						$prop["value"] = date("d.m.Y", $prop["value"]);
+					}
+					else
+					if ($_pd["type"] == "datetime_select")
+					{
+						$prop["value"] = date("d.m.Y", $prop["value"]);
+					}
+					else
+					if ($_pd["type"] == "select" && is_array($prop["options"]))
+					{
+						$prop["value"] = $prop["options"][$prop["value"]];
+					};
+					if($arr["prop"]["filt_edit_fields"] == 1)
+					{
+						if($prop["value"] != "" && $prop["type"] == "textbox")
+						{
+							$ed_fields[$_pn] = $_pn;
+						}
+					}
+					$export_props[$_pn] = $prop["value"];
+				}
+				//$export_props = $target->properties();
+				if ($ed_fields && ($this->form_type != $target->id()))
+				{
+					foreach($ed_fields as $ed_field)
+					{
+						// fucking hackery! :(
+						if ($this->all_props[$ed_field]["type"] == "textbox")
+						{
+							$export_props[$ed_field] = html::textbox(array(
+								"name" => "$name" . '[_data][' . $conn->prop("id") . '][' . $ed_field . "]",
+								"value" => $export_props[$ed_field],
+								"size" => $this->all_props[$ed_field]["size"] ? $this->all_props[$ed_field]["size"] : 15,
+							));
+						};
+					};
+				};
+				$rowdata = $rowdata + $export_props;
+				$awt->define_data($rowdata);
+			}
+		}
 
-
-		if (is_array($arr["prop"]["table_fields"]))
+		if($arr["prop"]["filt_edit_fields"] == 1)
+		{
+			$ed_fields = array("name" => "name") + $ed_fields;
+			foreach($ed_fields as $field)
+			{
+				$awt->define_field(array(
+					"name" => $field,
+					"caption" => $this->all_props[$field]["caption"],
+				));
+			}
+		}
+		elseif (is_array($arr["prop"]["table_fields"]))
 		{
 			foreach($arr["prop"]["table_fields"] as $table_field)
 			{
@@ -392,8 +504,7 @@ class releditor extends core
 					"name" => $table_field,
 					"caption" => $this->all_props[$table_field]["caption"],
 				));
-
-				$fdata[$table_field] = $table_field;
+				//$fdata[$table_field] = $table_field;
 			};
 		}
 		else
@@ -421,103 +532,10 @@ class releditor extends core
 			"name" => "check",
 		));
 
-		if ($arr["prop"]["table_edit_fields"])
-		{
-			$ed_fields = new aw_array($arr["prop"]["table_edit_fields"]);
-		};
-
 		// and how do I get values for those?
 
 		// and how do I show the selected row?
 
-		if (!$arr["new"])
-		{
-			$conns = $arr["obj_inst"]->connections_from(array(
-				"type" => $arr["prop"]["reltype"],
-			));
-			
-			$name = $arr["prop"]["name"];
-
-			
-			foreach($conns as $conn)
-			{
-				if ($arr["prop"]["direct_links"] == 1)
-				{
-					$url = $this->mk_my_orb("change",array("id" => $conn->prop("to"),"return_url" => urlencode(aw_global_get("REQUEST_URI"))),$conn->prop("to.class_id"));
-				}
-				else
-				{
-					$url = aw_url_change_var(array($this->elname => $conn->prop("to")));
-				};
-				$target = $conn->to();
-				$clinst = $target->instance();
-				$rowdata = array(
-					"id" => $conn->prop("to"),
-					"conn_id" => $conn->id(),
-					"name" => $conn->prop("to.name"),
-					"edit" => html::href(array(
-						"caption" => "Muuda",
-						"url" => $url,
-					)),
-					"_active" => ($arr["request"][$this->elname] == $conn->prop("to")),
-				);
-				$property_list = $target->get_property_list();
-				$export_props = array();
-				foreach($property_list as $_pn => $_pd)
-				{
-					if (empty($fdata[$_pn]))
-					{
-						continue;
-					};
-					$prop = $_pd;
-					$prop["value"] = $target->prop($_pn);
-					// now lets call get_property on that beast
-					$test = $clinst->get_property(array(
-						"prop" => &$prop,
-						"obj_inst" => $target,
-					));
-					if (PROP_OK != $test)
-					{
-						continue;
-					};
-					if ($_pd["type"] == "date_select")
-					{
-						$prop["value"] = date("d.m.Y", $prop["value"]);
-					}
-					else
-					if ($_pd["type"] == "datetime_select")
-					{
-						$prop["value"] = date("d.m.Y", $prop["value"]);
-					}
-					else
-					if ($_pd["type"] == "select" && is_array($prop["options"]))
-					{
-						$prop["value"] = $prop["options"][$prop["value"]];
-
-					};
-					$export_props[$_pn] = $prop["value"];
-				}
-				//$export_props = $target->properties();
-				if ($ed_fields && ($this->form_type != $target->id()))
-				{
-					foreach($ed_fields->get() as $ed_field)
-					{
-						// fucking hackery! :(
-						
-						if ($this->all_props[$ed_field]["type"] == "textbox")
-						{
-							$export_props[$ed_field] = html::textbox(array(
-								"name" => "$name" . '[_data][' . $conn->prop("id") . '][' . $ed_field . "]",
-								"value" => $export_props[$ed_field],
-								"size" => $this->all_props[$ed_field]["size"],
-							));
-						};
-					};
-				};
-				$rowdata = $rowdata + $export_props;
-				$awt->define_data($rowdata);
-			};
-		};
 		if($arr["prop"]["clone_link"] == 1)
 		{
 			$awt->table_header = '<input type="hidden" name="releditor_clones" id="releditor_clones" value="0" />';
