@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.171 2003/03/28 10:25:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.172 2003/03/28 17:12:29 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -774,6 +774,12 @@ class core extends db_connector
 		extract($args);
 		
 		// map2 supports both arrays and strings and returns array
+		$aliases = array();
+		// what would you want with oid=0 anyway? but it does get called
+		if (empty($oid))
+		{
+			return $aliases;
+		};
 		$typestring = "";
 		if ($type)
 		{
@@ -788,7 +794,6 @@ class core extends db_connector
 			WHERE source = '$oid' $typestring
 			ORDER BY aliases.id";
 		$this->db_query($q);
-		$aliases = array();
 		while($row = $this->db_next())
 		{
 			// note that the index inside the idx array is always one less than the 
