@@ -82,6 +82,24 @@ class layout extends class_base
 	function parse_alias($args)
 	{
 		extract($args);
+
+		// if oid is in the arguments check whether that object is attached to
+		// this document and display it instead of document
+		$oid = aw_global_get("oid");
+		if ($oid)
+		{
+			$q = "SELECT * FROM aliases WHERE source = '$alias[target]' AND target = '$oid' AND type =" . CL_FILE;
+			$this->db_query($q);
+			$row = $this->db_next();
+			if ($row)
+			{
+				$fi = get_instance("file");
+				$fl = $fi->get_file_by_id($oid);
+				return $fl["content"];
+			};
+		}
+
+
 		$ob = $this->get_object($alias["target"]);
 		$ge = get_instance("vcl/grid_editor");
 		$ob['meta']['grid']['table_style'] = $ob['meta']['table_style'];
