@@ -60,6 +60,13 @@
 <!-- END SUB: data_cell -->
 </tr>
 <!-- END SUB: data_row1 -->
+
+<!-- SUB: separator_row -->
+<tr>
+<td colspan="{VAR:colspan}" class="awmenuedittabletext" style="height: 3px; font-size: 2px;">&nbsp;</td>
+</tr>
+<!-- END SUB: separator_row -->
+
 </table>
 </td>
 </tr>

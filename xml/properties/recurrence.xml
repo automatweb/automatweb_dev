@@ -26,7 +26,7 @@
                   <num_1>edit</num_1>
                   <num_2>emb</num_2>
             </form>
-            <caption>Kellaaeg</caption>
+            <caption>Kellaaeg (tund:minut)</caption>
       </property>
       <property>
             <name>length</name>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.4 2005/02/07 13:18:37 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.5 2005/02/11 08:07:54 voldemar Exp $
 // gantt_chart.aw - Gantti diagramm
 /*
 
@@ -40,7 +40,7 @@ class gantt_chart extends class_base
 	// timestamp start - chart start time. defaults to start of week back from current time.
 	// int columns - number of divisions in chart (e.g. 7 days for a chart depicting one week). default is 7.
 	// int column_length - length of one division in seconds. default is 86400.
-	// int chart_width - chart width in pixels. default is 1000.
+	// int width - chart width in pixels. default is 1000.
 	// string row_dfn - title for row-titles column. default is "Ressurss".
 	// string style - style to use (default| ... ).
 	// bool row_anchors - make hyperlinks of row names (not impl. yet).
@@ -51,7 +51,7 @@ class gantt_chart extends class_base
 		$this->start = (int) (empty ($arr["start"]) ? (time () - 302400) : $arr["start"]);
 		$this->column_length = (int) (empty ($arr["column_length"]) ? 86400 : $arr["column_length"]);
 		$this->columns = (empty ($arr["columns"]) ? range (1, 7) :  range (1, (int) $arr["columns"]));
-		$this->chart_width = (int) (empty ($arr["chart_width"]) ? 1000 : $arr["chart_width"]);
+		$this->chart_width = (int) (empty ($arr["width"]) ? 1000 : $arr["width"]);
 		$this->chart_id = empty ($arr["chart_id"]) ? "0" : $arr["chart_id"];
 		$this->style = empty ($arr["style"]) ? "default" : $arr["style"];
 		$this->row_dfn = empty ($arr["row_dfn"]) ? "Ressurss" : $arr["row_dfn"];
@@ -226,7 +226,7 @@ class gantt_chart extends class_base
 						"colspan" => $columns + 1,
 					));
 					$rows .= trim ($this->parse ("separator_row"));
-					continue;
+					continue 2;
 			}
 
 			while ($columns)
@@ -244,7 +244,7 @@ class gantt_chart extends class_base
 					{
 						$bar = array_shift ($this->data[$row["name"]]);
 
-						if ($bar["start"] >= $cell_end)
+						if (($bar["start"] >= $cell_end) or !$bar)
 						{
 							### no bars or no bars left in cell
 							array_unshift ($this->data[$row["name"]], $bar);
@@ -262,17 +262,18 @@ class gantt_chart extends class_base
 						$bar_type = $bar["hilight"] ? "hilighted" : $bar_switch;
 					}
 
-					### trim bars ending before chart start
+					### trim bars starting/ending before chart start
 					if ($bar["start"] < $this->start)
 					{
 						if (($bar["start"] + $bar["length"]) > $this->start)
 						{
+							### trim bar ending after chart start
 							$bar["length"] = ($bar["start"] + $bar["length"]) - $this->start;
 							$bar["start"] = $this->start;
 						}
 						else
 						{
-							break;
+							### bar ends before chart start, go to next bar for current row
 							continue;
 						}
 					}

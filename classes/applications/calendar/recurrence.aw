@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/recurrence.aw,v 1.7 2005/01/14 08:59:26 kristo Exp $
-// recurrence.aw - Kordus 
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/recurrence.aw,v 1.8 2005/02/11 08:07:53 voldemar Exp $
+// recurrence.aw - Kordus
 /*
 
 @classinfo syslog_type=ST_RECURRENCE relationmgr=yes
@@ -8,13 +8,13 @@
 @default table=objects
 @default group=general
 
-form=+emb syntax means, that this thing should be in all the default forms + 
+form=+emb syntax means, that this thing should be in all the default forms +
 the emb form. The latter I can then use for embedding cases
-@property start type=date_select table=calendar2recurrence form=+emb 
+@property start type=date_select table=calendar2recurrence form=+emb
 @caption Alates
 
 @property time type=textbox size=5 field=meta method=serialize form=+emb
-@caption Kellaaeg
+@caption Kellaaeg (tund:minut)
 
 @property length type=textbox size=5 field=meta method=serialize form=+emb
 @caption Pikkus (h)
@@ -46,7 +46,7 @@ the emb form. The latter I can then use for embedding cases
 @property month_weekdays type=chooser multiple=1 field=meta method=serialize form=+emb
 @caption Nädalapäevad
 
-// lõppu per-se ei ole. Kuigi selle võib määrata. Igal juhul on see optional 
+// lõppu per-se ei ole. Kuigi selle võib määrata. Igal juhul on see optional
 @property end type=date_select table=calendar2recurrence form=+emb
 @caption Kuni
 
@@ -105,7 +105,7 @@ class recurrence extends class_base
 		switch($data["name"])
 		{
 			case "weekdays":
-				// php date functions give sunday an index of 0, 
+				// php date functions give sunday an index of 0,
 				// so I'm doing the same
 				$data["options"] = array(
 					"1" => "E",
@@ -117,9 +117,9 @@ class recurrence extends class_base
 					"0" => "P",
 				);
 				break;
-			
+
 			case "month_weekdays":
-				// php date functions give sunday an index of 0, 
+				// php date functions give sunday an index of 0,
 				// so I'm doing the same
 				$data["options"] = array(
 					"1" => "E",
@@ -150,6 +150,10 @@ class recurrence extends class_base
 					//RECUR_MONTHLY => "monthly",
 					RECUR_YEARLY => t("aasta"),
 				);
+				break;
+
+			case "length":
+				$data["value"] = $this->safe_settype_float ($data["value"]);
 				break;
 
 			case "test":
@@ -208,7 +212,7 @@ class recurrence extends class_base
 
 		$end_hour = $arr["end_hour"];
 		$end_min = $arr["end_min"];
-		
+
 		$interval = (int)$arr["interval"];
 		if ($interval == 0)
 		{
@@ -238,7 +242,7 @@ class recurrence extends class_base
 		};
 		return $rv;
 	}
-	
+
 	function calc_range_daily($arr)
 	{
 		// Need to calculate the time shift from the start of the day
@@ -249,7 +253,7 @@ class recurrence extends class_base
 		{
 			$interval = 1;
 		};
-		
+
 		$start_hour = $arr["start_hour"];
 		$start_min = $arr["start_min"];
 
@@ -276,7 +280,7 @@ class recurrence extends class_base
 		{
 			$interval = 1;
 		};
-		
+
 		$start_hour = $arr["start_hour"];
 		$start_min = $arr["start_min"];
 
@@ -286,7 +290,7 @@ class recurrence extends class_base
 		$start_year = date("Y",$arr["start"]);
 		$end_year = date("Y",$arr["end"]);
 
-		
+
 		$rv = array();
 
 		list($d,$m) = explode("-",date("d-m",$arr["start"]));
@@ -311,7 +315,7 @@ class recurrence extends class_base
 
 		}
 		return $retval;
-	}	
+	}
 
 	////
 	// !Sets a name for the object if one is not specified (embed forms)
@@ -355,7 +359,7 @@ class recurrence extends class_base
 		$recur_start = $arr["obj_inst"]->prop("start");
 		$recur_end = $arr["obj_inst"]->prop("end");
 		$recur_time = $arr["obj_inst"]->prop("time");
-		
+
 		$recur_start_hour = date("G",$start);
 		$recur_start_min = date("i",$start);
 
@@ -371,7 +375,7 @@ class recurrence extends class_base
 			{
 				$recur_start_hour = $recur_time_hour;
 				$recur_start_min = $recur_time_min;
-	
+
 				// if end time is added later, then implement processing here
 				$recur_end_hour = $recur_start_hour;
 				$recur_end_min = $recur_start_min;
@@ -524,6 +528,13 @@ class recurrence extends class_base
 
 	*/
 
-	
+	function safe_settype_float ($value)
+	{
+		$parts1 = explode (",", $value, 2);
+		$parts2 = explode (".", $value, 2);
+		$parts = (count ($parts2) == 1) ? $parts1 : $parts2;
+		$value = (float) ((isset ($parts[0]) ? ((int) $parts[0]) : 0) . "." . (isset ($parts[1]) ? ((int) $parts[1]) : 0));
+		return $value;
+	}
 }
 ?>

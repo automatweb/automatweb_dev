@@ -121,6 +121,16 @@
             <parent>vsplitbox</parent>
       </property>
       <property>
+            <name>legend</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_projects</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
             <name>resources_toolbar</name>
             <table>objects</table>
             <field>meta</field>
@@ -181,6 +191,46 @@
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>chart_project_hilight</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_schedule</group>
+            <type>select</type>
+            <store>no</store>
+            <caption>Tõsta esile projekt</caption>
+      </property>
+      <property>
+            <name>chart_project_hilight_gotostart</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_schedule</group>
+            <type>checkbox</type>
+            <store>no</store>
+            <caption>Mine valitud projekti algusesse</caption>
+      </property>
+      <property>
+            <name>chart_start_date</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_schedule</group>
+            <type>date_select</type>
+            <store>no</store>
+            <caption>Näidatava perioodi algus</caption>
+      </property>
+      <property>
+            <name>chart_submit</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_schedule</group>
+            <type>submit</type>
+            <store>no</store>
+            <caption>Näita</caption>
       </property>
       <property>
             <name>user_list_toolbar</name>
