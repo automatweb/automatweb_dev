@@ -1,7 +1,7 @@
 <?php
 
 classload("mailinglist/ml_queue");
-class ml_list_status extends aw_template
+class ml_list_status extends ml_queue
 {
 	function ml_list_status()
 	{
