@@ -1,6 +1,6 @@
 <?php
 include("const.aw");
-include("admin_header.$ext");
+include("admin_header.".aw_ini_get("ext"));
 classload("aw_template");
 $tt = new aw_template;
 $tt->db_init();
@@ -48,7 +48,7 @@ switch($type) {
 	case "list_mails":
 		$t = new email;
 		$parent = $t->db_fetch_field("SELECT parent FROM objects WHERE oid = $id","parent");
-		$site_title = "<a href='list.$ext?parent=$parent'>Listid</a> / Mailide nimekiri";
+		$site_title = "<a href='list.".aw_ini_get("ext")."?parent=$parent'>Listid</a> / Mailide nimekiri";
 		$content = $t->list_mails($id);
 		break;
 	
@@ -138,5 +138,5 @@ switch($type) {
 
 session_register("back");
 $back = $REQUEST_URI;
-include("admin_footer.$ext");
+include("admin_footer.".aw_ini_get("ext"));
 ?>
