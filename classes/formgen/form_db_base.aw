@@ -788,7 +788,7 @@ class form_db_base extends aw_template
 							{
 								if (isset($gp_coll_els[$el]))
 								{
-									$sql.=", stradd(\"".$gp_coll_els[$el]["sep"]."\",".$tbl.".".$eltbls["col"].") AS ev_".$el;
+									$sql.=", stradd(\"".$gp_coll_els[$el]["sep"]."\",".$tbl.".".$eltbls["col"].",1) AS ev_".$el;
 								}
 								else
 								{
@@ -799,7 +799,7 @@ class form_db_base extends aw_template
 							{
 								if (isset($gp_coll_els[$el]))
 								{
-									$sql.=", stradd(\"".$gp_coll_els[$el]["sep"]."\",".$tbl.".".$eltbls["col2"].") AS el_".$el;
+									$sql.=", stradd(\"".$gp_coll_els[$el]["sep"]."\",".$tbl.".".$eltbls["col2"].",1) AS el_".$el;
 								}
 								else
 								{
@@ -855,7 +855,7 @@ class form_db_base extends aw_template
 							{
 								if (isset($gp_coll_els[$el]))
 								{
-									$sql.=", stradd(\"".$gp_coll_els[$el]["sep"]."\",".$tbl.".".$eldat["col"].") AS ev_".$el;
+									$sql.=", stradd(\"".$gp_coll_els[$el]["sep"]."\",".$tbl.".".$eldat["col"].",1) AS ev_".$el;
 								}
 								else
 								{
@@ -866,7 +866,7 @@ class form_db_base extends aw_template
 							{
 								if (isset($gp_coll_els[$el]))
 								{
-									$sql.=", stradd(\"".$gp_coll_els[$el]["sep"]."\",".$tbl.".".$eldat["col2"].") AS el_".$el;
+									$sql.=", stradd(\"".$gp_coll_els[$el]["sep"]."\",".$tbl.".".$eldat["col2"].",1) AS el_".$el;
 								}
 								else
 								{
