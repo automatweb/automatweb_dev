@@ -7,6 +7,10 @@
 	<linn1>Jõgeva</linn1><temp1>3.8</temp1><linn2>Pärnu</linn2><temp2>2</temp2><linn3>Rapla</linn3><temp3>2.4/temp3>
 </blokk>
 */
+// sample crontab line:
+// * */4 * * * /www/automatweb_dev/scripts/php -q /www/automatweb_dev/addons/import/ilmee_xml2csv.php > /tmp/ilmee.csv && /usr/ local/bin/mysqlimport -h hell -r --fields-terminated-by=';' -v -u curimport --password='XXX' automatweb /tmp/ilmee.csv
+
+//
 $table = "ilmee_data";
 $file = join("",file("http://www.ilm.ee/~data/include/ilm_xml.php3"));
 $p = xml_parser_create();
