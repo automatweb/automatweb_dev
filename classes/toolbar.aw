@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/toolbar.aw,v 2.9 2003/01/16 16:46:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/toolbar.aw,v 2.10 2003/03/06 14:54:46 axel Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -77,6 +77,7 @@ class toolbar extends aw_template
 	function get_toolbar($args = array())
 	{
 		$matrix = new aw_array($this->matrix);
+		$this->vars(array('align' => $this->align?$this->align:'left'));
 		$result = $this->parse("start");
 		foreach($matrix->get() as $val)
 		{
