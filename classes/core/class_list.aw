@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/class_list.aw,v 1.3 2004/05/17 07:36:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/class_list.aw,v 1.4 2004/05/17 07:46:47 kristo Exp $
 // class_list.aw - Klasside nimekiri 
 /*
 
@@ -29,12 +29,12 @@ class class_list extends class_base
 		@param def required
 		@param name required
 		@param file required
-		@param can_add optional type=int
+		@param can_add optional 
 		@param parents optional
 		@param alias optional
 		@param alias_class optional
 		@param old_alias optional
-		@param is_remoted optional type=int
+		@param is_remoted optional 
 		@param subtpl_handler optional 
 
 	**/
