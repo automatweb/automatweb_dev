@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.40 2005/01/12 17:04:39 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.41 2005/01/19 15:00:30 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1326,7 +1326,7 @@ class webform extends class_base
 				"ot" => $object_type->id(),
 				"reforb" => array(
 					"class" => $ftype != CL_CALENDAR_REGISTRATION_FORM ? "webform" : "calendar_registration_form_conf",
-					"return_url" => $section,
+					"return_url" => $section.($_GET["show"] == 1 ? "?show=1" : ""),
 					"id" => $ftype != CL_CALENDAR_REGISTRATION_FORM ? $arr["id"] : $ef_id,
 					"doc_id" => $arr["doc_id"],
 				),
