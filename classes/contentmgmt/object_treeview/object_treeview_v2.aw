@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.59 2005/03/01 14:41:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.60 2005/03/02 07:33:33 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -13,6 +13,9 @@
 
 @property ds type=relpicker reltype=RELTYPE_DATASOURCE
 @caption Andmed
+
+@property no_cache_page type=checkbox ch_value=1
+@caption Lehte ei cacheta
 
 
 @groupinfo showing caption="N&auml;itamine"
@@ -434,6 +437,11 @@ class object_treeview_v2 extends class_base
 		}
 		enter_function("otv2::show");
 		$ob = obj($id);
+
+		if ($ob->prop("no_cache_page") == 1)
+		{
+			aw_global_set("no_cache", 1);
+		}
 
 		if (is_oid($ob->prop("inherit_view_props_from")) && $this->can("view", $ob->prop("inherit_view_props_from")))
 		{

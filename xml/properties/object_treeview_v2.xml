@@ -11,6 +11,16 @@
             <caption>Andmed</caption>
       </property>
       <property>
+            <name>no_cache_page</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Lehte ei cacheta</caption>
+      </property>
+      <property>
             <name>inherit_view_props_from</name>
             <table>objects</table>
             <group>showing</group>
