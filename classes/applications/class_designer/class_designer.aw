@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.9 2005/04/01 14:55:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.10 2005/04/04 13:33:09 duke Exp $
 // class_designer.aw - Vormidisainer 
 /*
 
@@ -728,6 +728,8 @@ class class_designer extends class_base
 		
 			$methods .= $this->generate_relationmgr_config($arr["obj_inst"]->id());
 
+			$rv .= $this->generate_reltypes($arr["obj_inst"]->id());
+
 		};
 		$methods .= "\tfunction callback_pre_save(\$arr)\n";
 		$methods .= "\t{\n";
@@ -780,6 +782,39 @@ class class_designer extends class_base
 			
 		$rv .= "\t}\n\n";
 		return $rv;
+
+	}
+
+	function generate_reltypes($id)
+	{
+		$o = new object($id);
+		$clsid = $o->id();
+		$clso = new object($clsid);
+		// iga seostatud objekt annab ühe välja vasakusse selecti
+		$conns = $clso->connections_from(array(
+			"type" => "RELTYPE_RELATION",
+		));
+		$classes = aw_ini_get("classes");
+		$export_rels = array();
+		$export_rel_names = array();
+		$clinf = aw_ini_get("classes");
+		foreach($conns as $conn)
+		{
+			$rv .= "@reltype " . strtoupper($this->_valid_id($conn->prop("to.name"))) . " value=" . $conn->prop("id") . " clid=";
+			$to = $conn->to();
+			$r_class_ids = $to->prop("r_class_id");
+			$cldefs = array();
+			foreach($r_class_ids as $r_class_id)
+			{
+				$cldefs[] = $clinf[$r_class_id]["def"];
+
+			};
+			$rv .= join(",",$cldefs);
+			$rv .= "\n";
+			$rv .= "@caption " . $conn->prop("to.name") . "\n\n";
+		}
+		return $rv;
+
 
 	}
 
