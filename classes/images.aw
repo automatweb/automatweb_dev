@@ -29,7 +29,7 @@ class images extends aw_template
 	{	
 		global $pilt, $pilt_type,$comment;
 		$ar = $this->di->_upload(array("filename" => $pilt, "file_type" => $pilt_type, "oid" => $arr[parent], "descript" => $comment,"link" => $arr["link"], "newwindow" => $arr["newwindow"]));
-		return $this->mk_orb("change", array("id" => $arr[parent]),"document");
+		return $this->mk_my_orb("change", array("id" => $arr[parent]),"document");
 	}
 
 	function change($arr)
@@ -52,7 +52,7 @@ class images extends aw_template
 		global $pilt, $pilt_type,$comment;
 		$ar = $this->di->_replace(array("filename" => $pilt, "file_type" => $pilt_type, "oid" => $arr["parent"], "comment" => $comment,"poid" => $arr["id"],"idx" => $arr["idx"],"link" => $arr["link"], "newwindow" => $arr["newwindow"]));
 	
-		return $this->mk_orb("change", array("id" => $arr[parent]),"document");
+		return $this->mk_my_orb("change", array("id" => $arr[parent]),"document");
 	}
 
 	function delete($arr)
@@ -66,7 +66,7 @@ class images extends aw_template
 		else
 		if ($docid)
 		{
-			header("Location: ".$this->mk_orb("change", array("id" => $docid),"document"));
+			header("Location: ".$this->mk_my_orb("change", array("id" => $docid),"document"));
 		}
 	}
 }

@@ -221,13 +221,20 @@ class file extends aw_template
 		}
 
 		// Probleemikoht. Mis siis, kui ma tahan monda teise kohta minna peale submitti?
-		if ($doc || $user)
+		if ($doc)
 		{
-			$retval = $this->mk_orb("change", array("id" => $doc),"document",$user);
+			$retval = $this->mk_my_orb("change", array("id" => $doc),"document");
 		}
 		else
 		{
-			$retval = "menuedit.".$GLOBALS["ext"]."?type=objects&parent=".$parent;
+			if ($GLOBALS["user"])
+			{
+				$retval = $this->mk_my_orb("gen_home_dir", array("id" => $parent),"users");
+			}
+			else
+			{
+				$retval = "menuedit.".$GLOBALS["ext"]."?type=objects&parent=".$parent;
+			}
 		};
 		return $retval;
 	}
@@ -246,6 +253,10 @@ class file extends aw_template
 	// !Näitab faili. DUH.
 	function show($id)
 	{
+		if (is_array($id))
+		{
+			extract($id);
+		}
 		$this->db_query("SELECT files.* FROM files WHERE id = $id");
 		$o = $this->db_next();
 		if ($o)

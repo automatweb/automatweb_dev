@@ -47,6 +47,14 @@
 				</arguments>
 			</function>
 		</action>
-	</class>
+
+		<action name="preview">
+			<function name="show">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+</class>
 </orb>
 		

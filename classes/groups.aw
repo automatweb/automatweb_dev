@@ -154,7 +154,7 @@ class groups extends users_user
 
 	function rec_menu($parent,$space_images,$parent_name)
 	{
-		global $ext,$group_folders;
+		global $ext,$group_folders,$orb;
 
 		if (!is_array($this->grpcache[$parent]))	// if no items on this level return immediately
 			return;
@@ -175,8 +175,14 @@ class groups extends users_user
 
 			if (is_array($this->grpcache[$v[gid]]))	// has subitems
 			{
-				
-				$image = "<a href='".$this->make_url(array($parent_name => $v[gid], "op" => $op))."'><img src='";
+				if ($orb)
+				{
+					$image = "<img src='";
+				}
+				else
+				{
+					$image = "<a href='".$this->make_url(array($parent_name => $v[gid], "op" => $op))."'><img src='";
+				}
 
 /*				if ($group_folders[$v[gid]] == 1)	// if closed
 					$image.="/images/puu_plus";
@@ -198,7 +204,14 @@ class groups extends users_user
 					$image.="/images/puu_lopp.gif";
 				else
 					$image.="/images/puu_rist.gif";*/
-				$image.="' border=0><a href='".$this->make_url(array($parent_name => $v[gid], "op" => $op))."'>";
+				if ($orb)
+				{
+					$image.="' border=0>";
+				}
+				else
+				{
+					$image.="' border=0><a href='".$this->make_url(array($parent_name => $v[gid], "op" => $op))."'>";
+				}
 			}
 
 			$b = "";
@@ -209,7 +222,11 @@ class groups extends users_user
 				$b = "l";
 			}
 
-			$image.="<img src='images/ftv2folderclosed.gif' border=0></a>";
+			$image.="<img src='images/ftv2folderclosed.gif' border=0>";
+			if (!$orb)
+			{
+				$image.="</a>";
+			}
 
 			switch ($v[type])
 			{
@@ -224,10 +241,15 @@ class groups extends users_user
 					break;
 			}
 
+			$name = $v["name"];
+			if (!$orb)
+			{
+				$name="<a href='".$this->make_url(array($parent_name => $v[gid],"op" => "open"))."'>".$v["name"]."</a>";
+			}
 			$this->vars(array("space_images"	=> $spim, 
 												"image"					=> $image,
 												"gid"						=> $v[gid],
-												"name"					=> "<a href='".$this->make_url(array($parent_name => $v[gid],"op" => "open"))."'>".$v[name]."</a>",
+												"name"					=> $name,
 												"type"					=> $type,
 												"members"				=> $v[gcount],
 												"modifiedby"		=> $v[modifiedby],

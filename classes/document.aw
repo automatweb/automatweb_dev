@@ -1025,19 +1025,8 @@ class document extends aw_template
 		$this->upd_object($oq_parts);
 		// logime aktsioone
 		$this->_log("document","muutis dokumenti <a href='".$GLOBALS["baseurl"]."/automatweb/".$this->mk_orb("change", array("id" => $id))."'>'".$data["title"]."'</a>");
-		if ($user)
-		{
-			$retval = $this->mk_site_orb(array(
-				"class" => "document",
-				"action" => "change",
-				"id" => $id,
-			));
-		}
-		else
-		{
-			$retval = $this->mk_orb("change", array("id" => $id),"",$user);
-		}
-		return $retval;
+
+		return $this->mk_my_orb("change", array("id" => $id));
 	}
 
 	function show_text($header, $text) {
@@ -1514,7 +1503,7 @@ class document extends aw_template
 		$this->db_query($q);
 
 		$this->id = $lid;
-		return $this->mk_orb("change", array("id" => $lid),"",$user);
+		return $this->mk_my_orb("change", array("id" => $lid));
 	}
 
 	function change($arr)
@@ -1556,7 +1545,7 @@ class document extends aw_template
 						$this->db_query("SELECT documents.title,documents.docid FROM documents WHERE documents.docid = ".$lang_brothers[$v[id]]);
 						$row = $this->db_next();
 						$this->vars(array("lang_name" => $v[name], 
-															"chbrourl"	=> $this->mk_orb("change", array("id" => $row[docid]),"",$user),
+															"chbrourl"	=> $this->mk_my_orb("change", array("id" => $row[docid])),
 															"bro_name"	=> $row[title]));
 						$db.=$this->parse("DOC_BROS");
 					}
@@ -1569,7 +1558,7 @@ class document extends aw_template
 		$alilist = array();
 		$jrk = array("1" => "1", "2" => "2", "3" => "3",  "4" => "4", "5"  => "5",
 								 "6" => "6", "7" => "7", "8" => "8",  "9" => "9", "10" => "10");
-		if ($user)
+/*		if ($user)
 		{
 			$addfile = $this->mk_site_orb(array(
 				"action" => "new",
@@ -1584,19 +1573,19 @@ class document extends aw_template
 			));
 		}
 		else
-		{
-			$addfile = $this->mk_orb("new",array("id" => $id, "parent" => $document["parent"]),"file",$user);
+		{*/
+			$addfile = $this->mk_my_orb("new",array("id" => $id, "parent" => $document["parent"]),"file");
 			$previewlink = "";
-		};
+//		};
 
 		$this->vars(array(
-			"addtable"	=> $this->mk_orb("add_doc", array("id" => $id, "parent" => $document["parent"]),"table",$user),
+			"addtable"	=> $this->mk_my_orb("add_doc", array("id" => $id, "parent" => $document["parent"]),"table"),
 			"addfile"		=> $addfile,
-			"add_img"	=> $this->mk_orb("new", array("parent" => $id),"images",$user,$user),
-			"addlink"	=> $this->mk_orb("new", array("docid" => $id, "parent" => $document["parent"]),"links",$user),
-			"addform"		=> $this->mk_orb("new", array("parent" => $document["parent"],"alias_doc" => $id),"form",$user),
-			"addgb"			=> $this->mk_orb("new", array("parent" => $document["parent"], "docid" => $id), "guestbook",$user),
-			"addgraph"	=> $this->mk_orb("new", array("parent" => $document["parent"],"alias_doc" => $id),"graph",$user),
+			"add_img"	=> $this->mk_my_orb("new", array("parent" => $id),"images"),
+			"addlink"	=> $this->mk_my_orb("new", array("docid" => $id, "parent" => $document["parent"]),"links"),
+			"addform"		=> $this->mk_my_orb("new", array("parent" => $document["parent"],"alias_doc" => $id),"form"),
+			"addgb"			=> $this->mk_my_orb("new", array("parent" => $document["parent"], "docid" => $id), "guestbook"),
+			"addgraph"	=> $this->mk_my_orb("new", array("parent" => $document["parent"],"alias_doc" => $id),"graph"),
 			"addgallery"	=> "galerii.".$GLOBALS["ext"]."?type=new&parent=".$document["parent"]."&alias_doc=$id"
 		));
 		// see sordib ja teeb aliaste nimekirja. ja see ei meeldi mulle. but what can ye do, eh?
@@ -1632,15 +1621,15 @@ class document extends aw_template
 											"tm"			=> trim($document["tm"]),
 											"subtitle"			=> trim($document["subtitle"]),
 											"link_text" => trim($document["link_text"]),
-											"reforb"	=> $this->mk_reforb("save", array("id" => $id,"user" => $user)),
+											"reforb"	=> $this->mk_reforb("save", array("id" => $id)),
 											"id" => $id,
 											"docid" => $id,
 											"previewlink" => $previewlink,
 											"weburl" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$document["docid"],
-											"lburl"		=> $this->mk_orb("sellang", array("id" => $id),"",$user),
+											"lburl"		=> $this->mk_my_orb("sellang", array("id" => $id)),
 											"long_title"	=> $document[long_title],
-											"menurl"		=> $this->mk_orb("sel_menus",array("id" => $id),"",$user),
-											"preview"	=> $this->mk_orb("preview", array("id" => $id),"",$user),
+											"menurl"		=> $this->mk_my_orb("sel_menus",array("id" => $id)),
+											"preview"	=> $this->mk_my_orb("preview", array("id" => $id)),
 											"cstatus"	=> checked($document["status"] == 2),
 											"no_left_pane" => checked($document["no_left_pane"]),
 											"no_right_pane" => checked($document["no_right_pane"])
@@ -1667,7 +1656,7 @@ class document extends aw_template
 	{
 		global $user;	// this is 1 if we come from the site side. we will kick ass there.
 
-		$this->vars(array("url" => $this->mk_orb("change",array("id" => $id),"",$user)));
+		$this->vars(array("url" => $this->mk_my_orb("change",array("id" => $id))));
 
 		global $ext,$s_pic_sortby,$s_pic_order,$baseurl,$pic_sortby,$pic_order,
 					 $link_sortby,$link_order,$s_link_sortby,$s_link_order,
@@ -1749,8 +1738,8 @@ class document extends aw_template
 												"comment"			=> $row[comment],
 												"id"					=> $row[oid],
 												"pic_order"		=> $pic_order == "ASC" ? "DESC" : "ASC",
-												"ch_img"			=> $this->mk_orb("change", array("id" => $row[oid]),"images",$user),
-												"del_img"			=> $this->mk_orb("delete", array("id" => $row[oid]),"images",$user),
+												"ch_img"			=> $this->mk_my_orb("change", array("id" => $row[oid]),"images"),
+												"del_img"			=> $this->mk_my_orb("delete", array("id" => $row[oid]),"images"),
 												"pic_name_img"		=> $s_pic_sortby == "name" ? ($s_pic_order == "DESC" ? $upimg : $downimg ): "",
 												"pic_comment_img"	=> $s_pic_sortby == "comment" ? ($s_pic_order == "DESC" ? $upimg : $downimg ): "",
 												"pic_alias_img"		=> $s_pic_sortby == "alias" ? ($s_pic_order == "DESC" ? $upimg : $downimg ): "",
@@ -1758,7 +1747,7 @@ class document extends aw_template
 												"pic_modified_img"		=> $s_pic_sortby == "modified" ? ($s_pic_order == "DESC" ? $upimg : $downimg ): ""
 												));
 			$l.=$this->parse("IMG_LINE");
-			$imglist[] = sprintf("<a href='".$this->mk_orb("change", array("id" => $row[oid]),"images",$user)."'>#p%d#</a>",
+			$imglist[] = sprintf("<a href='".$this->mk_my_orb("change", array("id" => $row[oid]),"images")."'>#p%d#</a>",
 							$row[idx]);
 			$images_count++;
 		};
@@ -1792,15 +1781,15 @@ class document extends aw_template
 												"alias"								=> "#l".$lc."#",
 												"id"									=> $v[id],
 												"comment"							=> $v[descript],
-												"ch_link"							=> $this->mk_orb("change", array("id" => $v[id],"docid" => $id),"links",$user),
-												"del_link"						=> $this->mk_orb("delete", array("id" => $v[id],"parent" => $id),"links",$user),
+												"ch_link"							=> $this->mk_my_orb("change", array("id" => $v[id],"docid" => $id),"links"),
+												"del_link"						=> $this->mk_my_orb("delete", array("id" => $v[id],"parent" => $id),"links"),
 												"link_order"					=> $s_link_order == "ASC" ? "DESC" : "ASC",
 												"link_name_img"				=> $s_link_sortby == "name" ?				($s_link_order == "DESC" ? $upimg : $downimg ): "",
 												"link_comment_img"		=> $s_link_sortby == "comment" ?		($s_link_order == "DESC" ? $upimg : $downimg ): "",
 												"link_modifiedby_img"	=> $s_link_sortby == "modifiedby" ? ($s_link_order == "DESC" ? $upimg : $downimg ): "",
 												"link_modified_img"		=> $s_link_sortby == "modified" ?		($s_link_order == "DESC" ? $upimg : $downimg ): ""));
 			$ll.=$this->parse("LINK_LINE");
-			$linklist[] = "[<a href=\"".$this->mk_orb("change", array("id" => $v[id],"docid" => $id),"links",$user)."\">#l".$lc."#</a> - $v[name]]";
+			$linklist[] = "[<a href=\"".$this->mk_my_orb("change", array("id" => $v[id],"docid" => $id),"links")."\">#l".$lc."#</a> - $v[name]]";
 		}
 		$this->vars(array("LINK_LINE" => $ll,"linklist" => join(",",$linklist)));
 		if ($lc > 0)
@@ -1825,15 +1814,15 @@ class document extends aw_template
 												"modifiedby"					=> $v[modifiedby],
 												"alias"								=> "#t".$tc."#","comment" => $v[comment],
 												"id"									=> $v[id],
-												"ch_table"						=> $this->mk_orb("change", array("id" => $v[id]),"table",$user),
-												"del_table"						=> $this->mk_orb("delete", array("id" => $v[id]),"table",$user),
+												"ch_table"						=> $this->mk_my_orb("change", array("id" => $v[id]),"table"),
+												"del_table"						=> $this->mk_my_orb("delete", array("id" => $v[id]),"table"),
 												"table_order"					=> $s_table_order == "ASC" ? "DESC" : "ASC",
 												"table_name_img"			=> $s_table_sortby == "name" ?				($s_table_order == "DESC" ? $upimg : $downimg ): "",
 												"table_comment_img"		=> $s_table_sortby == "comment" ?		($s_table_order == "DESC" ? $upimg : $downimg ): "",
 												"table_modifiedby_img"=> $s_table_sortby == "modifiedby" ? ($s_table_order == "DESC" ? $upimg : $downimg ): "",
 												"table_modified_img"	=> $s_table_sortby == "modified" ?		($s_table_order == "DESC" ? $upimg : $downimg ): ""));
 			$tl.=$this->parse("TABLE_LINE");
-			$tblist[] = sprintf("<a href='".$this->mk_orb("change", array("id" => $v[id], "parent" => $v[parent]),"table",$user)."'>#t%d#</a> <i>(Nimi: $v[name])</i>",$tc);
+			$tblist[] = sprintf("<a href='".$this->mk_my_orb("change", array("id" => $v[id], "parent" => $v[parent]),"table")."'>#t%d#</a> <i>(Nimi: $v[name])</i>",$tc);
 		}
 		$this->vars(array("TABLE_LINE" => $tl,"tblist" => join(",",$tblist)));
 		if ($tc > 0)
@@ -1858,14 +1847,14 @@ class document extends aw_template
 												"modifiedby"					=> $v[modifiedby],
 												"alias"								=> "#f".$fc."#","comment" => $v[comment],
 												"id"									=> $v[id],
-												"ch_form"							=> $this->mk_orb("change", array("id" => $v[id]),"form",$user),
+												"ch_form"							=> $this->mk_my_orb("change", array("id" => $v[id]),"form"),
 												"form_order"					=> $s_form_order == "ASC" ? "DESC" : "ASC",
 												"form_name_img"				=> $s_form_sortby == "name" ?				($s_form_order == "DESC" ? $upimg : $downimg ): "",
 												"form_comment_img"		=> $s_form_sortby == "comment" ?		($s_form_order == "DESC" ? $upimg : $downimg ): "",
 												"form_modifiedby_img"	=> $s_form_sortby == "modifiedby" ? ($s_form_order == "DESC" ? $upimg : $downimg ): "",
 												"form_modified_img"		=> $s_form_sortby == "modified" ?		($s_form_order == "DESC" ? $upimg : $downimg ): ""));
 			$ffl.=$this->parse("FORM_LINE");
-			$formlist[] = sprintf("<a href='".$this->mk_orb("change", array("id" => $v[id], "parent" => $v[parent]),"form",$user)."'>#f%d#</a> <i>(Nimi: $v[name])</i>",$fc);
+			$formlist[] = sprintf("<a href='".$this->mk_my_orb("change", array("id" => $v[id], "parent" => $v[parent]),"form")."'>#f%d#</a> <i>(Nimi: $v[name])</i>",$fc);
 		}
 		$this->vars(array("FORM_LINE" => $ffl,"formlist" => join(",",$formlist)));
 		if ($fc > 0)
@@ -1890,14 +1879,14 @@ class document extends aw_template
 												"modifiedby"					=> $v[modifiedby],
 												"alias"								=> "#v".$fic."#","comment" => $v[comment],
 												"id"									=> $v[id],
-												"ch_file"							=> $this->mk_orb("change", array("id" => $v[id], "doc" => $id),"file",$user),
+												"ch_file"							=> $this->mk_my_orb("change", array("id" => $v[id], "doc" => $id),"file"),
 												"file_order"					=> $s_file_order == "ASC" ? "DESC" : "ASC",
 												"file_name_img"				=> $s_file_sortby == "name" ?				($s_file_order == "DESC" ? $upimg : $downimg ): "",
 												"file_comment_img"		=> $s_file_sortby == "comment" ?		($s_file_order == "DESC" ? $upimg : $downimg ): "",
 												"file_modifiedby_img"	=> $s_file_sortby == "modifiedby" ? ($s_file_order == "DESC" ? $upimg : $downimg ): "",
 												"file_modified_img"		=> $s_file_sortby == "modified" ?		($s_file_order == "DESC" ? $upimg : $downimg ): ""));
 			$fl.=$this->parse("FILE_LINE");
-			$filelist[] = "<a href='".$this->mk_orb("change", array("id" => $v[id], "doc" => $id),"file",$user)."'>#v".$fic."#</a> <i>(Nimi: $v[name])</i>";
+			$filelist[] = "<a href='".$this->mk_my_orb("change", array("id" => $v[id], "doc" => $id),"file")."'>#v".$fic."#</a> <i>(Nimi: $v[name])</i>";
 		}
 		$this->vars(array("FILE_LINE" => $fl,"filelist" => join(",",$filelist)));
 		if ($fic > 0)
@@ -1922,14 +1911,14 @@ class document extends aw_template
 												"modifiedby"					=> $v[modifiedby],
 												"alias"								=> "#g".$gc."#","comment" => $v[comment],
 												"id"									=> $v[id],
-												"ch_graph"						=> $this->mk_orb("change", array("id" => $v[id]),"graph",$user),
+												"ch_graph"						=> $this->mk_my_orb("change", array("id" => $v[id]),"graph"),
 												"graph_order"					=> $s_graph_order == "ASC" ? "DESC" : "ASC",
 												"graph_name_img"				=> $s_graph_sortby == "name" ?				($s_graph_order == "DESC" ? $upimg : $downimg ): "",
 												"graph_comment_img"		=> $s_graph_sortby == "comment" ?		($s_graph_order == "DESC" ? $upimg : $downimg ): "",
 												"graph_modifiedby_img"	=> $s_graph_sortby == "modifiedby" ? ($s_graph_order == "DESC" ? $upimg : $downimg ): "",
 												"graph_modified_img"		=> $s_graph_sortby == "modified" ?		($s_graph_order == "DESC" ? $upimg : $downimg ): ""));
 			$gl.=$this->parse("GRAPH_LINE");
-			$graphlist[] = sprintf("<a href='".$this->mk_orb("change", array("id" => $v[id], "parent" => $v[parent]),"graph",$user)."'>#g%d#</a> <i>(Nimi: $v[name])</i>",$gc);
+			$graphlist[] = sprintf("<a href='".$this->mk_my_orb("change", array("id" => $v[id], "parent" => $v[parent]),"graph")."'>#g%d#</a> <i>(Nimi: $v[name])</i>",$gc);
 		}
 		$this->vars(array("GRAPH_LINE" => $gl,"graphlist" => join(",",$graphlist)));
 		if ($gc > 0)
@@ -1987,7 +1976,7 @@ class document extends aw_template
 												"alias"								=> "#b".$gbc."#","comment" => $v[comment],
 												"id"									=> $v[id]));
 			$gbl.=$this->parse("GB_LINE");
-			$gblist[] = sprintf("<a href='".$this->mk_orb("change", array("id" => $v[id], "docid" => $id),"guestbook",$user)."'>#b%d#</a> <i>(Nimi: $v[name])</i>",$gbc);
+			$gblist[] = sprintf("<a href='".$this->mk_my_orb("change", array("id" => $v[id], "docid" => $id),"guestbook")."'>#b%d#</a> <i>(Nimi: $v[name])</i>",$gbc);
 		}
 		$this->vars(array("GB_LINE" => $gal,"gblist" => join(",",$gblist)));
 		if ($gbc > 0)
@@ -2000,7 +1989,7 @@ class document extends aw_template
 		}
 		$this->vars(array("HAS_GUESTBOOKS" => $hg, "NO_GUESTBOOKS"));
 
-		$this->vars(array("add_image"	=> $this->mk_orb("new", array("parent" => $id), "images",$user)));
+		$this->vars(array("add_image"	=> $this->mk_my_orb("new", array("parent" => $id), "images")));
 	}
 
 		function mk_folders($parent,$str)

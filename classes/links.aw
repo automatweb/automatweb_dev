@@ -23,6 +23,7 @@ class links extends extlinks
 		$t = new menuedit;
 		$this->mk_path($parent, "Lisa link");
 		$this->read_template("nadd.tpl");
+		classload("objects");
 		$ob = new db_objects;
 		$this->vars(array("reforb" => $this->mk_reforb("submit", array("id" => 0, "docid" => $docid)),
 											"parent" => $this->picker($parent,$ob->get_list()),
@@ -77,7 +78,7 @@ class links extends extlinks
 		}
 		if ($docid)
 		{
-			return $this->mk_orb("change", array("id" => $docid), "document");
+			return $this->mk_my_orb("change", array("id" => $docid), "document");
 		}
 		else
 		{
