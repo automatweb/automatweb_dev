@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.41 2002/08/24 09:10:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.42 2002/08/24 19:07:53 duke Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -66,6 +66,7 @@ class form_base extends form_db_base
 		$this->lang_id = $row["lang_id"];
 		$this->meta = aw_unserialize($row["metadata"]);
 		$this->entry_id = 0;
+		$this->flags = $row["flags"];
 
 		$this->arr = aw_unserialize($row["content"]);
 
@@ -221,6 +222,7 @@ class form_base extends form_db_base
 			"name" => $this->name,
 			"comment" => $this->comment,
 			"metadata" => $this->meta,
+			"flags" => $this->flags,
 		));
 
 		$contents = aw_serialize($this->arr,SERIALIZE_PHP);
@@ -249,6 +251,11 @@ class form_base extends form_db_base
 		{
 			$this->mk_path($this->parent,$chlink . $desc);
 		}
+	}
+
+	function finit($id, $tpl = "", $desc = "")
+	{
+		return $this->init($id,$tpl,$desc);
 	}
 
 	////
@@ -327,7 +334,7 @@ class form_base extends form_db_base
 			$this->parse("HAS_ALIASMGR");
 		};
 		
-		if ($this->arr["uses_calendar"])
+		if ($this->uses_calendar)
 		{
 			$this->parse("USES_CALENDAR");
 		};
