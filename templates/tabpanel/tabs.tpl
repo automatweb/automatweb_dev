@@ -113,20 +113,24 @@ background-color: #478EB6;
 </td>
 </tr>
 <!-- END SUB: tabs_L1 -->
+
 <!-- SUB: tabs_L2 -->
 <tr>
-<td valign="top" height="20" width="5" class="awtabsel">&nbsp;</td>
-	<!-- SUB: tab_L2 -->
-		|<a href="{VAR:link}">{VAR:caption}</a>|
-	<!-- END SUB: tab_L2 -->
-	<!-- SUB: disabled_tab_L2 -->
-		{VAR:caption}
-	<!-- END SUB: disabled_tab_L2 -->
-	<!-- SUB: sel_tab_L2 -->
-		<strong>
-		[ <a href="{VAR:link}">{VAR:caption}</a> ]
-		</strong>
-	<!-- END SUB: sel_tab_L2 -->
+<td>
+<div style="width:5px;height:20px" />
+</td>
+<td class="chformsubtitle" width="100%">
+		<!-- SUB: tab_L2 -->
+			<a href="{VAR:link}">{VAR:caption}</a> |
+		<!-- END SUB: tab_L2 -->
+
+		<!-- SUB: disabled_tab_L2 -->
+			disabled: {VAR:caption} |
+		<!-- END SUB: disabled_tab_L2 -->
+
+		<!-- SUB: sel_tab_L2 -->
+			{VAR:caption} |
+		<!-- END SUB: sel_tab_L2 -->
 </td>
 </tr>
 <!-- END SUB: tabs_L2 -->
