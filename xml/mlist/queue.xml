@@ -10,7 +10,6 @@
 <field name="patch_size" caption="Korraga" talign="center" sortable="1" type="int" numeric="yea"/>
 <field name="delay" caption="Oota" talign="center" sortable="1" type="int" numeric="yea"/>
 <field name="protsent" caption="Valmis" talign="center" sortable="1"/>
-<field name="vali" caption="Vali" talign="center"/>
 </data>
 
 </tabledef>
