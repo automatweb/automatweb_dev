@@ -474,7 +474,7 @@ class export extends aw_template
 //		echo "url = $url, print = ",($is_print ? "jah" : "ei")," name = $name <br>";
 		if (substr($name, -4) == "html")
 		{
-				$fc .= "\n<!--  viimati genereeritud ".date("H:i d.m.Y")." kasutaja ".aw_global_get("uid")." poolt -->
+				$fc .= "\n<!--  viimati genereeritud ".date("H:i d.m.Y")." kasutaja ".aw_global_get("uid")." poolt -->";
 		}
 		$this->save_file($fc,$name, $is_print, $current_section, $t_lang_id, $url);
 
