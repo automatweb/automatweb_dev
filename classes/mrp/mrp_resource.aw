@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.18 2005/03/15 11:01:02 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.19 2005/03/15 11:30:02 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -758,6 +758,74 @@ class mrp_resource extends class_base
 		}
 
 		return $result;
+	}
+
+/**
+    @attrib name=start_job
+	@param resource required type=int
+**/
+	function start_job ($arr)
+	{
+		if (is_oid)
+		{
+			$resource = obj ($arr["resource"]);
+		}
+		else
+		{
+			return false;
+		}
+
+		switch ($resource->prop ("state"))
+		{
+			case MRP_STATUS_RESOURCE_AVAILABLE:
+				$resource->set_prop ("state", MRP_STATUS_RESOURCE_INUSE);
+				return MRP_STATUS_RESOURCE_AVAILABLE;
+
+			case MRP_STATUS_RESOURCE_INUSE:
+				return MRP_STATUS_RESOURCE_INUSE;
+				break;
+
+			case MRP_STATUS_RESOURCE_OUTOFSERVICE:
+				return MRP_STATUS_RESOURCE_OUTOFSERVICE;
+				break;
+
+			default:
+				return false;
+		}
+	}
+
+/**
+    @attrib name=stop_job
+	@param resource required type=int
+**/
+	function stop_job ($arr)
+	{
+		if (is_oid)
+		{
+			$resource = obj ($arr["resource"]);
+		}
+		else
+		{
+			return false;
+		}
+
+		switch ($resource->prop ("state"))
+		{
+			case MRP_STATUS_RESOURCE_AVAILABLE:
+				return MRP_STATUS_RESOURCE_AVAILABLE;
+
+			case MRP_STATUS_RESOURCE_INUSE:
+				$resource->set_prop ("state", MRP_STATUS_RESOURCE_AVAILABLE);
+				return MRP_STATUS_RESOURCE_INUSE;
+				break;
+
+			case MRP_STATUS_RESOURCE_OUTOFSERVICE:
+				return MRP_STATUS_RESOURCE_OUTOFSERVICE;
+				break;
+
+			default:
+				return false;
+		}
 	}
 }
 
