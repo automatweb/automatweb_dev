@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.23 2003/11/27 16:10:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.24 2004/02/16 10:44:32 duke Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -13,7 +13,7 @@
 	@caption E-post
 
 	@classinfo syslog_type=ST_MAILINGLIST_MEMBER
-	@classinfo no_status=1
+	@classinfo no_status=1 no_comment=1
 
 	@tableinfo ml_users index=id master_table=objects master_index=oid
 */
@@ -34,10 +34,6 @@ class ml_member extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-			case "comment":
-				$retval = PROP_IGNORE;
-				break;
-
 		}
 		return $retval;
 	}
@@ -59,6 +55,7 @@ class ml_member extends class_base
 	{
 		$this->quote($args);
 		extract($args);
+		// XXX: can I do this with object_list/search?
 		$q = "SELECT oid FROM objects LEFT JOIN ml_users ON (objects.oid = ml_users.id) WHERE mail = '$email' AND parent = '$folder' AND status != 0";
 		$this->db_query($q);
 		return $this->db_next();
@@ -173,9 +170,6 @@ class ml_member extends class_base
 		if ($check)
 		{
 			$member_obj = new object($check["oid"]); 
-			//$this->delete_object($check["oid"],$this->clid);
-			//$q = "DELETE FROM ml_users WHERE id = '$check[oid]'";
-			//$this->db_query($q);
 			$member_obj->delete();
 		};
 
@@ -212,7 +206,7 @@ class ml_member extends class_base
 	function callback_pre_save($arr)
 	{
 		$request = $arr["request"];
-		if (!empty($request["name"]) && !empty($request["mail"]))
+		if (empty($request["name"]) && !empty($request["mail"]))
 		{
 			$arr["obj_inst"]->set_name($request["name"] . " &lt;" .$request["mail"] . "&gt;");
 		};
