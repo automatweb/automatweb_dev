@@ -25,14 +25,6 @@
 			</function>
 		</action>
 		
-		<action name="list_el_forms">
-			<function name="list_el_forms">
-				<arguments>
-					<required name="id"/>
-				</arguments>
-			</function>
-		</action>
-		
 		<action name="add_col">
 			<function name="add_col">
 				<arguments>
@@ -189,6 +181,14 @@
 		<action name="save_settings">
 			<function name="save_settings">
 				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="form_aliasmgr">
+			<function name="form_aliasmgr">
+				<arguments>
+					<required name="id"/>
 				</arguments>
 			</function>
 		</action>

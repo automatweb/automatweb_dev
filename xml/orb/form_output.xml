@@ -77,6 +77,14 @@
 				</arguments>
 			</function>
 		</action>
+		
+		<action name="aliasmgr">
+			<function name="aliasmgr">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
 
 		<action name="submit">
 			<function name="submit">
