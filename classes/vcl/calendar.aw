@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.28 2004/10/22 12:06:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.29 2004/10/29 16:00:24 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -672,7 +672,7 @@ class vcalendar extends aw_template
 				"EVENT" => $events_for_day,
 				"daynum" => date("j",$reals),
 				"dayname" => date("F d, Y",$reals),
-				"lc_weekday" => ucfirst(get_lc_weekday($wn,$reals)),
+				"lc_weekday" => get_lc_weekday($wn,$reals),
 				"lc_month" => $mn,
 				"daylink" => aw_url_change_var(array("viewtype" => "day","date" => date("d-m-Y",$reals))),
                         	"date_and_time" => $dt . ". " . $mn2,
@@ -1004,7 +1004,7 @@ class vcalendar extends aw_template
 		$this->evt_tpl->vars($evt);
 
 		$dt = date("d",$evt["start1"]);
-                $mn = ucfirst(get_lc_month(date("m",$evt["start1"])));
+                $mn = locale::get_lc_month(date("m",$evt["start1"]));
                 $mn .= " " . date("H:i",$evt["start1"]);
 
 		
@@ -1021,7 +1021,7 @@ class vcalendar extends aw_template
 			"iconurl" => !empty($evt["icon"]) ? $evt["icon"] : "/automatweb/images/trans.gif",
 			"COMMENT" => "",
 			"comment" => $evt["comment"],
-			"day_name" => strtoupper(substr(get_lc_weekday(date("w",$evt["start1"])),0,1)),
+			"day_name" => substr(get_lc_weekday(date("w",$evt["start1"])),0,1),
                         "date_and_time" => $dt . ". " . $mn,
 
 		));
