@@ -92,11 +92,20 @@
             <no_caption>1</no_caption>
             <caption>Kommentaarid</caption>
       </property>
+      <property>
+            <name>rmd</name>
+            <table>objects</table>
+            <group>reminders</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>reminder</type>
+            <store>no</store>
+            <caption>Meeldetuletus</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_TASK</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
-            <no_comment>1</no_comment>
       </classinfo>
       <groupinfo>
             <recurrence>
@@ -112,6 +121,9 @@
             <comments>
                   <caption>Kommentaarid</caption>
             </comments>
+            <reminders>
+                  <caption>Meeldetuletused</caption>
+            </reminders>
       </groupinfo>
       <tableinfo>
             <planner>
