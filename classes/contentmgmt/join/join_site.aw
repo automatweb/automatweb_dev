@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.9 2004/06/28 09:45:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.10 2004/08/03 10:52:59 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -733,6 +733,7 @@ class join_site extends class_base
 			$add = 0;
 		}
 
+		aw_global_set("no_cache", 1);
 		$o = obj($arr["id"]);
 		$tx = "Join!";
 		if ($o->prop("join_but_text"))
