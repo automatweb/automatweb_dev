@@ -678,7 +678,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		if (!$this->stat)
 		{
-			$where .= ($where != "" ? " AND " : "")." objects.status != 0 ";
+			$where .= ($where != "" ? " AND " : "")." objects.status > 0 ";
 		}
 
 		if (!isset($params["site_id"]))
