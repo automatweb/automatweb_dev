@@ -196,6 +196,14 @@ class export extends aw_template
 			$this->fetch_and_save_page($this->cfg["baseurl"]."/?set_lang_id=".aw_global_get("lang_id"),aw_global_get("lang_id"));
 		}
 
+		// now fetch the empty template page. 
+		$this->fetch_and_save_page(
+			$this->cfg["baseurl"]."/?section=66666666&set_lang_id=".aw_global_get("lang_id"),
+			aw_global_get("lang_id"),
+			true,
+			"page_template.html"
+		);
+
 		// copy needed files
 		if (is_array($this->cfg["copy_files"]))
 		{
@@ -278,9 +286,9 @@ class export extends aw_template
 		die();
 	}
 
-	function fetch_and_save_page($url, $lang_id, $single_page_only = false)
+	function fetch_and_save_page($url, $lang_id, $single_page_only = false, $file_name = false)
 	{
-//		$url = $this->rewrite_link($url);
+		$url = $this->rewrite_link($url);
 		$_url = $url;
 //		echo "fetch_and_save_page($url, $lang_id) <br>";
 		if ($url == "")
@@ -313,6 +321,7 @@ class export extends aw_template
 
 		// set the hash table
 		$this->hashes[$url] = $this->get_hash_for_url($url,$t_lang_id);
+		$current_section = $this->current_section;
 
 		// read content
 //		echo "$url <br>\n";
@@ -324,22 +333,39 @@ class export extends aw_template
 			sleep($this->cfg["sleep_between_pages"]);
 		}
 
-		$f_name = $this->hashes[$url].".".$this->get_ext_for_link($url,$http_response_header);
-		$name = $this->folder."/".$f_name;
+		if ($file_name === false)
+		{
+			$f_name = $this->hashes[$url].".".$this->get_ext_for_link($url,$http_response_header);
+			$name = $this->folder."/".$f_name;
+		}
+		else
+		{
+			$name = $this->folder."/".$file_name;
+		}
 		echo "saving $url as $name (req level: $this->fsp_level)<br>\n";
 		flush();
 
 		// now. convert all the links in the page
-		$this->convert_links($fc,$t_lang_id, $single_page_only);
+		$this->convert_links($fc,$t_lang_id, $single_page_only, $url);
 
-		$this->save_file($fc,$name);
+		$is_print = false;
+		if (strpos($url, "print=1") !== false)
+		{
+			$is_print = true;
+		}
+		if (strpos($url, "class=document") !== false && strpos($url, "action=print") !== false)
+		{
+			$is_print = true;
+		}
+//		echo "url = $url, print = ",($is_print ? "jah" : "ei")," name = $name <br>";
+		$this->save_file($fc,$name, $is_print, $current_section);
 
 //		echo "fetch_and_save_page($_url, $lang_id) returning $f_name <br>";
 		$this->fsp_level--;
 		return $f_name;
 	}
 
-	function convert_links(&$fc,$lang_id, $single_page_only)
+	function convert_links(&$fc,$lang_id, $single_page_only, $url = false)
 	{
 //		echo "convert_links(fc,$lang_id) <br>";
 		// uukay. so the links we gotta convert are identified by having $baseurl in them. so look for that
@@ -374,8 +400,8 @@ class export extends aw_template
 		{
 			// now find all of the link - we do that by looking for ' " > or space
 			$begin = $pos;
-			$end = $pos;
-			$link = "";
+			$end = $pos+strlen($baseurl);
+			$link = $baseurl;
 			while (!in_array($fc[$end],$ends) && $end < $len)
 			{
 				$end++;
@@ -383,7 +409,6 @@ class export extends aw_template
 
 			// correct the link
 			$link = $this->rewrite_link(substr($fc,$begin,($end-$begin)));
-//			echo "REWR LINK = $link for ",substr($fc,$begin,($end-$begin))," <br>";
 
 			if ($this->is_external($link) || $this->is_dynamic($link))
 			{
@@ -413,6 +438,10 @@ class export extends aw_template
 						$this->menu_cache->make_caches(array("lang_id" => $t_lang_id));
 						$fname = $this->get_hash_for_url($link,$t_lang_id).".".$this->get_ext_for_link($link,$http_response_header);
 					}
+					$tid = $this->gen_uniq_id();
+					$temps[$tid] = $fname;
+	//				echo "fname = $fname , tid = $tid <br>";
+					$fname = $tid;
 				}
 				else
 				{
@@ -422,23 +451,27 @@ class export extends aw_template
 			// we still gotta replace the link, even if it is an extlink outta here, 
 			// cause otherwise we would end up in an infinite loop
 
+//			echo "replace $link with $fname begin = $begin end = $end , url = $url <br>";
 			// replace the link in the html
 			$fc = substr($fc,0,$begin).$fname.substr($fc,$end);
 		}
 
 		// right, now. this kinda sucks, but that's how it is
 		// el no translado forms
-		$fc = preg_replace("/<form(.*)action=([\"'])__form_action_url__\/(.*)([\"'])(.*)>/isU","<form\\1action=\\2".$this->cfg["form_server"]."/\\3\\4\\5>",$fc);
+		$fc = preg_replace("/<form(.*)action=([\"'])__form_action_url__\/(.*)([\"'])(.*)>/isU","<form\\1action=\\2".$this->cfg["form_server"]."\\4\\5>",$fc);
 
 		// and now replace temp links back
 		foreach($temps as $r => $l)
 		{
 			$fc = str_replace($r,$l, $fc);
 		}
+
+		// convert poll links
+		$fc = str_replace("$baseurl/poll.aw?", "/dyn.aw?type=poll&", $fc);
 //		echo "convert_links(fc,$lang_id) returning <br>";
 	}
 
-	function save_file($fc,$name)
+	function save_file($fc,$name, $no_db = false, $cur_sec = "")
 	{
 //		echo "save_file(fc,$name) <br>";
 //		echo "saving file as $name <br>\n";
@@ -446,6 +479,22 @@ class export extends aw_template
 		fwrite($fp,$fc);
 		fclose($fp);
 		chmod($name, 0644);
+
+		// now also save file to database, but only if it's a html file
+		if (substr($name, -5) == ".html" && !$no_db)
+		{
+			$this->quote($fc);
+			preg_match("/<!-- MODIFIED:(\d*) -->/U", $fc, $mt);
+			$fn = basename($name);
+			if (($id = $this->db_fetch_field("SELECT id FROM export_content WHERE filename = '$fn'","id")))
+			{
+				$this->db_query("UPDATE export_content SET content = '$fc',modified = '$mt[1]', section = '$cur_sec' WHERE id = '$id'");
+			}
+			else
+			{
+				$this->db_query("INSERT INTO export_content(filename, content, modified, section) VALUES('$fn', '$fc','$mt[1]','$cur_sec')");
+			}
+		}
 //		echo "save_file(fc,$name) returning <br>";
 	}
 
@@ -492,6 +541,10 @@ class export extends aw_template
 	// things work correctly
 	function rewrite_link($link)
 	{
+		if (isset($this->rewrite_link_cache[$link]))
+		{
+			return $this->rewrite_link_cache[$link];
+		}
 //		echo "rewrite_link($link) <br>";
 		$baseurl = $this->cfg["baseurl"];
 		$ext = $this->cfg["ext"];
@@ -544,6 +597,12 @@ class export extends aw_template
 			$js = "";
 			foreach($HG as $k => $v)
 			{
+				if ($k == "section" && !is_number($v))
+				{
+					// we must turn the section into a number always. 
+					$mned = get_instance("menuedit");
+					$v = $mned->check_section($v,false);
+				}
 				if (is_array($v))
 				{
 					$vs = $this->make_array_url_string($k,$v);
@@ -566,12 +625,54 @@ class export extends aw_template
 			$link = $baseurl."/index.aw".$js;
 //			echo "returned1 $link for $_link <Br>";
 //			echo "rewrite_link($_link) returning $link <br>";
+			$this->rewrite_link_cache[$_link] = $link;
+			return $link;
+		}
+		else
+		{
+			// first check if the file exists. if it does, then no rewrite the link.
+			if ($this->link_is_file($link))
+			{
+				$this->rewrite_link_cache[$_link] = $link;
+				return $link;
+			}
+	
+			$link = str_replace($this->cfg["baseurl"]."/index.".$this->cfg["ext"], "", $link);
+			$link = str_replace($this->cfg["baseurl"]."/reforb.".$this->cfg["ext"], "", $link);
+			$link = str_replace($this->cfg["baseurl"]."/login.".$this->cfg["ext"], "", $link);
+			$link = $this->do_aw_parse_url($link);
+			// now that we got a nice link, check if it is a class=links&action=show, cause those do redirects and
+			// php's fopen can't handle that
+			if (strpos($link, "class=links") !== false && strpos($link, "action=show") !== false)
+			{
+				preg_match("/id=(\d*)/", $link,$mt);
+
+				$el = get_instance("extlinks");
+				$ld = $el->get_link($mt[1]);
+				$link = $ld["url"];
+				if (substr($link,0,4) == "http" && strpos($link,$baseurl) === false)
+				{
+					// external link, should not be touched I guess
+//					echo "rewrite_link($_link) returning $link <br>";
+					$this->rewrite_link_cache[$_link] = $link;
+					return $link;
+				}
+
+				if (strpos($link,$baseurl) === false && $link[0] == "/")
+				{
+					$link = $baseurl.$link;
+				}
+				$link = $this->rewrite_link($link);
+//				echo "rewrote extlink $_link to $link  <br>";
+			}
+			$this->rewrite_link_cache[$_link] = $link;
+//			echo "rewrite_link($_link) returning $link <br>";
 			return $link;
 		}
 		
 //		echo "true <br>";
 		// ok here separate the baseurl bit and the other bits
-		$link = str_replace($baseurl, "", $link);
+/*		$link = str_replace($baseurl, "", $link);
 	
 		// now separate it by /'s and find the first one that matches a file
 		$pathbits = array();
@@ -641,7 +742,7 @@ class export extends aw_template
 		}
 
 //		echo "rewrite_link($_link) returning $link <br>";
-		return $link;
+		return $link;*/
 	}
 
 	function load_rule($id)
@@ -816,6 +917,7 @@ class export extends aw_template
 					$mned = get_instance("menuedit");
 					$secid = $mned->check_section($secid,false);
 				}
+				$this->current_section = $secid;
 
 				$mn = "";
 				$cnt = 0;
@@ -868,6 +970,7 @@ class export extends aw_template
 				{
 					$cnt = 1;
 					$_res = str_replace(" ", "_", str_replace("/","_",$mn));
+					$_res = str_replace("&nbsp;", "_", $_res);
 					$res = $_res;
 					while (isset($this->fta_used[$res]))
 					{
@@ -952,6 +1055,10 @@ class export extends aw_template
 
 	function is_out_of_rule($url)
 	{
+		if ($this->link_is_file($url) || strpos($url, "orb.".$this->cfg["ext"]) !== false)
+		{
+			return false;
+		}
 		preg_match("/section=([^&=\?]*)/",$url,$mt);
 		$secid = $mt[1];
 		if ($secid != "")
@@ -992,7 +1099,8 @@ class export extends aw_template
 		}
 		else
 		{
-			return false;
+//			echo "is out of rule3 $url <Br>";
+			return true;
 		}
 	}
 
@@ -1036,11 +1144,11 @@ class export extends aw_template
 		));
 		$socket->write($req);
 		$ipd = "";
-		while($data = $socket->read())
+		while($data = $socket->read(10000000))
 		{
 			$ipd .= $data;
 		};
-		list($headers,$data) = explode("\r\n\r\n",$ipd);
+		list($headers,$data) = explode("\r\n\r\n",$ipd,2);
 		return $data;
 	}
 
@@ -1103,5 +1211,187 @@ class export extends aw_template
 		}
 		return join("&", $ret);
 	}
+
+	function do_aw_parse_url($link)
+	{
+		$_link = $link;
+//		echo "enter do_aw_parse_url($link) <br>\n\n";
+//		flush();
+		$pi = str_replace($this->cfg["baseurl"], "", $link);
+
+		$HG = array();
+		if ($pi) 
+		{
+			// if $pi contains & or = 
+			if (preg_match("/[&|=]/",$pi)) 
+			{
+				// expand and import PATH_INFO
+				// replace ? and / with & in $pi and output the result to HTTP_GET_VARS
+				// why so?
+				parse_str(str_replace("?","&",str_replace("/","&",$pi)),$HG);
+		//		echo "gv = <pre>", var_dump($HTTP_GET_VARS),"</pre> <br>";
+			} 
+
+			if (($_pos = strpos($pi, "section=")) === false)
+			{
+				// ok, we need to check if section is followed by = then it is not really the section but 
+				// for instance index.aw/set_lang_id=1
+				// we check for that like this:
+				// if there are no / or ? chars before = then we don't prepend
+
+				$qpos = strpos($pi, "?");
+				$slpos = strpos($pi, "/");
+				$eqpos = strpos($pi, "=");
+				$qpos = $qpos ? $qpos : 20000000;
+				$slpos = $slpos ? $slpos : 20000000;
+
+				if (!$eqpos || ($eqpos > $qpos || $slpos > $qpos))
+				{
+					// if no section is in url, we assume that it is the first part of the url and so prepend section = to it
+					$pi = str_replace("?", "&", "section=".substr($pi, 1));
+				}
+			}
+
+			if (($_pos = strpos($pi, "section=")) !== false)
+			{
+				// this here adds support for links like http://bla/index.aw/section=291/lcb=117
+				$t_pi = substr($pi, $_pos+strlen("section="));
+				if (($_eqp = strpos($t_pi, "="))!== false)
+				{
+					$t_pi = substr($t_pi, 0, $_eqp);
+					$_tpos1 = strpos($t_pi, "?");
+					$_tpos2 = strpos($t_pi, "&");
+					if ($_tpos1 !== false || $_tpos2 !== false)
+					{
+						// if the thing contains ? or & , then section is the part before it
+						if ($_tpos1 === false)
+						{
+							$_tpos = $_tpos2;
+						}
+						else
+						if ($_tpos2 === false)
+						{
+							$_tpos = $_tpos1;
+						}
+						else
+						{
+							$_tpos = min($_tpos1, $_tpos2);
+						}
+						$section = substr($t_pi, 0, $_tpos);
+					}
+					else
+					{
+						// if not, then te section is the part upto the last /
+						$_lslp = strrpos($t_pi, "/");
+						if ($_lslp !== false)
+						{
+							$section = substr($t_pi, 0, $_lslp);
+						}
+						else
+						{
+							$section = $t_pi;
+						}
+					}
+				}
+				else
+				{
+					$section = $t_pi;
+				}
+			}
+		};
+		if ($section != "")
+		{
+			$HG["section"] = $section;
+		}
+		$js = "";
+		foreach($HG as $k => $v)
+		{
+			if ($k == "section" && !is_number($v))
+			{
+				// we must turn the section into a number always. 
+				$mned = get_instance("menuedit");
+				$v = $mned->check_section($v,false);
+			}
+			if ($k == "section" && trim($v) === "")
+			{
+				continue;
+			}
+			if (is_array($v))
+			{
+				$vs = $this->make_array_url_string($k,$v);
+			}
+			else
+			{
+				$vs = $k."=".$v;
+			}
+			if ($js != "")
+			{
+				$js.="&";
+			}
+			$js.=$vs;
+		}
+//			$js = join("&", map2("%s=%s", $HG));
+		if ($js != "")
+		{
+			$js = "?".$js;
+		}
+
+		if (strpos($_link, "orb.".$this->cfg["ext"]) !== false)
+		{
+			$link = $this->cfg["baseurl"]."/orb.".$this->cfg["ext"].$js;
+		}
+		else
+		if (strpos($_link, "poll.".$this->cfg["ext"]) !== false)
+		{
+			$link = $this->cfg["baseurl"]."/poll.".$this->cfg["ext"].$js;
+		}
+		else
+		{
+			$link = $this->cfg["baseurl"]."/index.".$this->cfg["ext"].$js;
+		}
+//		echo "exit do_aw_parse_url($link) = $link <br>\n\n";
+//		flush();
+		return $link;
+	}
+
+	function link_is_file($link)
+	{
+		$link = str_replace($this->cfg["baseurl"], "", $link);
+		$basedir = $this->cfg["site_basedir"]."/public";
+		// now separate it by /'s and find the first one that matches a file
+		$pathbits = array();
+		
+		$pt = strtok($link, "?&/");
+		while ($pt !== false)
+		{
+			if ($pt != "")
+			{
+				if (!$found)
+				{
+					if (strpos($pt, "/") !== false)
+					{
+						$cname .= $pt;
+					}
+					else
+					{
+						$cname .= "/".$pt;
+					}
+					$trypath = $basedir.$cname;
+					if (@is_file($trypath))
+					{
+						if (strpos($trypath, "orb.".$this->cfg["ext"]) === false &&
+								strpos($trypath, "index.".$this->cfg["ext"]) === false && 
+								strpos($trypath, "poll.".$this->cfg["ext"]) === false)
+						{
+							$found = true;
+						}
+					}
+				}
+			}
+			$pt = strtok("?&/");
+		}
+		return $found; 
+	}
+
 }
 ?>
