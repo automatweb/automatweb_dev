@@ -438,7 +438,7 @@ function aw_startup()
 	// reset aw_cache_* function globals
 	$GLOBALS["__aw_cache"] = array();
 
-	classload("defs", "core/error");
+	classload("defs", "core/error", "core/obj/object");
 	_aw_global_init();
 
 	$l = get_instance("languages");
