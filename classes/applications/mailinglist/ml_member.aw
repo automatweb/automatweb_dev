@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.4 2005/02/07 14:21:27 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.5 2005/03/10 09:00:12 kristo Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -353,5 +353,14 @@ class ml_member extends class_base
 		$request = $arr["request"];
 		$arr["obj_inst"]->set_name($request["name"] . " &lt;" .$request["mail"] . "&gt;");
 	}		
+
+	function parse_alias($arr)
+	{
+		$o = obj($arr["alias"]["target"]);
+		return html::href(array(
+			"url" => "mailto:".$o->prop("mail"),
+			"caption" => $o->prop("mail")
+		));
+	}
 };
 ?>
