@@ -30,8 +30,12 @@
 				<caption>Nimekiri</caption>
 				<link>?class=messenger&amp;action=contacts</link>
 			</list>
+			<newgroup>
+				<caption>Uus grupp</caption>
+				<link>?class=messenger&amp;action=add_contact_group</link>
+			</newgroup>
 			<newcontact>
-				<caption>Lisa uus</caption>
+				<caption>Uus kontakt</caption>
 				<link>?class=messenger&amp;action=add_contact</link>
 			</newcontact>
 		</sublinks>
