@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.96 2002/06/12 10:32:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.97 2002/06/17 10:34:47 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 classload("msgboard","aw_style","form_base","file");
@@ -199,6 +199,12 @@ class document extends aw_template
 	// !Fetces a document from the database
 	function fetch($docid) 
 	{
+		if (not($this->can("view",$docid)))
+		{
+			$this->data = false;
+			return false;
+		}
+
 		if ($this->period > 0) 
 		{
 			$sufix = " && objects.period = " . $this->period;
@@ -210,7 +216,7 @@ class document extends aw_template
 
 		if ($docid)
 		{
-			$q = "SELECT objects.*,documents.* FROM objects LEFT JOIN documents ON objects.brother_of = documents.docid WHERE objects.oid = $docid $sufix";
+			$q = "SELECT objects.*,documents.* FROM objects LEFT JOIN documents ON objects.brother_of = documents.docid WHERE objects.oid = $docid AND status != 0 $sufix";
 			$this->db_query($q);
 		}
 		$data = $this->db_next();
