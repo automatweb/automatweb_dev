@@ -5,8 +5,37 @@
 			<function name="gen_list">
 				<arguments>
 					<optional name="parent"/>
+					<optional name="op"/>
 				</arguments>
 			</function>
+		</action>
+
+		<action name="add_cat">
+			<function name="add_cat">
+				<arguments>
+					<required name="parent" type="int"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="change_cat">
+			<function name="change_cat">
+				<arguments>
+					<required name="id" type="int"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="delete_cat">
+			<function name="delete_cat">
+				<arguments>
+					<required name="id" type="int"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_cat">
+			<function name="submit_cat"/>
 		</action>
 		
 		<action name="list_stamps">
