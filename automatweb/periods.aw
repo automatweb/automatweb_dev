@@ -9,7 +9,6 @@ if (!$tt->prog_acl("view", PRG_PERIODS))
 {
 	$tt->prog_acl_error("view", PRG_PERIODS);
 }
-
 $use_per = ($oid) ? $oid : $per_oid;
 $periods = new db_periods($use_per);
 $content = "";
@@ -18,7 +17,7 @@ switch($type) {
 	case "add":
 		$periods->tpl_init("automatweb/periods");
 		$periods->read_template("add.tpl");
-		$periods->vars(array("oid" => $oid));
+		$periods->vars(array("oid" => $use_per));
 		$site_title .= " &gt; Uus";
 		$content = $periods->parse();
 		break;
