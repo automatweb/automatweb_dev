@@ -124,6 +124,12 @@ class _int_object
 			$cprms = array("to" => $oid);
 			if ($param["reltype"])
 			{
+				if (!is_numeric($param["reltype"]) && substr($param["reltype"], 0, 7) == "RELTYPE")
+				{
+					// it is "RELTYPE_FOO"
+					// resolve it to numeric
+					$param["reltype"] = $GLOBALS["relinfo"][$this->obj["class_id"]][$param["reltype"]]["value"];
+				}
 				$cprms["type"] = $param["reltype"];
 			}
 			
@@ -637,7 +643,10 @@ class _int_object
 			return new object();
 		}
 
-		return new object($oid);
+		aw_disable_acl();
+		$ret = new object($oid);
+		aw_restore_acl();
+		return $ret;
 	}
 
 	function created()
@@ -664,7 +673,11 @@ class _int_object
 				"msg" => "object::createdby(): the user $uid, who last modified the current object (".$this->obj["oid"]."), has no object!"
 			));
 		}
-		return new object($oid);
+
+		aw_disable_acl();
+		$ret = new object($oid);
+		aw_restore_acl();
+		return $ret;
 	}
 
 	function modified()
