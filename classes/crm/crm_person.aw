@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.8 2004/01/22 17:36:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.9 2004/02/03 10:40:28 duke Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -876,6 +876,10 @@ class crm_person extends class_base
 		$conns = $ob->connections_from($args);
 		$t = &$arr["prop"]["vcl_inst"];
 
+		$arr["prop"]["vcl_inst"]->configure(array(
+			"overview_func" => array(&$this,"get_overview"),
+		));
+
 		$range = $arr["prop"]["vcl_inst"]->get_range(array(
 			"date" => $arr["request"]["date"],
 			"viewtype" => !empty($arr["request"]["viewtype"]) ? $arr["request"]["viewtype"] : $arr["prop"]["viewtype"],
@@ -890,6 +894,7 @@ class crm_person extends class_base
 		$return_url = urlencode(aw_global_get("REQUEST_URI"));
 		$planner = get_instance(CL_PLANNER);
 		classload("icons");
+		$this->overview = array();
 
 		foreach($conns as $conn)
 		{
@@ -901,14 +906,7 @@ class crm_person extends class_base
 			
 			$cldat = $classes[$item->class_id()];
 
-			if ($item->class_id() == CL_CRM_CALL || $item->class_id() == CL_CRM_MEETING)
-			{
-				$icon = icons::get_icon_url($item);
-			}
-			else
-			{
-				$icon = "";
-			};
+			$icon = icons::get_icon_url($item);
 		
 			// I need to filter the connections based on whether they write to calendar
 			// or not.
@@ -923,7 +921,7 @@ class crm_person extends class_base
 				$t->add_item(array(
 					"timestamp" => $item->prop("start1"),
 					"data" => array(
-						"name" => "<font color='gray'>" . $cldat["name"] . " </font><em>" . $item->name() . "</em>",
+						"name" => $item->name(),
 						"link" => $link,
 						"modifiedby" => $item->prop("modifiedby"),
 						"icon" => $icon,
@@ -933,12 +931,16 @@ class crm_person extends class_base
 
 			if ($item->prop("start1") > $overview_start)
 			{
-				$t->add_overview_item(array(
-					"timestamp" => $item->prop("start1"),
-				));
+				$this->overview[$item->prop("start1")] = 1;
 			};
 		}
 	}
+
+	function get_overview($arr = array())
+	{
+		return $this->overview;
+	}
+
 
 	// Invoked when a connection is created from organization to person
 	// .. this will then create the opposite connection.
