@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.152 2003/02/05 18:52:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.153 2003/02/13 14:22:25 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1354,7 +1354,7 @@ class core extends db_connector
 
 		$ostr = ($orderby) ? " ORDER BY $orderby " : "";
 		// kui tegemist on menüüdega, siis joinime kylge ka menu tabeli
-		if ($cl == CL_PSEUDO)
+		if ($cl === CL_PSEUDO)
 		{
 			$q = "SELECT objects.* FROM objects LEFT JOIN menu ON (objects.oid = menu.id) $where $ostr";
 		}
@@ -1366,7 +1366,6 @@ class core extends db_connector
 		global $DBX;
 		if ($DBX)
 		{
-			print_r($args);
 			print $q;
 		}
 		$this->db_query($q);
