@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.148 2003/12/08 12:00:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.149 2003/12/10 14:47:03 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -707,6 +707,7 @@ class planner extends class_base
 				// have brother documents?
 
 				// 1 - get an instance of that class, for this I need to 
+				aw_session_set('org_action',aw_global_get('REQUEST_URI'));
 				$clfile = $this->cfg["classes"][$clid]["file"];
 				$t = get_instance($clfile);
 				$t->init_class_base();
@@ -1039,10 +1040,10 @@ class planner extends class_base
 		preg_match('/reltype_org=(\w*)/', $gl, $r);
 		if (is_numeric($o[1]) && is_numeric($r[1]))
 		{
-			$this->addalias(array(
-				'id' => $o[1],
-				'alias' => $this->event_id,
-				'reltype' => $r[1],
+			$org_obj = new object($o[1]);
+			$org_obj->connect(array(
+				"to" => $this->event_id,
+				"reltype" => $r[1],
 			));
 			aw_session_del('org_action');
 		}
@@ -2973,6 +2974,21 @@ class planner extends class_base
 
 		};
 		return $retval;
+	}
+
+	////
+	// !Returns a link for editing an event
+	// cal_id - calendar id
+	// event_id - id of an event
+	function get_event_edit_link($arr)
+	{
+		return $this->mk_my_orb("change",array(
+			"id" => $arr["cal_id"],
+			"group" => "add_event",
+			"event_id" => $arr["event_id"],
+			"return_url" => $arr["return_url"],
+		));
+
 	}
 };
 ?>
