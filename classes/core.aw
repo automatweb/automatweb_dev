@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.177 2003/04/13 17:04:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.178 2003/04/14 16:02:20 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1626,13 +1626,13 @@ class core extends db_connector
 			{
 				$co = get_instance("config");
 				$u = $co->get_simple_config("error_redirect");
-				//flush();
-				//die("<br><b>AW_ERROR: $msg</b><br>");
 				if ($u != "" && aw_global_get("uid") != "kix")
 				{
 					header("Location: $u");
 					die();
 				}
+				flush();
+				die("<br><b>AW_ERROR: $msg</b><br>\n\n<br>");
 			}
 		};
 		aw_global_set("__from_raise_error",0);
