@@ -45,7 +45,6 @@
             <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
-            <value>1</value>
             <ch_value>1</ch_value>
             <default>1</default>
             <caption>Kasuta SSL-i</caption>
