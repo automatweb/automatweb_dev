@@ -306,7 +306,11 @@ class _int_object
 		}
 		if ($param["sort_by"] != "")
 		{
-			usort($ret, create_function('$a,$b', 'return strcasecmp($a->prop("'.$param["sort_by"].'"), $b->prop("'.$param["sort_by"].'"));'));
+			uasort($ret, create_function('$a,$b', 'return strcasecmp($a->prop("'.$param["sort_by"].'"), $b->prop("'.$param["sort_by"].'"));'));
+		}
+		if ($param["sort_by_num"] != "")
+		{
+			uasort($ret, create_function('$a,$b', 'return ($a->prop("'.$param["sort_by_num"].'") == $b->prop("'.$param["sort_by_num"].'") ? 0 : ($a->prop("'.$param["sort_by_num"].'") > $b->prop("'.$param["sort_by_num"].'") ? 1 : -1 ));'));
 		}
 		if($param['sort_dir'] == 'desc')
 		{
@@ -1320,6 +1324,7 @@ class _int_object
 			$this->_int_load_properties();
 		}
 
+		$_is_new = false;
 		if (!$this->obj["oid"])
 		{
 			$this->_int_init_new();
@@ -1335,6 +1340,7 @@ class _int_object
 			{
 				$this->obj["brother_of"] = $this->obj["oid"];
 			}
+			$_is_new = true;
 		}
 		// now, save objdata
 		$GLOBALS["object_loader"]->ds->save_properties(array(
@@ -1355,6 +1361,9 @@ class _int_object
 
 		// obj inherit props impl
 		$this->_int_do_obj_inherit_props();
+
+		// log save
+		$GLOBALS["object_loader"]->_log($_is_new, $this->obj["oid"]);
 
 		return $this->obj["oid"];
 	}
@@ -1651,6 +1660,7 @@ class _int_object
 
 	function _int_load_property_values()
 	{
+		$this->_int_load_properties();
 		$this->obj["properties"] = $GLOBALS["object_loader"]->ds->read_properties(array(
 			"properties" => $GLOBALS["properties"][$this->obj["class_id"]],
 			"tableinfo" => $GLOBALS["tableinfo"][$this->obj["class_id"]],

@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.337 2004/12/03 15:02:43 duke Exp $
+// $Id: class_base.aw,v 2.338 2004/12/07 12:16:55 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -420,8 +420,8 @@ class class_base extends aw_template
 
 		if ($args["no_rte"] == 1)
 		{
-                        $this->no_rte = 1;
-                };
+			$this->no_rte = 1;
+		};
 
 		// and, if we are in that other layout mode, then we should probably remap all
 		// the links in the toolbar .. augh, how the hell do I do that?
@@ -430,9 +430,9 @@ class class_base extends aw_template
 			$new_uri = aw_url_change_var(array("cb_part" => 1));
 			$cli = get_instance("cfg/" . $this->output_client,array("layout_mode" => "fixed_toolbar"));
 			if ($args["no_rte"] == 1)
-            {
-                                $new_uri .= "&no_rte=1";
-                        };
+			{
+				$new_uri .= "&no_rte=1";
+			};
 
 
 			$properties["iframe_container"] = array(
@@ -867,7 +867,7 @@ class class_base extends aw_template
 
 		// XXX: if I want to save data that does not belong to 
 		// objects table, then I don't want to log it like this --duke
-		$this->_log($syslog_type, isset($this->new) ? SA_ADD : SA_CHANGE, $name, $this->id);
+		//$this->_log($syslog_type, isset($this->new) ? SA_ADD : SA_CHANGE, $name, $this->id);
 	}
 
 	function get_cfgform_for_object($args = array())

@@ -68,9 +68,9 @@ class core extends acl_base
 	// oid - object that the action was performed on
 	// example usage:
 	//   $this->_log(ST_DOCUMENT, SA_ADD, "Added document $name", $docid);
-	function _log($type,$action,$text,$oid = 0)
+	function _log($type,$action,$text,$oid = 0,$honor_ini = true)
 	{
-		if(aw_ini_get('logging_disabled'))
+		if(aw_ini_get('logging_disabled') && $honor_ini)
 		{
 			return;
 		}
