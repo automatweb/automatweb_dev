@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.16 2004/05/17 12:36:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.17 2004/05/20 12:44:27 duke Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -170,7 +170,7 @@ class poll extends class_base
 			}	 
 			else	 
 			{	 
-				$au = "/?section=".$section."&poll_id=".$ap->id()."&answer_id=".$k."&section=".aw_global_get("section");	 
+				$au = "javascript:window.location.href='/?section=".$section."&poll_id=".$ap->id()."&answer_id=".$k."&section=".aw_global_get("section") . "'";	 
 			}
 			if (isset($v["answer"]))
 			{
