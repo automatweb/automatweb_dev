@@ -1,7 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.174 2002/11/15 18:05:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.175 2002/11/26 12:33:35 duke Exp $
 // menuedit.aw - menuedit. heh.
-
 
 // meeza thinks we should split this class. One part should handle showing stuff
 // and the other the admin side -- duke
@@ -2972,8 +2971,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	function get_type_sel()
 	{
 		return array(
-			"69" => LC_MENUEDIT_CLIENT,
 			"70" => LC_MENUEDIT_SECTION,
+			"69" => LC_MENUEDIT_CLIENT,
 			"71" => LC_MENUEDIT_ADMINN_MENU,
 			//"72" => LC_MENUEDIT_DOCUMENT,
 			"75" => LC_MENUEDIT_CATALOG,
@@ -2983,6 +2982,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 	function create_homes()
 	{
+		$upd = array();
 		$this->db_query("SELECT * FROM users");
 		while ($row = $this->db_next())
 		{
@@ -2993,9 +2993,10 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			echo "created for $row[uid] , id = $id<br>";
 			flush();
 			$this->restore_handle();
+			$upd[] = $id;
 		}
 
-		$this->invalidate_menu_cache();
+		$this->invalidate_menu_cache($upd);
 	}
 
 	////
@@ -5038,9 +5039,10 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			{
 				$htmlf.="&aw_uid=".$uid;
 			}
-			$f = fopen($htmlf,"r");
-			$fc = fread($f,100000);
-			fclose($f);
+//                        $f = fopen($htmlf,"r");
+//                        $fc = fread($f,100000);
+//                        fclose($f);
+			$fc = "";
 
 			$fc = str_replace("[ss]","[ss".$gid."]",$fc);
 
@@ -6092,6 +6094,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	function submit_rf($arr)
 	{
 		extract($arr);
+		$upd = array();
 
 		if (is_array($old))
 		{
@@ -6110,17 +6113,19 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 							"oid" => $oid,
 							$column => $val
 						));
+						$upd[] = $oid;
 					}
 				}
 			}
 		}
-		$this->invalidate_menu_cache(array());
+		$this->invalidate_menu_cache($upd);
 		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period, "sortby" => $sortby, "sort_order" => $sort_order));
 	}
 
 	function new_delete($arr)
 	{
 		extract($arr);
+		$upd = array();
 		if (is_array($sel))
 		{
 			$oids = join(",",array_keys($sel));
@@ -6137,10 +6142,11 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					}
 				}
 				$this->delete_object($row["oid"]);
+				$upd[] = $row["oid"];
 				$this->restore_handle();
 			}
 		}
-		$this->invalidate_menu_cache(array());
+		$this->invalidate_menu_cache($upd);
 		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period, "sortby" => $sortby, "sort_order" => $sort_order));
 	}
 
@@ -6161,7 +6167,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 	function blank($arr)
 	{
-		return "<html><body>&nbsop;</body></html>";
+		return "<html><body>&nbsp;</body></html>";
 	}
 
 	function req_serialize_obj_tree($oid)

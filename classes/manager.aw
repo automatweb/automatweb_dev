@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/manager.aw,v 2.3 2002/07/18 10:44:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/manager.aw,v 2.4 2002/11/26 12:33:58 duke Exp $
 // that's your basic file manager with 2 frames class. On the left side is a
 // menu tree just like in /automatweb right now, on the right side we show objects
 // someday this can perhaps replace the current menuedit framework
@@ -332,7 +332,7 @@ class manager extends aw_template
 			$this->db_query("INSERT INTO menu (id,type) VALUES($id,70)");
 		};
 		$me = get_instance("menuedit");
-		$me->invalidate_menu_cache(true);
+		$me->invalidate_menu_cache(array($id));
 		return $this->mk_my_orb("edit_menu",array("id" => $id),"",false,1);
 	}
 }
