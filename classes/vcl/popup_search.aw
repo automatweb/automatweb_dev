@@ -181,14 +181,13 @@ class popup_search extends aw_template
 			$ol = new object_list($filter);
 			for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 			{
-				$mod = $o->modifiedby();
 				$t->define_data(array(
 					"oid" => $o->id(),
 					"name" => html::href(array(
 						"url" => $this->mk_my_orb("change", array("id" => $o->id()), $o->class_id()),
 						"caption" => $o->path_str()
 					)),
-					"modifiedby" => $mod->name(),
+					"modifiedby" => $o->modifiedby(),
 					"modified" => $o->modified(),
 					"sel" => html::checkbox(array(
 						"name" => "sel[]",

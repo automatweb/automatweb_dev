@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.47 2005/04/01 11:52:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.48 2005/04/01 12:06:15 kristo Exp $
 
 /*
 
@@ -306,7 +306,6 @@ class object_treeview extends class_base
 					))
 				));
 			}
-			$modder = $od->modifiedby();
 
 			$c .= $this->_do_parse_file_line(array(
 				"name" => parse_obj_name($od->name()),
@@ -321,7 +320,7 @@ class object_treeview extends class_base
 				"add_date" => $this->time2date($od->created(), 2),
 				"mod_date" => $this->time2date($od->modified(), 2),
 				"adder" => $od->createdby(),
-				"modder" => is_object($modder) ? $modder->name() : "",
+				"modder" => $od->modifiedby(),
 				"icon" => image::make_img_tag(icons::get_icon_url($od->class_id(), $od->name())),
 				"bgcolor" => $this->_get_bgcolor($ob, $this->cnt),
 				"acl_obj" => $od,

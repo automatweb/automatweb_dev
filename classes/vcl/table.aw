@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.45 2005/04/01 11:52:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.46 2005/04/01 12:06:15 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -1798,8 +1798,7 @@ class vcl_table extends aw_table
 				else
 				if ($v["name"] == "modifiedby")
 				{
-					$tmp = $o->modifiedby();
-					$val = $tmp->name();
+					$val = $o->modifiedby();
 				}
 				else
 				if ($v["name"] == "class_id")

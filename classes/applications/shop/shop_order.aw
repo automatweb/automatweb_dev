@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.27 2005/03/23 10:31:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.28 2005/04/01 12:06:16 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -1072,8 +1072,7 @@ class shop_order extends class_base
 
 	function get_orderer($o)
 	{
-		$m = $o->modifiedby();
-		$mb = $m->name();
+		$mb = $o->modifiedby();
 		if (is_oid($o->prop("orderer_person")) && $this->can("view", $o->prop("orderer_person")))
 		{
 			$_person = obj($o->prop("orderer_person"));

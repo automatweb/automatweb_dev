@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.117 2005/04/01 11:52:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.118 2005/04/01 12:06:15 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -4763,13 +4763,11 @@ class form extends form_base
 			$this->raise_error(ERR_FG_EMETAINFO,"form->metainfo(): weird error!", true);
 		}
 
-		$cby = $row->createdby();
-		$mby = $row->modifiedby();
 		$this->vars(array(
 			"created" => $this->time2date($row->created(),2), 
-			"created_by" => $cby,
+			"created_by" => $row->createdby(),
 			"modified" => $this->time2date($row->modified(),2),
-			"modified_by" => $mby->name(),
+			"modified_by" => $row->modifiedby(),
 			"views" => 1,
 			"num_entries" => $cnt["cnt"],
 			"position" => $ret,

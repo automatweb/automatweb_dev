@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.19 2005/04/01 11:52:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.20 2005/04/01 12:06:16 kristo Exp $
 // register.aw - Register 
 /*
 
@@ -306,14 +306,12 @@ class register extends class_base
 
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
-			$cby = $o->createdby();
-			$mby = $o->modifiedby();
 			$t->define_data(array(
 				"oid" => $o->id(),
 				"name" => $o->name(),
-				"createdby" => $cby,
+				"createdby" => $o->createdby(),
 				"created" => $o->created(),
-				"modifiedby" => $mby->name(),
+				"modifiedby" => $o->modifiedby(),
 				"modified" => $o->modified(),
 				"change" => html::href(array(
 					"url" => $this->mk_my_orb("change", array(

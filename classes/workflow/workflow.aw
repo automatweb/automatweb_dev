@@ -1008,7 +1008,7 @@ class workflow extends class_base
 				"name" => $name,
 				"type" => $type_o->name(),
 				"actor" => $actor_o->name(),
-				"modifiedby" => $mod->name(),
+				"modifiedby" => $mod,
 				"process" => $process_o->name(),
 				"action" => $cur_state->name(),
 				"next_action" => $na
@@ -1058,7 +1058,7 @@ class workflow extends class_base
 
 			$t->define_data(array(
 				"name" => $e->name(),
-				"modifiedby" => $mod->name(),
+				"modifiedby" => $mod,
 				"root_action" => $ra_o->name(),
 				"entity_count" => $el->count()
 			));
@@ -1135,11 +1135,9 @@ class workflow extends class_base
 				{
 					$a = $c->to();
 
-					$mod = $e->modifiedby();
-
 					$t->define_data(array(
 						"actor" => "",
-						"uid" => $mod->name(),
+						"uid" => $e->modifiedby(),
 						"process" => $e->name(),
 						"action" => $a->name()
 					));
@@ -1170,11 +1168,9 @@ class workflow extends class_base
 					$process_list->add($c["from"]);
 				}
 						
-				$mod = $e->modifiedby();
-
 				$t->define_data(array(
 					"actor" => "",
-					"uid" => $mod->name(),
+					"uid" => $e->modifiedby(),
 					"process" => join(",", $process_list->names()),
 					"action" => $e->name()
 				));

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/export/menu_export.aw,v 1.5 2005/04/01 11:52:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/export/menu_export.aw,v 1.6 2005/04/01 12:06:15 kristo Exp $
 // menu_export.aw - helper class for exporting menus
 class menu_export
 {
@@ -89,7 +89,7 @@ class menu_export
 			"created" => $o->created(),
 			"createdby" => $cb,
 			"modified" => $o->modified(),
-			"modifiedby" => $mb->name(),
+			"modifiedby" => $mb,
 			"status" => $o->status(),
 			"jrk" => $o->ord(),
 			"alias" => $o->prop("alias"),

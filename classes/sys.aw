@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.48 2005/03/21 12:50:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.49 2005/04/01 12:06:14 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -629,10 +629,9 @@ class sys extends aw_template
 		$clss = aw_ini_get("classes");
 		foreach($ol->arr() as $o)
 		{
-			$tmp = $o->modifiedby();
 			$t->define_data(array(
 				"name" => html::get_change_url($o->id(), array(), parse_obj_name($o->name())),
-				"modifiedby" => $tmp->name(),
+				"modifiedby" => $o->modifiedby(),
 				"modified" => $o->modified(),
 				"class_id" => $clss[$o->class_id()]["name"]
 			));

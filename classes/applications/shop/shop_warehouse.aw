@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.28 2005/04/01 11:52:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.29 2005/04/01 12:06:16 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -1408,8 +1408,7 @@ class shop_warehouse extends class_base
 		));
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
-			$m = $o->modifiedby();
-			$mb = $m->name();
+			$mb = $o->modifiedby();
 			if (is_oid($o->prop("orderer_person")) && $this->can("view", $o->prop("orderer_company")))
 			{
 				$_person = obj($o->prop("orderer_person"));
@@ -1541,11 +1540,9 @@ class shop_warehouse extends class_base
 		));
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
-			$m = $o->modifiedby();
-
 			$t->define_data(array(
 				"name" => $o->name(),
-				"modifiedby" => $m->name(),
+				"modifiedby" => $o->modifiedby(),
 				"modified" => $m->modified(),
 				"view" => html::href(array(
 					"url" => $this->mk_my_orb("change", array(

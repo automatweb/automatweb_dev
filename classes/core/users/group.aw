@@ -159,14 +159,6 @@ class group extends class_base
 			case "mmodifiedby":
 				$o = $arr["obj_inst"];
 				$prop['value'] = $o->modifiedby();
-				if (is_object($prop["value"]))
-				{
-					$prop["value"] = $prop["value"]->name();
-				}
-				else
-				{
-					$prop['value'] = "";
-				}
 				break;
 				
 			case "type":
