@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.116 2003/07/11 11:48:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.117 2003/08/01 12:21:43 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -479,7 +479,7 @@ class aliasmgr extends aw_template
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
-			"width" => "30",
+			"width" => "25",
 		));
 		$this->t->define_field(array(
 			"name" => "name",
@@ -575,6 +575,8 @@ class aliasmgr extends aw_template
 
 		$obj = $this->get_object($id);
 		$this->id = $id;
+		$this->parent = $obj["parent"];
+
 
 		$reltypes[0] = "alias";
 		$reltypes = new aw_array($reltypes);
@@ -629,6 +631,12 @@ class aliasmgr extends aw_template
 
 		$this->recover_idx_enumeration($id);
 
+		if (aw_ini_get("config.object_translation") == 1)
+		{
+			$l = get_instance("languages");
+			$langinfo = $l->get_list();
+		};
+
 		// fetch a list of all the aliases for this object
 		$alist = $this->get_aliases(array(
 			"oid" => $id,
@@ -641,7 +649,15 @@ class aliasmgr extends aw_template
 			$aclid = $alias["class_id"];
 			list($astr) = explode(",",$classes[$aclid]["alias"]);
 			$astr = sprintf("#%s%d#",$astr,$alias["idx"]);
-			$ch = $this->mk_my_orb("change", array("id" => $alias["target"], "return_url" => $return_url),$classes[$aclid]["file"]);
+
+			// yuck. I wish the static document editing forms were gone already
+			$edfile = $classes[$aclid]["file"];
+			if ($aclid == CL_DOCUMENT)
+			{
+				$edfile = "doc";
+			};
+
+			$ch = $this->mk_my_orb("change", array("id" => $alias["target"], "return_url" => $return_url),$edfile);
 			$chlinks[$alias["target"]] = $ch;
 			$reltype_id = $alias["reltype"];
 
@@ -673,16 +689,25 @@ class aliasmgr extends aw_template
 				"caption" => ($alias["name"] == "") ? "(no name)" : $alias["name"],
 			));
 
+			$type_str = $this->reltypes[$reltype_id];
+			// shoot me. 
+			// you fool, "shoot me" is just a good string to locate this place quickly later on.
+			//  -- duke
+			if ((aw_ini_get("config.object_translation") == 1) && ($reltype_id == RELTYPE_TRANSLATION))
+			{
+				$type_str = "tõlge (" . $langinfo[$alias["lang_id"]] . ")";
+			};
+
 			if ($alias["relobj_id"])
 			{
 				$alias["reltype"] = html::href(array(
 					"url" => $this->mk_my_orb("change",array("id" => $alias["relobj_id"],"return_url" => $return_url),$classes[$aclid]["file"]),
-					"caption" => $this->reltypes[$reltype_id],
+					"caption" => $type_str,
 				));
 			}
 			else
 			{
-				$alias["reltype"] = $this->reltypes[$reltype_id];
+				$alias["reltype"] = $type_str;
 			};
 
 
@@ -1108,6 +1133,23 @@ HTM;
 		};
 
 		$toolbar->add_separator();
+
+		$return_url = $this->mk_my_orb("list_aliases", array("id" => $this->id),$this->use_class);
+		$return_url = urlencode($return_url);
+
+		if (aw_ini_get("config.object_translation") == 1)
+		{
+			$toolbar->add_button(array(
+				"name" => "translate",
+				"tooltip" => "Tõlgi",
+				"url" => $this->mk_my_orb("create",array("id" => $this->id,"return_url" => $return_url),"object_translation"),
+				"target" => "_blank",
+				"imgover" => "edit_over.gif",
+				"img" => "edit.gif",
+			));
+			
+			$toolbar->add_separator();
+		};
 
 		$toolbar->add_button(array(
 			"name" => "refresh",
