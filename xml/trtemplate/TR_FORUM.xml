@@ -1,135 +1,250 @@
 <?xml version='1.0'?>
 <trtemplate>
 <string>
-      <id>7b409c8e53a765f99fb9c4d34f299773</id>
-      <text>Teemade kataloog</text>
-      <ctx>CTX_CAPTION</ctx>
+      <id>d6fe1c2a1e85340480942b7a67321f7e</id>
+      <file>forum_topic</file>
+      <ctx>status</ctx>
+      <caption>Aktiivne</caption>
+      <comment>Kas objekt on aktiivne </comment>
 </string>
 <string>
-      <id>0fa2f52df6063ddda8ed8103af5d4ddb</id>
-      <text>Sellest kataloogist võetakse foorumi teemasid</text>
-      <ctx>CTX_COMMENT</ctx>
+      <id>f0c9525225b09e8dffc6d3efc07574e7</id>
+      <file>forum_topic</file>
+      <ctx>textbox</ctx>
+      <caption>Pealkiri</caption>
+      <comment></comment>
 </string>
 <string>
-      <id>b6bb6bdc61ed1e70e440f405a8273c73</id>
-      <text>Listiliikmete kataloog</text>
-      <ctx>CTX_CAPTION</ctx>
+      <id>e72228a9d5876dfbba843f4750ff32d6</id>
+      <file>forum_topic</file>
+      <ctx>textarea</ctx>
+      <caption>Sisu</caption>
+      <comment></comment>
 </string>
 <string>
-      <id>5311d7b1e8e3a0a55ad2e0a7532bf07a</id>
-      <text>
+      <id>c01a19ee50e4bfb01c58805702dd0f8e</id>
+      <file>forum_topic</file>
+      <ctx>textbox</ctx>
+      <caption>Autori nimi</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>378efca5f23965438b7fb32bfe1997e8</id>
+      <file>forum_topic</file>
+      <ctx>checkbox</ctx>
+      <caption>Saada vastused meiliga</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>8c05d9c643e901499d179f737bccc270</id>
+      <file>forum_topic</file>
+      <ctx>tab</ctx>
+      <caption>Üldine</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>ee32ecee3a511fde380af65e5c86adb2</id>
+      <file>forum_v2</file>
+      <ctx>textbox</ctx>
+      <caption>Nimi</caption>
+      <comment>Objekti nimi</comment>
+</string>
+<string>
+      <id>4a9ba19cd676da1d932614dfb1c1be0e</id>
+      <file>forum_v2</file>
+      <ctx>textbox</ctx>
+      <caption>Kommentaar</caption>
+      <comment>Vabas vormis tekst objekti kohta</comment>
+</string>
+<string>
+      <id>623e257f527c0d00081501127b9ca6d2</id>
+      <file>forum_v2</file>
+      <ctx>status</ctx>
+      <caption>Aktiivne</caption>
+      <comment>Kas objekt on aktiivne </comment>
+</string>
+<string>
+      <id>8da168812c6d3b7841b06087ddc29169</id>
+      <file>forum_v2</file>
+      <ctx>select</ctx>
+      <caption>Teemade kataloog</caption>
+      <comment>Sellest kataloogist võetakse foorumi teemasid</comment>
+</string>
+<string>
+      <id>3421a1c48a923ac009df79fa2a7d167b</id>
+      <file>forum_v2</file>
+      <ctx>select</ctx>
+      <caption>Listiliikmete kataloog</caption>
+      <comment>
       <![CDATA[Sellesse kataloogi paigutatakse "listi liikmete" objektid]]>
-      </text>
-      <ctx>CTX_COMMENT</ctx>
+      </comment>
 </string>
 <string>
-      <id>1f0211605db597affff1b1666d639a41</id>
-      <text>Teemasid lehel</text>
-      <ctx>CTX_CAPTION</ctx>
+      <id>69177fa02e0567410088585068213b4b</id>
+      <file>forum_v2</file>
+      <ctx>select</ctx>
+      <caption>Teemasid lehel</caption>
+      <comment></comment>
 </string>
 <string>
-      <id>8beef9cc1471b84df145df8ba9fb0179</id>
-      <text>Postitusi lehel</text>
-      <ctx>CTX_CAPTION</ctx>
+      <id>edc2b7db2b0d5bbffdaeb0975116f1f9</id>
+      <file>forum_v2</file>
+      <ctx>select</ctx>
+      <caption>Postitusi lehel</caption>
+      <comment></comment>
 </string>
 <string>
-      <id>8058ffb2ff42152d82b1e45c0b87a35c</id>
-      <text>Konteiner</text>
-      <ctx>CTX_CAPTION</ctx>
+      <id>b2d36d26e23b181056bb051411393f78</id>
+      <file>forum_v2</file>
+      <ctx>text</ctx>
+      <caption>Konteiner</caption>
+      <comment></comment>
 </string>
 <string>
-      <id>850708d2e23766ba2200ab9b690fda8d</id>
-      <text>Foorumi sisu</text>
-      <ctx>CTX_CAPTION</ctx>
+      <id>828c8cd542768156605c449188d2f7d8</id>
+      <file>forum_v2</file>
+      <ctx>text</ctx>
+      <caption>Foorumi sisu</caption>
+      <comment></comment>
 </string>
 <string>
-      <id>fa57385d0b0d17e06b3776f373862e95</id>
-      <text>Lisa teema</text>
-      <ctx>CTX_CAPTION</ctx>
+      <id>c42c011c0cc4d5798116f147f08945ba</id>
+      <file>forum_v2</file>
+      <ctx>text</ctx>
+      <caption>Lisa teema</caption>
+      <comment></comment>
 </string>
 <string>
-      <id>66bebec663d24edab4387b5c82ff2478</id>
-      <text>Lisa kommentaar</text>
-      <ctx>CTX_CAPTION</ctx>
+      <id>eb27c36d47183439dda986d23ae81a85</id>
+      <file>forum_v2</file>
+      <ctx>text</ctx>
+      <caption>Lisa kommentaar</caption>
+      <comment></comment>
 </string>
 <string>
-      <id>9fc7b82ea021a0284471dfc5c2b95e27</id>
-      <text>Tabeli pealkirja stiil</text>
-      <ctx>CTX_CAPTION</ctx>
+      <id>86d15b59957d0bf125b3c05b2af2474f</id>
+      <file>forum_v2</file>
+      <ctx>select</ctx>
+      <caption>Tabeli pealkirja stiil</caption>
+      <comment></comment>
 </string>
 <string>
-      <id>f5800730b9d31c4540ee1703edafd076</id>
-      <text>Esimese taseme folderi stiil</text>
-      <ctx>CTX_CAPTION</ctx>
+      <id>f51fa2c61da93380f49259d756435880</id>
+      <file>forum_v2</file>
+      <ctx>select</ctx>
+      <caption>Esimese taseme folderi stiil</caption>
+      <comment></comment>
 </string>
 <string>
-      <id>7b6201bb886ceae4106357d268f9e3e6</id>
-      <text>Folderi pealkirja stiil</text>
-      <ctx>CTX_CAPTION</ctx>
+      <id>46d40e1f013e6072266511c3ae825859</id>
+      <file>forum_v2</file>
+      <ctx>select</ctx>
+      <caption>Folderi pealkirja stiil</caption>
+      <comment></comment>
 </string>
 <string>
-      <id>c8d726b1d073007b923ef11f16662607</id>
-      <text>Folderi teemade arvu stiil</text>
-      <ctx>CTX_CAPTION</ctx>
+      <id>69e01942580bdf6502edf387996d7e54</id>
+      <file>forum_v2</file>
+      <ctx>select</ctx>
+      <caption>Folderi teemade arvu stiil</caption>
+      <comment></comment>
 </string>
 <string>
-      <id>8363e05dd070e453e53529c10c2dff37</id>
-      <text>Folderi postituste arvu stiil</text>
-      <ctx>CTX_CAPTION</ctx>
+      <id>38b1244b2738ee3bd1f2bbffa6bea237</id>
+      <file>forum_v2</file>
+      <ctx>select</ctx>
+      <caption>Folderi postituste arvu stiil</caption>
+      <comment></comment>
 </string>
 <string>
-      <id>8a525be476bbe823508f7d091113beed</id>
-      <text>Folderi viimase postituse stiil</text>
-      <ctx>CTX_CAPTION</ctx>
+      <id>ac10cb334d6380de8d40497bb69559d3</id>
+      <file>forum_v2</file>
+      <ctx>select</ctx>
+      <caption>Folderi viimase postituse stiil</caption>
+      <comment></comment>
 </string>
 <string>
-      <id>1ee8bbcaba25c0465d570fbe4273cfce</id>
-      <text>Teema pealkirja stiil</text>
-      <ctx>CTX_CAPTION</ctx>
+      <id>92a690c46e2eed6c44fabf13e71d91ef</id>
+      <file>forum_v2</file>
+      <ctx>select</ctx>
+      <caption>Teema pealkirja stiil</caption>
+      <comment></comment>
 </string>
 <string>
-      <id>e8f5af46b49f1a0a7b0764c24e0aa311</id>
-      <text>Teema vastuste arvu stiil</text>
-      <ctx>CTX_CAPTION</ctx>
+      <id>85e69e4edaa1614d7f9c6516acca371a</id>
+      <file>forum_v2</file>
+      <ctx>select</ctx>
+      <caption>Teema vastuste arvu stiil</caption>
+      <comment></comment>
 </string>
 <string>
-      <id>dbbf2ff075530d1f670802d053960df9</id>
-      <text>Teema autori stiil</text>
-      <ctx>CTX_CAPTION</ctx>
+      <id>11b7295d9765283c1fe2ce564ee8ee92</id>
+      <file>forum_v2</file>
+      <ctx>select</ctx>
+      <caption>Teema autori stiil</caption>
+      <comment></comment>
 </string>
 <string>
-      <id>4a2eebebf880ff77f636e680eeae4d64</id>
-      <text>Teema viimase postituste stiil</text>
-      <ctx>CTX_CAPTION</ctx>
+      <id>177fe7f006218f90f42b358101400dd6</id>
+      <file>forum_v2</file>
+      <ctx>select</ctx>
+      <caption>Teema viimase postituste stiil</caption>
+      <comment></comment>
 </string>
 <string>
-      <id>8476703a0f338a231d13e2772cd6eb4c</id>
-      <text>Kommentaari kasutajainfo stiil</text>
-      <ctx>CTX_CAPTION</ctx>
+      <id>d3680d42c97b22d81c5c7457896eb045</id>
+      <file>forum_v2</file>
+      <ctx>select</ctx>
+      <caption>Kommentaari kasutajainfo stiil</caption>
+      <comment></comment>
 </string>
 <string>
-      <id>154ea649cd78bc5d54a869f98d4d0467</id>
-      <text>Kommentaari teksti stiil</text>
-      <ctx>CTX_CAPTION</ctx>
+      <id>7a6d5c9922a07d89e5fcd5b7ac0d4be3</id>
+      <file>forum_v2</file>
+      <ctx>select</ctx>
+      <caption>Kommentaari teksti stiil</caption>
+      <comment></comment>
 </string>
 <string>
-      <id>b74e3b5ff044065299898b6e62bcc111</id>
-      <text>Pealkiri</text>
-      <ctx>CTX_CAPTION</ctx>
+      <id>f47d776b245b1a87ec33d6abb3f040bd</id>
+      <file>forum_v2</file>
+      <ctx>tab</ctx>
+      <caption>Üldine</caption>
+      <comment></comment>
 </string>
 <string>
-      <id>67a4a8c85534b855496ef9fc987405c7</id>
-      <text>Sisu</text>
-      <ctx>CTX_CAPTION</ctx>
+      <id>b23313982864da68d4b0f62ed1aec31c</id>
+      <file>forum_v2</file>
+      <ctx>tab</ctx>
+      <caption>Foorum</caption>
+      <comment></comment>
 </string>
 <string>
-      <id>ca8aa043e66835dc0599209630f04152</id>
-      <text>Autori nimi</text>
-      <ctx>CTX_CAPTION</ctx>
+      <id>ab806cc55e00a3f5a20f425dd9094813</id>
+      <file>forum_v2</file>
+      <ctx>tab</ctx>
+      <caption>Sisu</caption>
+      <comment></comment>
 </string>
 <string>
-      <id>6d0582b78a3785ab7909840afee75337</id>
-      <text>Saada vastused meiliga</text>
-      <ctx>CTX_CAPTION</ctx>
+      <id>09c0a796ae937b1b9eefe2172c58744a</id>
+      <file>forum_v2</file>
+      <ctx>tab</ctx>
+      <caption>Stiilid</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>7634bbf741f0d7c9d2f6551b4646e59e</id>
+      <file>forum_v2</file>
+      <ctx>tab</ctx>
+      <caption>Lisa teema</caption>
+      <comment></comment>
+</string>
+<string>
+      <id>541f7d2e7dee0af90616f3dec5b469b7</id>
+      <file>forum_v2</file>
+      <ctx>tab</ctx>
+      <caption>Lisa kommentaar</caption>
+      <comment></comment>
 </string>
 </trtemplate>
