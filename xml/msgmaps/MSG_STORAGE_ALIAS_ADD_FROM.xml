@@ -1,43 +1,43 @@
 <?xml version='1.0'?>
 <xml>
 <num_0>
-      <class>core/users/group</class>
-      <func>on_add_alias_to_group</func>
-      <param>CL_GROUP</param>
-</num_0>
-<num_1>
-      <class>core/users/user</class>
-      <func>on_add_alias</func>
-      <param>CL_USER</param>
-</num_1>
-<num_2>
-      <class>crm/crm_company</class>
-      <func>on_connect_person_to_org</func>
-      <param>CL_CRM_PERSON</param>
-</num_2>
-<num_3>
-      <class>crm/crm_person</class>
-      <func>on_connect_org_to_person</func>
-      <param>CL_CRM_COMPANY</param>
-</num_3>
-<num_4>
-      <class>crm/crm_person</class>
-      <func>on_connect_section_to_person</func>
-      <param>CL_CRM_SECTION</param>
-</num_4>
-<num_5>
-      <class>crm/crm_section</class>
-      <func>on_connect_person_to_section</func>
-      <param>CL_CRM_PERSON</param>
-</num_5>
-<num_6>
-      <class>applications/shop/shop_product</class>
-      <func>on_add_alias</func>
-      <param>CL_SHOP_PRODUCT</param>
-</num_6>
-<num_7>
       <class>applications/personnel_management/personnel_management_job_offer</class>
       <func>on_connect_from_sector</func>
       <param>CL_PERSONNEL_MANAGEMENT_JOB_OFFER</param>
+</num_0>
+<num_1>
+      <class>applications/shop/shop_product</class>
+      <func>on_add_alias</func>
+      <param>CL_SHOP_PRODUCT</param>
+</num_1>
+<num_2>
+      <class>core/users/group</class>
+      <func>on_add_alias_to_group</func>
+      <param>CL_GROUP</param>
+</num_2>
+<num_3>
+      <class>core/users/user</class>
+      <func>on_add_alias</func>
+      <param>CL_USER</param>
+</num_3>
+<num_4>
+      <class>crm/crm_person</class>
+      <func>on_connect_org_to_person</func>
+      <param>CL_CRM_COMPANY</param>
+</num_4>
+<num_5>
+      <class>crm/crm_person</class>
+      <func>on_connect_section_to_person</func>
+      <param>CL_CRM_SECTION</param>
+</num_5>
+<num_6>
+      <class>crm/crm_company</class>
+      <func>on_connect_person_to_org</func>
+      <param>CL_CRM_PERSON</param>
+</num_6>
+<num_7>
+      <class>crm/crm_section</class>
+      <func>on_connect_person_to_section</func>
+      <param>CL_CRM_PERSON</param>
 </num_7>
 </xml>
