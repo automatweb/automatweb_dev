@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.57 2003/07/08 08:53:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.58 2003/07/08 11:59:17 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -2656,7 +2656,14 @@ class form_element extends aw_template
 				}
 //				echo "aentry_id = $this->entry_id , $this->entry <br>";
 				$vl = $this->get_val($elvalues);
-				$html .= $de->gen_edit_form($element_name, ($vl ? $vl : $def),($fy ? $fy : 2000),($ty ? $ty : 2005),true);
+				if ($this->arr["hidden"])
+				{
+					$html .= "<input type=\"hidden\" name=\"$element_name\" value=\"".($vl ? $vl : $def)."\" />";
+				}
+				else
+				{
+					$html .= $de->gen_edit_form($element_name, ($vl ? $vl : $def),($fy ? $fy : 2000),($ty ? $ty : 2005),true);
+				}
 				break;
 		};
 
