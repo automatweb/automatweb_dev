@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.8 2005/01/27 08:35:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.9 2005/01/27 08:55:59 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -321,6 +321,11 @@ class mrp_case extends class_base
 			case "workflow_table":
 				$this->save_workflow_data ($arr);
 				break;
+		}
+
+		if ($arr["obj_inst"]->prop($prop["name"]) != $prop["value"])
+		{
+			$this->mrp_log($arr["obj_inst"]->id(), NULL, "Projekti omaduse ".$prop["caption"]." v&auml;&auml;rtust muudeti ".$arr["obj_inst"]->prop($prop["name"])." => ".$prop["value"]);
 		}
 
 		return $retval;
@@ -1080,6 +1085,20 @@ class mrp_case extends class_base
 		// save data to prisma server
 		$i = get_instance(CL_MRP_PRISMA_IMPORT);
 		$i->write_proj($arr["oid"]);
+
+	}
+
+	function mrp_log($proj, $job, $msg, $comment = '')
+	{
+		$this->db_query("
+			INSERT INTO
+				mrp_log(
+					project_id,job_id,uid,tm,message,comment
+				)
+				values(
+					".((int)$proj).",".((int)$job).",'".aw_global_get("uid")."',".time().",'$msg','$comment'
+				)
+		");
 	}
 
 	function on_delete_case ($arr)
