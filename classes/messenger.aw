@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.75 2001/06/25 11:27:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.76 2001/06/25 12:59:13 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -1199,24 +1199,58 @@ class messenger extends menuedit_light
 		return $this->parse();
 	}
 
+	////
+	// !Otsib kirju
+	// argumendid:
+	// connector (array) - sisaldab koiki connectoreid
+	// search (array) - sisaldab otsistringe
+	// field (array) - sisaldab fielde, millest otsida.
 	function do_search($args = array())
 	{
 		extract($args);
 		$menu = $this->gen_msg_menu(array(
 				"activelist" => array("search"),
 				));
-		print "<pre>";
-		print_r($args);
-		print "</pre>";
+
 		$folder_list = $this->_folder_list();
-		if (!is_array($folders))
+		$fnames = array(
+			"mfrom" => "kellelt",
+			"subject" => "teema",
+			"message" => "sisu",
+		);
+		// koigepealt tuleb siis koostada query string
+		$qs = "";
+		$quser = "";
+		for ($i = 1; $i < sizeof($search); $i++)
 		{
-			$folders = array($folders => $folders);
+			// kui selles valjas asub string, siis lisame selle query stringile
+			if ($search[$i - 1])
+			{
+				$qs .= sprintf("(%s LIKE '%%%s%%')",$field[$i - 1], $search[$i - 1]);
+				$quser .= sprintf(" ..väljal <b>%s</b> sisaldub string '%s'",$fnames[$field[$i - 1]],$search[$i - 1]);
+			};
+
+			if ($search[$i])
+			{
+				$qs .= sprintf(" %s ",$connector[$i-1]);
+				$quser .= ($connector[$i-1] == "and") ? " ja " : " või ";
+				$quser .= "<br>";
+			};
 		};
+
+		if (strlen($qs) == 0)
+		{
+			return $this->mk_site_orb(array("action" => "search"));
+		};
+
+		#if (!is_array($folders))
+		#{
+		#	$folders = array($folders => $folders);
+		#};
 		$results = $this->driver->msg_search(array(
-					"fields" => array_keys($fields),
 					"value" => $value,
 					"connector" => $connector,
+					"qs" => $qs,
 					"folders" => array_keys($folders),
 		));
 		$this->read_template("searchresults.tpl");
@@ -1234,7 +1268,8 @@ class messenger extends menuedit_light
 		};
 		$this->vars(array(
 				"line" => $c,
-				"fields" => join(",",array_keys($fields)),
+				#"fields" => join(",",array_keys($fields)),
+				"quser" => $quser,
 				"value" => $value,
 				"menu" => $menu,
 		));
