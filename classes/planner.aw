@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.35 2001/06/28 18:04:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.36 2001/06/28 22:17:04 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -1261,81 +1261,6 @@ class planner extends calendar {
 
 	}
 
-	////
-	// !get_date_range
-	function get_date_range($args = array())
-	{
-		extract($args);
-		list($d,$m,$y) = split("-",$date);
-		$timestamp = mktime(0,0,0,$m,$d,$y);
-		switch($type)
-		{
-			case "month":
-				$start_ts = mktime(0,0,0,$m,1,$y);
-				$end_ts = mktime(23,59,59,$m+1,0,$y);
-				// siin on next ja prev-i arvutamine monevorra special
-				// kui päev on suurem, kui järgmises kuus päevi kokku
-				// järgmise kuu viimase päeva. Sama kehtib eelmise kohta
-				$next_mon = date("d",mktime(0,0,0,$m+2,0,$y));
-				$prev_mon = date("d",mktime(0,0,0,$m,0,$y));
-		
-				if ($d > $next_mon)
-				{
-					$next = mktime(0,0,0,$m+1,$next_mon,$y);
-				}
-				else
-				{
-					$next = mktime(0,0,0,$m+1,$d,$y);
-				};
-
-				if ($d > $prev_mon)
-				{
-					$prev = mktime(0,0,0,$m-1,$prev_mon,$y);
-				}
-				else
-				{
-					$prev = mktime(0,0,0,$m-1,$d,$y);
-				};
-				break;
-			
-			
-			case "week":
-				$next = mktime(0,0,0,$m,$d+7,$y);
-				$prev = mktime(0,0,0,$m,$d-7,$y);
-				$daycode = $this->_convert_wday(date("w",$timestamp));
-				// aga meil siin algab nädal siiski esmaspäevast
-				$monday = $d - $daycode + 1;
-				$start_ts = mktime(0,0,0,$m,$monday,$y);
-				$end_ts = mktime(23,59,59,$m,$monday+6,$y);
-				break;
-
-			case "overview":
-				$next = mktime(0,0,0,$m,$d+7,$y);
-				$prev = mktime(0,0,0,$m,$d-7,$y);
-				$start_ts = $timestamp;
-				$end_ts = mktime(23,59,59,$m,$d+6,$y);
-				break;
-
-			case "day":
-				$next = mktime(0,0,0,$m,$d+1,$y);
-				$prev = mktime(0,0,0,$m,$d-1,$y);
-				$start_ts = $timestamp;
-				$end_ts = mktime(23,59,59,$m,$d,$y);
-				break;
-
-		};
-		$arr = array(
-			"start" => $start_ts,
-			"end" => $end_ts,
-			"start_wd" => $this->_convert_wday(date("w",$start_ts)),
-			"end_wd" => $this->_convert_wday(date("w",$end_ts)),
-			"wd" => $this->_convert_wday(date("w",$timestamp)),
-			"prev" => date("d-m-Y",$prev),
-			"next" => date("d-m-Y",$next),
-			"timestamp" => $timestamp,
-		);
-		return $arr;
-	}
 
 	////
 	// Takes 2 timestamps and calculates the difference between them in days
@@ -1360,10 +1285,6 @@ class planner extends calendar {
 	}
 
 
-	function _convert_wday($daycode)
-	{
-		return ($daycode == 0) ? 7 : $daycode;
-	}
 
 	////
 	// !Listib koik eventid mingis vahemikus
@@ -1468,144 +1389,31 @@ class planner extends calendar {
 	function draw_day($args = array())
 	{
 		extract($args);
-		global $uid;
-		// first. We need to get all events that start on $date
-		// this should give me todays events
+	
 		$date = ($date) ? $date : date("d-m-Y");
-		list($d1,$m1,$y1) = split("-",$date);
-		$today = mktime(0,0,0,$m1,$d1,$y1);
-		$wday = get_lc_weekday(date("w",$today));
-		$todaystr = sprintf("%s, %d.%s %d",$wday,$d1,get_lc_month($m1),$y1);
+		$slice_id = join("",explode("-",$date));
 
-		$this->_get_events_in_range(array());
-
-		$events = array();
-		$event_starts = array();
-
-		// Sorteerime üritused ära ajaühikute kaupa
-		while($row = $this->db_next())
-		{
-			// G = hour without leading zeroes
-			// i = minutid
-			// arvutame yrituse kestvuse tundides
-
-			// kestvusest arvestame yhe sekundi maha, muidu spanniks
-			// kell 9.00-11.00 kestev yritus yle 3 lahtri (9,10,11)
-			$row["duration"] = (int)(($row["end"] - $row["start"] -1) / 3600); 
-			$event_starts[date("G",$row["start"])][] = $row["id"];
-			$events[$row["id"]] = $row;
-
-		};
-
-		$navigator = $this->draw_navigator(array(
-			"active" => "day",
-		));
-		$this->read_template("day.tpl");
-		$c = "";
-
-		$in_cell = 0;
-		$start_cell = 0;
-
-
-		$cells = array();
-		$cell_contents = array();
-
-
-		// leiame info, mis on vajalik päevaplaani joonistamiseks
-		for ($d = 0; $d <= 23; $d++)
-		{
-			if ($in_cell > 0)
-			{
-				$in_cell--;
-			}
-			elseif ($in_cell == 0)
-			{
-				$cells[$d] = "0";
-			};
-			// kui selles ajaühikus algab mõni event, siis...
-			if (is_array($event_starts[$d]))
-			{
-				if ($in_cell == 0)
-				{
-					$start_cell = $d;
-				};
-				// kaime yle koigi siin algavate eventite
-				reset($event_starts[$d]);
-				while(list(,$_event_id) = each($event_starts[$d]))
-				{
-					$_event = $events[$_event_id];
-					if ($_event["duration"] > $in_cell)
-					{
-						$cells[$start_cell] += ($_event["duration"] - $in_cell);
-						$in_cell = $_event["duration"];
-					};
-					$this->vars(array(
-						"start" => date("H:i",$_event["start"]),
-						"end" => date("H:i",$_event["end"]),
-						"id" => $_event["id"],
-						"title" => $_event["title"],
-					));
-					$cell_contents[$start_cell] .= $this->parse("event");
-				};
-			};
-		};
-
-
-		// Ja nüüd joonistame tabeli enda
-		// tsükkel üle kõikide ajaühikute, ehk tundide selles kontekstis
-		$in_cell = 0;
-		for ($d = 0; $d <= 23; $d++)
-		{
-			if ($in_cell > 0)
-			{
-				$in_cell--;
-			};
-			if ($in_cell > 0)
-			{
-				$data = "";
-			};
-			// kontrollime, kas selles ajaühikus on mingit sisu
-			if ($cells[$d] > 0)
-			{
-				$in_cell = $cells[$d];
-				$this->vars(array(
-					"rowspan" => $cells[$d],
-					"content" => $cell_contents[$d]
-				));
-				$data = $this->parse("data");
-			}
-			elseif ($in_cell > 0)
-			{
-				$data = "";
-			}
-			else
-			{
-				$this->vars(array(
-					"rowspan" => 1,
-					"content" => "&nbsp;",
-				));
-				$data = $this->parse("data");
-			};
-			
-			$this->vars(array(
-				"time" => sprintf("%02d:00",$d),
-				"timeslice" => $d,
+		$di = $this->get_date_range(array(
 				"date" => $date,
-				"data" => $data,
-			));
-			$c .= $this->parse("line");
-		};
-		list($d,$m,$y) = split("-",$date);
-		$smon = get_lc_month($m);
-		$next = 		$this->vars(array(
-			"line" => $c,
-			"prev" => date("d-m-Y",mktime(0,0,0,$m,$d-1,$y)),
-			"next" => date("d-m-Y",mktime(0,0,0,$m,$d+1,$y)),
-			"today" => $todaystr,
-			"navigator" => $navigator,
-			"thisdate" => $date,
+				"type" => "day",
 		));
-		return $this->parse();
+
+		$events = $this->get_events(array(
+				"start" => $di["start"],
+				"end" => $di["end"],
+				"uid" => UID,
+			));
+
+		foreach($events[$slice_id] as $key => $val)
+		{
+			print $val["title"] . "<br>";
+			print date("d-m-Y H:i",$val["start"]) . "<br>";
+			print date("d-m-Y H:i",$val["end"]) . "<br>";
+
+		};
+
+		print $retval;
+		exit;
 	}
 
 	//// joonistab navigaatori
@@ -1745,7 +1553,7 @@ class planner extends calendar {
 				}
 				else
 				{
-					$subtpl = "line2";
+					$subtpl = $this->templates["line2"] ? "line2" : "line";
 				};
 			}
 			else
