@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.92 2002/03/20 14:02:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.93 2002/03/20 19:36:08 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 lc_load("document");
@@ -306,6 +306,7 @@ class document extends aw_template
 		$baseurl = aw_ini_get("baseurl");
 		$ext = aw_ini_get("ext");
 		$awt->start("document::gen_preview");
+
 
 		// check if the menu had a form selected as a template - the difference is that then the template is not a filename
 		// but a number
@@ -764,7 +765,11 @@ class document extends aw_template
 
 		if ($doc["parent"])
 		{
-			$mn = $this->get_menu($doc["parent"]);
+			$mcache = get_instance("menu_cache");
+			$mn = $mcache->get_cached_menu($doc["parent"]);
+			$this->vars(array(
+				"parent_name" => $mn["name"]
+			));
 		}
 
 		if (!isset($this->doc_count))
@@ -801,10 +806,6 @@ class document extends aw_template
 			"title_link"  => ($doc["link_text"] != "" ? $doc["link_text"] : (isset($GLOBALS["doc_file"]) ? $GLOBALS["doc_file"] :  "index.".$ext."/")."section=".$docid),
 		));
 
-		$parent_obj = $this->get_object($doc["parent"]);
-		$this->vars(array(
-			"parent_name" => $parent_obj["name"]
-		));
 		if ($leadonly > -1 && $doc["title_clickable"])
 		{
 			$this->vars(array("TITLE_LINK_BEGIN" => $this->parse("TITLE_LINK_BEGIN"), "TITLE_LINK_END" => $this->parse("TITLE_LINK_END")));

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.2 2002/03/18 13:49:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.3 2002/03/20 19:36:08 duke Exp $
 // menu_cache.aw - Menüüde cache
 class menu_cache extends acl_base {
 	function menu_cache($args = array())
@@ -102,7 +102,8 @@ class menu_cache extends acl_base {
 		$cache = new cache();
 		$where = ($args["where"]) ? $args["where"] : " objects.status = 2";
 		global $awt,$lang_id,$SITE_ID;
-                $ms = $cache->file_get("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID);
+		$filename = "menuedit::menu_cache::lang::" . $lang_id . "::site_id::" . $SITE_ID;
+                $ms = $cache->file_get($filename);
 		$this->mar = array();
 		$this->mpr = array();
 		$this->subs = array();
@@ -133,6 +134,12 @@ class menu_cache extends acl_base {
 			$this->subs = $cached["subs"];
 		};
 
+
+	}
+
+	function get_cached_menu($oid)
+	{
+		return $this->mar[$oid];
 	}
 }
 ?>
