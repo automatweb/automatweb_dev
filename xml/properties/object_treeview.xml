@@ -12,39 +12,40 @@
             <name>folders</name>
             <table>objects</table>
             <group>folders</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>text</type>
             <store>no</store>
             <callback>callback_get_menus</callback>
-            <field>folders</field>
             <caption>Kataloogid</caption>
       </property>
       <property>
             <name>show_folders</name>
             <table>objects</table>
             <group>general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>N&amp;auml;ita katalooge</caption>
       </property>
       <property>
             <name>show_add</name>
             <table>objects</table>
             <group>general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>N&amp;auml;ita toolbari</caption>
       </property>
       <property>
             <name>tree_type</name>
             <table>objects</table>
             <group>general</group>
-            <type>chooser</type>
             <field>meta</field>
             <method>serialize</method>
+            <type>chooser</type>
             <default>1</default>
             <caption>Puu n&amp;auml;itamise meetod</caption>
       </property>
@@ -52,116 +53,117 @@
             <name>groupfolder_acl</name>
             <table>objects</table>
             <group>general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>&amp;Otilde;igused piiratud grupi kataloogide j&amp;auml;rgi</caption>
       </property>
       <property>
             <name>show_notact</name>
             <table>objects</table>
             <group>general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>N&amp;auml;ita mitteaktiivseid objekte</caption>
       </property>
       <property>
             <name>sort_by</name>
             <table>objects</table>
             <group>general</group>
-            <type>select</type>
             <field>meta</field>
             <method>serialize</method>
+            <type>select</type>
             <caption>Objekte sorteeritakse</caption>
       </property>
       <property>
             <name>tree_on_left</name>
             <table>objects</table>
             <group>general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>Puu vasakul</caption>
       </property>
       <property>
             <name>clids</name>
             <table>objects</table>
             <group>clids</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>callback</type>
             <callback>get_clids</callback>
             <store>no</store>
-            <field>clids</field>
             <caption>Klassid</caption>
       </property>
       <property>
             <name>style_donor</name>
             <table>objects</table>
             <group>styles</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_STYLE_DONOR</reltype>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE_DONOR</reltype>
             <caption>Stiilide doonor</caption>
       </property>
       <property>
             <name>title_bgcolor</name>
             <table>objects</table>
             <group>styles</group>
-            <type>colorpicker</type>
             <field>meta</field>
             <method>serialize</method>
+            <type>colorpicker</type>
             <caption>Pealkirja taustav&amp;auml;rv</caption>
       </property>
       <property>
             <name>even_bgcolor</name>
             <table>objects</table>
             <group>styles</group>
-            <type>colorpicker</type>
             <field>meta</field>
             <method>serialize</method>
+            <type>colorpicker</type>
             <caption>Paaris rea taustav&amp;auml;rv</caption>
       </property>
       <property>
             <name>odd_bgcolor</name>
             <table>objects</table>
             <group>styles</group>
-            <type>colorpicker</type>
             <field>meta</field>
             <method>serialize</method>
+            <type>colorpicker</type>
             <caption>Paaritu rea taustav&amp;auml;rv</caption>
       </property>
       <property>
             <name>header_css</name>
             <table>objects</table>
             <group>styles</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CSS</reltype>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CSS</reltype>
             <caption>Pealkirja stiil</caption>
       </property>
       <property>
             <name>line_css</name>
             <table>objects</table>
             <group>styles</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CSS</reltype>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CSS</reltype>
             <caption>Rea stiil</caption>
       </property>
       <property>
             <name>columns</name>
             <table>objects</table>
             <group>columns</group>
-            <type>callback</type>
-            <callback>callback_get_columns</callback>
             <field>meta</field>
             <method>serialize</method>
+            <type>callback</type>
+            <callback>callback_get_columns</callback>
             <caption>Tulbad</caption>
       </property>
       <classinfo>

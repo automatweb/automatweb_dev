@@ -4,49 +4,49 @@
             <name>ds</name>
             <table>objects</table>
             <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_DATASOURCE</reltype>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_DATASOURCE</reltype>
             <caption>Andmed</caption>
       </property>
       <property>
             <name>show_folders</name>
             <table>objects</table>
             <group>showing</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>N&amp;auml;ita katalooge</caption>
       </property>
       <property>
             <name>show_add</name>
             <table>objects</table>
             <group>showing</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>N&amp;auml;ita toolbari</caption>
       </property>
       <property>
             <name>show_link_new_win</name>
             <table>objects</table>
             <group>showing</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>Vaata link uues aknas</caption>
       </property>
       <property>
             <name>tree_type</name>
             <table>objects</table>
             <group>showing</group>
-            <type>chooser</type>
             <field>meta</field>
             <method>serialize</method>
+            <type>chooser</type>
             <default>1</default>
             <caption>Puu n&amp;auml;itamise meetod</caption>
       </property>
@@ -54,85 +54,87 @@
             <name>per_page</name>
             <table>objects</table>
             <group>showing</group>
-            <type>textbox</type>
-            <size>5</size>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
             <caption>Mitu rida lehel</caption>
       </property>
       <property>
             <name>sortbl</name>
             <table>objects</table>
             <group>showing</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>table</type>
             <store>no</store>
-            <field>sortbl</field>
             <caption>Andmete sorteerimine</caption>
       </property>
       <property>
             <name>filter_table</name>
             <table>objects</table>
             <group>showing</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>table</type>
             <store>no</store>
-            <field>filter_table</field>
             <caption>Andmete filtreerimine</caption>
       </property>
       <property>
             <name>title_bgcolor</name>
             <table>objects</table>
             <group>styles</group>
-            <type>colorpicker</type>
             <field>meta</field>
             <method>serialize</method>
+            <type>colorpicker</type>
             <caption>Pealkirja taustav&amp;auml;rv</caption>
       </property>
       <property>
             <name>even_bgcolor</name>
             <table>objects</table>
             <group>styles</group>
-            <type>colorpicker</type>
             <field>meta</field>
             <method>serialize</method>
+            <type>colorpicker</type>
             <caption>Paaris rea taustav&amp;auml;rv</caption>
       </property>
       <property>
             <name>odd_bgcolor</name>
             <table>objects</table>
             <group>styles</group>
-            <type>colorpicker</type>
             <field>meta</field>
             <method>serialize</method>
+            <type>colorpicker</type>
             <caption>Paaritu rea taustav&amp;auml;rv</caption>
       </property>
       <property>
             <name>header_css</name>
             <table>objects</table>
             <group>styles</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CSS</reltype>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CSS</reltype>
             <caption>Pealkirja stiil</caption>
       </property>
       <property>
             <name>line_css</name>
             <table>objects</table>
             <group>styles</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CSS</reltype>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CSS</reltype>
             <caption>Rea stiil</caption>
       </property>
       <property>
             <name>columns</name>
             <table>objects</table>
             <group>columns</group>
-            <type>callback</type>
-            <callback>callback_get_columns</callback>
             <field>meta</field>
             <method>serialize</method>
+            <type>callback</type>
+            <callback>callback_get_columns</callback>
             <caption>Tulbad</caption>
       </property>
       <classinfo>
