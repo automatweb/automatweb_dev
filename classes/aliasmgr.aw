@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.36 2002/07/05 09:42:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.37 2002/07/05 11:47:11 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -1128,7 +1128,8 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		$this->acounter++;
 		$alias = sprintf("#%s%d#",$this->defs[$this->def_id]["alias"],$this->acounter);
 		$this->counter++;
-		$this->chlinks[$this->counter] = $args["url"];
+		//$this->chlinks[$this->counter] = $args["url"];
+		$this->chlinks[$id] = $args["url"];
 		$this->dellinks[$id] = $id;
 		$this->t->merge_data(array(
 			"modified"            => $this->time2date($args["modified"],2),
