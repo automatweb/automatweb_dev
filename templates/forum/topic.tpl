@@ -16,26 +16,16 @@
 <!-- END SUB: page -->
 </td>
 </tr>
-<!-- <tr>
-<td colspan="2" class="{VAR:style_caption}">
-<strong>{VAR:name}</strong>
-</td>
-</tr>
-<tr>
-<td class="{VAR:style_comment_count}">
-{VAR:comment}
-</td>
-</tr> -->
 </table>
 
-<table border="0" cellspacing="0" cellpadding="3" width="100%" style="border-collapse: collapse;">
+<table border="1" cellspacing="0" cellpadding="3" width="100%" style="border-collapse: collapse;">
 <tr>
 	<td align="center" width="20%" class="{VAR:style_comment_creator}"><div class="{VAR:style_comment_user}">{VAR:createdby}</div>{VAR:date}</td>
 	<td valign="top" class="{VAR:style_comment_count}"><strong>{VAR:name}</strong><p>{VAR:comment}</td>
 </tr>
 <!-- SUB: COMMENT -->
 <tr>
-	<td align="center" width="20%" class="{VAR:style_comment_time}"><div class="{VAR:style_comment_user}">{VAR:createdby}</div><div class="">{VAR:date}</div></td>
+	<td align="center" width="20%" class="{VAR:style_comment_time}"><div class="{VAR:style_comment_user}">{VAR:uname}</div><div class="">{VAR:date}</div></td>
 	<td valign="top" class="{VAR:style_comment_text}"><strong>{VAR:name}</strong><p>{VAR:commtext}</td>
 </tr>
 <!-- END SUB: COMMENT -->
