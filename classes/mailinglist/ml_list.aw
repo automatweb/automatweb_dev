@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.71 2004/09/22 14:37:52 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.72 2004/10/07 21:28:35 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -10,7 +10,7 @@
 	@default group=general
 	
 	@property def_user_folder type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 rel=1
-	@caption Liikmete kaust
+	@caption Listi liikmete allikas
 
 	@property multiple_folders type=checkbox ch_value=1
 	@caption Lase liitumisel folderit valida
@@ -139,8 +139,8 @@
 	@classinfo relationmgr=yes
 	@classinfo no_status=1
 
-	@reltype MEMBER_PARENT value=1 clid=CL_MENU
-	@caption listi liikmete kataloog
+	@reltype MEMBER_PARENT value=1 clid=CL_MENU,CL_USER,CL_GROUP
+	@caption Listi liikmete allikas
 
 	@reltype REDIR_OBJECT value=2 clid=CL_DOCUMENT
 	@caption ümbersuunamine
@@ -276,12 +276,10 @@ class ml_list extends class_base
 	**/
 	function subscribe($args = array())
 	{
-		
 		$list_id = $args["id"];
 		$rel_id = $args["rel_id"];
 
 		$list_obj = new object($list_id);
-
 		// I have to check whether subscribing requires confirmation, and if so, send out the confirm message
 		// subscribe confirm works like this - we still subscribe the member to the list, but make
 		// her status "deactive" and generate her a confirmation code
@@ -399,9 +397,10 @@ class ml_list extends class_base
 		{
 			$retval = $this->cfg["baseurl"] . "/" . $mx["redir_obj"];
 		}
-		elseif ($list_obj->prop("redir_obj") != "")
+		elseif  ($list_obj->prop("redir_obj")!= "")
 		{
-			$retval = $this->cfg["baseurl"] . "/" . $list_obj->prop("redir_obj");
+			$ro = obj($list_obj->prop("redir_obj"));
+			$retval = $this->cfg["baseurl"] . "/" . $ro->id();
 		}
 		return $retval;
 	}
@@ -1159,11 +1158,12 @@ class ml_list extends class_base
 			$this->vars($cb_reqdata);
 		};
 		
+		$targ = obj($args["alias"]["target"]);
 		$this->vars(array(
 			"listname" => $tobj->name(),
 			"cb_errmsg" => $cb_errmsg,
 			"reforb" => $this->mk_reforb("subscribe",array(
-				"id" => $args["alias"]["target"],
+				"id" => $targ->id(),
 				"rel_id" => $relobj->id(),
 				"section" => aw_global_get("section"),
 			)),
