@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.34 2003/12/03 14:17:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.36 2004/02/27 13:27:06 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 /*
 
@@ -29,7 +29,7 @@
 @property units type=select 
 @caption Suuruse &uuml;hikud
 
-@property fgcolor type=colorpicker 
+@property fgcolor type=colorpicker
 @caption Teksti v&auml;rv
 
 @property bgcolor type=colorpicker 
@@ -60,7 +60,7 @@
 @caption Laiuse &uuml;hikud
 
 @property height type=textbox size=5
-@caption K&otilde;rgus 
+@caption K&otilde;rgus
 
 @property h_units type=select 
 @caption K&otilde;rguse &uuml;hikud
@@ -83,6 +83,8 @@
 @property pre type=text group=preview no_caption=1
 @caption Eelvaade
 
+@reltype CSS value=1 clid=CL_CSS
+@caption css stiil
 */
 
 define("RELTYPE_CSS", 1);
@@ -112,6 +114,32 @@ class css extends class_base
 		);
 	}
 
+
+	/** I could not think of another place to stick this. oh well. whatever
+
+		@attrib name=colorpicker params=name all_args="1" default="0"
+
+
+		@returns
+
+
+		@comment
+
+	**/
+	function colorpicker($arr)
+	{
+		if (method_exists($this,"db_init"))
+		{
+			$this->db_init();
+		};
+		if (method_exists($this,"tpl_init"))
+		{
+			$this->tpl_init("automatweb");
+		}
+		$this->read_template("colorpicker.tpl");
+		die($this->parse());
+	}
+
 	function get_style_data_by_id($id)
 	{
 		if (!empty($id))
@@ -131,15 +159,15 @@ class css extends class_base
 	// name - stiili nimi, data, array css atribuutidest
 	function _gen_css_style($name,$data = array())
 	{
-//		echo "name = $name , data = ".dbg::dump($data);
 		$retval = ".$name {\n";
 		if (!(is_array($data)))
 		{
 			return false;
 		};
+
 		foreach($data as $key => $val)
 		{
-			if ($val === "")			
+			if ($val === "")
 			{
 				continue;
 			}
@@ -161,7 +189,7 @@ class css extends class_base
 				case "fweight":
 					$mask = "font-weight: %s;\n";
 					break;
-				
+
 				case "bold":
 					if ($val == 1)
 					{
@@ -172,7 +200,7 @@ class css extends class_base
 						$ign = true;
 					};
 					break;
-				
+
 				case "fgcolor":
 					$mask = "color: %s;\n";
 					break;
@@ -257,8 +285,8 @@ class css extends class_base
 	{
 		if (!aw_cache_get("AW_CSS_STYLE_CACHE",$id))
 		{
-			$css_info = $this->get_obj_meta($id);
-			aw_cache_set("AW_CSS_STYLE_CACHE",$id,$css_info["meta"]["css"]);
+			$o = obj($id);
+			aw_cache_set("AW_CSS_STYLE_CACHE",$id,$o->meta("css"));
 		}
 		return aw_cache_get("AW_CSS_STYLE_CACHE",$id);
 	}
@@ -270,43 +298,10 @@ class css extends class_base
 		{
 			$ret[0] = "";
 		}
-		$this->db_query("SELECT oid,name FROM objects WHERE class_id = ".CL_CSS." AND status != 0");
-		while ($row = $this->db_next())
-		{
-			$ret[$row["oid"]] = $row["name"];
-		}
-		return $ret;
-	}
-
-	////
-	// !I could not think of another place to stick this. oh well. whatever
-	function colorpicker($arr)
-	{
-		if (method_exists($this,"db_init"))
-		{
-			$this->db_init();
-		};
-		if (method_exists($this,"tpl_init"))
-		{
-			$this->tpl_init("automatweb");
-		}
-		$this->read_template("colorpicker.tpl");
-		die($this->parse());
-	}
-
-	function callback_get_rel_types()
-	{
-		return array(
-			RELTYPE_CSS => "css stiil"
-		);
-	}
-
-	function callback_get_classes_for_relation($args = array())
-	{
-		if ($args["reltype"] == RELTYPE_CSS)
-		{
-			return array(CL_CSS);
-		}
+		$ol = new object_list(array(
+			"class_id" => CL_CSS,
+		));
+		return $ret + $ol->names();
 	}
 
 	function get_property(&$arr)
@@ -374,8 +369,8 @@ class css extends class_base
 
 	function callback_pre_save($arr)
 	{
-		$meta = $arr["obj_inst"]->meta();	
-		$cssmeta = array(); //$arr["obj_inst"]->meta("css");
+		$meta = $arr["obj_inst"]->meta();
+		$cssmeta = array(); ;
 		$_t = new aw_array($meta);
 		foreach($_t->get() as $k => $v)
 		{

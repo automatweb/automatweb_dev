@@ -199,18 +199,6 @@
             <group>selectione</group>
       </property>
       <property>
-            <name>selections</name>
-            <type>popup_objmgr</type>
-            <clid>CL_SELECTION</clid>
-            <multiple>1</multiple>
-            <method>serialize</method>
-            <field>meta</field>
-            <table>objects</table>
-            <width>600</width>
-            <group>general</group>
-            <caption>majanda valimeid</caption>
-      </property>
-      <property>
             <name>active_selection</name>
             <type>textbox</type>
             <group>

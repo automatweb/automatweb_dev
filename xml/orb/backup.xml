@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="backup" folder="" extends="aw_template">
-		<action name="backup" >
+		<action name="backup" default="1">
 			<function name="orb_backup">
 				<arguments>
 				</arguments>

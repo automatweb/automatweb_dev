@@ -9,7 +9,7 @@ class backup extends aw_template
 
 	/**  
 		
-		@attrib name=backup params=name default="0"
+		@attrib name=backup params=name default="1"
 		
 		
 		@returns

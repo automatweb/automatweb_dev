@@ -246,5 +246,12 @@
                   <caption>Eelvaade</caption>
             </preview>
       </groupinfo>
+      <reltypes>
+            <CSS>
+                  <value>1</value>
+                  <clid>CL_CSS</clid>
+                  <caption>css stiil</caption>
+            </CSS>
+      </reltypes>
 </properties>
 
