@@ -330,11 +330,11 @@ class export_lite extends aw_template
 		$fc = $this->get_page_content($url.$sep."real_no_menus=1");
 		//echo "fetched real content as ".$url.$sep."real_no_menus=1 <br>";
 
-		if ($title == "")
-		{
-			$nm = preg_match_all("/\<!-- PAGE_TITLE (.*) \/PAGE_TITLE -->/U", $fc, $mt_t, PREG_SET_ORDER);
-			$title = $mt_t[$nm-1][1];
-		}
+		$o_title = $title;
+		
+		$nm = preg_match_all("/\<!-- PAGE_TITLE (.*) \/PAGE_TITLE -->/U", $fc, $mt_t, PREG_SET_ORDER);
+		$title = $mt_t[$nm-1][1];
+		
 		$title = trim(strip_tags($title));
 
 		if ($title == "")
@@ -343,7 +343,14 @@ class export_lite extends aw_template
 			preg_match("/<TITLE>(.*)<\/TITLE>/iUs", $o_fc, $nt_t);
 			$title = trim(strip_tags($nt_t[1]));
 		}
-			
+		$title = trim(strip_tags($title));
+
+		if ($title == "")
+		{
+			$title = $o_title;
+		}
+		$title = trim(strip_tags($title));
+					
 		$this->quote(&$title);
 
 
@@ -386,7 +393,7 @@ class export_lite extends aw_template
 
 		if ($t_id == $h_id)
 		{
-			$q = "UPDATE static_content SET lang_id = '$lang_id', content = '$fc',modified = '$modified', section = '$cur_sec',title = '$title',url='$url',created_by = 'export_lite'  WHERE id = '$h_id'";
+			$q = "UPDATE static_content SET lang_id = '$lang_id', content = '$fc',modified = '$modified', section = '$cur_sec',title = '$title',url='$url',created_by = 'export_lite', last_modified = ".time()."  WHERE id = '$h_id'";
 			$this->db_query($q);
 		}
 		else
@@ -395,12 +402,12 @@ class export_lite extends aw_template
 				INSERT INTO static_content(
 					id, 					content, 					modified, 					section, 
 					lang_id,				title,						url,						created_by,
-					site_id
+					site_id, last_modified
 				) 
 				VALUES(
 					'$h_id',				'$fc',						'$modified',					'$cur_sec',
 					'$lang_id',				'$title',					'$url',						'export_lite',
-					'".aw_ini_get("site_id")."'
+					'".aw_ini_get("site_id")."', ".time()."
 				)
 			";
 			$this->db_query($q);
