@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.53 2002/10/16 13:42:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.54 2002/10/30 11:11:24 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -521,7 +521,7 @@ class aliasmgr extends aw_template
 			}
 			// let the correct class override the alias adding if it wants to
 			// if the class does not handle it, it falls back on core::addalias
-			$cl = $this->cfg["classes"][$al["class_id"]]["file"];
+			$cl = $this->cfg["classes"][$al["class_id"]]["alias_class"];
 			if ($cl != "")
 			{
 				$inst = get_instance($cl);
