@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.3 2002/11/07 10:52:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.4 2002/11/11 11:06:11 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -377,11 +377,13 @@ class form_table extends form_base
 						if ($cc["el_show"][$elid] == 1)
 						{
 							$cursums[$elid] += $dat["ev_".$elid];
+							$str .= $this->table["defs"][$col]["el_sep_pre"][$elid];
 							$str .= $dat["ev_".$elid];
 							$str .= $this->table["defs"][$col]["el_sep"][$elid];
 						}
 						else
 						{
+							$noshowstr .= $this->table["defs"][$col]["el_sep_pre"][$elid];
 							$noshowstr .= $dat["ev_".$elid];
 							$noshowstr .= $this->table["defs"][$col]["el_sep"][$elid];
 						}
@@ -392,6 +394,7 @@ class form_table extends form_base
 						// order element will never have a value in the data
 						if ($elid == "order" )
 						{
+							$str .= $this->table["defs"][$col]["el_sep_pre"][$elid];
 							$str .= $this->get_order_url($col,$dat);
 							$str .= $this->table["defs"][$col]["el_sep"][$elid];
 						}
@@ -516,6 +519,16 @@ class form_table extends form_base
 				// and then, finally some misc settings
 				if (isset($cc["link_el"]))
 				{
+					$linktext = $str;
+					$ar = new aw_array($cc["alias"]);
+					foreach($ar->get() as $aid)	
+					{
+						$alias_data = $cc["alias_data"][$aid];
+						if ($alias_data["class_id"] == CL_IMAGE)
+						{
+							$linktext = $this->get_image_alias_url($str, $alias_data["target"], $col, $noshowstr);
+						}
+					}
 					if (isset($cc["link_popup"]) && $cc["link_popup"])
 					{
 						$str = "<a href=\"".sprintf("javascript:ft_popup('%s&type=popup','popup',%d,%d,%d,%d,%d,%d)",
@@ -526,11 +539,11 @@ class form_table extends form_base
 							$cc["link_popup_addressbar"],
 							$cc["link_popup_width"],
 							$cc["link_popup_height"]
-						)."\">".$str."</a>";
+						)."\">".$linktext."</a>";
 					}
 					else
 					{
-						$str = "<a href='".$dat["ev_".$cc["link_el"]]."'>".$str."</a>";
+						$str = "<a href='".$dat["ev_".$cc["link_el"]]."'>".$linktext."</a>";
 					}
 				}
 				else
@@ -1880,6 +1893,7 @@ class form_table extends form_base
 						"el_ord" => $this->table["defs"][$col]["el_ord"][$el],
 						"el_id" => $el,
 						"el_sep" => $this->table["defs"][$col]["el_sep"][$el],
+						"el_sep_pre" => $this->table["defs"][$col]["el_sep_pre"][$el],
 						"el_show" => checked($this->table["defs"][$col]["el_show"][$el]),
 						"el_search" => checked($this->table["defs"][$col]["el_search"][$el])
 					));

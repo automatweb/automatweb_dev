@@ -105,7 +105,8 @@
 											<table border="0">
 												<tr>
 													<td class="celltext">Jrk.</td>
-													<td class="celltext">Sep.</td>
+													<td class="celltext">Pre.</td>
+													<td class="celltext">Post.</td>
 													<td class="celltext">N&auml;ita</td>
 												</tr>
 												<!-- SUB: SEL_EL -->
@@ -114,6 +115,7 @@
 												</tr>
 												<tr>
 													<td class="celltext"><input class="formtext" type="text" name="cols[{VAR:col_id}][el_ord][{VAR:el_id}]" value="{VAR:el_ord}" size="2"></td>
+													<td class="celltext"><input class="formtext" type="text" name="cols[{VAR:col_id}][el_sep_pre][{VAR:el_id}]" value="{VAR:el_sep_pre}" size="2"></td>
 													<td class="celltext"><input class="formtext" type="text" name="cols[{VAR:col_id}][el_sep][{VAR:el_id}]" value="{VAR:el_sep}" size="2"></td>
 													<td class="celltext"><input class="formcheck" type="checkbox" name="cols[{VAR:col_id}][el_show][{VAR:el_id}]" value="1" {VAR:el_show}></td>
 												</tr>
