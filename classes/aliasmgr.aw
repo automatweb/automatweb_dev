@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.155 2004/10/08 05:09:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.156 2004/10/27 16:23:29 duke Exp $
 
 class aliasmgr extends aw_template
 {
@@ -56,8 +56,8 @@ class aliasmgr extends aw_template
 					$cldat["file"] = $cldat["alias_class"];
 					$classes[$clid]["file"] = $cldat["alias_class"];
 				}
-				$clids .= 'clids['.$clid.'] = "'.basename($cldat["file"]).'";'."\n";
 			}
+			$clids .= 'clids['.$clid.'] = "'.basename($cldat["file"]).'";'."\n";
 		}
 		
 
@@ -91,7 +91,7 @@ class aliasmgr extends aw_template
 			"parent" => $obj->parent(),
 			"period" => $period,
 			"id" => $id,
-			"return_url" => $return_url,
+			"return_url" => urlencode($return_url),
 			"reforb" => $this->mk_reforb("search_aliases",array(
 				"no_reforb" => 1,
 				"search" => 1,
