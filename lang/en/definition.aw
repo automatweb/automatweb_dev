@@ -114,7 +114,6 @@ define("LC_CONFIG_CHOOSE_CONTACT_INPUT_FORM","<a href='%s'>Site config</a> / Cho
 define("LC_CONFIG_PROMO_BOX","promo box");
 define("LC_CONFIG_BROD_MENY","Brothered menu");
 define("LC_CONFIG_HOME_CAT","Homecatalogue");
-define("LC_CONFIG_HOME_CAT_SHAR_FOL", "Homecatalogue/SHARED FOLDERS");
 
 define("LC_CONTACT_NO_FORM","no form selected for adding contacts!");
 define("LC_CONTACT_NOT_SORTED","not sorted");
@@ -235,11 +234,6 @@ define("LC_EVENTS_USER_URL","URL");
 define("LC_EVENTS_USER_FREE","FREE");
 define("LC_EVENTS_USERADD_FLYER","FLYER");
 define("LC_EVENTS_USERADD_PRICE","PRICE");
-//define("LC_EVENTS_USER_LOC","Location: $baseurl/index.aw/section=11598");
-
-define("LC_EXTLINKS_ADD_LINK","Added link %s");
-define("LC_EXTLINKS_CLIK_LINK","Clicked link %s");
-define("LC_EXTLINKS_CHANGED_LINK","Changed link %s");
 
 define("LC_FILE_DIR_NOT_DEFINED","SITE_DIR is not defined, can't continue<br>");
 define("LC_FILE_ADD_FILE","Add file");
@@ -351,10 +345,6 @@ define("LC_GROUPS_GROUP_CHANGE","<a href='%s'>Groups</a> / Change");
 define("LC_GUESTBOOK_ADD","Add questbook");
 define("LC_GUESTBOOK_CHANGE","Change questbook");
 
-
-//homedir.aw
-define("LC_HOMEDIR_ADDED","Folder added");
-
 //icons.aw
 define("LC_ICONS_SITE_CONFIG","<a href='%s'>Site config</a> / Icons base");
 define("LC_ICONS_SITE_CONFIG_ADD","<a href='%s'>Site config</a> / <a href='%s'>Icons base</a> / Add");
@@ -367,13 +357,6 @@ define("LC_ICONS_IMPORTED_ICONS","Imported %s icons. <a href='%s'>Back</a><br>")
 define("LC_ICONS_PROCESSING_FILE","protsessing file %s <br>");
 define("LC_ICONS_CONVERTING_FILE","converting file to gif!<br>");
 define("LC_ICONS_IMPORTING","Imported %s icons!<br><a href='%s'>Back</a>");
-
-//images.aw
-define("LC_IMAGES_ADD_PIC","Add picture");
-define("LC_IMAGES_SOME_IS_WRONG","Something is wrong. Picture is not saved");
-define("LC_IMAGES_ADDED_PICT","Added picture %s");
-define("LC_IMAGES_CHANGED_PICT","Change picture %s");
-define("LC_IMAGES_NOT_COMP","Thist filetype doesn't suite me");
 
 //item_type
 define("LC_ITEM_TYPE_ADD","Add article type");
