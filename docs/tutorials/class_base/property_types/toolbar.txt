@@ -1,0 +1,111 @@
+toolbar
+
+Gets it's contents from a get_property call. You should probably set no_caption=1 and store=no, for this property.
+
+<b>Example 3.5. Example toolbar</b>
+<pre>
+#php#
+function get_property($arr)
+{
+	$data = &$args["prop"];
+	$retval = PROP_OK;
+	switch($data["name"])
+	{
+		case "navtoolbar":
+			$toolbar = &$data["toolbar"];
+			$toolbar->add_button(array(
+				"name" => "save",
+				"tooltip" => "Salvesta",
+				"url" => "javascript:do_something();",
+				"img" => "save.gif",
+			));
+			$toolbar->add_separator();
+			$toolbar->add_cdata("some text");
+			break;
+	}
+};
+#/php#
+</pre>
+You can also create drop-down menus with the toolbar class.
+It works like this:
+
+#php#
+$toolbar->add_menu_button(array(
+        "name" => "yourmenu",
+        "tooltip" => "Click this button to see the menu",
+));
+#/php#
+
+You can additionaly specify an "img" attribute, in which case
+that image will be used instead of the default "new.gif" (green
+rectangle).
+<pre>
+#php#
+$toolbar->add_menu_button(array(
+        "name" => "searchmenu",
+        "tooltip" => "Click to see search types",
+        "img" => "search.gif",
+));
+
+#/php#
+</pre>
+
+add_menu_button results looks like all other buttons on the toolbar,
+except that if you click on it, a menu will pop up below it.
+
+Adding items to the menu:
+<pre>
+#php#
+$toolbar->add_menu_item(array(
+        "parent" => "yourmenu",
+        "title" => "Automatweb.com",
+        "link" => "http://www.automatweb.com",
+));
+#/php#
+</pre>
+
+parent attribute specifies the name of the menu under which the
+item should be added. The rest of the attributes are self-explanatory.
+
+Adding a disabled menu item (let's say some prerequisite for invoking
+that action is not met) goes like this:
+<pre>
+#php#
+$toolbar->add_menu_item(array(
+        "parent" => "yourmenu",
+        "title" => "Pangalink",
+        "link" => "https://www.hanza.net",
+        "text" => "You do not have sufficient privileges for this",
+        "disabled" => true,
+));
+#/php#
+</pre>
+Disabled item will be rendered with grayed out text and it's impossible
+to click the item. text attribute will be shown as tooltip if the mouse
+is hovering over the item and is ment to be used as an explanation
+about why the item is disabled.
+
+You can also add nested menus which arbitrary number of levels.
+<pre>
+#php#
+$toolbar->add_sub_menu(array(
+        "name" => "submenu",
+        "parent" => "yourmenu",
+        "text" => "Click here to see more options",
+));
+#/php#
+</pre>
+
+To add items to a submenu, simply use the name of the
+submenu as the parent attribute.
+<pre>
+#php#
+$toolbar->add_menu_button(array(
+        "parent" => "submenu",
+        "title" => "Struktuur Meedia",
+        "link" => "http://www.struktuur.ee",
+));
+#/php#
+</pre>
+
+

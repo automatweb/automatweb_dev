@@ -1,0 +1,8 @@
+function binhex($str)
+
+Converts all characters in the given string to their hexadecimal notation and returns the resulting string. 
+
+<i>Parameters:</i>
+
+- $str
+The string to convert. 

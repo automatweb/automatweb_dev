@@ -1,0 +1,3 @@
+fileupload
+
+File upload field. You'll have to implement the code that will receive and store the file yourself.

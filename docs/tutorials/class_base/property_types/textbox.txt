@@ -1,0 +1,7 @@
+textbox
+
+single line text input control
+
+<b>size</b>
+
+    width of the element

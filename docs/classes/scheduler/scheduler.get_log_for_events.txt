@@ -1,0 +1,3 @@
+scheduler::get_log_for_events($mask)
+
+returns an array of log entries that are for events that match mask

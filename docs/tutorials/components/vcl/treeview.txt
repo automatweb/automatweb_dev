@@ -1,0 +1,111 @@
+Displays a hierarchical tree, with expandable/collapsibe nodes.
+
+We start by describing the creation of simplest possible tree.
+
+Start by creating an instance of the tree object
+
+#php#
+$tree = get_instance("vcl/treeview");
+#/php#
+
+Then define the tree type and root node.
+
+#php#
+$tree->start_tree(array(
+	"type" => TREE_DHTML,
+	"root_name" => "AutomatWeb",
+	"root_url" => $this->mk_my_orb("root_action",array()),
+));
+#/php#
+
+Now add some items to the tree.
+#php#
+$tree->add_item(0,array(
+	"id" => 3,
+	"name" => "Some item",
+	"iconurl" => "/automatweb/images/myicon.gif",
+	"url" => $this->mk_my_orb("do_something",array()),
+));
+#/php#
+First argument of add_item is the parent for the item.
+0 is the first level.
+
+Second argument specifies the contents of the node in array form,
+where
+
+id - unique id (oid) for the item,
+name - text shown beside the icon, caption of the node,
+iconurl - path to the icon for the node,
+url - action to invoke when the node is clicked.
+
+Now proceed with adding a few more items to the 0th level,
+(make sure that they all have UNIQUE id-s), and then
+add one with a parent of for example 3.
+
+Finally, to get the HTML for the tree, invoke
+#php#
+$res = $this->tree->finalize_tree();
+#/php#
+Now $res contains all the required HTML for the tree, which
+can now be exported to a template.
+
+Now that we are done with basics. What follows is a more
+detailed description of the tree component.
+
+
+#php#
+$tree->start_tree(array(
+	"type" => TREE_DHTML,
+	"root_name" => "AutomatWeb",
+	"root_url" => $this->mk_my_orb("root_action", array()),
+	"root_icon" => "/path/to/some/image",
+	"url_target" => "list",
+	"has_root" => empty($this->use_parent) ? true : false,
+	"tree_id" => "ad_folders",
+	//"persist_state" => true,
+	"get_branch_func" => $this->mk_my_orb("gen_branch",array("parent" => "0")),
+));
+#/php#
+
+Where
+
+type - is the type of tree. Two different types are implemented right now,
+
+TREE_DHTML - which uses mostly css and a tiny amount of Javascript, is
+quite fast, has more features and therefore should always be used.
+
+TREE_JS - heavy Javascript use, rather slow with complex trees, avoid
+using it.
+
+root_name - caption of the root node. This is the start of the tree, is
+always visible (unless hidden explicitly with has_root => false).
+There can only be one root node at a time.
+
+root_url - action of the root node.
+
+root_icon - optional, path to the image that should be used for the
+root node. If omitted, default icon with an AW logo is used.
+
+url_target - optional, if specified will be used as the target attribute
+for all links in the tree.
+
+has_root - optional, bool, is specified then the tree is drawn without a root node.
+Only useful with LOAD_ON_DEMAND feature (more about that below). Defaults
+to true.
+
+tree_id - optional, unique symbolic identifier for the tree. Only serves
+a purpose when "persist_state" is used.
+
+persist_sate - optional, bool, if set to true, the tree tries to remember
+it's state (information about opened and closed nodes) between page loads
+using cookies. If you use this, you absolutely _need_ to specify tree_id
+as well. Defaults to false.
+
+get_branch_func - optional. An action that returns a subtree (contents)
+of a node. If specified, then LOAD_ON_DEMAND feature will be used, if not
+then the whole tree will be drawn at once.
+
+Also, if you use get_branch_func, make sure you only export one level of tree items
+at a time.
+
+.. add a description of the LOAD_ON_DEMAND feature...

@@ -1,0 +1,3 @@
+<b>aw_array::get()</b>
+
+returns the contents of the object as a php array

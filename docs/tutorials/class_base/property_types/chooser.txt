@@ -1,0 +1,30 @@
+chooser
+
+Will be rendered as a group of checkboxes or a group of radiobuttons depending on the multiple attribute.
+
+Attributes:
+
+multiple=1 
+
+orient=vertical (optional), if omitted options will be rendered below each other. If specified properties will be rendered from left to right.
+
+<pre>
+#php#
+function get_property($arr)
+{
+	$data = &$args["prop"];
+	$retval = PROP_OK;
+	switch($data["name"])
+	{
+		case "organizations":
+			$toolbar = &$data["toolbar"];
+			$data["options"] = array(
+                            "1" => "UN",
+                            "2" => "NATO",
+                            "3" => "EU",
+                        );
+			break;
+	}
+};
+#/php#
+</pre>

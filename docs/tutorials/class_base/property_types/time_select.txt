@@ -1,0 +1,5 @@
+ 	
+time_select
+
+Basic widget for selecting a time (hour and minute)
+

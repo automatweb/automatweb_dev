@@ -1,0 +1,3 @@
+status
+
+Somewhat special item, generates a radiogroup with 2 choices - Yes and No

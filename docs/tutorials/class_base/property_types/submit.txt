@@ -1,0 +1,3 @@
+submit
+
+Submit button. Can be used to make multiple submit buttons, useful if you want to execute different actions for different buttons. The value of the submit property can be used to determine which button was clicked.

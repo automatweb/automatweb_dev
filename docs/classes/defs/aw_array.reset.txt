@@ -1,0 +1,3 @@
+<b>aw_array::reset()</b>
+
+resets the internal iterator for the current aw_array instance, after this, next() will return the first key/value pair of the aw_array

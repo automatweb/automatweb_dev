@@ -1,0 +1,11 @@
+function get_user($args)
+
+Returns the data stored in the users' table for user $uid. 
+
+<i>Parameters:</i>
+
+$uid - required
+The uid of the user to fetch. 
+
+$field - optional 
+If set, only the value for this field is returned, else all fields from the users table are returned. 
