@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.58 2003/12/05 12:29:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.59 2003/12/08 12:17:33 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -149,8 +149,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 
 @property gen_static type=checkbox store=no
 @caption Genereeri staatiline
-
-@property nobreaks type=hidden table=documents
 
 @property sbt type=submit value=Salvesta store=no 
 
@@ -429,7 +427,7 @@ class doc extends class_base
 	{
 		// map title to name
 		$obj_inst = &$args["obj_inst"];
-		$obj_inst->set_name($args["request"]["title"]);
+		$obj_inst->set_name($obj_inst->prop("title"));
 		
 		if (isset($this->_preview))
 		{
