@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.44 2004/06/28 19:50:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.45 2004/08/30 09:32:27 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -1603,7 +1603,7 @@ class converters extends aw_template
 			$this->db_query("ALTER TABLE languages ADD oid int default 0");
 		}
 			
-		$this->db_query("SELECT * FROM languages WHERE oid = 0");
+		$this->db_query("SELECT * FROM languages WHERE oid < 1");
 		while ($row = $this->db_next())
 		{
 			$this->save_handle();
