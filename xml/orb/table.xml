@@ -22,6 +22,14 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="aliases">
+			<function name="aliases">
+				<arguments>
+					<required name="id" type="int"/>
+				</arguments>
+			</function>
+		</action>
 		
 		<action name="add_col">
 			<function name="add_col">

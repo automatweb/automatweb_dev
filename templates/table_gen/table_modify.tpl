@@ -5,6 +5,7 @@
 		<td bgcolor=#f0f0f0><a href='{VAR:admin}'>{VAR:LC_TABLE_ADMIN}</a></td>
 		<td bgcolor=#f0f0f0><a href='{VAR:view}'>{VAR:LC_TABLE_PREVIEW}</a></td>
 		<td bgcolor=#f0f0f0><a href='{VAR:import}'>{VAR:LC_TABLE_IMPORT}</a></td>
+		<td bgcolor=#f0f0f0><a href='{VAR:aliases}'>Aliased</a></td>
 		<!-- SUB: ALIAS_LINK -->
 		<td bgcolor=#f0f0f0><a href='{VAR:url}'>{VAR:title}</a></td>
 		<!-- END SUB: ALIAS_LINK -->

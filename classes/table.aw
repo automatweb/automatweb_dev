@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.16 2001/11/29 22:09:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.17 2001/12/12 13:08:41 duke Exp $
 // table.aw - tabelite haldus
 global $orb_defs;
 
@@ -57,6 +57,91 @@ $orb_defs["table"] ="xml";
 			}
 			$replacement = $this->show(array("id" => $t["target"],"align" => $align));
 			return $replacement;
+			
+		}
+
+		////
+		// !Asendab tabeli sources aliased vastavate väärtustega
+		// content(string) - tabeli source
+		// oid(int) - millise tabeliga tegu?
+		function replace_aliases($args = array())
+		{
+			extract($args);
+			$mp = $this->register_parser(array(
+				"reg" => "/(#)(\w+?)(\d+?)(v|k|p|)(#)/i",
+			));
+	
+			$this->register_sub_parser(array(
+				"idx" => 2,
+				"match" => "p",
+				"class" => "image",
+				"reg_id" => $mp,
+				"function" => "parse_alias",
+			));
+
+			$this->register_sub_parser(array(
+				"idx" => 2,
+				"match" => "l", // L
+				"class" => "extlinks",
+				"reg_id" => $mp,
+				"function" => "parse_alias",
+				"reset" => "reset_aliases",
+				"templates" => array("link"),
+			));
+
+			$this->register_sub_parser(array(
+				"idx" => 2,
+				"match" => "v",
+				"class" => "file",
+				"reg_id" => $mp,
+				"function" => "parse_alias",
+			));
+
+			$this->register_sub_parser(array(
+				"idx" => 2,
+				"match" => "f",
+				"class" => "form",
+				"reg_id" => $mp,
+				"function" => "parse_alias",
+			));
+
+			$this->register_sub_parser(array(
+				"idx" => 2,
+				"match" => "c",
+				"class" => "form_chain",
+				"reg_id" => $mp,
+				"function" => "parse_alias",
+			));
+
+			$this->register_sub_parser(array(
+				"idx" => 2,
+				"match" => "x",
+				"class" => "link_collection",
+				"reg_id" => $mp,
+				"function" => "parse_alias",
+			));
+
+			$this->register_sub_parser(array(
+				"idx" => 2,
+				"match" => "g",
+				"class" => "graph",
+				"reg_id" => $mp,
+				"function" => "parse_alias",
+			));
+
+			$this->register_sub_parser(array(
+				"idx" => 2,
+				"match" => "r",
+				"class" => "form_alias",
+				"reg_id" => $mp,
+				"function" => "parse_alias",
+			));
+
+			$retval = $this->parse_aliases(array(
+				"oid" => $id,
+				"text" => $content,
+			));
+			return $retval;
 		}
 		
 		function load_table($id)
@@ -93,6 +178,22 @@ $orb_defs["table"] ="xml";
 			$this->table_parent = $row[parent];
 
 			// $this->table_loaded = true;
+		}
+
+		function aliases($args = array())
+		{
+			$this->read_template("table_aliases.tpl");
+			extract($args);
+			$this->vars(array(
+				"change"	=> $this->mk_orb("change", array("id" => $id)),
+				"styles"	=> $this->mk_orb("styles", array("id" => $id)),
+				"aliases" => $this->mk_my_orb("aliases",array("id" => $id)),
+				"admin"	=> $this->mk_orb("admin", array("id" => $id)),
+				"import"	=> $this->mk_orb("gen_import", array("id" => $id)),
+				"aliasmgr_link" => $this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"),
+				"view"		=> $this->mk_orb("view", array("id" => $id)),
+			));
+			return $this->parse();
 		}
 		
 		function gen_admin_html($arr)
@@ -187,6 +288,7 @@ $orb_defs["table"] ="xml";
 												"table_id" => $id,
 												"change"	=> $this->mk_orb("change", array("id" => $id)),
 												"styles"	=> $this->mk_orb("styles", array("id" => $id)),
+												"aliases" => $this->mk_my_orb("aliases",array("id" => $id)),
 												"admin"	=> $this->mk_orb("admin", array("id" => $id)),
 												"import"	=> $this->mk_orb("gen_import", array("id" => $id)),
 												"view"		=> $this->mk_orb("view", array("id" => $id)),
@@ -1229,7 +1331,8 @@ $orb_defs["table"] ="xml";
 
 				$table.= $footer_style ? $stc->get_text_begin_str($footer_style).$footer.$stc->get_text_end_str($footer_style) : $footer;
 			}
-			return $table;
+			$retval = $this->replace_aliases(array("id" => $id,"content" => $table));
+			return $retval;
 		}
 
 		function get_spans($i, $a, $map = -1,$rows = -1, $cols = -1)	// row, col
@@ -1732,6 +1835,7 @@ $orb_defs["table"] ="xml";
 				return "&nbsp;";
 			$txt = str_replace("  ", "&nbsp;&nbsp;", $txt);
 
+			// a miks seda iga celli juures eraldi peab tegema?
 			$txt = create_links($txt);
 			if ($txt == "")
 			{
