@@ -1,37 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.25 2003/07/04 14:08:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.26 2003/07/04 14:10:11 duke Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
-// I decided to make it a separate class, because I think the style.aw 
-// class is too cluttered.
-
-// General idea on selline:
-// Saidi juures / Autom@tWeb-is on defineeritud mingit kindlaksmääratud nimedega CSS stiilid,
-// css_list kuvab nende nimekirja, ning lubab sul igale stiilile vastavusse mõne enda defineeritud
-// stiili.
-
-// Ja üldiselt peaks see jagunema kaheks, peaksid olema süsteemi stiilid, ning "Minu stiilid"...
-// systeemi stiile kasutatakse by default, kuid, kui kasutajal on need endal defineeritud, siis
-// kasutame neid.
-
-// Stiilifaile peab saama ka importida/exportida
-
-// Tööle hakkab see nii, et tehakse cachesse fail, mis siis html-i alguses sisse loetakse
-
-// default stiilid loetakse koigepealt sisse, seejärel overraiditakse need custom stylesheediga.
-
-// font-family: serif|sans-serif|monospace|cursive
-// font-style: normal|italic
-// font-weight: normal|bold|bolder
-// font-size: XX px|pt|in|em|cm|mm
-// color: #RRGGBB
-// background: #RRGGBB
-
-// stiilid jaotuvad gruppidesse, igas grupis voib olla iga systeemse stiili jaoks
-// oma custom stiili defineeritud.
-
-// lisaks on kasutajatel olemas oma grupid, mille elemente saab jagada teiste kasutajatega, 
-// ja nii edasi ja nii tagasi
-
 /*
 
 @classinfo syslog_type=ST_CSS relationmgr=yes
