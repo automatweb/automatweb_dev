@@ -786,7 +786,7 @@ class shop_admin extends shop_base
 			{
 				// we do the time filtering here cause we can't do it in the query because then we might skip opver some important items
 				$_tm = $odata["from"];
-				if ($use_end)
+				if ($use_end && $odata["to"] > 2)
 				{
 					$_tm = $odata["to"];
 				}
@@ -814,6 +814,11 @@ class shop_admin extends shop_base
 				$this->db_query("SELECT * FROM order2form_entries WHERE order_id IN ($oids) order by order_id,name");
 				while ($row = $this->db_next())
 				{
+					if ($orders[$row["order_id"]]["to"] < 2)
+					{
+						$orders[$row["order_id"]]["to"] = $orders[$row["order_id"]]["from"];
+					}
+
 					$f = new form;
 					$this->vars(array(
 						"nr" => $cnt++,
