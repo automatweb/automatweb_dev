@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.301 2004/09/14 09:18:00 kristo Exp $
+// $Id: class_base.aw,v 2.302 2004/09/20 16:38:30 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -113,6 +113,7 @@ class class_base extends aw_template
 			"popup_search" => "vcl/popup_search",
 			"treeview" => "vcl/treeview",
 			"toolbar" => "vcl/toolbar",
+			"translator" => "vcl/translator",
 			//"relationmgr" => "vcl/relationmgr",
 		);
 
@@ -3324,6 +3325,8 @@ class class_base extends aw_template
 					"clid" => $_to->class_id(),
 				));
 
+				dbg::p5($bt);
+
 				$symname = "";
 
 				// figure out symbolic name for numeric reltype
@@ -3338,6 +3341,8 @@ class class_base extends aw_template
 					};
 				};
 
+				dbg::p5("symname = $symname");
+
 				// figure out which property to check
 				foreach($bt as $item_key => $item)
 				{
@@ -3348,6 +3353,8 @@ class class_base extends aw_template
 					};
 				};
 
+				dbg::p5("target_prop = " . $target_prop);
+
 				// now check, whether that property has a value. If not, 
 				// set it to point to the newly created connection
 				if (!empty($symname) && !empty($target_prop))
@@ -3356,6 +3363,7 @@ class class_base extends aw_template
 						"type" => $symname,
 					));
 					$conn_count = sizeof($conns);
+					dbg::p5("conn_count = " . $conn_count);
 					//$old_val = $_to->prop($target_prop);
 				};
 
