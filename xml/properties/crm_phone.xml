@@ -16,6 +16,16 @@
             <field>comment</field>
             <caption>Kommentaar</caption>
       </property>
+      <property>
+            <name>type</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>chooser</type>
+            <orient>vertical</orient>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Numbri tüüp</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_PHONE</syslog_type>
             <relationmgr>yes</relationmgr>
