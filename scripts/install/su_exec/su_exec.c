@@ -157,21 +157,7 @@ int main(int argc, char **argv)
 {
 	int errline = 0, i;
 	CMD_FILE cf;
-	pid_t fres;
 
-	fres = fork();
-	if (fres == -1)
-	{
-		perror("fork");
-	}
-	else
-	if (fres != 0)
-	{
-		// controlling process, wat for child to finish
-		//waitpid(fres, NULL, 0);
-		return 0;
-	}
-	
 	// check if cmd file was given
 	if (argc < 2)
 	{
@@ -207,20 +193,10 @@ int main(int argc, char **argv)
 
 	// set the uid to root, so that shell commands think they are really run from the root account
 	setuid(geteuid());
-	// this should detach us from the parent process
-	setsid();
-	// this should avoid the child process from getting killed when the parent is killed
-	signal(SIGHUP, SIG_IGN);
-
-	// close all outputs, so that the commands can be executed in the background
-	fclose(stdin);
-	fclose(stdout);
-	fclose(stderr);
-	
 
 	for (i = 0; i < cf.num_cmds; i++)
 	{
-//		printf("exec command %s \n", cf.cmds[i].real_cmd);
+		printf("exec command %s <br>\n", cf.cmds[i].real_cmd);
 		system(cf.cmds[i].real_cmd);
 	}
 	free_cmds(&cf);
