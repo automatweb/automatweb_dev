@@ -40,7 +40,14 @@
 .calcellcurr {
 	border: 1px solid #BCDCF0;
 	padding: 3px;
-	background: #FF9900;
+	background: #BCDCF0;
+	text-align: center;
+}
+
+.calcelltoday {
+	border: 1px solid #BCDCF0;
+	padding: 3px;
+	background: #E0A2A2;
 	text-align: center;
 }
 
@@ -71,6 +78,12 @@
 
 <!-- SUB: line -->
 <tr>
+	<!-- SUB: today_cell -->
+	<td class="calcelltoday">
+	<a href="{VAR:url}">{VAR:content}</a>
+	</td>
+	<!-- END SUB: today_cell -->
+
 	<!-- SUB: cell -->
 	<td class="calcell">
 	<a href="{VAR:url}">{VAR:content}</a>
