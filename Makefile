@@ -6,11 +6,8 @@ dist:
 	@tar czf aw-dist.tar.gz \
 		--exclude=addons\
 		--exclude=doc\
-		--exclude=scripts\
-		--exclude=quiz\
 		--exclude=stats\
 		--exclude=img\
-		--exclude=java\
 		*
 	@echo "Done. File is aw-dist.tar.gz"
 
