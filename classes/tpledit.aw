@@ -26,13 +26,13 @@ class tpledit extends aw_template {
 			$parent = "/";
 		};
 		#$parent = substr($parent,1);
-		$tpldir .= "/$parent";
+		$tpldir .= "$parent";
 		$files = array();
 		$dirs = array();
 		if ($dir = @opendir($tpldir)) {
 			while ($file = readdir($dir)) {
-				$fullname = $tpldir . "/" . $file;
-				if (is_dir($tpldir . "/" . $file))
+				$fullname = $tpldir . $file;
+				if (is_dir($fullname))
 				{
 					if (strpos($file,".") === false)
 					{
@@ -50,9 +50,10 @@ class tpledit extends aw_template {
 		$this->read_template("browse.tpl");
 		$d = "";
 		$f = "";
+
 		foreach($dirs as $name)
 		{
-			$fullname = $tpldir . $parent . $name;
+			$fullname = $tpldir .$name;
 			$this->vars(array(
 				"name" => $name,
 				"date" => $this->time2date($stat[$fullname][FILE_MODIFIED],6),
@@ -65,7 +66,7 @@ class tpledit extends aw_template {
 
 		foreach($files as $name)
 		{
-			$fullname = $tpldir . "/" .  $name;
+			$fullname = $tpldir . $name;
 			$relname = substr($fullname,strlen($tplroot) + 1);
 			$this->vars(array(
 				"name" => $name,
