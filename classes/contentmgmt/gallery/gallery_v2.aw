@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.1 2003/03/13 13:49:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.2 2003/03/14 13:36:17 kristo Exp $
 
 /*
 
@@ -17,6 +17,7 @@
 @groupinfo page_8 caption=Lehek&uuml;lg&nbsp;8
 @groupinfo page_9 caption=Lehek&uuml;lg&nbsp;9
 
+@groupinfo import caption=Impordi
 @groupinfo preview caption=Eelvaade
 
 @default table=objects
@@ -46,6 +47,22 @@
 
 @property preview type=text field=meta method=serialize group=preview no_caption=1
 
+@property ftp_host type=textbox field=meta method=serialize group=import
+@caption FTP Server
+
+@property ftp_user type=textbox field=meta method=serialize group=import
+@caption FTP Kasutaja
+
+@property ftp_pass type=password field=meta method=serialize group=import
+@caption FTP Parool
+
+@property ftp_folder type=textbox field=meta method=serialize group=import
+@caption FTP Serveri kataloog
+
+@property import_overwrite type=checkbox ch_value=1 field=meta method=serialize group=import
+@caption Importimisel kirjuta olemasolevad pildid &uuml;le
+
+@property do_import type=submit field=meta method=serialize group=import value=Impordi
 
 */
 
@@ -108,6 +125,21 @@ class gallery_v2 extends class_base
 				"page" => (int)substr($prop['name'], 3, 1)
 			));
 		}
+		else
+		if ($prop['name'] == "do_import")
+		{
+			$prop['value'] = "Impordi";
+		}
+		else
+		if ($prop['name'] == "ftp_host" || $prop['name'] == "ftp_user" || $prop['name'] == "ftp_pass" || $prop['name'] == "ftp_folder")
+		{
+			classload("core/ftp");
+			if (!ftp::is_available())
+			{
+				return PROP_IGNORE;
+			}
+		}
+		
 		return PROP_OK;
 	}
 
@@ -239,6 +271,44 @@ class gallery_v2 extends class_base
 			$arr['metadata'] = $obj['meta'];
 		}
 		return PROP_OK;
+	}
+
+	function callback_pre_save($arr)
+	{
+		$meta =& $arr["coredata"]["metadata"];
+		if ($meta['do_import'] != "" && $meta['ftp_user'] != "" && $meta['ftp_host'] != "" && $meta['ftp_pass'] != "")
+		{
+			$cu = "ftp://".$meta['ftp_user'].":".$meta['ftp_pass']."@".$meta['ftp_host'].":".$meta['ftp_folder'];
+			echo "cu = $cu <br>";
+			$ftp = get_instance("core/ftp");
+			if (!$ftp->is_available())
+			{
+				return;
+			}
+
+			$ftp->connect(array(
+				"host" => $meta['ftp_host'],
+				"user" => $meta['ftp_user'],
+				"pass" => $meta['ftp_pass'],
+			));
+
+			$img = get_instance("image");
+			$img_folder = $this->_get_image_folder($arr["object"]);
+
+			$files = $ftp->dir_list($meta['ftp_folder']);
+			foreach($files as $file)
+			{
+				echo "file = $file <br>";
+
+				$fc = $ftp->get($meta["ftp_folder"]."/".$file);
+				$img->add_file(array(
+					"str" => $ftp->get($meta["ftp_folder"]."/".$file), 
+					"orig_name" => $file,
+					"parent" => $img_folder
+				));
+			}
+		}
+		$meta["do_import"] = "";
 	}
 
 	function _set_edit_cell_content($params, $row, $col, $post_data)
