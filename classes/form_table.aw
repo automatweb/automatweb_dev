@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.39 2002/07/23 16:40:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.40 2002/07/24 20:34:32 kristo Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -59,16 +59,19 @@ class form_table extends form_base
 		$old_sk = $GLOBALS["old_sk"];
 		$tbl_sk = $GLOBALS["tbl_sk"];
 		$fg_table_sessions = aw_global_get("fg_table_sessions");
-		if ($old_sk != "")
-		{
-			$fg_table_sessions[$tbl_sk] = $fg_table_sessions[$old_sk];
-		}
+
+		// copy the first part of the path from the previous search
+		$fg_table_sessions[$tbl_sk] = $fg_table_sessions[$old_sk];
+
+		// check that everyhting is normal
 		if (!is_array($fg_table_sessions[$tbl_sk]))
 		{
 			$fg_table_sessions[$tbl_sk] = Array();
 		}
+
 		if ($tbl_sk != "")
 		{
+			// and finally, add the current search to the path
 			$num = count($fg_table_sessions[$tbl_sk]);
 			if ($fg_table_sessions[$tbl_sk][$num-1] != aw_global_get("REQUEST_URI"))
 			{
@@ -156,9 +159,10 @@ class form_table extends form_base
 						}
 					}
 				}
+				$textvalue = $str;
 
 				// then we add the aliases to the column
-				$str = $this->process_row_aliases($str, $cc, $dat, $col, $section, $form_id);
+				$str = $this->process_row_aliases($str, $cc, $dat, $col, $section, $form_id, $textvalue);
 
 				// and then, finally some misc settings
 				if ($cc["link_el"])
@@ -238,6 +242,17 @@ class form_table extends form_base
 			foreach($this->table["rgrps"] as $nr => $dat)
 			{
 				$ret[$this->table["rgrps_forms"][$dat["el"]]][$dat["el"]] = $dat["el"];
+				if ($dat["sort_el"])
+				{
+					$ret[$this->table["rgrps_forms"][$dat["sort_el"]]][$dat["sort_el"]] = $dat["sort_el"];
+				}
+				if (is_array($dat["data_els"]))
+				{
+					foreach($dat["data_els"] as $_del)
+					{
+						$ret[$this->table["rgrps_forms"][$_del]][$_del] = $_del;
+					}
+				}
 			}
 		}
 		return $ret;
@@ -259,28 +274,6 @@ class form_table extends form_base
 			die();
 		}
 
-		// change the current document title if necessary
-		if ($this->table["doc_title_is_search"])
-		{
-			global $restrict_search_val;
-			if (is_array($restrict_search_val))
-			{
-				foreach($restrict_search_val as $vl)
-				{
-					aw_global_set("set_doc_title", $vl);
-				}
-			}
-		}
-
-		if ($this->table["doc_title_is_yah"])
-		{
-			global $restrict_search_val;
-			if (is_array($restrict_search_val))
-			{
-				aw_global_set("set_doc_title", join($this->table["doc_title_is_yah_sep"], $restrict_search_val));
-			}
-		}
-
 		if (is_array($this->table["defsort"]))
 		{
 			$_sby = array();
@@ -299,6 +292,7 @@ class form_table extends form_base
 		$r_g = false;
 		$v_g = false;
 		$rgroupdat = false;
+		$vgroupdat = false;
 		if (is_array($this->table["rgrps"]))
 		{
 			foreach($this->table["rgrps"] as $nr => $dat)
@@ -307,6 +301,8 @@ class form_table extends form_base
 				if ($dat["vertical"])
 				{
 					$v_g["ev_".$dat["el"]] = "ev_".$dat["el"];
+					$vgroupdat["ev_".$dat["el"]]["sort_el"] = "ev_".$dat["sort_el"];
+					$vgroupdat["ev_".$dat["el"]]["sort_order"] = $dat["sort_order"];
 				}
 				else
 				{
@@ -330,11 +326,15 @@ class form_table extends form_base
 		}
 		$this->t->sort_by(array(
 			"rgroupby" => $r_g,
-			"vgroupby" => $v_g
+			"vgroupby" => $v_g,
+			"vgroupdat" => $vgroupdat
 		));
 
 		$tbl = $this->get_css();
 		$tbl.=$this->get_js();
+
+		// here. add the table header aliases to the table string
+		$tbl .= $this->render_aliases($this->table["table_header_aliases"]);
 
 		if (!$no_form_tags)
 		{
@@ -344,7 +344,8 @@ class form_table extends form_base
 		$tbl.=$this->t->draw(array(
 			"rgroupby" => $r_g,
 			"rgroupdat" => $rgroupdat,
-			"rgroupby_sep" => $rgroupby_sep
+			"rgroupby_sep" => $rgroupby_sep,
+			"titlebar_under_groups" => $this->table["has_grpnames"]
 		));
 
 		if (!$no_form_tags)
@@ -361,13 +362,24 @@ class form_table extends form_base
 
 		if ($this->table["no_show_empty"] && $this->num_lines < 1)
 		{
-			$tbl = $this->table["empty_table_text"];
+			if ($this->table["empty_table_alias"])
+			{
+				$tbl = $this->render_aliases(array($this->table["empty_table_alias"]));
+			}
+			else
+			{
+				$tbl = $this->table["empty_table_text"];
+			}
 		}
 
 		// now, if we need to show another table as well, do the new search for it
 		if ($this->table["show_second_table"] && !aw_global_get("form_table_already_drew_2nd_table"))
 		{
 			aw_global_set("form_table_already_drew_2nd_table",1);
+
+			// draw the table separator thingiesh
+			$tbl .= $this->render_aliases($this->table["show_second_table_tables_sep"]);
+
 			global $entry_id, $section, $match_form, $match_entry;
 			// now figure out the use table and search_form arguments from the selected aliases
 			$use_table = $this->table_id;
@@ -409,6 +421,55 @@ class form_table extends form_base
 			));
 		exit_function("form_table::finalize::nds",array());
 		exit_function("form_table::finalize::fin",array());
+		}
+
+		// change the current document title if necessary
+		// this must be here, after we are done showing any aliases, cause they might be documents
+		// and then their titles would get changed as well. bad karma.
+		if ($this->table["doc_title_is_search"])
+		{
+			global $restrict_search_yah;
+			if (is_array($restrict_search_yah))
+			{
+				$str = $restrict_search_yah[count($restrict_search_yah)-1];
+				if ($this->table["doc_title_is_search_upper"])
+				{
+					// switch to estonian locale
+					$old_loc = setlocale(LC_CTYPE,0);	
+					setlocale(LC_CTYPE, 'et_EE');
+
+					$str = strtoupper($str);
+
+					// switch back to estonian
+					setlocale(LC_CTYPE, $old_loc);
+				}
+				aw_global_set("set_doc_title", $str);
+			}
+		}
+
+		if ($this->table["doc_title_is_yah"])
+		{
+			global $restrict_search_yah;
+			if (is_array($restrict_search_yah))
+			{
+				$tmp = $restrict_search_yah;
+				if ($this->table["doc_title_is_yah_nolast"])
+				{
+					unset($tmp[count($tmp)-1]);
+				}
+				$str = join($this->table["doc_title_is_yah_sep"], $tmp);
+				if ($this->table["doc_title_is_yah_upper"])
+				{
+					$old_loc = setlocale(LC_CTYPE,0);	
+					setlocale(LC_CTYPE, 'et_EE');
+
+					$str = strtoupper($str);
+
+					// switch back to estonian
+					setlocale(LC_CTYPE, $old_loc);
+				}
+				aw_global_set("set_doc_title", $str);
+			}
 		}
 
 		return $tbl;
@@ -508,8 +569,7 @@ class form_table extends form_base
 		{
 			$this->load_table($id);
 		}
-		classload("style");
-		$s = new style;
+		$s = get_instance("style");
 		$op = "<style type=\"text/css\">\n";
 
 		if ($this->table["header_normal"])
@@ -696,7 +756,6 @@ class form_table extends form_base
 			}
 		};
 
-
 		$this->table["has_aliasmgr"] = $settings["has_aliasmgr"];
 		$this->table["has_yah"] = $settings["has_yah"];
 		$this->table["select_default"] = $settings["select_default"];
@@ -713,13 +772,19 @@ class form_table extends form_base
 		$this->table["skip_one_liners"] = $settings["skip_one_liners"];
 		$this->table["user_entries"] = $settings["user_entries"];
 		$this->table["doc_title_is_search"] = $settings["doc_title_is_search"];
+		$this->table["doc_title_is_search_upper"] = $settings["doc_title_is_search_upper"];
 		$this->table["doc_title_is_yah"] = $settings["doc_title_is_yah"];
 		$this->table["doc_title_is_yah_sep"] = $settings["doc_title_is_yah_sep"];
+		$this->table["doc_title_is_yah_nolast"] = $settings["doc_title_is_yah_nolast"];
+		$this->table["doc_title_is_yah_upper"] = $settings["doc_title_is_yah_upper"];
 		$this->table["show_second_table"] = $settings["show_second_table"];
 		$this->table["show_second_table_search_el"] = $settings["show_second_table_search_el"];
 		$this->table["show_second_table_search_val_el"] = $settings["show_second_table_search_val_el"];
+		$this->table["show_second_table_tables_sep"] = $this->make_keys($settings["show_second_table_tables_sep"]);
+		$this->table["table_header_aliases"] = $this->make_keys($settings["table_header_aliases"]);
 		$this->table["no_show_empty"] = $settings["no_show_empty"];
 		$this->table["empty_table_text"] = $settings["empty_table_text"];
+		$this->table["empty_table_alias"] = $settings["empty_table_alias"];
 		$this->table["no_grpels_in_restrict"] = $settings["no_grpels_in_restrict"];
 		$this->table["forms"] = $this->make_keys($settings["forms"]);
 		$this->table["languages"] = $this->make_keys($settings["languages"]);
@@ -769,9 +834,23 @@ class form_table extends form_base
 			if ($dat["el"])
 			{
 				$dat["data_els"] = $this->make_keys($dat["data_els"]);
+
 				$this->table["rgrps"][] = $dat;
 				$this->table["rgrps_forms"][$dat["el"]] = $els[$dat["el"]];
 				$this->table["rgrps_el_types"][$dat["el"]] = $elsubtypes[$els[$dat["el"]]][$dat["el"]]["subtype"];
+				if ($dat["sort_el"])
+				{
+					$this->table["rgrps_forms"][$dat["sort_el"]] = $els[$dat["sort_el"]];
+					$this->table["rgrps_el_types"][$dat["sort_el"]] = $elsubtypes[$els[$dat["sort_el"]]][$dat["sort_el"]]["subtype"];
+				}
+
+				if (is_array($dat["data_els"]))
+				{
+					foreach($dat["data_els"] as $_del)
+					{
+						$this->table["rgrps_forms"][$_del] = $els[$_del];
+					}
+				}
 			}
 		}
 		usort($this->table["rgrps"], create_function('$a,$b','if ($a["ord"] > $b["ord"]) return 1; if ($a["ord"] < $b["ord"]) return -1; return 0;'));
@@ -789,7 +868,7 @@ class form_table extends form_base
 		$this->read_template("add_table_settings.tpl");
 		$this->mk_path($this->table_parent, "Muuda formi tabelit");
 
-		$this->do_menu(2);
+		$this->do_menu();
 
 		$lang = get_instance("languages");
 		$obj = get_instance("objects");
@@ -797,6 +876,7 @@ class form_table extends form_base
 
 		$els = $this->get_tbl_elements();
 
+		$als = $this->get_aliases_for_table();
 		$this->vars(array(
 			"name" => $this->table_name,
 			"comment" => $this->table_comment,
@@ -824,13 +904,19 @@ class form_table extends form_base
 			"no_grpels_in_restrict" => checked($this->table["no_grpels_in_restrict"]),
 			"no_show_empty" => checked($this->table["no_show_empty"]),
 			"empty_table_text" => $this->table["empty_table_text"],
+			"empty_table_alias" => $this->picker($this->table["empty_table_alias"], $als),
 			"view_cols" => $this->mpicker($this->table["view_cols"], $els),
-			"show_second_table_aliases" => $this->mpicker($this->table["show_second_table_aliases"], $this->get_aliases_for_table()),
+			"show_second_table_aliases" => $this->mpicker($this->table["show_second_table_aliases"], $als),
 			"second_table_search_el" => $this->picker($this->table["show_second_table_search_el"], $els),
 			"second_table_search_val_el" => $this->picker($this->table["show_second_table_search_val_el"], $els),
+			"show_second_table_tables_sep" => $this->mpicker($this->table["show_second_table_tables_sep"], $als),
+			"table_header_aliases" => $this->mpicker($this->table["table_header_aliases"], $als),
 			"change_cols" => $this->mpicker($this->table["change_cols"], $els),
 			"doc_title_is_search" => checked($this->table["doc_title_is_search"]),
+			"doc_title_is_search_upper" => checked($this->table["doc_title_is_search_upper"]),
 			"doc_title_is_yah" => checked($this->table["doc_title_is_yah"]),
+			"doc_title_is_yah_upper" => checked($this->table["doc_title_is_yah_upper"]),
+			"doc_title_is_yah_nolast" => checked($this->table["doc_title_is_yah_nolast"]),
 			"doc_title_is_yah_sep" => $this->table["doc_title_is_yah_sep"],
 			"reforb" => $this->mk_reforb("new_submit_settings", array("id" => $id))
 		));
@@ -901,6 +987,8 @@ class form_table extends form_base
 					"gp_ord" => $dat["ord"],
 					"gp_row_title" => $dat["row_title"],
 					"els" => $this->picker($dat["el"], $els),
+					"sort_els" => $this->picker($dat["sort_el"], $els),
+					"sort_order" => $this->picker($dat["sort_order"], array("asc" => "Asc", "desc" => "Desc")),
 					"gp_vertical" => checked($dat["vertical"] == 1),
 					"data_els" => $this->mpicker($dat["data_els"], $els),
 					"pre_sep" => $dat["pre_sep"],
@@ -932,6 +1020,7 @@ class form_table extends form_base
 			"gp_ord" => $mord+1,
 			"gp_row_title" => "",
 			"els" => $this->picker('', $els),
+			"sort_els" => $this->picker('', $els),
 			"gp_vertical" => checked(false),
 			"data_els" => $this->mpicker(array(), $els),
 			"pre_sep" => "",
@@ -985,7 +1074,7 @@ class form_table extends form_base
 				$this->db_query("INSERT INTO form_table2form(form_id,table_id) VALUES($fid,".$this->table_id.")");
 			}
 		}
-		$co = aw_serialize($this->table,SERIALIZE_XML);
+		$co = aw_serialize($this->table,SERIALIZE_PHP);
 		$this->quote(&$co);
 		$q = "UPDATE form_tables SET num_cols = '".$this->table["cols"]."' , content = '$co' WHERE id = ".$this->table_id;
 		$this->db_query($q);
@@ -1449,7 +1538,6 @@ class form_table extends form_base
 		{
 			foreach($this->table["grps"] as $nr => $dat)
 			{
-//				echo "nr = $nr , dat = <pre>", var_dump($dat),"</pre> fid = ",$this->table["grps_forms"][$dat["gp_el"]],"<br>";
 				$ret[$this->table["grps_forms"][$dat["gp_el"]]][] = $dat["gp_el"];
 			}
 		}
@@ -1547,7 +1635,8 @@ class form_table extends form_base
 	// $row_data - the data containing all tha values for the current row
 	// $col - the column we are processing
 	// $cc - row settings
-	function get_ftable_alias_url($elval, $alias_target, $row_data, $col, $cc, $form_id)
+	// $textvalue - text value of column before images and links are applied to it
+	function get_ftable_alias_url($elval, $alias_target, $row_data, $col, $cc, $form_id, $textvalue)
 	{
 		// request uri, set in constructor
 		$ru = $this->ru;
@@ -1579,11 +1668,15 @@ class form_table extends form_base
 		{
 			foreach($this->table["rgrps"] as $nr => $_dat)
 			{
-				$url.= "&restrict_search_el[]=".$_dat["el"]."&restrict_search_val[]=".urlencode($row_data["ev_".$_dat["el"]]);
+				$url .= "&restrict_search_el[]=".$_dat["el"];
+				$url .= "&restrict_search_val[]=".urlencode($row_data["ev_".$_dat["el"]]);
+				$url .= "&restrict_search_yah[]=".urlencode($row_data["ev_".$_dat["el"]]);
 			}
 		}
 
-		$url.="&restrict_search_el[]=".$cc["search_el"]."&restrict_search_val[]=".urlencode($row_data["ev_".$cc["search_map"]]);
+		$url .= "&restrict_search_el[]=".$cc["search_el"];
+		$url .= "&restrict_search_val[]=".urlencode($row_data["ev_".$cc["search_map"]]);
+		$url .= "&restrict_search_yah[]=".urlencode($textvalue);
 
 		$url.="&tbl_sk=".$new_sk."&old_sk=".$GLOBALS["tbl_sk"];
 		$url.="&match_form=".$form_id."&match_entry=".$row_data["entry_id"];
@@ -1633,7 +1726,8 @@ class form_table extends form_base
 	// $col - the current column number
 	// $section - the current section
 	// $form_id - the id of the form of the current entry
-	function process_row_aliases($str, $cc, $dat, $col, $section, $form_id)
+	// $textvalue - the value of the column without any images or links or shit
+	function process_row_aliases($str, $cc, $dat, $col, $section, $form_id, $textvalue)
 	{
 		if (is_array($cc["alias"]))
 		{
@@ -1654,7 +1748,7 @@ class form_table extends form_base
 				$alias_data = $cc["alias_data"][$aid];
 				if ($alias_data["class_id"] == CL_FORM_TABLE)
 				{
-					$str = $this->get_ftable_alias_url($str, $alias_data["target"], $dat, $col, $cc, $form_id);
+					$str = $this->get_ftable_alias_url($str, $alias_data["target"], $dat, $col, $cc, $form_id, $textvalue);
 				}
 				else
 				if ($alias_data["class_id"] == CL_FORM_OUTPUT)
@@ -1750,6 +1844,48 @@ class form_table extends form_base
 				break;
 		}
 		return $link;
+	}
+
+	////
+	// !renders the aliases that are passed as an array of alias id's
+	function render_aliases($arr)
+	{
+		$tbl = "";
+		// this is here to make sure that any document aliases will not be using the print template
+		$print = aw_global_get("print");
+		aw_global_set("print", false);
+
+		if (is_array($arr))
+		{
+			$als = $this->get_aliases_for_table();
+			foreach($arr as $aid)
+			{
+				$alias_data = $this->get_data_for_alias($aid);
+				if ($alias_data["class_id"] == CL_FORM_OUTPUT)
+				{
+					// if it is a form output alias then show the output with the data the user clicked on last
+					$finst = get_instance("form");
+					$str = $finst->show(array(
+						"id" => $GLOBALS["match_form"],
+						"entry_id" => $GLOBALS["match_entry"],
+						"op_id" => $alias_data["target"]
+					));	 
+					$tbl .= $str;
+				}
+				else
+				{
+					// if it is something else, oo parse the thing
+					// get the #blah555# notation
+					$str = " ".$als[$aid]." ";
+
+					$amgr = get_instance("aliasmgr");
+					$amgr->parse_oo_aliases($this->table_id, $str);
+					$tbl .= $str;
+				}
+			}
+		}
+		aw_global_set("print", $print);
+		return $tbl;
 	}
 }
 ?>
