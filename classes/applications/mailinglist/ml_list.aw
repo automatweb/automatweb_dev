@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.8 2004/12/30 15:56:28 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.9 2005/01/05 12:08:05 dragut Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -1756,6 +1756,7 @@ class ml_list extends class_base
 
 	function submit_write_mail($arr)
 	{
+
 		$msg_data = $arr["request"]["emb"];
 		// 1. create an object. for this I need to know the parent
 		// for starters I'll use the one from the list object itself
@@ -1814,7 +1815,6 @@ class ml_list extends class_base
 		$msg_data["return"] = "id";
 		// no, it fucking does not!
 		$message_id = $writer->submit($msg_data);
-
 		if (is_oid($msg_data["template_selector"]))
 		{
 			$msg_obj = new object($message_id);
@@ -1842,6 +1842,49 @@ class ml_list extends class_base
 		}
 
 		// 
+	}
+	// this one can be used to send a message to mailinglist from code
+	// following parameters can be used
+        //      Array
+        //      (
+        //              [send_away] => 1 // sends mesage away (int)
+        //              [mfrom_name] => sender name (string)
+        //              [mfrom] => name@mail.ee (string)
+        //              [name] => topic (string)
+        //              [message] => message content (string)
+        //              [msg_contener_title] => have no idea what for (string)
+        //              [msg_contener_content] => have no idea what for (string)
+        //              [id] => I assume that this is message oid (int)
+        //              [mto] => mailing list oid (int) (required)
+        //              [return] => id  // if this is set, it gives back created object id
+        //                              // else it gives back the redirection url
+        //      )
+
+	function send_message($arr)
+	{
+		$mailinglist_obj = obj($arr['mto']);
+		// mail messages folder:
+		$folder = $mailinglist_obj->prop("msg_folder");
+
+		$msg_obj = obj();
+		$msg_obj->set_parent((!empty($folder) ? $folder : $mailinglist_obj->parent()));
+		$msg_obj->set_class_id(CL_MESSAGE);
+		$msg_obj->save();
+		$arr["id"] = $msg_obj->id();
+		
+		$this->submit_write_mail(array(
+			"request" => array(
+				"emb" => $arr,
+			),
+			"obj_inst" => obj($arr['mto']),
+		));
+/*
+		$this->submit_post_message(array(
+			"list_id" => $arr['mto'],
+			"id" => $arr['id'],
+		));
+*/
+
 	}
 
 	/** delete members from list
