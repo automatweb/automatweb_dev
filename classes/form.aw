@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.52 2001/08/13 09:16:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.53 2001/08/13 19:14:30 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -476,6 +476,37 @@ class form extends form_base
 			$this->save();
 		}
 
+		global $HTTP_POST_VARS;
+		$cdelete = array();
+		$rdelete = array();
+		reset($HTTP_POST_VARS);
+		while (list($k,$v) = each($HTTP_POST_VARS))
+		{
+			if (substr($k,0,3) == 'dc_' && $v==1)
+				$cdelete[substr($k,3)] = substr($k,3);
+			else
+			if (substr($k,0,3) == 'dr_' && $v==1)
+				$rdelete[substr($k,3)] = substr($k,3);
+		}
+
+		// kustutame tagant-ettepoole, niiet numbrid ei muutuks
+		krsort($cdelete,SORT_NUMERIC);
+		krsort($rdelete,SORT_NUMERIC);
+
+		reset($cdelete);
+		while (list($k,$v) = each($cdelete))
+		{
+			$this->cells_loaded = false;
+			$this->delete_column(array("id" => $id, "col" => $v));
+		}
+
+		reset($rdelete);
+		while (list($k,$v) = each($rdelete))
+		{
+			$this->cells_loaded = false;
+			$this->delete_row(array("id" => $id, "row" => $v));
+		}
+
 		$awt->stop("form::save_grid");
 		return $this->mk_orb("change",array("id" => $this->id));
 	}
@@ -863,7 +894,7 @@ class form extends form_base
 			"reforb"						=> $reforb,
 			"checks"						=> $chk_js
 		));
-		if (isset($this->arr["tablestyle"]))
+		if (isset($this->arr["tablestyle"]) &&  $this->arr["tablestyle"] != 0)
 		{
 			classload("style");
 			$st = new style;
@@ -1745,24 +1776,11 @@ class form extends form_base
 
 		if ($is_chain)
 		{
-//		echo "chid = $chain_id <br>";
 			$this->chain_id = $chain_id;
 			// loop through all the forms that are selected as search targets
 			$ar = $this->get_forms_for_chain($chain_id);
 			reset($ar);
 			list($mid,$v) = each($ar);
-/*			$formar = array("objects.oid as oid","form_".$mid."_entries.id as entry_id"
-			//,"form_".$mid."_entries.*"
-			);
-			$joinar = array();
-			while (list($id,) = each($ar))
-			{
-//				$formar[] = "form_".$id."_entries.*";
-				$joinar[] = "LEFT JOIN form_".$id."_entries ON (form_".$id."_entries.chain_id = form_".$mid."_entries.chain_id OR form_".$id."_entries.chain_id IS NULL) ";
-			}
-
-			$query="SELECT ".(join(",",$formar))." FROM form_".$mid."_entries LEFT JOIN objects ON objects.oid = form_".$mid."_entries.id ".(join(" ",$joinar))."  WHERE objects.status != 0 AND objects.lang_id = ".$GLOBALS["lang_id"]." AND form_".$mid."_entries.chain_id IS NOT NULL ";*/
-
 			// let's create the query a bit differently - join only the tables that are actually being searched from
 
 			$query = "";
@@ -1851,7 +1869,7 @@ class form extends form_base
 			if ($query == "")
 			{
 				// return all the chain entries for the first form in the chain
-				$query = "SELECT chain_id as oid FROM form_".$mid."_entries LEFT JOIN objects ON objects.oid = form_".$mid."_entries.id WHERE objects.status != 0 AND form_".$mid."_entries.chain_id IS NOT NULL ";
+				$query = "SELECT distinct(chain_id) as oid FROM form_".$mid."_entries LEFT JOIN objects ON objects.oid = form_".$mid."_entries.id WHERE objects.status != 0 AND form_".$mid."_entries.chain_id IS NOT NULL ";
 			}
 			else
 			{
@@ -1872,8 +1890,6 @@ class form extends form_base
 				$matches[] = $row["oid"];
 			}
 
-//			echo "done \n<br>";
-//			flush();
 			$ret = $matches;
 		}
 		else
@@ -1881,62 +1897,66 @@ class form extends form_base
 			// loop through all the forms that are selected as search targets
 			while (list($id,$v) = each($this->arr["search_from"]))
 			{
-				if ($v != 1)		// search only selected forms
+				if ($v == 1)		// search only selected forms
 				{
-					continue;
+					break;
 				}
+			}
 
-				// create the sql that searches from this form's entries
-				$query="SELECT * FROM form_".$id."_entries LEFT JOIN objects ON objects.oid = form_".$id."_entries.id WHERE objects.status !=0 AND objects.lang_id = ".$GLOBALS["lang_id"]." " ;
-				if (is_array($parent))
-				{
-					$query .= sprintf(" AND objects.parent IN (%s)",join(",",$parent));
-				}
+			if (!$id)
+			{
+				$this->raise_error("No forms selected as search targets!");
+			}
 
-				// loop through all the elements of this form 
-				$ch_q = array();
-				reset($els);
-				while( list(,$el) = each($els))
+			// create the sql that searches from this form's entries
+			$query="SELECT * FROM form_".$id."_entries LEFT JOIN objects ON objects.oid = form_".$id."_entries.id WHERE objects.status !=0 AND objects.lang_id = ".$GLOBALS["lang_id"]." " ;
+			if (is_array($parent))
+			{
+				$query .= sprintf(" AND objects.parent IN (%s)",join(",",$parent));
+			}
+
+			// loop through all the elements of this form 
+			$ch_q = array();
+			reset($els);
+			while( list(,$el) = each($els))
+			{
+				if ($el->arr["linked_form"] == $id)	// and use only the elements that are members of the current form in the query
 				{
-					if ($el->arr["linked_form"] == $id)	// and use only the elements that are members of the current form in the query
+					// oh la la
+					if ($el->get_type() == "checkbox")
+					{	
+						//checkboxidest ocime aint siis kui nad on tshekitud
+						if ($el->get_value(true) == 1)
+						{
+							$ch_q[$el->get_ch_grp()][] = " form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." like '%".$el->get_value()."%' ";
+						}
+					}
+					else
+					if ($el->get_type() == "date")
 					{
-						// oh la la
-						if ($el->get_type() == "checkbox")
-						{	
-//							echo "check!@ value = ",$this->entry[$el->get_id()]," gv = ",$el->get_value(true),"<br>";
-							//checkboxidest ocime aint siis kui nad on tshekitud
-							if ($el->get_value(true) == 1)
-							{
-								$ch_q[$el->get_ch_grp()][] = " form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." like '%".$el->get_value()."%' ";
-							}
+						if ($el->get_subtype() == "from")
+						{
+							$query.= "AND (form_".$el->arr["linked_form"]."_entries.el_".$el->arr["linked_element"]." >= ".$this->entry[$el->get_id()].")";
 						}
 						else
-						if ($el->get_type() == "date")
+						if ($el->get_subtype() == "to")
 						{
-							if ($el->get_subtype() == "from")
-							{
-								$query.= "AND (form_".$el->arr["linked_form"]."_entries.el_".$el->arr["linked_element"]." >= ".$this->entry[$el->get_id()].")";
-							}
-							else
-							if ($el->get_subtype() == "to")
-							{
-								$query.= "AND (form_".$el->arr["linked_form"]."_entries.el_".$el->arr["linked_element"]." <= ".$this->entry[$el->get_id()].")";
-							}
-							else
-							{
-								$query.= "AND (form_".$el->arr["linked_form"]."_entries.el_".$el->arr["linked_element"]." = ".$this->entry[$el->get_id()].")";
-							}
+							$query.= "AND (form_".$el->arr["linked_form"]."_entries.el_".$el->arr["linked_element"]." <= ".$this->entry[$el->get_id()].")";
 						}
 						else
-						if ($el->get_type() == "radiobutton")
 						{
-							// blah
+							$query.= "AND (form_".$el->arr["linked_form"]."_entries.el_".$el->arr["linked_element"]." = ".$this->entry[$el->get_id()].")";
 						}
-						else
-						if ($el->get_value() != "")	
-						{
-							$query.= "AND ev_".$el->arr["linked_element"]." like '%".$el->get_value()."%' ";
-						}
+					}
+					else
+					if ($el->get_type() == "radiobutton")
+					{
+						// blah
+					}
+					else
+					if ($el->get_value() != "")	
+					{
+						$query.= "AND ev_".$el->arr["linked_element"]." like '%".$el->get_value()."%' ";
 					}
 				}
 
@@ -1962,10 +1982,10 @@ class form extends form_base
 				while ($row = $this->db_next())
 				{
 					$matches[] = $row["id"];
-//					$this->cached_results[$id][$row["oid"]] = $row;
 				}
 
-				$ret[$id] = $matches;
+				$ret = $matches;
+				$this->form_search_only = true;
 			}
 		}
 	
@@ -1996,64 +2016,122 @@ class form extends form_base
 			// this returns an array of roms each of which is an array of elements that are actually used in the table
 			$used_els = $ft->get_used_elements();
 
-			// figure out what elements from what forms are used in the table and bring in the data from those forms and 
-			// those forms elements only.
-			$joins = array();
-			$q_els = array();
-			$has_eid = false;
-			foreach($used_els as $form_id => $el_arr)
+			if ($this->form_search_only)
 			{
-				$joins[] = "LEFT JOIN form_".$form_id."_entries ON form_".$form_id."_entries.chain_id = form_chain_entries.id";
-				if (!$has_eid)
+				foreach($used_els as $form_id => $el_arr)
 				{
-					$q_els[] = "form_".$form_id."_entries.id as entry_id";
-					$has_eid = true;
+					foreach($el_arr as $elid)
+					{
+						$q_els[] = "form_".$form_id."_entries.ev_".$elid." as ev_".$elid;
+					}
 				}
-				foreach($el_arr as $elid)
+				$eids = join(",", $matches);
+				$awt->stop("form::do_search::setup");
+				if ($eids != "")
 				{
-					$q_els[] = "form_".$form_id."_entries.ev_".$elid." as ev_".$elid;
+					$awt->start("form::do_search::qandstuff");
+					$jss = join(",",$q_els);
+					if ($jss != "")
+					{
+						$jss=",".$jss;
+					}
+					$chenrties = array();
+					$q = "SELECT form_".$form_id."_entries.id as entry_id $jss FROM form_".$form_id."_entries LEFT JOIN objects ON objects.oid = form_".$form_id."_entries.id WHERE form_".$form_id."_entries.id in ($eids) AND objects.status != 0";
+	//				echo "q = $q <br>";
+					$this->db_query($q);
+					$cnt = 0;
+					while ($row = $this->db_next())
+					{
+						$cnt++;
+						$row["ev_change"] = "<a href='".$this->mk_my_orb("show", array("id" => $form_id,"entry_id" => $row["entry_id"],"section" => $section), "form")."'>Muuda</a>";
+						$row["ev_created"] = $this->time2date($row["created"], 2);
+						$row["ev_uid"] = $row["modifiedby"];
+						$row["ev_modified"] = $this->time2date($row["modified"], 2);
+						$row["ev_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $form_id,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$form_id],"section" => $section))."'>Vaata</a>";		
+						$row["ev_delete"] = "<a href='".$this->mk_my_orb(
+							"delete_entry", 
+								array(
+									"id" => $fid,
+									"entry_id" => $row["entry_id"], 
+									"after" => $this->binhex($this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id,"section" => $section)))
+								),
+							"form")."'>Kustuta</a>";
+						if ($ft->table["view_col"] && $ft->table["view_col"] != "view")
+						{
+							$row["ev_".$ft->table["view_col"]] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $form_id,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$form_id],"section" => $section))."'>".$row["ev_".$ft->table["view_col"]]."</a>";
+						}
+						if ($ft->table["change_col"] && $ft->table["change_col"] != "change")
+						{
+							$row["ev_".$ft->table["change_col"]] = "<a href='".$this->mk_my_orb("show", array("id" => $form_id,"entry_id" => $row["entry_id"],"section" => $section), "form")."'>".$row["ev_".$ft->table["change_col"]]."</a>";
+						}
+						$ft->row_data($row);
+					}
 				}
 			}
-				
-			$eids = join(",", $matches);
-			$awt->stop("form::do_search::setup");
-			if ($eids != "")
+			else
 			{
-				$awt->start("form::do_search::qandstuff");
-				$jss = join(",",$q_els);
-				if ($jss != "")
+				// figure out what elements from what forms are used in the table and bring in the data from those forms and 
+				// those forms elements only.
+				$joins = array();
+				$q_els = array();
+				$has_eid = false;
+				foreach($used_els as $form_id => $el_arr)
 				{
-					$jss=",".$jss;
+					$joins[] = "LEFT JOIN form_".$form_id."_entries ON form_".$form_id."_entries.chain_id = form_chain_entries.id";
+					if (!$has_eid)
+					{
+						$q_els[] = "form_".$form_id."_entries.id as entry_id";
+						$has_eid = true;
+					}
+					foreach($el_arr as $elid)
+					{
+						$q_els[] = "form_".$form_id."_entries.ev_".$elid." as ev_".$elid;
+					}
 				}
-				$joss = join(" ",$joins);
-				$chenrties = array();
-				$q = "SELECT form_chain_entries.id as chain_entry_id $jss FROM form_chain_entries $joss WHERE form_chain_entries.id in ($eids)";
-				$this->db_query($q);
-				while ($row = $this->db_next())
+					
+				$eids = join(",", $matches);
+				$awt->stop("form::do_search::setup");
+				if ($eids != "")
 				{
-					// kui on p2rg, siis muudame p2rga
-					$row["ev_change"] = "<a href='".$this->mk_my_orb("show", array("id" => $this->chain_id,"section" => 1,"entry_id" => $row["chain_entry_id"],"section" => $section), "form_chain")."'>Muuda</a>";
-					$row["ev_created"] = $this->time2date($row["created"], 2);
-					$row["ev_uid"] = $row["modifiedby"];
-					$row["ev_modified"] = $this->time2date($row["modified"], 2);
-					$row["ev_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $this->main_search_form,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$this->main_search_form],"section" => $section))."'>Vaata</a>";		
-					$row["ev_delete"] = "<a href='".$this->mk_my_orb(
-						"delete_entry", 
-							array(
-								"id" => $fid,
-								"entry_id" => $row["entry_id"], 
-								"after" => $this->binhex($this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id,"section" => $section)))
-							),
-						"form")."'>Kustuta</a>";
-					if ($ft->table["view_col"] && $ft->table["view_col"] != "view")
+					$awt->start("form::do_search::qandstuff");
+					$jss = join(",",$q_els);
+					if ($jss != "")
 					{
-						$row["ev_".$ft->table["view_col"]] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $this->main_searrch_form,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$this->main_searrch_form],"section" => $section))."'>".$row["ev_".$ft->table["view_col"]]."</a>";
+						$jss=",".$jss;
 					}
-					if ($ft->table["change_col"] && $ft->table["change_col"] != "change")
+					$joss = join(" ",$joins);
+					$chenrties = array();
+					$q = "SELECT form_chain_entries.id as chain_entry_id $jss FROM form_chain_entries $joss WHERE form_chain_entries.id in ($eids)";
+	//				echo "q = $q <br>";
+					$this->db_query($q);
+					$cnt = 0;
+					while ($row = $this->db_next())
 					{
-						$row["ev_".$ft->table["change_col"]] = "<a href='".$this->mk_my_orb("show", array("id" => $this->chain_id,"section" => 1,"entry_id" => $row["chain_entry_id"],"section" => $section), "form_chain")."'>".$row["ev_".$ft->table["change_col"]]."</a>";
+						$cnt++;
+						// kui on p2rg, siis muudame p2rga
+						$row["ev_change"] = "<a href='".$this->mk_my_orb("show", array("id" => $this->chain_id,"section" => 1,"entry_id" => $row["chain_entry_id"],"section" => $section), "form_chain")."'>Muuda</a>";
+						$row["ev_created"] = $this->time2date($row["created"], 2);
+						$row["ev_uid"] = $row["modifiedby"];
+						$row["ev_modified"] = $this->time2date($row["modified"], 2);
+						$row["ev_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $form_id,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$this->main_search_form],"section" => $section))."'>Vaata</a>";		
+						$row["ev_delete"] = "<a href='".$this->mk_my_orb(
+							"delete_entry", 
+								array(
+									"id" => $fid,
+									"entry_id" => $row["entry_id"], 
+									"after" => $this->binhex($this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id,"section" => $section)))
+								),
+							"form")."'>Kustuta</a>";
+						if ($ft->table["view_col"] && $ft->table["view_col"] != "view")
+						{
+							$row["ev_".$ft->table["view_col"]] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $this->main_searrch_form,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$this->main_searrch_form],"section" => $section))."'>".$row["ev_".$ft->table["view_col"]]."</a>";
+						}
+						if ($ft->table["change_col"] && $ft->table["change_col"] != "change")
+						{
+							$row["ev_".$ft->table["change_col"]] = "<a href='".$this->mk_my_orb("show", array("id" => $this->chain_id,"section" => 1,"entry_id" => $row["chain_entry_id"],"section" => $section), "form_chain")."'>".$row["ev_".$ft->table["change_col"]]."</a>";
+						}
+						$ft->row_data($row);
 					}
-					$ft->row_data($row);
 				}
 			}
 			$awt->stop("form::do_search::qandstuff");
@@ -2086,6 +2164,10 @@ class form extends form_base
 			$awt->stop("form::do_search::finish_table");
 			$awt->stop("form::do_search");
 
+			if ($GLOBALS["SITE_ID"] == 14)
+			{
+				$tbl="Otsingu tulemusena leiti ".$cnt." kirjet. <br>".$tbl;
+			}
 			return $tbl;
 		}
 		else
