@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.32 2003/04/07 10:18:55 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.33 2003/04/09 22:40:02 duke Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -363,18 +363,26 @@ class html extends aw_template
 		// richtext editors are inside a template
 		static $rtcounter = 0;
 		$rtcounter++;
+		$awt = get_instance("aw_template");
+		$awt->init(array("tpldir" => "html"));
+		/*
 		$this->init(array(
 			"tpldir" => "html",
 		));
+		*/
 		$retval = "";
-		$this->vars($args);
+		$awt->vars($args);
+		$awt->read_template("ie_richtexteditor.tpl");
 		if ($rtcounter == 1)
 		{
 			$this->rt_elements = array($args["name"]);
-			$this->read_template("ie_richtexteditor.tpl");
-			$retval .= $this->parse("toolbar");
+			#$this->read_template("ie_richtexteditor.tpl");
+			#$awt->read_template("ie_richtexteditor.tpl");
+			#$retval .= $this->parse("toolbar");
+			$retval .= $awt->parse("toolbar");
 		};
-		$retval .= $this->parse("field");
+		#$retval .= $this->parse("field");
+		$retval .= $awt->parse("field");
 		return $retval;
 	}
 
