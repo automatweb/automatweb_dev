@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.33 2003/04/09 22:40:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.34 2003/05/12 14:15:16 duke Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -34,7 +34,7 @@ class html extends aw_template
 		{
 			$sel_array = $selected;
 		}
-		elseif (isset($selected))
+		elseif (!empty($selected))
 		{
 			$sel_array = array($selected);
 		}
