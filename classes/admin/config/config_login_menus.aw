@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.8 2004/11/07 12:18:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.9 2004/11/19 10:52:09 kristo Exp $
 // config_login_menus.aw - Login men&uuml;&uuml;d 
 /*
 
@@ -91,8 +91,7 @@ class config_login_menus extends class_base
 		$us = get_instance("users");
 		$gl = $us->get_group_list(array("type" => array(GRP_DYNAMIC, GRP_REGULAR)));
 
-		$conf = get_instance("config");
-		$lm = $conf->_get_login_menus();
+		$lm = $this->_get_login_menus();
 
 		foreach($gl as $gid => $gdat)
 		{
