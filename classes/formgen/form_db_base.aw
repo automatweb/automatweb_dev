@@ -1922,11 +1922,11 @@ class form_db_base extends aw_template
 			
 			if ($el_sort_by)
 			{
-				$order_by = "el_".$el_sort_by;
+				$order_by = "order by el_".$el_sort_by;
 			}
 		}
 
-		if ($sort_by_alpha && $rel_el != "" && $order_by = "")
+		if ($sort_by_alpha && $rel_el != "" && $order_by == "")
 		{
 			$order_by = " ORDER BY $rel_el ";
 		}

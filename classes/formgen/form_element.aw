@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.80 2004/11/27 11:05:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.81 2004/11/30 13:54:30 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -448,11 +448,17 @@ class form_element extends aw_template
 				if ($this->arr["lb_data_from_form"])
 				{
 					$lbdeels = $this->form->get_elements_for_forms(array($this->arr["lb_data_from_form"]),false, true);
+					$lbdeels_s = $lbdeels;
+				}
+				else
+				if ($this->arr["rel_form"])
+				{
+					$lbdeels_s = $this->form->get_elements_for_forms(array($this->arr["rel_form"]),false, true);
 				}
 				$this->vars(array(
 					"lb_data_from_form" => $this->picker($this->arr["lb_data_from_form"], $lbdforms),
 					"lb_data_from_el" => $this->picker($this->arr["lb_data_from_el"], $lbdeels),
-					"lb_data_from_el_sby" => $this->picker($this->arr["lb_data_from_el_sby"], $lbdeels)
+					"lb_data_from_el_sby" => $this->picker($this->arr["lb_data_from_el_sby"], $lbdeels_s)
 				));
 
 				$this->vars(array(
@@ -3572,6 +3578,10 @@ class form_element extends aw_template
 
 		if (!is_array($this->arr["rel_el_ord"]))
 		{
+			if ($this->arr["lb_data_from_el_sby"] != "")
+			{
+				$opts["el_sort_by"] = $this->arr["lb_data_from_el_sby"];
+			}
 			list($cnt,$this->arr["listbox_items"]) = $this->form->get_entries_for_element($opts);
 		}
 		else
