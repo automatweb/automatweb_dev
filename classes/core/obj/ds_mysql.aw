@@ -40,6 +40,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	function get_objdata($oid, $param = array())
 	{
 		$ret = $this->db_fetch_row("SELECT * FROM objects WHERE oid = $oid AND status != 0");
+		return $this->_get_objdata_proc($ret, $param);
+	}
+
+	function _get_objdata_proc($ret, $param)
+	{
 		if ($ret === false)
 		{
 			if ($param["no_errors"])
@@ -77,7 +82,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		// ok, so try for the store-shit-in-object-table
 		return $ret;
 	}
-
 
 	// parameters:
 	//	properties - property array
