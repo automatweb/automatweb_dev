@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.47 2003/03/06 23:08:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.48 2003/03/07 09:01:04 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -520,7 +520,7 @@ class aw_table
 			{
 				$counter++;
 				// if this is not on the active page, don't show the damn thing
-				if (isset($has_pages))
+				if (isset($has_pages) && $has_pages && isset($records_per_page) && $records_per_page)
 				{
 					$cur_page = (int)(($counter-1) / $records_per_page);
 					if ($cur_page != $act_page)
