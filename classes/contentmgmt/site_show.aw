@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.70 2004/07/30 07:38:58 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.71 2004/08/04 07:30:42 rtoomas Exp $
 
 /*
 
@@ -1478,7 +1478,7 @@ class site_show extends class_base
 		}
 
 		enter_function("site_show::do_draw_menus");
-		include_once($this->compiled_filename);
+		@include_once($this->compiled_filename);
 		exit_function("site_show::do_draw_menus");
 
 		$this->path_ids = $path_bak;
