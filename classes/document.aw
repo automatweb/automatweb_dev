@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.285 2004/10/12 13:29:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.286 2004/10/18 13:50:01 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -314,13 +314,14 @@ class document extends aw_template
 		if (($params["tpl_auto"] || true) && !$params["tpl"])
 		{
 			// do template autodetect from parent
+			$tplmgr = get_instance("templatemgr");
 			if ($leadonly > -1)
 			{
-				$tpl = $this->get_lead_template($doc["parent"]);
+				$tpl = $tplmgr->get_lead_template($doc["parent"]);
 			}
 			else
 			{
-				$tpl = $this->get_long_template($doc["parent"]);
+				$tpl = $tplmgr->get_long_template($doc["parent"]);
 			}
 		}
 
@@ -1201,6 +1202,11 @@ class document extends aw_template
 
 		$_date = $doc["doc_modified"] > 1 ? $doc["doc_modified"] : $doc["modified"];
 		$date_est = date("j", $_date).". ".get_lc_month(date("m", $_date))." ".date("Y", $_date);
+		$date_est_n = "";
+		if (trim($orig_doc_tm) != "")
+		{
+			$date_est_n = $date_est;
+		}
 		$date_est_print = date("j", time()).". ".get_lc_month(date("m", time()))." ".date("Y", time());
 
 		$r_docid = $docid;
@@ -1224,6 +1230,10 @@ class document extends aw_template
 			));
 		}
 
+		if ($GLOBALS["DD"] == 1)
+		{
+			echo "for doc $doc[docid] tm = ".$doc["tm"]."  den = $date_est_n<br>";
+		}
 
 
 		$this->vars(array(
@@ -1231,6 +1241,7 @@ class document extends aw_template
 			"doc_modified" => $_date,
 			"doc_mod" => $doc["doc_modified"],
 			"date_est" => $date_est,
+			"date_est_n" => $date_est_n,
 			"print_date_est" => $date_est_print,
 			"page_title" => ($pagetitle != "" ? $pagetitle : strip_tags($title)),
 			"title"	=> $title,
