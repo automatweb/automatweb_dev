@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.51 2002/01/15 17:58:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.52 2002/01/15 18:30:08 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -30,6 +30,61 @@ class planner extends calendar {
 			$this->vars($lc_planner);
 		}
 	}
+	
+	////
+	// !Kuvab uue kalendri lisamise vormi
+	// parent(id) - int : menüü, mille alla uus kalender lisatakse
+	function add($args = array())
+	{
+		$this->read_template("add.tpl");
+		$this->vars(array(
+				"reforb" => $this->mk_reforb("submit_add",array("parent" => $args["parent"])),
+		));
+		return $this->parse();
+	}
+
+	////
+	// !Submitib uue kalendriobjekti
+	function submit_add($args = array())
+	{
+		$this->quote($args);
+		extract($args);
+		$id = $this->new_object(array(
+			"class_id" => CL_CALENDAR,
+			"parent" => $parent,
+			"name" => $name,true));
+		$this->id = $id;
+		return $this->mk_orb("change",array("id" => $id));
+	}
+	
+	//// 
+	// !Kuvab kalendi muutmise vormi
+	// id(int) - konfigureeritava kalendri ID
+	function change($args = array())
+	{
+		extract($args);
+		$object = $this->get_object($id);
+		$this->read_template("change.tpl");
+		$this->mk_path($object["parent"],"Muuda kalendrit");
+		$this->vars(array(
+			"name" => $object["name"],
+			"oid" => $object["oid"],
+			"reforb" => $this->mk_reforb("submit",array("id" => $id)),
+		));
+		return $this->parse();
+	}
+	
+	////
+	// !Submitib olemasoleva kalendriobjekti
+	function submit($args = array())
+	{
+		$this->quote($args);
+		extract($args);
+		$this->upd_object(array(
+			"oid" => $id,
+			"name" => $name,true));
+		return $this->mk_orb("change",array("id" => $id));
+	}
 
 	////
 	// !Joonistab menüü
@@ -55,132 +110,7 @@ class planner extends calendar {
 
 					
 
-	////
-	// !Loob uue kalendriobjejkti
-	function add($args = array())
-	{
-		$this->tpl_init("automatweb/planner");
-		$this->read_template("add.tpl");
-		$this->vars(array(
-				"reforb" => $this->mk_reforb("submit_add",array(
-									"parent" => $args["parent"],
-									)),
-			));
-		return $this->parse();
-	}
 
-	////
-	// !Submitib kalendriobjekti
-	function submit_add($args = array())
-	{
-		$this->quote($args);
-		extract($args);
-		$id = $this->new_object(array(
-			"class_id" => CL_CALENDAR,
-			"parent" => $parent,
-			"name" => $name,true));
-		$this->id = $id;
-		return $this->mk_orb("change",array("id" => $id));
-	}
-
-	function edit_todo_item($args = array())
-	{
-		global $udata;
-		extract($args);
-		$flatlist = array();
-		$res = true;
-		$keys = array($udata["home_folder"]);
-
-		while($res)
-		{
-			$res = $this->get_objects_below(array(
-						"parent" => $keys,
-						"class" => CL_PSEUDO,
-						"type" => MN_EVENT_FOLDER,
-				));
-			if (is_array($res))
-			{
-				foreach($res as $key => $val)
-				{
-					$flatlist[$val["parent"]][$key] = $val["name"];
-				};
-				$keys = array_keys($res);
-			};
-			
-		}
-
-		$flatlist[0][$udata["home_folder"]] = LC_NOT_SORTED;
-		$fl = $this->indent_array($flatlist,0);
-		$ftitle = ($op == "add") ? LC_ADD_DOD : LC_CHANGE_DODO;
-		$this->read_template("edit_todo.tpl");
-		if ($id)
-		{
-			$obj = $this->get_object($id);
-			$parent = $obj["parent"];
-			$q = "SELECT * FROM planner WHERE id = '$id'";
-			$this->db_query($q);
-			$row = $this->db_next();
-		}
-		else
-		{
-			$row = array();
-		};
-		$this->vars(array(
-			"ftitle" => $ftitle,
-			"title" => $row["title"],
-			"description" => $row["description"],
-			"targetlist" => $this->picker($parent,$fl),
-			"reforb" => $this->mk_reforb("submit_todo_item",array("id" => $id,"date" => $date)),
-		));
-		return $this->parse();
-	}
-
-	function submit_todo_item($args = array())
-	{
-		$this->quote($args);
-		extract($args);
-		global $udata;
-		if ($id)
-		{
-			$obj = $this->get_object($id);
-			// siia voiks mingi acl checki panna
-			$q = "UPDATE objects SET parent = '$parent' WHERE oid = '$id'";
-			$this->db_query($q);
-			$parent = $obj["parent"];
-			$q = "UPDATE planner 
-				SET title = '$title',
-					description = '$description'
-				WHERE id = '$id'";
-		}
-		else
-		{
-			
-			$id = $this->new_object(array(
-					"name" => "$title",
-					"parent" => $parent,
-					"class_id" => CL_CAL_EVENT,
-				));
-		
-			list($d,$m,$y) = split("-",$date);
-			$start = mktime(0,0,0,$m,$d,$y);
-			$q = "INSERT INTO planner (id,title,description,start,type)
-				VALUES ($id,'$title','$description',$start,1)";
-		};
-		$this->db_query($q);
-		global $status_msg;
-		$status_msg = LC_PLANNER_TODO_SAVED;
-		session_register("status_msg");
-		return $this->mk_site_orb(array("action" => "todo","parent" => $parent));
-	}
-				
-
-
-	function user_planner($args = array())
-	{
-		extract($args);
-		$this->tpl_init("planner");
-		return $this->change($args);
-	}
 
 	function admin_planner($args = array())
 	{
@@ -251,7 +181,7 @@ class planner extends calendar {
 	// id - millist kalendrit näidata
 	// disp - vaate tüüp
 	// date - millisele kuupäevale keskenduda
-	function change($args = array())
+	function _change($args = array())
 	{
 		extract($args);
 
