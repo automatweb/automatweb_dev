@@ -230,13 +230,7 @@ function init_config($arr)
 		}
 	};
 
-	if (empty($LC))
-	{
-		$LC="et";
-	}
 
-	@include(aw_ini_get("basedir")."/lang/" . $LC . "/errors.".aw_ini_get("ext"));
-	@include(aw_ini_get("basedir")."/lang/" . $LC . "/common.".aw_ini_get("ext"));
 
 }
 
@@ -385,6 +379,16 @@ function aw_startup()
 	$l = new languages;
 	$l->request_startup();
 
+	$LC = aw_global_get("LC");
+	if (empty($LC))
+	{
+		$LC="et";
+	}
+
+	@include(aw_ini_get("basedir")."/lang/" . $LC . "/errors.".aw_ini_get("ext"));
+	@include(aw_ini_get("basedir")."/lang/" . $LC . "/common.".aw_ini_get("ext"));
+
+
 	classload("periods");
 	$p = new periods;
 	$p->request_startup();
@@ -400,7 +404,6 @@ function aw_startup()
 	$m = new menuedit();
 
 	$m->request_startup();
-
 
 	list($micro,$sec) = split(" ",microtime());
 	$ts_e = $sec + $micro;
