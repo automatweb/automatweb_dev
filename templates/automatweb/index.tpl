@@ -62,7 +62,7 @@ function check_generic_loader()
 {VAR:site_title}
 <!-- END SUB: YAH -->
 	</td>
-	<td width="1" nowrap align="right" class="aw04yah"><span class="mlang">[{VAR:lang_string}]</span>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+	<td nowrap align="right" class="aw04yah"><span class="mlang">[{VAR:lang_string}]</span>&nbsp;&nbsp;&nbsp;&nbsp;</td>
 </tr>
 </table>
 	<!-- END SUB: LANG_STRING -->
