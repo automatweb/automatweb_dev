@@ -27,7 +27,7 @@
 			</function>
 		</action>
 		
-		<action name="change" public="1">
+		<action name="change">
 			<function name="change">
 				<arguments>
 					<optional name="id"/>
@@ -204,10 +204,10 @@
 			<function name="show_user_info"/>
 		</action>
 
-		<action name="udata">
+		<action name="udata" public="1">
 			<function name="do_change_site">
 				<arguments>
-					<required name="fid"/>
+					<optional name="fid"/>
 				</arguments>
 			</function>
 		</action>
