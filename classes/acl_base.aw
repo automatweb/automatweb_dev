@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.52 2004/03/09 14:17:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.53 2004/03/09 18:13:43 kristo Exp $
 
 lc_load("definition");
 
@@ -170,18 +170,45 @@ class acl_base extends db_connector
 		//
 		// so we remove the groups join and do the sort in memory
 		// we have a list of all groups that the user belongs to with their priorites
-		// and we return the one from the list with the bigest priority
+		// and we return the one from the list with the bigest priority - duke
+		//
+		// I changed the query again - now it goes to the objects table first and
+		// joins the acl table from there, it also does not filter by gid, that is done in 
+		// memory now - the reason is that now this query can be used to determine if the object 
+		// asked for exists - previously it could not. It is perhaps a bit slower to do the
+		// memory filter, but it is well worth it, because it enables us to get rid of the
+		// object_exits function.  - terryf
+
 
 		$g_pris = aw_global_get("gidlist_pri");	// this gets made in users::request_startup
 
 		$max_pri = 0;
 		$max_row = array();
-		$q = "SELECT *,acl.id as acl_rel_id, objects.parent as parent,".$this->sql_unpack_string().",acl.oid as oid,acl.gid as gid FROM acl 
-										 LEFT JOIN objects ON objects.oid = acl.oid
-										 WHERE acl.oid = $oid AND acl.gid IN (".$gidstr.") ";
+		$q = "
+			SELECT 
+				*,
+				acl.id as acl_rel_id, 
+				objects.parent as parent,
+				".$this->sql_unpack_string().",
+				objects.oid as oid,
+				objects.parent as parent,
+				acl.gid as gid 
+			FROM 
+				objects
+				LEFT JOIN acl ON objects.oid = acl.oid
+			WHERE 
+				objects.oid = $oid AND objects.status != 0
+		";
 		$this->db_query($q);
 		while ($row = $this->db_next())
 		{
+			$max_row["oid"] = $row["oid"];
+			$max_row["parent"] = $row["parent"];
+			if (!$row["gid"] || !isset($g_pris[$row["gid"]]))
+			{
+				continue;
+			}
+
 			if ($g_pris[$row["gid"]] >= $max_pri)
 			{
 				$max_pri = $g_pris[$row["gid"]];
@@ -217,7 +244,17 @@ class acl_base extends db_connector
 			}
 			else
 			{
-				if ($tacl = $this->get_acl_for_oid($oid))
+				$tacl = $this->get_acl_for_oid($oid);
+
+				if ($cnt == 0 && !isset($tacl["oid"]))
+				{
+					// if we are on the first level and we get back no object, return no access
+					// cause then we asked about an object that does not exist!
+					aw_cache_set("aclcache",$oid,$tacl);
+					return array();
+				}
+
+				if ($tacl)
 				{
 					// found acl for this object from the database, so check it
 					$parent = $tacl["parent"];
@@ -262,14 +299,12 @@ class acl_base extends db_connector
 		{
 			return true;
 		}
-
 		if (!($max_acl = aw_cache_get("__aw_acl_cache", $oid)))
 		{
 			// try for file cache
 			$fqfn = $GLOBALS["cfg"]["cache"]["page_cache"]."/acl-cache-".$oid."-uid-".$GLOBALS["__aw_globals"]["uid"];
 			if (file_exists($fqfn))
 			{
-//				echo "acl cache hit file $oid ($fqfn) <br>";
 				include($fqfn);
 				aw_cache_set("__aw_acl_cache", $oid, $max_acl);
 			}
@@ -291,13 +326,8 @@ class acl_base extends db_connector
 				}
 
 				aw_cache_set("__aw_acl_cache", $oid, $max_acl);
-//				echo "acl cache miss, set file to $fqfn <br>";
 			}
 		}
-/*		else
-		{
-			echo "acl cache hit memory $oid <Br>";
-		}*/
 
 		$access="can_".$access;
 		return $max_acl[$access];
