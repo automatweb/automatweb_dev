@@ -1,8 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.91 2002/03/04 20:20:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.92 2002/03/20 14:02:23 duke Exp $
 // document.aw - Dokumentide haldus. 
-global $orb_defs;
-$orb_defs["document"] = "xml";
 
 lc_load("document");
 classload("msgboard","aw_style","form_base");
@@ -28,8 +26,7 @@ class document extends aw_template
 {
 	function document($period = 0)
 	{
-		$this->tpl_init("automatweb/documents");
-		$this->db_init();
+		$this->init("automatweb/documents");
 		// see on selleks, kui on vaja perioodilisi dokumente naidata
 		$this->period = $period;
 		
@@ -41,11 +38,9 @@ class document extends aw_template
 			$this->vars($lc_document);
 		}
 			
-		global $basedir;
-
 		// this takes less than 0.1 seconds btw
-		$xml_def = $this->get_file(array("file" => "$basedir/xml/documents/defaults.xml"));
-                if ($xml_def)
+		$xml_def = $this->get_file(array("file" => aw_ini_get("basedir")."/xml/documents/defaults.xml"));
+    if ($xml_def)
 		{
 			$this->style_engine->define_styles($xml_def);
 		}
@@ -105,7 +100,7 @@ class document extends aw_template
 		if (isset($GLOBALS["lc_doc"]) && is_array($GLOBALS["lc_doc"]))
 		{
 			$this->vars($GLOBALS["lc_doc"]);
-		 }
+		}
 	}
 
 	////
@@ -155,7 +150,6 @@ class document extends aw_template
 			{
 				$pstr = "objects.parent = $parent";
 			};
-//			$ordby = "objects.modified DESC";
 		}
 		else
 		{
@@ -228,9 +222,9 @@ class document extends aw_template
 
 		if (gettype($data) == "array") 
 		{
-			 $data["content"] = trim($data["content"]);
-			 $data["lead"] = trim($data["lead"]);
-			 $data["cite"] = trim($data["cite"]);
+			$data["content"] = trim($data["content"]);
+			$data["lead"] = trim($data["lead"]);
+			$data["cite"] = trim($data["cite"]);
 		};
 		$this->dequote($data);
 		$this->data = $data;
@@ -243,18 +237,18 @@ class document extends aw_template
 	function gen_rss_feed($args = array())
 	{
 		classload("rdf");
-		global $baseurl;
+		$baseurl = aw_ini_get("baseurl");
 		global $stitle;
-		global $ext;
+		$ext = aw_ini_get("ext");
 		$rdf = new rdf(array(
 			"about" => "$baseurl/index.$ext/format=rss",
 			"link" => "$baseurl/index.$ext",
 			"title" => $stitle,
 			"description" => PUBLISHER,
-                ));
+    ));
 
 		extract($args);
-		global $rootmenu;
+		$rootmenu = aw_ini_get("rootmenu");
 		$parent = (int)$parent;
 		if ($parent && ($parent != $rootmenu))
 		{
@@ -276,7 +270,7 @@ class document extends aw_template
 		header("Content-Type: text/xml");
 		print $rdf->gen_output();
 		die();
-        }
+  }
 
 
 
@@ -300,7 +294,6 @@ class document extends aw_template
 	//       s22stap yhe p2ringu.
 	function gen_preview($params) 
 	{
-		global $DEBUG;
 		extract($params);
 		global $print;	
 		$this->print = $print;
@@ -309,7 +302,9 @@ class document extends aw_template
 		!isset($strip_img) ? $strip_img = 0 : "";
 		!isset($notitleimg) ? $notitleimg = 0 : "";
 		
-		global $classdir,$baseurl,$ext,$awt;
+		global $awt;
+		$baseurl = aw_ini_get("baseurl");
+		$ext = aw_ini_get("ext");
 		$awt->start("document::gen_preview");
 
 		// check if the menu had a form selected as a template - the difference is that then the template is not a filename
@@ -345,11 +340,10 @@ class document extends aw_template
 	
 		if ( ($meta["show_print"]) && (not($print)) && $leadonly != 1)
 		{
-			global $REQUEST_URI;
-			if (defined("PRINT_CAP"))
+			if ($this->cfg["print_cap"] != "")
 			{
-				$pc = localparse(PRINT_CAP,array("link" => "/section=$docid" . "&print=1","docid" => $docid));
-				if (defined("PC_BOTTOM"))
+				$pc = localparse($this->cfg["print_cap"],array("link" => "/section=$docid" . "&print=1","docid" => $docid));
+				if ($this->cfg["pc_bottom"])
 				{
 					$doc["content"] .= $pc;
 				}
@@ -371,8 +365,6 @@ class document extends aw_template
 				$_tmp = $this->parse("PRINTANDSEND");
 				$this->vars(array("PRINTANDSEND" => $_tmp));
 			};
-				
-
 		};
 
 
@@ -446,19 +438,18 @@ class document extends aw_template
 		{
 			if (!(($pp = strpos($doc["content"],"#edasi#")) === false))
 			{
-				$doc["content"] = substr($doc["content"],0,$pp)."<br><B><a href='".$GLOBALS["baseurl"]."/index.aw/section=$docid/show_all=1'>Loe edasi</a></b></font>";
+				$doc["content"] = substr($doc["content"],0,$pp)."<br><B><a href='".$baseurl."/index.".$ext."/section=$docid/show_all=1'>Loe edasi</a></b></font>";
 			}
 
 			if (!(($pp = strpos($doc["content"],"#edasi1#")) === false))
 			{
-				$doc["content"] = substr($doc["content"],0,$pp)."<br><B><a href='".$GLOBALS["baseurl"]."/index.aw/section=$docid/show_all=1'>Loe edasi</a></b></font>";
+				$doc["content"] = substr($doc["content"],0,$pp)."<br><B><a href='".$baseurl."/index.".$ext."/section=$docid/show_all=1'>Loe edasi</a></b></font>";
 			}
 		}
 
 		// laeme vajalikud klassid
 		classload("images");
 		$img = new db_images;
-
 
 		// kui vaja on näidata ainult dokumendi leadi, siis see tehakse siin
  		if ($leadonly > -1) 
@@ -483,7 +474,7 @@ class document extends aw_template
 				// ja stripime leadist *koik* objektitagid välja.
 				$doc["lead"] = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$doc["lead"]);
 			};
-			$doc["content"] = "$doc[lead]";
+			$doc["content"] = $doc["lead"];
 		} 
 		else 
 		{
@@ -519,9 +510,9 @@ class document extends aw_template
 
 				if ($doc["lead"] != "" && $doc["lead"] != "&nbsp;")
 				{
-					if (defined("LEAD_SPLITTER"))
+					if ($this->cfg["lead_splitter"] != "")
 					{
-						$txt .= $doc["lead"] . LEAD_SPLITTER;
+						$txt .= $doc["lead"] . $this->cfg["lead_splitter"];
 					}
 					else
 					{
@@ -530,9 +521,9 @@ class document extends aw_template
 				}
 
 				// whaat?
-				if (defined("NO_LEAD_SPLITTER"))
+				if ($this->cfg["no_lead_splitter"])
 				{
-					$txt.=NO_LEAD_SPLITTER;
+					$txt.=$this->cfg["no_lead_splitter"];
 				}
 
 				if ($boldlead) 
@@ -540,7 +531,7 @@ class document extends aw_template
 					$txt .= "</b>";
 				};
 
-				$txt .= ($GLOBALS["doc_lead_break"] && $no_doc_lead_break != 1 ? "<br>" : "")."$doc[content]";
+				$txt .= ($this->cfg["doc_lead_break"] && $no_doc_lead_break != 1 ? "<br>" : "")."$doc[content]";
 				$doc["content"] = $txt;
 			};
 		};
@@ -577,7 +568,7 @@ class document extends aw_template
 
 		// create keyword links unless we are in print mode, since you cant click
 		// on links on the paper they dont make sense there :P
-		if (defined("KEYWORD_RELATIONS") && not($print))
+		if ($this->cfg["keyword_relations"] && not($print))
 		{
 			$this->create_keyword_relations(&$doc["content"]);
 		}
@@ -610,11 +601,12 @@ class document extends aw_template
 
 		// noja, mis fucking "undef" see siin on?
 		// damned if I know , v6tax ta 2kki 2ra siis? - terryf 
+		classload("aliasmgr");
+		$al = new aliasmgr();
+
 		if (!isset($text) || $text != "undef") 
 		{
-			classload("aliasmgr");
-			$al = new aliasmgr();
-			$al->parse_oo_aliases($doc["docid"],&$doc["content"],array("templates" => &$this->templates));
+			$al->parse_oo_aliases($doc["docid"],&$doc["content"],array("templates" => &$this->templates,"meta" => &$meta));
 			$doc["content"] = $this->parse_aliases(array(
                                 "oid" => $docid,
                                 "text" => $doc["content"],
@@ -862,9 +854,9 @@ class document extends aw_template
 		
 		// I kinda hate this part, mime registry should really be somewhere else
 		// failide ikoonid kui on template olemas, namely www.stat.ee jaox
-		$aliases = $this->get_aliases_for($doc["docid"]);
  		if ($this->is_template("FILE"))
 		{
+			$aliases = $this->get_aliases_for($doc["docid"]);
 			$ftypearr = array(
 				"application/pdf" => "pdf",
 				"text/richtext" => "rtf",
