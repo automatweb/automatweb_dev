@@ -20,6 +20,87 @@ class tpledit extends aw_template {
 	function browse($args = array())
 	{
 		extract($args);
+		load_vcl("table");
+		$meta = $this->obj_get_meta(array("oid" => $args["oid"]));
+		$t = new aw_table(array(
+                                "prefix" => "tpledit_browse",
+                                "imgurl"    => $GLOBALS["baseurl"]."/img",
+                                "tbgcolor" => "#C3D0DC",
+                        ));
+		$t->parse_xml_def($GLOBALS["basedir"]."/xml/generic_table.xml");
+		$t->set_header_attribs(array(
+                                "class" => "tpledit",
+                                "action" => "browse",
+                                "parent" => $args["parent"],
+                ));
+
+		$t->define_field(array(
+                                "name" => "oid",
+                                "caption" => "ID",
+                                "talign" => "center",
+                                "nowrap" => 1,
+				"sortable" => 1,
+				"align" => "right",
+                ));
+		$t->define_field(array(
+                                "name" => "name",
+                                "caption" => "Nimi",
+                                "talign" => "center",
+                                "nowrap" => 1,
+				"sortable" => 1,
+				"align" => "right",
+                ));
+		$t->define_field(array(
+                                "name" => "date",
+                                "caption" => "Muudetud",
+                                "talign" => "center",
+                                "nowrap" => 1,
+				"sortable" => 1,
+				"align" => "right",
+                ));
+		$t->define_field(array(
+                                "name" => "size",
+                                "caption" => "Suurus",
+                                "talign" => "center",
+                                "nowrap" => 1,
+				"sortable" => 1,
+				"align" => "right",
+                ));
+		$t->define_field(array(
+                                "name" => "uid",
+                                "caption" => "Muutja",
+                                "talign" => "center",
+                                "nowrap" => 1,
+				"sortable" => 1,
+				"align" => "right",
+                ));
+		$t->define_field(array(
+                                "name" => "arc",
+                                "caption" => "Arhiveeritakse",
+                                "talign" => "center",
+                                "nowrap" => 1,
+				"align" => "center",
+                ));
+		$t->define_action(array(
+				"link" => "class=tpledit&action=edit",
+				"field" => "file",
+				"caption" => "Muuda",
+		));
+		$t->define_action(array(
+				"link" => "class=tpledit&action=archive",
+				"field" => "oid",
+				"caption" => "Arhiiv",
+		));
+		$t->define_action(array(
+				"link" => "class=tpledit&action=upload",
+				"field" => "fullname",
+				"caption" => "Upload",
+		));
+		$t->define_action(array(
+				"link" => "class=tpledit&action=download",
+				"field" => "file",
+				"caption" => "Download",
+		));
 
 		// gather information about all template metaobjects
 		$q = "SELECT * FROM objects WHERE class_id = " . CL_TEMPLATE;
@@ -95,16 +176,23 @@ class tpledit extends aw_template {
 			{
 				$arclink = "";
 			};
-			$this->vars(array(
-				"name" => $name,
-				"date" => $this->time2date($stat[$fullname][FILE_MODIFIED],6),
-				"size" => $stat[$fullname][FILE_SIZE],
-				"modifiedby" => $tdata[$relname]["modifiedby"],
+
+			$mx_data = $this->obj_get_meta(array("oid" => $oid));
+
+			$archived = ($mx_data["archived"]) ? "checked" : "";
+
+			$t->define_data(array(
 				"oid" => $tdata[$relname]["oid"],
-				"edlink" => $this->mk_orb("edit",array("file" => $relname)),
-				"dnlink" => $this->mk_orb("download",array("file" => $relname)),
-				"arclink" => $arclink,
+				"size" => $stat[$fullname][FILE_SIZE],
+				"name" => $name,
+				"uid" => $tdata[$relname]["modifiedby"],
+				"date" => $this->time2date($stat[$fullname][FILE_MODIFIED],6),
+				"file" => $relname,
+				"fullname" => $fullname,
+				"arc" => "<input type=checkbox name=arc[$oid] $archived value=1><input type=hidden name=exists[$oid] value=1>",
+				"parent" => $parent,
 			));
+
 
 			$f .= $this->parse("file");
 		};
@@ -127,17 +215,40 @@ class tpledit extends aw_template {
 			$index = (strlen($fullname) > 0) ? $fullname : $name;
 			$path[$index] = $name;
 		};
+		
+		$title_path = array();
+		$title_path[] = "<a href='" . $this->mk_orb("browse",array("parent" => "root")) . "'>TemplateEditor</a>";
 
-		$path = join(" / ",map2("<a href='orb.aw?class=tpledit&action=browse&parent=%s'>%s</a>",$path));
+		$title_path = $title_path + map2("<a href='orb.aw?class=tpledit&action=browse&parent=%s'>%s</a>",$path);
+		$t->sort_by(array("field" => $args["sortby"]));
+
 		$this->vars(array(
 			"directory" => $d,
-			"file" => $f,
 			"path" => $path,
+			"files" => $t->draw(),
+			"reforb" => $this->mk_reforb("submit_browse",array("parent" => $args["parent"])),
 		));
 
 		$test = $this->mk_orb("shak",array("kala" => "tursk2"));
-		$GLOBALS["site_title"] = "<a href='" . $this->mk_orb("browse",array("parent" => "root")) . "'>TemplateEditor</a>";
-		return $this->parse();
+		$GLOBALS["site_title"] = join(" / ",$title_path);
+		$retval = $this->parse();
+		return $retval;
+	}
+
+	function submit_browse($args = array())
+	{
+		extract($args);
+		if (is_array($exists))
+		{
+			foreach($exists as $key => $val)
+			{
+				$this->obj_set_meta(array(
+					"oid" => $key,
+					"meta" => array("archived" => $arc[$key]),
+				));
+			};
+		};
+		return $this->mk_orb("browse",array("parent" => $parent));
 	}
 
 	// Kuvab faili edimise vormi
@@ -147,16 +258,48 @@ class tpledit extends aw_template {
 		global $tpldirs,$HTTP_HOST;
 		$tpldir = $tpldirs[$HTTP_HOST];
 		$meta_obj = $this->_fetch_tpl_obj(array("name" => $file));
+		$oid = $meta_obj["oid"];
+		if ($meta_obj["oid"])
+		{
+			$meta = $this->obj_get_meta(array(
+					"oid" => $meta_obj["oid"],
+			));
+		};
+		print "<pre>";
+		print_r($meta);
+		print "</pre>";
 		$dirname = dirname($file);
 		$source = join("",@file($tpldir . "/" . $file));
 		$this->read_template("edit.tpl");
+		$parents = explode("/",$file);
+
+		$fullname = "";
+	
+		array_pop($parents);	
+
+		$path = array();
+		$path[] = "<a href='" . $this->mk_orb("browse",array("parent" => "root")) . "'>TemplateEditor</a>"; 
+		foreach($parents as $name)
+		{
+			if (strlen($name) == 0)
+			{
+				continue;
+			};
+			$fullname .= "/$name";
+			$index = (strlen($fullname) > 0) ? $fullname : $name;
+			$path[$index] = sprintf("<a href='orb.aw?class=tpledit&action=browse&parent=%s'>%s</a>",$fullname,$name);
+		};
+
 		$this->vars(array(
 			"file" => $file,
 			"source" => htmlspecialchars($source),
+			"name" => $meta["name"],
+			"comment" => $meta["comment"],
 			"rawlink" => $this->mk_orb("source",array("file" => $file)),
+			"arclink" => $this->mk_orb("archive",array("oid" => $oid)),
 			"reforb" => $this->mk_reforb("submit",array("file" => $file)),
 		));
-		$GLOBALS["site_title"] = "<a href='" . $this->mk_orb("browse",array("parent" => "/$dirname")) . "'>TemplateEditor</a>";
+		$GLOBALS["site_title"] = join(" / ",$path);
 		return $this->parse();
 	}
 
@@ -180,6 +323,7 @@ class tpledit extends aw_template {
 			));
 			// create archive
 			$arc->add(array("oid" => $oid));
+			$timestamp = 0;
 		}
 		else
 		{
@@ -189,15 +333,20 @@ class tpledit extends aw_template {
 					"name" => $file,
 			));
 
+			$oid = $meta_obj["oid"];
+
 			$ser = $this->_archive(array("oid" => $meta_obj["oid"]));
 			// add a new copy of the template object to the archive
-			$arc->commit(array(
+			$timestamp = $arc->commit(array(
 				"oid" => $meta_obj["oid"],
 				"content" => trim($ser),
+				"name" => $name,
+				"comment" => $comment,
 			));
 
 			
 		}
+
 		$this->put_file(array(
 			"file" => $fullpath,
 			"content" => stripslashes($source),
@@ -217,13 +366,27 @@ class tpledit extends aw_template {
 		return $row;
 	}
 
+	////
+	// !Kuvab vormi, kust saab valida faili uploadimiseks
+	function upload($args = array())
+	{
+		extract($args);
+		$this->read_template("upload.tpl");
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit_upload",array()),
+		));
+		$GLOBALS["site_title"] = "Upload template";
+		return $this->parse();
+	}
+
 
 	function download($args = array())
 	{
 		extract($args);
 		global $tpldirs,$HTTP_HOST;
 		$tpldir = $tpldirs[$HTTP_HOST];
-		$source = join("",@file($tpldir . $file));
+		$src_path = $tpldir . $file;
+		$source = join("",@file($tpldir . "/" . $file));
 		$realname = basename($file);
 		header("Content-Type: text/plain");
 		header("Content-Disposition: filename=$realname");
@@ -274,6 +437,56 @@ class tpledit extends aw_template {
 	function show_archive($args = array())
 	{
 		classload("archive");
+		load_vcl("table");
+		$meta = $this->obj_get_meta(array("oid" => $args["oid"]));
+		$t = new aw_table(array(
+                                "prefix" => "mailbox",
+                                "imgurl"    => $GLOBALS["baseurl"]."/img",
+                                "tbgcolor" => "#C3D0DC",
+                        ));
+		$t->parse_xml_def($GLOBALS["basedir"]."/xml/generic_table.xml");
+		$t->set_header_attribs(array(
+                                "class" => "tpledit",
+                                "action" => "archive",
+                                "oid" => $args["oid"],
+                ));
+
+		$t->define_field(array(
+                                "name" => "name",
+                                "caption" => "Nimi",
+                                "talign" => "center",
+                                "nowrap" => 1,
+				"sortable" => 1,
+                ));
+		$t->define_field(array(
+                                "name" => "uid",
+                                "caption" => "Muutja",
+                                "talign" => "center",
+                                "nowrap" => 1,
+				"sortable" => 1,
+                ));
+		$t->define_field(array(
+                                "name" => "date",
+                                "caption" => "Kuupäev",
+                                "talign" => "center",
+                                "nowrap" => 1,
+				"sortable" => 1,
+                ));
+		$t->define_field(array(
+                                "name" => "size",
+                                "caption" => "Suurus",
+                                "talign" => "center",
+				"align" => "right",
+                                "nowrap" => 1,
+				"sortable" => 1,
+                ));
+		$t->define_field(array(
+                                "name" => "activate",
+                                "caption" => "Aktiveeri",
+                                "talign" => "center",
+				"align" => "center",
+                                "nowrap" => 1,
+                ));
 		$arc = new archive();
 		$contents = $arc->get($args);
 		// FIXME: check the object class too
@@ -285,18 +498,19 @@ class tpledit extends aw_template {
 		{
 			foreach($contents as $element)
 			{
-				$this->vars(array(
+				$t->define_data(array(
+					"name" => $meta["archive"][$element[FILE_MODIFIED]]["name"],
+					"uid" => $meta["archive"][$element[FILE_MODIFIED]]["uid"],
 					"date" => $this->time2date($element[FILE_MODIFIED],9),
-					"action" => "Näita",
 					"size" => $element[FILE_SIZE],
-					"id" => $element[FILE_MODIFIED],
+					"activate" => "<input type=radio name=active value=" . $element[FILE_MODIFIED] . ">",
 				));
 
-				$c .= $this->parse("line");
 			};
 		};
+		$t->sort_by(array("field" => $args["sortby"]));
 		$this->vars(array(
-			"line" => $c,
+			"table" => $t->draw(),
 			"reforb" => $this->mk_reforb("submit_archive",array("oid" => $args["oid"])),
 		));
 		return $this->parse();
