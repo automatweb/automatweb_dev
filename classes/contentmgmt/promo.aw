@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.48 2004/10/05 09:18:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.49 2004/10/08 15:51:20 duke Exp $
 // promo.aw - promokastid.
 
 /*
@@ -107,20 +107,20 @@ class promo extends class_base
 
 	function get_property($arr = array())
 	{
-		$data = &$arr["prop"];
+		$prop = &$arr["prop"];
 		$retval = PROP_OK; 
-		switch($data["name"])
+		switch($prop["name"])
 		{
 			case "promo_tpl":
 				$tm = get_instance("templatemgr");
-				$data["options"] = $tm->template_picker(array(
+				$prop["options"] = $tm->template_picker(array(
 					"folder" => "promo/doctemplates"
 				));
 				break;
 
 			case "tpl_edit":
 				$tplmgr = get_instance("templatemgr");
-				$data["options"] = $tplmgr->get_template_list(array(
+				$prop["options"] = $tplmgr->get_template_list(array(
 					"type" => 0,
 					"menu" => $arr["obj_inst"]->id(),
 				));
@@ -129,7 +129,7 @@ class promo extends class_base
 			case "tpl_lead":
 				// kysime infot lyhikeste templatede kohta
 				$tplmgr = get_instance("templatemgr");
-				$data["options"] = $tplmgr->get_template_list(array(
+				$prop["options"] = $tplmgr->get_template_list(array(
 					"type" => 1,
 					"def" => aw_ini_get("promo.default_tpl"),
 					"caption" => "Vali template"
@@ -156,18 +156,18 @@ class promo extends class_base
 						"scroll" => "Skrolliv",
 					);
 				}
-				$data["options"] = $opts;
+				$prop["options"] = $opts;
 				break;
 
 			case "groups":
 				$u = get_instance("users");
-				$data["options"] = $u->get_group_picker(array(
+				$prop["options"] = $u->get_group_picker(array(
 					"type" => array(GRP_REGULAR,GRP_DYNAMIC),
 				));
 				break;
 
 			case "sort_by":
-				$data['options'] = array(
+				$prop['options'] = array(
 					'' => "",
 					'objects.jrk' => "J&auml;rjekorra j&auml;rgi",
 					'objects.created' => "Loomise kuup&auml;eva j&auml;rgi",
@@ -178,7 +178,7 @@ class promo extends class_base
 				break;
 
 			case "sort_ord":
-				$data['options'] = array(
+				$prop['options'] = array(
 					'DESC' => "Suurem (uuem) enne",
 					'ASC' => "V&auml;iksem (vanem) enne",
 				);
@@ -211,9 +211,9 @@ class promo extends class_base
 
 	function set_property($arr)
 	{
-		$data = &$arr["prop"];
+		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		switch($data["name"])
+		switch($prop["name"])
 		{
 			case "section":
 				$arr["obj_inst"]->set_meta("section_include_submenus",$arr["request"]["include_submenus"]);
@@ -323,20 +323,21 @@ class promo extends class_base
 		foreach($conns as $c)
 		{
 			$c_o = $c->to();
+			$c_id = $c_o->id();
 			$t->define_data(array(
-				"id" => $c_o->id(),
+				"id" => $c_id,
 				"name" => $c_o->path_str(array(
 					"max_len" => 3
 				)),
 				"as_name" => html::radiobutton(array(
 					"name" => "as_name",
-					"value" => $c_o->id(),
-						"checked" => ($as_name == $c_o->id())
+					"value" => $c_id,
+						"checked" => ($as_name == $c_id)
 				)),
 				"src_submenus" => html::checkbox(array(
 					"name" => "src_submenus[]",
-					"value" => $c_o->id(),
-					"checked" => ($ssm[$c_o->id()] == $c_o->id())
+					"value" => $c_id,
+					"checked" => ($ssm[$c_id] == $c_id)
 				))
 			));
 		}
@@ -501,7 +502,7 @@ class promo extends class_base
 		$parms = array(
 			"leadonly" => 1,
 			"showlead" => 1,
-			"boldlead" => $thid->cfg["boldlead"],
+			"boldlead" => $this->cfg["boldlead"],
 			"no_strip_lead" => 1,
 		);
 
@@ -534,21 +535,24 @@ class promo extends class_base
 			$this->do_prev_next_links($def->get(), $this);
 		}
 
-		if ($ob->meta('as_name') && $ob->meta("caption") == "")
+		$as_name = $ob->meta("as_name");
+
+		if ($as_name && $ob->meta("caption") == "")
 		{
-			if ($this->can("view",$ob->meta("as_name")))
+			if ($this->can("view",$as_name))
 			{
-				$as_n_o = obj($ob->meta("as_name"));
+				$as_n_o = obj($as_name);
 				$ob->set_meta('caption',$as_n_o->name());
 			}
 		}
 
 		$image = "";
 		$image_url = "";
-		if ($ob->prop("image"))
+		$image_id = $ob->prop("image");
+		if ($image_id)
 		{
 			$i = get_instance("image");
-			$image_url = $i->get_url_by_id($ob->prop("image"));
+			$image_url = $i->get_url_by_id($image_id);
 			$image = $i->make_img_tag($image_url);
 		}
 
@@ -576,6 +580,9 @@ class promo extends class_base
 			));
 		}
 
+		// ADD_ITEM subtemplate should contain the link to add a new document
+		// to a container and will be made visible if there is an logged in user
+		// this check of course sucks, acl should be used instead --duke
 		if (aw_global_get("uid") != "" && $this->is_template("ADD_ITEM"))
 		{
 			$conns = $ob->connections_from(array(
@@ -636,12 +643,17 @@ class promo extends class_base
 		$tplmgr = get_instance("templatemgr");
 		$promos = array();
 		$gidlist = aw_global_get("gidlist");
-		for($o =& $list->begin(); !$list->end(); $o =& $list->next())
+		$rootmenu = aw_ini_get("rootmenu");
+		$default_tpl_filename = aw_ini_get("promo.default_tpl");
+		$tpldir = aw_ini_get("tpldir");
+		$no_acl_checks = aw_ini_get("menuedit.no_view_acl_checks");
+		$promo_areas = aw_ini_get("promo.areas");
+		foreach($list->arr() as $o)
 		{
 			if (!$o->prop("tpl_lead"))
 			{
-				$tpl_filename = aw_ini_get("promo.default_tpl");
-				if (!$tpl_filename)
+				$tpl_filename = $default_tpl_filename;
+				if (!$default_tpl_filename)
 				{
 					continue;
 				}
@@ -650,18 +662,23 @@ class promo extends class_base
 			{
 				// find the file for the template by id. sucks. we should join the template table
 				// on the menu template I guess
-				$tpl_filename = $tplmgr->get_template_file_by_id(array("id" => $o->prop("tpl_lead")));
+				$tpl_filename = $tplmgr->get_template_file_by_id(array(
+					"id" => $o->prop("tpl_lead"),
+				));
 			}
+			
+			$promo_link = $o->prop("link");
 
 			$found = false;
 
-			if (!is_array($o->meta("groups")) || count($o->meta("groups")) < 1)
+			$groups = $o->meta("groups");
+			if (!is_array($groups) || count($groups) < 1)
 			{
 				$found = true;
 			}
 			else
 			{
-				foreach($o->meta("groups") as $gid)
+				foreach($groups as $gid)
 				{
 					if (isset($gidlist[$gid]) && $gidlist[$gid] == $gid)
 					{
@@ -676,6 +693,8 @@ class promo extends class_base
 			
 			$msec = $o->meta("section");
 
+			$section_include_submenus = $o->meta("section_include_submenus");
+
 			if ($o->meta("all_menus"))
 			{
 				$show_promo = true;
@@ -686,9 +705,9 @@ class promo extends class_base
 				$show_promo = true;
 			}
 			else
-			if (is_array($o->meta("section_include_submenus")))
+			if (is_array($section_include_submenus))
 			{
-				$pa = array(aw_ini_get("rootmenu"));
+				$pa = array($rootmenu);
 				foreach($inst->path as $p_o)
 				{
 					$pa[] = $p_o->id();
@@ -697,7 +716,7 @@ class promo extends class_base
 				// here we need to check, whether any of the parent menus for
 				// this menu has been assigned a promo box and has been told
 				// that it should be shown in all submenus as well
-				$sis = new aw_array($o->meta("section_include_submenus"));
+				$sis = new aw_array($section_include_submenus);
 				$intersect = array_intersect($pa,$sis->get());
 				if (sizeof($intersect) > 0)
 				{
@@ -763,18 +782,12 @@ class promo extends class_base
 				{
 					if (($d_cnt % 2)  == 1)
 					{
-						if (file_exists(aw_ini_get("tpldir")."/automatweb/documents/".$tpl_filename."2"))
+						if (file_exists($tpldir."/automatweb/documents/".$tpl_filename."2"))
 						{
 							$tpl_filename .= "2";
 						}
 					}
-					global $awt;
 					enter_function("promo-prev");
-					global $XX6;
-					if ($XX6)
-					{
-						arr($d);
-					};
 					$cont = $doc->gen_preview(array(
 						"docid" => $d,
 						"tpl" => $tpl_filename,
@@ -784,7 +797,7 @@ class promo extends class_base
 						"showlead" => 1,
 						"boldlead" => $this->cfg["boldlead"],
 						"no_strip_lead" => 1,
-						"no_acl_checks" => aw_ini_get("menuedit.no_view_acl_checks"),
+						"no_acl_checks" => $no_acl_checks,
 						"vars" => array("doc_ord_num" => $d_cnt+1),
 					));
 					exit_function("promo-prev");
@@ -811,8 +824,8 @@ class promo extends class_base
 					"title" => $o->name(), 
 					"caption" => $o->meta("caption"),
 					"content" => $pr_c,
-					"url" => $o->prop("link"),
-					"link" => $o->prop("link"),
+					"url" => $promo_link,
+					"link" => $promo_link,
 					"link_caption" => $o->meta("link_caption"),
 					"promo_doc_count" => (int)$d_cnt,
 					"image" => $image, 
@@ -821,11 +834,10 @@ class promo extends class_base
 
 				// which promo to use? we need to know this to use
 				// the correct SHOW_TITLE subtemplate
-				$pa = aw_ini_get("promo.areas");
-				if (is_array($pa) && count($pa) > 0)
+				if (is_array($promo_areas) && count($promo_areas) > 0)
 				{
 					$templates = array();
-					foreach($pa as $pid => $pd)
+					foreach($promo_areas as $pid => $pd)
 					{
 						$templates[$pid] = $pd["def"]."_PROMO";
 					}
@@ -869,7 +881,7 @@ class promo extends class_base
 					));
 				}
 				$ap = "";
-				if ($o->prop("link") != "")
+				if ($promo_link != "")
 				{
 					$ap = "_LINKED";
 				}
