@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.166 2003/11/06 12:53:46 duke Exp $
+// $Id: class_base.aw,v 2.167 2003/11/06 17:13:26 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2340,19 +2340,27 @@ class class_base extends aw_template
 			{
 				if (isset($rawdata["del_" . $name]))
 				{
+					$this->obj_inst->set_meta($name . "_id",0);
+					$this->obj_inst->set_meta($name . "_url","");
+					/*
 					$metadata[$name . "_id"] = 0;
 					$metadata[$name . "_url"] = "";
+					*/
 				}
 				else
 				{
 					// upload the bloody image.
 					$t = get_instance("image");
 					$key = $name . "_id";
-					$oldid = (int)$this->coredata["meta"][$key];
-					$ar = $t->add_upload_image($name, $this->coredata["parent"], $oldid);
-					$metadata[$key] = $ar["id"];
+					$oldid = $this->obj_inst->meta($key);
+					//$oldid = (int)$this->coredata["meta"][$key];
+					$ar = $t->add_upload_image($name, $this->obj_inst->parent(), $oldid);
+					$this->obj_inst->set_meta($key,$ar["id"]);
+					//$metadata[$key] = $ar["id"];
 					$key = $name . "_url";
-					$metadata[$key] = image::check_url($ar["url"]);
+					//$metadata[$key] = image::check_url($ar["url"]);
+					$this->obj_inst->set_meta($key,image::check_url($ar["url"]));
+					$heh = $this->obj_inst->meta();
 				};
 			};
 			if ($method == "bitmask")
@@ -2399,11 +2407,13 @@ class class_base extends aw_template
 					$values[$name] = $property["value"];
 				};
 			}
+			/*
 			else if ($method == "serialize")
 			{
 				$this->obj_inst->set_prop($name,$property["value"]);
 				//$metadata[$name] = $property["value"];
 			}
+			*/
 			elseif ($table == "objects")
 			{
 				if ($method == "bitmask")
@@ -2416,7 +2426,8 @@ class class_base extends aw_template
 				else
 				if (isset($rawdata[$name]))
 				{
-					$this->obj_inst->set_prop($field,$property["value"]);
+					//$this->obj_inst->set_prop($field,$property["value"]);
+					$this->obj_inst->set_prop($name,$property["value"]);
 					//$this->coredata[$field] = $property["value"];
 				};
 			}
@@ -2430,6 +2441,7 @@ class class_base extends aw_template
 				};
 			};
 		};
+		
 
 		/*
 		if (sizeof($metadata) > 0)
@@ -2476,10 +2488,13 @@ class class_base extends aw_template
 			//$this->coredata["metadata"]["cfgform_id"] = $this->cfgform_id;
 		};
 
+		// this is here to solve the line break problems with RTE
 		if (is_array($args["cb_nobreaks"]))
 		{
 			$this->obj_inst->set_meta("cb_nobreaks",$args["cb_nobreaks"]);
 		}
+
+
 
 		$this->obj_inst->save();
 
