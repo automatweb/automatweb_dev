@@ -22,7 +22,7 @@ $lc_gallery["LC_GALLERY_ACTIVITY"] = "Tegevus";
 $lc_gallery["LC_GALLERY_CHANGE"] = "Muuda";
 
 $lc_gallery["LC_GALLERY_DEL_PAGE"] = "Kustuta lehek&uuml;lg";
-$lc_gallery["LC_GALLERY_IS_GALLERY_SLIDESHOW"] = "Kas galerii on slideshow";
-$lc_gallery["LC_GALLERY_IS_SLIDESHOW_AUTO"] = "Kas slideshow on automaatne";
+$lc_gallery["LC_GALLERY_IS_GALLERY_SLIDESHOW"] = "Slideshow";
+$lc_gallery["LC_GALLERY_IS_SLIDESHOW_AUTO"] = "Automaatne";
 
 ?>

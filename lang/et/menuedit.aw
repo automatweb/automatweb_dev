@@ -73,7 +73,7 @@ $lc_menuedit["LC_MENUEDIT_FORUM"] = "Foorum";
 $lc_menuedit["LC_MENUEDIT_FRONTPAGE"] = "Esilehel";
 $lc_menuedit["LC_MENUEDIT_TEXT"] = "Tekst";
 $lc_menuedit["LC_MENUEDIT_PICTURES"] = "Pildid";
-$lc_menuedit["LC_MENUEDIT_MENU_LOOK_MORE"] = "Parem tulp";
+$lc_menuedit["LC_MENUEDIT_MENU_LOOK_MORE"] = "Vaata lisaks";
 $lc_menuedit["LC_MENUEDIT_PICTURE"] = "Pilt";
 $lc_menuedit["LC_MENUEDIT_EXPORT"] = "Ekspordi";
 $lc_menuedit["LC_MENUEDIT_CHOOSE_SHOP"] = "Vali pood";
@@ -102,4 +102,6 @@ $lc_menuedit["LC_LOGIN_NAME"] = "Kasutajanimi";
 $lc_menuedit["LC_LOGIN_PASS"] = "Parool";
 $lc_menuedit["LC_LOGIN_CAPTION"] = "Logi sisse";
 $lc_menuedit["LC_MENUEDIT_CHOOSE_KEYWORDS"] = "M&auml;rks&otilde;nad";
+$lc_menuedit["LC_MENUEDIT_DISPLAY"] = "N&auml;itamine";
+$lc_menuedit["LC_MENUEDIT_OTHER_SETTINGS"] = "Muud m&auml;&auml;rangud";
 ?>

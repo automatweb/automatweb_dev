@@ -23,7 +23,7 @@ $lc_gallery["LC_GALLERY_MESSAGE"] = "Message";
 $lc_gallery["LC_GALLERY_CHANGE"] = "Change";
 
 $lc_gallery["LC_GALLERY_DEL_PAGE"] = "Delete page";
-$lc_gallery["LC_GALLERY_IS_GALLERY_SLIDESHOW"] = "Kas galerii on slideshow";
-$lc_gallery["LC_GALLERY_IS_SLIDESHOW_AUTO"] = "Kas slideshow on automaatne";
+$lc_gallery["LC_GALLERY_IS_GALLERY_SLIDESHOW"] = "Slideshow";
+$lc_gallery["LC_GALLERY_IS_SLIDESHOW_AUTO"] = "Automaatne";
 
 ?>

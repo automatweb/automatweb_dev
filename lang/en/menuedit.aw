@@ -100,6 +100,8 @@ $lc_menuedit["LC_MENUEDIT_PROPERTIES"] = "Properties";
 $lc_menuedit["LC_MENUEDIT_SURE_DELETE_MENU"] = "Are You sure You wish to delete this menu?";
 $lc_menuedit["LC_MENUEDIT_PERIOD"] = "Period";
 $lc_menuedit["LC_MENUEDIT_CHOOSE_KEYWORDS"] = "Keywords";
+$lc_menuedit["LC_MENUEDIT_DISPLAY"] = "Display";
+$lc_menuedit["LC_MENUEDIT_OTHER_SETTINGS"] = "Other Settings";
 $lc_menuedit["LC_LOGIN_CAPTION"] = "Log in";
 
 
