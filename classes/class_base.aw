@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.287 2004/07/08 11:21:06 duke Exp $
+// $Id: class_base.aw,v 2.288 2004/07/09 12:19:57 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -3775,6 +3775,32 @@ class class_base extends aw_template
 		foreach($all_properties as $key => $val)
 		{
 			if (in_array($val["type"],$type_filter))
+			{
+				$rv[$key] = $val;
+			};
+		};
+
+		return $rv;
+
+	}
+	
+	////
+	// !Returns a list of properties having the requested name
+	function get_properties_by_name($arr)
+	{
+		// load defaults first
+		$all_properties = $this->load_defaults(array(
+			"clid" => $arr["clid"],
+			"clfile" => $arr["clfile"],
+		));
+
+		$rv = array();
+
+		$name_filter = is_array($arr["props"]) ? $arr["props"] : array($arr["props"]);
+
+		foreach($all_properties as $key => $val)
+		{
+			if (in_array($val["name"],$name_filter))
 			{
 				$rv[$key] = $val;
 			};
