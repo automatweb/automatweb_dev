@@ -190,7 +190,7 @@ background: #F8F9D5;
 <td class="celltext" align="left">
 <a href="{VAR:prev}"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/cal_nool_left.gif" WIDTH="19" HEIGHT="8" BORDER=0 ALT="&lt;&lt;"></a>  {VAR:caption}   <a href="{VAR:next}"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/cal_nool_right.gif" WIDTH="19" HEIGHT="8" BORDER=0 ALT="&gt;&gt;"></a></td>
 <td align="right">
-
+<!--
 <table border="0" cellpadding="0" cellspacing="0">
 <form method="POST" action="reforb.{VAR:ext}">
 <tr><td>
@@ -201,6 +201,7 @@ background: #F8F9D5;
 </td></tr>
 </form>
 </table>
+-->
 
 </td>
 </tr>

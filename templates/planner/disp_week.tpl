@@ -29,7 +29,7 @@
 			<td width="{VAR:cellwidth}" bgcolor="#FFFFFF" valign="top">
 				<table width="100%" border="0" cellpadding="0" cellspacing="5">
 				<tr><td>
-				<div align="right" style="font-family: Verdana,serif; font-weight: bold; color: #CCC;">{VAR:daynum}</div>
+				<div align="right" style="font-family: Verdana,serif; font-weight: bold; color: #AAA;">{VAR:daynum}</div>
 				{VAR:cell}
 				</td></tr></table>
 
