@@ -1,9 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search_v2.aw,v 1.1 2005/01/21 12:50:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search_v2.aw,v 1.2 2005/01/26 23:36:59 duke Exp $
 
 /*
 @default group=search
 @default form=search
+
+@property stoolbar type=toolbar group=search,advsearch no_caption=1
+@caption Toolbar
 
 @property server type=select group=advsearch
 @caption Server
@@ -97,12 +100,16 @@ class search_v2 extends class_base
 	/** generates search form
 		
 		@attrib name=search default="1" all_args="1"
-		
+
 	**/
 	function search($arr)
 	{
 		$arr["form"] = "search";
-		$arr["group"] = "search";
+		$arr["group"] = !empty($arr["group"]) ? $arr["group"] : "search";
+		if (!isset($arr["action"]))
+		{
+			$arr["action"] = "";
+		};
 		return $this->change($arr);
 	}
 
@@ -112,6 +119,36 @@ class search_v2 extends class_base
 		$prop["value"] = $arr["request"][$prop["name"]];
 		switch($prop["name"])
 		{
+			case "stoolbar":
+				$toolbar = &$prop["vcl_inst"];
+				$toolbar->add_button(array(
+					"name" => "search",
+					"tooltip" => t("Otsi"),
+					"url" => "javascript:document.changeform.submit()",
+					"img" => "search.gif",
+				));
+				$toolbar->add_separator();
+				$toolbar->add_button(array(
+					"name" => "cut",
+					"tooltip" => t("Lõika"),
+					"action" => "cut",
+					"img" => "cut.gif",
+				));
+				$toolbar->add_button(array(
+					"name" => "copy",
+					"tooltip" => t("Kopeeri"),
+					"action" => "copy",
+					"img" => "copy.gif",
+				));
+				$toolbar->add_button(array(
+					"name" => "delete",
+					"tooltip" => t("Kustuta"),
+					"action" => "delete",
+					"img" => "delete.gif",
+				));
+	
+				break;
+
 			case "server":
 				$ol = new object_list(array(
 					"class_id" => CL_AW_LOGIN,
@@ -129,9 +166,9 @@ class search_v2 extends class_base
 
 			case "status":
 				$prop["options"] = array(
-					"3" => "Kõik",
-					"2" => "Aktiivsed",
-					"1" => "Deaktiivsed",
+					"3" => t("Kõik"),
+					"2" => t("Aktiivsed"),
+					"1" => t("Deaktiivsed"),
 				);
 				break;
 
@@ -161,43 +198,58 @@ class search_v2 extends class_base
 		$t->define_field(array(
 			"name" => "oid",
 			"caption" => "ID",
+			"align" => "center",
 		));
 		$t->define_field(array(
 			"name" => "icon",
 			"caption" => "",
+			"align" => "center",
 		));
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 		));
 		$t->define_field(array(
 			"name" => "lang_id",
-			"caption" => "Keel",
+			"caption" => t("Keel"),
+			"align" => "center",
 		));
 		$t->define_field(array(
 			"name" => "class_id",
-			"caption" => "Tüüp",
+			"caption" => t("Tüüp"),
 		));
 		$t->define_field(array(
 			"name" => "location",
-			"caption" => "Asukoht",
+			"caption" => t("Asukoht"),
 		));
 		$t->define_field(array(
 			"name" => "created",
-			"caption" => "Loodud",
+			"caption" => t("Loodud"),
+			"type" => "time",
+			"format" => "d.m.y / H:i",
 		));
 		$t->define_field(array(
 			"name" => "createdby",
-			"caption" => "Looja",
+			"caption" => t("Looja"),
 		));
 		$t->define_field(array(
 			"name" => "modified",
-			"caption" => "Muudetud",
+			"caption" => t("Muudetud"),
+			"type" => "time",
+			"format" => "d.m.y / H:i",
 		));
 		$t->define_field(array(
 			"name" => "modifiedby",
-			"caption" => "Muutja",
+			"caption" => t("Muutja"),
 		));
+
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid",
+			"caption" => t("Vali"),
+		));
+
+		classload("icons");
 
 		if ($this->do_search)
 		{
@@ -219,16 +271,21 @@ class search_v2 extends class_base
 
 			//arr($_tmp);
 
+			$clinf = aw_ini_get("classes");
+
 			foreach($_tmp as $id => $item)
 			{
+				$type = $clinf[$item["class_id"]]["name"];
+				$icon = sprintf("<img src='%s' alt='$type' title='$type'>",icons::get_icon_url($item["class_id"]));
 				$t->define_data(array(
 					"name" => $item["name"],
 					"oid" => $id,
+					"icon" => $icon,
 					"created" => $item["created"],
 					"createdby" => $item["createdby"],
 					"modifiedby" => $item["modifiedby"],
 					"modified" => $item["modified"],
-					"class_id" => $item["class_id"],
+					"class_id" => $clinf[$item["class_id"]]["name"],
 				));
 				//$o_data = $this->_search_mk_call("objects","get_object",array("id" => $item));
 				//arr($o_data);
