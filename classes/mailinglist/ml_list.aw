@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.47 2004/04/15 06:59:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.48 2004/05/13 14:49:01 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -863,6 +863,7 @@ class ml_list extends class_base
 		}
 		$tpl = ($sub_form_type == 0) ? "subscribe.tpl" : "unsubscribe.tpl";
 		$this->read_template($tpl);
+		lc_site_load("ml_list", &$this);
 		if ($this->is_template("FOLDER") && $tobj->prop("multiple_folders") == 1)
 		{
 			$folders = $tobj->connections_from(array(
