@@ -1,3 +1,8 @@
+<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/awplanner.css">
+<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/site.css">
+<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/fg_menu.css">
+<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/bench.css">
+
 <form method="POST" action="reforb.{VAR:ext}" name="doc" onSubmit="doSubmit();return true;">
 
 <!--tabelraam-->
@@ -103,6 +108,7 @@ target="_blank" href="{VAR:baseurl}/index.aw?section={VAR:id}">Eelvaade</a></td>
 	&nbsp;&nbsp;Lingi võtmesõnad:	<input type='checkbox' name="link_keywords" value=1>&nbsp;&nbsp;&nbsp;
 	-->
 	Arhiveeri:	<input type='checkbox' name="archive" value=1>&nbsp;&nbsp;&nbsp;
+	'Prindi' nupp: <input type='checkbox' name='show_print' value=1 {VAR:show_print}>
 	<!--
 	Esilehel:	<input type='checkbox' name="esilehel" value=1 {VAR:esilehel}>&nbsp;&nbsp;&nbsp;
 	Esilehel tulbas:	<input type='checkbox' name="frontpage_left" value=1 {VAR:frontpage_left}>&nbsp;&nbsp;&nbsp;
@@ -128,6 +134,10 @@ function doSubmit()
 <td class="celltext"><input class='tekstikast' type="text" name="title" size="80" value="{VAR:title}"></td>
 </tr>
 
+<tr>
+<td class="celltext"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Alias&nbsp;</b></td>
+<td class="celltext"><input class='tekstikast' type="text" name="alias" size="80" value="{VAR:alias}"></td>
+</tr>
 
 <tr>
 <td class="celltext"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Autor:&nbsp;</b></td>
@@ -152,6 +162,11 @@ function doSubmit()
 
 
 <!-- SUB: IE -->
+<tr>
+<td class="celltext"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Alias&nbsp;</b></td>
+<td class="celltext"><input class='tekstikast' type="text" name="alias" size="80" value="{VAR:alias}"></td>
+</tr>
+
 <tr>
 <td class="celltext" width="10%"><img src='{VAR:baseurl}/images/transa.gif' width=10 height=1><Br><B>&nbsp;Autor:&nbsp;</b></td>
 <td class="celltext" width="90%"><input class='tekstikast' type="text" name="author" size="80" value="{VAR:author}"></td>
@@ -390,19 +405,15 @@ href="orb.{VAR:ext}?class=document&action=archive&docid={VAR:id}">Arhiiv</a></td
 
 
 
-<!--<input type="submit" class='doc_button' value="Salvesta">
-
-<input class='doc_button' type="submit" value="Eelvaade" onClick="window.location.href='{VAR:preview}';return false;">
-<input type="submit" class='doc_button' value="Sektsioonid" onClick="window.location.href='{VAR:menurl}';return false;">
-
-<input type="submit" class='doc_button' value="Webile" onClick="remote2('{VAR:weburl}')">-->
-
-
-
 <table width="100%" border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC">
 <tr>
+<td class="fgtext">
+<a href="{VAR:aliasmgr_link}" target="al">tagasi aliastehaldurisse</a>
+</td>
+</tr>
+<tr>
 <td>
-<iframe width="100%" height="800" frameborder="0" src="{VAR:aliasmgr_link}">
+<iframe name="al" width="100%" height="800" frameborder="0" src="{VAR:aliasmgr_link}">
 </iframe>
 </td>
 </tr>

@@ -299,6 +299,15 @@ function format(what,opt)
 <td class="celltext"><input class='tekstikast' type="text" name="keywords" size="80" value="{VAR:keywords}"></td>
 </tr>
 <tr>
+<td class="celltext"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Ref&nbsp;</b></td>
+<td class="celltext"><input class='tekstikast' type="text" name="referer" size="60" value="{VAR:referer}">
+<select name="refopt">
+{VAR:refopts}
+</select>
+
+</td>
+</tr>
+<tr>
 <td class="celltext" valign="top"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Arhiiv&nbsp;</b></td>
 <td class="celltext"><input type="checkbox" name="archive" onClick="toggle_archive_settings()" value="1" {VAR:archive}>
 </td>

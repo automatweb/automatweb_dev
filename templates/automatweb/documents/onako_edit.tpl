@@ -208,6 +208,15 @@ function format(what,opt)
 <td class="hele_hall_taust"><input class='tekstikast' type="text" name="keywords" size="80" value="{VAR:keywords}"></td>
 </tr>
 <tr>
+<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Ref&nbsp;</b></td>
+<td class="hele_hall_taust"><input class='tekstikast' type="text" name="referer" size="60" value="{VAR:referer}">
+<select name="refopt">
+{VAR:refopts}
+</select>
+
+</td>
+</tr>
+<tr>
 <td class="hele_hall_taust" colspan="2">
 <input type="submit" class='doc_button' value="Save"> <input class='doc_button' type="submit" value="Preview" onClick="window.location.href='{VAR:preview}';return false;"> <input type="submit" class='doc_button' value="Sections" onClick="window.location.href='{VAR:menurl}';return false;"> <input type="submit" class='doc_button' value="Web" onClick="window.open('{VAR:baseurl}/index.{VAR:ext}?section={VAR:id}');return false;"> <input type="button" class="doc_button" value="Notify mailinglists" onClick="if (confirm('Teavitada liste?')) { window.location.href='{VAR:self}?class=keywords&action=notify&id={VAR:docid}';}"</td>
 </td>
