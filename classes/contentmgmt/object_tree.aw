@@ -156,6 +156,7 @@ class object_tree extends class_base
 			{
 				$url = $this->cfg["baseurl"]."/".$oid;
 			}
+			classload("icons");
 			$this->vars(array(
 				"show" => $url,
 				"name" => $od['name'],
