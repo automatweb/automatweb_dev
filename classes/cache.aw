@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.12 2002/09/19 15:13:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.13 2002/11/27 14:11:27 kristo Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
@@ -156,6 +156,30 @@ class cache extends core
 		{
 			@unlink($this->cfg["page_cache"]."/".$key);
 		}
+	}
+
+	////
+	// invalidates all cache files that match pcre regex $regex
+	// returns the number of caches that were invalidated
+	function file_invalidate_regex($regex)
+	{
+		$cnt = 0;
+		if ($dir = @opendir($this->cfg["page_cache"])) 
+		{
+		  while (($file = readdir($dir)) !== false) 
+			{
+				if (!($file == "." || $file == ".."))
+				{
+					if (preg_match("/$regex/", $file))
+					{
+						$this->file_invalidate($file);
+						$cnt++;
+					}
+				}
+			}
+	  }  
+	  closedir($dir);
+		return $cnt;
 	}
 };
 ?>
