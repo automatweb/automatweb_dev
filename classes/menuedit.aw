@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.147 2002/08/20 10:06:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.148 2002/08/21 11:21:09 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -1734,6 +1734,7 @@ class menuedit extends aw_template
 			//printf("%d\t%s\t%d\n",$row["id"],$row["description"],$act);
 			printf("%d\t%s\t%d\n",$row["id"],"xxx",$act);
 		};
+		exit;
 	}
 
 
@@ -3978,7 +3979,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 			$link = $this->make_menu_link(&$row);
 
-			$target = ($row["target"] == 1) ? sprintf("target='%s'","_new") : "";
+			$target = ($row["target"] == 1) ? sprintf("target='%s'","_blank") : "";
 
 			$imgurl2 = "";
 			if ($this_selected)
@@ -4425,7 +4426,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				if (!($meta["users_only"] == 1 && aw_global_get("uid") == ""))
 				{
 					$this->vars(array(
-						"target" => $samenu["target"] ? "target=\"blank\"" : "",
+						"target" => $samenu["target"] ? "target=\"_blank\"" : "",
 						"link" => $link,
 						"text" => str_replace("&nbsp;","",strip_tags($samenu["name"]))
 					));
