@@ -447,6 +447,15 @@
             <datatype>int</datatype>
             <caption>User-defined checkbox 5</caption>
       </property>
+      <property>
+            <name>usersubmit1</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>submit</type>
+            <store>no</store>
+            <field>usersubmit1</field>
+            <caption>User-defined submit 1</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_REGISTER_DATA</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -516,6 +525,11 @@
                   <clid>CL_META</clid>
                   <caption>kasutajadefineeritud muutuja 10</caption>
             </VARUSER10>
+            <REGISTER>
+                  <value>10</value>
+                  <clid>CL_REGISTER</clid>
+                  <caption>Seostatud register</caption>
+            </REGISTER>
       </reltypes>
 </properties>
 

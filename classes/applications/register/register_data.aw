@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.6 2004/11/09 17:45:35 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.7 2004/11/11 13:21:25 ahti Exp $
 // register_data.aw - Registri andmed 
 /*
 
