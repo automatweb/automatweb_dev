@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.32 2002/12/23 13:55:32 kristo Exp $
+// $Id: class_base.aw,v 2.33 2002/12/30 12:14:07 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -614,6 +614,7 @@ class class_base extends aliasmgr
 		// display the editing form) to add it's own tabs.
 
 		$activegroup = ($this->activegroup) ? $this->activegroup : $this->group;
+		$activegroup = ($this->action) ? $this->action : $activegroup;
 
 		foreach($grpnames->get() as $key => $val)
 		{
@@ -667,6 +668,9 @@ class class_base extends aliasmgr
 		$this->coredata = $this->ds->ds_get_object(array(
 			"id" => $args["id"],
 			"class_id" => $this->clid,
+			"table" => "objects",
+			"idfield" => "oid",
+			"fields" => array("oid" => "oid","parent" => "parent","name" => "name"),
 		));
 
 		$this->id = $this->coredata["oid"];
@@ -913,7 +917,11 @@ class class_base extends aliasmgr
 			{
 				$_field = "metadata";
 			};
-			$fields[$property["table"]][$_field] = $fval;
+
+			if ($property["table"])
+			{
+				$fields[$property["table"]][$_field] = $fval;
+			};
 
 		};
 
@@ -1131,9 +1139,10 @@ class class_base extends aliasmgr
 			}
 			else
 			// this doesn't let me use layout
-			if ($val["generator"] && method_exists($this->inst,$val["generator"]))
+			#if ($val["generator"] && method_exists($this->inst,$val["generator"]))
+			if ($val["callback"] && method_exists($this->inst,$val["callback"]))
 			{
-				$meth = $val["generator"];
+				$meth = $val["callback"];
 				$vx = $this->inst->$meth($argblock);
 				if (is_array($vx))
 				{
@@ -1150,6 +1159,10 @@ class class_base extends aliasmgr
 			else
 			{
 				$this->convert_element(&$val);
+				if (!$name)
+				{
+					$name = $key;
+				};
 				$resprops[$name] = $val;
 			};
 		}
@@ -1239,6 +1252,8 @@ class class_base extends aliasmgr
 		$this->load_coredata(array(
 			"id" => $args["id"],
 		));
+
+		$this->id = $args["id"];
 
 		$almgr = get_instance("aliasmgr",array("use_class" => get_class($this->orb_class)));
 
