@@ -1,5 +1,5 @@
 <?php
-// $Id: frameset.aw,v 1.8 2004/01/13 16:24:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/Attic/frameset.aw,v 1.9 2004/02/11 09:24:52 duke Exp $
 // frameset.aw - frameset generator
 /*
 	@default table=objects
@@ -65,7 +65,7 @@ of the NOFRAMES element.
 /* this class should allow the user to create whatever frameset she wants*/
 class frameset extends class_base
 {
-	function frameset($args = array())
+	function frameset($arr)
 	{
 		$this->init(array(
 			"clid" => CL_FRAMESET,
@@ -106,7 +106,7 @@ class frameset extends class_base
 
 	/**  
 		
-		@attrib name=show params=name default="0"
+		@attrib name=show params=name
 		
 		@param id required
 		
@@ -116,30 +116,27 @@ class frameset extends class_base
 		@comment
 
 	**/
-	function show($args = array())
+	function show($arr)
 	{
-		extract($args);
+		extract($arr);
 
-		$obj = $this->get_object(array(
-			"oid" => $id,
-			"class_id" => CL_FRAMESET,
-		));
+		$obj = new object($id);
 
 		$this->title = $title;
 
 		$this->_register_frame_templates();
-		$tpl = $this->frame_templates[$obj["meta"]["template"]];
+		$tpl = $this->frame_templates[$obj->prop("template")];
 
-		if ($args["sources"])
+		if ($arr["sources"])
 		{
-			$this->sources = $args["sources"];
+			$this->sources = $arr["sources"];
 		}
 		else
 		{
-			$this->sources = $obj["meta"]["sources"];
+			$this->sources = $obj->meta("sources");
 		};
 
-		$this->framedata = $obj["meta"]["framedata"];
+		$this->framedata = $obj->meta("framedata");
 		$this->draw_frameset($tpl);
 		print $this->content;
 		exit;
@@ -191,15 +188,15 @@ class frameset extends class_base
 		$this->content .= "$tab</frameset>\n";
 	}
 
-	function get_property($args)
+	function get_property($arr)
 	{
-		$data = &$args["prop"];
+		$data = &$arr["prop"];
 		switch($data["name"])
 		{
 			case "template":
 				$this->_register_frame_templates();
 				$data["options"] = array("" => "--vali--") + $this->frame_names;
-				$tpl = $this->frame_templates[$args["obj"]["meta"]["template"]];
+				$tpl = $this->frame_templates[$arr["obj_inst"]->prop("template")];
 				$this->draw_frameset($tpl);
 				break;
 
@@ -208,7 +205,7 @@ class frameset extends class_base
 
 	////
 	// !Returns a bunch of nodes for each frame
-	function callback_get_sources($args)
+	function callback_get_sources($arr)
 	{
 		$nodes = array();
 		$names = new aw_array($this->names);
@@ -220,26 +217,26 @@ class frameset extends class_base
 				"type" => "textbox",
 				"size" => 50,
 				"name" => "framedata[$name][source]",
-				"value" => $args["prop"]["value"][$name]["source"],
+				"value" => $arr["prop"]["value"][$name]["source"],
 			);
 			$nodes[] = array(
 				"caption" => "Default lehe stiil",
 				"type" => "objpicker",
 				"name" => "framedata[$name][style]",
 				"clid" => "CL_PAGE",
-				"value" => $args["prop"]["value"][$name]["style"],
+				"value" => $arr["prop"]["value"][$name]["style"],
 			);
 			$nodes[] = array(
 				"caption" => "Border",
 				"type" => "checkbox",
 				"name" => "framedata[$name][frameborder]",
-				"checked" => checked($args["prop"]["value"][$name]["frameborder"]),
+				"checked" => checked($arr["prop"]["value"][$name]["frameborder"]),
 			);
 			$nodes[] = array(
 				"caption" => "Keritav",
 				"type" => "select",
 				"name" => "framedata[$name][scrolling]",
-				"value" => $args["prop"]["value"][$name]["scrolling"],
+				"value" => $arr["prop"]["value"][$name]["scrolling"],
 				"options" => array("" => "","yes" => "Jah","no" => "Ei"),
 			);
 				
