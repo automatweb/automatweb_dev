@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.58 2004/09/04 17:45:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.59 2004/10/22 15:01:53 kristo Exp $
 
 /*
 
@@ -310,6 +310,7 @@ class links extends class_base
 		{
 			$caption = $this->img;
 		};
+		$url = str_replace("'", "\"", $url);
 		$vars = array(
 			"url" => $url,
 			"caption" => $caption,
