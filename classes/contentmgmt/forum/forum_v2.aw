@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.25 2004/03/11 13:26:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.26 2004/05/17 13:24:14 kristo Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -1026,19 +1026,22 @@ class forum_v2 extends class_base
 		// relobj_id on püsti ja kui on, siis tegema kõik lingid selle baasil.
 		// ah? mis?
 		$act = isset($_GET["action"]) ? $_GET["action"] : "change";
-		return $this->$act(array(
-			"id" => $alias["target"],
-			"action" => isset($_GET["action"]) ? $_GET["action"] : "view",
-			"rel_id" => $args["alias"]["relobj_id"],
-			"folder" => $_GET["folder"],
-			"topic" => $_GET["topic"],
-			"page" => $_GET["page"],
-			"c" => $_GET["c"],
-			"cb_part" => 1,
-			"fxt" => 1,
-			"group" => "contents",
-			//"group" => isset($_GET["group"]) ? $_GET["group"] : "contents",
-		));
+		if (method_exists($this, $act))
+		{
+			return $this->$act(array(
+				"id" => $alias["target"],
+				"action" => isset($_GET["action"]) ? $_GET["action"] : "view",
+				"rel_id" => $args["alias"]["relobj_id"],
+				"folder" => $_GET["folder"],
+				"topic" => $_GET["topic"],
+				"page" => $_GET["page"],
+				"c" => $_GET["c"],
+				"cb_part" => 1,
+				"fxt" => 1,
+				"group" => "contents",
+				//"group" => isset($_GET["group"]) ? $_GET["group"] : "contents",
+			));
+		}
 	}
 
 	////
