@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.83 2003/03/17 19:13:19 duke Exp $
+// $Id: class_base.aw,v 2.84 2003/03/18 15:10:53 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -149,15 +149,15 @@ class class_base extends aliasmgr
 	
 		$argblock = array(
 			"id" => $id,
-			"group" => $group,
+			"group" => isset($group) ? $group : "",
 			"orb_class" => $orb_class,
-			"cb_view" => $args["cb_view"],
+			"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
 			"parent" => $parent,
-			"period" => $period,
-			"alias_to" => $this->request["alias_to"],
-			"reltype" => $this->request["reltype"],
-			"cfgform" => $this->cfgform_id,
-			"return_url" => urlencode($this->request["return_url"]),
+			"period" => isset($period) ? $period : "",
+			"alias_to" => isset($this->request["alias_to"]) ? $this->request["alias_to"] : "",
+			"reltype" => isset($this->request["reltype"]) ? $this->request["reltype"] : "",
+			"cfgform" => isset($this->cfgform_id) ? $this->cfgform_id : "",
+			"return_url" => isset($this->request["return_url"]) ? urlencode($this->request["return_url"]) : "",
 		);
 
 		if (method_exists($this->inst,"callback_mod_reforb"))
@@ -177,7 +177,7 @@ class class_base extends aliasmgr
 		return $this->gen_output(array(
 			"parent" => $parent,
 			"content" => $content,
-			"cb_view" => $args["cb_view"],
+			"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
 		));
 	}
 
@@ -187,6 +187,7 @@ class class_base extends aliasmgr
 	// any other data, then you'll need to use other field name
 	function change($args = array())
 	{
+		error_reporting(E_ALL);
 		// create an instance of the class servicing the object ($this->inst)
 		// create an instance of the datasource ($this->ds)
 		// set $this->clid and $this->clfile (Do I need the latter at all?)
@@ -216,8 +217,8 @@ class class_base extends aliasmgr
 		// I need an easy way to turn off individual properties
 		$realprops = $this->get_active_properties(array(
 				"clfile" => $this->clfile,
-				"group" => $args["group"],
-				"cb_view" => $args["cb_view"],
+				"group" => isset($args["group"]) ? $args["group"] : "",
+				"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
 		));
 		
 		$this->load_obj_data(array("id" => $this->id));
@@ -282,11 +283,11 @@ class class_base extends aliasmgr
 
 		$argblock = array(
 			"id" => $id,
-			"group" => $group,
+			"group" => isset($group) ? $group : "",
 			"orb_class" => $orb_class,
 			"parent" => isset($parent) ? $parent : "",
 			"period" => isset($period) ? $period : "",
-			"cb_view" => $cb_view,
+			"cb_view" => isset($cb_view) ? $cb_view : "",
 			"alias_to" => isset($this->request["alias_to"]) ? $this->request["alias_to"] : "",
 			"return_url" => isset($this->request["return_url"]) ? urlencode($this->request["return_url"]) : "",
 			"subgroup" => isset($this->request["subgroup"]) ? $this->request["subgroup"] : "",
@@ -299,7 +300,7 @@ class class_base extends aliasmgr
 
 		$cli->finish_output(array(
 			"action" => "submit",
-			"submit" => $gdata["submit"],
+			"submit" => isset($gdata["submit"]) ? $gdata["submit"] : "",
 			"data" => $argblock,
 		));
 
@@ -330,7 +331,7 @@ class class_base extends aliasmgr
 		$this->id = $id;
 		
 		// try to load the bastard
-		if ($args["cfgform"])
+		if (isset($args["cfgform"]))
 		{
 			$_tmp = $this->get_object(array(
 				"oid" => $args["cfgform"],
@@ -475,8 +476,8 @@ class class_base extends aliasmgr
 				$name = $property["name"];
 
 				$savedata[$name] = ($property["value"]) ? $property["value"] : $xval;
-			
-				$table = $property["table"];
+		
+				$table = isset($property["table"]) ? $property["table"] : "";
 				$field = $property["field"];
 				$method = $property["method"];
 				$type = $property["type"];
@@ -495,13 +496,13 @@ class class_base extends aliasmgr
 					// turn the array into a timestamp
 					$savedata[$name] = date_edit::get_timestamp($savedata[$name]);
 				};
-				if (($type == "select") && $property["multiple"])
+				if (($type == "select") && isset($property["multiple"]))
 				{
 					$savedata[$name] = $this->make_keys($savedata[$name]);
 				};
 				if ($type == "imgupload")
 				{
-					if ($form_data["del_" . $name])
+					if (isset($form_data["del_" . $name]))
 					{
 						$metadata[$name . "_id"] = 0;
 						$metadata[$name . "_url"] = "";
@@ -595,7 +596,7 @@ class class_base extends aliasmgr
 			"alias_to" => $form_data["alias_to"],
 			"return_url" => $form_data["return_url"],
 			"cb_view" => $form_data["cb_view"],
-		) + (is_array($extraids) ? $extraids : array());
+		) + ( (isset($extraids) && is_array($extraids)) ? $extraids : array());
 
 		$action = "change";
 		$orb_class = get_class($this->orb_class);
@@ -625,13 +626,15 @@ class class_base extends aliasmgr
 			$syslog_type = constant($this->classinfo['syslog_type']['text']);
 		}
 
-		if ($this->new)
+		// XXX: if I want to save data that does not belong to 
+		// objects table, then I don't want to log it like this --duke
+		if (isset($this->new))
 		{
-			$this->_log($syslog_type, SA_ADD, $name, $id);
+			$this->_log($syslog_type, SA_ADD, $name, $this->id);
 		}
 		else
 		{
-			$this->_log($syslog_type, SA_CHANGE, $name, $id);
+			$this->_log($syslog_type, SA_CHANGE, $name, $this->id);
 		};
 	}
 	
@@ -793,7 +796,7 @@ class class_base extends aliasmgr
 		foreach($this->tables as $key => $val)
 		{
 			// that we already got
-			if (($key != "objects") && (sizeof($this->realfields[$key]) > 0) )
+			if (($key != "objects") && isset($this->realfields[$key]) && (sizeof($this->realfields[$key]) > 0) )
 			{
 				if ($val["master_table"] == "objects")
 				{
@@ -836,8 +839,9 @@ class class_base extends aliasmgr
 	{
 		// XXX: figure out a way to do better titles
 		$classname = get_class($this->orb_class);
-		$name = isset($this->coredata["name"]) ? $this->coredata["name"] : "";
 
+		$name = isset($this->coredata["name"]) ? $this->coredata["name"] : "";
+		$return_url = isset($this->request["return_url"]) ? urlencode($this->request["return_url"]) : "";
 		// XXX: pathi peab htmlclient tegema
 		$title = isset($args["title"]) ? $args["title"] : "";
 		if ($this->id)
@@ -909,7 +913,7 @@ class class_base extends aliasmgr
 			"id" => isset($this->id) ? $this->id : false,
 			"group" => "",
 			"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
-			"return_url" => isset($this->request["return_url"]) ? urlencode($this->request["return_url"]) : "",
+			"return_url" => $return_url,
 		));
 			
 		if (empty($this->classinfo["hide_tabs"]))
@@ -959,12 +963,12 @@ class class_base extends aliasmgr
 			$link = "";
 			if (isset($this->id))
 			{
-				$link = $this->mk_my_orb("list_aliases",array("id" => $this->id,"return_url" => urlencode($this->request["return_url"])),get_class($this->orb_class));
+				$link = $this->mk_my_orb("list_aliases",array("id" => $this->id,"return_url" => $return_url),get_class($this->orb_class));
 			};
 			$this->tp->add_tab(array(
 				"link" => $link,
 				"caption" => "Seostehaldur",
-				"active" => ( ($this->action == "list_aliases") || ($this->action == "search_aliases") ),
+				"active" => isset($this->action) && (($this->action == "list_aliases") || ($this->action == "search_aliases")),
 				"disabled" => !isset($this->id),
 			));
 		};
@@ -1002,6 +1006,11 @@ class class_base extends aliasmgr
 	// Loads an object. Any object
 	function load_object($args = array())
 	{
+		if (empty($args["table"]))
+		{
+			return false;
+		};
+
 		$tmp = $this->ds->ds_get_object(array(
 			"id" => $args["id"],
 			"table" => $args["table"],
@@ -1024,7 +1033,7 @@ class class_base extends aliasmgr
 				if (isset($table) && isset($idfield))
 				{
 					// create the new record
-					if ($this->new)
+					if (isset($this->new))
 					{
 						$this->ds->ds_new_object(array(
 							"table" => $table,
@@ -1188,6 +1197,8 @@ class class_base extends aliasmgr
 
 		$retval = array();
 		$tables = array();
+		$fields = array();
+		$realfields = array();
 
 		foreach($property_list as $key => $val)
 		{
@@ -1220,7 +1231,14 @@ class class_base extends aliasmgr
 			// figure out information about the table
 			if (isset($property["table"]) && empty($tables[$property["table"]]))
 			{
-				$tables[$property["table"]] = $this->tableinfo[$property["table"]];
+				if (isset($this->tableinfo[$property["table"]]))
+				{
+					$tables[$property["table"]] = $this->tableinfo[$property["table"]];
+				}
+				else
+				{
+					$tables[$property["table"]] = "";
+				};
 			};
 
 			$fval = $property["method"];
@@ -1247,6 +1265,7 @@ class class_base extends aliasmgr
 			};
 
 		};
+
 
 		$this->tables = $tables;
 		$this->fields = $fields;
@@ -1383,6 +1402,11 @@ class class_base extends aliasmgr
 
 	function convert_element(&$val)
 	{
+		// no type? get out then
+		if (empty($val["type"]))
+		{
+			return false;
+		};
 
 		if (($val["type"] == "popup_objmgr"))
 		{
@@ -1427,7 +1451,7 @@ class class_base extends aliasmgr
 			$val["type"] = "select";
 			$val["options"] = $this->list_objects(array(
 				"class" => constant($val["clid"]),
-				"subclass" => ($val["subclass"]) ? constant($val["subclass"]) : "",
+				"subclass" => isset($val["subclass"]) ? constant($val["subclass"]) : "",
 				"addempty" => true,
 			));
 		};
@@ -1439,7 +1463,7 @@ class class_base extends aliasmgr
 			$class_id = constant($val["clid"]);
 			$val["options"] = $this->list_objects(array(
 				"class" => CL_CFGFORM,
-				"subclass" => ($class_id) ? $class_id : "",
+				"subclass" => isset($class_id) ? $class_id : "",
 				"addempty" => true,
 			));
 			$val["type"] = "select";
@@ -1453,13 +1477,13 @@ class class_base extends aliasmgr
 			$val["caption"] = "";
 		};
 
-		if (($val["type"] == "relpicker") && ($val["clid"]))
+		if (($val["type"] == "relpicker") && isset($val["clid"]))
 		{
 			// retrieve the list of all aliases first time this is invoked
 			if (!is_array($this->alist))
 			{
 				$almgr = get_instance("aliasmgr");
-				if ($this->id)
+				if (isset($this->id))
 				{
 					$this->alist = $almgr->get_oo_aliases(array(
 								"oid" => $this->id,
@@ -1486,16 +1510,19 @@ class class_base extends aliasmgr
 
 		if (($val["type"] == "relpicker") && ($val["reltype"]))
 		{
-			$reltypes = $this->coredata["meta"]["alias_reltype"];
-			if (empty($reltypes))
+			if (isset($this->coredata["meta"]["alias_reltype"]))
+			{
+				$reltypes = $this->coredata["meta"]["alias_reltype"];
+			}
+			else
 			{
 				$reltypes = array();
 			};
 			// retrieve the list of all aliases first time this is invoked
-			if (!is_array($this->alist))
+			if (empty($this->alist))
 			{
 				$almgr = get_instance("aliasmgr");
-				if ($this->id)
+				if (isset($this->id))
 				{
 					$this->alist = $almgr->get_oo_aliases(array(
 								"oid" => $this->id,
@@ -1522,7 +1549,7 @@ class class_base extends aliasmgr
 			};
 			foreach($objlist->get() as $okey => $oval)
 			{
-				if ($reltypes[$oval["target"]] == $reltype)
+				if (isset($reltypes[$oval["target"]]) && $reltypes[$oval["target"]] == $reltype)
 				{
 					$options[$oval["target"]] = $oval["name"];
 				};
@@ -1631,7 +1658,7 @@ class class_base extends aliasmgr
 		};
 		if ($this->clid == CL_PSEUDO)
 		{
-			if ($this->parent)
+			if (isset($this->parent))
 			{
 				$parobj = $this->get_object($this->parent);
 				$retval = (int)$parobj["meta"]["cfgmanager"];
