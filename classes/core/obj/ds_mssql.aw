@@ -452,6 +452,11 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 		// now save all props to tables.
 		foreach($tbls as $tbl => $tbld)
 		{
+			if ($tbl == "")
+			{
+				continue;
+			}
+
 			if ($tbl == "objects")
 			{
 				$tableinfo[$tbl]["index"] = "oid";

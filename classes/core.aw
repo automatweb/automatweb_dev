@@ -95,7 +95,7 @@ class core extends acl_base
 			$ref = aw_global_get("HTTP_REFERER");
 			$this->quote(&$ref);
 			$fields = array("tm","uid","type","action","ip","oid","act_id", "referer");
-			$values = array($t,aw_global_get("uid"),$type,$text,$ip,$oid,$action,$ref);
+			$values = array($t,aw_global_get("uid"),$type,$text,$ip,(int)$oid,$action,$ref);
 			if (aw_ini_get("tafkap"))
 			{
 				$fields[] = "tafkap";

@@ -14,6 +14,11 @@ class date
 		}
 
 		$rv = "";
+
+		if (PHP_OS == "WINNT" && $timestamp < 0)
+		{
+			return "n/a";
+		}
 		
 		switch ($format)
 		{

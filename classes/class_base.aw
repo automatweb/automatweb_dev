@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.313 2004/11/02 09:59:51 kristo Exp $
+// $Id: class_base.aw,v 2.314 2004/11/02 12:18:37 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1047,7 +1047,7 @@ class class_base extends aw_template
 				$target = "_self";
 			};
 			$title = html::href(array(
-				"url" => $this->request["return_url"],
+				"url" => $_GET["return_url"],
 				"caption" => "Tagasi",
 				"target" => $target,
 			)) . " / " . $title;

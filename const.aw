@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.96 2004/10/30 16:33:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.97 2004/11/02 12:18:37 kristo Exp $
 error_reporting(E_ALL ^ E_NOTICE);
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
@@ -40,8 +40,12 @@ extract($_GET);
 $PATH_INFO = preg_replace("/\?automatweb=[^&]*/","", $PATH_INFO);
 $QUERY_STRING = preg_replace("/\?automatweb=[^&]*/","", $QUERY_STRING);
 
-// apache 2 fix
-//$QUERY_STRING = str_replace("index.aw", "", str_replace("orb.aw", "", $QUERY_STRING));
+if (strpos($_SERVER["SERVER_SOFTWARE"], "Apache/2") !== false)
+{
+	// apache 2 fix
+	$QUERY_STRING = str_replace("index.aw", "", str_replace("orb.aw", "", str_replace("login.aw", "", str_replace("reforb.aw", "", $QUERY_STRING))));
+}
+
 
 if ( isset($PATH_INFO) && (strlen($PATH_INFO) > 1))
 {
@@ -53,6 +57,15 @@ if ( isset($QUERY_STRING) && (strlen($QUERY_STRING) > 1))
 };
 
 $_SERVER["REQUEST_URI"] = preg_replace("/\?automatweb=[^&]*/","", $_SERVER["REQUEST_URI"]);
+
+if (strpos($_SERVER["SERVER_SOFTWARE"], "Apache/2") !== false)
+{
+	if ($_SERVER["REQUEST_URI"] != "")
+	{
+		$pi = "?".substr($_SERVER["REQUEST_URI"], 1);
+		$pi = str_replace("index.aw", "", str_replace("orb.aw", "", str_replace("login.aw", "", str_replace("reforb.aw", "", $pi))));
+	}
+}
 
 if ($pi) 
 {

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.116 2004/10/27 15:23:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.117 2004/11/02 12:18:38 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -109,6 +109,7 @@ class image extends class_base
 
 			if ($row)
 			{
+				array_walk($row ,create_function('&$arr','$arr=trim($arr);')); 
 				$row["url"] = $this->get_url($row["file"]);
 				$row["meta"] = aw_unserialize($row["metadata"]);
 				if ($row["meta"]["file2"] != "")
@@ -361,6 +362,8 @@ class image extends class_base
 				ORDER BY created DESC";
 			$this->db_query($q);
 			$row = $this->db_next();
+			array_walk($row ,create_function('&$arr','$arr=trim($arr);')); 
+
 			$row["url"] = $this->get_url($row["file"]);
 			$row["meta"] = aw_unserialize($row["metadata"]);
 			if ($row["meta"]["file2"] != "")
@@ -695,10 +698,10 @@ class image extends class_base
 				$fl = $arr["obj_inst"]->prop("file");
 				if (!empty($fl))
 				{
-					if ($fl{0} != "/")
-					{
-						$fl = $this->cfg["site_basedir"]."/files/".$fl{0}."/".$fl;
-					}
+					// rewrite $fl to be correct if site moved
+					$fl = basename($fl);
+					$fl = $this->cfg["site_basedir"]."/files/".$fl{0}."/".$fl;
+
 					$sz = @getimagesize($fl);
 					$prop["value"] = $sz[0] . " X " . $sz[1];
 				}

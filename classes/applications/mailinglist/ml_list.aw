@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.1 2004/10/29 21:13:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.2 2004/11/02 12:18:39 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -245,12 +245,12 @@ class ml_list extends class_base
 		$total++;
 
 		// mark the queue as "processing" - 5
-		$this->db_query("INSERT INTO ml_queue (lid,mid,gid,uid,aid,status,start_at,last_sent,patch_size,delay,position,total)
-			VALUES ('$list_id','$id','$gid','".aw_global_get("uid")."','$aid','5','$_start_at','0','$_patch_size','$_delay','0','$count')");
+		$qid = $this->db_fetch_field("SELECT max(qid) as qid FROM ml_queue", "qid")+1;
 
-		$qid = $this->db_last_insert_id();
-		
-		$mlq = get_instance("mailinglist/ml_queue");
+		$this->db_query("INSERT INTO ml_queue (qid,lid,mid,gid,uid,aid,status,start_at,last_sent,patch_size,delay,position,total)
+			VALUES ('$qid','$list_id','$id','$gid','".aw_global_get("uid")."','$aid','5','$_start_at','0','$_patch_size','$_delay','0','$count')");
+
+		$mlq = get_instance("applications/mailinglist/ml_queue");
 		$mlq->preprocess_messages(array(
 			"mail_id" => $id,
 			"list_id" => $list_id,
@@ -850,7 +850,6 @@ class ml_list extends class_base
 		$t->set_default_sortby("id");
 		$t->set_default_sorder("desc");
 		
-		
 		if($arr["obj_inst"]->prop("member_config"))
 		{
 			$config_obj = &obj($arr["obj_inst"]->prop("member_config"));
@@ -880,7 +879,7 @@ class ml_list extends class_base
 				}
 			}
 		}
-		
+
 		$t->define_field(array(
 			"name" => "others",
 			"caption" => "Liitumisinfo",
@@ -893,12 +892,12 @@ class ml_list extends class_base
 		$t->d_row_cnt = $this->member_count;
 		$pageselector = "";
 
-                if ($t->d_row_cnt > $perpage)
-                {
-                        $pageselector = $t->draw_lb_pageselector(array(
-                                "records_per_page" => $perpage
-                        ));
-                };
+		if ($t->d_row_cnt > $perpage)
+		{
+			$pageselector = $t->draw_lb_pageselector(array(
+				"records_per_page" => $perpage
+			));
+		};
 	
 		$t->table_header = $pageselector;
 		$ml_member_inst = get_instance(CL_ML_MEMBER);
@@ -938,6 +937,7 @@ class ml_list extends class_base
 		
 			}	
 		}		
+
 		$t->sort_by();
 	}
 
@@ -971,7 +971,7 @@ class ml_list extends class_base
 
 	function gen_list_status_table($arr)
 	{
-		$mq = get_instance("mailinglist/ml_queue");
+		$mq = get_instance("applications/mailinglist/ml_queue");
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->parse_xml_def("mlist/queue");
 		$t->define_chooser(array(
@@ -1286,10 +1286,21 @@ class ml_list extends class_base
 		$t->parse_xml_def("mlist/report");
 		$_mid = $arr["request"]["mail_id"];
 		$id = $arr["obj_inst"]->id();
+		if(strtolower(aw_ini_get('db.driver'))=='mssql')
+		{
+			$lim1 = " TOP 50 ";
+			$lim2 = "";
+		}
+		else
+		{
+			$lim1 = "";
+			$lim2 = " LIMIT 50 ";
+		}
+
 		$q = "
-			SELECT target, tm, subject, id
+			SELECT $lim1 target, tm, subject, id
 			FROM ml_sent_mails
-			WHERE lid = '$id' AND mail = '$_mid' AND mail_sent = 1 ORDER BY tm DESC limit 50";
+			WHERE lid = '$id' AND mail = '$_mid' AND mail_sent = 1 ORDER BY tm DESC $lim2";
 		$this->db_query($q);
 		while ($row = $this->db_next())
 		{

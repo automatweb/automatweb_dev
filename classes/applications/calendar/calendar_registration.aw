@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_registration.aw,v 1.3 2004/10/08 15:55:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_registration.aw,v 1.4 2004/11/02 12:18:38 kristo Exp $
 // calendar_registration.aw - Kalendri sündmusele registreerumine 
 /*
 
@@ -289,6 +289,7 @@ class calendar_registration extends class_base
 		$o->set_prop("content", $desc);
 		$o->set_name($arr["reg"]["first_name"]." ".$arr["reg"]["last_name"]." ".$arr["email"]." ".$arr["phone"]);
 		$o->set_comment($conf->prop("event_comment"));
+		$o->set_meta("register_session", session_id());
 		$o->save();
 
 		$cal = obj($arr["cal"]);
@@ -330,6 +331,12 @@ class calendar_registration extends class_base
 		
 		$cal = obj($arr["cal"]);
 		$event = obj($arr["event"]);
+
+		if ($event->meta("register_session") != session_id())
+		{
+			$this->read_template("reg_no_sess.tpl");
+			return $this->parse();
+		}
 
 		$this->_insert_pdata($cal);
 		$this->vars(array(
