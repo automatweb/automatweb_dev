@@ -155,6 +155,17 @@
             <caption>Max. cell'e reas</caption>
       </property>
       <property>
+            <name>use_menubar</name>
+            <type>checkbox</type>
+            <group>special</group>
+            <rel>1</rel>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <ch_value>1</ch_value>
+            <caption>Kasuta menubari</caption>
+      </property>
+      <property>
             <name>event_direction</name>
             <type>callback</type>
             <callback>cb_get_event_direction</callback>
@@ -288,6 +299,21 @@
             <general>
                   <caption>Seaded</caption>
             </general>
+            <general2>
+                  <caption>Üldine</caption>
+                  <parent>general</parent>
+            </general2>
+            <advanced>
+                  <caption>Seaded</caption>
+                  <parent>general</parent>
+            </advanced>
+            <special>
+                  <caption>Spetsiaalne</caption>
+                  <parent>general</parent>
+            </special>
+            <views>
+                  <caption>Vaated</caption>
+            </views>
             <show_day>
                   <caption>Päev</caption>
                   <submit>no</submit>
@@ -304,21 +330,6 @@
                   <default>1</default>
                   <parent>views</parent>
             </show_month>
-            <views>
-                  <caption>Vaated</caption>
-            </views>
-            <general2>
-                  <caption>Üldine</caption>
-                  <parent>general</parent>
-            </general2>
-            <advanced>
-                  <caption>Seaded</caption>
-                  <parent>general</parent>
-            </advanced>
-            <special>
-                  <caption>Spetsiaalne</caption>
-                  <parent>general</parent>
-            </special>
             <add_event>
                   <caption>Lisa_sündmus</caption>
             </add_event>
