@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.15 2001/09/12 17:59:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.16 2001/11/07 17:24:33 kristo Exp $
 // file.aw - Failide haldus
 global $orb_defs;
 $orb_defs["file"] = "xml";
@@ -157,6 +157,29 @@ class file extends aw_template
 		));
 
 		return $success;
+	}
+	
+	function get_special_file($args = array())
+	{
+		if ($args["sys"])
+		{
+			$path = AW_PATH . "/files";
+		}
+		else
+		{
+			$path = SITE_DIR . "/files";
+		};
+
+		if ($args["path"])
+		{
+			$path .= "/" . $args["path"];
+		};
+
+		$contents  =$this->get_file(array(
+			"file" => $path . "/" . $args["name"],
+		));
+
+		return $contents;
 	}
 
 	////
