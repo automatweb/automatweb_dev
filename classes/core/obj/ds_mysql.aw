@@ -1062,6 +1062,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$objdata["modified"] = time();		
 
 		$objdata["lang_id"] = aw_global_get("lang_id");		
+		$objdata["site_id"] = aw_ini_get("site_id");		
 
 		// create oid
 		$q = "
