@@ -1,0 +1,22 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>root</name>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Root objekt</caption>
+      </property>
+      <property>
+            <name>treetype</name>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Puu tüüp</caption>
+      </property>
+</properties>
+

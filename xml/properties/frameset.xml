@@ -1,0 +1,23 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>template</name>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Frameseti template</caption>
+      </property>
+      <property>
+            <name>sources</name>
+            <type>array</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <getter>callback_get_sources</getter>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Raamide sisu</caption>
+      </property>
+</properties>
+

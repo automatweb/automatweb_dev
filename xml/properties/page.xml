@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>background</name>
+            <type>imgupload</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Taustapilt</caption>
+      </property>
+      <property>
+            <name>bgcolor</name>
+            <type>colorpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Tausta värv</caption>
+      </property>
+      <property>
+            <name>margin</name>
+            <type>textbox</type>
+            <size>4</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Servade laius</caption>
+      </property>
+      <property>
+            <name>defayltstyle</name>
+            <type>objpicker</type>
+            <clid>CL_STYLE</clid>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Default stiil</caption>
+      </property>
+      <property>
+            <name>preview</name>
+            <type>text</type>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Eelvaade</caption>
+      </property>
+</properties>
+

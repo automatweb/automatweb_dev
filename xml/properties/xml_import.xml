@@ -1,0 +1,30 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>datasource</name>
+            <type>objpicker</type>
+            <clid>CL_DATASOURCE</clid>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>XML datasource</caption>
+      </property>
+      <property>
+            <name>import_function</name>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Impordifunktsioon</caption>
+      </property>
+      <property>
+            <name>run_import</name>
+            <type>text</type>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Käivita import</caption>
+      </property>
+</properties>
+

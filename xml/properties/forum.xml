@@ -1,0 +1,44 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>comments</name>
+            <type>checkbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <caption>Kommenteeritav</caption>
+      </property>
+      <property>
+            <name>rated</name>
+            <type>checkbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <caption>Hinnatav</caption>
+      </property>
+      <property>
+            <name>template</name>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <caption>Template</caption>
+      </property>
+      <property>
+            <name>onpage</name>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <caption>Kommentaare lehel</caption>
+      </property>
+      <property>
+            <name>topicsonpage</name>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <caption>Teemasid lehel</caption>
+      </property>
+</properties>
+

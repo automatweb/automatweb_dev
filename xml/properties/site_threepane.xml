@@ -1,0 +1,40 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>frameset</name>
+            <type>objpicker</type>
+            <clid>CL_FRAMESET</clid>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Frameseti objekt</caption>
+      </property>
+      <property>
+            <name>treeview</name>
+            <type>objpicker</type>
+            <clid>CL_TREEVIEW</clid>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Puu objekt</caption>
+      </property>
+      <property>
+            <name>logo</name>
+            <type>imgupload</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Logo</caption>
+      </property>
+      <property>
+            <name>preview</name>
+            <type>text</type>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Näita</caption>
+      </property>
+</properties>
+

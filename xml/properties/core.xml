@@ -1,0 +1,89 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>name</name>
+            <type>textbox</type>
+            <group>general</group>
+            <table>objects</table>
+            <caption>Objekti nimi</caption>
+      </property>
+      <property>
+            <name>comment</name>
+            <type>textbox</type>
+            <group>general</group>
+            <table>objects</table>
+            <caption>Kommentaar</caption>
+      </property>
+      <property>
+            <name>alias</name>
+            <type>textbox</type>
+            <group>general</group>
+            <table>objects</table>
+            <caption>Alias</caption>
+      </property>
+      <property>
+            <name>status</name>
+            <type>status</type>
+            <group>general</group>
+            <table>objects</table>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>jrk</name>
+            <type>textbox</type>
+            <size>4</size>
+            <group>general</group>
+            <table>objects</table>
+            <caption>Jrk</caption>
+      </property>
+      <property>
+            <name>created</name>
+            <type>date</type>
+            <access>ro</access>
+            <table>objects</table>
+            <caption>Loomise kuupäev</caption>
+      </property>
+      <property>
+            <name>createdby</name>
+            <type>uid</type>
+            <access>ro</access>
+            <table>objects</table>
+            <caption>Looja</caption>
+      </property>
+      <property>
+            <name>modified</name>
+            <type>date</type>
+            <access>ro</access>
+            <table>objects</table>
+            <caption>Muutmise kuupäev</caption>
+      </property>
+      <property>
+            <name>modifiedby</name>
+            <type>uid</type>
+            <access>ro</access>
+            <table>objects</table>
+            <caption>Muutja</caption>
+      </property>
+      <property>
+            <name>oid</name>
+            <type>int</type>
+            <access>ro</access>
+            <table>objects</table>
+            <caption>Objekti id</caption>
+      </property>
+      <property>
+            <name>parent</name>
+            <type>int</type>
+            <access>ro</access>
+            <table>objects</table>
+            <caption>Parenti id</caption>
+      </property>
+      <property>
+            <name>class_id</name>
+            <type>class_id</type>
+            <access>ro</access>
+            <table>objects</table>
+            <caption>Klassi id</caption>
+      </property>
+</properties>
+
