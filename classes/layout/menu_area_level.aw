@@ -1,0 +1,226 @@
+<?php
+
+/*
+
+@classinfo syslog_type=ST_MENU_AREA_LEVEL relationmgr=yes
+
+@groupinfo general caption=Üldine
+
+@default table=objects
+@default group=general
+
+@property status type=status field=status
+@caption Staatus
+
+@default field=meta
+@default method=serialize
+
+@property first_item_style type=relpicker reltype=RELTYPE_STYLE
+@caption Esimese men&uuml;&uuml; stiil
+
+@property item_style type=relpicker reltype=RELTYPE_STYLE
+@caption Men&uuml;&uuml; stiil
+
+@property last_item_style type=relpicker reltype=RELTYPE_STYLE
+@caption Viimase men&uuml;&uuml; stiil
+
+@property sel_item_style type=relpicker reltype=RELTYPE_STYLE
+@caption Valitud men&uuml;&uuml; stiil
+
+@property first_sel_item_style type=relpicker reltype=RELTYPE_STYLE
+@caption Valitud esimese men&uuml;&uuml; stiil
+
+@property last_sel_item_style type=relpicker reltype=RELTYPE_STYLE
+@caption Valitud viimase men&uuml;&uuml; stiil
+
+@property separator type=textbox size=10
+@caption Erldaja
+
+*/
+
+define("RELTYPE_STYLE",1);
+
+class menu_area_level extends class_base
+{
+	function menu_area_level()
+	{
+		$this->init(array(
+			'tpldir' => 'layout/menu_area_level',
+			'clid' => CL_MENU_AREA_LEVEL
+		));
+		$this->mned = get_instance("menuedit");
+	}
+
+	////
+	// !this should create a string representation of the object
+	// parameters
+	//    oid - object's id
+	function _serialize($arr)
+	{
+		extract($arr);
+		$ob = $this->get_object($oid);
+		if (is_array($ob))
+		{
+			return aw_serialize($ob, SERIALIZE_NATIVE);
+		}
+		return false;
+	}
+
+	////
+	// !this should create an object from a string created by the _serialize() function
+	// parameters
+	//    str - the string
+	//    parent - the folder where the new object should be created
+	function _unserialize($arr)
+	{
+		extract($arr);
+		$row = aw_unserialize($str);
+		$row['parent'] = $parent;
+		unset($row['brother_of']);
+		$this->quote(&$row);
+		$id = $this->new_object($row);
+		if ($id)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	////
+	// !this will be called if the object is put in a document by an alias and the document is being shown
+	// parameters
+	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
+	function parse_alias($args)
+	{
+		extract($args);
+		return $this->show(array('id' => $alias['target']));
+	}
+
+	////
+	// !this shows the object.
+	function show($arr)
+	{
+		extract($arr);
+		$this->ob = $this->get_object($id);
+
+		// ok, here we need to figure out if this level's parent menu is active. how the hell do we do that?
+		// ok, first get the path
+		// then crawl through the path, until we find the root menu of the menu_area that this object is attached to
+		// and then we can get the active parent, cause it is in the path at level root_menu_level + this_level
+		$sg = get_instance("layout/active_page_data");
+		$path = $sg->get_active_path();
+
+		$ma = get_instance("layout/menu_area");
+		$rootmenu = $ma->get_root_menu($this->ob["meta"]["menu_area"]);
+
+		$root_menu_level = 0;
+		foreach($path as $level => $oid)
+		{
+			if ($oid == $rootmenu)
+			{
+				// we got the root menu level
+				$root_menu_level = $level;
+				break;
+			}
+		}
+
+		$cont = "";
+		if (($root_menu_level && ($parent = $path[$root_menu_level+$this->ob['meta']['level']])) || ($this->ob['meta']['level'] == 0))
+		{
+			if ($this->ob['meta']['level'] == 0)
+			{
+				$parent = $rootmenu;
+			}
+
+			// now! show all the menus that are under $parent!
+			$mc = get_instance("menu_cache");
+			$menus = $mc->get_cached_menu_by_parent($parent);
+			$names = array();
+			$cnt_menus = count($menus);
+			foreach($menus as $idx => $menu_data)
+			{
+				$names[] = $this->draw_menu_item(array(
+					"data" => $menu_data,
+					"total" => $cnt_menus,
+					"cur" => $idx,
+					"active" => in_array($menu_data["oid"], $path)
+				));
+			}
+			return join($this->ob['meta']['separator'], $names);
+		}
+
+		return "";
+	}
+
+	function callback_get_rel_types()
+	{
+		return array(
+			RELTYPE_STYLE => "stiil",
+		);
+	}
+
+	function callback_get_classes_for_relation($args = array())
+	{
+		if ($args["reltype"] == RELTYPE_STYLE)
+		{
+			return array(CL_CSS);
+		}
+	}
+
+	function get_menu_link($mdat)
+	{
+		return $this->mned->make_menu_link($mdat);
+	}
+
+	////
+	// !draws one single menu item
+	// params: 
+	//   data - menu item data
+	//   total - count of items on this level
+	//   cur - current menu number on this level
+	//   active - bool, if true, this is an active menu
+	function draw_menu_item($arr)
+	{
+		extract($arr);
+		// right. check if there is a style for this menu
+		$style_name = "item_style";
+		if ($cur == 0)
+		{
+			$style_name = "first_".$style_name;
+		}
+		else
+		if ($cur == ($total-1))
+		{
+			$style_name = "last_".$style_name;
+		}
+		if ($active)
+		{
+			$style_name = "sel_".$style_name;
+		}
+
+		// if a style for this item that matches the type exactly is not set, then use the default
+		if (!($stylid = $this->ob['meta'][$style_name]))
+		{
+			$stylid = $this->ob['meta']["item_style"];
+		}
+		
+		$link = html::href(array(
+			"url" => $this->get_menu_link($data),
+			"caption" => $data["name"]
+		));
+
+		if ($stylid)
+		{
+			active_page_data::add_site_css_style($stylid);
+			return html::span(array(
+				"class" => "st".$stylid,
+				"content" => $link
+			));
+		}
+		else
+		{
+			return $link;
+		}
+	}
+}
+?>

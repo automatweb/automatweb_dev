@@ -1,0 +1,6 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="site_content" folder="layout" extends="class_base">
+	</class>
+</orb>
+		

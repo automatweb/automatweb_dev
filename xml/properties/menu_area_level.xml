@@ -1,0 +1,91 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>status</name>
+            <type>status</type>
+            <field>status</field>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>first_item_style</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Esimese men&amp;uuml;&amp;uuml; stiil</caption>
+      </property>
+      <property>
+            <name>item_style</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Men&amp;uuml;&amp;uuml; stiil</caption>
+      </property>
+      <property>
+            <name>last_item_style</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Viimase men&amp;uuml;&amp;uuml; stiil</caption>
+      </property>
+      <property>
+            <name>sel_item_style</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Valitud men&amp;uuml;&amp;uuml; stiil</caption>
+      </property>
+      <property>
+            <name>first_sel_item_style</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Valitud esimese men&amp;uuml;&amp;uuml; stiil</caption>
+      </property>
+      <property>
+            <name>last_sel_item_style</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Valitud viimase men&amp;uuml;&amp;uuml; stiil</caption>
+      </property>
+      <property>
+            <name>separator</name>
+            <type>textbox</type>
+            <size>10</size>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Erldaja</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_MENU_AREA_LEVEL</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <groupinfo>
+            <general>
+                  <caption>Üldine</caption>
+            </general>
+      </groupinfo>
+</properties>
+

@@ -1,5 +1,6 @@
 <?php
 
+classload("layout/active_page_data");
 class grid_editor extends class_base
 {
 	function grid_editor()
@@ -1002,7 +1003,6 @@ class grid_editor extends class_base
 			$table.= "<table>";
 		}
 
-		$used_css_styles = array();
 		for ($row=0; $row < $this->arr["rows"]; $row++)
 		{
 			$cs = "";
@@ -1022,7 +1022,7 @@ class grid_editor extends class_base
 				if ($st)
 				{
 					$cs .= "<td colspan=\"".$spans["colspan"]."\" rowspan=\"".$spans["rowspan"]."\" class=\"st".$st."\">";
-					$used_css_styles[$st] = $st;
+					active_page_data::add_site_css_style($st);
 				}
 				else
 				{
@@ -1045,7 +1045,7 @@ class grid_editor extends class_base
 		$al = get_instance("aliasmgr");
 		$al->parse_oo_aliases($oid,&$table,array());
 
-		return $this->_add_css_styles($used_css_styles, $table);
+		return $table;
 	}
 
 
@@ -1107,7 +1107,7 @@ class grid_editor extends class_base
 				if ($st)
 				{
 					$td_style = "colspan=\"".$spans["colspan"]."\" rowspan=\"".$spans["rowspan"]."\" class=\"st".$st."\"";
-					$used_css_styles[$st] = $st;
+					active_page_data::add_site_css_style($st);
 				}
 				else
 				{
@@ -1139,7 +1139,7 @@ class grid_editor extends class_base
 		$al = get_instance("aliasmgr");
 		$al->parse_oo_aliases($oid,&$table,array());
 		
-		return $this->_add_css_styles($used_css_styles, $table);
+		return $table;
 	}
 
 	function on_styles_edit_submit($data, $oid)
@@ -1266,28 +1266,6 @@ class grid_editor extends class_base
 			$this->num_frows = $stc->get_num_frows($this->arr["table_style"]);
 			$this->num_fcols = $stc->get_num_fcols($this->arr["table_style"]);
 		}
-	}
-
-	function _add_css_styles($used_css_styles, $retval)
-	{
-		$css_file = "";
-		$css = get_instance("css");
-		$used = array();
-		$_u = new aw_array($used_css_styles);
-		foreach($_u->get() as $stylid => $stylid)
-		{
-			if ($used[$stylid] != 1)
-			{
-				$used[$stylid] = 1;
-				$css_info = $this->get_obj_meta($stylid);
-				$css_file .= $css->_gen_css_style("st".$stylid,$css_info["meta"]["css"]);
-			}
-		}
-		if ($css_file != "")
-		{
-			$retval = "<style type=\"text/css\">".$css_file."</style>\n".$retval;
-		}
-		return $retval;
 	}
 
 	function _get_edit_toolbar()

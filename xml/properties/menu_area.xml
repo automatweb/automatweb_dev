@@ -1,0 +1,51 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>status</name>
+            <type>status</type>
+            <field>status</field>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>root_folder</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ROOT_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Root kataloog</caption>
+      </property>
+      <property>
+            <name>num_levels</name>
+            <type>textbox</type>
+            <size>3</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Mitu taset</caption>
+      </property>
+      <property>
+            <name>mod_levels</name>
+            <type>generated</type>
+            <generator>gen_mod_levels</generator>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Tasemed</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_MENU_AREA</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <groupinfo>
+            <general>
+                  <caption>Üldine</caption>
+            </general>
+      </groupinfo>
+</properties>
+
