@@ -333,6 +333,11 @@ class site_template_compiler extends aw_template
 
 	function compile_template_level($area, $adat, $level, $ldat)
 	{
+		if (!is_array($ldat["templates"]))
+		{
+			return;
+		}
+
 		$this->req_level ++;
 
 		$end_block = false;
@@ -1220,6 +1225,11 @@ class site_template_compiler extends aw_template
 		$dat = $arr["data"];
 		foreach($dat as $area => $adat)
 		{
+			if (!$adat["parent"])
+			{
+				continue;
+			}
+
 			$res .= $this->_gi()."if (\$this->_helper_get_levels_in_path_for_area(".$adat["parent"].") > 0)\n";
 			$res .= "{\n";
 			$this->brace_level++;
