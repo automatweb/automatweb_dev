@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_ldap.aw,v 1.3 2004/10/20 09:22:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_ldap.aw,v 1.4 2004/10/20 12:57:52 kristo Exp $
 // auth_server_ldap.aw - Autentimisserver LDAP 
 /*
 
@@ -15,6 +15,20 @@
 
 @property ad_domain type=textbox
 @caption Active Directory domeen
+
+@property ad_uid type=textbox
+@caption AD kasutaja (gruppide lugemiseks)
+
+@property ad_pwd type=password
+@caption AD parool
+
+@property ad_grp type=select
+@caption AD Grupp, kus kasutajad peavad olema
+
+@property ad_grp_txt type=textbox
+@caption AD Grupp, kus kasutajad peavad olema (tekst)
+
+
 
 */
 
@@ -33,7 +47,27 @@ class auth_server_ldap extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "ad_grp":
+				if ($arr["obj_inst"]->prop("ad_grp_txt") != "")
+				{
+					return PROP_IGNORE;
+				}
+				$grps = $this->_get_ad_grps($arr["obj_inst"]);
+				if (count($grps) == 0)
+				{
+					return PROP_IGNORE;
+				}
 
+				$prop["options"] = $grps;
+				break;
+
+			case "ad_pwd":
+			case "ad_uid":
+				if ($arr["obj_inst"]->prop("ad_grp_txt") != "")
+				{
+					return PROP_IGNORE;
+				}
+				break;
 		};
 		return $retval;
 	}
@@ -74,12 +108,97 @@ class auth_server_ldap extends class_base
 			$uid = $uid."@".$server->prop("ad_domain");
 		}
 
+		$break = false;
 		$bind = @ldap_bind($res, $uid, $credentials["password"]);
 		if ($bind)
 		{
-			return array(true, "");
+			$grp = $server->prop("ad_grp_text");
+			if ($server->prop("ad_grp") != "")
+			{
+				$grp = $server->prop("ad_grp");
+			}
+
+			if ($grp == "" || ($grp != "" && $this->_is_member_of($res, $server, $grp, $credentials)))
+			{
+				return array(true, "");
+			}
+			else
+			{
+				$break = true;
+			}
 		}
-		return array(false, "Sellist kasutajat pole v&otilde;i parool on vale!");
+		return array(false, "Sellist kasutajat pole v&otilde;i parool on vale!", $break);
+	}
+
+	function _get_ad_grps($o)
+	{
+		if (!($o->prop("ad_domain") && $o->prop("ad_uid") && $o->prop("ad_pwd")))
+		{
+			return array();
+		}
+		$res = ldap_connect($o->prop("server"));
+		ldap_set_option($res, LDAP_OPT_PROTOCOL_VERSION, 3);
+
+		$uid = $o->prop("ad_uid");
+		$uid = $uid."@".$o->prop("ad_domain");
+
+		if (!@ldap_bind($res, $uid, $o->prop("ad_pwd")))
+		{
+			return array();
+		}
+
+		$dna = array("CN=Users");
+		foreach(explode(".", $o->prop("ad_domain")) as $part)
+		{
+			$dna[] = "dc=".$part;
+		}
+
+		$dn = join(", ",$dna);
+		$sr=ldap_search($res, $dn, "cn=*"); 
+		$info = ldap_get_entries($res, $sr);
+
+		$ret = array("" => "");
+		for ($i=0; $i<$info["count"]; $i++) 
+		{
+			for ($a = 0; $a < $info[$i]["memberof"]["count"]; $a++)
+			{
+				list($grpn) = explode(",", $info[$i]["memberof"][$a]);
+				list(, $grpn) = explode("=", $grpn);
+				$ret[$grpn] = $grpn;
+			}
+		}
+
+		return $ret;
+	}
+
+	function _is_member_of($res, $o, $grp, $cred)
+	{
+		$dna = array("CN=Users");
+		foreach(explode(".", $o->prop("ad_domain")) as $part)
+		{
+			$dna[] = "dc=".$part;
+		}
+
+		$dn = join(", ",$dna);
+		$sr=ldap_search($res, $dn, "samaccountname=".$cred["uid"]); 
+		$info = ldap_get_entries($res, $sr);
+
+		$ret = array();
+		for ($i=0; $i<$info["count"]; $i++) 
+		{
+			for ($a = 0; $a < $info[$i]["memberof"]["count"]; $a++)
+			{
+				list($grpn) = explode(",", $info[$i]["memberof"][$a]);
+				list(, $grpn) = explode("=", $grpn);
+				$ret[$grpn] = $grpn;
+			}
+		}
+
+		if (isset($ret[$grp]))
+		{
+			return true;
+		}
+		return false;
 	}
 }
 ?>

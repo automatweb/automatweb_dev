@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.2 2004/10/20 09:22:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.3 2004/10/20 12:57:52 kristo Exp $
 // auth_config.aw - Autentimise Seaded 
 /*
 
@@ -207,7 +207,7 @@ class auth_config extends class_base
 		foreach($servers as $server)
 		{
 			$server_inst = get_instance($server->class_id());
-			list($is_valid, $msg) = $server_inst->check_auth($server, $credentials);
+			list($is_valid, $msg, $break_chain) = $server_inst->check_auth($server, $credentials);
 
 			if ($is_valid)
 			{
@@ -215,6 +215,11 @@ class auth_config extends class_base
 				{
 					return array(true, $msg);
 				}
+			}
+			else
+			if ($break_chain)
+			{
+				break;
 			}
 		}	
 		if ($msg == "")
