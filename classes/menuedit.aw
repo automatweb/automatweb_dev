@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.15 2001/05/31 13:38:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.16 2001/06/01 09:32:42 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -2658,7 +2658,7 @@ classload("cache","validator","defs");
 
 			global $basedir,$baseurl;
       global $ext;
-      include("$basedir/vcl/date_edit.$ext");
+      load_vcl("date_edit");
       $d_edit = new date_edit("x");
       $d_edit->configure(array("day" => 1,"month" => 2,"year" => 3,"hour" => 4,"minute" => 5));
 			$this->db_query("SELECT objects.*,objects.alias AS alias,
@@ -3472,6 +3472,12 @@ classload("cache","validator","defs");
 		while ($p && ($cnt < 20))
 		{
 			$cnt++;
+			if (!is_array($this->mar[$p]))
+			{
+				$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu ON menu.id = objects.oid WHERE oid = $p");
+				$this->mar[$p] = $this->db_next();
+			}
+
 			if ($this->mar[$p]["is_shop"])
 			{
 				$sh_id = $this->mar[$p]["shop_id"];
