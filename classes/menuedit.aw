@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.156 2002/09/26 16:13:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.157 2002/09/30 06:39:51 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -1505,7 +1505,7 @@ class menuedit extends aw_template
 			asort($clns);
 			foreach($clns as $cl_file => $cl_name)
 			{
-				$addlink = $this->mk_my_orb("new", array("parent" => $id, "period" => $period), $cl_file, true, true);
+				$addlink = $this->mk_my_orb("new", array("parent" => $parent, "period" => $period), $cl_file, true, true);
 
 				$cnt++;
 				$ret .= $cnt."|".((int)$cp)."|".$cl_name."|$addlink|list\n";
@@ -3446,6 +3446,13 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$this->skip = false;
 		if ($row["mtype"] == MN_PMETHOD)
 		{
+				global $DBX;
+				if ($DBX)
+				{
+					print "<pre>";
+					print_r($row);
+					print "</pre>";
+				};
 			// I should retrieve orb definitions for the requested class
 			// to figure out which arguments it needs and then provide
 			// those
@@ -5463,7 +5470,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			{
 				continue;
 			}
-			if ($row["class_id"] == CL_PSEUDO || $row["class_id"] == CL_BROTHER)
+			if ($row["class_id"] == CL_PSEUDO || $row["class_id"] == CL_BROTHER || $row["class_id"] == CL_PROMO)
 			{
 				$chlink = $this->mk_my_orb("right_frame", array("parent" => $row["oid"], "period" => $period));
 				$row["is_menu"] = 1;
