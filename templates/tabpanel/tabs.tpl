@@ -39,6 +39,7 @@ background-color: #478EB6;
 
 
 </style>
+{VAR:toolbar}
 <table border="0" cellspacing="0" cellpadding="0">
 <!-- SUB: tabs -->
 <tr>
@@ -87,6 +88,7 @@ SRC="{VAR:baseurl}/automatweb/images/blue/trans.gif" WIDTH="6" HEIGHT="5" BORDER
 <td class="awtablecellbacklight"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/trans.gif" WIDTH="85" HEIGHT="5" BORDER=0 ALT=""></td>
 </tr>
 </table>
+{VAR:toolbar2}
 <br>
 
 <!-- content ends  -->
