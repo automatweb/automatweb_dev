@@ -1,6 +1,15 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>def_cfgmanager</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>subclass</field>
+            <caption>Default seadete haldur</caption>
+      </property>
+      <property>
             <name>config</name>
             <table>objects</table>
             <group>config</group>

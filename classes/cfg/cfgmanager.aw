@@ -1,25 +1,29 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgmanager.aw,v 1.15 2005/03/23 10:31:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgmanager.aw,v 1.16 2005/04/01 13:02:06 ahti Exp $
 // cfgmanager.aw - Object configuration manager
 // deals with drawing add and change forms and submitting data
 
 /*
-	@default table=objects
-	@default group=general
-	@default field=meta
-	@default method=serialize
+@default table=objects
+@default group=general
 
-	@property config type=table store=no group=config no_caption=1
-	@caption Tabel
+@property def_cfgmanager type=checkbox ch_value=1 field=subclass
+@caption Default seadete haldur
 
-	@reltype C_GROUP value=1 clid=CL_GROUP
-	@caption Grupp
+@default field=meta
+@default method=serialize
 
-	@reltype C_CFGFORM value=2 clid=CL_CFGFORM
-	@caption Seadete vorm
+@property config type=table store=no group=config no_caption=1
+@caption Tabel
 
-	@groupinfo config caption=Seaded
-	@classinfo relationmgr=yes syslog_type=ST_CFGMANAGER
+@reltype C_GROUP value=1 clid=CL_GROUP
+@caption Grupp
+
+@reltype C_CFGFORM value=2 clid=CL_CFGFORM
+@caption Seadete vorm
+
+@groupinfo config caption=Seaded
+@classinfo relationmgr=yes syslog_type=ST_CFGMANAGER
 
 */
 class cfgmanager extends class_base
