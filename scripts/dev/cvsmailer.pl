@@ -12,6 +12,11 @@ $mod = shift; # module name
 if ($op =~ /- Imported sources$/) {
 	$op = 'import';
 	$file = "$ENV{USER} imported files into module '$mod'."
+}
+elsif ($op =~ /- Imported directory$/)
+{
+	$op = 'commit';
+	$file = "$ENV{USER} added a directory into module '$mod'.";
 } else {
 
 	$op = 'commit';
@@ -20,8 +25,23 @@ if ($op =~ /- Imported sources$/) {
 	while (($file, $oldvers, $newvers) = split(',', shift)) {
 		$oldvers = '<added>'   if $oldvers eq 'NONE';
 	 	$newvers = '<deleted>' if $newvers eq 'NONE';
-		push @files, " $cvsweb/$mod/$file [$oldvers -> $newvers]";
-		if ( ($oldvers ne 'NONE') && ($newvers ne 'NONE') )
+		if ($oldvers eq '<added>')
+		{
+			push @files, " $cvsweb/cvsweb/$mod/$file [added]";
+		}
+		elsif ($op =~ /- New directory$/)
+		{
+			push @files, " $cvsweb/cvsweb/$mod/$file [added directory]";
+		}
+		elsif ($newvers eq '<deleted>')
+		{
+			push @files, " $cvsweb/cvsweb/$mod/$file [removed]";
+		}
+		else
+		{
+			push @files, " $cvsweb/cvsweb/$mod/$file [$oldvers -> $newvers]";
+		};
+		if ( ($oldvers ne '<added>') && ($newvers ne '<deleted>') )
 		{
 			push @files, " D: $cvsweb/$mod/$file.diff?r1=$oldvers&r2=$newvers&f=h";
 		};
