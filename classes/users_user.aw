@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.93 2004/06/30 12:34:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.94 2004/07/15 13:20:22 rtoomas Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -446,14 +446,26 @@ class users_user extends aw_template
 		{
 			$ss.=" AND groups.parent = $parent ";
 		}
-		$q = "SELECT groups.*,count(groupmembers.gid) AS gcount
+		$q = "SELECT groups.gid as gid,groups.oid,count(groupmembers.gid) AS gcount
 			FROM groups
 			LEFT JOIN groupmembers on (groups.gid = groupmembers.gid)
 			LEFT JOIN users ON users.uid = groupmembers.uid
 			$ss 
-			GROUP BY groups.gid
+			GROUP BY groups.gid,groups.oid
 			$sufix";
 		$this->db_query($q);
+		$tmp = array();
+		while ($row = $this->db_next())
+		{
+			$tmp[] = $row["gid"];
+		}
+
+		if (count($tmp) > 0)
+		{
+			$q = "select * from groups where gid in (".join(",", $tmp).")";
+			$this->db_query($q);
+		}
+
 	}
 	
 	// This should eventually replace the previous function
@@ -471,14 +483,26 @@ class users_user extends aw_template
 			$w_type = " type = $type";
 		};
 		$q = "
-			SELECT groups.*,count(groupmembers.gid) AS gcount
+			SELECT groups.gid as gid,count(groupmembers.gid) AS gcount
 			FROM groups
 			LEFT JOIN groupmembers on (groups.gid = groupmembers.gid)
 			LEFT JOIN users ON users.uid = groupmembers.uid
 			WHERE $w_type
-			GROUP BY groups.gid
+			GROUP BY groups.gid,groups.oid
 		";
 		$this->db_query($q);
+
+		$tmp = array();
+		while ($row = $this->db_next())
+		{
+			$tmp[] = $row["gid"];
+		}
+
+		if (count($tmp) > 0)
+		{
+			$q = "select * from groups where gid in (".join(",", $tmp).")";
+			$this->db_query($q);
+		}
 	}
 
 	// argumendid:
@@ -549,10 +573,10 @@ class users_user extends aw_template
 
 	function fetchgroup($gid) 
 	{
-		$q = "SELECT *,count(groupmembers.gid) AS gcount FROM groups 
+		$q = "SELECT groups.oid,groups.gid,count(groupmembers.gid) AS gcount FROM groups 
 					LEFT JOIN groupmembers on (groups.gid = groupmembers.gid)
 					WHERE groups.gid = '$gid'
-					GROUP BY groups.gid";
+					GROUP BY groups.gid,groups.oid";
 		$this->db_query($q);
 		$retval = $this->db_fetch_row();
 		return $retval;
