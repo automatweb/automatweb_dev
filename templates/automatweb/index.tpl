@@ -40,13 +40,12 @@ window.location=url
 </tr>
 </table>
 <div align="center">
-<table border=0 cellpadding=0 cellspacing=0><tr><td class="header2">{VAR:menu} {VAR:rmenu}</td></tr></table>
-<font face="Verdana,Arial,Helvetica,sans-serif" size="-2">
-(C) StruktuurMeedia 2000, 2001. All Rights Reserved
-<br>
-<strong>{VAR:qcount}</strong> päringut, <strong>{VAR:timers}</strong><br>
-</font>
+<font face="Verdana,Arial,Helvetica,sans-serif" size="-2">(C) StruktuurMeedia 2000, 2001. All Rights Reserved</font>
 </div>
 </center>
 </body>
 </html>
+<!-- 
+{VAR:menu} {VAR:rmenu}
+<strong>{VAR:qcount}</strong> päringut, <strong>{VAR:timers}</strong><br>
+-->
