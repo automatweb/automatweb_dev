@@ -28,6 +28,14 @@
 </td>
 </tr>
 <tr>
+<td height="15" class="fgtext">&nbsp;Objekti lisamise menüü tüüp&nbsp;</td>
+<td height="15" class="fgtext">&nbsp;
+<select name="addobject_type">
+{VAR:addobject_type}
+</select>
+</td>
+</tr>
+<tr>
 <td height="15" class="fgtext">&nbsp;Default currency:&nbsp;</td>
 <td height="15" class="fgtext">&nbsp;
 <!-- SUB: CUR -->
