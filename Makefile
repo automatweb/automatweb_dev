@@ -31,3 +31,5 @@ properties:
 	else \
 		echo "Cmdline php not found, cannot collect properties"; \
 	fi
+
+all: ini properties
