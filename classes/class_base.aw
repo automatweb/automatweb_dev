@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.335 2004/12/03 12:29:15 ahti Exp $
+// $Id: class_base.aw,v 2.336 2004/12/03 12:36:12 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1244,7 +1244,7 @@ class class_base extends aw_template
 		// .. which .. makes the group into a relation manager. eh? Or perhaps I should
 		// just go with the iframe layout thingie. This frees us from the unneccessary
 		// wrappers inside the class_base.
-		if (empty($this->request["cb_part"]) && $this->classinfo(array("name" => "relationmgr")))
+		if (empty($this->request["cb_part"]) && $this->classinfo(array("name" => "relationmgr")) && empty($this->classinfo["hide_tabs"]))
 		{
 			$link = "";
 			if (isset($this->id))
