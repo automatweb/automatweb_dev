@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.133 2002/07/17 01:35:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.134 2002/07/17 02:06:46 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -2528,7 +2528,7 @@ class menuedit extends aw_template
 			"class_id" => CL_PSEUDO, 
 			"comment" => "","status" => 1
 		));
-		$this->db_query("INSERT INTO menu (id,link,type,is_l3,left_pane,right_pane) VALUES($id,'$link',".MN_CONTENT.",0,1,1)");
+		$this->db_query("INSERT INTO menu (id,link,type,is_l3,left_pane,right_pane,tpl_edit) VALUES($id,'$link',".MN_CONTENT.",0,1,1,0)");
 		header("Location: ".$this->mk_my_orb("change", array("id" => $id, "parent" => $parent,"period" => $period)));
 		die();
 	}
