@@ -15,6 +15,20 @@
 			</function>
 		</action>
 
+		<action name="my_list">
+			<function name="css_my_list">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_my_list">
+			<function name="css_submit_my_list">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="add">
 			<function name="css_edit">
 				<arguments>
@@ -25,7 +39,7 @@
 		<action name="edit">
 			<function name="css_edit">
 				<arguments>
-					<required name="id"/>
+					<required name="oid"/>
 				</arguments>
 			</function>
 		</action>
@@ -33,6 +47,14 @@
 		<action name="submit">
 			<function name="css_submit">
 				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="delete">
+			<function name="css_delete">
+				<arguments>
+					<required name="oid"/>
 				</arguments>
 			</function>
 		</action>
