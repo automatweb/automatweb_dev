@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/Attic/reminder.aw,v 1.8 2004/12/20 10:43:27 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/Attic/reminder.aw,v 1.9 2004/12/27 08:49:16 ahti Exp $
 // reminder.aw - Meeldetuletus 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_DOCUMENT, on_rconnect_from)
@@ -119,14 +119,20 @@ class reminder extends class_base
 				if($arr["new"])
 				{
 					$user = obj(aw_global_get("uid_oid"));
-					$prop["value"] = $user->prop("mail");
+					if($mail = $user->get_first_obj_by_reltype("RELTYPE_EMAIL"))
+					{
+						$prop["value"] = $mail->prop("mail");
+					}
 				}
 				break;
 			case "sender":
 				if($arr["new"])
 				{
 					$user = obj(aw_global_get("uid_oid"));
-					$prop["value"] = $user->prop("mail");
+					if($mail = $user->get_first_obj_by_reltype("RELTYPE_EMAIL"))
+					{
+						$prop["value"] = $mail->prop("mail");
+					}
 				}
 				break;
 			case "objects_toolbar":
@@ -227,6 +233,7 @@ class reminder extends class_base
 			$obj_inst->disconnect(array(
 				"from" => $value,
 				"reltype" => "RELTYPE_REMINDER_OBJECT",
+				"errors" => false,
 			));
 		}
 		return html::get_change_url($arr["id"], array("group" => $arr["group"]));
@@ -239,7 +246,6 @@ class reminder extends class_base
 	**/
 	function init_action($arr)
 	{
-		//aw_disable_acl();
 		$obj_inst = obj($arr["id"]);
 		$msg = $obj_inst->prop("subject");
 		$subject = !empty($msg) ? $msg : "Meeldetuletus saidilt:\n";
@@ -269,7 +275,6 @@ class reminder extends class_base
 				$awm->gen_mail();
 			}
 		}
-		//aw_enable_acl();
 		return "done";
 	}
 }

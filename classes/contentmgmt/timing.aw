@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/timing.aw,v 1.7 2004/12/20 13:41:45 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/timing.aw,v 1.8 2004/12/27 08:49:16 ahti Exp $
 // timing.aw - Ajaline aktiivsus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_DOCUMENT, on_tconnect_from)
@@ -240,6 +240,7 @@ class timing extends class_base
 			$obj_inst->disconnect(array(
 				"from" => $value,
 				"reltype" => "RELTYPE_TIMING_OBJECT",
+				"errors" => false,
 			));
 		}
 		return html::get_change_url($arr["id"], array("group" => $arr["group"]));
@@ -253,7 +254,6 @@ class timing extends class_base
 	**/
 	function init_action($arr)
 	{
-		//aw_disable_acl();
 		$obj_inst = obj($arr["id"]);
 		$objs = $obj_inst->connections_from(array(
 			"type" => "RELTYPE_TIMING_OBJECT",
@@ -266,7 +266,6 @@ class timing extends class_base
 		}
 		$mait = get_instance("maitenance");
 		$mait->clear_cache(array("no_die" => 1, "clear" => 1));
-		//aw_enable_acl();
 		return "done";
 	}
 }
