@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.40 2003/02/14 16:31:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.41 2003/02/18 14:10:57 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -5947,7 +5947,7 @@ class form extends form_base
 
 	////
 	// !returns el_id => el_ref for all elements in the form
-	function get_all_elements()
+	function get_all_element_refs()
 	{
 		$ret = array();
 		for ($row = 0; $row < $this->arr["rows"]; $row++)
