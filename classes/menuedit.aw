@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.189 2002/12/19 10:41:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.190 2002/12/19 15:19:55 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -1065,6 +1065,13 @@ class menuedit extends aw_template
 		if ($section == "")
 		{
 			return $frontpage < 1 ? 1 : $frontpage;
+		}
+
+		if ($section == 'favicon.ico')
+		{
+			// if user requested favicon, then just show the thing here and be done with it
+			$c = get_instance("config");
+			$c->show_favicon(array());
 		}
 
 		// sektsioon ei olnud numbriline
