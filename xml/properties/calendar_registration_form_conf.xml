@@ -50,6 +50,15 @@
             <caption>Kuva dokumendis s&amp;uuml;ndmuse sisu</caption>
       </property>
       <property>
+            <name>link_caption</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Lingi nimi</caption>
+      </property>
+      <property>
             <name>redirect</name>
             <table>objects</table>
             <group>general</group>
@@ -68,22 +77,22 @@
             <caption>Kellele lisaks mail saata</caption>
       </property>
       <property>
-            <name>mail_from_addr</name>
-            <table>objects</table>
-            <group>emails</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>Maili From aadress</caption>
-      </property>
-      <property>
             <name>mail_from_name</name>
             <table>objects</table>
             <group>emails</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Maili From nimi</caption>
+            <caption>Maili saatja nimi</caption>
+      </property>
+      <property>
+            <name>mail_from_addr</name>
+            <table>objects</table>
+            <group>emails</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Maili saatja aadress</caption>
       </property>
       <property>
             <name>mail_subj</name>
