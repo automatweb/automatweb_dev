@@ -479,6 +479,7 @@ class site_template_compiler extends aw_template
 			);
 
 			$no_display_item = false;
+			$has_sel = false;
 			foreach($tdat as $tpl_opt)
 			{
 				$params = $this->get_if_filter_from_tpl_opt($tpl_opt, $ldat["all_opts"]);
@@ -491,6 +492,10 @@ class site_template_compiler extends aw_template
 						"params" => $params
 					);
 					$no_display_item |= $params["no_display_item"];
+				}
+				if ($tpl_opt == "SEL")
+				{
+					$has_sel = true;
 				}
 			}
 
@@ -544,13 +549,13 @@ class site_template_compiler extends aw_template
 					);
 				}
 
-				if ($ldat["no_subitems_sel_check_after_item"])
+				if ($ldat["no_subitems_sel_check_after_item"]  && $has_sel)
 				{
 					$this->ops[] = array(
 						"op" => OP_CHECK_NO_SUBITEMS_SEL,
 						"params" => array(
 							"tpl" => $ldat["no_subitems_sel_check_tpl"],
-							"fq_tpl" => $cur_tpl_fqn.".".$ldat["no_subitems_sel_check_tpl"],
+							"fq_tpl" => $ldat["no_subitems_sel_check_tpl_fq"]//$cur_tpl_fqn.".".$ldat["no_subitems_sel_check_tpl"],
 						)
 					);
 				}
@@ -1137,6 +1142,14 @@ class site_template_compiler extends aw_template
 		$dat = $this->last_list_dat;
 		$list_name = $dat["list_name"];
 		$content_name = $dat["content_name"];
+		if ($content_name == "")
+		{
+			// get it from the current stack
+			end($this->list_name_stack);
+			$dat = current($this->list_name_stack);
+			$list_name = $dat["list_name"];
+			$content_name = $dat["content_name"];
+		}
 
 		$ret .= $this->_gi()."if (".$content_name." == \"\")\n";
 		$ret .= $this->_gi()."{\n";
