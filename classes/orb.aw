@@ -1,14 +1,17 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.17 2002/07/01 17:44:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.18 2002/07/11 21:01:39 duke Exp $
 // tegeleb ORB requestide handlimisega
 classload("aw_template","defs","xml_support");
 lc_load("automatweb");
 class orb extends aw_template 
 {
-	////
-	//! Konstruktor. Koik vajalikud argumendid antakse url-is ette
 	var $data;
 	var $info;
+	////
+	//! Konstruktor. Koik vajalikud argumendid antakse url-is ette
+	//  why the hell did I put all the functionality into the constructor?
+	// now I can't put other useful functions into this class and used them
+	// without calling the instructor
 	function orb($args = array())
 	{
 		// peavad olema vähemalt 
@@ -19,6 +22,7 @@ class orb extends aw_template
 		// optional
 		// d) silent. veateateid ei väljastata. caller peaks kontrollima return valuet,
 		// kui see on false, siis oli viga.
+
 		extract($args);
 		$action = $vars["action"];
 
@@ -49,16 +53,9 @@ class orb extends aw_template
 			bail_out();
 		};
 
+		// FIXME: we should cache that def instead of parsing xml every time
 		$orb_defs = $this->load_xml_orb_def($class);
 		$this->orb_defs = $orb_defs;
-
-		global $DBG;
-		if ($DBG)
-		{
-			print "<pre>";
-			print_r($orb_defs);
-			print "</pre>";
-		}
 
 		$action = ($action) ? $action : $orb_defs[$class]["default"];
 
@@ -204,6 +201,7 @@ class orb extends aw_template
 	{
 		$basedir = $this->cfg["basedir"];
 		// klassi definitsioon sisse
+
 		$xmldef = $this->get_file(array(
 			"file" => "$basedir/xml/orb/$class.xml"
 		));
@@ -249,6 +247,10 @@ class orb extends aw_template
 					if (($tag == "action") && (isset($attribs["nologin"]) && $attribs["nologin"]))
 					{
 						$orb_defs[$class][$attribs["name"]]["nologin"] = 1;
+					};
+					if (($tag == "action") && (isset($attribs["public"]) && $attribs["public"]))
+					{
+						$orb_defs[$class][$attribs["name"]]["public"] = 1;
 					};
 					if (($tag == "action") && (isset($attribs["all_args"]) && $attribs["all_args"]))
 					{
