@@ -32,6 +32,7 @@
 		<action name="change_file">
 			<function name="change_file">
 				<arguments>
+					<required name="id"/>
 				</arguments>
 			</function>
 		</action>
@@ -39,6 +40,7 @@
 		<action name="delete_file">
 			<function name="delete_file">
 				<arguments>
+					<required name="id"/>
 				</arguments>
 			</function>
 		</action>
