@@ -1,5 +1,5 @@
 <?php
-// $Id: treeview.aw,v 1.5 2002/12/19 17:59:55 duke Exp $
+// $Id: treeview.aw,v 1.6 2003/02/27 17:30:33 duke Exp $
 // treeview.aw - tree generator
 /*
         @default table=objects
@@ -48,14 +48,30 @@ class treeview extends class_base
 		};
 	}
 
-	function show($args = array())
+	
+	////
+	// !Generates a tree. Should be used from _inside_ the code, because
+	// this can accept arguments that could be harmful when used through ORB	
+	function generate($args = array())
 	{
 		// generates the tree
 		extract($args);
-		$obj = $this->get_object($id);
-		$root = $obj["meta"]["root"];
+		$root = $args["config"]["root"];
 		$this->urltemplate = $args["urltemplate"];
-		$this->meta = $obj["meta"];
+		$this->config = $args["config"];
+
+		if (is_array($args["callback_modify_node"]))
+		{
+			$this->callback_node_obj = &$args["callback_modify_node"][0];
+			$this->callback_node_meth = $args["callback_modify_node"][1];
+			if (!method_exists($this->callback_node_obj,$this->callback_node_meth))
+			{
+				// I'm not too fond of the current raise_error stuff
+				// sue me.
+				die("treeview->generate(): invalid callback");
+			};
+		};
+
 		$rootobj = $this->get_object($root);
 		if (!$rootobj)	
 		{
@@ -68,22 +84,26 @@ class treeview extends class_base
 		};
 		$this->read_template("ftiens.tpl");
 		$arr = array();
-                $mpr = array();
-                $this->listacl("objects.status != 0 AND objects.class_id = ".CL_PSEUDO);
+		
+		$this->clidlist = (is_array($args["config"]["clid"])) ? $args["config"]["clid"] : CL_PSEUDO; 
+
+
+		// I need a way to display all kind of documents here, and not only
+		// menus. So, how on earth am I going to do that.
+
+		// if the caller specified clid list, then we list all of those objects,
+		// if not, then only menus
+		
                 // listib koik menyyd ja paigutab need arraysse	
-		$mn = get_instance("menuedit");
-                $mn->db_listall("objects.status != 0 AND menu.type != ".MN_FORM_ELEMENT,true);
-                while ($row = $mn->db_next())
-                {
-                        if ($this->can("view",$row["oid"]))
-                        {
-                                $row["name"] = str_replace("\"","&quot;", $row["name"]);
-                                $arr[$row["parent"]][] = $row;
-                                $mpr[] = $row["parent"];
-                        }
-                }
+
+		$this->ic = get_instance("icons");
+
+
                 // objektipuu
-                $tr = $this->rec_tree(&$arr, $root,$period);
+                $this->rec_tree($root);
+
+		$tr = $this->generate_tree($root);
+
 		$this->vars(array(
 			"TREE" => $tr,
 			"DOC" => "",
@@ -93,65 +113,84 @@ class treeview extends class_base
 			"icon_root" => ($obj["meta"]["icon_root"])? $this->mk_my_orb("show",array("id" => $obj["meta"]["icon_root"]),"icons") : "/automatweb/images/aw_ikoon.gif",
                 ));
 
-		return $this->parse();
+		$retval = $this->parse();
+		return $retval;
+	}
+
+	////
+	// !Public/ORB interface
+	function show($args = array())
+	{
+		extract($args);
+		$obj = $this->get_object($id);
+		return $this->generate(array(
+			"urltemplate" => $args["urltemplate"],
+			"config" => $obj["meta"],
+		));
 	}
 	
-	function rec_tree(&$arr,$parent,$period)
+	function rec_tree($parent)
 	{
-		if (!isset($arr[$parent]) || !is_array($arr[$parent]))
+		$_objlist = $this->get_objects_by_class(array(
+			"parent" => $parent,
+			"class" => $this->clidlist,
+		));
+		
+		while ($row = $this->db_next())
 		{
-			return "";
+			$row["name"] = str_replace("\"","&quot;", $row["name"]);
+			$this->arr[$row["parent"]][] = $row;
+			$this->save_handle();
+			$this->rec_tree($row["oid"]);
+			$this->restore_handle();
 		}
 
+		return;
+	}
+
+	function generate_tree($parent)
+	{
+		if (!is_array($this->arr[$parent]))
+		{
+			return;
+		};
 		$baseurl = $this->cfg["baseurl"];
 		$ext = $this->cfg["ext"];
 
 		$ret = "";
-		reset($arr[$parent]);
-		while (list(,$row) = each($arr[$parent]))
+		reset($this->arr[$parent]);
+		while (list(,$row) = each($this->arr[$parent]))
 		{
-			if (!isset($row["mtype"]) || $row["mtype"] != MN_HOME_FOLDER)
+			// tshekime et kas menyyl on submenyysid
+			// kui on, siis n2itame alati
+			// kui pole, siis tshekime et kas n2idatakse perioodilisi dokke
+			// kui n2idatakse ja menyy on perioodiline, siis n2itame menyyd
+			// kui pole perioodiline siis ei n2ita
+			if (is_array($this->arr[$row["oid"]]))
 			{
-				// tshekime et kas menyyl on submenyysid
-				// kui on, siis n2itame alati
-				// kui pole, siis tshekime et kas n2idatakse perioodilisi dokke
-				// kui n2idatakse ja menyy on perioodiline, siis n2itame menyyd
-				// kui pole perioodiline siis ei n2ita
-				$sub = $this->rec_tree(&$arr,$row["oid"],$period);
-				// that's used for objects only
-				if ($row["icon_id"] > 0)
-				{
-					$icon_id = $row["icon_id"];
-				}
-				elseif ($this->meta["icon_folder_closed"])
-				{
-					$icon_id = $this->meta["icon_folder_closed"];
-				};
-				if ($icon_id)
-				{
-					$icon_url = $this->mk_my_orb("show",array("id" => $icon_id),"icons",0,1);
-				}
-				else
-				{
-					$icon_url = $baseurl . "/automatweb/images/ftv2doc.gif";
-				};
-				$url = $this->do_item_link($row);
-				$this->vars(array(
-					"name" => $row["name"],
-					"id" => $row["oid"],
-					"parent" => $row["parent"],
-					"iconurl" => $icon_url,
-					"url" => $url,
-					"targetframe" => "right",
-				));
-				if ($sub == "")
-				{
-					$ret.=$this->parse("DOC");
-				}
-				else
-				{
-					$ret.=$this->parse("TREE").$sub;
-				}
+				$sub = $this->generate_tree($row["oid"]);;
+			}
+			else
+			{
+				$sub = "";
+			};
+			$icon_url = ($row["class_id"] == CL_PSEUDO) ? "" : $this->ic->get_icon_url($row["class_id"],"");
+			$url = $this->do_item_link(&$row);
+			$this->vars(array(
+				"name" => $row["name"],
+				"id" => $row["oid"],
+				"parent" => $row["parent"],
+				"iconurl" => $icon_url,
+				"url" => $url,
+				"targetframe" => "right",
+			));
+			if ($sub == "")
+			{
+				$ret.=$this->parse("DOC");
+			}
+			else
+			{
+				$ret.=$this->parse("TREE").$sub;
 			}
 		}
 		return $ret;
@@ -159,6 +198,12 @@ class treeview extends class_base
 
 	function do_item_link($row)
 	{
+		if ($this->callback_node_obj)
+		{
+			$objref = &$this->callback_node_obj;
+			$metref = $this->callback_node_meth;
+			$objref->$metref(&$row);
+		};
 		if ($row["link"])
 		{
 			$url = $row["link"];
@@ -204,8 +249,8 @@ class treeview extends class_base
 	function finalize_tree()
 	{
 		$this->read_template("ftiens.tpl");
-    // objektipuu
-    $tr = $this->req_finalize_tree(0);
+		// objektipuu
+		$tr = $this->req_finalize_tree(0);
 		$this->vars(array(
 			"TREE" => $tr,
 			"DOC" => "",
