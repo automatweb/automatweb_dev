@@ -23,6 +23,14 @@
 			</function>
 		</action>
 
+		<action name="pick_folder">
+			<function name="pick_folder">
+				<arguments>
+					<optional name="id"/>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="folder" default="1">
 			<function name="show_mailbox">
 				<arguments>
