@@ -75,18 +75,18 @@
 <td class="fform">{VAR:column}</td>
 
 <!-- SUB: COL -->
-<td align="center" class="fform"><input type='radio' name='columns[{VAR:column}]' value='{VAR:el_id}' {VAR:checked}></td>
+<td align="center" class="fform"><input type='checkbox' name='columns[{VAR:column}][]' value='{VAR:el_id}' {VAR:checked}></td>
 <!-- END SUB: COL -->
 
-<td align="center" class="fform"><input type='radio' name='columns[{VAR:column}]' value='change' {VAR:change_checked}></td>
-<td align="center" class="fform"><input type='radio' name='columns[{VAR:column}]' value='view' {VAR:view_checked}></td>
-<td align="center" class="fform"><input type='radio' name='columns[{VAR:column}]' value='special' {VAR:special_checked}></td>
-<td align="center" class="fform"><input type='radio' name='columns[{VAR:column}]' value='delete' {VAR:delete_checked}></td>
-<td align="center" class="fform"><input type='radio' name='columns[{VAR:column}]' value='created' {VAR:created_checked}></td>
-<td align="center" class="fform"><input type='radio' name='columns[{VAR:column}]' value='modified' {VAR:modified_checked}></td>
-<td align="center" class="fform"><input type='radio' name='columns[{VAR:column}]' value='uid' {VAR:uid_checked}></td>
-<td align="center" class="fform"><input type='radio' name='columns[{VAR:column}]' value='active' {VAR:active_checked}></td>
-<td align="center" class="fform"><input type='radio' name='columns[{VAR:column}]' value='chpos' {VAR:chpos_checked}></td>
+<td align="center" class="fform"><input type='checkbox' name='columns[{VAR:column}][]' value='change' {VAR:change_checked}></td>
+<td align="center" class="fform"><input type='checkbox' name='columns[{VAR:column}][]' value='view' {VAR:view_checked}></td>
+<td align="center" class="fform"><input type='checkbox' name='columns[{VAR:column}][]' value='special' {VAR:special_checked}></td>
+<td align="center" class="fform"><input type='checkbox' name='columns[{VAR:column}][]' value='delete' {VAR:delete_checked}></td>
+<td align="center" class="fform"><input type='checkbox' name='columns[{VAR:column}][]' value='created' {VAR:created_checked}></td>
+<td align="center" class="fform"><input type='checkbox' name='columns[{VAR:column}][]' value='modified' {VAR:modified_checked}></td>
+<td align="center" class="fform"><input type='checkbox' name='columns[{VAR:column}][]' value='uid' {VAR:uid_checked}></td>
+<td align="center" class="fform"><input type='checkbox' name='columns[{VAR:column}][]' value='active' {VAR:active_checked}></td>
+<td align="center" class="fform"><input type='checkbox' name='columns[{VAR:column}][]' value='chpos' {VAR:chpos_checked}></td>
 <td class="fform"><input type='text' class='small_button' name='names[{VAR:column}]' VALUE='{VAR:c_name}'></td>
 <td class="fform" align="center"><input type='checkbox' name='sortable[{VAR:column}]' VALUE='1' {VAR:sortable}></td>
 </tr>
