@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.11 2004/11/19 11:32:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.12 2004/11/26 13:52:09 kristo Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -58,6 +58,24 @@
 
 @property sideways_pages type=textarea rows=4 cols=30 table=objects field=meta method=serialize group=folderspri
 @caption Landscape vaatega lehed
+
+@groupinfo views caption="Vaated"
+
+@property force_7_view type=textbox table=objects field=meta method=serialize group=views
+@caption 7 pildiga lehehed
+
+@property force_inf_view type=textbox table=objects field=meta method=serialize group=views
+@caption L&otilde;pmatute pildiga lehehed
+
+@property force_10_view type=textbox table=objects field=meta method=serialize group=views
+@caption 10 pildiga lehehed
+
+@property force_8_view type=textbox table=objects field=meta method=serialize group=views
+@caption 8 pildiga lehehed
+
+@property force_no_side_view type=textbox table=objects field=meta method=serialize group=views
+@caption Ilma detailvaate lisapiltideta lehed
+
 
 @reltype FOLDER value=1 clid=CL_MENU
 @caption kataloog
@@ -271,7 +289,7 @@ class otto_import extends class_base
 			$html = file_get_contents($url);
 
 			// image is http://image01.otto.de:80/m2bilder/OttoDe/de_DE/images/formatb/[number].jpg
-			if (true || strpos($html,"konnten leider keine") !== false)
+			if (strpos($html,"konnten leider keine") !== false)
 			{ 
 				// read from baur.de
 				$this->read_img_from_baur($pcode);
@@ -300,8 +318,17 @@ class otto_import extends class_base
 					}
 					else
 					{
+						$add = 0;
+						// check if we got the main img
+						if (preg_match("/m2bilder\/OttoDe\/de_DE\/images\/formatd\/(\d+)\.jpg/imsU", $html, $mt))
+						{
+							$add = 1;
+							$this->db_query("INSERT INTO otto_prod_img (pcode, nr, imnr) 
+								values('$pcode','1','$mt[1]')");
+						}
+
 						$this->db_query("INSERT INTO otto_prod_img (pcode, nr, imnr) 
-							values('$pcode',1,'$mt[1]')");	
+							values('$pcode',".(1+$add).",'$mt[1]')");	
 						echo "got img $mt[1]  <br>";
 
 
@@ -343,7 +370,7 @@ class otto_import extends class_base
 							else
 							{
 								$this->db_query("INSERT INTO otto_prod_img (pcode, nr, imnr) 
-									values('$pcode','$nr','$mt[1]')");
+									values('$pcode','".($nr+$add)."','$mt[1]')");
 							}
 						}
 					
@@ -355,6 +382,14 @@ class otto_import extends class_base
 				$this->db_query("INSERT INTO otto_prod_img (pcode, nr, imnr) 
 					values('$pcode',1,'$mt[1]')");	
 
+				$add = 0;
+				// check if we got the main img
+				if (preg_match("/m2bilder\/OttoDe\/de_DE\/images\/formatd\/(\d+)\.jpg/imsU", $html, $mt))
+				{
+					$add = 1;
+					$this->db_query("INSERT INTO otto_prod_img (pcode, nr, imnr) 
+						values('$pcode','1','$mt[1]')");
+				}
 
 				// also, other images, detect them via the jump_img('nr') js func
 				preg_match_all("/jump_img\('(\d+)'\)/imsU", $html, $mt, PREG_PATTERN_ORDER);
@@ -394,7 +429,7 @@ class otto_import extends class_base
 					else
 					{
 						$this->db_query("INSERT INTO otto_prod_img (pcode, nr, imnr) 
-							values('$pcode','$nr','$mt[1]')");
+							values('$pcode','".($nr+$add)."','$mt[1]')");
 					}
 				}
 			}
@@ -634,9 +669,12 @@ class otto_import extends class_base
 				{
 					$color .= " (".$row[2].")";
 				}
+
+				$set_f_img = trim($row[5]);
+
 				$this->db_query("
-					INSERT INTO otto_imp_t_codes(pg,nr,size,color,code, full_code)
-					VALUES('$cur_pg','$row[1]','$row[2]','$color','$row[4]','$full_code')
+					INSERT INTO otto_imp_t_codes(pg,nr,size,color,code, full_code, set_f_img)
+					VALUES('$cur_pg','$row[1]','$row[2]','$color','$row[4]','$full_code', '$set_f_img')
 				");
 				$num++;
 				if (!$row[4])
@@ -762,6 +800,16 @@ class otto_import extends class_base
 		}
 
 		echo "wrote temp db <br>\n";
+		flush();
+
+		echo "rewrite first images <br>\n";
+		$this->db_query("SELECT * FROM otto_imp_t_codes WHERE set_f_img != ''");
+		while ($row = $this->db_next())
+		{
+			$this->save_handle();
+			$this->db_query("UPDATE otto_prod_img SET imnr = '$row[set_f_img]' WHERE pcode = '$row[full_code]' AND nr = 1 ");
+			$this->restore_handle();
+		}
 
 		echo "make existing prod lut <br>\n";
 		flush();
@@ -769,11 +817,13 @@ class otto_import extends class_base
 			"class_id" => CL_SHOP_PRODUCT,
 		));
 		$pl = array();
+		$pl_full = array();
 
 		$exist_arr = $exist->arr();
 		foreach($exist_arr as $t)
 		{
 			$pl[$t->prop("user20")] = $t->id();
+			$pl_full[$t->prop("user20")][$t->id()] = $t;
 		}
 		
 		$total = $this->db_fetch_field("
@@ -847,12 +897,14 @@ class otto_import extends class_base
 			// check if it exists
 			echo "checking if \$pl[".$row['code']."] is oid<br>\n";
 			flush();
+			$new = true;
 			if (is_oid($pl[$row["code"]]))
 			{
 				echo "oid = ".$pl[$row["code"]]." <br>";
 				$dat = obj($pl[$row["code"]]);
 				echo "found existing ".$dat->id()."   ".$row['code']."<br>\n";
 				flush();
+				$new = false;
 			}
 			else
 			{
@@ -885,6 +937,17 @@ class otto_import extends class_base
 			$dat->set_prop("user16", $row["full_code"]);
 			$dat->set_prop("user17", $row["color"]);
 			$dat->set_prop("user18", $row["pg"]);
+
+			if (!$new)
+			{
+				foreach(safe_array($pl_full[$row["code"]]) as $tmp_dat)
+				{	
+					echo "also set ".$tmp_dat->id()." to page $row[pg] <br>";
+					$tmp_dat->set_prop("user18", $row["pg"]);
+					$tmp_dat->save();
+				}
+			}
+
 			$dat->set_prop("user19", $row["nr"]);
 
 			// log prods with codes that have more than one char

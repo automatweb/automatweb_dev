@@ -142,6 +142,51 @@
             <caption>Landscape vaatega lehed</caption>
       </property>
       <property>
+            <name>force_7_view</name>
+            <table>objects</table>
+            <group>views</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>7 pildiga lehehed</caption>
+      </property>
+      <property>
+            <name>force_inf_view</name>
+            <table>objects</table>
+            <group>views</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>L&amp;otilde;pmatute pildiga lehehed</caption>
+      </property>
+      <property>
+            <name>force_10_view</name>
+            <table>objects</table>
+            <group>views</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>10 pildiga lehehed</caption>
+      </property>
+      <property>
+            <name>force_8_view</name>
+            <table>objects</table>
+            <group>views</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>8 pildiga lehehed</caption>
+      </property>
+      <property>
+            <name>force_no_side_view</name>
+            <table>objects</table>
+            <group>views</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Ilma detailvaate lisapiltideta lehed</caption>
+      </property>
+      <property>
             <name>do_fixes</name>
             <table>objects</table>
             <group>post_import_fix</group>
@@ -172,6 +217,9 @@
                   <caption>Kataloogide m&amp;auml;&amp;auml;rangud</caption>
                   <parent>foldersa</parent>
             </folderspri>
+            <views>
+                  <caption>Vaated</caption>
+            </views>
             <post_import_fix>
                   <caption>Parandused</caption>
             </post_import_fix>
