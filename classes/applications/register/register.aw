@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.7 2004/06/09 12:54:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.8 2004/06/09 20:24:00 kristo Exp $
 // register.aw - Register 
 /*
 
@@ -110,7 +110,7 @@ class register extends class_base
 			case "cfgform_name_in_field":
 				$rs = get_instance(CL_REGISTER_SEARCH);
 				$ps = $rs->get_props_from_reg($arr["obj_inst"]);
-				$prop["options"] = array();
+				$prop["options"] = array("" => "");
 				foreach($ps as $pn => $pd)
 				{
 					$prop["options"][$pn] = $pd["caption"];
