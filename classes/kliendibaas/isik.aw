@@ -128,7 +128,7 @@ class isik extends class_base
 	function show_isik($args)
 	{
 
-		$arg2['id'] = $args['obj']['oid'];
+		$arg2['id'] = $args['obj'][OID];
 		$nodes = array();
 		$nodes['visitka'] = array(
 			"value" => $this->show($arg2),
@@ -142,8 +142,40 @@ class isik extends class_base
 		extract($args);
 
 		$obj = $this->get_object($id);
-		$this->read_template('visit/'.$obj['meta']['templates']);
 
+		if (strlen($obj['meta']['templates']) > 4)
+		{
+			$this->read_template('visit/'.$obj['meta']['templates']);
+		}
+		else
+		{
+			$this->read_template('visit/visiit1.tpl');
+		}
+
+		$row = $this->fetch_all_data($id);
+
+		$forms = '';
+		if (isset($obj['meta']['forms']) && is_array($obj['meta']['forms']))
+		{
+			foreach($obj['meta']['forms'] as $val)
+//			$val = $obj['meta']['forms'];
+			{
+				if (!$val)
+				continue;
+
+				$form = $this->get_object($val);
+				$forms.= html::href(array(
+				'target' => '_blank',
+				'caption' => $form['name'], 'url' => $this->mk_my_orb('form', array(
+					'id' => $form[OID],
+					'tagasiside' => $id,
+					'tagasiside_class' => 'kliendibaas/isik',
+
+					),'pilot_object'))).'<br />';
+			}
+		}
+
+/*
 		if (isset($obj['meta']['form']))
 		{
 			$forms = '';
@@ -151,18 +183,61 @@ class isik extends class_base
 			{
 				$form = $this->get_object($val);
 				$forms.= html::href(array('caption' => $form['name'], 'url' => $this->mk_my_orb('show', array(
-					'id' => $form['oid'],
+					'id' => $form[OID],
 					'tagasiside' => $id,
 					'tagasiside_class' => 'isik',
 
 					)))).'<br />';
 			}
+		}
+*/
 
+
+		if ($row['picture'])
+		{
+			$img = get_instance('image');
+//			$idata = $img->get_image_by_id($id);
+			//$this->mk_path($idata["parent"],"Vaata pilti");
+//			arr($idata,1);
+//			$row['picture'] = html::img(array(
+//				"url" => $idata["url"],
+//				'height' => '50',
+//			));
+
+
+			$row['picture'] = $img->view(array('id' => $row['picture'], 'height' => '65'));
+		}
+		else
+		{
+			$row['picture'] = '';
 		}
 
 
+
+//		$row['picture']=$row['picture']?html::img(array('src' => $row['picture'])):'';
+
+		//$row['picture'].=$row['pictureurl']?html::img(array('url' => $row['pictureurl'])):'';
+		if (($row['lastname'] == '') &&($row['firstname'] == ''))
+		{
+			$row['firstname'] = $row['name'];
+		}
+
+		$row['k_e_mail']=(!empty($row['k_e_mail']))?html::href(array('url' => 'mailto:'.$row['k_e_mail'], 'caption' => $row['k_e_mail'])):'';
+		$row['w_e_mail']=(!empty($row['w_e_mail']))?html::href(array('url' => 'mailto:'.$row['w_e_mail'],'caption' => $row['w_e_mail'])):'';
+		$row['k_kodulehekylg']=$row['k_kodulehekylg']?html::href(array('url' => $row['k_kodulehekylg'],'caption' => $row['k_kodulehekylg'],'target' => '_blank')):'';
+		$row['w_kodulehekylg']=$row['w_kodulehekylg']?html::href(array('url' => $row['w_kodulehekylg'],'caption' => $row['w_kodulehekylg'],'target' => '_blank')):'';
+		$row['tagasisidevormid'] = $forms;
+
+		$this->vars($row);
+
+		return $this->parse();
+	}
+
+
+	function fetch_all_data($id)
+	{
 //vot siuke päring, ära küsi
-		$row = $this->db_fetch_row("select
+		return  $this->db_fetch_row("select
 			t2.name as name,
 			firstname,
 			lastname,
@@ -180,9 +255,15 @@ class isik extends class_base
 			digitalID,
 			notes,
 			pictureurl,
-			t5.link as picture,
-			t3.riik as k_riik,
-			t3.maakond as k_maakond,
+			picture,
+			t11.name as k_riik,
+			t6.name as k_maakond,
+			t7.name as k_linn,
+			t8.name as w_maakond,
+			t9.name as w_linn,
+			t10.name as w_riik,
+			t4.name as fnimi,
+
 			t3.postiindeks as k_postiindex,
 			t3.aadress as k_aadress,
 			t3.telefon as k_telefon,
@@ -190,8 +271,7 @@ class isik extends class_base
 			t3.faks as k_faks,
 			t3.e_mail as k_e_mail,
 			t3.kodulehekylg as k_kodulehekylg,
-			t4.riik as w_riik,
-			t4.maakond as w_maakond,
+
 			t4.postiindeks as w_postiindex,
 			t4.aadress as w_aadress,
 			t4.telefon as w_telefon,
@@ -205,34 +285,26 @@ class isik extends class_base
 			left join kliendibaas_isik as t2 on t1.oid=t2.oid
 			left join kliendibaas_address as t3 on t2.personal_contact=t3.oid
 			left join kliendibaas_address as t4 on t2.work_contact=t4.oid
-			left join images as t5 on t2.picture=t5.id
+
+			left join kliendibaas_maakond as t6 on t6.oid=t3.maakond
+			left join kliendibaas_linn as t7 on t7.oid=t3.linn
+			left join kliendibaas_riik as t11 on t11.oid=t3.riik
+			left join kliendibaas_maakond as t8 on t8.oid=t4.maakond
+			left join kliendibaas_linn as t9 on t9.oid=t4.linn
+			left join kliendibaas_riik as t10 on t10.oid=t4.riik
+
 
 			where t1.oid=".$id);
 
-
-
-		 if ($row['picture'])
-		 {
-			$imd = $this->get_image_by_id($row['picture']);
-			if ($imd['file'] != '')
-			{
-				$row['picture'] = html::img(array('url' => $imd['url']));
-			};
-
-		}
-//		$row['picture']=$row['picture']?html::img(array('src' => $row['picture'])):'';
-		
-		$row['picture'].=$row['pictureurl']?html::img(array('url' => $row['pictureurl'])):'';
-		$row['k_e_mail']=$row['k_e_mail']?html::href(array('url' => 'mailto:'.$row['k_e_mail'], 'caption' => $row['k_e_mail'])):'';
-		$row['w_e_mail']=$row['w_e_mail']?html::href(array('url' => 'mailto:'.$row['w_e_mail'],'caption' => $row['w_e_mail'])):'';
-		$row['k_kodulehekylg']=$row['k_kodulehekylg']?html::href(array('url' => $row['k_kodulehekylg'],'caption' => $row['k_kodulehekylg'],'target' => '_blank')):'';
-		$row['w_kodulehekylg']=$row['w_kodulehekylg']?html::href(array('url' => $row['w_kodulehekylg'],'caption' => $row['w_kodulehekylg'],'target' => '_blank')):'';
-		$row['tagasisidevormid'] =
-
-		$this->vars($row);
-
-		return $this->parse();;
+	//left join images as t5 on t2.picture=t5.id
+//			t5.link as picture,
 	}
+
+	function show_in_selection($args)
+	{
+		return $this->show(array('id' => $args['id']));
+	}
+
 
 	function parse_alias($args)
 	{
@@ -285,7 +357,7 @@ class isik extends class_base
 		switch($data["name"])
 		{
 			case 'templates':
-				$tpls = $this->get_directory(array('dir' => aw_ini_get('tpldir').'/isik/visit/'));
+				$tpls = $this->get_directory(array('dir' => $this->cfg['tpldir'].'/isik/visit/'));
 				$data['options'] = $tpls;
 			break;
 			case 'name':
@@ -296,6 +368,9 @@ class isik extends class_base
 			break;
 			case 'alias':
 				$retval=PROP_IGNORE;
+			break;
+			case 'forms':
+				$data['multiple'] = 1;
 			break;
 		}
 		return $retval;

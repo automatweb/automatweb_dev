@@ -7,11 +7,14 @@
 	@default field=meta
 	@default method=serialize
 
-	@property pilot type=relpicker reltype=PILOT
-	@caption näitamise pilootobjekt
+//	@property pilot type=relpicker reltype=PILOT
+//	@caption näitamise pilootobjekt
 
-	@property use_existing_pilot type=checkbox
-	@caption näitamisel kasuta konkreetse objekti pilootobjekti kui on olemas
+	@property template type=select
+	@caption Näitamise templiit
+
+//	@property use_existing_pilot type=checkbox
+//	@caption näitamisel kasuta konkreetse objekti pilootobjekti kui on olemas
 
 	@property selections type=popup_objmgr clid=CL_SELECTION multiple=1 method=serialize field=meta table=objects width=600
 	@caption majanda valimeid
@@ -21,14 +24,14 @@
 ////////////////////////////////////////////////////////////
 
 	@default group=objects
-	@groupinfo objects caption=objectid submit=no
+	@groupinfo objects submit=no caption="Selle valimi objektid"
 
 	@property obj_list type=text callback=obj_list
 
 /////////////////////////////////////////////////////////////
 
 	@default group=selectione
-	@groupinfo selectione caption=valimid submit=no
+	@groupinfo selectione submit=no caption="Seotud valimid"
 
 	@property active_selection_objects type=text callback=callback_obj_list
 
@@ -53,18 +56,25 @@ CREATE TABLE `selection` (
 
 */
 
-define ('PILOT', 1);
+//define ('PILOT', 1);
 
 class selection extends class_base
 {
 
+	function selection()
+	{
+		$this->init(array(
+			'clid' => CL_SELECTION,
+			'tpldir' => 'selection',
+		));//	arr(get_defined_vars(),1);
+	}
 
-	function callback_get_rel_types()
+	/*function callback_get_rel_types()
 	{
 		return array(
 			PILOT => 'pilootobjekt',
 		);
-	}
+	}*/
 
 	function get_property($args)
 	{
@@ -79,6 +89,10 @@ class selection extends class_base
 
 		switch($data["name"])
 		{
+			case 'template':
+				$tpls = $this->get_directory(array('dir' => $this->cfg['tpldir'].'/selection/templs/'));
+				$data['options'] = $tpls;
+			break;
 			case 'active_selection':
 				$retval = PROP_IGNORE;
 			break;
@@ -93,11 +107,11 @@ class selection extends class_base
 				if (isset($data['value']) && is_array($data['value']))
 				{
 				//$data['value']=(array)$data['value'];
-					array_unshift($data['value'],$args['obj']['oid']);
+					array_unshift($data['value'],$args['obj'][OID]);
 				}
 				else
 				{
-					$data['value'][$args['obj']['oid']]=$args['obj']['oid'];
+					$data['value'][$args['obj'][OID]]=$args['obj'][OID];
 //				$data['value'] = array_unique($data['value']);
 				}
 
@@ -108,9 +122,9 @@ class selection extends class_base
 
 	function callback_obj_list($args)
 	{
-		$arg2['obj']['oid'] = isset($args['obj']['meta']['active_selection']) ? $args['obj']['meta']['active_selection'] : NULL;
+		$arg2['obj'][OID] = isset($args['obj']['meta']['active_selection']) ? $args['obj']['meta']['active_selection'] : NULL;
 		$arg2['obj']['parent'] = $args['obj']['parent'];
-		$arg2['obj']['meta']['active_selection'] = $arg2['obj']['oid'] ? $arg2['obj']['oid'] : $args['obj']['meta']['selections'][0];
+		$arg2['obj']['meta']['active_selection'] = $arg2['obj'][OID] ? $arg2['obj'][OID] : $args['obj']['meta']['selections'][0];
 		$arg2['obj']['meta']['selections'] = $args['obj']['meta']['selections'];
 		return $dat = $this->obj_list($arg2);
 	}
@@ -126,7 +140,7 @@ class selection extends class_base
 		}
 		else
 		{
-			$arg2['obj']['oid'] = $args['obj']['meta']['active_selection'];
+			$arg2['obj'][OID] = $args['obj']['meta']['active_selection'];
 			$po = get_instance('pilot_object');
 			$retval = $po->show($arg2);
 		}
@@ -143,7 +157,7 @@ class selection extends class_base
 		$ob = $args['obj'];
 		$meta = $ob['meta'];
 
-		$arr = $this->get_selection($ob['oid']);
+		$arr = $this->get_selection($ob[OID]);
 
 		load_vcl('table');
 		$t = new aw_table(array(
@@ -223,7 +237,7 @@ class selection extends class_base
 				'show_buttons' => array('activate','add','change','save','delete'),
 			)).
 			$t->draw().
-			html::hidden(array('name' => 'this_selection', 'value' => $args['obj']['oid'])).
+			html::hidden(array('name' => 'this_selection', 'value' => $args['obj'][OID])).
 			html::hidden(array('name' => 'active_selection', 'value' => $meta['active_selection'])),
 
 		);
@@ -232,12 +246,13 @@ class selection extends class_base
 
 	function callb_name($args)
 	{
-			return html::href(array('caption' => $args['name'],
-								'url' => $this->mk_my_orb('change',
-									array('id' => $args['oid']),
-									basename($this->cfg['classes'][$args['clid']]['file'])
-									)
-				));
+		return html::href(array(
+			'caption' => $args['name'],
+			'url' => $this->mk_my_orb('change', array(
+					'id' => $args[OID]
+				),basename($this->cfg['classes'][$args['clid']]['file'])
+			),
+		));
 	}
 
 
@@ -246,7 +261,7 @@ class selection extends class_base
 		return  html::textbox(array(
 			'size' => 4,
 			'maxlength' => 4,
-			'name' => 'jrk['.$args['oid'].']',
+			'name' => 'jrk['.$args[OID].']',
 			'value' => (int)$args['jrk'],
 		));/**/
 	}
@@ -256,14 +271,12 @@ class selection extends class_base
 		return html::checkbox(array(
 			'size' => 4,
 			'maxlength' => 4,
-			'name' => 'status['.$args['oid'].']',
+			'name' => 'status['.$args[OID].']',
 			'value' => 1,
 			'checked' => ((int)$args['status']==1)
 		));
 	}
 /**/
-
-
 
 
 	function delete_from_selection($args)
@@ -328,10 +341,10 @@ class selection extends class_base
 
 			}
 
-			$selections = $this->get_object_metadata(array('oid' => $args['id'],'key' => 'selections'));
+			$selections = $this->get_object_metadata(array(OID => $args['id'],'key' => 'selections'));
 			$selections = array_merge($selections,array($newoid => $newoid));
 			$this->set_object_metadata(array(
-				"oid" => $args['id'],
+				OID => $args['id'],
 				"key" => 'selections',
 				"value" => $selections,
 			));
@@ -537,54 +550,144 @@ class selection extends class_base
 			return $this->show $args['id']
 	}
 */
+
+
+	function show($args)
+	{
+
+		if (isset($args['id']))
+		{
+			$args['obj'][OID] = $args['id'];
+		}
+
+		$obj = $this->get_object($args['obj'][OID]);
+		$arr = $this->get_selection($args['obj'][OID],'active');
+
+		//echo $this->sel_tpl = implode('',file($this->cfg['tpldir'].'/selection/templs/default.tpl'));
+
+		if (!isset($obj['meta']['template']))
+		{
+			return 'templiit määramata';
+		}
+
+		$this->sel_tpl = implode('',file($this->cfg['tpldir'].'/selection/templs/'.$obj['meta']['template']));
+
+		$str = '';
+
+		if (is_array($arr))
+		{
+			//sorteerime jrk järgi
+			$this->sortby = 'jrk';
+			uasort($arr, array ($this, 'cmp_obj'));
+			foreach ($arr as $key => $val)
+			{
+/*				if ($cb['get_data'] && method_exists($this,$cb['get_data']))
+				{
+					$data = call_user_func (array($this,$cb['get_data']), $val['object']);
+				}
+				else*/
+				{//arr($this->cfg,1);
+
+					$data = $this->get_object($val['object']);
+					$data['class_file'] =  (isset($this->cfg['classes'][$data['class_id']]['alias_class'])) ? $this->cfg['classes'][$data['class_id']]['alias_class'] : $this->cfg['classes'][$data['class_id']]['file'];
+//$str .= $data['name'];
+					//switch($meta){}
+
+//					if (!isset($obj['meta']['tpdfggg']))
+					{
+						if (!isset($inst[$data['class_file']]))
+						{
+							$inst[$data['class_file']] = get_instance($data['class_file']);
+						}
+
+						if (method_exists($inst[$data['class_file']],'show_in_selection'))
+						{
+							$str .= $inst[$data['class_file']]->show_in_selection(array('id' =>$val['object'],'obj' => $data));
+						}
+						else
+						{
+							$str .= $this->show_in_selection(array('id' =>$val['object'],'obj' => $data));
+						}
+					}
+/*					else
+					{
+						$str .= $this->show_in_selection(array('id' =>$val['object'],'obj' => $data));
+					}
+*/
+
+/*					$data['pilot'] = html::href(array('caption' => 'tagasiside', 'url' =>
+					$this->mk_my_orb('form',array('id' => $data[OID],),'pilot_object'),
+					));
+					$this->vars($data);
+
+					$str .= $this->parse('object');
+					*/
+				}
+
+			}
+		}
+		else
+		{
+			$str = ' valim tühi, või objekte pole aktiivseks tehtud';
+		}
+		//$this->vars(array('object' => $str));
+		return $str;
+		//$this->parse();
+	}
+
+	function show_in_selection($args)
+	{
+		//$this->read_template();
+		//$obj['class_file']
+
+		//siin võib teha alampringud jne mida veel vaja objekti juures näidata
+
+		return localparse($this->sel_tpl, $args['obj']);
+	}
+
+
+
+
 /*
 	function show($args)
 	{
 
 		if (isset($args['id']))
 		{
-			$args['obj']['oid'] = $args['id'];
+			$args['obj'][OID] = $args['id'];
 		}
 
-		$obj = $this->get_object($args['obj']['oid']);
+		$obj = $this->get_object($args['obj'][OID]);
 		//if (!isset($obj['meta']['output_as']))
 		//{
 		//	return 'valimi väljundi tüüp määramata';
 		//}
-		$arr = $this->get_selection($args['obj']['oid'],'active');
+		//arr($arr);
+		$arr = $this->get_selection($args['obj'][OID],'active');
+//		if (!strval($obj['meta']['output_as']))
+//		{
+		$tpl = 'templs/default.tpl';
+//		}
+//		elseif($obj['meta']['output_as'] == 'templates')
+//		{
+//		}
+///		elseif($obj['meta']['output_as'] == 'aw_table')
+//		{
+//		}
+//		elseif($obj['meta']['output_as'] == 'object_show')
+//		{
+//		}
 
-		if (!strval($obj['meta']['output_as']))
-		{
-			$tpl = 'templs/default.tpl';
-		}
-		elseif($obj['meta']['output_as'] == 'templates')
-		{
-
-
-		}
-		elseif($obj['meta']['output_as'] == 'aw_table')
-		{
-
-
-		}
-		elseif($obj['meta']['output_as'] == 'object_show')
-		{
-
-
-		}
-
-
-
-			if (isset($obj['meta']['templates']))
-			{
-				$tpl = 'templs/'.$obj['meta']['templates'];
-			}
-			else
-			{
-
-			}
-		}
-
+//			if (isset($obj['meta']['templates']))
+//			{
+//				$tpl = 'templs/'.$obj['meta']['templates'];
+//			}
+//			else
+//			{
+//
+//			}
+//		}
+		$str = '';
 		$this->read_template($tpl);
 
 		if (is_array($arr))
@@ -592,7 +695,6 @@ class selection extends class_base
 			//sorteerime jrk järgi
 			$this->sortby = 'jrk';
 			uasort($arr, array ($this, 'cmp_obj'));
-			$str = '';
 			foreach ($arr as $key => $val)
 			{
 //				if ($cb['get_data'] && method_exists($this,$cb['get_data']))
@@ -600,20 +702,16 @@ class selection extends class_base
 //					$data = call_user_func (array($this,$cb['get_data']), $val['object']);
 //				}
 //				else
-				{//arr($this->cfg,1);
-				
-				
-				
-				
+//				{//arr($this->cfg,1);
+
+
+
+
 
 					$data = $this->get_object($val['object']);
-					$data['class_file'] =  (isset($this->cfg['classes'][$data['class_id']]['alias_class'])) ?
-						$this->cfg['classes'][$data['class_id']]['alias_class']	:
-				 		$this->cfg['classes'][$data['class_id']]['file'];
-
-						
-					switch($meta)
-
+//					$data['class_file'] =  (isset($this->cfg['classes'][$data['class_id']]['alias_class'])) ? $this->cfg['classes'][$data['class_id']]['alias_class'] : $this->cfg['classes'][$data['class_id']]['file'];
+//$str .= $data['name'];
+					//switch($meta){}
 
 					if (!isset($inst))
 					{
@@ -628,7 +726,14 @@ class selection extends class_base
 					{
 						$str .= $this->show_in_selection(array('id' =>$val['object'],'obj' => $data));
 					}
-				}
+					$data['pilot'] = html::href(array('caption' => 'tagasiside', 'url' =>
+					$this->mk_my_orb('form',array('id' => $data[OID],),'pilot_object'),
+					));
+					$this->vars($data);
+
+
+					$str .= $this->parse('object');
+//				}
 			}
 		}
 		else
@@ -636,28 +741,13 @@ class selection extends class_base
 			$str = ' valim tühi, või objekte pole aktiivseks tehtud';
 		}
 		$this->vars(array('object' => $str));
-		return $this->parse();
+		return //$str;
+		$this->parse();
 	}
 */
-	function show_in_selection($args)
-	{
-		//$this->read_template();
-		//$obj['class_file']
 
-		//siin võib teha alampringud jne mida veel vaja objekti juures näidata
 
-		$this->vars($args['obj']);
-		return $this->parse('object');
-	}
 
-	function selection()
-	{
-		//error_reporting(E_ALL);
-		$this->init(array(
-			'clid' => CL_SELECTION,
-			'tpldir' => 'selection',
-		));
-	}
 
 	function set_property($args = array())
 	{
@@ -667,7 +757,7 @@ class selection extends class_base
 
 		if (isset($form['del']))
 		{
-			$this->remove_from_selection($args['obj']['oid'],$form['sel']);
+			$this->remove_from_selection($args['obj'][OID],$form['sel']);
 		}
 		switch($data['name'])
 		{

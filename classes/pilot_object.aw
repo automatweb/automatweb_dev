@@ -2,7 +2,7 @@
 /*
 
 //@classinfo syslog_type=
-@classinfo relationmgr=yes
+//@classinfo relationmgr=yes
 @groupinfo general caption=Üldine
 
 @default table=objects
@@ -14,25 +14,28 @@
 	@default field=meta
 	@default method=serialize
 
-	@property output_as type=select
-	@caption kuidas näidatakse objekte dokumendi sees
+//	@property output_as type=select
+//	@caption kuidas näidatakse objekte dokumendi sees
 
-	@property templates type=select
-	@caption objektide näitamise templiidid
+//	@property templates type=select
+//	@caption objektide näitamise templiidid
 
-	@property aw_table type=select
-	@caption määra tabeli näitamise objekt
+//	@property aw_table type=select
+//	@caption määra tabeli näitamise objekt
 
-	@property object_show type=select
-	@caption millega näidatakse kui objektis näitamine puudub
+//	@property object_show type=select
+//	@caption millega näidatakse kui objektis näitamine puudub
 
-	@property personal_contact type=relpicker reltype=TEMPLATE
-	@caption kodused kontakt andmed
+//	@property personal_contact type=relpicker reltype=TEMPLATE
+//	@caption
+
+	@property template type=select
+	@caption Tagasisidevorm
 
 
 */
 
-define('TEMPLATE',1);
+//define('TEMPLATE',1);
 class pilot_object extends class_base
 {
 	function pilot_object()
@@ -46,13 +49,31 @@ class pilot_object extends class_base
 		));
 	}
 
-	function callback_get_rel_types()
-	{
-		return array(
-			TEMPLATE => 'objekti valimis näitamise templiit',
-		);
-	}
+//	function callback_get_rel_types()
+//	{
+//		return array(
+//			TEMPLATE => 'objekti valimis näitamise templiit',
+//		);
+//	}
 
+	function form($args)
+	{
+		$form = $this->get_object($args['id']);
+		$obj = get_instance($args['tagasiside_class']);
+
+		if (method_exists($obj,'fetch_all_data'))
+		{
+			$data = $obj->fetch_all_data($args['tagasiside']);
+		}
+		else
+		{
+			$data = $this->get_object($args['tagasiside']);
+		}
+
+		//arr($data,1);
+		//return localparse(implode('', file(aw_ini_get('tpldir').'/pilot_object/templs/'.$form['meta']['template'])),$data);
+		return localparse(implode('', file($this->cfg['tpldir'].'/pilot_object/templs/'.$form['meta']['template'])),$data);
+	}
 
 	function get_property($args)
 	{
@@ -62,7 +83,7 @@ class pilot_object extends class_base
 		//arr($args,1);
 		switch($data["name"])
 		{
-			case 'output_as':
+/*			case 'output_as':
 
 				$data['options'] = array(
 					'templates' => 'templiidiga',
@@ -71,19 +92,13 @@ class pilot_object extends class_base
 				);
 
 			break;
-
-			case 'templates':
-				if (($meta['output_as'] == 'templates'))
-				{
-					$tpls = $this->get_directory(array('dir' => aw_ini_get('tpldir').'/selection/templs'));
-					$data['options'] = $tpls;
-				}
-				else
-				{
-					$retval = PROP_IGNORE;
-				}
+*/
+			case 'template':
+				$tpls = $this->get_directory(array('dir' => $this->cfg['tpldir'].'/pilot_object/templs'));
+				//die;
+				$data['options'] = $tpls;
 			break;
-			case 'aw_table':
+/*			case 'aw_table':
 				if (($meta['output_as'] == 'aw_table'))
 				{
 				}
@@ -104,7 +119,10 @@ class pilot_object extends class_base
 					$retval = PROP_IGNORE;
 				}
 
-			break;
+			break;*/
+
+
+
 		}
 		return  $retval;
 	}
@@ -217,11 +235,14 @@ class pilot_object extends class_base
 		{
 			$args['obj']['oid'] = $args['id'];
 		}
+		
 		$obj = $this->get_object($args['obj']['oid']);
+
 		if (!is_numeric($obj['meta']['pilot']))
 		{
 			return 'valimi pilootobjekt määramata!';
 		}
+
 		$pilot = $this->get_object($obj['meta']['pilot']);
 		//arr($pilot,1);
 		$se = get_instance('kliendibaas/selection');
