@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.25 2004/10/08 01:32:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.26 2004/10/08 15:54:22 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -79,6 +79,9 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 
 	@property vacancies_cal group=create_vacancies_cal type=calendar no_caption=1
 	@caption Ajad
+
+	@property vacancies_cal_sbt group=create_vacancies_cal type=submit no_caption=1 value="Kinnita ajad"
+	@caption Kinnita ajad
 
 	@default group=views
 	@default store=no
@@ -312,7 +315,7 @@ class planner extends class_base
 				break;
 
 			case "vacancies_cal":
-				$this->gen_vacancies_cal($arr);
+				return $this->gen_vacancies_cal($arr);
 				break;
 
 			case "create_event_table":
@@ -1652,17 +1655,34 @@ class planner extends class_base
 
 		$slots = array();
 
-		while(sizeof($slots) < $vac_count)
+		$wds = safe_array($arr["obj_inst"]->prop("workdays"));
+		// if no workdays are defined, use all of them
+		if (count($wds) < 1)
+		{
+			for($wd = 0; $wd < 7; $wd++)
+			{
+				$wds[$wd] = 1;
+			}
+		}
+
+		while((isset($arr["until"]) && $tstamp < $arr["until"]) || sizeof($slots) < $vac_count)
 		{
 			// event list eh?
-			$slots = $slots + $this->_get_free_slots_for_day(array(
-				"id" => $arr["obj_inst"]->id(),
-				"tstamp" => $tstamp,
-				"today" => $today,
-			));
+			if ($wds[date("w", $tstamp)])
+			{
+				$slots = $slots + $this->_get_free_slots_for_day(array(
+					"id" => $arr["obj_inst"]->id(),
+					"tstamp" => $tstamp,
+					"today" => $today,
+				));
+			}
 			$tstamp += 86400;
 			$today = false;
-
+		
+			if (++$cnt > 500)
+			{
+				break;
+			}
 		};
 
 		return $slots;
@@ -1712,12 +1732,13 @@ class planner extends class_base
 
 	function gen_vacancies_cal($arr)
 	{
-		$slots = $this->_gen_vac_slots($arr);
-
 		$range = $arr["prop"]["vcl_inst"]->get_range(array(
 			"date" => $arr["request"]["date"],
 			"viewtype" => $arr["request"]["viewtype"] ? $arr["request"]["viewtype"] : $viewtype,
 		));
+
+		$arr["until"] = $range["end"];
+		$slots = $this->_gen_vac_slots($arr);
 
 		foreach($slots as $slot)
 		{
@@ -1733,6 +1754,8 @@ class planner extends class_base
 				),
 			));
 		};
+
+		return PROP_OK;
 	}
 
 	function _get_free_slots_for_day($arr)

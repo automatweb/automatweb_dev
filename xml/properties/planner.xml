@@ -206,6 +206,20 @@
             <caption>Ajad</caption>
       </property>
       <property>
+            <name>vacancies_cal_sbt</name>
+            <table>objects</table>
+            <group>create_vacancies_cal</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <store>no</store>
+            <type>submit</type>
+            <no_caption>1</no_caption>
+            <value>
+            <![CDATA["Kinnita]]>
+            </value>
+            <caption>Kinnita ajad</caption>
+      </property>
+      <property>
             <name>search</name>
             <table>objects</table>
             <group>views</group>
