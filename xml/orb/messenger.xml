@@ -159,7 +159,7 @@
 		<action name="refine_search">
 			<function name="search">
 				<arguments>
-					<define name="refine" value="1">
+					<define name="refine" value="1"/>
 				</arguments>
 			</function>
 		</action>
