@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.85 2004/07/08 13:44:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.86 2004/07/21 12:42:54 duke Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -70,7 +70,7 @@ class file extends class_base
 	// !Konstruktor
 	function file()
 	{
-		obj_set_opt("no_cache", 1);
+		//obj_set_opt("no_cache", 1);
 		$this->init(array(
 			"clid" => CL_FILE,
 			"tpldir" => "file",
