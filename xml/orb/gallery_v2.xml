@@ -12,6 +12,16 @@
 				</arguments>
 			</function>
 		</action>
+		<action name="view" nologin="1">
+			<function name="view">
+				<arguments>
+					<optional name="id"/>
+					<optional name="page"/>
+					<optional name="col"/>
+					<optional name="row"/>
+				</arguments>
+			</function>
+		</action>
 
 	</class>
 </orb>

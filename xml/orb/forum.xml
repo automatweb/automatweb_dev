@@ -64,7 +64,6 @@
 				<arguments>
 					<required name="board" type="int"/>
 					<optional name="section"/>
-					<optional name="from" type="int"/>
 				</arguments>
 			</function>
 		</action>
@@ -75,7 +74,6 @@
 					<optional name="section"/>
 					<optional name="cid" type="int"/>
 					<optional name="no_comments"/>
-					<optional name="from" type="int"/>
 				</arguments>
 			</function>
 		</action>

@@ -2,7 +2,7 @@
 <orb>
 	<class name="planner" extends="class_base">
 		<action name="view">
-			<function name="view">
+			<function name="view" nologin="1">
 				<arguments>
 					<required name="id" type="int"/>
 					<optional name="date"/>

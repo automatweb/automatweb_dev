@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.268 2003/03/18 12:18:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.269 2003/03/26 03:48:06 duke Exp $
 // menuedit.aw - menuedit. heh.
 // meeza thinks we should split this class. One part should handle showing stuff
 // and the other the admin side -- duke
@@ -156,7 +156,7 @@ class menuedit extends aw_template
 			{
 				$cache->set($section,$cp,$res);
 			};
-      echo "<!-- no cache $section <pre>",join("-",$cp),"</pre>\n-->";
+			echo "<!-- no cache $section <pre>",join("-",$cp),"</pre>\n-->";
 		}
 		else
 		{
@@ -394,9 +394,54 @@ class menuedit extends aw_template
 			$this->vars(array("doc_content" => $docc));
 		} 
 		else 
+		if (aw_global_get("cal"))
+		{
+			$cal_id = aw_global_get("cal");
+			// first check, whether the argument really can be an event source
+			$q = "SELECT count(*) AS cnt FROM aliases WHERE target = '$cal_id'";
+			$this->db_query($q);
+			$xrow = $this->db_next();
+			if (!$xrow)
+			{
+				die("no such calendar");
+			};
+			// leiame aktiivse eventi ka
+			list($_d,$_m,$_y) = explode("-",aw_global_get("date"));
+			$tm = mktime(0,0,0,$_m,$_d,$_y)-1;
+			$q = "SELECT objects.oid,name,parent,start FROM objects LEFT JOIN planner ON (objects.oid = planner.id) WHERE parent = $cal_id AND planner.start > $tm AND class_id = " . CL_DOCUMENT . " AND objects.status = 2 LIMIT 1";
+			$this->db_query($q);
+			$event = $this->db_next();
+			if (!$event)
+			{
+				die("no events in this calendar");
+			};
+			$d = get_instance("document");
+			if ($text)
+			{
+				// I'm sorry, I can't think of anything else right now to pass this
+				// to the site class
+				aw_global_set("doc_text",$text);
+			};
+			$res = $d->gen_preview(array(
+				"tpl" => "doc_event.tpl",
+				"docid" => $event["oid"],
+				"vars" => array("edate" => date("d-m-Y",$event["start"])),
+			));
+
+			$this->active_doc = $event["oid"];
+
+			$this->vars(array(
+				// to get the "edit document" link working
+				"docid" => $event["oid"],
+				"doc_content" => $res,
+			));
+		}
+		else
 		// if the menu has any relations to planner objects, then we show
 		// that planner under this menu. 
 		// I will fix this later.. --duke
+
+		// see siin genereerib nädala vaate, aga damn I really do hate this
 		if (is_array($meta["aliases_by_class"]) && sizeof($meta["aliases_by_class"][CL_PLANNER]) > 0)
 		{
 			$pl = get_instance("planner");

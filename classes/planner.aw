@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.98 2003/03/19 18:06:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.99 2003/03/26 03:48:07 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -1042,6 +1042,11 @@ class planner extends class_base
 			"next" => $next,
 		));
 
+		if ($this->no_wrapper)
+		{
+			$retval = $content;
+		}
+		else
 		if ($use_tabpanel)
 		{
 			$vars["content"] = $this->parse();
@@ -1210,7 +1215,7 @@ class planner extends class_base
 			};
 		}
 		$calstring = join(",",$calendars);
-		$q = "SELECT name,class_id,planner.*,documents.lead,documents.moreinfo,documents.content FROM objects LEFT JOIN planner ON (objects.oid = planner.id) LEFT JOIN documents ON (objects.oid = documents.docid) WHERE parent IN ($calstring) AND ((start >= '$start') OR (start <= '$end'))";
+		$q = "SELECT name,class_id,parent,planner.*,documents.lead,documents.moreinfo,documents.content FROM objects LEFT JOIN planner ON (objects.oid = planner.id) LEFT JOIN documents ON (objects.oid = documents.docid) WHERE parent IN ($calstring) AND ((start >= '$start') OR (start <= '$end'))";
 		$this->db_query($q);
 		$results = array();
 		$ia = get_instance("image");
@@ -1237,15 +1242,6 @@ class planner extends class_base
 						$row["imgurl"] = $imgdata["url"];
 					};
 
-					if ($row2["type"] == CL_FORUM)
-					{
-						$row["forum_id"] = $row2["target"];
-					}
-
-					if ($row2["type"] == CL_GALLERY_V2)
-					{
-						$row["gallery_id"] = $row2["target"];
-					};
                                 };
                                 $this->restore_handle();
 
@@ -2138,13 +2134,26 @@ class planner extends class_base
 				));
 				if ($e["class_id"] == CL_DOCUMENT)
 				{
+					/*
+					$daylink = $this->mk_my_orb("view",array(
+						"section" => $e["parent"],
+						"cal" => $e["parent"],
+						"id" => $this->id,
+						"type" => "day",
+						"date" => date("d-m-Y",$e["start"]),
+					));
+					*/
+					$daylink = $this->cfg["baseurl"] . "/section=$e[parent]/cal=$e[parent]/date=" . date("d-m-Y",$e["start"]);
 					$section = $e["id"];
-
 					if ($this->type == CAL_SHOW_DAY)
 					{
-                                                $pv = $d->gen_preview(array(
-                                                        "docid" => $e["id"],
-                                                ));
+						$this->no_wrapper = true;
+						$pv = $d->gen_preview(array(
+							  "tpl" => "doc_event.tpl",
+							  "docid" => $e["id"],
+							  "vars" => array("edate" => date("d-m-Y",$e["start"])),
+
+						));
 
 					};
 				};

@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.4 2003/03/19 14:16:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.5 2003/03/26 03:48:09 duke Exp $
 
 /*
 
@@ -97,6 +97,13 @@ class gallery_v2 extends class_base
 		extract($args);
 		return $this->show(array(
 			"oid" => $alias["target"]
+		));
+	}
+
+	function view($args = array())
+	{
+		return $this->show(array(
+			"oid" => $args["id"],
 		));
 	}
 		

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.165 2003/03/12 12:06:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.166 2003/03/26 03:48:06 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -723,6 +723,11 @@ class document extends aw_template
 				$doc['content'] = preg_replace("/#reg#(.*)$/s", $li->parse(), $doc['content']);
 			};
 		}		
+
+		if (isset($params["vars"]) && is_array($params["vars"]))
+		{
+			$this->vars($params["vars"]);
+		};
 
 		// create keyword links unless we are in print mode, since you cant click
 		// on links on the paper they dont make sense there :P

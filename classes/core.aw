@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.168 2003/03/17 15:25:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.169 2003/03/26 03:48:06 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1777,6 +1777,14 @@ class core extends db_connector
 		// handle arrays!
 		$section = false;
 		$ura = array();
+		if (aw_global_get("cal") && empty($arr["cal"]))
+		{
+			$arr["cal"] = aw_global_get("cal");
+		};
+		if (aw_global_get("date") && empty($arr["date"]))
+		{
+			$arr["date"] = aw_global_get("date");
+		};
 		foreach($arr as $k => $v)
 		{
 			if (is_array($v))
@@ -1937,6 +1945,14 @@ class core extends db_connector
 		$cl_name = $m[1];
 
 		$urs = "";
+		if (aw_global_get("cal") && empty($arr["cal"]))
+		{
+			$arr["cal"] = aw_global_get("cal");
+		};
+		if (aw_global_get("date") && empty($arr["date"]))
+		{
+			$arr["date"] = aw_global_get("date");
+		};
 		$tmp = new aw_array($arr);
 		foreach($tmp->get() as $k => $v)
 		{
