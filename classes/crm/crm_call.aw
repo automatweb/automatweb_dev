@@ -1,20 +1,23 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.3 2003/12/09 18:34:39 duke Exp $
-// crm_call.aw - Kõne 
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.4 2003/12/11 14:21:16 duke Exp $
+// crm_call.aw - phone call
 /*
 
-@classinfo syslog_type=ST_CRM_CALL relationmgr=yes
+@classinfo syslog_type=ST_CRM_CALL relationmgr=yes no_status=1 no_comment=1
 
-@default table=objects
+@default table=planner
 @default group=general
 
-@property start1 type=datetime_select field=start table=planner 
-@caption Algab 
+@property is_done type=checkbox table=objects field=flags method=bitmask ch_value=8 // OBJ_IS_DONE
+@caption Tehtud
 
-@property duration type=time_select field=end table=planner
-@caption Kestab
+@property start1 type=datetime_select field=start 
+@caption Algus
 
-@property content type=textarea cols=60 rows=30 table=planner field=description
+@property duration type=time_select field=end 
+@caption Kestus
+
+@property content type=textarea cols=60 rows=30 field=description
 @caption Sisu
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
