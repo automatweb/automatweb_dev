@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.65 2003/11/20 13:48:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.66 2003/12/03 12:04:41 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -288,7 +288,7 @@ class file extends class_base
 		
 			if ($fi["meta"]["show_framed"])
 			{
-				$url = $this->cfg["baseurl"]."/section=$alias[source]/oid=$alias[target]";
+				$url = $this->cfg["baseurl"]."/section=".aw_global_get("section")."/oid=$alias[target]";
 			}
 			else
 			{
