@@ -5,6 +5,32 @@ class propcollector extends aw_template
 	function propcollector($args = array())
 	{
 		$this->init(array("no_db" => 1));
+		
+		// there are 3 ways to define a tag
+		// with a context
+		// 	@tag name key1=value1 key2=value2 .. keyN=valueN
+		// without a context, key=value pairs
+		// 	@tag key1=value1 key2=value2 .. keyN=valueN
+		// simple value
+		//	@tag value, always belongs to some previous tag
+
+		define('TAG_CTX',1);
+		define('TAG_PAIRS',2);
+		define('TAG_VALUE',3);
+
+		$this->tags = array(
+			"classinfo" => TAG_PAIRS,
+			"default" => TAG_PAIRS,
+			"groupinfo" => TAG_CTX,
+			"tableinfo" => TAG_CTX,
+			"property" => TAG_CTX,
+			"layout" => TAG_CTX,
+			"forminfo" => TAG_CTX,
+			"reltype" => TAG_CTX,
+			"column" => TAG_CTX,
+			"caption" => TAG_VALUE,
+			"comment" => TAG_VALUE,
+		);
 	}
 
         function req_dir($args = array())
@@ -44,32 +70,7 @@ class propcollector extends aw_template
 		$counter = 0;
 		$total = 0;
 
-		// there are 3 ways to define a tag
-		// with a context
-		// 	@tag name key1=value1 key2=value2 .. keyN=valueN
-		// without a context, key=value pairs
-		// 	@tag key1=value1 key2=value2 .. keyN=valueN
-		// simple value
-		//	@tag value, always belongs to some previous tag
-
-		define('TAG_CTX',1);
-		define('TAG_PAIRS',2);
-		define('TAG_VALUE',3);
-
-		$tags = array(
-			"classinfo" => TAG_PAIRS,
-			"default" => TAG_PAIRS,
-			"groupinfo" => TAG_CTX,
-			"tableinfo" => TAG_CTX,
-			"property" => TAG_CTX,
-			"layout" => TAG_CTX,
-			"forminfo" => TAG_CTX,
-			"reltype" => TAG_CTX,
-			"column" => TAG_CTX,
-			"caption" => TAG_VALUE,
-			"comment" => TAG_VALUE,
-		);
-
+		$tags = $this->tags;
 
 		// now we need to parse all the files for properties
 		foreach($files as $key => $name)
@@ -188,6 +189,108 @@ class propcollector extends aw_template
 	}
 
 	////
+	// !parse a single file
+	function parse_file($arr)
+	{
+		$name = $arr["file"];
+		if (file_exists($name))
+		{
+			$lines = @file($name);
+		}
+		else
+		if (!empty($arr["data"]))
+		{
+			$lines = explode("\n",$arr["data"]);
+		};
+		
+
+		if (!is_array($lines))
+		{
+			return false;
+		};
+
+		$tags = $this->tags;
+
+		$this->cl_start($cname);
+		foreach($lines as $line)
+		{
+			$taginfo = preg_match("/^\s*@(\w*) (.*)/",$line,$m);
+			$tagname = $m[1];
+			$tagdata = $m[2];
+			if (isset($tags[$tagname]) && $tags[$tagname] == TAG_PAIRS)
+			{
+				$attribs = $this->_parse_attribs($m[2]);
+				if ($tagname == "classinfo")
+				{
+					$this->classinfo = array_merge($this->classinfo,$attribs);
+				};
+				if ($tagname == "default")
+				{
+					$this->defaults = array_merge($this->defaults,$attribs);
+				};
+
+			};
+
+			if (isset($tags[$tagname]) && $tags[$tagname] == TAG_CTX)
+			{
+				preg_match("/(\w+?) (.*)/",$tagdata,$m);
+				$aname = $m[1];
+				$attribs = $m[2];
+				if ($tagname == "groupinfo")
+				{
+					$this->set_groupinfo($aname,$attribs);
+				}
+				else
+				if ($tagname == "tableinfo")
+				{
+					$this->set_tableinfo($aname,$attribs);
+				}
+				else
+				if ($tagname == "property")
+				{
+					$this->add_property($aname,$attribs);
+				}
+				else
+				if ($tagname == "layout")
+				{
+					$this->add_layout($aname,$attribs);
+				}
+				else
+				if ($tagname == "reltype")
+				{
+					$this->add_reltype($aname,$attribs);
+				}
+				else
+				if ($tagname == "forminfo")
+				{
+					$this->add_forminfo($aname,$attribs);
+				}
+				else
+				{
+					$this->classdef[$tagname][$aname] = $this->_parse_attribs($attribs);
+					$this->name = $aname;
+					$this->last_element = $tagname;
+				};
+			};
+
+			if (isset($tags[$tagname]) && $tags[$tagname] == TAG_VALUE)
+			{
+				if ($tagname == "caption")
+				{
+					$this->add_caption($tagdata);
+				};
+				if ($tagname == "comment")
+				{
+					$this->add_comment($tagdata);
+				};
+			};
+		};
+
+		$success = $this->cl_end(0);
+		return $this->cdata;
+	}
+
+	////
 	// !Starts a new class
 	function cl_start($cname)
 	{
@@ -242,26 +345,12 @@ class propcollector extends aw_template
 			};
 		};
 
-		if ("table" == $fields["type"])
+		// things listed here have automatically set their store attribute to "no"
+		$no_store = array("table","container","calendar","toolbar","releditor");
+		if (in_array($fields["type"],$no_store))
 		{
 			$fields["store"] = "no";
-		};
-		if ("container" == $fields["type"])
-		{
-			$fields["store"] = "no";
-		};
-		if ("calendar" == $fields["type"])
-		{
-			$fields["store"] = "no";
-		};
-		if ("releditor" == $fields["type"])
-		{
-			$fields["store"] = "no";
-		};
-		if ("toolbar" == $fields["type"])
-		{
-			$fields["store"] = "no";
-		};
+		}		
 
 		// field defaults to the name of the property
 		if (!$fields["field"])
@@ -303,7 +392,6 @@ class propcollector extends aw_template
 		$this->last_element = "layout";
 	}
 
-	
 	function add_forminfo($name,$data)
 	{
 		$this->forminfo[$name] = $this->_parse_attribs($data);
@@ -362,15 +450,12 @@ class propcollector extends aw_template
 	
 	function set_tableinfo($id,$data)
 	{
-		$_x = new aw_array(explode(" ",$data));
-		foreach($_x->get() as $field)
+		$attr = $this->_parse_attribs($data);
+		if (empty($attr["master_index"]) && $attr["master_table"] == "objects")
 		{
-			list($fname,$fvalue) = explode("=",$field);
-			if ($fname && $fvalue)
-			{
-				$this->tableinfo[$id][$fname] = $fvalue;
-			};
+			$attr["master_index"] = "brother_of";
 		};
+		$this->tableinfo[$id] = $attr;
 	}
 
 
@@ -402,7 +487,7 @@ class propcollector extends aw_template
 
 	////
 	// !Ends a class
-	function cl_end()
+	function cl_end($write = 1)
 	{
 		$sr = get_instance("xml",array("ctag" => ""));
 		$sr->set_child_id("properties","property");
@@ -456,12 +541,20 @@ class propcollector extends aw_template
 				$arr["properties"]["columns"] = $this->classdef["column"];
 			};
 
-			$res = $sr->xml_serialize($arr);
-			//print_r($res);
-			$this->put_file(array(
-				"file" => $fullname,
-				"content" => $res,
-			));
+			if ($write == 1)
+			{
+
+				$res = $sr->xml_serialize($arr);
+				//print_r($res);
+				$this->put_file(array(
+					"file" => $fullname,
+					"content" => $res,
+				));
+			}
+			else
+			{
+				$this->cdata = $arr;
+			};
 			$success = true;
 		};
 		return $success;
