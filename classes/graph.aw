@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/graph.aw,v 2.5 2001/07/12 04:23:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/graph.aw,v 2.6 2002/01/29 23:51:49 duke Exp $
 // graph.aw - graafikute haldamine
 		global $orb_defs;
 		$orb_defs["graph"] = array(
@@ -49,15 +49,8 @@ lc_load("graph");
 		function parse_alias($args = array())
 		{
 			extract($args);
-			if (!is_array($this->graphaliases))
-			{
-				$this->graphaliases = $this->get_aliases(array(
-                                                                "oid" => $oid,
-                                                                "type" => CL_GRAPH,
-                                                        ));
-                        };	
-			$g = $this->graphaliases[$matches[3] - 1];
-			$replacement = "<img src='/graphs.aw?type=show&id=$g[target]'>";
+			global $ext;
+			$replacement = "<img src='/graphs.$ext?type=show&id=$alias[target]'>";
 			return $replacement;
 		}
 

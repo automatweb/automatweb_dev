@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.38 2002/01/24 04:32:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.39 2002/01/29 23:51:49 duke Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 global $orb_defs;
@@ -1411,11 +1411,7 @@ class forum extends aw_template
 		extract($args);
 		// we are inside the document, so we switch to embedded mode
 		$this->embedded = true;
-		$this->f_aliases = $this->get_aliases(array(
-                                                "oid" => $oid,
-                                                "type" => CL_FORUM,
-                ));
-                $l = $this->f_aliases[$matches[3] - 1];
+		$l = $alias;
                 $target = $l["target"];
                 $tobj = $this->get_object($target);
                 $parent = $tobj["last"];
