@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.46 2001/10/29 09:22:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.47 2001/11/09 05:42:38 cvs Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -33,7 +33,7 @@ if ($pi)
 	};
 };
 // right. here comes the error handler! badaboom!
-function handle_errors($errno, $errmsg, $filename, $linenum,$vars)
+/*function handle_errors($errno, $errmsg, $filename, $linenum,$vars)
 {
 	// format a nice message and pass it on to core::raise_error
 	$errortype = array (
@@ -66,7 +66,7 @@ function handle_errors($errno, $errmsg, $filename, $linenum,$vars)
 		$co->db_init();
 		$co->raise_error($msg,false,true);
 	}
-}
+}*/
 //error_reporting(0);
 //set_error_handler("handle_errors");
 
@@ -197,6 +197,7 @@ else
 };
 $classdir = $basedir."/classes";	 	  // where the classes are
 // veateadete tekstid
+
 if (empty($LC))
 {
 	$LC="et";
@@ -228,7 +229,7 @@ else
 		{
 			$admin_lang_lc = "et";
 		}
-		@include_once("$basedir/lang/" . $admin_lang_lc . "/$file.$ext");
+		include_once("$basedir/lang/" . $admin_lang_lc . "/$file.$ext");
 	}
 
 	// loads localization constants from the site's $site_basedir
@@ -562,7 +563,7 @@ define("PRG_SITE_BANNER_ADMIN",37);
 define("PRG_SITE_BANNER_STATS",38);
 define("PRG_BANNER_USERS",39);
 define("PRG_BANNER_PROFILES",40);
-define("PRG_EKOMAR",41);
+define("PRG_DOCEDIT",41);
 define("PRG_KEYWORD",42);
 define("PRG_CONF_JOIN_MAIL",43);
 define("PRG_CSS_EDITOR",44);
@@ -576,6 +577,7 @@ define("PRG_TPLEDIT",52); // templateeditor
 define("PRG_DOCMGR",53); // document manager
 define("PRG_HTML_POPUP",54); // html popip
 define("PRG_CONFIG_SITES",55);// saitide tegemine
+define("PRG_CONFIG_DOCFOLDERS",56); // dokumendi liigutamsie kataloogide vailimine
 
 // MN_* konstandid on defineeritud $basedir/lang/$lc/common.aw sees
 // $lc = keelekood, vaikimisi "ee"
@@ -621,7 +623,7 @@ PRG_SITE_BANNER_ADMIN	=> array("name" => MN_SITE_BANNER_ADMIN,"url" => "orb.aw?c
 PRG_SITE_BANNER_STATS	=> array("name" => MN_SITE_BANNER_STATS,"url" => "orb.aw?class=banner_buyer&action=sel_buyer_redirect&fun=buyer_banner_stats&r_class=banner_buyer"),
 PRG_BANNER_USERS			=> array("name" => MN_BANNER_USERS,			"url" => "orb.aw?class=banner&action=show_users"),
 PRG_BANNER_PROFILES		=> array("name" => MN_BANNER_PROFILES,	"url" => "orb.aw?class=banner&action=show_profiles"),
-PRG_EKOMAR						=> array("name" => MN_EKOMAR,           "url" => "orb.$ext?class=ekomar&action=list_files"),
+PRG_DOCEDIT						=> array("name" => MN_EKOMAR,           "url" => "orb.$ext?class=ekomar&action=list_files"),
 PRG_KEYWORD						=> array("name" => MN_KEYWORD,					"url" => "orb.aw?class=keywords&action=list"),
 PRG_CONF_JOIN_MAIL		=> array("name" => MN_JOIN_MAIL,				"url" => "orb.aw?class=config&action=join_mail"),
 PRG_CSS_EDITOR				=> array("name" => "Kasutaja CSS editor","url" => "orb.aw?class=css&action=list"),
@@ -633,6 +635,7 @@ PRG_CONFIG_REDIRECT		=> array("name" => "Config/suunamine",	"url" => "orb.aw?cla
 PRG_TPLEDIT						=> array("name" => "TemplateEditor",		"url" => "orb.aw?class=tpledit&action=browse"),
 PRG_DOCMGR						=> array("name" => "Document manager",	"url" => "orb.aw?class=docmgr&action=search"),
 PRG_CONFIG_SITES			=> array("name" => "Config/saidid",			"url" => "orb.aw?class=config&action=sites"),
+PRG_CONFIG_DOCFOLDERS	=> array("name" => "Config/dokumendi kataloogid",			"url" => "orb.aw?class=config&action=docfolders"),
 );
 
 // formide tyybid
