@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_ldap.aw,v 1.4 2004/10/20 12:57:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_ldap.aw,v 1.5 2004/10/28 17:29:48 kristo Exp $
 // auth_server_ldap.aw - Autentimisserver LDAP 
 /*
 
@@ -154,7 +154,7 @@ class auth_server_ldap extends class_base
 		}
 
 		$dn = join(", ",$dna);
-		$sr=ldap_search($res, $dn, "cn=*"); 
+		$sr=ldap_search($res, $dn, "cn=*",array("memberof")); 
 		$info = ldap_get_entries($res, $sr);
 
 		$ret = array("" => "");
@@ -173,32 +173,29 @@ class auth_server_ldap extends class_base
 
 	function _is_member_of($res, $o, $grp, $cred)
 	{
-		$dna = array("CN=Users");
+		$dna = array("OU=".$grp);
 		foreach(explode(".", $o->prop("ad_domain")) as $part)
 		{
 			$dna[] = "dc=".$part;
 		}
 
 		$dn = join(", ",$dna);
-		$sr=ldap_search($res, $dn, "samaccountname=".$cred["uid"]); 
+		$sr=ldap_search($res, $dn, "samaccountname=".$cred["uid"], array("samaccountname")); 
 		$info = ldap_get_entries($res, $sr);
 
-		$ret = array();
+		$ret = false;
 		for ($i=0; $i<$info["count"]; $i++) 
 		{
-			for ($a = 0; $a < $info[$i]["memberof"]["count"]; $a++)
+			for($a = 0; $a < $info[$i]["samaccountname"]["count"]; $a++)
 			{
-				list($grpn) = explode(",", $info[$i]["memberof"][$a]);
-				list(, $grpn) = explode("=", $grpn);
-				$ret[$grpn] = $grpn;
+				if ($info[$i]["samaccountname"][$a] == $cred["uid"])
+				{
+					$ret = true;
+				}
 			}
 		}
 
-		if (isset($ret[$grp]))
-		{
-			return true;
-		}
-		return false;
+		return $ret;
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.3 2004/10/20 12:57:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.4 2004/10/28 17:29:48 kristo Exp $
 // auth_config.aw - Autentimise Seaded 
 /*
 
@@ -182,7 +182,8 @@ class auth_config extends class_base
 			"flags" => array(
 				"mask" => OBJ_FLAG_IS_SELECTED,
 				"flags" => OBJ_FLAG_IS_SELECTED
-			)
+			),
+			"lang_id" => array(),
 		));
 		if ($ol->count())
 		{
@@ -204,6 +205,7 @@ class auth_config extends class_base
 	{
 		// get list of servers, sort by order and try each one
 		$servers = $this->_get_auth_servers($auth_id);
+
 		foreach($servers as $server)
 		{
 			$server_inst = get_instance($server->class_id());
