@@ -15,7 +15,7 @@
 </td>
 </tr>
 <tr>
-<td colspan="2"><a href="{VAR:add_topic_url}">Lisa teema</a></td>
+<td colspan="2" class="{VAR:style_caption}"><a href="{VAR:add_topic_url}">Lisa teema</a></td>
 </tr>
 </table>
 <table border="1" cellspacing="0" cellpadding="3" width="100%" style="border-collapse: collapse;">
