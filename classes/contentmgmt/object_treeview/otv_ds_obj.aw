@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.19 2005/01/13 17:15:11 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.20 2005/01/19 02:49:25 dragut Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -505,7 +505,11 @@ class otv_ds_obj extends class_base
 			// filtering by char
 			if (!empty($params['filters']['char']) && empty($tv_sel))
 			{
-				$_ft[$params['filters']['filter_by_char_field']] = $params['filters']['char']."%";
+				// check if char's value is not "all", cause then all object should be returned
+				if ($params['filters']['char'] != "all")
+				{
+					$_ft[$params['filters']['filter_by_char_field']] = $params['filters']['char']."%";
+				}
 			}
 
 		}

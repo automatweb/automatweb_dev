@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.45 2005/01/13 17:15:11 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.46 2005/01/19 02:49:25 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -25,6 +25,9 @@
 
 @property show_link_new_win type=checkbox ch_value=1
 @caption Vaata link uues aknas
+
+@property show_link_field type=select
+@caption Millises v&auml;ljas vaata linki n&auml;idata
 
 @property hide_content_table_by_default type=checkbox ch_value=1
 @caption Vaikimisi &auml;ra n&auml;ita sisu tabelit
@@ -137,6 +140,13 @@ class object_treeview_v2 extends class_base
 
 		switch($prop["name"])
 		{
+			case "show_link_field":
+				// another hack, just to make possible to set, that show link won't appear
+				// in any column, uh.
+				unset($col_list['']);
+				$col_list = array_merge(array("---" => "---"), $col_list);
+				$prop['options'] = $col_list;
+				break;
 			case "tree_type":
 				$prop["options"] = array(
 					TREE_DHTML => "DHTML"
@@ -303,8 +313,7 @@ class object_treeview_v2 extends class_base
 						"saved_filters" => new aw_array($ob->meta("saved_filters")),
 						"group_by_folder" => $ob->prop("group_by_folder"),
 						"filter_by_char_field" => $ob->prop("filter_by_char_field"),
-						"char" =>  $_GET['char']{0}, 	// I'll take only the first character
-										// from the char URL parameter
+						"char" =>  ($_GET['char'] == "all") ? $_GET['char'] : $_GET['char']{0}, 	
 					),
 				);
 				$ol = $d_inst->get_objects($d_o, $fld, $_GET['tv_sel'], $params);
@@ -367,7 +376,7 @@ class object_treeview_v2 extends class_base
 						if ($value["field"] == "name")
 						{
 							// make link from name field
-							$scf_val = $this->_get_name_val($scf_val, $ol_item["url"], $ob);
+							$scf_val = $this->_get_link($scf_val, $ol_item["url"], $ob);
 						}
 						
 						$ol_item[$sel_columns_fields_key] .= $scf_val;
@@ -479,8 +488,8 @@ class object_treeview_v2 extends class_base
 				"pfk" => $ob
 			));
 			$group_name = $odata[$group_field];
-		}
 
+		}
 		$tb = "";
 		$no_tb = "";
 		if ($ob->prop("show_add"))
@@ -491,35 +500,61 @@ class object_treeview_v2 extends class_base
 		{
 			$no_tb = $this->parse("HEADER_NO_TOOLBAR");
 		}
-// checking, if there is set a field, which values should be use to filter by first character
-// and according to this i'm showing or not showing the alphabet list
+
+		// checking, if there is set a field, which values should be use to filter by first character
+		// and according to this i'm showing or not showing the alphabet list
 		$filter_by_char_field = $ob->meta("filter_by_char_field");
 		if(!empty($filter_by_char_field))
 		{
 			$alphabet_parsed = "";
 			foreach($this->alphabet as $character)
 			{
+/*
 				$character_value = $character;
 				if(!empty($_GET['char']) && $character == $_GET['char'])
 				{
 					$character_value = "<strong>".$character."</strong>";
 				}
+*/
+/*
 				if($ob->prop("alphabet_in_lower_case"))
 				{
 					$character_value = strtolower($character_value);
 				}
+*/
 				$this->vars(array(
-					"char" => $character_value,
+					"char" => ($ob->prop("alphabet_in_lower_case")) ? strtolower($character) : $character, 
 					"char_url" => aw_ini_get("baseurl")."/".$oid."?char=".$character,
 				));
-				$alphabet_parsed .= $this->parse("ALPHABET");
+				// need that htmlentites/urldecode hack to make ALL characters 
+				// display bold if they are selected
+				// damn - with this is some security issue - damn
+			//	if ($character == htmlentities(urldecode($_GET['char'])))
+			// seems have to come out with some other solution
+				if ($character == $_GET['char'])
+				{
+					$alphabet_parsed .= $this->parse("ALPHABET_SEL");
+				}
+				else
+				{
+					$alphabet_parsed .= $this->parse("ALPHABET");
+				}
 			}
-// lets put a link at the end of the alphabet to make all fields to show
+
+			// lets put a link at the end of the alphabet to make all fields to show
 			$this->vars(array(
 				"char" => t("K&otilde;ik"),
 				"char_url" => aw_ini_get("baseurl")."/".$oid."?char=all",
 			));
-			$alphabet_parsed .= $this->parse("ALPHABET");
+			// and of course we need to make it selected if is selected
+			if ($_GET['char'] == "all")
+			{
+				$alphabet_parsed .= $this->parse("ALPHABET_SEL");
+			}
+			else
+			{
+				$alphabet_parsed .= $this->parse("ALPHABET");
+			}
 		}
 
 		$this->vars(array(
@@ -859,7 +894,6 @@ class object_treeview_v2 extends class_base
 			$tv->add_item($fld["parent"], array(
 				"id" => $fld["id"],
 				"name" => $fld["name"],
-//				"url" => aw_url_change_var("page", NULL, aw_url_change_var("tv_sel", $fld["id"], aw_url_change_var("char", ""))),
 				"url" => aw_ini_get("baseurl")."/".$oid."?tv_sel=".$fld['id'],
 				"icon" => $fld["icon"],
 				"comment" => $fld["comment"],
@@ -954,9 +988,11 @@ class object_treeview_v2 extends class_base
 		extract($parms);
 		extract($arr);
 
+		$show_link = $this->_get_link($name, $url, $parms['pfk']);
+
 		$formatv = array(
 			"show" => $url,
-			"name" => $this->_get_name_val($name, $url, $parms["pfk"]),
+			"name" => $name,
 			"oid" => $oid,
 			"target" => $target,
 			"sizeBytes" => $fileSizeBytes,
@@ -1019,6 +1055,30 @@ class object_treeview_v2 extends class_base
 						"size" => 5
 					));
 				}
+				else
+				{
+					// show link can only be on the column, which is not editable
+					$show_link_field = $tree_obj->prop("show_link_field");
+					if (!empty($show_link_field) && $show_link_field == $colid)
+					{
+						// well, actually i don't like this hack, but if it is needed to select
+						// that show link won't appear in any columns, then this is the only way
+						// i can come out right now. The best way should be, that if no show_link_field
+						// are seelcted, THEN it won't appear in any column, but it will also break 
+						// existing objects so this is out of question. 
+						if ($show_link_field != "---")
+						{
+							$content = $this->_get_link($content, $url, $parms['tree_obj']);
+						}
+					}
+					else
+					if (empty($show_link_field) && $colid == "name")
+					{
+						// here i will make sure, that existing objects, which don't have the
+						// show_link_field property set, have show link in name field
+						$content = $this->_get_link($content, $url, $parms['tree_obj']);
+					}
+				}	
 				$this->vars(array(
 					"content" => $content
 				));
@@ -1505,7 +1565,7 @@ class object_treeview_v2 extends class_base
 		return $return_url;
 	}
 
-	function _get_name_val($name, $url, $pfk)
+	function _get_link($name, $url, $pfk)
 	{
 		$ld = array(
 			"url" => $url,
@@ -1575,7 +1635,6 @@ class object_treeview_v2 extends class_base
 					{
 						unset($ol[$ol_key]);
 					}
-					else{arr($fld[$_GET['tv_sel']]['name']);}
 				}
 				// if there is char param set in the url, then filter objects by this fields value which is set by
 				// filter_by_char_field property

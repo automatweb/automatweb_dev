@@ -47,6 +47,9 @@ text-decoration: none;
 <!-- SUB: ALPHABET -->
 <a href="{VAR:char_url}">{VAR:char}</a>&nbsp;&nbsp; 
 <!-- END SUB: ALPHABET -->
+<!-- SUB: ALPHABET_SEL -->
+<a href="{VAR:char_url}"><strong>{VAR:char}</strong></a>&nbsp;
+<!-- END SUB: ALPHABET_SEL -->
 </center>
 {VAR:reforb}
 
