@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/layout/active_page_data.aw,v 1.6 2003/10/13 13:09:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/layout/active_page_data.aw,v 1.7 2003/11/13 11:10:09 kristo Exp $
 class active_page_data extends class_base
 {
 	function active_page_data()
@@ -12,9 +12,13 @@ class active_page_data extends class_base
 		static $cur_path = false;
 		if (!is_array($cur_path))
 		{
-			$mn = get_instance("contentmgmt/site_content");
-			$mn->make_menu_caches();
-			$cur_path = $mn->get_path(aw_global_get("section"));
+			$so = obj(aw_global_get("section"));
+			$o_path = $so->path();
+			$cur_path = array();
+			foreach($o_path as $o)
+			{
+				$cur_path[] = $o->id();
+			}
 		}
 		return is_array($cur_path) ? $cur_path : array();
 	}
