@@ -1,11 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.63 2003/01/22 16:53:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.64 2003/01/26 23:25:29 duke Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 
 /*
         // stuff that goes into the objects table
         @default table=objects
+	@default group=general
 
         @property comments type=checkbox field=meta method=serialize ch_value=1
         @caption Kommenteeritav
@@ -22,8 +23,13 @@
 	@property topicsonpage type=select field=meta method=serialize
 	@caption Teemasid lehel
 
+	@property rates callback=callback_get_rates field=meta method=serialize group=rates
+	@caption Hinded
+
 	@classinfo corefields=name,comment,status
 	@classinfo toolbar=yes
+
+	@groupinfo rates caption=Hinded
 
 */
 
@@ -64,101 +70,79 @@ class forum extends class_base
 		$this->lc_load("msgboard","lc_msgboard");
 	}
 
-	function change_rates($args = array())
+	function callback_get_rates($args = array())
 	{
-		extract($args);
-		$this->read_template("edit_ratings.tpl");
-		$title = "Muuda foorumit";
-		$_tmp = $this->get_object($id);
-		$meta = $this->get_object_metadata(array(
-			"oid" => $id,
-		));
-		$parent = $tmp["parent"];
-		$this->mk_path($parent, $title);
-		$c = "";
-		if (is_array($meta["rates"]))
+		$ratelist = new aw_array($args["prop"]["value"]);
+		$nodes = array();
+		$idx = 0;
+		foreach($ratelist->get() as $key => $val)
 		{
-			$ords = array();
-			foreach($meta["rates"] as $key => $rate)
-			{
-				$ords[$key] = $rate["ord"];
-			};
-			asort($ords);
-
-			foreach($ords as $key => $val)
-			{
-				$this->vars(array(
-					"id" => $key,
-					"ord" => $meta["rates"][$key]["ord"],
-					"name" => $meta["rates"][$key]["name"],
-					"rate" => $meta["rates"][$key]["rate"],
-				));
-
-				$c .= $this->parse("rateline");
-			};
+			$idx++;
+			$nodes[] = $this->_add_rate_line($idx,$key,$val);
 		};
-		$this->vars(array(
-			"topics_link" => $this->mk_my_orb("topics",array("id" => $id)),
-			"new_rate_link" => $this->mk_my_orb("add_rate",array("id" => $id)),
-			"rateline" => $c,
-			"change_link" => $this->mk_my_orb("configure",array("id" => $id)),
-			"rates_link" => $this->mk_my_orb("change_rates",array("id" => $id)),
-			"reforb" => $this->mk_reforb("submit_rates",array("id" => $id)),
-		));
-		return $this->parse();
+		$idx++;
+		$nodes[] = $this->_add_rate_line($idx,-1,array());
+		return $nodes;
 	}
 
-	function submit_rates($args = array())
+	function _add_rate_line($idx,$key,$val)
 	{
-		extract($args);
-		$rates = array();
-		if (is_array($rate_name))
+		$tmp = array();
+		$tmp["items"][] = array(
+			"name" => "rates[$idx][ord]",
+			"type" => "textbox",
+			"size" => 2,
+			"maxlength" => 2,
+			"value" => $val["ord"],
+		);
+		$tmp["items"][] = array(
+			"name" => "rates[$idx][name]",
+			"type" => "textbox",
+			"size" => 30,
+			"value" => $val["name"],
+		);
+		$tmp["items"][] = array(
+			"name" => "rates[$idx][rate]",
+			"type" => "textbox",
+			"size" => 4,
+			"maxlength" => 4,
+			"value" => $val["rate"],
+		);
+		// show the checkbox only for existing items
+		if ($key > -1)
 		{
-			foreach($rate_name as $key => $val)
-			{
-				if ($delete && $rate_check[$key])
+			$tmp["items"][] = array(
+				"type" => "checkbox",
+				"value" => 1,
+				"name" => "delete[$idx]",
+			);
+		};
+		return $tmp;
+	}
+
+	function set_property($args = array())
+	{
+		$data = &$args["prop"];
+		$form_data = &$args["form_data"];
+		$retval = PROP_OK;
+		switch($data["name"])
+		{
+			case "rates":
+				$rates = new aw_array($args["form_data"]["rates"]);
+				$delete = $args["form_data"]["delete"];
+				$rate_array = array();
+				foreach($rates->get() as $key => $val)
 				{
-				}
-				else
-				{
-					$rates[$key] = array("ord" => $rate_order[$key],"name" => $val,"rate" => $rate_value[$key]);
+					if (!$delete[$key] && $val["name"])
+					{
+						$rate_array[$key] = $val;
+					};
 				};
-			};
+				uasort($rate_array, create_function('$a,$b','if ($a["ord"] > $b["ord"]) { return 1; } if ($a["ord"] < $b["ord"]) { return -1; } return 0;'));
 
-			$this->set_object_metadata(array(
-				"oid" => $id,
-				"key" => "rates",
-				"value" => $rates,
-			));
+				$form_data["rates"] = $rate_array;
 		};
-		return $this->mk_my_orb("change_rates",array("id" => $id));
-	}
-
-	function add_rate($args = array())
-	{
-		extract($args);
-		$this->mk_path(0,"Lisa hinne");
-		$this->read_template("add_rate.tpl");
-		$this->vars(array(
-			"reforb" => $this->mk_reforb("submit_rate",array("id" => $id)),
-		));
-		return $this->parse();
-	}
-
-	function submit_rate($args = array())
-	{
-		extract($args);
-		$old_rates = $this->get_object_metadata(array(
-			"oid" => $id,
-			"key" => "rates",
-		));
-		$old_rates[] = array("name" => $name,"rate" => $rate);
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "rates",
-			"value" => $old_rates,
-		));
-		return $this->mk_my_orb("change_rates",array("id" => $id));
+		return $retval;
 	}
 
 	function notify_list($args = array())
@@ -263,11 +247,9 @@ class forum extends class_base
 		$toolbar = &$args["toolbar"];
 		$id = $args["id"];
 		$content_url = $this->mk_my_orb("topics",array("id" => $id));
-		$rates_url = $this->mk_my_orb("change_rates",array("id" => $id));
 		$notify_url = $this->mk_my_orb("notify_list",array("id" => $id));
 
 		$content_link = "<a href='$content_url' class='fgtitle'>Foorumi sisu</a>";
-		$rates_link = "<a href='$rates_url' class='fgtitle'>Hinded</a>";
 		$notify_link = "<a href='$notify_url' class='fgtitle'>E-posti aadressid</a>";
 
 		$toolbar->add_button(array(
@@ -283,10 +265,6 @@ class forum extends class_base
 			$toolbar->add_separator();
 			$toolbar->add_cdata($content_link);
 			$toolbar->add_separator();
-		
-			$toolbar->add_cdata($rates_link);
-			$toolbar->add_separator();
-		
 			$toolbar->add_cdata($notify_link);
 		};
 	}
