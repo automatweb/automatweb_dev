@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.53 2003/05/02 13:22:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.54 2003/05/04 18:52:48 kristo Exp $
 // image.aw - image management
 /*
 	@default group=general
@@ -139,6 +139,7 @@ class image extends class_base
 		if ($idata)
 		{
 			$alt = $idata["meta"]["alt"];
+			if ($idata["meta"]["file2"] != "")
 			{
 				$size = getimagesize($idata["meta"]["file2"]);
 			};
