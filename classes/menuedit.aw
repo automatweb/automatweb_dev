@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.305 2003/12/09 09:33:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.306 2003/12/22 14:58:42 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -468,7 +468,7 @@ class menuedit extends aw_template
 						// need to check one more thing, IF prnt = 0 then fetch the parent
 						// of this object and see whether it has an alias. if so, do not
 						// let him access this menu directly
-						if ($prnt == 0)
+						if ($prnt == 0 && is_object($obj))
 						{
 							$pobj = obj($obj->parent());
 							if (strlen($pobj->alias()) > 0)
