@@ -331,7 +331,7 @@ class aip_change extends aw_template
 		$co->set_simple_config("aip_change::act_change_1", $act_1);
 		$co->set_simple_config("aip_change::act_change_2", $act_2);
 		$act_3 = aw_serialize($act_3);
-		$this->quote(&$act3);
+		$this->quote(&$act_3);
 		$co->set_simple_config("aip_change::act_change_3", $act_3);
 
 		if ($is_del && is_array($sel))
