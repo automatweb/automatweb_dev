@@ -18,7 +18,7 @@ class contents extends aw_template
 		$this->mc = get_instance("menu_cache");
 		$this->doc = get_instance("document");
 		
-		$this->per = get_instance("periods");
+		$this->per = get_instance("period");
 
 		$this->period = aw_global_get("act_per_id");
 
@@ -73,11 +73,22 @@ class contents extends aw_template
 		}
 		
 		$act_per = $this->per->get($this->period);
-                                                                                                                            
+
+		if (!empty($act_per["data"]["image"]))
+		{
+			$img = get_instance("image");
+			$dat = $img->get_image_by_id($act_per["data"]["image"]);
+			$imgurl = $dat["url"];
+		}
+		else
+		{
+			$imgurl = $this->cfg["baseurl"] . "/automatweb/images/trans.gif";
+		};
+
                 $this->vars(array(
-                        "act_per_comment" => $act_per["data"]["comment"],
-                        "act_per_name" => $act_per["description"],
-			"act_per_image_url" => ($act_per['data']['image']['url']) ? $act_per['data']['image']['url'] : "/automatweb/images.trans.gif", 
+                        "act_per_comment" => $act_per["comment"],
+                        "act_per_name" => $act_per["name"],
+			"act_per_image_url" => $imgurl, 
                         "MENU" => $this->l,
                 ));
 
