@@ -1,19 +1,8 @@
 <form action='reforb.{VAR:ext}' method=post name=ffrm>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <tr class="aste01">
-<td class="celltext" colspan=2><strong>Vormi roll</strong></td>
-</tr>
-<tr class="aste01">
-<td class="celltext">Tavaline:</td>
-<td class="celltext"><input type='radio' name='calendar_role' value={VAR:role_general_val} {VAR:role_general}></td>
-</tr>
-<tr class="aste01">
-<td class="celltext">Eventite sisestamine:</td>
-<td class="celltext"><input type='radio' name='calendar_role' value={VAR:role_entry_val} {VAR:role_entry}></td>
-</tr>
-<tr class="aste01">
-<td class="celltext">Ajavahemike defineerimine:</td>
-<td class="celltext"><input type='radio' name='calendar_role' value={VAR:role_define_val} {VAR:role_define}></td>
+<td class="celltext">Vormi roll</td>
+<td class="celltext"><select name="calendar_role">{VAR:roles}</select></td>
 </tr>
 <!-- SUB: GENERAL -->
 <tr class="aste01">
