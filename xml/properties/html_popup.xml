@@ -43,6 +43,16 @@
             <caption>Kõrgus</caption>
       </property>
       <property>
+            <name>scrollbars</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Kerimisribad</caption>
+      </property>
+      <property>
             <name>only_once</name>
             <table>objects</table>
             <field>meta</field>
