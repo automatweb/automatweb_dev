@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.16 2002/06/10 15:50:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.17 2002/06/26 11:22:40 duke Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
@@ -98,6 +98,7 @@ class aw_mail {
 					"data" => $args["data"],
 					));
 
+		
 		$this->headers = $res["headers"];
 
 		// Do we have a multipart message?
@@ -108,12 +109,15 @@ class aw_mail {
 				preg_match("/boundary=(.*)$/i",$this->headers["Content-Type"],$matches);
 				$this->headers["Boundary"] = $matches[1];
 			};
-			$separator = "--" . $this->headers["Boundary"]; // feel free to consult the RFC to understand this
+			// feel free to consult the RFC to understand this
+			$separator = "--" . $this->headers["Boundary"];
+
 			$msg_parts = explode($separator,$res["body"]);
 			$count = sizeof($msg_parts);
 			// we should always get at least 4 parts and it is safe to ignore first and last, since
 			// they do not contain anything of importance
 			// second will contain the body of the message, and starting from the third are the attaches
+
 			for ($i = 1; $i <= ($count - 2); $i++)
 			{
 				$block = $this->_parse_block(array(
@@ -173,6 +177,7 @@ class aw_mail {
 		// actually, I don't like this one not a single bit, but since I do not know the internals
 		// of PHP very well, I don't know whether parsing the string until the next linefeed
 		// is found, is very effective. So right now, I'll leave it as it is.
+		$data = trim($data);
 
 		$lines = preg_split("/\n/",$data);
 

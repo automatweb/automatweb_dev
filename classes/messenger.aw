@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.97 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.98 2002/06/26 11:24:01 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 lc_load("definition");
@@ -2645,7 +2645,7 @@ class messenger extends menuedit_light
 			"uid" => $uid,
 			"password" => $password,
 		);
-					
+
 		global $status_msg;
 		if ($id == "new")
 		{
@@ -2724,6 +2724,7 @@ class messenger extends menuedit_light
 
 		// tekitame uidl-ide nimekirja
 		$uidls = array();
+		// bug. What if I move the message into another folder?
 		$q = "SELECT uidl FROM messages WHERE folder = '$parent'";
 		$this->db_query($q);
 		while($row = $this->db_next())
@@ -3185,7 +3186,7 @@ class messenger extends menuedit_light
 		}
 		else
 		{
-			return quoted_printable_decode($string);
+			#quoted_printable_decode($string);
 		};
 
 		// take out any spaces between multiple encoded words
@@ -3194,11 +3195,12 @@ class messenger extends menuedit_light
 		$preceding = substr($string, 0, $pos); // save any preceding text
 
 		$search = substr($string, $pos + 2, 75); // the mime header spec says this is the longest a single encoded word can be
-    $d1 = strpos($search, '?');
+		$d1 = strpos($search, '?');
 		if (!is_int($d1)) 
 		{
 			return $string;
 		}
+
 
 		$charset = substr($string, $pos + 2, $d1);
 		$search = substr($search, $d1 + 1);
@@ -3249,6 +3251,7 @@ class messenger extends menuedit_light
 				$decoded = '=?' . $charset . '?' . $encoding . '?' . $encoded_text . '?=';
 				break;
 			}
+		print "rest = $rest<br>";
 
 		$retval = $preceding . $decoded . $this->MIME_decode($rest);
 		return quoted_printable_decode($retval);
