@@ -65,14 +65,14 @@
 
 </tr>
 <tr>
-	<td bgcolor=#ffffff align=left class='fgen_text'><b>Jrk</b></td>
+	<td bgcolor=#ffffff align=left class='fgen_text'><b>Grp</b></td>
 	<td   bgcolor=#ffffff class='fgen_text'><b>{VAR:LC_FORMS_NAME}</b></td>
 	<td   bgcolor=#ffffff class='fgen_text'><b>{VAR:LC_FORMS_TYPE}</b></td>
 	<td   bgcolor=#ffffff align=left class='fgen_text' colspan=2><b>{VAR:LC_FORMS_TEXT}</b></td>
 </tr>
 <!-- SUB: ELEMENT -->
 <tr>
-	<td   bgcolor=#ffffff ><input class='tekstikast_n' size=2 type='text' NAME='element_{VAR:element_id}_order' VALUE='{VAR:form_cell_order}'></td>
+	<td   bgcolor=#ffffff ><input class='tekstikast_n' size=2 type='text' NAME='element_{VAR:element_id}_grp' VALUE='{VAR:form_cell_grp}'></td>
 	<td   bgcolor=#ffffff class='fgen_text'><input class='tekstikast_n' size=20 type='text' NAME='element_{VAR:element_id}_name' VALUE='{VAR:el_name}'></td>
 	<td  bgcolor=#ffffff class='fgen_text'>{VAR:el_type}</td>
 	<td  bgcolor=#ffffff  colspan=2><input class='tekstikast_n' size=15 type='text' NAME='element_{VAR:element_id}_text' VALUE='{VAR:form_cell_text}'><span class='fgen_text'><a href='{VAR:chpos}'>M</a><input type='checkbox' name='sel[]' value='{VAR:element_id}'></span></td>
