@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.22 2001/11/06 10:03:32 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.23 2001/11/14 22:17:38 lauri Exp $
 global $orb_defs;
 $orb_defs["form_table"] = "xml";
 lc_load("form");
@@ -57,8 +57,25 @@ class form_table extends form_base
 		{
 			$this->upd_object(array("oid" => $id, "name" => $name, "comment" => $comment));
 			$t_forms = $this->get_forms_for_table($id);
-			$els = $this->get_elements_for_forms($t_forms,true);
+			
 
+			// noojah lae aga kõik formid sisse
+			
+			if (is_array($t_forms))
+			foreach($t_forms as $formid)
+			{
+				$formels=$this->get_form_elements(array("id"=> $formid,"key"=> "id"));
+				if (is_array($formels))
+				foreach($formels as $k_elid => $v_eldata)
+				{
+					$els[$k_elid]=$formid;
+					$elsubtypes[$formid][$k_elid]["subtype"]=$v_eldata["subtype"];
+				};
+			};
+			
+			
+			//$els = $this->get_elements_for_forms($t_forms,true);// elid => formid,elid=>formid
+			
 			$this->load_table($id);
 			$this->table["defs"] = array();
 			if (is_array($columns))
@@ -79,6 +96,15 @@ class form_table extends form_base
 								}
 							}
 						}
+			
+						//siin vaata kas on int tyyi column
+						if (count($ar)==1 && $elsubtypes[$els[$elid]][$elid]["subtype"]=="int")
+						{
+							//elid tuleb eelmisest loobist
+							//echo("column $r_c [id:$col ] has 1 el (id:$elid) of type".$elsubtypes[$els[$elid]][$elid]["subtype"]."<br>");
+							$this->table["defs"][$r_c]["show_int"]=1;
+						};
+						
 						$this->table["defs"][$r_c]["lang_title"] = $names[$r_c];
 						$this->table["defs"][$r_c]["sortable"] = $sortable[$r_c];
 						$r_c++;
@@ -89,6 +115,7 @@ class form_table extends form_base
 					}
 				}
 			}
+			
 
 			$this->table["moveto"] = array();
 			if (is_array($moveto))
@@ -732,7 +759,7 @@ class form_table extends form_base
 		{
 			$this->load_table($id);
 		}
-
+		
 		$xml = "<?xml version='1.0'?>
 			<tabledef>
 			<definitions>
@@ -761,6 +788,8 @@ class form_table extends form_base
 		for ($col = 0; $col < $this->table["cols"]; $col++)
 		{
 			$cc = $this->table["defs"][$col];
+			
+			$numericattr="";
 			if (is_array($cc["el"]))
 			{
 				if (count($cc["el"]) == 1)
@@ -777,6 +806,15 @@ class form_table extends form_base
 			{
 				$eln = $cc["el"];
 			}
+			
+			
+			if ($cc["show_int"])
+			{
+				$numericattr=" numeric=\"1\"";
+				if ($GLOBALS["dbg_num"]) echo("get_xml: set numericattr for el $eln<br>");
+			};
+			
+
 			global $lang_id;
 			if (isset($cc["lang_title"]))
 			{
@@ -791,9 +829,10 @@ class form_table extends form_base
 			{
 				$xml.=" sortable=\"1\" ";
 			}
-			$xml.="/>\n";
+			$xml.=" $numericattr />\n";
 		}
 		$awt->stop("form_table::get_xml");
+		if ($GLOBALS["dbg_num"]) {echo("<textarea cols=80 rows=40>$xml</textarea>");};
 		return $xml.="\n</data></tabledef>";
 	}
 
