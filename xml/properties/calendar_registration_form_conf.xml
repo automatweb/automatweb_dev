@@ -68,6 +68,17 @@
             <caption>Kuhu suunata peale t&amp;auml;itmist</caption>
       </property>
       <property>
+            <name>mail_to_user</name>
+            <table>objects</table>
+            <group>emails</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <default>1</default>
+            <caption>Saata mail registreerunud kasutajale</caption>
+      </property>
+      <property>
             <name>mail_to_addr</name>
             <table>objects</table>
             <group>emails</group>
