@@ -137,6 +137,16 @@
 			<function name="show_message">
 				<arguments>
 				<required name="id"/>
+				<define name="op" value="show"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="preview">
+			<function name="show_message">
+				<arguments>
+				<required name="id"/>
+				<define name="op" value="preview"/>
 				</arguments>
 			</function>
 		</action>
