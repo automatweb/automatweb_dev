@@ -16,7 +16,8 @@ if (!$tt->prog_acl("view", PRG_MENUEDIT))
 
 <frameset cols="30%,*" frameborder="yes" framespacing=1>
   <frame name="menuFrame" src="orb.aw?class=menuedit&action=folders" MARGINHEIGHT=0 MARGINWIDTH=0 <?php if (aw_ini_get("menuedit.tree_type") == "java") { echo "scrolling=no"; } else { echo "scrolling=auto"; } ?> >
-  <frame name="list" src="orb.aw?fastcall=1&class=menuedit&action=right_frame&parent=<?php echo $parent; ?>&period=<?php echo $period; ?>" MARGINHEIGHT=0 MARGINWIDTH=0 scrolling=auto>
+
+  <frame name="list" src="orb.aw?class=menuedit&action=right_frame&parent=<?php echo $parent; ?>&period=<?php echo $period; ?>" MARGINHEIGHT=0 MARGINWIDTH=0 scrolling=auto>
 </frameset>
 
 </html>
