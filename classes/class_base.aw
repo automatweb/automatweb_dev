@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.185 2003/12/09 12:34:06 duke Exp $
+// $Id: class_base.aw,v 2.186 2003/12/09 14:45:34 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -95,6 +95,15 @@ class class_base extends aw_template
 	function change($args = array())
 	{
 		$this->init_class_base();
+
+		$cb_values = aw_global_get("cb_values");
+		$has_errors = false;
+		if (!empty($cb_values))
+		{
+			$this->cb_values = $cb_values;
+			$has_errors = true;
+			aw_session_del("cb_values");
+		};
 
 		$cfgform_id = "";
 		$this->subgroup = $this->reltype = "";
@@ -318,6 +327,11 @@ class class_base extends aw_template
 		// and, if we are in that other layout mode, then we should probably remap all
 		// the links in the toolbar .. augh, how the hell do I do that?
 
+		if ($has_errors)
+		{
+			$cli->show_error();
+		}
+
 		foreach($resprops as $val)
 		{
 			$cli->add_property($val);
@@ -426,10 +440,9 @@ class class_base extends aw_template
 		else
 		{
 			$args["rawdata"] = $args;
-			$this->process_data($args);
+			$save_ok = $this->process_data($args);
 		};
 
-		$this->log_obj_change();
 
 		$args = array(
 			"id" => $this->id,
@@ -440,20 +453,33 @@ class class_base extends aw_template
 			"cb_view" => $form_data["cb_view"],
 		) + ( (isset($extraids) && is_array($extraids)) ? $extraids : array());
 
-		$action = "change";
-		$orb_class = get_class($this->orb_class);
-
-		if (method_exists($this->inst,"callback_mod_retval"))
+		if (!$save_ok)
 		{
-			$this->inst->callback_mod_retval(array(
-				"action" => &$action,
-				"args" => &$args,
-				"form_data" => &$form_data,
-				"request" => &$form_data,
-				"orb_class" => &$orb_class,
-				"clid" => $this->clid,
-				"new" => $this->new,
-			));
+			$args["parent"] = $form_data["parent"];
+			unset($args["id"]);
+			$action = "new";
+		}
+		else
+		{
+			$action = "change";
+		};
+		$orb_class = get_class($this->orb_class);
+	
+		if ($save_ok)
+		{
+			$this->log_obj_change();
+			if (method_exists($this->inst,"callback_mod_retval"))
+			{
+				$this->inst->callback_mod_retval(array(
+					"action" => &$action,
+					"args" => &$args,
+					"form_data" => &$form_data,
+					"request" => &$form_data,
+					"orb_class" => &$orb_class,
+					"clid" => $this->clid,
+					"new" => $this->new,
+				));
+			};
 		};
 		// rrrr, temporary hack
 		if (isset($this->id_only))
@@ -1462,8 +1488,6 @@ class class_base extends aw_template
 			return false;
 		};
 
-
-
 		if (($val["type"] == "toolbar") && is_object($val["toolbar"]))
 		{
 			$val["value"] = $val["toolbar"]->get_toolbar();
@@ -1473,6 +1497,11 @@ class class_base extends aw_template
 		{
 			$val["vcl_inst"]->sort_by();
 			$val["value"] = $val["vcl_inst"]->draw();
+		};
+
+		if (($val["type"] == "relmanager") && is_object($val["vcl_inst"]))
+		{
+			$val["value"] = $val["vcl_inst"]->get_html();
 		};
 
 		if ($val["type"] == "date_select")
@@ -1575,6 +1604,14 @@ class class_base extends aw_template
 	// !Figures out the value for property
 	function get_value(&$property)
 	{
+		if (is_array($this->cb_values) && !empty($this->cb_values[$property["name"]]["value"]))
+		{
+			$property["value"] = $this->cb_values[$property["name"]]["value"];
+			if (!empty($this->cb_values[$property["name"]]["error"]))
+			{
+				$property["error"] = $this->cb_values[$property["name"]]["error"];
+			};
+		};
 		$field = trim(($property["field"]) ? $property["field"] : $property["name"]);
 		$table = isset($property["table"]) ? $property["table"] : "";
 		if ($property["type"] == "relpicker" && isset($property["pri"]))
@@ -1722,18 +1759,26 @@ class class_base extends aw_template
 				continue;
 			};
 
-			if (($val["type"] == "toolbar") && ($this->orb_action != "submit") && !is_object($val["toolbar"]))
+			if ("submit" != $this->orb_action)
 			{
-				classload("toolbar");
-				$val["toolbar"] = new toolbar();
-			};
-			
-			if (($val["type"] == "table") && ($this->orb_action != "submit") && !is_object($val["vcl_inst"]))
-			{
-				load_vcl("table");
-				$val["vcl_inst"] = new aw_table(array(
-					"layout" => "generic",
-				));
+				if (($val["type"] == "toolbar") && !is_object($val["toolbar"]))
+				{
+					classload("toolbar");
+					$val["toolbar"] = new toolbar();
+				};
+
+				if (($val["type"] == "relmanager") && !is_object($val["vcl_inst"]))
+				{
+					$val["vcl_inst"] = get_instance("vcl/dropmenu");
+				};
+				
+				if (($val["type"] == "table") && !is_object($val["vcl_inst"]))
+				{
+					load_vcl("table");
+					$val["vcl_inst"] = new aw_table(array(
+						"layout" => "generic",
+					));
+				};
 			};
 
 			if (!empty($val["parent"]))
@@ -1761,7 +1806,13 @@ class class_base extends aw_template
 				};
 			}
 
+
 			$argblock["prop"] = &$val;
+			
+			if ($val["type"] == "relmanager")
+			{
+				$this->init_rel_manager(&$argblock);
+			};
 
 			// callbackiga saad muuta ühe konkreetse omaduse sisu
 			if ($callback)
@@ -2033,7 +2084,10 @@ class class_base extends aw_template
 
 		$args["clid_list"] = $clid_list;
 
-		$args["return_url"] = $this->mk_my_orb("change",array("id" => $id,"group" => $group),get_class($this->orb_class));
+		if (empty($args["return_url"]))
+		{
+			$args["return_url"] = $this->mk_my_orb("change",array("id" => $id,"group" => $group),get_class($this->orb_class));
+		};
 		$gen = $almgr->search($args + array(
 			"reltypes" => $this->get_rel_types(),
 			'rel_type_classes' => $rel_type_classes,//$this->get_rel_type_classes(),
@@ -2203,25 +2257,15 @@ class class_base extends aw_template
 				$lg = get_instance("languages");
 				$o->set_lang($lg->get_langid($rawdata["lang_id"]));
 			}
-			$o->save();
-			$id = $o->id();
-			aw_session_set("added_object",$id);//axel häkkis
-
-			if ($alias_to || $rawdata["alias_to"])
-			{
-				$_to = obj(($rawdata["alias_to"] ? $rawdata["alias_to"] : $alias_to));
-				$_to->connect(array(
-					"to" => $id,
-					"reltype" => ($rawdata["reltype"] ? $rawdata["reltype"] : $reltype),
-				));
-			};
+			//$o->save();
+			//$id = $o->id();
 
 			$new = true;
 			$this->id = $id;
 			
 		};
 
-		if ($this->classinfo["trans"]["text"] == 1)
+		if (!$new && $this->classinfo["trans"]["text"] == 1)
 		{
 			$o_t = get_instance("translate/object_translation");
 			$t_list = $o_t->translation_list($this->id, true);
@@ -2244,7 +2288,7 @@ class class_base extends aw_template
 				"load_defaults" => $new ? true : false,
 		));
 
-		if (isset($this->tables["objects"]))
+		if (!$new && isset($this->tables["objects"]))
 		{
 			$fields = $this->fields["objects"];
 			// for objects, we always load the parent field as well
@@ -2262,16 +2306,26 @@ class class_base extends aw_template
 			$this->coredata = $tmp;
 		};
 
+		if (!$new)
+		{
+			$this->load_object(array("id" => $this->id));
+			$this->load_obj_data(array("id" => $this->id));
+			$this->obj_inst = new object($this->id);
+		}
+		else
+		{
+			$this->obj_inst = $o;
+		};
 
-		$this->load_object(array("id" => $this->id));
-		$this->load_obj_data(array("id" => $this->id));
-		
-		$this->obj_inst = new object($this->id);
-
-		$metadata = array();
+		//$metadata = array();
 
 		$pvalues = array();
 
+		// this is here so I can keep things in the session
+		$propvalues = array();
+		$tmp = array();
+
+		// first, gather all the values.
 		foreach($realprops as $key => $property)
 		{
 			//do not call set_property for edit_only properties when a new
@@ -2300,8 +2354,6 @@ class class_base extends aw_template
 
 			$name = $property["name"];
 			$type = $property["type"];
-			$method = $property["method"];
-			$table = $property["table"];
 			$field = !empty($property["field"]) ? $property["field"] : $property["name"];
 				
 			$xval = isset($rawdata[$name]) ? $rawdata[$name] : "";
@@ -2324,11 +2376,29 @@ class class_base extends aw_template
 
 			$property["value"] = $xval;
 
+			$tmp[$key] = $property;
+
+			$propvalues[$property["name"]] = array(
+				"value" => $property["value"],
+			);
+		}
+
+		$realprops = $tmp;
+
+	
+		// now do the real job.
+		foreach($realprops as $key => $property)
+		{
+			$name = $property["name"];
+			$type = $property["type"];
+			$method = $property["method"];
+			$table = $property["table"];
+			$field = !empty($property["field"]) ? $property["field"] : $property["name"];
 
                         $argblock = array(
                                 "prop" => &$property,
                                 "obj" => &$this->coredata,
-                                "metadata" => &$metadata,
+                                //"metadata" => &$metadata,
                                 "form_data" => &$rawdata,
 				"request" => &$rawdata,
                                 "new" => $new,
@@ -2347,6 +2417,25 @@ class class_base extends aw_template
 			if ($callback)
 			{
 				$status = $this->inst->set_property($argblock);
+				// XXX: what if one set_property changes a value and
+				// other raises an error. Then we will have the original
+				// value in the session. Is that a problem?
+			};
+
+			if (PROP_FATAL_ERROR == $status)
+			{
+				// so what the fuck do I do now?
+				// I need to give back a sensible error message
+				// and allow the user to correct the values in the form
+
+				// I need to remember the values .. oh fuck, fuck, fuck, fuck
+				
+				// now register the variables in the session
+
+				// I don't even want to think about serializers right about now.
+				$propvalues[$name]["error"] = $argblock["prop"]["error"];
+				aw_session_set("cb_values",$propvalues);
+				return false;
 			};
 
 			// oh well, bail out then.
@@ -2401,7 +2490,7 @@ class class_base extends aw_template
 			};
 
 			// XXX: this is not good!
-			if ( ($type == "relpicker") && isset($property["pri"]) )
+			if (!$new &&  ($type == "relpicker") && isset($property["pri"]) )
 			{
 				$realclid =  constant($property["clid"]);
 				// first zero out all other pri fields
@@ -2507,6 +2596,22 @@ class class_base extends aw_template
 
 		$this->obj_inst->save();
 
+		$this->id = $this->obj_inst->id();
+
+		if ($new)
+		{
+			aw_session_set("added_object",$id);//axel häkkis
+
+			if ($alias_to || $rawdata["alias_to"])
+			{
+				$_to = obj(($rawdata["alias_to"] ? $rawdata["alias_to"] : $alias_to));
+				$_to->connect(array(
+					"to" => $this->obj_inst->id(),
+					"reltype" => ($rawdata["reltype"] ? $rawdata["reltype"] : $reltype),
+				));
+			};
+		};
+
 		if (method_exists($this->inst,"callback_post_save"))
 		{
 			// you really shouldn't attempt something fancy like trying
@@ -2514,7 +2619,7 @@ class class_base extends aw_template
 			// but why would you want to, it's called post_save handler
 			// for a reason
 			$this->inst->callback_post_save(array(
-				"id" => $this->id,
+				"id" => $this->obj_inst->id(),
 				"obj_inst" => $this->obj_inst,
 				"form_data" => &$args,
 				"request" => &$args,
@@ -2684,6 +2789,58 @@ class class_base extends aw_template
 			$retval[$row["oid"]] = $row["name"];
 		};	
 		return $retval;
+	}
+
+	function init_rel_manager($arr)
+	{
+		$prop = &$arr["prop"];
+		$clids = $this->relinfo[$prop["reltype"]]["clid"];
+		if (empty($clids))
+		{
+			// no clids defined? bail out
+			return "";
+		};
+
+		if (!is_array($clids))
+		{
+			$clids = array($clids);
+		};
+
+		$new_name = $prop["name"] . "_new";
+		$search_name = $prop["name"] . "_search";
+
+		$prop["vcl_inst"]->start_menu(array(
+			"name" => $new_name,
+			"tooltip" => "Uus",
+		));
+		
+		$prop["vcl_inst"]->start_menu(array(
+			"name" => $search_name,
+			"tooltip" => "Otsi",
+			"img" => "search.gif",
+		));
+
+		$ret_url = $this->mk_my_orb("change",array("id" => $arr["request"]["id"],"group" => $arr["request"]["group"]));
+		foreach($clids as $clid)
+		{
+			$cln = constant($clid);
+			$classinf = $this->cfg["classes"][$cln];
+			$prop["vcl_inst"]->add_item(array(
+				"parent" => $new_name,
+				"text" => "Uus " . $classinf["name"],
+			));
+
+			$prop["vcl_inst"]->add_item(array(
+				"parent" => $search_name,
+				"text" => "Otsi " . $classinf["name"],
+				"link" => $this->mk_my_orb("search_aliases",array(
+					"id" => $arr["request"]["id"],
+					"return_url" => urlencode($ret_url),
+					"reltype" => $this->relinfo[$prop["reltype"]]["value"],
+					"objtype" => constant($clid),
+				)),
+			));
+		};
 	}
 
 };
