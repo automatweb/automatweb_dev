@@ -3,7 +3,7 @@
       <property>
             <name>name</name>
             <table>objects</table>
-            <group>general</group>
+            <group>generalinf</group>
             <type>textbox</type>
             <field>name</field>
             <caption>Nimi</caption>
@@ -11,7 +11,7 @@
       <property>
             <name>amount</name>
             <table>aw_prisma_orders</table>
-            <group>general</group>
+            <group>generalinf</group>
             <type>textbox</type>
             <size>5</size>
             <field>aw_amount</field>
@@ -20,26 +20,15 @@
       <property>
             <name>paper_format</name>
             <table>aw_prisma_orders</table>
-            <group>general</group>
+            <group>generalinf</group>
             <type>textbox</type>
             <field>aw_paper_format</field>
             <caption>Formaat</caption>
       </property>
       <property>
-            <name>sel_resources</name>
-            <table>aw_prisma_orders</table>
-            <group>general</group>
-            <type>chooser</type>
-            <multiple>1</multiple>
-            <store>connect</store>
-            <reltype>RELTYPE_RESOURCE</reltype>
-            <field>sel_resources</field>
-            <caption>Vali ressursid</caption>
-      </property>
-      <property>
             <name>priority</name>
             <table>objects</table>
-            <group>general</group>
+            <group>generalinf</group>
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
@@ -49,7 +38,7 @@
       <property>
             <name>action</name>
             <table>aw_prisma_orders</table>
-            <group>general</group>
+            <group>generalinf</group>
             <type>text</type>
             <store>no</store>
             <field>action</field>
@@ -58,11 +47,23 @@
       <property>
             <name>move_action</name>
             <table>aw_prisma_orders</table>
-            <group>general</group>
+            <group>generalinf</group>
             <type>select</type>
             <store>no</store>
             <field>move_action</field>
             <caption>Muuda aktiivset tegevust</caption>
+      </property>
+      <property>
+            <name>sel_resources</name>
+            <table>aw_prisma_orders</table>
+            <group>selres</group>
+            <type>chooser</type>
+            <orient>vertical</orient>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <reltype>RELTYPE_RESOURCE</reltype>
+            <field>sel_resources</field>
+            <caption>Vali ressursid</caption>
       </property>
       <property>
             <name>resources</name>
@@ -271,8 +272,15 @@
             <no_comment>1</no_comment>
       </classinfo>
       <groupinfo>
+            <generalinf>
+                  <caption>Esmased andmed</caption>
+                  <parent>general</parent>
+            </generalinf>
+            <selres>
+                  <caption>Vali ressursid</caption>
+            </selres>
             <resources>
-                  <caption>Ressursid</caption>
+                  <caption>Jaota ressursid</caption>
             </resources>
             <work>
                   <caption>T&amp;ouml;&amp;ouml;de seis</caption>
@@ -286,19 +294,20 @@
                   <parent>work</parent>
             </work_cal>
             <data>
-                  <caption>Muud andmed</caption>
+                  <caption>Tr&amp;uuml;kise andmed</caption>
+                  <parent>general</parent>
             </data>
             <montage>
                   <caption>Montaaz</caption>
-                  <parent>data</parent>
+                  <parent>general</parent>
             </montage>
             <print>
                   <caption>Tr&amp;uuml;kk</caption>
-                  <parent>data</parent>
+                  <parent>general</parent>
             </print>
             <postprod>
                   <caption>J&amp;auml;relt&amp;ouml;&amp;ouml;tlus</caption>
-                  <parent>data</parent>
+                  <parent>general</parent>
             </postprod>
       </groupinfo>
       <tableinfo>

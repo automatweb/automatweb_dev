@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_center.aw,v 1.2 2004/05/17 14:18:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_center.aw,v 1.3 2004/06/02 10:36:36 kristo Exp $
 // prisma_center.aw -  
 /*
 
@@ -489,13 +489,21 @@ class prisma_center extends class_base
 
 
 		$j_b_r = array();
+		$pr_by_event = array();
 		for($o = $resource_list->begin(); !$resource_list->end(); $o = $resource_list->next())
 		{
 			$j_b_r[$o->id()] = array();
 			$res_i = $o->instance();
 			foreach($res_i->get_events_for_resource(array("id" => $o->id())) as $evid)
 			{
-				$j_b_r[$o->id()][] = obj($evid);
+				$tmp = obj($evid);
+				$j_b_r[$o->id()][] = $tmp;
+				$job_o = obj($tmp->meta("job_id"));
+				$processing = $job_o->meta("processing");
+				if ($processing[$o->id()] == 1)
+				{
+					$pr_by_event[$evid] = 1;
+				}
 			}
 		}
 
@@ -544,11 +552,30 @@ class prisma_center extends class_base
 			for($i = 0; $i < 96; $i++)
 			{
 				$tsp = time() - (time() % (24*3600)) + ($i*(3600/4));
-				$job = $this->get_job_for_time($tsp, $j_b_r[$o->id()]);
+				$tmp = $this->get_job_for_time($tsp, $j_b_r[$o->id()]);
+				$col = "#FFFFFF";
+				if (is_object($tmp))
+				{
+					$job = $tmp->name();
+					$col = ($colors[$job] ? $colors[$job]  : "#FFFFFF");
+					if ($pr_by_event[$tmp->id()])
+					{
+						$col = "#FF0000";
+					}
+					$job = html::href(array(
+						"url" => $this->mk_my_orb("change", array("id" => $tmp->meta("job_id")), CL_PRISMA_ORDER),
+						"caption" => $job
+					));
+				}
+				else
+				{
+					$job = " - ";
+				}
+
 				$this->vars(array(
 					"time" => date("H:i", $tsp),
 					"event" => ($shown[$job] ? "" : $job),
-					"color" => ($colors[$job] ? $colors[$job]  : "#FFFFFF"),
+					"color" => $col,
 				));
 				$hour .= $this->parse("HOUR");
 				$shown[$job] = true;
@@ -607,9 +634,18 @@ class prisma_center extends class_base
 				));
 				for($o = $resource_list->begin(); !$resource_list->end(); $o = $resource_list->next())
 				{
+					$_jon = $this->get_job_for_time($ws + ($day * 3600 * 24) + $i * 3600, $j_b_r[$o->id()]);
+					if (is_object($_jon))
+					{
+						$_jon = $_jon->name();
+					}
+					else
+					{
+						$_jon = " - ";
+					}
 					$this->vars(array(
 						"res_name" => $o->name(),
-						"job_name" => $this->get_job_for_time($ws + ($day * 3600 * 24) + $i * 3600, $j_b_r[$o->id()])
+						"job_name" => $_jon
 					));
 
 					$res_s_h .= $this->parse("RESOURCE_H");
@@ -654,10 +690,10 @@ class prisma_center extends class_base
 		{
 			if ($ts >= $job->prop("start1") && $ts < $job->prop("end"))
 			{
-				return $job->name();
+				return $job;
 			}
 		}
-		return " - ";
+		return false;
 	}
 
 	function get_rand_color()

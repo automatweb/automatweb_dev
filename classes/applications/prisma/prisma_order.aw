@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_order.aw,v 1.2 2004/05/17 14:18:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_order.aw,v 1.3 2004/06/02 10:36:36 kristo Exp $
 // prisma_order.aw - Printali Tr&uuml;kis 
 /*
 
@@ -7,11 +7,13 @@
 
 @tableinfo aw_prisma_orders index=id master_table=objects master_index=brother_of
 
+@groupinfo generalinf caption="Esmased andmed" parent=general
 @default table=objects
-@default group=general
+@default group=generalinf
 @default table=aw_prisma_orders
 
-@property name type=textbox table=objects field=name
+
+@property name type=textbox table=objects field=name 
 @caption Nimi
 
 @property amount type=textbox size=5 field=aw_amount
@@ -19,9 +21,6 @@
 
 @property paper_format type=textbox field=aw_paper_format
 @caption Formaat
-
-@property sel_resources type=chooser multiple=1 store=connect reltype=RELTYPE_RESOURCE
-@caption Vali ressursid
 
 @property priority type=textbox table=objects field=meta method=serialize size=5
 @caption Prioriteet
@@ -32,8 +31,13 @@
 @property move_action type=select store=no
 @caption Muuda aktiivset tegevust
 
+@groupinfo selres caption="Vali ressursid"
 
-@groupinfo resources caption="Ressursid"
+@property sel_resources type=chooser orient=vertical multiple=1 store=connect reltype=RELTYPE_RESOURCE group=selres
+@caption Vali ressursid
+
+
+@groupinfo resources caption="Jaota ressursid"
 
 @property resources type=table group=resources no_caption=1
 
@@ -54,7 +58,7 @@
 
 
 ////////////// other data, ignore for now
-@groupinfo data caption="Muud andmed"
+@groupinfo data caption="Tr&uuml;kise andmed" parent="general"
 @default group=data
 
 @property pages_content type=textbox size=5 field=aw_pages_content
@@ -98,7 +102,7 @@
 @caption N&auml;idis
 
 
-@groupinfo montage caption="Montaaz" parent=data
+@groupinfo montage caption="Montaaz" parent=general 
 @defeult group=montage
 
 @property plates type=textbox size=5 field=aw_plates
@@ -114,11 +118,11 @@
 @caption KAAS
 
 
-@groupinfo print caption="Tr&uuml;kk" parent=data
+@groupinfo print caption="Tr&uuml;kk" parent=general
 @default group=print
 
 
-@groupinfo postprod caption="J&auml;relt&ouml;&ouml;tlus" parent=data
+@groupinfo postprod caption="J&auml;relt&ouml;&ouml;tlus" parent=general
 @default group=postprod
 
 @property pp_cut type=textbox field=aw_pp_cut
@@ -482,7 +486,7 @@ class prisma_order extends class_base
 			}
 		}
 
-		$arr["obj_inst"]->set_meta("order", $arr["request"]["order"]);
+		$arr["obj_inst"]->set_meta("pred", $arr["request"]["pred"]);
 		$arr["obj_inst"]->set_meta("length", $arr["request"]["length"]);
 		$arr["obj_inst"]->set_meta("processing", $arr["request"]["processing"]);
 		//echo "set processing as ".dbg::dump($arr["request"]["processing"])." <br>";
@@ -494,6 +498,12 @@ class prisma_order extends class_base
 		$t->define_field(array(
 			"name" => "order",
 			"caption" => "J&auml;jekord",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "pred",
+			"caption" => "Eeldustegevused",
 			"align" => "left"
 		));
 
@@ -542,6 +552,7 @@ class prisma_order extends class_base
 		$t->set_sortable(false);
 
 		$order = $arr["obj_inst"]->meta("order");
+		$pred = $arr["obj_inst"]->meta("pred");
 		$length = $arr["obj_inst"]->meta("length");
 		$processing = $arr["obj_inst"]->meta("processing");
 		//echo dbg::dump($processing);
@@ -557,6 +568,11 @@ class prisma_order extends class_base
 			"minute" => ""
 		));
 
+		if (!is_array($order))
+		{
+			$order = array();
+		}
+		$ord_change = false;
 		$srl = $this->_get_sel_resource_list($arr["obj_inst"]);
 		foreach($srl as $resid)
 		{
@@ -566,8 +582,21 @@ class prisma_order extends class_base
 			}
 			if (!$order[$resid])
 			{
-				$order[$resid] = 0; 
+				if (count($order) < 1)
+				{
+					$order[$resid] = 1;
+				}
+				else
+				{
+					$order[$resid] = max(array_values($order)) + 1; 
+				}
+				$ord_change = true;
 			}
+		}
+		if ($ord_change)
+		{
+			$arr["obj_inst"]->set_meta("order", $order);
+			$arr["obj_inst"]->save();
 		}
 
 
@@ -594,35 +623,26 @@ class prisma_order extends class_base
 					"priority" => $this->cur_priority
 				);
 
-				$m_pri = $order[$resid];
-				// find an event with the next smallest priority and longest time
-				// and then give the start time
-				$next_smallest = -10000000;
-				foreach($lut as $l_pri => $l_resid)
+				if ($pred[$resid] != "")
 				{
-					if ($l_pri > $next_smallest && $l_pri < $m_pri)
+					$max_t = 0;
+					foreach(explode(",", $pred[$resid]) as $pred_num)
 					{
-						$next_smallest = $l_pri;
+						// pred_num is index, not resid
+						$pred_id = array_search($pred_num, $order);
+						$max_t = max($max_t, $this->req_get_time_for_resource($pred_id, $length, $order, $lut, $event_ids, $pred) + ($length[$pred_id] * 3600));
 					}
+					$params["min_time"] = $max_t;
 				}
-
-				if ($next_smallest > -10000000)
-				{
-					// get start time and duration for that resource
-					// BUT. we might not yet have a time for that resource. dang, so we gots to recurse
-					if (!$this->times_by_resource[$lut[$next_smallest]])
-					{
-						$this->req_get_time_for_resource($lut[$next_smallest], $length, $order, $lut, $event_ids);
-					}
-
-					$params["min_time"] = $this->times_by_resource[$lut[$next_smallest]] + ($length[$lut[$next_smallest]] * 3600);
-				}
-
 	
 				$ts = $res_i->get_next_avail_time_for_resource($params);
 				$this->times_by_resource[$resid] = $ts;
 			}
 		}
+/*		foreach($this->times_by_resource as $resid => $ts)
+		{
+			echo "resid = ".$resid." ts = ".date("d.m.Y H:i", $ts)." <br>";
+		}*/
 
 		foreach($srl as $resid)
 		{
@@ -676,17 +696,23 @@ class prisma_order extends class_base
 			{
 				$cur = $curevent->name();
 			}
-			
+
+
+			if (!$order[$resid])
+			{
+				$order[$resid] = ++$cur_cnt;
+			}			
 			$t->define_data(array(
 				"name" => html::href(array(
 					"url" => $this->mk_my_orb("change", array("id" => $resid, "group" => "calendar"), CL_WORKFLOW_RESOURCE),
 					"caption" => $reso->name()
 				)),
 				"time" => $time,
-				"order" => html::textbox(array(
-					"name" => "order[$resid]",
+				"order" => $order[$resid],
+				"pred" => html::textbox(array(
+					"name" => "pred[$resid]",
 					"size" => 5,
-					"value" => $order[$resid]
+					"value" => $pred[$resid]
 				)),
 				"length" => html::textbox(array(
 					"name" => "length[$resid]",
@@ -698,6 +724,8 @@ class prisma_order extends class_base
 				"current" => $cur
 			));
 		}
+
+		//$arr["obj_inst"]->set_meta("order", $order);
 	}
 
 	function save_sel_resources($arr)
@@ -797,7 +825,8 @@ class prisma_order extends class_base
 	function get_lut_by_pri($order, $length)
 	{
 		$lut = array();
-		foreach($order as $t_resid => $ov)
+		$awa = new aw_array($order);
+		foreach($awa->get() as $t_resid => $ov)
 		{
 			if (isset($lut[$ov]))
 			{
@@ -817,7 +846,7 @@ class prisma_order extends class_base
 		return $lut;
 	}
 
-	function req_get_time_for_resource($resid, $length, $order, $lut, $event_ids)
+	function req_get_time_for_resource($resid, $length, $order, $lut, $event_ids, $pred)
 	{
 		$reso = obj($resid);
 		$res_i = $reso->instance();
@@ -829,31 +858,19 @@ class prisma_order extends class_base
 			"priority" => $this->cur_priority
 		);
 
-		$m_pri = $order[$resid];
-		// find an event with the next smallest priority and longest time
-		// and then give the start time
-		$next_smallest = -10000000;
-		foreach($lut as $l_pri => $l_resid)
+		if ($pred[$resid] != "")
 		{
-			if ($l_pri > $next_smallest && $l_pri < $m_pri)
+			$max_t = 0;
+			foreach(explode(",", $pred[$resid]) as $pred_num)
 			{
-				$next_smallest = $l_pri;
+				// pred_num is index, not resid
+				$pred_id = array_search($pred_num, $order);
+				//echo "pred_id for $pred_num = $pred_id <br>";
+				$max_t = max($max_t, $this->req_get_time_for_resource($pred_id, $length, $order, $lut, $event_ids, $pred) + ($length[$pred_id] * 3600));
+				//echo "got max_t for $resid predecessor $pred_num : ".date("d.m.Y H:i", $max_t)." <br>";
 			}
+			$params["min_time"] = $max_t;
 		}
-
-		if ($next_smallest > -10000000)
-		{
-			// get start time and duration for that resource
-			//echo "must get start time for resource $resid after resource ".$lut[$next_smallest]." <br>";
-			// BUT. we might not yet have a time for that resource. dang, so we gots to recurse
-			if (!$this->times_by_resource[$lut[$next_smallest]])
-			{
-				$this->req_get_time_for_resource($lut[$next_smallest], $length, $order, $lut, $event_ids);
-			}
-
-			$params["min_time"] = $this->times_by_resource[$lut[$next_smallest]];
-		}
-
 
 		$ts = $res_i->get_next_avail_time_for_resource($params);
 		$this->times_by_resource[$resid] = $ts;
@@ -895,13 +912,20 @@ class prisma_order extends class_base
 				$j_length = $job_o->meta("length");
 				$j_order = $job_o->meta("order");
 				$j_lut = $this->get_lut_by_pri($j_order, $j_length);
+				$j_pred = $job_o->meta("pred");
+				//echo "pred = ".dbg::dump($j_pred)." order = ".dbg::dump($j_order)." for $job_id meta = ".dbg::dump($job_o->meta())."<br>";
 				$overlap_resid = array_search($overlap->id(), $j_events);
+/*				if (!$overlap_resid)
+				{
+					continue;
+				}*/
+//				echo "overlap_resid = $overlap_resid , overlap id = ".$overlap->id()." j_evs = ".dbg::dump($j_events)." <br>";
 
 
 				//		find first avail time
 				$this->cur_priority = $overlap->meta("task_priority");
 				$this->times_by_resource = array();
-				$ts = $this->req_get_time_for_resource($overlap_resid, $j_length, $j_order, $j_lut, array($overlap->id() => $overlap->id()));
+				$ts = $this->req_get_time_for_resource($overlap_resid, $j_length, $j_order, $j_lut, array($overlap->id() => $overlap->id()), $j_pred);
 				//echo "got new ts as ".date("d.m.Y H:i", $ts)." len = $overlap_len <br>";
 				$overlap->set_prop("start1", $ts);
 				$overlap->set_prop("end", $ts + $overlap_len);
@@ -918,7 +942,7 @@ class prisma_order extends class_base
 						continue;
 					}
 
-					$ts = $this->req_get_time_for_resource($j_resid, $j_length, $j_order, $j_lut, array($j_evid => $j_evid));
+					$ts = $this->req_get_time_for_resource($j_resid, $j_length, $j_order, $j_lut, array($j_evid => $j_evid), $j_pred);
 					$j_evo = obj($j_evid);
 					if ($ts > $j_evo->prop("start1"))
 					{
