@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.34 2004/12/01 14:04:54 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.35 2004/12/02 15:41:14 dragut Exp $
 
 /*
 
-@classinfo syslog_type=ST_OBJECT_TREE relationmgr=yes
+@classinfo syslog_type=ST_OBJECT_ relationmgr=yes
 
 @groupinfo folders caption=Kaustad
 @groupinfo clids caption=Objektit&uuml;&uuml;bid
@@ -47,7 +47,7 @@
 @caption Klassid
 
 @default group=styles
-@property style_donor type=relpicker reltype=RELTYPE_STYLE_DONOR 
+@property style_donor type=relpicker reltype=LTYPE_STY_DONOR 
 @caption Stiilide doonor
 
 @property title_bgcolor type=colorpicker 
@@ -59,29 +59,29 @@
 @property odd_bgcolor type=colorpicker 
 @caption Paaritu rea taustav&auml;rv
 
-@property header_css type=relpicker reltype=RELTYPE_CSS 
+@property header_css type=relpicker reltype=LTYPE_CSS 
 @caption Pealkirja stiil
 
-@property line_css type=relpicker reltype=RELTYPE_CSS 
-@caption Rea stiil
+@property line_css type=relpicker reltype=LTYPE_CSS 
+@caption a stiil
 
 @default group=columns
 @property columns type=callback callback=callback_get_columns 
 @caption Tulbad
 
-@reltype FOLDER value=1 clid=CL_MENU,CL_SERVER_FOLDER
+@reltype FOLDER value=1 clid=CL_MENU,CL_SERR_FOLDER
 @caption kataloog
 
 @reltype ADD_TYPE value=2 clid=CL_OBJECT_TYPE
 @caption lisatav objektit&uuml;&uuml;p
 
-@reltype ALL_ACCESS_GRP value=3 clid=CL_GROUP
+@reltype ALL_ACSS_GRP value=3 clid=CL_GROUP
 @caption projekti haldaja grupp
 
 @reltype CSS value=4 clid=CL_CSS
 @caption css stiil
 
-@reltype STYLE_DONOR value=5 clid=CL_OBJECT_TREEVIEW
+@reltype STY_DONOR value=5 clid=CL_OBJECT_VIEW
 @caption stiilide doonor
 
 */
@@ -104,7 +104,7 @@ class object_treeview extends class_base
 	{
 		$this->init(array(
 			'tpldir' => 'contentmgmt/object_tree',
-			'clid' => CL_OBJECT_TREE
+			'clid' => CL_OBJECT_
 		));
 		$this->sub_merge = 1;
 	}
@@ -166,7 +166,7 @@ class object_treeview extends class_base
 		// and their cfgforms
 		// and make a nice little lut from them.
 		$class2cfgform = array();
-		foreach($ob->connections_from(array("type" => RELTYPE_ADD_TYPE)) as $c)
+		foreach($ob->connections_from(array("type" => LTYPE_ADD_TYPE)) as $c)
 		{
 			$addtype = $c->to();
 			if ($addtype->prop("use_cfgform"))
@@ -191,7 +191,7 @@ class object_treeview extends class_base
 				list($url,$target,$caption) = $li->draw_link($oid);
 			}
 			else
-			if ($od->class_id() == CL_FILE)
+			if ($od->class_id() == CL_FI)
 			{
 				$fi = get_instance("file");
 				$fd = $fi->get_file_by_id($oid);
@@ -214,7 +214,7 @@ class object_treeview extends class_base
 				));
 			}
 			else
-			if ($od->class_id() == CL_SERVER_FOLDER)
+			if ($od->class_id() == CL_SERR_FOLDER)
 			{
 				$sf = get_instance("contentmgmt/server_folder");
 				$fl = $sf->get_contents($od);
@@ -254,12 +254,12 @@ class object_treeview extends class_base
 						"fileSizeKBytes" => $fileSizeKBytes,
 						"fileSizeMBytes" => $fileSizeMBytes,
 						"comment" => "",
-						"type" => $classlist[CL_FILE]["name"],
+						"type" => $classlist[CL_FI]["name"],
 						"add_date" => $this->time2date(filemtime($fqfn), 2),
 						"mod_date" => $this->time2date(filemtime($fqfn), 2),
 						"adder" => $fowner["name"],
 						"modder" => $fowner["name"],
-						"icon" => image::make_img_tag(icons::get_icon_url(CL_FILE, $_file)),
+						"icon" => image::make_img_tag(icons::get_icon_url(CL_FI, $_file)),
 						"bgcolor" => $this->_get_bgcolor($ob, $this->cnt),
 						"acl_obj" => $od,
 						"tree_obj" => $ob,
@@ -297,7 +297,7 @@ class object_treeview extends class_base
 			if ($this->can("delete", $od->id()))
 			{
 				$delete = html::href(array(
-					"url" => $this->mk_my_orb("delete", array("id" => $od->id(), "return_url" => urlencode(aw_ini_get("baseurl").aw_global_get("REQUEST_URI")))),
+					"url" => $this->mk_my_orb("delete", array("id" => $od->id(), "return_url" => urlencode(aw_ini_get("baseurl").aw_global_get("QUEST_URI")))),
 					"caption" => html::img(array(
 						"border" => 0,
 						"url" =>  aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif"
@@ -342,11 +342,11 @@ class object_treeview extends class_base
 			$no_tb = $this->parse("HEADER_NO_TOOLBAR");
 		}
 		$this->vars(array(
-			"FILE" => $c,
+			"FI" => $c,
 			"HEADER_HAS_TOOLBAR" => $tb,
 			"HEADER_NO_TOOLBAR" => $no_tb,
 			"reforb" => $this->mk_reforb("submit_show", array(
-				"return_url" => aw_global_get("REQUEST_URI"),
+				"return_url" => aw_global_get("QUEST_URI"),
 				"subact" => "0"
 			))
 		));
@@ -436,7 +436,7 @@ class object_treeview extends class_base
 		{
 			// if parent can't be found. then get the objects from all the root folders
 			$con = $ob->connections_from(array(
-				"type" => RELTYPE_FOLDER
+				"type" => LTYPE_FOLDER
 			));
 
 			$ignoreself = $ob->meta("ignoreself");
@@ -471,7 +471,7 @@ class object_treeview extends class_base
 
 		$ol = new object_list(array(
 			"parent" => $parent,
-			"status" => $ob->prop("show_notact") ? array(STAT_ACTIVE, STAT_NOTACTIVE) : STAT_ACTIVE,
+			"status" => $ob->prop("show_notact") ? array(STAT_ACTI, STAT_NOTACTI) : STAT_ACTI,
 			"class_id" => $ob->meta('clids'),
 			"sort_by" => $sby,
 			"lang_id" => array()
@@ -503,7 +503,7 @@ class object_treeview extends class_base
 		foreach($awa->get() as $p_id)
 		{
 			$p_o = obj($p_id);
-			if ($p_o->class_id() == CL_SERVER_FOLDER)
+			if ($p_o->class_id() == CL_SERR_FOLDER)
 			{
 				$ol->add($p_o);
 			}
@@ -561,7 +561,7 @@ class object_treeview extends class_base
 		}
 																		
 		$adm_c = $ob->connections_from(array(
-			"type" => RELTYPE_ALL_ACCESS_GRP
+			"type" => LTYPE_ALL_ACSS_GRP
 		));
 		foreach($adm_c as $adm_conn)
 		{
@@ -576,7 +576,7 @@ class object_treeview extends class_base
 		$access_by_parent = array();
 
 		$conns = $ob->connections_from(array(
-			"type" => RELTYPE_FOLDER
+			"type" => LTYPE_FOLDER
 		));
 		foreach($conns as $conn)
 		{
@@ -593,7 +593,7 @@ class object_treeview extends class_base
 				$_ot = new object_tree(array(
 					"class_id" => CL_MENU,
 					"parent" => $c_o->id(),
-					"status" => array(STAT_ACTIVE,STAT_NOTACTIVE),
+					"status" => array(STAT_ACTI,STAT_NOTACTI),
 					"lang_id" => array()
 				));
 				$cur_ids = $_ot->ids();
@@ -611,7 +611,7 @@ class object_treeview extends class_base
 				{
 					$c_id_o = obj($c_id);
 					$c_id_gr = $c_id_o->connections_from(array(
-						"type" => RELTYPE_ACL_GROUP
+						"type" => LTYPE_ACL_GROUP
 					));
 					foreach($c_id_gr as $c_id_gr_c)
 					{
@@ -653,7 +653,7 @@ class object_treeview extends class_base
 			"root_url" => "",
 			"root_icon" => "",
 			"tree_id" => "objtr" . $ob->id(),
-			"type" => TREE_DHTML, //$ob->meta('tree_type'),
+			"type" => _DHTML, //$ob->meta('tree_type'),
 			"persist_state" => 1
 		));
 
@@ -698,7 +698,7 @@ class object_treeview extends class_base
 		// 
 		// hehe, heuristics rule ;)
 		$t_c = $ob->connections_to(array(
-			"type" => 8,	// RELTYPE_OBJ_TREE from menu
+			"type" => 8,	// LTYPE_OBJ_ from menu
 			"from.class_id" => CL_MENU
 		));
 		
@@ -811,7 +811,7 @@ class object_treeview extends class_base
 
 
 		$conns = $args["obj_inst"]->connections_from(array(
-			"type" => RELTYPE_FOLDER
+			"type" => LTYPE_FOLDER
 		));
 
 		foreach($conns as $conn)
@@ -853,7 +853,7 @@ class object_treeview extends class_base
 	function _get_add_toolbar($ob)
 	{
 		$types_c = $ob->connections_from(array(
-			"type" => RELTYPE_ADD_TYPE
+			"type" => LTYPE_ADD_TYPE
 		));
 
 		$menu = "";
@@ -867,12 +867,12 @@ class object_treeview extends class_base
 			"name" => "add",
 			"tooltip" => "Uus",
 		));
-		if ($p_o->class_id() == CL_SERVER_FOLDER)
+		if ($p_o->class_id() == CL_SERR_FOLDER)
 		{
 			$tb->add_menu_item(array(
 				"parent" => "add",
 				"url" => $this->mk_my_orb("add_file", array("id" => $p_o->id(), "section" => aw_global_get("section")), "server_folder"),
-				"text" => $classes[CL_FILE]["name"]
+				"text" => $classes[CL_FI]["name"]
 			));
 		}
 		else
@@ -995,9 +995,9 @@ class object_treeview extends class_base
 		if ($prop["name"] == "tree_type")
 		{
 			$prop["options"] = array(
-				TREE_HTML => "HTML",
-				TREE_JS => "Javascript",
-				TREE_DHTML => "DHTML"
+				_HTML => "HTML",
+				_JS => "Javascript",
+				_DHTML => "DHTML"
 			);
 		}
 		else
@@ -1122,10 +1122,10 @@ class object_treeview extends class_base
 		$del = "";
 		if ($this->can("delete", $acl_obj->id()))
 		{
-			$del = $this->parse("DELETE");
+			$del = $this->parse("DE");
 		}
 		$this->vars(array(
-			"DELETE" => $del
+			"DE" => $del
 		));
 
 		$tb = "";
@@ -1149,16 +1149,16 @@ class object_treeview extends class_base
 			$str = "";
 			if ($sel_cols[$colid] == 1)
 			{
-				$str = $this->parse("FILE_".$colid);
+				$str = $this->parse("FI_".$colid);
 			}
 			$this->vars(array(
-				"FILE_".$colid => $str
+				"FI_".$colid => $str
 			));
 		}
 		
 		$this->cnt++;
 
-		return $this->parse("FILE");
+		return $this->parse("FI");
 	}
 }
 ?>
