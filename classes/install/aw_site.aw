@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.38 2005/03/22 15:32:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.39 2005/04/04 08:46:56 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_SITE relationmgr=yes no_comment=1
@@ -384,7 +384,7 @@ class aw_site extends class_base
 			// now write options to the ini file
 			$this->create_ini_file($site, $ini_opts, &$log);
 
-			$log->finish_log();
+			//$log->finish_log();
 
 			// set the site id to the current object so we only let the user change it
 			$ob->set_meta("site_id", $ini_opts["site_id"]);
