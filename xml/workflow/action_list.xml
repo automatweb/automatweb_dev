@@ -1,0 +1,9 @@
+<?xml version='1.0'?>
+<tabledef>
+<data>
+<field name="actor" caption="Tegija" nowrap="1"/>
+<field name="uid" caption="Kasutaja"/>
+<field name="process" caption="Protsess"/>
+<field name="action" caption="Tegevus"/>
+</data>
+</tabledef>

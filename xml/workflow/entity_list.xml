@@ -1,0 +1,12 @@
+<?xml version='1.0'?>
+<tabledef>
+<data>
+<field name="name" caption="Olem" align="center" nowrap="1"/>
+<field name="type" caption="Olemi tüüp" align="center" nowrap="1"/>
+<field name="actor" caption="Tegija" align="center" nowrap="1"/>
+<field name="modifiedby" caption="Kasutaja" align="center"/>
+<field name="process" caption="Protsess"/>
+<field name="action" caption="Tegevus"/>
+<field name="next_action" caption="Järgmine tegevus"/>
+</data>
+</tabledef>
