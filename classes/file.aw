@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.16 2001/11/07 17:24:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.17 2001/11/20 12:08:36 cvs Exp $
 // file.aw - Failide haldus
 global $orb_defs;
 $orb_defs["file"] = "xml";
@@ -120,6 +120,11 @@ class file extends aw_template
 		// first, we need to find a path to put the file
 		$filename = $this->gen_uniq_id();
 		$prefix = substr($filename,0,1);
+		if (!is_dir(SITE_DIR . "/files/" . $prefix))
+		{
+			mkdir(SITE_DIR . "/files/" . $prefix,0777);
+		}
+
 		$file = SITE_DIR . "/files/" . $prefix . "/" . "$filename.$minor";
 		$this->put_file(array(
 					"file" => $file,
