@@ -802,8 +802,8 @@ class site_list extends class_base
 		}
 
 		// resolve url to ip
-		$ip = gethostbyname($url);
-		$server_url = gethostbyaddr($ip);
+		$ip = @gethostbyname($url);
+		$server_url = @gethostbyaddr($ip);
 
 		// check if such server exists
 		if (!($serv_id = $this->get_server_id_by_ip(array("ip" => $ip))))
