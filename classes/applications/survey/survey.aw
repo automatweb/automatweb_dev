@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey.aw,v 1.4 2004/10/28 11:34:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey.aw,v 1.5 2004/10/29 15:49:43 duke Exp $
 // survey.aw - Ankeet 
 /*
 
@@ -84,6 +84,9 @@
 
 @property utext8 type=textbox
 @caption utext8
+
+@property remote_host type=textbox
+@caption Remote host
 
 @property sbt type=submit 
 @caption Submit
