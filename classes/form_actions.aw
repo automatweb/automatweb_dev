@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.5 2001/10/08 14:47:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.6 2001/10/15 05:13:39 cvs Exp $
 
 // form_actions.aw - creates and executes form actions
 lc_load("form");
@@ -78,6 +78,7 @@ class form_actions extends form_base
 					case "email":
 						$data["email"] = $email;
 						$data["op_id"] = $op_id;
+						$data["l_section"] = $l_section;
 						$data = serialize($data);
 						break;
 
@@ -163,9 +164,14 @@ class form_actions extends form_base
 						$data = array("email" => $data);
 					}
 					$opar = $this->get_op_list($id);
-					$this->vars(array("email" => $data["email"],
-														"ops" => $this->picker($data["op_id"],array(0 => "") + (array)$opar[$id]),
-														"reforb" => $this->mk_reforb("submit_action", array("id" => $id, "action_id" => $aid, "level" => 2))));
+					classload("objects");
+					$ob = new db_objects();
+					$this->vars(array(
+						"email" => $data["email"],
+						"ops" => $this->picker($data["op_id"],array(0 => "") + (array)$opar[$id]),
+						"sec" => $this->picker($data["l_section"],$ob->get_list()),
+						"reforb" => $this->mk_reforb("submit_action", array("id" => $id, "action_id" => $aid, "level" => 2))
+					));
 					return $this->parse();
 					break;
 				case "move_filled":
