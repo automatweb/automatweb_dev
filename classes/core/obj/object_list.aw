@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.31 2004/08/19 08:04:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.32 2004/08/19 11:46:32 kristo Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -31,6 +31,26 @@ class object_list extends _int_obj_container_base
 				"msg" => "objct_list::filter(): oid parameter cannot be an empty array!"
 			));
 
+		}
+
+		// check if param is an array of connection objects. if so, then get the object id's from that
+		if (is_array($param))
+		{
+
+			$tmp = reset($param);
+			if (is_object($tmp) && get_class($tmp) == "connection")
+			{
+				$arr = array();
+				foreach($param as $c)
+				{
+					if ($GLOBALS["object_loader"]->ds->can("view", $c->prop("to")))
+					{
+						$arr[$c->prop("to")] = $c->prop("to");
+					}
+				}
+				$this->add($arr);
+				return;
+			}
 		}
 
 		// we should check the individual arguments as well .. if "oid" is an object
