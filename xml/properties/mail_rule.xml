@@ -1,0 +1,35 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>rule_from</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>From</caption>
+      </property>
+      <property>
+            <name>rule_subject</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Subject</caption>
+      </property>
+      <property>
+            <name>target_folder</name>
+            <type>select</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Liiguta folderisse</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_MAIL_RULE</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+</properties>
+
