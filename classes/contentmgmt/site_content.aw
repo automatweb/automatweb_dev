@@ -61,19 +61,7 @@ class site_content extends menuedit
 			$section=$obj["parent"];
 			$docid=$obj["brother_of"];
 		}
-
-		classload("image");
-		$pers = get_instance("periods");
-		$_t = aw_global_get("act_period");
-		$this->vars(array(
-			"per_string" => $_t["description"],
-			"act_per_id" => $_t["id"],
-			"def_per_id" => $pers->get_active_period(),
-			"per_img_url" => image::check_url($_t["data"]["image"]["url"]),
-			"per_img_tag" => image::make_img_tag(image::check_url($_t["data"]["image"]["url"])),
-			"per_img_link" => ($_t["data"]["image_link"] != "" ? $_t["data"]["image_link"] : aw_ini_get("baseurl"))
-		));
-
+		
 		// check whether access to that menu is denied by ACL and if so
 		// redirect the user 
 		if (!aw_ini_get("menuedit.no_view_acl_checks"))
@@ -83,6 +71,20 @@ class site_content extends menuedit
 				$this->no_access_redir($section);
 			}
 		}
+
+		classload("image");
+		$imc = get_instance("image");
+		$pers = get_instance("periods");
+		$_t = aw_global_get("act_period");
+		$imdata = $imc->get_image_by_id($_t["data"]["image"]);
+		$this->vars(array(
+			"per_string" => $_t["name"],
+			"act_per_id" => $_t["id"],
+			"def_per_id" => $pers->get_active_period(),
+			"per_img_url" => image::check_url($imdata["url"]),
+			"per_img_tag" => image::make_img_tag(image::check_url($imdata["url"])),
+			"per_img_link" => ($_t["data"]["image_link"] != "" ? $_t["data"]["image_link"] : aw_ini_get("baseurl"))
+		));
 
 		// by default show both panes.
 		$this->left_pane = (isset($no_left_pane) && $no_left_pane == true) ? false : true;
