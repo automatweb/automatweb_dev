@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/layout/active_page_data.aw,v 1.8 2003/12/08 11:35:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/layout/active_page_data.aw,v 1.9 2004/06/14 09:11:21 kristo Exp $
 class active_page_data extends class_base
 {
 	function active_page_data()
@@ -72,7 +72,10 @@ class active_page_data extends class_base
 		$ret = "";
 		foreach($styles->get() as $stylid)
 		{
-			$ret .= $css->get_style_data_by_id($stylid);
+			if ($this->can("view", $stylid))
+			{
+				$ret .= $css->get_style_data_by_id($stylid);
+			}
 		}
 
 		$serialized_styles = new aw_array(aw_global_get("__aw_serialized_styles"));
