@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.3 2001/05/22 06:36:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.4 2001/05/22 07:05:18 kristo Exp $
 class db_config extends aw_template {
 	function db_config() {
 		$this->db_init();
@@ -362,7 +362,9 @@ class db_config extends aw_template {
 	{
 		global $fail;
 		if (!($f = fopen($fail,"r")))
+		{
 			$this->raise_error("Miskit l2x uploadimisel viltu",true);
+		}
 
 		$fc = fread($f,filesize($fail));
 		fclose($f);
@@ -384,16 +386,16 @@ class db_config extends aw_template {
 		{
 			$v = unserialize($v);
 			$iid = 0;
-			if (is_array($v[icon]))
+			if (is_array($v["icon"]))
 			{
-				if (!($iid = $ic->get_icon_by_file($v[icon][file])))
-					$iid = $ic->add_array($v[icon]);
+				if (!($iid = $ic->get_icon_by_file($v["icon"]["file"])))
+					$iid = $ic->add_array($v["icon"]);
 			}
 			$this->$callback($v[$arname],$iid);
 			$cnt++;
 		}
 		global $ext;
-		echo "Importisin $cnt ikooni. <a href='config.aw?type=$goto'>Tagasi</a><br>";
+		echo "Importisin $cnt ikooni. <a href='config.$ext?type=$goto'>Tagasi</a><br>";
 	}
 
 	function import_file_icons($level)
@@ -484,7 +486,7 @@ class db_config extends aw_template {
 		reset($programs);
 		while (list($id,$desc) = each($programs))
 		{
-			$this->vars(array("name" => $desc[name], "url" => ($il[$id][url] == "" ? "/images/icon_aw.gif" : $il[$id][url]),"id" => $id));
+			$this->vars(array("name" => $desc["name"], "url" => ($il[$id]["url"] == "" ? "/images/icon_aw.gif" : $il[$id]["url"]),"id" => $id));
 			$l.=$this->parse("LINE");
 		}
 		$this->vars(array("LINE" => $l));
@@ -508,9 +510,9 @@ class db_config extends aw_template {
 		while (list(,$id) = each($sel))
 		{
 			$ret.="\x01programicon\x02\n";
-			$icon = $il[$id][id] ? $ic->get($il[$id][id]) : -1;
+			$icon = $il[$id]["id"] ? $ic->get($il[$id]["id"]) : -1;
 			$ar = array("id" => $id, "icon" => $icon);
-			$ret.=serialize($ar)."\n";
+			$ret.=serialize($ar);
 		}
 		return $ret;
 	}
@@ -529,9 +531,9 @@ class db_config extends aw_template {
 		while (list($id,$desc) = each($programs))
 		{
 			$ret.="\x01programicon\x02\n";
-			$icon = $il[$id][id] ? $ic->get($il[$id][id]) : -1;
+			$icon = $il[$id]["id"] ? $ic->get($il[$id]["id"]) : -1;
 			$ar = array("id" => $id, "icon" => $icon);
-			$ret.=serialize($ar)."\n";
+			$ret.=serialize($ar);
 		}
 		return $ret;
 	}
@@ -557,8 +559,8 @@ class db_config extends aw_template {
 		$ic = $t->get($icon_id);
 
 		$icons = unserialize($this->get_simple_config("program_icons"));
-		$icons[$id][id] = $icon_id;
-		$icons[$id][url] = $ic[url];
+		$icons[$id]["id"] = $icon_id;
+		$icons[$id]["url"] = $ic["url"];
 
 		$cs = serialize($icons);
 		$this->set_simple_config("program_icons",$cs);
