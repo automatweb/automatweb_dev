@@ -190,10 +190,10 @@
             <type>select</type>
             <multiple>1</multiple>
             <size>15</size>
+            <table>objects</table>
+            <field>meta</field>
             <method>serialize</method>
             <group>relations</group>
-            <table>menu</table>
-            <field>pers</field>
             <caption>Perioodid, mille alt dokumendid võetakse</caption>
       </property>
       <property>
@@ -302,6 +302,7 @@
             <type>checkbox</type>
             <group>general</group>
             <ch_value>1</ch_value>
+            <search>1</search>
             <table>menu</table>
             <field>target</field>
             <caption>Uues aknas</caption>
