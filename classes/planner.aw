@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.135 2003/11/10 21:44:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.136 2003/11/11 10:39:47 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -678,6 +678,14 @@ class planner extends class_base
 			};
 			$this->emb_group = $emb_group;
 			$tmp["value"] = join(" | ",$captions);
+			$t->inst->set_calendars(array($obj["oid"]));
+			foreach($all_props as $sk => $st)
+			{
+				if ($st["richtext"])
+				{
+					unset($all_props[$sk]["richtext"]);
+				};
+			};
 			$t->inst->set_calendars(array($obj->id()));
 			$xprops = $t->parse_properties(array(
 					"properties" => $all_props,
