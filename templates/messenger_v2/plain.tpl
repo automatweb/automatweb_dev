@@ -6,5 +6,9 @@
 <strong>Date:</strong> {VAR:date}<br>
 <br></small><span style='font-size: 11px;'>
 {VAR:content}
+<p>
+<!-- SUB: attachment -->
+Attachment: <a href="{VAR:get_part_url}">{VAR:part_name}</a><br>
+<!-- END SUB: attachment -->
 </span>
 
