@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.135 2003/07/21 14:48:53 duke Exp $
+// $Id: class_base.aw,v 2.136 2003/07/22 08:09:52 axel Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -90,7 +90,7 @@ class class_base extends aw_template
 			{
 				die($this->ds->get_error_text());
 			};
-
+			//$this->do_something_neat = 'wehee';//axel
 
 			$this->parent = $args["parent"];
 			$this->id = "";
@@ -129,9 +129,9 @@ class class_base extends aw_template
 				"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
 				"rel" => $this->is_rel,
 		));
-		
+
 		$this->request = $args;
-	
+
 		if (!empty($this->id))
 		{
 			$this->load_obj_data(array("id" => $this->id));
@@ -153,7 +153,7 @@ class class_base extends aw_template
 		$resprops = $this->parse_properties(array(
 			"properties" => &$realprops,
 		));
-		
+
 		// so now I have a list of properties along with their values,
 
 		// here be some magic to determine the correct output client
@@ -177,7 +177,7 @@ class class_base extends aw_template
 
 		$gdata = isset($this->subgroup) ? $this->groupinfo[$this->subgroup] : $this->groupinfo[$this->activegroup];
 
-		
+
 		$argblock = array(
 			"id" => $this->id,
 			// this should refer to the active group
@@ -231,7 +231,7 @@ class class_base extends aw_template
 
 		$form_data = $args;
 
-		// I need to know the id of the configuration form, so that I 
+		// I need to know the id of the configuration form, so that I
 		// can load it. Reason being, the properties can be grouped
 		// differently in the config form then they are in the original
 		// properties
@@ -698,7 +698,7 @@ class class_base extends aw_template
 			$this->tp->add_tab(array(
 				'id' => 'list_aliases',
 				"link" => $link,
-				"caption" => "Seostehaldur",
+				"caption" => "Seostehaldur".($this->do_something_neat ? ' oi':''),//axel
 				"active" => isset($this->action) && (($this->action == "list_aliases") || ($this->action == "search_aliases")),
 				"disabled" => empty($this->id),
 			));

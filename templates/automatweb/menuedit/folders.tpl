@@ -64,6 +64,7 @@ foldersTree = pr_{VAR:root};
 
 <!-- Build the browser's objects and display default view of the
      tree. -->
-<script>initializeDocument()</script>
+<script>initializeDocument();
+</script>
 
 </html>

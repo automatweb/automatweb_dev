@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.21 2003/07/18 11:54:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.22 2003/07/22 08:09:52 axel Exp $
 class admin_menus extends aw_template
 {
 	// this will be set to document id if only one document is shown, a document which can be edited
@@ -360,7 +360,7 @@ class admin_menus extends aw_template
 		if ($this->can("delete", $id))
 		{
 			$delurl = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1","period" => $period), "admin_menus",true,true);
-		
+
 			$this->vars(array(
 				"link" => $delurl,
 				"text" => "Delete"
@@ -377,6 +377,12 @@ class admin_menus extends aw_template
 			));
 			$retval .= $this->parse("MENU_ITEM");
 		}
+/*
+		$this->vars(array(
+			"link" => $this->mk_my_orb("mk_shortcut", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1","period" => $period), "admin_menus",true,true),
+			"text" => "(Tee kiirviide)",
+		));*/
+		$retval .= $this->parse("MENU_ITEM");
 
 		if ($ret_data)
 		{
@@ -572,7 +578,7 @@ class admin_menus extends aw_template
 	}
 
 	////
-	// !pastes the cut objects 
+	// !pastes the cut objects
 	function paste($arr)
 	{
 		extract($arr);
@@ -648,6 +654,14 @@ class admin_menus extends aw_template
 		aw_session_set("copied_objects",array());
 		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
 		//return "javascript:go_go(".$parent.",'".$period."')";
+	}
+
+	function mk_shortcut($arr)
+	{
+		extract($arr);
+		//make brother
+
+		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
 	}
 
 	function make_menu_caches($where = "objects.status = 2")
@@ -852,7 +866,7 @@ class admin_menus extends aw_template
 			$ps = " AND ((objects.period = '$period') OR (objects.class_id = ".CL_PSEUDO." AND objects.periodic = 1)) ";
 		}
 
-		$this->read_template("js_popup_menu.tpl");
+
 
 		// do not show relation objects in the list. hm, I wonder whether
 		// I'll burn in hell for this --duke
@@ -869,15 +883,15 @@ class admin_menus extends aw_template
 		$ft_page = $GLOBALS["ft_page"];
 		$lim = "LIMIT ".($ft_page * $per_page).",".$per_page;
 
-		$where = "objects.parent = '$parent' AND 
+		$where = "objects.parent = '$parent' AND
 				(lang_id = '$lang_id' OR m.type = ".MN_CLIENT." OR objects.class_id IN(".CL_PERIOD .",".CL_USER.",".CL_GROUP.",".CL_MSGBOARD_TOPIC."))
-				 AND 
-				status != 0 
+				 AND
+				status != 0
 				$cls $ps ";
 
-		$query = "FROM objects 
+		$query = "FROM objects
 				LEFT JOIN menu m ON m.id = objects.oid
-			WHERE 
+			WHERE
 				$where";
 
 		// make pageselector.
@@ -901,6 +915,44 @@ class admin_menus extends aw_template
 		$containers = array(CL_PSEUDO,CL_BROTHER,CL_PROMO,CL_GROUP,CL_MSGBOARD_TOPIC);
 
 		$num_records = 0;
+
+
+		switch($view_type)
+		{
+			case 'big':
+				$tpl = 'bigicons.tpl';
+			break;
+			case 'small':
+				$tpl = 'smallicons.tpl';
+			break;
+			case 'detail':
+				$tpl = 'js_popup_menu.tpl';
+				$view_type = 'detail';
+			break;
+			default :
+			{
+				if (isset($GLOBALS['menu_last_view'][$parent]) && ($GLOBALS['menu_last_view'][$parent] != 'detail'))
+				{
+					$view_type = $GLOBALS['menu_last_view'][$parent];
+					$tpl = $GLOBALS['menu_last_view'][$parent].'icons.tpl';
+				}
+				else
+				{
+					$tpl = 'js_popup_menu.tpl';
+					$view_type = 'detail';
+				}
+			}
+		}
+		
+		//if ($view_type != 'detail')
+		{
+			$menu_last_view = $GLOBALS['menu_last_view'];
+			$menu_last_view[$parent] = $view_type;
+			aw_session_set('menu_last_view',$menu_last_view);
+		}
+		
+		$this->read_template($tpl);
+
 
 		while ($row = $this->db_next())
 		{
@@ -929,7 +981,7 @@ class admin_menus extends aw_template
 			}
 
 			$dellink = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $row["oid"], "parent" => $row["parent"],"sel[".$row["oid"]."]" => "1"), "admin_menus",true,true);
-			
+
 			if (isset($sel_objs[$row["oid"]]))
 			{
 				$row["cutcopied"] = "#E2E2DB";
@@ -943,28 +995,47 @@ class admin_menus extends aw_template
 			$row["lang_id"] = $lar[$row["lang_id"]];
 
 			$this->save_handle();
-			$this->vars(array(
-				"menu_id" => "js_pop_".$row["oid"],
-				"menu_icon" => $this->cfg["baseurl"]."/automatweb/images/blue/obj_settings.gif",
-				"MENU_ITEM" => $this->get_popup_data(array(
-					"period" => $period,
-					"id" => $row["oid"], 
-					"ret_data" => true, 
-					"sharp" => true,
-					"type" => "js",
-					"obj" => $row
-				))
-			));
-			$row["java"] = $this->parse();
+
+			if ($view_type == 'detail')
+			{
+				$this->vars(array(
+					"menu_id" => "js_pop_".$row["oid"],
+					"menu_icon" => $this->cfg["baseurl"]."/automatweb/images/blue/obj_settings.gif",
+					"MENU_ITEM" => $this->get_popup_data(array(
+						"period" => $period,
+						"id" => $row["oid"],
+						"ret_data" => true,
+						"sharp" => true,
+						"type" => "js",
+						"obj" => $row
+					))
+				));
+				$row["java"] = $this->parse();
+			}
+			elseif($view_type == 'big')
+			{
+				$this->vars(array(
+					"MENU_ITEM" => $this->get_popup_data(array(
+						"period" => $period,
+						"id" => $row["oid"],
+						"ret_data" => true,
+						"sharp" => true,
+						"type" => "js",
+						"obj" => $row
+					))
+				));
+			}
+
 
 			$this->restore_handle();
 
-//			$row["icon"] = '<img src="'.$iu.'">';
-			$this->t->set_default_sortby(array("name" => "icon+name"));
+			$row["icon"] = '<img src="'.$iu.'">';
+			$this->t->set_default_sortby(array("name" => "name"));
 			$caption = ($row["name"] == '' ? "(nimeta)" : $row["name"]);
 
-			$row["name"] = '<!-- '.$caption.' --><a href="'.$chlink.'"><img src="'.$iu.'" border="0">&nbsp;&nbsp;&nbsp;'.$caption."</a>";
-
+			//$row["name"] = '<!-- '.$caption.' --><a href="'.$chlink.'"><img src="'.$iu.'" border="0">&nbsp;&nbsp;&nbsp;'.$caption."</a>";
+			$row["name"] = '<a href="'.$chlink.'">'.$caption."</a>";
+			
 			$row["link"] = "<a href=\"".$this->cfg["baseurl"]."/".$row["oid"]."\">Link</a>";
 			$row["class_id"] = $this->cfg["classes"][$row["class_id"]]["name"];
 			$row["hidden_jrk"] = $row["jrk"];
@@ -993,6 +1064,7 @@ class admin_menus extends aw_template
 
 			$row["change"] = $can_change ? "<a href=\"$chlink\"><img src=\"".$this->cfg["baseurl"]."/automatweb/images/blue/obj_settings.gif\" border=\"0\"></a>" : "";
 			$row["acl"] = $can_admin ? "<a href=\"editacl.aw?oid=".$row["oid"]."&file=default.xml\"><img src=\"".$this->cfg["baseurl"]."/automatweb/images/blue/obj_acl.gif\" border=\"0\"></a>" : "";
+			
 			if ($this->co_id)
 			{
 				$this->otc_inst->table_row($row, &$this->t);
@@ -1001,6 +1073,16 @@ class admin_menus extends aw_template
 			{
 				$this->t->define_data($row);
 			}
+
+			//axel häkkis,
+			//make big icon here
+			$row['icon_url'] = $iu;
+			$row['caption'] = $caption;
+			$row['chlink'] = $chlink;
+
+
+			$this->vars($row);
+			$the_icons .= $this->parse('ICON');//'<table border=1 style="float:left;"><tr><td>'.$row['oid'].'</td></tr></table>';
 
 			$num_records++;
 
@@ -1065,6 +1147,29 @@ class admin_menus extends aw_template
 			"width" => 23,
 		));
 
+		$view_types = array(
+			'big' => array('caption' => 'Suured ikoonid','title' => ''),
+			'small' => array('caption' => 'Väiksed ikoonid','title' => ''),
+			'detail' => array('caption' => 'Detailne vaade','title' => ''),
+		);
+
+		$items = '';
+		foreach($view_types as $key => $val)
+		{
+			$this->vars(array(
+				'caption' => $val['caption'],
+			//	'title' => $val['title'],
+				'url' => preg_replace('/&view_type=[^&$]*/','',aw_global_get('REQUEST_URI')).'&view_type='.$key,
+			));
+			$items .= $this->parse('MENU_ITEM');
+		}
+
+		$this->vars(array(
+			'items' => $items,
+			'menu_id' => 'view_type',
+		));
+		$view_button_menu = $this->parse('MENU2');
+
 		$la = get_instance("languages");
 
 		if (!$sortby)
@@ -1094,9 +1199,14 @@ class admin_menus extends aw_template
 
 		$toolbar_data = $toolbar->get_toolbar();
 		$toolbar_data .= $whole_menu;
+		$toolbar_data .= $view_button_menu;
+
+
+		$icons = (($view_type == 'big') || ($view_type == 'small'));
 
 		$this->vars(array(
-			"table" => $pageselector.$this->t->draw(),
+			'viewstyle' => $icons ? 'awmenuedittablerow' : 'awmenuedittableborder',
+			"table" => $pageselector.($icons ? $the_icons : $this->t->draw()),
 			"reforb" => $this->mk_reforb("submit_rf", array("parent" => $parent, "period" => $period, "sortby" => $sortby, "sort_order" => $sort_order)),
 			"parent" => $parent,
 			"period" => $period,
@@ -1207,7 +1317,18 @@ class admin_menus extends aw_template
 			"imgover" => "import_over.gif",
 			"img" => "import.gif",
 		));
-	
+
+		$toolbar->add_button(array(
+			"name" => "view_type",
+			"tooltip" => "detailne/Ikooni vaade",
+			"imgover" => "preview_over.gif",
+			"img" => "preview.gif",
+			"url" => "#",
+			"onClick" => "return buttonClick(event, 'view_type');",
+			"class" => "menuButton",
+		));
+
+
 		if (isset($callback) && is_array($callback) && sizeof($callback) == 2)
 		{
 			$callback[0]->$callback[1](array("toolbar" => &$toolbar));

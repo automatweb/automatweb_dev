@@ -1,4 +1,4 @@
-<?php 
+<?php
 include("const.aw");
 include("admin_header.".aw_ini_get("ext"));
 classload("aw_template");
@@ -27,7 +27,7 @@ if (!$tableinfo["fields"]["obj_id"])
 </head>
 
 <frameset cols="30%,*" frameborder="yes" framespacing=1>
-  <frame name="menuFrame" src="orb.aw?class=admin_folders&action=folders" MARGINHEIGHT=0 MARGINWIDTH=0 scrolling=auto>
+  <frame name="menuFrame" src="orb.aw?class=admin_folders&action=folders&parent=<?php echo $parent; ?>" MARGINHEIGHT=0 MARGINWIDTH=0 scrolling=auto>
   <frame name="list" src="orb.aw?class=admin_menus&action=right_frame&parent=<?php echo $parent; ?>&period=<?php echo $period; ?>" MARGINHEIGHT=0 MARGINWIDTH=0 scrolling=auto>
 </frameset>
 

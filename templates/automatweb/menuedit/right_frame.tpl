@@ -2,6 +2,49 @@
 
 </script>
 
+<script>
+if (window != window.top)
+{
+	if (top.document.getElementById('status') == '[object HTMLDivElement]')
+	{
+		top.document.getElementById('status').innerHTML = 'blaa';
+	}
+	else
+	{
+		//alert('desktop not found');
+	}
+}
+</script >
+
+
+<style>
+
+.boxA {
+  border: 1px solid transparent;
+  cursor:hand;
+  width:70px;
+  height:70px;
+  float:left;
+}
+
+.iconname
+{
+padding-left:2px;
+padding-right:2px;
+background-color:#1166C0;
+color:#ffffff;
+font-size:13px;
+font-weight:bold;
+spacing:2px;
+}
+
+.boxB {
+  background-color: #fffff0;
+  padding: 2px;
+}
+</style>
+
+
 <script language="javascript">
 var chk_status = true;
 
@@ -128,15 +171,12 @@ function go_acl(id)
 </script>
 
 
-
-
-
-
 <!-- begin ICONS table -->
 <form action='reforb.{VAR:ext}' method="post" name="foo">
 {VAR:toolbar}
+
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
-<tr><td class="awmenuedittableborder">
+<tr><td class="{VAR:viewstyle}" style="border:1px">
 {VAR:table}
 </td></tr></table>
 {VAR:reforb}
