@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.57 2003/05/26 11:48:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.58 2003/05/29 07:49:34 kristo Exp $
 // image.aw - image management
 /*
 	@default group=general
@@ -239,7 +239,7 @@ class image extends class_base
 					$replacement = "";
 					if (!empty($idata["big_url"]))
 					{
-						$replacement .= "<a href=\"#\" onClick=\"$bi_link\">";
+						$replacement .= "<a href=\"javascript:void(0)\" onClick=\"$bi_link\">";
 					};
 					$replacement .= "<img src='$idata[url]' alt='$alt' title='$alt' border=\"0\">";
 					if (!empty($idata["big_url"]))
