@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.52 2005/03/22 20:54:15 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.53 2005/03/23 15:46:08 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -2196,12 +2196,18 @@ class mrp_workspace extends class_base
 					"name" => "all_resources[".$c->prop("to")."]",
 					"value" => 1,
 					"checked" => $all_resources[$c->prop("to")],
+				)).html::hidden(array(
+					"name" => "old_all_resources[".$c->prop("to")."]",
+					"value" => $all_resources[$c->prop("to")]
 				)),
 				"dept_resources" => html::checkbox(array(
 					"name" => "dept_resources[".$c->prop("to")."]",
 					"value" => 1,
 					"checked" => $dept_resources[$c->prop("to")],
-				)),
+				)).html::hidden(array(
+					"name" => "old_dept_resources[".$c->prop("to")."]",
+                                        "value" => $dept_resources[$c->prop("to")]
+                                )),
 				"change" => html::get_change_url($c->prop("to"), array(), "Muuda")
 			));
 		}
@@ -2289,8 +2295,33 @@ class mrp_workspace extends class_base
 		}
 
 		$o = obj($arr["id"]);
-		$o->set_meta("umgr_all_resources", $arr["all_resources"]);
-		$o->set_meta("umgr_dept_resources", $arr["dept_resources"]);
+		$oldal = safe_array($o->meta("umgr_all_resources"));
+		foreach(safe_array($arr["old_all_resources"]) as $k => $v)
+		{
+			if ($arr["all_resources"] != $v)
+			{
+				$oldal[$k] = $arr["all_resources"][$k];
+			}
+		}
+		foreach(safe_array($arr["all_resources"]) as $k => $v)
+                {
+                        if ($arr["all_resources"] != $arr["old_all_resources"])
+                        {
+                                $oldal[$k] = $arr["all_resources"][$k];
+                        }
+                }
+
+		$o->set_meta("umgr_all_resources", $oldal);
+
+		$oldal = safe_array($o->meta("umgr_dept_resources"));
+		foreach(safe_array($arr["old_dept_resources"]) as $k => $v)
+		{
+			if ($arr["dept_resources"] != $v)
+			{
+				$oldal[$k] = $arr["dept_resources"][$v];
+			}
+		}
+		$o->set_meta("umgr_dept_resources", $oldal);
 		$o->save();
 
 		// cleverly return
