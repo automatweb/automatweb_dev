@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.28 2001/07/16 06:00:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.29 2001/07/16 23:34:35 duke Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -306,11 +306,7 @@ define("CL_TEST_QUESTION",42);
 define("CL_TEST_TEEMA",43);
 define("CL_TEST",44);
 
-// Vibe ürituste jaoks
-define("CL_EVENT",45);
-define("CL_LOCATION",46);
-define("CL_EVENT_TYPE",47);
-define("CL_LOCATION_TYPE",48);
+define("CL_FORM_XML_OUTPUT",45);
 
 // yuck.
 define("CL_GUESTBOOK",49);
