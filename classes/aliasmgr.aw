@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.168 2005/03/14 17:27:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.169 2005/03/22 11:15:56 ahti Exp $
 
 class aliasmgr extends aw_template
 {
@@ -814,7 +814,7 @@ class aliasmgr extends aw_template
 				"reltype" => $reltype,
 				"data" => $args["data"]
 			));
-		};
+		}
 	}
 
 	/**  

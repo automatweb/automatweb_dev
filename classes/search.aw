@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.88 2005/03/21 11:16:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.89 2005/03/22 11:15:56 ahti Exp $
 // search.aw - Search Manager
 
 /*
@@ -698,7 +698,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 				if (!$is_remote)
 				{
-					$row_o = obj($row["oid"]);				
+					$row_o = obj($row["oid"]);
 					$row["location"] = $row_o->path_str();
 					$row["icon"] = sprintf("<img src='%s' alt='$type' title='$type'>",icons::get_icon_url($row_o));
 				}
