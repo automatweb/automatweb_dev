@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.175 2003/05/02 13:11:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.176 2003/05/02 13:52:11 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -520,19 +520,14 @@ class document extends aw_template
 			return $t->kanalid_list($doc["content"]);
 		}
 
-		// ut 6pilaste tabel
-		if (strpos($doc["content"], "#ut_opilased#") !== false)
-		{
-			$ust = get_instance("ut_stat_table");
-			$doc["content"] = str_replace("#ut_opilased#", $ust->draw($section), $doc["content"]);
-		}
-
 		$doc["content"] = str_replace("#nool#", '<IMG SRC="{VAR:baseurl}/img/icon_nool.gif" WIDTH="21" HEIGHT="9" BORDER=0 ALT="">', $doc["content"]);
 
 		// in_archive disappears if we move around in archives
 		// so we need another way to determine whether this document belongs to the active
 		// period
 
+		// would be nice if I could check whether the template _has_ one of those period variables
+		// and only _then_ load the period class --duke
 		$db_periods = get_instance("periods",$this->cfg["per_oid"]);
 		$act_per = $db_periods->get_active_period($this->cfg["per_oid"]);
 		$pdat = $db_periods->get($act_per);
@@ -548,23 +543,25 @@ class document extends aw_template
 		$this->dequote(&$doc["title"]);
 		$this->title = $doc["title"];
 
-		//if (aw_global_get("in_archive"))
-		if ($doc["period"] != $act_per)
+		if (!(($pp = strpos($doc["content"],"#poolita#")) === false))
 		{
-			$doc["content"] = str_replace("#poolita#", "",$doc["content"]);
-		}
-		else
-		{
-			if (!(($pp = strpos($doc["content"],"#poolita#")) === false))
+			if ($doc["period"] != $act_per)
 			{
-				$def = "<br><B>Edasi loe ajakirjast!</b></font>";
+				$doc["content"] = str_replace("#poolita#", "",$doc["content"]);
+			}
+			else
+			{
 				if ($this->cfg["poolita_text"] != "")
 				{
 					$def = $this->cfg["poolita_text"];
 				}
+				else
+				{
+					$def = "<br><B>Edasi loe ajakirjast!</b></font>";
+				};
 				$doc["content"] = substr($doc["content"],0,$pp).$def;
 			}
-		}
+		};
 
 		// vaatame kas vaja poolitada - kui urlis on show_all siis n2itame tervet, muidu n2itame kuni #edasi# linkini
 		if ($GLOBALS["show_all"])
