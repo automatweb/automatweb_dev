@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.1 2004/11/07 11:47:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.2 2004/11/24 15:06:28 ahti Exp $
 
 /*
 
@@ -82,6 +82,10 @@ class classificator extends class_base
 			"obj_inst" => $arr["obj_inst"],
 		);
 
+		if($arr["sort_by"])
+		{
+			$ch_args["sort_by"] = $arr["sort_by"];
+		}
 		if (is_oid($prop["object_type_id"]))
 		{
 			$ch_args["object_type_id"] = $prop["object_type_id"];
@@ -232,24 +236,24 @@ class classificator extends class_base
 		$ofto = new object($clf[$name]);
 
 		$parent = is_oid($ofto->id()) ? $ofto->id() : -1;
+		$vars = array(
+			"parent" => $parent,
+			"class_id" => CL_META,
+			"lang_id" => array(),
+		);
+		if($arr["sort_by"])
+		{
+			$vars["sort_by"] = $arr["sort_by"];
+		}
 		if($this->recursive == 1)
 		{
-			$asd = new object_tree(array(
-				"parent" => $parent,
-				"class_id" => CL_META,
-				"lang_id" => array(),
-			));
+			$asd = new object_tree($vars);
 			$olx = $asd->to_list();
 		}
 		else
 		{
-			$olx = new object_list(array(
-				"parent" => $parent,
-				"class_id" => CL_META,
-				"lang_id" => array(),
-			));
+			$olx = new object_list($vars);
 		}
-
 		return array($olx,$ofto->name(),$use_type);
 
 	}
