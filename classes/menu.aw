@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.53 2003/06/18 15:46:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.54 2003/07/01 10:21:59 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -9,6 +9,9 @@
 	//added by martin
 	@property multi_doc_style type=checkbox value=1 ch_value=1 group=advanced field=meta method=serialize
 	@caption Kasuta jumpboxi
+
+	@property no_cmenu type=checkbox ch_value=1 group=advanced table=menu
+	@caption Eemalda rippmen&uuml;&uuml;st
 
 	@property alias type=textbox group=general
 	@caption Alias
