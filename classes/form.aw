@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.42 2001/07/26 16:44:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.43 2001/07/26 21:13:03 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -890,6 +890,16 @@ class form extends form_base
 	{
 		extract($arr);
 
+		if (is_array($values))
+		{
+			$this->post_vars = $values;
+		}
+		else
+		{
+			global $HTTP_POST_VARS;
+			$this->post_vars = $HTTP_POST_VARS;
+		};
+
 		$this->load($id);
 
 		if (!$entry_id)
@@ -957,15 +967,20 @@ class form extends form_base
 			while (list($k, $v) = each($this->entry))
 			{
 				$el = $this->get_element_by_id($k);
-				$ev = $el->get_value();
 
-				$ids.=",el_$k,ev_$k";
-				// see on pildi uploadimise elementide jaoks
-				if (is_array($v))
+				// häkk
+				if (is_object($el))
 				{
-					$v = serialize($v);
-				}
-				$vals.=",'$v','$ev'";
+					$ev = $el->get_value();
+
+					$ids.=",el_$k,ev_$k";
+					// see on pildi uploadimise elementide jaoks
+					if (is_array($v))
+					{
+						$v = serialize($v);
+					}
+					$vals.=",'$v','$ev'";
+				};
 			}
 
 			$sql = "INSERT INTO form_".$this->id."_entries($ids) VALUES($vals)";

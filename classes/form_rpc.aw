@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_rpc.aw,v 2.0 2001/07/26 16:20:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_rpc.aw,v 2.1 2001/07/26 21:13:03 duke Exp $
 // form_rpc.aw - RPC functions for formgen
 classload("form");
 class form_rpc extends form {
@@ -16,20 +16,28 @@ class form_rpc extends form {
 		$meta = $this->get_xml_input(array(
 			"alias" => $args["alias"],
 		));
- 
-		$form_id = $meta["forms"][0];
- 
-		$el_values = array();
- 
-		foreach($meta["elements"] as $id => $props)
+
+		// iga vormi submitmine eraldi
+		foreach($meta["forms"] as $key => $form_id)
 		{
-			$el_values[$id] = $args["elements"][$props["name"]];
-		}
+			$object = $this->get_object($form_id);
+			$el_values = array();
+			
+			foreach($meta["elements"] as $id => $props)
+			{
+				if ($props["form"] == $form_id)
+				{
+					$el_values[$id] = $args["elements"][$props["name"]];
+				};
+			}
+		
+			$datablock["id"] = $form_id;
+			$datablock["parent"] = $object["parent"];
+
+			$datablock["values"] = $el_values;
  
-		$el_values["form_id"] = $form_id;
-		$el_values["parent"] = RPC_ENTRIES;
- 
-		$this->proc_entry($el_values);
+			$this->process_entry($datablock);
+		};
  
 		// entry tuleb salvestada parenti RPC_ENTRIES alla
 		$retval = array(
