@@ -1,0 +1,28 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>priority_id</name>
+            <type>objpicker</type>
+            <clid>CL_PRIORITY</clid>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Prioriteedi objekt</caption>
+      </property>
+      <property>
+            <name>grps</name>
+            <callback>callback_get_groups</callback>
+            <group>grps</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Grupid</caption>
+      </property>
+      <groupinfo>
+            <grps>
+                  <caption>Puu_root_objektid</caption>
+            </grps>
+      </groupinfo>
+</properties>
+
