@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.24 2003/01/24 13:43:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.25 2003/01/26 18:53:46 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -148,6 +148,9 @@
 	@property ndocs type=textbox size=3 group=relations
 	@caption Mitu viimast dokumenti
 
+	@property export type=callback callback=callback_get_export_options group=import_export
+	@caption Eksport
+
 	@classinfo relationmgr=yes
 	@classinfo objtable=menu
 	@classinfo objtable_index=id
@@ -159,6 +162,7 @@
 	@groupinfo relations caption=Seosed
 	@groupinfo presentation caption=Presentatsioon
 	@groupinfo show caption=Näitamine
+	@groupinfo import_export caption=Import/Eksport submit=no
 
 	@tableinfo menu index=id master_table=objects master_index=oid
 */
@@ -358,6 +362,43 @@ class menu extends class_base
 
 			$nodes[] = $node;
 		};
+		return $nodes;
+	}
+
+	function callback_get_export_options($args = array())
+	{
+		$submenus = $this->get_menu_list(false,false,$args["obj"]["oid"]);
+		$tmp = array(
+			"type" => "select",
+			"multiple" => 1,
+			"size" => 15,
+			"name" => "ex_menus",
+			"caption" => "Vali menüüd",
+			"options" => $submenus,
+			// this selects all choices
+			"selected" => $submenus,
+		);
+		$nodes[] = $tmp;
+		$tmp = array(
+			"type" => "checkbox",
+			"name" => "allactive",
+			"value" => 1,
+			"caption" => "Märgi kõik menüüd aktiivseks",
+		);
+		$nodes[] = $tmp;
+		$tmp = array(
+			"type" => "checkbox",
+			"name" => "ex_icons",
+			"value" => 1,
+			"caption" => "Ekspordi ikoonid",
+		);
+		$nodes[] = $tmp;
+		$tmp = array(
+			"type" => "submit",
+			"value" => "Ekspordi",
+			"name" => "do_export",
+		);
+		$nodes[] = $tmp;
 		return $nodes;
 	}
 
@@ -637,6 +678,15 @@ class menu extends class_base
 
 	function callback_pre_save($args)
 	{
+		$form_data = &$args["form_data"];
+		if ($form_data["do_export"])
+		{
+			$this->export_menus(array(
+				"ex_menus" => $form_data["ex_menus"],
+				"allactive" => $form_data["allactive"],
+				"ex_icons" => $form_data["ex_icons"],
+			));
+		};
 		/*
 		if (!$args["object"]["type"])
 		{
@@ -662,6 +712,97 @@ class menu extends class_base
 		};
 		return $title;
 	}
+	
+	////
+	// !exports menu $id and all below it
+	function export_menus($arr)
+	{
+		extract($arr);
+		
+		if (!is_array($ex_menus))
+		{
+			return;
+		}
 
+		$i = get_instance("icons");
+		$this->m = get_instance("menuedit");
+		$this->m->get_feature_icon_url(0);	// warm up the cache
+
+		$menus = array("0" => $id);
+
+		// ok. now we gotta figure out which menus the user wants to export. 
+		// he can select just the lower menus and assume that the upper onec come along with them.
+		// biyaatch 
+
+		// kay. so we cache the menus
+		$this->m->db_listall();
+		while ($row = $this->m->db_next())
+		{
+			$this->mar[$row["oid"]] = $row;
+		}
+
+		// this keeps all the menus that will be selected
+		$sels = array();	
+		// now we start going through the selected menus
+		reset($ex_menus);
+		while (list(,$eid) = each($ex_menus))
+		{
+			// and for each we run to the top of the hierarchy and also select all menus 
+			// so we will gather a list of all the menus we need. groovy.
+			
+			$sels[$eid] = $eid;
+			while ($eid != $id && $eid > 0)
+			{
+				$sels[$eid] = $eid;
+				$eid = $this->mar[$eid]["parent"];
+			}
+		}
+
+		// so now we have a complete list of menus to fetch. 
+		// so fetchemall
+		reset($sels);
+		while (list(,$eid) = each($sels))
+		{
+			$row = $this->mar[$eid];
+			if ($allactive)
+			{
+				$row["status"] = 2;
+			}
+			$this->append_exp_arr($row,&$menus,$ex_icons,$i);
+		}
+
+		/// now all menus are in the array with all the other stuff, 
+		// so now export it.
+		header("Content-type: x-automatweb/menu-export");
+		header("Content-Disposition: filename=awmenus.txt");
+		echo serialize($menus);
+		die();
+	}
+
+	function append_exp_arr($db, $menus,$ex_icons,&$i)
+	{
+		$ret = array();
+		$ret["db"] = $db;
+		if ($ex_icons)
+		{
+			$icon = -1;
+			// admin_feature icon takes precedence over menu's icon. so include just that.
+			if ($db["admin_feature"] > 0)
+			{
+				$icon = $this->m->pr_icons[$db["admin_feature"]]["id"];
+				if ($icon)
+				{
+					$icon = $i->get($icon);
+				}
+			}
+			else
+			if ($db["icon_id"] > 0)
+			{
+				$icon = $i->get($db["icon_id"]);
+			}
+			$ret["icon"] = $icon;
+		}
+		$menus[$db["parent"]][] = $ret;
+	}
 };
 ?>
