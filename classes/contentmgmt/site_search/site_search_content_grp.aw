@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.11 2004/11/17 16:52:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.12 2004/12/01 10:58:08 kristo Exp $
 // site_seaarch_content_grp.aw - Saidi sisu otsingu grupp 
 /*
 
@@ -107,7 +107,7 @@ class site_search_content_grp extends class_base
 				"oid" => $cid,
 				"name" => $c_o->path_str(array(
 					"max_len" => 3
-				))."/".$c_o->name(),
+				)),
 				"class" => $clinf[$clid]["name"],
 				"check" => html::checkbox(array(
 					"name" => "include_submenus[".$cid."]",
@@ -148,14 +148,24 @@ class site_search_content_grp extends class_base
 			if ($sub[$m])
 			{
 				$ret[$m] = $m;
-				/*$tr = new object_tree(array(
+				$ot = new object_tree(array(
+					"class_id" => array(CL_MENU, CL_PROMO),
 					"parent" => $m,
 					"status" => STAT_ACTIVE,
-					"class_id" => CL_MENU,
-					"lang_id" => aw_global_get("lang_id"),
+					"sort_by" => "objects.parent",
+					"lang_id" => array(),
+					"site_id" => array(),
+					new object_list_filter(array(
+						"logic" => "OR",
+						"conditions" => array(
+							"lang_id" => aw_global_get("lang_id"),
+							"type" => MN_CLIENT
+						)
+					)),
+					"sort_by" => "objects.parent, objects.jrk"
 				));
-				$ids = $tr->ids();*/
-				$ids = array_keys($this->get_menu_list(false, false, $m, 1));
+				$ids = $ot->ids();
+
 				foreach($ids as $id)
 				{
 					$ret[$id] = $id;
@@ -183,6 +193,7 @@ class site_search_content_grp extends class_base
 				}
 			}
 		}
+
 		return $ret;
 	}
 	

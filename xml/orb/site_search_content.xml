@@ -17,6 +17,8 @@
 					<optional name="page" />
 					<optional name="str" />
 					<optional name="sort_by" />
+					<optional name="opts" />
+					<optional name="s_date" />
 				</arguments>
 			</function>
 		</action>
