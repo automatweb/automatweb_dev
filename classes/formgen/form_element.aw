@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.54 2003/07/01 12:59:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.55 2003/07/07 11:12:21 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -120,7 +120,7 @@ class form_element extends aw_template
 	function load(&$arr,&$form,$col,$row, $idx = 0)
 	{
 		$this->form =& $form;
-		$this->arr = $arr;
+		$this->arr = $arr; 
 		$this->id = $arr["id"];
 		$this->fid = $form->get_id();
 		$this->col = $col;
@@ -3073,6 +3073,7 @@ class form_element extends aw_template
 			case "file":
 				if ($this->entry["url"] != "")
 				{
+					classload("file");
 					if ($this->arr["ftype"] == 1)
 					{
 						if ($this->arr["fshow"])
