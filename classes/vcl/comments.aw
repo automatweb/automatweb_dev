@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/comments.aw,v 1.3 2004/06/25 15:01:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/comments.aw,v 1.4 2004/07/26 14:26:46 ahti Exp $
 // comments VCL component
 
 // what kind of forms do I need?
@@ -36,7 +36,11 @@ class comments extends class_base
 			"onpage" => 20,
 		));
 		$res = "";
-		if (is_object($this->obj))
+		if ($prop["heading"])
+		{
+			$res .= "<h2>" . $prop["heading"] . "</h2>";
+		}
+		elseif (is_object($this->obj))
 		{
 			$res .= "<h2>" . $this->obj->name() . "</h2>";
 		};
@@ -94,8 +98,9 @@ class comments extends class_base
 	{
 		$comm = get_instance(CL_COMMENT);
 		$commdata = $arr["prop"]["value"];
+		arr($commdata);
 		$nc = $comm->submit(array(
-			"parent" => $arr["obj_inst"]->id(),
+			"parent" => $commdata["obj_id"],  // "parent" => $arr["obj_inst"]->id(),
 			"commtext" => $commdata["comment"],
 			"return" => "id",
 		));
