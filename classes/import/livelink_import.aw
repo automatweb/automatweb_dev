@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.8 2003/05/14 16:13:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.9 2003/05/15 17:06:26 duke Exp $
 // livelink_import.aw - Import livelingist
 
 /*
@@ -299,7 +299,7 @@ class livelink_import extends class_base
 		$rootnode = $this->rootnode;
 		passthru("wget -O $outfile 'https://dok.ut.ee/livelink/livelink?func=LL.login&username=avatud&password=avatud'  'https://dok.ut.ee/livelink/livelink?func=ll&objId=$rootnode&objAction=XMLExport&scope=sub&versioninfo=current&schema' 2>&1",$retval);
 		var_dump($retval);
-		print "got file, parsing \n";
+		print "got structure, parsing \n";
 		// check whether opening succeeded?
 		$fc = join("",file($outfile));
 		// reap the bloody header
@@ -312,8 +312,10 @@ class livelink_import extends class_base
 
 	function fetch_node($node_id)
 	{
-		$outfile = tempnam($this->tmpdir,"aw-");
-		passthru("wget -O $outfile 'https://dok.ut.ee/livelink/livelink?func=LL.login&username=avatud&password=avatud'  'https://dok.ut.ee/livelink/livelink?func=ll&objId=$node_id&objAction=XMLExport&scope=sub&versioninfo=current&schema&content=base64'");
+		$outfile = tempnam($this->tmpdir,"aw-");	
+		$cmdline = "wget -O $outfile 'https://dok.ut.ee/livelink/livelink?func=LL.login&username=avatud&password=avatud'  'https://dok.ut.ee/livelink/livelink?func=ll&objId=$node_id&objAction=XMLExport&scope=sub&versioninfo=current&schema&content=base64'";
+		print "executing $cmdline<br>";
+		passthru($cmdline);
 		// check whether opening succeeded?
 		$fc = join("",file($outfile));
 		// reap the bloody header
@@ -324,6 +326,7 @@ class livelink_import extends class_base
 		sleep(3);
 
 		print "entering parser<br>";
+		
 		$this->parse_file($outfile);
 		unlink($outfile);
         }
@@ -333,6 +336,11 @@ class livelink_import extends class_base
 		$infile = $fname;
 		$xml_data = join("",file($infile));
 		#$xml_data = str_replace("\r","",$xml_data);
+		/*
+		print "<pre>";
+		print htmlspecialchars($xml_data);
+		print "</pre>";
+		*/
 		$this->catch_content = false;
 		$this->content = "";
 		$this->filename = "";
@@ -395,7 +403,9 @@ class livelink_import extends class_base
 				modified = '$modified', rootnode = '$rootnode',
 				icon = '$iconurl'
 				WHERE id = '$id'";
-				$this->db_query($q);
+				$this->db_query($q);	
+				print $q;
+				exit;
 			}
 			else
 			{
@@ -422,13 +432,13 @@ class livelink_import extends class_base
 
                 if (($name == "version") && isset($attribs["filename"]))
                 {
-                        $this->filename = $attribs["id"] . "-" . $attribs["filename"];
+			#print "version node properties:<br>";
+                        $this->filename = $this->id . "-" . $attribs["filename"];
 			$fext  = array_pop(explode('.', $attribs["filename"]));	
 			$this->fext = $fext;
-			$this->filename = $attribs["id"] . "." . $fext;
+			$this->filename = $this->id . "." . $fext;
                         $this->name = ($attribs["name"]) ? $attribs["name"] : $attribs["filename"];
                         $this->modified = strtotime($attribs["modifydate"]);
-                        $this->id = $attribs["id"];
                 };
 
                 if (($name == "llnode") && isset($attribs["parentid"]))
@@ -436,10 +446,12 @@ class livelink_import extends class_base
                         $this->parentid = $attribs["parentid"];
                         #$this->desc = $attribs["description"];
 			print "setting name to $attribs[name]<br>";
+			$this->desc = $attribs["name"];
+			print "llnode node properties:<br>";
 			print "<pre>";
 			print_r($attribs);
 			print "</pre>";
-                        $this->desc = $attribs["name"];
+                        $this->id = $attribs["id"];
                 };
         }
 
