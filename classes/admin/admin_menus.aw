@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.30 2003/10/30 16:11:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.31 2003/11/08 08:41:10 duke Exp $
 class admin_menus extends aw_template
 {
 	// this will be set to document id if only one document is shown, a document which can be edited
@@ -84,7 +84,7 @@ class admin_menus extends aw_template
 
 		if ($atc_id)
 		{
-			$atc_inst = get_instance("add_tree_conf");
+			$atc_inst = get_instance("admin/add_tree_conf");
 			$atc_root = $atc_inst->get_root_for_user($atc_id);
 			if ($atc_root)
 			{
