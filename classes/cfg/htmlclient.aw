@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.76 2004/10/19 13:18:12 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.77 2004/10/19 13:24:49 ahti Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -484,15 +484,15 @@ class htmlclient extends aw_template
 			"name" => $arr["name"] ? $arr["name"] : "",
 			"action" => $arr["action"] ? $arr["action"] : "",
 		);
-		if($this->tplmode == "groups" && $this->sub_tpl->is_template($name))
-		{
-			$this->sub_tpl->vars($tpl_vars);
-			$rv = $this->sub_tpl->parse($name);
-		}
-		elseif($this->tplmode =="groups" && $this->sub_tpl->is_template($arr["name"]))
+		if($this->tplmode =="groups" && $this->sub_tpl->is_template($arr["name"]))
 		{
 			$this->sub_tpl->vars($tpl_vars);
 			$rv = $this->sub_tpl->parse($arr["name"]);
+		}
+		elseif($this->tplmode == "groups" && $this->sub_tpl->is_template($name))
+		{
+			$this->sub_tpl->vars($tpl_vars);
+			$rv = $this->sub_tpl->parse($name);
 		}
 		else
 		{
@@ -511,15 +511,15 @@ class htmlclient extends aw_template
 		// SUBITEM - element first, caption right next to it
 		// SUBITEM2 - caption first, element right next to it
 		$tpl = $args["type"] == "checkbox" ? "SUBITEM" : "SUBITEM2";
-		if($this->tplmode == "groups" && $this->sub_tpl->is_template($tpl))
-		{
-			$this->sub_tpl->vars($tpl_vars);
-			$rv = $this->sub_tpl->parse($tpl);
-		}
-		elseif($this->tplmode == "groups" && $this->sub_tpl->is_template($args["name"]))
+		if($this->tplmode == "groups" && $this->sub_tpl->is_template($args["name"]))
 		{
 			$this->sub_tpl->vars($tpl_vars);
 			$rv = $this->sub_tpl->parse($args["name"]);
+		}
+		elseif($this->tplmode == "groups" && $this->sub_tpl->is_template($tpl))
+		{
+			$this->sub_tpl->vars($tpl_vars);
+			$rv = $this->sub_tpl->parse($tpl);
 		}
 		else
 		{
@@ -535,15 +535,15 @@ class htmlclient extends aw_template
 		$tpl_vars = array(
 			"caption" => $args["caption"],
 		);
-		if($this->tplmode == "groups" && $this->sub_tpl->is_template($name))
-		{
-			$this->sub_tpl->vars($tpl_vars);
-			$rv = $this->sub_tpl->parse($name);
-		}
-		elseif($this->tplmode == "groups" && $this->sub_tpl->is_template($args["name"]))
+		if($this->tplmode == "groups" && $this->sub_tpl->is_template($args["name"]))
 		{
 			$this->sub_tpl->vars($tpl_vars);
 			$rv = $this->sub_tpl->parse($args["name"]);
+		}
+		elseif($this->tplmode == "groups" && $this->sub_tpl->is_template($name))
+		{
+			$this->sub_tpl->vars($tpl_vars);
+			$rv = $this->sub_tpl->parse($name);
 		}
 		else
 		{
@@ -559,15 +559,15 @@ class htmlclient extends aw_template
 		$tpl_vars = array(
 			"value" => !empty($args["value"]) ? $args["value"] : $args["caption"],
 		);
-		if($this->tplmode == "groups" && $this->sub_tpl->is_template($name))
-		{
-			$this->sub_tpl->vars($tpl_vars);
-			$rv = $this->sub_tpl->parse($name);
-		}
-		elseif($this->tplmode == "groups" && $this->sub_tpl->is_template($args["name"]))
+		if($this->tplmode == "groups" && $this->sub_tpl->is_template($args["name"]))
 		{
 			$this->sub_tpl->vars($tpl_vars);
 			$rv = $this->sub_tpl->parse($args["name"]);
+		}
+		elseif($this->tplmode == "groups" && $this->sub_tpl->is_template($name))
+		{
+			$this->sub_tpl->vars($tpl_vars);
+			$rv = $this->sub_tpl->parse($name);
 		}
 		else
 		{

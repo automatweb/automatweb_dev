@@ -19,6 +19,8 @@ there are two ways of showing properties:
 #/code#
 For that, you have to consult to grouptpl_default.tpl for the VARs, that are showed inside and add them (usually it is SUB: LINE, but it can vary, determine it yourself)
 The advantage of this is, that you can define the placement and style of the property just the way you want it.
+Things like SUBMIT, HEADER etc., can be defined in two way: either a general way, <!-- SUB: SUBMIT --> or a <!-- SUB: [submit_property_name] -->. The last one is preferred, when both are defined in a template.
+
 
 * Second, you can define the property in a form of {VAR:[property name]}
 Then the property will be parsed as a default property from grouptpl_default.tpl (this is also usually SUB: LINE). Disadvantage is, that all the props will look the same.
