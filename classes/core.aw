@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.143 2003/01/07 14:25:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.144 2003/01/07 19:23:14 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1186,6 +1186,11 @@ class core extends db_connector
 		{
 			$oid = $arg;
 		};
+
+		if (!$oid)
+		{
+			return false;
+		}
 
 		if ($no_cache)
 		{
