@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.102 2002/08/08 17:38:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.103 2002/08/15 17:39:42 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 lc_load("definition");
@@ -1396,6 +1396,8 @@ class messenger extends menuedit_light
 		$q = "UPDATE messages SET mfrom = '$mfrom',tm=$tm WHERE id = '$msg_id'";
 		$this->db_query($q);
 
+		$message = stripslashes($message);
+
 		//echo("in deliver type=$type");//dbg
 		// tavaline meil
 		if (($type & MSG_HTML) == 0)
@@ -1491,6 +1493,7 @@ class messenger extends menuedit_light
 			}
 			print "<br>";
 			print sizeof($alist) . " kirja saadetud<br>";
+			$baseurl = aw_global_get("baseurl");
 			print "<a href='$baseurl/?class=messenger'>tagasi messengeri</a>";
 			exit;
 			//mis se on siis ?? lauri
