@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry.aw,v 2.1 2001/05/21 14:16:05 duke Exp $
 
 global $orb_defs;
 

@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/guestbook.aw,v 2.1 2001/05/21 14:15:04 duke Exp $
 
 global $orb_defs;
 $orb_defs["guestbook"] = array("new" => array("function" => "add" , "params" => array("parent"), "opt" => array("docid")),
