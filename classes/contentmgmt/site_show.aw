@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.66 2004/06/14 14:29:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.67 2004/06/17 13:56:19 kristo Exp $
 
 /*
 
@@ -70,7 +70,6 @@ class site_show extends class_base
 
 		$this->_init_path_vars($arr);
 
-
 		// figure out the menu that is active
 		$this->sel_section = $this->_get_sel_section(aw_global_get("section"));
 		if (aw_ini_get("config.object_translation"))
@@ -96,7 +95,6 @@ class site_show extends class_base
 		{
 			$this->right_pane = false;
 		}
-
 
 		$this->do_check_properties(&$arr);
 
