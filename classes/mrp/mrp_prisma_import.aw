@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.4 2005/02/07 13:18:36 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.5 2005/02/14 10:02:14 kristo Exp $
 // mrp_prisma_import.aw - Prisma import 
 /*
 
@@ -444,7 +444,7 @@ class mrp_prisma_import extends class_base
 			$o->set_parent($ws->prop("projects_folder"));
 			$o->set_prop("extern_id", $id);
 			$o->set_prop("customer", $t->id());
-			$o->set_prop("customer_priority", $t->prop("priority"));
+//			$o->set_prop("customer_priority", $t->prop("priority"));
 			$o->save();
 			$this->_upd_proj_o($o, $dat);
 			$o->save();
@@ -550,7 +550,16 @@ class mrp_prisma_import extends class_base
 			"class_id" => CL_CRM_COMPANY,
 			"extern_id" => $dat["Tellija"]
 		));
-		$t = $c_ol->begin();
+		if (!$c_ol->count())
+		{
+			// import new customer
+			$t = $this->_imp_new_cust($co,$dat["Tellija"]);
+		}
+		else
+		{
+			$t = $c_ol->begin();
+		}
+	
 
 		if (!$ol->count())
 		{
@@ -559,16 +568,19 @@ class mrp_prisma_import extends class_base
 			$o->set_class_id(CL_MRP_CASE);
 			$o->set_parent($co->id());
 			$o->set_prop("extern_id", $id);
-			$o->set_prop("customer", $t->id());
-			$o->set_prop("customer_priority", $t->prop("priority"));
+//			$o->set_prop("customer", $t->id());
+//			$o->set_prop("customer_priority", ($t ? $t->prop("priority") : 0));
 			$o->save();
 			$this->_upd_proj_o($o, $dat);
 			$o->save();
 
-			$t->connect(array(
-				"to" => $o->id(),
-				"reltype" => "RELTYPE_CUSTOMER"
-			));
+			if ($t)
+			{
+				$t->connect(array(
+					"to" => $o->id(),
+					"reltype" => "RELTYPE_CUSTOMER"
+				));
+			}
 
 			$o->connect(array(
 				"to" => aw_ini_get("prisma.ws"),
@@ -580,7 +592,7 @@ class mrp_prisma_import extends class_base
 			// if yes, update
 			$o = $ol->begin();
 			$o->set_prop("customer", $t->id());
-			$o->set_prop("customer_priority", $t->prop("priority"));
+//			$o->set_prop("customer_priority", ($t ? $t->prop("priority") : 0));
 			$this->_upd_proj_o($o, $dat);
 
 			if (!$o->is_connected_to(array("to" => aw_ini_get("prisma.ws"))))
@@ -597,6 +609,24 @@ class mrp_prisma_import extends class_base
 		aw_restore_messages();
 
 		return $o->id();
+	}
+
+	function _imp_new_cust($co, $id)
+	{
+		$db = $this->_get_conn();
+		$dat = $db->db_fetch_row("SELECT * FROM kliendid WHERE KliendiID = '$id'");
+		if (!$dat)
+		{
+			return false;
+		}
+		$o = obj();	
+		$o->set_class_id(CL_CRM_COMPANY);
+		$o->set_parent($co->id());
+		$o->set_prop("extern_id", $id);
+		$o->save();
+		$this->_upd_cust_o($o, $dat);
+		$o->save();
+		return $o;
 	}
 }
 ?>
