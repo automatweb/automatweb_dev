@@ -71,11 +71,26 @@ class class_base extends aliasmgr
                                 "objdata" => &$this->objdata,
                         );
 
+			// callbackiga saad muuta ühe konkreetse omaduse sisu
                         if ($callback)
                         {
                                 $this->inst->get_property($argblock);
                         };
 
+			// I need other way to retrieve a list of dynamically
+			// generated properties from the class and display those
+
+			if ($val["type"] == "generated" && method_exists($this->inst,$val["generator"]))
+			{
+				$meth = $val["generator"];
+				$vx = $this->inst->$meth($argblock);
+				$resprops = array_merge($resprops,$vx);
+			}
+			elseif ($val["type"] == "hidden")
+			{
+				// do nothing
+			}
+			else
                         // if the property has a getter, call it directly
                         if (is_array($val) && $val["getter"])
                         {
@@ -128,6 +143,7 @@ class class_base extends aliasmgr
                         // add properties - one line at a time
                         if (is_string($val) && method_exists($this,$val))
                         {
+				// this should NOT be here
                                 $content = $this->$val();
                         };
                         $cli->add_property($val);
@@ -348,10 +364,9 @@ class class_base extends aliasmgr
 	{
 		// load all properties
 		$cfgu = get_instance("cfg/cfgutils");
-		$coreprops = $cfgu->load_properties(array("file" => "core"));
-		$objprops = $cfgu->load_properties(array("file" => basename($args["clfile"])));
+//                $coreprops = $cfgu->load_properties(array("file" => "core"));
+		$all_props = $cfgu->load_properties(array("file" => basename($args["clfile"])));
 		$this->classinfo = $cfgu->get_classinfo();
-		$all_props = array_merge($coreprops,$objprops);
 	
 		// I need names of all group and the contents of active group
 		$by_group = array();
