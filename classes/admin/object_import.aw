@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.2 2004/05/07 10:54:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.3 2004/05/12 13:43:06 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -19,14 +19,8 @@
 @property unique_id type=select 
 @caption Unikaalne omadus
 
-@property import_file type=fileupload 
-@caption Imporditav fail
-
-@property import_file_show type=text 
-@caption Uploaditud fail
-
-@property file_has_header type=checkbox ch_value=1 
-@caption Esimene rida on pealkirjadega
+@property ds type=relpicker reltype=RELTYPE_DATASOURCE
+@caption Andmeallikas
 
 @property do_import type=checkbox ch_value=1 
 @caption Teosta import
@@ -43,6 +37,9 @@
 
 @reltype FOLDER value=2 clid=CL_MENU
 @caption kataloog kuhu objektid panna
+
+@reltype DATASOURCE value=3 clid=CL_ABSTRACT_DATASOURCE
+@caption andmeallikas
 
 */
 
@@ -62,59 +59,13 @@ class object_import extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "import_file_show":
-				$file = false;
-				if (($tfn = $arr["obj_inst"]->meta("tmp_up_file")) != "")
-				{
-					if (file_exists($tfn) && is_readable($tfn))
-					{
-						$size = @filesize($tfn);
-						if ($size > 1024)
-						{
-							$filesize = number_format($size / 1024, 2)."kb";
-						}
-						else
-						if ($size > (1024*1024))
-						{
-							$filesize = number_format($size / (1024*1024), 2)."mb";
-						}
-						else
-						{
-							$filesize = $size." b";
-						}
-
-						$lines = count(file($tfn)) - ($arr["obj_inst"]->prop("file_has_header") ? 1 : 0);
-
-						classload("icons");
-						$file = true;
-						$prop["value"] = html::img(array(
-							"url" => icons::get_icon_url(CL_FILE,$name),
-							"border" => "0"
-						))." ".$arr["obj_inst"]->meta("tmp_up_file_name").", ".$filesize.", $lines objekt(i)";
-					}
-				}
-
-				if (!$file)
-				{
-					$retval = PROP_IGNORE;
-				}
-				break;
-
 			case "do_import":
-				$file = false;
-				if (($tfn = $arr["obj_inst"]->meta("tmp_up_file")) != "")
-				{
-					if (file_exists($tfn) && is_readable($tfn))
-					{
-						$file = true;
-					}
-				}
-
-				if (!$file)
+				if (!$arr["obj_inst"]->prop("ds"))
 				{
 					$retval = PROP_IGNORE;
 				}
 				break;
+
 
 			case "unique_id":
 				if (!$arr["obj_inst"]->prop("object_type"))
@@ -148,21 +99,6 @@ class object_import extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "import_file":
-				// save as temp file
-				if (is_uploaded_file($_FILES["import_file"]["tmp_name"]))
-				{
-					if ($arr["obj_inst"]->meta("tmp_up_file"))
-					{
-						@unlink($arr["obj_inst"]->meta("tmp_up_file"));
-					}
-					$tmp_name = tempnam(aw_ini_get("server.tmpdir"), "aw_oi_tmp");
-					move_uploaded_file($_FILES["import_file"]["tmp_name"], $tmp_name);
-					$arr["obj_inst"]->set_meta("tmp_up_file", $tmp_name);
-					$arr["obj_inst"]->set_meta("tmp_up_file_name", $_FILES["import_file"]["name"]);
-				}
-				break;
-
 			case "props":
 				$arr["obj_inst"]->set_meta("isimp", $arr["request"]["isimp"]);
 				break;
@@ -273,7 +209,7 @@ class object_import extends class_base
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 
-		$cols = $this->get_cols_from_up_file($arr["obj_inst"]);
+		$cols = $this->get_cols_from_ds($arr["obj_inst"]);
 
 		$this->_init_connect_props_table($t, $cols);
 
@@ -310,37 +246,33 @@ class object_import extends class_base
 		}
 	}
 
-	function get_cols_from_up_file($o)
+	function get_cols_from_ds($o)
 	{
-		$ret = array();
-		if (file_exists($o->meta("tmp_up_file")) && is_readable($o->meta("tmp_up_file")))
+		if (!$o->prop("ds"))
 		{
-			$fp = fopen($o->meta("tmp_up_file"), "r");
-			$line = fgetcsv($fp, 100000);
-			if(is_array($line))
-			{
-				foreach($line as $idx => $txt)
-				{
-					$ret[$idx+1] = $txt;
-				}
-			}
+			return array();
 		}
-		
-		return $ret;
+
+		// let the datasource parse the data and return the first row
+		$ds_o = obj($o->prop("ds"));
+		$ds_i = $ds_o->instance();
+		return $ds_i->get_fields($ds_o);
 	}
 
 	function do_exec_import($o)
 	{
-		// for each line in the file
+		// for each line in the ds
 		// read it
 		// if there is an unique column
 		//		check if there already is an object with that value
-		//		if true, continue
+		//		if true, use that 
+		// else
+		//		create new object
 		// match col => prop
 		// save
 		// loop
 		// js redir back to change
-		if (file_exists($o->meta("tmp_up_file")) && is_readable($o->meta("tmp_up_file")) && $o->prop("folder"))
+		if ($o->prop("ds") && $o->prop("folder"))
 		{
 			$type_o = obj($o->prop("object_type"));
 			$class_id = $type_o->prop("type");
@@ -348,15 +280,13 @@ class object_import extends class_base
 
 			$line_n = 0;
 
-			$fp = fopen($o->meta("tmp_up_file"), "r");
-			while (($line = fgetcsv($fp, 100000)))
+			$ds_o = obj($o->prop("ds"));
+			$ds_i = $ds_o->instance();
+			$data_rows = $ds_i->get_objects($ds_o);
+
+			foreach($data_rows as $line)
 			{
 				$line_n++;
-				if ($o->prop("file_has_header") && $line_n == 1)
-				{
-					continue;
-				}
-
 				echo "impordin rida ".($line_n)."... <br>\n";
 				flush();
 
@@ -367,17 +297,23 @@ class object_import extends class_base
 
 					$ol = new object_list(array(
 						"class_id" => $class_id,
-						$o->prop("unique_id") => $line[$u_col-1]
+						$o->prop("unique_id") => $line[$u_col]
 					));
 					if ($ol->count() > 0)
 					{
-						$tmp = $ol->begin();
-						echo "leidsin juba olemasoleva objekti ".$tmp->name().", seda rida ei impordita <br>";
-						continue;
+						$dat = $ol->begin();
+						echo "leidsin juba olemasoleva objekti ".$dat->name().", kasutan olemasolevat objekti <br>";
+					}
+					else
+					{
+						$dat = obj();
 					}
 				}
+				else
+				{
+					$dat = obj();
+				}
 
-				$dat = obj();
 				$dat->set_class_id($class_id);
 				$dat->set_parent($o->prop("folder"));
 
@@ -389,7 +325,7 @@ class object_import extends class_base
 				
 				foreach($p2c as $pn => $idx)
 				{
-					$dat->set_prop($pn, $line[$idx-1]);
+					$dat->set_prop($pn, $line[$idx]);
 				}
 
 				$dat->save();

@@ -30,32 +30,14 @@
             <caption>Unikaalne omadus</caption>
       </property>
       <property>
-            <name>import_file</name>
+            <name>ds</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>fileupload</type>
-            <caption>Imporditav fail</caption>
-      </property>
-      <property>
-            <name>import_file_show</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <caption>Uploaditud fail</caption>
-      </property>
-      <property>
-            <name>file_has_header</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Esimene rida on pealkirjadega</caption>
+            <type>relpicker</type>
+            <reltype>RELTYPE_DATASOURCE</reltype>
+            <caption>Andmeallikas</caption>
       </property>
       <property>
             <name>do_import</name>
@@ -112,6 +94,11 @@
                   <clid>CL_MENU</clid>
                   <caption>kataloog kuhu objektid panna</caption>
             </FOLDER>
+            <DATASOURCE>
+                  <value>3</value>
+                  <clid>CL_ABSTRACT_DATASOURCE</clid>
+                  <caption>andmeallikas</caption>
+            </DATASOURCE>
       </reltypes>
 </properties>
 
