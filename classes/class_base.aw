@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.84 2003/03/18 15:10:53 duke Exp $
+// $Id: class_base.aw,v 2.85 2003/03/18 16:02:44 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -187,7 +187,6 @@ class class_base extends aliasmgr
 	// any other data, then you'll need to use other field name
 	function change($args = array())
 	{
-		error_reporting(E_ALL);
 		// create an instance of the class servicing the object ($this->inst)
 		// create an instance of the datasource ($this->ds)
 		// set $this->clid and $this->clfile (Do I need the latter at all?)
