@@ -430,17 +430,6 @@
             <caption>Template dokumendi näitamiseks (lühike)</caption>
       </property>
       <property>
-            <name>tpl_edit_cfgform</name>
-            <type>objpicker</type>
-            <clid>CL_CFGFORM</clid>
-            <subclass>CL_DOCUMENT</subclass>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>show</group>
-            <caption>Konfivorm/template dokumendi muutmiseks</caption>
-      </property>
-      <property>
             <name>hide_noact</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
