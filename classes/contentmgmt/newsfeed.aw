@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.2 2005/02/09 10:27:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.3 2005/02/09 17:46:14 duke Exp $
 // newsfeed.aw - Newsfeed 
 /*
 
@@ -129,6 +129,7 @@ class newsfeed extends class_base
 				"limit" => $count,
 			));
 			$first = 0;
+			$source = aw_ini_get("newsfeed.source");
 			foreach($ol->arr() as $o)
 			{
 				if ($first == 0)
@@ -148,7 +149,7 @@ class newsfeed extends class_base
 					"start_date" => date("Y-m-d H:i:s",$o->modified()),
 					"end_date" => "0000-00-00 00:00:00", // documents have no ending date
 					"author" => $o->prop("author"),
-					"source" => $o->prop("source"),
+					"source" => $source,
 					"art_lead" => $art_lead,
 					"description" => $description,
 					"guid" => aw_ini_get("baseurl") . "/" . $oid,
