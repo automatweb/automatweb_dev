@@ -1,50 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.125 2002/11/15 18:04:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.126 2002/11/15 21:19:20 duke Exp $
 // core.aw - Core functions
-
-// Core properties - common for all classes
-/*
-	@default table=objects
-
-	@property name type=textbox group=general
-	@caption Objekti nimi
-
-	@property comment type=textbox group=general
-	@caption Kommentaar
-
-	@property alias type=textbox group=general 
-	@caption Alias
-
-	@property status type=status group=general 
-	@caption Staatus
-
-	@property jrk type=textbox size=4 group=general
-	@caption Jrk
-
-	@property created type=date access=ro
-	@caption Loomise kuupäev
-
-	@property createdby type=uid access=ro
-	@caption Looja
-
-	@property modified type=date access=ro
-	@caption Muutmise kuupäev
-
-	@property modifiedby type=uid access=ro
-	@caption Muutja
-
-	@property oid type=int access=ro
-	@caption Objekti id
-
-	@property parent type=int access=ro
-	@caption Parenti id
-
-	@property class_id type=class_id access=ro
-	@caption Klassi id
-*/
-
-
-
 define("ARR_NAME", 1);
 define("ARR_ALL",2);
 
@@ -55,17 +11,6 @@ classload("db");
 class core extends db_connector
 {
 	var $errmsg;		
-
-	////
-	// !fetchib kirje suvalisest tabelist
-	/*
-	function get_record($table,$field,$selector)
-	{
-		$q = "SELECT * FROM $table WHERE $field = '$selector'";
-		$this->db_query($q);
-		return $this->db_fetch_row();
-	}
-	*/
 
 	////
 	// !kustutab kirje mingist tabelist. Kahtlane värk

@@ -1,5 +1,46 @@
 <?php
-// $Id: class_base.aw,v 2.6 2002/11/15 18:23:13 duke Exp $
+// $Id: class_base.aw,v 2.7 2002/11/15 21:19:42 duke Exp $
+// Common properties for all classes
+/*
+	@default table=objects
+
+	@property name type=textbox group=general
+	@caption Objekti nimi
+
+	@property comment type=textbox group=general
+	@caption Kommentaar
+
+	@property alias type=textbox group=general 
+	@caption Alias
+
+	@property status type=status group=general 
+	@caption Staatus
+
+	@property jrk type=textbox size=4 group=general
+	@caption Jrk
+
+	@property created type=date access=ro
+	@caption Loomise kuupäev
+
+	@property createdby type=uid access=ro
+	@caption Looja
+
+	@property modified type=date access=ro
+	@caption Muutmise kuupäev
+
+	@property modifiedby type=uid access=ro
+	@caption Muutja
+
+	@property oid type=int access=ro
+	@caption Objekti id
+
+	@property parent type=int access=ro
+	@caption Parenti id
+
+	@property class_id type=class_id access=ro
+	@caption Klassi id
+*/
+
 // some contants for internal use
 
 // possible return values for set_property
@@ -500,7 +541,6 @@ class class_base extends aliasmgr
 	{
 		// load all properties
 		$cfgu = get_instance("cfg/cfgutils");
-//                $coreprops = $cfgu->load_properties(array("file" => "core"));
 		$all_props = $cfgu->load_properties(array("file" => basename($args["clfile"])));
 		$this->classinfo = $cfgu->get_classinfo();
 	
