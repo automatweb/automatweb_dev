@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.67 2004/10/05 07:21:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.68 2004/10/08 07:56:31 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -189,7 +189,7 @@ class form_table extends form_base
 	function row_data(&$dat,$form_id = 0,$section = 0 ,$op_id = 0,$chain_id = 0, $chain_entry_id = 0)
 	{
 		enter_function("form_table::row_data", array());
-		
+
 		// check if we should perhaps not show the damn entry
 		if (isset($this->table["has_grpsettings"]) && $this->table["has_grpsettings"])
 		{
@@ -521,7 +521,31 @@ class form_table extends form_base
 							{
 								$target = "target=\"_blank\"";
 							}
-							$str = "<a $target href='".$dat["ev_".$cc["link_el"]]."'>".$linktext."</a>";
+
+							// try to detect if the damn thing is a file url
+							// if it is, check if the file can be viewed
+							// if not, don't show the link
+							$__link_url = $dat["ev_".$cc["link_el"]];
+							$__show_link = true;
+							if (strpos($__link_url, "class=file/action=preview/id=") !== false)
+							{
+								if (preg_match("/class=file\/action=preview\/id=(\d+)/ims", $__link_url, $_file_ids))
+								{
+									if (!$this->can("view", trim($_file_ids[1])))
+									{
+										$__show_link = false;
+									}
+								}
+							}
+
+							if ($__show_link)
+							{
+								$str = "<a $target href='".$__link_url."'>".$linktext."</a>";
+							}
+							else
+							{
+								$str = "";
+							}
 						}
 						else
 						{
