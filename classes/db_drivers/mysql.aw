@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.3 2002/11/12 12:49:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.4 2002/11/26 12:59:20 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql 
 {
@@ -17,7 +17,7 @@ class mysql
 		$this->db_base = $db_core->db_base;
 		$this->watch = 1;
 		*/
-		lc_load("definition");
+		lc_load('definition');
 	}
 		
 
@@ -31,14 +31,14 @@ class mysql
 		if (!$this->dbh) 
 		{
 			echo "Can't connect to database";
-			print "<br>";
+			print '<br>';
 			print mysql_error();
 			exit;
 		};
 		if (not(@mysql_select_db($base,$this->dbh)))
 		{
 			echo "Can't connect to database";
-			print "<br>";
+			print '<br>';
 			print mysql_error();
 			exit;	
 		};
@@ -50,13 +50,13 @@ class mysql
 		global $DUKE;
 		if ($DUKE)
 		{
-			print "<pre>";
-			print_r($qtext);
-			print "</pre>";
-			list($micro,$sec) = split(" ",microtime());
+			print '<pre>';
+			print_r(preg_replace("/\t/","",$qtext));
+			print '</pre>';
+			list($micro,$sec) = split(' ',microtime());
 			$ts_s = $sec + $micro;
 		};
-		aw_global_set("qcount",aw_global_get("qcount")+1); 
+		aw_global_set('qcount',aw_global_get('qcount')+1); 
 
 		if (not($this->dbh))
 		{
@@ -70,11 +70,17 @@ class mysql
 				exit;
 			}
 		};
-		$this->qID = mysql_query($qtext, $this->dbh);
+		$this->qID = @mysql_query($qtext, $this->dbh);
+		log_query($qtext);
 		if (!$this->qID ) 
 		{
 			if (!$errors)
 			{
+				$this->db_last_error = array(
+					'error_cmd' => $qtext,
+					'error_code' => mysql_errno($this->dbh),
+					'error_string' => mysql_error($this->dbh)
+				);
 				return false;
 			}
 			echo LC_MYSQL_ERROR_QUERY;
@@ -83,13 +89,13 @@ class mysql
 
 /*			if (strlen($qtext) > 5000)
 			{
-				$qtext = substr($qtext,0,5000) . "....(truncated)";
+				$qtext = substr($qtext,0,5000) . '....(truncated)';
 			};*/
 
-			echo $qtext . "\n";
-			echo "<br>\n";
+			echo $qtext . '\n';
+			echo '<br>\n';
 			echo mysql_errno($this->dbh);
-			print ":";
+			print ':';
 			echo mysql_error($this->dbh);
 		} 
 		else 
@@ -100,9 +106,10 @@ class mysql
 		$this->rec_count = 0;
 		if ($DUKE)
 		{
-			list($micro,$sec) = split(" ",microtime());
+			list($micro,$sec) = split(' ',microtime());
 			$ts_e = $sec + $micro;
-			echo "query took ".($ts_e - $ts_s)." seconds <br>";
+			$tm = sprintf("%0.04f",$ts_e - $ts_s);
+			echo "query took $tm seconds <br>";
 		}
 		return true;
 	}
@@ -144,7 +151,7 @@ class mysql
 			{
 				$this->dequote($res);
 			}
-			$res["rec"] = $this->rec_count;
+			$res['rec'] = $this->rec_count;
 		};
 		return $res;
 	}
@@ -155,9 +162,9 @@ class mysql
 		return $res;
 	}
 
-	function db_fetch_row($sql = "")
+	function db_fetch_row($sql = '')
 	{
-		if ($sql != "")
+		if ($sql != '')
 		{
 			$this->db_query($sql);
 		}
@@ -175,6 +182,23 @@ class mysql
 		$this->dequote($val);
 		return $val;
 	}
+
+	//// ! fetch all rows from db_query result
+	// loeb kogu select tulemuse arraysse
+	// query - if not set tries to fetch from previous db_query !!
+	function db_fetch_array($qtext='') 
+	{
+		if ($qtext)
+		{
+			$this->db_query($qtext);
+		}
+		while ($row[]=$this->db_next())
+		{}
+		return $row;
+	}
+
+
+
 
 	# need 2 funktsiooni oskavad käituda nii array-de kui ka stringidega
 	function quote(&$arr) 
@@ -246,7 +270,8 @@ class mysql
 	function db_get_fields()
 	{
 		$retval = array();
-		print $this->num_fields;
+		// print $this->num_fields;   // kommenterisin välja, kui keegi pahandab siis süüdi on axel
+		$this->num_fields;
 		for ($i = 0; $i < $this->num_fields; $i++)
 		{
 			$retval[] = mysql_fetch_field($this->qID);
@@ -268,7 +293,7 @@ class mysql
 	//								)
 	function db_get_table($name)
 	{
-		$ret = array("name" => $name,"fields" => array());
+		$ret = array('name' => $name,'fields' => array());
 		$fID = @mysql_list_fields($this->db_base, $name, $this->dbh);
 		if (!$fID)
 		{
@@ -278,12 +303,34 @@ class mysql
 		$numfields = mysql_num_fields($fID);
 		for ($i=0; $i < $numfields; $i++)
 		{
-			$name = mysql_field_name($fID,$i);
+			$_name = mysql_field_name($fID,$i);
 			$type = mysql_field_type($fID,$i);
 			$len =  mysql_field_len($fID,$i);
 			$flags = mysql_field_flags($fID,$i);
-			$ret["fields"][$name] = array("name" => $name, "length" => $len, "type" => $type, "flags" => "");
+			$ret['fields'][$_name] = array('name' => $_name, 'length' => $len, 'type' => $type, 'flags' => '');
 		}
+
+		$this->db_query("DESCRIBE $name");
+		while ($row = $this->db_next())
+		{
+			$ret['fields'][$row['Field']]['name'] = $row['Field'];
+			if (strpos($row['Type'],'(') === false)
+			{
+				$ret['fields'][$row['Field']]['length'] = $row['Type'] == 'text' ? 65535 : ($row['Type'] == 'mediumtext' ? 1024*1024*16 : 0 );
+				$ret['fields'][$row['Field']]['type'] = $row['Type'];
+			}
+			else
+			{
+				preg_match('/(.*)\((.*)\)/', $row['Type'], $mt);
+				$ret['fields'][$row['Field']]['length'] = $mt[2];
+				$ret['fields'][$row['Field']]['type'] = $mt[1];
+			}
+			$ret['fields'][$row['Field']]['null'] = $row['Null'];
+			$ret['fields'][$row['Field']]['default'] = $row['Default'];
+			$ret['fields'][$row['Field']]['flags'] = $row['Extra'];
+		}
+
+		// indeksid
 		return $ret;
 	}
 
@@ -299,32 +346,32 @@ class mysql
 		{
 			// create
 			$fls = array();
-			foreach ($source["fields"] as $fname => $fdata)
+			foreach ($source['fields'] as $fname => $fdata)
 			{
-				$fls[] = $fdata["name"]." ".$this->mk_field_len($fdata["type"],$fdata["length"]);
+				$fls[] = $fdata['name'].' '.$this->mk_field_len($fdata['type'],$fdata['length']);
 			}
-			$sql = "CREATE TABLE ".$dest."(".(join(",",$fls)).")";
+			$sql = 'CREATE TABLE '.$dest.'('.(join(',',$fls)).')';
 			$this->db_query($sql);
 		}
 		else
 		{
 			// iterate over all fields and add the missing ones and convert the changed ones
-			foreach($source["fields"] as $fname => $fdata)
+			foreach($source['fields'] as $fname => $fdata)
 			{
-				if (is_array($dest_t["fields"][$fdata["name"]]))
+				if (is_array($dest_t['fields'][$fdata['name']]))
 				{
 					// field exists, convert it if necessary
-					$dest_field = $dest_t["fields"][$fdata["name"]];
-					if ($dest_field["type"] != $fdata["type"] || $dest_field["length"] != $fdata["length"])
+					$dest_field = $dest_t['fields'][$fdata['name']];
+					if ($dest_field['type'] != $fdata['type'] || $dest_field['length'] != $fdata['length'])
 					{
-						$sql = "ALTER TABLE $dest CHANGE ".$fdata["name"]." ".$fdata["name"]." ".$this->mk_field_len($fdata["type"],$fdata["length"]);
+						$sql = "ALTER TABLE $dest CHANGE ".$fdata['name'].' '.$fdata['name'].' '.$this->mk_field_len($fdata['type'],$fdata['length']);
 						$this->db_query($sql);
 					}
 				}
 				else
 				{
 					// field does not exist, add it
-					$sql = "ALTER TABLE $dest ADD ".$fdata["name"]." ".$this->mk_field_len($fdata["type"],$fdata["length"]);
+					$sql = "ALTER TABLE $dest ADD ".$fdata['name'].' '.$this->mk_field_len($fdata['type'],$fdata['length']);
 					$this->db_query($sql);
 				}
 			}
@@ -337,15 +384,15 @@ class mysql
 	{
 		switch ($type)
 		{
-			case "tinyint":
-			case "smallint":
-			case "mediumint":
-			case "int":
-			case "integer":
-			case "bigint":
-			case "char":
-			case "varchar":
-				return $type."(".$length.")";
+			case 'tinyint':
+			case 'smallint':
+			case 'mediumint':
+			case 'int':
+			case 'integer':
+			case 'bigint':
+			case 'char':
+			case 'varchar':
+				return $type.'('.$length.')';
 
 			default:
 				return $type;
@@ -356,32 +403,32 @@ class mysql
 	// !this creates a nice string from the results of db_get_table
 	function db_print_table($arr)
 	{
-		$ret = "CREATE TABLE ".$arr["name"];
-		$ret.="(";
+		$ret = 'CREATE TABLE '.$arr['name'];
+		$ret.='(';
 		$fs = array();
-		if (is_array($arr["fields"]))
+		if (is_array($arr['fields']))
 		{
-			foreach($arr["fields"] as $fname => $fdata)
+			foreach($arr['fields'] as $fname => $fdata)
 			{
-				$fs[] = $fdata["name"]." ".$fdata["type"]."(".$fdata["length"].") ".$fdata["flags"];
+				$fs[] = $fdata['name'].' '.$fdata['type'].'('.$fdata['length'].') '.$fdata['flags'];
 			}
 		}
-		$ret.=join(",",$fs);
-		return $ret.")";
+		$ret.=join(',',$fs);
+		return $ret.')';
 	}
 
 	////
 	// !Reads and returns the structure of the database
 	function db_get_struct()
 	{
-		$this->db_query("SHOW TABLES");
+		$this->db_query('SHOW TABLES');
 		$tables = array();
 		while($row = $this->db_next())
 		{
 			list($key,$val) = each($row);
 			$row[0] = $val;
 			// form entry tables are ignored
-			if (not(preg_match("/form_(\d+?)_entries/",$row[0])))
+			if (not(preg_match('/form_(\d+?)_entries/',$row[0])))
 			{
 				$name = $row[0];
 				$this->save_handle();
@@ -389,26 +436,26 @@ class mysql
 				while($row = $this->db_next())
 				{
 					$flags = array();
-					list($type,$extra) = explode(" ",$row["Type"]);
+					list($type,$extra) = explode(' ',$row['Type']);
 					if ($extra)
 					{
 						$flags[] = $extra;
 					};
 
-					if (not($row["Null"] == "YES"))
+					if (not($row['Null'] == 'YES'))
 					{
-						$flags[] = "NOT NULL";
+						$flags[] = 'NOT NULL';
 					};
 			
-					if ($row["Extra"])
+					if ($row['Extra'])
 					{
-						$flags[] = $row["Extra"];
+						$flags[] = $row['Extra'];
 					};
 
-					$tables[$name][$row["Field"]] = array(
-							"type" => $type,
-							"flags" => $flags,
-							"key" => $row["Key"],
+					$tables[$name][$row['Field']] = array(
+						'type' => $type,
+						'flags' => $flags,
+						'key' => $row['Key'],
 					);
 					
 				};
@@ -418,106 +465,144 @@ class mysql
 		return $tables;
 	}
 
-/*	function db_get_table($args = array())
+	function db_list_databases()
+	{
+		return $this->db_query('SHOW DATABASES');
+	}
+
+	function db_next_database()
+	{
+		$tmp = $this->db_next();
+		return $tmp === false ? false : array('name' => $tmp['Database']);
+	}
+
+	function db_create_database($args)
 	{
 		extract($args);
-		$tables = array();
-		$this->db_query("SHOW CREATE TABLE $name");
-		$row = $this->db_next();
-		$def = $row["Create Table"];
-		preg_match("/CREATE TABLE `(\w*)` \((.*)\) TYPE/smi",$def,$m);
-		if (!$m[2])
-		{
-			return false;
-		};
-		$tokens = explode(",",str_replace("\n","",$m[2]));
+		$this->db_query("CREATE DATABASE $name");
+		$this->db_query('GRANT ALL PRIVILEGES on '.$name.'.* TO '.$user.'@'.$host." IDENTIFIED BY '".$pass."'");
+	}
 
-		$fields = $indexes = array();
-		// now figure out what each token contains
-		foreach($tokens as $token)
+	function db_server_status()
+	{
+		$ret = array();
+		$this->db_query('SHOW STATUS');
+		$ret['Server_version'] = mysql_get_server_info($this->dbh);
+		$ret['Protocol_version'] = mysql_get_proto_info($this->dbh);
+		$ret['Host_info'] = mysql_get_host_info($this->dbh);
+		while ($row = $this->db_next())
 		{
-			$token = trim($token);
-			$stuff = explode(" ",$token);
-			// if it starst with a identifier between upper apostrophes,
-			// then it's very likely a field definition
-			if (preg_match("/^`(\w*)`/",$token,$m))
-			{
-				$name = $m[1];
-				$type = $stuff[1];
-				$length = "";
-				if (preg_match("/(\w+?)\((\d+?)\)/",$type,$mx))
-				{
-					$type = $mx[1];
-					$length = $mx[2];
-				};
-				$x = array(
-					"name" => $name,
-					"type" => $type,
-				);
-				if (strpos($token,"unsigned"))
-				{
-					$x["unsigned"] = 1;
-				};
-				if ($length)
-				{
-					$x["length"] = $mx["2"];
-				};
-				if (strpos($token,"NOT NULL"))
-				{
-					$x["not_null"] = 1;
-				};
-				if (preg_match("/default (\S*)/",$token,$m))
-				{
-					$x["default"] = $m[1];
-				};
-				if (strpos($token,"auto_increment"))
-				{
-					$x["sequence"] = 1;
-				};
-				$fields[] = $x;
-				// but I also have to figure out the extra information
-			};
+			$ret[$row['Variable_name']] = $row['Value'];
 		}
+		$ret['Queries_per_sec'] = (int)($ret['Questions'] / $ret['Uptime']);
+		return $ret;
+	}
 
-		// now retrieve information about indexes
+	function db_get_table_info($tbl)
+	{
+		return $this->db_fetch_row("SHOW TABLE STATUS LIKE '$tbl'");
+	}
 
-		$q = "SHOW INDEX FROM $args[name]";
-		$this->db_query($q);
-		while($row = $this->db_next())
-		{
-			$name = $row["Key_name"];
-			if ($indexes[$name])
-			{
-				$idx = $indexes[$name];
-			}
-			else
-			{
-				$idx = array();
-			};
-			$idx["name"] = $name;
-			$idx["unique"] = (int)!$row["Non_unique"];
-			$idx["columns"][] = $row["Column_name"];
-			$idx["collation"] = $row["Collation"];
-			$idx["length"] = (int)$row["Sub_part"];
-			$indexes[$name] = $idx;
-		};
+	function db_list_field_types()
+	{
+		return array('' => '',
+		'VARCHAR' => 'VARCHAR',
+		'TINYINT' => 'TINYINT',
+		'TEXT' => 'TEXT',
+		'DATE' => 'DATE',
+		'SMALLINT' => 'SMALLINT',
+		'MEDIUMINT' => 'MEDIUMINT',
+		'INT' => 'INT',
+		'BIGINT' => 'BIGINT',
+		'FLOAT' => 'FLOAT',
+		'DOUBLE' => 'DOUBLE',
+		'DECIMAL' => 'DECIMAL',
+		'DATETIME' => 'DATETIME',
+		'TIMESTAMP' => 'TIMESTAMP',
+		'TIME' => 'TIME',
+		'YEAR' => 'YEAR',
+		'CHAR' => 'CHAR',
+		'TINYBLOB' => 'TINYBLOB',
+		'TINYTEXT' => 'TINYTEXT',
+		'BLOB' => 'BLOB',
+		'MEDIUMBLOB' => 'MEDIUMBLOB',
+		'MEDIUMTEXT' => 'MEDIUMTEXT',
+		'LONGBLOB' => 'LONGBLOB',
+		'LONGTEXT' => 'LONGTEXT',
+		'ENUM' => 'ENUM',
+		'SET' => 'SET');
+	}
 
-		$definition = array(
-			"fields" => $fields,
-			"indexes" => array_values($indexes),
+	function db_list_flags()
+	{
+		return array('' => '',
+			'AUTO_INCREMENT' => 'AUTO_INCREMENT'
 		);
+	}
 
-		$serializer = get_instance("xml",array("ctag" => "schema"));
-		$serializer->set_child_id("fields","field");
-		$serializer->set_child_id("indexes","index");
-		$serializer->set_child_id("columns","column");
-		$result = $serializer->xml_serialize($definition);
-		header("Content-Type: text/xml");
-		print $result;
-		exit;
-		print "<pre>";
-		print htmlspecialchars($result);
-		print "</pre>";
-	}*/
+	function db_drop_col($tbl,$col)
+	{
+		$q = "ALTER TABLE $tbl DROP $col";
+		$this->db_query($q);
+	}
+
+	function db_add_col($tbl,$coldat)
+	{
+		extract($coldat);
+		if ($extra == 'AUTO_INCREMENT')
+		{
+			$extra = 'PRIMARY KEY AUTO_INCREMENT';
+		}
+		if ($length)
+		{
+			$len = '('.$length.')';
+		}
+		$q = "ALTER TABLE $tbl ADD $name $type $len $null ".($default == '' ? '' : "default '$default'")." $extra ";
+		$this->db_query($q);
+	}
+
+	function db_change_col($tbl, $col, $newdat)
+	{
+		extract($newdat);
+		$q = "ALTER TABLE $tbl CHANGE $name $name $type($length) $null ".($default == "" ? "" : "default '$default'")." $extra ";
+		$this->db_query($q);
+	}
+
+	function db_list_indexes($tbl)
+	{
+		$this->db_query("SHOW INDEX FROM $tbl");
+	}
+
+	function db_next_index()
+	{
+		$dat = $this->db_next();
+		if ($dat)
+		{
+			return array(
+				'index_name' => $dat['Key_name'],
+				'col_name' => $dat['Column_name'],
+				'unique' => !$dat['Non_unique']
+			);
+		}
+		return false;
+	}
+
+	function db_add_index($tbl, $idx_dat)
+	{
+		extract($idx_dat);
+		$q = "ALTER TABLE $tbl ADD INDEX $name($col)";
+		$this->db_query($q);
+	}
+
+	function db_drop_index($tbl, $name)
+	{
+		$q = "ALTER TABLE $tbl DROP INDEX $name";
+		$this->db_query($q);
+	}
+
+	function db_get_last_error()
+	{
+		return $this->db_last_error;
+	}
 };
 ?>
