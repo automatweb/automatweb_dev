@@ -41,39 +41,33 @@ class toode extends class_base
 			'clid' => CL_TOODE,
 		));
 	}
-	function get_property($args)
+	function get_property($arr)
 	{
-		$data = &$args['prop'];
+		$data = &$arr['prop'];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-			case 'jrk':
-				$retval = PROP_IGNORE;
-			break;
-			case 'alias':
-				$retval = PROP_IGNORE;
-			break;
 			case 'status':
-				$retval=PROP_IGNORE;
-			break;
+				$retval = PROP_IGNORE;
+				break;
 			case 'name':
-				$retval=PROP_IGNORE;
-			break;			
+				$retval = PROP_IGNORE;
+				break;			
 		}
 		return  $retval;
 	}
 	
 	
-	function set_property($args = array())
+	function set_property($arr)
 	{
-		$data = &$args["prop"];
+		$data = &$arr["prop"];
 		$retval = PROP_OK;
-		$form = &$args["form_data"];
-		$obj = &$args["obj"];		
+		$form = &$arr["request"];
 		switch($data["name"])
 		{
 			case 'kood':
-				$obj['name'] =  ($form['kood'] ? ''.$form['kood'].' ' : '').$form['toode'];
+				$arr["obj_inst"]->set_name(($form['kood'] ? ''.$form['kood'].' ' : '').$form['toode']);
+				break;
 			break;
 		};
 		return $retval;
