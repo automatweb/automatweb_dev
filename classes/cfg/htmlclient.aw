@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.60 2004/04/21 09:16:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.61 2004/04/23 08:26:05 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -107,7 +107,6 @@ class htmlclient extends aw_template
 		// it as a list of elements.
 
 		// I need to redo this
-
 		$wrapchildren = false;
 
 		// but actually, settings parets should take place in class_base itself
@@ -591,9 +590,18 @@ class htmlclient extends aw_template
 			{
 				$rv = $arr["content"];
 			};
-			$rv = $this->tp->get_tabpanel(array(
-				"content" => $rv,
-			));
+			if ($this->form_layout != "boxed")
+			{
+				$rv = $this->tp->get_tabpanel(array(
+					"content" => $rv,
+					//"panels_only" => true,
+				));
+			}
+			else
+			{
+				$tabs = $this->tp->get_tabpanel(array());
+				$this->additional_content["top"] .= $tabs;
+			};
 		};
 
 		if ($this->form_layout == "boxed")
@@ -648,7 +656,7 @@ class htmlclient extends aw_template
 						$retval .= html::radiobutton(array(
 							"caption" => $val,
 							"name" => $arr["name"],
-							"checked" => ($arr["value"] == $key),
+							"checked" => !empty($arr["value"]) && ($arr["value"] == $key),
 							"value" => $key,
 						));
 					};
