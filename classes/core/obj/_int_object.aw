@@ -175,13 +175,17 @@ class _int_object
 			{
 				$filter["class"] = $param["class"];
 			}
+			if (isset($param["to"]))
+			{
+				$filter["to"] = $param["to"];
+			}
 		}
 
 		$ret = array();
 		$cs = $GLOBALS["object_loader"]->ds->find_connections($filter);
 		foreach($cs as $c_d)
 		{
-			if ($this->can("view", $c_d["source"]) && $this->can("view", $c_d["target"]))
+			if ($this->can("view", $c_d["from"]) && $this->can("view", $c_d["to"]))
 			{
 				$ret[] =& new connection($c_d);
 			}
@@ -191,7 +195,51 @@ class _int_object
 
 	function connections_to($param = NULL)
 	{
-		// TODO: connections_to
+		if (!$this->obj["oid"])
+		{
+			error::throw(array(
+				"id" => ERR_NO_OBJ,
+				"msg" => "object::connections_to(): no current object loaded!"
+			));
+		}
+
+		$filter = array(
+			"to" => $this->obj["oid"]
+		);
+
+		if ($param != NULL)
+		{
+			if (!is_array($param))
+			{
+				error::throw(array(
+					"id" => ERR_PARAM,
+					"msg" => "object::connections_to(): if argument is present, then argument must be array of filter parameters!"
+				));
+			}
+			if (isset($param["type"]))
+			{
+				$filter["type"] = $param["type"];
+			}
+			if (isset($param["class"]))
+			{
+				$filter["class"] = $param["class"];
+			}
+			if (isset($param["from"]))
+			{
+				$filter["from"] = $param["from"];
+			}
+		}
+
+		$ret = array();
+		$cs = $GLOBALS["object_loader"]->ds->find_connections($filter);
+		foreach($cs as $c_d)
+		{
+			if ($this->can("view", $c_d["from"]) && $this->can("view", $c_d["to"]))
+			{
+				$ret[] =& new connection($c_d);
+			}
+		}
+		return $ret;
 	}
 
 	function path($param = NULL)
@@ -813,6 +861,16 @@ class _int_object
 		return $prev;
 	}
 
+	function last()
+	{
+		// god damn, no setter for this or we'll never get rid of it!
+		return $this->obj['last'];
+	}
+
+	function brother_of()
+	{
+		return $this->obj['brother_of'];
+	}
 
 	/////////////////////////////////////////////////////////////////
 	// private functions
@@ -859,10 +917,12 @@ class _int_object
 			{
 				$this->_int_sync_from_objfield_to_prop($key);
 			}
-		};
+		}
 
-		$GLOBALS["objects"][$oid] = &$this;
-		
+		// yeees, this looks weird, BUT it is needed if the loaded object is not actually the one requested
+		// this can happen in ds_auto_translation for instance
+		$GLOBALS["objects"][$oid] = $this;
+		$GLOBALS["objects"][$this->obj["oid"]] = $this;
 	}
 
 	function _int_load_properties()
@@ -887,7 +947,7 @@ class _int_object
 		);
 		foreach($this->properties as $prop)
 		{
-			if ($prop['table'] == "objects")
+			if ($prop['table'] == "objects" && $prop["field"] != "meta")
 			{
 				$this->of2prop[$prop['name']] = $prop['name'];
 			}

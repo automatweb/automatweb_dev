@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.208 2003/08/29 11:51:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.209 2003/09/08 14:18:24 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -59,6 +59,8 @@ class document extends aw_template
 		{
 			$this->vars($GLOBALS["lc_document"]);
 		}
+
+		$this->subtpl_handlers["FILE"] = "_subtpl_file";
 	}
 
 	////
@@ -217,6 +219,7 @@ class document extends aw_template
 		if (is_object($docobj))
 		{
 			$retval = $docobj->fetch();
+			$retval["docid"] = $retval["oid"];
 			/*
 			print "<pre>";
 			print_r($retval);
@@ -256,8 +259,12 @@ class document extends aw_template
 		{
 			// we need to put the translation merging into this fetch function
 			$doc = $this->fetch($docid, $no_acl_checks);
-		};
-
+			$doc_o = obj($docid);
+		}
+		else
+		{
+			$doc_o = obj($doc["docid"]);
+		}
 
 		if ($params["tpl_auto"] && !$params["tpl"])
 		{
@@ -280,31 +287,6 @@ class document extends aw_template
 		};
 
 		
-		// if oid is in the arguments check whether that object is attached to 
-		// this document and display it instead of document
-
-		// this should be a more generic solution ..we should be able to show anything
-		// and not only files ...
-		$oid = aw_global_get("oid");
-		if ($oid)
-		{
-			$q = "SELECT * FROM aliases WHERE source = '$docid' AND target = '$oid' AND type =" . CL_FILE;
-			$this->db_query($q);
-			$row = $this->db_next();
-			if ($row)
-			{
-				$fi = get_instance("file");
-				$fl = $fi->get_file_by_id($oid);
-				$doc["content"] = $fl["content"];
-				$doc["lead"] = "";
-				$doc["title"] = "";
-				$doc["meta"]["show_print"] = 1;
-				$mk_compat = false;
-				$this->vars(array("page_title" => strip_tags($fl["comment"])));
-				$pagetitle = strip_tags($fl["comment"]);
-			};
-		}
-
 		if ($doc["meta"])
 		{
 			$meta = $doc["meta"];
@@ -1039,78 +1021,10 @@ class document extends aw_template
 			
 			$this->vars(array("LANG_BRO" => $langs));
 		}; // keeleseosed
-		
-		// I kinda hate this part, mime registry should really be somewhere else
-		// failide ikoonid kui on template olemas, namely www.stat.ee jaox
- 		if ($this->is_template("FILE"))
-		{
-			$aliases = $this->get_aliases_for($doc["docid"]);
-			$ftypearr = array(
-				"application/pdf" => "pdf",
-				"text/richtext" => "rtf",
-				"application/msword" => "doc",
-				"application/vnd.ms-excel" => "xls",
-				"text/html" => "html",
-				"image/gif" => "gif",
- 			);
-			classload("file");
-			reset($aliases);
-			while (list(,$ar) = each($aliases))
-			{
-				if ($ar["type"] == CL_FILE)
-				{
-					$this->db_query("SELECT objects.name as name, files.type AS type,objects.comment as comment FROM objects LEFT JOIN files ON files.id = objects.oid WHERE objects.oid = ".$ar["target"]);
-					$fif = $this->db_next();
- 
-					$im = $ftypearr[$fif["type"]];
-					if ($im != "" && $im != "html")
-					{
-						$this->vars(array(
-							"url" => file::get_url($ar["target"],$fif["name"]),
-							"im" => $im == "" ? "fil" : $im
-						));
- 
-						$fff.=$this->parse("FILE");
-					}
-				}
-			}
-			$this->vars(array("FILE" => $fff));
-		}
-		
-		// now I need to gather information about the different templates
-		$awdoc = get_instance("doc");
-		$plugins = $awdoc->parse_long_template(array(
-			"inst" => $this,
-		));
 
-		$plg_arg = array();
-		foreach($plugins as $plg_name)
-		{
-			$plg_arg[$plg_name] = array(
-				"value" => $doc["meta"]["plugins"][$plg_name],
-				"tpl" => $this->templates["plugin.$plg_name"],
-			);
-		}
+		$this->do_subtpl_handlers($doc_o);
 		
-		$plg_ldr = get_instance("plugins/plugin_loader");
-		$plugindata = $plg_ldr->load_by_category(array(
-			"category" => get_class($this),
-			"plugins" => $plugins,
-			"method" => "show",
-			"args" => $plg_arg,
-		));
-
-		$pvars = array();
-		foreach($plugindata as $key => $val)
-		{
-			$name = "plugin.${key}";
-			if (!empty($val))
-			{
-				$pvars[$name] = $this->parse($name);
-			};
-		};
-
-		$this->vars($pvars);
+		$this->do_plugins($doc_o);
 
 		$retval = $this->parse();
 
@@ -1123,33 +1037,6 @@ class document extends aw_template
 		return $retval;
 	}
 
-	function get_relations($docid) 
-	{
-		// kysiti votmesonu dokumendi kohta
-		$doc = $this->fetch($docid);
-		$keywords = split(",",$doc["keywords"]);
-		if (is_array($keywords)) 
-		{
-			$qparts = array();
-			while(list($k,$v) = each($keywords)) 
-			{
-				$v = trim($v);
-				$qparts[] = " keywords LIKE '%$v%' ";
-			};
-			if (is_array($qparts) && (sizeof($qparts) > 0)) 
-			{
-				$q = "SELECT docid,title,keywords FROM documents WHERE ".join(" OR ",$qparts);
-				$this->db_query($q);
-				$retval = array();
-				while($row = $this->db_next()) 
-				{
-					$retval[$row["docid"]] = $row;
-				};
-			};
-		};
-		return $retval;
-	}
-	
 	// kysib "sarnaseid" dokusid mingi v?lja kaudu
 	// XXX
 	function get_relations_by_field($params) 
@@ -1376,11 +1263,14 @@ class document extends aw_template
 
 		if ($this->cfg["use_dcache"] && $data["dcache"])
 		{
-			$preview = $this->gen_preview(array("docid" => $id));
-			$this->quote($preview);
-			$q = "UPDATE documents SET dcache = '$preview'  WHERE docid = '$id'";
-			$this->db_query($q);
-		};
+			$preview = $this->gen_preview(array(
+				"docid" => $id
+			));
+
+			$doc_o = obj($id);
+			$doc_o->set_prop("dcache_content", $preview);
+			$doc_o->save();
+		}
 
 		// and if the user has checked the checkbox, we should generate the static pages for the document, the parent menu
 		// and all the document's brothers
@@ -1451,13 +1341,16 @@ class document extends aw_template
 	}
 
 	////
-	// !buu
+	// !used in www.nadal.ee, in rating movies
 	function add_rating($docid, $hinne)
 	{
 		$hinne = $hinne+0;
 		if ($hinne > 0)
 		{
-			$this->db_query("UPDATE documents SET rating=rating+$hinne , num_ratings=num_ratings+1 WHERE docid = $docid");
+			$doc_o = obj($docid);
+			$doc_o->set_prop("rating", $doc_o->prop("rating")+$hinne);
+			$doc_o->set_prop("num_ratings", $doc_o->prop("num_ratings")+1);
+			$doc_o->save();
 		}
 	}
 
@@ -1484,89 +1377,6 @@ class document extends aw_template
 		$d_begin = $date - $sub_arr[date("w")]*24*3600;
 		$rdate = $d_begin+$num*24*3600;
 
-	}
-
-	function brother($id)
-	{
-		$this->read_template("brother.tpl");
-		$sar = array();
-		$this->db_query("SELECT * FROM objects WHERE brother_of = $id AND status != 0 AND class_id = ".CL_BROTHER_DOCUMENT);
-		while ($arow = $this->db_next())
-		{
-			$sar[$arow["parent"]] = $arow["parent"];
-		}
-
-		$ob = get_instance("objects");
-
-		$this->vars(array("docid" => $id,"sections"		=> $this->multiple_option_list($sar,$ob->get_list())));
-		return $this->parse();
-	}
-
-	function submit_brother($arr)
-	{
-		extract($arr);
-
-		$obj = $this->get_object($docid);
-
-		$sar = array(); $oidar = array();
-		$this->db_query("SELECT * FROM objects WHERE brother_of = $docid AND status != 0 AND class_id = ".CL_BROTHER_DOCUMENT);
-		while ($row = $this->db_next())
-		{
-			$sar[$row["parent"]] = $row["parent"];
-			$oidar[$row["parent"]] = $row["oid"];
-		}
-
-		$not_changed = array();
-		$added = array();
-		if (is_array($sections))
-		{
-			reset($sections);
-			$a = array();
-			while (list(,$v) = each($sections))
-			{
-				if ($sar[$v])
-				{
-					$not_changed[$v] = $v;
-				}
-				else
-				{
-					$added[$v] = $v;
-				}
-				$a[$v]=$v;
-			}
-		}
-		$deleted = array();
-		reset($sar);
-		while (list($oid,) = each($sar))
-		{
-			if (!$a[$oid])
-			{
-				$deleted[$oid] = $oid;
-			}
-		}
-
-		reset($deleted);
-		while (list($oid,) = each($deleted))
-		{
-			$this->delete_object($oidar[$oid]);
-		}
-		reset($added);
-		while(list($oid,) = each($added))
-		{
-			if ($oid != $id)	// no recursing , please
-			{
-				$noid = $this->new_object(array(
-					"parent" => $oid,
-					"class_id" => CL_BROTHER_DOCUMENT,
-					"status" => 1,
-					"brother_of" => $docid,
-					"name" => $obj["name"],
-					"comment" => $obj["comment"]
-				));
-			}
-		}
-
-		return $obj["parent"];
 	}
 
 	function add($arr)
@@ -1916,16 +1726,6 @@ class document extends aw_template
 		return $this->parse();
 	}
 
-
-	function delete($arr)
-	{
-		extract($arr);
-		global $period;
-		$this->delete_object($id);
-		header("Location: ".$this->mk_orb("obj_list", array("parent" => $parent,"period" => $period), "menuedit"));
-	}
-
-
 	function sel_lang_bros($arr)
 	{
 		extract($arr);
@@ -2031,146 +1831,51 @@ class document extends aw_template
 		header("Location: ".$this->mk_orb("change", $arr));
 	}
 
-	function list_docs_a($arr)
+	function mk_folders($parent,$str)
 	{
-		global $search,$sstring,$sstring2;
-
-		$this->read_template("list_docs.tpl");
-		$this->sub_merge = 1;
-
-		if ($search)
+		if (!is_array($this->menucache[$parent]))
 		{
-			$this->vars(array("sstring" => $sstring,"sstring2" => $sstring2));
-			$this->parse("SEARCH");
-			if ($sstring == "" && $sstring2 == "")
+			return;
+		}
+
+		reset($this->menucache[$parent]);
+		while(list(,$v) = each($this->menucache[$parent]))
+		{
+			$name = $v["data"]["name"];
+			if ($v["data"]["parent"] == 1)
 			{
-				$sstring = "|||||||||||||||||||||||||||";
+				$words = explode(" ",$name);
+				if (count($words) == 1)
+				{
+					$name = $words[0][0].$words[0][1];
+				}
+				else
+				{
+					reset($words);
+					$mstr = "";
+					while(list(,$v3) = each($words))
+					{
+						$mstr.=$v3[0];
+					}
+					$name = $mstr;
+				}
 			}
 
-			$ko = " AND documents.title LIKE '%$sstring%' AND documents.content LIKE '%$sstring2%' ";
-		}
+			$sep = ($str == "" ? "" : " / ");
+			$tstr = $str.$sep.$name;
 
-		$this->mk_menucache(aw_global_get("lang_id"));
-
-		// dokumentide list
-		$this->extrarr = array();
-		$prd = ($arr["period"]) ? $arr["period"] : 0;
-		$sub_sel = false;
-		$this->db_query("SELECT documents.*,documents.is_forum as is_forum,documents.esilehel as esilehel,documents.esilehel_uudis as esilehel_uudis,
-										 documents.showlead as showlead, objects.status as status,objects.parent as parent,
-										 objects.jrk as jrk, objects.modified as modified, objects.modifiedby as modifiedby
-										 FROM documents
-										 LEFT JOIN objects ON objects.brother_of = documents.docid
-										 WHERE objects.period = $prd AND objects.lang_id=".aw_global_get("lang_id")." and site_id = ".aw_global_get("site_id")." $ko
-										 ORDER BY objects.parent,jrk");
-		while ($row = $this->db_next()) 
-		{
-			$this->extrarr[$row["parent"]][] = array("docid" => $row["docid"], "name" => $row["title"].".".$this->cfg["ext"]);
-			$this->docarr[$row["docid"]] = $row;
-		}
-			
-		$this->docs = array();
-		$this->mk_folders($this->cfg["admin_rootmenu2"],"");
-
-		reset($this->docs);
-		while (list($k,$v) = each($this->docs))
-		{
-			$row = $this->docarr[$k];
-			$this->vars(array(
-				"doc_id"		=> $row["docid"],
-				"doc_title"	=> strip_tags($v),
-				"doc_title_s"	=> strip_tags(str_replace("\"","\\\"",$row["title"])),
-				"jrk"			  => $row["jrk"],
-				"modifiedby"	=> $row["modifiedby"],
-				"modified"		=> $this->time2date($row["modified"],2),
-				"active"			=> ($row["status"] > 0 ? "checked" : ""),
-				"is_forum"    => ($row["is_forum"] > 0 ? "checked" : ""),
-				"esilehel"    => ($row["esilehel"] > 0 ? "checked" : ""),
-				"jrk1"				=> $row["jrk1"],
-				"jrk2"				=> $row["jrk2"],
-				"esilehel_uudis"    => ($row["esilehel_uudis"] > 0 ? "checked" : ""),
-				"showlead"    => ($row["showlead"] > 0 ? "checked" : ""),
-				"text_ok"    => ($row["text_ok"] > 0 ? "checked" : ""),
-				"pic_ok"    => ($row["pic_ok"] > 0 ? "checked" : ""),
-				"link"				=> "<a href='".$this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$row["docid"]."'>url</a>",
-				"doc_default"	=> ($this->sel_doc == $row["docid"] ? "CHECKED" : ""),
-				"gee"			=> $dcnt & 1 ? "" : "_g"));
-
-				$dd = $this->parse("D_DELETE");
-				$dc = $this->parse("D_CHANGE");
-				$da = $this->parse("D_ACL");
-				$on2.= $this->parse("ONAME2");
-
-				$this->vars(array(
-					"D_DELETE" => $dd,
-					"D_CHANGE" => $dc,
-					"D_ACL" => $da
-				));
-				$this->parse("FLINE");
-				if ($this->sel_doc == $row["docid"])
+			if (is_array($this->extrarr[$v["data"]["oid"]]))
+			{
+				reset($this->extrarr[$v["data"]["oid"]]);
+				while (list(,$v2) = each($this->extrarr[$v["data"]["oid"]]))
 				{
-					$sub_sel = true;
+					$this->docs[$v2["docid"]] = $tstr." / ".$v2["name"];
 				}
-				$dcnt++;
-		}
+			}
 
-		$ob = get_instance("objects");
-	 
-		$this->vars(array(
-			"default_doc" => $default_doc,
-			"dest"				=> $dest,
-			"doc_default"	=> ($sub_sel == false ? "CHECKED" : "" ),
-			"ONAME2" => $on2,
-			"period" => $arr["period"]
-		));
-		return $this->parse();
+			$this->mk_folders($v["data"]["oid"],$tstr);
+		}
 	}
-
-		function mk_folders($parent,$str)
-		{
-			if (!is_array($this->menucache[$parent]))
-			{
-				return;
-			}
-
-			reset($this->menucache[$parent]);
-			while(list(,$v) = each($this->menucache[$parent]))
-			{
-				$name = $v["data"]["name"];
-				if ($v["data"]["parent"] == 1)
-				{
-					$words = explode(" ",$name);
-					if (count($words) == 1)
-					{
-						$name = $words[0][0].$words[0][1];
-					}
-					else
-					{
-						reset($words);
-						$mstr = "";
-						while(list(,$v3) = each($words))
-						{
-							$mstr.=$v3[0];
-						}
-						$name = $mstr;
-					}
-				}
-
-				$sep = ($str == "" ? "" : " / ");
-				$tstr = $str.$sep.$name;
-
-				if (is_array($this->extrarr[$v["data"]["oid"]]))
-				{
-					reset($this->extrarr[$v["data"]["oid"]]);
-					while (list(,$v2) = each($this->extrarr[$v["data"]["oid"]]))
-					{
-						$this->docs[$v2["docid"]] = $tstr." / ".$v2["name"];
-					}
-				}
-
-				$this->mk_folders($v["data"]["oid"],$tstr);
-			}
-		}
 
 	function mk_menucache($slang_id)
 	{
@@ -3755,6 +3460,85 @@ class document extends aw_template
 			$template = "edit.tpl";
 		}
 		return $template;
+	}
+
+	function do_subtpl_handlers($doc_o)
+	{
+		foreach($this->subtpl_handlers as $tpl => $handler)
+		{
+			if ($this->is_template($tpl))
+			{
+				$this->$handler($doc_o);
+			}
+		}
+	}
+
+	// failide ikoonid kui on template olemas, namely www.stat.ee jaox
+	function _subtpl_file($doc_o)
+	{
+		classload("file");
+		$mime_registry = get_instance("core/aw_mime_types");
+
+		$aliases = $doc_o->connections_from(array(
+			"type" => CL_FILE
+		));
+		foreach($aliases as $alias)
+		{
+			$file = $alias->to();
+			$ext = $mime_registry->ext_for_type($file->prop("type"));
+			if ($ext != "" && $ext != "html")
+			{
+				$this->vars(array(
+					"url" => file::get_url($file->id(),$file->name()),
+					"im" => $ext
+				));
+
+				$fff .= $this->parse("FILE");
+			}
+		}
+		$this->vars(array(
+			"FILE" => $fff
+		));
+	}
+
+	function do_plugins($doc_o)
+	{
+		// now I need to gather information about the different templates
+		$awdoc = get_instance("doc");
+		$plugins = $awdoc->parse_long_template(array(
+			"inst" => $this,
+		));
+
+		$m_pl = $doc_o->meta("plugins");
+
+		$plg_arg = array();
+		foreach($plugins as $plg_name)
+		{
+			$plg_arg[$plg_name] = array(
+				"value" => $m_pl[$plg_name],
+				"tpl" => $this->templates["plugin.$plg_name"],
+			);
+		}
+		
+		$plg_ldr = get_instance("plugins/plugin_loader");
+		$plugindata = $plg_ldr->load_by_category(array(
+			"category" => get_class($this),
+			"plugins" => $plugins,
+			"method" => "show",
+			"args" => $plg_arg,
+		));
+
+		$pvars = array();
+		foreach($plugindata as $key => $val)
+		{
+			$name = "plugin.${key}";
+			if (!empty($val))
+			{
+				$pvars[$name] = $this->parse($name);
+			};
+		};
+
+		$this->vars($pvars);
 	}
 };
 ?>

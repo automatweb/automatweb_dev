@@ -255,7 +255,7 @@ class site_content extends menuedit
 		lc_site_load("menuedit",$this);
 
 		// get array with path of objects in it
-		$path = $this->get_path($section,$obj);
+		$path = $this->get_path($section);
 		$this->path = $path;
 
 		// you are here links		
@@ -272,7 +272,7 @@ class site_content extends menuedit
 
 		if (aw_ini_get("menuedit.context_langs") == 1)
 		{
-			$this->make_context_langs();
+			$this->make_context_langs($obj2);
 		}
 		else
 		{
@@ -2560,58 +2560,66 @@ class site_content extends menuedit
 	////
 	// !basically works like the above thingie .. but only shows languages
 	// into which the current document has been translated to
-	function make_context_langs()
+	function make_context_langs($obj)
 	{
-		$lang_id = aw_global_get("lang_id");
-		$langs = get_instance("languages");
-		$lar = $langs->listall();
+		// see if the object has translations
+		$conn = $obj->connections_from(array(
+			"type" => RELTYPE_TRANSLATION
+		));
+		if (count($conn) < 1)
+		{
+			// if it has none, then try to figure out if it is a translated object
+			$conn = $obj->connections_to(array(
+				"type" => RELTYPE_TRANSLATION
+			));
+			if (count($conn) > 0)
+			{
+				// if it has connections pointing to it, then it is, so get the translations from the original
+				// we need to do this, because the previous query must ever only return 0 or 1 connections
+				$obj = obj($conn[0]->prop("from"));
+				$conn = $obj->connections_from(array(
+					"type" => RELTYPE_TRANSLATION
+				));
+			}
+		}
+
+		$l_inst = get_instance("languages");
+		$lref = $l_inst->get_list(array(
+			"key" => "id",
+			"all_data" => true
+		));
+
+		// now $conn contains all the translation relations from the original obj to the translated objs
+		$lang2trans = array(
+			$obj->lang() => $obj->id()
+		);
+		foreach($conn as $c)
+		{
+			$lang2trans[$lref[$c->prop("to.lang_id")]["acceptlang"]] = $c->prop("to");
+		}
+
+		$lang_id = aw_global_get("LC");
+		$ldat = $l_inst->get_list(array(
+			"key" => "acceptlang",
+			"all_data" => true
+		));
 		$l = "";
-
-		$q = sprintf("SELECT source FROM aliases WHERE target = %d AND reltype = %d",$this->section,RELTYPE_TRANSLATION);
-		$this->db_query($q);
-		$row = $this->db_next();
-
-		if (is_array($row) && !empty($row["source"]))
+		foreach($ldat as $lc => $ld)
 		{
-			$use_section = $row["source"];
-		}
-		else
-		{
-			$use_section = $this->section;
-		};
-
-		// well, except that .. if that object _is_ a translation .. then we
-		// need to get the aliases _from_ the original
-		$obj = new object($use_section);
-		$cs_from = $obj->connections_from(array("type" => RELTYPE_TRANSLATION));
-
-		// figure out the object id-s for translated objects
-		$rmap = array($obj->prop("lang_id") => $use_section);
-		foreach($cs_from as $item)
-		{
-			$lg = $item->prop("lang_id");
-			$oid = $item->prop("target");
-
-			$rmap[$lg] = $oid;
-		}
-
-		foreach($lar as $row)
-		{
-			// ignore languages with no content
-			if (!$rmap[$row["id"]])
+			if (!$lang2trans[$lc])
 			{
 				continue;
-			};
+			}
 
 			$this->vars(array(
-				"name" => $row["name"],
-				"lang_url" => $this->cfg["baseurl"] . "/" . $rmap[$row["id"]],
+				"name" => $ld["name"],
+				"lang_url" => $this->cfg["baseurl"] . "/" . $lang2trans[$lc],
 			));
 
-			if ($row["id"] == $lang_id)
+			if ($lc == $lang_id)
 			{
-				$l.=$this->parse("SEL_LANG");
-				$sel_lang = $row;
+				$l .= $this->parse("SEL_LANG");
+				$sel_lang = $ld;
 			}
 			else
 			{
@@ -2626,45 +2634,20 @@ class site_content extends menuedit
 		));
 	}
 
-	function get_path($section,$obj)
+	function get_path($section)
 	{
-		// now find the path through the menu
-		$path = array();
-		if ($obj["class_id"] != CL_PSEUDO)
-		{
-			$sec = $obj["parent"];
-			$section = $obj["parent"];
-		}
-		else
-		{
-			$sec = $section; 
-		}
-		$cnt = 0;
-		$tmp = array();
-		// kontrollime seda ka, et kas see "sec" yldse olemas on,
-		// vastasel korral satume loputusse tsyklisse
-		while ($sec && ($sec != 1)) 
-		{
-			array_push($tmp,$sec);
-			if (!isset($this->mar[$sec]))
-			{
-				$mc = get_instance("menu_cache");
-				$this->mar[$sec] = $mc->get_cached_menu($sec);
-			}
-			$sec = $this->mar[$sec]["parent"];
-			$cnt++;
-			if ($cnt > 1000)
-			{
-				$this->raise_error(ERR_MNED_HIER, "Error in object hierarchy, $sec is it's own parent!", true);
-			}
-		}
-		// now the path is in the correct order on the "root" stack
+		$obj = obj($section);
 
-		for ($i=0; $i < $cnt; $i++) 
+		if ($obj->class_id() != CL_PSEUDO)
 		{
-			$path[$i+1] = array_pop($tmp);
-		};
-		// and now in the $path array
+			$obj = obj($obj->parent());
+		}
+
+		$path = array();
+		foreach($obj->path() as $o)
+		{
+			$path[] = $o->id();
+		}
 		return $path;
 	}
 	
@@ -2682,22 +2665,22 @@ class site_content extends menuedit
 			return 0;
 		}
 
-		$obj = $this->get_object($section);
+		$obj = obj($section);
 	
 		// if it is a document, use this one. 
-		if (($obj["class_id"] == CL_DOCUMENT) || ($obj["class_id"] == CL_PERIODIC_SECTION))
+		if (($obj->class_id() == CL_DOCUMENT) || ($obj->class_id() == CL_PERIODIC_SECTION))
 		{
-			return $section;
+			return $obj->id();	// most important not to change this, it is!
 		}
 
-		if ($obj["class_id"] == CL_BROTHER)
+		if ($obj->class_id() == CL_BROTHER)
 		{
-			$obj = $this->get_object($obj["brother_of"]);
+			$obj = obj($obj->get_original());
 		}
 
 
 		// if any keywords for the menu are set, we must show all the documents that match those keywords under the menu
-		if ($obj["meta"]["has_kwd_rels"])
+		if ($obj->meta("has_kwd_rels"))
 		{
 			$docid = array();
 
@@ -2714,9 +2697,8 @@ class site_content extends menuedit
 			return $docid;
 		}
 
-		$docid = $obj["last"];
-		$ar = unserialize($docid);
-
+		$docid = $obj->last();
+		$ar = aw_unserialize($docid);
 
 		// kuna on vaja mitme keele jaox default dokke seivida, siis uues versioonis pannaxe
 		// siia array aga backward compatibility jaox tshekime, et 2kki see on integer ikkagi
@@ -2724,13 +2706,16 @@ class site_content extends menuedit
 		{
 			$docid = $ar[aw_global_get("lang_id")];
 		}
+
 		if ($docid > 0)
 		{
+			$check = obj($docid);
+			$ok = $check->class_id() == CL_DOCUMENT && $check->status() == STAT_ACTIVE;
 			if ($this->cfg["lang_menus"] == 1)
 			{
-				$ss = "AND objects.lang_id=".aw_global_get("lang_id");
+				$ok &= $check->lang_id() == aw_global_get("LC");
 			}
-			if ($this->db_fetch_field("SELECT status FROM objects WHERE oid = $docid AND class_id = ".CL_DOCUMENT." $ss ","status") != 2)	
+			if (!$ok)
 			{
 				// make sure that the default is not deleted
 				$docid = 0;
@@ -2741,21 +2726,14 @@ class site_content extends menuedit
 		// ei olnud defaulti, peaks vist .. n�tama nimekirja? 
 		if ($docid < 1)	
 		{
-			// avoid unneccessary query if the menu is already in the cache
-			if ($this->mar[$section])
-			{
-				$me_row = $this->mar[$section];
-			}
-			else
-			{
-				$me_row = $this->get_menu($section);
-			};
+			$me = obj($section);
 
-			if ($me_row["class_id"] == CL_PROMO)
+			if ($me->class_id() == CL_PROMO)
 			{
-				if (is_array($me_row["meta"]["last_menus"]) && ($me_row["meta"]["last_menus"][0] !== 0))
+				$lm = $me->meta("last_menus");
+				if (is_array($lm) && ($lm[0] !== 0))
 				{
-					$sections = $me_row["meta"]["last_menus"];
+					$sections = $lm;
 				}
 				else
 				{
@@ -2764,52 +2742,45 @@ class site_content extends menuedit
 			}
 			else
 			{
-				$sections = $me_row["meta"]["sss"];
+				$sections = $me->meta("sss");
 			};
 
-			if ($me_row["meta"]["all_pers"])
+			if ($me->meta("all_pers"))
 			{
 				$period_instance = get_instance("period");
 				$periods = $this->make_keys(array_keys($period_instance->period_list(false)));
 			}
 			else
 			{
-				$periods = $me_row["meta"]["pers"];
+				$periods = $me->meta("pers");
 			}
 
-			if (is_array($sections) && ($sections[0] !== 0))
+			$filter = array();
+
+			if (is_array($sections) && ($sections[0] !== 0) && count($sections) > 0)
 			{
-				$pstr = join(",",$sections);
-				if ($pstr != "")
-				{
-					$pstr = "objects.parent IN ($pstr)";
-					//$ordby = "objects.modified DESC";
-					$lsas = " AND (documents.no_last != 1 OR documents.no_last is null ) ";
-				}
-				else
-				{
-					$pstr = "objects.parent = '$obj[oid]'";
-				};
+				$filter["parent"] = $sections;
 			}
 			else
 			{
-				$pstr = "objects.parent = '$obj[oid]'";
+				$filter["parent"] = $obj->id();
 			};
-			if ($me_row["ndocs"] > 0)
+
+			if ($me->prop("ndocs") > 0)
 			{
-				$lm = "LIMIT ".$me_row["ndocs"];
+				$filter["limit"] = $me->prop("ndocs"); 
 			};
 
 			$docid = array();
 			$cnt = 0;
 			if ($ordby == "")
 			{
-				if ($me_row["meta"]["sort_by"] != "")
+				if ($me->meta("sort_by") != "")
 				{
-					$ordby = $me_row["meta"]["sort_by"];
-					if ($me_row["meta"]["sort_ord"] != "")
+					$ordby = $me->meta("sort_by");
+					if ($me->meta("sort_ord") != "")
 					{
-						$ordby .= " ".$me_row["meta"]["sort_ord"];
+						$ordby .= " ".$me->meta("sort_ord");
 					}
 				}
 				else
@@ -2826,19 +2797,24 @@ class site_content extends menuedit
 			$no_fp_document = aw_ini_get("menuedit.no_fp_document");
 			if (!isset($no_fp_document))
 			{
-				//$this->cfg["no_fp_document"] = false;
-				// ????
 				$no_fp_document = false;
 			}
-			$q = "SELECT objects.oid as oid,objects.class_id AS class_id, objects.brother_of AS brother_of, documents.esilehel as esilehel FROM objects LEFT JOIN documents ON documents.docid = objects.brother_of WHERE (($pstr AND status = 2 AND class_id in (7,29) AND objects.lang_id=".aw_global_get("lang_id").") OR (class_id = ".CL_BROTHER_DOCUMENT." AND status = 2 AND $pstr)) $lsas ORDER BY $ordby $lm";
-			$this->db_query($q);
-			while ($row = $this->db_next())
+
+			$filter["status"] = STAT_ACTIVE;
+			$filter["class_id"] = array(CL_DOCUMENT, CL_PERIODIC_SECTION, CL_BROTHER_DOCUMENT);
+			$filter["lang_id"] = aw_global_get("lang_id");
+			$filter["sort_by"] = $ordby;
+			
+			$documents = new object_list($filter);
+
+			for($o = $documents->begin(); !$documents->end(); $o = $documents->next())
 			{
-				if (!($no_fp_document && $row["esilehel"] == 1))
+				if (!($no_fp_document && $o->prop("esilehel") == 1))
 				{
-					$docid[$cnt++] = ($row["class_id"] == CL_DOCUMENT) ? $row["oid"] : $row["brother_of"];
+					$docid[$cnt++] = ($o->class_id() == CL_DOCUMENT) ? $o->id() : $o->brother_of();
 				}
 			}
+
 			if ($cnt > 1)
 			{
 				// a list of documents
@@ -2932,10 +2908,8 @@ class site_content extends menuedit
 		switch($obj->prop("class_id"))
 		{
 			case CL_EXTLINK:
-				$t = get_instance("links");
-				$link = $t->get_link($obj->id());
-				header("Location: $link[url]");
-				$die = true;
+				$el = get_instance("links");
+				$el->show(array("id" => $obj->id()));
 				break;
 
 			case CL_IMAGE:

@@ -855,9 +855,8 @@ class export extends aw_template
 			{
 				preg_match("/id=(\d*)/", $link,$mt);
 
-				$el = get_instance("links");
-				$ld = $el->get_link($mt[1]);
-				$link = $ld["url"];
+				$ld = obj($mt[1]);
+				$link = $ld->prop("url");
 				if (substr($link,0,4) == "http" && strpos($link,$baseurl) === false)
 				{
 					// external link, should not be touched I guess

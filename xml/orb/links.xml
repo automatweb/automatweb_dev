@@ -13,6 +13,8 @@
 		<action name="search_doc">
 			<function name="search_doc">
 				<arguments>
+					<optional name="s_name" />
+					<optional name="s_content" />
 				</arguments>
 			</function>
 		</action>

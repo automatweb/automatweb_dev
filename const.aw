@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.82 2003/09/02 12:41:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.83 2003/09/08 14:18:23 kristo Exp $
 error_reporting(E_ALL ^ E_NOTICE);
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
@@ -202,6 +202,8 @@ define("FORM_USES_CALENDAR",58);
 
 
 // object flags - bitmask
+define("OBJ_FLAGS_ALL", (1 << 30)-1);	// this has all the flags checked, so you can build masks, by negating this
+
 define("OBJ_HAS_CALENDAR",1);
 // this will be set for objects that need to be translated
 define("OBJ_NEEDS_TRANSLATION",2);

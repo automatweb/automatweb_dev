@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.53 2003/08/01 12:48:16 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.54 2003/09/08 14:18:24 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -281,8 +281,16 @@ class file extends class_base
 	// $args should contain line from that table
 	function can_be_embedded(&$row)
 	{
-		 return in_array($row["type"],$this->cfg["embtypes"]);
+		if (is_object($row))
+		{
+			return in_array($row->prop("type"),$this->cfg["embtypes"]);
+		}
+		else
+		{
+			return in_array($row["type"],$this->cfg["embtypes"]);
+		}
 	}
+
 
 	////
 	// !writes file to database - internal usage only, most of the parameters can be omitted

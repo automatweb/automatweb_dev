@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.218 2003/08/29 11:51:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.219 2003/09/08 14:18:23 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1581,8 +1581,53 @@ class core extends acl_base
 
 		$this->_log(ST_CORE, SA_RAISE_ERROR, $msg, $oid);
 
-		$msg = "Suhtuge veateadetesse rahulikult!  Te ei ole korda saatnud midagi katastroofilist. Ilmselt juhib programm Teie tähelepanu mingile ebatäpsusele  andmetes või näpuveale.<br /><br />\n\n".$msg;
+		$msg = "Suhtuge veateadetesse rahulikult!  Te ei ole korda saatnud midagi katastroofilist. Ilmselt juhib programm Teie tähelepanu mingile ebatäpsusele  andmetes või näpuveale.<br /><br />\n\n".$msg." </b>";
 
+
+		// also attach backtrace
+		if (function_exists("debug_backtrace"))
+		{
+			$msg .= "<br><br> Backtrace: \n\n<Br><br>";
+			$bt = debug_backtrace();
+			for ($i = count($bt)-1; $i > 0; $i--)
+			{
+				if ($bt[$i+1]["class"] != "")
+				{
+					$fnm = "method <b>".$bt[$i+1]["class"]."::".$bt[$i+1]["function"]."</b>";
+				}
+				else
+				if ($bt[$i+1]["function"] != "")
+				{
+					$fnm = "function <b>".$bt[$i+1]["function"]."</b>";
+				}
+				else
+				{
+					$fnm = "file ".$bt[$i]["file"];
+				}
+
+				$msg .= $fnm." on line ".$bt[$i]["line"]." called <br>\n";
+
+				if ($bt[$i]["class"] != "")
+				{
+					$fnm2 = "method <b>".$bt[$i]["class"]."::".$bt[$i]["function"]."</b>";
+				}
+				else
+				if ($bt[$i]["function"] != "")
+				{
+					$fnm2 = "function <b>".$bt[$i]["function"]."</b>";
+				}
+				else
+				{
+					$fnm2 = "file ".$bt[$i]["file"];
+				}
+
+				$msg .= $fnm2." with arguments ";
+
+				$msg .= "<font size=\"-1\">(".join(",", $bt[$i]["args"]).") file = ".$bt[$i]["file"]."</font>";
+			
+				$msg .= " <br><br>\n\n";
+			}
+		}
 
 		// meilime veateate listi ka
 		$subj = "Viga saidil ".$this->cfg["baseurl"];

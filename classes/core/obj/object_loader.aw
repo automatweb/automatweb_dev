@@ -14,7 +14,7 @@ class _int_object_loader
 		if ($datasources == "")
 		{
 			// default to simple mysql
-			$datasources = "ds_mysql";
+			$datasources = "mysql";
 		}
 
 		$dss = array_reverse(explode(",", $datasources));
@@ -262,6 +262,10 @@ class _int_object_loader
 	// load properties - arr[file] , arr[clid]
 	function load_properties($arr)
 	{
+		if ($arr["file"] == "document")
+		{
+			$arr["file"] = "doc";
+		}
 		$props = $this->cfgu->load_properties($arr);
 		return array($props, $this->cfgu->tableinfo);
 	}

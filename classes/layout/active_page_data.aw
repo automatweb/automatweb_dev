@@ -14,7 +14,7 @@ class active_page_data extends class_base
 		{
 			$mn = get_instance("contentmgmt/site_content");
 			$mn->make_menu_caches();
-			$cur_path = $mn->get_path(aw_global_get("section"), $this->get_object(aw_global_get("section")));
+			$cur_path = $mn->get_path(aw_global_get("section"));
 		}
 		return is_array($cur_path) ? $cur_path : array();
 	}

@@ -237,6 +237,20 @@
             <caption>Cache otsingu jaoks</caption>
       </property>
       <property>
+            <name>dcache_content</name>
+            <type>hidden</type>
+            <field>dcache</field>
+            <table>documents</table>
+            <group>general</group>
+      </property>
+      <property>
+            <name>rating</name>
+            <type>hidden</type>
+            <table>documents</table>
+            <group>general</group>
+            <field>rating</field>
+      </property>
+      <property>
             <name>show_title</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>

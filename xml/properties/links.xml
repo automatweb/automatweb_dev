@@ -19,6 +19,14 @@
             <caption>URL</caption>
       </property>
       <property>
+            <name>hits</name>
+            <table>extlinks</table>
+            <type>text</type>
+            <field>hits</field>
+            <group>general</group>
+            <caption>Klikke</caption>
+      </property>
+      <property>
             <name>url_int_text</name>
             <type>text</type>
             <group>general</group>

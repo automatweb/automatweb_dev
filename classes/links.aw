@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.37 2003/08/29 11:51:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.38 2003/09/08 14:18:24 kristo Exp $
 
 /*
 
@@ -20,6 +20,9 @@
 
 @property url table=extlinks type=textbox field=url group=general
 @caption URL
+
+@property hits table=extlinks type=text field=hits group=general
+@caption Klikke
 
 @property url_int_text type=text group=general store=no
 @caption Saidi sisene link
@@ -82,46 +85,34 @@ class links extends class_base
 
 	function search_doc($arr)
 	{
+		extract($arr);
 		$this->read_template("search_doc.tpl");
-		$this->vars(array(
-			"index_file" => $this->cfg["index_file"]
-		));
-		global $s_name, $s_content;
-
-		$baseurl = $this->cfg["baseurl"];
-		$ext = $this->cfg["ext"];
 
 		if ($s_name != "" || $s_content != "")
 		{
-			$se = array();
-			if ($s_name != "")
-			{
-				$se[] = " name LIKE '%".$s_name."%' ";
-			}
-			if ($s_content != "")
-			{
-				$se[] = " content LIKE '%".$s_content."%' ";
-			}
-			$this->db_query("SELECT documents.title as name,objects.oid as oid,objects.parent as parent FROM objects LEFT JOIN documents ON documents.docid=objects.oid WHERE objects.status != 0  AND (objects.site_id = ".$this->cfg["site_id"]." OR objects.site_id IS NULL) AND (objects.class_id = ".CL_DOCUMENT." OR objects.class_id = ".CL_PERIODIC_SECTION." ) AND ".join("AND",$se));
-			while ($row = $this->db_next())
+			$sres = new object_list(array(
+				"class_id" => CL_DOCUMENT,
+				"name" => "%".$s_name."%",
+				"content" => "%".$s_content."%"
+			));
+			for($o =& $sres->begin(); !$sres->end(); $o =& $sres->next())
 			{
 				if (aw_ini_get("menuedit.long_section_url"))
 				{
-					$url = "/".$this->cfg["index_file"].".".$ext."/section=".$row["oid"];
+					$url = $this->cfg["baseurl"]."/".$this->cfg["index_file"].".".$this->cfg["ext"]."/section=".$o->id();
 				}
 				else
 				{
-					$url = "/".$row["oid"];
+					$url = $this->cfg["baseurl"]."/".$o->id();
 				}
-				$name = strip_tags($row["name"]);
-				$name = str_replace("'","",$name);
 				$this->vars(array(
-					"name" => $name, 
-					"id" => $row["oid"],
+					"name" => str_replace("'","",strip_tags($o->name())), 
+					"id" => $o->id(),
 					"url" => $url
 				));
 				$l.=$this->parse("LINE");
 			}
+			
 			$this->vars(array("LINE" => $l));
 		}
 		else
@@ -141,18 +132,11 @@ class links extends class_base
 	function show($arr)
 	{
 		extract($arr);
-		$link = $this->get_link($id);
-		if (!$link) 
-		{
-			print "Sellist linki pole baasis";
-		} 
-		else 
-		{
-			$this->add_hit($id,aw_global_get("HTTP_HOST"),aw_global_get("uid"));
-			header("Location: ".$link["url"]);
-			header("Content-type: ");
-			exit;
-		};
+		$link = obj($id);
+		$this->add_hit($id,aw_global_get("HTTP_HOST"),aw_global_get("uid"));
+		header("Location: ".$link->prop("url"));
+		header("Content-type: ");
+		exit;
 	}
 	
 	function get_property(&$arr)
@@ -160,15 +144,18 @@ class links extends class_base
 		$prop = &$arr["prop"];
 		if ($prop["name"] == "link_image_show" && $arr["obj"]["oid"])
 		{
-			$foid = $this->db_fetch_field("SELECT oid FROM objects WHERE parent = ".$arr["obj"]["oid"]." AND class_id =".CL_FILE." AND status != 0","oid");
-			if ($foid)
+			$img = new object_list(array(
+				"parent" => $arr["obj"]["oid"],
+				"class_id" => CL_FILE
+			));
+			if ($img->count() > 0)
 			{
+				$o =& $img->begin();
 				$f = get_instance("file");
-				$fdat = $f->get_file_by_id($foid);
-				if ($f->can_be_embedded($fdat))
+				if ($f->can_be_embedded($o))
 				{
 					$prop['value'] = html::img(array(
-						'url' => file::get_url($fdat['oid'],$fdat['name'])
+						'url' => file::get_url($o->id(),$o->name())
 					));
 				}
 			}
@@ -195,9 +182,20 @@ class links extends class_base
 		$prop = $arr["prop"];
 		if ($prop["name"] == "link_image")
 		{
+			$old_file = 0;
+
+			$img = new object_list(array(
+				"parent" => $arr["obj"]["oid"],
+				"class_id" => CL_FILE
+			));
+			if ($img->count() > 0)
+			{
+				$o =& $img->begin();
+				$old_file = $o->id();
+			}
+
 			$f = get_instance("file");
-			$foid = $this->db_fetch_field("SELECT oid FROM objects WHERE parent = ".$arr["obj"]["oid"]." AND class_id =".CL_FILE." AND status != 0","oid");
-			$nfoid = $f->add_upload_image("link_image", $arr['obj']['oid'], $foid);
+			$f->add_upload_image("link_image", $arr['obj']['oid'], $old_file);
 			return PROP_IGNORE;
 		}
 		return PROP_OK;
@@ -228,54 +226,47 @@ class links extends class_base
 		{
 			if ($img)
 			{
-				$replacement = sprintf("<a href='%s' %s title='%s'><img src='%s' alt='%s' border='0'></a>",$url,$target,$this->cur_link["alt"],$this->img,$caption);
+				$replacement = sprintf("<a href='%s' %s title='%s'><img src='%s' alt='%s' border='0'></a>",$url,$target,$this->cur_link->prop("alt"),$this->img,$caption);
 			}
 			else
 			{
-				$replacement = sprintf("<a href='%s' %s title='%s'>%s</a>",$url,$target,$this->cur_link["alt"],$caption);
+				$replacement = sprintf("<a href='%s' %s title='%s'>%s</a>",$url,$target,$this->cur_link->prop("alt"),$caption);
 			}
 		};
 		$this->img = "";
 		return $replacement;
 	}
 
-	////
-	// !if ret_all is set, returns all the information about the link
-	function draw_link($target,$ret_all = false)
+	function draw_link($target)
 	{
-		$link = $this->get_link($target);
-		$this->dequote(&$link);
+		$link = obj($target);
 		$this->cur_link = $link;
-		if (not($link))
-		{
-			return;
-		}
-		$this->dequote(&$link);
 
-		if (strpos($link["url"],"@") > 0)
+		if (strpos($link->prop("url"),"@") > 0)
 		{
-			$linksrc = $link["url"];
+			$linksrc = $link->prop("url");
 		}
 		elseif (aw_ini_get("extlinks.directlink") == 1)
 		{
-			$linksrc = $link["url"];
+			$linksrc = $link->prop("url");
 		}
 		else
 		{
-			$linksrc = aw_ini_get("baseurl")."/".$link["id"];//$this->mk_my_orb("show", array("id" => $link["id"]),"links",false,true);
+			$linksrc = aw_ini_get("baseurl")."/".$link->id();
 		};
 
-		if ($link["link_image_check_active"] && ($link["link_image_active_until"] >= time()) )
+		if ($link->prop("link_image_check_active") && ($link->prop("link_image_active_until") >= time()) )
 		{
-			$awf = get_instance("file");
-			$q = "SELECT * FROM objects LEFT JOIN files ON objects.oid = files.id WHERE parent = '$target' AND class_id = " . CL_FILE;
-			$this->db_query($q);
-			$row = $this->db_next();
+			$img = new object_list(array(
+				"parent" => $link["oid"],
+				"class_id" => CL_FILE
+			));
 
-			if ($row && $awf->can_be_embedded(&$row))
+			$awf = get_instance("file");
+			if ($img->count() > 0 && $awf->can_be_embedded($o =& $img->begin()))
 			{
-				$img = $awf->get_url($row["oid"],"");
-				$img = "<img border='0' src='$img' alt='$link[alt]' title='$link[alt]' />";
+				$img = $awf->get_url($o->id(),"");
+				$img = "<img border='0' src='$img' alt='".$link->prop("alt")."' title='".$link->prop("alt")."' />";
 			}
 			else
 			{
@@ -285,105 +276,39 @@ class links extends class_base
 			$this->img = $img;
 		}
 		
-		if ($link["use_javascript"])
+		if ($link->prop("use_javascript"))
 		{
-			$target = sprintf("onClick='javascript:window.open(\"%s\",\"w%s\",\"toolbar=%d,location=%d,menubar=%d,scrollbars=%d,width=%d,height=%d\")'",$linksrc,$link["id"],$link["newwintoolbar"],$link["newwinlocation"],$link["newwinmenu"],$link["newwinscroll"],$link["newwinwidth"],$link["newwinheight"]);
+			$target = sprintf("onClick='javascript:window.open(\"%s\",\"w%s\",\"toolbar=%d,location=%d,menubar=%d,scrollbars=%d,width=%d,height=%d\")'",
+				$linksrc,
+				$link->id(),
+				$link->prop("newwintoolbar"),
+				$link->prop("newwinlocation"),
+				$link->prop("newwinmenu"),
+				$link->prop("newwinscroll"),
+				$link->prop("newwinwidth"),
+				$link->prop("newwinheight")
+			);
 			$url = "javascript:void(0)";
 		}
 		else
 		{
 			$url = $linksrc;
-			$target = $link["newwindow"] ? "target='_blank'" : "";
+			$target = $link->prop("newwindow") ? "target='_blank'" : "";
 		};
 
 
-		return $ret_all ? $link : (array($url,$target,$link["name"]));
+		return array($url,$target,$link->name());
 	}
 	
-	////
-	// !resetib aliased
-	function reset_aliases()
-	{
-		$this->extlinkaliases = "";
-	}
-
-	function get_link($id)
-	{
-		// bail out if no id	
-		if (not($id))
-		{
-			return;
-		};
-		$q = "SELECT extlinks.*,objects.* FROM extlinks LEFT JOIN objects ON objects.oid = extlinks.id WHERE id = '$id'";
-		$row = $this->db_fetch_row($q);
-		$row = array_merge($row,aw_unserialize($row['metadata']));
-		if ($row["type"] == "int")
-		{
-			$row["url"] = $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".$row["docid"];
-		}
-		return $row;
-	}
-
 	// registreerib kliki lingile
 	// peab ehitama ka mehhanisimi spämmimise vältimiseks
 	function add_hit($id,$host,$uid) 
 	{
-		$q = "UPDATE extlinks
-							SET hits = hits + 1
-							WHERE id = '$id'";
-		$this->db_query($q);
-		$t = time();
-		$q = "INSERT INTO extlinkstats (lid,tm,host,uid) 
-						VALUES ('$id',$t,'$host','$uid')";
-		$this->db_query($q);
-		$name = $this->db_fetch_field("SELECT name FROM objects where oid = $id","name");
-		$this->_log(ST_EXTLINK, SA_CLICK, $name, $id);
-	}
+		$o = obj($id);
+		$o->set_prop("hits", $o->prop("hits")+1);
+		$o->save();
 
-	////
-	// !Returns a list of links matching the given conditions. Used to implement
-	// the feature of adding links to a document
-	function get_link_list($arr)
-	{
-		$retval = "";
-		$qparts = array(
-			"parent" => $arr["parent"],
-			"class_id" => $this->clid,
-			"status" => STAT_ACTIVE,
-		);
-
-                if (!empty($arr["period"]))
-                {
-                        $qparts["period"] = $arr["period"];
-                };
-
-                $q = sprintf("SELECT oid,name,created,createdby,commtext FROM objects
-                                LEFT JOIN forum_comments ON (objects.oid = forum_comments.id)
-                                WHERE (%s) ORDER BY created",join(" AND ",map2("%s='%s'",$qparts)));
-
-                $this->db_query($q);
-
-		// don't read the template/show anything if there are no comments,
-		// perhaps this should be configurable though
-		if (sizeof($this->num_rows()) > 0)
-		{
-			$this->sub_merge = 1;
-			$this->read_template("link_list.tpl");
-			while($row = $this->db_next())
-			{
-				$this->save_handle();
-                                $ldata = $this->draw_link($row["oid"],true);
-				$this->restore_handle();
-                                $this->vars(array(
-                                        "user" => $ldata["createdby"],
-                                        "url" => $ldata["url"],
-                                        "name" => $ldata["name"],
-                                ));
-                                $this->parse("one_url");
-                        };
-			$retval = $this->parse();
-                }
-		return $retval;
+		$this->_log(ST_EXTLINK, SA_CLICK, $o->name(), $id);
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/site_translation.aw,v 1.1 2003/08/29 11:51:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/site_translation.aw,v 1.2 2003/09/08 14:18:24 kristo Exp $
 // site_translation.aw - Saidi tõlge 
 /*
 
@@ -125,8 +125,9 @@ class site_translation extends class_base
 			));
 			foreach($conns as $conn)
 			{
-				$obj = new object($conn->to());
-				$this->clid[$obj->prop("type")] = $obj->prop("type");
+				// yeah, these are class type objects, so we really do need to get the type from the object, not the connection
+				$o = $conn->to();
+				$this->clid[$o->prop("type")] = $o->prop("type");
 			};
 		};
 
@@ -152,13 +153,19 @@ class site_translation extends class_base
 				$start = mktime(0,0,0,date("m"),date("d"),date("Y"));
 				break;
 		};
-		$thingies = new object_list(array(
-			"flags" => "& ~" . OBJ_IS_TRANSLATED . " = " . OBJ_NEEDS_TRANSLATION,
+		$filter = array(
+			"flags" => array(
+				"mask" => OBJ_IS_TRANSLATED|OBJ_NEEDS_TRANSLATION,
+				"flags" => OBJ_NEEDS_TRANSLATION
+			),
 			"class_id" => in_array($args["request"]["clid"],$this->clid) ? $args["request"]["clid"] : $this->clid,
 			"lang_id" => $this->base_lang_id,
-			"modified" => $start ? ">=$start" : false,
-
-		));
+		);
+		if ($start)
+		{
+			$filter["modified"] = ">=$start";
+		}
+		$thingies = new object_list($filter);
 
 		$clist = aw_ini_get("classes");
 
@@ -234,13 +241,20 @@ class site_translation extends class_base
 				$start = mktime(0,0,0,date("m"),date("d"),date("Y"));
 				break;
 		};
-		$mask = OBJ_NEEDS_TRANSLATION | OBJ_IS_TRANSLATED;
-		$thingies = new object_list(array(
-			"flags" => "& " . $mask . " = " . $mask,
+
+		$filter = array(
+			"flags" => array(
+				"mask" => OBJ_IS_TRANSLATED|OBJ_NEEDS_TRANSLATION,
+				"flags" => OBJ_NEEDS_TRANSLATION|OBJ_IS_TRANSLATED
+			),
 			"class_id" => in_array($args["request"]["clid"],$this->clid) ? $args["request"]["clid"] : $this->clid,
 			"lang_id" => $this->base_lang_id,
-			"modified" => $start ? ">=$start" : false,
-		));
+		);
+		if ($start)
+		{
+			$filter["modified"] = ">=$start";
+		}
+		$thingies = new object_list($filter);
 
 		load_vcl("table");
 		$t = new aw_table(array(
@@ -280,13 +294,13 @@ class site_translation extends class_base
 	}
 
 	function gen_utr_toolbar($arr)
-        {
-                $id = $arr["obj"]["oid"];
-                if ($id)
-                {
-                        // which links do I need on the toolbar?
-                        // 1- lisa grupp
-                        $toolbar = &$arr["prop"]["toolbar"];
+	{
+		$id = $arr["obj"]["oid"];
+		if ($id)
+		{
+			// which links do I need on the toolbar?
+			// 1- lisa grupp
+			$toolbar = &$arr["prop"]["toolbar"];
 
 			$toolbar->add_cdata(html::select(array(
 				"name" => "clid",
@@ -294,24 +308,24 @@ class site_translation extends class_base
 				"selected" => (int)$arr["request"]["clid"],
 			)));
 
-                        $toolbar->add_button(array(
-                                "name" => "save",
-                                "tooltip" => "Salvesta",
-                                "url" => "javascript:document.location.href=document.location.href+'&clid='+document.getElementById('clid').value;",
-                                "imgover" => "save_over.gif",
-                                "img" => "save.gif",
-                        ));
+			$toolbar->add_button(array(
+				"name" => "save",
+				"tooltip" => "Salvesta",
+				"url" => "javascript:document.location.href=document.location.href+'&clid='+document.getElementById('clid').value;",
+				"imgover" => "save_over.gif",
+				"img" => "save.gif",
+			));
 		};
 	}
 	
 	function gen_tr_toolbar($arr)
-        {
-                $id = $arr["obj"]["oid"];
-                if ($id)
-                {
-                        // which links do I need on the toolbar?
-                        // 1- lisa grupp
-                        $toolbar = &$arr["prop"]["toolbar"];
+	{
+		$id = $arr["obj"]["oid"];
+		if ($id)
+		{
+			// which links do I need on the toolbar?
+			// 1- lisa grupp
+			$toolbar = &$arr["prop"]["toolbar"];
 			
 			$toolbar->add_cdata(html::select(array(
 				"name" => "clid",
@@ -320,13 +334,13 @@ class site_translation extends class_base
 			)));
                         
 			$toolbar->add_button(array(
-                                "name" => "save",
-                                "tooltip" => "Salvesta",
-                                "url" => "javascript:document.location.href=document.location.href+'&clid='+document.getElementById('clid').value;",
-                                "imgover" => "save_over.gif",
-                                "img" => "save.gif",
-                        ));
-		};
+				"name" => "save",
+				"tooltip" => "Salvesta",
+				"url" => "javascript:document.location.href=document.location.href+'&clid='+document.getElementById('clid').value;",
+				"imgover" => "save_over.gif",
+				"img" => "save.gif",
+			));
+		}
 	}
 
 	function _prep_clid_list()
@@ -373,9 +387,9 @@ class site_translation extends class_base
 
 	function callback_get_rel_types()
 	{
-                return array(
-                        RELTYPE_CLASS => "klass",
-                );
+		return array(
+			RELTYPE_CLASS => "klass",
+		);
 	}
 
 	function callback_get_classes_for_relation($args = array())
@@ -383,7 +397,7 @@ class site_translation extends class_base
 		$retval = false;
 		switch($args["reltype"])
 		{
-                        case RELTYPE_CLASS:
+			case RELTYPE_CLASS:
 				$retval = array(CL_OBJECT_TYPE);
 				break;
 		};

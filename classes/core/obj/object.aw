@@ -351,6 +351,16 @@ class object
 	{
 		return $GLOBALS["objects"][$this->oid]->set_cache_dirty($param);
 	}
+
+	function last()
+	{
+		return $GLOBALS["objects"][$this->oid]->last();
+	}
+
+	function brother_of()
+	{
+		return $GLOBALS["objects"][$this->oid]->brother_of();
+	}
 }
 
 function &obj($param = NULL)

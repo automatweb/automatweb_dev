@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.7 2003/09/03 12:31:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.8 2003/09/08 14:18:24 kristo Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -221,6 +221,12 @@ class object_list extends _int_obj_container_base
 	function ids()
 	{
 		return array_keys($this->list);
+	}
+
+	
+	function count()
+	{
+		return count($this->list);
 	}
 
 	///////////////////////////////////////

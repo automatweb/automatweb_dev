@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.36 2003/08/29 11:51:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.37 2003/09/08 14:18:24 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -79,6 +79,11 @@
 
 @property dcache type=checkbox store=no
 @caption Cache otsingu jaoks
+
+@property dcache_content type=hidden field=dcache 
+@property rating type=hidden 
+@property num_ratings type=hidden 
+
 
 @property show_title type=checkbox ch_value=1
 @caption Näita pealkirja

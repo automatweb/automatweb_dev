@@ -47,16 +47,16 @@ class connection
 		}
 	}
 
-	function find($from, $to)
+	function find($param)
 	{
-		if (!is_oid($from) || !is_oid($to))
+		if (!is_array($param))
 		{
 			error::throw(array(
 				"id" => ERR_PARAM,
-				"msg" => "connection::find($from, $to): from and to parameters must be oids!"
+				"msg" => "connection::find(): parameter must be an array of filter parameters!"
 			));
 		}
-		return $GLOBALS["object_loader"]->ds->finnd_connection($from, $to);
+		return $GLOBALS["object_loader"]->ds->find_connections($param);
 	}
 
 	function change($param)
@@ -89,7 +89,7 @@ class connection
 		}
 
 		// now, check acl - both ends must be visible for the connection to be deleted
-		if (!($GLOBALS["object_loader"]->ds->can("view", $this->conn["source"]) || $GLOBALS["object_loader"]->ds->can("view", $this->conn["target"])))
+		if (!($GLOBALS["object_loader"]->ds->can("view", $this->conn["from"]) || $GLOBALS["object_loader"]->ds->can("view", $this->conn["to"])))
 		{
 			error::throw(array(
 				"id" => ERR_ACL,
@@ -119,7 +119,7 @@ class connection
 				"msg" => "connection::to(): no current connection!"
 			));
 		}
-		return obj($this->conn["target"]);
+		return obj($this->conn["to"]);
 	}
 
 	////////////////////////////
@@ -137,7 +137,7 @@ class connection
 		}
 		
 		// now, check acl - both ends must be visible for the connection to be shown
-		if (!($GLOBALS["object_loader"]->ds->can("view", $this->conn["source"]) || $GLOBALS["object_loader"]->ds->can("view", $this->conn["target"])))
+		if (!($GLOBALS["object_loader"]->ds->can("view", $this->conn["from"]) || $GLOBALS["object_loader"]->ds->can("view", $this->conn["to"])))
 		{
 			error::throw(array(
 				"id" => ERR_ACL,
@@ -148,7 +148,7 @@ class connection
 
 	function _int_save()
 	{
-		if (!$this->conn["source"] || !$this->conn["target"])
+		if (!$this->conn["from"] || !$this->conn["to"])
 		{
 			error::throw(array(
 				"id" => ERR_CONNECTION,
@@ -157,7 +157,7 @@ class connection
 		}
 
 		// now, check acl - both ends must be visible for the connection to be changed
-		if (!($GLOBALS["object_loader"]->ds->can("view", $this->conn["source"]) || $GLOBALS["object_loader"]->ds->can("view", $this->conn["target"])))
+		if (!($GLOBALS["object_loader"]->ds->can("view", $this->conn["from"]) || $GLOBALS["object_loader"]->ds->can("view", $this->conn["to"])))
 		{
 			error::throw(array(
 				"id" => ERR_ACL,
@@ -166,7 +166,7 @@ class connection
 		}
 
 		// now that everything is ok, save the damn thing
-		$GLOBALS["object_loader"]->ds->save_connection($this->conn);
+		$this->conn["id"] = $GLOBALS["object_loader"]->ds->save_connection($this->conn);
 	}
 }
 

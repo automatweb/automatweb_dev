@@ -141,6 +141,16 @@ class _int_obj_ds_base extends acl_base
 			"msg" => "called abstract function ds_base::search"
 		));
 	}
+
+	////
+	// !deletes object $oid
+	function delete_object($oid)
+	{
+		error::throw(array(
+			"id" => ERR_ABSTRACT,
+			"msg" => "called abstract function ds_base::delete_object"
+		));
+	}
 }
 
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.1 2003/08/01 11:38:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.2 2003/09/08 14:18:24 kristo Exp $
 // object_translation.aw - Objekti tõlge 
 
 // create method accepts the following arguments:
@@ -32,12 +32,6 @@ class object_translation extends aw_template
 	// dstlang(str) - id of the target language
 	function create($args = array())
 	{
-		/*
-		print "<pre>";
-		print_r($args);
-		print "</pre>";
-		*/
-
 		// steps
 		// 1 - read the original object
 		$orig = new object($args["id"]);
@@ -67,16 +61,26 @@ class object_translation extends aw_template
 			$dstlang_id = $langinfo[$args["dstlang"]]["id"];
 		};
 
-		//print "translationg to $dstlang / $dstlang_id<br>";
-
-		// 3 - clone all the data from the original object ...
 		$fl = $this->cfg["classes"][$orig->prop("class_id")]["file"];
-
 		if ($fl == "document")
 		{
 			$fl = "doc";
 		};
 
+
+		// check if the original object already has a translation relation to an object of the correct lang
+		$conns = $orig->connections_from(array(
+			"reltype" => RELTYPE_TRANSLATION,
+			"to.lang_id" => $dstlang_id
+		));
+		if (count($conns) > 0)
+		{
+			// it already has the translation, don't create a new one, just go to changing
+			$clone = $conns[0]->to();
+			return $this->mk_my_orb("change",array("id" => $clone->id()),$fl);
+		}
+		
+		// 3 - clone all the data from the original object ...
 		$orig_inst = get_instance($fl);
 
 		// get old
@@ -88,22 +92,19 @@ class object_translation extends aw_template
 		$raw["lang_id"] = $dstlang_id;
 		$raw["class_id"] = $orig->class_id();
 
-		/*
-		print "<pre>";
-		print "<h1>raw</h1>";
-		print_r($raw);
-		print "</pre>";
-		*/
-
-		$raw["alias_to"] = $orig->id();
-		$raw["reltype"] = RELTYPE_TRANSLATION;
-
 		// create new .. 
 		$clone_id = $orig_inst->unserialize(array(
 			"parent" => $orig->parent(),
 			"raw" => $raw,
 		));
 
+		// we also gots to create a relation
+		$co = new connection();
+		$co->change(array(
+			"from" => $orig->id(),
+			"to" => $clone_id,
+			"reltype" => RELTYPE_TRANSLATION
+		));
 		return $this->mk_my_orb("change",array("id" => $clone_id),$fl);
 	}
 };

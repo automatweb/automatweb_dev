@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.6 2003/08/27 13:47:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.7 2003/09/08 14:18:24 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -423,18 +423,16 @@ class promo extends class_base
 		$new_alias_reltype = array();
 		foreach($oldaliases as $alias)
 		{
-			//if ($alias_reltype[$alias["target"]] == RELTYPE_ASSIGNED_MENU)
 			if ($alias["reltype"] == RELTYPE_ASSIGNED_MENU)
 			{
-				$section[$alias["target"]] = $alias["target"];
-				$new_alias_reltype[$alias["target"]] = RELTYPE_ASSIGNED_MENU;
+				$section[$alias["to"]] = $alias["to"];
+				$new_alias_reltype[$alias["to"]] = RELTYPE_ASSIGNED_MENU;
 			};
 			
-			//if ($alias_reltype[$alias["target"]] == RELTYPE_DOC_SOURCE)
 			if ($alias["reltype"] == RELTYPE_DOC_SOURCE)
 			{
-				$last_menus[$alias["target"]] = $alias["target"];
-				$new_alias_reltype[$alias["target"]] = RELTYPE_DOC_SOURCE;
+				$last_menus[$alias["to"]] = $alias["to"];
+				$new_alias_reltype[$alias["to"]] = RELTYPE_DOC_SOURCE;
 			};
 		};
 
@@ -531,14 +529,6 @@ class promo extends class_base
 			"no_strip_lead" => 1,
 		);
 
-		global $XX3;
-		if ($XX3)
-		{
-			print "<pre>";
-			print_r($alias);
-			var_dump($ob->prop("tpl_lead"));
-			print "</pre>";
-		};
 		if (!$ob->meta('use_fld_tpl'))
 		{
 			$mgr = get_instance("templatemgr");
@@ -549,14 +539,6 @@ class promo extends class_base
 			$parms["tpl_auto"] = 1;
 		}
 
-		global $XX3;
-		if ($XX3)
-		{
-			print "<pre>";
-			print_r($parms);
-			print "</pre>";
-		};
-	
 		foreach($def->get() as $key => $val)
 		{
 			$_parms = $parms;
