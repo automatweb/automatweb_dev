@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/stat_report/Attic/stat_report.aw,v 1.1 2004/03/24 15:58:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/stat_report/Attic/stat_report.aw,v 1.2 2004/03/25 21:45:35 duke Exp $
 // stat_report.aw - Stati aruannete upload 
 /*
 
@@ -7,6 +7,10 @@
 
 @default table=objects
 @default group=general
+
+@reltype REPORT_TYPE value=1 clid=CL_META
+@caption Aruannete tyybid
+
 
 */
 

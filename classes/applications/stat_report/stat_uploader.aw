@@ -12,6 +12,9 @@
 @property password type=password 
 @caption Parool
 
+@property report_type type=select
+@caption Aruande tüüp
+
 @property file type=fileupload
 @caption Fail 
 
@@ -19,7 +22,7 @@
 @caption Aruande esitaja
 
 @property email type=textbox
-@caption Aruande esitaja meiliaadress
+@caption Kontaktandmed
 
 @classinfo hide_tabs=1
 @forminfo stat onsubmit=submit_upload
@@ -31,13 +34,34 @@ class stat_uploader extends class_base
 	{
 		$this->init("");
 		$this->password = "1234";
-		$this->filestore = "/www/dev/duke/site/public/vvstat";
+		$this->filestore = "/www/aruanded.stat.ee/aruanded";
 		$this->reg = array(1234,2234,3234);
 		$this->whitelist = array(
 			".*\.xls$",
 			".*\.sxc$",
 			".*\.ddoc$",
 		);
+		$this->obj = new object(130830);
+		$conns = $this->obj->connections_from(array(
+			"reltype" => 1,
+		));
+		foreach($conns as $conn)
+		{
+			$to_obj = $conn->to();
+		};
+
+		$choices = new object_list(array(
+			"class_id" => CL_META,
+			"parent" => $to_obj->id(),
+			"lang_id" => array(),
+		));
+
+		$this->choices = array();
+		for ($o =& $choices->begin(); !$choices->end(); $o =& $choices->next())
+		{
+			$this->choices[$o->comment()] = $o->name();
+		};
+
 	}
 
 	/**
@@ -74,45 +98,54 @@ class stat_uploader extends class_base
 		$propvalues["email"]["error"] = "";
 		$propvalues["file"]["error"] = "";
 
+		$authfile = aw_ini_get("site_basedir") . "/auth.csv";
+		$authcontents = file_get_contents($authfile);
+
+		$mx = preg_match("/^$reg,(.*)$/m",$authcontents,$m);
+		$this->password = $m[1];
+
 		if (empty($reg))
 		{
 			$errors = true;
-			$propvalues["reg"]["error"] = "Registrikood ei tohi olla tühi";
+			$propvalues["reg"]["value"] = " ";
+			$propvalues["reg"]["error"] = "Sisestage registrikood";
 		}
-		else if (!in_array($reg,$this->reg))
+		//else if (!in_array($reg,$this->reg))
+		else if (!$mx)
 		{
 			$errors = true;
-			$propvalues["reg"]["error"] = "Tundmatu registrikood";
+			$propvalues["reg"]["value"] = $reg;
+			$propvalues["reg"]["error"] = "Sellist registrikoodi ei ole olemas!";
 		};
 
 		// parool
 		if (empty($password))
 		{
 			$errors = true;
-			$propvalues["password"]["error"] = "Parool ei tohi olla tühi";
+			$propvalues["password"]["error"] = "Sisestage parool!";
 		}
 		else if ($password != $this->password)
 		{
 			$errors = true;
-			$propvalues["password"]["error"] = "Parool ei klapi";
+			$propvalues["password"]["error"] = "Registrikood ja parool ei klapi!";
 		};
 
 		if (empty($name))
 		{
 			$errors = true;
-			$propvalues["name"]["error"] = "Nimi ei tohi olla tühi";
+			$propvalues["name"]["error"] = "Sisestage oma nimi!";
 		};
 		if (empty($email))
 		{
 			$errors = true;
-			$propvalues["email"]["error"] = "Meiliaadress tohi olla tühi";
+			$propvalues["email"]["error"] = "Sisestage oma kontaktandmed!";
 		};
 
 		$filedat = $_FILES["file"];
 		if (empty($filedat["tmp_name"]))
 		{
 			$errors = true;
-			$propvalues["file"]["error"] = "Vali fail ka";
+			$propvalues["file"]["error"] = "Palun valige fail!";
 		}
 		else
 		{
@@ -136,7 +169,10 @@ class stat_uploader extends class_base
 		if (!$errors)
 		{
 			// now fetch the file and do something with it
-			move_uploaded_file($filedat["tmp_name"],$this->filestore . "/" . $reg . ".xls");
+			$pi = pathinfo($filename);
+			$ext = $pi["extension"];
+			$new_name = $this->filestore . "/" . $reg . "_" . $arr["report_type"] . "#" . date("YmdHi") . "." . $ext;
+			$stat = move_uploaded_file($filedat["tmp_name"],$new_name);
 			return $this->mk_my_orb("final",array());
 		}
 		else
@@ -144,9 +180,23 @@ class stat_uploader extends class_base
 			$propvalues["reg"]["value"] = $reg;
 			$propvalues["name"]["value"] = $name;
 			$propvalues["email"]["value"] = $email;
+			$propvalues["file"]["value"] = $file;
 			aw_session_set("cb_values",$propvalues);
 			return $this->mk_my_orb("show",array());
 		};
+	}
+
+	function get_property($arr)
+	{	
+		$prop = &$arr["prop"];
+		$rv = PROP_OK;
+		switch($prop["name"])
+		{
+			case "report_type":
+				$prop["options"] = $this->choices;
+				break;
+		};
+		return $rv;
 	}
 };
 ?>
