@@ -1,0 +1,54 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="manager">
+		<action name="frames" default="1">
+			<function name="frames">
+				<arguments/>
+			</function>
+		</action>
+
+		<action name="tree">
+			<function name="tree">
+				<arguments/>
+			</function>
+		</action>
+
+		<action name="browse">
+			<function name="browse">
+				<arguments>
+					<optional name="parent" type="int"/>
+					<optional name="sortby"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_browse">
+			<function name="submit_browse">
+				<arguments/>
+			</function>
+		</action>
+
+		<action name="add_menu">
+			<function name="edit_menu">
+				<arguments>
+					<required name="parent" type="int"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="edit_menu">
+			<function name="edit_menu">
+				<arguments>
+					<required name="id" type="int"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_menu">
+			<function name="submit_menu">
+				<arguments/>
+			</function>
+		</action>
+	</class>
+</orb>
+		

@@ -1,0 +1,42 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="scheduler">
+		<action name="update_repeaters">
+			<function name="update_repeaters">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="do_events" nologin="1" default="1">
+			<function name="do_events">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="show">
+			<function name="show">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="show_log">
+			<function name="show_log">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="show_log_entry">
+			<function name="show_log_entry">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+	</class>
+</orb>
+		

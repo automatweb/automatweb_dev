@@ -1,0 +1,21 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="datasource">
+		<action name="new">
+			<function name="change">
+				<required name="parent" type="int"/>
+			</function>
+		</action>
+
+		<action name="change">
+			<function name="change">
+				<required name="id" type="int"/>
+			</function>
+		</action>
+
+		<action name="submit">
+			<function name="submit"/>
+		</action>
+	</class>
+</orb>
+		

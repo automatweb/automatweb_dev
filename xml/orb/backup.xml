@@ -1,0 +1,19 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="backup">
+		<action name="backup">
+			<function name="orb_backup">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_backup">
+			<function name="submit_backup">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+	</class>
+</orb>
+		

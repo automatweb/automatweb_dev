@@ -1,0 +1,23 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="ut_stat_table" nologin="1">
+		<action name="draw" >
+			<function name="draw">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="list" nologin="1">
+			<function name="orb_list">
+				<arguments>
+					<required name='teaduskond'/>
+					<required name='oppevorm'/>
+					<required name='oppeaste'/>
+					<required name='oppekava'/>
+				</arguments>
+			</function>
+		</action>
+	</class>
+</orb>
+		

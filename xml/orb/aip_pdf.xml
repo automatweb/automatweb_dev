@@ -1,0 +1,20 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="aip_pdf">
+		<action name="listfiles">
+			<function name="listfiles">
+				<arguments>
+					<optional name="section"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_list">
+			<function name="submit_list">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+	</class>
+</orb>
+		

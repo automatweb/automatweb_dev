@@ -1,0 +1,87 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="email">
+		<action name="list_mails">
+			<function name="list_mails">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_default">
+			<function name="submit_default">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="new_mail">
+			<function name="new_mail">
+				<arguments>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_mail">
+			<function name="save_mail">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="change">
+			<function name="change_mail">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="delete">
+			<function name="delete_mail">
+				<arguments>
+					<required name="id"/>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="send_mail">
+			<function name="send_mail">
+				<arguments>
+					<required name="id"/>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="preview">
+			<function name="mail_preview">
+				<arguments>
+					<required name="id"/>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="print">
+			<function name="orb_print">
+				<arguments>
+					<required name="id"/>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="print_mail">
+			<function name="orb_print_mail">
+				<arguments>
+					<required name="id"/>
+					<required name="user_id"/>
+				</arguments>
+			</function>
+		</action>
+	</class>
+</orb>
