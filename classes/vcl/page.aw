@@ -1,5 +1,5 @@
 <?php
-// $Id: page.aw,v 1.3 2003/04/25 08:58:59 duke Exp $
+// $Id: page.aw,v 1.4 2003/06/04 14:05:19 duke Exp $
 // page.aw - Generic HTML page
 /*
 	@default table=objects
@@ -17,7 +17,7 @@
 	@property defayltstyle type=objpicker clid=CL_STYLE field=meta method=serialize
 	@caption Default stiil
 
-	@property preview type=text
+	@property preview type=text store=no
 	@caption Eelvaade
 
 */
