@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.296 2004/08/25 16:25:08 duke Exp $
+// $Id: class_base.aw,v 2.297 2004/08/25 17:09:27 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -205,7 +205,6 @@ class class_base extends aw_template
 		$cb_values = aw_global_get("cb_values");
 
 		$has_errors = false;
-
 
 		if (!empty($cb_values))
 		{
@@ -2760,6 +2759,13 @@ class class_base extends aw_template
 			$props = $arr["props"];
 		};
 
+		if (is_oid($arr["cfgform_id"]))
+		{
+			$controller_inst = get_instance(CL_CFGCONTROLLER);
+			$controllers = $this->get_all_controllers($arr["cfgform_id"]);
+			
+		};
+
 		$res = array();
 
 		foreach($arr["request"] as $key => $val)
@@ -2781,6 +2787,25 @@ class class_base extends aw_template
 					);
 				};
 			};
+			
+			if($controllers[$key])
+			{
+				$controller_id = $controllers[$key];
+				$controller_ret = $controller_inst->check_property($controller_id, $args["id"], $prpdata, $arr["request"]);
+
+				if ($controller_ret != PROP_OK)
+				{
+					$ctrl_obj = new object($controller_id);
+					$errmsg = $ctrl_obj->prop("errmsg");
+					if (empty($errmsg))
+					{
+						$errmsg = "Entry was blocked by a controller, but no error message is available";
+					};
+					$res[$key] = array(
+						"msg" => $errmsg,
+					);
+				};
+			}
 		};
 		return $res;
 	}
@@ -2902,6 +2927,7 @@ class class_base extends aw_template
 
 		$errors = $this->validate_data(array(
 			"request" => $args,
+			"cfgform_id" => $args["cfgform"],
 		));
 
 		$pvalues = array();
@@ -3026,7 +3052,7 @@ class class_base extends aw_template
 			if (isset($errors[$name]["msg"]))
 			{
 				$status = PROP_FATAL_ERROR;
-				$property["error"] = $errors[$name]["msg"];
+				$argblock["prop"]["error"] = $errors[$name]["msg"];
 				
 			};
 
@@ -3041,13 +3067,6 @@ class class_base extends aw_template
 				};
 			};
 			
-			if($controllers[$property["name"]])
-			{
-				$controller_id = $controllers[$property["name"]];
-				$controller_ret = $controller_inst->check_property($controller_id, $args["id"], $property, $realprops);
-				$property["error"] = $controller_ret["error"];
-				$status = $controller_ret["status"];
-			}
 					
 			if (PROP_ERROR == $status)
 			{
@@ -3077,7 +3096,7 @@ class class_base extends aw_template
 					$propvalues[$name]["error"] = $argblock["prop"]["error"];
 				};
 				aw_session_set("cb_values",$propvalues);
-				
+
 				
 				return false;
 			};
