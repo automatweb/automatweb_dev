@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.63 2004/11/07 12:18:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.64 2004/11/07 19:14:17 kristo Exp $
 
 class db_config extends aw_template 
 {
@@ -542,96 +542,6 @@ class config extends db_config
 			}
 		}
 		return $this->mk_my_orb("sel_join_form");
-	}
-
-	/**  
-		
-		@attrib name=class_cfgforms params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function class_cfgforms()
-	{
-		$this->mk_path(0,"Klasside konfiguratsioonivormid");
-
-		load_vcl("table");
-		$t = new aw_table(array(
-			"prefix" => "class_cfgforms",
-			"tbgcolor" => "#C3D0DC",
-		));
-
-		$t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
-		$t->tableattribs["width"] = "300";
-		$t->define_field(array(
-			"name" => "name",
-			"caption" => "Klass",
-			"talign" => "center",
-			"nowrap" => "1",
-			"sortable" => 1,
-			"width" => "20%",
-		));
-		$t->define_field(array(
-			"name" => "cfgform",
-			"caption" => "Konfivorm",
-			"talign" => "center",
-			"nowrap" => "1",
-			"width" => "20%",
-		));
-		
-		$this->read_template("class_cfgforms.tpl");
-				
-		$ol = new object_list(array(
-			"class_id" => CL_CFGFORM,
-			"site_id" => array(),
-			"lang_id" => array()
-		));
-		$options = array("" => "") + $ol->names();
-		classload("html");
-
-		$cfgu = get_instance("cfg/cfgutils");
-		
-		$cs = aw_unserialize($this->get_simple_config("class_cfgforms"));
-
-		while (list($clid,$desc) = each(aw_ini_get("classes")))
-		{
-			if ($cfgu->has_properties(array("clid" => $clid)))
-			{
-				$t->define_data(array(
-					"name" => $desc["name"],
-					"cfgform" => html::select(array("name" => "cfgform[$clid]","value" => $cs[$clid],"options" => $options)),
-				));
-			};
-		}
-		$this->vars(array(
-			"table" => $t->draw(),
-			"reforb" => $this->mk_reforb("submit_class_cfgforms",array()),
-		));
-		return $this->parse();
-	}
-
-	/**  
-		
-		@attrib name=submit_class_cfgforms params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function submit_class_cfgforms($args = array())
-	{
-		extract($args);
-		$cs = aw_serialize($cfgform);
-		$this->quote($cs);
-		$this->set_simple_config("class_cfgforms",$cs);
-		return $this->mk_my_orb("class_cfgforms",array());
 	}
 
 	/**  

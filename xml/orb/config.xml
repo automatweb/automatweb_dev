@@ -78,20 +78,6 @@
 			</function>
 		</action>
 
-		<action name="class_cfgforms">
-			<function name="class_cfgforms">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit_class_cfgforms">
-			<function name="submit_class_cfgforms">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="submit_loginaddr">
 			<function name="submit_loaginaddr">
 				<arguments>
