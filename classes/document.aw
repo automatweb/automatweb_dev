@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.243 2004/03/10 16:04:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.244 2004/03/11 09:34:25 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -885,7 +885,8 @@ class document extends aw_template
 				$x = array();
 
 				// XXX: does not work with multiple authors
-				foreach($author_list as $author_name => $author_doc_id)
+				$_al = new aw_array($author_list);
+				foreach($_al->get() as $author_name => $author_doc_id)
 				{
 					if (stristr($author_name,$doc["author"]) !== false)
 					{
