@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.6 2004/11/11 15:07:37 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.7 2005/01/19 14:55:52 duke Exp $
 // metamgr.aw - Muutujate haldus 
 
 // see on siis mingi faking muutujate haldus. Mingi puu. Ja mingid asjad. Ja see kõik pole
@@ -24,14 +24,14 @@
 
 @property metalist type=table parent=manager store=no
 
-@property mupload type=fileupload store=no
+@property mupload type=fileupload store=no group=import
 @caption Vali muutujatega fail
 
 @property meta type=hidden store=no 
 @caption Metainfo
 
-@groupinfo manager caption="Muutujad" 
-
+@groupinfo manager caption="Muutujad" submit=no
+@groupinfo import caption="Import" 
 
 */
 
@@ -413,8 +413,14 @@ class metamgr extends class_base
 		{
 			foreach($items_to_remove as $item)
 			{
+				if (!is_oid($item))
+				{
+					continue;
+				};
+
 				$o = new object($item);
 				$o->delete();
+				
 			};
 		};
 		return $this->mk_my_orb("change",array(
@@ -499,5 +505,6 @@ class metamgr extends class_base
 			$arr["args"]["meta"] = $arr["request"]["meta"];
 		};
 	}
+
 }
 ?>
