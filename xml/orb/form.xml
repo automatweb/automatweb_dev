@@ -180,6 +180,14 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="preview_form">
+			<function name="preview_form">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
 		
 		<action name="table_settings">
 			<function name="gen_settings">
