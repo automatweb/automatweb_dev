@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.75 2004/06/08 14:34:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.76 2004/06/09 13:04:56 kristo Exp $
 
 lc_load("definition");
 
@@ -462,10 +462,11 @@ class acl_base extends db_connector
 		$grplist = $this->get_acl_groups_for_obj($oid);
 		if (!is_array($grplist[$all_users_grp]))
 		{
-			$this->add_acl_group_to_obj($all_users_grp, $oid);
+			$this->add_acl_group_to_obj($all_users_grp, $oid, array(), false);
 		}
-
-		$this->save_acl($oid,$all_users_grp, $aclarr);		// give no access to all users
+		
+		// we don't need to flush caches here, because the user that was just created can't have an acl cache anyway
+		$this->save_acl($oid,$all_users_grp, $aclarr, false);		// give no access to all users
 	}
 
 	////
