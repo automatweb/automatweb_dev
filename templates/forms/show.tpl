@@ -31,7 +31,7 @@ var form_changed = 0;
 <form name='fm_{VAR:form_id}' action='{VAR:form_action}' METHOD="{VAR:method}" enctype='multipart/form-data' onSubmit="check_submit()">
 <input type='hidden' NAME='MAX_FILE_SIZE' VALUE='10000000'>
 
-<table{VAR:form_border}{VAR:form_bgcolor}{VAR:form_cellpadding}{VAR:form_cellspacing}{VAR:form_height}{VAR:form_width}{VAR:form_hspace}{VAR:form_vspace}>
+<table {VAR:tblstring}>
 
 <!-- SUB: LINE -->
 
