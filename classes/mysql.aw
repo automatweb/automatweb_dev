@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.14 2002/03/01 13:13:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.15 2002/03/05 22:59:03 duke Exp $
 // mysql.aw - MySQL draiver
 include("$classdir/root.$ext");
 class db_connector extends root 
@@ -53,6 +53,12 @@ class db_connector extends root
 		};
 		$qcount++; $qarr[] = $qtext;
 //		dbg("<!-- $qcount : $qtext -->\n\n");
+
+		if (not($this->dbh))
+		{
+			print "I'm not connected to the database, cannot perform the requested query. Please report this to site administrator immediately";
+			exit;
+		};
 		if (is_object($awt)) 
 		{
 			$awt->start("querys");
