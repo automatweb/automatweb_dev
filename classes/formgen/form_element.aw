@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.4 2002/11/07 10:52:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.5 2002/11/07 22:56:25 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -2265,6 +2265,7 @@ class form_element extends aw_template
 				break;
 
 			case "date":
+				load_vcl("date_edit");
 				$de = new date_edit(time());
 				$bits = array();
 				$has_some = false;
