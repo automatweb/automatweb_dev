@@ -59,7 +59,7 @@ msgstr ""
 
 # classes/core/users/user.aw:prop_logins
 msgid "Omaduse Sisselogimisi (logins) caption"
-msgstr ""
+msgstr "Logins"
 
 # classes/core/users/user.aw:prop_logins_comment
 msgid "Omaduse Sisselogimisi (logins) kommentaar"
@@ -71,7 +71,7 @@ msgstr ""
 
 # classes/core/users/user.aw:prop_online
 msgid "Omaduse Sisselogitud (online) caption"
-msgstr ""
+msgstr "Is online"
 
 # classes/core/users/user.aw:prop_online_comment
 msgid "Omaduse Sisselogitud (online) kommentaar"
@@ -83,7 +83,7 @@ msgstr ""
 
 # classes/core/users/user.aw:prop_lastaction
 msgid "Omaduse Viimane tegevus (lastaction) caption"
-msgstr ""
+msgstr "Time of last action"
 
 # classes/core/users/user.aw:prop_lastaction_comment
 msgid "Omaduse Viimane tegevus (lastaction) kommentaar"
@@ -95,7 +95,7 @@ msgstr ""
 
 # classes/core/users/user.aw:prop_blocked
 msgid "Omaduse Blokeeritud (blocked) caption"
-msgstr ""
+msgstr "Blocked"
 
 # classes/core/users/user.aw:prop_blocked_comment
 msgid "Omaduse Blokeeritud (blocked) kommentaar"
@@ -107,7 +107,7 @@ msgstr ""
 
 # classes/core/users/user.aw:prop_name
 msgid "Omaduse Nimi (name) caption"
-msgstr ""
+msgstr "Name"
 
 # classes/core/users/user.aw:prop_name_comment
 msgid "Omaduse Nimi (name) kommentaar"
@@ -119,7 +119,7 @@ msgstr ""
 
 # classes/core/users/user.aw:prop_email
 msgid "Omaduse E-mail (email) caption"
-msgstr ""
+msgstr "E-mail address"
 
 # classes/core/users/user.aw:prop_email_comment
 msgid "Omaduse E-mail (email) kommentaar"
@@ -131,7 +131,7 @@ msgstr ""
 
 # classes/core/users/user.aw:prop_created
 msgid "Omaduse Loodud (created) caption"
-msgstr ""
+msgstr "Created"
 
 # classes/core/users/user.aw:prop_created_comment
 msgid "Omaduse Loodud (created) kommentaar"
@@ -143,7 +143,7 @@ msgstr ""
 
 # classes/core/users/user.aw:prop_createdby
 msgid "Omaduse Looja (createdby) caption"
-msgstr ""
+msgstr "Created by"
 
 # classes/core/users/user.aw:prop_createdby_comment
 msgid "Omaduse Looja (createdby) kommentaar"
@@ -155,7 +155,7 @@ msgstr ""
 
 # classes/core/users/user.aw:prop_admin_lang
 msgid "Omaduse Admin keel (admin_lang) caption"
-msgstr ""
+msgstr "Admin interface language"
 
 # classes/core/users/user.aw:prop_admin_lang_comment
 msgid "Omaduse Admin keel (admin_lang) kommentaar"
@@ -167,7 +167,7 @@ msgstr ""
 
 # classes/core/users/user.aw:prop_base_lang
 msgid "Omaduse Baaskeel (base_lang) caption"
-msgstr ""
+msgstr "Base langugage"
 
 # classes/core/users/user.aw:prop_base_lang_comment
 msgid "Omaduse Baaskeel (base_lang) kommentaar"
@@ -179,7 +179,7 @@ msgstr ""
 
 # classes/core/users/user.aw:prop_target_lang
 msgid "Omaduse Sihtkeel (target_lang) caption"
-msgstr ""
+msgstr "Target language"
 
 # classes/core/users/user.aw:prop_target_lang_comment
 msgid "Omaduse Sihtkeel (target_lang) kommentaar"
@@ -191,7 +191,7 @@ msgstr ""
 
 # classes/core/users/user.aw:prop_act_from
 msgid "Omaduse Aktiivne alates (act_from) caption"
-msgstr ""
+msgstr "Active since"
 
 # classes/core/users/user.aw:prop_act_from_comment
 msgid "Omaduse Aktiivne alates (act_from) kommentaar"
@@ -203,7 +203,7 @@ msgstr ""
 
 # classes/core/users/user.aw:prop_act_to
 msgid "Omaduse Aktiivne kuni (act_to) caption"
-msgstr ""
+msgstr "Active until"
 
 # classes/core/users/user.aw:prop_act_to_comment
 msgid "Omaduse Aktiivne kuni (act_to) kommentaar"
@@ -215,7 +215,7 @@ msgstr ""
 
 # classes/core/users/user.aw:prop_passwd
 msgid "Omaduse Salasõna (passwd) caption"
-msgstr ""
+msgstr "Password"
 
 # classes/core/users/user.aw:prop_passwd_comment
 msgid "Omaduse Salasõna (passwd) kommentaar"
@@ -227,7 +227,7 @@ msgstr ""
 
 # classes/core/users/user.aw:prop_passwd_again
 msgid "Omaduse Salasõna uuesti (passwd_again) caption"
-msgstr ""
+msgstr "Password again"
 
 # classes/core/users/user.aw:prop_passwd_again_comment
 msgid "Omaduse Salasõna uuesti (passwd_again) kommentaar"
@@ -251,7 +251,7 @@ msgstr ""
 
 # classes/core/users/user.aw:prop_gen_pwd
 msgid "Omaduse Genereeri parool (gen_pwd) caption"
-msgstr ""
+msgstr "Generate random password"
 
 # classes/core/users/user.aw:prop_gen_pwd_comment
 msgid "Omaduse Genereeri parool (gen_pwd) kommentaar"
@@ -263,7 +263,7 @@ msgstr ""
 
 # classes/core/users/user.aw:prop_genpwd
 msgid "Omaduse Genereeritud parool (genpwd) caption"
-msgstr ""
+msgstr "Generated password"
 
 # classes/core/users/user.aw:prop_genpwd_comment
 msgid "Omaduse Genereeritud parool (genpwd) kommentaar"
@@ -275,7 +275,7 @@ msgstr ""
 
 # classes/core/users/user.aw:prop_resend_welcome
 msgid "Omaduse Saada tervitusmeil (resend_welcome) caption"
-msgstr ""
+msgstr "Send welcome e-mail"
 
 # classes/core/users/user.aw:prop_resend_welcome_comment
 msgid "Omaduse Saada tervitusmeil (resend_welcome) kommentaar"
@@ -371,7 +371,7 @@ msgstr ""
 
 # classes/core/users/user.aw:prop_stat
 msgid "Omaduse Statistika (stat) caption"
-msgstr ""
+msgstr "Statistics"
 
 # classes/core/users/user.aw:prop_stat_comment
 msgid "Omaduse Statistika (stat) kommentaar"
@@ -491,15 +491,15 @@ msgstr ""
 
 # classes/core/users/user.aw:group_general
 msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
+msgstr "General"
 
 # classes/core/users/user.aw:group_chpwd
 msgid "Grupi Parool (chpwd) pealkiri"
-msgstr ""
+msgstr "Password"
 
 # classes/core/users/user.aw:group_objects
 msgid "Grupi Objektid ja &Otilde;igused (objects) pealkiri"
-msgstr ""
+msgstr "Objects and rights"
 
 # classes/core/users/user.aw:group_objects_own
 msgid "Grupi Enda tehtud (objects_own) pealkiri"
@@ -511,7 +511,7 @@ msgstr ""
 
 # classes/core/users/user.aw:group_groups
 msgid "Grupi Grupid (groups) pealkiri"
-msgstr ""
+msgstr "Groups"
 
 # classes/core/users/user.aw:group_jdata
 msgid "Grupi Liitumise info (jdata) pealkiri"
@@ -519,7 +519,7 @@ msgstr ""
 
 # classes/core/users/user.aw:group_stat
 msgid "Grupi Statistika (stat) pealkiri"
-msgstr ""
+msgstr "Statistics"
 
 # classes/core/users/user.aw:group_aclwizard
 msgid "Grupi ACL Maag (aclwizard) pealkiri"
@@ -547,31 +547,32 @@ msgstr ""
 
 #: classes/core/users/user.aw:299
 msgid "Genereeri parool"
-msgstr ""
+msgstr "Generate password"
 
 #: classes/core/users/user.aw:342
 msgid "Selline kasutaja on juba olemas!"
-msgstr ""
+msgstr "User with that uid already exists!:w
+"
 
 #: classes/core/users/user.aw:347
 msgid "Selline kasutajanimi pole lubatud!"
-msgstr ""
+msgstr "Username contains invalid characters!"
 
 #: classes/core/users/user.aw:383
 msgid "Paroolid pole samad!"
-msgstr ""
+msgstr "Passwords do not match!"
 
 #: classes/core/users/user.aw:389
 msgid "Parool sisaldab lubamatuid t&auml;hti v&otilde;i on liiga l&uuml;hike!"
-msgstr ""
+msgstr "Password contains invalid characters or is too short!"
 
 #: classes/core/users/user.aw:443
 msgid "Sellist kasutajat pole!"
-msgstr ""
+msgstr "No such user!"
 
 #: classes/core/users/user.aw:470
 msgid "D&uuml;naamiline"
-msgstr ""
+msgstr "Dynamic"
 
 #: classes/core/users/user.aw:475
 msgid "Tavaline"
@@ -579,15 +580,15 @@ msgstr ""
 
 #: classes/core/users/user.aw:630
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/core/users/user.aw:636
 msgid "Liige?"
-msgstr ""
+msgstr "Member?"
 
 #: classes/core/users/user.aw:642
 msgid "Prioriteet"
-msgstr ""
+msgstr "Priority"
 
 #: classes/core/users/user.aw:650
 msgid "Mitu liiget"
@@ -615,47 +616,47 @@ msgstr ""
 
 #: classes/core/users/user.aw:1141
 msgid "Nr"
-msgstr ""
+msgstr "Nr"
 
 #: classes/core/users/user.aw:1145
 msgid "Millal"
-msgstr ""
+msgstr "When"
 
 #: classes/core/users/user.aw:1154
 msgid "Kes"
-msgstr ""
+msgstr "Who"
 
 #: classes/core/users/user.aw:1159
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: classes/core/users/user.aw:1169
 msgid "Tegevus"
-msgstr ""
+msgstr "Action"
 
 #: classes/core/users/user.aw:1176
 msgid "Saidi ID"
-msgstr ""
+msgstr "Site ID"
 
 #: classes/core/users/user.aw:1182
 msgid "OID"
-msgstr ""
+msgstr "OID"
 
 #: classes/core/users/user.aw:1187
 msgid "Mida"
-msgstr ""
+msgstr "What"
 
 #: classes/core/users/user.aw:1549
 msgid "users::add_user(%s): no uid specified"
-msgstr ""
+msgstr "users::add_user(%s): no uid specified"
 
 #: classes/core/users/user.aw:1621
 msgid "Objekt on kustutatud. Pole &otilde;igusi!"
-msgstr ""
+msgstr "Object has been deleted, permission denied!"
 
 #: classes/core/users/user.aw:1626
 msgid "Objekti pole ega pole kunagi olnud! Pole &otilde;igusi!"
-msgstr ""
+msgstr "Object does not exist and never has, permission denied!"
 
 #: classes/core/users/user.aw:1631
 msgid "Objekti &uuml;lemobjekt (%s) on kustutatud. Pole &otilde;igusi!"
