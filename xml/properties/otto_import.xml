@@ -82,10 +82,10 @@
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
-			<store>no</store>
             <method>serialize</method>
             <type>text</type>
-            <caption>Vimase impordi log</caption>
+            <store>no</store>
+            <caption>Viimase impordi logi</caption>
       </property>
       <property>
             <name>fnames</name>

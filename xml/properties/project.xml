@@ -17,25 +17,6 @@
             <caption>Staatus</caption>
       </property>
       <property>
-            <name>project_navigator</name>
-            <table>objects</table>
-            <group>web_settings</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Näita projektide navigaatorit</caption>
-      </property>
-      <property>
-            <name>use_template</name>
-            <table>objects</table>
-            <group>web_settings</group>
-            <type>select</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Välimus</caption>
-      </property>
-      <property>
             <name>doc</name>
             <table>objects</table>
             <group>general2</group>
@@ -54,6 +35,25 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Ära näita alamprojektide sündmusi</caption>
+      </property>
+      <property>
+            <name>project_navigator</name>
+            <table>objects</table>
+            <group>web_settings</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Näita projektide navigaatorit</caption>
+      </property>
+      <property>
+            <name>use_template</name>
+            <table>objects</table>
+            <group>web_settings</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Välimus</caption>
       </property>
       <property>
             <name>prj_image</name>

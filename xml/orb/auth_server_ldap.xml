@@ -3,4 +3,3 @@
 	<class name="auth_server_ldap" folder="core/users/auth" extends="class_base">
 	</class>
 </orb>
-		
