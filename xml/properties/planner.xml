@@ -158,6 +158,50 @@
             <caption>Kalendri näitamisel kasutatakse 'tabpanel' komponenti</caption>
       </property>
       <property>
+            <name>items_on_line</name>
+            <type>textbox</type>
+            <size>4</size>
+            <group>advanced</group>
+            <rel>1</rel>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Cell'e reas</caption>
+      </property>
+      <property>
+            <name>event_direction</name>
+            <type>callback</type>
+            <callback>cb_get_event_direction</callback>
+            <group>advanced</group>
+            <rel>1</rel>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Suund</caption>
+      </property>
+      <property>
+            <name>event_time_item</name>
+            <type>textbox</type>
+            <size>4</size>
+            <group>advanced</group>
+            <rel>1</rel>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Mitu päeva</caption>
+      </property>
+      <property>
+            <name>event_max_items</name>
+            <type>textbox</type>
+            <size>4</size>
+            <group>advanced</group>
+            <rel>1</rel>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Max. sündmusi </caption>
+      </property>
+      <property>
             <name>event_folder</name>
             <type>select</type>
             <table>objects</table>

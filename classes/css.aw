@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.20 2003/01/22 12:50:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.21 2003/04/23 17:00:23 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 // I decided to make it a separate class, because I think the style.aw 
 // class is too cluttered.
@@ -32,40 +32,106 @@
 // lisaks on kasutajatel olemas oma grupid, mille elemente saab jagada teiste kasutajatega, 
 // ja nii edasi ja nii tagasi
 
-class css extends aw_template 
+/*
+
+@classinfo syslog_type=ST_CSS relationmgr=yes
+@groupinfo general caption=Üldine
+@groupinfo preview caption=Eelvaade
+
+@default group=general 
+@default table=objects
+
+@property ffamily type=select field=meta method=serialize group=general
+@caption Font
+
+@property italic type=checkbox ch_value=1 field=meta method=serialize group=general
+@caption <i>Italic</i>
+
+@property bold type=checkbox ch_value=1 field=meta method=serialize group=general
+@caption <b>Bold</b>
+
+@property underline type=checkbox ch_value=1 field=meta method=serialize group=general
+@caption <u>Underline</u>
+
+@property size type=textbox field=meta method=serialize group=general size=5
+@caption Suurus
+
+@property units type=select field=meta method=serialize group=general
+@caption Suuruse &uuml;hikud
+
+@property fgcolor type=colorpicker field=meta method=serialize group=general
+@caption Teksti v&auml;rv
+
+@property bgcolor type=colorpicker field=meta method=serialize group=general
+@caption Tausta v&auml;rv
+
+@property lineheight type=textbox field=meta method=serialize group=general size=5
+@caption Joone k&otilde;rgus
+
+@property lhunits type=select field=meta method=serialize group=general
+@caption Joone k&otilde;rguse &uuml;hikud
+
+@property border type=textbox field=meta method=serialize group=general size=5
+@caption Border width
+
+@property bordercolor type=colorpicker field=meta method=serialize group=general
+@caption Border color
+
+@property align type=select field=meta method=serialize group=general
+@caption Align
+
+@property valign type=select field=meta method=serialize group=general
+@caption Valign
+
+@property a_style type=relpicker field=meta method=serialize group=general reltype=RELTYPE_CSS
+@caption Lingi stiil
+
+@property a_hover_style type=relpicker field=meta method=serialize group=general reltype=RELTYPE_CSS
+@caption Lingi stiil (hover)
+
+@property a_visited_style type=relpicker field=meta method=serialize group=general reltype=RELTYPE_CSS
+@caption Lingi stiil (visited)
+
+@property a_active_style type=relpicker field=meta method=serialize group=general reltype=RELTYPE_CSS
+@caption Lingi stiil (active)
+
+@property pre type=text field=meta method=serialize group=preview no_caption=1
+
+*/
+
+define("RELTYPE_CSS", 1);
+
+class css extends class_base
 {
 	function css ($args = array())
 	{
 		// kuidas ma seda edimisvormi alati automawebi juurest lugeda saan?
-//		$this->init("css");
-		if (method_exists($this, "db_init"))
-		{
-			$this->db_init();
-		}
-		if (method_exists($this, "tpl_init"))
-		{
-			$this->tpl_init("css");
-		}
+		$this->init(array(
+			"tpldir" => "css",
+			"clid" => CL_CSS
+		));
+
 		$this->lc_load("css","lc_css");
+
 		// fondifamilyd, do not change the order
 		$this->font_families = array(
-				"0" => "Verdana,Helvetica,sans-serif",
-				"1" => "Arial,Helvetica,sans-serif",
-				"2" => "Tahoma,sans-serif",
-				"3" => "serif",
-				"4" => "sans-serif",
-				"5" => "monospace",
-				"6" => "cursive",
-				"7" => "Trebuchet MS,Tahoma,sans-serif"
+			"0" => "Verdana,Helvetica,sans-serif",
+			"1" => "Arial,Helvetica,sans-serif",
+			"2" => "Tahoma,sans-serif",
+			"3" => "serif",
+			"4" => "sans-serif",
+			"5" => "monospace",
+			"6" => "cursive",
+			"7" => "Trebuchet MS,Tahoma,sans-serif"
 		);
 
 		$this->units = array(
-				"px" => "pikslit",
-				"pt" => "punkti (1pt=1/72in)",
-				"in" => "tolli",
-				"em" => "ems (suhteline)",
-				"cm" => "sentimeetrit",
-				"mm" => "millimeetrit",
+			"px" => "pikslit",
+			"pt" => "punkti (1pt=1/72in)",
+			"in" => "tolli",
+			"em" => "ems (suhteline)",
+			"cm" => "sentimeetrit",
+			"mm" => "millimeetrit",
 		);
 
 		// siin on süsteemsed stiilid defineeritud.
@@ -77,6 +143,20 @@ class css extends aw_template
 			"4" => "header1",
 			"5" => "fgtitle",
 			"6" => "fgtext",
+		);
+
+		$this->aligns = array(
+			"" => "",
+			"left" => "Vasak",
+			"center" => "Keskel",
+			"right" => "Paremal"
+		);
+
+		$this->valigns = array(
+			"" => "",
+			"top" => "&Uuml;leval",
+			"middle" => "Keskel",
+			"bottom" => "All"
 		);
 
 		// siin peaks diferentseerima selle, kas tegu on süsteemste voi kasutaja
@@ -558,6 +638,14 @@ class css extends aw_template
 					$mask = "border-width: %spx;\n";
 					break;
 				
+				case "valign":
+					$mask = "vertical-align: %s;\n";
+					break;
+				
+				case "align":
+					$mask = "text-align: %s;\n";
+					break;
+				
 				default:
 					$ign = true;
 					break;
@@ -670,125 +758,6 @@ class css extends aw_template
 	}
 
 	////
-	// !Kuvab CSS objekti lisamis/muutmisvormi
-	// argumendid:
-	// oid(int) - muudetava stiiliobjekti ID
-	function css_edit($args = array())
-	{
-		$this->read_template("edit.tpl");
-		extract($args);	
-		if ($id)
-		{
-			$obj = $this->get_obj_meta($id);
-			$gid = $obj["parent"];
-			$css_data = $obj["meta"]["css"];
-			$this->mk_path($obj["parent"]);
-		}
-		else
-		{
-			$css_data = array();
-		};
-	
-		$c = "";
-		foreach($this->font_families as $key => $val)
-		{
-			$this->vars(array(
-				"family" => $val,
-				"ffamily" => $key,
-				"fchecked" => ($val == $css_data["ffamily"]) ? "checked" : "",
-			));
-
-			$c .= $this->parse("family");
-		};
-			
-		$styl = $this->_gen_css_style("demo",$css_data);
-
-		$stlist = $this->get_select(true);
-
-		$this->vars(array(
-			"styl" => $styl,
-			"name" => $obj["name"],
-			"family" => $c,
-			"italic" => ($css_data["fstyle"] == "italic") ? "checked" : "",
-			"bold" => ($css_data["fweight"] == "bold") ? "checked" : "",
-			"underline" => ($css_data["textdecoration"] == "underline") ? "checked" : "",
-			"fgcolor" => $css_data["fgcolor"],
-			"bgcolor" => $css_data["bgcolor"],
-			"lineheight" => $css_data["lineheight"],
-			"size" => $css_data["size"],
-			"units" => $this->picker($css_data["units"],$this->units),
-			"lhunits" => $this->picker($css_data["lhunits"],$this->units),
-			"link_sys_styles" => $this->mk_my_orb("group_content_list",array("gid" => $gid)),
-			"link_my_styles" => $this->mk_my_orb("my_list",array("gid" => $gid)),
-			"link_groups" => $this->mk_my_orb("list",array()),
-			"reforb" => $this->mk_reforb("submit",array("oid" => $id,"gid" => $gid)),
-			"a_style" => $this->picker($css_data["a_style"], $stlist),
-			"a_hover_style" => $this->picker($css_data["a_hover_style"], $stlist),
-			"a_visited_style" => $this->picker($css_data["a_visited_style"], $stlist),
-			"a_active_style" => $this->picker($css_data["a_active_style"], $stlist),
-			"border" => $css_data["border"],
-			"bordercolor" => $css_data["bordercolor"],
-		));
-		return $this->parse();
-	}
-
-	////
-	// !Salvestab CSS stiili
-	function css_submit($args = array())
-	{
-		// by default lisame uue stiili saidi root objecti alla
-		$rootmenu = $this->rootmenu;
-		
-		$block = array();
-
-		$block["ffamily"] = $this->font_families[$args["ffamily"]];
-		$block["fstyle"] = isset($args["italic"]) ? "italic" : "normal";
-		$block["fweight"] = isset($args["bold"]) ? "bold" : "normal";
-		$block["textdecoration"] = isset($args["underline"]) ? "underline" : "none";
-		$block["size"] = $args["size"];
-		$block["units"] = $args["units"];
-		$block["lhunits"] = $args["lhunits"];
-		$block["fgcolor"] = $args["fgcolor"];
-		$block["bgcolor"] = $args["bgcolor"];
-		$block["lineheight"] = $args["lineheight"];
-		$block["a_style"] = $args["a_style"];
-		$block["a_hover_style"] = $args["a_hover_style"];
-		$block["a_visited_style"] = $args["a_visited_style"];
-		$block["a_active_style"] = $args["a_active_style"];
-		$block["border"] = $args["border"];
-		$block["bordercolor"] = $args["bordercolor"];
-
-		$oid = $args["oid"];
-		$gid = $args["gid"];
-
-		if (not($oid))
-		{
-			$oid = $this->new_object(array(
-				"parent" => $gid,
-				"name" => $args["name"],
-				"class_id" => CL_CSS,
-				),false);
-		}
-		else
-		{
-			$this->upd_object(array(
-				"oid" => $oid,
-				"name" => $args["name"],
-			));
-		};
-
-		$this->set_object_metadata(array(
-				"oid" => $oid,
-				"key" => "css",
-				"value" => $block,
-		));
-
-		$this->css_sync(array("gid" => $gid));
-
-		return $this->mk_my_orb("change",array("id" => $oid));
-	}
-
-	////
 	// !Kustutab mingi eelnevalt defineeritud stiili
 	function css_delete($args = array())
 	{
@@ -848,4 +817,68 @@ class css extends aw_template
 		die($this->parse());
 	}
 
+	function callback_get_rel_types()
+	{
+		return array(
+			RELTYPE_CSS => "css stiil"
+		);
+	}
+
+	function callback_get_classes_for_relation($args = array())
+	{
+		if ($args["reltype"] == RELTYPE_CSS)
+		{
+			return array(CL_CSS);
+		}
+	}
+
+	function get_property(&$arr)
+	{
+		$prop =& $arr["prop"];
+		switch($prop['name'])
+		{
+			case "ffamily":
+				$prop['options'] = $this->font_families;
+				break;
+
+			case "align":
+				$prop['options'] = $this->aligns;
+				break;
+
+			case "valign":
+				$prop['options'] = $this->valigns;
+				break;
+
+			case "units":
+			case "lhunits":
+				$prop['options'] = $this->units;
+				break;
+
+			case "pre":
+				$this->read_template("preview.tpl");
+				$prop['value'] = $this->parse();
+				break;
+		}
+		return PROP_OK;
+	}
+
+	function callback_pre_edit($arr)
+	{
+		$dc =& $arr["coredata"];
+		$_t = new aw_array($dc['meta']['css']);
+		foreach($_t->get() as $k => $v)
+		{
+			$dc['meta'][$k] = $v;
+		}
+	}
+
+	function callback_pre_save($arr)
+	{
+		$dc =& $arr["coredata"];
+		$_t = new aw_array($dc['metadata']);
+		foreach($_t->get() as $k => $v)
+		{
+			$dc['metadata']['css'][$k] = $v;
+		}
+	}
 };

@@ -42,9 +42,13 @@
 @property has_sub_menus_sep type=textbox 
 @caption J&auml;rgmise taseme men&uuml;&uuml;de eraldaja
 
+@property pre_image type=relpicker reltype=RELTYPE_IMAGE
+@caption Men&uuml;&uuml; pilt
+
 */
 
 define("RELTYPE_STYLE",1);
+define("RELTYPE_IMAGE",2);
 
 class menu_area_level extends class_base
 {
@@ -127,6 +131,13 @@ class menu_area_level extends class_base
 			));
 		}
 
+		if ($this->ob['meta']['pre_image'])
+		{
+			$im = get_instance("image");
+			$imd = $im->get_image_by_id($this->ob['meta']['pre_image']);
+			$imstr = image::make_img_tag(image::check_url($imd["url"]));
+		}
+
 		$root_menu_level = 0;
 		foreach($path as $level => $oid)
 		{
@@ -157,7 +168,7 @@ class menu_area_level extends class_base
 			$cnt_menus = count($menus);
 			foreach($menus as $idx => $menu_data)
 			{
-				$names[] = $prepend_sep.$this->draw_menu_item(array(
+				$names[] = $prepend_sep.$imstr.$this->draw_menu_item(array(
 					"data" => $menu_data,
 					"total" => $cnt_menus,
 					"cur" => $idx,
@@ -186,6 +197,7 @@ class menu_area_level extends class_base
 	{
 		return array(
 			RELTYPE_STYLE => "stiil",
+			RELTYPE_IMAGE => "pilt"
 		);
 	}
 
@@ -194,6 +206,10 @@ class menu_area_level extends class_base
 		if ($args["reltype"] == RELTYPE_STYLE)
 		{
 			return array(CL_CSS);
+		}
+		if ($args["reltype"] == RELTYPE_IMAGE)
+		{
+			return array(CL_IMAGE);
 		}
 	}
 

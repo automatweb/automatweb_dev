@@ -19,6 +19,16 @@ class active_page_data extends class_base
 		return is_array($cur_path) ? $cur_path : array();
 	}
 
+	function get_text_content($txt = "")
+	{
+		static $txt_content;
+		if ($txt != "")
+		{
+			$txt_content = $txt;
+		}
+		return $txt_content;
+	}
+
 	function get_active_section()
 	{
 		static $active_section = -1;

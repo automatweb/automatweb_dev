@@ -2,7 +2,7 @@
 
 /*
 
-@classinfo syslog_type=ST_SITE_CONTENT
+@classinfo syslog_type=ST_SITE_SEARCH
 
 @groupinfo general caption=Üldine
 
@@ -14,12 +14,13 @@
 
 */
 
-class site_content extends class_base
+class site_search extends class_base
 {
-	function site_content()
+	function site_search()
 	{
 		$this->init(array(
-			'clid' => CL_SITE_CONTENT
+			'tpldir' => 'layout/site_search',
+			'clid' => CL_SITE_SEARCH
 		));
 	}
 
@@ -69,23 +70,20 @@ class site_content extends class_base
 	}
 
 	////
-	// !this shows the object. 
+	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
 	function show($arr)
 	{
 		extract($arr);
 		$ob = $this->get_object($id);
 
-		$pd = get_instance("layout/active_page_data");
-		$mned = get_instance("menuedit");
+		$this->read_template('show.tpl');
 
- 		if (($txt = $pd->get_text_content()) != "")
-		{
-			return $txt;
-		}
-		else
-		{
-			return $mned->show_documents($pd->get_active_section(), 0);
-		}
+		classload("layout/active_page_data");
+		$this->vars(array(
+			'section' => active_page_data::get_active_section()
+		));
+
+		return $this->parse();
 	}
 }
 ?>

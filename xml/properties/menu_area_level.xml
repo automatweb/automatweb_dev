@@ -97,6 +97,16 @@
             <method>serialize</method>
             <caption>J&amp;auml;rgmise taseme men&amp;uuml;&amp;uuml;de eraldaja</caption>
       </property>
+      <property>
+            <name>pre_image</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_IMAGE</reltype>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Men&amp;uuml;&amp;uuml; pilt</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_MENU_AREA_LEVEL</syslog_type>
             <relationmgr>yes</relationmgr>

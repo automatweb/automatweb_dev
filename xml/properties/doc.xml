@@ -257,13 +257,6 @@
             <caption>Aliastehaldur</caption>
       </property>
       <property>
-            <name>cal_event</name>
-            <callback>callback_get_event_editor</callback>
-            <store>no</store>
-            <group>calendar</group>
-            <caption>Kalendrisündmus</caption>
-      </property>
-      <property>
             <name>start</name>
             <type>date_select</type>
             <table>planner</table>
@@ -280,7 +273,7 @@
             <caption>Vali kalendrid, millesse see sündmus veel salvestatakse.</caption>
       </property>
       <property>
-            <name>main_calendar</name>
+            <name>calendar_relation</name>
             <type>select</type>
             <field>meta</field>
             <method>serialize</method>

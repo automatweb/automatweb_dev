@@ -1,29 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="css">
-		<action name="new">
-			<function name="css_new">
-				<arguments>
-					<required name="parent" acl="add"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit_new">
-			<function name="css_submit_new">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="change">
-			<function name="css_edit">
-				<arguments>
-					<required name="id" acl="edit;view"/>
-				</arguments>
-			</function>
-		</action>
-
+	<class name="css" extends="class_base">
 		<action name="mylist">
 			<function name="css_mylist">
 				<arguments>
@@ -131,13 +108,6 @@
 			<function name="css_edit">
 				<arguments>
 					<required name="oid"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit">
-			<function name="css_submit">
-				<arguments>
 				</arguments>
 			</function>
 		</action>

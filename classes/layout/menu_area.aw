@@ -22,6 +22,9 @@
 @property mod_levels type=generated generator=gen_mod_levels field=meta method=serialize
 @caption Tasemed
 
+@property show_name type=checkbox rel=1 ch_value=1 field=meta method=serialize 
+@caption Kas n&auml;idata nime
+
 */
 
 define("RELTYPE_ROOT_FOLDER",1);
@@ -78,7 +81,8 @@ class menu_area extends class_base
 	function parse_alias($args)
 	{
 		extract($args);
-		return $this->show(array('id' => $alias['target']));
+		$ob = $this->get_object($args["relobj_id"]);
+		return $this->show(array('id' => $alias['target'], "relobj" => $ob));
 	}
 
 	////
@@ -86,15 +90,14 @@ class menu_area extends class_base
 	function show($arr)
 	{
 		extract($arr);
-		$ob = $this->get_object($id);
 
-		$this->read_template('show.tpl');
-
-		$this->vars(array(
-			'name' => $ob['name']
-		));
-
-		return $this->parse();
+		if ($relobj["meta"][CL_MENU_AREA]['show_name'])
+		{
+			$ob = $this->get_object($id);
+			$root_o = $this->get_object($ob['meta']['root_folder']);
+			$str = $root_o['name'];
+		}
+		return $str;
 	}
 
 	function callback_get_rel_types()
