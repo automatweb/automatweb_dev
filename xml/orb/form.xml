@@ -172,6 +172,7 @@
 					<optional name="entry_id"/>
 					<optional name="extraids"/>
 					<optional name="reforb"/>
+					<optional name="load_entry_data"/>
 				</arguments>
 			</function>
 		</action>
