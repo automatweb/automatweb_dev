@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.43 2002/01/08 05:34:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.44 2002/01/08 05:53:12 kristo Exp $
 // form_element.aw - vormi element.
 lc_load("form");
 
@@ -889,9 +889,14 @@ class form_element extends aw_template
 
 		$mue = str_replace("\"","\\\"",$mue);
 
+		if ($this->arr["type"] == "textarea" && $this->arr["wysiwyg"] == 1)
+		{
+			$str .= "doc._el_".$this->id.".value=_ifr_".$this->id.".document.body.innerHTML;\n";
+		}
+
 		if (($this->arr["type"] == "textbox" || $this->arr["type"] == "textarea") && isset($this->arr["must_fill"]) && $this->arr["must_fill"] == 1)
 		{
-			$str = "for (i=0; i < document.fm_".$this->fid.".elements.length; i++) ";
+			$str .= "for (i=0; i < document.fm_".$this->fid.".elements.length; i++) ";
 			$str .= "{ if (document.fm_".$this->fid.".elements[i].name == \"";
 			$str .=$this->id;
 			$str .= "\" && document.fm_".$this->fid.".elements[i].value == \"\")";
@@ -901,15 +906,16 @@ class form_element extends aw_template
 		else
 		if ($this->arr["type"] == "listbox" && isset($this->arr["must_fill"]) && $this->arr["must_fill"] == 1)
 		{
-			$str = "for (i=0; i < document.fm_".$this->fid.".elements.length; i++) ";
+			$str .= "for (i=0; i < document.fm_".$this->fid.".elements.length; i++) ";
 			$str .= "{ if (document.fm_".$this->fid.".elements[i].name == \"";
 			$str .=$this->id;
 			$str .= "\" && document.fm_".$this->fid.".elements[i].selectedIndex == 0)";
 			$awt->stop("form_element::gen_check_html");
 			return  $str."{ alert(\"".$mue."\");return false; }}\n";
 		}
+
 		$awt->stop("form_element::gen_check_html");
-		return "";
+		return $str;
 	}
 
 	////
@@ -1760,7 +1766,7 @@ class form_element extends aw_template
 		else
 		if ($this->arr["type"] == "textarea" && $this->arr["wysiwyg"] == 1)
 		{
-			$var = $this->form->post_vars["_ifr_".$prefix.$this->id];
+			$var = $this->form->post_vars["_el_".$prefix.$this->id];
 		}
 		else
 		{
