@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.12 2004/08/31 11:21:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.13 2004/08/31 11:33:29 sven Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -1931,6 +1931,21 @@ class planner extends class_base
 		$classes = aw_ini_get("classes");		
 		foreach ($data->arr() as $result)
 		{
+			
+			$participants = $result->connections_to(array(
+				"type" => array(8,9,10),
+				"from.class_id" => CL_CRM_PERSON,
+			));
+			
+			$par_href = "";
+			foreach ($participants as $participant)
+			{
+				$par_href.= " ".html::href(array(
+					"caption" => $participant->prop("from.name"),
+					"url" => html::get_change_url($participant->prop("from")),
+				));
+			}
+			
 			$iconurl = icons::get_icon_url($result->class_id());
 			if($result->prop("is_done"))
 			{
@@ -1952,11 +1967,15 @@ class planner extends class_base
 				)),
 				"type" => $classes[$result->class_id()]["name"],
 				"date" => $result->prop("start1"),
-				"createdby" => $author_person_obj->name(),
+				"createdby" => html::href(array(
+					"url" => $this->mk_my_orb("change", array("id" => $author_person_obj->id()), CL_CRM_PERSON),
+					"caption" => $author_person_obj->name(),
+				)),
 				"modified" => $result->modified(),
 				"icon" => html::img(array(
 					"url" => $iconurl,
 				)),
+				"participants" => $par_href,
 			));
 		}
 	}
