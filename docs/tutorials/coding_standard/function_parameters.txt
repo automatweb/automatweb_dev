@@ -5,7 +5,7 @@ It is strongly recommended that functions pass parameters as arrays, not by posi
 To make this easier, there is a function in php - extract() that creates local variables from an array - key is variable name, value is variable value. 
 
 example:
-<pre>
+#php#
 function foo($arr)
 {
 	extract($arr);
@@ -15,6 +15,6 @@ function foo($arr)
 foo(array(
 	"param1" => "elephant"
 ));
-</pre>
+#/php#
 
 

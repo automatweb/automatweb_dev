@@ -15,7 +15,7 @@ The indending standard is:
 
 example:
 
-<pre>
+#php#
 class foo
 {
 	function bar()
@@ -26,24 +26,24 @@ class foo
 		}
 	}
 }
-</pre>
+#/php#
 
 - even one-line if constructs must have braces around the content
 
 example:
-<pre>
+#php#
 if (true)
 {
 	echo "yes!"
 }
-</pre>
+#/php#
 
 
-- If a function takes as a parameter an array and you need to specify more than one member for the array, array members should be on separate lines and indented one tab past the function indent. If the array contains only one element, indenting is not necessary, but allowed. 
+- If a function takes an array as a parameter and you need to specify more than one member for the array, array members should be on separate lines and indented one tab past the function indent. If the array contains only one element, indenting is not necessary, but recommended. 
 
 example:
 
-<pre>
+#php#
 $this->something(array(
 	'a' => 'b',
 	'c' => 'd'
@@ -57,16 +57,15 @@ $this->upd_object(array(
 		'msgconf' => $this->msgconf
 	)
 ));
-</pre>
+#/php#
 
 
 - Simply defining arrays in code follows the same standard as using arrays as function parameters.
 
 example:
-
-<pre>
+#php#
 $arr = array(
 	'a' => 'b',
 	'c' => 'd'
 );
-</pre>
+#/php#

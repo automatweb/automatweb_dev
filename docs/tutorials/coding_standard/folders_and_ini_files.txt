@@ -5,6 +5,6 @@ Each component should have it's own folder in the classes folder, if it is an ap
 
 When adding a new class, you should use the command "make class" in the root folder of the automatweb code. 
 
-Each larger module should have it's own ini file in the config/ini folder. 
+If a module requires use of ini file settings, then it should have its own ini file in the config/ini folder. 
 
 
