@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.2 2003/10/06 14:32:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.3 2003/10/14 10:29:02 kristo Exp $
 // site_seaarch_content_grp.aw - Saidi sisu otsingu grupp 
 /*
 
@@ -202,7 +202,7 @@ class site_search_content_grp extends class_base
 					"lang_id" => aw_global_get("lang_id"),
 				));
 				$ids = $tr->ids();*/
-				$ids = array_keys($this->get_menu_list(false, false, $m));
+				$ids = array_keys($this->get_menu_list(false, false, $m, 1));
 				foreach($ids as $id)
 				{
 					$ret[$id] = $id;
