@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.9 2004/06/09 12:56:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.10 2004/06/17 13:43:12 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -17,16 +17,22 @@
 @caption Imporditava objekti t&uuml;&uuml;p
 
 @property unique_id type=select 
-@caption Unikaalne omadus
+@caption Unikaalne omadus 
 
 @property folder_field type=select 
 @caption Tulp, mille j&auml;rgi jagatakse kataloogidesse
+
+@property folder_is_parent type=checkbox ch_value=1
+@caption Objektid samsse kataloogi, kus imporditavad
 
 @property ds type=relpicker reltype=RELTYPE_DATASOURCE
 @caption Andmeallikas
 
 @property do_import type=checkbox ch_value=1 
 @caption Teosta import
+
+@property import_status type=text
+@caption Impordi staatus
 
 @groupinfo props caption="Omadused"
 @property props type=table store=no no_caption=1 group=props
@@ -75,13 +81,42 @@ class object_import extends class_base
 				}
 				break;
 
+			case "import_status":
+				if (!$arr["obj_inst"]->meta("import_status"))
+				{
+					return PROP_IGNORE;
+				}
+				$prop["value"]  = "Import k&auml;ivitati ".date("d.m.Y H:i", $arr["obj_inst"]->meta("import_started_at"));
+				$prop["value"] .= ". Hetkel on imporditud ".$arr["obj_inst"]->meta("import_row_count")." rida. <br>";
+				$prop["value"] .= "Viimane muudatus toimis kell ".date("d.m.Y H:i", $arr["obj_inst"]->meta("import_last_time"))." <br>";
+				$prop["value"] .= html::href(array(
+					"url" => $this->mk_my_orb("do_check_import"),
+					"caption" => "J&auml;tka importi kohe"
+				));
+				break;
+
+			case "folder_is_parent";
+				if (!$arr["obj_inst"]->prop("ds"))
+				{
+					return PROP_IGNORE;
+				}
+				$ds = obj($arr["obj_inst"]->prop("ds"));
+				if (!$ds->prop("ds"))
+				{
+					return PROP_IGNORE;
+				}
+				$dso = obj($ds->prop("ds"));
+				if ($dso->class_id() != CL_OTV_DS_OBJ)
+				{
+					return PROP_IGNORE;
+				}
+				break;
 
 			case "unique_id":
 				if (!$arr["obj_inst"]->prop("object_type"))
 				{
 					return PROP_IGNORE;
 				}
-
 				$properties = $this->get_props_from_obj($arr["obj_inst"]);
 
 				$prop["options"] = array("" => "");
@@ -130,6 +165,7 @@ class object_import extends class_base
 			case "do_import":
 				if ($prop["value"] == 1)
 				{
+					$this->do_init_import($arr["obj_inst"]);
 					$this->do_exec_import($arr["obj_inst"]);
 					$prop["value"] = 0;
 				}
@@ -306,9 +342,9 @@ class object_import extends class_base
 		}
 		else
 		{
-			$class_i = get_instance($class_id);
+			$class_i = get_instance($class_id == CL_DOCUMENT ? "doc" : $class_id);
 			$properties = $class_i->load_from_storage(array(
-				"id" => $type_o->prop("use_cfgform")
+				"id" => $type_o->prop("use_cfgform"),
 			));
 		}
 
@@ -396,7 +432,7 @@ class object_import extends class_base
 		return $ds_i->get_fields($ds_o);
 	}
 
-	function do_exec_import($o)
+	function do_exec_import($o, $start_from_row = 0)
 	{
 		// for each line in the ds
 		// read it
@@ -412,6 +448,14 @@ class object_import extends class_base
 		if ($o->prop("ds"))
 		{
 			set_time_limit(0);
+
+			$sc = get_instance("scheduler");
+			$sc->add(array(
+				"event" => $this->mk_my_orb("do_check_import"),
+				"time" => time() + 4 * 60,
+				"sessid" => session_id()
+			));
+
 			$type_o = obj($o->prop("object_type"));
 			$class_id = $type_o->prop("type");
 			$p2c = $o->meta("p2c");
@@ -441,6 +485,11 @@ class object_import extends class_base
 			foreach($data_rows as $line)
 			{
 				$line_n++;
+				if ($start_from_row > $line_n)
+				{
+					continue;
+				}
+
 				echo "impordin rida ".($line_n)."... <br>\n";
 				flush();
 
@@ -481,6 +530,10 @@ class object_import extends class_base
 				$dat->set_parent($folder);
 			
 				$linebak = $line;
+				if (!is_array($p2c))
+				{
+					continue;
+				}
 				foreach($p2c as $pn => $idx)
 				{
 					if ($pn == "needs_translation" || $pn == "is_translated" || $idx == "dontimp")
@@ -524,6 +577,11 @@ class object_import extends class_base
 				}
 				$line = $linebak;
 
+				if ($o->prop("folder_is_parent"))
+				{
+					$dat->set_parent($line["parent"]);
+				}
+
 				// now, if we have separate folder settings, then move to correct place.
 				if (($fldfld = $o->prop("folder_field")))
 				{	
@@ -553,11 +611,67 @@ class object_import extends class_base
 				$dat->save();
 				echo "importisin objekti ".$dat->name()." (".$dat->id().") kataloogi ".$dat->parent()." <br>\n";
 				flush();
-	
+
+				if (($line_n % 10) == 1)
+				{
+					$o->set_meta("import_last_time", time());
+					$o->set_meta("import_row_count", $line_n);
+					$o->save();
+				}
 			}
+			$this->do_mark_finish_import($o);
 			echo "Valmis! <br>\n";
 			echo "<script language=javascript>setTimeout(\"window.location='".$this->mk_my_orb("change", array("id" => $o->id()))."'\", 5000);</script>";
 			die();
+		}
+	}
+
+	function do_init_import($o)
+	{
+		$o->set_meta("import_status", 1);
+		$o->set_meta("import_started_at", time());
+		$o->save();
+	}
+
+	function do_mark_finish_import($o)
+	{
+		$o->set_meta("import_status", 0);
+		$o->save();
+	}
+
+	/**
+
+		@attrib name=do_check_import nologin="1"
+
+	**/
+	function do_check_import()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_OBJECT_IMPORT,
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+		for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		{
+			if ($o->meta("import_status") == 1 && $o->meta("import_last_time") < (time() - 3 * 60))
+			{
+				echo "restart import for ".$o->id()." <br>";
+				$this->do_exec_import($o, $o->meta("import_row_count"));
+			}
+			echo "for o ".$o->id()." status = ".$o->meta("import_status")." last time = ".date("d.m.Y H:i", $o->meta("import_last_time"))." <br>";
+		}
+	}
+
+	function callback_pre_edit($arr)
+	{
+		if ($arr["obj_inst"]->meta("import_status") == 1)
+		{
+			$sc = get_instance("scheduler");
+			$sc->add(array(
+				"event" => $this->mk_my_orb("do_check_import"),
+				"time" => time() + 4 * 60,
+				"sessid" => session_id()
+			));
 		}
 	}
 }

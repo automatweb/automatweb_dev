@@ -27,7 +27,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Unikaalne omadus</caption>
+            <caption>Unikaalne omadus </caption>
       </property>
       <property>
             <name>folder_field</name>
@@ -37,6 +37,16 @@
             <method>serialize</method>
             <type>select</type>
             <caption>Tulp, mille j&amp;auml;rgi jagatakse kataloogidesse</caption>
+      </property>
+      <property>
+            <name>folder_is_parent</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Objektid samsse kataloogi, kus imporditavad</caption>
       </property>
       <property>
             <name>ds</name>
@@ -57,6 +67,15 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <caption>Teosta import</caption>
+      </property>
+      <property>
+            <name>import_status</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Impordi staatus</caption>
       </property>
       <property>
             <name>props</name>
