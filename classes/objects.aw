@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.45 2003/04/17 12:50:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.46 2003/04/23 12:05:24 duke Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 class db_objects extends aw_template 
 {
@@ -8,64 +8,6 @@ class db_objects extends aw_template
 		$this->init("");
 		$this->lc_load("objects","lc_objects");
 		lc_load("definition");
-	}
-
-	function hf_search($args = array())
-	{
-		classload('icons');
-		$this->tpl_init("objects");
-		extract($args);
-		if (!is_array($folders))
-		{
-			$retval = $this->mk_site_orb(array("action" => "browser","type" => "search"));
-			return $retval;
-		};
-		$flist = $this->gen_folders(array("sq" => 0));
-		$this->read_template("searchresults.tpl");
-		$maps = sprintf("(%s)",join(",",$folders));
-		$cid = sprintf("(%s)",join(",",array(CL_FILE)));
-		$q = "SELECT * FROM objects WHERE parent IN $maps AND name LIKE '%$search%' AND class_id IN $cid ORDER BY parent";
-		$this->db_query($q);
-		$lastparent = -1;
-		$c = "";
-		$cnt = 0;
-		while($row = $this->db_next())
-		{
-			$cnt++;
-			if ($lastparent != $row["parent"])
-			{
-				$this->vars(array("name" => $flist[$row["parent"]]));
-				$c .= $this->parse("line");
-			};
-
-			$lastparent = $row["parent"];
-			$this->vars(array(
-				"name" => $row["name"],
-				"oid" => $row["oid"],
-				"icon" => icons::get_icon_url($row["class_id"],$row["name"]),
-			));
-			$c .= $this->parse("object");
-		};
-		$this->vars(array(
-			"line" => $c,
-			"reforb" => $this->mk_reforb("submit_hd",array("msgid" => $msgid)),
-		));
-		$retval = $this->parse();
-		print $retval;
-		exit;
-	}
-
-	function gen_folders($args = array())
-	{
-		extract($args);
-		$mnl = get_instance("menuedit_light");
-		$udata = $this->get_user();
-		$flist = $mnl->gen_rec_list(array(
-			"start_from" => $udata["home_folder"],
-			"add_start_from" => true,
-			"sq" => $sq,
-		));
-		return $flist;
 	}
 
 	////
@@ -824,7 +766,11 @@ class objects extends db_objects
 
 		// and now import them to the new site
 		$i_p = $menus[0];
-		$mned->req_import_menus($i_p, &$menus, $awmenu_id);
+
+		$am = get_instance("admin/admin_menus");
+		$am->dc = $dbi->dc;	// fake the db connection
+
+		$am->req_import_menus($i_p, &$menus, $awmenu_id);
 		//echo "imported .. <br>\n";
 		flush();
 
