@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.277 2003/04/09 10:54:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.278 2003/04/09 12:37:07 kristo Exp $
 // menuedit.aw - menuedit. heh.
 // meeza thinks we should split this class. One part should handle showing stuff
 // and the other the admin side -- duke
@@ -234,10 +234,12 @@ class menuedit extends aw_template
 		}
 		
 		classload("image");
+		$pers = get_instance("periods");
 		$_t = aw_global_get("act_period");
 		$this->vars(array(
 			"per_string" => $_t["description"],
 			"act_per_id" => $_t["id"],
+			"def_per_id" => $pers->get_active_period(),
 			"per_img_url" => image::check_url($_t["data"]["image"]["url"]),
 			"per_img_tag" => image::make_img_tag(image::check_url($_t["data"]["image"]["url"])),
 			"per_img_link" => ($_t["data"]["image_link"] != "" ? $_t["data"]["image_link"] : aw_ini_get("baseurl"))
