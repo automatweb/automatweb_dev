@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.78 2003/11/27 13:10:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.79 2003/12/02 10:34:41 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -59,7 +59,7 @@
 	@property description type=textbox field=meta method=serialize group=keywords
 	@caption META description
 	
-	@property sections type=table store=no group=relations
+	@property sections type=table store=no group=brothers
 	@caption Vennad
 
 	@property images_from_menu type=relpicker reltype=RELTYPE_PICTURES_MENU group=presentation field=meta method=serialize
@@ -71,22 +71,22 @@
 	@property img_act type=relpicker reltype=RELTYPE_IMAGE field=meta method=serialize group=presentation
 	@caption Aktiivse menüü pilt
 
-	@property menu_images type=callback field=meta method=serialize callback=callback_get_menu_image group=presentation store=no
+	@property menu_images type=table field=meta method=serialize group=presentation store=no
 	@caption Menüü pildid
 
 	// and now stuff that goes into menu table
 	@default table=menu
 
-	@property sss type=table store=no group=relations
+	@property sss type=table store=no group=docs_from
 	@caption Menüüd, mille alt viimased dokumendid võetakse
 	
-	@property pers type=relpicker multiple=1 size=5 table=objects field=meta method=serialize group=relations reltype=RELTYPE_PERIOD
+	@property pers type=relpicker multiple=1 size=5 table=objects field=meta method=serialize group=docs_from reltype=RELTYPE_PERIOD
 	@caption Perioodid, mille alt dokumendid võetakse
 	
-	@property all_pers type=checkbox ch_value=1 table=objects field=meta method=serialize group=relations
+	@property all_pers type=checkbox ch_value=1 table=objects field=meta method=serialize group=docs_from
 	@caption K&otilde;ikide perioodide alt
 	
-	@property docs_per_period type=textbox size=3 group=relations table=objects field=meta method=serialize
+	@property docs_per_period type=textbox size=3 group=docs_from table=objects field=meta method=serialize
 	@caption Dokumente perioodist
 
 	@property seealso type=table group=relations store=no
@@ -152,7 +152,7 @@
 	@property hide_noact type=checkbox ch_value=1
 	@caption Peida ära, kui dokumente pole
 
-	@property ndocs type=textbox size=3 group=relations
+	@property ndocs type=textbox size=3 group=docs_from
 	@caption Mitu viimast dokumenti
 
 	@property show_periods type=checkbox ch_value=1 group=show table=objects field=meta method=serialize
@@ -179,7 +179,10 @@
 	@groupinfo general caption=Üldine default=1
 	@groupinfo advanced caption=Spetsiaal
 	@groupinfo keywords caption=Võtmesõnad
-	@groupinfo relations caption=Kaustad
+	@groupinfo menus caption=Kaustad
+	@groupinfo relations caption="Vaata lisaks" parent=menus
+	@groupinfo brothers caption=Vennastamine parent=menus
+	@groupinfo docs_from caption="Sisu asukoht" parent=menus
 	@groupinfo presentation caption=Pildid
 	@groupinfo show caption=Näitamine
 	@groupinfo import_export caption=Eksport submit=no
@@ -424,61 +427,30 @@ class menu extends class_base
 					));
 				}
 				break;
+
+			case "menu_images":
+				$data["value"] = $this->_get_images_table($arr);
+				break;
 		};
 		return $retval;
 	}
 
-	////
-	// !Callback for the edit form, returns the data for 
-	// menu images (of which there can be 1..n)
-	function callback_get_menu_image($args = array())
+	function _get_images_table($arr)
 	{
-		classload("image","html");
-		$data = $args["prop"];
-		// each line consists of multiple elements
-		// and this is where we create them
-		$nodes = array();
-		$imdata = $args["obj_inst"]->meta("menu_images");
-		for ($i = 0; $i < $this->cfg["num_menu_images"]; $i++)
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_get_images_table_cols($t);
+		
+		$cnt = aw_ini_get("menu.num_menu_images");
+		$imdata = $arr["obj_inst"]->meta("menu_images");
+
+		$imgrels = array(0 => "Vali pilt..");
+		foreach($arr["obj_inst"]->connections_from(array("type" => RELTYPE_IMAGE)) as $conn)
 		{
-			$node = array();
-			// do something
-			$node["caption"] = "Pilt #" . ($i+1);
-			$node["table"] = "objects";
-			$node["name"] = "menu_images_".$i;
-			$node["field"] = "meta";
-			$node["method"] = "serialize";
-			$node["items"] = array();
-			$node["group"] = "presentation";
-			
-			$val = $data["value"][$i];
+			$imgrels[$conn->prop("to")] = $conn->prop("to.name");
+		}
 
-			// ord textbox
-			$tmp = array(
-				"type" => "textbox",
-				"name" => "img_ord[$i]",
-				"size" => 3,
-				"value" => $imdata[$i]["ord"],
-			);
-			array_push($node["items"],$tmp);
-
-			// delete checkbox
-			$tmp = array(
-				"type" => "checkbox",
-				"name" => "img_del[$i]",
-				"ch_value" => 1,
-			);
-			array_push($node["items"],$tmp);
-
-			// file upload
-			$tmp = array(
-				"type" => "relpicker",
-				"reltype" => RELTYPE_IMAGE,
-				"name" => "img[".$i."]",
-				"value" => $imdata[$i]["image_id"]
-			);
-			array_push($node["items"],$tmp);
-
+		for($i = 0; $i <  $cnt; $i++)
+		{
 			// image preview
 			$url = "";
 			$imi = get_instance("image");
@@ -495,15 +467,63 @@ class menu extends class_base
 				}
 			}
 
-			$tmp = array(
-				"type" => "text",
-				"value" => $url,
-			);
-			array_push($node["items"],$tmp);
+			$rel = html::select(array(
+				"name" => "img[$i]",
+				"options" => $imgrels,
+				"selected" => $imdata[$i]["image_id"],
+			));
 
-			$nodes["menu_images_".$i] = $node;
-		};
-		return $nodes;
+			$t->define_data(array(
+				"nr" => sprintf("Pilt #%d",$i),
+				"ord" => html::textbox(array(
+					"name" => "img_ord[$i]",
+					"value" => $imdata[$i]["ord"],
+					"size" => 3
+				)),
+				"preview" => $url,
+				"rel" => $rel,
+				"del" => html::checkbox(array(
+					"ch_value" => 1,
+					"name" => "img_del[$i]"
+				))
+			));
+		}
+		$t->set_default_sortby("nr");
+		$t->sort_by();
+	}
+
+	function _get_images_table_cols(&$t)
+	{
+		$t->define_field(array(
+			"name" => "nr",
+			"caption" => "NR",
+			"talign" => "center",
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "ord",
+			"caption" => "J&auml;rjekord",
+			"talign" => "center",
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "preview",
+			"caption" => "Eelvaade",
+			"talign" => "center",
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "rel",
+			"caption" => "Vali Pilt",
+			"talign" => "center",
+			"align" => "center",
+		));
+/*		$t->define_field(array(
+			"name" => "del",
+			"caption" => "Kustuta",
+			"talign" => "center",
+			"align" => "center",
+		));*/
 	}
 
 	function callback_get_export_options($arr = array())
@@ -797,7 +817,7 @@ class menu extends class_base
 			$ret[$row["keyword_id"]] = $row["keyword_id"];
 		}
 		return $ret;
-        }
+	}
 
 	function save_menu_keywords($keywords,$id)
 	{
@@ -910,13 +930,13 @@ class menu extends class_base
 			"caption" => "Nimi",
 			"talign" => "center",
 		));
-		$t->define_field(array(
+/*		$t->define_field(array(
 			"name" => "check",
 			"caption" => "kustuta",
 			"talign" => "center",
 			"width" => 80,
 			"align" => "center",
-		));
+		));*/
 
 		$ol = new object_list(array(
 			"brother_of" => $obj->id()

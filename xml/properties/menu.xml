@@ -165,7 +165,7 @@
             <name>sections</name>
             <type>table</type>
             <store>no</store>
-            <group>relations</group>
+            <group>brothers</group>
             <table>objects</table>
             <field>sections</field>
             <caption>Vennad</caption>
@@ -202,10 +202,9 @@
       </property>
       <property>
             <name>menu_images</name>
-            <type>callback</type>
+            <type>table</type>
             <field>meta</field>
             <method>serialize</method>
-            <callback>callback_get_menu_image</callback>
             <group>presentation</group>
             <store>no</store>
             <table>objects</table>
@@ -215,7 +214,7 @@
             <name>sss</name>
             <type>table</type>
             <store>no</store>
-            <group>relations</group>
+            <group>docs_from</group>
             <table>menu</table>
             <field>sss</field>
             <caption>Menüüd, mille alt viimased dokumendid võetakse</caption>
@@ -228,7 +227,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>relations</group>
+            <group>docs_from</group>
             <reltype>RELTYPE_PERIOD</reltype>
             <caption>Perioodid, mille alt dokumendid võetakse</caption>
       </property>
@@ -239,14 +238,14 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>relations</group>
+            <group>docs_from</group>
             <caption>K&amp;otilde;ikide perioodide alt</caption>
       </property>
       <property>
             <name>docs_per_period</name>
             <type>textbox</type>
             <size>3</size>
-            <group>relations</group>
+            <group>docs_from</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -443,7 +442,7 @@
             <name>ndocs</name>
             <type>textbox</type>
             <size>3</size>
-            <group>relations</group>
+            <group>docs_from</group>
             <table>menu</table>
             <field>ndocs</field>
             <caption>Mitu viimast dokumenti</caption>
@@ -522,9 +521,21 @@
             <keywords>
                   <caption>Võtmesõnad</caption>
             </keywords>
-            <relations>
+            <menus>
                   <caption>Kaustad</caption>
+            </menus>
+            <relations>
+                  <caption>Vaata lisaks</caption>
+                  <parent>menus</parent>
             </relations>
+            <brothers>
+                  <caption>Vennastamine</caption>
+                  <parent>menus</parent>
+            </brothers>
+            <docs_from>
+                  <caption>Sisu asukoht</caption>
+                  <parent>menus</parent>
+            </docs_from>
             <presentation>
                   <caption>Pildid</caption>
             </presentation>

@@ -144,7 +144,7 @@ class connection
 				"msg" => "connection::load($id): no view access for this connection!"
 			));
 		}	
-}
+	}
 
 	function _int_save()
 	{

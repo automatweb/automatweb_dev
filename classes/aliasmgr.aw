@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.123 2003/11/13 11:23:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.124 2003/12/02 10:34:41 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -209,6 +209,25 @@ class aliasmgr extends aw_template
 			$to_delete = new aw_array($check);
 			foreach($to_delete->get() as $alias_id)
 			{
+				// now, get the alias. if it has reltype of 10000, then get the object it points TO
+				// then find any brothers of the object the relation comes from and delete them
+				$o = obj($id);
+				$conns = $o->connections_from(array(
+					"to" => $alias_id
+				));
+				$c = $conns[0];
+				if ($c->prop("reltype") == 10000)
+				{
+					$ol = new object_list(array(
+						"parent" => $alias_id,
+						"brother_of" => $id
+					));
+					for($o =& $ol->begin(); !$ol->end(); $o = $ol->next())
+					{
+						$o->delete();
+					}
+				}
+				
 				$this->delete_alias($id,$alias_id);
 				unset($link[$alias_id]);
 			};
@@ -808,6 +827,13 @@ class aliasmgr extends aw_template
 				$al = $this->get_object($_al);
 			}
 
+			// now. if the alias added has type 10 000, then it's a brother and we gots to actually create the damn brother..
+			if ($reltype == 10000)
+			{
+				$o = obj($id);
+				$o->create_brother($onealias);
+			}
+
 			// parent will be the parent of the object from which the relation
 			// goes out.
 			$relobj_id = $this->new_object(array(
@@ -845,7 +871,6 @@ class aliasmgr extends aw_template
 				));
 				$alias_reltype[$onealias] = $reltype;
 			}
-
 		};
 
 		// this really is obsoleted by the reltype field in the aliases table ..
@@ -1056,6 +1081,11 @@ class aliasmgr extends aw_template
 
 		$hist = !is_array($hist) ? array() : $this->make_alias_classarr2($hist);
 
+		$this->reltypes[10000] = "lisa vend";
+		$this->rel_type_classes[10000] = array(
+			1 => $this->cfg["classes"][CL_MENU]["name"]
+		);
+
 		foreach($this->reltypes as $k => $v)
 		{
 			$dval = true;
@@ -1069,13 +1099,15 @@ class aliasmgr extends aw_template
 			{
 				$choice = &$choices2;
 			}
-
+		 
 			if (!isset($this->rel_type_classes[$k]))
 			{
 				$vals = $this->mk_kstring($choice);
 				$defaults1 .= 'listB.setDefaultOption("'.$k.'","capt_new_object");'."\n";
 				if (isset($choice[$objtype]))
+				{
 					$sele = $objtype;
+				}
 			}
 			else
 			{
@@ -1084,12 +1116,13 @@ class aliasmgr extends aw_template
 					$dval = false;
 					$single_select = $this->rel_type_classes[$k][0];
 				}
-				else
-				{
-				}
+
 				$vals = $this->mk_kstring($this->rel_type_classes[$k]);
+
 				if (isset($this->rel_type_classes[$k][$objtype]))
+				{
 					$sele = $objtype;
+				}
 			}
 
 			$history = array();
