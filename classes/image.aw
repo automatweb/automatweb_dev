@@ -154,12 +154,13 @@ class image extends aw_template
 	function parse_alias($args = array())
 	{
 		extract($args);
-		if (!is_array($this->imagealiases))
+		if (!is_array($this->imagealiases) || $this->imagealiasoid != $oid)
 		{
 			$this->imagealiases = $this->get_aliases(array(
 								"oid" => $oid,
 								"type" => CL_IMAGE,
 							));
+			$this->imagealiasoid = $oid;
 		};
 		$f = $this->imagealiases[$matches[3] - 1];
 		if (!$f["target"])
