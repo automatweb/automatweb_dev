@@ -1262,6 +1262,7 @@ class _int_object
 		{
 			$this->_int_init_new();
 
+			$this->_int_do_inherit_new_props();
 
 			$this->obj["oid"] = $GLOBALS["object_loader"]->ds->create_new_object(array(
 				"objdata" => &$this->obj,
@@ -1290,9 +1291,53 @@ class _int_object
 			};
 		};
 
+		// obj inherit props impl
+		$this->_int_do_obj_inherit_props();
+
 		return $this->obj["oid"];
 	}
 
+	function _int_do_inherit_new_props()
+	{
+		$data = $GLOBALS["object_loader"]->obj_inherit_props_conf;
+		if (!is_array($data))
+		{
+			return;
+		}
+		foreach($data as $from_oid => $ihd)
+		{
+			if ($ihd["to_class"] == $this->obj["class_id"])
+			{
+				if ($GLOBALS["object_loader"]->ds->can("edit", $from_oid))
+				{
+					$orig = obj($from_oid);
+					$this->obj["properties"][$ihd["to_prop"]] = $orig->prop($ihd["from_prop"]);
+				}
+			}
+		}
+	}
+
+	function _int_do_obj_inherit_props()
+	{
+		if (isset($GLOBALS["object_loader"]->obj_inherit_props_conf[$this->obj["oid"]]))
+		{
+			$ihd = $GLOBALS["object_loader"]->obj_inherit_props_conf[$this->obj["oid"]];
+
+			$propv = $this->obj["properties"][$ihd["from_prop"]];
+			
+			// find all object os correct type
+			$ol = new object_list(array(
+				"class_id" => $ihd["to_class"],
+				"site_id" => array(),
+				"lang_id" => array()
+			));
+			foreach($ol->arr() as $o)
+			{
+				$o->set_prop($ihd["to_prop"], $propv);
+				$o->save();
+			}
+		}
+	}
 
 	function _int_do_implicit_save()
 	{

@@ -1,0 +1,54 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>inherit_from</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_INHERIT_FROM</reltype>
+            <caption>Vali objekt, millelt p&amp;auml;rida</caption>
+      </property>
+      <property>
+            <name>inherit_from_prop</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Vali omadus, mida p&amp;auml;rida</caption>
+      </property>
+      <property>
+            <name>inherit_to_class</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Vali klass, kuhu omadusi kirjutatakse</caption>
+      </property>
+      <property>
+            <name>inherit_to_prop</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Vali omadus, kuhu omadusi kirjutatakse</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_OBJ_INHERIT_PROPS_CONF</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+      </classinfo>
+      <reltypes>
+            <INHERIT_FROM>
+                  <value>1</value>
+                  <clid>CL_MENU</clid>
+                  <caption>p&amp;auml;ritav objekt</caption>
+            </INHERIT_FROM>
+      </reltypes>
+</properties>
+

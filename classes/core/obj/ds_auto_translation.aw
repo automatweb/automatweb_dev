@@ -23,6 +23,12 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 		$lang_id = aw_global_get("lang_id");
 		$req_od = $this->contained->get_objdata($oid, $param);
 
+		// check if this object is part of the whole translation hooplaa or not. if not, just return the objdata
+		if (($req_od["flags"] & (OBJ_HAS_TRANSLATION|OBJ_IS_TRANSLATED|OBJ_NEEDS_TRANSLATION)) == 0)
+		{
+			return $req_od;
+		}
+
 		// check whether there are any relations of type RELTYPE_TRANSLATION pointing
 		// to this object .. 
 		$conns = $this->contained->find_connections(array(
@@ -159,6 +165,12 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 			return $this->contained->read_properties($arr);
 		}
 		extract($arr);
+
+		// check if this object is part of the whole translation hooplaa or not. if not, just return the objdata
+		if (($objdata["flags"] & (OBJ_HAS_TRANSLATION|OBJ_IS_TRANSLATED|OBJ_NEEDS_TRANSLATION)) == 0)
+		{
+			return $this->contained->read_properties($arr);
+		}
 		
 		$oid = $objdata["oid"];
 		if ($this->objdata[$oid]["type"] == OBJ_TRANS_TRANSLATED)
@@ -241,6 +253,16 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 		// rewrite parent parameter to point to the real object
 		if (isset($params["parent"]))
 		{
+			if (is_object($params["parent"]) && get_class($params["parent"]) == "aw_array")
+			{
+				$npr = array();
+				foreach($params["parent"]->get() as $pr)
+				{
+					$npr[] = $this->_get_root_obj($pr);
+				}
+				$params["parent"] = $npr;
+			}
+			else
 			if (is_array($params["parent"]))
 			{
 				$npr = array();

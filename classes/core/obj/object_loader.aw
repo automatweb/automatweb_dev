@@ -43,6 +43,8 @@ class _int_object_loader
 		$this->object_member_funcs = get_class_methods("object");
 		$this->cfgu = get_instance("cfg/cfgutils");
 		$this->cache = get_instance("cache");
+
+		$this->obj_inherit_props_conf = safe_array(aw_unserialize(@file_get_contents(aw_ini_get("site_basedir")."/files/obj_inherit_props.conf")));
 	}
 
 	function oid_for_alias($alias)
