@@ -229,6 +229,15 @@ function init_config($arr)
 			define($prd["def"], $prid);
 		}
 	};
+
+	if (empty($LC))
+	{
+		$LC="et";
+	}
+
+	@include(aw_ini_get("basedir")."/lang/" . $LC . "/errors.".aw_ini_get("ext"));
+	@include(aw_ini_get("basedir")."/lang/" . $LC . "/common.".aw_ini_get("ext"));
+
 }
 
 function aw_ini_set($key,$value)
