@@ -1,13 +1,13 @@
 <?xml version='1.0'?>
 <xml>
 <num_0>
-      <class>core/users/group</class>
-      <func>on_remove_alias_for_group</func>
-      <param>CL_GROUP</param>
-</num_0>
-<num_1>
       <class>applications/personnel_management/personnel_management_job_offer</class>
       <func>on_disconnect_section_from_job</func>
       <param>CL_PERSONNEL_MANAGEMENT_JOB_OFFER</param>
+</num_0>
+<num_1>
+      <class>core/users/group</class>
+      <func>on_remove_alias_for_group</func>
+      <param>CL_GROUP</param>
 </num_1>
 </xml>

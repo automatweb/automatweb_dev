@@ -1,0 +1,8 @@
+<?xml version='1.0'?>
+<xml>
+<num_0>
+      <class>applications/shop/shop_warehouse</class>
+      <func>on_popup_search_change</func>
+      <param>CL_SHOP_WAREHOUSE</param>
+</num_0>
+</xml>
