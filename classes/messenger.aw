@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.34 2001/05/29 00:06:51 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.35 2001/05/29 00:39:50 cvs Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -629,7 +629,13 @@ class messenger extends menuedit_light
 					$msg["style"] = ($msg["status"]) ? "textsmall" : "textsmallbold";
 					if ($msg["type"] == 2)
 					{
-						$msg["from"] = htmlspecialchars($msg["mfrom"]);
+						$from = $msg["mfrom"];
+						if ($this->msgconf["msg_filter_address"])
+						{
+							$from = preg_replace("/[<|\(|\[].*[>|\)|\]]/","",$from);
+						};
+						$from = htmlspecialchars($from);
+						$msg["from"] = $from;
 					}
 					else
 					{
@@ -1487,6 +1493,7 @@ class messenger extends menuedit_light
 						"msg_store_sent" => checked($conf["msg_store_sent"]),
 						"msg_ondelete" => $this->picker($conf["msg_ondelete"],array("delete" => "Kustutakse", "move" => "Viiakse Trash folderisse")),
 						"msg_confirm_send" => checked($conf["msg_confirm_send"]),
+						"msg_filter_address" => checked($conf["msg_filter_address"]),
 						"msg_quote_list" => $this->picker($conf["msg_quotechar"],array(">" => ">",":" => ":")),
 						"msg_default_pri" => $this->picker($conf["msg_default_pri"],array(0,1,2,3,4,5,6,7,8,9)),
 						"msg_cnt_att" => $this->picker($conf["msg_cnt_att"],array("1" => "1","2" => "2","3" => "3","4" => "4","5" => "5")),
@@ -1554,6 +1561,7 @@ class messenger extends menuedit_light
 			$this->msgconf["msg_store_sent"] = ($msg_store_sent) ? 1 : 0;
 			$this->msgconf["msg_confirm_send"] = ($msg_confirm_send) ? 1 : 0;
 			$this->msgconf["msg_move_read"] = ($msg_move_read) ? 1 : 0;
+			$this->msgconf["msg_filter_address"] = ($msg_filter_address) ? 1 : 0;
 		};
 		$users->set_user_config(array(
 						"uid" => UID,
