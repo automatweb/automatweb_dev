@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.12 2003/06/06 14:17:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.13 2003/06/06 14:58:58 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -647,16 +647,10 @@ class converters extends aw_template
 			echo "form $oid <br>\n";
 			flush();
 			$tbl = "form_".$oid."_entries";
-			$this->db_add_col($tbl, array(
-				"name" => "deleted",
-				"type" => "int",
-				"default" => 0
-			));
-			
-			$this->db_add_index($tbl, array(
-				"name" => "deleted",
-				"col" => "deleted"
-			));
+			$this->db_query("ATER TABLE $tbl DROP deleted");
+			$this->db_query("ATER TABLE $tbl ADD deleted int default 0");
+			$this->db_query("ATER TABLE $tbl ADD index deleted(deleted)");
+
 
 			// now, also go oever all the entries and mark the deleted ones as deleted
 			$this->db_query("SELECT f.id as id , o.status as status FROM $tbl f left join objects o on o.oid = f.id");
