@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/recurrence.aw,v 1.8 2005/02/11 08:07:53 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/recurrence.aw,v 1.9 2005/03/08 17:26:21 duke Exp $
 // recurrence.aw - Kordus
 /*
 
@@ -22,17 +22,23 @@ the emb form. The latter I can then use for embedding cases
 @property recur_type type=select field=meta method=serialize form=+emb
 @caption Korduse tüüp
 
+@property interval_minutely type=textbox size=2 field=meta method=serialize form=+emb
+@caption Iga X minuti järel
+
+@property interval_hourly type=textbox size=2 field=meta method=serialize form=+emb
+@caption Iga X tunni järel
+
 @property interval_daily type=textbox size=2 field=meta method=serialize form=+emb
-@caption Iga X päeva tagant
+@caption Iga X päeva järel
 
 @property interval_weekly type=textbox size=2 field=meta method=serialize form=+emb
-@caption Iga X nädala tagant
+@caption Iga X nädala järel
 
 @property interval_monthly type=textbox size=2 field=meta method=serialize form=+emb
-@caption Iga X kuu tagant
+@caption Iga X kuu järel
 
 @property interval_yearly type=textbox size=2 field=meta method=serialize form=+emb
-@caption Iga X aasta tagant
+@caption Iga X aasta järel
 
 @property weekdays type=chooser multiple=1 field=meta method=serialize form=+emb
 @caption Nendel päevadel
@@ -66,6 +72,8 @@ define("RECUR_DAILY",1);
 define("RECUR_WEEKLY",2);
 define("RECUR_MONTHLY",3);
 define("RECUR_YEARLY",4);
+define("RECUR_HOURLY",5);
+define("RECUR_MINUTELY",6);
 
 class recurrence extends class_base
 {
@@ -80,8 +88,10 @@ class recurrence extends class_base
 	{
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
-		$filtered = array("interval_daily","weekdays","interval_weekly","interval_monthly","interval_yearly","month_weekdays","month_rel_weekdays", "month_days");
+		$filtered = array("interval_hourly","interval_minutely","interval_daily","weekdays","interval_weekly","interval_monthly","interval_yearly","month_weekdays","month_rel_weekdays", "month_days");
 		$prop_filter = array(
+			RECUR_MINUTELY => array("interval_minutely"),
+			RECUR_HOURLY => array("interval_hourly"),
 			RECUR_DAILY => array("interval_daily"),
 			RECUR_WEEKLY => array("weekdays","interval_weekly"),
 			RECUR_MONTHLY => array("interval_monthly","month_weekdays","month_rel_weekdays","month_days"),
@@ -147,8 +157,10 @@ class recurrence extends class_base
 				$data["options"] = array(
 					RECUR_DAILY => t("päev"),
 					RECUR_WEEKLY => t("nädal"),
-					//RECUR_MONTHLY => "monthly",
+					RECUR_MONTHLY => t("kuu"),
 					RECUR_YEARLY => t("aasta"),
+					RECUR_MINUTELY => t("minut"),
+					RECUR_HOURLY => t("tund"),
 				);
 				break;
 
@@ -269,6 +281,50 @@ class recurrence extends class_base
 			$evt_start = $day_start + (3600 * $start_hour) + (60 * $start_min);
 			$evt_end = $day_start + (3600 * $end_hour) + (60 * $end_min);
 			$rv[$evt_start] = $evt_end;
+		};
+		return $rv;
+	}
+	
+	function calc_range_minutely($arr)
+	{
+		$interval = (int)$arr["interval"];
+		if ($interval == 0)
+		{
+			$interval = 1;
+		};
+
+		$rv = array();
+		list($sd,$sm,$sy) = explode("-",date("d-m-Y",$arr["start"]));
+		list($ed,$em,$ey) = explode("-",date("d-m-Y",$arr["end"]));
+		$range_start = mktime(0,0,0,$sm,$sd,$sy);
+		$range_end = mktime(23,59,59,$em,$ed,$ey);
+		for ($i = $range_start; $i <= $range_end; $i = $i + ($interval * 60))
+		{
+			$rv[$i] = $i;
+
+		};
+		return $rv;
+	}
+	
+	function calc_range_hourly($arr)
+	{
+		$interval = (int)$arr["interval"];
+		if ($interval == 0)
+		{
+			$interval = 1;
+		};
+
+		$rv = array();
+		list($sd,$sm,$sy) = explode("-",date("d-m-Y",$arr["start"]));
+		list($ed,$em,$ey) = explode("-",date("d-m-Y",$arr["end"]));
+		$range_start = mktime(0,0,0,$sm,$sd,$sy);
+		$range_end = mktime(23,59,59,$em,$ed,$ey);
+		for ($i = $range_start; $i <= $range_end; $i = $i + ($interval * 3600))
+		{
+			//print date("d.m.Y H:i",$i);
+			//print "<br>";
+			$rv[$i] = $i;
+
 		};
 		return $rv;
 	}
@@ -408,6 +464,17 @@ class recurrence extends class_base
 		{
 			$range_data["interval"] = $arr["obj_inst"]->prop("interval_yearly");
 			$rx = $this->calc_range_yearly($range_data);
+		}
+		elseif (RECUR_HOURLY == $recur_type)
+		{
+			$range_data["interval"] = $arr["obj_inst"]->prop("interval_hourly");
+			$rx = $this->calc_range_hourly($range_data);
+
+		}
+		elseif (RECUR_MINUTELY == $recur_type)
+		{
+			$range_data["interval"] = $arr["obj_inst"]->prop("interval_minutely");
+			$rx = $this->calc_range_minutely($range_data);
 		};
 
 		if (is_array($rx) && sizeof($rx) > 0)
