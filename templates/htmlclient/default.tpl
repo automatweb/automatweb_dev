@@ -65,12 +65,14 @@
 <!-- END SUB: SUBMIT -->
 
 <!-- SUB: SUBITEM -->
+	<span style='color: red'>{VAR:err_msg}</span>
         {VAR:element}
         {VAR:caption}
 	&nbsp;
 <!-- END SUB: SUBITEM -->
 
 <!-- SUB: SUBITEM2 -->
+	<span style='color: red'>{VAR:err_msg}</span>
         {VAR:caption}
         {VAR:element}
 	&nbsp;
