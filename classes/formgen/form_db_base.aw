@@ -463,6 +463,8 @@ class form_db_base extends aw_template
 		{
 			$tmp = obj($entry_id);
 			$tmp->delete();
+			// mark it deleted in the default table
+			$this->db_query("update form_".$id."_entries SET deleted = 1 where id = '$entry_id'");
 			$this->_log(ST_FORM_ENTRY, SA_DELETE,"form $this->name sisestus $entry_id", $entry_id);
 		}
 		else
