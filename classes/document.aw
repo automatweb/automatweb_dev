@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.173 2003/04/29 15:54:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.174 2003/05/01 17:39:02 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -320,6 +320,8 @@ class document extends aw_template
 			// you sould still be left under the menu where the brother document is.
 			//	$docid = $doc["docid"];
 		};
+
+
 
 		$this->dequote(&$doc["lead"]);
 		// if there is no document with that id, then bail out
@@ -3013,12 +3015,30 @@ class document extends aw_template
 		{
 			if ($from > 0)
 			{
-				$this->vars(array("from" => $from-$per_page));
+				$this->vars(array(
+					"from" => $from-$per_page,
+					"prev_link" => $this->mk_my_orb("search", array(
+						"parent" => $parent,
+						"str" => $str,
+						"section" => $section,
+						"sortby" => $sortby,
+						"from" => $from-$per_page
+					)),
+				));
 				$prev = $this->parse("PREVIOUS");
 			}
 			if ($from+$per_page <= $cnt)
 			{
-				$this->vars(array("from" => $from+$per_page));
+				$this->vars(array(
+					"from" => $from+$per_page,
+					"next_link" => $this->mk_my_orb("search", array(
+						"parent" => $parent,
+						"str" => $str,
+						"section" => $section,
+						"sortby" => $sortby,
+						"from" => $from+$per_page
+					)),
+				));
 				$next = $this->parse("NEXT");
 			}
 
@@ -3027,7 +3047,14 @@ class document extends aw_template
 				$this->vars(array(
 					"from" => $i*$per_page,
 					"page_from" => $i*$per_page,
-					"page_to" => min(($i+1)*$per_page,$cnt)
+					"page_to" => min(($i+1)*$per_page,$cnt),
+					"page_link" => $this->mk_my_orb("search", array(
+						"parent" => $parent,
+						"str" => $str,
+						"section" => $section,
+						"sortby" => $sortby,
+						"from" => $i*$per_page
+					)),
 				));
 				if ($i*$per_page == $from)
 				{
@@ -3045,7 +3072,21 @@ class document extends aw_template
 			"PAGE" => $pg,
 			"SEL_PAGE" => "",
 			"from" => $from,
-			"section" => $section
+			"section" => $section,
+			"sortchanged" => $this->mk_my_orb("search", array(
+				"parent" => $parent,
+				"str" => $str,
+				"section" => $section,
+				"sortby" => "time",
+				"from" => $from
+			)),
+			"sortpercent" => $this->mk_my_orb("search", array(
+				"parent" => $parent,
+				"str" => $str,
+				"section" => $section,
+				"sortby" => "percent",
+				"from" => $from
+			)),
 		));
 		$ps = $this->parse("PAGESELECTOR");
 		$this->vars(array(
