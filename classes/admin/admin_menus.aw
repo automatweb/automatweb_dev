@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.19 2003/07/09 10:25:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.20 2003/07/09 12:59:38 kristo Exp $
 class admin_menus extends aw_template
 {
 	// this will be set to document id if only one document is shown, a document which can be edited
@@ -1400,6 +1400,7 @@ class admin_menus extends aw_template
 			if (!$row["is_object"])
 			{
 				$ob = $row["object"];
+				unset($ob["brother_of"]);
 				$ob["parent"] = $hash2id[$ob["parent"]];
 				$this->quote(&$ob);
 				$id = $this->new_object($ob);
