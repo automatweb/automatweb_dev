@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.99 2005/01/18 13:19:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.100 2005/01/26 14:27:17 duke Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -194,11 +194,17 @@ class file extends class_base
 				break;
 
 			case "file":
+				// see asi eeldab ajutise faili tegemist eksole?
 				if (is_array($data["value"]))
 				{
 					$file = $data["value"]["tmp_name"];
 					$file_type = $data["value"]["type"];
 					$file_name = $data["value"]["name"];
+					$fc = "";
+					if (!empty($data["value"]["content"]))
+					{
+						$fc = $data["value"]["content"];
+					};
 				}
 				else
 				{
@@ -207,6 +213,7 @@ class file extends class_base
 					$file_type = $_FILES["file"]["type"];
 
 				};
+
 				if (is_uploaded_file($file))
 				{
 					if ($this->cfg["upload_virus_scan"])
@@ -222,27 +229,31 @@ class file extends class_base
 					$fc = $this->get_file(array(
 						"file" => $file,
 					));
+				}
 			
-					if ($fc != "")
+				if ($fc != "")
+				{
+					$pathinfo = pathinfo($file_name);
+					$mimeregistry = get_instance("core/aw_mime_types");
+
+					$realtype = $mimeregistry->type_for_ext($pathinfo["extension"]);
+
+					if (empty($file_type))
 					{
-						// stick the file in the filesystem
-						$fs = $this->_put_fs(array(
-							"type" => $file_type,
-							"content" => $fc,
-						));
-
-						$pathinfo = pathinfo($file_name);
-						$mimeregistry = get_instance("core/aw_mime_types");
-
-						$realtype = $mimeregistry->type_for_ext($pathinfo["extension"]);
-
-						$data["value"] = $fs;
-						$arr["obj_inst"]->set_name($file_name);
-						$arr["obj_inst"]->set_prop("type", $file_type);
-						$this->file_type = $file_type;
-						//$this->file_name = $file_name;
+						$file_type = $realtype;
 					};
-			
+
+					// stick the file in the filesystem
+					$fs = $this->_put_fs(array(
+						"type" => $file_type,
+						"content" => $fc,
+					));
+
+					$data["value"] = $fs;
+					$arr["obj_inst"]->set_name($file_name);
+					$arr["obj_inst"]->set_prop("type", $file_type);
+					$this->file_type = $file_type;
+					//$this->file_name = $file_name;
 				}
 				else
 				{
@@ -911,6 +922,40 @@ class file extends class_base
 		$fn = basename($fn);
 		$path = aw_ini_get("site_basedir")."/files/".$fn{0}."/".$fn;
 		return @filesize($path);
+	}
+
+	/** creates/updates a file object from the arguments
+		@attrib api=1
+		@param id optional type=int
+		@param parent optional type=int
+		@param content
+		@param name required
+
+	**/
+	function create_file_from_string($arr)
+	{
+		if (isset($arr["id"]))
+		{
+			$data["id"] = $arr["id"];
+		}
+		elseif (isset($arr["parent"]))
+		{
+			$data["parent"] = $arr["parent"];
+		}
+		else
+		{
+			error::throw(array(
+				"msg" => t("Need either id or parent"),
+			));
+		};
+		$data["return"] = "id";
+		$data["file"] = array(
+			"content" => $arr["content"],
+			"name" => $arr["name"],
+		);
+		$t = get_instance(CL_FILE);
+		$rv = $t->submit($data);
+		return $rv;
 	}
 
 	/** saves editable fields (given in $ef) to object $id, data is in $data
