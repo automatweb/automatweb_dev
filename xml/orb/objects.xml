@@ -17,6 +17,19 @@
 			</function>
 		</action>
 
+		<action name="storage_query" all_args="1">
+			<function name="storage_query">
+				<arguments>
+					<optional name="name" />
+					<optional name="class_id" />
+					<optional name="comment" />
+					<optional name="site_id" />
+					<optional name="createdby" />
+					<optional name="modifiedby" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="delete_object">
 			<function name="orb_delete_object">
 				<arguments>
