@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.42 2005/01/26 22:51:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.43 2005/01/26 23:15:53 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -586,6 +586,13 @@ class planner extends class_base
 		};
 
 		$this->folders = $folders;
+
+		if (sizeof($folders) == 0)
+		{
+			return array();
+		};
+
+
 
 		// that is the basic query
 		// I need to add different things to it
