@@ -53,7 +53,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
-            <caption>Suurus</caption>
+            <caption>Kirja suurus (px)</caption>
       </property>
       <property>
             <name>fgcolor</name>
@@ -91,7 +91,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
-            <caption>Border width</caption>
+            <caption>&amp;Auml;&amp;auml;rejoone j&amp;auml;medus</caption>
       </property>
       <property>
             <name>bordercolor</name>
@@ -100,7 +100,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>colorpicker</type>
-            <caption>Border color</caption>
+            <caption>&amp;Auml;&amp;auml;rejoone v&amp;auml;rv</caption>
       </property>
       <property>
             <name>align</name>

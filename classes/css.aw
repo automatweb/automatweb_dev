@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.40 2004/10/22 11:47:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.41 2004/10/29 15:47:43 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 /*
 
@@ -24,7 +24,7 @@
 @caption <u>Underline</u>
 
 @property size type=textbox size=5
-@caption Suurus
+@caption Kirja suurus (px)
 
 @property fgcolor type=colorpicker
 @caption Teksti v&auml;rv
@@ -36,10 +36,10 @@
 @caption Joone k&otilde;rgus
 
 @property border type=textbox size=5
-@caption Border width
+@caption &Auml;&auml;rejoone j&auml;medus
 
 @property bordercolor type=colorpicker 
-@caption Border color
+@caption &Auml;&auml;rejoone v&auml;rv
 
 @property align type=select 
 @caption Align
@@ -216,7 +216,8 @@ class css extends class_base
 					break;
 
 				case "border":
-					$mask = "border-width: %spx;\n";
+					//$mask = "border-width: %spx;\n";
+					$mask = "border-collapse: collapse;\n";
 					break;
 				
 				case "valign":
@@ -228,11 +229,25 @@ class css extends class_base
 					break;
 				
 				case "width":
-					$mask = "width: %spx;\n";
+					if (substr($val, -1) == "%")
+					{
+						$mask = "width: %s;\n";
+					}
+					else
+					{
+						$mask = "width: %spx;\n";
+					}
 					break;
 
 				case "height":
-					$mask = "height: %spx;\n";
+					if (substr($val, -1) == "%")
+					{
+						$mask = "height: %s;\n";
+					}
+					else
+					{
+						$mask = "height: %spx;\n";
+					}
 					break;
 
 				default:
@@ -248,12 +263,35 @@ class css extends class_base
 			if (!$ign)
 			{
 				$retval .= sprintf("\t" . $mask,$val);
+				if ($key == "border")
+				{
+					$has_border = true;
+				}
 			};
 		}
 
 		$retval .= $data["user_css"];
 
 		$retval .= "}\n";
+
+		if ($has_border)
+		{
+			$retval .= ".$name td {\n";
+			if (trim($data["border"]) != "")
+			{
+				$retval .= "border: $data[border]px solid ";
+				if (trim($data["bordercolor"]) != "")
+				{
+					if ($data["bodercolor"]{0} != "#")
+					{
+						$retval .= "#";
+					}
+					$retval .= "$data[bordercolor]";
+				}
+				$retval .= ";\n";
+			}
+			$retval .= " }\n";
+		}
 
 		if (!$this->in_gen)
 		{
