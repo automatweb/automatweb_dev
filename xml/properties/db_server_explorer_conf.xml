@@ -1,0 +1,62 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>name</name>
+            <type>textbox</type>
+            <field>name</field>
+            <group>general</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>status</name>
+            <type>status</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>all_servers</name>
+            <type>checkbox</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>K&amp;otilde;ik serverid</caption>
+      </property>
+      <property>
+            <name>servers</name>
+            <type>select</type>
+            <multiple>1</multiple>
+            <size>5</size>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Serverid, millest baase n&amp;auml;idatakse</caption>
+      </property>
+      <property>
+            <name>all_databases</name>
+            <type>checkbox</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>K&amp;otilde;ik andmebaasid</caption>
+      </property>
+      <property>
+            <name>databases</name>
+            <type>select</type>
+            <multiple>1</multiple>
+            <size>10</size>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Andmebaasid, mida n&amp;auml;idatakse</caption>
+      </property>
+</properties>
+

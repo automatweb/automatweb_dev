@@ -1,0 +1,51 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>name</name>
+            <type>textbox</type>
+            <field>name</field>
+            <group>general</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>status</name>
+            <type>status</type>
+            <group>general</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>db_base</name>
+            <type>objpicker</type>
+            <clid>CL_DB_LOGIN</clid>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Andmebaas</caption>
+      </property>
+      <property>
+            <name>db_table</name>
+            <type>select</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Tabel</caption>
+      </property>
+      <property>
+            <name>per_page</name>
+            <type>textbox</type>
+            <size>5</size>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Mitu rida lehel</caption>
+      </property>
+</properties>
+

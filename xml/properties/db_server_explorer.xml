@@ -1,0 +1,32 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>name</name>
+            <type>textbox</type>
+            <field>name</field>
+            <group>general</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>status</name>
+            <type>status</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>conf</name>
+            <type>objpicker</type>
+            <clid>CL_DB_VIEW_CONF</clid>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vali konfiguratsioon</caption>
+      </property>
+</properties>
+
