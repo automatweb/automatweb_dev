@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.124 2002/11/07 10:52:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.125 2002/11/07 12:41:04 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -1319,8 +1319,11 @@ class document extends aw_template
 		$q_parts[] = "modified = $modified";
 
 		// see paneb siis paringu kokku. Whee.
-		$q = "UPDATE documents SET " . join(",\n",$q_parts) . " WHERE docid = '".$old["brother_of"]."'"; 
-		$this->db_query($q);
+		if ($old["brother_of"])
+		{
+			$q = "UPDATE documents SET " . join(",\n",$q_parts) . " WHERE docid = '".$old["brother_of"]."'"; 
+			$this->db_query($q);
+		}
 		
 		// siia moodustame objektitabeli p?ringu osad
 		$oq_parts = array();
