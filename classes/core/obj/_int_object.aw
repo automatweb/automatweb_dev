@@ -1668,16 +1668,4 @@ class _int_object
 	}
 }
 
-function do_fop()
-{
-	foreach($GLOBALS["objects"] as $oid => $od)
-	{
-		if (!$od->props_loaded)
-		{
-			echo "no props for ib $oid <br>";
-		}
-	}
-	echo "total obj count = ".count($GLOBALS["objects"])."<br>";
-}
-register_shutdown_function("do_fop");
 ?>
