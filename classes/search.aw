@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.82 2004/11/01 20:20:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.83 2004/12/27 12:43:19 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -430,7 +430,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 					case "name":
 						if ($val)
 						{
-							$val = str_replace("'", "\\'", $val);
+							//$val = str_replace("'", "\\'", $val);
 							if (strpos($val,",") !== false)
 							{
 								$pts = array();
