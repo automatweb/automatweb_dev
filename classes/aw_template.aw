@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.18 2001/10/02 10:16:58 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.19 2002/01/11 19:47:32 duke Exp $
 // aw_template.aw - Templatemootor
 class tpl
 {
@@ -77,6 +77,8 @@ class aw_template extends acl_base
 	{
 		global $tpldir;
 		$this->template_dir = $tpldir . "/$path";
+		global $basedir;
+		$this->adm_template_dir = $basedir . "/templates/$path";
 	}
 
 	////
@@ -167,6 +169,26 @@ class aw_template extends acl_base
 	}
 	
 	////
+	// !Loeb template failist
+	function read_adm_template($filename,$dbg = 0)
+	{
+		// loeme faili sisse
+		$filename = $this->adm_template_dir . "/$filename";
+		$this->template_filename = $filename;
+
+		$source = $this->get_file(array("file" => $filename));
+		
+		if (!$source)
+		{
+			global $tpldir;
+			//$name = substr($filename,strlen($tpldir) + 1);
+			$name = $filename;
+			$this->raise_error("Template '$name' not found",true);
+		};
+		return $this->use_template($source);
+	}
+	
+	////
 	// !Selle abil saab sisse lugeda kusagilt mujalt (mitte failist) voetud template
 	function use_template($source)
 	{
@@ -235,7 +257,7 @@ class aw_template extends acl_base
         $last = array_pop($construct);
         if ($last->name != $m[1])
 				{
-          printf("Broken template. Tried to close '%s' while '%s' was open",$m[1],$last->name);
+          printf("Broken template $this->template_filename. Tried to close '%s' while '%s' was open",$m[1],$last->name);
           die;
         };
       }
