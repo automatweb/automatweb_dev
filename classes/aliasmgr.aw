@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.163 2004/11/23 13:20:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.164 2004/11/29 13:18:59 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -45,6 +45,8 @@ class aliasmgr extends aw_template
 				$this->rel_type_classes[$key] = $this->make_alias_classarr2($val);
 			}
 		}
+
+		$this->_filtr_rtc();
 
 		$classes = aw_ini_get("classes");
 		foreach($classes as $clid => $cldat)
@@ -602,6 +604,8 @@ class aliasmgr extends aw_template
 			}
 		}
 
+		$this->_filtr_rtc();
+
 		$this->search_url = $search_url;
 
 		// this will be an array of class => name pairs for all object types that can be embedded
@@ -916,7 +920,7 @@ class aliasmgr extends aw_template
 		$arr = array();
 		foreach($rel_arr as $val)
 		{
-			if (isset($classes[$val]))// && isset($classes[$val]["alias"]))
+			if (isset($classes[$val]))
 			{
 				if (!is_array($filt) || $filt[$clid] == $clid)
 				{
@@ -1363,6 +1367,29 @@ HTM;
 		}
 		asort($ret);
 		return $ret;
+	}
+
+	function _filtr_rtc()
+	{
+		// filtr
+		// check if there is an add tree conf for the current user
+		$adc = get_instance("admin/add_tree_conf");
+		if (($adc_id = $adc->get_current_conf()))
+		{
+			$tmp = array();
+
+			foreach($this->rel_type_classes as $key => $dat)
+			{
+				foreach(safe_array($dat) as $clid => $_nm)
+				{
+					if ($adc->can_access_class(obj($adc_id), $clid))
+					{
+						$tmp[$key][$clid] = $_nm;
+					}
+				}
+			}
+			$this->rel_type_classes = $tmp;
+		}
 	}
 
 }
