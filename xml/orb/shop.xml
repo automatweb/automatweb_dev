@@ -114,6 +114,7 @@
 				<arguments>
 					<required name="shop"/>
 					<required name="order_id"/>
+					<optional name="section"/>
 				</arguments>
 			</function>
 		</action>
@@ -123,6 +124,7 @@
 				<arguments>
 					<required name="shop"/>
 					<required name="order_id"/>
+					<optional name="section"/>
 				</arguments>
 			</function>
 		</action>
@@ -132,6 +134,7 @@
 				<arguments>
 					<define name="filter_uid" value="1"/>
 					<required name="id"/>
+					<optional name="section"/>
 				</arguments>
 			</function>
 		</action>

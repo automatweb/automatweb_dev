@@ -10,7 +10,7 @@
 		</action>
 
 		<action name="add_contact_group">
-			<function name="add_contact_group">
+			<function name="edit_contact_group">
 				<arguments>
 					<optional name="folder"/>
 				</arguments>
@@ -50,6 +50,27 @@
 
 		<action name="submit_contact">
 			<function name="submit_contact">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="search_contact">
+			<function name="search_contact">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_search_contact">
+			<function name="submit_search_contact">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="pick_contacts">
+			<function name="pick_contacts">
 				<arguments>
 				</arguments>
 			</function>
