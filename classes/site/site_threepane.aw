@@ -1,5 +1,5 @@
 <?php
-// $Id: site_threepane.aw,v 1.1 2002/11/04 17:48:06 duke Exp $
+// $Id: site_threepane.aw,v 1.2 2002/11/04 20:49:25 duke Exp $
 // site_threepane.aw - simpel 3 paaniga sait.
 /*
 	@default table=objects
@@ -21,25 +21,9 @@ class site_threepane extends aw_template
 {
 	function site_threepane($args = array())
 	{
-		$this->init("site/threepane");
-	}
-
-	function add($args = array())
-	{
-		extract($args);
-                // gotta get rid of that too
-                $cfg = get_instance("cfg/cfgmanager");
-                return $cfg->change(array(
-                        "class_id" => CL_SITE_THREEPANE,
-                        "parent" => $parent,
-                ));
-	}
-
-	function change($args = array())
-	{
-		$cfg = get_instance("cfg/cfgmanager");
-		return $cfg->change(array(
-			"id" => $args["id"],
+		$this->init(array(
+			"tpldir" => "site/threepane",
+			"clid" => CL_SITE_THREEPANE,
 		));
 	}
 
