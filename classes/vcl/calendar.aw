@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.11 2004/02/11 13:05:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.12 2004/02/25 15:48:32 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -303,6 +303,7 @@ class vcalendar extends aw_template
 
 		$this->vars(array(
 			"PAGE" => $ts,
+			"mininaviurl" => aw_url_change_var("date",""),
 			"naviurl" => aw_url_change_var("date",""),
 			"mnames" => html::picker((int)$m,$mnames),
 			"years" => html::picker($y,$years),
@@ -312,6 +313,8 @@ class vcalendar extends aw_template
 			"nextlink" => aw_url_change_var("date",$this->range["next"]),
 			"overview" => $mn,
 			"today_url" => aw_url_change_var(array("viewtype" => "day","date" => date("d-m-Y"))),
+			"today_date" => date("d.m.Y"),
+			"act_day_tm" => $this->range["timestamp"],
 		));
 
 		return $this->parse();
@@ -582,6 +585,10 @@ class vcalendar extends aw_template
 	{
 		$m = date("m",$evt["timestamp"]);
 		$lc_month = get_lc_month($m);
+		if (isset($evt["url"]))
+		{
+			$evt["link"] = $evt["url"];
+		};
 		$this->evt_tpl->vars(array(
 			"time" => date("H:i",$evt["timestamp"]),
 			"date" => date("j-m-Y H:i",$evt["timestamp"]),
