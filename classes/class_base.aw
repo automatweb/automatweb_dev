@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.193 2003/12/17 16:08:51 kristo Exp $
+// $Id: class_base.aw,v 2.194 2004/01/05 16:38:54 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -171,8 +171,8 @@ class class_base extends aw_template
 			"args" => $args,
 		));
 
-		$this->validate_cfgform($cfgform_id);
 
+		$this->validate_cfgform($cfgform_id);
 
 		if ($this->classinfo["fixed_toolbar"])
 		{
@@ -586,6 +586,20 @@ class class_base extends aw_template
 				{
 					$this->cfgform_id = $_tmp["oid"];
 					$this->cfgform = $_tmp;
+					if ($_tmp["meta"]["classinfo_fixed_toolbar"] == 1)
+					{
+						$this->classinfo["fixed_toolbar"] = 1;
+					};
+					
+					if ($_tmp["meta"]["classinfo_allow_rte"] == 1)
+					{
+						$this->classinfo["allow_rte"] = 1;
+					};
+					
+					if ($_tmp["meta"]["classinfo_disable_relationmgr"] == 1)
+					{
+						$this->classinfo["disable_relationmgr"] = 1;
+					};
 				};
 			}
 			else
@@ -1801,7 +1815,8 @@ class class_base extends aw_template
 				
 				if (($val["type"] == "calendar") && !is_object($val["vcl_inst"]))
 				{
-					$val["vcl_inst"] = get_instance("vcl/calendar");
+					classload("vcl/calendar");
+					$val["vcl_inst"] = new vcalendar();
 				};
 			};
 
@@ -2048,12 +2063,12 @@ class class_base extends aw_template
 			$this->classinfo["hide_tabs"] = 1;
 			aw_global_set("hide_yah",1);
 		};
-		
+
 		$gen = $almgr->list_aliases(array(
 			"id" => $id,
 			"reltypes" => $reltypes,
 			'rel_type_classes' => $rel_type_classes,//$this->get_rel_type_classes(),
-			"return_url" => $this->mk_my_orb("list_aliases",array("id" => $id),get_class($this->orb_class)),
+			"return_url" => !empty($return_url) ? $return_url : $this->mk_my_orb("list_aliases",array("id" => $id),get_class($this->orb_class)),
 		));
 		return $this->gen_output(array("content" => $gen));
 	}
