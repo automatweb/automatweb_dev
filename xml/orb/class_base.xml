@@ -2,7 +2,7 @@
 <orb>
 	<class name="class_base">
 		<action name="new" all_args="1">
-			<function name="add">
+			<function name="change">
 				<arguments>
 					<required name="parent"/>
 				</arguments>
@@ -13,6 +13,7 @@
 			<function name="change">
 				<arguments>
 					<required name="id"/>
+					<optional name="group"/>
 				</arguments>
 			</function>
 		</action>
@@ -22,5 +23,30 @@
 				<arguments/>
 			</function>
 		</action>
+
+		<action name="list_aliases" all_args="1">
+			<function name="list_aliases">
+				<arguments/>
+			</function>
+		</action>
+		
+		<action name="submit_list" all_args="1">
+			<function name="submit_list">
+				<arguments/>
+			</function>
+		</action>
+		
+		<action name="search_aliases" all_args="1">
+			<function name="search_aliases">
+				<arguments/>
+			</function>
+		</action>
+		
+		<action name="addalias" all_args="1">
+			<function name="addalias">
+				<arguments/>
+			</function>
+		</action>
+
 	</class>
 </orb>
