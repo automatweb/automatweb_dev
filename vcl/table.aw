@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.39 2003/01/27 18:27:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.40 2003/01/29 14:38:08 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -1138,9 +1138,14 @@ class aw_table
 					if (is_array($rgroupdat[$rgel]))
 					{
 						$val .= $rgroupby_sep[$rgel]["pre"];
+						$prevdat = false;
 						foreach($rgroupdat[$rgel] as $rgdat)
 						{
-							$val .= $v[$rgdat["el"]].$rgdat["sep"];
+							if ($v[$rgdat["el"]] != "")
+							{
+								$val .= $prevdat["sep"].$v[$rgdat["el"]];
+							}
+							$prevdat = $rgdat;
 						}
 						$val .= $rgroupby_sep[$rgel]["after"];
 					}
