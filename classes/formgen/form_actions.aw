@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.31 2004/11/02 09:53:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.32 2004/11/04 11:37:52 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -116,10 +116,9 @@ class form_actions extends form_base
 						$data["link_to_change"] = $link_to_change;
 						$data["link_caption"] = $link_caption;
 						$data["text_only"] = $text_only;
-						$data["no_user_info_link"] = $no_user_info_link;
-						$data["send_html_mail"] = $send_html_mail;
 						$data["from_addr"] = $from_addr;
 						$data["from_name"] = $from_name;
+						
 						$la = get_instance("languages");
 						$ls = $la->listall();
 						foreach($ls as $ld)
@@ -860,11 +859,6 @@ class form_actions extends form_base
 			{
 				$froma = "automatweb@automatweb.com";
 				$fromn = "AutomatWeb";
-			}
-
-			if (aw_global_get("fa_mail_subject") != "")
-			{
-				$subj = aw_global_get("fa_mail_subject");
 			}
 			
 			$awm = get_instance("protocols/mail/aw_mail");
