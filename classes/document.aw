@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.72 2002/01/07 13:14:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.73 2002/01/07 13:52:59 duke Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -217,8 +217,11 @@ class document extends aw_template
 			$sufix = "";
 		};
 
-		$q = "SELECT objects.*, documents.* FROM objects LEFT JOIN documents ON objects.brother_of = documents.docid WHERE objects.oid = $docid $sufix";
-		$this->db_query($q);
+		if ($docid)
+		{
+			$q = "SELECT objects.*, documents.* FROM objects LEFT JOIN documents ON objects.brother_of = documents.docid WHERE objects.oid = $docid $sufix";
+			$this->db_query($q);
+		}
 		$data = $this->db_next();
 
 		if (gettype($data) == "array") 
@@ -248,8 +251,9 @@ class document extends aw_template
                 ));
 
 		extract($args);
+		global $rootmenu;
 		$parent = (int)$parent;
-		if ($parent)
+		if ($parent && ($parent != $rootmenu))
 		{
 			$pstr = " AND objects.parent = '$parent' ";
 		}
@@ -332,7 +336,7 @@ class document extends aw_template
 		
 		$doc["lead"] = preg_replace("/<p>(.*)<\/p>/is","\\1",$doc["lead"]);
 		$doc["content"] = preg_replace("/<p>(.*)<\/p>/is","\\1",$doc["content"]);
-		
+			
 		if ($meta["show_last_changed"])
 		{
 			$doc["content"] .= "<p><font size=1><i>Viimati muudetud:&nbsp;&nbsp;</i>" . $this->time2date($doc["modified"],4) . "</font>";
@@ -345,7 +349,7 @@ class document extends aw_template
 			global $REQUEST_URI;
 			if (defined("PRINT_CAP"))
 			{
-				$pc = localparse(PRINT_CAP,array("link" => $REQUEST_URI . "&print=1"));
+				$pc = localparse(PRINT_CAP,array("link" => "/section=$docid" . "&print=1"));
 				if (!($doc["showlead"] == 1 || $showlead == 1))
 				{
 					$doc["content"] = $pc . $doc["content"];
@@ -691,7 +695,7 @@ class document extends aw_template
 		$mp = $this->register_parser(array(
 					"reg" => "/(#)event_(.+?)(#)/i",
 					));
-		
+
 		if (defined("PIKK"))
 		{
 			$class = "events3";
@@ -731,7 +735,7 @@ class document extends aw_template
 			$this->db_query($q);
 			while($row = $this->db_next())
 			{
-				$keywords[$row["keyword"]] = sprintf(" <a href='%s' title='%s'>%s<sup><b>*</b></sup></a> ",$this->mk_my_orb("lookup",array("id" => $row["keyword_id"]),"document"),"LINK",$row["keyword"]);
+				$keywords[$row["keyword"]] = sprintf(" <a href='%s' title='%s'>%s<sup><b>*</b></sup></a> ",$this->mk_my_orb("lookup",array("id" => $row["keyword_id"],"section" => $docid),"document"),"LINK",$row["keyword"]);
 			};
 		}
 
@@ -741,7 +745,7 @@ class document extends aw_template
 			foreach ($keywords as $k_key => $k_val)
 			{
 				$k_key = str_replace("/","\/",$k_key);
-				$doc["content"] = preg_replace("/$k_key/i",$k_val," " . $doc["content"] . " ");
+				$doc["content"] = preg_replace("/\b$k_key\b/i",$k_val," " . $doc["content"] . " ");
 			};
 		}
 	
@@ -785,7 +789,7 @@ class document extends aw_template
 		{
 			$doc["content"] = str_replace("\r\n","<br>",$doc["content"]);
 		}
-		$doc["content"] = str_replace("\n","",$doc["content"]);
+		# $doc["content"] = str_replace("\n","",$doc["content"]);
 
 		$pb = "";
 		if ($doc["photos"])
@@ -906,7 +910,10 @@ class document extends aw_template
 		$fr = "";
 		if ($doc["is_forum"])
 		{
-			$fr = $this->parse("FORUM_ADD");
+			classload("forum");
+			$forum = new forum();
+			$fr = $forum->add_comment(array("board" => $docid));
+			#$fr = $this->parse("FORUM_ADD");
 		}
 
 		$langs = "";
@@ -1507,6 +1514,7 @@ class document extends aw_template
 	function add($arr)
 	{
 		extract($arr);
+		global $per_oid,$period;
 
 		// ok, instead of all this, just add the damn thing and redirect to changing.
 		$ret = $this->submit_add(array(
@@ -2981,6 +2989,7 @@ class document extends aw_template
 	{
 		global $SITE_ID;
 		extract($args);
+		$id = (int)$id;
 		$q = "SELECT * FROM objects LEFT JOIN keywordrelations ON (keywordrelations.id = objects.oid) WHERE status = 2 AND class_id IN (" . CL_DOCUMENT . "," . CL_PERIODIC_SECTION . ") AND site_id = '$SITE_ID' AND keywordrelations.keyword_id = '$id' ORDER BY modified DESC";
 		$retval = "";
 		load_vcl("table");
@@ -2990,10 +2999,6 @@ class document extends aw_template
 			"imgurl"    => $GLOBALS["baseurl"]."/img",
 			"tbgcolor" => "#C3D0DC",
 		));
-
-		print "<!--";
-		print $GLOBALS["basedir"];
-		print "-->";
 
 		$tt->parse_xml_def($GLOBALS["site_basedir"]."/xml/generic_table.xml");
 		$tt->set_header_attribs(array(
@@ -3006,7 +3011,6 @@ class document extends aw_template
 			"caption" => "Nimi",
 			"talign" => "center",
 			"sortable" => 1,
-			"nowrap" => "1",
 		));
 		$tt->define_field(array(
 			"name" => "modified",
@@ -3014,7 +3018,6 @@ class document extends aw_template
 			"talign" => "center",
 			"align" => "center",
 			"sortable" => 1,
-			"nowrap" => "1",
 		));
 		$tt->define_field(array(
 			"name" => "modifiedby",
@@ -3022,7 +3025,6 @@ class document extends aw_template
 			"talign" => "center",
 			"align" => "center",
 			"sortable" => 1,
-			"nowrap" => "1",
 		));
 		$this->db_query($q);
 		while($row = $this->db_next())
