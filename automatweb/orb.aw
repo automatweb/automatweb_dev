@@ -1,10 +1,26 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.7 2002/06/10 15:50:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.8 2002/08/29 03:06:41 kristo Exp $
 include("const.aw");
 
-$vars = array_merge($HTTP_POST_VARS,$HTTP_GET_VARS,$AW_GET_VARS);
+//$vars = array_merge($HTTP_POST_VARS,$HTTP_GET_VARS,$AW_GET_VARS,$_GET,$_POST);
+// _GET, _POST and friends were implemented in php 4.1.0
+// right now, heaven is on 4.0.6, so I have to implement an workaround
+if (!is_array($_GET))
+{
+        $_GET = $HTTP_GET_VARS;
+};
 
-if ($fastcall == 1)
+if (!is_array($_POST))
+{
+        $_POST = $HTTP_POST_VARS;
+};
+
+$vars = array_merge($_GET,$_POST,$AW_GET_VARS);
+
+$class = $vars["class"];
+$action = $vars["action"];
+
+if ($vars["fastcall"] == 1)
 {
 	// loadime klassi
 	classload("fastcall_base");
@@ -36,7 +52,7 @@ $content = $orb->get_data();
 // et kui orb_data on link, siis teeme ümbersuunamise
 // see ei ole muidugi parem lahendus. In fact, see pole üleüldse
 // mingi lahendus
-if ((substr($content,0,5) == "http:" || $reforb == 1) && !$no_redir)
+if ((substr($content,0,5) == "http:" || $vars["reforb"] == 1) && !$vars["no_redir"])
 {
 	header("Location: $content");
 	print "\n\n";
