@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.29 2001/06/21 03:51:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.30 2001/06/27 23:28:42 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -90,6 +90,7 @@ class core extends db_connector
 	//				"key" => "notes",
 	//				"value" => "3l33t",
 	// ));
+	
 	function set_object_metadata($args = array())
 	{
 		$this->quote($args);
@@ -817,6 +818,44 @@ class core extends db_connector
 	}
 
 	////
+	// !New improved version of get_object_chain.
+	// oid(int) - millisest objektist parsimist alustada
+	// stop(int)(optional) - millise objekti juures parsimine lopetada (kui puudu, siis lopeb
+	//   esimese objekti juures, mille parent on 0
+	// check(int)(optional)(n/a) - kontrollib objekti id-ga check olemasolu chainis, kui ei leitud,
+	//   siis tagastab false.
+	// class_id(int)(optional)(n/a) - millise klassi objektid meid huvitavad
+	// Damn. the correct way to do this would be to store the parents of each objects by that object
+	// that would save us A LOT of queries.
+	function get_obj_chain($args = array())
+	{
+		extract($args);
+		$retval = array();
+		$object = $this->get_object($oid);	
+		if (!$object)
+		{
+			return false;
+		};
+
+		$retval[$object["oid"]] = $object["name"];
+	
+		$found = $object["parent"];
+
+		while($found)
+		{
+			$object = $this->get_object($object["parent"]);
+			$found = $object["parent"];
+			$retval[$object["oid"]] = $object["name"];
+			if ($stop == $object["oid"])
+			{
+				$found = false;
+			};
+
+		};
+		return $retval;
+	}
+
+	////
 	// !tagastab objekti
 	function get_object($arg) 
 	{
@@ -870,11 +909,25 @@ class core extends db_connector
 		// kui parent on antud, siis moodustame sellest IN klausli
 		$pstr = ($parent) ? " AND parent IN (" . join(",",map("'%s'",$parent)) . ")" : "";
 		// see groyp by jaab mulle natuke segaks tekalt. oidid ju ei kordu eniveis, so what's the point?
+		// I have no idea. The answer lies somewhere in a bottom of a bottle of wine.
 		$this->db_query("SELECT objects.*
 					FROM objects
 					WHERE class_id = $class AND status != 0 $pstr
 					GROUP BY objects.oid");
 	}
+
+	////
+	// !Eelmise analoog, kuid class_id seekord ignoreeritakse
+	function get_objects($args = array())
+	{
+		extract($args);
+		$pstr = " AND parent IN (" . join(",",map("'%s'",$parent)) . ")";
+		$cstr = " AND class_id IN (" . join(",",map("'%s'",$class_id)) . ")";
+		$this->db_query("SELECT objects.*
+					FROM objects
+					WHERE status != 0 $pstr $cstr");
+	}
+	
 	
 	////
 	// !loendab mingisse kindlasse klassi kuuluvad objektid mingi parenti all
