@@ -118,7 +118,7 @@
       </property>
       <property>
             <name>member_list</name>
-            <type>text</type>
+            <type>table</type>
             <store>no</store>
             <group>members</group>
             <table>objects</table>
@@ -149,5 +149,21 @@
                   <caption>Liitumine/lahkumine</caption>
             </subscribing>
       </groupinfo>
+      <reltypes>
+            <MEMBER_PARENT>
+                  <value>1</value>
+                  <clid>CL_MENU</clid>
+                  <caption>listi liikmete kataloog</caption>
+            </MEMBER_PARENT>
+            <REDIR_OBJECT>
+                  <value>2</value>
+                  <clid>CL_DOCUMENT</clid>
+                  <caption>ümbersuunamine</caption>
+            </REDIR_OBJECT>
+            <ADM_MESSAGE>
+                  <value>3</value>
+                  <caption>administratiivne teade clid=CL_MESSAGE</caption>
+            </ADM_MESSAGE>
+      </reltypes>
 </properties>
 
