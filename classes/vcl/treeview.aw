@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.21 2004/01/14 15:21:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.22 2004/02/26 14:10:32 duke Exp $
 // treeview.aw - tree generator
 /*
 
@@ -94,7 +94,7 @@ class treeview extends class_base
 		$this->read_template("ftiens.tpl");
 		$this->arr = array();
 		
-		$this->clidlist = (is_array($args["config"]["clid"])) ? $args["config"]["clid"] : CL_PSEUDO; 
+		$this->clidlist = (is_array($args["config"]["clid"])) ? $args["config"]["clid"] : CL_MENU; 
 
 
 		// I need a way to display all kind of documents here, and not only
@@ -195,7 +195,7 @@ class treeview extends class_base
 			{
 				$sub = "";
 			};
-			$icon_url = ($row["class_id"] == CL_PSEUDO) ? "" : $this->ic->get_icon_url($row["class_id"],"");
+			$icon_url = ($row["class_id"] == CL_MENU) ? "" : $this->ic->get_icon_url($row["class_id"],"");
 			$url = $this->do_item_link(&$row);
 			$this->vars(array(
 				"name" => $row["name"],
@@ -489,8 +489,14 @@ class treeview extends class_base
 				$iconurl = $this->cfg["baseurl"] . "/automatweb/images/closed_folder.gif";
 			};
 
+			$name = $item["name"];
+			if ($item["id"] == $this->selected_item)
+			{
+				$name = "<strong>$name</strong>";
+			};
+
 			$this->vars(array(
-				"name" => $item["name"],
+				"name" => $name,
 				"id" => $item["id"],
 				"iconurl" => $iconurl,
 				"url" => $item["url"],
