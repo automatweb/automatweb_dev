@@ -6,6 +6,8 @@
 <a href="{VAR:content_link}">{VAR:LC_MSGBOARD_FORUM_CONTENT}</a>
 |
 <a href="{VAR:rates_link}">Hinded</a>
+|
+<a href="{VAR:notify_link}">E-posti aadressid</a>
 </td>
 </tr>
 </table>
