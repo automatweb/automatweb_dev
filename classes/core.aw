@@ -424,15 +424,11 @@ class core extends acl_base
 	// $msg - teate tekst
 	// $fatal - katkestada töö?
 	// $silent - logida viga, aga jätkata tööd
-	function raise_error($err_type,$msg, $fatal = false, $silent = false, $oid = 0)
+	function raise_error($err_type,$msg, $fatal = false, $silent = false, $oid = 0, $send_mail = true)
 	{
 		if(aw_ini_get('raise_error.no_email'))
 		{
 			$send_mail = false;	
-		}
-		else
-		{
-			$send_mail = true;
 		}
 
 		if (aw_global_get("__from_raise_error") > 0)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.74 2004/11/30 16:01:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.75 2005/03/01 20:44:26 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -3065,7 +3065,7 @@ class form_table extends form_base
 	{
 		if (!$GLOBALS["match_form"] || !$GLOBALS["match_entry"])
 		{
-			$this->raise_error(ERR_FG_TBL_NOSEARCHTBL, "Can't show output alias in form table, no matching form or entry set - outputs can only be shown if doing a search from a previous table", true);
+			$this->raise_error(ERR_FG_TBL_NOSEARCHTBL, "Can't show output alias in form table, no matching form or entry set - outputs can only be shown if doing a search from a previous table", true, false, 0, ($GLOBALS["tbl_sk"] != "" ? true : false));
 		}
 		$finst = get_instance("formgen/form");
 		return $finst->show(array(
