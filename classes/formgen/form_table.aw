@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.36 2003/02/11 15:34:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.37 2003/02/11 15:38:30 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -2748,6 +2748,10 @@ class form_table extends form_base
 					if (strpos($str, "<a href=") === false)
 					{
 						$str = $this->get_ftable_alias_url($str, $alias_data["target"], $dat, $col, $cc, $form_id, $textvalue);
+					}
+					else
+					{
+						$this->dequote(&$str);
 					}
 				}
 				else
