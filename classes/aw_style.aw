@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_style.aw,v 2.6 2002/06/10 15:50:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_style.aw,v 2.7 2004/06/04 11:24:33 kristo Exp $
 // AW Style Engine.
 class aw_style 
 {
@@ -28,6 +28,7 @@ class aw_style
 				$this->tags[$id] = $element["value"];
 			};
 		};
+
 	}
 
 	function parse_text($text)
