@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.6 2001/06/04 07:38:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.7 2001/06/05 13:26:46 duke Exp $
 // file.aw - Failide haldus
 global $orb_defs;
 $orb_defs["file"] = "xml";
@@ -11,6 +11,60 @@ class file extends aw_template
 	{
 		$this->tpl_init("file");
 		$this->db_init();
+	}
+
+	////
+	// !Aliaste parsimine
+	function parse_alias($args = array())
+	{
+		extract($args);
+		if (!is_array($this->filealiases))
+		{
+			$this->filealiases = $this->get_aliases(array(
+								"oid" => $oid,
+								"type" => CL_FILE,
+							));
+		};
+		$f = $this->filealiases[$matches[3] - 1];
+		$fi = $this->get_file_by_id($f["target"]);
+		if ($fi["showal"] == 1)
+		{
+			// n2itame kohe
+			// kontrollime koigepealt, kas headerid on ehk väljastatud juba.
+			// dokumendi preview vaatamisel ntx on.
+			if ($fi["type"] == "text/html")
+			{
+				if (!headers_sent())
+				{
+					header("Content-type: text/html");
+				};
+                		
+				preg_match("/<body (.*)>(.*)<\/body>/imsU",$fi["content"],$map);
+				// return only the body of the file
+                		$replacement = str_replace("\n","",$map[2]);
+			}
+			else
+			{
+				header("Content-type: ".$fi["type"]);
+				die($fi["content"]);
+			}
+		}
+		else
+		{
+			if ($fi["newwindow"])
+			{
+				$ss = "target=\"_new\"";
+			}
+			
+			$comment = $fi["comment"];
+			if ($comment == "")
+			{
+				$comment = $fi["name"];
+			}
+			
+			$replacement = "<a $ss class=\"sisutekst\" href='".$GLOBALS["baseurl"]."/files.aw/id=$gid/".urlencode($fi[name])."'>$comment</a>";
+		}
+		return $replacement;
 	}
 	
 	////
