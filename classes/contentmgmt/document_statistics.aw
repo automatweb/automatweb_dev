@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.6 2004/03/25 13:51:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.7 2004/03/31 10:42:02 duke Exp $
 // document_statistics.aw - Dokumentide vaatamise statistika 
 /*
 
@@ -226,6 +226,10 @@ class document_statistics extends class_base
 	{
 		// open and lock file
 		list($fp, $size) = $this->_open_and_lock_stat_file();
+		if ($this->error)
+		{
+			return false;
+		};
 
 		// get contents
 		$fc = explode("\n", fread($fp, $size));
@@ -270,8 +274,15 @@ class document_statistics extends class_base
 			@chmod($fld, 0777);
 		}
 		$fp = $fld."/".date("Y-m-d").".txt";
-		$ret = fopen($fp, "a+");
-		flock($ret, LOCK_EX);
+		$ret = @fopen($fp, "a+");
+		if ($ret)
+		{
+			flock($ret, LOCK_EX);
+		}
+		else
+		{
+			$this->error = true;
+		};
 		return array($ret, filesize($fp));
 	}
 
