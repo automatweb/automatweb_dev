@@ -1,8 +1,26 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.91 2004/08/31 11:00:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.92 2004/09/29 13:27:11 kristo Exp $
 error_reporting(E_ALL ^ E_NOTICE);
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
+
+if (get_magic_quotes_gpc() && !defined("GPC_HANDLER")) 
+{
+	
+	function stripslashes_deep($value)
+	{
+		$value = is_array($value) ? array_map('stripslashes_deep', $value) : stripslashes($value);
+		return $value;
+	}
+
+	$_POST = array_map('stripslashes_deep', $_POST);
+	$_GET = array_map('stripslashes_deep', $_GET);
+	$_COOKIE = array_map('stripslashes_deep', $_COOKIE);
+	define("GPC_HANDLER", 1);
+	extract($_POST);
+	extract($_GET);
+
+}
 
 $pi = "";
 
