@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.59 2004/10/15 14:15:33 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.60 2004/10/15 15:07:35 ahti Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -2088,19 +2088,22 @@ class crm_person extends class_base
 	{
 		$profile = array();
 		// first, we'll check, if the person has an active profile
-		$active_profile = $args["obj_inst"]->meta("active_profile");
+		$active_profile = $person->meta("active_profile");
 		if($all)
 		{
 			$profs = $person->connections_from(array(
 				"type" => "RELTYPE_PROFILE",
 			));
-			//if($count($
-			$prof_list = new object_list();
-			foreach($profs as $prof)
-			{
-				$prof_list->add($prof->prop("to"));
-			}
-			$profile = $prof_list->arr();
+			//if(count($profs) > 0)
+			//{
+				$prof_list = new object_list();
+				foreach($profs as $prof)
+				{
+					$prof_list->add($prof->prop("to"));
+				}
+				$profile = $prof_list->arr();
+				arr($profile);
+			//}
 		}
 		else
 		{
