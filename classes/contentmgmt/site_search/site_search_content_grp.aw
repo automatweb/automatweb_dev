@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.15 2004/12/14 08:38:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.16 2005/01/21 10:08:04 kristo Exp $
 // site_seaarch_content_grp.aw - Saidi sisu otsingu grupp 
 /*
 
@@ -49,6 +49,7 @@ class site_search_content_grp extends class_base
 		{
 			case "menus":
 				$arr["obj_inst"]->set_meta("section_include_submenus", $arr["request"]["include_submenus"]);
+				$arr["obj_inst"]->set_meta("notact", $arr["request"]["notact"]);
 				break;
 		}
 		return $retval;
@@ -63,6 +64,7 @@ class site_search_content_grp extends class_base
 		$prop = $arr["prop"];
 		$obj = $arr["obj_inst"];
 		$section_include_submenus = $obj->meta("section_include_submenus");
+		$notact = $obj->meta("notact");
 		// now I have to go through the process of setting up a generic table once again
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
@@ -85,6 +87,14 @@ class site_search_content_grp extends class_base
 		$t->define_field(array(
 			"name" => "check",
 			"caption" => "k.a. alammenüüd",
+			"talign" => "center",
+			"width" => 80,
+			"align" => "center",
+		));
+		
+		$t->define_field(array(
+			"name" => "check_na",
+			"caption" => "mitteaktiivsed",
 			"talign" => "center",
 			"width" => 80,
 			"align" => "center",
@@ -114,6 +124,11 @@ class site_search_content_grp extends class_base
 					"value" => $cid,
 					"checked" => $section_include_submenus[$cid],
 				)),
+				"check_na" => html::checkbox(array(
+					"name" => "notact[".$cid."]",
+					"value" => $cid,
+					"checked" => $notact[$cid],
+				)),
 			);
 			$t->define_data($el_arr);
 		}
@@ -141,6 +156,7 @@ class site_search_content_grp extends class_base
 		};
 
 		$sub = $o->meta("section_include_submenus");
+		$notact = $o->meta("notact");
 
 		// bloody hell .. this thing should differentiate menus and event searches ..
 		// and possibly other objects as well. HOW?
@@ -155,7 +171,7 @@ class site_search_content_grp extends class_base
 				$ot = new object_tree(array(
 					"class_id" => array(CL_MENU, CL_PROMO),
 					"parent" => $m,
-					"status" => STAT_ACTIVE,
+					"status" => ($notact[$m] ? array(STAT_ACTIVE,STAT_NOTACTIVE) : STAT_ACTIVE),
 					"sort_by" => "objects.parent",
 					"lang_id" => array(),
 					"site_id" => array(),
