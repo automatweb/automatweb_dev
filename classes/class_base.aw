@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.229 2004/03/02 16:39:51 duke Exp $
+// $Id: class_base.aw,v 2.230 2004/03/02 21:13:32 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -92,7 +92,6 @@ class class_base extends aw_template
 		{
 			$this->output_client = "xulclient";
 		};
-		$this->ds_name = "ds_local_sql";
 		$this->default_group = "general";
 		$this->features = array();
 
@@ -731,8 +730,6 @@ class class_base extends aw_template
 		{
 			die(sprintf("this class (%s) does not have any defined properties ",$orb_class));
 		};
-
-		$this->ds = get_instance("datasource/" . $this->ds_name);
 
 		$clid = $this->clid;
 		if (empty($clid) && method_exists($this->orb_class,"get_opt"))
@@ -3049,11 +3046,11 @@ class class_base extends aw_template
 
 			$propdata = array_merge($all_properties[$key],$val);
 
-			if (isset($first_subgrp[$propdata["group"]]))
+			if (is_array($first_subgrp) && !is_array($propdata["group"]) && $first_subgrp[$propdata["group"]])
 			{
 				$val["group"] = $first_subgrp[$propdata["group"]];
 			};
-
+			
 			// deal with properties belonging to multiple groups
 			$propgroups = is_array($val["group"]) ? $val["group"] : array($val["group"]);
 			$this->prop_by_group = array_merge($this->prop_by_group,array_flip($propgroups));
