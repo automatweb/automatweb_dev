@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.57 2004/04/01 12:56:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.58 2004/04/08 12:41:47 kristo Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -385,6 +385,7 @@ class aw_template extends core
 			$this->v2_arr = $arr;
 			$this->req_read_tpl("MAIN","MAIN","");
 		}
+		return true;
 	}
 
 	function req_read_tpl($fq_name,$cur_name,$parent_name)

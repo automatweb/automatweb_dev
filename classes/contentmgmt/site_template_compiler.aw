@@ -69,16 +69,22 @@ class site_template_compiler extends aw_template
 		);
 	}
 
-	function compile($path, $tpl)
+	function compile($path, $tpl, $mdefs = NULL, $no_cache = false)
 	{
 		enter_function("site_template_compiler::compile");
 
 		$this->tpl_init($path);
 
-		$this->read_template($tpl);
+		$this->no_use_ma_cache = $no_cache;
+
+		$success = $this->read_template($tpl,true);
+		if (!$success)
+		{
+			return false;
+		};
 		$this->tplhash = md5($path.$tpl);
 
-		$this->parse_template_parts();
+		$this->parse_template_parts($mdefs);
 		$this->compile_template_parts();
 		$code =  "<?php\n".$this->generate_code()."?>";
 
@@ -89,7 +95,7 @@ class site_template_compiler extends aw_template
 	////
 	// !this parses the template parts into data that the compiler uses
 	// so this is sort of a 3-step compilation process
-	function parse_template_parts()
+	function parse_template_parts($mdefs = NULL)
 	{
 		$this->menu_areas = array();
 
@@ -105,10 +111,13 @@ class site_template_compiler extends aw_template
 		}
 		$tpls = array_unique($_tpls);
 
-		$mdefs = aw_ini_get("menuedit.menu_defs");
-		if (aw_ini_get("menuedit.lang_defs") == 1)
+		if ($mdefs === NULL)
 		{
-			$mdefs = $mdefs[aw_global_get("lang_id")];
+			$mdefs = aw_ini_get("menuedit.menu_defs");
+			if (aw_ini_get("menuedit.lang_defs") == 1)
+			{
+				$mdefs = $mdefs[aw_global_get("lang_id")];
+			}
 		}
 		
 		foreach($tpls as $tpl)
@@ -380,7 +389,7 @@ class site_template_compiler extends aw_template
 		}
 
 
-		if ($this->req_level == 1 && aw_ini_get("template_compiler.no_menu_area_cache") != 1)
+		if ($this->req_level == 1 && aw_ini_get("template_compiler.no_menu_area_cache") != 1 && !$this->no_use_ma_cache)
 		{		
 			$this->ops[] = array(
 				"op" => OP_AREA_CACHE_CHECK,
@@ -613,7 +622,7 @@ class site_template_compiler extends aw_template
 			);
 		}
 
-		if ($this->req_level == 1  && aw_ini_get("template_compiler.no_menu_area_cache") != 1)
+		if ($this->req_level == 1  && aw_ini_get("template_compiler.no_menu_area_cache") != 1 && !$this->no_use_ma_cache)
 		{
 			$this->ops[] = array(
 				"op" => OP_AREA_CACHE_SET,
