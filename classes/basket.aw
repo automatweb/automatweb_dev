@@ -297,7 +297,7 @@ class basket extends aw_template
 		$t_price = 0;
 		foreach($basket["items"] as $iid => $icnt)
 		{
-			$t_price += $basket["prices"][$iid] * $icnt;
+			$t_price += str_replace(",",".",$basket["prices"][$iid]) * $icnt;
 		}
 		aw_global_set("cur_price_elements_sum", $t_price);
 

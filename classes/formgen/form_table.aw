@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.24 2003/01/07 15:27:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.25 2003/01/07 16:04:34 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -532,7 +532,7 @@ class form_table extends form_base
 									// calculate the total count of the item on this table row (we can have several baskets on one row)
 									$basket_count += $this->baskets[$bid]->get_item_count(array("item_id" => $dat["entry_id"]));
 								}
-								$this->pricel_sum += $dat["ev_".$element_id]*$basket_count;
+								$this->pricel_sum += str_replace(",",".", $dat["ev_".$element_id])*$basket_count;
 								if (((double)$dat["ev_".$element_id]*(double)$basket_count) > 0)
 								{
 									$str .= (double)$dat["ev_".$element_id]*(double)$basket_count;
