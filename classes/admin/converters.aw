@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.4 2003/05/12 16:57:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.5 2003/05/12 17:39:47 duke Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -244,7 +244,8 @@ class converters extends aw_template
 		// now, cycle over all the periods, and create an object for each one
 		// under .. what? 
 		$map = array();
-		$q = "SELECT * FROM periods";
+		$pid = $this->cfg["per_oid"];
+		$q = "SELECT * FROM periods WHERE oid = '$pid'";
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
