@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.50 2004/05/24 16:43:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.51 2004/06/11 11:43:24 duke Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -138,6 +138,9 @@
 
 	@reltype ADM_MESSAGE value=3 clid=CL_MESSAGE
 	@caption administratiivne teade 
+
+	@reltype TEMPLATE value=4 clid=CL_MESSAGE_TEMPLATE
+	@caption kirja template
 	
 */
 
@@ -1070,21 +1073,41 @@ class ml_list extends class_base
 
 	function callback_gen_write_mail($arr)
 	{
-		// haudi, haudi. now I have to create the form of mail writer into here somehow	
+		// haudi, haudi. now I have to embed the form of mail writer into here somehow	
 
 		// you see, there _is_ NO connection whatsoever
 		$writer = get_instance(CL_MESSAGE);
 		$writer->init_class_base();
-		$all_props = $writer->get_active_properties(array(
-                                "group" => "general",
+		$all_props = $writer->get_property_group(array(
+			"group" => "general",
 		));
+
+		$templates = $arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_TEMPLATE",
+		));
+
+		$filtered_props = array();
+		// insert a template selector, if there are any templates available
+		if (sizeof($templates) > 0)
+		{
+			$options = array(0 => " - vali - ");
+			foreach($templates as $template)
+			{
+				$options[$template->prop("to")] = $template->prop("to.name");
+			};
+			$filtered_props["template_selector"] = array(
+				"type" => "select",
+				"name" => "template_selector",
+				"options" => $options,
+				"caption" => "Vali template",
+			);
+		}
 
 		// narf, can I make this work better perhaps? I really do hate callback ..
 		// and I want to embed a new object. And I have to functionality in form
 		// of releditor. So why can't I use _that_ to write a new mail. Eh?
 
 		// would be nice to have some other and better method to do this
-		$filtered_props = array();
 		foreach($all_props as $id => $prop)
 		{
 			if ($id == "mfrom" || $id == "name" || $id == "html_mail" || $id == "message")
@@ -1113,11 +1136,21 @@ class ml_list extends class_base
 		$msg_data["parent"] = $arr["obj_inst"]->parent();
 		$msg_data["mto"] = $arr["obj_inst"]->id();
 
+		if (is_oid($msg_data["template_selector"]))
+		{
+			// use that template then!
+			// 1. load it
+			$o = new object($msg_data["template_selector"]);
+			$template = $o->prop("content");
+			$template = str_replace("#content#",$msg_data["message"],$template);
+			$msg_data["message"] = $template;
+		};
+
 		$writer = get_instance(CL_MESSAGE);
 		$writer->init_class_base();
-		$writer->id_only = true;
 		// it does it's own redirecting .. duke
 
+		$msg_data["return"] = "id";
 		// no, it fucking does not!
 		$message_id = $writer->submit($msg_data);
 
