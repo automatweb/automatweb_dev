@@ -25,6 +25,7 @@
             <group>strengths</group>
             <field>meta</field>
             <method>serialize</method>
+            <no_caption>1</no_caption>
             <table>objects</table>
             <caption>Tugevused</caption>
       </property>
@@ -34,6 +35,7 @@
             <group>weaknesses</group>
             <field>meta</field>
             <method>serialize</method>
+            <no_caption>1</no_caption>
             <table>objects</table>
             <caption>Norkused</caption>
       </property>
@@ -43,6 +45,7 @@
             <group>opportunities</group>
             <field>meta</field>
             <method>serialize</method>
+            <no_caption>1</no_caption>
             <table>objects</table>
             <caption>Voimalused</caption>
       </property>
@@ -52,8 +55,18 @@
             <group>threats</group>
             <field>meta</field>
             <method>serialize</method>
+            <no_caption>1</no_caption>
             <table>objects</table>
             <caption>Ohud</caption>
+      </property>
+      <property>
+            <name>view</name>
+            <type>text</type>
+            <group>view</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <no_caption>1</no_caption>
+            <table>objects</table>
       </property>
       <classinfo>
             <syslog_type>ST_SWOT</syslog_type>
@@ -75,6 +88,9 @@
             <threats>
                   <caption>Ohud</caption>
             </threats>
+            <view>
+                  <caption>&amp;Uuml;ldvaade</caption>
+            </view>
       </groupinfo>
 </properties>
 

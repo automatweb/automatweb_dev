@@ -1,0 +1,52 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>comment</name>
+            <type>textarea</type>
+            <cols>50</cols>
+            <rows>5</rows>
+            <field>comment</field>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Kommentaar</caption>
+      </property>
+      <property>
+            <name>status</name>
+            <type>status</type>
+            <field>status</field>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>folders</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <multiple>1</multiple>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kus kehtib</caption>
+      </property>
+      <property>
+            <name>clids</name>
+            <type>select</type>
+            <multiple>1</multiple>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Klassid millele kehtib</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_CLASSIFICATOR</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <groupinfo>
+            <general>
+                  <caption>Üldine</caption>
+            </general>
+      </groupinfo>
+</properties>
+

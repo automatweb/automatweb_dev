@@ -9,6 +9,7 @@
 @groupinfo weaknesses caption=N&otilde;rkused
 @groupinfo opportunities caption=V&otilde;imalused
 @groupinfo threats caption=Ohud
+@groupinfo view caption=&Uuml;ldvaade
 
 @default table=objects
 @default group=general
@@ -19,17 +20,19 @@
 @property swot_folder type=relpicker reltype=RELTYPE_FOLDER multiple=1 field=meta method=serialize
 @caption SWOT Objektide kataloogid
 
-@property strengths type=text group=strengths field=meta method=serialize
+@property strengths type=text group=strengths field=meta method=serialize no_caption=1
 @caption Tugevused
 
-@property weaknesses type=text group=weaknesses field=meta method=serialize
+@property weaknesses type=text group=weaknesses field=meta method=serialize no_caption=1
 @caption Norkused
 
-@property opportunities type=text group=opportunities field=meta method=serialize
+@property opportunities type=text group=opportunities field=meta method=serialize no_caption=1
 @caption Voimalused
 
-@property threats type=text group=threats field=meta method=serialize
+@property threats type=text group=threats field=meta method=serialize no_caption=1
 @caption Ohud
+
+@property view type=text group=view field=meta method=serialize no_caption=1
 
 */
 
@@ -116,6 +119,10 @@ class swot extends class_base
 			case "threats":
 				$prop['value'] = $this->_mk_table($arr['obj']['oid'], CL_SWOT_THREAT);
 				break;
+
+			case "view":
+				$prop['value'] = $this->show(array("oid" => $arr['obj']['oid']));
+				break;
 		}
 		return PROP_OK;
 	}
@@ -137,16 +144,17 @@ class swot extends class_base
 			));
 		}
 
-		$tb = new aw_table(array("layout" => "generic"));
+		$tb = new aw_table(array("layout" => "generic",'prefix' => "sw_".$clid));
+
 		$tb->define_field(array(
-			"caption" => "Jrk",
-			"name" => "jrk",
+			"caption" => $this->cfg["classes"][$clid]["name"],
+			"name" => "name",
 			"sortable" => 1
 		));
 
 		$tb->define_field(array(
-			"caption" => "Nimi",
-			"name" => "name",
+			"caption" => "Klassifikaatorid",
+			"name" => "clf",
 			"sortable" => 1
 		));
 
@@ -161,11 +169,28 @@ class swot extends class_base
 				'url' => $this->mk_my_orb("change", array("id" => $s_row["oid"]),$this->cfg["classes"][$clid]["file"]),
 				'caption' => $s_row['name']
 			));
+
+			
+			$s_row["clf"] = $this->db_fetch_field("SELECT name FROM objects WHERE oid = '".$s_row['meta']['clf']."'","name");
 			$tb->define_data($s_row);
 		}
 		$tb->set_default_sortby("jrk");
 		$tb->sort_by();
 		return $tb->draw();
+	}
+
+	function show($arr)
+	{
+		extract($arr);
+		$this->read_template("show.tpl");
+
+		$this->vars(array(
+			"strengths" => $this->_mk_table($oid, CL_SWOT_STRENGTH),
+			"weaknesses" => $this->_mk_table($oid, CL_SWOT_WEAKNESS),
+			"threats" => $this->_mk_table($oid, CL_SWOT_THREAT),
+			"opportunities" => $this->_mk_table($oid, CL_SWOT_OPPORTUNITY),
+		));
+		return $this->parse();
 	}
 }
 ?>
