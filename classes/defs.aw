@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.59 2002/11/25 12:59:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.60 2002/12/02 12:50:33 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
-	define(DEFS,1);
+	define("DEFS",1);
 
 	define("SERIALIZE_PHP",1);
 	define("SERIALIZE_XML",2);
@@ -12,19 +12,6 @@ if (!defined("DEFS"))
 	define("SERIALIZE_XMLRPC", 5);
 
 	classload("xml","php");
-
-	////
-	// !saadab 404 Not found vmt.
-	function bail_out()
-	{
-		header(LC_DEFS_HTTP);
-		print LC_DEFS_NOT_FOUND;
-		print LC_DEFS_NOT_FOUND2;
-		print LC_DEFS_REG_URL . aw_global_get("REQUEST_URI") . LC_DEFS_NOT_IN_SERVER;
-		print "<hr>\n<address>" . aw_global_get("SERVER_SIGNATURE") . "</address>\n</body></html>";
-		exit;
-		lc_load("definition");
-	}
 
 	////
 	// !Replaces links inside text
