@@ -505,7 +505,10 @@ class sql_filter extends aw_template
 			if ($f["op"]=="LIKE" || $f["op"]=="=" ||$f["op"]=="!=")
 			{
 				$fakeval="'$fakeval'";
-			};
+			} else 
+			{
+				$fakeval+=0;
+			}
 			//echo($f["op"]." -- ".$fakeval);
 			$w.=" ".(!$w? $fake?"kus":"WHERE" : $fakejoin )." $faketable.$fakefield ".strtr($f["op"],$xlate)." $fakeval";
 		};
