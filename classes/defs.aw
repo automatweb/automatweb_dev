@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.167 2004/12/10 10:12:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.168 2004/12/10 10:49:20 ahti Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -456,7 +456,6 @@ if (!defined("DEFS"))
 
 	function arr($arr,$die=false,$see_html=false)
 	{
-		dbg::process_backtrace(debug_backtrace());
 		echo '<hr/>';
 		$tmp = '';
 		ob_start();
