@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.68 2003/09/24 12:49:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.69 2003/10/06 10:23:20 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -7,13 +7,6 @@
 	@default table=objects
 
 	@classinfo trans=1
-
-	//added by martin
-	@property multi_doc_style type=checkbox value=1 ch_value=1 group=advanced field=meta method=serialize
-	@caption Kasuta jumpboxi
-
-	property no_cmenu type=checkbox ch_value=1 group=advanced table=menu
-	caption Eemalda rippmen&uuml;&uuml;st
 
 	@property alias type=textbox group=general
 	@caption Alias
@@ -96,7 +89,7 @@
 	@property docs_per_period type=textbox size=3 group=relations table=objects field=meta method=serialize
 	@caption Dokumente perioodist
 
-	@property seealso type=callback callback=callback_get_seealso group=relations store=no
+	@property seealso type=table group=relations store=no
 	@caption Menüüd, mille all see menüü on "vaata lisaks" menüü
 	@comment Nende menüüde lisamine ja eemaldamine käib läbi seostehalduri
 
@@ -187,7 +180,6 @@
 	@groupinfo ip caption="IP Aadressid"
 
 	@tableinfo menu index=id master_table=objects master_index=oid
-	@classinfo trans_id=TR_MENU
 */
 
 define("RELTYPE_PICTURES_MENU",1);
@@ -211,10 +203,11 @@ class menu extends class_base
 		));
 	}
 	
-	function get_property($args)
+	function get_property($arr)
 	{
-		$data = &$args["prop"];
+		$data = &$arr["prop"];
 		$retval = PROP_OK;
+		$ob = $arr["obj_inst"];
 		switch($data["name"])
 		{
 			case "type":
@@ -224,17 +217,17 @@ class menu extends class_base
 
 			case "tpl_edit":
 				$tplmgr = get_instance("templatemgr");
-				$data["options"] = $tplmgr->get_template_list(array("type" => 0, "menu" => $args["obj"]["oid"]));
+				$data["options"] = $tplmgr->get_template_list(array("type" => 0, "menu" => $ob->id()));
 				break;
 			
 			case "tpl_lead":
 				$tplmgr = get_instance("templatemgr");
-				$data["options"] = $tplmgr->get_template_list(array("type" => 1, "menu" => $args["obj"]["oid"]));
+				$data["options"] = $tplmgr->get_template_list(array("type" => 1, "menu" => $ob->id()));
 				break;
 			
 			case "tpl_view":
 				$tplmgr = get_instance("templatemgr");
-				$data["options"] = $tplmgr->get_template_list(array("type" => 2, "menu" => $args["obj"]["oid"]));
+				$data["options"] = $tplmgr->get_template_list(array("type" => 2, "menu" => $ob->id()));
 				break;
 
 			case "tpl_dir":
@@ -244,7 +237,7 @@ class menu extends class_base
 			
 			case "sections":
 				$data["options"] = $this->get_menu_list(false,true);
-				$data["selected"] = $this->get_brothers($args["obj"]["oid"]);
+				$data["selected"] = $this->get_brothers($ob->id());
 				break;
 
 			case "sss":
@@ -259,21 +252,26 @@ class menu extends class_base
 			case "grkeywords":
 				$kwds = get_instance("keywords");
 				$data["options"] = $kwds->get_keyword_picker();
-				$data["selected"] = $this->get_menu_keywords($args["obj"]["oid"]);
+				$data["selected"] = $this->get_menu_keywords($ob->id());
 				break;
 
 			case "icon":
 				$ext = $this->cfg['ext'];
-				if ($args['objdata']['icon_id'])
+				if ($ob->prop("icon_id"))
 				{
-					$icon = "<img src='$baseurl" . "/automatweb/icon.$ext" . "?id=" . $args['objdata']['icon_id'] . "'>";
+					$icon = html::img(array(
+						"url" => "${baseurl}/automatweb/icon.${ext}?id=".$ob->id(),
+					));
 				}
 				else
 				{
 					$m = get_instance("menuedit");
-					if ($args["objdata"]["admin_feature"])
+					if ($ob->prop("admin_feature"))
 					{
-						$icon = "<img src='" . $m->get_feature_icon_url($args['objdata']['admin_feature']) . "'>";
+						classload("icons");
+						$icon = html::img(array(
+							"url" => icons::get_feature_icon_url($ob->prop("admin_feature")),
+						));
 					}
 					else
 					{
@@ -284,12 +282,12 @@ class menu extends class_base
 				break;
 
 			case "img_act":
-				$data["value"] = $args["obj"]["meta"]["img_act_url"] != "" ? "<img src='".$args[obj][meta][img_act_url]."'>" : "";
+				$data["value"] = $ob->meta("img_act_url") != "" ? "<img src='".$ob->meta("img_act_url")."'>" : "";
 				break;
 
 			case "admin_feature":
 				// only show the program selector, if the menu has the correct type
-				if ($args["objdata"]["type"] == MN_ADMIN1)
+				if ($ob->prop("type") == MN_ADMIN1)
 				{
 					$data["options"] = $this->get_feature_sel();				
 				}
@@ -316,8 +314,35 @@ class menu extends class_base
 				);
 				break;
 
+			case "seealso":
+				$t = &$arr["prop"]["obj_inst"];
+				$t->define_field(array(
+					"name" => "id",
+					"caption" => "OID",
+					"type" => "int",
+					"talign" => "center",
+				));
+
+				$t->define_field(array(
+					"name" => "name",
+					"caption" => "Nimi",
+				));
+
+				$see_also_conns = $arr["obj_inst"]->connections_from(array(
+					"type" => RELTYPE_SEEALSO,
+				));
+
+				foreach($see_also_conns as $conn)
+				{
+					$t->define_data(array(
+						"id" => $conn->prop("to"),
+						"name" => $conn->prop("to.name"),
+					));
+				};
+				break;
+
 			case "ip":
-				$t = &$args["prop"]["obj_inst"];
+				$t = &$arr["prop"]["obj_inst"];
 				$t->define_field(array(
 					"name" => "ip_name",
 					"caption" => "IP Nimi",
@@ -343,12 +368,10 @@ class menu extends class_base
 					"align" => "center"
 				));
 				
-				$o = obj($args["obj"]["oid"]);
+				$allow = $ob->meta("ip_allow");
+				$deny = $ob->meta("ip_deny");
 
-				$allow = $o->meta("ip_allow");
-				$deny = $o->meta("ip_deny");
-
-				$conn = $o->connections_from(array(
+				$conn = $ob->connections_from(array(
 					"type" => RELTYPE_IP
 				));
 				foreach($conn as $c)
@@ -445,9 +468,9 @@ class menu extends class_base
 		return $nodes;
 	}
 
-	function callback_get_export_options($args = array())
+	function callback_get_export_options($arr = array())
 	{
-		$submenus = $this->get_menu_list(false,false,$args["obj"]["oid"]);
+		$submenus = $this->get_menu_list(false,false,$arr["obj_inst"]->id());
 		$nodes = array();
 		$tmp = array(
 			"type" => "select",
@@ -483,32 +506,9 @@ class menu extends class_base
 		return $nodes;
 	}
 
-	function callback_get_seealso($args = array())
+	function callback_get_pmethod_options($arr = array())
 	{
-		load_vcl("table");
-		$t = new aw_table(array(
-			"layout" => "generic",
-			"xml_def" => "menu/seealso_table",
-		));
-		$mlist = $this->get_aliases_for($args["obj"]["oid"],-1,"","","",RELTYPE_SEEALSO);
-		foreach($mlist as $item)
-		{
-			$t->define_data($item);
-		};
-		
-		$prop = $args["prop"];
-		$nodes = array();
-		$nodes[$prop["name"]] = array(
-			"type" => $prop["type"],
-			"caption" => $prop["caption"],
-			"value" => $t->draw(),
-		);
-		return $nodes;
-	}
-
-	function callback_get_pmethod_options($args = array())
-	{
-		if ($args["objdata"]["type"] != MN_PMETHOD)
+		if ($arr["obj_inst"]->prop("type") != MN_PMETHOD)
 		{
 			return PROP_IGNORE;
 		};
@@ -520,7 +520,7 @@ class menu extends class_base
 			"name" => "pclass",
 			"caption" => "Vali meetod",
 			"options" => array(),
-			"selected" => $args["obj"]["meta"]["pclass"],
+			"selected" => $arr["obj_inst"]->meta("pclass"),
 			"options" => $this->get_pmethod_sel(),
 		);
 		
@@ -529,7 +529,7 @@ class menu extends class_base
 			"name" => "pm_url_admin",
 			"value" => 1,
 			"caption" => "Meetod viitab adminni",
-			"ch_value" => $args["obj"]["meta"]["pm_url_admin"],
+			"ch_value" => $arr["obj_inst"]->meta("pm_url_admin"),
 		);
 		
 		$nodes[] = array(
@@ -537,24 +537,25 @@ class menu extends class_base
 			"name" => "pm_url_menus",
 			"value" => 1,
 			"caption" => "Meetodi väljundi kuvamisel näidatakse menüüsid",
-			"ch_value" => $args["obj"]["meta"]["pm_url_menus"],
+			"ch_value" => $arr["obj_inst"]->meta("pm_url_menus"),
 		);
 		
 		return $nodes;
 	}
 			
-	function set_property($args = array())
+	function set_property($arr = array())
 	{	
-		$data = &$args["prop"];
+		$data = &$arr["prop"];
+		$ob = $arr["obj_inst"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
 			// grkeywords just triggers an action, nothing should
 			// be saved into the objects table
 			case "grkeywords":
-				if (!empty($args["obj"]["oid"]))
+				if (!$ob->id())
 				{
-					$this->save_menu_keywords($data["value"],$args["obj"]["oid"]);
+					$this->save_menu_keywords($data["value"],$ob->id());
 				};
 				$retval = PROP_IGNORE;
 				break;
@@ -564,58 +565,55 @@ class menu extends class_base
 				break;
 
 			case "sections":
-				if (!empty($args["obj"]["oid"]))
+				if (!$ob->id())
 				{
 					$this->update_brothers(array(
-						"id" => $args["obj"]["oid"],
-						"menu" => array_merge($args["obj"],$args["objdata"]),
-						"sections" => $args["form_data"]["sections"],
+						"id" => $ob->id(),
+						"sections" => $arr["form_data"]["sections"],
 					));
 				};
 				break;
 
 			case "type":
-				$form_data = &$args["form_data"];
+				$form_data = &$arr["form_data"];
 				if ($form_data["type"] != MN_ADMIN1)
 				{
-					$form_data["admin_feature"] = 0;
+					$ob->set_prop("admin_feature",0);
 				};
 				if ($form_data["type"] != MN_PMETHOD)
 				{
-					$metadata = &$args["metadata"];
-					$metadata["pclass"] = "";
-					$metadata["pm_url_admin"] = "";
-					$metadata["pm_url_menus"] = "";
+					$ob->set_meta("pclass","");
+					$ob->set_meta("pm_url_admin","");
+					$ob->set_meta("pm_url_menus","");
 				};
 				break;
 
 			case "menu_images":
-				// XXX: this should be rewritten to upload one image at a time
+				// XXX: this should be rewritten to use relation manager
 				if (!$this->menu_images_done)
 				{
 					$args["metadata"]["menu_images"] = $this->update_menu_images(array(
-						"id" => $args["obj"]["oid"],
-						"img_del" => $args["form_data"]["img_del"],
-						"img_ord" => $args["form_data"]["img_ord"],
-						"meta" => $args["obj"]["meta"],
+						"id" => $ob->id(),
+						"img_del" => $arr["form_data"]["img_del"],
+						"img_ord" => $arr["form_data"]["img_ord"],
+						"meta" => $arr["obj"]["meta"],
 					));
 					$this->menu_images_done = 1;
 				};
 				break;
 
 			case "pmethod_properties":
-				$form_data = &$args["form_data"];
-				$metadata = &$args["metadata"];
-				$metadata["pclass"] = $form_data["pclass"];
-				$metadata["pm_url_menus"] = $form_data["pm_url_menus"];
-				$metadata["pm_url_admin"] = $form_data["pm_url_admin"];
+				$form_data = &$arr["form_data"];
+				$ob->set_meta("pclass",$form_data["pclass"]);
+				$ob->set_meta("pm_url_menus",$form_data["pm_url_menus"]);
+				$ob->set_meta("pm_url_admin",$form_data["pm_url_admin"]);
 				break;
 
 			case "ip":
 				$allow = array();
 				$deny = array();
 
-				$ar = new aw_array($args["form_data"]["ip"]);
+				$ar = new aw_array($arr["form_data"]["ip"]);
 				foreach($ar->get() as $ipid => $ipv)
 				{
 					if ($ipv == IP_ALLOWED)
@@ -628,9 +626,8 @@ class menu extends class_base
 						$deny[$ipid] = 1;
 					}
 				}
-				$metadata = &$args["metadata"];
-				$metadata["ip_allow"] = $allow;
-				$metadata["ip_deny"] = $deny;
+				$arr["obj_inst"]->set_meta("ip_allow",$allow);
+				$arr["obj_inst"]->set_meta("ip_deny",$deny);
 				break;				
 		};
 		return $retval;
@@ -760,35 +757,33 @@ class menu extends class_base
 	}
 
 
-	function callback_post_save($args = array())
+	function callback_post_save($arr)
 	{
-		$this->updmenus[] = (int)$args["id"];
+		$this->updmenus[] = (int)$arr["obj_inst"]->id();
 		$m = get_instance("menuedit");
 		$m->invalidate_menu_cache($this->updmenus);
 	}
 
-	function callback_pre_save($args)
+	function callback_pre_save($arr)
 	{
-		$form_data = &$args["form_data"];
+		$form_data = &$arr["form_data"];
 		if ($form_data["do_export"])
 		{
-			$this->export_menus(array(
-				"id" => $form_data["id"],
+			$menu_export = get_instance("export/menu_export");
+			$menu_export->export_menus(array(
+				"id" => $arr["obj_inst"]->id(),
 				"ex_menus" => $form_data["ex_menus"],
 				"allactive" => $form_data["allactive"],
 				"ex_icons" => $form_data["ex_icons"],
 			));
 		};
-		/*
-		if (!$args["object"]["type"])
-		{
-			$args["objdata"]["type"] = MN_CONTENT;
-		}
-		*/
 	}
 
 	function callback_gen_path($args = array())
 	{
+		// XXX: rewrite it to use some kind of global list of container objects
+		// because, all this does it to put a clickable link on the YAH to see
+		// the contents of the container
 		if ($args["id"])
 		{
 			$obj = $this->get_object($args["id"]);
@@ -804,105 +799,6 @@ class menu extends class_base
 			$title = "Lisa";
 		};
 		return $title;
-	}
-
-	////
-	// !exports menu $id and all below it
-	// if $ret_data is true, then the export arr is returned, not output
-	function export_menus($arr)
-	{
-		extract($arr);
-
-		if (!is_array($ex_menus))
-		{
-			return;
-		}
-
-		$i = get_instance("icons");
-		$this->m = get_instance("menuedit");
-		$this->m->get_feature_icon_url(0);	// warm up the cache
-
-		$menus = array("0" => $id);
-
-		// ok. now we gotta figure out which menus the user wants to export. 
-		// he can select just the lower menus and assume that the upper onec come along with them.
-		// biyaatch 
-
-		// kay. so we cache the menus
-		$this->m->db_listall();
-		while ($row = $this->m->db_next())
-		{
-			$this->mar[$row["oid"]] = $row;
-		}
-
-		// this keeps all the menus that will be selected
-		$sels = array();	
-		// now we start going through the selected menus
-		reset($ex_menus);
-		while (list(,$eid) = each($ex_menus))
-		{
-			// and for each we run to the top of the hierarchy and also select all menus 
-			// so we will gather a list of all the menus we need. groovy.
-			
-			$sels[$eid] = $eid;
-			while ($eid != $id && $eid > 0)
-			{
-				$sels[$eid] = $eid;
-				$eid = $this->mar[$eid]["parent"];
-			}
-		}
-
-		// so now we have a complete list of menus to fetch.
-		// so fetchemall
-		reset($sels);
-		while (list(,$eid) = each($sels))
-		{
-			$row = $this->mar[$eid];
-			if ($allactive)
-			{
-				$row["status"] = 2;
-			}
-			flush();
-			$this->append_exp_arr($row,&$menus,$ex_icons,$i);
-		}
-
-		if ($ret_data)
-		{
-			return $menus;
-		}
-
-		/// now all menus are in the array with all the other stuff, 
-		// so now export it.
-		header("Content-type: x-automatweb/menu-export");
-		header("Content-Disposition: filename=awmenus.txt");
-		echo serialize($menus);
-		die();
-	}
-
-	function append_exp_arr($db, $menus,$ex_icons,&$i)
-	{
-		$ret = array();
-		$ret["db"] = $db;
-		if ($ex_icons)
-		{
-			$icon = -1;
-			// admin_feature icon takes precedence over menu's icon. so include just that.
-			if ($db["admin_feature"] > 0)
-			{
-				$icon = $this->m->pr_icons[$db["admin_feature"]]["id"];
-				if ($icon)
-				{
-					$icon = $i->get($icon);
-				}
-			}
-			else
-			if ($db["icon_id"] > 0)
-			{
-				$icon = $i->get($db["icon_id"]);
-			}
-			$ret["icon"] = $icon;
-		}
-		$menus[$db["parent"]][] = $ret;
 	}
 
 	////
