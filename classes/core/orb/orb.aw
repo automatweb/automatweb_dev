@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.2 2005/03/24 10:02:23 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.3 2005/03/30 22:00:57 duke Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -59,7 +59,13 @@ class orb extends aw_template
 		{
 			$this->raise_error(ERR_ORB_NOCLASS,E_ORB_CLASS_UNDEF,true,$silent);
 		};
-		
+	
+		// damn, I'm smart
+		if (is_oid($class))
+		{
+			//$class = "class_visualizer";
+		};
+
 		// laeme selle klassi siis
 		$orb_defs = $this->try_load_class($class);
 
@@ -116,6 +122,8 @@ class orb extends aw_template
 			$found = false;
 		};
 
+
+
 		foreach($cl2load as $clname)
 		{
 			// not yet found
@@ -123,7 +131,7 @@ class orb extends aw_template
 			{
 				// only load if definitions for this class are
 				// not yet loaded (master class)
-				if (empty($_orb_defs[$clname]))
+				if (empty($_orb_defs[$clname]) && $clname != "aw_template")
 				{
 					$_orb_defs = $this->try_load_class($clname);
 				};
@@ -161,7 +169,8 @@ class orb extends aw_template
 
 		if (isset($vars["reforb"]) && $vars["reforb"] == 1)
 		{
-			$t = new $class;
+			//$t = new $class;
+			$t = $this->orb_class;
 			$fname = $fun["function"];
 			if (!method_exists($t,$fname))
 			{
@@ -175,7 +184,7 @@ class orb extends aw_template
 			else
 			{
 				// loome õige objekti
-				$t = new $class;
+				//$t = new $class;
 
 				$t->set_opt("orb_class",&$this->orb_class);
 
@@ -274,14 +283,14 @@ class orb extends aw_template
 			if (method_exists($t, "set_opt"))
 			{
 				$t->set_opt("orb_class",&$this->orb_class);
-				//$t->set_opt("orb_class",&$this->orb_class);
 			}
 			$fname = $fun["function"];
 			if (!method_exists($t,$fname))
 			{
 				$this->raise_error(ERR_ORB_MNOTFOUND,sprintf(E_ORB_METHOD_NOT_FOUND,$action,$class),$fatal,$silent);
 			};
-		
+	
+			// this is perhaps the single most important place in the code ;)
 			$content = $t->$fname($params);
 		}
 		$this->data = $content;
@@ -508,7 +517,7 @@ class orb extends aw_template
 		extract($args);
 		if ((!aw_global_get("uid")) && (!isset($this->orb_defs[$class][$action]["nologin"])))
 		{
-			$auth = get_instance(CL_AUTH_CONFIG);
+			$auth = get_instance("core/users/auth/auth_config");
 			print $auth->show_login();
 			// dat sucks
 			exit;
@@ -529,13 +538,26 @@ class orb extends aw_template
 
 	function try_load_class($class)
 	{
-		if (!file_exists($this->cfg["basedir"]."/xml/orb/$class.xml"))
+		if (is_oid($class))
 		{
-			$this->raise_error(ERR_ORB_NOTFOUND,sprintf(E_ORB_CLASS_NOT_FOUND,$class),true,$this->silent);
+			$ret = array();
+			$ret[$class]["_extends"][0] = "class_base";
+			$ret[$class]["___folder"] = "designedclass";
+			$cl = new object($class);
+			$gen_class_name = strtolower(preg_replace("/\s/","_",$cl->name()));
+			$GLOBALS["gen_class_name"] = $gen_class_name;
+			//print "loading numeric class";
 		}
+		else
+		{
+			if (!file_exists($this->cfg["basedir"]."/xml/orb/$class.xml"))
+			{
+				$this->raise_error(ERR_ORB_NOTFOUND,sprintf(E_ORB_CLASS_NOT_FOUND,$class),true,$this->silent);
+			}
 
-		$ret = $this->load_xml_orb_def($class);
-		
+			$ret = $this->load_xml_orb_def($class);
+		};
+
 		if (isset($ret[$class]["_extends"]))
 		{
 			$extname = $ret[$class]["_extends"][0];
@@ -552,10 +574,11 @@ class orb extends aw_template
 			$folder = $ret[$class]["___folder"]."/";
 		}
 
+
 		// laeme selle klassi siis
 		classload($folder.$class);
 
-		if (!class_exists($class))
+		if (empty($gen_class_name) && !class_exists($class))
 		{
 			// try without folder for compatibility
 			classload($class);
@@ -568,9 +591,13 @@ class orb extends aw_template
 
 		if (!isset($this->orb_class))
 		{
+			//print "trying to get instance<br>";
 			$this->orb_class = get_instance($folder.$class);
+			unset($GLOBALS["gen_class_name"]);
+			//print "got";
+			//var_dump($this->orb_class);
 		};
-		
+
 		// FIXME: we should cache that def instead of parsing xml every time
 		return $ret;
 
@@ -654,8 +681,12 @@ class orb extends aw_template
 		$orb_defs = $this->try_load_class($class);
 
 		// check params
-		$params = $this->check_method_params($orb_defs, $params, $class, $action);
-		$arr["params"] = $params;
+		if (!isset($method) || (isset($method) && ($method ==
+"local")))
+		{
+			$params = $this->check_method_params($orb_defs, $params, $class, $action);
+			$arr["params"] = $params;
+		}
 
 		$this->do_orb_acl_checks($orb_defs[$class][$action], $params);
 
@@ -672,7 +703,7 @@ class orb extends aw_template
 			list($arr["remote_host"], $arr["remote_session"]) = $this->get_remote_session($arr);
 
 			// load rpc handler
-			$inst = get_instance("core/orb/".$method);
+			$inst = get_instance("orb/".$method);
 			if (!is_object($inst))
 			{
 				$this->raise_error(ERR_ORB_RPC_NO_HANDLER,"Could not load request handler for request method '".$method."'", true,$this->silent);
@@ -819,7 +850,7 @@ class orb extends aw_template
 		ob_start();
 
 		// load rpc handler
-		$inst = get_instance("core/orb/".$method);
+		$inst = get_instance("orb/".$method);
 		if (!is_object($inst))
 		{
 			$this->raise_error(ERR_ORB_RPC_NO_HANDLER,"orb::handle_rpc_call - Could not load request handler for request method '".$method."'", true,false);
@@ -922,7 +953,7 @@ class orb extends aw_template
 	function get_methods_by_flag($args = array())
 	{
 		extract($args);
-		$orbclass = get_instance("core/orb/orb");
+		$orbclass = get_instance("orb");
 		$orb_defs = $orbclass->load_xml_orb_def($id);
 		$methods = array();
 		foreach(safe_array($orb_defs[$id]) as $key => $val)
@@ -940,7 +971,7 @@ class orb extends aw_template
 	function get_public_method($args = array())
 	{
 		extract($args);
-		$orbclass = get_instance("core/orb/orb");
+		$orbclass = get_instance("orb");
 		$orb_defs = $orbclass->load_xml_orb_def($id);
 //		echo "id = $id , action = $action , orb_defs = <pre>", var_dump($orb_defs),"</pre> <br />";
 		if ($action == "default")
@@ -982,7 +1013,7 @@ class orb extends aw_template
 		};
 		if ($id == "doc")
 		{
-			$cl = get_instance(CL_DOCUMENT);
+			$cl = get_instance("document");
 			if ($cl->get_opt("cnt_documents") == 1)
 			{
 				$meth["values"]["id"] = $cl->get_opt("shown_document");
@@ -1025,7 +1056,7 @@ class orb extends aw_template
 
 	function check_class_access($class)
 	{
-		$atc = get_instance(CL_ADD_TREE_CONF);
+		$atc = get_instance("admin/add_tree_conf");
 		$conf = $atc->get_current_conf();
 		if (!$conf)
 		{
