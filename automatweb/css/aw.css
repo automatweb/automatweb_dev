@@ -1247,7 +1247,7 @@ border-right: 1px solid #BDBDBD;
 .aw04kalenderkast02today {
 margin: 0px;
 padding: 2px;
-background-color: #EFEFEF;
+background-color: #CFCFCF;
 border-top: 1px solid #FFFFFF;
 border-bottom: 1px solid #BDBDBD;
 border-left: 1px solid #FFFFFF;
@@ -1358,6 +1358,36 @@ text-decoration:underline;
 
 .awmenuedittableframeclass {
 background-color: #E2E2DB
+}
+
+
+.chaintab2selcontent {
+height: 24px;
+font-family: Arial, sans-serif;
+font-size: 12px;
+font-weight: bold;
+color:#FFFFFF;
+vertical-align: top;
+}
+
+.chaintab2selcontent a {
+color: #FFFFFF;
+text-decoration:none;
+}
+
+.chaintab2selcontent a:link {
+color: #FFFFFF;
+text-decoration:none;
+}
+
+.chaintab2selcontent a:hover {
+color: #FFFFFF;
+text-decoration:underline;
+}
+
+.chaintab2selcontent a:visited {
+color: #FFFFFF;
+text-decoration:none;
 }
 
 /********** RATE **********/
