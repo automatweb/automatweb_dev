@@ -437,6 +437,26 @@
 			<function name="submit_calendar"/>
 		</action>
 
+		<action name="new_cal_rel">
+			<function name="edit_cal_rel">
+				<arguments/>
+			</function>
+		</action>
+		
+		<action name="edit_cal_rel">
+			<function name="edit_cal_rel">
+				<arguments>
+					<required name="id" type="int"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_cal_rel">
+			<function name="submit_cal_rel">
+				<arguments/>
+			</function>
+		</action>
+
 		<action name="submit_writer">
 			<function name="submit_writer">
 				<required name="id"/>
