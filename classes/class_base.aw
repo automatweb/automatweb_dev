@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.362 2005/02/09 16:41:56 duke Exp $
+// $Id: class_base.aw,v 2.363 2005/02/14 10:25:38 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2919,8 +2919,8 @@ class class_base extends aw_template
 		{
 			$controller_inst = get_instance(CL_CFGCONTROLLER);
 			$controllers = $this->get_all_controllers($arr["cfgform_id"]);
-			//$cf = get_instance("cfg/cfgform");
-			//$props = $cf->get_props_from_cfgform(array("id" => $arr["cfgform_id"]));
+			$cf = get_instance("cfg/cfgform");
+			$props = $cf->get_props_from_cfgform(array("id" => $arr["cfgform_id"]));
 		};
 		
 		$res = array();
@@ -2929,7 +2929,6 @@ class class_base extends aw_template
 		{
 			return $res;
 		};
-
 		foreach($props as $key => $tmp)
 		{
 			// skiping text controllers.. you can't save anything with them, aight? -- ahz
@@ -2968,7 +2967,6 @@ class class_base extends aw_template
 					$controller_id = $contr;
 					$prpdata["value"] = $val;
 					$controller_ret = $controller_inst->check_property($controller_id, $args["id"], &$prpdata, &$arr["request"], $val, &$this->obj_inst);
-	
 					if ($controller_ret != PROP_OK)
 					{
 						$ctrl_obj = new object($controller_id);
