@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.27 2005/01/25 10:58:36 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.28 2005/01/26 09:02:12 ahti Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -324,8 +324,8 @@ class event_search extends class_base
 					if ($arr["request"][$fname])
 					{
 						$fdata[$fname] = $arr["request"][$fname];
-					};
-				};
+					}
+				}
 				$o->set_meta("formconfig", $fdata);
 				break;
 
