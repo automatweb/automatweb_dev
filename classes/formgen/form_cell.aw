@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_cell.aw,v 1.4 2003/02/06 15:30:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_cell.aw,v 1.5 2003/02/13 14:38:44 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle formi sees kirjas
@@ -275,14 +275,19 @@ class form_cell extends form_base
 		$this->db_query("INSERT INTO form_elements (id) values($el)");
 		$this->form->add_element_cols($this->id,$el);
 
-		if (!is_array($props))
+		if (!is_array($props) && $based_on)
 		{
 			$props = $this->db_fetch_field("SELECT props FROM form_elements WHERE id = ".$based_on,"props");
 			$arr = aw_unserialize($props);
 		}
 		else
+		if (is_array($props))
 		{
 			$arr = $props;
+		}
+		else
+		{
+			$arr = array();
 		}
 		$arr["id"] = $el;
 		$arr["name"] = $name;
