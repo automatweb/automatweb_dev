@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/mlist.aw,v 2.9 2003/01/20 14:25:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/mlist.aw,v 2.10 2003/07/28 15:01:29 duke Exp $
 class mlist extends aw_template
 {
 	function mlist($id = 0)
@@ -48,7 +48,7 @@ class mlist extends aw_template
 		$tot_cnt = $this->db_fetch_field("SELECT count(*) as cnt FROM objects
 										 LEFT JOIN acl ON acl.oid = objects.oid
 										 LEFT JOIN ml_users ON ml_users.id = objects.oid
-										 WHERE objects.parent = $this->id AND objects.status != 0 AND objects.class_id = 17", "cnt");
+										 WHERE objects.parent = " . $this->id . " AND objects.status != 0 AND objects.class_id = 17", "cnt");
 		$num_pages = $tot_cnt / 200;
 
 		$p = "";
