@@ -9,10 +9,36 @@
             <caption>Pilt</caption>
       </property>
       <property>
+            <name>cur_width</name>
+            <type>text</type>
+            <group>
+                  <num_0>general</num_0>
+                  <num_1>resize</num_1>
+            </group>
+            <store>no</store>
+            <table>objects</table>
+            <field>cur_width</field>
+            <caption>Laius</caption>
+      </property>
+      <property>
+            <name>cur_height</name>
+            <type>text</type>
+            <group>
+                  <num_0>general</num_0>
+                  <num_1>resize</num_1>
+            </group>
+            <store>no</store>
+            <table>objects</table>
+            <field>cur_height</field>
+            <caption>Kõrgus</caption>
+      </property>
+      <property>
             <name>file_show</name>
             <type>text</type>
             <store>no</store>
+            <editonly>1</editonly>
             <group>general</group>
+            <table>objects</table>
             <field>file_show</field>
             <caption>Eelvaade </caption>
       </property>
@@ -30,6 +56,8 @@
             <type>text</type>
             <group>img2</group>
             <store>no</store>
+            <editonly>1</editonly>
+            <table>objects</table>
             <field>file_show2</field>
             <caption>Eelvaade</caption>
       </property>
@@ -39,6 +67,7 @@
             <ch_value>1</ch_value>
             <group>img2</group>
             <store>no</store>
+            <table>objects</table>
             <field>file2_del</field>
             <caption>Kustuta suur pilt</caption>
       </property>
@@ -96,20 +125,13 @@
             <caption>&amp;Auml;ra n&amp;auml;ita print-vaates</caption>
       </property>
       <property>
-            <name>cur_data</name>
-            <type>text</type>
-            <group>resize</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Praegune pilt</caption>
-      </property>
-      <property>
             <name>new_w</name>
             <type>textbox</type>
             <group>resize</group>
             <field>meta</field>
             <method>serialize</method>
             <size>6</size>
+            <table>objects</table>
             <caption>Uus laius</caption>
       </property>
       <property>
@@ -119,6 +141,7 @@
             <field>meta</field>
             <method>serialize</method>
             <size>6</size>
+            <table>objects</table>
             <caption>Uus k&amp;otilde;rgus</caption>
       </property>
       <property>
@@ -128,11 +151,12 @@
             <method>serialize</method>
             <group>resize</group>
             <value>Muuda</value>
+            <store>no</store>
+            <table>objects</table>
       </property>
       <classinfo>
             <trans>1</trans>
             <syslog_type>ST_IMAGE</syslog_type>
-            <trans_id>TR_IMAGE</trans_id>
       </classinfo>
       <groupinfo>
             <img2>

@@ -10,12 +10,13 @@
             <caption>Keel</caption>
       </property>
       <property>
-            <name>catalog</name>
+            <name>subclass</name>
             <type>select</type>
-            <field>subclass</field>
+            <newonly>1</newonly>
             <table>objects</table>
             <group>general</group>
-            <caption>Kataloog</caption>
+            <field>subclass</field>
+            <caption>Klass</caption>
       </property>
       <property>
             <name>info</name>

@@ -2,7 +2,7 @@
 <properties>
       <property>
             <name>uidl</name>
-            <type>textbox</type>
+            <type>hidden</type>
             <table>messages</table>
             <group>general</group>
             <field>uidl</field>
@@ -33,7 +33,7 @@
             <table>objects</table>
             <group>general</group>
             <field>name</field>
-            <caption>Subjekt</caption>
+            <caption>Teema</caption>
       </property>
       <property>
             <name>message</name>
@@ -46,14 +46,33 @@
             <caption>Sisu</caption>
       </property>
       <property>
+            <name>buttonbar</name>
+            <type>text</type>
+            <store>no</store>
+            <table>messages</table>
+            <group>general</group>
+            <field>buttonbar</field>
+            <caption>Tegevused</caption>
+      </property>
+      <property>
             <name>send</name>
             <type>submit</type>
-            <value>Saada</value>
             <store>no</store>
+            <parent>buttonbar</parent>
             <table>messages</table>
             <group>general</group>
             <field>send</field>
             <caption>Saada</caption>
+      </property>
+      <property>
+            <name>savedraft</name>
+            <type>submit</type>
+            <store>no</store>
+            <parent>buttonbar</parent>
+            <table>messages</table>
+            <group>general</group>
+            <field>savedraft</field>
+            <caption>Salvesta</caption>
       </property>
       <property>
             <name>aliasmgr</name>
@@ -64,6 +83,11 @@
             <field>aliasmgr</field>
             <caption>Aliased</caption>
       </property>
+      <groupinfo>
+            <general>
+                  <submit>no</submit>
+            </general>
+      </groupinfo>
       <tableinfo>
             <messages>
                   <index>id</index>
