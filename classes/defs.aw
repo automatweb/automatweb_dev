@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.32 2001/12/05 23:04:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.33 2001/12/18 00:14:11 kristo Exp $
 // defs.aw - common functions (C) StruktuurMeedia 2000,2001
 if (!defined("DEFS"))
 {
@@ -456,37 +456,11 @@ function get_ip()
 
 ////
 // !Kas argument on e-maili aadress?
-// FIXME: should be rewritten. There are easier ways to do this with preg_match function
-function is_email ($Address = "") 
+// Courtesy of martin@linuxator.com ;)
+function is_email ($address = "") 
 {
-	if(empty($Address)) 
-	{
-		// tühi aadress
-  	return false;
-	}
-
-	if(!ereg("@",$Address)) 
-	{
-		// @-i pole
-		return false;
-	}
-
-	list($User,$Host) = split("@",$Address);
-
-	if ( (empty($User)) or (empty($Address)) ) 
-	{
-		// kuju pole user@host
-		return false;
-	}
-       
-	if( (!(strpos($User," ")===false) or !(strpos($Host," ")===false)) )
-	{
-		// whitespace sees
-		return false;
-	}
-
-	return true;
-};
+	return preg_match('/([a-z0-9]((\.|_)?[a-z0-9]+)+@([a-z0-9]+(\.|-)?)+[a-z0-9]\.[a-z]{2,})/i',$address);
+}
 
 function is_admin()
 {
