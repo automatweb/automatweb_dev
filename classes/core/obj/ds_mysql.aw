@@ -925,6 +925,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					{
 						continue;
 					}
+					$this->quote(&$v);
 					if ($this->properties[$key]["store"] == "connect")
 					{
 						$str[] = " aliases_".$key.".target = '$v' ";
@@ -947,6 +948,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 			else
 			{
+				$this->quote(&$val);
 				if ($this->properties[$key]["store"] == "connect")
 				{
 					$sql[] = " aliases_".$key.".target = '$val' ";
