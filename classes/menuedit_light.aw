@@ -181,7 +181,19 @@ class menuedit_light extends aw_template
 						$id = $id;
 					};
 
-					$this->vars(array(
+					$url = "/" . $id;
+
+					if ($v["class_id"] == CL_PSEUDO)
+					{
+						$_v_l = $this->db_fetch_field("SELECT link FROM menu WHERE id = $v[oid] ", "link");
+						if ($_v_l != "")
+						{
+							$url = $_v_l;
+						}
+                                        }
+
+			 		$this->vars(array(
+						"url" => $url,
 						"oid" => $id,
 						"name" => $v["name"],
 						"spacer" => $spacer,
