@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.12 2003/11/04 13:16:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.13 2003/11/04 13:49:34 duke Exp $
 // imap.aw - IMAP login 
 /*
 
@@ -231,7 +231,7 @@ class imap extends class_base
 					$req_msgs[$rkey] = array(
 						"from" => $message->from,
 						"froma" => $addrinf["addr"],
-						"fromn" => quoted_printable_decode($addrinf["name"]),
+						"fromn" => $this->MIME_decode($addrinf["name"]),
 						"subject" => $this->_parse_subj($message->subject),
 						"date" => $message->date,
 						"tstamp" => strtotime($message->date),
@@ -320,9 +320,9 @@ class imap extends class_base
 		// XXX: check whether the message was valid
 
 		$msgdata = array(
-			"from" => $hdrinfo->fromaddress,
-			"reply_to" => $hdrinfo->reply_toaddress,
-			"to" => $hdrinfo->toaddress,
+			"from" => $this->MIME_decode($hdrinfo->fromaddress),
+			"reply_to" => $this->MIME_decode($hdrinfo->reply_toaddress),
+			"to" => $this->MIME_decode($hdrinfo->toaddress),
 			"subject" => $this->_parse_subj($hdrinfo->subject),
 			"date" => $hdrinfo->MailDate,
 		);
@@ -429,7 +429,7 @@ class imap extends class_base
 
 	function _parse_subj($str)
 	{
-		$elements=imap_mime_header_decode($str);
+		$elements = imap_mime_header_decode($str);
 		for($i=0; $i<count($elements); $i++)
 		{
 			$rv .= $elements[$i]->text;
@@ -532,7 +532,7 @@ class imap extends class_base
 		if (preg_match("/(.*)<(.*)>/",$arg,$m))
 		{
 			$rv = array(
-				"name" => $m[1],
+				"name" => str_replace("\"","",$m[1]),
 				"addr" => $m[2],
 			);
 		}
@@ -544,6 +544,86 @@ class imap extends class_base
 			);
 		}
 		return $rv;
+	}
+	
+	////
+	// !Dekodeerib MIME encodingus teate
+	function MIME_decode($string)
+	{
+		$pos = strpos($string,'=?');
+		if ($pos === false)
+		{
+			return $string;
+		}
+		else
+		{
+			#quoted_printable_decode($string);
+		};
+
+		// take out any spaces between multiple encoded words
+		$string = preg_replace('|\?=\s=\?|', '?==?', $string);
+
+		$preceding = substr($string, 0, $pos); // save any preceding text
+
+		$search = substr($string, $pos + 2, 75); // the mime header spec says this is the longest a single encoded word can be
+		$d1 = strpos($search, '?');
+		if (!is_int($d1)) 
+		{
+			return $string;
+		}
+
+
+		$charset = substr($string, $pos + 2, $d1);
+		$search = substr($search, $d1 + 1);
+
+		$d2 = strpos($search, '?');
+		if (!is_int($d2)) 
+		{
+			return $string;
+		}
+
+		$encoding = substr($search, 0, $d2);
+		$search = substr($search, $d2+1);
+
+		$end = strpos($search, '?=');
+		if (!is_int($end)) 
+		{
+			return $string;
+		}
+
+		$encoded_text = substr($search, 0, $end);
+		$rest = substr($string, (strlen($preceding . $charset . $encoding . $encoded_text) + 6));
+
+		switch ($encoding) 
+		{
+			case 'Q':
+			case 'q':
+				$encoded_text = str_replace('_', '%20', $encoded_text);
+				$encoded_text = str_replace('=', '%', $encoded_text);
+				$decoded = urldecode($encoded_text);
+
+				if (strtolower($charset) == 'windows-1251') 
+				{
+					$decoded = convert_cyr_string($decoded, 'w', 'k');
+				}
+				break;
+
+			case 'B':
+			case 'b':
+				$decoded = urldecode(base64_decode($encoded_text));
+
+				if (strtolower($charset) == 'windows-1251') 
+				{
+					$decoded = convert_cyr_string($decoded, 'w', 'k');
+				}
+				break;
+
+			default:
+				$decoded = '=?' . $charset . '?' . $encoding . '?' . $encoded_text . '?=';
+				break;
+			}
+		$retval = $preceding . $decoded . $this->MIME_decode($rest);
+		return quoted_printable_decode($retval);
 	}
 
 };
