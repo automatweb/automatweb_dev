@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.19 2003/01/08 12:52:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.20 2003/01/08 14:51:12 kristo Exp $
 
 define("ST_TABLE",0);
 define("ST_CELL",1);
@@ -624,24 +624,24 @@ class style extends aw_template
 			$str = ".style_".$id." { \n".$fsstr." \n} \n";
 		}
 
-		if ($st['visited'])
-		{
-			$vst = $this->mk_cache($st['visited']);
-			$visstr = $this->_get_css($vst);
-			if ($visstr != "")
-			{
-				$str .= ".style_".$id.":visited { \n".$visstr." \n} \n";
-			}
-		}
-
 		if ($a_id)
 		{
-			$st = $this->mk_cache($a_id);
+			$sta = $this->mk_cache($a_id);
 			
-			$fsstr = $this->_get_css($st);
+			$fsstr = $this->_get_css($sta);
 			if ($fsstr != "")
 			{
-				$str = $str."\n.style_".$id." a { \n".$fsstr." \n} \n";
+				$str .= "\n.style_".$id." a { \n".$fsstr." \n} \n";
+
+				if ($sta['visited'])
+				{
+					$vst = $this->mk_cache($sta['visited']);
+					$visstr = $this->_get_css($vst);
+					if ($visstr != "")
+					{
+						$str .= ".style_".$id." a:visited { \n".$visstr." \n} \n";
+					}
+				}
 			}
 		}
 		return $str;
