@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.25 2004/04/26 10:47:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.26 2004/04/27 11:21:26 kristo Exp $
 // treeview.aw - tree generator
 /*
 
@@ -502,7 +502,6 @@ class treeview extends class_base
 				// spacer is only used for purely aesthetic reasons - to make
 				// source of the page look better
 				"spacer" => str_repeat("    ",$this->level),
-				"target" => $item["target"]
 			));
 
 
