@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.14 2002/12/18 13:15:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.15 2003/01/09 17:21:36 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -54,8 +54,8 @@ class htmlclient extends aw_template
 		if ($args["no_caption"])
 		{
 			$this->put_content($args);
-		};
-
+		}
+		else
 		if ($args["type"])
 		{
 			$this->put_line($args);
@@ -235,6 +235,7 @@ class htmlclient extends aw_template
 
 			case "checkbox":
 				$retval = html::checkbox(array(
+					'label' => $arr['label'],
 					'name' => $arr['name'],
 					'value' => $arr['ch_value'],
 					'checked' => ($arr['value'] == $arr['ch_value'])
