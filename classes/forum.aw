@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.37 2002/01/17 21:27:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.38 2002/01/24 04:32:56 duke Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 global $orb_defs;
@@ -78,7 +78,7 @@ class forum extends aw_template
 			"topics_link" => $this->mk_my_orb("topics",array("id" => $id)),
 			"new_rate_link" => $this->mk_my_orb("add_rate",array("id" => $id)),
 			"rateline" => $c,
-			"change_link" => $this->mk_my_orb("change",array("id" => $id)),
+			"change_link" => $this->mk_my_orb("configure",array("id" => $id)),
 			"rates_link" => $this->mk_my_orb("change_rates",array("id" => $id)),
 			"reforb" => $this->mk_reforb("submit_rates",array("id" => $id)),
 		));
@@ -203,7 +203,7 @@ class forum extends aw_template
 
 		$this->vars(array(
 			"table" => $t->draw(),
-			"change_link" => $this->mk_my_orb("change",array("id" => $id)),
+			"change_link" => $this->mk_my_orb("configure",array("id" => $id)),
 			"rates_link" => $this->mk_my_orb("change_rates",array("id" => $id)),
 			"reforb" => $this->mk_reforb("submit_notify_list",array("id" => $id)),
 		));
@@ -243,7 +243,7 @@ class forum extends aw_template
 
 	////
 	// !Displays the form for configuring the form
-	function change($arr)
+	function configure($arr)
 	{
 		extract($arr);
 		$this->read_template("add_forum.tpl");
@@ -255,11 +255,11 @@ class forum extends aw_template
 			// we redirect the user to the topic list, becase the Big Pointy
 			// Haired boss wants it that way. And besides, this is temporary
 			// (yeah, right) anyway, until we figure out something better.
-			if (not($new) && ($pobj["class_id"] == CL_PSEUDO))
-			{
-				header("Location: " . $this->mk_my_orb("topics",array("id" => $id)));
-				exit;
-			};
+			//if (not($new) && ($pobj["class_id"] == CL_PSEUDO))
+			//{
+			//	header("Location: " . $this->mk_my_orb("topics",array("id" => $id)));
+			//	exit;
+			//};
 			
 			$title = "Lisa foorum";
 		
@@ -359,7 +359,7 @@ class forum extends aw_template
 		}
 		else
 		{
-			$retval = $this->mk_my_orb("change", array("id" => $id,"parent" => $parent));
+			$retval = $this->mk_my_orb("configure", array("id" => $id,"parent" => $parent));
 		};
 		return $retval;
 	}
@@ -386,10 +386,10 @@ class forum extends aw_template
 
 		$tabs = array(
 			"newtopic" => $this->mk_my_orb("add_topic",array("id" => $id,"_alias" => "forum","section" => $this->section)),
-			"configure" => $this->mk_my_orb("change",array("id" => $id,"_alias" => "forum","section" => $this->section)),
+			"configure" => $this->mk_my_orb("configure",array("id" => $id,"_alias" => "forum","section" => $this->section)),
 			"addcomment" => $this->mk_my_orb("addcomment",array("board" => $board,"_alias" => "forum","section" => $this->section)),
 			"forum_link" => $this->mk_my_orb("topics",array("id" => $id,"_alias" => "forum", "section" => $this->section)),
-			"props_link" => $this->mk_my_orb("change",array("id" => $id)),
+			"props_link" => $this->mk_my_orb("configure",array("id" => $id)),
 			"mark_all_read" => $this->mk_my_orb("mark_all_read",array("id" => $id,"_alias" => "forum", "section" => $this->section)),
 			"search" => $this->mk_my_orb("search",array("id" => $id,"_alias" => "forum","section" => $this->section,)),
 			"search_link" => $this->mk_my_orb("search",array("id" => $id,"_alias" => "forum","section" => $this->section,)),
@@ -456,7 +456,7 @@ class forum extends aw_template
 			$this->vars(array(
 				"newtopic_link" => $this->mk_my_orb("add_topic",array("id" => $id,"_alias" => $alias,"section" => $this->section)),
 				"forum_link" => $this->mk_my_orb("topics",array("id" => $id,"_alias" => $alias, "section" => $this->section)),
-				"props_link" => $this->mk_my_orb("change",array("id" => $id)),
+				"props_link" => $this->mk_my_orb("configure",array("id" => $id)),
 				"mark_all_read" => $this->mk_my_orb("mark_all_read",array("id" => $id,"_alias" => $alias, "section" => $this->section)),
 				"search_forum_link" => $this->mk_my_orb("search",array("id" => $id,"_alias" => $alias,"section" => $this->section,)),
 				"search_link" => $this->mk_my_orb("search",array("id" => $id,"_alias" => $alias,"section" => $this->section,)),
@@ -510,7 +510,7 @@ class forum extends aw_template
 		#$parent = $this->get_object($object["parent"]);
 		// kui kaasa antakse section argument, siis peaks kontrollima
 		// kas see ikka kuulub selle foorumi juurde
-		$text = $this->mk_orb("change",array("id" => $id));
+		$text = $this->mk_orb("configure",array("id" => $id));
 		$this->mk_path($object["parent"],"<a href='$text'>$object[name]</a> / Lisa teema");
 		$this->forum_id = $id;
 		$tabs = $this->tabs(array("search","flat","details"));
@@ -564,7 +564,7 @@ class forum extends aw_template
 		$meta = $this->get_object_metadata(array("oid" => $forum_obj["oid"]));
 		$board_meta = $this->get_object_metadata(array("oid" => $board));
 		setcookie("aw_mb_last",serialize($aw_mb_last),time()+24*3600*1000);
-		$flink = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("change",array("id" => $forum_obj["oid"])),$forum_obj["name"]);
+		$flink = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("configure",array("id" => $forum_obj["oid"])),$forum_obj["name"]);
 		$this->mk_path($forum_obj["parent"],$flink . " / $board_obj[name]");
 		$this->_query_comments(array("board" => $board));
 		$this->comm_count = 0;
@@ -749,7 +749,7 @@ class forum extends aw_template
 			array("oid" => $forum_obj["oid"],
 		));
 		$board_meta = $this->get_object_metadata(array("oid" => $board));
-		$flink = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("change",array("id" => $forum_obj["oid"])),$forum_obj["name"]);
+		$flink = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("configure",array("id" => $forum_obj["oid"])),$forum_obj["name"]);
 		$this->mk_path($forum_obj["parent"],$flink . " / $board_obj[name]");
 		$this->forum_id = $forum_obj["oid"];
 		$this->board = $board;
@@ -975,7 +975,7 @@ class forum extends aw_template
 		$row = $this->db_next();
 		$board_obj = $this->get_object($row["board_id"]);
 		$forum_obj = $this->get_object($board_obj["parent"]);
-		$flink = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("change",array("id" => $forum_obj["oid"])),$forum_obj["name"]);
+		$flink = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("configure",array("id" => $forum_obj["oid"])),$forum_obj["name"]);
 		$this->mk_links(array("board" => $board_obj["oid"],"id" => $board_obj["parent"]));
 		$this->board = $board_obj["oid"];
 		$this->mk_path($forum_obj["parent"],$flink . " / $board_obj[name]");
@@ -1307,7 +1307,7 @@ class forum extends aw_template
 		$o = $this->get_object($board);
 		$board_obj = $this->get_obj_meta($board);
 		$forum_obj = $this->get_obj_meta($board_obj["parent"]);
-		$flink = $this->mk_my_orb("change",array("id" => $board));
+		$flink = $this->mk_my_orb("configure",array("id" => $board));
 		$this->mk_path($o["parent"], "<a href='$flink'>$o[name]</a> / Otsi");
 		$this->mk_links(array(
 			"id" => $id,
@@ -1559,6 +1559,7 @@ class forum extends aw_template
 
 		$this->vars(array(
 			"del_topic" => $this->mk_my_orb("delete_topic", array("board" => $args["oid"],"forum_id" => $args["parent"])),
+			"change_topic" => $this->mk_my_orb("change_topic", array("board" => $args["oid"],"forum_id" => $args["parent"])),
 			"id" => $args["oid"],
 		));
 
