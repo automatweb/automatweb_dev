@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.51 2002/09/24 18:52:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.52 2002/10/04 12:20:25 kristo Exp $
 // users.aw - User Management
 classload("users_user","config","form","objects","file");
 
@@ -1962,7 +1962,7 @@ class users extends users_user
 			{
 				// this also marks the session_filled_forms array
 				$f = get_instance("form");
-				$f->process_entry(array("id" => $id, "values" => $GLOBALS["HTTP_GET_VARS"], "entry_id" => $ex_entry));
+				$f->process_entry(array("id" => $id, "values" => $GLOBALS["HTTP_GET_VARS"], "entry_id" => $entry_id));
 			}
 		}
 
