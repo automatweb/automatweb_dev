@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.19 2002/07/17 15:42:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.20 2002/09/26 16:12:38 kristo Exp $
 // tegeleb ORB requestide handlimisega
 classload("aw_template","defs","xml_support");
 lc_load("automatweb");
@@ -227,9 +227,12 @@ class orb extends aw_template
 		$basedir = $this->cfg["basedir"];
 		// klassi definitsioon sisse
 
-		$xmldef = $this->get_file(array(
-			"file" => "$basedir/xml/orb/$class.xml"
-		));
+		if (not($xmldef))
+		{
+			$xmldef = $this->get_file(array(
+				"file" => "$basedir/xml/orb/$class.xml"
+			));
+		};
 
 		// loome parseri
 		$parser = xml_parser_create();
@@ -416,6 +419,220 @@ class orb extends aw_template
 		// FIXME: we should cache that def instead of parsing xml every time
 		return $this->load_xml_orb_def($class);
 
+	}
+}
+
+class new_orb extends orb
+{
+	function new_orb()
+	{
+		$this->init("");
+	}
+
+	////
+	// !executes an orb function call and returns the data that the function returns
+	// params:
+	// required:
+	//	action - orb action to exec
+	// optional
+	//  class - class for the action - default the current class
+	//  params - params to the action 
+	//  method - the method to use when doing the function call - possible values: local / xmlrpc / (soap - not implemented yet) 
+	//  server - if doing a rpc call, the server where to connect
+	//  login_obj - if we must log in to a serverm the id of the CL_AW_LOGIN that will be used to login to the server
+	//              if this is set, then server will be ignored
+	function do_method_call($arr)
+	{
+		extract($arr);
+
+		$this->fatal = true;
+		$this->silent = false;
+
+		if (!isset($class))
+		{
+			$this->raise_error(ERR_ORB_NOCLASS,E_ORB_CLASS_UNDEF,$this->fatal,$this->silent);
+			bail_out();
+		};
+
+		if (!isset($action))
+		{
+			$this->raise_error(ERR_ORB_AUNDEF,E_ORB_ACTION_UNDEF,$this->fatal,$this->silent);
+			bail_out();
+		};
+
+		// get orb defs for the class
+		$orb_defs = $this->try_load_class($class);
+
+			// check parameters
+		$params = $this->check_method_params($orb_defs, $params, $class, $action);
+		$arr["params"] = $params;
+
+		// do the call
+		if (!$method || $method == "local")
+		{
+			// local call
+			$data = $this->do_local_call($orb_defs[$class][$action]["function"], $class, $params);
+		}
+		else
+		{
+			// log in if necessary or get the existing session for rpc call
+			list($arr["remote_host"], $arr["remote_session"]) = $this->get_remote_session($arr);
+
+			// load rpc handler
+			$inst = get_instance("orb/".$method);
+			if (!is_object($inst))
+			{
+				$this->raise_error(ERR_ORB_RPC_NO_HANDLER,"Could not load request handler for request method '".$method."'", $this->fatal,$this->silent);
+				bail_out();
+			}
+			// send the remote request and read the result
+			$data = $inst->do_request($arr);
+		}
+
+		return $data;
+	}
+
+	////
+	// !checks the parameters $params for action $action, defined in $defs and returns the matching parameters
+	function check_method_params($orb_defs, $params, $class, $action)
+	{
+		$ret = array();
+		if (isset($orb_defs[$class][$action]["all_args"]) && $orb_defs[$class][$action]["all_args"] == true)
+		{
+			return $params;
+		}
+		else
+		{
+			// required arguments
+			$required = $orb_defs[$class][$action]["required"];
+			$optional = $orb_defs[$class][$action]["optional"];
+			$defined = $orb_defs[$class][$action]["define"];
+			foreach($required as $key => $val)
+			{
+				if (!isset($params[$key]))
+				{
+					$this->raise_error(ERR_ORB_CPARM,sprintf(E_ORB_CLASS_PARM,$key,$action,$class),$this->fatal,$this->silent);
+					bail_out();
+				};
+
+				$vartype = $orb_defs[$class][$action]["types"][$key];
+				if ($vartype == "int")
+				{
+					if (((string)($params[$key])) != ((string)((int)$params[$key])))
+					{
+						$this->raise_error(ERR_ORB_NINT,sprintf(E_ORB_NOT_INTEGER,$key),$this->fatal,$this->silent);
+						bail_out();
+					};
+				};
+				$ret[$key] = $params[$key];
+			};
+ 
+			//optional arguments
+			foreach($optional as $key => $val)
+			{
+				$vartype = $orb_defs[$class][$action]["types"][$key];
+				if (isset($params[$key]))
+				{
+					if ( ($vartype == "int") && ($params[$key] != sprintf("%d",$vars[$key])) )
+					{
+						$this->raise_error(ERR_ORB_NINT,sprintf(E_ORB_NOT_INTEGER,$key),$this->fatal,$this->silent);
+						bail_out();
+					};
+					$ret[$key] = $params[$key];
+				}
+				else
+				if (isset($orb_defs[$class][$action]["defaults"][$key]))
+				{
+					$ret[$key] = $orb_defs[$class][$action]["defaults"][$key];
+				}
+			};
+			if (is_array($defined))
+			{
+				$ret += $defined;
+			}
+		}
+		return $ret;
+	}
+
+	function do_local_call($func, $class, $params)
+	{
+		$inst = get_instance($class);
+		if (is_object($inst))
+		{
+			if (method_exists($inst, $func))
+			{
+				return $inst->$func($params);
+			}
+			else
+			{
+				$this->raise_error(ERR_ORB_MNOTFOUND,sprintf(E_ORB_METHOD_NOT_FOUND,$func,$class),$this->fatal,$this->silent);
+				bail_out();
+			}
+		}
+		else
+		{
+			$this->raise_error(ERR_ORB_NOCLASS,E_ORB_CLASS_UNDEF,$this->fatal,$this->silent);
+			bail_out();
+		}
+	}
+
+	////
+	// !returns the session id for the rpc call 
+	// params:
+	// either login_obj or server must be specified
+	// login_obj - the oid of the CL_AW_LOGIN object - the server is read from that
+	// server - the server to use (no login)
+	function get_remote_session($arr)
+	{
+		extract($arr);
+		if ($login_obj)
+		{
+			$login = get_instance("remote_login");
+			list($server, $cookie) = $login->login_from_obj($login_obj);
+			$this->rpc_session_cookies[$server] = $cookie;
+		}
+		else
+		{
+			if ($server == "")
+			{
+				$this->raise_error(ERR_ORB_RPC_NO_SERVER, "No server defined for ORB RPC call!", true, false);
+			}
+
+			$login = get_instance("remote_login");
+			$this->rpc_session_cookies[$server] = $login->handshake(array(
+				"silent" => true,
+				"host" => $server
+			));
+		}
+		return array($server,$this->rpc_session_cookies[$server]);
+	}
+
+	////
+	// !handles a rpc call - ie decodes the request and calls the right function, encodes returned data and returns the encoded data
+	// params:
+	//	method - request method, currently only xmlrpc is supported
+	function handle_rpc_call($arr)
+	{
+		extract($arr);
+
+		// load rpc handler
+		$inst = get_instance("orb/".$method);
+		if (!is_object($inst))
+		{
+			$this->raise_error(ERR_ORB_RPC_NO_HANDLER,"orb::handle_rpc_call - Could not load request handler for request method '".$method."'", true,false);
+			bail_out();
+		}
+
+		// decode request
+		$request = $inst->decode_request();
+
+		// do the method calling thing
+		$orb_defs = $this->try_load_class($request["class"]);
+		$params = $this->check_method_params($orb_defs, $request["params"], $request["class"], $request["action"]);
+
+		$ret = $this->do_local_call($orb_defs[$request["class"]][$request["action"]]["function"], $request["class"], $request["params"]);
+
+		return $inst->encode_return_data($ret);
 	}
 }
 ?>
