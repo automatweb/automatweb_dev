@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.49 2005/03/21 15:26:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.50 2005/03/21 21:48:59 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -998,53 +998,6 @@ class mrp_workspace extends class_base
 		$this_object =& $arr["obj_inst"];
 		$projects_folder = $this_object->prop ("projects_folder");
 
-		$url_projects_all = $this->mk_my_orb("change", array(
-			"id" => $this_object->id (),
-			"group" => "grp_projects",
-			"mrp_projects_show" => "all",
-		), "mrp_workspace");
-		$url_projects_planned = $this->mk_my_orb("change", array(
-			"id" => $this_object->id (),
-			"group" => "grp_projects",
-			"mrp_projects_show" => "planned",
-		), "mrp_workspace");
-		$url_projects_in_work = $this->mk_my_orb("change", array(
-			"id" => $this_object->id (),
-			"group" => "grp_projects",
-			"mrp_projects_show" => "inwork",
-		), "mrp_workspace");
-		$url_projects_overdue = $this->mk_my_orb("change", array(
-			"id" => $this_object->id (),
-			"group" => "grp_projects",
-			"mrp_projects_show" => "overdue",
-		), "mrp_workspace");
-		$url_projects_planned_overdue = $this->mk_my_orb("change", array(
-			"id" => $this_object->id (),
-			"group" => "grp_projects",
-			"mrp_projects_show" => "planned_overdue",
-		), "mrp_workspace");
-		$url_projects_new = $this->mk_my_orb("change", array(
-			"id" => $this_object->id (),
-			"group" => "grp_projects",
-			"mrp_projects_show" => "new",
-		), "mrp_workspace");
-		$url_projects_done = $this->mk_my_orb("change", array(
-			"id" => $this_object->id (),
-			"group" => "grp_projects",
-			"mrp_projects_show" => "done",
-		), "mrp_workspace");
-		$url_projects_aborted = $this->mk_my_orb("change", array(
-			"id" => $this_object->id (),
-			"group" => "grp_projects",
-			"mrp_projects_show" => "aborted",
-		), "mrp_workspace");
-		$url_subcontract_jobs = $this->mk_my_orb("change", array(
-			"id" => $this_object->id (),
-			"group" => "grp_projects",
-			"mrp_projects_show" => "subcontracts",
-		), "mrp_workspace");
-
-///!!! appdeitida need count listid table listide j2rgi
 		$list = new object_list (array (
 			"class_id" => CL_MRP_CASE,
 			"state" => MRP_STATUS_PLANNED,
@@ -1108,55 +1061,61 @@ class mrp_workspace extends class_base
 		$tree->add_item (0, array (
 			"name" => t("Kõik plaanisolevad") . "(" . $count_projects_planned . ")",
 			"id" => "planned",
-			"url" => $url_projects_planned,
+			"url" => aw_url_change_var ("mrp_projects_show", "planned"),
 		));
 
 		$tree->add_item (0, array (
 			"name" => t("Hetkel töösolevad") . "(" . $count_projects_in_work . ")",
 			"id" => "inwork",
-			"url" => $url_projects_in_work,
+			"url" => aw_url_change_var ("mrp_projects_show", "inwork"),
 		));
 
 		$tree->add_item (0, array (
 			"name" => t("Planeeritud üle tähtaja") . "(" . $count_projects_planned_overdue . ")",
 			"id" => "planned_overdue",
-			"url" => $url_projects_planned_overdue,
+			"url" => aw_url_change_var ("mrp_projects_show", "planned_overdue"),
 		));
 
 		$tree->add_item (0, array (
 			"name" => t("Üle tähtaja") . "(" . $count_projects_overdue . ")",
 			"id" => "overdue",
-			"url" => $url_projects_overdue,
+			"url" => aw_url_change_var ("mrp_projects_show", "overdue"),
 		));
 
 		$tree->add_item (0, array (
 			"name" => t("Uued") . "(" . $count_projects_new . ")",
 			"id" => "new",
-			"url" => $url_projects_new,
-		));
-
-		$tree->add_item (0, array (
-			"name" => "Valmis" . "(" . $count_projects_done . ")",
-			"id" => "done",
-			"url" => $url_projects_done,
+			"url" => aw_url_change_var ("mrp_projects_show", "new"),
 		));
 
 		$tree->add_item (0, array (
 			"name" => t("Katkestatud") . "(" . $count_projects_aborted . ")",
 			"id" => "aborted",
-			"url" => $url_projects_aborted,
+			"url" => aw_url_change_var ("mrp_projects_show", "aborted"),
+		));
+
+		$tree->add_item (0, array (
+			"name" => t("Valmis") . "(" . $count_projects_done . ")",
+			"id" => "done",
+			"url" => aw_url_change_var ("mrp_projects_show", "done"),
+		));
+
+		$tree->add_item (0, array (
+			"name" => t("Arhiveeritud"),
+			"id" => "archived",
+			"url" => aw_url_change_var ("mrp_projects_show", "archived"),
 		));
 
 		$tree->add_item (0, array (
 			"name" => t("Kõik projektid"),
 			"id" => "all",
-			"url" => $url_projects_all,
+			"url" => aw_url_change_var ("mrp_projects_show", "all"),
 		));
 
 		$tree->add_item (0, array (
 			"name" => t("Allhanket&ouml;&ouml;d"),
 			"id" => "subcontracts",
-			"url" => $url_subcontract_jobs,
+			"url" => aw_url_change_var ("mrp_projects_show", "subcontracts"),
 		));
 
 		$active_node = empty ($arr["request"]["mrp_projects_show"]) ? "planned" : $arr["request"]["mrp_projects_show"];
@@ -1168,6 +1127,7 @@ class mrp_workspace extends class_base
 	{
 		$table =& $arr["prop"]["vcl_inst"];
 		$this_object =& $arr["obj_inst"];
+
 		if (isset($arr["list_request"]))
 		{
 			$list_request = $arr["list_request"];
@@ -1190,24 +1150,6 @@ class mrp_workspace extends class_base
 			"sortable" => 1,
 			"numeric" => 1
 		));
-		$table->define_field (array (
-			"name" => "starttime",
-			"caption" => t("Materjalide saabumine"),
-			"chgbgcolor" => "bgcolour_overdue",
-			"sortable" => 1,
-		));
-		$table->define_field(array(
-			"name" => "planned_date",
-			"caption" => "Planeeritud valmimine",
-			"chgbgcolor" => "bgcolour_overdue",
-			"sortable" => 1,
-		));
-		$table->define_field(array(
-			"name" => "due_date",
-			"caption" => t("Tähtaeg"),
-			"chgbgcolor" => "bgcolour_overdue",
-			"sortable" => 1,
-		));
 
 		switch ($list_request)
 		{
@@ -1217,6 +1159,24 @@ class mrp_workspace extends class_base
 			case "new":
 			case "planned":
 			case "aborted":
+				$table->define_field (array (
+					"name" => "starttime",
+			"caption" => t("Materjalide saabumine"),
+					"chgbgcolor" => "bgcolour_overdue",
+					"sortable" => 1,
+				));
+				$table->define_field(array(
+					"name" => "planned_date",
+					"caption" => "Planeeritud valmimine",
+					"chgbgcolor" => "bgcolour_overdue",
+					"sortable" => 1,
+				));
+				$table->define_field(array(
+					"name" => "due_date",
+			"caption" => t("Tähtaeg"),
+					"chgbgcolor" => "bgcolour_overdue",
+					"sortable" => 1,
+				));
 				$table->define_field(array(
 					"name" => "priority",
 					"chgbgcolor" => "bgcolour_overdue",
@@ -1229,6 +1189,7 @@ class mrp_workspace extends class_base
 
 			case "all":
 			case "done":
+			case "archived":
 				$table->define_field (array (
 					"name" => "priority",
 					"chgbgcolor" => "bgcolour_overdue",
@@ -1257,6 +1218,7 @@ class mrp_workspace extends class_base
 				"field" => "project_id",
 			));
 		}
+
 		$table->set_default_sortby ("modified");
 		$table->set_default_sorder ("desc");
 		$table->draw_text_pageselector (array (
@@ -1344,6 +1306,15 @@ class mrp_workspace extends class_base
 				));
 				break;
 
+			case "archived":
+				$list = new object_list (array (
+					"class_id" => CL_MRP_CASE,
+					"state" => MRP_STATUS_ARCHIVED,
+					"parent" => $this_object->prop ("projects_folder"),
+					// "createdby" => aw_global_get('uid'),
+				));
+				break;
+
 			case "aborted":
 				$list = new object_list (array (
 					"class_id" => CL_MRP_CASE,
@@ -1366,7 +1337,7 @@ class mrp_workspace extends class_base
 			$change_url = $this->mk_my_orb("change", array(
 				"id" => $project_id,
 				"return_url" => urlencode (aw_global_get ('REQUEST_URI')),
-				"group" => "grp_case_schedule",
+				"group" => "grp_case_workflow",
 			), "mrp_case");
 
 			### get planned project finishing date
@@ -1410,6 +1381,7 @@ class mrp_workspace extends class_base
 
 				case "all":
 				case "done":
+				case "archived":
 					break;
 			}
 
@@ -1496,6 +1468,7 @@ class mrp_workspace extends class_base
 		$resource_tree = new object_tree (array (
 			"parent" => $this_object->prop ("resources_folder"),
 			"class_id" => array (CL_MENU, CL_MRP_RESOURCE),
+			"sort_by" => "objects.jrk",
 		));
 		$list = $resource_tree->to_list ();
 		$list->filter (array (
@@ -1608,6 +1581,7 @@ class mrp_workspace extends class_base
 			$resource_tree = new object_tree(array(
 				"parent" => $id,
 				"class_id" => array (CL_MRP_RESOURCE),
+				"sort_by" => "objects.jrk",
 			));
 			$resources = $resource_tree->to_list();
 
@@ -2093,7 +2067,8 @@ class mrp_workspace extends class_base
 		$resource_tree = new object_tree(array(
 			"parent" => $arr["obj_inst"]->prop ("resources_folder"),
 			"class_id" => array(CL_MENU, CL_MRP_RESOURCE),
-		));
+			"sort_by" => "objects.jrk",
+	));
 		$l = $resource_tree->to_list();
 		$resources = array("" => "");
 		foreach($l->arr() as $o)
@@ -2629,7 +2604,7 @@ class mrp_workspace extends class_base
 				$bgcol = $this->pj_colors["done"];
 			}
 			else
-			if ($job->prop("state") == MRP_STATUS_INPROGRESS || $mrp_case->can_start_job(array("project" => $job->prop("project"), "job" => $job->id())))
+			if ($mrp_job->can_start(array("job" => $job->id())))
 			{
 				// light green
 				$bgcol = $this->pj_colors["can_start"];
@@ -3214,29 +3189,29 @@ class mrp_workspace extends class_base
 			$results = new object_list();
 		}
 		else
-		{
+	{
 			$filt = array(
 				"class_id" => CL_CRM_COMPANY,
 				"name" => "%".$arr["request"]["cs_name"]."%",
 				"reg_nr" => "%".$arr["request"]["cs_reg_nr"]."%",
 			);
 			if ($arr["request"]["cs_firmajuht"] != "")
-			{
+		{
 				$filt["CL_CRM_COMPANY.firmajuht.name"] = "%".$arr["request"]["cs_firmajuht"]."%";
-			}
+		}
 			if ($arr["request"]["cs_contact"] != "")
 			{
 				$filt["CL_CRM_COMPANY.contact.name"] = "%".$arr["request"]["cs_contact"]."%";
-			}
+	}
 			if ($arr["request"]["cs_phone"] != "")
-			{
+	{
 				$filt["CL_CRM_COMPANY.phone.name"] = "%".$arr["request"]["cs_phone"]."%";
 			}
 			$results = new object_list($filt);
-		}
+	}
 
 		foreach($results->arr() as $cust)
-		{
+	{
 			$t->define_data(array(
 				"name" => html::get_change_url($cust->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), $cust->name()),
 				"address" => $cust->prop_str("contact"),
@@ -3244,7 +3219,7 @@ class mrp_workspace extends class_base
 				"email" => $cust->prop_str("email_id"),
 				"oid" => $cust->id(),
 				"priority" => $cust->prop("priority")
-			));
+		));
 		}
 	}
 }

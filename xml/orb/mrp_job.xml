@@ -49,5 +49,13 @@
 			</function>
 		</action>
 
+		<action name="can_start">
+			<function name="can_start">
+				<arguments>
+					<required name="job" type="int" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

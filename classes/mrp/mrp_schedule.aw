@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.19 2005/03/21 13:21:09 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.20 2005/03/21 21:48:59 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 

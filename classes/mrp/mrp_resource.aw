@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.24 2005/03/21 13:21:09 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.25 2005/03/21 21:48:59 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -152,11 +152,11 @@ class mrp_resource extends class_base
 						$parent_folder_id = $parent->parent ();
 					}
 
-					$prop["value"] = "/Ressursid" . $parents;
+					$prop["value"] = t("/Ressursid") . $parents;
 				}
 				else
 				{
-					$prop["value"] = "Ressurss ei kuulu ühessegi ressursihaldussüsteemi.";
+					$prop["value"] = t("Ressurss ei kuulu ühessegi ressursihaldussüsteemi.");
 				}
 				break;
 
@@ -166,9 +166,9 @@ class mrp_resource extends class_base
 
 			case "type":
 				$prop["options"] = array (
-					MRP_RESOURCE_SCHEDULABLE => "Ressursi kasutust planeeritakse",
-					MRP_RESOURCE_NOT_SCHEDULABLE => "Ressursi kasutust ei planeerita",
-					MRP_RESOURCE_SUBCONTRACTOR => "Ressurss on allhange",
+					MRP_RESOURCE_SCHEDULABLE => t("Ressursi kasutust planeeritakse"),
+					MRP_RESOURCE_NOT_SCHEDULABLE => t("Ressursi kasutust ei planeerita"),
+					MRP_RESOURCE_SUBCONTRACTOR => t("Ressurss on allhange"),
 				);
 				break;
 
@@ -181,9 +181,9 @@ class mrp_resource extends class_base
 				$prop["value"] = (in_array ($prop["value"], $applicable_states)) ? $prop["value"] : 0;
 				$prop["options"] = array (
 					0 => "M&auml;&auml;ramata",
-					MRP_STATUS_RESOURCE_AVAILABLE => "Vaba",
-					MRP_STATUS_RESOURCE_INUSE => "Kasutusel",
-					MRP_STATUS_RESOURCE_OUTOFSERVICE => "Suletud",
+					MRP_STATUS_RESOURCE_AVAILABLE => t("Vaba"),
+					MRP_STATUS_RESOURCE_INUSE => t("Kasutusel"),
+					MRP_STATUS_RESOURCE_OUTOFSERVICE => t("Suletud"),
 				);
 				break;
 
@@ -271,31 +271,31 @@ class mrp_resource extends class_base
 
 		$table->define_field(array(
 			"name" => "client",
-			"caption" => "Klient",
+			"caption" => t("Klient",
 			"sortable" => 1,
 			"align" => "center"
 		));
 		$table->define_field(array(
 			"name" => "project",
-			"caption" => "Projekt",
+			"caption" => t("Projekt"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 		$table->define_field(array(
 			"name" => "name",
-			"caption" => "Töö",
+			"caption" => t("Töö"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 		$table->define_field(array(
 			"name" => "starttime",
-			"caption" => "Alustamisaeg",
+			"caption" => t("Alustamisaeg"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 		$table->define_field(array(
 			"name" => "modify",
-			"caption" => "Ava",
+			"caption" => t("Ava"),
 			"align" => "center"
 		));
 
@@ -336,7 +336,7 @@ class mrp_resource extends class_base
 
 			$table->define_data (array (
 				"modify" => html::href (array (
-					"caption" => "Ava",
+					"caption" => t("Ava"),
 					"url" => $change_url,
 					)),
 				"project" => $project,
@@ -804,37 +804,6 @@ class mrp_resource extends class_base
 			case MRP_STATUS_RESOURCE_OUTOFSERVICE:
 				return MRP_STATUS_RESOURCE_OUTOFSERVICE;
 				break;
-
-			default:
-				return false;
-		}
-	}
-
-/**
-    @attrib name=is_available
-	@param resource required type=int
-**/
-	function can_start_job ($arr)
-	{
-		if (is_oid ($arr["resource"]))
-		{
-			$resource = obj ($arr["resource"]);
-		}
-		else
-		{
-			return false;
-		}
-
-		switch ($resource->prop ("state"))
-		{
-			case MRP_STATUS_RESOURCE_AVAILABLE:
-				return true;
-
-			case MRP_STATUS_RESOURCE_INUSE:
-				return MRP_STATUS_RESOURCE_INUSE;
-
-			case MRP_STATUS_RESOURCE_OUTOFSERVICE:
-				return MRP_STATUS_RESOURCE_OUTOFSERVICE;
 
 			default:
 				return false;

@@ -17,13 +17,5 @@
 			</function>
 		</action>
 
-		<action name="is_available">
-			<function name="can_start_job">
-				<arguments>
-					<required name="resource" type="int" />
-				</arguments>
-			</function>
-		</action>
-
 	</class>
 </orb>

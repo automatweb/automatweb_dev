@@ -83,16 +83,6 @@
             <field>extern_id</field>
       </property>
       <property>
-            <name>do_abort</name>
-            <group>grp_general</group>
-            <table>objects</table>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>L&amp;otilde;peta</caption>
-      </property>
-      <property>
             <name>planned_date</name>
             <group>grp_general</group>
             <table>objects</table>
@@ -435,17 +425,6 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <parent>manager</parent>
-      </property>
-      <property>
-            <name>set_plannable</name>
-            <group>grp_case_workflow</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <store>no</store>
-            <ch_value>1</ch_value>
-            <caption>Planeeri projekti</caption>
       </property>
       <property>
             <name>chart_navigation</name>

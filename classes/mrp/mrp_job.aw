@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.21 2005/03/21 13:21:09 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.22 2005/03/21 21:48:59 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -118,16 +118,16 @@ define ("MRP_DATE_FORMAT", "j/m/Y H.i");
 class mrp_job extends class_base
 {
 	var $states = array (
-		MRP_STATUS_NEW => "Uus",
-		MRP_STATUS_PLANNED => "Töösse planeeritud",
-		MRP_STATUS_INPROGRESS => "Töös",
-		MRP_STATUS_ABORTED => "Katkestatud",
-		MRP_STATUS_DONE => "Valmis",
-		MRP_STATUS_LOCKED => "Lukustatud",
-		MRP_STATUS_PAUSED => "Paus",
-		MRP_STATUS_DELETED => "Kustutatud",
-		MRP_STATUS_ONHOLD => "Plaanist väljas",
-		MRP_STATUS_ARCHIVED => "Arhiveeritud",
+		MRP_STATUS_NEW => t("Uus"),
+		MRP_STATUS_PLANNED => t("Töösse planeeritud"),
+		MRP_STATUS_INPROGRESS => t("Töös"),
+		MRP_STATUS_ABORTED => t("Katkestatud"),
+		MRP_STATUS_DONE => t("Valmis"),
+		MRP_STATUS_LOCKED => t("Lukustatud"),
+		MRP_STATUS_PAUSED => t("Paus",
+		MRP_STATUS_DELETED => t("Kustutatud"),
+		MRP_STATUS_ONHOLD => t("Plaanist väljas"),
+		MRP_STATUS_ARCHIVED => t("Arhiveeritud"),
 	);
 
 	function mrp_job ()
@@ -167,7 +167,7 @@ class mrp_job extends class_base
 
 			case "resource":
 				$resource = is_oid ($prop["value"]) ? obj ($prop["value"]) : false;
-				$prop["value"] = $resource ? $resource->name () : "Ressurss määramata";
+				$prop["value"] = $resource ? $resource->name () : t("Ressurss määramata");
 				break;
 
 			case "length":
@@ -178,7 +178,7 @@ class mrp_job extends class_base
 				break;
 
 			case "state":
-				$prop["value"] = $this->states[$prop["value"]] ? $this->states[$prop["value"]] : "Määramata";
+				$prop["value"] = $this->states[$prop["value"]] ? $this->states[$prop["value"]] : t("Määramata");
 				break;
 
 			case "job_toolbar":
@@ -267,13 +267,12 @@ class mrp_job extends class_base
 
 		if ($this_object->prop ("state") != MRP_STATUS_INPROGRESS)
 		{
-			$mc = get_instance(CL_MRP_CASE);
-			if ($mc->can_start_job(array("project" => $this_object->prop("project"), "job" => $this_object->id())))
+			if ($this->can_start(array("job" => $this_object->id())))
 			{
 				$toolbar->add_button(array(
 					"name" => "start",
 					//"img" => "new.gif",
-					"tooltip" => "Alusta",
+					"tooltip" => t("Alusta"),
 					"action" => "start",
 				));
 			}
@@ -284,17 +283,17 @@ class mrp_job extends class_base
 			$toolbar->add_button(array(
 				"name" => "done",
 				//"img" => "done.gif",
-				"tooltip" => "Valmis",
+				"tooltip" => t("Valmis"),
 				"action" => "done",
 			));
 
 			$toolbar->add_button(array(
 				"name" => "abort",
 				//"img" => "abort.gif",
-				"tooltip" => "Katkesta",
+				"tooltip" => t("Katkesta"),
 				//"action" => "abort",
 				"url" => "#",
-				"onClick" => "if (document.changeform.pj_change_comment.value.replace(/\\s+/, '') != '') { submit_changeform('abort') } else { alert('Kommentaar peab olema t&auml;idetud!'); }"
+				"onClick" => "if (document.changeform.pj_change_comment.value.replace(/\\s+/, '') != '') { submit_changeform('abort') } else { alert('" . t("Kommentaar peab olema t&auml;idetud!") . "'); }"
 			));
 
 			if ($this_object->prop("state") != MRP_STATUS_PAUSED)
@@ -309,7 +308,7 @@ class mrp_job extends class_base
 				$toolbar->add_button(array(
 					"name" => "end_shift",
 					//"img" => "end_shift.gif",
-					"tooltip" => "Vahetuse l&otilde;pp",
+					"tooltip" => t("Vahetuse l&otilde;pp"),
 					"action" => "end_shift",
 				));
 			}
@@ -318,7 +317,7 @@ class mrp_job extends class_base
 				$toolbar->add_button(array(
 					"name" => "scontinue",
 					//"img" => "continue.gif",
-					"tooltip" => "J&auml;tka",
+					"tooltip" => t("J&auml;tka"),
 					"action" => "scontinue",
 				));
 			}
@@ -331,6 +330,8 @@ class mrp_job extends class_base
 **/
 	function start ($arr)
 	{
+		$errors = false;
+
 		if (is_oid ($arr["id"]))
 		{
 			$this_object = obj ($arr["id"]);
@@ -370,41 +371,51 @@ class mrp_job extends class_base
 			}
 		}
 
-		$resource = get_instance(CL_MRP_RESOURCE);
-		$resource_is_reserved = $resource->start_job(array("resource" => $this_object->prop("resource")));
+		$mrp_resource = get_instance(CL_MRP_RESOURCE);
+		$resource_is_reserved = $mrp_resource->start_job(array("resource" => $this_object->prop("resource")));
 
 		if ( (in_array ($project->prop ("state"), $applicable_project_states)) and (in_array ($this_object->prop ("state"), $applicable_job_states)) and $prerequisites_done and $resource_is_reserved )
 		{
 			if (((int) $this_object->prop ("exec_order")) === 1)
 			{
 				### start project
-				$this->do_orb_method_call (array (
-					"action" => "start",
-					"class" => "mrp_case",
-					"params" => array (
-						"project" => $project->id ()
-					)
-				));
+				$mrp_case = get_instance(CL_MRP_RESOURCE);
+				$project_start = $mrp_case->start(array("id" => $project->id ()));
+
+				if (!$project_start)
+				{
+					$errors = true;
+				}
 			}
 
 			### set project state & progress
 			$progress = time () + $this_object->prop ("planned_length");
 			$project->set_prop ("state", MRP_STATUS_INPROGRESS);
 			$project->set_prop ("progress", $progress);
-			$project->save ();
 
 			### start job
 			$this_object->set_prop ("state", MRP_STATUS_INPROGRESS);
-			$this_object->save ();
-
-			### log
-			$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")], $arr["pj_change_comment"]);
-
-			return true;
 		}
 		else
 		{
+			$errors = true;
+		}
+
+		if ($errors)
+		{
+			### free resource and exit
+			$mrp_resource->stop_job(array("resource" => $this_object->prop("resource")));
 			return false;
+		}
+		else
+		{
+			### log
+			$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")], $arr["pj_change_comment"]);
+
+			### all went well, save and say OK
+			$this_object->save ();
+			$project->save ();
+			return true;
 		}
 	}
 
@@ -423,7 +434,7 @@ class mrp_job extends class_base
 			return false;
 		}
 
-		$project =& $this->get_project ($arr);
+		$project = $job->get_first_obj_by_reltype ("RELTYPE_MRP_PROJECT");
 		$applicable_states = array (
 			MRP_STATUS_INPROGRESS,
 		);
@@ -464,13 +475,8 @@ class mrp_job extends class_base
 			if ($done_jobs === $all_jobs)
 			{
 				### finish project
-				$this->do_orb_method_call (array (
-					"action" => "finish",
-					"class" => "mrp_case",
-					"params" => array (
-						"project" => $project->id ()
-					)
-				));
+				$mrp_case = get_instance(CL_MRP_RESOURCE);
+				$mrp_case->finish(array("id" => $project->id ()));
 			}
 			else
 			{
@@ -544,7 +550,7 @@ class mrp_job extends class_base
 			return false;
 		}
 
-		$project =& $this->get_project ($arr);
+		$project = $job->get_first_obj_by_reltype ("RELTYPE_MRP_PROJECT");
 		$applicable_states = array (
 			MRP_STATUS_INPROGRESS,
 		);
@@ -587,7 +593,7 @@ class mrp_job extends class_base
 			return false;
 		}
 
-		$project =& $this->get_project ($arr);
+		$project = $job->get_first_obj_by_reltype ("RELTYPE_MRP_PROJECT");
 		$applicable_project_states = array (
 			MRP_STATUS_INPROGRESS,
 			// MRP_STATUS_ONHOLD,
@@ -634,7 +640,7 @@ class mrp_job extends class_base
 			return false;
 		}
 
-		$project =& $this->get_project ($arr);
+		$project = $job->get_first_obj_by_reltype ("RELTYPE_MRP_PROJECT");
 		$applicable_states = array (
 			MRP_STATUS_INPROGRESS,
 		);
@@ -664,6 +670,76 @@ class mrp_job extends class_base
 		{
 			return false;
 		}
+	}
+
+/**
+    @attrib name=can_start
+	@param job required type=int
+**/
+	function can_start ($arr)
+	{
+		if (is_oid ($arr["job"]))
+		{
+			$job = obj ($arr["job"]);
+		}
+		else
+		{
+			return false;
+		}
+
+		### check if project is ready to go on
+		$project = $job->get_first_obj_by_reltype ("RELTYPE_MRP_PROJECT");
+		$applicable_states = array (
+			MRP_STATUS_INPROGRESS,
+			MRP_STATUS_PLANNED,
+		);
+
+		if (!in_array ($project->prop ("state"), $applicable_states))
+		{
+			return false;
+		}
+
+		### check if job can start
+		$applicable_states = array (
+			MRP_STATUS_PLANNED,
+		);
+
+		if (!in_array ($job->prop ("state"), $applicable_states))
+		{
+			return false;
+		}
+
+		### check if resource is available
+		$resource = obj($job->prop("resource"));
+		$applicable_states = array (
+			MRP_STATUS_RESOURCE_AVAILABLE,
+		);
+
+		if (!in_array ($resource->prop ("state"), $applicable_states))
+		{
+			return false;
+		}
+
+		### check if all prerequisite jobs are done
+		if (trim ($job->prop ("prerequisites")))
+		{
+			$prerequisites = explode (",", $job->prop ("prerequisites"));
+			$applicable_states = array (
+				MRP_STATUS_DONE,
+			);
+
+			foreach ($prerequisites as $prerequisite_oid)
+			{
+				$prerequisite = obj ($prerequisite_oid);
+
+				if (!in_array ($prerequisite->prop ("state"), $applicable_states))
+				{
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 
 	function on_delete_job ($arr)
