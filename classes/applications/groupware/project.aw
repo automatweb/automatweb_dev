@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.21 2004/12/10 10:21:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.22 2004/12/13 12:56:35 duke Exp $
 // project.aw - Projekt 
 /*
 
@@ -526,13 +526,12 @@ class project extends class_base
 
 		// SELECT objects.oid AS id, objects.parent, objects.class_id, objects.brother_of, objects.name, planner.start, planner.end FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE ((planner.start >= '1099260000' AND planner.start <= '1104530399') OR (planner.end >= '1099260000' AND planner.end <= '1104530399')) AND objects.status != 0 AND objects.parent IN (2186)
 
-		
-
 		enter_function("project::query");
 		dbg::p1($q);
 		$this->db_query($q);
 		$events = array();
 		$pl = get_instance(CL_PLANNER);
+		$ids = array();
 		$projects = $by_parent = array();
 		obj_set_opt("no_auto_translation", 0);
 		$lang_id = aw_global_get("lang_id");
@@ -1746,6 +1745,28 @@ class project extends class_base
 		};
 
 		return $tmp;
+	}
+	
+	function get_event_overview($arr)
+	{
+		// saan ette project id, alguse ja lõpu
+		$rv = array();
+		$ol = new object_list(array(
+			"parent" => $arr["id"],
+			"sort_by" => "planner.start",
+			new object_list_filter(array("non_filter_classes" => CL_CRM_MEETING)),
+		));
+
+
+		foreach($ol->arr() as $o)
+		{
+			$id = $o->id();
+			$rv[] = array(
+				"url" => "/" . $o->id(),
+				"start" => $o->prop("start1"),
+			);
+		};
+		return $rv;
 	}
 
 };
