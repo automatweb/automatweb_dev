@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.20 2001/06/13 03:35:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.21 2001/06/13 19:15:14 kristo Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -10,15 +10,21 @@ $orb_defs["form"] = "xml";
 	// see on kasutajate registreerimiseks. et pannaxe kirja et mis formid tyyp on t2itnud.
 	session_register("session_filled_forms");
 
-	define(FORM_ENTRY,1);
-	define(FORM_SEARCH,2);
-	define(FORM_RATING,3);
+	define("FORM_ENTRY",1);
+	define("FORM_SEARCH",2);
+	define("FORM_RATING",3);
 
 	// constants for get_elements_for_row - specify wheter the return array is 
 	// element_name => element_value
-	define(ARR_ELNAME, 1);
+	define("ARR_ELNAME", 1);
 	// or element_id => element_value
-	define(ARR_ELID,2);
+	define("ARR_ELID",2);
+
+	// constants for get_element_by_name
+	// it returns just the first element with the name
+	define("RET_FIRST", 1);
+	// it returns all elements with the name, return type is array
+	define("RET_ALL", 2);
 
 	class form extends form_base
 	{
@@ -1745,11 +1751,11 @@ $orb_defs["form"] = "xml";
 		// !finds the element with id $id in the loaded form and returns a reference to it
 		function get_element_by_id($id)
 		{
-			for ($row = 0; $row < $this->arr[rows]; $row++)
+			for ($row = 0; $row < $this->arr["rows"]; $row++)
 			{
-				for ($col = 0; $col < $this->arr[cols]; $col++)
+				for ($col = 0; $col < $this->arr["cols"]; $col++)
 				{
-					$this->arr[contents][$row][$col]->get_els(&$elar);
+					$this->arr["contents"][$row][$col]->get_els(&$elar);
 					reset($elar);
 					while (list(,$el) = each($elar))
 					{
@@ -1766,7 +1772,10 @@ $orb_defs["form"] = "xml";
 		////
 		// !finds the element with name $name in the loaded form and returns a reference to it
 		// Kui ma nyyd oieti aru saan, siis see eeldab muu hulgas ka seda, et on laetud mingi entry.
-		function get_element_by_name($name)
+		//
+		// nope, see ei eelda, get_element_value_by_name eeldab et miski entry on loaditud - terryf
+		// $type can be either RET_FIRST - returns the forst element or RET_ALL - returns all elements with the name
+		function get_element_by_name($name,$type = RET_FIRST)
 		{
 			for ($row = 0; $row < $this->arr["rows"]; $row++)
 			{
@@ -1778,12 +1787,26 @@ $orb_defs["form"] = "xml";
 					{
 						if ($el->get_el_name() == $name)
 						{
-							return $el;
+							if ($type == RET_FIRST)
+							{
+								return $el;
+							}
+							else
+							{
+								$ret[] = $el;
+							}
 						}
 					}
 				}
 			}
-			return false;
+			if ($type == RET_FIRST || !is_array($ret))
+			{
+				return false;
+			}
+			else
+			{
+				return $ret;
+			}
 		}
 
 		////
@@ -1828,18 +1851,18 @@ $orb_defs["form"] = "xml";
 		}
 
 		////
-		// !finds the first element with type $name in the loaded form and returns a reference to it
-		function get_element_by_type($name)
+		// !finds the first element with type $type (and subtype $subtype) in the loaded form and returns a reference to it
+		function get_element_by_type($type,$subtype = "")
 		{
-			for ($row = 0; $row < $this->arr[rows]; $row++)
+			for ($row = 0; $row < $this->arr["rows"]; $row++)
 			{
-				for ($col = 0; $col < $this->arr[cols]; $col++)
+				for ($col = 0; $col < $this->arr["cols"]; $col++)
 				{
-					$this->arr[contents][$row][$col]->get_els(&$elar);
+					$this->arr["contents"][$row][$col]->get_els(&$elar);
 					reset($elar);
 					while (list(,$el) = each($elar))
 					{
-						if ($el->get_type() == $name)
+						if ($el->get_type() == $type && ($subtype == "" || $el->get_subtype() == $subtype))
 						{
 							return $el;
 						}
@@ -1985,17 +2008,24 @@ $orb_defs["form"] = "xml";
 		}
 
 		////
-		// !returns the value of the entered element. finds the first element of that type and 
+		// !returns the value of the entered element. finds the first element of $type (and $subtype)  and 
 		// ignores the rest. form entry must be loaded before calling this.
-		function get_element_value_by_type($name)
+		function get_element_value_by_type($type,$subtype = "")
 		{
-			$el = $this->get_element_by_type($name);
+			$el = $this->get_element_by_type($type,$subtype);
 			if (!$el)
 			{
 				return false;
 			}
 
 			return $this->entry[$el->get_id()];
+		}
+
+		////
+		// !returns the value of element with id $id
+		function get_element_value($id)
+		{
+			return $this->entry[$id];
 		}
 
 		////

@@ -32,14 +32,25 @@ class form_element extends aw_template
 			$str .= "\" && document.fm_".$this->fid.".elements[i].value == \"\")";
 			return  $str."{ alert(\"".$this->arr["must_error"]."\");return false; }}\n";
 		}
+		else
+		if ($this->arr["type"] == "listbox" && $this->arr["must_fill"] == 1)
+		{
+			$str = "for (i=0; i < document.fm_".$this->fid.".elements.length; i++) ";
+			$str .= "{ if (document.fm_".$this->fid.".elements[i].name == \"";
+			$str .=$this->id;
+			$str .= "\" && document.fm_".$this->fid.".elements[i].selectedIndex == 0)";
+			return  $str."{ alert(\"".$this->arr["must_error"]."\");return false; }}\n";
+		}
 		return "";
 	}
-	function get_text()		{	return $this->arr[text]; }
-	function get_el_name()		{	return $this->arr[name]; }
-	function get_style()	{	return $this->arr[style]; }
-	function get_type()		{	return $this->arr[type]; }
+	function get_text()		{	return $this->arr["text"]; }
+	function get_el_name()		{	return $this->arr["name"]; }
+	function get_style()	{	return $this->arr["style"]; }
+	function get_type()		{	return $this->arr["type"]; }
+	function get_subtype()		{	return $this->arr["subtype"]; }
+	function get_srow_grp()		{	return $this->arr["srow_grp"]; }
 	function get_id()			{ return $this->id;	}
-	function get_order()	{ return $this->arr[ord]; }
+	function get_order()	{ return $this->arr["ord"]; }
 	function get_acl()		{ return $this->acl; }
 	function get_props()  { return $this->arr; }
 

@@ -118,6 +118,7 @@ class shop_item extends shop_base
 			$shcats = $shcats + $shop->get_shop_categories($sh_id);
 		}
 
+		$eq = $this->get_eq($itt["eq_id"]);
 		$this->vars(array( 
 			"item" => $f->gen_preview(array(
 										"id" => $itt["form_id"],
@@ -134,7 +135,8 @@ class shop_item extends shop_base
 			"has_period" => checked($o["has_period"]),
 			"has_objs" => checked($o["has_objs"]),
 			"price_eq" => $o["price_eq"],
-			"types" => $this->picker($o["type_id"],$this->listall_item_types())
+			"type" => $itt["name"],
+			"price_eq" => $eq["name"]
 		));
 		return $this->parse();
 	}

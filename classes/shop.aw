@@ -40,11 +40,13 @@ class shop extends shop_base
 
 		classload("form_base");
 		$fb = new form_base;
+		$fl = $fb->get_list(FORM_ENTRY);
 
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit", array("parent" => $parent)),
 			"root" => $this->picker($parent,$ob->get_list()),
-			"of" => $this->picker(0,$fb->get_list(FORM_ENTRY))
+			"of" => $this->multiple_option_list(0,$fl),
+			"forms" => $this->picker(0,$fl)
 		));
 		return $this->parse();
 	}
@@ -64,18 +66,87 @@ class shop extends shop_base
 		classload("form_base");
 		$fb = new form_base;
 
+		$ofs = $this->get_ofs_for_shop($id);
+		foreach($ofs as $ofid => $chk)
+		{
+			$ofa[$ofid] = $ofid;
+		}
+
+		classload("form_base");
+		$fb = new form_base;
+
+		$op_list = $fb->get_op_list();
+
+		$fl = $fb->get_list(FTYPE_ENTRY);
+		reset($fl);
+		while (list($tid,) = each($fl))
+		{
+			if (!$form_id)
+			{
+				$form_id = $tid;
+			}
+			$this->vars(array("form_id" => $tid));
+			if (is_array($op_list[$tid]))
+			{
+				reset($op_list[$tid]);
+				$cnt = 0;
+				$fop = "";
+				while (list($op_id,$op_name) = each($op_list[$tid]))
+				{
+					$this->vars(array("cnt" => $cnt, "op_id" => $op_id, "op_name" => $op_name));
+					$fop.=$this->parse("FORM_OP");
+					$cnt++;
+				}
+				$this->vars(array("FORM_OP" => $fop));
+				$this->parse("FORM");
+			}
+		}
+
 		$this->vars(array(
 			"name" => $oba["name"],
 			"comment" => $oba["comment"],
 			"root" => $this->picker($oba["root_menu"],$ob->get_list()),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
-			"of" => $this->picker($oba["order_form"],$fb->get_list(FORM_ENTRY)),
+			"of" => $this->multiple_option_list($ofa,$fl),
 			"stat_by_turnover" => $this->mk_orb("turnover_stat", array("id" => $id)),
 			"orders" => $this->mk_orb("admin_orders", array("id" => $id)),
-			"emails" => $oba["emails"]
+			"emails" => $oba["emails"],
+			"forms" => $this->picker($oba["owner_form"], $fl),
+			"o_form_id" => $oba["owner_form"],
+			"o_op_id" => $oba["owner_form_op"],
+			"ch_own" => $this->mk_orb("ch_owner_data", array("id" => $id))
 		));
+		if ($oba["owner_form"])
+		{
+			$this->parse("CH_OWN");
+		}
 		$this->parse("CHANGE");
+		$this->parse("CHANGE2");
+
+		foreach($ofs as $of_id => $chk)
+		{
+			$this->vars(array(
+				"of_id" => $of_id,
+				"of_name" => $this->db_fetch_field("SELECT name FROM objects WHERE oid = ".$of_id,"name"),
+				"of_checked" => checked($chk)
+			));
+			$of.=$this->parse("OF");
+		}
+		$this->vars(array(
+			"OF" => $of
+		));
 		return $this->parse();
+	}
+
+	function get_ofs_for_shop($id)
+	{
+		$ret = array();
+		$this->db_query("SELECT of_id,repeat FROM shop2order_form WHERE shop_id = $id");
+		while ($row = $this->db_next())
+		{
+			$ret[$row["of_id"]] = $row["repeat"];
+		}
+		return $ret;
 	}
 
 	////
@@ -86,16 +157,64 @@ class shop extends shop_base
 
 		if ($id)
 		{
+			$sh = $this->get($id);
+			if ($sh["owner_form"] != $owner_form)
+			{
+				// if owner form has changed, zero out the form entry, cause it belongs to the prev. form
+				$ss = ", owner_form_entry = '' ";
+			}
 			$this->upd_object(array("oid" => $id, "name" => $name, "comment" => $comment));
-			$this->db_query("UPDATE shop SET root_menu = $root, order_form = $order_form,emails='$emails' WHERE id = $id");
+			$this->db_query("UPDATE shop SET root_menu = $root, emails='$emails',owner_form = '$owner_form',owner_form_op = '$owner_form_op' $ss WHERE id = $id");
 		}
 		else
 		{
 			$id = $this->new_object(array("parent" => $parent, "class_id" => CL_SHOP, "status" => 1, "name" => $name, "comment" => $comment));
-			$this->db_query("INSERT INTO shop(id,root_menu,order_form,emails) VALUES($id,'$root','$order_form','$emails')");
+			$this->db_query("INSERT INTO shop(id,root_menu,emails,owner_form,owner_form_op) VALUES($id,'$root','$emails','$owner_form','$owner_form_op')");
 		}
 
+		// update order_forms
+		$this->db_query("DELETE FROM shop2order_form WHERE shop_id = '$id'");
+		if (is_array($order_form))
+		{
+			foreach($order_form as $of_id)
+			{
+				$this->db_query("INSERT INTO shop2order_form(shop_id,of_id,repeat) values($id,$of_id,'".$of_rep[$of_id]."')");
+			}
+		}
 		return $this->mk_orb("change", array("id" => $id));
+	}
+
+	////
+	// !shows the form for entering shop owner data
+	function ch_owner_data($arr)
+	{
+		extract($arr);
+		$sh = $this->get($id);
+		$this->mk_path($sh["parent"],"<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda poodi</a> / Muuda poe omaniku andmeid");
+
+		classload("form");
+		$f = new form;
+		return $f->gen_preview(array(
+							"id" => $sh["owner_form"],
+							"entry_id" => $sh["owner_form_entry"],
+							"reforb" => $this->mk_reforb("submit_owner_data", array("id" => $id))
+						));
+	}
+
+	////
+	// !saves the sop owner data
+	function submit_owner_data($arr)
+	{
+		extract($arr);
+		$sh = $this->get($id);
+
+		classload("form");
+		$f = new form;
+		$f->process_entry(array("id" => $sh["owner_form"], "entry_id" => $sh["entry_id"]));
+
+		$this->db_query("UPDATE shop SET owner_form_entry = ".$f->entry_id." WHERE id = $id");
+
+		return $this->mk_orb("ch_owner_data", array("id" => $id));
 	}
 
 	////
@@ -237,15 +356,6 @@ class shop extends shop_base
 	}
 
 	////
-	// !adds items to user's shopping cart
-	function add_to_cart($arr)
-	{
-		extract($arr);
-		$this->upd_cart_from_arr($sh_it);
-		return $GLOBALS["baseurl"]."/shop.".$GLOBALS["ext"]."/shop=$shop_id/section=$section";
-	}
-
-	////
 	// !displays the users shopping cart contents
 	function view_cart($arr)
 	{
@@ -356,17 +466,24 @@ class shop extends shop_base
 					$count = 0;
 					foreach($selrows as $i)
 					{
-						$rowels = $f->get_elements_for_row($i);
+						$rowels = $f->get_elements_for_row($i,ARR_ELID);
 						// this row's count must be added to this item's count in the shopping cart
-						$count+=$rowels["mitu"];
+						foreach($rowels as $rowelid => $rowelvalue)
+						{
+							$rowelref = $f->get_element_by_id($rowelid);
+							if ($rowelref->get_type() == "textbox" && $rowelref->get_subtype() == "count")
+							{
+								$count+=$rowelvalue;
+							}
+						}
 					}
 
 					// nyyd tshekime et kas j2lle on vaba see item kyllalt palju
 					if ($it["has_max"] && $it["has_period"] && $it["has_objs"] && $count > 0)
 					{
 						// check if the user entered some dates in the form, if not, then show error message and go back.
-						$from = $f->get_element_value_by_name("Alates");
-						$to = $f->get_element_value_by_name("Kuni");
+						$from = $f->get_element_value_by_type("date","from");
+						$to = $f->get_element_value_by_type("date","to");
 
 						$free_items = array();
 						$free_item_count = 0;
@@ -405,34 +522,7 @@ class shop extends shop_base
 					}
 
 					// now calc price
-					if ($it["price_eq"] == "")
-					{
-						$price = (double)$it["price"] * (double)$count;
-					}
-					else
-					{
-						// parsime price_eq'st v2lja formi elementide nimed ja asendame need numbritega ja siis laseme evali()'i peale
-						$f_kaup = new form;
-						$f_kaup->load($itt["form_id"]);
-						$f_kaup->load_entry($it["entry_id"]);
-
-						$els = $this->parse_eq_variables($it["price_eq"]);
-
-						$eq = $it["price_eq"];
-						foreach($els as $elname)
-						{
-							if ($f->get_element_by_name($elname))
-							{
-								$elval = (int)$f->get_element_value_by_name($elname);
-							}
-							else
-							{
-								$elval = (int)$f_kaup->get_element_value_by_name($elname);
-							}
-							$eq = str_replace($elname,$elval,$eq);
-						}
-						eval("\$price = ".$eq.";");
-					}
+					$price = $this->calc_price($itt,$it,$count,$f);
 
 					$GLOBALS["shopping_cart"]["items"][$item_id]["cnt"] = $count;
 					$GLOBALS["shopping_cart"]["items"][$item_id]["price"] = $price;
@@ -444,36 +534,38 @@ class shop extends shop_base
 		return $this->mk_site_orb(array("action" => "view_cart", "shop_id" => $shop_id, "section" => $section));
 	}
 
-	function upd_cart_from_arr($sh_it)
+	function calc_price($itt,$it,$count,$f)
 	{
-		if (is_array($sh_it))	// shop_items 
+		$eq = $this->get_eq($itt["eq_id"]);
+		if ($eq["comment"] == "")
 		{
-			reset($sh_it);
-			while (list($item_id,$count) = each($sh_it))
-			{
-				$this->db_query("SELECT price,name FROM shop_items LEFT JOIN objects ON objects.oid = shop_items.id WHERE id = $item_id");
-				$r = $this->db_next();
-				$GLOBALS["shopping_cart"]["items"][$item_id]["cnt"] = max($count,0);
-				$GLOBALS["shopping_cart"]["items"][$item_id]["price"] = $r["price"];
-				$GLOBALS["shopping_cart"]["items"][$item_id]["name"] = $r["name"];
-			}
-		}											// ;)
-
-		$price = 0.0;
-		global $shopping_cart;
-		if (is_array($shopping_cart["items"]))
-		{
-			reset($shopping_cart["items"]);
-			while (list($item_id,$ar) = each($shopping_cart["items"]))
-			{
-				$price+=(double)$ar["cnt"] * (double)$ar["price"];
-			}
-			$GLOBALS["shopping_cart"]["price"] = $price;
+			$price = (double)$it["price"] * (double)$count;
 		}
 		else
 		{
-			$GLOBALS["shopping_cart"] = array();
+			// parsime price_eq'st v2lja formi elementide nimed ja asendame need numbritega ja siis laseme evali()'i peale
+			$f_kaup = new form;
+			$f_kaup->load($itt["form_id"]);
+			$f_kaup->load_entry($it["entry_id"]);
+
+			$els = $this->parse_eq_variables($eq["comment"]);
+
+			$eq = $eq["comment"];
+			foreach($els as $elname)
+			{
+				if ($f->get_element_by_name($elname))
+				{
+					$elval = (int)$f->get_element_value_by_name($elname);
+				}
+				else
+				{
+					$elval = (int)$f_kaup->get_element_value_by_name($elname);
+				}
+				$eq = str_replace($elname,$elval,$eq);
+			}
+			eval("\$price = ".$eq.";");
 		}
+		return $price;
 	}
 
 	function get($id)
@@ -489,7 +581,6 @@ class shop extends shop_base
 		extract($arr);
 		$this->read_template("order.tpl");
 
-		$sh = $this->get($shop_id);
 
 		classload("form");
 		$f = new form;
@@ -510,18 +601,86 @@ class shop extends shop_base
 				$elvals = array_merge($elvals, $f->get_element_values());
 			};
 		};
+
+		global $order_forms;
+		if (!$num)
+		{
+			$order_forms = false;
+			$num = 0;
+		}
+		else
+		if ($num >= $order_forms["max_cnt"])
+		{
+			// but that was the last form so continue to the real submit function
+			header("Location: ".$this->mk_my_orb("submit_order", array("shop_id" => $shop_id, "section" => $section)));
+			die();
+		}
+
+		// now! we must show all the selected forms in a row, and repeat the ones that are marked as repeating
+		// get all the forms
+		$ofs = $this->get_ofs_for_shop($shop_id);
+		if (!is_array($order_forms))
+		{
+			// first time, so fill arrays
+			$order_forms["entries"] = array();
+
+			$cnt = 0;
+			foreach($ofs as $fid => $chk)
+			{
+				$order_forms["order"][$cnt]["form"] = $fid;
+				$order_forms["order"][$cnt]["chk"] = $chk;
+				$cnt++;
+			}
+			$order_forms["max_cnt"] = $cnt;
+			$order_forms["current_cnt"] = 0;
+			session_register("order_forms");
+		}
+
 		$this->vars(array(
 			"form" => $f->gen_preview(array(
 									"elvalues" => $elvals,
-									"id" => $sh["order_form"], 
-									"reforb" => $this->mk_reforb("submit_order", array("shop_id" => $shop_id, "section" => $section))
+									"id" => $order_forms["order"][$num]["form"], 
+									"reforb" => $this->mk_reforb("pre_submit_order", array("shop_id" => $shop_id, "section" => $section,"num" => $num)),
+									"form_action" => "/index.".$GLOBALS["ext"]
 								)),
 			"shop_id" => $shop_id,
 			"section" => $section,
 			"cart" => $this->mk_site_orb(array("action" => "view_cart", "shop_id" => $shop_id, "section" => $section)),
-			"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$section//$this->mk_my_orb("show", array("id" => $shop_id, "parent" => $section))
+			"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$section,
+			"next"		=> $this->mk_my_orb("order", array("shop_id" => $shop_id, "section" => $section, "num" => ($num+1))),
+			"cnt"			=> $order_forms["current_cnt"]
 		));
 		return $this->parse();
+	}
+
+	function pre_submit_order($arr)
+	{
+		extract($arr);
+		global $order_forms;
+		classload("form");
+		$f = new form;
+		$f->process_entry(array("id" => $order_forms["order"][$num]["form"]));
+		$order_forms["entries"][] = array("form" => $order_forms["order"][$num]["form"], "entry" => $f->entry_id);
+
+		// now check if we sould move on
+		if ($order_forms["order"][$num]["chk"] != 1)
+		{
+			// yes we should
+			$num++;
+			$order_forms["current_cnt"] = 0;
+			if ($num == $order_forms["max_cnt"])
+			{
+				// but that was the last form so continue to the real submit function
+				header("Location: ".$this->mk_my_orb("submit_order", array("shop_id" => $shop_id, "section" => $section)));
+				die();
+			}
+		}
+		else
+		{
+			// increment this forms entry count
+			$order_forms["current_cnt"]++;
+		}
+		return $this->mk_my_orb("order", array("shop_id" => $shop_id, "section" => $section, "num" => $num));
 	}
 
 	////
@@ -529,6 +688,7 @@ class shop extends shop_base
 	function submit_order($arr)
 	{
 		extract($arr);
+
 		$sh = $this->get($shop_id);
 
 		classload("form");
@@ -554,8 +714,8 @@ class shop extends shop_base
 					// check the availability of the item
 					if ($it["has_max"] && $it["has_period"] && $it["has_objs"])
 					{
-						$from = $f->get_element_value_by_name("Alates");
-						$to = $f->get_element_value_by_name("Kuni");
+						$from = $f->get_element_value_by_type("date","from");
+						$to = $f->get_element_value_by_type("date","to");
 						$count = $ar["cnt"];
 						$free_items = array();
 						$free_item_count = 0;
@@ -619,8 +779,6 @@ class shop extends shop_base
 		// save the user info
 		classload("form");
 		$f = new form;
-		$url = $f->process_entry(array("id" => $sh["order_form"]));
-		$eid = $f->entry_id;
 
 		global $uid;
 		
@@ -632,7 +790,7 @@ class shop extends shop_base
 
 		// and also log the order
 		$ord_id = $this->db_fetch_field("SELECT MAX(id) AS id FROM orders","id")+1;
-		$this->db_query("INSERT INTO orders(id,entry_id,tm,user,ip,shop_id,day,month,wd,hr) VALUES($ord_id,$eid,".time().",'$uid','".get_ip()."','$shop_id','$day','$month','$wd','$hr')");
+		$this->db_query("INSERT INTO orders(id,tm,user,ip,shop_id,day,month,wd,hr) VALUES($ord_id,".time().",'$uid','".get_ip()."','$shop_id','$day','$month','$wd','$hr')");
 
 		// kirjutame baasi alles siin, p2rast kontrollimist et kas k6ik ikka olemas on
 		global $shopping_cart;
@@ -649,6 +807,13 @@ class shop extends shop_base
 			}
 		}
 
+		// nyt paneme tellimusega kaasa tulnud order formid ka kirja
+		global $order_forms;
+		foreach($order_forms["entries"] as $ar)
+		{
+			$this->db_query("INSERT INTO order2form_entries(order_id,form_id,entry_id) values($ord_id,'".$ar["form"]."','".$ar["entry"]."')");
+		}
+
 		// now we must also send an email to somebody notifying them of the new order.
 		// the email must contain all the info about the purchase, including all the
 		// items and their counts and also the order form data.
@@ -657,9 +822,12 @@ class shop extends shop_base
 		$this->db_query("UPDATE orders SET t_price = '$t_p' WHERE id = $ord_id");
 		
 		$mail.="\n\nTellija sisestas enda kohta järgmised andmed:\n\n";
-		$f->load($sh["order_form"]);
-		$f->load_entry($eid);
-		$mail.=$f->show_text();
+		foreach($order_forms["entries"] as $ar)
+		{
+			$f->load($ar["form"]);
+			$f->load_entry($ar["entry"]);
+			$mail.=$f->show_text();
+		}
 
 		$emails = explode(",",$sh["emails"]);
 		foreach($emails as $email)
@@ -801,16 +969,23 @@ class shop extends shop_base
 		// now figure out the correct row(s) in the count form and mark them in the shopping cart.
 		// rows are figured out based on elements named selectrow - if it's checked on that row, then that row
 		// nost be added to the cart. 
-		// here we just calculate the amount of items based on the selected rows and numbers entered in "mitu" elements
+		// here we just calculate the amount of items based on the selected rows and numbers entered in textbox/count elements
 
 		$selrows = $this->get_selected_rows_in_form(&$f);
 
 		$count = 0;
 		foreach($selrows as $i)
 		{
-			$rowels = $f->get_elements_for_row($i);
+			$rowels = $f->get_elements_for_row($i,ARR_ELID);
 			// this row's count must be added to this item's count in the shopping cart
-			$count+=$rowels["mitu"];
+			foreach($rowels as $rowelid => $rowelvalue)
+			{
+				$rowelref = $f->get_element_by_id($rowelid);
+				if ($rowelref->get_type() == "textbox" && $rowelref->get_subtype() == "count")
+				{
+					$count+=$rowelvalue;
+				}
+			}
 		}
 
 		// if the item is set to have some max amount of items and they have calendars, then we must check if there are still some available
@@ -818,8 +993,8 @@ class shop extends shop_base
 		if ($it["has_max"] && $it["has_period"] && $it["has_objs"] && $count > 0)
 		{
 			// check if the user entered some dates in the form, if not, then show error message and go back.
-			$from = $f->get_element_value_by_name("Alates");
-			$to = $f->get_element_value_by_name("Kuni");
+			$from = $f->get_element_value_by_type("date","from");
+			$to = $f->get_element_value_by_type("date","to");
 
 			if ($from < 1 || $to < 1)
 			{
@@ -873,34 +1048,7 @@ class shop extends shop_base
 		}
 
 		// calculate price
-		if ($it["price_eq"] == "")
-		{
-			$price = (double)$it["price"] * (double)$count;
-		}
-		else
-		{
-			// parsime price_eq'st v2lja formi elementide nimed ja asendame need numbritega ja siis laseme evali()'i peale
-			$f_kaup = new form;
-			$f_kaup->load($itt["form_id"]);
-			$f_kaup->load_entry($it["entry_id"]);
-
-			$els = $this->parse_eq_variables($it["price_eq"]);
-
-			$eq = $it["price_eq"];
-			foreach($els as $elname)
-			{
-				if ($f->get_element_by_name($elname))
-				{
-					$elval = (int)$f->get_element_value_by_name($elname);
-				}
-				else
-				{
-					$elval = (int)$f_kaup->get_element_value_by_name($elname);
-				}
-				$eq = str_replace($elname,$elval,$eq);
-			}
-			eval("\$price = ".$eq.";");
-		}
+		$price = $this->calc_price($itt,$it,$count,$f);
 
 		$GLOBALS["shopping_cart"]["items"][$item_id]["cnt"] = $count;
 		$GLOBALS["shopping_cart"]["items"][$item_id]["price"] = $price;
@@ -924,13 +1072,46 @@ class shop extends shop_base
 	{
 		$ret = array();
 		$nr = $f->get_num_rows();
+		$srs = $f->get_element_by_name("selectrow", RET_ALL);
+		if (!$srs)
+		{
+			// if there are no selectrow elements in the form, return all rows
+			for ($i=0; $i < $nr; $i++)
+			{
+				$ret[$i] = $i;
+			}
+			return $ret;
+		}
+
+		$sel_srs = array();
+		// k2ime k6ik selectrow elemendid l2bi 
+		foreach($srs as $el)
+		{
+			// leiame need, mis on valitud. 
+			if ($f->is_checked_value($f->get_element_value($el->get_id())))
+			{
+				$sel_srs[$el->get_srow_grp()] = true;
+			}
+		}
+
+		// nyd k2ime k6ik read l2bi
 		for ($i=0; $i < $nr; $i++)
 		{
-			$rowels = $f->get_elements_for_row($i);
-			// now check if this row's selectrow is checked
-			if ($f->is_checked_value($rowels["selectrow"]))
+			$hasels = false;
+			$rowels = $f->get_elements_for_row($i,ARR_ELID);
+			// tshekime kas m6ni selle rea peal olev element on sama grupiga, mis m6ni checkitud selectrow
+			foreach($rowels as $elid => $elval)
 			{
-				// if it is, add it to the return
+				$el = $f->get_element_by_id($elid);
+				if ($sel_srs[$el->get_srow_grp()])
+				{
+					// kui on, siis j2relikult n2itame selle rea elemente
+					$hasels = true;
+				}
+			}
+
+			if ($hasels)
+			{
 				$ret[$i] = $i;
 			}
 		}
@@ -1059,15 +1240,21 @@ class shop extends shop_base
 				}
 			}
 		}
-		$f->load($sh["order_form"]);
-		$f->load_entry($order["entry_id"]);
+
+		$this->db_query("SELECT entry_id,form_id FROM order2form_entries WHERE order_id = $order_id");
+		while ($row = $this->db_next())
+		{
+			$f->load($row["form_id"]);
+			$f->load_entry($row["entry_id"]);
+			$tx.=$f->show_text();
+		}
 
 		$this->vars(array(
 			"ITEM" => $itm,
 			"user" => $order["user"],
 			"time" => $this->time2date($order["tm"],2),
 			"ip"	=> $order["ip"],
-			"inf_form" => $f->show_text()
+			"inf_form" => $tx
 		));
 		return $this->parse();
 	}

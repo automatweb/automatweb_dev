@@ -53,6 +53,7 @@ load_vcl("date_edit");
 												"text_pos_left"						=> ($this->arr["text_pos"] == "left" ? "CHECKED" : ""),
 												"text_pos_right"					=> ($this->arr["text_pos"] == "right" ? "CHECKED" : ""),
 												"length"									=> $this->arr["length"],
+												"srow_grp"								=> $this->arr["srow_grp"],
 												"changepos"								=> $this->mk_orb("change_el_pos",array("id" => $this->fid, "col" => $this->col, "row" => $this->row, "el_id" => $this->id), "form")));
 
 			$cd = "";
@@ -84,6 +85,11 @@ load_vcl("date_edit");
 			$lb = "";
 			if ($this->arr["type"] == "listbox")		
 			{	
+				$this->vars(array(
+					"must_fill_checked" => checked($this->arr["must_fill"] == 1),
+					"must_error" => $this->arr["must_error"]
+				));
+				$this->vars(array("HAS_SIMPLE_CONTROLLER" => $this->parse("HAS_SIMPLE_CONTROLLER")));
 				for ($b=0; $b < ($this->arr["listbox_count"]+1); $b++)
 				{
 					$this->vars(array("listbox_item_id" 			=> "element_".$this->id."_lb_".$b,
@@ -132,9 +138,12 @@ load_vcl("date_edit");
 			{
 				$this->vars(array(
 					"must_fill_checked" => checked($this->arr["must_fill"] == 1),
-					"must_error" => $this->arr["must_error"]
+					"must_error" => $this->arr["must_error"],
+					"subtypes" => $this->picker($this->arr["subtype"], array("" => "","count" => "Mitu"))
 				));
+				$this->vars(array("HAS_SIMPLE_CONTROLLER" => $this->parse("HAS_SIMPLE_CONTROLLER")));
 				$dt = $this->parse("DEFAULT_TEXT");
+				$this->vars(array("HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE")));
 			}
 
 			$dc="";
@@ -163,9 +172,11 @@ load_vcl("date_edit");
 			{
 				$this->vars(array(
 					"from_year" => $this->arr["from_year"],
-					"to_year" => $this->arr["to_year"]
+					"to_year" => $this->arr["to_year"],
+					"subtypes" => $this->picker($this->arr["subtype"], array("" => "","from" => "Algus", "to" => "L&otilde;pp"))
 				));
 				$di = $this->parse("DATE_ITEMS");
+				$this->vars(array("HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE")));
 			}
 			$this->vars(array(
 				"LISTBOX_ITEMS"		=> $lb, 
@@ -193,79 +204,79 @@ load_vcl("date_edit");
 			$base = "element_".$this->id;
 			
 			$var=$base."_text";
-			$this->arr[text] = $$var;
+			$this->arr["text"] = $$var;
 			$var=$base."_name";
 			// check if the name has changed and if it has, then update the real object also
-			if ($$var != $this->arr[name])
+			if ($$var != $this->arr["name"])
 			{
-				$this->arr[name] = $$var;
+				$this->arr["name"] = $$var;
 				$this->upd_object(array("oid" => $this->id, "name" => $$var));
 			}
 			$var=$base."_list";
-			$this->arr[join_list] = $$var;
+			$this->arr["join_list"] = $$var;
 			$var=$base."_email_el";
-			$this->arr[join_email] = $$var;
+			$this->arr["join_email"] = $$var;
 
 			$var=$base."_type";
 			if ($$var == "delete")
 				return false;
 
-			$this->arr[type] = $$var;
+			$this->arr["type"] = $$var;
 			$var = $base."_info";
-			$this->arr[info]=$$var;
+			$this->arr["info"]=$$var;
 			$var=$base."_front";
-			$this->arr[front] = $$var;
+			$this->arr["front"] = $$var;
 			$var=$base."_dist";
-			$this->arr[text_distance] = $$var;
+			$this->arr["text_distance"] = $$var;
 			$var=$base."_text_pos";
-			$this->arr[text_pos] = $$var;
+			$this->arr["text_pos"] = $$var;
 
-			if ($this->arr[type] == "listbox")
+			if ($this->arr["type"] == "listbox")
 			{
-				$cnt=$this->arr[listbox_count]+1;
+				$cnt=$this->arr["listbox_count"]+1;
 				for ($b=0; $b < $cnt; $b++)
 				{
 					$var=$base."_lb_".$b;
-					$this->arr[listbox_items][$b] = $$var;
+					$this->arr["listbox_items"][$b] = $$var;
 				}
-				while (isset($this->arr[listbox_items][$cnt-1]) && ($this->arr[listbox_items][$cnt-1] == ""))
+				while (isset($this->arr["listbox_items"][$cnt-1]) && ($this->arr["listbox_items"][$cnt-1] == ""))
 				{
 					$cnt--;
 				}
 
-				$this->arr[listbox_count]=$cnt;
+				$this->arr["listbox_count"]=$cnt;
 				$var = $base."_lradio";
-				$this->arr[listbox_default] = $$var;
+				$this->arr["listbox_default"] = $$var;
 			}
 
-			if ($this->arr[type] == "multiple")
+			if ($this->arr["type"] == "multiple")
 			{
-				$cnt=$this->arr[multiple_count]+1;	
+				$cnt=$this->arr["multiple_count"]+1;	
 				for ($b=0; $b < $cnt; $b++)
 				{
 					$var=$base."_mul_".$b;
-					$this->arr[multiple_items][$b] = $$var;
+					$this->arr["multiple_items"][$b] = $$var;
 
 					$var = $base."_m_".$b;
-					$this->arr[multiple_defaults][$b] = $$var;
+					$this->arr["multiple_defaults"][$b] = $$var;
 				}
-				if ($this->arr[multiple_items][$cnt-1] == "")
+				if ($this->arr["multiple_items"][$cnt-1] == "")
 					$cnt--;
-				$this->arr[multiple_count]=$cnt;
+				$this->arr["multiple_count"]=$cnt;
 			}
 
-			if ($this->arr[type] == "textarea")
+			if ($this->arr["type"] == "textarea")
 			{
 				$var = $base."_ta_rows";
-				$this->arr[ta_rows]= $$var;
+				$this->arr["ta_rows"]= $$var;
 				$var = $base."_ta_cols";
-				$this->arr[ta_cols]=$$var;
+				$this->arr["ta_cols"]=$$var;
 			}
 
-			if ($this->arr[type] == "radiobutton")
+			if ($this->arr["type"] == "radiobutton")
 			{
 				$var=$base."_group";
-				$this->arr[group] = $$var;
+				$this->arr["group"] = $$var;
 			}
 
 			if ($this->arr["type"] == "price")
@@ -276,7 +287,7 @@ load_vcl("date_edit");
 				$this->arr["length"] = $$var;
 			}
 
-			if ($this->arr[type] == "textbox" || $this->arr[type] == "textarea" || $this->arr[type] == "checkbox" || $this->arr[type] == "radiobutton")
+			if ($this->arr["type"] == "textbox" || $this->arr["type"] == "textarea" || $this->arr["type"] == "checkbox" || $this->arr["type"] == "radiobutton")
 			{
 				$var=$base."_def";
 				$this->arr["default"] = $$var;
@@ -284,7 +295,7 @@ load_vcl("date_edit");
 				$this->arr["length"] = $$var;
 			}
 
-			if ($this->arr[type] == "textbox")
+			if ($this->arr["type"] == "textbox" || $this->arr["type"] == "listbox")
 			{
 				$var=$base."_must_fill";
 				$this->arr["must_fill"] = $$var;
@@ -292,22 +303,22 @@ load_vcl("date_edit");
 				$this->arr["must_error"] = $$var;
 			}
 
-			if ($this->arr[type] == 'file')
+			if ($this->arr["type"] == 'file')
 			{
 				$var=$base."_filetype";
-				$this->arr[ftype] = $$var;
+				$this->arr["ftype"] = $$var;
 				$var=$base."_file_link_text";
-				$this->arr[flink_text] = $$var;
+				$this->arr["flink_text"] = $$var;
 				$var=$base."_file_show";
-				$this->arr[fshow] = $$var;
+				$this->arr["fshow"] = $$var;
 			}
 
-			if ($this->arr[type] == 'link')
+			if ($this->arr["type"] == 'link')
 			{
 				$var=$base."_link_text";
-				$this->arr[link_text] = $$var;
+				$this->arr["link_text"] = $$var;
 				$var=$base."_link_address";
-				$this->arr[link_address] = $$var;
+				$this->arr["link_address"] = $$var;
 			}
 
 			if ($this->arr["type"] == 'date')
@@ -318,25 +329,31 @@ load_vcl("date_edit");
 				$this->arr["to_year"] = $$var;
 			}
 
-			if ($this->arr[type] == "submit" || $this->arr[type] == "reset")
+			if ($this->arr["type"] == "submit" || $this->arr["type"] == "reset")
 			{
 				$var = $base."_btext";
-				$this->arr[button_text] = $$var;
+				$this->arr["button_text"] = $$var;
 			}
 
 			$var = $base."_separator_type";
-			$this->arr[sep_type] = $$var;
+			$this->arr["sep_type"] = $$var;
 
 			$var = $base."_sep_pixels";
-			$this->arr[sep_pixels] = $$var;
+			$this->arr["sep_pixels"] = $$var;
 
 			$var = $base."_order";
 			$$var+=0;
-			if ($this->arr[ord] != $$var)
+			if ($this->arr["ord"] != $$var)
 			{
-				$this->arr[ord] = $$var;
+				$this->arr["ord"] = $$var;
 				$this->upd_object(array("oid" => $this->id, "jrk" => $$var));
 			}
+
+			$var = $base."_subtype";
+			$this->arr["subtype"] = $$var;
+
+			$var = $base."_srow_grp";
+			$this->arr["srow_grp"] = $$var;
 			return true;
 		}
 

@@ -64,5 +64,27 @@ class shop_base extends aw_template
 		$this->db_query("SELECT objects.*,shop_items.* FROM objects LEFT JOIN shop_items ON shop_items.id = objects.oid WHERE id = $id");
 		return $this->db_next();
 	}
+
+	////
+	// !returns the shop equasion $id
+	function get_eq($id)
+	{
+		if (!$id)
+		{
+			return false;
+		}
+		return $this->get_object($id);
+	}
+
+	function listall_eqs()
+	{
+		$ret = array();
+		$this->db_query("SELECT oid,name,comment FROM objects WHERE class_id = ".CL_SHOP_EQUASION." AND status != 0");
+		while ($row = $this->db_next())
+		{
+			$ret[$row["oid"]] = $row["name"];
+		}
+		return $ret;
+	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.21 2001/06/13 03:35:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.22 2001/06/13 19:15:14 kristo Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -149,12 +149,24 @@ class planner extends calendar {
 				"date" => $date,
 				"type" => $disp,
 		));
-		
-		$repeaters = $this->_get_event_repeaters(array(
-				"id"	=> $id,
-				"start" => date("d-m-Y",$di["start"]),
-				"end" => date("d-m-Y",$di["end"])));
+		$events = $this->get_events2(array(
+					"start" => $di["start"],
+					"end" => $di["end"],
+					"uid" => UID,
+				));
 
+		foreach($events as $key => $val)
+		{
+			print $val["oid"] . "<br>";
+			print $key . "-" . $val["title"] . "<br>";
+		};
+		print "---";
+		
+		//$repeaters = $this->_get_event_repeaters(array(
+		//		"id"	=> $id,
+		//		"start" => date("d-m-Y",$di["start"]),
+		//		"end" => date("d-m-Y",$di["end"])));
+		//
 		$rlist = array();
 	
 		// see on fawking catch22 olukord.
@@ -166,44 +178,6 @@ class planner extends calendar {
 
 		// lahendus? planner_repeater tabelisse panna samuti kirja selle
 		// kalendri ID, mille juurde repeater kuulub.
-		foreach($repeaters as $key => $val)
-		{
-			$rlist[] = $val["eid"];
-		};
-		if (sizeof($rlist) > 0)
-		{
-			$rinlist = " OR (planner.id IN ( " . join(",",$rlist) . " )) ";
-		}
-		else
-		{
-			$rinlist = "";
-		};
-		$rxlist = array_flip($rlist);
-	
-
-		$events = array();
-		$events2 = array();
-		if ($ctype == "oid")
-		{
-			$supp = "parent = '$id'";
-		}
-		else
-		{
-			$supp = "uid = '" . UID . "'";
-		};
-		$q = "SELECT * FROM planner
-			LEFT JOIN objects ON (planner.id = objects.oid)
-			WHERE objects.status = 2 AND ((start >= '$di[start]' AND start <= '$di[end]')) 
-			ORDER BY start";
-		$this->db_query($q);
-		while($row = $this->db_next())
-		{
-			if (!isset($rxlist[$row["id"]]))
-			{
-				$events[date("dmY",$row["start"])][$row["start"]] = $row;
-			};
-			$events2["$row[id]"] = $row;
-		};
 
 		$ddiff1 = $this->get_day_diff($di["start"],$di["end"]);
 		// tsükkel yle koigi selles perioodis asuvate päevade, et
@@ -219,7 +193,7 @@ class planner extends calendar {
 			reset($repeaters);
 			$more = true;
 			$yearpwhen = "";
-			while(list($key,$rep) = each($repeaters))
+			while(list($key,$rep) = each($events))
 			{
 				$rep["end"] = $events2[$rep["eid"]]["rep_until"];
 				$sx = strtotime("+$i days",$rep["start"]);
@@ -614,17 +588,50 @@ class planner extends calendar {
 	// argumendid:
 	// start(timestamp), end(timestamp)
 	// parent(int) - kalendri ID
+
+	// tegelikult peaks siin lugema repeaterid sisse ja mitte kusagil mujal
 	function get_events($args = array())
 	{
 		extract($args);
 		$retval = array();
 		$q = "SELECT * FROM planner
 			LEFT JOIN objects ON (planner.id = objects.oid)
-			WHERE objects.status = 2 AND objects.parent = '$parent' AND (start >= '$start' AND start <= '$end') ORDER BY start";
+			WHERE objects.status = 2 AND objects.parent = '$parent'
+				AND ((start >= '$start' AND start <= '$end') OR (rep_until >= '$start')) ORDER BY start";
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
 			$retval[] = $row;
+		};
+		return (sizeof($retval) > 0) ? $retval : false;
+	}
+	
+	// tegelikult peaks siin lugema repeaterid sisse ja mitte kusagil mujal
+	function get_events2($args = array())
+	{
+		extract($args);
+		$retval = array();
+		$reps = array();
+		$q = "SELECT * FROM planner
+			LEFT JOIN objects ON (planner.id = objects.oid)
+			WHERE objects.status = 2 AND planner.uid = '$uid'
+				AND ((start >= '$start' AND start <= '$end') OR (rep_until >= '$start')) ORDER BY start";
+		$this->db_query($q);
+		while($row = $this->db_next())
+		{
+			$this->save_handle();
+			$q = "SELECT * FROM planner_repeaters WHERE eid = '$row[oid]'";
+			$this->db_query($q);
+			while($rep = $this->db_next())
+			{
+				$reps[$row["oid"]][] = $rep;
+			};
+			$this->restore_handle();
+			$retval[] = $row;
+		};
+		foreach($retval as $key => $val)
+		{
+			printf("%s - %s - %s<br>",date("d-m-Y",$val["start"]),$val["title"],date("d-m-Y",$val["end"]));
 		};
 		return (sizeof($retval) > 0) ? $retval : false;
 	}

@@ -53,7 +53,8 @@ class item_type extends shop_base
 			"form_id" => $form_id,
 			"cnt_form_id" => $form_id,
 			"reforb" => $this->mk_reforb("submit", array("parent" => $parent)),
-			"flist" => $this->picker(0,$fl)
+			"flist" => $this->picker(0,$fl),
+			"eqs" => $this->picker(0,$this->listall_eqs())
 		));
 		return $this->parse();
 	}
@@ -67,12 +68,12 @@ class item_type extends shop_base
 		if ($id)
 		{
 			$this->upd_object(array("oid" => $id, "name" => $name));
-			$this->db_query("UPDATE shop_item_types set form_id = '$form_id' , short_op = '$op_id', long_op = '$op_id_l', cart_op = '$op_id_cart', cnt_form = '$cnt_form' , cnt_op = '$cnt_form_op' WHERE id = $id");
+			$this->db_query("UPDATE shop_item_types set form_id = '$form_id' , short_op = '$op_id', long_op = '$op_id_l', cart_op = '$op_id_cart', cnt_form = '$cnt_form' , cnt_op = '$cnt_form_op',eq_id = '$eq' WHERE id = $id");
 		}
 		else
 		{
 			$id = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_SHOP_ITEM_TYPE));
-			$this->db_query("INSERT INTO shop_item_types(id,form_id, short_op, long_op, cart_op, cnt_form, cnt_op) values($id,$form_id,$op_id,$op_id_l,$op_id_cart,$cnt_form,$cnt_form_op)");
+			$this->db_query("INSERT INTO shop_item_types(id,form_id, short_op, long_op, cart_op, cnt_form, cnt_op,eq_id) values($id,'$form_id','$op_id','$op_id_l','$op_id_cart','$cnt_form','$cnt_form_op','$eq')");
 		}
 
 		return $this->mk_orb("change", array("id" => $id));
@@ -114,6 +115,8 @@ class item_type extends shop_base
 			}
 		}
 
+		$es = $this->listall_eqs();
+		$es[0] = "";
 		$this->vars(array(
 			"form_id" => $itt["form_id"],
 			"cnt_form_id" => $itt["cnt_form"],
@@ -123,7 +126,8 @@ class item_type extends shop_base
 			"cnt_op_id" => $itt["cnt_op"],
 			"reforb" => $this->mk_reforb("submit", array("id" => $tid)),
 			"flist" => $this->picker(0,$fl),
-			"name" => $itt["name"]
+			"name" => $itt["name"],
+			"eqs" => $this->picker($itt["eq_id"],$es)
 		));
 		$this->parse("CHANGE");
 		return $this->parse();

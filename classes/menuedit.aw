@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.21 2001/06/13 05:28:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.22 2001/06/13 19:15:14 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -232,7 +232,14 @@ classload("cache","validator","defs");
 			// leiame, kas on tegemist perioodilise rubriigiga
  			$periodic = $this->is_periodic($section);
 
-			$this->sel_section = $section;
+			if ($obj["class_id"] == CL_DOCUMENT)
+			{
+				$this->sel_section = $obj["parent"];
+			}
+			else
+			{
+				$this->sel_section = $section;
+			}
 	
 			$sel_menu_id = $section;
 			if (!is_array($this->mar[$sel_menu_id]))
