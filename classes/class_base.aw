@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.202 2004/01/29 10:46:11 duke Exp $
+// $Id: class_base.aw,v 2.203 2004/02/04 13:22:50 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -36,8 +36,11 @@
 	@caption Tõlge kinnitatud
 
 	@groupinfo general caption=Üldine default=1 icon=edit
-*/
 
+	@forminfo add onload=init_storage_object 
+	@forminfo edit onload=load_storage_object
+
+*/
 
 // some contants for internal use
 
@@ -373,6 +376,17 @@ class class_base extends aw_template
 
 		foreach($resprops as $val)
 		{
+			global $XX4;
+			/// .. aaah. dammit. I need to implement the form thingie.
+			// don't you see? Then I can do different forms .. one for
+			// editint .. other for showing. Damn, that's going to be nice.
+
+			// that form would then be able to do different transformations
+			// with it's contents and stuff like that. Oh yes ..
+			if ($XX4)
+			{
+				$this->alter_property(&$val);
+			};
 			$cli->add_property($val);
 		};
 
@@ -1343,6 +1357,8 @@ class class_base extends aw_template
 		$clif = new aw_array($cfgu->get_classinfo());
 		$this->classinfo = $this->classinfo + $clif->get();
 		$this->relinfo = $cfgu->get_relinfo();
+		$this->forminfo = $cfgu->get_forminfo();
+		#arr($this->forminfo);
 		if (is_array($this->classconfig))
 		{
 			$this->classinfo = array_merge($this->classinfo,$this->classconfig);
@@ -1583,6 +1599,11 @@ class class_base extends aw_template
 			$val["value"] = $val["vcl_inst"]->get_html();
 		};
 		
+		if (($val["type"] == "releditor") && is_object($val["vcl_inst"]))
+		{
+			$val["value"] = $val["vcl_inst"]->get_html();
+		};
+		
 		if (($val["type"] == "calendar") && is_object($val["vcl_inst"]))
 		{
 			$val["value"] = $val["vcl_inst"]->get_html();
@@ -1783,6 +1804,7 @@ class class_base extends aw_template
 		$has_rte = false;
 		foreach($properties as $key => $val)
 		{
+
 			if (isset($val["callback"]) && method_exists($this->inst,$val["callback"]))
 			{
 				$meth = $val["callback"];
@@ -1797,6 +1819,27 @@ class class_base extends aw_template
 					};
 				}
 			}
+			elseif ($val["type"] == "releditor")
+			{
+				if (!is_object($val["vcl_inst"]))
+				{
+					classload("vcl/releditor");
+					$val["vcl_inst"] = new releditor();
+				};
+				$argblock["prop"] = &$val;
+				$target_reltype = constant($val["reltype"]);
+				$argblock["prop"]["reltype"] = $target_reltype;
+				$argblock["prop"]["clid"] = $this->relinfo[$target_reltype]["clid"];
+				$relres = $val["vcl_inst"]->init_rel_editor($argblock);
+				if (is_array($relres))
+				{
+					foreach($relres as $rkey => $rval)
+					{
+						$this->convert_element(&$rval);
+						$resprops[$rkey] = $rval;
+					};
+				};
+			}
 			else
 			{
 				$resprops[$key] = $val;
@@ -1806,6 +1849,8 @@ class class_base extends aw_template
 			{
 				$has_rte = true;
 			};
+				
+
 		}
 
 		if (1 != $this->classinfo["allow_rte"])
@@ -1909,8 +1954,8 @@ class class_base extends aw_template
 				$argblock["prop"]["reltype"] = $target_reltype;
 				$argblock["prop"]["clid"] = $this->relinfo[$target_reltype]["clid"];
 				$val["vcl_inst"]->init_rel_manager($argblock);
-				//$this->init_rel_manager(&$argblock);
 			};
+			
 			
 			if ( isset($val["editonly"]) && empty($this->id))
 			{
@@ -2164,7 +2209,6 @@ class class_base extends aw_template
 		$this->request = $args;
 
 		$obj = $this->get_object($args["id"]);
-
 
 		$almgr = get_instance("aliasmgr",array("use_class" => get_class($this->orb_class)));
 
@@ -2544,6 +2588,8 @@ class class_base extends aw_template
 			$type = $property["type"];
 			$method = $property["method"];
 			$table = $property["table"];
+
+
 			$field = !empty($property["field"]) ? $property["field"] : $property["name"];
 
                         $argblock = array(
@@ -2601,6 +2647,21 @@ class class_base extends aw_template
 			{
 				continue;	
 			};
+			
+			if ($property["type"] == "releditor")
+			{
+				/// XXX: right now I can only have one type of rel editor
+				$cba_emb = $args["cba_emb"];	
+				classload("vcl/releditor");
+				$vcl_inst = new releditor();
+
+				$argblock["prop"] = $property;
+				$target_reltype = constant($property["reltype"]);
+				$argblock["prop"]["reltype"] = $target_reltype;
+				$argblock["prop"]["clid"] = $this->relinfo[$target_reltype]["clid"];
+
+				$vcl_inst->process_releditor($argblock);
+			};
 
 			if ($property["store"] == "no")
 			{
@@ -2650,6 +2711,7 @@ class class_base extends aw_template
 					$pvalues[$field] += $property["ch_value"];
 				};     
 			};
+
 
 			// XXX: this is not good!
 			if (!$new &&  ($type == "relpicker") && isset($property["pri"]) )
@@ -2947,6 +3009,11 @@ class class_base extends aw_template
 		));
 	}
 
+	function alter_property($arr)
+	{
+		$arr["type"] = "text";
+	}
+
 	////
 	// !Returns a list of config forms used by this
 	function get_cfgform_list($args = array())
@@ -2967,57 +3034,6 @@ class class_base extends aw_template
 		return $retval;
 	}
 
-	function init_rel_manager($arr)
-	{
-		$prop = &$arr["prop"];
-		$clids = $this->relinfo[$prop["reltype"]]["clid"];
-		if (empty($clids))
-		{
-			// no clids defined? bail out
-			return "";
-		};
-
-		if (!is_array($clids))
-		{
-			$clids = array($clids);
-		};
-
-		$new_name = $prop["name"] . "_new";
-		$search_name = $prop["name"] . "_search";
-
-		$prop["vcl_inst"]->start_menu(array(
-			"name" => $new_name,
-			"tooltip" => "Uus",
-		));
-		
-		$prop["vcl_inst"]->start_menu(array(
-			"name" => $search_name,
-			"tooltip" => "Otsi",
-			"img" => "search.gif",
-		));
-
-		$ret_url = $this->mk_my_orb("change",array("id" => $arr["request"]["id"],"group" => $arr["request"]["group"]));
-		foreach($clids as $clid)
-		{
-			$cln = constant($clid);
-			$classinf = $this->cfg["classes"][$cln];
-			$prop["vcl_inst"]->add_item(array(
-				"parent" => $new_name,
-				"text" => "Uus " . $classinf["name"],
-			));
-
-			$prop["vcl_inst"]->add_item(array(
-				"parent" => $search_name,
-				"text" => "Otsi " . $classinf["name"],
-				"link" => $this->mk_my_orb("search_aliases",array(
-					"id" => $arr["request"]["id"],
-					"return_url" => urlencode($ret_url),
-					"reltype" => $this->relinfo[$prop["reltype"]]["value"],
-					"objtype" => constant($clid),
-				)),
-			));
-		};
-	}
 
 };
 ?>
