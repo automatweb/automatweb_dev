@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.272 2004/05/31 11:22:40 duke Exp $
+// $Id: class_base.aw,v 2.273 2004/06/01 07:48:27 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -192,6 +192,7 @@ class class_base extends aw_template
 		$this->init_class_base();
 
 		$cb_values = aw_global_get("cb_values");
+
 		$has_errors = false;
 		if (!empty($cb_values))
 		{
@@ -313,7 +314,6 @@ class class_base extends aw_template
 
 		// it's the bloody run order .. FUCK
 		$properties = $this->get_property_group2($filter);
-
 
 		if ($this->classinfo(array("name" => "trans")) == 1 && $this->id)
 		{
@@ -2640,6 +2640,12 @@ class class_base extends aw_template
 		extract($args);
 
 		$this->init_class_base();
+		if (method_exists($this->inst,"callback_on_load"))
+		{
+			$this->inst->callback_on_load(array(
+				"request" => $args,
+			));
+		}
 
 		// and this of course should handle both creating new objects and updating existing ones
 
