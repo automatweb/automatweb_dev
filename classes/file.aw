@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.41 2003/02/01 21:58:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.42 2003/02/06 13:44:41 duke Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -122,6 +122,7 @@ class file extends class_base
 
 					$form_data["file"] = $fs;
 					$form_data["type"] = $file_type;
+					$this->file_name = $file_name;
 				};
 		
 				/*	
@@ -138,6 +139,15 @@ class file extends class_base
 		};
 		// cause everything is alreay handled here
 		return $retval;
+	}
+
+	function callback_pre_save($args = array())
+	{
+		$coredata = &$args["coredata"];
+		if (!$coredata["name"] && isset($this->file_name))
+		{
+			$coredata["name"] = $this->file_name;
+		};
 	}
 
 	////
