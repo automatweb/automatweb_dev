@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.15 2004/07/30 11:06:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.16 2004/11/02 11:22:49 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -331,7 +331,8 @@ class site_search_content extends class_base
 					d.title like '%$str%' OR
 					d.lead like '%$str%' OR
 					d.author like '%$str%' OR
-					d.photos like '%$str%'
+					d.photos like '%$str%' OR
+					d.dcache like '%$str%'
 				) AND 
 				o.parent IN (".$ams->to_sql().") AND
 				o.status = 2 AND
