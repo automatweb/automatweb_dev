@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.60 2004/07/09 12:45:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.61 2004/07/30 08:00:45 rtoomas Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -32,9 +32,18 @@ class aw_template extends core
 
 		$this->REQUEST_URI = aw_global_get("REQUEST_URI");
 
-		$this->template_dir = $this->cfg["tpldir"] . "/$basedir";
-		$this->adm_template_dir = $this->cfg["basedir"] . "/templates/$basedir";
-		$this->site_template_dir = $this->cfg["site_tpldir"]."/".$basedir;
+		if (substr($basedir,0,1) != "/" && !preg_match("/^[a-z]:/i", substr($basedir,0,2)))
+		{
+			$this->template_dir = $this->cfg["tpldir"] . "/$basedir";
+			$this->adm_template_dir = $this->cfg["basedir"] . "/templates/$basedir";
+			$this->site_template_dir = $this->cfg["site_tpldir"]."/".$basedir;
+		}
+		else
+		{
+			$this->template_dir = $basedir;
+			$this->adm_template_dir = $basedir;
+			$this->site_template_dir = $basedir;
+		}
 		
 		$this->vars = array();
 		$this->sub_merge = 0;
@@ -152,8 +161,9 @@ class aw_template extends core
 		$this->template_filename = $this->template_dir."/".$name;
 		if (!file_exists($this->template_filename))
 		{
-			$this->template_filename = $this->adm_template_dir . "/" . $name;
+			$this->template_filename = $this->adm_template_dir . "/" . $name;			
 		};
+
 		// try to load a template from aw directory then
 		if (file_exists($this->template_filename))
 		{
