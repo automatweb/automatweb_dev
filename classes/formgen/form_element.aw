@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.84 2005/03/24 10:01:38 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.85 2005/04/05 13:52:33 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -52,7 +52,8 @@ class form_element extends aw_template
 				"delete" => "Kustuta",
 				"url" => "URL",
 				"preview" => "Eelvaade",
-				"confirm" => "Kinnita",
+				"confirm" => 
+					"Kinnita",
 				"order" => "Tellimine",
 				"close" => "Sulge aken"
 			),

@@ -171,7 +171,7 @@ class parser extends aw_template
 				}
 			}
 		}
-		die("class count = ".$this->class_count." <br />\nfunction count = ".$this->function_count." <br />\nMaximum brace depth = ".$this->max_brace_level." \n<br />max level in file ".$this->max_brace_file." on line ".$this->max_brace_line." <br />\n");
+		die(sprintf(t("class count = %s <br />\nfunction count = %s <br />\nMaximum brace depth = %s \n<br />max level in file %s on line %s <br />\n"), $this->class_count, $this->function_count, $this->max_brace_level, $this->max_brace_file, $this->max_brace_line));
 	}
 
 	////
@@ -324,7 +324,7 @@ class parser extends aw_template
 				$cur_class = $this->p_get_token();
 				if (!$cur_class)
 				{
-					die("error - end of file after class in line ".$this->p_get_line()." <br />");
+					die(sprintf(t("error - end of file after class in line %s <br />"), $this->p_get_line()));
 				}
 				$this->classes[$cur_class] = array("name" => $cur_class,"file" => $file_name, "start_line" => $this->p_get_line());
 //				echo "found class $cur_class in line ".$this->p_get_line()." <br />";
@@ -581,7 +581,7 @@ class parser extends aw_template
 //		echo "enter p_get_string() <br />";
 		if ($str_start != "\"" && $str_start != "'")
 		{
-			die("error in p_get_string (line: ".$this->p_get_line()." , pos = ".$this->p_pos." ) , called without string start <br />\n");
+			die(sprintf(t("error in p_get_string (line: %s , pos = %s ) , called without string start <br />\n"), $this->p_get_line(), $this->p_pos));
 		}
 		$ret = $str_start;
 //		echo "str_start = $str_start <br />";
@@ -607,7 +607,7 @@ class parser extends aw_template
 			}
 		}
 //		echo "ch = <pre>", var_dump($ch),"</pre> <br />";
-		die("error in line ".$this->p_get_line()." file ended with open string! <br />\n");
+		die(sprintf(t("error in line %s file ended with open string! <br />\n"), $this->p_get_line()));
 	}
 
 	////
@@ -658,7 +658,7 @@ class parser extends aw_template
 			echo "creating back-up of old class: $file to $backup_name <br />\n";
 			if (!copy($file, $backup_name))
 			{
-				die("copy of $file to $backup_name failed, stopping <br />\n");
+				die(sprintf(t("copy of %s to %s failed, stopping <br />\n"), $file, $backup_name));
 			}
 			echo "saving new file as $file ....<br />\n";
 			$this->put_file(array("file" => $file, "content" => $fc_n));
@@ -712,7 +712,7 @@ class parser extends aw_template
 			echo "creating back-up of old class: $file to $backup_name <br />\n";
 			if (!copy($file, $backup_name))
 			{
-				die("copy of $file to $backup_name failed, stopping <br />\n");
+				die(sprintf(t("copy of %s to %s failed, stopping <br />\n"), $file, $backup_name));
 			}
 			echo "saving new file as $file ....<br />\n";
 			$this->put_file(array("file" => $file, "content" => $fc));

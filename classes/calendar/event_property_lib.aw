@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.22 2005/03/24 10:12:59 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.23 2005/04/05 13:52:35 kristo Exp $
 // Shared functionality for event classes
 class event_property_lib extends aw_template
 {
@@ -287,7 +287,7 @@ class event_property_lib extends aw_template
 		{
 			$table->define_field(array(
 				"name" => "change",
-				"caption" => "Muuda",
+				"caption" => t("Muuda"),
 				"align" => "center",
 			));
 			$table->define_chooser(array(
@@ -314,7 +314,7 @@ class event_property_lib extends aw_template
 							"cfgform" => $_tmp->meta("cfgform"),
 							"return_url" => urlencode(aw_global_get("REQUEST_URI"))
 						), CL_CALENDAR_REGISTRATION_FORM),
-						"caption" => "Vaata"
+						"caption" => t("Vaata")
 					));
 					*/
 					$dat["id"] = $_tmp->id();

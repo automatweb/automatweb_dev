@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 14:23:49 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:52:36 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -127,4 +127,32 @@ msgstr ""
 
 # classes/contentmgmt/reminder.aw:rel_RELTYPE_REMINDER_OBJECT
 msgid "Seose Seotud objekt (RELTYPE_REMINDER_OBJECT) tekst"
+msgstr ""
+
+#: classes/contentmgmt/reminder.aw:180
+msgid "Eemalda valitud objektid"
+msgstr ""
+
+#: classes/contentmgmt/reminder.aw:182
+msgid "Oled kindel, et soovid valitud objektid ajastamiselt eemaldada?"
+msgstr ""
+
+#: classes/contentmgmt/reminder.aw:192
+msgid "ID"
+msgstr ""
+
+#: classes/contentmgmt/reminder.aw:193
+msgid "Nimi"
+msgstr ""
+
+#: classes/contentmgmt/reminder.aw:194
+msgid "Tüüp"
+msgstr ""
+
+#: classes/contentmgmt/reminder.aw:270
+msgid "aw"
+msgstr ""
+
+#: classes/contentmgmt/reminder.aw:271
+msgid "Meeldetuletus"
 msgstr ""

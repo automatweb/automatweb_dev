@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/vcl/project_selector.aw,v 1.7 2005/03/24 10:13:00 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/vcl/project_selector.aw,v 1.8 2005/04/05 13:52:35 kristo Exp $
 class project_selector extends core
 {
 	function project_selector()
@@ -106,7 +106,8 @@ class project_selector extends core
 					"name" => $propname . "[" . $item_id . "]",
 					"caption" => html::href(array(
 						"url" => $this->mk_my_orb("change",array("id" => $item_id),CL_PROJECT),
-						"caption" => "<font color='$color'>" . $item->name() . "</font>",
+						"caption" => 
+							"<font color='$color'>" . $item->name() . "</font>",
 					)),
 					"ch_value" => $xlist[$item_id],
 					"value" => 1,

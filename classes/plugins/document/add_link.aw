@@ -10,7 +10,7 @@ class add_link extends aw_template
 	function get_property($value)
 	{
 		return array(
-			"caption" => "Lisa link nähtav",
+			"caption" => t("Lisa link nähtav"),
 			"type" => "checkbox",
 			"value" => $value,
 			"ch_value" => 1,
@@ -30,7 +30,7 @@ class add_link extends aw_template
 	function get_static_property($args = array())
 	{
 		return html::checkbox(array(
-			"caption" => "Lisa link nähtav",
+			"caption" => t("Lisa link nähtav"),
 			"checked" => !empty($args["value"]),
 			"name" => "plugins[" . get_class($this) . "]",
 		));

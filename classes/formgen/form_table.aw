@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.77 2005/03/24 10:01:38 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.78 2005/04/05 13:52:33 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -10,24 +10,24 @@ class form_table extends form_base
 		lc_load("definition");
 		$this->lc_load("form","lc_form");
 		$this->fakels = array(
-			"change" => "Change", 
-			"view" => "View", 
-			"special" => "Special", 
-			"delete" => "Delete", 
-			"created" => "Created", 
-			"modified" => "Modified", 
-			"uid" => "UID", 
-			"active" => "Acive", 
-			"chpos" => "Move",
-			"order" => "Order", 
-			"select" => "Select",
-			"hidden_select" => "Peidetud Select",
-			"jrk" => "Jrk",
-			"cnt" => "Count",
-			"formel" => "Koguse element",
-			"formel_price" => "Hinna element",
-			"entry_id" => "Sisestuse ID",
-			"text" => "Tekst"
+			"change" => t("Change"), 
+			"view" => t("View"), 
+			"special" => t("Special"), 
+			"delete" => t("Delete"), 
+			"created" => t("Created"), 
+			"modified" => t("Modified"), 
+			"uid" => t("UID"), 
+			"active" => t("Active"), 
+			"chpos" => t("Move"),
+			"order" => t("Order"), 
+			"select" => t("Select"),
+			"hidden_select" => t("Peidetud Select"),
+			"jrk" => t("Jrk"),
+			"cnt" => t("Count"),
+			"formel" => t("Koguse element"),
+			"formel_price" => t("Hinna element"),
+			"entry_id" => t("Sisestuse ID"),
+			"text" => t("Tekst")
 		);
 
 		$this->lang_id = aw_global_get("lang_id");

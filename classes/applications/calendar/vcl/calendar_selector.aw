@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/vcl/calendar_selector.aw,v 1.5 2005/02/06 17:42:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/vcl/calendar_selector.aw,v 1.6 2005/04/05 13:52:35 kristo Exp $
 class calendar_selector extends core
 {
 	function calendar_selector()
@@ -43,7 +43,8 @@ class calendar_selector extends core
 					"name" => "${propname}[${event_folder}]",
 					"caption" => html::href(array(
 						"url" => $this->mk_my_orb("change",array("id" => $id,"group" => "views"),CL_PLANNER),
-						"caption" => "<font color='black'>" . $planner->name() . "</font>",
+						"caption" => 
+							"<font color='black'>" . $planner->name() . "</font>",
 					)),
 					"ch_value" => $event_folder,
 					"value" => isset($plrlist[$event_folder]) ? $event_folder : 0,

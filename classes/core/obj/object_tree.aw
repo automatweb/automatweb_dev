@@ -15,7 +15,7 @@ class object_tree extends _int_obj_container_base
 		{
 			error::raise(array(
 				"id" => ERR_PARAM,
-				"msg" => "object_tree:constructor(): if you specify a parameter, it must be a filter array!"
+				"msg" => t("object_tree:constructor(): if you specify a parameter, it must be a filter array!")
 			));
 		}
 
@@ -38,7 +38,7 @@ class object_tree extends _int_obj_container_base
 		{
 			error::raise(array(
 				"id" => ERR_PARAM,
-				"msg" => "object_tree::filter(): filter parameter must be an array!"
+				"msg" => t("object_tree::filter(): filter parameter must be an array!")
 			));
 		}
 
@@ -71,7 +71,7 @@ class object_tree extends _int_obj_container_base
 		{
 			error::raise(array(
 				"id" => ERR_PARAM,
-				"msg" => "object_tree::foreach_o(): parameter must be an array"
+				"msg" => t("object_tree::foreach_o(): parameter must be an array")
 			));
 		}
 
@@ -84,7 +84,7 @@ class object_tree extends _int_obj_container_base
 		{
 			error::raise(array(
 				"id" => ERR_PARAM,
-				"msg" => "object_tree::foreach_o(): $param[func] is not a member function of the object class!"
+				"msg" => sprintf(t("object_tree::foreach_o(): %s is not a member function of the object class!"), $param["func"])
 			));
 		}
 
@@ -121,7 +121,7 @@ class object_tree extends _int_obj_container_base
 		{
 			error::raise(array(
 				"id" => ERR_PARAM,
-				"msg" => "object_tree::foreach_cb(): parameter must be an array!"
+				"msg" => t("object_tree::foreach_cb(): parameter must be an array!")
 			));
 		}
 
@@ -136,7 +136,7 @@ class object_tree extends _int_obj_container_base
 			{
 				error::raise(array(
 					"id" => ERR_PARAM,
-					"msg" => "object_tree::foreach_cb(): callback method ".$param["func"][1]." does not exist in class ".get_class($param["func"][1])."!"
+					"msg" => sprintf(t("object_tree::foreach_cb(): callback method %s does not exist in class %s!"), $param["func"][1], get_class($param["func"][1]))
 				));
 			}
 		}
@@ -145,7 +145,7 @@ class object_tree extends _int_obj_container_base
 		{
 			error::raise(array(
 				"id" => ERR_PARAM,
-				"msg" => "object_tree::foreach_cb(): callback function ".$param["func"][1]." does not exist!"
+				"msg" => sprintf(t("object_tree::foreach_cb(): callback function %s does not exist!"), $param["func"][1])
 			));
 		}
 
@@ -253,7 +253,7 @@ class object_tree extends _int_obj_container_base
 		{
 			error::raise(array(
 				"id" => ERR_PARAM,
-				"msg" => "object_tree::filter(): parent filter parameter mut always be passed!"
+				"msg" => t("object_tree::filter(): parent filter parameter mut always be passed!")
 			));
 		}
 

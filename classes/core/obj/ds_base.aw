@@ -26,7 +26,7 @@ class _int_obj_ds_base extends acl_base
 	{
 		error::raise(array(
 			"id" => ERR_ABSTRACT,
-			"msg" => "called abstract function ds_base::get_oid_by_alias"
+			"msg" => t("called abstract function ds_base::get_oid_by_alias")
 		));
 	}
 
@@ -37,7 +37,7 @@ class _int_obj_ds_base extends acl_base
 	{
 		error::raise(array(
 			"id" => ERR_ABSTRACT,
-			"msg" => "called abstract function ds_base::get_objdata"
+			"msg" => t("called abstract function ds_base::get_objdata")
 		));
 	}
 
@@ -51,7 +51,7 @@ class _int_obj_ds_base extends acl_base
 	{
 		error::raise(array(
 			"id" => ERR_ABSTRACT,
-			"msg" => "called abstract function ds_base::read_properties"
+			"msg" => t("called abstract function ds_base::read_properties")
 		));
 	}
 
@@ -67,7 +67,7 @@ class _int_obj_ds_base extends acl_base
 	{
 		error::raise(array(
 			"id" => ERR_ABSTRACT,
-			"msg" => "called abstract function ds_base::create_new_object"
+			"msg" => t("called abstract function ds_base::create_new_object")
 		));
 	}
 
@@ -84,7 +84,7 @@ class _int_obj_ds_base extends acl_base
 	{
 		error::raise(array(
 			"id" => ERR_ABSTRACT,
-			"msg" => "called abstract function ds_base::save_properties"
+			"msg" => t("called abstract function ds_base::save_properties")
 		));
 	}
 
@@ -94,7 +94,7 @@ class _int_obj_ds_base extends acl_base
 	{
 		error::raise(array(
 			"id" => ERR_ABSTRACT,
-			"msg" => "called abstract function ds_base::read_connection"
+			"msg" => t("called abstract function ds_base::read_connection")
 		));
 	}
 
@@ -104,7 +104,7 @@ class _int_obj_ds_base extends acl_base
 	{
 		error::raise(array(
 			"id" => ERR_ABSTRACT,
-			"msg" => "called abstract function ds_base::save_connection"
+			"msg" => t("called abstract function ds_base::save_connection")
 		));
 	}
 
@@ -114,7 +114,7 @@ class _int_obj_ds_base extends acl_base
 	{
 		error::raise(array(
 			"id" => ERR_ABSTRACT,
-			"msg" => "called abstract function ds_base::delete_connection"
+			"msg" => t("called abstract function ds_base::delete_connection")
 		));
 	}
 
@@ -125,7 +125,7 @@ class _int_obj_ds_base extends acl_base
 	{
 		error::raise(array(
 			"id" => ERR_ABSTRACT,
-			"msg" => "called abstract function ds_base::find_connections"
+			"msg" => t("called abstract function ds_base::find_connections")
 		));
 	}
 
@@ -138,7 +138,7 @@ class _int_obj_ds_base extends acl_base
 	{
 		error::raise(array(
 			"id" => ERR_ABSTRACT,
-			"msg" => "called abstract function ds_base::search"
+			"msg" => t("called abstract function ds_base::search")
 		));
 	}
 
@@ -148,7 +148,7 @@ class _int_obj_ds_base extends acl_base
 	{
 		error::raise(array(
 			"id" => ERR_ABSTRACT,
-			"msg" => "called abstract function ds_base::delete_object"
+			"msg" => t("called abstract function ds_base::delete_object")
 		));
 	}
 
@@ -158,7 +158,7 @@ class _int_obj_ds_base extends acl_base
 	{
 		error::raise(array(
 			"id" => ERR_ABSTRACT,
-			"msg" => "called abstract function ds_base::create_brother"
+			"msg" => t("called abstract function ds_base::create_brother")
 		));
 	}
 
@@ -168,7 +168,7 @@ class _int_obj_ds_base extends acl_base
 	{
 		error::raise(array(
 			"id" => ERR_ABSTRACT,
-			"msg" => "called abstract function ds_base::fetch_list"
+			"msg" => t("called abstract function ds_base::fetch_list")
 		));
 	}
 }

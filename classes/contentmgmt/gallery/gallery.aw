@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery.aw,v 1.8 2005/03/24 10:04:06 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery.aw,v 1.9 2005/04/05 13:52:34 kristo Exp $
 
 class gallery extends aw_template
 {
@@ -132,7 +132,7 @@ class gallery extends aw_template
 		$this->db_query("SELECT objects.*, galleries.content as content FROM objects LEFT JOIN galleries ON galleries.id = objects.oid WHERE oid = $id");
 		if (!($row = $this->db_next()))
 		{
-			$this->raise_error(ERR_GAL_NOGAL,"load_gallery($id): no such gallery!", true);
+			$this->raise_error(ERR_GAL_NOGAL,sprintf(t("load_gallery(%s): no such gallery!"), $id), true);
 		}
 
 		$this->arr = unserialize($row["content"]);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.41 2005/03/24 10:10:24 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.42 2005/04/05 13:52:33 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -237,7 +237,7 @@ class form_actions extends form_base
 										 WHERE objects.oid = $aid");
 		if (!($row = $this->db_next()))
 		{
-			$this->raise_error(ERR_FG_NOACTION,"form->gen_change_action($id, $aid, $level): no such action!", true);
+			$this->raise_error(ERR_FG_NOACTION,sprintf(t("form->gen_change_action(%s, %s, %s): no such action!"), $id, $aid, $level), true);
 		}
 
 		if ($level < 2)

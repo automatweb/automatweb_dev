@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/cfgobject.aw,v 1.12 2005/03/24 10:06:29 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/cfgobject.aw,v 1.13 2005/04/05 13:52:35 kristo Exp $
 // cfgobject.aw - configuration objects
 // adds, changes and in general handles configuration objects
 
@@ -39,7 +39,7 @@ class cfgobject extends aw_template
 		$toolbar = get_instance("vcl/toolbar");
 		$toolbar->add_button(array(
                         "name" => "add",
-                        "tooltip" => "Lisa",
+                        "tooltip" => t("Lisa"),
                         "url" => "javascript:document.clform.submit()",
                         "img" => "save.gif",
                 ));
@@ -70,18 +70,18 @@ class cfgobject extends aw_template
 	{
 		extract($args);
 		$obj = obj($id);
-		$this->mk_path($obj->parent(),"Muuda konfiobjekti");
+		$this->mk_path($obj->parent(),t("Muuda konfiobjekti"));
 
 		$toolbar = get_instance("vcl/toolbar");
 		$toolbar->add_button(array(
                         "name" => "save",
-                        "tooltip" => "Salvesta",
+                        "tooltip" => t("Salvesta"),
                         "url" => "javascript:document.clform.submit()",
                         "img" => "save.gif",
                 ));
 		$toolbar->add_button(array(
                         "name" => "search",
-                        "tooltip" => "Vali objektid",
+                        "tooltip" => t("Vali objektid"),
                         "url" => "javascript:show_search()",
                         "img" => "search.gif",
                 ));
@@ -353,12 +353,12 @@ class cfgobject extends aw_template
 		$toolbar = get_instance("vcl/toolbar");
 		$toolbar->add_button(array(
                         "name" => "save",
-                        "tooltip" => "Rakenda",
+                        "tooltip" => t("Rakenda"),
                         "url" => "javascript:document.assignform.submit()",
                         "img" => "save.gif",
                 ));
 
-		$this->mk_path(-1,"Vali konfiguratsiooniobjektid");
+		$this->mk_path(-1,t("Vali konfiguratsiooniobjektid"));
 	
 		$this->read_template("assign.tpl");
 
@@ -392,26 +392,26 @@ class cfgobject extends aw_template
 		$form = $search->show($args);
 
 		$this->read_template("search.tpl");
-		$this->mk_path($obj->parent(),"Muuda konfiobjekti");
+		$this->mk_path($obj->parent(),t("Muuda konfiobjekti"));
 		
 		$toolbar = get_instance("vcl/toolbar");
 		$toolbar->add_button(array(
                         "name" => "save",
-                        "tooltip" => "Salvesta",
+                        "tooltip" => t("Salvesta"),
                         "url" => "javascript:document.searchform.submit()",
                         "img" => "save.gif",
                 ));
 
 		$toolbar->add_button(array(
                         "name" => "search",
-                        "tooltip" => "Otsi",
+                        "tooltip" => t("Otsi"),
                         "url" => "javascript:document.queryform.submit()",
                         "img" => "search.gif",
                 ));
 
 		$toolbar->add_button(array(
                         "name" => "edit",
-                        "tooltip" => "Muuda",
+                        "tooltip" => t("Muuda"),
                         "url" => $this->mk_my_orb("change",array("id" => $id)),
                         "img" => "edit.gif",
                 ));

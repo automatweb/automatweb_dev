@@ -357,7 +357,7 @@ class languages extends aw_template
 				$dbi->db_query("INSERT INTO languages(id, name, charset, status, acceptlang, modified, modifiedby) values('$lid','$ldat[name]','$ldat[charset]',$status,'$ldat[acceptlang]','".time()."','".$site['site_obj']['default_user']."')");
 				$log->add_line(array(
 					"uid" => aw_global_get("uid"),
-					"msg" => "Lisas keele",
+					"msg" => t("Lisas keele"),
 					"comment" => $ldat["name"],
 					"result" => "OK"
 				));

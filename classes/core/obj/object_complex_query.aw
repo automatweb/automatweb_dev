@@ -31,7 +31,7 @@ class object_complex_query extends core
 		// start from start from, find relations, join tables, create query template. badabimm, badaboom, and that's it
 		error::raise_if(!isset($arr["fields"][$arr["start_from"]]), array(
 			"id" => ERR_PARAM,
-			"msg" => "object_complex_query::compile_search_by_result_set(): start_from class has no fields in the fields array!"
+			"msg" => t("object_complex_query::compile_search_by_result_set(): start_from class has no fields in the fields array!")
 		));
 
 		$tbls = array();
@@ -94,7 +94,7 @@ class object_complex_query extends core
 		// start from start from, create query template. badabimm, badaboom, and that's it
 		error::raise_if(!isset($arr["where"]["fields"][$arr["where"]["start_from"]]), array(
 			"id" => ERR_PARAM,
-			"msg" => "object_complex_query::compile_search_by_param(): start_from class has no fields in the fields array!"
+			"msg" => t("object_complex_query::compile_search_by_param(): start_from class has no fields in the fields array!")
 		));
 
 		$tbls = array();

@@ -650,7 +650,8 @@ class core extends acl_base
 					die();
 				}
 				flush();
-				die("<br /><b>AW_ERROR: $msg</b><br />\n\n<br />");
+				die("<br /><b>".
+					"AW_ERROR: $msg</b><br />\n\n<br />");
 			}
 		};
 		aw_global_set("__from_raise_error",0);
@@ -662,7 +663,7 @@ class core extends acl_base
 	{
 		error::raise(array(
 			"id" => ERR_ACL,
-			"msg" => "ACL error saidil ".aw_ini_get("baseurl")." ".sprintf(E_ACCESS_DENIED1,"CAN_".$right,$oid)
+			"msg" => sprintf(t("ACL error saidil %s: CAN_%s denied for oid %s"), aw_ini_get("baseurl"),$right, $oid)
 		));
 	}
 
@@ -966,7 +967,7 @@ class core extends acl_base
 		// "b" is for os-indepence, winblowsil on huvitav omadus isiklikke reavahetusi kasutada
 		if (not(($fh = fopen($file,"wb"))))
 		{
-			$this->raise_error(ERR_CORE_NOP_OPEN_FILE,"Couldn't open file '$file' for writing",true);
+			$this->raise_error(ERR_CORE_NOP_OPEN_FILE,sprintf(t("Couldn't open file '%s' for writing"), $file),true);
 		}
 		else
 		{

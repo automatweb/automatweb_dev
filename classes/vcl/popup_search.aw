@@ -45,7 +45,7 @@ class popup_search extends aw_template
 			"selected" => $arr["obj_inst"]->prop($arr["property"]["name"])
 		)).html::href(array(
 			"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",550,500)",
-			"caption" => "Otsi"
+			"caption" => t("Otsi")
 		));
 
 		return array(
@@ -85,28 +85,28 @@ class popup_search extends aw_template
 			"name" => "s[name]",
 			"type" => "textbox",
 			"value" => $arr["s"]["name"],
-			"caption" => "Nimi"
+			"caption" => t("Nimi")
 		));
 
 		$htmlc->add_property(array(
 			"name" => "s[comment]",
 			"type" => "textbox",
 			"value" => $arr["s"]["comment"],
-			"caption" => "Kommentaar"
+			"caption" => t("Kommentaar")
 		));
 
 		$htmlc->add_property(array(
 			"name" => "s[oid]",
 			"type" => "textbox",
 			"value" => $arr["s"]["oid"],
-			"caption" => "OID"
+			"caption" => t("OID")
 		));
 
 		$htmlc->add_property(array(
 			"name" => "s[submit]",
 			"type" => "submit",
 			"value" => "Otsi",
-			"caption" => "Otsi"
+			"caption" => t("Otsi")
 		));
 
 		$htmlc->finish_output(array(
@@ -137,29 +137,29 @@ class popup_search extends aw_template
 
 		$t->define_field(array(
 			"name" => "oid",
-			"caption" => "OID",
+			"caption" => t("OID"),
 			"sortable" => 1,
 		));
 		$t->define_field(array(
 			"name" => "name",
 			"sortable" => 1,
-			"caption" => "Nimi"
+			"caption" => t("Nimi")
 		));
 		$t->define_field(array(
 			"name" => "modifiedby",
 			"sortable" => 1,
-			"caption" => "Muutja"
+			"caption" => t("Muutja")
 		));
 		$t->define_field(array(
 			"name" => "modified",
-			"caption" => "Muudetud",
+			"caption" => t("Muudetud"),
 			"sortable" => 1,
 			"format" => "d.m.Y H:i",
 			"type" => "time"
 		));
 		$t->define_field(array(
 			"name" => "sel",
-			"caption" => "Vali"
+			"caption" => t("Vali")
 		));
 		$t->set_default_sortby("name");
 

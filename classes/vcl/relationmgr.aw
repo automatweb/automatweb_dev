@@ -280,7 +280,7 @@ class relationmgr extends aw_template
 			{
 				$tb->add_button(array(
 					"name" => "save",
-					"tooltip" => "Loo seos(ed)",
+					"tooltip" => t("Loo seos(ed)"),
 					"url" => "javascript:aw_save()",
 					"img" => "save.gif",
 				));
@@ -332,7 +332,7 @@ class relationmgr extends aw_template
 		
 		$tbl->define_field(array(
 			"name" => "icon",
-			"caption" => "",
+			"caption" => t(""),
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.27 2005/03/24 10:01:38 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.28 2005/04/05 13:52:33 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -54,7 +54,7 @@ class form_base extends form_db_base
 		$this->db_query($q);
 		if (!($row = $this->db_next()))
 		{
-			$this->raise_error(ERR_FG_NOFORM,"form->load($id): no such form!",true);
+			$this->raise_error(ERR_FG_NOFORM,sprintf(t("form->load(%s): no such form!"), $id),true);
 		}
 
 		$this->name = $row["name"];

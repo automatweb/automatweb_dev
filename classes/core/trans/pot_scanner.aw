@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.15 2005/04/04 08:49:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.16 2005/04/05 13:52:34 kristo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -49,6 +49,10 @@ class pot_scanner extends core
 		{
 			while (false !== ($file = readdir($dh)))
 			{ 
+				if ($file == "converters.aw")
+				{
+					continue;
+				}
 				$fn = $dir . "/" . $file;
 				if (is_file($fn))
 				{
@@ -141,49 +145,21 @@ class pot_scanner extends core
 		if (count($strings))
 		{
 			echo "scanned file $file_from \n";
-			$fp = fopen($file_to, "w");
-			// add special POT header
-			fwrite($fp, "msgid \"\"\n");
-			fwrite($fp, "msgstr \"\"\n");
-			fwrite($fp, "\"Project-Id-Version: Automatweb 2.0\\n\"\n");
-			fwrite($fp, "\"POT-Creation-Date: " . date("r") . "\\n\"\n");
-			fwrite($fp, "\"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\\n\"\n");
-			fwrite($fp, "\"Last-Translator: FULL NAME <EMAIL@ADDRESS>\\n\"\n");
-			fwrite($fp, "\"MIME-Version: 1.0\\n\"\n");
-			fwrite($fp, "\"Content-Type: text/plain; charset=ISO-8859-1\\n\"\n");
-			fwrite($fp, "\"Content-Transfer-Encoding: 8bit\\n\"\n");
-			fwrite($fp, "\"Generated-By: AutomatWeb POT Scanner\\n\"\n");
-			fwrite($fp, "\n\n");
 
-			// put same strings on one line
-			$res = array();
-			foreach($strings as $string)
+			if (file_exists($to_file))
 			{
-				$str = $string["str"];
-				$str = str_replace('"','\"',$str);
-
-				if (isset($res[$str]))
+				$tmpf = tempnam(aw_ini_get("server.tmpdir"), "awtrans");
+				$this->_write_file($tmpf, $strings, date("r", filemtime($to_file)));
+			
+				if (md5($this->get_file(array("file" => $tmpf))) != md5($this->get_file(array("file" => $to_file))))
 				{
-					$res[$str]["comment"] .= " ".str_replace(aw_ini_get("basedir")."/","", $file_from).":".$string["line"];
-				}
-				else
-				{
-
-					$res[$str] = array(
-						"comment" => "#: ".str_replace(aw_ini_get("basedir")."/","", $file_from).":".$string["line"],
-						"msgid" => $str
-					);
+					$this->_write_file($to_file, $strings, date("r"));
 				}
 			}
-
-			foreach($res as $dat)
+			else
 			{
-				fwrite($fp, $dat["comment"]."\n");
-				fwrite($fp, "msgid \"".$dat["msgid"]."\"\n");
-				fwrite($fp, "msgstr \"\"\n");
-				fwrite($fp, "\n");
+				$this->_write_file($to_file, $strings, date("r"));
 			}
-			fclose($fp);
 
 			// now, for all languages, check of the .po file exists and if not, copy the new .pot over to that
 			$langs = $this->_get_langs();
@@ -230,18 +206,8 @@ class pot_scanner extends core
 	{
 		$fc = file($from_file);
 		
-		// "caption" => "Foo"
 		foreach($fc as $ln => $line)
 		{
-			// only apply for classes that extend from class_base
-			if (preg_match("/class(.*)extends(.*)/ims", $line, $mt))
-			{
-				if (trim($mt[2]) != "class_base")
-				{
-					return;
-				}
-			}
-
 			if (preg_match("/\"caption\"(\s*)=>(\s*)['|\"](.*)['|\"]/imsU", $line))
 			{
 				if (strpos($line, "t(") === false)
@@ -465,5 +431,51 @@ class pot_scanner extends core
 			}
 		}
 		return $langs;
+	}
+
+	function _write_file($to_file, $strings, $date)
+	{
+		$fp = fopen($to_file, "w");
+		// add special POT header
+		fwrite($fp, "msgid \"\"\n");
+		fwrite($fp, "msgstr \"\"\n");
+		fwrite($fp, "\"Project-Id-Version: Automatweb 2.0\\n\"\n");
+		fwrite($fp, "\"POT-Creation-Date: $date\\n\"\n");
+		fwrite($fp, "\"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\\n\"\n");
+		fwrite($fp, "\"Last-Translator: FULL NAME <EMAIL@ADDRESS>\\n\"\n");
+		fwrite($fp, "\"MIME-Version: 1.0\\n\"\n");
+		fwrite($fp, "\"Content-Type: text/plain; charset=ISO-8859-1\\n\"\n");
+		fwrite($fp, "\"Content-Transfer-Encoding: 8bit\\n\"\n");
+		fwrite($fp, "\"Generated-By: AutomatWeb POT Scanner\\n\"\n");
+		fwrite($fp, "\n\n");
+
+		// put same strings on one line
+		$res = array();
+		foreach($strings as $string)
+		{
+			$str = $string["str"];
+			$str = str_replace('"','\"',$str);
+
+			if (isset($res[$str]))
+			{
+				$res[$str]["comment"] .= " ".str_replace(aw_ini_get("basedir")."/","", $file_from).":".$string["line"];
+			}
+			else
+			{
+				$res[$str] = array(
+					"comment" => "#: ".str_replace(aw_ini_get("basedir")."/","", $file_from).":".$string["line"],
+					"msgid" => $str
+				);
+			}
+		}
+
+		foreach($res as $dat)
+		{
+			fwrite($fp, $dat["comment"]."\n");
+			fwrite($fp, "msgid \"".$dat["msgid"]."\"\n");
+			fwrite($fp, "msgstr \"\"\n");
+			fwrite($fp, "\n");
+		}
+		fclose($fp);
 	}
 }

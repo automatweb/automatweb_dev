@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.118 2005/04/01 12:06:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.119 2005/04/05 13:52:33 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -2288,7 +2288,7 @@ class form extends form_base
 			$id = $this->output["session_form"];
 			if (!$id)
 			{
-				$this->raise_error(ERR_F_OP_NO_SESSION_FORM,"Sessioonist lugemise formi pole valitud v&auml;ljundile $op_id ",true);
+				$this->raise_error(ERR_F_OP_NO_SESSION_FORM,sprintf(t("Sessioonist lugemise formi pole valitud v&auml;ljundile %s "), $op_id),true);
 			}
 
 			if (!$this->can("view",$id) && !aw_ini_get("menuedit.no_view_acl_checks"))
@@ -3062,7 +3062,7 @@ class form extends form_base
 		{
 			if (!$this->arr["table"])
 			{
-				$this->raise_error(ERR_FG_NOTABLE,"No table selected for showing search results for form ".$this->id."!",true);
+				$this->raise_error(ERR_FG_NOTABLE,sprintf(t("No table selected for showing search results for form %s!"), $this->id),true);
 			}
 			if (!$use_table)
 			{
@@ -3411,7 +3411,7 @@ class form extends form_base
 
 		if (!is_array($this->arr["search_from"]))
 		{
-			$this->raise_error(ERR_FG_NOTARGETS,"form->search($entry_id): no forms selected as search targets!",true);
+			$this->raise_error(ERR_FG_NOTARGETS,sprintf(t("form->search(%s): no forms selected as search targets!"), $entry_id),true);
 		}
 
 		reset($this->arr["search_from"]);
@@ -3599,7 +3599,7 @@ class form extends form_base
 
 			if (!$id)
 			{
-				$this->raise_error(ERR_FG_NOTARGETS,"No forms selected as search targets!");
+				$this->raise_error(ERR_FG_NOTARGETS,t("No forms selected as search targets!"));
 			}
 
 			$this->search_form = $id;
@@ -3805,7 +3805,7 @@ class form extends form_base
 		{
 			if (!$this->arr["table"])
 			{
-				$this->raise_error(ERR_FG_NOTABLE,"No table selected for showing data!",true);
+				$this->raise_error(ERR_FG_NOTABLE,t("No table selected for showing data!"),true);
 			}
 
 			$ft = get_instance(CL_FORM_TABLE);
@@ -3853,7 +3853,7 @@ class form extends form_base
 
 				if (!is_array($q_els))
 				{
-					$this->raise_error(ERR_FG_NOTBLELS,"Tulemuste kuvamise tabelis pole yhtegi elementi!", true);
+					$this->raise_error(ERR_FG_NOTBLELS,t("Tulemuste kuvamise tabelis pole yhtegi elementi!"), true);
 				}
 
 				$eids = join(",", $matches);
@@ -4760,7 +4760,7 @@ class form extends form_base
 		$this->db_query("SELECT count(id) as cnt from form_entries where form_id = $this->id");
 		if (!($cnt = $this->db_next()))
 		{
-			$this->raise_error(ERR_FG_EMETAINFO,"form->metainfo(): weird error!", true);
+			$this->raise_error(ERR_FG_EMETAINFO,t("form->metainfo(): weird error!"), true);
 		}
 
 		$this->vars(array(

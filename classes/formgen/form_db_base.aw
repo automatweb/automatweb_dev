@@ -2047,7 +2047,7 @@ class form_db_base extends aw_template
 		$dat = aw_unserialize($res);
 		if (!is_array($dat) || !is_array($dat["els"]))
 		{
-			$this->raise_error(0,"Please <a href='".aw_ini_get("baseurl")."/automatweb/orb.aw?class=form&action=change&id=$fid'>go here</a> and click the save button", true);
+			$this->raise_error(0,sprintf(t("Please %sgo here</a> and click the save button"), "<a href='".aw_ini_get("baseurl")."/automatweb/orb.aw?class=form&action=change&id=$fid'>"), true);
 		}
 		aw_cache_set("cache_get_form_eldat",$fid,$dat);
 		return $dat;

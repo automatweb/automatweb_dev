@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.45 2005/03/20 14:22:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.46 2005/04/05 13:52:34 kristo Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -25,7 +25,7 @@ class object_list extends _int_obj_container_base
 		{
 			error::raise(array(
 				"id" => ERR_PARAM,
-				"msg" => "objct_list::filter(): parameter must be an array!"
+				"msg" => t("object_list::filter(): parameter must be an array!")
 			));
 		}
 
@@ -33,7 +33,7 @@ class object_list extends _int_obj_container_base
 		{
 			error::raise(array(
 				"id" => ERR_PARAM,
-				"msg" => "objct_list::filter(): oid parameter cannot be an empty array!"
+				"msg" => t("objct_list::filter(): oid parameter cannot be an empty array!")
 			));
 
 		}
@@ -91,7 +91,7 @@ class object_list extends _int_obj_container_base
 		{
 			error::raise(array(
 				"id" => ERR_PARAM,
-				"msg" => "object_list::sort_by(): argument must be an array!"
+				"msg" => t("object_list::sort_by(): argument must be an array!")
 			));
 		}
 
@@ -99,7 +99,7 @@ class object_list extends _int_obj_container_base
 		{
 			error::raise(array(
 				"id" => ERR_PARAM,
-				"msg" => "object_list::sort_by(): prop argument must be present!"
+				"msg" => t("object_list::sort_by(): prop argument must be present!")
 			));
 		}
 
@@ -112,19 +112,19 @@ class object_list extends _int_obj_container_base
 		{
 			error::raise_if(!is_object($cb[0]), array(
 				"id" => ERR_CORE_NO_OBJ,
-				"msg" => "object_list::sort_by_cb(): if parameter is an array, the first entry must be an object instance!"
+				"msg" => t("object_list::sort_by_cb(): if parameter is an array, the first entry must be an object instance!")
 			));
 
 			error::raise_if(!method_exists($cb[0], $cb[1]), array(
 				"id" => ERR_CORE_NO_OBJ,
-				"msg" => "object_list::sort_by_cb(): if parameter is an array, the first entry must be an object instance and the second a method name from that object!"
+				"msg" => t("object_list::sort_by_cb(): if parameter is an array, the first entry must be an object instance and the second a method name from that object!")
 			));
 		}
 		else
 		{
 			error::raise_if(!function_exists($cb),array(
 				"id" => ERR_CORE_NO_FUNC,
-				"msg" => "object_list::sort_by_cb($cb): no function $cb exists!"
+				"msg" => sprintf(t("object_list::sort_by_cb(%s): no function %s exists!"), $cb, $cb)
 			));
 		}
 		$this->_int_sort_list_cb($cb);
@@ -173,7 +173,7 @@ class object_list extends _int_obj_container_base
 		{
 			error::raise(array(
 				"id" => ERR_PARAM,
-				"msg" => "object_list::foreach_o(): parameter must be an array"
+				"msg" => t("object_list::foreach_o(): parameter must be an array")
 			));
 		}
 
@@ -195,7 +195,7 @@ class object_list extends _int_obj_container_base
 		{
 			error::raise(array(
 				"id" => ERR_PARAM,
-				"msg" => "object_list::foreach_o(): $param[func] is not a member function of the object class!"
+				"msg" => sprintf(t("object_list::foreach_o(): %s is not a member function of the object class!"), $param["func"])
 			));
 		}
 
@@ -225,7 +225,7 @@ class object_list extends _int_obj_container_base
 		{
 			error::raise(array(
 				"id" => ERR_PARAM,
-				"msg" => "object_list::foreach_cb(): parameter must be an array!"
+				"msg" => t("object_list::foreach_cb(): parameter must be an array!")
 			));
 		}
 
@@ -235,7 +235,7 @@ class object_list extends _int_obj_container_base
 			{
 				error::raise(array(
 					"id" => ERR_PARAM,
-					"msg" => "object_list::foreach_cb(): callback method ".$param["func"][1]." does not exist in class ".get_class($param["func"][1])."!"
+					"msg" => sprintf(t("object_list::foreach_cb(): callback method %s does not exist in class %s!"), $param["func"][1], get_class($param["func"][1]))
 				));
 			}
 		}
@@ -244,7 +244,7 @@ class object_list extends _int_obj_container_base
 		{
 			error::raise(array(
 				"id" => ERR_PARAM,
-				"msg" => "object_list::foreach_cb(): callback function $param[func] does not exist!"
+				"msg" => sprintf(t("object_list::foreach_cb(): callback function %s does not exist!"), $param["func"])
 			));
 		}
 
@@ -290,7 +290,7 @@ class object_list extends _int_obj_container_base
 		{
 			error::raise(array(
 				"id" => ERR_PARAM,
-				"msg" => "object_list::from_arr(): parameter must be an array!"
+				"msg" => t("object_list::from_arr(): parameter must be an array!")
 			));
 		}
 
@@ -391,7 +391,7 @@ class object_list extends _int_obj_container_base
 						{
 							error::raise(array(
 								"id" => "ERR_META_FILTER",	
-								"msg" => "object_list::filter($mf_k => $mf_v): can not do LIKE searches on metadata fields!"
+								"msg" => sprintf(t("object_list::filter(%s => %s): can not do LIKE searches on metadata fields!"), $mf_k, $mf_v)
 							));
 						}
 

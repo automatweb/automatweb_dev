@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.6 2005/04/04 08:49:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.7 2005/04/05 13:52:34 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -706,7 +706,7 @@ class orb extends aw_template
 			$inst = get_instance("core/orb/".$method);
 			if (!is_object($inst))
 			{
-				$this->raise_error(ERR_ORB_RPC_NO_HANDLER,"Could not load request handler for request method '".$method."'", true,$this->silent);
+				$this->raise_error(ERR_ORB_RPC_NO_HANDLER,sprintf(t("Could not load request handler for request method '%s'"), $method), true,$this->silent);
 			}
 			// send the remote request and read the result
 			$data = $inst->do_request($arr);
@@ -853,7 +853,7 @@ class orb extends aw_template
 		$inst = get_instance("core/orb/".$method);
 		if (!is_object($inst))
 		{
-			$this->raise_error(ERR_ORB_RPC_NO_HANDLER,"orb::handle_rpc_call - Could not load request handler for request method '".$method."'", true,false);
+			$this->raise_error(ERR_ORB_RPC_NO_HANDLER,sprintf(t("orb::handle_rpc_call - Could not load request handler for request method '%s'"), $method), true,false);
 		}
 
 		// decode request
@@ -1067,7 +1067,7 @@ class orb extends aw_template
 
 		error::raise_if(!$atc->can_access_class(obj($conf), $class),array(
 			"id" => ERR_ACL,
-			"msg" => "orb::check_class_access($class): no permissions to access the class! (denied by $conf)"
+			"msg" => sprintf(t("orb::check_class_access(%s): no permissions to access the class! (denied by %s)"), $class, $conf)
 		));
 	}
 }

@@ -123,7 +123,7 @@ class _int_object_loader extends core
 			{
 				error::raise(array(
 					"id" => ERR_NO_ALIAS,
-					"msg" => "object_loader::param_to_oid($param): no object with alias $param!"
+					"msg" => sprintf(t("object_loader::param_to_oid(%s): no object with alias $param!"), $param)
 				));
 			}
 			return $oid;
@@ -140,7 +140,7 @@ class _int_object_loader extends core
 
 		error::raise(array(
 			"id" => ERR_PARAM,
-			"msg" => "object_loader::param_to_oid(): parameter must be either: oid , string (alias) or object instance!"
+			"msg" => t("object_loader::param_to_oid(): parameter must be either: oid , string (alias) or object instance!")
 		));
 	}
 
@@ -159,7 +159,7 @@ class _int_object_loader extends core
 			{
 				error::raise(array(
 					"id" => ERR_NO_ALIAS,
-					"msg" => "no object with alias $param!"
+					"msg" => sprintf(t("no object with alias %s!"), $param)
 				));
 			}
 			return array($oid);
@@ -191,7 +191,7 @@ class _int_object_loader extends core
 
 		error::raise(array(
 			"id" => ERR_PARAM,
-			"msg" => "parameter must be either: oid , string (alias), object instance or object list instance!"
+			"msg" => t("parameter must be either: oid , string (alias), object instance or object list instance!")
 		));
 	}
 
@@ -217,7 +217,7 @@ class _int_object_loader extends core
 		{
 			error::raise(array(
 				"id" => ERR_PARAM,
-				"msg" => "object_loader::load($oid): parameter is not object id!"
+				"msg" => sprintf(t("object_loader::load(%s): parameter is not object id!"), $oid)
 			));
 		}
 
@@ -230,7 +230,7 @@ class _int_object_loader extends core
 			{
 				error::raise(array(
 					"id" => ERR_PARAM,
-					"msg" => "object_loader::load($oid): no such object!"
+					"msg" => sprintf(t("object_loader::load(%s): no such object!"), $oid)
 				));
 			}
 			else
@@ -254,7 +254,7 @@ class _int_object_loader extends core
 		{
 			error::raise(array(
 				"id" => ERR_OBJECT,
-				"msg" => "object_loader::save($oid): no object with oid $oid exists in the global list"
+				"msg" => sprintf(t("object_loader::save(%s): no object with oid $oid exists in the global list"), $oid)
 			));
 		}
 
@@ -305,7 +305,7 @@ class _int_object_loader extends core
 		{
 			error::raise(array(
 				"id" => ERR_OBJECT,
-				"msg" => "object_loader::save_new($oid): no object with oid $oid exists in the global list"
+				"msg" => sprintf(t("object_loader::save_new(%s): no object with oid %s exists in the global list"), $oid, $oid)
 			));
 		}
 
@@ -375,7 +375,7 @@ class _int_object_loader extends core
 
 		error::raise_if(!is_object($ds), array(
 			"id" => ERR_NO_DS,
-			"msg" => "object_loader::switch_db_connection($new_conn): could nto find root connection!"
+			"msg" => sprintf(t("object_loader::switch_db_connection(%s): could nto find root connection!"), $new_conn)
 		));
 
 		$old = $ds->dc[$ds->default_cid];
@@ -484,7 +484,7 @@ class _int_object_loader extends core
 
 				if (++$cnt > 100)
 				{
-					$this->raise_error(ERR_ACL_EHIER,"object_loader->can($access,$oid): error in object hierarchy, count exceeded!",true);
+					$this->raise_error(ERR_ACL_EHIER,sprintf(t("object_loader->can(%s, %s): error in object hierarchy, count exceeded!"), $access,$oid),true);
 				}
 
 				// go to parent

@@ -23,7 +23,7 @@ class print_preview extends aw_template
 	function get_static_property($args = array())
 	{
 		return html::checkbox(array(
-			"caption" => "Prindi nähtav",
+			"caption" => t("Prindi nähtav"),
 			"checked" => !empty($args["value"]),
 			"name" => "plugins[" . get_class($this) . "]",
 		));

@@ -3,7 +3,7 @@
 /** aw code analyzer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_analyzer.aw,v 1.20 2004/10/29 19:10:26 duke Exp $
+	@cvs $Id: docgen_analyzer.aw,v 1.21 2005/04/05 13:52:34 kristo Exp $
 
 	@comment 
 	analyses aw code
@@ -539,7 +539,7 @@ class docgen_analyzer extends class_base
 				$pdat = $this->_do_parse_parameter($_pm);
 				if ($pdat["name"] == "")
 				{
-					die("error: do_parse_parameters failed for string $_pm <br>\n");
+					die(sprintf(t("error: do_parse_parameters failed for string %s <br>\n"), $_pm));
 				}
 				$data["params"][$pdat["name"]] = $pdat;
 			}
@@ -1023,7 +1023,7 @@ class docgen_analyzer extends class_base
 			$tmp++;
 			if ($tmp > 1000)
 			{
-				die("horrible parse error!");
+				die(t("horrible parse error!"));
 			}
 		}
 	}

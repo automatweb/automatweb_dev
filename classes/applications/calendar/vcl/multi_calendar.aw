@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/vcl/multi_calendar.aw,v 1.1 2005/03/18 12:23:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/vcl/multi_calendar.aw,v 1.2 2005/04/05 13:52:35 kristo Exp $
 class multi_calendar extends aw_template
 {
 	function multi_calendar()
@@ -49,7 +49,7 @@ class multi_calendar extends aw_template
 		$name = $prop["name"] . "_calendars";
 		$rv[$name] = array(
 			"name" => $name,
-			"caption" => "Kalendrid, millest otsida",
+			"caption" => t("Kalendrid, millest otsida"),
 			"type" => "chooser",
 			"orient" => "vertical",
 			"multiple" => 1,
@@ -61,7 +61,7 @@ class multi_calendar extends aw_template
 		$name = $prop["name"] . "_duration";
 		$rv[$name] = array(
 			"name" => $name,
-			"caption" => "Otsitava aja pikkus (hh:mm)",
+			"caption" => t("Otsitava aja pikkus (hh:mm)"),
 			"type" => "textbox",
 			"size" => 5,
 			"value" => $search_duration,
@@ -172,22 +172,22 @@ class multi_calendar extends aw_template
 
 				$this->t->define_field(array(
 					"name" => "calendar",
-					"caption" => "Kalender",
+					"caption" => t("Kalender"),
 				));
 
 				$this->t->define_field(array(
 					"name" => "from",
-					"caption" => "Alates",
+					"caption" => t("Alates"),
 				));
 
 				$this->t->define_field(array(
 					"name" => "to",
-					"caption" => "Kuni",
+					"caption" => t("Kuni"),
 				));
 
 				$this->t->define_chooser(array(
 					"field" => "from",
-					"caption" => "XX",
+					"caption" => t("XX"),
 				));
 				*/
 
@@ -211,7 +211,7 @@ class multi_calendar extends aw_template
 					"type" => "chooser",
 					"orient" => "vertical",
 					"options" => $opts,
-					"caption" => "Leitud ajad",
+					"caption" => t("Leitud ajad"),
 				);
 
 

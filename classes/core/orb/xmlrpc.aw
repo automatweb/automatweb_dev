@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/xmlrpc.aw,v 1.1 2005/03/20 15:38:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/xmlrpc.aw,v 1.2 2005/04/05 13:52:34 kristo Exp $
 class xmlrpc extends aw_template
 {
 	var $allowed = array("I4","BOOLEAN","STRING", "DOUBLE","DATETIME.ISO8601","BASE64", "STRUCT", "ARRAY");
@@ -90,7 +90,7 @@ class xmlrpc extends aw_template
 			}
 			else
 			{
-				$this->raise_error(ERR_XML_PARSER_ERROR,"Viga XML-RPC p2ringu vastuse dekodeerimisel: ".xml_error_string($err)."!", true,false);
+				$this->raise_error(ERR_XML_PARSER_ERROR,sprintf(t("Viga XML-RPC p2ringu vastuse dekodeerimisel: %s!"), xml_error_string($err)), true,false);
 			}
 		}
 		xml_parser_free($parser); 

@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.377 2005/04/01 18:35:15 ahti Exp $
+// $Id: class_base.aw,v 2.378 2005/04/05 13:52:32 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -578,7 +578,7 @@ class class_base extends aw_template
 		$panel = array(
 			"name" => "tabpanel",
 			"type" => "tabpanel",
-			"caption"=> "tab panel",
+			"caption"=> t("tab panel"),
 		);
 
 		$properties = array("tabpanel" => $panel) + $properties;
@@ -1142,7 +1142,7 @@ class class_base extends aw_template
 			};
 			$title = html::href(array(
 				"url" => $_GET["return_url"],
-				"caption" => "Tagasi",
+				"caption" => t("Tagasi"),
 				"target" => $target,
 			)) . " / " . $title;
 		};
@@ -1320,7 +1320,7 @@ class class_base extends aw_template
 			$this->cli->add_tab(array(
 				"id" => "list_aliases",
 				"link" => $link,
-				"caption" => "Seostehaldur",
+				"caption" => t("Seostehaldur"),
 				"active" => isset($this->action) && (($this->action == "list_aliases") || ($this->action == "search_aliases")),
 				"disabled" => empty($this->id),
 			));
@@ -2965,7 +2965,7 @@ class class_base extends aw_template
 			if (1 == $prpdata["required"] && !$val)
 			{
 				$res[$key] = array(
-					"msg" => "See väli ei tohi olla tühi!",
+					"msg" => t("See väli ei tohi olla tühi!"),
 				);
 			};
 
@@ -2974,7 +2974,7 @@ class class_base extends aw_template
 				if (!is_email($val))
 				{
 					$res[$key] = array(
-						"msg" => "See pole korrektne e-posti aadress!",
+						"msg" => t("See pole korrektne e-posti aadress!"),
 					);
 				};
 			};
@@ -4211,7 +4211,7 @@ class class_base extends aw_template
 			if ($cfgform_obj->class_id() != CL_CFGFORM)
 			{
 				error::raise(array(
-					"msg" => "$id is not a valid configuration form!",
+					"msg" => sprintf(t("%s is not a valid configuration form!"), $id),
 					"fatal" => true,
 				));
 			}

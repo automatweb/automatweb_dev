@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/stat.aw,v 1.4 2004/10/24 18:53:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/stat.aw,v 1.5 2005/04/05 13:52:33 kristo Exp $
 // stat.aw - generating statictis from the syslog
 // klass, mille abil saab genereerida statistikat syslog tabelist
 class db_stat extends aw_template
@@ -352,7 +352,7 @@ class db_stat extends aw_template
 		$this->vars(array(
 			"total" => $total,
 		  "login_line" => $l,
-		  "title" => "Top $limit logijat"
+		  "title" => sprintf(t("Top %s logijat"), $limit)
 		));
 		return $this->parse("logins");
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.324 2005/04/05 11:01:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.325 2005/04/05 13:52:32 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -3430,7 +3430,8 @@ class document extends aw_template
 
 		ob_end_clean();
 		echo  t("Staatilised lehek&uuml;ljed loodud!<br />\n");
-		die("<br /><br /><a href='".$this->mk_my_orb("change", array("id" => $id))."'> <<< ".t("tagasi dokumendi muutmise juurde")."</a>");
+		die("<br /><br /><a href='".$this->mk_my_orb("change", array("id" => $id))."'> <<< ".
+			t("tagasi dokumendi muutmise juurde")."</a>");
 	}
 
 	////

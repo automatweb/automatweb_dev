@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.8 2005/02/21 08:52:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.9 2005/04/05 13:52:34 kristo Exp $
 
 lc_load("definition");
 
@@ -339,7 +339,7 @@ class acl_base extends db_connector
 			{
 				error::raise(array(
 					"id" => ERR_ACL_EHIER,
-					"msg" => "acl_base->can($access,$oid): error in object hierarchy, count exceeded!"
+					"msg" => sprintf(t("acl_base->can(%s, %s): error in object hierarchy, count exceeded!"), $access,$oid)
 				));
 			}
 
@@ -534,7 +534,7 @@ class acl_base extends db_connector
 			// the only program you can ask for is PRG_MENUEDIT 
 			error::raise_if($progid != PRG_MENUEDIT, array(
 				"id" => ERR_PROG_ACL,
-				"msg" => "acl_base::prog_acl($right, $progid): the only program you can get access rights for is PRG_MENUEDIT, all others are deprecated!"
+				"msg" => sprintf(t("acl_base::prog_acl(%s, %s): the only program you can get access rights for is PRG_MENUEDIT, all others are deprecated!"), $right, $progid)
 			));
 
 			$can_adm = aw_global_get("acl_base::prog_acl_cache");

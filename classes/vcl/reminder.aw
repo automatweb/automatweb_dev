@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/reminder.aw,v 1.3 2005/03/18 12:07:45 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/reminder.aw,v 1.4 2005/04/05 13:52:33 kristo Exp $
 // reminder UI VCL component
 
 class reminder extends core
@@ -35,7 +35,7 @@ class reminder extends core
 			"type" => "checkbox",
 			"ch_value" => 1,
 			"name" => "${name}[set_reminder]",
-			"caption" => "Meeldetuletus e-postiga",
+			"caption" => t("Meeldetuletus e-postiga"),
 			"value" => ($old_evt && $old_evt->status() == STAT_ACTIVE) ? 1 : 0,
 		);
 
@@ -52,14 +52,14 @@ class reminder extends core
 		$rv["email_addr"] = array(
 			"type" => "textbox",
 			"name" => "${name}[email_addr]",
-			"caption" => "E-posti aadress",
+			"caption" => t("E-posti aadress"),
 			"value" => $email,
 		);
 
 		$rv["remind_time"] = array(
 			"type" => "select",
 			"name" => "${name}[remind_time]",
-			"caption" => "Minutid",
+			"caption" => t("Minutid"),
 			"options" => array(
 				5 => 5,
 				10 => 10,
@@ -74,7 +74,7 @@ class reminder extends core
 		$rv["remind_status"] = array(
 			"type" => "text",
 			"name" => "${name}[remind_status]",
-			"caption" => "Saadetud?",
+			"caption" => t("Saadetud?"),
 			"value" => ($old_evt && $old_evt->prop("reminder_sent") == 1) ? "jah" : "ei",
 		);
 		return $rv;

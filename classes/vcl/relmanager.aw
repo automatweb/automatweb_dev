@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/relmanager.aw,v 1.10 2004/05/20 11:15:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/relmanager.aw,v 1.11 2005/04/05 13:52:33 kristo Exp $
 /*
 // !Displays a table of relations and adds one line with edit fields to allow adding
 // of new objects
@@ -83,7 +83,7 @@ class relmanager extends aw_template
 		{
 			$this->t->define_field(array(
 				"name" => "chooser",
-				"caption" => "Vali üks",
+				"caption" => t("Vali üks"),
 				"align" => "center",
 				"width" => 100,
 			));

@@ -10,7 +10,7 @@ class add_comment extends aw_template
 	function get_property($value)
 	{
 		return array(
-			"caption" => "Lisa kommentaar nähtav",
+			"caption" => t("Lisa kommentaar nähtav"),
 			"type" => "checkbox",
 			"value" => $value,
 			"ch_value" => 1,
@@ -30,7 +30,7 @@ class add_comment extends aw_template
 	function get_static_property($args = array())
 	{
 		return html::checkbox(array(
-			"caption" => "Lisa kommentaar nähtav",
+			"caption" => t("Lisa kommentaar nähtav"),
 			"checked" => !empty($args["value"]),
 			"name" => "plugins[" . get_class($this) . "]",
 		));

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.139 2005/03/24 10:14:40 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.140 2005/04/05 13:52:32 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -305,7 +305,7 @@ class users extends users_user
 		else
 		{
 			header("Refresh: 2;url=".$this->cfg["baseurl"]);
-			die("Parool on edukalt vahetatud");
+			die(t("Parool on edukalt vahetatud"));
 		}
 	}
 
@@ -1063,7 +1063,7 @@ class users extends users_user
 		{
 			$this->read_adm_template("hash_results.tpl");
 			$this->vars(array(
-				"msg" => "Vigane kasutajanimi",
+				"msg" => t("Vigane kasutajanimi"),
 			));
 			return $this->parse();
 		};
@@ -1075,7 +1075,7 @@ class users extends users_user
 		{
 			$this->read_adm_template("hash_results.tpl");
 			$this->vars(array(
-				"msg" => "Sellist kasutajat pole registreeritud",
+				"msg" => t("Sellist kasutajat pole registreeritud"),
 			));
 			return $this->parse();
 		};
@@ -1089,7 +1089,7 @@ class users extends users_user
 		{	
 			$this->read_adm_template("hash_results.tpl");
 			$this->vars(array(
-				"msg" => "Sellist võtit pole väljastatud",
+				"msg" => t("Sellist võtit pole väljastatud"),
 			));
 			return $this->parse();
 		};
@@ -1104,7 +1104,7 @@ class users extends users_user
 		{
 			$this->read_adm_template("hash_results.tpl");
 			$this->vars(array(
-				"msg" => "See võti on juba aegunud <a href='".$this->mk_my_orb('send_hash')."'>Telli uusi v&otilde;ti</a>"
+				"msg" => t("See võti on juba aegunud")." <a href='".$this->mk_my_orb('send_hash')."'>".t("Telli uusi v&otilde;ti")."</a>"
 			));
 			return $this->parse();
 		}

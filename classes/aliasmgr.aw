@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.174 2005/04/05 11:06:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.175 2005/04/05 13:52:32 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -133,7 +133,7 @@ class aliasmgr extends aw_template
 		{
 			$fields["complexity"] = array(
 				"type" => "text",
-				"caption" => "",
+				"caption" => t(""),
 				'value' => html::href(array(
 					'caption' =>'lihtsam otsing',
 					'url' => $request.'&simple=1',
@@ -142,7 +142,7 @@ class aliasmgr extends aw_template
 
 			$fields["class_id"] = array(
 				"type" => "class_id_multiple",
-				"caption" => "Klass",
+				"caption" => t("Klass"),
 				"size" => "8",
 				"options" => (isset($this->rel_type_classes[$this->reltype]) && is_array($this->rel_type_classes[$this->reltype])) ? $this->rel_type_classes[$this->reltype] : $options,
 				"selected" => $args["s"]["class_id"],
@@ -168,7 +168,7 @@ class aliasmgr extends aw_template
 			
 			$fields["complexity"] = array(
 				"type" => "text",
-				"caption" => "",
+				"caption" => t(""),
 				'value' => html::href(array(
 					'caption' =>'täpsem otsing',
 					'url' => $request.'&complex=1',
@@ -484,7 +484,7 @@ class aliasmgr extends aw_template
 		$this->t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
 		$this->t->define_field(array(
 			"name" => "icon",
-			"caption" => "",
+			"caption" => t(""),
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
@@ -492,26 +492,26 @@ class aliasmgr extends aw_template
 		));
 		$this->t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"talign" => "center",
 			"sortable" => 1,
 		));
 		$this->t->define_field(array(
 			"name" => "lang",
-			"caption" => "Keel",
+			"caption" => t("Keel"),
 			"talign" => "center",
 			"align" => "center",
 			"sortable" => 1,
 		));
 		$this->t->define_field(array(
 			"name" => "comment",
-			"caption" => "Muu info",
+			"caption" => t("Muu info"),
 			"talign" => "center",
 			"sortable" => 1,
 		));
 		$this->t->define_field(array(
 			"name" => "alias",
-			"caption" => "Alias",
+			"caption" => t("Alias"),
 			"talign" => "center",
 			"width" => 50,
 			"align" => "center",
@@ -519,7 +519,7 @@ class aliasmgr extends aw_template
 		));
 		$this->t->define_field(array(
 			"name" => "link",
-			"caption" => "Link",
+			"caption" => t("Link"),
 			"talign" => "center",
 			"width" => 50,
 			"align" => "center",
@@ -528,7 +528,7 @@ class aliasmgr extends aw_template
 		));
 		$this->t->define_field(array(
 			"name" => "cache",
-			"caption" => "Cache",
+			"caption" => t("Cache"),
 			"talign" => "center",
 			"width" => 50,
 			"align" => "center",
@@ -537,7 +537,7 @@ class aliasmgr extends aw_template
 		));
 		$this->t->define_field(array(
 			"name" => "modifiedby",
-			"caption" => "Muutja",
+			"caption" => t("Muutja"),
 			"align" => "center",
 			"talign" => "center",
 			"nowrap" => "1",
@@ -545,7 +545,7 @@ class aliasmgr extends aw_template
 		));
 		$this->t->define_field(array(
 			"name" => "modified",
-			"caption" => "Muudetud",
+			"caption" => t("Muudetud"),
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
@@ -556,7 +556,7 @@ class aliasmgr extends aw_template
 		));
 		$this->t->define_field(array(
 			"name" => "title",
-			"caption" => "Tüüp",
+			"caption" => t("Tüüp"),
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
@@ -564,7 +564,7 @@ class aliasmgr extends aw_template
 		));
 		$this->t->define_field(array(
 			"name" => "reltype",
-			"caption" => "Seose tüüp",
+			"caption" => t("Seose tüüp"),
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
@@ -1129,7 +1129,7 @@ HTM;
 
 		$toolbar->add_button(array(
 			"name" => "new",
-			"tooltip" => "Lisa uus objekt",
+			"tooltip" => t("Lisa uus objekt"),
 			"url" => "javascript:create_new_object()",
 			"img" => "new.gif",
 		));
@@ -1139,7 +1139,7 @@ HTM;
 		{
 			$toolbar->add_button(array(
 				"name" => "search",
-				"tooltip" => "Otsi",
+				"tooltip" => t("Otsi"),
 				"url" => "javascript:if (document.foo.reltype.value!='_') {document.searchform.submit();} else alert('Vali seosetüüp!')",
 				"img" => "search.gif",
 			));
@@ -1148,7 +1148,7 @@ HTM;
 		{
 			$toolbar->add_button(array(
 				"name" => "search",
-				"tooltip" => "Otsi",
+				"tooltip" => t("Otsi"),
 				"url" => "javascript:search_for_object()",
 				"img" => "search.gif",
 			));
@@ -1165,7 +1165,7 @@ HTM;
 		{
 			$toolbar->add_button(array(
 				"name" => "translate",
-				"tooltip" => "Tõlgi",
+				"tooltip" => t("Tõlgi"),
 				"url" => $this->mk_my_orb("create",array("id" => $this->id,"return_url" => $return_url),"object_translation"),
 				"target" => "_blank",
 				"img" => "edit.gif",
@@ -1176,7 +1176,7 @@ HTM;
 
 		$toolbar->add_button(array(
 			"name" => "refresh",
-			"tooltip" => "Reload",
+			"tooltip" => t("Reload"),
 			"url" => "javascript:window.location.reload()",
 			"img" => "refresh.gif",
 		));
@@ -1187,7 +1187,7 @@ HTM;
 			{
 				$toolbar->add_button(array(
 					"name" => "save",
-					"tooltip" => "Loo seos(ed)",
+					"tooltip" => t("Loo seos(ed)"),
 					"url" => "javascript:aw_save()",
 					"img" => "save.gif",
 				));
@@ -1197,14 +1197,14 @@ HTM;
 		{
 			$toolbar->add_button(array(
 				"name" => "save",
-				"tooltip" => "Salvesta",
+				"tooltip" => t("Salvesta"),
 				"url" => "javascript:saveform()",
 				"img" => "save.gif",
 			));
 
 			$toolbar->add_button(array(
 				"name" => "delete",
-				"tooltip" => "Kustuta valitud seos(ed)",
+				"tooltip" => t("Kustuta valitud seos(ed)"),
 				"url" => "javascript:awdelete()",
 				"img" => "delete.gif",
 			));

@@ -23,7 +23,7 @@ class send_link extends aw_template
 	function get_static_property($args = array())
 	{
 		return html::checkbox(array(
-			"caption" => "Saada link nähtav",
+			"caption" => t("Saada link nähtav"),
 			"checked" => !empty($args["value"]),
 			"name" => "plugins[" . get_class($this) . "]",
 		));

@@ -1952,7 +1952,8 @@ class site_content extends menuedit
 				// nil the variables that were imported for promo boxes
 				// if we dont do that we can get unwanted copys of promo boxes
 				// in places we dont want them
-				$this->vars(array("title" => "", "content" => "","url" => ""));
+				$this->vars(array("title" => 
+					"", "content" => "","url" => ""));
 				$this->restore_handle();
 			}
 		};
@@ -2070,12 +2071,12 @@ class site_content extends menuedit
 				}
 				else
 				{
-					$this->raise_error(ERR_ACL_ERR,"Access denied and error redirects are defined.incorrectly. Please report this to the site administrator",1);
+					$this->raise_error(ERR_ACL_ERR,t("Access denied and error redirects are defined.incorrectly. Please report this to the site administrator"),1);
 				};
 					
 			}
 		}
-		$this->raise_error(ERR_MNEDIT_NOACL,"No ACL error messages defined! no can_view access for object $section",true);
+		$this->raise_error(ERR_MNEDIT_NOACL,sprintf(t("No ACL error messages defined! no can_view access for object %s"), $section),true);
 	}
 	
 	////

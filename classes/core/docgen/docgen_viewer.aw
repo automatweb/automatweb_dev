@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.23 2005/03/23 11:45:07 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.24 2005/04/05 13:52:34 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -857,7 +857,7 @@ class docgen_viewer extends class_base
 				}
 			}
 		}
-		die("ALL DONE");
+		die(t("ALL DONE"));
 	}
 
 	/** displays where the class::function is called from. wildly inaccurate at the moment.

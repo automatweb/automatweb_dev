@@ -859,7 +859,7 @@ class site_template_compiler extends aw_template
 			{
 				error::raise(array(
 					"id" => ERR_TPL_COMPILER, 
-					"msg" => "show_site::generate_code(): could not find generator for op $op_name ($gen) op = ".$op["op"]
+					"msg" => sprintf(t("show_site::generate_code(): could not find generator for op %s (%s) op = %s"), $op_name, $gen, $op["op"])
 				));
 			}
 			

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.14 2005/02/01 12:37:36 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.15 2005/04/05 13:52:35 kristo Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -304,7 +304,8 @@ class ml_queue extends aw_template
 		$this->db_query("UPDATE ml_queue SET delay='$delay', patch_size='$patch_size' $sls WHERE qid='$id'");
 
 		$GLOBALS["reforb"]=0;// see on selleks, et ta ei hakkaks kuhugi suunama vaid prindiks skripti välja
-		die("<script language='JavaScript'>opener.history.go(0);window.close();</script>");
+		die("<script ".
+			"language='JavaScript'>opener.history.go(0);window.close();</script>");
 	}
 
 	/**  
@@ -546,7 +547,7 @@ class ml_queue extends aw_template
 				$this->restore_handle();
 			};
 		};
-		die("die<br />\n");
+		die(t("done\n<br>"));
 		return "";//hmhm
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/translator.aw,v 1.5 2004/11/16 18:22:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/translator.aw,v 1.6 2005/04/05 13:52:33 kristo Exp $
 class translator extends  core
 {
 	function translator()
@@ -107,7 +107,7 @@ class translator extends  core
 				"type" => "checkbox",
 				"ch_value" => STAT_ACTIVE,
 				"value" => ($current_translation) ? $current_translation->status() == STAT_ACTIVE : 1,
-				"caption" => "Aktiivne",
+				"caption" => t("Aktiivne"),
 			);
                 };
 

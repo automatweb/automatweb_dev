@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.110 2005/03/24 10:14:40 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.111 2005/04/05 13:52:32 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -215,7 +215,7 @@ class users_user extends aw_template
 		{
 			error::raise(array(
 				"id" => "ERR_NO_UID",	
-				"msg" => "uid is empty!"
+				"msg" => t("uid is empty!")
 			));
 		}
 		$u_oid = users::get_oid_for_uid($uid);
@@ -223,7 +223,7 @@ class users_user extends aw_template
 		{
 			error::raise(array(
 				"id" => "ERR_NO_UID_OID",	
-				"msg" => "oid for uid is empty uid = '$uid'!"
+				"msg" => sprintf(t("oid for uid is empty uid = '%s'!"), $uid)
 			));
 		}
 		$user_obj = &obj($u_oid);
@@ -231,7 +231,7 @@ class users_user extends aw_template
 		{
 			error::raise(array(
 				"id" => "ERR_NO_PROP",
-				"msg" => "user object is not user object!!!! ".dbg::dump($user_obj)." clid = ".$user_obj->class_id()
+				"msg" => sprintf(t("user object is not user object!!!! %s clid = %s"), dbg::dump($user_obj), $user_obj->class_id())
 			));
 		}
 
@@ -239,7 +239,7 @@ class users_user extends aw_template
 		{
 			error::raise(array(
 				"id" => "ERR_NO_CLASS",
-				"msg" => "user object is of wrong type! ".dbg::dump($user_obj)." props = ".dbg::dump($user_obj->properties())
+				"msg" => sprintf(t("user object is of wrong type! %s props = %s"), dbg::dump($user_obj), dbg::dump($user_obj->properties()))
 			));
 		}
 		$logins = $user_obj->prop("logins") + 1;
@@ -1083,7 +1083,7 @@ class users_user extends aw_template
 			{
 				error::raise(array(
 					"id" => ERR_GROUP_HIER,
-					"msg" => "Error in group hierarchy, count of 100 exceeded! probably offending group - $gid"
+					"msg" => sprintf(t("Error in group hierarchy, count of 100 exceeded! probably offending group - %s"), $gid)
 				));
 			}
 		}

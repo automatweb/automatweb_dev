@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.47 2005/03/31 11:48:59 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.48 2005/04/05 13:52:33 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -46,8 +46,8 @@ class releditor extends core
 			$errors = true;
 			$xprops[] = array(
 				"type" => "text",
-				"caption" => " ",
-				"error" => "Viga $prop[name] definitsioonis (omadused defineerimata!)",
+				"caption" => t(" "),
+				"error" => sprintf(t("Viga %s definitsioonis (omadused defineerimata!)"), $prop["name"]),
 			);
 		};
 
@@ -56,8 +56,8 @@ class releditor extends core
 			$errors = true;
 			$xprops[] = array(
 				"type" => "text",
-				"caption" => " ",
-				"error" => "Viga $prop[name] definitsioonis (seose tüüp defineerimata!)",
+				"caption" => t(" "),
+				"error" => sprintf(t("Viga %s definitsioonis (seose tüüp defineerimata!)"), $prop["name"])
 			);
 		};
 
@@ -95,8 +95,8 @@ class releditor extends core
 			$errors = true;
 			$xprops[] = array(
 				"type" => "text",
-				"caption" => " ",
-				"value" => "Seda seost ei saa redigeerida!",
+				"caption" => t(" "),
+				"value" => t("Seda seost ei saa redigeerida!"),
 			);
 		};
 
@@ -415,7 +415,7 @@ class releditor extends core
 					"conn_id" => $conn->id(),
 					"name" => $conn->prop("to.name"),
 					"edit" => html::href(array(
-						"caption" => "Muuda",
+						"caption" => t("Muuda"),
 						"url" => $url,
 					)),
 					"_active" => ($arr["request"][$this->elname] == $conn->prop("to")),
@@ -489,7 +489,7 @@ class releditor extends core
 		{
 			$awt->define_field(array(
 				"name" => "id",
-				"caption" => "ID",
+				"caption" => t("ID"),
 			));
 			foreach($ed_fields as $field)
 			{
@@ -514,18 +514,18 @@ class releditor extends core
 		{
 			$awt->define_field(array(
 				"name" => "id",
-				"caption" => "ID",
+				"caption" => t("ID"),
 			));
 
 			$awt->define_field(array(
 				"name" => "name",
-				"caption" => "Nimi",
+				"caption" => t("Nimi"),
 			));
 		};
 
 		$awt->define_field(array(
 			"name" => "edit",
-			"caption" => "Muuda",
+			"caption" => t("Muuda"),
 			"align" => "center",
 		));
 

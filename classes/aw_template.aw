@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.68 2005/03/17 13:42:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.69 2005/04/05 13:52:32 kristo Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -188,7 +188,7 @@ class aw_template extends core
 			else
 			{
 				// raise_error drops out, therefore $retval has no meaning here
-				$this->raise_error(ERR_TPL_NOTPL,"Template '".$this->template_dir."/".$name."' not found",true);
+				$this->raise_error(ERR_TPL_NOTPL,sprintf(t("Template '%s/%s' not found"), $this->template_dir, $name),true);
 			};
 		}
 		return $retval;
@@ -219,7 +219,7 @@ class aw_template extends core
 			else
 			{
 				// raise_error drops out, therefore $retval has no meaning here
-				$this->raise_error(ERR_TPL_NOTPL,"Template '".$this->template_filename."' not found",true);
+				$this->raise_error(ERR_TPL_NOTPL,sprintf(t("Template '%s' not found"), $this->template_filename),true);
 			};
 		}
 		return $retval;
@@ -244,7 +244,7 @@ class aw_template extends core
 			else
 			{
 				// raise_error drops out, therefore $retval has no meaning here
-				$this->raise_error(ERR_TPL_NOTPL,"Template '".$this->template_filename."' not found",true);
+				$this->raise_error(ERR_TPL_NOTPL,sprintf(t("Template '%s' not found"), $this->template_filename),true);
 			};
 		}
 		return $retval;
@@ -274,7 +274,7 @@ class aw_template extends core
 				else
 				{
 					// raise_error drops out, therefore $retval has no meaning here
-					$this->raise_error(ERR_TPL_NOTPL,"Template '".$this->template_filename."' not found in admin or site folder",true);
+					$this->raise_error(ERR_TPL_NOTPL,sprintf(t("Template '%s' not found in admin or site folder"), $this->template_filename),true);
 				};
 			}
 		}
