@@ -6,6 +6,7 @@
 <td class="title">Nimi</td>
 <td class="title">Kommentaar</td>
 <td class="title">Vali</td>
+<td class="title">Peab t&auml;itma</td>
 <td class="title">Grupp</td>
 <td class="title">J&auml;rjekord men&uuml;&uuml;s</td>
 <td class="title">Nimi men&uuml;&uuml;s</td>
@@ -19,6 +20,11 @@
 <td class="plain"><a href='{VAR:change}'>{VAR:form_name}</a></td>
 <td class="plain">{VAR:form_comment}</td>
 <td class="plain"><input type='checkbox' name='sf[{VAR:form_id}]' value=1 {VAR:checked}></td>
+<td class="plain">&nbsp;
+<!-- SUB: MUSTFILL -->
+<input type='checkbox' name='mf[{VAR:form_id}]' value=1 {VAR:mf}>
+<!-- END SUB: MUSTFILL -->
+</td>
 <td class="plain">&nbsp;
 <!-- SUB: GROUP -->
 <input type='text' size=10 name='fg[{VAR:form_id}]' value="{VAR:group}">
