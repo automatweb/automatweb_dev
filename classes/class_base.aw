@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.73 2003/02/17 11:52:47 duke Exp $
+// $Id: class_base.aw,v 2.74 2003/02/17 14:41:18 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -338,6 +338,7 @@ class class_base extends aliasmgr
 		$fields = $this->fields["objects"];
 		// for objects, we always load the parent field as well
 		$fields["parent"] = "direct";
+		$fields["metadata"] = "serialize";
 		$tmp = $this->load_object(array(
 			"id" => $args["id"],
 			"table" => "objects",
