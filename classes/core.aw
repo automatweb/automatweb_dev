@@ -632,7 +632,7 @@ class core extends acl_base
 					$u = $co->get_simple_config("error_redirect");
 				}
 
-				if ($u != "" && aw_global_get("uid") != "kix" && aw_global_get("uid") != "duke" && aw_global_get("uid") != "sven" && aw_global_get("uid") != "root" && !headers_sent() && aw_ini_get("site_id") != 138)
+				if ($u != "" && aw_global_get("uid") != "kix" && aw_global_get("uid") != "duke" && aw_global_get("uid") != "sven" && aw_global_get("uid") != "root" && !headers_sent() && aw_ini_get("site_id") != 138 && aw_global_get("uid") != "ahti")
 				{
 					header("Location: $u");
 					die();
