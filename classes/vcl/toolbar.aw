@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.3 2004/10/25 12:45:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.4 2004/10/25 14:34:33 duke Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -7,6 +7,7 @@ class toolbar extends aw_template
 	{
 		$this->init("toolbar");
 		$this->matrix = array();
+		$this->custom_data = "";
 
 		extract($args);
 		if (empty($imgbase))
@@ -91,7 +92,7 @@ class toolbar extends aw_template
 				"id" => $parent,
 			));
 			$cdata = $this->parse();
-			$this->add_cdata($cdata);
+			$this->custom_data .= $cdata;
 		};
 	}
 
@@ -252,7 +253,7 @@ class toolbar extends aw_template
 			$result .= $this->parse("right_side");
 		};
 
-		$result .= $this->parse("real_end");
+		$result .= $this->parse("real_end") . $this->custom_data;
 		return $result;
 	}
 
