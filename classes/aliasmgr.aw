@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.76 2003/02/17 13:48:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.77 2003/02/17 16:08:07 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -478,6 +478,7 @@ class aliasmgr extends aw_template
 
 		$this->search_url = $search_url;
 
+
 		// this will be an array of class => name pairs for all object types that can be embedded
 		$aliases = array();
 		$types = array();
@@ -780,7 +781,7 @@ class aliasmgr extends aw_template
 			}
 		}
 	
-		array_unshift($this->reltypes,"Seose tüüp");
+		//array_unshift($this->reltypes,"Seose tüüp");
 		
 		$reltypes = html::select(array(
 			"options" => $this->reltypes,
