@@ -1,8 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.5 2004/05/05 11:42:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.6 2004/06/11 12:55:24 duke Exp $
 // crm_org_search.aw - kliendibaasi otsing 
-
-// and pray tell .. how to I embed this into crm_db now?
 /*
 
 @default group=general
@@ -164,7 +162,7 @@ class crm_org_search extends class_base
 		
 		if (!empty($req["reg_nr"]))
 		{
-			$filter["reg_nr"] = $req["reg_nr"];
+			$filter["reg_nr"] = "%" . $req["reg_nr"] . "%";
 		};
 
 		if (!empty($req["ettevotlusvorm"]))
@@ -221,8 +219,11 @@ class crm_org_search extends class_base
 		$results = new object_list($filter);
 		obj_set_opt("no_cache", 0);
 
+		$count = 0;
+
 		for ($o = $results->begin(); !$results->end(); $o = $results->next())
 		{
+			$count++;
 			// aga ülejäänud on kõik seosed!
 			$vorm = $tegevus = $contact = $juht = $juht_id = $phone = $url = $mail = "";
 			if (is_oid($o->prop("ettevotlusvorm")))
@@ -304,6 +305,11 @@ class crm_org_search extends class_base
 				"email" => $mail,
 			));
 		}
+
+		if ($count == 0)
+		{
+			$tf->set_header("Otsing ei leidnud ühtegi objekti");
+		};
 	}
 
 
