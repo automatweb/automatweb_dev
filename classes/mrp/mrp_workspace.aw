@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.58 2005/03/24 14:58:48 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.59 2005/03/24 21:40:52 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -442,7 +442,7 @@ class mrp_workspace extends class_base
 								"id" => $tmp->id(),
 								"return_url" => get_ru()
 							)),
-							"caption" => 
+							"caption" =>
 											"<span style='font-size:20px'>".$tmp->name()."</span>"
 						));
 						break;
@@ -1051,9 +1051,8 @@ class mrp_workspace extends class_base
 
 		$list = new object_list (array (
 			"class_id" => CL_MRP_CASE,
+			"state" => new obj_predicate_not (array (MRP_STATUS_DONE, MRP_STATUS_ARCHIVED)),
 			"due_date" => new obj_predicate_compare (OBJ_COMP_LESS, time()),
-			//"CL_MRP_CASE.RELTYPE_MRP_PROJECT_JOB.starttime" => new obj_predicate_compare(OBJ_COMP_GREATER, new obj_predicate_prop("due_date")),
-			"finished_date" => 0,
 			"parent" => $this_object->prop ("projects_folder"),
 			// "createdby" => aw_global_get('uid'),
 		));
@@ -1204,17 +1203,23 @@ class mrp_workspace extends class_base
 					"name" => "starttime",
 					"caption" => t("Materjalide saabumine"),
 					"chgbgcolor" => "bgcolour_overdue",
+					"type" => "time",
+					"format" => MRP_DATE_FORMAT,
 					"sortable" => 1,
 				));
 				$table->define_field(array(
 					"name" => "planned_date",
 					"caption" => t("Planeeritud valmimine"),
 					"chgbgcolor" => "bgcolour_overdue",
+					"type" => "time",
+					"format" => MRP_DATE_FORMAT,
 					"sortable" => 1,
 				));
 				$table->define_field(array(
 					"name" => "due_date",
 					"caption" => t("Tähtaeg"),
+					"type" => "time",
+					"format" => MRP_DATE_FORMAT,
 					"chgbgcolor" => "bgcolour_overdue",
 					"sortable" => 1,
 				));
@@ -1260,8 +1265,8 @@ class mrp_workspace extends class_base
 			));
 		}
 
-		$table->set_default_sortby ("modified");
-		$table->set_default_sorder ("desc");
+		$table->set_default_sortby ("due_date");
+		$table->set_default_sorder ("asc");
 		$table->draw_text_pageselector (array (
 			"records_per_page" => 50,
 		));
@@ -1437,9 +1442,9 @@ class mrp_workspace extends class_base
 				"name" => $project->name (),
 				"priority" => $priority,
 				"sales_priority" => $project->prop ("sales_priority"),
-				"starttime" => date (MRP_DATE_FORMAT, $project->prop ("starttime")),
-				"due_date" => date (MRP_DATE_FORMAT, $project->prop ("due_date")),
-				"planned_date" => date (MRP_DATE_FORMAT, $planned_date),
+				"starttime" => $project->prop ("starttime"),
+				"due_date" => $project->prop ("due_date"),
+				"planned_date" => $planned_date,
 				"project_id" => $project_id,
 				"bgcolour_overdue" => $bg_colour,
 			);
@@ -1706,11 +1711,13 @@ class mrp_workspace extends class_base
 
 			for ($resource =& $resources->begin (); !$resources->end (); $resource =& $resources->next ())
 			{
-				$id = $resource->id ();
 				$chart->add_row (array (
-					"name" => $id,
-					"title" => $resource->name (),
-					"uri" => html::get_change_url ($id)
+					"name" => $resource->id(),
+					"title" => $resource->name(),
+					"uri" => html::get_change_url(
+						$resource->id(),
+						array("return_url" => urlencode(aw_global_get("REQUEST_URI")))
+					)
 				));
 			}
 		}

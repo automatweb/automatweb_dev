@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.41 2005/03/24 14:58:48 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.42 2005/03/24 21:40:52 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -57,7 +57,7 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 @default table=objects
 @default field=meta
 @default method=serialize
-	@property planned_date type=text store=no editonly=1
+	@property planned_date type=text editonly=1
 	@caption Planeeritud valmimisaeg
 
 	@property sales_priority type=textbox size=5
@@ -266,6 +266,7 @@ class mrp_case extends class_base
 				{
 					return PROP_IGNORE;
 				}
+
 				$prop["value"] = $this->get_header($arr);
 				break;
 
@@ -465,19 +466,19 @@ class mrp_case extends class_base
 		$chart = get_instance ("vcl/gantt_chart");
 		$columns = 7;
 		$hilighted_project = $this_object->id ();
-		$hilighted_jobs = array ();
+		$hilighted_jobs = array();
 
 		### add row dfn-s, resource names
-		$connections = $this_object->connections_from(array ("type" => "RELTYPE_MRP_PROJECT_JOB", "class_id" => CL_MRP_JOB));
+		$connections = $this_object->connections_from(array("type" => "RELTYPE_MRP_PROJECT_JOB", "class_id" => CL_MRP_JOB));
 		$project_resources = array ();
 		$project_start = "NA";
 
 		foreach ($connections as $connection)
 		{
-			$job = $connection->to ();
-			$project_resources[] = $job->prop ("resource");
-			$starttime = $job->prop ("starttime");
-			$project_start = ($project_start === "NA") ? $starttime : min ($starttime, $project_start);
+			$job = $connection->to();
+			$project_resources[] = $job->prop("resource");
+			$starttime = $job->prop("starttime");
+			$project_start = ($project_start === "NA") ? $starttime : min($starttime, $project_start);
 		}
 
 		### add rows
@@ -642,17 +643,27 @@ class mrp_case extends class_base
 		$this_object =& $arr["obj_inst"];
 		$toolbar =& $arr["prop"]["toolbar"];
 
+		### delete button
 		if ($arr["request"]["group"] == "grp_case_workflow")
 		{
-			$toolbar->add_button(array(
-				"name" => "delete",
-				"img" => "delete.gif",
-				"tooltip" => t("Kustuta valitud töö(d)"),
-				"confirm" => t("Kustutada kõik valitud tööd?"),
-				"action" => "delete",
-			));
-			$toolbar->add_separator();
+			$disabled = false;
 		}
+		else
+		{
+			$disabled = true;
+		}
+
+		$toolbar->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta valitud töö(d)"),
+			"confirm" => t("Kustutada kõik valitud tööd?"),
+			"action" => "delete",
+			"disabled" => $disabled,
+		));
+
+		$toolbar->add_separator();
+
 		// $toolbar->add_button(array(
 			// "name" => "test",
 			// "img" => "preview.gif",
@@ -669,13 +680,21 @@ class mrp_case extends class_base
 
 		if (in_array($this_object->prop("state"), $applicable_states))
 		{
-			$toolbar->add_button(array(
-				"name" => "plan_btn",
-				// "img" => "save.gif",
-				"tooltip" => t("Planeeri"),
-				"action" => "plan",
-			));
+			$disabled = false;
 		}
+		else
+		{
+			$disabled = true;
+		}
+
+		$toolbar->add_button(array(
+			"name" => "plan_btn",
+			// "img" => "save.gif",
+			"tooltip" => t("Planeeri"),
+			"action" => "plan",
+			"disabled" => $disabled,
+		));
+
 
 		### states for taking a project out of scheduling
 		$applicable_states = array(
@@ -684,13 +703,20 @@ class mrp_case extends class_base
 
 		if (in_array($this_object->prop("state"), $applicable_states))
 		{
-			$toolbar->add_button(array(
-				"name" => "onhold_btn",
-				// "img" => "save.gif",
-				"tooltip" => t("Võta planeerimisest v&auml;lja"),
-				"action" => "set_on_hold",
-			));
+			$disabled = false;
 		}
+		else
+		{
+			$disabled = true;
+		}
+
+		$toolbar->add_button(array(
+			"name" => "onhold_btn",
+			// "img" => "save.gif",
+			"tooltip" => t("Plaanist v&auml;lja"),
+			"action" => "set_on_hold",
+			"disabled" => $disabled,
+		));
 
 		### states for aborting a project
 		$applicable_states = array(
@@ -699,14 +725,21 @@ class mrp_case extends class_base
 
 		if (in_array($this_object->prop("state"), $applicable_states))
 		{
-			$toolbar->add_button(array(
-				"name" => "abort_btn",
-				// "img" => "save.gif",
-				"tooltip" => t("Katkesta projekt"),
-				"confirm" => t("Katkesta projekt?"),
-				"action" => "abort",
-			));
+			$disabled = false;
 		}
+		else
+		{
+			$disabled = true;
+		}
+
+		$toolbar->add_button(array(
+			"name" => "abort_btn",
+			// "img" => "save.gif",
+			"tooltip" => t("Katkesta"),
+			"confirm" => t("Katkesta projekt?"),
+			"action" => "abort",
+			"disabled" => $disabled,
+		));
 
 		### states for archiving a project
 		$applicable_states = array(
@@ -715,13 +748,20 @@ class mrp_case extends class_base
 
 		if (in_array($this_object->prop("state"), $applicable_states))
 		{
-			$toolbar->add_button(array(
-				"name" => "archive_btn",
-				// "img" => "save.gif",
-				"tooltip" => t("Arhiveeri projekt"),
-				"action" => "archive",
-			));
+			$disabled = false;
 		}
+		else
+		{
+			$disabled = true;
+		}
+
+		$toolbar->add_button(array(
+			"name" => "archive_btn",
+			// "img" => "save.gif",
+			"tooltip" => t("Arhiveeri"),
+			"action" => "archive",
+			"disabled" => $disabled,
+		));
 	}
 
 	function create_workflow_table ($arr)
@@ -818,6 +858,11 @@ class mrp_case extends class_base
 					$disabled = true;
 					break;
 
+				case MRP_STATUS_PAUSED:
+					$stag = '<span style="color: black;">';
+					$disabled = true;
+					break;
+
 				case MRP_STATUS_DONE:
 					$stag = '<span style="color: gray;">';
 					$disabled = true;
@@ -868,7 +913,11 @@ class mrp_case extends class_base
 					"url" => $change_url,
 					)
 				),
-				"name" => $this_object->name () . " - " . $resource_name,
+				"name" => $this_object->name () . " - " . html::get_change_url(
+					$resource->id(),
+					array("return_url" => urlencode(aw_global_get("REQUEST_URI"))),
+					$resource_name
+				),
 				"length" => html::textbox(array(
 					"name" => "mrp_workflow_job-" . $job_id . "-length",
 					"size" => "1",
@@ -1451,6 +1500,7 @@ class mrp_case extends class_base
 	function get_header($arr)
 	{
 		$ws = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+
 		if ($ws)
 		{
 			if (is_oid($ws->prop("case_header_controller")) && $this->can("view", $ws->prop("case_header_controller")))

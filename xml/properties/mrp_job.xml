@@ -18,6 +18,23 @@
             <caption>Kommentaar</caption>
       </property>
       <property>
+            <name>job_toolbar</name>
+            <group>data</group>
+            <table>objects</table>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>job_toolbar</field>
+      </property>
+      <property>
+            <name>resource</name>
+            <group>data</group>
+            <table>mrp_job</table>
+            <type>text</type>
+            <field>resource</field>
+            <caption>Ressurss</caption>
+      </property>
+      <property>
             <name>length</name>
             <group>data</group>
             <table>mrp_job</table>
@@ -49,14 +66,6 @@
             <field>minstart</field>
             <comment>Enne seda kuupäeva, kellaaega ei lubata tööd alustada</comment>
             <caption>Varaseim alustusaeg</caption>
-      </property>
-      <property>
-            <name>resource</name>
-            <group>data</group>
-            <table>mrp_job</table>
-            <type>text</type>
-            <field>resource</field>
-            <caption>Ressurss</caption>
       </property>
       <property>
             <name>project</name>
@@ -106,15 +115,6 @@
             <type>text</type>
             <field>state</field>
             <caption>Staatus</caption>
-      </property>
-      <property>
-            <name>job_toolbar</name>
-            <group>data</group>
-            <table>mrp_job</table>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>job_toolbar</field>
       </property>
       <classinfo>
             <syslog_type>ST_MRP_JOB</syslog_type>

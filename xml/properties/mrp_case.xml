@@ -102,7 +102,6 @@
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <store>no</store>
             <editonly>1</editonly>
             <caption>Planeeritud valmimisaeg</caption>
       </property>

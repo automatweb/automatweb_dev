@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.29 2005/03/24 15:28:28 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.30 2005/03/24 21:40:52 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -366,8 +366,16 @@ class mrp_resource extends class_base
 			"records_per_page" => 50,
 		));
 
+		### states for resource joblist
+		$applicable_states = array (
+			MRP_STATUS_PLANNED,
+			MRP_STATUS_PAUSED,
+			MRP_STATUS_INPROGRESS,
+		);
+
 		$list = new object_list(array(
 			"class_id" => CL_MRP_JOB,
+			"state" => $applicable_states,
 			"resource" => $this_object->id (),
 			// "starttime" => new obj_predicate_compare (OBJ_COMP_BETWEEN, time (), mktime (23, 59, 59)),
 		));
@@ -389,6 +397,44 @@ class mrp_resource extends class_base
 				}
 			}
 
+			### colour job status
+			$stag = '<span>';
+			$etag = '</span>';
+			$status = $this->states[$job->prop ("state")];
+
+			switch ($job->prop ("state"))
+			{
+				case MRP_STATUS_NEW:
+					$stag = '<span style="color: green;">';
+					break;
+
+				case MRP_STATUS_PLANNED:
+					$stag = '<span style="color: blue;">';
+					break;
+
+				case MRP_STATUS_ABORTED:
+					$stag = '<span style="color: red;">';
+					break;
+
+				case MRP_STATUS_INPROGRESS:
+					$stag = '<span style="color: #D79B00;">';
+					$disabled = true;
+					break;
+
+				case MRP_STATUS_PAUSED:
+					$stag = '<span style="color: black;">';
+					$disabled = true;
+					break;
+
+				case MRP_STATUS_DONE:
+					$stag = '<span style="color: gray;">';
+					$disabled = true;
+					break;
+			}
+
+			$status = $stag . $status . $etag;
+
+
 			$change_url = $this->mk_my_orb ("change", array (
 				"id" => $job_id,
 				"return_url" => urlencode (aw_global_get ('REQUEST_URI')),
@@ -402,7 +448,7 @@ class mrp_resource extends class_base
 					)),
 				"project" => $project,
 				"name" => $job->name (),
-				"state" => $this->states[$job->prop("state")],
+				"state" => $status,
 				"starttime" => $starttime,
 				"client" => $client
 			));
@@ -426,8 +472,17 @@ class mrp_resource extends class_base
 		$start = $range["start"];
 		$end = $range["end"];
 
-		$list = new object_list (array (
+		### states for resource joblist
+		$applicable_states = array (
+			MRP_STATUS_PLANNED,
+			MRP_STATUS_PAUSED,
+			MRP_STATUS_INPROGRESS,
+			// MRP_STATUS_DONE,
+		);
+
+		$list = new object_list(array(
 			"class_id" => CL_MRP_JOB,
+			"state" => $applicable_states,
 			"resource" => $this_object->id (),
 			"starttime" => new obj_predicate_compare (OBJ_COMP_BETWEEN, $start, $end),
 		));
@@ -438,10 +493,49 @@ class mrp_resource extends class_base
 			{
 				//$project = is_oid ($job->prop ("project")) ? obj ($job->prop ("project")) : NULL;
 				$project = is_object ($project) ? $project->name () : "...";
+
+				### colour job status
+				$stag = '<span>';
+				$etag = '</span>';
+				$status = $this->states[$job->prop ("state")];
+
+				switch ($job->prop ("state"))
+				{
+					case MRP_STATUS_NEW:
+						$stag = '<span style="color: green;">';
+						break;
+
+					case MRP_STATUS_PLANNED:
+						$stag = '<span style="color: blue;">';
+						break;
+
+					case MRP_STATUS_ABORTED:
+						$stag = '<span style="color: red;">';
+						break;
+
+					case MRP_STATUS_INPROGRESS:
+						$stag = '<span style="color: #D79B00;">';
+						$disabled = true;
+						break;
+
+					case MRP_STATUS_PAUSED:
+						$stag = '<span style="color: black;">';
+						$disabled = true;
+						break;
+
+					case MRP_STATUS_DONE:
+						$stag = '<span style="color: gray;">';
+						$disabled = true;
+						break;
+				}
+
+				$status = $stag . $status . $etag;
+
+				### ...
 				$calendar->add_item (array (
 					"timestamp" => $job->prop ("starttime"),
 					"data" => array(
-						"name" => $job->prop ("name"),
+						"name" => $job->prop ("name") . " [" . $status . "]",
 						"link" => $this->mk_my_orb ("change",array ("id" => $job->id ()), "mrp_job"),
 					),
 				));
@@ -488,7 +582,7 @@ class mrp_resource extends class_base
 				while ($year <= $period_end_year)
 				{
 					if (
-						(($year != $period_start_year) and ($year != $period_end_year)) or
+						(( ((int) $year) != ((int) $period_start_year) ) and ( ((int) $year) != ((int) $period_end_year) )) or
 						(($year == $period_start_year) and ($start_mon >= $period_start_mon) and ($start_day >= $period_start_day))
 						// (($year == $period_end_year) and ($end_mon <= $period_end_mon) and ($end_day <= $period_end_day))
 					)
@@ -496,22 +590,7 @@ class mrp_resource extends class_base
 						$start = mktime ($start_hour, $start_min, 0, $start_mon, $start_day, $year);
 						$end = mktime ($end_hour, $end_min, 0, $end_mon, $end_day, $year);
 						$end = ($end < $start) ? mktime ($end_hour, $end_min, 0, $end_mon, $end_day, ($year + 1)) : $end;
-
-
-
-						foreach ($unavailable_dates as $start_defined => $end_defined)
-						{
-							if ( (($start >= $start_defined) and ($start <= $end_defined)) or (($end >= $start_defined) and ($end <= $end_defined)) )
-							{
-								unset ($unavailable_dates[$start_defined]);
-								$start = min ($start, $start_defined);
-								$unavailable_dates[$start] = max ($end, $end_defined);
-							}
-							else
-							{
-								$unavailable_dates[$start] = $end;
-							}
-						}
+						$unavailable_dates[$start] = $end;
 					}
 
 					$year++;
@@ -519,12 +598,21 @@ class mrp_resource extends class_base
 			}
 		}
 
+/* dbg */ if ($this->mrpdbg){
+// /* dbg */ echo "unavailable_dates:";
+// /* dbg */ arr ($unavailable_dates);
+/* dbg */ }
+
 		ksort ($unavailable_dates);
 		return $unavailable_dates;
 	}
 
 	function get_unavailable_periods ($resource, $start, $end)
 	{
+/* dbg */ if ($resource->id () == 6670  ) {
+/* dbg */ $this->mrpdbg=1;
+/* dbg */ }
+
 		$unavailable_periods = array ();
 		$unavailable_periods = $this->_get_unavailable_dates ($resource->prop ("unavailable_dates"), $start, $end);
 		return $unavailable_periods;

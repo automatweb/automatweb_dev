@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.31 2005/03/24 14:58:48 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.32 2005/03/24 21:40:52 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -22,7 +22,12 @@ EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 
 @groupinfo data caption="Andmed"
 @default group=data
+	@property job_toolbar type=toolbar no_caption=1 store=no
+
 @default table=mrp_job
+	@property resource type=text
+	@caption Ressurss
+
 	@property length type=textbox
 	@caption Töö pikkus (h)
 
@@ -35,9 +40,6 @@ EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 	@property minstart type=datetime_select
 	@comment Enne seda kuupäeva, kellaaega ei lubata tööd alustada
 	@caption Varaseim alustusaeg
-
-	@property resource type=text
-	@caption Ressurss
 
 	@property project type=hidden
 	@caption Projekt
@@ -58,7 +60,6 @@ EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 	@property state type=text
 	@caption Staatus
 
-	@property job_toolbar type=toolbar no_caption=1 store=no
 
 // --------------- RELATION TYPES ---------------------
 
@@ -270,63 +271,87 @@ class mrp_job extends class_base
 		$toolbar =& $arr["prop"]["toolbar"];
 		$this_object =& $arr["obj_inst"];
 
-		if ($this_object->prop ("state") == MRP_STATUS_PLANNED)
+		### start button
+		if ( ($this_object->prop ("state") == MRP_STATUS_PLANNED) and ($this->can_start(array("job" => $this_object->id()))) )
 		{
-			if ($this->can_start(array("job" => $this_object->id())))
-			{
-				$toolbar->add_button(array(
-					"name" => "start",
-					//"img" => "new.gif",
-					"tooltip" => t("Alusta"),
-					"action" => "start",
-					"confirm" => t("Oled kindel et soovid t&ouml;&ouml;d alustada?")
-				));
-			}
+			$disabled = false;
+		}
+		else
+		{
+			$disabled = true;
 		}
 
+		$toolbar->add_button(array(
+			"name" => "start",
+			//"img" => "new.gif",
+			"tooltip" => t("Alusta"),
+			"action" => "start",
+			// "confirm" => t("Oled kindel et soovid t&ouml;&ouml;d alustada?"),
+			"disabled" => $disabled,
+		));
+
+		### done, abort, pause, end_shift buttons
 		if ($this_object->prop ("state") == MRP_STATUS_INPROGRESS)
 		{
-			$toolbar->add_button(array(
-				"name" => "done",
-				//"img" => "done.gif",
-				"tooltip" => t("Valmis"),
-				"action" => "done",
-				"confirm" => t("Oled kindel et soovid t&ouml;&ouml;d l&otilde;petada?")
-			));
-
-			$toolbar->add_button(array(
-				"name" => "abort",
-				//"img" => "abort.gif",
-				"tooltip" => t("Katkesta"),
-				//"action" => "abort",
-				"url" => "#",
-				"onClick" => "if (document.changeform.pj_change_comment.value.replace(/\\s+/, '') != '') { submit_changeform('abort') } else { alert('" . t("Kommentaar peab olema t&auml;idetud!") . "'); }"
-			));
-
-			$toolbar->add_button(array(
-				"name" => "pause",
-				//"img" => "pause.gif",
-				"tooltip" => t("Paus"),
-				"action" => "pause",
-			));
-
-			$toolbar->add_button(array(
-				"name" => "end_shift",
-				//"img" => "end_shift.gif",
-				"tooltip" => t("Vahetuse l&otilde;pp"),
-				"action" => "end_shift",
-			));
+			$disabled_inprogress = false;
+		}
+		else
+		{
+			$disabled_inprogress = true;
 		}
 
+		$toolbar->add_button(array(
+			"name" => "done",
+			//"img" => "done.gif",
+			"tooltip" => t("Valmis"),
+			"action" => "done",
+			"confirm" => t("Oled kindel et soovid t&ouml;&ouml;d l&otilde;petada?"),
+			"disabled" => $disabled_inprogress,
+		));
+		$toolbar->add_button(array(
+			"name" => "pause",
+			//"img" => "pause.gif",
+			"tooltip" => t("Paus"),
+			"action" => "pause",
+			"disabled" => $disabled_inprogress,
+		));
+		$toolbar->add_button(array(
+			"name" => "end_shift",
+			//"img" => "end_shift.gif",
+			"confirm" => t("Lõpeta vahetus ja logi v&auml;lja?"),
+			"tooltip" => t("Vahetuse l&otilde;pp"),
+			"action" => "end_shift",
+			"disabled" => $disabled_inprogress,
+		));
+
+		### continue button
 		if ($this_object->prop("state") == MRP_STATUS_PAUSED)
 		{
-			$toolbar->add_button(array(
-				"name" => "scontinue",
-				//"img" => "continue.gif",
-				"tooltip" => t("J&auml;tka"),
-				"action" => "scontinue",
-			));
+			$disabled = false;
 		}
+		else
+		{
+			$disabled = true;
+		}
+
+		$toolbar->add_button(array(
+			"name" => "scontinue",
+			//"img" => "continue.gif",
+			"tooltip" => t("J&auml;tka"),
+			"action" => "scontinue",
+			"disabled" => $disabled,
+		));
+
+		$toolbar->add_button(array(
+			"name" => "abort",
+			//"img" => "abort.gif",
+			"tooltip" => t("Katkesta"),
+			//"action" => "abort",
+			"url" => "#",
+			"confirm" => t("Katkesta t&ouml;&ouml;?"),
+			"onClick" => "if (document.changeform.pj_change_comment.value.replace(/\\s+/, '') != '') { submit_changeform('abort') } else { alert('" . t("Kommentaar peab olema t&auml;idetud!") . "'); }",
+			"disabled" => $disabled_inprogress,
+		));
 	}
 
 /**
