@@ -4,6 +4,10 @@
 		<caption>Kalendri konf</caption>
 		<link>?class=planner&amp;action=change&amp;id={VAR:id}</link>
 	</config>
+	<add>
+		<caption>Lisa sündmus</caption>
+		<link>?class=planner&amp;action=new_event&amp;parent={VAR:id}&amp;date={VAR:date}</link>
+	</add>
 	<today>
 		<caption>Täna</caption>
 		<link>?class=planner&amp;action=view&amp;id={VAR:id}</link>
