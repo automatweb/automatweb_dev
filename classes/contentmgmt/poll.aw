@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.17 2004/05/20 12:44:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.18 2004/06/04 11:40:16 duke Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -164,9 +164,10 @@ class poll extends class_base
 		reset($ans);
 		while (list($k,$v) = each($ans))
 		{
+			$o_l = $this->mk_my_orb("show", array("poll_id" => $ap->id(), "answer_id" => $k, "section" => aw_global_get("section")));
 			if ($def)	 
 			{	 
-				$au = $this->mk_my_orb("show", array("poll_id" => $ap->id(), "answer_id" => $k, "section" => aw_global_get("section")));
+				$au = "javascript:window.location.href='" . $this->mk_my_orb("show", array("poll_id" => $ap->id(), "answer_id" => $k, "section" => aw_global_get("section"))) . "'";
 			}	 
 			else	 
 			{	 
@@ -181,6 +182,7 @@ class poll extends class_base
 				"answer_id" => $k,
 				"answer" => is_array($v) ? $v["answer"] : $v, 
 				"click_answer" => str_replace("&", "&amp;", $au),
+				"click_answer_js" => $o_l,
 				"clicks" => $v["clicks"],
 			));
 			if ($v["answer"] != "")
