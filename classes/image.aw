@@ -1,12 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.83 2004/02/19 22:35:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.84 2004/03/18 16:19:22 duke Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
 	@default group=general
 	@default table=objects
 
-	@property file type=fileupload table=images
+	@property file type=fileupload table=images form=+emb
 	@caption Pilt
 
 	@property dimensions type=text group=general,resize store=no
@@ -647,13 +647,14 @@ class image extends class_base
 					$prop["value"] = $fl;
 				}
 				// XXX: this is not the correct way to detect this
-				elseif (!empty($arr["request"]["file_type"]))
+				elseif (!empty($prop["value"]["type"]))
 				{
 					$_fi = get_instance("file");
 					$fl = $_fi->_put_fs(array(
-						"type" => $arr["request"]["file_type"],
-						"content" => $prop["value"],
+						"type" => $prop["value"]["type"],
+						"content" => $prop["value"]["contents"],
 					));
+					$arr["obj_inst"]->set_name($prop["value"]["name"]);
 					$prop["value"] = $fl;
 					
 				}
