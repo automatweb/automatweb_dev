@@ -8,6 +8,14 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="view" nologin="1">
+			<function name="view">
+				<arguments>
+					<required name="id" type="int"/>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
 		
