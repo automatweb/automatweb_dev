@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.38 2003/02/18 21:49:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.39 2003/02/27 13:25:37 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -2864,7 +2864,12 @@ class form_table extends form_base
 		// form table alias marker is w
 		while (preg_match("/#u(\d+)#/U", $text, $mt))
 		{
-			$text = str_replace("#u".$mt[1]."#", $this->do_parse_ftbl_alias($aliases[CL_FORM_OUTPUT][$mt[1]-1]["target"]), $text);
+			$alid = $aliases[CL_FORM_OUTPUT][$mt[1]-1]["target"];
+			if (!$alid)
+			{
+				$alid = $aliases[CL_FORM_OUTPUT][$mt[1]]["target"];
+			}
+			$text = str_replace("#u".$mt[1]."#", $this->do_parse_ftbl_alias($alid), $text);
 		}
 		
 		$am->parse_oo_aliases($this->table_id, $text);
