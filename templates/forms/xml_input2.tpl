@@ -25,6 +25,7 @@
 <td class="fform" align="center"><input type="checkbox" name="active[{VAR:id}]" value="1" {VAR:checked}></td>
 <input type="hidden" name="exists[{VAR:id}]" value="1">
 <input type="hidden" name="type[{VAR:id}]" value="{VAR:type}">
+<input type="hidden" name="form[{VAR:id}]" value="{VAR:form_id}">
 </tr>
 <!-- END SUB: element -->
 <tr>

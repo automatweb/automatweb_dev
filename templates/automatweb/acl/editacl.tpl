@@ -1,4 +1,6 @@
 <form method="POST" ACTION="refcheck.{VAR:ext}">
+<input type="submit" value="Salvesta oigused">
+
 <table border="0" cellspacing="1" cellpadding="2" bgcolor="#CCCCCC">
 <tr>
 <td class="ftitle2" colspan='{VAR:colspan}'><a href='editacl.{VAR:ext}?type=addgrp&oid={VAR:oid}&file={VAR:file}'>Muuda gruppe</a></td>

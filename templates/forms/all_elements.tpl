@@ -1,7 +1,14 @@
 <form action='reforb.{VAR:ext}' method=POST>
 <table bgcolor=#b0b0b0 cellpadding=2>
+<tr>
+<td>&nbsp;</td>
+<!-- SUB: HE -->
+<td align="center">{VAR:col1}</td>
+<!-- END SUB: HE -->
+</tr>
 <!-- SUB: LINE -->
 <tr>
+<td>{VAR:row1}</td>
 <!-- SUB: COL -->
 <td bgcolor=#ffffff valign=bottom align=left colspan={VAR:colspan} rowspan={VAR:rowspan}>
 <!-- SUB: SOME_ELEMENTS -->

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.31 2001/07/26 12:54:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.32 2001/07/28 13:46:32 kristo Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -137,8 +137,8 @@ if (empty($LC))
 	$LC="et";
 }
 
-include("$basedir/lang/" . $LC . "/errors.aw");
-include("$basedir/lang/" . $LC . "/common.aw");
+@include("$basedir/lang/" . $LC . "/errors.aw");
+@include("$basedir/lang/" . $LC . "/common.aw");
 
 $cachedir = $basedir . "/cache"; 		  // where the file cache is
 $pi = "";
@@ -233,6 +233,13 @@ else
 			$lib = "$classdir/$lib.$ext";
 			include_once($lib);
 		};
+	}
+	
+	////
+	// !A neat little functional programming function
+	function not($arg)
+	{
+		return !$arg;
 	}
 
 	function sysload($lib)

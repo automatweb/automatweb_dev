@@ -27,6 +27,7 @@ function savemenu() {
 <td bgcolor="#CCCCCC">
 <table border="0" cellspacing="1" cellpadding="0" width=100%>
 <tr><td class="fgtitle">&nbsp;<img src='/images/trans.gif' width=1 height=12>
+<a href="javascript:savemenu()"><b><font color=red>{VAR:LC_MENUEDIT_SAVE}</font></b></a>&nbsp;
 <a href="javascript:show_tab(1)"><B>{VAR:LC_MENUEDIT_MENU_GENERAL}</b></a> |
 <a href="javascript:show_tab(2)"><b>{VAR:LC_MENUEDIT_MENU_TEMPLATES}</b></a> |
 <a href="javascript:show_tab(3)"><B>{VAR:LC_MENUEDIT_MENU_AUTOMATIC}</b></a> |
@@ -43,7 +44,7 @@ function savemenu() {
 <!-- SUB: IS_SHOP -->
 <a href="javascript:show_tab(8)"><b>{VAR:LC_MENUEDIT_CHOOSE_SHOP}</b></a> | 
 <!-- END SUB: IS_SHOP -->
-<a href="javascript:savemenu()"><b><font color=red>{VAR:LC_MENUEDIT_SAVE}</font></b></a>&nbsp;
+
 </td>
 </tr>
 </table>
@@ -101,6 +102,7 @@ function savemenu() {
 		<td class="title">&nbsp;</td>
 		<td class="fgtext_g" >&nbsp;{VAR:LC_MENUEDIT_LEFT_PANE}:&nbsp;<input type="checkbox" value=1 name="left_pane" {VAR:left_pane}></td>
 		<td class="fgtext_g">&nbsp;{VAR:LC_MENUEDIT_RIGHT_PANE}:&nbsp;<input type="checkbox" value=1 name="right_pane" {VAR:right_pane}></td>
+		<td class="fgtext_g" >&nbsp;Users only:&nbsp;<input type="checkbox" value=1 name="users_only" {VAR:users_only}</td>
 		<td class="fgtext_g" >{VAR:LC_MENUEDIT_ITEMS_SBS}:&nbsp;<input type='checkbox' name='shop_parallel' value=1 {VAR:shop_parallel}></td>
 		<td class="fgtext_g" colspan=20>{VAR:LC_MENUEDIT_IGNORE_NEXT}:&nbsp;<input type='checkbox' name='shop_ignoregoto' value=1 {VAR:shop_ignoregoto}></td>
 	</tr>
