@@ -1,21 +1,21 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.47 2003/05/20 06:35:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.48 2003/06/04 14:19:54 axel Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
 	// stuff that goes into the objects table
 	@default table=objects
-	
+
 	//added by martin
 	@property multi_doc_style type=checkbox value=1 ch_value=1 group=advanced field=meta method=serialize
 	@caption Kasuta jumpboxi
 
 	@property alias type=textbox group=general
 	@caption Alias
-	
+
 	@property jrk type=textbox size=4 group=general
 	@caption Jrk
-	
+
 	@property target type=checkbox group=general ch_value=1 search=1 table=menu
 	@caption Uues aknas
 
@@ -61,7 +61,7 @@
 	@property description type=textbox field=meta method=serialize group=keywords
 	@caption META description
 	
-	@property sections type=select multiple=1 size=20 field=meta method=serialize group=relations 
+	@property sections type=select multiple=1 size=20 field=meta method=serialize group=relations
 	@caption Vennastamine
 
 	@property images_from_menu type=relpicker reltype=RELTYPE_PICTURES_MENU group=presentation field=meta method=serialize
@@ -240,7 +240,7 @@ class menu extends class_base
 				$data["options"] = $this->get_menu_list(false,true);
 				$data["selected"] = $this->get_brothers($args["obj"]["oid"]);
 				break;
-			
+
 			case "sss":
 				$data["options"] = $this->get_menu_list();
 				break;
@@ -628,9 +628,10 @@ class menu extends class_base
 
 		if (is_array($sections))
 		{
-			reset($sections);
 			$a = array();
-			while (list(,$v) = each($sections))
+			//reset($sections);
+			//while (list(,$v) = each($sections))
+			foreach($sections as $v)
 			{
 				if ($sar[$v])
 				{
@@ -644,8 +645,9 @@ class menu extends class_base
 			}
 		}
 		$deleted = array();
-		reset($sar);
-		while (list($oid,) = each($sar))
+		//reset($sar);
+		//while (list($oid,) = each($sar))
+		foreach($sar as $oid => $val)
 		{
 			if (!$a[$oid])
 			{
@@ -653,14 +655,13 @@ class menu extends class_base
 			}
 		}
 
-		reset($deleted);
-		while (list($oid,) = each($deleted))
+		//reset($deleted);
+		//while (list($oid,) = each($deleted))
+		foreach($deleted as $oid => $val)
 		{
 			$this->updmenus[] = $oid;
 			$this->delete_object($oidar[$oid]);
 		}
-		reset($added);
-
 
 		while(list($oid,) = each($added))
 		{
@@ -692,9 +693,9 @@ class menu extends class_base
 	function update_menu_images($args = array())
 	{
 		extract($args);
-		$num_menu_images = $this->cfg["num_menu_images"]; 
+		$num_menu_images = $this->cfg["num_menu_images"];
 		$t = get_instance("image");
-		
+
 		$imgar = $meta["menu_images"];
 		for ($i=0; $i < $num_menu_images; $i++)
 		{
@@ -778,14 +779,14 @@ class menu extends class_base
 		};
 		return $title;
 	}
-	
+
 	////
 	// !exports menu $id and all below it
 	// if $ret_data is true, then the export arr is returned, not output
 	function export_menus($arr)
 	{
 		extract($arr);
-		
+
 		if (!is_array($ex_menus))
 		{
 			return;
@@ -825,7 +826,7 @@ class menu extends class_base
 			}
 		}
 
-		// so now we have a complete list of menus to fetch. 
+		// so now we have a complete list of menus to fetch.
 		// so fetchemall
 		reset($sels);
 		while (list(,$eid) = each($sels))

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.199 2003/06/03 16:48:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.200 2003/06/04 14:19:54 axel Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -841,7 +841,9 @@ class core extends db_connector
 	//   reltype - type of the relation
 	function addalias($arr)
 	{
+		//arr($arr);
 		extract($arr);
+
 		$extra = ($arr["extra"]) ? $arr["extra"] : "";
 
 		$target_data = $this->get_object($alias);
@@ -860,7 +862,7 @@ class core extends db_connector
 		$reltype = (int)$arr["reltype"];
 		$q = "INSERT INTO aliases (source,target,type,data,idx,relobj_id,reltype)
 			VALUES('$id','$alias','$target_data[class_id]','$extra','$idx','$relobj_id','$reltype')";
-			
+
 		$cl = $target_data['class_id'];
 
 		if (is_array($hist = aw_global_get('aliasmgr_obj_history')))

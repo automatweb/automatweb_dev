@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.7 2003/06/04 14:03:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.8 2003/06/04 14:19:55 axel Exp $
 define("SHARED_FOLDER_ID",2147483647);
 class admin_folders extends aw_template
 {
@@ -542,7 +542,7 @@ class admin_folders extends aw_template
 						"id" => $row["oid"],
 						"parent" => $row["parent"],
 						"iconurl" => $url,
-						"url" => $this->mk_my_orb("right_frame",array("parent" => $row["oid"], "period" => $period),"admin_menus")
+						"url" => $this->mk_my_orb("right_frame",array("parent" => $row["oid"], "period" => $period),"admin_menus"),
 					));
 					if ($sub == "")
 					{

@@ -1,9 +1,8 @@
 <?php
 /*
-	
-	@groupinfo general caption=&Uuml;ldine
-	
+
 	@classinfo relationmgr=yes
+	@groupinfo general caption=Üldine	
 	@tableinfo kliendibaas_isik index=oid master_table=objects master_index=oid
 
 	@default table=objects

@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.116 2003/06/04 14:02:27 duke Exp $
+// $Id: class_base.aw,v 2.117 2003/06/04 14:19:54 axel Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -1897,7 +1897,6 @@ class class_base extends aw_template
 				$rel_type_classes[$key] = $this->inst->callback_get_classes_for_relation(array(
 					"reltype" => $key,
 				));
-
 			}
 		}
 

@@ -75,7 +75,7 @@ class popup_objmgr extends class_base
 		return $this->parse();
 	}
 
-	function instant_get($args)
+/*	function instant_get($args)
 	{
 		extract($args);
 arr($args,1);
@@ -85,7 +85,7 @@ arr($args,1);
 
 
 		return $this->parse();
-	}
+	}*/
 
 	function mk_toolbar()
 	{
@@ -162,6 +162,7 @@ arr($args,1);
 		$fields = array();
 		$fields['special'] = 'n/a';
 //		$fields['class_id'] = 'n/a';
+		$fields['location'] = 'n/a';
 		$fields['server'] = 'n/a';
 		$fields['site_id'] = 'n/a';
 		$fields['period'] = 'n/a';

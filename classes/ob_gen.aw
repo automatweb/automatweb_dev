@@ -115,7 +115,7 @@ class ob_gen extends class_base
 	function get_property($args)
 	{
 		$data = &$args['prop'];
-		$retval = true;
+		$retval = PROP_OK;
 
 		static $list_tables;
 		if (!is_array($list_tables))

@@ -60,9 +60,13 @@ class pilot_object extends class_base
 	function form($args)
 	{
 		$form = $this->get_object($args['id']);
-		$obj = get_instance($args['feedback_cl']);
+		
+		if (!empty($args['feedback_cl']))
+		{
+			$obj = get_instance($args['feedback_cl']);
+		}
 
-		if (method_exists($obj,'fetch_all_data'))
+		if (isset($obj) && method_exists($obj,'fetch_all_data'))
 		{
 			$data = $obj->fetch_all_data(rawurldecode($args['feedback']));
 		}
@@ -219,7 +223,7 @@ class pilot_object extends class_base
 		$this->vars($data);
 		return $this->parse('object');
 	}
-	
+
 	function obj_tabl()
 	{
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.293 2003/06/04 12:36:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.294 2003/06/04 14:19:54 axel Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -158,8 +158,9 @@ class menuedit extends aw_template
 		{
 			// kui asi on caches, siis paneme kirja et mis lehte vaadatati.
 			$ch = $this->get_object_chain($section);
-			reset($ch);
-			while (list($k,$v) = each($ch))
+			//reset($ch);
+			//while (list($k,$v) = each($ch))
+			foreach($ch as $k => $v)
 			{
 				$str=$v["name"]." / ".$str;
 			}
@@ -170,14 +171,16 @@ class menuedit extends aw_template
 		$banner_defs = $this->cfg["banners"];
 		if (is_array($banner_defs))
 		{
-			reset($banner_defs);
-			while (list($name,$gid) = each($banner_defs))
+			//reset($banner_defs);
+			//while (list($name,$gid) = each($banner_defs))
+			foreach($banner_defs as $name => $gid)
 			{
 				$res = str_replace("[ss".$gid."]",gen_uniq_id(),$res);
 			}
 		}
 		return $res;
 	}
+
 
 	////
 	// !Listib koik objektid
@@ -330,6 +333,7 @@ class menuedit extends aw_template
 		$q = "SELECT name FROM languages WHERE id = '$set_lang_id' AND status = 2";
 		$this->db_query($q);
 		$row = $this->db_next();
+
 
 		if ($set_lang_id)
 		{
