@@ -69,9 +69,16 @@ class xml_path_parser
 		xml_set_character_data_handler($parser,"xml_cdata");
 		if (!xml_parse($parser,$this->content))
 		{
-			echo(sprintf("XML error: %s at line %d",
+                	$b_idx = xml_get_current_byte_index($parser);
+                	$frag = substr($this->content,$b_idx - 100, 200);
+			$pref = htmlspecialchars(substr($frag,0,100));
+			$suf = htmlspecialchars(substr($frag,101));
+			$offender = htmlspecialchars(substr($frag,100,1));
+			echo(sprintf("XML error: %s--|<font color='red'>%s</font>|--%s %s at line %d",
+			$pref,$offender,$suf,
 			xml_error_string(xml_get_error_code($parser)),
 			xml_get_current_line_number($parser)));
+			
 		};
 		xml_parser_free($parser);
 
