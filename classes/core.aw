@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.85 2002/03/13 03:15:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.86 2002/03/18 21:13:19 kristo Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -2055,7 +2055,10 @@ class core extends db_connector
 			$q = "SELECT menu.*,objects.* FROM menu LEFT join objects on (menu.id = objects.oid) WHERE id = '$id'";
 			$this->db_query($q);
 			$row = $this->db_fetch_row();
-			$row["meta"] = aw_unserialize($row["metadata"]);
+			if (is_array($row))
+			{
+				$row["meta"] = aw_unserialize($row["metadata"]);
+			}
 			aw_cache_set("gm_cache",$id,$row);
 			return $row;
 		};
