@@ -92,7 +92,8 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <type>select</type>
+            <type>textbox</type>
+            <size>5</size>
             <caption>Prioriteedihinnang müügimehelt</caption>
       </property>
       <property>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.7 2005/02/16 15:04:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.8 2005/02/17 10:27:21 kristo Exp $
 // mrp_prisma_import.aw - Prisma import 
 /*
 
@@ -46,7 +46,8 @@ class mrp_prisma_import extends class_base
 			"markused" => "Märkused",
 			"allahindlus" => "Allahindlus",
 			"vahendustasu" => "Vahendustasu",
-			"myygi_hind" => "Muugi hind"
+			"myygi_hind" => "Muugi hind",
+			"salves_priority" => "prioriteet"
 		);
 
 	}
@@ -545,7 +546,7 @@ class mrp_prisma_import extends class_base
 		{
 			$dat["TellimuseTähtaeg"] = -1;
 		}
-//echo (dbg::dump($dat));
+
 		// check if we got it
 		$ol = new object_list(array(
 			"class_id" => CL_MRP_CASE,

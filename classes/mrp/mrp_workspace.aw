@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.32 2005/02/16 15:05:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.33 2005/02/17 10:27:21 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -136,16 +136,15 @@
 	@property parameter_timescale_unit type=select
 	@caption Skaala ajaühik
 
-@default group=grp_settings_salesman
-	@property sales_pri_tbl type=table no_caption=1
-
-
 @default group=grp_printer
 	@property printer_jobs type=table no_caption=1
 
 	// these are shown when a job is selected
-	@property pj_toolbar type=toolbar store=no
+	@property pj_case_header type=text no_caption=1 store=no
+
+	@property pj_toolbar type=toolbar store=no no_caption=1
 	@caption Muuda staatust
+	
 
 	@property pj_change_comment type=textarea rows=5 cols=50 store=no
 	@caption Kommentaar
@@ -159,11 +158,11 @@
 	@property pj_length type=text store=no
 	@caption Plaanitud kestus (h)
 
-	@property pj_pre_buffer type=text store=no
-	@caption Eelpuhveraeg (h)
+	property pj_pre_buffer type=text store=no
+	caption Eelpuhveraeg (h)
 
-	@property pj_post_buffer type=text store=no
-	@caption Järelpuhveraeg (h)
+	property pj_post_buffer type=text store=no
+	caption Järelpuhveraeg (h)
 
 	@property pj_resource type=text store=no
 	@caption Ressurss
@@ -295,7 +294,7 @@ class mrp_workspace extends class_base
 				$prop["value"] = $proj->prop(substr($prop["name"], 4));
 				if ($prop["value"] == "")
 				{
-					$prop["value"] = "&nbsp;";
+					return PROP_IGNORE;
 				}
 			}
 		}
@@ -356,8 +355,18 @@ class mrp_workspace extends class_base
 						$prop["value"] = $j->states[$job->prop($rpn)];
 						break;
 
+					case "case_header":
+						$c_o = obj($job->prop("project"));
+						$c_i = $c_o->instance();
+						$prop["value"] = $c_i->get_header(array("obj_inst" => $c_o));
+						break;
+
 					default:
 						$prop["value"] = $job->prop($rpn);
+						if ($prop["value"] == "")
+						{
+							return PROP_IGNORE;
+						}
 						break;
 				}
 
@@ -512,10 +521,6 @@ class mrp_workspace extends class_base
 				}
 				$this->_printer_jobs($arr);
 				break;
-
-			case "sales_pri_tbl":
-				$this->_do_sales_pri_tbl($arr);
-				break;
 		}
 		return $retval;
 	}
@@ -530,10 +535,6 @@ class mrp_workspace extends class_base
 			case "projects_list":
 			case "resources_list":
 				$this->save_custom_form_data ($arr);
-				break;
-
-			case "sales_pri_tbl":
-				$this->_save_sales_pri_tbl($arr);
 				break;
 		}
 
@@ -1025,6 +1026,7 @@ class mrp_workspace extends class_base
 			"caption" => "Projekt",
 			"chgbgcolor" => "bgcolour_overdue",
 			"sortable" => 1,
+			"numeric" => 1
 		));
 		$table->define_field (array (
 			"name" => "starttime",
@@ -1613,6 +1615,17 @@ class mrp_workspace extends class_base
 		$arr['cat'] = $_GET["cat"];
 		$arr['pj_job'] = $_GET["pj_job"];
 		$arr['mrp_tree_active_item'] = $_GET["mrp_tree_active_item"];
+
+		if (is_oid($_GET["pj_job"]) || $_GET["group"] == "grp_printer")
+		{
+			aw_register_header_text_cb(array(&$this, "make_aw_header"));
+		}
+
+		// if no back link is set, make the yah empty
+		if (!$_GET["return_url"])
+		{
+			aw_global_set("hide_yah", true);
+		}
 	}
 
 	/** cuts the selected person objects
@@ -1702,6 +1715,18 @@ class mrp_workspace extends class_base
 		));
 
 		$t->define_field(array(
+			"name" => "all_resources",
+			"caption" => t("N&auml;ita k&otilde;ikide ressurside t&ouml;id"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "dept_resources",
+			"caption" => t("N&auml;ita osakonna ressurside t&ouml;id"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
 			"name" => "change",
 			"caption" => t("Muuda"),
 			"align" => "center"
@@ -1717,6 +1742,9 @@ class mrp_workspace extends class_base
 		{
 			return;
 		}
+
+		$all_resources = $arr["obj_inst"]->meta("umgr_all_resources");
+		$dept_resources = $arr["obj_inst"]->meta("umgr_dept_resources");
 
 		$resource_tree = new object_tree(array(
 			"parent" => $arr["obj_inst"]->prop ("resources_folder"),
@@ -1751,6 +1779,16 @@ class mrp_workspace extends class_base
 					"name" => "prof2res[".$c->prop("to")."]",
 					"options" => $resources,
 					"value" => $prof2res[$c->prop("to")]
+				)),
+				"all_resources" => html::checkbox(array(
+					"name" => "all_resources[".$c->prop("to")."]",
+					"value" => 1,
+					"checked" => $all_resources[$c->prop("to")],
+				)),
+				"dept_resources" => html::checkbox(array(
+					"name" => "dept_resources[".$c->prop("to")."]",
+					"value" => 1,
+					"checked" => $dept_resources[$c->prop("to")],
 				)),
 				"change" => html::get_change_url($c->prop("to"), array(), "Muuda")
 			));
@@ -1837,6 +1875,11 @@ class mrp_workspace extends class_base
 				$rel["rel"]->delete();
 			}
 		}
+
+		$o = obj($arr["id"]);
+		$o->set_meta("umgr_all_resources", $arr["all_resources"]);
+		$o->set_meta("umgr_dept_resources", $arr["dept_resources"]);
+		$o->save();
 
 		// cleverly return
 		return $arr["return_url"];
@@ -2173,11 +2216,13 @@ class mrp_workspace extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_printer_jobs_t($t);
 
-		$res = $this->get_cur_printer_resources();
-
+		$res = $this->get_cur_printer_resources(array(
+			"ws" => $arr["obj_inst"]
+		));
+		
 		$jobs = $this->get_next_jobs_for_resources(array(
 			"resources" => $res,
-			"limit" => 30
+			"limit" => 30,
 		));
 
 		$workers = $this->get_workers_for_resources($res);
@@ -2213,14 +2258,17 @@ class mrp_workspace extends class_base
 				"length" => $len,
 				"job" => html::href(array(
 					"caption" => t("Ava"),
-					"url" => aw_url_change_var("pj_job", $job->id())
+					"url" => aw_url_change_var(array(
+						"pj_job" =>  $job->id(),
+						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+					)),
 				)),
 				"resource" => html::get_change_url($res->id(), array(
 						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
 					),
 					$res->name()
 				),
-				"worker" => join(",",$workers_str),
+				"worker" => join(", ",$workers_str),
 				"project" => html::get_change_url($proj->id(), array(
 						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
 					),
@@ -2234,7 +2282,7 @@ class mrp_workspace extends class_base
 		$t->sort_by();
 	}
 
-	function get_cur_printer_resources()
+	function get_cur_printer_resources($arr)
 	{
 		// get person
 		$u = get_instance(CL_USER);
@@ -2248,12 +2296,13 @@ class mrp_workspace extends class_base
 		// if current person has no rank, return all resources
 		if (!$profs->count())
 		{
-			$ol = new object_list(array(
+			/*$ol = new object_list(array(
 				"class_id" => CL_MRP_RESOURCE,
 				"lang_id" => array(),
 				"site_id" => array()
 			));
-			return $this->make_keys($ol->ids());
+			return $this->make_keys($ol->ids());*/
+			return array();
 		}
 
 		// get resource operators for professions
@@ -2273,6 +2322,51 @@ class mrp_workspace extends class_base
 				$ret[$op->prop("resource")] = $op->prop("resource");
 			}
 		}
+
+		// if no resources are given, check if the current user should have
+		// all resources displayed, the department's resources displayed
+		// or none
+		if (count($res) == 0)
+		{
+			$ws = $arr["ws"];
+
+			$all_res = $ws->meta("umgr_all_resources");
+			$dept_res = $ws->meta("umgr_dept_resources");
+
+			foreach($profs->arr() as $prof)
+			{
+				if ($all_res[$prof->id()] == 1)
+				{
+					// return all resources
+					$ol = new object_list(array(
+						"class_id" => CL_MRP_RESOURCE,
+						"lang_id" => array(),
+						"site_id" => array()
+					));
+					return $this->make_keys($ol->ids());
+				}
+				else
+				if ($dept_res[$prof->id()] == 1)
+				{
+					// get the user's department
+					foreach($person->connections_from(array("RELTYPE_SECTION")) as $c)
+					{
+						$sect = $c->to();
+	
+						// get all resources for section
+						$ol = new object_list(array(
+							"class_id" => CL_MRP_RESOURCE_OPERATOR,
+							"unit" => $sect->id()
+						));
+						foreach($ol->arr() as $o)
+						{
+							$ret[$o->prop("resource")] = $o->prop("resource");
+						}
+					}
+				}
+			}
+		}
+		
 		return $ret;
 	}
 
@@ -2281,9 +2375,14 @@ class mrp_workspace extends class_base
 		@comment
 			resources - array of recource id's to return jobs for
 			limit - limit number of returned data
+			ws - workspace object
 	**/
 	function get_next_jobs_for_resources($arr)
 	{
+		if (!is_array($arr["resources"]) || count($arr["resources"]) == 0)
+		{
+			return array();
+		}
 		$jobs = new object_list(array(
 			"resource" => $arr["resources"],
 			"limit" => $arr["limit"],
@@ -2499,64 +2598,6 @@ class mrp_workspace extends class_base
 		return urldecode($arr["return_url"]);
 	}
 
-	function _init_sales_pri_t(&$t)
-	{
-		$t->define_field(array(
-			"name" => "pri",
-			"align" => "center",
-			"caption" => "Prioriteet"
-		));
-
-		$t->define_field(array(
-			"name" => "name",
-			"align" => "center",
-			"caption" => "Tekst"
-		));
-	}
-
-	function _do_sales_pri_tbl($arr)
-	{
-		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_sales_pri_t($t);
-
-		$inf = safe_array($arr["obj_inst"]->meta("sales_pri"));
-		$inf[""] = "";
-		//arsort($inf);
-
-		$num = 0;
-		foreach($inf as $pri => $nm)
-		{
-			$num++;
-
-			$t->define_data(array(
-				"pri" => html::textbox(array(
-					"name" => "pris[$num]",
-					"size" => 5,
-					"value" => $pri
-				)),
-				"name" => html::textbox(array(
-					"name" => "names[$num]",
-					"value" => $nm
-				)),
-			));
-		}
-
-		$t->set_sortable(false);
-	}
-
-	function _save_sales_pri_tbl($arr)
-	{
-		$dat = array();
-		foreach(safe_array($arr["request"]["pris"]) as $idx => $pri)
-		{
-			if ($pri && $arr["request"]["names"][$idx] != "")
-			{
-				$dat[$pri] = $arr["request"]["names"][$idx];
-			}
-		}
-		$arr["obj_inst"]->set_meta("sales_pri", $dat);
-	}
-
 	function callback_on_load($arr)
 	{
 		if ($this->can("view", 17639))
@@ -2583,6 +2624,26 @@ class mrp_workspace extends class_base
 			"value" => $row["order"],
 		));
 		return $cellcontents;
+	}
+
+	function make_aw_header()
+	{
+		// current user name, logout link
+		$us = get_instance(CL_USER);
+		
+		$p_id = $us->get_current_person();
+		if (!$p_id)
+		{
+			return "";
+		}
+	
+		$person = obj($p_id);
+		$hdr = "<span style=\"font-size: 18px; color: red;\">".$person->prop("name")." | ".html::href(array(
+				"url" => $this->mk_my_orb("logout", array(), "users"),
+				"caption" => t("Logi v&auml;lja")
+			))."  | </span>";
+
+		return $hdr;
 	}
 }
 

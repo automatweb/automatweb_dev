@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.70 2005/01/21 13:00:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.71 2005/02/17 10:27:21 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -1699,6 +1699,7 @@ class crm_person extends class_base
 				));	
 			}
 		}
+		$arr["obj_inst"]->set_meta("no_create_user_yet", NULL);
 	}
 	
 	

@@ -102,6 +102,7 @@
 					<required name="alias_to" />
 					<required name="reltype" />
 					<optional name="return_url" />
+					<optional name="profession" />
 				</arguments>
 			</function>
 		</action>

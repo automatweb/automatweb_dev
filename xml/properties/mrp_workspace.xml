@@ -484,22 +484,22 @@
             <caption>Skaala ajaühik</caption>
       </property>
       <property>
-            <name>sales_pri_tbl</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_settings_salesman</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-      </property>
-      <property>
             <name>printer_jobs</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>grp_printer</group>
             <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>pj_case_header</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_printer</group>
+            <type>text</type>
             <no_caption>1</no_caption>
             <store>no</store>
       </property>
@@ -511,6 +511,7 @@
             <group>grp_printer</group>
             <type>toolbar</type>
             <store>no</store>
+            <no_caption>1</no_caption>
             <caption>Muuda staatust</caption>
       </property>
       <property>
@@ -555,26 +556,6 @@
             <type>text</type>
             <store>no</store>
             <caption>Plaanitud kestus (h)</caption>
-      </property>
-      <property>
-            <name>pj_pre_buffer</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_printer</group>
-            <type>text</type>
-            <store>no</store>
-            <caption>Eelpuhveraeg (h)</caption>
-      </property>
-      <property>
-            <name>pj_post_buffer</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_printer</group>
-            <type>text</type>
-            <store>no</store>
-            <caption>Järelpuhveraeg (h)</caption>
       </property>
       <property>
             <name>pj_resource</name>

@@ -27,7 +27,7 @@ $sf->vars(array(
 ));
 
 $sf->vars(array(
-	"YAH" => empty($site_title) || aw_global_get("hide_yah") ? "" : $sf->parse("YAH"),
+	"YAH" => empty($site_title) || aw_global_get("hide_yah") ? ($site_title != "" ? "&nbsp;" : "") : $sf->parse("YAH"),
 ));
 
 $tmp = array();
@@ -54,8 +54,10 @@ if ($site_title != "")	// weird, but lots of places rely on the yah line being e
 			"caption" => ($lid == aw_global_get("lang_id") ? "<b><font color=\"#FF0000\">".$ln."</font></b>" : $ln)
 		));
 	}
+
 	$sf->vars(array(
 		"lang_string" => join("|", $tmp),
+		"header_text" => aw_call_header_text_cb()
 	));
 	$sf->vars(array(
 		"LANG_STRING" => $sf->parse("LANG_STRING")

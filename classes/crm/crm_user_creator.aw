@@ -14,6 +14,12 @@ class crm_user_creator extends core
 
 	function on_save_person($arr)
 	{
+		$person = obj($arr["oid"]);
+		if ($person->meta("no_create_user_yet") == true)
+		{
+			return;
+		}
+
 		// check where the user is employed
 		$co = $this->get_co_for_person($arr["oid"]);
 

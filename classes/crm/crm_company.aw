@@ -3145,7 +3145,8 @@ class crm_company extends class_base
 				'alias_to' => $alias_to,
 				'reltype' => $this->reltype_workers,
 				'return_url' => urlencode(aw_global_get('REQUEST_URI')),
-				"class" => "crm_company"
+				"class" => "crm_company",
+				"profession" => $arr["request"]["cat"]
 			))
 		));
 		
@@ -4281,6 +4282,8 @@ class crm_company extends class_base
 		@param alias_to required
 		@param reltype required
 		@param return_url optional
+		@param profession optional
+		@param return_url optional
 	**/
 	function create_new_person($arr)
 	{
@@ -4293,6 +4296,7 @@ class crm_company extends class_base
 		$person = new object();
 		$person->set_class_id(CL_CRM_PERSON);
 		$person->set_parent($arr['parent']);
+		$person->set_meta("no_create_user_yet", true);
 		$person->save();
 		$alias_to = new object($arr['alias_to']);
 
@@ -4300,6 +4304,14 @@ class crm_company extends class_base
 			'to' => $person->id(),
 			'reltype' => $arr['reltype'],
 		));
+
+		if (is_oid($arr["profession"]) && $this->can("view", $arr["profession"]))
+		{
+			$person->connect(array(
+				"to" => $arr["profession"],
+				"reltype" => "RELTYPE_RANK"
+			));
+		}
 
 		$work_contact = 0;
 		if($alias_to->class_id()==CL_CRM_COMPANY)
@@ -4316,7 +4328,7 @@ class crm_company extends class_base
 		}
 		$person->set_prop('work_contact',$work_contact);
 		$person->save();
-		return html::get_change_url($person->id());
+		return html::get_change_url($person->id())."&return_url=".urlencode($arr["return_url"]);
 	}
 	
 	function do_objects_listing_toolbar($arr)

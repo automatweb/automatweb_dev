@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.175 2005/02/08 15:14:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.176 2005/02/17 10:27:21 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -970,9 +970,30 @@ if (!defined("DEFS"))
 	{
 		$GLOBALS["cfg"]["acl"]["no_check"] = $GLOBALS["__aw_disable_acl"];
 	}
+
 	function clid_for_name($class_name)
 	{
 		return aw_ini_get("class_lut.".$class_name);
+	}
+
+	function aw_register_header_text_cb($cb)
+	{
+		aw_global_set("__aw.header_text_cb", $cb);
+	}
+
+	function aw_call_header_text_cb()
+	{
+		$cb = aw_global_get("__aw.header_text_cb");
+		if (is_array($cb))
+		{
+			return $cb[0]->$cb[1]();
+		}
+		else
+		if ($cb != "")
+		{
+			return $cb();
+		}
+		return "";
 	}
 
 	////

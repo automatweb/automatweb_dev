@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.22 2005/02/17 08:00:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.23 2005/02/17 10:27:21 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -55,7 +55,7 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 	@property planned_date type=text store=no editonly=1
 	@caption Planeeritud valmimisaeg
 
-	@property sales_priority type=select
+	@property sales_priority type=textbox size=5
 	@caption Prioriteedihinnang müügimehelt
 
 
@@ -261,7 +261,7 @@ class mrp_case extends class_base
 				{
 					return PROP_IGNORE;
 				}
-				$prop["value"] = $this->_get_header($arr);
+				$prop["value"] = $this->get_header($arr);
 				break;
 
 			case "state":
@@ -313,10 +313,6 @@ class mrp_case extends class_base
 
 			case "log":
 				$this->_do_log($arr);
-				break;
-
-			case "sales_priority":
-				$prop["options"] = $this->_get_sales_priority($arr["obj_inst"]);
 				break;
 		}
 
@@ -1224,7 +1220,7 @@ class mrp_case extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_log_t($t);
 
-		$this->db_query("SELECT tm,objects.name as job_id, uid,message,mrp_log.comment as comment FROM mrp_log left join objects on objects.oid = mrp_log.job_id  WHERE project_id = ".$arr["obj_inst"]->id()." ORDER BY tm");
+		$this->db_query("SELECT tm,objects.name as job_id, uid,message,mrp_log.comment as comment FROM mrp_log left join objects on objects.oid = mrp_log.job_id  WHERE project_id = ".$arr["obj_inst"]->id()." ORDER BY tm DESC");
 		while ($row = $this->db_next())
 		{
 			$row["message"] = nl2br($row["message"]);
@@ -1275,21 +1271,8 @@ class mrp_case extends class_base
 		$value = (float) ((isset ($parts[0]) ? ((int) $parts[0]) : 0) . "." . (isset ($parts[1]) ? ((int) $parts[1]) : 0));
 		return $value;
 	}
-//!!! miks see workspacest v6etakse?
-	function _get_sales_priority($o)
-	{
-		if (!is_oid($o->id()))
-		{
-			return array();
-		}
-		$ws = $o->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
-		if ($ws)
-		{
-			return safe_array($ws->meta("sales_pri"));
-		}
-	}
 
-	function _get_header($arr)
+	function get_header($arr)
 	{
 		$ws = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
 		if ($ws)
