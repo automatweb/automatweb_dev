@@ -50,6 +50,10 @@
 <td class="celltext">{VAR:LC_FORMS_ESPOUSE_MAILLIST}</td>
 </tr>
 <tr>
+<td class="celltext"><input type='radio' NAME='type' VALUE='email_confirm' {VAR:email_confirm_selected}></td>
+<td class="celltext">Saada tellimuse kinnitusmeil</td>
+</tr>
+<tr>
 <td></td>
 <td class="celltext"><input class='formbutton' type='submit' VALUE='{VAR:LC_FORMS_FORWARD}'></td>
 </tr>
