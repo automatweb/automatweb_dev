@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/folder_list.aw,v 1.1 2004/01/15 12:39:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/folder_list.aw,v 1.3 2004/05/03 12:07:42 kristo Exp $
 // folder_list.aw - Kaustade nimekiri 
 /*
 
@@ -10,6 +10,12 @@
 
 @property rootmenu type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
 @caption Juurkataloog
+
+@property template type=select field=meta method=serialize
+@caption Template
+
+@property sort_by type=select field=meta method=serialize
+@caption Mille j&auml;rgi sortida
 
 @reltype FOLDER clid=CL_MENU value=1
 @caption juurkataloog
@@ -26,18 +32,28 @@ class folder_list extends class_base
 		));
 	}
 
-	/*
 	function get_property($arr)
 	{
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "template":
+				$tm = get_instance("templatemgr");
+				$data["options"] = $tm->template_picker(array(
+					"folder" => "contentmgmt/folder_list"
+				));
+				break;
 
+			case "sort_by":
+				$data["options"] = array(
+					"objects.name" => "Nimi",
+					"objects.jrk" => "J&auml;rjekord"
+				);
+				break;
 		};
-		return $retval;
+		return PROP_OK;
 	}
-	*/
 
 	/*
 	function set_property($arr = array())
@@ -64,11 +80,25 @@ class folder_list extends class_base
 	function show($arr)
 	{
 		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
+
+		$tpl = "show.tpl";
+		if ($ob->prop("template") != "")
+		{
+			$tpl = $ob->prop("template");
+		}
+
+		$sby = "objects.name";
+		if ($ob->prop("sort_by") != "")
+		{
+			$sby = $ob->prop("sort_by");
+		}
+
+		$this->read_template($tpl);
 
 		$ol = new object_list(array(
 			"parent" => $ob->prop("rootmenu"),
-			"class_id" => CL_MENU
+			"class_id" => CL_MENU,
+			"sort_by" => $sby
 		));
 
 		$ssh = get_instance("contentmgmt/site_show");
@@ -78,7 +108,8 @@ class folder_list extends class_base
 		{
 			$this->vars(array(
 				"name" => $o->name(),
-				"link" => $ssh->make_menu_link($o)
+				"link" => $ssh->make_menu_link($o),
+				"selected" => selected($o->id() == aw_global_get("section"))
 			));
 
 			$fls .= $this->parse("FOLDER");

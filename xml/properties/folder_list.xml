@@ -10,6 +10,24 @@
             <method>serialize</method>
             <caption>Juurkataloog</caption>
       </property>
+      <property>
+            <name>template</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Template</caption>
+      </property>
+      <property>
+            <name>sort_by</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Mille j&amp;auml;rgi sortida</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_FOLDER_LIST</syslog_type>
             <relationmgr>yes</relationmgr>
