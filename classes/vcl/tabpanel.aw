@@ -1,5 +1,5 @@
 <?php
-// $Id: tabpanel.aw,v 1.3 2002/12/19 17:16:15 duke Exp $
+// $Id: tabpanel.aw,v 1.4 2003/01/17 12:34:09 duke Exp $
 // tabpanel.aw - class for creating tabbed dialogs
 class tabpanel extends aw_template
 {
@@ -11,7 +11,7 @@ class tabpanel extends aw_template
 		$this->read_template("tabs.tpl");
 		$this->tabs = "";
 		$this->tabcount = 0;
-		$this->hide_one_tab = 1;
+		$this->hide_one_tab = 0;
 	}
 
 	////
