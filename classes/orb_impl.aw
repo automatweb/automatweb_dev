@@ -35,7 +35,10 @@ if ($vars["fastcall"] == 1)
 	session_start();
 	// loadime klassi
 	classload("fastcall_base");
-	classload("class_base");
+	if (!class_exists("class_base"))
+	{
+		classload("class_base");
+	};
 	// instantseerime
 	classload($class);
 	$inst = new $class;
