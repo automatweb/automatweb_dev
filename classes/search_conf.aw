@@ -23,7 +23,9 @@ class search_conf extends aw_template
 		if (!$level)
 		{
 			$this->read_template("conf1.tpl");
-			$this->vars(array("section"		=> $ob->multiple_option_list($conf[$SITE_ID][$lang_id]["sections"],$ob->get_list())));
+			$this->vars(array(
+				"section" => $ob->multiple_option_list($conf[$SITE_ID][$lang_id]["sections"],$ob->get_list())
+			));
 			return $this->parse();
 		}
 		else
@@ -34,7 +36,12 @@ class search_conf extends aw_template
 			reset($conf[$SITE_ID][$lang_id]["sections"]);
 			while (list(,$v) = each($conf[$SITE_ID][$lang_id]["sections"]))
 			{
-				$this->vars(array("section" => $sarr[$v],"section_id" => $v,"section_name" => $conf[$SITE_ID][$lang_id]["names"][$v],"order" => $conf[$SITE_ID][$lang_id]["order"][$v]));
+				$this->vars(array(
+					"section" => $sarr[$v],
+					"section_id" => $v,
+					"section_name" => $conf[$SITE_ID][$lang_id]["names"][$v],
+					"order" => $conf[$SITE_ID][$lang_id]["order"][$v]
+				));
 				$s.= $this->parse("RUBR");
 			}
 			$this->vars(array("RUBR" => $s));
@@ -168,21 +175,42 @@ class search_conf extends aw_template
 			$first = false;
 		}
 
+		load_vcl("date_edit");
+		$de = new date_edit;
+		$de->configure(array(
+			"year" => "",
+			"month" => "",
+			"day" => ""
+		));
+		$date_from = date_edit::get_timestamp($date_from);
+		$date_to = date_edit::get_timestamp($date_to);
+		$sstring_title = trim($sstring_title);
+		$sstring_author = trim($sstring_author);
+		$sstring = trim($sstring);
+
 		$this->vars(array(
 			"SEARCH_PARENT" => $sp,
 			"search_sel" => $this->option_list($s_parent,$search_list),
 			"sstring_title" => $sstring_title,
+			"sstring_author" => $sstring_author,
 			"sstring" => $sstring,
 			"t2c_or" => selected($t2c_log == "OR"),
 			"t2c_and" => selected($t2c_log == "AND"),
+			"a2c_or" => selected($a2c_log == "OR"),
+			"a2c_and" => selected($a2c_log == "AND"),
 			"c2k_or" => selected($c2k_log == "OR"),
 			"c2k_and" => selected($c2k_log == "AND"),
+			"d2k_or" => selected($d2k_log == "OR"),
+			"d2k_and" => selected($d2k_log == "AND"),
 			"t_type1" => selected($t_type == 1),
 			"t_type2" => selected($t_type == 2),
 			"t_type3" => selected($t_type == 3),
 			"c_type1" => selected($c_type == 1),
 			"c_type2" => selected($c_type == 2),
 			"c_type3" => selected($c_type == 3),
+			"max_results" => $this->picker($max_results, array("10" => "10", "20" => "20", "50" => "50", "100" => "100", "500" => "500")),
+			"date_from" => $de->gen_edit_form("date_from", $date_from, date("Y")-5, date("Y")+5, true),
+			"date_to" => $de->gen_edit_form("date_to", $date_to, date("Y")-5, date("Y")+5, true),
 			"keywords" => $this->multiple_option_list($keys,$k->get_all_keywords(array("type" => ARR_KEYWORD))),
 			"reforb"	=> $this->mk_reforb("search", array("reforb" => 0,"search" => 1,"section" => aw_global_get("section"), "set_lang_id" => aw_global_get("lang_id")))
 		));
@@ -271,6 +299,10 @@ class search_conf extends aw_template
 
 			if ($sstring != "")
 			{
+				if ($c_type > 3 || $c_type < 1)
+				{
+					$c_type = 1;
+				}
 				if ($c_type == 1)	//	m6ni s6na
 				{
 					// dokude tabelist otsing
@@ -308,9 +340,25 @@ class search_conf extends aw_template
 				}
 			}
 
+
 			if ($sel_keys)
 			{
 				$q_cons2.="(".join(" OR ",map("documents.keywords LIKE '%%%s%%'",$keys)).")";
+			}
+
+			if ($sstring_author != "")
+			{
+				$q_cons2 .= " AND (documents.author LIKE '%%%s%%') ";
+			}
+
+			if ($date_from > 24*3600*12)
+			{
+				$q_cons2 .= " AND (documents.modified >= $date_from) ";
+			}
+
+			if ($date_to > 24*3600*12)
+			{
+				$q_cons2 .= " AND (documents.modified <= $date_to) ";
 			}
 
 			// search from files and tables here. ugh. ugly. yeah. I know.
@@ -401,6 +449,10 @@ class search_conf extends aw_template
 
 			// make pageselector
 			$cnt = $this->db_fetch_field("SELECT count(*) as cnt FROM documents LEFT JOIN objects ON objects.oid = documents.docid WHERE $q_cons","cnt");
+			if ($max_results > 0)
+			{
+				$cnt = min($max_results, $cnt);
+			}
 
 			$this->vars(array(
 				"PAGESELECTOR" => $this->do_pageselector($cnt,$arr)
@@ -412,7 +464,8 @@ class search_conf extends aw_template
 			$mc = get_instance("menu_cache");
 			$mc->make_caches();
 
-			$this->db_query("SELECT objects.*,documents.* FROM documents LEFT JOIN objects ON objects.oid = documents.docid WHERE $q_cons $ap LIMIT ".($page*PER_PAGE).",".PER_PAGE);
+			$sql = "SELECT objects.*,documents.* FROM documents LEFT JOIN objects ON objects.oid = documents.docid WHERE $q_cons $ap LIMIT ".($page*PER_PAGE).",".PER_PAGE;
+			$this->db_query($sql);
 			while ($row = $this->db_next())
 			{
 				$co = strip_tags($row["content"]);
