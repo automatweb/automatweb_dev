@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.9 2005/03/29 20:39:23 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.10 2005/03/30 12:55:56 voldemar Exp $
 // gantt_chart.aw - Gantti diagramm
 /*
 
@@ -127,6 +127,7 @@ class gantt_chart extends class_base
 	// int length - bar length in seconds. Required.
 	// string title - title for the bar.
 	// string colour - (CSS colour definition, name or rgb value).  default is "silver".
+	// bool nostartmark - don't show bar start mark. default is false.
 	// string uri - uri for bar hyperlink. Applies if bar_anchors property is set to true for chart.
 	// string target - uri target for bar hyperlink. Applies if bar_anchors property is set to true for chart.
 	function add_bar ($arr)
@@ -136,6 +137,7 @@ class gantt_chart extends class_base
 		$length = (int) $arr["length"];
 		$title = empty ($arr["title"]) ? "" : $arr["title"];
 		$colour = empty ($arr["colour"]) ? "silver" : $arr["colour"];
+		$nostartmark = empty ($arr["nostartmark"]) ? false : true;
 		$uri = empty ($arr["uri"]) ? "#" : $arr["uri"];
 		$uri_target = empty ($arr["target"]) ? "_self" : $arr["target"];
 
@@ -144,6 +146,7 @@ class gantt_chart extends class_base
 			"length" => $length,
 			"title" => $title,
 			"colour" => $colour,
+			"nostartmark" => $nostartmark,
 			"bar_uri" => $uri,
 			"bar_uri_target" => $uri_target,
 			"row" => $row
@@ -224,7 +227,15 @@ class gantt_chart extends class_base
 						}
 						else
 						{
-							$bar_type = "start";
+							if ($bar["nostartmark"])
+							{
+								$bar_type = "continue";
+							}
+							else
+							{
+								$bar_type = "start";
+							}
+
 							$bar_colour = $bar["colour"];
 						}
 
