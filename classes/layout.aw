@@ -13,44 +13,45 @@
 
 @default table=objects
 @default field=meta
+@default method=serialize
 
-@property rows type=textbox group=general method=serialize size=3
+@property rows type=textbox group=general size=3
 @caption Ridu
 
-@property columns type=textbox group=general method=serialize size=3
+@property columns type=textbox group=general size=3
 @caption Tulpi
 
-@property cell_style_folders type=relpicker reltype=RELTYPE_CELLSTYLE_FOLDER group=settings field=meta method=serialize multiple=1
+@property cell_style_folders type=relpicker reltype=RELTYPE_CELLSTYLE_FOLDER group=settings multiple=1
 @caption Stiilide kataloogid
 
-@property grid type=callback group=layout method=serialize field=meta table=objects
+@property grid type=callback group=layout 
 @caption Tabel
 
-@property grid_styles type=callback group=styles method=serialize field=meta table=objects
+@property grid_styles type=callback group=styles 
 @caption Stiilid
 
-@property table_style type=select group=settings method=serialize field=meta table=objects
+@property table_style type=select group=settings 
 @caption Tabeli stiil
 
-@property grid_aliases type=callback group=aliases method=serialize field=meta table=objects
+@property grid_aliases type=callback group=aliases 
 @caption Aliased
 
 @property grid_aliases_list type=aliasmgr group=aliases store=no
 @caption Aliaste manager
 
-@property grid_preview type=callback group=preview method=serialize
+@property grid_preview type=callback group=preview 
 @caption Eelvaade
 
-@property import_file type=fileupload group=import method=serialize
+@property import_file type=fileupload group=import 
 @caption Uploadi .csv fail
 
-@property import_remove_empty type=checkbox ch_value=1 group=import method=serialize
+@property import_remove_empty type=checkbox ch_value=1 group=import 
 @caption Kas eemaldame tühjad read lõpust
 
-@property import_sep type=textbox size=1 group=import method=serialize
+@property import_sep type=textbox size=1 group=import 
 @caption Mis märgiga on tulbad eraldatud?
 
-@property show_in_folders type=relpicker reltype=RELTYPE_SHOW_FOLDER multiple=1 rel=1 method=serialize group=general
+@property show_in_folders type=relpicker reltype=RELTYPE_SHOW_FOLDER multiple=1 rel=1 group=general
 @caption Millistes kataloogides n&auml;idatakse
 
 */
