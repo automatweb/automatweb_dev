@@ -1,0 +1,28 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>account_balance</name>
+            <table>pank_konto</table>
+            <group>account_overview</group>
+            <type>textbox</type>
+            <field>account_balance</field>
+            <caption>Konto saldo</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_ACCOUNT</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <groupinfo>
+            <account_overview>
+                  <caption>Konto ülevaade</caption>
+            </account_overview>
+      </groupinfo>
+      <tableinfo>
+            <pank_konto>
+                  <index>oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </pank_konto>
+      </tableinfo>
+</properties>
+

@@ -1,0 +1,47 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>trans_from</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <field>trans_from</field>
+            <caption>Kandja</caption>
+      </property>
+      <property>
+            <name>trans_to</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <field>trans_to</field>
+            <caption>Saaja</caption>
+      </property>
+      <property>
+            <name>sum</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <field>sum</field>
+            <caption>Summa</caption>
+      </property>
+      <property>
+            <name>time</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <field>time</field>
+            <caption>Kellaaeg</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_TRANSACTION</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <tableinfo>
+            <pank_transaction>
+                  <index>oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </pank_transaction>
+      </tableinfo>
+</properties>
+
