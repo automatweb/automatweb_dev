@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.170 2004/02/11 17:15:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.171 2004/02/12 11:15:09 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -1140,77 +1140,34 @@ class planner extends class_base
 	// !Parsib kalendrialiast
 	function parse_alias($arr)
 	{
-		//extract($args);
 		extract($arr);
+		$this->cal_oid = $alias["target"];
 
+                // if there is a relation object, then load it and apply the settings
+                // it has.
+                if ($alias["relobj_id"])
+                {
+                        $relobj = $this->get_object(array(
+                                "oid" => $alias["relobj_id"],
+                                "clid" => CL_RELATION,
+                        ));
 
-		$cal_id = $alias["to"];
+                        $overrides = $relobj["meta"]["values"]["CL_PLANNER"];
+                        if (is_array($overrides))
+                        {
+                                $this->overrides = $overrides;
+                        };
+                        if (!empty($relobj["name"]))
+                        {
+                                $this->caption = $relobj["name"];
+                        };
 
-		// if there is a relation object, then load it and apply the settings 
-		// it has.
-		if ($alias["relobj_id"])
-		{
-			$relobj = new object($alias["relobj_id"]);
+                        $this->relobj_id = $alias["relobj_id"];
+                }
 
-			$overrides1 = $relobj->meta("values");
-			$overrides = $overrides1["CL_PLANNER"];
+                $replacement = $this->view(array("id" => $alias["target"]));
+                return $replacement;
 
-			if (is_array($overrides))
-			{
-				$this->overrides = $overrides;
-			};
-
-			if ($relobj->name() != "")
-			{
-				$this->caption = $relobj->name();
-			};
-
-			$this->relobj_id = $alias["relobj_id"];
-		}
-
-		// nii, aga kuidas kuradi moodi ma selle kalendri komponendi nüüd tööle saan? :(
-		classload("vcl/calendar");
-		$vcal = new vcalendar();
-		$vcal->configure(array(
-			"overview_func" => array(&$this,"get_overview"),
-			"overview_range" => 1,
-		));
-
-		
-		$range = $vcal->get_range(array(
-			"viewtype" => "day",
-			"date" => aw_global_get("date"),
-		));
-		
-		$this->calendar_inst = new object($alias["to"]);
-		
-		// that is all nice and well. But I also need a separate function for 
-		// overview
-		$events = $this->_init_event_source(array(
-			"id" => $cal_id,
-			"type" => $range["viewtype"],
-			"flatlist" => 1,
-			"date" => date("d-m-Y",$range["timestamp"]),
-		));
-
-		foreach($events as $event)
-		{
-			$vcal->add_item(array(
-				"timestamp" => $event["start"],
-				"data" => array(
-					"id" => $event["id"],
-					"name" => $event["name"],
-					"icon" => $event["event_icon_url"],
-					"link" => $event["link"],
-					"comment" => $event["comment"],
-				),
-			));
-		};
-
-		return $vcal->get_html();
-			
-		//$replacement = $this->view(array("id" => $alias["to"]));
-		return $replacement;
 	}
 
 	////
@@ -2955,7 +2912,7 @@ class planner extends class_base
 	function get_overview($arr = array())
 	{
 		$events = $this->get_event_list(array(
-			"id" => $this->calendar_inst->id(),
+			"id" => isset($arr["id"]) ? $arr["id"] : $this->calendar_inst->id(),
 			"start" => $arr["start"],
 			"end" => $arr["end"],
 		));
