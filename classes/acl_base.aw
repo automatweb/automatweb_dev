@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.15 2002/02/18 13:38:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.16 2002/02/19 00:39:10 duke Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -506,6 +506,25 @@ class acl_base extends core
 	}
 
 	////
+	// !Wrapper for "prog_acl", used to display the login form if the user is not logged in
+	function prog_acl_auth($right,$progid)
+	{
+		if ( defined("UID") && (strlen(UID) > 0) )
+		{
+			return $this->prog_acl($right,$progid);
+		}
+		else
+		{
+			// show the login form
+			classload("auth");
+			$auth = new auth();
+			print $auth->show_login();
+			// dat sucks
+			exit;
+		}
+	}
+
+	////
 	// !checks if the user has the $right for program $progid
 	function prog_acl($right,$progid)
 	{
@@ -528,7 +547,6 @@ class acl_base extends core
 				$c = new db_config;
 				$prog_cache = unserialize($c->get_simple_config("accessmgr"));
 			}
-			dbg("olen real 441 ".$right."<br>");
 			return $this->can($right,$prog_cache[$progid]);
 		};
 	}
