@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.167 2003/11/06 17:13:26 duke Exp $
+// $Id: class_base.aw,v 2.168 2003/11/08 07:12:36 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -307,14 +307,13 @@ class class_base extends aw_template
 			$orb_class = "doc";
 		};
 
-
 		$argblock = array(
 			"id" => $this->id,
 			// this should refer to the active group
 			"group" => isset($args["group"]) ? $args["group"] : $this->activegroup,
 			"orb_class" => $orb_class,
 			"parent" => $this->parent,
-			"section" => aw_global_get("section"),
+			"section" => $_REQUEST["section"],
 			"period" => isset($args["period"]) ? $args["period"] : "",
 			"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
 			"alias_to" => isset($this->request["alias_to"]) ? $this->request["alias_to"] : "",
@@ -440,14 +439,15 @@ class class_base extends aw_template
 		}
 		else
 		{
-			$use_orb = true;
+			//$use_orb = true;
 			if (!empty($form_data["section"]))
 			{
 				$args["section"] = $form_data["section"];
 				$args["_alias"] = get_class($this);
 				$use_orb = false;
 			};
-			$retval = $this->mk_my_orb($action,$args,$orb_class,false,$use_orb);
+			//$retval = $this->mk_my_orb($action,$args,$orb_class,false,$use_orb);
+			$retval = $this->mk_my_orb($action,$args,$orb_class);
 		};
 		return $retval;
 	}
@@ -1501,7 +1501,7 @@ class class_base extends aw_template
 
 		if (($val["type"] == "aliasmgr") && isset($this->id))
 		{
-			$link = $this->mk_my_orb("list_aliases",array("id" => $this->id),"aliasmgr");
+			$link = $this->mk_my_orb("list_aliases",array("id" => $this->id),"aliasmgr",false,true);
 			$val["value"] = "<iframe width='100%' name='aliasmgr' height='800' frameborder='0' src='$link'></iframe>";
 			$val["type"] = "";
 			$val["caption"] = "";
@@ -1683,13 +1683,13 @@ class class_base extends aw_template
 
 		foreach($properties as $key => $val)
 		{
-			if (($val["type"] == "toolbar") && ($this->orb_action != "submit"))
+			if (($val["type"] == "toolbar") && ($this->orb_action != "submit") && !is_object($val["toolbar"]))
 			{
 				classload("toolbar");
 				$val["toolbar"] = new toolbar();
 			};
 			
-			if (($val["type"] == "table") && ($this->orb_action != "submit"))
+			if (($val["type"] == "table") && ($this->orb_action != "submit") && !is_object($val["vcl_inst"]))
 			{
 				load_vcl("table");
 				$val["vcl_inst"] = new aw_table(array(
