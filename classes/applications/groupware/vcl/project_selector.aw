@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/vcl/project_selector.aw,v 1.4 2004/10/16 22:32:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/vcl/project_selector.aw,v 1.5 2004/10/29 15:55:10 duke Exp $
 class project_selector extends core
 {
 	function project_selector()
@@ -10,7 +10,6 @@ class project_selector extends core
 	function init_vcl_property($arr)
 	{
 		$orig = $arr["obj_inst"]->get_original();
-		//$orig = $arr["obj_inst"];
 
 		$olist = new object_list(array(
 			"brother_of" => $orig->id(),
@@ -62,7 +61,6 @@ class project_selector extends core
 
 			foreach($conns as $conn)
 			{
-				#$from = $conn->prop("from");
 				$from = $conn->from();
 				$by_parent[$from->parent()][$from->id()] = $from->name();
 			};
@@ -221,7 +219,11 @@ class project_selector extends core
 				}
 				else
 				{
+					$new_ones[$event_obj->parent()] = 1;
 					$arr["obj_inst"]->set_parent($new_parent);
+					$event_obj->set_parent($new_parent);
+					$event_obj->save();
+
 				};
 				
 				// do not create a brother if there is an object there already
