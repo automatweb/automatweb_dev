@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.72 2001/06/21 20:50:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.73 2001/06/21 21:13:11 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -163,6 +163,22 @@ class messenger extends menuedit_light
 				"activelist" => $activelist,
 			));
 		return $retval;
+	}
+	
+	////
+	// !Show headers
+	function show_headers($args = array())
+	{
+		extract($args);
+		$q = "SELECT headers FROM messages WHERE id = '$id'";
+		$this->db_query($q);
+		$this->read_template("headers.tpl");
+		$row = $this->db_next();
+		$this->vars(array(
+				"headers" => htmlspecialchars($row["headers"]),
+			));
+		print $this->parse();
+		exit;
 	}
 
 	////
