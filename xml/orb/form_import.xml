@@ -9,6 +9,29 @@
 			</function>
 		</action>
 
+		<action name="submit_form">
+			<function name="submit_form">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="select_form_els">
+			<function name="select_form_els">
+				<arguments>
+					<required name="id"/>
+					<required name="file"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_form_els">
+			<function name="submit_form_els">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="import_chain_entries">
 			<function name="import_chain_entries">
 				<arguments>
@@ -17,6 +40,28 @@
 			</function>
 		</action>
 
+		<action name="submit_chain">
+			<function name="submit_chain">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="select_chain_els">
+			<function name="select_chain_els">
+				<arguments>
+					<required name="id"/>
+					<required name="file"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_chain_els">
+			<function name="submit_chain_els">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
 		

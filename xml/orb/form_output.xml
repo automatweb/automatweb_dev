@@ -33,10 +33,27 @@
 			</function>
 		</action>
 
+		<action name="ch_cell">
+			<function name="ch_cell">
+				<arguments>
+					<required name="id"/>
+					<required name="row"/>
+					<required name="col"/>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="submit_admin">
 			<function name="submit_admin">
 				<arguments>
 					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_admin_cell">
+			<function name="submit_admin_cell">
+				<arguments>
 				</arguments>
 			</function>
 		</action>

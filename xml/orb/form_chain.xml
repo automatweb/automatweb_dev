@@ -36,6 +36,23 @@
 			</function>
 		</action>
 
+		<action name="show_chain_entries">
+			<function name="show_chain_entries">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="delete_entry">
+			<function name="delete_entry">
+				<arguments>
+					<required name="id"/>
+					<required name="entry_id"/>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="submit_form">
 			<function name="submit_form">
 				<arguments>
