@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.111 2004/11/08 08:59:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.112 2004/11/15 17:44:43 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -913,6 +913,23 @@ class menu extends class_base
 				$arr["obj_inst"]->set_meta("ip_allow",$allow);
 				$arr["obj_inst"]->set_meta("ip_deny",$deny);
 				break;				
+
+			case "alias":
+				if ($data["value"] != "")
+				{
+					$ol = new object_list(array(
+						"parent" => $arr["obj_inst"]->parent(),
+						"class_id" => CL_MENU,
+						"alias" => $data["value"],
+						"oid" => new obj_predicate_not($arr["obj_inst"]->id())
+					));
+					if (count($ol->ids()))
+					{
+						$data["error"] = "Selline alias on juba olemas!";
+						return PROP_FATAL_ERROR;
+					}
+				}
+				break;
 		};
 		return $retval;
 	}
