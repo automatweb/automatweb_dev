@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.153 2004/10/07 21:35:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.154 2004/10/08 15:27:36 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -1170,6 +1170,21 @@ if (!defined("DEFS"))
 			}
 
 			return $msg;
+		}
+
+		function q($q)
+		{
+			$first = true;
+			$GLOBALS["__aw_globals"]["db::DBMAIN"]->db_query($q);
+			while ($row = $GLOBALS["__aw_globals"]["db::DBMAIN"]->db_next())
+			{
+				echo "********** Row nr ".++$cnt." *****************\n";
+				foreach($row as $k => $v)
+				{
+					echo "$k: $v\n";
+				}
+			}
+			echo "\n";
 		}
 	}
 
