@@ -15,7 +15,7 @@
 <!-- SUB: LAST_LEVEL -->
 <tr>
 	<td class="{VAR:style_folder_caption}">{VAR:spacer}</td>
-	<td class="{VAR:style_folder_caption}"><img src="{VAR:baseurl}/img/arrow_sm.gif"><center></center></td>
+	<td class="{VAR:style_folder_caption}"><img src="{VAR:baseurl}/automatweb/images/forum_arrow_sm.gif"><center></center></td>
 	<td class="{VAR:style_folder_caption}"><a href="{VAR:open_topic_url}">{VAR:name}</a><br>{VAR:comment}</td>
 	<td class="{VAR:style_folder_topic_count}" align="center">{VAR:topic_count}</td>
 	<td class="{VAR:style_folder_comment_count}" align="center">{VAR:comment_count}</td>
