@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.339 2004/11/23 13:19:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.340 2004/12/10 10:10:47 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -591,7 +591,7 @@ class menuedit extends aw_template
 			// in that case, redirect the user to no trans page
 			$o = obj($section);
 			$lid = $o->lang_id();
-			if ($lid != aw_global_get("lang_id"))
+			if ($lid != aw_global_get("lang_id") && $o->prop("type") != MN_CLIENT)
 			{
 				// only redirect of we are not in trans msg already
 				if (aw_global_get("action") == "")
