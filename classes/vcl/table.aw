@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.5 2004/02/19 16:58:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.6 2004/02/27 16:10:30 duke Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -43,6 +43,7 @@ class aw_table extends aw_template
 		$this->actions = array();
 		$this->col_styles = array();
 		$this->nfields = array();
+		$this->sortable = true;
 
 		// esimene kord andmeid sisestada?
 		// seda on vaja selleks, et määrata default sort order.
@@ -58,6 +59,11 @@ class aw_table extends aw_template
 		$this->use_chooser = false;
 		// if true and chooser is used, checking chooser checkboxes changes the style of the row as well
 		$this->chooser_hilight = true;
+	}
+
+	function set_sortable($arg)
+	{
+		$this->sortable = $arg;
 	}
 
 	////
@@ -178,6 +184,11 @@ class aw_table extends aw_template
 	// vgroupby - array of elements that will be vertically grouped
 	function sort_by($params = array()) 
 	{
+
+		if (!$this->sortable)
+		{
+			return false;
+		};
 
 		// see peaks olema array,
 		// kus on regitud erinevate tabelite andmed
