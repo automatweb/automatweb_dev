@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.18 2004/09/03 09:43:33 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.19 2004/09/03 15:08:15 ahti Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -937,6 +937,10 @@ class planner extends class_base
 		$emb["return"] = "id";
 
 		$this->event_id = $t->submit($emb);
+		
+		// register event_id in global scope also -- ahz
+		aw_global_set("event_id", $this->event_id);
+		
 		if (!empty($emb["id"]))
 		{
 			$this->event_id = $event_obj->id();
