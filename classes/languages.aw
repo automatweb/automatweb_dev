@@ -9,7 +9,7 @@ class languages extends aw_template
 		$this->lc_load("languages","lc_languages");
 		$this->file_cache = get_instance("cache");
 		// the name of the cache file
-		$this->cf_name = "languages::cache::site_id::".$this->cfg["site_id"];
+		$this->cf_name = "languages-cache-site_id-".$this->cfg["site_id"];
 		$this->init_cache();
 	}
 
@@ -329,6 +329,8 @@ class languages extends aw_template
 		{
 			aw_global_set("admin_lang_lc",$LC);
 		}
+
+		aw_global_set("lang_oid", $la["oid"]);
 		// and we should be all done. if after this, lang_id will still be not set I won't be able to write the
 		// code that fixes it anyway. 
 	}
