@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.77 2004/09/09 11:12:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.78 2004/10/05 09:09:51 duke Exp $
 // search.aw - Search Manager
 
 /*
@@ -712,6 +712,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 					$row["location"] = $serv;
 				};
 
+				$row["lang"] = $row_o->lang();
+
 				$this->rescounter++;
 				$type = $this->cfg["classes"][$row["class_id"]]["name"];
 				if (!$row["name"])
@@ -1335,6 +1337,15 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			"caption" => "Nimi",
 			"talign" => "center",
 			"sortable" => 1,
+			"chgbgcolor" => "cutcopied",
+		));
+		$this->t->define_field(array(
+			"name" => "lang",
+			"caption" => "Keel",
+			"talign" => "center",
+			"align" => "center",
+			"nowrap" => "1",
+			"width" => "20",
 			"chgbgcolor" => "cutcopied",
 		));
 			

@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.153 2004/09/20 13:15:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.154 2004/10/05 09:09:51 duke Exp $
 
 class aliasmgr extends aw_template
 {
@@ -475,6 +475,13 @@ class aliasmgr extends aw_template
 			"sortable" => 1,
 		));
 		$this->t->define_field(array(
+			"name" => "lang",
+			"caption" => "Keel",
+			"talign" => "center",
+			"align" => "center",
+			"sortable" => 1,
+		));
+		$this->t->define_field(array(
 			"name" => "comment",
 			"caption" => "Muu info",
 			"talign" => "center",
@@ -651,6 +658,8 @@ class aliasmgr extends aw_template
 			);
 
 			$target_obj = $alias->to();
+
+			$adat["lang"] = $target_obj->lang();
 
 			$aclid = $alias->prop("to.class_id");
 
