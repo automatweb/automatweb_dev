@@ -18,7 +18,9 @@ class export extends aw_template
 		$this->type2ext = array(
 			"text/html" => "html",
 			"text/html; charset=iso-8859-1" => "html",
+			"text/html; charset=iso-8859-15" => "html",
 			"text/css" => "css",
+			"text/richtext" => "rtf",
 			"image/gif" => "gif",
 			"image/jpeg" => "jpg",
 			"image/jpg" => "jpg",
@@ -138,10 +140,6 @@ class export extends aw_template
 		// take the folder thing and add the date to it so we can make several copies in the same folder
 		$folder = $this->rep_dates($this->get_cval("export::folder"));
 		@mkdir($folder,0777);
-		if (!is_dir($folder))
-		{
-			$this->raise_error(ERR_SITEXPORT_NOFOLDER,"Folder $folder does not exist on server!",true);
-		}
  		$this->folder = $folder;
 
 		$this->hashes = array();
@@ -163,6 +161,11 @@ class export extends aw_template
 		$automatic = $this->get_cval("export::automatic");
 
 		$this->init_settings();
+
+		if (!is_dir($this->folder))
+		{
+			$this->raise_error(ERR_SITEXPORT_NOFOLDER,"Folder $this->folder does not exist on server!",true);
+		}
 
 		if ($rule_id)
 		{
@@ -190,7 +193,7 @@ class export extends aw_template
 		else
 		{
 			// ok, start from the front page
-			$this->fetch_and_save_page($this->cfg["baseurl"]."/?set_lang_id=1",1);
+			$this->fetch_and_save_page($this->cfg["baseurl"]."/?set_lang_id=".aw_global_get("lang_id"),aw_global_get("lang_id"));
 		}
 
 		// copy needed files
@@ -277,6 +280,7 @@ class export extends aw_template
 
 	function fetch_and_save_page($url, $lang_id, $single_page_only = false)
 	{
+//		$url = $this->rewrite_link($url);
 		$_url = $url;
 //		echo "fetch_and_save_page($url, $lang_id) <br>";
 		if ($url == "")
@@ -311,9 +315,9 @@ class export extends aw_template
 		$this->hashes[$url] = $this->get_hash_for_url($url,$t_lang_id);
 
 		// read content
-		$fp = fopen($url,"r");
-		$fc = fread($fp,10000000);
-		fclose($fp);
+//		echo "$url <br>\n";
+		$fc = $this->get_page_content($url);
+
 		// pause for set number of seconds
 		if ($this->cfg["sleep_between_pages"])
 		{
@@ -359,8 +363,8 @@ class export extends aw_template
 		$fc = preg_replace("/href='\/(\d*)'/iU","href='".$baseurl."/\\1'",$fc);
 		$fc = preg_replace("/href=\"\/(\d*)\"/iU","href=\"".$baseurl."/\\1\"",$fc);
 
-		$fc = preg_replace("/href='\/(\d*)\?automatweb=aw_export'/iU","href='".$baseurl."/\\1'",$fc);
-		$fc = preg_replace("/href=\"\/(\d*)\?automatweb=aw_export\"/iU","href=\"".$baseurl."/\\1\"",$fc);
+//		$fc = preg_replace("/href='\/(\d*)\?automatweb=aw_export'/iU","href='".$baseurl."/\\1'",$fc);
+//		$fc = preg_replace("/href=\"\/(\d*)\?automatweb=aw_export\"/iU","href=\"".$baseurl."/\\1\"",$fc);
 
 		$fc = preg_replace("/<form(.*)action=([\"'])http:\/\/(.*)\/(.*)([\"'])(.*)>/isU","<form\\1action=\\2"."__form_action_url__"."/\\4\\5\\6>",$fc);
 
@@ -379,6 +383,7 @@ class export extends aw_template
 
 			// correct the link
 			$link = $this->rewrite_link(substr($fc,$begin,($end-$begin)));
+//			echo "REWR LINK = $link for ",substr($fc,$begin,($end-$begin))," <br>";
 
 			if ($this->is_external($link) || $this->is_dynamic($link))
 			{
@@ -440,6 +445,7 @@ class export extends aw_template
 		$fp = fopen($name,"w");
 		fwrite($fp,$fc);
 		fclose($fp);
+		chmod($name, 0644);
 //		echo "save_file(fc,$name) returning <br>";
 	}
 
@@ -508,13 +514,51 @@ class export extends aw_template
 			$end = "";
 			if (substr($ud["path"],1) != "" || $ud["query"] != "" || $ud["fragment"] != "")
 			{
-				$end = "?section=".str_replace("?", "&",substr($ud["path"],1)."&".$ud["query"].$ud["fragment"]);
+				$sec_str = substr($ud["path"],1,7) == "section" ? "" : "section=";
+				$end = "?".$sec_str.str_replace("?", "&",substr($ud["path"],1)."&".$ud["query"].$ud["fragment"]);
 			}
 			$link = $baseurl."/index.".$ext.$end;
 			// now just extract it again
 			$ud = parse_url($link);
+			// damn, this does not handle urls like http://bla/index.aw?section=2345/oid=333
 			parse_str($ud["query"],$HG);
-			$js = join("&", map2("%s=%s", $HG));
+			// so we do some subtle trickery here. basically, section cannot contain =
+			// so we check for that
+			if (($eqpos = strpos($HG["section"], "=")) !== false)
+			{
+//				echo "doing weird magick for link $_link <br>";
+				$tp = substr($HG["section"], 0, $eqpos);
+				$lslpos = strrpos($tp, "/");
+				$ttp = substr($tp, 0, $lslpos);
+				// now $ttp contains the real section value, so we can replace the / after the section with &
+				// and now we should also replace all other /'s with &'s after the end of the section variable
+				$seclen = strlen("section=".$ttp."&");
+				$aftersec = str_replace("/", "&", substr($ud["query"], $seclen));
+				// and now put the full string together again
+				$tq = "section=".$ttp."&".$aftersec;
+				parse_str($tq,$HG);
+//				echo "hg = <pre>", var_dump($HG),"</pre> <br>";
+//				echo "returning tq = $tq <br>";
+			}
+
+			$js = "";
+			foreach($HG as $k => $v)
+			{
+				if (is_array($v))
+				{
+					$vs = $this->make_array_url_string($k,$v);
+				}
+				else
+				{
+					$vs = $k."=".$v;
+				}
+				if ($js != "")
+				{
+					$js.="&";
+				}
+				$js.=$vs;
+			}
+//			$js = join("&", map2("%s=%s", $HG));
 			if ($js != "")
 			{
 				$js = "?".$js;
@@ -525,6 +569,7 @@ class export extends aw_template
 			return $link;
 		}
 		
+//		echo "true <br>";
 		// ok here separate the baseurl bit and the other bits
 		$link = str_replace($baseurl, "", $link);
 	
@@ -539,7 +584,14 @@ class export extends aw_template
 			{
 				if (!$found)
 				{
-					$cname .= "/".$pt;
+					if (strpos($pt, "/") !== false)
+					{
+						$cname .= $pt;
+					}
+					else
+					{
+						$cname .= "/".$pt;
+					}
 					$trypath = $basedir.$cname;
 //					echo "part  = $pt ,cname = $cname,  $trypath = $trypath <br>";
 					if (is_file($trypath))
@@ -557,6 +609,7 @@ class export extends aw_template
 		}
 		
 		$jo = join("&", $pathbits);
+		// now we got the path part of the link
 		if ($jo != "")
 		{
 			$end = "?".$jo;
@@ -699,7 +752,11 @@ class export extends aw_template
 			$this->cfg["baseurl"]."/?set_lang_id=1&automatweb=aw_export",
 			$this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?set_lang_id=1&automatweb=aw_export",
 			$this->cfg["baseurl"]."/?automatweb=aw_export&set_lang_id=1",
-			$this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?automatweb=aw_export&set_lang_id=1"
+			$this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?automatweb=aw_export&set_lang_id=1",
+			$this->cfg["baseurl"]."/?set_lang_id=1",
+			$this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?set_lang_id=1",
+			$this->cfg["baseurl"]."/?set_lang_id=1",
+			$this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?set_lang_id=1"
 		);
 		if (in_array($url,$fpurls))
 		{
@@ -841,14 +898,14 @@ class export extends aw_template
 			$sep = "&";
 		}
 
-		if (strpos($url, "automatweb=aw_export") === false)
+/*		if (strpos($url, "automatweb=aw_export") === false)
 		{
 			$url = $url.$sep."automatweb=aw_export";
-		}
+		}*/
 
 		if (strpos($url, "set_lang_id=") === false)
 		{
-			$url = $url."&set_lang_id=".$lang_id;
+			$url = $url.$sep."set_lang_id=".$lang_id;
 		}
 		return $url;
 	}
@@ -901,23 +958,35 @@ class export extends aw_template
 		{
 			if (!is_number($secid))
 			{
-				$seco = $this->_get_object_by_alias($secid);
-				$secid = $seco["oid"];
+				$mned = get_instance("menuedit");
+//				$seco = $this->_get_object_by_alias($secid);
+//				$secid = $seco["oid"];
+				$secid = $mned->check_section($secid, false);
 			}
 
 			if (is_number($secid))
 			{
+				do {
+					$seco = $this->get_object($secid);
+					if ($seco["class_id"] != CL_PSEUDO)
+					{
+						$secid = $seco["parent"];
+					}
+				} while ($seco["class_id"] != CL_PSEUDO);
+
 				if ($this->loaded_rule["meta"]["menus"][$secid] == $secid)
 				{
 					return false;
 				}
 				else
 				{
+//					echo "is out of rule $url <Br>";
 					return true;
 				}
 			}
 			else
 			{
+//				echo "is out of rule2 $url <Br>";
 				return true;
 			}
 		}
@@ -934,6 +1003,105 @@ class export extends aw_template
 		$this->hash2url = array();
 		$this->ftn_used = array();
 		$this->fta_used = array();
+	}
+	
+	////
+	// !this tries to keep session between pages
+	function get_page_content($url)
+	{
+/*		$fp = fopen($url,"r");
+		$fc = fread($fp,10000000);
+		fclose($fp);*/
+		if (!$this->cookie)
+		{
+			$this->get_session();
+		}
+
+		$host = str_replace("http://","",$this->cfg["baseurl"]);
+		preg_match("/.*:(.+?)/U",$host, $mt);
+		if ($mt[1])
+		{
+			$host = str_replace(":".$mt[1], "", $host);
+		}
+		$port = ($mt[1] ? $mt[1] : 80);
+
+		$req  = "GET $url HTTP/1.0\r\n";
+		$req .= "Host: ".$host.($port != 80 ? ":".$port : "")."\r\n";
+		$req .= "Cookie: automatweb=".$this->cookie."\r\n";
+		$req .= "\r\n";
+		classload("socket");
+		$socket = new socket(array(
+			"host" => $host,
+			"port" => $port,
+		));
+		$socket->write($req);
+		$ipd = "";
+		while($data = $socket->read())
+		{
+			$ipd .= $data;
+		};
+		list($headers,$data) = explode("\r\n\r\n",$ipd);
+		return $data;
+	}
+
+	function get_session()
+	{
+		$host = str_replace("http://","",$this->cfg["baseurl"]);
+		preg_match("/.*:(.+?)/U",$host, $mt);
+		if ($mt[1])
+		{
+			$host = str_replace(":".$mt[1], "", $host);
+		}
+		$port = ($mt[1] ? $mt[1] : 80);
+		classload("socket");
+		$socket = new socket(array(
+			"host" => $host,
+			"port" => $port,
+		));
+		
+		$op = "HEAD / HTTP/1.0\r\n";
+		$op .= "Host: $host".($port != 80 ? ":".$port : "" )."\r\n\r\n";
+
+		print "<pre>";
+		print "Acquiring session\n";
+		flush();
+
+//		echo "op = $op <br>";
+		$socket->write($op);
+
+		$ipd="";
+		
+		while($data = $socket->read())
+		{
+			$ipd .= $data;
+		};
+
+//		echo "ipd = $ipd <br>";
+		if (preg_match("/automatweb=(\w+?);/",$ipd,$matches))
+		{
+			$cookie = $matches[1];
+		};
+
+		$this->cookie = $cookie;
+
+		print "Got session, ID is $cookie\n</pre>";
+	}
+
+	function make_array_url_string($k,$v)
+	{
+		$ret = array();
+		foreach($v as $_k => $_v)
+		{
+			if (is_array($_v))
+			{
+				$ret[] =$this->make_array_url_string($k."[$_k]", $_v);
+			}
+			else
+			{
+				$ret[] =$k."[]=".urlencode($_v);
+			}
+		}
+		return join("&", $ret);
 	}
 }
 ?>
