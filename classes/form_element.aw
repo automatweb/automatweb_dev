@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.23 2001/09/25 06:01:10 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.24 2001/10/01 13:47:55 cvs Exp $
 // form_element.aw - vormi element.
 lc_load("form");
 global $orb_defs;
@@ -436,6 +436,9 @@ class form_element extends aw_template
 					}
 					else
 					{
+						// make sure we got it right.
+						$this->db_query("DELETE FROM form_relations WHERE form_from = ".$this->arr["rel_form"]." AND form_to = ".$this->form->id." AND el_from = ".$this->arr["rel_element"]." AND el_to = ".$this->id);
+
 						$this->db_query("INSERT INTO form_relations (form_from,form_to,el_from,el_to) VALUES('".$this->arr["rel_form"]."','".$this->form->id."','".$this->arr["rel_element"]."','".$this->id."')");
 						$this->arr["rel_table_id"] = $this->db_last_insert_id();
 					}
