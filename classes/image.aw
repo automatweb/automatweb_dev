@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.84 2004/03/18 16:19:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.85 2004/03/22 11:54:41 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -312,7 +312,10 @@ class image extends class_base
 
 	function get_img_by_oid($oid,$idx) 
 	{
-		$q = "SELECT images.*,objects.* FROM objects
+		$o = obj($oid);
+		$c = reset($o->connections_from(array("idx" => $idx, "to.class_id" => CL_IMAGE)));
+		return $this->get_image_by_id($c->prop("to"));
+		/*$q = "SELECT images.*,objects.* FROM objects
 			LEFT JOIN images ON objects.oid = images.id
 			WHERE parent = '$oid' AND idx = '$idx' AND objects.status = 2 AND objects.class_id = 6
 			ORDER BY created DESC";
@@ -325,7 +328,7 @@ class image extends class_base
 			$row["big_url"] = $this->get_url($row["meta"]["file2"]);
 		}
 
-		return $row;
+		return $row;*/
 	}
 
 	function is_flash($file)
