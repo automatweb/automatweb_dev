@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.174 2005/01/28 14:07:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.175 2005/02/08 15:14:29 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -112,7 +112,17 @@ if (!defined("DEFS"))
 		{
 			$arguments = aw_ini_get("mail.arguments");
 		};
-		mail($to,$subject,$msg,$headers,$arguments);
+		// from the PHP manual: Since PHP 4.2.3 this parameter is disabled in safe_mode  and the mail()
+		// function will expose a warning message and return FALSE if you're trying to use it.
+		if ((bool)ini_get("safe_mode"))
+		{
+			mail($to,$subject,$msg,$headers);
+		}
+		else
+		{
+			mail($to,$subject,$msg,$headers,$arguments);
+
+		};
 	}
 	
 	////
