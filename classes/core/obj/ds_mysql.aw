@@ -506,9 +506,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			{
 				$sql .= " AND o_t.".substr($k, 3)." = '$v' ";
 			}
-			if (substr($k, 0, 3) == "from.")
+			if (substr($k, 0, 5) == "from.")
 			{
-				$sql .= " AND o_s.".substr($k, 3)." = '$v' ";
+				$sql .= " AND o_s.".substr($k, 5)." = '$v' ";
 			}
 		}
 
@@ -569,7 +569,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		foreach($params as $key => $val)
 		{
-			if ($val === "ignore")
+			if ($val === NULL)
 			{
 				continue;
 			}
