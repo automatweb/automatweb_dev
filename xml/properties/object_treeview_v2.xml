@@ -125,7 +125,7 @@
             </DATASOURCE>
             <CSS>
                   <value>2</value>
-                  <clid>CL_GROUP</clid>
+                  <clid>CL_CSS</clid>
                   <caption>css stiil</caption>
             </CSS>
       </reltypes>
