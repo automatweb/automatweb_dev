@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.8 2004/05/19 16:08:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.9 2004/06/09 13:01:12 kristo Exp $
 // otv_ds_postipoiss.aw - Objektinimekirja Postipoisi datasource 
 /*
 
@@ -218,7 +218,7 @@ class otv_ds_postipoiss extends class_base
 	{
 		if (!file_exists($o->prop("subj_xml")))
 		{
-			error::trhow(array(
+			error::throw(array(
 				"id" => ERR_NO_FILE,
 				"msg" => "the subject xml file (".$o->prop("subj_xml").") does not exist!"
 			));
