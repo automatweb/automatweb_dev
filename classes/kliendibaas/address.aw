@@ -67,7 +67,7 @@ class address extends class_base
 
 	function get_property($args)
 	{
-		$retval = true;
+		$retval = PROP_OK;
 		switch($data["name"])
 		{
 			case 'jrk':

@@ -96,7 +96,7 @@ print_r($a);die();
 		//print_r($args);
 			//die();
 		$data = &$args['prop'];
-		$retval = true;
+		$retval = PROP_OK;
 		$meta=$args['obj']['meta'];
 		$id=$args['obj']['oid'];
 		$parent=$args['obj']['parent'];

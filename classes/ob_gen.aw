@@ -774,7 +774,7 @@ $get_oids.=$get_oid.';';
 		$all_db_tables=$this->db_query('show tables');
 		while ($row = $this->db_next())
 		{
-			$tables[$row['Tables_in_samaw']] = $row['Tables_in_samaw'];
+			$tables[$row['Tables_in_'.$GLOBAL['db']['base']]] = $row['Tables_in_'.$GLOBAL['db']['base']];
 		}
 		return $tables;
 	}

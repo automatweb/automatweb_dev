@@ -199,7 +199,7 @@ arr($args,1);
 	function get_property($args)
 	{
 		$data = &$args['prop'];
-		$retval = true;
+		$retval = PROP_OK;
 		$meta=$args['obj']['meta'];
 		$id=$args['obj']['oid'];
 		$parent=$args['obj']['parent'];

@@ -54,7 +54,7 @@
 	@property testi type=text
 	@caption testi
 
-	@property ruuls_setup type=text
+	@property ruuls_setup callback=visual_conf
 	@caption ruuls setup
 
 	@property ruul type=textarea
@@ -101,10 +101,8 @@
 
 define("PREFIX","html_import_"); // sql tabelitele ette, et mingit jama ei tekiks
 
-
 class html_import extends class_base
 {
-
 	function html_import()
 	{
 		$this->init(array(
@@ -112,9 +110,9 @@ class html_import extends class_base
 		));
 	}
 
-
-	function visual_conf($ob)
+	function visual_conf($args)
 	{
+		$ob=$args['obj'];
 		$meta=$ob['meta'];
 		$examples=explode("\n",$meta["example"]);
 		$what=$meta["ruul"];
@@ -239,7 +237,16 @@ html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'chec
 				$show="fail: ".$examples[0]."<br /><textarea cols=95 rows=10>".$html."</textarea><br /><br />".$source;
 			}
 		}
-		return $meta["database"].$show.($notest?'':$exmpl);
+
+
+		$nodes = array();
+		$nodes[] = array(
+			'type' => 'text',
+			"value" => $meta["database"].$show.($notest?'':$exmpl),
+		);
+		return $nodes;
+
+
 	}
 
 
@@ -290,20 +297,22 @@ html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'chec
 	function get_property($args)
 	{
 		$data = &$args['prop'];
-		$retval = true;
+		$retval = PROP_OK;
 		$meta=$args['obj']['meta'];
 		$id=$args['obj']['oid'];
 
 		static $tbl_exists,$tables;
+
 		if (!isset($tables))
 		{
 			$all_db_tables=$this->db_query('show tables');
 			while ($row = $this->db_next())
 			{
-				if (is_int(strpos($row['Tables_in_samaw'],PREFIX)))
+				$rowname='Tables_in_'.$GLOBAL['db']['base'];
+				if (is_int(strpos($row[$rowname],PREFIX)))
 				{
-					$tables[$row['Tables_in_samaw']] = $row['Tables_in_samaw'];
-					if ($row['Tables_in_samaw']==PREFIX.$meta["mk_my_table"])
+					$tables[$row[$rowname]] = $row[$rowname];
+					if ($row[$rowname]==PREFIX.$meta["mk_my_table"])
 					{
 						$tbl_exists=true;
 					//break 1;
@@ -333,9 +342,9 @@ html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'chec
 				}
 			break;
 
-			case 'ruuls_setup':
-				$data['value']=$this->visual_conf($args['obj']);
-			break;
+			//case 'ruuls_setup':
+				//$data['value']=$this->visual_conf($args['obj']);
+			//break;
 
 			case 'reset':
 				$data['value']='reset';

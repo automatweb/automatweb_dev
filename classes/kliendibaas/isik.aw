@@ -167,7 +167,7 @@ class isik extends class_base
 	function get_property($args)
 	{
 		$data = &$args["prop"];
-		$retval = true;
+		$retval = PROP_OK;
 
 		switch($data["name"])
 		{
@@ -182,6 +182,7 @@ class isik extends class_base
 			break;
 		}
 		return $retval;
+
 	}
 }
 ?>

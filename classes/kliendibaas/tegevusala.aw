@@ -34,7 +34,7 @@ class tegevusala extends class_base
 	function get_property($args)
 	{
 		$data = &$args['prop'];
-		$retval = true;
+		$retval = PROP_OK;
 		switch($data["name"])
 		{
 			case 'jrk':

@@ -1,7 +1,6 @@
 <?php
 /*
 	@default table=objects
-	@groupinfo general caption=üldine default=1
 	@default group=general
 	@property comment type=textarea field=comment cols=40 rows=3
 	@caption Kommentaar
@@ -70,7 +69,7 @@ class linklist extends class_base
 	function get_property($args)
 	{
 		$data = &$args['prop'];
-		$retval = true;
+		$retval = PROP_OK;
 		$meta=$args['obj']['meta'];
 		$id=$args['obj']['oid'];
 		switch($data['name'])
@@ -375,9 +374,8 @@ class linklist extends class_base
 			'onclick'=>'document.changeform.delete_level.value='.$key.';document.changeform.submit();'
 	)):'',
 			);
-
-
 		}
+
 		ksort($levels);
 
 
@@ -503,6 +501,8 @@ class linklist extends class_base
 
 		return $t->draw();
 	}
+
+
 /*
 
 		$p_tbp = get_instance('vcl/tabpanel');
@@ -546,7 +546,8 @@ class linklist extends class_base
 	// form output maching the serach criteria
 	//
 	function show($arr)
-	{return 'jee';
+	{
+	return 'jee';
 		extract($arr); // cd = current directory
 		$uid= aw_global_get('uid');
 		$this->write_stat(array(
@@ -914,7 +915,11 @@ class linklist extends class_base
 		return $tulbad;
 	}
 
-
+	function parse_alias($args)
+	{
+		extract($args);
+		return $this->show(array('id' => $alias['target']));
+	}
 
 	////
 	// !this adds a hit to the external link (and possibly some information about user) and redirects user to the url,
