@@ -1,5 +1,5 @@
 <?php
-// $Id: doc.aw,v 2.4 2003/02/03 12:19:31 duke Exp $
+// $Id: doc.aw,v 2.5 2003/03/12 14:09:24 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -161,7 +161,7 @@ class doc extends class_base
 	{
 		// map title to name
 		$coredata = &$args["coredata"];
-		$objdata = &$args["objdata"];
+		$objdata = &$args["objdata"]["documents"];
 		if ($objdata["title"])
 		{
 			$coredata["name"] = $objdata["title"];
@@ -178,6 +178,7 @@ class doc extends class_base
                         "imgover" => "save_over.gif",
                         "img" => "save.gif",
                 ));
+		/*
 		$toolbar->add_button(array(
                         "name" => "edit",
                         "tooltip" => "Muuda",
@@ -202,6 +203,7 @@ class doc extends class_base
                         "imgover" => "lists_over.gif",
                         "img" => "lists.gif",
                 ));
+		*/
 
 		$toolbar->add_button(array(
                         "name" => "preview",
