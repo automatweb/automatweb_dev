@@ -1,9 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.17 2004/02/12 09:42:45 duke Exp $
+
 /*
 
-@classinfo syslog_type=ST_SITE relationmgr=yes no_comment=1
+@classinfo syslog_type=ST_SITE relationmgr=yes
 
+@groupinfo general caption=Üldine
 @groupinfo templates caption=Templated
 @groupinfo db caption=Andmebaas
 
@@ -42,7 +43,7 @@
 @property select_imgcss_sites type=select group=templates
 @caption Vali sait, millelt v&otilde;tta css ja pildid
 
-@property gen_site type=checkbox ch_value=1 edit_only=1
+@property gen_site type=checkbox ch_value=1
 @caption Genereeri sait!
 
 @property site_errmsg type=text
@@ -51,10 +52,9 @@
 @property site_warnmsg type=text
 @caption Hoiatused:
 
-@reltype LAYOUT value=1 clid=CL_LAYOUT
-@caption Saidi layout
-
 */
+
+define("RELATION_LAYOUT",1);
 
 class aw_site extends class_base
 {
@@ -71,6 +71,12 @@ class aw_site extends class_base
 		$prop =&$arr['prop'];
 		switch($prop['name'])
 		{
+			case "comment":
+			case "alias":
+			case "jrk":
+				return PROP_IGNORE;
+				break;
+
 			case "site_errmsg":
 				if ($this->err_str == "")
 				{
@@ -88,13 +94,16 @@ class aw_site extends class_base
 				break;
 
 			case "gen_site":
-				$site = $this->get_site_def($arr['obj_inst']->id());
-				if (!$this->is_site_ok($site))
+				if ($arr['obj']['oid'])
 				{
-					return PROP_IGNORE;
+					$site = $this->get_site_def($arr['obj']['oid']);
+					if (!$this->is_site_ok($site))
+					{
+						return PROP_IGNORE;
+					}
 				}
-
-				if ("" == $arr["obj_inst"]->prop("site_url"))
+	
+				if ($arr['obj']['meta']['site_url'] == '')
 				{
 					$this->err_str = "Saidi url on m&auml;&auml;ramata!";
 					return PROP_IGNORE;
@@ -102,7 +111,7 @@ class aw_site extends class_base
 				break;
 
 			case "select_db":
-				if (1 == $arr["obj_inst"]->prop("use_existing_database"))
+				if ($arr['obj']['meta']['use_existing_database'] == 1)
 				{
 					if (!is_array($this->server_site_list))
 					{
@@ -133,10 +142,10 @@ class aw_site extends class_base
 				break;
 
 			case "select_parent_folder":
-				if (1 == $arr["obj_inst"]->prop("use_existing_database") && "" != $arr["obj_inst"]->prop("select_db"))
+				if ($arr['obj']['meta']['use_existing_database'] == 1 && $arr['obj']['meta']['select_db'] != "")
 				{
 					// get list of folders for the site
-					$serv = str_replace("http://","",$arr['obj_inst']->prop('select_db'));
+					$serv = str_replace("http://","",$arr['obj']['meta']['select_db']);
 					$flds = $this->do_orb_method_call(array(
 						"class" => "objects",
 						"action" => "get_list",
@@ -160,7 +169,7 @@ class aw_site extends class_base
 				break;
 
 			case "select_tpl_sites":
-				if (1 == $arr["obj_inst"]->prop("use_existing_templates"))
+				if ($arr['obj']['meta']['use_existing_templates'] != 1)
 				{
 					return PROP_IGNORE;
 				}
@@ -189,7 +198,7 @@ class aw_site extends class_base
 				break;
 
 			case "select_imgcss_sites":
-				if (1 == $arr["obj_inst"]->prop("use_existing_templates"))
+				if ($arr['obj']['meta']['use_existing_templates'] != 1)
 				{
 					return PROP_IGNORE;
 				}
@@ -218,16 +227,15 @@ class aw_site extends class_base
 				break;
 
 			case "select_tpl_folders":
-				$tpl_sites = $arr["obj_inst"]->prop("select_tpl_sites");
-				$isar = is_array($tpl_sites) && count($tpl_sites) > 0;
-				if ($arr['obj_inst']->prop('use_existing_templates') != 1 || !$isar)
+				$isar = is_array($arr['obj']['meta']['select_tpl_sites']) && count($arr['obj']['meta']['select_tpl_sites']) > 0;
+				if ($arr['obj']['meta']['use_existing_templates'] != 1 || !$isar)
 				{
 					return PROP_IGNORE;
 				}
 
 				// now get list for all selected sites
 				$fl = array();
-				foreach($tpl_sites as $sn)
+				foreach($arr['obj']['meta']['select_tpl_sites'] as $sn)
 				{
 					$sn = str_replace("http://","",$sn);
 
@@ -256,7 +264,7 @@ class aw_site extends class_base
 				break;
 
 			case "select_layout":
-				if (!($arr['obj_inst']->prop('use_existing_database') == 1 && $arr['obj_inst']->prop('select_db') == "http://aw.struktuur.ee"))
+				if (!($arr['obj']['meta']['use_existing_database'] && $arr['obj']['meta']['select_db'] == "http://aw.struktuur.ee"))
 				{
 					return PROP_IGNORE;
 				}
@@ -268,7 +276,7 @@ class aw_site extends class_base
 	function callback_post_save($arr)
 	{
 		extract($arr);
-		$ob = $arr["obj_inst"];
+		$ob = obj($id);
 		if ($ob->meta('gen_site') && $arr["request"]["group"] == "general")
 		{
 			$site = $this->get_site_def($id);
@@ -1107,6 +1115,21 @@ class aw_site extends class_base
 		$sue->add_cmd("chmod 666 $site[docroot]/public/css/*");
 
 		$sue->exec();
+	}
+
+	function callback_get_rel_types()
+	{
+		return array(
+			RELATION_LAYOUT => "saidi layout"
+		);
+	}
+
+	function callback_get_classes_for_relation($args = array())
+	{
+		if ($args["reltype"] == RELATION_LAYOUT)
+		{
+			return array(CL_LAYOUT);
+		}
 	}
 
 	function _do_create_menus_from_template(&$dbi, &$site, &$ini_opts, &$log, &$osi_vars)
