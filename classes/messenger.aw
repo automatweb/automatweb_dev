@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.117 2003/02/12 11:23:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.118 2003/03/28 10:24:54 kristo Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 lc_load("definition");
@@ -1013,7 +1013,7 @@ class messenger extends menuedit_light
 			$muutujad = array();
 			foreach($lists as $lid)
 			{
-				$muutujad += $mlist->get_all_varnames($lid);
+				$muutujad += $mlist->get_all_active_varnames($lid);
 			}
 			foreach($muutujad as $k => $v)
 			{
