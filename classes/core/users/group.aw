@@ -615,7 +615,9 @@ class group extends class_base
 	{
 		$ret = array();
 		$la = get_instance("languages");
-		$ll = $la->get_list();
+		$ll = $la->get_list(array(
+			"ignore_status" => true
+		));
 
 		$meta = $arr["obj_inst"]->meta();
 
