@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.64 2004/05/04 12:58:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.65 2004/05/25 08:37:47 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -722,6 +722,21 @@ class htmlclient extends aw_template
 
 			case "textbox":
 				$retval = html::textbox($arr);
+				$id = str_replace("[","_",$arr["name"]);
+				$id = str_replace("]","_",$id);
+				if (isset($arr["zee_shaa_helper"]))
+				{
+					$name = $arr["name"];
+					$retval .= html::button(array(
+						"value" => "ð",
+						"onclick" => "el=document.getElementById('${id}');el.value=el.value+'ð';el.focus();",
+					));
+
+					$retval .= html::button(array(
+						"value" => "þ",
+						"onclick" => "el=document.getElementById('${id}');el.value=el.value+'þ';el.focus();",
+					));
+				};
 				break;
 
 			case "textarea":
