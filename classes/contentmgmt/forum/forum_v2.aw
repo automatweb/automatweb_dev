@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.57 2004/12/10 13:43:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.58 2004/12/10 13:54:13 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -28,7 +28,7 @@
 	@property comments_on_page type=select
 	@caption Kommentaare lehel
 
-	@property topic_depth type=select default=0 
+	@property topic_depth type=select group=topic_selector default=0 
 	@caption Teemade sügavus
 
 	@property topic_selector type=text group=topic_selector no_caption=1
@@ -182,7 +182,13 @@ class forum_v2 extends class_base
 
 			case "topic_selector":
 				$topic_folder = $arr["obj_inst"]->prop("topic_folder");
-				if (!is_oid($topic_folder))
+				$depth = $arr["obj_inst"]->prop("topic_depth");
+				// hide topic_selector if it doesn't make any sense
+				if (0 == $depth)
+				{
+					$retval = PROP_IGNORE;
+				}
+				else if (!is_oid($topic_folder))
 				{
 					$retval = PROP_ERROR;
 					$data["error"] = t("Teemade kaust on valimata");
