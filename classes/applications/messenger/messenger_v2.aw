@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.6 2005/03/18 12:19:32 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.7 2005/03/22 17:04:03 kristo Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -128,12 +128,13 @@ class messenger_v2 extends class_base
 	{
 		$users = get_instance("users");
 		$obj_id = $users->get_user_config(array(
-				"uid" => aw_global_get("uid"),
-				"key" => "user_messenger"));
+			"uid" => aw_global_get("uid"),
+			"key" => "user_messenger"
+		));
 
 		if (empty($obj_id))
 		{
-			return "kulla mees, sa pole omale default messengeri ju valinud?";
+			return t("kulla mees, sa pole omale default messengeri ju valinud?");
 		};
 		$arr["id"] = $obj_id;
 		$arr["group"] = "main_view";
@@ -207,8 +208,8 @@ class messenger_v2 extends class_base
 				$t->add_button(array(
 					"name" => "delete",
 					"img" => "delete.gif",
-					"confirm" => "Kustutada?",
-					"tooltip" => "Kustuta märgitud kirjad",
+					"confirm" => t("Kustutada?"),
+					"tooltip" => t("Kustuta märgitud kirjad"),
 					"action" => "delete_search_results",
 				));
 				break;
@@ -221,7 +222,7 @@ class messenger_v2 extends class_base
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
-                {
+		{
 			case "autofilter_delay":
 				$this->schedule_filtering($arr);
 				break;
@@ -234,15 +235,12 @@ class messenger_v2 extends class_base
 					"value" => $data["value"],
 				));
 				break;
-
-                        break;
-
 		}
 		return $retval;
 	}	
 
 	function callback_pre_edit($arr)
-        {
+	{
 		$mailbox = isset($arr["request"]["mailbox"]) ? $arr["request"]["mailbox"] : "INBOX"; 
 		$name = $arr["obj_inst"]->name();
 		aw_global_set("title_action",$name);
@@ -264,7 +262,7 @@ class messenger_v2 extends class_base
 
 			if (!extension_loaded("imap"))
 			{
-				$this->connect_errors = "IMAP extension not available";
+				$this->connect_errors = t("IMAP extension not available");
 				return false;
 			};
 			$this->msgobj = new object($arr["msgr_id"]);
@@ -276,7 +274,7 @@ class messenger_v2 extends class_base
 			//$_sdat =$conns[0];
 			if (empty($_sdat))
 			{
-				$this->connect_errors = "IMAP sissepääs on konfigureerimata";
+				$this->connect_errors = t("IMAP sissepääs on konfigureerimata");
 				return false;
 			};
 			$sdat = new object($_sdat->to());
@@ -327,7 +325,7 @@ class messenger_v2 extends class_base
 
 		if ($this->connect_errors)
 		{
-			$arr["prop"]["error"] = "Login failed, check whether server name, user and password are correct.<br>" . $this->connect_errors; 
+			$arr["prop"]["error"] = t("Login failed, check whether server name, user and password are correct.<br>") . $this->connect_errors; 
 			return PROP_ERROR;
 		};
 
@@ -423,7 +421,7 @@ class messenger_v2 extends class_base
 
 	function _conv_stat($code)
 	{
-		return ($code == 0) ? "ei" : "jah";
+		return ($code == 0) ? t("ei") : t("jah");
 	}
 
 	////
@@ -556,7 +554,7 @@ class messenger_v2 extends class_base
 
 		$toolbar->add_button(array(
 			"name" => "newmessage",
-			"tooltip" => "Uus kiri",
+			"tooltip" => t("Uus kiri"),
 			"url" => "javascript:aw_popup_scroll('" . $this->mk_my_orb("create_draft",array(
 				"msgrid" => $this->msgobj->id(),
 				"cb_part" => 1,
@@ -571,7 +569,7 @@ class messenger_v2 extends class_base
 			return false;
 		};
 	
-		$_tmp = array("0" => "Vii kirjad");
+		$_tmp = array("0" => t("Vii kirjad"));
 		foreach($this->mailboxlist as $item)
 		{
 			$_tmp[$item["name"]] = str_repeat("&nbsp;",4*(substr_count($item["name"],".")+1)) . $item["realname"];
@@ -585,7 +583,7 @@ class messenger_v2 extends class_base
 
 		$toolbar->add_button(array(
 			"name" => "move",
-			"tooltip" => "Vii valitud kirjad kataloogi",
+			"tooltip" => t("Vii valitud kirjad kataloogi"),
 			"action" => "move_messages",
 			"img" => "import.gif",
 			"side" => "right",
@@ -598,8 +596,8 @@ class messenger_v2 extends class_base
 		
 		$toolbar->add_button(array(
 			"name" => "delete",
-			"tooltip" => "Kustuta märgitud kirjad",
-			"confirm" => "Kustutada märgitud kirjad?",
+			"tooltip" => t("Kustuta märgitud kirjad"),
+			"confirm" => t("Kustutada märgitud kirjad?"),
 			"action" => "delete_messages",
 			"img" => "delete.gif",
 			"side" => "right",
@@ -685,12 +683,6 @@ class messenger_v2 extends class_base
 		@attrib name=test_filters params=name 
 		
 		@param id required type=int
-		
-		@returns
-		
-		
-		@comment
-
 	**/
 	function test_filters($arr)
 	{
@@ -704,7 +696,7 @@ class messenger_v2 extends class_base
 
 		if ($this->done === false)
 		{
-			$rv = "ükski kiri INBOXis ei matchinud ühegi ruuliga<br>";
+			$rv = t("ükski kiri INBOXis ei matchinud ühegi ruuliga<br>");
 		};
 		return "<pre>" . $rv . "</pre>";
 
@@ -721,7 +713,7 @@ class messenger_v2 extends class_base
 
 		if (sizeof($conns) == 0)
 		{
-			return "ühtegi ruuli pole seostatud";
+			return t("ühtegi ruuli pole seostatud");
 		};
 
 		$rv = "";
@@ -803,9 +795,9 @@ class messenger_v2 extends class_base
 			{
 				if (strpos($message["subject"],$val) !== false)
 				{
-					$rv .= sprintf("<strong>message with subject: %s</strong><br>",$message["subject"]);
+					$rv .= sprintf(t("<strong>message with subject: %s</strong><br>"),$message["subject"]);
 					$target = $this->targets[$key];
-					$rv .= " &nbsp; &nbsp; uid = $mkey, matches subject rule $key, moving to $target folder<br>";
+					$rv .= sprintf(t(" &nbsp; &nbsp; uid = %s, matches subject rule %s, moving to %s folder<br>"), $mkey, $key, $target);
 					$this->done = true;
 					$move_ops[$target][] = $mkey;
 					break;
@@ -816,9 +808,9 @@ class messenger_v2 extends class_base
 			{
 				if (strpos($message["from"],$val) !== false)
 				{
-					$rv .= sprintf("<strong>message with subject: %s</strong><br>",$message["subject"]);
+					$rv .= sprintf(t("<strong>message with subject: %s</strong><br>"),$message["subject"]);
 					$target = $this->targets[$key];
-					$rv .= " &nbsp; &nbsp; matches from rule $key, moving to $target folder<br>";
+					$rv .= sprintf(t(" &nbsp; &nbsp; matches from rule %s, moving to %s folder<br>"), $key, $target);
 					$move_ops[$target][] = $mkey;
 					$this->done = true;
 					break;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.15 2005/03/14 17:27:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.16 2005/03/22 17:04:03 kristo Exp $
 // recycle_bin.aw - Prügikast 
 /*
 
@@ -107,19 +107,19 @@ class recycle_bin extends class_base
 	{
 		$table->define_field(array(
 			"name" => "icon",
-			"caption" => "",
+			"caption" => t(""),
 			"width" => 15,
 		));
 		
 		$table->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"sortable" => 1,
 		));
 		
 		$table->define_field(array(
 			"name" => "oid",
-			"caption" => "ID",
+			"caption" => t("ID"),
 			"sortable" => 1,
 			"width" => 50,
 			"numeric" => 1
@@ -127,19 +127,19 @@ class recycle_bin extends class_base
 		
 		$table->define_field(array(
 			"name" => "restore",
-			"caption" => "Tegevus",
+			"caption" => t("Tegevus"),
 		));
 		
 		$table->define_field(array(
 			"name" => "class_id",
-			"caption" => "Objektitüüp",
+			"caption" => t("Objektitüüp"),
 			"sortable" => 1,
 			"width" => 1,
 		));
 		
 		$table->define_field(array(
 			"name" => "modifiedby",
-			"caption" => "Kustutaja",
+			"caption" => t("Kustutaja"),
 			"sortable" => "1",
 			"width" => 80,
 			"align" => "center",
@@ -147,7 +147,7 @@ class recycle_bin extends class_base
 		
 		$table->define_field(array(
 			"name" => "modified",
-			"caption" => "Kustutatud",
+			"caption" => t("Kustutatud"),
 			"sortable" => "1",
 			"width" => 100,
 			"type" => "time",
@@ -159,7 +159,7 @@ class recycle_bin extends class_base
 		$table->define_chooser(array(
     		"name" => "mark",
     		"field" => "id",
-    		"caption" => "Vali",
+    		"caption" => t("Vali"),
 		));
 	}
 
@@ -220,7 +220,7 @@ class recycle_bin extends class_base
 				"oid" => $row["oid"],
 				"id" => $row["oid"],
 				"restore" => html::href(array(
-					"caption" => "Taasta",
+					"caption" => t("Taasta"),
 					"url" => $this->mk_my_orb(
 						"restore_object", 
 						array(
@@ -250,30 +250,30 @@ class recycle_bin extends class_base
 		$tb->add_button(array(
     		"name" => "save",
     		"img" => "restore.gif",
-    		"tooltip" => "Taasta valitud objektid",
+    		"tooltip" => t("Taasta valitud objektid"),
     		"action" => "restore_objects",
     	));
     	$tb->add_button(array(
     		"name" => "refresh",
     		"img" => "refresh.gif",
-    		"tooltip" => "Uuenda",
+    		"tooltip" => t("Uuenda"),
     		"url" => aw_url_change_var(array()),
     	));
 
     	$tb->add_button(array(
     		"name" => "delete",
     		"img" => "delete.gif",
-    		"tooltip" => "Kustuta",
+    		"tooltip" => t("Kustuta"),
     		"action" => "final_delete",
-			"confirm" => "Kas olete 100% kindel et soovite valitud objekte l&otilde;plikult kustutada?"
+			"confirm" => t("Kas olete 100% kindel et soovite valitud objekte l&otilde;plikult kustutada?")
     	));
 
     	$tb->add_button(array(
     		"name" => "clear_all",
     		"img" => "del_all.gif",
-    		"tooltip" => "T&uuml;hjenda",
+    		"tooltip" => t("T&uuml;hjenda"),
     		"action" => "clear_all",
-			"confirm" => "Ettevaatust! Objektid kustutatakse j&auml;&auml;davalt!"
+			"confirm" => t("Ettevaatust! Objektid kustutatakse j&auml;&auml;davalt!")
     	));
 	}
 

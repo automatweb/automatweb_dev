@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/contact_list.aw,v 1.5 2004/12/07 13:49:17 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/contact_list.aw,v 1.6 2005/03/22 17:04:03 kristo Exp $
 // contact_list.aw - Aadressiraamat 
 /*
 
@@ -45,8 +45,6 @@ class contact_list extends class_base
 {
 	function contact_list()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
-		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
 			"tpldir" => "applications/quickmessage/",
 			"clid" => CL_CONTACT_LIST
@@ -64,7 +62,7 @@ class contact_list extends class_base
 				/*
 				$tb->add_button(array(
             		"name" => "add",
-            		"tooltip" => "Lisa aadressiraamatusse",
+            		"tooltip" => t("Lisa aadressiraamatusse"),
             		"img" => "new.gif",
             		"url" => $this->mk_my_orb(
 						"change", array("group" => "addnew", "id" => $arr["obj_inst"]->id()), CL_CONTACT_LIST),
@@ -72,7 +70,7 @@ class contact_list extends class_base
 				$tb->add_separator();
 				$tb->add_button(array(
 					"name" => "search",
-				"tooltip" => "Otsi kontakte",
+				"tooltip" => t("Otsi kontakte"),
             		"img" => "search.gif",
             		"action" => "",
         		));
@@ -162,7 +160,7 @@ class contact_list extends class_base
 		$contacts = array_slice($contacts, ($ft_page * $r_on_page), $r_on_page);
 		$t->define_field(array(
 			"name" => "id",
-			"caption" => "ID",
+			"caption" => t("ID"),
 		));
 		$t->define_field(array(
 			"name" => "name",
@@ -174,7 +172,7 @@ class contact_list extends class_base
 		));
 		$t->define_field(array(
 			"name" => "sendmessage",
-			"caption" => "",
+			"caption" => t(""),
 		));
 		$t->define_chooser(array(
 			"name" => "sel",

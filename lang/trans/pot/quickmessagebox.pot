@@ -1,3 +1,7 @@
+#: classes/applications/quickmessage/quickmessagebox.aw:80
+msgid "Priit on jobu!"
+msgstr ""
+
 #: classes/applications/quickmessage/quickmessagebox.aw:92
 msgid "Uus kiri"
 msgstr ""
@@ -34,6 +38,14 @@ msgstr ""
 msgid "Oled kindel, et tahad valitud kirjad kustutada?"
 msgstr ""
 
+#: classes/applications/quickmessage/quickmessagebox.aw:210
+msgid "sellist kasutajat ei ole olemas!"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:274
+msgid "Kellelt"
+msgstr ""
+
 #: classes/applications/quickmessage/quickmessagebox.aw:282
 msgid "Kellele"
 msgstr ""
@@ -48,6 +60,10 @@ msgstr ""
 
 #: classes/applications/quickmessage/quickmessagebox.aw:294
 msgid "Sisu"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:334
+msgid "ID"
 msgstr ""
 
 #: classes/applications/quickmessage/quickmessagebox.aw:335
@@ -68,6 +84,10 @@ msgstr ""
 
 #: classes/applications/quickmessage/quickmessagebox.aw:377
 msgid "teade edukalt kohale toimetatud!"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:414
+msgid "Aadressiraamat"
 msgstr ""
 
 #: classes/applications/quickmessage/quickmessagebox.aw:437

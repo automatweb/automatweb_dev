@@ -34,6 +34,10 @@ msgstr ""
 msgid "Otsi kõigist kalendritest"
 msgstr ""
 
+#: classes/applications/calendar/planner.aw:741
+msgid "header"
+msgstr ""
+
 #: classes/applications/calendar/planner.aw:795
 msgid "Sündmuste kataloog on valimata"
 msgstr ""

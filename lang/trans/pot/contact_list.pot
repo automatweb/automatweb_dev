@@ -1,20 +1,36 @@
-#: classes/applications/quickmessage/contact_list.aw:83
+#: classes/applications/quickmessage/contact_list.aw:65
+msgid "Lisa aadressiraamatusse"
+msgstr ""
+
+#: classes/applications/quickmessage/contact_list.aw:73
+msgid "Otsi kontakte"
+msgstr ""
+
+#: classes/applications/quickmessage/contact_list.aw:81
 msgid "Kustuta kontakte"
 msgstr ""
 
-#: classes/applications/quickmessage/contact_list.aw:86
+#: classes/applications/quickmessage/contact_list.aw:84
 msgid "Oled kindel, et tahad valitud eemaldada?"
 msgstr ""
 
-#: classes/applications/quickmessage/contact_list.aw:169
+#: classes/applications/quickmessage/contact_list.aw:163
+msgid "ID"
+msgstr ""
+
+#: classes/applications/quickmessage/contact_list.aw:167
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/quickmessage/contact_list.aw:173
+#: classes/applications/quickmessage/contact_list.aw:171
 msgid "E-post"
 msgstr ""
 
-#: classes/applications/quickmessage/contact_list.aw:222
+#: classes/applications/quickmessage/contact_list.aw:175
+msgid ""
+msgstr ""
+
+#: classes/applications/quickmessage/contact_list.aw:220
 msgid "Saada sõnum"
 msgstr ""
 

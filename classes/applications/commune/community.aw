@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/community.aw,v 1.6 2004/10/11 12:59:48 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/community.aw,v 1.7 2005/03/22 17:04:03 kristo Exp $
 // community.aw - Kogukond 
 /*
 
@@ -137,16 +137,16 @@ class community extends class_base
 			case "moderators_toolbar":
 				$var = array(
 					"members_toolbar" => array(
-						"blocked" => "Blokeeri", 
-						"moderator" => "Tee moderaatoriks",
+						"blocked" => t("Blokeeri"), 
+						"moderator" => t("Tee moderaatoriks"),
 					),
 					"blocked_toolbar" => array(
-						"member" => "Tee liikmeks", 
-						"moderator" => "Tee moderaatoriks",
+						"member" => t("Tee liikmeks"), 
+						"moderator" => t("Tee moderaatoriks"),
 					),
 					"moderators_toolbar" => array(
-						"member" => "Tee liikmeks", 
-						"blocked" => "Blokeeri",
+						"member" => t("Tee liikmeks"), 
+						"blocked" => t("Blokeeri"),
 					),
 				);
 				$tb = &$prop["vcl_inst"];
@@ -162,7 +162,7 @@ class community extends class_base
 				}
 				$tb->add_button(array(
 					"name" => "delete",
-					"tooltip" => "Eemalda ".$var[$prop["name"]],
+					"tooltip" => t("Eemalda ").$var[$prop["name"]],
 					"img" => "delete.gif",
 					"action" => "remove_con",
 				));
@@ -285,20 +285,20 @@ class community extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			"name" => "id",
-			"caption" => "ID",
+			"caption" => t("ID"),
 			"type" => "int",
 		));
 		$t->define_field(array(
 			"name" => "user",
-			"caption" => "Kasutaja",
+			"caption" => t("Kasutaja"),
 		));
 		$t->define_field(array(
 			"name" => "person",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 		));
 		$t->define_field(array(
 			"name" => "add_time",
-			"caption" => "Lisamisaeg",
+			"caption" => t("Lisamisaeg"),
 		));
 		$t->define_chooser(array(
 			"name" => "sel",
@@ -460,7 +460,7 @@ class community extends class_base
 	
 	function _add_con($arr, $opt)
 	{
-			$opts = array(
+		$opts = array(
 			"moderators" => array(4, 5),
 			"blocked" => array(3, 4),
 			"members" => array(3, 5),

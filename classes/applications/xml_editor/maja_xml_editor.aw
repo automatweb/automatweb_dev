@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.13 2005/03/20 17:38:11 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.14 2005/03/22 17:04:04 kristo Exp $
 // maja_xml_editor.aw - maja xml-i editor 
 /*
 
@@ -105,8 +105,6 @@ class maja_xml_editor extends class_base
 {
 	function maja_xml_editor()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
-		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
 			"tpldir" => "applications/xml_editor/maja_xml_editor",
 			"clid" => CL_MAJA_XML_EDITOR
@@ -375,11 +373,11 @@ class maja_xml_editor extends class_base
 
 		$t->define_field(array(
 			"name" => "first_column",
-			"caption" => "---",
+			"caption" => t("---"),
 		));
 		$t->define_field(array(
 			"name" => "empty",
-			"caption" => "Ei Salvestata",
+			"caption" => t("Ei Salvestata"),
 		));
 		foreach($table_fields as $key => $value)
 		{
@@ -712,13 +710,13 @@ class maja_xml_editor extends class_base
 
 			if(!$file_handle = fopen($arr['obj_inst']->prop("new_xml_file"), "w"))
 			{
-				die("Couldn't open the file (".$arr['obj_inst']->prop("new_xml_file").") to write");
+				die(sprintf(t("Couldn't open the file (%s) to write"), $arr['obj_inst']->prop("new_xml_file")));
 			}
 
 
 			if(fwrite($file_handle, $result) === FALSE)
 			{
-				die("Cannot write to this file: ".$arr['obj_inst']->prop("new_xml_file"));
+				die(sprintf(t("Cannot write to this file: %s"), $arr['obj_inst']->prop("new_xml_file")));
 			}
 
 			fclose($file_handle);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.7 2005/03/18 12:12:41 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.8 2005/03/22 17:04:02 kristo Exp $
 // staging.aw - Lavastus 
 /*
 
@@ -107,7 +107,7 @@ class staging extends class_base
 			"type" => "datetime_select",
 			"name" => $prefix . "[active]",
 			"value" => $o->prop("start1"),
-			"caption" => "Aktiivne objekt",
+			"caption" => t("Aktiivne objekt"),
 		);
 		*/
 		

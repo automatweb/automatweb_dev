@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.50 2005/03/21 12:00:12 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.51 2005/03/22 17:04:02 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -738,7 +738,7 @@ class planner extends class_base
 		$xtmp = $arr["t"]->groupinfo;
 		$tmp = array(
 			"type" => "text",
-			"caption" => "header",
+			"caption" => t("header"),
 			"subtitle" => 1,
 		);	
 		$captions = array();

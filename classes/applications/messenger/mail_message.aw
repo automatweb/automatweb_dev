@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.8 2005/03/18 12:19:32 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.9 2005/03/22 17:04:03 kristo Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -140,7 +140,7 @@ class mail_message extends class_base
 		
 		if (empty($msgdata))
 		{
-			print "couldn't retrieve message " . $arr["request"]["msgid"] . ", perhaps it has been deleted or moved?<bR>";
+			print sprintf(t("couldn't retrieve message %s, perhaps it has been deleted or moved?<bR>"), $arr["request"]["msgid"]);
 			die();
 		};
 
@@ -245,7 +245,7 @@ class mail_message extends class_base
 				"to" => $msgobj->prop("mto"),
 				"cc" => $msgobj->prop("cc"),
 				"bcc" => $msgobj->prop("bcc"),
-				"body" => "Kahjuks sinu meililugeja ei oska näidata HTML formaadis kirju",
+				"body" => t("Kahjuks sinu meililugeja ei oska näidata HTML formaadis kirju"),
 			));
 			$this->awm->htmlbodyattach(array(
 				"data" => $msgobj->prop("message"),
@@ -506,14 +506,14 @@ class mail_message extends class_base
 			"name" => "send",
 			"action" => "mail_send",
 			"img" => "mail_send.gif",
-			"tooltip" => "Saada",
+			"tooltip" => t("Saada"),
 		));
 
 		$tb->add_button(array(
 			"name" => "save",
 			"action" => "",
 			"img" => "save.gif",
-			"tooltip" => "Salvesta",
+			"tooltip" => t("Salvesta"),
 		));
 
 	}
@@ -536,21 +536,21 @@ class mail_message extends class_base
 		$tb->add_button(array(
 			"name" => "reply",
 			"action" => "mail_reply",
-			"tooltip" => "Vasta",
+			"tooltip" => t("Vasta"),
 			"img" => "mail_reply.gif",
 		));
 
 		$tb->add_button(array(
 			"name" => "reply3",
 			"action" => "mail_reply_all",
-			"tooltip" => "Vasta/kõigile",
+			"tooltip" => t("Vasta/kõigile"),
 			"img" => "mail_reply_all.gif",
 		));
 
 		$tb->add_button(array(
 			"name" => "forward",
 			"action" => "mail_forward",
-			"tooltip" => "Edasta",
+			"tooltip" => t("Edasta"),
 			"img" => "mail_fwd.gif",
 		));
 
@@ -558,8 +558,8 @@ class mail_message extends class_base
 		$tb->add_button(array(
 			"name" => "delete",
 			"action" => "mail_delete",
-			"confirm" => "Kustutada see kiri? (tagasi ei saa!)",
-			"tooltip" => "Kustuta",
+			"confirm" => t("Kustutada see kiri? (tagasi ei saa!)"),
+			"tooltip" => t("Kustuta"),
 			"img" => "delete.gif",
 		));
 		
@@ -577,7 +577,7 @@ class mail_message extends class_base
 			$tb->add_separator();
 			$tb->add_menu_button(array(
 				"name" => "calendar",
-				"tooltip" => "Lisa kalendrisse",
+				"tooltip" => t("Lisa kalendrisse"),
 				"img" => "icon_cal_today.gif",
 			));
 			$ev_classes = $pl->get_event_classes();
@@ -612,18 +612,18 @@ class mail_message extends class_base
 		$tb->add_menu_button(array(
 			"name" => "viewmode",
 			"img" => "preview.gif",
-			"tooltip" => "Päised",
+			"tooltip" => t("Päised"),
 		));
 
 		$tb->add_menu_item(array(
 			"parent" => "viewmode",
-			"text" => "Tavaline",
+			"text" => t("Tavaline"),
 			"url" => aw_url_change_var("viewmode",""),
 		));
 
 		$tb->add_menu_item(array(
 			"parent" => "viewmode",
-			"text" => "Kõik päised",
+			"text" => t("Kõik päised"),
 			"url" => aw_url_change_var("viewmode","headers"),
 		));
 	}
@@ -782,7 +782,7 @@ class mail_message extends class_base
 
 		if (!is_oid($user_cal))
 		{
-			die("err, ei leidnud kalendrit");
+			die(t("err, ei leidnud kalendrit"));
 		};
 
 		$user_cal = new object($user_cal);
@@ -799,7 +799,7 @@ class mail_message extends class_base
 		$o->set_prop("start1",time());
 		$o->save();
 
-		print "Toimetus lisatud<br>";
+		print t("Toimetus lisatud<br>");
 
 		$arr["id"] = $arr["msgid"];
 		
@@ -821,9 +821,9 @@ class mail_message extends class_base
                         "msgr_id" => $arr["msgrid"],
                 ));
 		$msgr->drv_inst->delete_msgs_from_folder(array($arr["msgid"]));
-		print "kustutatud!";
+		print t("kustutatud!");
 		print "<script>window.opener.location.reload();</script>";
-		print "<a href='javascript:window.close();'>sulge aken</a>";
+		print "<a href='javascript:window.close();'>".t("sulge aken")."</a>";
 		exit;
 	}
 	
@@ -875,8 +875,8 @@ class mail_message extends class_base
 		));
                 
 		
-		print "saadetud<p>";
-		print "<a href='javascript:window.close();'>sulge aken</a>";
+		print t("saadetud<p>");
+		print "<a href='javascript:window.close();'>".t("sulge aken")."</a>";
 		exit;
 
 	}
@@ -992,7 +992,7 @@ class mail_message extends class_base
 			"msgrid" => $arr["msgrid"],
 		));
 
-		$hdr = "----Forwarded message-----\n";
+		$hdr = t("----Forwarded message-----\n");
 		$hdr .= "> From: $msgdata[from]\n";
 		$hdr .= "> To: $msgdata[to]\n";
 		$hdr .= "> Subject: $msgdata[subject]\n";

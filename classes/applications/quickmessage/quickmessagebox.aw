@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/quickmessagebox.aw,v 1.6 2004/12/07 13:49:16 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/quickmessagebox.aw,v 1.7 2005/03/22 17:04:03 kristo Exp $
 // quickmessagebox.aw - Kiirsõnumite haldus 
 /*
 
@@ -77,7 +77,7 @@ class quickmessagebox extends class_base
 			/*
 			case "tabpanel":
 				$tp = &$prop["vcl_inst"];
-				$tp->add_tab(array("disabled" => true, "caption" => "Priit on jobu!"));
+				$tp->add_tab(array("disabled" => true, "caption" => t("Priit on jobu!")));
 			break;
 			*/
 			case "newmessage":
@@ -207,7 +207,7 @@ class quickmessagebox extends class_base
 		{
 			/*
 			case "user_to":
-				$prop["error"] = "sellist kasutajat ei ole olemas!";
+				$prop["error"] = t("sellist kasutajat ei ole olemas!");
 				$users = get_instance("users");
 				$t_id = $users->get_oid_for_uid($prop["value"]);
 				if(!$this->can("view", $t_id) || empty($t_id))
@@ -271,7 +271,7 @@ class quickmessagebox extends class_base
 			), $value);
 		}
 		$t->define_data(array(
-			"name" => "Kellelt",
+			"name" => t("Kellelt"),
 			"content" => html::get_change_url($arr["request"]["id"], array(
 				"mid" => $arr["request"]["mid"],
 				"group" => "newmessage",
@@ -331,7 +331,7 @@ class quickmessagebox extends class_base
 		$ft_page = $arr["request"]["ft_page"] ? $arr["request"]["ft_page"] : 0;
 		$messages = array_slice($messages, ($ft_page * $r_on_page), $r_on_page);
 		$fields = array(
-			"id" => "ID",
+			"id" => t("ID"),
 			"time" => t("Aeg"),
 			"user" => t("Kasutaja"),
 			"subject" => t("Pealkiri"),
@@ -411,7 +411,7 @@ class quickmessagebox extends class_base
 							"onClick" => "javascript:window.open(\"".$this->mk_my_orb("show_list", array(
 								"id" => $c_list->prop("to"),
 							), CL_CONTACT_LIST, false, true)."\",\"\",\" toolbar=no,directories=no,status=no,location=no,resizable=no,scrollbars=yes,menubar=no,height=300,width=500\");return false;",
-							"caption" => "Aadressiraamat",
+							"caption" => t("Aadressiraamat"),
 						)),
 					),
 				);

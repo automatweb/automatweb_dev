@@ -1,3 +1,7 @@
+#: classes/applications/calendar/staging.aw:110
+msgid "Aktiivne objekt"
+msgstr ""
+
 #: classes/applications/calendar/staging.aw:118
 msgid "Originaalobjekt"
 msgstr ""

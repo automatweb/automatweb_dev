@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/commune.aw,v 1.9 2004/11/07 11:47:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/commune.aw,v 1.10 2005/03/22 17:04:03 kristo Exp $
 // commune.aw - Kommuun
 /*
 
@@ -533,14 +533,14 @@ class commune extends class_base
 			"user_blob2",
 		);
 		$this->msg_vars = array(
-			"pcom" => array(false,false,"Minu piltidele lisatud kommentaarid"),
-			"pacpt" => array(false,false,"Pildi aktsepteerimine moderaatori poolt"),
-			"pacom" => array(false,false,"Minu profiilile lisatud kommentaarid"),
-			"nfriend" => array(false,false,"Uus sõber"),
-			"avgr" => array(false,false,"Keskmise hinde saatmine iga pildi kohta 1 kord päevas"),
-			"fpa" => array(false,false,"Minu foorumipostitustele vastamised"),
-			"nfm" => array(true,true,"mittesõpradelt laekunud teated"),
-			"fm" => array(true,true,"sõpradelt laekunud teated")
+			"pcom" => array(false,false,t("Minu piltidele lisatud kommentaarid")),
+			"pacpt" => array(false,false,t("Pildi aktsepteerimine moderaatori poolt")),
+			"pacom" => array(false,false,t("Minu profiilile lisatud kommentaarid")),
+			"nfriend" => array(false,false,t("Uus sõber")),
+			"avgr" => array(false,false,t("Keskmise hinde saatmine iga pildi kohta 1 kord päevas")),
+			"fpa" => array(false,false,t("Minu foorumipostitustele vastamised")),
+			"nfm" => array(true,true,t("mittesõpradelt laekunud teated")),
+			"fm" => array(true,true,t("sõpradelt laekunud teated"))
 		);
 	}
 	
@@ -678,7 +678,7 @@ class commune extends class_base
 		switch($prop["name"])
 		{
 			case "fake10":
-				$prop["value"] = "siia tuleb horoskoop";
+				$prop["value"] = t("siia tuleb horoskoop");
 				break;
 				
 			case "my_forum_topics":
@@ -766,16 +766,16 @@ class commune extends class_base
 				$tb = &$prop["vcl_inst"];
 				$tb->add_button(array(
 					"name"		=> "hide",
-					"tooltip"	=> "Muuda valitud kommentaaride staatust",
+					"tooltip"	=> t("Muuda valitud kommentaaride staatust"),
 					"img"		=> "import.gif",
 					"action"	=> "hide_prof_com",
 				));
 				$tb->add_button(array(
             		"name" => "delete",
-            		"tooltip" => "Kustuta valitud kommentaarid",
+            		"tooltip" => t("Kustuta valitud kommentaarid"),
             		"img" => "delete.gif",
             		"action" => "delete_prof_com",
-					"confirm" => "soovid tõesti valitud kommentaarid kustutada?",
+					"confirm" => t("soovid tõesti valitud kommentaarid kustutada?"),
         		));
 				break;
 				
@@ -795,7 +795,7 @@ class commune extends class_base
 				}
 				else
 				{
-					$groupname = "üldine";
+					$groupname = t("üldine");
 				}
 				$prop["value"] = $groupname;
 				break;
@@ -808,14 +808,14 @@ class commune extends class_base
 				$tb = &$prop["vcl_inst"];
 				$tb->add_button(array(
             		"name" => "delete",
-            		"tooltip" => "Kustuta kontakte",
+            		"tooltip" => t("Kustuta kontakte"),
             		"img" => "delete.gif",
             		"action" => "delete_contact",
-					"confirm" => "Oled kindel, et tahad valitud eemaldada?",
+					"confirm" => t("Oled kindel, et tahad valitud eemaldada?"),
         		));
 				$tb->add_button(array(
             		"name" => "search",
-            		"tooltip" => "Otsi kontaktidesse",
+            		"tooltip" => t("Otsi kontaktidesse"),
             		"img" => "search.gif",
             		"url" => $this->mk_comm_orb(array(
 							"group" => "search_n_add",
@@ -855,10 +855,10 @@ class commune extends class_base
 				$tb = &$prop["vcl_inst"];
 				$tb->add_button(array(
             		"name" => "delete",
-            		"tooltip" => "Eemalda valitud ".$vars[$prop["name"]][0]."listist",
+            		"tooltip" => sprintf(t("Eemalda valitud %slistist"), $vars[$prop["name"]][0]),
             		"img" => "delete.gif",
             		"action" => $vars[$prop["name"]][1],
-					"confirm" => "Soovid tõesti valitud ".$vars[$prop["name"]][0]."listist eemaldada?",
+					"confirm" => sprintf(t("Soovid tõesti valitud %s listist eemaldada?"), $vars[$prop["name"]][0]),
 					/*
 					"url" => $this->mk_comm_orb(array(
 						"action" => "delete_obj", 
@@ -868,7 +868,7 @@ class commune extends class_base
         		));
 				$tb->add_button(array(
             		"name" => "search",
-            		"tooltip" => "Otsi ".$vars[$prop["name"]][2],
+            		"tooltip" => t("Otsi ").$vars[$prop["name"]][2],
             		"img" => "search.gif",
             		"url" => $this->mk_comm_orb(array(
 							"group" => "profile_search",
@@ -939,7 +939,7 @@ class commune extends class_base
 				
 				$tb->add_button(array(
 					"name"		=> "add",
-					"tooltip"	=> "Uus profiil",
+					"tooltip"	=> t("Uus profiil"),
 					"img"		=> "new.gif",
 					/*
 					"url"		=> $this->mk_my_orb("new", array(
@@ -951,16 +951,16 @@ class commune extends class_base
 				));
 				$tb->add_button(array(
 					"name"		=> "save",
-					"tooltip"	=> "Salvesta muutused",
+					"tooltip"	=> t("Salvesta muutused"),
 					"img"		=> "save.gif",
 					"action"	=> "",
 				));
 				$tb->add_button(array(
             		"name" => "delete",
-            		"tooltip" => "Kustuta valitud profiilid",
+            		"tooltip" => t("Kustuta valitud profiilid"),
             		"img" => "delete.gif",
             		"action" => "delete_profile",
-					"confirm" => "Oled kindel, et soovid valitud profiilid kustutada?",
+					"confirm" => t("Oled kindel, et soovid valitud profiilid kustutada?"),
         		));
 				
 				break;
@@ -973,10 +973,10 @@ class commune extends class_base
 				$tb = &$prop["vcl_inst"];
 				$tb->add_button(array(
             		"name" => "delete",
-            		"tooltip" => "Kustuta valitud kommentaarid",
+            		"tooltip" => t("Kustuta valitud kommentaarid"),
             		"img" => "delete.gif",
             		"action" => "delete_comments",
-					"confirm" => "Oled kindel, et soovid valitud kommentaarid kustutada?",
+					"confirm" => t("Oled kindel, et soovid valitud kommentaarid kustutada?"),
         		));
 				$person = $this->get_person();
 				$person->set_meta("img_id",$arr["request"]["img_id"]);
@@ -996,13 +996,13 @@ class commune extends class_base
 				$tb = &$prop["vcl_inst"];
 				$tb->add_button(array(
 					"name" => "new_profile",
-					"tooltip" => "Lisa uus profiil",
+					"tooltip" => t("Lisa uus profiil"),
 					"img" => "new.gif",
 					"action" => "new_profile",
 				));
 
 				$tb->add_separator();
-				$tb->add_cdata("<small>Vali profiil:</small>");
+				$tb->add_cdata(t("<small>Vali profiil:</small>"));
 				$connected_profiles = $this->get_connections_to_profiles();
 				$active_profile = $this->get_active_profile();
 				$selected_profile = $this->common["my_profile"] ? $this->common["my_profile"]->id() : $active_profile->id();
@@ -1024,17 +1024,17 @@ class commune extends class_base
 				{
 					$tb->add_button(array(
 						"name" => "save_changes",
-						"tooltip" => "Salvesta muutused oma profiilis",
+						"tooltip" => t("Salvesta muutused oma profiilis"),
 						"img" => "save.gif",
 						"action" => "",
 					));
 				}
 				$tb->add_button(array(
 					"name" => "delete_profile",
-					"tooltip" => "Kustuta käesolev profiil",
+					"tooltip" => t("Kustuta käesolev profiil"),
 					"img" => "delete.gif",
 					"action" => "",
-					"confirm" => "Olete Te kindel, et soovite kustutada käesolevat profiili?",
+					"confirm" => t("Olete Te kindel, et soovite kustutada käesolevat profiili?"),
 				));
 				break;
 				
@@ -1062,10 +1062,10 @@ class commune extends class_base
 				$tb = &$prop["vcl_inst"];
 				$tb->add_button(array(
 					"name"		=> "hide",
-					"tooltip"	=> "Eemalda ennast valitud kogukondades",
+					"tooltip"	=> t("Eemalda ennast valitud kogukondades"),
 					"img"		=> "delete.gif",
 					"action"	=> "remove_from_community",
-					"confirm"	=> "oled ikka kindel?",
+					"confirm"	=> t("oled ikka kindel?"),
 				));
 				break;
 				
@@ -1175,7 +1175,7 @@ class commune extends class_base
 		/*
 		$tree->start_tree(array(
 			"type" => TREE_DHTML,
-			"root_name" => "Kategooriad",
+			"root_name" => t("Kategooriad"),
 			"root_url" => "",
 		));
 		*/
@@ -1198,7 +1198,7 @@ class commune extends class_base
 			}
 		}
 		$tree->add_item(0, array(
-			"name" => "Ühtegi kategooriat pole veel defineeritud",
+			"name" => t("Ühtegi kategooriat pole veel defineeritud"),
 			"id" => 1,
 		));
 	}
@@ -1233,24 +1233,24 @@ class commune extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			"name" => "id",
-			"caption" => "ID",
+			"caption" => t("ID"),
 		));
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 		));
 		$t->define_field(array(
 			"name" => "category",
-			"caption" => "Kategooriad",
+			"caption" => t("Kategooriad"),
 		));
 		$t->define_field(array(
 			"name" => "members",
-			"caption" => "Liikmeid",
+			"caption" => t("Liikmeid"),
 			"type" => "int",
 		));
 		$t->define_field(array(
 			"name" => "status",
-			"caption" => "Sinu staatus",
+			"caption" => t("Sinu staatus"),
 		));
 		$t->define_chooser(array(
 			"name" => "sel",
@@ -1347,7 +1347,7 @@ class commune extends class_base
 		}
 		$htmlc->add_property(array(
 			"name" => "search",
-			"caption" => "Otsi",
+			"caption" => t("Otsi"),
 			"type" => "submit",
 			"store" => "no"
 		));
@@ -1374,28 +1374,28 @@ class commune extends class_base
 		{
 			$t->rowdefs[] = array(
 				"name" => "flist",
-				"caption" => "",
+				"caption" => t(""),
 			);
 		}
 		elseif($s_group == "ignored")
 		{
 			$t->rowdefs[] = array(
 				"name" => "ilist",
-				"caption" => "",
+				"caption" => t(""),
 			);
 		}
 		elseif($s_group == "blocked")
 		{
 			$t->rowdefs[] = array(
 				"name" => "blist",
-				"caption" => "",
+				"caption" => t(""),
 			);
 		}
 		elseif($arr["request"]["group"] == "search_n_add")
 		{
 			$t->rowdefs[] = array(
 				"name" => "clist",
-				"caption" => "",
+				"caption" => t(""),
 			);
 		}
 		foreach($t->data as $id => $data)
@@ -1404,7 +1404,7 @@ class commune extends class_base
 			$obj = obj($data["oid"]);
 			$creator = $obj->createdby();
 			$t->data[$id]["flist"] = html::href(array(
-				"caption" => "lisa sõbraks",
+				"caption" => t("lisa sõbraks"),
 				"url" => $this->mk_comm_orb(array(
 					"commact" => "add_friend", 
 					"group" => "friend_list", 
@@ -1412,7 +1412,7 @@ class commune extends class_base
 				), 0, "commaction"),
 			));
 			$t->data[$id]["clist"] = html::href(array(
-				"caption" => "lisa kontaktidesse",
+				"caption" => t("lisa kontaktidesse"),
 				"url" => $this->mk_comm_orb(array(
 					"commact" => "add_contact", 
 					"group" => "address_book", 
@@ -1420,7 +1420,7 @@ class commune extends class_base
 				), 0, "commaction"),
 			));
 			$t->data[$id]["blist"] = html::href(array(
-				"caption" => "blokeeri",
+				"caption" => t("blokeeri"),
 				"url" => $this->mk_comm_orb(array(
 					"commact" => "add_blocked",
 					"group" => "blocked_list",
@@ -1428,7 +1428,7 @@ class commune extends class_base
 				), 0, "commaction"),
 			));
 			$t->data[$id]["ilist"] = html::href(array(
-				"caption" => "ignoreeri",
+				"caption" => t("ignoreeri"),
 				"url" => $this->mk_comm_orb(array(
 					"commact" => "add_ignored",
 					"group" => "ignored_list",
@@ -1467,20 +1467,20 @@ class commune extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Teema",
+			"caption" => t("Teema"),
 		));
 		$t->define_field(array(
 			"name" => "posts",
-			"caption" => "Postitusi",
+			"caption" => t("Postitusi"),
 			"type" => "int",
 		));
 		$t->define_field(array(
 			"name" => "date",
-			"caption" => "Loomisaeg",
+			"caption" => t("Loomisaeg"),
 		));
 		$t->define_field(array(
 			"name" => "lastpost",
-			"caption" => "Viimane postitus",
+			"caption" => t("Viimane postitus"),
 		));
 		
 		$frm = reset($arr["obj_inst"]->connections_from(array(
@@ -1578,16 +1578,16 @@ class commune extends class_base
 		$user = $this->get_user();
 		$view = $user->meta("forum_view");
 		$opts = array(10, 30, 60, 100, 200, 365);
-		$ropts = array(0 => "näita kõiki");
+		$ropts = array(0 => t("näita kõiki"));
 		foreach($opts as $opt)
 		{
-			$ropts[$opt] = $opt." päeva";
+			$ropts[$opt] = $opt.t(" päeva");
 		}
 		$rval = array(
 			"days" => array(
 				"name" => "days",
 				"type" => "select",
-				"caption" => "Ära näita vanemaid teemasid, kui",
+				"caption" => t("Ära näita vanemaid teemasid, kui"),
 				"options" => $ropts,
 				"selected" => $view,
 			),
@@ -1604,20 +1604,20 @@ class commune extends class_base
 		/*
 		$t->define_field(array(
 			"name" => "id",
-			"caption" => "ID",
+			"caption" => t("ID"),
 		));
 		*/
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 		));
 		$t->define_field(array(
 			"name" => "email",
-			"caption" => "E-post",
+			"caption" => t("E-post"),
 		));
 		$t->define_field(array(
 			"name" => "sendmessage",
-			"caption" => "",
+			"caption" => (""),
 		));
 		/*
 		$t->define_chooser(array(
@@ -1652,7 +1652,7 @@ class commune extends class_base
 							"cuser" => $creator->name(),
 							"group" => "newmessage",
 						)),
-						"caption" => "Saada sõnum",
+						"caption" => t("Saada sõnum"),
 					)),
 				));
 			}
@@ -1685,7 +1685,7 @@ class commune extends class_base
 							"cuser" => $creator->name(),
 							"group" => "newmessage",
 						)),
-						"caption" => "Saada sõnum",
+						"caption" => t("Saada sõnum"),
 					)),
 				));
 			}
@@ -1713,11 +1713,11 @@ class commune extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Grupp",
+			"caption" => t("Grupp"),
 		));
 		$t->define_field(array(
 			"name" => "count",
-			"caption" => "Sõpru grupis",
+			"caption" => t("Sõpru grupis"),
 			"type" => "int",
 		));
 		foreach($groups as $gr)
@@ -1740,7 +1740,7 @@ class commune extends class_base
 		}
 		$t->define_data(array(
 			"name" => html::href(array(
-				"caption" => "üldine",
+				"caption" => t("üldine"),
 				"url" => html::get_change_url($arr["obj_inst"]->id(), array(
 						"f_group" =>$group->id(),
 						"group" => "general",
@@ -1780,26 +1780,26 @@ class commune extends class_base
 		$t = &$prop["vcl_inst"];
 		$t->define_field(array(
 			"name" => "id",
-			"caption" => "ID",
+			"caption" => t("ID"),
 			"sortable" => "1",
 		));
 		$t->define_field(array(
 			"name" => "uname",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"sortable" => "1",
 		));
 		$t->define_field(array(
 			"name" => "ctime",
-			"caption" => "Aeg",
+			"caption" => t("Aeg"),
 			"sortable" => "1",
 		));
 		$t->define_field(array(
 			"name" => "comment",
-			"caption" => "Kommentaar",
+			"caption" => t("Kommentaar"),
 		));
 		$t->define_field(array(
 			"name" => "status",
-			"caption" => "Staatus",
+			"caption" => t("Staatus"),
 		));
 		$t->define_chooser(array(
 			"name" => "sel",
@@ -1832,7 +1832,7 @@ class commune extends class_base
 				)),
 				"ctime" =>$this->time2date($comment->created(), 2),
 				"comment" => $comment->prop("commtext"),
-				"status" => $comment->status() == STAT_ACTIVE ? "nähtav" : "peidetud",
+				"status" => $comment->status() == STAT_ACTIVE ? t("nähtav") : t("peidetud"),
 			));
 		}
 	}
@@ -1853,12 +1853,12 @@ class commune extends class_base
 		$t = &$prop["vcl_inst"];
 		$t->define_field(array(
 			"name" => "id",
-			"caption" => "ID",
+			"caption" => t("ID"),
 			"sortable" => "1",
 		));
 		$t->define_field(array(
 			"name" => "uname",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"sortable" => "1",
 		));
 		$t->define_chooser(array(
@@ -1920,19 +1920,19 @@ class commune extends class_base
 		$gnames = array("switch_profile","l_switch_profile","c_switch_profile", "f_switch_profile");
 		$groupinfo = array(
 			$gnames[0] => array(
-				"caption" => "Pilte",
+				"caption" => t("Pilte"),
 				"group" => "my_images",
 				),
 			$gnames[1] => array(
-				"caption" => "Sõpru",
+				"caption" => t("Sõpru"),
 				"group" => "friend_list",
 			),
 			$gnames[2] => array(
-				"caption" => "Kommentaare",
+				"caption" => t("Kommentaare"),
 				"group" => "prof_comments",
 			),
 			$gnames[3] => array(
-				"caption" => "Sõpru",
+				"caption" => t("Sõpru"),
 				"group" => "prof_friends",
 			),
 		);
@@ -1941,7 +1941,7 @@ class commune extends class_base
 		$t = &$prop["vcl_inst"];
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"sortable" => "1",
 		));
 		$t->define_field(array(
@@ -1954,13 +1954,13 @@ class commune extends class_base
 		{
 		$t->define_field(array(
 			"name" => "ignored",
-			"caption" => "Ignoreerituid",
+			"caption" => t("Ignoreerituid"),
 			"sortable" => "1",
 			"type" => "int",
 		));
 		$t->define_field(array(
 			"name" => "blocked",
-			"caption" => "Blokeerituid",
+			"caption" => t("Blokeerituid"),
 			"sortable" => "1",
 			"type" => "int",
 		));
@@ -2086,7 +2086,7 @@ class commune extends class_base
 			}
 			$this->vars(array(
 				"link" => html::get_change_url($obj->id(), array("group" => "prof_friends")),
-				"title" => "Minu sõbrad",
+				"title" => t("Minu sõbrad"),
 				"content" => implode(" ", $cont),
 			));
 			$this->parse("item");
@@ -2104,7 +2104,7 @@ class commune extends class_base
 				$cont[] = html::get_change_url($com->id(), array("group" => "content"), $com->name());
 			}
 			$this->vars(array(
-				"title" => "Minu kogukonnad",
+				"title" => t("Minu kogukonnad"),
 				"link" => html::get_change_url($obj->id(), array("group" => "my_communities")),
 				"content" => implode("<br />\n", $cont),
 			));
@@ -2173,22 +2173,22 @@ class commune extends class_base
 		$t = &$prop["vcl_inst"];
 		$t->define_field(array(
 			"name" => "id",
-			"caption" => "ID",
+			"caption" => t("ID"),
 			"sortable" => "1",
 		));
 		$t->define_field(array(
 			"name" => "uname",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"sortable" => "1",
 		));
 		$t->define_field(array(
 			"name" => "ctime",
-			"caption" => "Aeg",
+			"caption" => t("Aeg"),
 			"sortable" => "1",
 		));
 		$t->define_field(array(
 			"name" => "comment",
-			"caption" => "Kommentaar",
+			"caption" => t("Kommentaar"),
 		));
 		$t->define_chooser(array(
 			"name" => "sel",
@@ -2239,23 +2239,23 @@ class commune extends class_base
 		$t = &$prop["vcl_inst"];
 		$t->define_field(array(
 			"name" => "id",
-			"caption" => "ID",
+			"caption" => t("ID"),
 			"sortable" => "1",
 		));
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"sortable" => "1",
 		));
 		
 		$t->define_field(array(
 			"name" => "pics",
-			"caption" => "Pildid",
+			"caption" => t("Pildid"),
 		));
 		
 		$t->define_field(array(
 			"name" => "active_prof",
-			"caption" => "Vaikeprofiil",
+			"caption" => t("Vaikeprofiil"),
 		));
 		$t->define_chooser(array(
 			"name" => "sel",
@@ -2287,7 +2287,7 @@ class commune extends class_base
 									"group" => "my_images",
 									"my_profile" => $item->id(),
 								)),
-								"caption" => "pildid (".count($images).")",
+								"caption" => t("pildid (").count($images).")",
 						)),
 					"active_prof" => html::radiobutton(array(
 						"name" => "active_profile",
@@ -2526,7 +2526,7 @@ class commune extends class_base
 		
 		$str .= html::href(array(
 			"url" => $this->mk_my_orb("right_frame", $params, "admin_menus"),
-			"caption" => "[at]",
+			"caption" => t("[at]"),
 		));
 		return $str;
 	}
@@ -2545,17 +2545,17 @@ class commune extends class_base
 		$t = &$prop["vcl_inst"];
 		$t->define_field(array(
 			"name" => "email",
-			"caption" => "e-mailile",
+			"caption" => t("e-mailile"),
 			"sorted" => 0,
 		));
 		$t->define_field(array(
 			"name" => "inbox",
-			"caption" => "postkasti",
+			"caption" => t("postkasti"),
 			"sorted" => 0,
 		));
 		$t->define_field(array(
 			"name" => "type",
-			"caption" => "",
+			"caption" => (""),
 			"sorted" => 0,
 		));
 		if(!$person_ms = $person->meta("message_conditions"))
@@ -2648,9 +2648,9 @@ class commune extends class_base
 			"obj_inst" => $profile_o,
 		));
 		$options = array(
-			"0" => "Mõlemad",
-			"1" => "Mees",
-			"2" => "Naine",
+			"0" => t("Mõlemad"),
+			"1" => t("Mees"),
+			"2" => t("Naine"),
 		);
 		foreach($options as $key => $value)
 		{
@@ -2676,17 +2676,17 @@ class commune extends class_base
 		$t = &$prop["vcl_inst"];
 		$t->define_field(array(
 			"name" => "setting",
-			"caption" => "Seade",
+			"caption" => t("Seade"),
 		));
 		$t->define_field(array(
 			"name" => "settings",
 		));
 		$t->define_data(array(
-			"setting" => "Sugu",
+			"setting" => t("Sugu"),
 			"settings" => $opts
 		));
 		$t->define_data(array(
-			"setting" => "Vanus",
+			"setting" => t("Vanus"),
 			"settings" => html::select(array(
 				"name" => "bc[age_s]",
 				"options" => $aoptions,
@@ -2698,7 +2698,7 @@ class commune extends class_base
 			)),
 		));
 		$t->define_data(array(
-			"setting" => "Seksuaalne orientatsioon",
+			"setting" => t("Seksuaalne orientatsioon"),
 			"settings" => $sopt,
 		));
 	}
@@ -2718,12 +2718,12 @@ class commune extends class_base
 			$t = &$prop["vcl_inst"];
 			$t->define_field(array(
 				"name" => "group",
-				"caption" => "Grupp",
+				"caption" => t("Grupp"),
 				"sorted" => 0,
 			));
 			$t->define_field(array(
 				"name" => "p_show_settings",
-				"caption" => "Profiili kuvamise seaded",
+				"caption" => t("Profiili kuvamise seaded"),
 				"sorted" => 0,
 			));
 			$options = array("default" => "aktiivne profiil");
@@ -2736,7 +2736,7 @@ class commune extends class_base
 				$options[$prof_o->id()] = $prof_o->name();
 				//echo $prof_o->name();
 			}
-			$options[0] = "ei näita antud grupile";
+			$options[0] = t("ei näita antud grupile");
 			$groups = $this->common["obj_inst"]->connections_from(array(
 				"type" => "RELTYPE_USER_GROUPS",
 			));
@@ -2805,7 +2805,7 @@ class commune extends class_base
 			}
 			else
 			{
-				$name = "(isikut pole)";
+				$name = t("(isikut pole)");
 			}
 
 			// props --------------------------------------------
@@ -2824,9 +2824,9 @@ class commune extends class_base
 				"img_url" => $img_url,
 				"img_link" => $prof_view_url,
 				"name_link" => $name_link,
-				"prop1" => $person->prop("gender") == 2 ? "Naine" : "Mees",
-				"prop2" => "lisatud: ".$created,
-				"prop3" => "hinne: ".$rating,
+				"prop1" => $person->prop("gender") == 2 ? t("Naine") : t("Mees"),
+				"prop2" => t("lisatud: ").$created,
+				"prop3" => t("hinne: ").$rating,
 				"prop4" => $this->render_online($prof_i->is_online(array("obj_inst" => $profile))),
 			);
 			
@@ -2971,7 +2971,7 @@ class commune extends class_base
 			}
 			else
 			{
-				$name = "(isikut pole)";
+				$name = t("(isikut pole)");
 			}
 
 			// props --------------------------------------------
@@ -2988,8 +2988,8 @@ class commune extends class_base
 				"img_url" => $img_url,
 				"img_link" => $prof_view_url,
 				"name_link" => $name_link,
-				"prop1" => "vanus: ".$friend_i->get_age(array("obj_inst" => $friend_profile)),
-				"prop2" => "sõpru: ".$friends_count,
+				"prop1" => t("vanus: ").$friend_i->get_age(array("obj_inst" => $friend_profile)),
+				"prop2" => t("sõpru: ").$friends_count,
 				"prop3" => $this->render_online($friend_i->is_online(array("obj_inst" => $friend_profile))),
 				"prop4" => $this->render_karma(0),
 			);
@@ -3022,7 +3022,7 @@ class commune extends class_base
 			$rv["midavittu"] = array(
 				"name" => "profile",
 				"type" => "text",
-				"caption" => "sae pekki",
+				"caption" => t("sae pekki"),
 				//"display" => "none",
 				"value" => $arr["request"]["profile"],
 			);
@@ -3061,7 +3061,7 @@ class commune extends class_base
 		$ims = array_values($images);
 		$rt = get_instance(CL_RATE);
 		$ti = get_instance(CL_IMAGE);
-		$options = array("-- vali pilt --");
+		$options = array(t("-- vali pilt --"));
 		$prof_to_person = $person->connections_from(array(
 			"type" => "RELTYPE_PROFILE",
 		));
@@ -3090,7 +3090,7 @@ class commune extends class_base
 			$rv["s".$i] = array(
 				"type" => "text",
 				"name" => "s".$i,
-				"caption" => "Pilt $i",
+				"caption" => sprintf(t("Pilt %s"), $i),
 				"subtitle" => 1,
 			);
 			$key = $i;
@@ -3105,7 +3105,7 @@ class commune extends class_base
 				$rv["st".$i] = array(
 					"type" => "text",
 					"name" => "st".$i,
-					"caption" => "Pilt",
+					"caption" => t("Pilt"),
 					"value" => html::img(array(
 						"url" => $imgdata["big_url"],
 					)),
@@ -3115,26 +3115,26 @@ class commune extends class_base
 				$rv[$nm."_name".$i]= array(
 					"name" => $nm."[$key][name]",
 					"type" => "text",
-					"caption" => "Pildi nimi",
+					"caption" => t("Pildi nimi"),
 					"value" => (strlen($comment)<=15?$comment:substr($comment,0,15)."..."),
 					
 				);
 				$rv[$nm."_comment".$i] = array(
 					"name" => $nm."[$key][comment]",
 					"type" => "textarea",
-					"caption" => "Pildi kommentaar",
+					"caption" => t("Pildi kommentaar"),
 					"value" => $comment,
 				);
 				$rv[$nm."_file".$i] = array(
 					"name" => $nm."[$key][file]",
 					"type" => "fileupload",
-					"caption" => "Vali uus",
+					"caption" => t("Vali uus"),
 				);
 				
 				$rv[$nm."_con".$i]= array(
 					"name" => "replace[".$key."]",
 					"type" => "select",
-					"caption" => "Vali olemasolev",
+					"caption" => t("Vali olemasolev"),
 					"options" => $options,
 				);
 				
@@ -3142,7 +3142,7 @@ class commune extends class_base
 				$rv["rating".$i] = array(
 					"type" => "text",
 					"name" => "rating".$i,
-					"caption" => "Hinne",
+					"caption" => t("Hinne"),
 					"value" => $rt->get_rating_for_object($img_oid),
 				);
 				
@@ -3153,13 +3153,13 @@ class commune extends class_base
 				$rv["hits".$i] = array(
 					"type" => "text",
 					"name" => "hits".$i,
-					"caption" => "Vaatamisi",
+					"caption" => t("Vaatamisi"),
 					"value" => $hits,
 				);
 				$rv["d".$i] = array(
 					"name" => "delete[".$key."]",
 					"type" => "checkbox",
-					"caption" => "Kustuta",
+					"caption" => t("Kustuta"),
 				);
 				$clist = new object_list(array(
 					"parent" => $img_oid,
@@ -3175,7 +3175,7 @@ class commune extends class_base
 							"group" => "show_image_comments",
 							"img_id" => $target->id(),
 						)),
-						"caption" => "Kommentaarid (".count($clist_arr).")",
+						"caption" => sprintf(t("Kommentaarid (%s)"), count($clist_arr)),
 					)),
 				);
 			}
@@ -3185,18 +3185,18 @@ class commune extends class_base
 				$rv[$nm."_file".$i] = array(
 					"name" => $nm."[$i][file]",
 					"type" => "fileupload",
-					"caption" => "Vali uus",
+					"caption" => t("Vali uus"),
 				);
 				$rv[$nm."_con".$i]= array(
 					"name" => "nlink[$i]",
 					"type" => "select",
-					"caption" => "Vali olemasolev",
+					"caption" => t("Vali olemasolev"),
 					"options" => $options,
 				);
 				$rv[$nm."_comment".$i] = array(
 					"name" => $nm."[$i][comment]",
 					"type" => "textarea",
-					"caption" => "Pildi kommentaar",
+					"caption" => t("Pildi kommentaar"),
 				);
 			};
 		};
@@ -3330,9 +3330,9 @@ class commune extends class_base
 				"img_link" => $prof_view_url,
 				"name_link" => $name_link,
 				"prop1" => $person->prop("gender") == 2 ? "Naine" : "Mees",
-				"prop2" => "hinne: ".$rating,
+				"prop2" => t("hinne: ").$rating,
 				"prop3" => $this->render_online($prof_i->is_online(array("obj_inst" => $profile))),
-				"prop4" => "lisatud: ".$created, 
+				"prop4" => t("lisatud: ").$created, 
 			);
 			
 		}	
@@ -3394,7 +3394,7 @@ class commune extends class_base
 		$retval["rateform"] = array(
 			"type" => "form",
 			"name" => "rateform",
-			"caption" => "Pildi hindamine",
+			"caption" => t("Pildi hindamine"),
 			"sclass" => "applications/commune/image_rate",
 			"sform" => "rate",
 		);
@@ -3775,7 +3775,7 @@ class commune extends class_base
 			"group" => "profile_change",
 			"type" => "toolbar",
 			"no_caption" => 1,
-			"caption" => "ToolBar",
+			"caption" => t("ToolBar"),
 		);
 		//arr($ret_props_profile);
 		$rv = $ret_toolbar + $ret_props_person + $ret_props_profile;
@@ -3797,14 +3797,14 @@ class commune extends class_base
 			$name = $target->name();
 			$id = $target->id();
 			$rv["title_" . $id] = array(
-				"caption" => "Objekt",
+				"caption" => t("Objekt"),
 				"type" => "text",
 				"name" => "title_" . $id,
 				"value" => $name,
 			);
 
 			$rv["location_" . $id] = array(
-				"caption" => "Asukoht",
+				"caption" => t("Asukoht"),
 				"type" => "chooser",
 				"name" => "location[" . $id . "]",
 				"options" => array("top" => "üleval","left" => "vasakul","right" => "paremal","bottom" => "all"),
@@ -3854,10 +3854,10 @@ class commune extends class_base
 			"name" => "friend_groups", 
 			"clid" => CL_PROFILE,
 		));
-		$sopts = array(-1 => "-- vali --", 0 => "üldine");
+		$sopts = array(-1 => t("-- vali --"), 0 => t("üldine"));
 		$sopts = $sopts + $opts;
 		$rval["friendgroups"] = array(
-			"caption" => "Pane sõbragruppi",
+			"caption" => t("Pane sõbragruppi"),
 			"type" => "text",
 			"name" => "friendgroups",
 			"value" => html::select(array(
@@ -3884,7 +3884,7 @@ class commune extends class_base
 				"name" => "removefriend",
 				"value" => html::href(array(
 					"url" => $this->mk_comm_orb($params, 0, "remove_friend"),
-					"caption" => "Eemalda sõprade hulgast",
+					"caption" => t("Eemalda sõprade hulgast"),
 				)),
 			);
 		}
@@ -3898,7 +3898,7 @@ class commune extends class_base
 				"name" => "addfriend",
 				"value" => html::href(array(
 					"url" => $this->mk_comm_orb($afparams, 0, "commaction"),
-					"caption" => "lisa sõprade hulka",
+					"caption" => t("lisa sõprade hulka"),
 				)),
 			);
 			$user = $this->get_user_for_profile($profile);
@@ -3914,7 +3914,7 @@ class commune extends class_base
 					"name" => "removeignored",
 					"value" => html::href(array(
 						"url" => $this->mk_comm_orb($riparams, 0, "remove_ignored"),
-						"caption" => "Eemalda ignoreeritute hulgast",
+						"caption" => t("Eemalda ignoreeritute hulgast"),
 					)),
 				);
 			}
@@ -3928,7 +3928,7 @@ class commune extends class_base
 					"name" => "addignored",
 					"value" => html::href(array(
 						"url" => $this->mk_comm_orb($aiparams, 0, "commaction"),
-						"caption" => "lisa ignoreeritute hulka",
+						"caption" => t("lisa ignoreeritute hulka"),
 					)),
 				);
 			}
@@ -3943,7 +3943,7 @@ class commune extends class_base
 					"name" => "removeblocked",
 					"value" => html::href(array(
 						"url" => $this->mk_comm_orb($params, 0, "remove_blocked"),
-						"caption" => "Eemalda blokeeritute hulgast",
+						"caption" => t("Eemalda blokeeritute hulgast"),
 					)),
 				);
 			}
@@ -3956,7 +3956,7 @@ class commune extends class_base
 					"name" => "addblocked",
 					"value" => html::href(array(
 						"url" => $this->mk_comm_orb($params, 0, "commaction"),
-						"caption" => "lisa blokeeritute hulka",
+						"caption" => t("lisa blokeeritute hulka"),
 					)),
 				);
 			}
@@ -3970,7 +3970,7 @@ class commune extends class_base
 			"use_parent" => $profile->id(),
 		);
 		$rval["submit"] = array(
-			"caption" => "Kommenteeri!",
+			"caption" => t("Kommenteeri!"),
 			"type" => "submit",
 			"name" => "kommenteeri",
 		);
@@ -4455,7 +4455,7 @@ class commune extends class_base
 				$pps["join_butt"] = array(
 					"name" => "join_butt",
 					"type" => "submit",
-					"caption" => "Liitu!"
+					"caption" => t("Liitu!")
 				);
 			}
 			else
@@ -4463,7 +4463,7 @@ class commune extends class_base
 				$pps["upd_butt"] = array(
 					"name" => "upd_butt",
 					"type" => "submit",
-					"caption" => "Uuenda andmed!"
+					"caption" => t("Uuenda andmed!")
 				);
 			}
 			return $pps;
@@ -4477,13 +4477,13 @@ class commune extends class_base
 			"inbox_toolbar" => array(
 				"name" => "inbox_toolbar",
 				"type" => "toolbar",
-				"caption" => "Inboxi toolbar",
+				"caption" => t("Inboxi toolbar"),
 				"no_caption" => 1,
 			),
 			"inbox" => array(
 				"name" => "inbox",
 				"type" => "table",
-				"caption" => "Sissetulnud kirjad",
+				"caption" => t("Sissetulnud kirjad"),
 				"no_caption" => 1,
 			),
 		);
@@ -4496,13 +4496,13 @@ class commune extends class_base
 			"outbox_toolbar" => array(
 				"name" => "outbox_toolbar",
 				"type" => "toolbar",
-				"caption" => "Outboxi toolbar",
+				"caption" => t("Outboxi toolbar"),
 				"no_caption" => 1,
 			),
 			"outbox" => array(
 				"name" => "outbox",
 				"type" => "table",
-				"caption" => "Väljasaadetud kirjad",
+				"caption" => t("Väljasaadetud kirjad"),
 				"no_caption" => 1,
 			),
 		);
@@ -4515,13 +4515,13 @@ class commune extends class_base
 			"archive_toolbar" => array(
 				"name" => "archive_toolbar",
 				"type" => "toolbar",
-				"caption" => "Arhiivi toolbar",
+				"caption" => t("Arhiivi toolbar"),
 				"no_caption" => 1,
 			),
 			"archive" => array(
 				"name" => "archive",
 				"type" => "table",
-				"caption" => "Arhiveeritud kirjad",
+				"caption" => t("Arhiveeritud kirjad"),
 				"no_caption" => 1,
 			),
 		);
@@ -4538,7 +4538,7 @@ class commune extends class_base
 			"group" => array(
 			"name" => "group",
 			"type" => "textbox",
-			"caption" => "Grupp",
+			"caption" => t("Grupp"),
 		));
 		$bbox = $box->callback_new_message($arr);
 		$rval = $abox + $bbox;
@@ -4561,7 +4561,7 @@ class commune extends class_base
 		$t_id = $users->get_oid_for_uid($arr["user_to"]);
 		if (empty($t_id))
 		{
-			die("aga sellist kasutajat pole üldse olemas");
+			die(t("aga sellist kasutajat pole üldse olemas"));
 		};
 		$user = new object($u_id);
 		$o = new object();
@@ -4698,7 +4698,7 @@ class commune extends class_base
 		//siin peaks key-d vbl märgistama prefiksitega "person." ja "profile.", et samu ei oleks
 		$user = $this->get_user_for_profile($profile);
 		$item["username"] = array(
-			"caption" => "Kasutajanimi",
+			"caption" => t("Kasutajanimi"),
 			"value" => $user->name(),
 		);
 		return $item + $person_props + $profile_props;

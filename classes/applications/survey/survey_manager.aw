@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey_manager.aw,v 1.7 2005/01/21 13:18:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey_manager.aw,v 1.8 2005/03/22 17:04:04 kristo Exp $
 // survey_manager.aw - Ankeetide haldur 
 /*
 
@@ -122,9 +122,9 @@ class survey_manager extends class_base
 		$t->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
-			"tooltip" => "Kustuta valitud ankeedid",
+			"tooltip" => t("Kustuta valitud ankeedid"),
 			"action" => "delete_surveys",
-			"confirm" => "Kustutada valitud ankeedid?",
+			"confirm" => t("Kustutada valitud ankeedid?"),
 		));
 
 	}
@@ -139,15 +139,15 @@ class survey_manager extends class_base
 		$t->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
-			"tooltip" => "Kustuta valitud ankeedid",
+			"tooltip" => t("Kustuta valitud ankeedid"),
 			"action" => "delete_surveys",
-			"confirm" => "Kustutada valitud ankeedid?",
+			"confirm" => t("Kustutada valitud ankeedid?"),
 		));
 		$t->add_separator();
 		$t->add_button(array(
 			"name" => "export_csv",
 			"img" => "ftype_xls.gif",
-			"tooltip" => "Ekspordi ankeedid",
+			"tooltip" => t("Ekspordi ankeedid"),
 			"url" => aw_url_change_var(array(
 				"format" => "csv",
 				)),
@@ -199,7 +199,7 @@ class survey_manager extends class_base
 		$rv[$pname . "sbt"] = array(
 			"type" => "submit",
 			"name" => $pname . "sbt",
-			"caption" => "Otsi",
+			"caption" => t("Otsi"),
 		);	
 		return $rv;
 
@@ -230,7 +230,7 @@ class survey_manager extends class_base
 				"modified" => $survey->modified(),
 				"edit" => html::href(array(
 					"url" => $this->mk_my_orb("change",array("id" => $id,"return_url" => $return_url),CL_SURVEY),
-					"caption" => "Vaata",
+					"caption" => t("Vaata"),
 				)),
 			);
 
@@ -296,7 +296,7 @@ class survey_manager extends class_base
 					"modified" => $survey->modified(),
 					"edit" => html::href(array(
 						"url" => $this->mk_my_orb("change",array("id" => $id,"return_url" => $return_url),CL_SURVEY),
-						"caption" => "Vaata",
+						"caption" => t("Vaata"),
 					)),
 				);
 
@@ -444,7 +444,7 @@ class survey_manager extends class_base
 		};
 		$t->define_chooser(array(
 			"name" => "sel",
-			"caption" => "id",
+			"caption" => t("id"),
 			"field" => "id",
 		));
 
@@ -453,7 +453,7 @@ class survey_manager extends class_base
 		//{
 			$t->define_field(array(
 				"name" => "name",
-				"caption" => "Nimi",
+				"caption" => t("Nimi"),
 				"sortable" => 1,
 			));
 		//};
@@ -477,12 +477,12 @@ class survey_manager extends class_base
 		
 		$t->define_field(array(
 			"name" => "remote_host",
-			"caption" => "Host",
+			"caption" => t("Host"),
 		));
 		
 		$t->define_field(array(
 			"name" => "created",
-			"caption" => "Loodud",
+			"caption" => t("Loodud"),
 			"type" => "time",
 			"format" => "H:i d-M-y",
 			"sortable" => 1,
@@ -491,7 +491,7 @@ class survey_manager extends class_base
 
 		$t->define_field(array(
 			"name" => "edit",
-			"caption" => "Vaata",
+			"caption" => t("Vaata"),
 			"align" => "center",
 		));
 
