@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.264 2004/04/29 12:20:50 kristo Exp $
+// $Id: class_base.aw,v 2.265 2004/05/03 11:25:17 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -108,6 +108,7 @@ class class_base extends aw_template
 			"container" => "vcl/container",
 			"table" => "vcl/table",
 			"relpicker" => "vcl/relpicker",
+			"tabpanel" => "vcl/tabpanel",
 		);
 		parent::init($arg);
 	}
@@ -482,12 +483,21 @@ class class_base extends aw_template
 		// to beg rid of all that shit
 		$this->inst->relinfo = $this->relinfo;
 
+		$panel = array(
+			"name" => "tabpanel",
+			"type" => "tabpanel",
+			"caption"=> "tab panel",
+		);
+
+		$properties = array("tabpanel" => $panel) + $properties;
+
+
 
 		$awt->start("parse-properties");
 		$resprops = $this->parse_properties(array(
 			"properties" => &$properties,
 		));
-
+		
 		$awt->stop("parse-properties");
 		$awt->start("add-property");
 
@@ -974,8 +984,6 @@ class class_base extends aw_template
 		{
 			$this->mk_path($parent,$title,aw_global_get("period"));
 		};
-
-		//$this->tp = get_instance("vcl/tabpanel");
 
 
 		// I need a way to let the client (the class using class_base to
@@ -1924,7 +1932,7 @@ class class_base extends aw_template
 				
 
 		}
-		
+
 		if (1 != $this->classinfo(array("name" => "allow_rte")))
 		{
 			$has_rte = false;
