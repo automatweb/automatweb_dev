@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.36 2004/12/03 12:19:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.37 2004/12/03 13:27:40 duke Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -156,8 +156,9 @@ class releditor extends core
 		foreach($all_props as $key => $_prop)
 		{
 			//if (!empty($use_form) || (is_array($props) && in_array($key,$props)))
-			if ($all_props[$key])
+			//if ($all_props[$key])
 			//if (is_array($props) && in_array($key,$props))
+			if ((empty($form_type) && $all_props[$key]) || (is_array($props) && in_array($key,$props)))
 			{
 				$this->all_props[$key] = $_prop;
 				if (!empty($form_type) || $visual != "manager")
@@ -185,12 +186,12 @@ class releditor extends core
 		// "form" does not need a caption
 		if ($visual == "manager" && $form_type == "new")
 		{
-			$act_props[$this->elname . "_caption"] = array(
+			$act_props = array($this->elname . "_caption" => array(
 				"name" => $this->elname . "_caption",
 				"type" => "text",
 				"value" => "Uus",
 				"subtitle" => 1,
-			);
+			)) + $act_props;
 		};
 
 		$obj_inst = false;
