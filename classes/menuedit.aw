@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.3 2001/05/21 01:15:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.4 2001/05/21 03:39:19 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -284,7 +284,7 @@ classload("cache","validator","defs");
 			$awt->start("cycle");
 			if ($GLOBALS["MENUEDIT_VER2"])
 			{
-				global $menu_defs_v2;
+				global $menu_defs_v2,$frontpage;
 
 				$awt->start("menuedit_ver2");
 				if (is_array($menu_defs_v2))
@@ -293,6 +293,10 @@ classload("cache","validator","defs");
 					while (list($id,$name) = each($menu_defs_v2))
 					{
 						$this->req_draw_menu($id,$name,&$path,false);
+						if ($this->sel_section == $frontpage)
+						{
+							$this->do_seealso_items($this->mar[$id],$name);
+						}
 					}
 				}
 				$awt->stop("menuedit_ver2");
@@ -2956,31 +2960,7 @@ classload("cache","validator","defs");
 				// check if this menu is THE selected menu
 				if ($this->sel_section == $row["oid"] && $this->is_template("MENU_".$name."_SEEALSO_ITEM"))
 				{
-					$sa = unserialize($row["seealso"]);
-					if (is_array($sa))
-					{
-						reset($sa);
-						while (list($said,) = each($sa))
-						{
-							$samenu = $this->mar[$said];
-							if ($samenu[link] != "")
-							{
-								$link = $samenu[link];
-							}
-							else
-							{
-								$link = $baseurl."/";
-								$link .= ($samenu[alias] != "") ? $samenu[alias] : "index." . $ext . "/section=" . $samenu[oid];
-							}
-
-							$this->vars(array(
-								"target" => $samenu["target"] ? "target=\"blank\"" : "",
-								"link" => $link,
-								"text" => $samenu["name"]
-							));
-							$this->parse("MENU_".$name."_SEEALSO_ITEM");
-						}
-					}
+					$this->do_seealso_items($row,$name);
 				}
 
 				$this->vars(array($mn2 => "", $mn2."_N" => ""));
@@ -3058,6 +3038,47 @@ classload("cache","validator","defs");
 			$this->level--;
 			return $cnt;
 		}
+
+	////
+	// !draws MENU_$name_SEEALSO_ITEM 's for the menu given in $row
+	function do_seealso_items($row,$name)
+	{
+		$sa = unserialize($row["seealso"]);
+		if (is_array($sa))
+		{
+			reset($sa);
+			while (list($said,) = each($sa))
+			{
+				$samenu = $this->mar[$said];
+				if (!is_array($samenu))
+				{
+					// the menu was not loaded. load it.
+					$this->save_handle();
+					$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu ON menu.id = objects.oid WHERE objects.oid = $said");
+					$samenu = $this->db_next();
+					$this->mar[$said] = $samenu;
+					$this->restore_handle();
+				}
+
+				if ($samenu[link] != "")
+				{
+					$link = $samenu[link];
+				}
+				else
+				{
+					$link = $baseurl."/";
+					$link .= ($samenu[alias] != "") ? $samenu[alias] : "index." . $ext . "/section=" . $samenu[oid];
+				}
+
+				$this->vars(array(
+					"target" => $samenu["target"] ? "target=\"blank\"" : "",
+					"link" => $link,
+					"text" => $samenu["name"]
+				));
+				$this->parse("MENU_".$name."_SEEALSO_ITEM");
+			}
+		}
+	}
 
 	////
 	// !exports menu $id and all below it
