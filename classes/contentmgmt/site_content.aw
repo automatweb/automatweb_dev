@@ -177,6 +177,7 @@ class site_content extends menuedit
 		$d = get_instance("document");
 		$this->doc = get_instance("document");
 		
+		
 		// so, if the current object is not a menu,
 		// just pretend that the parent is. Hm, I think that's wrong
 		if (!is_array($this->mar[$sel_menu_id]))
@@ -1614,6 +1615,10 @@ class site_content extends menuedit
 	function make_promo_boxes($section)
 	{
 		$doc = get_instance("document");
+
+		# reset period, or we don't see contents of promo boxes under periodic menus:
+		$doc->set_period(0);
+
 		$right_promo = "";
 		$left_promo = "";
 		$scroll_promo = "";
