@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.229 2003/10/28 14:47:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.230 2003/11/03 16:52:30 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1944,12 +1944,12 @@ class core extends acl_base
 
 		$this->orb_values = array();
 
-		if (isset($arr["section"]))
+		if (!empty($arr["section"]))
 		{
 			$this->orb_values["section"] = $arr["section"];
 		};
 
-		if (isset($arr["_alias"]))
+		if (isset($arr["_alias"]) && !empty($arr["section"]))
 		{
 			$this->orb_values["alias"] = $arr["_alias"];
 			unset($arr["_alias"]);
