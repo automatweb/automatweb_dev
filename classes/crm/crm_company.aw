@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.53 2004/07/09 10:28:58 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.54 2004/07/12 11:17:05 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -223,6 +223,28 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 
 ////end of box////
 
+/////start of my_customers
+@default group=my_customers
+
+@layout my_customers_hbox_toolbar type=hbox group=my_customers
+
+@property my_customers_toolbar type=toolbar no_caption=1 store=no parent=my_customers_hbox_toolbar
+@caption "Klientide toolbar"
+
+@layout my_customers_hbox_others type=hbox group=my_customers width=20%:80%
+
+@layout vbox_my_customers_left type=vbox parent=my_customers_hbox_others group=my_customers
+
+@property my_customers_listing_tree type=treeview no_caption=1 parent=vbox_my_customers_left
+@caption Rühmade puu
+
+@layout vbox_my_customers_right type=vbox parent=my_customers_hbox_others group=my_customers
+
+@property my_customers_table type=table store=no no_caption=1 parent=vbox_my_customers_right
+@caption Kliendid
+
+/////end of my_customers
+
 @groupinfo contacts caption="Kontaktid"
 @groupinfo oldcontacts caption="Nimekiri" parent=contacts submit=no
 @groupinfo contacts2 caption="Kontaktid" parent=contacts submit=no
@@ -236,7 +258,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 
 @groupinfo relorg caption="Kliendid"
 @groupinfo customers caption="Kliendid" parent=relorg submit=no
-@groupinfo my_customers caption="kliendid" parent=relorg submit=no
+@groupinfo my_customers caption="Kliendid" parent=relorg submit=no
 @groupinfo fcustomers caption="Tulevased kliendid" parent=relorg
 @groupinfo partners caption="Partnerid" parent=relorg
 @groupinfo fpartners caption="Tulevased partnerid" parent=relorg
@@ -460,8 +482,10 @@ class crm_company extends class_base
 		//all connections from the currrent object
 		//different reltypes
 		$tmp_type = $type1;
+		$customer_reltype = 3;//crm_category.reltype_customer 
 		if($obj->prop('class_id')==CL_CRM_COMPANY)
 		{
+			$customer_reltype = 22; //crm_company.reltye_customer
 			if($type1=='RELTYPE_CATEGORY')
 			{
 				$type1 = $this->crm_company_reltype_category;
@@ -516,8 +540,23 @@ class crm_company extends class_base
 				'url'=>aw_url_change_var(array(
 							$attrib=>$conn->prop('to'),
 							'cat'=>''
-				))
+				)),
+				'oid' => $conn->prop('to'),
 			);
+			//i know, i know, this function is getting really bloated
+			//i just don't know yet, how to refactor it nicely, until then
+			//i'll be just adding the bloat
+			//get all the company for the current leaf
+			$blah = $conn->to();
+			$conns_tmp = $blah->connections_from(array(
+								'type'=>$customer_reltype
+							));
+			$oids = array();
+			foreach($conns_tmp as $conn_tmp)
+			{
+				$oids[$conn_tmp->prop('to')] = $conn_tmp->prop('to');
+			}
+			$tree_node_info['oid'] = $oids;
 			//let's find the picture for this obj
 			$img_conns = $tmp_obj->connections_from(array('type'=>'RELTYPE_IMAGE'));
 			//uuuuu, we have a pic
@@ -585,6 +624,10 @@ class crm_company extends class_base
 		{
 			$tmp_obj = new object($arr['request']['id']);
 			$arr['caption'] = $tmp_obj->prop('name');
+		}
+		else if($arr['id']=='my_customers')
+		{
+			$arr['caption'] = $this->users_person->prop('name');	
 		}
 	}
 
@@ -818,6 +861,33 @@ class crm_company extends class_base
 													'RELTYPE_CATEGORY',array(CL_CRM_COMPANY),'category',false,'nodetextbuttonlike');
 				break;
 			}
+			case "my_customers_listing_tree":
+			{
+				$tree_inst = &$arr['prop']['vcl_inst'];	
+				$node_id = 0;
+				$this->active_node = (int)$arr['request']['category'];
+				$this->generate_tree(&$tree_inst,$arr['obj_inst'],&$node_id,
+													'RELTYPE_CATEGORY',array(CL_CRM_COMPANY),'category',false,'nodetextbuttonlike');
+				
+				//need to delete every category of the tree that the person doesn't
+				//have a relation with
+				$my_data = array();
+				$crm_person = get_instance('crm/crm_person');
+				$users = get_instance('users_user');
+				$person = $crm_person->get_person_by_user_id($users->get_oid_for_uid(aw_global_get('uid')));
+				//genereerin listi persooni kõikidest firmadest
+				$person = new object($person);
+				$conns=$person->connections_from(array(
+							'type' => 22,//crm_person.reltype_CLIENT_IM_HANDLING
+							));
+				
+				foreach($conns as $conn)
+				{
+					$my_data[$conn->prop('to')] = $conn->prop('to');
+				}
+				$this->_clean_up_the_tree(&$tree_inst->items, 0, &$my_data);
+				break;
+			}
 			case 'ettevotlusvorm':
 			{
 				$ol = new object_list(array(
@@ -846,6 +916,11 @@ class crm_company extends class_base
 				$this->do_customer_toolbar(&$data['toolbar'],&$arr);	
 				break;
 			}
+			case 'my_customers_toolbar':
+			{
+				$this->do_my_customers_toolbar(&$data['toolbar'],&$arr);
+				break;
+			}
 			case "customer":
 				if($this->show_customer_search)
 				{
@@ -856,7 +931,23 @@ class crm_company extends class_base
 					$this->org_table(&$arr);
 				}
 				break;
-
+			case 'my_customers_table':
+			{
+				$crm_person = get_instance('crm/crm_person');
+				$users = get_instance('users_user');
+				$person = $crm_person->get_person_by_user_id($users->get_oid_for_uid(aw_global_get('uid')));
+				$person = new object($person);
+				$conns = $person->connections_from(array(
+								'type'=>22, //crm_person.reltype_CLIENT_IM_HANDLING
+							));
+				$filter = array();
+				foreach($conns as $conn)
+				{
+					$filter[$conn->prop('to')] = $conn->prop('to');
+				}
+				$this->org_table(&$arr, $filter);
+				break;
+			}
 			case "org_toolbar":
 				$vcl_inst = &$arr["prop"]["toolbar"];
 				$vcl_inst->add_button(array(
@@ -939,7 +1030,56 @@ class crm_company extends class_base
 			"uid" => aw_global_get("uid"),
 		));
 	}
-	
+
+	function _clean_up_the_tree($tree_items, $arrkey, $my_data)
+	{
+		$ret = false;
+		foreach($tree_items[$arrkey] as $key=>$value)
+		{
+			//these are toplevel nodes
+			//checking if one has sub_elements
+			if(array_key_exists($value['id'], $tree_items))
+			{
+				//has subelements
+				$ret = $this->_clean_up_the_tree(&$tree_items, $value['id'], &$my_data);
+				$keep_it = false;
+
+				foreach($my_data as $key2=>$value2)
+				{
+					if(in_array($value2, $value['oid']))
+					{
+						$keep_it = true;
+						$ret = true;
+					}
+				}
+
+				if(!$ret && !$keep_it)
+				{
+					unset($tree_items[$arrkey][$key]);
+				}
+			}
+			//no sub elements, now if this node isn't useful to me
+			//it will get deleted :)
+			else
+			{
+				$keep_it = false;
+				foreach($my_data as $key2=>$value2)
+				{
+					if(in_array($value2, $value['oid']))
+					{
+						$keep_it = true;
+					}
+				}
+				if(!$keep_it)
+				{
+					unset($tree_items[$arrkey][$key]);
+				}
+				return $keep_it;
+			}
+		}
+		return $ret;
+	}
+
 	function personal_offers_table($arr)
 	{
 		$table = &$arr["prop"]["vcl_inst"];
@@ -2014,7 +2154,7 @@ class crm_company extends class_base
 		}
 	}
 
-	function org_table(&$arr)
+	function org_table(&$arr, $filter=null)
 	{
 		$tf = &$arr["prop"]["vcl_inst"];
 		$tf->define_field(array(
@@ -2081,6 +2221,13 @@ class crm_company extends class_base
 
 		foreach($orgs as $org)
 		{
+			if($filter)
+			{
+				if(!in_array($org->prop('to'),$filter))
+				{
+					continue;
+				}
+			}
 			$o = $org->to();
 			// aga ülejäänud on kõik seosed!
 			$vorm = $tegevus = $contact = $juht = $juht_id = $phone = $url = $mail = "";
@@ -2187,6 +2334,47 @@ class crm_company extends class_base
 		);
 	}
 
+	/**
+		@attrib name=submit_delete_my_customers_relations
+		@param id required type=int acl=view
+	**/
+	function submit_delete_my_customers_relations($arr)
+	{
+		$this->crm_company_init();
+		if($arr['check'])
+		{
+			foreach($arr['check'] as $from)
+			{
+				if($this->users_person->is_connected_to(array(
+						'to' => $arr['check'],
+						'reltype' => 22, //crm_person.client_im_handling
+					)))
+				{
+					$this->users_person->disconnect(array(
+								'from' => $from,
+								'type' => 22,
+					));
+				}
+
+				if($this->users_person->is_connected_to(array(
+						'to' => $arr['check'],
+						'reltype' => 23, //crm_person.client_im_selling_to
+					)))
+				{
+					$this->users_person->disconnect(array(
+								'from' => $from,
+								'type' => 23
+					));
+				}
+			}
+		}
+
+		return $this->mk_my_orb('change',array(
+						'id' => $arr['id'],
+						'group' => 'my_customers',
+						'category' => $arr['category']
+					));
+	}
 
 	/**
 		deletes the relations category -> organization || organization -> category
@@ -2196,6 +2384,16 @@ class crm_company extends class_base
 	**/
 	function submit_delete_customer_relations($arr)
 	{
+		$url = $this->mk_my_orb('change',array(
+							'id' => $arr['id'],
+							'group'=>'relorg',
+							'category'=>$arr['category']),
+						CL_CRM_COMPANY
+					);
+		if(!is_array($arr['check']))
+		{
+			return $url;
+		}
 		$main_obj = new Object($arr['id']);
 		
 		if((int)$arr['category'])
@@ -2206,20 +2404,13 @@ class crm_company extends class_base
 		{
 			$main_obj->disconnect(array('from'=>$value));
 		}
-
-		return $this->mk_my_orb('change',array(
-			'id' => $arr['id'],
-			'group'=>'relorg',
-			'category'=>$arr['category']),
-			CL_CRM_COMPANY
-		);
-			
+		return $url;		
 	}
 
 	/*
 	
 	*/
-	function callback_on_load($arr)
+	function callback_on_load($arr)		
 	{
 		$this->crm_company_init();
 		//for post stuff
@@ -2566,10 +2757,20 @@ class crm_company extends class_base
 			));
 		}
 	}
+	
+	function do_my_customers_toolbar($tb, $arr)
+	{
+		//delete button
+		$tb->add_button(array(
+			'name' => 'del',
+			'img' => 'delete.gif',
+			'tooltip' => 'Kustuta valitud',
+			'action' => 'submit_delete_my_customers_relations',
+		));
+	}
 
 	function do_customer_toolbar($tb, $arr)
 	{
-	
 		$tb->add_menu_button(array(
 				'name'=>'add_item',
 				'tooltip'=>'Uus'
