@@ -119,13 +119,6 @@ switch($action)
 		header("Location: list.$ext?parent=$parent");
 		break;
 
-	case "submit_var_cat":
-		classload("vars");
-		$t = new variables;
-		$t->submit_cat($HTTP_POST_VARS);
-		header("Location: list.$ext?type=list_vars&parent=$parent");
-		break;
-
 	case "people_list":
 		classload("list");
 		$t = new mlist($list_id);
@@ -155,13 +148,6 @@ switch($action)
 		header("Location: list.$ext?type=list_vars&parent=$parent");
 		break;
 			
-	case "admin_stamp":
-		classload("vars");
-		$t = new variables;
-		$t->add_stamp_submit($HTTP_POST_VARS);
-		header("Location: list.$ext?type=list_stamps");
-		break;
-
 	case "admin_promo":
 		classload("menuedit");
 		$t = new menuedit;

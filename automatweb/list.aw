@@ -11,7 +11,7 @@ if (!$tt->prog_acl("view", PRG_LISTS))
 
 classload("lists");
 classload("list");
-classload("vars");
+classload("variables");
 classload("email");
 classload("acl");
 
@@ -51,21 +51,9 @@ switch($type) {
 		$content = $t->add_cat($parent);
 		break;
 
-	case "add_var_cat":
-		$site_title = "<a href='list.$ext?type=list_vars&parent=$parent'>Muutujad</a> / Lisa kategooria";
-		$t = new variables;
-		$content = $t->add_cat($parent);
-		break;
-
 	case "change_cat":
 		$site_title = "<a href='list.$ext?parent=$parent'>Listid</a> / Muuda kategooriat";
 		$t = new lists;
-		$content = $t->change_cat($id);
-		break;
-
-	case "change_var_cat":
-		$site_title = "<a href='list.$ext?type=list_vars&parent=$parent'>Muutujad</a> / Muuda kategooriat";
-		$t = new variables;
 		$content = $t->change_cat($id);
 		break;
 
@@ -75,12 +63,6 @@ switch($type) {
 		header("Location: list.$ext?parent=$parent");
 		break;
 
-	case "delete_var_cat":
-		$t = new variables;
-		$t->delete_cat($id);
-		header("Location: list.$ext?type=list_vars&parent=$parent");
-		break;
-		
 	case "add_list":
 		$site_title = "<a href='list.$ext?parent=$parent'>Listid</a> / Lisa list";
 		$t = new lists;
@@ -186,12 +168,6 @@ switch($type) {
 		die();
 		break;
 
-	case "list_vars":
-		$site_title = "Muutjate nimekiri";
-		$t = new variables;
-		$content = $t->gen_list($parent);
-		break;
-		
 	case "add_var":
 		$site_title = "<a href='list.$ext?type=list_vars&parent=$parent'>Muutujate nimekiri</a> / Lisa muutuja";
 		$t = new variables;
@@ -210,11 +186,6 @@ switch($type) {
 		header("Location: list.$ext?type=list_vars&parent=$parent");
 		break;
 
-	case "list_stamps":
-		$site_title = "Stampide nimekiri";
-		$t = new variables;
-		$content = $t->list_stamps();
-		break;
 		
 	case "change_stamp":
 		$site_title = "<a href='list.$ext?type=list_stamps'>Stampide nimekiri</a> / Muuda stampi";
