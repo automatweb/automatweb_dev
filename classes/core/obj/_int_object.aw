@@ -961,6 +961,30 @@ class _int_object
 		return $retval;
 	}
 
+	function prop_str($param)
+	{
+		$pd = $GLOBALS["properties"][$this->obj["class_id"]][$param];
+		if (!$pd)
+		{
+			return $this->prop($param);
+		}
+
+		$val = $this->obj["properties"][$param];
+		switch($pd["type"])
+		{
+			case "relmanager":
+			case "relpicker": 
+			case "classificator":
+				if (is_oid($val) && $GLOBALS["object_loader"]->ds->can("view", $val))
+				{
+					$tmp = new object($val);
+					$val = $tmp->name();
+				}
+				break;
+		}
+		return $val;
+	}
+
 	function set_prop($key, $val)
 	{
 		if (!$this->_int_is_property($key))
