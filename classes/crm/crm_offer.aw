@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.9 2004/08/24 15:48:59 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.10 2004/08/26 14:08:09 sven Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -24,19 +24,20 @@ caption Tellija
 @property salesman type=select field=meta method=serialize
 @caption Pakkumise koostaja
 
-@property content type=textarea cols=60 rows=30 table=planner field=description
-@caption Sisu
-
-@property goals type=textarea cols=60 rows=15 field=meta method=serialize
-@caption Eesmärgid
-
 @property offer_status type=select field=meta method=serialize
 @caption Staatus
+
+@property content type=textarea cols=60 rows=30 table=planner field=description
+@caption Sisu
 
 @property prev_status type=hidden store=no
 
 property done type=checkbox ch_value=1 field=meta method=serialize
 caption Tehtud
+
+@property sum type=textbox field=meta method=serialize size=7
+@caption Hind(ilma KM)
+
 
 default group=other_calendars
 @tableinfo planner index=id master_table=objects master_index=brother_of
@@ -109,7 +110,7 @@ class crm_offer extends class_base
 			"clid" => CL_CRM_OFFER
 		));
 		$this->u_i = get_instance("core/users/user");
-		$this->statuses =  array("Koostamisel", "Saadetud", "Esitletud", "Tagasilükatud", "Suletud");		
+		$this->statuses =  array("Koostamisel", "Saadetud", "Esitletud", "Tagasilükatud", "Positiivelt lõppenud");		
 	}
 
 	function get_property($arr)
@@ -120,11 +121,11 @@ class crm_offer extends class_base
 		{
 			case "orderer":
 				$org_inst = get_instance(CL_CRM_COMPANY);
-				if($arr["obj_inst"]->prop("preformer"))
+				if(!($arr["new"] == 1))
 				{
 					$ord_company_id = $arr["obj_inst"]->prop("preformer"); 
 				}
-				elseif ($_GET["alias_to_org"])
+				elseif ($_GET["alias_to"])
 				{
 					$ord_company_id =  $_GET["alias_to"];
 				}
@@ -212,7 +213,10 @@ class crm_offer extends class_base
 			break;
 			
 			case "prev_status":
-				$prop["value"] = $arr["obj_inst"]->prop("offer_status");
+				if(is_object($arr["obj_inst"]))
+				{
+					$prop["value"] = $arr["obj_inst"]->prop("offer_status");
+				}
 			break;
 		};
 		return $retval;

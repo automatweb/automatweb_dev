@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.70 2004/08/25 18:48:33 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.71 2004/08/26 14:07:47 sven Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -2068,18 +2068,18 @@ class crm_company extends class_base
 			}
 		}
 	}
-		
+	
 	/**
-		@attrib name=delete_selected_jobs
+		@attrib name=delete_selected_objects
 	**/
-	function delete_selected_jobs($arr)
+	function delete_selected_objects($arr)
 	{
 		foreach ($arr["select"] as $deleted_obj_id)
 		{
 			$deleted_obj = &obj($deleted_obj_id);
 			$deleted_obj->delete();	
 		}
-		return $arr["return_url"];
+		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"]), $arr["class"]);
 	}
 	
 	/**
@@ -2247,7 +2247,7 @@ class crm_company extends class_base
 		if (!empty($this->cal_id))
 		{
 			$user_calendar = new object($this->cal_id);
-			$parents[RELTYPE_CALL] = $parents[RELTYPE_OFFER] = $parents[RELTYPE_KOHTUMINE] = $parents[RELTYPE_DEAL] = $parents[RELTYPE_TASK] = $user_calendar->prop('event_folder');
+			$parents[RELTYPE_CALL] = $parents[RELTYPE_KOHTUMINE] = $parents[RELTYPE_DEAL] = $parents[RELTYPE_TASK] = $user_calendar->prop('event_folder');
 		}
 
 		$toolbar->add_menu_button(array(
@@ -2304,7 +2304,7 @@ class crm_company extends class_base
 		// basically, I need to create a list of relation types that are of any
 		// interest to me and then get a list of all classes for those
 
-		$action = array(RELTYPE_OFFER,RELTYPE_DEAL,RELTYPE_KOHTUMINE,RELTYPE_CALL,RELTYPE_TASK);
+		$action = array(RELTYPE_DEAL,RELTYPE_KOHTUMINE,RELTYPE_CALL,RELTYPE_TASK);
 
 		foreach($action as $key => $val)
 		{
@@ -2354,7 +2354,16 @@ class crm_company extends class_base
 				};
 			};
 		};
-			
+		
+		$ui = get_instance("core/users/user");
+		$my_org_id = $ui->get_current_company();
+		$toolbar->add_menu_item(array(
+			"parent" => "calendar_sub",
+			"title" => "Lisa pakkumine",
+			"text" => "Lisa pakkumine",
+			"link" => $this->mk_my_orb("new", array("alias_to_org" => $args["obj_inst"]->id(), "alias_to" => $my_org_id), CL_CRM_OFFER),
+		));
+		
 		if (!empty($this->cal_id))	
 		{
 			$toolbar->add_button(array(
@@ -3133,7 +3142,7 @@ class crm_company extends class_base
 			'name' => 'del',
 			'img' => 'delete.gif',
 			'tooltip' => 'Kustuta valitud tööpakkumised',
-			'action' => 'delete_selected_jobs',
+			'action' => 'delete_selected_objects',
 			'confirm' => "Kas oled kindel et soovid valitud tööpakkumised kustudada?"
 		));
 
@@ -3788,17 +3797,17 @@ class crm_company extends class_base
 		));
 		
 		$table->define_field(array(
-			"name" => "show_offer",
-			"caption" => "Vaata pakkumist",
-			"sortable" => "1",
-			"align" => "center",
-		));
-		
-		$table->define_field(array(
 			"name" => "offer_sum",
 			"caption" => "Pakkumise summa",
 			"sortable" => "1",
 			"align" => "center",
+		));
+		
+		
+		$table->define_chooser(array(
+			"name" => "select",
+			"field" => "select",
+			"caption" => "X",
 		));
 		
 		$offer_inst = get_instance(CL_CRM_OFFER);
@@ -3821,11 +3830,12 @@ class crm_company extends class_base
 					
 					$table->define_data(array(
 						"org" => is_object($org)?html::get_change_url($org->id(), array(), $org->name()):false,
-						"show_offer" => html::get_change_url($offer->id(), false, "Vaata pakkumist"),
+						//"show_offer" => html::get_change_url($offer->id(), false, "Vaata pakkumist"),
 						"salesman" => $salesmanlink,
 						"offer_name" => html::get_change_url($offer->id(), array(), $offer->name()),
 						"offer_made" => $offer->created(),
 						"offer_sum" => $offer_inst->total_sum($offer->id()),
+						"select" => $offer->id(),
 					));
 				}
 			}
@@ -3878,8 +3888,8 @@ class crm_company extends class_base
 		
 		$all_org_parent = $node_id;
 		
+		$data = array();
 		$this->get_customers_for_company($arr["obj_inst"], &$data);
-		
 		foreach ($data as $customer)
 		{
 			$obj = &obj($customer);
@@ -3940,7 +3950,7 @@ class crm_company extends class_base
 		$params = array(
 				'alias_to'=> $arr['obj_inst']->id(),
 				'reltype'=> RELTYPE_OFFER,
-				'return_url'=> urlencode(aw_global_get('REQUEST_URI')),
+				//'return_url'=> urlencode(aw_global_get('REQUEST_URI')),
 				'org' => $arr['obj_inst']->id(),
 				'alias_to_org' => $arr['request']['org_id'],
 		);
@@ -3950,6 +3960,13 @@ class crm_company extends class_base
 				'parent'=>'add_item',
 				'text'=>'Pakkumine',
 				'url' => html::get_new_url(CL_CRM_OFFER, $arr['obj_inst']->id(), $params),
+		));
+		
+		$tb->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"action" => "delete_selected_objects",
+			"confirm" => "Kas oled kindel, et soovid valitud pakkumise(d) kustutada?"
 		));
 	}	
 

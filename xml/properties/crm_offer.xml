@@ -36,6 +36,15 @@
             <caption>Pakkumise koostaja</caption>
       </property>
       <property>
+            <name>offer_status</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <type>select</type>
+            <method>serialize</method>
+            <caption>Staatus</caption>
+      </property>
+      <property>
             <name>content</name>
             <table>planner</table>
             <group>general</group>
@@ -46,32 +55,22 @@
             <caption>Sisu</caption>
       </property>
       <property>
-            <name>goals</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <type>textarea</type>
-            <cols>60</cols>
-            <rows>15</rows>
-            <method>serialize</method>
-            <caption>Eesmärgid</caption>
-      </property>
-      <property>
-            <name>offer_status</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <type>select</type>
-            <method>serialize</method>
-            <caption>Staatus</caption>
-      </property>
-      <property>
             <name>prev_status</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <type>hidden</type>
             <store>no</store>
+      </property>
+      <property>
+            <name>sum</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <type>textbox</type>
+            <method>serialize</method>
+            <size>7</size>
+            <caption>Hind(ilma KM)</caption>
       </property>
       <property>
             <name>calendar_selector</name>
