@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.13 2001/12/18 00:10:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.14 2002/01/31 00:30:04 kristo Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -189,140 +189,177 @@ class acl_base extends core
 		return $row;
 	}
 
-	// black magic follows.
-	function can($access, $oid)
+	function can_aw($access,$oid)
 	{
 		global $acl_default,$no_check_acl;
 		global $SITE_ID,$uid;
 		$o_oid = $oid;
+		
+		global $awt;
+		$awt->start("acl::can");
+		$awt->count("acl::can");
+		$access="can_".$access;
+
+		$this->save_handle();
+
+		$max_priority = -1;
+		$max_acl = $acl_default;
+		$max_acl["acl_rel_id"] = "666";
+		$cnt = 0;
+		// here we must traverse the tree from $oid to 1, gather all the acls and return the one with the highest priority
+		//	echo "entering can, access = $access, oid = $oid<Br>";
+		while ($oid > 0)
+		{
+			// echo "oid = $oid<br>";
+			if (is_array($GLOBALS["aclcache"][$oid]))
+			{
+				$tacl = $GLOBALS["aclcache"][$oid];
+				$parent = $GLOBALS["aclcache"][$oid]["parent"];
+				//echo "found in cache! tacl[$access] = ",$tacl[$access], ", parent = $parent<br>";
+			}
+			else
+			{
+				//echo "not found in cache!<br>";
+				if ($tacl = $this->get_acl_for_oid($oid))
+				{
+					// found acl for this object from the database, so check it
+					$parent = $tacl["parent"];
+					//echo "found in db, tacl[$access] = ",$tacl[$access],", parent = $parent<br>";
+					$GLOBALS["aclcache"][$oid] = $tacl;
+				}
+				else
+				{
+					// no acl for this object in the database, find it's parent
+					$parent = $this->db_fetch_field("SELECT parent FROM objects WHERE oid = $oid","parent");
+					$tacl = array("oid" => $oid,"parent" => $parent,"priority" => -1);
+					$GLOBALS["aclcache"][$oid] = $tacl;
+					//echo "not found in db, parent = $parent<br>";
+				}
+			}
+
+			// now check if we found an acl with a higher priority, than the current one
+			// this could be optimized a bit by finding out the highest priority among the groups, the user belongs to
+			// and only looping until we find that, but that will not happen too often, since user groups always have the highest priority
+			// and access is almost always granted by normal groups, not user groups so it isn't worth it
+			if ($tacl["priority"] > $max_priority)
+			{
+				$max_priority = $tacl["priority"];
+				$max_acl = $tacl;
+				//echo "bigger than max priority (",$tacl[priority],") , setting max<br>";
+			}
+			// siin oli 100, aga seda on imho ilmselgelt liiga palju
+			// 25 peaks vist piisama kyll
+			if (++$cnt > 25)
+			{
+				$this->raise_error("acl_base->can($access,$oid): error in object hierarchy, count exceeded!",true);
+			}
+
+			$oid = $parent;
+		}
+
+		$this->restore_handle();
+		// and now return the highest found
+//		return 1;
+		
+		$awt->stop("acl::can");
+		// nini ja nyt kui see on aw.struktuur.ee siis kysime java k2est ka
+		return $max_acl;
+	}
+
+	function can_server($access,$oid)
+	{
+		global $acl_default,$no_check_acl;
+		global $SITE_ID,$uid;
+		$o_oid = $oid;
+
+		global $awt;
+		$access = "can_".$access;
+		$awt->start("acl::can_server");
+		if (!$o_oid)
+		{
+			dbg("olen real 231 OID=".$o_oid." tagastan false<br>");
+			return false;
+		}
+		dbg("olen real 234 <br>");
+		global $acl_server_socket;
+		if (!$acl_server_socket)
+		{
+			dbg("olen real 237 võtan javaga yhendust<br>");
+			$awt->start("acl::can_server::connect");
+			$acl_server_socket = fsockopen("127.0.0.1", 10000,$errno,$errstr,10);
+			$awt->stop("acl::can_server::connect");
+		}
+		if (!$acl_server_socket)
+		{
+			echo "ACL: error: $errstr ($errno) <br>\n";
+			flush();
+		}
+		else
+		{
+			if ($uid == "")
+			{
+				$u_uid = ",";
+			}
+			else
+			{
+				$u_uid = $uid;
+			}
+			//echo "saadan: -1 ".$SITE_ID." ".$u_uid." ".$o_oid."<br>";
+			fputs($acl_server_socket,"-1 ".$SITE_ID." ".$u_uid." ".$o_oid."\n");
+			$s_res.=fgets ($acl_server_socket,1000);
+			// parsime tulemuse laiali
+			$s_rights = explode(",",$s_res);
+			foreach($s_rights as $s_line)
+			{
+				list($s_r_name, $s_r_value) = explode(" ",$s_line);
+				$max_acl[$s_r_name] = $s_r_value;
+				//echo "got access for $s_r_name as $s_r_value <br>";
+			}
+	//		echo "out of can() <br>";
+		}
+		$awt->stop("acl::can_server");
+
+		return $max_acl;
+	}
+
+	// black magic follows.
+	function can($access, $oid)
+	{
+		global $no_check_acl,$compare_acls;
 		if ($no_check_acl)
 		{
 			return true;
 		}
-dbg("olen real 155 sait=".$SITE_ID." UID=".$uid." OID=".$o_oid."<br>");
-		
-		if (!($GLOBALS["use_acl_server"] && ($GLOBALS["uid"] == "kix" || $GLOBALS["uid"] == "risto")))
+
+		$max_acl = array();
+		if ((!($GLOBALS["use_acl_server"] && ($GLOBALS["uid"] == "kix" || $GLOBALS["uid"] == "risto"))) || $compare_acls)
 		{
-			global $awt;
-			$awt->start("acl::can");
-			$awt->count("acl::can");
-			$access="can_".$access;
-
-			$this->save_handle();
-
-			$max_priority = -1;
-			$max_acl = $acl_default;
-			$max_acl["acl_rel_id"] = "666";
-			$cnt = 0;
-			// here we must traverse the tree from $oid to 1, gather all the acls and return the one with the highest priority
-		//	echo "entering can, access = $access, oid = $oid<Br>";
-			while ($oid > 0)
-			{
-				// echo "oid = $oid<br>";
-				if (is_array($GLOBALS["aclcache"][$oid]))
-				{
-					$tacl = $GLOBALS["aclcache"][$oid];
-					$parent = $GLOBALS["aclcache"][$oid]["parent"];
-					//echo "found in cache! tacl[$access] = ",$tacl[$access], ", parent = $parent<br>";
-				}
-				else
-				{
-					//echo "not found in cache!<br>";
-					if ($tacl = $this->get_acl_for_oid($oid))
-					{
-						// found acl for this object from the database, so check it
-						$parent = $tacl["parent"];
-						//echo "found in db, tacl[$access] = ",$tacl[$access],", parent = $parent<br>";
-						$GLOBALS["aclcache"][$oid] = $tacl;
-					}
-					else
-					{
-						// no acl for this object in the database, find it's parent
-						$parent = $this->db_fetch_field("SELECT parent FROM objects WHERE oid = $oid","parent");
-						$tacl = array("oid" => $oid,"parent" => $parent,"priority" => -1);
-						$GLOBALS["aclcache"][$oid] = $tacl;
-						//echo "not found in db, parent = $parent<br>";
-					}
-				}
-
-				// now check if we found an acl with a higher priority, than the current one
-				// this could be optimized a bit by finding out the highest priority among the groups, the user belongs to
-				// and only looping until we find that, but that will not happen too often, since user groups always have the highest priority
-				// and access is almost always granted by normal groups, not user groups so it isn't worth it
-				if ($tacl["priority"] > $max_priority)
-				{
-					$max_priority = $tacl["priority"];
-					$max_acl = $tacl;
-					//echo "bigger than max priority (",$tacl[priority],") , setting max<br>";
-				}
-				// siin oli 100, aga seda on imho ilmselgelt liiga palju
-				// 25 peaks vist piisama kyll
-				if (++$cnt > 25)
-				{
-					$this->raise_error("acl_base->can($access,$oid): error in object hierarchy, count exceeded!",true);
-				}
-
-				$oid = $parent;
-			}
-
-			$this->restore_handle();
-			// and now return the highest found
-	//		return 1;
-			
-			$awt->stop("acl::can");
-			// nini ja nyt kui see on aw.struktuur.ee siis kysime java k2est ka
+			$max_acl = $this->can_aw($access,$oid);
+			$cmp_aw = $max_acl;
 		}
-		else
+
+		if (($GLOBALS["use_acl_server"] && ($GLOBALS["uid"] == "kix" || $GLOBALS["uid"] == "risto")) || $compare_acls)
 		{
-			global $awt;
-			$access = "can_".$access;
-			$awt->start("acl::can_server");
-			if (!$o_oid)
-			{
-				dbg("olen real 231 OID=".$o_oid." tagastan false<br>");
-				return false;
-			}
-		dbg("olen real 234 <br>");
-			global $acl_server_socket;
-			if (!$acl_server_socket)
-			{
-				dbg("olen real 237 võtan javaga yhendust<br>");
-				$awt->start("acl::can_server::connect");
-				$acl_server_socket = fsockopen("127.0.0.1", 10000,$errno,$errstr,10);
-				$awt->stop("acl::can_server::connect");
-			}
-			if (!$acl_server_socket)
-			{
-				echo "ACL: error: $errstr ($errno) <br>\n";
-				flush();
-			}
-			else
-			{
-				if ($uid == "")
-				{
-					$u_uid = ",";
-				}
-				else
-				{
-					$u_uid = $uid;
-				}
-				//echo "saadan: -1 ".$SITE_ID." ".$u_uid." ".$o_oid."<br>";
-				fputs($acl_server_socket,"-1 ".$SITE_ID." ".$u_uid." ".$o_oid."\n");
-				$s_res.=fgets ($acl_server_socket,1000);
-				// parsime tulemuse laiali
-				$s_rights = explode(",",$s_res);
-				foreach($s_rights as $s_line)
-				{
-					list($s_r_name, $s_r_value) = explode(" ",$s_line);
-					$max_acl[$s_r_name] = $s_r_value;
-					//echo "got access for $s_r_name as $s_r_value <br>";
-				}
-		//		echo "out of can() <br>";
-			}
-			$awt->stop("acl::can_server");
+			$max_acl = $this->can_server($access,$oid);
+			$cmp_server = $max_acl;
 		}
+
+
+		if ($compare_acls)
+		{
+			global $acl_ids;
+			foreach($acl_ids as $bp => $aname)
+			{
+				if (((int)$cmp_aw[$aname]) != ((int)$cmp_server[$aname]))
+				{
+					echo "erinevus! oid = $oid , access = $aname , aw andis ",((int)$cmp_aw[$aname])," ja server andis ",((int)$cmp_server[$aname]),"<br>\n";
+					flush();
+				}
+			}
+		}
+
+		$access="can_".$access;
 		return $max_acl[$access];
-		//ret//urn 1;
 	}
 
 	// SELECT * FROM objects join(" ",map2("LEFT JOIN %s ON %s",$joins)) WHERE $where
@@ -517,6 +554,22 @@ dbg("olen real 155 sait=".$SITE_ID." UID=".$uid." OID=".$o_oid."<br>");
 		);
 
 		$ret= $sys->check_db_tables(array($op_table),$fix);
+		return $ret;
+	}
+
+	////
+	// !returns an array of acls in the system as array(bitpos => name)
+	function acl_list_acls()
+	{
+		global $acl_ids;
+		return $acl_ids;
+	}
+
+	function acl_get_acls_for_grp($gid,$min,$num)
+	{
+		// damn this thing is gonna be fuckin huge
+		$ret= array();
+		$this->db_query("SELECT objects.name as name,acl.oid as oid, ".$this->sql_unpack_string()."	FROM acl LEFT JOIN objects ON objects.oid = acl.oid WHERE acl.gid = $gid LIMIT $min,$num");
 		return $ret;
 	}
 }
