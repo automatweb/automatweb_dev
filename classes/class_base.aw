@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.297 2004/08/25 17:09:27 duke Exp $
+// $Id: class_base.aw,v 2.298 2004/08/31 07:56:15 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1443,6 +1443,7 @@ class class_base extends aw_template
 				"clid" => $this->clid,
 				"filter" => $filter,
 			));
+
 		};
 
 		if (!is_array($this->classinfo))
@@ -2759,14 +2760,22 @@ class class_base extends aw_template
 			$props = $arr["props"];
 		};
 
-		if (is_oid($arr["cfgform_id"]))
+		if (is_oid($arr["cfgform_id"]) && $this->can("view", $arr["cfgform_id"]))
 		{
 			$controller_inst = get_instance(CL_CFGCONTROLLER);
 			$controllers = $this->get_all_controllers($arr["cfgform_id"]);
 			
+			$cf = get_instance("cfg/cfgform");
+			$props = $cf->get_props_from_cfgform(array("id" => $arr["cfgform_id"]));
 		};
 
 		$res = array();
+
+		if (!is_array($arr["request"]))
+		{
+			return $res;
+		};
+
 
 		foreach($arr["request"] as $key => $val)
 		{
@@ -2791,7 +2800,9 @@ class class_base extends aw_template
 			if($controllers[$key])
 			{
 				$controller_id = $controllers[$key];
-				$controller_ret = $controller_inst->check_property($controller_id, $args["id"], $prpdata, $arr["request"]);
+				$prpdata["value"] = $val;
+				$controller_ret = $controller_inst->check_property($controller_id, $args["id"], $prpdata, $arr["request"], $val);
+				//print "validating $key<br>";
 
 				if ($controller_ret != PROP_OK)
 				{
@@ -2801,6 +2812,7 @@ class class_base extends aw_template
 					{
 						$errmsg = "Entry was blocked by a controller, but no error message is available";
 					};
+					$errmsg = str_replace("%caption", $prpdata["caption"], $errmsg);
 					$res[$key] = array(
 						"msg" => $errmsg,
 					);
@@ -4127,6 +4139,7 @@ class class_base extends aw_template
 	{
 		return $this->mk_my_orb("change",array(
 			"group" => $arr["group"],
+			"_alias" => get_class($this),
 			"page" => $arr["page"],
 			"topic" => $arr["topic"],
 			"id" => $arr["id"],
