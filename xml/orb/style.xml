@@ -37,7 +37,6 @@
 		<action name="change">
 			<function name="change">
 				<arguments>
-					<required name="parent"/>
 					<required name="id" acl="view;edit"/>
 				</arguments>
 			</function>
