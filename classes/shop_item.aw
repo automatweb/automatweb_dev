@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/shop_item.aw,v 2.18 2001/07/19 14:24:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/shop_item.aw,v 2.19 2001/07/19 22:11:28 duke Exp $
 
 global $orb_defs;
 $orb_defs["shop_item"] = "xml";
@@ -54,10 +54,10 @@ class shop_item extends shop_base
 
 			$this->vars(array( 
 				"item" => $f->gen_preview(array(
-										"id" => $itt["form_id"],
-										"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "type" => $type)),
-										"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$parent
-									)),
+					"id" => $itt["form_id"],
+					"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "type" => $type)),
+					"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$parent
+				)),
 				"menus" => $this->multiple_option_list(array(),$o->get_list())
 			));
 			return $this->parse();
@@ -188,7 +188,6 @@ class shop_item extends shop_base
 		$old = $this->get_object($args["oid"]);
 		$block = array(
 			"oid" => $args["oid"],
-			"class_id" => $args["class_id"],
 		);
 		return serialize($block);
 	}
@@ -198,12 +197,94 @@ class shop_item extends shop_base
 		$str = unserialize($args["str"]);
 		$oid = $str["oid"];
 		$parent = $args["parent"];
+		$this->cp(array("id" => $oid,"parent" => $args["parent"]));
+	}
+
+	////
+	// !Kopeerib poe objekti uude kohta, tehes ka kok vajalikud operatsioonid (nullib ära sold_items ntx)
+	// argumendid:
+	// id (int) - objekti id
+	// parent(int) - millise parenti all objekt kopeerida
+	function cp($args = array())
+	{
+		extract($args);
+
+		// koigepealt teeme koopia objektist.
+		$old = $this->get_object($args["id"]);
+		$old["parent"] = $args["parent"];
+		$new_id = $this->new_object($old);
+	
+		// FIXME: muudame objekti brother_of-i ära. 
+		$q = "UPDATE objects SET brother_of = '$new_id' WHERE oid = '$new_id'";
+		$this->db_query($q);
+
+		// now we copy the form_entry object
+		$old_item = $this->get_record("shop_items","id",$id);
+
 		classload("form_entry");
 		$f_entry = new form_entry();
-		$f_entry->cp(array(
-			"eid" => $oid,
-			"parent" => $parent,
+		
+		classload("planner");
+		$planner = new planner();
+
+		$new_entry_id = $f_entry->cp(array(
+					"eid" => $old_item["entry_id"],
+					"parent" => $new_id,
 		));
+
+
+		extract($old_item);
+
+		// kui vanal itemil on "has_period", siis on talle vaja kalendrit
+		// ja yhte eventit sinna kalendrisse
+		// kui on perioodiga item, siis on vaja selle perioodid ka ära kopeerida
+		// see käib küll kalendri juurde
+		if ($old_item["has_period"])
+		{
+			// kui on "has_period" ja "has_objects" siis on vaja uue objekti alla teha
+			// nii mitu objekti, kui on selle itemi max_items ja iga objekti juurde 
+			// kalendrit
+			if ($old_item["has_objects"])
+			{
+
+			}
+			else
+			{
+				$planner_id = $this->db_fetch_field("SELECT oid FROM objects WHERE parent = '$args[id]' AND class_id = " . CL_CALENDAR,"oid");
+				$new_cal_id = $planner->cp(array(
+						"id" => $planner_id,
+						"parent" => $n_id,
+				));
+
+			}
+			// siis on vaja ära kopeerida ka perioodide hinnad tabelist shop_item2per_prices
+			$q = "SELECT * FROM shop_item2per_prices WHERE item_id = $args[id]";
+			$this->db_query($q);
+			while( $row = $this->db_next() )
+			{
+				$this->save_handle();
+				$price = $row["price"];
+				$this->quote($price);
+
+				$q = "INSERT INTO shop_item2per_prices 
+					(item_id,tfrom,tto,price,per_type)
+					VALUES ('$new_id','$row[tfrom]','$row[tto]','$price','$row[per_type]')";
+				$this->db_query($q);
+				$this->restore_handle();
+			}
+				
+		};
+		// ja siis ongi koik
+		// now we only have to copy the actual shop_item object
+		$q = "INSERT INTO shop_items (id,form_id,entry_id,op_id,price,op_id_l,
+			cnt_form,redir,has_max,max_items,has_period,has_objs,price_eq,
+			type_id,sold_items,calendar_id,per_from,per_event_id,per_cnt)
+			VALUES ('$new_id','$form_id','$new_entry_id','$op_id','$price','$op_id_l',
+				'$cnt_form','$redir','$has_max','$max_items','$has_period','$has_objs',
+				'$price_eq','$type_id',0,'$new_cal_id','$per_from','$per_event_id',
+				'$per_cnt')";
+		$this->db_query($q);
+
 	}
 
 	////
