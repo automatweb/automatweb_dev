@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.9 2001/11/07 17:35:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.10 2001/11/20 11:46:58 kristo Exp $
 // tegeleb ORB requestide handlimisega
 classload("aw_template","defs");
 lc_load("automatweb");
@@ -53,15 +53,16 @@ class orb extends aw_template {
 
 		if (!is_array($orb_defs[$class]))
 		{
-			if ($orb_defs[$class] == "xml")
-			{
+//			if ($orb_defs[$class] == "xml")
+//			{
+	
 				$orb_defs = load_xml_orb_def($class);
-			}
+/*			}
 			else
 			{
 				$this->raise_error(sprintf(E_ORB_ORB_CLASS_UNDEF,$class),$fatal,$silent);
 				bail_out();
-			};
+			};*/
 		};
 
 		$action = ($action) ? $action : $orb_defs[$class]["default"];
