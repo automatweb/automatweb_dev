@@ -754,5 +754,20 @@ class ml_list extends aw_template
 		$this->load_list($id);
 		return $this->list_ob["meta"]["user_form_conf"];
 	}
+
+	function get_all_active_varnames($id)
+	{
+		$ret = array();
+		$row = $this->load_list($id);
+		$allvars=$this->get_all_varnames();
+		foreach ($allvars as $k => $name)
+		{
+			if ($row["meta"]["vars"][$k])
+			{
+				$ret[$k] = $name;
+			}
+		}
+		return $ret;
+	}
 };
 ?>
