@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.60 2003/06/19 14:29:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.61 2003/06/25 14:21:55 duke Exp $
 // image.aw - image management
 /*
 	@default group=general
@@ -63,7 +63,7 @@ class image extends class_base
 	{
 		// it shouldn't be, but it is an array, if a period is loaded
 		// from a stale cache.
-		if (is_array($id))
+		if (is_array($id) && !is_numeric($id))
 		{
 			return false;
 		}
