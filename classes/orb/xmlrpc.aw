@@ -1,5 +1,5 @@
 <?php
-
+// $Header: /home/cvs/automatweb_dev/classes/orb/Attic/xmlrpc.aw,v 1.10 2003/06/25 14:55:40 duke Exp $
 class xmlrpc extends aw_template
 {
 	var $allowed = array("I4","BOOLEAN","STRING", "DOUBLE","DATETIME.ISO8601","BASE64", "STRUCT", "ARRAY");
@@ -66,6 +66,7 @@ class xmlrpc extends aw_template
 
 	function decode_response($xml)
 	{
+		//if (aw_global_get("xmlrpc_dbg"))
 		if (aw_global_get("xmlrpc_dbg"))
 		{
 			echo "resp xml = <pre>", htmlspecialchars($xml),"</pre> <br>";
@@ -176,6 +177,10 @@ class xmlrpc extends aw_template
 	function send_request($args = array())
 	{
 		extract($args);
+		if (substr($server,0,7) == "http://")
+		{
+			$server = substr($server,7);
+		};
 		$fp = fsockopen($server,$port,&$this->errno, &$this->errstr);
 		$op = "POST $handler HTTP/1.0\r\n";
 		$op .= "User-Agent: AutomatWeb\r\n";
