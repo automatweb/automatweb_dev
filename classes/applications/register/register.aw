@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.10 2004/11/09 17:45:35 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.11 2004/11/25 11:16:55 kristo Exp $
 // register.aw - Register 
 /*
 
@@ -419,6 +419,15 @@ class register extends class_base
 
 		return $t->finalize_tree(array(
 		));
+	}
+
+	function _get_reg_folders($r)
+	{
+		$ot = new object_tree(array(
+			"parent" => $r->prop("data_rootmenu"),
+			"class_id" => CL_MENU
+		));
+		return $ot->ids();
 	}
 }
 ?>

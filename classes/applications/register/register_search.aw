@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.10 2004/08/02 12:38:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.11 2004/11/25 11:16:55 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -405,6 +405,10 @@ class register_search extends class_base
 		$awa = new aw_array($reg->prop("data_cfgform"));
 		foreach($awa->get() as $cfid)
 		{
+			if (!is_oid($cfid) || !$this->can("view", $cfid))
+			{
+				continue;
+			}
 			$cff = obj($cfid);
 			$class_id = $cff->prop("ctype");
 
@@ -435,6 +439,10 @@ class register_search extends class_base
 		$awa = new aw_array($reg->prop("data_cfgform"));
 		foreach($awa->get() as $cfid)
 		{
+			if (!is_oid($cfid) || !$this->can("view", $cfid))
+			{
+				continue;
+			}
 			$cff = obj($cfid);
 			$class_id = $cff->prop("ctype");
 			return $class_id;
@@ -570,11 +578,20 @@ class register_search extends class_base
 	function get_search_results($o, $request)
 	{
 		$reg = obj($o->prop("register"));
+		$reg_i = $reg->instance();
+
 		$props = $this->get_props_from_reg($reg);
 
 		$filter = array(
 			"class_id" => CL_REGISTER_DATA,
-			"register_id" => $reg->id()
+			new object_list_filter(array(
+				"logic" => "OR", 
+				"conditions" => array(
+					"register_id" => $reg->id(),
+					"parent" => $reg_i->_get_reg_folders($reg)
+				)
+			))
+			
 		);
 		foreach($props as $pn => $pd)
 		{
@@ -800,5 +817,6 @@ class register_search extends class_base
 		header("Location: ".$arr["return_url"]);
 		die();
 	}
+
 }
 ?>
