@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.9 2004/11/19 10:52:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.10 2004/11/19 10:54:30 kristo Exp $
 // config_login_menus.aw - Login men&uuml;&uuml;d 
 /*
 
@@ -101,7 +101,7 @@ class config_login_menus extends class_base
 
 		$data = aw_serialize($lm);
 		$this->quote($data);
-		$conf->set_simple_config("login_menus_".aw_ini_get("site_id"),$data);
+		$this->set_cval("login_menus_".aw_ini_get("site_id"),$data);
 		
 	}
 
