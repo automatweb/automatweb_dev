@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.31 2004/09/10 12:08:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.32 2004/09/14 13:40:12 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -301,9 +301,23 @@ class releditor extends core
 
 	function init_rel_toolbar($arr)
 	{
-		$newurl = aw_url_change_var(array(
-			$this->elname => "new",
-		));
+		if ($arr["prop"]["direct_links"])
+		{
+			$params = array(
+				"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+			);
+			if ($arr["prop"]["cfgform"])
+			{
+				$params["cfgform"] = $arr["prop"]["cfgform"];
+			}
+			$newurl = html::get_new_url($arr["prop"]["clid"][0], $arr["obj_inst"]->parent(), $params);
+		}
+		else
+		{
+			$newurl = aw_url_change_var(array(
+				$this->elname => "new",
+			));
+		}
 
 		$tb = get_instance("vcl/toolbar");
 		$tb->add_button(array(
