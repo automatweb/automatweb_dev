@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.149 2004/06/25 20:10:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.150 2004/08/23 09:42:56 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -247,6 +247,10 @@ class aliasmgr extends aw_template
 		{
 			$act = "list_aliases";
 		};
+		// so how should this thing work? if there is a special argument, then put the current
+		// url into the new url as a return_url
+
+		// except that if there already is one, then add do it. eh?
 		return $this->mk_my_orb($act,array("id" => $id,"group" => $group,"return_url" => urlencode($return_url)),$this->use_class);
 	}
 		
@@ -1040,7 +1044,10 @@ class aliasmgr extends aw_template
 		$tmp = aw_ini_get("classes");
 		$this->reltypes[RELTYPE_BROTHER] = "too vend";
 		$this->rel_type_classes[RELTYPE_BROTHER] = array(
-			CL_MENU => $tmp[CL_MENU]["name"]
+			CL_MENU => $tmp[CL_MENU]["name"],
+			CL_SHOP_PRODUCT => $tmp[CL_SHOP_PRODUCT]['name'],
+			CL_SHOP_PACKET => $tmp[CL_SHOP_PACKET]['name'],
+			CL_SHOP_PRODUCT_PACKAGING => $tmp[CL_SHOP_PRODUCT_PACKAGING]['name'],
 		);
 
 		$this->reltypes[RELTYPE_ACL] = "&otilde;igus";
