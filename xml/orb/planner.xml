@@ -100,7 +100,16 @@
 			<function name="event_repeaters">
 				<arguments>
 					<required name="id" type="int"/>
-					<optional name="stage" type="int"/>
+					<optional name="cycle"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="delete_repeater">
+			<function name="delete_repeater">
+				<arguments>
+					<required name="id" type="int"/>
+					<required name="cycle" type="int"/>
 				</arguments>
 			</function>
 		</action>
