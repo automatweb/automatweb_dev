@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.77 2002/01/11 00:45:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.78 2002/01/11 12:19:39 duke Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -299,6 +299,7 @@ class document extends aw_template
 	{
 		global $DEBUG;
 		extract($params);
+		global $print;	
 		$tpl = isset($params["tpl"]) ? $params["tpl"] : "plain.tpl";
 		!isset($leadonly) ? $leadonly = -1 : "";
 		!isset($strip_img) ? $strip_img = 0 : "";
@@ -342,7 +343,6 @@ class document extends aw_template
 			$doc["content"] .= "<p><font size=1><i>Viimati muudetud:&nbsp;&nbsp;</i>" . $this->time2date($doc["modified"],4) . "</font>";
 		};
 	
-		global $print;	
 
 		if ( ($meta["show_print"]) && (not($print)) && $leadonly != 1)
 		{
@@ -564,7 +564,7 @@ class document extends aw_template
 			};
 		}
 
-		if (is_array($keywords))
+		if (is_array($keywords) && not($print) )
 		{
 			// performs the actual search and replace
 			foreach ($keywords as $k_key => $k_val)
@@ -737,7 +737,7 @@ class document extends aw_template
 		));
 
 		$fr = "";
-		if ($doc["is_forum"])
+		if ($doc["is_forum"] && (not($print)) )
 		{
 			classload("forum");
 			$forum = new forum();
