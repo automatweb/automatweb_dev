@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.329 2004/12/01 14:01:16 ahti Exp $
+// $Id: class_base.aw,v 2.330 2004/12/01 14:37:42 ahti Exp $
 // the root of all good.
 // <<<<<
 // ------------------------------------------------------------------
@@ -29,13 +29,13 @@
 	@comment Kas objekt on aktiivne 
 
 	@property needs_translation type=checkbox field=flags method=bitmask ch_value=2 // OBJ_NEEDS_TRANSLATION
-	@caption Vajab tõlget
+	@caption Vajab t&otilde;lget
 
 	// see peaks olemas olema ainult siis, kui sellel objekt on _actually_ mingi asja tõlge
 	@property is_translated type=checkbox field=flags method=bitmask ch_value=4 trans=1 // OBJ_IS_TRANSLATED
-	@caption Tõlge kinnitatud
+	@caption T&otilde;lge kinnitatud
 
-	@groupinfo general caption=Üldine default=1 icon=edit
+	@groupinfo general caption=&Uuml;ldine default=1 icon=edit
 
 	@forminfo add onload=init_storage_object 
 	@forminfo edit onload=load_storage_object
