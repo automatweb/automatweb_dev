@@ -1,4 +1,5 @@
 <script src="/automatweb/js/popup_menu.js" type="text/javascript">
+
 </script>
 
 <script language="javascript">
@@ -62,6 +63,68 @@ function change(val)
 		alert("Valige ainult yks objekt palun!");
 	}
 }
+
+function go_add(cl)
+{
+	url = "orb.{VAR:ext}?class=" + cl + "&action=new&parent={VAR:parent}&period={VAR:period}";
+	document.location = url;
+}
+
+function go_change(cl,id,par)
+{
+	pare = par ? par : "{VAR:parent}";
+	url = "orb.{VAR:ext}?class=" + cl + "&action=change&parent=" + pare + "&period={VAR:period}&id=" + id ;
+	document.location = url;
+}
+
+
+function go_view(cl,id,par)
+{
+	pare = par ? par : "{VAR:parent}";
+	url = "orb.{VAR:ext}?class=" + cl + "&action=view&parent=" + pare + "&period={VAR:period}&id=" + id ;
+	document.location = url;
+}
+
+function go_cut(id,par)
+{
+	pare = par ? par : "{VAR:parent}";
+	url = "orb.{VAR:ext}?class=menuedit&reforb=1&action=cut&parent=" + pare + "&id=" + id + "&sel[" + id + "]=1";
+	document.location = url;
+}
+
+function go_copy(id,par)
+{
+	pare = par ? par : "{VAR:parent}";
+	url = "orb.{VAR:ext}?class=menuedit&reforb=1&action=copy&parent=" + pare + "&id=" + id + "&sel[" + id + "]=1";
+	document.location = url;
+}
+
+function go_delete(id,par)
+{
+	pare = par ? par : "{VAR:parent}";
+	url = "orb.{VAR:ext}?class=menuedit&reforb=1&action=delete&parent=" + pare + "&id=" + id + "&sel[" + id + "]=1";
+	document.location = url;
+}
+
+function go_open(id)
+{
+	url = "orb.{VAR:ext}?class=menuedit&action=right_frame&parent=" + id + "&period={VAR:period}";
+	document.location = url;
+}
+
+function go_go(par,perio)
+{
+	perio = perio ? perio : "{VAR:period}";
+	url = "orb.{VAR:ext}?class=menuedit&action=right_frame&parent=" + par + "&period=" + perio;
+	document.location = url;
+}
+
+function go_acl(id)
+{
+	url = "editacl.{VAR:ext}?file=menu.xml&oid=" + id;
+	document.location = url;
+}
+
 </script>
 
 

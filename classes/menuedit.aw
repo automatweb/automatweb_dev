@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.259 2003/03/12 15:26:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.260 2003/03/12 16:19:44 axel Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -28,12 +28,12 @@ class menuedit extends aw_template
 	// !simpel menyy lisamise funktsioon. laienda kui soovid. Mina kasutan seda saidi seest   
 	// uue folderi lisamiseks kodukataloogi alla   
 	// skip_invalidate   
-	function add_new_menu($args = array())   
+	function add_new_menu($args = array())
 	{   
 		// ja eeldame, et meil on v�emalt parent ja name olemas.   
 		$this->quote($args["name"]);   
 		$newoid = $this->new_object(array(   
-			"name" => $args["name"],   
+			"name" => $args["name"],
 			"parent" => $args["parent"],   
 			"status" => (isset($args["status"]) ? $args["status"] : 2),   
 			"class_id" => CL_PSEUDO,   
@@ -52,7 +52,7 @@ class menuedit extends aw_template
 		if (!$args['no_flush'])   
 		{   
 			$this->invalidate_menu_cache(array($newoid));   
-		}   
+		}
 
 		return $newoid;   
 	} 
@@ -185,7 +185,7 @@ class menuedit extends aw_template
 	}
 	
 	////
-	// !da thing. draws the site 
+	// !da thing. draws the site
 	// params: section, text, docid, strip_img, template, format, vars, no_left_pane, no_right_pane
 	// niisiis. vars array peaks sisaldama mingeid pre-parsed html tkke,
 	// mis vivad tulla ntx kusagilt orbi klassi seest vtm.
@@ -1295,7 +1295,7 @@ class menuedit extends aw_template
 		$this->db_listall("objects.status != 0 AND menu.type != ".MN_FORM_ELEMENT,true);
 		while ($row = $this->db_next())
 		{
-			$row["name"] = str_replace("\"","&quot;", $row["name"]);
+			$row["name"] = str_replace("\"","&quot;", $row["name"]); //"
 			if ($this->can("view",$row["oid"]) || 
 			    $row["oid"] == $this->cfg["admin_rootmenu2"]
 			)
@@ -1389,6 +1389,7 @@ class menuedit extends aw_template
 		}
 		$this->vars(array(
 			"rooturl" => $this->mk_my_orb("right_frame", array("parent" => $this->cfg["admin_rootmenu2"]))
+			//"rooturl" => "javascript:go_go(".$this->cfg['admin_rootmenu2'].",'')",
 		));
 		return $this->parse();
 	}
@@ -1426,7 +1427,8 @@ class menuedit extends aw_template
 				"id" => $row["oid"],
 				"parent" => $row["parent"],
 				"iconurl" => $row["icon_id"] != "" ? $baseurl."/automatweb/icon.".$this->cfg["ext"]."?id=".$row["icon_id"] : $baseurl."/automatweb/images/ftv2doc.gif",
-				"url" => $this->mk_my_orb("right_frame",array("parent" => $row["oid"]))
+				"url" => $this->mk_my_orb("right_frame",array("parent" => $row["oid"])),
+				//"url" => "javascript:go_go(".$row["oid"].",'')",
 			));
 			$this->homefolders[$row["oid"]] = $row["oid"];
 			if ($sub == "")
@@ -1472,6 +1474,7 @@ class menuedit extends aw_template
 			"parent" => $admin_rootmenu2,
 			"iconurl" => icons::get_icon_url("homefolder",""),
 			"url" => $this->mk_my_orb("right_frame",array("parent" => $hf["oid"]))
+			//"url" => "javascript:go_go(".$hf["oid"].",'')",
 		));
 		$hft = $this->parse("TREE");
 
@@ -1489,7 +1492,8 @@ class menuedit extends aw_template
 				"id"	=> $v["oid"],		
 				"parent"=> SHARED_FOLDER_ID,
 				"iconurl" => $row["icon_id"] ? $baseurl."/automatweb/icon.".$ext."?id=".$row["icon_id"] : $baseurl."/automatweb/images/ftv2doc.gif",
-				"url"	=> $this->mk_my_orb("right_frame", array("parent" => $v["oid"]))
+				"url"	=> $this->mk_my_orb("right_frame", array("parent" => $v["oid"])),
+				//"url" => "javascript:go_go(".$v["oid"].",'')",
 			));
 			$shares.=$this->parse("DOC");
 		}
@@ -1499,7 +1503,8 @@ class menuedit extends aw_template
 			"id" => SHARED_FOLDER_ID,		
 			"parent" => $hf["oid"],
 			"iconurl" => icons::get_icon_url("shared_folders",""),
-			"url" => $this->mk_my_orb("right_frame",array("parent" => SHARED_FOLDER_ID))
+			"url" => $this->mk_my_orb("right_frame",array("parent" => SHARED_FOLDER_ID)),
+			//"url" => "javascript:go_go(".SHARED_FOLDER_ID.",'')",
 		));
 		if ($shares != "")
 		{
@@ -1626,7 +1631,8 @@ class menuedit extends aw_template
 									asort($clns);
 									foreach($clns as $cl_file => $cl_name)
 									{
-										$addlink = $this->mk_my_orb("new", array("parent" => $id, "period" => $period), $cl_file, true, true);
+										//$addlink = $this->mk_my_orb("new", array("parent" => $id, "period" => $period), $cl_file, true, true);
+										$addlink = "javascript:go_add('".basename($cl_file)."')";
 
 										$cnt++;
 										$ret .= $cnt."|".((int)$cp)."|".$cl_name."|$addlink|list".$sep;
@@ -1635,8 +1641,8 @@ class menuedit extends aw_template
 							}
 							else
 							{
-								$addlink = $this->mk_my_orb("new", array("parent" => $id, "period" => $period), $this->cfg["classes"][$meta["type"]]["file"], true, true);
-
+								//$addlink = $this->mk_my_orb("new", array("parent" => $id, "period" => $period), $this->cfg["classes"][$meta["type"]]["file"], true, true);
+								$addlink = "javascript:go_add('".basename($this->cfg["classes"][$meta["type"]]["file"])."')";
 								$cnt++;
 								$ret .= $cnt."|".((int)$counts[$row["parent"]])."|".$row["name"]."|$addlink|list".$sep;
 							}
@@ -1686,8 +1692,8 @@ class menuedit extends aw_template
 			asort($clns);
 			foreach($clns as $cl_file => $cl_name)
 			{
-				$addlink = $this->mk_my_orb("new", array("parent" => $parent, "period" => $period), $cl_file, true, true);
-
+				//$addlink = $this->mk_my_orb("new", array("parent" => $parent, "period" => $period), $cl_file, true, true);
+				$addlink = "javascript:go_add('".basename($cl_file)."')";
 				$cnt++;
 				$ret .= $cnt."|".((int)$cp)."|".$cl_name."|$addlink|list".$sep;
 			}
@@ -1708,7 +1714,8 @@ class menuedit extends aw_template
 					$parens = explode(",", $cldata["parents"]);
 					if (in_array($prnt, $parens))
 					{
-						$addlink = $this->mk_my_orb("new", array("parent" => $parent, "period" => $period), $cldata["file"], true, true);
+						//$addlink = $this->mk_my_orb("new", array("parent" => $parent, "period" => $period), $cldata["file"], true, true);
+						$addlink = "javascript:go_add('".basename($cldata["file"])."')";
 						$tcnt++;
 				 $ret .= ($tcnt)."|0|".$cldata["name"]."|$addlink|list".$sep;
 					}
@@ -1726,7 +1733,8 @@ class menuedit extends aw_template
 					$parens = explode(",", $cldata["parents"]);
 					if (in_array($prnt, $parens))
 					{
-						$addlink = $this->mk_my_orb("new", array("parent" => $parent, "period" => $period), $cldata["file"], true, true);
+						//$addlink = $this->mk_my_orb("new", array("parent" => $parent, "period" => $period), $cldata["file"], true, true);
+						$addlink = "javascript:go_add('".basename($cldata["file"])."')";
 						$ret .= ($clid+1000)."|".((int)($prnt+4))."|".$cldata["name"]."|$addlink|list".$sep;
 					}
 				}
@@ -1776,7 +1784,9 @@ class menuedit extends aw_template
 
 		if ($obj["class_id"] == CL_PSEUDO)
 		{
-			$ourl = $this->mk_my_orb("right_frame", array("id" => $id, "parent" => $obj["oid"],"period" => $period), "menuedit",true,true);
+			//$ourl = $this->mk_my_orb("right_frame", array("id" => $id, "parent" => $obj["oid"],"period" => $period), "menuedit",true,true);
+			$ourl = "javascript:go_open(".$obj["oid"].")";
+
 			if ($type == "js")
 			{
 				$this->vars(array(
@@ -1793,7 +1803,8 @@ class menuedit extends aw_template
 
 		if ($this->can("edit", $id))
 		{
-			$churl = $this->mk_my_orb("change", array("id" => $id, "parent" => $obj["parent"],"period" => $period), $this->cfg["classes"][$obj["class_id"]]["file"],true,true);
+			//$churl = $this->mk_my_orb("change", array("id" => $id, "parent" => $obj["parent"],"period" => $period), $this->cfg["classes"][$obj["class_id"]]["file"],true,true);
+			$churl = "javascript:go_change('".basename($this->cfg["classes"][$obj["class_id"]]["file"])."',$id,".$obj['parent'].")";
 			if ($type == "js")
 			{
 				$this->vars(array(
@@ -1807,7 +1818,8 @@ class menuedit extends aw_template
 				$retval .= "1|0|Change|".$churl."|list".$sep;
 			}
 
-			$cuturl = $this->mk_my_orb("cut", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1"), "menuedit",true,true);
+			//$cuturl = $this->mk_my_orb("cut", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1"), "menuedit",true,true);
+			$cuturl = "javascript:go_cut($id,".$obj['parent'].")";
 			if ($type == "js")
 			{
 				$this->vars(array(
@@ -1822,7 +1834,8 @@ class menuedit extends aw_template
 			}
 		}
 
-		$copyurl = $this->mk_my_orb("copy", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1","period" => $period), "menuedit",true,true);
+		//$copyurl = $this->mk_my_orb("copy", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1","period" => $period), "menuedit",true,true);
+		$copyurl = "javascript:go_copy($id,".$obj['parent'].")";
 		if ($type == "js")
 		{
 			$this->vars(array(
@@ -1838,7 +1851,8 @@ class menuedit extends aw_template
 
 		if ($this->can("delete", $id))
 		{
-			$delurl = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1","period" => $period), "menuedit",true,true);
+			//$delurl = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1","period" => $period), "menuedit",true,true);
+			$delurl = "javascript:go_delete($id,".$obj['parent'].")";
 			if ($type == "js")
 			{
 				$this->vars(array(
@@ -1855,7 +1869,8 @@ class menuedit extends aw_template
 
 		if ($this->can("admin", $id))
 		{
-			$delurl = $baseurl."/automatweb/editacl.".$this->cfg["ext"]."?file=menu.xml&oid=".$id;
+			//$delurl = $baseurl."/automatweb/editacl.".$this->cfg["ext"]."?file=menu.xml&oid=".$id;
+			$delurl = "javascript:go_acl(".$id.")";
 			if ($type == "js")
 			{
 				$this->vars(array(
@@ -1891,6 +1906,7 @@ class menuedit extends aw_template
 			$parent = $this->cfg["amenustart"];
 			// kui parentit antud pole, siis esimese elemendina tagastame selle AW ikooni
 			$rooturl = $this->mk_my_orb("right_frame", array("parent" => $this->cfg["admin_rootmenu2"]));
+			//$rooturl = "javascript:go_go(".$this->cfg["admin_rootmenu2"].",'')";
 			$this->_send_branch_line(0,0,"AutomatWeb",$rooturl,$baseurl . "/automatweb/images/aw_ikoon.gif");
 		};
 
@@ -1917,6 +1933,7 @@ class menuedit extends aw_template
 			{
 
 				$url = $this->mk_my_orb("right_frame",array("parent" => $hf["oid"]));
+				//$url = "javascript:go_go(".$hf["oid"].",'')";
 				$iconurl = icons::get_icon_url("homefolder","");
 				// allpool peab ka acli kontrollima :(
 				$q = "SELECT oid FROM objects LEFT JOIN menu ON (objects.oid = menu.id) WHERE objects.status != 0 AND ( (objects.class_id = 1) OR (objects.class_id = 39) ) AND (menu.type != " . MN_FORM_ELEMENT . " AND menu.type != " . MN_ADMIN1 . ") AND objects.parent = '$hf[oid]' AND (objects.lang_id = ".aw_global_get("lang_id") . " OR menu.type = 69)";
@@ -2035,7 +2052,8 @@ class menuedit extends aw_template
 						$iconurl = $row["icon_id"] > 0 ? $baseurl."/automatweb/icon.".$ext."?id=".$row["icon_id"] : $baseurl."/automatweb/images/ftv2doc.gif";
 					}
 
-					$url = $this->mk_my_orb("right_frame",array("parent" => $row["oid"], "period" => $period));
+					//$url = $this->mk_my_orb("right_frame",array("parent" => $row["oid"], "period" => $period));
+					$url = "javascript:go_view(".$row["oid"].")";
 					$this->_send_branch_line($row["oid"],$subcnt,$row["name"],$url,$iconurl);
 				}
 			}
@@ -2053,7 +2071,7 @@ class menuedit extends aw_template
 			$this->db_listall("objects.status != 0 AND menu.type != ".MN_FORM_ELEMENT,true);
 			while ($row = $this->db_next())
 			{
-				$row["name"] = str_replace("\"","&quot;", $row["name"]);
+				$row["name"] = str_replace("\"","&quot;", $row["name"]);//"
 				if ($this->can("view",$row["oid"]) || 
 					$row["oid"] == $this->cfg["admin_rootmenu2"]
 				)
@@ -2105,6 +2123,7 @@ class menuedit extends aw_template
 								}
 							}
 							$url = $this->mk_my_orb("right_frame",array("parent" => $d_row["oid"], "period" => $period));
+							//$url = "javascript:go_go(".$d_row["oid"].",'".$period."')";
 							$this->_send_branch_line($d_row["oid"],$subcnt,$d_row["name"],$url,$iconurl);
 						}
 					}
@@ -2318,7 +2337,7 @@ class menuedit extends aw_template
 			$this->vars(array(
 				"name" => $row["name"],"id" => "gp_".$row["oid"], "parent" => "gp_".$row["parent"],
 				"iconurl" => $this->cfg["baseurl"]."/automatweb/images/ftv2doc.gif",
-				"url"			=> $this->mk_orb("mk_grpframe",array("parent" => $row["gid"]),"groups")
+				"url" => $this->mk_orb("mk_grpframe",array("parent" => $row["gid"]),"groups")
 			));
 			if ($sub == "")
 			{
@@ -2387,6 +2406,7 @@ class menuedit extends aw_template
 						"parent" => $row["parent"],
 						"iconurl" => $url,
 						"url" => $this->mk_my_orb("right_frame",array("parent" => $row["oid"], "period" => $period))
+						//"url" => "javascript:go_go(".$row["oid"].",'".$period."')",
 					));
 					if ($sub == "")
 					{
@@ -3438,6 +3458,7 @@ class menuedit extends aw_template
 		$this->invalidate_menu_cache($this->updmenus);
 
 		return $this->mk_my_orb("right_frame", array("parent" => $parent));
+//		return $url = "javascript:go_go(".$parent.",'')";
 	}
 
 	function req_import_menus($i_p, &$menus, $parent)
@@ -3495,7 +3516,9 @@ class menuedit extends aw_template
 		}
 
 		aw_session_set("cut_objects",$cut_objects);
+		
 		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
+		//return "javascript:go_go(".$parent.",'".$period."')";
 	}
 
 	////
@@ -3531,7 +3554,9 @@ class menuedit extends aw_template
 			}
 		}
 		aw_session_set("copied_objects", $copied_objects);
+
 		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
+		//return "javascript:go_go(".$parent.",'".$period."')";
 	}
 
 	function copy_feedback($arr)
@@ -3567,6 +3592,7 @@ class menuedit extends aw_template
 		}
 		aw_session_set("copied_objects", $copied_objects);
 		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
+		//return "javascript:go_go(".$parent.",'".$period."')";
 	}
 
 	////
@@ -3607,6 +3633,7 @@ class menuedit extends aw_template
 
 		$GLOBALS["copied_objects"] = array();
 		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
+		//return "javascript:go_go(".$parent.",'".$period."')";
 	}
 
 	function o_delete($arr)
@@ -3628,6 +3655,7 @@ class menuedit extends aw_template
 		return $this->mk_orb("obj_list", array("parent" => $parent, "period" => $period));
 		aw_session_set("copied_objects",array());
 		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
+		//return "javascript:go_go(".$parent.",'".$period."')";
 	}
 
 	function make_menu_caches($where = "objects.status = 2")
@@ -5227,6 +5255,7 @@ class menuedit extends aw_template
 			if ($row["class_id"] == CL_PSEUDO || $row["class_id"] == CL_BROTHER || $row["class_id"] == CL_PROMO)
 			{
 				$chlink = $this->mk_my_orb("right_frame", array("parent" => $row["oid"], "period" => $period));
+				//$chlink = "javascript:go_go(".$row["oid"].",'".$period."')";
 				$row["is_menu"] = 1;
 			}
 			else
@@ -5236,10 +5265,13 @@ class menuedit extends aw_template
 			}
 			else
 			{
-				$chlink = $this->mk_my_orb("view", array("id" => $row["oid"], "parent" => $row["parent"]),$this->cfg["classes"][$row["class_id"]]["file"]);
+				//$chlink = $this->mk_my_orb("view", array("id" => $row["oid"], "parent" => $row["parent"]),$this->cfg["classes"][$row["class_id"]]["file"]);
+				$chlink = "javascript:go_view('".basename($this->cfg["classes"][$row["class_id"]]["file"])."',".$row["oid"].",".$row["parent"].")";
 				$row["is_menu"] = 2;
 			}
 
+			$dellink = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $id, "parent" => $row["parent"],"sel[".$row["oid"]."]" => "1"), "menuedit",true,true);
+			//$dellink = "javascript:go_delete('menuedit',$id,$row["parent"])"; $id ==? $row["oid"]
 			if (isset($sel_objs[$row["oid"]]))
 			{
 				$row["cutcopied"] = "#E2E2DB";
@@ -5654,7 +5686,8 @@ class menuedit extends aw_template
 		list($oid,) = each($sel);
 
 		$obj = $this->get_object($oid);
-		return $this->mk_my_orb("change", array("id" => $oid, "parent" => $parent), $this->cfg["classes"][$obj["class_id"]]["file"]);
+		//return $this->mk_my_orb("change", array("id" => $oid, "parent" => $parent), $this->cfg["classes"][$obj["class_id"]]["file"]);
+		return "javascript:go_change('".basename($this->cfg["classes"][$row["class_id"]]["file"])."',".$oid.",".$parent.")";
 	}
 
 	function blank($arr)
