@@ -8,16 +8,16 @@
             <field>meta</field>
             <method>serialize</method>
             <group>general2</group>
-            <caption>Default vaade</caption>
+            <caption>Aeg</caption>
       </property>
       <property>
             <name>content_generator</name>
             <type>select</type>
             <rel>1</rel>
+            <group>advanced</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general2</group>
             <caption>Näitamisfunktsioon</caption>
       </property>
       <property>
@@ -33,21 +33,21 @@
       <property>
             <name>day_start</name>
             <type>time_select</type>
+            <group>time_settings</group>
             <rel>1</rel>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general2</group>
             <caption>Päev algab</caption>
       </property>
       <property>
             <name>day_end</name>
             <type>time_select</type>
+            <group>time_settings</group>
             <rel>1</rel>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general2</group>
             <caption>Päev lõpeb</caption>
       </property>
       <property>
@@ -78,7 +78,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <default>1</default>
-            <group>advanced</group>
+            <group>time_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -91,7 +91,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <default>1</default>
-            <group>advanced</group>
+            <group>time_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -179,7 +179,7 @@
       <property>
             <name>range_start</name>
             <type>date_select</type>
-            <group>advanced</group>
+            <group>time_settings</group>
             <rel>1</rel>
             <table>objects</table>
             <field>meta</field>
@@ -190,7 +190,7 @@
             <name>event_time_item</name>
             <type>textbox</type>
             <size>4</size>
-            <group>advanced</group>
+            <group>time_settings</group>
             <rel>1</rel>
             <table>objects</table>
             <field>meta</field>
@@ -235,7 +235,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Tööpäevad</caption>
+            <caption>Näidatavad päevad</caption>
       </property>
       <property>
             <name>navtoolbar</name>
@@ -304,13 +304,9 @@
                   <parent>general</parent>
             </general2>
             <advanced>
-                  <caption>Seaded</caption>
+                  <caption>Sisuseaded</caption>
                   <parent>general</parent>
             </advanced>
-            <special>
-                  <caption>Spetsiaalne</caption>
-                  <parent>general</parent>
-            </special>
             <views>
                   <caption>Vaated</caption>
             </views>
@@ -330,6 +326,14 @@
                   <default>1</default>
                   <parent>views</parent>
             </show_month>
+            <time_settings>
+                  <caption>Ajaseaded</caption>
+                  <parent>general</parent>
+            </time_settings>
+            <special>
+                  <caption>Spetsiaalne</caption>
+                  <parent>general</parent>
+            </special>
             <add_event>
                   <caption>Lisa_sündmus</caption>
             </add_event>
