@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.10 2004/07/08 11:53:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.11 2004/07/13 15:01:37 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2 
 /*
 
@@ -755,7 +755,7 @@ class object_treeview_v2 extends class_base
 
 		$t->define_field(array(
 			"name" => "is_date",
-			"caption" => "Kuup&auml;ev?",
+			"caption" => "Kuup&auml;ev tekstina?",
 			"align" => "center"
 		));
 	}
@@ -767,6 +767,14 @@ class object_treeview_v2 extends class_base
 		// find the first non-matching element
 		foreach($this->__is as $isd)
 		{
+			if ($isd["element"] == "modified")
+			{
+				$isd["element"] = "mod_date";
+			}
+			if ($isd["element"] == "created")
+			{
+				$isd["element"] = "add_date";
+			}
 			$comp_a = $a[$isd["element"]];
 			$comp_b = $b[$isd["element"]];
 
@@ -784,6 +792,7 @@ class object_treeview_v2 extends class_base
 				break;
 			}
 		}
+
 		// sort by that element
 		if ($comp_a  == $comp_b)
 		{
@@ -792,7 +801,7 @@ class object_treeview_v2 extends class_base
 
 		if ($ord == "asc")
 		{
-			return $comp_a > $comp_b ? 1 : -1;
+			return $comp_a < $comp_b ? 1 : -1;
 		}
 		else
 		{

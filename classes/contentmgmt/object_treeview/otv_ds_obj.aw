@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.6 2004/07/08 11:53:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.7 2004/07/13 15:01:37 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -435,7 +435,14 @@ class otv_ds_obj extends class_base
 			{
 				if ($ff_n != "url")
 				{
-					$ret[$t->id()][$ff_n] = $t->prop($ff_n);
+					if ($ff_n != "type")
+					{
+						$ret[$t->id()][$ff_n] = $t->prop($ff_n);
+					}
+					else
+					{
+						$ret[$t->id()][$ff_n] = $this->cfg["classes"][$t->class_id()]["name"];
+					}
 				}
 			}
 		}
