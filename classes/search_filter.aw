@@ -306,12 +306,15 @@ class search_filter extends aw_template
 
 					case "listbox":
 						$arr["fields"][$edata["name"]]["type"]=0;//string
+						$arr["fields"][$edata["name"]]["select"][0]="";
 						if (is_array($edata["lb_items"]))
-						foreach($edata["lb_items"] as $number => $lbval)
 						{
-							if ($lbval)//miskid tyhjad valikud tekivad
-								$arr["fields"][$edata["name"]]["select"][$lbval]=$lbval;
-						};
+							foreach($edata["lb_items"] as $number => $lbval)
+							{
+								if ($lbval)//miskid tyhjad valikud tekivad
+									$arr["fields"][$edata["name"]]["select"][$lbval]=$lbval;
+							};
+						}
 						break;
 
 					case "date":
@@ -687,11 +690,11 @@ class search_filter extends aw_template
 						$this->db_query($q);
 						while ($row = $this->db_next())
 						{
-							if ($used_eids[$row["chain_id"]])
+							if ($used_eids[$row["chain_entry_id"]])
 							{
 								continue;
 							}
-							$used_eids[$row["chain_id"]]=1;
+							$used_eids[$row["chain_entry_id"]]=1;
 
 							if ($GLOBALS["dbg_ft"]) echo "nr= $num_rec_found eid = ", $row["entry_id"], " ch_eid = ", $row["chain_entry_id"], "<br>";//dbg
 							$num_rec_found++;
@@ -724,7 +727,7 @@ class search_filter extends aw_template
 									};
 								};
 							};
-							$this->ft->row_data($row);
+							$this->ft->row_data($row,$fid,$GLOBALS["section"], $this->filter["filter_op"], $chain_id,$row["chain_entry_id"] );
 						};
 					};
 				}; // of foreach ($chainids as $chain_id)
@@ -775,20 +778,11 @@ class search_filter extends aw_template
 							};
 						};
 					};
-					$this->ft->row_data($row);
+					$this->ft->row_data($row,$fid,$GLOBALS["section"], $this->filter["filter_op"], 0,0);
 				}
 			};
 		};
 
-
-		// Siin on juba joonistatud nüüd see andmete osa siis
-		if ($GLOBALS["get_csv_file"])
-		{
-			header('Content-type: Application/Octet-stream"');
-			header('Content-disposition: root_access; filename="csv_output_'.$id.'.csv"');
-			print $this->ft->t->get_csv_file();
-			die();
-		};
 
 		$parse="";
 		// See siin on miskise ymber nurga fulltext searchi jaoks mis kaob varsti ära kui asi tööle hakkab
@@ -816,6 +810,16 @@ class search_filter extends aw_template
 		};
 		
 		$parse.= $this->ft->finalize_table(array("no_form_tags" => $no_form_tags));
+
+		// Siin on juba joonistatud nüüd see andmete osa siis
+		if ($GLOBALS["get_csv_file"])
+		{
+			header('Content-type: Application/Octet-stream"');
+			header('Content-disposition: root_access; filename="csv_output_'.$id.'.csv"');
+			print $this->ft->t->get_csv_file();
+			die();
+		};
+
 
 		// Siin hakkab näitama statistika tabelit all
 		if ($this->data["stat_show"] && $this->data["stat_id"])
