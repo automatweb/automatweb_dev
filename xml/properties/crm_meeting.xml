@@ -114,6 +114,17 @@
             <caption>Kalendrid</caption>
       </property>
       <property>
+            <name>other_selector</name>
+            <table>objects</table>
+            <group>others</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>callback</type>
+            <callback>cb_calendar_others</callback>
+            <store>no</store>
+            <caption>Teised</caption>
+      </property>
+      <property>
             <name>project_selector</name>
             <table>objects</table>
             <group>projects</group>
@@ -158,6 +169,9 @@
             <calendars>
                   <caption>Kalendrid</caption>
             </calendars>
+            <others>
+                  <caption>Teised</caption>
+            </others>
             <projects>
                   <caption>Projektid</caption>
             </projects>
