@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.26 2005/03/23 16:05:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.27 2005/03/24 07:52:00 kristo Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -279,6 +279,7 @@ class mrp_job extends class_base
 					//"img" => "new.gif",
 					"tooltip" => t("Alusta"),
 					"action" => "start",
+					"confirm" => t("Oled kindel et soovid t&ouml;&ouml;d alustada?")
 				));
 			}
 		}
@@ -290,6 +291,7 @@ class mrp_job extends class_base
 				//"img" => "done.gif",
 				"tooltip" => t("Valmis"),
 				"action" => "done",
+				"confirm" => t("Oled kindel et soovid t&ouml;&ouml;d l&otilde;petada?")
 			));
 
 			$toolbar->add_button(array(
@@ -440,9 +442,7 @@ class mrp_job extends class_base
 			$project->set_prop ("progress", $progress);
 
 			### set resource in use
-			$resource_obj = obj($this_object->prop("resource"));
-			$resource_obj->set_prop("state", MRP_STATUS_RESOURCE_INUSE);
-			$resource_obj->save();
+			$mrp_resource->start_job(array("resource" => $this_object->prop("resource")));
 
 			### start job
 			$this_object->set_prop ("state", MRP_STATUS_INPROGRESS);

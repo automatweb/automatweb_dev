@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.53 2005/03/23 15:46:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.54 2005/03/24 07:52:00 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -2938,7 +2938,8 @@ class mrp_workspace extends class_base
 			"site_id" => array(),
 			"lang_id" => array(),
 			"starttime" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $arr["minstart"]),
-//			"status" => new obj_predicate_not(MRP_STATUS_DONE)
+//			"status" => new obj_predicate_not(MRP_STATUS_DONE),
+			"sort_by" => "mrp_job.starttime"
 		);
 
 		if ($arr["onlydone"])
@@ -2952,6 +2953,7 @@ class mrp_workspace extends class_base
 		}
 
 		$jobs = new object_list($filt);
+
 		$ret = array();
 		foreach($jobs->arr() as $o)
 		{
