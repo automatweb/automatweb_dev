@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.365 2005/02/15 10:57:10 duke Exp $
+// $Id: class_base.aw,v 2.366 2005/02/16 13:29:55 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1867,17 +1867,6 @@ class class_base extends aw_template
 			};
 		};
 		
-		// this was implemented for BDG, because I needed to allow the user to 
-		// choose one connected image to be used as the flyer for an event.
-		// would be nice to get rid of this.
-		if ($property["type"] == "relpicker" && isset($property["pri"]))
-		{
-			$realclid = constant($property["clid"]);
-			$q = sprintf("SELECT target FROM aliases WHERE source = %d AND pri = %d AND type = %d",
-					$this->id,$property["pri"],$realclid);
-			$property["value"] = $this->db_fetch_field($q,"target");
-		}
-		else
 		// if this is a new object and the property has a default value, use it
 		if (empty($this->id) && isset($property["default"]))
 		{
