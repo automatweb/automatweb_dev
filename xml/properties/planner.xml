@@ -59,7 +59,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Päeva vaates on ainult sündmustega päevad</caption>
+            <caption>Näidatakse ainult sündmustega päevi</caption>
       </property>
       <property>
             <name>tab_add_visible</name>
@@ -85,19 +85,6 @@
             <method>serialize</method>
             <caption>
             <![CDATA["Päev" nähtav]]>
-            </caption>
-      </property>
-      <property>
-            <name>tab_overview_visible</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <default>1</default>
-            <group>advanced</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>
-            <![CDATA["Ülevaade" nähtav]]>
             </caption>
       </property>
       <property>
@@ -235,10 +222,9 @@
             <field>oid</field>
             <group>
                   <num_0>show_day</num_0>
-                  <num_1>show_overview</num_1>
-                  <num_2>show_week</num_2>
-                  <num_3>show_month</num_3>
-                  <num_4>add_event</num_4>
+                  <num_1>show_week</num_1>
+                  <num_2>show_month</num_2>
+                  <num_3>add_event</num_3>
             </group>
             <method>serialize</method>
             <view>show</view>
@@ -250,14 +236,6 @@
             <view>show</view>
             <store>no</store>
             <caption>Päev</caption>
-      </property>
-      <property>
-            <name>show_overview</name>
-            <callback>callback_show_overview</callback>
-            <group>show_overview</group>
-            <view>show</view>
-            <store>no</store>
-            <caption>Ülevaade</caption>
       </property>
       <property>
             <name>show_week</name>
@@ -285,6 +263,7 @@
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
+            <toolbar>yes</toolbar>
       </classinfo>
       <groupinfo>
             <advanced>
@@ -294,10 +273,6 @@
                   <caption>Päev</caption>
                   <submit>no</submit>
             </show_day>
-            <show_overview>
-                  <caption>Ülevaade</caption>
-                  <submit>no</submit>
-            </show_overview>
             <show_week>
                   <caption>Nädal</caption>
                   <submit>no</submit>
