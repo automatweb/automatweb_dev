@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.15 2004/11/19 12:47:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.16 2004/11/22 14:16:52 duke Exp $
 // project.aw - Projekt 
 /*
 
@@ -87,6 +87,9 @@
 
 @reltype IMPLEMENTOR value=10 clid=CL_CRM_COMPANY
 @caption teostaja
+
+@reltype PRJ_VIDEO value=11 clid=CL_VIDEO
+@caption Video
 
 */
 
