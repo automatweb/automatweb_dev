@@ -392,7 +392,7 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 		{
 			// beisikli if were doing connections_to
 
-			$cldef = $GLOBALS["cfg"]["classes"][$arr["from.class_id"]];
+			$cldef = $GLOBALS["cfg"]["__default"]["classes"][$arr["from.class_id"]];
 			if ($cldef["rels"][$arr["type"]]["trans_always_original"] == 1)
 			{
 				if (is_array($arr["to"]))
@@ -428,6 +428,10 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 			"from" => $oid,
 			"type" => RELTYPE_ORIGINAL
 		)));
+		if (!$conn)
+		{
+			return $oid;
+		}
 		return $conn["to"];
 	}
 }
