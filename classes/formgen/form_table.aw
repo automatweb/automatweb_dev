@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.42 2003/04/25 13:00:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.43 2003/06/26 14:15:00 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -375,7 +375,7 @@ class form_table extends form_base
 			{
 				$dat["ev_modified"] = $this->time2date($dat["modified"], 2);
 			};
-			$dat["ev_select"] = "<input type='checkbox' name='sel[".$dat["entry_id"]."]' ".checked(isset($this->table["sel_def"]) && ($this->table["sel_def"]))." VALUE='1'>";
+			$dat["ev_select"] = "<input type='checkbox' name='sel[".$dat["entry_id"]."]' ".checked(isset($this->table["select_default"]) && ($this->table["select_default"]))." VALUE='1'>";
 			$dat["ev_jrk"] = "[__jrk_replace__]";
 		}
 
@@ -1395,7 +1395,7 @@ class form_table extends form_base
 	function get_js()
 	{
 		return "<script language='javascript'>
-			var chk_status = ".($this->table["sel_def"] == 1 ? "false" : "true").";
+			var chk_status = ".($this->table["select_default"] == 1 ? "false" : "true").";
 
 				function tb_selall(frmna)
 				{
