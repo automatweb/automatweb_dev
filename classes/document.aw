@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.85 2002/01/31 23:34:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.86 2002/01/31 23:53:13 duke Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -43,6 +43,7 @@ class document extends aw_template
 			
 		global $basedir;
 
+		// this takes less than 0.1 seconds btw
 		$xml_def = $this->get_file(array("file" => "$basedir/xml/documents/defaults.xml"));
                 if ($xml_def)
 		{
@@ -124,7 +125,7 @@ class document extends aw_template
 		$this->db_query($q);
 	}
 
-	///
+	////
 	// !Listib dokud mingi menüü all
 	function list_docs($parent,$period = -1,$status = -1,$visible = -1)
 	{
@@ -499,6 +500,7 @@ class document extends aw_template
 				{
 					$txt = "<b>";
 				};
+
 				if ($doc["lead"] != "" && $doc["lead"] != "&nbsp;")
 				{
 					if (defined("LEAD_SPLITTER"))
@@ -510,14 +512,18 @@ class document extends aw_template
 						$txt .= $doc["lead"] . "<br>";
 					}
 				}
+
+				// whaat?
 				if (defined("NO_LEAD_SPLITTER"))
 				{
 					$txt.=NO_LEAD_SPLITTER;
 				}
+
 				if ($boldlead) 
 				{
 					$txt .= "</b>";
 				};
+
 				$txt .= ($GLOBALS["doc_lead_break"] && $no_doc_lead_break != 1 ? "<br>" : "")."$doc[content]";
 				$doc["content"] = $txt;
 			};
@@ -528,6 +534,7 @@ class document extends aw_template
 		
 		$doc["content"] = preg_replace("/<loe_edasi>(.*)<\/loe_edasi>/isU","<a href='$baseurl/index.$ext/section=$docid'>\\1</a>",$doc["content"]);
 		// sellel real on midagi pistmist WYSIWYG edimisvormiga
+		// and this also means that we can't have xml inside the document. sniff.
 		$doc["content"] = preg_replace("/<\?xml(.*)\/>/imsU","",$doc["content"]); 
 
 		$this->docid = $docid;
@@ -535,17 +542,7 @@ class document extends aw_template
 
 		$this->register_parsers();
 
-
-		// linkide parsimine
-		while (preg_match("/(#)(\d+?)(#)(.*)(#)(\d+?)(#)/U",$doc["content"],$matches))
-		{
-			$doc["content"] = str_replace($matches[0],"<a href='#" . $matches[2] . "'>$matches[4]</a>",$doc["content"]);
-		};
-
-		while(preg_match("/(#)(s)(\d+?)(#)/",$doc["content"],$matches))
-		{
-			$doc["content"] = str_replace($matches[0],"<a name='" . $matches[3] . "'> </a>",$doc["content"]);
-		};
+		$this->create_relative_links(&$doc["content"]);
 
 		// viimati muudetud dokude listi rida
 		if (preg_match("/#viimati_muudetud num=\"(.*)\"#/",$doc["content"], $matches))
@@ -554,25 +551,9 @@ class document extends aw_template
 		}
 
 		// tekitame keywordide lingid
-		// this should be toggled with a preference in site config
 		if (defined("KEYWORD_RELATIONS"))
 		{
-			$q = "SELECT keywords.keyword AS keyword,keyword_id FROM keywordrelations LEFT JOIN keywords ON (keywordrelations.keyword_id = keywords.oid) WHERE keywordrelations.id = '$docid'";
-			$this->db_query($q);
-			while($row = $this->db_next())
-			{
-				$keywords[$row["keyword"]] = sprintf(" <a href='%s' title='%s'>%s<sup><b>*</b></sup></a> ",$this->mk_my_orb("lookup",array("id" => $row["keyword_id"],"section" => $docid),"document"),"LINK",$row["keyword"]);
-			};
-		}
-
-		if (is_array($keywords) && not($print) )
-		{
-			// performs the actual search and replace
-			foreach ($keywords as $k_key => $k_val)
-			{
-				$k_key = str_replace("/","\/",$k_key);
-				$doc["content"] = preg_replace("/\b$k_key\b/i",$k_val," " . $doc["content"] . " ");
-			};
+			$this->create_keyword_relations(&$doc["content"]);
 		}
 	
 		// v6tame pealkirjast <p> maha
@@ -600,7 +581,6 @@ class document extends aw_template
 		// #top# link - viib doku yles
 		$top_link = $this->parse("top_link");
 		$this->vars(array(
-			"top_link" => "",
 			"num_comments" => sprintf("%d",$num_comments),
 			"comm_link" => $this->mk_my_orb("show_threaded",array("board" => $docid),"forum"),
 		));
@@ -620,7 +600,6 @@ class document extends aw_template
 		{
 			$doc["content"] = str_replace("\r\n","<br>",$doc["content"]);
 		}
-		# $doc["content"] = str_replace("\n","",$doc["content"]);
 
 		$pb = "";
 		if ($doc["photos"])
@@ -3065,6 +3044,50 @@ class document extends aw_template
 		
 		$text = str_replace("<p>","",$text);
 		$text = str_replace("<P>","",$text);
+	}
+
+	////
+	// !Creates relative links inside the text
+	function create_relative_links(&$text)
+	{
+		// linkide parsimine
+		while (preg_match("/(#)(\d+?)(#)(.*)(#)(\d+?)(#)/U",$text,$matches))
+		{
+			$text = str_replace($matches[0],"<a href='#" . $matches[2] . "'>$matches[4]</a>",$text);
+		};
+
+		while(preg_match("/(#)(s)(\d+?)(#)/",$text,$matches))
+		{
+			$text = str_replace($matches[0],"<a name='" . $matches[3] . "'> </a>",$text);
+		};
+	}
+
+	////
+	// !Creates keyword relations
+	// this should be toggled with a preference in site config
+	function create_keyword_relations(&$text)
+	{
+		// FIXME: check whether that query is optimal
+		$q = "SELECT keywords.keyword AS keyword,keyword_id FROM keywordrelations 
+			LEFT JOIN keywords ON (keywordrelations.keyword_id = keywords.oid) 
+			WHERE keywordrelations.id = '$this->docid'";
+		print $q;
+		$this->db_query($q);
+		$keywords = array();
+		while($row = $this->db_next())
+		{
+			$keywords[$row["keyword"]] = sprintf(" <a href='%s' title='%s'>%s<sup><b>*</b></sup></a> ",$this->mk_my_orb("lookup",array("id" => $row["keyword_id"],"section" => $docid),"document"),"LINK",$row["keyword"]);
+		}
+
+		if (is_array($keywords) && not($print) )
+		{
+			// performs the actual search and replace
+			foreach ($keywords as $k_key => $k_val)
+			{
+				$k_key = str_replace("/","\/",$k_key);
+				$text = preg_replace("/\b$k_key\b/i",$k_val," " . $text . " ");
+			};
+		}
 	}
 };
 ?>
