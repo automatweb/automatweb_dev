@@ -1,4 +1,9 @@
 <?php
+if (empty($_COOKIE["nocache"]))
+{
+        session_cache_limiter("public");
+};
+
 session_name("automatweb");
 session_start();
 classload("aw_template");

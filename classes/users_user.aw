@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.83 2004/03/09 15:35:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.84 2004/03/11 09:06:18 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -272,6 +272,7 @@ class users_user extends aw_template
 			setcookie("tafkap",$uid,strtotime("+7 years"));
 		};
 		
+		setcookie("nocache",1);
 		session_register("uid");
 		aw_global_set("uid", $uid);
 		
