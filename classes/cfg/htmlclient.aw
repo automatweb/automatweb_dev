@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.97 2005/02/23 11:32:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.98 2005/03/10 12:44:54 ahti Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -243,6 +243,7 @@ class htmlclient extends aw_template
 		{
 			$lf = array();
 		};
+		//arr($res);
 
 		if ($type == "iframe")
 		{
@@ -306,9 +307,9 @@ class htmlclient extends aw_template
 		}
 		// now I have to check whether this property is placed in a grid
 		// if so, place this thing int he grid
-		elseif (	!empty($args["layout"]) && 
-				!empty($this->layoutinfo[$args["layout"]]) &&
-				$this->layoutinfo[$args["layout"]]["type"] == "grid")
+		elseif (!empty($args["layout"]) && 
+			!empty($this->layoutinfo[$args["layout"]]) &&
+			$this->layoutinfo[$args["layout"]]["type"] == "grid")
 		{
 			// now for starters lets assume that this grid thingie uses autoflow, I'll implement
 			// other things later on. properties come in and will be placed in the correct places
@@ -372,7 +373,7 @@ class htmlclient extends aw_template
 			);
 		};
 
-		if (empty($args["value"]) && is_callable(array($args["vcl_inst"],"get_html")))
+		if (empty($args["value"]) && is_callable(array($args["vcl_inst"], "get_html")))
 		{
 			$args["value"] = $args["vcl_inst"]->get_html();
 		}
@@ -441,6 +442,7 @@ class htmlclient extends aw_template
 			{
 				$args["value"] = $args["caption"];
 			};
+			unset($args["caption"]);
 		};
 
 		if ($args["type"] == "container")
@@ -507,7 +509,7 @@ class htmlclient extends aw_template
 	{
 		$name = "SUBMIT";
 		$tpl_vars = array(
-			"sbt_caption" => $arr["caption"] ? $arr["caption"] : "Salvesta",
+			"sbt_caption" => $arr["value"] ? $arr["value"] : "Salvesta",
 			"name" => $arr["name"] ? $arr["name"] : "",
 			"action" => $arr["action"] ? $arr["action"] : "",
 			"webform_element" => !empty($arr["style"]["prop"]) ? "st".$arr["style"]["prop"] : "",
