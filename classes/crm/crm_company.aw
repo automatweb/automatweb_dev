@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.39 2004/06/29 09:43:09 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.40 2004/06/30 09:15:38 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -142,16 +142,21 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 ////|------|------| <- hobx2
 @default group=customers
 
-@property customer_toolbar type=toolbar no_caption=1 store=no
+@layout customer_hbox_toolbar type=hbox group=customers
+
+@property customer_toolbar type=toolbar no_caption=1 store=no parent=customer_hbox_toolbar
 @caption "Klientide toolbar"
 
-//first hbox inside the vbox
-@layout customer_hbox2 type=hbox group=customers
+@layout customers_hbox_others type=hbox group=customers width=20%:80%
 
-@property customer_listing_tree type=treeview no_caption=1 parent=customer_hbox2
+@layout vbox_customers_left type=vbox parent=customers_hbox_others group=customers
+
+@property customer_listing_tree type=treeview no_caption=1 parent=vbox_customers_left
 @caption Rühmade puu
 
-@property customer type=table store=no no_caption=1 parent=customer_hbox2
+@layout vbox_customers_right type=vbox parent=customers_hbox_others group=customers
+
+@property customer type=table store=no no_caption=1 parent=vbox_customers_right
 @caption Kliendid
 
 ////end of box////
@@ -285,9 +290,47 @@ class crm_company extends class_base
 	var $active_node = 0;
 	var $group_not_shown = true;
 	var $data = null;
+	/*
+		Problem. The datamodel is as follows.
+			company -> section -> profession|section|member 
+			or
+			company -> profession|section|member
+		profession, section, member are relations.
+		crm_company.reltype_section.value!=crm_person.reltype_section
+		This is why i need to hold the values of the relations.
+		When the time comes and i can use textual relations('RELTYPE_FOO'), i would just
+		have the names the same and the methods operating on the relations
+		would do the work. But until then i'll have tmp variables...
+		Later on they can be just changed to text
+	*/
+	//sections
+	//crm_company.reltype_section.value = 28;
+	var $crm_company_reltype_section = 28;
+	//crm_section.reltype_subsection.value = 1;
+	var $crm_section_reltype_section = 1;
+	//professions
+	//crm_company.reltype_professions.value = 29;
+	var $crm_company_reltype_professions = 29;
+	//crm_section.reltype_professions.value = 1;
+	var $crm_section_reltype_professions = 3;
+	//workers
+	//crm_company.reltype_workers.value = 8;
+	var $crm_company_reltype_workers = 8;
+	//crm_section.reltype_workers.value = 2;
+	var $crm_section_reltype_workers = 2;
+
+	//default to company relation values
+	var $reltype_section = 0;//$this->crm_company_reltype_section;
+	var $reltype_professions = 0;//$this->crm_company_reltype_professions;
+	var $reltype_workers = 0;//$this->crm_company_reltype_workers;
 
 	function crm_company()
 	{
+		//default to company relation values
+		$this->reltype_section = $this->crm_company_reltype_section;
+		$this->reltype_professions = $this->crm_company_reltype_professions;
+		$this->reltype_workers = $this->crm_company_reltype_workers;
+		//
 		$this->init(array(
 			'clid' => CL_CRM_COMPANY,
 			'tpldir' => 'firma',
@@ -306,6 +349,16 @@ class crm_company extends class_base
 	function generate_tree($tree, $obj,$node_id,$type1,$skip, $attrib, $leafs)
 	{
 		//all connections from the currrent object
+		//different reltypes
+		if($obj->prop('class_id')==CL_CRM_COMPANY)
+		{
+			$type1 = $this->crm_company_reltype_section;
+		}
+		else if($obj->prop('class_id')==CL_CRM_SECTION)
+		{
+			$type1 = $this->crm_section_reltype_section;
+		}
+		
 		$conns = $obj->connections_from(array(
 			'type'=>$type1
 		));
@@ -337,7 +390,6 @@ class crm_company extends class_base
 							'cat'=>''
 				))
 			);
-			
 			//let's find the picture for this obj
 			$img_conns = $tmp_obj->connections_from(array('type'=>'RELTYPE_IMAGE'));
 			//uuuuu, we have a pic
@@ -363,10 +415,19 @@ class crm_company extends class_base
 	//hardcoded
 	function tree_node_items($tree,$obj,$this_level_id,$node_id)
 	{
+		$type = 'RELTYPE_PROFESSIONS';
+		if($obj->prop('class_id')==CL_CRM_COMPANY)
+		{
+			$type = $this->crm_company_reltype_professions;
+		}
+		else if($obj->prop('class_id')==CL_CRM_SECTION)
+		{
+			$type = $this->crm_section_reltype_professions;
+		}
 		//getting the list of professions for the current
 		//unit/organization
 		$prof_connections = $obj->connections_from(array(
-			'type'=>'RELTYPE_PROFESSIONS',
+			'type'=>$type,
 		));
 
 		$key = 'unit';
@@ -422,7 +483,18 @@ class crm_company extends class_base
 		
 		if((int)$arr['request']['unit'])
 		{
+			//section relations are active now
 			$this->unit=$arr['request']['unit'];
+			$this->reltype_section = $this->crm_section_reltype_section;
+			$this->reltype_professions = $this->crm_section_reltype_professions;
+			$this->reltype_workers = $this->crm_section_reltype_workers;
+		}
+		else
+		{
+			//company relations are default
+			$this->reltype_section = $this->crm_company_reltype_section;
+			$this->reltype_professions = $this->crm_company_reltype_professions;
+			$this->reltype_workers = $this->crm_company_reltype_workers;
 		}
 
 		switch($data['name'])
@@ -435,20 +507,6 @@ class crm_company extends class_base
 			case "unit_listing_tree":
 			{
 				$tree_inst = &$arr['prop']['vcl_inst'];
-				//toplevel tree item, unit=>parent won't fall into if((int)$arr['request']['unit']), so its okay
-				/*if($arr['request']['unit']=='parent' || !$arr['request']['unit'])
-				{
-					$name = '<b>'.'Üksused'.'</b>';
-				}
-				else
-				{
-					$name = 'Üksused';
-				}*/
-				/*$tree_inst->add_item(0,array("id"=>1,
-														'name'=>$name,
-														'url'=>aw_url_change_var(array('unit'=>'parent',
-																									'cat'=>''))
-				));*/
 				$node_id = 0;
 				$this->active_node = (int)$arr['request']['unit'];
 				$this->generate_tree(&$tree_inst,$arr['obj_inst'],&$node_id,RELTYPE_SECTION,array(),'unit',true);
@@ -457,19 +515,6 @@ class crm_company extends class_base
 			case "customer_listing_tree":
 			{
 				$tree_inst = &$arr['prop']['vcl_inst'];	
-				/*if($arr['request']['category']=='parent' || !$arr['request']['category'])
-				{
-					$name = '<b>'.'Kategooriad'.'</b>';
-				}
-				else
-				{
-					$name = 'Kategooriad';
-				}
-				$tree_inst->add_item(0,array("id"=>1,
-														'name'=>$name,
-														'url'=>aw_url_change_var(array('category'=>'parent',
-																									'cat'=>''))
-				));*/
 				$node_id = 0;
 				$this->active_node = (int)$arr['request']['category'];
 				$this->generate_tree(&$tree_inst,$arr['obj_inst'],&$node_id,
@@ -690,8 +735,8 @@ class crm_company extends class_base
                         'sortable' => '1',
                 ));
 		$t->define_field(array(
-								'name' => 'osakond',
-								'caption' => 'Osakond',
+								'name' => 'section',
+								'caption' => 'Üksus',
 								'sortable' => '1',
 					));
 		$t->define_field(array(
@@ -778,7 +823,7 @@ class crm_company extends class_base
 		else
 		{
 			$conns = $arr["obj_inst"]->connections_from(array(
-				"type" => RELTYPE_WORKERS,
+				"type" => $this->crm_company_reltype_workers,
 			));
 
 			//if listing from a specific unit, then the reltype is different
@@ -786,7 +831,7 @@ class crm_company extends class_base
 			{
 				$obj = new object((int)$arr['request']['unit']);
 				$conns = $obj->connections_from(array(
-					'type' => RELTYPE_MEMBER,
+					'type' => $this->crm_section_reltype_workers,
 				));
 			}
 
@@ -805,7 +850,6 @@ class crm_company extends class_base
 				"id" => $person->id(),
 				"cal_id" => $cal_id,
 			));
-
 			if(is_oid($arr['request']['cat']))
 			{
 				//persons only from this category
@@ -828,12 +872,33 @@ class crm_company extends class_base
 				$pdat['rank'] = join(', ',$tmp_arr2);
 			}
 			
+			$sections_professions = array();
+			$section = '';
+			foreach($pdat['sections_arr'] as $key=>$value)
+			{
+				$crm_section = get_instance('crm/crm_section');
+				$sections_professions[$key] = $crm_section->get_professions($key);
+				$tmp_arr = array_intersect(array_keys($pdat['ranks_arr']),array_keys($pdat['ranks_arr']));
+				$tmp_arr2 = array();
+				foreach($tmp_arr as $key2=>$value2)
+				{
+					$tmp_arr2[] = $pdat['ranks_arr'][$value2];
+				}
+				$section = current($pdat['sections_arr']).', '.join(', ',$tmp_arr2);
+				//damn, i'm not sure if a person can have multiple sections?
+				//until then the break stays here
+				break;
+			}
+
+			//kui amet kuulub $pdat['sections_arr'] olevasse sektsiooni ja persoon on seotud
+			//selle ametiga, siis seda näidata kujul 
 			
 			$tdata = array(
 				"name" => $person->prop('name'),
 				"id" => $person->id(),
 				"phone" => $pdat["phone"],
 				"rank" => $pdat["rank"],
+				'section' => $section,
 				"email" => html::href(array(
 					"url" => "mailto:" . $pdat["email"],
 					"caption" => $pdat["email"],
@@ -866,7 +931,7 @@ class crm_company extends class_base
 	{	
 		//getting all the workers for the $obj
 		$conns = $obj->connections_from(array(
-			"type" => RELTYPE_MEMBER,
+			"type" => $this->crm_section_reltype_workers,
 		));
 		foreach($conns as $conn)
 		{
@@ -1082,7 +1147,7 @@ class crm_company extends class_base
 		{
 			$target_obj->connect(array(
 				"to" => $conn->prop("from"),
-				"reltype" => RELTYPE_MEMBER,
+				"reltype" => $this->crm_section_reltype_workers,
 			));
 		
 		}
@@ -1098,7 +1163,7 @@ class crm_company extends class_base
 		{
 			$target_obj->connect(array(
 				"to" => $conn->prop("from"),
-				"reltype" => RELTYPE_MEMBER,
+				"reltype" => $this->crm_section_reltype_workers,
 			));
 		}
 	}
@@ -1179,6 +1244,10 @@ class crm_company extends class_base
 		$fake_alias = 0;
 		reset($arr['check']);
 		$fake_alias = current($arr['check']);
+
+		//why need person? cos i want to add the same event to the user too
+		//$person = get_instance('crm/crm_person');
+		//$person = $person->get_person_by_user_id(users_user::get_oid_for_uid(aw_global_get('uid')));
 		$url = $this->mk_my_orb('change',array(
 				'id'=>$cal_id,
 				'group'=>'add_event',
@@ -1186,6 +1255,7 @@ class crm_company extends class_base
 				'reltype_org'=>9, //PERSON_CALL
 				'clid'=>$arr['clid'],
 				'alias_to_org_arr'=>urlencode(serialize($arr['check'])),
+				//'person_id'=>$person,
 			),'planner');
 		header('Location: '.$url);	
 		die();
@@ -1625,12 +1695,10 @@ class crm_company extends class_base
 		));
 		
 		$alias_to = $arr['obj_inst']->id();
-		$rel_type = RELTYPE_WORKERS;
 		
 		if((int)$arr['request']['unit'])
 		{
 			$alias_to = $arr['request']['unit'];
-			$rel_type = RELTYPE_MEMBER;
 		}
 
 		$tb->add_menu_item(array(
@@ -1639,7 +1707,7 @@ class crm_company extends class_base
 				'link'=>$this->mk_my_orb('new',array(
 					'parent'=>$arr['obj_inst']->id(),
 					'alias_to'=>$alias_to,//$arr['obj_inst']->id(),
-					'reltype'=>$rel_type,
+					'reltype'=>$this->reltype_workers,
 					'return_url'=>urlencode(aw_global_get('REQUEST_URI'))
 				),'crm_person')
 				
@@ -1651,7 +1719,7 @@ class crm_company extends class_base
 				'link'=>$this->mk_my_orb('new',array(
 					'parent'=>$arr['obj_inst']->id(),
 					'alias_to'=>$alias_to,
-					'reltype'=>RELTYPE_SECTION,
+					'reltype'=> $this->reltype_section,
 					'return_url'=>urlencode(aw_global_get('REQUEST_URI'))
 					),
 					'crm_section')
@@ -1663,7 +1731,7 @@ class crm_company extends class_base
 				'link'=>$this->mk_my_orb('new',array(
 					'parent'=>$arr['obj_inst']->id(),
 					'alias_to'=>$alias_to,
-					'reltype'=>RELTYPE_PROFESSIONS,
+					'reltype'=> $this->reltype_professions,
 					'return_url'=>urlencode(aw_global_get('REQUEST_URI'))
 					),
 					'crm_profession')
@@ -1682,7 +1750,7 @@ class crm_company extends class_base
 			'name' => 'Kõne',
 			'img' => 'class_223.gif',
 			'tooltip' => 'Tee kõne',
-			'action' => 'submit_new_phone_call'
+			'action' => 'submit_new_call'
 		));
 
 		//uus date
