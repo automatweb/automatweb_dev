@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.22 2004/06/22 14:30:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.23 2004/06/25 13:13:39 duke Exp $
 // scheduler.aw - Scheduler
 class scheduler extends aw_template
 {
@@ -237,13 +237,16 @@ class scheduler extends aw_template
 		// now do all events for which the time has expired
 		$cp = $this->repdata;
 
+		$now = time();
+
 		foreach($cp as $evnt)
 		{
-			if (isset($evnt["time"]) && (time() > $evnt["time"]))
+			if (isset($evnt["time"]) && ($now > $evnt["time"]))
 			{
 				echo "exec event $evnt[event] <br />";
 				$this->do_and_log_event($evnt);
 			}
+
 		}
 	}
 
@@ -304,6 +307,7 @@ class scheduler extends aw_template
 
 		echo "do send req $url ",substr($ev_url,strlen("http://")+strlen($url))," <br />";
 		$req = $awt->do_send_request(array("host" => $url, "req" => substr($ev_url,strlen("http://")+strlen($url))));
+		print $req;
 		echo "unlinking ",$lockfilename," <br />";
 		unlink($lockfilename);
 
