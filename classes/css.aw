@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.17 2002/11/07 10:52:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.18 2002/11/22 12:14:43 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 // I decided to make it a separate class, because I think the style.aw 
 // class is too cluttered.
@@ -556,7 +556,7 @@ class css extends aw_template
 					break;
 
 				case "lineheight":
-					$mask = "line-height: %s ".$data["lhunits"].";\n";
+					$mask = "line-height: %s".$data["lhunits"].";\n";
 					break;
 
 				case "border":
