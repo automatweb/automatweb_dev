@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.4 2004/02/26 14:09:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.5 2004/03/08 20:20:52 kristo Exp $
 // rte.aw - Rich Text Editor 
 /*
 
@@ -136,6 +136,16 @@ class rte extends class_base
                         "url" => "javascript:${js_url_prefix}format_selection('indent');",
                         "img" => "rte_indent.gif",
                 ));
+
+		$toolbar->add_separator();
+
+		$toolbar->add_button(array(
+			"name" => "source",
+			"tooltip" => "HTML",
+			"target" => "_self",
+			"url" => "javascript:oldurl=window.location.href;window.location.href=oldurl + '&no_rte=1';",
+		));
+
                
 	       	/*
                 $toolbar->add_separator();
