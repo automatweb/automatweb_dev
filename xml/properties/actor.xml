@@ -1,0 +1,30 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>name</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>description</name>
+            <type>textarea</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Rolli kirjeldus</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_ACTOR</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <groupinfo>
+            <general>
+                  <caption>Üldine</caption>
+            </general>
+      </groupinfo>
+</properties>
+

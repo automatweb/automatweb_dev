@@ -1,0 +1,76 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>treeview_conf</name>
+            <type>objpicker</type>
+            <clid>CL_TREEVIEW</clid>
+            <editonly>1</editonly>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Puu konfiguratsioon</caption>
+      </property>
+      <property>
+            <name>actor_rootmenu</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ROOTMENU</reltype>
+            <group>config_actor</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Tegijate juurmenüü</caption>
+      </property>
+      <property>
+            <name>action_rootmenu</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ROOTMENU</reltype>
+            <group>config_action</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Tegevuste juurmenüü</caption>
+      </property>
+      <property>
+            <name>entity_rootmenu</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ROOTMENU</reltype>
+            <group>config_entity</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Olemite juurmenüü</caption>
+      </property>
+      <property>
+            <name>process_rootmenu</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ROOTMENU</reltype>
+            <group>config_process</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Protsesside juurmenüü</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_WORKFLOW_CONFIG</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <groupinfo>
+            <general>
+                  <caption>Üldine</caption>
+            </general>
+            <config_actor>
+                  <caption>Tegijate_konf</caption>
+            </config_actor>
+            <config_action>
+                  <caption>Tegevuste_konf</caption>
+            </config_action>
+            <config_entity>
+                  <caption>Olemite_konf</caption>
+            </config_entity>
+            <config_process>
+                  <caption>Protsesside_konf</caption>
+            </config_process>
+      </groupinfo>
+</properties>
+
