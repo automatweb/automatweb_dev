@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/lang/en/automatweb.aw,v 1.5 2001/10/02 10:16:59 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/lang/en/automatweb.aw,v 1.6 2001/12/05 22:38:59 duke Exp $
 // automatwebis kasutatavad teated
 define("E_ORB_CLASS_UNDEF","ORB: class not defined");
 define("E_ORB_ACTION_UNDEF","ORB: action not defined");
@@ -10,5 +10,6 @@ define("E_ORB_CLASS_PARM","ORB: parameter '%s' for action '%s' in class '%s' is 
 define("E_ORB_METHOD_NOT_FOUND","ORB: no function defined for action '%s' in class '%s'");
 define("E_ORB_REFFERER","ORB: refferer incorrect (%s)");
 define("E_ORB_LOGIN_REQUIRED","ORB: you have to be logged in to do that");
+define("E_ORB_NOT_INTEGER","ORB: parameter (%s) requires an integer value");
 
 ?>
