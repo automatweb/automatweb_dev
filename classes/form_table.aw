@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.44 2002/08/01 17:00:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.45 2002/08/02 13:31:58 kristo Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -53,6 +53,10 @@ class form_table extends form_base
 		$this->t->parse_xml_def_string($this->get_xml($id));
 		$this->set_numeric_fields_in_table();
 
+		if ($GLOBALS["tbl_dbg"])
+		{
+			echo "table id = $id <br>";
+		}
 		enter_function("form_table::groupsettings");
 		$this->in_show_all_entries_groups = false;
 		if (is_array($this->table["user_entries_except_grps"]) && count($this->table["user_entries_except_grps"]) > 0)
@@ -130,7 +134,7 @@ class form_table extends form_base
 	function row_data(&$dat,$form_id = 0,$section = 0 ,$op_id = 0,$chain_id = 0, $chain_entry_id = 0)
 	{
 		enter_function("form_table::row_data", array());
-
+		
 		// check if we should perhaps not show the damn entry
 		if (isset($this->table["has_grpsettings"]) && $this->table["has_grpsettings"])
 		{
@@ -147,6 +151,8 @@ class form_table extends form_base
 				return;
 			}
 		}
+
+		$this->num_lines++;
 
 		if ($form_id != 0)
 		{
@@ -260,7 +266,6 @@ class form_table extends form_base
 		}
 
 		$this->t->define_data($dat);
-		$this->num_lines++;
 		exit_function("form_table::row_data", array());
 	}
 
@@ -417,7 +422,7 @@ class form_table extends form_base
 		// here. add the table header aliases to the table string
 		$tbl .= $this->render_aliases($this->table["table_header_aliases"]);
 
-		$tbl .= $this->do_pageselector(nl2br($this->table["header"]));
+		$tbl .= $this->do_render_text_aliases($this->do_pageselector(nl2br($this->table["header"])));
 
 		if (!$no_form_tags)
 		{
@@ -428,7 +433,10 @@ class form_table extends form_base
 			"rgroupby" => $r_g,
 			"rgroupdat" => $rgroupdat,
 			"rgroupby_sep" => $rgroupby_sep,
-			"titlebar_under_groups" => $this->table["has_grpnames"]
+			"titlebar_under_groups" => $this->table["has_grpnames"],
+			"has_pages" => $this->table["has_pages"],
+			"records_per_page" => $this->table["records_per_page"],
+			"act_page" => $GLOBALS["ft_page"]
 		));
 
 		if (!$no_form_tags)
@@ -443,7 +451,7 @@ class form_table extends form_base
 			$tbl.="</form>";
 		}
 
-		$tbl .= $this->do_pageselector(nl2br($this->table["footer"]));
+		$tbl .= $this->do_render_text_aliases($this->do_pageselector(nl2br($this->table["footer"])));
 
 		if ($this->table["no_show_empty"] && $this->num_lines < 1)
 		{
@@ -689,6 +697,14 @@ class form_table extends form_base
 		{
 			$op.= $s->get_css($this->table["content_sorted_style2"],$this->table["link_style2"]);
 		}
+		if ($this->table["pg_lb_style"])
+		{
+			$op.= $s->get_css($this->table["pg_lb_style"],0);
+		}
+		if ($this->table["pg_text_style"])
+		{
+			$op.= $s->get_css($this->table["pg_text_style"],$this->table["pg_text_style_link"]);
+		}
 		$op.="</style>\n";
 		return $op;
 	}
@@ -851,9 +867,6 @@ class form_table extends form_base
 		$this->table["has_pages"] = $settings["has_pages"];
 		$this->table["has_pages_type"] = $settings["has_pages_type"];
 		$this->table["records_per_page"] = $settings["records_per_page"];
-		$this->table["has_pages_up"] = $settings["has_pages_up"];
-		$this->table["has_pages_down"] = $settings["has_pages_down"];
-		$this->table["page_sep_pixels"] = $settings["page_sep_pixels"];
 		$this->table["skip_one_liners"] = $settings["skip_one_liners"];
 		$this->table["user_entries"] = $settings["user_entries"];
 		$this->table["doc_title_is_search"] = $settings["doc_title_is_search"];
@@ -983,9 +996,6 @@ class form_table extends form_base
 			"has_pages_lb" => checked($this->table["has_pages_type"] == "lb"),
 			"has_user_entries" => checked($this->table["user_entries"]),
 			"records_per_page" => $this->table["records_per_page"],
-			"page_sep_pixels" => $this->table["page_sep_pixels"],
-			"has_pages_up" => checked($this->table["has_pages_up"]),
-			"has_pages_down" => checked($this->table["has_pages_down"]),
 			"uee_grps" => $this->mpicker($this->table["user_entries_except_grps"], $us->get_group_picker(array("type" => array(GRP_REGULAR,GRP_DYNAMIC)))),
 			"skip_one_liners" => checked($this->table["skip_one_liners"]),
 			"show_second_table" => checked($this->table["show_second_table"]),
@@ -1463,7 +1473,9 @@ class form_table extends form_base
 			"group_link_style" => $this->picker($this->table["group_link_style"],$css),
 			"link_style1" => $this->picker($this->table["link_style1"],$css),
 			"link_style2" => $this->picker($this->table["link_style2"],$css),
-
+			"pg_text_style" => $this->picker($this->table["pg_text_style"], $css),
+			"pg_text_style_link" => $this->picker($this->table["pg_text_style_link"], $css),
+			"pg_lb_style" => $this->picker($this->table["pg_lb_style"], $css),
 			"sum_style" => $this->picker($this->table["sum_style"],$css),
 			"reforb" => $this->mk_reforb("new_submit_styles", array("id" => $id))
 		));
@@ -1771,8 +1783,10 @@ class form_table extends form_base
 		// as well, because it would make a whole lotta sense that way
 		if (is_array($this->table["rgrps"]) && !$this->table["no_grpels_in_restrict"])
 		{
+			echo "addrgrpvals <br>";
 			foreach($this->table["rgrps"] as $nr => $_dat)
 			{
+				echo "nr = $nr , el = ",$_dat["el"]," val = ",urlencode($row_data["ev_".$_dat["el"]]),"<br>";
 				$url .= "&restrict_search_el[]=".$_dat["el"];
 				$url .= "&restrict_search_val[]=".urlencode($row_data["ev_".$_dat["el"]]);
 				$url .= "&restrict_search_yah[]=".urlencode($row_data["ev_".$_dat["el"]]);
@@ -1955,6 +1969,23 @@ class form_table extends form_base
 		return $link;
 	}
 
+	function do_render_text_aliases($text)
+	{
+		$am = get_instance("aliasmgr");
+		
+		$aliases = $am->get_oo_aliases(array("oid" => $this->table_id));
+		
+		// we must do all form table aliases ourselves unfortunately. 
+		// form table alias marker is w
+		while (preg_match("/#w(\d+)#/U", $text, $mt))
+		{
+			$text = str_replace("#w".$mt[1]."#", $this->do_parse_ftbl_alias($aliases[CL_FORM_TABLE][$mt[1]]), $text);
+		}
+		
+		$am->parse_oo_aliases($this->table_id, $text);
+		return $text;
+	}
+	
 	////
 	// !renders the aliases that are passed as an array of alias id's
 	function render_aliases($arr)
@@ -1973,13 +2004,7 @@ class form_table extends form_base
 				if ($alias_data["class_id"] == CL_FORM_OUTPUT)
 				{
 					// if it is a form output alias then show the output with the data the user clicked on last
-					$finst = get_instance("form");
-					$str = $finst->show(array(
-						"id" => $GLOBALS["match_form"],
-						"entry_id" => $GLOBALS["match_entry"],
-						"op_id" => $alias_data["target"]
-					));	 
-					$tbl .= $str;
+					$tbl .= $this->do_parse_ftbl_alias($alias_data["target"]);
 				}
 				else
 				{
@@ -1997,6 +2022,16 @@ class form_table extends form_base
 		return $tbl;
 	}
 
+	function do_parse_ftbl_alias($id)
+	{
+		$finst = get_instance("form");
+		return $finst->show(array(
+			"id" => $GLOBALS["match_form"],
+			"entry_id" => $GLOBALS["match_entry"],
+			"op_id" => $id
+		));	 
+	}
+	
 	function change_grpsettings($arr)
 	{
 		extract($arr);
@@ -2069,13 +2104,60 @@ class form_table extends form_base
 			$pgsel = "";
 			if ($this->table["has_pages"])
 			{
+				$num_pages = $this->num_lines / $this->table["records_per_page"];
+				$ru = preg_replace("/ft_page=\d*/", "", $this->ru);
+				$ru = preg_replace("/\&{2,}/","&",$ru);
+				$sep = "&";
+				if (strpos($ru, "?") === false)
+				{
+					$sep = "?";
+				}
 				if ($this->table["has_pages_type"] == "text")	// text pageselector
 				{
-					$pgsel = "pgsel_text";
+					$cl = "";
+					if ($this->table["pg_text_style"])
+					{
+						$cl = "class=\"style_".$this->table["pg_lb_style"]."\"";
+					}
+					for ($i = 0; $i < $num_pages; $i++)
+					{
+						$from = $i*$this->table["records_per_page"]+1;
+						$to = min(($i+1)*$this->table["records_per_page"], $this->num_lines);
+						$url = $ru.$sep."ft_page=".$i;
+						if ($GLOBALS["ft_page"] == $i)
+						{
+							$pgsel.="<span $cl>".$from." - ".$to."</span>";
+						}
+						else
+						{
+							$pgsel.="<span $cl><a href='$url'>".$from." - ".$to."</a></span>";
+						}
+						if ($i < ($num_pages - 1))
+						{
+							$pgsel.= " | ";
+						}
+					}
 				}
 				else	// listbox pageselector
 				{
-					$pgsel = "pgsel_lb";
+					$cl = "";
+					if ($this->table["pg_lb_style"])
+					{
+						$cl = "class=\"style_".$this->table["pg_lb_style"]."\"";
+					}
+					$pgsel = "<select $cl name=\"ft_page\" onChange=\"window.location='".$ru.$sep."ft_page='+this.options[this.selectedIndex].value\">";
+					for ($i = 0; $i < $num_pages; $i++)
+					{
+						$from = $i*$this->table["records_per_page"]+1;
+						$to = min(($i+1)*$this->table["records_per_page"], $this->num_lines);
+						$sel = "";
+						if ($GLOBALS["ft_page"] == $i)
+						{
+							$sel = "selected";
+						}
+						$pgsel.= "<option $sel value='".$i."'>".$from." - ".$to;
+					}
+					$pgsel.="</select>";
 				}
 			}
 			$txt = str_replace("#lk#", $pgsel, $txt);
