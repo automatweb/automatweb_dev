@@ -44,7 +44,7 @@ class branchRight extends Container
   
 		this.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));  
 		this.add(image,0);  
-		this.add(name,-1);  
+		this.add(name,-1);   
 		Cursor kursor=new Cursor(Cursor.HAND_CURSOR);  
 		name.setCursor(kursor);  
 		image.setCursor(kursor);  
@@ -467,10 +467,12 @@ class hiireKuular2 implements MouseListener
 	Panel aken;  
 	branch folder; 
 	int jrk; 
-	String font,session,end; 
+	String font,session,end;
+	GridBagConstraints cc;
   
 	hiireKuular2(branch fold,Panel aaken,Applet bos)  
 	{  
+		cc=((menuThread2)bos).cc;
 		boss=bos;  
 		aken=aaken;  
 		folder=fold; 
@@ -486,7 +488,7 @@ class hiireKuular2 implements MouseListener
 		int i,j,pikkus;  
 		jrk=0; 
 		if(boss.getComponentCount()>1) 
-		{//on k arefresh button saidil 
+		{//on ka refresh button saidil 
 			jrk=1; 
 		} 
   
@@ -536,6 +538,9 @@ class hiireKuular2 implements MouseListener
 					String puu=new String(array);  
 					//System.out.println("Sain: "+puu); 
  
+					//GridBagLayout layout=(GridBagLayout)aken.getLayout(); 
+					//base.setConstraints(fixer, cc);
+					
 					GridLayout layout=(GridLayout)aken.getLayout();  
 					i=layout.getRows(); 
 					 
@@ -559,7 +564,9 @@ class hiireKuular2 implements MouseListener
 	  
 					tab=puu.indexOf("	");  
 					i=0;  
-	  
+					//cc.gridheight = 1;
+					//cc.weighty=0.0;
+
 					while(tab!=-1)  
 					{  
 						  
@@ -597,8 +604,11 @@ class hiireKuular2 implements MouseListener
  
 						first.count=folder.count+i+1;  
 						paneel.add(first);  
-						aken.add(paneel,first.count);  
-	  
+						aken.add(paneel,first.count);
+						
+						//layout.setConstraints(paneel, cc);
+						//aken.add(paneel,first.count);
+						
 						aken.doLayout(); 
 						paneel.doLayout();  
 						first.doLayout();  
@@ -666,6 +676,7 @@ if((i+1)!=folder.alluvaid)
 			else  
 			{ 		 
 	 
+				//GridBagLayout layout=(GridBagLayout)aken.getLayout();  
 				GridLayout layout=(GridLayout)aken.getLayout();  
 				i=layout.getRows(); 
 				 
@@ -677,7 +688,11 @@ if((i+1)!=folder.alluvaid)
 					aken.doLayout(); 
  
 					boss.getComponent(jrk).doLayout(); 
-				} 			 
+				}
+				
+				//cc.gridheight = 1;
+				//cc.weighty=0.0;
+
 				for(i=0;i<folder.alluvaid;i++)  
 				{//lisan uued nähtavad folderid  
 					Panel paneel=new Panel();	  
@@ -685,6 +700,10 @@ if((i+1)!=folder.alluvaid)
 					paneel.add(folder.slaves[i]);  
 					folder.slaves[i].count=folder.count+1+i;	 					  
 					aken.add(paneel,folder.slaves[i].count);  
+					
+					//layout.setConstraints(paneel, cc);
+					//aken.add(paneel,folder.slaves[i].count);  
+
 					aken.doLayout(); 
 					paneel.doLayout();  
 					folder.slaves[i].doLayout();  
@@ -1795,6 +1814,9 @@ public class menuThread2 extends Applet
 	int aktiivne=-1; 
 	Thread tirija,recall; 
 	static Socket s; 
+	GridBagConstraints cc=new GridBagConstraints();
+	pilt refresh;
+	ScrollPane scroll;
  
 	public void destroy() 
 	{ 
@@ -1941,7 +1963,7 @@ public class menuThread2 extends Applet
 		byte[] array2;  
 		InputStream sisse; 
 		String aadress=this.getParameter("url")+"/automatweb/orb.aw?class=menuedit&action=get_branch&automatweb="+session+end; 
-		System.out.println("Kysin URL: "+aadress+"\n"); 
+		//System.out.println("Kysin URL: "+aadress+"\n"); 
 			try  
 			{  
 				sisse=new URL(aadress).openConnection().getInputStream();  
@@ -1982,8 +2004,8 @@ public class menuThread2 extends Applet
 		int oid,alluvaid,tab;  
 		String nimi,iconurl,url;  
 		boolean last=false;  
-  
-		int hait=this.getSize().height-30; 
+		
+		int hait=this.getSize().height-30; //!!! sa ei tea ju veel kas tuleb -30!
 		if(hait==-30) 
 		{ 
 			this.setSize(200,568);//sest IE on nõme, saab vahepeal, et appeti suurus on 0, annan jõuga ette 
@@ -1998,7 +2020,7 @@ public class menuThread2 extends Applet
 			aken.setLayout(new GridLayout(hait,1,0,0));  
 			this.setBackground(back);  
 			this.setLayout(new BorderLayout());  
- 
+		}
 	//0 0 AutomatWeb http://aw.struktuur.ee/?class=menuedit&action=right_frame&fastcall=1&parent=4 http://aw.struktuur.ee/images/aw_ikoon.gif 
 			 
 			puu=puu.substring(4); 
@@ -2014,8 +2036,21 @@ public class menuThread2 extends Applet
 	  
 			iconurl=puu.substring(0,tab);  
 			puu=puu.substring(tab+1);  
-			 
-			 
+	
+//System.out.println("nimi="+nimi);				  
+//System.out.println("sihturl="+url);	
+//System.out.println("ikooniurl="+iconurl); 
+/*			
+			GridBagLayout base=new GridBagLayout();
+			GridBagConstraints cc=new GridBagConstraints();
+			cc.weighty = 0.0;		   //reset to the default
+			cc.weightx = 1.0;	
+			cc.gridwidth = GridBagConstraints.REMAINDER; //end row REMAINDER
+			cc.gridheight = 1;
+
+			cc.anchor=GridBagConstraints.NORTHWEST;
+			aken.setLayout(base);  
+*/
 	//LOON ESIMESE PUU OBJEKTI 
  
 			Panel pea=new Panel(); 
@@ -2023,6 +2058,9 @@ public class menuThread2 extends Applet
 			branch aw=new branch(nimi,0,last,aken,this,back,mouse,select,text,iconurl,iconurl,url,0,-1,null,font); 
 			aw.count=0; 
 			pea.add(aw); 
+			
+			//base.setConstraints(pea, cc);
+
 			aken.add(pea); 
 			 
 			tab=puu.indexOf("	");  
@@ -2054,7 +2092,9 @@ public class menuThread2 extends Applet
 				iconurl=puu.substring(0,tab);  
 				puu=puu.substring(tab+1);  
 				tab=puu.indexOf("	");  
-				  
+//System.out.println("oid="+oid+"  alluvaid="+alluvaid+"   nimi="+nimi);				  
+//System.out.println("sihturl="+url);	
+//System.out.println("ikooniurl="+iconurl);
 				if(tab==-1)  
 				{  
 					last=true;  
@@ -2063,7 +2103,10 @@ public class menuThread2 extends Applet
 				paneel.setLayout(new FlowLayout(FlowLayout.LEFT,0,-2));  
 				branch first=new branch(nimi,0,last,aken,this,back,mouse,select,text,iconurl,iconurl,url,alluvaid,oid,null,font);  
 				first.count=i;  
-				paneel.add(first);  
+				paneel.add(first);
+				
+				//base.setConstraints(paneel, cc);
+
 				aken.add(paneel);  
 				i++;  
  
@@ -2073,25 +2116,37 @@ public class menuThread2 extends Applet
 				} 		 
 			}  
  
- 
+			/*Panel fixer=new Panel();
+			cc.weighty = 1.0;
+			base.setConstraints(fixer, cc);
+			aken.add(fixer);*/
+
+			//base.removeLayoutComponent(pea);
+			//aken.remove(pea);
+			//base.setConstraints(pea, cc);
+			//cc.weighty=0.0;
+			//aken.add(pea,3);
+		
 			if(i>hait) 
 			{//kohe on vaja scrollbari 
 				aken.setLayout(new GridLayout(i,1,0,0));  
 				aken.setSize(this.getSize().width,i*20); 
-			} 
+			}
+			
 			s=null; 
-			ScrollPane scroll=new ScrollPane();  
+			scroll=new ScrollPane();  
 			scroll.setBackground(back);  
 			scroll.add(aken);  
 			((Adjustable)scroll.getVAdjustable()).setUnitIncrement(20); 
 			 
-			pilt refresh; 
+			 
  
-			if(this.getParameter("deemon").compareTo("ON")!=0) 
-			{//ei taheta deemonit 
+			//if(this.getParameter("deemon").compareTo("ON")!=0) 
+			//{//ei taheta deemonit 
  
 				try  
 				{  
+					
 					URL urll=new URL("http://aw.struktuur.ee/automatweb/images/blue/awicons/refresh.gif");  
 					refresh=new pilt(this.getImage(urll)); 
 					refresh.setSize(25,25); 
@@ -2109,8 +2164,10 @@ public class menuThread2 extends Applet
 				{  
 					System.out.println("!!!Ei saanud ikooni kätte "+e); 
 				}	 
-			} 
-			else 
+			//} 
+			//else 
+			if(this.getParameter("deemon").compareTo("ON")==0) 
+			{//tahetakse deemonit 
 			{ 
 				try 
 				{//panen deemoniga suhtlema 
@@ -2232,14 +2289,6 @@ public class menuThread2 extends Applet
 				perioodid.addItemListener(new perioodiKuular(this,period,perioodid)); 
 			} 
 		 
-			if(nupp.getComponentCount()>0) 
-			{ 
-				this.add(nupp,"North"); 
-			} 
-			this.add(scroll,"Center");  
-			aken.doLayout(); 
-			aken.repaint(); 
- 
 			tirija=new tirija(this,aken); 
 			tirija.start(); 
  
@@ -2248,6 +2297,14 @@ public class menuThread2 extends Applet
 				recall=new recall(aken,this,s); 
 				recall.start(); 
 			} 
-		}//else 
+		}//else
+		
+		if(nupp.getComponentCount()>0) 
+			{ 
+				this.add(nupp,"North"); 
+			} 
+			this.add(scroll,"Center");  
+			aken.doLayout(); 
+			aken.repaint(); 
 	}  
 }  
