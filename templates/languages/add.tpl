@@ -35,6 +35,9 @@
 <td class="celltext">{VAR:LC_LANGUAGES_NAME}:</td><td class="celltext"><input type='text' NAME='name' VALUE='{VAR:name}' class="formtext"></td>
 </tr>
 <tr>
+<td class="celltext">Keele kood:</td><td class="celltext"><select NAME='lang_code' class="formtext">{VAR:lang_codes}</select></td>
+</tr>
+<tr>
 <td class="celltext">{VAR:LC_LANGUAGES_LANGUAGE_ID}:</td><td class="celltext"><input type='text' NAME='acceptlang' VALUE='{VAR:acceptlang}' class="formtext"></td>
 </tr>
 <tr>
