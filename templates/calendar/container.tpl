@@ -116,7 +116,6 @@ function navigate_to()
 
 
 	</td>
-	<form id='naviform' style='display: inline'>
 	<td align="right" valign="middle" class="aw04kalender02">
 
 	<select id='navi_month' name='month' style="border: 1px solid gray">{VAR:mnames}</select>
@@ -125,7 +124,6 @@ function navigate_to()
 	
 	</td>
 	</tr>
-		</form>
 </table>
 </div>
 
