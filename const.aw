@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.41 2001/09/21 10:51:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.42 2001/09/27 16:31:08 duke Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -9,6 +9,29 @@ define("AW_VERSION","2.0.0");
 
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
+$pi = "";
+
+if ( isset($PATH_INFO) && (strlen($PATH_INFO) > 1))
+{
+	$pi = $PATH_INFO;
+};
+if ( isset($QUERY_STRING) && (strlen($QUERY_STRING) > 1))
+{
+	$pi .= "?".$QUERY_STRING;
+};
+
+if ($pi) 
+{
+	 if (preg_match("/[&|=]/",$pi)) 
+	 {
+		// expand and import PATH_INFO
+		parse_str(str_replace("?","&",str_replace("/","&",$pi)));
+	 } 
+	 else 
+	 {
+		$section = substr($pi,1);
+	};
+};
 // right. here comes the error handler! badaboom!
 function handle_errors($errno, $errmsg, $filename, $linenum,$vars)
 {
@@ -183,29 +206,6 @@ if (empty($LC))
 @include("$basedir/lang/" . $LC . "/common.aw");
 
 $cachedir = $basedir . "/cache"; 		  // where the file cache is
-$pi = "";
-
-if ( isset($PATH_INFO) && (strlen($PATH_INFO) > 1))
-{
-	$pi = $PATH_INFO;
-};
-if ( isset($QUERY_STRING) && (strlen($QUERY_STRING) > 1))
-{
-	$pi .= "?".$QUERY_STRING;
-};
-
-if ($pi) 
-{
-	 if (preg_match("/[&|=]/",$pi)) 
-	 {
-		// expand and import PATH_INFO
-		parse_str(str_replace("?","&",str_replace("/","&",$pi)));
-	 } 
-	 else 
-	 {
-		$section = substr($pi,1);
-	};
-};
 
 if (isset($menu_defs) && !is_array($menu_defs))
 {
@@ -288,6 +288,10 @@ else
 };
 
 // other stuff
+
+// stat function fields
+define("FILE_SIZE",7);
+define("FILE_MODIFIED",9);
 
 // millisele aadressile saadetakse Alerdid (ebaonnestunud sisselogimised, jne).
 define("ALERT_ADDR","log@struktuur.ee");
