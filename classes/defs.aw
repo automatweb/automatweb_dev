@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.55 2002/11/06 11:27:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.56 2002/11/12 18:01:18 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -631,6 +631,8 @@ if (!defined("DEFS"))
 
 	// well. our own stuff kinda.. I dunno, feels better. but yeah, it also feels a lot slower. 
 	// and yeah. we shouldn't need these before aw_startup() and we could init it in there.. - terryf
+
+	// .. and now they are. 
 	function &_aw_global_init()
 	{
 		// reset aw_global_* function globals
@@ -762,10 +764,13 @@ if (!defined("DEFS"))
 
 	////
 	// !deletes the variable $name from the session
-	function aw_session_del($name)
+	function aw_session_del($name, $leave_global = false)
 	{
 		session_unregister($name);
-		aw_global_set($name, "");
+		if (!$leave_global)
+		{
+			aw_global_set($name, "");
+		}
 	}
 
 	function get_ts_from_arr($var)
