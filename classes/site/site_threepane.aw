@@ -1,23 +1,29 @@
 <?php
-// $Id: site_threepane.aw,v 1.3 2002/11/07 10:52:36 kristo Exp $
+// $Id: site_threepane.aw,v 1.4 2002/11/08 15:02:24 duke Exp $
 // site_threepane.aw - simpel 3 paaniga sait.
 /*
 	@default table=objects
 	@default group=general
+
 	@property frameset type=objpicker clid=CL_FRAMESET field=meta method=serialize
 	@caption Frameseti objekt
 
 	@property treeview type=objpicker clid=CL_TREEVIEW field=meta method=serialize
 	@caption Puu objekt
 
-	@property logo type=imgupload field=meta method=serialize
+	@property logo type=relpicker clid=CL_IMAGE field=meta method=serialize
 	@caption Logo
+
+	@xproperty logo type=imgupload field=meta method=serialize
+	@xcaption Logo
 
 	@property info type=array getter=callback_get_info field=meta method=serialize
 	@caption Metainfo
 
 	@property preview type=text
 	@caption Näita
+
+	@classinfo relationmgr=yes
 
 */
 class site_threepane extends aw_template
@@ -35,11 +41,6 @@ class site_threepane extends aw_template
 		$data = &$args["prop"];
 		switch($data["name"])
 		{
-			case "logo":
-				$data["value"] = $args["obj"]["meta"]["logo_url"] != "" ? "<img src='".$args[obj][meta][logo_url]."'>" : "";
-				$data["value"] .= "<br>";
-				break;
-
 			case "preview":
 				classload("html");
 				$id = $args["obj"]["oid"];
@@ -69,8 +70,10 @@ class site_threepane extends aw_template
 			case "top":
 				$this->read_template("top.tpl");
 				classload("html");
+				$img = get_instance("image");
+				$imgdata = $img->get_image_by_id($obj["meta"]["logo"]);
 				$this->vars(array(
-					"logo" => html::img(array("url" => $obj["meta"]["logo_url"])),
+					"logo" => html::img(array("url" => $imgdata["url"])),
 				));
 				$info = $obj["meta"]["info"];
 				$max = sizeof($info["name"]);
