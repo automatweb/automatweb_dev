@@ -62,14 +62,17 @@ class releditor extends aw_template
 		$clinf = aw_ini_get("classes");
 		$clname = $clinf[$clid]["name"];
 
+	
+		/*
 		$ef = array("header" => array(
 				"type" => "text",
 				"subtitle" => 1,
 				"value" => "Uus " . $clname,
 		));
+		*/
 
 
-		$xprops = $ef + $t->parse_properties(array(
+		$xprops = $t->parse_properties(array(
 			"properties" => $act_props,
 			"name_prefix" => "cba_emb",
 		));
