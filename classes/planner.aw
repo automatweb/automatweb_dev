@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.53 2002/01/15 20:27:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.54 2002/01/17 22:34:27 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -7,7 +7,6 @@ lc_load("planner");
 classload("calendar","defs");
 global $orb_defs;
 $orb_defs["planner"] = "xml";
-define(DAY,86400);
 define(WEEK,DAY * 7);
 define(REP_DAY,1);
 define(REP_WEEK,2);
@@ -167,7 +166,7 @@ class planner extends calendar {
 	// id - millist kalendrit näidata
 	// disp - vaate tüüp
 	// date - millisele kuupäevale keskenduda
-	function _change($args = array())
+	function view($args = array())
 	{
 		extract($args);
 
@@ -177,13 +176,13 @@ class planner extends calendar {
 			$date = date("d-m-Y");
 		};
 
-		if ($disp == "day")
+		if ($type == "day")
 		{
 			$act = ($date == date("d-m-Y")) ? "today" : "day";
 		}
 		else
 		{
-			$act = $disp;
+			$act = $type;
 		};
 	
 		$menubar = $this->gen_menu(array(
@@ -196,25 +195,24 @@ class planner extends calendar {
 			
 		list($d,$m,$y) = split("-",$date);
 		
-		// X marks the spot
 		$xdate = $d . $m . $y;
 
 		$this->mk_path($object["parent"],"Kalender");
 
-		if (!$disp)
+		if (!$type)
 		{
-			$disp = "day";
+			$type = "day";
 		};
 
 		$di = $this->get_date_range(array(
 				"date" => $date,
-				"type" => $disp,
+				"type" => $type,
 		));
 		
-		$events = $this->get_events(array(
+		$events = $this->get_events2(array(
 					"start" => $di["start"],
 					"end" => $di["end"],
-					"parent" => $id,
+					"folder" => $id,
 				));
 
 		$ddiff1 = $this->get_day_diff($di["start"],$di["end"]);
@@ -222,8 +220,9 @@ class planner extends calendar {
 		// tsükkel yle koigi selles perioodis asuvate päevade, et
 		// leida ja paigutada events massiivi koik korduvad üritused
 		
+
 		list($d,$m,$y) = split("-",$date);
-		switch($disp)
+		switch($type)
 		{
 			case "week":
 				$title = CAL_WEEK;
@@ -247,12 +246,7 @@ class planner extends calendar {
 					{
 						foreach($events[$dx] as $key => $e)
 						{
-							$this->vars(array(
-									"color" => $e["color"],
-									"time" => date("H:i",$e["start"]) . "-" . date("H:i",$e["end"]),
-									 "title" => ($e["title"]) ? $e["title"] : "(nimetu)",
-									 "id" => $e["id"],
-							));
+							$this->_draw_event($e);
 							$c1 .= $this->parse("line.event");
 						};
 					};
@@ -261,7 +255,7 @@ class planner extends calendar {
 							"head" => get_lc_weekday($i+1),
 							"did" => $id,
 							"hid" => $args["id"],
-							"disp" => "week",
+							"type" => "week",
 							"date" => date("d-m-Y",$thisday),
 							"dateinfo" => "$d. " . get_lc_month(date("m",$thisday)),
 							"bgcolor" => $bgcolor));
@@ -305,12 +299,7 @@ class planner extends calendar {
 						{
 							foreach($events[$dx] as $key => $e)
 							{
-								$this->vars(array(
-										"color" => $e["color"],
-										"time" => date("H:i",$e["start"]) . "-" . date("H:i",$e["end"]),
-									 	"title" => ($e["title"]) ? $e["title"] : "(nimetu)",
-										"id" => $e["id"],
-								));
+								$this->_draw_event($e);
 								$c2 .= $this->parse("line.subline.element");
 							};
 						};
@@ -368,13 +357,7 @@ class planner extends calendar {
 				foreach($events[$slice] as $key => $e)
 				{
 					$cnt++;
-					$this->vars(array(
-							"color" => $e["color"],
-							"time" => date("H:i",$e["start"]) . "-" . date("H:i",$e["end"]),
-							"id" => $e["id"],
-							"title" => ($e["title"]) ? $e["title"] : "(nimetu)",
-							"contents" => nl2br($e["description"]),
-				 	));
+					$this->_draw_event($e);
 					$c .= $this->parse("line");
 				};
 				};
@@ -396,12 +379,7 @@ class planner extends calendar {
 					{
 					foreach($events[$dx] as $key => $e)
 					{
-						$this->vars(array(
-								"color" => $e["color"],
-								"time" => date("H:i",$e["start"]) . "-" . date("H:i",$e["end"]),
-								 "title" => $e["title"],
-								 "id" => $e["id"],
-						));
+						$this->_draw_event($e);
 						$c1 .= $this->parse("line.event");
 					};
 					};
@@ -416,7 +394,7 @@ class planner extends calendar {
 							"did" => $args["id"],
 							"hid" => $args["id"],
 							"date" => date("d-m-Y",$thisday),
-							"disp" => "overview",
+							"type" => "overview",
 							"dateinfo" => "$d. " . get_lc_month(date("m",$thisday)),
 							"bgcolor" => $bgcolor));
 					$c .= $this->parse("line");
@@ -442,13 +420,7 @@ class planner extends calendar {
 					foreach($events[$slice] as $key => $e)
 					{
 						$cnt++;
-						$this->vars(array(
-								"color" => $e["color"],
-								"time" => date("H:i",$e["start"]) . "-" . date("H:i",$e["end"]),
-								"id" => $e["id"],
-								"title" => ($e["title"]) ? $e["title"] : "(nimetu)",
-								"contents" => nl2br($e["description"]),
-				 		));
+						$this->_draw_event($e);
 						$c .= $this->parse("line");
 					};
 				};
@@ -476,16 +448,8 @@ class planner extends calendar {
 		);
 		$mlist = explode("|",LC_MONTH);
 		unset($mlist[0]);
-		if ($ctype == "oid")
-		{
-			$prev = "class=planner&action=change&id=$id&disp=$disp&date=$di[prev]&id=$id";
-			$next = "class=planner&action=change&id=$id&disp=$disp&date=$di[next]&id=$id";
-		}
-		else
-		{
-			$prev = "class=planner&action=$disp&date=$di[prev]&id=$id";
-			$next = "class=planner&action=$disp&date=$di[next]&id=$id";
-		};
+		$prev = "class=planner&action=view&id=$id&type=$type&date=$di[prev]&id=$id";
+		$next = "class=planner&action=view&id=$id&type=$type&date=$di[next]&id=$id";
 		$this->vars(array(
 			"menudef" => $menudef,
 			"caption" => $caption,
@@ -500,6 +464,48 @@ class planner extends calendar {
 			"menubar" => $menubar,
 			"next" => $next));
 		return $this->parse();
+	}
+
+	function _draw_event($e = array())
+	{
+		if ($e["aid"])
+		{
+			$obj = $this->get_object($e["aid"]);
+			$meta = aw_unserialize($e["metadata"]);	
+			if ($meta["showtype"] == 0)
+			{
+				$link = sprintf("onClick='javascript:window.open(\"%s\",\"w%s\",\"toolbar=0,location=0,menubar=0,scrollbars=1,width=400,height=500\")'","orb.aw?class=planner&action=display_object&id=$obj[oid]",$obj["oid"]);
+				$repl = "<a href='#' $link>$obj[name]</a>";
+			}
+			else
+			{
+				$repl = $this->_show_object($obj);
+			};
+			//$name = sprintf("<br><img src='%s'>%s",get_icon_url($obj["class_id"],""),$obj["name"]);
+			$name = "<br>" .$repl;
+		}
+		else
+		{
+			$name = "";
+		};
+		$this->vars(array(
+			"color" => $e["color"],
+			"time" => date("H:i",$e["start"]) . "-" . date("H:i",$e["end"]),
+			"id" => $e["id"],
+			"title" => ($e["title"]) ? $e["title"] : "(nimetu)",
+			"object" => $name,
+			"contents" => nl2br($e["description"]),
+		));
+
+
+	}
+
+	function display_object($args = array())
+	{
+		extract($args);
+		$obj = $this->get_object($args["id"]);
+		$repl = $this->_show_object($obj);
+		return $repl;
 	}
 
 	////
@@ -547,6 +553,50 @@ class planner extends calendar {
 		return $new_id;
 	}
 
+	function get_events2($args = array())
+	{
+		extract($args);
+		$q = "SELECT *,planner.oid AS aid FROM planner
+			LEFT JOIN objects ON (planner.id = objects.oid)
+			WHERE objects.status = 2 AND planner.folder = '$folder'
+			AND ( (start >= '$start') OR (start <= '$end') OR (rep_until >= '$start'))
+			ORDER BY start";
+		$this->db_query($q);
+		$timebase = mktime(0,0,0,1,1,2001);
+		$start_gdn = sprintf("%d",($start - $timebase) / 86400);
+		$end_gdn = sprintf("%d",($end - $timebase) / 86400);
+		$gdn = $start_gdn;
+		$range = range($start_gdn,$end_gdn);	
+		$results = array();
+		// I  need to find all the day number for the time period the client asked
+		while($row = $this->db_next())
+		{
+			$reps = aw_unserialize($row["repeaters"]);
+			if (is_array($reps))
+			{
+				$intersect = array_intersect($reps,$range);
+			};
+			// always show the event at the day it was added
+			$results[date("dmY",$row["start"])][] = $row;
+			if (is_array($intersect))
+			{
+				foreach($intersect as $xgdn)
+				{
+					$ts = mktime(0,0,0,1,$xgdn+1,2001);
+					if ($ts >= $row["start"])
+					{
+						$gx = date("dmY",$ts);
+						$results[$gx][] = $row;
+					};
+				};
+			};
+			$intersect = "";
+					
+			$gdn++;
+		}
+		return $results;
+	}
+
 	////
 	// !tagastab eventid mingis ajavahemikus
 	// argumendid:
@@ -558,9 +608,9 @@ class planner extends calendar {
 	
 	function get_events($args = array())
 	{
+		extract($args);
 		classload("repeater");
 		$repeater = new repeater();
-		extract($args);
 		if ($uid)
 		{
 			$selector = " AND planner.uid = '$uid'";
@@ -568,7 +618,11 @@ class planner extends calendar {
 		elseif ($parent)
 		{
 			$selector = " AND objects.parent = '$parent'";
-		};
+		}
+		elseif ($folder)
+		{
+			$select = " AND planner.folder = '$folder'";
+		}
 		
 		if (!$end)
 		{
@@ -580,7 +634,7 @@ class planner extends calendar {
 		// defaultima näitma lihtsalt tavalisi eventeid (neid millel type on NULL)
 		// tekalt, ma kardan, et sellega voib tekkida probleeme, kui me AW-d
 		// mone teise DB peale portima hakkame.
-		$tp = ($type) ? " AND planner.type = $type " : " AND planner.type = NULL ";
+		//$tp = ($type) ? " AND planner.type = $type " : " AND planner.type = NULL ";
 
 		$eselect = (isset($event)) ? "AND planner.id = '$event'" : "";
 		$limit = ($limit) ? $limit : 999999;
@@ -596,7 +650,7 @@ class planner extends calendar {
 		{
 			$q = "SELECT * FROM planner
 			LEFT JOIN objects ON (planner.id = objects.oid)
-			WHERE objects.status = 2 $selector $eselect $tp
+			WHERE objects.status = 2 $select $eselect $tp
 				AND ( (start >= '$start') OR (start <= '$end') OR (rep_until >= '$start'))
 				ORDER BY start";
 		};	
@@ -697,193 +751,57 @@ class planner extends calendar {
 
 	}
 
-	////
-	// !Processes repeaters that deal with days
-	function _process_day($args = array())
-	{
-		// every X days
-		print "wd = $this->wd<br>";
-		if ($this->repeats["day"] == 1)
-		{
-			if ( ($this->daynum % $this->dayskip) == 0)
-			{
-				$this->found = true;
-				print "$this->daynum JAGUB $this->dayskip<br>";
-			}
-		}
-		// every
-		elseif ($this->repeats["day"] == 2)
-		{
-			if ($this->repeats["wday"][$this->wd])
-			{
-				$this->found = true;
-				print "$this->wd päev matchib DAYS_IN_WEEK ruuliga<br>";
-			};
-		}
-		elseif ($this->repeats["day"] == 3)
-		{
-			if (in_array($this->d,$this->days))
-			{
-				$this->found = true;
-				print "$this->d päev matchib DAYS_IN_MONTH ruuliga<br>";
-			};
-		}
-	}
 
 	////
-	// Cycles over all days in a single month
-	// month(int) - month number
-	// year(int) - year number
-	function _process_month($args = array())
+	// !Displays an object the screen
+	// expects the data from the object array
+	function _show_object($args = array())
 	{
 		extract($args);
-		// dm is the amount of days in this mount
-		// wd is the number of day in the current week (1-7), below we use it
-		// as our internal counter, since we have to know the number of day
-		// we are currently processing
-		list($dm,$this->wd) = explode("-",date("t-w",mktime(0,0,0,$month,1,$year))); 
-			
-		// our week starts on monday
-		if ($this->wd == 0)
+		$replacement = "";
+		// tra, ma panen ennast põlema kohe
+		switch($args["class_id"])
 		{
-			$this->wd = 7;
-		};
-		
-		$this->dayskip = ($this->repeats["day"] == 1) ? $this->repeats["dayskip"] : 1;
+			case CL_EXTLINK:
+				classload("extlinks");
+				$t = new extlinks();
+				list($url,$target,$caption) = $t->draw_link($args["oid"]);
+				$replacement = sprintf("<a href='%s' %s>%s</a>",$url,$target,$caption);
+				break;
 
-		if ( ($this->repeats["region1"]) && ($this->repeats["day"] == 3) )
-		{
-			$this->days = explode(",",$this->repeats["monpwhen2"]);
-		};
+			case CL_IMAGE:
+				classload("image");
+				$t = new image();
+				$idata = $t->get_image_by_id($args["oid"]);
+				$replacement = sprintf("<img src='%s'><br>%s",$idata["url"],$idata["comment"]);
+				break;
+			case CL_TABLE:
+				classload("table");
+				$t = new table();
+				$replacement = $t->show(array("id" => $args["oid"],"align" => $align));
+				break;
 
-		if ($this->from_scratch)
-		{
-			$this->weeknum = 1; // global week number
-			$this->daynum = 1; // global day number
-			print "fresh start, (gwkn)!<br>";
-		};
-		
-		$wkn = 1; // week number in this month
+			case CL_FORM_ENTRY:
+				classload("form");
+				$t = new form();
+				$frm = $t->get_form_for_entry($args["oid"]);
+				$ops = $t->get_op_list($frm);
+				list($x,$y) = each($ops);
+				list($id,$name) = each($y);
 
-		$this->found = false;
-
-		for ($this->d = 1; $this->d <= $dm; $this->d++)
-		{
-			$this->daynum++;
-			
-			if ($this->repeats["region1"])
-			{
-				$this->_process_day();
-			};
-			if ($this->wd == 8)
-			{
-				// rollover
-				$this->wd = 1;
-				print "y:$y - m:$m - wn:$wkn - gwkn: $gwkn<br>";
-				// nädala kontroll
-				if ($this->region2)
-				{
-					if ($week == 1)
-					{
-						if (($gwkn % $weekskip) == 0)
-						{
-							print "$gwkn jagub $weekskip<br>";
-							print $gwkn % $weekskip;
-							print "<br>";
-						};
-					}
-					elseif ($week == 2)
-					{
-						if ($mweek[$wkn])
-						{
-							print "$wkn matchib ruuliga WEEKS_IN_MONTH<br>";
-						};
-					};
-
-				}
-				$wkn++;
-				$gwkn++;
-			};
-
-			$this->wd++;
-			if ($this->found)
-			{
-				$ts = mktime(0,0,0,$month,$this->d,$year);
-				print "<b>MATCH:</b> " . date("l, d-m-Y",$ts) . "<br>";;
-				$this->found = false;
-			};
-				
-
-
-		}
-		print "<br>";
-	}
-	
-	function repeaters($args = array())
-	{
-		extract($args);
-
-		$par_obj = $this->get_object($id);
-		$grand_parent = $this->get_object($par_obj["parent"]);
-		$this->mk_path($grand_parent["parent"],"Muuda eventit");
-		$meta = $this->get_object_metadata(array("oid" => $id,"key" => "repeaters"));
-
-		$menubar = $this->gen_menu(array(
-			"activelist" => array("add","repeaters"),
-			"vars" => array("id" => $par_obj["parent"],"eid" => $id),
-		));
-		// what's that?
-		$caldata = $this->get_object_metadata(array(
-						"oid" => $id,
-						"key" => "calconfig",
+				$replacement = $t->show(array(
+					"id" => $frm,
+					"entry_id" => $args["oid"],
+					"op_id" => $id,
 				));
-		if (is_array($caldata))
-		{
-			extract($caldata);
+				break;
 		}
 
-		$this->read_template("repeaters.tpl");
-		load_vcl("date_edit");
-		$repend = new date_edit("start");
-		$repend->configure(array("day" => 1,"month" => 2,"year" => 3));
-		$repend_ed= $repend->gen_edit_form("repend",strtotime("+1 week"));
-		// oh, I know, this is sooo ugly
-		$this->vars(array(
-				"region1" => checked($meta["region1"]),
-				"dayskip" => ($meta["dayskip"] > 0) ? $meta["dayskip"] : 1,
-				"day1" => checked($meta["day"] == 1),
-				"day2" => checked($meta["day"] == 2),
-				"day3" => checked($meta["day"] == 3),
-				"wday1" => checked($meta["wday"][1]),
-				"wday2" => checked($meta["wday"][2]),
-				"wday3" => checked($meta["wday"][3]),
-				"wday4" => checked($meta["wday"][4]),
-				"wday5" => checked($meta["wday"][5]),
-				"wday6" => checked($meta["wday"][6]),
-				"wday7" => checked($meta["wday"][7]),
-				"monpwhen2" => $meta["monpwhen2"],
-				"region2" => checked($meta["region2"]),
-				"week1" => checked($meta["week"] == 1),
-				"week2" => checked($meta["week"] == 2),
-				"weekskip" => ($meta["weekskip"] > 0) ? $meta["weekskip"] : 1,
-				"mweek1" => checked($meta["mweek"][1]),
-				"mweek2" => checked($meta["mweek"][2]),
-				"mweek3" => checked($meta["mweek"][3]),
-				"mweek4" => checked($meta["mweek"][4]),
-				"mweek5" => checked($meta["mweek"][5]),
-				"mweeklast" => checked($meta["mweek"]["last"]),
-				"region3" => checked($meta["region3"]),
-				"month1" => checked($meta["month"] == 1),
-				"month2" => checked($meta["month"] == 2),
-				"monthskip" => ($meta["monthskip"] > 0) ? $meta["monthskip"] : 1,
-				"yearpwhen" => ($meta["yearpwhen"] > 0) ? $meta["yearpwhen"] : 1,
-				"region4" => checked($meta["region4"]),
-				"yearskip" => ($meta["yearskip"] > 0) ? $meta["yearskip"] : 1,
-				"menubar" => $menubar,
-				"reforb" => $this->mk_reforb("submit_repeaters",array("id" => $id)),
-		));
-		return $this->parse();
+		return $replacement;
+
 	}
+
+	
 
 	function submit_repeaters($args = array())
 	{
@@ -914,121 +832,6 @@ class planner extends calendar {
 		// remove old repeaters
 		$q = "DELETE FROM planner_repeaters WHERE eid = '$id'";
 			
-		// here.
-		// I also have to know the week day of the event
-		$start = $event["start"];
-		list($start_year,$start_wday) = explode("-",date("Y-w",$start));
-		
-		// then, we have to find out the time where the repeaters end
-		switch($rep)
-		{
-			case "1":
-				// so yes, it's not really forever
-				$end_year = "2037";
-				$end_date = "31-12-2037";
-				break;
-
-			case "2":
-				// we need to know the count of events to use that,
-				// so for the moment we just guess
-				$end_year = "2037";
-				$end_date = "31-12-2037";
-				break;
-
-			case "3":
-				$end_year = $repend["year"];
-				$end_date = sprintf("%02d-%02d-%04d",$repend["day"],$repend["month"],$repend["year"]);
-				break;
-		};
-
-
-		$years = array();
-
-		// if the user selected the every X year option, so we alter the skip accordingly
-		$yearskip = ($region4) ? $yearskip : 1;
-		
-		// now we cycle over all possible months
-		// 3 and 8 are mutually exclusive
-		if ($use[8])
-		{
-			$_tmp = explode(",",$yearpwhen);
-			foreach($_tmp as $key => $val)
-			{
-				$months[$val] = array();
-			};
-		}
-		elseif ($use[3])
-		{
-			for ($m = 1; $m <= 12; $m = $m + $skip["month"])
-			{
-				$months[$m] = array();
-			};
-		};
-
-		$months = array();
-		// every X months
-		if ($month == 2)
-		{
-			$months = explode(",",$yearpwhen);
-		}
-		else
-		{
-			$monthskip = ($region3) ? $monthskip : 1;
-			for ($m = 1; $m <= 12; $m = $m + $monthskip)
-			{
-				$months[] = $m;
-			};
-		};
-
-
-		// we need four cycles inside each other, years, months, weeks, days
-		$last_year = 0;
-		$last_mon = 0;
-		$last_day = 0;
-		print "months = ";
-		print "<pre>";
-		print_r($months);
-		print "</pre>";
-
-		$this->from_scratch = true;
-		print "start_year = $start_year, end_year = $end_year, yearskip = $yearskip<br>";
-		for ($y = $start_year; $y <= $end_year; $y = $y + $yearskip)
-		{
-			if ( ($y - 1) != $last_year)
-			{
-				$this->from_scratch = true;
-				print "fresh start $y (y)!<br>";
-			};
-			$last_year = $y;
-
-			foreach($months as $m)
-			{
-				if ($last_mon == 12)
-				{
-					if ($m != 1)
-					{
-						$this->from_scratch = true;
-						print "fresh start (m1)!<br>";
-					}
-				}
-				elseif ( $last_mon != ($m - 1) )
-				{
-					$this->from_scratch = true;
-					print "fresh start (m2)!<br>";
-				};
-				$last_mon = $m;
-		
-				print "<i>Processing:</i> $m/$y<br>";
-				$this->_process_month(array("month" => $m,"year" => $y));
-				$this->from_scratch = false;
-				print "<br>";
-
-
-			}
-
-		}
-		
-		exit;
 
 		// at first, we find out how many events and on what days we have to create
 		if (is_array($use))
@@ -1210,8 +1013,8 @@ class planner extends calendar {
 		$params["id"] = $id;
 		$params["id"] = $id;
 		$params["disp"] = $disp;
-		$action = "change";
-		$retval = $this->mk_my_orb("change",array("disp" => $disp,"date" => $date,"id" => $id));
+		$action = "view";
+		$retval = $this->mk_my_orb("view",array("type" => $disp,"date" => $date,"id" => $id));
 		return $retval;
 
 	}
