@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.62 2001/11/20 13:44:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.63 2001/11/22 16:41:26 kristo Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -19,7 +19,7 @@ session_register("s_gallery_sortby");
 session_register("s_gallery_order");
 
 lc_load("document");
-classload("msgboard","aw_style");
+classload("msgboard","aw_style","form_base");
 // erinevad dokumentide muutmise templated.
 //  kui soovid uut lisada, siis paned selle kataloogi 
 //  /www/automatweb/public/templates/automatweb/documents
@@ -592,6 +592,15 @@ class document extends aw_template
 					"function" => "parse_alias",
 				));
 		
+		// formi entryd
+		$this->register_sub_parser(array(
+					"idx" => 2,
+					"match" => "r",
+					"class" => "form_alias",
+					"reg_id" => $mp,
+					"function" => "parse_alias",
+				));
+		
 		// keywordide list. bijaatch!
 		$mp = $this->register_parser(array(
 					"reg" => "/(#)huvid(.+?)(#)/i",
@@ -665,7 +674,7 @@ class document extends aw_template
 		// this should be toggled with a preference in site config
 		if (defined("KEYWORD_RELATIONS"))
 		{
-			$keywords[$row["keyword"]] = sprintf(" <a href='%s' title='%s' target='_blank'>%s<sup><b>*</b></sup></a> ",$this->mk_my_orb("lookup",array("id" => $row["keyword_id"]),"document"),"LINK",$row["keyword"]);
+//			$keywords[$row["keyword"]] = sprintf(" <a href='%s' title='%s' target='_blank'>%s<sup><b>*</b></sup></a> ",$this->mk_my_orb("lookup",array("id" => $row["keyword_id"]),"document"),"LINK",$row["keyword"]);
 		}
 		
 		if (is_array($keywords))
@@ -1242,15 +1251,23 @@ class document extends aw_template
 	{
 		$this->read_template("alias_type.tpl");
 
-		$ob = $this->get_object($entry_id);
-		
-		$karr = array();
-		$this->db_query("SELECT * FROM objects WHERE parent = ".$ob["parent"]." AND class_id = 12 AND objects.status != 0");
-		while ($row = $this->db_next())
-			$karr[$row["oid"]] = $row["name"];
+		$fb = new form_base;
+		$form = $fb->get_form_for_entry($entry_id);
 
-		$this->vars(array("docid" => $docid, "alias" => $entry_id, "op_sel" => $this->picker("", $karr),"form_id" => $ob["parent"]));
+		$opl = $fb->get_op_list($form);
+
+		$this->vars(array(
+			"op_sel" => $this->picker("", $opl[$form]),
+			"reforb" => $this->mk_reforb("submit_select_alias", array("docid" => $docid, "alias" => $entry_id, "form_id" => $form))
+		));
 		return $this->parse();
+	}
+
+	function submit_select_alias($arr)
+	{
+		extract($arr);
+		$this->add_alias($docid,$alias,serialize(array("type" => $type, "output" => $output, "form_id" => $form_id)));
+		return $this->mk_my_orb("change", array("id" => $docid));
 	}
 
 	function send_link()
@@ -2428,8 +2445,8 @@ class document extends aw_template
 	function addalias($arr)
 	{
 		extract($arr);
-		$al = $this->fetch($alias);
-		if ($al["class_id"] == 8)	// form_entry
+		$al = $this->get_object($alias);
+		if ($al["class_id"] == CL_FORM_ENTRY)	// form_entry
 		{
 			// we must let the user select whether he wants to view or edit the entry
 			$this->mk_path($al["parent"],"<a href='pickobject.$ext?docid=$docid&parent=".$al["parent"]."'>Tagasi</a> / Vali aliase t&uuml;&uuml;p");

@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.2 2001/11/20 11:35:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.3 2001/11/22 16:41:26 kristo Exp $
 
 // yup, this class is really braindead at the moment and mostly a copy of
 // the current alias manager inside the document class, but I will optimize
@@ -124,6 +124,15 @@ class aliasmgr extends aw_template {
 				"addlink" => $this->mk_my_orb("new",array("parent" => $this->parent, "return_url" => $return_url,"alias_to" => $this->id),"image"),
 				"chlink" => "#",
 		);
+
+		$return_url = urlencode($this->mk_my_orb("list_aliases", array("id" => $this->id) ) );
+		$this->defs["form_entry"] = array(
+				"alias" => "r",
+				"title" => "Formi sisetus",
+				"table" => "form_entries",
+				"addlink" => $this->mk_my_orb("new_entry_alias",array("parent" => $this->parent, "return_url" => $return_url,"alias_to" => $this->id),"form_alias"),
+				"chlink" => "#",
+		);
 	}
 
 	////
@@ -203,6 +212,7 @@ class aliasmgr extends aw_template {
 		$this->_image_aliases();
 		$this->_graph_aliases();
 		$this->_gallery_aliases();
+		$this->_form_entry_aliases();
 		$this->vars(array(
 			"table" => $this->contents,
 		));
@@ -390,6 +400,28 @@ class aliasmgr extends aw_template {
 			$this->_common_parts($v);
 		}
 		$this->_finalize($this->defs["galleries"]);
+	}
+
+	function _form_entry_aliases($args = array())
+	{
+		$this->_initialize($this->defs["form_entry"]);
+		$fes = $this->get_aliases_for($this->id,CL_FORM_ENTRY,$s_fe_sortby, $s_fe_order);
+		$fec = 0;
+		reset($fes);
+		while (list(,$v) = each($fes))
+		{
+			$fec++;
+			$link = sprintf("<a href='%s'>%s</a>",$this->mk_orb("change_entry_alias", array("id" => $v["id"]),"form_alias"),$v["name"]);
+			$this->t->define_data(array(
+				"name"                => $link,
+				"modified"            => $this->time2date($v["modified"],2),
+				"modifiedby"          => $v["modifiedby"],
+				"alias"               => "#r".$fec."#","comment" => $v["comment"],
+				"id"                  => $v["id"],
+			));
+			$this->_common_parts($v);
+		}
+		$this->_finalize($this->defs["form_entry"]);
 	}
 
 

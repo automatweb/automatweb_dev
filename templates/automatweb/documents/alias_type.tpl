@@ -1,5 +1,5 @@
 <br>
-<form ACTION='refcheck.{VAR:ext}' METHOD=POST>
+<form ACTION='reforb.{VAR:ext}' METHOD=POST>
 <table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC">
 <tr>
 <td class="fcaption" colspan=2>{VAR:LC_DOCUMENT_CHOOSE_FORM_ENTRY}:</td>
@@ -17,8 +17,5 @@
 </td>
 </tr>
 </table>
-<input type='hidden' NAME='action' VALUE='alias_type'>
-<input type='hidden' NAME='docid' VALUE='{VAR:docid}'>
-<input type='hidden' NAME='alias' VALUE='{VAR:alias}'>
-<input type='hidden' NAME='form_id' VALUE='{VAR:form_id}'>
+{VAR:reforb}
 </form>
