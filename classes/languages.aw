@@ -20,8 +20,10 @@ class languages extends aw_template
 		$admin_lang = aw_global_get("admin_lang");
 		$lang_id = aw_global_get("lang_id");
 
-		$langs = aw_cache_get_array("languages");
-		foreach($langs as $row)
+		//$langs = aw_cache_get_array("languages");
+		//foreach($langs as $row)
+		$this->db_query("SELECT * FROM languages WHERE status != 0");
+		while ($row = $this->db_next())
 		{
 			$this->vars(array(
 				"id" => $row["id"], 
@@ -34,7 +36,8 @@ class languages extends aw_template
 				"modified" => $this->time2date($row["modified"],2),
 				"modifiedby" => $row["modifiedby"],
 				"change" => $this->mk_my_orb("change", array("id" => $row["id"])),
-				"delete" => $this->mk_my_orb("delete", array("id" => $row["id"]))
+				"delete" => $this->mk_my_orb("delete", array("id" => $row["id"])),
+				"sites" => $row["site_id"]
 			));
 			$l.=$this->parse("LINE");
 		}
@@ -47,13 +50,20 @@ class languages extends aw_template
 		return $this->parse();
 	}
 
-	function fetch($id)
+	function fetch($id, $no_cache = false)
 	{
 		if (!$id)
 		{
 			return false;
 		}
-		return aw_cache_get("languages",$id);
+		if ($no_cache)
+		{
+			return $this->db_fetch_row("SELECT * FROM languages WHERE id = '$id'");
+		}
+		else
+		{
+			return aw_cache_get("languages",$id);
+		}
 	}
 
 	////
@@ -115,7 +125,8 @@ class languages extends aw_template
 		$this->mk_path(0,"<a href='".$this->mk_my_orb("admin_list")."'>Keeled</a> / Lisa");
 		$this->read_template("add.tpl");
 		$this->vars(array(
-			"reforb" => $this->mk_reforb("submit_add")
+			"reforb" => $this->mk_reforb("submit_add"),
+			"sites" => $this->mpicker(array(), $this->_get_sl())
 		));
 		return $this->parse();
 	}
@@ -125,29 +136,42 @@ class languages extends aw_template
 		extract($arr);
 		$this->mk_path(0,"<a href='".$this->mk_my_orb("admin_list")."'>Keeled</a> / Muuda");
 		$this->read_template("add.tpl");
-		$l = $this->fetch($id);
+		$l = $this->fetch($id, true);
 		$this->vars(array(
 			"id" => $id, 
 			"name" => $l["name"], 
 			"charset" => $l["charset"],
 			"acceptlang" => $l["acceptlang"],
-			"reforb" => $this->mk_reforb("submit_add",array("id" => $id))
+			"reforb" => $this->mk_reforb("submit_add",array("id" => $id)),
+			"sites" => $this->mpicker($this->make_keys(explode(",", $l["site_id"])), $this->_get_sl())
 		));
 		return $this->parse();
+	}
+
+	function _get_sl()
+	{
+		$ret = array();
+		$this->db_query("SELECT DISTINCT(site_id) AS site_id FROM objects");
+		while ($row = $this->db_next())
+		{
+			$ret[$row["site_id"]] = $row["site_id"];
+		}
+		return $ret;
 	}
 
 	function submit($arr)
 	{
 		extract($arr);
 
+		$si = join(",", is_array($site_id) ? $site_id : array());
 		if ($id)
 		{
-			$this->db_query("UPDATE languages SET name = '$name' , charset = '$charset' , acceptlang='$acceptlang', modified = ".time().", modifiedby = '".aw_global_get("uid")."' WHERE id = $id");
+			$this->db_query("UPDATE languages SET site_id = '$si' , name = '$name' , charset = '$charset' , acceptlang='$acceptlang', modified = ".time().", modifiedby = '".aw_global_get("uid")."' WHERE id = $id");
 		}
 		else
 		{
 			$id = $this->db_fetch_field("select max(id) as id from languages","id")+1;
-			$this->db_query("INSERT INTO languages(id, name, charset, status, acceptlang, modified, modifiedby) values($id,'$name','$charset',1,'$acceptlang','".time()."','".aw_global_get("uid")."')");
+			$this->db_query("INSERT INTO languages(id, name, charset, status, acceptlang, modified, modifiedby, site_id) values($id,'$name','$charset',1,'$acceptlang','".time()."','".aw_global_get("uid")."','$si')");
 		}
 
 		$this->init_cache(true);
@@ -319,7 +343,10 @@ class languages extends aw_template
 				$this->db_query("SELECT * FROM languages WHERE status != 0");
 				while ($row = $this->db_next())
 				{
-					aw_cache_set("languages", $row["id"],$row);
+					if ($row["site_id"] == "" || in_array($this->cfg["site_id"], explode(",", $row["site_id"])))
+					{
+						aw_cache_set("languages", $row["id"],$row);
+					}
 				}
 				$this->file_cache->file_set($this->cf_name,aw_serialize(aw_cache_get_array("languages")));
 			}

@@ -41,6 +41,9 @@
 <td class="celltext">{VAR:LC_LANGUAGES_CHARSET}:</td><td class="celltext"><input type='text' NAME='charset' VALUE='{VAR:charset}' class="formtext"></td>
 </tr>
 <tr>
+<td class="celltext">Saidid:</td><td class="celltext"><select multiple name="site_id[]" class="formselect">{VAR:sites}</select></td>
+</tr>
+<tr>
 <td class="celltext" colspan=2>
 
 

@@ -58,6 +58,7 @@ onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseu
 		<td align=center class="celltext" width="10%">&nbsp;{VAR:LC_LANGUAGES_CHOSEN}&nbsp;</td>
 		<td align=center class="celltext" width="10%">&nbsp;{VAR:LC_LANGUAGES_ADMIN}&nbsp;</td>
 		<td align=center class="celltext" width="10%">&nbsp;{VAR:LC_LANGUAGES_ACTIVE}?&nbsp;</td>
+		<td align=center class="celltext" width="10%">&nbsp;Saidid&nbsp;</td>
 		<td align="center" colspan="2" width="10%" class="celltext">&nbsp;{VAR:LC_LANGUAGES_ACTION}&nbsp;</td>
 	</tr>
 <!-- SUB: LINE -->
@@ -70,6 +71,7 @@ onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseu
 <td class="celltext" align="center">&nbsp;<input type="radio" name="selected" value='{VAR:id}' {VAR:selected}>&nbsp;</td>
 <td class="celltext" align="center">&nbsp;<input type='radio' name='adminlang' value='{VAR:id}' {VAR:check}>&nbsp;</td>
 <td class="celltext" align="center">&nbsp;<input type="checkbox" name="act[{VAR:id}]" value='1' {VAR:active}>&nbsp;</td>
+<td class="celltext" align="center">&nbsp;{VAR:sites}&nbsp;</td>
 <td class="celltext" align=center><a href='{VAR:change}'><IMG SRC="{VAR:baseurl}/automatweb/images/blue/obj_edit.gif" WIDTH="16" HEIGHT="16" BORDER=0 ALT="{VAR:LC_LANGUAGES_CHANGE}"></a></td>
 <td class="celltext" align=center><a href='javascript:box2("Are You sure you wish to delete language?","{VAR:delete}")'><IMG SRC="{VAR:baseurl}/automatweb/images/blue/obj_delete.gif" WIDTH="16" HEIGHT="16" BORDER=0 ALT="{VAR:LC_LANGUAGES_DELETE}"></a></td>
 </tr>
