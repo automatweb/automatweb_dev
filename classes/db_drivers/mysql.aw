@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.17 2004/01/08 08:48:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.18 2004/05/06 12:25:18 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql 
 {
@@ -185,6 +185,7 @@ class mysql
 		{
 			$this->db_query($qtext);
 		}
+		$arr = array();
 		while ($row=$this->db_next())
 		{
 			$arr[]=$row;
