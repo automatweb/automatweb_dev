@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.39 2003/02/14 15:58:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.40 2003/02/14 16:31:34 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -644,16 +644,6 @@ class form extends form_base
 		extract($arr);
 		$this->load($id);
 
-		$this->do_add_row($arr);
-		$this->save();
-		$orb = $this->mk_orb("change", array("id" => $this->id));
-		header("Location: $orb");
-		return $orb;
-	}
-	
-	function do_add_row($arr)
-	{
-		extract($arr);
 		while ($count-- > 0)
 		{
 			$this->arr["rows"]++;
@@ -675,8 +665,12 @@ class form extends form_base
 				$this->arr["elements"][$after+1][$a] = array();
 			}
 		}
+		$this->save();
+		$orb = $this->mk_orb("change", array("id" => $this->id));
+		header("Location: $orb");
+		return $orb;
 	}
-
+	
 	////
 	// !Deletes column $col of form $id
 	function delete_column($arr)
@@ -5960,6 +5954,7 @@ class form extends form_base
 		{
 			for ($col = 0; $col < $this->arr["cols"]; $col++)
 			{
+				$elar = array();
 				$this->arr["contents"][$row][$col]->get_els(&$elar);
 				while (list(,$el) = each($elar))
 				{
