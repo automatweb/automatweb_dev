@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.11 2001/12/05 23:04:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.12 2001/12/18 00:07:45 kristo Exp $
 // tegeleb ORB requestide handlimisega
 classload("aw_template","defs");
 lc_load("automatweb");
@@ -172,7 +172,12 @@ class orb extends aw_template {
 							bail_out();
 						};
 						$params[$key] = $vars[$key];
-					};
+					}
+					else
+					if (isset($orb_defs[$class][$action]["defaults"][$key]))
+					{
+						$params[$key] = $orb_defs[$class][$action]["defaults"][$key];
+					}
 				};
 				$params = array_merge($params,$defined);
 			}
@@ -298,6 +303,10 @@ class orb extends aw_template {
 						$orb_defs[$class][$action]["optional"] = array();
 						$orb_defs[$class][$action]["define"] = array();
 						$orb_defs[$class][$action]["types"] = array();
+
+						// default values for optional arguments
+						$orb_defs[$class][$action]["defaults"] = array();
+
 						// default action
 						if (isset($attribs["default"]) && $attribs["default"])
 						{
@@ -327,6 +336,7 @@ class orb extends aw_template {
 					};
 					$orb_defs[$class][$action][$tag][$attribs["name"]] = $val;
 					$orb_defs[$class][$action]["types"][$attribs["name"]] = $attribs["type"];
+					$orb_defs[$class][$action]["defaults"][$attribs["name"]] = $attribs["default"];
 				};
 			};
 		}; // foreach
