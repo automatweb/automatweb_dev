@@ -47,24 +47,9 @@ class form_element extends aw_template
 		}
 	}
 
-/*	function save_final($ord = "")
-	{
-		if (strlen($ord) == 0)
-			$o = "";
-		else
-			$o = ", ord = $ord ";
-
-		$contents = serialize($this->arr);
-		$this->update_object($this->id);
-		$this->db_query("UPDATE form_elements SET content = '$contents' $o WHERE id = ".$this->id);
-	}*/
-
 	// this function deletes the element. called from $this->save();
 	function del()
 	{
-/*		if (!$this->acl->get(can_delete))
-			return;
-		$this->delete_object($this->id);*/
 	}
 
 	function gen_action_html()

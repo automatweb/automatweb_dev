@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.1 2001/05/19 23:27:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.2 2001/05/25 09:07:36 kristo Exp $
 
 global $orb_defs;
 $orb_defs["promo"] = array("new" => array("function" => "add", "params" => array("parent")),
@@ -69,7 +69,7 @@ class promo extends aw_template
 		}
 		else
 		{
-			$id = $this->register_object($parent,$title,CL_PROMO,serialize($sets),1,$type);
+			$id = $this->new_object(array("parent" => $parent,"name" => $title,"class_id" => CL_PROMO,"comment" => serialize($sets),"last" => 1,"visible" => $type));
 			$this->db_query("INSERT INTO menu (id,link,type,is_l3,tpl_lead,tpl_edit) VALUES($id,'$link',".MN_PROMO_BOX.",0,'$tpl_lead','$tpl_edit')");
 			$this->_log("promo", "Lisas promo kasti $title");
 		}

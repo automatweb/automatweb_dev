@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/styles.aw,v 2.1 2001/05/19 21:49:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/styles.aw,v 2.2 2001/05/25 09:07:36 kristo Exp $
 class styles extends aw_template
 {
 	function styles($parent, $pacl = 0)
@@ -196,13 +196,13 @@ class styles extends aw_template
 			
 			if ($id)
 			{
-				$this->update_object($id,$name);
+				$this->upd_object(array("oid" => $id,"name" => $name));
 				$this->db_query("UPDATE styles SET style='$c' WHERE id = $id");
 				$this->_log("style", "Muutis stiili $name");
 			}
 			else
 			{
-				$id = $this->register_object($this->parent, $name,CL_STYLE);
+				$id = $this->new_object(array("parent" => $this->parent, "name" => $name,"class_id" => CL_STYLE));
 				$this->db_query("INSERT INTO styles VALUES($id, '$c')");
 				$this->_log("style", "Lisas stiili $name");
 			}
@@ -248,7 +248,7 @@ class styles extends aw_template
 			{
 				$idx = split(",",$line);
 				$this->quote(&$idx[1]);
-				$id = $this->register_object($this->parent, $idx[1],CL_STYLE);
+				$id = $this->new_object(array("parent" => $this->parent, "name" => $idx[1],"class_id" => CL_STYLE));
 				$this->db_query("INSERT INTO styles VALUES($id,'".$idx[2]."')");
 			}
 			$this->_log("style", "Importis stiile");

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.3 2001/05/22 10:52:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.4 2001/05/25 09:07:35 kristo Exp $
 // klass piltide manageerimiseks
 global $orb_defs;
 $orb_defs["images"] = array("new"						=> array("function"	=> "add",		"params"	=> array("parent")),
@@ -272,7 +272,7 @@ class db_images extends aw_template
 		{
 			// failitüüp ei sobinud või uut faili polnudki,
 			// uuendame ainult kirjeldust
-			$this->update_object_comment($poid,$comment);
+			$this->upd_object(array("oid" => $poid,"comment" => $comment));
 			$this->db_query("UPDATE images SET link = '$link',newwindow='$newwindow' WHERE id = $poid");
 		};
 	}

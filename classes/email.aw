@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.3 2001/05/20 23:36:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.4 2001/05/25 09:07:35 kristo Exp $
 // mailinglist saadetavate mailide klass
 
 	class email extends aw_template
@@ -124,7 +124,7 @@
 					if (strpos(substr($link_addr,8),"/") === false)
 						$link_addr.="/";
 				}
-				$this->register_object($mail_id,$link_addr,CL_MAIL_LINK);
+				$this->new_object(array("parent" => $mail_id,"name" => $link_addr,"class_id" => CL_MAIL_LINK));
 				$this->_log("e-mail","Lisas meilile $subject lingi $link_addr");
 			}
 			return $mail_id;

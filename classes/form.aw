@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.7 2001/05/22 05:02:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.8 2001/05/25 09:07:35 kristo Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -1890,7 +1890,7 @@ $orb_defs["form"] = "xml";
 		{
 			$this->quote(&$arr);
 			extract($arr);
-			$this->update_object($id, $name, -1, $comment);
+			$this->upd_object(array("oid" => $id, "name" => $name, "comment" => $comment));
 			$this->_log("form","Muutis formi $this->name metainfot");
 			return $this->mk_orb("metainfo",  array("id" => $id));
 		}

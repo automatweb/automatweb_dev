@@ -991,5 +991,11 @@ class shop extends aw_template
 		));
 		return $this->parse();
 	}
+
+	function get_shop_categories($id)
+	{
+		$sh = $this->get($id);
+
+	}
 }
 ?>

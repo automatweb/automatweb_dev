@@ -237,7 +237,7 @@
 			$this->quote(&$msg);
 			extract($headers);
 
-			$id = $this->register_object($this->conf[inbox_id],$subject,"mail","",UNREAD,"",1,$date);
+			$id = $this->new_object(array("parent" => $this->conf["inbox_id"],"name" => $subject,"class_id" => CL_MAIL,"status" => UNREAD,"visible" => 1,"created" => $date));
 			$q ="INSERT INTO 
 			mailbox(id,sender,sender_name,reciever,reciever_name,return_path,message_id,content,full_text,uid,uidl) 		
 			values($id,'$sender', '$sender_name', '$reciever', '$reciever_name', '$return_path', '$message_id', '$content', '".$msg[msg]."', '".$GLOBALS["uid"]."', '".$ui."')";
@@ -458,7 +458,7 @@
 			if ($id)
 				$this->upd_object(array("oid" => $id, "name" => $name));
 			else
-				$id = $this->register_object($parent, $name, "mail_folder","",2,$GLOBALS["uid"]);
+				$id = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_MAIL_FOLDER,"status" => 2,"last" => $GLOBALS["uid"]));
 
 			return $parent;
 		}
@@ -489,10 +489,10 @@
 			$num = $this->db_fetch_field("SELECT count(oid) as cnt FROM objects where class_id = 27 AND status != 0 AND last = '".$GLOBALS["uid"]."'","cnt");
 			if ($num < 1)
 			{
-				$this->conf[inbox_id] = $this->register_object(1,"Inbox","mail_folder","",2,$uid,0);
-				$this->conf[sent_items_id] = $this->register_object(1,"Sent Items","mail_folder","",2,$uid,0);
-				$this->conf[del_items_id] = $this->register_object(1,"Deleted Items","mail_folder","",2,$uid,0);
-				$this->conf[drafts_id] = $this->register_object(1,"Drafts","mail_folder","",2,$uid,0);
+				$this->conf["inbox_id"] = $this->new_object(array("parent" => 1,"name" => "Inbox","class_id" => CL_MAIL_FOLDER,"status" => 2,"last" => $uid));
+				$this->conf["sent_items_id"] = $this->new_object(array("parent" => 1,"name" => "Sent Items","class_id" => CL_MAIL_FOLDER,"status" => 2,"last" => $uid));
+				$this->conf["del_items_id"] = $this->new_object(array("parent" => 1,"name" => "Deleted Items","class_id" => CL_MAIL_FOLDER,"status" => 2,"last" => $uid));
+				$this->conf["drafts_id"] = $this->new_object(array("parent" => 1,"name" => "Drafts","class_id" => CL_MAIL_FOLDER,"status" => 2,"last" => $uid));
 			}
 
 			$str = serialize($this->conf);
@@ -545,7 +545,7 @@
 					$this->upd_object(array("oid" => $in_reply_to, "status" => $status));
 				}
 
-				$id = $this->register_object($this->conf[drafts_id],$subject,"mail");
+				$id = $this->new_object(array("parent" => $this->conf["drafts_id"],"name" => $subject,"class_id" => CL_MAIL));
 				$this->db_query("INSERT INTO mailbox(id,sender,reciever,content,uid) 		
 													values($id,'$from','$to','$content','".$GLOBALS["uid"]."')");
 			}

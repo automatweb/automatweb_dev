@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.7 2001/05/22 05:02:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.8 2001/05/25 09:07:35 kristo Exp $
 /*       _\|/_
          (o o)
  +----oOO-{_}-OOo----------------------------------+
@@ -7,9 +7,7 @@
  |          (C) StruktuurMeedia 2000,2001          |
  +------------------------------------------------*/
 
-// you are such a microsoft's bitch duke :)
-
-include("$classdir/connect.$ext");
+classload("connect");
 
 class core extends db_connector
 {
@@ -25,8 +23,8 @@ class core extends db_connector
 		$this->basedir = $basedir;
 	}
 
-	// abifunktsioonid
-	// fetchib kirje suvalisest tabelist
+	////
+	// !fetchib kirje suvalisest tabelist
 	function get_record($table,$field,$selector)
 	{
 		$q = "SELECT * FROM $table WHERE $field = '$selector'";
@@ -34,39 +32,44 @@ class core extends db_connector
 		return $this->db_fetch_row();
 	}
 
-	// kustutab kirje mingist tabelist. Kahtlane värk
+	////
+	// !kustutab kirje mingist tabelist. Kahtlane värk
 	function dele_record($table,$field,$selector)
 	{
 		$q = "DELETE FROM $table WHERE $field = '$selector'";
 		$this->db_query($q);
 	}
 
-	// fetch a config key
+	////
+	// !fetch a config key
 	function get_cval($ckey)
 	{
 		$q = sprintf("SELECT content FROM config WHERE ckey = '%s'",$ckey);
 		return $this->db_fetch_field($q,"content");
 	}
 
-	// järgmised 4 funktsiooni on vajalikud ntx siis, kui on tarvis ühe objekti
+	////
+	// !järgmised 4 funktsiooni on vajalikud ntx siis, kui on tarvis ühe objekti
 	// juures korraga 2 või enamat päringut kasutada. Enne uue sisestamist tuleb
 	// siis lihtsalt vana handle ära seivida
 	// -------------------------------------------------------------------------
 	// samas, seda saab kindlasti ka paremini teha, ntx kasutada
 	// sissehitatud pinu handlete jaoks
-        // get query handle
+  // get query handle
 	function get_handle()
 	{
 		return $this->qID;
 	}
 
-	// set query handle
+	////
+	// !set query handle
 	function set_handle($qID)
 	{
 		$this->qID = $qID;
 	}
 
-	// need on tegelikult analoogid eelmisele, aga kasutavad objekti sisseehitatud
+	////
+	// !need on tegelikult analoogid eelmisele, aga kasutavad objekti sisseehitatud
 	// pinu qID salvestamiseks
 	function save_handle()
 	{
@@ -77,8 +80,9 @@ class core extends db_connector
 	{
 		$this->qID = $this->_pop("qID");
 	}
-	
-	// write to syslog. the other way.
+
+	////
+	// !write to syslog. the other way.
 	// nimelt uid-d pole ju vaja igalt poolt siia ette anda, selle voime
 	// globaalsest skoobist importida. Aga kuna log_action funktsiooni
 	// kasutatakse nii paljudes kohtades, siis tegin uue funktsiooni
@@ -99,21 +103,8 @@ class core extends db_connector
 		$this->db_query($q);
 	}
 		
-	// write to syslog
-	// DEPRECATED
-	// Don't use this. Use _log instead
-	// function log_action($uid,$type,$action)
-	// {
-	//	global $REMOTE_HOST;
-	//	global $REMOTE_ADDR;
-	//	$ip = "$REMOTE_HOST / $REMOTE_ADDR";
-	//	$when = time();
-	//	$this->quote($action);
-	//	$q = "INSERT DELAYED INTO syslog (syslog.tm,uid,type,action,ip) VALUES ('$when','$uid','$type','$action','$ip')";
-	//	$this->db_query($q);
-	//}
-
-	// outputs debug information if $HTTP_SESSION_VARS["debugging"] is set
+	////
+	// !outputs debug information if $HTTP_SESSION_VARS["debugging"] is set
 	function dmsg($msg)
 	{
 		global $HTTP_SESSION_VARS;
@@ -151,18 +142,17 @@ class core extends db_connector
 	// Parameetrid:
 	//	uid - kelle info
 	//	field - millise välja sisu. Kui defineerimata, siis terve kirje
-	
 	function get_user($args = array())
 	{
-	        global $users_cache;
+		global $users_cache;
 		extract($args);
-                if (!is_array($users_cache[$uid]))
-                {
-                        $q = "SELECT * FROM users WHERE uid = '$uid'";
-                        $this->db_query($q);
+		if (!is_array($users_cache[$uid]))
+		{
+			$q = "SELECT * FROM users WHERE uid = '$uid'";
+			$this->db_query($q);
 			$row = $this->db_next();
-                        $users_cache[$uid] = $row;
-                }
+			$users_cache[$uid] = $row;
+		}
 		else
 		{
 			$row = $users_cache[$uid];
@@ -171,7 +161,8 @@ class core extends db_connector
 		{
 			$retval = $row[$field];
 		}
-		elseif ($row)
+		else
+		if ($row)
 		{
 			// inbox ja draft defauldivad kodukataloogida, kui neid pole määratud
 			$inbox = $row["msg_inbox"] ? $row["msg_inbox"] : $row["home_folder"];
@@ -180,7 +171,7 @@ class core extends db_connector
 			$row["msg_draft"] = $draft;
 			$retval = $row;
 		};
-                return $row;	
+		return $row;	
 	}
 
 	////
@@ -229,7 +220,8 @@ class core extends db_connector
 		return ($timestamp) ? date($dateformat,$timestamp) : date($dateformat);
 	}
 
-	// tagastab objekti info aliase kaudu
+	////
+	// !tagastab objekti info aliase kaudu
 	function _get_object_by_alias($alias) 
 	{
 		if ($GLOBALS["lang_menus"] == 1)
@@ -243,6 +235,8 @@ class core extends db_connector
 		return $res;
 	}
 
+	////
+	// !tagastab array grupi id'dest, kuhu kasutaja kuulub
 	function get_gids_by_uid($uid)
 	{
 		$q = "SELECT gid FROM groupmembers WHERE uid = '$uid'";
@@ -255,21 +249,9 @@ class core extends db_connector
 		return $retval;
 	}
 
-	// kontrollib objekti olemasolu
-	// DEPRECATED
-	// mix deprecated? - terryf
-	// see tagastab lihtsalt objekti oid - eeldusel, et see olemas on.
-	// kui on, siis on vaja teha veel teine päring kogu objekti info saamiseks.
-	// mottetu imho. get_object töötab täpselt sama hästi. - duke
-	function object_exists($oid)
-	{
-		$q = "SELECT oid FROM objects WHERE oid = '$oid'";
-		$this->db_query($q);
-		$row = $this->db_fetch_row();
-		return $row;
-	}
-
-	// improved version of the one below.
+	////
+	// !adds a new object, inserts all fields that are given in the array and puts default values for all others
+	// lang_id,site_id,created,createdby,modified,modifiedby are set to correct values
 	function new_object($arr,$add_acl = true)
 	{
 		if (!is_array($arr))
@@ -341,78 +323,9 @@ class core extends db_connector
 		$this->situ_tais();
 		return $oid;
 	}
-	
-	// improved version of the one below.
-	// function new_object($arr,$add_acl = true)
-	//{
-		// kui arr pole array, siis voiks see funktsioon töö lopetama
-	//	global $uid, $lang_id,$SITE_ID;
-	//	$cols = array("createdby", "created", "modifiedby",
-	//				"modified", "lang_id", "site_id");
-	//	$vals = array("'$uid'",time(), "'$uid'", time(), "'$lang_id'",$SITE_ID);
-	//	reset($arr);
-	//	while (list($k,$v) = each($arr))
-	//	{
-	//		$cols[] = $k;
-	//		$vals[] = "'".$v."'";
-	//	};
-		// oid on auto_increment tüüpi väli. Possible race condition
-		#$oid = $this->db_fetch_field("SELECT MAX(oid) AS oid FROM objects","oid")+1;
 
-	//	$q = "INSERT INTO objects ( " . join(",",$cols) . ") VALUES (" . join(",",$vals) . ")";
-	//	$this->db_query($q);
-		
-	//	$q = "SELECT MAX(oid) AS oid FROM objects WHERE createdby = '$uid'";
-	//	$oid = $this->db_fetch_field($q,"oid");
-	//	$this->db_query("INSERT INTO hits (oid,hits) VALUES ($oid,0)");
-	//
-	//	if ($oid > 0 && $add_acl)
-	//	{
-	//		$this->create_obj_access($oid);
-	//	};
-	//	$this->situ_tais();
-	//	return $oid;
-	//}
-
-
-	// registreerib uue objekti objektide tabelis
-	// DEPRECATED, kasutab positsioneeritud parameetreid
-	function register_object($parent,$name,$class,$comment = "",$status = 2,$last="",$visible = 1,$time = -1,$period = 0)
-	{
-		$cid = $class;
-		$this->db_query("SELECT MAX(oid) AS oid FROM objects");
-		$row = $this->db_next();
-		$oid = $row[oid] + 1;
-		$this->quote($comment);
-		$this->quote($name);
-
-		if ($this->period > 0)
-		{
-			$period = $this->period;
-		} else {
-			$period = 0;
-		};
-		
-		global $uid, $lang_id,$SITE_ID; #sessiooni variaablitest loetud
-		if ($time == -1)
-			$time = time();
-		// uued objektid on vaikimis aktiivsed
-		$q = "INSERT INTO objects(oid,parent,name,createdby,class_id,created,period,
-							modified,modifiedby,status,lang_id,comment,last,visible,site_id)
-			VALUES('$oid','$parent','$name','$uid','$cid','$time',
-							'$period',
-							'$time','$uid','$status','$lang_id','$comment','$last','$visible','$SITE_ID')";
-		$this->db_query($q);
-		
-		$this->db_query("INSERT INTO hits (oid,hits) VALUES ($oid,0)");
-
-		if ($oid > 0)
-			$this->create_obj_access($oid);
-		$this->situ_tais();
-		return $oid;		
-	}
-	
-	// kirjutab objekti kustutatux
+	////
+	// !kirjutab objekti kustutatux
 	function delete_object($oid)
 	{
 		global $uid;
@@ -426,7 +339,8 @@ class core extends db_connector
 		$this->db_query($q);
 	}
 
-	// 'l337
+	////
+	// !'l337
 	// see sai mingis erilises deprekahoos kirjutet. tegelt voiks ymber nimetada.
 	//
 	// gee, you think? - terryf
@@ -436,7 +350,8 @@ class core extends db_connector
 		$this->db_query($q);
 	}
 
-	// uus ja parem objekti uuendamise funktsioon, votab andmed ette arrayst
+	////
+	// !uus ja parem objekti uuendamise funktsioon, votab andmed ette arrayst
 	// ja uuendab ainult neid, mida ette anti
 	//  	oid peab olema
 	function upd_object($params) 
@@ -460,28 +375,9 @@ class core extends db_connector
 		// see on siis see vinge funktsioon
 		$this->situ_tais();
 	}
-	
-	function update_object($oid, $name = "", $active = -1, $comment = -1) {
-		global $uid;
-		$t = time();	
-		$sql = "UPDATE objects
-				SET modified = $t,
-				    modifiedby = '$uid'";
-		if ($name != "") {
-			$sql.=" , name = '$name' ";
-		};
 
-		if ($active != -1) {
-			$sql.=" , status = $active ";
-		}
-		
-		if ($comment != -1) 
-			$sql.=" , comment = '$comment' ";
-			
-		$this->db_query($sql." WHERE oid = $oid");
-		$this->situ_tais;
-	}
-
+	////
+	// !returns true if object $oid 's cahe dirty flag is set
 	function cache_dirty($oid)
   {
 		if (isset($GLOBALS["cahe_dirty_cache"][$oid]))
@@ -493,18 +389,21 @@ class core extends db_connector
 			$q = "SELECT cachedirty FROM objects WHERE oid = '$oid'";
 			$this->db_query($q);
 			$row = $this->db_next();
-			$GLOBALS["cahe_dirty_cache"][$oid] = $row[cachedirty];
-			return ($row[cachedirty] == 1) ? true : false;
+			$GLOBALS["cahe_dirty_cache"][$oid] = $row["cachedirty"];
+			return ($row["cachedirty"] == 1) ? true : false;
 		}
   }
 
+	////
+	// !sets objects $oid's cache dirty flag to false
   function clear_cache($oid)
   {
 		$q = "UPDATE objects SET cachedirty = 0 WHERE oid = '$oid'";
     $this->db_query($q);
   }
 
-	// lisab objektile aliase
+	////
+	// !lisab objektile aliase
 	// source on see objekt, mille juurde lingitakse
 	// target on see, mida lingitakse
 	// aliaste tabelisse paigutame ka klassi id, nii
@@ -519,12 +418,15 @@ class core extends db_connector
 		$this->_log("alias","Lisas objektile $source aliase");
 	}
 
+	////
+	// !deletes alias $target from object $source
 	function delete_alias($source,$target)
 	{
 		$this->db_query("DELETE FROM aliases WHERE source = '$source' AND target = '$target'");
 	}
 
-	// koostab aliaste nimekirja objekti jaoks
+	////
+	// !koostab aliaste nimekirja objekti jaoks
 	function get_aliases_for($oid,$type = -1,$sortby = "", $order = "",$join = "") 
 	{
 		global $awt;
@@ -557,7 +459,10 @@ class core extends db_connector
 		return $aliases;
 	}
 
-	function get_aliases_of($oid) {
+	////
+	// !returns array of aliases pointing to object $oid
+	function get_aliases_of($oid) 
+	{
 		$q = "SELECT *,objects.name as name,objects.parent as parent FROM aliases
 			LEFT JOIN objects ON
 			(aliases.source = objects.oid)
@@ -578,16 +483,8 @@ class core extends db_connector
 		$this->db_query("DELETE FROM aliases WHERE source = $oid");
 	}
 
-	function update_object_comment($oid,$comment) 
-	{
-		$this->quote($comment);
-		$q = "UPDATE objects
-			SET comment = '$comment'
-			WHERE oid = '$oid'";
-		$this->db_query($q);
-	}
-
-	// lisab objektile yhe vaatamise
+	////
+	// !lisab objektile yhe vaatamise
   function add_hit($oid) 
 	{
 		if ($oid) 
@@ -595,7 +492,9 @@ class core extends db_connector
 	    $this->db_query("UPDATE hits SET hits=hits+1 WHERE oid = $oid");
 		};
   }
-        
+     
+	////
+	// !imcrements the objects cached hit count by one
 	function add_cache_hit($oid) 
 	{
 		if ($oid) 
@@ -604,7 +503,13 @@ class core extends db_connector
 		};
 	}
 
-	// noh, mida see funktsioon teeb, peaks olema ysnagi ilmne
+	////
+	// !traverses the object tree from bottom to top and returns an 
+	// array of all objects in the path
+	// params:
+	//	$oid = object to start from
+	//	$check_objs = if this is false, then only menu objects are traversed, if this is true, all objects
+	//	$rootobj = the oid of the object where to stop traversing, ie the root of the tree
 	function get_object_chain($oid,$check_objs = false, $rootobj = 0) 
 	{
 		if (!$oid) 
@@ -646,7 +551,8 @@ class core extends db_connector
 		return $chain;
 	}
 
-	// tagastab objekti
+	////
+	// !tagastab objekti
 	function get_object($arg) 
 	{
 		global $objcache;
@@ -685,7 +591,8 @@ class core extends db_connector
 		$this->db_query("SELECT objects.* FROM objects WHERE class_id = $class AND status != 0  GROUP BY objects.oid");
 	}
 
-	// miski lame funktsioon. Aga praegu paremini ei oska. templateeditor pruugib seda
+	////
+	// !miski lame funktsioon. Aga praegu paremini ei oska. templateeditor pruugib seda
 	function get_objects_by_parent($parent)
 	{
 
@@ -699,15 +606,19 @@ class core extends db_connector
 		return $result;
 	}
 
-	// hmm .. miski kahtlane värk ... vbla polegi neid vaja?
+	////
+	// !hmm .. miski kahtlane värk ... vbla polegi neid vaja?
 	// fetchib objekti last välja ja unserializeb selle
+	// 
+	// jah, vbla pole t6esti. kogu see aliaste asi tulex nac yle vaadata - terryf
 	function get_last($oid) 
 	{
 		$row = $this->get_object($oid);
 		return unserialize($row[last]);
 	}
 
-	// salvestab objekti last välja uue info
+	////
+	// !salvestab objekti last välja uue info
 	function set_last($oid,$field,$val) 
 	{
 		$old = $this->get_last($oid);
@@ -740,6 +651,10 @@ class core extends db_connector
 		};
 	}
 
+	////
+	// !finds the lead template for menu $section
+	// if the template is not set for this menu, traverses the object tree upwards 
+	// until it finds a menu for which it is set
 	function get_lead_template($section)
 	{
 		global $awt,$lead_template_cache;
@@ -763,6 +678,10 @@ class core extends db_connector
 		return $template;
 	}
 
+	////
+	// !finds the full document template for menu $section
+	// if the template is not set for this menu, traverses the object tree upwards 
+	// until it finds a menu for which it is set
 	function get_long_template($section)
 	{
 		global $awt;
@@ -783,6 +702,10 @@ class core extends db_connector
 		return $template;
 	}
 
+	////
+	// !finds the edit template for menu $section
+	// if the template is not set for this menu, traverses the object tree upwards 
+	// until it finds a menu for which it is set
 	function get_edit_template($section)
 	{
 		do { 
@@ -794,6 +717,8 @@ class core extends db_connector
 		return $template;
 	}
 
+	////
+	// !prints an error message about the fact that the user has no access to do this
 	function acl_error($right, $oid)
 	{
 		if (func_num_args() == 2)
@@ -809,6 +734,8 @@ class core extends db_connector
 		die();
 	}
 
+	////
+	// !returns the default group for the user
 	function get_user_group($uid)
 	{
 		$this->db_query("SELECT * FROM groups WHERE type=1 AND name='$uid'");
@@ -864,6 +791,8 @@ class core extends db_connector
 		}
 	}
 
+	////
+	// !old version of orb url maker, use mk_my_orb instead 
 	// kui user = 1, siis suunatakse tagasi Saidi sisse. Now, I do realize that this is not
 	// the best solution, but for now, it works
 	function mk_orb($fun,$arr, $cl_name = "",$user = "")
@@ -894,6 +823,8 @@ class core extends db_connector
 		return $url;
 	}
 
+	////
+	// !DEPRECATED - use mk_my_orb
 	// eelmise analoog. Parameetrid votab arrayst
 	function mk_site_orb($args = array())
 	{
@@ -909,6 +840,8 @@ class core extends db_connector
 		return $retval;
 	}
 
+	////
+	// !creates the necessary hidden elements to put in a form that tell the orb which function to call
 	function mk_reforb($fun,$arr,$cl_name = "")
 	{
 		global $ext;
@@ -921,6 +854,8 @@ class core extends db_connector
 		return $url;
 	}
 
+	////
+	// !creates a list of menus above $parent and appends $text and assigns it to the correct variable
 	function mk_path($oid,$text = "",$period = 0)
 	{
 		global $ext;
@@ -958,7 +893,8 @@ class core extends db_connector
 		return $retval;
 	}
 
-	// fwrite wrapper
+	////
+	// !fwrite wrapper
 	function put_file($arr)
 	{
 		if (!$arr["file"])
@@ -974,6 +910,8 @@ class core extends db_connector
 		fclose($fh);
 	}
 
+	////
+	// !converts all characters of string $str to their hex representation and returns the resulting string
 	function binhex($str)
 	{
 		$l = strlen($str);
@@ -993,6 +931,8 @@ class core extends db_connector
 		}
 	}
 
+	////
+	// !opposite of binhex, decodes a string of hex numbers to their values and creates a string from them
 	function hexbin($str)
 	{
 		$l = strlen($str);
@@ -1004,7 +944,8 @@ class core extends db_connector
 		return $ret;
 	}
 
-	// serializemise funktsioonid. 
+	////
+	// !serializemise funktsioonid. 
 	// need on siin sellex et kui objekt ei implemendi serializemist, siis errorit ei tulex. 
 	function _serialize($arr)
 	{

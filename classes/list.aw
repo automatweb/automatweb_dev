@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.6 2001/05/21 21:42:15 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.7 2001/05/25 09:07:35 kristo Exp $
 class mlist extends aw_template
 {
 	function mlist($id = 0)
@@ -101,7 +101,7 @@ class mlist extends aw_template
 		if (($row = $this->db_next()))
 			return $row["id"];	// if such user exists, do not add another
 
-		$user_id = $this->register_object($this->id, $name, CL_MAILINGLIST_MEMBER);
+		$user_id = $this->new_object(array("parent" => $this->id, "name" => $name, "class_id" => CL_MAILINGLIST_MEMBER));
 		$this->db_query("INSERT INTO ml_users(id,mail) VALUES($user_id, '$email')");
 
 		if (gettype($vars) == "array")

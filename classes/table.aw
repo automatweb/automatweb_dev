@@ -287,7 +287,7 @@ $orb_defs["table"] = array("change"						=> array("function"	=> "gen_admin_html"
 			extract($ar);
 						
 			$this->db_query("UPDATE aw_tables SET contents = '$str' WHERE id = ".$this->table_id);
-			$this->update_object($this->table_id);
+			$this->upd_object(array("oid" => $this->table_id));
 		}
 		
 		function save_table_settings($ar)
@@ -305,7 +305,7 @@ $orb_defs["table"] = array("change"						=> array("function"	=> "gen_admin_html"
 			$this->arr["def_style"] = $def_style;
 
 			$str=serialize($this->arr);
-			$this->update_object($this->table_id, $name, -1, $comment);
+			$this->upd_object(array("oid" => $this->table_id, "name" => $name, "comment" =>  $comment));
 			
 			$this->db_query("UPDATE aw_tables SET contents = '$str' WHERE id = ".$this->table_id);
 		}

@@ -20,6 +20,10 @@ class icons extends aw_template
 		{
 			$ss = "WHERE grp_id = $grp";
 		}
+		else
+		{
+			$ss = "WHERE grp_id = 0 OR grp_id IS NULL";
+		}
 
 		$start = $page*PER_PAGE;
 		$end = ($page+1)*PER_PAGE;
@@ -234,7 +238,7 @@ class icons extends aw_template
 		}
 	}
 
-	function sel_icon($rtype,$rid,$sstring = "",$sstring2 = "")
+	function sel_icon($rtype,$rid,$sstring = "",$sstring2 = "",$grp="")
 	{
 		global $ext,$kelle,$puhastatud,$praht,$opsys,$p2rit,$m2rks6nad,$m2rks6nad2,$search,$programm;
 		$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / Otsi ikooni");
@@ -252,6 +256,13 @@ class icons extends aw_template
 											"programm"				=> $programm,
 											"m2rks6nad"		=> $m2rks6nad,
 											"m2rks6nad2"		=> $m2rks6nad2));
+		$icarr = array(0 => "");
+		$this->db_query("SELECT * from icon_grps");
+		while ($row = $this->db_next())
+		{
+			$icarr[$row["id"]] = $row["name"];
+		}
+		$this->vars(array("grps" => $this->picker($grp,$icarr)));
 
 		if ($search)
 		{
@@ -272,6 +283,8 @@ class icons extends aw_template
 				$sp[] = " m2rks6nad LIKE '%$m2rks6nad%' ";
 			if ($m2rks6nad2 != "")
 				$sp[] = " m2rks6nad2 LIKE '%$m2rks6nad2%' ";
+			if ($grp > 0)
+				$sp[] = " grp_id = $grp ";
 
 			$sps = join("AND",$sp);
 			if ($sps != "")
@@ -475,7 +488,7 @@ class icons extends aw_template
 		$icon = $idir."/".$icon;
 		$odir = $tdir."/".$nname;
 		// now $tdir contains files $icon.gif.0 / $icon.gif.1 ...
-		$op = `$convert_dir +adjoin $icon $odir`;
+		$op = `$convert_dir +adjoin "$icon" "$odir"`;
 		echo "$convert_dir (convert +adjoin $icon $odir) result: <pre>$op</pre><Br>";
 		// find the right size image with identify
 		$h = opendir($tdir);
@@ -491,7 +504,7 @@ class icons extends aw_template
 				{
 					$fi = $tdir."/".$file;
 					$e_fi = str_replace("/","\/",$fi);
-					$op = `$identify_dir $fi`;
+					$op = `$identify_dir "$fi"`;
 					echo "$identify_dir $fi result:<br><pre>$op</pre><br>";
 					$res = preg_match("/$e_fi (\d*)x(\d*)/",$op,$mat);
 
@@ -508,7 +521,7 @@ class icons extends aw_template
 						$c_file = $nname;
 						// now also crop the image to the right size
 						$nm = $idir."/".$nname;
-						$op = `$convert_dir -crop 16x16 $nm $nm`;
+						$op = `$convert_dir -crop 16x16 "$nm" "$nm"`;
 						echo "crop result: $op <br>";
 					}
 
@@ -525,15 +538,19 @@ class icons extends aw_template
 						$c_file = $nname;
 						// now also crop the image to the right size
 						$nm = $idir."/".$nname;
-						$op = `$convert_dir -size 16x16 $nm $nm`;
+						$op = `$convert_dir -geometry 16x16! "$nm" "$nm"`;
 						echo "crop result: $op <br>";
-						$op = `$convert_dir -crop 16x16 $nm $nm`;
+						$op = `$convert_dir -crop 16x16 "$nm" "$nm"`;
 						echo "size result: $op <br>";
 					}
 				}
 				echo "deleting ",$tdir."/".$file,"<br>";
 				@unlink($tdir."/".$file);
 			}
+		}
+		if (!$found)
+		{
+			echo "!!!!!!!!!!!!!!!notfound '$icon'\n\n";
 		}
 		return $c_file;
 	}
@@ -558,7 +575,16 @@ class icons extends aw_template
 	{
 		$this->read_template("add_icon_grp.tpl");
 
-		$this->vars(array("ics" => $ics));
+		$icarr = array(0 => "");
+		$this->db_query("SELECT * from icon_grps");
+		while ($row = $this->db_next())
+		{
+			$icarr[$row["id"]] = $row["name"];
+		}
+		$this->vars(array(
+			"ics" => $ics,
+			"grps" => $this->picker($grp,$icarr)
+		));
 		return $this->parse();
 	}
 
@@ -568,10 +594,13 @@ class icons extends aw_template
 	{
 		extract($arr);
 		$ics = explode("|",$ics);
-		$id = $this->db_fetch_field("SELECT max(id) as id FROM icon_grps","id")+1;
-		$this->db_query("INSERT INTO icon_grps(id,name) values($id,'$name')");
+		if ($act == "new")
+		{
+			$grp = $this->db_fetch_field("SELECT max(id) as id FROM icon_grps","id")+1;
+			$this->db_query("INSERT INTO icon_grps(id,name) values($grp,'$name')");
+		}
 		$ics = join(",",$ics);
-		$this->db_query("update icons set grp_id = $id where id in($ics)");
+		$this->db_query("update icons set grp_id = $grp where id in($ics)");
 		return $id;
 	}
 

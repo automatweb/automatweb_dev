@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.4 2001/05/21 03:19:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.5 2001/05/25 09:07:35 kristo Exp $
 // list.aw - listide haldus
 
 	global $orb_defs;
@@ -281,12 +281,12 @@
 
 			if ($id)
 			{
-				$this->update_object($id, $name, 2, $comment);
+				$this->upd_object(array("oid" => $id, "name" => $name, "status" => 2, "comment" => $comment));
 				$this->_log("mlist","Muutis kategooriat $name");
 			}
 			else
 			{
-				$id = $this->register_object($parent, $name, CL_MAILINGLIST_CATEGORY, $comment);
+				$id = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_MAILINGLIST_CATEGORY, "comment" => $comment));
 				$this->_log("mlist","Lisas kategooria $name");
 			}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/accessmgr.aw,v 2.1 2001/05/16 03:00:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/accessmgr.aw,v 2.2 2001/05/25 09:07:35 kristo Exp $
 
 global $orb_defs;
 $orb_defs["accessmgr"] = array("list_access" => array("function" => "list_access", "params" => array())
@@ -68,7 +68,7 @@ class accessmgr extends aw_template
 	// !check if the object for this program exists or not and if it doesn't, then create it. 
 	function check_obj($prid)
 	{
-		if (!$this->object_exists($this->ar[$prid]))
+		if (!$this->get_object($this->ar[$prid]))
 		{
 			global $programs;
 			$id = $this->new_object(array("parent" => $this->ar["root"], "class_id" => CL_ACCESSMGR, "status" => $prid, "name" => $programs[$prid]["name"]));

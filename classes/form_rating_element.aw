@@ -203,7 +203,7 @@
 				$o = ", ord = $ord ";
 
 			$contents = serialize($this->arr);
-			$this->update_object($this->id);
+			$this->upd_object(array("oid" => $this->id));
 			$this->db_query("UPDATE form_elements SET content = '$contents' $o WHERE id = ".$this->id);
 		}
 

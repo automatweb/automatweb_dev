@@ -47,7 +47,7 @@ define(TYPE_BAR,2);
 		function base_add($ar)
 		{
 			extract($ar);
-				$id = $this->register_object($parent,$name,CL_GRAPH,$comment,$status = 2);	
+				$id = $this->new_object(array("parent" => $parent,"name" => $name,"class_id" => CL_GRAPH,"comment" => $comment,"status" => 2));	
 				if ($alias_doc)
 				{
 					$this->add_alias($alias_doc,$id);
@@ -611,7 +611,7 @@ define(TYPE_BAR,2);
 		function save_userdata($ar)
 		{
 			extract($ar);
-			$this->update_object($id, $name = "", $active = -1, $comment = -1);
+			$this->upd_object(array("oid" => $id));
 			$dt=$this->quote(serialize($arr));
 			$q="UPDATE graphs SET data = '$dt' WHERE id=$id";
 			$this->db_query($q);
@@ -649,7 +649,7 @@ define(TYPE_BAR,2);
 		function save_meta($ar)
 		{
 			extract($ar);
-			$this->update_object($id, $name, $active = -1, $comment);
+			$this->upd_object(array("oid" => $id, "name" => $name, "comment" =>  $comment));
 			return $this->mk_orb("meta",array("id"=>$id));
 		}
 

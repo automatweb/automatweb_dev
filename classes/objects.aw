@@ -272,7 +272,7 @@ class db_objects extends aw_template
 
 		if (!isset($status))
 			$status = -1;
-		return $this->register_object($parent,$name,$class,$comment,$status,0,0,0,$period);
+		return $this->new_object(array("parent" => $parent,"name" => $name,"class_id" => $class,"comment" => $comment,"status" => $status,"period" => $period));
 	}
 
 	function count_by_parent($parent,$typearr = "") {

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/vars.aw,v 2.1 2001/05/18 17:01:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/vars.aw,v 2.2 2001/05/25 09:07:36 kristo Exp $
 
 	global $orb_defs;
 	$orb_defs["variables"] = array(
@@ -330,7 +330,7 @@
 
 			if ($id)
 			{
-				$this->update_object($id, $name, 2, $comment);
+				$this->upd_object(array("oid" => $id, "name" => $name, "status" => 2, "comment" => $comment));
 				$this->_log("ml_var","Muutis meili muutujate kategooriat $name");
 			}
 			else

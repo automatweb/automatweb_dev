@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.2 2001/05/21 04:01:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.3 2001/05/25 09:07:35 kristo Exp $
 
 global $orb_defs;
 $orb_defs["form_output"] = 
@@ -186,7 +186,7 @@ class form_output extends form_base
 		$this->dequote(&$arr);
 		extract($arr);
 
-		$this->update_object($op_id, $name, -1, $comment);
+		$this->upd_object(array("oid" => $op_id, "name" => $name, "comment" => $comment));
 		$this->_log("form","Muutis formi $this->name outputi stiili $name");
 		return $this->mk_orb("op_meta", array("id" => $id, "op_id" => $op_id));
 	}
@@ -197,7 +197,7 @@ class form_output extends form_base
 	{
 		$tp = serialize($this->output);
 		$this->db_query("UPDATE form_output SET op = '$tp' WHERE id = $id");
-		$this->update_object($id);
+		$this->upd_object(array("oid" => $id));
 		$this->_log("form","Muutis formi $this->name outputi stiili $name");
 	}
 

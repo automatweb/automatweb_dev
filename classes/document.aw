@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.9 2001/05/23 18:22:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.10 2001/05/25 09:07:35 kristo Exp $
 // document.aw - Dokumentide haldus. ORB compatible. Should be used instead of documents.aw
 // defineerime orbi funktsioonid
 global $orb_defs;
@@ -1622,6 +1622,8 @@ class document extends aw_template
 									"oid" => $id,
 		));
 
+		classload("languages");
+		$t = new languages;
     $this->vars(array("title" => str_replace("\"","&quot;",$document["title"]),
 											"jrk1"  => $this->picker($document["jrk1"],$jrk),
 										  "jrk2"  => $this->picker($document["jrk2"],$jrk),
@@ -1665,7 +1667,8 @@ class document extends aw_template
 											"cstatus"	=> checked($document["status"] == 2),
 											"no_search" => checked($document["no_search"]),
 											"no_left_pane" => checked($document["no_left_pane"]),
-											"no_right_pane" => checked($document["no_right_pane"])
+											"no_right_pane" => checked($document["no_right_pane"]),
+											"charset" => $t->get_charset()
 											));
 
 
