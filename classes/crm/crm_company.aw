@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.60 2004/07/22 10:30:20 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.61 2004/08/03 10:48:34 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -29,7 +29,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 //@property ettevotlusvorm type=relpicker reltype=RELTYPE_ETTEVOTLUSVORM table=kliendibaas_firma 
 //@caption Õiguslik vorm
 
-@property ettevotlusvorm type=chooser table=kliendibaas_firma
+@property ettevotlusvorm type=select table=kliendibaas_firma
 @caption Õiguslik vorm
 
 //@property ettevotlusvorm type=objpicker clid=CL_CRM_CORPFORM table=kliendibaas_firma 
@@ -59,7 +59,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 @caption Nimekiri
 
 @default group=contacts2
-
 
 @layout hbox_toolbar type=hbox group=contacts2
 
@@ -893,6 +892,7 @@ class crm_company extends class_base
 					'sort_by' => 'objects.jrk, objects.name',
 				));
 				$elements = array();
+				$elements[0] = '--vali--';
 				for($o=$ol->begin();!$ol->end();$o=$ol->next())
 				{
 					if($o->id()==$data['value'])
@@ -1907,6 +1907,11 @@ class crm_company extends class_base
 	{
 		if(!is_array($arr['check']))
 			return;
+
+		$us = get_instance(CL_USER);
+		$person = new object($us->get_current_person());
+		$arr['check'][$person->id()] = $person->id();
+
 		$prsn = get_instance(CL_CRM_PERSON);
 		$pl = get_instance(CL_PLANNER);
 		$cal_id = $pl->get_calendar_for_user(array('uid'=>aw_global_get('uid')));
