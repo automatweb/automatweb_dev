@@ -104,7 +104,7 @@ class ut_stat_table extends aw_template
 
 		$q = "
 			SELECT
-				ut_tudengid.nimi as nimi,
+				CONCAT(ut_tudengid.pnimi,', ',ut_tudengid.enimi) as nimi,
 				ut_tudengid.aasta as aasta
 			FROM ut_tudengid
 			LEFT JOIN ut_struktuurid ON ut_struktuurid.id = ut_tudengid.struktuur 
@@ -114,8 +114,8 @@ class ut_stat_table extends aw_template
 				ut_tudengid.oppevorm = '$oppevorm' AND
 				ut_tudengid.oppeaste = '$oppeaste' AND
 				ut_oppekavad.nimetus = '$oppekava'
-			GROUP BY ut_tudengid.nimi
-			ORDER BY ut_tudengid.nimi
+			GROUP BY nimi
+			ORDER BY nimi
 		";
 		
 		$this->db_query($q);

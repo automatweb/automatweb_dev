@@ -4,6 +4,7 @@
 		<action name="draw" >
 			<function name="draw">
 				<arguments>
+					<optional name="section"/>
 				</arguments>
 			</function>
 		</action>
@@ -15,6 +16,7 @@
 					<required name='oppevorm'/>
 					<required name='oppeaste'/>
 					<required name='oppekava'/>
+					<optional name="section"/>
 				</arguments>
 			</function>
 		</action>
