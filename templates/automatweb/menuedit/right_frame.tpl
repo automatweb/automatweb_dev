@@ -121,7 +121,7 @@ function go_go(par,perio)
 
 function go_acl(id)
 {
-	url = "editacl.{VAR:ext}?file=menu.xml&oid=" + id;
+	url = "editacl.{VAR:ext}?file=default.xml&oid=" + id;
 	document.location = url;
 }
 
