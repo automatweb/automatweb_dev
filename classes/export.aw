@@ -119,7 +119,7 @@ class export extends aw_template
 		if ($automatic)
 		{
 			$sched->add(array(
-				"event" => $this->mk_my_orb("do_export"),
+				"event" => str_replace("/automatweb","",$this->mk_my_orb("do_export")),
 				"rep_id" => $this->get_cval("export::event_id")
 			));
 		}
@@ -301,6 +301,8 @@ class export extends aw_template
 			}
 		}
 
+		@unlink(aw_ini_get("server.tmpdir")."/exp_running.".$this->rule_id);
+
 		if ($zip_file != "")
 		{
 			// $zip_file contains the path and name of the file into which we should zip the exported site
@@ -385,6 +387,13 @@ class export extends aw_template
 				die();
 			}
 		}
+
+		// set export running flag
+		if ($this->rule_id)
+		{
+			touch(aw_ini_get("server.tmpdir")."/exp_running.".$this->rule_id);
+		}
+
 		$url = $this->rewrite_link($url);
 		$_url = $url;
 //		echo "fetch_and_save_page($url, $lang_id) <br>";
@@ -874,6 +883,20 @@ class export extends aw_template
 					"cal_id" => $pl->id,
 					"event_id" => $pl->bron_add_event(array("parent" => $pl->id,"start" => time(), "end" => time()+1))
 				)
+			));
+		}
+
+		$ob = $this->get_object($id);
+		if ($ob['meta']['event_id'])
+		{
+			$sched = get_instance("scheduler");
+			$sched->remove(array(
+				"event" => str_replace("/automatweb","",$this->mk_my_orb("do_export", array("rule_id" => $id))),
+				"rep_id" => $ob['meta']['event_id']
+			));
+			$sched->add(array(
+				"event" => str_replace("/automatweb","",$this->mk_my_orb("do_export", array("rule_id" => $id))),
+				"rep_id" => $ob['meta']['event_id']
 			));
 		}
 
