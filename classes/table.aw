@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.34 2002/07/23 12:52:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.35 2002/07/31 10:01:54 kristo Exp $
 // table.aw - tabelite haldus
 
 
@@ -124,7 +124,7 @@ class table extends aw_template
 		$this->meta = aw_unserialize($row["metadata"]);
 		$this->obj_data = $row;
 
-		$this->arr = unserialize($row["contents"]);
+		$this->arr = aw_unserialize($row["contents"]);
 
 		if ($this->arr["cols"]  < 1 || $this->arr["rows"]  < 1)
 		{
@@ -467,7 +467,6 @@ class table extends aw_template
 		for ($i=0; $i < $this->arr["cols"]; $i++)
 			for ($a=0; $a < $this->arr["rows"]; $a++)
 			{
-				$this->dequote($text[$a][$i]);
 				$this->arr["contents"][$a][$i]["text"] = $text[$a][$i];
 			}
 
@@ -493,6 +492,16 @@ class table extends aw_template
 		if ($update)
 		{
 			$this->update_table();
+		}
+		else
+		{
+			for ($i=0; $i < $this->arr["cols"]; $i++)
+			{
+				for ($a=0; $a < $this->arr["rows"]; $a++)
+				{
+					$this->quote(&$this->arr["contents"][$a][$i]["text"]);
+				}
+			}
 		}
 
 		$cdelete = array();
@@ -527,7 +536,7 @@ class table extends aw_template
 			$this->del_row(array("row" => $v));
 		}
 
-		$ar["str"]=serialize($this->arr);
+		$ar["str"]=aw_serialize($this->arr, SERIALIZE_XML);
 		$this->quote($ar);
 		extract($ar);
 
@@ -2355,7 +2364,7 @@ class table extends aw_template
 	{
 		extract($arr);
 
-		$row = unserialize($str);
+		$row = aw_unserialize($str);
 		$row["parent"] = $parent;
 		// $row may contain metadata and the query will fail, if that metadata contains apostrophses
 		$this->quote($row);
