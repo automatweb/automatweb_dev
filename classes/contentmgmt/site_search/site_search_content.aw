@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.12 2004/05/07 06:53:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.13 2004/06/03 10:49:46 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -295,8 +295,8 @@ class site_search_content extends class_base
 				d.lead as lead,
 				d.content as content
 			 FROM 
-				documents d 
-				LEFT JOIN objects o ON o.oid = d.docid
+				objects o  
+				LEFT JOIN documents d ON o.brother_of = d.docid
 			WHERE 
 				(
 					d.content like '%$str%' OR
@@ -308,7 +308,8 @@ class site_search_content extends class_base
 				o.parent IN (".$ams->to_sql().") AND
 				o.status = 2 AND
 				o.lang_id = '".aw_global_get("lang_id")."' AND
-				o.site_id = '".aw_ini_get("site_id")."'
+				o.site_id = '".aw_ini_get("site_id")."' AND
+				o.class_id IN (".CL_DOCUMENT.",".CL_BROTHER_DOCUMENT.",".CL_PERIODIC_SECTION.")
 		";
 		$this->db_query($sql);
 		while ($row = $this->db_next())
@@ -503,7 +504,7 @@ class site_search_content extends class_base
 		$per_page = $arr["per_page"];
 		$params = $arr["params"];
 
-		$num_pages = floor(($cnt / $per_page) + 0.5);
+		$num_pages = ($cnt / $per_page);
 
 		$pg = "";
 		$prev = "";
