@@ -11,7 +11,7 @@ class error
 	// msg - error message to show
 	// fatal - if set, aborts execution
 	// show - if true, error is shown to user, error is always logged and sent to the mailinglist
-	function throw($arr)
+	function raise($arr)
 	{
 		if (!isset($arr["id"]) || !$arr["id"])
 		{
@@ -41,7 +41,7 @@ class error
 	// func - the function where access was denied
 	function throw_acl($arr)
 	{
-		error::throw(array(
+		error::raise(array(
 			"id" => ERR_ACL,
 			"msg" => "Acl error, access ".(isset($arr["access"]) ? "can_".$arr["access"] : "not specified")." was denied for object ".(isset($arr["oid"]) ? $arr["oid"] : "not specified")." in function ".(isset($arr["func"]) ? $arr["func"] : "not specified"),
 			"fatal" => true,
@@ -54,11 +54,11 @@ class error
 	// params:
 	//	cond - if true, error is raised
 	//	arr - array of parameters that get passed to throw()
-	function throw_if($cond, $arr)
+	function raise_if($cond, $arr)
 	{
 		if ($cond)
 		{
-			error::throw($arr);
+			error::raise($arr);
 		}
 	}
 }

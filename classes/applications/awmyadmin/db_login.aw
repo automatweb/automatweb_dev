@@ -46,7 +46,7 @@ class db_login extends class_base
 			$server = get_instance(CL_DB_SERVER_LOGIN);
 			if (!$server->login_as($ob->prop('db_server')))
 			{
-				error::throw(array(
+				error::raise(array(
 					"id" => ERR_DB_ADMIN_NOT_SET, 
 					"msg" => 'The admin user for the database server has not been set!'
 				));
