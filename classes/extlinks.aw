@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.23 2002/12/11 12:46:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.24 2002/12/16 16:15:54 duke Exp $
 // extlinks.aw - Väliste linkide haldamise klass
 
 
@@ -54,6 +54,7 @@ class extlinks extends aw_template
 		{
 			$replacement = sprintf("<a href='%s' %s>%s</a>",$url,$target,$caption);
 		};
+		$this->img = "";
 		return $replacement;
 	}
 
