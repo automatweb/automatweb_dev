@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.64 2001/11/02 12:05:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.65 2001/11/07 17:33:10 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -314,6 +314,9 @@ class menuedit extends aw_template
 
 		$sel_menu_id = $section;
 
+		$this->vars(array(
+			"sel_menu_id" => $sel_menu_id
+		));
 
 		if ($GLOBALS["uid"] == "")
 		{
@@ -3684,7 +3687,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			{
 				$this->vars(array(
 					"sel_menu_".$name."_L".$this->level."_cnt" => $cnt,
-					"sel_menu_".$name."_L".$this->level."_name" => $row["name"]
+					"sel_menu_".$name."_L".$this->level."_name" => $row["name"],
+					"sel_menu_".$name."_L".$this->level."_id" => $row["oid"]
 				));
 			}
 
