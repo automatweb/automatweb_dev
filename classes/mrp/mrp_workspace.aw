@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.8 2005/01/14 08:59:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.9 2005/01/14 10:34:35 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -105,6 +105,20 @@
 
 	@property parameter_priority_slope type=textbox default=0.8
 	@caption Kliendi ja projektiprioriteedi suhtelise väärtuse tõus vrd. tähtajaga
+
+	@property separator type=text store=no no_caption=1
+
+	@property parameter_schedule_length type=textbox default=2
+	@caption Ajaplaani ulatus (a)
+
+	@property parameter_schedule_start type=textbox default=300
+	@caption Ajaplaani alguse vahe planeerimise alguse hetkega (s)
+
+	@property parameter_timescale type=textarea
+	@caption Otsingutabeli ajaskaala definitsioon (jaotuste lõpud, komaga eraldatud)
+	@property parameter_timescale_unit type=select
+	@caption Skaala ajaühik
+
 
 
 
@@ -216,10 +230,18 @@ class mrp_workspace extends class_base
 				$prop["value"] = $this->create_chart_navigation ($arr);
 				break;
 
+			case "parameter_timescale_unit":
+				$prop["options"] = array (
+					"86400" => "Päev",
+					"60" => "Minut",
+					"1" => "Sekund",
+				);
+				break;
+
 			case "replan":
 				$plan_url = $this->mk_my_orb("create", array(
 					"return_url" => urlencode(aw_global_get('REQUEST_URI')),
-					"workspace" => $this_object->id (),
+					"mrp_workspace" => $this_object->id (),
 				), "mrp_schedule");
 				$plan_href = html::href(array(
 					"caption" => "[Planeeri]",
@@ -501,37 +523,37 @@ class mrp_workspace extends class_base
 			"id" => $this_object->id (),
 			"group" => "grp_projects",
 			"mrp_projects_show" => "all",
-			"mrp_selected_node" => 1,
+			"mrp_tree_active_item" => 1,
 		), "mrp_workspace");
 		$url_projects_in_work = $this->mk_my_orb("change", array(
 			"id" => $this_object->id (),
 			"group" => "grp_projects",
 			"mrp_projects_show" => "inwork",
-			"mrp_selected_node" => 2,
+			"mrp_tree_active_item" => 2,
 		), "mrp_workspace");
 		$url_projects_overdue = $this->mk_my_orb("change", array(
 			"id" => $this_object->id (),
 			"group" => "grp_projects",
 			"mrp_projects_show" => "overdue",
-			"mrp_selected_node" => 4,
+			"mrp_tree_active_item" => 4,
 		), "mrp_workspace");
 		$url_projects_planned_overdue = $this->mk_my_orb("change", array(
 			"id" => $this_object->id (),
 			"group" => "grp_projects",
 			"mrp_projects_show" => "planned_overdue",
-			"mrp_selected_node" => 3,
+			"mrp_tree_active_item" => 3,
 		), "mrp_workspace");
 		$url_projects_new = $this->mk_my_orb("change", array(
 			"id" => $this_object->id (),
 			"group" => "grp_projects",
 			"mrp_projects_show" => "new",
-			"mrp_selected_node" => 5,
+			"mrp_tree_active_item" => 5,
 		), "mrp_workspace");
 		$url_projects_done = $this->mk_my_orb("change", array(
 			"id" => $this_object->id (),
 			"group" => "grp_projects",
 			"mrp_projects_show" => "done",
-			"mrp_selected_node" => 6,
+			"mrp_tree_active_item" => 6,
 		), "mrp_workspace");
 ///!!! appdeitida need count listid table listide j2rgi
 		$list = new object_list (array (
@@ -614,7 +636,7 @@ class mrp_workspace extends class_base
 			"url" => $url_projects_done,
 		));
 
-		$tree->set_selected_item ($arr["request"]["mrp_selected_node"]);
+		$tree->set_selected_item ($arr["request"]["mrp_tree_active_item"]);
 		$arr["prop"]["value"] = $tree->finalize_tree ();
 	}
 
@@ -817,7 +839,7 @@ class mrp_workspace extends class_base
 			$resource_id = $job->prop ("resource");
 			$project_id = $job->prop ("project");
 			$start = $job->prop ("starttime");
-			$hilight = in_array ($job->id (), safe_array($hilighted_jobs)) ? true : false;
+			$hilight = in_array ($job->id (), $hilighted_jobs) ? true : false;
 
 			$bar = array (
 				"row" => $resource_id,
@@ -978,7 +1000,7 @@ class mrp_workspace extends class_base
 			WHERE
 				objects.status > 0 AND
 				objects.class_id = ".CL_MRP_CASE." AND
-				objects.parent = ".$this_object->prop ("projects_folder")." AND
+				objects.parent = " . $this_object->prop ("projects_folder") . " AND
 				mrp_job.starttime > mrp_case.due_date
 		");
 		while ($row = $this->db_next())

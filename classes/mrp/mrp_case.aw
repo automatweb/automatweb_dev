@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.3 2005/01/13 19:47:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.4 2005/01/14 10:34:35 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -184,7 +184,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_MRP_CASE, on_save_case)
 @reltype MRP_USED_RESOURCE value=4 clid=CL_MRP_RESOURCE
 @caption Kasutatav ressurss
 
-@reltype MRP_OWNER value=1 clid=CL_MRP_WORKSPACE
+@reltype MRP_OWNER value=5 clid=CL_MRP_WORKSPACE
 @caption Projekti omanik
 
 */
@@ -422,7 +422,7 @@ class mrp_case extends class_base
 		foreach ($connections as $connection)
 		{
 			$job = $connection->to ();
-			$length = $job->prop ("length") + $job->prop ("buffer");
+			$length = $job->prop ("pre_buffer") + $job->prop ("length") + $job->prop ("post_buffer");
 			$resource = $job->prop ("resource");
 			$project_length += $length;
 			$jobs[] = $job;
@@ -556,8 +556,12 @@ class mrp_case extends class_base
 			"caption" => "Pikkus (h)",
 		));
 		$table->define_field(array(
-			"name" => "buffer",
-			"caption" => "Puhver (h)",
+			"name" => "pre_buffer",
+			"caption" => "Eelpuhver (h)",
+		));
+		$table->define_field(array(
+			"name" => "post_buffer",
+			"caption" => "Järelpuhver (h)",
 		));
 		$table->define_field(array(
 			"name" => "status",
@@ -712,10 +716,17 @@ class mrp_case extends class_base
 					"disabled" => $disabled,
 					)
 				),
-				"buffer" => html::textbox(array(
-					"name" => "mrp_workflow_job-" . $job_id . "-buffer",
+				"pre_buffer" => html::textbox(array(
+					"name" => "mrp_workflow_job-" . $job_id . "-pre_buffer",
 					"size" => "3",
-					"value" => round ((($job->prop ("buffer"))/3600), 2),
+					"value" => round ((($job->prop ("pre_buffer"))/3600), 2),
+					"disabled" => $disabled,
+					)
+				),
+				"post_buffer" => html::textbox(array(
+					"name" => "mrp_workflow_job-" . $job_id . "-post_buffer",
+					"size" => "3",
+					"value" => round ((($job->prop ("post_buffer"))/3600), 2),
 					"disabled" => $disabled,
 					)
 				),
@@ -818,7 +829,8 @@ class mrp_case extends class_base
 							break;
 
 						case "length":
-						case "buffer":
+						case "pre_buffer":
+						case "post_buffer":
 							$decimal = strstr ($value, ",") ? strstr ($value, ",") : strstr ($value, ".");
 							$decimal = substr ($decimal, 1);
 							settype ($decimal, "int");
@@ -829,11 +841,15 @@ class mrp_case extends class_base
 							switch ($property)
 							{
 								case "length":
-									$job->set_prop ("length", ($value * 3600));
+									$job->set_prop ("length", (ceil ($value * 3600)));
 									break;
 
-								case "buffer":
-									$job->set_prop ("buffer", ($value * 3600));
+								case "pre_buffer":
+									$job->set_prop ("pre_buffer", (ceil ($value * 3600)));
+									break;
+
+								case "post_buffer":
+									$job->set_prop ("post_buffer", (ceil ($value * 3600)));
 									break;
 							}
 							break;
@@ -1001,11 +1017,15 @@ class mrp_case extends class_base
 		{
 			$resource = obj ($resource_id);
 			$name = $this_object->name () . " - " . $resource->name ();
+			$pre_buffer = $resource->prop ("default_pre_buffer");
+			$post_buffer = $resource->prop ("default_post_buffer");
 		}
 		else
 		{
 			$resource = false;
 			$name = $this_object->name () . " - ...";
+			$pre_buffer = 0;
+			$post_buffer = 0;
 		}
 
 		if (!($jobs_folder = $workspace->prop ("jobs_folder")))
@@ -1032,6 +1052,8 @@ class mrp_case extends class_base
 		$job->set_prop ("exec_order", $job_number);
 		$job->set_prop ("prerequisites", $prerequisite);
 		$job->set_prop ("project", $this_object->id ());
+		$job->set_prop ("pre_buffer", $pre_buffer);
+		$job->set_prop ("post_buffer", $post_buffer);
 		$job->set_prop ("resource", $resource_id);
 		$job->save ();
 

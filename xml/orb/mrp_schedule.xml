@@ -4,6 +4,7 @@
 		<action name="create">
 			<function name="create">
 				<arguments>
+					<required name="mrp_workspace" type="int" />
 				</arguments>
 			</function>
 		</action>

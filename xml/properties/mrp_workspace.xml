@@ -375,6 +375,54 @@
             <default>0.8</default>
             <caption>Kliendi ja projektiprioriteedi suhtelise väärtuse tõus vrd. tähtajaga</caption>
       </property>
+      <property>
+            <name>separator</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>parameter_schedule_length</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings</group>
+            <type>textbox</type>
+            <default>2</default>
+            <caption>Ajaplaani ulatus (a)</caption>
+      </property>
+      <property>
+            <name>parameter_schedule_start</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings</group>
+            <type>textbox</type>
+            <default>300</default>
+            <caption>Ajaplaani alguse vahe planeerimise alguse hetkega (s)</caption>
+      </property>
+      <property>
+            <name>parameter_timescale</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings</group>
+            <type>textarea</type>
+            <caption>Otsingutabeli ajaskaala definitsioon (jaotuste lõpud, komaga eraldatud)</caption>
+      </property>
+      <property>
+            <name>parameter_timescale_unit</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings</group>
+            <type>select</type>
+            <caption>Skaala ajaühik</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_MRP_WORKSPACE</syslog_type>
             <relationmgr>yes</relationmgr>

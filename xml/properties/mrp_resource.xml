@@ -43,6 +43,35 @@
             <caption>Ressursi kasutaja</caption>
       </property>
       <property>
+            <name>default_pre_buffer</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_resource_settings</group>
+            <type>textbox</type>
+            <caption>Vaikimisi eelpuhveraeg (h)</caption>
+      </property>
+      <property>
+            <name>default_post_buffer</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_resource_settings</group>
+            <type>textbox</type>
+            <caption>Vaikimisi järelpuhveraeg (h)</caption>
+      </property>
+      <property>
+            <name>global_buffer</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_resource_settings</group>
+            <type>textbox</type>
+            <caption>
+            <![CDATA["Päevapuhver" (h)]]>
+            </caption>
+      </property>
+      <property>
             <name>unavailable_recur</name>
             <table>objects</table>
             <field>meta</field>
@@ -98,7 +127,7 @@
             <MRP_OPERATOR>
                   <value>1</value>
                   <clid>CL_MRP_RESOURCE_OPERATOR</clid>
-                  <caption>Ressursi kasutaja</caption>
+                  <caption>Ressursi operaator</caption>
             </MRP_OPERATOR>
             <MRP_SCHEDULE>
                   <value>2</value>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.2 2004/12/08 12:23:32 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.3 2005/01/14 10:34:35 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -14,8 +14,11 @@
 	@property length type=textbox
 	@caption Plaanitud kestus (h)
 
-	@property buffer type=textbox
-	@caption Puhveraeg (h)
+	@property pre_buffer type=textbox
+	@caption Eelpuhveraeg (h)
+
+	@property post_buffer type=textbox
+	@caption Järelpuhveraeg (h)
 
 	@property resource type=text
 	@caption Ressurss
@@ -30,7 +33,7 @@
 	@caption Eeldustööd
 
 	@property starttime type=datetime_select
-	@caption Plaanitud töösseminekuaeg (timestamp)
+	@caption Plaanitud töösseminekuaeg
 
 	@property state type=radio
 	@caption Staatus
@@ -74,13 +77,14 @@
 CREATE TABLE `mrp_job` (
   `oid` int(11) NOT NULL default '0',
   `length` int(10) unsigned NOT NULL default '0',
-  `resource` int(10) unsigned default NULL,
+  `resource` int(11) unsigned default NULL,
   `exec_order` smallint(5) unsigned NOT NULL default '1',
-  `project` int(10) unsigned NOT NULL default '0',
+  `project` int(11) unsigned default NULL,
   `starttime` int(10) unsigned default NULL,
-  `prerequisites` char(14) default NULL,
+  `prerequisites` char(255) default NULL,
   `state` tinyint(2) unsigned default '1',
-  `buffer` int(10) unsigned NOT NULL default '0',
+  `pre_buffer` int(10) unsigned default NULL,
+  `post_buffer` int(10) unsigned default NULL,
 
 	PRIMARY KEY  (`oid`),
 	UNIQUE KEY `oid` (`oid`)
@@ -101,6 +105,9 @@ define ("MRP_STATUS_ABORTED", 4);
 define ("MRP_STATUS_DONE", 5);
 define ("MRP_STATUS_LOCKED", 6);
 define ("MRP_STATUS_OVERDUE", 7);
+
+### misc
+define ("MRP_DATE_FORMAT", "j/m/Y H.i");
 
 class mrp_job extends class_base
 {
@@ -126,8 +133,9 @@ class mrp_job extends class_base
 				break;
 
 			case "length":
-			case "buffer":
-				$prop["value"] = $prop["value"] * 3600;
+			case "pre_buffer":
+			case "post_buffer":
+				$prop["value"] = $prop["value"] / 3600;
 				break;
 
 			case "state":
@@ -160,7 +168,7 @@ class mrp_job extends class_base
 		{
 			case "length":
 			case "buffer":
-				$prop["value"] = $prop["value"] / 3600;
+				$prop["value"] = $prop["value"] * 3600;
 				break;
 
 		}

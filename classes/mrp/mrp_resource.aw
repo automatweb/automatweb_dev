@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.4 2004/12/27 12:36:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.5 2005/01/14 10:34:35 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -21,31 +21,46 @@
 	// @property type type=select
 	// @caption Tüüp
 
+
 @default group=grp_resource_schedule
 	@property resource_calendar type=text store=no no_caption=1
 	@caption Tööd
+
 
 @default group=grp_resource_joblist
 	@property job_list type=table store=no editonly=1
 	@caption Tööleht
 
+
 @default group=grp_resource_settings
-	//@property operator type= ???
+	@property operator type=relpicker reltype=RELTYPE_MRP_OPERATOR
+	@caption Ressursi kasutaja
+
+	@property default_pre_buffer type=textbox
+	@caption Vaikimisi eelpuhveraeg (h)
+
+	@property default_post_buffer type=textbox
+	@caption Vaikimisi järelpuhveraeg (h)
+
+	@property global_buffer type=textbox
+	@caption "Päevapuhver" (h)
+
 
 @default group=grp_resource_unavailable
-
 	@property unavailable_recur type=releditor reltype=RELTYPE_RECUR use_form=emb mode=manager
 	@caption Kinnised ajad
 
-	@property unavailable_weekends type=checkbox ch_value=1 
+	@property unavailable_weekends type=checkbox ch_value=1
 	@caption Ei t&ouml;&ouml;ta n&auml;dalavahetustel
 
 	@property unavailable_dates type=textarea rows=5 cols=50
 	@caption Kinnised p&auml;evad (formaat: p&auml;ev.kuu p&auml;ev.kuu)
 
+
+
 // --------------- RELATION TYPES ---------------------
 
-@reltype MRP_OPERATOR value=1 clid=CL_USER
+@reltype MRP_OPERATOR value=1 clid=CL_MRP_RESOURCE_OPERATOR
 @caption Ressursi operaator
 
 @reltype MRP_SCHEDULE value=2 clid=CL_PLANNER
@@ -55,7 +70,8 @@
 @caption Ressursi omanik
 
 @reltype RECUR value=4 clid=CL_RECURRENCE
-@caption kordus
+@caption Kordus
+
 */
 
 ### resource types
@@ -286,6 +302,7 @@ class mrp_resource extends class_base
 	{
 		$start = time() - (24*3600*60);
 		$end = time() + (24*3600*60);
+
 		for($i = $start; $i < $end; $i += (24*3600))
 		{
 			$ret[$i] = aw_url_change_var("viewtype", "week", aw_url_change_var("date", date("d", $i)."-".date("m", $i)."-".date("Y", $i)));
@@ -293,38 +310,53 @@ class mrp_resource extends class_base
 		return $ret;
 	}
 
-	function get_unavailable_times($resource)
+	function get_unavailable_times ($resource)
 	{
-		$ret = array();
-		if ($resource->prop("unavailable_weekends"))
-		{
-			$this->_get_weekends($ret);
-		}
-		$this->_get_dates($ret, $resource->prop("unavailable_dates"));
+		$ret = array ();
 
-		foreach($resource->connections_from(array("type" => "RELTYPE_RECUR")) as $c)
+		if ($resource->prop ("unavailable_weekends"))
 		{
-			$this->_get_recur($ret, $c->to());
+			$this->_get_weekends ($ret);
 		}
 
-		ksort($ret);
+		$this->_get_dates ($ret, $resource->prop ("unavailable_dates"));
 
+		foreach ($resource->connections_from (array ("type" => "RELTYPE_RECUR")) as $c)
+		{
+			$this->_get_recur ($ret, $c->to ());
+		}
+
+		ksort ($ret);
 		return $ret;
 	}
 
 	function _get_weekends(&$ret)
 	{
-		// let's say from next saturday for 104 weeks
+		### get workspace object "owning" current object
+		foreach ($this_object->connections_from(array("type" => RELTYPE_MRP_OWNER)) as $connection)
+		{
+			if ($connection)
+			{
+				$workspace = $connection->to();
+
+				if (!is_object ($workspace))
+				{
+					exit ("suur jama");//!!! mis siin teh.?
+				}
+			}
+		}
+
+		$weeks = ceil ($workspace->prop ("parameter_schedule_length") * 52);
 		$wd = date("w");
 		$sat = mktime(0,0,0, date("m"), date("d") + (($wd == 0) ? -1 : 6 - $wd), date("Y"));
 
-		for ($i = 0; $i < 104; $i++)
+		for ($i = 0; $i < $weeks; $i++)
 		{
 			$tm = $sat + ($i * 7 * 24 * 3600);
-			$ret[$tm] = array($tm, 24 * 3600);
-		
+			$ret[$tm] = 24 * 3600;
+
 			$tm = $sat + ($i * 7 * 24 * 3600) + 24 * 3600;
-			$ret[$tm] = array($tm, 24 * 3600);
+			$ret[$tm] = 24 * 3600;
 		}
 	}
 
@@ -336,10 +368,10 @@ class mrp_resource extends class_base
 			list($day, $mon) = explode(".", $part);
 
 			$tm = mktime(0,0,0, $mon, $day, date("Y"));
-			$ret[$tm] = array($tm, 24 * 3600);
+			$ret[$tm] = 24 * 3600;
 
 			$tm = mktime(0,0,0, $mon, $day, date("Y")+1);
-			$ret[$tm] = array($tm, 24 * 3600);
+			$ret[$tm] = 24 * 3600;
 		}
 	}
 
@@ -348,13 +380,14 @@ class mrp_resource extends class_base
 		$rec = get_instance(CL_RECURRENCE);
 		$tmp =  $rec->get_event_range(array(
 			"id" => $recur->id(),
-			"start" => time(), 
+			"start" => time(),
 			"end" => mktime(0,0,0, date("m"), date("d"), date("Y")+2)
 		));
 		foreach($tmp as $time => $row)
 		{
-			$ret[$time] = array($time, $row["recur_end"] - $time);
+			$ret[$time] = $row["recur_end"] - $time;
 		}
 	}
 }
+
 ?>

@@ -17,12 +17,20 @@
             <caption>Plaanitud kestus (h)</caption>
       </property>
       <property>
-            <name>buffer</name>
+            <name>pre_buffer</name>
             <group>general</group>
             <table>mrp_job</table>
             <type>textbox</type>
-            <field>buffer</field>
-            <caption>Puhveraeg (h)</caption>
+            <field>pre_buffer</field>
+            <caption>Eelpuhveraeg (h)</caption>
+      </property>
+      <property>
+            <name>post_buffer</name>
+            <group>general</group>
+            <table>mrp_job</table>
+            <type>textbox</type>
+            <field>post_buffer</field>
+            <caption>Järelpuhveraeg (h)</caption>
       </property>
       <property>
             <name>resource</name>
@@ -62,7 +70,7 @@
             <table>mrp_job</table>
             <type>datetime_select</type>
             <field>starttime</field>
-            <caption>Plaanitud töösseminekuaeg (timestamp)</caption>
+            <caption>Plaanitud töösseminekuaeg</caption>
       </property>
       <property>
             <name>state</name>
