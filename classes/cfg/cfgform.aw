@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.27 2004/03/17 16:07:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.28 2004/03/31 14:13:48 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -308,14 +308,22 @@ class cfgform extends class_base
 			};
 		};
 
-
 		if (is_array($this->prplist))
 		{
 			foreach($this->prplist as $property)
 			{
 				if (!empty($property["group"]))
 				{
-					$by_group[$property["group"]][] = $property;
+					if (!is_array($property["group"]))
+					{
+						$by_group[$property["group"]][] = $property;
+					}
+					else
+					{
+						list(,$first) = each($property["group"]);
+						$by_group[$first][] = $property;
+					};
+
 				};
 			};
 		};
