@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.89 2003/03/28 18:27:55 duke Exp $
+// $Id: class_base.aw,v 2.90 2003/03/31 10:09:21 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -199,6 +199,7 @@ class class_base extends aliasmgr
 				"group" => isset($args["group"]) ? $args["group"] : "",
 				"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
 		));
+
 
 		
 		$this->load_obj_data(array("id" => $this->id));
@@ -1034,32 +1035,28 @@ class class_base extends aliasmgr
 	function save_object($args = array())
 	{
 		$id = $this->id;
-		if (is_array($this->tableinfo))
+		if (!is_array($this->tableinfo))
 		{
-			foreach($this->tableinfo as $table => $data)
-			{
-				$idfield = $data["index"];
-				if (isset($table) && isset($idfield))
-				{
-					// create the new record
-					if (isset($this->new))
-					{
-						$this->ds->ds_new_object(array(
-							"table" => $table,
-							"idfield" => $idfield,
-							"id" => $id,
-						));
-					};
-
-					$this->ds->ds_save_object(array(
-						"table" => $table,
-						"idfield" => $idfield,
-						"replace" => true,
-						"id" => $id),$args["data"][$table]
-					);
-				};	
-			};	
+			return;
 		};
+
+		foreach($this->tableinfo as $table => $data)
+		{
+			$idfield = $data["index"];
+			// NB! no record is created in the "other" table before we
+			// actually have something to write there besides the id itself
+			if (isset($table) && isset($idfield) && isset($args["data"][$table]))
+			{
+				// ds_save_object creates the record in the other table,
+				// if it does not exist yet.
+				$this->ds->ds_save_object(array(
+					"table" => $table,
+					"idfield" => $idfield,
+					"replace" => true,
+					"id" => $id),$args["data"][$table]
+				);
+			};	
+		};	
 	}
 
 	////
@@ -1261,9 +1258,10 @@ class class_base extends aliasmgr
 		// actually, config forms should hold a serialized form 
 		// of the data, and not the raw XML source. And I should
 		// validate the XML before I upload it to the object -- duke
-		if (isset($this->cfgform["meta"]["xml_definition"]))
+		if (isset($this->cfgform["meta"]["cfg_proplist"]))
 		{
-			list($proplist,$grplist) = $cfgu->parse_cfgform($this->cfgform["meta"]);
+			$proplist = $this->cfgform["meta"]["cfg_proplist"];
+			$grplist = $this->cfgform["meta"]["cfg_groups"];
 		}
 
 		if ($args["content"])
@@ -1320,12 +1318,6 @@ class class_base extends aliasmgr
 			{
 				$val = array_merge($_all_props[$k],$val);
 			}
-
-			/*
-			print "<pre>";
-			print_r($val);
-			print "</pre>";
-			*/
 
 			//print "using $val[name]<br>";
 
@@ -1386,42 +1378,28 @@ class class_base extends aliasmgr
 		$this->classinfo = $cfgu->get_classinfo();
 		$tmp_grpinfo = $cfgu->get_groupinfo();
 		$grpinfo = array();
-		/*
-		print "<pre>";
-		print_r($this->all_props);
-		print_r($grplist);
-		print_r($tmp_grpinfo);
-		print_r($group_el_cnt);
-		print "</pre>";
-		*/
 		if (is_array($tmp_grpinfo))
 		{
 			foreach($tmp_grpinfo as $key => $val)
 			{
-				//print "key = $key, val = $val<br>";
 				if (in_array($key,array_keys($group_el_cnt)))
 				{
-				//	print "X";
 					if (!empty($this->cfgform_id) && empty($grplist[$key]))
 					{
-				//		print "skipping $key<br>";
 						continue;
 					}
 					else
 					{
+						// grplist comes from CL_CFGFORM
+						if (is_array($grplist) && isset($grplist[$key]))
+						{
+							$val = array_merge($val,$grplist[$key]);
+						};
 						$grpinfo[$key] = $val;
 					};
 				};
 			};
 		};
-		/*
-		print "-- in get_all_properties --<bR>";
-		print "<pre>";
-		print_r($grpinfo);
-		print "</pre>";
-		print "-- END OF: in get_all_properties --<bR>";
-		exit;
-		*/
 		$this->groupinfo = new aw_array($grpinfo);
 		$this->tableinfo = $cfgu->get_opt("tableinfo");
 	}
@@ -1773,7 +1751,7 @@ class class_base extends aliasmgr
 				{
 					$name = $key;
 				};
-				if (($name != $val["field"]) && ($val["method"] != "serialize"))
+				if (!empty($val["field"]) && ($name != $val["field"]) && ($val["method"] != "serialize"))
 				{
 					$_field = $val["field"];
 				}
@@ -1785,50 +1763,6 @@ class class_base extends aliasmgr
 			};
 		}
 		return $resprops;
-	}
-
-	////
-	// !Loads and parses a configuration form
-	// returns the layout array of config form
-	// id(int) - id of the config form
-	// type(string) - layout|list - type of data to return
-	function parse_cfgform($args = array())
-	{
-		$id = (int)$args["id"];
-		$retval = false;
-		if ($id)
-		{
-                        $cfgform = $this->get_object($id);
-
-			$this->cfgform_id = $id;
-
-			// XXX: false means that no filtering should be done
-			// but I think that this should really be decided by the ini file
-			// maybe it's better if we are "locked down" by default
-			$this->active_properties = false;
-
-			$proplist = array_keys($cfgform["meta"]["ord"]);
-
-			$this->active_properties = array_flip($proplist);
-
-			if ( is_array($cfgform["meta"]["property_list"]) )
-			{
-				$retval = $cfgform["meta"]["property_list"];
-			};
-
-			if ( is_array($cfgform["meta"]["layout"]) )
-			{
-				$this->layout = $cfgform["meta"]["layout"];
-			};
-
-			$this->property_order = false;
-
-			if (is_array($cfgform["meta"]["ord"]))
-			{
-				$this->property_order = $cfgform["meta"]["ord"];
-			};
-		};
-		return $retval;
 	}
 
 	function gen_toolbar($args = array())
@@ -1843,14 +1777,11 @@ class class_base extends aliasmgr
 		};
 		if ($this->cfgform_id)
 		{
-			/*
-			$ac = $this->get_object($this->cfgform_id);
 			$toolbar->add_cdata(html::href(array(
 				"url" => $this->mk_my_orb("change",array("id" => $this->cfgform_id),"cfgform"),
-				"caption" => "Aktiivne konfivorm: " . $ac["name"],
+				"caption" => "Aktiivne konfivorm: " . $this->cfgform["name"],
 				"target" => "_blank",
 			)));
-			*/
 		};
 		$this->toolbar = $toolbar->get_toolbar();
 		$this->toolbar2 = $toolbar->get_toolbar(array("id" => "bottom"));
