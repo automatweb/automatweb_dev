@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.24 2004/07/01 13:32:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.25 2004/07/01 13:35:54 duke Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -316,7 +316,6 @@ class releditor extends core
 			"type" => "toolbar",
 			"vcl_inst" => $tb,
 			"no_caption" => 1,
-			"_parsed" => 1,
 		);
 
 		return $rv;
