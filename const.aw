@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.65 2002/07/11 20:59:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.66 2002/07/17 20:17:44 kristo Exp $
 
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
@@ -55,7 +55,9 @@ if ($pi)
 		if (($_eqp = strpos($t_pi, "="))!== false)
 		{
 			$t_pi = substr($t_pi, 0, $_eqp);
-			if (($_tpos1 = strpos($t_pi, "?")) !== false || ($_tpos2 = strpos($t_pi, "&")) !== false)
+			$_tpos1 = strpos($t_pi, "?");
+			$_tpos2 = strpos($t_pi, "&");
+			if ($_tpos1 !== false || $_tpos2 !== false)
 			{
 				// if the thing contains ? or & , then section is the part before it
 				if ($_tpos1 === false)
@@ -63,7 +65,7 @@ if ($pi)
 					$_tpos = $_tpos2;
 				}
 				else
-				if (!$_tpos2 === false)
+				if ($_tpos2 === false)
 				{
 					$_tpos = $_tpos1;
 				}
