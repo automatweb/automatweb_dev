@@ -190,7 +190,7 @@ SRC="{VAR:baseurl}/automatweb/images/blue/awicons/seperator.gif" width="6" heigh
 
 <table border="0" cellspacing="0" cellpadding="0" width=100%>
 <tr>
-<td>
+<td bgcolor="#FFFFFF">
 
 
 <table border="0" cellspacing="1" cellpadding="2" width=100%>
@@ -235,22 +235,22 @@ aste07
 </td>
 <td class="celltext" align="center">
 <!-- SUB: CAN_CHANGE -->
-<a href='{VAR:properties}'>{VAR:LC_MENUEDIT_PROPERTIES}</a>
+<a href='{VAR:properties}'><img src="{VAR:baseurl}/automatweb/images/blue/obj_settings.gif" alt="{VAR:LC_MENUEDIT_PROPERTIES}" border="0"></a>
 <!-- END SUB: CAN_CHANGE -->
 </td>
 <td class="celltext" align="center">
 <!-- SUB: CAN_DELETE -->
-<a href="javascript:box2('{VAR:LC_MENUEDIT_SURE_DELETE_MENU}?','{VAR:delete}')">{VAR:LC_MENUEDIT_DELETE}</a>
+<a href="javascript:box2('{VAR:LC_MENUEDIT_SURE_DELETE_MENU}?','{VAR:delete}')"><img src="{VAR:baseurl}/automatweb/images/blue/obj_delete.gif" border="0" alt="{VAR:LC_MENUEDIT_DELETE}"></a>
 <!-- END SUB: CAN_DELETE -->
 </td>
 <td class="celltext" align="center">
 <!-- SUB: CAN_SEL_PERIOD -->
-<a href="periods.{VAR:ext}?oid={VAR:menu_id}">{VAR:LC_MENUEDIT_PERIOD}</a>
+<a href="periods.{VAR:ext}?oid={VAR:menu_id}"><img src="{VAR:baseurl}/automatweb/images/blue/obj_period.gif" border="0" alt="{VAR:LC_MENUEDIT_PERIOD}"></a>
 <!-- END SUB: CAN_SEL_PERIOD -->
 </td>
 <td class="celltext" align="center">
 <!-- SUB: CAN_ACL -->
-<a href='editacl.{VAR:ext}?oid={VAR:r_menu_id}&file=menu.xml'>ACL</a>
+<a href='editacl.{VAR:ext}?oid={VAR:r_menu_id}&file=menu.xml'><img src="{VAR:baseurl}/automatweb/images/blue/obj_acl.gif" border="0" alt="ACL"></a>
 <!-- END SUB: CAN_ACL -->
 </td>
 <td class="celltext"><input type='checkbox' NAME='sel[{VAR:menu_id}]' VALUE=1></td>

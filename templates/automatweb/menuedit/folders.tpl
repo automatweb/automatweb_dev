@@ -9,7 +9,7 @@
 
 
 <script language=javascript>
-document.write("<body bgcolor=#eeeeee><table border=\"0\" cellspacing=\"0\" cellpadding=\"1\" width=100%>			\
+document.write("<body bgcolor=#eeeeee><table border=0 width=\"100%\" cellspacing=\"0\" cellpadding=\"2\"><tr><td align=\"left\" class=\"yah\">&nbsp;{VAR:uid} @ {VAR:date}</td></tr></table><IMG SRC=\"{VAR:baseurl}/automatweb/images/trans.gif\" WIDTH=\"1\" HEIGHT=\"1\" BORDER=0 ALT=\"\"><br><table border=\"0\" cellspacing=\"0\" cellpadding=\"1\" width=100%>			\
 		<tr>																																																			\
 			<td class=\"tableborder\">																																								\
 				<table border=\"0\" cellspacing=\"0\" cellpadding=\"1\" width=100%>																		\
@@ -31,7 +31,7 @@ document.write("<body bgcolor=#eeeeee><table border=\"0\" cellspacing=\"0\" cell
 		</table>																																																	\
 						<table border=0 cellpadding=0 cellspacing=0 width=100%>																		\
 					<tr>																																																\
-						<td align='center'><font face=verdana size=1><b>[{VAR:uid} @ {VAR:date}]</b></font></td>																	\
+						<td align='center'><font face=verdana size=1><b></b></font></td>																	\
 					</tr>																																																\
 				</table>																																															\
 		");
