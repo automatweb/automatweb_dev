@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.31 2003/11/08 08:41:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.32 2003/11/13 12:45:24 kristo Exp $
 class admin_menus extends aw_template
 {
 	// this will be set to document id if only one document is shown, a document which can be edited
@@ -15,57 +15,6 @@ class admin_menus extends aw_template
 		lc_load("definition");
 	}
 
-	////
-	// !Listib koik objektid
-	function db_listall($where = " objects.status != 0",$ignore = false,$ignore_lang = false)
-	{
-		$aa = "";
-		if (!$ignore)
-		{
-			// loeme sisse koik objektid
-			$aa = "AND ((objects.site_id = '".aw_ini_get("site_id")."') OR (objects.site_id IS NULL))";
-		};
-		if ($this->cfg["lang_menus"] == 1 && $ignore_lang == false)
-		{
-			$aa.="AND (objects.lang_id=".aw_global_get("lang_id")." OR menu.type = ".MN_CLIENT.")";
-		}
-		$q = "SELECT objects.oid as oid, 
-				objects.parent as parent,
-				objects.comment as comment,
-				objects.name as name,
-				objects.created as created,
-				objects.createdby as createdby,
-				objects.modified as modified,
-				objects.modifiedby as modifiedby,
-				objects.last as last,
-				objects.status as status,
-				objects.jrk as jrk,
-				objects.alias as alias,
-				objects.class_id as class_id,
-				objects.brother_of as brother_of,
-				objects.metadata as metadata,
-				objects.periodic as periodic,
-				menu.type as mtype,
-				menu.link as link,
-				menu.clickable as clickable,
-				menu.target as target,
-				menu.ndocs as ndocs,
-				menu.img_id as img_id,
-				menu.img_url as img_url,
-				menu.hide_noact as hide_noact,
-				menu.mid as mid,
-				menu.sss as sss,
-				menu.links as links,
-				menu.icon_id as icon_id,
-				menu.admin_feature as admin_feature,
-				menu.periodic as mperiodic
-			FROM objects 
-				LEFT JOIN menu ON menu.id = objects.oid
-				WHERE (objects.class_id = ".CL_PSEUDO." OR objects.class_id = ".CL_BROTHER.")  AND $where $aa
-				ORDER BY objects.parent, jrk,objects.created";
-		$this->db_query($q);
-	}
-
 	function get_add_menu($arr)
 	{
 		extract($arr);
@@ -73,12 +22,15 @@ class admin_menus extends aw_template
 		$this->add_menu = array();
 		// check if any parent menus have config objects attached
 		$atc_id = 0;
-		$ch = $this->get_object_chain($id);
-		foreach($ch as $oid => $od)
+
+		$obj = obj($id);
+
+		$ch = $obj->path();
+		foreach($ch as $o)
 		{
-			if (isset($od["meta"]["add_tree_conf"]))
+			if ($o->meta("add_tree_conf"))
 			{
-				$atc_id = $od["meta"]["add_tree_conf"];
+				$atc_id = $o->meta("add_tree_conf");
 			}
 		}
 
@@ -306,9 +258,9 @@ class admin_menus extends aw_template
 			$this->get_add_menu($args);
 		}
 
-		if (!is_array($obj))
+		if (!is_object($obj))
 		{
-			$obj = $this->get_object($id);
+			$obj = obj($id);
 		}
 
 		$sep = "\n";
@@ -320,9 +272,9 @@ class admin_menus extends aw_template
 		$baseurl = $this->cfg["baseurl"];
 		$retval = "";
 
-		if ($obj["class_id"] == CL_PSEUDO)
+		if ($obj->class_id() == CL_PSEUDO)
 		{
-			$ourl = $this->mk_my_orb("right_frame", array("id" => $id, "parent" => $obj["oid"],"period" => $period), "admin_menus",true,true);
+			$ourl = $this->mk_my_orb("right_frame", array("id" => $id, "parent" => $obj->id(),"period" => $period), "admin_menus",true,true);
 			$this->vars(array(
 				"link" => $ourl,
 				"text" => "Open"
@@ -332,7 +284,7 @@ class admin_menus extends aw_template
 
 		if ($this->can("edit", $id))
 		{
-			$churl = $this->mk_my_orb("change", array("id" => $id, "parent" => $obj["parent"],"period" => $period), $this->cfg["classes"][$obj["class_id"]]["file"],true,true);
+			$churl = $this->mk_my_orb("change", array("id" => $id, "parent" => $obj->parent(),"period" => $period), $this->cfg["classes"][$obj->class_id()]["file"],true,true);
 
 			$this->vars(array(
 				"link" => $churl,
@@ -340,7 +292,7 @@ class admin_menus extends aw_template
 			));
 			$retval .= $this->parse("MENU_ITEM");
 
-			$cuturl = $this->mk_my_orb("cut", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1"), "admin_menus",true,true);
+			$cuturl = $this->mk_my_orb("cut", array("reforb" => 1, "id" => $id, "parent" => $obj->parent(),"sel[$id]" => "1"), "admin_menus",true,true);
 
 			$this->vars(array(
 				"link" => $cuturl,
@@ -349,7 +301,7 @@ class admin_menus extends aw_template
 			$retval .= $this->parse("MENU_ITEM");
 		}
 
-		$copyurl = $this->mk_my_orb("copy", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1","period" => $period), "admin_menus",true,true);
+		$copyurl = $this->mk_my_orb("copy", array("reforb" => 1, "id" => $id, "parent" => $obj->parent(),"sel[$id]" => "1","period" => $period), "admin_menus",true,true);
 
 		$this->vars(array(
 			"link" => $copyurl,
@@ -359,7 +311,7 @@ class admin_menus extends aw_template
 
 		if ($this->can("delete", $id))
 		{
-			$delurl = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1","period" => $period), "admin_menus",true,true);
+			$delurl = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $id, "parent" => $obj->parent(),"sel[$id]" => "1","period" => $period), "admin_menus",true,true);
 
 			$this->vars(array(
 				"link" => $delurl,
@@ -452,7 +404,10 @@ class admin_menus extends aw_template
 		{
 			return;
 		}
-		$mt = $this->db_fetch_field("SELECT type FROM menu WHERE id= $parent","type");
+
+		$p_o = obj($parent);
+		$mt = $p_o->prop("type");
+
 		$i = get_instance("icons");
 		reset($menus[$i_p]);
 		while (list(,$v) = each($menus[$i_p]))
@@ -479,6 +434,8 @@ class admin_menus extends aw_template
 						 (id,link,type,is_l3,periodic,clickable,target,mid,hide_noact,ndocs,admin_feature,number,icon_id,links) 
 			VALUES ($id,'".$db["link"]."','".$db["mtype"]."','".$db["is_l3"]."','".$db["periodic"]."','".$db["clickable"]."','".$db["target"]."','".$db["mid"]."','".$db["hide_noact"]."','".$db["ndocs"]."','".$db["admin_feature"]."','".$db["number"]."',$icon_id,'".$db["links"]."')");
 
+
+			
 			// tegime vanema menyy 2ra, teeme lapsed ka.
 			$this->req_import_menus($db["oid"],$menus,$id);
 		}
@@ -515,8 +472,8 @@ class admin_menus extends aw_template
 		{
 			foreach($sel as $oid => $one)
 			{
-				$ob = $this->get_object($oid);
-				if ($ob["class_id"] == CL_PSEUDO)
+				$ob = obj($oid);
+				if ($ob->class_id() == CL_PSEUDO)
 				{
 					return $this->mk_my_orb("copy_feedback", array("parent" => $parent, "period" => $period, "sel" => $sel));
 				}
@@ -545,7 +502,7 @@ class admin_menus extends aw_template
 	{
 		extract($arr);
 		$this->read_template("copy_feedback.tpl");
-		$this->mk_path($parent, "Vali kuidaws objekte kopeerida");
+		$this->mk_path($parent, "Vali kuidas objekte kopeerida");
 
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_copy_feedback", array("parent" => $parent, "period" => $period,"sel" => $sel))
@@ -593,10 +550,10 @@ class admin_menus extends aw_template
 				if ($oid != $parent)
 				{
 					// so, let the object update itself when it is being cut-pasted, if it so desires
-					$obj = $this->get_object($oid);
-					if ($this->cfg["classes"][$obj["class_id"]]["file"] != "")
+					$obj = obj($oid);
+					if ($this->cfg["classes"][$obj->class_id()]["file"] != "")
 					{
-						$inst = get_instance($this->cfg["classes"][$obj["class_id"]]["alias_class"] != "" ? $this->cfg["classes"][$obj["class_id"]]["alias_class"] : $this->cfg["classes"][$obj["class_id"]]["file"]);
+						$inst = $obj->instance();
 						if (method_exists($inst, "cut_hook"))
 						{
 							$inst->cut_hook(array(
@@ -644,8 +601,6 @@ class admin_menus extends aw_template
 					"reltype" => $connection["reltype"],
 				));
 			}
-
-
 		};
 
 		$this->invalidate_menu_cache();
@@ -662,27 +617,17 @@ class admin_menus extends aw_template
 			reset($sel);
 			while (list($ooid,) = each($sel))
 			{
-				$this->delete_object($ooid);
-				$this->delete_aliases_of($ooid);
+				$o = obj($ooid);
+				$o->delete();
 			}
 		}
 		if ($oid)
 		{
-			$this->delete_object($oid);
+			$o = obj($oid);
+			$o->delete();
 		}
-		return $this->mk_orb("obj_list", array("parent" => $parent, "period" => $period));
-		aw_session_set("copied_objects",array());
-		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
-	}
 
-	function make_menu_caches($where = "objects.status = 2")
-	{
-		$mc = get_instance("menu_cache");
-		$mc->make_caches();
-		upd_instance("menu_cache",$mc);
-		$this->subs =  $mc->get_ref("subs");
-		$this->mar =  $mc->get_ref("mar");
-		$this->mpr =  $mc->get_ref("mpr");
+		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
 	}
 
 	function invalidate_menu_cache()
@@ -806,12 +751,13 @@ class admin_menus extends aw_template
 		$this->co_id = 0;
 
 		// check if any parent menus have config objects attached 
-		$ch = $this->get_object_chain($parent);
-		foreach($ch as $oid => $od)
+		$p_o = obj($parent);
+		$ch = $p_o->path();
+		foreach($ch as $o)
 		{
-			if (isset($od["meta"]["objtbl_conf"]))
+			if ($o->meta("objtbl_conf"))
 			{
-				$this->co_id = $od["meta"]["objtbl_conf"];
+				$this->co_id = $o->meta("objtbl_conf");
 			}
 		}
 
@@ -904,6 +850,11 @@ class admin_menus extends aw_template
 				LEFT JOIN menu m ON m.id = objects.oid
 			WHERE
 				$where";
+
+		$filter = array(
+			"parent" => $parent,
+			"lang_id" => $lang_id,
+		);
 
 		// make pageselector.
 		$_t = new aw_table;
