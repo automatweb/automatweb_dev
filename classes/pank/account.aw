@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/pank/account.aw,v 1.3 2004/07/27 09:55:36 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/pank/account.aw,v 1.4 2004/07/27 10:44:46 rtoomas Exp $
 // account.aw - Konto 
 /*
 @tableinfo pank_account index=oid master_table=objects master_index=oid
@@ -62,8 +62,8 @@
 define('NORMAL_ACCOUNT', 0);
 define('TAX_ACCOUNT', 1);
 
-define('INCOMING', 0);
-define('OUTGOING', 1);
+define('ACCOUNT_INCOMING', 0);
+define('ACCOUNT_OUTGOING', 1);
 
 class account extends class_base
 {
@@ -97,20 +97,20 @@ class account extends class_base
 				}
 			break;
 			case 'account_transactions_outgoing':
-				$arr['extra']['type'] = OUTGOING;
+				$arr['extra']['type'] = ACCOUNT_OUTGOING;
 				$this->do_account_transactions($arr);
 			break; 
 			case 'account_transactions_incoming':
-				$arr['extra']['type'] = INCOMING;
+				$arr['extra']['type'] = ACCOUNT_INCOMING;
 				$this->do_account_transactions($arr);
 			break; 
 			case 'other_account_transactions_incoming':
-				$arr['extra']['type'] = INCOMING;
+				$arr['extra']['type'] = ACCOUNT_INCOMING;
 				$arr['parent'] = $this->get_the_other_account(&$arr['obj_inst']);
 				$this->do_account_transactions($arr);
 			break;
 			case 'other_account_transactions_outgoing':
-				$arr['extra']['type'] = OUTGOING;
+				$arr['extra']['type'] = ACCOUNT_OUTGOING;
 				$arr['parent'] = $this->get_the_other_account(&$arr['obj_inst']);
 				$this->do_account_transactions($arr);
 			break;
@@ -224,11 +224,11 @@ class account extends class_base
 			'sort_by' => 'time desc',
 		);
 
-		if($arr['extra']['type'] == INCOMING)
+		if($arr['extra']['type'] == ACCOUNT_INCOMING)
 		{
 			$ol_params['trans_to_account'] = $arr['parent']->id();;
 		}
-		else if($arr['extra']['type'] == OUTGOING)
+		else if($arr['extra']['type'] == ACCOUNT_OUTGOING)
 		{
 			$ol_params['trans_from_account'] = $arr['parent']->id();	
 		}
