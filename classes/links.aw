@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.21 2002/10/03 13:46:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.22 2002/10/04 10:47:35 kristo Exp $
 
 classload("extlinks");
 class links extends extlinks
@@ -112,8 +112,6 @@ class links extends extlinks
 			"extlink"	=> checked($link["type"] != "int"),
 			"intlink"	=> checked($link["type"] == "int"),
 			"doclinkcollection"	=> checked($link["doclinkcollection"]),
-///mk_doksel tekitab probleeme?
-//			"docs"		=> $this->picker($link["docid"], $t->mk_docsel()),
 			"newwindow" => checked($link["newwindow"]),
 			"link_image_active_until" => $de->gen_edit_form("active_until",$active_until),
 			"link_image_check_active" => checked($link["link_image_check_active"]),

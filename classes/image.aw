@@ -117,6 +117,12 @@ class image extends aw_template
 	
 		$img = $this->get_image_by_id($id);
 
+		// http://site/automatweb/orb.aw/class=image/action=show etc
+		// doesn't work for some reason - "class not defined"
+		// I'd like to find the real cause for this, but for now
+		// this has to do
+		$img["url"] = str_replace("automatweb/","",$img["url"]);
+
 		if ($this->is_flash($img["file"]))
 		{
 			$ima = "<object classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" codebase=\"http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=4,0,2,0\" width=\"165\" height=\"75\" hspace=\"0\" vspace=\"0\" border=\"0\" align=\"absmiddle\"><param name=movie value=\"".$img["url"]."\"><param name=quality value=high><param name=\"BGCOLOR\" value=\"#336600\"><embed width=\"150\" height=\"150\" hspace=\"0\" vspace=\"0\" border=\"0\" align=\"absmiddle\" quality=\"high\" pluginspage=\"http://www.macromedia.com/shockwave/download/\" src=\"".$img["url"]."\" bgcolor=\"#336600\"></embed></object>";
@@ -466,6 +472,7 @@ class image extends aw_template
 		{
 			$url = aw_ini_get("baseurl").$url;
 		}
+		$url = str_replace("automatweb/", "", $url);
 		return $url;
 	}
 
@@ -475,7 +482,14 @@ class image extends aw_template
 	// $alt - alt text for the image
 	function make_img_tag($url, $alt = "")
 	{
-		return "<img src=\"$url\" alt=\"$alt\">";
+		if ($url == "")
+		{
+			return "<img border=\"0\" src=\"".aw_ini_get("baseurl")."/automatweb/images/trans.gif\" alt=\"$alt\">";
+		}
+		else
+		{
+			return "<img border=\"0\" src=\"$url\" alt=\"$alt\">";
+		}
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.159 2002/10/02 12:27:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.160 2002/10/04 10:47:34 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -221,7 +221,10 @@ class menuedit extends aw_template
 		$_t = aw_global_get("act_period");
 		$this->vars(array(
 			"per_string" => $_t["description"],
-			"act_per_id" => $_t["id"]
+			"act_per_id" => $_t["id"],
+			"per_img_url" => image::check_url($_t["data"]["image"]["url"]),
+			"per_img_tag" => image::make_img_tag(image::check_url($_t["data"]["image"]["url"])),
+			"per_img_link" => ($_t["data"]["image_link"] != "" ? $_t["data"]["image_link"] : aw_ini_get("baseurl"))
 		));
 
 		// check whether access to that menu is denied by ACL and if so
@@ -522,12 +525,19 @@ class menuedit extends aw_template
 		  "uid" => aw_global_get("uid"),
 		  "date" => $this->time2date(time(), 2),
 		  "date2" => $this->time2date(time(), 8),
+		  "date3" => date("d").". ".get_lc_month(date("n")).". ".date("Y"),
 			"IS_FRONTPAGE" => ($section == $frontpage ? $this->parse("IS_FRONTPAGE") : ""),
 			"IS_FRONTPAGE2" => ($section == $frontpage ? $this->parse("IS_FRONTPAGE2") : ""),
 			"IS_NOT_FRONTPAGE" => ($section != $frontpage ? $this->parse("IS_NOT_FRONTPAGE") : ""),
 			"IS_NOT_FRONTPAGE2" => ($section != $frontpage ? $this->parse("IS_NOT_FRONTPAGE2") : ""),
 		));
 
+		if ($_t["data"]["image"]["url"] != "")
+		{
+			$this->vars(array(
+				"HAS_PERIOD_IMAGE" => $this->parse("HAS_PERIOD_IMAGE")
+			));
+		}
 		// what's that for?
 		// well, you can pass along values for variables from index.aw and places like that using $vars array 
 		// it's pretty neat actually. - terryf
@@ -2834,6 +2844,12 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$menu_check_acl = $this->cfg["menu_check_acl"];
 		$this->sub_merge = 1;
 
+		global $DBUG;
+		if ($DBUG)
+		{
+			print "parent = $parent<br>";
+		};
+
 		$this->level++;
 
 		// needed to make creating links containing hiearchical aliases work
@@ -2861,6 +2877,11 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		{
 			$this->level--;
 			array_pop($this->menu_aliases);
+			global $DBUG;
+			if ($DBUG)
+			{
+				print "skip";
+			};
 			return 0;
 		}
 		
@@ -2913,6 +2934,11 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			// ignore all these if the meny is a 1st level menu 
 			$this->level--;
 			array_pop($this->menu_aliases);
+			global $DBUG;
+			if ($DBUG)
+			{
+				print "skip";
+			};
 			return 0;
 		}
 		$this->vars(array(
@@ -2924,6 +2950,14 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$l = "";
 		$l_mid = "";
 		reset($this->mpr[$parent]);
+
+		global $DBX;
+		if ($DBX && ($parent == 36))
+		{
+			print "<pre>";
+			print_r($this->mpr[$parent]);
+			print "</pre>";
+		}
 
 		// find out how many menus do we have so we know when to use
 		// the _END moficator
@@ -5496,7 +5530,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		}
 		$sel_objs+=$t;
 
-		$this->mk_path($parent);
+		$this->mk_path($parent,"",$period);
 
 		$la = get_instance("languages");
 		$lar = $la->get_list();
@@ -5510,8 +5544,13 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$host = str_replace(":".$mt[1], "", $host);
 		}
 
+		if ($period)
+		{
+			$ps = " AND period = '$period' ";
+		}
+
 		$this->read_template("java_popup_menu.tpl");
-		$this->db_query("SELECT * FROM objects WHERE parent = '$parent' AND lang_id = '$lang_id' AND site_id = '$site_id' AND status != 0");
+		$this->db_query("SELECT * FROM objects WHERE parent = '$parent' AND lang_id = '$lang_id' AND site_id = '$site_id' AND status != 0 $ps ");
 		while ($row = $this->db_next())
 		{
 			if (!$this->can("view", $row["oid"]))
@@ -5596,8 +5635,15 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"width" => 23,
 			"url" => $host
 		));
+		$up = $this->parse("URLPARAM");
 		$this->vars(array(
-			"URLPARAM" => $this->parse("URLPARAM")
+			"nr" => 3,
+			"key" => "period",
+			"val" => $period,
+		));
+		$up .= $this->parse("URLPARAM");
+		$this->vars(array(
+			"URLPARAM" => $up
 		));
 		$add_applet = $this->parse();
 
@@ -5756,6 +5802,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$this->db_query("SELECT oid,class_id FROM objects WHERE oid IN($oids)");
 			while ($row = $this->db_next())
 			{
+				$this->save_handle();
 				if ($this->cfg["classes"][$row["class_id"]]["file"] != "")
 				{
 					$inst = get_instance($this->cfg["classes"][$row["class_id"]]["file"]);
@@ -5765,6 +5812,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					}
 				}
 				$this->delete_object($row["oid"]);
+				$this->restore_handle();
 			}
 		}
 		$this->invalidate_menu_cache(array());
