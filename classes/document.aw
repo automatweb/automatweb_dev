@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.15 2001/06/05 19:14:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.16 2001/06/05 20:25:05 duke Exp $
 // document.aw - Dokumentide haldus. ORB compatible. Should be used instead of documents.aw
 // defineerime orbi funktsioonid
 global $orb_defs;
@@ -356,7 +356,7 @@ class document extends aw_template
 		{
 			$doc = $this->fetch($docid);
 			$docid = $doc["docid"];
-		];
+		};
 		if (!$doc)
 		{
 			// objekti polnud, bail out
