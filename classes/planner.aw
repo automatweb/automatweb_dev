@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.45 2001/10/24 19:27:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.46 2001/10/24 19:57:45 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -436,7 +436,7 @@ class planner extends calendar {
 		$events = $this->get_events(array(
 					"start" => $di["start"],
 					"end" => $di["end"],
-					"uid" => UID,
+					"parent" => $id,
 				));
 
 		$ddiff1 = $this->get_day_diff($di["start"],$di["end"]);
@@ -780,6 +780,7 @@ class planner extends calendar {
 	
 	function get_events($args = array())
 	{
+		print "getting events";
 		classload("repeater");
 		$repeater = new repeater();
 		extract($args);
@@ -1637,7 +1638,7 @@ class planner extends calendar {
 		$events = $this->get_events(array(
 				"start" => $di["start"],
 				"end" => $di["end"],
-				"uid" => UID,
+				"id" => $id,
 			));
 
 		$c = "";
