@@ -235,7 +235,7 @@ class group extends class_base
 				return PROP_OK;
 			}
 
-			$us = get_instance(CL_USERS);
+			$us = get_instance(CL_USER);
 			echo t("Impordin kasutajaid ... <br />");
 			$first = true;
 			$f = fopen($imp,"r");

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.40 2005/03/24 10:01:38 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.41 2005/03/24 10:10:24 ahti Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -477,7 +477,7 @@ class form_actions extends form_base
 			$txt[$el->get_id()] = $el->get_el_name() == "" ? $el->get_text() == "" ? $el->get_type() : $el->get_text() : $el->get_el_name();
 		}
 
-		$li = get_instance(CL_MAILINGLIST);
+		$li = get_instance("lists");
 		$this->vars(array(
 			"checkbox"	=> $this->option_list($data["checkbox"],$chk),
 			"list"			=> $this->option_list($data["list"],$li->get_op_list()),

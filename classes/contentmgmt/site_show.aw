@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.125 2005/03/24 10:06:29 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.126 2005/03/24 10:10:23 ahti Exp $
 
 /*
 
@@ -1149,7 +1149,7 @@ class site_show extends class_base
 			if ($ref->prop("show_object_tree"))
 			{
 				$show_obj_tree = true;
-				$ot_inst = get_instance(CL_OBJECT_TREEVIEW);
+				$ot_inst = get_instance(CL_OBJECT_TREE);
 				$ot_id = $ref->prop("show_object_tree");
 			}
 
