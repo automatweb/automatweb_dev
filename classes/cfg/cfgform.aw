@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.54 2005/03/02 13:11:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.55 2005/03/03 12:57:31 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -850,6 +850,7 @@ class cfgform extends class_base
 		$this->_init_cfgform_data($arr["obj_inst"]);
 		switch($subaction)
 		{
+			// aww .. I need to fix that!
 			case "addgrp":
 				$newgrpname =$arr["request"]["newgrpname"];
 				$grpid = strtolower(preg_replace("/\W/","",$newgrpname));
@@ -1170,6 +1171,183 @@ class cfgform extends class_base
 		}
 		$els = $tmp;
 		return $els;
+	}
+
+	function on_site_init($dbi, $site, &$ini_opts, &$log, &$osi_vars)
+	{
+		// create the default document config form 
+		$form = obj($osi_vars["doc_conf_form"]);
+
+		// Üldine (general)
+		// 100, navtoolbar
+		// 200, status
+		// 300, title		
+		// 400, tm
+		// 500, lead		
+		// 600, content
+		// 700, moreinfo
+		// 800, sbt
+		// 900, aliasmgr
+		// Seadistused (settings)
+		// 100, show_title
+		// 200, showlead
+		// 300, show_print
+		// 400, title_clickable
+		
+		// elements: 
+		$els = array(
+			"general" => array(
+				"navtoolbar" => array(100, "T&ouml;&ouml;riistariba"),
+				"status" => array(200,"Aktiivne"),
+				"title" => array(300, "Pealkiri"),
+				"tm" => array(400, "Kuup&auml;ev"),
+				"lead" => array(500, "Sissejuhatus"),
+				"content" => array(600, "Sisu"),
+				"moreinfo" => array(700, "Toimetamata"),
+				"sbt" => array(800, "Salvesta"),
+				"aliasmgr" => array(900, "Seostehaldur")
+			),
+			"settings" => array(
+				"show_title" => array(100, "N&auml;ita pealkirja"),
+				"showlead" => array(200, "N&auml;ita sissejuhatust"),
+				"show_print" => array(300, "N&auml;ita prindi nuppu"),
+				"title_clickable" => array(400, "Pealkiri klikitav")
+			)
+		);
+
+		$this->cff_init_from_class($form, CL_DOCUMENT);
+
+		$this->cff_remove_all_props($form);
+		
+		foreach($els as $grp => $gels)
+		{
+			foreach($gels as $el => $ord)
+			{
+				$this->cff_add_prop($form, $el, array("ord" => $ord[0], "group" => $grp, "caption" => $ord[1]));
+			}
+		}
+
+		$form->save();
+	}
+
+	/**
+
+		@attrib api=1
+
+		@comment
+			Initializes given cfgform object to contain all groups and props from the given class
+
+			$o - cfgform object
+			$clid - class id to init from
+	**/
+	function cff_init_from_class($o, $clid)
+	{
+		$o->set_prop("subclass", $clid);
+		// fool around a bit to get the correct data
+		$subclass = $clid;
+
+		// now that's the tricky part ... this thingsbum overrides
+		// all the settings in the document config form
+		$this->_init_properties($subclass);
+		$cfgu = get_instance("cfg/cfgutils");
+		if ($subclass == CL_DOCUMENT)
+		{
+			$def = join("",file(aw_ini_get("basedir") . "/xml/documents/def_cfgform.xml"));
+			list($proplist,$grplist) = $cfgu->parse_cfgform(array("xml_definition" => $def));
+			$this->cfg_proplist = $proplist;
+			$this->cfg_groups = $grplist;
+		}
+		else
+		{
+			$tmp = aw_ini_get("classes");
+			$fname = $tmp[$subclass]["file"];
+			$def = join("",file(aw_ini_get("basedir") . "/xml/properties/class_base.xml"));
+			list($proplist,$grplist) = $cfgu->parse_cfgform(array("xml_definition" => $def));
+			$this->cfg_proplist = $proplist;
+			$this->cfg_groups = $grplist;
+			$fname = basename($fname);
+			$def = join("",file(aw_ini_get("basedir") . "/xml/properties/$fname.xml"));
+			list($proplist,$grplist) = $cfgu->parse_cfgform(array("xml_definition" => $def));
+			// nono. It needs to fucking merge those things with classbase 
+			$this->cfg_proplist = $this->cfg_proplist + $proplist;
+			$this->cfg_groups = $this->cfg_groups + $grplist;
+		};
+
+		if (isset($this->cfg_proplist) && is_array($this->cfg_proplist))
+		{
+			$tmp = array();
+			$cnt = 0;
+			foreach($this->cfg_proplist as $key => $val)
+			{
+				if (empty($val["ord"]))
+				{
+					$cnt++;
+					$val["tmp_ord"] = $cnt;
+				};	
+				$tmp[$key] = $val;
+			};
+			uasort($tmp,array($this,"__sort_props_by_ord"));
+			$cnt = 0;
+			$this->cfg_proplist = array();
+
+			foreach($tmp as $key => $val)
+			{
+				unset($val["tmp_ord"]);
+				if ($this->default_values[$key])
+				{
+					$val["default"] = $this->default_values[$key];	
+				}
+				else
+				{
+					unset($val["default"]);
+				};
+				$this->cfg_proplist[$key] = $val;
+			};
+			$o->set_meta("cfg_proplist",$this->cfg_proplist);
+		};
+		if (isset($this->cfg_groups))
+		{
+			$o->set_meta("cfg_groups",$this->cfg_groups);
+		};
+	}
+
+	/**
+
+		@attrib api=1
+
+		@comment
+			Removes all properties from the given config form
+
+			$o - cfgform object
+	**/
+	function cff_remove_all_props($o)
+	{
+		$o->set_meta("cfg_proplist", array());
+	}
+
+	/**
+
+		@attrib api=1
+
+		@comment
+			Adds the given property to the given config form object
+
+			$o - cfgform object
+			$pn - name of property to add
+			$pd - array(caption, group, ord) for the property
+	**/
+	function cff_add_prop($o, $pn, $pd)
+	{
+		$pl = $o->meta("cfg_proplist");
+		$pl[$pn] = array(
+			"name" => $pn,
+			"caption" => $pd["caption"],
+			"group" => $pd["group"],
+			"ord" => $pd["ord"]
+		);
+
+		uasort($pl,array($this,"__sort_props_by_ord"));
+		$o->set_meta("cfg_proplist", $pl);
 	}
 };
 ?>
