@@ -23,7 +23,7 @@
 									<br>
 									<table class="aste01" cellpadding=3 cellspacing=1 border=0>
 										<tr>
-											<td class="celltext" width=30% colspan=2>iga erinevat tüüpi htmli jaoks oleks mõttekas teha uus objekt
+											<td class="celltext" width=30% colspan=2>
 										</tr>
 										<tr>
 											<td class="celltext" width=30%>name</td><td class="celltext"><input type='text' NAME='name' VALUE='{VAR:name}' class="formtext"></td>
@@ -55,8 +55,8 @@
 											</td>
 										</tr>
 										<tr>
-											<td class="celltext" colspan=2>
-											<input type=radio name='single' value=0 {VAR:singleoff_}>										
+											<td class="celltext" colspan=2>tulevikus
+											<input type=radio name='single' value=0 {VAR:singleoff_}>
 											mingi kolmas spetsiifiline variant, mida ma pole veel teinud
 											</td>
 										</tr>
@@ -77,13 +77,19 @@
 											</td>
 										</tr>
 										<tr>
-											<td class="celltext" colspan=2><input type=radio name=output value="mk_my_csv" {VAR:is_my_csv}> luuakse csv tyypi fail
+											<td class="celltext" colspan=2>tulevikus<input type=radio name=output value="mk_my_csv" {VAR:is_my_csv}> luuakse csv tyypi fail
 											<input type=text size=20 name='mk_my_csv' value='{VAR:mk_my_csv}' class="formtext"><br>
 											</td>
 										</tr>
 										<tr>
-											<td class="celltext" colspan=2><input type=radio name=output value="mk_my_xml" {VAR:is_my_xml}> luuakse xml tyypi fail
+											<td class="celltext" colspan=2>tulevikus<input type=radio name=output value="mk_my_xml" {VAR:is_my_xml}> luuakse xml tyypi fail
 											<input type=text size=20 name='mk_my_xml' value='{VAR:mk_my_xml}' class="formtext"><br>
+											</td>
+										</tr>
+										<tr>
+											<td class="celltext" colspan=2>
+											väike docu:<br />
+											{VAR:docu}
 											</td>
 										</tr>
 									</table>
