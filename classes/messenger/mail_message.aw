@@ -1,13 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.1 2003/05/08 17:33:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.2 2003/07/25 15:52:45 duke Exp $
 // mail_message.aw - Mail message
 
 /*
 	@default table=objects
 	@default group=general
-
-	@property status type=status field=status
-	@caption Staatus
 
 	@default table=messages
 
@@ -76,6 +73,40 @@ class mail_message extends class_base
 			
 		};
 		return $retval;
+	}
+
+	// basically the same as deliver, except that this one is _not_
+	// called through ORB, and you can specify replacements here
+	function process_and_deliver($args)
+	{
+		$oid = $args["id"];
+		$q = "SELECT name,mfrom,mto,message FROM objects
+			LEFT JOIN messages ON (objects.oid = messages.id)
+			WHERE objects.oid = $oid";
+		$this->db_query($q);
+		$row = $this->db_next();
+
+		$message = $row["message"];
+		if (is_array($args["replacements"]))
+		{
+			foreach($args["replacements"] as $source => $target)
+			{
+				$message = str_replace($source,$target,$message);
+			}
+
+		}
+		
+		$awm = get_instance("aw_mail");
+
+		$awm->create_message(array(
+			"froma" => $row["mfrom"],
+			"subject" => $row["name"],
+			"to" => $args["to"],
+			"body" => $message,
+		));
+
+		$awm->gen_mail();
+
 	}
 
 	function deliver($args)

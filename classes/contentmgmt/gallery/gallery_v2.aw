@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.23 2003/07/01 12:14:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.24 2003/07/25 15:51:29 duke Exp $
 
 /*
 
@@ -22,9 +22,6 @@
 
 @default table=objects
 @default group=general
-
-@property status type=status field=status
-@caption Staatus
 
 @property conf_id type=text size=3 field=meta method=serialize
 @caption Konfiguratsioon:

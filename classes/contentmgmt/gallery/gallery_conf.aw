@@ -11,9 +11,6 @@
 @default table=objects
 @default group=general
 
-@property status type=status field=status
-@caption Staatus
-
 @property conf_folders type=relpicker field=meta method=serialize reltype=RELTYPE_FOLDER multiple=1
 @caption Kataloogid, kus konf kehtib
 
