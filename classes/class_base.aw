@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.233 2004/03/08 20:21:18 kristo Exp $
+// $Id: class_base.aw,v 2.234 2004/03/09 13:00:21 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -234,6 +234,8 @@ class class_base extends aw_template
 				"args" => $args,
 			));
 		};
+
+		$this->use_form = $use_form;
 
 		$cfgform_id = $args["cfgform"];
 		if (empty($cfgform_id) && is_object($this->obj_inst))
@@ -497,11 +499,17 @@ class class_base extends aw_template
 		extract($args);
 		if (empty($content))
 		{
+			// XXX: xulclient dies in get_result
+			if ($this->output_client == "xulclient")
+			{
+				$this->cli = &$cli;
+				$_tmp = $this->gen_output(array());
+			};
 			$content = $cli->get_result(array(
 				"raw_output" => $this->raw_output,
 			));
 		};
-		
+
 		$rv =  $this->gen_output(array(
 			"parent" => $this->parent,
 			"content" => isset($content) ? $content : "",
@@ -959,6 +967,14 @@ class class_base extends aw_template
 						"caption" => $tabinfo["caption"],
 						"active" => !empty($val["active"]) || ($key == $this->subgroup),
 					));
+
+					if ($this->output_client == "xulclient")
+					{
+						$this->cli->add_tab(array(
+							"id" => $tabinfo["id"],
+							"caption" => $tabinfo["caption"],
+						));
+					};
 				};
 			};
 
@@ -1420,6 +1436,7 @@ class class_base extends aw_template
 			return false;
 		};
 
+		// XXX: move get_html calls out of here, they really do not belong
 		if (($val["type"] == "toolbar") && is_object($val["toolbar"]))
 		{
 			$val["value"] = $val["toolbar"]->get_toolbar();
@@ -1445,15 +1462,6 @@ class class_base extends aw_template
 		{
 			$val["value"] = $val["vcl_inst"]->get_html();
 		};
-
-		if ($val["type"] == "date_select")
-		{
-			// set the date to "now" for empty date_selects
-			if (empty($this->id))
-			{
-				$val["value"] = time();
-			};
-		}
 
 		if (($val["type"] == "objpicker") && isset($val["clid"]) && defined($val["clid"]))
 		{
@@ -1528,7 +1536,9 @@ class class_base extends aw_template
 		}
 		else
 		// current time for datetime_select properties for new objects
-		if (empty($this->id) && $property["type"] == "datetime_select")
+		// XXX: for now this->use_form is empty for add/change forms, this
+		// will probably change in the future
+		if (empty($this->id) && empty($this->use_form) && ($property["type"] == "datetime_select" || $property["type"] == "date_select"))
 		{
 			$property["value"] = time();
 		}
@@ -2039,9 +2049,11 @@ class class_base extends aw_template
 		$defaults = $this->get_property_group(array(
 			"clid" => $this->clid,
 			"clfile" => $this->clfile,
-			"group" => $args["group"],
 			"cfgform_id" => $cfgform_id,
 		));
+
+		$this->use_group = "list_aliases";
+		$this->parent_group = "";
 
 		$reltypes = $this->get_rel_types();
 
@@ -2126,6 +2138,9 @@ class class_base extends aw_template
 			"group" => $args["group"],
 			"cfgform_id" => $cfgform_id,
 		));
+		
+		$this->use_group = "list_aliases";
+		$this->parent_group = "";
 
 		$reltypes = $this->get_rel_types();
 
