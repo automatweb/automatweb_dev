@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.7 2003/03/19 18:07:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.8 2003/03/28 18:27:19 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -31,7 +31,10 @@
 @property content type=textarea richtext=1 cols=60 rows=30
 @caption Sisu
 
-@property pic1 type=relpicker clid=CL_IMAGE
+@property moreinfo type=textarea richtext=1 cols=60 rows=5
+@caption Lisainfo
+
+@property img1 type=relpicker clid=CL_IMAGE table=objects field=meta method=serialize
 @caption Pilt
 
 @property is_forum type=checkbox ch_value=1
@@ -95,9 +98,16 @@
 @property cal_event callback=callback_get_event_editor store=no group=calendar
 @caption Kalendrisündmus
 
+@property start type=date_select table=planner group=calendar
+@caption Algab
+
+@property link_calendars type=callback store=no callback=callback_gen_link_calendars group=calendar
+@caption Vali kalendrid, millesse see sündmus veel salvestatakse.
+
 @groupinfo calendar caption=Kalender
 
 @tableinfo documents index=docid master_table=objects master_index=oid
+@tableinfo planner index=id master_table=objects master_index=oid
 
 @classinfo toolbar=yes
 @classinfo corefields=status
@@ -155,6 +165,11 @@ class doc extends class_base
 					"form_data" => $args["form_data"],
 				));
 				$retval = PROP_IGNORE;
+				break;
+
+			case "link_calendars":
+				$this->update_link_calendars($args);
+				break;
 
 		};
 		return $retval;
@@ -263,6 +278,22 @@ class doc extends class_base
 		extract($args);
 		$d = get_instance("document");
 		return $d->gen_preview(array("docid" => $args["id"]));
+	}
+
+	// creates a list of brothers for a document
+	function _get_brother_documents($docid)
+	{
+		if (!is_numeric($docid))
+		{
+			return false;
+		}
+		$retval = array();
+		$this->db_query("SELECT oid,parent FROM objects WHERE brother_of = $docid AND status != 0 AND class_id = ".CL_BROTHER_DOCUMENT);
+		while ($arow = $this->db_next())
+		{
+			$retval[$arow["parent"]] = $arow;
+		}
+		return $retval;
 	}
 
 	function get_brothers($args = array())
@@ -401,6 +432,87 @@ class doc extends class_base
 			};
 		};
 		return $retval;
+	}
+
+	////
+	function get_planners_with_folders($args = array())
+	{
+		$retval = array();
+		$this->get_objects_by_class(array(
+			"class" => CL_PLANNER,
+			"active" => true,
+			"fields" => "oid,name,metadata",
+		));
+		while($row = $this->db_next())
+		{
+			$row["meta"] = aw_unserialize($row["metadata"]);
+			// aight, this is where I could use $obj->get_property_value("xxx");
+			// but since I don't have it yet, this will do -- duke
+
+			// display only the calendars which have an event folder defined
+			if (!empty($row["meta"]["event_folder"]))
+			{
+				$retval[] = array(
+					"oid" => $row["oid"],
+					"name" => $row["name"],
+					"event_folder" => $row["meta"]["event_folder"],
+				);
+			};
+		};		
+		return $retval;
+	}
+
+	////
+	// !Generates the contents of cal1 property	
+	function callback_gen_link_calendars($args = array())
+	{
+		$retval = array();
+		$bs = $this->_get_brother_documents($args["obj"]["oid"]);
+		$retval["caption"] = array(
+			"caption" => $args["prop"]["caption"],
+		);
+
+		foreach($this->get_planners_with_folders() as $row)
+		{
+			/*
+			print "<pre>";
+			print_r($row);
+			print "</pre>";
+			*/
+			$folderdat = $this->get_object($row["event_folder"]);
+			$retval["cal_" . $row["oid"]] = array(
+				"type" => "checkbox",
+				"name" => $args["prop"]["name"] . "[]",
+				"caption" => "Kalender: " . $row["name"] . "<br>Folder: " . $folderdat["name"],
+				"ch_value" => $row["oid"],
+				"value" => isset($bs[$row["event_folder"]]) ? $row["oid"] : 0,
+				"group" => $args["prop"]["group"],
+			);
+		}
+		return $retval;
+	}	
+
+	function update_link_calendars($args = array())
+	{
+		// first, get rid of all brothers
+		$event_id = $args["obj"]["oid"];
+		// eeh, ei taha kirvega anda, aga praegu ei viitsi paremini ka teha
+		$q = "DELETE FROM objects WHERE brother_of = '$event_id' AND class_id = " .  CL_BROTHER_DOCUMENT;
+		$this->db_query($q);
+
+		foreach($this->get_planners_with_folders() as $row)
+		{
+			// kui vend on olemas, aga sellist eventfolderit pole, siis peab ta kustutama
+			if (is_array($args["prop"]["value"]) && in_array($row["oid"],$args["prop"]["value"]))
+			{
+				$this->new_object(array(
+					"parent" => $row["event_folder"],
+					"class_id" => CL_BROTHER_DOCUMENT,
+					"status" => STAT_ACTIVE,
+					"brother_of" => $event_id,
+				));
+			};
+		};
 	}
 
 };
