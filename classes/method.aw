@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/method.aw,v 1.3 2004/09/13 14:21:54 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/method.aw,v 1.4 2004/09/20 14:45:37 ahti Exp $
 // method.aw - Klassi meetod
 /*
 
@@ -102,14 +102,6 @@ class method extends class_base
 				}
 				$prop["options"] = array(0 => "-- vali --") + $rval;
 				break;
-			
-			case "method_props":
-				$prp = $arr["obj_inst"]->prop("method");
-				if(empty($prp))
-				{
-					return PROP_IGNORE;
-				}
-				break;
 		}
 
 		return $retval;
@@ -119,60 +111,11 @@ class method extends class_base
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		//$this_object =& $arr["obj_inst"];
-
 		switch($prop["name"])
 		{
-			case "method":
-				//$methods = $this->method_list();
-				//$this_aw_object->set_name($methods [$prop["value"]]);
-				break;
-			case "method_class":
-				/*
-				// do not overwrite subclass if it was not in the form
-				// hum .. this is temporary fix of course. yees --duke
-				if (empty($arr["request"]["subclass"]))
-				{
-					$retval = PROP_IGNORE;
-				}
-				// cfg_proplist is in "formdata" only if this a serialized object
-				// being unserialized. for example, if we are copying this object
-				// over xml-rpc
-				elseif ($arr["new"] && empty($arr["request"]["cfg_proplist"]))
-				{
-					// fool around a bit to get the correct data
-					$subclass = $arr["request"]["subclass"];
-
-					// now that's the tricky part ... this thingsbum overrides
-					// all the settings in the document config form
-					$this->_init_properties($subclass);
-					$cfgu = get_instance("cfg/cfgutils");
-					if ($subclass == CL_DOCUMENT)
-					{
-						$def = join("",file(aw_ini_get("basedir") . "/xml/documents/def_cfgform.xml"));
-						list($proplist,$grplist) = $cfgu->parse_cfgform(array("xml_definition" => $def));
-						$this->cfg_proplist = $proplist;
-						$this->cfg_groups = $grplist;
-					}
-					else
-					{
-						$tmp = aw_ini_get("classes");
-						$fname = $tmp[$subclass]["file"];
-						$def = join("",file(aw_ini_get("basedir") . "/xml/properties/class_base.xml"));
-						list($proplist,$grplist) = $cfgu->parse_cfgform(array("xml_definition" => $def));
-						$this->cfg_proplist = $proplist;
-						$this->cfg_groups = $grplist;
-						$fname = basename($fname);
-						$def = join("",file(aw_ini_get("basedir") . "/xml/properties/$fname.xml"));
-						list($proplist,$grplist) = $cfgu->parse_cfgform(array("xml_definition" => $def));
-						// nono. It needs to fucking merge those things with classbase 
-						$this->cfg_proplist = $this->cfg_proplist + $proplist;
-						$this->cfg_groups = $this->cfg_groups + $grplist;
-
-
-					};
-				};
-				*/
+			case "method_props":
+				// there is only ONE slight problem with the method_props:
+				// you can't check type=int and give errors
 				break;
 		}
 
@@ -192,26 +135,90 @@ class method extends class_base
 	
 	function callback_method_props($arr)
 	{
+		$prp = $arr["obj_inst"]->prop("method");
+		$ob = $arr["obj_inst"]->prop("method_object");
+		if(empty($prp) || empty($ob))
+		{
+			return;
+		}
 		
 		$orb_class = get_instance("orb");
 		$id = get_class(get_instance($arr["obj_inst"]->prop("method_class")));
 		$orb_defs = $orb_class->load_xml_orb_def($id);
 		$needed_props = $orb_defs[$id][$arr["obj_inst"]->prop("method")];
 		$args = array();
-		foreach($needed_props as $key => $value)
+		//arr($needed_props);
+		if(is_array($needed_props))
 		{
-			if($key == "caption" || $key == "function")
+			foreach($needed_props as $key => $value)
 			{
-				continue;
+				if($key == "caption" || $key == "function" || $key == "define")
+				{
+					// filtering out defined params and other stuff -- ahz
+					continue;
+				}
+				if(is_array($value))
+				{
+					foreach($value as $vkey => $vvalue)
+					{
+						if(!in_array($vkey, $filt))
+						{
+							$args[$vkey][$key] = $vvalue;
+						}
+					}
+				}
 			}
-			foreach($value as $vkey => $vvalue)
+			$filt = array();
+			$prp = $arr["obj_inst"]->prop("method_props");
+			foreach($args as $key => $value)
 			{
-				$args[$vkey][$key] = $vvalue;
+				$opts = array(
+						0 => "-- vali --",
+						1 => "saan päringust",
+						2 => "määran käsitsi",
+						3 => "objekti ID",
+				);
+				$rv = array();
+				if($value["optional"])
+				{
+					$rv[] = "optional";
+					$opts[4] = "ignoreerin";
+				}
+				elseif($value["required"])
+				{
+					$rv[] = "required";
+				}
+				if($value["types"])
+				{
+					$rv[] = "type=".$value["types"];
+				}
+				if($value["acl"])
+				{
+					$rv[] = "acl=".$value["acl"];
+				}
+				$asd = implode(", ", $rv);
+				$filt[$key] = array(
+					"name" => "method_props[$key][prop]",
+					"caption" => $key.(!empty($asd) ? " ($asd)" : ""),
+					"type" => "select",
+					"options" => $opts,
+					"selected" => $prp[$key]["prop"],
+				);
+				if($prp[$key]["prop"] == 2)
+				{
+					
+					$filt[$key."value"] = array(
+						"name" => "method_props[$key][value]",
+						"caption" => "Väärtus",
+						"type" => "textbox",
+						"value" => $prp[$key]["value"],
+					);
+				} 
 			}
 		}
 		//arr($args);
 		//arr($needed_props);
-		return $args;
+		return $filt;
 	}
 	
 	function parse_alias($arr)
@@ -230,24 +237,45 @@ class method extends class_base
 	}
 	
 	/**
-		@attrib name=method_parser is_public="1" caption="Meetodi kuvaja"
-		@param id required type=int acl=view
+		@attrib name=method_parser is_public="1" caption="Meetodi kuvaja" all_args=1 default=1
+		@param mid required type=int acl=view
 	**/
 	function method_parser($arr)
 	{
-		//
-		arr($arr);
-		/*
-		$obj_inst = obj($arr["id"]);
-		$this->do_orb_method_call(array(
+		//arr($arr);
+		$obj_inst = obj($arr["mid"]);
+		//arr($obj_inst->properties());
+		$prp = $obj_inst->prop("method_props");
+		
+		$classes = aw_ini_get("classes");
+		list($obj, $name) = explode("/", $classes[$obj_inst->prop("method_class")]["file"]);
+		
+		$params = array();
+		if(is_array($prp))
+		{
+			foreach($prp as $key => $value)
+			{
+				switch($value["prop"])
+				{
+					case 1:
+						$params[$key] = $arr[$key];
+						break;
+					case 2:
+						$params[$key] = $value["value"];
+						break;
+					case 3:
+						$params[$key] = $arr["mid"];
+						break;
+				}
+			}
+		}
+		//arr($params);
+		//arr($obj_inst->prop("method"));
+		return $this->do_orb_method_call(array(
 			"action" => $obj_inst->prop("method"),
-			"params" => array(
-				"id" => $obj_inst->prop("method_object"),
-			),
-			"class" => $obj_inst->prop("method_class"),
+			"params" => $params,
+			"class" => $name,
 		));
-		*/
-		return null;
 	}
 }
 ?>

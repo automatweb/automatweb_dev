@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.82 2004/09/20 13:11:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.83 2004/09/20 14:45:37 ahti Exp $
 
 /*
 
@@ -1479,10 +1479,6 @@ class site_show extends class_base
 
 	function do_draw_menus($arr, $filename = NULL, $tpldir = NULL, $tpl = NULL)
 	{
-		if (aw_ini_get("config.menus_not_translated"))
-		{
-			obj_set_opt("no_auto_translation", 1);
-		}
 		if ($filename == NULL)
 		{
 			$filename = $this->compiled_filename;
@@ -1525,11 +1521,6 @@ class site_show extends class_base
 		enter_function("site_show::do_draw_menus");
 		include_once($this->compiled_filename);
 		exit_function("site_show::do_draw_menus");
-
-		if (aw_ini_get("config.menus_not_translated"))
-		{
-			obj_set_opt("no_auto_translation", 0);
-		}
 
 		$this->path_ids = $path_bak;
 		if ($filename !== NULL)
@@ -1644,7 +1635,7 @@ class site_show extends class_base
 		reset($banner_defs);
 		while (list($name,$gid) = each($banner_defs))
 		{
-			$htmlf = $banner_server."/banner.$ext?gid=$gid&ba_html=1";
+			$htmlf = $banner_server."/banner.$ext?gid=$gid&html=1";
 			if ($uid != "")
 			{
 				$htmlf.="&aw_uid=".$uid;
@@ -1892,10 +1883,12 @@ class site_show extends class_base
 					$_cl = "period";
 				};
 				$pobject = $o->meta("pobject");
+				$pgroup = $o->meta("pgroup");
 				$meth = $orb->get_public_method(array(
 					"id" => $_cl,
 					"action" => $_act,
-					"obj" => (!empty($pobject) ? $pobject : false), 
+					"obj" => (!empty($pobject) ? $pobject : false),
+					"pgroup" =>  (!empty($pgroup) ? $pgroup : false),
 				));
 				$values = array();
 				$err = false;

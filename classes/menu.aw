@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.101 2004/09/20 13:14:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.102 2004/09/20 14:45:37 ahti Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -55,9 +55,6 @@
 	
 	@property show_lead_template type=select field=meta method=serialize group=advanced 
 	@caption Leadi template
-
-	@property get_content_from type=relpicker reltype=RELTYPE_CONTENT_FROM field=meta method=serialize group=advanced
-	@caption Sisu objektist
 	
 	@property grkeywords type=select size=10 multiple=1 field=meta method=serialize group=keywords
 	@caption AW Märksõnad
@@ -258,10 +255,6 @@
 
 	@reltype SUBMENUS value=16 clid=CL_SHOP_ORDER_CENTER,CL_CRM_SECTION,CL_OBJECT_TREEVIEW_V2,CL_ABSTRACT_DATASOURCE
 	@caption alammen&uuml;&uuml;d objektist
-
-	@reltype CONTENT_FROM value=17 clid=CL_PROJECT
-	@caption Sisu objektist
-
 */
 
 define("IP_ALLOWED", 1);
@@ -322,6 +315,11 @@ class menu extends class_base
 		return parent::change($args);
 	}
 
+	function __callback_on_load($arr)
+	{
+		$this->cfgmanager = 128946;
+	}
+	
 	function get_property($arr)
 	{
 		$data = &$arr["prop"];
@@ -743,28 +741,27 @@ class menu extends class_base
 		);
 		$pclass = $arr["obj_inst"]->meta("pclass");
 		list($class_name, $tmp) = explode("/", $pclass);
-		if($class == "method")
+		if($class_name == "method" || $class_name == "commune")
 		{
-			
-			$classes = aw_ini_get("classes");
-			foreach($classes as $id => $class)
-			{
-				if($class["file"] == $class_name)
-				{
-					$class_id = $id;
-					break;
-				}
-			}
-			//arr($classes);
+			$class_id = clid_for_name($class_name);
 			$nodes[] = array(
 				"type" => "select",
 				"name" => "pobject",
 				"caption" => "Vali meetodiga seotud objekt",
-				"options" => array(),
 				"selected" => $arr["obj_inst"]->meta("pobject"),
 				"options" => $this->get_pobjects($class_id),
 			);
-		} 
+		}
+		if($class_name == "commune")
+		{
+			$nodes[] = array(
+				"type" => "select",
+				"name" => "pgroup",
+				"caption" => "Vali meetodiga seotud grupp",
+				"options" => $this->get_object_groups($class_id),
+				"selected" => $arr["obj_inst"]->meta("pgroup"),
+			);
+		}
 		$nodes[] = array(
 			"type" => "checkbox",
 			"name" => "pm_url_admin",
@@ -870,7 +867,8 @@ class menu extends class_base
 			case "pmethod_properties":
 				$request = &$arr["request"];
 				list($class, $tmp) = explode("/",$request["pclass"]);
-				$ob->set_meta("pobject", ($class == "method" ? $request["pobject"] : ""));
+				$ob->set_meta("pobject", (($class == "method" || $class == "commune") ? $request["pobject"] : ""));
+				$ob->set_meta("pgroup", ($class == "commune" ? $request["pgroup"] : ""));
 				$ob->set_meta("pclass",$request["pclass"]);
 				$ob->set_meta("pm_url_menus",$request["pm_url_menus"]);
 				$ob->set_meta("pm_url_admin",$request["pm_url_admin"]);
@@ -900,6 +898,20 @@ class menu extends class_base
 		return $retval;
 	}
 
+	function get_object_groups($class_name)
+	{
+		$cfg = get_instance("cfg/cfgutils");
+		$cfg->load_class_properties(array("clid" => $class_name));
+		$groups = $cfg->get_groupinfo();
+		//arr($groups);
+		$rval = array();
+		foreach($groups as $key => $value)
+		{
+			$rval[$key] = $value["caption"] ? $value["caption"]." ($key)" : $key;
+		}
+		return $rval;
+	}
+	
 	function get_pobjects($class_id)
 	{
 		$objects = new object_list(array(
@@ -1237,12 +1249,12 @@ class menu extends class_base
 		}
 		$target = $f;
 
-		if (!$this->can("view", $alias["to"]))
+		if (!$this->can("view", $target["oid"]))
 		{
 			return "";
 		}
 
-		$o = obj($alias["to"]);
+		$o = obj($target["oid"]);
 
 		if ($o->prop("link") != "")
 		{
@@ -1250,7 +1262,7 @@ class menu extends class_base
 		}	
 		else
 		{
-			$link = $this->cfg["baseurl"]."/".$alias["to"];
+			$link = $this->cfg["baseurl"]."/".$target["oid"];
 		}
 
 		$ltarget = "";
