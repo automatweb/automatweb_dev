@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.295 2004/08/25 09:30:06 kristo Exp $
+// $Id: class_base.aw,v 2.296 2004/08/25 16:25:08 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2743,6 +2743,47 @@ class class_base extends aw_template
 		$obj = &obj($config_id);
 		return $obj->meta("controllers");		
 	}
+
+	////
+	// !You give it a class id and a list of properties .. it performs a validation on all the data
+	// and returns something eatable
+	function validate_data($arr)
+	{
+		if (empty($arr["props"]))
+		{
+			$props = $this->load_defaults(array(
+				"clid" => $this->clid,
+			));
+		}
+		else
+		{
+			$props = $arr["props"];
+		};
+
+		$res = array();
+
+		foreach($arr["request"] as $key => $val)
+		{
+			$prpdata = $props[$key];
+			if (1 == $prpdata["required"] && !$val)
+			{
+				$res[$key] = array(
+					"msg" => "See väli ei tohi olla tühi!",
+				);
+			};
+
+			if ("email" == $prpdata["validate"])
+			{
+				if (!is_email($val))
+				{
+					$res[$key] = array(
+						"msg" => "See pole korrektne e-posti aadress!",
+					);
+				};
+			};
+		};
+		return $res;
+	}
 	 
 	////
 	// !Processes and saves form data
@@ -2858,8 +2899,11 @@ class class_base extends aw_template
 		{
 			$properties = $this->get_property_group($filter);
 		};
-		
-		
+
+		$errors = $this->validate_data(array(
+			"request" => $args,
+		));
+
 		$pvalues = array();
 
 		// this is here so I can keep things in the session
@@ -2961,7 +3005,7 @@ class class_base extends aw_template
 			);
 			
 			$status = PROP_OK;
-			
+
 		
 			
 			// give the class a possiblity to execute some action
@@ -2977,6 +3021,13 @@ class class_base extends aw_template
 				// XXX: what if one set_property changes a value and
 				// other raises an error. Then we will have the original
 				// value in the session. Is that a problem?
+			};
+			
+			if (isset($errors[$name]["msg"]))
+			{
+				$status = PROP_FATAL_ERROR;
+				$property["error"] = $errors[$name]["msg"];
+				
 			};
 
 			if ($status == PROP_OK && "int" == $property["datatype"])
