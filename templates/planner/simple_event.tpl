@@ -1,11 +1,8 @@
 <!-- SUB: event -->
-<!--
-<span class="caleventtext"><b><i>{VAR:caption}</b></i></span><br>
-{VAR:time}<br>
--->
-<span class="caleventtext">
-<br>
-<a href="{VAR:event_link}" target="{VAR:target}" class="caleventtext"><b><font color="{VAR:color}">{VAR:title}</font></a><font color="{VAR:color}">{VAR:object}</b><br>
-{VAR:contents}</font></span><br>
+<div style="width=100%; background-color: {VAR:color}; padding: 3px;">
+<span class="caleventtext">{VAR:time_start}</a>
+<a href="{VAR:event_link}" target="{VAR:target}" class="caleventtext"><b>{VAR:title}</a>{VAR:object}</b><br>
+{VAR:contents}
+</div>
 <!-- END SUB: event -->
 

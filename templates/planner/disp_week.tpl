@@ -29,12 +29,32 @@
 			<td width="{VAR:cellwidth}" bgcolor="#FFFFFF" valign="top">
 				<table width="100%" border="0" cellpadding="0" cellspacing="5">
 				<tr><td>
-				<div align="right" style="font-family: Verdana,serif; font-weight: bold; color: #AAA;">{VAR:daynum}</div>
+				<div align="right" style="font-family: Verdana,serif; font-weight: bold; color: #000; font-size: 12px;"><a href="{VAR:dayorblink}">{VAR:daynum}</a></div>
 				{VAR:cell}
 				</td></tr></table>
 
 			</td>
 	<!-- END SUB: content_cell -->
+	<!-- SUB: content_cell_today -->
+			<td width="{VAR:cellwidth}" bgcolor="#EEEEEE" valign="top">
+				<table width="100%" border="0" cellpadding="0" cellspacing="5">
+				<tr><td>
+				<div align="right" style="font-family: Verdana,serif; font-weight: bold; color: #000; font-size: 12px;"><a href="{VAR:dayorblink}">{VAR:daynum}</a></div>
+				{VAR:cell}
+				</td></tr></table>
+
+			</td>
+	<!-- END SUB: content_cell_today -->
+	<!-- SUB: content_cell_today_empty -->
+			<td width="{VAR:cellwidth}" bgcolor="#EEEEEE" valign="top">
+				<table width="100%" border="0" cellpadding="0" cellspacing="5">
+				<tr><td>
+				<div align="right" style="font-family: Verdana,serif; font-weight: bold; color: #000; font-size: 12px;"><a href="{VAR:dayorblink}">{VAR:daynum}</a></div>
+				{VAR:cell}
+				</td></tr></table>
+
+			</td>
+	<!-- END SUB: content_cell_today_empty -->
 </tr>
 <!-- END SUB: content_row -->
 </table>
