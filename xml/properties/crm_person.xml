@@ -153,6 +153,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_RANK</reltype>
             <table>kliendibaas_isik</table>
+            <automatic>1</automatic>
             <group>general</group>
             <field>rank</field>
             <caption>Ametinimetus</caption>
@@ -393,10 +394,6 @@
                   <clid>CL_PROFIIL</clid>
                   <caption>Profiil</caption>
             </PROFILE>
-            <USER_DATA>
-                  <value>15</value>
-                  <caption>Andmed</caption>
-            </USER_DATA>
       </reltypes>
 </properties>
 
