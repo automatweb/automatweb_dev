@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.28 2003/02/06 15:30:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.29 2003/02/07 19:00:21 duke Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -2790,6 +2790,30 @@ class form_element extends aw_template
 		}
 		return true;
 	}
+
+	function get_selection_id()
+	{
+		$html = "";
+		switch($this->arr["type"])
+		{
+			case "listbox":
+				if ($this->arr["subtype"] == "relation" && $this->arr["rel_element"] && $this->arr["rel_form"])
+				{
+					if ($this->entry != "")
+					{
+						// relation listbox can only have a value if the user has selected something!
+						$this->make_relation_listbox_content();
+					}
+				}
+                                                                                                                            
+				$sp = split("_", $this->entry, 10);
+				$html = $sp[3];
+				break;
+		};
+		return $html;
+        }
+
+
 
 	////
 	// !returns the elements value in the currently loaded entry in a form that can be presented to the user (ev_xxx)
