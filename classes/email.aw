@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.13 2001/11/20 13:40:23 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.14 2001/11/28 13:17:39 duke Exp $
 // mailinglist saadetavate mailide klass
 lc_load("mailinglist");
 	class email extends aw_template
@@ -389,7 +389,7 @@ lc_load("mailinglist");
 
 				classload("smtp");
 				$t = new smtp;
-				$t->send_message($GLOBALS["smtp_server"], $from, $user["mail"], $msg);
+				$t->send_message($GLOBALS["smtp_server"], $mail["mail_from"], $user["mail"], $msg);
 
 				echo LC_EMAIL_SENT_EMAIL3, $user[name], "(" ,  $user[mail], ") 'le<br>";
 				flush();
