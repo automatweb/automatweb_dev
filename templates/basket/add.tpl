@@ -49,6 +49,12 @@
 <tr>
 <td class="celltext">Form, millega tellimus sooritatakse:</td><td class="celltext"><select NAME='order_form' class="formselect">{VAR:order_form}</select></td>
 </tr>
+<tr>
+<td class="celltext">V&auml;ljund mida n&auml;idatakse e-mailis:</td><td class="celltext"><select NAME='order_form_op' class="formselect">{VAR:order_form_op}</select></td>
+</tr>
+<tr>
+<td class="celltext">Formi tabel mida n&auml;idatakse e-mailis:</td><td class="celltext"><select NAME='order_ftbl' class="formselect">{VAR:order_ftbl}</select></td>
+</tr>
 </table>
 
 
