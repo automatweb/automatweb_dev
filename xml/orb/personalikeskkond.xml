@@ -15,5 +15,19 @@
 			</function>
 		</action>
 
+		<action name="refresh_jobs" >
+			<function name="refresh_jobs">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="bookmark_persons" >
+			<function name="bookmark_persons">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

@@ -208,13 +208,17 @@
             <name>my_personal_toolbar</name>
             <table>objects</table>
             <type>toolbar</type>
-            <group>
-                  <num_0>mycvs</num_0>
-                  <num_1>my_candits</num_1>
-                  <num_2>my_personal_info</num_2>
-            </group>
+            <group>mycvs</group>
             <no_caption>1</no_caption>
             <field>my_personal_toolbar</field>
+      </property>
+      <property>
+            <name>my_personal_toolbar_mycandits</name>
+            <table>objects</table>
+            <type>toolbar</type>
+            <group>my_candits</group>
+            <no_caption>1</no_caption>
+            <field>my_personal_toolbar_mycandits</field>
       </property>
       <property>
             <name>mycvs</name>
@@ -244,6 +248,89 @@
             <field>my_personal_info</field>
       </property>
       <property>
+            <name>my_personal_info_username</name>
+            <table>objects</table>
+            <type>text</type>
+            <group>my_personal_info</group>
+            <store>no</store>
+            <field>my_personal_info_username</field>
+            <caption>Kasutajanimi</caption>
+      </property>
+      <property>
+            <name>my_personal_info_firstname</name>
+            <table>objects</table>
+            <type>textbox</type>
+            <group>my_personal_info</group>
+            <store>no</store>
+            <field>my_personal_info_firstname</field>
+            <caption>Eesnimi</caption>
+      </property>
+      <property>
+            <name>my_personal_info_lastname</name>
+            <table>objects</table>
+            <type>textbox</type>
+            <group>my_personal_info</group>
+            <store>no</store>
+            <field>my_personal_info_lastname</field>
+            <caption>Perekonnanimi</caption>
+      </property>
+      <property>
+            <name>gender</name>
+            <table>objects</table>
+            <type>chooser</type>
+            <group>my_personal_info</group>
+            <store>no</store>
+            <field>gender</field>
+            <caption>Sugu</caption>
+      </property>
+      <property>
+            <name>my_personal_info_id</name>
+            <table>objects</table>
+            <type>textbox</type>
+            <group>my_personal_info</group>
+            <store>no</store>
+            <field>my_personal_info_id</field>
+            <caption>Isikukood</caption>
+      </property>
+      <property>
+            <name>my_default_cv</name>
+            <table>objects</table>
+            <type>select</type>
+            <group>mycvs</group>
+            <field>my_default_cv</field>
+            <caption>Minu cv vaikimisi</caption>
+      </property>
+      <property>
+            <name>my_personal_info_password</name>
+            <table>objects</table>
+            <type>textbox</type>
+            <group>my_personal_info</group>
+            <store>no</store>
+            <field>my_personal_info_password</field>
+            <caption>Parool</caption>
+      </property>
+      <property>
+            <name>my_personal_info_password_again</name>
+            <table>objects</table>
+            <type>textbox</type>
+            <group>my_personal_info</group>
+            <store>no</store>
+            <field>my_personal_info_password_again</field>
+            <caption>Parool uuesti</caption>
+      </property>
+      <property>
+            <name>org_toolbar</name>
+            <table>objects</table>
+            <type>toolbar</type>
+            <group>
+                  <num_0>org_jobs</num_0>
+                  <num_1>org_jobs_candits</num_1>
+                  <num_2>org_info</num_2>
+            </group>
+            <no_caption>1</no_caption>
+            <field>org_toolbar</field>
+      </property>
+      <property>
             <name>org_jobs</name>
             <table>objects</table>
             <type>table</type>
@@ -270,6 +357,15 @@
             <store>no</store>
             <field>org_info</field>
       </property>
+      <property>
+            <name>org_bookmarks</name>
+            <table>objects</table>
+            <type>table</type>
+            <group>org_bookmarks</group>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>org_bookmarks</field>
+      </property>
       <classinfo>
             <syslog_type>ST_PERSONALIKESKKOND</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -293,38 +389,34 @@
             </haldurid>
             <toopakkujad_nimekiri>
                   <caption>Tööpakkujate nimekiri</caption>
+                  <submit>no</submit>
                   <parent>toopakkujad</parent>
             </toopakkujad_nimekiri>
             <toopakkujad_tood>
                   <caption>Tööpakkumised</caption>
+                  <submit>no</submit>
                   <parent>toopakkujad</parent>
             </toopakkujad_tood>
-            <toopakkujad_statistika>
-                  <caption>Statistika</caption>
-                  <parent>toopakkujad</parent>
-            </toopakkujad_statistika>
             <toopakkumised_cats>
                   <parent>toopakkujad</parent>
-                  <caption>Tööpakkumised - Valdkonnad</caption>
                   <submit>no</submit>
+                  <caption>Tööpakkumised - Valdkonnad</caption>
             </toopakkumised_cats>
             <tootsijad_nimekiri>
                   <caption>T&amp;ouml;&amp;ouml;otsijate nimekiri</caption>
+                  <submit>no</submit>
                   <parent>tootsijad</parent>
             </tootsijad_nimekiri>
-            <cv_nimekiri>
-                  <caption>CV nimekiri</caption>
-                  <parent>tootsijad</parent>
-            </cv_nimekiri>
-            <tootsijad_satistika>
-                  <caption>Statistika</caption>
-                  <parent>tootsijad</parent>
-            </tootsijad_satistika>
             <tootsijad_valdkonnad>
                   <caption>Tööotsijad - Valdkonnad</caption>
-                  <parent>tootsijad</parent>
                   <submit>no</submit>
+                  <parent>tootsijad</parent>
             </tootsijad_valdkonnad>
+            <cv_nimekiri>
+                  <caption>CV nimekiri</caption>
+                  <submit>no</submit>
+                  <parent>tootsijad</parent>
+            </cv_nimekiri>
             <mycvs>
                   <caption>Minu CV-d</caption>
                   <parent>my_profile</parent>
@@ -349,12 +441,18 @@
                   <parent>org_profile</parent>
                   <submit>no</submit>
             </org_jobs_candits>
+            <org_bookmarks>
+                  <caption>Huvitavad kandidaadid</caption>
+                  <parent>org_profile</parent>
+                  <submit>no</submit>
+            </org_bookmarks>
             <org_info>
                   <caption>Organisatsiooni andmed</caption>
                   <parent>org_profile</parent>
             </org_info>
             <setings>
                   <caption>Seaded</caption>
+                  <parent>all_setings</parent>
             </setings>
       </groupinfo>
       <reltypes>
@@ -368,6 +466,11 @@
                   <clid>CL_CRM_COMPANY</clid>
                   <caption>Haldur</caption>
             </HALDUR>
+            <CONFIGFORM>
+                  <value>4</value>
+                  <clid>CL_CFGMANAGER</clid>
+                  <caption>Seadete vorm</caption>
+            </CONFIGFORM>
             <VALDKONNAD>
                   <value>20</value>
                   <clid>CL_META</clid>
