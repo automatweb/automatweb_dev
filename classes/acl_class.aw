@@ -113,14 +113,14 @@ class acl_class extends aw_template
 		));
 
 		$oc = get_instance("object_chain");
-		$objs = $oc->get_objects_in_chain($meta["chain"]);
+		$objs = new aw_array($oc->get_objects_in_chain($meta["chain"]));
 
 		$ro = get_instance("role");
 		$mask = $ro->get_acl_mask($meta["role"]);
 		$aclarr = $ro->get_acl_values($meta["role"]);
 
 		$gads = $meta["added_groups"];
-		foreach($objs as $oid)
+		foreach($objs->get() as $oid)
 		{
 			$o_grps = $this->get_acl_groups_for_obj($oid);
 			foreach($meta["groups"] as $grp)

@@ -127,7 +127,8 @@ class role extends aw_template
 		));
 
 		$ret = array();
-		foreach($meta["acls"] as $aclname)
+		$acls = new aw_array($meta["acls"]);
+		foreach($acls->get() as $aclname)
 		{
 			$ret[$aclname] = ($meta["acls_set"][$aclname] == $aclname ? aw_ini_get("acl.allowed") : aw_ini_get("acl.denied"));
 		}
