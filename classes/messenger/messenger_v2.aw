@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.14 2003/10/31 13:46:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.15 2003/11/04 13:11:54 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -57,11 +57,6 @@ caption Peavaade
 @property testfilters type=text 
 @caption Testi filtreid
 
-@default view=real
-
-@property parentfolder type=hidden store=no group=folderadm
-@caption Parent folder (sys)
-
 @groupinfo main_view caption="Kirjad" submit=no
 
 */
@@ -113,21 +108,15 @@ class messenger_v2 extends class_base
 				$users = get_instance("users");
 				$obj_id = $arr["obj_inst"]->id();
 
-				if ($obj_id == $users->get_user_config(array(
-                                                "uid" => aw_global_get("uid"),
-                                                "key" => "user_messenger")))
-                                {
-                                        $data['checked'] = true;
-
-                                }
-                                $data['ch_value'] = $obj_id;
+				$data['value'] = $users->get_user_config(array(
+					"uid" => aw_global_get("uid"),
+					"key" => "user_messenger",
+				));
+                                $data['ch_value'] = $arr["obj_inst"]->id();
 				break;
 
 			case "message_list":
-				if (empty($arr["request"]["msgid"]))
-				{
-					$data["value"] = $this->gen_message_list($arr);
-				}
+				$data["value"] = $this->gen_message_list($arr);
 				break;
 
 			case "mail_toolbar":
@@ -178,19 +167,11 @@ class messenger_v2 extends class_base
 
 			case "user_messenger":
 				$users = get_instance("users");
-				$kb = $users->get_user_config(array(
-                                        "uid" => aw_global_get("uid"),
-                                        "key" => "user_messenger",
-                                ));
-				$obj_id = $arr["obj_inst"]->id();
-                                if(($kb == $obj_id) || empty($kb))
-                                {
-                                        $users->set_user_config(array(
-                                                "uid" => aw_global_get("uid"),
-                                                "key" => "user_messenger",
-                                                "value" => $data["value"],
-                                        ));
-                                }
+				$users->set_user_config(array(
+					"uid" => aw_global_get("uid"),
+					"key" => "user_messenger",
+					"value" => $data["value"],
+				));
 				break;
 
                         break;
