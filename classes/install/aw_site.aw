@@ -29,6 +29,15 @@
 @property select_parent_folder type=select
 @caption Vali kataloog olemasolevas baasis, kuhu alla sait lisatakse
 
+@property use_existing_templates type=checkbox ch_value=1
+@caption Vali olemasolevad templated
+
+@property select_tpl_sites type=select multiple=1 size=10
+@caption Vali saidid, mille templatesid valida saad
+
+@property select_tpl_folders type=select multiple=1 size=20
+@caption Vali templatede kataloogid, mis uude saiti kopeerida
+
 @property gen_site type=checkbox ch_value=1
 @caption Genereeri sait!
 
@@ -98,34 +107,16 @@ class aw_site extends class_base
 			case "select_db":
 				if ($arr['obj']['meta']['use_existing_database'] == 1)
 				{
-					// get current server id
-					$server_id = $this->do_orb_method_call(array(
-						"class" => "site_list",
-						"action" => "get_server_id_by_ip", 
-						"params" => array(
-							"ip" => aw_ini_get("install.default_ip")
-						),
-						"method" => "xmlrpc",
-						"server" => "register.automatweb.com",
-						"no_errors" => true
-					));
-					if (!$server_id)
+					if (!is_array($this->server_site_list))
 					{
-						$this->err_str = "Ei saanud lugeda serveri id'd! (vali andmebaas)";
-						return PROP_IGNORE;
+						if ($this->get_server_site_list() == PROP_IGNORE)
+						{
+							return PROP_IGNORE;
+						}
 					}
 
-					// ok, here we must figoure out a list of sites in that server 
-					$sl = $this->do_orb_method_call(array(
-						"class" => "site_list",
-						"action" => "get_site_list", 
-						"params" => array(
-							"server_id" => $server_id
-						),
-						"method" => "xmlrpc",
-						"server" => "register.automatweb.com",
-						"no_errors" => true
-					));
+					$sl = $this->server_site_list;
+
 					if (!is_array($sl))
 					{
 						$this->err_str = "Ei saanud lugeda serveri saitide nimekirja! (vali andmebaas)";
@@ -168,6 +159,63 @@ class aw_site extends class_base
 				else
 				{
 					return PROP_IGNORE;
+				}
+				break;
+
+			case "select_tpl_sites":
+				if ($arr['obj']['meta']['use_existing_templates'] != 1)
+				{
+					return PROP_IGNORE;
+				}
+
+				if (!is_array($this->server_site_list))
+				{
+					if ($this->get_server_site_list() == PROP_IGNORE)
+					{
+						return PROP_IGNORE;
+					}
+				}
+
+				$sl = $this->server_site_list;
+
+				if (!is_array($sl))
+				{
+					$this->err_str = "Ei saanud lugeda serveri saitide nimekirja! (vali templatede sait)";
+					return PROP_IGNORE;
+				}
+
+				$prop['options'] = array("" => "");
+				foreach($sl as $sid => $sd)
+				{
+					$prop['options'][$sd['url']] = $sd['name'];
+				}
+				break;
+
+			case "select_tpl_folders":
+				$isar = is_array($arr['obj']['meta']['select_tpl_sites']) && count($arr['obj']['meta']['select_tpl_sites']) > 0;
+				if ($arr['obj']['meta']['use_existing_templates'] != 1 || !$isar)
+				{
+					return PROP_IGNORE;
+				}
+
+				// now get list for all selected sites
+				$fl = array();
+				foreach($arr['obj']['meta']['select_tpl_sites'] as $sn)
+				{
+					$sn = str_replace("http://","",$sn);
+					$_t = $this->do_orb_method_call(array(
+						"class" => "templatemgr",
+						"action" => "get_template_folder_list",
+						"method" => "xmlrpc",
+						"server" => $sn
+					));
+					if (is_array($_t))
+					{
+						foreach($_t as $complete_fld => $user_fld)
+						{
+							$prop['options'][$complete_fld] = $sn."/".$user_fld;
+						}
+					}
 				}
 				break;
 		}
@@ -265,6 +313,12 @@ class aw_site extends class_base
 
 		// now copy base templates to the just-created templates folder
 		$si->add_cmd("copy -r ".$this->cfg["basedir"]."/install/site_template/templates/* ".$site['docroot']."/templates/");
+
+		// now, if the user said, that we gots to copy some foldres from other sites, then do that as well
+		if ($site['site_obj']['use_existing_templates'] == 1)
+		{
+			$this->do_copy_existing_templates($site);
+		}
 
 		$si->add_cmd("mkdir ".$site['logroot']);
 		$si->add_cmd("chmod 777 ".$site['logroot']);
@@ -448,6 +502,22 @@ class aw_site extends class_base
 		{
 			$this->err_str = "Site vhost file exists, will not overwrite! ($site[vhost_file]) ";
 			return false;
+		}
+
+		// if we selected that we want to use templates, then make sure we have selected some
+		if ($site['site_obj']['use_existing_templates'])
+		{
+			if (!is_array($site['site_obj']['select_tpl_sites']) || count($site['site_obj']['select_tpl_sites']) < 1)
+			{
+				$this->err_str = "Saidid, kust templatesid kopeerida on valimata! ";
+				return false;
+			}
+			else
+			if (!is_array($site['site_obj']['select_tpl_folders']) || count($site['site_obj']['select_tpl_folders']) < 1)
+			{
+				$this->err_str = "Kataloogid, kust templatesid kopeerida on valimata! ";
+				return false;
+			}
 		}
 
 		// if we are writing to an existing database, check if we have selected all the necessary stuff
@@ -669,6 +739,73 @@ class aw_site extends class_base
 		));
 		echo "got site id $site_id <br>";
 		$ini_opts["site_id"] = $site_id;
+	}
+
+	function get_server_site_list()
+	{
+		// get current server id
+		$server_id = $this->do_orb_method_call(array(
+			"class" => "site_list",
+			"action" => "get_server_id_by_ip", 
+			"params" => array(
+				"ip" => aw_ini_get("install.default_ip")
+			),
+			"method" => "xmlrpc",
+			"server" => "register.automatweb.com",
+			"no_errors" => true
+		));
+		if (!$server_id)
+		{
+			$this->err_str = "Ei saanud lugeda serveri id'd! (vali andmebaas)";
+			return PROP_IGNORE;
+		}
+
+		// ok, here we must figoure out a list of sites in that server 
+		$this->server_site_list = $this->do_orb_method_call(array(
+			"class" => "site_list",
+			"action" => "get_site_list", 
+			"params" => array(
+				"server_id" => $server_id
+			),
+			"method" => "xmlrpc",
+			"server" => "register.automatweb.com",
+			"no_errors" => true
+		));
+	}
+
+	function do_copy_existing_templates($site)
+	{
+		// get list of all folders
+		$fmap = array();
+		foreach($site['site_obj']['select_tpl_sites'] as $sn)
+		{
+			$sn = str_replace("http://","",$sn);
+			$_t = $this->do_orb_method_call(array(
+				"class" => "templatemgr",
+				"action" => "get_template_folder_list",
+				"method" => "xmlrpc",
+				"server" => $sn
+			));
+			if (is_array($_t))
+			{
+				foreach($_t as $complete_fld => $user_fld)
+				{
+					$fmap[$complete_fld] = $sn."/".$user_fld;
+				}
+			}
+		}
+		$sue = get_instance("install/su_exec");
+		foreach($site['site_obj']['select_tpl_folders'] as $fld)
+		{
+			$from_fld = $fld;
+			$this_site_fld = $site['docroot']."/".$fmap[$from_fld];
+			$sue->add_cmd("mkdir $this_site_fld");
+			$sue->add_cmd("copy $from_fld/*tpl $this_site_fld/");
+			echo "added cmd mkdir $this_site_fld <br>\n";
+			echo "addes cmd copy $from_fld/*tpl $this_site_fld/ <br>\n";
+			flush();
+		}
+//		$sue->exec();
 	}
 }
 ?>
