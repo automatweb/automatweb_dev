@@ -100,6 +100,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		{
 			if ($prop["method"] == "serialize")
 			{
+				if ($prop['field'] == "meta")
+				{
+					$prop['field'] = "metadata";
+				}
 				// metadata is unserialized in read_objprops
 				$ret[$prop["name"]] = $objdata[$prop["field"]][$prop["name"]];
 			}
@@ -115,6 +119,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$fields = array();
 			foreach($tbl2prop[$table] as $prop)
 			{
+				if ($prop['field'] == "meta" && $prop["table"] == "objects")
+				{
+					$prop['field'] = "metadata";
+				}
 				$fields[] = $table.".".$prop["field"]." AS ".$prop["name"];
 			}
 
@@ -132,6 +140,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				{
 					if ($prop["method"] == "serialize")
 					{
+						if ($prop['field'] == "meta")
+						{
+							$prop['field'] = "metadata";
+						}
+
 						$unser = aw_unserialize($ret[$prop["field"]]);
 						$ret[$prop["name"]] = $unser[$prop["name"]];
 					}
@@ -247,7 +260,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	{
 		extract($arr);
 
-		$metadata = aw_serialize($objdata["metadata"]);
+		$metadata = aw_serialize($objdata["meta"]);
 		$this->quote(&$metadata);
 		$this->quote(&$objdata);
 
@@ -304,6 +317,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				{
 					if ($prop['method'] == "serialize")
 					{
+						if ($prop['field'] == "meta")
+						{
+							$prop['field'] = "metadata";
+						}
 						// since serialized properites can be several for each field, gather them together first
 						$serfs[$prop['field']][$prop['name']] = $propvalues[$prop['name']];
 					}
