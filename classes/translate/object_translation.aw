@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.19 2004/12/01 14:07:31 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.20 2005/03/08 13:25:24 kristo Exp $
 // object_translation.aw - Objekti tõlge 
 
 // create method accepts the following arguments:
@@ -185,40 +185,31 @@ class object_translation extends aw_template
 		$orig_lang = $l_inst->get_langid_for_code($orig_obj->lang());
 		obj_set_opt("no_auto_translation", 0);
 
-		// ok, if the obj has any connections FROM, of type RELTYPE_TRANSLATION
-		// it is the original, so get all the relations and mark the translations
-		// IF it does NOT, then find connection of type RELTYPE_ORIGINAL from the object
-		// if there is ONE, then ot points to the original. 
-		// if there are none, then the object is not translated
+		// check if there is an ORIGINAL trans - if so, then it is translated, if not, then original
 		$c = new connection();
 		$conn = $c->find(array(
 			"from" => $oid,
-			"type" => RELTYPE_TRANSLATION
+			"type" => RELTYPE_ORIGINAL
 		));
-		if (count($conn) == 0)
+		if (count($conn) > 0)
+		{
+			reset($conn);
+			list(,$f_conn) = each($conn);
+			$conn = $c->find(array(
+				"from" => $f_conn["to"],
+				"type" => RELTYPE_TRANSLATION
+			));
+
+			$orig_id = $f_conn["to"];
+			$orig_name = $f_conn["to.name"];
+			$orig_lang = $f_conn["to.lang_id"];
+		}
+		else
 		{
 			$conn = $c->find(array(
 				"from" => $oid,
-				"type" => RELTYPE_ORIGINAL
+				"type" => RELTYPE_TRANSLATION
 			));
-			error::raise_if(count($conn) > 1, array(
-				"id" => ERR_TRANS,
-				"msg" => "object_translation::translation_list(): found more than one RELTYPE_ORIGINAL translation from object ".$oid
-			));
-			
-			if (count($conn) == 1)
-			{
-				reset($conn);
-				list(,$f_conn) = each($conn);
-				$conn = $c->find(array(
-					"from" => $f_conn["to"],
-					"type" => RELTYPE_TRANSLATION
-				));
-
-				$orig_id = $f_conn["to"];
-				$orig_name = $f_conn["to.name"];
-				$orig_lang = $f_conn["to.lang_id"];
-			}
 		}
 
 		if ($no_orig)
