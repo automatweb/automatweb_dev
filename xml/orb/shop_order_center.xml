@@ -1,0 +1,14 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="shop_order_center" folder="applications/shop" extends="class_base">
+		<action name="show_items" >
+			<function name="show_items">
+				<arguments>
+					<required name="id" type="int" acl="view"/>
+					<required name="section" type="int" acl="view"/>
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>

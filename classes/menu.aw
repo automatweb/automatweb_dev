@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.87 2004/04/08 09:08:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.88 2004/04/13 12:36:26 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -16,6 +16,9 @@
 
 	@property target type=checkbox group=general ch_value=1 search=1 table=menu
 	@caption Uues aknas
+
+	@property submenus_from_obj type=relpicker reltype=RELTYPE_SUBMENUS field=meta method=serialize group=general
+	@caption Alammen&uuml;&uuml;d objektist
 
 	@property users_only type=checkbox field=meta method=serialize group=advanced ch_value=1
 	@caption Ainult sisselogitud kasutajatele
@@ -233,6 +236,9 @@
 
 	@reltype IMAGE value=14 clid=CL_IMAGE
 	@caption pilt
+
+	@reltype SUBMENUS value=16 clid=CL_SHOP_ORDER_CENTER
+	@caption alammen&uuml;&uuml;d objektist
 */
 
 define("IP_ALLOWED", 1);

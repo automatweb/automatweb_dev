@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.2 2004/03/24 11:00:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.3 2004/04/13 12:36:34 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -1184,11 +1184,12 @@ class shop_warehouse extends class_base
 	// warehouse public interface functions      //
 	///////////////////////////////////////////////
 
-	/** returns a list of packets in the warehouse $id
+	/** returns a list of packets in the warehouse $id, optionally under folder $parent
 
 		@attrib param=name
 
 		@param id required
+		@param parent optional
 	**/
 	function get_packet_list($arr)
 	{
@@ -1196,7 +1197,7 @@ class shop_warehouse extends class_base
 		$conf = obj($wh->prop("conf"));
 
 		$ot = new object_tree(array(
-			"parent" => $conf->prop("pkt_fld"),
+			"parent" => (!empty($arr["parent"]) ? $arr["parent"] : $conf->prop("pkt_fld")),
 			"class_id" => array(CL_MENU,CL_SHOP_PACKET),
 			"status" => array(STAT_ACTIVE, STAT_NOTACTIVE)
 		));
@@ -1214,7 +1215,7 @@ class shop_warehouse extends class_base
 		}
 
 		$ot = new object_tree(array(
-			"parent" => $conf->prop("prod_fld"),
+			"parent" => (!empty($arr["parent"]) ? $arr["parent"] : $conf->prop("prod_fld")),
 			"class_id" => array(CL_MENU,CL_SHOP_PRODUCT),
 			"status" => array(STAT_ACTIVE, STAT_NOTACTIVE)
 		));
@@ -1230,6 +1231,24 @@ class shop_warehouse extends class_base
 		}
 
 		return $ret;
+	}
+
+	function get_order_folder($w)
+	{
+		error::throw_if(!$w->prop("conf"), array(
+			"id" => ERR_FATAL,
+			"msg" => "shop_warehouse::get_order_folder($w): the warehouse has not configuration object set!"
+		));
+
+		$conf = obj($w->prop("conf"));
+		$tmp = $conf->prop("order_fld");
+
+		error::throw_if(empty($tmp), array(
+			"id" => ERR_FATAL,
+			"msg" => "shop_warehouse::get_order_folder($w): the warehouse configuration has no order folder set!"
+		));
+
+		return $tmp;
 	}
 }
 ?>

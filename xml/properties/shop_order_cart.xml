@@ -1,0 +1,26 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>prod_layout</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PROD_LAYOUT</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kujundus, mida korvis kasutatakse</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_SHOP_ORDER_CART</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
+      </classinfo>
+      <reltypes>
+            <PROD_LAYOUT>
+                  <value>1</value>
+                  <clid>CL_SHOP_PRODUCT_LAYOUT</clid>
+                  <caption>toote kujundus</caption>
+            </PROD_LAYOUT>
+      </reltypes>
+</properties>
+

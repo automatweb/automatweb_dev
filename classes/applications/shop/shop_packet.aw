@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.2 2004/03/24 11:00:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.3 2004/04/13 12:36:34 kristo Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -103,6 +103,30 @@ class shop_packet extends class_base
 	function get_price($o)
 	{
 		return $o->prop("price");
+	}
+
+	/** returns the html for the product
+
+		@comment
+
+			uses the $layout object to draw the product $prod
+			from the layout reads the template and inserts correct vars
+			optionally you can give the $quantity parameter
+	**/
+	function do_draw_product($arr)
+	{
+		extract($arr);
+
+		$l_inst = $layout->instance();
+		$l_inst->read_template($layout->prop("template"));
+		$l_inst->vars(array(
+			"name" => $prod->name(),
+			"price" => $prod->prop("price"),
+			"id" => $prod->id(),
+			"quantity" => (int)($arr["quantity"])
+		));
+
+		return $l_inst->parse();
 	}
 }
 ?>

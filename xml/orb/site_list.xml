@@ -98,7 +98,7 @@
 			</function>
 		</action>
 
-		<action name="fetch_site_data" nologin="1">
+		<action name="fetch_site_data" >
 			<function name="fetch_site_data">
 				<arguments>
 				</arguments>

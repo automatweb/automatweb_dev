@@ -1,0 +1,23 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="shop_order_cart" folder="applications/shop" extends="class_base">
+		<action name="show_cart" >
+			<function name="show">
+				<arguments>
+					<optional name="oc" type="int"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_add_cart" >
+			<function name="submit_add_cart">
+				<arguments>
+					<required name="oc" type="int" acl="view"/>
+					<optional name="add_to_cart" />
+					<optional name="is_update" type="int"/>
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>

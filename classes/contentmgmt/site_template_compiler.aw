@@ -37,6 +37,9 @@ define("OP_LIST_INIT", 22);	// params { a_parent, level, a_parent_p_fn}
 
 define("OP_HAS_LUGU", 23);	// params { a_parent, level, a_parent_p_fn}
 
+define("OP_IF_SUBMENUS", 24);		// params { a_parent, level}
+define("OP_GET_OBJ_SUBMENUS", 25);	// params { a_parent, level, a_parent_p_fn}
+
 class site_template_compiler extends aw_template
 {
 	function site_template_compiler()
@@ -66,6 +69,8 @@ class site_template_compiler extends aw_template
 			21 => "OP_GET_OBJ_TREE_LIST",
 			22 => "OP_LIST_INIT",
 			23 => "OP_HAS_LUGU",
+			24 => "OP_IF_SUBMENUS",
+			25 => "OP_GET_OBJ_SUBMENUS"
 		);
 	}
 
@@ -426,64 +431,7 @@ class site_template_compiler extends aw_template
 			)
 		);
 
-		$this->ops[] = array(
-			"op" => OP_IF_OBJ_TREE,
-			"params" => array(
-				"a_parent" => $adat["parent"],
-				"level" => $level
-			)
-		);
-
-		$this->ops[] = array(
-			"op" => OP_START_BLK,
-			"params" => array()
-		);
-
-		$this->ops[] = array(
-			"op" => OP_LIST_BEGIN,
-			"params" => array(
-				"a_parent" => $adat["parent"],
-				"a_parent_p_fn" => $adat["a_parent_p_fn"],
-				"level" => $level,
-				"in_parent_tpl" => $ldat["inside_parent_menu_tpl"]
-			)
-		);
-
-		$this->ops[] = array(
-			"op" => OP_LIST_END,
-			"params" => array()
-		);
-
-		$this->ops[] = array(
-			"op" => OP_END_BLK,
-			"params" => array()
-		);
-
-		$this->ops[] = array(
-			"op" => OP_IF_ELSE,
-			"params" => array()
-		);
-		
-		$this->ops[] = array(
-			"op" => OP_START_BLK,
-			"params" => array()
-		);
-
-		$this->ops[] = array(
-			"op" => OP_GET_OBJ_TREE_LIST,
-			"params" => array(
-				"a_parent" => $adat["parent"],
-				"a_parent_p_fn" => $adat["a_parent_p_fn"],
-				"level" => $level,
-				"in_parent_tpl" => $ldat["inside_parent_menu_tpl"]
-			)
-		);
-
-		$this->ops[] = array(
-			"op" => OP_END_BLK,
-			"params" => array()
-		);
-
+		$this->_insert_obj_tree_ops($adat, $ldat, $level);
 
 		$this->ops[] = array(
 			"op" => OP_LOOP_LIST_BEGIN,
@@ -732,6 +680,95 @@ class site_template_compiler extends aw_template
 		}
 
 		return false;
+	}
+
+	function _insert_obj_tree_ops($adat, $ldat, $level)
+	{
+		$this->ops[] = array(
+			"op" => OP_IF_SUBMENUS,
+			"params" => array(
+				"a_parent" => $adat["parent"],
+				"level" => $level
+			)
+		);
+
+		$this->ops[] = array(
+			"op" => OP_START_BLK,
+			"params" => array()
+		);
+
+		$this->ops[] = array(
+			"op" => OP_GET_OBJ_SUBMENUS,
+			"params" => array(
+				"a_parent" => $adat["parent"],
+				"a_parent_p_fn" => $adat["a_parent_p_fn"],
+				"level" => $level,
+				"in_parent_tpl" => $ldat["inside_parent_menu_tpl"]
+			)
+		);
+
+		$this->ops[] = array(
+			"op" => OP_END_BLK,
+			"params" => array()
+		);
+
+		$this->ops[] = array(
+			"op" => OP_IF_OBJ_TREE,
+			"params" => array(
+				"a_parent" => $adat["parent"],
+				"level" => $level
+			)
+		);
+
+		$this->ops[] = array(
+			"op" => OP_START_BLK,
+			"params" => array()
+		);
+
+		$this->ops[] = array(
+			"op" => OP_LIST_BEGIN,
+			"params" => array(
+				"a_parent" => $adat["parent"],
+				"a_parent_p_fn" => $adat["a_parent_p_fn"],
+				"level" => $level,
+				"in_parent_tpl" => $ldat["inside_parent_menu_tpl"]
+			)
+		);
+
+		$this->ops[] = array(
+			"op" => OP_LIST_END,
+			"params" => array()
+		);
+
+		$this->ops[] = array(
+			"op" => OP_END_BLK,
+			"params" => array()
+		);
+
+		$this->ops[] = array(
+			"op" => OP_IF_ELSE,
+			"params" => array()
+		);
+		
+		$this->ops[] = array(
+			"op" => OP_START_BLK,
+			"params" => array()
+		);
+
+		$this->ops[] = array(
+			"op" => OP_GET_OBJ_TREE_LIST,
+			"params" => array(
+				"a_parent" => $adat["parent"],
+				"a_parent_p_fn" => $adat["a_parent_p_fn"],
+				"level" => $level,
+				"in_parent_tpl" => $ldat["inside_parent_menu_tpl"]
+			)
+		);
+
+		$this->ops[] = array(
+			"op" => OP_END_BLK,
+			"params" => array()
+		);
 	}
 
 	function dbg_show_template_ops()
@@ -1333,6 +1370,7 @@ class site_template_compiler extends aw_template
 			$add = " || (".$p_v_name.")";
 		}
 	
+		$ret .= $this->_gi()."else\n";
 		$ret .= $this->_gi()."if (!(\$parent_obj->prop(\"show_object_tree\") $add))\n";
 		return $ret;
 	}
@@ -1366,13 +1404,33 @@ class site_template_compiler extends aw_template
 		// get executed in aw ...
 
 		// insert new list item in the list name stack
+
+		// the object_list for this area this level
 		$list_name = "\$list_".$arr["a_parent"]."_".$arr["level"];
+
+		// the name of the list item object this area level
 		$o_name = "\$o_".$arr["a_parent"]."_".$arr["level"];
+
+		// the name of the content string for this level area
 		$content_name = "\$content_".$arr["a_parent"]."_".$arr["level"];
+
+		// the name of the loop counter for this level area
 		$loop_counter_name = "\$i_".$arr["a_parent"]."_".$arr["level"];
+
+		// the object to call make_menu_link from 
 		$inst_name = "\$inst_".$arr["a_parent"]."_".$arr["level"];
+
+		// the make_menu_link function name
 		$fun_name = "\$fun_".$arr["a_parent"]."_".$arr["level"];
+
+		// the cache file name
 		$cache_name = "\$use_cache_".$arr["a_parent"]."_".$arr["level"];
+
+		// if the parent level menus are from another object
+		$parent_is_from_obj_name = "\$p_is_o_".$arr["a_parent"]."_".($arr["level"]-1);
+
+		// the start level of the menus-from-object for this area
+		$parent_is_from_obj_start_level = "\$p_is_o_level_".$arr["a_parent"];
 
 		array_push($this->list_name_stack, array(
 			"list_name" => $list_name,
@@ -1381,7 +1439,9 @@ class site_template_compiler extends aw_template
 			"loop_counter_name" => $loop_counter_name,
 			"inst_name" => $inst_name,
 			"fun_name" => $fun_name,
-			"cache_name" => $cache_name
+			"cache_name" => $cache_name,
+			"parent_is_from_obj_name" => $parent_is_from_obj_name,
+			"parent_is_from_obj_start_level" => $parent_is_from_obj_start_level
 		));
 
 
@@ -1488,6 +1548,71 @@ class site_template_compiler extends aw_template
 		$this->brace_level--;
 		$ret .= $this->_gi()."));\n";
 		
+		return $ret;
+	}
+
+	function _g_op_if_submenus($arr)
+	{
+		$ret = "";
+
+		end($this->list_name_stack);
+		$dat = current($this->list_name_stack);
+		$parent_is_from_obj_name = $dat["parent_is_from_obj_name"];
+
+		$ret .= $this->_gi()."if (\$parent_obj->prop(\"submenus_from_obj\") || ".$parent_is_from_obj_name.")\n";
+
+		return $ret;
+	}
+
+	function _g_op_get_obj_submenus($arr)
+	{
+		end($this->list_name_stack);
+		$dat = current($this->list_name_stack);
+		$list_name = $dat["list_name"];
+		$inst_name = $dat["inst_name"];
+		$fun_name = $dat["fun_name"];
+		$cache_name = $dat["cache_name"];
+		$p_v_name = "\$os_".$arr["a_parent"]."_".$arr["level"];
+		$this_is_from_obj_name = "\$p_is_o_".$arr["a_parent"]."_".$arr["level"];
+		$parent_is_from_obj_name = $dat["parent_is_from_obj_name"];
+		$parent_is_from_obj_start_level = $dat["parent_is_from_obj_start_level"];
+
+		$ret .= $this->_gi()."if (".$parent_is_from_obj_name.")\n";
+		$ret .= $this->_gi()."{\n";
+		$this->brace_level++;
+		$ret .= $this->_gi()."\$tmp = ".$parent_is_from_obj_name.";\n";
+		$this->brace_level--;
+		$ret .= $this->_gi()."}\n";
+		$ret .= $this->_gi()."else\n";
+		$ret .= $this->_gi()."{\n";
+		$this->brace_level++;
+		$ret .= $this->_gi()."\$tmp = obj(\$parent_obj->prop(\"submenus_from_obj\"));\n";
+		$ret .= $this->_gi().$parent_is_from_obj_start_level." = ".$arr["level"].";\n";
+		$this->brace_level--;
+		$ret .= $this->_gi()."}\n";
+		$ret .= $this->_gi().$this_is_from_obj_name." = \$tmp;\n";
+		$ret .= $this->_gi()."\$o_obj_from = get_instance(\$tmp->class_id());\n";
+		$ret .= $this->_gi().$list_name." = \$o_obj_from->get_folders_as_object_list(\$tmp,".$arr["level"]." - ".$parent_is_from_obj_start_level.",\$parent_obj);\n";
+
+		$ret .= $this->_gi()."if (method_exists(\$o_obj_from, \"make_menu_link\"))\n";
+		$ret .= $this->_gi()."{\n";
+		$this->brace_level++;
+		$ret .= $this->_gi()."$inst_name =& \$o_obj_from;\n";		
+		$ret .= $this->_gi()."$fun_name = \"make_menu_link\";\n";		
+		$this->brace_level--;
+		$ret .= $this->_gi()."}\n";
+		$ret .= $this->_gi()."\n";
+		$ret .= $this->_gi()."else\n";
+		$ret .= $this->_gi()."{\n";
+		$this->brace_level++;
+		$ret .= $this->_gi()."$inst_name =& \$this;\n";		
+		$ret .= $this->_gi()."$fun_name = \"make_menu_link\";\n";		
+		$this->brace_level--;
+		$ret .= $this->_gi()."}\n";
+
+		$ret .= $this->_gi().$p_v_name." = true;\n";
+		$ret .= $this->_gi().$cache_name." = false;\n";
+
 		return $ret;
 	}
 }

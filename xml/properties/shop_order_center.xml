@@ -1,0 +1,69 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>warehouse</name>
+            <table>aw_shop_order_center</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_WAREHOUSE</reltype>
+            <field>aw_warehouse_id</field>
+            <caption>Ladu</caption>
+      </property>
+      <property>
+            <name>cart</name>
+            <table>aw_shop_order_center</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CART</reltype>
+            <field>aw_cart_id</field>
+            <caption>Ostukorv</caption>
+      </property>
+      <property>
+            <name>layoutbl</name>
+            <table>objects</table>
+            <group>appear</group>
+            <type>table</type>
+            <store>no</store>
+            <field>layoutbl</field>
+            <caption>Toodete layout</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_SHOP_ORDER_CENTER</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <groupinfo>
+            <appear>
+                  <caption>N&amp;auml;itamine</caption>
+            </appear>
+      </groupinfo>
+      <tableinfo>
+            <aw_shop_order_center>
+                  <index>aw_id</index>
+                  <master_table>objects</master_table>
+                  <master_index>brother_of</master_index>
+            </aw_shop_order_center>
+      </tableinfo>
+      <reltypes>
+            <WAREHOUSE>
+                  <value>1</value>
+                  <clid>CL_SHOP_WAREHOUSE</clid>
+                  <caption>ladu</caption>
+            </WAREHOUSE>
+            <TABLE_LAYOUT>
+                  <value>2</value>
+                  <clid>CL_SHOP_PRODUCT_TABLE_LAYOUT</clid>
+                  <caption>toodete tabeli kujundus</caption>
+            </TABLE_LAYOUT>
+            <ITEM_LAYOUT>
+                  <value>3</value>
+                  <clid>CL_SHOP_PRODUCT_LAYOUT</clid>
+                  <caption>toote kujundus</caption>
+            </ITEM_LAYOUT>
+            <CART>
+                  <value>4</value>
+                  <clid>CL_SHOP_ORDER_CART</clid>
+                  <caption>ostukorv</caption>
+            </CART>
+      </reltypes>
+</properties>
+

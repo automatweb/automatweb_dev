@@ -28,6 +28,16 @@
             <caption>Uues aknas</caption>
       </property>
       <property>
+            <name>submenus_from_obj</name>
+            <table>objects</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SUBMENUS</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Alammen&amp;uuml;&amp;uuml;d objektist</caption>
+      </property>
+      <property>
             <name>users_only</name>
             <table>objects</table>
             <type>checkbox</type>
@@ -634,6 +644,11 @@
                   <clid>CL_IMAGE</clid>
                   <caption>pilt</caption>
             </IMAGE>
+            <SUBMENUS>
+                  <value>16</value>
+                  <clid>CL_SHOP_ORDER_CENTER</clid>
+                  <caption>alammen&amp;uuml;&amp;uuml;d objektist</caption>
+            </SUBMENUS>
       </reltypes>
 </properties>
 
