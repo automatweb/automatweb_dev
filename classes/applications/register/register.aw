@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.14 2004/11/30 10:16:37 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.15 2004/12/02 16:36:26 ahti Exp $
 // register.aw - Register 
 /*
 
@@ -302,7 +302,13 @@ class register extends class_base
 				"modifiedby" => $mby->name(),
 				"modified" => $o->modified(),
 				"change" => html::href(array(
-					"url" => $this->mk_my_orb("change", array("section" => aw_global_get("section"), "id" => $o->id()), $o->class_id()),
+					"url" => $this->mk_my_orb("change", array(
+						"section" => aw_global_get("section"), 
+						"id" => $o->id(),
+						"return_url" => urlencode(html::get_change_url($arr["request"]["id"], array(
+							"group" => $arr["request"]["group"],
+						))),
+					), $o->class_id()),
 					"caption" => "Muuda"
 				))
 			));
