@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.10 2004/07/05 15:32:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.11 2004/08/19 07:52:51 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -28,17 +28,43 @@
 @property data_form_company type=select field=meta method=serialize
 @caption Organisatsiooni nime element andmete vormis
 
+@property mail_to_el type=select table=objects field=meta method=serialize
+@caption E-maili element, kuhu saata tellimus
+
+@property data_form_discount type=select field=meta method=serialize
+@caption Allahindluse element andmete vormis
+
 @property only_active_items type=checkbox ch_value=1 table=objects field=meta method=serialize
 @caption Ainult aktiivsed tooted
 
+@property use_controller type=checkbox ch_value=1 table=objects field=meta method=serialize
+@caption N&auml;itamiseks kasuta kontrollerit
+
 @groupinfo appear caption="N&auml;itamine"
 @default group=appear
+
+@property controller type=relpicker reltype=RELTYPE_CONTROLLER table=objects field=meta method=serialize
+@caption N&auml;itamise kontroller
 
 @property layoutbl type=table store=no
 @caption Toodete layout
 
 @property sortbl type=table store=no
 @caption Toodete sorteerimine
+
+
+@groupinfo psfieldmap caption="Isukuandmete kaart"
+@default group=psfieldmap
+
+@property psfieldmap type=table store=no 
+@caption Vali millised elemendid tellimuse andmete vormis vastavad isukuandmetele
+
+@groupinfo orgfieldmap caption="Firma andmete kaart"
+@default group=orgfieldmap
+
+@property orgfieldmap type=table store=no 
+@caption Vali millised elemendid tellimuse andmete vormis vastavad firma andmetele
+
 
 @reltype WAREHOUSE value=1 clid=CL_SHOP_WAREHOUSE
 @caption ladu
@@ -54,6 +80,9 @@
 
 @reltype ORDER_FORM value=5 clid=CL_CFGFORM
 @caption vorm tellija andmete jaoks
+
+@reltype CONTROLLER value=6 clid=CL_FORM_CONTROLLER
+@caption n&auml;itamise kontroller
 */
 
 class shop_order_center extends class_base
@@ -73,15 +102,32 @@ class shop_order_center extends class_base
 		switch($prop["name"])
 		{
 			case "layoutbl":
+				if ($arr["obj_inst"]->prop("use_controller"))
+				{
+					return PROP_IGNORE;
+				}
 				$this->do_layoutbl($arr);
 				break;
 
 			case "sortbl":
+				if ($arr["obj_inst"]->prop("use_controller"))
+				{
+					return PROP_IGNORE;
+				}
 				$this->do_sortbl($arr);
 				break;
 
+			case "controller":
+				if (!$arr["obj_inst"]->prop("use_controller"))
+				{
+					return PROP_IGNORE;
+				}
+				break;			
+
 			case "data_form_person":
 			case "data_form_company":
+			case "data_form_discount":
+			case "mail_to_el":
 				if (!$arr["obj_inst"]->prop("data_form"))
 				{	
 					return PROP_IGNORE;
@@ -93,6 +139,14 @@ class shop_order_center extends class_base
 					$opts[$pn] = $pd["caption"];
 				}
 				$prop["options"] = $opts;
+				break;
+
+			case "psfieldmap":
+				return $this->do_psfieldmap($arr);
+				break;
+
+			case "orgfieldmap":
+				return $this->do_orgfieldmap($arr);
 				break;
 		};
 		return $retval;
@@ -110,6 +164,14 @@ class shop_order_center extends class_base
 
 			case "sortbl":
 				$this->do_save_sortbl($arr);
+				break;
+
+			case "psfieldmap":
+				$arr["obj_inst"]->set_meta("ps_pmap", $arr["request"]["pmap"]);
+				break;
+
+			case "orgfieldmap":
+				$arr["obj_inst"]->set_meta("org_pmap", $arr["request"]["pmap"]);
 				break;
 		}
 		return $retval;
@@ -290,6 +352,7 @@ class shop_order_center extends class_base
 		{
 			$elements[$pn] = $pd["caption"];
 		}
+		$elements["jrk"] = "J&auml;rjekord";
 		
 
 		$maxi = 0;
@@ -364,6 +427,7 @@ class shop_order_center extends class_base
 			$ol = new object_list(array(
 				"parent" => $parent->id(),
 				"class_id" => CL_MENU,
+				"sort_by" => "objects.jrk"
 			));
 		}
 		else
@@ -371,9 +435,10 @@ class shop_order_center extends class_base
 			$ol = new object_list(array(
 				"parent" => $conf->prop("pkt_fld"),
 				"class_id" => CL_MENU,
+				"sort_by" => "objects.jrk"
 			));
 		}
-		
+
 		return $ol;
 	}
 
@@ -386,6 +451,10 @@ class shop_order_center extends class_base
 		}
 		return $i->make_menu_link($o);*/
 
+		if ($o->prop("link") != "")
+		{
+			return $o->prop("link");
+		}
 		
 		return $this->mk_my_orb("show_items", array("id" => $this->folder_obj->id(), "section" => $o->id()));
 	}
@@ -401,39 +470,47 @@ class shop_order_center extends class_base
 	function show_items($arr)
 	{
 		extract($arr);
-
 		$soc = obj($arr["id"]);
 		$wh_id = $soc->prop("warehouse");
 
 		$wh = get_instance("applications/shop/shop_warehouse");
-
-		// get the template for products for this folder
-		$layout = $this->get_prod_layout_for_folder($soc, $section);
-
-		// get the table layout for this folder
-		$t_layout = $this->get_prod_table_layout_for_folder($soc, $section);
-
-		$pl = $wh->get_packet_list(array(
-			"id" => $wh_id,
-			"parent" => $section,
-			"only_active" => $soc->prop("only_active_items")
-		));
-
-		$this->do_sort_packet_list($pl, $soc->meta("itemsorts"));
-
 
 		// also show docs
 		$ss = get_instance("contentmgmt/site_show");
 		$tmp = array();
 		$ss->_init_path_vars($tmp);
 		$html = $ss->show_documents($tmp);
-		
-		$html .= $this->do_draw_prods_with_layout(array(
-			"t_layout" => $t_layout, 
-			"layout" => $layout, 
-			"pl" =>  $pl,
-			"soc" => $soc
-		));
+
+		if ($soc->prop("use_controller") && is_oid($soc->prop("controller")))
+		{
+			$fc = get_instance(CL_FORM_CONTROLLER);
+			$html .= $fc->eval_controller($soc->prop("controller"), array(
+				"soc" => $soc, 
+				"pl" => $pl
+			));
+		}
+		else
+		{
+			$pl = $wh->get_packet_list(array(
+				"id" => $wh_id,
+				"parent" => $section,
+				"only_active" => $soc->prop("only_active_items")
+			));
+			$this->do_sort_packet_list($pl, $soc->meta("itemsorts"));
+
+			// get the template for products for this folder
+			$layout = $this->get_prod_layout_for_folder($soc, $section);
+
+			// get the table layout for this folder
+			$t_layout = $this->get_prod_table_layout_for_folder($soc, $section);
+	
+			$html .= $this->do_draw_prods_with_layout(array(
+				"t_layout" => $t_layout, 
+				"layout" => $layout, 
+				"pl" =>  $pl,
+				"soc" => $soc
+			));
+		}
 
 		return $html;
 	}
@@ -478,7 +555,6 @@ class shop_order_center extends class_base
 	function do_draw_prods_with_layout($arr)
 	{
 		extract($arr);
-
 		$soce = aw_global_get("soc_err");
 
 		$tl_inst = $t_layout->instance();
@@ -624,8 +700,17 @@ class shop_order_center extends class_base
 		// find the first non-matching element
 		foreach($this->__is as $isd)
 		{
-			$comp_a = $a->prop($isd["element"]);
-			$comp_b = $b->prop($isd["element"]);
+			if ($isd["element"] == "jrk")
+			{
+				$comp_a = $a->ord();
+				$comp_b = $b->ord();
+			}
+			else
+			{
+				$comp_a = $a->prop($isd["element"]);
+				$comp_b = $b->prop($isd["element"]);
+			}
+
 			$ord = $isd["ord"];
 			if ($comp_a != $comp_b)
 			{
@@ -665,7 +750,8 @@ class shop_order_center extends class_base
 		{
 			return $ret;
 		}
-		$class_i = get_instance($class_id);
+		$class_i = get_instance($class_id == CL_DOCUMENT ? "doc" : $class_id);
+ 
 		$cf_ps = $class_i->load_from_storage(array(
 			"id" => $cff->id()
 		));
@@ -691,6 +777,170 @@ class shop_order_center extends class_base
 		}
 
 		return $ret;
+	}
+
+	function _init_fieldm_t(&$t, $props)
+	{
+		$t->define_field(array(
+			"name" => "desc",
+			"caption" => "&nbsp"
+		));
+
+		// now, for each property in the selected form do a column
+		foreach($props as $pn => $pd)
+		{
+			$t->define_field(array(
+				"name" => "f_".$pn,
+				"caption" => $pd["caption"],
+				"align" => "center"
+			));
+		}
+
+		$t->define_field(array(
+			"name" => "empty",
+			"caption" => "Vali t&uuml;hjaks",
+			"align" => "center"
+		));
+	}
+
+	function do_psfieldmap($arr)
+	{
+		// get props from cfgform
+		$dat = $this->get_props_from_cfgform($arr);
+		if ($dat == PROP_ERROR)
+		{
+			return $dat;
+		}
+
+		$t =&$arr["prop"]["vcl_inst"];
+		$this->_init_fieldm_t($t, $dat);
+
+		// now, insert rows for the person object
+		$cu = get_instance("cfg/cfgutils");
+		$props = $cu->load_properties(array(
+			"clid" => CL_CRM_PERSON
+		));
+		uasort($props, create_function('$a,$b', 'return strcasecmp($a["caption"], $b["caption"]);'));
+
+		$pmap = $arr["obj_inst"]->meta("ps_pmap");
+
+		foreach($props as $pn => $pd)
+		{
+			$row = array(
+				"desc" => $pd["caption"],
+				"empty" => html::radiobutton(array(
+					"name" => "pmap[empty]",
+					"value" => "",
+				))
+			);
+
+			foreach($dat as $dpn => $dpd)
+			{
+				$row["f_".$dpn] = html::radiobutton(array(
+					"name" => "pmap[$pn]",
+					"value" => $dpn,
+					"checked" => checked($pmap[$pn] == $dpn)
+				));
+			}
+
+			$t->define_data($row);
+		}
+
+		$t->set_sortable(false);
+		return PROP_OK;
+	}
+
+	function do_orgfieldmap($arr)
+	{
+		// get props from cfgform
+		$dat = $this->get_props_from_cfgform($arr);
+		if ($dat == PROP_ERROR)
+		{
+			return $dat;
+		}
+
+		$t =&$arr["prop"]["vcl_inst"];
+		$this->_init_fieldm_t($t, $dat);
+
+		// now, insert rows for the person object
+		$cu = get_instance("cfg/cfgutils");
+		$props = $cu->load_properties(array(
+			"clid" => CL_CRM_COMPANY
+		));
+		uasort($props, create_function('$a,$b', 'return strcasecmp($a["caption"], $b["caption"]);'));
+
+		$pmap = $arr["obj_inst"]->meta("org_pmap");
+
+		foreach($props as $pn => $pd)
+		{
+			$row = array(
+				"desc" => $pd["caption"],
+				"empty" => html::radiobutton(array(
+					"name" => "pmap[empty]",
+					"value" => "",
+				))
+			);
+
+			foreach($dat as $dpn => $dpd)
+			{
+				$row["f_".$dpn] = html::radiobutton(array(
+					"name" => "pmap[$pn]",
+					"value" => $dpn,
+					"checked" => checked($pmap[$pn] == $dpn)
+				));
+			}
+
+			$t->define_data($row);
+		}
+
+		$t->set_sortable(false);
+		return PROP_OK;
+	}
+
+	function get_props_from_cfgform($arr)
+	{
+		if (!is_oid($arr["obj_inst"]->prop("data_form")) || !$this->can("view", $arr["obj_inst"]->prop("data_form")))
+		{
+			$arr["prop"]["error"] = "Tellija andmete vorm valimata!";
+			return PROP_ERROR;
+		}
+
+		$cff = get_instance("cfg/cfgform");
+		$ret =  $cff->get_props_from_cfgform(array(
+			"id" => $arr["obj_inst"]->prop("data_form")
+		));
+		return $ret;
+	}
+
+	function get_property_map($oc_id, $type)
+	{
+		$o = obj($oc_id);
+		switch($type)
+		{
+			case "person":
+				return array_flip($o->meta("ps_pmap"));
+				break;
+
+			case "org":
+				return array_flip($o->meta("org_pmap"));
+				break;
+
+			default:
+				error::throw(array(
+					"id" => "ERR_WRONG_MAP",
+					"msg" => "shop_order_center::get_property_map($oc_id, $type): the options for type are 'person' and 'org'"
+				));
+		}
+	}
+
+	function get_discount_from_order_data($oc_id, $data)
+	{
+		$oc = obj($oc_id);
+		if (!$oc->prop("data_form_discount"))
+		{
+			return 0;
+		}
+		return $data[$oc->prop("data_form_discount")];
 	}
 }
 ?>

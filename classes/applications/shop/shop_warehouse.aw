@@ -1,7 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.13 2004/06/19 19:17:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.14 2004/08/19 07:52:51 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_search_change)
+
 
 @tableinfo aw_shop_warehouses index=aw_oid master_table=objects master_index=brother_of
 
@@ -52,11 +55,10 @@
 @caption V&auml;ljaminekud
 
 ////////// ordering tab
-@groupinfo order caption="Telli"
+@groupinfo order caption="Tellimused"
 @groupinfo order_unconfirmed parent=order caption="Kinnitamata"
 @groupinfo order_confirmed parent=order caption="Kinnitatud"
 @groupinfo order_orderer_cos parent=order caption="Tellijad"
-@groupinfo order_current parent=order caption="Praegune tellimus"
 
 @property order_unconfirmed_toolbar type=toolbar no_caption=1 group=order_unconfirmed store=no
 @property order_unconfirmed type=table store=no group=order_unconfirmed no_caption=1
@@ -69,21 +71,13 @@
 @property order_orderer_cos_tree type=text store=no parent=hbox_oc group=order_orderer_cos no_caption=1
 @property order_orderer_cos type=table store=no parent=hbox_oc group=order_orderer_cos no_caption=1
 
-@property order_current_toolbar type=toolbar no_caption=1 group=order_current store=no
-@property order_current_table type=table store=no group=order_current no_caption=1
-
-@property order_current_org type=popup_search field=meta method=serialize group=order_current clid=CL_CRM_COMPANY
-@caption Tellija organisatsioon
-
-@property order_current_person type=popup_search field=meta method=serialize group=order_current clid=CL_CRM_PERSON
-@caption Tellija isik
-
-@property order_current_form type=callback callback=callback_get_order_current_form store=no group=order_current
-@caption Tellimuse info vorm
 
 // search tab
-@groupinfo search caption="Otsi" submit_method=get
-@default group=search
+@groupinfo search caption="Otsing" submit_method=get
+
+@groupinfo search_search caption="Otsing" parent=search submit_method=get
+
+@default group=search_search
 
 @property search_tb type=toolbar store=no no_caption=1
 @caption Otsingo toolbar
@@ -99,6 +93,21 @@
 
 @property search_cur_ord type=table store=no no_caption=1
 @caption Hetke tellimus tabel
+
+
+@groupinfo order_current parent=search caption="Pakkumine"
+
+@property order_current_toolbar type=toolbar no_caption=1 group=order_current store=no
+@property order_current_table type=table store=no group=order_current no_caption=1
+
+@property order_current_org type=popup_search field=meta method=serialize group=order_current clid=CL_CRM_COMPANY
+@caption Tellija organisatsioon
+
+@property order_current_person type=popup_search field=meta method=serialize group=order_current clid=CL_CRM_PERSON
+@caption Tellija isik
+
+@property order_current_form type=callback callback=callback_get_order_current_form store=no group=order_current
+@caption Tellimuse info vorm
 
 
 ////////// reltypes
@@ -120,11 +129,11 @@
 @reltype ORDER value=5 clid=CL_SHOP_ORDER
 @caption tellimus
 
-@reltype EMAIL value=6 clid=CL_ML_MEMBER
-@caption saada tellimused
-
 @reltype ORDER_CENTER value=6 clid=CL_SHOP_ORDER_CENTER
 @caption tellimiskeskkond
+
+@reltype EMAIL value=7 clid=CL_ML_MEMBER
+@caption saada tellimused
 
 */
 
@@ -227,7 +236,7 @@ class shop_warehouse extends class_base
 				break;
 	
 			case "search_cur_ord_text":
-				$data["value"] = "<br><br>Hetkel korvis olevad kaubad:";
+				$data["value"] = "<br><br>Hetkel pakkumises olevad tooted:";
 				break;
 		};
 		return $retval;
@@ -257,19 +266,46 @@ class shop_warehouse extends class_base
 
 			case "order_current_table":
 			case "search_cur_ord":
-				$this->save_ord_cur_tbl($arr);
+				$this->save_ord_cur_tbl($arr, true);
+				break;
+
+			case "order_current_org":
+				if ($arr["obj_inst"]->prop("order_current_org") != $arr["request"]["order_current_org"])
+				{
+					$this->upd_ud = true;
+				}
+				break;
+
+			case "order_current_person":
+				if ($arr["obj_inst"]->prop("order_current_person") != $arr["request"]["order_current_person"])
+				{
+					$this->upd_ud = true;
+				}
 				break;
 		}
 		return $retval;
 	}	
 
-	function save_ord_cur_tbl($arr)
+	function save_ord_cur_tbl($arr, $is_post = false)
 	{
 		$soc = get_instance("applications/shop/shop_order_cart");
 		$awa = new aw_array($arr["request"]["quant"]);
 		foreach($awa->get() as $iid => $quant)
 		{
 			$soc->set_item($iid, $quant);
+		}
+
+		if ($is_post)
+		{
+			// also, if we got a discount element, save that as well
+			$soc = get_instance(CL_SHOP_ORDER_CENTER);
+
+			$arr["obj_inst"]->set_meta(
+				"order_cur_discount", 
+				$soc->get_discount_from_order_data($arr["obj_inst"]->prop("order_center"), $arr["request"]["user_data"])
+			);
+
+			$arr["obj_inst"]->set_meta("order_cur_pages", $arr["request"]["pgnr"]);
 		}
 	}
 
@@ -284,16 +320,42 @@ class shop_warehouse extends class_base
 			"url" => "javascript:document.changeform.submit()"
 		));*/
 
+		$url = $this->mk_my_orb("gen_order", array("id" => $data["obj_inst"]->id(), "html" => 1));
+		$url = "window.open('$url','offer','width=700,height=600,toolbar=0,location=0,menubar=1,scrollbars=1')";
 		$tb->add_button(array(
 			"name" => "confirm",
 			"img" => "pdf_upload.gif",
-			"tooltip" => "Loo tellimus",
-			"url" => $this->mk_my_orb("gen_order", array("id" => $data["obj_inst"]->id()))
+			"tooltip" => "Genereeri HTML pakkumine",
+			"onClick" => $url,
+			"url" => "#"
+		));
+
+		$tb->add_button(array(
+			"name" => "mail",
+			"img" => "save.gif",
+			"tooltip" => "Saada meilile",
+			"action" => "send_cur_order"
+		));
+
+		$tb->add_button(array(
+			"name" => "clear",
+			"img" => "new.gif",
+			"tooltip" => "Uus pakkumine",
+			"action" => "clear_order"
 		));
 	}
 
 	function _init_order_cur_table(&$t)
 	{
+		if ($_GET["group"] == "order_current")
+		{
+			$t->define_field(array(
+				"name" => "page",
+				"caption" => "Lehek&uuml;lg",
+				"align" => "center"
+			));
+		}
+
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => "Nimi",
@@ -311,12 +373,19 @@ class shop_warehouse extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_order_cur_table($t);
 
+		$pgnr = $arr["obj_inst"]->meta("order_cur_pages");
+
 		// stick the order in the table
 		$soc = get_instance("applications/shop/shop_order_cart");
 		foreach($soc->get_items_in_cart() as $iid => $quant)
 		{
 			$item = obj($iid);
 			$t->define_data(array(
+				"page" => html::textbox(array(
+					"name" => "pgnr[$iid]",
+					"value" => $pgnr[$iid],
+					"size" => 5
+				)),
 				"name" => html::href(array(
 					"caption" => $item->name(),
 					"url" => $this->mk_my_orb("change", array("id" => $iid), $item->class_id())
@@ -328,6 +397,9 @@ class shop_warehouse extends class_base
 				))
 			));
 		}
+
+		$t->set_default_sortby("page");
+		$t->sort_by();
 	}
 
 	function do_del_prod($arr)
@@ -397,7 +469,8 @@ class shop_warehouse extends class_base
 						"alias_to" => $data["obj_inst"]->id(),
 						"reltype" => RELTYPE_PRODUCT,
 						"return_url" => urlencode(aw_global_get("REQUEST_URI")),
-						"cfgform" => $o->prop("sp_cfgform")
+						"cfgform" => $o->prop("sp_cfgform"),
+						"object_type" => $o->prop("sp_object_type")
 					), CL_SHOP_PRODUCT)
 				));
 			}
@@ -468,13 +541,18 @@ class shop_warehouse extends class_base
 				"status" => array(STAT_ACTIVE, STAT_NOTACTIVE)
 			));
 		}
+
+		classload("icons");
+
 		$ol = $ot->to_list();
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
+
 			if ($o->class_id() == CL_MENU)
 			{
-				continue;
+				$tp = "Kaust";
 			}
+			else
 			if (is_oid($o->prop("item_type")))
 			{
 				$tp = obj($o->prop("item_type"));
@@ -497,32 +575,51 @@ class shop_warehouse extends class_base
 				));
 			}
 
-			$tb->define_data(array(
-				"name" => $o->path_str(array("to" => $this->prod_fld)),
-				"cnt" => $o->prop("item_count"),
-				"item_type" => $tp,
-				"change" => html::href(array(
-					"url" => $this->mk_my_orb("change", array(
-						"id" => $o->id(),
-					), CL_SHOP_PRODUCT),
-					"caption" => "Muuda"
-				)),
-				"get" => $get,
-				"put" => html::href(array(
+			$put = "";
+			if ($o->class_id() != CL_MENU)
+			{
+				$put = html::href(array(
 					"url" => $this->mk_my_orb("create_reception", array(
 						"id" => $arr["obj_inst"]->id(),
 						"product" => $o->id()
 					)),
 					"caption" => "Vii lattu"
+				));
+			}
+
+			$name = $o->path_str(array("to" => $this->prod_fld));
+			if ($o->class_id() == CL_MENU)
+			{
+				$name = html::href(array(
+					"url" => aw_url_change_var("tree_filter", $o->id()),
+					"caption" => $name
+				));
+			}
+
+			$tb->define_data(array(
+				"icon" => html::img(array("url" => icons::get_icon_url($o->class_id(), $o->name()))),
+				"name" => $name,
+				"cnt" => $o->prop("item_count"),
+				"item_type" => $tp,
+				"change" => html::href(array(
+					"url" => $this->mk_my_orb("change", array(
+						"id" => $o->id(),
+					), $o->class_id()),
+					"caption" => "Muuda"
 				)),
+				"get" => $get,
+				"put" => $put,
 				"del" => html::checkbox(array(
 					"name" => "sel[]",
 					"value" => $o->id()
-				))
+				)),
+				"is_menu" => ($o->class_id() == CL_MENU ? 0 : 1)
 			));
 		}
 
 				
+		$tb->set_default_sortby(array("is_menu", "name"));
+		$tb->sort_by();
 
 		return $tb->draw(array(
 			"pageselector" => "text",
@@ -533,6 +630,12 @@ class shop_warehouse extends class_base
 
 	function _init_prod_list_list_tbl(&$t)
 	{
+		$t->define_field(array(
+			"name" => "icon",
+			"caption" => "&nbsp;",
+			"sortable" => 0,
+		));
+
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => "Nimi",
@@ -1724,6 +1827,14 @@ class shop_warehouse extends class_base
 		{
 			$arr["obj_inst"]->set_meta("order_cur_ud", $arr["request"]["user_data"]);
 		}
+
+		if ($this->upd_ud)
+		{
+			echo "updud <br>";
+			$this->do_update_user_data(array(
+				"oid" => $arr["obj_inst"]->id()
+			));
+		}
 	}
 
 	function callback_get_order_current_form($arr)
@@ -1797,8 +1908,19 @@ class shop_warehouse extends class_base
 
 		@param id required type=int acl=view
 		@param user_data optional
+		@param html optional
 	**/
 	function gen_order($arr)
+	{
+		$ordid = $this->make_cur_order_id($arr);
+
+		return $this->mk_my_orb("gen_pdf", array(
+			"id" => $ordid,
+			"html" => $arr["html"],
+		), "applications/shop/shop_order");
+	}
+
+	function make_cur_order_id($arr)
 	{
 		$o = obj($arr["id"]);
 		$oc = $o->prop("order_center");
@@ -1808,18 +1930,19 @@ class shop_warehouse extends class_base
 		));
 
 		$soc = get_instance("applications/shop/shop_order_cart");
-		$ordid = $soc->do_create_order_from_cart($oc, $arr["id"], array(
-			"pers_id" => $o->prop("order_current_person"),
-			"com_id" => $o->prop("order_current_org"),
-			"user_data" => $o->meta("order_cur_ud")
-		));
-		$soc->clear_cart();
-		$o->set_prop("order_current_person", "");
-		$o->set_prop("order_current_org", "");
-		$o->save();
-		return $this->mk_my_orb("gen_pdf", array(
-			"id" => $ordid
-		), "applications/shop/shop_order");
+		if (!aw_global_get("wh_order_cur_order_id"))
+		{
+			$ordid = $soc->do_create_order_from_cart($oc, $arr["id"], array(
+				"pers_id" => $o->prop("order_current_person"),
+				"com_id" => $o->prop("order_current_org"),
+				"user_data" => $o->meta("order_cur_ud"),
+				"discount" => $o->meta("order_cur_discount"),
+				"prod_paging" => $o->meta("order_cur_pages"),
+				"no_send_mail" => 1
+			));
+			aw_session_set("wh_order_cur_order_id", $ordid);
+		}
+		return aw_global_get("wh_order_cur_order_id");
 	}
 
 	function callback_get_search_form($arr)
@@ -1846,7 +1969,7 @@ class shop_warehouse extends class_base
 		$tb->add_button(array(
 			"name" => "add_to_order",
 			"img" => "import.gif",
-			"tooltip" => "Lisa tellimusse",
+			"tooltip" => "Lisa pakkumisse",
 			"action" => "add_to_cart"
 		));
 
@@ -1855,6 +1978,131 @@ class shop_warehouse extends class_base
 			"img" => "save.gif",
 			"tooltip" => "Moodusta pakkumine",
 			"url" => $this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => "order_current"))
+		));
+	}
+
+	/** message handler for the MSG_POPUP_SEARCH_CHANGE message so we can update
+		the person/company listboxes when one changes
+	**/
+	function on_popup_search_change($arr)
+	{
+		if ($arr["prop"] == "order_current_org")
+		{
+			$this->do_update_persons_from_org($arr);
+		}
+		else
+		{
+			$this->do_update_orgs_from_person($arr);
+		}
+
+		$this->do_update_user_data(array(
+			"oid" => $arr["oid"]
+		));	
+	}
+
+	function do_update_user_data($arr)
+	{
+		// also update the data form data, based on the property maps from the order center
+		// first org
+		$o = obj($arr["oid"]);
+
+		$oc = get_instance(CL_SHOP_ORDER_CENTER);
+		$personmap = $oc->get_property_map($o->prop("order_center"), "person");
+		$orgmap = $oc->get_property_map($o->prop("order_center"), "org");
+
+		$cud = $o->meta("order_cur_ud");
+
+		// get selected person object
+		if (($ps = $o->prop("order_current_person")))
+		{
+			$person = obj($ps);
+			$ps_props = $person->get_property_list();
+
+			foreach($personmap as $data_f_prop => $person_o_prop)
+			{
+				if ($ps_props[$person_o_prop]["type"] == "relmanager")
+				{
+					$tmp = $person->prop($person_o_prop);
+					if (is_oid($tmp))
+					{
+						$tmp = obj($tmp);
+						$cud[$data_f_prop] = $tmp->name();
+					}
+				}
+				else
+				{
+					$cud[$data_f_prop] = $person->prop($person_o_prop);
+				}
+			}
+		}
+
+		if (($org = $o->prop("order_current_org")))
+		{
+			$org = obj($org);
+			$org_props = $org->get_property_list();
+
+			foreach($orgmap as $data_f_prop => $org_o_prop)
+			{
+				if ($org_props[$org_o_prop]["type"] == "relmanager")
+				{
+					$tmp = $org->prop($org_o_prop);
+					if (is_oid($tmp))
+					{
+						$tmp = obj($tmp);
+						$cud[$data_f_prop] = $tmp->name();
+					}
+				}
+				else
+				{
+					$cud[$data_f_prop] = $org->prop($org_o_prop);
+				}
+			}
+		}
+
+		$o->set_meta("order_cur_ud", $cud);
+		$o->save();
+	}
+
+	function do_update_persons_from_org($arr)
+	{
+		$o = obj($arr["oid"]);
+		$cur_co = $o->prop($arr["prop"]);
+		if (!is_oid($cur_co))
+		{
+			return;
+		}
+
+		$workers = array();
+
+		$co = get_instance("crm/crm_company");
+		$co->get_all_workers_for_company(obj($cur_co), &$workers, true);
+
+		$pop = get_instance("vcl/popup_search");
+		$pop->set_options(array(
+			"obj" => $o,
+			"prop" => "order_current_person",
+			"opts" => $workers
+		));
+	}
+
+	function do_update_orgs_from_person($arr)
+	{
+		$o = obj($arr["oid"]);
+		$cur_person = $o->prop($arr["prop"]);
+
+		if (!is_oid($cur_person))
+		{
+			return;
+		}
+
+		$ps = get_instance("crm/crm_person");
+		$cos = $ps->get_all_employers_for_person(obj($cur_person));
+
+		$pop = get_instance("vcl/popup_search");
+		$pop->set_options(array(
+			"obj" => $o,
+			"prop" => "order_current_org",
+			"opts" => $cos
 		));
 	}
 
@@ -1882,9 +2130,15 @@ class shop_warehouse extends class_base
 		}
 
 		$ret = array();
-	
+
+		$po = obj((!empty($arr["parent"]) ? $arr["parent"] : $conf->prop("pkt_fld")));	
+		if ($po->is_brother())
+		{
+			$po = $po->get_original();
+		}
+
 		$ol = new object_list(array(
-			"parent" => (!empty($arr["parent"]) ? $arr["parent"] : $conf->prop("pkt_fld")),
+			"parent" => $po->id(),
 			"class_id" => CL_SHOP_PACKET,
 			"status" => $status
 		));
@@ -1897,8 +2151,14 @@ class shop_warehouse extends class_base
 			$ret[] = $o;
 		}
 
+		$po = obj((!empty($arr["parent"]) ? $arr["parent"] : $conf->prop("prod_fld")));	
+		if ($po->is_brother())
+		{
+			$po = $po->get_original();
+		}
+
 		$ol = new object_list(array(
-			"parent" => (!empty($arr["parent"]) ? $arr["parent"] : $conf->prop("prod_fld")),
+			"parent" => $po->id(),
 			"class_id" => array(CL_MENU,CL_SHOP_PRODUCT),
 			"status" => array(STAT_ACTIVE, STAT_NOTACTIVE)
 		));
@@ -1987,6 +2247,86 @@ class shop_warehouse extends class_base
 			return true;
 		}
 		return false;
+	}
+
+	/** sends the current order to the orderer's e-mail
+
+		@attrib name=send_cur_order
+
+	**/
+	function sent_cur_order($arr)
+	{
+		$ordid = $this->make_cur_order_id($arr);
+
+		$ordo = obj($ordid);
+
+		// get e-mail address from order
+		$o = obj($arr["id"]);
+		$oc = obj($o->prop("order_center"));
+		$mail_to_el = $oc->prop("mail_to_el");
+		$ud = $o->meta("order_cur_ud");
+		$to = str_replace("&gt;", "", str_replace("&lt;", "", $ud[$mail_to_el]));
+		if ($to == "")
+		{
+			return;
+		}
+
+		$so = get_instance(CL_SHOP_ORDER);
+		$html = $so->gen_pdf(array(
+			"id" => $ordid,
+			"html" => 1,
+			"return" => 1
+		));
+
+		$us = get_instance(CL_USER);
+		$cur_person = obj($us->get_current_person());
+
+		$froma = "automatweb@automatweb.com";
+		if (is_oid($cur_person->prop("email")))
+		{
+			$tmp = obj($cur_person->prop("email"));
+			$froma = $tmp->prop("mail");
+		}
+
+		$fromn = $cur_person->prop("name");
+
+		$awm = get_instance("aw_mail");
+		$awm->create_message(array(
+			"froma" => $froma,
+			"fromn" => $fromn,
+			"subject" => "Tellimus laost ".$o->name(),
+			"to" => $to,
+			"body" => strip_tags(str_replace("<br>", "\n",$html)),
+		));
+		$awm->htmlbodyattach(array(
+			"data" => $html
+		));
+		$awm->gen_mail();
+		
+		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => "order_current"));
+	}
+
+	/** clears the current order 
+
+		@attrib name=clear_order
+
+	**/
+	function clear_order($arr)
+	{
+		$soc = get_instance(CL_SHOP_ORDER_CART);
+		$soc->clear_cart();
+
+		$o = obj($arr["id"]);
+		$o->set_prop("order_current_person", "");
+		$o->set_prop("order_current_org", "");
+		$o->set_meta("order_cur_ud", "");
+		$o->set_meta("order_cur_discount", "");
+		$o->set_meta("order_cur_pages", "");
+		$o->save();
+
+		aw_session_set("wh_order_cur_order_id", NULL);
+
+		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => "order_current"));
 	}
 }
 ?>

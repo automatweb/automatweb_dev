@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_config.aw,v 1.3 2004/06/17 13:39:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_config.aw,v 1.4 2004/08/19 07:52:51 kristo Exp $
 // shop_warehouse_config.aw - Lao konfiguratsioon 
 /*
 
@@ -33,7 +33,7 @@
 @caption Lao otsinguvorm
 
 @property manager_cos type=relpicker reltype=RELTYPE_MANAGER_CO field=meta method=serialize multiple=1
-@caption Lao otsinguvorm
+@caption Haldurfirmad
 
 @reltype FOLDER value=1 clid=CL_MENU
 @caption kataloog

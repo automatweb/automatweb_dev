@@ -89,7 +89,7 @@
             <field>meta</field>
             <method>serialize</method>
             <multiple>1</multiple>
-            <caption>Lao otsinguvorm</caption>
+            <caption>Haldurfirmad</caption>
       </property>
       <classinfo>
             <syslog_type>ST_SHOP_WAREHOUSE_CONFIG</syslog_type>

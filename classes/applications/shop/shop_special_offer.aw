@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_special_offer.aw,v 1.2 2004/06/11 08:43:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_special_offer.aw,v 1.3 2004/08/19 07:52:51 kristo Exp $
 // shop_special_offer.aw - Poe eripakkumine 
 /*
 
@@ -11,7 +11,7 @@
 @groupinfo vis caption="N&auml;itamine"
 @default group=vis
 
-@property template type=relpicker reltype=RELTYPE_ITEM_LAYOUT field=meta method=serialize
+@property template type=relpicker reltype=RELTYPE_ITEM_LAYOUT field=meta method=serialize automatic=1
 @caption Kujundusmall
 
 @groupinfo prods caption="Tooted"
@@ -125,7 +125,12 @@ class shop_special_offer extends class_base
 	function show($arr)
 	{
 		$ob = new object($arr["id"]);
-		
+
+		error::throw_if(!$ob->prop("template"), array(
+			"id" => "ERR_NO_LAYOUT",
+			"msg" => "shop_special_offer::show(): no layout set for product display in special offer!"
+		));
+
 		$layout = obj($ob->prop("template"));
 		$prodat = $ob->meta("prodat");
 

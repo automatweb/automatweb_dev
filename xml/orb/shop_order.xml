@@ -13,6 +13,7 @@
 			<function name="gen_pdf">
 				<arguments>
 					<required name="id" type="int" acl="view"/>
+					<optional name="html" />
 				</arguments>
 			</function>
 		</action>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.9 2004/07/29 13:30:09 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.10 2004/08/19 07:52:51 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -342,6 +342,9 @@ class shop_order extends class_base
 			$oi->set_meta("user_data", $_SESSION["cart"]["user_data"]);
 		}
 
+		$oi->set_meta("discount", $params["discount"]);
+		$oi->set_meta("prod_paging", $params["prod_paging"]);
+
 		if ($this->order_center)
 		{
 			$oi->set_prop("oc", $this->order_center->id());
@@ -484,7 +487,7 @@ class shop_order extends class_base
 		// if the order center has an e-mail element selected, send the order to that one as well
 		// but using a different template
 		$ud = $oi->meta("user_data");
-		if ($this->order_center->prop("mail_to_el") != "" && ($_send_to = $ud[$this->order_center->prop("mail_to_el")]) != "")
+		if (!$arr["no_send_mail"] && $this->order_center->prop("mail_to_el") != "" && ($_send_to = $ud[$this->order_center->prop("mail_to_el")]) != "")
 		{
 			$html = $this->show(array(
 				"id" => $oi->id(),
@@ -526,24 +529,46 @@ class shop_order extends class_base
 		$tp = $o->meta("ord_content");
 		$ord_item_data = $o->meta('ord_item_data');
 
-		//SIIN TEHAKSE VIIMANE TABEL
-		$p = "";
-		$total = 0;
+		// we need to sort the damn products based on their page values. if they are set of course. blech.
+		// so go over prods, make sure all have page numbers and then sort by page numbers
+		$prods = array();
+		$pages = $o->meta("prod_paging");
+		if (!is_array($pages))
+		{
+			$pages = array(1 => 1);
+		}
 		foreach($o->connections_from(array("type" => 1 /* RELTYPE_PRODUCT */)) as $c)
 		{
 			$prod = $c->to();
+			if (!$pages[$prod->id()])
+			{
+				$pages[$prod->id()] = max($pages);
+			}
+			$prods[] = $prod;
+		}
+		$this->__sp = $pages;
+		usort($prods, array(&$this, "__prod_show_sort"));
+
+		$p = "";
+		$total = 0;
+		
+		foreach($prods as $prod)
+		{
 			$inst = $prod->instance();
 			$pr = $inst->get_calc_price($prod);
 			
 			$product_info = reset($prod->connections_to(array(
-						"from.class_id" => CL_SHOP_PRODUCT,
+				"from.class_id" => CL_SHOP_PRODUCT,
 			)));
-			if(is_object($product_info))
+
+			if (is_object($product_info))
 			{
 				$product_info = $product_info->from();
-				for($i=1;$i<21;$i++)
+				for( $i=1; $i<21; $i++)
 				{
-					$this->vars(array('user'.$i=>$product_info->prop('user'.$i)));
+					$this->vars(array(
+						'user'.$i => $product_info->prop('user'.$i)
+					));
 				}
 			}
 
@@ -634,9 +659,14 @@ class shop_order extends class_base
 		$pl = "";
 		if ($this->is_template("PROD_LONG"))
 		{
-			foreach($o->connections_from(array("type" => "RELTYPE_PRODUCT")) as $c)
+			$prev_page = NULL;
+			foreach($prods as $prod)
 			{
-				$prod = $c->to();
+				$pb = "";
+				if ($pages[$prod->id()] != $prev_page && $prev_page != NULL)
+				{
+					$pb = $this->parse("PAGE_BREAK");
+				}
 				$inst = $prod->instance();
 
 				$this->vars(array(
@@ -648,10 +678,12 @@ class shop_order extends class_base
 						)),
 						"oc_obj" => $oc,
 						"quantity" => $tp[$prod->id()],
-					))
+					)),
+					"PAGE_BREAK" => $pb
 				));
 				
 				$pl .= $this->parse("PROD_LONG");
+				$prev_page = $pages[$prod->id()];
 			}
 		}
 
@@ -683,7 +715,8 @@ class shop_order extends class_base
 			"PROD_LONG" => $pl,
 			"total" => number_format($total,2),
 			"id" => $o->id(),
-			"order_pdf" => $this->mk_my_orb("gen_pdf", array("id" => $o->id()))
+			"order_pdf" => $this->mk_my_orb("gen_pdf", array("id" => $o->id())),
+			"discount" => $o->meta("discount")
 		));
 
 		if (!$arr["is_pdf"])
@@ -747,6 +780,7 @@ class shop_order extends class_base
 		@attrib name=gen_pdf nologin="1"
 
 		@param id required type=int acl=view
+		@param html optional
 
 	**/
 	function gen_pdf($arr)
@@ -770,11 +804,31 @@ class shop_order extends class_base
 			}*/
 		}
 
+		if ($arr["html"])
+		{
+			if ($arr["return"] == 1)
+			{
+				return $html;
+			}
+			die($html);
+		}
+
 		header("Content-type: application/pdf");
 		$conv = get_instance("core/converters/html2pdf");
 		die($conv->convert(array(
 			"source" => $html
 		)));
+	}
+
+	function __prod_show_sort($a, $b)
+	{
+		$a_pg = $this->__sp[$a->id()];
+		$b_pg = $this->__sp[$b->id()];
+		if ($a_pg == $b_pg)
+		{
+			return 0;
+		}
+		return ($a_pg > $b_pg ? -1 : 1);
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.5 2004/06/04 11:11:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.6 2004/08/19 07:52:51 kristo Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -139,9 +139,13 @@ class shop_product_packaging extends class_base
 			"from.class_id" => CL_SHOP_PRODUCT,
 		)));
 		$prod = $prod->from();
-
 		$l_inst = $layout->instance();
 		$l_inst->read_template($layout->prop("template"));
+
+		$parent_fld = $pi;
+		do {
+			$parent_fld = obj($parent_fld->parent());
+		} while($parent_fld->class_id() != CL_MENU && $parent_fld->parent());
 		$ivs = array(
 			"packaging_name" => $pi->name(),
 			"packaging_price" => $this->get_price($pi),
@@ -150,11 +154,16 @@ class shop_product_packaging extends class_base
 			"packaging_view_link" => obj_link($pi->id().":".$oc_obj->id()),
 			"name" => $prod->name(),
 			"price" => $this->get_price($prod),
+			"obj_price" => $this->get_price($pi),
+			"obj_tot_price" => number_format(((int)($arr["quantity"]) * $this->get_calc_price($pi)), 2),
 			"id" => $prod->id(),
 			"trow_id" => "trow".$prod->id(),
 			"err_class" => ($arr["is_err"] ? "class='selprod'" : ""),
 			"quantity" => (int)($arr["quantity"]),
-			"view_link" => obj_link($prod->id().":".$oc_obj->id())
+			"view_link" => obj_link($prod->id().":".$oc_obj->id()),
+			"edit_link" => $this->mk_my_orb("change", array("id" => $prod->id()), $prod->class_id(), true),
+			"obj_id" => $pi->id(),
+			"obj_parent" => $parent_fld->id()
 		);
 		$l_inst->vars($ivs);
 		$proc_ivs = $ivs;
@@ -215,17 +224,42 @@ class shop_product_packaging extends class_base
 				"packaging_userta".$i => nl2br($pi->prop("userta".$i)),
 				"packaging_uservar".$i => $tmp2
 			);
+
+			if ($i < 6)
+			{
+				$ivar["userch".$i] = $prod->prop("userch".$i);
+			}
+
 			$l_inst->vars($ivar);
 			$proc_ivs += $ivar;
 		}
-
 		$pr_i->_int_proc_ivs($proc_ivs, $l_inst);
+
+		// order data
+		$soc = get_instance(CL_SHOP_ORDER_CART);
+		$inf = $soc->get_item_in_cart($pi->id());
+		$awa = new aw_array($inf["data"]);
+		foreach($awa->get() as $datan => $datav)
+		{
+			$vs = array(
+				"order_data_".$datan => $datav
+			);
+			$l_inst->vars($vs);
+			$proc_ivs += $vs;
+		}
+		$pr_i->_int_proc_ivs($proc_ivs, $l_inst);
+
 		return $l_inst->parse();
 	}
 
 	function get_price($o)
 	{
 		return number_format($o->prop("price"),2);
+	}
+
+	function get_calc_price($o)
+	{
+		return $o->prop("price");
 	}
 
 	function request_execute($obj)

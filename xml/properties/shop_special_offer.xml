@@ -8,6 +8,7 @@
             <reltype>RELTYPE_ITEM_LAYOUT</reltype>
             <field>meta</field>
             <method>serialize</method>
+            <automatic>1</automatic>
             <caption>Kujundusmall</caption>
       </property>
       <property>

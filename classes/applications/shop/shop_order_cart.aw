@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.11 2004/07/29 11:31:10 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.12 2004/08/19 07:52:51 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -124,7 +124,6 @@ class shop_order_cart extends class_base
 			}
 			$i = obj($iid);
 			$inst = $i->instance();
-				
 			$this->vars(array(
 				"prod_html" => $inst->do_draw_product(array(
 					"layout" => $layout,

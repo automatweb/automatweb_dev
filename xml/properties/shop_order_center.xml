@@ -56,6 +56,24 @@
             <caption>Organisatsiooni nime element andmete vormis</caption>
       </property>
       <property>
+            <name>mail_to_el</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>E-maili element, kuhu saata tellimus</caption>
+      </property>
+      <property>
+            <name>data_form_discount</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Allahindluse element andmete vormis</caption>
+      </property>
+      <property>
             <name>only_active_items</name>
             <table>objects</table>
             <group>general</group>
@@ -64,6 +82,26 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Ainult aktiivsed tooted</caption>
+      </property>
+      <property>
+            <name>use_controller</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>N&amp;auml;itamiseks kasuta kontrollerit</caption>
+      </property>
+      <property>
+            <name>controller</name>
+            <table>objects</table>
+            <group>appear</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTROLLER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>N&amp;auml;itamise kontroller</caption>
       </property>
       <property>
             <name>layoutbl</name>
@@ -83,6 +121,24 @@
             <field>sortbl</field>
             <caption>Toodete sorteerimine</caption>
       </property>
+      <property>
+            <name>psfieldmap</name>
+            <table>objects</table>
+            <group>psfieldmap</group>
+            <type>table</type>
+            <store>no</store>
+            <field>psfieldmap</field>
+            <caption>Vali millised elemendid tellimuse andmete vormis vastavad isukuandmetele</caption>
+      </property>
+      <property>
+            <name>orgfieldmap</name>
+            <table>objects</table>
+            <group>orgfieldmap</group>
+            <type>table</type>
+            <store>no</store>
+            <field>orgfieldmap</field>
+            <caption>Vali millised elemendid tellimuse andmete vormis vastavad firma andmetele</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_ORDER_CENTER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -91,6 +147,12 @@
             <appear>
                   <caption>N&amp;auml;itamine</caption>
             </appear>
+            <psfieldmap>
+                  <caption>Isukuandmete kaart</caption>
+            </psfieldmap>
+            <orgfieldmap>
+                  <caption>Firma andmete kaart</caption>
+            </orgfieldmap>
       </groupinfo>
       <tableinfo>
             <aw_shop_order_center>
@@ -125,6 +187,11 @@
                   <clid>CL_CFGFORM</clid>
                   <caption>vorm tellija andmete jaoks</caption>
             </ORDER_FORM>
+            <CONTROLLER>
+                  <value>6</value>
+                  <clid>CL_FORM_CONTROLLER</clid>
+                  <caption>n&amp;auml;itamise kontroller</caption>
+            </CONTROLLER>
       </reltypes>
 </properties>
 

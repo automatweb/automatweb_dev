@@ -162,6 +162,57 @@
             <field>order_orderer_cos</field>
       </property>
       <property>
+            <name>search_tb</name>
+            <table>objects</table>
+            <group>search_search</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>search_tb</field>
+            <caption>Otsingo toolbar</caption>
+      </property>
+      <property>
+            <name>search_form</name>
+            <table>objects</table>
+            <group>search_search</group>
+            <type>callback</type>
+            <callback>callback_get_search_form</callback>
+            <submit_method>get</submit_method>
+            <store>no</store>
+            <field>search_form</field>
+            <caption>Otsinguvorm</caption>
+      </property>
+      <property>
+            <name>search_res</name>
+            <table>objects</table>
+            <group>search_search</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>search_res</field>
+            <caption>Otsingu tulemused</caption>
+      </property>
+      <property>
+            <name>search_cur_ord_text</name>
+            <table>objects</table>
+            <group>search_search</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>search_cur_ord_text</field>
+            <caption>Hetke tellimus text</caption>
+      </property>
+      <property>
+            <name>search_cur_ord</name>
+            <table>objects</table>
+            <group>search_search</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>search_cur_ord</field>
+            <caption>Hetke tellimus tabel</caption>
+      </property>
+      <property>
             <name>order_current_toolbar</name>
             <table>objects</table>
             <group>order_current</group>
@@ -209,57 +260,6 @@
             <field>order_current_form</field>
             <caption>Tellimuse info vorm</caption>
       </property>
-      <property>
-            <name>search_tb</name>
-            <table>objects</table>
-            <group>search</group>
-            <type>toolbar</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>search_tb</field>
-            <caption>Otsingo toolbar</caption>
-      </property>
-      <property>
-            <name>search_form</name>
-            <table>objects</table>
-            <group>search</group>
-            <type>callback</type>
-            <callback>callback_get_search_form</callback>
-            <submit_method>get</submit_method>
-            <store>no</store>
-            <field>search_form</field>
-            <caption>Otsinguvorm</caption>
-      </property>
-      <property>
-            <name>search_res</name>
-            <table>objects</table>
-            <group>search</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>search_res</field>
-            <caption>Otsingu tulemused</caption>
-      </property>
-      <property>
-            <name>search_cur_ord_text</name>
-            <table>objects</table>
-            <group>search</group>
-            <type>text</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>search_cur_ord_text</field>
-            <caption>Hetke tellimus text</caption>
-      </property>
-      <property>
-            <name>search_cur_ord</name>
-            <table>objects</table>
-            <group>search</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>search_cur_ord</field>
-            <caption>Hetke tellimus tabel</caption>
-      </property>
       <classinfo>
             <syslog_type>ST_SHOP_WAREHOUSE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -290,7 +290,7 @@
                   <caption>V&amp;auml;ljaminekud</caption>
             </storage_export>
             <order>
-                  <caption>Telli</caption>
+                  <caption>Tellimused</caption>
             </order>
             <order_unconfirmed>
                   <parent>order</parent>
@@ -304,14 +304,19 @@
                   <parent>order</parent>
                   <caption>Tellijad</caption>
             </order_orderer_cos>
-            <order_current>
-                  <parent>order</parent>
-                  <caption>Praegune tellimus</caption>
-            </order_current>
             <search>
-                  <caption>Otsi</caption>
+                  <caption>Otsing</caption>
                   <submit_method>get</submit_method>
             </search>
+            <search_search>
+                  <caption>Otsing</caption>
+                  <parent>search</parent>
+                  <submit_method>get</submit_method>
+            </search_search>
+            <order_current>
+                  <parent>search</parent>
+                  <caption>Pakkumine</caption>
+            </order_current>
       </groupinfo>
       <tableinfo>
             <aw_shop_warehouses>
@@ -351,16 +356,16 @@
                   <clid>CL_SHOP_ORDER</clid>
                   <caption>tellimus</caption>
             </ORDER>
-            <EMAIL>
-                  <value>6</value>
-                  <clid>CL_ML_MEMBER</clid>
-                  <caption>saada tellimused</caption>
-            </EMAIL>
             <ORDER_CENTER>
                   <value>6</value>
                   <clid>CL_SHOP_ORDER_CENTER</clid>
                   <caption>tellimiskeskkond</caption>
             </ORDER_CENTER>
+            <EMAIL>
+                  <value>7</value>
+                  <clid>CL_ML_MEMBER</clid>
+                  <caption>saada tellimused</caption>
+            </EMAIL>
       </reltypes>
       <layout>
             <hbox_oc>

@@ -24,6 +24,7 @@
 				<arguments>
 					<required name="id" type="int" acl="view"/>
 					<optional name="user_data" />
+					<optional name="html" />
 				</arguments>
 			</function>
 		</action>
@@ -34,6 +35,20 @@
 					<required name="id" type="ind" acl="view"/>
 					<optional name="sel" />
 					<optional name="group" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="send_cur_order" >
+			<function name="sent_cur_order">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="clear_order" >
+			<function name="clear_order">
+				<arguments>
 				</arguments>
 			</function>
 		</action>
