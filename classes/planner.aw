@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.13 2001/05/17 14:11:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.14 2001/05/17 14:26:52 duke Exp $
 // planner.aw - päevaplaneerija
 // CL_CAL_EVEN on kalendri event
 classload("calendar","defs");
@@ -179,7 +179,7 @@ class planner extends calendar {
 		}
 		else
 		{
-			$supp = "uid = '$uid'";
+			$supp = "uid = '" . UID . "'";
 		};
 		$q = "SELECT * FROM planner
 			LEFT JOIN objects ON (planner.id = objects.oid)
@@ -828,6 +828,13 @@ class planner extends calendar {
 		// lisame uue
 		else
 		{
+			$uid = "";
+			if (!$parent)
+			{
+				global $udata;
+				$parent = $udata["homefolder"];
+				$uid = UID;
+			};
 			$id = $this->new_object(array(	
 				"class_id" => CL_CAL_EVENT,
 				"parent" => $parent,
@@ -835,8 +842,8 @@ class planner extends calendar {
 			),true);
 
 			$q = "INSERT INTO planner 
-				(id,start,end,title,place,private,reminder,description,rep_type,rep_dur,rep_forever,rep_until)
-				VALUES ('$id','$start','$end','$title','$place','$private','$reminder','$description','$rep_type','$rep_dur','$rep_forever','$rep_until')";
+				(id,uid,start,end,title,place,private,reminder,description,rep_type,rep_dur,rep_forever,rep_until)
+				VALUES ('$id','$uid','$start','$end','$title','$place','$private','$reminder','$description','$rep_type','$rep_dur','$rep_forever','$rep_until')";
 			$status_msg = "Event on lisatud";
 		};
 		$this->db_query($q);
@@ -897,7 +904,14 @@ class planner extends calendar {
 
 		session_register("status_msg");
 		// suunab tagasi default lehele, ehk tänasele päevale
-		return $this->mk_orb("change",array("id" => $parent,"date" => $date));
+		if ($parent)
+		{
+			return $this->mk_my_orb("change",array("id" => $parent,"date" => $date));
+		}
+		else
+		{
+			return $this->mk_my_orb("day",array("date" => $date));
+		};
 	}
 
 

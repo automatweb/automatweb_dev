@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.1 2001/05/17 14:26:52 duke Exp $
 /*
 	AW Foundation Classes
 	(C) StruktuurMeedia 2000,2001
@@ -119,7 +120,7 @@ class root
                 }
 		else
 		{
-                        $retval[] = sprintf($format,$val);
+                       	$retval[] = sprintf($format,$val);
                 };
                 return $retval;
         }
