@@ -30,6 +30,9 @@
 </tr>
 <!-- END SUB: FORM -->
 <tr>
+<td class="fform" colspan=20><input type="checkbox" name="after_show_entry" value="1" {VAR:after_show_entry}> P&auml;rast viimase formi t&auml;itmist n&auml;idatakse v&auml;ljundit <select class="small_button" name="after_show_op">{VAR:ops}</select></td>
+</tr>
+<tr>
 <td class="fcaption" colspan=30><input class='small_button' type='submit' VALUE='{VAR:LC_FORMS_SAVE}'></td>
 </tr>
 <tr>
