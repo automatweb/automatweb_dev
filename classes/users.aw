@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.124 2004/08/02 12:36:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.125 2004/09/20 13:14:35 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1185,6 +1185,7 @@ class users extends users_user
 				$_oid = $this->get_oid_for_gid($hig);
 				if ($_oid)
 				{
+					obj_set_opt("no_auto_translation", 1);
 					aw_disable_acl();
 					$o = obj($_oid);
 					aw_restore_acl();
@@ -1200,6 +1201,7 @@ class users extends users_user
 					{
 						$GLOBALS["cfg"]["__default"]["frontpage"] = $gf[aw_global_get("lang_id")];
 					}
+					obj_set_opt("no_auto_translation", 0);
 				}
 			}
 		}
