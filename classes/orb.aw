@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.42 2003/04/07 10:18:55 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.43 2003/04/14 16:03:31 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 class orb extends aw_template 
@@ -119,7 +119,6 @@ class orb extends aw_template
 		// check acl
 		$this->do_orb_acl_checks($orb_defs[$class][$action], $vars);
 
-
 		if (isset($vars["reforb"]) && $vars["reforb"] == 1)
 		{
 			$t = new $class;
@@ -180,7 +179,8 @@ class orb extends aw_template
 			$required = $orb_defs[$class][$action]["required"];
 			$optional = $orb_defs[$class][$action]["optional"];
 			$defined = $orb_defs[$class][$action]["define"];
-			foreach($required as $key => $val)
+			$_r = new aw_array($required);
+			foreach($_r->get() as $key => $val)
 			{
 				if (!isset($vars[$key]))
 				{
@@ -197,7 +197,8 @@ class orb extends aw_template
 			};
  
 			//optional arguments
-			foreach($optional as $key => $val)
+			$_o = new aw_array($optional);
+			foreach($_o->get() as $key => $val)
 			{
 				if (isset($vars[$key]))
 				{
