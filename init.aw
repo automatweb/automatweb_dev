@@ -381,7 +381,15 @@ function classload($args)
 		}
 		else
 		{
-			$lib = $GLOBALS["cfg"]["__default"]["classdir"]."/".$lib.".".$GLOBALS["cfg"]["__default"]["ext"];
+			if (substr($lib,0,13) == "designedclass")
+			{
+				$lib = basename($lib);
+				$lib = $GLOBALS["cfg"]["__default"]["site_basedir"]."/files/classes/".$lib.".".$GLOBALS["cfg"]["__default"]["ext"];
+			}
+			else
+			{
+				$lib = $GLOBALS["cfg"]["__default"]["classdir"]."/".$lib.".".$GLOBALS["cfg"]["__default"]["ext"];
+			}
 		}
 		include_once($lib);
 	};
@@ -392,16 +400,20 @@ function get_instance($class,$args = array(), $errors = true)
 {
 	enter_function("__global::get_instance",array());
 
-	$site = false;
+	$site = $designed = false;
 	if (is_numeric($class))
 	{
 		$class = $GLOBALS["cfg"]["__default"]["classes"][$class]["file"];
 	}
-	if (isset($GLOBALS["cfg"]["__default"]["site_classes"][$class]))
+	if (isset($GLOBALS["cfg"]["__default"]["site_classes"]) && isset($GLOBALS["cfg"]["__default"]["site_classes"][$class]))
 	{
 		$class = $GLOBALS["cfg"]["__default"]["site_classes"][$class];
 		$site = true;
 	}
+	if (substr($class,0,13) == "designedclass")
+	{
+		$designed = true;
+	};
 
 	$id = "instance::" . $class;
 	$instance = aw_global_get($id);
@@ -412,11 +424,13 @@ function get_instance($class,$args = array(), $errors = true)
 	$clid = $GLOBALS["cfg"]["class_lut"][$lib];
 	if (($rs = $GLOBALS["cfg"]["__default"]["classes"][$clid]["is_remoted"]) != "")
 	{
+		print "clid = ". var_dump($clid);
 		if ($rs != $GLOBALS["cfg"]["__default"]["baseurl"])
 		{
 			$proxy_file = $GLOBALS["cfg"]["__default"]["basedir"]."/classes/core/proxy_classes/".$lib.".aw";
 			$proxy_class = "__aw_proxy_".$lib;
 			include_once($proxy_file);
+			print dbg::process_backtrace(debug_backtrace());
 			return new $proxy_class($rs);
 		}
 	}
@@ -426,6 +440,12 @@ function get_instance($class,$args = array(), $errors = true)
 		if ($site)
 		{
 			$classdir = $GLOBALS["cfg"]["__default"]["site_basedir"]."/classes";
+		}
+		else if ($designed)
+		{
+			$classdir = $GLOBALS["cfg"]["__default"]["site_basedir"]."/files/classes";
+			$class = basename($class);
+			$lib = $GLOBALS["gen_class_name"];
 		}
 		else
 		{
@@ -443,7 +463,8 @@ function get_instance($class,$args = array(), $errors = true)
 				"msg" => t("the requested class $class does not exist !"),
 			));
 		}
-		include_once($classdir."/".str_replace(".","", $class).".".$ext);
+		error_reporting(E_PARSE | E_ERROR);
+		require_once($classdir."/".str_replace(".","", $class).".".$ext);
 		if (class_exists($lib))
 		{
 			if (sizeof($args) > 0)
