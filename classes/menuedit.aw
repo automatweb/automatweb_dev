@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.122 2002/06/26 11:10:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.123 2002/07/10 17:08:37 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -135,7 +135,11 @@ class menuedit extends aw_template
 
 		// kontrollib sektsiooni ID-d, tagastab oige numbri kui tegemist oli
 		// aliasega, voi lopetab töö, kui miskit oli valesti
-		$section = $this->check_section($params["section"]);
+		// $section = $this->check_section($params["section"]);
+
+		// at this point $section is already numeric,
+		// we checked it in $this->request_startup()
+		$section = aw_global_get("section");
 
 		$obj = $this->get_object($section);
 		$meta = $obj["meta"];
@@ -169,9 +173,21 @@ class menuedit extends aw_template
 
 		$cp[] = aw_global_get("lang_id");
 
+		// here we sould add all the variables that are in the url to the cache parameter list
+		global $HTTP_GET_VARS;
+
+		foreach($HTTP_GET_VARS as $var => $val)
+		{
+			if ($var != "automatweb")	// just to make sure that each user does not get it's own copy
+			{
+				$cp[] = $var."-".$val;
+			}
+		}
+
 		$not_cached = false;
 
-		if ($GLOBALS["docid"])
+		// what the hell did this do anyway? and I think the new cache architecture solves the problem anyway
+/*		if ($GLOBALS["docid"])
 		{
 			$cp[] = $GLOBALS["docid"];
 			if ($this->cache_dirty($GLOBALS["docid"]))
@@ -179,7 +195,7 @@ class menuedit extends aw_template
 				$not_cached = true;
 				$this->clear_cache($GLOBALS["docid"]);
 			}; 
-		};
+		};*/
 
 		$use_cache = true;
 
@@ -467,6 +483,11 @@ class menuedit extends aw_template
 
 		$cd = "";
 		$menu_defs_v2 = $this->cfg["menu_defs"];
+		if ($this->cfg["lang_defs"])
+		{
+			$menu_defs_v2 = $this->cfg["menu_defs"][aw_global_get("lang_id")];
+
+		}
 		$frontpage = $this->cfg["frontpage"];
 		
 
@@ -575,18 +596,28 @@ class menuedit extends aw_template
 			}
 			$this->vars(array("JOIN_FORM" => $jfs));
 
+			if ($this->can("edit",$section) && $this->active_doc)
+			{
+				$cd = $this->parse("CHANGEDOCUMENT");
+			};
+			$this->vars(array(
+				"CHANGEDOCUMENT" => $cd,
+			));
+
+			$cd = "";
+			if ($this->can("add",$section))
+			{
+				$cd = $this->parse("ADDDOCUMENT");
+			};
+			$this->vars(array(
+				"ADDDOCUMENT" => $cd,
+			));
+
 			// check menuedit access
 			if ($this->prog_acl("view", PRG_MENUEDIT))
 			{
 				// so if this is the only document shown and the user has edit right
 				// to it, parse and show the CHANGEDOCUMENT sub
-				if ($this->can("edit",$section) && $this->active_doc)
-				{
-					$cd = $this->parse("CHANGEDOCUMENT");
-				};
-				$this->vars(array(
-		   		"CHANGEDOCUMENT" => $cd,
-				));
 				$this->vars(array("MENUEDIT_ACCESS" => $this->parse("MENUEDIT_ACCESS")));
 			}
 			else
@@ -978,6 +1009,33 @@ class menuedit extends aw_template
 		$this->do_syslog_core($log,$section);
 	}
 
+	function request_startup()
+	{
+		$section = aw_global_get("section");
+		$realsect = $this->check_section($section);
+		$_mn = $this->get_menu($realsect);
+		$set_lang_id = false;
+		if ($_mn)
+		{
+			if ($_mn["type"] != MN_CLIENT)
+			{
+				$set_lang_id = $_mn["lang_id"];
+			};
+		}
+		else
+		{
+			$_obj = $this->get_object($realsect);
+			$set_lang_id = $_obj["lang_id"];
+		};
+
+		if ($set_lang_id)
+		{
+			aw_global_set("lang_id",$set_lang_id);
+		};
+
+		aw_global_set("section",$realsect);
+	}
+
 	function check_section($section)
 	{
 		$frontpage = $this->cfg["frontpage"];
@@ -1016,26 +1074,37 @@ class menuedit extends aw_template
 			$prnt = 0;
 			foreach($sections as $skey => $sval)
 			{
+				global $DBUG;
+				if ($DBUG)
+				{
+					print "checking $sval<br>";
+				}
 				if (preg_match("/\W/",$sval))
 				{
 					$obj = false;
 				}
-				elseif ($obj !== false)
+				else
+				if ($obj !== false)
 				{
 					// vaatame, kas selle nimega aliast on?
 					$obj = $this->_get_object_by_alias($sval,$prnt);
+					//$obj = $this->_get_object_by_alias2($sval,$prnt);
 
 					// need to check one more thing, IF prnt = 0 then fetch the parent
 					// of this object and see whether it has an alias. if so, do not
 					// let him access this menu directly
-					if ($prnt == 0)
+
+					// and why the hell not? 
+					// this broke aw.struktuur.ee and why is it good anyway? - terryf
+
+/*					if ($prnt == 0)
 					{
 						$pobj = $this->get_object($obj["parent"]);
 						if (strlen($pobj["alias"]) > 0)
 						{
 							$obj = false;
 						}
-					};
+					};*/
 
 					if ( ($prnt != 0) && ($obj["parent"] != $prnt) )
 					{
@@ -1332,6 +1401,19 @@ class menuedit extends aw_template
 		$ret = $hft.$shfs.$shares.$grps.$grptree.$ret;
 
 		return $ret;
+	}
+
+	function get_popup_data($args = array())
+	{
+		extract($args);
+		$baseurl = $this->cfg["baseurl"];
+		$retval = "1|0|Set notification|$baseurl/?set_notification&id=$id\n";
+		$retval .= "separator\n";
+		$retval .= "2|0|Info|\n";
+		$retval .= "3|2|General|$baseurl/?info&id=$id\n";
+		$retval .= "4|2|Audit|$baseurl/?audit&id=$id\n";
+		print $retval;
+		exit;
 	}
 
 	function get_branch($args = array())
@@ -3514,7 +3596,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		}
 
 		// I don't care about the first level menus
-		if ($this->level > 1)
+		if ($this->level > 0)
 		{
 			if ($this->mar[$parent]["alias"])
 			{
