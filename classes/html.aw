@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.38 2003/07/02 14:53:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.39 2003/09/09 12:05:10 duke Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -243,11 +243,11 @@ class html extends aw_template
 		};
 		if (isset($label))
 		{
-			$caption = $label;
+			$capt .= $label;
 		};
 		if (isset($caption))
 		{
-			$capt = " " . $caption;
+			$capt .= " " . $caption;
 		};
 		return "<input type='checkbox' id='$name' name='$name' value='$value' $checked/> $capt\n";
 	}
