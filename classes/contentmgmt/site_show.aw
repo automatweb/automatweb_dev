@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.89 2004/10/14 13:39:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.90 2004/10/18 13:48:54 duke Exp $
 
 /*
 
@@ -729,9 +729,10 @@ class site_show extends class_base
 		$blocks = array();
 
 		$section_id = $this->section_obj->id();
+		$tplmgr = get_instance("templatemgr");
 		if (is_array($docid)) 
 		{
-			$template = $this->get_lead_template($section_id);
+			$template = $tplmgr->get_lead_template($section_id);
 			
 			// I need to  know that for the public method menus
 			// christ, this sucks ass, we really should put that somewhere else! - terryf
@@ -766,7 +767,7 @@ class site_show extends class_base
 		else 
 		{
 			$awt->start("get-long");
-			$template = $this->get_long_template($section_id);
+			$template = $tplmgr->get_long_template($section_id);
 			$awt->stop("get-long");
 
 			if ($docid)
@@ -2131,7 +2132,6 @@ class site_show extends class_base
 	{
 		global $awt;
 
-		$tpldir = str_replace($this->cfg["site_basedir"]."/", "", $this->cfg["tpldir"])."/automatweb/menuedit";
 		$tpldir = str_replace($this->cfg["site_basedir"]."/", "", $this->cfg["tpldir"])."/automatweb/menuedit";
 
 		if (isset($arr["tpldir"]) && $arr["tpldir"] != "")

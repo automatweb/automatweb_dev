@@ -1745,7 +1745,9 @@ class site_content extends menuedit
 		$left_promo = "";
 		$scroll_promo = "";
 
-		$template = $this->get_lead_template($section);
+		$tplmgr = get_instance("templatemgr");
+                $template = $tplmgr->get_lead_template($section);
+
 		if ($this->cfg["lang_menus"])
 		{
 			$lai = "AND objects.lang_id = ".aw_global_get("lang_id");
@@ -2223,9 +2225,10 @@ class site_content extends menuedit
 		$cont = "";
 		// if $section is a periodic document then emulate the current period for it and show the document right away
 		$d->set_opt("parent",$section);
+		$tplmgr = get_instace("templatemgr");
 		if ($obj->class_id() == CL_PERIODIC_SECTION || $obj->class_id() == CL_DOCUMENT) 
 		{
-			$template = $this->get_long_template($section);
+			$template = $tplmgr->get_long_template($section);
 			$activeperiod = $obj->period();
 			$cont = $d->gen_preview(array(
 				"docid" => $section,
@@ -2248,10 +2251,11 @@ class site_content extends menuedit
 			// I need to  know that for the public method menus
 			$d->set_opt("cnt_documents",$d->num_rows());
 
+
 			if ($d->num_rows() > 1)		// the database driver sets this
 			{
 				$this->vars(array("DOCUMENT_LIST" => $this->parse("DOCUMENT_LIST")));
-				$template = $this->get_lead_template($section);
+				$template = $tplmgr->get_lead_template($section);
 				while($row = $d->db_next()) 
 				{
 					$d->save_handle();
@@ -2272,7 +2276,7 @@ class site_content extends menuedit
 			else 
 			{
 				$row = $d->db_next();
-				$template = $this->get_long_template($section);
+				$template = $tplmgr->get_long_template($section);
 				$d->set_opt("shown_document",$row["docid"]);
 				$cont = $d->gen_preview(array(
 					"docid" => $row["docid"],
@@ -2301,6 +2305,8 @@ class site_content extends menuedit
 		$ct = "";
 
 		$jumpbox = false;
+		// JUMPBOX was only ever used in php.ee I think and was used
+		// to display an additonal navigation menu for interconnected documents
 		if ($this->is_template("JUMPBOX") && ($this->mar[$section]["meta"]["multi_doc_style"]))
 		{
 			$jumpbox = true;
@@ -2313,7 +2319,8 @@ class site_content extends menuedit
 		// mingitest artiklis esinevatest asjadest. You name it.
 		$this->blocks = array();
 
-		$template = $this->get_long_template($section);
+		$tplmgr = get_instance("templatemgr");
+		$template = $tplmgr->get_long_template($section);
 
 		$metaref = array();
 		
@@ -2321,7 +2328,7 @@ class site_content extends menuedit
 
 		if (is_array($docid)) 
 		{
-			$template = $this->get_lead_template($section);
+			$template = $tplmgr->get_lead_template($section);
 			
 			// I need to  know that for the public method menus
 			$d->set_opt("cnt_documents",sizeof($docid));
