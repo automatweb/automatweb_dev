@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.26 2004/02/25 15:46:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.27 2004/05/06 11:20:58 duke Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -21,6 +21,9 @@
 
 	@property cc type=textbox field=mtargets1 size=80
 	@caption Koopia
+
+	@property bcc type=textbox field=mtargets2 size=80
+	@caption Pimekoopia
 
 	@property name type=textbox size=80 table=objects
 	@caption Teema
@@ -228,6 +231,7 @@ class mail_message extends class_base
 				"subject" => $msgobj->name(),
 				"to" => $msgobj->prop("mto"),
 				"cc" => $msgobj->prop("cc"),
+				"bcc" => $msgobj->prop("bcc"),
 				"body" => "Kahjuks sinu meililugeja ei oska näidata HTML formaadis kirju",
 			));
 			$this->awm->htmlbodyattach(array(
@@ -241,6 +245,7 @@ class mail_message extends class_base
 				"subject" => $msgobj->name(),
 				"to" => $msgobj->prop("mto"),
 				"cc" => $msgobj->prop("cc"),
+				"bcc" => $msgobj->prop("bcc"),
 				"body" => $msgobj->prop("message"),
 			));
 		};
