@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.144 2002/09/09 14:06:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.145 2002/09/25 14:59:22 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -151,7 +151,7 @@ class form extends form_base
 						"el_name"					=> ($v["name"] == "" ? "&nbsp;" : $v["name"]),
 						"el_type"					=> ($v["type"] == "" ? "&nbsp;" : $v["type"]),
 						"form_cell_grp"   => $v["group"],
-						"chpos" => $this->mk_my_orb("change_el_pos", array("id" => $this->id, "col" => $arr["r_col"], "row" => $arr["r_row"],"el_id" => $v["id"]))
+						"chpos" => $this->mk_my_orb("change_el_pos", array("id" => $this->id, "col" => (int)$arr["r_col"], "row" => (int)$arr["r_row"],"el_id" => $v["id"]))
 					));
 					$el.=$this->parse("ELEMENT");
 					$el_cnt++;
@@ -165,8 +165,8 @@ class form extends form_base
 					"exp_right"	=> $this->mk_orb("exp_cell_right", array("id" => $this->id, "col" => $a, "row" => $i)),
 					"split_ver"	=> $this->mk_orb("split_cell_ver", array("id" => $this->id, "col" => $a, "row" => $i)),
 					"split_hor"	=> $this->mk_orb("split_cell_hor", array("id" => $this->id, "col" => $a, "row" => $i)),
-					"admin_cell"	=> $this->mk_orb("admin_cell", array("id" => $this->id, "col" => $arr["r_col"], "row" => $arr["r_row"])),
-					"add_element" => $this->mk_orb("add_element", array("id" => $this->id, "col" => $arr["r_col"], "row" => $arr["r_row"])),
+					"admin_cell"	=> $this->mk_orb("admin_cell", array("id" => $this->id, "col" => (int)$arr["r_col"], "row" => (int)$arr["r_row"])),
+					"add_element" => $this->mk_orb("add_element", array("id" => $this->id, "col" => (int)$arr["r_col"], "row" => (int)$arr["r_row"])),
 				));
 				$sh = ""; $sv = "";
 				if ($arr["rowspan"] > 1)
@@ -270,7 +270,11 @@ class form extends form_base
 				}
 						
 				$cell = &$this->arr["contents"][$arr["r_row"]][$arr["r_col"]];
-				$els = $cell->get_elements();
+				$els = array();
+				if (is_object($cell))
+				{
+					$els = $cell->get_elements();
+				}
 				reset($els);
 				$el = "";
 				while (list(, $v) = each($els))
@@ -286,9 +290,14 @@ class form extends form_base
 					$el.=$this->parse("ELEMENT");
 				}
 
+				$__stsel = 0;
+				if (is_object($this->arr["contents"][$arr["r_row"]][$arr["r_col"]]))
+				{
+					$__stsel = $this->arr["contents"][$arr["r_row"]][$arr["r_col"]]->get_style();
+				}
 				$this->vars(array(
 					"ELEMENT"				=> $el, 
-					"style_name" => $stylesel[$this->arr["contents"][$arr["r_row"]][$arr["r_col"]]->get_style()],
+					"style_name" => $stylesel[$__stsel],
 					"col"						=> $arr["r_col"], 
 					"row"						=> $arr["r_row"],
 					"row1" => $arr["r_row"]+1
@@ -1315,7 +1324,7 @@ class form extends form_base
 			$this->db_query($q);
 			$relation = ($chain_entry_id) ? $chain_entry_id : $this->entry_id;
 			$q = "INSERT INTO calendar2timedef (oid,cal_id,entry_id,start,end,max_items,period,period_cnt,relation)
-				VALUES ('$id','$id','$entry_id','$_start','$_end','$_max','2','$_period_cnt','$relation')";
+				VALUES ('$id','$id','$eid','$_start','$_end','$_max','2','$_period_cnt','$relation')";
 			$this->db_query($q);
 		};
 
@@ -1460,6 +1469,10 @@ class form extends form_base
 			if (!($this->can("view",$op_id)))
 			{
 				$this->acl_error("view",$op_id);
+			}
+			if ($GLOBALS["fg_op_dbg"] == 1)
+			{
+				echo "op_id = $op_id <br>";
 			}
 			$this->load_output($op_id);
 		}
@@ -2101,6 +2114,25 @@ class form extends form_base
 		if ($entry_id)
 		{
 			$this->load_entry($entry_id);
+			// check whether we are using are filtering using a calendar
+			// and if so, replace the value of date element before performing
+			// the actual search
+			global $cal;
+			if ($cal)
+			{
+				$co = $this->get_object($cal);
+				$tf = $co["meta"]["target_form"];
+				$te = $co["meta"]["target_element"];
+				$fid = $this->id;
+				if ($tf == $fid)
+				{
+					global $d;
+					list($_d,$_m,$_y) = explode("-",$d);
+					$_ds = mktime(0,0,0,$_m,$_d,$_y);
+					$this->entry[$co["meta"]["target_element"]] = $_ds;
+				};
+			};
+
 		}
 		exit_function("form::new_do_search::load",array());
 
@@ -2244,22 +2276,10 @@ class form extends form_base
 					$count = 1;
 				};
 
-				/*
-				
-				print "start = $start<br>";
-				print "end = $end<br>";
-				print "count = $count<br>";
-				*/
-
 			};
 		}
 		// if we use a calendar, retrieve the data first without grouping
 		// so that we can perform our magic on it.
-		/*
-		print "<pre>";
-		print_r($used_els);
-		print "</pre>";
-		*/
 		if ($has_calendar)
 		{
 			$sql = $this->get_search_query(array(
@@ -2278,17 +2298,10 @@ class form extends form_base
 
 			while($row = $this->db_next())
 			{
-				/*
-				print "<pre>";
-				print_r($row);
-				print "</pre>";
-				*/
 				$vacs = $fcal->check_vacancies(array(
 					"cal_id" => $this->arr["search_chain"],
 					"contr" => $contr,
-					//"eform" => $this->id,
 					"entry_id" => $row["entry_id"],
-					//"entry_id" => $others,
 					"id" => $cf["form_id"],
 					"eid" => $row["chain_entry_id"],
 					"start" => $start,
@@ -2298,23 +2311,15 @@ class form extends form_base
 				if (!$groups[$row[$_key]] && ($vacs > -1))
 				{
 					$groups[$row[$_key]] = $vacs;
-					//print "xassigning $vacs to $row[$_key]<br>";
 				}
 				else
 				if (($groups[$row[$_key]] < $vacs) && ($vacs > -1))
 				{
-					//print "assigning $vacs to $row[$_key]<br>";
 					$groups[$row[$_key]] = $vacs;
 				}
 				
 			};
 		};
-
-		/*
-		print "<pre>";
-		print_r($groups);
-		print "</pre>";
-		*/
 
 		// now get the search query
 //		echo "getting search query , used_els = <pre>",var_dump($used_els) ,"</pre><br>";
