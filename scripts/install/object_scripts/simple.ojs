@@ -1,4 +1,5 @@
 # menyyd on root/klient/$url
+$users = obj { class_id=CL_MENU, parent=${parent}, name="Kasutajad", type=MN_CLIENT, status=STAT_ACTIVE }
 $root = obj{ class_id=CL_MENU, parent=${parent}, name="Klient", type=MN_CLIENT, status=STAT_ACTIVE}
 	$klient = obj { class_id=CL_MENU, parent=${root}, name=${url}, type=MN_CLIENT, status=STAT_ACTIVE }
 		$site_root = obj { class_id=CL_MENU, parent=${klient}, jrk="2", name=${url}, type=MN_CLIENT, status=STAT_ACTIVE }
@@ -80,7 +81,6 @@ $root = obj{ class_id=CL_MENU, parent=${parent}, name="Klient", type=MN_CLIENT, 
 
 		$aw_obj_priv = obj { class_id=CL_MENU, parent=${klient}, jrk="3", name="Piiratud ligip&auml;&auml;suga AW Objektid", type=MN_CLIENT, status=STAT_ACTIVE }
 
-$users = obj { class_id=CL_MENU, parent=${parent}, name="Kasutajad", type=MN_CLIENT, status=STAT_ACTIVE }
 
 ini { site_rootmenu=${site_root} }
 
