@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.25 2004/07/01 13:35:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.26 2004/07/12 09:40:32 duke Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -145,22 +145,22 @@ class releditor extends core
 
 		//if (!empty($form_type) || $visual != "manager")
 		//{
-			foreach($all_props as $key => $prop)
+			foreach($all_props as $key => $_prop)
 			{
 				//if (!empty($use_form) || (is_array($props) && in_array($key,$props)))
 				if (is_array($props) && in_array($key,$props))
 				{
-					$this->all_props[$key] = $prop;
+					$this->all_props[$key] = $_prop;
 					if (!empty($form_type) || $visual != "manager")
 					{
-						$act_props[$key] = $prop;
+						$act_props[$key] = $_prop;
 					};
 				};
 			};
 		//};
 
 		#$this->all_props = $act_props;
-		
+
 		if ($visual == "manager")
 		{
 			// insert the toolbar into property array
