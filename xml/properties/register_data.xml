@@ -510,46 +510,46 @@
       <property>
             <name>usertext1</name>
             <group>data</group>
-            <table>objects</table>
+            <table>aw_register_data</table>
             <type>text</type>
-            <field>meta</field>
-            <method>serialize</method>
+            <store>no</store>
+            <field>usertext1</field>
             <caption>Usertext1</caption>
       </property>
       <property>
             <name>usertext2</name>
             <group>data</group>
-            <table>objects</table>
+            <table>aw_register_data</table>
             <type>text</type>
-            <field>meta</field>
-            <method>serialize</method>
+            <store>no</store>
+            <field>usertext2</field>
             <caption>Usertext2</caption>
       </property>
       <property>
             <name>usertext3</name>
             <group>data</group>
-            <table>objects</table>
+            <table>aw_register_data</table>
             <type>text</type>
-            <field>meta</field>
-            <method>serialize</method>
+            <store>no</store>
+            <field>usertext3</field>
             <caption>Usertext3</caption>
       </property>
       <property>
             <name>usertext4</name>
             <group>data</group>
-            <table>objects</table>
+            <table>aw_register_data</table>
             <type>text</type>
-            <field>meta</field>
-            <method>serialize</method>
+            <store>no</store>
+            <field>usertext4</field>
             <caption>Usertext4</caption>
       </property>
       <property>
             <name>usertext5</name>
             <group>data</group>
-            <table>objects</table>
+            <table>aw_register_data</table>
             <type>text</type>
-            <field>meta</field>
-            <method>serialize</method>
+            <store>no</store>
+            <field>usertext5</field>
             <caption>Usertext5</caption>
       </property>
       <property>
@@ -614,6 +614,51 @@
             <store>no</store>
             <field>userreset1</field>
             <caption>User-defined reset 1</caption>
+      </property>
+      <property>
+            <name>usersel1</name>
+            <group>data</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>select</type>
+            <caption>User-defined select 1</caption>
+      </property>
+      <property>
+            <name>usersel2</name>
+            <group>data</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>select</type>
+            <caption>User-defined select 2</caption>
+      </property>
+      <property>
+            <name>usersel3</name>
+            <group>data</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>select</type>
+            <caption>User-defined select 3 </caption>
+      </property>
+      <property>
+            <name>usersel4</name>
+            <group>data</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>select</type>
+            <caption>User-defined select 4</caption>
+      </property>
+      <property>
+            <name>usersel5</name>
+            <group>data</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>select</type>
+            <caption>User-defined select 5</caption>
       </property>
       <property>
             <name>udefhidden1</name>
