@@ -1,7 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.15 2003/08/01 12:48:17 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.16 2003/09/16 14:51:09 duke Exp $
 // scheduler.aw - Scheduler
-
 class scheduler extends aw_template
 {
 	function scheduler()
@@ -28,7 +27,8 @@ class scheduler extends aw_template
 
 		if ($time)
 		{
-			$this->evnt_add($time, $event, $uid, $password);
+			$event_id = md5($event);
+			$this->evnt_add($time, $event, $uid, $password, 0, $event_id);
 		}
 
 		if ($rep_id)
@@ -47,7 +47,7 @@ class scheduler extends aw_template
 			{
 				foreach($reps as $time => $_e)
 				{
-					$this->evnt_add($time, $event, $uid, $password, $rep_id);
+					$this->evnt_add($time, $event, $uid, $password, $rep_id, $event_id);
 					$ltime = $time;
 				}
 			};
@@ -108,7 +108,7 @@ class scheduler extends aw_template
 		$this->close_session(true);
 	}
 
-	function evnt_add($time, $event, $uid = "", $password = "", $rep_id = 0)
+	function evnt_add($time, $event, $uid = "", $password = "", $rep_id = 0, $event_id = "")
 	{
 		$this->open_session();
 		$found = false;
@@ -125,7 +125,13 @@ class scheduler extends aw_template
 
 		if (!$found)
 		{
-			$this->repdata[] = array("time" => $time, "event" => $event, "uid" => $uid, "password" => $password, "rep_id" => $rep_id);
+			if (empty($event_id))
+			{
+				// that should be enough to make sure that 2 requests to one url
+				// do not overlap
+				$event_id = md5($event);
+			};
+			$this->repdata[] = array("time" => $time, "event" => $event, "event_id" => $event_id, "uid" => $uid, "password" => $password, "rep_id" => $rep_id);
 		}
 		$this->close_session(true);
 	}
@@ -184,16 +190,6 @@ class scheduler extends aw_template
 		extract($arr);
 		set_time_limit(0);
 		
-		// ok, here check if events are already being processed
-		if (file_exists($this->cfg["lock_file"]) && (filectime($this->cfg["lock_file"]) > (time()-36000)))
-		{
-			// they are so just bail out
-			echo "bailing for lock file ",$this->cfg["lock_file"],"<br />\n";
-			return;
-		}
-
-		touch($this->cfg["lock_file"]);
-
 		// read in all events
 		$this->open_session();
 		$this->close_session(true);
@@ -208,8 +204,6 @@ class scheduler extends aw_template
 				$this->do_and_log_event($evnt);
 			}
 		}
-		echo "unlinking ",$this->cfg["lock_file"]," <br />";
-		unlink($this->cfg["lock_file"]);
 	}
 
 	function do_and_log_event($evnt)
@@ -218,6 +212,17 @@ class scheduler extends aw_template
 		{
 			return;
 		}
+	
+		// ok, here check if this event is already being processed
+		$lockfilename = $this->cfg["lock_file"] . "." . $evnt["event_id"];
+		if (file_exists($lockfilename) && (filectime($lockfilename) > (time()-36000)))
+		{
+			// they are so just bail out
+			echo "bailing for lock file ",$lockfilename,"<br />\n";
+			return;
+		}
+
+		touch($lockfilename);
 
 		$evnt["event"];
 		$ev_url = str_replace("/automatweb","",$evnt["event"]);
@@ -249,6 +254,10 @@ class scheduler extends aw_template
 		$this->log_event($evnt, $req);
 
 		$this->remove($evnt);
+		
+		echo "unlinking ",$lockfilename," <br />";
+		unlink($lockfilename);
+
 	}
 
 	////
