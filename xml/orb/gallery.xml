@@ -98,6 +98,13 @@
 			</function>
 		</action>
 
+		<action name="show" nologin="1">
+			<function name="show"  nologin="1">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
 		
