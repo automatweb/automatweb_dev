@@ -28,7 +28,7 @@
 <field name="modifiedby" caption="Muutja" width="50" align="center" talign="center" sortable="1" chgbgcolor="cutcopied"/>
 <field name="modified" caption="Muudetud" width="100" align="center" talign="center" type="time" format="d-M-y / H:i" sortable="1" numeric="yea" chgbgcolor="cutcopied"/>
 <field name="class_id" caption="T&amp;uuml;&amp;uuml;p" width="100" talign="center" align="center" sortable="1" chgbgcolor="cutcopied"/>
-<field name="link" caption="Link" talign="center" width="30" align="center" chgbgcolor="cutcopied"/>
+<field name="java" caption="Tegevus" talign="center" width="30" align="center" chgbgcolor="cutcopied"/>
 <field name="select" caption="&lt;a href='javascript:selall()'&gt;Vali&lt;/a&gt;" talign="center" width="30" align="center" chgbgcolor="cutcopied"/>
 </data>
 
