@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.14 2004/09/14 09:29:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.15 2004/10/05 09:21:01 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -514,6 +514,7 @@ class shop_order extends class_base
 		// if the order center has an e-mail element selected, send the order to that one as well
 		// but using a different template
 		$ud = $oi->meta("user_data");
+		//echo "mail to el = ".$this->order_center->prop("mail_to_el")." <br>";
 		if (!$arr["no_send_mail"] && $this->order_center->prop("mail_to_el") != "" && ($_send_to = $ud[$this->order_center->prop("mail_to_el")]) != "")
 		{
 			$html = $this->show(array(
@@ -521,6 +522,7 @@ class shop_order extends class_base
 				"template" => "show_cust.tpl"
 			));
 
+		//echo "sent to $_send_to content = $html <br>";
 			$awm = get_instance("aw_mail");
 			$awm->create_message(array(
 				"froma" => "automatweb@automatweb.com",
@@ -597,6 +599,14 @@ class shop_order extends class_base
 						'user'.$i => $product_info->prop('user'.$i)
 					));
 				}
+				$product_info_i = $product_info->instance();
+				$cur_tot = $tp[$prod->id()] * $product_info_i->get_calc_price($product_info);
+				$prod_total += $cur_tot;
+				$this->vars(array(
+					"prod_name" => $product_info->name(),
+					"prod_price" => $product_info_i->get_price($product_info),
+					"prod_tot_price" => number_format($cur_tot, 2)
+				));
 			}
 
 			$this->vars(array(
@@ -745,6 +755,7 @@ class shop_order extends class_base
 			"PROD" => $p,
 			"PROD_LONG" => $pl,
 			"total" => number_format($total,2),
+			"prod_total" => number_format($prod_total,2),
 			"total_incl_disc" => number_format($total_incl_disc,2),
 			"id" => $o->id(),
 			"order_pdf" => $this->mk_my_orb("gen_pdf", array("id" => $o->id())),

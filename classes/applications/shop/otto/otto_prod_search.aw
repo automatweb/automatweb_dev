@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.4 2004/09/14 09:31:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.5 2004/10/05 09:21:02 kristo Exp $
 // otto_prod_search.aw - Otto toodete otsing 
 /*
 
@@ -123,6 +123,11 @@ class otto_prod_search extends class_base
 
 		// filter by name does NOT work. at all. must filter by image number. 
 		// so write some badass sql here
+		$jstr = trim(join(",", $ol_cnt->ids()));
+		if ($jstr == "")
+		{
+			$jstr = "-1";
+		}
 		$q = "
 			SELECT 
 				o.brother_of as oid,pi.imnr as imnr
@@ -132,7 +137,7 @@ class otto_prod_search extends class_base
 				LEFT JOIN objects o ON pr.aw_oid = o.oid 
 			WHERE
 				o.status > 0 AND o.lang_id = ".aw_global_get("lang_id")." AND
-				pr.aw_oid IN (".join(",", $ol_cnt->ids()).") AND
+				pr.aw_oid IN ($jstr) AND
 				pi.imnr IS NOT NULL
 			GROUP BY
 				pi.imnr

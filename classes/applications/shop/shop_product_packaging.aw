@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.7 2004/09/17 12:18:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.8 2004/10/05 09:21:01 kristo Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -261,6 +261,20 @@ class shop_product_packaging extends class_base
 	function get_calc_price($o)
 	{
 		return $o->prop("price");
+	}
+
+	function get_prod_calc_price($o)
+	{
+		$c = reset($o->connections_to(array(
+			"from.class_id" => CL_SHOP_PRODUCT,
+			"type" => 2 // RELTYPE_PACKAGING
+		)));
+		if ($c)
+		{
+			$o = $c->from();
+			return $o->prop("price");
+		}
+		return 0;
 	}
 
 	function request_execute($obj)

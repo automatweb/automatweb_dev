@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.17 2004/09/17 12:18:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.18 2004/10/05 09:21:01 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -114,6 +114,7 @@ class shop_order_cart extends class_base
 		$layout = obj($cart_o->prop("prod_layout"));
 
 		$total = 0;
+		$prod_total = 0;
 
 		$awa = new aw_array($_SESSION["cart"]["items"]);
 		$show_info_page = true;
@@ -142,6 +143,14 @@ class shop_order_cart extends class_base
 			$show_info_page = false;
 
 			$total += ($quant * $inst->get_price($i));
+			if (get_class($inst) == "shop_product_packaging")
+			{
+				$prod_total += ($quant * $inst->get_prod_calc_price($i));
+			}
+			else
+			{
+				$prod_total = $total;
+			}
 
 			$str .= $this->parse("PROD");
 		}
@@ -194,6 +203,7 @@ class shop_order_cart extends class_base
 			"user_data_form" => $html,
 			"PROD" => $str,
 			"total" => number_format($total, 2),
+			"prod_total" => number_format($prod_total, 2),
 			"postal_price" => number_format($cart_o->prop("postal_price"),2),
 			"reforb" => $this->mk_reforb("submit_add_cart", array("oc" => $arr["oc"], "update" => 1, "section" => $arr["section"]))
 		));
@@ -505,7 +515,7 @@ class shop_order_cart extends class_base
 		}
 	}
 
-	function get_cart_value()
+	function get_cart_value($prod = false)
 	{
 		$total = 0;
 
@@ -517,10 +527,28 @@ class shop_order_cart extends class_base
 				$i = obj($iid);
 				$inst = $i->instance();
 				$total += ($quant * $inst->get_calc_price($i));
+				if ($prod)				
+				{
+					if ($i->class_id() == CL_SHOP_PRODUCT_PACKAGING)
+					{
+						$prod_total += ($quant * $inst->get_prod_calc_price($i));
+					}	
+					else
+					{
+						$prod_total = $total;
+					}
+				}
 			}
 		}
 
-		return $total;
+		if ($prod)
+		{
+			return array($total, $prod_total);
+		}
+		else
+		{
+			return $total;
+		}
 	}
 
 	function get_items_in_cart()
@@ -609,6 +637,7 @@ class shop_order_cart extends class_base
 		$layout->set_prop("template", "prod_pre_confirm.tpl");
 
 		$total = 0;
+		$prod_total = 0;
 
 		$awa = new aw_array($_SESSION["cart"]["items"]);
 		foreach($awa->get() as $iid => $quant)
@@ -632,6 +661,14 @@ class shop_order_cart extends class_base
 			));
 
 			$total += ($quant * $inst->get_price($i));
+			if (get_class($inst) == "shop_product_packaging")
+			{
+				$prod_total += ($quant * $inst->get_prod_calc_price($i));
+			}
+			else
+			{
+				$prod_total = $total;
+			}
 
 			$str .= $this->parse("PROD");
 		}
@@ -650,6 +687,9 @@ class shop_order_cart extends class_base
 		$els["userdate1"]["year_to"] = date("Y");
 		$els["userdate1"]["no_default"] = true;
 		$els["userdate1"]["value"] = -1;
+
+		$els["userdate2"]["year_from"] = date("Y");
+		$els["userdate2"]["year_to"] = date("Y")+3;
 
 		// if there are errors
 		$els = $this->do_insert_user_data_errors($els);
@@ -705,6 +745,7 @@ class shop_order_cart extends class_base
 			"user_data_form" => $html,
 			"PROD" => $str,
 			"total" => number_format($total, 2),
+			"prod_total" => number_format($prod_total, 2),
 			"reforb" => $this->mk_reforb("submit_add_cart", array("oc" => $arr["oc"], "update" => 1, "section" => $arr["section"], "from" => "pre")),
 			"postal_price" => number_format($cart_o->prop("postal_price"))
 		));

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart_value.aw,v 1.3 2004/09/03 15:56:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart_value.aw,v 1.4 2004/10/05 09:21:01 kristo Exp $
 // shop_order_cart_value.aw - Poe ostukorvi v&auml;&auml;rtus 
 /*
 
@@ -59,9 +59,11 @@ class shop_order_cart_value extends class_base
 			$count += $dat;
 		}
 
+		list($t1, $t2) = $soc->get_cart_value(true);
 		$this->read_template("show.tpl");
 		$this->vars(array(
-			"value" => number_format($soc->get_cart_value(),2),
+			"value" => number_format($t1,2),
+			"prod_value" => number_format($t2, 2),
 			"count" => $count
 		));
 

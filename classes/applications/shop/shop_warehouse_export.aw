@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_export.aw,v 1.2 2004/03/24 11:00:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_export.aw,v 1.3 2004/10/05 09:21:01 kristo Exp $
 // shop_warehouse_export.aw - Lao v&auml;ljaminek 
 /*
 
@@ -133,8 +133,11 @@ class shop_warehouse_export extends class_base
 		foreach($o->connections_from(array("type" => 1 /*RELTYPE_PRODUCT*/)) as $c)
 		{
 			$to = $c->to();
-			$to->set_prop("item_count", $to->prop("item_count") - $pd[$to->id()]);
-			$to->save();
+			if ($to->is_property("item_count"))
+			{
+				$to->set_prop("item_count", $to->prop("item_count") - $pd[$to->id()]);
+				$to->save();
+			}
 		}
 		$o->set_prop("confirm", 1);
 		$o->save();

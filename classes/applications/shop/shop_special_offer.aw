@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_special_offer.aw,v 1.3 2004/08/19 07:52:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_special_offer.aw,v 1.4 2004/10/05 09:21:01 kristo Exp $
 // shop_special_offer.aw - Poe eripakkumine 
 /*
 
@@ -79,6 +79,12 @@ class shop_special_offer extends class_base
 			"name" => "price",
 			"caption" => "Hind"
 		));
+
+		$t->define_field(array(
+			"name" => "price_comment",
+			"caption" => "Hind kommentaariga",
+			"align" => "center"
+		));
 	}
 
 	function do_prods_tbl($arr)
@@ -107,6 +113,10 @@ class shop_special_offer extends class_base
 					"size" => 5,
 					"name" => "prodat[$id][price]",
 					"value" => $prodat[$id]["price"]
+				)),
+				"price_comment" => html::textbox(array(
+					"name" => "prodat[$id][price_comment]",
+					"value" => $prodat[$id]["price_comment"]
 				)),
 				"hidden_ord" => $prodat[$id]["ord"]
 			));
@@ -152,7 +162,8 @@ class shop_special_offer extends class_base
 			$html .= $prod_i->do_draw_product(array(
 				"layout" => $layout,
 				"prod" => $prod,
-				"price" => $prodat[$prod->id()]["price"]
+				"price" => $prodat[$prod->id()]["price"],
+				"price_comment" => $prodat[$prod->id()]["price_comment"]
 			));
 		}
 
