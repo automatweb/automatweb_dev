@@ -303,15 +303,17 @@ aste07
 <!-- SUB: LINE -->
 <tr class="{VAR:is_cut}">
 <td height="15" class="celltext"><img src="{VAR:icon}"></td>
-<td height="15" class="celltext">&nbsp;
 <!-- SUB: CAN_CHANGE -->
+<td height="15" class="celltext" onMouseOver="this.style.backgroundColor='#A2BCCC'; this.style.cursor='hand';" onMouseOut="this.style.backgroundColor='#DBE8EE';" onclick="window.location.href='{VAR:change}'">&nbsp;
 <a {VAR:target} href="{VAR:change}">{VAR:name}</a>
+&nbsp;</td>
 <!-- END SUB: CAN_CHANGE -->
 
 <!-- SUB: CAN_VIEW -->
+<td height="15" class="celltext">&nbsp;
 {VAR:name}
-<!-- END SUB: CAN_VIEW -->
 &nbsp;</td>
+<!-- END SUB: CAN_VIEW -->
 <td class="celltext" align=center>
 <!-- SUB: NFIRST -->
 <input class='small_button' type=text NAME='ord[{VAR:oid}]' VALUE='{VAR:order}' SIZE=3 MAXLENGTH=4><input type='hidden' name='old_ord[{VAR:oid}]' value='{VAR:order}'>
