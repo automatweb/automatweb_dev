@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.185 2002/12/12 16:09:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.186 2002/12/16 16:02:57 axel Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -27,6 +27,7 @@ class menuedit extends aw_template
 	////
 	// !simpel menyy lisamise funktsioon. laienda kui soovid. Mina kasutan seda saidi seest
 	// uue folderi lisamiseks kodukataloogi alla
+	// skip_invalidate
 	function add_new_menu($args = array())
 	{
 		// ja eeldame, et meil on vähemalt parent ja name olemas.
@@ -36,14 +37,18 @@ class menuedit extends aw_template
 			"parent" => $args["parent"],
 			"status" => (isset($args["status"]) ? $args["status"] : 2),
 			"class_id" => CL_PSEUDO,
-			"jrk" => $args["jrk"]
+			"jrk" => $args["jrk"],
+			'no_flush' => $args['no_flush'],
 		));
 		$type = $args["type"] ? $args["type"] : MN_HOME_FOLDER_SUB;
 		$q = sprintf("INSERT INTO menu (id,type) VALUES (%d,%d)",$newoid,$type);
 		$this->db_query($q);
 		$this->_log("menuedit",sprintf(LC_MENUEDIT_ADDED_HOMECAT_FOLDER,$args["name"]));
 
-		$this->invalidate_menu_cache(array($newoid));
+		if (!$args['no_flush'])
+		{
+			$this->invalidate_menu_cache(array($newoid));
+		}
 
 		return $newoid;
 	}
