@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:39 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:52:33 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -126,7 +126,7 @@ msgstr ""
 msgid "Seose postipoisi andmeallikas (RELTYPE_PP) tekst"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:96
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:96 classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:159
 msgid "Element"
 msgstr ""
 
@@ -134,20 +134,16 @@ msgstr ""
 msgid "Otsitav"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:105
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:105 classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:183
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:110
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:110 classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:188
 msgid "Tekst"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:125
 msgid "T&auml;istekstiotsing"
-msgstr ""
-
-#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:159
-msgid "Element"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:163
@@ -164,14 +160,6 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:178
 msgid "Vaatamise tulp"
-msgstr ""
-
-#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:183
-msgid "J&auml;rjekord"
-msgstr ""
-
-#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:188
-msgid "Tekst"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:393

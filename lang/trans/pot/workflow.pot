@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:49 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:52:29 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -186,32 +186,20 @@ msgstr ""
 msgid "Tegijate rootmenüü on valimata!"
 msgstr ""
 
-#: classes/workflow/workflow.aw:250
+#: classes/workflow/workflow.aw:250 classes/workflow/workflow.aw:351 classes/workflow/workflow.aw:471 classes/workflow/workflow.aw:662
 msgid "Salvesta"
 msgstr ""
 
-#: classes/workflow/workflow.aw:351
-msgid "Salvesta"
-msgstr ""
-
-#: classes/workflow/workflow.aw:439
+#: classes/workflow/workflow.aw:439 classes/workflow/workflow.aw:875
 msgid "Uus"
 msgstr ""
 
-#: classes/workflow/workflow.aw:471
-msgid "Salvesta"
-msgstr ""
-
-#: classes/workflow/workflow.aw:543
+#: classes/workflow/workflow.aw:543 classes/workflow/workflow.aw:799
 msgid "you did not pick a process<br />"
 msgstr ""
 
 #: classes/workflow/workflow.aw:588
 msgid "Log"
-msgstr ""
-
-#: classes/workflow/workflow.aw:662
-msgid "Salvesta"
 msgstr ""
 
 #: classes/workflow/workflow.aw:672
@@ -220,14 +208,6 @@ msgstr ""
 
 #: classes/workflow/workflow.aw:796
 msgid "create ent"
-msgstr ""
-
-#: classes/workflow/workflow.aw:799
-msgid "you did not pick a process<br />"
-msgstr ""
-
-#: classes/workflow/workflow.aw:875
-msgid "Uus"
 msgstr ""
 
 #: classes/workflow/workflow.aw:996

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:55 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:53:43 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -215,15 +215,15 @@ msgid "Omaduse Ei t&ouml;&ouml;ta n&auml;dalavahetustel (unavailable_weekends) h
 msgstr ""
 
 #: classes/mrp/mrp_resource.aw:prop_unavailable_dates
-msgid "Omaduse Kinnised päevad (Formaat: <span style="white-space: nowrap;">p.k, h:m - p.k, h:m;</span><br /><span style="white-space: nowrap;">p.k, h:m - p.k, h:m;</span><br /> ...) (unavailable_dates) caption"
+msgid "Omaduse Kinnised päevad (Formaat: <span style=\"white-space: nowrap;\">p.k, h:m - p.k, h:m;</span><br /><span style=\"white-space: nowrap;\">p.k, h:m - p.k, h:m;</span><br /> ...) (unavailable_dates) caption"
 msgstr ""
 
 #: classes/mrp/mrp_resource.aw:prop_unavailable_dates_comment
-msgid "Omaduse Kinnised päevad (Formaat: <span style="white-space: nowrap;">p.k, h:m - p.k, h:m;</span><br /><span style="white-space: nowrap;">p.k, h:m - p.k, h:m;</span><br /> ...) (unavailable_dates) kommentaar"
+msgid "Omaduse Kinnised päevad (Formaat: <span style=\"white-space: nowrap;\">p.k, h:m - p.k, h:m;</span><br /><span style=\"white-space: nowrap;\">p.k, h:m - p.k, h:m;</span><br /> ...) (unavailable_dates) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_resource.aw:prop_unavailable_dates_help
-msgid "Omaduse Kinnised päevad (Formaat: <span style="white-space: nowrap;">p.k, h:m - p.k, h:m;</span><br /><span style="white-space: nowrap;">p.k, h:m - p.k, h:m;</span><br /> ...) (unavailable_dates) help"
+msgid "Omaduse Kinnised päevad (Formaat: <span style=\"white-space: nowrap;\">p.k, h:m - p.k, h:m;</span><br /><span style=\"white-space: nowrap;\">p.k, h:m - p.k, h:m;</span><br /> ...) (unavailable_dates) help"
 msgstr ""
 
 #: classes/mrp/mrp_resource.aw:group_general
@@ -326,16 +326,16 @@ msgstr ""
 msgid "Arhiveeritud"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:191
-msgid "Kasutatav ressursihalduskeskkond määramata. "
+#: classes/mrp/mrp_resource.aw:186
+msgid "Uut ressurssi saab luua vaid ressursihalduskeskkonnast. "
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:216
-msgid "/Ressursid"
-msgstr ""
-
-#: classes/mrp/mrp_resource.aw:220
+#: classes/mrp/mrp_resource.aw:196
 msgid "Ressurss ei kuulu ühessegi ressursihaldussüsteemi. "
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:221
+msgid "/Ressursid"
 msgstr ""
 
 #: classes/mrp/mrp_resource.aw:234
@@ -350,31 +350,27 @@ msgstr ""
 msgid "Ressurss on allhange"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:370
+#: classes/mrp/mrp_resource.aw:392
 msgid "Klient"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:376
+#: classes/mrp/mrp_resource.aw:398
 msgid "Projekt"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:382
+#: classes/mrp/mrp_resource.aw:404
 msgid "Töö"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:388
+#: classes/mrp/mrp_resource.aw:410
 msgid "Alustamisaeg"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:394
+#: classes/mrp/mrp_resource.aw:416
 msgid "Staatus"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:399
-msgid "Ava"
-msgstr ""
-
-#: classes/mrp/mrp_resource.aw:461
+#: classes/mrp/mrp_resource.aw:421 classes/mrp/mrp_resource.aw:483
 msgid "Ava"
 msgstr ""
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:22 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:53:17 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -550,7 +550,7 @@ msgstr ""
 msgid "Muuda töösoovi"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_cv.aw:409
+#: classes/applications/personnel_management/personnel_management_cv.aw:409 classes/applications/personnel_management/personnel_management_cv.aw:1192
 msgid "Genereeri pdf"
 msgstr ""
 
@@ -562,7 +562,7 @@ msgstr ""
 msgid "Kool"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_cv.aw:460
+#: classes/applications/personnel_management/personnel_management_cv.aw:460 classes/applications/personnel_management/personnel_management_cv.aw:585
 msgid "Periood"
 msgstr ""
 
@@ -570,7 +570,7 @@ msgstr ""
 msgid "Hariduse liik"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_cv.aw:526
+#: classes/applications/personnel_management/personnel_management_cv.aw:526 classes/applications/personnel_management/personnel_management_cv.aw:560 classes/applications/personnel_management/personnel_management_cv.aw:643
 msgid "Kustuta &otilde;pingud"
 msgstr ""
 
@@ -582,20 +582,12 @@ msgstr ""
 msgid "Muuda valitud täienduskoolitust"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_cv.aw:546
+#: classes/applications/personnel_management/personnel_management_cv.aw:546 classes/applications/personnel_management/personnel_management_cv.aw:637
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_cv.aw:551
+#: classes/applications/personnel_management/personnel_management_cv.aw:551 classes/applications/personnel_management/personnel_management_cv.aw:552
 msgid "Töösoov"
-msgstr ""
-
-#: classes/applications/personnel_management/personnel_management_cv.aw:552
-msgid "Töösoov"
-msgstr ""
-
-#: classes/applications/personnel_management/personnel_management_cv.aw:560
-msgid "Kustuta &otilde;pingud"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:562
@@ -608,18 +600,6 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:579
 msgid "Haridusasutus"
-msgstr ""
-
-#: classes/applications/personnel_management/personnel_management_cv.aw:585
-msgid "Periood"
-msgstr ""
-
-#: classes/applications/personnel_management/personnel_management_cv.aw:637
-msgid "Uus"
-msgstr ""
-
-#: classes/applications/personnel_management/personnel_management_cv.aw:643
-msgid "Kustuta &otilde;pingud"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:645
@@ -642,7 +622,7 @@ msgstr ""
 msgid "Keel"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_cv.aw:714
+#: classes/applications/personnel_management/personnel_management_cv.aw:714 classes/applications/personnel_management/personnel_management_cv.aw:863
 msgid "Tase"
 msgstr ""
 
@@ -680,14 +660,6 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:857
 msgid "Oskus"
-msgstr ""
-
-#: classes/applications/personnel_management/personnel_management_cv.aw:863
-msgid "Tase"
-msgstr ""
-
-#: classes/applications/personnel_management/personnel_management_cv.aw:1192
-msgid "Genereeri pdf"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:1217

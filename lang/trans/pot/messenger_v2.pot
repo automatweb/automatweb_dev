@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:26 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:53:27 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -322,7 +322,7 @@ msgstr ""
 msgid "Kustutada?"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:212
+#: classes/applications/messenger/messenger_v2.aw:212 classes/applications/messenger/messenger_v2.aw:599
 msgid "Kustuta märgitud kirjad"
 msgstr ""
 
@@ -358,10 +358,6 @@ msgstr ""
 msgid "Vii valitud kirjad kataloogi"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:599
-msgid "Kustuta märgitud kirjad"
-msgstr ""
-
 #: classes/applications/messenger/messenger_v2.aw:600
 msgid "Kustutada märgitud kirjad?"
 msgstr ""
@@ -374,16 +370,12 @@ msgstr ""
 msgid "ühtegi ruuli pole seostatud"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:798
+#: classes/applications/messenger/messenger_v2.aw:798 classes/applications/messenger/messenger_v2.aw:811
 msgid "<strong>message with subject: %s</strong><br>"
 msgstr ""
 
 #: classes/applications/messenger/messenger_v2.aw:800
 msgid " &nbsp; &nbsp; uid = %s, matches subject rule %s, moving to %s folder<br>"
-msgstr ""
-
-#: classes/applications/messenger/messenger_v2.aw:811
-msgid "<strong>message with subject: %s</strong><br>"
 msgstr ""
 
 #: classes/applications/messenger/messenger_v2.aw:813

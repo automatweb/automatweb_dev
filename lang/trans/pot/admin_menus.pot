@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:10 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:53:36 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -14,15 +14,15 @@ msgstr ""
 msgid "Ava"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:249
+#: classes/admin/admin_menus.aw:249 classes/admin/admin_menus.aw:1372
 msgid "Muuda"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:257
+#: classes/admin/admin_menus.aw:257 classes/admin/admin_menus.aw:1341
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:266
+#: classes/admin/admin_menus.aw:266 classes/admin/admin_menus.aw:1348
 msgid "Kopeeri"
 msgstr ""
 
@@ -30,7 +30,7 @@ msgstr ""
 msgid "Kustutada valitud objektid?"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:278
+#: classes/admin/admin_menus.aw:278 classes/admin/admin_menus.aw:1365
 msgid "Kustuta"
 msgstr ""
 
@@ -70,24 +70,8 @@ msgstr ""
 msgid "Otsi"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1341
-msgid "L&otilde;ika"
-msgstr ""
-
-#: classes/admin/admin_menus.aw:1348
-msgid "Kopeeri"
-msgstr ""
-
 #: classes/admin/admin_menus.aw:1357
 msgid "Kleebi"
-msgstr ""
-
-#: classes/admin/admin_menus.aw:1365
-msgid "Kustuta"
-msgstr ""
-
-#: classes/admin/admin_menus.aw:1372
-msgid "Muuda"
 msgstr ""
 
 #: classes/admin/admin_menus.aw:1381

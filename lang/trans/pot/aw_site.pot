@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:46 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:53:38 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -282,7 +282,7 @@ msgstr ""
 msgid "<br><br><b>Valmis! sait on kasutatav 30 sekundi p&auml;rast!</b><br />\n"
 msgstr ""
 
-#: classes/install/aw_site.aw:412
+#: classes/install/aw_site.aw:412 classes/install/aw_site.aw:448 classes/install/aw_site.aw:472 classes/install/aw_site.aw:498 classes/install/aw_site.aw:514 classes/install/aw_site.aw:548 classes/install/aw_site.aw:567 classes/install/aw_site.aw:783 classes/install/aw_site.aw:851 classes/install/aw_site.aw:1106 classes/install/aw_site.aw:1152
 msgid "OK"
 msgstr ""
 
@@ -298,32 +298,16 @@ msgstr ""
 msgid "Kopeeris default keelefailid"
 msgstr ""
 
-#: classes/install/aw_site.aw:448
-msgid "OK"
-msgstr ""
-
 #: classes/install/aw_site.aw:470
 msgid "Kopeeris default kujunduse"
 msgstr ""
 
-#: classes/install/aw_site.aw:472
-msgid "OK"
-msgstr ""
-
-#: classes/install/aw_site.aw:498
-msgid "OK"
-msgstr ""
-
-#: classes/install/aw_site.aw:501
+#: classes/install/aw_site.aw:501 classes/install/aw_site.aw:570 classes/install/aw_site.aw:1109
 msgid "Faili ei ole!"
 msgstr ""
 
 #: classes/install/aw_site.aw:505
 msgid "Tegi virtualhost konfi!"
-msgstr ""
-
-#: classes/install/aw_site.aw:514
-msgid "OK"
 msgstr ""
 
 #: classes/install/aw_site.aw:517
@@ -336,18 +320,6 @@ msgstr ""
 
 #: classes/install/aw_site.aw:546
 msgid "Kopeeris saidi koodi"
-msgstr ""
-
-#: classes/install/aw_site.aw:548
-msgid "OK"
-msgstr ""
-
-#: classes/install/aw_site.aw:567
-msgid "OK"
-msgstr ""
-
-#: classes/install/aw_site.aw:570
-msgid "Faili ei ole!"
 msgstr ""
 
 #: classes/install/aw_site.aw:574
@@ -366,16 +338,8 @@ msgstr ""
 msgid "Konfigureeris nimeserveri"
 msgstr ""
 
-#: classes/install/aw_site.aw:783
-msgid "OK"
-msgstr ""
-
 #: classes/install/aw_site.aw:849
 msgid "L&otilde;i saidi andmebaasi"
-msgstr ""
-
-#: classes/install/aw_site.aw:851
-msgid "OK"
 msgstr ""
 
 #: classes/install/aw_site.aw:862
@@ -438,24 +402,12 @@ msgstr ""
 msgid "Ei saa root kasutaja &otilde;iguseid kasutada!"
 msgstr ""
 
-#: classes/install/aw_site.aw:1106
-msgid "OK"
-msgstr ""
-
-#: classes/install/aw_site.aw:1109
-msgid "Faili ei ole!"
-msgstr ""
-
 #: classes/install/aw_site.aw:1113
 msgid "Tegi ini faili"
 msgstr ""
 
 #: classes/install/aw_site.aw:1150
 msgid "K&uuml;sis uue saidi id"
-msgstr ""
-
-#: classes/install/aw_site.aw:1152
-msgid "OK"
 msgstr ""
 
 #: classes/install/aw_site.aw:1171
@@ -490,11 +442,7 @@ msgstr ""
 msgid "%s konteineri sisu"
 msgstr ""
 
-#: classes/install/aw_site.aw:1484
-msgid "pealkiri"
-msgstr ""
-
-#: classes/install/aw_site.aw:1485
+#: classes/install/aw_site.aw:1484 classes/install/aw_site.aw:1485
 msgid "pealkiri"
 msgstr ""
 

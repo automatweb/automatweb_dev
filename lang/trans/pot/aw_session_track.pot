@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:08 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:52:52 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/core/aw_session_track.aw:25
+#: classes/core/aw_session_track.aw:25 classes/core/aw_session_track.aw:172
 msgid "Saidid"
 msgstr ""
 
@@ -42,19 +42,15 @@ msgstr ""
 msgid "Sisse loginud kasutajad"
 msgstr ""
 
-#: classes/core/aw_session_track.aw:172
-msgid "Saidid"
-msgstr ""
-
-#: classes/core/aw_session_track.aw:210
+#: classes/core/aw_session_track.aw:210 classes/core/aw_session_track.aw:351
 msgid "Logi v&auml;lja"
 msgstr ""
 
-#: classes/core/aw_session_track.aw:229
+#: classes/core/aw_session_track.aw:229 classes/core/aw_session_track.aw:339
 msgid "Saada teade"
 msgstr ""
 
-#: classes/core/aw_session_track.aw:237
+#: classes/core/aw_session_track.aw:237 classes/core/aw_session_track.aw:345
 msgid "Suuna"
 msgstr ""
 
@@ -62,24 +58,16 @@ msgstr ""
 msgid "Aadress, kuhu suunata"
 msgstr ""
 
-#: classes/core/aw_session_track.aw:261
+#: classes/core/aw_session_track.aw:261 classes/core/aw_session_track.aw:287
 msgid "Kasutaja ip"
 msgstr ""
 
-#: classes/core/aw_session_track.aw:265
+#: classes/core/aw_session_track.aw:265 classes/core/aw_session_track.aw:291
 msgid "Kellele"
 msgstr ""
 
 #: classes/core/aw_session_track.aw:269
 msgid "Teade"
-msgstr ""
-
-#: classes/core/aw_session_track.aw:287
-msgid "Kasutaja ip"
-msgstr ""
-
-#: classes/core/aw_session_track.aw:291
-msgid "Kellele"
 msgstr ""
 
 #: classes/core/aw_session_track.aw:295
@@ -100,18 +88,6 @@ msgstr ""
 
 #: classes/core/aw_session_track.aw:332
 msgid "Millal viimati"
-msgstr ""
-
-#: classes/core/aw_session_track.aw:339
-msgid "Saada teade"
-msgstr ""
-
-#: classes/core/aw_session_track.aw:345
-msgid "Suuna"
-msgstr ""
-
-#: classes/core/aw_session_track.aw:351
-msgid "Logi v&auml;lja"
 msgstr ""
 
 #: classes/core/aw_session_track.aw:357

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:26 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:53:26 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -198,24 +198,16 @@ msgstr ""
 msgid "Edasta kiri"
 msgstr ""
 
-#: classes/applications/quickmessage/quickmessagebox.aw:127
+#: classes/applications/quickmessage/quickmessagebox.aw:127 classes/applications/quickmessage/quickmessagebox.aw:154
 msgid "Arhiveeri valitud kirjad"
 msgstr ""
 
-#: classes/applications/quickmessage/quickmessagebox.aw:139
+#: classes/applications/quickmessage/quickmessagebox.aw:139 classes/applications/quickmessage/quickmessagebox.aw:161
 msgid "Kustuta valitud kirjad"
 msgstr ""
 
 #: classes/applications/quickmessage/quickmessagebox.aw:147
 msgid "oled sa kindel, et tahad valitud kirja kustutada?"
-msgstr ""
-
-#: classes/applications/quickmessage/quickmessagebox.aw:154
-msgid "Arhiveeri valitud kirjad"
-msgstr ""
-
-#: classes/applications/quickmessage/quickmessagebox.aw:161
-msgid "Kustuta valitud kirjad"
 msgstr ""
 
 #: classes/applications/quickmessage/quickmessagebox.aw:164
@@ -238,7 +230,7 @@ msgstr ""
 msgid "Saadetud"
 msgstr ""
 
-#: classes/applications/quickmessage/quickmessagebox.aw:290
+#: classes/applications/quickmessage/quickmessagebox.aw:290 classes/applications/quickmessage/quickmessagebox.aw:337
 msgid "Pealkiri"
 msgstr ""
 
@@ -256,10 +248,6 @@ msgstr ""
 
 #: classes/applications/quickmessage/quickmessagebox.aw:336
 msgid "Kasutaja"
-msgstr ""
-
-#: classes/applications/quickmessage/quickmessagebox.aw:337
-msgid "Pealkiri"
 msgstr ""
 
 #: classes/applications/quickmessage/quickmessagebox.aw:377

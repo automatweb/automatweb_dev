@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:45 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:53:38 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -54,19 +54,19 @@ msgstr ""
 msgid "AW Saitide list"
 msgstr ""
 
-#: classes/install/site_list.aw:33
+#: classes/install/site_list.aw:33 classes/install/site_list.aw:221 classes/install/site_list.aw:510
 msgid "ID"
 msgstr ""
 
-#: classes/install/site_list.aw:39
+#: classes/install/site_list.aw:39 classes/install/site_list.aw:228 classes/install/site_list.aw:517
 msgid "Nimi"
 msgstr ""
 
-#: classes/install/site_list.aw:44
+#: classes/install/site_list.aw:44 classes/install/site_list.aw:525
 msgid "URL"
 msgstr ""
 
-#: classes/install/site_list.aw:49
+#: classes/install/site_list.aw:49 classes/install/site_list.aw:154 classes/install/site_list.aw:533
 msgid "Server"
 msgstr ""
 
@@ -82,7 +82,7 @@ msgstr ""
 msgid "Viimane uuendus"
 msgstr ""
 
-#: classes/install/site_list.aw:72
+#: classes/install/site_list.aw:72 classes/install/site_list.aw:240 classes/install/site_list.aw:248
 msgid "Muuda"
 msgstr ""
 
@@ -110,11 +110,7 @@ msgstr ""
 msgid "Koodiversioonide kaupa: <br />\n"
 msgstr ""
 
-#: classes/install/site_list.aw:154
-msgid "Server"
-msgstr ""
-
-#: classes/install/site_list.aw:159
+#: classes/install/site_list.aw:159 classes/install/site_list.aw:189
 msgid "Mitu"
 msgstr ""
 
@@ -122,48 +118,12 @@ msgstr ""
 msgid "Koodiversioon"
 msgstr ""
 
-#: classes/install/site_list.aw:189
-msgid "Mitu"
-msgstr ""
-
-#: classes/install/site_list.aw:213
+#: classes/install/site_list.aw:213 classes/install/site_list.aw:613
 msgid "AW Serverite list"
-msgstr ""
-
-#: classes/install/site_list.aw:221
-msgid "ID"
-msgstr ""
-
-#: classes/install/site_list.aw:228
-msgid "Nimi"
 msgstr ""
 
 #: classes/install/site_list.aw:234
 msgid "IP aadress"
-msgstr ""
-
-#: classes/install/site_list.aw:240
-msgid "Muuda"
-msgstr ""
-
-#: classes/install/site_list.aw:248
-msgid "Muuda"
-msgstr ""
-
-#: classes/install/site_list.aw:510
-msgid "ID"
-msgstr ""
-
-#: classes/install/site_list.aw:517
-msgid "Nimi"
-msgstr ""
-
-#: classes/install/site_list.aw:525
-msgid "URL"
-msgstr ""
-
-#: classes/install/site_list.aw:533
-msgid "Server"
 msgstr ""
 
 #: classes/install/site_list.aw:541
@@ -184,10 +144,6 @@ msgstr ""
 
 #: classes/install/site_list.aw:570
 msgid "Last update"
-msgstr ""
-
-#: classes/install/site_list.aw:613
-msgid "AW Serverite list"
 msgstr ""
 
 #: classes/install/site_list.aw:614

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:50 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:53:42 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -455,15 +455,15 @@ msgid "Omaduse Seosehaldur (sa_manager) help"
 msgstr ""
 
 #: classes/menu.aw:prop_seealso
-msgid "Omaduse Menüüd, mille all see menüü on "vaata lisaks" menüü (seealso) caption"
+msgid "Omaduse Menüüd, mille all see menüü on \"vaata lisaks\" menüü (seealso) caption"
 msgstr ""
 
 #: classes/menu.aw:prop_seealso_comment
-msgid "Omaduse Menüüd, mille all see menüü on "vaata lisaks" menüü (seealso) kommentaar"
+msgid "Omaduse Menüüd, mille all see menüü on \"vaata lisaks\" menüü (seealso) kommentaar"
 msgstr ""
 
 #: classes/menu.aw:prop_seealso_help
-msgid "Omaduse Menüüd, mille all see menüü on "vaata lisaks" menüü (seealso) help"
+msgid "Omaduse Menüüd, mille all see menüü on \"vaata lisaks\" menüü (seealso) help"
 msgstr ""
 
 #: classes/menu.aw:prop_seealso_order
@@ -950,23 +950,23 @@ msgstr ""
 msgid "Järjekord"
 msgstr ""
 
-#: classes/menu.aw:463
+#: classes/menu.aw:463 classes/menu.aw:516
 msgid "J&auml;rjekorra j&auml;rgi"
 msgstr ""
 
-#: classes/menu.aw:464
+#: classes/menu.aw:464 classes/menu.aw:517
 msgid "Loomise kuup&auml;eva j&auml;rgi"
 msgstr ""
 
-#: classes/menu.aw:465
+#: classes/menu.aw:465 classes/menu.aw:518
 msgid "Muutmise kuup&auml;eva j&auml;rgi"
 msgstr ""
 
-#: classes/menu.aw:466
+#: classes/menu.aw:466 classes/menu.aw:519
 msgid "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"
 msgstr ""
 
-#: classes/menu.aw:467
+#: classes/menu.aw:467 classes/menu.aw:520
 msgid "Kalendris valitud aja j&auml;rgi"
 msgstr ""
 
@@ -974,39 +974,11 @@ msgstr ""
 msgid "Nime j&auml;rgi"
 msgstr ""
 
-#: classes/menu.aw:472
+#: classes/menu.aw:472 classes/menu.aw:526
 msgid "Suurem (uuem) enne"
 msgstr ""
 
-#: classes/menu.aw:473
-msgid "V&auml;iksem (vanem) enne"
-msgstr ""
-
-#: classes/menu.aw:516
-msgid "J&auml;rjekorra j&auml;rgi"
-msgstr ""
-
-#: classes/menu.aw:517
-msgid "Loomise kuup&auml;eva j&auml;rgi"
-msgstr ""
-
-#: classes/menu.aw:518
-msgid "Muutmise kuup&auml;eva j&auml;rgi"
-msgstr ""
-
-#: classes/menu.aw:519
-msgid "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"
-msgstr ""
-
-#: classes/menu.aw:520
-msgid "Kalendris valitud aja j&auml;rgi"
-msgstr ""
-
-#: classes/menu.aw:526
-msgid "Suurem (uuem) enne"
-msgstr ""
-
-#: classes/menu.aw:527
+#: classes/menu.aw:473 classes/menu.aw:527
 msgid "V&auml;iksem (vanem) enne"
 msgstr ""
 
@@ -1014,7 +986,7 @@ msgstr ""
 msgid "OID"
 msgstr ""
 
-#: classes/menu.aw:542
+#: classes/menu.aw:542 classes/menu.aw:1231 classes/menu.aw:1283
 msgid "Nimi"
 msgstr ""
 
@@ -1038,7 +1010,7 @@ msgstr ""
 msgid "Vali pilt.."
 msgstr ""
 
-#: classes/menu.aw:662
+#: classes/menu.aw:662 classes/menu.aw:1076
 msgid "Muuda"
 msgstr ""
 
@@ -1106,40 +1078,20 @@ msgstr ""
 msgid "-- vali --"
 msgstr ""
 
-#: classes/menu.aw:1076
-msgid "Muuda"
-msgstr ""
-
 #: classes/menu.aw:1080
 msgid "Lisa"
 msgstr ""
 
-#: classes/menu.aw:1089
+#: classes/menu.aw:1089 classes/menu.aw:1109
 msgid "--vali--"
 msgstr ""
 
-#: classes/menu.aw:1109
-msgid "--vali--"
-msgstr ""
-
-#: classes/menu.aw:1223
+#: classes/menu.aw:1223 classes/menu.aw:1275
 msgid "ID"
-msgstr ""
-
-#: classes/menu.aw:1231
-msgid "Nimi"
 msgstr ""
 
 #: classes/menu.aw:1236
 msgid "kustuta"
-msgstr ""
-
-#: classes/menu.aw:1275
-msgid "ID"
-msgstr ""
-
-#: classes/menu.aw:1283
-msgid "Nimi"
 msgstr ""
 
 #: classes/menu.aw:1288

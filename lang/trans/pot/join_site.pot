@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:35 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:52:30 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -326,15 +326,11 @@ msgstr ""
 msgid "Grupp"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:247
+#: classes/contentmgmt/join/join_site.aw:247 classes/contentmgmt/join/join_site.aw:268
 msgid "Muuda"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:268
-msgid "Muuda"
-msgstr ""
-
-#: classes/contentmgmt/join/join_site.aw:278
+#: classes/contentmgmt/join/join_site.aw:278 classes/contentmgmt/join/join_site.aw:297
 msgid "Omadus"
 msgstr ""
 
@@ -344,10 +340,6 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:287
 msgid "N&otilde;utav"
-msgstr ""
-
-#: classes/contentmgmt/join/join_site.aw:297
-msgid "Omadus"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:301

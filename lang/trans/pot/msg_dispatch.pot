@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:08 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:52:47 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -10,24 +10,16 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/core/msg/msg_dispatch.aw:22
+#: classes/core/msg/msg_dispatch.aw:22 classes/core/msg/msg_dispatch.aw:50
 msgid "msg_dispatch::post_message - no message posted!"
 msgstr ""
 
-#: classes/core/msg/msg_dispatch.aw:33
+#: classes/core/msg/msg_dispatch.aw:33 classes/core/msg/msg_dispatch.aw:72
 msgid "msg_dispatch::post_message - no handler function (%s) in class (%s) for message %s!"
-msgstr ""
-
-#: classes/core/msg/msg_dispatch.aw:50
-msgid "msg_dispatch::post_message - no message posted!"
 msgstr ""
 
 #: classes/core/msg/msg_dispatch.aw:55
 msgid "msg_dispatch::post_message - no parameter for message posted!"
-msgstr ""
-
-#: classes/core/msg/msg_dispatch.aw:72
-msgid "msg_dispatch::post_message - no handler function (%s) in class (%s) for message %s!"
 msgstr ""
 
 #: classes/core/msg/msg_dispatch.aw:87

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:37 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:52:32 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -430,36 +430,16 @@ msgstr ""
 msgid "V&auml;iksem (vanem) enne"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:254
+#: classes/contentmgmt/promo.aw:254 classes/contentmgmt/promo.aw:303 classes/contentmgmt/promo.aw:350
 msgid "ID"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:262
+#: classes/contentmgmt/promo.aw:262 classes/contentmgmt/promo.aw:311 classes/contentmgmt/promo.aw:359
 msgid "Nimi"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:267
+#: classes/contentmgmt/promo.aw:267 classes/contentmgmt/promo.aw:316
 msgid "k.a. alammenüüd"
-msgstr ""
-
-#: classes/contentmgmt/promo.aw:303
-msgid "ID"
-msgstr ""
-
-#: classes/contentmgmt/promo.aw:311
-msgid "Nimi"
-msgstr ""
-
-#: classes/contentmgmt/promo.aw:316
-msgid "k.a. alammenüüd"
-msgstr ""
-
-#: classes/contentmgmt/promo.aw:350
-msgid "ID"
-msgstr ""
-
-#: classes/contentmgmt/promo.aw:359
-msgid "Nimi"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:366

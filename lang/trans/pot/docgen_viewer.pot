@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:07 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:52:47 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -110,15 +110,7 @@ msgstr ""
 msgid "Open DocGen"
 msgstr ""
 
-#: classes/core/docgen/docgen_viewer.aw:98
-msgid "Classes"
-msgstr ""
-
-#: classes/core/docgen/docgen_viewer.aw:647
-msgid "Classes"
-msgstr ""
-
-#: classes/core/docgen/docgen_viewer.aw:716
+#: classes/core/docgen/docgen_viewer.aw:98 classes/core/docgen/docgen_viewer.aw:647 classes/core/docgen/docgen_viewer.aw:716 classes/core/docgen/docgen_viewer.aw:989 classes/core/docgen/docgen_viewer.aw:1059 classes/core/docgen/docgen_viewer.aw:1157
 msgid "Classes"
 msgstr ""
 
@@ -148,17 +140,5 @@ msgstr ""
 
 #: classes/core/docgen/docgen_viewer.aw:963
 msgid "Foorum"
-msgstr ""
-
-#: classes/core/docgen/docgen_viewer.aw:989
-msgid "Classes"
-msgstr ""
-
-#: classes/core/docgen/docgen_viewer.aw:1059
-msgid "Classes"
-msgstr ""
-
-#: classes/core/docgen/docgen_viewer.aw:1157
-msgid "Classes"
 msgstr ""
 

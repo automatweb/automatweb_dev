@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:32 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:53:34 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -226,63 +226,59 @@ msgstr ""
 msgid "Seose seos (RELTYPE_RELATION) tekst"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:168
+#: classes/applications/class_designer/class_designer.aw:186
 msgid "Visualiseeri"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:259
+#: classes/applications/class_designer/class_designer.aw:311
 msgid "Uus tab"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:270
+#: classes/applications/class_designer/class_designer.aw:322
 msgid "Uus grid"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:306
+#: classes/applications/class_designer/class_designer.aw:358
 msgid "Save"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:316
+#: classes/applications/class_designer/class_designer.aw:368
 msgid "Cut"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:326
+#: classes/applications/class_designer/class_designer.aw:378
 msgid "Paste"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:335
+#: classes/applications/class_designer/class_designer.aw:387
 msgid "Delete"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:338
+#: classes/applications/class_designer/class_designer.aw:390
 msgid "Kustutada valitud objektid?"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:348
+#: classes/applications/class_designer/class_designer.aw:400
 msgid "Jrk"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:354
+#: classes/applications/class_designer/class_designer.aw:406
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:359
+#: classes/applications/class_designer/class_designer.aw:411
 msgid "Tüüp"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:364
+#: classes/applications/class_designer/class_designer.aw:416 classes/applications/class_designer/class_designer.aw:460
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:408
-msgid "Muuda"
-msgstr ""
-
-#: classes/applications/class_designer/class_designer.aw:440
+#: classes/applications/class_designer/class_designer.aw:492
 msgid "Grupp "
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:471
+#: classes/applications/class_designer/class_designer.aw:523
 msgid "vbox "
 msgstr ""
 

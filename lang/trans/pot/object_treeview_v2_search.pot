@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:39 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:52:34 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -142,16 +142,12 @@ msgstr ""
 msgid "Tekst"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:171
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:171 classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:219
 msgid "J&auml;rjekord"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:190
 msgid "T&auml;istekstiotsing"
-msgstr ""
-
-#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:219
-msgid "J&auml;rjekord"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:226
@@ -182,11 +178,7 @@ msgstr ""
 msgid "--Vali--"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:344
-msgid "Otsi"
-msgstr ""
-
-#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:345
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:344 classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:345
 msgid "Otsi"
 msgstr ""
 

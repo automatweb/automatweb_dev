@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:10 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:52:53 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -166,11 +166,7 @@ msgstr ""
 msgid "Muuda"
 msgstr ""
 
-#: classes/core/aw_help.aw:434
-msgid "Salvesta"
-msgstr ""
-
-#: classes/core/aw_help.aw:441
+#: classes/core/aw_help.aw:434 classes/core/aw_help.aw:441
 msgid "Salvesta"
 msgstr ""
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:31 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:53:33 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -634,19 +634,7 @@ msgstr ""
 msgid "Kõik andmed"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:723
-msgid "Selle toimingu jaoks peab listiliikmete allikas olema kaust"
-msgstr ""
-
-#: classes/applications/mailinglist/ml_list.aw:740
-msgid "Selle toimingu jaoks peab listiliikmete allikas olema kaust"
-msgstr ""
-
-#: classes/applications/mailinglist/ml_list.aw:752
-msgid "Selle toimingu jaoks peab listiliikmete allikas olema kaust"
-msgstr ""
-
-#: classes/applications/mailinglist/ml_list.aw:763
+#: classes/applications/mailinglist/ml_list.aw:723 classes/applications/mailinglist/ml_list.aw:740 classes/applications/mailinglist/ml_list.aw:752 classes/applications/mailinglist/ml_list.aw:763
 msgid "Selle toimingu jaoks peab listiliikmete allikas olema kaust"
 msgstr ""
 
@@ -666,16 +654,12 @@ msgstr ""
 msgid "(pealkiri puudub)"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1005
+#: classes/applications/mailinglist/ml_list.aw:1005 classes/applications/mailinglist/ml_list.aw:1017 classes/applications/mailinglist/ml_list.aw:1247
 msgid "Kustuta"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:1007
 msgid "Eemaldan valitud kirjad?"
-msgstr ""
-
-#: classes/applications/mailinglist/ml_list.aw:1017
-msgid "Kustuta"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:1019
@@ -698,55 +682,51 @@ msgstr ""
 msgid "Uus kiri"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1247
-msgid "Kustuta"
-msgstr ""
-
 #: classes/applications/mailinglist/ml_list.aw:1250
 msgid "Oled kindel, et soovid valitud kirjad kustutada?"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1295
+#: classes/applications/mailinglist/ml_list.aw:1288
 msgid "kõik"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1630
+#: classes/applications/mailinglist/ml_list.aw:1623
 msgid "jah"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1630
+#: classes/applications/mailinglist/ml_list.aw:1623
 msgid "ei"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1671
+#: classes/applications/mailinglist/ml_list.aw:1664
 msgid "Liikmeid: %s, saadetud: %s %s"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1753
+#: classes/applications/mailinglist/ml_list.aw:1746
 msgid " - vali - "
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1762
+#: classes/applications/mailinglist/ml_list.aw:1755
 msgid "Vali template"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1771
+#: classes/applications/mailinglist/ml_list.aw:1764
 msgid "Saada peale salvestamist ära"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1788
+#: classes/applications/mailinglist/ml_list.aw:1781
 msgid "Saatja e-maili aadress"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1793
+#: classes/applications/mailinglist/ml_list.aw:1786
 msgid "Saatja nimi"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1801
+#: classes/applications/mailinglist/ml_list.aw:1794
 msgid "Asenduste legend"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1802
+#: classes/applications/mailinglist/ml_list.aw:1795
 msgid "Meili sisus on võimalik kasutada järgnevaid asendusi:<br /><br />
 							#username# - AutomatWebi kasutajanimi<br />
 							#name# - Listi liikme nimi<br />
@@ -757,7 +737,7 @@ msgid "Meili sisus on võimalik kasutada järgnevaid asendusi:<br /><br />
 							Näiteks: http://www.struktuur.ee/aw#traceid#"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:2075
+#: classes/applications/mailinglist/ml_list.aw:2068
 msgid "all done"
 msgstr ""
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:27 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:53:27 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -95,15 +95,15 @@ msgid "Omaduse Muuda (morph_to) help"
 msgstr ""
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_task_toolbar
-msgid "Omaduse "Toolbar" (task_toolbar) caption"
+msgid "Omaduse \"Toolbar\" (task_toolbar) caption"
 msgstr ""
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_task_toolbar_comment
-msgid "Omaduse "Toolbar" (task_toolbar) kommentaar"
+msgid "Omaduse \"Toolbar\" (task_toolbar) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_task_toolbar_help
-msgid "Omaduse "Toolbar" (task_toolbar) help"
+msgid "Omaduse \"Toolbar\" (task_toolbar) help"
 msgstr ""
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_participant

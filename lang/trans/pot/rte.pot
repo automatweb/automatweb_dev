@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:48 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:52:27 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -50,63 +50,75 @@ msgstr ""
 msgid "Grupi Üldine (general) pealkiri"
 msgstr ""
 
-#: classes/vcl/rte.aw:66
+#: classes/vcl/rte.aw:75
 msgid "Bold"
 msgstr ""
 
-#: classes/vcl/rte.aw:73
+#: classes/vcl/rte.aw:82
 msgid "Italic"
 msgstr ""
 
-#: classes/vcl/rte.aw:80
+#: classes/vcl/rte.aw:89
 msgid "Underline"
 msgstr ""
 
-#: classes/vcl/rte.aw:89
+#: classes/vcl/rte.aw:98
 msgid "Align left"
 msgstr ""
 
-#: classes/vcl/rte.aw:96
+#: classes/vcl/rte.aw:105
 msgid "Align center"
 msgstr ""
 
-#: classes/vcl/rte.aw:103
+#: classes/vcl/rte.aw:112
 msgid "Align right"
 msgstr ""
 
-#: classes/vcl/rte.aw:112
+#: classes/vcl/rte.aw:121
 msgid "Numbered list"
 msgstr ""
 
-#: classes/vcl/rte.aw:119
+#: classes/vcl/rte.aw:128
 msgid "Bulleted list"
 msgstr ""
 
-#: classes/vcl/rte.aw:128
+#: classes/vcl/rte.aw:137
 msgid "Outdent"
 msgstr ""
 
-#: classes/vcl/rte.aw:144
+#: classes/vcl/rte.aw:153
 msgid "Tabel"
 msgstr ""
 
-#: classes/vcl/rte.aw:150
+#: classes/vcl/rte.aw:160
 msgid "Lisa tabel"
 msgstr ""
 
-#: classes/vcl/rte.aw:158
+#: classes/vcl/rte.aw:168
 msgid "Lisa tulp"
 msgstr ""
 
-#: classes/vcl/rte.aw:164
+#: classes/vcl/rte.aw:174
 msgid "Lisa rida"
 msgstr ""
 
-#: classes/vcl/rte.aw:172
+#: classes/vcl/rte.aw:182
 msgid "Kustuta tulp"
 msgstr ""
 
-#: classes/vcl/rte.aw:178
+#: classes/vcl/rte.aw:188
 msgid "Kustuta rida"
+msgstr ""
+
+#: classes/vcl/rte.aw:196
+msgid "Poolita rida"
+msgstr ""
+
+#: classes/vcl/rte.aw:201
+msgid "Poolita tulp"
+msgstr ""
+
+#: classes/vcl/rte.aw:211
+msgid "HTML"
 msgstr ""
 

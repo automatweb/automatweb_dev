@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:38 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:52:32 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -110,11 +110,7 @@ msgstr ""
 msgid "server_folder::del_file(%s): the fid parameter does not contain a valid object id!"
 msgstr ""
 
-#: classes/contentmgmt/server_folder.aw:125
-msgid "server_folder::change_file(%s): the fid parameter does not contain a valid object id!"
-msgstr ""
-
-#: classes/contentmgmt/server_folder.aw:148
+#: classes/contentmgmt/server_folder.aw:125 classes/contentmgmt/server_folder.aw:148
 msgid "server_folder::change_file(%s): the fid parameter does not contain a valid object id!"
 msgstr ""
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:48 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:52:54 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -234,19 +234,19 @@ msgstr ""
 msgid "Seose klass (RELTYPE_CLASS) tekst"
 msgstr ""
 
-#: classes/translate/site_translation.aw:224
+#: classes/translate/site_translation.aw:224 classes/translate/site_translation.aw:370 classes/translate/site_translation.aw:515
 msgid "ID"
 msgstr ""
 
-#: classes/translate/site_translation.aw:230
+#: classes/translate/site_translation.aw:230 classes/translate/site_translation.aw:376 classes/translate/site_translation.aw:521
 msgid "Originaali nimi"
 msgstr ""
 
-#: classes/translate/site_translation.aw:236
+#: classes/translate/site_translation.aw:236 classes/translate/site_translation.aw:382 classes/translate/site_translation.aw:527
 msgid "Klass"
 msgstr ""
 
-#: classes/translate/site_translation.aw:243
+#: classes/translate/site_translation.aw:243 classes/translate/site_translation.aw:389 classes/translate/site_translation.aw:534
 msgid "Baaskeel"
 msgstr ""
 
@@ -254,55 +254,11 @@ msgstr ""
 msgid "T&otilde;lgi"
 msgstr ""
 
-#: classes/translate/site_translation.aw:370
-msgid "ID"
-msgstr ""
-
-#: classes/translate/site_translation.aw:376
-msgid "Originaali nimi"
-msgstr ""
-
-#: classes/translate/site_translation.aw:382
-msgid "Klass"
-msgstr ""
-
-#: classes/translate/site_translation.aw:389
-msgid "Baaskeel"
-msgstr ""
-
-#: classes/translate/site_translation.aw:396
+#: classes/translate/site_translation.aw:396 classes/translate/site_translation.aw:541
 msgid "Vaata t&otilde;lkeid"
 msgstr ""
 
-#: classes/translate/site_translation.aw:515
-msgid "ID"
-msgstr ""
-
-#: classes/translate/site_translation.aw:521
-msgid "Originaali nimi"
-msgstr ""
-
-#: classes/translate/site_translation.aw:527
-msgid "Klass"
-msgstr ""
-
-#: classes/translate/site_translation.aw:534
-msgid "Baaskeel"
-msgstr ""
-
-#: classes/translate/site_translation.aw:541
-msgid "Vaata t&otilde;lkeid"
-msgstr ""
-
-#: classes/translate/site_translation.aw:650
-msgid "Salvesta"
-msgstr ""
-
-#: classes/translate/site_translation.aw:671
-msgid "Salvesta"
-msgstr ""
-
-#: classes/translate/site_translation.aw:692
+#: classes/translate/site_translation.aw:650 classes/translate/site_translation.aw:671 classes/translate/site_translation.aw:692
 msgid "Salvesta"
 msgstr ""
 

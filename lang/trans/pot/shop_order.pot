@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:16 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:53:10 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -246,11 +246,7 @@ msgstr ""
 msgid "Lao v&auml;ljaminek tellimuse %s p&otilde;hjal"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:392
-msgid "Tellimus laost %s"
-msgstr ""
-
-#: classes/applications/shop/shop_order.aw:523
+#: classes/applications/shop/shop_order.aw:392 classes/applications/shop/shop_order.aw:523
 msgid "Tellimus laost %s"
 msgstr ""
 

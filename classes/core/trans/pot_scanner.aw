@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.8 2005/03/31 06:28:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.9 2005/03/31 08:23:05 kristo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -155,12 +155,31 @@ class pot_scanner extends core
 			fwrite($fp, "\"Generated-By: AutomatWeb POT Scanner\\n\"\n");
 			fwrite($fp, "\n\n");
 
+			// put same strings on one line
+			$res = array();
 			foreach($strings as $string)
 			{
-				fwrite($fp, "#: ".str_replace(aw_ini_get("basedir")."/","", $file_from).":".$string["line"]."\n");
 				$str = $string["str"];
 				$str = str_replace('"','\"',$str);
-				fwrite($fp, "msgid \"".$str."\"\n");
+
+				if (isset($res[$str]))
+				{
+					$res[$str]["comment"] .= " ".str_replace(aw_ini_get("basedir")."/","", $file_from).":".$string["line"];
+				}
+				else
+				{
+
+					$res[$str] = array(
+						"comment" => "#: ".str_replace(aw_ini_get("basedir")."/","", $file_from).":".$string["line"],
+						"msgid" => $str
+					);
+				}
+			}
+
+			foreach($res as $dat)
+			{
+				fwrite($fp, $dat["comment"]."\n");
+				fwrite($fp, "msgid \"".$dat["msgid"]."\"\n");
 				fwrite($fp, "msgstr \"\"\n");
 				fwrite($fp, "\n");
 			}

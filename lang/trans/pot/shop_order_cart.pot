@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:17 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:53:13 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -118,7 +118,7 @@ msgstr ""
 msgid "Seose kontroller (RELTYPE_CONTROLLER) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_order_cart.aw:149
+#: classes/applications/shop/shop_order_cart.aw:149 classes/applications/shop/shop_order_cart.aw:778 classes/applications/shop/shop_order_cart.aw:999
 msgid "shop_order_cart::show(): no product layout set for cart (%s) "
 msgstr ""
 
@@ -128,13 +128,5 @@ msgstr ""
 
 #: classes/applications/shop/shop_order_cart.aw:603
 msgid "shop_order_cart::do_creat_order_from_cart(): no warehouse set for cart %s!"
-msgstr ""
-
-#: classes/applications/shop/shop_order_cart.aw:778
-msgid "shop_order_cart::show(): no product layout set for cart (%s) "
-msgstr ""
-
-#: classes/applications/shop/shop_order_cart.aw:999
-msgid "shop_order_cart::show(): no product layout set for cart (%s) "
 msgstr ""
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:47 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:52:46 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -354,7 +354,7 @@ msgstr ""
 msgid "Saidi ID"
 msgstr ""
 
-#: classes/syslog/dronline.aw:353
+#: classes/syslog/dronline.aw:353 classes/syslog/dronline.aw:1139
 msgid "OID"
 msgstr ""
 
@@ -418,15 +418,15 @@ msgstr ""
 msgid "Vahemik"
 msgstr ""
 
-#: classes/syslog/dronline.aw:824
+#: classes/syslog/dronline.aw:824 classes/syslog/dronline.aw:978 classes/syslog/dronline.aw:1162
 msgid "Mitu"
 msgstr ""
 
-#: classes/syslog/dronline.aw:831
+#: classes/syslog/dronline.aw:831 classes/syslog/dronline.aw:984 classes/syslog/dronline.aw:1168
 msgid "%"
 msgstr ""
 
-#: classes/syslog/dronline.aw:963
+#: classes/syslog/dronline.aw:963 classes/syslog/dronline.aw:1131 classes/syslog/dronline.aw:1358
 msgid "#"
 msgstr ""
 
@@ -434,31 +434,11 @@ msgstr ""
 msgid "IP Aadress"
 msgstr ""
 
-#: classes/syslog/dronline.aw:978
-msgid "Mitu"
-msgstr ""
-
-#: classes/syslog/dronline.aw:984
-msgid "%"
-msgstr ""
-
-#: classes/syslog/dronline.aw:1041
+#: classes/syslog/dronline.aw:1041 classes/syslog/dronline.aw:1042
 msgid "Blokeeri"
 msgstr ""
 
-#: classes/syslog/dronline.aw:1042
-msgid "Blokeeri"
-msgstr ""
-
-#: classes/syslog/dronline.aw:1131
-msgid "#"
-msgstr ""
-
-#: classes/syslog/dronline.aw:1139
-msgid "OID"
-msgstr ""
-
-#: classes/syslog/dronline.aw:1147
+#: classes/syslog/dronline.aw:1147 classes/syslog/dronline.aw:1366
 msgid "Nimi"
 msgstr ""
 
@@ -466,24 +446,8 @@ msgstr ""
 msgid "Detailid"
 msgstr ""
 
-#: classes/syslog/dronline.aw:1162
-msgid "Mitu"
-msgstr ""
-
-#: classes/syslog/dronline.aw:1168
-msgid "%"
-msgstr ""
-
 #: classes/syslog/dronline.aw:1282
 msgid "Uuenda p&auml;ringute&nbsp;cache"
-msgstr ""
-
-#: classes/syslog/dronline.aw:1358
-msgid "#"
-msgstr ""
-
-#: classes/syslog/dronline.aw:1366
-msgid "Nimi"
 msgstr ""
 
 #: classes/syslog/dronline.aw:1373
@@ -494,11 +458,7 @@ msgstr ""
 msgid "Kes Muutis"
 msgstr ""
 
-#: classes/syslog/dronline.aw:1388
-msgid "Vaata"
-msgstr ""
-
-#: classes/syslog/dronline.aw:1402
+#: classes/syslog/dronline.aw:1388 classes/syslog/dronline.aw:1402
 msgid "Vaata"
 msgstr ""
 

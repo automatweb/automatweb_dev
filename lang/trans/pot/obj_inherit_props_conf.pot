@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:09 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:52:52 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -190,7 +190,7 @@ msgstr ""
 msgid "Omaduse t&uuml;&uuml;p"
 msgstr ""
 
-#: classes/core/obj_inherit_props_conf.aw:279
+#: classes/core/obj_inherit_props_conf.aw:279 classes/core/obj_inherit_props_conf.aw:471
 msgid "Kasuta"
 msgstr ""
 
@@ -224,10 +224,6 @@ msgstr ""
 
 #: classes/core/obj_inherit_props_conf.aw:461
 msgid "Muutmise aeg"
-msgstr ""
-
-#: classes/core/obj_inherit_props_conf.aw:471
-msgid "Kasuta"
 msgstr ""
 
 #: classes/core/obj_inherit_props_conf.aw:539

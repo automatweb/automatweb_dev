@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:14 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:52:42 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -68,18 +68,6 @@ msgstr ""
 
 #: classes/crm/crm_offer.aw:prop_start1_help
 msgid "Omaduse Algus (start1) help"
-msgstr ""
-
-#: classes/crm/crm_offer.aw:prop_end
-msgid "Omaduse L&otilde;pp (end) caption"
-msgstr ""
-
-#: classes/crm/crm_offer.aw:prop_end_comment
-msgid "Omaduse L&otilde;pp (end) kommentaar"
-msgstr ""
-
-#: classes/crm/crm_offer.aw:prop_end_help
-msgid "Omaduse L&otilde;pp (end) help"
 msgstr ""
 
 #: classes/crm/crm_offer.aw:prop_preformer
@@ -278,6 +266,10 @@ msgstr ""
 msgid "Grupi Üldine (general) pealkiri"
 msgstr ""
 
+#: classes/crm/crm_offer.aw:group_content
+msgid "Grupi Sisu (content) pealkiri"
+msgstr ""
+
 #: classes/crm/crm_offer.aw:group_recurrence
 msgid "Grupi Kordumine (recurrence) pealkiri"
 msgstr ""
@@ -350,15 +342,15 @@ msgstr ""
 msgid "Salvesta valitud paketid pakkumisse"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:339
+#: classes/crm/crm_offer.aw:339 classes/crm/crm_offer.aw:648
 msgid "Pakett"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:345
+#: classes/crm/crm_offer.aw:345 classes/crm/crm_offer.aw:518 classes/crm/crm_offer.aw:655
 msgid "Hind"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:354
+#: classes/crm/crm_offer.aw:354 classes/crm/crm_offer.aw:525 classes/crm/crm_offer.aw:664
 msgid "X"
 msgstr ""
 
@@ -398,14 +390,6 @@ msgstr ""
 msgid "Toode"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:518
-msgid "Hind"
-msgstr ""
-
-#: classes/crm/crm_offer.aw:525
-msgid "X"
-msgstr ""
-
 #: classes/crm/crm_offer.aw:599
 msgid "Algstaatus"
 msgstr ""
@@ -420,18 +404,6 @@ msgstr ""
 
 #: classes/crm/crm_offer.aw:617
 msgid "Muutja"
-msgstr ""
-
-#: classes/crm/crm_offer.aw:648
-msgid "Pakett"
-msgstr ""
-
-#: classes/crm/crm_offer.aw:655
-msgid "Hind"
-msgstr ""
-
-#: classes/crm/crm_offer.aw:664
-msgid "X"
 msgstr ""
 
 #: classes/crm/crm_offer.aw:693

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:35 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:52:29 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -222,11 +222,11 @@ msgstr ""
 msgid "Muutmise kuup&auml;eva j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:108
+#: classes/contentmgmt/site_search/site_search_content.aw:108 classes/contentmgmt/site_search/site_search_content.aw:187
 msgid "Pealkirja j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:109
+#: classes/contentmgmt/site_search/site_search_content.aw:109 classes/contentmgmt/site_search/site_search_content.aw:188
 msgid "Sisu j&auml;rgi"
 msgstr ""
 
@@ -272,13 +272,5 @@ msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content.aw:186
 msgid "Kuupäeva järgi (vanem enne)"
-msgstr ""
-
-#: classes/contentmgmt/site_search/site_search_content.aw:187
-msgid "Pealkirja j&auml;rgi"
-msgstr ""
-
-#: classes/contentmgmt/site_search/site_search_content.aw:188
-msgid "Sisu j&auml;rgi"
 msgstr ""
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:41 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:52:54 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -390,7 +390,7 @@ msgstr ""
 msgid "this is not a valid config form - class_id not specified"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:733
+#: classes/cfg/cfgform.aw:733 classes/cfg/cfgform.aw:812 classes/cfg/cfgform.aw:1207
 msgid "Salvesta"
 msgstr ""
 
@@ -416,10 +416,6 @@ msgstr ""
 
 #: classes/cfg/cfgform.aw:783
 msgid "Lisa grupp"
-msgstr ""
-
-#: classes/cfg/cfgform.aw:812
-msgid "Salvesta"
 msgstr ""
 
 #: classes/cfg/cfgform.aw:949
@@ -464,10 +460,6 @@ msgstr ""
 
 #: classes/cfg/cfgform.aw:1206
 msgid "Toimetamata"
-msgstr ""
-
-#: classes/cfg/cfgform.aw:1207
-msgid "Salvesta"
 msgstr ""
 
 #: classes/cfg/cfgform.aw:1208

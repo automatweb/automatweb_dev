@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:08 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:52:47 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 msgid "ERROR: function %s already defined as message handler\n       for message %s with param %s, can not define several recievers\n       for one message with same param in the same class!\n\n"
 msgstr ""
 
-#: classes/core/msg/msg_scanner.aw:90
+#: classes/core/msg/msg_scanner.aw:90 classes/core/msg/msg_scanner.aw:115
 msgid "ERROR: message %s is not defined, but recieved by class%s %s!\n\n"
 msgstr ""
 
@@ -26,19 +26,11 @@ msgstr ""
 msgid "ERROR: class %s defines function %s as message handler for message %s,\n       but the function does not exist in that class!\n\n"
 msgstr ""
 
-#: classes/core/msg/msg_scanner.aw:115
-msgid "ERROR: message %s is not defined, but recieved by class%s %s!\n\n"
-msgstr ""
-
-#: classes/core/msg/msg_scanner.aw:182
+#: classes/core/msg/msg_scanner.aw:182 classes/core/msg/msg_scanner.aw:198
 msgid "ERROR: no write access to file %s!\n\n"
 msgstr ""
 
 #: classes/core/msg/msg_scanner.aw:191
 msgid "ERROR: folder %s where message maps are stored, does not exist!\n\n"
-msgstr ""
-
-#: classes/core/msg/msg_scanner.aw:198
-msgid "ERROR: no write access to file %s!\n\n"
 msgstr ""
 

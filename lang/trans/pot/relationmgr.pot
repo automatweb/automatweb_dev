@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:49 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:52:28 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -10,15 +10,7 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/vcl/relationmgr.aw:57
-msgid "Objekti tüüp"
-msgstr ""
-
-#: classes/vcl/relationmgr.aw:59
-msgid "Objekti tüüp"
-msgstr ""
-
-#: classes/vcl/relationmgr.aw:63
+#: classes/vcl/relationmgr.aw:57 classes/vcl/relationmgr.aw:59 classes/vcl/relationmgr.aw:63
 msgid "Objekti tüüp"
 msgstr ""
 
@@ -26,11 +18,7 @@ msgstr ""
 msgid "Lisa uus objekt"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:241
-msgid "Otsi"
-msgstr ""
-
-#: classes/vcl/relationmgr.aw:250
+#: classes/vcl/relationmgr.aw:241 classes/vcl/relationmgr.aw:250
 msgid "Otsi"
 msgstr ""
 

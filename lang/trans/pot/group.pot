@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:06 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:52:49 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -335,7 +335,7 @@ msgid "
 					Kasutajate importimise faili formaat on j&auml;rgmine:<br />
 					kasutajanimi,parool,nimi,e-post,aktiivne alates,aktiivne kuni <br />
 					v&auml;ljad on eraldatud komadega, iga kasutaja on eraldi real <br />
-					kuup&auml;evade formaadi t&auml;pne kirjeldus on <a href=\"http://www.gnu.org/software/tar/manual/html_chapter/tar_7.html\">siin</a> <br />
+					kuup&auml;evade formaadi t&auml;pne kirjeldus on <a href=\\"http://www.gnu.org/software/tar/manual/html_chapter/tar_7.html\\">siin</a> <br />
 					n&auml;ide: <br />
 					kix,parool,Kristo Iila, kristo@struktuur.ee, 2003-09-17, 2005-09-17 <br />
 					<br />
@@ -383,7 +383,7 @@ msgstr ""
 msgid " / Muuda"
 msgstr ""
 
-#: classes/core/users/group.aw:842
+#: classes/core/users/group.aw:850
 msgid "Default &otilde;igused seose loomisel"
 msgstr ""
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:40 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:52:35 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -274,7 +274,7 @@ msgstr ""
 msgid "Grupi Pilt (Pilt) pealkiri"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:121
+#: classes/contentmgmt/links.aw:121 classes/contentmgmt/links.aw:166
 msgid "Vali see"
 msgstr ""
 
@@ -292,9 +292,5 @@ msgstr ""
 
 #: classes/contentmgmt/links.aw:140
 msgid "Viimati muudetud"
-msgstr ""
-
-#: classes/contentmgmt/links.aw:166
-msgid "Vali see"
 msgstr ""
 

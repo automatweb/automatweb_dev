@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:15 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:52:44 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -734,11 +734,7 @@ msgstr ""
 msgid "Seose Töölepingu peatamine (RELTYPE_CONTRACT_STOP) tekst"
 msgstr ""
 
-#: classes/crm/crm_person.aw:418
-msgid "--vali--"
-msgstr ""
-
-#: classes/crm/crm_person.aw:462
+#: classes/crm/crm_person.aw:418 classes/crm/crm_person.aw:462
 msgid "--vali--"
 msgstr ""
 
@@ -786,31 +782,15 @@ msgstr ""
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/crm/crm_person.aw:708
+#: classes/crm/crm_person.aw:708 classes/crm/crm_person.aw:762 classes/crm/crm_person.aw:1476
 msgid "Uus"
 msgstr ""
 
-#: classes/crm/crm_person.aw:721
+#: classes/crm/crm_person.aw:721 classes/crm/crm_person.aw:778
 msgid "Kalender määramata"
 msgstr ""
 
-#: classes/crm/crm_person.aw:722
-msgid "Lisa %s"
-msgstr ""
-
-#: classes/crm/crm_person.aw:739
-msgid "Lisa %s"
-msgstr ""
-
-#: classes/crm/crm_person.aw:762
-msgid "Uus"
-msgstr ""
-
-#: classes/crm/crm_person.aw:778
-msgid "Kalender määramata"
-msgstr ""
-
-#: classes/crm/crm_person.aw:779
+#: classes/crm/crm_person.aw:722 classes/crm/crm_person.aw:739 classes/crm/crm_person.aw:779
 msgid "Lisa %s"
 msgstr ""
 
@@ -822,15 +802,11 @@ msgstr ""
 msgid "Kasutaja kalender"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1476
-msgid "Uus"
-msgstr ""
-
 #: classes/crm/crm_person.aw:1482
 msgid "Kustuta valitud tööpakkumised"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1488
+#: classes/crm/crm_person.aw:1488 classes/crm/crm_person.aw:1592
 msgid "Salvesta"
 msgstr ""
 
@@ -870,16 +846,12 @@ msgstr ""
 msgid "Kustuta töökogemused"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1578
+#: classes/crm/crm_person.aw:1578 classes/crm/crm_person.aw:1718
 msgid "Oled kindel, et kustutada?"
 msgstr ""
 
 #: classes/crm/crm_person.aw:1584
 msgid "Muuda tkogemust"
-msgstr ""
-
-#: classes/crm/crm_person.aw:1592
-msgid "Salvesta"
 msgstr ""
 
 #: classes/crm/crm_person.aw:1603
@@ -890,11 +862,11 @@ msgstr ""
 msgid "Ametikoht"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1615
+#: classes/crm/crm_person.aw:1615 classes/crm/crm_person.aw:1775
 msgid "Alates"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1621
+#: classes/crm/crm_person.aw:1621 classes/crm/crm_person.aw:1785
 msgid "Kuni"
 msgstr ""
 
@@ -906,36 +878,24 @@ msgstr ""
 msgid "Kustuta haridus"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1718
-msgid "Oled kindel, et kustutada?"
-msgstr ""
-
 #: classes/crm/crm_person.aw:1723
 msgid "Põhiharidus"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1734
+#: classes/crm/crm_person.aw:1734 classes/crm/crm_person.aw:1847
 msgid "Keskharidus"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1744
+#: classes/crm/crm_person.aw:1744 classes/crm/crm_person.aw:1868
 msgid "Kõrgharidus"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1754
+#: classes/crm/crm_person.aw:1754 classes/crm/crm_person.aw:1889
 msgid "Kutseharidus"
 msgstr ""
 
 #: classes/crm/crm_person.aw:1769
 msgid "Kool"
-msgstr ""
-
-#: classes/crm/crm_person.aw:1775
-msgid "Alates"
-msgstr ""
-
-#: classes/crm/crm_person.aw:1785
-msgid "Kuni"
 msgstr ""
 
 #: classes/crm/crm_person.aw:1795
@@ -944,18 +904,6 @@ msgstr ""
 
 #: classes/crm/crm_person.aw:1801
 msgid "Eriala"
-msgstr ""
-
-#: classes/crm/crm_person.aw:1847
-msgid "Keskharidus"
-msgstr ""
-
-#: classes/crm/crm_person.aw:1868
-msgid "Kõrgharidus"
-msgstr ""
-
-#: classes/crm/crm_person.aw:1889
-msgid "Kutseharidus"
 msgstr ""
 
 #: classes/crm/crm_person.aw:1914

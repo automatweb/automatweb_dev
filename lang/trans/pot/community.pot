@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:21 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:53:25 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -246,28 +246,16 @@ msgstr ""
 msgid "Seose Seadete haldur (RELTYPE_CFG_MANAGER) tekst"
 msgstr ""
 
-#: classes/applications/commune/community.aw:140
+#: classes/applications/commune/community.aw:140 classes/applications/commune/community.aw:149
 msgid "Blokeeri"
 msgstr ""
 
-#: classes/applications/commune/community.aw:141
+#: classes/applications/commune/community.aw:141 classes/applications/commune/community.aw:145
 msgid "Tee moderaatoriks"
 msgstr ""
 
-#: classes/applications/commune/community.aw:144
+#: classes/applications/commune/community.aw:144 classes/applications/commune/community.aw:148
 msgid "Tee liikmeks"
-msgstr ""
-
-#: classes/applications/commune/community.aw:145
-msgid "Tee moderaatoriks"
-msgstr ""
-
-#: classes/applications/commune/community.aw:148
-msgid "Tee liikmeks"
-msgstr ""
-
-#: classes/applications/commune/community.aw:149
-msgid "Blokeeri"
 msgstr ""
 
 #: classes/applications/commune/community.aw:165

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:37 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:52:32 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -282,7 +282,7 @@ msgstr ""
 msgid "Ikoon"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview.aw:96
+#: classes/contentmgmt/object_treeview.aw:96 classes/contentmgmt/object_treeview.aw:797
 msgid "Nimi"
 msgstr ""
 
@@ -312,10 +312,6 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview.aw:789
 msgid "ID"
-msgstr ""
-
-#: classes/contentmgmt/object_treeview.aw:797
-msgid "Nimi"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview.aw:802

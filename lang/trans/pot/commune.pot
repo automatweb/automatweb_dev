@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:20 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:53:25 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -1182,7 +1182,7 @@ msgstr ""
 msgid "Muuda valitud kommentaaride staatust"
 msgstr ""
 
-#: classes/applications/commune/commune.aw:775
+#: classes/applications/commune/commune.aw:775 classes/applications/commune/commune.aw:976
 msgid "Kustuta valitud kommentaarid"
 msgstr ""
 
@@ -1190,7 +1190,7 @@ msgstr ""
 msgid "soovid tõesti valitud kommentaarid kustutada?"
 msgstr ""
 
-#: classes/applications/commune/commune.aw:798
+#: classes/applications/commune/commune.aw:798 classes/applications/commune/commune.aw:1743 classes/applications/commune/commune.aw:3857
 msgid "üldine"
 msgstr ""
 
@@ -1234,10 +1234,6 @@ msgstr ""
 msgid "Oled kindel, et soovid valitud profiilid kustutada?"
 msgstr ""
 
-#: classes/applications/commune/commune.aw:976
-msgid "Kustuta valitud kommentaarid"
-msgstr ""
-
 #: classes/applications/commune/commune.aw:979
 msgid "Oled kindel, et soovid valitud kommentaarid kustutada?"
 msgstr ""
@@ -1270,7 +1266,7 @@ msgstr ""
 msgid "oled ikka kindel?"
 msgstr ""
 
-#: classes/applications/commune/commune.aw:1178
+#: classes/applications/commune/commune.aw:1178 classes/applications/commune/commune.aw:1244
 msgid "Kategooriad"
 msgstr ""
 
@@ -1278,16 +1274,12 @@ msgstr ""
 msgid "Ühtegi kategooriat pole veel defineeritud"
 msgstr ""
 
-#: classes/applications/commune/commune.aw:1236
+#: classes/applications/commune/commune.aw:1236 classes/applications/commune/commune.aw:1607 classes/applications/commune/commune.aw:1783 classes/applications/commune/commune.aw:1856 classes/applications/commune/commune.aw:2176 classes/applications/commune/commune.aw:2242
 msgid "ID"
 msgstr ""
 
-#: classes/applications/commune/commune.aw:1240
+#: classes/applications/commune/commune.aw:1240 classes/applications/commune/commune.aw:1612 classes/applications/commune/commune.aw:1788 classes/applications/commune/commune.aw:1861 classes/applications/commune/commune.aw:1944 classes/applications/commune/commune.aw:2181 classes/applications/commune/commune.aw:2247
 msgid "Nimi"
-msgstr ""
-
-#: classes/applications/commune/commune.aw:1244
-msgid "Kategooriad"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:1248
@@ -1302,19 +1294,7 @@ msgstr ""
 msgid "Otsi"
 msgstr ""
 
-#: classes/applications/commune/commune.aw:1377
-msgid ""
-msgstr ""
-
-#: classes/applications/commune/commune.aw:1384
-msgid ""
-msgstr ""
-
-#: classes/applications/commune/commune.aw:1391
-msgid ""
-msgstr ""
-
-#: classes/applications/commune/commune.aw:1398
+#: classes/applications/commune/commune.aw:1377 classes/applications/commune/commune.aw:1384 classes/applications/commune/commune.aw:1391 classes/applications/commune/commune.aw:1398
 msgid ""
 msgstr ""
 
@@ -1362,27 +1342,15 @@ msgstr ""
 msgid "Ära näita vanemaid teemasid, kui"
 msgstr ""
 
-#: classes/applications/commune/commune.aw:1607
-msgid "ID"
-msgstr ""
-
-#: classes/applications/commune/commune.aw:1612
-msgid "Nimi"
-msgstr ""
-
 #: classes/applications/commune/commune.aw:1616
 msgid "E-post"
 msgstr ""
 
-#: classes/applications/commune/commune.aw:1655
+#: classes/applications/commune/commune.aw:1655 classes/applications/commune/commune.aw:1688
 msgid "Saada sõnum"
 msgstr ""
 
-#: classes/applications/commune/commune.aw:1688
-msgid "Saada sõnum"
-msgstr ""
-
-#: classes/applications/commune/commune.aw:1716
+#: classes/applications/commune/commune.aw:1716 classes/applications/commune/commune.aw:2721 classes/applications/commune/commune.aw:4541
 msgid "Grupp"
 msgstr ""
 
@@ -1390,23 +1358,11 @@ msgstr ""
 msgid "Sõpru grupis"
 msgstr ""
 
-#: classes/applications/commune/commune.aw:1743
-msgid "üldine"
-msgstr ""
-
-#: classes/applications/commune/commune.aw:1783
-msgid "ID"
-msgstr ""
-
-#: classes/applications/commune/commune.aw:1788
-msgid "Nimi"
-msgstr ""
-
-#: classes/applications/commune/commune.aw:1793
+#: classes/applications/commune/commune.aw:1793 classes/applications/commune/commune.aw:2186
 msgid "Aeg"
 msgstr ""
 
-#: classes/applications/commune/commune.aw:1798
+#: classes/applications/commune/commune.aw:1798 classes/applications/commune/commune.aw:2191
 msgid "Kommentaar"
 msgstr ""
 
@@ -1422,32 +1378,16 @@ msgstr ""
 msgid "peidetud"
 msgstr ""
 
-#: classes/applications/commune/commune.aw:1856
-msgid "ID"
-msgstr ""
-
-#: classes/applications/commune/commune.aw:1861
-msgid "Nimi"
-msgstr ""
-
 #: classes/applications/commune/commune.aw:1923
 msgid "Pilte"
 msgstr ""
 
-#: classes/applications/commune/commune.aw:1927
+#: classes/applications/commune/commune.aw:1927 classes/applications/commune/commune.aw:1935
 msgid "Sõpru"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:1931
 msgid "Kommentaare"
-msgstr ""
-
-#: classes/applications/commune/commune.aw:1935
-msgid "Sõpru"
-msgstr ""
-
-#: classes/applications/commune/commune.aw:1944
-msgid "Nimi"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:1957
@@ -1464,30 +1404,6 @@ msgstr ""
 
 #: classes/applications/commune/commune.aw:2107
 msgid "Minu kogukonnad"
-msgstr ""
-
-#: classes/applications/commune/commune.aw:2176
-msgid "ID"
-msgstr ""
-
-#: classes/applications/commune/commune.aw:2181
-msgid "Nimi"
-msgstr ""
-
-#: classes/applications/commune/commune.aw:2186
-msgid "Aeg"
-msgstr ""
-
-#: classes/applications/commune/commune.aw:2191
-msgid "Kommentaar"
-msgstr ""
-
-#: classes/applications/commune/commune.aw:2242
-msgid "ID"
-msgstr ""
-
-#: classes/applications/commune/commune.aw:2247
-msgid "Nimi"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:2253
@@ -1518,11 +1434,11 @@ msgstr ""
 msgid "Mõlemad"
 msgstr ""
 
-#: classes/applications/commune/commune.aw:2652
+#: classes/applications/commune/commune.aw:2652 classes/applications/commune/commune.aw:2827
 msgid "Mees"
 msgstr ""
 
-#: classes/applications/commune/commune.aw:2653
+#: classes/applications/commune/commune.aw:2653 classes/applications/commune/commune.aw:2827
 msgid "Naine"
 msgstr ""
 
@@ -1542,10 +1458,6 @@ msgstr ""
 msgid "Seksuaalne orientatsioon"
 msgstr ""
 
-#: classes/applications/commune/commune.aw:2721
-msgid "Grupp"
-msgstr ""
-
 #: classes/applications/commune/commune.aw:2726
 msgid "Profiili kuvamise seaded"
 msgstr ""
@@ -1554,28 +1466,16 @@ msgstr ""
 msgid "ei näita antud grupile"
 msgstr ""
 
-#: classes/applications/commune/commune.aw:2808
+#: classes/applications/commune/commune.aw:2808 classes/applications/commune/commune.aw:2974
 msgid "(isikut pole)"
 msgstr ""
 
-#: classes/applications/commune/commune.aw:2827
-msgid "Naine"
-msgstr ""
-
-#: classes/applications/commune/commune.aw:2827
-msgid "Mees"
-msgstr ""
-
-#: classes/applications/commune/commune.aw:2828
+#: classes/applications/commune/commune.aw:2828 classes/applications/commune/commune.aw:3335
 msgid "lisatud: "
 msgstr ""
 
-#: classes/applications/commune/commune.aw:2829
+#: classes/applications/commune/commune.aw:2829 classes/applications/commune/commune.aw:3333
 msgid "hinne: "
-msgstr ""
-
-#: classes/applications/commune/commune.aw:2974
-msgid "(isikut pole)"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:2991
@@ -1606,15 +1506,15 @@ msgstr ""
 msgid "Pildi nimi"
 msgstr ""
 
-#: classes/applications/commune/commune.aw:3125
+#: classes/applications/commune/commune.aw:3125 classes/applications/commune/commune.aw:3199
 msgid "Pildi kommentaar"
 msgstr ""
 
-#: classes/applications/commune/commune.aw:3131
+#: classes/applications/commune/commune.aw:3131 classes/applications/commune/commune.aw:3188
 msgid "Vali uus"
 msgstr ""
 
-#: classes/applications/commune/commune.aw:3137
+#: classes/applications/commune/commune.aw:3137 classes/applications/commune/commune.aw:3193
 msgid "Vali olemasolev"
 msgstr ""
 
@@ -1632,26 +1532,6 @@ msgstr ""
 
 #: classes/applications/commune/commune.aw:3178
 msgid "Kommentaarid (%s)"
-msgstr ""
-
-#: classes/applications/commune/commune.aw:3188
-msgid "Vali uus"
-msgstr ""
-
-#: classes/applications/commune/commune.aw:3193
-msgid "Vali olemasolev"
-msgstr ""
-
-#: classes/applications/commune/commune.aw:3199
-msgid "Pildi kommentaar"
-msgstr ""
-
-#: classes/applications/commune/commune.aw:3333
-msgid "hinne: "
-msgstr ""
-
-#: classes/applications/commune/commune.aw:3335
-msgid "lisatud: "
 msgstr ""
 
 #: classes/applications/commune/commune.aw:3397
@@ -1672,10 +1552,6 @@ msgstr ""
 
 #: classes/applications/commune/commune.aw:3857
 msgid "-- vali --"
-msgstr ""
-
-#: classes/applications/commune/commune.aw:3857
-msgid "üldine"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:3860
@@ -1740,10 +1616,6 @@ msgstr ""
 
 #: classes/applications/commune/commune.aw:4524
 msgid "Arhiveeritud kirjad"
-msgstr ""
-
-#: classes/applications/commune/commune.aw:4541
-msgid "Grupp"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:4564

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:27 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:53:31 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -230,11 +230,11 @@ msgstr ""
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:143
+#: classes/applications/calendar/event_search.aw:143 classes/applications/calendar/event_search.aw:394
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:148
+#: classes/applications/calendar/event_search.aw:148 classes/applications/calendar/event_search.aw:398
 msgid "Pealkiri"
 msgstr ""
 
@@ -242,7 +242,7 @@ msgstr ""
 msgid "Sisu"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:158
+#: classes/applications/calendar/event_search.aw:158 classes/applications/calendar/event_search.aw:402
 msgid "Aktiivne"
 msgstr ""
 
@@ -258,19 +258,11 @@ msgstr ""
 msgid "Kuup&auml;ev, kellaajad"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:188
+#: classes/applications/calendar/event_search.aw:188 classes/applications/calendar/event_search.aw:191
 msgid "Alguskuup&auml;ev"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:191
-msgid "Alguskuup&auml;ev"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:202
-msgid "L&otilde;ppkuup&auml;ev"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:205
+#: classes/applications/calendar/event_search.aw:202 classes/applications/calendar/event_search.aw:205
 msgid "L&otilde;ppkuup&auml;ev"
 msgstr ""
 
@@ -278,27 +270,15 @@ msgstr ""
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:271
+#: classes/applications/calendar/event_search.aw:271 classes/applications/calendar/event_search.aw:274
 msgid "Projekt 1"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:274
-msgid "Projekt 1"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:285
+#: classes/applications/calendar/event_search.aw:285 classes/applications/calendar/event_search.aw:288
 msgid "Projekt 2"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:288
-msgid "Projekt 2"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:298
-msgid "Otsi nupp"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:301
+#: classes/applications/calendar/event_search.aw:298 classes/applications/calendar/event_search.aw:301
 msgid "Otsi nupp"
 msgstr ""
 
@@ -316,18 +296,6 @@ msgstr ""
 
 #: classes/applications/calendar/event_search.aw:328
 msgid "P&auml;eva j&auml;rgi"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:394
-msgid "Nimi"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:398
-msgid "Pealkiri"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:402
-msgid "Aktiivne"
 msgstr ""
 
 #: classes/applications/calendar/event_search.aw:407
@@ -370,19 +338,7 @@ msgstr ""
 msgid "V&auml;ljundvorm on valimata"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:833
-msgid "kõik"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:839
-msgid "kõik"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:855
-msgid "kõik"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:861
+#: classes/applications/calendar/event_search.aw:833 classes/applications/calendar/event_search.aw:839 classes/applications/calendar/event_search.aw:855 classes/applications/calendar/event_search.aw:861
 msgid "kõik"
 msgstr ""
 

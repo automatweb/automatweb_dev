@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:08 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:52:50 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -34,11 +34,7 @@ msgstr ""
 msgid "connection::delete(): no view access for this connection (%s)!"
 msgstr ""
 
-#: classes/core/obj/connection.aw:210
-msgid "connection::to(): no current connection!"
-msgstr ""
-
-#: classes/core/obj/connection.aw:222
+#: classes/core/obj/connection.aw:210 classes/core/obj/connection.aw:222
 msgid "connection::to(): no current connection!"
 msgstr ""
 
@@ -46,15 +42,11 @@ msgstr ""
 msgid "connection::load(%s): no connection with id $id!"
 msgstr ""
 
-#: classes/core/obj/connection.aw:253
+#: classes/core/obj/connection.aw:253 classes/core/obj/connection.aw:275
 msgid "connection::load(%s): no view access for this connection!"
 msgstr ""
 
 #: classes/core/obj/connection.aw:264
 msgid "connection::save(): connection must have both ends defined!"
-msgstr ""
-
-#: classes/core/obj/connection.aw:275
-msgid "connection::load(%s): no view access for this connection!"
 msgstr ""
 

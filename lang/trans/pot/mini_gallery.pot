@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:36 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:52:31 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -82,24 +82,8 @@ msgstr ""
 msgid "Omaduse ridu (rows) help"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:prop_zip_file
-msgid "Omaduse Uploadi ZIP fail (zip_file) caption"
-msgstr ""
-
-#: classes/contentmgmt/gallery/mini_gallery.aw:prop_zip_file_comment
-msgid "Omaduse Uploadi ZIP fail (zip_file) kommentaar"
-msgstr ""
-
-#: classes/contentmgmt/gallery/mini_gallery.aw:prop_zip_file_help
-msgid "Omaduse Uploadi ZIP fail (zip_file) help"
-msgstr ""
-
 #: classes/contentmgmt/gallery/mini_gallery.aw:group_general
 msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/contentmgmt/gallery/mini_gallery.aw:group_import
-msgid "Grupi Import (import) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:rel_RELTYPE_IMG_FOLDER

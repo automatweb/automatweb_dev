@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:26 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:53:26 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -362,16 +362,12 @@ msgstr ""
 msgid "kustutatud!"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:826
+#: classes/applications/messenger/mail_message.aw:826 classes/applications/messenger/mail_message.aw:879
 msgid "sulge aken"
 msgstr ""
 
 #: classes/applications/messenger/mail_message.aw:878
 msgid "saadetud<p>"
-msgstr ""
-
-#: classes/applications/messenger/mail_message.aw:879
-msgid "sulge aken"
 msgstr ""
 
 #: classes/applications/messenger/mail_message.aw:995

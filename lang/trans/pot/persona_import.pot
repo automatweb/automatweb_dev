@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:32 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:53:34 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -214,11 +214,7 @@ msgstr ""
 msgid "Käivita import"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:120
-msgid "You forgot to enter server data"
-msgstr ""
-
-#: classes/applications/persona_import/persona_import.aw:155
+#: classes/applications/persona_import/persona_import.aw:120 classes/applications/persona_import/persona_import.aw:155 classes/applications/persona_import/persona_import.aw:914
 msgid "You forgot to enter server data"
 msgstr ""
 
@@ -288,9 +284,5 @@ msgstr ""
 
 #: classes/applications/persona_import/persona_import.aw:531
 msgid "updating existing person object"
-msgstr ""
-
-#: classes/applications/persona_import/persona_import.aw:914
-msgid "You forgot to enter server data"
 msgstr ""
 

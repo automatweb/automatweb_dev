@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:22 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:53:17 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -102,7 +102,7 @@ msgstr ""
 msgid "Kustuta kandieerijad"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:431
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:431 classes/applications/personnel_management/personnel_management_job_offer.aw:619
 msgid "Nimi"
 msgstr ""
 
@@ -128,10 +128,6 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:532
 msgid "Genereeri pdf"
-msgstr ""
-
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:619
-msgid "Nimi"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:625

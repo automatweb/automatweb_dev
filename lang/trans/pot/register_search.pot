@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:25 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:53:22 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -210,79 +210,67 @@ msgstr ""
 msgid "Seose register millest otsida (RELTYPE_REGISTER) tekst"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:rel_RELTYPE_SEARCH_FOLDER
-msgid "Seose kaust millest otsida (RELTYPE_SEARCH_FOLDER) tekst"
-msgstr ""
-
-#: classes/applications/register/register_search.aw:134
+#: classes/applications/register/register_search.aw:131 classes/applications/register/register_search.aw:226
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:141
+#: classes/applications/register/register_search.aw:138 classes/applications/register/register_search.aw:233
 msgid "Element"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:147
+#: classes/applications/register/register_search.aw:144
 msgid "Otsitav"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:153
+#: classes/applications/register/register_search.aw:150
 msgid "Numbrite vahemiku otsing"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:159
+#: classes/applications/register/register_search.aw:156
 msgid "Valik olemasolevatest"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:165
+#: classes/applications/register/register_search.aw:162
 msgid "Elemendi tekst"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:182
+#: classes/applications/register/register_search.aw:179
 msgid "T&auml;istekstiotsing"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:229
-msgid "J&auml;rjekord"
-msgstr ""
-
-#: classes/applications/register/register_search.aw:236
-msgid "Element"
-msgstr ""
-
-#: classes/applications/register/register_search.aw:242
+#: classes/applications/register/register_search.aw:239
 msgid "Tabelis"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:248
+#: classes/applications/register/register_search.aw:245
 msgid "Sorditav"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:254
+#: classes/applications/register/register_search.aw:251
 msgid "Vaikimisi sort"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:260
+#: classes/applications/register/register_search.aw:257
 msgid "Vaata tulp"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:266
+#: classes/applications/register/register_search.aw:263
 msgid "Tulba pealkiri"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:784
+#: classes/applications/register/register_search.aw:769
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:798
+#: classes/applications/register/register_search.aw:783
 msgid "Vaata"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:809
+#: classes/applications/register/register_search.aw:794
 msgid "Kustutada objekt?"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:810
+#: classes/applications/register/register_search.aw:795
 msgid "Kustuta"
 msgstr ""
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:27 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:53:28 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -538,35 +538,19 @@ msgstr ""
 msgid "Jrk"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:1779
+#: classes/applications/calendar/planner.aw:1779 classes/applications/calendar/planner.aw:1975 classes/applications/calendar/planner.aw:2088
 msgid "Algus"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:1783
+#: classes/applications/calendar/planner.aw:1783 classes/applications/calendar/planner.aw:1981
 msgid "Lõpp"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:1788
+#: classes/applications/calendar/planner.aw:1788 classes/applications/calendar/planner.aw:1992
 msgid "Vali"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:1975
-msgid "Algus"
-msgstr ""
-
-#: classes/applications/calendar/planner.aw:1981
-msgid "Lõpp"
-msgstr ""
-
-#: classes/applications/calendar/planner.aw:1985
-msgid "Uus kohtumine"
-msgstr ""
-
-#: classes/applications/calendar/planner.aw:1992
-msgid "Vali"
-msgstr ""
-
-#: classes/applications/calendar/planner.aw:2028
+#: classes/applications/calendar/planner.aw:1985 classes/applications/calendar/planner.aw:2028
 msgid "Uus kohtumine"
 msgstr ""
 
@@ -588,10 +572,6 @@ msgstr ""
 
 #: classes/applications/calendar/planner.aw:2081
 msgid "Sündmusel osalejad"
-msgstr ""
-
-#: classes/applications/calendar/planner.aw:2088
-msgid "Algus"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:2099

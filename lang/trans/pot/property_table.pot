@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:33 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:53:35 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -186,15 +186,11 @@ msgstr ""
 msgid "Joondamine"
 msgstr ""
 
-#: classes/applications/class_designer/property_table.aw:605
+#: classes/applications/class_designer/property_table.aw:605 classes/applications/class_designer/property_table.aw:678
 msgid "Tulp"
 msgstr ""
 
 #: classes/applications/class_designer/property_table.aw:612
 msgid "Omadus"
-msgstr ""
-
-#: classes/applications/class_designer/property_table.aw:678
-msgid "Tulp"
 msgstr ""
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 08:51:07 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 10:52:47 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -26,11 +26,7 @@ msgstr ""
 msgid "Viimane versioon"
 msgstr ""
 
-#: classes/core/pkmgr/packagemgr_server.aw:52
-msgid "Muuda"
-msgstr ""
-
-#: classes/core/pkmgr/packagemgr_server.aw:69
+#: classes/core/pkmgr/packagemgr_server.aw:52 classes/core/pkmgr/packagemgr_server.aw:69
 msgid "Muuda"
 msgstr ""
 
