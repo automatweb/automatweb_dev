@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.58 2005/02/22 09:06:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.59 2005/03/01 14:41:59 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -203,6 +203,8 @@ class object_treeview_v2 extends class_base
 				$ol = new object_list(array(
 					"class_id" => CL_OBJECT_TREEVIEW_V2,
 					"is_inheritable" => 1,
+					"lang_id" => array(),
+					"site_id" => array()
 				));
 				$prop["options"] = array("" => "") + $ol->names();
 				break;
@@ -661,7 +663,7 @@ class object_treeview_v2 extends class_base
 			if(($group_name != $odata[$group_field]) && empty($_GET['char']))
 			{
 				$this->vars(array(
-					"content" => $odata[$ih_ob->prop("group_in_table")],
+					"content" => "<a name=\"".$this->_mk_anch($odata[$ih_ob->prop("group_in_table")])."\" ></a>".$odata[$ih_ob->prop("group_in_table")],
 					"cols_count" => $sel_cols_count,
 //					"group_bgcolor" => $group_header_color_code,
 				));
@@ -2015,6 +2017,11 @@ class object_treeview_v2 extends class_base
 			}
 		}
 		return true;
+	}
+
+	function _mk_anch($txt)
+	{
+		return str_replace(" ", "_", $txt);
 	}
 
 	function _init_search_fields_t(&$t)
