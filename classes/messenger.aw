@@ -1,9 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.103 2002/08/15 17:39:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.104 2002/11/02 23:26:53 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 lc_load("definition");
-classload("defs","menuedit_light","xml","msg_sql");
 
 // sisemine, aw sees saadetud teade
 define('MSG_INTERNAL',1);
@@ -23,6 +22,7 @@ define('MSG_STATUS_READ',1);
 
 // siit algab messengeri põhiklass
 
+classload("menuedit_light");
 class messenger extends menuedit_light
 {
 	////
@@ -34,10 +34,10 @@ class messenger extends menuedit_light
 	{
 		$this->init("messenger");
 		$this->lc_load("messenger","lc_messenger");
-		$driverclass = "msg_" . $this->drivername . "_driver";
+		$driverclass = "msg_" . $this->drivername;
 
 		// $this->driveri kaudu pöördutakse andmebaasidraiveri poole
-		$this->driver = new $driverclass;
+		$this->driver = get_instance($driverclass);
 		
 		// juhuks, kui kusagil on vaja kasutada messengeri alamhulka, siis konstruktorile
 		// fast argumendi etteandmisega saab vältida rohkem aega nõudvaid operatsioone
@@ -48,13 +48,12 @@ class messenger extends menuedit_light
 		));
 		if (!$args["fast"])
 		{
-			classload("users");
-			$users = new users;
+			$users = get_instance("users");
 			$this->msgconf = $users->get_user_config(array(
 				"uid" => aw_global_get("uid"),
 				"key" => "messenger",
 			));
-			$this->xml = new xml();
+			$this->xml = get_instance("xml");
 			// igal klassi loomisel toome ka 
 			$this->conf = $this->_get_msg_conf(array("conf" => $this->user["messenger"]));
 			if ($this->msgconf["msg_window"])
@@ -170,8 +169,7 @@ class messenger extends menuedit_light
 		print "<pre>";
 		print_r($args);
 		print "</pre>";
-		classload("file");
-		$awf = new file();
+		$awf = get_instance("file");
 		$awf->cp(array("id" => $attach,"parent" => $folder));
 		print "<script language='Javascript'> window.close(); </script>";
 		exit;
@@ -247,8 +245,7 @@ class messenger extends menuedit_light
 			$c++;
 			if ($c == $attnum)
 			{
-				classload("file");
-				$awf = new file();
+				$awf = get_instance("file");
 				$fdata = $awf->get_file_by_id($row["oid"]);
 				header("Content-Type: $fdata[type]");
 				header("Content-Disposition: filename=$row[name]");
@@ -300,8 +297,7 @@ class messenger extends menuedit_light
 	// !Koostab folderite nimekirja
 	function _folder_list($args = array())
 	{
-		classload("menuedit_light");
-		$mnl = new menuedit_light();
+		$mnl = get_instance("menuedit_light");
 		$folder_list = $mnl->gen_rec_list(array(
 			"start_from" => $this->user["home_folder"],
 			"add_start_from" => true,
@@ -821,8 +817,7 @@ class messenger extends menuedit_light
 		));
 		
 		// add all the attaches to the new message as well
-		classload("file");
-		$awf = new file();
+		$awf = get_instance("file");
 		$this->get_objects_by_class(array(
 			"class" => CL_FILE,
 			"parent" => $forward,
@@ -987,8 +982,7 @@ class messenger extends menuedit_light
 
 		if ($msg["type"] & MSG_LIST)
 		{
-			classload("ml_list");
-			$mlist = new ml_list();
+			$mlist = get_instance("mailinglist/ml_list");
 			$muutujad= $mlist->get_all_varnames();
 			foreach($muutujad as $k => $v)
 			{
@@ -1259,8 +1253,7 @@ class messenger extends menuedit_light
 			$message .= "\r\n" . $this->msgconf["msg_signatures"][$args["signature"]]["signature"];
 		};
 
-		classload("aw_mail");
-		$this->awm = new aw_mail();
+		$this->awm = get_instance("aw_mail");
 
 		#$message = str_replace("\r","",$message);
 		#$message = str_replace("\n","\r\n",$message);
@@ -1292,8 +1285,7 @@ class messenger extends menuedit_light
 		{
 			$sentto=array();
 
-			classload("email");
-			$awe = new email();
+			$awe = get_instance("email");
 			foreach($internals as $internal)
 			{
 				$this->get_object_by_name(array(
@@ -1356,8 +1348,7 @@ class messenger extends menuedit_light
 		// siin kutsume välja meililistidesse saatmise (kui vaja)
 		if (sizeof($lists))
 		{
-			classload("ml_list");
-			$mllist=new ml_list();
+			$mllist=get_instance("mailinglist/ml_list");
 			$route_back=$this->mk_site_orb(array(
 				"action" => "edit",
 				"id" => $msg_id,
@@ -1522,8 +1513,7 @@ class messenger extends menuedit_light
 		global $attach_name;
 		global $attach_type;
 		
-		classload("file");
-		$awf = new file();
+		$awf = get_instance("file");
 		$count = 0;
 		
 		if (!is_array($attach))
@@ -1650,8 +1640,7 @@ class messenger extends menuedit_light
 
 		// since we need to save the contents of the search, we will 
 		// do it right with user metadata
-		classload("users");
-		$this->awuser = new users();
+		$this->awuser = get_instance("users");
 	}
 
 
@@ -1947,9 +1936,8 @@ class messenger extends menuedit_light
 		));
 		$c = 0;
 		$attaches = "";
-		classload("file","xml");
-		$awf = new file();
-		$xml = new xml();
+		$awf = get_instance("file");
+		$xml = get_instance("xml");
 		while($row = $this->db_next())
 		{
 			$c++;
@@ -2131,8 +2119,7 @@ class messenger extends menuedit_light
 		$data = unserialize($row["content"]);
 		$class = $actions[$data["class_id"]]["class"];
 		$action = $actions[$data["class_id"]]["action"];
-		classload($class);
-		$t = new $class;
+		$t = get_instance($class);
 		$data["att_id"] = $id;
 		print $t->$action($data);
 	}
@@ -2346,8 +2333,7 @@ class messenger extends menuedit_light
 	{
 		// loeme vana konffi sisse
 		extract($args);
-		classload("users");
-		$users = new users();
+		$users = get_instance("users");
 		// default_acc peaks sisaldama koigi nende accountide id-sid, millelt
 		// get mail id-sid peaks kysima
 		if ($page == "folders")
@@ -2461,8 +2447,7 @@ class messenger extends menuedit_light
 			$siglist[] = $datablock;
 		};
 		$this->msgconf["msg_signatures"] = $siglist;
-		classload("users");
-		$users = new users();
+		$users = get_instance("users");
 		$users->set_user_config(array(
 			"uid" => aw_global_get("uid"),
 			"key" => "messenger",
@@ -2496,8 +2481,7 @@ class messenger extends menuedit_light
 
 		if ($page == "accounts")
 		{
-			classload("users");
-			$users = new users();
+			$users = get_instance("users");
 			$pop3conf = $users->get_user_config(array(
 				"uid" => aw_global_get("uid"),
 				"key" => "pop3servers",
@@ -2643,6 +2627,7 @@ class messenger extends menuedit_light
 			"password" => $password,
 		);
 
+
 		global $status_msg;
 		if ($id == "new")
 		{
@@ -2660,8 +2645,7 @@ class messenger extends menuedit_light
 			$pop3conf[$id] = $confblock;
 			$status_msg = MSG_STATUS_ACCOUNT_SAVED;
 		};
-		classload("users");
-		$users = new users();
+		$users = get_instance("users");
 		$conf["msg_pop3servers"] = $pop3conf;
 		$users->set_user_config(array(
 			"uid" => aw_global_get("uid"),
@@ -2682,8 +2666,7 @@ class messenger extends menuedit_light
 		$pop3conf = $this->msgconf["msg_pop3servers"];
 		$c = "";
 		$accdata = array();
-		classload("users");
-		$users = new users();
+		$users = get_instance("users");
 		$rules = $users->get_user_config(array(
 			"uid" => aw_global_get("uid"),
 			"key" => "rules",
@@ -2760,10 +2743,9 @@ class messenger extends menuedit_light
 	function _get_pop3_messages($args = array())
 	{
 		extract($args);
-		classload("pop3","aw_mail","file");
-		$pop3 = new pop3();
-		$awm = new aw_mail();
-		$awf = new file();
+		$pop3 = get_instance("pop3");
+		$awm = get_instance("aw_mail");
+		$awf = get_instance("file");
 		$msgs = $pop3->get_messages($server,$uid,$password,false,$uidls,$rules);
 
 		$c = 0;
@@ -2880,8 +2862,7 @@ class messenger extends menuedit_light
 			"subject" => LC_MENUEDIT_SUBJECT,
 			"message" => LC_MENUEDIT_MATTER,
 		);
-		classload("users");
-		$users = new users();
+		$users = get_instance("users");
 		$rules = $users->get_user_config(array(
 			"uid" => aw_global_get("uid"),
 			"key" => "rules",
@@ -2957,8 +2938,7 @@ class messenger extends menuedit_light
 
 		$this->read_template("editrule.tpl");
 		$delivery = "fldr";
-		classload("users");
-		$users = new users();
+		$users = get_instance("users");
 		$oldrules = $users->get_user_config(array(
 			"uid" => aw_global_get("uid"),
 			"key" => "rules",
@@ -3013,8 +2993,7 @@ class messenger extends menuedit_light
 		global $status_msg;
 		$this->quote($args);
 		extract($args);
-		classload("users");
-		$users = new users();
+		$users = get_instance("users");
 		$oldrules = $users->get_user_config(array(
 			"uid" => aw_global_get("uid"),
 			"key" => "rules",
@@ -3071,8 +3050,7 @@ class messenger extends menuedit_light
 	// Loob uue folderi, kui see mingil pohjusel ei eksisteerinud
 	function _create_folder($args = array())
 	{
-		classload("menuedit");
-		$m = new menuedit();
+		$m = get_instance("menuedit");
 		$new = $m->add_new_menu(array(
 			"name" => $args["name"],
 			"parent" => $args["parent"],
@@ -3083,8 +3061,7 @@ class messenger extends menuedit_light
 	function submit_new_folder($args = array())
 	{
 		extract($args);
-		classload("menuedit");
-		$m = new menuedit;
+		$m = get_instance("menuedit");
 		$m->add_new_menu(array(
 			"name" => $folder,
 			"parent" => $parent,
@@ -3100,8 +3077,7 @@ class messenger extends menuedit_light
 	// Kuvab folderi valimise vormi
 	function set_folder($args = array())
 	{
-		classload("menuedit_light");
-		$mnl = new menuedit_light();
+		$mnl = get_instance("menuedit_light");
 		$chooser = $mnl->gen_rec_list(array(
 			"start_from" => 220,
 			"tpl" => "objects/chooser.tpl",
@@ -3248,8 +3224,6 @@ class messenger extends menuedit_light
 				$decoded = '=?' . $charset . '?' . $encoding . '?' . $encoded_text . '?=';
 				break;
 			}
-		print "rest = $rest<br>";
-
 		$retval = $preceding . $decoded . $this->MIME_decode($rest);
 		return quoted_printable_decode($retval);
 	}
