@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.131 2002/12/03 13:37:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.132 2002/12/03 14:19:08 duke Exp $
 // core.aw - Core functions
 define("ARR_NAME", 1);
 define("ARR_ALL",2);
@@ -422,6 +422,10 @@ class core extends db_connector
 
 		// vahetame key=>value paarid ära
 		$ofields = array_flip($_ofields);
+
+		// check whether to flush the cache
+		$no_flush = isset($arr["no_flush"]);
+		unset($arr["no_flush"]);
 		
 		// oid voib tulla naiteks serializetud objektist
 		// anyhow, meil siin pole sellega midagi peale hakata, so nil.
@@ -492,7 +496,10 @@ class core extends db_connector
 		{
 			$this->db_query("UPDATE objects SET brother_of = oid WHERE oid = $oid");
 		}
-		$this->flush_cache();
+		if (!$no_flush)
+		{
+			$this->flush_cache();
+		};
 		return $oid;
 	}
 
