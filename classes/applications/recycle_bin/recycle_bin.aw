@@ -1,12 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.7 2004/12/27 14:52:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.8 2005/01/07 12:10:41 kristo Exp $
 // recycle_bin.aw - Prügikast 
 /*
 @default table=objects
 @default group=recycle
 @classinfo no_yah=1
 @property toolbar type=toolbar store=no no_caption=1
-@property recycle_table type=table store=no no_caption=1
+@property recycle_table type=text store=no no_caption=1
 
 @groupinfo recycle submit=no caption="Prügikast"
 */
@@ -37,7 +37,7 @@ class recycle_bin extends class_base
 				$this->do_toolbar(&$arr);
 			break;
 			case "recycle_table":
-				$this->do_recycle_table($arr);
+				$prop["value"] = $this->do_recycle_table($arr);
 			break;
 		};
 		return $retval;
@@ -45,7 +45,9 @@ class recycle_bin extends class_base
 
 	function do_recycle_table($arr)
 	{
-		$table = &$arr["prop"]["vcl_inst"];
+		//$table = &$arr["prop"]["vcl_inst"];
+		classload("vcl/table");
+		$table = new aw_table();
 		
 		$table->define_field(array(
 			"name" => "icon",
@@ -72,14 +74,14 @@ class recycle_bin extends class_base
 		));
 		
 		$table->define_field(array(
-			"name" => "class",
+			"name" => "class_id",
 			"caption" => "Objektitüüp",
 			"sortable" => 1,
 			"width" => 1,
 		));
 		
 		$table->define_field(array(
-			"name" => "modified_by",
+			"name" => "modifiedby",
 			"caption" => "Kustutaja",
 			"sortable" => "1",
 			"width" => 80,
@@ -106,8 +108,17 @@ class recycle_bin extends class_base
 		$classes = aw_ini_get("classes");
 		
 		get_instance("icons");
+
+		$cnt = $this->db_fetch_field("SELECT count(*) as cnt FROM objects WHERE status=0 ", "cnt");
 		
-		$query = "SELECT * FROM objects WHERE status=0";
+		if ($arr["request"]["sortby"] != "")
+		{
+			$ob = " ORDER BY ".$arr["request"]["sortby"]." ".$arr["request"]["sort_order"];
+		}
+
+		$lim = "LIMIT ".($arr["request"]["ft_page"] * 100).",".(100);
+
+		$query = "SELECT * FROM objects WHERE status=0 $ob ".$lim;
 		$this->db_query($query);
 		$rows = array();
 		while ($row = $this->db_next())
@@ -122,14 +133,14 @@ class recycle_bin extends class_base
 			$table->define_data(array(
 				"name" => $row["name"],
 				"modified" => $row["modified"],
-				"modified_by" => $row["modifiedby"],
+				"modifiedby" => $row["modifiedby"],
 				"oid" => $row["oid"],
 				"id" => $row["oid"],
 				"restore" => html::href(array(
 					"caption" => "Taasta",
 					"url" => $this->mk_my_orb("restore_object", array("oid" => $row["oid"]), "recycle_bin"),
 				)),
-				"class" => $classes[$row["class_id"]]["name"],
+				"class_id" => $classes[$row["class_id"]]["name"],
 				"icon" => html::img(array(
 					"url" => icons::get_icon_url($row["class_id"]),
 					"alt" => $paths[$row["oid"]],
@@ -140,6 +151,13 @@ class recycle_bin extends class_base
 		//set_default_sort_by("modified");
 	 	$table->set_default_sorder("desc");
 		$table->set_default_sortby("modified");
+
+		$table->sort_by();		
+
+		return $table->draw_text_pageselector(array(
+			"d_row_cnt" => $cnt,
+			"records_per_page" => 100
+		)).$table->draw();
 	}
 	
 	function do_toolbar($arr)

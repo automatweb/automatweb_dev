@@ -13,7 +13,7 @@
             <name>recycle_table</name>
             <table>objects</table>
             <group>recycle</group>
-            <type>table</type>
+            <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
             <field>recycle_table</field>
