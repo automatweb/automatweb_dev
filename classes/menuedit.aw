@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.207 2003/01/21 12:33:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.208 2003/01/24 13:02:23 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -886,7 +886,7 @@ class menuedit extends aw_template
 				$sections = unserialize($me_row["sss"]);
 			};
 
-			$periods = unserialize($me_row["pers"]);
+			$periods = $me_row["meta"]["pers"];
 
 			if (is_array($sections))
 			{
