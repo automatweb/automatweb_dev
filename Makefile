@@ -53,4 +53,4 @@ orb:
 class:
 	@scripts/php -n -q scripts/mk_class/mk_class.aw
 
-all: ini properties msg
+all: ini properties msg orb
