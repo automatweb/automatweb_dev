@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.85 2004/01/13 16:24:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.86 2004/02/25 16:11:43 kristo Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -70,10 +70,6 @@ class forum extends class_base
 			$this->section = $section;
 		};
 
-		// yikes
-		$u = get_instance("users_user");
-		$this->$members = $u->getgroupmembers("Kasutajatugi");
-		
 		$this->lc_load("msgboard","lc_msgboard");
 		lc_site_load("msgboard",&$this);
 	}
