@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.21 2004/03/10 17:24:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.22 2004/03/24 13:21:56 kristo Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -115,6 +115,7 @@ class object_list extends _int_obj_container_base
 		// then end will be correct even for 1 element lists!
 		$this->iter_index = 0;
 		$this->iter_lut = array_keys($this->list);
+		$this->iter_lut_count = count($this->iter_lut);
 
 		return $this->_int_get_at($this->iter_lut[$this->iter_index]);
 	}
@@ -127,7 +128,7 @@ class object_list extends _int_obj_container_base
 
 	function end()
 	{
-		return (($this->iter_index) == (count($this->iter_lut)));
+		return (($this->iter_index) == ($this->iter_lut_count));
 	}
 
 	function foreach_o($param)
