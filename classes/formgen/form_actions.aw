@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.26 2004/06/26 09:47:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.27 2004/08/24 13:03:09 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -13,7 +13,8 @@ class form_actions extends form_base
 			"join_list" => array("execute" => "do_join_list_action"),
 			"email_form" => array("execute" => "do_email_form_action"),
 			"email" => array("execute" => "do_email_action"),
-			"after_submit_controller" => array("execute" => "do_after_submit_controller_action")
+			"email_confirm" => array("execute" => "do_email_confirm_action"),
+			"after_submit_controller" => array("execute" => "do_after_submit_controller_action"),
 		);
 	}
 
@@ -163,6 +164,15 @@ class form_actions extends form_base
 						$data["controller"] = $controller;
 						$data = serialize($data);
 						break;
+
+					case "email_confirm":
+						$data["from_addr"] = $from_addr;
+						$data["from_name"] = $from_name;
+						$data["subj"] = $subj;
+						$data["content"] = $content;
+						$data["email_el"] = $email_el;
+						$data = serialize($data);
+						break;
 				}
 				$this->db_query("UPDATE form_actions SET data = '$data' WHERE id = $action_id");
 				$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $action_id","name");
@@ -243,6 +253,7 @@ class form_actions extends form_base
 				"email_selected"				=> checked($row["type"] == 'email'),
 				"move_filled_selected"			=> checked($row["type"] == 'move_filled'),
 				"join_list_selected"			=> checked($row["type"] == 'join_list'),
+				"email_confirm_selected"			=> checked($row["type"] == 'email_confirm'),
 				"email_form"					=> checked($row["type"] == 'email_form'),
 				"after_submit_controller"		=> checked($row["type"] == 'after_submit_controller'),
 				"activate_on_button" => $this->mpicker($meta["activate_on_button"], $bts),
@@ -271,6 +282,9 @@ class form_actions extends form_base
 
 				case "after_submit_controller":
 					return $this->_change_after_submit_controller_action($dt);
+
+				case "email_confirm":
+					return $this->_change_email_confirm_action($dt);
 			}
 		}
 	}
@@ -493,6 +507,26 @@ class form_actions extends form_base
 		return $this->parse();
 	}
 
+
+	////
+	// !Generats the form for editing email action
+	function _change_email_confirm_action($args = array())
+	{
+		extract($args);
+		$this->read_template("action_email_confirm.tpl");
+		$data = unserialize($row["data"]);
+
+		$this->vars(array(
+			"email_el" => $this->picker($data["email_el"], $this->get_elements_for_forms(array($id), false, true)),
+			"from_addr" => $data["from_addr"],
+			"from_name" => $data["from_name"],
+			"subj" => $data["subj"],
+			"content" => $data["content"],
+			"reforb" => $this->mk_reforb("submit_action", array("id" => $id, "action_id" => $aid, "level" => 2)),
+		));
+
+		return $this->parse();
+	}
 
 	////
 	// !ececutes form actions, gets called after form submit
@@ -933,6 +967,12 @@ class form_actions extends form_base
 	{
 		$cinst = get_instance("formgen/form_controller");
 		$cinst->eval_controller($data["controller"],$entry_id,$form,false);
+	}
+
+	function do_email_confirm_action(&$form, $data, $entry_id)
+	{
+		$to = $form->get_element_value($data["email_el"]);
+		send_mail($to,$data["subj"], $data["content"],"From: $data[from_name] <$data[from_addr]>\n");
 	}
 }
 ?>
