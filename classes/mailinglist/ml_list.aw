@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.35 2003/12/16 15:52:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.36 2003/12/23 17:07:22 duke Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -618,20 +618,38 @@ class ml_list extends class_base
 		$_delay = $delay * 60;
 		$_patch_size = $patch_size;
 
+		/*
 		if (!isset($aid))
 		{
 			// tee sisestus avoidmids tabelisse
 			$this->db_query("INSERT INTO ml_avoidmids (avoidmids) VALUES ('')");
 			$aid=$this->db_last_insert_id();
 		};
+		*/
+
 		$count = $this->get_member_count($list_id);
 		$total++;
+
+		// mark the queue as "processing" - 5
 		$this->db_query("INSERT INTO ml_queue (lid,mid,gid,uid,aid,status,start_at,last_sent,patch_size,delay,position,total)
-			VALUES ('$list_id','$id','$gid','".aw_global_get("uid")."','$aid','0','$_start_at','0','$_patch_size','$_delay','0','$count')");
+			VALUES ('$list_id','$id','$gid','".aw_global_get("uid")."','$aid','5','$_start_at','0','$_patch_size','$_delay','0','$count')");
+
+		$qid = $this->db_last_insert_id();
+		
+		$mlq = get_instance("mailinglist/ml_queue");
+		$mlq->preprocess_messages(array(
+			"mail_id" => $id,
+			"list_id" => $list_id,
+			"qid" => $qid,
+		));
+
+		// now I should mark the queue as "ready to send" or 0
+		$q = "UPDATE ml_queue SET status = 0 WHERE qid = '$qid'";
+		$this->db_query($q);
 		
 		$this->_log(ST_MAILINGLIST, SA_SEND,"saatis meili $id listi ".$v["name"].":$gname", $lid);
 			
-		$this->db_query("UPDATE ml_avoidmids SET usagec='$total' WHERE aid='$aid'");
+		//$this->db_query("UPDATE ml_avoidmids SET usagec='$total' WHERE aid='$aid'");
 
 		return aw_global_get("route_back");
 	}
@@ -640,7 +658,7 @@ class ml_list extends class_base
 	{
 		$ret = array();
 		$list_obj = new object($id);
-				
+
 		$member_list = new object_list(array(
 			"parent" => $list_obj->prop("def_user_folder"),
 			"class_id" => CL_ML_MEMBER,
@@ -662,7 +680,6 @@ class ml_list extends class_base
 			};
 		};
 
-		
 		return $ret;
 	}	
 
@@ -791,15 +808,13 @@ class ml_list extends class_base
 		$_mid = $arr["request"]["mail_id"];
 		$id = $arr["obj_inst"]->id();
 		$q = "
-			SELECT m_objects.name as member, l_objects.name as lid, tm, subject, id
+			SELECT target, tm, subject, id
 			FROM ml_sent_mails
-			LEFT JOIN objects AS m_objects ON m_objects.oid = ml_sent_mails.member
-			LEFT JOIN objects AS l_objects ON l_objects.oid = ml_sent_mails.lid
-			WHERE lid = '$id' AND mail = '$_mid' ORDER BY ml_sent_mails.tm DESC limit 50";
+			WHERE lid = '$id' AND mail = '$_mid' AND mail_sent = 1 ORDER BY tm DESC limit 50";
 		$this->db_query($q);
 		while ($row = $this->db_next())
 		{
-			$row["member"] = "<a href='".$this->mk_my_orb("change", array("id" => $id, "group" => "show_mail", "mail_id" => $arr["request"]["mail_id"], "s_mail_id" => $row["id"]))."'>".$row["member"]."</a>";
+			$row["member"] = "<a href='".$this->mk_my_orb("change", array("id" => $id, "group" => "show_mail", "mail_id" => $arr["request"]["mail_id"], "s_mail_id" => $row["id"]))."'>".$row["target"]."</a>";
 			$t->define_data($row);
 		}
 	}
