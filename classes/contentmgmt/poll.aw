@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.18 2004/06/04 11:40:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.19 2004/06/17 11:59:38 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -161,6 +161,8 @@ class poll extends class_base
 
 		$ans = $this->get_answers($ap->id());
 
+		$GLOBALS["poll_disp_count"]++;
+
 		reset($ans);
 		while (list($k,$v) = each($ans))
 		{
@@ -180,6 +182,7 @@ class poll extends class_base
 
 			$this->vars(array(
 				"answer_id" => $k,
+				"answer_id_uniq" => $GLOBALS["poll_disp_count"].$k,
 				"answer" => is_array($v) ? $v["answer"] : $v, 
 				"click_answer" => str_replace("&", "&amp;", $au),
 				"click_answer_js" => $o_l,
