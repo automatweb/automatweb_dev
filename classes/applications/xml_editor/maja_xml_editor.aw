@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.5 2004/10/26 05:38:41 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.6 2004/11/01 23:47:28 dragut Exp $
 // maja_xml_editor.aw - maja xml-i editor 
 /*
 
@@ -358,6 +358,7 @@ class maja_xml_editor extends class_base
 		$t = &$arr['prop']['vcl_inst'];
 		$fields = array(
 			"flat_nr" => "Korteri nr.",
+			"flat_nr2" => "Alternatiivne korteri nr.",
 			"korrus" => "Korruse nr.",
 			"korrus_nimi" => "Korruse nimi",
 			"staatus2" => "Alternatiivne staatus",
@@ -385,7 +386,7 @@ class maja_xml_editor extends class_base
 /*
 
 // not sure if it is going to work and don't have time right now to
-// fool around it :(
+// fool around with it :(
 			$row = array("flat_nr" => $flat['korter']);
 			foreach($fields as $field_key => $field_value)
 			{
@@ -401,11 +402,15 @@ class maja_xml_editor extends class_base
 */
 			$t->define_data(array(
 				"flat_nr" => $flat['korter'],
-				
+				"flat_nr2" => html::textbox(array(
+						"name" => "row[".$flat['id']."][korter2]",
+						"value" => $flat['korter2'],
+						"size" => 5,
+					)),
 				"korrus" => html::textbox(array(
 						"name" => "row[".$flat['id']."][korrus]",
 						"value" => $flat['korrus'],
-						"size" => "5",
+						"size" => 5,
 					)),
 				"korrus_nimi" => html::textbox(array(
 						"name" => "row[".$flat['id']."][korrus_nimi]",
@@ -452,6 +457,7 @@ class maja_xml_editor extends class_base
 		if ($arr['request']['group'] == "additional_info")
 		{
 
+			$db_tmp = $this->db_fetch_array("SELECT id,staatus,korter from ".$db_table_name);
 
 			foreach($arr['request']['row'] as $key => $value)
 			{
@@ -460,10 +466,26 @@ class maja_xml_editor extends class_base
 				$db_query = "UPDATE ".$db_table_name." SET ";
 				foreach($value as $k => $v)
 				{
-					if($k == "staatus2" && empty($v))
+					if(($k == "staatus2" || $k == "korter2") && empty($v))
 					{
-						$staatus_from_xml = $this->db_fetch_array("SELECT staatus FROM ".$db_table_name." WHERE id=".$key);
-						$v = $staatus_from_xml[0]['staatus'];
+//						$staatus_from_xml = $this->db_fetch_array("SELECT staatus FROM ".$db_table_name." WHERE id=".$key);
+						foreach($db_tmp as $tmp_key => $tmp_value)
+						{
+							if($tmp_value['id'] == $key)
+							{
+								if($k == "staatus2")
+								{
+//									$v = $staatus_from_xml[0]['staatus'];
+									$v = $tmp_value['staatus'];
+									break;
+								}
+								if($k == "korter2")
+								{
+									$v = $tmp_value['korter'];
+									break;
+								}
+							}
+						}
 					}
 					$db_query .= $k."='".$v."', ";
 				}
@@ -501,11 +523,6 @@ class maja_xml_editor extends class_base
 // some preparations for updating the db table
 			$sql_commands = array();
 
-// moved the next 2 lines at the beginning of the function
-//			$db_table_contents_obj = obj($arr['obj_inst']->prop("db_table_contents"));
-//			$db_table_name = $db_table_contents_obj->prop("db_table");
-			
-//			$saved_floors = $arr['obj_inst']->meta("floors");
 			$xml_to_db_conns = $arr['obj_inst']->meta("xml_to_db_conns");
 			
 			foreach($xml_file_content[0] as $key => $value)
@@ -557,33 +574,19 @@ class maja_xml_editor extends class_base
 // let's but the data in db table
 
 
-// I think i don't need the following check
-//			$db_table_rows = $this->db_fetch_array("SELECT * FROM ".$db_table_name." WHERE maja_nimi='".$house_name."'");
-//			if(!empty($db_table_rows))
-//			{
-//				$this->db_query("DELETE FROM ".$db_table_name." WHERE maja_nimi='".$house_name."'");
-//			}
 
 			$house_name = $arr['obj_inst']->prop("house_name");
 
-//			$this->db_query("DELETE FROM ".$db_table_name." WHERE maja_nimi='".$house_name."'");
-
 			$db_result = $this->db_fetch_array("SELECT * FROM ".$db_table_name." WHERE maja_nimi='".$house_name."'");
-//			$db_result = $this->db_fetch_array("SELECT * FROM ".$db_table_name." WHERE maja_nimi='blah'");
 
-//			arr($db_result);
-//----------------------------------------------------------
-// ok, siin tuleks ilmselt siiski baasist olemas olevad vastava
-// tänava kirjed välja võtta ja siis kokku panna natuke täiuslikum
-// insert VÕI update - juhul kui baasist midagi ei tule siis
-// ilmselt insert
-//----------------------------------------------------------
 			$insert = false;
 
 			if(empty($db_result))
 			{
 				$insert = true;
 			}
+
+			$db_tmp = $this->db_fetch_array("SELECT staatus, korter, id from ".$db_table_name);
 
 			foreach($sql_commands as $sql_command)
 			{
@@ -599,13 +602,37 @@ class maja_xml_editor extends class_base
 				{
 
 // check if the status is changed, if it is changed, then it is updated in staatus2 field also
-					if($sql_c_key == "staatus" && !$insert)
+					if(($sql_c_key == "staatus" || $sql_c_key == "korter") && !$insert)
 					{
+/*
 						$staatus_from_db = $this->db_fetch_array("SELECT staatus FROM ".$db_table_name." WHERE korter='".$sql_command['korter']."'");
 						if($staatus_from_db[0]['staatus'] != $sql_c_value)
 						{
 							$sql_query .= "staatus2='".$sql_c_value."', ";
 							
+						}
+*/
+						foreach($db_tmp as $tmp_value)
+						{
+							if($tmp_value['korter'] == $sql_command['korter'])
+							{
+								if($sql_c_key == "staatus")
+								{
+									if($tmp_value['staatus'] != $sql_c_value)
+									{
+										$sql_query = "staatus2='".$sql_c_value."', ";
+										break;
+									}
+								}
+								if($sql_c_key == "korter")
+								{
+									if($tmp_value['korter'] != $sql_c_value)
+									{
+										$sql_query = "korter2='".$sql_c_value."', ";
+										break;
+									}
+								}
+							}
 						}
 					}
 					$sql_query .= $sql_c_key."='".$sql_c_value."', ";
