@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.355 2005/01/10 12:51:06 kristo Exp $
+// $Id: class_base.aw,v 2.356 2005/01/11 14:18:45 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2842,6 +2842,7 @@ class class_base extends aw_template
 	function _unserialize($args = array())
 	{
 		$raw = isset($args["raw"]) ? $args["raw"] : aw_unserialize($args["str"]);
+
 		$this->init_class_base();
 
 		// quoting thins here _seriosly_ fucks us over with binary data
@@ -2853,6 +2854,14 @@ class class_base extends aw_template
 			"is_paste" => true
 		));
 		
+		foreach(safe_array($raw["connections"]) as $con)
+		{
+			$this->obj_inst->connect(array(
+				"to" => $con["to"],
+				"reltype" => $con["reltype"]
+			));
+		}
+
 		// object_translation depends on getting the id from here
 		return $this->id;
 	}

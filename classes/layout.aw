@@ -458,6 +458,14 @@ class layout extends class_base
 		}
 		$o->save();
 
+		foreach(safe_array($raw["connections"]) as $con)
+		{
+			$o->connect(array(
+				"to" => $con["to"],
+				"reltype" => $con["reltype"]
+			));
+		}
+
 		return $o->id();
 	}
 }
