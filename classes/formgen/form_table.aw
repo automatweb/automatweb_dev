@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.9 2002/11/18 16:57:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.10 2002/11/19 11:53:45 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -870,7 +870,8 @@ class form_table extends form_base
 			$tbl.= $this->mk_reforb("submit_table", 
 				array(
 					"return" => $this->binhex($this->ru),
-					"table_id" => $this->table_id
+					"table_id" => $this->table_id,
+					"form_id_for_entries" => $this->form_for_entry_id
 				)
 			);
 			$tbl.="</form>";
@@ -2944,7 +2945,11 @@ class form_table extends form_base
 			{
 				if ($one == 1)
 				{
-					$this->do_delete_entry($this->get_form_for_entry($id), $id);
+					if (!$form_id_for_entries)
+					{
+						$form_id_for_entries = $this->get_form_for_entry($id);
+					}
+					$this->do_delete_entry($form_id_for_entries, $id);
 				}
 			}
 		}

@@ -401,6 +401,12 @@ class form_db_base extends aw_template
 			$this->delete_object($entry_id);
 			$this->_log("form","Kustutas formi $this->name sisestuse $entry_id");
 		}
+		else
+		{
+			// delete permanently from the table then I guess
+			$q = "DELETE FROM ".$this->arr["save_table_start_from"]." WHERE ".$this->arr["save_tables"][$this->arr["save_table_start_from"]]." = '$entry_id'";
+			$this->db_query($q);
+		}
 	}
 
 	////
