@@ -1,0 +1,22 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>uid</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Kasutajanimi</caption>
+      </property>
+      <property>
+            <name>kanal</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Kanal</caption>
+      </property>
+</properties>
+

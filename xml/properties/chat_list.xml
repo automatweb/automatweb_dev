@@ -1,0 +1,22 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>host</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Deemoni host</caption>
+      </property>
+      <property>
+            <name>port</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Kuulatav port</caption>
+      </property>
+</properties>
+

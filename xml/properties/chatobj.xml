@@ -1,0 +1,104 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>serverObjId</name>
+            <type>objpicker</type>
+            <clid>CL_CHATSERVER</clid>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Serveri objekt</caption>
+      </property>
+      <property>
+            <name>buttontext</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Nupu tekst</caption>
+      </property>
+      <property>
+            <name>mode</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Mode</caption>
+      </property>
+      <property>
+            <name>channel</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Kanal</caption>
+      </property>
+      <property>
+            <name>message</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Teade</caption>
+      </property>
+      <property>
+            <name>privat</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Privat</caption>
+      </property>
+      <property>
+            <name>windowcolor</name>
+            <type>colorpicker</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Akna värv</caption>
+      </property>
+      <property>
+            <name>backcolor</name>
+            <type>colorpicker</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Tausta värv</caption>
+      </property>
+      <property>
+            <name>textcolor</name>
+            <type>colorpicker</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Teksti värv</caption>
+      </property>
+      <property>
+            <name>buttoncolor</name>
+            <type>colorpicker</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Nupu värv</caption>
+      </property>
+      <property>
+            <name>icon</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Ikoon</caption>
+      </property>
+</properties>
+
