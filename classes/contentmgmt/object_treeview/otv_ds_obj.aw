@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.5 2004/06/17 13:54:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.6 2004/07/08 11:53:20 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -384,7 +384,7 @@ class otv_ds_obj extends class_base
 			{
 				$fi = get_instance("file");
 				$url = $fi->get_url($t->id(),$t->name());
-				
+			
 				if ($fd["newwindow"])
 				{
 					$target = "target=\"_blank\"";
@@ -433,7 +433,10 @@ class otv_ds_obj extends class_base
 
 			foreach($fields as $ff_n => $ff_c)
 			{
-				$ret[$t->id()][$ff_n] = $t->prop($ff_n);
+				if ($ff_n != "url")
+				{
+					$ret[$t->id()][$ff_n] = $t->prop($ff_n);
+				}
 			}
 		}
 		return $ret;
@@ -474,7 +477,13 @@ class otv_ds_obj extends class_base
 		{
 			$ret[] = $c->to();
 		}
-		return $ret;
+
+		$conns = $o->connections_from(array(
+			"type" => "RELTYPE_FOLDER"
+		));
+		$c = reset($conns);
+
+		return array($GLOBALS["tv_sel"] ? $GLOBALS["tv_sel"] : $c->prop("to"), $ret);
 	}
 
 	function do_delete_objects($o, $arr)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.9 2004/06/25 20:20:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.10 2004/07/08 11:53:20 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2 
 /*
 
@@ -452,13 +452,12 @@ class object_treeview_v2 extends class_base
 		// must read these from the datasource
 		$ds_o = obj($ob->prop("ds"));
 		$ds_i = $ds_o->instance();
-		$types = $ds_i->get_add_types($ds_o);
+		list($parent, $types) = $ds_i->get_add_types($ds_o);
 
 
 		$menu = "";
 		$classes = aw_ini_get("classes");
 
-		$parent = $GLOBALS["tv_sel"] ? $GLOBALS["tv_sel"] : $this->first_folder;
 
 		$ot = get_instance("admin/object_type");
 		foreach($types as $c_o)
