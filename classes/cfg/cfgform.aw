@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.6 2002/11/24 21:42:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.7 2002/11/26 12:36:08 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -269,6 +269,36 @@ class cfgform extends aw_template
 				"content" => $ser,
 			));
 		};
+	}
+	
+	function _serialize($arr)
+	{
+		extract($arr);
+		$row = $this->get_object($oid);
+		if (!$row)
+		{
+			return false;
+		}
+		unset($row["metadata"]);
+		return serialize($row);
+	}
+
+	function _unserialize($arr)
+	{
+		extract($arr);
+		$row = unserialize($str);
+		$oid = $this->new_object(array(
+			"parent" => $parent,
+			"name" => $row["name"],
+			"class_id" => CL_CFGFORM,
+			"subclass" => $row["subclass"],
+			"status" => $row["status"],
+			"comment" => $row["comment"],
+			"alias" => $row["alias"],
+			"metadata" => $row["meta"],
+		));
+
+		return $oid;
 	}
 
 
