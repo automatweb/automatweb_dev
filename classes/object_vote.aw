@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/object_vote.aw,v 2.1 2001/07/29 19:07:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/object_vote.aw,v 2.2 2001/08/02 16:21:58 duke Exp $
 global $orb_defs; 
 $orb_defs["object_vote"] = "xml";
 
@@ -105,8 +105,8 @@ class  object_vote extends aw_template
 				"oid" => $id,
 				"key" => "object_vote",
 		));
-		$check = $meta["object_vote"]["check"];
-		$jrk = $meta["object_vote"]["jrk"];
+		$check = $meta["check"];
+		$jrk = $meta["jrk"];
 		$cluster = $this->get_object($id);
 		$q = "SELECT *,objects.* FROM documents LEFT JOIN objects ON (documents.docid = objects.oid) WHERE site_id = '$SITE_ID' AND objects.period = '$cluster[period]' AND status = 2";
 		$this->db_query($q);
@@ -142,6 +142,7 @@ class  object_vote extends aw_template
 			"key" => "object_vote",
 			"value" => $block,
 		));
+
 
 		global $baseurl;
 		return $baseurl . "/automatweb/orb.aw?class=object_vote&action=edit_cluster&id=$id";
