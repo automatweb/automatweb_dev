@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/pank/pank.aw,v 1.3 2004/07/22 11:19:01 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/pank/pank.aw,v 1.4 2004/07/27 11:20:45 rtoomas Exp $
 // crm_pank.aw - Pank 
 /*
 @classinfo syslog_type=ST_PANK relationmgr=yes
@@ -92,6 +92,9 @@
 @caption Kellele kuulub
 
 */
+
+define('NORMAL_ACCOUNT', 0);
+define('TAX_ACCOUNT', 1);
 
 class pank extends class_base
 {
@@ -285,7 +288,7 @@ class pank extends class_base
 					'class_id' => CL_ACCOUNT,
 					'parent' => $arr['obj_inst']->id()
 		));
-
+		
 		for($o=$ol->begin();!$ol->end();$o=$ol->next())
 		{
 			$table->define_data(array(
@@ -516,6 +519,14 @@ class pank extends class_base
 	}
 
 	/*
+
+	*/
+	function get_tax_account_for_obj($parent)
+	{
+		return $this->get_account_for_obj(&$parent, TAX_ACCOUNT);	
+	}
+
+	/*
 		every company can have just one account, 
 		its more like it should have one account.
 
@@ -523,7 +534,7 @@ class pank extends class_base
 		give company, if none exist, will make 
 		a new one, and return that one.
 	*/
-	function get_account_for_obj($parent)
+	function get_account_for_obj($parent, $type=NORMAL_ACCOUNT)
 	{
 		//paistab, et tuli id hoopis sisse
 		if(!is_object($parent))
@@ -531,47 +542,30 @@ class pank extends class_base
 			$parent = new object($parent);
 		}
 		
-		//company accounts aren't in the company
-		//but in the pank associated with the company
-		/*if($parent->class_id() == CL_CRM_COMPANY)
+		$ol = new object_list(array(
+						'parent' => $parent->id(),
+						'class_id' => CL_ACCOUNT,
+						'account_type' => $type
+		));
+		if(sizeof($ol->ids()))
 		{
-			$conns = $parent->connections_to(array(
-								'type' => RELTYPE_OWNER
-			));
-			if(sizeof($conns))
-			{
-				$bank = current($conns);
-				$bank = $bank->from();
-				return $this->get_account_for_obj(&$bank);
-			}
-			else
-			{
-				//ei suutnud saada
-				echo "Ei suutnud saada kontot järgmisele objektile: ";
-				arr($parent->properties());
-				die();
-			}
+			return new object(current($ol->ids()));
 		}
-		else*/
+		//make account
+		else
 		{
-			$ol = new object_list(array(
-							'parent' => $parent->id(),
-							'class_id' => CL_ACCOUNT
-			));
-			if(sizeof($ol->ids()))
+			$name = $parent->name()." konto";
+			if($type==TAX_ACCOUNT)
 			{
-				return new object(current($ol->ids()));
+				$name = $parent->name().' maksu konto';
 			}
-			//make account
-			else
-			{
-				$obj = new object();
-				$obj->set_class_id(CL_ACCOUNT);
-				$obj->set_parent($parent->id());
-				$obj->set_name($parent->name().' konto');
-				$obj->save();
-				return $obj;
-			}
+			$obj = new object();
+			$obj->set_class_id(CL_ACCOUNT);
+			$obj->set_parent($parent->id());
+			$obj->set_name($name);
+			$obj->set_prop('account_type', $type);
+			$obj->save();
+			return $obj;
 		}
 	}
 
@@ -659,10 +653,10 @@ class pank extends class_base
 		$company = new object($arr['parent']);
 
 		$account = $this->get_account_for_obj($company);
-
+		
 		$table->define_data(array(
-					'saldo' => $account->prop('account_balance'),
 					'account_name' => $account->name(),
+					'saldo' => $account->prop('account_balance'),
 		));
 	}
 
@@ -717,6 +711,11 @@ class pank extends class_base
 									),
 									CL_PANK);
 
+			$change_project_url = $this->mk_my_orb('change',array(
+												'id' => $project->id()
+											),CL_PROJECT);
+			$admin_menus_project_url = 'http://toomas.dev.struktuur.ee/automatweb/orb.aw?class=admin_menus&action=right_frame&parent='.$project->id().'&period=';
+
 			$table->define_data(array(
 				'project_name' => html::href(array(
 											'url'=>aw_url_change_var(array(
@@ -726,6 +725,14 @@ class pank extends class_base
 												'return_url' => '',
 											)),
 											'caption'=>$project->name()
+										)).' '.
+										html::href(array(
+											'url' => $change_project_url,
+											'caption' => 'Muuda'
+										)).' '.
+										html::href(array(
+											'url' => $admin_menus_project_url,
+											'caption' => 'Ava'
 										)),
 				'saldo' => $project_account->prop('account_balance'),
 				'project_account' => $project_account->name()
