@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.45 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.46 2002/07/17 04:01:46 kristo Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 
@@ -460,7 +460,7 @@ class forum extends aw_template
 			$b_obj = $this->get_object($board);
 			if ($b_obj["class_id"] == CL_PERIODIC_SECTION)
 			{
-				$topic_link = "/index.".$this->cfg["ext"]."/" . $this->mk_link(array("section" => $board));
+				$topic_link = document::get_link($board);
 			};
 			$this->vars(array(
 				"topic_link" => $topic_link,
