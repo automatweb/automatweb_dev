@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.1 2003/10/22 13:42:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.2 2003/11/05 13:12:00 duke Exp $
 // rte.aw - Rich Text Editor 
 /*
 
@@ -55,11 +55,13 @@ class rte extends class_base
 		$toolbar = &$arr["toolbar"];
 		$toolbar->add_separator();
 
+		// TODO: remap those URL-s so that I can use the toolbar in other situations
+		// besides the fixed toolbar.
                 $toolbar->add_button(array(
                         "name" => "bold",
                         "tooltip" => "Bold",
                         "target" => "contentarea",
-                        "url" => "javascript:format_selection('bold');",
+                        "url" => "javascript:parent.contentarea.format_selection('bold');",
                         "img" => "rte_bold.gif",
                 ));
 
@@ -67,7 +69,7 @@ class rte extends class_base
                         "name" => "italic",
                         "tooltip" => "Italic",
                         "target" => "contentarea",
-                        "url" => "javascript:format_selection('italic');",
+                        "url" => "javascript:parent.contentarea.format_selection('italic');",
                         "img" => "rte_italic.gif",
                 ));
 
@@ -75,7 +77,7 @@ class rte extends class_base
                         "name" => "underline",
                         "tooltip" => "Underline",
                         "target" => "contentarea",
-                        "url" => "javascript:format_selection('underline');",
+                        "url" => "javascript:parent.contentarea.format_selection('underline');",
                         "img" => "rte_underline.gif",
                 ));
 
@@ -85,7 +87,7 @@ class rte extends class_base
                         "name" => "align_left",
                         "tooltip" => "Align left",
                         "target" => "contentarea",
-                        "url" => "javascript:format_selection('justifyleft');",
+                        "url" => "javascript:parent.contentarea.format_selection('justifyleft');",
                         "img" => "rte_align_left.gif",
                 ));
 
@@ -93,7 +95,7 @@ class rte extends class_base
                         "name" => "align_center",
                         "tooltip" => "Align center",
                         "target" => "contentarea",
-                        "url" => "javascript:format_selection('justifycenter');",
+                        "url" => "javascript:parent.contentarea.format_selection('justifycenter');",
                         "img" => "rte_align_center.gif",
                 ));
 
@@ -101,7 +103,7 @@ class rte extends class_base
                         "name" => "align_right",
                         "tooltip" => "Align right",
                         "target" => "contentarea",
-                        "url" => "javascript:format_selection('justifyright');",
+                        "url" => "javascript:parent.contentarea.format_selection('justifyright');",
                         "img" => "rte_align_right.gif",
                 ));
 
@@ -111,7 +113,7 @@ class rte extends class_base
                         "name" => "num_list",
                         "tooltip" => "Numbered list",
                         "target" => "contentarea",
-                        "url" => "javascript:format_selection('insertorderedlist');",
+                        "url" => "javascript:parent.contentarea.format_selection('insertorderedlist');",
                         "img" => "rte_num_list.gif",
                 ));
 
@@ -119,7 +121,7 @@ class rte extends class_base
                         "name" => "bul_list",
                         "tooltip" => "Bulleted list",
                         "target" => "contentarea",
-                        "url" => "javascript:format_selection('insertunorderedlist');",
+                        "url" => "javascript:parent.contentarea.format_selection('insertunorderedlist');",
                         "img" => "rte_bul_list.gif",
                 ));
 
@@ -129,7 +131,7 @@ class rte extends class_base
                         "name" => "outdent",
                         "tooltip" => "Outdent",
                         "target" => "contentarea",
-                        "url" => "javascript:format_selection('outdent');",
+                        "url" => "javascript:parent.contentarea.format_selection('outdent');",
                         "img" => "rte_outdent.gif",
                 ));
 
@@ -137,50 +139,59 @@ class rte extends class_base
                         "name" => "indent",
                         "tooltip" => "Indent",
                         "target" => "contentarea",
-                        "url" => "javascript:format_selection('indent');",
+                        "url" => "javascript:parent.contentarea.format_selection('indent');",
                         "img" => "rte_indent.gif",
                 ));
-
+               
+	       	/*
                 $toolbar->add_separator();
 		$this->read_template("stylebox.tpl");
-		$toolbar->add_cdata($this->parse());
+		$toolbar->add_cdata($this->parse(),"right");
+		*/
 
-		$toolbar->add_cdata("<script>function format_selection(arg){parent.contentarea.format_selection(arg);}</script>");
-		$toolbar->add_cdata("<script>function surroundHTML(start,end){parent.contentarea.surroundHTML(start,end);}</script>");
-
-                $toolbar->add_separator();
+                $toolbar->add_separator(array(
+			"side" => "right",
+		));
 
 		$toolbar->add_button(array(
 			"name" => "clearstyles",
+			"img" => "clearstyles.gif",
 			"tooltip" => "tühista stiilid",
 			"target" => "contentarea",
 			"url" => "javascript:parent.contentarea.clearstyles()",
+			"side" => "right",
                 ));
 	}
 
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	////
-	// !this will be called if the object is put in a document by an alias and the document is being shown
-	// parameters
-	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
-	function parse_alias($arr)
+	function draw_editor($arr)
 	{
-		return $this->show(array("id" => $arr["alias"]["target"]));
-	}
+                // richtext editors are inside a template
+                static $rtcounter = 0;
+                $rtcounter++;
+                $retval = "";
+                $this->read_template("aw_richtexteditor.tpl");
+                $this->vars($arr);
 
-	////
-	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
-	function show($arr)
-	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		return $this->parse();
-	}
-}
+                if ($rtcounter == 1)
+                {
+                        $this->rt_elements = array($arr["name"]);
+                        // get the site styles
+                        $site_styles = $this->get_file(array(
+                                "file" => aw_ini_get("site_basedir") . "/public/css/styles.css",
+                        ));
+                        preg_match("/(\.text \{.+?\})/sm",$site_styles,$m);
+                        $text_style = str_replace("\n"," ",$m[1]);
+
+			/*
+                        $this->vars(array(
+                                "rte_styles" => $text_style . " .styl1 {color: green; font-family: Verdana; font-weight: bold;} .styl2 {color: blue; font-size: 20px;} .styl3 {color: red; border: 1px solid blue;}",
+                        ));
+			*/
+                        $retval .= $this->parse("writer");
+                        $retval .= $this->parse("toolbar");
+                };
+                $retval .= $this->parse("field");
+                return $retval;
+        }
+};
 ?>
