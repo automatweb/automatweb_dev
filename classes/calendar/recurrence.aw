@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/recurrence.aw,v 1.3 2004/03/17 13:47:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/recurrence.aw,v 1.4 2004/07/30 08:44:43 kristo Exp $
 // recurrence.aw - Kordus 
 /*
 
@@ -12,6 +12,9 @@ form=+emb syntax means, that this thing should be in all the default forms +
 the emb form. The latter I can then use for embedding cases
 @property start type=date_select table=calendar2recurrence form=+emb 
 @caption Alates
+
+@property time type=textbox size=5 field=meta method=serialize form=+emb
+@caption Kellaaeg
 
 @property recur_type type=select field=meta method=serialize form=+emb
 @caption Korduse tüüp
