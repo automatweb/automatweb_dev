@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.56 2002/01/22 16:26:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.57 2002/01/24 04:36:38 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -55,6 +55,15 @@ class planner extends calendar {
 		$this->id = $id;
 		return $this->mk_orb("change",array("id" => $id));
 	}
+
+	////
+	// !Kuvab kalendri aliase konfimise vormi
+	function add_alias($args = array())
+	{
+		extract($args);
+		return $this->mk_my_orb("search",array("s_name" => "%25","s_comment" => "%25","docid" => $parent,"s_type" => CL_CALENDAR),"aliasmgr");
+
+	}
 	
 	//// 
 	// !Kuvab kalendi muutmise vormi
@@ -92,6 +101,25 @@ class planner extends calendar {
 			"oid" => $id,
 			"name" => $name,true));
 		return $this->mk_orb("change",array("id" => $id));
+	}
+
+	////
+	// !Parsib kalendrialiast
+	function parse_alias($args = array())
+	{
+		extract($args);
+		if (!is_array($this->calaliases) || ($oid != $this->cal_oid) )
+		{
+			$this->calaliases = $this->get_aliases(array(
+								"oid" => $oid,
+								"type" => CL_CALENDAR,
+			));
+			$this->cal_oid = $oid;
+		};
+                $c = $this->calaliases[$matches[3] - 1];
+		$replacement = $this->object_list(array("id" => $c["target"],"type" => "day"));
+		return $replacement;
+
 	}
 
 	////
@@ -439,6 +467,7 @@ class planner extends calendar {
 						"total" => $cnt));
 				$content = $this->parse();
 				break;
+
 		};
 
 		$this->read_template("planner.tpl");
@@ -517,6 +546,37 @@ class planner extends calendar {
 			"contents" => nl2br($e["description"]),
 		));
 
+
+	}
+
+	function object_list($args = array())
+	{
+		extract($args);
+		if (!$date)
+		{
+			$date = date("d-m-Y");
+		};
+		$di = $this->get_date_range(array(
+				"date" => $date,
+				"type" => "day",
+		));
+		
+		$events = $this->get_events2(array(
+					"start" => $di["start"],
+					"end" => $di["end"],
+					"folder" => $id,
+		));
+		$slice = date("dmY",$di["start"]);
+		$repl = "";
+		if (is_array($events[$slice]))
+		{
+			foreach($events[$slice] as $key => $e)
+			{
+				$emb_obj = $this->db_fetch_field("SELECT oid FROM planner WHERE id = $e[id]","oid");
+				$repl .= $this->_show_object(array("oid" => $emb_obj));
+			};
+		};
+		return $repl;
 
 	}
 
@@ -1590,6 +1650,25 @@ class planner extends calendar {
 		));
 		return $menubar . $html;
 	}
+
+	function bron_add_event($args = array())
+	{
+		$this->quote($args);
+		extract($args);
+		$id = $this->new_object(array(
+			"class_id" => CL_CAL_EVENT,
+			"parent" => $parent,
+			"name" => $title,
+		),true);
+
+
+		$q = "INSERT INTO planner
+			(id,uid,start,end,title,place,description)
+			VALUES ('$id','$uid','$start','$end','$title','$place','$description')";
+		$this->db_query($q);
+		return $id;
+         }
+	
 
 
 };
