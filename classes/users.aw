@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.100 2004/01/14 09:53:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.101 2004/01/14 15:39:28 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -2693,6 +2693,22 @@ class users extends users_user
 	function login($arr)
 	{
 		return parent::login($arr);
+	}
+
+	/** logout
+		
+		@attrib name=logout params=name default="0" nologin="1"
+		
+		@returns
+		
+		
+		@comment
+			logs the current user out
+
+	**/
+	function orb_logout($arr = array())
+	{
+		return parent::orb_logout($arr);
 	}
 }
 ?>

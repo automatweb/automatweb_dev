@@ -262,5 +262,12 @@
 			</function>
 		</action>
 
+		<action name="logout" nologin="1">
+			<function name="orb_logout">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
