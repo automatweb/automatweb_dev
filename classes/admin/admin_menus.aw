@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.11 2003/06/10 13:11:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.12 2003/06/17 12:01:18 kristo Exp $
 class admin_menus extends aw_template
 {
 	// this will be set to document id if only one document is shown, a document which can be edited
@@ -862,7 +862,7 @@ class admin_menus extends aw_template
 
 		// by the way, mk_my_orb is pretty expensive and all those calls to it
 		// here take up to 10% of the time used to create the page -- duke
-
+/* AND site_id = '$site_id' */
 		$q = "
 			SELECT objects.* 
 			FROM objects 
@@ -870,7 +870,7 @@ class admin_menus extends aw_template
 			WHERE 
 				objects.parent = '$parent' AND 
 				(lang_id = '$lang_id' OR m.type = ".MN_CLIENT." OR objects.class_id IN(".CL_PERIOD .",".CL_USER.",".CL_GROUP."))
-				AND site_id = '$site_id' AND 
+				 AND 
 				status != 0 
 				$cls $ps ";
 		$this->db_query($q);
