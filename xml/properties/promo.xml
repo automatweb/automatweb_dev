@@ -179,7 +179,7 @@
             <type>textbox</type>
             <size>4</size>
             <method>serialize</method>
-            <caption>Mitu algusest a&amp;auml;ra j&amp;auml;tta</caption>
+            <caption>Mitu algusest &amp;auml;ra j&amp;auml;tta</caption>
       </property>
       <property>
             <name>sort_by</name>

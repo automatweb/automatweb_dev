@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.55 2004/12/31 10:13:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.56 2005/01/14 11:49:22 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -64,7 +64,7 @@
 	@caption Mitu viimast dokumenti
 
 	@property start_ndocs type=textbox size=4 group=menus table=objects field=meta method=serialize
-	@caption Mitu algusest a&auml;ra j&auml;tta
+	@caption Mitu algusest &auml;ra j&auml;tta
 
 	@property sort_by type=select table=objects field=meta method=serialize group=show
 	@caption Dokumente j&auml;rjestatakse
@@ -639,16 +639,18 @@ class promo extends class_base
 		$filter["class_id"] = CL_PROMO;
 		$filter["sort_by"] = "objects.jrk";
 
-		if (aw_ini_get("menuedit.lang_menus"))
+		/*if (aw_ini_get("menuedit.lang_menus"))
 		{
 			$filter["lang_id"] = aw_global_get("lang_id");
-		}
+		}*/
+		$filter["lang_id"] = array();
 
 		$list = new object_list($filter);
 
 		$tplmgr = get_instance("templatemgr");
 		$promos = array();
 		$gidlist = aw_global_get("gidlist");
+		$lang_id = aw_global_get("lang_id");
 		$rootmenu = aw_ini_get("rootmenu");
 		$default_tpl_filename = aw_ini_get("promo.default_tpl");
 		$tpldir = aw_ini_get("tpldir");
@@ -656,6 +658,11 @@ class promo extends class_base
 		$promo_areas = aw_ini_get("promo.areas");
 		foreach($list->arr() as $o)
 		{
+			if ($o->lang_id() != $lang_id && !$o->prop("content_all_langs"))
+			{
+				continue;
+			}
+
 			if (!$o->prop("tpl_lead"))
 			{
 				$tpl_filename = $default_tpl_filename;
