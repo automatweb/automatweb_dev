@@ -32,8 +32,11 @@ class form_export_db extends form_base
 			if ($el->get_type() != "")
 			{
 				$nm = $e->fix_fn($el->get_el_name());
-				$cols[] = $nm." text ";
-				$elem2col[$el->get_id()] = $nm;
+				if ($nm != "")
+				{
+					$cols[] = $nm." text ";
+					$elem2col[$el->get_id()] = $nm;
+				}
 			}
 		}
 

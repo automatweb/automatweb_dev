@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.59 2003/05/14 14:36:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.60 2003/05/14 15:44:21 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -1682,6 +1682,7 @@ class form extends form_base
 				$this->acl_error("view",$entry_id);
 			}
 			$this->load_entry($entry_id);
+			$this->_do_value_controllers();
 		}
 		else
 		{

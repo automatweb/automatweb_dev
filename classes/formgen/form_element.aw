@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.43 2003/05/14 14:36:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.44 2003/05/14 15:44:21 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -3666,6 +3666,7 @@ class form_element extends aw_template
 		if ($this->arr["value_controller"] && (!$this->form->arr["sql_writer_writer"])) 
 		{
 			$this->entry = $this->form->controller_instance->eval_controller($this->arr["value_controller"], $this->entry, &$this->form, $this);
+			$this->form_ref->entry[$this->id] = $this->entry;
 		}
 	}
 }

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.16 2003/05/08 13:43:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.17 2003/05/14 15:44:21 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -670,13 +670,62 @@ class form_base extends form_db_base
 	// well, theoretically references anyway, but php craps out here and actually, if you modify them, they get cloned 
 	// and changes end up in the cloned versions, so no changing stuff through these pointers
 	function get_all_els()
-	{
+	{	
+		// damn, this needs to be different for outputs
 		$ret = array();
-		for ($row = 0; $row < $this->arr["rows"]; $row++)
+		if ($this->output_id)
 		{
-			for ($col = 0; $col < $this->arr["cols"]; $col++)
+			$op_far = $this->get_op_forms($this->output_id);
+			for ($row = 0; $row < $this->output["rows"]; $row++)
 			{
-				$this->arr["contents"][$row][$col]->get_els(&$ret);
+				for ($col = 0; $col < $this->output["cols"]; $col++)
+				{
+					if (!($arr = $this->get_spans($row, $col, $this->output["map"], $this->output["rows"], $this->output["cols"])))
+					{
+						continue;
+					}
+					$rrow = (int)$arr["r_row"];
+					$rcol = (int)$arr["r_col"];
+					$op_cell = $this->output[$rrow][$rcol];
+					for ($i=0; $i < $op_cell["el_count"]; $i++)
+					{
+						$el=get_instance("formgen/form_entry_element");
+						$el->load($op_cell["elements"][$i],&$this,$rcol,$rrow);
+
+						// if the element is linked, then fake the elements entry
+						if ($op_cell["elements"][$i]["linked_element"] && $op_far[$op_cell["elements"][$i]["linked_form"]] == $op_cell["elements"][$i]["linked_form"])
+						{
+							// now fake the correct id
+							// ok, we have to make a backup of $this->entry - because we just might overwrite important entries in it
+							// if the element id's in the output are the same as the element id's in the linked form
+		
+							// damn, we have to set relation form and element from the original form in the element 
+							// - the output does not contain them :(
+							if ($el->arr["subtype"] == "relation")
+							{
+								$opelform =& $this->cache_get_form_instance($op_cell["elements"][$i]["linked_form"]);
+								$opelformel = $opelform->get_element_by_id($op_cell["elements"][$i]["linked_element"]);
+								$el->arr["rel_form"] = $opelformel->arr["rel_form"];
+								$el->arr["rel_element"] = $opelformel->arr["rel_element"];
+							}
+
+							$_entry = array();
+							$_entry[$el->get_id()] = $this->entry[$op_cell["elements"][$i]["linked_element"]];
+							$el->set_entry($_entry,$this->entry_id);
+						}
+						$ret[] = $el;
+					}
+				}
+			}
+		}
+		else
+		{
+			for ($row = 0; $row < $this->arr["rows"]; $row++)
+			{
+				for ($col = 0; $col < $this->arr["cols"]; $col++)
+				{
+					$this->arr["contents"][$row][$col]->get_els(&$ret);
+				}
 			}
 		}
 		return $ret;

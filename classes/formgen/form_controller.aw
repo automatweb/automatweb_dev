@@ -231,7 +231,7 @@ class form_controller extends form_base
 
 		$eq = "\$res = ".$eq.";\$contr_finish = true;";
 		dbg::p2("controller id $id: evaling $eq , res = $res<br>");
-		@eval($eq);
+		eval($eq);
 		if (!$contr_finish)
 		{
 			$this->dequote(&$eq);
