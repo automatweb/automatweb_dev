@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.5 2004/06/17 14:36:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.6 2004/06/29 11:48:10 rtoomas Exp $
 // Shared functionality for event classes
 class event_property_lib extends core
 {
@@ -70,6 +70,11 @@ class event_property_lib extends core
 		};
 
 		return $all_props;
+	}
+
+	function cb_participant_selector($arr)
+	{
+	
 	}
 
 	function process_project_selector($arr)
@@ -248,8 +253,72 @@ class event_property_lib extends core
                 return $retval;
         }
 
+   function callb_human_name($arr)
+   {
+      return html::href(array(
+         "url" => $this->mk_my_orb("change",array(
+            "id" => $arr["id"],
+            "return_url" => urlencode(aw_global_get("REQUEST_URI")),
+         ),CL_CRM_PERSON),
+         "caption" => $arr["name"],
+      ));
+   }
 
+	
+	function participant_selector($arr)
+	{
+		classload("vcl/table");
+		$rtrn = array();
+		$table = new vcl_table();
+		
+		$table->define_field(array(
+							'name' => 'name',
+							'caption' => 'Nimi',
+							'sortable' => '1',
+							'callback' => array(&$this,'callb_human_name'),
+							'callb_pass_row' => true,
+		));
+		$table->define_field(array(
+							'name' => 'phone',
+							'caption' => 'Telefon',
+							'sortable' => '1',
+		));
 
+		$table->define_field(array(
+							'name' => 'email',
+							'caption' => 'E-post',
+							'sortable' => '1',
+		));
+		$table->define_field(array(
+							'name' => 'rank',
+							'caption' => 'Ametinimetus',
+							'sortable' => '1',
+		));
+		$table->define_chooser(array(
+						'name' => 'check',
+						'field' => 'id',
+						'caption' => 'X',
+		));
+
+		$conns = $arr['obj_inst']->connections_to(array());
+		//arr($conns);
+		foreach($conns as $conn)
+		{
+			$person = get_instance(CL_CRM_PERSON);
+			if($conn->prop('from.class_id')==CL_CRM_PERSON)
+			{
+				$data = $person->fetch_person_by_id(array('id'=>$conn->prop('from')));
+				$table->define_data(array(
+					'id' => $conn->prop('from'),
+					'name' => $data['name'],
+					'phone' => $data['phone'],
+					'email' => $data['email'],
+					'rank' => $data['rank'],
+				));
+			}
+		}
+		return array('tabel'=> array('type'=>'table','vcl_inst'=>&$table,'no_caption' => 1));
+	}
 
 };
 ?>
