@@ -5,7 +5,7 @@
 <script language="javascript">
 function ssrch()
 {
-	document.selsrch.elements[1].disabled=true;
+	document.selsrch.elements[2].disabled=true;
 	if (document.selsrch.form_op)
 	{
 		document.selsrch.form_op.disabled=true;
@@ -18,7 +18,7 @@ function ssrch()
 
 	if (document.selsrch.search_from[0].checked)
 	{
-		document.selsrch.elements[1].disabled=false;
+		document.selsrch.elements[2].disabled=false;
 		if (document.selsrch.form_op)
 		{
 			document.selsrch.form_op.disabled=false;
