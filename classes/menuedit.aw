@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.100 2002/02/27 00:16:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.101 2002/02/27 00:50:58 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -275,38 +275,12 @@ class menuedit extends aw_template
 		$this->vars(array(
 						"per_string" => $GLOBALS["act_period"]["description"],
 		));
-		if (!$this->can("view", $section))
+
+		// check whether access to that menu is denied by ACL and if so
+		// redirect the user 
+		if (not($this->can("view", $section)))
 		{
-			// kui kastuajal pole selle men&uuml;&uuml; vaatamise &otilde;igust, siis vaatame et millisesse persesse ta saata tuleb
-			classload("config");
-			$c = new db_config;
-			$ec = $c->get_simple_config("errors");
-			classload("xml");
-			$x = new xml;
-			$ra = $x->xml_unserialize(array("source" => $ec));
-			
-			global $gidlist;
-			if (is_array($gidlist))
-			{
-				$d_gid = 0;
-				$d_pri = 0;
-				$d_url = "";
-				foreach($gidlist as $gid)
-				{
-					if ($ra[$gid]["pri"] >= $d_pri && $ra[$gid]["url"] != "")
-					{
-						$d_gid = $gid;
-						$d_pri = $ra[$gid]["pri"];
-						$d_url = $ra[$gid]["url"];
-					}
-				}
-				if ($d_url != "")
-				{
-					header("Location: $d_url");
-					die();
-				}
-			}
-			$this->raise_error(ERR_MNEDIT_NOACL,"No ACL error messages defined!",true);
+			$this->no_access_redir();
 		}
 
 		// main.tpl-i muutuste testimiseks ilma seda oiget main.tpl-i muutmata
@@ -410,15 +384,6 @@ class menuedit extends aw_template
 		{
 			$this->right_pane = false;
 		}
-
-		// loome sisu
-		//if ($obj["class_id"] == CL_PSEUDO && $this->is_link_collection($section) && $text == "")
-		//{
-			// tshekime et kas 2kki on selle menyy all lingikogu. kui on, siis joonistame selle.
-		//	$this->vars(array("doc_content" => $this->do_link_collection($section)));
-		//	$this->read_template($template);
-		//}
-		//else
 
 		if ($obj["class_id"] == CL_PSEUDO && (($sh_id = $this->is_shop($section)) > 0) && $text == "")
 		{
@@ -5418,6 +5383,48 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		}		
 
 		return $tpldir;
+	}
+
+	////
+	// !Redirect the user if he/she didn't have the right to view that section
+	function no_access_redir()
+	{
+		classload("config");
+		$c = new db_config;
+		$ec = $c->get_simple_config("errors");
+		$ra = aw_unserialize($ec);
+			
+		global $gidlist;
+		if (is_array($gidlist))
+		{
+			$d_gid = 0;
+			$d_pri = 0;
+			$d_url = "";
+			foreach($gidlist as $gid)
+			{
+				if ($ra[$gid]["pri"] >= $d_pri && $ra[$gid]["url"] != "")
+				{
+					$d_gid = $gid;
+					$d_pri = $ra[$gid]["pri"];
+					$d_url = $ra[$gid]["url"];
+				}
+			}
+			
+			if ($d_url != "")
+			{
+				if ($d_url != aw_global_get("REQUEST_URI"))
+				{
+					header("Location: $d_url");
+					die();
+				}
+				else
+				{
+					$this->raise_error(ERR_ACL_ERR,"Access denied and error redirects are defined.incorrectly. Please report this to the site administrator",1);
+				};
+					
+			}
+		}
+		$this->raise_error(ERR_MNEDIT_NOACL,"No ACL error messages defined!",true);
 	}
 }
 ?>
