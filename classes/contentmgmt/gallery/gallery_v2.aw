@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.46 2004/05/20 12:12:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.47 2004/06/02 12:59:02 kristo Exp $
 
 /*
 
@@ -74,7 +74,8 @@
 @property import_add_pages type=checkbox ch_value=1 
 @caption Importimisel lisa vajadusel lehek&uuml;lgi
 
-@property do_import type=submit value=Impordi
+@property do_import type=checkbox ch_value=1
+@caption Teosta import
 
 @classinfo no_status=1
 
@@ -165,11 +166,11 @@ class gallery_v2 extends class_base
 		else
 		if ($prop['name'] == "do_import")
 		{
-			if ($arr['obj_inst']->prop('import_local') != 1 && $arr['obj_inst']->prop('import_ftp') != 1 && $arr['obj_inst']->prop('import_zip') != 1)
+			if (!($arr['obj_inst']->prop('import_local') == 1 || $arr['obj_inst']->prop('import_ftp') == 1 || $arr['obj_inst']->prop('import_zip') == 1))
 			{
 				return PROP_IGNORE;
 			}
-			$prop['value'] = "Impordi";
+			//$prop['value'] = "Impordi";
 		}
 		else
 		if ($prop['name'] == "ftp_host" || $prop['name'] == "ftp_user" || $prop['name'] == "ftp_pass" || $prop['name'] == "ftp_folder")
@@ -196,7 +197,6 @@ class gallery_v2 extends class_base
 		$od = $parm["obj_inst"];
 		if (substr($id, 0, 5) == 'page_')
 		{
-			//$od = $this->get_object($parm['obj_inst']->id());
 			$pgnr = substr($id, 5);
 			if ($pgnr > $od->prop('num_pages'))
 			{
@@ -209,9 +209,10 @@ class gallery_v2 extends class_base
 	function _get_edit_page($arr)
 	{
 		extract($arr);
-		$obj = $this->get_object($oid);
+		$obj = obj($oid);
 		
-		$page_data = $obj['meta']['page_data'][$page]['layout'];
+		$tmp = $obj->meta("page_data");
+		$page_data = $tmp[$page]['layout'];
 		if (!$page_data && ($def_layout = $this->_get_default_layout($obj)))
 		{
 			// this the first time this page is edited, so get the default layout for it
@@ -230,7 +231,8 @@ class gallery_v2 extends class_base
 		$obj = $params['obj'];
 		$page = $params['page'];
 
-		$pd = $obj['meta']['page_data'][$page]['content'][$row][$col];
+		$tmp = $obj->meta("page_data");
+		$pd = $tmp[$page]['content'][$row][$col];
 		$this->read_template("grid_edit_cell.tpl");
 		$this->vars(array(
 			'page' => $page,
@@ -265,7 +267,7 @@ class gallery_v2 extends class_base
 	function set_property(&$arr)
 	{
 		$prop = &$arr['prop'];
-		$obj = $this->get_object($arr["obj_inst"]->id());
+		$obj = $arr["obj_inst"];
 		$meta = $arr["obj_inst"]->meta();
 		if (substr($prop['name'],0,3) == "pg_")
 		{
@@ -274,7 +276,7 @@ class gallery_v2 extends class_base
 
 			$page_data = $pg_data[$page_number]['layout'];
 			// _get_default_layout only needs a parent
-			if (!$page_data && ($def_layout = $this->_get_default_layout($obj)))
+			if (!$page_data && ($def_layout = $this->_get_default_layout($arr["obj_inst"])))
 			{
 				// this the first time this page is edited, so get the default layout for it
 				$l = get_instance("layout");
@@ -286,7 +288,7 @@ class gallery_v2 extends class_base
 			// _get_image_folder also only needs the parent
 			// this obj thingie gets passed to _set_edit_cell_content, which only uses
 			// that image_folder value
-			$obj["meta"]["image_folder"] = $this->_get_image_folder($obj);
+			$obj->set_meta("image_folder",$this->_get_image_folder($obj));
 
 			$ge = get_instance("vcl/grid_editor");
 			$pg_data[$page_number]['layout'] = $ge->on_edit_submit(
@@ -326,10 +328,10 @@ class gallery_v2 extends class_base
 
 	function callback_post_save($arr)
 	{
-		$ob = $this->get_object($arr["id"]);
-		$meta = $ob['meta'];
+		$ob = obj($arr["id"]);
+		$meta = $ob->meta();
 
-		if ($meta['do_import'] != "" || ($meta["import_zip"] && $meta["up_zip_file"] && $arr["request"]["group"] == "import"))
+		if ($meta['do_import'] != "" && $arr["request"]["group"] == "import")
 		{
 			set_time_limit(0);
 			if ($meta['import_overwrite'] == 1)
@@ -337,7 +339,6 @@ class gallery_v2 extends class_base
 				$this->_clear_images(&$meta);
 			}
 
-			echo "impo! <br>";
 			if ($meta["import_zip"] == 1)
 			{
 				// un_zip_file was set in set_property
@@ -393,8 +394,8 @@ class gallery_v2 extends class_base
 			$img_folder = $this->_get_image_folder($ob);
 
 			$conf = get_instance("contentmgmt/gallery/gallery_conf");
-			$conf_id = $this->_get_conf_for_folder($ob["parent"]);
-			$conf_o = $this->get_object($conf_id);
+			$conf_id = $this->_get_conf_for_folder($ob->parent());
+			$conf_o = obj($conf_id);
 
 			echo "Impordin faile, palun oodake... <br /><br />\n\n";
 			flush();
@@ -434,7 +435,7 @@ class gallery_v2 extends class_base
 
 				$_t = $img->copy();
 
-				if ($conf_o["meta"]["insert_logo"] == 1)
+				if ($conf_o->meta("insert_logo") == 1)
 				{
 					$_t = $this->_do_logo($_t, $conf_o);
 				}
@@ -465,12 +466,12 @@ class gallery_v2 extends class_base
 				}
 				else
 				{
-					$n_img->resize_simple($tn_height, $tn_width);
+					$n_img->resize_simple($tn_width, $tn_height);
 				}
 				$img->destroy();
 				$img = $n_img;
 
-				if ($conf_o["meta"]["tn_insert_logo"] == 1)
+				if ($conf_o->meta("tn_insert_logo") == 1)
 				{
 					$img = $this->_do_logo($img, $conf_o, "tn_");
 				}
@@ -499,19 +500,18 @@ class gallery_v2 extends class_base
 					$_col = $r[2];
 					$meta['page_data'][$_pg]['content'][$_row][$_col]['img'] = $idata;
 					$meta['page_data'][$_pg]['content'][$_row][$_col]['tn'] = $tn_idata;
+					$ob->set_meta("page_data", $meta["page_data"]);
 					$this->db_query("INSERT INTO g_img_rel(img_id, tn_id) VALUES('".$idata["id"]."','".$tn_idata["id"]."')");
 				}
-				$meta["do_import"] = "";
-				$this->upd_object(array(
-					"oid" => $arr["id"],
-					"metadata" => $meta
-				));
+				$ob->set_meta("do_import","");
+				$ob->save();
+				$meta = $ob->meta();
 			}
 			if ($meta["import_zip"] == 1)
 			{
 				@unlink($meta["up_zip_file"]);
-				$meta["import_local"] = 0;
-				$meta["local_folder"] = "";
+				$ob->set_meta("import_local", 0);
+				$ob->set_meta("local_folder", "");
 				@unlink($meta["up_zip_file"]);
 				if ($dir = @opendir($tn)) 
 				{
@@ -525,15 +525,10 @@ class gallery_v2 extends class_base
 					closedir($dir);
 				}
 				@rmdir($tn);
-				$meta["import_local"] = 0;
-				$meta["local_folder"] = "";
 			}
 			
-			$meta["do_import"] = "";
-			$this->upd_object(array(
-				"oid" => $arr["id"],
-				"metadata" => $meta
-			));
+			$ob->set_meta("do_import", "");
+			$ob->save();
 			echo "Valmis! <a href='".$this->mk_my_orb("change", array("id" => $arr["id"], "group" => "import"))."'>Tagasi</a><br />\n";
 			die();
 		}
@@ -544,8 +539,9 @@ class gallery_v2 extends class_base
 		$l = get_instance("layout");
 		$page_data = $l->get_layout($this->_get_default_layout($ob));
 
-		$meta['num_pages']++;
+		$ob->set_meta("num_pages", $meta['num_pages']+1);
 		$meta['page_data'][$meta['num_pages']]['layout'] = $page_data;
+		$ob->set_meta("page_data", $meta["page_data"]);
 	}
 
 	function _get_next_free_pos(&$meta, $page, $row, $col, $ob)
@@ -639,7 +635,7 @@ class gallery_v2 extends class_base
 			$f = get_instance("file");
 			$this->_page_content[$row][$col]["img"] = $f->add_upload_image(
 				$img_n, 
-				$obj['meta']['image_folder'],
+				$obj->meta('image_folder'),
 				$old['img']['id']
 			);
 			$this->_page_content[$row][$col]["img"]["is_file"] = 1;
@@ -650,7 +646,7 @@ class gallery_v2 extends class_base
 			$f = get_instance("image");
 			$this->_page_content[$row][$col]["img"] = $f->add_upload_image(
 				$img_n, 
-				$obj['meta']['image_folder'],
+				$obj->meta('image_folder'),
 				$old['img']['id']
 			);
 			$this->_page_content[$row][$col]["img"]["is_file"] = 0;
@@ -661,7 +657,7 @@ class gallery_v2 extends class_base
 		$f = get_instance("image");
 		$this->_page_content[$row][$col]["tn"] = $f->add_upload_image(
 			$img_n, 
-			$obj['meta']['image_folder'],
+			$obj->meta('image_folder'),
 			$old['tn']['id']
 		);
 
@@ -685,9 +681,17 @@ class gallery_v2 extends class_base
 
 	function _get_image_folder($obj)
 	{
+		if (is_object($obj))
+		{
+			$parent = $obj->parent();
+		}
+		else
+		{
+			$parent = $obj["parent"];
+		}
 		// get it from conf
 		$cf = get_instance("contentmgmt/gallery/gallery_conf");
-		return $cf->get_image_folder($this->_get_conf_for_folder($obj['parent']));
+		return $cf->get_image_folder($this->_get_conf_for_folder($parent));
 	}
 
 	function _show_rate_objs($ob,$robj)
@@ -1182,32 +1186,32 @@ class gallery_v2 extends class_base
 		extract($arr);
 		if ($i_width > $i_height)
 		{
-			$tn_width = $conf_o["meta"]["h_tn_width"];
-			$tn_height = $conf_o["meta"]["h_tn_height"];
-			$width = $conf_o["meta"]["h_width"];
-			$height = $conf_o["meta"]["h_height"];
-			$is_subimage = $conf_o["meta"]["h_tn_subimage"] == 1;
+			$tn_width = $conf_o->meta("h_tn_width");
+			$tn_height = $conf_o->meta("h_tn_height");
+			$width = $conf_o->meta("h_width");
+			$height = $conf_o->meta("h_height");
+			$is_subimage = $conf_o->meta("h_tn_subimage") == 1;
 			if ($is_subimage)
 			{
-				$si_top = $conf_o["meta"]["h_tn_subimage_top"];
-				$si_left = $conf_o["meta"]["h_tn_subimage_left"];
-				$si_width = $conf_o["meta"]["h_tn_subimage_width"];
-				$si_height = $conf_o["meta"]["h_tn_subimage_height"];
+				$si_top = $conf_o->meta("h_tn_subimage_top");
+				$si_left = $conf_o->meta("h_tn_subimage_left");
+				$si_width = $conf_o->meta("h_tn_subimage_width");
+				$si_height = $conf_o->meta("h_tn_subimage_height");
 			}
 		}
 		else
 		{
-			$tn_width = $conf_o["meta"]["v_tn_width"];
-			$tn_height = $conf_o["meta"]["v_tn_height"];
-			$width = $conf_o["meta"]["v_width"];
-			$height = $conf_o["meta"]["v_height"];
-			$is_subimage = $conf_o["meta"]["v_tn_subimage"] == 1;
+			$tn_width = $conf_o->meta("v_tn_width");
+			$tn_height = $conf_o->meta("v_tn_height");
+			$width = $conf_o->meta("v_width");
+			$height = $conf_o->meta("v_height");
+			$is_subimage = $conf_o->meta("v_tn_subimage") == 1;
 			if ($is_subimage)
 			{
-				$si_top = $conf_o["meta"]["v_tn_subimage_top"];
-				$si_left = $conf_o["meta"]["v_tn_subimage_left"];
-				$si_width = $conf_o["meta"]["v_tn_subimage_width"];
-				$si_height = $conf_o["meta"]["v_tn_subimage_height"];
+				$si_top = $conf_o->meta("v_tn_subimage_top");
+				$si_left = $conf_o->meta("v_tn_subimage_left");
+				$si_width = $conf_o->meta("v_tn_subimage_width");
+				$si_height = $conf_o->meta("v_tn_subimage_height");
 			}
 		}
 
@@ -1345,13 +1349,13 @@ class gallery_v2 extends class_base
 	function _do_logo($img, $conf_o, $p = "")
 	{
 		// first, get the damn image
-		if (!$conf_o["meta"][$p."logo_img"])
+		if (!$conf_o->meta($p."logo_img"))
 		{
 			return $img;
 		}
 
 		$iinst = get_instance("image");
-		$_img = $iinst->get_image_by_id($conf_o["meta"][$p."logo_img"]);
+		$_img = $iinst->get_image_by_id($conf_o->meta($p."logo_img"));
 
 		$l_img = get_instance("core/converters/image_convert");
 		$l_img->load_from_file($_img["file"]);
@@ -1360,43 +1364,43 @@ class gallery_v2 extends class_base
 		list($l_img_x, $l_img_y) = $l_img->size();
 
 		// now, find where to put the damn thing
-		if ($conf_o["meta"][$p."logo_corner"] == CORNER_LEFT_TOP)
+		if ($conf_o->meta($p."logo_corner") == CORNER_LEFT_TOP)
 		{
 			$img->merge(array(
 				"source" => $l_img,
-				"x" => $conf_o["meta"][$p."logo_dist_x"],
-				"y" => $conf_o["meta"][$p."logo_dist_y"],
-				"pct" => ($conf_o["meta"][$p."logo_transparency"] ? $conf_o["meta"][$p."logo_transparency"] : 99)
+				"x" => $conf_o->meta($p."logo_dist_x"),
+				"y" => $conf_o->meta($p."logo_dist_y"),
+				"pct" => ($conf_o->meta($p."logo_transparency") ? $conf_o->meta($p."logo_transparency") : 99)
 			));
 		}
 		else
-		if ($conf_o["meta"][$p."logo_corner"] == CORNER_LEFT_BOTTOM)
+		if ($conf_o->meta($p."logo_corner") == CORNER_LEFT_BOTTOM)
 		{
 			$img->merge(array(
 				"source" => $l_img,
-				"x" => $conf_o["meta"][$p."logo_dist_x"],
-				"y" => $img_y - ($conf_o["meta"][$p."logo_dist_y"] + $l_img_y),
-				"pct" => ($conf_o["meta"][$p."logo_transparency"] ? $conf_o["meta"][$p."logo_transparency"] : 99)
+				"x" => $conf_o->meta($p."logo_dist_x"),
+				"y" => $img_y - ($conf_o->meta($p."logo_dist_y") + $l_img_y),
+				"pct" => ($conf_o->meta($p."logo_transparency") ? $conf_o->meta($p."logo_transparency") : 99)
 			));
 		}
 		else
-		if ($conf_o["meta"][$p."logo_corner"] == CORNER_RIGHT_TOP)
+		if ($conf_o->meta($p."logo_corner") == CORNER_RIGHT_TOP)
 		{
 			$img->merge(array(
 				"source" => $l_img,
-				"x" => $img_x - ($conf_o["meta"][$p."logo_dist_x"] + $l_img_x),
-				"y" => $conf_o["meta"][$p."logo_dist_y"],
-				"pct" => ($conf_o["meta"][$p."logo_transparency"] ? $conf_o["meta"][$p."logo_transparency"] : 99)
+				"x" => $img_x - ($conf_o->meta($p."logo_dist_x") + $l_img_x),
+				"y" => $conf_o->meta($p."logo_dist_y"),
+				"pct" => ($conf_o->meta($p."logo_transparency") ? $conf_o->meta($p."logo_transparency") : 99)
 			));
 		}
 		else
-		if ($conf_o["meta"][$p."logo_corner"] == CORNER_RIGHT_BOTTOM)
+		if ($conf_o->meta($p."logo_corner") == CORNER_RIGHT_BOTTOM)
 		{
 			$img->merge(array(
 				"source" => $l_img,
-				"x" => $img_x - ($conf_o["meta"][$p."logo_dist_x"] + $l_img_x),
-				"y" => $img_y - ($conf_o["meta"][$p."logo_dist_y"] + $l_img_y),
-				"pct" => ($conf_o["meta"][$p."logo_transparency"] ? $conf_o["meta"][$p."logo_transparency"] : 99)
+				"x" => $img_x - ($conf_o->meta($p."logo_dist_x") + $l_img_x),
+				"y" => $img_y - ($conf_o->meta($p."logo_dist_y") + $l_img_y),
+				"pct" => ($conf_o->meta($p."logo_transparency") ? $conf_o->meta($p."logo_transparency") : 99)
 			));
 		}
 		return $img;
@@ -1530,8 +1534,16 @@ class gallery_v2 extends class_base
 
 	function _get_default_layout($obj)
 	{
+		if (!is_object($obj))
+		{
+			$parent = $obj["parent"];
+		}
+		else
+		{
+			$parent = $obj->parent();
+		}
 		$conf = get_instance("contentmgmt/gallery/gallery_conf");
-		return $conf->get_default_layout($this->_get_conf_for_folder($obj['parent']));
+		return $conf->get_default_layout($this->_get_conf_for_folder($parent));
 	}
 
 	function get_contained_objects($arr)

@@ -215,8 +215,9 @@
             <group>import</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>submit</type>
-            <value>Impordi</value>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Teosta import</caption>
       </property>
       <classinfo>
             <syslog_type>ST_GALLERY</syslog_type>
