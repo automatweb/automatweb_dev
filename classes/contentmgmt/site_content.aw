@@ -282,6 +282,7 @@ class site_content extends menuedit
 		// yukk
 		$mn = get_instance("menuedit");
 		$mn->path = $this->path;
+		$mn->menu_chain = $this->menu_chain;
 		$mn->do_syslog($section);
 
 		// right, now build the menus
