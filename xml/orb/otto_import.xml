@@ -36,5 +36,12 @@
 			</function>
 		</action>
 
+		<action name="fix_package_pages" >
+			<function name="fix_package_pages">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
