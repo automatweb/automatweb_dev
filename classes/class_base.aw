@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.336 2004/12/03 12:36:12 duke Exp $
+// $Id: class_base.aw,v 2.337 2004/12/03 15:02:43 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1840,6 +1840,7 @@ class class_base extends aw_template
 			empty($property["emb"]) &&
 			is_object($this->obj_inst) &&
 			$property["store"] != "connect" && 
+			$property["store"] != "no" && 
 			empty($property["value"]) && 
 			$this->obj_inst->is_property($property["name"]) && 
 			$this->obj_inst->prop($property["name"]) != NULL )
@@ -1848,6 +1849,7 @@ class class_base extends aw_template
 			// I need to implement this in storage .. so that $obj->prop('blag')
 			// gives the correct result .. all connections of that type
 			$property["value"] = $this->obj_inst->prop($property["name"]);
+
 		}
 
 		if ($property["method"] == "bitmask")
@@ -2198,6 +2200,7 @@ class class_base extends aw_template
 					$val["value"] = $tmp->name();
 				};
 			};
+
 
 			if (is_object($this->tr))
 			{
