@@ -1,0 +1,52 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>reg</name>
+            <group>general</group>
+            <form>stat</form>
+            <type>textbox</type>
+            <field>reg</field>
+            <caption>Reg. kood</caption>
+      </property>
+      <property>
+            <name>password</name>
+            <group>general</group>
+            <form>stat</form>
+            <type>password</type>
+            <field>password</field>
+            <caption>Parool</caption>
+      </property>
+      <property>
+            <name>file</name>
+            <group>general</group>
+            <form>stat</form>
+            <type>fileupload</type>
+            <field>file</field>
+            <caption>Fail </caption>
+      </property>
+      <property>
+            <name>name</name>
+            <group>general</group>
+            <form>stat</form>
+            <type>textbox</type>
+            <field>name</field>
+            <caption>Aruande esitaja</caption>
+      </property>
+      <property>
+            <name>email</name>
+            <group>general</group>
+            <form>stat</form>
+            <type>textbox</type>
+            <field>email</field>
+            <caption>Aruande esitaja meiliaadress</caption>
+      </property>
+      <classinfo>
+            <hide_tabs>1</hide_tabs>
+      </classinfo>
+      <forminfo>
+            <stat>
+                  <onsubmit>submit_upload</onsubmit>
+            </stat>
+      </forminfo>
+</properties>
+
