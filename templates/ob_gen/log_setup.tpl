@@ -32,7 +32,7 @@
 										</tr>
 										<tr>
 											<td class="celltext">
-											logi faili
+											logi sql tabelisse
 											</td>
 											<td class="celltext">
 											<input type=checkbox name="log[db_table]" value=1 {VAR:db_table}>
@@ -57,10 +57,12 @@
 
 										<tr>
 											<td class="celltext">
-											logis näita andmeveergu
+											logis näita infona andmeveergu
 											</td>
 											<td class="celltext">
-											<input type=checkbox name="log[a_source_field]" value=1 {VAR:a_source_field}>
+											<select name="log[a_source_field]">
+											{VAR:a_source_field}
+											</select>
 											</td>
 										</tr>
 
