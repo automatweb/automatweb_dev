@@ -149,8 +149,8 @@ function init_config($arr)
 	}
 	else
 	{
-		list($micro,$sec) = split(" ",microtime());
-		$ts_s = $sec + $micro;
+//		list($micro,$sec) = split(" ",microtime());
+//		$ts_s = $sec + $micro;
 		$rootini = false;
 		foreach($ini_files as $file)
 		{
