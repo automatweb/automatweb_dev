@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/foreach_site.aw,v 1.6 2004/11/01 20:20:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/foreach_site.aw,v 1.7 2004/12/10 10:09:46 kristo Exp $
 // foreach_site.aw - foreach site 
 
 class foreach_site extends class_base
@@ -51,6 +51,8 @@ class foreach_site extends class_base
 		
 		// try remoting
 		$sl = get_instance("install/site_list");
+		$sl->_do_update_list_cache();
+
 		$sites = $sl->get_site_list();
 
 		$cur_site = $sites[aw_ini_get("site_id")];
