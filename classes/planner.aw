@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.68 2002/07/23 05:20:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.69 2002/07/25 22:40:24 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -377,7 +377,11 @@ class planner extends calendar
 
 			$this->ft = get_instance("form_table");
 			$this->table_id = $fc->arr["event_display_table"];
-			$this->ft->load_table($this->table_id);
+			// event_display_table can be empty
+			if ($this->table_id)
+			{
+				$this->ft->load_table($this->table_id);
+			};
 
 		}
 		else
