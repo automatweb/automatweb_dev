@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.15 2004/05/06 12:31:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.16 2004/05/17 10:31:54 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -47,6 +47,11 @@ class vcalendar extends aw_template
 		if (!empty($arr["container_template"]))
 		{
 			$this->container_template = $arr["container_template"];
+		};
+
+		if (!empty($arr["show_days_with_events"]))
+		{
+			$this->show_days_with_events = 1;
 		};
 
 
@@ -482,6 +487,10 @@ class vcalendar extends aw_template
 				{
 					$events_for_day .= $this->draw_event($event);
 				};
+			}
+			elseif ($this->show_days_with_events == 1)
+			{
+				continue;	
 			};
 			$wn = date("w",$i);
 			if ($wn == 0)
