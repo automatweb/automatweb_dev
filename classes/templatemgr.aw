@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/templatemgr.aw,v 2.13 2004/03/15 12:35:18 duke Exp $
 
 class templatemgr extends aw_template
 {
@@ -114,5 +115,38 @@ class templatemgr extends aw_template
 		}
 		return $cnt;
 	}
+
+	function get_long_template($section)
+	{
+		$obj = new object($section);
+		if ($obj->class_id() == CL_PERIODIC_SECTION || $obj->class_id() == CL_DOCUMENT)
+		{
+			$section = $obj->parent();
+		};
+
+		$template = "";
+
+		$path = $obj->path();
+		if (is_array($path))
+		{
+			$path = array_reverse($path);
+			foreach($path as $path_item)
+			{
+				if (empty($template) && is_oid($path_item->prop("tpl_view")))
+				{
+					$tview = $path_item->prop("tpl_view");
+					$template = $this->get_template_file_by_id(array("id" => $tview));
+				};
+
+			};
+		};
+
+		if (empty($template))
+		{
+			$template = "plain.tpl";
+		};
+		return $template;
+        }
+
 }
 ?>

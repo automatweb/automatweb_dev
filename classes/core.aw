@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.253 2004/03/09 18:23:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.254 2004/03/15 12:35:18 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1582,6 +1582,8 @@ class core extends acl_base
 	// until it finds a menu for which it is set
 	function get_lead_template($section)
 	{
+		global $awt;
+		$awt->start("lead-template");
 		if (aw_cache_get("lead_template_cache",$section) != "")
 		{
 			$template = aw_cache_get("lead_template_cache",$section);
@@ -1612,6 +1614,7 @@ class core extends acl_base
 		{
 			$template = "lead.tpl";
 		}
+		$awt->stop("lead-template");
 		return $template;
 	}
 
@@ -1621,38 +1624,9 @@ class core extends acl_base
 	// until it finds a menu for which it is set
 	function get_long_template($section)
 	{
-		// chekime et kui ette anti dokument, siis ei hakkax seda menyy tabelist otsima
-		$obj = $this->get_object($section);	
-		if ($obj["class_id"] == CL_PERIODIC_SECTION || $obj["class_id"] == CL_DOCUMENT)
-		{
-			$section = $obj["parent"];
-		}
-
-		do { 
-			$section = (int)$section;
-			$this->db_query("SELECT template.filename AS filename, objects.parent AS parent, objects.metadata as metadata FROM menu LEFT JOIN template ON template.id = menu.tpl_view LEFT JOIN objects ON objects.oid = menu.id WHERE menu.id = $section");
-			$row = $this->db_next();
-			$meta = $this->get_object_metadata(array(
-				"metadata" => $row["metadata"]
-			));
-
-			if ((int)$meta["template_type"] == TPLTYPE_TPL)
-			{
-				$template = $row["filename"];
-			}
-			else
-			{
-				$template = $meta["ftpl_view"];
-			}
-			$section = $row["parent"];
-		} while ($template == "" && $section > 1);
-		if (not($template))
-		{
-			$template = "plain.tpl";
-		};
-		return $template;
+		$tplmgr = get_instance("templatemgr");
+		return $tplmgr->get_long_template($section);
 	}
-
 
 	////
 	// !prints an error message about the fact that the user has no access to do this
