@@ -1,0 +1,14 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="remote">
+
+		<action name="test">
+			<function name="test">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+	</class>
+</orb>
+		
