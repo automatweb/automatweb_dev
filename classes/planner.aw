@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.173 2004/02/18 17:47:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.174 2004/02/23 15:26:27 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -323,7 +323,7 @@ class planner extends class_base
 			$_start = $arr["start"];
 			$_end = $arr["end"];
 		};
-		
+
 		// generate a list of folders from which to take events
 		// both calendars and projects have "event_folder"'s
 		$folderlist = $obj->connections_from(array(
@@ -415,7 +415,6 @@ class planner extends class_base
 		// I could probably optimize this even further by not processing folders,
 		// if events from a projects were requested.
 
-
 		// if events from a project were requested, then include events
 		// from that projects only - id's are in event_ids array()
 		if ($project)
@@ -425,7 +424,7 @@ class planner extends class_base
 		// include events from all folders and all projects
 		else
 		{
-			if ($parstr && $eidstr)
+			if ($parstr)
 			{
 				$q .= $parprefix . "(" . $parstr . $eidstr . ")";
 			};
@@ -534,6 +533,7 @@ class planner extends class_base
 					$eo = $eo->get_original();
 				};
 				$row["name"] = $real_obj["name"];
+				$row["comment"] = $real_obj["comment"];
 				$row["status"] = $real_obj["status"];
 				$row["flags"] = $real_obj["flags"];
 				$this->restore_handle();
@@ -613,6 +613,7 @@ class planner extends class_base
 				$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
 				$conns = $user->connections_to(array(
 					"from.class_id" => CL_PROJECT,
+					"sort_by" => "from.name",
 				));
 
 				$all_props = array();
@@ -923,7 +924,7 @@ class planner extends class_base
 		}
 		else
 		{
-			$obj = $this->get_object($args["obj"]["oid"]);
+			$obj = $this->get_object($args["obj_inst"]->id());
 			$event_cfgform = $obj["meta"]["event_cfgform"];
 			$frm = $this->get_object($event_cfgform);
 			classload("doc");
@@ -1564,6 +1565,7 @@ class planner extends class_base
 				$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
 				$conns = $user->connections_to(array(
 					"from.class_id" => CL_PROJECT,
+					"sort_by" => "from.name",
 				));
 
 				foreach($conns as $conn)
