@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.52 2001/06/04 05:22:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.53 2001/06/04 07:39:46 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -94,6 +94,38 @@ class messenger extends menuedit_light
 		$this->quote($newconf);
 		$q = "UPDATE users SET msg_inbox = '$msg_inbox',messenger = '$newconf' WHERE uid = '" . UID . "'";
 		$this->db_query($q);
+	}
+
+	////
+	// !And this should be somewhere else as well
+	function pick_folder($args = array())
+	{
+		global $udata;
+		$this->read_template("pf.tpl");
+		extract($args);
+		$att = $this->get_object($attach);
+		$hf = $udata["home_folder"];
+		$id = ($args["id"]) ? $args["id"] : $hf;
+		$object =  $this->get_object($id);
+		$q = "SELECT * FROM objects WHERE parent = '$id' AND status = 2 AND class_id = 1 ORDER BY name";
+		$this->db_query($q);
+		$c = "";
+		while($row = $this->db_next())
+		{
+			$this->vars(array(
+					"folder" => "<a href='?class=messenger&action=pick_folder&id=$row[oid]&type=popup&attach=$attach&msg_id=$msg_id'>$row[name]</a>",
+			));
+			$c .= $this->parse("line");
+		};
+		$u = "";
+		if ($id != $hf)
+		{
+			$parent = $this->get_object($object["parent"]);
+			$this->vars(array("id" => $parent[oid],"aid" => $attach));
+			$u = $this->parse("up");
+		};
+		$this->vars(array("line" => $c,"up" => $u,"name" => $object["name"],"oname" => $att["name"]));
+		print $this->parse();
 	}
 
 	////
@@ -657,10 +689,11 @@ class messenger extends menuedit_light
 		if ($args["reply"])
 		{
 			$msg_id = $reply;
+			$msg = $this->driver->msg_get(array("id" => $msg_id));
 			$sprefix = "Re: ";
 			$quote = true;
 			
-			if ($msg["type"] == 2)
+			if ($msg["type"] == MSG_EXTERNAL)
 			{
 				$msg["mtargets1"] = $msg["mfrom"];
 			}
@@ -672,16 +705,17 @@ class messenger extends menuedit_light
 		elseif ($args["forward"])
 		{
 			$msg_id = $forward;
+			$msg = $this->driver->msg_get(array("id" => $msg_id));
 			$sprefix = "Fwd: ";
 			$quote = true;
 		}
 		else
 		{
 			$msg_id = $args["id"];
+			$msg = $this->driver->msg_get(array("id" => $msg_id));
 			$sprefix = "";
 		};
 
-		$msg = $this->driver->msg_get(array("id" => $msg_id));
 		$msg["subject"] = $sprefix . $this->MIME_decode($msg["subject"]);
 		$msg["message"] = $this->MIME_decode($msg["message"]);
 
@@ -1183,6 +1217,8 @@ class messenger extends menuedit_light
 		{
 			$c++;
 			$this->vars(array(
+					"aid" => $row["oid"],
+					"msg_id" => $id,
 					"cnt" => $c,
 					"msgid" => $args["id"],
 					"icon" => get_icon_url($row["class_id"],""),
@@ -1256,27 +1292,6 @@ class messenger extends menuedit_light
 			"mbox_name" => $mboxes[$mailbox],
 			"folders_dropdown" => $this->picker($user["msg_inbox"],$folder_list),
 		));
-		
-		// Attachid
-		$q = "SELECT * FROM msg_objects WHERE message_id = '$id'";
-		$this->db_query($q);
-		$att_list = array();
-		while($row = $this->db_next())
-		{
-			$_tmp = unserialize($row["content"]);
-			$_tmp["idd"] = $row["id"];
-			$att_list[] = $_tmp;
-		};
-		global $class_defs;
-		while(list($k,$v) = each($att_list))
-		{
-			$data = $class_defs[$v["class_id"]];
-			$icon = sprintf("<img src='%s'>",get_icon_url($v["class_id"],"test"));
-			$name = $v["name"];
-			$this->vars(array("attach" => $data["name"] . $icon . " | " . $name));
-			$this->vars(array("id" => $v["idd"]));
-			$att .= $this->parse("att");
-		};
 		
 		$this->vars(array(
 			"att" => $att,
