@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.31 2002/11/07 10:52:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.32 2002/12/03 12:23:59 kristo Exp $
 
 class gallery extends aw_template
 {
@@ -172,12 +172,15 @@ class gallery extends aw_template
 					"ord" => $cell["ord"],
 					"has_textlink" => checked($cell["has_textlink"]),
 					"textlink" => $cell["textlink"],
+					'glink' => $cell['glink']
 				));
 				$b = $cell["bigurl"] != "" ? $this->parse("BIG") : "";
 				$h = $cell["tnurl"] != "" ? $this->parse("HAS_IMG") : "";
+				$gl = $this->arr['is_automatic_slideshow'] ? $this->parse("IS_AUTOMATIC_GAL") : "";
 				$this->vars(array(
 					"BIG" => $b,
-					"HAS_IMG" => $h
+					"HAS_IMG" => $h,
+					"IS_AUTOMATIC_GAL" => $gl
 				));
 				$c.=$this->parse("CELL");
 			}
@@ -319,6 +322,10 @@ class gallery extends aw_template
 				$v = str_replace("'","\"",$v);
 				$this->arr[$page]["content"][$row][$col]["textlink"] = $v;
 
+				$var = "glink_".$row."_".$col;
+				global $$var;
+				$this->arr[$page]["content"][$row][$col]["glink"] = $$var;
+
 				$var = "erase_".$row."_".$col;
 				global $$var;
 				if ($$var == 1)
@@ -384,14 +391,17 @@ class gallery extends aw_template
 
 			usort($imgurls,array($this,"_sort_cmp"));
 			$ius = array();
+			$rus = array();
 			foreach($imgurls as $dat)
 			{
 				$bigurl = image::check_url($dat["tnurl"]);
 				$ius[] = "\"".$bigurl."\"";
+				$rus[] = $dat['glink'];
 			}
 
 			$this->vars(array(
 				"img_urls" => join(",",$ius),
+				"ref_urls" => join(",",map("\"%s\"",$rus)),
 				"img_url" => image::check_url($this->arr[0]["content"][0][0]["tnurl"])
 			));
 			return $this->parse();

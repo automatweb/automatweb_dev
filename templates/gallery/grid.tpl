@@ -102,6 +102,12 @@
 				<td align=right class="celltext">Jrk:</td>
 				<td><input type='text' NAME='ord_{VAR:row}_{VAR:col}' class="formtext" size="3" value='{VAR:ord}'></td>
 			</tr>
+			<!-- SUB: IS_AUTOMATIC_GAL -->
+			<tr>
+				<td align=right class="celltext">Link:</td>
+				<td><input type='text' NAME='glink_{VAR:row}_{VAR:col}' class="formtext" value='{VAR:glink}'></td>
+			</tr>
+			<!-- END SUB: IS_AUTOMATIC_GAL -->
 		</table>
 	</td>
 	<!-- END SUB: CELL -->
