@@ -1,0 +1,47 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="class_list" folder="core" extends="class_base">
+		<action name="register_new_class_id" nologin="1">
+			<function name="register_new_class_id">
+				<arguments>
+					<required name="def" />
+					<required name="name" />
+					<required name="file" />
+					<optional name="can_add" type="int"/>
+					<optional name="parents" />
+					<optional name="alias" />
+					<optional name="alias_class" />
+					<optional name="old_alias" />
+					<optional name="is_remoted" type="int"/>
+					<optional name="subtpl_handler" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="update_class_def" >
+			<function name="update_class_def">
+				<arguments>
+					<required name="id" type="int"/>
+					<required name="def" />
+					<required name="name" />
+					<required name="file" />
+					<optional name="can_add" type="int"/>
+					<optional name="parents" />
+					<optional name="alias" />
+					<optional name="alias_class" />
+					<optional name="old_alias" />
+					<optional name="is_remoted" type="int"/>
+					<optional name="subtpl_handler" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_list" >
+			<function name="get_list">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>
