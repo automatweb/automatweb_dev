@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.222 2004/02/26 16:52:56 duke Exp $
+// $Id: class_base.aw,v 2.223 2004/02/26 18:58:07 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1767,7 +1767,10 @@ class class_base extends aw_template
 			{
 				classload("toolbar");
 				$val["toolbar"] = new toolbar();
-				$val["toolbar"]->set_opt("button_target","contentarea");
+				if ($this->layout_mode == "fixed_toolbar")
+				{
+					$val["toolbar"]->set_opt("button_target","contentarea");
+				};
 			};
 
 
