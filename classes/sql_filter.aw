@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/sql_filter.aw,v 2.7 2002/07/18 10:44:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/sql_filter.aw,v 2.8 2002/09/30 06:44:24 kristo Exp $
 
 class sql_filter extends aw_template 
 {
@@ -243,6 +243,7 @@ class sql_filter extends aw_template
 			"name" => $this->filter["name"],
 			"dedit" => $date_edit->gen_edit_form("dateval",$selecteddate),
 			"reforb" => $arr["reforb"] ? $arr["reforb"] : $this->mk_my_orb($reforb_func,$reforb_arr,$reforb_class),
+			"ops" => $this->picker($this->filter["filter_op"], $this->list_objects(array("class" => CL_FORM_OUTPUT, "addempty" => true)))
 		));
 		
 		
@@ -282,6 +283,7 @@ class sql_filter extends aw_template
 			};
 		};
 		$this->filter["name"]=$name;
+		$this->filter["filter_op"]=$filter_op;
 		//echo("filter=<pre>");print_r($this->filter);echo("</pre>");//dbg
 	
 		return $this->filter;
@@ -548,17 +550,20 @@ class sql_filter extends aw_template
 					$fakeval="%$fakeval%";
 				};
 
-				// siin vaatab et kui v6rdlus on > < >= <= siis ei pane '' ymber valuele
-				// või kui on määratud masterarrays et ei panda siis ka ei panda
-				if (($f["op"]=="LIKE" || $f["op"]=="NOT LIKE" || $f["op"]=="=" ||$f["op"]=="!=") && (!$f["noqm"]))
+				if ($fakeval != '')
 				{
-					$fakeval="'$fakeval'";
-				} else 
-				if ($fakeval[0]!="@") //this stuff is for bugtrack @uid ja @t+24h et saaks teha näiteks et näita viimase nädala bugisid
-				{
-					$fakeval+=0;
+					// siin vaatab et kui v6rdlus on > < >= <= siis ei pane '' ymber valuele
+					// või kui on määratud masterarrays et ei panda siis ka ei panda
+					if (($f["op"]=="LIKE" || $f["op"]=="NOT LIKE" || $f["op"]=="=" ||$f["op"]=="!=") && (!$f["noqm"]))
+					{
+						$fakeval="'$fakeval'";
+					} else 
+					if ($fakeval[0]!="@") //this stuff is for bugtrack @uid ja @t+24h et saaks teha näiteks et näita viimase nädala bugisid
+					{
+						$fakeval+=0;
+					}
+					$w.=" ".(!$w? $fake?"kus":"WHERE" : $fakejoin )." $faketable.$fakefield ".($f["op"] == "NOT LIKE" ? $f["op"] : strtr($f["op"],$xlate))." $fakeval";
 				}
-				$w.=" ".(!$w? $fake?"kus":"WHERE" : $fakejoin )." $faketable.$fakefield ".($f["op"] == "NOT LIKE" ? $f["op"] : strtr($f["op"],$xlate))." $fakeval";
 			};
 		};
 		$this->used_tables=array_keys($this->used_tables);
