@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.35 2004/12/15 11:14:25 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.36 2004/12/20 11:05:59 ahti Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -1045,30 +1045,31 @@ class aw_table extends aw_template
 	// tagastab csv andmed, kustuda välja draw asemel
 	function get_csv_file($sep = ";")
 	{
-		$sep = "\t";
-		$d=array();
+		//$sep = "\t";
+		$d = array();
 		reset($this->rowdefs);
-		$tbl="";
-		if (is_array($this->rowdefs))
-		while(list($k,$v) = each($this->rowdefs)) 
+		$tbl = "";
+		if(is_array($this->rowdefs))
 		{
-				$tbl .= ($tbl?$sep:"").$this->_format_csv_field($v["caption"],$sep);
-		};
-		$d[]=$tbl;
+			foreach($this->rowdefs as $v) 
+			{
+				$tbl .= ($tbl ? $sep : "").$this->_format_csv_field($v["caption"], $sep);
+			}
+		}
+		$d[] = $tbl;
 
-		
 		// koostame tabeli sisu
-		if (is_array($this->data)) 
+		if(is_array($this->data)) 
 		{
 			reset($this->data);
-			$cnt=0;
-			while(list($k,$v) = each($this->data)) 
+			$cnt = 0;
+			foreach($this->data as $k => $v)
 			{
-				$tbl="";
+				$tbl = "";
 				$cnt++;
 				reset($this->rowdefs);
-				if (is_array($this->rowdefs))
-				while(list($k1,$v1) = each($this->rowdefs))
+				if(is_array($this->rowdefs))
+				foreach($this->rowdefs as $k1 => $v1)
 				{
 					if ($v1["name"] == "rec") 
 					{
@@ -1077,8 +1078,8 @@ class aw_table extends aw_template
 					{
 						if ($v1["strformat"])
 						{
-							$format = localparse($v1["strformat"],$v);
-							$val = sprintf($format,$v[$v1["name"]]);
+							$format = localparse($v1["strformat"], $v);
+							$val = sprintf($format, $v[$v1["name"]]);
 						}
 						else
 						{
@@ -1088,21 +1089,21 @@ class aw_table extends aw_template
 
 					if ($v1["type"] == "time")
 					{
-						$val = date($v1["format"],$val);
+						$val = date($v1["format"], $val);
 					};
 
-					if (!$val && $v1["type"]!="int")
+					if (!$val && $v1["type"] != "int")
 					{
 						$val = "";
 					};
 
-					$tbl .= ($tbl?$sep:"").$this->_format_csv_field($val,$sep);
+					$tbl .= ($tbl ? $sep : "").$this->_format_csv_field($val, $sep);
 				};
-				$d[]=$tbl;
+				$d[] = $tbl;
 			};
 		};
 		// sisu joonistamine lopeb
-		return join("\r\n",$d);
+		return join("\r\n", $d);
 	}
 
 	// genereerib html tagi
