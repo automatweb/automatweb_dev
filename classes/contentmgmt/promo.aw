@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.64 2005/04/05 11:37:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.65 2005/04/05 11:57:10 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -13,6 +13,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE,CL_DOCUMENT, on_save_document)
 - when a promo box is saved, the list of documents for it's display is regenerated
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE,CL_PROMO, on_save_promo)
+
+- when a document is deleted, the list of documents needs to be regenerated
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE,CL_DOCUMENT, on_delete_document)
 
 */
 
@@ -1223,6 +1227,52 @@ class promo extends class_base
 
 		$o->set_meta("version", 2);
 		$o->save();
+	}
+
+	function on_delete_document($arr)
+	{
+		$o = obj($arr["oid"]);
+
+		// figure out if this document is to be shown in any promo in the system
+		// to do that
+		// make a list of all promo boxes
+		$ol = new object_list(array(
+			"class_id" => CL_PROMO,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+
+		$path = $o->path();
+
+		foreach($ol->arr() as $box)
+		{
+			$add_to_list = false;
+
+			// for each box, check the folders where it gets documents and if this document's parent is one of them, 
+			$fld = $this->_get_folders_for_box($box);
+			$is_in_promo = false;
+			foreach($fld as $f => $subs)
+			{
+				if ($f == $o->parent() || ($subs && $this->_is_in_path($path, $f)))
+				{
+					$is_in_promo = true;
+					break;
+				}
+			}
+
+			if ($is_in_promo)
+			{
+				// get list of docs for promo
+				$si = get_instance("contentmgmt/site_show");
+		
+				$box->set_meta("content_documents", $this->make_keys($si->get_default_document(array(
+					"obj" => $box
+				))));
+
+				$box->set_meta("version", 2);
+				$box->save();
+			}
+		}
 	}
 }
 ?>
