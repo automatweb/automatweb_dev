@@ -15,32 +15,32 @@
 <table border="0" cellpadding="0" cellspacing="2">
 
 <tr>
-<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="javascript:doSubmit();" 
+<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="javascript:doSubmit();" 
 onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseurl}/automatweb/images/blue/awicons/save_over.gif',1)"><img name="save" alt="Salvesta" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/save.gif" width="25" height="25"></a><br><a
 href="javascript:doSubmit()" >Salvesta</a></td>
-<td><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
+<td><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
 
-<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="{VAR:menurl}"
+<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="{VAR:menurl}"
 onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('brothering','','{VAR:baseurl}/automatweb/images/blue/awicons/brothering_over.gif',1)"><img name="brothering" alt="Vennastamine" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/brothering.gif" width="25" height="25"></a><br><a
 href="{VAR:menurl}">Vennastamine</a></td>
-<td><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
+<td><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
 
 
-<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="#" onClick="javascript:if (confirm('Teavitada liste?')) { window.location.href='{VAR:self}?class=keywords&action=notify&id={VAR:docid}';}" 
+<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="#" onClick="javascript:if (confirm('Teavitada liste?')) { window.location.href='{VAR:self}?class=keywords&action=notify&id={VAR:docid}';}" 
 onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('lists','','{VAR:baseurl}/automatweb/images/blue/awicons/lists_over.gif',1)"><img name="lists" alt="Teavita liste" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/lists.gif" width="25" height="25"></a><br><a href="#"
 onClick="javascript:if (confirm('Teavitada liste?')) { window.location.href='{VAR:self}?class=keywords&action=notify&id={VAR:docid}';}">Teavita liste</a></td>
-<td><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
+<td><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
 
 
-<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="orb.{VAR:ext}?class=document&action=archive&docid={VAR:id}" 
+<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="orb.{VAR:ext}?class=document&action=archive&docid={VAR:id}" 
 onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('archive','','{VAR:baseurl}/automatweb/images/blue/awicons/archive_over.gif',1)"><img name="archive" alt="Arhiiv" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/archive.gif" width="25" height="25"></a><br><a
 href="orb.{VAR:ext}?class=document&action=archive&docid={VAR:id}">Arhiiv</a></td>
-<td><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
+<td><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
 
-<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a target="_blank" href="{VAR:baseurl}/index.aw?section={VAR:id}" 
+<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a target="_blank" href="{VAR:baseurl}/index.aw?section={VAR:id}" 
 onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('preview','','{VAR:baseurl}/automatweb/images/blue/awicons/preview_over.gif',1)"><img name="preview" alt="Eelvaade" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/preview.gif" width="25" height="25"></a><br><a
 target="_blank" href="{VAR:baseurl}/index.aw?section={VAR:id}">Eelvaade</a></td>
-<td><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
+<td><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
 
 </table>
 
@@ -81,11 +81,11 @@ target="_blank" href="{VAR:baseurl}/index.aw?section={VAR:id}">Eelvaade</a></td>
 
 <table border=0 cellpadding=0 cellspacing=0>
 	<tr>
-		<td colspan=3><img src='{VAR:baseurl}/images/transa.gif' width=1 height=10 border=0></td>
+		<td colspan=3><img src='{VAR:baseurl}/automatweb/images/trans.gif' width=1 height=10 border=0></td>
 	</tr>
 	<tr>
-		<td class="celltext"><img src='{VAR:baseurl}/images/transa.gif' width=113 height=1 border=0><br><B>&nbsp;M‰‰rangud&nbsp;</b></td>
-		<td class="fcaption2_nt" bgcolor="#CCCCCC"><img src='{VAR:baseurl}/images/transa.gif' width=1 height=10 border=0></td>
+		<td class="celltext"><img src='{VAR:baseurl}/automatweb/images/trans.gif' width=113 height=1 border=0><br><B>&nbsp;M‰‰rangud&nbsp;</b></td>
+		<td class="fcaption2_nt" bgcolor="#CCCCCC"><img src='{VAR:baseurl}/automatweb/images/trans.gif' width=1 height=10 border=0></td>
 		<td class="celltext">&nbsp;	
 			Aktiivne: <input type='checkbox' name='status' value='2' {VAR:cstatus}>&nbsp;&nbsp;&nbsp;
 			Kommenteeritav:	<input type='checkbox' name='is_forum' value='1' {VAR:is_forum}>&nbsp;&nbsp;&nbsp;
@@ -120,13 +120,13 @@ function doSubmit()
 </script>
 
 <tr>
-<td class="celltext"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Pealkiri&nbsp;</b></td>
+<td class="celltext"><img src='{VAR:baseurl}/automatweb/images/trans.gif' width=110 height=1><Br><B>&nbsp;Pealkiri&nbsp;</b></td>
 <td class="celltext"><input class='tekstikast' type="text" name="title" size="80" value="{VAR:title}"></td>
 </tr>
 
 
 <tr>
-<td class="celltext"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Autor:&nbsp;</b></td>
+<td class="celltext"><img src='{VAR:baseurl}/automatweb/images/trans.gif' width=110 height=1><Br><B>&nbsp;Autor:&nbsp;</b></td>
 <td class="celltext"><input class='tekstikast' type="text" name="author" size="80" value="{VAR:author}"></td>
 </tr>
 
@@ -149,11 +149,11 @@ function doSubmit()
 
 <!-- SUB: IE -->
 <tr>
-<td class="celltext" width="10%"><img src='{VAR:baseurl}/images/transa.gif' width=10 height=1><Br><B>&nbsp;Autor:&nbsp;</b></td>
+<td class="celltext" width="10%"><img src='{VAR:baseurl}/automatweb/images/trans.gif' width=10 height=1><Br><B>&nbsp;Autor:&nbsp;</b></td>
 <td class="celltext" width="90%"><input class='tekstikast' type="text" name="author" size="80" value="{VAR:author}"></td>
 </tr>
 <tr>
-<td class="celltext" valign="top"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Pealkiri&nbsp;</b></td>
+<td class="celltext" valign="top"><img src='{VAR:baseurl}/automatweb/images/trans.gif' width=110 height=1><Br><B>&nbsp;Pealkiri&nbsp;</b></td>
 <td class="celltext">
 
 <div id=idBox style="width: 600px;text-align: left; ;visibility: hidden, height:25;overflow:hidden;background:gainsboro" ID=htmlOnly valign="top">
@@ -284,22 +284,22 @@ function format(what,opt)
 </script>
 <!-- END SUB: IE -->
 <tr>
-<td class="celltext" valign="top"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Alias&nbsp;</b></td>
+<td class="celltext" valign="top"><img src='{VAR:baseurl}/automatweb/images/trans.gif' width=110 height=1><Br><B>&nbsp;Alias&nbsp;</b></td>
 <td class="celltext"><input type="text" name="alias" class="tekstikast" size="80" value="{VAR:alias}">
 </td>
 </tr>
 
 <tr>
-<td class="celltext"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Vıtmesınad&nbsp;</b></td>
+<td class="celltext"><img src='{VAR:baseurl}/automatweb/images/trans.gif' width=110 height=1><Br><B>&nbsp;Vıtmesınad&nbsp;</b></td>
 <td class="celltext"><input class='tekstikast' type="text" name="keywords" size="80" value="{VAR:keywords}"></td>
 </tr>
 <tr>
-<td class="celltext" valign="top"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Arhiiv&nbsp;</b></td>
+<td class="celltext" valign="top"><img src='{VAR:baseurl}/automatweb/images/trans.gif' width=110 height=1><Br><B>&nbsp;Arhiiv&nbsp;</b></td>
 <td class="celltext"><input type="checkbox" name="archive" onClick="toggle_archive_settings()" value="1" {VAR:archive}>
 </td>
 </tr>
 <tr>
-<td class="celltext" valign="top"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Arhiivikoopia nimi&nbsp;</b></td>
+<td class="celltext" valign="top"><img src='{VAR:baseurl}/automatweb/images/trans.gif' width=110 height=1><Br><B>&nbsp;Arhiivikoopia nimi&nbsp;</b></td>
 <td class="celltext"><input type="text" name="archive_name" class="tekstikast" size="80" value="{VAR:archive_name}">
 </td>
 </tr>
@@ -342,32 +342,32 @@ if (!document.doc.archive.checked)
 <table border="0" cellpadding="0" cellspacing="2">
 
 <tr>
-<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="javascript:doSubmit();"
+<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="javascript:doSubmit();"
 onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save2','','{VAR:baseurl}/automatweb/images/blue/awicons/save_over.gif',1)"><img name="save2" alt="Salvesta" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/save.gif" width="25" height="25"></a><br><a
 href="javascript:dosubmit();">Salvesta</a></td>
-<td><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
+<td><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
 
-<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="{VAR:preview}"
+<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="{VAR:preview}"
 onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('preview2','','{VAR:baseurl}/automatweb/images/blue/awicons/preview_over.gif',1)"><img name="preview2" alt="Eelvaade" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/preview.gif" width="25" height="25"></a><br><a
 href="{VAR:preview}">Eelvaade</a></td>
-<td><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
+<td><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
 
-<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="{VAR:menurl}"
+<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="{VAR:menurl}"
 onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('brothering2','','{VAR:baseurl}/automatweb/images/blue/awicons/brothering_over.gif',1)"><img name="brothering2" alt="Vennastamine" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/brothering.gif" width="25" height="25"></a><br><a
 href="{VAR:menurl}">Vennastamine</a></td>
-<td><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
+<td><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
 
 
-<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="#" onClick="javascript:if (confirm('Teavitada liste?')) { window.location.href='{VAR:self}?class=keywords&action=notify&id={VAR:docid}';}" 
+<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="#" onClick="javascript:if (confirm('Teavitada liste?')) { window.location.href='{VAR:self}?class=keywords&action=notify&id={VAR:docid}';}" 
 onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('lists2','','{VAR:baseurl}/automatweb/images/blue/awicons/lists_over.gif',1)"><img name="lists2" alt="Teavita liste" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/lists.gif" width="25" height="25"></a><br><a href="#"
 onClick="javascript:if (confirm('Teavitada liste?')) { window.location.href='{VAR:self}?class=keywords&action=notify&id={VAR:docid}';}">Teavita liste</a></td>
-<td><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
+<td><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
 
 
-<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="orb.{VAR:ext}?class=document&action=archive&docid={VAR:id}" 
+<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="orb.{VAR:ext}?class=document&action=archive&docid={VAR:id}" 
 onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('archive2','','{VAR:baseurl}/automatweb/images/blue/awicons/archive_over.gif',1)"><img name="archive2" alt="Arhiiv" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/archive.gif" width="25" height="25"></a><br><a
 href="orb.{VAR:ext}?class=document&action=archive&docid={VAR:id}">Arhiiv</a></td>
-<td><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
+<td><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
 
 </table>
 
