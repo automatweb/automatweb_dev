@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/events.aw,v 2.4 2001/10/15 15:51:30 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/events.aw,v 2.5 2001/11/20 09:16:22 cvs Exp $
 // events.aw - the sucky sucky version of Vibe events
 
 // sisestamis/muutmisvorm peab nagu praegunegi muutmisvorm,
@@ -107,12 +107,12 @@ class events extends aw_template {
 		}
 		else
 		{
-			$_tmp = $cal->get_date_range(array("time" => time(),"type" => "week"));
+			$_tmp = $cal->get_date_range(array("time" => time(),"type" => "overview"));
 			$start = $_tmp["start"];
 			$end = $_tmp["end"];
 
 			// kristian tahtis et aint neid n2idatakse mis pole veel alanud
-			$limits = " AND events.start >= ".time()." AND events.start <= $end";
+			$limits = " AND events.start >= ".$start." AND events.start <= $end";
 		};
 
 		$this->read_template($template);
@@ -711,11 +711,17 @@ class events extends aw_template {
 		$_timestamp = time();	
 		$ts1 = "$year-$mon";
 		$ts2 = date("Y-m",$_timestamp);
-		if ($ts1 == $ts2)
-		{
-			$_tmp = $cal->get_date_range(array("time" => time(),"type" => "month"));
-			$start = $_tmp["start"];
-			$end = $_tmp["end"];
+//		if ($ts1 == $ts2)
+//		{
+//			$_tmp = $cal->get_date_range(array("time" => mktime(0,0,0,$mon,0,$year),"type" => "month"));
+//			$start = $_tmp["start"];
+//			$end = $_tmp["end"];
+
+			// ja kui siinkohal on vingumist et month l2heb ju liiga suurex, siis tasub mktime kohta php menuaali lugeda - 
+			// mktime() is useful for doing date arithmetic and validation, as it will automatically calculate the 
+			// correct value for out-of-range input
+			$start = mktime(0,0,0,$mon,0,$year);
+			$end = mktime(0,0,0,$mon+1,0,$year);
 			$limits = " AND events.start >= $start AND events.start <= $end";
 			global $rootmenu;
 			$cl = CL_EVENT;
@@ -734,11 +740,11 @@ class events extends aw_template {
 			{
 				$marked[date("d",$row["start"])] = 1;
 			};
-		}
+/*		}
 		else
 		{
 			$marked = array();
-		};
+		};*/
 					
 		$calendar = $cal->draw_month(array(
 					"year" => $year,
