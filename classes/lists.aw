@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.1 2001/05/18 15:31:56 duke Exp $
 
 	global $orb_defs;
 	$orb_defs["lists"] = array(
@@ -280,22 +281,30 @@
 			return $this->parse();
 		}
 
+		////
+		// !Koikide listide nimekiri
 		function db_list()
 		{
-			$this->db_query("SELECT objects.* FROM objects WHERE class_id = 15 AND status != 0  GROUP BY objects.oid");
+			$this->get_objects_by_class(array(
+						"class" => CL_MAILINGLIST,
+						));
 		}
-
+		
+		////
+		// !Koostab koigi listide hierarhilise nimekirja (s.t. koos kategooriatega)
 		function get_op_list()
 		{
-			$this->db_query("SELECT objects.* FROM objects WHERE class_id = 16 AND status != 0  GROUP BY objects.oid");
+			$this->get_objects_by_clas(array(
+						"class" => CL_MAILINGLIST_CATEGORY,
+						));
 			$this->lcarr = array();
 			while ($row = $this->db_next())
-				$this->lcarr[$row[parent]][] = $row;
+				$this->lcarr[$row["parent"]][] = $row;
 
 			$this->db_list();
 			$this->liarr = array();
 			while ($row = $this->db_next())
-				$this->liarr[$row[parent]][] = $row;
+				$this->liarr[$row["parent"]][] = $row;
 
 			$this->op_list = array();
 			$this->rec_op_list(1,"");
@@ -303,6 +312,8 @@
 			return $this->op_list;
 		}
 
+		////
+		// !For internal use. Kutsutakse eelmisest välja
 		function rec_op_list($parent,$str)
 		{
 			if (!is_array($this->lcarr[$parent]))
@@ -311,18 +322,18 @@
 			reset($this->lcarr[$parent]);
 			while (list(,$v) = each($this->lcarr[$parent]))
 			{
-				$ns = $str.($str == "" ? "" : " / ").$v[name];
+				$ns = $str.($str == "" ? "" : " / ").$v["name"];
 
-				if (is_array($this->liarr[$v[oid]]))
+				if (is_array($this->liarr[$v["oid"]]))
 				{
-					reset($this->liarr[$v[oid]]);
-					while (list(,$lv) = each($this->liarr[$v[oid]]))
+					reset($this->liarr[$v["oid"]]);
+					while (list(,$lv) = each($this->liarr[$v["oid"]]))
 					{
-						$this->op_list[$lv[oid]] = $ns." / ".$lv[name];
+						$this->op_list[$lv["oid"]] = $ns." / ".$lv["name"];
 					}
 				}
 
-				$this->rec_op_list($v[oid],$ns);
+				$this->rec_op_list($v["oid"],$ns);
 			}
 		}
 
