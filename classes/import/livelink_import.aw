@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.17 2004/03/10 15:36:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.18 2004/06/08 19:13:37 kristo Exp $
 // livelink_import.aw - Import livelingist
 
 /*
@@ -486,36 +486,6 @@ class livelink_import extends class_base
 		{
 			$this->content .= $data;
 		};
-	}
-
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	////
-	// !this will be called if the object is put in a document by an alias and the document is being shown
-	// parameters
-	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
-	function parse_alias($args)
-	{
-		extract($args);
-		return $this->show(array('id' => $alias['target']));
-	}
-
-	////
-	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
-	function show($arr)
-	{
-		extract($arr);
-		$ob = $this->get_object($id);
-
-		$this->read_template('show.tpl');
-
-		$this->vars(array(
-			'name' => $ob['name']
-		));
-
-		return $this->parse();
 	}
 }
 ?>
