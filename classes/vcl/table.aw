@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.10 2004/04/12 08:56:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.11 2004/04/13 12:18:44 duke Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -1576,6 +1576,49 @@ class aw_table extends aw_template
 			"page" => $rv,
 		));
 		return $this->parse();
+	}
+
+};
+
+// this is needed to make this work with get_instance
+class table extends aw_table
+{
+	function table($arr = array())
+	{
+		return $this->aw_table($arr);
+	}
+	
+	function init_vcl_property($arr)
+	{
+		// I need access to class information!
+		$pr = &$arr["property"];
+		if (!is_object($pr["vcl_inst"]))
+		{
+			$this->set_layout("generic");
+			if (is_array($arr["columns"]) && sizeof($arr["columns"]) > 0)
+			{
+				foreach($arr["columns"] as $ckey => $cval)
+				{
+					if ($cval["table"] != $pr["name"])
+					{
+						continue;
+					};
+					$this->define_field(array(
+						"name" => $ckey,
+						"caption" => $cval["caption"],
+						"sortable" => $cval["sortable"],
+					));
+				};
+			};
+			$pr["vcl_inst"] = $this;
+		};
+		return array($pr["name"] => $pr);
+	}
+
+	function get_html()
+	{
+		$this->sort_by();
+		return $this->draw();
 	}
 };
 ?>
