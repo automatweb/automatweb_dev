@@ -600,5 +600,6 @@ define("LC_VARS_ADD_STAMP","Added stamp %s");
 define("LC_VARS_CHANGED_CAT","Changed mail variables category %s");
 define("LC_VARS_ADD_CAT","Added mail variable category %S");
 
-
+define("LC_LOGIN_NAME","Username:");
+define("LC_LOGIN_PASS","Password:");
 ?>
