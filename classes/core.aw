@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.57 2001/09/28 12:46:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.58 2001/09/28 14:48:43 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -156,17 +156,26 @@ class core extends db_connector
 	function obj_get_meta($args = array())
 	{
 		extract($args);
-		if (not($oid))
+		classload("php");
+		if (not($oid) && (strlen($meta) == 0))
 		{
 			return false;
 		};
-		classload("php");
 		$php_ser = new php_serializer();
-		$q = "SELECT meta FROM objects WHERE oid = $oid";
-		$this->db_query($q);
-		$row = $this->db_next();
+		if ($args["oid"])
+		{
+			$q = "SELECT meta FROM objects WHERE oid = $oid";
+			$this->db_query($q);
+			$row = $this->db_next();
+			$meta = $row["meta"];
+		}
+		else
+		{
+			$meta = $args["meta"];
+		};
 		#$this->dequote($row["meta"]);
-		return $php_ser->php_unserialize($row["meta"]);
+		$retval = $php_ser->php_unserialize($meta);
+		return $retval;
 	}
 
 
