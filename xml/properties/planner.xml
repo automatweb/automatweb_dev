@@ -7,7 +7,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
+            <group>general2</group>
             <caption>Default vaade</caption>
       </property>
       <property>
@@ -17,7 +17,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
+            <group>general2</group>
             <caption>Näitamisfunktsioon</caption>
       </property>
       <property>
@@ -28,7 +28,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
+            <group>general2</group>
             <caption>Sündmuse lisamise vorm</caption>
       </property>
       <property>
@@ -38,7 +38,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
+            <group>general2</group>
             <caption>Päev algab</caption>
       </property>
       <property>
@@ -48,7 +48,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
+            <group>general2</group>
             <caption>Päev lõpeb</caption>
       </property>
       <property>
@@ -194,7 +194,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
+            <group>general2</group>
             <caption>Sündmuste kataloog</caption>
       </property>
       <property>
@@ -207,33 +207,9 @@
             <caption>Tööpäevad</caption>
       </property>
       <property>
-            <name>preview</name>
-            <type>text</type>
-            <callback>callback_get_preview_link</callback>
-            <store>no</store>
-            <editonly>1</editonly>
-            <group>general</group>
-            <caption>Eelvaade</caption>
-      </property>
-      <property>
-            <name>id</name>
-            <type>hidden</type>
-            <table>objects</table>
-            <field>oid</field>
-            <group>
-                  <num_0>show_day</num_0>
-                  <num_1>show_week</num_1>
-                  <num_2>show_month</num_2>
-                  <num_3>add_event</num_3>
-            </group>
-            <method>serialize</method>
-            <view>show</view>
-      </property>
-      <property>
             <name>show_day</name>
             <callback>callback_show_day</callback>
             <group>show_day</group>
-            <view>show</view>
             <store>no</store>
             <caption>Päev</caption>
       </property>
@@ -241,7 +217,6 @@
             <name>show_week</name>
             <callback>callback_show_week</callback>
             <group>show_week</group>
-            <view>show</view>
             <store>no</store>
             <caption>Nädal</caption>
       </property>
@@ -249,7 +224,6 @@
             <name>show_month</name>
             <callback>callback_show_month</callback>
             <group>show_month</group>
-            <view>show</view>
             <store>no</store>
             <caption>Kuu</caption>
       </property>
@@ -257,7 +231,6 @@
             <name>add_event</name>
             <callback>callback_get_add_event</callback>
             <group>add_event</group>
-            <view>show</view>
             <store>no</store>
             <caption>Lisa sündmus</caption>
       </property>
@@ -266,28 +239,36 @@
             <toolbar>yes</toolbar>
       </classinfo>
       <groupinfo>
-            <advanced>
-                  <caption>Seaded</caption>
-            </advanced>
             <show_day>
                   <caption>Päev</caption>
                   <submit>no</submit>
+                  <parent>views</parent>
             </show_day>
             <show_week>
                   <caption>Nädal</caption>
                   <submit>no</submit>
+                  <parent>views</parent>
             </show_week>
             <show_month>
                   <caption>Kuu</caption>
                   <submit>no</submit>
                   <default>1</default>
+                  <parent>views</parent>
             </show_month>
+            <views>
+                  <caption>Vaated</caption>
+            </views>
+            <general2>
+                  <caption>Üldine</caption>
+                  <parent>general</parent>
+            </general2>
+            <advanced>
+                  <caption>Seaded</caption>
+                  <parent>general</parent>
+            </advanced>
             <add_event>
                   <caption>Lisa_sündmus</caption>
             </add_event>
       </groupinfo>
-      <views>
-            <show>1</show>
-      </views>
 </properties>
 
