@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.1 2004/06/09 10:16:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.2 2004/06/09 12:57:14 kristo Exp $
 // object_export.aw - Objektide eksport 
 /*
 
@@ -11,10 +11,10 @@
 @default method=serialize
 
 @property object_type type=relpicker reltype=RELTYPE_OBJECT_TYPE
-@caption Objektit&uuml;&uuml; mida eksportida
+@caption Objektit&uuml;&uuml;p mida eksportida
 
 @property root_folder type=relpicker reltype=RELTYPE_FOLDER
-@caption Kataloog, kust objektid v&otilde;tta
+@caption Kaust, kust objektid v&otilde;tta
 
 @property csv_separator type=textbox size=1
 @caption CSV Faili tulpade erladaja
@@ -36,7 +36,7 @@
 @caption objektit&uuml;&uuml;p
 
 @reltype FOLDER value=2 clid=CL_MENU
-@caption kataloog
+@caption kaust
 
 */
 
