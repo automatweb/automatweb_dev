@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.18 2002/12/18 16:58:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.19 2002/12/19 15:17:38 kristo Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -212,14 +212,28 @@ class html extends aw_template
 	function img($args = array())
 	{
 		extract($args);
-		return "<img src='$url'>";
+		$ret = "<img src='$url'";
+		if ($width)
+		{
+			$ret.=" width='$width'";
+		}
+		if ($height)
+		{
+			$ret.=" height='$height'";
+		}
+		if (isset($border))
+		{
+			$ret.=" border='$border'";
+		}
+		return $ret.">";
 	}
 
 	function href($args = array())
 	{
 		extract($args);
 		$target = ($target) ? " target='$target' " : "";
-		return "<a href='$url' $target>$caption</a>";
+		$onClick = ($onClick) ? " onClick='$onClick' " : "";
+		return "<a href='$url' $target $onClick>$caption</a>";
 	}
 
 	function richtext($args = array())
@@ -242,7 +256,16 @@ class html extends aw_template
 		return $retval;
 	}
 
-
-
+	////
+	// !html form, 
+	// params:
+	// method - form method
+	// action - form action
+	// content - html to insert between form tags
+	function form($args = array())
+	{
+		extract($args);
+		return '<form action="'.$action.'" method="'.$method.'" name="'.$name.'">'.$content.'</form>';
+	}
 };
 ?>
