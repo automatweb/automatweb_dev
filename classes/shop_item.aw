@@ -156,6 +156,9 @@ class shop_item extends aw_template
 
 	////
 	// !saves the brothers of the shop_item
+	// argumendid
+	// id(int) - selle objekti ID, millest me vendasid looma hakkame
+	// menus(array) - nende menyyde ID-d, mille alla vennad luua tuleb
 	function submit_bros($arr)
 	{
 		extract($arr);
@@ -163,15 +166,21 @@ class shop_item extends aw_template
 		// ok so how do we do this? well. what if, for each brother of this, 
 		// we create a CL_SHOP_ITEM and set it's brother_of to point to this item
 		// let's try this shit.
+		$selmenus = array();
 
 		if (is_array($menus))
 		{
+			// olemasolevate vendade list?
 			$brol = $this->get_brother_list($id);
+
+			// $selmenus sisaldab koigi nende menüüde, mille alla vennastatakse
+			// id-sid nii keyde kui ka väärtustena
 			foreach($menus as $menu_id)
 			{
 				$selmenus[$menu_id] = $menu_id;
 			}
 
+		
 			foreach($menus as $menu_id)
 			{
 				// if the menu is not a brother yet, add it
@@ -198,6 +207,7 @@ class shop_item extends aw_template
 			foreach($toremove as $menu_id)
 			{
 				// now we must delete the brother for this object that is present under menu $menu_id
+				// kas vendasid ei peaks lihtsalt maha votma, selle asemel, et neid dekatiivseks määrata?
 				$this->db_query("UPDATE objects SET status = 0 WHERE class_id = ".CL_SHOP_ITEM." AND brother_of = $id AND parent = $menu_id ");
 			}
 			// and now the brothers should be up to date....
