@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.10 2003/03/20 18:28:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.11 2003/06/04 13:20:55 kristo Exp $
 // treeview.aw - tree generator
 /*
         @default table=objects
@@ -23,6 +23,10 @@
 	@property icon_folder_closed type=objpicker clid=CL_ICON field=meta method=serialize
 	@caption Kinnise kausta ikoon
 */
+
+define("TREE_HTML", 1);
+define("TREE_JS", 2);
+
 class treeview extends class_base
 {
 	function treeview($args = array())
@@ -279,9 +283,11 @@ class treeview extends class_base
 	//   root_name - root menu name
 	//   root_url - root menu url
 	//   root_icon - root menu icon
+	//	type - either TREE_HTML or TREE_JS , defaults to TREE_JS
 	function start_tree($arr)
 	{
 		$this->items = array();
+		$this->tree_type = ($arr["type"] == TREE_HTML ? TREE_HTML : TREE_JS);
 		$this->tree_dat = $arr;
 	}
 
@@ -300,8 +306,18 @@ class treeview extends class_base
 		$this->items[$parent][] = $item;
 	}
 
+	function set_selected_item($id)
+	{
+		$this->selected_item = $id;
+	}
+
 	function finalize_tree()
 	{
+		if ($this->tree_type == TREE_HTML)
+		{
+			return $this->html_finalize_tree();
+		}
+
 		$this->read_template("ftiens.tpl");
 		// objektipuu
 		$tr = $this->req_finalize_tree(0);
@@ -346,5 +362,142 @@ class treeview extends class_base
 		}
 		return $ret;
 	}
+
+	function html_finalize_tree()
+	{
+		$this->read_template("html_tree.tpl");
+		$ml = array();
+		$this->draw_html_tree(0, &$ml);
+		
+		$this->vars(array(
+			"colspan" => 10
+		));
+		return $this->parse("TREE_BEGIN").join("\n", $ml).$this->parse("TREE_END");
+	}
+
+	function draw_html_tree($parent, &$ml)
+	{
+		$this->level++;
+		$data = array();
+		$ids = new aw_array();
+		$counts = array();
+
+		// get all menus for this level
+		if (is_array($this->items[$parent]))
+		{
+			$data = $this->items[$parent];
+		}
+
+		foreach($data as $row)
+		{
+			$counts[$row["id"]] = count($this->items[$row["id"]]);
+		}
+
+		$num = 0;
+		$cnt = count($data);
+		foreach($data as $row)
+		{
+			if ($cnt-1 == $num && $this->level == 1)
+			{
+				$this->first_level_menu_is_last = true;
+			}
+			else
+			if ($this->level == 1)
+			{
+				$this->first_level_menu_is_last = false;
+			}
+
+			$this->vars(array(
+				"link" => $row["url"],
+				"name" => $row["name"],
+				"section" => $row['id']
+			));
+			$this->vars($row["data"]);
+
+			$sel = "";
+			if ($this->selected_item == $row['id'])
+			{
+				$sel = "_SEL";
+			}
+			if ($counts[$row['id']])
+			{
+				$ms = $this->parse("MENU".$sel);
+			}
+			else
+			{
+				$ms = $this->parse("MENU_NOSUBS".$sel);
+			}
+
+			if ($this->level > 1)
+			{
+				$ms .= $this->parse("INFO");
+			}
+
+			// if the first level menu on this line is the last in it's level, then the first image must be empty
+			if ($this->level == 1)
+			{
+				$str = "";
+			}
+			else
+			if ($this->first_level_menu_is_last)
+			{
+				$str = $this->parse("FTV_BLANK");
+			}
+			else
+			{
+				$str = $this->parse("FTV_VERTLINE");
+			}
+
+			if ($counts[$row['id']])
+			{
+				$str .= str_repeat($this->parse("FTV_VERTLINE"), max(0,$this->level-2));
+				if ($cnt-1 == $num)
+				{
+					$str.= $this->parse("FTV_PLASTNODE");
+				}
+				else
+				{
+					if (isset($this->items[$row['id']]))
+					{
+						$str.= $this->parse("FTV_MNODE");
+					}
+					else
+					{
+						
+						$str.= $this->parse("FTV_PNODE");
+					}
+				}
+			}
+			else
+			{
+				$str .= str_repeat($this->parse("FTV_VERTLINE"), max(0,$this->level-2));
+				if ($cnt-1 == $num)
+				{
+					$str.= $this->parse("FTV_LASTNODE");
+				}
+				else
+				{
+					$str.= $this->parse("FTV_NODE");
+				}
+			}
+
+			$this->vars(array(
+				"str" => $str,
+				"colspan" => (10-$this->level),
+				"ms" => $ms
+			));
+			$ml[] = $this->parse("FTV_ITEM");
+
+			// now check if this menu is in the oc for the active menu 
+			// and if so, then recurse to the next level
+			if (isset($this->items[$row["id"]]))
+			{
+				$this->draw_html_tree($row['id'], &$ml);
+			}
+			$num++;
+		}
+		$this->level--;
+	}
+	
 };
 ?>
