@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.17 2004/09/03 09:36:25 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.18 2004/09/03 09:43:33 sven Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -1937,7 +1937,10 @@ class planner extends class_base
 		$user_inst = get_instance(CL_USER);		
 		foreach ($data->arr() as $result)
 		{
-		
+			if($arr["request"]["event_search_add"]["all_cal"] && $result->id() != $result->brother_of())
+			{
+				continue;		
+			}
 			
 			$participants = $result->connections_to(array(
 				"type" => array(8,9,10),
@@ -2070,7 +2073,7 @@ class planner extends class_base
 		{
 			$params["class_id"] = $this->event_entry_classes;
 		}
-		arr($params);
+
 		$event_ol = new object_list($params);
 		return $event_ol;
 	}
