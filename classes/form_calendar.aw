@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_calendar.aw,v 2.5 2002/07/17 07:44:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_calendar.aw,v 2.6 2002/07/25 23:55:14 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 class form_calendar extends form_base
 {
@@ -615,6 +615,11 @@ class form_calendar extends form_base
 				$tslice_el2 = $el["id"];
 			};
 		};
+		
+		if (($args["arr"]["event_start_el"]))
+		{
+			$start_el = $args["arr"]["event_start_el"];
+		};
 
 		/*
 		print "start = $start_el<br>";
@@ -632,7 +637,15 @@ class form_calendar extends form_base
 		$this->db_query($q);
 
 		$ct_start = $entry[$start_el];
-		$ct_end = $entry[$end_el];
+		if (not($end_el))
+		{
+			$ct_end = $ct_start + 3600;
+		}
+		else
+		{ 
+			$ct_end = $entry[$end_el];
+		};
+
 		$ct_max = $entry[$max_el];
 
 		$ct_tslice = (int)$entry[$tslice_el]["count"];

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.112 2002/07/25 22:52:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.113 2002/07/25 23:55:13 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1119,10 +1119,21 @@ class form extends form_base
 
 			}	
 
+			if ($qf->arr["event_start_el"])
+			{
+				$start_el = $qf->arr["event_start_el"];
+			};
+
 			$_start = $this->post_vars[$start_el];
 			$_end = $this->post_vars[$end_el];
 			$_range_start = mktime($_start["hour"],$_start["minute"],0,$_start["month"],$_start["day"],$_start["year"]);
 			$_range_end = mktime($_end["hour"],$_end["minute"],-1,$_end["month"],$_end["day"],$_end["year"]);
+
+			if ($_range_end == -1)
+			{
+				$_range_end = $_range_start + 3600;
+			};
+
 			$_count = (int)$this->post_vars[$count_el];
 
 			// default to 1, if not set or not int, this might be a mistake
@@ -1155,16 +1166,21 @@ class form extends form_base
 				};
 			}
 
-
-			$has_vacancies = $fc->check_vacancies(array(
-				"id" => $cal_target,
-				"eid" => $cal_id,
-				"start" => $_range_start,
-				"end" => $_range_end,
-				"count" => $_count,
-				"eform" => $this->id,
-			));
-
+			if ($no_vac_check)
+			{
+				$has_vacancies = true;
+			}
+			else
+			{
+				$has_vacancies = $fc->check_vacancies(array(
+					"id" => $cal_target,
+					"eid" => $cal_id,
+					"start" => $_range_start,
+					"end" => $_range_end,
+					"count" => $_count,
+					"eform" => $this->id,
+				));
+			};
 
 			if (not($has_vacancies))
 			{
@@ -1217,6 +1233,7 @@ class form extends form_base
 					$controllers_ok = false;
 				}
 			}
+
 
 			if ( (!$controllers_ok) || ($has_errors) )
 			{
@@ -1316,6 +1333,7 @@ class form extends form_base
 				"els" => &$els,
 				"entry_id" => &$this->entry_id,
 				"entry" => &$this->entry,
+				"arr" => $this->arr,
 			));
 		}
 
