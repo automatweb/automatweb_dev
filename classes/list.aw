@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.4 2001/05/18 22:08:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.5 2001/05/18 22:13:39 duke Exp $
 class mlist extends aw_template
 {
 	function mlist($id = 0)
@@ -197,6 +197,7 @@ class mlist extends aw_template
 
 	////
 	// !Teeb koigi listide nimekirja, kuhu kasutaja kuulub
+	// listide id-d on tagastava array keyd-eks
 	// argumendid:
 	// uid (string) - uid
 	function get_user_lists($args = array())
@@ -207,7 +208,7 @@ class mlist extends aw_template
 		$res = array();
 		while($row = $this->db_next())
 		{
-			$res[] = $row["list_id"];
+			$res[$row["list_id"]] = 1;
 		};
 		return $res;
 	}
