@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.15 2004/10/22 15:04:38 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.16 2004/10/25 08:55:39 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2 
 /*
 
@@ -197,7 +197,7 @@ class object_treeview_v2 extends class_base
 		$ol_result = array();
 		foreach($ol as $ol_item)
 		{
-			foreach($filters as $filter)
+			foreach(safe_array($filters) as $filter)
 			{
 				if($filter['is_strict'] == 1)
 				{
