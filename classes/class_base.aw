@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.128 2003/07/02 12:06:47 duke Exp $
+// $Id: class_base.aw,v 2.129 2003/07/02 15:00:49 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -7,12 +7,15 @@
 
 	@property name type=textbox group=general rel=1
 	@caption Nimi
+	@comment Objekti nimi
 
 	@property comment type=textbox group=general
 	@caption Kommentaar
+	@comment Vabas vormis tekst objekti kohta
 
 	@property status type=status group=general
 	@caption Staatus
+	@comment Kas objekt on aktiivne või mitte
 
 	@groupinfo general caption=Üldine default=1
 */
