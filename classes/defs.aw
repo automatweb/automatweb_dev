@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.142 2004/06/30 13:27:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.143 2004/07/05 08:56:26 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -102,6 +102,7 @@ if (!defined("DEFS"))
 	////
 	// !returns an array of all classes defined in the system, index is class id, value is class name and path
 	//  addempty - if true, empty element in front
+	//	only_addable - if true, only classes that have can_add = 1 are listed
 	function get_class_picker($arr = array())
 	{
 		extract($arr);
@@ -116,6 +117,8 @@ if (!defined("DEFS"))
 
 		$field = ($field) ? $field : "name";
 
+		$trans = array_flip(get_html_translation_table(HTML_ENTITIES));
+
 		foreach($cls as $clid => $cld)
 		{
 
@@ -123,10 +126,18 @@ if (!defined("DEFS"))
 			//if (isset($cld['field']) && ($cld['field'] != ""))
 			if (isset($cld['file']) && ($cld['file'] != ""))
 			{
-				$clname = $cld[$field];
+				$clname = strtr($cld[$field], $trans);
 				if (isset($index))
 				{
 					$ret[$cld[$index]] = $clname;
+				}
+				else
+				if ($only_addable)
+				{
+					if ($cld["can_add"] == 1)
+					{
+						$ret[$clid] = $clname;
+					}
 				}
 				else
 				{
