@@ -24,7 +24,7 @@
 			</function>
 		</action>
 
-		<action name="submit_interests">
+		<action name="submit_interests" nologin="1">
 			<function name="submit_interests">
 				<arguments>
 				</arguments>

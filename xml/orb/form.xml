@@ -208,7 +208,7 @@
 			</function>
 		</action>
 		
-		<action name="process_entry">
+		<action name="process_entry" nologin="1">
 			<function name="process_entry">
 				<arguments>
 				</arguments>
