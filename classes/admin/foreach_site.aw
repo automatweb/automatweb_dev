@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/foreach_site.aw,v 1.4 2004/06/25 20:09:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/foreach_site.aw,v 1.5 2004/09/22 08:44:54 kristo Exp $
 // foreach_site.aw - foreach site 
 
 class foreach_site extends class_base
@@ -49,12 +49,11 @@ class foreach_site extends class_base
 
 		set_time_limit(0);
 		
-		$sites = $this->do_orb_method_call(array(
-			"class" => "site_list",
-			"action" => "get_site_list",
-			"method" => "xmlrpc",
-			"server" => "register.automatweb.com"
-		));
+		// try remoting
+		$sl = get_instance("install/site_list");
+		$sites = $sl->get_site_list();
+
+		$cur_site = $sites[aw_ini_get("site_id")];
 
 		foreach($sites as $site)
 		{
@@ -66,6 +65,29 @@ class foreach_site extends class_base
 			if ($url == "")
 			{
 				continue;
+			}
+
+			if (1 == $arr["same_code"])
+			{
+				$cur_code = aw_ini_get("basedir");
+				// read remote code
+				$inivals = $this->do_orb_method_call(array(
+					"class" => "objects",
+					"action" => "aw_ini_get_mult",
+					"method" => "xmlrpc",
+					"server" => "register.automatweb.com",
+					"params" => array(
+						"vals" => array(
+							"basedir"
+						)
+					)
+				));
+
+				if ($inivals["basedir"] != $cur_code || $cur_site["server_id"] != $site["server_id"])
+				{
+					echo "<font color=red>skipping site $url, because it is using a different code path (remote: $site[server_id]:$inivals[basedir]  vs local: $cur_site[server_id]:$cur_code)</font> <br><br>";
+					continue;
+				}
 			}
 
 			if (substr($url, 0, 4) != "http")
