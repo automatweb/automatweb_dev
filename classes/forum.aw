@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.51 2002/08/28 10:21:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.52 2002/09/27 13:25:38 duke Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 
@@ -805,6 +805,7 @@ topic");
 			$this->aw_mb_read = unserialize($HTTP_COOKIE_VARS["aw_mb_read"]);
 			if ($cid)
 			{
+
 				$q = "SELECT * FROM comments WHERE id = '$cid'";
 				$this->db_query($q);
 				$crow = $this->db_next();
@@ -1067,7 +1068,29 @@ topic");
 		};
 
 		$new = "";
-		if (not($this->aw_mb_read[$args["id"]]))
+		if ($this->cfg["track_users"])
+		{
+			$uid = aw_global_get("uid");
+			$board_id = $args["board_id"];
+			$id = $args["id"];
+
+			$this->save_handle();
+			$uid = aw_global_get("uid");
+			$q = "SELECT count(*) AS cnt FROM forum_track WHERE comm_id = '$id' AND uid = '$uid'";
+			$this->db_query($q);
+			$row = $this->db_next();
+
+
+			if ($row["cnt"] == 0)
+			{
+				$new = $this->parse("NEW_MSGS");
+			}
+			else
+			{
+				$new = $this->parse("READ_MSGS");
+			};
+			$this->restore_handle();
+		} else if (not($this->aw_mb_read[$args["id"]]))
 		{
 			$new = $this->parse("NEW_MSG");
 		};
@@ -1097,6 +1120,16 @@ topic");
 		if ($this->mark_comments)
 		{
 			$this->aw_mb_read[$args["id"]] = 1;
+		};
+
+		if ($this->cfg["track_users"])
+		{
+			$this->save_handle();
+			// remember that this comment has already been shown
+			$q = "REPLACE INTO forum_track (uid,thread_id,comm_id)
+				VALUES ('$uid','$board_id','$id')";
+			$this->db_query($q);
+			$this->restore_handle();
 		};
 
 		if ($this->is_template("SHOW_COMMENT") && ($this->cid == $args["id"]))
@@ -1240,6 +1273,7 @@ topic");
 			));
 
 			$this->db_query($q);
+
 		}
 		if (not($act))
 		{
@@ -1280,6 +1314,7 @@ topic");
 		};
 
 		$tabs = $this->tabs(array("flat","details","newtopic","mark_all_read","archive","search"),$act_tab);
+
 		$this->topicsonpage = ($o["meta"]["topicsonpage"]) ? $o["meta"]["topicsonpage"] : 5;
 
 		$this->mk_path($o["parent"], "Foorum");
@@ -1307,6 +1342,8 @@ topic");
 
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_topics",array("id" => $id,"section" => $this->section)),
+			"TO_ARCHIVE" => ($archive == 1 ? $this->parse("FROM_ARCHIVE") : $this->parse("TO_ARCHIVE")),
+			"FROM_ARCHIVE" => ""
 		));
 
 
@@ -1368,6 +1405,10 @@ topic");
 			if ($act == "delete")
 			{
 				$stat = 0;
+			}
+			if ($act == "activate")
+			{
+				$stat = 2;
 			}
 			$to_delete = join(",",$check);
 			$q = "UPDATE objects SET status = $stat WHERE oid IN ($to_delete)";
@@ -1678,6 +1719,35 @@ topic");
 			print "</pre>";
 		}
 		$mark = ($check_against > $this->last_read[$args["oid"]]) ? $this->parse("NEW_MSGS") : "";
+
+		if ($this->cfg["track_users"])
+		{
+			$this->save_handle();
+			$uid = aw_global_get("uid");
+			$q = "SELECT count(*) AS cnt FROM forum_track WHERE thread_id = '$args[oid]' AND uid = '$uid'";
+			$this->db_query($q);
+			$row = $this->db_next();
+
+			$read_msgs = $row["cnt"];
+			
+			
+			$total_msgs = (int)$this->comments[$args["oid"]];
+
+			global $DBUG;
+			if ($DBUG)
+			{
+				print "read = $read_msgs, total = $total_msgs<br>";
+			}
+
+			if ($read_msgs < $total_msgs)
+			{
+				$mark = $this->parse("NEW_MSGS");
+			}
+			else
+			{
+				$mark = "";
+			}
+		};
 
 		$this->vars(array(
 			"del_topic" => $this->mk_my_orb("delete_topic", array("board" => $args["oid"],"forum_id" => $args["parent"])),
