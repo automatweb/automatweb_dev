@@ -582,6 +582,12 @@ function toggle_file_link_newwin()
 <td class="fgtext">Jaga otsing s&otilde;nadeks:</td>
 <td class="fgtext"><input type='checkbox' CLASS="small_button" NAME='{VAR:cell_id}_search_separate_words' VALUE='1' {VAR:search_separate_words}></td>
 </tr>
+<tr>
+<td class="fgtext">Otsing on loogiline lause:</td>
+<td class="fgtext"><input type='checkbox' CLASS="small_button" NAME='{VAR:cell_id}_search_logical' VALUE='1' {VAR:search_logical}></td>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;</td>
+</tr>
 <!-- END SUB: SEARCH_PROPS -->
 
 <!-- SUB: HAS_CONTROLLER -->

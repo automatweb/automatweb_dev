@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.58 2002/07/17 20:29:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.59 2002/07/19 14:49:14 kristo Exp $
 // form_element.aw - vormi element.
 classload("image");
 
@@ -171,7 +171,8 @@ class form_element extends aw_template
 				"value_controller" 				=> $this->picker($this->arr["value_controller"], $this->form->get_list_controllers(true)),
 				"disabled" 								=> checked($this->arr["disabled"]),
 				"search_all_text"					=> checked($this->arr["search_all_text"]),
-				"search_separate_words"		=> checked($this->arr["search_separate_words"])
+				"search_separate_words"		=> checked($this->arr["search_separate_words"]),
+				"search_logical"					=> checked($this->arr["search_logical"]),
 			));
 	
 			$this->vars(array(
@@ -731,6 +732,10 @@ class form_element extends aw_template
 		$var = $base."_search_separate_words";
 		global $$var;
 		$this->arr["search_separate_words"] = $$var;
+
+		$var = $base."_search_logical";
+		global $$var;
+		$this->arr["search_logical"] = $$var;
 
 		$var=$base."_text";
 		$this->arr["text"] = $$var;

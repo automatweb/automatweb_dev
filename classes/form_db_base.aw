@@ -804,7 +804,6 @@ class form_db_base extends aw_template
 	// use $this->forms_used_in_where that gets initialized in this function
 	function get_sql_where_clause()
 	{
-
 		$this->forms_used_in_where = array();
 
 		// checkbox groups are stored here (checkboxes with the same group get OR between them)
@@ -913,7 +912,6 @@ class form_db_base extends aw_template
 					{
 						if ($el->arr["search_separate_words"])
 						{
-							// now split it at the spaces
 							if (preg_match("/\"(.*)\"/",$value,$matches))
 							{
 								if ($el->arr["search_all_text"] != 1)
@@ -927,6 +925,7 @@ class form_db_base extends aw_template
 							}
 							else
 							{
+								// now split it at the spaces
 								$pieces = explode(" ",$value);
 								if (is_array($pieces))
 								{
@@ -951,6 +950,72 @@ class form_db_base extends aw_template
 									}
 								};
 							};
+						}
+						else
+						if ($el->arr["search_logical"])
+						{
+							// here we try to parse the damn text entered in the element
+							// let's try and do NOT / AND / OR here
+							$qstr = "";
+							$pics = explode(" ",$value);
+							foreach($pics as $pic)
+							{
+//								echo "pic = $pic <br>";
+								if ($pic == "AND")
+								{
+									$qstr .= " AND ";
+								}
+								else
+								if ($pic == "OR")
+								{
+									$qstr .= " OR ";
+								}
+								else
+								if ($pic == "NOT")
+								{
+									$nextnot = true;
+								}
+								else
+								if ($pic == "(" || $pic ==")")
+								{
+									$qstr.=$pic;
+								}
+								else
+								{
+									if ($nextnot)
+									{
+										$nextnot = false;
+										if ($el->arr["search_all_text"] != 1)
+										{
+											$qstr .= " $elname NOT LIKE '%$pic%' ";
+										}
+										else
+										{
+											$qstr .= " $elname != '$pic' ";
+										}
+									}
+									else
+									{
+										if ($el->arr["search_all_text"] != 1)
+										{
+											$qstr .= " $elname LIKE '%$pic%' ";
+										}
+										else
+										{
+											$qstr .= " $elname = '$pic' ";
+										}
+									}
+								}
+							}
+//							echo "got qstr $qstr <br>";
+							if ($qstr != "")
+							{
+								if ($query != "")
+								{
+									$query .= "AND ";
+								}
+								$query.= " ($qstr) ";
+							}
 						}
 						else
 						{
