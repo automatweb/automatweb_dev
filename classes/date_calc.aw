@@ -1,6 +1,6 @@
 <?php
 // date_calc.aw - Kuupäevaaritmeetika
-// $Header: /home/cvs/automatweb_dev/classes/Attic/date_calc.aw,v 2.12 2004/03/25 13:40:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/date_calc.aw,v 2.13 2004/05/12 13:29:47 kristo Exp $
 
 ////
 // !get_date_range
@@ -241,5 +241,22 @@ function get_week_start()
 function get_month_start()
 {
 	return mktime(0,0,0, date("m"), 1, date("Y"));
+}
+
+/** returns true if the given timespans ($a_from, $a_to) - ($b_from - $b_to) overlap
+**/
+function timespans_overlap($a_from, $a_to, $b_from, $b_to)
+{
+	// test for NOT overlapping, that's simpler. 
+	// two options here: completely before or completely after
+	if ($a_to <= $b_from)
+	{
+		return false;
+	}
+	if ($a_from >= $b_to)
+	{
+		return false;
+	}
+	return true;
 }
 ?>

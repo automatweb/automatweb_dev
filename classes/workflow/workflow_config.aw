@@ -11,9 +11,6 @@
 @default field=meta
 @default method=serialize
 
-@property treeview_conf type=relpicker reltype=RELTYPE_TREE_CONFIG editonly=1
-@caption Puu konfiguratsioon
-
 @property actor_rootmenu type=relpicker reltype=RELTYPE_ROOTMENU group=config_actor
 @caption Tegijate juurmenüü
 
@@ -30,16 +27,12 @@
 @caption Protsesside juurmenüü
 
 @groupinfo config_actor caption="Tegijate seaded"
-@groupinfo config_action caption=Tegevuste seaded"
+@groupinfo config_action caption="Tegevuste seaded"
 @groupinfo config_entity caption="Juhtumite seaded"
 @groupinfo config_process caption="Protsesside seaded"
 
 @reltype ROOTMENU value=1 clid=CL_MENU
 @caption juurmenüü
-
-@reltype TREE_CONFIG value=2 clid=CL_TREEVIEW
-@caption puu seaded
-
 
 
 */

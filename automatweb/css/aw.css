@@ -1650,6 +1650,15 @@ background-color: #FFFFFF;
 border: 1px solid #EFEFEF;
 }
 
+.aw04kalendersubeventnobg {
+margin: 2px;
+padding: 2px;
+font-family: Arial, verdana, sans-serif;
+font-size: 11px;
+color: #000000;
+}
+
+
 .aw04kalendersubevent a {
 color: #000000;
 text-decoration:none;

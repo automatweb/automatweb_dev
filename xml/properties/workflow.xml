@@ -11,16 +11,6 @@
             <caption>Konfiguratsioon</caption>
       </property>
       <property>
-            <name>preview</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>text</type>
-            <editonly>1</editonly>
-            <store>no</store>
-            <field>preview</field>
-            <caption>Näita</caption>
-      </property>
-      <property>
             <name>id</name>
             <table>objects</table>
             <group>

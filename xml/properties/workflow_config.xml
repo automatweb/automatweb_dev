@@ -1,17 +1,6 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>treeview_conf</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_TREE_CONFIG</reltype>
-            <editonly>1</editonly>
-            <caption>Puu konfiguratsioon</caption>
-      </property>
-      <property>
             <name>actor_rootmenu</name>
             <table>objects</table>
             <group>config_actor</group>
@@ -74,7 +63,7 @@
                   <caption>Tegijate seaded</caption>
             </config_actor>
             <config_action>
-                  <caption>Tegevuste</caption>
+                  <caption>Tegevuste seaded</caption>
             </config_action>
             <config_entity>
                   <caption>Juhtumite seaded</caption>
@@ -89,11 +78,6 @@
                   <clid>CL_MENU</clid>
                   <caption>juurmenüü</caption>
             </ROOTMENU>
-            <TREE_CONFIG>
-                  <value>2</value>
-                  <clid>CL_TREEVIEW</clid>
-                  <caption>puu seaded</caption>
-            </TREE_CONFIG>
       </reltypes>
 </properties>
 

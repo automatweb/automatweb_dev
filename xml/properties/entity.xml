@@ -71,6 +71,11 @@
                   <value>4</value>
                   <caption>protsess</caption>
             </PROCESS>
+            <RESOURCE>
+                  <clid>CL_WORKFLOW_RESOURCE</clid>
+                  <value>5</value>
+                  <caption>ressurss</caption>
+            </RESOURCE>
       </reltypes>
 </properties>
 

@@ -34,6 +34,9 @@
 @reltype PROCESS clid=CL_PROCESS value=4
 @caption protsess
 
+@reltype RESOURCE clid=CL_WORKFLOW_RESOURCE value=5
+@caption ressurss
+
 */
 
 class entity extends class_base

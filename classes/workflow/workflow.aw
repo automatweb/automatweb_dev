@@ -12,9 +12,6 @@
 	@property config type=relpicker reltype=RELTYPE_WORKFLOW_CONFIG field=meta method=serialize
 	@caption Konfiguratsioon
 
-	@property preview type=text editonly=1 store=no
-	@caption Näita
-
 	// --views
 	
 	@default view=show
@@ -124,16 +121,6 @@ class workflow extends class_base
 		};
 		
 		$this->cfg_obj = new object($cfgid);
-
-		/*$this->treeview_conf_id = $this->cfg_obj->prop("treeview_conf");
-
-		if (empty($this->treeview_conf_id))
-		{
-			$data["error"] = "Puu konfiguratsioon on valimata!";
-			return PROP_ERROR;
-		};
-
-		$this->treeview_conf = new object($this->treeview_conf_id);*/
 
 		$entity_rootmenu_id = $this->cfg_obj->prop("entity_rootmenu");
 
@@ -338,8 +325,6 @@ class workflow extends class_base
 			$con = new connection();
 			foreach($con->find(array("to" => $al)) as $c)
 			{
-				echo "add $c[from] <br>\n";
-				flush();
 				// now get the from , that's the process
 				$process_list->add($c["from"]);
 			}
@@ -579,6 +564,9 @@ class workflow extends class_base
 		$en_inst->set_prop("entity_type", $data["request"]["entity_id"]);
 		$en_inst->set_prop("obj_id", $cl_o->id());
 		$en_inst->save();
+
+		$cl_o->set_meta("entity_instance", $en_inst->id());
+		$cl_o->save();
 
 		$fl = $this->cfg["classes"][$cfgform->prop("subclass")]["file"];
 		if ($fl == "document")
