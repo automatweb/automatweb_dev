@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.14 2002/02/18 13:47:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.15 2002/02/19 00:37:25 duke Exp $
 // tegeleb ORB requestide handlimisega
 classload("aw_template","defs","xml_support");
 lc_load("automatweb");
@@ -49,6 +49,7 @@ class orb extends aw_template {
 		};
 
 		global $orb_defs;
+		// import into local scope
 
 
 		if (!is_array($orb_defs[$class]))
@@ -57,6 +58,7 @@ class orb extends aw_template {
 //			{
 	
 				$orb_defs = $this->load_xml_orb_def($class);
+				$this->orb_defs = $orb_defs;
 /*			}
 			else
 			{
@@ -67,21 +69,23 @@ class orb extends aw_template {
 
 		$action = ($action) ? $action : $orb_defs[$class]["default"];
 
-		if ((!defined("UID")) && (!isset($orb_defs[$class][$action]["nologin"])))
-		{
-			classload("config");
-			$c = new db_config;
-			$doc = $c->get_simple_config("orb_err_mustlogin");
-			if ($doc != "")
-			{
-				header("Location: $doc");
-				die();
-			}
-			else
-			{
-				$this->raise_error(ERR_ORB_LOGIN,E_ORB_LOGIN_REQUIRED,$fatal,$silent);
-			}
-		};
+		//if ((!defined("UID")) && (!isset($orb_defs[$class][$action]["nologin"])))
+		//{
+		// 	//need to do the transparent redirect in here
+		//	classload("config");
+		//	$c = new db_config;
+		//	$doc = $c->get_simple_config("orb_err_mustlogin");
+		//	if ($doc != "")
+		//	{
+		//		header("Location: $doc");
+		//		die();
+		//	}
+		//	else
+		//	{
+		//		$this->raise_error(ERR_ORB_LOGIN,E_ORB_LOGIN_REQUIRED,$fatal,$silent);
+		//	}
+		//};
+		$this->check_login(array("class" => $class,"action" => $action));
 
 
 		// action defineeritud?
@@ -389,6 +393,36 @@ class orb extends aw_template {
 	function do_orb_xmlrpc_call($server,$class,$action,$params)
 	{
 		rpc_create_struct($params);
+	}
+
+	////
+	// !Checks whether a resource requires login and if so, asks for the password
+	// also, remembers the requesterd url so we can redirect back there after the
+	// login
+	function check_login($args = array())
+	{
+		extract($args);
+		if ((!defined("UID")) && (!isset($this->orb_defs[$class][$action]["nologin"])))
+		{
+			classload("auth");
+			$auth = new auth();
+			print $auth->show_login();
+			// dat sucks
+			exit;
+
+			//classload("config");
+			//$c = new db_config;
+			//$doc = $c->get_simple_config("orb_err_mustlogin");
+			//if ($doc != "")
+			//{
+			//	header("Location: $doc");
+			//	die();
+			//}
+			//else
+			//{
+			//	$this->raise_error(ERR_ORB_LOGIN,E_ORB_LOGIN_REQUIRED,$fatal,$silent);
+			//}
+		};
 	}
 }
 ?>
