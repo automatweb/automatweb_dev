@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.95 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.96 2002/06/13 22:04:49 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -41,6 +41,16 @@ class form extends form_base
 			FTYPE_FILTER_SEARCH => "Filtri otsinguform",
 		);
 
+		// these types are used in the "add new form" page 
+		// feel free to move them to the ini file
+		$this->ftypes = array(
+			FTYPE_ENTRY => $this->vars["LC_FORMS_TYPE_ENTRY"],
+			FTYPE_SEARCH => $this->vars["LC_FORMS_TYPE_SEARCH"],
+			FTYPE_RATING => $this->vars["LC_FORMS_TYPE_FILTER_SEARCH"],
+			FTYPE_FILTER_SEARCH => $this->vars["LC_FORMS_TYPE_RATING"],
+			FTYPE_CONFIG => $this->vars["LC_FORMS_TYPE_CONFIG"],
+		);
+
 		$this->formaliases = "";
 		$this->entry_id = 0;
 
@@ -50,6 +60,7 @@ class form extends form_base
 		{
 			$this->controller_instance = new form_controller;
 		}
+
 		lc_load("definition");
 	}
 
@@ -865,6 +876,14 @@ class form extends form_base
 			$this->acl_error("view",$id);
 		}
 
+		// xml based config forms are quite a lot different than usual forms and I don't want to
+		// clutter this class so I redirect to another class transparently
+		if ($this->type == FTYPE_CONFIG)
+		{
+			$xmlform = get_instance("xmlform");
+			return $xmlform->gen_preview(array("id" => $id,"xmldata" => $xmldata));
+		}
+
 		if ($form_action == "")
 		{
 			if (stristr(aw_global_get("REQUEST_URI"),"/automatweb")!=false)
@@ -878,6 +897,7 @@ class form extends form_base
 		}
 
 		$section = aw_global_get("section");
+
 		if (!isset($reforb) || $reforb == "")
 		{
 			$reforb = $this->mk_reforb("process_entry", array("id" => $this->id,"section" => $section));
@@ -999,7 +1019,9 @@ class form extends form_base
 				$pic.=$this->parse("IMAGE");
 			}
 		}
+
 		$ip ="";
+
 		if ($this->entry_id != 0)	// images can only be added after the place is entered for the first time
 		{
 			$this->vars(array("IMAGE" => $pic, "url"	=> aw_global_get("REQUEST_URI")));
@@ -1007,9 +1029,11 @@ class form extends form_base
 		}
 
 		$this->vars(array("var_name" => "entry_id", "var_value" => $this->entry_id));
+
 		$ei = $this->parse("EXTRAIDS");
 
 		$this->vars(array("var_name" => "return_url", "var_value" => aw_global_get("REQUEST_URI")));
+
 		$ei .= $this->parse("EXTRAIDS");
 
 		if (isset($extraids) && is_array($extraids))
@@ -1043,7 +1067,7 @@ class form extends form_base
 		}
 
 		$this->vars(array(
-			"LINE"							=> $c,
+			"LINE"						=> $c,
 			"EXTRAIDS"					=> $ei,
 			"IMG_WRAP"					=> $ip, 
 			"form_action"				=> $form_action,
@@ -1062,6 +1086,7 @@ class form extends form_base
 			$s = $st->get($this->arr["tablestyle"]);
 			$s = unserialize($s["style"]);
 		}
+
 		$this->vars(array(
 			"form_border"				=> (isset($s["border"]) && $s["border"] != "" ? " BORDER='".$s["border"]."'" : ""),
 			"form_bgcolor"			=> (isset($s["bgcolor"]) && $s["bgcolor"] !="" ? " BGCOLOR='".$s["bgcolor"]."'" : ""),
@@ -1075,10 +1100,12 @@ class form extends form_base
 		));
 
 		$st = $this->parse();				
+
 		if ($css_file != "")
 		{
 			$st = "<style type=\"text/css\">".$css_file."</style>\n".$st;
 		}
+
 		return $st;
 	}
 
@@ -3091,7 +3118,8 @@ class form extends form_base
 		return $this->parse();
 	}
 
-	// new orb functions start here
+	////
+	// !Adds a new form
 	function add($arr)
 	{
 		extract($arr);
@@ -3099,43 +3127,26 @@ class form extends form_base
 		$this->read_template("form_add.tpl");
 		$this->vars(array(
 			"forms" => $this->picker(0,$this->get_list(FTYPE_ENTRY,true)),
+			"types" => $this->picker(-1,$this->ftypes),
 			"reforb"	=> $this->mk_reforb("submit_add",array("parent" => $parent, "alias_doc" => $alias_doc))
 		));
 		return $this->parse();
 	}
 
+	////
+	// !Submits the new form
 	function submit_add($arr)
 	{
 		extract($arr);
 
 		$id = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_FORM, "comment" => $comment));
-		
-		if ($type == "entry") 
-		{
-			$type = FTYPE_ENTRY;
-		}
-		if ($type == "search")
-		{
-			$type = FTYPE_SEARCH;
-		}
-		if ($type == "rating")
-		{
-			$type = FTYPE_RATING;
-		}
 
-		if ($type == "filter_search")
-		{
-			$type = FTYPE_FILTER_SEARCH;
-		}
-
+		// $type is integer now
 		$this->db_query("INSERT INTO forms(id, type,content,cols,rows) VALUES($id, $type,'',1,1)");
-
-		$this->db_query("CREATE TABLE form_".$id."_entries (id int primary key,chain_id int)");
-		$this->db_query("ALTER TABLE form_".$id."_entries add index chain_id(chain_id)");
+		$this->db_query("CREATE TABLE form_".$id."_entries (id INT PRIMARY KEY,chain_id INT,INDEX(chain_id))");
 
 		$this->load($id);
-
-		$this->_log("form",LC_FORM_ADDED_FORM.$name);
+		$this->_log("form",$this->vars["LC_FORMS_LOG_NEW"] ." ". $this->ftypes[$type] ." ". $name);
 
 		if ($alias_doc)
 		{
@@ -3143,56 +3154,72 @@ class form extends form_base
 		}
 
 		// uhm yeah. if the user selected a base form, then we must clone it and all the elements in it
-		if ($base)
+
+		// unless it's a config form in which case I don't really want to clone it. At least not right
+		// now -- duke
+		if ($base && ($type != FTYPE_CONFIG))
 		{
-			$bf = new form;
-			$bf->load($base);
+			// don't you like this a lot better? :) -- duke
+			// why yes. yes I do :) -- terryf
+			$this->_clone_from($base,$id);
+		}
 
-			$this->arr = $bf->arr;
-			$this->arr["elements"] = array();
-			$this->arr["contents"] = array();
-			for ($row = 0; $row < $this->arr["rows"]; $row++)
+		// change is gen_grid
+		return $this->mk_orb("change", array("id" => $id));
+	}
+
+	////
+	// !Clones "this" form from another
+	function _clone_from($base,$id)
+	{
+		$bf = new form;
+		$bf->load($base);
+
+		$this->arr = $bf->arr;
+		$this->arr["elements"] = array();
+		$this->arr["contents"] = array();
+		for ($row = 0; $row < $this->arr["rows"]; $row++)
+		{
+			for ($col=0; $col < $this->arr["cols"]; $col++)
 			{
-				for ($col=0; $col < $this->arr["cols"]; $col++)
+				// this is a trick to make form cells in $bf save new elements to $this
+				$bf->arr["contents"][$row][$col]->form = &$this;
+
+				$bf->arr["contents"][$row][$col]->id = $id;
+
+				if (is_array($bf->arr["elements"][$row][$col]))
 				{
-					$bf->arr["contents"][$row][$col]->form = &$this;	// this is a trick to make form cells in $bf save new elements to $this
-					$bf->arr["contents"][$row][$col]->id = $id;
-
-					if (is_array($bf->arr["elements"][$row][$col]))
+					foreach($bf->arr["elements"][$row][$col] as $elid => $elval)
 					{
-						foreach($bf->arr["elements"][$row][$col] as $elid => $elval)
+						if (is_number($elid))
 						{
-							if (is_number($elid))
-							{
-								// replicate this element into this form!!
-								$el_parent = $this->db_fetch_field("SELECT parent FROM objects WHERE oid = $elid", "parent");
+							// replicate this element into this form!!
+							$el_parent = $this->db_fetch_field("SELECT parent FROM objects WHERE oid = $elid", "parent");
 
-								$newel = $bf->arr["contents"][$row][$col]->do_add_element(array("parent" => $el_parent, "name" => $elval["name"], "based_on" => $elid));
+							$newel = $bf->arr["contents"][$row][$col]->do_add_element(array("parent" => $el_parent, "name" => $elval["name"], "based_on" => $elid));
 
-								$elval["id"] = $newel;
-								$elval["ver2"] = true;
-								$elval["linked_form"] = $base;
-								$elval["linked_element"] = $elid;
-								$this->arr["elements"][$row][$col][$newel] = $elval;
+							$elval["id"] = $newel;
+							$elval["ver2"] = true;
+							$elval["linked_form"] = $base;
+							$elval["linked_element"] = $elid;
+							$this->arr["elements"][$row][$col][$newel] = $elval;
 //								echo "elval linked form = $base , real = ", $this->arr["elements"][$row][$col][$newel]["linked_form"]," <br>";
-								// save element props also
-								$prp = aw_serialize($this->arr["elements"][$row][$col][$newel],SERIALIZE_XML);
-								$this->quote(&$prp);
-								$this->db_query("UPDATE form_elements SET props = '$prp' WHERE id = $newel");
-							}
-							else
-							{
-								// class style
-								$this->arr["elements"][$row][$col][$elid] = $elval;
-							}
+							// save element props also
+							$prp = aw_serialize($this->arr["elements"][$row][$col][$newel],SERIALIZE_XML);
+							$this->quote(&$prp);
+							$this->db_query("UPDATE form_elements SET props = '$prp' WHERE id = $newel");
+						}
+						else
+						{
+							// class style
+							$this->arr["elements"][$row][$col][$elid] = $elval;
 						}
 					}
 				}
 			}
-			$this->arr["search_from"][$base]=1;
-			$this->save();
 		}
-		return $this->mk_orb("change", array("id" => $id));
+		$this->arr["search_from"][$base]=1;
+		$this->save();
 	}
 
 	////
@@ -3210,15 +3237,18 @@ class form extends form_base
 	{
 		extract($arr);
 		$this->load($id);
-		$ret = $this->arr["contents"][$row][$col]->add_element($wizard_step);
-		if ($ret == false)
-		{
-			return $this->mk_orb("admin_cell", array("id" => $this->id, "row" => $row, "col" => $col));
-		}
-		else
-		{
-			return $ret;
-		}
+		$ret = $this->arr["contents"][$row][$col]->add_element();
+		return $ret;
+	}
+
+	////
+	// !submits a new element to form (from add_element)
+	function submit_element($args = array())
+	{
+		extract($args);
+		$this->load($id);
+		$this->arr["contents"][$row][$col]->submit_element($args);
+		return $this->mk_orb("admin_cell", array("id" => $id, "row" => $row, "col" => $col));
 	}
 
 	////
