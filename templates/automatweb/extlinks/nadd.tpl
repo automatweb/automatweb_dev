@@ -61,7 +61,12 @@ function toggle_javascript()
 </tr>
 <tr>
 	<td class="fcaption2">Uue akna sätungid</td>
-	<td class="fform">Toolbar: <input type="checkbox" name="newwintoolbar" value=1 {VAR:newwintoolbar}></td>
+	<td class="fform">
+	Toolbar: <input type="checkbox" name="newwintoolbar" value=1 {VAR:newwintoolbar}> |
+	Address bar: <input type="checkbox" name="newwinlocation" value=1 {VAR:newwinlocation}> |
+	Menyyd: <input type="checkbox" name="newwinmenu" value=1 {VAR:newwinmenu}> 
+
+</td>
 </tr>
 <tr>
 	<td class="fcaption2">{VAR:LC_EXTLINKS_DOC_LC}?</td>
