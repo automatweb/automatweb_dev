@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.17 2001/06/06 12:16:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.18 2001/06/08 18:58:35 duke Exp $
 // document.aw - Dokumentide haldus. ORB compatible. Should be used instead of documents.aw
 // defineerime orbi funktsioonid
 global $orb_defs;
@@ -518,6 +518,14 @@ class document extends aw_template
 					"idx" => 2,
 					"match" => "g",
 					"class" => "graph",
+					"reg_id" => $mp,
+					"function" => "parse_alias",
+				));
+		// galeriid
+		$this->register_sub_parser(array(
+					"idx" => 2,
+					"match" => "y",
+					"class" => "gallery",
 					"reg_id" => $mp,
 					"function" => "parse_alias",
 				));
