@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.24 2003/06/12 15:38:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.25 2003/06/18 15:44:57 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -177,7 +177,7 @@ class doc extends class_base
 				break;
 
 			case "calendar_relation":
-				$data["options"] = $this->calendar_list;
+				$data["options"] = array(-1 => "puudub") + $this->calendar_list;
 				break;
 
 			case "duration":
@@ -345,7 +345,7 @@ class doc extends class_base
 						};
 					}
 				}
-				else
+				elseif ($data["value"] == -1)
 				{
 					// nuke all brothers
 					$q = sprintf("UPDATE objects SET status = 0 WHERE brother_of = %d AND class_id = %d",
