@@ -4,30 +4,31 @@
             <name>root_folder</name>
             <type>relpicker</type>
             <reltype>RELTYPE_ROOT_FOLDER</reltype>
-            <field>meta</field>
-            <method>serialize</method>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Root kataloog</caption>
       </property>
       <property>
             <name>num_levels</name>
             <type>textbox</type>
             <size>3</size>
-            <field>meta</field>
-            <method>serialize</method>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Mitu taset</caption>
       </property>
       <property>
             <name>mod_levels</name>
-            <type>generated</type>
-            <generator>gen_mod_levels</generator>
-            <field>meta</field>
-            <method>serialize</method>
+            <type>callback</type>
+            <callback>gen_mod_levels</callback>
+            <edit_only>1</edit_only>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Tasemed</caption>
       </property>
       <property>
@@ -35,20 +36,15 @@
             <type>checkbox</type>
             <rel>1</rel>
             <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Kas n&amp;auml;idata nime</caption>
       </property>
       <classinfo>
             <syslog_type>ST_MENU_AREA</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
-      <groupinfo>
-            <general>
-                  <caption>Üldine</caption>
-            </general>
-      </groupinfo>
 </properties>
 

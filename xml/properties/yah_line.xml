@@ -4,29 +4,24 @@
             <name>separator</name>
             <type>textbox</type>
             <size>5</size>
-            <field>meta</field>
-            <method>serialize</method>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Eraldaja</caption>
       </property>
       <property>
             <name>show_nosubs</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Kas n&amp;auml;idata men&amp;uuml;&amp;uuml;sid, mille all pole dokumente</caption>
       </property>
       <classinfo>
             <syslog_type>ST_YAH_LINE</syslog_type>
       </classinfo>
-      <groupinfo>
-            <general>
-                  <caption>Üldine</caption>
-            </general>
-      </groupinfo>
 </properties>
 
