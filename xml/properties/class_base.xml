@@ -24,7 +24,7 @@
             <name>status</name>
             <type>status</type>
             <trans>1</trans>
-            <default>2</default>
+            <default>1</default>
             <table>objects</table>
             <group>general</group>
             <field>status</field>

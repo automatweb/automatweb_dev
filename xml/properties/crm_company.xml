@@ -176,16 +176,19 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Töötajad</caption>
             </WORKERS>
-            <PAKKUMINE>
+            <OFFER>
                   <value>9</value>
-                  <clid>CL_CRM_OFFER</clid>
+                  <clid>
+                        <num_0>CL_CRM_OFFER</num_0>
+                        <num_1>CL_CRM_PERSON</num_1>
+                  </clid>
                   <caption>Pakkumine</caption>
-            </PAKKUMINE>
-            <TEHING>
+            </OFFER>
+            <DEAL>
                   <value>10</value>
                   <clid>CL_CRM_DEAL</clid>
                   <caption>Tehing</caption>
-            </TEHING>
+            </DEAL>
             <KOHTUMINE>
                   <value>11</value>
                   <clid>CL_CRM_MEETING</clid>

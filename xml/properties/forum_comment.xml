@@ -43,6 +43,7 @@
       </property>
       <classinfo>
             <syslog_type>ST_COMMENT</syslog_type>
+            <no_status>1</no_status>
       </classinfo>
       <tableinfo>
             <forum_comments>

@@ -58,9 +58,6 @@
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
-            <general>
-                  <caption>Üldine</caption>
-            </general>
             <actions>
                   <caption>Tegevused</caption>
             </actions>

@@ -86,9 +86,6 @@
             <method>serialize</method>
             <caption>Keel</caption>
       </property>
-      <classinfo>
-            <corefields>name,comment,status</corefields>
-      </classinfo>
       <groupinfo>
             <rates>
                   <caption>Hinded</caption>

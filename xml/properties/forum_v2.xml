@@ -43,6 +43,26 @@
             <caption>Postitusi lehel</caption>
       </property>
       <property>
+            <name>topic_depth</name>
+            <type>select</type>
+            <default>1</default>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Teemade sügavus</caption>
+      </property>
+      <property>
+            <name>topic_selector</name>
+            <type>callback</type>
+            <callback>callback_get_topic_selector</callback>
+            <group>topic_selector</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Teemade tasemed</caption>
+      </property>
+      <property>
             <name>container</name>
             <type>text</type>
             <store>no</store>
@@ -228,6 +248,9 @@
                   <caption>Foorum</caption>
                   <submit>no</submit>
             </container>
+            <topic_selector>
+                  <caption>Teemad</caption>
+            </topic_selector>
             <contents>
                   <caption>Sisu</caption>
                   <submit>no</submit>

@@ -40,6 +40,36 @@
             <caption>Definitsioon</caption>
       </property>
       <property>
+            <name>classinfo_fixed_toolbar</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Fix. toolbar</caption>
+      </property>
+      <property>
+            <name>classinfo_allow_rte</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Luba RTE kasutamist</caption>
+      </property>
+      <property>
+            <name>classinfo_disable_relationmgr</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Ära kasuta seostehaldurit</caption>
+      </property>
+      <property>
             <name>edit_groups</name>
             <type>callback</type>
             <callback>callback_edit_groups</callback>

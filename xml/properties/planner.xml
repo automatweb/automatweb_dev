@@ -177,8 +177,7 @@
       </property>
       <property>
             <name>event_direction</name>
-            <type>callback</type>
-            <callback>cb_get_event_direction</callback>
+            <type>chooser</type>
             <group>advanced</group>
             <rel>1</rel>
             <table>objects</table>
@@ -240,7 +239,8 @@
       </property>
       <property>
             <name>workdays</name>
-            <callback>callback_get_workday_choices</callback>
+            <type>chooser</type>
+            <multiple>1</multiple>
             <group>advanced</group>
             <table>objects</table>
             <field>meta</field>
