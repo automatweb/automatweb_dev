@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.27 2003/01/23 10:35:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.28 2003/01/27 10:47:54 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -882,6 +882,13 @@ class form extends form_base
 			}
 		}
 
+		if (!$entry_id && ($_eid = aw_global_get("form_use_entry_id_once_".$this->id)) != "")
+		{
+			$entry_id = $_eid;
+			$arr["entry_id"] = $_eid;
+			aw_session_del("form_use_entry_id_once_".$this->id);
+		}
+
 		$section = aw_global_get("section");
 
 		// obj_id is for config forms and it allows us to specify the object into which we would have to save
@@ -1104,6 +1111,11 @@ class form extends form_base
 			$st = "<style type=\"text/css\">".$css_file."</style>\n".$st;
 		}
 
+		if (($go_to = aw_global_get("form_redir_after_submit_".$this->id)) != "")
+		{
+			header("Location: $go_to");
+			aw_session_del("form_redir_after_submit_".$this->id);
+		}
 		return $st;
 	}
 
@@ -1154,6 +1166,10 @@ class form extends form_base
 			global $HTTP_POST_VARS;
 			$this->post_vars = $HTTP_POST_VARS;
 		};
+
+		// if this is set to true, then a variable in the session will be set to the created/loaded entry id, so that
+		// the next time the form is viewed in the current session, this entry id will be used if not specified in the url
+		$this->set_use_eid_once = false;
 
 		if (!$no_load_form)
 		{
@@ -1430,6 +1446,11 @@ class form extends form_base
 		{
 			$ml_rule_inst = get_instance("mailinglist/ml_rule");
 			$ml_rule_inst->exec_dynamic_rules();
+		}
+
+		if ($this->set_use_eid_once == true)
+		{
+			aw_session_set("form_use_entry_id_once_".$this->id, $this->entry_id);
 		}
 
 		if (isset($redirect_after) && $redirect_after)

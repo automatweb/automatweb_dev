@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.25 2003/01/27 09:45:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.26 2003/01/27 10:47:54 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -639,7 +639,8 @@ class form_element extends aw_template
 					"redirect" => $this->arr["confirm_redirect"],
 					"order_form" => $this->picker($this->arr["order_form"],$this->form->get_list(FTYPE_ENTRY)),
 					"button_img" => $img,
-					"use_button_img" => checked($this->arr["button_img"]["use"] == 1)
+					"use_button_img" => checked($this->arr["button_img"]["use"] == 1),
+					"bt_redir_after_submit" => checked($this->arr["bt_redir_after_submit"])
 				));
 				$bt = $this->parse("BUTTON_ITEMS");
 				$this->vars(array(
@@ -1303,6 +1304,9 @@ class form_element extends aw_template
 
 			$var = $base."_button_css_class";
 			$this->arr["button_css_class"] = $$var;
+
+			$var = $base."_bt_redir_after_submit";
+			$this->arr["bt_redir_after_submit"] = $$var;
 
 			$var = $base."_button_img";
 			$im = get_instance("image");
@@ -2332,7 +2336,15 @@ class form_element extends aw_template
 						{
 							$onclick =  "window.location='".$this->arr["button_url"]."';return false;";
 						}
-						$html .= "<input $csscl $disabled type='$btype' $bsrc VALUE='".$butt."' onClick=\"$onclick\" />\n";
+
+						if ($this->arr["bt_redir_after_submit"])
+						{
+							$html .= "<input $csscl $disabled type='$btype' $bsrc NAME='bt_url_".$this->id."' VALUE='".$butt."' />\n";
+						}
+						else
+						{
+							$html .= "<input $csscl $disabled type='$btype' $bsrc VALUE='".$butt."' onClick=\"$onclick\" />\n";
+						}
 					}
 					else
 					if ($this->arr["subtype"] == "order")
@@ -2643,29 +2655,39 @@ class form_element extends aw_template
 //		else
 		if ($this->arr["type"] == "button")
 		{
-			$s_arr = $this->form->post_vars["submit"];
-			$clicked = false;
-			if (is_array($s_arr))
+			if ($this->arr["subtype"] == "url" && $this->arr["bt_redir_after_submit"])
 			{
-				reset($s_arr);
-				list($skey,) = each($s_arr);
-				if ($skey == $this->id)
+				if ($this->form->post_vars["bt_url_".$this->id] != "")
 				{
-					$clicked = true;
-				};
-			};
-
-			if ($clicked)
-			{
-				// pass a reference to this elements "arr" back to the form
-				$this->form->set_opt("el_submit",&$this->arr);
-
-				if ($this->arr["subtype"] == "confirm")
-				{
-					$this->form->set_opt("entry_parent",$this->arr["confirm_moveto"]);
+					aw_session_set("form_redir_after_submit_".$this->form->id, $this->arr["button_url"]);
+					$this->form->set_use_eid_once = true;
 				}
-			};
+			}
+			else
+			{
+				$s_arr = $this->form->post_vars["submit"];
+				$clicked = false;
+				if (is_array($s_arr))
+				{
+					reset($s_arr);
+					list($skey,) = each($s_arr);
+					if ($skey == $this->id)
+					{
+						$clicked = true;
+					};
+				};
 
+				if ($clicked)
+				{
+					// pass a reference to this elements "arr" back to the form
+					$this->form->set_opt("el_submit",&$this->arr);
+
+					if ($this->arr["subtype"] == "confirm")
+					{
+						$this->form->set_opt("entry_parent",$this->arr["confirm_moveto"]);
+					}
+				}
+			}
 		}
 		else
 		if ($this->arr["type"] == "multiple")

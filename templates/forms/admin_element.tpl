@@ -413,8 +413,8 @@ function toggle_file_link_newwin()
 <tr>
 <td class="fgtext">URL:</td>
 <td class="fgtext"><input type='text' CLASS="small_button" NAME='{VAR:cell_id}_burl' VALUE='{VAR:button_url}'></td>
-<td class="fgtext">&nbsp;</td>
-<td class="fgtext">&nbsp;</td>
+<td class="fgtext">Kas nupu vajutamisel tehakse formi sisestus?</td>
+<td class="fgtext"><input type="checkbox" name="{VAR:cell_id}_bt_redir_after_submit" {VAR:bt_redir_after_submit} value="1"></td>
 </tr>
 <!-- END SUB: BUTTON_SUB_URL -->
 
