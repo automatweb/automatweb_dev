@@ -40,7 +40,6 @@ class releditor extends aw_template
 
 		// now I have to query the target class and add the fields in here
 
-
 		$t = get_instance($clid);
 		$t->init_class_base();
 		$emb_group = "general";
@@ -61,16 +60,6 @@ class releditor extends aw_template
 		
 		$clinf = aw_ini_get("classes");
 		$clname = $clinf[$clid]["name"];
-
-	
-		/*
-		$ef = array("header" => array(
-				"type" => "text",
-				"subtitle" => 1,
-				"value" => "Uus " . $clname,
-		));
-		*/
-
 
 		$xprops = $t->parse_properties(array(
 			"properties" => $act_props,
@@ -96,18 +85,19 @@ class releditor extends aw_template
 		));
 
 		$propname = $prop["name"];
-
 		$proplist = is_array($prop["props"]) ? $prop["props"] : array($prop["props"]);
 
-		$xproplist = array();
+		$el_count = 0;
+
 		foreach($props as $item)
                 {
+			// if that property is in the list of the class properties, then
+			// process it
                         if (in_array($item["name"],$proplist))
                         {
 				if ($item["type"] == "fileupload")
 				{
 					$name = $item["name"];
-                                	$xproplist[$item["name"]] = $item;
 					$_fileinf = $_FILES["cba_emb"];
 					$filename = $_fileinf["name"][$name];
 					$filetype = $_fileinf["type"][$name];
@@ -122,24 +112,26 @@ class releditor extends aw_template
 						"type" => $filetype,
 						"name" => $filename,
 					);
+				}
+				else
+				{
+					if ($emb[$item["name"]] && $item["type"] != "datetime_select")
+					{
+						$el_count++;
+					};
 				};
 
                         };
                 };
+		
+		if ($el_count == 0)
+		{
+			return false;
+		};
 
 
 		$emb["group"] = "general";
 		$emb["parent"] = $obj->parent();
-
-		/*
-		foreach($emb as $key => $item)
-		{
-			print "k = $key<br>";
-			arr($item);
-
-
-		};
-		*/
 
 		$reltype = $arr["prop"]["reltype"];
 
