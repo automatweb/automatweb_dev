@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.50 2004/06/14 09:11:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.51 2004/06/14 09:11:50 kristo Exp $
 
 /*
 
@@ -422,7 +422,6 @@ class gallery_v2 extends class_base
 
 				// get image size
 				list($i_width, $i_height) = $img->size();
-				echo "loaded from string , iw = $i_width , ih = $i_height <br>";
 
 				$xydata = $this->_get_xydata(array(
 					"i_width" => $i_width,
