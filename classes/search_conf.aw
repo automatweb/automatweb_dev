@@ -147,7 +147,7 @@ class search_conf extends aw_template
 			}
 		}
 		$search_list = $this->get_search_list(&$def);
-		// if s_parent isn't numeric, set it to zero. otherwise various 
+		// if s_parent isn't numeric, set it to zero. otherwise various
 		// interesting effects will happen. I spent fscking 2 hours debugging
 		// this in www.eas.ee
 		if ($s_parent != sprintf("%d",$s_parent))
@@ -187,6 +187,8 @@ class search_conf extends aw_template
 			"reforb"	=> $this->mk_reforb("search", array("reforb" => 0,"search" => 1,"section" => aw_global_get("section"), "set_lang_id" => aw_global_get("lang_id")))
 		));
 
+		$this->quote(&$sstring);
+		$this->quote(&$sstring_title);
 		// this means that we only have one textbox, that sould search from title || body
 		if ($search_all)
 		{
@@ -207,16 +209,21 @@ class search_conf extends aw_template
 				$finst->load($grps[$s_parent]["search_form"]);
 
 				$s_q = $sstring != "" ? $sstring : $sstring_title;
-			
+
 				// set the search elements values
 				foreach($grps[$s_parent]["search_elements"] as $el)
 				{
 					$finst->set_element_value($el, $s_q, true);
 				}
 
+				global $restrict_search_el,$restrict_search_val,$use_table,$search_form;
 				$this->vars(array(
 					"SEARCH" => $finst->new_do_search(array(
+						"restrict_search_el" => $restrict_search_el,
+						"restrict_search_val" => $restrict_search_val,
+						"use_table" => $use_table,
 						"section" => $section,
+						"search_form" => $search_form
 					))
 				));
 
