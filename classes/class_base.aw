@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.81 2003/03/12 13:16:45 duke Exp $
+// $Id: class_base.aw,v 2.82 2003/03/13 15:16:51 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -62,7 +62,6 @@ class class_base extends aliasmgr
 		$this->output_client = "htmlclient";
 		$this->ds_name = "ds_local_sql";
 		$this->default_group = "general";
-		//error_reporting(E_ALL);
 		parent::init($arg);
 	}
 
@@ -273,7 +272,7 @@ class class_base extends aliasmgr
 			"data" => $argblock,
 		));
 
-		if (!isset($content))
+		if (empty($content))
 		{
 			$content = $cli->get_result();
 		};
@@ -314,7 +313,7 @@ class class_base extends aliasmgr
 		// now, how do I figure out whether we want to save an object
 		// or just use the form interactively.
 
-		if (!$id)
+		if (empty($id))
 		{
 			// create the object, if it wasn't already there
 
@@ -474,8 +473,6 @@ class class_base extends aliasmgr
 					};
 				}
 				
-				// this is wrong you see, because it only allows to serialize data into
-				// objects metadata and not someplace else
 				if ($method == "serialize")
 				{
 					$metadata[$name] = $savedata[$name];
@@ -498,7 +495,6 @@ class class_base extends aliasmgr
 			};
 		};
 
-	
 		if (sizeof($metadata) > 0)
 		{
 			$coredata["metadata"] = $metadata;
@@ -529,7 +525,6 @@ class class_base extends aliasmgr
 				"object" => array_merge($this->coredata,$this->objdata),
 			));
 		}
-
 
 		$this->ds->ds_save_object(array("id" => $id,"clid" => $this->clid),$coredata);
 
@@ -684,7 +679,7 @@ class class_base extends aliasmgr
 		// can use class_base
 		$cfgu = get_instance("cfg/cfgutils");
 		$orb_class = $this->cfg["classes"][$this->clid]["file"];
-		if (!$orb_class)
+		if (empty($orb_class))
 		{
 			$orb_class = get_class($this->orb_class);
 		};
@@ -695,7 +690,7 @@ class class_base extends aliasmgr
 		};
 
 		$has_properties = $cfgu->has_properties(array("file" => $orb_class));
-		if (!$has_properties)
+		if (empty($has_properties))
 		{
 			die(sprintf("this class (%s) does not have any defined properties ",$orb_class));
 		};
@@ -705,7 +700,7 @@ class class_base extends aliasmgr
 		$this->ds = get_instance("datasource/" . $this->ds_name);
 
 		$clid = $this->clid;
-		if (!$clid)
+		if (empty($clid))
 		{
 			$clid = $this->orb_class->get_opt("clid");
 		};
@@ -724,7 +719,7 @@ class class_base extends aliasmgr
 			$clfile = "doc";
 		};
 
-		if (!$clfile)
+		if (empty($clfile))
 		{
 			die("coult not identify object " . $this->clfile);
 		};
@@ -790,20 +785,21 @@ class class_base extends aliasmgr
 	{
 		// XXX: figure out a way to do better titles
 		$classname = get_class($this->orb_class);
+		$name = isset($this->coredata["name"]) ? $this->coredata["name"] : "";
 
 		// XXX: pathi peab htmlclient tegema
 		$title = isset($args["title"]) ? $args["title"] : "";
 		if ($this->id)
 		{
-			if (!$title)
+			if (empty($title))
 			{
-				$title = "Muuda $classname objekti " . $this->coredata["name"];
+				$title = "Muuda $classname objekti " . $name;
 			};
 			$parent = $this->coredata["parent"];
 		}
 		else
 		{
-			if (!$title)
+			if (empty($title))
 			{
 				$title = "Lisa $classname objekt";
 			};
@@ -853,24 +849,35 @@ class class_base extends aliasmgr
 
 		$orb_action = isset($args["orb_action"]) ? $args["orb_action"] : "";
 
-		if (!$orb_action)
+		if (empty($orb_action))
 		{
 			$orb_action = "change";
 		};	
-
-		foreach($grpnames->get() as $key => $val)
+			
+		$link_args = new aw_array(array(
+			"id" => isset($this->id) ? $this->id : false,
+			"group" => "",
+			"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
+			"return_url" => isset($this->request["return_url"]) ? urlencode($this->request["return_url"]) : "",
+		));
+			
+		if (empty($this->classinfo["hide_tabs"]))
 		{
-			if ($this->id)
-			{
-				$link = $this->mk_my_orb($orb_action,array("id" => $this->id,"group" => $key,"cb_view" => $args["cb_view"],"return_url" => urlencode($this->request["return_url"])),get_class($this->orb_class));
-			}
-			else
-			{
-				$link = ($activegroup == $key) ? "#" : "";
-			};
+			$tab_callback = (method_exists($this->inst,"callback_mod_tab")) ? true : false;
 
-			if (!isset($this->classinfo["hide_tabs"]))
+			foreach($grpnames->get() as $key => $val)
 			{
+				if ($this->id)
+				{
+					$link_args->set_at("group",$key);
+					$link = $this->mk_my_orb($orb_action,$link_args->get(),get_class($this->orb_class));
+				}
+				else
+				{
+					$link = ($activegroup == $key) ? "#" : "";
+				};
+				
+
 				$tabinfo = array(
 					"link" => &$link,
 					"caption" => &$val,
@@ -878,9 +885,9 @@ class class_base extends aliasmgr
 					"tp" => &$this->tp,
 					"coredata" => $this->coredata,
 				);
-	
+
 				$res = true;	
-				if (method_exists($this->inst,"callback_mod_tab"))
+				if ($tab_callback)
 				{
 					$res = $this->inst->callback_mod_tab($tabinfo);
 				};
@@ -896,7 +903,7 @@ class class_base extends aliasmgr
 			};
 		};
 		
-		if (isset($this->classinfo["relationmgr"]) && !$this->request["cb_view"])
+		if (isset($this->classinfo["relationmgr"]) && empty($this->request["cb_view"]))
 		{
 			$link = "";
 			if (isset($this->id))
@@ -1020,7 +1027,7 @@ class class_base extends aliasmgr
 		};
 
 		// and if nothing suitable was found, default to the "general" group
-		if (!$use_group)
+		if (empty($use_group))
 		{
 			if ($this->groupinfo->key_exists("general"))
 			{
@@ -1049,7 +1056,7 @@ class class_base extends aliasmgr
 
 		foreach($this->all_props as $key => $val)
 		{
-			if (isset($val["view"]) && !$this->cb_views[$val["view"]])
+			if (isset($val["view"]) && empty($this->cb_views[$val["view"]]))
 			{
 				$this->cb_views[$val["view"]] = 1;
 			};
@@ -1133,15 +1140,21 @@ class class_base extends aliasmgr
 		{
 			$property = $this->all_props[$key];
 
-			if ($property_list[$key]["caption"])
+			// give it the default value to silence warnings
+			$property["store"] = isset($property["store"]) ? $property["store"] : "";
+			$property["field"] = isset($property["field"]) ? $property["field"] : "";
+			$property["method"] = isset($property["method"]) ? $property["method"] : "direct";
+
+
+			if (isset($property_list[$key]["caption"]))
 			{
 				$property["caption"] = $property_list[$key]["caption"];
 			};
 
 			// properties with no group end up in default group
-			$grpid = ($property["group"]) ? $property["group"] : $this->default_group;
+			$grpid = isset($property["group"]) ? $property["group"] : $this->default_group;
 
-			if ($val["group"])
+			if (isset($val["group"]))
 			{
 				$grpid = $val["group"];
 			};
@@ -1152,19 +1165,20 @@ class class_base extends aliasmgr
 			};
 
 			// figure out information about the table
-			if ($property["table"] && !$tables[$property["table"]])
+			if (isset($property["table"]) && empty($tables[$property["table"]]))
 			{
 				$tables[$property["table"]] = $this->tableinfo[$property["table"]];
 			};
 
-			$fval = isset($property["method"]) ? $property["method"] : "direct";
+			$fval = $property["method"];
 			$_field = $property["field"];
+
 			if ($_field == "meta")
 			{
 				$_field = "metadata";
 			};
 
-			if ($property["table"])
+			if (isset($property["table"]))
 			{
 				if ($_field)
 				{
@@ -1185,16 +1199,16 @@ class class_base extends aliasmgr
 		$this->fields = $fields;
 		$this->realfields = $realfields;
 
-		if (is_array($layout[$activegroup]["items"]))
+		if (isset($layout) && is_array($layout[$this->activegroup]["items"]))
 		{
-			$idx = $activegroup;
+			$idx = $this->activegroup;
 		}
 		else
 		{
 			$idx = $this->default_group;
 		};
 
-		if (is_array($layout[$idx]["items"]))
+		if (isset($layout) && is_array($layout[$idx]["items"]))
 		{
 			$this->layout = $layout[$idx]["items"];
 		};
@@ -1265,7 +1279,7 @@ class class_base extends aliasmgr
 			);
 
 			// generated elements count as one for this purpose
-			$_grplist = explode(",",$val["group"]);
+			$_grplist = is_array($val["group"]) ? $val["group"] : explode(",",$val["group"]);
 			foreach($_grplist as $_grp)
 			{
 				if (isset($group_el_cnt[$_grp]))
@@ -1284,7 +1298,7 @@ class class_base extends aliasmgr
 				$vx = new aw_array($this->inst->$meth($argblock));
 				foreach($vx->get() as $vxk => $vxv)
 				{
-					if (!$vxv["group"])
+					if (empty($vxv["group"]))
 					{
 						$vxv["group"] = $val["group"];
 					};
@@ -1420,7 +1434,7 @@ class class_base extends aliasmgr
 		if (($val["type"] == "relpicker") && ($val["reltype"]))
 		{
 			$reltypes = $this->coredata["meta"]["alias_reltype"];
-			if (!$reltypes)
+			if (empty($reltypes))
 			{
 				$reltypes = array();
 			};
@@ -1471,13 +1485,13 @@ class class_base extends aliasmgr
 	function get_value(&$property)
 	{
 		$field = trim(($property["field"]) ? $property["field"] : $property["name"]);
-		$table = $property["table"];
-		if (!$this->id && $property["default"])
+		$table = isset($property["table"]) ? $property["table"] : "";
+		if (empty($this->id) && $property["default"])
 		{
 			$property["value"] = $property["default"];
 		}
 		else
-		if (is_array($this->values))
+		if (isset($this->values) && is_array($this->values))
 		{
 			if (isset($this->values[$property["name"]]))
 			{
@@ -1486,7 +1500,7 @@ class class_base extends aliasmgr
 		}
 		else
 		{
-			if ($property["table"] == "objects")
+			if ($table == "objects")
 			{
 				if ($field == "meta")
 				{
@@ -1529,7 +1543,7 @@ class class_base extends aliasmgr
 	function get_visible_corefields()
 	{
 		// figure out which core fields are to be shown
-		if ($this->classinfo["corefields"]["text"])
+		if (isset($this->classinfo["corefields"]["text"]))
 		{
 			$corefields = array_flip(explode(",",$this->classinfo["corefields"]["text"]));
 		}
@@ -1626,12 +1640,12 @@ class class_base extends aliasmgr
 				$resprops[$key] = $val;
 			}
 			else
-			if ( ($val["editonly"] == 1) && !$this->id)
+			if ( isset($val["editonly"]) && empty($this->id))
 			{
 				// do nothing
 			}
 			else
-			if ($val["callback"] && method_exists($this->inst,$val["callback"]))
+			if (isset($val["callback"]) && method_exists($this->inst,$val["callback"]))
 			{
 				$meth = $val["callback"];
 				$vx = $this->inst->$meth($argblock);
@@ -1651,7 +1665,7 @@ class class_base extends aliasmgr
 			else
 			{
 				$this->convert_element(&$val);
-				if (!$name)
+				if (empty($name))
 				{
 					$name = $key;
 				};
