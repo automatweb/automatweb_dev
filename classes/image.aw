@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.105 2004/07/28 13:47:53 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.106 2004/07/30 11:36:34 rtoomas Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -855,83 +855,93 @@ class image extends class_base
 		return array("id" => $oid,"url" => $this->get_url($fl), "sz" => $sz);
 	}
 
-	function callback_post_save($arr)
+	function resize_picture(&$arr)
 	{
 		$im = $this->get_image_by_id($arr["id"]);
-		
-		if($this->new_h_big || $this->new_w_big)
+		$file = $arr['file'];
+
+		$img = get_instance("core/converters/image_convert");
+		if ($im[$file]{0} != "/")
 		{
-			$file = 'file2';
-			if(!isset($im[$file]))
-			{
-				//why would anyone want to resize a non-existent picture?
-				return;	
-			}
-			$this->new_h = $this->new_h_big;
-			$this->new_w = $this->new_w_big;
+			$im[$file] = $this->cfg["site_basedir"]."/files/".$im[$file]{0}."/".$im[$file];
 		}
-		else
+		$img->load_from_file($im[$file]);
+
+		list($i_width, $i_height) = $img->size();
+
+		$width = $arr['width'];
+		$height = $arr['height'];
+
+		if ($width && !$height)
 		{
-			$file = 'file';	
-		}
-		if ($this->new_w || $this->new_h)
-		{
-			$img = get_instance("core/converters/image_convert");
-			if ($im[$file]{0} != "/")
-			{
-				$im[$file] = $this->cfg["site_basedir"]."/files/".$im[$file]{0}."/".$im[$file];
-			}
-			$img->load_from_file($im[$file]);
-	
-			list($i_width, $i_height) = $img->size();
-
-			$width = $this->new_w;
-			$height = $this->new_h;
-			if ($width && !$height)
-			{
-				if ($width{strlen($width)-1} == "%")
-				{
-					$height = $width;
-				}
-				else
-				{
-					$ratio = $width / $i_width;
-					$height = (int)($i_height * $ratio);
-					$this->new_h = $height;
-				}
-			}
-
-			if (!$width && $height)
-			{
-				if ($height{strlen($height)-1} == "%")
-				{
-					$width = $height;
-				}
-				else
-				{
-					$ratio = $height / $i_height;
-					$width = (int)($i_width * $ratio);
-					$this->new_w = $width;
-				}
-			}
-
 			if ($width{strlen($width)-1} == "%")
 			{
-				$width = (int)($i_width * (((int)substr($width, 0, -1))/100));
+				$height = $width;
 			}
-			if ($height{strlen($height)-1} == "%")
+			else
 			{
-				$height = (int)($i_height * (((int)substr($height, 0, -1))/100));
+				$ratio = $width / $i_width;
+				$height = (int)($i_height * $ratio);
+				//$this->new_h = $height;
 			}
-
-			$img->resize_simple($width, $height);
-
-			$this->put_file(array(
-				'file' => $im[$file],
-				"content" => $img->get(IMAGE_JPEG)
-			));
 		}
 
+		if (!$width && $height)
+		{
+			if ($height{strlen($height)-1} == "%")
+			{
+				$width = $height;
+			}
+			else
+			{
+				$ratio = $height / $i_height;
+				$width = (int)($i_width * $ratio);
+				//$this->new_w = $width;
+			}
+		}
+
+		if ($width{strlen($width)-1} == "%")
+		{
+			$width = (int)($i_width * (((int)substr($width, 0, -1))/100));
+		}
+		if ($height{strlen($height)-1} == "%")
+		{
+			$height = (int)($i_height * (((int)substr($height, 0, -1))/100));
+		}
+
+		$img->resize_simple($width, $height);
+
+		$this->put_file(array(
+			'file' => $im[$file],
+			"content" => $img->get(IMAGE_JPEG)
+		));
+
+	}
+
+	function callback_post_save($arr)
+	{
+		if($this->new_h_big || $this->new_w_big)
+		{
+			$arr['file'] = 'file2';
+			$arr['height'] = $this->new_h_big;
+			$arr['width'] = $this->new_w_big;
+			/*echo $arr['file'],":<br>";
+			echo $arr['height'],"<br>";
+			echo $arr['width'],"<br>";*/
+			$this->resize_picture($arr);
+		}
+		
+		if($this->new_w || $this->new_h)
+		{
+			$arr['file'] = 'file';
+			$arr['height'] = $this->new_h;
+			$arr['width'] = $this->new_w;
+			/*echo $arr['file'],":<br>";
+			echo $arr['height'],"<br>";
+			echo $arr['width'],"<br>";*/
+			$this->resize_picture($arr);
+		}
+		
 		$this->do_apply_gal_conf(obj($arr["id"]), $prop["value"]);
 	}
 
