@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.47 2005/02/16 13:25:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.48 2005/02/18 12:54:44 kristo Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -1216,7 +1216,7 @@ class vcalendar extends aw_template
 		$next_img = "<img border='0' src='" . $baseurl . "/automatweb/images/blue/cal_nool_right.gif" . "'>";
 
 		$caption = "<div class='$style_title'><a href='$prev_url' alt='$prev_month' title='$prev_month'>$prev_img</a><a href='$caption_url'>$caption</a><a href='$next_url' alt='$next_month' title='$next_month'>$next_img</a>";
-		return $caption . "<table border=0 cellspacing=0 cellpadding=0 width='90%'><tr><td class='$style_background'><table border=0 cellpadding=0 cellspacing=1 width='100%'>" . $w . "</table></td></tr></table>";
+		return $caption . "<table border=0 cellspacing=0 cellpadding=0 width='100%'><tr><td class='$style_background'><table border=0 cellpadding=0 cellspacing=1 width='100%'>" . $w . "</table></td></tr></table>";
 	}
 
 	function draw_event($evt)
