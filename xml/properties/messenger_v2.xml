@@ -215,7 +215,7 @@
                   <submit_method>GET</submit_method>
             </search>
             <rules>
-                  <caption>Ruulid</caption>
+                  <caption>Reeglid</caption>
                   <submit>no</submit>
             </rules>
       </groupinfo>
