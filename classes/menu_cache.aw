@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.5 2002/06/26 11:12:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.6 2002/07/12 16:56:28 kristo Exp $
 // menu_cache.aw - Menüüde cache
 class menu_cache extends aw_template
 {
@@ -76,6 +76,8 @@ class menu_cache extends aw_template
           WHERE (objects.class_id = ".CL_PSEUDO." OR objects.class_id = ".CL_BROTHER.")
 									AND menu.type != ".MN_FORM_ELEMENT." AND $where $aa
           ORDER BY objects.parent, jrk,objects.created";
+
+//		echo "q = $q <br>";
 		if (not($this->db_query($q,false)))
 		{
 			return false;
@@ -104,7 +106,7 @@ class menu_cache extends aw_template
 		extract($args);
 
 		$cache = new cache();
-		$where = ($args["where"]) ? $args["where"] : " class_id = 1 AND objects.status = 2";
+		$where = ($args["where"]) ? $args["where"] : " objects.status = 2";
 		if (!$lang_id)
 		{
 			$lang_id = aw_global_get("lang_id");
