@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.21 2002/12/20 11:39:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.22 2003/01/03 15:01:25 kristo Exp $
 // lists.aw - listide haldus
 class lists extends aw_template
 {
@@ -100,6 +100,18 @@ class lists extends aw_template
 				}
 			}
 
+			// create #pwd_hash# variable
+			if (!in_array("pwd_hash",$existing_variables))
+			{
+				// we gots to create a new variable
+				$pwd_hash_var_id = $this->new_object(array("parent" => aw_ini_get("mailinglist.default_var_cat"),"name" => "pwd_hash", "class_id" => CL_MAILINGLIST_VARIABLE,"status" => 2));
+				$existing_variables[$pwd_hash_var_id] = "pwd_hash";
+			}
+			else
+			{
+				$pwd_hash_var_id = array_search("pwd_hash", $existing_variables);
+			}
+
 			// create #password# variable
 			if (!in_array("password",$existing_variables))
 			{
@@ -156,6 +168,7 @@ class lists extends aw_template
 				$this->quote(&$_udata["password"]);
 				$varvals[$pwd_var_id] = $_udata["password"];
 				$varvals[$uid_var_id] = $uid;
+				$varvals[$pwd_hash_var_id] = $us->get_change_pwd_hash_link($uid);
 				$li->db_add_user(array(
 					"name" => $uid, 
 					"email" => $_udata["email"]
