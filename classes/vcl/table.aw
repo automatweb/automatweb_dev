@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.28 2004/09/04 21:20:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.29 2004/09/09 11:05:14 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -1515,7 +1515,7 @@ class aw_table extends aw_template
 						"name" => "span",
 						"classid" => ($this->col_styles[$v["name"]]["group_style"] ? $this->col_styles[$v["name"]]["group_style"] : $this->group_style)
 					));
-					$tbl.= create_email_links($_a);
+					$tbl.= create_links($_a);
 					$tbl .= "</span>";
 				}
 				else
@@ -1529,7 +1529,7 @@ class aw_table extends aw_template
 					{
 						$tbl .= $rgroupby_sep[$rgel]["real_sep_before"];
 					}
-					$tbl.=create_email_links($_a);
+					$tbl.=create_links($_a);
 				}
 
 				$this->lgrpvals[$rgel] = $_a;
@@ -1557,7 +1557,7 @@ class aw_table extends aw_template
 					$val .= join($rgroupby_sep[$rgel]["mid_sep"],$_ta);
 					$val .= $rgroupby_sep[$rgel]["after"];
 				}
-				$tbl .= create_email_links(str_replace("[__jrk_replace__]",$this->rgroupcounts[$_a],$val));
+				$tbl .= create_links(str_replace("[__jrk_replace__]",$this->rgroupcounts[$_a],$val));
 
 				if (isset($this->group_add_els_style) && $this->group_add_els_style != "")
 				{
