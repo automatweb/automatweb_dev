@@ -13,16 +13,9 @@ class relpicker extends  core
 		$val = &$arr["property"];
 
                 $options = array("0" => "--vali--");
-                // generate option list
-                //if (defined($prop["reltype"]) && constant($prop["reltype"]))
-                //{
-                //        $reltype = constant($prop["reltype"]);
-                //}
-                //else
-                //{
-                        $reltype = $prop["reltype"];
-                //};
+		$reltype = $prop["reltype"];
 
+                // generate option list
 		if (is_array($prop["options"]))
 		{
                         $val["type"] = "select";
@@ -48,7 +41,7 @@ class relpicker extends  core
 			};
                 }
                 else
-                if ($arr["id"])
+		if ($arr["id"])
                 {
                         $o = obj($arr["id"]);
                         $conn = $o->connections_from(array(
@@ -59,10 +52,11 @@ class relpicker extends  core
                         {
                                 $options[$c->prop("to")] = $c->prop("to.name");
                         }
-
-                        $val["type"] = "select";
                         $val["options"] = $options;
-                }
+		};
+
+
+                $val["type"] = "select";
 		return array($val["name"] => $val);
 
 	}
