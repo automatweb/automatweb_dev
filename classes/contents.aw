@@ -26,12 +26,22 @@ class contents extends aw_template
 	
 		$morder = aw_ini_get("contents.menu_order");
 
-		//foreach($mareas as $pid => $an)
-		foreach($morder as $order => $mname)
+		if (is_array($morder))
 		{
-			// now find the id from the menu_defs 
-			$pid = array_search($mname, $mareas);
-			$this->req_menus($pid);
+			//foreach($mareas as $pid => $an)
+			foreach($morder as $order => $mname)
+			{
+				// now find the id from the menu_defs 
+				$pid = array_search($mname, $mareas);
+				$this->req_menus($pid);
+			}
+		}
+		else
+		{
+			foreach($mareas as $pid => $an)
+			{
+				$this->req_menus($pid);
+			}
 		}
 
 		$ld = $this->get_cval("contents::document");
