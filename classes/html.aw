@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.22 2003/01/26 18:39:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.23 2003/02/12 14:36:14 axel Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -55,6 +55,14 @@ class html extends aw_template
 		return "<input type='text' id='$name' name='$name' size='$size' value='$value' maxlength='$maxlength'/>\n";
 	}
 
+	
+	function test($args = array())
+	{
+		extract($args);
+		$size = ($size) ? $size : 40;
+		return "<input type='text' id='$name' name='$name' size='$size' value='$value' maxlength='$maxlength'/>\n";
+	}
+
 	////
 	// !html textarea
 	// name(string)
@@ -72,7 +80,7 @@ class html extends aw_template
 			$args["type"] = "richtext";
 			$args["width"] = $cols * 10;
 			$args["height"] = $rows * 10;
-			$args["value"] = str_replace("\"" , "&quot;",$args["value"]);
+			$args["value"] = str_replace("\"" , "&quot;",$args["value"]); //"
 			$retval = html::richtext($args);
 		}
 		else
@@ -95,6 +103,47 @@ class html extends aw_template
 		$width = ($width) ? $width : 300;
 		$height = ($height) ? $height : 200;
 		return "<iframe src='$src' name='$name' width='$width' height='$height'></iframe>\n";
+	}
+
+	function popup_objmgr($args = array())
+	{
+		extract($args);
+		if ($multiple)
+		{
+			$mz = "multiple ";
+			$name .= "[]";
+			$pop_type='2';
+		}
+		else
+		{
+			$pop_type='1';
+		}
+
+		if ($multiple)
+		{
+			$options = $this->mpicker($selected,$options);
+		}
+		else
+		{
+			$options = $this->picker($selected,$options);
+		};
+
+		if (!$this->got_popup_objmgr)
+		{
+			$this->got_popup_objmgr=1;
+			
+			$str.=localparse(implode('',file($this->cfg['tpldir'].'/popup_objmgr/popup_objmgr.script')),
+				array(
+					'width' => $width?$width:450,
+					'height' => $height?$height:400,
+					'params' => ($top?'top='.$top.',':'').($left?'left='.$left.',':''),
+				)
+
+			);
+		}
+
+		return 	$str.="<select name='".$name."' $mz id='".$name."'>\n".$options."</select>\n".
+			"<input type='button' value=' + ' onClick=\""."current_element='".$name."';pop_select('".$popup_objmgr."');"."\" />\n";
 	}
 
 	////
@@ -123,7 +172,7 @@ class html extends aw_template
 	function hidden($args = array())
 	{
 		extract($args);
-		return "<input type='hidden' name='$name' value='$value' />\n";
+		return "<input type='hidden' id='$name' name='$name' value='$value' />\n";
 	}
 
 	////
