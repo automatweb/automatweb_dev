@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.54 2004/03/10 11:38:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.55 2004/03/10 12:17:50 kristo Exp $
 
 lc_load("definition");
 
@@ -151,12 +151,12 @@ class acl_base extends db_connector
 		// and whose priority is highest
 		if (!is_array($gidlist))
 		{
-			return false;
+			return array("oid" => $oid, "can_view" => 1);
 		}
 		$gidstr = join(",",$gidlist);
 		if ($gidstr == "")
 		{
-			return false;
+			return array("oid" => $oid, "can_view" => 1);
 		}
 		// previously this query was:
 		/*		$q = "SELECT *,acl.id as acl_rel_id, objects.parent as parent,".$this->sql_unpack_string().",groups.priority as priority,acl.oid as oid FROM acl 
@@ -183,7 +183,14 @@ class acl_base extends db_connector
 		$g_pris = aw_global_get("gidlist_pri");	// this gets made in users::request_startup
 
 		$max_pri = 0;
-		$max_row = array();
+		if (aw_global_get("uid") == "")
+		{
+			$max_row = array("can_view" => 1);
+		}
+		else
+		{
+			$max_row = array();
+		}
 		$q = "
 			SELECT 
 				acl.id as acl_rel_id, 
@@ -436,6 +443,7 @@ class acl_base extends db_connector
 
 			$can_adm = false;
 			$can_adm_max = 0;
+			$can_adm_oid = 0;
 
 			$gl = aw_global_get("gidlist_oid");
 			foreach($gl as $g_oid)
@@ -447,8 +455,14 @@ class acl_base extends db_connector
 					{
 						$can_adm = $o->prop("can_admin_interface");
 						$can_adm_max = $o->prop("priority");
+						$can_adm_oid = $g_oid;
 					}
 				}
+			}
+
+			if (aw_ini_get("site_id") == 84)
+			{
+				return $can_adm;
 			}
 
 			// ok, if we are returning false, send an error e-mail, so that we can fix the situation
@@ -456,7 +470,7 @@ class acl_base extends db_connector
 			{
 				error::throw(array(
 					"id" => ERR_NOTICE,
-					"msg" => "acl_base::prog_acl($right, $progid): access was denied for user ".aw_global_get("uid").". please verify that the site is configured correctly!",
+					"msg" => "acl_base::prog_acl($right, $progid): access was denied for user ".aw_global_get("uid").". please verify that the site is configured correctly ($can_adm_oid) gl = ".join(",", array_values($gl))."!",
 					"fatal" => false,
 					"show" => false
 				));
