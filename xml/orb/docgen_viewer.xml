@@ -90,13 +90,5 @@
 			</function>
 		</action>
 
-		<action name="forum" >
-			<function name="forum">
-				<arguments>
-					<required name="id" type="int" acl="view"/>
-				</arguments>
-			</function>
-		</action>
-
 	</class>
 </orb>
