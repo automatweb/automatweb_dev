@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.45 2004/04/06 15:15:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.46 2004/04/07 09:11:06 kristo Exp $
 
 /*
 
@@ -669,7 +669,7 @@ class site_show extends class_base
 
 	function show_periodic_documents(&$arr)
 	{
-		if ($this->section_obj->class_id() == CL_PERIODIC_SECTION || $this->section_obj->class_id() == CL_DOCUMENT) 
+		if ($this->section_obj->class_id() == CL_PERIODIC_SECTION || $this->section_obj->class_id() == CL_DOCUMENT)
 		{
 			$docid = $this->section_obj->id();
 		}
@@ -843,6 +843,11 @@ class site_show extends class_base
 		else
 		{
 			$docc = $arr["text"];
+		}
+
+		if ($GLOBALS["real_no_menus"] == 1)
+		{
+			die($docc);
 		}
 
 		if ($this->sel_section_obj->prop("no_menus") == 1 || $GLOBALS["print"])
