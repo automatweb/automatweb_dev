@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.32 2003/11/13 12:45:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.33 2003/11/13 12:58:20 kristo Exp $
 class admin_menus extends aw_template
 {
 	// this will be set to document id if only one document is shown, a document which can be edited
@@ -1353,10 +1353,19 @@ class admin_menus extends aw_template
 					}
 					if ($val != $oval)
 					{
-						$this->upd_object(array(
-							"oid" => $oid,
-							$column => $val
-						));
+						if ($this->can("edit", $oid) && $this->can("view", $oid))
+						{
+							$o = obj($oid);
+							if ($column == "jrk")
+							{
+								$o->set_ord($val);
+							}
+							else
+							{
+								$o->set_prop($column, $val);
+							}
+							$o->save();
+						}
 					}
 				}
 			}
@@ -1370,24 +1379,23 @@ class admin_menus extends aw_template
 		extract($arr);
 		if (is_array($sel))
 		{
-			$oids = join(",",array_keys($sel));
-			$this->db_query("SELECT oid,class_id FROM objects WHERE oid IN($oids)");
-			while ($row = $this->db_next())
+			$ol = new object_list(array(
+				"oid" => $sel
+			));
+			for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 			{
-				$this->save_handle();
-				if ($this->can("delete", $row["oid"]))
+				if ($this->can("delete", $o->id()))
 				{
 					if ($this->cfg["classes"][$row["class_id"]]["file"] != "")
 					{
-						$inst = get_instance($this->cfg["classes"][$row["class_id"]]["alias_class"] != "" ? $this->cfg["classes"][$row["class_id"]]["alias_class"] : $this->cfg["classes"][$row["class_id"]]["file"]);
+						$inst = get_instance($this->cfg["classes"][$o->class_id()]["alias_class"] != "" ? $this->cfg["classes"][$o->class_id()]["alias_class"] : $this->cfg["classes"][$o->class_id()]["file"]);
 						if (method_exists($inst, "delete_hook"))
 						{
-							$inst->delete_hook(array("oid" => $row["oid"]));
+							$inst->delete_hook(array("oid" => $o->id()));
 						}
 					}
-					$this->delete_object($row["oid"]);
+					$o->delete();
 				}
-				$this->restore_handle();
 			}
 		}
 		$this->invalidate_menu_cache();
@@ -1405,9 +1413,8 @@ class admin_menus extends aw_template
 		reset($sel);
 		list($oid,) = each($sel);
 
-		$obj = $this->get_object($oid);
-		//return $this->mk_my_orb("change", array("id" => $oid, "parent" => $parent), $this->cfg["classes"][$obj["class_id"]]["file"]);
-		return "javascript:go_change('".basename($this->cfg["classes"][$row["class_id"]]["file"])."',".$oid.",".$parent.")";
+		$obj = obj($oid);
+		return "javascript:go_change('".basename($this->cfg["classes"][$obj->class_id()]["file"])."',".$oid.",".$parent.")";
 	}
 
 	function req_serialize_obj_tree($oid)
