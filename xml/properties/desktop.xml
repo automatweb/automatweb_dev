@@ -9,6 +9,46 @@
             <caption>Staatus</caption>
       </property>
       <property>
+            <name>datadir</name>
+            <type>relpicker</type>
+            <reltype>DATADIR</reltype>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Peamenüü asukoht (soovitatavalt kodukataloogis)</caption>
+      </property>
+      <property>
+            <name>launchbar</name>
+            <type>relpicker</type>
+            <reltype>LAUNCHBAR</reltype>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kiirmenüü</caption>
+      </property>
+      <property>
+            <name>newobjects</name>
+            <type>relpicker</type>
+            <reltype>NEWOBJECTS</reltype>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Uute objektide kaust</caption>
+      </property>
+      <property>
+            <name>desktopobjects</name>
+            <type>relpicker</type>
+            <reltype>DESKTOPOBJECTS</reltype>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Tausta objektide kataloog</caption>
+      </property>
+      <property>
             <name>backgroundcolor</name>
             <type>colorpicker</type>
             <table>objects</table>
@@ -37,12 +77,134 @@
             <caption>Tausta tekstivärv</caption>
       </property>
       <property>
+            <name>clockstyle</name>
+            <type>checkbox</type>
+            <value>12</value>
+            <ch_value>12</ch_value>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>12 tunnine kell</caption>
+      </property>
+      <property>
+            <name>windowsW</name>
+            <type>textbox</type>
+            <size>4</size>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Avatava akna vaikimisi laius pixelites (vaikimisi 600)</caption>
+      </property>
+      <property>
+            <name>windowsH</name>
+            <type>textbox</type>
+            <size>4</size>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>kõrgus (vaikimisi 500)</caption>
+      </property>
+      <property>
+            <name>calendar</name>
+            <type>relpicker</type>
+            <reltype>CALENDAR</reltype>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kalender</caption>
+      </property>
+      <property>
+            <name>backgroundtype</name>
+            <type>select</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Tausta pilt on ...</caption>
+      </property>
+      <property>
             <name>startdesktop</name>
             <type>text</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <caption>Käivita</caption>
+      </property>
+      <property>
+            <name>activedesktop_on</name>
+            <type>checkbox</type>
+            <value>1</value>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <group>activedesktop</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>aktiivne</caption>
+      </property>
+      <property>
+            <name>activedesktop_url</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <group>activedesktop</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Tausta lehekülg</caption>
+      </property>
+      <property>
+            <name>AC_top</name>
+            <type>textbox</type>
+            <size>4</size>
+            <table>objects</table>
+            <group>activedesktop</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>top</caption>
+      </property>
+      <property>
+            <name>AC_left</name>
+            <type>textbox</type>
+            <size>4</size>
+            <table>objects</table>
+            <group>activedesktop</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>left</caption>
+      </property>
+      <property>
+            <name>AC_width</name>
+            <type>textbox</type>
+            <size>4</size>
+            <table>objects</table>
+            <group>activedesktop</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>laius</caption>
+      </property>
+      <property>
+            <name>AC_height</name>
+            <type>textbox</type>
+            <size>4</size>
+            <table>objects</table>
+            <group>activedesktop</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>kõrgus</caption>
+      </property>
+      <property>
+            <name>activedesktop_href</name>
+            <type>checkbox</type>
+            <value>1</value>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <group>activedesktop</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Lingid on klikitavad</caption>
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
@@ -51,6 +213,9 @@
             <general>
                   <caption>Üldine</caption>
             </general>
+            <activedesktop>
+                  <caption>Aktivedesktop</caption>
+            </activedesktop>
       </groupinfo>
 </properties>
 
