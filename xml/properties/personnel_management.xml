@@ -1,11 +1,30 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>my_manager_profile_persons_tb</name>
+            <table>objects</table>
+            <group>manager_profile_persons</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>my_manager_profile_persons_tb</field>
+      </property>
+      <property>
+            <name>my_manager_profile_orgs_tb</name>
+            <table>objects</table>
+            <group>manager_profile_orgs</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>my_manager_profile_orgs_tb</field>
+      </property>
+      <property>
             <name>my_profile_mycvs_tb</name>
             <table>objects</table>
             <group>my_profile_mycvs</group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
+            <store>no</store>
             <field>my_profile_mycvs_tb</field>
       </property>
       <property>
@@ -14,6 +33,7 @@
             <group>my_profile_candits</group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
+            <store>no</store>
             <field>my_profile_candits_tb</field>
       </property>
       <property>
@@ -33,69 +53,6 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <field>my_profile_candits_table</field>
-      </property>
-      <property>
-            <name>my_personal_info_firstname</name>
-            <table>objects</table>
-            <group>my_profile_personal</group>
-            <type>textbox</type>
-            <store>no</store>
-            <field>my_personal_info_firstname</field>
-            <caption>Eesnimi</caption>
-      </property>
-      <property>
-            <name>my_personal_info_lastname</name>
-            <table>objects</table>
-            <group>my_profile_personal</group>
-            <type>textbox</type>
-            <store>no</store>
-            <field>my_personal_info_lastname</field>
-            <caption>Perekonnanimi</caption>
-      </property>
-      <property>
-            <name>my_personal_info_username</name>
-            <table>objects</table>
-            <group>my_profile_personal</group>
-            <type>text</type>
-            <store>no</store>
-            <field>my_personal_info_username</field>
-            <caption>Kasutajanimi</caption>
-      </property>
-      <property>
-            <name>gender</name>
-            <table>objects</table>
-            <group>my_profile_personal</group>
-            <type>chooser</type>
-            <store>no</store>
-            <field>gender</field>
-            <caption>Sugu</caption>
-      </property>
-      <property>
-            <name>my_personal_info_id</name>
-            <table>objects</table>
-            <group>my_profile_personal</group>
-            <type>textbox</type>
-            <store>no</store>
-            <field>my_personal_info_id</field>
-            <caption>Isikukood</caption>
-      </property>
-      <property>
-            <name>my_personal_info_password</name>
-            <table>objects</table>
-            <group>my_profile_personal</group>
-            <type>textbox</type>
-            <store>no</store>
-            <field>my_personal_info_password</field>
-            <caption>Parool</caption>
-      </property>
-      <property>
-            <name>my_personal_info_password_again</name>
-            <table>objects</table>
-            <group>my_profile_personal</group>
-            <type>textbox</type>
-            <store>no</store>
-            <field>my_personal_info_password_again</field>
-            <caption>Parool uuesti</caption>
       </property>
       <property>
             <name>org_profile_jobs_tb</name>
@@ -134,41 +91,12 @@
             <field>org_profile_candits</field>
       </property>
       <property>
-            <name>org_username</name>
-            <table>objects</table>
-            <group>org_profile_info</group>
-            <type>text</type>
-            <field>org_username</field>
-            <caption>Kasutajanimi</caption>
-      </property>
-      <property>
-            <name>orgname</name>
-            <table>objects</table>
-            <group>org_profile_info</group>
-            <type>textbox</type>
-            <field>orgname</field>
-            <caption>Organisatsiooni nimi</caption>
-      </property>
-      <property>
-            <name>org_password</name>
-            <table>objects</table>
-            <group>org_profile_info</group>
-            <type>textbox</type>
-            <field>org_password</field>
-            <caption>Parool</caption>
-      </property>
-      <property>
-            <name>org_password_rep</name>
-            <table>objects</table>
-            <group>org_profile_info</group>
-            <type>textbox</type>
-            <field>org_password_rep</field>
-            <caption>Parooli kordus</caption>
-      </property>
-      <property>
             <name>my_join_worker</name>
             <table>objects</table>
-            <group>my_join_worker</group>
+            <group>
+                  <num_0>my_join_worker</num_0>
+                  <num_1>my_profile_personal</num_1>
+            </group>
             <type>callback</type>
             <callback>callback_get_join_worker</callback>
             <store>no</store>
@@ -177,29 +105,22 @@
       <property>
             <name>my_join_offerer</name>
             <table>objects</table>
-            <group>my_join_offerer</group>
+            <group>
+                  <num_0>my_join_offerer</num_0>
+                  <num_1>org_profile_info</num_1>
+            </group>
             <type>callback</type>
             <callback>callback_get_join_offerer</callback>
             <store>no</store>
             <field>my_join_offerer</field>
       </property>
       <property>
-            <name>manager_person</name>
-            <table>objects</table>
-            <group>employee</group>
-            <type>text</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <wrapchildren>1</wrapchildren>
-            <field>manager_person</field>
-      </property>
-      <property>
             <name>treeview_person</name>
             <table>objects</table>
             <group>employee</group>
             <type>text</type>
-            <parent>manager_person</parent>
             <store>no</store>
+            <no_caption>1</no_caption>
             <field>treeview_person</field>
       </property>
       <property>
@@ -207,27 +128,17 @@
             <table>objects</table>
             <group>employee</group>
             <type>table</type>
-            <parent>manager_person</parent>
             <store>no</store>
-            <field>personlist</field>
-      </property>
-      <property>
-            <name>manager</name>
-            <table>objects</table>
-            <group>employers</group>
-            <type>text</type>
             <no_caption>1</no_caption>
-            <store>no</store>
-            <wrapchildren>1</wrapchildren>
-            <field>manager</field>
+            <field>personlist</field>
       </property>
       <property>
             <name>treeview</name>
             <table>objects</table>
             <group>employers</group>
             <type>text</type>
-            <parent>manager</parent>
             <store>no</store>
+            <no_caption>1</no_caption>
             <field>treeview</field>
       </property>
       <property>
@@ -235,9 +146,49 @@
             <table>objects</table>
             <group>employers</group>
             <type>table</type>
-            <parent>manager</parent>
             <store>no</store>
+            <no_caption>1</no_caption>
             <field>joblist</field>
+      </property>
+      <property>
+            <name>cv_acitvity_prop</name>
+            <table>objects</table>
+            <group>env_setings</group>
+            <type>chooser</type>
+            <orient>vertical</orient>
+            <store>no</store>
+            <field>cv_acitvity_prop</field>
+            <caption>CVde aktiivsus</caption>
+      </property>
+      <property>
+            <name>max_active_cv</name>
+            <table>objects</table>
+            <group>env_setings</group>
+            <type>textbox</type>
+            <size>3</size>
+            <store>no</store>
+            <field>max_active_cv</field>
+            <caption>CV maksimaalselt aktiivne(päevades)</caption>
+      </property>
+      <property>
+            <name>max_active_cv_def</name>
+            <table>objects</table>
+            <group>env_setings</group>
+            <type>textbox</type>
+            <size>3</size>
+            <store>no</store>
+            <field>max_active_cv_def</field>
+            <caption>CV maksimaalselt aktiivne(päevades)</caption>
+      </property>
+      <property>
+            <name>max_active_job</name>
+            <table>objects</table>
+            <group>env_setings</group>
+            <type>textbox</type>
+            <size>3</size>
+            <store>no</store>
+            <field>max_active_job</field>
+            <caption>Tööpakkumine maksimaalselt aktiivne(päevades) </caption>
       </property>
       <property>
             <name>orgs</name>
@@ -319,6 +270,17 @@
             <method>serialize</method>
             <caption>Asukohad</caption>
       </property>
+      <property>
+            <name>search_cv</name>
+            <table>objects</table>
+            <group>search_cv</group>
+            <type>form</type>
+            <sclass>applications/personnel_management/personnel_management_cv_search</sclass>
+            <sform>cv_search</sform>
+            <store>no</store>
+            <field>search_cv</field>
+            <caption>Otsi CV-sid</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PERSONNEL_MANAGEMENT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -328,6 +290,7 @@
       <groupinfo>
             <my_profile>
                   <caption>Minu profiil</caption>
+                  <tabgroup>navi</tabgroup>
             </my_profile>
             <org_profile>
                   <caption>Tööpakkuja profiil</caption>
@@ -348,15 +311,18 @@
                   <caption>Minu CV-d</caption>
                   <parent>my_profile</parent>
                   <submit>no</submit>
+                  <tabgroup>navi</tabgroup>
             </my_profile_mycvs>
             <my_profile_candits>
                   <caption>Kandideerin</caption>
                   <parent>my_profile</parent>
                   <submit>no</submit>
+                  <tabgroup>navi</tabgroup>
             </my_profile_candits>
             <my_profile_personal>
                   <caption>Minu andmed</caption>
                   <parent>my_profile</parent>
+                  <tabgroup>navi</tabgroup>
             </my_profile_personal>
             <org_profile_jobs>
                   <caption>Tööpakkumised</caption>
@@ -382,17 +348,44 @@
                   <caption>Seaded</caption>
                   <parent>all_setings</parent>
             </layout_setings>
+            <env_setings>
+                  <caption>Keskkonna seaded</caption>
+                  <parent>all_setings</parent>
+            </env_setings>
             <my_join>
-                  <caption>Liitu kasutajaks</caption>
+                  <caption>Registreeru</caption>
+                  <tabgroup>left</tabgroup>
             </my_join>
             <my_join_worker>
                   <caption>T&amp;ouml;&amp;ouml;otsija</caption>
                   <parent>my_join</parent>
+                  <tabgroup>left</tabgroup>
             </my_join_worker>
             <my_join_offerer>
                   <caption>T&amp;ouml;&amp;ouml;pakkuja</caption>
                   <parent>my_join</parent>
+                  <tabgroup>left</tabgroup>
             </my_join_offerer>
+            <manager_profile>
+                  <caption>Halduri profiil</caption>
+            </manager_profile>
+            <manager_profile_persons>
+                  <caption>Tööotsijad</caption>
+                  <parent>manager_profile</parent>
+            </manager_profile_persons>
+            <manager_profile_orgs>
+                  <caption>Tööpakkujad</caption>
+                  <parent>manager_profile</parent>
+            </manager_profile_orgs>
+            <search>
+                  <caption>Otsi</caption>
+            </search>
+            <search_cv>
+                  <caption>Otsi CV'sid</caption>
+            </search_cv>
+            <search_offer>
+                  <caption>Otsi pakkumisi</caption>
+            </search_offer>
       </groupinfo>
       <reltypes>
             <MENU>
@@ -419,6 +412,16 @@
                   </clid>
                   <caption>Sisuelement</caption>
             </CONTENT>
+            <LAYOUT_BACKGROUND>
+                  <value>23</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>Kujunduse taustapilt</caption>
+            </LAYOUT_BACKGROUND>
+            <LAYOUT_LOGO>
+                  <value>24</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>Kujunduse logo</caption>
+            </LAYOUT_LOGO>
       </reltypes>
 </properties>
 

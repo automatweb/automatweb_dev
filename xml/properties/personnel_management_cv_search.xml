@@ -1,15 +1,6 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>s_cv_name</name>
-            <table>objects</table>
-            <group>general</group>
-            <form>cv_search</form>
-            <type>textbox</type>
-            <field>s_cv_name</field>
-            <caption>Otsi nimest</caption>
-      </property>
-      <property>
             <name>s_cv_ametinimetus</name>
             <table>objects</table>
             <group>general</group>
@@ -74,15 +65,6 @@
             <mode>checkboxes</mode>
             <field>s_cv_koormus</field>
             <caption>T&amp;ouml;&amp;ouml; koormus</caption>
-      </property>
-      <property>
-            <name>s_cv_job_addinfo</name>
-            <table>objects</table>
-            <group>general</group>
-            <form>cv_search</form>
-            <type>textarea</type>
-            <field>s_cv_job_addinfo</field>
-            <caption>Lisainfo soovitava t&amp;ouml;&amp;ouml; kohta</caption>
       </property>
       <property>
             <name>cv_search_button</name>
