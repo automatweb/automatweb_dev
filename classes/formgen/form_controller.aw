@@ -210,8 +210,8 @@ class form_controller extends form_base
 		$eq = $this->replace_vars($co,$co["meta"]["eq"],true,$form_ref, $el_ref, $entry);
 
 		$eq = "\$res = ".$eq.";";
-//		echo "evaling $eq <br>";
 		eval($eq);
+//		echo "evaling $eq , res = $res<br>";
 		return $res;
 	}
 
