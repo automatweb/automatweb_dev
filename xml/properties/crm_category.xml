@@ -14,6 +14,14 @@
             <field>img_upload</field>
             <caption>Pilt</caption>
       </property>
+      <property>
+            <name>extern_id</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_CATEGORY</syslog_type>
             <relationmgr>yes</relationmgr>

@@ -37,6 +37,13 @@
             <caption>Kommentaar</caption>
       </property>
       <property>
+            <name>extern_id</name>
+            <table>kliendibaas_firma</table>
+            <group>general_sub</group>
+            <type>hidden</type>
+            <field>extern_id</field>
+      </property>
+      <property>
             <name>reg_nr</name>
             <table>kliendibaas_firma</table>
             <group>general_sub</group>
