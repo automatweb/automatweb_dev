@@ -41,13 +41,14 @@ function ch(el, f_el,suf)
 	var sf = f_el.options[f_el.selectedIndex].value;
 
 	clearList(el);
-	for (i=0; i < elements.length; i++)
+	el.options[el.length] = new Option("","",false,false);
+	for (i=1; i < (elements.length+1); i++)
 	{
-		if (typeof(elements[i]) != "undefined")
+		if (typeof(elements[i-1]) != "undefined")
 		{
-			if (elements[i][0] == sf)
+			if (elements[i-1][0] == sf)
 			{
-				el.options[el.length] = new Option(elements[i][2],""+elements[i][1],false,false);
+				el.options[el.length] = new Option(elements[i-1][2],""+elements[i-1][1],false,false);
 			}
 		}
 	}
