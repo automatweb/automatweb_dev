@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.5 2002/10/10 13:19:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.6 2002/10/16 14:21:16 duke Exp $
 // search.aw - Search Manager
 class search extends aw_template
 {
@@ -80,19 +80,26 @@ class search extends aw_template
 		// create an instance of a object for callbacks 
 		if ($args["clid"])
 		{
-			$_obj = get_instance($args["clid"]);
-			if (!$_obj)
+			if (gettype($args["clid"]) == "object")
 			{
-				$this->raise_error(ERR_CORE_NO_FILE,"Cannot create an instance of $clid",true);
-			};
-			$this->obj_ref = $_obj;
-			if ($args["clid"] == "document")
+				$this->obj_ref = $args["clid"];
+			}
+			else
 			{
-				$mn = get_instance("menuedit");
-				$parent = (int)$parent;
-				$toolbar = $mn->rf_toolbar(array(
-					"parent" => $parent,
-				));
+				$_obj = get_instance($args["clid"]);
+				if (!$_obj)
+				{
+					$this->raise_error(ERR_CORE_NO_FILE,"Cannot create an instance of $clid",true);
+				};
+				$this->obj_ref = $_obj;
+				if ($args["clid"] == "document")
+				{
+					$mn = get_instance("menuedit");
+					$parent = (int)$parent;
+					$toolbar = $mn->rf_toolbar(array(
+						"parent" => $parent,
+					));
+				};
 			};
 			$this->read_template("objects.tpl");
 		}
@@ -106,6 +113,8 @@ class search extends aw_template
 			$this->parent = $parent;
 			$this->mk_path($parent,"<a href='$url'>Objektiotsing</a>");
 		};
+
+		$this->rescounter = 0;
 
 		// perform the actual search
 		if ($search)
@@ -192,7 +201,7 @@ class search extends aw_template
 							$parts["class_id"] = " class_id IN ($xval) ";
 							$partcount++;
 						}
-						else
+						elseif ($val != 0)
 						{
 							$parts["class_id"] = " class_id = '$val' ";
 							$partcount++;
@@ -219,28 +228,39 @@ class search extends aw_template
 					
 			};
 
-			$query = $this->search_callback(array("name" => "get_query","args" => $args,"parts" => $parts));
+			// first check, whether the caller has a do_search callback,
+			// if so, we assume that it knows what it's doing and simply
+			// call it.
+			$caller_search = $this->search_callback(array("name" => "do_search","args" => $args));
 
-			if ($query)
+			// if not, use our own (old?) search method
+			if ($caller_search === false)
 			{
-				$this->db_query($query);
-				$partcount = 1;
-			}
-			elseif ($partcount == 0)
-			{
-				$table = "<span style='font-family: Arial; font-size: 12px; color: red;'>Defineerige otsingutingimused</span>";
-			}
-			else
-			{
-				$where = join(" AND ",$parts);
-				$q = "SELECT * FROM objects WHERE $where";
-				$this->db_query($q);
+				$query = $this->search_callback(array("name" => "get_query","args" => $args,"parts" => $parts));
+
+				if ($query)
+				{
+					$this->db_query($query);
+					$partcount = 1;
+				}
+				elseif ($partcount == 0)
+				{
+					$table = "<span style='font-family: Arial; font-size: 12px; color: red;'>Defineerige otsingutingimused</span>";
+				}
+				else
+				{
+					$where = join(" AND ",$parts);
+					$q = "SELECT * FROM objects WHERE $where";
+					$this->db_query($q);
+				};
+
+				$results = 0;
 			};
 
-			$results = 0;
-
-			while($row = $this->db_next())
+			//while($row = $this->db_next())
+			while($row = $this->get_next())
 			{
+				$this->rescounter++;
 				$type = $this->cfg["classes"][$row["class_id"]]["name"];
 				$row["icon"] = sprintf("<img src='%s' alt='$type' title='$type'>",get_icon_url($row["class_id"],""));
 				if (!$row["name"])
@@ -422,17 +442,27 @@ class search extends aw_template
 				"parent" => $parent,
 				"callback" => array($this,"modify_toolbar"),
 			));
+
+			// override the search button with our own
+			$toolbar->add_button(array(
+				"name" => "search",
+				"tooltip" => "Otsi",
+				"url" => "javascript:document.searchform.submit()",
+				"imgover" => "search_over.gif",
+				"img" => "search.gif",
+			));
 		};
 
 		$this->table = $table;
 
+
 		$this->vars(array(
 			"table" => $table,
-			"toolbar" => $toolbar,
+			"toolbar" => $toolbar->get_toolbar(),
 			"reforb" => $this->mk_reforb("search",array("no_reforb" => 1,"search" => 1,"obj" => $args["obj"],"docid" => $docid, "parent" => $parent)),
 		));
 
-		return $header . $this->parse();
+		return $this->parse();
 	}
 
 	function modify_toolbar($args)
@@ -667,12 +697,25 @@ class search extends aw_template
 		));
 	}
 
+	function get_next()
+	{
+		if (method_exists($this->obj_ref,"search_callback_get_next"))
+		{
+			$result = $this->search_callback(array("name" => "get_next"));
+		}
+		else
+		{
+			$result = $this->db_next();
+		};
+		return $result;
+	}
+
 	////
 	// !Callback funktsioonid
 	function search_callback($args = array())
 	{
 		$prefix = "search_callback_";
-		$allowed = array("get_fields","get_query","get_table_defs","modify_data","table_header","table_footer");
+		$allowed = array("get_fields","get_query","get_table_defs","modify_data","table_header","table_footer","do_query","get_next");
 		if (!is_object($this->obj_ref))
 		{
 			return false;
@@ -705,6 +748,10 @@ class search extends aw_template
 			elseif ($name == "search_callback_get_query")
 			{
 				$retval = $this->obj_ref->$name($args["args"],$args["parts"]);
+			}
+			elseif ($name == "get_next")
+			{
+				$retval = $this->obj_ref->$name();
 			}
 			else
 			{
