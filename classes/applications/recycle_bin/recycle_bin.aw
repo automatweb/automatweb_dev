@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.5 2004/11/05 10:49:16 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.6 2004/11/08 12:31:30 kristo Exp $
 // recycle_bin.aw - Prügikast 
 /*
 @default table=objects
@@ -156,6 +156,10 @@ class recycle_bin extends class_base
 	{
 		$query = "UPDATE objects SET status=1 WHERE oid =".$arr['oid'];
 		$this->db_query($query);
+		// clear cache
+		$c = get_instance("cache");
+		$c->file_invalidate_regex(".*");
+		
 		return $this->mk_my_orb("change", array("group" => "recycle"), "recycle_bin");
 	}
 	
@@ -172,7 +176,12 @@ class recycle_bin extends class_base
 				$this->db_query($query);
 			}
 		}
-			return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"]), $arr["class"]);	
+
+		// clear cache
+		$c = get_instance("cache");
+		$c->file_invalidate_regex(".*");
+
+		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"]), $arr["class"]);	
 	}
 }
 ?>

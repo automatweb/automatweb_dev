@@ -1605,6 +1605,15 @@ class _int_object
 			);
 			$GLOBALS["object_loader"]->ds->delete_object($oid);
 		}
+
+		// must clear acl cache for all objects below it
+		// but since I think that finding the subobjects and clearing just those will be slower than clearing it all
+		// we're gonna clear it all.
+		if (!aw_ini_get("acl.use_new_acl"))
+		{
+			$c = get_instance("cache");
+			$c->file_invalidate_regex("acl");
+		}
 	}
 
 	function _int_create_brother($parent)
