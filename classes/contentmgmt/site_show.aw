@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.118 2005/03/03 12:56:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.119 2005/03/04 12:14:40 kristo Exp $
 
 /*
 
@@ -1014,7 +1014,8 @@ class site_show extends class_base
 				if ($dat["url"] != "")
 				{
 					$this->vars(array(
-						"sel_menu_image_".$nr => "<img name='sel_menu_image_".$nr."' src='".$dat["url"]."' border='0'>"
+						"sel_menu_image_".$nr => "<img name='sel_menu_image_".$nr."' src='".$dat["url"]."' border='0'>",
+						"sel_menu_image_".$nr."_url" => $dat["url"]
 					));
 				}
 			}
