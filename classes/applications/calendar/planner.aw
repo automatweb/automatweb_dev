@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.55 2005/04/06 12:44:52 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.56 2005/04/06 13:00:26 ahti Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -2478,18 +2478,12 @@ class planner extends class_base
 		{
 			if(is_oid($event) && $this->can("delete", $event))
 			{
-				$obj = obj($event);
-				$objs = new object_list(array(
-					"brother_of" => $obj->brother_of(),
-					"site_id" => array(),
-					"lang_id" => array(),
-				));
-				foreach($objs->arr() as $obj)
+				$objz = obj($event);
+				$orig = $objz->brother_of();
+				if(is_oid($orig) && $this->can("delete", $orig))
 				{
-					if($this->can("delete", $obj->id()) && in_array($obj->class_id(), $this->event_entry_classes))
-					{
-						$obj->delete();
-					}
+					$orig = obj($orig);
+					$orig->delete();
 				}
 			}
 		}
