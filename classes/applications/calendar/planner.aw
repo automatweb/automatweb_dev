@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.23 2004/10/05 07:13:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.24 2004/10/07 21:23:25 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -77,6 +77,9 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 	@property confirm_vacancies type=checkbox group=create_vacancies store=no no_caption=1 
 	@caption Kinnita vabad ajad
 
+	@property vacancies_cal group=create_vacancies_cal type=calendar no_caption=1
+	@caption Ajad
+
 	@default group=views
 	@default store=no
 	
@@ -112,6 +115,7 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 	@groupinfo vacancies caption="Vabad ajad" 
 	@groupinfo create_events caption="Sündmuste lisamine" parent=vacancies
 	@groupinfo create_vacancies caption="Vabad ajad" parent=vacancies
+	@groupinfo create_vacancies_cal caption="Vabad ajad (kalendrivaade)" parent=vacancies
 	@groupinfo time_settings caption=Ajaseaded parent=general
 	@groupinfo add_event caption="Muuda sündmust"
 */
@@ -307,16 +311,21 @@ class planner extends class_base
 				$this->gen_vacancies($arr);
 				break;
 
+			case "vacancies_cal":
+				$this->gen_vacancies_cal($arr);
+				break;
+
 			case "create_event_table":
 				$this->create_event_table($arr);
 				break;
-						case "event_search_name":
+
+			case "event_search_name":
 				if(!$arr["request"]["search"] == 1)
 				{
 					return PROP_IGNORE;
 				}
 				$data["value"] = $arr["request"]["event_search_name"];
-			break;
+				break;
 			
 			case "event_search_content":
 				if(!$arr["request"]["search"] == 1)
@@ -324,14 +333,16 @@ class planner extends class_base
 					return PROP_IGNORE;
 				}
 				$data["value"] = $arr["request"]["event_search_content"];
-			break;
+				break;
+
 			case "event_search_comment":
 				if(!$arr["request"]["search"] == 1)
 				{
 					return PROP_IGNORE;
 				}
 				$data["value"] = $arr["request"]["event_search_comment"];
-			break;
+				break;
+
 			case "event_search_type":
 				
 				$data["options"] = array(
@@ -432,6 +443,7 @@ class planner extends class_base
 				break;
 
 			case "vacancies":
+			case "vacancies_cal":
 				$this->update_vacancies($arr);
 				break;
 
@@ -1434,7 +1446,15 @@ class planner extends class_base
 					"img" => "refresh.gif",
 				));
 			};
-                };
+
+			$toolbar->add_button(array(
+				"name" => "only_vac",
+				"tooltip" => "Ainult vabad ajad",
+				"url" => aw_url_change_var("clid_filt", CL_CALENDAR_VACANCY),
+				"img" => "qmarks.gif",
+				"class" => "menuButton",
+			));
+		};
 	}
 
 	function delete_events($args = array())
@@ -1504,6 +1524,10 @@ class planner extends class_base
 
 		foreach($events as $event)
 		{
+			if ($arr["request"]["clid_filt"] && $event["class_id"] != $arr["request"]["clid_filt"])
+			{
+				continue;
+			}
 			$arr["prop"]["vcl_inst"]->add_item(array(
 				"timestamp" => $event["start"],
 				"data" => array(
@@ -1586,29 +1610,8 @@ class planner extends class_base
 		return $rv;
 	}
 
-	function gen_vacancies($arr)
+	function _gen_vac_slots($arr)
 	{
-		$t = &$arr["prop"]["vcl_inst"];
-		// mis väljad peavad olema
-		// jrk, algus, lõpp, checkbox kinnita
-		$t->define_field(array(
-			"name" => "ord",
-			"caption" => "Jrk",
-			"numeric" => 1,
-		));	
-		$t->define_field(array(
-			"name" => "start",
-			"caption" => "Algus",
-		));
-		$t->define_field(array(
-			"name" => "end",
-			"caption" => "Lõpp",
-		));
-		$t->define_chooser(array(
-			"name" => "confirm",
-			"field" => "start_tm",
-			"caption" => "Vali",
-		));
 		$vac_count = $arr["obj_inst"]->prop("vac_count");
 		if (!is_numeric($vac_count))
 		{
@@ -1662,6 +1665,35 @@ class planner extends class_base
 
 		};
 
+		return $slots;
+	}
+
+	function gen_vacancies($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		// mis väljad peavad olema
+		// jrk, algus, lõpp, checkbox kinnita
+		$t->define_field(array(
+			"name" => "ord",
+			"caption" => "Jrk",
+			"numeric" => 1,
+		));	
+		$t->define_field(array(
+			"name" => "start",
+			"caption" => "Algus",
+		));
+		$t->define_field(array(
+			"name" => "end",
+			"caption" => "Lõpp",
+		));
+		$t->define_chooser(array(
+			"name" => "confirm",
+			"field" => "start_tm",
+			"caption" => "Vali",
+		));
+
+		$slots = $this->_gen_vac_slots($arr);
+
 		foreach($slots as $slot)
 		{
 			$start = $slot["start"];
@@ -1676,6 +1708,31 @@ class planner extends class_base
 		};
 		$t->set_sortable(false);
 
+	}
+
+	function gen_vacancies_cal($arr)
+	{
+		$slots = $this->_gen_vac_slots($arr);
+
+		$range = $arr["prop"]["vcl_inst"]->get_range(array(
+			"date" => $arr["request"]["date"],
+			"viewtype" => $arr["request"]["viewtype"] ? $arr["request"]["viewtype"] : $viewtype,
+		));
+
+		foreach($slots as $slot)
+		{
+			$arr["prop"]["vcl_inst"]->add_item(array(
+				"timestamp" => $slot["start"],
+				"data" => array(
+					"name" => "Vaba aeg".html::checkbox(array(
+						"name" => "confirm[]",
+						"value" => $slot["start"]
+					)),
+					"link" => "#",
+					"comment" => "",
+				),
+			));
+		};
 	}
 
 	function _get_free_slots_for_day($arr)
@@ -1791,7 +1848,7 @@ class planner extends class_base
 		};
 		$span = $span_length * 60; // X minutes for one slot
 
-		if ($arr["request"]["confirm_vacancies"] && is_array($confirmed))
+		if (($arr["request"]["confirm_vacancies"] || $arr["request"]["group"] == "create_vacancies_cal") && is_array($confirmed))
 		{
 			foreach($confirmed as $start_tm)
 			{
@@ -1863,7 +1920,7 @@ class planner extends class_base
 			$t->define_data(array(
 				"start1" => $vac->prop("start"),
 				"start" => date("d-M H:i",$vac->prop("start")),
-				"end" => $vac->prop("end"),
+				"end" => date("d-M H:i",$vac->prop("end")),
 				"id" => $vac->id(),
 				"meeting" => html::href(array(
 					"url" => $this->mk_my_orb("reserve_slot",array(
@@ -1872,6 +1929,20 @@ class planner extends class_base
 						"cal_id" => $arr["obj_inst"]->id(),
 					),CL_CALENDAR_VACANCY),
 					"caption" => "Uus kohtumine",
+				))." | ".html::href(array(
+					"url" => $this->mk_my_orb("reserve_slot",array(
+						"id" => $vac->id(),
+						"clid" => CL_CRM_CALL,
+						"cal_id" => $arr["obj_inst"]->id(),
+					),CL_CALENDAR_VACANCY),
+					"caption" => "Uus k&otilde;ne",
+				))." | ".html::href(array(
+					"url" => $this->mk_my_orb("reserve_slot",array(
+						"id" => $vac->id(),
+						"clid" => CL_TASK,
+						"cal_id" => $arr["obj_inst"]->id(),
+					),CL_CALENDAR_VACANCY),
+					"caption" => "Uus toimetus",
 				)),
 			));
 		};

@@ -195,6 +195,17 @@
             <caption>Kinnita vabad ajad</caption>
       </property>
       <property>
+            <name>vacancies_cal</name>
+            <table>objects</table>
+            <group>create_vacancies_cal</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <store>no</store>
+            <type>calendar</type>
+            <no_caption>1</no_caption>
+            <caption>Ajad</caption>
+      </property>
+      <property>
             <name>search</name>
             <table>objects</table>
             <group>views</group>
@@ -313,6 +324,10 @@
                   <caption>Vabad ajad</caption>
                   <parent>vacancies</parent>
             </create_vacancies>
+            <create_vacancies_cal>
+                  <caption>Vabad ajad (kalendrivaade)</caption>
+                  <parent>vacancies</parent>
+            </create_vacancies_cal>
             <time_settings>
                   <caption>Ajaseaded</caption>
                   <parent>general</parent>
