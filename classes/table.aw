@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.27 2002/02/14 16:23:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.28 2002/02/18 14:17:03 cvs Exp $
 // table.aw - tabelite haldus
 global $orb_defs;
 
@@ -197,8 +197,19 @@ $orb_defs["table"] ="xml";
 		$this->arr["show_title"] = $show_title;
 		$this->arr["table_style"] = $table_style;
 		$this->arr["default_style"] = $default_style;
-		$this->arr["style2class"][$default_style] = $this->db_fetch_field("SELECT class_id FROM objects WHERE oid = $default_style","class_id");
+		if ($default_style)
+		{
+			$this->arr["style2class"][$default_style] = $this->db_fetch_field("SELECT class_id FROM objects WHERE oid = $default_style","class_id");
+		}
 
+		classload("style");
+		$stl = new style;
+		if ($this->arr["table_style"])
+		{
+			$tbst = $stl->mk_cache($this->arr["table_style"]);
+			$this->arr["style2class"][$tbst["even_style"]] = $this->db_fetch_field("SELECT class_id FROM objects WHERE oid = ".$tbst["even_style"],"class_id");
+			$this->arr["style2class"][$tbst["odd_style"]] = $this->db_fetch_field("SELECT class_id FROM objects WHERE oid = ".$tbst["odd_style"],"class_id");
+		}
 		// touch the object
 		$this->upd_object(array(
 			"oid" => $id,
@@ -1362,15 +1373,16 @@ $orb_defs["table"] ="xml";
 					$scell = $this->arr["styles"][$map["row"]][$map["col"]];
 
 					$st = 0;
+					$est = 0;
 					if ($this->arr["table_style"])
 					{
 						if (($row & 1) > 0)
 						{
-							$st = $stc->get_odd_style($this->arr["table_style"]);
+							$est = $stc->get_odd_style($this->arr["table_style"]);
 						}
 						else
 						{
-							$st = $stc->get_even_style($this->arr["table_style"]);
+							$est = $stc->get_even_style($this->arr["table_style"]);
 						}
 					}
 
@@ -1380,20 +1392,31 @@ $orb_defs["table"] ="xml";
 					}
 					else
 					{
-						// tshekime et kui on esimene rida/tulp ja stiili pole m22ratud, siis 
-						// v6tame tabeli stiilist, kui see on m22ratud default stiili esimese rea/tulba jaox
-						if ($this->arr["table_style"] && $row < $num_frows)
-							$st = $frow_style;
-						else
-						if ($this->arr["table_style"] && $col < $num_fcols)
-							$st = $fcol_style;
-
-						// kui tabeli stiilis pold m22ratud stiili v6i ei old esimene rida/tulp, siis v6tame default celli stiili, kui see on
-						if ($st == 0 && $this->arr["default_style"])
+						if ($est)
 						{
-							$st = $this->arr["default_style"];
+							$st = $est;
 						}
-						// damn this was horrible
+						else
+						{
+							// tshekime et kui on esimene rida/tulp ja stiili pole m22ratud, siis 
+							// v6tame tabeli stiilist, kui see on m22ratud default stiili esimese rea/tulba jaox
+							if ($this->arr["table_style"] && $row < $num_frows)
+							{
+								$st = $frow_style;
+							}
+							else
+							if ($this->arr["table_style"] && $col < $num_fcols)
+							{
+								$st = $fcol_style;
+							}
+
+							// kui tabeli stiilis pold m22ratud stiili v6i ei old esimene rida/tulp, siis v6tame default celli stiili, kui see on
+							if ($st == 0 && $this->arr["default_style"])
+							{
+								$st = $this->arr["default_style"];
+							}
+							// damn this was horrible
+						}
 					}
 
 					if ($st)
