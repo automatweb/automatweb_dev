@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.25 2001/06/18 18:46:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.26 2001/06/18 19:17:06 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -1052,115 +1052,6 @@ classload("cache","defs");
 			return $section;
 		}
 
-		function add_promo($parent)
-		{
-			$this->read_template("add_promo.tpl");
-			classload("objects");
-			$ob = new db_objects;
-			$menu = $ob->get_list();
-			$menu[$GLOBALS["rootmenu"]] = "Esileht";
-
-			// kysime infot adminnitemplatede kohta
-			$q = "SELECT * FROM template WHERE type = 0 ORDER BY id";
-			$this->db_query($q);
-			$edit_templates = array();
-			while($tpl = $this->db_fetch_row()) {
-				$edit_templates[$tpl["id"]] = $tpl["name"];
-			};
-			// kysime infot lyhikeste templatede kohta
-			$q = "SELECT * FROM template WHERE type = 1 ORDER BY id";
-			$this->db_query($q);
-			$short_templates = array();
-			while($tpl = $this->db_fetch_row()) {
-				$short_templates[$tpl["id"]] = $tpl["name"];
-			};
-
-			$this->vars(array("title" => "", "promo_id" => "", "section" => $ob->option_list($parent,$menu),"right_sel" => "","left_sel" => "CHECKED","parent" => $parent,"tpl_edit" => $this->option_list(0,$edit_templates),"tpl_lead" => $this->option_list(0, $short_templates)));
-			return $this->parse();
-		}
-
-		function submit_promo($arr)
-		{
-			$this->quote(&$arr);
-			extract($arr);
-
-			if (is_array($section))
-			{
-				reset($section);
-				$a = array();
-				while (list(,$v) = each($section))
-					$a[$v]=$v;
-			}
-
-			$sets = array("section" => $a,"right" => ($right == 1 ? 1 : 0), "scroll" => ($right == 'scroll' ? 1 : 0),"tpl_lead" => $tpl_lead, "tpl_edit" => $tpl_edit);
-
-			if ($id)
-			{
-				$com = $all_menus ? "all_menus" : serialize($sets);
-				$this->upd_object(array("oid" => $id, "name" => $title,"last" => $type,"comment" => $com));
-				$this->db_query("UPDATE menu SET tpl_lead = '$tpl_lead', tpl_edit = '$tpl_edit' , link = '$link' WHERE id = $id");
-				$this->_log("promo", "Muutis promo kasti $title");
-			}
-			else
-			{
-				$id = $this->new_object(array("parent" => $parent,"name" => $title,"class_id" => CL_PROMO,"comment" => $all_menus ? "all_menus" : serialize($sets),"status" => 1,"last" => $type));
-				$this->db_query("INSERT INTO menu (id,link,type,is_l3,tpl_lead,tpl_edit) VALUES($id,'$link',".MN_PROMO_BOX.",0,'$tpl_lead','$tpl_edit')");
-				$this->_log("promo", "Lisas promo kasti $title");
-			}
-			return $id;
-		}
-
-		function change_promo($id,$newinterface)
-		{
-			$this->read_template("add_promo.tpl");
-
-			if (!($row = $this->get_object($id)))
-				$this->raise_error("promo->gen_change($id): No such box!", true);
-
-			classload("objects");
-			$ob = new db_objects;
-
-			$sets = unserialize($row["comment"]);
-
-			// kysime infot adminnitemplatede kohta
-			$q = "SELECT * FROM template WHERE type = 0 ORDER BY id";
-			$this->db_query($q);
-			$edit_templates = array();
-			while($tpl = $this->db_fetch_row()) {
-				$edit_templates[$tpl["id"]] = $tpl["name"];
-			};
-			// kysime infot lyhikeste templatede kohta
-			$q = "SELECT * FROM template WHERE type = 1 ORDER BY id";
-			$this->db_query($q);
-			$short_templates = array();
-			while($tpl = $this->db_fetch_row()) {
-				$short_templates[$tpl["id"]] = $tpl["name"];
-			};
-
-			$this->db_query("SELECT * FROM menu WHERE id = $id");
-			$rw = $this->db_next();
-
-			$menu = $ob->get_list();
-			$menu[0] = "";
-			$menu[$GLOBALS["frontpage"]] = "Esileht";
-			$this->vars(array("title"			=> $row["name"], 
-												"promo_id"	=> $id,
-												"section"		=> $ob->multiple_option_list($sets["section"],$menu),
-												"all_menus"	=> checked($row["comment"] == "all_menus"),
-												"right_sel"	=> ($sets["right"] == 1 ? "CHECKED" : ""),
-												"left_sel"	=> ($sets["right"] != 1 ? "CHECKED" : ""),
-												"scroll_sel"	=> checked($sets["scroll"]),
-												"parent"		=> $row["parent"],
-												"link"			=> $rw["link"],
-												"tpl_edit" => $this->option_list($rw["tpl_edit"],$edit_templates),
-												"tpl_lead" => $this->option_list($rw["tpl_lead"],$short_templates),
-												"interface" => ($newinterface ? "new" : "")));
-
-			return $this->parse();
-		}
-		
-
-
 		// well, mul on vaja kuvada see asi popupi sees, niisiis tegin ma miniversiooni folders.tpl-ist
 		// ja lisasin siia uue parameetri
 		function gen_folders($period,$popup = 0)
@@ -1757,7 +1648,8 @@ classload("cache","defs");
 				"sortedimg6"	=> $sortby == "periodic" ? $order == "ASC" ? "<img src='$baseurl/images/up.gif'>" : "<img src='$baseurl/images/down.gif'>" : "",
 				"yah"	=> $this->mk_path($parent,"",0,false),
 				"cut" => $this->mk_orb("cut_menus", array("parent" => $parent)),
-				"paste" => $this->mk_orb("paste_menus", array("parent" => $parent))
+				"paste" => $this->mk_orb("paste_menus", array("parent" => $parent)),
+				"addpromo" => $this->mk_orb("new", array("parent" => $parent),"promo")
 			));
 			return $this->parse();
 		}
@@ -2743,7 +2635,11 @@ classload("cache","defs");
 				$this->raise_error("menuedit->gen_change_html($id): No such menu!", true);
 
 			if ($row["class_id"] == CL_PROMO)
-				return $this->change_promo($id,true);
+			{
+				classload("promo");
+				$p = new promo;
+				return $p->change(array("id" => $id));
+			}
 
 			$this->read_template("nchange.tpl");
 			

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.24 2001/06/18 18:46:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.25 2001/06/18 19:17:06 kristo Exp $
 // document.aw - Dokumentide haldus. ORB compatible. Should be used instead of documents.aw
 // defineerime orbi funktsioonid
 global $orb_defs;
@@ -390,7 +390,7 @@ class document extends aw_template
 			return $this->telekava_doc($doc["content"]);
 
 		// laeme vajalikud klassid
-		classload("acl","styles","form","table","extlinks","images","gallery");
+		classload("acl","form","table","extlinks","images","gallery");
 
 		$tbl = new table;
 		$img = new db_images;
