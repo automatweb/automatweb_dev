@@ -163,6 +163,7 @@
 											Vali v&auml;&auml;rtuse kontroller:<br>
 											<select name="cols[{VAR:col_id}][val_controller]" class="formselect">{VAR:val_controller}</select><Br>
 
+											Sektsioon, kuhu link viitab <input type="textbox" size="5"  name="cols[{VAR:col_id}][link_section]" value="{VAR:link_section}"><br>
 											<input type="checkbox" name="cols[{VAR:col_id}][link_new_window]" value="1" {VAR:col_link_new_window}> Uues aknas <br><br>
 
 											<input type="checkbox" name="cols[{VAR:col_id}][link_popup]" value="1" {VAR:col_link_popup}> Popup aken <br>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.72 2004/11/19 11:56:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.73 2004/11/27 10:37:49 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -278,14 +278,18 @@ class form_table extends form_base
 				$dat["ev_".$chel] = "<a href=\"".$change_link."\">".$dat["ev_".$chel]."</a>";
 			}
 
-			$show_link = $this->get_link("show", $form_id,$section,$op_id,$chain_id,$chain_entry_id, $dat["entry_id"] ? $dat["entry_id"] : $dat['id']);
-			$show_link_popup = $this->get_link("show_popup", $form_id,$section,$op_id,$chain_id,$chain_entry_id, $dat["entry_id"] ? $dat["entry_id"] : $dat['id']);
+			$v_s = $section;
 			if ($this->get_col_for_el("view"))
 			{
 				// only do this, when necessary and perhaps avoid the next loop
 				$this->table["view_cols"]["view"] = "view";
 				$dat["ev_view"] = $this->table["texts"]["view"][$this->lang_id];
 			}
+
+
+			$show_link = $this->get_link("show", $form_id,$v_s,$op_id,$chain_id,$chain_entry_id, $dat["entry_id"] ? $dat["entry_id"] : $dat['id']);
+			$show_link_popup = $this->get_link("show_popup", $form_id,$v_s,$op_id,$chain_id,$chain_entry_id, $dat["entry_id"] ? $dat["entry_id"] : $dat['id']);
+			
 			if (is_array($this->table["view_cols"]))
 			{
 				foreach($this->table["view_cols"] as $v_el)
@@ -327,6 +331,10 @@ class form_table extends form_base
 						}
 					}
 
+					if ($popdat["link_section"] != "")
+					{
+						$show_link = aw_url_change_var("section", $popdat["link_section"], $show_link);
+					}
 					// I don't see _targetwin being defined anywhere and this causes a warning
 					$dat["ev_".$v_el] = sprintf("<a href=\"%s\">%s</a>",$show_link,$_caption);
 				}
@@ -2058,7 +2066,8 @@ class form_table extends form_base
 				"search_map" => $this->picker($this->table["defs"][$col]["search_map"], $elns),
 				"search_el" => $this->picker($this->table["defs"][$col]["search_el"], $elns),
 				"split_col_search" => checked($this->table["defs"][$col]["split_col_search"]),
-				"split_col_search_splitter" => $this->table["defs"][$col]["split_col_search_splitter"]
+				"split_col_search_splitter" => $this->table["defs"][$col]["split_col_search_splitter"],
+				"link_section" => $this->table["defs"][$col]["link_section"]
 			));
 			$has_ftable_aliases = false;
 			if (is_array($this->table["defs"][$col]["alias"]))
