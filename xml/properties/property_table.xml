@@ -1,0 +1,24 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>design_table</name>
+            <table>objects</table>
+            <group>designer</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Veerud</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_PROPERTY_TABLE</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <groupinfo>
+            <designer>
+                  <caption>Tulbad</caption>
+            </designer>
+      </groupinfo>
+</properties>
+

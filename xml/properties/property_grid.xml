@@ -1,0 +1,17 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>grid_type</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <caption>Gridi tüüp</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_PROPERTY_GRID</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+</properties>
+

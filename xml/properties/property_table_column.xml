@@ -1,0 +1,47 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>ord</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>jrk</field>
+            <size>2</size>
+            <caption>Jrk</caption>
+      </property>
+      <property>
+            <name>sortable</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Sorteeritav</caption>
+      </property>
+      <property>
+            <name>width</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <datatype>int</datatype>
+            <size>2</size>
+            <caption>Laius</caption>
+      </property>
+      <property>
+            <name>nowrap</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Poolitamine keelatud</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_PROPERTY_TABLE_COLUMN</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+</properties>
+
