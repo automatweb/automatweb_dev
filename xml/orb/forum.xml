@@ -77,37 +77,6 @@
 			</function>
 		</action>
 
-		<action name="change_rates">
-			<function name="change_rates">
-				<arguments>
-					<required name="id"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit_rates">
-			<function name="submit_rates">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-		
-		<action name="add_rate">
-			<function name="add_rate">
-				<arguments>
-					<required name="id"/>
-				</arguments>
-			</function>
-		</action>
-		
-		<action name="submit_rate">
-			<function name="submit_rate">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-		
-		
 		<action name="edit_properties">
 			<function name="edit_properties">
 				<arguments>
