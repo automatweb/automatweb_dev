@@ -279,19 +279,15 @@ class form_controller extends form_base
 		$eq = $this->replace_vars($co,$co["meta"]["eq"],true,$form_ref, $el_ref, $entry);
 
 		$eq = "\$res = ".$eq.";\$contr_finish = true;";
-/*		if (aw_global_get("uid") == "kix")
+		dbg::p2("controller id $id: evaling $eq <br />");
+		if (aw_ini_get("site_id") == 139)
 		{
-			//echo("controller id $id: evaling <pre>$eq</pre> <br />");
-			//echo("controller id $id: for row ".$el_ref->row." col = ".$el_ref->col." <br />");
-			//echo("controller id $id: for row ".$el_ref->row." col = ".$el_ref->col." ".$this->dc[$this->default_cid]->_dbg_backtrace()."<br />");
-			@eval($eq);
-			//echo "result = ".dbg::dump($res)." <br>";
+			eval($eq);
 		}
 		else
-		{*/
-			dbg::p2("controller id $id: evaling $eq <br />");
+		{
 			@eval($eq);
-//		}
+		}
 		dbg::p2("evaled $id, res: ".dbg::dump($res)." <br />");
 		if (!$contr_finish)
 		{
@@ -335,18 +331,17 @@ class form_controller extends form_base
 		$eq = $this->replace_vars($co,$co["meta"]["eq"],true,$form_ref, $el_ref, $entry);
 
 		$eq = "\$res = ".$eq.";\$contr_finish = true;";
-/*		if (aw_global_get("uid") == "erkihotel")
+		dbg::p2("controller id $id: evaling $eq <br />");
+
+		if (aw_ini_get("site_id") == 139)
 		{
-			//echo ("controller id $id: evaling <pre>$eq</pre> <br />");
-			//echo("controller2 id $id: for row ".$el_ref->row." col = ".$el_ref->col." ".$this->dc[$this->default_cid]->_dbg_backtrace()."<br />");
-			@eval($eq);
-			//echo "result = ".dbg::dump($res)." <br>";
+			eval($eq);
 		}
 		else
-		{	*/
-			dbg::p2("controller id $id: evaling $eq <br />");
+		{
 			@eval($eq);
-//	}
+		}
+
 		dbg::p2("evaled $id, res: ".dbg::dump($res)." <br /><br />");
 		if (!$contr_finish)
 		{
