@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.44 2005/01/18 10:39:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.45 2005/01/19 09:46:07 ahti Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -180,6 +180,7 @@ class sys extends aw_template
 	function db_compare_choose_donor($args = array())
 	{
 		$files = array(
+			"envir.struktuur.ee" => "envir.struktuur.ee",
 			"work.struktuur.ee" => "work.struktuur.ee",
 			"aw.struktuur.ee" => "aw.struktuur.ee",
 			"idaviru.struktuur.ee" => "idaviru.struktuur.ee",
