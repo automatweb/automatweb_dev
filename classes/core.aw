@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.140 2002/12/19 10:39:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.141 2002/12/19 11:44:16 kristo Exp $
 // core.aw - Core functions
 define("ARR_NAME", 1);
 define("ARR_ALL",2);
@@ -1849,15 +1849,7 @@ class core extends db_connector
 		// url-il? Ntx www.kirjastus.ee/pk/automatweb juures see ei tööta. - duke
 		if ((stristr($this->REQUEST_URI,"/automatweb")!=false) || $force_admin)
 		{
-			// admin side.
-			if ($use_orb == false)
-			{
-				$ret =  $this->cfg["baseurl"]."/index.".$this->cfg["ext"].$qm.$sec."class=$cl_name".$separator."action=$fun".$separator."$urs";
-			}
-			else
-			{
-				$ret =  $this->cfg["baseurl"]."/automatweb/orb.".$this->cfg["ext"].$qm.$sec."class=$cl_name".$separator."action=$fun".$separator."$urs";
-			}
+			$ret =  $this->cfg["baseurl"]."/automatweb/orb.".$this->cfg["ext"].$qm.$sec."class=$cl_name".$separator."action=$fun".$separator."$urs";
 		}
 		else
 		{
