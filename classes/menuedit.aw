@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.253 2003/03/06 23:55:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.254 2003/03/07 10:38:02 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -4660,7 +4660,7 @@ class menuedit extends aw_template
 			// this is a problem since the user can override the treetype,
 			// but this will still try to contact the java daemon if 
 			// tree_type is set to java in the ini file -- duke
-			if ($this->cfg["tree_type"] == "java" && $this->cfg["java_tree_update"])
+/*			if ($this->cfg["tree_type"] == "java" && $this->cfg["java_tree_update"])
 			{
 				$server_socket = fsockopen($this->cfg["java_tree_update_server"], $this->cfg["java_tree_update_port"],$errno,$errstr,10);
 				if ($server_socket)
@@ -4668,7 +4668,7 @@ class menuedit extends aw_template
 					fputs($server_socket,$str);
 					fclose($server_socket);
 				}
-			}
+			}*/
 			$this->restore_handle();
 		}
 	}
