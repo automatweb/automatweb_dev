@@ -296,6 +296,7 @@ function doSubmit()
 <select onchange="format('fontname',this[this.selectedIndex].value);this.selectedIndex=0" STYLE="font:8pt verdana,arial,sans-serif;background:#FFFFFF">
 										<option selected>Font...
 										<option value="Geneva,Arial,Sans-Serif">Arial
+										<option value="Trebuchet MS,Arial">Trebuchet MS
 										<option value="Verdana,Geneva,Arial,Helvetica,Sans-Serif">Verdana
 										<option value="Times New Roman,Times,Serif">Time
 										<option value="Courier, Monospace">Courier
@@ -304,6 +305,7 @@ function doSubmit()
 <select onchange="format('forecolor',this[this.selectedIndex].style.color);this.selectedIndex=0" STYLE="font:8pt verdana,arial,sans-serif;background:#FFFFFF">
 										<option selected>V&auml;rv...
 										<option style="color:black">must</option>
+										<option style="color:#FF9900">domina</option>
 										<option style="color:darkslategray">tumehall</option>
 										<option style="color:red">punane</option>
 										<option style="color:maroon">tumelilla</option>
@@ -339,17 +341,17 @@ function doSubmit()
 <input type='hidden' name='nobreaks' value='1'>
 <script for=window event=onload>
 	cont_edit.document.designMode='On';
-	cont_edit.document.write("<html><head><META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset={VAR:charset}\"></head><body style='font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 12px;background-color: #FFFFFF; border: #CCCCCC solid; border-width: 1px 1px 1px 1px; margin-left: 0px;padding-left: 3px;	padding-top: 0px;	padding-right: 3px; padding-bottom: 0px;'>");
+	cont_edit.document.write("<html><head><META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset={VAR:charset}\"></head><body style='font-family: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif;font-size: 12px;background-color: #FFFFFF; border: #CCCCCC solid; border-width: 1px 1px 1px 1px; margin-left: 0px;padding-left: 3px;	padding-top: 0px;	padding-right: 3px; padding-bottom: 0px;'>");
 	cont_edit.document.write(doc.content.value);
 	cont_edit.document.write("</body></html>");
 
 	lead_edit.document.designMode='On';
-	lead_edit.document.write("<html><head><META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset={VAR:charset}\"></head><body style='font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 12px;background-color: #FFFFFF; border: #CCCCCC solid; border-width: 1px 1px 1px 1px; margin-left: 0px;padding-left: 3px;	padding-top: 0px;	padding-right: 3px; padding-bottom: 0px;'>");
+	lead_edit.document.write("<html><head><META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset={VAR:charset}\"></head><body style='font-family: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif;font-size: 12px;background-color: #FFFFFF; border: #CCCCCC solid; border-width: 1px 1px 1px 1px; margin-left: 0px;padding-left: 3px;	padding-top: 0px;	padding-right: 3px; padding-bottom: 0px;'>");
 	lead_edit.document.write(doc.lead.value);
 	lead_edit.document.write("</body></html>");
 
 	title_edit.document.designMode='On';
-	title_edit.document.write("<html><head><META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset={VAR:charset}\"></head><body style='font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 12px;background-color: #FFFFFF; border: #CCCCCC solid; border-width: 1px 1px 1px 1px; margin-left: 0px;padding-left: 3px;	padding-top: 0px;	padding-right: 3px; padding-bottom: 0px;'>");
+	title_edit.document.write("<html><head><META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset={VAR:charset}\"></head><body style='font-family: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif;font-size: 12px;background-color: #FFFFFF; border: #CCCCCC solid; border-width: 1px 1px 1px 1px; margin-left: 0px;padding-left: 3px;	padding-top: 0px;	padding-right: 3px; padding-bottom: 0px;'>");
 	title_edit.document.write(doc.title.value);
 	title_edit.document.write("</body></html>");
 </script>

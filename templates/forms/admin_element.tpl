@@ -1,12 +1,28 @@
-<!-- SUB: SEARCH_SCRIPT -->
+<!-- SUB: SEARCH_DEFS -->
 <script language="javascript">
-
 var elements = new Array();
 // elements = array(form_id, el_id,el_text);
 
 <!-- SUB: ELDEFS -->
 elements[{VAR:el_num}] = new Array({VAR:form_id},{VAR:el_id},"{VAR:el_text}");
 <!-- END SUB: ELDEFS -->
+
+</script>
+<!-- END SUB: SEARCH_DEFS -->
+
+<!-- SUB: TABLE_DEFS -->
+<script language="javascript">
+var elements = new Array();
+
+<!-- SUB: TBL -->
+elements[{VAR:tbl_num}] = new Array({VAR:table_name},{VAR:col_name},"{VAR:col_name}");
+<!-- END SUB: TBL -->
+
+</script>
+<!-- END SUB: TABLE_DEFS -->
+
+<!-- SUB: SEARCH_SCRIPT -->
+<script language="javascript">
 
 function clearList(list)
 {

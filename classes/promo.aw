@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.8 2001/07/26 16:49:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.9 2001/10/02 10:05:53 kristo Exp $
 lc_load("promo");
 global $orb_defs;
 $orb_defs["promo"] = "xml";
@@ -84,6 +84,7 @@ class promo extends aw_template
 			$com = $all_menus ? "all_menus" : serialize($sets);
 			$this->upd_object(array("oid" => $id, "name" => $title,"last" => $type,"comment" => $com));
 			$this->db_query("UPDATE menu SET tpl_lead = '$tpl_lead', tpl_edit = '$tpl_edit' , link = '$link' WHERE id = $id");
+			$this->set_object_metadata(array("oid" => $id, "key" => "no_title", "value" => $no_title));
 			$this->_log("promo", sprintf(LC_PROMO_CHANGED_PROMO_BOX,$title));
 		}
 		else
@@ -96,6 +97,7 @@ class promo extends aw_template
 				"last" => 1,
 			));
 			$this->db_query("INSERT INTO menu (id,link,type,is_l3,tpl_lead,tpl_edit) VALUES($id,'$link',".MN_PROMO_BOX.",0,'$tpl_lead','$tpl_edit')");
+			$this->set_object_metadata(array("oid" => $id, "key" => "no_title", "value" => $no_title));
 			$this->_log("promo", sprintf(LC_PROMO_ADD_TO_PROMO_BOX,$title));
 		}
 		return $this->mk_orb("change", array("id" => $id));
@@ -133,6 +135,8 @@ class promo extends aw_template
 			$short_templates[$tpl["id"]] = $tpl["name"];
 		};
 
+		$no_title = $this->get_object_metadata(array("oid" => $id, "key" => "no_title"));
+
 		$this->db_query("SELECT * FROM menu WHERE id = $id");
 		$rw = $this->db_next();
 
@@ -149,7 +153,8 @@ class promo extends aw_template
 			"link" => $rw["link"],
 			"tpl_edit" => $this->option_list($rw["tpl_edit"],$edit_templates),
 			"tpl_lead" => $this->option_list($rw["tpl_lead"],$short_templates),
-			"reforb" => $this->mk_reforb("submit", array("id" => $id))
+			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
+			"no_title" => checked($no_title)
 		));
 		return $this->parse();
 	}

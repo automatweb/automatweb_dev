@@ -308,6 +308,7 @@ function doSubmit()
 <select onchange="format('forecolor',this[this.selectedIndex].style.color);this.selectedIndex=0" STYLE="font:8pt verdana,arial,sans-serif;background:#FFFFFF">
 										<option selected>V&auml;rv...
 										<option style="color:black">must</option>
+										<option style="color:#da4d00">orikas</option>
 										<option style="color:darkslategray">tumehall</option>
 										<option style="color:red">punane</option>
 										<option style="color:maroon">tumelilla</option>
@@ -317,7 +318,7 @@ function doSubmit()
 										<option style="color:darkblue">tumesinine</option>
 										<option style="color:teal">rohekassinine</option>
 										<option style="color:skyblue">taevasinine</option>
-										<option style="color:green">soheline</option>
+										<option style="color:green">roheline</option>
 										<option style="color:seagreen">mereroheline</option>
 										<option style="color:olive">oliiv</option>
 										<option style="color:orange">oranz</option>

@@ -9,7 +9,7 @@
 <table border="0" cellspacing="1" cellpadding="2" width="100%">
 
 <tr><td class="fgtitle" width="1%">Nimi</td><td class="fgtext" colspan="3"><input type="text" name="name" value="{VAR:name}" class="small_button" Style="width:280px;"></td></tr>
-<tr><td class="fgtitle" >SQL</td><td class="fgtext" colspan="3" ><input type="text" name="sql" value="{VAR:sql}" class="small_button" Style="width:280px;"></td></tr>
+<tr><td class="fgtitle" >SQL</td><td class="fgtext" colspan="3" ><input disabled type="text" name="sql" value="{VAR:sql}" class="small_button" Style="width:280px;"></td></tr>
 <tr><td class="fgtext" colspan="1" ><input type="submit" name="save_data"  value="Salvesta" class="small_button"></td>
 <td colspan="3" class="fgtext" align="right">
 <input type="submit"   value="Muuda" class="small_button" OnClick="sendcmd('filter_edit_change_part');">
@@ -31,7 +31,7 @@
 <td class="title" align="center">
 <input type="checkbox" name="sel[]" value="{VAR:tid}">
 
-<!--
+<!-- no kui te tõesti mugavamalt ei taha, ex siis teeme keeruliselt 
 <a href="javascript:sendcmd2('filter_edit_up',{VAR:tid})"><img border=0 alt="kõrgemale" src="/images/up_r_arr.gif"></a>
 <a href="javascript:sendcmd2('filter_edit_down',{VAR:tid})"><img  border=0 alt="madalamale" src="/images/down_r_arr.gif"></a>
 -->
@@ -43,7 +43,7 @@
 
 <tr>
 <!-- SUB: LISA -->
-<td class="ftitle2" colspan="4">Lisa <input type="radio" name="addpos"  value="before" checked class="small_button">enne&nbsp;&nbsp;<input type="radio" name="addpos" value="after" class="small_button">pärast valitut</td>
+<td class="ftitle2" colspan="4">Lisa <input type="radio" name="addpos"  value="before" class="small_button">enne&nbsp;&nbsp;<input type="radio" name="addpos" value="after" class="small_button" checked>pärast valitut</td>
 <!-- END SUB: LISA -->
 
 <!-- SUB: MUUDA -->
@@ -90,7 +90,7 @@
 </form>
 <script language="javascript">
 exprs=new Array("=","!=","LIKE",">","<",">=","<=");
-validexprs=new Array(new Array(0,1,2),new Array(0,1,3,4,5,6),new Array(0,1,3,4,5,6));
+validexprs=new Array(new Array(0,1,2,3,4,5,6),new Array(0,1,3,4,5,6),new Array(0,1,3,4,5,6));
 ftnames=new Array("string","number","aeg");
 ftypes=new Array({VAR:ftypes});
 vhelp=new Array({VAR:foptions});
@@ -163,12 +163,12 @@ document.forms.fr.valhelp.options[0]=new Option("                    ");
 for (i=0;i<vhelp[sel].length;i++)
 {
 	document.forms.fr.valhelp.options[i]=new Option(vhelp[sel][i],vhelpkeys[sel][i]);
-	//alert("valhelp "+i+": v="+vhelp[sel][i]+"- k="+vhelpkeys[sel][i]);
+	//alert("valhelp "+i+": v=*"+vhelp[sel][i]+"* k=*"+vhelpkeys[sel][i]+"*");
 };
 
 if (vhelp[sel].length>0)
 {
-	document.forms.fr.val.value="0" //kuna esimene on valitud
+	document.forms.fr.val.value="0"; //kuna esimene on valitud
 	n2ita("dvalhelp",1);
 	n2ita("dval",0);
 }
@@ -193,7 +193,9 @@ n2ita("ddateval2",0);
 };
 
 onfiechange({VAR:change_p_fieldnum});
+
 document.forms.fr.val.value="{VAR:selectedval}";
+document.forms.fr.valhelp.value="{VAR:selectedval}";
 document.forms.fr.expr.value="{VAR:selectedexpr}";
 
 </script>

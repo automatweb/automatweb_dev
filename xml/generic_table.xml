@@ -1,0 +1,16 @@
+<?xml version='1.0'?>
+<tabledef>
+
+<definitions>
+<header_normal   value="title"/>
+<header_sortable value="title"/>
+<header_sorted   value="titlesel"/>
+
+<content_style1  value="fgtext"/>
+<content_style2  value="fgtext"/>
+<content_style1_selected value="fgtextsel"/>
+<content_style2_selected value="fgtextsel"/>
+<tableattribs border="0" width="100%" cellspacing="1" cellpadding="1" bgcolor="#FFFFFF"/>
+</definitions>
+
+</tabledef>

@@ -1,3 +1,23 @@
+<form action='orb.aw' method="GET">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr>
+<td colspan=2> In this view You can search from made reservations by passenger name, order ID or agent name. </td>
+</tr>
+<tr>
+<td>Name:</td><td><input type='text' name='s_name' value='{VAR:s_name}'></td>
+</tr>
+<tr>
+<td>ID:</td><td><input type='text' name='s_id' value='{VAR:s_id}'></td>
+</tr>
+<tr>
+<td>Agent:</td><td><input type='text' name='s_agent' value='{VAR:s_agent}'></td>
+</tr>
+<tr>
+<td colspan=2><input type='submit' value='Otsi'></td>
+</tr>
+</table>
+{VAR:reforb}
+</form>
 <table width="750" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td align="left">

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.69 2001/09/28 14:51:39 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.70 2001/10/02 10:05:53 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -10,6 +10,7 @@ global $orb_defs;
 $orb_defs["form"] = "xml";
 
 classload("form_base","form_element","form_entry_element","form_search_element","form_cell","images","style","acl");
+classload("form_filter_search_element");
 
 // see on kasutajate registreerimiseks. et pannaxe kirja et mis formid tyyp on t2itnud.
 session_register("session_filled_forms");
@@ -17,6 +18,8 @@ session_register("session_filled_forms");
 define("FORM_ENTRY",1);
 define("FORM_SEARCH",2);
 define("FORM_RATING",3);
+define("FORM_FILTER_SEARCH",4);//lauri muudetud 09302001
+//damn, const.aw-s on defineeritud FTYPE_ ja need samad, milleks ??
 
 // constants for get_elements_for_row - specify wheter the return array is 
 // element_name => element_value
@@ -49,6 +52,7 @@ class form extends form_base
 				FORM_ENTRY => FG_ENTRY_FORM, 
 				FORM_SEARCH => FG_SEARCH_FORM, 
 				FORM_RATING => FG_RATING_FORM,
+				FORM_FILTER_SEARCH => "Filtri otsinguform",
 		);
 
 		$this->formaliases = "";
@@ -1228,7 +1232,7 @@ class form extends form_base
 				$l = $this->mk_my_orb("show_entry", array("id" => $id, "entry_id" => $entry_id, "op_id" => $this->arr["after_submit_op"],"section" => $section));
 				break;
 			default:
-				if ($this->type == FTYPE_SEARCH)
+				if ($this->type == FTYPE_SEARCH || $this->type == FTYPE_FILTER_SEARCH)
 				{
 					// n2itame ocingu tulemusi
 					$l = $this->mk_my_orb("show_entry", array("id" => $id, "entry_id" => $entry_id,"op_id" => 1,"section" => $section));
@@ -1262,33 +1266,42 @@ class form extends form_base
 		$this->db_query("SELECT * FROM form_relations WHERE form_to = $id OR form_from = $id");
 		while ($r_row = $this->db_next())
 		{
-			// nii. nyt on siis see form, mille entryt loaditakse on lingitud miski teise formi kylge. 
-			// j2relikult tuleb siin loadida ka see entry, mis on lingitud
-			// niisis, tuleb teha p2ring teise formi tabelisse, milles where klauslis on see v22rtus, mis k2esolevast formist valiti
-			$this->save_handle();
-			$this->db_query("SELECT * FROM form_".$r_row["form_from"]."_entries WHERE ev_".$r_row["el_from"]." = '".$row["ev_".$r_row["el_to"]]."'");
-			$er_row = $this->db_next();
-			if (is_array($er_row))
+			if ($r_row["form_from"] && $r_row["form_to"])
 			{
-				$er_row["form_".$r_row["form_from"]."_entry"] = $er_row["id"];
-				$row= $row+$er_row;
+				// nii. nyt on siis see form, mille entryt loaditakse on lingitud miski teise formi kylge. 
+				// j2relikult tuleb siin loadida ka see entry, mis on lingitud
+				// niisis, tuleb teha p2ring teise formi tabelisse, milles where klauslis on see v22rtus, mis k2esolevast formist valiti
+				$this->save_handle();
+				if ($r_row["el_from"])
+				{
+					$this->db_query("SELECT * FROM form_".$r_row["form_from"]."_entries WHERE ev_".$r_row["el_from"]." = '".$row["ev_".$r_row["el_to"]]."'");
+					$er_row = $this->db_next();
+					if (is_array($er_row))
+					{
+						$er_row["form_".$r_row["form_from"]."_entry"] = $er_row["id"];
+						$row= $row+$er_row;
+					}
+					if (!in_array($r_row["form_from"],$this->temp_ids))
+					{
+						$this->req_load_relations($r_row["form_from"],&$row);
+					}
+				}
+				if ($r_row["el_to"])
+				{
+					$this->db_query("SELECT * FROM form_".$r_row["form_to"]."_entries WHERE ev_".$r_row["el_to"]." = '".$row["ev_".$r_row["el_from"]]."'");
+					$er_row = $this->db_next();
+					if (is_array($er_row))
+					{
+						$er_row["form_".$r_row["form_to"]."_entry"] = $er_row["id"];
+						$row= $row+$er_row;
+					}
+					if (!in_array($r_row["form_to"],$this->temp_ids))
+					{
+						$this->req_load_relations($r_row["form_to"],&$row);
+					}
+				}
+				$this->restore_handle();
 			}
-			if (!in_array($r_row["form_from"],$this->temp_ids))
-			{
-				$this->req_load_relations($r_row["form_from"],&$row);
-			}
-			$this->db_query("SELECT * FROM form_".$r_row["form_to"]."_entries WHERE ev_".$r_row["el_to"]." = '".$row["ev_".$r_row["el_from"]]."'");
-			$er_row = $this->db_next();
-			if (is_array($er_row))
-			{
-				$er_row["form_".$r_row["form_to"]."_entry"] = $er_row["id"];
-				$row= $row+$er_row;
-			}
-			if (!in_array($r_row["form_to"],$this->temp_ids))
-			{
-				$this->req_load_relations($r_row["form_to"],&$row);
-			}
-			$this->restore_handle();
 		}
 		$this->restore_handle();
 	}
@@ -1422,6 +1435,13 @@ class form extends form_base
 			$r = $this->do_search($entry_id, $op_id);
 			$awt->stop("form::show");
 			return $r;
+		}
+
+		if ($this->type == FORM_FILTER_SEARCH)
+		{
+			$parse = $this->do_filter_search($entry_id, $op_id, $arr);
+			$awt->stop("form::show");
+			return $parse;
 		}
 
 		if (!$no_load_op)
@@ -2105,7 +2125,7 @@ class form extends form_base
 				$query = "SELECT * FROM form_".$id."_entries";
 			}
 
-//			echo "q = $query <br>";
+		//	echo "q = $query <br>";
 			$matches = array();
 			$this->db_query($query);
 			while ($row = $this->db_next())
@@ -2449,6 +2469,11 @@ class form extends form_base
 		if ($type == "rating")
 		{
 			$type = FORM_RATING;
+		}
+
+		if ($type == "filter_search")
+		{
+			$type = FORM_FILTER_SEARCH;
 		}
 
 		$this->db_query("INSERT INTO forms(id, type,content,cols,rows) VALUES($id, $type,'',1,1)");
@@ -3848,6 +3873,190 @@ class form extends form_base
 			$f->load_output($row["oid"]);
 			$f->save_output($row["oid"]);
 		}
+	}
+
+	function tables($arr)
+	{
+		extract($arr);
+		$this->init($id,"admin_tables.tpl","Muuda tabeleid");
+
+		$tables = array();
+		$tbels = array();
+		$this->db_list_tables();
+		while ($tb = $this->db_next_table())
+		{
+			$tables[$tb] = $tb;
+		}
+
+		if (is_array($this->arr["save_tables"]))
+		{
+			foreach($this->arr["save_tables"] as $tbl => $tbcol)
+			{
+				$ta = $this->db_get_table($tbl);
+				$fields = array("" => "");
+				foreach($ta["fields"] as $fn => $fdata)
+				{
+					$fields[$fn] = $fn;
+				}
+				$this->vars(array(
+					"table_name" => $tbl,
+					"cols" => $this->picker($tbcol,$fields)
+				));
+				$tabel.=$this->parse("TABLE");
+			}
+		}
+		$this->vars(array(
+			"save_table" => checked($this->arr["save_table"] == 1),
+			"tables" => $this->multiple_option_list($this->arr["save_tables"], $tables),
+			"TABLE" => $tabel,
+			"reforb" => $this->mk_reforb("submit_tables", array("id" => $id))
+		));
+		return $this->do_menu_return();
+	}
+
+	function submit_tables($arr)
+	{
+		extract($arr);
+		$this->load($id);
+
+		$this->arr["save_table"] = $save_table;
+		$this->arr["save_tables"] = array();
+		if (is_array($tables))
+		{
+			foreach($tables as $tbl)
+			{
+				$this->arr["save_tables"][$tbl] = $indexes[$tbl];
+			}
+		}
+		$this->save();
+		return $this->mk_my_orb("sel_tables", array("id" => $id));
+	}
+
+	////
+	// !generates the form for selecting the used filter
+	function gen_filter_search_sel($arr)
+	{
+		global $awt;
+		$page=(int)$page;
+		$awt->start("form::gen_filter_search_sel");
+		$awt->count("form::gen_filter_search_sel");
+
+		extract($arr);
+		$this->init($id, "filter_search_sel.tpl", "Vali kasutatav filter");
+
+		$this->vars(array("LINE" => "")); $cnt=0;
+
+		$per_page = 10;
+
+		$total = $this->db_fetch_field("SELECT count(oid) as cnt FROM objects  WHERE status != 0 AND class_id = ".CL_SEARCH_FILTER,"cnt");
+		$pages = $total / $per_page;
+		for ($i=0; $i < $pages; $i++)
+		{
+			$this->vars(array(
+				"from" => ($i*$per_page),
+				"to" => min(($i+1)*$per_page, $total),
+				"pageurl" => $this->mk_my_orb("sel_filter_search", array("id" => $id, "page" => $i))
+			));
+			if ($i == $page)
+			{
+				$pp.=$this->parse("SEL_PAGE");
+			}
+			else
+			{
+				$pp.=$this->parse("PAGE");
+			}
+		}
+		$this->vars(array(
+			"PAGE" => $pp,
+			"SEL_PAGE" => ""
+		));
+
+		$this->db_query("SELECT oid,parent,name,comment FROM objects  WHERE status != 0 AND class_id = ".CL_SEARCH_FILTER." LIMIT ".($page*$per_page).",$per_page");
+		while($row = $this->db_next())
+		{
+			$tar = array(0 => "");
+			if (is_array($ops[$row["oid"]]))
+			{
+				foreach($ops[$row["oid"]] as $opid => $opname)
+				{
+					$tar[$opid] = $opname;
+				}
+			}
+			
+			$this->vars(array(
+				"flt_name"	=> $row["name"], 
+				"flt_comment" => $row["comment"], 
+				"flt_location" => $row["parent"], 
+				"flt_id" => $row["oid"],
+				"row"	=> $cnt,
+				"checked" => checked($this->arr["search_filter"] == $row["oid"]),
+			));
+			$this->parse("LINE");
+			$cnt+=2;
+		}
+
+		$this->vars(array(
+			"reforb"	=> $this->mk_reforb("save_filter_search_sel", array("id" => $this->id,"page" => $page)),
+		));
+
+		$awt->stop("form::gen_filter_search_sel");
+		return $this->do_menu_return();
+	}
+
+	////
+	// !saves the used filter for search form $id
+	function save_filter_search_sel(&$arr)
+	{
+		$this->dequote(&$arr);
+		extract($arr);
+		$this->load($id);
+
+		$this->arr["search_filter"] = $sel;
+
+		$this->save();
+		return $this->mk_orb("sel_filter_search", array("id" => $id,"page" => $page));
+	}
+
+	//Output määratakse niikuinii filtri poolt.
+	function do_filter_search($entry_id, $output_id,$arr)
+	{
+		classload("search_filter");
+		if (!$this->arr["search_filter"])
+		{
+			return "Kasutatav filter formile $this->id on määramata";
+		};
+		$sf = new search_filter();
+		$sf->id=$this->arr["search_filter"];
+
+		$sf->__load_filter();
+		$this->load_entry($entry_id);
+		//Nüüd tuleb filtri osad käigu pealt mälus ära muuta ja 
+		// panna asemele see kamm, mille kasutaja sisestas
+		//Kuna form::get_all_elements ei anna küllalt andmeid, siis tuleb siia ise teha:
+		for ($row = 0; $row < $this->arr["rows"]; $row++)
+		{
+			for ($col = 0; $col < $this->arr["cols"]; $col++)
+			{
+				$this->arr["contents"][$row][$col]->get_els(&$elar);
+				while (list(,$el) = each($elar))
+				{
+					if ($el->arr["part"]!="" && $el->arr["part"]!=-1)
+					{
+						$sf->filter["p".(int)$el->arr["part"]]["val"]=$el->get_val();
+					};
+				}
+			}
+		}
+
+		$arr["no_menu"]=1;
+		$arr["dont_load_filter"]=1;
+		
+		$arr["this_page"]=$this->mk_my_orb("show_entry",array("id"=>$arr["id"],"entry_id"=>$entry_id,"op_id" => $arr["op_id"]));
+		$arr["this_page_array"]=array("class" => "form", "action" => "show_entry","id" => $arr["id"],"entry_id"=>$entry_id,"op_id" => $arr["op_id"]);
+		$arr["id"]=$sf->id;
+
+
+		return $sf->orb_search($arr);
 	}
 };	// class ends
 ?>

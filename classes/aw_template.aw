@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.16 2001/10/01 13:50:49 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.17 2001/10/02 10:05:52 kristo Exp $
 // aw_template.aw - Templatemootor
 class tpl
 {
@@ -148,6 +148,7 @@ class aw_template extends acl_base
 	{
 		// loeme faili sisse
 		$filename = $this->template_dir . "/$filename";
+		$this->template_filename = $filename;
 
 		$source = $this->get_file(array("file" => $filename));
 		

@@ -64,10 +64,11 @@ class shop_admin extends shop_base
 								 array("name" => "Article types", "url" => $this->mk_my_orb("arttype_redirect", array("shop_id" => $shop_id),"",false,true)),
 								),
 			3 => array(
-								 array("name" => "All reservations", "url" => $this->mk_my_orb("admin_orders", array("id" => $shop_id),"shop",false,true)),
+								 array("name" => "All reservations", "url" => $this->mk_my_orb("admin_orders", array("id" => $shop_id),"shop",true,true)),
 								 array("name" => "Detailed reservations", "url" => $this->mk_my_orb("detailed_reservations", array("shop_id" => $shop_id),"shop_admin",false,true)),
+//								 array("name" => "Passengers", "url" => $this->mk_my_orb("passengers", array("shop_id" => $shop_id),"shop_admin",false,true)),
+								 array("name" => "Detailed Passengers list", "url" => $this->mk_my_orb("passengers_detail", array("shop_id" => $shop_id),"shop_admin",false,true)),
 								 array("name" => "Statistics", "url" => $this->mk_my_orb("change", array("id" => "3443", "parent" => "3430"),"shop_stat", false, true)),
-								 array("name" => "Passengers", "url" => $this->mk_my_orb("passengers", array("shop_id" => $shop_id),"shop_admin",false,true)),
 								),
 			4 => array(
 								 array("name" => "Add new user", "url" => "#"),
@@ -680,6 +681,174 @@ class shop_admin extends shop_base
 			}		
 		}
 
+		return $this->parse();
+	}
+
+	function passengers_detail($arr)
+	{
+		extract($arr);
+		if ($print)
+		{
+			$this->read_template("admin_passengers_detail_print.tpl");
+		}
+		else
+		{
+			$this->read_template("admin_passengers_detail.tpl");
+		}
+
+		load_vcl("date_edit");
+		$de = new date_edit(time());
+		$de->configure(array(
+			"year" => "",
+			"month" => "",
+			"day" => "",
+		));
+	
+		$ipi = $this->get_item_picker();
+
+		$t_from = mktime($from["hour"],$from["minute"],0,$from["month"],$from["day"],$from["year"]);
+		$t_to = mktime($to["hour"],$to["minute"],0,$to["month"],$to["day"],$to["year"]);
+		$this->vars(array(
+			"t_from" => $de->gen_edit_form("from", $t_from),
+			"t_to"	=> $de->gen_edit_form("to", $t_to),
+			"reforb" => $this->mk_reforb("passengers_detail", array("shop_id" => $shop_id,"no_reforb" => true,"search" => true)),
+			"arts" => $this->picker($art,$ipi),
+			"all_art_types" => checked($all_art_types==1),
+			"all_arts" => checked($all_arts==1),
+		));
+
+		if ($search)
+		{
+			$sh_ofs = $this->get_ofs_for_shop($shop_id);
+
+			$itypes = $this->listall_item_types(ALL_PROPS);
+			$all_items = $this->get_item_picker(array("type" => ALL_PROPS));
+
+			$items = array();
+			if ($all_arts) 
+			{
+				$items = $all_items;
+			}
+			else
+			if ($art)
+			{
+				$items = $this->get_item_picker(array("type" => ALL_PROPS, "constraint" => " AND id = '$art'"));
+			}
+
+			$orders = array();
+			// no distinct so we can figure out the start/end dates of the order
+			// order by period so that from will always be before to. so we can avoid checking
+			$this->db_query("SELECT * FROM order2item order by period");
+			while ($row = $this->db_next())
+			{
+				// if we don't have the from date yet, then this is it
+				if (!$orders[$row["order_id"]]["from"])
+				{
+					$orders[$row["order_id"]]["from"] = $row["period"];
+				}
+				else
+				if ($row["period"] != $orders[$row["order_id"]]["from"])	
+				{
+					// if we already have it and this one is different then it must be the end date
+					$orders[$row["order_id"]]["to"] = $row["period"];
+				}
+
+				// now we must check that just orders that contain the selected items go through
+				if ($items[$row["item_id"]])
+				{
+					$orders[$row["order_id"]]["has_item"] = true;
+				}
+
+				if ($itypes[$all_items[$row["item_id"]]["type_id"]]["has_voucher"])	// it's a hotel. blerg.
+				{
+					$orders[$row["order_id"]]["room"] = $all_items[$row["item_id"]]["name"];
+					// use parent cache and figure out the hotel name - ie the parent name
+					if (!$parent_names[$row["item_id"]])
+					{
+						$this->save_handle();
+						$parent_names[$row["item_id"]] = $this->db_fetch_field("SELECT name FROM objects WHERE oid = ".$all_items[$row["item_id"]]["parent"],"name");
+						$this->restore_handle();
+					}
+					$orders[$row["order_id"]]["hotel"] = $parent_names[$row["item_id"]];
+					$orders[$row["order_id"]]["hotel_form_id"] = $all_items[$row["item_id"]]["cnt_form"] ? $all_items[$row["item_id"]]["cnt_form"] : $itypes[$all_items[$row["item_id"]]["type_id"]]["cnt_form"];
+					$orders[$row["order_id"]]["hotel_entry_id"] = $row["cnt_entry"];
+					$orders[$row["order_id"]]["hotel_op_id"] = $all_items[$row["item_id"]]["cnt_extra_op"];
+				}
+			}
+
+			// now leave out all the orders that don't contain any items
+			$oids = array();
+			foreach($orders as $oid => $odata)
+			{
+				// we do the time filtering here cause we can't do it in the query because then we might skip opver some important items
+				if ($odata["has_item"] && $odata["from"] >= $t_from && $odata["from"] <= $t_to)
+				{
+					$oids[] = $oid;
+				}
+			}
+			$oids = join(",",$oids);
+
+			// first we must count the number of passengers for each order
+			if ($oids != "")
+			{
+				$cnt_data = array();
+				$this->db_query("SELECT count(entry_id) AS cnt,order_id as order_id FROM order2form_entries WHERE order_id IN ($oids) GROUP BY order_id");
+				while ($row = $this->db_next())
+				{
+					$cnt_data[$row["order_id"]] = $row["cnt"];
+				}
+
+				$f = new form;
+
+				$cur_order = 0;
+				$cnt = 1;
+				$this->db_query("SELECT * FROM order2form_entries WHERE order_id IN ($oids) order by order_id,name");
+				while ($row = $this->db_next())
+				{
+					$f->reset();
+					$this->vars(array(
+						"nr" => $cnt++,
+						"name" => $f->show(array("id" => $row["form_id"], "entry_id" => $row["entry_id"], "op_id" => $sh_ofs[$row["form_id"]]["op_id_search"])),
+						"from" => $this->time2date($orders[$row["order_id"]]["from"],5),
+						"to" => $this->time2date($orders[$row["order_id"]]["to"],5),
+						"num_items" => (int)$cnt_data[$row["order_id"]],
+						"ord_id" => $row["order_id"],
+						"room" => $orders[$row["order_id"]]["room"],
+						"hotel" => $orders[$row["order_id"]]["hotel"],
+						"view_order" => $this->mk_my_orb("view_order", array("shop" => $shop_id, "order_id" => $row["order_id"]), "shop", false,true),
+					));
+					$no1 = "";
+					$no2 = "";
+					if ($row["order_id"] != $cur_order)
+					{
+						$f->reset();
+						$info = "";
+						if ($orders[$row["order_id"]]["hotel_op_id"] != "")
+						{
+							$info = $f->show(array(
+								"id" => $orders[$row["order_id"]]["hotel_form_id"], 
+								"entry_id" => $orders[$row["order_id"]]["hotel_entry_id"],
+								"op_id" => $orders[$row["order_id"]]["hotel_op_id"]
+							));
+						}
+						$this->vars(array("info" => $info));
+						$no1 = $this->parse("N_ORD1");
+						$no2 = $this->parse("N_ORD2");
+						$cur_order = $row["order_id"];
+					}
+					$this->vars(array(
+						"N_ORD1" => $no1,
+						"N_ORD2" => $no2
+					));
+					$ps.=$this->parse("PASSENGER");
+				}
+			}
+			$this->vars(array(
+				"PASSENGER" => $ps,
+				"sel_item" => $parent_names[$art]."/".$all_items[$art]["name"],
+				"print_url" => $this->mk_my_orb("passengers_detail", $arr+array("print" => true), "",false, true)
+			));
+		}
 		return $this->parse();
 	}
 }

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.10 2001/09/12 18:00:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.11 2001/10/02 10:06:28 kristo Exp $
 global $PHP_SELF;
 $js_table = "
 function xnavi_alfa(char_to_look_for) {
@@ -75,6 +75,12 @@ class aw_table
 	{
 		// sisestame andmed
 		$this->data[] = $row;
+	}
+	
+	function define_action($row) 
+	{
+		// sisestame andmed
+		$this->actions[] = $row;
 	}
 
 	// defineerib headeri
@@ -558,7 +564,7 @@ class aw_table
 
 							$tbl.=$av["remote"]?
 								"<a href='javascript:remote(0,".$av["remote"].",\"$this->self?".$av["link"]."&id=".$v[$av["field"]].'");\'>'.$av["caption"]."</a>":
-								"<a href='$this->self?" . $av["link"] . "&id=" . $v[$av["field"]] . "'>$av[caption]</a>";
+								"<a href='$this->self?" . $av["link"] . "&id=" . $v[$av["field"]] . "&" . $av[field] . "=" . $v[$av["field"]] . "'>$av[caption]</a>";
 
 							$tbl .= $this->closetag(array("name" => "td"));
 						};
@@ -589,6 +595,78 @@ class aw_table
 		// tagastame selle käki
 		$awt->stop("table::draw");
 		return $tbl;
+	}
+
+	function _format_csv_field($d)
+	{
+		$new=strtr($d,array('"'=>'""'));
+		if (!(strpos($d,';')===false) || $new != $d)
+		{
+			$new='"'.$new.'"';
+		};
+		return $new;
+	}
+
+	// tagastab csv andmed, kustuda välja draw asemel
+	function get_csv_file()
+	{
+		$d=array();
+		reset($this->rowdefs);
+		$tbl="";
+		if (is_array($this->rowdefs))
+		while(list($k,$v) = each($this->rowdefs)) 
+		{
+				$tbl .= ($tbl?";":"").$this->_format_csv_field($v["caption"]);
+		};
+		$d[]=$tbl;
+
+		
+		// koostame tabeli sisu
+		if (is_array($this->data)) 
+		{
+			reset($this->data);
+			$cnt=0;
+			while(list($k,$v) = each($this->data)) 
+			{
+				$tbl="";
+				$cnt++;
+				reset($this->rowdefs);
+				if (is_array($this->rowdefs))
+				while(list($k1,$v1) = each($this->rowdefs)) 
+				{
+					if ($v1["name"] == "rec") 
+					{
+						$val = $cnt;   
+					} else 
+					{
+						if ($v1["strformat"])
+						{
+							$format = localparse($v1["strformat"],$v);
+							$val = sprintf($format,$v[$v1["name"]]);
+						}
+						else
+						{
+							$val = $v[$v1["name"]];	
+						};
+					};
+
+					if ($v1["type"] == "time")
+					{
+						$val = date($v1["format"],$val);
+					};
+
+					if (!$val && $v1["type"]!="int")
+					{
+						$val = "";
+					};
+
+					$tbl .= ($tbl?";":"").$this->_format_csv_field($val);
+				};
+				$d[]=$tbl;
+			};
+		};
+		// sisu joonistamine lopeb
+		return join("\r\n",$d);
 	}
 
 	// genereerib html tagi

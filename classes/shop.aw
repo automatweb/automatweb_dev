@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.35 2001/09/18 00:21:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.36 2001/10/02 10:05:53 kristo Exp $
 // shop.aw - Shop
 lc_load("shop");
 global $orb_defs;
@@ -373,39 +373,48 @@ class shop extends shop_base
 		$ucur = $this->get_act_cur($shop);
 
 		$c = "";
+		$has_items = 0;
 		while ($row = $this->db_next())
 		{
 			$this->save_handle();
-			if (!$this->is_item_available($row,1,new form(), $min_p))
+			if ($this->is_item_available($row,1,new form(), $min_p))
 			{
-				$c.=$this->parse("NOT_AVAILABLE");
-				continue;
+				$itt = $ityp->get_item_type($row["type_id"]);
+
+				$it_price = $this->get_list_price($row["oid"],$row["price"],$shop);
+
+				$f = new form;
+				$f->set_active_currency($ucur);
+				$f->load($itt["form_id"]);
+				$f->load_entry($row["entry_id"]);
+				$f->set_element_value_by_type("price",$it_price);
+
+				$this->vars(array(
+					"item" => $f->show(array("id" => $itt["form_id"], "entry_id" => $row["entry_id"],"op_id" => $itt["short_op"],"no_load_entry" => true)),
+					"item_id" => $row["oid"],
+					"price" => $it_price, 
+					"it_cnt"	=> $shopping_cart["items"][$row["oid"]]["cnt"],
+					"order_item" => $this->mk_my_orb("order_item", array("item_id" => $row["oid"], "shop" => $id, "section" => $section)),
+					"change" => $this->mk_my_orb("change", array("id" => $row["oid"]),"shop_item")
+				));
+				$tp+=(double)$shopping_cart["items"][$row["oid"]]["cnt"]*(double)$row["price"];	// selle arvutame p2rast kogusummast maha
+																																				// et saada korvi hind = baashind + selle lehe asjade hind
+				$c .= $this->parse("ITEM");
+				$has_items = 1;
 			}
-			$itt = $ityp->get_item_type($row["type_id"]);
-
-			$it_price = $this->get_list_price($row["oid"],$row["price"],$shop);
+			else
+			{
+				if ($has_items == 0)
+				{
+					$has_items = 2;
+				}
+			}
 			$this->restore_handle();
-
-			$f = new form;
-			$f->set_active_currency($ucur);
-			$f->load($itt["form_id"]);
-			$f->load_entry($row["entry_id"]);
-			$f->set_element_value_by_type("price",$it_price);
-
-			$this->vars(array(
-				"item" => $f->show(array("id" => $itt["form_id"], "entry_id" => $row["entry_id"],"op_id" => $itt["short_op"],"no_load_entry" => true)),
-				"item_id" => $row["oid"],
-				"price" => $it_price, 
-				"it_cnt"	=> $shopping_cart["items"][$row["oid"]]["cnt"],
-				"order_item" => $this->mk_my_orb("order_item", array("item_id" => $row["oid"], "shop" => $id, "section" => $section)),
-				"change" => $this->mk_my_orb("change", array("id" => $row["oid"]),"shop_item")
-			));
-			$tp+=(double)$shopping_cart["items"][$row["oid"]]["cnt"]*(double)$row["price"];	// selle arvutame p2rast kogusummast maha
-																																			// et saada korvi hind = baashind + selle lehe asjade hind
-			$c .= $this->parse("ITEM");
-			$has_items = true;
 		}
-
+		if ($has_items == 2)
+		{
+			$c = $this->parse("NOT_AVAILABLE");
+		}
 		$this->vars(array(
 			"tot_price" => (double)$shopping_cart["price"]-(double)$tp,	
 			"reforb" => $this->mk_reforb("add_cart", array("shop_id" => $id, "section" => $section)),
@@ -663,7 +672,7 @@ class shop extends shop_base
 		return (int)($price+0.5);
 	}
 
-	function do_parse_eq($eq,$farr)
+	function do_parse_eq($eq,$farr,$num_weeks = 0)
 	{
 		$els = $this->parse_eq_variables($eq["comment"]);
 
@@ -692,6 +701,9 @@ class shop extends shop_base
 			$replaces[$elname] = $elval;
 //			$eq = str_replace($elname,$elval,$eq);
 		}
+
+		$replaces["num_weeks"] = $num_weeks;
+//		echo "weeks = $num_weeks <br>";
 		uksort($replaces, array($this,"_sort_repl"));
 		foreach($replaces as $k => $v)
 		{
@@ -1164,8 +1176,16 @@ class shop extends shop_base
 						}
 						$f->set_element_value($el->get_id(),$time);
 
+						if ($this->is_item_available($row,1,new form(),$time))
+						{
+							$item = $f->show(array("id" => $itt["form_id"], "entry_id" => $row["entry_id"],"op_id" => $itt["long_op"],"no_load_entry" => true));
+						}
+						else
+						{
+							$item = "No items available in this period (".$this->time2date($time,5).")";
+						}
 						$this->vars(array(
-							"item" => $f->show(array("id" => $itt["form_id"], "entry_id" => $row["entry_id"],"op_id" => $itt["long_op"],"no_load_entry" => true)),
+							"item" => $item,
 							"perd_val" => $time,
 							"perd_check" => checked($shopping_cart["items"][$row["brother_of"]]["period"] == $time),
 							"item_id" => $row["brother_of"]
@@ -1230,10 +1250,12 @@ class shop extends shop_base
 		extract($arr);
 		global $shopping_cart;
 	
+		$is_period_item = true;
 		if (!is_array($period))
 		{
 			// if period is not set then fake it to be the date from the shopping cart
 			$period[$item_id] = $this->get_cart_min_period();
+			$is_period_item = false;
 		}
 
 		$shop_o = $this->get($shop);
@@ -1288,7 +1310,7 @@ class shop extends shop_base
 				session_register("status_msg");
 				// kui ei old kyllalt kohti, siis rollime tellimuse sisestuse tagasi ka
 				$f->restore_entry($it["cnt_form"] ? $it["cnt_form"] : $itt["cnt_form"],$shopping_cart["items"][$item_id]["cnt_entry"],$old_entry);
-				return $this->mk_my_orb("order_item", array("item_id" => $item_id,"shop" => $shop, "section" => $section));
+				return $this->mk_my_orb("show", array("id" => $shop, "section" => $section));
 			}
 
 			// ei broneeri asju tegelt 2ra, bronnime alles siis kui tyyp p2ris tellimuse teeb.
@@ -1384,6 +1406,18 @@ class shop extends shop_base
 			$ss = " AND user = '$uid' ";
 		}
 
+		$this->vars(array(
+			"s_name" => $s_name,
+			"s_agent" => $s_agent,
+			"s_id" => $s_id,
+			"reforb" => $this->mk_reforb("admin_orders", array("id" => $id, "no_reforb" => true,"search" => true))
+		));
+
+		if ($search)
+		{
+			$ss.=" AND (name LIKE '%".$s_name."%' AND id LIKE '%".$s_id."%' AND	user LIKE '%".$s_agent."%') ";
+		}
+
 		// make pageselector
 		$cnt = $this->db_fetch_field("SELECT count(*) as cnt FROM orders WHERE shop_id = $id $ss","cnt");
 		$num_pages = $cnt / SHOP_PER_PAGE;
@@ -1393,7 +1427,7 @@ class shop extends shop_base
 			$this->vars(array(
 				"from" => $i*SHOP_PER_PAGE,
 				"to" => min(($i+1)*SHOP_PER_PAGE,$cnt),
-				"goto_page" => $this->mk_my_orb("order_history", array("id" => $id, "section" => $section, "page" => $i))
+				"goto_page" => $this->mk_my_orb($GLOBALS["action"], array("id" => $id, "section" => $section, "page" => $i,"s_id" => $s_id,"search" => $search, "s_name" => $s_name, "s_agent" => $s_agent))
 			));
 			if ($i == $page)
 			{
@@ -1911,9 +1945,11 @@ class shop extends shop_base
 
 		$item_form = new form;
 		$cnt_form = new form;
+		$periods = array();
 		$this->db_query("SELECT * FROM order2item WHERE order_id = $order_id ORDER BY item_type_order");
 		while ($row = $this->db_next())
 		{
+			$periods[$row["period"]] = $row["period"];
 			$this->save_handle();
 			if ($cur_type != $row["item_type"])
 			{
@@ -1963,6 +1999,24 @@ class shop extends shop_base
 		}
 		$tx.=$ft->finish_table();
 
+		$min_p = 2000000000;
+		foreach($periods as $ip)
+		{
+			if ($ip > 1 && $min_p > $ip)
+			{
+				$min_p = $ip;
+			}
+		}
+		$max_p = 0;
+		foreach($periods as $ip)
+		{
+			if ($ip > 1 && $max_p < $ip)
+			{
+				$max_p = $ip;
+			}
+		}
+		$weeks = ($max_p - $min_p)/(24*3600*7);
+
 		$f = new form;
 		$txx = "";
 		$this->db_query("SELECT entry_id,form_id FROM order2form_entries WHERE order_id = $order_id");
@@ -1987,11 +2041,12 @@ class shop extends shop_base
 			$tmp->allah = $eid;
 			$allitemsarr[] = $tmp;
 		}
+
 		// calc commission eq
 		if ($sh["commission_eq"])
 		{
 			$eq = $this->get_eq($sh["commission_eq"]);
-			$commission = $this->do_parse_eq($eq,$allitemsarr);
+			$commission = $this->do_parse_eq($eq,$allitemsarr,$weeks);
 		}
 		$f->reset();
 		$this->vars(array(
@@ -2009,7 +2064,6 @@ class shop extends shop_base
 			"commission" => (int)(($commission)+0.5),
 			"t_price" => (int)(($order["t_price"] - $commission)+0.5)
 		));
-
 		die($this->parse());
 	}
 

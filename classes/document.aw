@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.49 2001/10/01 13:03:23 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.50 2001/10/02 10:05:52 kristo Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -977,10 +977,34 @@ class document extends aw_template
 		}; // eoi
 	}
 
+	////
+	// !Salvestab dokumendi
 	function save($data) 
 	{
-		// docid on ainuke parameeter, mis *peab* olema kaasa antud
+		// id (docid) on ainuke parameeter, mis *peab* olema kaasa antud
 		// ja siis veel vähemalt yx teine parameeter mida muuta
+
+		// fetchime vana dokumendi, et seda arhiivi salvestada
+		$old = $this->fetch($data["id"]);
+		//classload("archive");
+		//$arc = new archive();
+		// teeme arhiivi, kui seda pole
+		// kallis vaataja, ma tean, et sulle meeldib jargnev rida kohe sitta moodi
+
+		//if (not($arc->exists(array("oid" => $data["id"]))))
+		//{
+		//	$arc->add(array("oid" => $data["id"]));
+		//};
+
+		//$ser = $arc->serializer->php_serialize($old);
+
+		//$arc->commit(array(
+		//			"oid" => $data["id"],
+		//			"content" => $ser,
+		//));
+
+		// go on with our usual business
+		
 		$this->quote($data);
 		$user = $data["user"];
 		if ($data["content"]) {$data["content"] = trim($data["content"]);};
@@ -1917,6 +1941,77 @@ class document extends aw_template
 		header("Location: ".$this->mk_orb("obj_list", array("parent" => $parent,"period" => $period), "menuedit"));
 	}
 
+	////
+	// !Handles the document archive
+	function show_archive($args = array())
+	{
+		extract($args);
+		$this->read_template("archive.tpl");
+		$GLOBALS["site_title"] = "Arhiiv";
+
+		classload("archive");
+		$arc = new archive();
+		$t = new aw_table(array(
+					"prefix" => "mailbox",
+					"imgurl"    => $GLOBALS["baseurl"]."/img",
+          "tbgcolor" => "#C3D0DC",
+				));
+
+		$t->parse_xml_def($GLOBALS["basedir"]."/xml/generic_table.xml");
+
+		$t->set_header_attribs(array(
+					"class" => "document",
+					"action" => "archive",
+					"docid" => $args["docid"],
+		));
+
+		$t->define_field(array(
+								"name" => "name",
+								"caption" => "Nimi",
+								"talign" => "center",
+								"nowrap" => 1,
+								"sortable" => 1,
+		));
+		
+		$t->define_field(array(
+								"name" => "uid",
+								"caption" => "Muutja",
+								"talign" => "center",
+								"nowrap" => 1,
+								"sortable" => 1,
+		));
+		
+		$t->define_field(array(
+								"name" => "date",
+								"caption" => "Kuupäev",
+								"talign" => "center",
+								"nowrap" => 1,
+								"sortable" => 1,
+		));
+
+		$contents = $arc->get(array("oid" => $args["docid"]));
+
+		if (is_array($contents))
+		{
+			foreach($contents as $key => $val)
+			{
+				$t->define_data(array(
+						"name" => $key,
+						"uid" => "duke",
+						"date" => $this->time2date($val[FILE_MODIFIED],9),
+				));
+			}
+		};
+
+		$t->sort_by(array("field" => $args["sortby"]));
+
+		$this->vars(array(
+				"docid" => $docid,
+				"arc_table" => $t->draw(),
+		));
+		return $this->parse();
+	}
+
 	function preview($arr)
 	{
 		extract($arr);
@@ -2504,7 +2599,6 @@ class document extends aw_template
 		{
 			foreach($parens as $_parent)
 			{
-				// now, make a list of all menus below $parent
 				if ($this->can("view",$_parent))
 				{
 					$this->marr[] = $_parent;

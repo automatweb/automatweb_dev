@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.8 2001/09/12 17:59:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.9 2001/10/02 10:05:53 kristo Exp $
 lc_load("style");
 global $orb_defs;
 // hey I just thought of another thing! you can have several aliases for 1 function :) wooho!
@@ -156,7 +156,7 @@ $style_cache = array();
 		{
 			extract($arr);
 			
-			$fonts = array("" => "", "arial" => "Arial","times" => "Times", "verdana" => "Verdana","tahoma" => "Tahoma", "geneva"  => "Geneva", "helvetica" => "Helvetica");
+			$fonts = array("" => "", "arial" => "Arial","times" => "Times", "verdana" => "Verdana","tahoma" => "Tahoma", "geneva"  => "Geneva", "helvetica" => "Helvetica", "Trebuchet MS" => "Trebuchet MS");
 
 			$fontsizez = array("-1" => -1, "0" => 0, "1" => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5);
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/shop_item.aw,v 2.21 2001/09/12 17:59:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/shop_item.aw,v 2.22 2001/10/02 10:05:53 kristo Exp $
 lc_load("shop");
 global $orb_defs;
 $orb_defs["shop_item"] = "xml";
@@ -74,7 +74,7 @@ class shop_item extends shop_base
 			"change" => array("name" => "General", "url" => $this->mk_my_orb("change", array("id" => $id), "",false,true)),
 			"change_categories" => array("name" => "Categories", "url" => $this->mk_my_orb("change_categories", array("id" => $id), "",false,true)),
 			"change_settings" => array("name" => "Settings", "url" => $this->mk_my_orb("change_settings", array("id" => $id), "",false,true)),
-			"change_period" => array("name" => "Periodical prices/places", "url" => $this->mk_my_orb("change_period", array("id" => $id), "",false,true)),
+			"change_period" => array("name" => "Periodical prices/places", "url" => $this->mk_my_orb("set_per_prices", array("id" => $id), "",false,true)),
 		);
 
 		return $this->do_menu($menu_items).$ret;
@@ -469,9 +469,9 @@ class shop_item extends shop_base
 			}
 		}
 
-		$this->db_query("UPDATE shop_items SET has_max = '$has_max',max_items = '$max_items',has_period = '$has_period' , has_objs = '$has_objs' , calendar_id = '$calendar_id',per_from = '$per_from',per_event_id = '$event_id',per_cnt = '$per_cnt',cnt_form = '$cnt_form', price_eq = '$item_eq' WHERE id = $id");
+		$this->db_query("UPDATE shop_items SET has_max = '$has_max',max_items = '$max_items',has_period = '$has_period' , has_objs = '$has_objs' , calendar_id = '$calendar_id',per_from = '$per_from',per_event_id = '$event_id',per_cnt = '$per_cnt',cnt_form = '$cnt_form', price_eq = '$item_eq',cnt_extra_op = '$sel_extra_op' WHERE id = $id");
 
-		return $this->mk_my_orb("change", array("id" => $id));
+		return $this->mk_my_orb("change_settings", array("id" => $id),"",false,true);
 	}
 
 	////
@@ -578,10 +578,10 @@ class shop_item extends shop_base
 		}
 
 		$this->vars(array(
-			"reforb" => $this->mk_reforb("submit_per_prices", array("id" => $id,"page" => $page)),
+			"reforb" => $this->mk_reforb("submit_per_prices", array("id" => $id,"page" => $page),"",false,true),
 			"PERIOD" => $per
 		));
-		return $this->parse();
+		return $this->do_item_menu($id);
 	}
 
 	function submit_per_prices($arr)
@@ -741,6 +741,7 @@ class shop_item extends shop_base
 		classload("form_base");
 		$fb = new form_base;
 		$fl = $fb->get_list(FTYPE_ENTRY,true);
+		$f_opl = $fb->get_op_list($o["cnt_form"] ? $o["cnt_form"] : $itt["cnt_form"]);
 		$this->vars(array( 
 			"reforb" => $this->mk_reforb("submit_opts", array("id" => $id)),
 			"has_max" => checked($o["has_max"]),
@@ -754,6 +755,7 @@ class shop_item extends shop_base
 			"per_cnt" => $o["per_cnt"],
 			"cnt_form" => $this->picker($o["cnt_form"], $fl),
 			"item_eq" => $this->picker($o["price_eq"], $this->listall_eqs(true)),
+			"extra_ops" => $this->picker($o["cnt_extra_op"], $f_opl[($o["cnt_form"] ? $o["cnt_form"] : $itt["cnt_form"])])
 		));
 		return $this->do_item_menu($id);
 	}

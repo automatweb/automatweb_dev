@@ -15,6 +15,14 @@
 <form action='reforb.{VAR:ext}' method=post>
 <input type='submit' NAME='save_table' VALUE='{VAR:LC_TABLE_SAVE}'>
 <table border=1 bgcolor=#cccccc cellspacing=2 cellpadding=2>
+<!-- SUB: extdata -->
+<tr>
+<td colspan=1 class="fgtitle">Aliased:</td>
+<td colspan=101 class="fgtitle">
+{VAR:extdata}
+</td>
+</tr>
+<!-- END SUB: extdata -->
 <tr>
 <td bgcolor=#dddddd>{VAR:LC_TABLE_TABLE_NAME}:</td><td colspan=100><input type='text' name='table_name' VALUE='{VAR:table_name}'><input type='checkbox' name='show_title' VALUE=1 {VAR:show_title}></td>
 </tr>
@@ -25,6 +33,9 @@
 <tr>
 <!-- SUB: COL -->
 <td bgcolor=#dddddd colspan={VAR:colspan} rowspan={VAR:rowspan}>
+<!-- SUB: H_HEADER-->
+<b>{VAR:text}</b>
+<!-- END SUB: H_HEADER-->
 <!-- SUB: AREA -->
 <textarea class='small_button' name="text[{VAR:row}][{VAR:col}]" cols="{VAR:num_cols}" rows="{VAR:num_rows}">{VAR:text}</textarea>
 <!-- END SUB: AREA -->

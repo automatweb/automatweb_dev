@@ -1,4 +1,4 @@
-<form enctype="multipart/form-data" method=POST action='images.{VAR:ext}'>
+<form enctype="multipart/form-data" method=POST action='orb.{VAR:ext}'>
 <input type="hidden" name="MAX_FILE_SIZE" value="100000">
 <table border="0" cellspacing="0" cellpadding="0" width="400" bgcolor="#CCCCCC">
 <tr>
@@ -27,3 +27,4 @@
 </td>
 </tr>
 </table>
+</form>

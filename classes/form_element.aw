@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.25 2001/10/01 14:05:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.26 2001/10/02 10:05:53 kristo Exp $
 // form_element.aw - vormi element.
 lc_load("form");
 global $orb_defs;
@@ -1703,7 +1703,9 @@ class form_element extends aw_template
 			}
 			$this->vars(array("ELDEFS" => $eds));
 			$this->vars(array("SEARCH_SCRIPT" => $this->parse("SEARCH_SCRIPT")));
+			$this->vars(array("SEARCH_DEFS" => $this->parse("SEARCH_DEFS")));
 			$GLOBALS["elements_created"] = true;
+			$GLOBALS["search_script"] = true;
 			$GLOBALS["formcache"] = $formcache;
 		}
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.11 2001/09/26 12:30:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.12 2001/10/02 10:05:53 kristo Exp $
 // table.aw - tabelite haldus
 global $orb_defs;
 
@@ -129,7 +129,7 @@ $orb_defs["table"] ="xml";/* array("change"						=> array("function"	=> "gen_adm
 
 			if ($this->is_filter)
 			{
-				echo("isfilter");//dbg
+				//echo("isfilter");//dbg
 				$col="";
 				for($a=-1;$a<$this->arr["cols"];$a++)
 				{

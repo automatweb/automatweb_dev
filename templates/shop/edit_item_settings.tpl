@@ -45,11 +45,15 @@ window.location=url
 	</tr>
 	<tr>
 		<td class="fcaption2">Koguse vorm:</td>
-		<td class="fcaption2" colspan=2><select name='sel_cnt_form'>{VAR:cnt_form}</select></td>
+		<td class="fcaption2" colspan=2><select name='cnt_form'>{VAR:cnt_form}</select></td>
 	</tr>
 	<tr>
 		<td class="fcaption2">Hinna arvutamise valem:</td>
-		<td class="fcaption2" colspan=2><select name='sel_formula'>{VAR:item_eq}</select></td>
+		<td class="fcaption2" colspan=2><select name='item_eq'>{VAR:item_eq}</select></td>
+	</tr>
+	<tr>
+		<td class="fcaption2">Koguse ekstra v&auml;ljund:</td>
+		<td class="fcaption2" colspan=2><select name='sel_extra_op'>{VAR:extra_ops}</select></td>
 	</tr>
 </table>
 {VAR:reforb}

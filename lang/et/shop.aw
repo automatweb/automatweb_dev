@@ -109,5 +109,10 @@ $lc_shop["LC_SHOP_IP"] = "IP aadress";
 $lc_shop["LC_SHOP_MARK_PAID"] = "Märgi makstuks";
 $lc_shop["LC_SHOP_ORDER_PAID"] = "Broneering on tasutud";
 
-
+$lc_shop["LC_SHOP_FROM"] = "Alates";
+$lc_shop["LC_SHOP_TO"] = "Kuni";
+$lc_shop["LC_SHOP_WEEK_PRICE"] = "1 n";
+$lc_shop["LC_SHOP_2_WEEK_PRICE"] = "2 n";
+$lc_shop["LC_SHOP_DELETE"] = "Del";
+$lc_shop["LC_SHOP_PLACES"] = "Kohti";
 ?>

@@ -25,6 +25,11 @@ class archive extends aw_template {
 		$this->tpl_init();
 		$this->db_init();
 
+		// since most archive functions use serialization anyway
+		// we can load and use that module from here anyway
+		classload("php");
+		$this->serializer = new php_serializer();
+
 		if (not(defined("ARC_DEPTH")))
 		{
 			$this->raise_error("ARC_DEPTH is not defined, cannot continue",true);
@@ -65,6 +70,11 @@ class archive extends aw_template {
 	// oid(int) - objekti ID, millest koopia teha
 	function add($args = array())
 	{
+		if (not(defined("ARCHIVE")))
+		{
+			return false;
+		};
+
 		extract($args);
 		$this->_calc_path($args);
 		foreach($this->path_parts as $key => $val)
@@ -84,9 +94,14 @@ class archive extends aw_template {
 	// oid(int) - objekti ID, millest koopia teha
 	function commit($args = array())
 	{
+		if (not(defined("ARCHIVE")))
+		{
+			return false;
+		};
+
 		extract($args);
 		$this->_calc_path($args);
-		$tstamp = time();
+		$tstamp = ($version) ? $version : time();
 		$fname = $this->fullpath . "/$tstamp";
 		$this->put_file(array(
 			"file" => $fname,
@@ -122,7 +137,7 @@ class archive extends aw_template {
 				$full = $this->fullpath . "/$file";
 				if (is_file($full))
 				{
-					$res[] = stat($full);
+					$res[$file] = stat($full);
 				};
                         }
                         closedir($dir);
@@ -144,6 +159,15 @@ class archive extends aw_template {
 			"file" => $fname,
 		));
 		return $retval;
+	}
+
+	////
+	// !Checks whether a given archive exists
+	function exists($args = array())
+	{
+		$this->_calc_path($args);
+		// more checks are needed
+		return is_dir($this->fullpath);
 	}
 
 	////

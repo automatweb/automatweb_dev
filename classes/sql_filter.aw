@@ -128,7 +128,7 @@ class sql_filter extends aw_template
 		$tingimused="";
 		for ($i=0; $i < (int)$this->filter["nump"]; $i++)
 		{
-			$part=$filter["p$i"];
+			$part=$this->filter["p$i"];
 
 			//extract realtable.realfield to faketable.fakefield
 			list($realtable,$realfield)=explode(".",$part["field"]);
@@ -138,10 +138,12 @@ class sql_filter extends aw_template
 			//echo("explode $realtable,$realfield =>$faketable.$fakefield<br>");//dbg
 			
 			$fakeval=$filter["p$i"]["val"];
+			
 			if (is_array($this->tables[$faketable]["fields"][$fakefield]["select"]))
 			{
 				$fakeval=$this->tables[$faketable]["fields"][$fakefield]["select"][$fakeval];
 			};
+			
 
 			if ($is_change_part && $i==$change_part)
 			{
@@ -496,8 +498,16 @@ class sql_filter extends aw_template
 				$fakeval="%$fakeval%";
 			};
 			//done
-			//vali seest maiesskuell.db kus noo ma tahaks nagu neid kus nimi on nagu veits pikem kui 5 märki või midagi
-			$w.=" ".(!$w? $fake?"kus":"WHERE" : $fakejoin )." $faketable.$fakefield ".strtr($f["op"],$xlate)." '$fakeval'";
+//mysql>vali parool seest maiesskuell.user kus noo ma tahaks nagu neid kus nimi oleks ikka veits pikem kui 5 märki või nii, noh!
+//ERROR 1064: You have an error in your SQL syntax near ...
+
+			// siin vaatab et kui v6rdlus on > < >= <= siis ei pane '' ymber valuele
+			if ($f["op"]=="LIKE" || $f["op"]=="=" ||$f["op"]=="!=")
+			{
+				$fakeval="'$fakeval'";
+			};
+			//echo($f["op"]." -- ".$fakeval);
+			$w.=" ".(!$w? $fake?"kus":"WHERE" : $fakejoin )." $faketable.$fakefield ".strtr($f["op"],$xlate)." $fakeval";
 		};
 		$this->used_tables=array_keys($this->used_tables);
 		return $w;

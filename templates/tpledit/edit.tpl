@@ -3,7 +3,7 @@
 <tr>
 <td colspan="2" class="fgtitle"><b>Editing {VAR:file}
 |
-<a href="#">Eelvaade</a>
+<a href="javascript:remote(0,500,500,'{VAR:preview_url}')">Eelvaade</a>
 |
 <a href="{VAR:arclink}">Arhiiv</a>
 |
@@ -21,7 +21,9 @@
 </tr>
 <tr>
 <td class="fgtext">M‰‰rangud</td>
-<td class="fgtext">Arhiiv: <input type="checkbox" name="archive" value="1" {VAR:archive}>
+<td class="fgtext">Aktiivne versioon arhiivi? <input type="checkbox" name="archive" value="1" {VAR:archive}>
+|
+Aktiveerida <input type="checkbox" name="activate" value="1" {VAR:activate}>
 </tr>
 <tr>
 <td class="fgtext" colspan="2">

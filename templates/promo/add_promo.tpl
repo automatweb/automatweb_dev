@@ -19,6 +19,9 @@
 <td class="fcaption">{VAR:LC_PROMO_AT_LEFT}:</td><td class="fform"><input type='radio' NAME='right' VALUE='0' {VAR:left_sel}></td>
 </tr>
 <tr>
+<td class="fcaption">Ilma pealkirjata:</td><td class="fform"><input type='checkbox' NAME='no_title' VALUE='1' {VAR:no_title}></td>
+</tr>
+<tr>
 <td class="fcaption">{VAR:LC_PROMO_TEMPLATE_FOR_CHANGE}</td><td class="fform">
 <select name="tpl_edit">
 {VAR:tpl_edit}

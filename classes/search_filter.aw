@@ -56,6 +56,9 @@
 				"type" => $type,
 				"target_id" => $type=="form"?$target_id_f:$target_id_c,
 				"output_id" => 0,
+				"stat_id" => 0,
+				"stat_show" => 0,
+				"stat_data" => array(),
 				);
 
 			$this->set_object_metadata(array("oid" => $id,"key" => "data","value"=> $this->data));
@@ -84,7 +87,7 @@
 			$parent=$r["parent"];
 			$name=$r["name"];
 
-			$this->mk_path($parent,"Muuda filtrit | <a href=\"".$this->mk_my_orb("output",array("id"=>$id))."\">Väljund</a> | <a href=\"".$this->mk_my_orb("search",array("id"=>$id))."\">Otsi</a>");
+			$this->mk_path($parent,"Filter");
 
 			
 			$this->__load_data();
@@ -94,7 +97,7 @@
 			$this->sql_filter->set_data($this->master_array);
 
 			//echo($this->sql_filter->filter_to_sql(array("filter"=>$this->filter)));//dbg
-			return $this->sql_filter->do_filter_edit(array(
+			return $this->make_upper_menu($arr,"change").$this->sql_filter->do_filter_edit(array(
 			"filter"=>$this->filter,
 			"is_change_part"=>$is_change_part,
 			"change_part" => $change_part,
@@ -172,15 +175,17 @@
 				$formname=str_replace(" ","_",$r["name"]);
 				/*$content=$this->content[$fid]=$this->__unserialize_fdata($r["content"]);
 				echo("<pre>build_master_array::content=");print_r($content);echo("</pre>");//dbg*/
-				$content=$this->form->get_form_elements(array("id" => $fid));
+				$content=$this->form->get_form_elements(array("id" => $fid,"key" => "id"));
 				//echo("form title=$ftitle<br><pre>");print_r($content);echo("</pre>");//dbg
 
 				$arr=array();
 				$arr["real"]="form_".$fid."_entries";
-
-				foreach($content as $fieldname => $edata)
+				//echo("content=><pre>");print_r($content);echo("</pre><br>");//dbg
+				foreach($content as $f_id => $edata)
 				{
+					$fieldname=$edata["name"];
 					$create=1;
+					//echo("$fieldname=><pre>");print_r($edata);echo("</pre><br>");//dbg
 					switch ($edata["type"])
 					{
 						case "button"://Don't let these suckers in!
@@ -188,26 +193,24 @@
 							break;
 
 						case "radiobutton":
+							//paluks siia arraysse info ka rb. väärtuse kohta??
+							
 							$arr["fields"][$edata["name"]]["type"]=0;//string
-							$arr["fields"][$edata["name"]]["select"][$edata["ch_value"]]=$edata["ch_value"];
+							$arr["fields"][$edata["name"]]["select"][$edata["text"]]=$edata["text"];
 							break;
 
 						case "listbox":
 							$arr["fields"][$edata["name"]]["type"]=0;//string
-							if (is_array($edata["listbox_items"]))
-							foreach($edata["listbox_items"] as $number => $lbval)
+							if (is_array($edata["lb_items"]))
+							foreach($edata["lb_items"] as $number => $lbval)
 							{
-								if ($lbval)//miskid tyhgad valikud tekivad
+								if ($lbval)//miskid tyhjad valikud tekivad
 									$arr["fields"][$edata["name"]]["select"][$lbval]=$lbval;
 							};
 							break;
 
 						case "date":
 							$arr["fields"][$edata["name"]]["type"]=2;//date
-							break;
-
-						case "textbox":
-							$arr["fields"][$edata["name"]]["type"]=0;//string
 							break;
 
 						default:
@@ -217,7 +220,7 @@
 					};
 					if ($create)
 					{
-						$arr["fields"][$edata["name"]]["real"]="ev_".$edata["id"];
+						$arr["fields"][$edata["name"]]["real"]="ev_$f_id";
 					};
 
 				};
@@ -227,6 +230,221 @@
 
 			//echo("<pre>");print_r($this->master_array);echo("</pre>");//dbg
 		}
+
+		function make_upper_menu($arr,$action)
+		{
+			extract($arr);
+			$a="<table border=0 cellpadding=2 cellspacing=1 bgcolor=#CCCCCC><tr>";
+			$b=($action=="change")?0:1;
+			$a.="<td bgcolor=#EEEEEE>".($b?"<a href='".$this->mk_my_orb("change",array("id"=>$id))."'>":"")."Tingimused".($b?"</a>":"")."</td>";
+
+			$b=($action=="output")?0:1;
+			$a.="<td bgcolor=#EEEEEE>".($b?"<a href='".$this->mk_my_orb("output",array("id"=>$id))."'>":"")."Väljund".($b?"</a>":"")."</td>";
+
+			$b=($action=="statdata")?0:1;
+			$a.="<td bgcolor=#EEEEEE>".($b?"<a href='".$this->mk_my_orb("statdata",array("id"=>$id))."'>":"")."Statandmed".($b?"</a>":"")."</td>";
+
+			$b=($action=="stat")?0:1;
+			$a.="<td bgcolor=#EEEEEE>".($b?"<a href='".$this->mk_my_orb("stat",array("id"=>$id))."'>":"")."Stattabel".($b?"</a>":"")."</td>";
+
+			$b=($action=="search")?0:1;
+			$a.="<td bgcolor=#EEEEEE>".($b?"<a href='".$this->mk_my_orb("search",array("id"=>$id))."'>":"")."Otsi".($b?"</a>":"")."</td>";
+			$a.="</tr></table>";
+			return $a;
+		}
+
+		// see on selline func mis kudagi petab 2ra kliendi
+		function orb_totally_fake_fulltext_search($arr)
+		{
+			extract($arr);
+			$html="<form action='orb.aw' method='get'>
+				<input type='text' name='true_fulltext' value='' class='small_button'>
+				<input type='submit' value='Otsi' class='small_button'>
+				<input type='hidden' name='class' value='search_filter'>
+				<input type='hidden' name='id' value='$id'>
+				<input type='hidden' name='action' value='do_tf_fulltext_search'>
+				</form>
+				";
+			return $html;
+		}
+
+		function orb_do_totally_fake_fulltext_search($arr)
+		{
+			extract($arr);
+			//okei, siin nüüd muudame ära ainsa filtri osa teksti ja otsime stuffi
+			$this->id=$id;
+			$this->__load_filter();
+			//print_r($this->filter);//dbg
+			$this->filter["p0"]["val"]=$true_fulltext;
+			$this->__save_filter();
+
+			$arr["no_menu"]=1;
+			$arr["j2ta_see_form_sinna_yles"]=1;
+			return $this->orb_search($arr);
+
+		}
+
+		function orb_stat_new_submit($arr)
+		{
+			extract($arr);
+			//echo("blah<pre>");print_r($arr);echo("</pre>");//dbg
+			$this->id=$filter_id;
+			$this->db_query("SELECT name,parent FROM objects WHERE oid='$this->id'");
+			$r=$this->db_next();
+			$this->__load_data();
+
+			classload("table");
+			$tbl=new table();
+			
+			$arr["is_filter"]=1;
+			$arr["filter"]=$this->id;
+			$tbl->submit_add($arr);
+			$this->data["stat_id"]=$tbl->id;
+			//echo("id=".$tbl->id);
+			$this->data["stat_show"]=1;
+			$this->data["stat_pix"]=10;
+
+			$this->__save_data();
+
+			return $this->mk_my_orb("stat",array("id" => $filter_id));
+		}
+
+		function orb_statdata($arr)
+		{
+			extract($arr);
+			$this->id=$id;
+			$this->db_query("SELECT name,parent FROM objects WHERE oid='$this->id'");
+			$r=$this->db_next();
+			$parent=$r["parent"];
+			$name=$r["name"];
+
+			$this->read_template("statdata.tpl");
+			
+			$this->__load_data();
+			$this->build_master_array();
+
+			$fieldarr=array();
+			if (is_array($this->master_array))
+			foreach($this->master_array as $tfakename => $tdata)// for each table do
+			{
+				if ($tfakename && is_array($tdata) && is_array($tdata["fields"])) // for each field in table do
+				foreach($tdata["fields"] as $ffakename => $fdata)
+				{
+					$fieldarr[$tdata["real"].".".$fdata["real"]]="$tfakename.$ffakename";
+				};
+			};
+			
+
+			$statd="";
+			$fields=$this->picker("",$fieldarr);
+
+			if (is_array($this->data["statdata"]))
+			foreach($this->data["statdata"] as $alias => $sd)
+			{
+				$this->vars(array(
+					"alias" => "#$alias",
+					"nr" => $alias,
+					"display" => $sd["display"],
+					));
+				$statd.=$this->parse("statd");
+			};
+
+			$this->vars(array(
+				"chkstat_show"=> $this->data["stat_show"]?"checked":"",
+				"stat_pix" => $this->data["stat_pix"],
+				"statd" => $statd,
+				"fields" => $fields,
+				"reforb" => $this->mk_reforb("submit_statdata",array("id"=>$id)),
+				));
+
+			$this->mk_path($parent,"Filter");
+			return $this->make_upper_menu($arr,"statdata").$this->parse();
+		}
+
+		function orb_submit_statdata($arr)
+		{
+			extract($arr);
+			$this->id=$id;
+			$this->__load_data();
+			$this->data["stat_pix"]=$stat_pix;
+			$this->data["stat_show"]=$stat_show;
+			if ($subaction=="addpart")
+			{
+				$arr2["func"]=$func;
+				
+				list($rtable,$rfield)=explode(".",$field);
+				$this->build_master_array();
+
+				//tra, vastupidi on :)
+				if (is_array($this->master_array))
+				foreach($this->master_array as $tfakename => $tdata)// for each table do
+				{
+					if ($tdata["real"]==$rtable && is_array($tdata["fields"])) // for each field in table do
+					{
+						foreach($tdata["fields"] as $ffakename => $fdata)
+						if ($fdata["real"]==$rfield)
+						{
+							$ffield=$ffakename;
+							break;
+						};
+						$ftable=$tfakename;
+					};
+				};
+				$arr2["field"]=$rfield;
+				$arr2["table"]=$rtable;
+				$arr2["display"]="$func($ftable.$ffield)";
+				//print_r($arr2);//dbg
+				$this->data["statdata"][]=$arr2;
+				
+			} else
+			if ($subaction=="delpart")
+			{
+				if (is_array($sel))
+				foreach($sel as $nr)
+				{
+					unset($this->data["statdata"][$nr]);
+				};
+			};
+
+			$this->__save_data();
+			return $this->mk_my_orb("statdata",array("id"=>$id));
+		}
+
+		function orb_stat($arr)
+		{
+			extract($arr);
+			$this->id=$id;
+			$this->db_query("SELECT name,parent FROM objects WHERE oid='$this->id'");
+			$r=$this->db_next();
+			$parent=$r["parent"];
+			$name=$r["name"];
+			
+			$this->__load_data();
+
+			classload("table");
+			$tbl=new table();
+			$rec=$this->get_object($this->data["stat_id"]);
+			if ($this->data["stat_id"] && $rec["status"]!=0)
+			{
+				$parse="<div><IFRAME SRC='".$this->mk_my_orb("change",array(
+					"id"=>$this->data["stat_id"],
+					"is_filter"=>1,
+					"filter"=>$id,
+					),"table")."' Style='width:100%;height:800;margin-left:-5;margin-top:0;' frameborder=0 id='ifr'></iframe></div>";
+			} else
+			{
+				// nõu komments
+				$parse="Tee uus stattabel:".$tbl->add(array("parent" => $parent,"name" => "stat_for_$name"));
+
+				$parse=preg_replace("/name='class' value='(.+?)'/","name='class' value='search_filter'",$parse);
+				$parse=preg_replace("/name='action' value='(.+?)'/","name='action' value='stat_new_submit'",$parse);
+				$parse=preg_replace("/<input type='hidden' name='reforb'/","<input type='hidden' name='filter_id' value='$id'><input type='hidden' name='reforb'",$parse);
+			};
+
+			$this->mk_path($parent,"Filter");
+			return $this->make_upper_menu($arr,"stat").$parse;
+		}
+
 
 		function orb_search($arr)
 		{
@@ -241,19 +459,20 @@
 			$parent=$r["parent"];
 			$name=$r["name"];
 			$this->__load_data();
-
-			$this->mk_path($parent,"<a href=\"".$this->mk_my_orb("change",array("id"=>$id))."\">Muuda filtrit</a> | <a href=\"".$this->mk_my_orb("output",array("id"=>$id))."\">Väljund</a> | Otsi");
+			
+			if (!$no_menu)
+			$this->mk_path($parent,"Filter");
 
 			if (!$this->data["output_id"])
 			{
-				return "Väljundi tabelit pole veel määratud, vajuta 'väljund' lingile!";
+				return $this->make_upper_menu($arr,"search")."Väljundi tabelit pole veel määratud, vajuta 'väljund' lingile!";
 			};
 			global $search_filter_m;
 			session_register("search_filter_m");
 			$sfm=unserialize($search_filter_m);
 			if /*(!is_array($sfm[$id]))*/ (1)//Kuna "enam-vähem" kõlab minumeelest ysna "jah" moodi siis otsib igakord uuesti
 			{
-				$this->__load_data();
+				if (!$dont_load_filter)
 				$this->__load_filter();
 				
 				$this->build_master_array();
@@ -266,14 +485,23 @@
 
 			//siin tuleb stuffi näidata
 			classload("form_table");
+
 			$this->ft=new form_table();
-			
+			$table_id=$this->data["output_id"];
+			if (!$this_page_array)
+			{
+				$this_page_array=array("class" => "search_filter", "action" => "search",   "filter_id" => $id,"id"=>$id,"op_id" => $op_id);
+			};
+			$this->ft->start_table($table_id,$this_page_array);
+
+			$stats=array();//statistika avaldiste väärtused
+			$num_rec_found=0;
 			if ($this->data["type"]=="chain")
 			{
 				// form_table rida 469
-				$table_id=$this->data["output_id"];
+				
 				$chain_id=$this->data["target_id"];
-				$this->ft->start_table($table_id,array("class" => "search_filter", "action" => "search",   "filter_id" => $id,"id"=>$id,"op_id" => $op_id));
+				
 
 				$this->ft->load_chain($chain_id);
 
@@ -296,10 +524,41 @@
 				if ($eids != "")
 				{
 					$q = "SELECT distinct(form_".$fid."_entries.id) as entry_id, form_".$fid."_entries.chain_id as chain_entry_id, form_".$fid."_entries.* $tbls FROM form_".$fid."_entries LEFT JOIN objects ON objects.oid = form_".$fid."_entries.id $joins WHERE objects.status != 0 AND form_".$fid."_entries.chain_id in ($eids)";
-//					echo "q = $q <br>";
+					//echo "q = $q <br>";
 					$this->ft->db_query($q);
 					while ($row = $this->ft->db_next())
 					{
+						$num_rec_found++;
+						if ($this->data["stat_show"] && $this->data["stat_id"] && is_array($this->data["statdata"]))
+						{
+							foreach($this->data["statdata"] as $alias2 => $statd2)
+							{
+								
+								$v2=$row[$statd2["field"]];
+								//echo($statd2["field"]." = ".$v2."<br>");//dbg
+								switch($statd2["func"])
+								{
+									case "sum":
+										$stats[$alias2]["val"]+=$v2;
+										break;
+									case "min":
+										if ($stats[$alias2]["val"]=="")
+											$stats[$alias2]["val"]=$v2;
+										if ($v2<$stats[$alias2]["val"])
+											$stats[$alias2]["val"]=$v2;
+										break;
+									case "max":
+										if ($v2>$stats[$alias2]["val"])
+											$stats[$alias2]["val"]=$v2;
+										break;
+									case "avg":
+										$stats[$alias2]["sum"]+=$v2;
+										$stats[$alias2]["num"]++;
+										break;
+								};
+							};
+						};
+						//echo("<pre>");print_r($row);echo("</pre>");//dbg
 						$row["ev_change"] = "<a href='".$this->ft->mk_my_orb("show", array("id" => $chain_id,"entry_id" => $row["chain_entry_id"]), "form_chain")."'>Muuda</a>";
 						$row["ev_view"] = "<a href='".$this->ft->mk_my_orb("show_entry", array("id" => $fid,"entry_id" => $row["entry_id"], "op_id" => $op_id,"section" => $section),"form")."'>Vaata</a>";		
 						$row["ev_delete"] = "<a href='".$this->ft->mk_my_orb(
@@ -310,84 +569,158 @@
 									"after" => $this->ft->binhex($this->ft->mk_my_orb("show_user_entries", array("chain_id" => $chain_id, "table_id" => $table_id, "op_id" => $op_id,"section" => $section)))
 								),
 							"form")."'>Kustuta</a>";
-//						echo "eid = ", $row["entry_id"], " ch_eid = ", $row["chain_entry_id"], "<br>";
+						//echo "eid = ", $row["entry_id"], " ch_eid = ", $row["chain_entry_id"], "<br>";
 						$this->ft->row_data($row);
 					}
 				}
 
-				$this->ft->t->sort_by(array("field" => $GLOBALS["sortby"],"sorder" => $GLOBALS["sort_order"]));
-				$tbl = $this->ft->get_css();
-				$tbl.="<form action='reforb.aw' method='POST'>\n";
-				if ($this->ft->table["submit_top"])
-				{
-					$tbl.="<input type='submit' value='".$this->ft->table["submit_text"]."'>";
-				}
-				if ($this->ft->table["user_button_top"])
-				{
-					$tbl.="&nbsp;<input type='submit' value='".$this->ft->table["user_button_text"]."' onClick=\"window.location='".$this->ft->table["user_button_url"]."';return false;\">";
-				}
-				$tbl.=$this->ft->t->draw();
-
-				if ($this->ft->table["submit_bottom"])
-				{
-					$tbl.="<input type='submit' value='".$this->ft->table["submit_text"]."'>";
-				}
-				if ($this->ft->table["user_button_bottom"])
-				{
-					$tbl.="&nbsp;<input type='submit' value='".$this->ft->table["user_button_text"]."' onClick=\"window.location='".$this->ft->table["user_button_url"]."';return false;\">";
-				}
-				$tbl.= $this->ft->mk_reforb("submit_table", array("return" => $this->ft->binhex($this->ft->mk_my_orb("show_entry", array("id" => $this->ft->id, "entry_id" => $entry_id, "op_id" => $output_id)))));
-				$tbl.="</form>";
-				$parse=$tbl;
-
 			} else
 			{
-				//tavaline yhest formist otsimine oli oopis
-				$table_id=$this->data["output_id"];
+				//tavaline yhest formist otsimine oli hoopis
+				
 				$fid=$this->data["target_id"];
-				$this->ft->start_table($table_id,array("class" => "search_filter", "action" => "search",   "filter_id" => $id,"id"=>$id,"op_id" => $op_id));
-
+				
 				$eids = $sfm[$id];
-				$q="SELECT * FROM form_".$fid."_entries,objects WHERE objects.status != 0 and objects.oid = '$fid' AND form_".$fid."_entries.id in (".join(",",$eids).")";
-				$this->ft->db_query($q);
-				while ($row = $this->ft->db_next())
+				$eids=join(",",$eids);
+				if ($eids != "")
 				{
-					$row["ev_delete"] = "<a href='".$this->ft->mk_my_orb(
-						"delete_entry", 
-							array(
-								"id" => $fid,
-								"entry_id" => $row["entry_id"], 
-								"after" => $this->ft->binhex($this->ft->mk_my_orb("show_user_entries", array("chain_id" => $chain_id, "table_id" => $table_id, "op_id" => $op_id,"section" => $section)))
-							),
-						"form")."'>Kustuta</a>";
-					$this->ft->row_data($row);
-				}
+					$q="SELECT * FROM form_".$fid."_entries,objects WHERE objects.status != 0 and objects.oid = '$fid' AND form_".$fid."_entries.id in ($eids)";
+					$this->ft->db_query($q);
+					while ($row = $this->ft->db_next())
+					{
+						$num_rec_found++;
+						if ($this->data["stat_show"] && $this->data["stat_id"] && is_array($this->data["statdata"]))
+						{
+							foreach($this->data["statdata"] as $alias2 => $statd2)
+							{
+								
+								$v2=$row[$statd2["field"]];
+								//echo($statd2["field"]." = ".$v2." ++".$statd2["func"]."<br>");//dbg
 
-				$this->ft->t->sort_by(array("field" => $GLOBALS["sortby"],"sorder" => $GLOBALS["sort_order"]));
-				$tbl = $this->ft->get_css();
-				$tbl.="<form action='reforb.aw' method='POST'>\n";
-				if ($this->ft->table["submit_top"])
-				{
-					$tbl.="<input type='submit' value='".$this->ft->table["submit_text"]."'>";
-				}
-				if ($this->ft->table["user_button_top"])
-				{
-					$tbl.="&nbsp;<input type='submit' value='".$this->ft->table["user_button_text"]."' onClick=\"window.location='".$this->ft->table["user_button_url"]."';return false;\">";
-				}
-				$tbl.=$this->ft->t->draw();
+								switch($statd2["func"])
+								{
+									case "sum":
+										$stats[$alias2]["val"]+=$v2;
+										break;
+									case "min":
+										if ($stats[$alias2]["val"]=="")
+											$stats[$alias2]["val"]=$v2;
+										if ($v2<$stats[$alias2]["val"])
+											$stats[$alias2]["val"]=$v2;
+										break;
+									case "max":
+										if ($v2>$stats[$alias2]["val"])
+											$stats[$alias2]["val"]=$v2;
+										break;
+									case "avg":
+										$stats[$alias2]["sum"]+=$v2;
+										$stats[$alias2]["num"]++;
+										break;
+								};
+							};
+						};
+						$row["ev_delete"] = "<a href='".$this->ft->mk_my_orb(
+							"delete_entry", 
+								array(
+									"id" => $fid,
+									"entry_id" => $row["entry_id"], 
+									"after" => $this->ft->binhex($this->ft->mk_my_orb("show_user_entries", array("chain_id" => $chain_id, "table_id" => $table_id, "op_id" => $op_id,"section" => $section)))
+								),
+							"form")."'>Kustuta</a>";
+						$this->ft->row_data($row);
+					}
+				};
+			};
 
-				if ($this->ft->table["submit_bottom"])
-				{
-					$tbl.="<input type='submit' value='".$this->ft->table["submit_text"]."'>";
-				}
-				if ($this->ft->table["user_button_bottom"])
-				{
-					$tbl.="&nbsp;<input type='submit' value='".$this->ft->table["user_button_text"]."' onClick=\"window.location='".$this->ft->table["user_button_url"]."';return false;\">";
-				}
-				$tbl.= $this->ft->mk_reforb("submit_table", array("return" => $this->ft->binhex($this->ft->mk_my_orb("show_entry", array("id" => $this->ft->id, "entry_id" => $entry_id, "op_id" => $output_id)))));
-				$tbl.="</form>";
-				$parse=$tbl;
 
+
+
+			$this->ft->t->sort_by(array("field" => $GLOBALS["sortby"],"sorder" => $GLOBALS["sort_order"]));
+
+			if ($GLOBALS["get_csv_file"])
+			{
+				header('Content-type: Application/Octet-stream"');
+				header('Content-disposition: root_access; filename="csv_output_'.$id.'.csv"');
+				print $this->ft->t->get_csv_file();
+				die();
+			};
+			$parse="";
+			if ($j2ta_see_form_sinna_yles)
+			{
+				$parse.="<form action='orb.aw' method='get'>
+				<input type='text' name='true_fulltext' value='' class='small_button'>
+				<input type='submit' value='Otsi' class='small_button'>
+				<input type='hidden' name='class' value='search_filter'>
+				<input type='hidden' name='id' value='$id'>
+				<input type='hidden' name='action' value='do_tf_fulltext_search'>
+				</form>
+				";
+			};
+			
+			$parse.="Otsingu tulemusena leiti ".(int)$num_rec_found." kirjet";
+			//siin teeb lingi csv outputile
+			if ($this_page)
+			{
+				$parse.="&nbsp;&nbsp;<a href='".$this_page."&get_csv_file=1' target=_blank>CSV</a><br>";
+			} else
+			{
+				$parse.="&nbsp;&nbsp;<a href='".$this->mk_my_orb("search",array("id"=>$id,"get_csv_file"=>1))."' target=_blank>CSV</a><br>";
+			};
+			
+			$parse.= $this->ft->get_css();
+			$parse.="<form action='reforb.aw' method='POST'>\n";
+			if ($this->ft->table["submit_top"])
+			{
+				$parse.="<input type='submit' value='".$this->ft->table["submit_text"]."'>";
+			}
+			if ($this->ft->table["user_button_top"])
+			{
+				$parse.="&nbsp;<input type='submit' value='".$this->ft->table["user_button_text"]."' onClick=\"window.location='".$this->ft->table["user_button_url"]."';return false;\">";
+			}
+			$blah=$this->ft->t->draw();
+			$parse.=str_replace("<table>","",$blah);
+
+			if ($this->ft->table["submit_bottom"])
+			{
+				$parse.="<input type='submit' value='".$this->ft->table["submit_text"]."'>";
+			};
+			if ($this->ft->table["user_button_bottom"])
+			{
+				$parse.="&nbsp;<input type='submit' value='".$this->ft->table["user_button_text"]."' onClick=\"window.location='".$this->ft->table["user_button_url"]."';return false;\">";
+			};
+
+			$parse.=$this->ft->mk_reforb("submit_table", array("return" => $this->ft->binhex($this->ft->mk_my_orb("show_entry", array("id" => $this->ft->id, "entry_id" => $entry_id, "op_id" => $output_id)))));
+			
+			if ($this->data["stat_show"] && $this->data["stat_id"])
+			{
+				classload("table");
+				$tbl=new table();
+							// tee veel avg funktsioonid korda
+				$tbl->fl_external=array();
+				if (is_array($this->data["statdata"]))
+				foreach($this->data["statdata"] as $alias2 => $statd2)
+				{
+					switch($statd2["func"])
+					{
+						case "avg":
+
+							$stats[$alias2]["val"]=$stats[$alias2]["num"]?$stats[$alias2]["sum"]/$stats[$alias2]["num"]:0;
+							break;
+					};
+					//echo($alias2." = ".$stats[$alias2]["val"]."<br>");//dbg
+					$tbl->fl_external[$alias2]=$stats[$alias2]["val"];
+				};
+
+				if ($this->data["stat_pix"])
+				{
+					$parse.="<table border=0 cellpadding=0 cellspacing=0 height='".$this->data["stat_pix"]."' Style='height:".$this->data["stat_pix"]."px'><tr><td></td></tr></table>";
+				};
+				$parse.=$tbl->show(array("id" => $this->data["stat_id"],"is_filter" => 1));
+			};
+			$parse.="</form>";
+			if (!$no_menu)
+			{
+				$parse=$this->make_upper_menu($arr,"search").$parse;
 			};
 			return $parse;
 		}
@@ -510,9 +843,9 @@
 			$cparse=preg_replace("/name='action' value='(.+?)'/","name='action' value='output_submit'",$cparse);
 			$cparse=preg_replace("/<input type='hidden' name='reforb'/","<input type='hidden' name='filter_id' value='$id'><input type='hidden' name='reforb'",$cparse);
 
-			$this->mk_path($parent,"<a href=\"".$this->mk_my_orb("change",array("id"=>$id))."\">Muuda filtrit</a> | Väljund | <a href=\"".$this->mk_my_orb("search",array("id"=>$id))."\">Otsi</a>");
+			$this->mk_path($parent,"Filter");
 
-			return $cparse;
+			return $this->make_upper_menu($arr,"output").$cparse;
 		}
 
 		function orb_output_submit($arr)
@@ -557,7 +890,7 @@
 			//print_r($fulltextsearch);//dbg
 			//echo("ftsstring=$ftsstring<br>");//dbg
 			//echo("sqlw=$sqlw<br>");//dbg
-			$sqlw=preg_replace("/%virtual.%täistekst = '(.+?)'/","($ftsstring)",$sqlw);
+			$sqlw=preg_replace("/%virtual.%täistekst = '(.*?)'/","($ftsstring)",$sqlw);
 			//echo("sqlw=$sqlw<br>");//dbg
 
 			if ($this->data["type"]=="chain")
@@ -575,12 +908,13 @@
 					$leftjoin[]=" LEFT JOIN $tbl ON $tbl.chain_id=form_chain_entries.id ";
 				};
 				//$sql="SELECT form_chain_entries.id FROM form_chain_entries, ".join(",",array_keys($used_tables))." $sqlw AND form_chain_entries.chain_id='".$this->data["target_id"]."' AND ".join(" AND ",$jointofce);
-				$sql="SELECT DISTINCT(form_chain_entries.id) as id FROM form_chain_entries".join(" ",$leftjoin)." $sqlw AND form_chain_entries.chain_id='".$this->data["target_id"]."'";
-//				echo("sql=$sql<br>");//dbg
+				$sqlw=$sqlw?$sqlw." AND ":" WHERE ";
+				$sql="SELECT DISTINCT(form_chain_entries.id) as id FROM form_chain_entries".join(" ",$leftjoin)." $sqlw form_chain_entries.chain_id='".$this->data["target_id"]."'";
+				//echo("sql=$sql<br>");//dbg
 			} else
 			{
 				$sql="SELECT id FROM ".join(",",array_keys($used_tables))." $sqlw";
-//				echo("sql=$sql<br>");//dbg
+				//echo("sql=$sql<br>");//dbg
 			};
 
 			$this->db_query($sql);
@@ -589,60 +923,13 @@
 			{
 				$matches[]=$r["id"];
 			};
-//			echo "<pre>", var_dump($matches),"</pre><br>";
+			//echo "<pre>", var_dump($matches),"</pre><br>";
 			return $matches;
 		}
 
-		function __unserialize_fdata($dta)
-		{
-			// copy & paste from form_base.aw lines 85-105.
-			// why the f*ck am i duplicating code?? 
-			//i dont need those form_cell & form_element objects created, that's why
-			if (substr($dta,0,14) == "<?xml version=")
-			{
-				classload("xml");
-				$x = new xml;
-				$arr = $x->xml_unserialize(array("source" => $dta));
-			}
-			else
-			if (substr($dta,0,6) == "\$arr =")
-			{
-				// php serializer
-				classload("php");
-				$p = new php_serializer;
-				$arr = $p->php_unserialize($dta);
-			}
-			else
-			{
-				$arr = unserialize($dta);
-			}
-			return $arr;
-		}
+	
 
-/*		// Filter edit forwarders
-		function orb_filter_edit_down($arr)
-		{
-			return $this->orb_filter_edit_move(array_merge($arr,array("delta"=>"1")));
-		}
 
-		function orb_filter_edit_up($arr)
-		{
-			return $this->orb_filter_edit_move(array_merge($arr,array("delta"=>"-1")));
-		}
-
-		//liigutab filtri tingimus yles/alla
-		function orb_filter_edit_move($arr)
-		{
-			extract($arr);
-			$this->id=$id;
-			$arr["filter"]=$this->__load_filter();
-
-			$this->filter=$this->sql_filter->do_filter_edit_move($arr);
-
-			$this->__save_filter();
-			return $this->mk_my_orb("change",array("id" => $id));
-		}
-*/
 		function orb_filter_edit_change_part($arr)
 		{
 			extract($arr);

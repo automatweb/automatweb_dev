@@ -4,8 +4,6 @@ global $orb_defs;
 $orb_defs["tpledit"] = "xml";
 classload("defs");
 
-define("FILE_SIZE",7);
-define("FILE_MODIFIED",9);
 
 class tpledit extends aw_template {
 	function tpledit($args =array())

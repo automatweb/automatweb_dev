@@ -1,12 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.57 2001/09/18 00:22:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.58 2001/10/02 10:05:53 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
 
 // muh? mes number?
 // seep see nummer mille kaudu tuntakse 2ra kui tyyp klikkid kodukataloog/SHARED_FOLDERS peale
-define("SHARED_FOLDER_ID",2147483648);
+define("SHARED_FOLDER_ID",2147483647);
 
 session_register("cut_objects");
 session_register("copied_objects");
@@ -424,11 +424,13 @@ class menuedit extends aw_template
 				$smi.=$this->parse("SEL_MENU_IMAGE");
 			}
 			$sel_image = "<img name='sel_menu_image' src='".$this->mar[$si_parent]["img_url"]."' border='0'>";
+			$sel_image_url = $this->mar[$si_parent]["img_url"];
 		}
 		$this->vars(array(
 			"SEL_MENU_IMAGE" => $smi,
 			"sel_menu_name" => $this->mar[$sel_menu_id]["name"],
 			"sel_menu_image" => $sel_image,
+			"sel_menu_image_url" => $sel_image_url,
 			"sel_menu_id" => $sel_menu_id,
 			"sel_menu_timing" => $sel_menu_meta["img_timing"] ? $sel_menu_meta["img_timing"] : 4 
 		));
@@ -1855,11 +1857,11 @@ class menuedit extends aw_template
 			$ss = "AND (objects.lang_id=".$GLOBALS["lang_id"]." OR menu.type = ".MN_CLIENT.")";
 		}
 
-
 		if ($period > 0)
 		{
 			$ss.=" AND menu.periodic=1 ";
 		};
+
 
 		$q = "SELECT objects.*,menu.*
 			FROM objects LEFT JOIN menu ON menu.id = objects.oid
@@ -2792,7 +2794,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 							clickable = '$clickable',
 							target = '$target',
 							ndocs = '$ndocs',
-							mid = '$mid',
+							mid = '$arr[mid]',
 							is_shop = '$is_shop',
 							shop_id = '$shop',
 							links = '$links',
@@ -4418,7 +4420,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		{
 			$leadonly = -1;
 		};
-		$q = "SELECT objects.*, template.filename as filename,menu.link as link
+		$q = "SELECT objects.*, template.filename as filename,menu.link as link,objects.metadata as metadata
 				FROM objects 
 				LEFT JOIN menu ON menu.id = objects.oid
 				LEFT JOIN template ON template.id = menu.tpl_lead
@@ -4455,7 +4457,18 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					print $pr_c;
 				};
 
+
+				$meta = $this->get_object_metadata(array("metadata" => $row["metadata"]));
 				$this->vars(array("title" => $row["name"], "content" => $pr_c,"url" => $row["link"]));
+
+				if ($meta["no_title"] != 1)
+				{
+					$this->vars(array("SHOW_TITLE" => $this->parse("SHOW_TITLE")));
+				}
+				else
+				{
+					$this->vars(array("SHOW_TITLE" => ""));
+				}
 				$ap = "";
 				if ($row["link"] != "")
 				{
@@ -4718,6 +4731,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 	function make_langs()
 	{
+		global $lang_id;
 		classload("languages");
 		$langs = new languages;
 		$lar = $langs->listall();

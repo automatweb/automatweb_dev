@@ -167,6 +167,12 @@ $lc_shop["LC_SHOP_VOUCHER"] = "Voucher";
 $lc_shop["LC_SHOP_HOTELS"] = "Hotel(s)";
 $lc_shop["LC_SHOP_STATUS"] = "Status";
 
+$lc_shop["LC_SHOP_FROM"] = "From";
+$lc_shop["LC_SHOP_TO"] = "To";
+$lc_shop["LC_SHOP_WEEK_PRICE"] = "1 w";
+$lc_shop["LC_SHOP_2_WEEK_PRICE"] = "2 w";
+$lc_shop["LC_SHOP_DELETE"] = "Del";
+$lc_shop["LC_SHOP_PLACES"] = "Places";
 
 
 
