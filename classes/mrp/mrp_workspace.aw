@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.64 2005/03/29 11:01:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.65 2005/03/29 11:26:28 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -624,6 +624,7 @@ class mrp_workspace extends class_base
 				$plan_url = $this->mk_my_orb("create", array(
 					"return_url" => urlencode(aw_global_get('REQUEST_URI')),
 					"mrp_workspace" => $this_object->id (),
+					"mrp_force_replan" => 1,
 				), "mrp_schedule");
 				$plan_href = html::href(array(
 					"caption" => t("[Planeeri]"),
@@ -820,42 +821,42 @@ class mrp_workspace extends class_base
 
 
 /* dbg */ //finish all jobs in progress and set_all_resources_available
-if ($_GET["mrp_set_all_resources_available"])
-{
-	$list = new object_list (array (
-		"class_id" => CL_MRP_JOB,
-		"state" => MRP_STATUS_INPROGRESS,
-	));
+// if ($_GET["mrp_set_all_resources_available"])
+// {
+	// $list = new object_list (array (
+		// "class_id" => CL_MRP_JOB,
+		// "state" => MRP_STATUS_INPROGRESS,
+	// ));
 
-	$jj = $list->arr();
-	$j = get_instance(CL_MRP_JOB);
+	// $jj = $list->arr();
+	// $j = get_instance(CL_MRP_JOB);
 
-	foreach ($jj as $job_id => $job)
-	{
-		echo "job id: " . $job->id() ."<br>";
-		$arr = array("id"=>$job_id);
-		$ud = parse_url($j->done($arr));
-		$pars = array();
-		parse_str($ud["query"], $pars);
-		$this->dequote($pars["errors"]);
-		$errs = unserialize($pars["errors"]);
-		echo "done: [" . implode(",", $errs) . "]<br><br>";
-	}
+	// foreach ($jj as $job_id => $job)
+	// {
+		// echo "job id: " . $job->id() ."<br>";
+		// $arr = array("id"=>$job_id);
+		// $ud = parse_url($j->done($arr));
+		// $pars = array();
+		// parse_str($ud["query"], $pars);
+		// $this->dequote($pars["errors"]);
+		// $errs = unserialize($pars["errors"]);
+		// echo "done: [" . implode(",", $errs) . "]<br><br>";
+	// }
 
-	$list = $resource_tree->to_list();
-	$list->filter (array (
-		"class_id" => CL_MRP_RESOURCE,
-	));
-	$list = $list->arr();
+	// $list = $resource_tree->to_list();
+	// $list->filter (array (
+		// "class_id" => CL_MRP_RESOURCE,
+	// ));
+	// $list = $list->arr();
 
-	foreach ($list as $res_id => $r)
-	{
-		echo "res id: " . $res_id ."<br>";
-		$r->set_prop("state", MRP_STATUS_RESOURCE_AVAILABLE);
-		$r->save();
-		echo "state set to: [" . MRP_STATUS_RESOURCE_AVAILABLE . "]<br><br>";
-	}
-}
+	// foreach ($list as $res_id => $r)
+	// {
+		// echo "res id: " . $res_id ."<br>";
+		// $r->set_prop("state", MRP_STATUS_RESOURCE_AVAILABLE);
+		// $r->save();
+		// echo "state set to: [" . MRP_STATUS_RESOURCE_AVAILABLE . "]<br><br>";
+	// }
+// }
 /* dbg */
 
 		classload("vcl/treeview");
@@ -1234,7 +1235,7 @@ if ($_GET["mrp_set_all_resources_available"])
 		));
 		$table->define_field (array (
 			"name" => "name",
-			"caption" => t("Projekt"),
+			"caption" => t("Pro&shy;jekt"),
 			"chgbgcolor" => "bgcolour_overdue",
 			"sortable" => 1,
 			"numeric" => 1
@@ -1275,7 +1276,7 @@ if ($_GET["mrp_set_all_resources_available"])
 				$table->define_field(array(
 					"name" => "priority",
 					"chgbgcolor" => "bgcolour_overdue",
-					"caption" => t("Prioriteet"),
+					"caption" => t("Prio&shy;ri&shy;teet"),
 					"callback" => array (&$this, "priority_field_callback"),
 					"callb_pass_row" => false,
 					"sortable" => 1,
@@ -1288,7 +1289,7 @@ if ($_GET["mrp_set_all_resources_available"])
 				$table->define_field (array (
 					"name" => "priority",
 					"chgbgcolor" => "bgcolour_overdue",
-					"caption" => t("Prioriteet"),
+					"caption" => t("Prio&shy;ri&shy;teet"),
 					"sortable" => 1,
 				));
 				break;

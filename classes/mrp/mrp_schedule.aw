@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.30 2005/03/29 10:01:12 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.31 2005/03/29 11:26:28 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -214,6 +214,7 @@ class mrp_schedule extends class_base
 /**
     @attrib name=create
 	@param mrp_workspace required type=int
+	@param mrp_force_replan optional type=int
 **/
 	function create ($arr)
 	{
@@ -241,7 +242,7 @@ class mrp_schedule extends class_base
 		sem_acquire($sem_id);
 
 		### start scheduling only if input data has been altered
-		if ($workspace->prop("rescheduling_needed"))
+		if ( $workspace->prop("rescheduling_needed") or ($arr["mrp_force_replan"] == 1) )
 		{
 			### set scheduling not needed, and start scheduling
 			$workspace->set_prop("rescheduling_needed", 0);
@@ -891,10 +892,10 @@ class mrp_schedule extends class_base
 					list ($unavailable_start, $unavailable_length) = $this->get_closest_unavailable_period ($resource_id, $reserved_time);
 
 /* dbg */ if ($this->mrpdbg){
-/* dbg */ echo "start1:". date (MRP_DATE_FORMAT, $this->schedule_start + $start1)." - length1:".$length1." - d: ".$d." - start:". date (MRP_DATE_FORMAT, $this->schedule_start + $start) ."-start2:". date (MRP_DATE_FORMAT, $this->schedule_start + $start2) ."<br>";
-/* dbg */ echo "reservedtime: " . date (MRP_DATE_FORMAT, $this->schedule_start + $reserved_time) . "<br>";
-/* dbg */ echo "1st unavail: " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)."<br>";
-/* dbg */ $dbg_time = $unavailable_start + $unavailable_length;
+// /* dbg */ echo "start1:". date (MRP_DATE_FORMAT, $this->schedule_start + $start1)." - length1:".$length1." - d: ".$d." - start:". date (MRP_DATE_FORMAT, $this->schedule_start + $start) ."-start2:". date (MRP_DATE_FORMAT, $this->schedule_start + $start2) ."<br>";
+// /* dbg */ echo "reservedtime: " . date (MRP_DATE_FORMAT, $this->schedule_start + $reserved_time) . "<br>";
+// /* dbg */ echo "1st unavail: " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)."<br>";
+// /* dbg */ $dbg_time = $unavailable_start + $unavailable_length;
 /* dbg */ }
 // /* dbg */ echo date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)."<br>";
 
@@ -911,8 +912,8 @@ class mrp_schedule extends class_base
 								list ($unavailable_start, $unavailable_length) = $this->get_closest_unavailable_period ($resource_id, $reserved_time);
 
 /* dbg */ if ($this->mrpdbg){
-/* dbg */ echo "2nd unavail: " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)."<br>";
-/* dbg */ $dbg_time = $unavailable_start + $unavailable_length;
+// /* dbg */ echo "2nd unavail: " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)."<br>";
+// /* dbg */ $dbg_time = $unavailable_start + $unavailable_length;
 /* dbg */ }
 							}
 							else
@@ -953,9 +954,9 @@ class mrp_schedule extends class_base
 								list ($unavailable_start, $unavailable_length) = $this->get_closest_unavailable_period ($resource_id, ($unavailable_start + $unavailable_length));
 
 /* dbg */ if ($this->mrpdbg){
-/* dbg */ echo "cycle end unavail: " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)." resp to time: " . date (MRP_DATE_FORMAT, $this->schedule_start + $dbg_time) . "<br>";
-/* dbg */ echo "cycle end length: " . $length/3600 . "h<br>";
-/* dbg */ echo "cycle end rt+length: " . date (MRP_DATE_FORMAT, $this->schedule_start + $reserved_time + $length) . "<br>";
+// /* dbg */ echo "cycle end unavail: " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)." resp to time: " . date (MRP_DATE_FORMAT, $this->schedule_start + $dbg_time) . "<br>";
+// /* dbg */ echo "cycle end length: " . $length/3600 . "h<br>";
+// /* dbg */ echo "cycle end rt+length: " . date (MRP_DATE_FORMAT, $this->schedule_start + $reserved_time + $length) . "<br>";
 /* dbg */ }
 
 							}
@@ -1286,54 +1287,11 @@ class mrp_schedule extends class_base
 			}
 		}
 	}
-}
 
-function timing ($name, $action = "time")
-{
-	if ($_GET["showtimings"])
-	{
-		static $timings = array ();
-
-		switch ($action)
-		{
-			case "time":
-			case "start":
-			case "end":
-				list ($msec, $sec) = explode (" ", microtime ());
-				$time = ((float) $msec + (float) $sec);
-
-				if ($timings[$name]["start"])
-				{
-					$timings[$name]["sum"] += ($time - $timings[$name]["start"]);
-					$timings[$name]["count"]++;
-					$timings[$name]["start"] = 0;
-				}
-				else
-				{
-					$timings[$name]["start"] = $time;
-				}
-				break;
-
-			case "show":
-				echo "<pre>";
-
-				foreach ($timings as $name => $timing)
-				{
-					echo "[" . $name . "] => " . ($timing["sum"] / $timing["count"]) . " (count = " . $timing["count"] . ")\n";
-				}
-
-				echo "</pre>";
-				break;
-		}
-	}
-
-/**
-    @attrib name=get_unavailable_periods
-	@param mrp_resource required type=int
-	@param mrp_start required type=int
-	@param mrp_length required type=int
-**/
-	function get_unavailable_periods_for_range ($arr)
+	// @param mrp_resource required type=int
+	// @param mrp_start required type=int
+	// @param mrp_length required type=int
+	function get_unavailable_periods_for_range ()
 	{
 		$resource_id = $arr["mrp_resource"];
 		$resource = obj ($resource_id);
@@ -1375,6 +1333,46 @@ function timing ($name, $action = "time")
 		}
 
 		return true;
+	}
+}
+
+function timing ($name, $action = "time")
+{
+	if ($_GET["showtimings"])
+	{
+		static $timings = array ();
+
+		switch ($action)
+		{
+			case "time":
+			case "start":
+			case "end":
+				list ($msec, $sec) = explode (" ", microtime ());
+				$time = ((float) $msec + (float) $sec);
+
+				if ($timings[$name]["start"])
+				{
+					$timings[$name]["sum"] += ($time - $timings[$name]["start"]);
+					$timings[$name]["count"]++;
+					$timings[$name]["start"] = 0;
+				}
+				else
+				{
+					$timings[$name]["start"] = $time;
+				}
+				break;
+
+			case "show":
+				echo "<pre>";
+
+				foreach ($timings as $name => $timing)
+				{
+					echo "[" . $name . "] => " . ($timing["sum"] / $timing["count"]) . " (count = " . $timing["count"] . ")\n";
+				}
+
+				echo "</pre>";
+				break;
+		}
 	}
 }
 

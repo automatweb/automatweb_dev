@@ -5,6 +5,7 @@
 			<function name="create">
 				<arguments>
 					<required name="mrp_workspace" type="int" />
+					<optional name="mrp_force_replan" type="int" />
 				</arguments>
 			</function>
 		</action>
