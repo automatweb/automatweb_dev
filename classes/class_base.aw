@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.302 2004/09/20 16:38:30 duke Exp $
+// $Id: class_base.aw,v 2.303 2004/10/05 09:25:26 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1845,7 +1845,6 @@ class class_base extends aw_template
 		$remap_children = false;
 
 		// how do I stop parsing of properties that _are_ already parsed?
-
 
 		foreach($properties as $key => $val)
 		{
