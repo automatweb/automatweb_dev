@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.71 2002/08/16 21:31:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.72 2002/08/20 07:48:25 duke Exp $
 error_reporting(E_ALL ^ E_NOTICE);
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
@@ -129,8 +129,9 @@ if (empty($LC))
 	$LC="et";
 }
 
-@include(aw_ini_get("basedir")."/lang/" . $LC . "/errors.".aw_ini_get("ext"));
-@include(aw_ini_get("basedir")."/lang/" . $LC . "/common.".aw_ini_get("ext"));
+// that's done in init.aw->init_config now
+//@include(aw_ini_get("basedir")."/lang/" . $LC . "/errors.".aw_ini_get("ext"));
+//@include(aw_ini_get("basedir")."/lang/" . $LC . "/common.".aw_ini_get("ext"));
 
 // other stuff
 
@@ -187,6 +188,10 @@ define("FSUBTYPE_EMAIL_ACTION",4);
 
 // kas seda vormi kasutatakse kalendri ajavahemike defineerimiseks?
 define("FSUBTYPE_CAL_CONF",8);
+
+
+// object flags - bitmask
+define("OBJ_HAS_CALENDAR",1);
 
 // objektide subclassid - objects.subclass sees juusimiseks
 
