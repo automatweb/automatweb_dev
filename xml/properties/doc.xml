@@ -79,7 +79,7 @@
             <size>60</size>
             <trans>1</trans>
             <field>keywords</field>
-            <caption>Võtmesõnad</caption>
+            <caption>V&amp;otilde;tmes&amp;otilde;nad</caption>
       </property>
       <property>
             <name>names</name>
@@ -156,7 +156,7 @@
             <default>1</default>
             <trans>1</trans>
             <field>showlead</field>
-            <caption>Näita leadi</caption>
+            <caption>N&amp;auml;ita leadi</caption>
       </property>
       <property>
             <name>show_modified</name>
@@ -167,7 +167,7 @@
             <trans>1</trans>
             <default>1</default>
             <field>show_modified</field>
-            <caption>Näita muutmise kuupäeva</caption>
+            <caption>N&amp;auml;ita muutmise kuup&amp;auml;eva</caption>
       </property>
       <property>
             <name>doc_modified</name>
@@ -218,7 +218,7 @@
             <store>no</store>
             <trans>1</trans>
             <field>clear_styles</field>
-            <caption>Tühista stiilid</caption>
+            <caption>T&amp;uuml;hista stiilid</caption>
       </property>
       <property>
             <name>link_keywords</name>
@@ -229,7 +229,7 @@
             <store>no</store>
             <trans>1</trans>
             <field>link_keywords</field>
-            <caption>Lingi võtmesõnad</caption>
+            <caption>Lingi v&amp;otilde;tmes&amp;otilde;nad</caption>
       </property>
       <property>
             <name>link_keywords2</name>
@@ -240,7 +240,7 @@
             <field>meta</field>
             <method>serialize</method>
             <default>1</default>
-            <caption>Võtmesõnad lingina</caption>
+            <caption>V&amp;otilde;tmes&amp;otilde;nad lingina</caption>
       </property>
       <property>
             <name>esilehel</name>
@@ -313,7 +313,7 @@
             <default>1</default>
             <trans>1</trans>
             <field>show_title</field>
-            <caption>Näita pealkirja</caption>
+            <caption>N&amp;auml;ita pealkirja</caption>
       </property>
       <property>
             <name>no_search</name>
@@ -323,7 +323,7 @@
             <ch_value>1</ch_value>
             <trans>1</trans>
             <field>no_search</field>
-            <caption>Jäta otsingust välja</caption>
+            <caption>J&amp;auml;ta otsingust välja</caption>
       </property>
       <property>
             <name>cite</name>
@@ -344,7 +344,7 @@
             <size>20</size>
             <trans>1</trans>
             <field>tm</field>
-            <caption>Kuupäev</caption>
+            <caption>Kuup&amp;auml;ev</caption>
       </property>
       <property>
             <name>show_print</name>
@@ -502,7 +502,7 @@
             <field>meta</field>
             <method>serialize</method>
             <trans>1</trans>
-            <caption>Põhikalender</caption>
+            <caption>P&amp;otilde;hikalender</caption>
       </property>
       <property>
             <name>gen_static</name>
@@ -552,7 +552,7 @@
             <field>meta</field>
             <method>serialize</method>
             <ch_value>1</ch_value>
-            <caption>Ära tee Samal teemal linke</caption>
+            <caption>&amp;Auml;ra tee Samal teemal linke</caption>
       </property>
       <property>
             <name>no_last</name>
@@ -562,7 +562,7 @@
             <ch_value>1</ch_value>
             <trans>1</trans>
             <field>no_last</field>
-            <caption>Ära arvesta muutmist</caption>
+            <caption>&amp;Auml;ra arvesta muutmist</caption>
       </property>
       <property>
             <name>show_last_changed</name>
@@ -618,5 +618,17 @@
                   <master_index>brother_of</master_index>
             </planner>
       </tableinfo>
+      <reltypes>
+            <TIMING>
+                  <value>1</value>
+                  <clid>CL_TIMING</clid>
+                  <caption>Aeg</caption>
+            </TIMING>
+            <REMINDER>
+                  <value>2</value>
+                  <clid>CL_REMINDER</clid>
+                  <caption>Meeldetuletus</caption>
+            </REMINDER>
+      </reltypes>
 </properties>
 
