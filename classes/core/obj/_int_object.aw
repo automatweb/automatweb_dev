@@ -154,10 +154,22 @@ class _int_object
 					continue;
 				}
 				obj_set_opt("no_cache", $tmp);
-				$c = new connection();
-				$param["from"] = $this->obj["brother_of"];
-				$param["to"] = $oid;
-				$c->change($param);
+
+				if ($GLOBALS["object_loader"]->ds->can("view", $this->obj["brother_of"]) && 
+					$GLOBALS["object_loader"]->ds->can("view", $oid))
+				{
+					$c = new connection();
+					$param["from"] = $this->obj["brother_of"];
+					$param["to"] = $oid;
+					$c->change($param);
+				}
+				else
+				{
+					error::throw(array(
+						"id" => ERR_ACL,
+						"msg" => "object::connect(): no view access for both endpoints (".$this->obj["brother_of"]." and $oid)!"
+					));
+				}
 			};
 		}
 	}
