@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.103 2004/11/24 08:33:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.104 2004/11/24 08:41:13 kristo Exp $
 
 /*
 
@@ -280,18 +280,6 @@ class site_show extends class_base
 			$this->do_check_ip_access(array(
 				"allowed" => $this->properties["ip_allowed"],
 				"denied" => $this->properties["ip_denied"]
-			));
-		}
-		
-		// insert sel images
-		foreach(safe_array($this->properties["images"]) as $nr => $id)
-		{
-			$url = $this->image->get_url_by_id($id);
-			$this->vars(array(
-				"sel_menu_image_".$nr."_url" => $url,
-				"sel_menu_image_".$nr => html::img(array(
-					"url" => $url
-				))
 			));
 		}
 	}
@@ -1760,6 +1748,18 @@ class site_show extends class_base
 			"current_period" => aw_global_get("current_period"),
 		));
 
+		// insert sel images
+		foreach(safe_array($this->properties["images"]) as $nr => $id)
+		{
+			$url = $this->image->get_url_by_id($id);
+			$this->vars(array(
+				"path_menu_image_".$nr."_url" => $url,
+				"path_menu_image_".$nr => html::img(array(
+					"url" => $url
+				))
+			));
+		}
+		
 		if (aw_global_get("uid") == "")
 		{
 			$this->vars(array(
@@ -2261,7 +2261,7 @@ class site_show extends class_base
 		$awt->start("part6");
 		$this->make_final_vars();		
 		$awt->stop("part6");
-
+	
 		$rv = $this->parse();
 
 
