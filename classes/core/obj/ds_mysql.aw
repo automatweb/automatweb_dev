@@ -197,6 +197,21 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	{
 		extract($arr);
 
+		// add default values to metadata as well
+		foreach($properties as $prop => $data)
+		{
+			if (empty($data["table"]))
+			{
+				continue;
+			}
+			
+			if ($data["table"] == "objects" && $data["field"] == "meta" && !isset($objdata["meta"][$data["name"]]) && !empty($data["default"]))
+			{
+				$objdata["meta"][$data["name"]] = $data["default"];
+			}
+		}
+
+
 		$metadata = aw_serialize($objdata["meta"]);
 		$this->quote($metadata);
 		$this->quote(&$objdata);
@@ -234,25 +249,20 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		// now we need to create entries in all tables that are in properties as well.
 		$tbls = array();
-//echo "adding,  <br>";
 		foreach($properties as $prop => $data)
 		{
-	//		echo "rpop = $prop <br>";
 			if (empty($data["table"]))
 			{
-		//		echo "no table bail <br>";
 				continue;
 			}
 			
 			if ($data["table"] == "objects")
 			{
-			//	echo "objects table bail <br>";
 				continue;
 			}
 
 			if ($data["store"] != "no")
 			{
-				//echo "set table $data[table] <br>";
 				$tbls[$data["table"]]["index"] = $tableinfo[$data["table"]]["index"];
 				// check if the property has a value
 				if (isset($objdata["properties"][$prop]))
@@ -282,7 +292,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 
 			$q = "INSERT INTO $tbl (".$idx.$fds.") VALUES('".$oid."'".$vls.")";
-			//echo "q = <pre>". htmlentities($q)."</pre> <br />";
 			$this->db_query($q);
 		}
 		
