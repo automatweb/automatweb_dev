@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.333 2004/12/02 17:12:07 ahti Exp $
+// $Id: class_base.aw,v 2.334 2004/12/03 12:22:55 ahti Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1864,10 +1864,14 @@ class class_base extends aw_template
 		{
 			if($value)
 			{
-				$retval = $view_controller_inst->check_property(&$properties[$key], $value, $argblock);
-				if($retval == PROP_IGNORE)
+				$val = is_array($value) ? $value : array($value);
+				foreach($val as $value)
 				{
-					unset($properties[$key]);
+					$retval = $view_controller_inst->check_property(&$properties[$key], $value, $argblock);
+					if($retval == PROP_IGNORE)
+					{
+						unset($properties[$key]);
+					}
 				}
 			}
 		}
@@ -2857,7 +2861,7 @@ class class_base extends aw_template
 		}
 		else
 		{
-			$props = $arr["props"];
+			$props = &$arr["props"];
 		};
 
 
@@ -2878,7 +2882,7 @@ class class_base extends aw_template
 
 		foreach($arr["request"] as $key => $val)
 		{
-			$prpdata = $props[$key];
+			$prpdata = &$props[$key];
 			if (1 == $prpdata["required"] && !$val)
 			{
 				$res[$key] = array(
@@ -2898,23 +2902,29 @@ class class_base extends aw_template
 			
 			if($controllers[$key])
 			{
-				$controller_id = $controllers[$key];
-				$prpdata["value"] = $val;
-				$controller_ret = $controller_inst->check_property($controller_id, $args["id"], $prpdata, $arr["request"], $val);
-
-				if ($controller_ret != PROP_OK)
+				$controller = is_array($controllers[$key]) ? $controllers[$key] : array($controllers[$key]);
+				foreach($controller as $contr)
 				{
-					$ctrl_obj = new object($controller_id);
-					$errmsg = $ctrl_obj->prop("errmsg");
-					if (empty($errmsg))
+					$controller_id = $contr;
+					$prpdata["value"] = $val;
+					$controller_ret = $controller_inst->check_property($controller_id, $args["id"], &$prpdata, $arr["request"], $val);
+	
+					if ($controller_ret != PROP_OK)
 					{
-						$errmsg = "Entry was blocked by a controller, but no error message is available";
+						$ctrl_obj = new object($controller_id);
+						$errmsg = $ctrl_obj->prop("errmsg");
+						if (empty($errmsg))
+						{
+							$errmsg = "Entry was blocked by a controller, but no error message is available";
+						};
+						$errmsg = str_replace("%caption", $prpdata["caption"], $errmsg);
+						$rvs[] = $errmsg;
 					};
-					$errmsg = str_replace("%caption", $prpdata["caption"], $errmsg);
-					$res[$key] = array(
-						"msg" => $errmsg,
-					);
-				};
+				}
+				if(!empty($rvs))
+				{
+					$res[$key]["msg"] = implode("<br />\n", $rvs);
+				}
 			}
 		};
 		return $res;
