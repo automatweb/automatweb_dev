@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.25 2001/11/07 17:41:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.26 2001/11/20 08:42:17 duke Exp $
 classload("users_user","config","form");
 
 load_vcl("table");
@@ -191,7 +191,7 @@ class users extends users_user
 		$q = "SELECT groups.oid,groups.gid
 			FROM groups
 			LEFT JOIN objects ON (objects.oid = groups.oid)
-			WHERE objects.status != 0";
+			WHERE objects.status != 0 AND groups.type IN (".GRP_REGULAR.",".GRP_DYNAMIC.")";
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
@@ -228,6 +228,22 @@ class users extends users_user
 		}
 		$this->read_template("list.tpl");
 
+		extract($arr);
+		if ($s_uid == "")
+		{
+			$s_uid = "%";
+		}
+
+		if ($s_mail == "")
+		{
+			$s_mail = "%";
+		}
+
+		$this->vars(array(
+			"s_mail" => $s_mail,
+			"s_uid" => $s_uid,
+			"reforb" => $this->mk_reforb("gen_list", array("page" => $page, "no_reforb" => 1))
+		));
 		global $lookfor, $sortby,$uid;
 		$users = $this->_gen_usr_list();
 		
@@ -235,14 +251,16 @@ class users extends users_user
 		
 		$page = $arr["page"];
 
-		$num_users = count($uid_list);
+		
+		$num_users = $this->db_fetch_field("SELECT count(uid) as cnt FROM users WHERE uid IN(".join(",",map("'%s'",$uid_list)).") AND blocked = 0 AND uid LIKE '%".$s_uid."%' AND email LIKE '%".$s_mail."%'","cnt");
+
 		$pages = $num_users / PER_PAGE;
 		for ($i=0; $i < $pages; $i++)
 		{
 			$this->vars(array(
 				"from" => $i*PER_PAGE,
 				"to" => min(($i+1)*PER_PAGE, $num_users),
-				"link" => $this->mk_orb("gen_list", array("page" => $i))
+				"link" => $this->mk_orb("gen_list", array("page" => $i,"s_uid" => $s_uid, "s_mail" => $s_mail))
 			));
 			if ($i == $page)
 			{
@@ -261,7 +279,7 @@ class users extends users_user
 		}
 		// hmpf. Huvitav, kas IN klauslil mingi suuruspiirang ka on?
 		// kui kasutajaid on ntx 2000, siis see päring voib ysna jube olla
-			$q = sprintf("SELECT * FROM users WHERE uid IN(%s) AND blocked = 0 order by uid LIMIT %s,%s",join(",",map("'%s'",$uid_list)),$page*PER_PAGE,PER_PAGE);
+			$q = "SELECT * FROM users WHERE uid IN(".join(",",map("'%s'",$uid_list)).") AND blocked = 0 AND uid LIKE '%".$s_uid."%' AND email LIKE '%".$s_mail."%' order by uid LIMIT ".$page*PER_PAGE.",".PER_PAGE;
 			$this->db_query($q);
 			while ($row = $this->db_next())
 			{
