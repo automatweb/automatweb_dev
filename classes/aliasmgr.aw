@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.23 2002/02/05 06:40:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.24 2002/02/08 09:33:52 kristo Exp $
 
 global $orb_defs;
 $orb_defs["aliasmgr"] = "xml";
@@ -250,9 +250,14 @@ class aliasmgr extends aw_template {
 		extract($args);
 		$this->_init_aliases();
 		$this->read_template("search_doc.tpl");
-		                global $s_name, $s_comment,$s_type,$SITE_ID;
-                if ($s_name != "" || $s_comment != "" || $s_type > 0)
-                {
+		global $s_name, $s_comment,$s_type,$SITE_ID;
+		foreach($this->defs as $key => $val)
+		{
+			$clid = $val["class_id"];
+			$this->typearr[] = $clid;
+		}
+    if ($s_name != "" || $s_comment != "" || $s_type > 0)
+    {
 			$se = array();
 			if ($s_name != "")
 			{
