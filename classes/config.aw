@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.5 2001/05/22 07:23:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.6 2001/05/22 07:28:42 kristo Exp $
 class db_config extends aw_template 
 {
 	function db_config() 
@@ -13,11 +13,6 @@ class db_config extends aw_template
 	{
 		$q = "SELECT content FROM config WHERE ckey = '$ckey'";
 		$ret = $this->db_fetch_field($q,"content");
-		if ($ret == false)
-		{
-			// no such key, so create it
-			$this->db_query("INSERT INTO config(ckey) VALUES('$ckey')");
-		}
 		return $ret;
 	}
 
@@ -58,6 +53,14 @@ class db_config extends aw_template
 
 	function _set_config($ckey,$content) 
 	{
+		// 1st, check if the necessary key exists
+		$ret = $this->db_fetch_field("SELECT COUNT(*) AS cnt FROM config WHERE ckey = '$ckey'","cnt");
+		if ($ret == false)
+		{
+			// no such key, so create it
+			$this->db_query("INSERT INTO config(ckey) VALUES('$ckey')");
+		}
+
 		$this->quote($content);
 		$q = "UPDATE config
 			SET content = '$content'
