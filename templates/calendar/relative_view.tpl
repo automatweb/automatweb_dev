@@ -1,28 +1,20 @@
-Viimased {VAR:PAST_LIMIT}
+<div class="aw04kalenderkast01">
+<b>Viimased {VAR:PAST_LIMIT}</b>
+</div>
 <!-- SUB: PAST -->
-<table border="0" style="border-collapse: collapse; border: 1px solid #CCC;" width="100%">
+<div class="aw04kalenderkast03">
 <!-- SUB: PAST_EVENT -->
-<tr>
-<td>
-<small>
-	{VAR:PT_EVENT}
-</small>
-</td>
-</tr>
+<div class="aw04kalendertextevent">{VAR:PT_EVENT}</div>
 <!-- END SUB: PAST_EVENT -->
-</table>
+</div>
 <!-- END SUB: PAST -->
-Järgmised {VAR:FUTURE_LIMIT}
+<div class="aw04kalenderkast01">
+<b>Järgmised {VAR:FUTURE_LIMIT}</b>
+</div>
 <!-- SUB: FUTURE -->
-<table border="0" style="border-collapse: collapse; border: 1px solid #CCC;" width="100%">
+<div class="aw04kalenderkast03">
 <!-- SUB: FUTURE_EVENT -->
-<tr>
-<td>
-<small>
-	{VAR:FT_EVENT}
-</small>
-</td>
-</tr>
+<div class="aw04kalendertextevent">{VAR:FT_EVENT}</div>
 <!-- END SUB: FUTURE_EVENT -->
-</table>
+</div>
 <!-- END SUB: FUTURE -->

@@ -1,16 +1,14 @@
-<table border="0" width="100%" style="border-collapse: collapse; border: 1px solid #CCC;">
+<table border="0" width="100%" cellpadding="0" cellspacing="0">
 <!-- SUB: DAY -->
 <tr>
-<td valign="top" style="border: 1px solid #CCC; background: #EEE;">
-<span style="font-size: 10px; font-weight: bold;">
-<a style="text-decoration: none; color: black;" href="{VAR:daylink}">{VAR:lc_weekday}, {VAR:daynum}. {VAR:lc_month}</a></strong>
+<td valign="top" class="aw04kalenderkast01">
+<span class="aw04kalendertext"><strong><a href="{VAR:daylink}">{VAR:lc_weekday}, {VAR:daynum}. {VAR:lc_month}</a></strong>
 </span>
 </td>
 </tr>
 <tr>
-<td valign="top" style="border: 1px solid #CCC;">
+<td valign="top"  class="aw04kalenderkast03">
 <span style="font-size: 11px;">
-<p>
 	{VAR:EVENT}
 </span>
 </td>
@@ -18,16 +16,15 @@
 <!-- END SUB: DAY -->
 <!-- SUB: TODAY -->
 <tr>
-<td valign="top" style="border: 1px solid #CCC; background: #EEE;">
-<span style="font-size: 10px; font-weight: bold;">
+<td valign="top" class="aw04kalenderkast01today">
+<span class="aw04kalendertext"><strong>
 <a style="text-decoration: none; color: black;" href="{VAR:daylink}">{VAR:lc_weekday}, {VAR:daynum}. {VAR:lc_month}</a></strong>
 </span>
 </td>
 </tr>
 <tr>
-<td valign="top" style="border: 1px solid #CCC; background: #F6F6F6;">
+<td valign="top" class="aw04kalenderkast03today">
 <span style="font-size: 11px;">
-<p>
 	{VAR:EVENT}
 </span>
 </td>

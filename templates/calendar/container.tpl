@@ -1,11 +1,14 @@
 <style type="text/css">
 .minical_table {
 	border-collapse: collapse;
-	border: 1px solid #BCDCF0;
+	border: 0px;
 	font-family: Arial,sans-serif;
 	font-size: 11px;
 	padding: 3px;
+	text-align: center;
 	color: #000;
+	background-color: #EFEFEF;
+
 }
 .minical_table a {
 	color: #000;
@@ -17,35 +20,49 @@
 }
 
 .minical_header {
-	background-color: #BCDCF0;
+	font-family: Arial,sans-serif;
+	font-size: 11px;
+	background-color: #FFFFFF;
 	text-align: center;
-	border: 1px solid black;
+	border: 0px solid black;
 }
 .minical_cell {
-	border: 1px solid #BCDCF0;
+	font-family: Arial,sans-serif;
+	font-size: 11px;
+	background-color: #FFFFFF;
+	border: 0px solid #BCDCF0;
 	padding: 3px;
 	text-align: center;
 }
 
 .minical_cellact {
-	border: 1px solid #BCDCF0;
+	font-family: Arial,sans-serif;
+	font-size: 11px;
+	background-color: #FFFFFF;
+	border: 0px solid #BCDCF0;
 	padding: 3px;
-	background: #EEEEEE;
+	background: #E1E1E1;
 	text-align: center;
 }
 
 .minical_cell_deact {
-	border: 1px solid #BCDCF0;
+	font-family: Arial,sans-serif;
+	font-size: 11px;
+	background-color: #FFFFFF;
+	border: 0px solid #BCDCF0;
 	padding: 3px;
 	text-align: center;
-	color: #EEEEEE;
+	color: #BDBDBD;
 }
 
 .minical_cell_today {
-	border: 1px solid #BCDCF0;
+	font-family: Arial,sans-serif;
+	font-size: 11px;
+	border: 0px solid #BCDCF0;
 	padding: 3px;
 	text-align: center;
-	background: #E0A2A2;
+	background: #5FC000;
+	color: #000000;
 }
 </style>
 
@@ -61,66 +78,81 @@ function navigate_to()
 };
 </script>
 
-<table width="100%" border="0" cellpadding="3" cellspacing="0">
-<!--
-<tr>
-<td align="right" style="font-size: 10px;" colspan="3">
-<a href="{VAR:today_url}">Täna</a>
-<!-- SUB: PAGE -->
-<a href="{VAR:link}">{VAR:text}</a> 
-<!-- END SUB: PAGE -->
 
-<!-- SUB: SEL_PAGE -->
-[ {VAR:text} ] 
-<!-- END SUB: SEL_PAGE -->
-</td>
-</tr>
--->
-<tr>
-<td class="caldayheadday">
-<a href="{VAR:prevlink}"><img SRC="{VAR:baseurl}/automatweb/images/blue/cal_nool_left.gif" WIDTH="19" HEIGHT="8" BORDER=0 ALT="&lt;&lt;"></a> {VAR:caption}  <a href="{VAR:nextlink}"><img SRC="{VAR:baseurl}/automatweb/images/blue/cal_nool_right.gif" WIDTH="19" HEIGHT="8" BORDER=0 ALT="&gt;&gt;"></a></td>
-<td style="background: #BCDCF0; font-size: 10px;">
-<a href="{VAR:today_url}">Täna</a>
-<!-- SUB: PAGE -->
-<a href="{VAR:link}">{VAR:text}</a> 
-<!-- END SUB: PAGE -->
+<div class="aw04kalender01">
 
-<!-- SUB: SEL_PAGE -->
-[ {VAR:text} ] 
-<!-- END SUB: SEL_PAGE -->
-</td>
-<td align="right" style="background: #BCDCF0">
-<form id='naviform' style='display: inline'>
-<select id='navi_month' name='month' style="border: 1px solid gray">
-{VAR:mnames}
-</select>
-<select id='navi_year' name='year'>
-{VAR:years}
-</select>
-<input type="button" value="Go!" onClick='navigate_to()'>
-</form>
-</td>
-</tr>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td class="aw04kalender02">
+			<a href="{VAR:prevlink}"><img SRC="{VAR:baseurl}/automatweb/images/blue/cal_nool_left.gif" WIDTH="19" HEIGHT="8" BORDER=0 ALT="&lt;&lt;"></a> {VAR:caption}  <a href="{VAR:nextlink}"><img SRC="{VAR:baseurl}/automatweb/images/blue/cal_nool_right.gif" WIDTH="19" HEIGHT="8" BORDER=0 ALT="&gt;&gt;"></a>
+		</td>
+	<td valign="bottom">
+
+	<table border="0" cellpadding="0" cellspacing="0">
+		<tr>
+	
+		  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2small_left.gif" WIDTH="7" HEIGHT="18" BORDER="0" ALT=""></td>
+		  <td class="aw04tab2smallcontent" background="{VAR:baseurl}/automatweb/images/aw04/tab2small_back.gif"><a href="{VAR:today_url}"><b>Täna</b></a></td>
+		  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2small_right.gif" WIDTH="7" HEIGHT="18" BORDER="0" ALT=""></td>
+
+			<!-- SUB: PAGE -->
+		  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2small_left.gif" WIDTH="7" HEIGHT="18" BORDER="0" ALT=""></td>
+		  <td class="aw04tab2smallcontent" background="{VAR:baseurl}/automatweb/images/aw04/tab2small_back.gif"><a href="{VAR:link}"><b>{VAR:text}</b></a></td>
+		  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2small_right.gif" WIDTH="7" HEIGHT="18" BORDER="0" ALT=""></td>
+			<!-- END SUB: PAGE -->
+
+			<!-- SUB: SEL_PAGE -->
+		  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2small_sel_left.gif" WIDTH="7" HEIGHT="18" BORDER="0" ALT=""></td>
+		  <td class="aw04tab2smallcontent" background="{VAR:baseurl}/automatweb/images/aw04/tab2small_sel_back.gif"><b>{VAR:text}</b></td>
+		  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2small_sel_right.gif" WIDTH="7" HEIGHT="18" BORDER="0" ALT=""></td>
+			<!-- END SUB: SEL_PAGE -->
+			</tr>
+			</table>
+
+	</td>
+	<form id='naviform' style='display: inline'>
+	<td align="right" valign="middle" class="aw04kalender02">
+
+	<select id='navi_month' name='month' style="border: 1px solid gray">{VAR:mnames}</select>
+	<select id='navi_year' name='year'>{VAR:years}</select>
+	<input type="button" class="aw04formbutton" value="Go!" onClick='navigate_to()'>
+	
+	</td>
+	</tr>
+		</form>
 </table>
-<table border="0" cellspacing="0">
+</div>
+
+<table border="0" cellspacing="0" cellpadding="0">
 <tr>
-<td rowspan="1" valign="top" width="90%">
-{VAR:content}
-</td>
-<td valign="top" width="10%">
-{VAR:overview}
-<!-- SUB: TASKS -->
-<span style="font-size: 10px;">
-<div class="minical_header">
-<center>{VAR:tasks_title}</center>
-</div>
-<!-- SUB: TASK -->
-<div style="margin: 2px; border: 1px solid #CCC; background: #EEE;">
-<a href="{VAR:task_url}" style="text-decoration: none;">{VAR:task_name}</a>
-</div>
-<!-- END SUB: TASK -->
-</span>
-<!-- END SUB: TASKS -->
+	<td rowspan="1" valign="top" width="90%">
+
+	{VAR:content}
+
+	</td>
+
+	<td valign="top" width="10%"  class="aw04kalenderkast01">
+
+	{VAR:overview}
+
+
+	<!-- SUB: TASKS -->
+
+	<span style="font-size: 10px;">
+		<div class="minical_header">
+		<center>{VAR:tasks_title}</center>
+		</div>
+
+		<!-- SUB: TASK -->
+		<div style="margin: 2px; border: 1px solid #CCC; background: #EEE;">
+		<a href="{VAR:task_url}" style="text-decoration: none;">{VAR:task_name}</a>
+		</div>
+		<!-- END SUB: TASK -->
+	</span>
+
+	<!-- END SUB: TASKS -->
+
 </td>
 </tr>
 </table>

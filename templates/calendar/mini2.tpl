@@ -1,9 +1,10 @@
-<table class="minical_table">
+<div class="minical_table"><a href="{VAR:caption_url}">{VAR:caption}</a></div>
+
+<table border="0" cellpadding="0" cellspacing="0">
 <tr>
-<td colspan="7" class="minical_header">
-<a href="{VAR:caption_url}">{VAR:caption}</a>
-</td>
-</tr>
+<td class="aw04kalendermini">
+
+<table border="0" cellpadding="0" cellspacing="1">
 
 <!-- SUB: header -->
 <tr>
@@ -31,3 +32,5 @@
 </tr>
 <!-- END SUB: line -->
 </table>
+
+</td></tr></table>

@@ -1,8 +1,8 @@
-<table border="0" width="100%" style="border-collapse: collapse; border: 1px solid #8AAABE;" cellspacing="0" cellpadding="2">
+<table border="0" width="100%" cellspacing="0" cellpadding="2">
 <tr>
 <!-- SUB: HEADER -->
 	<!-- SUB: HEADER_CELL -->
-	<th width="20%" class="caldayheadday">
+	<th width="20%" class="aw04kalenderkast01">
 		{VAR:dayname}
 	</th>
 	<!-- END SUB: HEADER_CELL -->
@@ -11,15 +11,15 @@
 <!-- SUB: WEEK -->
 <tr>
 	<!-- SUB: DAY -->
-	<td width="20%" valign="top" style="border: 1px solid #8AAABE; background-color: #FFF;">
-	<div align="right" style="font-size: 13px; font-weight: bold; background: #EEE;"><a style="text-decoration: none;" href="{VAR:daylink}">{VAR:daynum}</a></div>
+	<td width="20%" valign="top" class="aw04kalenderkast02">
+	<div align="right" class="aw04kalendertextday"><a href="{VAR:daylink}">{VAR:daynum}</a></div>
 	<span style="font-size: 11px;">
 		{VAR:EVENT}
 	</span>
 	</td>
 	<!-- END SUB: DAY -->
 	<!-- SUB: TODAY -->
-	<td width="20%" valign="top" style="border: 1px solid #8AAABE; background-color: #EEE;">
+	<td width="20%" valign="top" class="aw04kalenderkast02today">
 	<a name="today"></a>
 	<div align="right"><small><strong><a href="{VAR:daylink}">{VAR:daynum}</a></strong></small></div>
 	<span style="font-size: 11px;">

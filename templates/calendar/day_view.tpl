@@ -1,9 +1,5 @@
-<table border="0" style="border-collapse: collapse;" width="100%" height="100%">
-<tr>
-<td valign="top">
+<div class="aw04kalenderkast03">
 <small>
 	{VAR:EVENT}
 </small>
-</td>
-</tr>
-</table>
+</div>

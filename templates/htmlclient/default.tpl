@@ -1,6 +1,6 @@
+<table border='0' class="aw04contenttable" align="center" cellpadding="0" cellspacing="0">
 <form action='{VAR:handler}.{VAR:ext}' method='post' name='changeform' enctype='multipart/form-data' {VAR:form_target}>
 <input type='hidden' NAME='MAX_FILE_SIZE' VALUE='100000000'>
-<table border='0' width='100%' cellspacing='1' cellpadding='1' bgcolor='#FFFFFF'>
 
 {VAR:content}
 
@@ -12,31 +12,28 @@
 
 <!-- SUB: PROP_ERR_MSG -->
 <tr>
-	<td class="chformleftcol" width='160'>
-	</td>
-	<td class='chformrightcol'>
-<span style='color: red'>{VAR:err_msg}</span>
-	</td>
+	<td class="aw04contentcellleft" width='160'></td>
+	<td class='aw04contentcellright'><span style='color: red'>{VAR:err_msg}</span>	</td>
 </tr>	
 <!-- END SUB: PROP_ERR_MSG -->
 
 <!-- SUB: LINE -->
 <tr>
-        <td class='chformleftcol' width='160' nowrap>
-        {VAR:caption}
-        </td>
-        <td class='chformrightcol'>
-        {VAR:element}
+        <td class='aw04contentcellleft' width='160' nowrap>
+		{VAR:caption}
+		</td>
+        <td class='aw04contentcellright'>
+		{VAR:element}
         </td>
 </tr>
 <!-- END SUB: LINE -->
 
 <!-- SUB: HEADER -->
 <tr>
-	<td class='chformsubheader' width='160'>
+	<td class='aw04contentcellsubheader' width='160'>
 	&nbsp;
 	</td>
-	<td class='chformsubheader'>
+	<td class='aw04contentcellsubheader'>
 	{VAR:caption}
 	</td>
 </tr>
@@ -44,7 +41,7 @@
 
 <!-- SUB: SUB_TITLE -->
 <tr>
-	<td colspan='2' class='chformsubtitle'>
+	<td colspan='2' class='aw04contentcellsubtitle'>
 	{VAR:value}
 	</td>
 </tr>
@@ -52,7 +49,7 @@
 
 <!-- SUB: CONTENT -->
 <tr>
-	<td colspan='2' class='chformrightcol'>
+	<td colspan='2' class='aw04contentcellcontent'>
 	{VAR:value}
 	</td>
 </tr>
@@ -60,9 +57,9 @@
 
 <!-- SUB: SUBMIT -->
 <tr>
-	<td class='chformleftcol' align='center' width='160'>&nbsp;</td>
-	<td class='chformrightcol'>
-		<input type='submit' value='Salvesta' class='small_button' onClick='submit_changeform(); return false;'>
+	<td class='aw04contentcellleft' align='center' width='160'>&nbsp;</td>
+	<td class='aw04contentcellright'>
+		<input type='submit' value='Salvesta' class='aw04formbutton' onClick='submit_changeform(); return false;'>
 	</td>
 </tr>
 <!-- END SUB: SUBMIT -->
