@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.24 2004/12/29 12:50:46 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.25 2004/12/29 13:05:12 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -311,6 +311,7 @@ class webform extends class_base
 				break;
 				
 			case "entries":
+				$register = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_REGISTER");
 				$register_i = get_instance(CL_REGISTER);
 				$register_i->do_data_tbl(array(
 					"obj_inst" => $register,
@@ -320,6 +321,7 @@ class webform extends class_base
 				break;
 				
 			case "search":
+				$register = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_REGISTER");
 				$s = get_instance(CL_REGISTER_SEARCH);
 				$prop["value"] = $s->show(array(
 					"id" => $register->prop("search_o"),
