@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgmanager.aw,v 1.9 2004/03/30 14:41:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgmanager.aw,v 1.10 2004/03/31 14:13:31 duke Exp $
 // cfgmanager.aw - Object configuration manager
 // deals with drawing add and change forms and submitting data
 
@@ -55,6 +55,7 @@ class cfgmanager extends class_base
 				$arr["obj_inst"]->set_meta("use_form",$arr["request"]["use_form"]);
 				break;
 		};
+		return $rv;
 	}
 
 	// there are 2 distinct roles
