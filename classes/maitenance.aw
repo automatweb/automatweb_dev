@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/maitenance.aw,v 1.10 2004/09/09 11:03:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/maitenance.aw,v 1.11 2004/10/21 09:46:55 kristo Exp $
 // maitenance.aw - Saidi hooldus 
 /*
 
@@ -852,17 +852,21 @@ class maitenance extends class_base
 		<input type='button' value='clear cache' 
 		onclick=\"document.location='".$this->mk_my_orb('cache_clear', array('clear' => '1'))."'\"><br />";
 		
-		$cache = get_instance("cache");
+		/*$cache = get_instance("cache");
 		$cache->_get_cache_files(aw_ini_get("cache.page_cache"));
-		echo 'about to delete '.count($cache->cache_files).' files<br />';
+		echo 'about to delete '.count($cache->cache_files).' files<br />';*/
+
+		$this->files = array();
+		$this->files_from_sd(aw_ini_get("cache.page_cache"));
+		echo 'about to delete '.count($this->files).'files<br />';
 
 		if (isset($args['clear']))
 		{
-			foreach($cache->cache_files as $file)
+			foreach($this->files as $file)
 			{
-				$cache->file_invalidate($file);
+				unlink($file);
 			}
-			echo '<br />'.count($cache->cache_files).' files deleted!!<br />';
+			echo '<br />'.count($this->files).' files deleted!!<br />';
 		}
 		die();
 	}
@@ -924,6 +928,29 @@ class maitenance extends class_base
 		));
 
 		return $this->parse();
+	}
+
+	function files_from_sd($dir)
+	{
+		if ($dh = opendir($dir)) 
+		{
+			while (($file = readdir($dh)) !== false) 
+			{
+				$fp = $dir."/".$file;
+				if (!($file == "." || $file == ".."))
+				{
+					if (is_dir($fp))
+					{
+						$this->files_from_sd($fp);
+					}
+					else
+					{
+						$this->files[] = $fp;
+					}
+				}
+			}
+			closedir($dh);
+		}
 	}
 }
 ?>
