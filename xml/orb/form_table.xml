@@ -135,7 +135,7 @@
 			</function>
 		</action>
 
-		<action name="submit_table">
+		<action name="submit_table" nologin="1">
 			<function name="submit_table">
 				<arguments>
 					<required name="return"/>
