@@ -16,9 +16,6 @@
 @property folders type=text store=no group=folders callback=callback_get_menus
 @caption Kataloogid
 
-@property root_name type=textbox group=folders field=meta table=objects method=serialize
-@caption Rootkataloogi nimi
-
 @property show_folders type=checkbox ch_value=1 field=meta method=serialize
 @caption N&auml;ita katalooge
 
@@ -280,17 +277,17 @@ class object_treeview extends class_base
 	{
 		$ret = array();
 
+		// if the folder is specified in the url, then show that
+		if ($GLOBALS["tv_sel"])
+		{
+			$parent = $GLOBALS["tv_sel"];
+		}
+		else
 		// right. if the user has said, that no tree should be shown
 		// then get files in all selected folders
 		if (!$ob->meta('show_folders'))
 		{
 			$parent = $folders;
-		}
-		else
-		// if the folder is specified in the url, then show that
-		if ($GLOBALS["tv_sel"])
-		{
-			$parent = $GLOBALS["tv_sel"];
 		}
 
 		if (!$parent)
@@ -315,7 +312,8 @@ class object_treeview extends class_base
 			"parent" => $parent,
 			"status" => $ob->prop("show_notact") ? array(STAT_ACTIVE, STAT_NOTACTIVE) : STAT_ACTIVE,
 			"class_id" => $ob->meta('clids'),
-			"sort_by" => "objects.modified DESC"
+			"sort_by" => "objects.modified DESC",
+			"lang_id" => array()
 		));
 		$ol->sort_by_cb(array(&$this, "_obj_list_sorter"));
 
@@ -398,7 +396,8 @@ class object_treeview extends class_base
 				$_ot = new object_tree(array(
 					"class_id" => CL_MENU,
 					"parent" => $c_o->id(),
-					"status" => STAT_ACTIVE
+					"status" => STAT_ACTIVE,
+					"lang_id" => array()
 				));
 				$cur_ids = $_ot->ids();
 			}
@@ -453,8 +452,8 @@ class object_treeview extends class_base
 		// use treeview widget
 		$tv = get_instance("vcl/treeview");
 		$tv->start_tree(array(
-			"root_name" => $ob->prop("root_name"),
-			"root_url" => $this->mk_my_orb("show", array("id" => $ob->id(), "section" => aw_global_get("section"))),
+			"root_name" => "",
+			"root_url" => "",
 			"root_icon" => "",
 			"type" => $ob->meta('tree_type')
 		));

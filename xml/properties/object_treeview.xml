@@ -19,15 +19,6 @@
             <caption>Kataloogid</caption>
       </property>
       <property>
-            <name>root_name</name>
-            <type>textbox</type>
-            <group>folders</group>
-            <field>meta</field>
-            <table>objects</table>
-            <method>serialize</method>
-            <caption>Rootkataloogi nimi</caption>
-      </property>
-      <property>
             <name>show_folders</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
