@@ -1,6 +1,6 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.4 2002/01/18 00:03:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.5 2002/02/06 02:27:11 duke Exp $
 global $class_defs;
 $class_defs["cal_event"] = "xml";
 
@@ -307,15 +307,19 @@ class cal_event extends aw_template {
 		));
 		return $this->parse();
 	}
-	
+
+	////
+	// !Saves the repeaters and calculates the dates when the correspondending event occurs
 	function submit_repeaters($args = array())
 	{
 		extract($args);
+		
 		// store them inside the object so we can use them elsewhere
 		$this->repeats = $args;
 		$obj = $this->get_object($id);
 		$par_obj = $this->get_object($obj["parent"]);
 		$parent_class = $par_obj["class_id"];
+
 		$this->set_object_metadata(array(
 			"oid" => $id,
 			"overwrite" => 1,
@@ -326,12 +330,17 @@ class cal_event extends aw_template {
 			WHERE objects.oid = '$id'";
 		$this->db_query($q);
 		$event = $this->db_next();
+
 		$this->reps = array();
+
 		$rep_end = $this->process_repeaters($event,$args);
+
 		$reps = aw_serialize($this->reps,SERIALIZE_PHP_NOINDEX);
 		$this->quote($reps);
 		$q = "UPDATE planner SET rep_until = '$rep_end', repeaters = '$reps' WHERE id = '$id'";
 		$this->db_query($q);
+
+		// FIXME: this sucks
 		if ($parent_class == CL_CALENDAR)
 		{
 			return $this->mk_my_orb("event_repeaters",array("id" => $id),"planner");
@@ -348,7 +357,6 @@ class cal_event extends aw_template {
 	{
 		// every X days
 		// print "wd = $this->wd<br>";
-		$this->gdaynum++;
 		if ($this->repeats["day"] == 1)
 		{
 			if ( ($this->daynum % $this->dayskip) == 0)
@@ -357,7 +365,7 @@ class cal_event extends aw_template {
 				//print "$this->daynum JAGUB $this->dayskip<br>";
 			}
 		}
-		// every
+		// on _those_ days inside the week
 		elseif ($this->repeats["day"] == 2)
 		{
 			if ($this->repeats["wday"][$this->wd])
@@ -366,6 +374,7 @@ class cal_event extends aw_template {
 				//print "$this->wd päev matchib DAYS_IN_WEEK ruuliga<br>";
 			};
 		}
+		// on _those_ days inside the month
 		elseif ($this->repeats["day"] == 3)
 		{
 			if (in_array($this->d,$this->days))
@@ -394,11 +403,23 @@ class cal_event extends aw_template {
 		{
 			$this->wd = 7;
 		};
-		
-		$this->dayskip = ($this->repeats["day"] == 1) ? $this->repeats["dayskip"] : 1;
 
+		// $repeats[day] is 1, if the "every X days" line in the form was selected 
+		// $repeats[dayskip] is the X
+		$this->dayskip = sprintf("%d",($this->repeats["day"] == 1) ? $this->repeats["dayskip"] : 1);
+		
+		// dayskip has to be integer, thus if it wasn't, we set it to default value and that's 1
+		if ($this->dayskip == 0)
+		{
+			$this->dayskip = 1;
+		};
+		
+
+		// region1 is the whole day block of the form
+		// $repeats[day] == 3, if the "every month on those days" option was selected
 		if ( ($this->repeats["region1"]) && ($this->repeats["day"] == 3) )
 		{
+			// we should check for integers here as well
 			$this->days = explode(",",$this->repeats["monpwhen2"]);
 		};
 
@@ -413,33 +434,31 @@ class cal_event extends aw_template {
 
 		$this->found = false;
 
-		$sd = ($month == $this->start_month) ? $this->start_day : 1;
+		//$sd = ($month == $this->start_month) ? $this->start_day : 1;
 
+		// this take care of the time periods before the actual event starts.
+		// Maybe that should be configurable as well?
 		$this_is = mktime(0,0,0,$month,1,$year);
 		if ($this_is < $this->start)
 		{
-			//print "skipping the start<br>";
 			$sd = $this->start_day;
+			$this->wd = date("w",mktime(0,0,0,$month,$sd,$year)); 
 		}
 		else
 		{
 			$sd = 1;
 		};
-		$sd = 1;
 
+		//$sd = 1;
+
+		// cycle over all (remaining) days in that month
 		for ($this->d = $sd; $this->d <= $dm; $this->d++)
 		{
-			$this->daynum++;
 
-			if ($this->repeats["region1"])
-			{
-				$this->_process_day();
-			};
 			if ($this->wd == 8)
 			{
-				// rollover
+				// week rollover
 				$this->wd = 1;
-				//print "y:$y - m:$m - wn:$wkn - gwkn: $gwkn<br>";
 				// nädala kontroll
 				if ($this->region2)
 				{
@@ -464,21 +483,33 @@ class cal_event extends aw_template {
 				$wkn++;
 				$gwkn++;
 			};
+			
+			if ($this->repeats["region1"])
+			{
+				$this->_process_day();
+			};
 
 			$this->wd++;
 			if ($this->found)
 			{
-				$ts = mktime(0,0,0,$month,$this->d,$year);
+				//$ts = mktime(0,0,0,$month,$this->d,$year);
+				// something weird is going on
+				$ts = mktime(0,0,0,1,$this->gdaynum,2001);
 				$this->reps[] = $this->gdaynum;
 				//print "<b>MATCH:</b> " . date("l, d-m-Y",$ts) . "<br>";;
 				$this->found = false;
 			};
+		
+			$this->daynum++;
+			$this->gdaynum++;
 				
 
 
 		}
 	}
-		
+
+	////
+	// Processes all events
 	function process_repeaters($event,$args)
 	{
 		// here.
@@ -488,7 +519,7 @@ class cal_event extends aw_template {
 		$this->start = $start;
 		list($start_year,$start_wday) = explode("-",date("Y-w",$start));
 
-		list($sx_m,$sx_d) = explode("-",date("m-d",$start));
+		list($sx_m,$sx_d) = explode("-",date("n-j",$start));
 		$this->start_day = $sx_d;
 		$this->start_month = $sx_m;
 
@@ -516,10 +547,11 @@ class cal_event extends aw_template {
 	
 		list($_d,$_m,$_y) = explode("-",$end_date);
 		$rep_end = mktime(23,59,59,$_m,$_d,$_y);
+		
 		classload("date_calc");
 		$timebase = mktime(0,0,0,1,1,2001);
 		$ddiff = get_day_diff($timebase,$start);
-		$this->gdaynum = $ddiff;
+		$this->gdaynum = $ddiff + 1;
 
 
 		$years = array();
@@ -579,10 +611,11 @@ class cal_event extends aw_template {
 				$last_mon = $m;
 		
 				//print "<i>Processing:</i> $m/$y<br>";
-				if ( ($y == start_year) && ($m < $sx_m) )
+				if ( ($y == $start_year) && ($m < $sx_m) )
 				{
-
+					// it's too early, do nothing
 				}
+				else
 				{
 					$this->_process_month(array("month" => $m,"year" => $y));
 				};
