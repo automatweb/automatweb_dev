@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.28 2004/10/26 14:42:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.29 2004/10/29 16:08:19 duke Exp $
 
 /*
 
@@ -180,7 +180,7 @@ class classificator extends class_base
 	}
 
 	// this will eventually replace delayed vcl property thingie
-	function get_vcl_property($arr)
+	function _get_vcl_property($arr)
 	{
 		print "siin ei ole kala";
 
