@@ -258,7 +258,7 @@ class form_controller extends form_base
 					{
 						$val = "\"".str_replace("\"","\\\"",$val)."\"";
 					}
-	//				echo "replace '$var' with '$val' <Br>";
+					echo "replace '$var' with '$val' <Br>";
 					$eq = str_replace("[".$var."]",$val,$eq);
 				}
 			}
@@ -276,7 +276,7 @@ class form_controller extends form_base
 		}
 
 		// and finally init all non-initialized vars to zero to avoid parse errors
-		$eq = preg_replace("/(\[.*\])/","0",$eq);
+		$eq = preg_replace("/(\[[-a-zA-Z0-9 _:\(\)]*\])/","0",$eq);
 
 		return $eq;
 	}
@@ -459,10 +459,7 @@ class form_controller extends form_base
 			if ($et_type == "same_chain")
 			{
 				// figure out the current chain entry and load it
-				// cur_form_instance wasn't defined
-				//$chent = $this->cur_form_instance->get_current_chain_entry();
 				// i hope that does the right thing
-//				$chent = $form->get_current_chain_entry();
 				$chent = aw_global_get("current_chain_entry");
 				if ($chent)
 				{
