@@ -431,8 +431,9 @@
       </property>
       <property>
             <name>tpl_edit_cfgform</name>
-            <type>cfgform_picker</type>
-            <clid>CL_DOCUMENT</clid>
+            <type>objpicker</type>
+            <clid>CL_CFGFORM</clid>
+            <subclass>CL_DOCUMENT</subclass>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
