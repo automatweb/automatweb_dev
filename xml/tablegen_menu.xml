@@ -8,10 +8,10 @@
 		<caption>Toimeta</caption>
 		<link>{VAR:edit_url}</link>
 	</edit>
-	<properties>
+	<configure>
 		<caption>H‰‰lestus</caption>
-		<link>{VAR:props_url}</link>
-	</properties>
+		<link>{VAR:config_url}</link>
+	</configure>
 	<admin>
 		<caption>Admin</caption>
 		<link>{VAR:admin_url}</link>

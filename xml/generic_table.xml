@@ -2,14 +2,14 @@
 <tabledef>
 
 <definitions>
-<header_normal   value="title"/>
-<header_sortable value="title"/>
-<header_sorted   value="titlesel"/>
+<header_normal   value="aste05"/>
+<header_sortable value="aste05"/>
+<header_sorted   value="aste04"/>
 
-<content_style1  value="fgtext"/>
-<content_style2  value="fgtext"/>
-<content_style1_selected value="fgtextsel"/>
-<content_style2_selected value="fgtextsel"/>
+<content_style1  value="aste07"/>
+<content_style2  value="aste07"/>
+<content_style1_selected value="aste05"/>
+<content_style2_selected value="aste05"/>
 <tableattribs border="0" width="100%" cellspacing="1" cellpadding="1" bgcolor="#FFFFFF"/>
 </definitions>
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/xmlmenu.aw,v 2.4 2001/08/12 23:21:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/xmlmenu.aw,v 2.5 2001/12/21 10:15:22 kristo Exp $
 // xmlmenu.aw - xml-i ja aw_template abil menüüde genereerimise skript
 classload("defs");
 class xmlmenu {
@@ -38,7 +38,13 @@ class xmlmenu {
 	//// Impordib muutujad, mida kas template voi xml defi sees kasutakse
 	function vars($args = array())
 	{
-		$this->vars = is_array($args) ? $args : array();
+		if (is_array($args))
+		{
+			foreach($args as $key => $val)
+			{
+				$this->vars[$key] = str_replace("&","&amp;",$val);
+			};
+		};
 		$this->tpl->vars($this->vars);
 	}
 
