@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.5 2001/06/18 17:20:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.6 2001/06/21 03:51:30 kristo Exp $
 
 global $orb_defs;
 $orb_defs["form_output"] = "xml";
@@ -145,7 +145,6 @@ class form_output extends form_base
 		$this->read_template("output_grid.tpl");
 		$this->load_output($id);
 		$this->mk_path($this->parent,"<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda v&auml;jundit</a> / Adminni");
-
 		$op_id = $id;
 
 		// vaja on arrayd el_id => el_name k6ikide elementide kohta, mis on selle v2ljundi juurde valitud formides
@@ -154,6 +153,17 @@ class form_output extends form_base
 		$fidstring = join(",",$this->map2("%s",$op_forms));
 		if ($fidstring != "")
 		{
+			// make preview
+			$this->db_query("SELECT oid,form_id FROM objects LEFT JOIN form_entries ON form_entries.id = objects.oid WHERE class_id = ".CL_FORM_ENTRY." AND status != 0 AND form_entries.form_id IN ($fidstring)");
+			$row = $this->db_next();
+			if ($row)
+			{
+				$this->vars(array(
+					"preview" => $this->mk_orb("show_entry", array("id" => $row["form_id"], "op_id" => $op_id, "entry_id" => $row["oid"]),"form")
+				));
+				$this->vars(array("PREVIEW" => $this->parse("PREVIEW")));
+			}
+
 			$this->db_query(
 				"SELECT el_id, objects.name as name
 				 FROM element2form 

@@ -1,18 +1,18 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/lang/en/common.aw,v 1.2 2001/06/14 08:47:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/lang/en/common.aw,v 1.3 2001/06/21 03:51:34 kristo Exp $
 // kuude nimed
-define("LC_M1","jaanuar");
-define("LC_M2","veebruar");
-define("LC_M3","märts");
-define("LC_M4","aprill");
-define("LC_M5","mai");
-define("LC_M6","juuni");
-define("LC_M7","juuli");
+define("LC_M1","january");
+define("LC_M2","february");
+define("LC_M3","march");
+define("LC_M4","april");
+define("LC_M5","may");
+define("LC_M6","june");
+define("LC_M7","july");
 define("LC_M8","august");
 define("LC_M9","september");
-define("LC_M10","oktoober");
+define("LC_M10","october");
 define("LC_M11","november");
-define("LC_M12","detsember");
+define("LC_M12","december");
 
 define("LC_MONTH","|jaanuar|veebruar|märts|aprill|mai|juuni|juuli|august|september|oktoober|november|detsember");
 define("LC_WEEKDAY","|esmaspäev|teisipäev|kolmapäev|neljapäev|reede|laupäev|pühapäev");

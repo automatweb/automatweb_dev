@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.5 2001/06/20 06:39:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.6 2001/06/21 03:51:30 kristo Exp $
 // mailinglist saadetavate mailide klass
 
 	class email extends aw_template
@@ -305,10 +305,8 @@
 			while($row = $this->db_next())
 			{
 				$maddr = trim($row["mail"]);
-				print "m = ($maddr)<br>";
 				if (is_email($maddr))
 				{
-					print "pushing $row[mail]<br>";
 					$retval[] = $row["mail"];
 				};
 			};

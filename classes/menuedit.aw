@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.27 2001/06/18 19:56:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.28 2001/06/21 03:51:30 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -2289,6 +2289,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 							admin_feature = '$admin_feature',
 							left_pane = '$left_pane',
 							shop_parallel = '$shop_parallel',
+							shop_ignoregoto = '$shop_ignoregoto',
 							right_pane = '$right_pane'
 							WHERE id = '$id'";
 			$this->db_query($q);
@@ -2612,7 +2613,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 										 menu.left_pane as left_pane,
 										 menu.right_pane as right_pane,
 										 menu.pers as pers,
-										 menu.shop_parallel as shop_parallel
+										 menu.shop_parallel as shop_parallel,
+										 menu.shop_ignoregoto as shop_ignoregoto
 										 FROM objects 
 										 LEFT JOIN menu ON menu.id = objects.oid
 										 WHERE oid = $id");
@@ -2748,6 +2750,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 											"left_pane"		=> checked($row["left_pane"]),
 											"right_pane"	=> checked($row["right_pane"]),
 											"shop_parallel" => checked($row["shop_parallel"]),
+											"shop_ignoregoto" => checked($row["shop_ignoregoto"]),
 											"width" => $row["width"],
 											"pers" => $dbp->period_mlist(unserialize($row["pers"]))
 											));

@@ -124,12 +124,13 @@ class shop extends shop_base
 		$this->parse("CHANGE");
 		$this->parse("CHANGE2");
 
-		foreach($ofs as $of_id => $chk)
+		foreach($ofs as $of_id => $row)
 		{
 			$this->vars(array(
 				"of_id" => $of_id,
 				"of_name" => $this->db_fetch_field("SELECT name FROM objects WHERE oid = ".$of_id,"name"),
-				"of_checked" => checked($chk)
+				"of_checked" => checked($row["repeat"]),
+				"of_ops" => $this->picker($row["op_id"],$op_list[$of_id])
 			));
 			$of.=$this->parse("OF");
 		}
@@ -142,10 +143,10 @@ class shop extends shop_base
 	function get_ofs_for_shop($id)
 	{
 		$ret = array();
-		$this->db_query("SELECT of_id,repeat FROM shop2order_form WHERE shop_id = $id");
+		$this->db_query("SELECT of_id,repeat,op_id FROM shop2order_form WHERE shop_id = $id");
 		while ($row = $this->db_next())
 		{
-			$ret[$row["of_id"]] = $row["repeat"];
+			$ret[$row["of_id"]] = $row;
 		}
 		return $ret;
 	}
@@ -179,7 +180,7 @@ class shop extends shop_base
 		{
 			foreach($order_form as $of_id)
 			{
-				$this->db_query("INSERT INTO shop2order_form(shop_id,of_id,repeat) values($id,$of_id,'".$of_rep[$of_id]."')");
+				$this->db_query("INSERT INTO shop2order_form(shop_id,of_id,repeat,op_id) values($id,$of_id,'".$of_rep[$of_id]."','".$of_op[$of_id]."')");
 			}
 		}
 		return $this->mk_orb("change", array("id" => $id));
@@ -277,7 +278,7 @@ class shop extends shop_base
 		}
 
 		// some of the shop categories
-		$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu ON menu.id = objects.oid WHERE parent = $parent AND class_id = ".CL_PSEUDO." AND status = 2 ");
+		$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu ON menu.id = objects.oid WHERE parent = $parent AND class_id = ".CL_PSEUDO." AND status = 2");
 		while ($row = $this->db_next())
 		{
 			if ($row["link"] != "")
@@ -632,10 +633,11 @@ class shop extends shop_base
 			$order_forms["entries"] = array();
 
 			$cnt = 0;
-			foreach($ofs as $fid => $chk)
+			foreach($ofs as $fid => $row)
 			{
 				$order_forms["order"][$cnt]["form"] = $fid;
-				$order_forms["order"][$cnt]["chk"] = $chk;
+				$order_forms["order"][$cnt]["chk"] = $row["repeat"];
+				$order_forms["order"][$cnt]["op_id"] = $row["op_id"];
 				$cnt++;
 			}
 			$order_forms["max_cnt"] = $cnt;
@@ -650,7 +652,17 @@ class shop extends shop_base
 			die();
 		}
 
+		if ($order_forms["current_cnt"] > 0 || $num > 0)
+		{
+			$prev_entry = "";
+			foreach($order_forms["entries"] as $ar)
+			{
+				$f->reset();
+				$prev_entry .= $f->show(array("id" => $ar["form"], "entry_id" => $ar["entry"], "op_id" => $order_forms["order"][$num]["op_id"]))."<br>";
+			}
+		}
 		$this->vars(array(
+			"prev_entry" => $prev_entry,
 			"form" => $f->gen_preview(array(
 									"elvalues" => $elvals,
 									"id" => $order_forms["order"][$num]["form"], 
@@ -911,53 +923,59 @@ class shop extends shop_base
 		{
 			$this->read_template("order_item_rep.tpl");
 			$parent = $this->do_shop_menus($shop,$section);
+			$ignoregoto = $this->db_fetch_field("SELECT shop_ignoregoto FROM menu WHERE id = $parent","shop_ignoregoto");
+
 			classload("planner");
 
 			// so we check for it here
 			if ($parallel)
 			{
 				// and if it is so, then select all the items for showing
-				$this->db_query("SELECT shop_items.*, objects.* FROM objects LEFT JOIN shop_items ON objects.oid = shop_items.id WHERE objects.parent = $parent AND status != 0 AND objects.class_id = ".CL_SHOP_ITEM);
+				$this->db_query("SELECT shop_items.*, objects.* FROM objects LEFT JOIN shop_items ON objects.brother_of = shop_items.id WHERE objects.parent = $parent AND status != 0 AND objects.class_id = ".CL_SHOP_ITEM);
 			}
 			else
 			{
-				$this->db_query("SELECT shop_items.*, objects.* FROM objects LEFT JOIN shop_items ON objects.oid = shop_items.id WHERE objects.oid = $item_id");
+				$this->db_query("SELECT shop_items.*, objects.* FROM objects LEFT JOIN shop_items ON objects.brother_of = shop_items.id WHERE objects.oid = $item_id");
 			}
 			$item_id = 0;
 			while ($row = $this->db_next())
 			{
 				if (!$item_id)
 				{
-					$item_id = $row["oid"];
+					$item_id = $row["brother_of"];
 				}
 				$this->save_handle();
 				$itt = $this->get_item_type($row["type_id"]);
 				$ir = "";
 				// this object has a repeater and can therefore have a repeat count
-				$rep_days = $row["per_cnt"];
+				$rep_cnt = $row["per_cnt"];
 				$pl = new planner;
-				// get the events for this planner from today to today+$rep_days <- change this later when duke adds get_events_by_count
-				$reps = $pl->get_events(array("parent" => $row["calendar_id"], "start" => time(), "end" => time()+$rep_days*24*3600,"index_time" => true));
-				foreach($reps as $time => $evnt)
+				// get the events for this planner from today to 800 days, limiting the number of events to $rep_num
+				$reps = $pl->get_events(array( "start" => time(), "limit" => $rep_cnt,"index_time" => true,"event" => $row["per_event_id"],"end" => time()*800*24*3600));
+				if (is_array($reps))
 				{
 					$f = new form;
 					$f->load($itt["form_id"]);
 					$f->load_entry($row["entry_id"]);
-
-					$el = $f->get_element_by_type("date", "from");
-					if (!$el)
+					foreach($reps as $time => $evnt)
 					{
-						$this->raise_error("No from date element in item form! ", true);
-					}
-					$f->set_element_value($el->get_id(),$time);
+						$f->reset();
 
-					$this->vars(array(
-						"item" => $f->show(array("id" => $itt["form_id"], "entry_id" => $row["entry_id"],"op_id" => $itt["long_op"],"no_load_entry" => true)),
-						"perd_val" => $time,
-						"perd_check" => checked($shopping_cart["items"][$row["oid"]]["period"] == $time),
-						"item_id" => $row["oid"]
-					));
-					$ir.= $this->parse("ITEM_REP_N");
+						$el = $f->get_element_by_type("date", "from");
+						if (!$el)
+						{
+							$this->raise_error("No from date element in item form! ", true);
+						}
+						$f->set_element_value($el->get_id(),$time);
+
+						$this->vars(array(
+							"item" => $f->show(array("id" => $itt["form_id"], "entry_id" => $row["entry_id"],"op_id" => $itt["long_op"],"no_load_entry" => true)),
+							"perd_val" => $time,
+							"perd_check" => checked($shopping_cart["items"][$row["brother_of"]]["period"] == $time),
+							"item_id" => $row["brother_of"]
+						));
+						$ir.= $this->parse("ITEM_REP_N");
+					}
 				}
 				$this->vars(array(
 					"ITEM_REP_N" => $ir
@@ -971,7 +989,7 @@ class shop extends shop_base
 												"entry_id" => $shopping_cart["items"][$item_id]["cnt_entry"],
 												"form_action" => "/index.".$ext,
 												"tpl" => "show_noform.tpl")),
-				"reforb" => $this->mk_reforb("submit_order_item", array("item_id" => $item_id, "shop" => $shop, "section" => $parent)),
+				"reforb" => $this->mk_reforb("submit_order_item", array("item_id" => $item_id, "shop" => $shop, "section" => $parent,"ignoregoto" => $ignoregoto)),
 				"PAR_ITEM" => $pari
 			));
 		}
@@ -979,12 +997,13 @@ class shop extends shop_base
 		{
 			$this->read_template("order_item.tpl");
 			$parent = $this->do_shop_menus($shop,$section);
+			$ignoregoto = $this->db_fetch_field("SELECT shop_ignoregoto FROM menu WHERE id = $parent","shop_ignoregoto");
 			$this->vars(array("item" => $f->show(array("id" => $itt["form_id"], "entry_id" => $row["entry_id"],"op_id" => $itt["long_op"]))));
 			$this->vars(array(
 				"cnt_form" => $f->gen_preview(array(
 													"id" => $itt["cnt_form"],
 													"entry_id" => $shopping_cart["items"][$row["oid"]]["cnt_entry"],
-													"reforb" => $this->mk_reforb("submit_order_item", array("item_id" => $row["oid"], "shop" => $shop, "section" => $parent)),
+													"reforb" => $this->mk_reforb("submit_order_item", array("item_id" => $row["oid"], "shop" => $shop, "section" => $parent,"ignoregoto" => $ignoregoto)),
 													"form_action" => "/index.".$ext)),
 			));
 		}
@@ -994,7 +1013,7 @@ class shop extends shop_base
 			"price" => $row["price"],
 			"it_cnt"	=> $shopping_cart["items"][$row["oid"]]["cnt"],
 			"order_item" => $this->mk_my_orb("order_item", array("item_id" => $row["oid"], "shop" => $shop, "section" => $parent)),
-			"cart" => $this->mk_my_orb("view_cart", array("shop_id" => $shop, "section" => $parent))
+			"cart" => $this->mk_my_orb("view_cart", array("shop_id" => $shop, "section" => $parent)),
 		));
 		return $this->parse();
 	}
@@ -1080,7 +1099,7 @@ class shop extends shop_base
 		}
 
 		// if the item specifies, where to go after ordering it, then go there. otherwise don't go anywhere
-		if ($it["redir"])
+		if ($it["redir"] && !$ignoregoto)
 		{
 			return $this->mk_my_orb("show", array("section" => $it["redir"]));
 		}

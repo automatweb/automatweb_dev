@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.6 2001/06/14 08:47:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.7 2001/06/21 03:51:30 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -191,7 +191,7 @@ class users_user extends aw_template {
 		$this->msg = $msg;
 		// caller voib kontrollida - if (!$users->login("fubar"))
 		//				login failed	
-		if ($success && $params["reforb"])
+		if ($success)
 		{
 			global $baseurl;
 			session_register("uid");

@@ -48,9 +48,15 @@ class form_element extends aw_template
 	// !seab vormielemendi sisu
 	function set_content($args = array())
 	{
-		if ($this->arr["type"] == "textbox")
+		switch($this->arr["type"])
 		{
-			$this->arr["text"] = $args["content"];
+			case "textbox":
+				$this->arr["text"] = $args["content"];
+				break;
+
+			case "listbox":
+				$this->arr["listbox_items"] = $args["content"];
+				break;
 		};
 	}
 
@@ -69,17 +75,20 @@ class form_element extends aw_template
 	{
 		$var = "element_".$this->id."_text";
 		global $$var;
-		$this->arr["text"] = $$var;
-		$this->dequote(&$this->arr["text"]);
-
-		$var = "element_".$this->id."_order";
-		global $$var;
-		$$var+=0;
-		if ($this->arr["ord"] != $$var)
+		if (isset($$var))
 		{
-			$this->arr["ord"] = $$var;
-			$this->upd_object(array("oid" => $this->id, "jrk" => $$var));
-		}
+			$this->arr["text"] = $$var;
+			$this->dequote($this->arr["text"]);
+
+			$var = "element_".$this->id."_order";
+			global $$var;
+			$$var+=0;
+			if ($this->arr["ord"] != $$var)
+			{
+				$this->arr["ord"] = $$var;
+				$this->upd_object(array("oid" => $this->id, "jrk" => $$var));
+			}
+		};
 	}
 
 	////

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.28 2001/06/20 06:09:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.29 2001/06/21 03:51:30 kristo Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -1102,6 +1102,7 @@ class core extends db_connector
 	// the best solution, but for now, it works
 
 	// Kas seda kasutatkse veel? - duke
+	// well, kasuttakse, aga tegelt ei tohiks. ysnaga, DEPRECATEED - terryf
 	function mk_orb($fun,$arr, $cl_name = "",$user = "")
 	{
 		global $ext;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.16 2001/06/19 00:46:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.17 2001/06/21 03:51:30 kristo Exp $
 // form_entry_element.aw - 
 session_register("clipboard");
 
@@ -507,36 +507,46 @@ load_vcl("date_edit");
 					$fy = $this->arr["from_year"];
 					$ty = $this->arr["to_year"];
 					$html = $de->gen_edit_form($prefix.$elid, ($this->entry_id ? $this->entry : time()),($fy ? $fy : 2000),($ty ? $ty : 2005));
-
-				default:
-
-					if ($this->arr["type"] == "")
-						$html .= $text;
-					else
-					{
-						$sep_ver = ($this->arr["text_distance"] > 0 ? "<br><img src='/images/transa.gif' width='1' height='".$this->arr["text_distance"]."' border='0'><br>" : "<br>");
-						$sep_hor = ($this->arr["text_distance"] > 0 ? "<img src='/images/transa.gif' height='1' width='".$this->arr["text_distance"]."' border='0'>" : "");
-					if ($this->arr["text_pos"] == "up")
-						$html = $text.$sep_ver.$html;
-					else
-					if ($this->arr["text_pos"] == "down")
-						$html = $html.$sep_ver.$text;
-					else
-					if ($this->arr["text_pos"] == "right")
-						$html = $html.$sep_hor.$text;
-					else
-						$html = $text.$sep_hor.$html;		// default is on left of element
-				}
+					break;
 			};
 			
+			if ($this->arr["type"] != "")
+			{
+				$sep_ver = ($this->arr["text_distance"] > 0 ? "<br><img src='/images/transa.gif' width='1' height='".$this->arr["text_distance"]."' border='0'><br>" : "<br>");
+				$sep_hor = ($this->arr["text_distance"] > 0 ? "<img src='/images/transa.gif' height='1' width='".$this->arr["text_distance"]."' border='0'>" : "");
+			}
+			if ($this->arr["text_pos"] == "up")
+			{
+				$html = $text.$sep_ver.$html;
+			}
+			else
+			if ($this->arr["text_pos"] == "down")
+			{	
+				$html = $html.$sep_ver.$text;
+			}
+			else
+			if ($this->arr["text_pos"] == "right")
+			{
+				$html = $html.$sep_hor.$text;
+			}
+			else
+			{
+				$html = $text.$sep_hor.$html;		// default is on left of element
+			}
 			if ($this->arr["info"] != "")
+			{
 				$html .= "<br><font face='arial, geneva, helvetica' size='1'>&nbsp;&nbsp;$info</font>";
+			}
 
 			if ($this->arr["sep_type"] == 1)	// reavahetus
+			{
 				$html.="<br>";
+			}
 			else
 			if ($this->arr["sep_pixels"] > 0)
+			{
 				$html.="<img src='/images/transa.gif' width=".$this->arr["sep_pixels"]." height=1 border=0>";
+			}
 			return $html;
 		}
 

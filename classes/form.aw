@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.23 2001/06/18 17:20:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.24 2001/06/21 03:51:30 kristo Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -577,7 +577,7 @@ $orb_defs["form"] = "xml";
 					$elvalues=$elvalues + $u->get_user_info($GLOBALS["uid"]);
 				}
 			}
-
+			
 			$tpl = isset($tpl) ? $tpl : "show.tpl";
 			$this->read_template($tpl,1);
 			$this->vars(array("form_id" => $id));
@@ -595,10 +595,6 @@ $orb_defs["form"] = "xml";
 				for ($a = 0; $a < $this->arr["cols"]; $a++)
 				{
 					$chk_js .= $this->arr["contents"][$i][$a]->gen_check_html();
-					//print "<pre>";
-					//print_r($this->arr["contents"][$i][$a]);
-					//print "</pre>";
-					//print "---";
 				}
 			}
 

@@ -93,7 +93,7 @@ class shop_item extends shop_base
 	function change($arr)
 	{
 		extract($arr);
-		$o = $this->get_item($id);
+		$o = $this->get_item($id,true);
 		if ($o["brother_of"] != $id)
 		{
 			$id = $o["brother_of"];	// this is in case we clicked on a brother to change it, we must revert to the real object
