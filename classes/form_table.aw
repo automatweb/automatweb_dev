@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.52 2002/09/04 07:34:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.53 2002/09/05 13:56:01 kristo Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -295,7 +295,7 @@ class form_table extends form_base
 							if ($alias_data["class_id"] == CL_IMAGE)
 							{
 								$imgdat = $this->image->get_image_by_id($alias_data["target"]);
-								$show_link = "<img border='0' src='".$show_link."' alt='".$dat["ev_".$v_el]."'>";
+								$_caption = "<img border='0' src='".$imgdat["url"]."' alt='".$dat["ev_".$v_el]."'>";
 								$reset_aliases[$cl][$_aidx] = $this->table["defs"][$cl]["alias"][$_aidx];
 								unset($this->table["defs"][$cl]["alias"][$_aidx]);
 							}
