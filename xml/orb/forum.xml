@@ -21,6 +21,7 @@
 			<function name="change">
 				<arguments>
 					<required name="id"/>
+					<optional name="from"/>
 				</arguments>
 			</function>
 		</action>
