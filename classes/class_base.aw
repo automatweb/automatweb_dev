@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.238 2004/03/17 13:46:39 duke Exp $
+// $Id: class_base.aw,v 2.239 2004/03/17 17:12:35 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1598,9 +1598,13 @@ class class_base extends aw_template
 		if ( 	/*($property["trans"] == 0) &&*/
 			empty($property["emb"]) &&
 			is_object($this->obj_inst) &&
+			$property["store"] != "connect" && 
 			$this->obj_inst->is_property($property["name"]) && 
 			$this->obj_inst->prop($property["name"]) != NULL )
 		{
+			//print "got da value! for ${property[name]}<br>";
+			// I need to implement this in storage .. so that $obj->prop('blag')
+			// gives the correct result .. all connections of that type
 			$property["value"] = $this->obj_inst->prop($property["name"]);
 		}
 
@@ -1651,14 +1655,6 @@ class class_base extends aw_template
 			"groupinfo" => &$this->groupinfo,
 			"new" => $this->new,
 		);
-
-		/*
-		if ($this->is_rel)
-		{
-			$conn = $this->_get_connection_for_relobj($this->obj_inst);
-			var_dump($conn);
-		};
-		*/
 
 		$this->cfgu = get_instance("cfg/cfgutils");
 
@@ -1840,8 +1836,10 @@ class class_base extends aw_template
 					$ot->init_vcl_property(array(
 						"property" => &$val,
 						"clid" => $this->clid,
+						"obj_inst" => &$this->obj_inst,
 					));
 				};
+
 			};
 			if (($val["type"] == "toolbar") && !is_object($val["toolbar"]))
 			{
@@ -2621,6 +2619,14 @@ class class_base extends aw_template
 				$vcl_inst->process_releditor($argblock);
 			};
 
+			if ($property["type"] == "classificator")
+			{
+				$vcl_inst = get_instance("classificator");
+				$argblock["prop"] = $property;
+				$vcl_inst->process_classificator($argblock);
+
+			};
+
 			if ($property["store"] == "no")
 			{
 				continue;
@@ -2730,7 +2736,6 @@ class class_base extends aw_template
 				};
 			}
 
-
 			if ($this->is_rel)
 			{
 				if ($name == "name")
@@ -2751,7 +2756,6 @@ class class_base extends aw_template
 				} 
 				else
 				{
-					
 					$this->obj_inst->set_prop($name,$property["value"]);
 				};
 			};
