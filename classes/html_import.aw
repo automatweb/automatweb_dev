@@ -1,20 +1,19 @@
 <?php
-define("PREFIX","html_import_");
+define("PREFIX","html_import_"); // sql tabelitele ette, et mingit jama ei tekiks
+
+// todo
+// logi, ja võimalus importi pauseda, ning jätkata
+// update võimalus, andmete uuendamiseks, lisamiseks
+// optional: andmete päritolu veeru lisamine
+// 
 class html_import extends aw_template
 {
 	////////////////////////////////////
 	// the next functions are REQUIRED for all classes that can be added from menu editor interface
 	////////////////////////////////////
 
-//
-/*
-abx 
-function db_get_table($name)
-function mk_field_len($type,$length)
-*/
 	function html_import()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be 
 		$this->init("html_import");
 	}
 
@@ -29,34 +28,20 @@ function mk_field_len($type,$length)
 				"'\t'", // strip tabs
 				"'\n'", // strip linebrakes
 				"'\r'",                 
+				"'<textarea'",  // muidu pole võimalik testi õigesti kuvada
+				"'<\/textarea>'", // muidu pole võimalik testi õigesti kuvada
 		);
+
 		$replace = array (
 				"",
 				"",
 				"",
+				"<t_extarea",
+				"</t_extarea>",
 		);
-/*
-		$search = array (
-				"\t", // strip tabs
-				"\n", // strip linebrakes
-				"\r",                 
-		);
-		$replace = array (
-				"",
-				"",
-				"",
-		);
-*/
-		$text = str_replace ("\r\n", "\r", $text);
-		$text = str_replace ("\r", "\r\n", $text);
-//		$text = str_replace ($search, $replace, $text);
-		
+
 		$text = preg_replace ($search, $replace, $text);
 
-
-
-		$text = str_replace ("<textarea", "<t_extarea", $text); // muidu pole võimalik testi õigesti kuvada
-		$text = str_replace ("</textarea>", "</t_extarea>", $text); // muidu pole võimalik testi õigesti kuvada
 		return $text;
 	}
 
@@ -170,7 +155,9 @@ function mk_field_len($type,$length)
 
 
 		if (!$files) 
-			{die("could not get files in $path");}
+		{
+			die("could not get files, check if if they relly excist and can be opened");
+		}
 
 		//tabeli jrk nr
 		$starts=$ob["meta"]["starts"];
@@ -787,8 +774,8 @@ function mk_field_len($type,$length)
 	//		array("William","ClinTon"),
 	//		array("George","Bush"),
 	//		)
-	// first_row - elliminate firs row 
-	// insert - actually insert data into the sql base
+	// first_row  bool - elliminate first row 
+	// insert bool - actually insert data into the sql base
 	//
 	function db_insert($table,$fields,$data,$first_row=true,$insert=false,$source="")
 	{
@@ -981,37 +968,6 @@ function mk_field_len($type,$length)
 		return $this->show(array("id" => $alias["target"]));
 	}
 
-/*
-	////////////////////////////////////
-	// object persistance functions - used when copying/pasting object
-	// if the object does not support copy/paste, don't define these functions
-	////////////////////////////////////
-
-	////
-	// !this should create a string representation of the object
-	// parameters
-	// oid - object's id
-	function _serialize($arr)
-	{
-		extract($arr);
-		$ob = $this->get_object($oid);
-		return aw_serialize($row);
-	}
-
-	////
-	// !this should create an object from a string created by the _serialize() function
-	// parameters
-	// str - the string
-	// parent - the folder where the new object should be created
-	function _unserialize($arr)
-	{
-		extract($arr);
-		$row = unserialize($str);
-		$row["parent"] = $parent;
-		$id = $this->new_object($row);
-		return true;
-	}
-*/
 
 	////////////////////////////////////
 	// object persistance functions - used when copying/pasting object
