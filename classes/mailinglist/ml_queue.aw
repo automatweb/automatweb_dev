@@ -728,7 +728,6 @@ class ml_queue extends aw_template
 		$froma = $mfrom != "" ? $mfrom : $messenger->get_default_froma($msg_meta["identity"]);
 		$fromn = $mfrom != "" ? "" : $messenger->get_default_fromn($msg_meta["identity"]);
 		echo "froma = $froma , fromn = $fromn  <br>";
-		$message .= " mid = $mid\n";
 		$this->awm->create_message(array(
 			"froma" => $froma,
 			"fromn" => $fromn,
