@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/archive/document_archive.aw,v 1.1 2004/04/06 12:11:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/archive/document_archive.aw,v 1.2 2004/06/17 14:38:41 duke Exp $
 // document_archive.aw - Dokumendiarhiiv 
 /*
 
@@ -64,6 +64,8 @@ class document_archive extends class_base
 
 		$rv = array();
 
+		return $rv;
+
 		if (!empty($parents))
 		{
 			// I need limit this list
@@ -90,7 +92,7 @@ class document_archive extends class_base
 				$doc_obj = new object($id);
 				$rv[] = array(
 					"start" => $doc_obj->prop("doc_modified"),
-					"link" => "xxx",
+					"url" => aw_ini_get("baseurl") . "/" . $o->id(),
 					"name" => $doc_obj->name(),
 				);
 			};
@@ -114,7 +116,7 @@ class document_archive extends class_base
 		};
 
 		$rv = array();
-		
+
 		if (!empty($parents))
 		{
 			$doclist = new object_list(array(
@@ -122,13 +124,17 @@ class document_archive extends class_base
 				"class_id" => array(CL_DOCUMENT,CL_PERIODIC_SECTION),
 				"site_id" => array(),
 				"lang_id" => array(),
+				"doc_modified" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $arr["start"]),
 			));
+
+			$base = aw_ini_get("baseurl");
 
 			foreach($doclist->ids() as $id)
 			{
 				$doc_obj = new object($id);
 				$rv[] = array(
 					"start" => $doc_obj->prop("doc_modified"),
+					"url" => $base . "/" . $o->id(),
 				);
 			};
 		};
@@ -208,8 +214,10 @@ class document_archive extends class_base
 		{
 			$parents[] = $conn->prop("to");
 		};
+		$_date = $start;
+		$date_est = date("d", $_date).". ".get_lc_month(date("m", $_date))." ".date("Y", $_date);
 		$d = get_instance(CL_DOCUMENT);
-		$rv = "<h2>$date</h2>";
+		$rv = "<h2>$date_est</h2>";
 		if (!empty($parents))
 		{
 			$pstr = join(",",$parents);
@@ -223,6 +231,14 @@ class document_archive extends class_base
 		};
 		return $rv;
 	}
+
+	function request_execute($obj)
+	{
+		$arx = array();
+		$arx["alias"]["to"] = $obj->id();
+		return $this->parse_alias($arx);
+	}
+
 
 }
 ?>
