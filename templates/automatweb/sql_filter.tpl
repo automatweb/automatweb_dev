@@ -97,6 +97,7 @@
 </table>
 </td></tr>
 </table>
+Vali v&auml;ljund:<select name='filter_op'>{VAR:ops}</select>
 </form>
 <script language="javascript">
 exprs=new Array("=","!=","LIKE",">","<",">=","<=");
