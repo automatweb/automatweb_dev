@@ -790,6 +790,15 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
 
+		$ret .= $this->_gi()."if (\$img[\$i][\"image_id\"])\n";
+		$ret .= $this->_gi()."{\n";
+		$this->brace_level++;
+
+		$ret .= $this->_gi()."\$img[\$i][\"url\"] = \$this->image->get_url_by_id(\$img[\$i][\"image_id\"]);\n";
+	
+		$this->brace_level--;
+		$ret .= $this->_gi()."}\n";
+
 		$ret .= $this->_gi()."if (!empty(\$img[\$i][\"url\"]))\n";
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;

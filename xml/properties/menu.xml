@@ -94,8 +94,8 @@
       </property>
       <property>
             <name>objtbl_conf</name>
-            <type>objpicker</type>
-            <clid>CL_OBJ_TABLE_CONF</clid>
+            <type>relpicker</type>
+            <reltype>RELTYPE_OBJ_TABLE_CONF</reltype>
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
@@ -104,8 +104,8 @@
       </property>
       <property>
             <name>add_tree_conf</name>
-            <type>objpicker</type>
-            <clid>CL_ADD_TREE_CONF</clid>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADD_TREE_CONF</reltype>
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
@@ -114,9 +114,8 @@
       </property>
       <property>
             <name>cfgmanager</name>
-            <type>objpicker</type>
-            <clid>CL_CFGFORM</clid>
-            <subclass>CL_MENU</subclass>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CFGFORM</reltype>
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
@@ -193,7 +192,8 @@
       </property>
       <property>
             <name>img_act</name>
-            <type>imgupload</type>
+            <type>relpicker</type>
+            <reltype>RELTYPE_IMAGE</reltype>
             <field>meta</field>
             <method>serialize</method>
             <group>presentation</group>
@@ -526,7 +526,7 @@
                   <caption>Kaustad</caption>
             </relations>
             <presentation>
-                  <caption>Presentatsioon</caption>
+                  <caption>Pildid</caption>
             </presentation>
             <show>
                   <caption>Näitamine</caption>
@@ -597,6 +597,26 @@
                   <clid>CL_PERIOD</clid>
                   <caption>v&amp;otilde;ta dokumente perioodi alt</caption>
             </PERIOD>
+            <OBJ_TABLE_CONF>
+                  <value>11</value>
+                  <clid>CL_OBJ_TABLE_CONF</clid>
+                  <caption>objektitabeli konfiguratsioon</caption>
+            </OBJ_TABLE_CONF>
+            <ADD_TREE_CONF>
+                  <value>12</value>
+                  <clid>CL_ADD_TREE_CONF</clid>
+                  <caption>lisamise puu konfiguratsioon</caption>
+            </ADD_TREE_CONF>
+            <CFGFORM>
+                  <value>13</value>
+                  <clid>CL_CFGFORM</clid>
+                  <caption>konfiguratsioonivorm</caption>
+            </CFGFORM>
+            <IMAGE>
+                  <value>14</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>pilt</caption>
+            </IMAGE>
       </reltypes>
 </properties>
 

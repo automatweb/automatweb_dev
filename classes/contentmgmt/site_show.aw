@@ -27,10 +27,13 @@ class site_show extends class_base
 
 	var $cache;				// cache class instance
 
+	var $image;				// image class instance
+
 	function site_show()
 	{
 		$this->init("automatweb/menuedit");
 		$this->cache = get_instance("cache");
+		$this->image = get_instance("image");
 	}
 
 	////
@@ -790,6 +793,7 @@ class site_show extends class_base
 		$smi = "";
 		$sel_image = "";
 
+
 		$cnt = count($this->path);
 		for($i = $cnt-1; $i > -1; $i--)
 		{
@@ -805,9 +809,20 @@ class site_show extends class_base
 				break;
 			}
 
-			if ($o->meta("img_act_url") != "")
+			$img_act_url = "";
+			if ($o->meta("img_act"))
 			{
-				$sel_image_url = image::check_url($o->meta("img_act_url"));
+				$img_act_url = $this->image->get_url_by_id($o->meta("img_act"));
+			}
+
+			if ($img_act_url == "" && $o->meta("img_act_url") != "")
+			{
+				$img_act_url = $o->meta("img_act_url");
+			}
+			
+			if ($img_act_url != "")
+			{
+				$sel_image_url = image::check_url($img_act_url);
 				$sel_image = "<img name='sel_menu_image' src='".$sel_image_url."' border='0'>";
 				$this->vars(array(
 					"url" => $sel_image_url
@@ -823,6 +838,11 @@ class site_show extends class_base
 			$smi = "";
 			foreach($imgar as $nr => $dat)
 			{
+				if ($dat["image_id"])
+				{
+					$dat["url"] = $this->image->get_url_by_id($dat["image_id"]);
+				}
+
 				if ($smi == "")
 				{
 					$sel_image = "<img name='sel_menu_image' src='".image::check_url($dat["url"])."' border='0'>";

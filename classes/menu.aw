@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.77 2003/11/26 18:58:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.78 2003/11/27 13:10:28 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -38,13 +38,13 @@
 	@property periodic type=checkbox group=advanced ch_value=1
 	@caption Perioodiline
 
-	@property objtbl_conf type=objpicker clid=CL_OBJ_TABLE_CONF field=meta method=serialize group=advanced
+	@property objtbl_conf type=relpicker reltype=RELTYPE_OBJ_TABLE_CONF field=meta method=serialize group=advanced
 	@caption Objektitabeli konf
 
-	@property add_tree_conf type=objpicker clid=CL_ADD_TREE_CONF field=meta method=serialize group=advanced
+	@property add_tree_conf type=relpicker reltype=RELTYPE_ADD_TREE_CONF field=meta method=serialize group=advanced
 	@caption Objekti lisamise puu konff
 
-	@property cfgmanager type=objpicker clid=CL_CFGFORM subclass=CL_MENU field=meta method=serialize group=advanced
+	@property cfgmanager type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize group=advanced
 	@caption Konfiguratsioonivorm
 	
 	@property show_lead type=checkbox field=meta method=serialize group=advanced ch_value=1
@@ -68,7 +68,7 @@
 	@property img_timing type=textbox size=3 field=meta method=serialize group=presentation
 	@caption Viivitus piltide vahel (sek.)
 
-	@property img_act type=imgupload field=meta method=serialize group=presentation
+	@property img_act type=relpicker reltype=RELTYPE_IMAGE field=meta method=serialize group=presentation
 	@caption Aktiivse menüü pilt
 
 	@property menu_images type=callback field=meta method=serialize callback=callback_get_menu_image group=presentation store=no
@@ -180,7 +180,7 @@
 	@groupinfo advanced caption=Spetsiaal
 	@groupinfo keywords caption=Võtmesõnad
 	@groupinfo relations caption=Kaustad
-	@groupinfo presentation caption=Presentatsioon
+	@groupinfo presentation caption=Pildid
 	@groupinfo show caption=Näitamine
 	@groupinfo import_export caption=Eksport submit=no
 	@groupinfo ip caption="IP Aadressid"
@@ -217,6 +217,17 @@
 	@reltype PERIOD value=10 clid=CL_PERIOD
 	@caption v&otilde;ta dokumente perioodi alt
 
+	@reltype OBJ_TABLE_CONF value=11 clid=CL_OBJ_TABLE_CONF
+	@caption objektitabeli konfiguratsioon
+
+	@reltype ADD_TREE_CONF value=12 clid=CL_ADD_TREE_CONF
+	@caption lisamise puu konfiguratsioon
+
+	@reltype CFGFORM value=13 clid=CL_CFGFORM
+	@caption konfiguratsioonivorm
+
+	@reltype IMAGE value=14 clid=CL_IMAGE
+	@caption pilt
 */
 
 define("IP_ALLOWED", 1);
@@ -302,10 +313,6 @@ class menu extends class_base
 					};
 				};
 				$data["value"] = $icon;
-				break;
-
-			case "img_act":
-				$data["value"] = $ob->meta("img_act_url") != "" ? "<img src='".$ob->meta("img_act_url")."'>" : "";
 				break;
 
 			case "admin_feature":
@@ -451,7 +458,7 @@ class menu extends class_base
 				"type" => "textbox",
 				"name" => "img_ord[$i]",
 				"size" => 3,
-				"value" => $val["ord"],
+				"value" => $imdata[$i]["ord"],
 			);
 			array_push($node["items"],$tmp);
 
@@ -465,22 +472,27 @@ class menu extends class_base
 
 			// file upload
 			$tmp = array(
-				"type" => "fileupload",
-				"name" => "img" . $i,
+				"type" => "relpicker",
+				"reltype" => RELTYPE_IMAGE,
+				"name" => "img[".$i."]",
+				"value" => $imdata[$i]["image_id"]
 			);
 			array_push($node["items"],$tmp);
 
 			// image preview
-			$url = image::check_url($imdata[$i]["url"]);
-			if ($url)
+			$url = "";
+			$imi = get_instance("image");
+			if ($imdata[$i]["image_id"])
 			{
-				$url =  html::img(array("url" => $url));
-				/*
-				$url .= " ( ".html::href(array(
-					"url" => $this->mk_my_orb("change", array("id" => $imdata[$i]["id"]),"image"),
-					"caption" => "Muuda"
-				))." ) ";
-				*/
+				$url = $imi->get_url_by_id($imdata[$i]["image_id"]);
+				if ($url)
+				{
+					$url =  html::img(array("url" => $url));
+					$url .= " ( ".html::href(array(
+						"url" => $this->mk_my_orb("change", array("id" => $imdata[$i]["image_id"]),"image"),
+						"caption" => "Muuda"
+					))." ) ";
+				}
 			}
 
 			$tmp = array(
@@ -618,13 +630,13 @@ class menu extends class_base
 				break;
 
 			case "menu_images":
-				// XXX: this should be rewritten to use relation manager
 				if (!$this->menu_images_done)
 				{
 					$arr["obj_inst"]->set_meta("menu_images",$this->update_menu_images(array(
 						"id" => $ob->id(),
 						"img_del" => $arr["form_data"]["img_del"],
 						"img_ord" => $arr["form_data"]["img_ord"],
+						"img" => $arr["request"]["img"],
 						"meta" => $arr["obj"]["meta"]
 					)));
 					$this->menu_images_done = 1;
@@ -672,15 +684,13 @@ class menu extends class_base
 		$imgar = $meta["menu_images"];
 		for ($i=0; $i < $num_menu_images; $i++)
 		{
-			if ($img_del[$i] == 1)
+			if ($img_del[$i] == 1 || !$img[$i])
 			{
 				unset($imgar[$i]);
 			}
 			else
 			{
-				$ar = $t->add_upload_image("img".$i, $id, $imgar[$i]["id"]);
-				$imgar[$i]["id"] = $ar["id"];
-				$imgar[$i]["url"] = $ar["url"];
+				$imgar[$i]["image_id"] = $img[$i];
 				$imgar[$i]["ord"] = $img_ord[$i];
 			}
 		}
@@ -689,7 +699,7 @@ class menu extends class_base
 		$cnt = 0;
 		for ($i=0; $i < $num_menu_images; $i++)
 		{
-			if ($imgar[$i]["id"] || $imgar[$i]["ord"])
+			if ($imgar[$i]["id"] || $imgar[$i]["ord"] || $imgar[$i]["image_id"])
 			{
 				$timgar[$cnt++] = $imgar[$i];
 			}

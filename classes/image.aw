@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.76 2003/11/20 13:48:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.77 2003/11/27 13:10:28 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -592,7 +592,7 @@ class image extends class_base
 				$fl = $arr["obj_inst"]->prop("file");
 				if (!empty($fl))
 				{
-					$sz = getimagesize($fl);
+					$sz = @getimagesize($fl);
 					$prop["value"] = ($prop["name"] == "cur_width") ? $sz[0] : $sz[1];
 				}
 				else
@@ -803,6 +803,13 @@ class image extends class_base
 		$this->show(array(
 			"file" => basename($obj->prop("file"))
 		));
+	}
+
+	function get_url_by_id($id)
+	{
+		$imd = $this->get_image_by_id($id);
+		$url = $this->get_url($imd["file"]);
+		return $this->check_url($url);
 	}
 }
 ?>
