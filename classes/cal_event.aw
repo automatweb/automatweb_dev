@@ -1,6 +1,6 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.8 2002/02/07 00:06:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.9 2002/02/07 02:08:05 duke Exp $
 global $class_defs;
 $class_defs["cal_event"] = "xml";
 
@@ -268,7 +268,9 @@ class cal_event extends aw_template {
 	{
 		extract($args);
 
-		$obj = $this->get_object($id);
+		$obj = $this->get_obj_meta($id);
+		$obj_meta = $obj["meta"];
+
 		$par_obj = $this->get_object($obj["parent"]);
 		
 		$menubar = $this->gen_menu(array(
@@ -277,101 +279,142 @@ class cal_event extends aw_template {
 		));
 
 		$this->mk_path($par_obj["parent"],"Muuda eventit");
-		$key = ($stage == 2) ? "repeaters2" : "repeaters";
-		$meta = $this->get_object_metadata(array("oid" => $id,"key" => $key));
+
 
 		// what's that?
-		$caldata = $this->get_object_metadata(array(
-						"oid" => $id,
-						"key" => "calconfig",
-				));
+		$caldata = $obj_meta["calconfig"];
+		$cycle_counter = $obj_meta["cycle_counter"];
+
 		if (is_array($caldata))
 		{
 			extract($caldata);
 		}
 
-		$this->read_template("repeaters.tpl");
-		load_vcl("date_edit");
-		$repend = new date_edit("start");
-		$repend->configure(array("day" => 1,"month" => 2,"year" => 3));
-		if ($meta["repend"])
+		// if cycle is set, then we alter a specific cycle, otherwise we just
+		// show the list
+		$new = false;
+		if ($cycle)
 		{
-			$_tmp = mktime(0,0,0,$meta["repend"]["month"],$meta["repend"]["day"],$meta["repend"]["year"]);
-		}
-		else
-		{
-			$_tmp = strtotime("+1 week");
-		};
-		$repend_ed= $repend->gen_edit_form("repend",$_tmp);
+			$this->read_template("edit_repeater.tpl");
+			// if it is a predefined cycle, then we load it
+			if (is_number($cycle))
+			{
+				$meta = $this->get_object_metadata(array(
+							"oid" => $id,
+							"key" => "repeaters" . $cycle,
+				));
+			}
+			// so it must be a new one
+			else
+			{
+				// we have to figure out the last cycle number in use
+				$cycle = $this->get_object_metadata(array(
+							"oid" => $id,
+							"key" => "cycle_counter",
+				));
+				$new = 1;
+				// us the next available
+				if ($cycle)
+				{
+					$cycle++;
+				}
+				else
+				{
+					// nothing found, so we set it to 1
+					$cycle = 1;
+				};
+				$meta = array();
+			};
 		
-		if ($par_obj["class_id"] == CL_CALENDAR)
-		{
-			$rep_link = $this->mk_my_orb("change_event",array("id" => $id),"planner");
+			load_vcl("date_edit");
+			$repend = new date_edit("start");
+			$repend->configure(array("day" => 1,"month" => 2,"year" => 3));
+			if ($meta["repend"])
+			{
+				$_tmp = mktime(0,0,0,$meta["repend"]["month"],$meta["repend"]["day"],$meta["repend"]["year"]);
+			}
+			else
+			{
+				$_tmp = strtotime("+1 week");
+			};
+			$repend_ed= $repend->gen_edit_form("repend",$_tmp);
+			// oh, I know, this is sooo ugly
+			$this->vars(array(
+					"region1" => checked($meta["region1"]),
+					"dayskip" => ($meta["dayskip"] > 0) ? $meta["dayskip"] : 1,
+					"day1" => checked($meta["day"] == 1),
+					"day2" => checked($meta["day"] == 2),
+					"day3" => checked($meta["day"] == 3),
+					"wday1" => checked($meta["wday"][1]),
+					"wday2" => checked($meta["wday"][2]),
+					"wday3" => checked($meta["wday"][3]),
+					"wday4" => checked($meta["wday"][4]),
+					"wday5" => checked($meta["wday"][5]),
+					"wday6" => checked($meta["wday"][6]),
+					"wday7" => checked($meta["wday"][7]),
+					"monpwhen2" => $meta["monpwhen2"],
+					"region2" => checked($meta["region2"]),
+					"week1" => checked($meta["week"] == 1),
+					"week2" => checked($meta["week"] == 2),
+					"weekskip" => ($meta["weekskip"] > 0) ? $meta["weekskip"] : 1,
+					"mweek1" => checked($meta["mweek"][1]),
+					"mweek2" => checked($meta["mweek"][2]),
+					"mweek3" => checked($meta["mweek"][3]),
+					"mweek4" => checked($meta["mweek"][4]),
+					"mweek5" => checked($meta["mweek"][5]),
+					"mweeklast" => checked($meta["mweek"]["last"]),
+					"region3" => checked($meta["region3"]),
+					"month1" => checked($meta["month"] == 1),
+					"month2" => checked($meta["month"] == 2),
+					"monthskip" => ($meta["monthskip"] > 0) ? $meta["monthskip"] : 1,
+					"yearpwhen" => ($meta["yearpwhen"] > 0) ? $meta["yearpwhen"] : 1,
+					"region4" => checked($meta["region4"]),
+					"yearskip" => ($meta["yearskip"] > 0) ? $meta["yearskip"] : 1,
+					"repend" => $repend_ed,
+					"repeats" => ($meta["repeats"]) ? $meta["repeats"] : 6,
+					"rep1_checked" => ($meta["rep"]) ? checked($meta["rep"] == 1) : "checked",
+					"rep2_checked" => checked($meta["rep"] == 2),
+					"rep3_checked" => checked($meta["rep"] == 3),
+					"reforb" => $this->mk_reforb("submit_repeaters",array("id" => $id,"cycle" => $cycle,"new" => $new),"cal_event"),
+			));
 		}
 		else
 		{
-			$rep_link = $this->mk_my_orb("change",array("id" => $id));
-		};
+			$this->read_template("repeaters.tpl");
 
-		if ($stage == 2)
-		{
-			$stage2 = $this->mk_my_orb("event_repeaters",array("id" => $id),"planner");
-			$link2 = "Stage 2";
-			$link1 = "<a href='$stage2'>Stage 1</a>";
-		}
-		else
-		{
-			$stage2 = $this->mk_my_orb("event_repeaters",array("id" => $id,"stage" => 2),"planner");
-			$link1 = "Stage 1";
-			$link2 = "<a href='$stage2'>Stage 2</a>";
-		}
-			
-			
+			$content = "";
 
-		// oh, I know, this is sooo ugly
+			if ( ($cycle_counter > 0) && (is_array($obj_meta)) )
+			{
+				for ($i = 1; $i <= $cycle_counter; $i++)
+				{
+					$key = sprintf("repeaters%d",$i);
+					if ($obj_meta[$key])
+					{
+						$repdat = $obj_meta[$key];
+						$this->vars(array(
+							"id" => $i,
+							"start" => "trill",
+							"end" => "trall",
+						));
+						$content .= $this->parse("line");
+					};
+				};
+			};
+
+			$this->vars(array(
+				"add_link" => $this->mk_my_orb("event_repeaters",array("id" => $id,"cycle" => "new"),"planner"),
+				"ed_link" => $this->mk_my_orb("event_repeaters",array("id" => $id),"planner"),
+				"del_link" => $this->mk_my_orb("delete_repeater",array("id" => $id),"planner"),
+				"line" => $content,
+			));
+		}
+
 		$this->vars(array(
-				"menubar" => $menubar,
-				"stage1" => $link1,
-				"stage2" => $link2,
-				"region1" => checked($meta["region1"]),
-				"dayskip" => ($meta["dayskip"] > 0) ? $meta["dayskip"] : 1,
-				"change_link" => $rep_link,
-				"day1" => checked($meta["day"] == 1),
-				"day2" => checked($meta["day"] == 2),
-				"day3" => checked($meta["day"] == 3),
-				"wday1" => checked($meta["wday"][1]),
-				"wday2" => checked($meta["wday"][2]),
-				"wday3" => checked($meta["wday"][3]),
-				"wday4" => checked($meta["wday"][4]),
-				"wday5" => checked($meta["wday"][5]),
-				"wday6" => checked($meta["wday"][6]),
-				"wday7" => checked($meta["wday"][7]),
-				"monpwhen2" => $meta["monpwhen2"],
-				"region2" => checked($meta["region2"]),
-				"week1" => checked($meta["week"] == 1),
-				"week2" => checked($meta["week"] == 2),
-				"weekskip" => ($meta["weekskip"] > 0) ? $meta["weekskip"] : 1,
-				"mweek1" => checked($meta["mweek"][1]),
-				"mweek2" => checked($meta["mweek"][2]),
-				"mweek3" => checked($meta["mweek"][3]),
-				"mweek4" => checked($meta["mweek"][4]),
-				"mweek5" => checked($meta["mweek"][5]),
-				"mweeklast" => checked($meta["mweek"]["last"]),
-				"region3" => checked($meta["region3"]),
-				"month1" => checked($meta["month"] == 1),
-				"month2" => checked($meta["month"] == 2),
-				"monthskip" => ($meta["monthskip"] > 0) ? $meta["monthskip"] : 1,
-				"yearpwhen" => ($meta["yearpwhen"] > 0) ? $meta["yearpwhen"] : 1,
-				"region4" => checked($meta["region4"]),
-				"yearskip" => ($meta["yearskip"] > 0) ? $meta["yearskip"] : 1,
-				"repend" => $repend_ed,
-				"repeats" => ($meta["repeats"]) ? $meta["repeats"] : 6,
-				"rep1_checked" => ($meta["rep"]) ? checked($meta["rep"] == 1) : "checked",
-				"rep2_checked" => checked($meta["rep"] == 2),
-				"rep3_checked" => checked($meta["rep"] == 3),
-				"menubar" => $menubar,
-				"reforb" => $this->mk_reforb("submit_repeaters",array("id" => $id,"stage" => $stage),"cal_event"),
+			"menubar" => $menubar,
 		));
+			
+		
 		return $this->parse();
 	}
 
@@ -387,13 +430,24 @@ class cal_event extends aw_template {
 		$par_obj = $this->get_object($obj["parent"]);
 		$parent_class = $par_obj["class_id"];
 
-		$key = ($stage == 2) ? "repeaters2" : "repeaters";
+		$key = "repeaters" . $cycle;
 		$this->set_object_metadata(array(
 			"oid" => $id,
 			"overwrite" => 1,
 			"key" => $key,
 			"value" => $args,
 		));
+		
+		// if that one was a new cycle, then we need update the object as well
+		if ($new)
+		{
+			$cycle = $this->set_object_metadata(array(
+					"oid" => $id,
+					"key" => "cycle_counter",
+					"value" => $cycle, // 1
+			));
+		};
+
 		$q = "SELECT *,planner.* FROM objects LEFT JOIN planner ON (objects.oid = planner.id)
 			WHERE objects.oid = '$id'";
 		$this->db_query($q);
