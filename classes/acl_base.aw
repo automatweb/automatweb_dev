@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.44 2003/11/13 11:24:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.45 2003/12/03 12:02:29 kristo Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -282,16 +282,18 @@ class acl_base extends db_connector
 			{
 				$max_acl = $this->can_aw($access,$oid);
 
-				$str = "<?php\n";
-				$str .= aw_serialize($max_acl, SERIALIZE_PHP_FILE, array("arr_name" => "max_acl"));
-				$str .= "?>";
+				if ($GLOBALS["cfg"]["cache"]["page_cache"] != "")
+				{
+					$str = "<?php\n";
+					$str .= aw_serialize($max_acl, SERIALIZE_PHP_FILE, array("arr_name" => "max_acl"));
+					$str .= "?>";
 				
-				$fp = fopen($fqfn, "w");
-				flock($fp, LOCK_EX);
-				fwrite($fp, $str);
-				flock($fp, LOCK_UN);
-				fclose($fp);
-//				$this->put_file(array("file" => $fqfn, "content" => $str));
+					$fp = fopen($fqfn, "w");
+					flock($fp, LOCK_EX);
+					fwrite($fp, $str);
+					flock($fp, LOCK_UN);
+					fclose($fp);
+				}
 
 				aw_cache_set("__aw_acl_cache", $oid, $max_acl);
 //				echo "acl cache miss, set file to $fqfn <br>";
