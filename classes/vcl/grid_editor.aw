@@ -1064,13 +1064,14 @@ class grid_editor extends class_base
 			$col="";
 			for ($a=0; $a < $this->arr["cols"]; $a++)
 			{
-				$colw = !empty($this->arr["col_widths"][$a]) ? $this->arr["col_widths"][$a] : $spans["colspan"]*150+($spans["colspan"]-1)*7;
-				$colh = !empty($this->arr["col_heights"][$a]) ? $this->arr["col_heights"][$a] : $spans["rowspan"]*17+($spans["rowspan"]-1)*9;
-
 				if (!($spans = $this->get_spans($i, $a)))
 				{
 					continue;
 				}
+
+				$colw = !empty($this->arr["col_widths"][$a]) ? $this->arr["col_widths"][$a] : $spans["colspan"]*150+($spans["colspan"]-1)*7;
+				$colh = !empty($this->arr["col_heights"][$a]) ? $this->arr["col_heights"][$a] : $spans["rowspan"]*17+($spans["rowspan"]-1)*9;
+
 
 				$map = $this->arr["map"][$i][$a];
 				
