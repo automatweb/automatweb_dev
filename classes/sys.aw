@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.13 2002/09/27 11:45:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.14 2002/10/10 12:56:58 duke Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -334,7 +334,7 @@ class sys extends aw_template
 							{	
 								$flags .= " NOT NULL";
 							};
-							$autoinc = ", PRIMARY KEY($key)";
+							$autoinc = " PRIMARY KEY";
 							$prim_key_added = true;
 						}
 						else
