@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.115 2002/08/21 14:20:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.116 2002/08/29 03:18:57 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 classload("msgboard","aw_style","form_base","file");
@@ -531,7 +531,6 @@ class document extends aw_template
 		classload("periods");
 		$db_periods = new db_periods(aw_ini_get("per_oid"));
 		$act_per = $db_periods->get_active_period(aw_ini_get("per_oid"));
-
 		$this->title = $doc["title"];
 
 		//if (aw_global_get("in_archive"))
@@ -883,6 +882,12 @@ class document extends aw_template
 			{
 				$this->vars(array("FORUM_ADD_SUB" => $this->parse("FORUM_ADD_SUB")));
 			}
+			$this->vars(array("FORUM_ADD_SUB_ALWAYS" => $this->parse("FORUM_ADD_SUB_ALWAYS")));
+		}
+		else
+		{
+			$this->vars(array("FORUM_ADD_SUB_ALWAYS" => ""));
+			$this->vars(array("FORUM_ADD_SUB" => ""));
 		}
 
 		$langs = "";
@@ -962,6 +967,19 @@ class document extends aw_template
 			"title_target" => $doc["newwindow"] ? "target=\"_blank\"" : "",
 			"title_link"  => ($doc["link_text"] != "" ? $doc["link_text"] : (isset($GLOBALS["doc_file"]) ? $GLOBALS["doc_file"] :  "index.".$ext."/")."section=".$docid),
 		));
+
+		if ($title != "")
+		{
+			$this->vars(array(
+				"TITLE_NOT_EMPTY" => $this->parse("TITLE_NOT_EMPTY")
+			));
+		}
+		else
+		{
+			$this->vars(array(
+				"TITLE_NOT_EMPTY" => ""
+			));
+		}
 
 		if ($leadonly > -1 && $doc["title_clickable"])
 		{
@@ -3700,6 +3718,8 @@ class document extends aw_template
 
 		// doc 
 		$exp->fetch_and_save_page($this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".$id, aw_global_get("lang_id"), true);
+		// print doc
+		$exp->fetch_and_save_page($this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".$id."&print=1", aw_global_get("lang_id"), true);
 		die("<Br><br>Valmis, tagasi dokumendi muutmise juurde saab <a href='".$this->mk_my_orb("change", array("id" => $id))."'>siit</a>");
 	}
 };
