@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.243 2004/03/29 11:16:51 duke Exp $
+// $Id: class_base.aw,v 2.244 2004/03/30 14:40:35 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -205,7 +205,14 @@ class class_base extends aw_template
 		};
 
 		$use_form = $args["form"];
-
+			
+			
+		if (method_exists($this->inst,"callback_on_load"))
+		{
+			$this->inst->callback_on_load(array(
+				"request" => $this->request,
+			));
+		}
 
 		if (empty($use_form))
 		{
@@ -248,7 +255,6 @@ class class_base extends aw_template
 			));
 		};
 
-
 		$this->use_form = $use_form;
 
 		$cfgform_id = $args["cfgform"];
@@ -285,6 +291,8 @@ class class_base extends aw_template
 		}
 
 		// Now I need to deal with relation elements
+
+		// it's the bloody run order .. FUCK
 		$properties = $this->get_property_group2($filter);
 		$awt->start("shit");
 
@@ -345,6 +353,7 @@ class class_base extends aw_template
 					"group" => $this->use_group,
 				));
 
+
 				if (is_array($fstat) && !empty($fstat["error"]))
 				{
 					$properties = array();
@@ -401,7 +410,16 @@ class class_base extends aw_template
 		}
 		else
 		{
-			$cli = get_instance("cfg/" . $this->output_client);
+			$template = $this->forminfo(array(
+				"form" => $args["form"],
+				"attr" => "template",
+			));
+			$o_arr = array();
+			if (!empty($template))
+			{
+				$o_arr["template"] = $template;
+			};
+			$cli = get_instance("cfg/" . $this->output_client,$o_arr);
 			if (!empty($lm))
 			{
 				if ($this->use_mode == "new")
@@ -808,7 +826,6 @@ class class_base extends aw_template
 			$orb_class = "doc";
 		};
 
-
 		$has_properties = $cfgu->has_properties(array("file" => $orb_class));
 		if (empty($has_properties))
 		{
@@ -1069,6 +1086,11 @@ class class_base extends aw_template
 
 		$vars["content"] = $args["content"];
 
+		if ($this->orb_class == "auth")
+		{
+			return $args["content"];
+		}
+		else
 		if (isset($this->raw_output))
 		{
 			return $args["content"];
@@ -1648,6 +1670,7 @@ class class_base extends aw_template
 			$this->id = $this->obj_inst->id();
 		};
 
+
 		// only relation object uses this. But hey, if the relation object
 		// thingie is now done differently then I do not need this, yees?
 		if (isset($args["target_obj"]))
@@ -1775,12 +1798,12 @@ class class_base extends aw_template
 				// into my output stream. Uh, that's going to be hard.
 
 				$_all_props = $cfgu->load_properties(array(
-					"file" => $val["sclass"],
+					"file" => basename($val["sclass"]),
 					"filter" => $filter,
 				));
 
 				// and how I get the class_instance?
-				$clx_name = "crm/" . $val["sclass"];
+				$clx_name = $val["sclass"];
 				$clx_inst = get_instance($clx_name);
 
 				$clx_inst->orb_class = $clx_name;
@@ -2570,6 +2593,7 @@ class class_base extends aw_template
 
 		$realprops = $tmp;
 
+
 		// now do the real job.
 		foreach($realprops as $key => $property)
 		{
@@ -3110,6 +3134,8 @@ class class_base extends aw_template
 		else
 		{
 			// no config form? alright, load the default one then!
+
+
 			if ($arr["clid"] == CL_DOCUMENT )
 			{
 				$def_cfgform = aw_ini_get("document.default_cfgform");
@@ -3126,6 +3152,39 @@ class class_base extends aw_template
 					{
 						$this->groupinfo = $grplist;
 					};
+				};
+			}
+			elseif (is_oid($this->inst->cfgmanager))
+			{
+				// load a configuration manager if a class uses it
+				$cfg_loader = new object($this->inst->cfgmanager);
+				$mxt = $cfg_loader->meta("use_form");
+
+				$forms = $mxt[$arr["clid"]];
+				$gx = aw_global_get("gidlist_pri_oid");
+
+				// I have a list of forms for groups and I have a list of group oids..
+				// find the first usable one
+				$found_form = false;
+				if (is_array($gx) && is_array($forms))
+				{
+					// start from group with highest priority
+					arsort($gx);
+					foreach($gx as $grp_oid => $grp_pri)
+					{
+						if ($forms[$grp_oid] && empty($found_form))
+						{
+							$found_form = $forms[$grp_oid];
+						};
+					};
+				}
+
+				// use it, if we found one, otherwise fall back to defaults
+				if (is_oid($found_form) && $this->can("view",$found_form))
+				{
+					$cfg_props = $this->load_from_storage(array(
+						"id" => $found_form,
+					));
 				};
 			};
 		};
@@ -3224,8 +3283,13 @@ class class_base extends aw_template
 			
 			// deal with properties belonging to multiple groups
 			$propgroups = is_array($val["group"]) ? $val["group"] : array($val["group"]);
+
+			// make it appear in parent group too	
+			if (is_array($first_subgrp) && !is_array($propdata["group"]) && $first_subgrp[$propdata["group"]])
+			{
+				$propgroups[] = $propdata["group"];
+			};
 			$this->prop_by_group = array_merge($this->prop_by_group,array_flip($propgroups));
-			// tyri, kuidas ma siis nyyd arvestan siin järgmise taseme asju ah?
 
 			// skip anything that is not in the active group
 			if (!in_array($use_group,$propgroups))
@@ -3437,10 +3501,11 @@ class class_base extends aw_template
 			// users of this
 			if (!isset($this->prop_by_group[$gkey]))
 			{
-				if (!empty($gval["parent"]))
-				{
+				// this skips all second level groups, right ..
+				//if (!empty($gval["parent"]))
+				//{
 					continue;
-				};
+				//};
 			};
 
 			// skip all second level groups that are not children of the currently used group
