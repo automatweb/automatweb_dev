@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.55 2004/03/10 12:17:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.56 2004/03/10 12:19:25 kristo Exp $
 
 lc_load("definition");
 
@@ -183,14 +183,7 @@ class acl_base extends db_connector
 		$g_pris = aw_global_get("gidlist_pri");	// this gets made in users::request_startup
 
 		$max_pri = 0;
-		if (aw_global_get("uid") == "")
-		{
-			$max_row = array("can_view" => 1);
-		}
-		else
-		{
-			$max_row = array();
-		}
+		$max_row = array();
 		$q = "
 			SELECT 
 				acl.id as acl_rel_id, 
