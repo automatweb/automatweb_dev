@@ -28,6 +28,9 @@
 </tr>
 <!-- SUB: CHANGE -->
 <tr>
+	<td class="fcaption2" colspan=2><a href='{VAR:orders}'>Tellimused</a></td>
+</tr>
+<tr>
 	<td class="fcaption2" colspan=2><a href='{VAR:stat_by_turnover}'>K&auml;ibe statistika</a></td>
 </tr>
 <!-- END SUB: CHANGE -->

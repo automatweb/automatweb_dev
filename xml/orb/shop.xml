@@ -89,7 +89,7 @@
 				<arguments>
 					<required name="item_id"/>
 					<required name="shop"/>
-					<required name="section"/>
+					<optional name="section"/>
 				</arguments>
 			</function>
 		</action>
@@ -97,6 +97,41 @@
 		<action name="submit_order_item">
 			<function name="submit_order_item">
 				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="admin_orders">
+			<function name="admin_orders">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="mark_order_filled">
+			<function name="mark_order_filled">
+				<arguments>
+					<required name="shop"/>
+					<required name="order_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="view_order">
+			<function name="view_order">
+				<arguments>
+					<required name="shop"/>
+					<required name="order_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="order_history">
+			<function name="admin_orders">
+				<arguments>
+					<optional name="filter_uid" default="1"/>
+					<required name="id"/>
 				</arguments>
 			</function>
 		</action>

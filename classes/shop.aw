@@ -15,6 +15,8 @@ session_register("shopping_cart");
 //	$shopping_cart["items"][$oid]["cnt_entry"] - form_entry id of the form filled to specify count and type of items
 //  $shopping_cart["price"] = total price of items in cart, not to be trusted, payment total should be calculated from database
 
+define(ORD_FILLED,1);
+
 class shop extends aw_template
 {
 	function shop()
@@ -68,6 +70,7 @@ class shop extends aw_template
 			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
 			"of" => $this->picker($oba["order_form"],$fb->get_list(FORM_ENTRY)),
 			"stat_by_turnover" => $this->mk_orb("turnover_stat", array("id" => $id)),
+			"orders" => $this->mk_orb("admin_orders", array("id" => $id)),
 			"emails" => $oba["emails"]
 		));
 		$this->parse("CHANGE");
@@ -249,7 +252,8 @@ class shop extends aw_template
 			"reforb" => $this->mk_reforb("submit_cart", array("shop_id" => $shop_id,"section" => $section)),
 			"shop_id" => $shop_id,
 			"section" => $section,
-			"order"	=> $this->mk_site_orb(array("action" => "order", "shop_id" => $shop_id, "section" => $section))
+			"order"	=> $this->mk_site_orb(array("action" => "order", "shop_id" => $shop_id, "section" => $section)),
+			"order_hist" => $this->mk_my_orb("order_history", array("id" => $shop_id))
 		));
 		if ($items)
 		{
@@ -796,6 +800,134 @@ class shop extends aw_template
 			}
 		}
 		return $ret;
+	}
+
+	////
+	// !shows the orders for shop $id on the admin side and lets you  manage them
+	function admin_orders($arr)
+	{
+		extract($arr);
+		$this->read_template("admin_orders.tpl");
+		$sh = $this->get($id);
+		$this->mk_path($sh["parent"], "<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda poodi</a> / Tellimused");
+
+		$ss = "";
+		if ($filter_uid)
+		{
+			global $uid;
+			$ss = " AND user = '$uid' ";
+		}
+
+		$this->db_query("SELECT * FROM orders WHERE shop_id = $id $ss ORDER BY tm DESC");
+		while ($row = $this->db_next())
+		{
+			$this->vars(array(
+				"when" => $this->time2date($row["tm"], 2),
+				"user" => $row["user"],
+				"ip" => $row["ip"],
+				"price" => $row["price"],
+				"view"	=> $this->mk_my_orb("view_order", array("shop" => $id, "order_id" => $row["id"])),
+				"fill"	=> $this->mk_my_orb("mark_order_filled", array("shop" => $id, "order_id" => $row["id"]))
+			));
+			$is_f = "";
+			if ($row["status"] != ORD_FILLED)
+			{
+				$is_f = $this->parse("IS_F");
+			}
+			else
+			{
+				$is_f = $this->parse("FILLED");
+			}
+			$this->vars(array("IS_F" => $is_f,"FILLED" => ""));
+			$this->parse("LINE");
+		}
+		return $this->parse();
+	}
+
+	////
+	// !marks the order as filled
+	function mark_order_filled($arr)
+	{
+		extract($arr);
+		$this->db_query("UPDATE orders SET status = ".ORD_FILLED." WHERE id = $order_id");
+		header("Location: ".$this->mk_orb("admin_orders", array("id" => $shop)));
+		die();
+	}
+
+	////
+	// !shows the order $order_id for shop $shop
+	function view_order($arr)
+	{
+		extract($arr);
+		$this->read_template("view_order.tpl");
+		$sh = $this->get($shop);
+		$this->mk_path($sh["parent"], "<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda poodi</a> / <a href='".$this->mk_orb("admin_orders", array("id" => $shop))."'>Tellimused</a> / Vaata tellimust");
+
+		// load the entry from the database
+		$this->db_query("SELECT * FROM orders WHERE id = $order_id");
+		$order = $this->db_next();
+
+		$this->db_query("SELECT * FROM order2item WHERE order_id = $order_id");
+		while ($row = $this->db_next())
+		{
+			$o_items[$row["item_id"]] = $row;
+		}
+
+		classload("form");
+		$f = new form;
+		$images = new db_images;
+
+		$items = false;
+		if (is_array($o_items))
+		{
+			reset($o_items);
+			while (list($item_id,$ar) = each($o_items))
+			{
+				if ($ar["count"] > 0)
+				{
+					// now here we must show the name of the item followed by
+					// the rows from the cnt_form for that item that have selectrow checked
+
+					// so, get the item
+					$it = $this->get_item($item_id);
+					// load it's cnt_form
+					$f->load($it["cnt_form"]);
+					// now find all the rows that are selected in the entry from the shopping cart
+					$f->load_entry($ar["cnt_entry"]);
+					$selrows = $this->get_selected_rows_in_form(&$f);
+
+					$rowhtml = "";
+					foreach($selrows as $rownum)
+					{
+						// here we must add the elements of row $rownum to the form we are assembling of the selected rows
+						// oh what a mindjob.
+						// we add prefix entry_.$entry_id._ to all elements in this entry and later when processing
+						// entry, we add the same prefix so we process the elements from the right form.
+						$this->vars(array("row" => $f->mk_show_text_row($rownum)));
+						$rowhtml.=$this->parse("F_ROW");
+					}
+
+					$this->vars(array(
+						"item_link" => $this->mk_my_orb("change", array("id" => $item_id),"shop_item"),
+						"view_item" => $this->mk_my_orb("order_item", array("item_id" => $item_id, "shop" => $shop)),
+						"name" => $it["name"],
+						"F_ROW" => $rowhtml
+					));
+					$itm.=$this->parse("ITEM");
+				}
+			}
+		}
+		$f->load($sh["order_form"]);
+		$f->load_entry($order["entry_id"]);
+
+		$this->vars(array(
+			"ITEM" => $itm,
+			"user" => $order["user"],
+			"time" => $this->time2date($order["tm"],2),
+			"ip"	=> $order["ip"],
+			"inf_form" => $f->show_text()
+		));
+		return $this->parse();
 	}
 }
 ?>
