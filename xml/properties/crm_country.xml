@@ -1,21 +1,21 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>name</name>
+            <type>textbox</type>
+            <size>20</size>
+            <table>objects</table>
+            <group>general</group>
+            <field>name</field>
+            <caption>Riigi nimetus</caption>
+      </property>
+      <property>
             <name>comment</name>
             <type>textarea</type>
             <field>comment</field>
             <table>objects</table>
             <group>general</group>
             <caption>Kommentaar</caption>
-      </property>
-      <property>
-            <name>name</name>
-            <type>textbox</type>
-            <size>20</size>
-            <table>kliendibaas_riik</table>
-            <group>general</group>
-            <field>name</field>
-            <caption>Riigi nimetus</caption>
       </property>
       <property>
             <name>name_en</name>
@@ -33,8 +33,11 @@
             <table>kliendibaas_riik</table>
             <group>general</group>
             <field>name_native</field>
-            <caption>Niemtus kohalikus keeles</caption>
+            <caption>Nimetus kohalikus keeles</caption>
       </property>
+      <classinfo>
+            <no_status>1</no_status>
+      </classinfo>
       <tableinfo>
             <kliendibaas_riik>
                   <index>oid</index>
