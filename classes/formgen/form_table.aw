@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.55 2004/05/05 13:09:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.56 2004/05/17 06:36:03 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -1283,11 +1283,21 @@ class form_table extends form_base
 				}
 				if (is_array($cc["styles"]))
 				{
+					$st = get_instance("style");
 					foreach($cc["styles"] as $k => $v)
 					{
 						if ($v)
 						{
-							$xml.=" $k=\"style_".$v."\"";
+							if (($_csscl = $st->get_css_class($v)))
+							{
+								$_stylename = $_csscl;
+							}
+							else
+							{
+								$_stylename = "style_".$v;
+							}
+							
+							$xml.=" $k=\"$_stylename\"";
 						}
 					}
 				}
