@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.4 2004/10/14 13:31:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.5 2004/10/15 07:44:04 kristo Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -1065,6 +1065,16 @@ class otto_import extends class_base
 		// clear cache
 		$cache = get_instance("maitenance");
 		$cache->cache_clear(array("clear" => 1));
+
+		$fld = aw_ini_get("site_basedir")."/prod_cache";
+		$cache = get_instance("cache");
+		$cache->_get_cache_files($fld);
+		echo 'about to delete '.count($cache->cache_files2).' files<br />';
+
+		foreach($cache->cache_files2 as $file)
+		{
+			unlink($file);
+		}
 	}
 
 	function conv($str)
@@ -1201,6 +1211,8 @@ class otto_import extends class_base
 		$this->db_query("SELECT * FROM otto_prod_img WHERE p_pg IS NULL or p_nr IS NULL ");
 		while ($row = $this->db_next())
 		{
+			echo "pcode = $row[pcode] <br>\n";
+			flush();			
 			$this->save_handle();
 			// find the correct ones from the prod by code
 			$ol = new object_list(array(
