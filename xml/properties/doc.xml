@@ -260,6 +260,7 @@
             <name>show_title</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <default>1</default>
             <table>documents</table>
             <group>general</group>
             <field>show_title</field>
