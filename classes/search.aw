@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.54 2003/12/30 15:13:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.55 2003/12/30 15:18:07 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -407,8 +407,12 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 							$val = str_replace("'", "\\'", $val);
 							if (strpos($val,",") !== false)
 							{
-								$pts = explode(",", $val);
-								
+								$pts = array();
+								foreach(explode(",", $val) as $_pt)
+								{
+									$pts[] = trim($_pt);
+								}
+																
 								$parts["name"] = "(".join(" OR ", map("name LIKE '%%%s%%' ", $pts)).")";
 							}
 							else
