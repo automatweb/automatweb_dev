@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.75 2001/10/26 15:21:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.76 2001/10/31 03:21:11 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -10,7 +10,7 @@ global $orb_defs;
 $orb_defs["form"] = "xml";
 
 classload("form_base","form_element","form_entry_element","form_search_element","form_cell","images","style","acl");
-classload("form_filter_search_element");
+classload("form_filter_search_element","form_table");
 
 // see on kasutajate registreerimiseks. et pannaxe kirja et mis formid tyyp on t2itnud.
 session_register("session_filled_forms");
@@ -1229,12 +1229,12 @@ class form extends form_base
 		$this->vars(array("entry_id" => $entry_id));
 		
 		// so we feed the data to the elements and that should be it
-		$this->read_entry_from_array();
+		$this->read_entry_from_array($entry_id);
 
 		$awt->stop("form::load_entry");
 	}
 
-	function read_entry_from_array()
+	function read_entry_from_array($entry_id)
 	{
 		for ($row=0; $row < $this->arr["rows"]; $row++)
 		{
@@ -1704,6 +1704,7 @@ class form extends form_base
 			"FORM_SEL" => $fs,
 			"CHAIN_SEL" => $cs,
 			"reforb"	=> $this->mk_reforb("save_search_sel", array("id" => $this->id,"page" => $page)),
+			"use_new_search" => checked($this->arr["new_search_engine"] == 1)
 		));
 
 		$awt->stop("form::gen_search_sel");
@@ -1741,6 +1742,7 @@ class form extends form_base
 
 		$this->load($id);
 
+		$this->arr["new_search_engine"] = $use_new_search;
 		$this->arr["search_type"] = $search_from;
 		$this->arr["search_forms"] = array();
 		if (is_array($forms))
@@ -1886,9 +1888,8 @@ class form extends form_base
 			{
 				$this->raise_error("No table selected for showing search results for form ".$this->id."!",true);
 			}
-			$form_table->load_table($this->arr["table"]);
 			$used_els = $form_table->get_used_elements();
-			$form_table->start_table($this->entry_id,array("class" => "form", "action" => "show_entry", "id" => $this->id, "entry_id" => $this->entry_id, "op_id" => 1,"section" => $section));
+			$form_table->start_table($this->arr["table"],array("class" => "form", "action" => "show_entry", "id" => $this->id, "entry_id" => $this->entry_id, "op_id" => 1,"section" => $section));
 		}
 
 		// now get the search query
@@ -1906,13 +1907,14 @@ class form extends form_base
 		{
 			if ($this->arr["show_table"])
 			{
-				$form_table->row_data($row);
+				$form_table->row_data($row,$this->arr["start_search_relations_from"],$section,$this->arr["search_form_op"]);
 			}
 			else
 			{
 				// this should load the entry without doing any db queries - from the result row data
 				// hm - but - maybe we shouldn't do this - maybe the form also has some other relations that are 
 				// not selected as search forms - so their data will not get loaded. damn. ok, so we just do load_entry for the form
+				$show_form->reset();
 				$show_form->load_entry($row["entry_id"]);
 				$result.=$show_form->show(array("id" => $show_form->id,"entry_id" => $row["entry_id"], "op_id" => $show_form->output_id,"no_load_entry" => true, "no_load_op" => true));
 			}
@@ -2287,6 +2289,11 @@ class form extends form_base
 
 	function do_search($entry_id, $output_id)
 	{
+		if ($this->arr["new_search_engine"] == 1)
+		{
+			return $this->new_do_search(array("entry_id" => $entry_id));
+		}
+
 		global $awt;
 		$awt->start("form::do_search");
 		$awt->count("form::do_search");
@@ -3662,13 +3669,23 @@ class form extends form_base
 		$awt->count("form::get_search_targets");
 
 		$ret = array();
-		if (is_array($this->arr["search_from"]))
+		if ($this->arr["new_search_engine"] == 1)
 		{
-			foreach ($this->arr["search_from"] as $fid => $one)
+			if (is_array($this->arr["search_forms"]))
 			{
-				if ($one == 1)
+				$ret = $this->arr["search_forms"];
+			}
+		}
+		else
+		{
+			if (is_array($this->arr["search_from"]))
+			{
+				foreach ($this->arr["search_from"] as $fid => $one)
 				{
-					$ret[$fid] = $this->arr["search_from"][$fid];
+					if ($one == 1)
+					{
+						$ret[$fid] = $this->arr["search_from"][$fid];
+					}
 				}
 			}
 		}

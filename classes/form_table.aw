@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.20 2001/10/12 15:34:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.21 2001/10/31 03:21:11 kristo Exp $
 global $orb_defs;
 $orb_defs["form_table"] = "xml";
 lc_load("form");
@@ -335,11 +335,84 @@ class form_table extends form_base
 
 	////
 	// !adds another row of data to the table
-	function row_data($dat)
+	function row_data($dat,$form_id = 0,$section = 0 ,$op_id = 0)
 	{
 		global $awt;
 		$awt->start("form_table::row_data");
 		$awt->count("form_table::row_data");
+
+		if ($form_id != 0)
+		{
+			// here also make the view and other links
+			$dat["ev_change"] = "<a href='".$this->mk_my_orb(
+				"show", 
+				array(
+					"id" => $form_id,
+					"entry_id" => $dat["entry_id"],
+					"section" => $section
+				), 
+				"form"
+			)."'>Muuda</a>";
+
+			$dat["ev_created"] = $this->time2date($dat["created"], 2);
+			$dat["ev_uid"] = $dat["modifiedby"];
+			$dat["ev_modified"] = $this->time2date($dat["modified"], 2);
+
+			$dat["ev_view"] = "<a href='".$this->mk_my_orb(
+				"show_entry", 
+				array(
+					"id" => $form_id,
+					"entry_id" => $dat["entry_id"], 
+					"op_id" => $op_id,
+					"section" => $section
+				),
+				"form"
+			)."'>Vaata</a>";		
+
+			$dat["ev_delete"] = "<a href='".$this->mk_my_orb(
+				"delete_entry", 
+				array(
+					"id" => $fid,
+					"entry_id" => $dat["entry_id"], 
+					"after" => $this->binhex(
+						$this->mk_my_orb(
+							"show_entry", 
+							array(
+								"id" => $this->id, 
+								"entry_id" => $entry_id, 
+								"op_id" => $output_id,
+								"section" => $section
+							)
+						)
+					)
+				),
+				"form"
+			)."'>Kustuta</a>";
+
+			if ($this->table["view_col"] && $this->table["view_col"] != "view")
+			{
+				$_link = $this->mk_my_orb("show_entry", array(
+					"id" => $form_id,
+					"entry_id" => $dat["entry_id"],
+					"op_id" => $op_id,
+					"section" => $section,
+				));
+
+				$_caption = $dat["ev_".$this->table["view_col"]];
+
+				if ($this->table["view_new_win"])
+				{
+					$_link = sprintf("javascript:ft_popup('%s&type=popup','popup',%d,%d,%d,%d)",$_link,$this->table["new_win_scroll"],!$this->table["new_win_fixedsize"],$this->table["new_win_x"],$this->table["new_win_y"]);
+				};
+
+				$dat["ev_".$this->table["view_col"]] = sprintf("<a href=\"%s\" %s>%s</a>",$_link,$_targetwin,$_caption);
+			}
+
+			if ($this->table["change_col"] && $this->table["change_col"] != "change")
+			{
+				$dat["ev_".$this->table["change_col"]] = "<a href='".$this->mk_my_orb("show", array("id" => $form_id,"entry_id" => $dat["entry_id"],"section" => $section), "form")."'>".$dat["ev_".$this->table["change_col"]]."</a>";
+			}
+		}
 
 		// hmph. here we must preprocess the data if any columns have more than 1 elements assigned to them, cause then the column names will be el_col_[col_number] not element names
 		for ($col = 0; $col < $this->table["cols"]; $col++)
@@ -609,7 +682,44 @@ class form_table extends form_base
 		$this->menu_picker = $ret;
 		return $ret;
 	}
-	
+
+	function finalize_table()
+	{
+		$this->t->sort_by(array("field" => $GLOBALS["sortby"],"sorder" => $GLOBALS["sort_order"]));
+		$tbl = $this->get_css();
+		$tbl.="<form action='reforb.aw' method='POST'>\n";
+		if ($this->table["submit_top"])
+		{
+			$tbl.="<input type='submit' value='".$this->table["submit_text"]."'>";
+		}
+
+		if ($this->table["closewin"])
+		{
+			global $ft_closewin;
+			$ft_closewin[$output_id] = $this->table["closewin_value"];
+			session_register("ft_closewin");
+		};
+
+		if ($this->table["user_button_top"])
+		{
+			$tbl.="&nbsp;<input type='submit' value='".$this->table["user_button_text"]."' onClick=\"window.location='".$this->table["user_button_url"]."';return false;\">";
+		}
+		$tbl.=$this->t->draw();
+
+		if ($this->table["submit_bottom"])
+		{
+			$tbl.="<input type='submit' value='".$this->table["submit_text"]."'>";
+		}
+		if ($this->table["user_button_bottom"])
+		{
+			$tbl.="&nbsp;<input type='submit' value='".$this->table["user_button_text"]."' onClick=\"window.location='".$this->table["user_button_url"]."';return false;\">";
+		}
+		$tbl.= $this->mk_reforb("submit_table", array("return" => $this->binhex($this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id)))));
+
+		$tbl.="</form>";
+		return $tbl;
+	}
+
 	////
 	// !returns the xml definition for table $id to be passed to the table generator. if no id specified, presumes table is loaded already
 	function get_xml($id = 0)

@@ -566,6 +566,336 @@ class form_db_base extends aw_template
 	//							if it contains some element id's, then only those elements are returned
 	function get_search_query($arr)
 	{
+		extract($arr);
+		if (!is_array($used_els))
+		{
+			$used_els = array();
+		}
+
+		// ugh. this is the complicated bit again. 
+
+		// first we must figure out what tables we will work on - go through all the forms that might be touched 
+		// in the search query and figure out in what tables they write/read from
+		$form2table = $this->get_form2table_map($used_els);
+
+		// now put all the joins into sql
+		$sql_join = $this->get_sql_joins_for_search($form2table);
+
+		// now get fetch data part
+		$sql_data = $this->get_sql_fetch_for_search($form2table,$this->_joins);
+
+		// and finally the where part 
+		$sql_where = $this->get_sql_where_clause();
+		if ($sql_where != "")
+		{
+			$sql_where = "WHERE ".$sql_where;
+		}
+		
+		$sql = "SELECT ".$sql_data." FROM ".$sql_join." ".$sql_where;
+		echo "sql = $sql <br>";
+		return $sql;
+	}
+
+	////
+	// !this returns an array of all the forms that will be included in the search
+	function get_search_included_forms()
+	{
+		if ($this->arr["search_type"] == "forms")
+		{
+			return $this->arr["search_forms"];
+		}
+		else
+		{
+			// we are searching from a chain, so get the forms included in the chain
+			$ch_fs = $this->get_forms_for_chain($this->arr["search_chain"]);
+			return $ch_fs;
+		}
+	}
+
+	////
+	// !returns an instance of form $fid - caches the instances as well
+	function &cache_get_form_instance($fid)
+	{
+		if (!is_object($this->form_instance_cache[$fid]))
+		{
+			$this->form_instance_cache[$fid] = new form;
+			$this->form_instance_cache[$fid]->load($fid);
+		}
+
+		return $this->form_instance_cache[$fid];
+	}
+
+	////
+	// !returns an array of form_id => array(table,table..) for all forms that will be part of the search
+	function get_form2table_map($used_els)
+	{
+		$ret = array();
+		$forms = $this->get_search_included_forms();
+		foreach($forms as $fid)
+		{
+			$f =& $this->cache_get_form_instance($fid);
+			$ret[$fid] = $f->get_tables_for_form();
+		}
+
+		return $ret;
+	}
+
+	////
+	// !returns an array of db tables for this form - 
+	//		if it's a normal form then it's just one table - form_[id]_entries
+	//		but if the form writes to other tables then returns all the names of the tables and the info on how to join them
+	function get_tables_for_form()
+	{
+		if ($this->arr["save_table"] == 1)
+		{
+			return array(
+				"from" => $this->arr["save_table_start_from"],
+				"joins" => $this->arr["save_tables_rels"],
+				"join_via" => $this->arr["save_tables_rel_els"],
+				"table_indexes" => $this->arr["save_tables"]
+			);
+		}
+		else
+		{
+			$ftn = "form_".$this->id."_entries";
+			$fta = array();
+			$fta[$ftn][$ftn] = $ftn;
+			return array(
+				"from" => $ftn, 
+				"joins" => $fta,
+				"join_via" => array(),
+				"table_indexes" => array($ftn => "id")
+			);
+		}
+	}
+
+	////
+	// !takes the form to table join map and builds sql joins from those 
+	// it follows the relations between the forms to search from and the relations between the form tables for 
+	// each form are described in $form2table 
+	function get_sql_joins_for_search(&$form2table)
+	{
+		// recurse through the selected search form relations. boo-ya!
+		$this->_joins = array();
+		$this->_used_forms_map = array();
+		$this->_used_tables_map = array();
+		$this->req_get_sql_joins_for_search($this->arr["start_search_relations_from"],&$form2table);
+
+		// ok, so we can assume that we have all the necessary relations in $this->_joins, so convert that into sql
+
+		$sql = "";
+		$first = true;
+		foreach($this->_joins as $jdata)
+		{
+			if ($first)
+			{
+				$sql = $jdata["from_tbl"];
+				$prev = $jdata;
+			}
+			else
+			{
+				$sql.=" LEFT JOIN ".$jdata["from_tbl"]." ON ".$jdata["from_tbl"].".".$jdata["from_el"]." = ".$jdata["to_tbl"].".".$jdata["to_el"];
+			}
+		}
+		return $sql;
+	}
+
+	function req_get_sql_joins_for_search($fid,&$form2table)
+	{
+		if ($this->_used_forms_map[$fid] != $fid)
+		{
+			$this->_used_forms_map[$fid] = $fid;
+			// now we start from the first table and recurse to join all the other tables
+			// wow. we are calling a recursive function from a recursive function. shit. this is insane.
+			$this->req_req_get_sql_joins_for_search(
+				$form2table[$fid]["from"],
+				$form2table[$fid]["joins"],
+				$form2table[$fid]["join_via"],
+				$fid,
+				$form2table[$fid]["table_indexes"]
+			);
+
+			// now recurse for all relation elements 
+			$form =& $this->cache_get_form_instance($fid);
+			$rels = $form->get_element_by_type("listbox","relation",true);
+			foreach($rels as $el)
+			{
+				// if the related form is selected as a search form, then follow the relation, otherwise don't
+				$rel_f = $el->get_related_form();
+				// also if we have already visited that form, make sure we don't end up in a loop
+				if (is_array($form2table[$rel_f]))
+				{
+					$this->req_check_stf_relations($rel_f,&$form2table);
+				}
+			}
+		}
+	}
+
+	function req_req_get_sql_joins_for_search($tbl,&$relmap,&$joinmap,$fid,&$tblar)
+	{
+		// here we go through all tables that must be included in the search for a certain form
+		if ($this->_used_tables_map[$tbl] != $tbl)
+		{
+			$this->_used_tables_map[$tbl] = $tbl;
+
+			$this->table2form_map[$tbl] = $fid;
+
+			$_tmp = $tblar;
+			if (is_array($_tmp))
+			{
+				foreach($_tmp as $r_tbl => $_)
+				{
+					$this->_joins[] = array(
+						"from_tbl" => $tbl, 
+						"from_el" => $joinmap[$tbl][$r_tbl]["from"], 
+						"to_tbl" => $r_tbl,
+						"to_el" => $joinmap[$tbl][$r_tbl]["to"]
+					);
+					$this->req_req_get_sql_joins_for_search($r_tbl,&$relmap,&$joinmap,$fid,&$tblar);
+				}
+			}
+		}
+	}
+
+	function get_sql_fetch_for_search($form2table,$joins)
+	{
+		// return all elements from all tables, map them to el_[id] values
+		$sql = "";
+		foreach($joins as $jdata)
+		{
+			// find the form for the table and get all elements of the form and find out what columns they map to in the table
+			$tbl = $jdata["from_tbl"];
+			$fid = $this->table2form_map[$tbl];
+			$form =& $this->cache_get_form_instance($fid);
+
+			if ($sql == "")
+			{
+				$sql=$tbl.".".$form2table[$fid]["table_indexes"][$tbl]." AS entry_id "; 
+			}
+
+			$els = $form->get_all_els();
+			foreach($els as $el)
+			{
+				$s_t = $el->get_save_table();
+				if ($s_t == $tbl)
+				{
+					// if this element gets written to the current table, include it in the sql
+					$sql.=", ".$tbl.".".$el->get_save_col()." AS ev_".$el->get_id();
+				}
+			}
+		}
+		return $sql;
+	}
+
+	function get_sql_where_clause()
+	{
+		$els = $this->get_all_els();
+
+		$ch_q = array();
+		reset($els);
+		// loop through all the elements of this form 
+		while( list(,$el) = each($els))
+		{
+			if ($el->arr["linked_form"] && $el->arr["linked_element"])	
+			{
+				$relf =& $this->cache_get_form_instance($el->arr["linked_form"]);
+				$linked_el = $relf->get_element_by_id($el->arr["linked_element"]);
+
+				$elname = $linked_el->get_save_table().".".$linked_el->get_save_col();
+
+				if (trim($el->get_value()) != "")	
+				{
+					if ($el->get_type() == "multiple")
+					{
+						$query.=" AND (";
+						$ec=explode(",",$el->entry);
+						reset($ec);
+						$qpts = array();
+						while (list(, $v) = each($ec))
+						{
+							$qpts[] = " ".$elname." like '%".$el->arr["multiple_items"][$v]."%' ";
+						}
+
+						$query.= join("OR",$qpts).")";
+					}
+					else
+					if ($el->get_type() == "checkbox")
+					{	
+						//checkboxidest ocime aint siis kui nad on tshekitud
+						if ($el->get_value(true) == 1)
+						{
+							// grupeerime p2ringus nii et checkboxi gruppide vahel on AND ja grupi sees OR
+							$ch_q[$el->get_ch_grp()][] = " ".$elname." like '%".$el->get_value()."%' ";
+						}
+					}
+					else
+					if ($el->get_type() == "radiobutton")
+					{
+						if ($el->get_value(true) == 1)
+						{
+							$query.="AND (".$elname." LIKE '%".$el->get_value()."%')";
+						}
+					}
+					else
+					if ($el->get_type() == "date")
+					{
+						if ($el->get_subtype() == "from")
+						{
+							$query.= "AND (".$elname." >= ".$this->entry[$el->get_id()].")";
+						}
+						else
+						if ($el->get_subtype() == "to")
+						{
+							$query.= "AND (".$elname." <= ".$this->entry[$el->get_id()].")";
+						}
+						else
+						{
+							$query.= "AND (".$elname." = ".$this->entry[$el->get_id()].")";
+						}
+					}
+					else
+					{
+						$value = $el->get_value();
+
+						// now split it at the spaces
+						if (preg_match("/\"(.*)\"/",$value,$matches))
+						{
+							$qstr = " $elname LIKE '%$matches[1]%' ";
+						}
+						else
+						{
+							$pieces = explode(" ",$value);
+							if (is_array($pieces))
+							{
+								$qstr = join (" OR ",map("$elname LIKE '%%%s%%'",$pieces));
+							}
+							else
+							{
+								$qstr = " $elname LIKE '%$value%' ";
+							};
+						};
+
+						if ($query != "")
+						{
+							$query .= "AND ";
+						}
+						$query.= "($qstr)";
+					}
+				}
+			}
+		}
+
+		// k2ime l2bi erinevad checkboxide grupid ja paneme gruppide vahele AND ja checkboxide vahele OR
+		foreach($ch_q as $chgrp => $ch_ar)
+		{
+			$chqs = join(" OR ", $ch_ar);
+			if ($chqs !="")
+			{
+				$query.=" AND ($chqs)";
+			}
+		}
+
+		return $query;
 	}
 }
 ?>
