@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.15 2003/02/07 15:46:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.16 2003/02/07 16:17:02 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 classload("formgen/form_base");
 class form_calendar extends form_base
@@ -674,26 +674,29 @@ class form_calendar extends form_base
 			// get the vacancy controller for the chain.
 			$this->save_handle();
 			// now I need to fetch all the records for this from form the
-                        // calendar2form_relations table
-                        $q = "SELECT * FROM calendar2form_relations WHERE calendar2forms_id = '$row[id]'";
-                        $this->db_query($q);
-                        $rels = array();
-						while($relrow = $this->db_next())
-						{
-								if ($relrow["el_count"])
-								{
-										$req_items = $args["post_vars"][$relrow["el_count"]];
-										if ($req_items == 0)
-										{
-												// default to 1. is this good?
-												$req_items = 1;
-										};
-										$relrow["req_items"] = $req_items;
-										$relrow["txtid"] = $args["post_vars"][$relrow["el_relation"]];
-												
-										$rels[] = $relrow;
-								};
-						};
+			// calendar2form_relations table
+			$q = "SELECT * FROM calendar2form_relations WHERE calendar2forms_id = '$row[id]'";
+			$this->db_query($q);
+			$rels = array();
+			while($relrow = $this->db_next())
+			{
+				if ($relrow["el_count"])
+				{
+					$req_items = $args["post_vars"][$relrow["el_count"]];
+					if ($req_items == 0)
+					{
+						// default to 1. is this good?
+						$req_items = 1;
+					};
+					$relrow["req_items"] = $req_items;
+					$lb_sel = $args["post_vars"][$relrow["el_relation"]];
+					if (preg_match("/^element_\d*_lbopt_(\d*)$/",$lb_sel,$m))
+					{
+						$relrow["txtid"] = $args["els"][$relrow["el_relation"]]["lb_items"][$m[1]];
+						$rels[] = $relrow;
+					};
+				};
+			};
 
 			if ($row["class_id"] == CL_FORM_CHAIN)
 			{
