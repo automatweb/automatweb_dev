@@ -1,0 +1,51 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>start1</name>
+            <group>general</group>
+            <table>planner</table>
+            <type>datetime_select</type>
+            <field>start</field>
+            <caption>Algab</caption>
+      </property>
+      <property>
+            <name>end</name>
+            <group>general</group>
+            <table>planner</table>
+            <type>datetime_select</type>
+            <field>end</field>
+            <caption>Lõpeb</caption>
+      </property>
+      <property>
+            <name>duration_days</name>
+            <group>general</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Kestvus päevades</caption>
+      </property>
+      <property>
+            <name>type</name>
+            <group>general</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_VACATION_TYPE</reltype>
+            <automatic>1</automatic>
+            <caption>Puhkuse tüüp</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_CRM_VACATION</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <reltypes>
+            <VACATION_TYPE>
+                  <value>1</value>
+                  <clid>CL_META</clid>
+                  <caption>Puhkuse tüüp</caption>
+            </VACATION_TYPE>
+      </reltypes>
+</properties>
+
