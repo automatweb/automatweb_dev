@@ -237,7 +237,7 @@ function toggle_file_link_newwin()
 </td>
 <td class="fgtext">&nbsp;</td>
 <td class="fgtext">&nbsp;</td>
-</tr>	
+</tr>
 <!-- END SUB: LISTBOX_ITEMS -->
 
 <!-- SUB: MULTIPLE_ITEMS -->
@@ -318,7 +318,7 @@ function toggle_file_link_newwin()
 <tr>
 <td class="fgtext">{VAR:LC_FORMS_DEFAULT_DATE}</td>
 <td class="fgtext" align="right">
-&nbsp;<input type="radio" name="{VAR:cell_id}_def_date_type" VALUE="rel" {VAR:date_rel_checked}> {VAR:C_FORMS_DATE_IN_ELEMENT} 
+&nbsp;<input type="radio" name="{VAR:cell_id}_def_date_type" VALUE="rel" {VAR:date_rel_checked}> {VAR:C_FORMS_DATE_IN_ELEMENT}
 <select name='{VAR:cell_id}_def_date_rel' class='small_button'>{VAR:date_rel_els}</select>&nbsp;&nbsp;&nbsp;&nbsp;
 <input type="radio" name="{VAR:cell_id}_def_date_type" VALUE="now" {VAR:date_now_checked}> {VAR:LC_FORMS_TIME} </td>
 <td class="fgtext" colspan=2>pluss&nbsp;<input type="text" class="small_button" size="5" name="{VAR:cell_id}_def_date_num" value="{VAR:def_date_num}">&nbsp;<select name='{VAR:cell_id}_def_date_add_type' class="small_button">{VAR:add_types}</select>&nbsp;</td>
@@ -499,6 +499,12 @@ function toggle_file_link_newwin()
 <td valign=top class="fgtext"><input class="small_button" type='text' NAME='{VAR:cell_id}_text' VALUE="{VAR:cell_text}">&nbsp;{VAR:LC_FORMS_DISTANCE_FROM_ELEMENT}:&nbsp;<input class="small_button" type='text' NAME='{VAR:cell_id}_dist' size=3 VALUE='{VAR:cell_dist}'>&nbsp;pix</td>
 <td class="fgtext">Disabled:</td>
 <td class="fgtext"><input type='checkbox' name='{VAR:cell_id}_disabled' value='1' {VAR:disabled}></td>
+</tr>
+<tr>
+<td valign=top class="fgtext">&nbsp;</td>
+<td valign=top class="fgtext">&nbsp;</td>
+<td class="fgtext">Peidetud:</td>
+<td class="fgtext"><input type='checkbox' name='{VAR:cell_id}_hidden' value='1' {VAR:hidden}></td>
 <!-- END SUB: EL_NOHLINK -->
 
 <!-- SUB: ACTIVITY -->
