@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.13 2004/06/03 10:49:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.14 2004/07/23 09:13:52 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -33,7 +33,7 @@
 @property static_gen_link type=text store=no group=static
 @caption Staatilise genereerimise link
 
-@reltype REPEATER value=1 clid=CL_REPEATER_OBJ 
+@reltype REPEATER value=1 clid=CL_RECURRENCE
 @caption kordus staatilise koopia genereerimiseks
 
 @reltype SEARCH_GRP value=2 clid=CL_SITE_SEARCH_CONTENT_GRP
