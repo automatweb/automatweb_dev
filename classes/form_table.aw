@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.55 2002/09/09 12:28:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.56 2002/09/25 15:01:50 kristo Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -440,7 +440,7 @@ class form_table extends form_base
 										"basket_id" => $bid,
 										"redir" => urlencode($redir),
 										"count" => $dat["ev_".$cc["basket_add_count_el"][$element_id]]
-									),"basket");
+									),"basket", false, true);
 									$el_ref->onclick = "window.location='".$burl."';return false;";
 
 									if (isset($cc["link_popup"]) && $cc["link_popup"])
@@ -754,7 +754,13 @@ class form_table extends form_base
 		if ($this->table["buttons"]["save"]["pos"]["up"])
 		{
 			// draw top button
-			$tbl.="<input type='submit' value='".$this->table["buttons"]["save"]["text"]."'>";
+			$tbl .= $this->draw_button("save");
+		}
+
+		if ($this->table["buttons"]["delete"]["pos"]["up"])
+		{
+			// draw top delete button
+			$tbl .= $this->draw_button("delete");
 		}
 
 		$tbl.=$this->t->draw(array(
@@ -764,13 +770,20 @@ class form_table extends form_base
 			"titlebar_under_groups" => $this->table["has_grpnames"],
 			"has_pages" => $this->table["has_pages"],
 			"records_per_page" => $this->table["records_per_page"],
-			"act_page" => $GLOBALS["ft_page"]
+			"act_page" => $GLOBALS["ft_page"],
+			"no_titlebar" => $this->table["no_titlebar"]
 		));
 
 		if ($this->table["buttons"]["save"]["pos"]["down"])
 		{
 			// draw top button
-			$tbl.="<input type='submit' value='".$this->table["buttons"]["save"]["text"]."'>";
+			$tbl .= $this->draw_button("save");
+		}
+
+		if ($this->table["buttons"]["delete"]["pos"]["down"])
+		{
+			// draw top delete button
+			$tbl .= $this->draw_button("delete");
 		}
 
 		if (!$no_form_tags)
@@ -833,7 +846,6 @@ class form_table extends form_base
 					}
 				}
 			}
-		enter_function("form_table::finalize::fin",array());
 			$form = new form;
 			// here we must find the value for the element($this->table["show_second_table_search_val_el"]) that was on the row
 			// we clicked on
@@ -842,8 +854,7 @@ class form_table extends form_base
 			$form->load($match_form);
 			$form->load_entry($match_entry);
 			$sve = $form->entry[$this->table["show_second_table_search_val_el"]];
-		enter_function("form_table::finalize::nds",array());
-			$tbl.=$form->new_do_search(array(
+			$second_tbl_str = $form->new_do_search(array(
 				"entry_id" => $entry_id,
 				"restrict_search_el" => array($this->table["show_second_table_search_el"]), 
 				"restrict_search_val" => array($sve),
@@ -852,8 +863,15 @@ class form_table extends form_base
 				"no_form_tags" => false,
 				"search_form" => $search_form
 			));
-		exit_function("form_table::finalize::nds",array());
-		exit_function("form_table::finalize::fin",array());
+
+			if ($this->table["show_second_table_where"] != "above")
+			{
+				$tbl.=$second_tbl_str;
+			}
+			else
+			{
+				$tbl = $second_tbl_str.$tbl;
+			}
 		}
 
 		// change the current document title if necessary
@@ -1228,6 +1246,7 @@ class form_table extends form_base
 		$this->table["doc_title_is_yah_nolast"] = $settings["doc_title_is_yah_nolast"];
 		$this->table["doc_title_is_yah_upper"] = $settings["doc_title_is_yah_upper"];
 		$this->table["show_second_table"] = $settings["show_second_table"];
+		$this->table["show_second_table_where"] = $settings["show_second_table_where"];
 		$this->table["show_second_table_search_el"] = $settings["show_second_table_search_el"];
 		$this->table["show_second_table_search_val_el"] = $settings["show_second_table_search_val_el"];
 		$this->table["show_second_table_tables_sep"] = $this->make_keys($settings["show_second_table_tables_sep"]);
@@ -1246,6 +1265,7 @@ class form_table extends form_base
 		$this->table["show_second_table_aliases"] = $this->make_keys($settings["show_second_table_aliases"]);
 		$this->table["header"] = $settings["header"];
 		$this->table["footer"] = $settings["footer"];
+		$this->table["no_titlebar"] = $settings["no_titlebar"];
 
 		if (!is_array($defsort))
 		{
@@ -1314,6 +1334,29 @@ class form_table extends form_base
 		}
 		usort($this->table["rgrps"], create_function('$a,$b','if ($a["ord"] > $b["ord"]) return 1; if ($a["ord"] < $b["ord"]) return -1; return 0;'));
 
+		$im = get_instance("image");
+		if (is_array($this->table["buttons"]))
+		{
+			foreach($this->table["buttons"] as $bt_id => $bt_dat)
+			{
+				$imn = "buttons_".$bt_id."_image";
+				global $$imn;
+				if (($$imn == "none" || $$imn == "") && !$buttons[$bt_id]["delimage"])
+				{
+					$buttons[$bt_id]["image"] = $this->table["buttons"][$bt_id]["image"];
+				}
+				else
+				if ($buttons[$bt_id]["delimage"])
+				{
+					$buttons[$bt_id]["image"] = array();
+				}
+				else
+				{
+					$buttons[$bt_id]["image"] = $im->add_upload_image($imn, $this->table_parent, $this->table["buttons"][$bt_id]["image"]["id"]);
+				}
+			}
+		}
+
 		$this->table["buttons"] = $buttons;
 
 		$this->save_table_settings();
@@ -1358,6 +1401,8 @@ class form_table extends form_base
 			"skip_one_liners" => checked($this->table["skip_one_liners"]),
 			"skip_one_liners_col" => $this->picker($this->table["skip_one_liners_col"],$this->get_col_picker()),
 			"show_second_table" => checked($this->table["show_second_table"]),
+			"second_table_below" => checked($this->table["show_second_table_where"] != "above"),
+			"second_table_above" => checked($this->table["show_second_table_where"] == "above"),
 			"no_grpels_in_restrict" => checked($this->table["no_grpels_in_restrict"]),
 			"no_show_empty" => checked($this->table["no_show_empty"]),
 			"empty_table_text" => $this->table["empty_table_text"],
@@ -1376,6 +1421,7 @@ class form_table extends form_base
 			"doc_title_is_yah_nolast" => checked($this->table["doc_title_is_yah_nolast"]),
 			"doc_title_is_yah_sep" => $this->table["doc_title_is_yah_sep"],
 			"has_grpsettings" => checked($this->table["has_grpsettings"]),
+			"no_titlebar" => checked($this->table["no_titlebar"]),
 			"header" => htmlentities($this->table["header"]),
 			"footer" => htmlentities($this->table["footer"]),
 			"reforb" => $this->mk_reforb("new_submit_settings", array("id" => $id))
@@ -1496,6 +1542,11 @@ class form_table extends form_base
 		$l = "";
 		foreach($this->buttons as $btn_id => $btn_name)
 		{
+			$img = "";
+			if ($this->table["buttons"][$btn_id]["image"]["url"] != "")
+			{
+				$img = image::make_img_tag(image::check_url($this->table["buttons"][$btn_id]["image"]["url"]));
+			}
 			$this->vars(array(
 				"button_check" => checked($this->table["buttons"][$btn_id]["check"] == 1),
 				"button_text" => $this->table["buttons"][$btn_id]["text"],
@@ -1503,7 +1554,8 @@ class form_table extends form_base
 				"button_up" => checked($this->table["buttons"][$btn_id]["pos"]["up"] == 1),
 				"button_down" => checked($this->table["buttons"][$btn_id]["pos"]["down"] == 1),
 				"bt_name" => $btn_name,
-				"bt_id" => $btn_id
+				"bt_id" => $btn_id,
+				"image" => $img
 			));
 			$l.=$this->parse("BUTTON");
 		}
@@ -1656,31 +1708,34 @@ class form_table extends form_base
 
 			if ($this->table["defs"][$col]["els"]["formel"] == "formel")
 			{
-				foreach($this->table["defs"][$col]["formel"] as $fel)
+				if (is_array($this->table["defs"][$col]["formel"]))
 				{
-					$this->vars(array(
-						"fel_name" => $els[$fel],
-						"fel_id" => $fel,
-						"baskets" => $this->picker($this->table["defs"][$col]["basket"][$fel], $this->list_objects(array("class" => CL_SHOP_BASKET, "addempty" => true))),
-						"basket_controller" => $this->mpicker($this->table["defs"][$col]["basket_controller"][$fel], $this->list_objects(array("class" => CL_FORM_CONTROLLER, "addempty" => true))),
-						"basket_url" => $this->table["defs"][$col]["basket_url"][$fel],
-						"bcount_el" => $this->picker($this->table["defs"][$col]["basket_add_count_el"][$fel], $els_nof)
-					));
-
-					$issb = "";
-					if ($this->table["defs"][$col]["el_forms"][$fel])
+					foreach($this->table["defs"][$col]["formel"] as $fel)
 					{
-						$finst =& $this->cache_get_form_instance($this->table["defs"][$col]["el_forms"][$fel]);
-						$el_ref = $finst->get_element_by_id($fel);
-						if ($el_ref->get_type() == "button")
+						$this->vars(array(
+							"fel_name" => $els[$fel],
+							"fel_id" => $fel,
+							"baskets" => $this->picker($this->table["defs"][$col]["basket"][$fel], $this->list_objects(array("class" => CL_SHOP_BASKET, "addempty" => true))),
+							"basket_controller" => $this->mpicker($this->table["defs"][$col]["basket_controller"][$fel], $this->list_objects(array("class" => CL_FORM_CONTROLLER, "addempty" => true))),
+							"basket_url" => $this->table["defs"][$col]["basket_url"][$fel],
+							"bcount_el" => $this->picker($this->table["defs"][$col]["basket_add_count_el"][$fel], $els_nof)
+						));
+
+						$issb = "";
+						if ($this->table["defs"][$col]["el_forms"][$fel])
 						{
-							$issb = $this->parse("EL_IS_SUBMIT");
+							$finst =& $this->cache_get_form_instance($this->table["defs"][$col]["el_forms"][$fel]);
+							$el_ref = $finst->get_element_by_id($fel);
+							if ($el_ref->get_type() == "button")
+							{
+								$issb = $this->parse("EL_IS_SUBMIT");
+							}
 						}
+						$this->vars(array(
+							"EL_IS_SUBMIT" => $issb
+						));
+						$coldata[$col][8] .= $this->parse("SEL_BASKET");
 					}
-					$this->vars(array(
-						"EL_IS_SUBMIT" => $issb
-					));
-					$coldata[$col][8] .= $this->parse("SEL_BASKET");
 				}
 			}
 
@@ -2441,9 +2496,9 @@ class form_table extends form_base
 		
 		// we must do all form table aliases ourselves unfortunately. 
 		// form table alias marker is w
-		while (preg_match("/#w(\d+)#/U", $text, $mt))
+		while (preg_match("/#u(\d+)#/U", $text, $mt))
 		{
-			$text = str_replace("#w".$mt[1]."#", $this->do_parse_ftbl_alias($aliases[CL_FORM_TABLE][$mt[1]]), $text);
+			$text = str_replace("#u".$mt[1]."#", $this->do_parse_ftbl_alias($aliases[CL_FORM_OUTPUT][$mt[1]-1]["target"]), $text);
 		}
 		
 		$am->parse_oo_aliases($this->table_id, $text);
@@ -2679,6 +2734,17 @@ class form_table extends form_base
 				$bo->save_user_basket();
 			}
 		}
+
+		if ($butt_delete != "" && is_array($sel))
+		{
+			foreach($sel as $id => $one)
+			{
+				if ($one == 1)
+				{
+					$this->do_delete_entry($this->get_form_for_entry($id), $id);
+				}
+			}
+		}
 		return $this->hexbin($return);
 	}
 
@@ -2704,6 +2770,20 @@ class form_table extends form_base
 	function get_price_elements_sum()
 	{
 		return $this->pricel_sum;
+	}
+
+	function draw_button($bt_id)
+	{
+		$ret = "";
+		if ($this->table["buttons"][$bt_id]["image"]["url"] != "")
+		{
+			$ret ="<input name='butt_".$bt_id."' type='image' src='".image::check_url($this->table["buttons"][$bt_id]["image"]["url"])."'>";
+		}
+		else
+		{
+			$ret ="<input type='submit' name='butt_".$bt_id."' value='".$this->table["buttons"][$bt_id]["text"]."'>";
+		}
+		return $ret;
 	}
 }
 ?>
