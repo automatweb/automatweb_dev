@@ -638,7 +638,7 @@ class contacts extends aw_template
 			$g .= $this->parse("group");
 
 
-			$dummy = array("0" => LC_CONTACT_ALL,"1" => LC_CONTACT_LISTS, "2" => "Uued listid");
+			$dummy = array("0" => LC_CONTACT_ALL,"1" => "Vanad listid", "2" => "Listid");
 			
 			$mlist = get_instance("mailinglist/ml_list");
 			$arr = $mlist->get_lists_and_groups(array("check_acl" => 1, "fullnames" => 1, "prefix" => ":", "spacer"=> " "));//check_acl =1,
@@ -660,7 +660,7 @@ class contacts extends aw_template
 	
 
 		$this->vars(array(
-			"groups" => $this->picker(-1,$dummy + $this->flatlist),
+			"groups" => $this->picker(2,$dummy + $this->flatlist),
 			"group" => $g,
 			"is_list_msg" => $listmsg,
 			"garr" => $garr,
