@@ -222,6 +222,14 @@
 					<required name="pass2"/>
 					<required name="a"/>
 					<optional name="change"/>
+				</arguments>
+			</function>
+
+		</action>
+
+		<action name="pwconv">
+			<function name="pwconv">
+				<arguments/>
 			</function>
 		</action>
 	</class>
