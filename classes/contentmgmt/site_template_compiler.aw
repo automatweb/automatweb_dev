@@ -467,7 +467,8 @@ class site_template_compiler extends aw_template
 				"has_prev_link" => $ldat["has_prev_link"],
 				"has_next_link" => $ldat["has_next_link"],
 				"a_name" => $area,
-				"level" => $level
+				"level" => $level,
+				"a_parent" => $adat["parent"]
 			)
 		);
 
@@ -1132,6 +1133,8 @@ class site_template_compiler extends aw_template
 		$o_name = $dat["o_name"];
 		$content_name = $dat["content_name"];
 		$loop_counter_name = $dat["loop_counter_name"];
+		$parent_is_from_obj_name = $dat["parent_is_from_obj_name"];
+		$this_is_from_obj_name = "\$p_is_o_".$arr["a_parent"]."_".$arr["level"];
 
 		$ret = "";
 		$ret .= $this->_gi().$content_name." = \"\";\n";
@@ -1139,6 +1142,14 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi()."for(".$o_name." =& ".$list_name."->begin(), ".$loop_counter_name." = 0,\$prev_obj = NULL; !".$list_name."->end(); \$prev_obj = ".$o_name.",".$o_name." =& ".$list_name."->next(),".$loop_counter_name."++)\n";
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
+
+			$ret .= $this->_gi()."if (".$this_is_from_obj_name."[".$o_name."->parent()])\n";
+			$ret .= $this->_gi()."{\n";
+			$this->brace_level++;
+			$ret .= $this->_gi().$this_is_from_obj_name."[".$o_name."->id()] = ".$this_is_from_obj_name."[".$o_name."->parent()];\n";
+			$this->brace_level--;
+			$ret .= $this->_gi()."}\n";
+
 
 			// add hide_noact check
 			$ret .= $this->_gi()."if (".$o_name."->prop(\"hide_noact\") == 1)\n";
@@ -1675,6 +1686,7 @@ class site_template_compiler extends aw_template
 		}
 
 		$ret .= $this->_gi().$cache_name." = true;\n";
+		$ret .= $this->_gi()."\$p_is_o_".$arr["a_parent"]."_".($arr["level"])."[\$parent_obj->id()] = NULL;\n";
 		return $ret;
 	}
 	
@@ -1748,7 +1760,7 @@ class site_template_compiler extends aw_template
 		$dat = current($this->list_name_stack);
 		$parent_is_from_obj_name = $dat["parent_is_from_obj_name"];
 
-		$ret .= $this->_gi()."if (\$parent_obj->prop(\"submenus_from_obj\") || ".$parent_is_from_obj_name.")\n";
+		$ret .= $this->_gi()."if (\$parent_obj->prop(\"submenus_from_obj\") || ".$parent_is_from_obj_name."[\$parent_obj->id()])\n";
 
 		return $ret;
 	}
@@ -1762,14 +1774,14 @@ class site_template_compiler extends aw_template
 		$fun_name = $dat["fun_name"];
 		$cache_name = $dat["cache_name"];
 		$p_v_name = "\$os_".$arr["a_parent"]."_".$arr["level"];
-		$this_is_from_obj_name = "\$p_is_o_".$arr["a_parent"]."_".$arr["level"];
+		$this_is_from_obj_name = "\$p_is_o_".$arr["a_parent"]."_".$arr["level"]."[\$parent_obj->id()]";
 		$parent_is_from_obj_name = $dat["parent_is_from_obj_name"];
 		$parent_is_from_obj_start_level = $dat["parent_is_from_obj_start_level"];
 
-		$ret .= $this->_gi()."if (".$parent_is_from_obj_name.")\n";
+		$ret .= $this->_gi()."if (".$parent_is_from_obj_name."[\$parent_obj->id()])\n";
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
-		$ret .= $this->_gi()."\$tmp = ".$parent_is_from_obj_name.";\n";
+		$ret .= $this->_gi()."\$tmp = ".$parent_is_from_obj_name."[\$parent_obj->id()];\n";
 		$this->brace_level--;
 		$ret .= $this->_gi()."}\n";
 		$ret .= $this->_gi()."else\n";
