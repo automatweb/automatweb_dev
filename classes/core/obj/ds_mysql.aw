@@ -147,6 +147,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$object_id = ($objdata["brother_of"] ? $objdata["brother_of"] : $objdata["oid"]);
 
 		$conn_prop_vals = array();
+		$conn_prop_fetch = array();
 
 		// do a query for each table
 		foreach($tables as $table)
@@ -174,16 +175,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					if ($GLOBALS["cfg"]["__default"]["site_id"] != 139)
 					{
 					// resolve reltype and do find_connections
-					$values = array();
+					//$values = array();
 					$_co_reltype = $prop["reltype"];
 					$_co_reltype = $GLOBALS["relinfo"][$objdata["class_id"]][$_co_reltype]["value"];
 
-					if ($_co_reltype)
+					/*if ($_co_reltype)
 					{
-						$alt_n = "conn_als_".$prop["name"];
-						//$pjoins[] = " LEFT JOIN aliases $alt_n ON $alt_n.source = '$object_id' ";
-						//$fields[] = $alt_n.".target AS ".$prop["name"];
-
 						$this->db_query("
 							SELECT 
 								target 
@@ -206,9 +203,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 								$values = $row["target"];
 								break;
 							}
+
 						}
-					}
-					$conn_prop_vals[$prop["name"]] = $values;
+					}*/
+					$conn_prop_fetch[$prop["name"]] = $_co_reltype;
+
+					//$conn_prop_vals[$prop["name"]] = $values;
 					//echo "resolved reltype to ".dbg::dump($_co_reltype)." <br>";
 					}
 				}
@@ -254,11 +254,52 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 		}
 
-		foreach($conn_prop_vals as $prop => $val)
+
+		if (count($conn_prop_fetch))
+		{
+			$this->db_query("
+				SELECT 
+					target,
+					reltype
+				FROM 
+					aliases 
+				LEFT JOIN objects ON objects.oid = aliases.target
+				WHERE 
+					source = '".$object_id."' AND 
+					reltype IN (".join(",", map("'%s'", $conn_prop_fetch)).") AND 
+					objects.status != 0
+			");
+			while ($row = $this->db_next())
+			{
+				$prop_name = array_search($row["reltype"], $conn_prop_fetch);
+				if (!$prop_name)
+				{
+					error::throw(array(
+						"id" => "ERR_NO_PROP",
+						"msg" => "ds_mysql::read_properties(): no prop name for reltype $row[reltype] in store=connect fetch!"
+					));
+				}
+
+				$prop = $properties[$prop_name];
+				if ($prop["multiple"] == 1)
+				{
+					$ret[$prop_name][$row["target"]] = $row["target"];
+				}
+				else
+				{
+					if (!isset($ret[$prop_name])) // just the first one
+					{
+						$ret[$prop_name] = $row["target"];
+					}
+				}
+			}
+		}
+
+		/*foreach($conn_prop_vals as $prop => $val)
 		{
 			$ret[$prop] = $val;
 			//echo "set $prop => ".dbg::dump($val)." <br>";
-		}
+		}*/
 		return $ret;
 	}
 
@@ -521,6 +562,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			if ($sets != "")
 			{
 				$q = "UPDATE $tbl SET $sets WHERE ".$tableinfo[$tbl]["index"]." = '".$objdata["brother_of"]."'";
+				if ($objdata["brother_of"] == 13083)
+				{
+					print dbg::process_backtrace(debug_backtrace());
+					print $q;
+				};
 //				echo "q = <pre>". htmlentities($q)."</pre> <br />";
 				$this->db_query($q);
 			}
@@ -1306,7 +1352,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			// if it is the last one, then it can be anything
 			if ($pos < (count($filt) - 1))
 			{
-				error::throw_if($cur_prop["type"] != "relpicker", array(
+				error::throw_if($cur_prop["type"] != "relpicker" && $cur_prop["type"] != "relmanager", array(
 					"id" => ERR_OBJ_NO_RP,
 					"msg" => "ds_mysql::_req_do_pcp(): currently join properties can only be of type relpicker - can't figure out the class id of the object-to-join otherwise"
 				));
@@ -1319,6 +1365,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				switch ($cur_prop["type"])
 				{
 					case "relpicker":
+					case "relmanager":
 						$relt_s = $cur_prop["reltype"];
 						$relt = $GLOBALS["relinfo"][$cur_clid][$relt_s]["value"];
 				

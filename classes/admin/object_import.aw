@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.15 2004/10/20 11:26:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.16 2004/10/27 10:16:52 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -487,6 +487,57 @@ class object_import extends class_base
 
 			$ex_i = get_instance(CL_OBJECT_IMPORT_EXCEPTION);
 
+			if (is_array($o->prop("unique_id")) && count($o->prop("unique_id")) > 0)
+			{
+				// get uniqueness filtr.
+				// we need to load all possible objects to do this. damn.
+				// storage simply can not handle this for 65k objects. 
+				// so we do query :(
+				echo "creating uniqueness filter <br>\n";
+				flush();
+
+				$existing_objects = array();
+
+
+				$fetch = array("objects.oid as id");
+				$where = array("objects.status > 0", "objects.lang_id = '".aw_global_get("lang_id")."'", "objects.site_id = ".aw_ini_get("site_id"));
+				$tbls = array();
+
+				foreach($o->prop("unique_id") as $unique_id)
+				{
+					$prop = $properties[$unique_id];
+					if ($prop["store"] == "no")
+					{
+						continue;
+					}
+
+					if (!isset($tbls[$prop["table"]]))
+					{
+						$tbls[$prop["table"]] = "LEFT JOIN {$prop[table]} ON {$prop[table]}.{$tableinfo[$prop[table]][index]} = {$tableinfo[$prop[table]][master_table]}.{$tableinfo[$prop[table]][master_index]}";
+					}
+
+					$tf = $prop["table"].".".$prop["field"];
+					$fetch[] = $tf." as ".$unique_id;
+				}
+
+				$uns = $o->prop("unique_id");
+
+				$sql = "SELECT ".join(",", $fetch)." FROM objects ".join(" ", $tbls)." WHERE ".join(" AND ", $where);
+				$this->db_query($sql);
+				while ($row = $this->db_next())
+				{
+					$key = "";
+					foreach($uns as $un)
+					{
+						$key .= $un.":".$row[$un];
+					}
+					$existing_objects[$key] = $row["id"];
+				}
+
+				echo "created uniqueness filter for ".count($existing_objects)." objects. <br>\n";
+				flush();
+			}
+
 			foreach($data_rows as $line)
 			{
 				$line_n++;
@@ -505,20 +556,18 @@ class object_import extends class_base
 
 				if (is_array($o->prop("unique_id")) && count($o->prop("unique_id")) > 0)
 				{
-					$un_filt = array(
-						"class_id" => $class_id,
-					);
+					$key = "";
 
 					foreach($o->prop("unique_id") as $unique_id)
 					{
 						// get column for uniq id
 						$u_col = $p2c[$unique_id];
-						$un_filt[$unique_id] = $line[$u_col];
+						$val = $line[$u_col];
 
 						// if this col has a user-defined value, use that. 
 						if (!empty($userval[$unique_id]))
 						{
-							$un_filt[$unique_id] = $userval[$unique_id];
+							$val = $userval[$unique_id];
 						}
 
 						// check for classificators
@@ -531,16 +580,18 @@ class object_import extends class_base
 							), $line[$u_col]);
 							if (is_oid($tmp))
 							{
-								$un_filt[$unique_id] = $tmp;
+								$val = $tmp;
 							}
 						}
+						$key .= $unique_id.":".$val;
 					}
 
-					$ol = new object_list($un_filt);
+				
+					$t_oid = $existing_objects[$key];
 
-					if ($ol->count() > 0)
+					if (is_oid($t_oid) && $this->can("view", $t_oid))
 					{	
-						$dat = $ol->begin();
+						$dat = obj($t_oid);
 						echo "leidsin juba olemasoleva objekti ".$dat->name().", kasutan olemasolevat objekti <br>";
 					}
 					else
@@ -695,7 +746,7 @@ class object_import extends class_base
 		$ol = new object_list($filt);
 		for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
-			if ($o->meta("import_status") == 1 && $o->meta("import_last_time") < (time() - 3 * 60))
+			if ($o->meta("import_status") == 1 && $o->meta("import_last_time") < (time() - 30))
 			{
 				echo "restart import for ".$o->id()." <br>";
 				$this->do_exec_import($o, $o->meta("import_row_count"));
