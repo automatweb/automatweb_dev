@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.97 2004/12/01 11:37:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.98 2005/01/16 17:11:01 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -647,6 +647,7 @@ class file extends class_base
 		}
 		// allow only integer id-s
 		$id = (int)$id;
+		error::view_check($id);
 		$fc = $this->get_file_by_id($id);
 
 		$pi = pathinfo($fc["name"]);
