@@ -1,4 +1,8 @@
 <table width="100%" border=0 cellspacing=0 cellpadding=1 bgcolor="#EEEEEE">
+<tr>
+<td colspan="2" class="title">
+<a href='pickobject.{VAR:ext}?docid={VAR:id}'>Lisa uus objekt&gt;&gt;&gt;</a></td>
+</tr>
 <form name="aform">
 <!-- SUB: table -->
 <tr>
