@@ -1,7 +1,7 @@
-<table border="0" style="border-collapse: collapse; border: 1px solid blue;">
+<table border="0" style="border-collapse: collapse; border: 1px solid #CCC;">
 <tr>
 <!-- SUB: DAY -->
-<td width="150" valign="top" style="border: 1px solid blue;">
+<td width="150" valign="top" style="border: 1px solid #CCC;">
 <strong>{VAR:daynum}</strong>
 <small>
 <p>

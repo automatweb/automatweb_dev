@@ -1,8 +1,8 @@
-<table border="1" style="border: 1px solid #8AAABE;" cellspacing="0">
+<table border="0" style="border-collapse: collapse; border: 1px solid #8AAABE;" cellspacing="0">
 <tr>
 <!-- SUB: HEADER -->
 	<!-- SUB: HEADER_CELL -->
-	<th width="150">
+	<th width="150" class="caldayheadday">
 		{VAR:dayname}
 	</th>
 	<!-- END SUB: HEADER_CELL -->
@@ -12,13 +12,11 @@
 <tr>
 	<!-- SUB: DAY -->
 	<td width="150" valign="top" style="border: 1px solid #8AAABE; background-color: #FFF;">
-	<strong>{VAR:daynum}</strong>
-	<small>
+	<div align="right"><small><strong><a href="{VAR:daylink}">{VAR:daynum}</a></strong></small></div>
+	<span style="font-size: 11px;">
 	<p>
-		<!-- SUB: EVENT -->
-			<strong>{VAR:time}</strong> - {VAR:name}<br>
-		<!-- END SUB: EVENT -->
-	</small>
+		{VAR:EVENT}
+	</span>
 	</td>
 	<!-- END SUB: DAY -->
 </tr>

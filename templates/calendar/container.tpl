@@ -47,7 +47,9 @@ function navigate_to()
 };
 </script>
 
-<center><h3>
+<table width="100%" border="0" cellpadding="3" cellspacing="0">
+<tr>
+<td align="right" style="font-size: 10px;">
 <!-- SUB: PAGE -->
 <a href="{VAR:link}">{VAR:text}</a> 
 <!-- END SUB: PAGE -->
@@ -55,8 +57,13 @@ function navigate_to()
 <!-- SUB: SEL_PAGE -->
 [ {VAR:text} ] 
 <!-- END SUB: SEL_PAGE -->
-</h3></center>
-<center><h2><a href="{VAR:prevlink}">&lt;&lt;</a> | {VAR:caption} | <a href="{VAR:today_url}">Täna</a> | <a href="{VAR:nextlink}">&gt;&gt;</a></h2></center>
+</td>
+</tr>
+<tr>
+<td class="caldayheadday">
+<a href="{VAR:prevlink}"><img SRC="{VAR:baseurl}/automatweb/images/blue/cal_nool_left.gif" WIDTH="19" HEIGHT="8" BORDER=0 ALT="&lt;&lt;"></a> {VAR:caption}  <a href="{VAR:nextlink}"><img SRC="{VAR:baseurl}/automatweb/images/blue/cal_nool_right.gif" WIDTH="19" HEIGHT="8" BORDER=0 ALT="&gt;&gt;"></a></td>
+</tr>
+</table>
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
 <td rowspan="2" valign="top" width="90%">
@@ -76,6 +83,7 @@ function navigate_to()
 {VAR:years}
 </select>
 <input type="button" value="Go!" onClick='navigate_to()'>
+<a href="{VAR:today_url}">Täna</a>
 </form>
 </center>
 </td>

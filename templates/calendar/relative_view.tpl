@@ -4,7 +4,9 @@ Viimased {VAR:PAST_LIMIT}
 <!-- SUB: PAST_EVENT -->
 <tr>
 <td>
+<small>
 	{VAR:PT_EVENT}
+</small>
 </td>
 </tr>
 <!-- END SUB: PAST_EVENT -->
@@ -16,7 +18,9 @@ Järgmised {VAR:FUTURE_LIMIT}
 <!-- SUB: FUTURE_EVENT -->
 <tr>
 <td>
+<small>
 	{VAR:FT_EVENT}
+</small>
 </td>
 </tr>
 <!-- END SUB: FUTURE_EVENT -->

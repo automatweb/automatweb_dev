@@ -1,1 +1,1 @@
-<strong>{VAR:time}</strong> - <a href="{VAR:link}">{VAR:name}</a><br>
+{VAR:time} - <img src="{VAR:iconurl}" /><a href="{VAR:link}">{VAR:name}</a><br>
