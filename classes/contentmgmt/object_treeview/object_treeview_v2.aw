@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.69 2005/04/01 15:26:15 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.70 2005/04/04 08:51:30 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -167,6 +167,8 @@ class object_treeview_v2 extends class_base
 			"tpldir" => "contentmgmt/object_treeview/object_treeview_v2",
 			"clid" => CL_OBJECT_TREEVIEW_V2
 		));
+
+		$this->tr_i = get_instance(CL_OTV_DATA_FILTER);
 	}
 
 	function get_property($arr)
@@ -478,6 +480,14 @@ class object_treeview_v2 extends class_base
 			// queried from datasource, no matter how much of it passes the filtering
 			if ($d_inst->has_feature("filter"))
 			{
+				$sc = safe_array($ih_ob->meta("sel_columns"));
+				foreach(safe_array($ih_ob->meta("sel_columns_fields")) as $__k => $__v)
+				{
+					foreach($__v as $___k => $___v)
+					{
+						$sc[$___v["field"]] = 1;
+					}
+				}
 				$params = array(
 					"filters" => array(
 						"saved_filters" => new aw_array($ob->meta("saved_filters")),
@@ -485,7 +495,8 @@ class object_treeview_v2 extends class_base
 						"filter_by_char_field" => $ih_ob->prop("filter_by_char_field"),
 						"char" =>  ($_GET['char'] == "all") ? $_GET['char'] : $_GET['char']{0}, 	
 					),
-					"sproc_params" => $ob->prop("sproc_params")
+					"sproc_params" => $ob->prop("sproc_params"),
+					"sel_cols" => $sc
 				);
 				$ol = $d_inst->get_objects($d_o, $fld, $_GET['tv_sel'], $params);
 			}
@@ -525,7 +536,6 @@ class object_treeview_v2 extends class_base
 		// if there are set some datasource fields to be displayed in one table field
 
 		$sel_columns_fields = new aw_array($ih_ob->meta("sel_columns_fields"));
-
 		if ($sel_columns_fields->count() != 0)
 		{
 			$ol_result = array();
@@ -533,8 +543,25 @@ class object_treeview_v2 extends class_base
 			{
 				foreach($sel_columns_fields->get() as $sel_columns_fields_key => $sel_columns_fields_value)
 				{
+					if ($sel_columns_fields_key == "modifiedby")
+					{
+						$sel_columns_fields_key = "modder";
+					}
+					if ($sel_columns_fields_key == "createdby")
+					{
+						$sel_columns_fields_key = "adder";
+					}
 					foreach($sel_columns_fields_value as $key => $value)
 					{
+						if ($value["field"] == "modified")
+						{
+							$value["field"] = "mod_date";
+						}
+						if ($value["field"] == "created")
+						{
+							$value["field"] = "add_date";
+						}
+
 						if (empty($ol_item[$value['field']]))
 						{
 							$ol_item[$sel_columns_fields_key] .= "";
@@ -544,7 +571,20 @@ class object_treeview_v2 extends class_base
 							$ol_item[$sel_columns_fields_key] .= $value['sep'];
 						}
 						$ol_item[$sel_columns_fields_key] .= $value['left_encloser'];
-						$scf_val = $ol_item[$value['field']];
+
+						if ($value["field"] == "mod_date")
+						{
+							$scf_val = date("d.m.Y H:i", $ol_item[$value['field']]);
+						}
+						else
+						if ($value["field"] == "add_date")
+						{
+							$scf_val = date("d.m.Y H:i", $ol_item[$value['field']]);
+						}
+						else
+						{
+							$scf_val = $ol_item[$value['field']];
+						}
 						if ($value["field"] == "name")
 						{
 							// make link from name field
@@ -553,6 +593,7 @@ class object_treeview_v2 extends class_base
 						
 						$ol_item[$sel_columns_fields_key] .= $scf_val;
 						$ol_item[$sel_columns_fields_key] .= $value['right_encloser'];
+
 					}
 				}
 				array_push($ol_result, $ol_item);
@@ -794,14 +835,14 @@ class object_treeview_v2 extends class_base
 		{
 			$res = $this->_get_add_toolbar($ih_ob).$res;
 		}
-
+	
+		exit_function("otv2::show");
 		if (strpos($res, "<a") !== false || strpos($res, "< a") !== false || strpos($res, "<A") !== false)
 		{
 			return $res;
 		}
 		return create_email_links($res);
 
-		exit_function("otv2::show");
 		return $res;
 	}
 
@@ -1018,6 +1059,7 @@ class object_treeview_v2 extends class_base
 
 	function _insert_styles($o)
 	{
+		enter_function("object_treeview_v2::_insert_styles");
 		$style = "textmiddle";
 		classload("layout/active_page_data");
 		$header_css = "textmiddle";
@@ -1074,10 +1116,12 @@ class object_treeview_v2 extends class_base
 			"header_bgcolor" => $header_bg,
 			"group_header_bgcolor" => $group_header_bg,
 		));
+		exit_function("object_treeview_v2::_insert_styles");
 	}
 
 	function _get_bgcolor($ob, $line)
 	{
+		enter_function("object_treeview_v2::_get_bgcolor");
 		$ret = "";
 		if (($line % 2) == 1)
 		{
@@ -1091,11 +1135,13 @@ class object_treeview_v2 extends class_base
 		{
 			$ret = "#".$ret;
 		}
+		exit_function("object_treeview_v2::_get_bgcolor");
 		return $ret;
 	}
 
 	function _get_style_text($ob, $line)
 	{
+		enter_function("object_treeview_v2::_get_style_text");
 		$ret = "";
 		if (($line % 2) == 1)
 		{
@@ -1110,6 +1156,7 @@ class object_treeview_v2 extends class_base
 		{
 			$ret = " style=\"$ret\"";
 		}
+		exit_function("object_treeview_v2::_get_style_text");
 		return $ret;
 	}
 
@@ -1119,6 +1166,7 @@ class object_treeview_v2 extends class_base
 		{
 			return;
 		}
+		enter_function("object_treeview_v2::_draw_folders");
 		$tree_type = $ob->prop("tree_type");
 		if (empty($tree_type))
 		{
@@ -1159,6 +1207,7 @@ class object_treeview_v2 extends class_base
 					}	
 					$table->define_data($row);
 				}		
+				exit_function("object_treeview_v2::_draw_folders");
 				return $table->draw();
 				break;
 			case "TREE_DHTML":
@@ -1198,6 +1247,7 @@ class object_treeview_v2 extends class_base
 			$pms["rootnode"] = aw_global_get("section");
 		}*/
 
+				exit_function("object_treeview_v2::_draw_folders");
 				return $tv->finalize_tree($pms);
 				break;
 			}
@@ -1205,6 +1255,7 @@ class object_treeview_v2 extends class_base
 
 	function _get_add_toolbar($ob, $drv = NULL)
 	{
+		enter_function("object_treeview_v2::_get_add_toolbar");
 		// must read these from the datasource
 		$ds_o = obj($ob->prop("ds"));
 		$ds_i = $ds_o->instance();
@@ -1266,6 +1317,7 @@ class object_treeview_v2 extends class_base
 			));
 		}
 
+		exit_function("object_treeview_v2::_get_add_toolbar");
 		if ($has_b)
 		{
 			return $tb->get_toolbar();
@@ -1275,6 +1327,7 @@ class object_treeview_v2 extends class_base
 
 	function _do_parse_file_line($arr, $drv, $d_o, $parms)
 	{
+		enter_function("object_treeview_v2::_do_parse_file_line");
 		extract($parms);
 		extract($arr);
 
@@ -1333,7 +1386,6 @@ class object_treeview_v2 extends class_base
 		));
 
 		$trs = safe_array($parms['tree_obj_ih']->meta("transform_cols"));
-		$tr_i = get_instance(CL_OTV_DATA_FILTER);
 		// columns
 		$str = "";
 		foreach($col_list as $colid => $coln)
@@ -1345,7 +1397,7 @@ class object_treeview_v2 extends class_base
 				{
 					foreach($trs[$colid] as $tr_id)
 					{
-						$tr_i->transform(obj($tr_id), $content);
+						$this->tr_i->transform(obj($tr_id), $content);
 					}
 				}
 
@@ -1372,9 +1424,14 @@ class object_treeview_v2 extends class_base
 						if ($show_link_field != "---")
 						{
 							$url_field = $parms['tree_obj_ih']->prop("url_field");
+
 							if (!empty($url_field))
 							{
 								$content = $this->_get_link($content, $arr[$url_field], $parms['tree_obj_ih']);
+							}
+							else
+							{
+								$content = $this->_get_link($content, $url, $parms['tree_obj_ih']);
 							}
 
 						}
@@ -1416,6 +1473,7 @@ class object_treeview_v2 extends class_base
 			"style_text" => $this->_get_style_text($style_obj, $this->cnt)
 		));
 
+		exit_function("object_treeview_v2::_do_parse_file_line");
 		return $this->parse("FILE");
 	}
 
@@ -1426,6 +1484,7 @@ class object_treeview_v2 extends class_base
 	//
 	function _get_col_list($params = array())
 	{
+		enter_function("object_treeview_v2::_get_col_list");
 		extract($params);
 
 		$tmp = $o->meta("sel_columns");
@@ -1459,6 +1518,7 @@ class object_treeview_v2 extends class_base
 		// sort
 		$this->__sby = $o->meta("sel_columns_ord");
 		uksort($cold, array(&$this, "__sby"));
+		exit_function("object_treeview_v2::_get_col_list");
 		return $cold;
 	}
 
@@ -1473,6 +1533,7 @@ class object_treeview_v2 extends class_base
 
 	function get_folders_as_object_list($object, $level, $parent_o)
 	{
+		enter_function("object_treeview_v2::get_folders_as_object_list");
 		$this->tree_ob = $object;
 
 		if (is_oid($object->prop("inherit_view_props_from")) && $this->can("view", $object->prop("inherit_view_props_from")))
@@ -1525,6 +1586,7 @@ class object_treeview_v2 extends class_base
 			}
 		}
 
+		exit_function("object_treeview_v2::get_folders_as_object_list");
 		return $ol;
 	}
 
@@ -1548,6 +1610,7 @@ class object_treeview_v2 extends class_base
 
 	function do_sortbl(&$arr)
 	{
+		enter_function("object_treeview_v2::do_sortbl");
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_sortbl($t);
 
@@ -1629,6 +1692,7 @@ class object_treeview_v2 extends class_base
 		));
 
 		$t->set_sortable(false);
+		exit_function("object_treeview_v2::do_sortbl");
 	}
 
 	function do_save_sortbl(&$arr)
@@ -1669,6 +1733,7 @@ class object_treeview_v2 extends class_base
 
 	function __is_sorter($a, $b)
 	{
+		enter_function("object_treeview_v2::__is_sorter");
 		$comp_a = NULL;
 		$comp_b = NULL;
 		// find the first non-matching element
@@ -1706,6 +1771,7 @@ class object_treeview_v2 extends class_base
 			return 0;
 		}
 
+		exit_function("object_treeview_v2::__is_sorter");
 		if ($ord == "asc")
 		{
 			return $comp_a > $comp_b ? 1 : -1;
@@ -1936,10 +2002,13 @@ class object_treeview_v2 extends class_base
 			$ld["target"] = "_blank";
 		}
 
-		$_name = html::href($ld);
 		if ($url == "")
 		{
 			$_name = $name;
+		}
+		else
+		{
+			$_name = html::href($ld);
 		}
 		return $_name;
 	}
@@ -1948,6 +2017,7 @@ class object_treeview_v2 extends class_base
 // "otv_obj" => otv object
 	function filter_data($arr)
 	{
+		enter_function("object_treeview_v2::filter_data");
 		$ol = $arr['ol'];
 		$ob = $arr['otv_obj'];
 		$ih_ob = $arr['otv_obj_ih'];
@@ -2007,10 +2077,12 @@ class object_treeview_v2 extends class_base
 					}
 				}
 			}
+			exit_function("object_treeview_v2::filter_data");
 			return $ol;
 
 		}
 
+		exit_function("object_treeview_v2::filter_data");
 		return $ol;
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.31 2005/04/01 12:06:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.32 2005/04/04 08:51:30 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -411,6 +411,7 @@ class otv_ds_obj extends class_base
 
 	function get_objects($ob, $fld = NULL, $tv_sel = NULL, $params = array())
 	{
+		enter_function("otv_ds_obj::get_objects");
 		$ret = array();
 
 		// if the folder is specified in the url, then show that
@@ -440,6 +441,7 @@ class otv_ds_obj extends class_base
 		}
 		if (!is_oid($ob->id()))
 		{
+			exit_function("otv_ds_obj::get_objects");
 			return;
 		}
 		if (!$parent)
@@ -544,24 +546,34 @@ class otv_ds_obj extends class_base
 
 		}
 
+		enter_function("otv_ds_obj::get_objects::list");
 		$ol = new object_list($_ft);
-		$ol->sort_by_cb(array(&$this, "_obj_list_sorter"));
+		//$ol->sort_by_cb(array(&$this, "_obj_list_sorter"));
+		exit_function("otv_ds_obj::get_objects::list");
+
 		$classlist = aw_ini_get("classes");
 		$fields = $this->get_fields($ob, true);
 
 		$ret = array();
 		classload("core/icons", "image");
-		for($t = $ol->begin(); !$ol->end(); $t = $ol->next())
+
+		enter_function("otv_ds_obj::get_objects::arr");
+		$ar = $ol->arr();
+		exit_function("otv_ds_obj::get_objects::arr");
+		
+		enter_function("otv_ds_obj::get_objects::loop");
+		foreach($ar as $t)
 		{
 			$url = $target = $fileSizeBytes = $fileSizeKBytes = $fileSizeMBytes = "";
 			$caption = $t->name();
-			if ($t->class_id() == CL_EXTLINK)
+			$clid = $t->class_id();
+			if ($clid == CL_EXTLINK)
 			{
 				$li = get_instance(CL_EXTLINK);
 				list($url,$target,$caption) = $li->draw_link($t->id());
 			}
 			else
-			if ($t->class_id() == CL_FILE)
+			if ($clid == CL_FILE)
 			{
 				$fi = get_instance(CL_FILE);
 				$url = $fi->get_url($t->id(),$t->name());
@@ -575,7 +587,7 @@ class otv_ds_obj extends class_base
 				$fileSizeMBytes = number_format(file::get_file_size($t->prop('file'))/(1024*1024),2);
 			}
 			else
-			if ($t->class_id() == CL_MENU)
+			if ($clid == CL_MENU)
 			{
 				$url = aw_url_change_var("tv_sel", $t->id());
 			}
@@ -600,7 +612,7 @@ class otv_ds_obj extends class_base
 				$url = "";
 			}
 
-			if ($t->class_id() == CL_FILE && $ob->prop("file_show_comment"))
+			if ($clid == CL_FILE && $ob->prop("file_show_comment"))
 			{
 				$_name = parse_obj_name($t->comment());
 			}
@@ -616,17 +628,17 @@ class otv_ds_obj extends class_base
 				"url" => $url,
 				"target" => $target,
 				"comment" => $t->comment(),
-				"type" => $classlist[$t->class_id()]["name"],
+				"type" => $classlist[$clid]["name"],
 				"add_date" => $t->created(),
 				"mod_date" => $t->modified(),
 				"adder" => $t->createdby(),
 				"modder" => $t->modifiedby(),
-				"icon" => image::make_img_tag(icons::get_icon_url($t->class_id(), $t->name())),
+				"icon" => image::make_img_tag(icons::get_icon_url($clid, $t->name())),
 				"fileSizeBytes" => $fileSizeBytes,
 				"fileSizeKBytes" => $fileSizeKBytes,
 				"fileSizeMBytes" => $fileSizeMBytes,
 				"change" => html::href(array(
-					"url" => $this->mk_my_orb("change", array("id" => $t->id(), "section" => aw_global_get("section")), $t->class_id()),
+					"url" => $this->mk_my_orb("change", array("id" => $t->id(), "section" => aw_global_get("section")), $clid),
 					"caption" => html::img(array(
 						"url" => aw_ini_get("baseurl")."/automatweb/images/icons/edit.gif",
 						"border" => 0
@@ -641,7 +653,17 @@ class otv_ds_obj extends class_base
 				{
 					if ($ff_n != "type")
 					{
-						$ret[$t->id()][$ff_n] = $t->prop_str($ff_n);
+						if (isset($params["sel_cols"]))
+						{
+							if ($params["sel_cols"][$ff_n] == 1)
+							{
+								$ret[$t->id()][$ff_n] = $t->prop_str($ff_n);
+							}
+						}
+						else
+						{
+							$ret[$t->id()][$ff_n] = $t->prop_str($ff_n);
+						}
 					}
 					else
 					{
@@ -661,6 +683,7 @@ class otv_ds_obj extends class_base
 			$ret[$t->id()]["name"] = $_name;
 			$ret[$t->id()]["jrk"] = $t->ord();
 		}
+		exit_function("otv_ds_obj::get_objects::loop");
 
 		foreach($ob->connections_from(array("type" => "RELTYPE_TRANSFORM")) as $c)
 		{
@@ -669,6 +692,7 @@ class otv_ds_obj extends class_base
 			$tr_i->transform($tr, $ret);
 		}
 
+		exit_function("otv_ds_obj::get_objects");
 		return $ret;
 	}
 
