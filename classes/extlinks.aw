@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.1 2001/05/19 23:31:12 duke Exp $
 // Väliste linkide haldamise klass
 if (!$GLOBALS[extlinks]) {
 	$GLOBALS[extlinks] = 1;
@@ -14,7 +15,7 @@ class extlinks extends aw_template {
 		$q = "INSERT INTO extlinks (id,oid,url,name,hits,newwindow,descript,type,docid,doclinkcollection) 
 						VALUES('$id','$oid','$url','$name','$hits','$newwindow','$desc','$type','$docid','$doclinkcollection')";
 		$this->db_query($q);
-		$this->log_action($GLOBALS["uid"],"link","Lisas lingi $name");
+		$this->_log("link","Lisas lingi $name");
 	}
 
 	function save_link($args) {
@@ -36,16 +37,16 @@ class extlinks extends aw_template {
 		$this->db_query($q);
 		$this->upd_object(array("oid" => $lid,
 					"name" => $name));
-		$this->log_action($GLOBALS["uid"],"link","Muutis linki $name");
+		$this->_log("link","Muutis linki $name");
 	}
 
 	function get_link($id) {
 		$q = "SELECT extlinks.*,objects.* FROM extlinks LEFT JOIN objects ON objects.oid = extlinks.id WHERE id = '$id'";
 		$this->db_query($q);
 		$row = $this->db_fetch_row();
-		if ($row[type] == "int")
+		if ($row["type"] == "int")
 		{
-			$row[url] = $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."?section=".$row[docid];
+			$row["url"] = $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."?section=".$row["docid"];
 		}
 		return $row;
 	}
@@ -63,7 +64,7 @@ class extlinks extends aw_template {
 						VALUES ('$id',$t,'$host','$uid')";
 		$this->db_query($q);
 		$name = $this->db_fetch_field("SELECT name FROM objects where oid = $id","name");
-		$this->log_action($GLOBALS["uid"],"link","Klikkis lingil $name");
+		$this->_log("link","Klikkis lingil $name");
 	}
 
 };
