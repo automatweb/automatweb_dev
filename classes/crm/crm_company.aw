@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.75 2004/08/31 15:15:22 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.76 2004/08/31 16:19:03 sven Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -4132,6 +4132,13 @@ class crm_company extends class_base
    	 			"text" => $menu["name"],
     		));
 		}
+		
+		$tb->add_button(array(
+			'name' => 'del',
+			'img' => 'delete.gif',
+			'tooltip' => 'Kustuta valitud objektid',
+			'action' => 'delete_selected_objects',
+		));
 	}
 
 	function do_objects_listing_tree($arr)
@@ -4164,7 +4171,12 @@ class crm_company extends class_base
 	}
 	
 	function do_object_table_header(&$table)
-	{	
+	{
+		$table->define_field(array(
+			"name" => "icon",
+			"width" => 15
+		));
+			
 		$table->define_field(array(
 			"name" => "name",
 			"caption" => "Nimi",
@@ -4189,8 +4201,8 @@ class crm_company extends class_base
 		));
 			
 		$table->define_chooser(array(
-			"name" => "oid",
-			"field" => "sel",
+			"name" => "select",
+			"field" => "select",
 		));
 	}
 	
@@ -4210,8 +4222,25 @@ class crm_company extends class_base
 			"parent" => $arr["request"]["parent"] ? $arr["request"]["parent"] : $arr["obj_inst"]->id(),
 			"class_id" => $class_ids 
 		));
-		$arr["prop"]["vcl_inst"]->data_from_ol($ol);
 		
+		$table = &$arr["prop"]["vcl_inst"];
+		
+		get_instance("icons");
+		foreach ($ol->arr() as $item)
+		{
+			$table->define_data(array(
+				"class_id" => $item->class_id(),
+				"name" => html::href(array(
+						"url" => html::get_change_url($item->id()),
+						"caption" => $item->name(),
+						)),
+				"modified" => get_lc_date($item->modified()),
+				"select" => $item->id(),
+				"icon" => html::img(array(
+					"url" => icons::get_icon_url($item->class_id()),
+				)),
+			));
+		}
 	}
 	
 	function do_objects_listing_table($arr)
@@ -4270,8 +4299,54 @@ class crm_company extends class_base
 			"sortable" => 1,
 		));
 		
+		$project_conns = new connection();
+	
+		if(!$arr["request"]["org_id"])
+		{
+			return;
+		}
 		
+		$project_conns = $project_conns->find(array(
+			"to" => $arr["request"]["org_id"],
+			"reltype" => 2,
+			"from.class_id" => CL_PROJECT
+		));
 		
+		if(count($project_conns) == 0)
+		{
+			return 0;
+		}
+		
+		foreach ($project_conns as $conn)
+		{
+			$tmp_ids[] = $conn["from"];
+		}
+		
+		$ol = new object_list(array(
+			"oid" => $tmp_ids,
+		));
+		
+		foreach ($ol->arr() as $project)
+		{
+			
+			$participants = $project->connections_from(array(
+				"type" => "RELTYPE_PARTICIPANT",
+			));
+			
+			foreach ($participants as $participant)
+			{
+				$partic_row .= " ".html::href(array(
+					"url" => html::get_change_url($participant->prop("to")),
+					"caption" => $participant->prop("to.name"),
+				)); 
+			}
+			
+			$table->define_data(array(
+				"project_name" => $project->name(),
+				"project_participants"	=> $partic_row,
+				"project_created" => get_lc_date($project->created())
+			));
+		}
 	}
 }
 ?>
