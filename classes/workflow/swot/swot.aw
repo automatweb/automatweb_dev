@@ -2,7 +2,7 @@
 
 /*
 
-@classinfo syslog_type=ST_SWOT relationmgr=yes
+@classinfo syslog_type=ST_SWOT relationmgr=yes no_status=1
 
 @groupinfo general caption=Üldine
 @groupinfo strengths caption=Tugevused
@@ -13,23 +13,25 @@
 
 @default table=objects
 @default group=general
+@default field=meta
+@default method=serialize
 
-@property swot_folder type=relpicker reltype=RELTYPE_SWOT_FOLDER multiple=1 field=meta method=serialize
+@property swot_folder type=relpicker reltype=RELTYPE_SWOT_FOLDER multiple=1 
 @caption SWOT Objektide kataloogid
 
-@property strengths type=text group=strengths field=meta method=serialize no_caption=1
+@property strengths type=text group=strengths no_caption=1
 @caption Tugevused
 
-@property weaknesses type=text group=weaknesses field=meta method=serialize no_caption=1
+@property weaknesses type=text group=weaknesses no_caption=1
 @caption Norkused
 
-@property opportunities type=text group=opportunities field=meta method=serialize no_caption=1
+@property opportunities type=text group=opportunities no_caption=1
 @caption Voimalused
 
-@property threats type=text group=threats field=meta method=serialize no_caption=1
+@property threats type=text group=threats no_caption=1
 @caption Ohud
 
-@property view type=text group=view field=meta method=serialize no_caption=1
+@property view type=text group=view no_caption=1
 
 @reltype SWOT_FOLDER value=1 clid=CL_MENU
 @caption SWOT objektide kataloog
@@ -54,23 +56,23 @@ class swot extends class_base
 		switch($prop['name'])
 		{
 			case "strengths":
-				$prop['value'] = $this->_mk_table($arr['obj']['oid'], CL_SWOT_STRENGTH);
+				$prop['value'] = $this->_mk_table($arr['obj_inst']->id(), CL_SWOT_STRENGTH);
 				break;
 
 			case "weaknesses":
-				$prop['value'] = $this->_mk_table($arr['obj']['oid'], CL_SWOT_WEAKNESS);
+				$prop['value'] = $this->_mk_table($arr['obj_inst']->id(), CL_SWOT_WEAKNESS);
 				break;
 
 			case "opportunities":
-				$prop['value'] = $this->_mk_table($arr['obj']['oid'], CL_SWOT_OPPORTUNITY);
+				$prop['value'] = $this->_mk_table($arr['obj_inst']->id(), CL_SWOT_OPPORTUNITY);
 				break;
 
 			case "threats":
-				$prop['value'] = $this->_mk_table($arr['obj']['oid'], CL_SWOT_THREAT);
+				$prop['value'] = $this->_mk_table($arr['obj_inst']->id(), CL_SWOT_THREAT);
 				break;
 
 			case "view":
-				$prop['value'] = $this->show(array("oid" => $arr['obj']['oid']));
+				$prop['value'] = $this->show(array("oid" => $arr['obj_inst']->id()));
 				break;
 		}
 		return PROP_OK;
@@ -78,20 +80,18 @@ class swot extends class_base
 
 	function _mk_table($oid, $clid)
 	{
-		$ob = $this->get_object($oid);
+		$ob = new object($oid);
 
-		$sobjs = array();
+		$arr = new aw_array($ob->prop('swot_folder'));
 
-		$arr = new aw_array($ob['meta']['swot_folder']);
-		foreach($arr->get() as $parent)
-		{
-			$sobjs += $this->get_objects_below(array(
-				"parent" => $parent,
-				"class" => $clid,
-				"full" => true,
-				"ret" => ARR_ALL
-			));
-		}
+
+
+		$sobjs = new object_list(array(
+                        "class_id" => $clid,
+			// is this right?
+                        "parent" => $ob->prop("swot_folder"),
+                ));
+
 
 		$tb = new aw_table(array("layout" => "generic",'prefix' => "sw_".$clid));
 
@@ -112,15 +112,17 @@ class swot extends class_base
 			"name" => "comment",
 			"sortable" => 1
 		));
-		foreach($sobjs as $s_oid => $s_row)
+                foreach($sobjs->arr() as $sobj)
 		{
+			$s_row = array();
 			$s_row["name"] = html::href(array(
-				'url' => $this->mk_my_orb("change", array("id" => $s_row["oid"]),$this->cfg["classes"][$clid]["file"]),
-				'caption' => $s_row['name']
+				'url' => $this->mk_my_orb("change", array("id" => $sobj->id()),$this->cfg["classes"][$clid]["file"]),
+				'caption' => $sobj->name(),
 			));
 
-			
-			$s_row["clf"] = $this->db_fetch_field("SELECT name FROM objects WHERE oid = '".$s_row['meta']['clf']."'","name");
+			$clf_obj = new object($sobj->prop("clf"));
+			$s_row["clf"] = $clf_obj->name();
+
 			$tb->define_data($s_row);
 		}
 		$tb->set_default_sortby("jrk");
