@@ -9,7 +9,7 @@
 @default table=objects
 @default group=general
 
-@property change_folder type=relpicker type=RELATION_CHANGE_FOLDER field=meta method=serialize
+@property change_folder type=relpicker reltype=RELATION_CHANGE_FOLDER field=meta method=serialize
 @caption Muudatuste kataloog
 
 */
