@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.59 2005/01/12 11:49:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.60 2005/02/01 14:52:04 kristo Exp $
 // keywords.aw - dokumentide võtmesõnad
 /*
 @tableinfo keywords index=id master_table=keywords master_index=brother_of
@@ -16,6 +16,9 @@
 
 @reltype FILE value=2 clid=CL_FILE
 @caption Fail
+
+@reltype LINK value=3 clid=CL_EXTLINK
+@caption Link
 */
 
 define("ARR_LISTID", 1);
@@ -54,7 +57,9 @@ class keywords extends class_base
 	{
 		extract($id);
 		$obj = &obj($id);
-		$conns = $obj->connections_from(array("type" => "RELTYPE_KEYWORD"));
+		$conns = $obj->connections_from(array("type" => 
+			array(1,2,3)
+		));
 		
 		$si = get_instance("install/site_list");
 		if($conns)
@@ -77,28 +82,40 @@ class keywords extends class_base
 				{
 					$burl = $si->get_url_for_site($doc->site_id());
 
-					$al = get_instance("aliasmgr");
-					$lead = $doc->prop("lead");
-					$meta = $doc->meta();
-					$al->parse_oo_aliases($doc->id(),&$lead,array("templates" => &$this->templates,"meta" => &$meta));
-
-					$u1 = $doc->prop("user1");
-					if ($u1 != "")
+					if ($doc->class_id() == CL_EXTLINK || $doc->class_id() == CL_FILE)
 					{
-						$u1 .= " / ";
+						$this->vars(array(	
+							"target" => ($doc->prop("newwindow") ? "target=\"blank\"" : ""),
+							"link" => obj_link($doc->id()),
+							"title" => $doc->name()
+						));
+						$line .= $this->parse("LINE_OTHER");
 					}
-					$this->vars(array(
-						"date" => get_lc_date($doc->prop("modified")),
-						"title" => $doc->prop("title"),
-						"author" => $doc->prop("author"),
-						"id" => $doc->id(),
-						"lead" => $lead."<br>",
-						"link" => $burl."/".$doc->id(),
-						"target" => ($doc->site_id() != $this->cfg["site_id"]) ? " target=\"_blank\" " : "",
-						"site_url" => $burl,
-						"user1" => $u1
-					));
-					$line.= $this->parse("LINE");			
+					else
+					{
+						$al = get_instance("aliasmgr");
+						$lead = $doc->prop("lead");
+						$meta = $doc->meta();
+						$al->parse_oo_aliases($doc->id(),&$lead,array("templates" => &$this->templates,"meta" => &$meta));
+
+						$u1 = $doc->prop("user1");
+						if ($u1 != "")
+						{
+							$u1 .= " / ";
+						}
+						$this->vars(array(
+							"date" => get_lc_date($doc->prop("modified")),
+							"title" => $doc->prop("title"),
+							"author" => $doc->prop("author"),
+							"id" => $doc->id(),
+							"lead" => $lead."<br>",
+							"link" => $burl."/".$doc->id(),
+							"target" => ($doc->site_id() != $this->cfg["site_id"]) ? " target=\"_blank\" " : "",
+							"site_url" => $burl,
+							"user1" => $u1
+						));
+						$line.= $this->parse("LINE");			
+					}
 				}
 				$key_obj = &obj($id);
 				$this->vars(array(

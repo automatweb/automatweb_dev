@@ -32,6 +32,11 @@
                   <clid>CL_FILE</clid>
                   <caption>Fail</caption>
             </FILE>
+            <LINK>
+                  <value>3</value>
+                  <clid>CL_EXTLINK</clid>
+                  <caption>Link</caption>
+            </LINK>
       </reltypes>
 </properties>
 
