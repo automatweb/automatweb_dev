@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.6 2005/02/21 08:49:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.7 2005/03/08 13:27:31 kristo Exp $
 // orders_order.aw - Tellimus 
 /*
 @classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes
@@ -551,10 +551,7 @@ class orders_order extends class_base
 		$order = &obj($_SESSION["order_cart_id"]);
 		if ($order->class_id() != CL_ORDERS_ORDER)
 		{
-			error::raise(array(
-				"id" => "ERR_WTF",
-				"msg" => "orders_order::send_order(): order_cart_id in session is of wrong class!!"
-			));
+			return;
 		}
 		$order->set_prop("order_completed", 1);
 		if($order_form->prop("orders_to_mail"))

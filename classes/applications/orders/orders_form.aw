@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.8 2005/02/21 08:49:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.9 2005/03/08 13:27:31 kristo Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -225,6 +225,13 @@ class orders_form extends class_base
 			$_SESSION["order_cart_id"] = $order->id();
 			$_SESSION["order_form_id"] = $arr["alias"]["to"];
 			
+			if (!is_oid($_SESSION["order_form_id"]) || !$this->can("view", $_SESSION["order_form_id"]))
+			{
+				$ol = new object_list(array("class_id" => CL_ORDERS_FORM));
+				$tmp = $ol->begin();
+				$_SESSION["order_form_id"] = $tmp->id();
+			}
+
 			$form_obj = &obj($_SESSION["order_form_id"]);
 		
 			if($conns = $form_obj->connections_from(array("type" => 4)))
@@ -557,6 +564,10 @@ class orders_form extends class_base
 
 	function get_cart_items()
 	{
+		if (!is_oid($_SESSION["order_cart_id"]))
+		{
+			return aw_ini_get("baseurl");
+		}
 		$order = &obj($_SESSION["order_cart_id"]);
 		$form = &obj($_SESSION["order_form_id"]);
 		$conns = $order->connections_from(array(
