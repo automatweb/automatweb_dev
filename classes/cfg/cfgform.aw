@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.44 2004/11/25 13:29:52 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.45 2004/11/26 06:32:40 ahti Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -293,8 +293,8 @@ class cfgform extends class_base
 	{
 		$this->_init_properties($obj->prop("subclass"));
 
-		$this->grplist = $obj->meta("cfg_groups");
-		$this->prplist = $obj->meta("cfg_proplist");
+		$this->grplist = safe_array($obj->meta("cfg_groups"));
+		$this->prplist = safe_array($obj->meta("cfg_proplist"));
 
 	}
 
@@ -852,6 +852,8 @@ class cfgform extends class_base
 						};
 					};
 				};
+				
+				// if there's any additional properties concerning object, then save them too just in case..
 
 				//$this->cfg_groups = $grplist;
 				$this->cfg_proplist = $prplist;
@@ -997,7 +999,6 @@ class cfgform extends class_base
 			$ret[$pn] = $pd;
 		}
 		$els = $ret;
-
 		$rd = get_instance(CL_REGISTER_DATA);
 		$els = $rd->parse_properties(array(
 			"properties" => $els,
@@ -1056,7 +1057,6 @@ class cfgform extends class_base
 			}
 			$els = $tmp;
 		}
-
 		$tmp = array();
 		foreach($els as $pn => $pd)
 		{
@@ -1069,7 +1069,6 @@ class cfgform extends class_base
 			{
 				$pd["value"] = $arr["values"][$pn];
 			}
-
 			if ($pd["type"] == "classificator")
 			{
 				$pd["object_type_id"] = $arr["ot"];
@@ -1079,16 +1078,13 @@ class cfgform extends class_base
 					$pd["value"] = $tmpo->name();
 				}
 			}
-
 			if ($pd["type"] == "textarea" && $arr["for_show"])
 			{
 				$pd["value"] = nl2br($pd["value"]);
 			}
-
 			$tmp[$pn] = $pd;
 		}
 		$els = $tmp;
-
 		return $els;
 	}
 };
