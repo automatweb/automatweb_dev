@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.14 2003/04/10 14:19:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.15 2003/04/28 16:11:06 duke Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -491,7 +491,7 @@ class ml_member extends class_base
 		if ($check)
 		{
 			$this->delete_object($check["oid"],$this->clid);
-			$q = "DELETE FROM ml_users WHERE oid = '$check[oid]'";
+			$q = "DELETE FROM ml_users WHERE id = '$check[oid]'";
 			$this->db_query($q);
 		};
 
