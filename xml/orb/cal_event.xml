@@ -1,8 +1,7 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="cal_event">
-
-		<action name="new">
+	<class name="cal_event" folder="calendar" extends="class_base">
+		<action name="_new">
 			<function name="add">
 				<arguments>
 					<required name="parent"/>
@@ -12,7 +11,7 @@
 			</function>
 		</action>
 
-		<action name="change">
+		<action name="_change">
 			<function name="change">
 				<arguments>
 					<required name="id"/>
@@ -21,7 +20,7 @@
 			</function>
 		</action>
 
-		<action name="submit">
+		<action name="_submit">
 			<function name="submit"/>
 		</action>
 
@@ -60,7 +59,7 @@
 			</function>
 		</action>
 
-		<action name="addalias">
+		<action name="_addalias">
 			<function name="addalias">
 				<arguments>
 					<required name="alias" type="int"/>
@@ -68,13 +67,6 @@
 				</arguments>
 			</function>
 		</action>
-
-		<action name="test">
-			<function name="test" all_args="1">
-				<arguments/>
-			</function>
-		</action>
-		
 
 	</class>
 </orb>
