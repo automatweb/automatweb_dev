@@ -1,0 +1,19 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>contents</name>
+            <type>text</type>
+            <store>no</store>
+            <group>general</group>
+            <caption>Sisu</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_RELATION</syslog_type>
+      </classinfo>
+      <groupinfo>
+            <general>
+                  <caption>Üldine</caption>
+            </general>
+      </groupinfo>
+</properties>
+
