@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.174 2003/11/20 13:26:43 duke Exp $
+// $Id: class_base.aw,v 2.175 2003/11/27 12:00:38 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1421,6 +1421,8 @@ class class_base extends aw_template
 			return false;
 		};
 
+
+
 		if (($val["type"] == "toolbar") && is_object($val["toolbar"]))
 		{
 			$val["value"] = $val["toolbar"]->get_toolbar();
@@ -1780,6 +1782,17 @@ class class_base extends aw_template
 							"toolbar" => &$val["toolbar"],
 						));
 					};
+				};
+
+				if (is_array($val["items"]) && sizeof($val["items"]) > 0)
+				{
+					$tmp = array();
+					foreach($val["items"] as $item)
+					{
+						$this->convert_element(&$item);
+						$tmp[] = $item;
+					};
+					$val["items"] = $tmp;
 				};
 
 				$this->convert_element(&$val);
