@@ -1,24 +1,17 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl.aw,v 2.1 2001/05/16 03:00:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl.aw,v 2.2 2001/06/18 21:06:30 kristo Exp $
 // acl.aw - Access Control Lists
 
 global $orb_defs;
 $orb_defs["acl"] = "xml";
 
-class acl extends aw_template {
-
+class acl extends aw_template 
+{
 	function acl() 
 	{
 		$this->db_init();
 		$this->tpl_init("automatweb/acl");
 	}
-
-	// these are placeholders, so that everything that uses these, will still work
-	function query_parent($oid=-1) {} 
-	function query($oid = -1) {} 
-	function sql() { return "acl";}
-	function get($tp) {	return true;}
-	function add($oid = -1) {}
 
 	////
 	// !Loeb ja parsib ACLi vormi XML deffi
@@ -30,8 +23,7 @@ class acl extends aw_template {
 		if (!$contents)
 		{
 			// siia ei tohiks me tegelikult mitte kunagi sattuda
-			print "smth bad just happened. Please report to dev@struktuure.ee immediately";
-			die();
+			$this->raise_error("smth bad just happened. Please report to dev@struktuure.ee immediately",true);
 		};
 		list($tags,) = parse_xml_def(array(
 					"xml" => $contents,
@@ -47,7 +39,6 @@ class acl extends aw_template {
 		return $fields;
 
 	}
-		
 
 	////
 	// !Kuvab ACL-i muutmisvormi. Orb compatible
@@ -65,31 +56,32 @@ class acl extends aw_template {
 		// andmed väljade kohta käes, nüüd kuvame vormi
 		// dump_struct($fields);
 		$bld = new aw_template;
-                $bld->tpl_init("automatweb/acl");
-                $bld->read_template("cells.tpl");
+    $bld->tpl_init("automatweb/acl");
+    $bld->read_template("cells.tpl");
 
 		$this->read_template("editacl.tpl");
 
 		while(list($k,$v) = each($fields))
-                {
-                        $bld->vars(array(
-                                "colspan" => 1,
-                                "align"   => "left",
-                                "content" => $v["caption"]));
-                        $c.= $bld->parse("title");
+		{
+			$bld->vars(array(
+				"colspan" => 1,
+				"align" => "left",
+        "content" => $v["caption"]
+			));
+      $c.= $bld->parse("title");
  
-                        if ($v["special"])
-                        {
-                                $this->vars(array(
-                                        "caption" => $v["caption"],
-                                        "help"    => $v["help"],
-                                        "key"     => $v["value"],
-                                ));
-                                $help .= $this->parse("help");
-                                $keys .= $this->parse("xfield");
-                        };
-                        $count++;
-                };
+      if ($v["special"])
+      {
+				$this->vars(array(
+          "caption" => $v["caption"],
+          "help"    => $v["help"],
+          "key"     => $v["value"],
+        ));
+        $help .= $this->parse("help");
+        $keys .= $this->parse("xfield");
+      };
+      $count++;
+    };
 		$this->vars(array(
 			"header" => $c,
 			"colspan" => $count+2,
@@ -166,15 +158,41 @@ class acl extends aw_template {
 		return $retval;
 	}
 		
+	function xml_start_element($parser,$name,$attrs) 
+	{ 
+		$temp = "";
+		if ($name == "FIELD") {
+			while(list($k,$v) = each($attrs)) {
+				$temp[$k] = $v;
+			};
+			$this->data[] = $temp;
+		};
+	}
+	
+	function xml_end_element($parser,$name) 
+	{
+	}
+
+	function __get_config($content) 
+	{
+		$this->data = array();
+		$xml_parser = xml_parser_create();
+		xml_set_object($xml_parser,&$this);
+		xml_set_element_handler($xml_parser,"xml_start_element","xml_end_element");
+		if (!xml_parse($xml_parser,$content)) 
+		{
+			echo(sprintf("XML error: %s at line %d",
+                                      xml_error_string(xml_get_error_code($xml_parser)),
+                                      xml_get_current_line_number($xml_parser)));
+    };
+		return $this->data;
+	}
 
 	////
 	// !Kuvab ACL muutmise vormi mingi objekti jaoks
 	// user - kas vormi kuvatakse saidi sees? (kodukataloogis)
 	function gen_acl_form($oid,$def = -1,$user = 0) 
 	{
-		sysload("config");
-		$config = new db_config;
-
 		global $basedir;
 		if ($user == 1)
 		{
@@ -190,14 +208,14 @@ class acl extends aw_template {
 		};
 		$name = "$basedir/xml/acl/$fname";
 		$xmldata = $this->get_file(array("file" => $name));
-		$fields = $config->__get_config($xmldata);
+		$fields = $this->__get_config($xmldata);
 
 		$bld = new aw_template;
 		$bld->tpl_init("automatweb/acl");
-	  	$bld->read_template("cells.tpl");
+	  $bld->read_template("cells.tpl");
 
-	  	global $PHP_SELF;
-	  	$c = "";
+	  global $PHP_SELF;
+	  $c = "";
 		$help = "";
 		$keys = "";
 		$count = 0;
@@ -208,8 +226,9 @@ class acl extends aw_template {
 			$bld->vars(array(
 				"colspan" => 1,
 				"align"   => "left",
-				"content" => $v["CAPTION"]));
-      			$c.= $bld->parse("title");
+				"content" => $v["CAPTION"]
+			));
+    	$c.= $bld->parse("title");
 
 			if ($v[SPECIAL]) 
 			{
