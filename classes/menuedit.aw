@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.257 2003/03/11 15:28:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.258 2003/03/12 11:34:13 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -2666,18 +2666,11 @@ class menuedit extends aw_template
 				}
 			}
 
-			// je, I know, this will kind of slow down things
-			// hmhm. taimisin seda vibe esilehel - 0.05 sek. niiet mitte oluliselt. - terryf
-			// kuigi, seda siin funxioonis kasutatakse aint n2dala vasaku paani tegemisex exole. ja see v6ix ikka n2dala koodis olla. 
-			// njah, praegu ainult nï¿½alas. Aga idee on selles, et metainfo vï¿½ja kasutad ka muu info salvestamiseks,
-			// mitte teha jarjest uusi valju juurde - duke
-			// 
-			// ok, point taken. nyt kasutatakse seda objekti metadatat ka ntx sellex et selektitud menyy pildi urli salvestada. - terryf
 			// it's already uncompressed, use it
 			$meta = $row["meta"];
 
-			// see on siis nï¿½ala parema paani leadide nï¿½tamine
-			// nme hï¿½k. FIX ME.
+			// see on siis nädala parema paani leadide nï¿½tamine
+			// nme häkk. FIX ME.
 			if (isset($meta["show_lead"]) && $meta["show_lead"])
 			{
 				$activeperiod = aw_global_get("act_per_id");
@@ -4802,6 +4795,8 @@ class menuedit extends aw_template
 
 	////
 	// !Fetches the menu chain for the current object from the menu cache for further use
+	// XXX: this should be moved to core - because at least one other class - document
+	// uses this to figure out whether a cfgform based template should be shown -- duke
 	function build_menu_chain($section)
 	{
 		$parent = $section;
@@ -4823,6 +4818,7 @@ class menuedit extends aw_template
 			"ftpl_lead" => "",
 			"tpl_edit" => "",
 			"ftpl_edit" => "",
+			"tpl_edit_cfgform" => "",
 		);
 	
 		while($parent)
