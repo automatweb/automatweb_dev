@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.94 2004/07/15 13:20:22 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.95 2004/08/21 10:22:55 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -573,10 +573,10 @@ class users_user extends aw_template
 
 	function fetchgroup($gid) 
 	{
-		$q = "SELECT groups.oid,groups.gid,count(groupmembers.gid) AS gcount FROM groups 
+		$q = "SELECT groups.oid,groups.gid,count(groupmembers.gid) AS gcount,groups.priority FROM groups 
 					LEFT JOIN groupmembers on (groups.gid = groupmembers.gid)
 					WHERE groups.gid = '$gid'
-					GROUP BY groups.gid,groups.oid";
+					GROUP BY groups.gid,groups.oid,groups.priority";
 		$this->db_query($q);
 		$retval = $this->db_fetch_row();
 		return $retval;
@@ -747,7 +747,9 @@ class users_user extends aw_template
 
 		// teeme default grupi
 		aw_disable_acl();
-		$gid = $this->addgroup(0, $uid, GRP_DEFAULT, 0, USER_GROUP_PRIORITY, 0, 1);
+		// in the bloody eau database the object with oid 1 is the groups folder. bloody hell.
+		// this really needs a better solution :(
+		$gid = $this->addgroup(0, $uid, GRP_DEFAULT, 0, USER_GROUP_PRIORITY, 0, (aw_ini_get("site_id") == 65 ? 5 : 1));
 		aw_restore_acl();
 
 		// lisame kasutaja default grupi liikmex
