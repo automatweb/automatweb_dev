@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.11 2003/10/30 16:47:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.12 2003/11/04 13:16:44 duke Exp $
 // imap.aw - IMAP login 
 /*
 
@@ -182,9 +182,6 @@ class imap extends class_base
 		$last_check = $ovr[$this->mboxspec];
 		$new_check = $this->_get_ovr_checksum($mboxinf);
 
-		//print "lc = $last_check<br>";
-		//print "nc = $new_check<br>";
-
 		$count = $mboxinf->Nmsgs;
 		$this->count = $count;
 
@@ -197,9 +194,6 @@ class imap extends class_base
 			$ovr[$this->mboxspec] = $new_check;
 			$this->_set_overview($ovr);
 			$mboxinf = imap_mailboxmsginfo($this->mbox);
-
-			$src = $cache->file_get($this->mbox_cache_id);
-			#$mbox_over = aw_unserialize($src);
 
 			if (!is_array($mbox_over["contents"]))
 			{
@@ -512,7 +506,6 @@ class imap extends class_base
 
 	function _get_overview()
 	{
-		$this->overview_cache_id = "imap" . md5("imap-over".$this->id);
 		$cache = get_instance("cache");
 		$fl = $cache->file_get($this->overview_cache_id);
 		$ovr = array();
