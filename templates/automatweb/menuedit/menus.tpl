@@ -53,7 +53,8 @@ function paste()
 <!-- END SUB: PASTE -->
 </b>
 </td>
-<td height="15" colspan="11" class="fgtitle_new" valign=center background="images/uus_sinine.gif" align=right><a href='http://www.automatweb.com' target="_new"><img border=0 src='images/jessss1.gif'></a>
+<td height="15" colspan="11" class="fgtitle_new" valign=center background="images/uus_sinine.gif" align=right><a href='orb.aw?action=list&class=bugtrack&filt=all' class='fgtitle_link'>BugTrack</a></td>
+<td height="15" class="fgtitle_new" valign=center background="images/uus_sinine.gif" align=right><a href='http://www.automatweb.com' target="_new"><img border=0 src='images/jessss1.gif'></a>
 </td>
 </tr>
 </table>
