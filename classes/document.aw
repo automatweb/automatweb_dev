@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.253 2004/05/11 06:32:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.254 2004/05/12 10:54:23 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -968,7 +968,8 @@ class document extends aw_template
 				$pts.=$this->parse("RATE");
 		};
 
-		if ($this->is_template("LINKLIST"))
+		$dc_obj = new object($doc["docid"]);
+		if ($this->is_template("LINKLIST") && $dc_obj->prop("no_topic_links") != 1)
 		{
 
 			$pos = strpos($doc["content"],"Vaata lisaks:");
@@ -981,7 +982,6 @@ class document extends aw_template
 			{
 				$doc["content"] = substr($doc["content"],0,$pos);
 			};
-			$dc_obj = new object($doc["docid"]);
 			$conns = $dc_obj->connections_from(array(
 				"class" => array(CL_EXTLINK),
 			));
@@ -1018,7 +1018,7 @@ class document extends aw_template
 			// generate a list of objects
 		}
 		
-		if ($this->is_template("DOCLIST"))
+		if ($this->is_template("DOCLIST") && $dc_obj->prop("no_topic_links") != 1)
 		{
 
 			$pos = strpos($doc["content"],"Vaata lisaks:");
@@ -1152,8 +1152,8 @@ class document extends aw_template
 		}
 
 		$_date = $doc["doc_modified"] > 1 ? $doc["doc_modified"] : $doc["modified"];
-		$date_est = date("d", $_date).". ".get_lc_month(date("m", $_date))." ".date("Y", $_date);
-		$date_est_print = date("d", time()).". ".get_lc_month(date("m", time()))." ".date("Y", time());
+		$date_est = date("j", $_date).". ".get_lc_month(date("m", $_date))." ".date("Y", $_date);
+		$date_est_print = date("j", time()).". ".get_lc_month(date("m", time()))." ".date("Y", time());
 
 		$r_docid = $docid;
 
