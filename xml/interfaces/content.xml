@@ -2,4 +2,5 @@
 <interface>
 	<class id="doc" name="Dokument"/>
 	<class id="image" name="Pildid"/>
+	<class id="gallery_v2" name="Galerii"/>
 </interface>
