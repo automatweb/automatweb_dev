@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.41 2003/05/09 15:41:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.42 2003/05/09 16:37:23 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -2107,6 +2107,10 @@ class form_element extends aw_template
 							if ($_v == $_lbsel)
 							{
 								$html .= $value;
+								$html .= html::hidden(array(
+									"name" => $element_name,
+									"value" => $_v
+								));
 							}
 						}
 					}
