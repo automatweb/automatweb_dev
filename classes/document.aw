@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.11 2001/05/28 16:15:25 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.12 2001/06/05 16:56:11 duke Exp $
 // document.aw - Dokumentide haldus. ORB compatible. Should be used instead of documents.aw
 // defineerime orbi funktsioonid
 global $orb_defs;
@@ -19,7 +19,7 @@ session_register("s_graph_order");
 session_register("s_gallery_sortby");	
 session_register("s_gallery_order");
 
-classload("msgboard");
+classload("msgboard","aw_style");
 // erinevad dokumentide muutmise templated.
 //  kui soovid uut lisada, siis paned selle kataloogi 
 //  /www/automatweb/public/templates/automatweb/documents
@@ -38,7 +38,6 @@ classload("msgboard");
 // http://site/automatweb/periods.aw?oid=foo
 
 // oid siis mingi menyysektsoonid ID. DUH.
-// @desc: dokumentide klass
 class document extends aw_template
 {
 	function document($period = 0)
@@ -47,9 +46,17 @@ class document extends aw_template
 		$this->db_init();
 		// see on selleks, kui on vaja perioodilisi dokumente naidata
 		$this->period = $period;
+		
+		$this->style_engine = new aw_style;
+		global $basedir;
+
+		$xml_def = $this->get_file(array("file" => "$basedir/xml/documents/defaults.xml"));
+                if ($xml_def)
+		{
+			$this->style_engine->define_styles($xml_def);
+		}
 		// siia tuleks kirja panna koik dokumentide tabeli v2ljade nimed,
 		// mida voidakse muuta
-
 		// key on kasutusel selleks, et formeerida logi jaoks moistlik string
 		$this->knownfields = array(
 				"Pealkiri"		=> "title",
@@ -114,6 +121,7 @@ class document extends aw_template
 	// teeb uue kirje documents tabelisse
 	function create_doc($docid)
 	{
+		// hm. Kas siin mitte new_object funktsiooni ei peaks kasutama?
 		$q = "INSERT INTO documents (docid) VALUES ('$docid')";
 		$this->db_query($q);
 	}
@@ -193,10 +201,14 @@ class document extends aw_template
 		return $data;
 	}
 
+	////
+	// !Obsolete?
 	function get_title($docid) {
 		return $this->db_fetch_field("SELECT title FROM documents WHERE docid='$docid'","title");
 	}
 
+	////
+	// !Obsolete?
 	function set_status($docid,$status) {
 		$q = "UPDATE objects 
 			SET status = $status
@@ -205,6 +217,8 @@ class document extends aw_template
 		$this->_log("document","aktiveeris dokumendi $docid");
 	}
 
+	////
+	//! Obsolete?
 	function set_visibility($docid,$vis) {
                 $q = "UPDATE objects
                         SET visible = $vis
@@ -215,11 +229,11 @@ class document extends aw_template
 			
 	// see on lihtsalt wrapper backwards compatibility jaoks
 	function show($docid,$text = "undef",$tpl="plain.tpl",$leadonly = -1,$secID = -1) {
-		$params[docid] 		= $docid;
-		$params[text] 		= $text;
-		$params[tpl] 		= $tpl;
-		$params[leadonly] 	= $leadonly;
-		$params[secID] 		= $secID;
+		$params["docid"] 		= $docid;
+		$params["text"] 		= $text;
+		$params["tpl"] 		= $tpl;
+		$params["leadonly"] 	= $leadonly;
+		$params["secID"] 		= $secID;
 		return $this->gen_preview($params);
 	}
 
@@ -228,49 +242,47 @@ class document extends aw_template
 
 
 	function gen_preview($params) {
-		$docid 		= $params[docid];
-		$text 		= $params[text];
-		$tpl 		= ($params[tpl]) ? $params[tpl] : "plain.tpl";
+		$docid 		= $params["docid"];
+		$text 		= $params["text"];
+		$tpl 		= ($params["tpl"]) ? $params[tpl] : "plain.tpl";
 		// selle votmega antakse ette template source, mille
 		// sisse kood paigutada
-		$tpls		= $params[tpls];
-		$leadonly 	= $params[leadonly];
-		$strip_img      = $params[strip_img];
-		$secID 		= $params[secID];
-		$boldlead	= $params[boldlead];
-		$tplsf		= $params[tplsf];
-		$notitleimg 	= $params[notitleimg];
-		$showlead 	= $params[showlead];
-		$no_strip_lead 	= $params[no_strip_lead];
-		// kui lead_only on antud, siis loeme (vajadusel) ainult 
-
-		// miks kurat siin globaalseid muutujaid peab kasutama. I don't like it
+		$tpls		= $params["tpls"];
+		$leadonly 	= $params["leadonly"];
+		$strip_img      = $params["strip_img"];
+		$secID 		= $params["secID"];
+		$boldlead	= $params["boldlead"];
+		$tplsf		= $params["tplsf"];
+		$notitleimg 	= $params["notitleimg"];
+		$showlead 	= $params["showlead"];
+		$no_strip_lead 	= $params["no_strip_lead"];
+		
 		global $classdir;
 		global $ext;
 	
 		$align= array("k" => "align=\"center\"", "p" => "align=\"right\"" , "v" => "align=\"left\"" ,"" => "");
 	
 		// küsime dokumendi kohta infot
-
 		// muide docid on kindlasti numbriline, aliaseid kasutatakse ainult
 		// menueditis.
 		$doc = $this->fetch($docid);
-		$this->no_right_pane = $doc["no_right_pane"];	// see on sellex et kui on laiem doku, siis menyyeditor tshekib
-		$this->no_left_pane = $doc["no_left_pane"];		// neid muutujaid ja j2tab paani 2ra kui tshekitud on.
 
-																									
 		if (!$doc)
 		{
 			// objekti polnud, bail out
-			return "";
+			return false;
 		};
 		
+		$this->no_right_pane = $doc["no_right_pane"];	// see on sellex et kui on laiem doku, siis menyyeditor tshekib
+		$this->no_left_pane = $doc["no_left_pane"];		// neid muutujaid ja j2tab paani 2ra kui tshekitud on.
+
 		$this->tpl_reset();
 		$this->tpl_init("automatweb/documents");
+
 		// kui tpls anti ette, siis loeme template sealt,
 		// muidu failist.
 		if (strlen($tpls) > 0) {
-			$this->templates[MAIN] = $tpls;
+			$this->templates["MAIN"] = $tpls;
 		} elseif (strlen($tplsf) > 0) {
 			$this->read_template($tplsf);
 		} else {
@@ -284,21 +296,22 @@ class document extends aw_template
 		$this->add_hit($docid);
 
 		// miski kahtlane vark siin. Peaks vist sellele ka cachet rakendama?
-		if (strpos($doc[content], "#telekava_") === false)
+		if (strpos($doc["content"], "#telekava_") === false)
 		{}
 		else
-			return $this->telekava_doc($doc[content]);
+			return $this->telekava_doc($doc["content"]);
 
 		// laeme vajalikud klassid
 		classload("acl","styles","form","table","extlinks","images","gallery");
-		
 
 		$extlinks = new extlinks;
 		$extlinks->db_init();
 		$tbl = new table;
 
 		$img = new db_images;
-		$aliases = $img->get_aliases_for($docid);
+		list($aliases,$idx) = $this->get_aliases(array(
+						"oid" => $docid,
+				));
 		$formlist = array();
 		$fc = 0;
 
@@ -315,11 +328,6 @@ class document extends aw_template
 		 		if (preg_match("/#p(\d+?)(v|k|p|)#/i",$doc[lead],$match)) {
 					$idata = $img->get_img_by_oid($docid,$match[1]);
 					$this->li_cache[$docid] = $idata[url];
-					#if ($idata[url]) {
-						$this->vars(array("imurl" => $idata[url]));
-					#} else {
-					#	$this->vars(array("imurl" => ""));
-					#:w};
 				} else {
 					$this->vars(array("imurl" => "/images/trans.gif"));
 				};
@@ -342,28 +350,80 @@ class document extends aw_template
 				$doc[content] = $txt;
 			};
 		};
+
+		// all the style magic is performed inside the style engine
+		$doc["content"] = $this->style_engine->parse_text($doc["content"]); 
+
+		$mp = $this->register_parser(array(
+					"reg" => "/(#)(\w+?)(\d+?)(v|k|p|)(#)/i",
+					));
+
+		// pildid
+		$this->register_sub_parser(array(
+					"idx" => 2,
+					"match" => "p",
+					"class" => "images",
+					"reg_id" => $mp,
+					"function" => "parse_alias",
+					"templates" => array("image","image_linked"),
+				));
+		// välised lingid
+		$this->register_sub_parser(array(
+					"idx" => 2,
+					"match" => "l", // L
+					"class" => "extlinks",
+					"reg_id" => $mp,
+					"function" => "parse_alias",
+					"templates" => array("link"),
+				));
+		// tabelid	
+		$this->register_sub_parser(array(
+					"idx" => 2,
+					"match" => "t", // L
+					"class" => "table",
+					"reg_id" => $mp,
+					"function" => "parse_alias",
+				));
+
+		// guestbuugid
+		$this->register_sub_parser(array(
+					"idx" => 2,
+					"match" => "b",
+					"class" => "guestbook",
+					"reg_id" => $mp,
+					"function" => "parse_alias",
+				));
+		
+		// failid
+		$this->register_sub_parser(array(
+					"idx" => 2,
+					"match" => "v",
+					"class" => "file",
+					"reg_id" => $mp,
+					"function" => "parse_alias",
+				));
+		
+		// vormid
+		$this->register_sub_parser(array(
+					"idx" => 2,
+					"match" => "f",
+					"class" => "form",
+					"reg_id" => $mp,
+					"function" => "parse_alias",
+				));
+		
+		// graafikud
+		$this->register_sub_parser(array(
+					"idx" => 2,
+					"match" => "g",
+					"class" => "graph",
+					"reg_id" => $mp,
+					"function" => "parse_alias",
+				));
+
+
 	
-		$doc[content] = ereg_replace("<peida>(.*)<\/peida>", "", $doc[content]);
-		$doc[content] = preg_replace("/<alapealkiri>(.*)<\/alapealkiri>/isU","</font></td><tr><td colspan=\"3\" bgcolor=\"#004040\" valign=\"middle\"><font face=\"tahoma, arial\" size=\"2\"><b>\\1</b></font></td></tr><tr><td colspan=\"3\" valign=\"middle\"><font face=\"tahoma, arial\" size=\"2\">",$doc[content]);
-		$doc[content] = preg_replace("/<star>(.*)<\/star>/isU","<b><font size=\"5\" face=\"Tahoma, Arial\" color=\"#FF9900\">\\1</font></b>",$doc[content]);
-		$doc[content] = preg_replace("/<costar>(.*)<\/costar>/isU","<b><font face=\"Tahoma, Arial\" size=\"4\" color=\"#FF9900\">\\1</font></b>",$doc[content]);
-		$doc[content] = preg_replace("/<h3>(.*)<\/h3>/isU","<font face=\"Tahoma, Arial\" size=\"3\" color=\"#FFCC33\"><b>\\1</b></font>",$doc[content]);
-		$doc[content] = preg_replace("/<general>(.*)<\/general>/isU","<font size=\"2\" face=\"Tahoma, Arial\"><b><font color=\"#CCCCCC\">\\1</font></b></font>",$doc[content]);
-		$doc[content] = preg_replace("/<label>(.*)<\/label>/isU","<font size=\"2\" face=\"Tahoma, Arial\"><b><font color=\"#FFFFFF\">\\1</font></b></font>",$doc[content]);
-
-		$doc[content] = preg_replace("/<room>(.*)<\/room>/isU","<font size=\"2\" face=\"Tahoma, Arial\"><u><b><font color=\"#FF6633\">\\1</font></b></u></font>",$doc[content]);
-
-		$doc[content] = preg_replace("/<special>(.*)<\/special>/isU","<font size=\"2\" face=\"Tahoma, Arial\" color=\"#FFCC33\"><b>\\1</b></font>",$doc[content]);
-
-		$doc[content] = preg_replace("/<info>(.*)<\/info>/isU","<div align=\"justify\"><font size=\"1\" face=\"Arial, Helvetica, sans-serif\" color=\"#C0C0C0\">\\1</font></div>",$doc[content]);
-
-		$doc[content] = preg_replace("/<aine>(.*)<\/aine>/isU","<li>\\1</li>",$doc[content]);
-		$doc[content] = preg_replace("/<vasakul>(.*)<\/vasakul>/isU","<div align=\"left\">\\1</div>",$doc[content]);
-		$doc[content] = preg_replace("/<paremal>(.*)<\/paremal>/isU","<div align=\"right\">\\1</div>",$doc[content]);
-		$doc[content] = preg_replace("/<keskel>(.*)<\/keskel>/isU","<div align=\"center\">\\1</div>",$doc[content]);
-
-		$doc[content] = preg_replace("/<ap>(.*)<\/ap>/isU","<i><b>\\1</b></i>",$doc[content]);
-
+		
 		global $baseurl,$ext;
 
 
@@ -371,49 +431,14 @@ class document extends aw_template
 
 		if ($notitleimg != 1)
 		{
-			$im = "";
-			while (preg_match("/#(\w+?)(\d+?)(v|k|p|)#/i",$doc[title],$match)) 
-			{
-   			switch($match[1]) 
-				{
-					case "p":
-						$pc = 0; $pid = 0;
-						reset($aliases);
-						$icount++;
-						$idata = $img->get_img_by_oid($docid,$match[2]);
-						if ($idata) {
-							$this->vars(array("url" => $idata[url],"plink" => $idata[link]));
-							if ($link != "")
-							{
-								$im = $this->parse("image_linked");
-							}
-							else
-							{
-								$im = $this->parse("image");
-							}
-						}; // if idata
-							
-						if ($pid) {
-							$i = $img->get_img_by_id($pid);
-							$this->vars(array("url" => $i[url],"plink" => $i[link]));
-							if ($link != "")
-							{
-								$im = $this->parse("image_linked");
-							}
-							else
-							{
-								$im = $this->parse("image");
-							}
-					};
-					$doc[title] = preg_replace("/$match[0]/i",$im,$doc[title]);
-					break;
-				}
-			}
+			$doc["title"] = $this->parse_aliases(array(
+							"text"	=> $doc["title"],
+							"oid"	=> $docid,
+					));
 		}
 		else
 		{
-			$this->vars(array("image" => ""));
-			$doc[title] = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$doc[title]);
+			$doc["title"] = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$doc[title]);
 		}
 
 		if (!(strpos($doc[content], "#board_last5#") === false))
@@ -423,292 +448,16 @@ class document extends aw_template
 		}
 
 		$doc[content] = preg_replace("/<\?xml(.*)\/>/imsU","",$doc[content]);
-		$text = $doc[content]; 
-
-		classload("file");
-
+		
+		// noja, mis fucking "undef" see siin on?
 		if ($text != "undef") {
-			// see regulaaravaldis siin parsib välja koik tagid, mis on kujul 
-			// #XY# voi #XYZ#, kus X on objekti tyyp (p = pilt, t = tabel)
-			// Y on objekti (aliase) number selle objekti juures.
-			// Z on align (v,k,p voi yldse puudu)
-
-			// see tsykkel on voimeline töötama ka rekursiivselt, alltho ma pole
-			// veel kindel, kas ja milleks see hea on
-
-			$icount = 0;
-			while (preg_match("/#(\w+?)(\d+?)(v|k|p|b|)#/i",$text,$match)) 
-			{
-				// $match[0] sisaldab tervet stringi
-        			// $match[1] on objekti tyyp (p = pilt, t = tabel) -- aname
-        			// $match[2] on objekti id selle objekti juures    -- anum
-        			// $match[3] on align				   -- aalign
-
-				// switch objekti asendamiseks
-      	switch($match[1]) {
-						// vorm
-					case "f":
-						// since alias numbers are generated according to order,
-						// iterate until we find the one.
-						// eh. ytlen otse v2lja. see systeem on katki.
-						// mis siis kui m6ni vahelt 2ra kustutataxe? 
-						//  .. so what? iga objekt teab, mitu aliast tema juures on ja tanu sellele
-						//     saab uutele aliastele anda eelnevalt kasutamata numbreid. Probleemi pole
-						// vahemalt minu vaimusilmas. Kuigi jah, moned AGAD siin tunduvad olevat
-						$fc = 0; $fid = 0;
-
-						// et siis tsykkel yle koigi defineeritud aliaste
-						reset($aliases);
-						while (list(,$ar) = each($aliases)) {
-							if ($ar[type] == 2 || $ar[type] == 8)	// form, form_entry
-								$fc++;
-							if ($match[2] == $fc) {
-								// this should be the correct one
-								$fid = $ar;
-								break;
-							}
-						};
-						if ($fid) {
-							if ($ar[type] == 8) {
-								$al_type = unserialize($ar[data]);
-								$fx = new form($al_type[form_id]);
-								if ($al_type[type] == "change")
-									$replacement = $fx->gen_user_html($fid[id]);
-								else
-									$replacement = $fx->show($fid[id], $al_type[output]);
-							} else {
-								$fx = new form($fid[id]);
-								$replacement = $fx->gen_user_html();
-							}
-						}
-						break;
-
-						// pilt
-            case "p":
-							$pc = 0; $pid = 0;
-							reset($aliases);
-							$icount++;
-							$idata = $img->get_img_by_oid($docid,$match[2]);
-							if ($idata) 
-							{
-								global $uid;
-								$this->vars(array("imgref" => $idata[url], "imgcaption" => $idata[comment], "align" => $align[$match[3]],"plink" => $idata["link"]));
-								if ($idata["link"] != "")
-								{
-									$replacement = $this->parse("image_linked");
-								}
-								else
-								{
-									$replacement = $this->parse("image");
-								}
-
-								if ($icount == 1) 
-								{
-									$this->imcache[$docid] = $idata[url];
-								};
-							}; // if idata
-							
-							if ($pid) 
-							{
-								$i = $img->get_img_by_id($pid);
-								$this->vars(array("imgref" 	=> $i[url], "imgcaption" 	=> $i[comment], "align" 	=> $align[$v[align]],"plink" => $i[link]));
-								if ($i[link] != "")
-								{
-									$replacement = $this->parse("image_linked");
-								}
-								else
-								{
-									$replacement = $this->parse("image");
-								}	
-							};
-						break;
-
-						// link
-					case "l":
-						$lc = 0; $lid = 0;
-						reset($aliases);
-						while(list(,$ar) = each($aliases)) 
-						{
-							if ($ar[type] == CL_EXTLINK) 
-							  	$lc++;
-							if ($match[2] == $lc) 
-							{
-								$lid = $ar[id];
-								break;
-							}
-						}
-						if ($lid) 
-						{
-							$l = $extlinks->get_link($lid);
-							global $baseurl;
-							$this->vars(array("url" => $baseurl . "/indexx.aw?id=$l[id]",
-									"caption" => $l[name], "target" => $link[newwindow] ? "target='_blank'" : ""));
-							$replacement = $this->parse("link");
-							// print $replacement;
-						}
-						break;
-
-					// guestbook
-					case "b":
-						$gbc = 0; $gbid = 0;
-						reset($aliases);
-						while(list(,$ar) = each($aliases)) 
-						{
-							if ($ar[type] == CL_GUESTBOOK) 
-							{
-								$gbc++;
-							}
-							if ($match[2] == $gbc) 
-							{
-								$gbid = $ar[id];
-								break;
-							}
-						}
-						if ($gbid) 
-						{
-							classload("guestbook");
-							$gb = new guestbook;
-							$replacement = $gb->draw($gbid);
-						}
-						break;
-
-					case "t":
-						// tabel
-						$tc = 0; $tid = 0;
-						reset($aliases);
-						while (list(,$ar) = each($aliases)) 
-						{
-							if ($ar[type] == 3)
-							{
-								$tc++;
-							};
-
-							if ($match[2] == $tc) 
-							{
-								$tid = $ar[id];
-								break;
-							}
-						}
-						if ($tid) 
-						{
-							$replacement = $tbl->show(array("id" => $tid));
-						};
-       			break;
-
-     					case "g":
-						// graahvikud
-						$gc = 0; $pid = 0;
-						reset($aliases);
-						while (list(,$ar) = each($aliases)) 
-						{
-							if ($ar[type] == 28)
-								$gc ++;
-
-							if ($match[2] == $gc) 
-							{
-								$gid = $ar[id];
-								break;
-							}
-						}
-						if ($gid) {
-							// siin tuleb siis n2idata graafikut id'ga $gid
-							$replacement = "<img src='graphs.aw?type=show&id=$gid'>";
-						};
-						break;
-											
- 					case "y":
-						// galerriid
-						$gc = 0; $pid = 0;
-						reset($aliases);
-						while (list(,$ar) = each($aliases)) 
-						{
-							if ($ar[type] == CL_GALLERY)
-								$gc ++;
-
-							if ($match[2] == $gc) 
-							{
-								$gid = $ar[id];
-								break;
-							}
-						}
-						if ($gid) {
-							// siin tuleb siis n2idata galeriid id'ga $gid
-							$gal = new gallery($gid);
-							$replacement = $gal->show($GLOBALS["page"]);
-						};
-						break;
-									
-					case "v":
-					// failid
-					$gc = 0; $pid = 0;
-					reset($aliases);
-					while (list(,$ar) = each($aliases))
-					{
-						if ($ar[type] == CL_FILE)
-							$gc ++;
-
-						if ($match[2] == $gc)
-						{
-							$gid = $ar[id];
-							break;
-						}
-					}
-					if ($gid)
-					{
-						// siin tuleb siis n2idata faili id'ga $gid
-						$t = new file;
-						$fi = $t->get_file_by_id($gid);
-						if ($fi[showal] == 1)
-						{
-							// n2itame kohe
-							// kontrollime koigepealt, kas headerid on ehk väljastatud juba.
-							// dokumendi preview vaatamisel ntx on.
-							if ($fi["type"] == "text/html")
-							{
-								if (!headers_sent())
-								{
-									header("Content-type: text/html");
-								};
-								preg_match("/<body (.*)>(.*)<\/body>/imsU",$fi[content],$map);
-/*								$this->read_template("show_file.tpl");
-								$this->vars(array("content" => $map[2]));
-								die($this->parse());*/
-								// strip returns, cause the file is already a html file, so we don't need to replace newlines with <br> l8r
-								$replacement = str_replace("\n","",$map[2]);
-							}
-							else
-							{
-								header("Content-type: ".$fi["type"]);
-								die($fi["content"]);
-							}
-						}
-						else
-						{
-							if ($fi[newwindow])
-							{
-								$ss = "target=\"_new\"";
-							}
-							$comment = $fi["comment"];
-							if ($comment == "")
-							{
-								$comment = $fi["name"];
-							}
-							$replacement = "<a $ss class=\"sisutekst\" href='".$GLOBALS["baseurl"]."/files.aw/id=$gid/".urlencode($fi[name])."'>$comment</a>";
-						}
-					};
-					break;
-
-					default:
-                        			// kaotame vigased voi tundmatud tagid
-                        			$replacement = "";
-        			}; // end switch
-
-				$text = preg_replace("/$match[0]/i",$replacement,$text);
-			}; // regexp tsykkel yle teksti
+			$doc["content"] = $this->parse_aliases(array(
+							"text"	=> $doc["content"],
+							"oid"	=> $docid,
+					));
 
 		}; 
 
-		$doc[content] = $text;
 		// see on ka eri kuradi fun asi siin
 		if ($docid == 64 || $docid == 65) 
 		{
