@@ -10,6 +10,22 @@
             <field>event_list</field>
             <caption>Sündmused</caption>
       </property>
+      <property>
+            <name>file_editor</name>
+            <table>objects</table>
+            <group>files</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_PRJ_FILE</reltype>
+            <mode>manager</mode>
+            <props>
+                  <num_0>filename</num_0>
+                  <num_1>file</num_1>
+                  <num_2>comment</num_2>
+            </props>
+            <store>no</store>
+            <field>file_editor</field>
+            <caption>Failid</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PROJECT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -19,6 +35,9 @@
                   <caption>Sündmused</caption>
                   <submit>no</submit>
             </event_list>
+            <files>
+                  <caption>Failid</caption>
+            </files>
       </groupinfo>
       <reltypes>
             <SUBPROJECT>
@@ -45,6 +64,11 @@
                   </clid>
                   <caption>Sündmus</caption>
             </PRJ_EVENT>
+            <PRJ_FILE>
+                  <value>4</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Fail</caption>
+            </PRJ_FILE>
       </reltypes>
 </properties>
 
