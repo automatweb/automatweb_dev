@@ -104,6 +104,7 @@ target="_blank" href="{VAR:baseurl}/index.aw?section={VAR:id}">Eelvaade</a></td>
 	-->
 	Arhiveeri:	<input type='checkbox' name="archive" value=1>&nbsp;&nbsp;&nbsp;
 	'Prindi' nupp: <input type='checkbox' name='show_print' value=1 {VAR:show_print}>
+	Genereeri staatiline koopia: <input type='checkbox' name='gen_static' value=1>
 	<!--
 	Esilehel:	<input type='checkbox' name="esilehel" value=1 {VAR:esilehel}>&nbsp;&nbsp;&nbsp;
 	Esilehel tulbas:	<input type='checkbox' name="frontpage_left" value=1 {VAR:frontpage_left}>&nbsp;&nbsp;&nbsp;
@@ -402,7 +403,7 @@ href="orb.{VAR:ext}?class=document&action=archive&docid={VAR:id}">Arhiiv</a></td
 </tr>
 <tr>
 <td>
-<iframe width="100%" height="800" name="al" frameborder="0" src="{VAR:aliasmgr_link}">
+<iframe width="100%" height="400" name="al" frameborder="0" src="{VAR:aliasmgr_link}">
 </iframe>
 </td>
 </tr>
