@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.28 2002/12/20 16:26:01 duke Exp $
+// $Id: class_base.aw,v 2.29 2002/12/21 17:44:18 kristo Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -710,9 +710,28 @@ class class_base extends aliasmgr
 		
 		// load all properties for the current class
 		$cfgu = get_instance("cfg/cfgutils");
-		$all_props = $cfgu->load_properties(array(
+		$_all_props = $cfgu->load_properties(array(
 			"clid" => $this->clid,
 		));
+
+		// ok, first add all the generated props to the props array 
+		$all_props = array();
+		foreach($_all_props as $k => $val)
+		{
+			if ($val["type"] == "generated" && method_exists($this->inst,$val["generator"]))
+			{
+				$meth = $val["generator"];
+				$vx = new aw_array($this->inst->$meth($argblock));
+				foreach($vx->get() as $vxk => $vxv)
+				{
+					$all_props[$vxk] = $vxv;
+				}
+			}
+			else
+			{
+				$all_props[$k] = $val;
+			}
+		}
 
 		// first I need to collect the names of all groups, e.g.
 		// reorder the $all_props list based on group name
@@ -752,8 +771,6 @@ class class_base extends aliasmgr
 
 		$property_list = $bygroup[$use_group];
 		// loads all properties for this class
-
-		$_all_props = $all_props;
 
 		// This concept of core fields sucks beams through a garden hose
 		$corefields = $this->get_visible_corefields();
@@ -832,25 +849,6 @@ class class_base extends aliasmgr
 		$retval = array();
 
 		$this->groupnames = array();
-
-		// ok, first add all the generated props to the props array 
-		$all_props = array();
-		foreach($_all_props as $k => $val)
-		{
-			if ($val["type"] == "generated" && method_exists($this->inst,$val["generator"]))
-			{
-				$meth = $val["generator"];
-				$vx = new aw_array($this->inst->$meth($argblock));
-				foreach($vx->get() as $vxk => $vxv)
-				{
-					$all_props[$vxk] = $vxv;
-				}
-			}
-			else
-			{
-				$all_props[$k] = $val;
-			}
-		}
 
 		// now, cycle over all the properties and do all necessary filtering
 		foreach($groupinfo->get() as $key => $val)
