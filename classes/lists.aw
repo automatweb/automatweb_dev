@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.11 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.12 2002/07/17 20:28:05 kristo Exp $
 // lists.aw - listide haldus
 class lists extends aw_template
 {
@@ -89,7 +89,6 @@ class lists extends aw_template
 
 	function rec_menu($parent,$space_images)
 	{
-		global $list_folders;
 		$ext = $this->cfg["ext"];
 
 		if (!is_array($this->menucache[$parent]))	// if no items on this level return immediately
@@ -432,7 +431,6 @@ class lists extends aw_template
 	{
 		$this->selected = $selected;
 
-		global $op,$list_folders;
 		if ($op == "close")
 		{
 			$list_folders[$selected] = 1;

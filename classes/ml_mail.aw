@@ -286,7 +286,6 @@ class ml_mail extends aw_template
 
 		if ($manager)
 		{
-			global $title;
 			$title="Meililistid";
 
 			$fb=new form_base();

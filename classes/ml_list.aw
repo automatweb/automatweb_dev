@@ -143,9 +143,9 @@ class ml_list extends aw_template
 		$last=unserialize($row["last"]);
 		$vars=unserialize($last["vars"]);
 
-		global $back;
+		$back = aw_global_get("back"); // from session
 		$back=$this->mk_my_orb("omadused",array("id" => $id));
-		session_register("back");
+		aw_session_set("back", $back);
 
 		$varacl=$this->can("change_variable_acl",$id);
 		$allvars=$this->get_all_varnames();
@@ -224,9 +224,9 @@ class ml_list extends aw_template
 			"id" => $id
 		));
 
-		global $back,$queue_back;
 		$back=$queue_back=$this->mk_my_orb("change",array("id" => $id));
-		session_register("back","queue_back");
+		aw_session_set("back",$back);
+		aw_session_set("queue_back",$queue_back);
 
 		$can_add=$this->can("add_users",$id);
 		$can_del=$this->can("delete_users",$id);
@@ -575,7 +575,6 @@ class ml_list extends aw_template
 			$tee = $this->get_object_chain($prevfid);
 			reset($tee);
 			$path="";
-			global $ext;
 			while (list(,$rx) =each($tee))
 			{
 				$path="<a target='_blank' href='".$this->mk_my_orb("obj_list", array("parent" => $rx["oid"],"period" => $period))."' alt='".$rx["oid"]."'>".$rx["name"]."</a> / ".$path;
@@ -930,7 +929,7 @@ class ml_list extends aw_template
 	{
 		extract($args);
 
-		$GLOBALS["site_title"] = "<a href='".$GLOBALS["route_back"]."'>Tagasi</a>&nbsp;/&nbsp;Saada teade";
+		$GLOBALS["site_title"] = "<a href='".aw_global_get("route_back")."'>Tagasi</a>&nbsp;/&nbsp;Saada teade";
 
 		$this->read_template("post_message.tpl");
 
@@ -1101,7 +1100,7 @@ class ml_list extends aw_template
 			
 		$this->db_query("UPDATE ml_avoidmids SET usagec='$total' WHERE aid='$aid'");
 
-		return $GLOBALS["route_back"];
+		return aw_global_get("route_back");
 	}
 };
 ?>
