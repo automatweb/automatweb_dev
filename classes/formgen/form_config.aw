@@ -1,9 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_config.aw,v 2.2 2002/04/11 11:02:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_config.aw,v 1.1 2002/10/28 13:59:50 kristo Exp $
 // form_config.aw - FormGen configuration
 
-classload("form_element");
-
+classload("formgen/form_base");
 class form_config extends form_base
 {
 	function form_config()
@@ -16,15 +15,14 @@ class form_config extends form_base
 	{
 		$this->read_template("config.tpl");
 
-		classload("config");
-		$co = new config;
+		$co = get_instance("config");
 		$this->mk_path(0,"FormGen configuration");
 		$_typs = $co->get_simple_config("form::element_types");
 		$_styps = $co->get_simple_config("form::element_subtypes");
 		$typs = aw_unserialize($_typs);
 		$styps = aw_unserialize($_styps);
 
-		$fo = new form_element;
+		$fo = get_instance("form_element");
 		$atyps = $fo->get_all_types();
 		$astyps = $fo->get_all_subtypes();
 
@@ -78,11 +76,9 @@ class form_config extends form_base
 	function submit($arr)
 	{
 		extract($arr);
-		classload("config");
-		$co = new config;
+		$co = get_instance("config");
 
-		classload("form_element");
-		$fo = new form_element;
+		$fo = get_instance("form_element");
 		$all_types = $fo->get_all_types();
 		$all_subtypes = $fo->get_all_subtypes();
 
