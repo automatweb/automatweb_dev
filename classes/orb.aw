@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.53 2003/12/04 16:37:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.54 2003/12/14 15:22:13 duke Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -519,6 +519,14 @@ class orb extends aw_template
 		}
 
 		$ret = $this->load_xml_orb_def($class);
+		
+		if (isset($ret[$class]["_extends"]))
+		{
+			$extname = $ret[$class]["_extends"][0];
+			$tmp = $this->load_xml_orb_def($extname);
+			$ret[$class] = array_merge($tmp[$extname],$ret[$class]);
+			//$ret = array_merge($tmp[$extname],$ret);
+		};
 
 		// try and figure out the folder for this class 
 		$folder = "";
