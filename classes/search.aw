@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.68 2004/03/09 18:24:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.69 2004/03/16 10:30:17 duke Exp $
 // search.aw - Search Manager
 
 /*
@@ -233,9 +233,9 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 		foreach($_all_props as $key => $val)
 		{
-			if ($val["search"] && $args["form_data"][$val["name"]])
+			if ($val["search"] && $args["request"][$val["name"]])
 			{
-				$retval[$val["name"]] = $args["form_data"][$val["name"]];
+				$retval[$val["name"]] = $args["request"][$val["name"]];
 			};
 		}
 		$args["obj_inst"]->set_meta("obj",$retval);
