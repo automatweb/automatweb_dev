@@ -1263,6 +1263,16 @@ class _int_object
 				"clid" => $cl_id
 		));
 
+		if (!isset($GLOBALS["properties"][$cl_id]))
+		{
+			$GLOBALS["properties"][$cl_id] = "";
+		}
+
+		if (!isset($GLOBALS["tableinfo"][$cl_id]))
+		{
+			$GLOBALS["tableinfo"][$cl_id] = "";
+		}
+
 		// also make list of properties that belong to object, so we can keep them 
 		// in sync in $this->obj and properties
 
