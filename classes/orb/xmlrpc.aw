@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/orb/Attic/xmlrpc.aw,v 1.11 2003/08/01 13:27:53 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/orb/Attic/xmlrpc.aw,v 1.12 2003/10/21 18:28:04 duke Exp $
 class xmlrpc extends aw_template
 {
 	var $allowed = array("I4","BOOLEAN","STRING", "DOUBLE","DATETIME.ISO8601","BASE64", "STRUCT", "ARRAY");
@@ -23,6 +23,7 @@ class xmlrpc extends aw_template
 		$resp = $this->send_request(array(
 			"server" => $arr["remote_host"],
 			"port" => 80,
+			// well, it would be nice to get rid of that separate file you see
 			"handler" => "/xmlrpc.aw",
 			"request" => $xml,
 			"session" => $arr["remote_session"]
@@ -213,9 +214,16 @@ class xmlrpc extends aw_template
 	// class - the class of the request
 	// action - the action of the request
 	// params - array of parameters for request
-	function decode_request()
+	function decode_request($arr = array())
 	{
-		$xml = $GLOBALS["HTTP_RAW_POST_DATA"];
+		if (empty($arr["xml"]))
+		{
+			$xml = $GLOBALS["HTTP_RAW_POST_DATA"];
+		}
+		else
+		{
+			$xml = $arr["xml"];
+		};
 		$result = array();
 
 		$parser = xml_parser_create();
@@ -225,6 +233,7 @@ class xmlrpc extends aw_template
 
 		aw_global_set("__is_rpc_call", true);
 		aw_global_set("__rpc_call_type", "xmlrpc");
+		$this->i = 0;
 		$res = $this->req_decode_xml($values);
 		return $res;	
 	}
@@ -234,9 +243,8 @@ class xmlrpc extends aw_template
 		$result = array();
 		$name = "";
 		$in_value = false;
-		$this->i = 0;
 
-		$continue = $i < sizeof($values);
+		$continue = $this->i < sizeof($values);
 		while ($continue)
 		{
 			$token = $values[$this->i++];
@@ -257,6 +265,11 @@ class xmlrpc extends aw_template
 				$in_value = false;
 				$tmp = $this->req_decode_xml($values);
 				$result["params"][$name] = $tmp["params"];
+			};
+
+			if (($token["tag"] == "base64") && ($token["type"] == "complete"))
+			{
+				$result["params"][$name] = base64_decode($token["value"]);
 			};
 
 			if (($token["tag"] == "struct") && ($token["type"] == "close"))
@@ -324,27 +337,42 @@ class xmlrpc extends aw_template
 	{
 		$pre = "";
 		$pad = str_repeat("  ",$level);
-		switch(gettype($val))
+		// From PHP manual:
+		// ---------------------------------------------------------------------------------------
+		// Never use gettype() to test for a certain type, since the returned string may
+		// be subject to change in a future version. In addition, it is slow too, as it involves
+		// string comparision.
+		// ---------------------------------------------------------------------------------------
+		// Instead, use the is_* functions. 
+		// ---------------------------------------------------------------------------------------
+
+		// how do I encode binaries, I think I need to make them objects
+		if (is_bool($val))
 		{
-			case 'boolean':
-				$pre .= $pad.'<boolean>'.($val === true ? 1 : 0)."</boolean>\n";
-				break;
-
-			case 'integer':
-				$pre .= $pad."<i4>$val</i4>\n";
-				break;
-
-			case 'double':
-				$pre .= $pad."<double>$val</double>\n";
-				break;
-
-			case 'string':
-				$val = str_replace("<", "&lt;", $val);
-				$val = str_replace("&", "&amp;", $val);
-				$pre .= $pad."<string>$val</string>\n";
-				break;
-
-			case 'array':
+			$pre .= $pad.'<boolean>'.($val === true ? 1 : 0)."</boolean>\n";
+		}
+		elseif (is_integer($val))
+		{
+			$pre .= $pad."<i4>$val</i4>\n";
+		}
+		elseif (is_float($val))
+		{
+			$pre .= $pad."<double>$val</double>\n";
+		}
+		elseif (is_string($val))
+		{
+			$val = str_replace("<", "&lt;", $val);
+			$val = str_replace("&", "&amp;", $val);
+			$pre .= $pad."<string>$val</string>\n";
+		}
+		elseif (is_array($val))
+		{
+			if ( 1 == sizeof($val) && !empty($val["base64"]))
+			{
+				$pre .= $pad."<base64>".base64_encode($val["base64"])."</base64>\n";
+			}
+			else
+			{
 				$pre .= $pad."<struct>\n";
 				$level++;
 				foreach($val as $k => $v)
@@ -360,13 +388,14 @@ class xmlrpc extends aw_template
 				}
 				$pre .= $pad."</struct>\n";
 				$level --;
-				break;
-
-			default:
-				// ignore all unknown types
-				$pre .= $pad."<string></string>\n";
-				return $pre;
+			};
 		}
+		else
+		{
+			// ignore all unknown types
+			$pre .= $pad."<string></string>\n";
+		};
+			
 		return $pre;
 	}
 
