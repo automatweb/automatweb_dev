@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/aip/Attic/aip_ctl_list.aw,v 1.2 2004/03/25 22:02:10 duke Exp $
 
 class aip_ctl_list extends aw_template
 {
@@ -9,7 +10,7 @@ class aip_ctl_list extends aw_template
 
 	/**  
 		
-		@attrib name=list params=name default="0"
+		@attrib name=list params=name 
 		
 		
 		@returns
@@ -51,7 +52,6 @@ class aip_ctl_list extends aw_template
 			"url" => "#",
 			"onClick" => "return buttonClick(event, 'aw_menu_0');",
 			"img" => "new.gif",
-			"imgover" => "new_over.gif",
 			"class" => "menuButton",
 		));
 
@@ -59,7 +59,6 @@ class aip_ctl_list extends aw_template
 			"name" => "ules",
 			"tooltip" => "&Uuml;les",
 			"url" => aw_ini_get("baseurl")."/index.aw?section=".aip::get_root()."&aip=1",
-			"imgover" => "kaust_tagasi_over.gif",
 			"img" => "kaust_tagasi.gif"
 		));
 
@@ -67,7 +66,6 @@ class aip_ctl_list extends aw_template
 			"name" => "import",
 			"tooltip" => "Impordi kaustad",
 			"url" => aw_ini_get("baseurl")."/index.aw?section=".aip::get_root()."&action=importmenus",
-			"imgover" => "import_over.gif",
 			"img" => "import.gif"
 		));
 
@@ -82,7 +80,7 @@ class aip_ctl_list extends aw_template
 
 	/**  
 		
-		@attrib name=upload params=name default="0"
+		@attrib name=upload params=name 
 		
 		
 		@returns
@@ -106,7 +104,6 @@ class aip_ctl_list extends aw_template
 			"url" => "#",
 			"onClick" => "return buttonClick(event, 'aw_menu_0');",
 			"img" => "new.gif",
-			"imgover" => "new_over.gif",
 			"class" => "menuButton",
 		));
 
@@ -114,7 +111,6 @@ class aip_ctl_list extends aw_template
 			"name" => "save",
 			"tooltip" => "Salvesta",
 			"url" => "javascript:document.a.submit()",
-			"imgover" => "save_over.gif",
 			"img" => "save.gif"
 		));
 
@@ -122,7 +118,6 @@ class aip_ctl_list extends aw_template
 			"name" => "ules",
 			"tooltip" => "&Uuml;les",
 			"url" => aw_ini_get("baseurl")."/index.aw?section=".aip::get_root()."&aip=1",
-			"imgover" => "kaust_tagasi_over.gif",
 			"img" => "kaust_tagasi.gif"
 		));
 
@@ -130,7 +125,6 @@ class aip_ctl_list extends aw_template
 			"name" => "import",
 			"tooltip" => "Impordi kaustad",
 			"url" => aw_ini_get("baseurl")."/index.aw?section=".aip::get_root()."&action=importmenus",
-			"imgover" => "import_over.gif",
 			"img" => "import.gif"
 		));
 
@@ -144,7 +138,7 @@ class aip_ctl_list extends aw_template
 
 	/**  
 		
-		@attrib name=submit_upload params=name default="0"
+		@attrib name=submit_upload params=name 
 		
 		
 		@returns
@@ -220,7 +214,7 @@ class aip_ctl_list extends aw_template
 
 	/**  
 		
-		@attrib name=log params=name default="0"
+		@attrib name=log params=name 
 		
 		
 		@returns
@@ -257,7 +251,6 @@ class aip_ctl_list extends aw_template
 			"url" => "#",
 			"onClick" => "return buttonClick(event, 'aw_menu_0');",
 			"img" => "new.gif",
-			"imgover" => "new_over.gif",
 			"class" => "menuButton",
 		));
 
@@ -265,7 +258,6 @@ class aip_ctl_list extends aw_template
 			"name" => "ules",
 			"tooltip" => "&Uuml;les",
 			"url" => aw_ini_get("baseurl")."/index.aw?section=".aip::get_root()."&aip=1",
-			"imgover" => "kaust_tagasi_over.gif",
 			"img" => "kaust_tagasi.gif"
 		));
 
@@ -273,7 +265,6 @@ class aip_ctl_list extends aw_template
 			"name" => "import",
 			"tooltip" => "Impordi kaustad",
 			"url" => aw_ini_get("baseurl")."/index.aw?section=".aip::get_root()."&action=importmenus",
-			"imgover" => "import_over.gif",
 			"img" => "import.gif"
 		));
 
@@ -281,7 +272,6 @@ class aip_ctl_list extends aw_template
 			"name" => "toimeta",
 			"tooltip" => "Toimeta",
 			"url" => $this->mk_my_orb("list", array("section" => aip::get_root()),"aip_ctl_list", false,true),
-			"imgover" => "edit_over.gif",
 			"img" => "edit.gif"
 		));
 

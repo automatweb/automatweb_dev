@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/aip/Attic/aip_change.aw,v 1.2 2004/03/25 22:02:10 duke Exp $
 define("FILE_STAT_NEW",1);
 define("FILE_STAT_MODIFIED",2);
 define("FILE_STAT_DELETED",3);
@@ -20,7 +21,7 @@ class aip_change extends aw_template
 
 	/**  
 		
-		@attrib name=new params=name default="0"
+		@attrib name=new params=name 
 		
 		@param parent required
 		
@@ -71,7 +72,7 @@ class aip_change extends aw_template
 
 	/**  
 		
-		@attrib name=submit params=name default="0"
+		@attrib name=submit params=name 
 		
 		
 		@returns
@@ -251,7 +252,7 @@ class aip_change extends aw_template
 
 	/**  
 		
-		@attrib name=change params=name default="0"
+		@attrib name=change params=name 
 		
 		@param id required
 		
@@ -340,7 +341,7 @@ class aip_change extends aw_template
 
 	/**  
 		
-		@attrib name=list params=name default="0"
+		@attrib name=list params=name 
 		
 		
 		@returns
@@ -413,7 +414,6 @@ class aip_change extends aw_template
 			"url" => "#",
 			"onClick" => "return buttonClick(event, 'aw_menu_0');",
 			"img" => "new.gif",
-			"imgover" => "new_over.gif",
 			"class" => "menuButton",
 		));
 		
@@ -421,14 +421,12 @@ class aip_change extends aw_template
 			"name" => "save",
 			"tooltip" => "Salvesta",
 			"url" => $savelink,
-			"imgover" => "save_over.gif",
 			"img" => "save.gif"
 		));
 		$tb->add_button(array(
 			"name" => "ules",
 			"tooltip" => "&Uuml;les",
 			"url" => aw_ini_get("baseurl")."/index.aw?section=".aip::get_root()."&aip=1",
-			"imgover" => "kaust_tagasi_over.gif",
 			"img" => "kaust_tagasi.gif"
 		));
 
@@ -436,7 +434,6 @@ class aip_change extends aw_template
 			"name" => "import",
 			"tooltip" => "Impordi kaustad",
 			"url" => aw_ini_get("baseurl")."/index.aw?section=".aip::get_root()."&action=importmenus",
-			"imgover" => "import_over.gif",
 			"img" => "import.gif"
 		));
 
@@ -444,7 +441,6 @@ class aip_change extends aw_template
 			"name" => "delete",
 			"tooltip" => "Kustuta",
 			"url" => "javascript:dodelete()",
-			"imgover" => "delete_over.gif",
 			"img" => "delete.gif"
 		));
 		return $tb->get_toolbar().get_add_menu(array("section" => aip::get_root()));
@@ -452,7 +448,7 @@ class aip_change extends aw_template
 
 	/**  
 		
-		@attrib name=submit_list params=name default="0"
+		@attrib name=submit_list params=name 
 		
 		
 		@returns
@@ -493,7 +489,7 @@ class aip_change extends aw_template
 
 	/**  
 		
-		@attrib name=delete params=name default="0"
+		@attrib name=delete params=name 
 		
 		@param id required
 		
@@ -542,7 +538,7 @@ class aip_change extends aw_template
 
 	/**  
 		
-		@attrib name=do_change params=name nologin="1" default="0"
+		@attrib name=do_change params=name nologin="1" 
 		
 		@param id required
 		
@@ -861,7 +857,7 @@ class aip_change extends aw_template
 
 	/**  
 		
-		@attrib name=show_files params=name nologin="1" default="0"
+		@attrib name=show_files params=name nologin="1" 
 		
 		@param type optional default="1"
 		
@@ -1382,7 +1378,7 @@ class aip_change extends aw_template
 
 	/** this publishes the file - makes it the default change in it's category 
 		
-		@attrib name=do_publish params=name nologin="1" default="0"
+		@attrib name=do_publish params=name nologin="1" 
 		
 		@param id required
 		
@@ -1422,7 +1418,7 @@ class aip_change extends aw_template
 
 	/**  
 		
-		@attrib name=check_events params=name nologin="1" default="0"
+		@attrib name=check_events params=name nologin="1" 
 		
 		
 		@returns
