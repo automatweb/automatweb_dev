@@ -428,7 +428,9 @@ class user extends class_base
 				{
 					$ol = new object_list(array(
 						"class_id" => CL_USER,
-						"name" => $arr["request"]["aclwizard"]["user"]
+						"name" => $arr["request"]["aclwizard"]["user"],
+						"site_id" => array(),
+						"lang_id" => array()
 					));
 					if ($ol->count() < 1)
 					{
