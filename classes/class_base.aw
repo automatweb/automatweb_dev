@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.186 2003/12/09 14:45:34 duke Exp $
+// $Id: class_base.aw,v 2.187 2003/12/10 13:08:37 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1363,7 +1363,7 @@ class class_base extends aw_template
 			{
 				continue;
 			}
-			
+
 			if (empty($val["view"]))
 			{
 				$val["view"] = "";
@@ -1572,13 +1572,11 @@ class class_base extends aw_template
 			$val["type"] = "select";
 		};
 
-		if (($val["type"] == "aliasmgr") && isset($this->id))
+		if (empty($val["value"]) && ($val["type"] == "aliasmgr") && isset($this->id))
 		{
-			//$link = $this->mk_my_orb("list_aliases",array("id" => $this->id),"aliasmgr",false,true);
 			$link = $this->mk_my_orb("list_aliases",array("id" => $this->obj_inst->brother_of()),"aliasmgr",false,true);
 			$val["value"] = "<iframe width='100%' name='aliasmgr' height='800' frameborder='0' src='$link'></iframe>";
-			$val["type"] = "";
-			$val["caption"] = "";
+			$val["no_caption"] = 1;
 		};
 
 		if (($val["type"] == "relpicker") && isset($val["clid"]))
@@ -2265,6 +2263,7 @@ class class_base extends aw_template
 			
 		};
 
+		// new object should not have any translation connections, so skip it
 		if (!$new && $this->classinfo["trans"]["text"] == 1)
 		{
 			$o_t = get_instance("translate/object_translation");
