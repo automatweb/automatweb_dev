@@ -541,6 +541,17 @@ class core extends acl_base
 			$send_mail = false;
 		}
 
+		// ifthe request is too big or b0rked
+		if ($err_type == 30 && $_SERVER["REQUEST_METHOD"] == "POST" && count($_POST) == 0)
+		{
+			$send_mail = false;
+		}
+
+		if ($err_type == 31 && substr($GLOBALS["class"], -3) == "...")
+		{
+			$send_mail = false;
+		}
+
 		$si = __get_site_instance();
 		if (is_object($si) && method_exists($si,"process_error"))
 		{
