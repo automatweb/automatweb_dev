@@ -1,54 +1,21 @@
 <?php
 
-/*
-
-this message will get called whenever an object is saved as the class_id as the message type parameter
-and the object's id as the "oid" parameter
-EMIT_MESSAGE(MSG_STORAGE_SAVE)
-
-*/
-
 class _int_object_loader
 {
-	// private variables, only object system classes can use these
 	var $ds; 					// data source
 	var $object_member_funcs;	// names of all object class member functions
 	var $cfgu;					// cfgutilities instance
-	var $cache;					// cache class instance
 
 	function _int_object_loader()
 	{
-		// init the datasource from the ini file setting
-		$datasources = aw_ini_get("objects.default_datasource");
-		if ($datasources == "")
-		{
-			// default to simple mysql
-			$datasources = "mysql";
-		}
-
-		$dss = array_reverse(explode(",", $datasources));
-	
-		classload("core/obj/ds_".$dss[0]);
-		$clname = "_int_obj_ds_".$dss[0];
-		// the first is the db specific ds, that does not contain anything
-		$this->ds = new $clname;
-
-		for ($i = 1; $i < count($dss); $i++)
-		{
-			classload("core/obj/ds_".$dss[$i]);
-			$clname = "_int_obj_ds_".$dss[$i];
-			$this->ds = new $clname($this->ds);
-		}
-
+		$this->ds = new _int_obj_ds_local_sql;
 		$this->object_member_funcs = get_class_methods("object");
 		$this->cfgu = get_instance("cfg/cfgutils");
-		$this->cache = get_instance("cache");
 	}
 
 	function oid_for_alias($alias)
 	{
-		// there is no quote here -- duke
-		//$this->quote($alias);
+		$this->quote($alias);
 
 		if (substr($alias,-1) == "/")
 		{
@@ -164,11 +131,6 @@ class _int_object_loader
 				return $param->ids();
 			}
 		}
-		else
-		if (is_array($param))
-		{
-			return $param;
-		}
 
 		error::throw(array(
 			"id" => ERR_PARAM,
@@ -179,7 +141,7 @@ class _int_object_loader
 
 	////
 	// !returns temp id for new object
-	function new_object_temp_id($param = NULL)
+	function new_object_temp_id()
 	{
 		$cnt = 0;
 		$str = "new_object_temp_id_".$cnt;
@@ -188,7 +150,8 @@ class _int_object_loader
 			$cnt++;
 			$str = "new_object_temp_id_".$cnt;
 		}
-		$GLOBALS["objects"][$str] =& new _int_object($param);
+		$GLOBALS["objects"][$str] =& new _int_object();
+		echo "created new temp obj id! $str <br>";
 		return $str;
 	}
 
@@ -204,18 +167,7 @@ class _int_object_loader
 
 		if (!is_object($GLOBALS["objects"][$oid]))
 		{
-			$ref = &new _int_object($oid);
-			if ($ref->id() === NULL)
-			{
-				error::throw(array(
-					"id" => ERR_PARAM,
-					"msg" => "object_loader::load($oid): no such object!"
-				));
-			}
-			else
-			{
-				$GLOBALS["objects"][$oid] = $ref;
-			};
+			$GLOBALS["objects"][$oid] =& new _int_object($oid);
 		}
 
 		return $GLOBALS["objects"][$oid]->id();
@@ -244,14 +196,6 @@ class _int_object_loader
 		// because you probably will not be able to acquire pointers to temp-objects.
 		// probably.
 		// well, here's to hoping it won't happen!
-
-		post_message_with_param(MSG_STORAGE_SAVE, $GLOBALS["objects"][$t_oid]->class_id(), array(
-			"oid" => $t_oid
-		));
-
-		// write the current time as last modification time of any object.
-		$this->cache->file_set("objlastmod", time());
-
 		return $t_oid;
 	}
 
@@ -273,10 +217,6 @@ class _int_object_loader
 		// copy the object to the new place
 		$GLOBALS["objects"][$t_oid] = $t_o;
 
-		post_message_with_param(MSG_STORAGE_SAVE, $GLOBALS["objects"][$t_oid]->class_id(), array(
-			"oid" => $t_oid
-		));
-
 		return $t_oid;
 	}
 
@@ -289,26 +229,8 @@ class _int_object_loader
 	// load properties - arr[file] , arr[clid]
 	function load_properties($arr)
 	{
-		if ($arr["file"] == "document" || $arr["file"] == "document_brother")
-		{
-			$arr["file"] = "doc";
-		}
-		// cfgu->load_properties is expensive, so we cache the results.
-		// why here? because it does a lot more than just load properties
-		// and it's a bit tricky to cache all that information there --duke
-		// 
-		// removed the caching from here, it is done in object::_int_load_properties
-		// it won't call this function if an object of the same class id has been loaded before
-		// so doing the caching here is just wasting memory now. 
-		// - terryf
 		$props = $this->cfgu->load_properties($arr);
-		$rv = array($props, $this->cfgu->tableinfo);
-		return $rv;
-	}
-
-	function object_exists($oid)
-	{
-		return $this->ds->object_exists($this->param_to_oid($oid));
+		return array($props, $this->cfgu->tableinfo);
 	}
 }
 
