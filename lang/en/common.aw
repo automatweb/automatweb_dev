@@ -1,11 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/lang/en/common.aw,v 1.7 2001/10/25 15:22:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/lang/en/common.aw,v 1.8 2003/05/14 11:58:41 kristo Exp $
 // kuude nimed
 define("LC_M1","january");
 define("LC_M2","february");
 define("LC_M3","march");
 define("LC_M4","april");
-define("LC_M5","mai");
+define("LC_M5","may");
 define("LC_M6","june");
 define("LC_M7","july");
 define("LC_M8","august");
