@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/Attic/reminder.aw,v 1.5 2004/12/15 12:30:29 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/Attic/reminder.aw,v 1.6 2004/12/20 10:34:06 ahti Exp $
 // reminder.aw - Meeldetuletus 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_DOCUMENT, on_rconnect_from)
@@ -17,11 +17,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_DOCUMENT, on_rdisconne
 @property remind type=datetime_select year_from=2004 year_to=2010
 @caption Millal meelde tuletab
 
-@property emails_text type=textarea cols=40 rows=10
-@caption Saaja e-mail(id) tekstina
+@property sender type=textbox
+@caption Saatja e-mail 
 
-@property emails type=relpicker reltype=RELTYPE_EMAIL multiple=1
-@caption Saaja e-mail(id)
+@property emails_text type=textarea cols=30 rows=5
+@caption Saaja e-mail(id) (eraldada komaga)
 
 @property subject type=textbox
 @caption Teade
@@ -36,9 +36,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_DOCUMENT, on_rdisconne
 
 @reltype REMINDER_OBJECT value=1 clid=CL_DOCUMENT,CL_MENU
 @caption Seotud objekt
-
-@reltype EMAIL value=2 clid=CL_ML_MEMBER
-@caption E-mail
 
 */
 
@@ -118,6 +115,20 @@ class reminder extends class_base
 					$prop["value"] = -1;
 				}
 				break;
+			case "emails_text":
+				if($arr["new"])
+				{
+					$user = obj(aw_global_get("uid_oid"));
+					$prop["value"] = $user->prop("mail");
+				}
+				break;
+			case "sender":
+				if($arr["new"])
+				{
+					$user = obj(aw_global_get("uid_oid"));
+					$prop["value"] = $user->prop("mail");
+				}
+				break;
 			case "objects_toolbar":
 				$this->objects_toolbar($arr);
 				break;
@@ -175,7 +186,6 @@ class reminder extends class_base
 			"id" => t("ID"),
 			"name" => t("Nimi"),
 			"type" => t("Tüüp"),
-			"change" => t("Muuda"),
 		);
 		foreach($var as $key => $val)
 		{
@@ -195,9 +205,8 @@ class reminder extends class_base
 		{
 			$t->define_data(array(
 				"id" => $obj->prop("to"),
-				"name" => $obj->prop("to.name"),
+				"name" => html::get_change_url($obj->prop("to"), array(), $obj->prop("to.name")),
 				"type" => $classes[$obj->prop("to.class_id")]["name"],
-				"change" => html::get_change_url($obj->prop("to"), array(), "Muuda"),
 			));
 		}
 	}
@@ -232,46 +241,31 @@ class reminder extends class_base
 	{
 		//aw_disable_acl();
 		$obj_inst = obj($arr["id"]);
-		if($obj_inst->status() == STAT_ACTIVE)
+		$msg = $obj_inst->prop("subject");
+		$subject = !empty($msg) ? $msg : "Meeldetuletus saidilt:\n";
+		$awm = get_instance("protocols/mail/aw_mail");
+		$objs = $obj_inst->connections_from(array(
+			"type" => "RELTYPE_REMINDER_OBJECT",
+		));
+		$emls = array();
+		$emails = explode(",", $obj_inst->prop("emails_text"));
+		foreach(safe_array($emails) as $key)
 		{
-			$msg = $obj_inst->prop("subject");
-			$subject = !empty($msg) ? $msg : "Meeldetuletus saidilt:";
-			$awm = get_instance("protocols/mail/aw_mail");
-			$objs = $obj_inst->connections_from(array(
-				"type" => "RELTYPE_REMINDER_OBJECT",
-			));
-			$emls = array();
-			$emails = safe_array($obj_inst->prop("emails"));
-			$emails2 = explode(",", $obj_inst->prop("emails_text"));
-			foreach($emails as $id)
+			$key = trim($key);
+			$emls[] = $key;
+		}
+		foreach($objs as $obz)
+		{
+			$body = $subject." ".$this->mk_my_orb("change", array("id" => $obz->prop("to")), $obz->prop("to.class_id"), true);
+			foreach($emls as $addr)
 			{
-				if(is_oid($id) && $this->can("view", $id))
-				{
-					$eml = obj($id);
-					$emls[] = $eml->prop("mail");
-				}
-			}
-			foreach(safe_array($emails2) as $key)
-			{
-				$key = trim($key);
-				if(!in_array($key, $emls))
-				{
-					$emls[] = $key;
-				}
-			}
-			foreach($objs as $obz)
-			{
-				$body = $subject." ".$this->mk_my_orb("change", array("id" => $obz->prop("to")), $obz->prop("to.class_id"), true);
-				foreach($emls as $addr)
-				{
-					$awm->create_message(array(
-						"froma" => t("aw").str_replace("http://", "@", aw_ini_get("baseurl")),
-						"subject" => t("Meeldetuletus"),
-						"to" => $addr,
-						"body" => $body,
-					));
-					$awm->gen_mail();
-				}
+				$awm->create_message(array(
+					"froma" => t("aw").str_replace("http://", "@", aw_ini_get("baseurl")),
+					"subject" => t("Meeldetuletus").": ".$obj_inst->name(),
+					"to" => $addr,
+					"body" => $body,
+				));
+				$awm->gen_mail();
 			}
 		}
 		//aw_enable_acl();

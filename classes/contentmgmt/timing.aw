@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/timing.aw,v 1.5 2004/12/15 12:30:30 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/timing.aw,v 1.6 2004/12/20 10:34:06 ahti Exp $
 // timing.aw - Ajaline aktiivsus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_DOCUMENT, on_tconnect_from)
@@ -11,7 +11,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_MENU, on_tdisconnect
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_DOCUMENT, on_tdisconnect_to)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_MENU, on_tdisconnect_to)
 
-@classinfo syslog_type=ST_TIMING relationmgr=yes
+@classinfo syslog_type=ST_TIMING relationmgr=yes no_status=1
 
 @default table=objects
 @default group=general
@@ -199,7 +199,6 @@ class timing extends class_base
 			"id" => t("ID"),
 			"name" => t("Nimi"),
 			"type" => t("Tüüp"),
-			"change" => t("Muuda"),
 		);
 		foreach($var as $key => $val)
 		{
@@ -219,9 +218,8 @@ class timing extends class_base
 		{
 			$t->define_data(array(
 				"id" => $obj->prop("to"),
-				"name" => $obj->prop("to.name"),
+				"name" => tml::get_change_url($obj->prop("to"), array(), $obj->prop("to.name")),
 				"type" => $classes[$obj->prop("to.class_id")]["name"],
-				"change" => html::get_change_url($obj->prop("to"), array(), "Muuda"),
 			));
 		}
 	}
@@ -257,20 +255,17 @@ class timing extends class_base
 	{
 		//aw_disable_acl();
 		$obj_inst = obj($arr["id"]);
-		if($obj_inst->status() == STAT_ACTIVE)
+		$objs = $obj_inst->connections_from(array(
+			"type" => "RELTYPE_TIMING_OBJECT",
+		));
+		foreach($objs as $obz)
 		{
-			$objs = $obj_inst->connections_from(array(
-				"type" => "RELTYPE_TIMING_OBJECT",
-			));
-			foreach($objs as $obz)
-			{
-				$obj = $obz->to();
-				$obj->set_status(($arr["subaction"] == "activate" ? STAT_ACTIVE : STAT_NOTACTIVE));
-				$obj->save();
-			}
-			$mait = get_instance("maitenance");
-			$mait->clear_cache(array("no_die" => 1, "clear" => 1));
+			$obj = $obz->to();
+			$obj->set_status(($arr["subaction"] == "activate" ? STAT_ACTIVE : STAT_NOTACTIVE));
+			$obj->save();
 		}
+		$mait = get_instance("maitenance");
+		$mait->clear_cache(array("no_die" => 1, "clear" => 1));
 		//aw_enable_acl();
 		return "done";
 	}

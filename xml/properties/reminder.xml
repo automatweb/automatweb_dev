@@ -12,26 +12,24 @@
             <caption>Millal meelde tuletab</caption>
       </property>
       <property>
+            <name>sender</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Saatja e-mail </caption>
+      </property>
+      <property>
             <name>emails_text</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textarea</type>
-            <cols>40</cols>
-            <rows>10</rows>
-            <caption>Saaja e-mail(id) tekstina</caption>
-      </property>
-      <property>
-            <name>emails</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_EMAIL</reltype>
-            <multiple>1</multiple>
-            <caption>Saaja e-mail(id)</caption>
+            <cols>30</cols>
+            <rows>5</rows>
+            <caption>Saaja e-mail(id) (eraldada komaga)</caption>
       </property>
       <property>
             <name>subject</name>
@@ -83,11 +81,6 @@
                   </clid>
                   <caption>Seotud objekt</caption>
             </REMINDER_OBJECT>
-            <EMAIL>
-                  <value>2</value>
-                  <clid>CL_ML_MEMBER</clid>
-                  <caption>E-mail</caption>
-            </EMAIL>
       </reltypes>
 </properties>
 
