@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.25 2004/11/18 12:04:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.26 2004/11/30 16:26:32 duke Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -965,6 +965,8 @@ class site_search_content extends class_base
 	**/
 	function do_search($arr)
 	{
+//		return "Otsinguv&otilde;imalus on tehnilistel p&otilde;hjustel ajutiselt piiratud! Palun proovige hiljem uuesti";
+//		return "Search has been disabled temporarily for technical reasons. Please check back later";
 		extract($this->set_defaults($arr));
 		$o = obj($id);
 
@@ -980,44 +982,76 @@ class site_search_content extends class_base
 		// seda peab siis kuidagi filtreerima ka .. et ta ei hakkas mul igasugu ikaldust näitama
 		if ($str != "")
 		{
-			$conns = $o->connections_from(array(
-				"type" => "RELTYPE_SEARCH_GRP",
-			));
-
-			$grpcfg = $o->meta("grpcfg");
-
-			foreach($conns as $conn)
+			if (1 == $o->prop("multi_groups"))
 			{
-				$cid = $conn->prop("to");
-				if ($conn->prop("to.class_id") == CL_EVENT_SEARCH)
+
+				$conns = $o->connections_from(array(
+					"type" => "RELTYPE_SEARCH_GRP",
+				));
+
+				$grpcfg = $o->meta("grpcfg");
+
+				foreach($conns as $conn)
 				{
-					$t = get_instance(CL_EVENT_SEARCH);
-		
-					$clid = $o->class_id();
-					$so = $conn->to();
-					$results = $t->get_search_results(array(
-						"id" => $so->id(),
+					$cid = $conn->prop("to");
+					if ($conn->prop("to.class_id") == CL_EVENT_SEARCH)
+					{
+						$t = get_instance(CL_EVENT_SEARCH);
+			
+						$clid = $o->class_id();
+						$so = $conn->to();
+						$results = $t->get_search_results(array(
+							"id" => $so->id(),
+							"str" => $str,
+						));
+					}
+					else
+					{
+						$results = $this->fetch_search_results(array(
+							"obj" => $o,
+							"str" => $str,
+							"group" => $cid,
+						));
+					};
+
+					$grp_sort_by = $sort_by;
+					if (!empty($grpcfg["sorder"][$cid]))
+					{
+						$grp_sort_by = $grpcfg["sorder"][$cid];
+					};
+
+						
+					$ret .= $this->display_results(array(
+						"groupname" => $grpcfg["caption"][$conn->prop("to")],
+						"results" => $results,
+						"obj" => $o, 
+						"str" => $str, 
+						"group" => $group,
+						"sort_by" => $grp_sort_by,
 						"str" => $str,
-					));
-				}
-				else
-				{
-					$results = $this->fetch_search_results(array(
-						"obj" => $o,
-						"str" => $str,
-						"group" => $conn->prop("to"),
+						"per_page" => ($o->meta("per_page") ? $o->meta("per_page") : 20),
+						"params" => array("id" => $id, "str" => $str, "sort_by" => $sort_by, "group" => $group, "section" => aw_global_get("section")),
+						"page" => $page
 					));
 				};
-
+			}
+			else
+			{
+				$results = $this->fetch_search_results(array(
+					"obj" => $o,
+					"str" => $str,
+					"group" => $group,
+				));
+					
 				$grp_sort_by = $sort_by;
 				if (!empty($grpcfg["sorder"][$cid]))
 				{
 					$grp_sort_by = $grpcfg["sorder"][$cid];
 				};
 
-					
+						
 				$ret .= $this->display_results(array(
-					"groupname" => $grpcfg["caption"][$conn->prop("to")],
+					"groupname" => $grpcfg["caption"][$group],
 					"results" => $results,
 					"obj" => $o, 
 					"str" => $str, 
@@ -1028,6 +1062,7 @@ class site_search_content extends class_base
 					"params" => array("id" => $id, "str" => $str, "sort_by" => $sort_by, "group" => $group, "section" => aw_global_get("section")),
 					"page" => $page
 				));
+
 			};
 
 		};
