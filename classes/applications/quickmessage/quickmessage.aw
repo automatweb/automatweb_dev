@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/quickmessage.aw,v 1.5 2004/08/25 07:13:39 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/quickmessage.aw,v 1.6 2004/10/08 01:32:06 kristo Exp $
 // quickmessage.aw - Kiirteade 
 /*
 
@@ -11,10 +11,10 @@
 
 //@default form=message
 
-@property user_from type=text
+@property user_from type=text datatype=int
 @caption Kellelt
 
-@property user_to type=textbox
+@property user_to type=textbox datatype=int
 @caption Kellele
 
 @property subject type=textbox

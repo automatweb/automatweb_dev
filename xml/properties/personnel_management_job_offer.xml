@@ -5,6 +5,7 @@
             <table>personnel_management_job</table>
             <group>general</group>
             <type>select</type>
+            <datatype>int</datatype>
             <field>profession</field>
             <caption>Ametikoht</caption>
       </property>

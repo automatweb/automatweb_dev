@@ -6,6 +6,7 @@
             <group>general</group>
             <type>select</type>
             <field>type</field>
+            <datatype>int</datatype>
             <caption>Template t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
@@ -22,6 +23,7 @@
             <group>general</group>
             <type>hidden</type>
             <field>id</field>
+            <datatype>int</datatype>
       </property>
       <property>
             <name>t_name</name>
@@ -36,6 +38,7 @@
             <group>general</group>
             <type>hidden</type>
             <field>site_id</field>
+            <datatype>int</datatype>
       </property>
       <classinfo>
             <syslog_type>ST_CONFIG_AW_DOCUMENT_TEMPLATE</syslog_type>

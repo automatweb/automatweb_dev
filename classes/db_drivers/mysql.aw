@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.20 2004/08/19 08:03:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.21 2004/10/08 01:32:09 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql 
 {
@@ -689,6 +689,11 @@ class mysql
 		}
 
 		return $msg;
+	}
+
+	function db_fn($fn)
+	{
+		return $fn;
 	}
 };
 ?>

@@ -459,8 +459,8 @@ class user extends class_base
 				{
 					return PROP_OK;
 				}
-				
-				if($mail = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_EMAIL"))
+
+				if(is_oid($arr["obj_inst"]->id()) && $mail = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_EMAIL"))
 				{
 					$mail->set_prop("mail", $prop["value"]);
 				}

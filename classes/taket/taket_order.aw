@@ -1,15 +1,15 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_order.aw,v 1.1 2004/01/02 02:58:30 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_order.aw,v 1.2 2004/10/08 01:32:10 kristo Exp $
 // taket_order.aw - Taketi tellimus 
 /*
 @tableinfo taket_orders index=id master_table=objects master_index=oid
 @property comments table=taket_orders
 @property transport table=taket_orders
-@property timestmp table=taket_orders
-@property price table=taket_orders
+@property timestmp table=taket_orders datatype=int
+@property price table=taket_orders datatype=float
 @property contact table=taket_orders
 @property status table=taket_orders 
-@property user_id table=taket_orders
+@property user_id table=taket_orders datatype=int
 
 @classinfo syslog_type= relationmgr=yes
 

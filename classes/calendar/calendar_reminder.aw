@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_reminder.aw,v 1.2 2004/06/25 19:35:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_reminder.aw,v 1.3 2004/10/08 01:32:08 kristo Exp $
 // calendar_reminder.aw - Kalendri meeldetuletus 
 /*
 
@@ -11,20 +11,20 @@
 
 @default table=reminders
 
-@property user_id type=textbox
+@property user_id type=textbox datatype=int
 @caption Kasutaja id
 
 
-@property event_id type=textbox 
+@property event_id type=textbox datatype=int
 @caption Eventi id
 
-@property reminder_rule_id type=textbox
+@property reminder_rule_id type=textbox datatype=int
 @caption Meeldetuletuse reegli id
 
-@property remind_at type=datetime_select
+@property remind_at type=datetime_select 
 @caption Meeldetuletuse aeg
 
-@property reminder_sent type=checkbox ch_value=1 default=0
+@property reminder_sent type=checkbox ch_value=1 default=0 datatype=int
 @caption Saadetud
 
 @property email type=textbox

@@ -17,6 +17,18 @@
             <caption>Lõpeb</caption>
       </property>
       <property>
+            <name>project_selector</name>
+            <table>objects</table>
+            <group>projects</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>callback</type>
+            <callback>cb_project_selector</callback>
+            <store>no</store>
+            <all_projects>1</all_projects>
+            <caption>Projektid</caption>
+      </property>
+      <property>
             <name>utextbox1</name>
             <table>objects</table>
             <group>general</group>
@@ -265,6 +277,11 @@
             <syslog_type>ST_CALENDAR_EVENT</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
+      <groupinfo>
+            <projects>
+                  <caption>Projektid</caption>
+            </projects>
+      </groupinfo>
       <tableinfo>
             <planner>
                   <index>id</index>

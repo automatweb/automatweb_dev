@@ -94,6 +94,16 @@
             <caption>Stiilidoonor</caption>
       </property>
       <property>
+            <name>style_new_topic_row</name>
+            <table>objects</table>
+            <group>styles</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
+            <caption>Teema lisamise stiil</caption>
+      </property>
+      <property>
             <name>style_caption</name>
             <table>objects</table>
             <group>styles</group>
@@ -293,6 +303,44 @@
             <store>no</store>
             <caption>Vali XML fail</caption>
       </property>
+      <property>
+            <name>answers_to_mail</name>
+            <table>objects</table>
+            <group>mail_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Soovi korral vastused meiliga</caption>
+      </property>
+      <property>
+            <name>mail_from</name>
+            <table>objects</table>
+            <group>mail_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>E-mail kellelt</caption>
+      </property>
+      <property>
+            <name>mail_address</name>
+            <table>objects</table>
+            <group>mail_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>E-maili aadress kellelt</caption>
+      </property>
+      <property>
+            <name>mail_subject</name>
+            <table>objects</table>
+            <group>mail_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Maili subject</caption>
+            <comment>Kui m‰‰ramata, siis foorumi topic</comment>
+      </property>
       <classinfo>
             <syslog_type>ST_FORUM</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -316,6 +364,10 @@
                   <caption>Import</caption>
                   <parent>settings</parent>
             </import>
+            <mail_settings>
+                  <caption>Meiliseaded</caption>
+                  <parent>settings</parent>
+            </mail_settings>
       </groupinfo>
       <reltypes>
             <TOPIC_FOLDER>

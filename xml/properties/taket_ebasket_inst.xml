@@ -3,6 +3,7 @@
       <property>
             <name>user_id</name>
             <table>taket_ebasket</table>
+            <datatype>int</datatype>
             <field>user_id</field>
       </property>
       <classinfo>

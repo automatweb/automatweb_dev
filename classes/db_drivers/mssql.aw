@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mssql.aw,v 1.2 2004/08/06 09:30:21 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mssql.aw,v 1.3 2004/10/08 01:32:09 kristo Exp $
 // mysql.aw - MySQL draiver
 class mssql
 {
@@ -81,13 +81,13 @@ class mssql
 		$this->log_query($qtext);
 		if (!$this->qID ) 
 		{
-			echo mssql_get_last_message();
+			echo dbg::short_backtrace();
+			echo mssql_get_last_message()."<br>";
+			echo "sql was ".$qtext." <br>";
 			if (!$errors)
 			{
 				$this->db_last_error = array(
 					'error_cmd' => $qtext,
-					'error_code' => mysql_errno($this->dbh),
-					'error_string' => mysql_error($this->dbh)
 				);
 				return false;
 			}
@@ -696,6 +696,19 @@ class mssql
 	function db_tn($table)
 	{
 		return $table;" [BEETA\strmeed].[$table] ";
+	}
+
+	function db_fn($fn)
+	{
+		if (strpos($fn,".") !== false)
+		{
+			list($tn, $fn) = explode(".", $fn);
+			return "[".$tn."].[".$fn."]";
+		}
+		else
+		{
+			return "[".$fn."]";
+		}
 	}
 };
 ?>

@@ -4,7 +4,7 @@
             <name>navtoolbar</name>
             <table>objects</table>
             <group>
-                  <num_0>general</num_0>
+                  <num_0>general_sub</num_0>
                   <num_1>all_actions</num_1>
                   <num_2>meetings</num_2>
                   <num_3>tasks</num_3>
@@ -19,7 +19,7 @@
       <property>
             <name>name</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_sub</group>
             <type>textbox</type>
             <size>30</size>
             <maxlenght>255</maxlenght>
@@ -29,7 +29,7 @@
       <property>
             <name>comment</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_sub</group>
             <type>textarea</type>
             <cols>65</cols>
             <rows>3</rows>
@@ -39,7 +39,7 @@
       <property>
             <name>reg_nr</name>
             <table>kliendibaas_firma</table>
-            <group>general</group>
+            <group>general_sub</group>
             <type>textbox</type>
             <size>10</size>
             <maxlength>20</maxlength>
@@ -47,56 +47,17 @@
             <caption>Registri number</caption>
       </property>
       <property>
-            <name>pohitegevus</name>
-            <table>kliendibaas_firma</table>
-            <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_TEGEVUSALAD</reltype>
-            <field>pohitegevus</field>
-            <caption>Põhitegevus</caption>
-      </property>
-      <property>
             <name>ettevotlusvorm</name>
             <table>kliendibaas_firma</table>
-            <group>general</group>
+            <group>general_sub</group>
             <type>select</type>
             <field>ettevotlusvorm</field>
             <caption>Õiguslik vorm</caption>
       </property>
       <property>
-            <name>tooted</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_TOOTED</reltype>
-            <method>serialize</method>
-            <field>meta</field>
-            <caption>Tooted</caption>
-      </property>
-      <property>
-            <name>kaubamargid</name>
-            <table>kliendibaas_firma</table>
-            <group>general</group>
-            <type>textarea</type>
-            <cols>65</cols>
-            <rows>3</rows>
-            <field>kaubamargid</field>
-            <caption>Kaubamärgid</caption>
-      </property>
-      <property>
-            <name>tegevuse_kirjeldus</name>
-            <table>kliendibaas_firma</table>
-            <group>general</group>
-            <type>textarea</type>
-            <cols>65</cols>
-            <rows>3</rows>
-            <field>tegevuse_kirjeldus</field>
-            <caption>Tegevuse kirjeldus</caption>
-      </property>
-      <property>
             <name>logo</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_sub</group>
             <type>textbox</type>
             <size>40</size>
             <method>serialize</method>
@@ -106,12 +67,61 @@
       <property>
             <name>firmajuht</name>
             <table>kliendibaas_firma</table>
-            <group>general</group>
+            <group>general_sub</group>
             <type>chooser</type>
             <orient>vertical</orient>
             <editonly>1</editonly>
             <field>firmajuht</field>
             <caption>Kontaktisik</caption>
+      </property>
+      <property>
+            <name>year_founded</name>
+            <table>kliendibaas_firma</table>
+            <group>general_sub</group>
+            <type>date_select</type>
+            <year_from>1800</year_from>
+            <default>-1</default>
+            <field>year_founded</field>
+            <caption>Asutatud</caption>
+      </property>
+      <property>
+            <name>kaubamargid</name>
+            <table>kliendibaas_firma</table>
+            <group>org_sections</group>
+            <type>textarea</type>
+            <cols>65</cols>
+            <rows>3</rows>
+            <field>kaubamargid</field>
+            <caption>Kaubamärgid</caption>
+      </property>
+      <property>
+            <name>tegevuse_kirjeldus</name>
+            <table>kliendibaas_firma</table>
+            <group>org_sections</group>
+            <type>textarea</type>
+            <cols>65</cols>
+            <rows>3</rows>
+            <field>tegevuse_kirjeldus</field>
+            <caption>Tegevuse kirjeldus</caption>
+      </property>
+      <property>
+            <name>tooted</name>
+            <table>objects</table>
+            <group>org_sections</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_TOOTED</reltype>
+            <method>serialize</method>
+            <field>meta</field>
+            <caption>Tooted</caption>
+      </property>
+      <property>
+            <name>pohitegevus</name>
+            <table>kliendibaas_firma</table>
+            <group>org_sections</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_TEGEVUSALAD</reltype>
+            <field>pohitegevus</field>
+            <caption>Põhitegevus</caption>
       </property>
       <property>
             <name>addresslist</name>
@@ -720,23 +730,34 @@
             <no_status>1</no_status>
       </classinfo>
       <groupinfo>
+            <general_sub>
+                  <caption>&amp;Uuml;ldine</caption>
+                  <parent>general</parent>
+            </general_sub>
+            <cedit>
+                  <caption>Üldkontaktid</caption>
+                  <parent>general</parent>
+            </cedit>
+            <org_sections>
+                  <caption>Tegevus</caption>
+                  <parent>general</parent>
+            </org_sections>
+            <people>
+                  <caption>Inimesed</caption>
+            </people>
             <contacts>
                   <caption>Kontaktid</caption>
             </contacts>
             <oldcontacts>
                   <caption>Isikud</caption>
-                  <parent>contacts</parent>
+                  <parent>people</parent>
                   <submit>no</submit>
             </oldcontacts>
             <contacts2>
-                  <caption>Kontaktid</caption>
-                  <parent>contacts</parent>
+                  <caption>Puuvaade</caption>
+                  <parent>people</parent>
                   <submit>no</submit>
             </contacts2>
-            <cedit>
-                  <caption>Üldkontaktid</caption>
-                  <parent>contacts</parent>
-            </cedit>
             <overview>
                   <caption>Tegevused</caption>
             </overview>
@@ -768,12 +789,12 @@
                   <caption>Kliendid</caption>
             </relorg>
             <customers>
-                  <caption>Kliendid</caption>
+                  <caption>Kõik kliendid</caption>
                   <parent>relorg</parent>
                   <submit>no</submit>
             </customers>
             <my_customers>
-                  <caption>Kliendid</caption>
+                  <caption>Minu kliendid</caption>
                   <parent>relorg</parent>
                   <submit>no</submit>
             </my_customers>
@@ -793,22 +814,20 @@
                   <caption>Konkurendid</caption>
                   <parent>relorg</parent>
             </competitors>
-            <personal>
-                  <caption>Värbamine</caption>
-            </personal>
             <personal_offers>
                   <caption>Tööpakkumised</caption>
-                  <parent>personal</parent>
+                  <parent>people</parent>
                   <submit>no</submit>
             </personal_offers>
             <personal_candits>
                   <caption>Kandideerijad</caption>
-                  <parent>personal</parent>
+                  <parent>people</parent>
                   <submit>no</submit>
             </personal_candits>
             <offers>
                   <caption>Pakkumised</caption>
                   <submit>no</submit>
+                  <parent>relorg</parent>
             </offers>
             <org_objects_main>
                   <caption>Objektid</caption>
@@ -819,18 +838,14 @@
                   <submit>no</submit>
                   <parent>org_objects_main</parent>
             </org_objects>
-            <org_projects_main>
-                  <caption>Projektid</caption>
-                  <submit>no</submit>
-            </org_projects_main>
             <org_projects>
                   <caption>Projektid</caption>
                   <submit>no</submit>
-                  <parent>org_projects_main</parent>
+                  <parent>relorg</parent>
             </org_projects>
             <my_projects>
                   <caption>Minu projektid</caption>
-                  <parent>org_projects_main</parent>
+                  <parent>relorg</parent>
                   <submit>no</submit>
             </my_projects>
       </groupinfo>
@@ -997,6 +1012,11 @@
                   <clid>CL_CRM_MANAGER</clid>
                   <caption>Kliendihaldur</caption>
             </CLIENT_MANAGER>
+            <SECTION_WEBSIDE>
+                  <value>35</value>
+                  <clid>CL_CRM_MANAGER</clid>
+                  <caption>Üksus veebis</caption>
+            </SECTION_WEBSIDE>
       </reltypes>
       <layout>
             <hbox_toolbar>

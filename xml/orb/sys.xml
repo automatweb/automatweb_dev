@@ -65,5 +65,13 @@
 			</function>
 		</action>
 
+		<action name="test_object_types" >
+			<function name="test_object_types">
+				<arguments>
+					<required name="parent" acl="view;add"/>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

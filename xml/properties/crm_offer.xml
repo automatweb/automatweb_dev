@@ -2,104 +2,114 @@
 <properties>
       <property>
             <name>orderer</name>
-            <table>objects</table>
+            <table>aw_crm_offer</table>
             <group>general</group>
-            <field>meta</field>
             <type>select</type>
-            <method>serialize</method>
+            <datatype>int</datatype>
+            <field>orderer</field>
             <caption>Tellija</caption>
-      </property>
-      <property>
-            <name>preformer</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <type>hidden</type>
-            <method>serialize</method>
-      </property>
-      <property>
-            <name>preformer_cap</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <type>text</type>
-            <method>serialize</method>
-            <caption>Täitja</caption>
       </property>
       <property>
             <name>start1</name>
             <table>planner</table>
             <group>general</group>
-            <field>start</field>
             <type>datetime_select</type>
+            <field>start</field>
             <caption>Algus</caption>
       </property>
       <property>
-            <name>salesman</name>
+            <name>preformer</name>
+            <table>aw_crm_offer</table>
+            <group>general</group>
+            <type>hidden</type>
+            <datatype>int</datatype>
+            <field>preformer</field>
+      </property>
+      <property>
+            <name>preformer_cap</name>
             <table>objects</table>
             <group>general</group>
-            <field>meta</field>
+            <type>text</type>
+            <store>no</store>
+            <field>preformer_cap</field>
+            <caption>Täitja</caption>
+      </property>
+      <property>
+            <name>salesman</name>
+            <table>aw_crm_offer</table>
+            <group>general</group>
             <type>select</type>
-            <method>serialize</method>
+            <datatype>int</datatype>
+            <field>salesman</field>
             <caption>Pakkumise koostaja</caption>
       </property>
       <property>
             <name>offer_status</name>
-            <table>objects</table>
+            <table>aw_crm_offer</table>
             <group>general</group>
-            <field>meta</field>
             <type>select</type>
-            <method>serialize</method>
+            <datatype>int</datatype>
+            <field>offer_status</field>
             <caption>Staatus</caption>
       </property>
       <property>
             <name>content</name>
             <table>planner</table>
             <group>general</group>
-            <field>description</field>
             <type>textarea</type>
             <cols>60</cols>
-            <rows>30</rows>
+            <rows>20</rows>
+            <field>description</field>
             <caption>Sisu</caption>
       </property>
       <property>
             <name>prev_status</name>
             <table>objects</table>
             <group>general</group>
-            <field>meta</field>
             <type>hidden</type>
             <store>no</store>
+            <field>prev_status</field>
       </property>
       <property>
             <name>sum</name>
+            <table>aw_crm_offer</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>7</size>
+            <datatype>int</datatype>
+            <field>sum</field>
+            <caption>Hind (ilma KM)</caption>
+      </property>
+      <property>
+            <name>is_done</name>
             <table>objects</table>
             <group>general</group>
-            <field>meta</field>
-            <type>textbox</type>
-            <method>serialize</method>
-            <size>7</size>
-            <caption>Hind(ilma KM)</caption>
+            <type>checkbox</type>
+            <field>flags</field>
+            <method>bitmask</method>
+            <ch_value>8</ch_value>
+            <caption>Tehtud</caption>
       </property>
       <property>
             <name>calendar_selector</name>
             <table>objects</table>
             <group>calendars</group>
-            <field>meta</field>
             <method>serialize</method>
             <type>callback</type>
             <callback>cb_calendar_selector</callback>
             <store>no</store>
+            <field>calendar_selector</field>
             <caption>Kalendrid</caption>
       </property>
       <property>
             <name>project_selector</name>
             <table>objects</table>
             <group>projects</group>
-            <field>meta</field>
             <method>serialize</method>
             <type>callback</type>
             <callback>cb_project_selector</callback>
             <store>no</store>
+            <field>project_selector</field>
             <caption>Projektid</caption>
       </property>
       <property>
@@ -109,31 +119,31 @@
                   <num_0>packages_show</num_0>
                   <num_1>products_show</num_1>
             </group>
-            <field>meta</field>
             <method>serialize</method>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
+            <field>package_toolbar</field>
       </property>
       <property>
             <name>package_table</name>
             <table>objects</table>
             <group>packages_show</group>
-            <field>meta</field>
             <method>serialize</method>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
+            <field>package_table</field>
       </property>
       <property>
             <name>products_table</name>
             <table>objects</table>
             <group>products_show</group>
-            <field>meta</field>
             <method>serialize</method>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
+            <field>products_table</field>
       </property>
       <property>
             <name>packages_search</name>
@@ -142,12 +152,12 @@
                   <num_0>packages_show</num_0>
                   <num_1>products_show</num_1>
             </group>
-            <field>meta</field>
             <method>serialize</method>
             <type>callback</type>
             <callback>do_packages_search_form</callback>
             <no_caption>1</no_caption>
             <store>no</store>
+            <field>packages_search</field>
       </property>
       <property>
             <name>packages_search_results</name>
@@ -156,21 +166,21 @@
                   <num_0>packages_show</num_0>
                   <num_1>products_show</num_1>
             </group>
-            <field>meta</field>
             <method>serialize</method>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
+            <field>packages_search_results</field>
       </property>
       <property>
             <name>offer_history</name>
             <table>objects</table>
             <group>history</group>
-            <field>meta</field>
             <method>serialize</method>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
+            <field>offer_history</field>
       </property>
       <classinfo>
             <syslog_type>ST_CRM_OFFER</syslog_type>
@@ -206,6 +216,11 @@
                   <master_table>objects</master_table>
                   <master_index>brother_of</master_index>
             </planner>
+            <aw_crm_offer>
+                  <index>aw_oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </aw_crm_offer>
       </tableinfo>
       <reltypes>
             <RECURRENCE>

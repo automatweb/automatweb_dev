@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.24 2004/07/15 12:38:22 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.25 2004/10/08 01:32:03 kristo Exp $
 // period.aw - periods 
 /*
 
@@ -20,12 +20,12 @@
 	@property status type=status
 	@caption Arhiivis
 
-	@property syear type=hidden table=periods field=syear
+	@property syear type=hidden table=periods field=syear datatype=int
 
-	@property per_id type=text table=periods field=id
+	@property per_id type=text table=periods field=id datatype=int
 	@caption Perioodi id.
 
-	@property per_oid type=hidden table=periods field=oid
+	@property per_oid type=hidden table=periods field=oid datatype=int
 	@caption Oid
 
 	@default field=meta

@@ -1,11 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_ebasket_inst.aw,v 1.1 2004/01/02 02:58:30 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_ebasket_inst.aw,v 1.2 2004/10/08 01:32:10 kristo Exp $
 // taket_ebasket_inst.aw - Taketi Ostukorvi Objekt 
 /*
 
 @tableinfo taket_ebasket index=id master_table=objects master_index=oid
 
-@property user_id table=taket_ebasket
+@property user_id table=taket_ebasket datatype=int
 
 @classinfo syslog_type=ST_TAKET_EBASKET_INST relationmgr=yes
 

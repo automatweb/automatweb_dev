@@ -35,23 +35,33 @@
             <caption>Autori meil</caption>
       </property>
       <property>
-            <name>mail_answers</name>
+            <name>subscribers_editor</name>
             <table>objects</table>
-            <group>general</group>
-            <type>checkbox</type>
+            <group>subscribers</group>
+            <type>releditor</type>
             <store>no</store>
-            <field>mail_answers</field>
-            <caption>Saada vastused meiliga</caption>
+            <mode>manager</mode>
+            <reltype>RELTYPE_SUBSCRIBER</reltype>
+            <props>
+                  <num_0>mail</num_0>
+                  <num_1>name</num_1>
+            </props>
+            <field>subscribers_editor</field>
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
       </classinfo>
+      <groupinfo>
+            <subscribers>
+                  <caption>Mailinglist</caption>
+            </subscribers>
+      </groupinfo>
       <reltypes>
             <SUBSCRIBER>
                   <value>1</value>
                   <clid>CL_ML_MEMBER</clid>
-                  <caption>tellija</caption>
+                  <caption>Tellija</caption>
             </SUBSCRIBER>
       </reltypes>
 </properties>

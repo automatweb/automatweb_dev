@@ -25,6 +25,7 @@
             <type>textbox</type>
             <size>5</size>
             <field>aw_amount</field>
+            <datatype>int</datatype>
             <caption>Tr&amp;uuml;kiarv</caption>
       </property>
       <property>
@@ -201,6 +202,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>aw_kromaliin</field>
+            <datatype>int</datatype>
             <caption>Kromaliin</caption>
       </property>
       <property>
@@ -210,6 +212,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>aw_makett</field>
+            <datatype>int</datatype>
             <caption>Makett</caption>
       </property>
       <property>
@@ -219,6 +222,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>aw_example</field>
+            <datatype>int</datatype>
             <caption>N&amp;auml;idis</caption>
       </property>
       <property>
@@ -228,6 +232,7 @@
             <type>textbox</type>
             <size>5</size>
             <field>aw_plates</field>
+            <datatype>int</datatype>
             <caption>Plaate</caption>
       </property>
       <property>
@@ -237,6 +242,7 @@
             <type>textbox</type>
             <size>5</size>
             <field>aw_actual</field>
+            <datatype>int</datatype>
             <caption>Tegelik</caption>
       </property>
       <property>

@@ -10,7 +10,7 @@
             <reltype>RELTYPE_MEMBER_PARENT</reltype>
             <editonly>1</editonly>
             <rel>1</rel>
-            <caption>Liikmete kaust</caption>
+            <caption>Listi liikmete allikas</caption>
       </property>
       <property>
             <name>multiple_folders</name>
@@ -369,8 +369,12 @@
       <reltypes>
             <MEMBER_PARENT>
                   <value>1</value>
-                  <clid>CL_MENU</clid>
-                  <caption>listi liikmete kataloog</caption>
+                  <clid>
+                        <num_0>CL_MENU</num_0>
+                        <num_1>CL_USER</num_1>
+                        <num_2>CL_GROUP</num_2>
+                  </clid>
+                  <caption>Listi liikmete allikas</caption>
             </MEMBER_PARENT>
             <REDIR_OBJECT>
                   <value>2</value>

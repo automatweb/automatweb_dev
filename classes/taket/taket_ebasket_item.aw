@@ -1,17 +1,17 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_ebasket_item.aw,v 1.1 2004/01/02 02:58:30 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_ebasket_item.aw,v 1.2 2004/10/08 01:32:10 kristo Exp $
 // taket_ebasket_item.aw - Taketi Ostukorvi Rida 
 /*
 @tableinfo taket_ebasket_item index=id master_table=objects master_index=oid
 
 @property product_code table=taket_ebasket_item
 @property product_name table=taket_ebasket_item
-@property ebasket_id table=taket_ebasket_item
-@property quantity table=taket_ebasket_item
+@property ebasket_id table=taket_ebasket_item datatype=int
+@property quantity table=taket_ebasket_item datatype=int
 @property price table=taket_ebasket_item
 @property discount table=taket_ebasket_item
-@property inStock table=taket_ebasket_item
-@property supplier_id table=taket_ebasket_item
+@property inStock table=taket_ebasket_item datatype=int
+@property supplier_id table=taket_ebasket_item datatype=int
 
 @classinfo syslog_type=ST_TAKET_EBASKET_ITEM relationmgr=yes
 

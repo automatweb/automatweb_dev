@@ -1,14 +1,14 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_order_item.aw,v 1.1 2004/01/02 02:58:30 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_order_item.aw,v 1.2 2004/10/08 01:32:10 kristo Exp $
 // taket_order_item.aw - Taketi tellimuse item 
 /*
 
 @classinfo syslog_type=ST_TAKET_ORDER_ITEM relationmgr=yes
 
 @tableinfo taket_order_items index=id master_table=objects master_index=oid
-@property order_id table=taket_order_items
+@property order_id table=taket_order_items datatype=int
 @property product_code table=taket_order_items
-@property quantity table=taket_order_items
+@property quantity table=taket_order_items datatype=int
 @property price table=taket_order_items
 @property discount table=taket_order_items
 @property product_name table=taket_order_items

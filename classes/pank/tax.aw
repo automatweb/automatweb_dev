@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/pank/tax.aw,v 1.2 2004/07/27 11:21:18 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/pank/tax.aw,v 1.3 2004/10/08 01:32:09 kristo Exp $
 // tax.aw - Maks 
 /*
 
@@ -14,7 +14,7 @@
 
 @default table=tax
 
-@property tax_type type=chooser
+@property tax_type type=chooser datatype=int
 @caption Maksu tüüp
 
 @property tax_percentage type=textbox

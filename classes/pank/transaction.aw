@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/pank/transaction.aw,v 1.3 2004/07/27 11:22:08 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/pank/transaction.aw,v 1.4 2004/10/08 01:32:09 kristo Exp $
 // transaction.aw - Ülekanne 
 /*
 
@@ -20,10 +20,10 @@
 @property trans_from_object type=text store=no
 @caption Kandja
 
-@property trans_from_account_hr type=text table=pank_transaction store=no
+@property trans_from_account_hr type=text table=pank_transaction store=no 
 @caption Kandja konto
 
-@property trans_from_account type=hidden table=pank_transaction no_caption=1
+@property trans_from_account type=hidden table=pank_transaction no_caption=1 datatype=int
 @caption Kandja konto
 
 @property trans_to_object type=text store=no
@@ -32,19 +32,19 @@
 @property trans_to_account_hr type=text store=no
 @caption Saaja konto
 
-@property trans_to_account type=hidden no_caption=1 
+@property trans_to_account type=hidden no_caption=1 datatype=int
 @caption Saaja konto
 
 @property sum type=textbox
 @caption Summa
 
-@property time type=hidden no_caption=1 
+@property time type=hidden no_caption=1 datatype=int
 @caption Kellaaeg
 
 @property time_hr type=text store=no
 @caption Kellaaeg
 
-@property is_completed type=hidden no_caption=1
+@property is_completed type=hidden no_caption=1 datatype=int
 @caption Kinnitatud
 
 @property completion_confirmation type=hidden no_caption store=no value=0

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.83 2004/09/16 08:55:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.84 2004/10/08 01:32:03 kristo Exp $
 
 lc_load("definition");
 
@@ -330,7 +330,10 @@ class acl_base extends db_connector
 			}
 			if (++$cnt > 100)
 			{
-				$this->raise_error(ERR_ACL_EHIER,"acl_base->can($access,$oid): error in object hierarchy, count exceeded!",true);
+				error::throw(array(
+					"id" => ERR_ACL_EHIER,
+					"msg" => "acl_base->can($access,$oid): error in object hierarchy, count exceeded!"
+				));
 			}
 
 			$oid = $parent;

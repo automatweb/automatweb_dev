@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_registration.aw,v 1.1 2004/10/07 21:37:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_registration.aw,v 1.2 2004/10/08 01:32:04 kristo Exp $
 // calendar_registration.aw - Kalendri sündmusele registreerumine 
 /*
 
@@ -100,11 +100,15 @@ class calendar_registration extends class_base
 		{
 			$cal = $c->to();
 			$owner_user = $cal->get_first_obj_by_reltype(8 /* CL_PLANNER.RELTYPE_CALENDAR_OWNERSHIP */);
-			$owner_person = $owner_user->get_first_obj_by_reltype(2 /* CL_USER.RELTYPE_PERSON */);
+			$pdata = array();
+			if ($owner_user)
+			{
+				$owner_person = $owner_user->get_first_obj_by_reltype(2 /* CL_USER.RELTYPE_PERSON */);
 
-			$pdata = $person->fetch_person_by_id(array(
-				"id" => $owner_person->id()
-			));
+				$pdata = $person->fetch_person_by_id(array(
+					"id" => $owner_person->id()
+				));
+			}
 
 			$this->vars(array(
 				"person" => $pdata["name"],

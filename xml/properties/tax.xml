@@ -13,6 +13,7 @@
             <table>tax</table>
             <group>general</group>
             <type>chooser</type>
+            <datatype>int</datatype>
             <field>tax_type</field>
             <caption>Maksu tüüp</caption>
       </property>

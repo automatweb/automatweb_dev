@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.5 2004/07/05 13:16:00 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.6 2004/10/08 01:32:05 kristo Exp $
 // personnel_management_job_offer.aw - Tööpakkumine 
 /*
 //HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_PERSONNEL_MANAGEMENT_JOB_OFFER, on_job_save)
@@ -17,7 +17,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_PERSONNEL_MANAGEMENT_J
 @tableinfo personnel_management_job index=oid master_table=objects master_index=oid
 
 
-@property profession type=select table=personnel_management_job
+@property profession type=select table=personnel_management_job datatype=int
 @caption Ametikoht
 
 @property deadline type=date_select table=personnel_management_job

@@ -32,6 +32,7 @@
             <group>general</group>
             <type>hidden</type>
             <no_caption>1</no_caption>
+            <datatype>int</datatype>
             <field>trans_from_account</field>
             <caption>Kandja konto</caption>
       </property>
@@ -59,6 +60,7 @@
             <group>general</group>
             <type>hidden</type>
             <no_caption>1</no_caption>
+            <datatype>int</datatype>
             <field>trans_to_account</field>
             <caption>Saaja konto</caption>
       </property>
@@ -76,6 +78,7 @@
             <group>general</group>
             <type>hidden</type>
             <no_caption>1</no_caption>
+            <datatype>int</datatype>
             <field>time</field>
             <caption>Kellaaeg</caption>
       </property>
@@ -94,6 +97,7 @@
             <group>general</group>
             <type>hidden</type>
             <no_caption>1</no_caption>
+            <datatype>int</datatype>
             <field>is_completed</field>
             <caption>Kinnitatud</caption>
       </property>

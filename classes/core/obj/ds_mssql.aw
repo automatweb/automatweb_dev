@@ -5,6 +5,7 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 	function _int_obj_ds_mssql()
 	{
 		$this->init();
+		$this->numeric_datatypes = array("relmanager", "relpicker", "date_select","classificator", "datetime_select");
 	}
 
 	// returns oid for alias
@@ -285,19 +286,27 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 		// create oid
 		$oid = $this->db_fetch_field("SELECT max(oid) as oid FROM objects with(tablock)", "oid")+1;
 
+		// set brother to self if not specified.
+		if (!$objdata["brother_of"])
+		{
+			$objdata["brother_of"] = $oid;
+		}
+
 		$q = "
 			INSERT INTO objects (
 				parent,						class_id,						name,						createdby,
 				created,					modified,						status,						site_id,
 				hits,						lang_id,						comment,					modifiedby,
 				jrk,						period,							alias,						periodic,
-				cachedirty,					metadata,						subclass,					flags, oid
+				cachedirty,					metadata,						subclass,					flags, 
+				oid,						brother_of
 		) VALUES (
 				'".$objdata["parent"]."',	'".$objdata["class_id"]."',		'".$objdata["name"]."',		'".$objdata["createdby"]."',
 				'".$objdata["created"]."',	'".$objdata["modified"]."',		'".$objdata["status"]."',	'".$objdata["site_id"]."',
 				'".$objdata["hits"]."',		'".$objdata["lang_id"]."',		'".$objdata["comment"]."',	'".$objdata["modifiedby"]."',
 				'".$objdata["jrk"]."',		'".$objdata["period"]."',		'".$objdata["alias"]."',	'".$objdata["periodic"]."',
-				'1',						'".$metadata."',				'".$objdata["subclass"]."',	'".$objdata["flags"]."', $oid
+				'1',						'".$metadata."',				'".$objdata["subclass"]."',	'".$objdata["flags"]."', 
+				$oid,						$objdata[brother_of]
 		)";
 		//echo "q = <pre>". htmlentities($q)."</pre> <br />";
 
@@ -307,13 +316,7 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 
 		// create all access for the creator
 		$this->create_obj_access($oid);
-		
-
-		// set brother to self if not specified.
-		if (!$objdata["brother_of"])
-		{
-			$this->db_query("UPDATE objects SET brother_of = oid WHERE oid = $oid");
-		}
+	
 
 		// hits
 		$this->db_query("INSERT INTO hits(oid,hits,cachehits) VALUES($oid, 0, 0 )");
@@ -345,7 +348,7 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 					$tbls[$data["table"]]["defaults"][$data["field"]] = $data["default"];
 				}
 
-				if ($data["datatype"] == "int" && $tbls[$data["table"]]["defaults"][$data["field"]] == "")
+				if (($data["datatype"] == "int" || in_array($data["type"], $this->numeric_datatypes)) && $tbls[$data["table"]]["defaults"][$data["field"]] == "")
 				{
 					$tbls[$data["table"]]["defaults"][$data["field"]] = "0";
 				}
@@ -363,7 +366,7 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 				foreach($dat["defaults"] as $fd => $vl)
 				{
 					$this->quote($vl);
-					$fds .=",".$fd;
+					$fds .=",[".$fd."]";
 					$vls .=",'".$vl."'";
 				}
 			}
@@ -489,7 +492,7 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 						$seta[$prop["field"]] = $str;
 					}
 
-					if ($prop["datatype"] == "int" && $seta[$prop["field"]] == "")
+					if (($prop["datatype"] == "int" || in_array($data["type"], $this->numeric_datatypes)) && $seta[$prop["field"]] == "")
 					{
 						$seta[$prop["field"]] = "0";
 					}
@@ -502,7 +505,7 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 				$this->quote($str);
 				$seta[$field] = $str;
 			}
-			$sets = join(",",map2("%s = '%s'",$seta,0,true));
+			$sets = join(",",map2("[%s] = '%s'",$seta,0,true));
 			if ($sets != "")
 			{
 				$q = "UPDATE $tbl SET $sets WHERE ".$tableinfo[$tbl]["index"]." = '".$objdata["brother_of"]."'";
@@ -564,8 +567,8 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 				pri,						id
 			) VALUES(
 				'$data[from]',				'$data[to]',			'$data[type]',			'$data[data]',
-				'$data[idx]',				'".((int)$data[cached])."',		'$data[relobj_id]',		'$data[reltype]',
-				'".((int)$data[pri])."',	 '$data[id]'
+				'$data[idx]',				'".((int)$data["cached"])."',		'$data[relobj_id]',		'".((int)$data["reltype"])."',
+				'".((int)$data["pri"])."',	 '$data[id]'
 			)";
 			$this->db_query($q);
 			//$data['id'] = $this->db_last_insert_id();

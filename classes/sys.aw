@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.34 2004/10/07 21:33:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.35 2004/10/08 01:32:03 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -637,6 +637,29 @@ class sys extends aw_template
 		$t->set_default_sorder("desc");
 		$t->sort_by();
 		return $t->draw();
+	}
+
+	/** tests database by adding all possible types of objects
+
+		@attrib name=test_object_types
+
+		@param parent required acl=view;add
+
+	**/
+	function test_object_types($arr)
+	{
+		$clss = aw_ini_get("classes");
+		foreach($clss as $clid => $cldata)
+		{
+			echo "clid = $clid , name = $cldata[name] <br>\n";
+			flush();
+			$o = obj();
+			$o->set_parent($arr["parent"]);
+			$o->set_class_id($clid);
+			$o->set_name($cldata["name"]);
+			$o->save();
+		}
+		die("all done!! database seems to be relatively ok!");
 	}
 };
 ?>

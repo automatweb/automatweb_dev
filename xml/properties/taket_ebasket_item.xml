@@ -13,11 +13,13 @@
       <property>
             <name>ebasket_id</name>
             <table>taket_ebasket_item</table>
+            <datatype>int</datatype>
             <field>ebasket_id</field>
       </property>
       <property>
             <name>quantity</name>
             <table>taket_ebasket_item</table>
+            <datatype>int</datatype>
             <field>quantity</field>
       </property>
       <property>
@@ -33,11 +35,13 @@
       <property>
             <name>inStock</name>
             <table>taket_ebasket_item</table>
+            <datatype>int</datatype>
             <field>inStock</field>
       </property>
       <property>
             <name>supplier_id</name>
             <table>taket_ebasket_item</table>
+            <datatype>int</datatype>
             <field>supplier_id</field>
       </property>
       <classinfo>

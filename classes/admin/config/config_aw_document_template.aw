@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_aw_document_template.aw,v 1.2 2004/05/25 10:50:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_aw_document_template.aw,v 1.3 2004/10/08 01:32:04 kristo Exp $
 // config_aw_document_template.aw - Dokumendi Template 
 /*
 
@@ -10,15 +10,15 @@
 
 @tableinfo template index=obj_id master_table=objects master_index=brother_of
 
-@property type type=select table=template field=type 
+@property type type=select table=template field=type datatype=int
 @caption Template t&uuml;&uuml;p
 
 @property filename type=textbox table=template field=filename
 @caption Template fail
 
-@property t_id type=hidden table=template field=id
+@property t_id type=hidden table=template field=id datatype=int
 @property t_name type=hidden table=template field=name
-@property t_site_id type=hidden table=template field=site_id
+@property t_site_id type=hidden table=template field=site_id datatype=int
 
 
 */

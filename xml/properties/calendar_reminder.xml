@@ -5,6 +5,7 @@
             <table>reminders</table>
             <group>general</group>
             <type>textbox</type>
+            <datatype>int</datatype>
             <field>user_id</field>
             <caption>Kasutaja id</caption>
       </property>
@@ -13,6 +14,7 @@
             <table>reminders</table>
             <group>general</group>
             <type>textbox</type>
+            <datatype>int</datatype>
             <field>event_id</field>
             <caption>Eventi id</caption>
       </property>
@@ -21,6 +23,7 @@
             <table>reminders</table>
             <group>general</group>
             <type>textbox</type>
+            <datatype>int</datatype>
             <field>reminder_rule_id</field>
             <caption>Meeldetuletuse reegli id</caption>
       </property>
@@ -38,6 +41,7 @@
             <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <datatype>int</datatype>
             <field>reminder_sent</field>
             <caption>Saadetud</caption>
       </property>

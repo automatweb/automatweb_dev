@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.1 2004/06/17 13:28:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.2 2004/10/08 01:32:05 kristo Exp $
 // personnel_management_job_wanted.aw - T&ouml;&ouml; soov 
 /*
 
@@ -12,7 +12,7 @@
 @property name type=textbox table=objects
 @caption Ametinimetus
 
-@property palgasoov type=textbox size=5
+@property palgasoov type=textbox size=5 datatype=int
 @caption Palgasoov
 
 @property valdkond type=classificator multiple=1 orient=vertical store=connect reltype=RELTYPE_TEGEVUSVALDKOND field=meta method=serialize table=objects

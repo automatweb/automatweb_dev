@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.22 2004/09/12 21:07:40 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.23 2004/10/08 01:32:09 kristo Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -8,21 +8,21 @@
 @default table=objects
 @default group=general
 
-@property orderer type=select table=aw_crm_offer
+@property orderer type=select table=aw_crm_offer datatype=int
 @caption Tellija
 
 @property start1 type=datetime_select field=start table=planner
 @caption Algus
 
-@property preformer type=hidden table=aw_crm_offer
+@property preformer type=hidden table=aw_crm_offer datatype=int
 
 @property preformer_cap type=text store=no
 @caption Täitja
 
-@property salesman type=select table=aw_crm_offer
+@property salesman type=select table=aw_crm_offer datatype=int
 @caption Pakkumise koostaja
 
-@property offer_status type=select table=aw_crm_offer
+@property offer_status type=select table=aw_crm_offer datatype=int
 @caption Staatus
 
 @property content type=textarea cols=60 rows=20 table=planner field=description
@@ -30,7 +30,7 @@
 
 @property prev_status type=hidden store=no
 
-@property sum type=textbox table=aw_crm_offer size=7
+@property sum type=textbox table=aw_crm_offer size=7 datatype=int
 @caption Hind (ilma KM)
 
 @property is_done type=checkbox table=objects field=flags method=bitmask ch_value=8 // OBJ_IS_DONE

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.22 2004/02/03 16:31:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.23 2004/10/08 01:32:03 kristo Exp $
 // this is the class that allows us to connect to multiple datasources at once
 // it replaces the mysql class which was used up to now, but still routes all
 // db functions to it so that everything stays working and it also provides
@@ -395,6 +395,13 @@ class db_connector
 	function db_table_exists($tbl)
 	{
 		return $this->dc[$this->default_cid]->db_table_exists($tbl);
+	}
+
+	/** escapes a database table field name based on the db driver
+	**/
+	function db_fn($fn)
+	{
+		return $this->dc[$this->default_cid]->db_fn($fn);
 	}
 };
 ?>

@@ -13,11 +13,13 @@
       <property>
             <name>timestmp</name>
             <table>taket_orders</table>
+            <datatype>int</datatype>
             <field>timestmp</field>
       </property>
       <property>
             <name>price</name>
             <table>taket_orders</table>
+            <datatype>float</datatype>
             <field>price</field>
       </property>
       <property>
@@ -33,6 +35,7 @@
       <property>
             <name>user_id</name>
             <table>taket_orders</table>
+            <datatype>int</datatype>
             <field>user_id</field>
       </property>
       <classinfo>

@@ -3,6 +3,7 @@
       <property>
             <name>order_id</name>
             <table>taket_order_items</table>
+            <datatype>int</datatype>
             <field>order_id</field>
       </property>
       <property>
@@ -13,6 +14,7 @@
       <property>
             <name>quantity</name>
             <table>taket_order_items</table>
+            <datatype>int</datatype>
             <field>quantity</field>
       </property>
       <property>

@@ -5,6 +5,7 @@
             <table>pank_account</table>
             <group>general</group>
             <type>text</type>
+            <datatype>int</datatype>
             <field>account_type</field>
             <caption>Konto tüüp</caption>
       </property>

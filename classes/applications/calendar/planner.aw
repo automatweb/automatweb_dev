@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.24 2004/10/07 21:23:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.25 2004/10/08 01:32:04 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -594,12 +594,12 @@ class planner extends class_base
 
 		// that is the basic query
 		// I need to add different things to it
-		$q = "SELECT objects.oid AS id,objects.brother_of,objects.name,planner.start,planner.end
+		$q = "SELECT ".$this->db_fn("objects.oid")." AS id,".$this->db_fn("objects.brother_of").",".$this->db_fn("objects.name").",".$this->db_fn("planner.start").",".$this->db_fn("planner.end")."
 			FROM planner
-			LEFT JOIN objects ON (planner.id = objects.brother_of)
-			WHERE planner.start >= '${_start}' AND
-			(planner.start <= '${_end}' OR planner.end IS NULL) AND
-			objects.status != 0";
+			LEFT JOIN objects ON (".$this->db_fn("planner.id")." = ".$this->db_fn("objects.brother_of").")
+			WHERE ".$this->db_fn("planner.start")." >= '${_start}' AND
+			(".$this->db_fn("planner.start")." <= '${_end}' OR ".$this->db_fn("planner.end")." IS NULL) AND
+			".$this->db_fn("objects.status")." != 0";
 
 		// lyhidalt. planneri tabelis peaks kirjas olema. No, but it can't be there 
 		// I need to connect that god damn recurrence table into this fucking place.
@@ -1852,13 +1852,11 @@ class planner extends class_base
 		{
 			foreach($confirmed as $start_tm)
 			{
-				$vaco = new object(array(
-					"parent" => $event_folder,
-					//"class_id" => CL_CALENDAR_VACANCY,
-					"status" => STAT_ACTIVE,
-					"name" => "Vaba aeg",
-				));
+				$vaco = new object();
+				$vaco->set_parent($event_folder);
 				$vaco->set_class_id(CL_CALENDAR_VACANCY);
+				$vaco->set_status(STAT_ACTIVE);
+				$vaco->set_name("Vaba aeg");
 				$vaco->set_prop("start",$start_tm);
 				$em = $start_tm + ($span) - 1;
 				$vaco->set_prop("end",$start_tm + ($span) - 1);

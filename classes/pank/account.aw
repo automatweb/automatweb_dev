@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/pank/account.aw,v 1.4 2004/07/27 10:44:46 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/pank/account.aw,v 1.5 2004/10/08 01:32:09 kristo Exp $
 // account.aw - Konto 
 /*
 @tableinfo pank_account index=oid master_table=objects master_index=oid
@@ -10,7 +10,7 @@
 
 @default table=pank_account
 
-@property account_type type=text group=general
+@property account_type type=text group=general datatype=int
 @caption Konto tüüp
 
 @groupinfo account_overview caption="Konto ülevaade" submit=no

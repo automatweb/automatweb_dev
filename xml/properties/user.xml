@@ -355,6 +355,11 @@
                   <clid>CL_USER</clid>
                   <caption>ignoreeritud</caption>
             </IGNORED>
+            <EMAIL>
+                  <value>6</value>
+                  <clid>CL_ML_MEMBER</clid>
+                  <caption>Email</caption>
+            </EMAIL>
       </reltypes>
 </properties>
 

@@ -404,6 +404,7 @@
             <type>textbox</type>
             <field>aw_userch1</field>
             <ch_value>1</ch_value>
+            <datatype>int</datatype>
             <caption>User-defined checkbox 1</caption>
       </property>
       <property>
@@ -413,6 +414,7 @@
             <type>textbox</type>
             <field>aw_userch2</field>
             <ch_value>1</ch_value>
+            <datatype>int</datatype>
             <caption>User-defined checkbox 2</caption>
       </property>
       <property>
@@ -422,6 +424,7 @@
             <type>text</type>
             <field>aw_userch3</field>
             <ch_value>1</ch_value>
+            <datatype>int</datatype>
             <caption>User-defined checkbox 3</caption>
       </property>
       <property>
@@ -431,6 +434,7 @@
             <type>textbox</type>
             <field>aw_userch4</field>
             <ch_value>1</ch_value>
+            <datatype>int</datatype>
             <caption>User-defined checkbox 4</caption>
       </property>
       <property>
@@ -440,6 +444,7 @@
             <type>textbox</type>
             <field>aw_userch5</field>
             <ch_value>1</ch_value>
+            <datatype>int</datatype>
             <caption>User-defined checkbox 5</caption>
       </property>
       <classinfo>

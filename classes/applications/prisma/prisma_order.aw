@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_order.aw,v 1.7 2004/07/09 07:59:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_order.aw,v 1.8 2004/10/08 01:32:05 kristo Exp $
 // prisma_order.aw - Printali Tr&uuml;kis 
 /*
 
@@ -19,7 +19,7 @@
 @property number type=textbox table=objects field=meta method=serialize size=6
 @caption T&ouml;&ouml; number
 
-@property amount type=textbox size=5 field=aw_amount
+@property amount type=textbox size=5 field=aw_amount datatype=int
 @caption Tr&uuml;kiarv
 
 @property paper_format type=textbox field=aw_paper_format
@@ -95,23 +95,23 @@
 @caption Tr&uuml;kise ehitus / kaas
 
 
-@property kromaliin type=checkbox ch_value=1 field=aw_kromaliin
+@property kromaliin type=checkbox ch_value=1 field=aw_kromaliin datatype=int
 @caption Kromaliin
 
-@property makett type=checkbox ch_value=1 field=aw_makett
+@property makett type=checkbox ch_value=1 field=aw_makett datatype=int
 @caption Makett
 
-@property example type=checkbox ch_value=1 field=aw_example
+@property example type=checkbox ch_value=1 field=aw_example datatype=int
 @caption N&auml;idis
 
 
 @groupinfo montage caption="Montaaz" parent=general 
 @defeult group=montage
 
-@property plates type=textbox size=5 field=aw_plates
+@property plates type=textbox size=5 field=aw_plates datatype=int
 @caption Plaate
 
-@property actual type=textbox size=5 field=aw_actual
+@property actual type=textbox size=5 field=aw_actual datatype=int
 @caption Tegelik
 
 @property m_content type=textarea rows=10 cols=40 field=aw_m_content

@@ -5,6 +5,7 @@
             <table>quickmessages</table>
             <group>general</group>
             <type>text</type>
+            <datatype>int</datatype>
             <field>user_from</field>
             <caption>Kellelt</caption>
       </property>
@@ -13,6 +14,7 @@
             <table>quickmessages</table>
             <group>general</group>
             <type>textbox</type>
+            <datatype>int</datatype>
             <field>user_to</field>
             <caption>Kellele</caption>
       </property>

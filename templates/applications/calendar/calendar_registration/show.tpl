@@ -1,4 +1,4 @@
-<table border="1">
+<table border="0">
 <!-- SUB: CALENDAR -->
 <tr>
 	<td colspan="2">{VAR:person} {VAR:person_rank} {VAR:person_mail} {VAR:person_phone}</td>
