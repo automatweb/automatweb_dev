@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_profession.aw,v 1.7 2004/11/09 10:27:29 kristo Exp $
-// crm_profession.aw - Ameti nimetus 
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_profession.aw,v 1.8 2005/01/21 13:10:14 duke Exp $
+// crm_profession.aw - Ametinimetus 
 /*
 @classinfo syslog_type=ST_CRM_PROFESSION relationmgr=yes
 @tableinfo kliendibaas_amet index=oid master_table=objects master_index=oid
@@ -9,6 +9,9 @@
 @default group=general
 
 @classinfo no_status=1
+
+@property ext_id field=subclass type=textbox
+@caption Sidussüsteemi ID
 
 @property name_in_plural type=textbox table=kliendibaas_amet
 @caption Nimi mitmuses
@@ -24,6 +27,9 @@
 
 @reltype GROUP value=2 clid=CL_GROUP
 @caption grupp
+
+@reltype DESC_FILE value=2 clid=CL_FILE
+@caption Ametijuhend
 
 */
 
