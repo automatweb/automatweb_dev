@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.15 2003/11/08 07:49:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.16 2003/12/09 12:42:30 duke Exp $
 // imap.aw - IMAP login 
 /*
 
@@ -242,10 +242,11 @@ class imap extends class_base
 						"answered" => $message->answered,
 						"recent" => $message->recent,
 							// 1 is multipart message
+							// this needs some tweaking, since multipart
+							// doesn't always mean that the message
+							// has attachments
 						"has_attachments" => ($str->type == 1) ? true : false,
 					);
-					//print ".";
-					//flush();
 				};
 			};
 
@@ -264,7 +265,9 @@ class imap extends class_base
 		{
 			foreach(array_keys($mbox_over["contents"]) as $rkey => $ritem)
 			{
-				if (!between($rkey+1,$arr["from"],$arr["to"]))
+				// * means all messages should be returned. used for filters
+				// mostly. IMAP extension uses this syntax so I will too.
+				if ("*" != $arr["to"] && !between($rkey+1,$arr["from"],$arr["to"]))
 				{
 					unset($mbox_over["contents"][$ritem]);
 				};
