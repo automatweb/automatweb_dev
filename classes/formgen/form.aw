@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.82 2003/08/01 13:27:49 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.83 2003/08/18 12:03:00 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -1199,6 +1199,7 @@ class form extends form_base
 			header("Location: $go_to");
 			aw_session_del("form_redir_after_submit_".$this->id);
 		}
+
 		return $st;
 	}
 
@@ -1405,7 +1406,7 @@ class form extends form_base
 				aw_session_set("form_".$this->id."_entry_".$entry_id."_data", $this->entry);
 				aw_session_set("form_".$this->id."_entry_".$entry_id."_errors", $this->controller_errors);
 				aw_session_set("form_".$this->id."_entry_".$entry_id."_is_error", true);
-
+				aw_session_set("form_redir_after_submit_".$this->id,NULL);
 				if ((!$controllers_ok) || ($has_errors))
 				{
 					// return to the form display url and show the error messages to the user so he/she can
@@ -1438,6 +1439,11 @@ class form extends form_base
 				"lang_id" => $lang_id,
 			));
 		}
+
+		// paneme kirja, et kasutaja t2itis selle formi et siis kasutajax regimisel saame seda kontrollida.
+		$sff = aw_global_get("session_filled_forms");
+		$sff[$this->id] = $this->entry_id;
+		aw_session_set("session_filled_forms", $sff);
 
 		if (!$controller_warnings_ok)
 		{
@@ -1529,11 +1535,6 @@ class form extends form_base
 			$this->db_query($q);
 		};
 
-		// paneme kirja, et kasutaja t2itis selle formi et siis kasutajax regimisel saame seda kontrollida.
-		$sff = aw_global_get("session_filled_forms");
-		$sff[$this->id] = $this->entry_id;
-		aw_session_set("session_filled_forms", $sff);
-
 		// check mailinglist rules
 		if ($this->type == FTYPE_ENTRY && !$no_ml_rules)
 		{
@@ -1548,6 +1549,11 @@ class form extends form_base
 
 		$fact = get_instance("formgen/form_actions");
 		$fact->do_actions(&$this, $this->entry_id);
+
+		if (!empty($this->go_to_after_submit))
+		{
+			return $this->go_to_after_submit;
+		}
 
 		if (isset($redirect_after) && $redirect_after)
 		{
