@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.42 2003/10/16 14:38:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.43 2003/10/23 11:23:07 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -715,6 +715,7 @@ class doc extends class_base
 			"class" => CL_PLANNER,
 			"active" => true,
 			"fields" => "oid,name,metadata",
+			"orderby" => "name",
 		));
 		while($row = $this->db_next())
 		{
