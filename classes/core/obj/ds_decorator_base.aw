@@ -124,6 +124,11 @@ class _int_obj_ds_decorator
 	{
 		$this->contained->object_exists($oid);
 	}
+
+	function create_brother($arr)
+	{
+		$this->contained->create_brother($arr);
+	}
 }
 
 ?>

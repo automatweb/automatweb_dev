@@ -607,7 +607,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 	function delete_object($oid)
 	{
-		$this->db_query("UPDATE objects SET status = '".STAT_DELETED."' WHERE oid = '$oid'");
+		$this->db_query("UPDATE objects SET status = '".STAT_DELETED."', modified = ".time().",modifiedby = '".aw_global_get("uid")."' WHERE oid = '$oid'");
 		$this->db_query("DELETE FROM aliases WHERE target = '$oid'");
 	}
 
@@ -691,7 +691,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$str = join(" OR ", $str);
 				if ($str != "")
 				{
-					$sql = " ( $str ) ";
+					$sql[] = " ( $str ) ";
 				}
 			}
 			else
@@ -713,6 +713,44 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 		}
 		return join(" ".$logic." ", $sql);
+	}
+
+	function create_brother($arr)
+	{
+		extract($arr);
+
+		$metadata = aw_serialize($objdata["meta"]);
+		$this->quote($metadata);
+		$this->quote(&$objdata);
+
+		// create oid
+		$q = "
+			INSERT INTO objects (
+				parent,						class_id,						name,						createdby,
+				created,					modified,						status,						site_id,
+				hits,						lang_id,						comment,					modifiedby,
+				jrk,						period,							alias,						periodic,
+				cachedirty,					metadata,						subclass,					flags,
+				brother_of
+		) VALUES (
+				'".$objdata["parent"]."',	'".$objdata["class_id"]."',		'".$objdata["name"]."',		'".$objdata["createdby"]."',
+				'".$objdata["created"]."',	'".$objdata["modified"]."',		'".$objdata["status"]."',	'".$objdata["site_id"]."',
+				'".$objdata["hits"]."',		'".$objdata["lang_id"]."',		'".$objdata["comment"]."',	'".$objdata["modifiedby"]."',
+				'".$objdata["jrk"]."',		'".$objdata["period"]."',		'".$objdata["alias"]."',	'".$objdata["periodic"]."',
+				'1',						'".$metadata."',				'".$objdata["subclass"]."',	'".$objdata["flags"]."',
+				'".$objdata["oid"]."'
+		)";
+		//echo "q = <pre>". htmlentities($q)."</pre> <br />";
+		$this->db_query($q);
+		$oid = $this->db_last_insert_id();
+
+		// create all access for the creator
+		$this->create_obj_access($oid);
+
+		// hits
+		$this->db_query("INSERT INTO hits(oid,hits,cachehits) VALUES($oid, 0, 0 )");
+
+		return $oid;
 	}
 }
 

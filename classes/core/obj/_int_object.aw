@@ -758,6 +758,10 @@ class _int_object
 
 	function set_meta($key, $value)
 	{
+		if (aw_global_get("uid") == "kix")
+		{
+			echo "key = $key , value = $value <br>";
+		}
 		$prev = $this->obj["meta"][$key];
 
 		$this->obj["meta"][$key] = $value;
@@ -785,6 +789,10 @@ class _int_object
 
 	function set_prop($key, $val)
 	{
+		if (aw_global_get("uid") == "kix")
+		{
+			echo "propkey = $key , value = $val <br>";
+		}
 		if (!$this->_int_is_property($key))
 		{
 			error::throw(array(
@@ -925,6 +933,21 @@ class _int_object
 		}
 		$clss = aw_ini_get("classes");
 		return get_instance($clss[$clid]["file"]);
+	}
+
+	function create_brother($parent)
+	{
+		error::throw_if(!$this->obj["oid"], array(
+			"id" => ERR_CORE_OID,
+			"msg" => "object::create_brother($parent): no object loaded!"
+		));
+
+		error::throw_if(!$parent, array(
+			"id" => ERR_CORE_OID,
+			"msg" => "object::create_brother($parent): no parent!"
+		));
+
+		return $this->_int_create_brother($parent);
 	}
 
 	/////////////////////////////////////////////////////////////////
@@ -1193,6 +1216,14 @@ class _int_object
 	function _int_do_delete($oid)
 	{
 		$GLOBALS["object_loader"]->ds->delete_object($oid);
+	}
+
+	function _int_create_brother($parent)
+	{
+		return $GLOBALS["object_loader"]->ds->create_brother(array(
+			"objdata" => $this->obj,
+			"parent" => $parent
+		));
 	}
 }
 ?>

@@ -161,6 +161,16 @@ class _int_obj_ds_base extends acl_base
 			"msg" => "called abstract function ds_base::object_exists"
 		));
 	}
+
+	////
+	// !make bro
+	function create_brother($oid)
+	{
+		error::throw(array(
+			"id" => ERR_ABSTRACT,
+			"msg" => "called abstract function ds_base::create_brother"
+		));
+	}
 }
 
 ?>
