@@ -125,7 +125,7 @@ function navigate_to()
 </td></tr></table>
 
 
-<table border="0" cellspacing="0" cellpadding="0">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
 <tr>
 	<td rowspan="1" valign="top" width="90%">
 
