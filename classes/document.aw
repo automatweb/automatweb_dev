@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.51 2001/10/14 13:40:30 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.53 2001/11/01 14:04:02 cvs Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -109,6 +109,9 @@ class document extends aw_template
 
 		// nini. siia paneme nyt kirja v2ljad, mis dokumendi metadata juures kirjas on
 		$this->metafields = array("show_print","show_last_changed");
+
+		// siin on kirjas need väljad, mida arhiveeritakse
+		$this->archive_fields = array("title","lead","content");
 		lc_site_load("document",$this);
 		if (isset($GLOBALS["lc_doc"]) && is_array($GLOBALS["lc_doc"]))
 		{
@@ -116,6 +119,8 @@ class document extends aw_template
 		 }
 	}
 
+	////
+	// !Sets period to use
 	function set_period($period)
 	{
 		$this->period = $period;	
@@ -131,6 +136,8 @@ class document extends aw_template
 		$this->db_query($q);
 	}
 
+	///
+	// !Listib dokud mingi menüü all
 	function list_docs($parent,$period = -1,$status = -1,$visible = -1)
 	{
 		if ($period == -1)
@@ -246,6 +253,7 @@ class document extends aw_template
 				WHERE docid = '".$oo["brother_of"]."' $sufix";
 			$this->db_query($q);
 			$data = $this->db_fetch_row();
+			$data["brother_of"] = $oo["brother_of"];
 		}
 
 		if (gettype($data) == "array") 
@@ -319,7 +327,7 @@ class document extends aw_template
 			return false;
 		};
 		
-		$meta = $this->get_object_metadata(array("oid" => $docid));
+		$meta = $this->get_object_metadata(array("oid" => $doc["brother_of"]));
 		
 		$doc["lead"] = preg_replace("/<p>(.*)<\/p>/is","\\1",$doc["lead"]);
 		$doc["content"] = preg_replace("/<p>(.*)<\/p>/is","\\1",$doc["content"]);
@@ -451,12 +459,12 @@ class document extends aw_template
 				{
 					$txt = "<b>";
 				};
-				$txt .= $doc["lead"];
+				$txt .= $doc["lead"] . "<br>";
 				if ($boldlead) 
 				{
 					$txt .= "</b>";
 				};
-				$txt .= "$doc[content]";
+				$txt .= ($GLOBALS["doc_lead_break"] ? "<br>" : "")."$doc[content]";
 				$doc["content"] = $txt;
 			};
 		};
@@ -804,6 +812,7 @@ class document extends aw_template
 		$title = $doc["title"];
 		$this->vars(array(
 			"title"	=> $title,
+			"menu_image" => $mn["img_url"],
 			"text"  => $doc["content"],
 			"secid" => isset($secID) ? $secID : 0,
 			"docid" => $docid,
@@ -986,22 +995,36 @@ class document extends aw_template
 
 		// fetchime vana dokumendi, et seda arhiivi salvestada
 		$old = $this->fetch($data["id"]);
-		//classload("archive");
-		//$arc = new archive();
-		// teeme arhiivi, kui seda pole
-		// kallis vaataja, ma tean, et sulle meeldib jargnev rida kohe sitta moodi
+		if (defined("ARCHIVE") && ($data["archive"]))
+		{
+			classload("archive");
+			$arc = new archive();
+			// teeme arhiivi, kui seda pole
+			// kallis vaataja, ma tean, et sulle meeldib jargnev rida kohe sitta moodi
 
-		//if (not($arc->exists(array("oid" => $data["id"]))))
-		//{
-		//	$arc->add(array("oid" => $data["id"]));
-		//};
+			if (not($arc->exists(array("oid" => $data["id"]))))
+			{
+				$arc->add(array("oid" => $data["id"]));
+			};
+	
+			$ser = $arc->serializer->php_serialize($old);
+			$arc_data = array();
 
-		//$ser = $arc->serializer->php_serialize($old);
+			foreach($this->archive_fields as $afield)
+			{
+				$arc_data[$afield] = $data[$afield];
+			};
 
-		//$arc->commit(array(
-		//			"oid" => $data["id"],
-		//			"content" => $ser,
-		//));
+			$arc_name = ($data["archive_name"]) ? $data["archive_name"] : $data["title"];
+
+			$arc->commit(array(
+						"oid" => $data["id"],
+						"content" => $ser,
+						"name" => $arc_name,
+						"data" => $arc_data,
+						"class_id" => CL_DOCUMENT,
+			));
+		};
 
 		// go on with our usual business
 		
@@ -1107,6 +1130,11 @@ class document extends aw_template
 				$oq_parts[$fname] = $data[$fname];
 			};
 		};
+
+		if ($data["docfolder"])
+		{
+			$oq_parts["parent"] = $data["docfolder"];
+		}
 
 		$this->upd_object($oq_parts);
 		$this->db_query("UPDATE objects SET name='".$data["name"]."' WHERE brother_of = '$id'");
@@ -1385,14 +1413,19 @@ class document extends aw_template
 		return $this->mk_my_orb("change", array("id" => $lid));
 	}
 
+	////
+	// !Displays the document edit form
 	function change($arr)
 	{
 		global $baseurl;
+		// hmpf, imho voiks see veidi globaalsem kontroll olla, kui
+		// ainult siin, selles yhes funktsioonid
 		if (!$this->prog_acl("view",PRG_MENUEDIT))
 		{
 			header("Location: $baseurl");
 			exit;
 		}
+
 		extract($arr);
 
 		$oob = $this->get_object($id);
@@ -1415,6 +1448,8 @@ class document extends aw_template
 			$mcap = LC_DOCUMENT_DOC;
 		};
 
+		// jargnev funktsioon kaib rekursiivselt mooda menyysid, kuni leitakse
+		// menyy, mille juures on määratud edimistemplate
 		$_tpl = $this->get_edit_template($document["parent"]);
 		$this->read_template($_tpl);
 
@@ -1434,9 +1469,11 @@ class document extends aw_template
 					{
 						$this->db_query("SELECT documents.title,documents.docid FROM documents WHERE documents.docid = ".$lang_brothers[$v["id"]]);
 						$row = $this->db_next();
-						$this->vars(array("lang_name" => $v["name"], 
-															"chbrourl"	=> $this->mk_my_orb("change", array("id" => $row["docid"])),
-															"bro_name"	=> $row["title"]));
+						$this->vars(array(
+							"lang_name" => $v["name"], 
+							"chbrourl"	=> $this->mk_my_orb("change", array("id" => $row["docid"])),
+							"bro_name"	=> $row["title"],
+						));
 						$db.=$this->parse("DOC_BROS");
 					}
 				}
@@ -1445,8 +1482,20 @@ class document extends aw_template
 		}
 
 		$GLOBALS["lang_id"] = $document["lang_id"];
+
 		$alilist = array();
-		$jrk = array("1" => "1", "2" => "2", "3" => "3",  "4" => "4", "5"  => "5",
+		$jrk = array("-10" => "-10", 
+								"-9" => "-9", 
+			"-8" => "-8", 
+			"-7" => "-7", 
+			"-6" => "-6",
+			"-5" => "-5", 
+			"-4" => "-4", 
+			"-3" => "-3", 
+			"-2" => "-2", 
+			"-1" => "-1",
+			"0" => "0", 
+			"1" => "1", "2" => "2", "3" => "3",  "4" => "4", "5"  => "5",
 								 "6" => "6", "7" => "7", "8" => "8",  "9" => "9", "10" => "10");
 		$addfile = $this->mk_my_orb("new",array("id" => $id, "parent" => $document["parent"]),"file");
 		$previewlink = "";
@@ -1457,7 +1506,6 @@ class document extends aw_template
 			"add_img"	=> $this->mk_my_orb("new", array("parent" => $id),"images"),
 			"addlink"	=> $this->mk_my_orb("new", array("docid" => $id, "parent" => $document["parent"]),"links"),
 			"addform"		=> $this->mk_my_orb("new", array("parent" => $document["parent"],"alias_doc" => $id),"form"),
-			"addgb"			=> $this->mk_my_orb("new", array("parent" => $document["parent"], "docid" => $id), "guestbook"),
 			"addgraph"	=> $this->mk_my_orb("new", array("parent" => $document["parent"],"alias_doc" => $id),"graph"),
 			"addgallery"	=> $this->mk_my_orb("new", array("parent" => $document["parent"],"alias_doc" => $id),"gallery"),
 			"addchain" => $this->mk_my_orb("new", array("parent" => $document["parent"],"alias_doc" => $id),"form_chain")
@@ -1474,6 +1522,17 @@ class document extends aw_template
 		$t = new languages;
 
 		$meta = $this->get_object_metadata(array("oid" => $id));
+
+		$conf = new config;
+		$df = $conf->get_simple_config("docfolders");
+		if ($df != "")
+		{
+			$xml = new xml;
+			$_df = $xml->xml_unserialize(array("source" => $df));
+			$this->vars(array(
+				"docfolders" => $this->picker($document["parent"],$_df)
+			));
+		}
 
     $this->vars(array("title" => str_replace("\"","&quot;",$document["title"]),
 											"jrk1"  => $this->picker($document["jrk1"],$jrk),
@@ -1707,6 +1766,9 @@ class document extends aw_template
 			$hl = $this->parse("NO_LINKS");
 		}
 		$this->vars(array("HAS_LINKS" => $hl, "NO_LINKS" => ""));
+
+		// lingikogud
+		$this->vars(array("NO_LINK_COLLECTION" => $this->parse("NO_LINK_COLLECTION")));
 
 		$tables = $this->get_aliases_for($id,CL_TABLE,$s_table_sortby, $s_table_order);
 		$tc = 0;
@@ -1990,20 +2052,22 @@ class document extends aw_template
 		));
 
 		$contents = $arc->get(array("oid" => $args["docid"]));
+		$obj = $this->get_object($args["docid"]);
+		$meta = $arc->serializer->php_unserialize($obj["meta"]);
 
 		if (is_array($contents))
 		{
 			foreach($contents as $key => $val)
 			{
 				$t->define_data(array(
-						"name" => $key,
-						"uid" => "duke",
+						"name" => $meta["archive"][$key]["name"],
+						"uid" => $meta["archive"][$key]["uid"],
 						"date" => $this->time2date($val[FILE_MODIFIED],9),
 				));
 			}
 		};
 
-		$t->sort_by(array("field" => $args["sortby"]));
+		$t->sort_by(array("field" => ($args["sortby"]) ? $args["sortby"] : "date"));
 
 		$this->vars(array(
 				"docid" => $docid,
@@ -2015,6 +2079,7 @@ class document extends aw_template
 	function preview($arr)
 	{
 		extract($arr);
+		$this->dmsg("a");
 		if ($user)
 		{
 			$this->read_template("preview_user.tpl");
@@ -2023,6 +2088,7 @@ class document extends aw_template
 		{
 			$this->read_template("preview.tpl");
 		}
+		$this->dmsg("b");
 
 		$obj = $this->get_object($id);
 		$this->mk_path($obj["parent"],LC_DOCUMENT_PREW);
@@ -2813,6 +2879,50 @@ class document extends aw_template
 				$this->rec_list($v["oid"],$pref."/".$v["name"]);
 			}
 		}
+	}
+
+	function list_user_docs($arr)
+	{
+		$this->read_template("user_docs.tpl");
+
+		$ob = new objects;
+		$obl = $ob->get_list(false,false,$GLOBALS["rootmenu"]);
+
+		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_DOCUMENT." AND status != 0 AND createdby ='".$GLOBALS["uid"]."'");
+		while ($row = $this->db_next())
+		{
+			$this->vars(array(
+				"name" => $row["name"],
+				"created" => $this->time2date($row["created"],3),
+				"active" => checked($row["status"]),
+				"change" => $this->mk_my_orb("change", array("id" => $row["oid"])),
+				"parent_name" => $obl[$row["parent"]],
+				"docid" => $row["oid"]
+			));
+			$rd = $this->parse("ROW");
+		}
+
+		$this->vars(array(
+			"ROW" => $rd,
+			"reforb" => $this->mk_reforb("submit_user_docs",array())
+		));
+
+		return $this->parse();
+	}
+
+	function submit_user_docs($arr)
+	{
+		extract($arr);
+
+		if (is_array($act))
+		{
+			foreach($act as $docid => $stat)
+			{
+				$this->upd_object(array("oid" => $docid, "status" => ($stat == 1 ? 2 : 1)));
+			}
+		}
+
+		return $this->mk_my_orb("list_user_docs");
 	}
 };
 ?>
