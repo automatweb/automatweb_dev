@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.61 2003/10/06 14:32:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.62 2003/11/13 11:11:19 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -303,6 +303,7 @@ class form_element extends aw_template
 					"HAS_SIMPLE_CONTROLLER" => $this->parse("HAS_SIMPLE_CONTROLLER"),
 					"SHOW_AS_TEXT" => $this->parse("SHOW_AS_TEXT")
 				));
+				$users = get_instance("users");
 				for ($b=0; $b < ($this->arr["listbox_count"]+1); $b++)
 				{
 					$this->vars(array(
@@ -317,6 +318,7 @@ class form_element extends aw_template
 						"listbox_activity_value" => $this->arr["listbox_activity"][$b],
 						"num" => $b,
 						"user_entries_only" => checked($this->arr["user_entries_only"] == 1),
+						"user_entries_only_exclude" => $this->mpicker($this->arr["user_entries_only_exclude"], $users->get_group_picker(array("type" => array(GRP_REGULAR,GRP_DYNAMIC)))),
 						"chain_entries_only" => checked($this->arr["chain_entries_only"] == 1),
 					));
 					$at = "";
@@ -1030,6 +1032,9 @@ class form_element extends aw_template
 
 				$var = $base."_user_entries_only";
 				$this->arr["user_entries_only"] = $$var;
+
+				$var = $base."_user_entries_only_exclude";
+				$this->arr["user_entries_only_exclude"] = $this->make_keys($$var);
 
 				$var = $base."_chain_entries_only";
 				$this->arr["chain_entries_only"] = $$var;

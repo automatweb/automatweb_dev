@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.20 2003/10/06 14:32:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.21 2003/11/13 11:11:19 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -1062,7 +1062,7 @@ class form_base extends form_db_base
 
 		if (!($ret = aw_global_get("form_controllers_cache".$add_empty)))
 		{
-			$ret = $this->controller_instance->listall(array("parents" => $this->arr["controller_folders"],"add_empty" => $add_empty));
+			$ret = $this->controller_instance->listall(array("parents" => $this->arr["controller_folders"],"add_empty" => $add_empty, "add_id" => true));
 			aw_global_set("form_controllers_cache".$add_empty,$ret);
 		}
 		return $ret;

@@ -1802,7 +1802,14 @@ class form_db_base extends aw_template
 			$join = " LEFT JOIN objects ON objects.oid = ".$rel_tbl.".id  WHERE objects.status != 0 ";
 			if ($user_entries_only)
 			{
-				$where = " AND objects.createdby = '".aw_global_get("uid")."' ";
+				// if you are in the exclude group, ignore
+				$awa = new aw_array($user_entries_only_exclude);
+				$t = array_intersect($awa->get(), array_values(aw_global_get("gidlist")));
+//				echo "t = ".dbg::dump($t)." gl = ".dbg::dump(aw_global_get("gidlist"))." awa = ".dbg::dump($awa)." <br>";
+				if (count($t) < 1)
+				{
+					$where = " AND objects.createdby = '".aw_global_get("uid")."' ";
+				}
 			}
 			if ($chain_entries_only)
 			{

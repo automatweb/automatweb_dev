@@ -179,7 +179,14 @@ class form_controller extends form_base
 		$this->db_query("SELECT oid,name,parent FROM objects WHERE class_id = ".CL_FORM_CONTROLLER." AND status != 0 $wh");
 		while($row = $this->db_next())
 		{
-			$ret[$row["oid"]] = $ol[$row["parent"]]."/".$row["name"];
+			if ($add_id)
+			{
+				$ret[$row["oid"]] = $ol[$row["parent"]]."/".$row["name"]." (".$row["oid"].")";
+			}
+			else
+			{
+				$ret[$row["oid"]] = $ol[$row["parent"]]."/".$row["name"];
+			}
 		}
 		return $ret;
 	}
@@ -237,8 +244,16 @@ class form_controller extends form_base
 		$eq = $this->replace_vars($co,$co["meta"]["eq"],true,$form_ref, $el_ref, $entry);
 
 		$eq = "\$res = ".$eq.";\$contr_finish = true;";
-		dbg::p2("controller id $id: evaling $eq <br />");
-		@eval($eq);
+/*		if (aw_global_get("uid") == "erkihotel")
+		{
+			echo("controller id $id: evaling $eq <br />");
+			eval($eq);
+		}
+		else
+		{*/
+			dbg::p2("controller id $id: evaling $eq <br />");
+			@eval($eq);
+//		}
 		dbg::p2("evaled $id, res: ".dbg::dump($res)." <br />");
 		if (!$contr_finish)
 		{
@@ -282,8 +297,16 @@ class form_controller extends form_base
 		$eq = $this->replace_vars($co,$co["meta"]["eq"],true,$form_ref, $el_ref, $entry);
 
 		$eq = "\$res = ".$eq.";\$contr_finish = true;";
-		dbg::p2("controller id $id: evaling $eq <br />");
-		@eval($eq);
+/*		if (aw_global_get("uid") == "erkihotel")
+		{
+			echo ("controller id $id: evaling $eq <br />");
+			eval($eq);
+		}
+		else
+		{	*/
+			dbg::p2("controller id $id: evaling $eq <br />");
+			@eval($eq);
+//	}
 		dbg::p2("evaled $id, res: ".dbg::dump($res)." <br /><br />");
 		if (!$contr_finish)
 		{
