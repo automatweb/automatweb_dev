@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.2 2003/06/26 17:26:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.3 2003/07/01 15:18:42 duke Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -67,12 +67,15 @@ class forum_comment extends class_base
 				if (empty($args["obj"]["oid"]))
 				{
 					$data["value"] = $_COOKIE["aw_mb_name"];
+					$this->dequote($data["value"]);
 				};
 				break;
 			case "uemail":
 				if (empty($args["obj"]["oid"]))
 				{
 					$data["value"] = $_COOKIE["aw_mb_mail"];
+					$this->dequote($data["value"]);
+
 				};
 				break;
 			case "status":
@@ -94,7 +97,7 @@ class forum_comment extends class_base
 				break;
 
 			case "remember":
-				if (!headers_sent())
+				if (!empty($data["value"]) && !headers_sent())
 				{
 					$t = time();
 					setcookie("aw_mb_name",$args["form_data"]["uname"],time()+24*3600*1000);
