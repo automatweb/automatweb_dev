@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/sitemap.aw,v 2.5 2002/01/21 06:04:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/sitemap.aw,v 2.6 2002/01/30 21:13:05 duke Exp $
 // sitemap.aw - Site Map
 classload("menuedit");
 class sitemap extends aw_template 
@@ -72,9 +72,16 @@ class sitemap extends aw_template
 		reset($ar);
 		while (list(,$row) = each($ar))
 		{
+			$meta = $this->get_object_metadata(array(
+				"metadata" => $row["metadata"]
+			));
+
+			if (!($meta["users_only"] == 1 && $GLOBALS["uid"] ==""))
+			{
 				$this->vars(array("url" => $baseurl."/index.".$ext."/section=".$row[oid],"name" => $row[name],"oid" => $row[oid]));
 				$r.=$this->parse("ITEM");
 				$r.=$this->req_map($row[oid]);
+			}
 		}
 		$r.=$this->parse("LEVEL_END");
 		$this->level--;
