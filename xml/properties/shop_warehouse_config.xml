@@ -58,7 +58,17 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_CFGFORM</reltype>
-            <caption>Lao toodete t&amp;uuml;&amp;uuml;pide lisamise vormi seadete vorm</caption>
+            <caption>Lao tootet&amp;uuml;&amp;uuml;pide lisamise vormi seadete vorm</caption>
+      </property>
+      <property>
+            <name>prod_conf_folder</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <caption>Toodete lisaobjektide seadetevormide kataloog</caption>
       </property>
       <property>
             <name>order_fld</name>

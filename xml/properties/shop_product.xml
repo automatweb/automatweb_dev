@@ -487,6 +487,8 @@
                   <num_0>name</num_0>
                   <num_1>jrk</num_1>
             </table_fields>
+            <clone_link>1</clone_link>
+            <filt_edit_fields>1</filt_edit_fields>
             <store>no</store>
             <caption>Pakendid</caption>
       </property>
