@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.42 2004/12/09 18:30:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.43 2005/02/11 13:36:37 kristo Exp $
 
 define("ST_TABLE",0);
 define("ST_CELL",1);
@@ -1002,6 +1002,10 @@ class style extends aw_template
 
 	function get_style_name($id)
 	{
+		if (!is_oid($id) || !$this->can("view", $id))
+		{
+			return "";
+		}
 		$o = obj($id);
 		if (($nm = trim($o->prop("site_css"))) != "")
 		{
