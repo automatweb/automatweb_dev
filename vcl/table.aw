@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.6 2001/07/03 05:07:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.7 2001/07/04 23:03:44 kristo Exp $
 global $PHP_SELF;
 $js_table = "
 function xnavi_alfa(char_to_look_for) {
@@ -198,10 +198,27 @@ class aw_table
 			$flag = SORT_REGULAR;
 		};
  
-		if ($sorder == "asc") {
-			ksort($newdata,$flag);
-		} else {
-			krsort($newdata,$flag);
+		if ($sorder == "asc") 
+		{
+			if ($flag == SORT_NUMERIC)
+			{
+				ksort($newdata,$flag);
+			}
+			else
+			{
+				uksort($newdata,create_function('$a,$b','return strcasecmp($a,$b);'));
+			}
+		} 
+		else 
+		{
+			if ($flag == SORT_NUMERIC)
+			{
+				krsort($newdata,$flag);
+			}
+			else
+			{
+				uksort($newdata,create_function('$a,$b','return -strcasecmp($a,$b);'));
+			}
 		};
 		$this->data = $newdata;
 	
