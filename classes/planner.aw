@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.165 2004/02/03 12:03:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.166 2004/02/03 12:48:13 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -2911,7 +2911,6 @@ class planner extends class_base
 
 	function gen_calendar_contents($arr)
 	{
-		// I need another function that configures the calendar. somehow. in some way
 		$arr["prop"]["vcl_inst"]->configure(array(
 			"tasklist_func" => array(&$this,"get_tasklist"),
 			"overview_func" => array(&$this,"get_overview"),
@@ -2924,8 +2923,6 @@ class planner extends class_base
 			"viewtype" => $arr["request"]["viewtype"] ? $arr["request"]["viewtype"] : $viewtype,
 		));
 
-		// that is all nice and well. But I also need a separate function for 
-		// overview
 		$events = $this->_init_event_source(array(
 			"id" => $arr["request"]["id"],
 			"type" => $range["viewtype"],
@@ -2985,11 +2982,12 @@ class planner extends class_base
 			if ($task->is_brother())
 			{
 				$task = $task->get_original();
-				if ($task->status() != STAT_ACTIVE)
+				if (($task->flags() & OBJ_IS_DONE) == OBJ_IS_DONE)
 				{
 					continue;
 				};
 			};
+				
 
 			$rv[] = array(
 				"name" => $task->prop("name"),
