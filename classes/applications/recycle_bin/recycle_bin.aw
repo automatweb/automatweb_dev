@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.2 2004/10/12 14:25:41 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.3 2004/11/04 16:50:02 sven Exp $
 // recycle_bin.aw - Prügikast 
 /*
 @default table=objects
@@ -54,10 +54,15 @@ class recycle_bin extends class_base
 		));
 		
 		$table->define_field(array(
+			"name" => "icon",
+			"caption" => "",
+			"width" => 15,
+		));
+		
+		$table->define_field(array(
 			"name" => "name",
 			"caption" => "Nimi",
 			"sortable" => 1,
-			"width" => "100%",
 		));
 		
 		$table->define_field(array(
@@ -67,9 +72,9 @@ class recycle_bin extends class_base
 		
 		$table->define_field(array(
 			"name" => "class",
-			"caption" => "Klass",
+			"caption" => "Objektitüüp",
 			"sortable" => 1,
-			"width" => 100,
+			"width" => 1,
 		));
 		
 		$table->define_field(array(
@@ -84,10 +89,10 @@ class recycle_bin extends class_base
 			"name" => "modified",
 			"caption" => "Kustutatud",
 			"sortable" => "1",
-			"width" => 80,
+			"width" => 100,
 			"type" => "time",
 			"numeric" => 1,
-			"format" => "d.m.y",
+			"format" => "d.m.y - H:m:s",
 			"align" => "center",
 		));
 		
@@ -101,7 +106,7 @@ class recycle_bin extends class_base
 		
 		$query = "SELECT * FROM objects WHERE status=0";
 		$this->db_query($query);
-		
+		get_instance("icons");
 		while ($row = $this->db_next())
 		{
 			$table->define_data(array(
@@ -115,9 +120,14 @@ class recycle_bin extends class_base
 					"url" => $this->mk_my_orb("restore_object", array("oid" => $row["oid"]), "recycle_bin"),
 				)),
 				"class" => $classes[$row["class_id"]]["name"],
+				"icon" => html::img(array(
+					"url" => icons::get_icon_url($row["class_id"]),
+				))
 			));	
 		}
-		
+		//set_default_sort_by("modified");
+	 	$table->set_default_sorder("desc");
+		$table->set_default_sortby("modified");
 	}
 	
 	function do_toolbar($arr)
@@ -125,9 +135,15 @@ class recycle_bin extends class_base
 		$tb = &$arr["prop"]["vcl_inst"];
 		$tb->add_button(array(
     		"name" => "save",
-    		"img" => "save.gif",
-    		"tooltip" => "Vali taastatavad objektid ja kliki sellel nupul",
+    		"img" => "restore.gif",
+    		"tooltip" => "Taasta valitud objektid",
     		"action" => "restore_objects",
+    	));
+    	$tb->add_button(array(
+    		"name" => "refresh",
+    		"img" => "refresh.gif",
+    		"tooltip" => "Uuenda",
+    		"url" => "javascript:history.go()",
     	));
 	}
 
