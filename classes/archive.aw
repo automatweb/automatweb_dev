@@ -1,6 +1,6 @@
 <?php
 // archive.aw - Archive class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/archive.aw,v 2.12 2002/06/10 15:50:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/archive.aw,v 2.13 2002/06/26 11:29:06 duke Exp $
 
 // arhiivide jaoks tuleb luua eraldi kataloog (check), sinna sisse 
 // kahetasemeline (peaks siiski muudetav olema) kataloogipuu, igal
@@ -61,7 +61,7 @@ class archive extends aw_template
 		};
 
 		$path = join("/",$this->path_parts);
-		$this->fullpath = $this->arc_dir . "/" . $path . "/" . $this->id;
+		$this->fullpath = $this->arc_dir . "/" . $path . "/" . sprintf("%04d",$this->id);
 	}
 
 	////
@@ -85,7 +85,7 @@ class archive extends aw_template
 		};
 
 		// create the actual directory.
-		@mkdir($this->arc_dir . $path . "/" . $oid,0700);
+		@mkdir($this->arc_dir . $path . "/" . sprintf("%04d",$oid),0700);
 	}
 
 	////
@@ -111,8 +111,7 @@ class archive extends aw_template
 			// replace the data in the archive table, not 
 			// insert a new record
 			//
-			// and since when is define() good for setting variables? - terryf
-			define("REPLACE",1);
+			$replace = 1;
 		}
 		else
 		{
@@ -160,7 +159,7 @@ class archive extends aw_template
 			{
 				$raw_value = strip_tags($val);
 				$this->quote($raw_value);
-				if (defined("REPLACE"))
+				if ($replace)
 				{
 					$q = "UPDATE archive SET
 						name = '$key'
@@ -224,7 +223,8 @@ class archive extends aw_template
 	{
 		$this->_calc_path($args);
 		// more checks are needed
-		return is_dir($this->fullpath);
+		$retval = is_dir($this->fullpath);
+		return $retval;
 	}
 
 	////
