@@ -166,7 +166,7 @@ class languages extends aw_template
 					"method" => "xmlrpc",
 					"server" => "register.automatweb.com"
 				));
-				$ret[$row["site_id"]] = $sd["name"];
+				$ret[$row["site_id"]] = $sd["name"]."( ".$row["site_id"]." )";
 			}
 		}
 		return $ret;
