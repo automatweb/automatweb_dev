@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.25 2004/10/08 15:58:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.26 2004/10/13 15:50:32 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -214,7 +214,7 @@ class vcalendar extends aw_template
 				$awt->start("draw-month");
 				$content = $this->draw_month();
 				$awt->stop("draw-month");
-				$caption = get_est_month(date("m",$this->range["timestamp"]));
+				$caption = locale::get_lc_month(date("m",$this->range["timestamp"]));
 				$caption .= " ";
 				$caption .= date("Y",$this->range["timestamp"]);
 				break;
@@ -222,14 +222,14 @@ class vcalendar extends aw_template
 			case "week":
 			case "last_events":
 				$content = $this->draw_week();
-				$ms = get_est_month(date("m",$this->range["start"]));
-				$me = get_est_month(date("m",$this->range["end"]));
+				$ms = locale::get_lc_month(date("m",$this->range["start"]));
+				$me = locale::get_lc_month(date("m",$this->range["end"]));
 				$caption = date("j. ",$this->range["start"]) . "$ms - " . date("j. ",$this->range["end"]) . " " . $me;
 				break;
 
 			case "relative":
 				$content = $this->draw_relative();
-				$caption = date("j. ",$this->range["timestamp"]) . get_est_month(date("m",$this->range["timestamp"]));
+				$caption = date("j. ",$this->range["timestamp"]) . locale::get_lc_month(date("m",$this->range["timestamp"]));
 				break;
 
 			case "year":
@@ -240,7 +240,7 @@ class vcalendar extends aw_template
 	
 			default:
 				$content = $this->draw_day();
-				$caption = date("j. ",$this->range["timestamp"]) . get_est_month(date("m",$this->range["timestamp"])) . date(" Y",$this->range["timestamp"]);
+				$caption = date("j. ",$this->range["timestamp"]) . locale::get_lc_month(date("m",$this->range["timestamp"])) . date(" Y",$this->range["timestamp"]);
 		};
 		
 		classload("date_calc");
@@ -374,7 +374,7 @@ class vcalendar extends aw_template
 
 		for ($i = 1; $i <= 12; $i++)
 		{
-			$mnames[$i] = get_est_month($i);
+			$mnames[$i] = locale::get_lc_month($i);
 		};
 
 		for ($i = 2002; $i <= 2005; $i++)
@@ -633,7 +633,7 @@ class vcalendar extends aw_template
 			};
 		
 			$dt = date("d",$i);
-                	$mn = get_lc_month(date("m",$i));
+                	$mn = locale::get_lc_month(date("m",$i));
                 	$mn2 = $mn . " " . date("H:i",$i);
 
 
@@ -642,7 +642,7 @@ class vcalendar extends aw_template
 				"daynum" => date("j",$i),
 				"dayname" => date("F d, Y",$i),
 				"lc_weekday" => ucfirst(get_lc_weekday($wn,$i)),
-				"lc_month" => get_est_month(date("m",$i)),
+				"lc_month" => $mn,
 				"daylink" => aw_url_change_var(array("viewtype" => "day","date" => date("d-m-Y",$i))),
                         	"date_and_time" => $dt . ". " . $mn2,
 				"day_name" => locale::get_lc_weekday($wn,true),
@@ -912,7 +912,8 @@ class vcalendar extends aw_template
 		};
 
 		// now, how to make those configurable?
-		$caption =  get_est_month(date("m",$arr["timestamp"])) . " " . date("Y",$arr["timestamp"]);
+		$mon = locale::get_lc_month(date("m",$arr["timestamp"]));
+		$caption =  $mon . " " . date("Y",$arr["timestamp"]);
 
 		$caption_url = aw_url_change_var(array("viewtype" => "month","date" => date("d-m-Y",$arr["timestamp"])));
 
