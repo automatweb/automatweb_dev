@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.191 2003/12/15 14:06:12 duke Exp $
+// $Id: class_base.aw,v 2.192 2003/12/15 18:03:56 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1512,6 +1512,11 @@ class class_base extends aw_template
 		{
 			$val["value"] = $val["vcl_inst"]->get_html();
 		};
+		
+		if (($val["type"] == "calendar") && is_object($val["vcl_inst"]))
+		{
+			$val["value"] = $val["vcl_inst"]->get_html();
+		};
 
 		if ($val["type"] == "date_select")
 		{
@@ -1790,6 +1795,11 @@ class class_base extends aw_template
 					$val["vcl_inst"] = new aw_table(array(
 						"layout" => "generic",
 					));
+				};
+				
+				if (($val["type"] == "calendar") && !is_object($val["vcl_inst"]))
+				{
+					$val["vcl_inst"] = get_instance("vcl/calendar");
 				};
 			};
 
