@@ -18,14 +18,6 @@
             <caption>Template näitamiseks</caption>
       </property>
       <property>
-            <name>tpl_edit</name>
-            <type>select</type>
-            <table>menu</table>
-            <group>show</group>
-            <field>tpl_edit</field>
-            <caption>Template muutmiseks</caption>
-      </property>
-      <property>
             <name>type</name>
             <type>select</type>
             <table>objects</table>
@@ -84,16 +76,6 @@
             <caption>Kasuta dokumendi asukoha templatet</caption>
       </property>
       <property>
-            <name>section</name>
-            <type>text</type>
-            <callback>callback_get_menus</callback>
-            <group>menus</group>
-            <method>serialize</method>
-            <table>objects</table>
-            <field>meta</field>
-            <caption>Vali menüüd, mille all kasti näidata</caption>
-      </property>
-      <property>
             <name>all_menus</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
@@ -103,6 +85,16 @@
             <table>objects</table>
             <field>meta</field>
             <caption>Näita igal pool</caption>
+      </property>
+      <property>
+            <name>section</name>
+            <type>text</type>
+            <callback>callback_get_menus</callback>
+            <group>menus</group>
+            <method>serialize</method>
+            <table>objects</table>
+            <field>meta</field>
+            <caption>Vali menüüd, mille all kasti näidata</caption>
       </property>
       <property>
             <name>last_menus</name>

@@ -439,14 +439,6 @@
             <caption>Template set </caption>
       </property>
       <property>
-            <name>tpl_edit</name>
-            <type>select</type>
-            <table>menu</table>
-            <group>show</group>
-            <field>tpl_edit</field>
-            <caption>Template dokumendi muutmiseks</caption>
-      </property>
-      <property>
             <name>tpl_view</name>
             <type>select</type>
             <table>menu</table>
@@ -505,6 +497,7 @@
             <type>callback</type>
             <callback>callback_get_export_options</callback>
             <group>import_export</group>
+            <store>no</store>
             <table>menu</table>
             <field>export</field>
             <caption>Eksport</caption>

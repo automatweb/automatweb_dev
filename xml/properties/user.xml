@@ -121,6 +121,24 @@
             <caption>Password veelkord</caption>
       </property>
       <property>
+            <name>gen_pwd</name>
+            <store>no</store>
+            <type>text</type>
+            <table>users</table>
+            <group>chpwd</group>
+            <field>gen_pwd</field>
+            <caption>Genereeri parool</caption>
+      </property>
+      <property>
+            <name>genpwd</name>
+            <store>no</store>
+            <type>textbox</type>
+            <table>users</table>
+            <group>chpwd</group>
+            <field>genpwd</field>
+            <caption>Genereeritud parool</caption>
+      </property>
+      <property>
             <name>resend_welcome</name>
             <store>no</store>
             <type>checkbox</type>
