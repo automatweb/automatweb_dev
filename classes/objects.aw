@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.62 2004/06/26 08:08:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.63 2005/01/21 12:37:05 duke Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 class db_objects extends aw_template 
 {
@@ -175,6 +175,39 @@ class objects extends db_objects
 			$ret[] = $row;
 		}
 		return $ret;
+	}
+
+	/**
+		@attrib name=storage_query params=name all_args="1"
+		@param name optional
+		@param class_id optional
+		@param comment optional
+		@param site_id optional
+		@param createdby optional
+		@param modifiedby optional
+
+
+	**/
+	function storage_query($arr)
+	{
+		$arr["site_id"] = array();
+		$arr["lang_id"] = array();
+		$ol = new object_list($arr);
+		$rv = array();
+		foreach($ol->arr() as $o)
+		{
+			$m_o = $o->modifiedby();
+			$c_o = $o->createdby();
+			$rv[$o->id()] = array(
+				"name" => $o->name(),
+				"class_id" => $o->class_id(),
+				"created" => $o->created(),
+				"modified" => $o->modified(),
+				"createdby" => $c_o->name(),
+				"modifiedby" => $m_o->name(),
+			);
+		};
+		return $rv;
 	}
 
 	/**  
