@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.33 2003/03/03 16:24:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.34 2003/03/04 22:08:38 duke Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -1521,11 +1521,6 @@ class form_element extends aw_template
 	function get_props()  
 	{ 
 		return $this->arr; 
-	}
-
-	function get_type()		
-	{	
-		return $this->arr["type"]; 
 	}
 
 	function get_row()		
