@@ -1,5 +1,5 @@
 <?php
-
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.11 2001/09/05 11:59:50 duke Exp $
 global $orb_defs;
 $orb_defs["form_table"] = "xml";
 lc_load("form");
@@ -83,6 +83,7 @@ class form_table extends form_base
 
 			if (is_array($del))
 			{
+//				echo "del <br>";
 				$td = array();
 				$nc = 0;
 				for ($i=0; $i < $num_cols; $i++)
@@ -99,6 +100,7 @@ class form_table extends form_base
 
 			if (is_array($addaf))
 			{
+//				echo "addaf <br>";
 				$td = array();
 				$nc = 0;
 				for ($i=0; $i < $num_cols; $i++)
@@ -141,11 +143,14 @@ class form_table extends form_base
 			$this->table["user_button_url"] = $user_button_url;
 			$this->table["view_col"] = $viewcol;
 			$this->table["change_col"] = $changecol;
+			$this->table["view_new_win"] = $view_new_win;
 			classload("xml");
 			$x = new xml;
 			$co = $x->xml_serialize($this->table);
 			$this->quote(&$co);
-			$this->db_query("UPDATE form_tables SET num_cols = '$num_cols' , content = '$co' WHERE id = $id");
+//			echo "num_cols = $num_cols <br>";
+			$q = "UPDATE form_tables SET num_cols = '$num_cols' , content = '$co' WHERE id = $id";
+			$this->db_query($q);
 		}
 		else
 		{
@@ -316,6 +321,7 @@ class form_table extends form_base
 			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
 			"CHANGE" => $this->parse("CHANGE"),
 			"tablestyles" => $this->picker($this->table["table_style"],$s->get_select(0,ST_TABLE)),
+			"view_new_win" => checked($this->table["view_new_win"]),
 			"header_normal" => $this->picker($this->table["header_normal"],$css),
 			"header_sortable" => $this->picker($this->table["header_sortable"],$css),
 			"header_sorted" => $this->picker($this->table["header_sorted"],$css),
@@ -396,6 +402,7 @@ class form_table extends form_base
 				$dat["ev_col_".$col] = join(",",$str);
 			}
 		}
+
 		$this->t->define_data($dat);
 		$awt->stop("form_table::row_data");
 	}
@@ -459,6 +466,7 @@ class form_table extends form_base
 		{
 			return $this->show_user_form_entries($arr);
 		}
+
 
 		global $awt;
 		$awt->start("form_table::show_user_entries");
