@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.270 2004/06/25 18:29:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.271 2004/06/25 18:38:25 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -149,59 +149,6 @@ class core extends acl_base
 		$this->db_query($q);
 	}
 		
-	////
-	// !Tagastab koik mingist nodest allpool olevad objektid
-	// seda on mugav kasutada, kui tegemist on suhteliselt
-	// vaikse osaga kogu objektihierarhiast, ntx kodukataloog
-	// parent(int) - millisest nodest alustame?
-	// class(int) - milline klass meid huvitab?
-	// type(int) - kui tegemist on menüüga, siis loetakse sisse ainult seda tüüpi menüüd.
-	// status - only objects of this status are returned if set
-	// orderby(string) - millise välja järgi tulemus järjestada?
-	// full(bool) - if true, also recurses to subfolders
-	// ret(int) - ARR_NAME or ARR_ALL, default is ARR_ALL
-	function get_objects_below($args = array())
-	{
-		extract($args);
-		$this->save_handle();
-		$groups = array();
-
-		if (isset($full))
-		{
-			$this->get_objects_by_class($args + array("class" => CL_PSEUDO));
-			while ($row = $this->db_next())
-			{
-				$ta = $args;
-				$ta["parent"] = $row["oid"];
-				$tg = $this->get_objects_below($ta);
-				foreach($tg as $k => $v)
-				{
-					$groups[$k] = $v;
-				}
-			}
-		}
-
-		// just pass everything, hopefully wont break anything, but it does kill
-		// a bunch of warnings
-		$this->get_objects_by_class($args);
-
-		while($row = $this->db_next())
-		{
-			if (isset($ret) && $ret == ARR_NAME)
-			{
-				$groups[$row["oid"]] = $row["name"];
-			}
-			else
-			{
-				$row["meta"] = aw_unserialize($row["metadata"]);
-				$groups[$row["oid"]] = $row;
-			}
-		};
-		$this->restore_handle();
-		return $groups;
-	}
-
-
 	////
 	// !returns true if object $oid 's cahe dirty flag is set
 	function cache_dirty($oid, $fname = "")

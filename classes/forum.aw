@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.93 2004/06/25 18:13:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.94 2004/06/25 18:38:25 kristo Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -1861,57 +1861,47 @@ topic");
 	function _draw_all_topics($args = array())
 	{
 		extract($args);
-		$act = ($this->archive) ? 1 : 2;
-		$obj = $this->get_objects_below(array(
+		$ol = new object_list(array(
 			"parent" => $id,
-			"class" => CL_MSGBOARD_TOPIC,
-			"orderby" => "created desc",
-			"status" => $this->archive ? 1 : 2,
+			"class_id" => CL_MSGBOARD_TOPIC,
+			"sort_by" => "objects.created desc",
+			"status" => $this->archive ? STAT_NOTACTIVE : STAT_ACTIVE
 		));
 		$content = "";
-		if (is_array($obj))
-		{
-			$blist = array();
-			foreach($obj as $key => $item)
-			{
-				$blist[] = $item["oid"];
-			}
+		$blist = $ol->ids();
 
-			$this->comments = $this->_get_comment_counts($blist);
-			list($from,$to) = $this->_draw_pager(array(
-						"total" => sizeof($obj),
-						"onpage" => $this->topicsonpage,
-						"active" => $this->from,
-						"details" => $args["details"],
-			));
-			$cnt = 0;
-			foreach($obj as $key => $item)
+		$this->comments = $this->_get_comment_counts($blist);
+		list($from,$to) = $this->_draw_pager(array(
+					"total" => $ol->count(),
+					"onpage" => $this->topicsonpage,
+					"active" => $this->from,
+					"details" => $args["details"],
+		));
+		$cnt = 0;
+		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		{
+			if ( ($cnt >= $from) && ($cnt <= $to) )
 			{
-				$item["meta"] = aw_unserialize($item["metadata"]);
-				if ( ($cnt >= $from) && ($cnt <= $to) )
+				if ($args["details"])
 				{
-					if ($args["details"])
+					// this is a tad ineffective, because we query 
+					// for each topic, instead of getting the comments
+					// as a batch
+					$this->_query_comments(array("board" => $o->id()));
+					// put the comments into tree
+					while($row = $this->db_next())
 					{
-						// this is a tad ineffective, because we query 
-						// for each topic, instead of getting the comments
-						// as a batch
-						$this->_query_comments(array("board" => $item["oid"]));
-						// put the comments into tree
-						while($row = $this->db_next())
-						{
-							$this->_comments[$row["parent"]][] = $row;
-						};
-						$this->rec_comments(0);
-						$this->vars(array("message" => $this->content));
-						$this->content = "";
-						$this->_comments = array();
-					}
-					$content .= $this->_draw_topic(array_merge($item,array("section" => $oid)));
+						$this->_comments[$row["parent"]][] = $row;
+					};
+					$this->rec_comments(0);
+					$this->vars(array("message" => $this->content));
+					$this->content = "";
+					$this->_comments = array();
 				}
-				$cnt++;
+				$content .= $this->_draw_topic(array_merge($o->fetch(),array("section" => $oid)));
 			}
-				
-		};
+			$cnt++;
+		}
 		return $content;
 	}
 

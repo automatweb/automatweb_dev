@@ -182,15 +182,13 @@ class menu_gen extends class_base
 		$source_cats=(array)$source_cats;
 		foreach($source_cats as $parent)
 		{
-			$objects+=$this->get_objects_below($args = array(
+			$ol = new object_list(array(
 				'parent' => $parent,
-				'class' => $class, //
-	//			'type' => MN_CONTENT,
-				'active' => false,
-				'orderby' => 'name',
-				'full' => $full,
-				'ret' => $ret,
+				'class_id' => $class, //
+				'status' => STAT_NOTACTIVE,
+				'sort_by' => 'objects.name',
 			));
+			$objects+=$ol->names();
 		};
 		return $objects;
 	}
