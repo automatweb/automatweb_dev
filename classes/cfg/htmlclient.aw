@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.10 2002/12/17 16:10:35 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.11 2002/12/17 16:57:28 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -49,6 +49,11 @@ class htmlclient extends aw_template
 		else
 		{
 			$this->mod_property(&$args);
+		};
+
+		if ($args["no_caption"])
+		{
+			$this->put_content($args);
 		};
 
 		if ($args["type"])
@@ -146,6 +151,7 @@ class htmlclient extends aw_template
 		$this->res .= "</td>\n";
 
 		$this->res.= "\t<td class='" . $this->style2 . "'>";
+		unset($args["caption"]);
 		$this->res .= $this->draw_element($args);
 		$this->res .= "</td>\n";
 		$this->res .= "</tr>\n";
@@ -163,7 +169,7 @@ class htmlclient extends aw_template
 	function put_content($args)
 	{
 		$this->res .= "<tr>\n";
-		$this->res .= "\t<td colspan='2' class='" . $this->style_content . "' width='160'>";
+		$this->res .= "\t<td colspan='2' class='" . $this->style_content . "'>";
 		$this->res .= $args["value"];
 		$this->res .= "</td>\n";
 		$this->res .= "</tr>\n";
@@ -246,6 +252,11 @@ class htmlclient extends aw_template
 			case "time_select":
 				$retval = html::time_select($arr);
 				break;
+			
+			case "date_select":
+				$retval = html::date_select($arr);
+				break;
+
 
 			case "img":
 				$retval = html::img($arr);

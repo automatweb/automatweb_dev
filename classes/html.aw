@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.14 2002/12/17 16:13:06 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.15 2002/12/17 16:57:53 duke Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -127,7 +127,11 @@ class html extends aw_template
 		{
 			$value = 1;
 		};
-		return "<input type='checkbox' id='$name' name='$name' value='$value' $checked/>\n";
+		if ($caption)
+		{
+			$capt = " " . $caption;
+		};
+		return "<input type='checkbox' id='$name' name='$name' value='$value' $checked/> $capt\n";
 	}
 
 	////
@@ -170,6 +174,18 @@ class html extends aw_template
 		$selector->configure(array("hour" => 1, "minute" => 1));
 		list($d,$m,$y) = explode("-",date("d-m-Y"));
 		$val = mktime($args["value"]["hour"],$args["value"]["minute"],0,$m,$d,$y);
+		return $selector->gen_edit_form($args["name"], $val);
+	}
+	
+	////
+	// !Date selector
+	function date_select($args = array())
+	{
+		load_vcl("date_edit");
+		$selector = new date_edit($args["name"]);
+		$selector->configure(array("day" => 1,"month" => 1,"year" => 1,"hour" => 1, "minute" => 1));
+		list($d,$m,$y) = explode("-",date("d-m-Y"));
+		$val = mktime($args["value"]["hour"],$args["value"]["minute"],0,$args["value"]["month"],$args["value"]["day"],$args["value"]["year"]);
 		return $selector->gen_edit_form($args["name"], $val);
 	}
 
