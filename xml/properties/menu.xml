@@ -245,6 +245,16 @@
             <caption>Perioodid, mille alt dokumendid võetakse</caption>
       </property>
       <property>
+            <name>all_pers</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>relations</group>
+            <caption>K&amp;otilde;ikide perioodide alt</caption>
+      </property>
+      <property>
             <name>docs_per_period</name>
             <type>textbox</type>
             <size>3</size>
