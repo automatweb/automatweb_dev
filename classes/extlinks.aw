@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.29 2003/04/23 13:58:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.30 2003/05/08 19:42:52 kristo Exp $
 // extlinks.aw - Väliste linkide haldamise klass
 
 
@@ -75,13 +75,13 @@ class extlinks extends class_base
 		{
 			$linksrc = $link["url"];
 		}
-		elseif ($this->cfg["directlink"] == 1)
+		elseif (aw_ini_get("extlinks.directlink") == 1)
 		{
 			$linksrc = $link["url"];
 		}
 		else
 		{
-			$linksrc = $this->mk_my_orb("show", array("id" => $link["id"]),"links",false,true);
+			$linksrc = aw_ini_get("baseurl")."/".$link["id"];//$this->mk_my_orb("show", array("id" => $link["id"]),"links",false,true);
 		};
 
 		if ($link["link_image_check_active"] && ($link["link_image_active_until"] >= time()) )
