@@ -1,4 +1,4 @@
-<table border="0" width="100%" style="border-collapse: collapse; border: 1px solid #8AAABE;" cellspacing="0">
+<table border="0" width="100%" style="border-collapse: collapse; border: 1px solid #8AAABE;" cellspacing="0" cellpadding="2">
 <tr>
 <!-- SUB: HEADER -->
 	<!-- SUB: HEADER_CELL -->
