@@ -62,12 +62,16 @@
 
 @property obj_acl type=callback callback=get_acls store=no
 
+@reltype SEARCHFORM value=1 clid=CL_FORM
+@caption otsinguvorm
+
+@reltype MEMBER value=2 clid=CL_USER
+@caption liige
+
+@reltype ACL value=3 clid=CL_ACL
+@caption acl
 
 */
-
-define("RELTYPE_SEARCHFORM", 1);
-define("RELTYPE_MEMBER", 2);
-define("RELTYPE_ACL", 3);
 
 class group extends class_base
 {
@@ -78,31 +82,6 @@ class group extends class_base
 			'clid' => CL_GROUP
 		));
 		$this->users = get_instance("users");
-	}
-
-	function callback_get_rel_types()
-	{
-		return array(
-			RELTYPE_SEARCHFORM => "otsinguvorm",
-			RELTYPE_MEMBER => "liige",
-			RELTYPE_ACL => "acl"
-		);
-	}
-
-	function callback_get_classes_for_relation($args = array())
-	{
-		if ($args["reltype"] == RELTYPE_SEARCHFORM)
-		{
-			return array(CL_FORM);
-		}
-		if ($args["reltype"] == RELTYPE_MEMBER)
-		{
-			return array(CL_USER);
-		}
-		if ($args["reltype"] == RELTYPE_ACL)
-		{
-			return array(CL_ACL);
-		}
 	}
 
 	function get_property(&$arr)
@@ -137,13 +116,27 @@ class group extends class_base
 			case "mcreatedby":
 				$o = $arr["obj_inst"];
 				$prop['value'] = $o->createdby();
-				$prop["value"] = $prop["value"]->name();
+				if (is_object($prop["value"]))
+				{
+					$prop["value"] = $prop["value"]->name();
+				}
+				else
+				{
+					$prop['value'] = "";
+				}
 				break;
 				
 			case "mmodifiedby":
 				$o = $arr["obj_inst"];
 				$prop['value'] = $o->modifiedby();
-				$prop["value"] = $prop["value"]->name();
+				if (is_object($prop["value"]))
+				{
+					$prop["value"] = $prop["value"]->name();
+				}
+				else
+				{
+					$prop['value'] = "";
+				}
 				break;
 				
 			case "type":

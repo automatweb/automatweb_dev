@@ -116,9 +116,10 @@
 @property stat type=text store=no no_caption=1
 @caption Statistika
 
-*/
+@reltype GRP value=1 clid=CL_GROUP
+@caption Grupp
 
-define("RELTYPE_GRP", 1);
+*/
 
 class user extends class_base
 {
@@ -129,23 +130,6 @@ class user extends class_base
 			'clid' => CL_USER
 		));
 		$this->users = get_instance("users");
-	}
-
-	function callback_get_rel_types()
-	{
-		return array(
-			RELTYPE_GRP => "Grupp",
-		);
-	}
-
-	function callback_get_classes_for_relation($args = array())
-	{
-		switch($args["reltype"])
-		{
-			case RELTYPE_GRP:
-				return array(CL_GROUP);
-			break;
-		}
 	}
 
 	function get_property(&$arr)
@@ -323,7 +307,7 @@ class user extends class_base
 				{
 					$this->users->send_welcome_mail(array(
 						"uid" => $arr["obj_inst"]->prop("uid"),
-						"pass" => $arr['request']['password']
+						"pass" => $arr['request']['passwd']
 					));
 				}
 				break;
