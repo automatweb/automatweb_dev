@@ -90,6 +90,16 @@
             <caption>Lisa kommentaar</caption>
       </property>
       <property>
+            <name>style_donor</name>
+            <type>relpicker</type>
+            <group>styles</group>
+            <reltype>RELTYPE_STYLE_DONOR</reltype>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Stiilidoonor</caption>
+      </property>
+      <property>
             <name>style_caption</name>
             <type>relpicker</type>
             <group>styles</group>
@@ -212,7 +222,6 @@
       <classinfo>
             <syslog_type>ST_FORUM</syslog_type>
             <relationmgr>yes</relationmgr>
-            <trans_id>TR_FORUM</trans_id>
       </classinfo>
       <groupinfo>
             <container>
