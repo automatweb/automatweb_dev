@@ -200,6 +200,16 @@
             <caption>Folderi viimase postituse stiil</caption>
       </property>
       <property>
+            <name>style_forum_yah</name>
+            <type>relpicker</type>
+            <group>styles</group>
+            <reltype>RELTYPE_STYLE</reltype>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Foorumi YAH</caption>
+      </property>
+      <property>
             <name>style_topic_caption</name>
             <type>relpicker</type>
             <group>styles</group>
@@ -248,6 +258,16 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Kommentaaride arvu stiil</caption>
+      </property>
+      <property>
+            <name>style_comment_creator</name>
+            <type>relpicker</type>
+            <group>styles</group>
+            <reltype>RELTYPE_STYLE</reltype>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Teema püstitaja stiil</caption>
       </property>
       <property>
             <name>style_comment_user</name>
