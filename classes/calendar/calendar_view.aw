@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.22 2005/01/16 16:56:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.23 2005/01/18 09:50:27 ahti Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -432,7 +432,6 @@ class calendar_view extends class_base
 				"first_image" => $first_image,
 				"project_media" => $project_media,
 			));
-
 			foreach($events as $event)
 			{
 				$data = $event;
@@ -502,6 +501,9 @@ class calendar_view extends class_base
 					"flatlist" => 1,
 					"date" => date("d-m-Y",$range["timestamp"]),
 				));
+				$num = $range["limit_events"];
+				$count = count($events);
+				$events = array_slice($events, ($count - $num), $num);
 				break;
 
 			case CL_DOCUMENT_ARCHIVE:
@@ -746,7 +748,7 @@ class calendar_view extends class_base
 		};
 
 		$rv = $vcal->get_html($args);
-
+		
 		if ("grouped" == $use_template)
 		{
 			$conns = $this->obj_inst->connections_from(array(
@@ -770,7 +772,6 @@ class calendar_view extends class_base
 
 			$rv .= "<br>";
 
-
 			foreach ($conns as $conn)
 			{
 				$to_o = $conn->to();
@@ -779,7 +780,6 @@ class calendar_view extends class_base
 					"obj_inst" => $to_o,
 					"range" => $range,
 				));
-
 
 				$vcal->items = array();
 				
