@@ -1,6 +1,23 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>navtoolbar</name>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <group>general</group>
+            <caption>Toolbar</caption>
+      </property>
+      <property>
+            <name>active</name>
+            <type>checkbox</type>
+            <ch_value>2</ch_value>
+            <table>objects</table>
+            <field>status</field>
+            <group>general</group>
+            <caption>Aktiivne</caption>
+      </property>
+      <property>
             <name>title</name>
             <type>textbox</type>
             <size>60</size>
@@ -118,8 +135,8 @@
             <name>no_right_pane</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <group>settings</group>
             <table>documents</table>
-            <group>general</group>
             <field>no_right_pane</field>
             <caption>Ilma parema paanita</caption>
       </property>
@@ -127,8 +144,8 @@
             <name>no_left_pane</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <group>settings</group>
             <table>documents</table>
-            <group>general</group>
             <field>no_left_pane</field>
             <caption>Ilma vasaku paanita</caption>
       </property>
@@ -136,8 +153,8 @@
             <name>title_clickable</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <group>settings</group>
             <table>documents</table>
-            <group>general</group>
             <field>title_clickable</field>
             <caption>Pealkiri klikitav</caption>
       </property>
@@ -161,8 +178,8 @@
             <name>esilehel</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <group>settings</group>
             <table>documents</table>
-            <group>general</group>
             <field>esilehel</field>
             <caption>Esilehel</caption>
       </property>
@@ -173,6 +190,13 @@
             <table>documents</table>
             <group>general</group>
             <field>frontpage_left</field>
+            <caption>Esilehel tulbas</caption>
+      </property>
+      <property>
+            <name>dcache</name>
+            <type>checkbox</type>
+            <store>no</store>
+            <group>general</group>
             <caption>Cache otsingu jaoks</caption>
       </property>
       <property>
@@ -288,20 +312,29 @@
             <caption>Põhikalender</caption>
       </property>
       <property>
+            <name>gen_static</name>
+            <type>checkbox</type>
+            <store>no</store>
+            <group>general</group>
+            <caption>Genereeri staatiline</caption>
+      </property>
+      <property>
             <name>sbt</name>
             <type>submit</type>
             <value>Salvesta</value>
             <store>no</store>
             <group>general</group>
       </property>
-      <classinfo>
-            <toolbar>yes</toolbar>
-            <corefields>status</corefields>
-      </classinfo>
       <groupinfo>
             <calendar>
                   <caption>Kalender</caption>
             </calendar>
+            <vennastamine>
+                  <caption>Vennastamine</caption>
+            </vennastamine>
+            <settings>
+                  <caption>Seadistused</caption>
+            </settings>
       </groupinfo>
       <tableinfo>
             <documents>
