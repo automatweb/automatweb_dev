@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/scripts/shell/shell.aw,v 1.5 2004/04/15 06:29:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/scripts/shell/shell.aw,v 1.6 2004/06/03 16:42:03 duke Exp $
 // now I have to figure out a way to execute this from site directory.
 // so that I can actually parse an INI file
 
@@ -22,6 +22,29 @@ print "Using $inifile\n";
 
 classload("timer");
 $awt = new aw_timer;
+
+print "hua!";
+
+readline_completion_function("autocomplete");
+function autocomplete($arg)
+{
+	$line = readline_info("line_buffer");
+	#nt "l = $line\n";
+	$rv = array();
+	// check whether it starts with an object
+	if (preg_match("/\\$(\w+?)->/",$line,$m))
+	{
+		$x = $m[1];
+		#print "dump starts\n";
+		global $$x;
+		$tmp = get_class_methods($$x);
+		foreach($tmp as $item)
+		{
+			$rv[] = $item . "(";
+		};
+	};
+	return $rv;
+}
 
 $continue = true;
 while ($continue)
@@ -57,6 +80,12 @@ while ($continue)
 			$awt->start("shellcommand");
 		};
 		eval($str);
+		if ($use_timer)
+		{
+			print $awt->elapsed("shellcommand");
+			$awt->stop("shellcommand");
+			print "\n";
+		};
 		echo "\ncmd took ".$awt->elapsed("shellcommand")." seconds \n";
 	};
 };
