@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.7 2004/01/15 16:13:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.8 2004/05/20 10:33:31 duke Exp $
 // crm_address.aw - It's not really a physical address but a collection of data required to 
 // contact a person.
 /*
@@ -20,13 +20,13 @@
 	@property postiindeks type=textbox size=5 maxlength=5
 	@caption Postinindex
 	
-	@property linn type=relpicker reltype=RELTYPE_LINN 
+	@property linn type=relpicker reltype=RELTYPE_LINN automatic=1
 	@caption Linn/Vald/Alev
 
-	@property maakond type=relpicker reltype=RELTYPE_MAAKOND 
+	@property maakond type=relpicker reltype=RELTYPE_MAAKOND automatic=1
 	@caption Maakond
 
-	@property riik type=relpicker reltype=RELTYPE_RIIK 
+	@property riik type=relpicker reltype=RELTYPE_RIIK automatic=1
 	@caption Riik
 	
 	@property comment type=textarea cols=65 rows=3 table=objects field=comment
