@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.12 2004/08/01 20:40:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.13 2004/08/02 10:48:53 duke Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -150,11 +150,14 @@ class crm_meeting extends class_base
 				break;
 			
 			case "whole_day":
-				list($m,$d,$y) = explode("-",date("m-d-Y"));
-				$daystart = mktime(9,0,0,$m,$d,$y);
-				$dayend = mktime(17,0,0,$m,$d,$y);
-				$arr["obj_inst"]->set_prop("start1",$daystart);
-				$arr["obj_inst"]->set_prop("end",$dayend);
+				if ($data["value"])
+				{
+					list($m,$d,$y) = explode("-",date("m-d-Y"));
+					$daystart = mktime(9,0,0,$m,$d,$y);
+					$dayend = mktime(17,0,0,$m,$d,$y);
+					$arr["obj_inst"]->set_prop("start1",$daystart);
+					$arr["obj_inst"]->set_prop("end",$dayend);
+				};
 				break;
 		};
 		return $retval;
