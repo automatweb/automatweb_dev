@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.3 2002/08/16 21:27:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.4 2002/10/09 09:50:16 kristo Exp $
 // this is the class that allows us to connect to multiple datasources at once
 // it replaces the mysql class which was used up to now, but still routes all
 // db functions to it so that everything stays working and it also provides
@@ -123,9 +123,9 @@ class db_connector extends root
 
 	}
 
-	function db_fetch_row()
+	function db_fetch_row($sql = "")
 	{
-		return $this->dc[$this->default_cid]->db_next();
+		return $this->dc[$this->default_cid]->db_fetch_row($sql);
 	}
 
 	function db_fetch_field($qtext,$field)

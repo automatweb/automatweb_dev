@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.19 2002/07/16 19:22:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.20 2002/10/09 09:50:16 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql 
 {
@@ -155,8 +155,12 @@ class mysql
 		return $res;
 	}
 
-	function db_fetch_row() 
+	function db_fetch_row($sql = "")
 	{
+		if ($sql != "")
+		{
+			$this->db_query($sql);
+		}
 		return $this->db_next();
 	}
 	
