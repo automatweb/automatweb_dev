@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.263 2004/06/17 14:30:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.264 2004/06/18 16:23:41 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -2463,15 +2463,8 @@ class document extends aw_template
 		{
 			if ($oid != $id)	// no recursing , please
 			{
-				$noid = $this->new_object(array(
-					"parent" => $oid,
-					"class_id" => CL_BROTHER_DOCUMENT,
-					"status" => $obj["status"],
-					"brother_of" => $id,
-					"name" => $obj["name"],
-					"comment" => $obj["comment"],
-					"period" => $obj["period"]
-				));
+				$tmp = obj($id);
+				$noid = $tmp->create_brother($oid);
 			}
 		}
 

@@ -313,25 +313,8 @@ class document_brother extends document
 	function create_bro($arr)
 	{
 		extract($arr);
-		//check if this brother does not already exist
-		$this->db_query("SELECT * FROM objects WHERE parent = $parent AND class_id = ".CL_BROTHER_DOCUMENT." AND brother_of = $id AND status != 0");
-		if (!($row = $this->db_next()))
-		{
-			$obj = $this->get_object($id);
-			if ($obj["parent"] != $parent)
-			{
-				$this->quote(&$obj["name"]);
-				$noid = $this->new_object(array(
-					"parent" => $parent,
-					"class_id" => CL_BROTHER_DOCUMENT,
-					"status" => 2,
-					"brother_of" => $id,
-					"name" => $obj["name"],
-					"comment" => $obj["comment"],
-					"subclass" => $subclass
-				));
-			}
-		}
+		$o = obj($id);
+		$noid = $o->create_brother($parent);
 		if ($no_header)
 		{
 			return $noid;

@@ -341,10 +341,11 @@ class basket extends aw_template
 		$basket = $tmp[$this->current_basket_id];
 
 		$creat = time();
-		$order_id = $this->new_object(array(
-			"parent" => $ob["meta"]["ord_parent"],
-			"class_id" => CL_SHOP_BASKET_ORDER,
-		));
+
+		$o = obj();
+		$o->set_parent($ob["meta"]["ord_parent"]);
+		$o->set_class_id(CL_SHOP_BASKET_ORDER);
+		$order_id = $o->save();
 
 		// we have to calculate the total price and store to a global var so that the form controller for the total price
 		// can get to it

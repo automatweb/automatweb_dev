@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.76 2004/06/11 09:54:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.77 2004/06/18 16:23:41 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -402,12 +402,7 @@ class doc extends class_base
 						$xrow = $this->db_fetch_row($q);
 						if (empty($xrow))
 						{
-							$this->new_object(array(
-								"parent" => $fldr,
-								"class_id" => CL_BROTHER_DOCUMENT,
-								"status" => STAT_ACTIVE,
-								"brother_of" => $args["obj_inst"]->id(),
-							));
+							$args["obj_inst"]->create_brother($fldr);
 						};
 					}
 				}
@@ -638,15 +633,8 @@ class doc extends class_base
 		{
 			if ($oid != $id)	// no recursing , please
 			{
-				$noid = $this->new_object(array(
-					"parent" => $oid,
-					"class_id" => CL_BROTHER_DOCUMENT,
-					"status" => $obj->status(),
-					"brother_of" => $id,
-					"name" => $obj->name(),
-					"comment" => $obj->comment(),
-					"period" => $obj->period(),
-				));
+				$tmp = obj($id);
+				$noid = $tmp->create_brother($oid);
 			}
 		}
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.72 2004/06/17 14:29:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.73 2004/06/18 16:23:23 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -1533,12 +1533,13 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		elseif($subaction == "mkgroup")
 		{
 			// aga kuidas otsing kirja panna?
-			$id = $this->new_object(array(
-				"parent" => $parent,
-				"name" => $grpname,
-				"class_id" => CL_OBJECT_CHAIN,
-				"metadata" => array("objs" => $sel,"s" => $s),
-			));
+			$o = obj();
+			$o->set_parent($parent);
+			$o->set_name($grpname);
+			$o->set_class_id(CL_OBJECT_CHAIN);
+			$o->set_meta("objs", $sel);
+			$o->set_meta("s", $s);
+			$id = $o->save();
 		}
 		elseif ($subaction == "assign_config")
 		{

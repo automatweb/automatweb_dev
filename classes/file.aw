@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.80 2004/06/07 15:54:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.81 2004/06/18 16:23:41 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -395,49 +395,42 @@ class file extends class_base
 		// now if we need to create a new object, do so
 		if (!$file_id)
 		{
-			$file_id = $this->new_object(array(
-				"parent" => $parent,
-				"class_id" => CL_FILE,
-				"name" => $name,
-				"comment" => $comment,
-				"metadata" => array(
-					"act_time" => $act_time,
-					"j_time" => $j_time,
-					"show_framed" => $show_framed,
-				)
-			));
-			$this->db_query("INSERT INTO files(id,file,showal,type,newwindow) 
-				VALUES('$file_id','$fs','$showal','$type','$newwindow') ");
+			$o = obj();
+			$o->set_parent($parent);
+			$o->set_class_id(CL_FILE);
+			$o->set_name($name);
+			$o->set_comment($comment);
+			$o->set_meta("show_framed", $show_framed);
+			$o->set_prop("file", $fs);
+			$o->set_prop("showal", $showal);
+			$o->set_prop("type", $type);
+			$o->set_prop("newwindow", $newwindow);
+			$file_id = $o->save();
 		}
 		else
 		{
 			// change existing
-			$co = array("oid" => $file_id);
+			$o = obj($file_id);
 			if ($parent)
 			{
-				$co["parent"] = $parent;
+				$o->set_parent($parent);
 			}
 			if (isset($comment))
 			{
-				$co["comment"] = $comment;
+				$o->set_comment($comment);
 			}
-			$co["metadata"]["act_time"] = $act_time;
-			$co["metadata"]["j_time"] = $j_time;
-			$co["metadata"]["show_framed"] = $show_framed;
+			$o->set_meta("show_framed",$show_framed);
 
-			$upd = array();
 			if ($fs != "")
 			{
-				$co["name"] = $name;
-				$upd[] = "file = '$fs'";
-				$upd[] = "type = '$type'";
-				$upd[] = "content = ''";	// if file content was specified, remove old file data to save resources
+				$o->set_name($name);
+				$o->set_prop("file",$fs);
+				$o->set_prop("type",$type);
 			}
-			$upd[] = "showal = '$showal'";
-			$upd[] = "newwindow = '$newwindow'";
-			$this->upd_object($co);
-			$upds = join(",",$upd);
-			$this->db_query("UPDATE files SET $upds WHERE id = '$file_id'");
+
+			$o->set_prop("showal", $showal);
+			$o->set_prop("newwindow", $newwindow);
+			$o->save();
 		}
 
 		return $file_id;

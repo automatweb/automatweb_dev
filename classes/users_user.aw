@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.88 2004/06/11 08:52:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.89 2004/06/18 16:23:08 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -526,7 +526,12 @@ class users_user extends aw_template
 		{
 			$og["oid"] = $obj_parent;
 		}
-		$oid = $this->new_object(array("name" => $gname, "class_id" => CL_GROUP, "status" => 2, "parent" => $pg["oid"]));
+		$oid = $this->new_object(array(
+			"name" => $gname, 
+			"class_id" => CL_GROUP, 
+			"status" => 2, 
+			"parent" => $pg["oid"]
+		));
 
 		$q = "INSERT INTO groups (name,created,createdby,modified,modifiedby,type,data,parent,priority,oid,search_form)
 			VALUES('$gname',$t,'$uid',$t,'$uid','$type','$data',$parent,$priority,$oid,$search_form)";
@@ -693,15 +698,14 @@ class users_user extends aw_template
 		}
 
 		// kodukataloom
-		$hfid = $this->new_object(array(
-			"parent" => 1, 
-			"name" => $uid, 
-			"class_id" => CL_PSEUDO, 
-			"comment" => $uid." kodukataloog"
-		),false);
+		$o = obj();
+		$o->set_parent(1);
+		$o->set_name($uid);
+		$o->set_class_id(CL_MENU);
+		$o->set_comment($uid." kodukataloog");
+		$o->set_prop("type", MN_HOME_FOLDER);
+		$hfid = $o->save();
 		$this->hfid = $hfid;
-		$this->db_query("INSERT INTO menu (id,type) VALUES($hfid,".MN_HOME_FOLDER.")");
-
 
 		if (aw_ini_get("auth.md5_passwords") || $use_md5_passwords)
 		{

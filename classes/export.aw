@@ -972,49 +972,19 @@ class export extends aw_template
 
 		if ($id)
 		{
-			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $name,
-				"metadata" => array(
-					"menus" => $this->make_keys($menus)
-				)
-			));
+			$o = obj($id);
+			$o->set_name($name);
+			$o->set_meta("menus", $this->make_keys($menus));
+			$o->save();
 		}
 		else
 		{
-			$id = $this->new_object(array(
-				"name" => $name,
-				"parent" => $parent,
-				"class_id" => CL_EXPORT_RULE,
-				"metadata" => array(
-					"menus" => $this->make_keys($menus),
-				)
-			));
-
-			$pl = new planner;
-			//$pl->submit_add(array("parent" => $id));
-
-			$this->upd_object(array(
-				"oid" => $id,
-				"metadata" => array(
-					"cal_id" => $pl->id,
-					"event_id" => $pl->bron_add_event(array("parent" => $pl->id,"start" => time(), "end" => time()+1))
-				)
-			));
-		}
-
-		$ob = $this->get_object($id);
-		if ($ob['meta']['event_id'])
-		{
-			$sched = get_instance("scheduler");
-			$sched->remove(array(
-				"event" => str_replace("/automatweb","",$this->mk_my_orb("do_export", array("rule_id" => $id))),
-				"rep_id" => $ob['meta']['event_id']
-			));
-			$sched->add(array(
-				"event" => str_replace("/automatweb","",$this->mk_my_orb("do_export", array("rule_id" => $id))),
-				"rep_id" => $ob['meta']['event_id']
-			));
+			$o = obj();
+			$o->set_name($name);
+			$o->set_parent($parent);
+			$o->set_class_id(CL_EXPORT_RULE);
+			$o->set_meta("menus", $this->make_keys($menus));
+			$id = $o->save();
 		}
 
 		return $this->mk_my_orb("change", array("id" => $id));

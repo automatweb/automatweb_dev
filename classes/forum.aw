@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.91 2004/06/15 08:57:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.92 2004/06/18 16:23:41 kristo Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -508,19 +508,15 @@ topic");
 		$this->quote($args);
 		extract($args);
 
-		$tid = $this->new_object(array(
-			"parent" => $id,
-			"name" => $topic,
-			"comment" => ($text) ? $text : $comment,
-			"last" => $from,
-			"class_id" => CL_MSGBOARD_TOPIC,
-			"status" => 2,
-		));
-
 		aw_disable_acl();
-		$o = obj($tid);
+		$o = obj();
+		$o->set_parent($id);
+		$o->set_name($topic);
+		$o->set_comment(($text) ? $text : $comment);
+		$o->set_class_id(CL_MSGBOARD_TOPIC);
+		$o->set_status(STAT_ACTIVE);
 		$o->set_meta("author_email", $email);
-		$o->save();
+		$tid = $o->save();
 		aw_restore_acl();
 
 		if ($section)
