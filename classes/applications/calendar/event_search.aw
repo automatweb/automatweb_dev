@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.12 2005/01/12 12:51:45 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.13 2005/01/12 15:22:25 ahti Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -152,7 +152,6 @@ class event_search extends class_base
 			"name" => "data",
 			"caption" => t("Sisu"),
 		));
-
 		
 		$t->define_field(array(
 			"name" => "active",
@@ -612,7 +611,8 @@ class event_search extends class_base
 				if(!empty($prj_ch1))
 				{
 					$search_p1 = true;
-					$prj_ch1 = array("0" => t("kõik")) + $prj_ch1;
+					asort($prj_ch1);
+					$prj_ch1 = array_merge(array(0 => t("kõik")), $prj_ch1);
 				}
 				else
 				{
@@ -638,7 +638,8 @@ class event_search extends class_base
 				if(!empty($prj_ch2))
 				{
 					$search_p2 = true;
-					$prj_ch2 = array("0" => t("kõik")) + $prj_ch2;
+					asort($prj_ch2);
+					$prj_ch2 = array_merge(array(0 => t("kõik")), $prj_ch2);
 				}
 				else
 				{
@@ -775,12 +776,16 @@ class event_search extends class_base
 				$this->read_template("search_results.tpl");
 				$tabledef = $ob->meta("result_table");
 				//arr($tabledef);
-				uasort($tabledef,array($this,"__sort_props_by_ord"));
+				uasort($tabledef, array($this, "__sort_props_by_ord"));
 				// first I have to sort the bloody thing in correct order
 				//$this->sub_merge = 1;
 				$cdat = "";
-				foreach($tabledef as $propdef)
+				foreach($tabledef as $key => $propdef)
 				{
+					if($key == "content")
+					{
+						continue;
+					}
 					if ($propdef["active"])
 					{
 						$this->vars(array(
@@ -837,7 +842,7 @@ class event_search extends class_base
 							"project_selector" => "n/a",
 							"date" => date("d-m-Y", $res->prop("start1")),
 						);
-						$edata[$orig_id] = array_merge($edata[$orig_id],$res->properties());
+						$edata[$orig_id] = array_merge($edata[$orig_id], $res->properties());
 					};
 					$orig = $res->get_original();
 					$ecount[$orig->id()]++;
@@ -878,6 +883,10 @@ class event_search extends class_base
 				$cdat = "";
 				foreach($tabledef as $sname => $propdef)
 				{
+					if($sname == "content")
+					{
+						continue;
+					}
 					if(!$propdef["active"])
 					{
 						continue;
@@ -916,6 +925,29 @@ class event_search extends class_base
 								$v = date("d-m-Y", $v);
 							}
 						}
+						if($nms == "name")
+						{
+							$id = $eval["event_id"];
+							if(is_oid($id) && $this->can("view", $id))
+							{
+								$obj = obj($id);
+								if($obj->prop("udeftb1") != "")
+								{
+									$v = html::popup(array(
+										"url" => $obj->prop("udeftb1"),
+										"caption" => $v,
+										"target" => "_blank",
+										"toolbar" => 1,
+										"directories" => 1,
+										"status" => 1,
+										"location" => 1,
+										"resizable" => 1,
+										"scrollbars" => 1,
+										"menubar" => 1,
+									));
+								}
+							}
+						}
 						$aliasmrg->parse_oo_aliases($ekey, $v);
 						$val[] = $v;
 					}
@@ -935,7 +967,7 @@ class event_search extends class_base
 				{
 					$aliasmrg->parse_oo_aliases($ekey, $eval["utextarea1"]);
 					$content = $eval["utextarea1"];
-					$nmx = "utextarea1";
+					$nmx = "content";
 				}
 				$i++;
 				$this->vars(array(
@@ -947,11 +979,15 @@ class event_search extends class_base
 						"fulltext_name" => $tabledef[$nmx]["caption"],
 						"fulltext" => $content,
 					));
-					$this->vars(array(
-						"FULLTEXT" => $this->parse("FULLTEXT"),
-					));
-					
+					$fulltext = $this->parse("FULLTEXT");
 				}
+				else
+				{
+					$fulltext = "";
+				}
+				$this->vars(array(
+						"FULLTEXT" => $fulltext,
+				));
 				$res .= $this->parse("EVENT");
 			};
 			
