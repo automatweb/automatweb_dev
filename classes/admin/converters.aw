@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.13 2003/06/06 14:58:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.14 2003/06/06 15:26:06 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -640,16 +640,18 @@ class converters extends aw_template
 
 		echo "converting formgen tables! <br><br>\n";
 
-		aw_global_set("__from_raise_error",1);
-
 		foreach($ol as $oid => $_d)
 		{
 			echo "form $oid <br>\n";
 			flush();
 			$tbl = "form_".$oid."_entries";
-			$this->db_query("ATER TABLE $tbl DROP deleted");
-			$this->db_query("ATER TABLE $tbl ADD deleted int default 0");
-			$this->db_query("ATER TABLE $tbl ADD index deleted(deleted)");
+			aw_global_set("__from_raise_error",1);
+			$this->db_query("ALTER TABLE $tbl DROP deleted");
+			aw_global_set("__from_raise_error",0);
+			$this->db_query("ALTER TABLE $tbl ADD deleted int default 0");
+			aw_global_set("__from_raise_error",1);
+			$this->db_query("ALTER TABLE $tbl ADD index deleted(deleted)");
+			aw_global_set("__from_raise_error",0);
 
 
 			// now, also go oever all the entries and mark the deleted ones as deleted
