@@ -20,7 +20,7 @@
 		<action name="change">
 			<function name="change">
 				<arguments>
-					<required name="id" type="int" acl="view;change"/>
+					<required name="id" type="int" acl="view;edit"/>
 					<optional name="search"/>
 					<optional name="s_name" default="%"/>
 					<optional name="s_comment" default="%"/>

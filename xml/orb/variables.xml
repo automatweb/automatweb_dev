@@ -84,7 +84,7 @@
 		<action name="change">
 			<function name="change_var">
 				<arguments>
-					<required name="id" acl="change;view"/>
+					<required name="id" acl="edit;view"/>
 				</arguments>
 			</function>
 		</action>

@@ -12,7 +12,7 @@
 		<action name="submit">
 			<function name="submit">
 				<arguments>
-					<required name="id" type="int" acl="view;change"/>
+					<required name="id" type="int" acl="view;edit"/>
 				</arguments>
 			</function>
 		</action>
@@ -20,7 +20,7 @@
 		<action name="change">
 			<function name="change">
 				<arguments>
-					<required name="id" type="int" acl="view;change"/>
+					<required name="id" type="int" acl="view;edit"/>
 				</arguments>
 			</function>
 		</action>

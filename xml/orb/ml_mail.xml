@@ -20,7 +20,7 @@
 		<action name="change">
 			<function name="orb_change">
 				<arguments>
-					<required name="id" acl="view;change"/>
+					<required name="id" acl="view;edit"/>
 					<optional name="parent"/>
 				</arguments>
 			</function>

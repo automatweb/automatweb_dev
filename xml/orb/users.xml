@@ -78,7 +78,7 @@
 			</function>
 		</action>
 
-		<action name="logout" public="1">
+		<action name="logout" public="1" nologin="1">
 			<function name="orb_logout">
 				<arguments>
 				</arguments>

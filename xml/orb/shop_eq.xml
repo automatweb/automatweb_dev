@@ -14,7 +14,7 @@
 		<action name="change">
 			<function name="change">
 				<arguments>
-					<required name="id" acl="view;change"/>
+					<required name="id" acl="view;edit"/>
 				</arguments>
 			</function>
 		</action>

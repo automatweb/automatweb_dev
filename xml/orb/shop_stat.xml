@@ -20,7 +20,7 @@
 		<action name="change">
 			<function name="change">
 				<arguments>
-					<required name="id" acl="view;change"/>
+					<required name="id" acl="view;edit"/>
 				</arguments>
 			</function>
 		</action>
@@ -28,7 +28,7 @@
 		<action name="change_stat">
 			<function name="change_stat">
 				<arguments>
-					<required name="id" acl="view;change"/>
+					<required name="id" acl="view;edit"/>
 				</arguments>
 			</function>
 		</action>

@@ -6,7 +6,7 @@
 		<action name="change">
 			<function name="gen_admin_html">
 				<arguments>
-					<required name="id" acl="view;change"/>
+					<required name="id" acl="view;edit"/>
 					<optional name="is_filter"/>
 					<optional name="filter"/>
 				</arguments>
@@ -16,7 +16,7 @@
 		<action name="configure">
 			<function name="configure">
 				<arguments>
-					<required name="id" type="int" acl="view;change"/>
+					<required name="id" type="int" acl="view;edit"/>
 				</arguments>
 			</function>
 		</action>
@@ -29,7 +29,7 @@
 		<action name="admin">
 			<function name="gen_admin2_html">
 				<arguments>
-					<required name="id" acl="view;change"/>
+					<required name="id" acl="view;edit"/>
 					<optional name="is_filter"/>
 					<optional name="filter"/>
 				</arguments>
@@ -47,7 +47,7 @@
 		<action name="add_col">
 			<function name="add_col">
 				<arguments>
-					<required name="id" acl="view;change"/>
+					<required name="id" acl="view;edit"/>
 					<required name="after"/>
 					<required name="num"/>
 				</arguments>
@@ -57,7 +57,7 @@
 		<action name="del_col">
 			<function name="del_col">
 				<arguments>
-					<required name="id" acl="view;change"/>
+					<required name="id" acl="view;edit"/>
 					<required name="col"/>
 				</arguments>
 			</function>
@@ -66,7 +66,7 @@
 		<action name="nadd_col">
 			<function name="nadd_col">
 				<arguments>
-					<required name="id" acl="view;change"/>
+					<required name="id" acl="view;edit"/>
 					<required name="after"/>
 					<required name="num"/>
 				</arguments>
@@ -76,7 +76,7 @@
 		<action name="ndel_col">
 			<function name="ndel_col">
 				<arguments>
-					<required name="id" acl="view;change"/>
+					<required name="id" acl="view;edit"/>
 					<required name="col"/>
 				</arguments>
 			</function>
@@ -85,7 +85,7 @@
 		<action name="add_row">
 			<function name="add_row">
 				<arguments>
-					<required name="id" acl="view;change"/>
+					<required name="id" acl="view;edit"/>
 					<required name="after"/>
 					<required name="num"/>
 				</arguments>
@@ -95,7 +95,7 @@
 		<action name="del_row">
 			<function name="del_row">
 				<arguments>
-					<required name="id" acl="view;change"/>
+					<required name="id" acl="view;edit"/>
 					<required name="row"/>
 				</arguments>
 			</function>
@@ -104,7 +104,7 @@
 		<action name="nadd_row">
 			<function name="nadd_row">
 				<arguments>
-					<required name="id" acl="view;change"/>
+					<required name="id" acl="view;edit"/>
 					<required name="after"/>
 					<required name="num"/>
 				</arguments>
@@ -114,7 +114,7 @@
 		<action name="ndel_row">
 			<function name="ndel_row">
 				<arguments>
-					<required name="id" acl="view;change"/>
+					<required name="id" acl="view;edit"/>
 					<required name="row"/>
 				</arguments>
 			</function>
@@ -151,7 +151,7 @@
 		<action name="styles">
 			<function name="gen_styles">
 				<arguments>
-					<required name="id" acl="view;change"/>
+					<required name="id" acl="view;edit"/>
 				</arguments>
 			</function>
 		</action>
@@ -167,7 +167,7 @@
 		<action name="pick_style">
 			<function name="pick_style">
 				<arguments>
-					<required name="id" acl="view;change"/>
+					<required name="id" acl="view;edit"/>
 				</arguments>
 			</function>
 		</action>
@@ -175,7 +175,7 @@
 		<action name="exp_right">
 			<function name="exp_right">
 				<arguments>
-					<required name="id" acl="view;change"/>
+					<required name="id" acl="view;edit"/>
 					<required name="col"/>
 					<required name="row"/>
 					<required name="cnt"/>
@@ -186,7 +186,7 @@
 		<action name="exp_left">
 			<function name="exp_left">
 				<arguments>
-					<required name="id" acl="view;change"/>
+					<required name="id" acl="view;edit"/>
 					<required name="col"/>
 					<required name="row"/>
 					<required name="cnt"/>
@@ -197,7 +197,7 @@
 		<action name="exp_up">
 			<function name="exp_up">
 				<arguments>
-					<required name="id" acl="view;change"/>
+					<required name="id" acl="view;edit"/>
 					<required name="col"/>
 					<required name="row"/>
 					<required name="cnt"/>
@@ -208,7 +208,7 @@
 		<action name="exp_down">
 			<function name="exp_down">
 				<arguments>
-					<required name="id" acl="view;change"/>
+					<required name="id" acl="view;edit"/>
 					<required name="col"/>
 					<required name="row"/>
 					<required name="cnt"/>
@@ -219,7 +219,7 @@
 		<action name="split_ver">
 			<function name="split_ver">
 				<arguments>
-					<required name="id" acl="view;change"/>
+					<required name="id" acl="view;edit"/>
 					<required name="col"/>
 					<required name="row"/>
 				</arguments>
@@ -229,7 +229,7 @@
 		<action name="split_hor">
 			<function name="split_hor">
 				<arguments>
-					<required name="id" acl="view;change"/>
+					<required name="id" acl="view;edit"/>
 					<required name="col"/>
 					<required name="row"/>
 				</arguments>
