@@ -22,7 +22,6 @@ classload(
 // the dummy object class just forwards all calls to the global table.
 // voila - instant object cache!
 
-
 class object
 {
 	var $oid;	// the object this instance points to
@@ -288,7 +287,7 @@ class object
 		return $GLOBALS["objects"][$this->oid]->set_flag($flag, $val);
 	}
 
-	function meta($param)
+	function meta($param = false)
 	{
 		return $GLOBALS["objects"][$this->oid]->meta($param);
 	}

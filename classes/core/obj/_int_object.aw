@@ -663,9 +663,19 @@ class _int_object
 		return $prev;
 	}
 
-	function meta($param)
+	function meta($param = false)
 	{
-		return $this->obj["meta"][$param];
+		// calling this withoun an argument returns the contents of whole metainfo
+		// site_content->build_menu_chain for example needs access to the whole metainfo at once -- duke
+		if ($param === false)
+		{
+			$retval = $this->obj["meta"];
+		}
+		else
+		{
+			$retval = $this->obj["meta"][$param];
+		};
+		return $retval;
 	}
 
 	function set_meta($key, $value)
@@ -820,6 +830,14 @@ class _int_object
 			"tableinfo" => $this->tableinfo,
 			"objdata" => $this->obj
 		));
+
+		foreach($this->of2prop as $key => $val)
+		{
+			if (!$this->obj["properties"][$key])
+			{
+				$this->_int_sync_from_objfield_to_prop($key);
+			}
+		};
 	}
 
 	function _int_load_properties()
@@ -832,7 +850,16 @@ class _int_object
 
 		// also make list of properties that belong to object, so we can keep them 
 		// in sync in $this->obj and $this->properties
-		$this->of2prop = array();
+
+		// things in this array can be accessed later with $objref->prop("keyname")
+		$this->of2prop = array(
+			"brother_of" => "brother_of",
+			"parent" => "parent",
+			"class_id" => "class_id",
+			"lang_id" => "lang_id",
+			"period" => "period",
+			"periodic" => "periodic",
+		);
 		foreach($this->properties as $prop)
 		{
 			if ($prop['table'] == "objects")
@@ -840,6 +867,7 @@ class _int_object
 				$this->of2prop[$prop['field']] = $prop['name'];
 			}
 		}
+
 	}
 
 	function _init_ini_cache()

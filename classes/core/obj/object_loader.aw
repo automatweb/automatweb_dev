@@ -167,7 +167,18 @@ class _int_object_loader
 
 		if (!is_object($GLOBALS["objects"][$oid]))
 		{
-			$GLOBALS["objects"][$oid] =& new _int_object($oid);
+			$ref = &new _int_object($oid);
+			if ($ref->id() === NULL)
+			{
+				error::throw(array(
+					"id" => ERR_PARAM,
+					"msg" => "object_loader::load($oid): no such object!"
+				));
+			}
+			else
+			{
+				$GLOBALS["objects"][$oid] = $ref;
+			};
 		}
 
 		return $GLOBALS["objects"][$oid]->id();

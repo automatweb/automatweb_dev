@@ -104,6 +104,11 @@ class connection
 		return $this->conn["id"];
 	}
 
+	function prop($key)
+	{
+		return $this->conn[$key];
+	}
+
 	function to()
 	{
 		if (!$this->conn["id"])
