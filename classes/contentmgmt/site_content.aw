@@ -767,26 +767,31 @@ class site_content extends menuedit
 
 			// see on siis n䤡la parema paani leadide n�tamine
 			// nme h䫫. FIX ME.
-			if (isset($meta["show_lead"]) && $meta["show_lead"])
+			$has_lugu = "";
+			if (isset($meta["show_lead"]) && $meta["show_lead"] && (!aw_ini_get("menuedit.show_lead_in_menu_only_active") || in_array($row["oid"], $path)))
 			{
 				$activeperiod = aw_global_get("act_per_id");
 				$this->save_handle();
-				$q = "SELECT objects.oid,documents.* AS lead FROM objects LEFT JOIN documents ON (objects.oid = documents.docid) WHERE parent = $row[oid] AND status = 2 AND objects.period = '$activeperiod' AND class_id = " . CL_PERIODIC_SECTION;
+				$q = "SELECT objects.oid FROM objects LEFT JOIN documents ON (objects.oid = documents.docid) WHERE parent = $row[oid] AND status = 2 AND objects.period = '$activeperiod' AND class_id IN (" . CL_PERIODIC_SECTION.",".CL_DOCUMENT.") ORDER BY objects.jrk LIMIT ".((int)(aw_ini_get("menuedit.show_lead_in_menu_count")));
 				$this->db_query($q);
-				$xdat = $this->db_next();
-
-				if (!$xdat)
+				while ($xdat = $this->db_next())
 				{
-					continue;
-				};
-
-				$done = $this->doc->gen_preview(array("docid" => $xdat["oid"], "tpl" => "nadal_film_side_lead.tpl","leadonly" => 1, "section" => $row["oid"],    "strip_img" => 0));
-
-				$this->vars(array("lugu" => $done));
-				
+					$done = $this->doc->gen_preview(array(
+						"docid" => $xdat["oid"], 
+						"tpl" => "nadal_film_side_lead.tpl",
+						"leadonly" => 1, 
+						"section" => $row["oid"],
+						"strip_img" => 0
+					));
+					$this->vars(array(
+						"lugu" => $done
+					));
+					$has_lugu .= $this->parse("HAS_LUGU");
+				}
 				$this->restore_handle();
-			};
-
+			}
+			// HAS_LUGU var is inserted in template much later, so that it will not get overwritten
+			
 			// only show content menus
 			if ($row["mtype"] != MN_CONTENT && $row["mtype"] != MN_CLIENT && $row["mtype"] != MN_HOME_FOLDER_SUB && $row["mtype"] != MN_PMETHOD)
 			{
@@ -1166,6 +1171,7 @@ class site_content extends menuedit
 				"NO_SUBITEMS_".$name => "",
 				"HAS_SUBITEMS_".$name."_L".$this->level => $hsl,
 				"NO_SUBITEMS_".$name."_L".$this->level => "",
+				"HAS_LUGU" => $has_lugu
 			));
 
 
@@ -2060,7 +2066,7 @@ class site_content extends menuedit
 		$cont = "";
 		// if $section is a periodic document then emulate the current period for it and show the document right away
 		$d->set_opt("parent",$section);
-		if ($obj["class_id"] == CL_PERIODIC_SECTION)
+		if ($obj["class_id"] == CL_PERIODIC_SECTION || $obj["class_id"] == CL_DOCUMENT) 
 		{
 			$template = $this->get_long_template($section);
 			$activeperiod = $obj["period"];
@@ -2083,7 +2089,6 @@ class site_content extends menuedit
 	
 			// I need to  know that for the public method menus
 			$d->set_opt("cnt_documents",$d->num_rows());
-
 
 			if ($d->num_rows() > 1)		// the database driver sets this
 			{
@@ -2120,6 +2125,7 @@ class site_content extends menuedit
 				$this->active_doc = $row["docid"];
 				$PRINTANDSEND = $this->parse("PRINTANDSEND");
 			}
+
 		}
 		upd_instance("document",$d);
 		return $cont;
