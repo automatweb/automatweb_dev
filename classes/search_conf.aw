@@ -716,9 +716,13 @@ class search_conf extends aw_template
 	{
 		// here we must first sort the $grps array based on user entered order
 		uasort($grps,array($this,"_grp_sort"));
+		classload("cache");
+		$cache = new cache();
 
 		$lgps = $this->get_groups(true);
 		$lgps[$GLOBALS["SITE_ID"]][$GLOBALS["lang_id"]] = $grps;
+
+		$cache->file_set("search_groups::$GLOBALS[SITE_ID]",aw_serialize($lgps));
 		classload("xml");
 		$x = new xml;
 		$dat = $x->xml_serialize($lgps);
@@ -730,12 +734,24 @@ class search_conf extends aw_template
 
 	function get_groups($no_strip = false)
 	{
-		classload("config");
-		$c = new config;
-		$dat = $c->get_simple_config("search_grps");
-		classload("xml");
-		$x = new xml;
-		$ret = $x->xml_unserialize(array("source" => $dat));
+		classload("cache");
+		$cache = new cache();
+		$cs = $cache->file_get("search_groups::$GLOBALS[SITE_ID]");
+		if ($cs)
+		{
+			$ret = aw_unserialize($cs);
+		}
+		else
+		{
+			classload("config");
+			$c = new config;
+			$dat = $c->get_simple_config("search_grps");
+			classload("xml");
+			$x = new xml;
+			$ret = $x->xml_unserialize(array("source" => $dat));
+			$cache->file_set("search_groups::$GLOBALS[SITE_ID]",aw_serialize($ret));
+		};
+
 		if ($no_strip)
 		{
 			$r = $ret;

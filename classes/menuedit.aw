@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.102 2002/02/27 17:58:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.103 2002/02/27 18:45:16 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -430,8 +430,8 @@ class menuedit extends aw_template
 		lc_site_load("menuedit",$this);
 
 		// get array with path of objects in it
-		$path = $this->get_path($section,$obj);
-		#$path = $this->path;
+		#$path = $this->get_path($section,$obj);
+		$path = $this->path;
 
 		// you are here links		
 		$this->vars(array("YAH_LINK" => $this->make_yah($this->path)));
@@ -500,9 +500,18 @@ class menuedit extends aw_template
 		}
 
 		$this->make_promo_boxes($obj["class_id"] == CL_BROTHER ? $obj["brother_of"] : $this->sel_section);
-		$this->make_poll();
+
+		if ($this->is_template("POLL"))
+		{
+			$this->make_poll();
+		};
+
 		$this->make_search();
-		$this->make_nadalanagu();
+		
+		if ($this->is_template("NADALA_NAGU"))
+		{
+			$this->make_nadalanagu();
+		};
 
 		$this->make_banners();
 	
@@ -4768,12 +4777,9 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		};
 
 		$awt->start("menuedit::make_poll");
-		if ($this->is_template("POLL"))
-		{
-			classload("poll");
-			$t = new poll;
-			$this->vars(array("POLL" => $t->gen_user_html()));
-		}
+		classload("poll");
+		$t = new poll;
+		$this->vars(array("POLL" => $t->gen_user_html()));
 		$awt->stop("menuedit::make_poll");
 	}
 
@@ -4806,38 +4812,35 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	{
 		global $awt;
 		$awt->start("menuedit::make_nadalanagu");
-		if ($this->is_template("NADALA_NAGU"))
+		classload("nagu");
+		$t = new nagu;
+		$nagu = $t->get_active($GLOBALS["per_oid"]);
+		$tmp = $nagu["content"];
+		if ($nagu["num"] > 0 && is_array($tmp))
 		{
-			classload("nagu");
-			$t = new nagu;
-			$nagu = $t->get_active($GLOBALS["per_oid"]);
-			$tmp = $nagu["content"];
-			if ($nagu["num"] > 0 && is_array($tmp))
-			{
-				reset($tmp);
-				uasort($tmp,__nagu_sort);
-				reset($tmp);
-				$max = $nagu["num"];
-				// kui 3, siis 3
-				$max = 3;
-				for ($i=0; $i < $max; $i++)
-				{	
-					list(,$v) = each($tmp);
-					$this->vars(array("pos" => $i+1, "name" => $v["eesnimi"]." ".$v["kesknimi"]." ".$v["perenimi"]));
-					$l.=$this->parse("NAME");
-					if ($i == 0)
-					{
-						$wurl = $v["imgurl"];
-					}
-				}
-				if ($wurl == "")
+			reset($tmp);
+			uasort($tmp,__nagu_sort);
+			reset($tmp);
+			$max = $nagu["num"];
+			// kui 3, siis 3
+			$max = 3;
+			for ($i=0; $i < $max; $i++)
+			{	
+				list(,$v) = each($tmp);
+				$this->vars(array("pos" => $i+1, "name" => $v["eesnimi"]." ".$v["kesknimi"]." ".$v["perenimi"]));
+				$l.=$this->parse("NAME");
+				if ($i == 0)
 				{
-					$wurl = $GLOBALS["baseurl"]."/images/transa.gif";
+					$wurl = $v["imgurl"];
 				}
-				$this->vars(array("NAME" => $l,"winnerurl" => $wurl));
-				$nn = $this->parse("NADALA_NAGU");
-				$this->vars(array("NADALA_NAGU" => $nn));
 			}
+			if ($wurl == "")
+			{
+				$wurl = $GLOBALS["baseurl"]."/images/transa.gif";
+			}
+			$this->vars(array("NAME" => $l,"winnerurl" => $wurl));
+			$nn = $this->parse("NADALA_NAGU");
+			$this->vars(array("NADALA_NAGU" => $nn));
 		}
 		$awt->stop("menuedit::make_nadalanagu");
 	}
