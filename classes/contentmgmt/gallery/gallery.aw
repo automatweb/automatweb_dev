@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery.aw,v 1.4 2004/01/13 16:24:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery.aw,v 1.5 2004/06/02 10:52:01 kristo Exp $
 
 class gallery extends aw_template
 {
@@ -65,16 +65,13 @@ class gallery extends aw_template
 	function change($arr)
 	{
 		extract($arr);
-		if (!($row = $this->get_object($id)))
-		{
-			$this->raise_error(ERR_GAL_NOGAL,"no such gallery($id)!", true);
-		}
+		$o = obj($id);
 		$this->read_template("add.tpl");
-		$this->mk_path($row["parent"],LC_GALLERY_CHANGE_GAL);
+		$this->mk_path($o->parent(),LC_GALLERY_CHANGE_GAL);
 
 		$this->vars(array(
-			"name" => $row["name"], 
-			"comment" => $row["comment"],
+			"name" => $o->name(), 
+			"comment" => $o->comment(),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
 			"content" => $this->mk_orb("admin", array("id" => $id, "page" => "0"))
 		));
