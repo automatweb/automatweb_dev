@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.114 2003/06/02 13:44:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.115 2003/06/03 13:20:43 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -9,7 +9,6 @@
 	@default method=serialize
 	@default group=general2
 	@classinfo relationmgr=yes 
-	@classinfo toolbar=yes
 
 	@property default_view type=select rel=1
 	@caption Default vaade
@@ -69,6 +68,9 @@
 	@caption Tööpäevad
 
 	@default store=no
+
+	@property navtoolbar type=toolbar group=show_day,show_week,show_month no_caption=1
+	@caption Nav. toolbar
 
 	@property show_day callback=callback_show_day group=show_day 
 	@caption Päev
@@ -194,6 +196,10 @@ class planner extends class_base
 				$data["options"] = $tmp;
 				break;
 
+			case "navtoolbar":
+				$this->gen_navtoolbar($args);
+				break;
+
 		}
 		return $retval;
 	}
@@ -258,9 +264,8 @@ class planner extends class_base
 			"type" => $type,
 		));
 
-
-		
 		$obj = $this->get_object($id);
+		$this->id = $id;
 		$this->content_gen_class = "";
 		if (!empty($obj["meta"]["content_generator"]))
 		{
@@ -1429,7 +1434,6 @@ class planner extends class_base
 		return $retval;
 	}
 
-
 	////
 	// Takes 2 timestamps and calculates the difference between them in days
 	//	args: time1, time2
@@ -1558,24 +1562,27 @@ class planner extends class_base
 		$cells = array();
 		foreach($args["events"] as $key => $val)
 		{
-			if ($val[0]["lead"])
+			foreach($val as $vkey => $vval)
 			{
-				if (isset($val[0]["ev_link"]))
+				if ($vval["lead"])
 				{
-					$ev_link = $val[0]["ev_link"];
+					if (isset($vval["ev_link"]))
+					{
+						$ev_link = $vval["ev_link"];
+					}
+					else
+					{
+						$ev_link = "/" . $this->_get_cal_target($vval["meta"]["calendar_relation"]);
+					};
+					$this->vars(array(
+						"lead" => $vval["lead"],
+						"date" => date("d.m.Y",$vval["start"]),
+						"title" => $vval["title"],
+						"ev_link" => $ev_link,
+					));
+					$cells[] = $this->parse("CELL");
 				}
-				else
-				{
-					$ev_link = "/" . $this->_get_cal_target($val[0]["meta"]["calendar_relation"]);
-				};
-				$this->vars(array(
-					"lead" => $val["0"]["lead"],
-					"date" => date("d.m.Y",$val[0]["start"]),
-					"title" => $val["0"]["title"],
-					"ev_link" => $ev_link,
-				));
-				$cells[] = $this->parse("CELL");
-			}
+			};
 		}
 
 		$items_on_line = is_numeric($this->conf["items_on_line"]) ? $this->conf["items_on_line"] : 1;
@@ -2455,12 +2462,12 @@ class planner extends class_base
 
 	}
 
-	function callback_get_toolbar($arr = array())
+	function gen_navtoolbar(&$arr)
 	{
-		$id = $arr["id"];
+		$id = $arr["obj"]["oid"];
                 if ($id)
                 {
-			$toolbar = &$arr["toolbar"];
+			$toolbar = &$arr["prop"]["toolbar"];
 
 			$toolbar->add_button(array(
                                 "name" => "add",
@@ -2472,11 +2479,11 @@ class planner extends class_base
                         ));
 
 			$dt = date("d-m-Y",time());
-		
+
 			$toolbar->add_button(array(
                                 "name" => "today",
                                 "tooltip" => "Täna",
-                                "url" => $this->day_orb_link . "&date=$dt",
+                                "url" => $this->mk_my_orb("change",array("id" => $id,"group" => "show_day","date" => $dt)),
                                 "img" => "icon_cal_today.gif",
                                 "imgover" => "icon_cal_today_over.gif",
                                 "class" => "menuButton",
