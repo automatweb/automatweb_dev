@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.8 2003/03/28 10:19:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.9 2003/04/25 13:01:42 kristo Exp $
 // form_chain.aw - form chains
 
 classload("formgen/form_base");
@@ -68,6 +68,7 @@ class form_chain extends form_base
 		$ct["rep_ops"] = $rep_ops;
 
 		$ct["cal_controller"] = $cal_controller;
+		$ct["no_load"] = $no_load;
 		
 		$this->chain = $ct;
 
@@ -196,6 +197,7 @@ class form_chain extends form_base
 					"show_reps" => checked($this->chain["show_reps"][$fid]),
 					"rep_tbls" => $this->picker($this->chain["rep_tbls"][$fid], $this->list_objects(array("class" => CL_FORM_TABLE))),
 					"rep_ops" => $this->picker($this->chain["rep_ops"][$fid], $this->list_objects(array("addempty" => true,"class" => CL_FORM_OUTPUT))),
+					"no_load" => checked($this->chain["no_load"][$fid]),
 					"LANG" => $lg
 				));
 				$this->parse("FORM");
