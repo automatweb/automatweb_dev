@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.22 2005/03/03 12:57:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.23 2005/03/08 13:26:32 kristo Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -274,8 +274,8 @@ class otto_import extends class_base
 		}
 		else
 		{
-			$data = array_unique(explode(",", $this->get_file(array("file" => "/www/otto.struktuur.ee/ottids.txt"))));
-			//$data = array("3112371","340751F");
+			//$data = array_unique(explode(",", $this->get_file(array("file" => "/www/otto.struktuur.ee/ottids.txt"))));
+			$data = array("198052Y");
 		}
 
 		if (!$fix_missing && file_exists($this->cfg["site_basedir"]."/files/status.txt"))
@@ -340,7 +340,7 @@ class otto_import extends class_base
 			flush();
 
 			$url = "http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/OttoDe/de_DE/-/EUR/OV_ParametricSearch-Progress;sid=bwNBYJMEb6ZQKdPoiDHte7MOOf78U0shdsyx6iWD?_PipelineID=search_pipe_ovms&_QueryClass=MallSearch.V1&ls=0&Orengelet.sortPipelet.sortResultSetSize=10&SearchDetail=one&Query_Text=".$pcode;
-		
+		echo "url = $url <br>";
 			$html = $this->file_get_contents($url);
 
 			// image is http://image01.otto.de:80/pool/OttoDe/de_DE/images/formatb/[number].jpg
@@ -360,7 +360,10 @@ class otto_import extends class_base
 
 				// subrequest for two images
 				//die($html);
-				preg_match_all("/<\/table>\n<a href=\"Javascript:document\.location\.href='(.*)'\+urlParameter\"/imsU", $html, $mt, PREG_PATTERN_ORDER);
+				if (!preg_match_all("/<\/table>\n<a href=\"Javascript:document\.location\.href='(.*)'\+urlParameter\"/imsU", $html, $mt, PREG_PATTERN_ORDER))
+				{
+					preg_match_all("/<td valign=\"middle\" align=\"center\" height=\"\d+\" width=\"\d+\"><a href=\"Javascript:document\.location\.href='(.*)'\+urlParameter\"/imsU", $html, $mt, PREG_PATTERN_ORDER);
+				}
 
 				$urld = array();
 				//die(dbg::dump($mt));
