@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.129 2004/11/04 11:55:48 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.130 2004/11/19 11:30:09 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -722,7 +722,7 @@ class users extends users_user
 				{
 					foreach($jf as $joinform => $joinentry)
 					{
-						if ($ops[$joinform])
+						if ($ops[$joinform] && $this->can("view", $joinentry))
 						{
 							$ret.=$f->show(array(
 								"id" => $joinform,
@@ -793,7 +793,7 @@ class users extends users_user
 		}	
 
 		$c = get_instance("config");
-		$mail = $c->get_simple_config("remind_pwd_mail");
+		$mail = $c->get_simple_config("remind_pwd_mail".aw_global_get("LC"));
 		$mail = str_replace("#parool#", $udata["password"],$mail);
 		$mail = str_replace("#kasutaja#", $username,$mail);
 		$mail = str_replace("#liituja_andmed#", str_replace("\n\n","\n",$this->show_join_data(array("nohtml" => true,"user" => $username,"no_load_op" => 1))),$mail);
@@ -801,7 +801,7 @@ class users extends users_user
 		#$mail = str_replace("\r","",$mail);
 		$mail = str_replace("\r\n","\n",$mail);
 
-		send_mail($udata["email"],$c->get_simple_config("remind_pwd_mail_subj"),$mail,"From: ".$this->cfg["mail_from"]);
+		send_mail($udata["email"],$c->get_simple_config("remind_pwd_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
 		$this->_log(ST_USERS, SA_REMIND_PWD, $username);
 		return $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$after;
 	}
@@ -959,7 +959,7 @@ class users extends users_user
 
 		$this->vars(array(
 			"webmaster" => $this->cfg["webmaster_mail"],
-			"reforb" => $this->mk_reforb("submit_send_hash",array()),
+			"reforb" => $this->mk_reforb("submit_send_hash",array("section" => aw_global_get("section"))),
 		));
 
 		return $this->parse();
@@ -1021,7 +1021,7 @@ class users extends users_user
 			send_mail($row["email"],"Paroolivahetus saidil ".aw_global_get("HTTP_HOST"),$msg,"From: $from");
 			aw_session_set("status_msg","Parooli muutmise link saadeti  aadressile <b>$row[email]</b>. Vaata oma postkasti<br />Täname!<br />");
 		};
-		return $this->mk_my_orb("send_hash",array());
+		return $this->mk_my_orb("send_hash",array("section" => $args["section"]));
 	}
 
 	/** Allows the user to change his/her password 
@@ -1430,7 +1430,11 @@ class users extends users_user
 		));
 
 		$host = aw_global_get("HTTP_HOST");
-		return str_replace("orb.aw", "index.aw", str_replace("/automatweb", "", $this->mk_my_orb("pwhash",array("u" => $uid,"k" => $hash),"users",0,0)));
+		return str_replace("orb.aw", "index.aw", str_replace("/automatweb", "", $this->mk_my_orb("pwhash",array(
+			"u" => $uid,
+			"k" => $hash, 
+			"section" => $this->get_cval("join_hash_section".aw_global_get("LC"))
+		),"users",0,0)));
 	}
 
 	function on_site_init(&$dbi, $site, &$ini_opts)
